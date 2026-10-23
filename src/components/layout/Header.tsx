@@ -59,7 +59,7 @@ export function Header() {
 
   return (
     <>
-      <header data-site-chrome="" className="sticky top-11 z-50 w-full border-b border-border/40 bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
+      <header data-site-chrome="" className="sticky top-0 z-50 w-full border-b border-border/40 bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
         {/* Round 117: px-3 and gap-2 below sm. The wordmark is 2xl and Log In
             plus Sign Up are both whitespace-nowrap, so on a 320px phone the row
             could not fit and Sign Up hung 9px off the right edge, taking seven

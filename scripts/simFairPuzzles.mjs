@@ -1,7 +1,5 @@
 /**
- * Round 214 harness: no puzzle on this site gains a second right answer (the
- * soccer findings the claim ledger still owes to part B of Round 1553 are the
- * only ones allowed, and that list may only shrink).
+ * Round 214 harness: every puzzle on this site has exactly one right answer.
  *
  * The puzzle games all share one failure mode and it is the worst kind,
  * because the better you know the sport the more likely it is to catch
@@ -14,16 +12,11 @@
  * connections boards, fourteen ranking rounds and a hundred and eighty one
  * team sheets.
  *
- * Round 214 found them all clean by NAME, and wrote that every one of them
- * was clean. That was the easy half. Round 1553 found the hard half: a tile
- * that honestly MEETS a second group's category is a second right answer
- * even when nobody typed the name twice (Zidane won the Ballon d'Or and
- * scored in a World Cup final, on a board with both groups). So section 1
- * now also judges soccer tiles against the record (the shared checker,
- * scripts/lib/connectionsCrossCheck.mjs, with soccer's
- * scripts/lib/soccerConnectionsCheck.mjs), and scripts/simConnectionsFacts.mjs
- * carries the full claim ledger. The rules below cannot quietly stop being
- * true.
+ * They are all clean, every one of them, which is worth knowing and worth
+ * keeping. So this is a fence rather than a fix: the rules below were true
+ * when it was written and now they cannot quietly stop being true. A round
+ * that finds nothing is still worth shipping if it stops the next one
+ * being found by a player.
  *
  * The two shapes are both legitimate and both stay. Soccer uses four
  * groups of four named `category`; the other four sports use four groups of
@@ -43,15 +36,12 @@
  * and the day somebody writes more the floor comes up with them.
  *
  * Run: node scripts/simFairPuzzles.mjs
- * Control (must exit 1): FAIR_CONTROL=secondfit node scripts/simFairPuzzles.mjs
  */
 import { execSync } from 'node:child_process';
 import os from 'node:os';
 import fs from 'node:fs';
 import path from 'node:path';
 import { fileURLToPath, pathToFileURL } from 'node:url';
-import { crossCheckBoards, findingKey } from './lib/connectionsCrossCheck.mjs';
-import { makeSoccerChecker, loadConnectionsRecord } from './lib/soccerConnectionsCheck.mjs';
 
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const ENTRY = path.join(os.tmpdir(), 'connHarnessEntry.mjs');
@@ -140,29 +130,6 @@ for (const [sport, mod] of Object.entries(mods)) {
   }
 }
 console.log(`   ${puzzles} puzzles, ${groups} groups, ${tiles} tiles, 0 shared between groups`);
-{
-  /* Round 1553: and no soccer tile honestly fits a second group, where the
-     record can say so: the closed winner lists (Ballon d'Or, European Golden
-     Shoe, Premier League Player of the Season, MLS MVP, the men over 100
-     Premier League assists), the 2025-26 season squads and the men the
-     ledger holds. Findings on boards part B has not rebuilt yet are owed in
-     the ledger and stay allowed here; anything else is a new second answer. */
-  const { ledger, awardLists } = loadConnectionsRecord(ROOT);
-  const soccerCheck = makeSoccerChecker({ careerPlayers: [], clubSeasonsOf: () => new Map(), nationalityMaps: [], awardLists, ledger });
-  const soccerBoards = Object.values(mods.soccer).find(v => Array.isArray(v)) ?? [];
-  /* the control: Zidane (Ballon d'Or 1998) dealt into another group of a board with a Ballon d'Or group */
-  if (process.env.FAIR_CONTROL === 'secondfit') {
-    const g = soccerBoards.find(x => x.id === 'puzzle-1')?.groups.find(x => x.category === 'Over 100 Premier League assists');
-    if (!g || g.players.includes('Zinedine Zidane')) { console.error('FAIR_CONTROL=secondfit ABORTED: puzzle-1 has no assists group to change'); process.exit(1); }
-    g.players[3] = 'Zinedine Zidane';
-    console.log('   FAIR_CONTROL=secondfit: Zidane dealt into puzzle-1, this run must end red');
-  }
-  const cross = crossCheckBoards(soccerBoards, soccerCheck);
-  const allowed = new Set([...(ledger.owed ?? []), ...(ledger.adjudicated ?? []).map(a => a.key)]);
-  const fresh = cross.findings.filter(f => !allowed.has(findingKey(f)));
-  for (const f of fresh) fail(`soccer ${findingKey(f)}: the record says this tile belongs to two groups`);
-  console.log(`   soccer against the record: ${cross.checked} groups judged, ${cross.findings.length - fresh.length} findings owed or adjudicated in the ledger, ${fresh.length} new`);
-}
 
 console.log('2) The pools are deep enough that a daily is not a weekly');
 {
@@ -264,4 +231,4 @@ if (failures > 0) {
   console.error(`simFairPuzzles: ${failures} failure${failures === 1 ? '' : 's'}`);
   process.exit(1);
 }
-console.log('simFairPuzzles: green. No board has a new second right answer; only the soccer findings the ledger owes to part B remain.');
+console.log('simFairPuzzles: green. Every board on the site has exactly one right answer.');

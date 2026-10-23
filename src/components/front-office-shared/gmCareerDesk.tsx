@@ -12,15 +12,12 @@
  *
  * Each screen loads on demand (gmLazyPanel.tsx), so a board that mounts the
  * boxes pays for the three tiles and nothing else until one is tapped. What a
- * tile says is decided in src/lib/gmCareerFace.ts (re-exported by src/lib/gmDeskHost.ts).
+ * tile says is decided in src/lib/gmDeskHost.ts.
  *
- * Round 1533 mounts it on the NFL board (the hub and the out of work screen).
+ * Not mounted by this round: nothing imports this file but its own test.
  */
 import type { GmPanelDef } from '@/lib/gmDesk';
-/* Round 1550: the boxes' words from the part of the career every screen reads, never from the whole host, so a
-   board that mounts these boxes does not download the market, the verdict and the year out with its page. */
-import { hostCareerTile, hostMarketTile, hostXpTile } from '@/lib/gmCareerFace';
-import type { GmCareerFacts } from '@/lib/gmDeskHost';
+import { hostCareerTile, hostMarketTile, hostXpTile, type GmCareerFacts } from '@/lib/gmDeskHost';
 import { lazyGmPanel } from './gmLazyPanel';
 
 export const GM_CAREER_KEYS = { market: 'seat', career: 'career', xp: 'xp' } as const;

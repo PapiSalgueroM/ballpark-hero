@@ -53,88 +53,12 @@ function unlift1523(rel, text) {
   return out;
 }
 
-/* Round 1534 (the US shop keeps its promises) edits mlbMyCareer.ts and nhlMyCareer.ts too: one import line, the heat
-   drift reading the lawyer, the shop's settle call after the pay line, and (its step 3) the card words and the summer
-   camp's buy case. Decided again here the way 1523 was: each hunk is put back first, required exactly once, and the
-   file must then still be 1313's closed head, so any other later change is still refused. The inverse is whole
-   files, so with these two inverted the kit's MLB and NHL careers run 48cb9d4b's engines, as before this round. */
-const SETTLE_1534 = sport => '  /* Round 1534: the shop pays what its cards print (src/lib/usCareerAnnualBenefits.ts), straight after the pay\n'
-  + '     line so Cash is in tenths, and before the money app. Stakes draw on their own keyed stream, never this rng. */\n'
-  + '  for (const line of settleUsCareerShop(c, ' + sport + '_SPEND_ITEMS)) notes.push(line);\n';
-const LIFT_1534_COMMON = sport => [
-  ["import { settleUsCareerShop, usCareerSeasonCool } from './usCareerAnnualBenefits';\n", ''],
-  ['const drift = dm > 0 ? Math.min(8, 2 + dm * 0.5) : -usCareerSeasonCool(c.purchased, 9);', 'const drift = dm > 0 ? Math.min(8, 2 + dm * 0.5) : -9;'],
-  [SETTLE_1534(sport), ''],
-];
-const LIFT_1534 = {
-  'src/lib/mlbMyCareer.ts': LIFT_1534_COMMON('MLB'),
-  'src/lib/nhlMyCareer.ts': LIFT_1534_COMMON('NHL'),
-};
-/* The card words, each on its own card's line: [id, the words now, the words before]. */
-const WORDS_1534 = shady => [
-  [`family_office_${shady === 'mshady' ? 'mlb' : 'nhl'}`, "effect: 'Adds 2 percent to your cash every season'", "effect: 'Protects your money'"],
-  ['team_stake', "effect: 'Fanbase +10'", "effect: 'The retirement plan, fanbase +10'"],
-  ['signature_shoe', "effect: 'Fanbase +12'", "effect: 'Fanbase +12, real royalties'"],
-  [`${shady}_club`, "effect: 'Washes 4M, heat +3'", "effect: 'Washes 4M, heat +3 a year'"],
-  [`${shady}_offshore`, "effect: 'Heat +6'", "effect: 'Hides money, heat +6'"],
-];
-const WORDS_1534_OF = { 'src/lib/mlbMyCareer.ts': WORDS_1534('mshady'), 'src/lib/nhlMyCareer.ts': WORDS_1534('hshady') };
-function unlift1534(rel, text) {
-  let out = text;
-  for (const [from, to] of LIFT_1534[rel] ?? []) {
-    assert.equal(out.split(from).length, 2, 'Round 1534: ' + rel + ' must hold its shop hunk exactly once: ' + from.slice(0, 60));
-    out = out.replace(from, () => to);
-  }
-  if (!WORDS_1534_OF[rel]) return out;
-  const lines = out.split('\n');
-  for (const [id, now, was] of WORDS_1534_OF[rel]) {
-    const at = lines.flatMap((l, i) => (l.includes(`{ id: '${id}',`) ? [i] : []));
-    assert.ok(at.length === 1 && lines[at[0]].split(now).length === 2, 'Round 1534: ' + rel + ' must hold the card ' + id + "'s new words exactly once");
-    lines[at[0]] = lines[at[0]].replace(now, () => was);
-  }
-  const camp = lines.flatMap((l, i) => (l.startsWith("    case 'summer_camp': {") ? [i] : []));
-  assert.equal(camp.length, 1, 'Round 1534: ' + rel + " must hold the summer camp's buy case exactly once");
-  lines.splice(camp[0], 1);
-  return lines.join('\n');
-}
-
-/* Round 1538 (money a line says was banked reaches the Bank; the Skill card stops at the ceiling) edits the same two
-   engines: one import line, the summer brand answer through the shared fee helper, and the summer Skill answer
-   through the shared Skill helper with its new button words (since the review of 2026-10-22 the maintenance button
-   reads "Health +4, up to 100" and the helper is handed the line's lead, so it can say the health that landed).
-   Decided again the same way: each hunk is put back
-   first, required exactly once, before the 1534 hunks and the byte check against 1313's closed head. */
-const BRAND_1538 = {
-  'src/lib/mlbMyCareer.ts': ['const fee = bankUsCareerFee(cc, 3, mlbEraById(cc.eraId).moneyScale); return `National ads all winter. ${fee}M banked.`;', "cc.earnings += 3; return 'National ads all winter. 3M banked.';"],
-  'src/lib/nhlMyCareer.ts': ['const fee = bankUsCareerFee(cc, 2, nhlEraById(cc.eraId).moneyScale); return `Golf videos and a doc crew. ${fee}M banked.`;', "cc.earnings += 2; return 'Golf videos and a doc crew. 2M banked.';"],
-};
-const SKILL_TAIL_1538 = 'const up = 1 + Math.floor(r() * 2); cc.ovr = Math.min(cc.pot + 1, cc.ovr + up); return `Rating +${up}.`; } },';
-const SKILL_1538 = {
-  'src/lib/mlbMyCareer.ts': ["effect: c.age >= 32 ? 'Health +4, up to 100' : 'Rating +1 or +2, up to your ceiling', apply: (cc, r) => usCareerSkillSummer(cc, r, 32, 'Veteran maintenance.') },",
-    "effect: 'Push the ceiling', apply: (cc, r) => { if (cc.age >= 32) { cc.health = Math.min(100, cc.health + 4); return 'Veteran maintenance. Health +4.'; } " + SKILL_TAIL_1538],
-  'src/lib/nhlMyCareer.ts': ["effect: c.age >= 31 ? 'Health +4, up to 100' : 'Rating +1 or +2, up to your ceiling', apply: (cc, r) => usCareerSkillSummer(cc, r, 31, 'Maintenance summer.') },",
-    "effect: 'Push the ceiling', apply: (cc, r) => { if (cc.age >= 31) { cc.health = Math.min(100, cc.health + 4); return 'Maintenance summer. Health +4.'; } " + SKILL_TAIL_1538],
-};
-const LIFT_1538 = Object.fromEntries(Object.entries(BRAND_1538).map(([rel, brand]) => [rel, [
-  ["import { bankUsCareerFee, usCareerSkillSummer } from './usCareerAnnualBenefits';\n", ''],
-  brand,
-  SKILL_1538[rel],
-]]));
-function unlift1538(rel, text) {
-  let out = text;
-  for (const [from, to] of LIFT_1538[rel] ?? []) {
-    assert.equal(out.split(from).length, 2, 'Round 1538: ' + rel + ' must hold its hunk exactly once: ' + from.slice(0, 60));
-    out = out.replace(from, () => to);
-  }
-  return out;
-}
-
 const show = (commit, rel) => execFileSync('git', ['show', commit + ':' + rel], { maxBuffer: 64 * 1024 * 1024 }).toString('utf8').replaceAll('\r\n', '\n');
 
 /* contents: the file as read from disk (any line endings). rows: receives rel once per file inverted. */
 export function inverseUsRival1313(rel, contents, rows) {
   if (!US_RIVAL_1313_FILES.includes(rel)) return contents;
-  assert.equal(unlift1523(rel, unlift1534(rel, unlift1538(rel, contents.replaceAll('\r\n', '\n')))), show(US_RIVAL_1313_HEAD, rel), 'Release BB: ' + rel + ' is no longer as Round 1313 closed it (' + US_RIVAL_1313_HEAD + '); decide its inverse again in scripts/lib/usRival1313Inverse.mjs');
+  assert.equal(unlift1523(rel, contents.replaceAll('\r\n', '\n')), show(US_RIVAL_1313_HEAD, rel), 'Release BB: ' + rel + ' is no longer as Round 1313 closed it (' + US_RIVAL_1313_HEAD + '); decide its inverse again in scripts/lib/usRival1313Inverse.mjs');
   assert.notEqual(rel, 'src/lib/careerFactBeats.ts', 'Release BB: careerFactBeats.ts is new in Round 1313 and only its own files import it; something else loaded it, so the inverse of 1313 is no longer whole');
   rows.push(rel);
   return show(US_RIVAL_1313_BASE, rel);

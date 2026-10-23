@@ -151,9 +151,6 @@ const gamesPlayed = (league: any) =>
 for (const c of CASES) {
   const override = process.env[c.env];
   const { default: Board } = override ? await import(/* @vite-ignore */ override) : await c.load();
-  /* Round 1550: the board fetches its career kit when a screen needs it (FrontOfficeLazyDesk.test.tsx drives that);
-     these cases drive the rules, so the kit is on the page before the board mounts. */
-  if (c.env === 'FO_BOARD_NFL') await (await import('@/components/front-office/nflCareerKitLoad')).loadNflCareerKit();
   const save = (shape: any) => localStorage.setItem(c.saveKey, JSON.stringify(shape));
   const read = (): any => JSON.parse(localStorage.getItem(c.saveKey)!);
 

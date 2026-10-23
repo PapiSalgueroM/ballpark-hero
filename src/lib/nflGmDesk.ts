@@ -57,13 +57,6 @@ import {
   DEEP_ROSTER_MAX, NFL_ROSTER_MIN, REGULAR_WEEKS, capUsed, conferenceOf, conferenceSeeds, teamStrength, tradeValue,
   type GmPlayer, type GmTeamState, type LeagueState, type OffseasonNews, type Prospect,
 } from './frontOffice';
-/* Round 1533: the GM's career (the desk host, bound to this board). Round 1550: only the part every screen reads
-   (gmCareerFace.ts) is imported for its values here; the calls that need the whole host, its adapter and the
-   market (nflLegacy, nflTakeSeat), and the three only they read (nflOutcome, nflDeskBlockRules, nflAwayHost), live
-   in nflGmCareer.ts, which the board fetches when it needs them. */
-import { GM_HOST_KEYS, isGmSeatBlock } from './gmCareerFace';
-import type { HostXpSource } from './gmDeskHost';
-import type { GmTree } from './gmXp';
 
 /* ------------------------------------------------------------------ */
 /* The blocks                                                          */
@@ -126,8 +119,7 @@ const freshPicks = (league: LeagueState): GmPickLedger =>
      is the year the old list was for, and the two later years start whole. */
   migrateLegacyPicks(league.teams, league.season, nflGamePickRules(), NFL_GAME_DRAFT_ROUNDS).ledger;
 
-/** A club's staff the day it is opened. Exported for the block rules a move reads (nflGmCareer.ts). */
-export const freshStaff = (league: LeagueState, team: string): NflStaffState => ({
+const freshStaff = (league: LeagueState, team: string): NflStaffState => ({
   block: gmDefaultStaff(NFL_STAFF_PACK.rules, nflStaffCtx(league, team)),
   purse: NFL_STAFF_PACK.money.seasonPurse,
 });
@@ -629,31 +621,4 @@ export function nflDealsTile(league: LeagueState, on = true): GmTileFace {
     sub: w.open ? 'Players and picks, dead money stays behind' : 'Deals open again after the season',
     accent: w.open && w.periodsLeft <= 1,
   };
-}
-
-/* ------------------------------------------------------------------ */
-/* Round 1533: the GM's career, the desk host bound to this board      */
-/* ------------------------------------------------------------------ */
-
-/**
- * The trees this desk routes to its engine. It grows a tree a round, never
- * ahead of the route: a tree off the list sells no point (hostSpendPoint
- * refuses it whatever a screen allows).
- */
-export const NFL_XP_LIVE: readonly GmTree[] = ['ownership', 'media'];
-
-/** What this board's save holds the facts for, so the GM level screen promises nothing more. */
-export const NFL_XP_SOURCES: readonly HostXpSource[] = ['wins', 'titles', 'playoffs', 'mandate'];
-
-/**
- * Whether the save's counters already hold the league's season (the host's
- * seasonCounted contract, gmDeskHost.ts HostLegacy). Read off the save,
- * never off the league: true on the recap, the draft and the fired screen
- * of the season he ran; false on the hub (a season being played) and after a
- * year out (the league has a champion he did not play for).
- */
-export function nflSeasonCounted(phase: string, desk: GmDesk | null): boolean {
-  if (phase === 'hub' || phase === 'pick') return false;
-  const stored = desk ? desk.blocks[GM_HOST_KEYS.seat] : undefined;
-  return !(isGmSeatBlock(stored) && stored.career.seasonsOut > 0);
 }

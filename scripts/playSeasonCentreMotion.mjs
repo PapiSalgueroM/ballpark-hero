@@ -204,7 +204,7 @@ const notes = [];
 const note = (id, msg) => { if (notes.filter(n => n.startsWith(id)).length < 4) notes.push(`${id}: ${msg}`); };
 
 /* ---- the tables, from node ---- */
-const B = await bundleAwardsNight(ROOT, { extra: { season: 'src/lib/season/soccer.ts', core: 'src/lib/season/core.ts', moments: 'src/lib/season/soccerMoments.ts', ledger: 'src/lib/season/momentsSave.ts', comps: 'src/lib/soccerSeasonCompetitions.ts', world: 'src/lib/soccerCareerLeagueWorld.ts', wheel: 'src/lib/careerChanceWheel.ts', hist: 'src/lib/season/historicalOpponentLabels.ts' } });
+const B = await bundleAwardsNight(ROOT, { extra: { season: 'src/lib/season/soccer.ts', core: 'src/lib/season/core.ts', moments: 'src/lib/season/soccerMoments.ts', ledger: 'src/lib/season/momentsSave.ts', comps: 'src/lib/soccerSeasonCompetitions.ts', world: 'src/lib/soccerCareerLeagueWorld.ts', wheel: 'src/lib/careerChanceWheel.ts' } });
 const CLUBS = B.soccer.FALLBACK_CLUBS;
 const found = [];
 const seen = new Set();
@@ -863,12 +863,7 @@ if (ONLY.length === 0 || ONLY.some(x => x.startsWith('C'))) {
   }
   if (!HUB) throw new Error('the engine gave no hub save with twelve played seasons and a table season he did not win at the end: nothing was checked');
   const D = HUB.d, M = D.games.length;
-  /* Release BQ: the page keys its table rows by the season's labels after historicalOpponentLabels has filled the one
-     slot the game holds a verified member for (the 2023/24 Premier League's Luton Town, since 92c78ddec; see
-     SoccerSeasonCentre.tsx buildModel), so node's oracle reads the same labels. Without this a hub save whose last season
-     is that league (Round 1525 moved the search onto one) can never match: node says u16 where the page says Luton Town. */
-  const HIST = B.hist.historicalOpponentLabels(HUB.last.row, HUB.last.ctx, D);
-  const keyOfSlot = slot => (HIST ? HIST.labels : D.labels)[slot]?.key ?? `u${slot}`;
+  const keyOfSlot = slot => D.labels[slot]?.key ?? `u${slot}`;
   const ORDER = Array.from({ length: M + 1 }, (_, k) => C.tableAt(D, k).map(r => keyOfSlot(r.slot)));
   const MINE = keyOfSlot(0);
   const compactOf = k => { const at = ORDER[k].indexOf(MINE); const lo = Math.max(0, Math.min(at - 2, ORDER[k].length - 5)); return ORDER[k].slice(lo, lo + 5); };

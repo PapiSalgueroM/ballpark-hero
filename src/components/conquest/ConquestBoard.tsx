@@ -132,8 +132,7 @@ function PowerRankingsPanel({ rankings }: { rankings: PowerRankEntry[] }) {
 
 // Free Agency panel (item 87): collapsible, same pattern as PowerRankingsPanel.
 // Before a favorite team is chosen, shows a compact 32-team picker. Once a
-// team is picked, lists the players fallen teams left behind (the hook's
-// freeAgencyPool, src/lib/conquestMarket.ts) with a Sign
+// team is picked, lists the CONQUEST_FREE_AGENCY_POOL candidates with a Sign
 // button gated by canSignFreeAgent(); when gated, the button is disabled and
 // shows the cooldown ("Available after N more conquests" using the hook's
 // exposed freeAgencyCooldownRemaining, since the hook doesn't expose a
@@ -225,7 +224,7 @@ function FreeAgencyPanel({
                 </div>
               ))}
               {pool.length === 0 && (
-                <p className="text-[10px] text-muted-foreground text-center pt-1">Nobody's on the market yet. When a team falls, its players land here.</p>
+                <p className="text-[10px] text-muted-foreground text-center pt-1">No free agents on the market right now</p>
               )}
               {!canSign && (
                 <p className="text-[10px] text-muted-foreground text-center pt-1">{cooldownLabel}</p>
@@ -674,7 +673,7 @@ export default function ConquestBoard() {
                   <span className="font-medium">{player}</span>
                   {playerData && (
                     <span className="text-xs text-muted-foreground">
-                      {playerData.position} · {playerData.overall} OVR{playerData.keyStat ? ` · ${playerData.keyStat}` : ''}
+                      {playerData.position} · {playerData.overall} OVR · {playerData.keyStat}
                     </span>
                   )}
                 </button>
@@ -748,10 +747,10 @@ export default function ConquestBoard() {
       <Dialog open={game.phase === 'powerup_use' && game.powerupUseType === 'free_agent'} onOpenChange={() => {}}>
         <DialogContent className="max-w-lg bg-card border-border text-foreground overflow-y-auto max-h-[90vh]">
           <DialogHeader>
-            <DialogTitle className="text-center text-lg">✍️ Sign a Player</DialogTitle>
+            <DialogTitle className="text-center text-lg">✍️ Sign a Free Agent</DialogTitle>
           </DialogHeader>
           <p className="text-sm text-muted-foreground text-center mb-2">
-            Pick someone a fallen team left behind, or call a retired great back for one more run. They join <span className="font-bold text-foreground">{t(game.powerupTeam)?.name || 'your team'}</span>:
+            Choose a player to add to <span className="font-bold text-foreground">{t(game.powerupTeam)?.name || 'your team'}</span>'s roster:
           </p>
           <div className="space-y-1.5 max-h-80 overflow-y-auto">
             {game.freeAgentList.map(fa => (
@@ -760,11 +759,8 @@ export default function ConquestBoard() {
                 onClick={() => game.signFreeAgent(fa.name)}
                 className="w-full px-4 py-2.5 rounded-lg border border-border hover:bg-primary/20 transition-colors text-left text-sm text-foreground flex items-center justify-between gap-2"
               >
-                <span className="min-w-0">
-                  <span className="font-medium block truncate">{fa.name}</span>
-                  {fa.lastSeason && <span className="block text-[11px] text-muted-foreground">Retired, last played {fa.lastSeason}</span>}
-                </span>
-                <span className="shrink-0 text-xs text-muted-foreground">
+                <span className="font-medium">{fa.name}</span>
+                <span className="text-xs text-muted-foreground">
                   {fa.position} · {fa.overall} OVR
                 </span>
               </button>

@@ -34,9 +34,9 @@ const FightCareer = () => {
               'Spend six weeks of camp across conditioning, power, defence and speed. Spread them or specialise.',
               'Pick three looks for the night. He adjusts to whatever you keep doing, so do not give him the same thing twice.',
               'Pressure beats an out-boxer, boxing beats a swarmer, countering beats a slugger, brawling beats a counter-puncher.',
-              'Damage never heals. It eats your chin first, and enough of it ends your career.',
+              'Damage never heals. It eats your chin first, and it is what decides when you are finished.',
               'Reach number one and every offer on the table is for a world title.',
-              'Retire any time after 10 fights, or when your body makes you, and get the verdict: who you beat is worth far more than how many.',
+              'Retire and get the verdict: who you beat is worth far more than how many.',
             ]}
             examples={[
               'An out-boxer who wins a belt at 27 and holds it four times',

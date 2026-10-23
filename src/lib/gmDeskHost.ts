@@ -12,8 +12,8 @@
  * engine calls and a few board hunks.
  *
  * THIS ROUND IS THE LIFT. New files only: nothing under src imports this file
- * except its own tests, its four read adapters and its panels. Round 1533
- * bound it to the NFL board first; the other three boards mount it next.
+ * except its own tests, its four read adapters and its panels. No board mounts
+ * anything yet, so no player sees a change.
  *
  * THE RULES OF THE HOST.
  *   1. It imports no engine. A league is read only through the adapter it is
@@ -42,16 +42,16 @@
  *     out (GmAwayHost): a new tick joins as an optional field.
  *   - GmCareerBinding and the panel list in gmCareerDesk.tsx.
  */
-import { withGmBlock, type GmDesk, type GmFacts, type GmTileFace } from './gmDesk';
+import { gmBlock, withGmBlock, type GmDesk, type GmFacts, type GmTileFace } from './gmDesk';
 import {
   careerTotals, currentStint, endSeatStint, leagueTiers, newGmCareer, recordSeatSeason,
-  seatMandate, seatNextYear, seatOffers, sitOutYear, startSeatStint, takeSeat, BADLY_FIRED_CEILING,
+  sanitizeGmCareer, seatNextYear, seatOffers, sitOutYear, startSeatStint, takeSeat, BADLY_FIRED_CEILING,
   type GmCareer, type GmSeatPack, type SeatNextYear, type SeatOffer, type SeatSave, type SeatStint, type SeatTeam,
 } from './gmSeat';
 import {
-  GM_TREES, addXp, contractAsk, craftedDeadMoney,
-  cushionTrustLoss, developedGrowth, gmLevel, gmPointsFree, gmSeasonXp, gmTreePoints,
-  mandateSteps, pressOdds, scoutedNoise, spendGmPoint, tradePremium,
+  GM_MAX_LEVEL, GM_MAX_TREE_POINTS, GM_TREES, GM_TREE_INFO, XP_FIRST_LEVEL, addXp, contractAsk, craftedDeadMoney,
+  cushionTrustLoss, defaultGmXp, developedGrowth, gmLevel, gmPointsFree, gmSeasonXp, gmTreePoints, isValidGmXp,
+  mandateSteps, pressOdds, scoutedNoise, spendGmPoint, tradePremium, xpForLevel,
   type GmTree, type GmXp, type GmXpAward,
 } from './gmXp';
 import type { ClubTier } from './managerOffers';
@@ -65,10 +65,6 @@ import { deadMoneyFor, type CutLedger } from './frontOfficeCuts';
 import { deskCases, type DeskCase, type GmContractHost, type GmContractLeague, type GmContractLedger } from './gmContracts';
 import type { GmSportKey } from './gmSport';
 import type { StandingRow } from './gmPicks';
-import {
-  GM_HOST_KEYS, hostCanSpend, hostSeatOf, hostStintSeasons, hostXpOf, plural, titleWords,
-  type GmSeatBlock, type HostBlockRule, type HostLegacy,
-} from './gmCareerFace';
 
 /* ================================================================== */
 /* 1. The read adapter a sport fills once                              */
@@ -124,20 +120,80 @@ export function hostSeatTeams<L>(host: GmDeskHost<L>, league: L, nameOf: (id: st
 const sameId = (id: string): string => id;
 const round1 = (n: number): number => Math.round(n * 10) / 10;
 const capWord = (s: string): string => s.charAt(0).toUpperCase() + s.slice(1);
+const plural = (n: number, one: string, many = `${one}s`): string => `${n} ${n === 1 ? one : many}`;
+const isInt = (n: unknown): n is number => typeof n === 'number' && Number.isInteger(n);
+const whole = (n: number): number => (Number.isFinite(n) ? Math.max(0, Math.floor(n)) : 0);
 
 /* ================================================================== */
 /* 2. The two blocks, and who owns a block when the GM changes clubs   */
 /* ================================================================== */
 
-/* Round 1550: the two keys, who owns a block, the record block and its reader, the XP reader, the words on the hub
-   boxes and the GM level help live in gmCareerFace.ts, the part of the career a board needs on every screen.
-   Re-exported here unchanged, so every caller of the host reads what it read before. */
-export {
-  GM_HOST_KEYS, isGmSeatBlock, hostLegacySeat, hostSeatOf, hostXpOf, hostStintSeasons,
-  HOST_TILE_VALUE_MAX, HOST_TILE_SUB_MAX, hostMarketTile, hostCareerTile, hostCanSpend, hostXpTile, hostXpHelp,
-  HOST_BLOCK_RULES, hostSummerMandate, type HostBlockOwner, type HostBlockRule,
-  type SeatBefore, type GmSeatBlock, type HostLegacy,
-} from './gmCareerFace';
+export const GM_HOST_KEYS = { seat: 'seat', xp: 'xp' } as const;
+
+/**
+ * What the record does not know about the time before it began. Present only
+ * on a record built from a save older than the block (hostLegacySeat).
+ */
+export interface SeatBefore {
+  /** Seasons he ran the club before the record began, known only as a count. Shown, never graded. */
+  seasons: number;
+  /** True when the first stint's tier is the tier on the day the record began, not the day he arrived. The screen leaves that tier off. */
+  tierUnknown: boolean;
+}
+
+export interface GmSeatBlock {
+  v: 1;
+  /** gmSeat's own shape, checked by sanitizeGmCareer. */
+  career: GmCareer;
+  /** The last season recorded, so a season can never be recorded twice. */
+  last?: number;
+  before?: SeatBefore;
+}
+
+export function isGmSeatBlock(v: unknown): v is GmSeatBlock {
+  if (!v || typeof v !== 'object' || Array.isArray(v)) return false;
+  const o = v as Record<string, unknown>;
+  if (o.v !== 1 || sanitizeGmCareer(o.career) === null) return false;
+  if (o.last !== undefined && !isInt(o.last)) return false;
+  if (o.before !== undefined) {
+    const b = o.before as Record<string, unknown> | null;
+    if (!b || typeof b !== 'object' || Array.isArray(b)) return false;
+    if (!isInt(b.seasons) || b.seasons < 0 || typeof b.tierUnknown !== 'boolean') return false;
+  }
+  return true;
+}
+
+/**
+ * Who a desk block belongs to when the GM takes another club's seat. Club
+ * Manager already rules it (clubManager.ts, the job change: the staff, the
+ * facilities and the books are the club's, a move means the new club hands
+ * you its own), and a move is the one event that touches every block, so the
+ * rule is a list a later lift adds a row to and never a line inside
+ * hostTakeSeat.
+ *   gm      travels with him untouched (his record, his XP)
+ *   club    is opened again for the club he joins, from `fresh`
+ *   league  is the league's own and stays as it is (the pick ledger)
+ * A block no rule names is carried untouched, as gmDesk.ts promises for keys a
+ * build does not know.
+ */
+export type HostBlockOwner = 'gm' | 'club' | 'league';
+
+export interface HostBlockRule<L = unknown> {
+  key: string;
+  owner: HostBlockOwner;
+  /**
+   * A club owned block's value at the club he joins. A club rule with no
+   * `fresh` drops the block instead, so the old club's never rides along and
+   * the system's own fresh value answers the next read.
+   */
+  fresh?: (league: L, team: string) => unknown;
+}
+
+/** The host's own two rows. A sport spreads these before its own. */
+export const HOST_BLOCK_RULES: readonly HostBlockRule[] = [
+  { key: 'seat', owner: 'gm' },
+  { key: 'xp', owner: 'gm' },
+];
 
 /** The desk as it stands at the club he joins. The desk handed in is not changed. */
 export function hostMoveBlocks<L>(desk: GmDesk, rules: readonly HostBlockRule<L>[], league: L, team: string): GmDesk {
@@ -157,12 +213,97 @@ export function hostMoveBlocks<L>(desk: GmDesk, rules: readonly HostBlockRule<L>
 /* 3. The record of a save, and of a save older than the record        */
 /* ================================================================== */
 
+/**
+ * What any of the four saves knows without the block.
+ *
+ * THE CONTRACT ON seasonCounted (the brief's B7). seasonsPlayed and titles are
+ * read in one of two states and the caller says which:
+ *   true   they already include `season`: a save at rest after its close
+ *          (the recap, the fired screen, a reload of either).
+ *   false  they do not: a season still being played, or the values as they
+ *          stood BEFORE this season was counted, which is what the verdict
+ *          hands in (hostSeasonVerdict sets false itself).
+ * Never read it off the league: at the verdict the league already holds the
+ * champion while the counters are still the old ones, and a `from` built from
+ * that mix starts every new save a season late.
+ */
+export interface HostLegacy {
+  team: string;
+  /** The club's tier today. */
+  tier: ClubTier;
+  /** league.season as the save holds it. */
+  season: number;
+  seasonCounted: boolean;
+  seasonsPlayed: number;
+  titles: number;
+  fired: boolean;
+  /** Only when the bind can work it out again from the save (hostLastGrade), else null. Never a guess. */
+  lastGrade: FoGradeResult | null;
+}
+
+/**
+ * The record of a save that has no block. Nothing is filled in: a title is a
+ * 'title' grade (gradeSeason returns it whenever the title was won), the last
+ * grade is there only when it was handed in, and every other season is a count
+ * (before.seasons). Never a guessed 'met'.
+ *
+ * Known and accepted: with no last grade a record that holds titles reads its
+ * last season as a title, and the seasons known only as a count do not weigh
+ * as experience in the market (careerProfile reads grades only).
+ */
+export function hostLegacySeat(l: HostLegacy): GmSeatBlock {
+  const seasons = whole(l.seasonsPlayed);
+  const titles = Math.min(whole(l.titles), seasons);
+  const counted = l.seasonCounted && seasons >= 1;
+  const grades: FoGradeResult[] = [];
+  for (let i = 0; i < titles; i++) grades.push('title');
+  /* A last grade that is a title is one of the titles above already. Any
+     other needs a season that was not a title to sit in. */
+  if (l.lastGrade !== null && l.lastGrade !== 'title' && seasons - titles >= 1) grades.push(l.lastGrade);
+  const unknown = seasons - grades.length;
+  const stint: SeatStint = {
+    team: l.team, tier: l.tier, from: l.season - seasons + (counted ? 1 : 0), grades,
+    ...(l.fired ? { ended: 'fired' as const } : {}),
+  };
+  /* The tier is today's, read on the day the record began. Only hostNewSeat,
+     called the day he takes a club, knows the tier on arrival, so every legacy
+     record says its first tier is unknown, a save of no seasons included (its
+     first read may come at its first close, a whole season of moves later). */
+  return {
+    v: 1,
+    career: { version: 1, stints: [stint], seasonsOut: 0 },
+    before: { seasons: unknown, tierUnknown: true },
+  };
+}
 
 /** The record of a brand new save, written when he takes his first club: the tier on arrival is known. */
 export function hostNewSeat(team: string, tier: ClubTier, season: number): GmSeatBlock {
   return { v: 1, career: newGmCareer(team, tier, season) };
 }
 
+/**
+ * A stored record must agree with the save beside it (the way nhlContractsOf
+ * checks its ledger's team). His last stint is at the save's club, and it is
+ * open exactly while the save is not fired: between seats the save keeps the
+ * old club's id with fired true. Anything else fails closed to the legacy
+ * record, which credits every title to the current club.
+ */
+function seatFitsSave(b: GmSeatBlock, l: HostLegacy): boolean {
+  const s = currentStint(b.career);
+  return s.team === l.team && (s.ended !== undefined) === l.fired;
+}
+
+/** His record: the stored block when it is sound and fits the save, else the legacy record. Never writes. */
+export function hostSeatOf(desk: GmDesk | null, l: HostLegacy): GmSeatBlock {
+  if (!desk) return hostLegacySeat(l);
+  return gmBlock<GmSeatBlock>(desk, GM_HOST_KEYS.seat, v => isGmSeatBlock(v) && seatFitsSave(v, l), () => hostLegacySeat(l));
+}
+
+/** His XP block, a fresh one when absent or mangled. Never writes. */
+export function hostXpOf(desk: GmDesk | null): GmXp {
+  if (!desk) return defaultGmXp();
+  return gmBlock<GmXp>(desk, GM_HOST_KEYS.xp, isValidGmXp, defaultGmXp);
+}
 
 /** What a bind knows of its save, for hostLegacy. */
 export interface HostSaveFacts {
@@ -184,6 +325,12 @@ export function hostLegacy<L>(host: GmDeskHost<L>, league: L, f: HostSaveFacts):
   };
 }
 
+/** Seasons a stint covers: its grades, plus the uncounted ones when it is the stint the record began in. */
+export function hostStintSeasons(seat: GmSeatBlock, index: number): number {
+  const s = seat.career.stints[index];
+  if (!s) return 0;
+  return s.grades.length + (index === 0 ? (seat.before?.seasons ?? 0) : 0);
+}
 
 /** Every season the record holds, graded or only counted. Years out are not seasons: he ran no club. */
 export function hostSeasonsRecorded(seat: GmSeatBlock): number {
@@ -449,6 +596,18 @@ export function hostLastGrade<L>(
 }
 
 /**
+ * The ask he was shown is the ask he is graded on. A board builds a new
+ * mandate every summer; the summer after he takes a seat it must keep the
+ * offer's. An offer's ask is built for the season after the league's, so the
+ * rule needs no flag: keep a stored mandate whose season already equals the
+ * season the summer rolled to. On every other path the stored one is a season
+ * old and the built one stands, as today.
+ */
+export function hostSummerMandate(stored: OwnerMandate | null | undefined, built: OwnerMandate, season: number): OwnerMandate {
+  return stored && stored.season === season ? stored : built;
+}
+
+/**
  * True while he has taken a seat whose first season has not started: his open
  * stint begins after the league's season. A recap drawn then is the arrival,
  * not his season, so it must not stage a title he did not win.
@@ -456,20 +615,6 @@ export function hostLastGrade<L>(
 export function hostArriving(seat: GmSeatBlock, leagueSeason: number): boolean {
   const s = currentStint(seat.career);
   return !s.ended && s.from > leagueSeason;
-}
-
-/**
- * Round 1533: the line under the title on the arrival recap, the day he takes
- * another club's seat (the season on the screen was not his). Null unless he
- * is arriving. Read off the league through the adapter: the club's own record
- * and place, no player and no person.
- */
-export function hostArrivalLine<L>(host: GmDeskHost<L>, league: L, seat: GmSeatBlock, nameOf: (id: string) => string): string | null {
-  if (!hostArriving(seat, host.season(league))) return null;
-  const s = currentStint(seat.career);
-  const row = host.clubs(league).find(c => c.id === s.team);
-  if (!row) return null;
-  return `You take over the ${nameOf(s.team)}. They finished ${row.record}, ${ordinal(row.place)} in the league.`;
 }
 
 /* ================================================================== */
@@ -520,8 +665,6 @@ export interface HostMarket {
   offers: SeatOffer[];
   /** By teamId. */
   facts: Record<string, HostOfferFacts>;
-  /** True when the one offer on the table is the first call (hostFirstCall): nobody else rang. */
-  firstCall?: boolean;
 }
 
 /**
@@ -613,43 +756,6 @@ export function hostMarketLine(
     : `${head} Nobody called this year. As things stand next year is still open, and every year out makes the phone quieter.`;
 }
 
-/** Why the first call came. The game's own words: no real club, no real person. */
-export const HOST_FIRST_CALL_REASON = 'Nobody else rang. They have the weakest roster in the league and they will take the chance on you.';
-/** The same call when the club that let him go is the weakest itself, or ties the caller at the bottom: the
-    caller is then not the weakest, and its own card reads its roster rank right under this line. */
-export const HOST_FIRST_CALL_REASON_NEAR = 'Nobody else rang. They have one of the weakest rosters in the league and they will take the chance on you.';
-
-/**
- * Round 1533: the first call. A firing must never open on a screen that says
- * the save is over: the owner asked for exactly that not to be built (his
- * ruling is recorded at managerOffers.ts 138 to 142, where a man pinned at
- * zero standing is the save being over). So when the first feed after a sacking is empty, the club with
- * the weakest roster by the engine's own strength (ties by id, the order
- * leagueTiers sorts in) that is not the club that let him go calls, with its
- * own ask from seatMandate as every offer has. Only then: a man who walked
- * gets no call he did not earn, and after a year out the feed is the
- * engine's alone, so passing on this call can still end on an honest closed
- * screen a year later. It draws nothing, so the feed key that names the
- * feed names it too, and every read of the same save reads the same call.
- */
-function hostFirstCall(pack: GmSeatPack, teams: SeatTeam[], seat: GmSeatBlock, season: number, champion: string | null): SeatOffer | null {
-  const last = currentStint(seat.career);
-  if (last.ended !== 'fired' || seat.career.seasonsOut !== 0) return null;
-  const weakest = [...teams].sort((a, b) => a.strength - b.strength || b.id.localeCompare(a.id)).find(t => t.id !== last.team);
-  if (!weakest) return null;
-  const strengths = Object.fromEntries(teams.map(t => [t.id, t.strength]));
-  const rank = strengthRank(strengths, weakest.id);
-  return {
-    teamId: weakest.id,
-    teamName: weakest.name,
-    tier: leagueTiers(teams).get(weakest.id) ?? 4,
-    ask: seatMandate(pack, rank, teams.length, champion === weakest.id, season),
-    /* "The weakest" only when every other club is stronger: the rank the card prints under it is this one. */
-    reason: rank === teams.length ? HOST_FIRST_CALL_REASON : HOST_FIRST_CALL_REASON_NEAR,
-    keenness: 5,
-  };
-}
-
 /**
  * The market for a GM between seats, or null while he holds one. Pure and
  * keyed: reading it twice, or after a reload, reads the same feed.
@@ -665,15 +771,10 @@ export function hostMarket<L>(
   const season = host.season(league);
   const clubs = host.clubs(league);
   const teams: SeatTeam[] = clubs.map(c => ({ id: c.id, name: nameOf(c.id), strength: c.strength }));
-  let offers = seatOffers(
+  const offers = seatOffers(
     host.pack, teams, seat.career, season + 1,
     keyedRng(hostFeedKey(host.sport, seat, season)), host.champion(league, season),
   );
-  let firstCall = false;
-  if (offers.length === 0) {
-    const call = hostFirstCall(host.pack, teams, seat, season + 1, host.champion(league, season));
-    if (call) { offers = [call]; firstCall = true; }
-  }
   const { nextYear, climbTo } = hostNextYear(seat, leagueTiers(teams));
   const state: HostMarketState = offers.length > 0 ? 'offers' : nextYear === 'shut' ? 'closed' : 'quiet';
   const strengths = Object.fromEntries(clubs.map(c => [c.id, c.strength]));
@@ -687,7 +788,6 @@ export function hostMarket<L>(
   return {
     state, nextYear, climbTo, seasonsOut: seat.career.seasonsOut, season: season + 1, offers, facts,
     line: hostMarketLine(host.pack, seat, state, { nextYear, climbTo }, offers.length, nameOf(last.team)),
-    firstCall,
   };
 }
 
@@ -783,18 +883,6 @@ export interface HostAwayReport {
  * hostCanSitOut saying no.
  */
 export type HostAwayRefusal = 'in-seat' | 'season-open' | 'market-closed' | 'last-call' | 'broken-adapter';
-
-/** Round 1533's fix pass: why a year out was refused, in the game's words, for the board's feed. A refusal saves nothing. */
-export function hostAwayRefusalLine(pack: GmSeatPack, reason: HostAwayRefusal): string {
-  const why: Record<HostAwayRefusal, string> = {
-    'in-seat': `you already run a ${pack.seat}`,
-    'season-open': 'the season is still being played',
-    'market-closed': 'the phone has stopped for good, so a year out leads nowhere',
-    'last-call': 'the offers in front of you are the last calls you will get',
-    'broken-adapter': 'the league did not come out exactly one season on',
-  };
-  return `No year out: ${why[reason]}. Nothing was saved.`;
-}
 
 /* Narrow it with `=== false` (or `=== true`): this app compiles without strict
    null checks, where a bare `!r.ok` does not tell the two halves apart. */
@@ -991,7 +1079,83 @@ export const HOST_GRADE_MARKS: Record<FoGradeResult, { mark: string; word: strin
   badly: { mark: '✕', word: 'nowhere near the ask' },
 };
 
+const titleWords = (n: number): string => (n === 0 ? 'no titles' : plural(n, 'title'));
 
+/**
+ * What a hub box can hold. The shared HubTiles draws a box's value and its
+ * sub on one line each and cuts the rest off with an ellipsis, so a string
+ * that outgrows the box loses its end, and the end is where the fact is.
+ * Measured 2026-10-10 in Chromium on the built site's stylesheet (the
+ * review's walk, runner result r1223-run-w): at 390 wide the line is 149 px;
+ * the value's bold 14 px type ran 7.0 to 7.7 px a letter and the sub's 9 px
+ * type 4.2. Each ceiling is that line less a tenth, at the widest letter
+ * measured. scripts/simGmDeskHost.mjs holds every box string to them, with
+ * each sport's real club names (control `longtile`).
+ */
+export const HOST_TILE_VALUE_MAX = 17;
+export const HOST_TILE_SUB_MAX = 32;
+
+/** The Job market box. Null while he holds a seat, so the hub never shows it. */
+export function hostMarketTile(market: HostMarket | null): GmTileFace | null {
+  if (!market) return null;
+  /* What a year out leaves, when it is not simply open: the same word on the box whether or not somebody called. */
+  const hangs = 'Next year hangs on your old club';
+  if (market.state === 'offers') {
+    const n = market.offers.length;
+    const sub = market.nextYear === 'shut' ? `The last ${n === 1 ? 'call' : 'calls'} you will get`
+      : market.nextYear === 'climb' ? hangs
+      : 'Open it to see each ask';
+    return { icon: '\u{1F4DE}', value: plural(n, 'offer'), sub, accent: true };
+  }
+  if (market.state === 'closed') {
+    return { icon: '\u{1F4F5}', value: 'No more calls', sub: 'Only a new front office now', accent: false };
+  }
+  return {
+    icon: '\u{1F4DE}', value: 'Nobody called',
+    sub: market.nextYear === 'climb' ? hangs : 'Next year open, as things stand',
+    accent: false,
+  };
+}
+
+/** The Career box. Reading it never writes, so it needs no desk. */
+export function hostCareerTile(seat: GmSeatBlock, nameOf: (id: string) => string): GmTileFace {
+  const stints = seat.career.stints;
+  const index = stints.length - 1;
+  const s = stints[index];
+  if (s.ended) {
+    const clubs = new Set(stints.map(x => x.team)).size;
+    return { icon: '\u{1F4D6}', value: 'Out of work', sub: `${plural(clubs, 'club')}, ${titleWords(careerTotals(seat.career).titles)}`, accent: false };
+  }
+  /* The season on the value and the club under it: a club's full name does
+     not fit the value's line at any width (measured: 224 px and up in 149 or
+     182). A name too long even for the sub goes in alone. */
+  const name = nameOf(s.team);
+  const withThe = `With the ${name}`;
+  return {
+    icon: '\u{1F4D6}', value: `Season ${hostStintSeasons(seat, index) + 1}`,
+    sub: withThe.length <= HOST_TILE_SUB_MAX ? withThe : name, accent: false,
+  };
+}
+
+/** True when some tree on this desk can take a point he already has. */
+export function hostCanSpend(desk: GmDesk | null, live: readonly GmTree[]): boolean {
+  const xp = hostXpOf(desk);
+  return gmPointsFree(xp) > 0 && live.some(t => gmTreePoints(xp, t) < GM_MAX_TREE_POINTS);
+}
+
+/** The GM level box. It pulses only when a live tree can take a point. */
+export function hostXpTile(desk: GmDesk | null, live: readonly GmTree[], deskOn: boolean): GmTileFace {
+  const xp = hostXpOf(desk);
+  const level = gmLevel(xp);
+  const free = gmPointsFree(xp);
+  const can = hostCanSpend(desk, live);
+  const sub = !deskOn ? 'Starts with your GM desk'
+    : can ? `${plural(free, 'point')} to spend`
+    : free > 0 ? `${plural(free, 'point')} saved for later`
+    : level >= GM_MAX_LEVEL ? 'Top level'
+    : `${Math.max(0, Math.round(xpForLevel(level + 1) - xp.xp))} XP to level ${level + 1}`;
+  return { icon: '\u{1F396}\u{FE0F}', value: `GM level ${level}`, sub, accent: deskOn && can };
+}
 
 /** The line a recap prints under the trust line after a graded season, or null when nothing was paid. */
 export function hostXpRecapLine(close: Pick<HostSeasonClose, 'award' | 'levelAfter' | 'desk'>, live: readonly GmTree[]): string | null {
@@ -1112,7 +1276,6 @@ export function hostCareerTotalsLine(seat: GmSeatBlock): string {
 export function hostMarketHelp(pack: GmSeatPack): string[] {
   return [
     `When ${pack.upstairs} lets you go, the ${pack.seats} that rate your record can call. The ${pack.seat} that let you go never does.`,
-    `If nobody rates it, the ${pack.seat} with the weakest ${pack.roster} in the league, leaving out the one that let you go, still rings, once, the day you are let go.`,
     `Each offer shows what that ${pack.seat} asks of your first season there. That is the ask you are graded on.`,
     'No call this year? A year out lets the league play a season without you and the phone can ring next summer, but every year out makes it quieter. The screen says when the offers in front of you are the last ones and when the phone has stopped for good, and then there is no year out to take.',
     `Worked example: leave straight after a season graded nowhere near the ask and no ${HOST_TIER_WORDS[BADLY_FIRED_CEILING - 1]} ${pack.seat} calls, whatever you won before. The best that can ring is rated ${HOST_TIER_WORDS[BADLY_FIRED_CEILING]}. The tiers are the four quarters of the league by strength.`,
@@ -1131,4 +1294,29 @@ export function hostCareerHelp(pack: GmSeatPack): string[] {
   ];
 }
 
+/*
+ * The earn sentence (hostEarnsLine) is not one of these lines: the GM level
+ * screen prints it above the "?", and a help that opened with it said the
+ * same sentence twice, word for word.
+ */
+export function hostXpHelp(): string[] {
+  /* What a season one step short of the ask costs, read off gradeSeason itself (it exports no constant): an owner
+     who asks for the postseason and a season that misses it. */
+  const missed = gradeSeason(
+    { tier: 'playoffs', text: '', winFloor: 0, reqLevel: 1, season: 0 },
+    { wins: 0, madePlayoffs: false, roundsWon: 0, reachedFinal: false, wonTitle: false },
+  );
+  const loss = missed.trustDelta;
+  const eased = cushionTrustLoss(loss, 2);
+  const kept = applyMandateResult(-loss, { ...missed, trustDelta: eased });
+  const season = gmSeasonXp({ winPct: 0.6, titles: 0, playoffRoundsWon: 1, mandateSteps: mandateSteps('met'), placesAboveExpectation: 0, prospectsGraduated: 0 });
+  /* The honest pace (scripts/simGmDeskHost.mjs measures it on the four engines: the median club is near this). */
+  const even = gmSeasonXp({ winPct: 0.5, titles: 0, playoffRoundsWon: 0, mandateSteps: mandateSteps('met'), placesAboveExpectation: 0, prospectsGraduated: 0 });
+  return [
+    `Level 2 costs ${XP_FIRST_LEVEL} XP and every level after it costs a little more. Each level is one point, and ${GM_MAX_TREE_POINTS} points fill a tree.`,
+    `A .500 season that meets the ask pays ${even.total} XP, so at that pace the first point is about ${plural(Math.ceil(XP_FIRST_LEVEL / even.total), 'season')} away. Playoff rounds, a title and beating the ask bring it sooner.`,
+    'A tree marked Not here yet takes no points on this desk, so a point is never spent where it moves nothing.',
+    `Worked example: a .600 season that met the ask and won one playoff round pays ${season.total} XP. And with two ${GM_TREE_INFO.ownership.label} points, missing the ask on trust ${-loss} costs ${-eased}, not ${-loss}, so you keep the job on trust ${kept.trust}.`,
+  ];
+}
 

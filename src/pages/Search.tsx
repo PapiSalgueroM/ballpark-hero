@@ -1,5 +1,5 @@
 import { useEffect, useMemo, useRef, useState, type KeyboardEvent as ReactKeyboardEvent } from 'react';
-import { Link, useLocation, useNavigate, useNavigationType, useSearchParams } from 'react-router-dom';
+import { Link, useNavigate, useSearchParams } from 'react-router-dom';
 import { ArrowLeft, Search as SearchIcon, X } from 'lucide-react';
 import PageSeo from '@/components/seo/PageSeo';
 import { CATEGORIES, FEATURED_GAMES, TOTAL_GAMES, type CategoryTitle } from '@/data/gameRegistry';
@@ -41,8 +41,6 @@ const ALL_SPORTS = 'All sports';
 
 export default function Search() {
   const navigate = useNavigate();
-  const location = useLocation();
-  const navigationType = useNavigationType();
   const [params, setParams] = useSearchParams();
   const [query, setQuery] = useState(() => params.get('q') ?? '');
   const [sport, setSport] = useState<string>(ALL_SPORTS);
@@ -50,44 +48,44 @@ export default function Search() {
   const inputRef = useRef<HTMLInputElement>(null);
   const listRef = useRef<HTMLDivElement>(null);
 
-  const pendingWriteRef = useRef<{ search: string; token: number } | null>(null);
-  const writeTokenRef = useRef(0);
-  const timerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+  /* The last value this page itself put in the address, so the two effects
+     below can tell their own write apart from somebody else's navigation. */
+  const pushedRef = useRef<string>(params.get('q') ?? '');
 
-  /* Keep rapid edits out of browser history. Safari also limits how often
-     replaceState can run, so retain the 250ms pause between URL writes. */
+  /* The address carries the query so a search can be sent to somebody.
+     replace: true, or every keystroke would be a back button press. */
   useEffect(() => {
-    if ((params.get('q') ?? '') === query) return;
-    const timer = setTimeout(() => {
-      timerRef.current = null;
+    const current = params.get('q') ?? '';
+    if (current === query) { pushedRef.current = query; return; }
+    /* Round 538: DEBOUNCED, and not for tidiness. This ran on every keystroke,
+       and setParams is history.replaceState underneath. Safari throttles that
+       to roughly 100 calls in 30 seconds and then THROWS SecurityError, from
+       inside an effect with nothing to catch it, so a long query typed quickly
+       took the page down. 250ms is shorter than the gap between two typed
+       characters and far longer than the throttle needs. */
+    const t = setTimeout(() => {
       const next = new URLSearchParams(params);
       if (query) next.set('q', query); else next.delete('q');
-      const search = next.toString();
-      const token = ++writeTokenRef.current;
-      pendingWriteRef.current = { search: search ? '?' + search : '', token };
-      setParams(next, { replace: true, state: { searchWriteToken: token } });
+      pushedRef.current = query;
+      setParams(next, { replace: true });
     }, 250);
-    timerRef.current = timer;
-    return () => {
-      clearTimeout(timer);
-      if (timerRef.current === timer) timerRef.current = null;
-    };
+    return () => clearTimeout(t);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [query]);
 
-  /* Every navigation owns the box, even when the URL text is unchanged.
-     Recognize only this page's exact write so newer typing survives it. */
+  /* Round 538: and the other direction, which was missing entirely. The
+     footer's own "Search games" link points at /search with no q. Clicking it
+     while already on /search?q=hockey does not remount the route, so the box
+     kept the old text and the address disagreed with it. Adopting an external
+     change cannot loop: a change this page wrote is recognised by pushedRef
+     and ignored here. */
   useEffect(() => {
-    const pending = pendingWriteRef.current;
-    pendingWriteRef.current = null;
-    if (navigationType === 'REPLACE' && pending && location.search === pending.search
-      && location.state?.searchWriteToken === pending.token) return;
-    if (timerRef.current !== null) {
-      clearTimeout(timerRef.current);
-      timerRef.current = null;
-    }
-    setQuery(new URLSearchParams(location.search).get('q') ?? '');
-  }, [location.key, location.search, location.state, navigationType]);
+    const fromUrl = params.get('q') ?? '';
+    if (fromUrl === pushedRef.current) return;
+    pushedRef.current = fromUrl;
+    setQuery(fromUrl);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [params]);
 
   /* Focus the box on a pointer device only. On a phone, focusing it on arrival
      throws the keyboard up and shoves the page around, and this site has a rule

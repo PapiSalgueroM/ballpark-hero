@@ -1,10 +1,6 @@
-import { afterEach, beforeAll, beforeEach, describe, expect, it, vi } from 'vitest';
+import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 import { act, cleanup, fireEvent, render, screen, within } from '@testing-library/react';
 import Board from '@/components/front-office/FrontOfficeBoard';
-import { loadNflCareerKit } from '@/components/front-office/nflCareerKitLoad';
-/* Round 1550: the board fetches its career kit when a screen needs it (FrontOfficeLazyDesk.test.tsx drives that);
-   these cases drive the rules, so the kit is on the page before the board mounts. */
-beforeAll(async () => { await loadNflCareerKit(); });
 import { consumeDraftPick, draftOrder, executeTalksTrade, franchiseTagSalary, generateDraftClass, initLeague, nflAiDraftPicks, prospectToPlayer, runOffseason, runPlayoffs, type LeagueState } from '@/lib/frontOffice';
 import * as engine from '@/lib/frontOffice';
 import { leagueNames } from '@/lib/foNames';

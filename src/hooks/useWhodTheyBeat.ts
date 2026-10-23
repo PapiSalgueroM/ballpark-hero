@@ -73,7 +73,7 @@ export function useWhodTheyBeat() {
     (async () => {
       try {
         const entries = await Promise.all(
-          FINALS_COMPS.map(async c => [c.key, await fetchFinalsRows(c, today).catch(() => [] as FinalsRow[])] as const),
+          FINALS_COMPS.map(async c => [c.key, await fetchFinalsRows(c).catch(() => [] as FinalsRow[])] as const),
         );
         if (!alive) return;
         const m = new Map(entries.map(([k, v]) => [k, v]));

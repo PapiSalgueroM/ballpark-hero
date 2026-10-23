@@ -76,7 +76,7 @@ export function useChampOrNot() {
     (async () => {
       try {
         const entries = await Promise.all(
-          COMPETITIONS.map(async c => [c.key, await fetchCompetitionRows(c, today).catch(() => [] as ChampRow[])] as const),
+          COMPETITIONS.map(async c => [c.key, await fetchCompetitionRows(c).catch(() => [] as ChampRow[])] as const),
         );
         if (!alive) return;
         const m = new Map(entries.map(([k, v]) => [k, v]));

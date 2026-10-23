@@ -21,10 +21,6 @@ import { SORT_LABELS } from '@/lib/silverwareSort';
  * - The save loads fail closed: a doctored save gets a fresh museum,
  *   never a printing press. Offline progress runs at half speed capped
  *   at eight hours, the same cap the other idles honor.
- * - Round 1548: fail closed means nonsense (negative, NaN, a wrong shape),
- *   never a big number, because the price curve itself carries a long
- *   museum past 1e15; and a hidden tab is away time, paid by the same rule
- *   and the same meter as a closed one (advanceClock).
  * - The screen never lies: the quoted cost is the charged cost, and a
  *   plaque's year and name render exactly what the record says.
  *
@@ -40,23 +36,6 @@ const SAVE_VERSION = 1;
 /** offline progress: half speed, capped at eight hours (site convention) */
 const OFFLINE_RATE_BASE = 0.5;
 const OFFLINE_CAP_SEC = 8 * 3600;
-/**
- * Round 1548: the longest gap between two clock callbacks on a VISIBLE page
- * that still counts as somebody watching. A hidden page is always away,
- * whatever the gap (see advanceClock).
- *
- * Before this round the hook ticked a fixed quarter second per callback. A
- * browser slows a hidden tab's interval to once a second and then once a
- * minute, so a museum left open in a background tab overnight earned a couple
- * of minutes, and the visibility save stamped the time as it went, so not
- * even the next load paid the night. Closing the tab would have paid eight
- * hours at half speed. Wonderkid Factory fixed the same thing in Round 581
- * (src/lib/wonderkidFactory.ts, advanceClock) and this is its rule and its
- * number: visibility decides hidden, and this bound only catches a visible
- * page that was not really running (a laptop waking from sleep), five seconds
- * being far past any honest main thread stall.
- */
-export const AWAY_AFTER_MS = 5000;
 
 /** wings in unlock order: short famous start, a quick first plaque, then
  * the long shelves. Costs are the door price to OPEN the wing. */
@@ -227,14 +206,6 @@ export interface HallState {
   rushReadyAt: number;
   /** seconds of museum time since the save was born */
   clock: number;
-  /** Round 1548: wall milliseconds of the current absence already paid as
-   *  away time (hidden or closed), so one absence meets one eight hour cap.
-   *  Zero again on the first watched tick. Absent in older saves. */
-  awayMs?: number;
-  /** Round 1548: the admissions that absence has paid so far, hidden part and
-   *  closed part together, so the note on the door tells the whole absence even
-   *  when a hidden tab was closed. Zero again with the meter. Absent in older saves. */
-  awayPaid?: number;
 }
 
 export function freshState(seed: number): HallState {
@@ -389,59 +360,12 @@ export function tick(wings: Wing[], s: HallState, dt: number, opts?: { offline?:
   }
 }
 
-/** Round 1548: the part of the eight hour cap this absence has already used. */
-function awayUsedMs(s: HallState): number {
-  return Number.isFinite(s.awayMs) && (s.awayMs as number) > 0 ? (s.awayMs as number) : 0;
-}
-
-/**
- * Round 1548: pay `gapMs` of wall clock as away time, at the shop rate, and
- * count it on the `awayMs` meter, because a throttled tab wakes once a minute
- * and would otherwise collect a fresh eight hours on every wake. The meter
- * travels in the save, so time paid while hidden and the time a later load
- * pays are one absence under one cap. Returns the admissions it paid. Idle
- * Arena's shape (src/lib/idleArena.ts applyOffline), Wonderkid Factory's rule.
- */
-export function applyAway(wings: Wing[], s: HallState, gapMs: number): number {
-  const used = awayUsedMs(s);
-  const left = Math.max(0, OFFLINE_CAP_SEC * 1000 - used);
-  const away = Math.min(Math.max(0, Number.isFinite(gapMs) ? gapMs : 0), left);
-  s.awayMs = used + away;
-  const before = s.funds;
-  tick(wings, s, away / 1000, { offline: true });
-  const paid = s.funds - before;
-  s.awayPaid = awayPaidSoFar(s) + paid;
-  return paid;
-}
-
-/** Round 1548: what the current absence has paid so far (the note on the door). */
-export function awayPaidSoFar(s: HallState): number {
-  return Number.isFinite(s.awayPaid) && (s.awayPaid as number) > 0 ? (s.awayPaid as number) : 0;
-}
-
-/**
- * Round 1548: one callback of the hall's clock, `gapMs` of wall time after the
- * last one. On a visible page a gap up to AWAY_AFTER_MS is somebody watching:
- * full rate, and the absence meter and its takings go back to zero. A hidden page, or a
- * longer gap, is time away and goes through applyAway. The caller keeps the
- * time of the last callback and says whether the page is visible.
- */
-export function advanceClock(wings: Wing[], s: HallState, gapMs: number, visible = true): { away: boolean; earned: number } {
-  if (!(gapMs > 0)) return { away: false, earned: 0 };
-  if (!visible || gapMs > AWAY_AFTER_MS) return { away: true, earned: applyAway(wings, s, gapMs) };
-  s.awayMs = 0;
-  s.awayPaid = 0;
-  const before = s.funds;
-  tick(wings, s, gapMs / 1000);
-  return { away: false, earned: s.funds - before };
-}
-
-/** the offline welcome: how much the hall earned while away, for the toast.
- *  Round 1548: through the same meter as a hidden tab, so a museum hidden for
- *  three hours and then closed is paid one eight hour absence, not eleven. */
+/** the offline welcome: how much the hall earned while away, for the toast */
 export function offlineReport(wings: Wing[], s: HallState, awaySec: number): { earned: number; capped: boolean } {
-  const capped = awaySec * 1000 > Math.max(0, OFFLINE_CAP_SEC * 1000 - awayUsedMs(s));
-  return { earned: applyAway(wings, s, awaySec * 1000), capped };
+  const before = s.funds;
+  const capped = awaySec > OFFLINE_CAP_SEC;
+  tick(wings, s, awaySec, { offline: true });
+  return { earned: s.funds - before, capped };
 }
 
 /* -------------------------------------------------------------------- save */
@@ -460,14 +384,8 @@ export function loadSave(raw: string | null): { state: HallState; lastSeen: numb
     if (o.v !== SAVE_VERSION) return null;
     const num = (x: unknown, lo: number, hi: number): number | null =>
       typeof x === 'number' && Number.isFinite(x) && x >= lo && x <= hi ? x : null;
-    /* Round 1548: money is finite and non negative, with no ceiling. These
-       were 1e15 and 1e18, and the museum's own prices walk every long player
-       past them: about 136 of the 909 exhibits cost more than 1e15 even at
-       the full network discount, so saving up for one wrote a save the next
-       load refused, and the hook then wrote a fresh museum over it.
-       Nonsense (negative, NaN, Infinity, a string) still loads as null. */
-    const funds = num(o.funds, 0, Infinity);
-    const careerEarned = num(o.careerEarned, 0, Infinity);
+    const funds = num(o.funds, 0, 1e15);
+    const careerEarned = num(o.careerEarned, 0, 1e18);
     const seed = num(o.seed, 0, 2 ** 31);
     const renown = num(o.renown, 0, MAX_RENOWN);
     const rededications = num(o.rededications, 0, 10000);
@@ -502,37 +420,17 @@ export function loadSave(raw: string | null): { state: HallState; lastSeen: numb
       rededications, rushUntil, rushReadyAt, clock,
     };
     if (state.openWings.length === 0) state.openWings = [WING_ORDER[0].key];
-    /* Round 1548: the absence meter is optional (older saves have none) and
-       is repaired rather than refused: a bad meter can only move one
-       absence's cap, never the museum. */
-    if (o.awayMs !== undefined) {
-      const a = o.awayMs;
-      state.awayMs = typeof a === 'number' && Number.isFinite(a) && a > 0 ? Math.min(a, OFFLINE_CAP_SEC * 1000) : 0;
-    }
-    /* Round 1548: the absence's takings so far, repaired the same way. It
-       only feeds the note on the door, never the money. */
-    if (o.awayPaid !== undefined) {
-      const p = o.awayPaid;
-      state.awayPaid = typeof p === 'number' && Number.isFinite(p) && p > 0 ? p : 0;
-    }
     return { state, lastSeen };
   } catch {
     return null;
   }
 }
 
-/** Round 1548: the units past a thousand, the same ladder Idle Arena prints
- *  (src/lib/idleArena.ts SUFFIX). It stopped at T, so the last AFL exhibit,
- *  about 9e19, read "90000000T". */
-const UNITS: [number, string][] = [
-  [1e33, 'Dc'], [1e30, 'No'], [1e27, 'Oc'], [1e24, 'Sp'], [1e21, 'Sx'], [1e18, 'Qi'], [1e15, 'Qa'],
-  [1e12, 'T'], [1e9, 'B'], [1e6, 'M'], [1e3, 'K'],
-];
-
 /** short money formatting for the plaques and buttons */
 export function fmt(n: number): string {
-  for (const [unit, name] of UNITS) {
-    if (n >= unit) return `${(n / unit).toFixed(n >= unit * 10 ? 0 : 1)}${name}`;
-  }
+  if (n >= 1e12) return `${(n / 1e12).toFixed(n >= 1e13 ? 0 : 1)}T`;
+  if (n >= 1e9) return `${(n / 1e9).toFixed(n >= 1e10 ? 0 : 1)}B`;
+  if (n >= 1e6) return `${(n / 1e6).toFixed(n >= 1e7 ? 0 : 1)}M`;
+  if (n >= 1e3) return `${(n / 1e3).toFixed(n >= 1e4 ? 0 : 1)}K`;
   return `${Math.floor(n)}`;
 }

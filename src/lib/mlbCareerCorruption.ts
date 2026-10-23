@@ -26,7 +26,6 @@
 import type { MlbCareerState, MlbCareerEvent } from './mlbMyCareer';
 import { mlbTeamLabelOf, MLB_SPEND_ITEMS } from './mlbMyCareer';
 import { liquidateUsCareerPurchases } from './usCareerAnnualBenefits';
-import { bankUsCareerFee } from './usCareerAnnualBenefits';
 import { launderDirtyMoney, launderEffectText } from './careerDirtyMoney';
 
 type DirtyState = MlbCareerState & {
@@ -246,7 +245,7 @@ export function getMlbCorruptionEvents(c: MlbCareerState, rng: () => number): Ml
         { label: 'Sign it, 5M', effect: '5M dirty, heat +20',
           apply: (cc) => { dirty(cc, 5); heatUp(cc, 20); cc.fanbase = clamp(cc.fanbase + 4, 0, 100); return 'You signed. Five million and your face on a parlay slip in every bar in the state. Heat +20.'; } },
         { label: 'Sign the clean version, 1.8M', effect: '1.8M legit',
-          apply: (cc) => { const paid = bankUsCareerFee(cc, 1.8, 1); return `Your lawyer stripped the illegal clauses and the number fell to ${paid}M. Still ${paid}M, banked.`; } },
+          apply: (cc) => { cc.earnings += 1.8; return 'Your lawyer stripped the illegal clauses and the number fell to 1.8M. Still 1.8M.'; } },
         { label: 'Turn it down entirely', effect: 'Fanbase +8',
           apply: (cc) => { cc.fanbase = clamp(cc.fanbase + 8, 0, 100); cc.morale = clamp(cc.morale + 5, 0, 100); return 'You turned down sportsbook money out loud, in a sport that banned its best hitter for exactly this.'; } },
       ],
@@ -262,7 +261,7 @@ export function getMlbCorruptionEvents(c: MlbCareerState, rng: () => number): Ml
         { label: 'Authenticate all of it, 1.2M', effect: '1.2M dirty, heat +12',
           apply: (cc) => { dirty(cc, 1.2); heatUp(cc, 12); return 'You signed certificates for bats you never held. Heat +12.'; } },
         { label: 'Only authenticate the real ones', effect: '400k clean',
-          apply: (cc) => { const paid = bankUsCareerFee(cc, 0.4, 1); return `You went through the whole inventory and signed off on eleven real pieces out of ninety. ${paid}M banked.`; } },
+          apply: (cc) => { cc.earnings += 0.4; return 'You went through the whole inventory and signed off on eleven real pieces out of ninety.'; } },
       ],
     });
   }

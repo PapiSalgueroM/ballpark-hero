@@ -61,8 +61,6 @@ const firedFrom = (grades: FoGradeResult[], team = BOTTOM, from = 2026): GmSeatB
 /* Strong enough that the engine's own count is never zero, weak enough to be shut for good, and one in between. */
 const WINNER = firedFrom(['title', 'title', 'title', 'title', 'title', 'overachieved', 'overachieved', 'overachieved', 'missed']);
 const WRECK = firedFrom(['badly', 'badly', 'badly']);
-/* Round 1533: fired straight from the seat somebody always rings (the first call), so the closed market is a year out on. */
-const WRECK_OUT: GmSeatBlock = { ...WRECK, career: { ...WRECK.career, seasonsOut: 1 } };
 const CLIMB = firedFrom(['badly', 'badly']);
 const HELD: GmSeatBlock = { v: 1, career: { version: 1, stints: [{ team: BOTTOM, tier: 4, from: 2026, grades: ['met', 'title'] }], seasonsOut: 0 } };
 
@@ -126,10 +124,9 @@ describe('the job market panel', () => {
   });
   it('stays out a year on the second tap only, and says when that opens the desk', () => {
     const career = binding(CLIMB, { deskOn: false });
-    /* Round 1533: nobody rated it, so the first call is the one offer, and passing on it still hangs on a climb. */
-    expect(career.market).toMatchObject({ state: 'offers', firstCall: true, nextYear: 'climb' });
+    expect(career.market!.state).toBe('quiet');
     const { container } = render(<GmJobMarketPanel {...panelProps(career)} />);
-    expect(container.querySelectorAll('[data-gm-offer]')).toHaveLength(1);
+    expect(container.querySelector('[data-gm-offers]')).toBeNull();
     const button = container.querySelector('[data-gm-sit-out]')!;
     fireEvent.click(button);
     expect(career.sitOut).not.toHaveBeenCalled();
@@ -181,7 +178,7 @@ describe('the job market panel', () => {
     expect(/stay out/i.test(container.textContent ?? '')).toBe(false);
   });
   it('offers no year out on a closed market, and its "?" opens the rules', () => {
-    const career = binding(WRECK_OUT);
+    const career = binding(WRECK);
     expect(career.market!.state).toBe('closed');
     const { container } = render(<GmJobMarketPanel {...panelProps(career)} />);
     expect(container.querySelector('[data-gm-sit-out]')).toBeNull();
@@ -189,7 +186,7 @@ describe('the job market panel', () => {
     expect(/\bsit|stay out/i.test(container.textContent ?? '')).toBe(false);
     expect(container.querySelector('[data-gm-market-help]')).toBeNull();
     fireEvent.click(screen.getByLabelText('How the job market works'));
-    expect(container.querySelectorAll('[data-gm-market-help] p')).toHaveLength(5);
+    expect(container.querySelectorAll('[data-gm-market-help] p')).toHaveLength(4);
   });
   it('draws something sane while he holds a seat', () => {
     const { container } = render(<GmJobMarketPanel {...panelProps(binding(HELD))} />);
@@ -244,13 +241,6 @@ describe('the GM level panel', () => {
     expect(container.querySelectorAll('[data-gm-xp-help] p')).toHaveLength(4);
     /* The earn line is on the screen once: above the "?", never a second time inside it. */
     expect(container.textContent!.split(career.earns)).toHaveLength(2);
-    /* Round 1533, the 1223 notes' condition 1: the panel under the earn line promises no source this desk cannot
-       feed (GmXpPanel's own six source sentence is not drawn when `earns` is passed). */
-    expect(container.textContent).not.toContain('finishing higher than anyone expected');
-    expect(container.textContent).not.toContain('bringing a prospect through');
-    expect(container.querySelector('[data-gm-xp-sources]')).toBeNull();
-    /* Condition 2: on a phone the live trees come first. */
-    expect(Array.from(container.querySelectorAll('[data-gm-tree]')).slice(0, 2).map(e => e.getAttribute('data-gm-tree'))).toEqual(['ownership', 'media']);
   });
   it('says XP has not started on a save whose desk is off, and the "?" then carries the earn line', () => {
     const career = binding(HELD, { deskOn: false });

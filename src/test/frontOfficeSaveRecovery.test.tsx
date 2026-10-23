@@ -1,11 +1,7 @@
 import { Component, type ReactNode } from 'react';
 import { cleanup, fireEvent, render, waitFor, within } from '@testing-library/react';
-import { afterEach, beforeAll, beforeEach, describe, expect, it, vi } from 'vitest';
+import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 import NflBoard from '@/components/front-office/FrontOfficeBoard';
-import { loadNflCareerKit } from '@/components/front-office/nflCareerKitLoad';
-/* Round 1550: the board fetches its career kit when a screen needs it (FrontOfficeLazyDesk.test.tsx drives that);
-   these cases drive the rules, so the kit is on the page before the board mounts. */
-beforeAll(async () => { await loadNflCareerKit(); });
 import NhlBoard from '@/components/nhl-front-office/NhlFrontOfficeBoard';
 import { initLeague, generateDraftClass, runPlayoffs, REGULAR_WEEKS } from '@/lib/frontOffice';
 import { initNhlLeague, nhlDraftClass, runNhlFoPlayoffs, nhlContributors, NHL_FO_ROUNDS } from '@/lib/nhlFrontOffice';

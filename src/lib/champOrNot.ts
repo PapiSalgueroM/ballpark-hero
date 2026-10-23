@@ -1,6 +1,5 @@
 import { supabase } from '@/integrations/supabase/client';
-import { dailyDraw, getTodayET, shuffledRange } from '@/lib/dateUtils';
-import { seasonCounts } from '@/lib/seasonCalendar';
+import { dailyDraw, shuffledRange } from '@/lib/dateUtils';
 
 /**
  * Champ or Not (Round 235): quick daily true-or-false over the champion
@@ -149,11 +148,7 @@ export interface ChampRound {
   beatLine?: string;
 }
 
-/* `today` is the board's day. A daily hook passes the day it read at mount; the
-   default is read when the call is made, before the network wait, so a
-   response that lands after midnight ET cannot deal tomorrow's seasons into
-   the board of the day the page opened on (Round 1551 review). */
-export async function fetchCompetitionRows(def: CompetitionDef, today: string = getTodayET()): Promise<ChampRow[]> {
+export async function fetchCompetitionRows(def: CompetitionDef): Promise<ChampRow[]> {
   const cols = [def.yearCol, def.winCol];
   if (def.finals) {
     cols.push(def.finals.loseCol);
@@ -176,13 +171,10 @@ export async function fetchCompetitionRows(def: CompetitionDef, today: string = 
   const { data, error } = await (q as { limit: (n: number) => PromiseLike<{ data: unknown; error: unknown }> }).limit(5000);
   if (error || !Array.isArray(data)) throw new Error(`${def.table} unavailable`);
   const out: ChampRow[] = [];
-  /* Round 1551: a season that just landed counts from a day boundary, so it
-     cannot reshuffle a board somebody already played today (seasonCalendar.ts). */
   for (const r of data as Record<string, unknown>[]) {
     const year = r[def.yearCol];
     const team = r[def.winCol];
-    if (typeof year === 'number' && Number.isFinite(year) && typeof team === 'string' && team.trim().length >= 3
-      && seasonCounts(def.table, year, today)) {
+    if (typeof year === 'number' && Number.isFinite(year) && typeof team === 'string' && team.trim().length >= 3) {
       const row: ChampRow = { year, team: team.trim() };
       if (def.finals) {
         const loser = r[def.finals.loseCol];

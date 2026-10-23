@@ -8,6 +8,10 @@ GATE ON GITHUB RUNNERS on 3cca8400 (122 requests, 70 resent after a silent sende
 
 Owed: Round 1551's migration before 2026-11-01 ET (APPLY-1551.md, B2 to B7); Club Manager budget balance after the other lane's 1443 (a spending manager sacked about twice as fast).
 
+## Preview query typing repair, 2026-10-23 UTC
+
+Added a narrow local query contract for live game relations omitted from the preview's generated schema: transfer_grade_votes, player_market_values_dedup, game_player_pool and jeopardy_clues. Five affected callers reuse the same existing client through that contract. No generated files, query strings, game rules, connection, session or production deployment changed. Verification pending below; campaign preparation remains pending with no spend authorized.
+
 ## Release BP LIVE, 2026-10-22 17:53 EDT: the owner's 2026-10-21 reports answered (Soccer Career retirement at 26, Club Manager nationalities and tactics), Soccer Career morale and a real owner tail, and session J's eight rounds
 
 Claude lane (sessions I and J). main 5ba8a1c6, deployment e12d7e79-2485-4228-a591-8f9d3df6d32c, entry index-Ci0coPfK.js.

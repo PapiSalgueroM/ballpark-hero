@@ -142,12 +142,6 @@ export interface Fighter {
   potential: number;
   /** 1 is the number one contender. 0 means he holds the title. 99 is unranked. */
   rank: number;
-  /**
-   * Round 1546: the division a gym or promotion man was showing when his id
-   * had to be repaired (repairFighterIds). Absent on everybody else, whose
-   * class is still read off his id (fighterClass).
-   */
-  weight?: WeightId;
 }
 
 /* Generated names. Deliberately a wide international pool, and deliberately
@@ -178,112 +172,10 @@ export function genFighterName(rng: () => number): string {
   return genPersonName(rng, FIRST, LAST);
 }
 
-/*
- * Round 1546: A FIGHTER'S ID NEVER COMES FROM MODULE STATE.
- *
- * Until this round every id was "f" plus a counter that lived in this module.
- * The counter went back to 0 on every page load while the gym's roster and the
- * promoter's pool kept the ids it had handed out before, so after a reload the
- * next man minted wore an id a saved man already had: the man you clicked was
- * not always the man who fought, his training went to the other one, and
- * letting one man go let both go. Round 568's bug (src/lib/entityIds.ts) in
- * the three fight games.
- *
- * Two kinds of caller, two answers, and neither touches the rng, so every draw
- * is the draw it was. Fight Gym and Fight Promoter keep their men for months,
- * so they pass an id minted off their own save (mintFighterId below), unique by
- * construction. Fight Career keys nothing on a fighter id (an opponent belongs
- * to one offer, the daily is two men), so when no id is passed the man is
- * named by what was drawn for him.
- */
-function drawnId(f: Omit<Fighter, 'id'>): string {
-  const a = f.attrs;
-  const key = [f.name, f.style, a.power, a.chin, a.speed, a.stamina, a.defence, a.ringIq, f.age, f.potential].join('|');
-  return `x${hashLabel(key).toString(36)}`;
-}
-
-/** Round 1546: a save that mints fighter ids. Both the gym and the promoter are one. */
-export interface FighterIdBook { seed: number; nextFighterNo?: number }
-
-/**
- * Round 1546: the next id off a save's own counter. The counter is written into
- * the save beside the men, so a reload carries on from it rather than from 0,
- * and the save's seed is part of the id, so two saves never mint the same id
- * and the division (read off the id) is not the same first man in every gym.
- * The prefix is never "f", so no id minted here can equal an id minted before
- * this round. It writes the counter on the book it is handed, which is always
- * the fresh state the caller is building, as stream() does with rngTick.
- *
- * Numbers start at 10, so a new promotion's first ten men all carry ids of
- * one length. The division is a hash of the id, and over ten ids of one
- * length it lands on ten classes in a row, which is the spread every new
- * promotion has always opened with: two pairs who can be matched on the first
- * card. Starting at 1 crossed from "-9" to "-10" inside the first ten and left
- * one new promotion in four (measured, 2000 names) with a single legal pair.
- */
-export const FIRST_FIGHTER_NO = 10;
-
-export function mintFighterId(book: FighterIdBook, prefix: string): string {
-  const stored = book.nextFighterNo;
-  const n = typeof stored === 'number' && Number.isInteger(stored) && stored >= 1 ? stored : FIRST_FIGHTER_NO;
-  book.nextFighterNo = n + 1;
-  return `${prefix}${(book.seed >>> 0).toString(36)}-${n}`;
-}
-
-/**
- * Round 1546: a gym or promotion man's division. It is read off his id, as it
- * always has been (a gym has men at several classes and a Round 620 fighter
- * stores none), except for a man whose id was repaired: he keeps the class he
- * was showing, stored on him at the repair.
- */
-export function fighterClass(f: Fighter): WeightId {
-  if (f.weight !== undefined && WEIGHT_CLASSES.some(w => w.id === f.weight)) return f.weight;
-  return WEIGHT_CLASSES[Math.abs(hashLabel(f.id)) % WEIGHT_CLASSES.length].id;
-}
-
-/**
- * Round 1546: the repair, for a save written before the fix. FIRST HOLDER WINS,
- * Round 568's rule (ensureUniqueIds in src/lib/entityIds.ts), written out here
- * rather than imported because the fight harnesses bundle these engine files
- * on their own. The earlier man keeps the id, and with it the training and the
- * bookings already written against it; only the man shadowing him moves, to a
- * fresh id off the save's counter, and he keeps the division he was showing.
- * The counter is first lifted above every id the save already minted, so a
- * hand edited or damaged counter cannot mint an id somebody wears. Returns new
- * lists and never edits the men it was handed; the book's counter is updated.
- */
-export function repairFighterIds(
-  book: FighterIdBook, prefix: string, lists: Fighter[][],
-): { lists: Fighter[][]; moved: number } {
-  const head = `${prefix}${(book.seed >>> 0).toString(36)}-`;
-  let top = 0;
-  for (const list of lists) {
-    for (const f of list) {
-      if (!f || typeof f.id !== 'string' || !f.id.startsWith(head)) continue;
-      const n = Number(f.id.slice(head.length));
-      if (Number.isInteger(n) && n > top) top = n;
-    }
-  }
-  const stored = book.nextFighterNo;
-  const storedOk = typeof stored === 'number' && Number.isInteger(stored) && stored > top;
-  if (!storedOk && (stored !== undefined || top > 0)) book.nextFighterNo = Math.max(top + 1, FIRST_FIGHTER_NO);
-  const seen = new Set<string>();
-  let moved = 0;
-  const out = lists.map(list => list.map(f => {
-    if (!f) return f;
-    const named = typeof f.id === 'string' && f.id !== '';
-    if (named && !seen.has(f.id)) {
-      seen.add(f.id);
-      return f;
-    }
-    const shown = named ? fighterClass(f) : undefined;
-    const fixed: Fighter = { ...f, id: mintFighterId(book, prefix) };
-    if (shown) fixed.weight = shown;
-    seen.add(fixed.id);
-    moved += 1;
-    return fixed;
-  }));
-  return { lists: out, moved };
+let seq = 0;
+function nextId(): string {
+  seq += 1;
+  return `f${seq}`;
 }
 
 /**
@@ -293,12 +185,8 @@ export function repairFighterIds(
  * drawn around it and then pulled apart by the style, so an out-boxer really
  * is quicker and a slugger really does hit harder at the same tier. Without
  * that the styles would be labels on identical men.
- *
- * Round 1546: `id` is the caller's (a gym or a promotion mints one off its
- * save). Without one the man is named by what was drawn for him, never by a
- * counter in this module.
  */
-export function makeFighter(rng: () => number, tier: number, weight: WeightId, style?: FightStyle, id?: string): Fighter {
+export function makeFighter(rng: () => number, tier: number, weight: WeightId, style?: FightStyle): Fighter {
   const st = style ?? STYLES[Math.floor(rng() * STYLES.length)].id;
   const base = clamp(tier, 20, 99);
   const jitter = () => (rng() - 0.5) * 10;
@@ -310,7 +198,8 @@ export function makeFighter(rng: () => number, tier: number, weight: WeightId, s
   };
   const s = shape[st];
   const mk = (k: keyof Attrs) => clampi(base + (s[k] ?? 0) + jitter(), 15, 99);
-  const drawn: Omit<Fighter, 'id'> = {
+  return {
+    id: nextId(),
     name: genPersonName(rng, FIRST, LAST),
     style: st,
     attrs: {
@@ -321,7 +210,6 @@ export function makeFighter(rng: () => number, tier: number, weight: WeightId, s
     wins: 0, losses: 0, draws: 0, kos: 0, damage: 0, rank: 99,
     potential: clampi(base + 10 + rng() * 16, 30, 99),
   };
-  return { id: id ?? drawnId(drawn), ...drawn };
 }
 
 /**
@@ -767,12 +655,6 @@ export interface FightCareerState {
   earnings: number;
   history: FightLine[];
   retired: boolean;
-  /**
-   * Round 1546: 'choice' when he hung the gloves up himself (retireByChoice).
-   * Absent when the body or the record ended it, and on every save from before
-   * the round, which could only end that way.
-   */
-  retiredBy?: 'choice';
   offers: Offer[];
   camp: CampPlan | null;
   campQuality: number;
@@ -1062,43 +944,6 @@ export function shouldRetire(st: FightCareerState): boolean {
   return false;
 }
 
-/**
- * Round 1546: HANGING THEM UP. Until this round a career ended only when
- * shouldRetire said so, so a champion who wanted to go out on top could not,
- * and the hub's only exit wiped the save with no verdict. This is the
- * family's exit shape (canSellGym and sellGym in fightGym.ts, canHandOver and
- * handOver in fightPromoter.ts): a gate, then the same verdict the body would
- * have given, read off the same record.
- *
- * The gate is a number of fights, as the gym's is weeks and the promoter's is
- * shows. Below it a short perfect record could be banked before anybody good
- * was ever met. scripts/simFightCareerRetire.mjs measures what the gate buys:
- * a walkaway at the gate is a Footnote 95 to 97 percent of the time, and the
- * same careers walked away from ten fights later score 3.8 to 5.2 more, so
- * the earliest door is never the best one and the gate is a door and not a
- * trick. It does NOT score under playing a career out to the end: the decline
- * years cost legacy, so stopping on your own terms is a real choice.
- */
-export const RETIRE_MIN_FIGHTS = 10;
-
-export function canRetire(st: FightCareerState): boolean {
-  return !st.retired && st.fightNo >= RETIRE_MIN_FIGHTS;
-}
-
-export function retireByChoice(st: FightCareerState): FightCareerState | null {
-  if (!canRetire(st)) return null;
-  const f = st.fighter;
-  return {
-    ...st,
-    retired: true,
-    retiredBy: 'choice',
-    offers: [],
-    camp: null,
-    campQuality: 0.5,
-    log: [`You hang them up after ${st.fightNo} fights, ${f.wins} and ${f.losses}${f.draws ? ` and ${f.draws}` : ''}.`, ...st.log],
-  };
-}
-
 export function legacyOf(st: FightCareerState): LegacyVerdict {
   const f = st.fighter;
   const titleWins = st.history.filter(h => h.title && h.result === 'W').length;
@@ -1148,82 +993,7 @@ export function legacyOf(st: FightCareerState): LegacyVerdict {
       : f.damage >= 40 ? 'He took his share and walked out on his own feet.'
         : 'He got out clean, which almost nobody does.',
   );
-  /* Round 1546: the score is the record's whatever ended it; this line only says who did. */
-  if (st.retiredBy === 'choice') bullets.push(`He called time himself after ${st.fightNo} fights.`);
   return { score, tier, hof, bullets };
-}
-
-/* ─────────────────────────── past fighters ─────────────────────────── */
-
-/**
- * Round 1546: one finished career, kept after its save is cleared, so a
- * returning player sees at setup what he has already done (the gym keeps its
- * alumni the same way). The board stores the list under its own key, so the
- * v1 save is untouched and a player from before the round has an empty list.
- */
-export interface PastFighter {
-  /** The career it came from, so the same retirement is never kept twice. */
-  key: string;
-  name: string;
-  weight: WeightId;
-  wins: number;
-  losses: number;
-  draws: number;
-  kos: number;
-  /** World title wins. */
-  titles: number;
-  defences: number;
-  tier: string;
-  score: number;
-  /** He hung them up himself rather than being stopped by the body or the record. */
-  chose: boolean;
-}
-
-export const PAST_FIGHTERS_MAX = 8;
-
-export function pastFighterOf(st: FightCareerState): PastFighter {
-  const f = st.fighter;
-  const v = legacyOf(st);
-  return {
-    key: `${st.seed >>> 0}:${st.fightNo}:${f.wins}-${f.losses}-${f.draws}:${f.kos}:${st.earnings}`,
-    name: f.name,
-    weight: st.weight,
-    wins: f.wins, losses: f.losses, draws: f.draws, kos: f.kos,
-    titles: st.history.filter(h => h.title && h.result === 'W').length,
-    defences: st.titleDefences,
-    tier: v.tier,
-    score: v.score,
-    chose: st.retiredBy === 'choice',
-  };
-}
-
-/** Newest first. A career already on the list is left where it is, so a reload of a finished save adds nothing. */
-export function archiveCareer(list: PastFighter[], st: FightCareerState): PastFighter[] {
-  if (!st.retired) return list;
-  const entry = pastFighterOf(st);
-  if (list.some(p => p.key === entry.key)) return list;
-  return [entry, ...list].slice(0, PAST_FIGHTERS_MAX);
-}
-
-/** Whatever storage hands back, as a list the setup screen can draw. Anything malformed is dropped. */
-export function sanitizePastFighters(raw: unknown): PastFighter[] {
-  if (!Array.isArray(raw)) return [];
-  const num = (v: unknown) => (typeof v === 'number' && Number.isFinite(v) ? v : null);
-  const out: PastFighter[] = [];
-  for (const r of raw) {
-    if (!r || typeof r !== 'object') continue;
-    const p = r as Record<string, unknown>;
-    const nums = [p.wins, p.losses, p.draws, p.kos, p.titles, p.defences, p.score].map(num);
-    if (typeof p.key !== 'string' || typeof p.name !== 'string' || typeof p.tier !== 'string') continue;
-    if (!WEIGHT_CLASSES.some(w => w.id === p.weight) || nums.some(n => n === null)) continue;
-    const [wins, losses, draws, kos, titles, defences, score] = nums as number[];
-    out.push({
-      key: p.key, name: p.name, weight: p.weight as WeightId, wins, losses, draws, kos, titles, defences,
-      tier: p.tier, score, chose: p.chose === true,
-    });
-    if (out.length >= PAST_FIGHTERS_MAX) break;
-  }
-  return out;
 }
 
 /* ─────────────────────────── the daily ─────────────────────────── */

@@ -26,8 +26,7 @@ import type { PitchFigure, PitchInput, PitchSide } from '@/components/pitch-moti
 import { goalWindow } from '@/components/pitch-motion/motion';
 import { PitchSurface, pitchSpot } from '@/components/pitch-motion/PitchSurface';
 import { CelebrationStyles } from '@/components/club-manager/CelebrationStyles';
-import { cueManThere, pitchPlan, pitchScene, pitchSceneKey } from '@/components/pitch-motion/scene';
-import { figureLook } from '@/components/pitch-motion/look';
+import { pitchPlan, pitchScene, pitchSceneKey } from '@/components/pitch-motion/scene';
 /* Round 1146: the mark after a goal, the report's own. */
 import { scorerMark } from '@/lib/clubManagerScorerLine';
 import type { GoalMarks } from '@/lib/clubManagerScorerLine';
@@ -355,16 +354,6 @@ export function labelsShort(figures: { key: string; x: number; y: number }[]): S
  *  of the same two numbers: (orientation: landscape) and (max-height: 499px). */
 const isSideways = (width: number, height: number) => width >= height && height <= 499;
 
-/** Round 1521: the other side's keeper's shirt, so the two keepers are never the same figure. */
-export const OPP_KEEPER = '#7ee0a3';
-/** Round 1521: whose look a figure wears (figureLook). Mine: the player's own id, so the same man is the same figure
- *  in every match. Theirs: the game holds no id for the other side's men, only their names, and a look is never
- *  drawn from a name, so it is the club and his place on that night's teamsheet (1 to 11, then the bench). Never
- *  a name, a nationality or a rating: none of them is read here. */
-export function lookKeyOf(m: { id?: string; side: 'me' | 'opp'; number: number; key: string }, club: string, opponent: string): string {
-  return m.side === 'me' ? (m.id ? `p:${m.id}` : `${club}:${m.key}`) : `${opponent}:${m.number}`;
-}
-
 /** Round 1101: a 32 bit hash of a string, the pitch's seed. Nothing in this file draws a random number. */
 function seedOf(text: string): number {
   let h = 0x811c9dc5;
@@ -430,9 +419,6 @@ export function stagePitchInput(
     kickoffs: [{ at: from, side: kicking }],
     possession: (share ?? 50) / 100,
     seed,
-    /* Round 1521: the fuller picture (attacks built line by line, fouls met on the grass, how each pass travels).
-       My side plays as directly as its mentality says; theirs is drawn balanced, as its shape already is. */
-    build: { me: mentality === 'attacking' ? 1 : mentality === 'defensive' ? -1 : 0, opp: 0 },
   };
 }
 
@@ -455,9 +441,6 @@ function LiveMatchHelp({ onClose, kinds = [] }: { onClose: () => void; kinds?: r
         <li>{penalties ? 'The score changes when the ball is in the net, not before. A penalty a review gives waits for the review first.' : 'The score changes when the ball is in the net, not before.'}</li>
         <li>The home side is named first, on the left of the score, the way a football scoreboard does it, so away from home your club is on the right. Your club's name is the one in green, on either side, and the stats follow the same order.</li>
         <li>On the pitch each man wears his surname, or his initials when players bunch up at a wall or a corner. No side in the game carries real shirt numbers, so the pitch shows none, and a side the game has no names for shows each man's position instead (CB, ST).</li>
-        <li>The players are drawn as made up figures, not likenesses of the real players. Each of your players looks the same every match; the other side's are drawn by their place on that night's teamsheet.</li>
-        <li>A foul is shown where it happens: the man who fouled gets to the player on the ball, the whistle goes and the free kick is taken from that spot while he stands by it. A card shows on the foul it was given for. When a chance, a kick off or another dead ball keeps the pitch busy all through that minute, the foul is not drawn, but it is still in the list of what happened (beside the pitch on a wide screen, the latest line under the stats on a phone) and in the stats.</li>
-        <li>Short passes roll along the grass. Long balls, crosses, throw ins, goal kicks and shots go up in the air, and the shadow under the ball shows how high.</li>
         <li>A goal marked (P) was a penalty. A goal marked (O.G) is an own goal: it counts for the club it is listed under, and the man named put it into his own net. On the pitch the ball goes in off him and he holds his head.</li>
         {reviews && <li>VAR here reviews {goals && penalties ? 'goals and penalties only' : goals ? 'goals only' : 'penalty calls only'}, and you only see a review that changed the call.{goals ? ' A goal that gets ruled out goes in first: the check opens with the ball in the net, the score does not move, and it adds no scorer or shot stats.' : ''}{penalties ? ' A foul the referee missed can become a penalty, and that kick can go in, be saved or miss.' : ''}</li>}
         <li>Tap one of your players to make a sub or change shape. Everything up to that minute stays. The rest of the half is played again with your change.</li>
@@ -1328,8 +1311,6 @@ export function LiveSimScreen({
   const scene = useMemo(() => pitchScene(plan, clock), [plan, sceneKey]);
   /* The part places roles; who each one is (his name, number, id, armband) is this screen's own. */
   const manOf = useMemo(() => new Map([...men.mine, ...men.theirs].map(m => [m.key, m])), [men]);
-  /* Round 1521: each figure is one generic person, the same man in every match (see lookKeyOf). */
-  const looks = useMemo(() => new Map([...men.mine, ...men.theirs].map(m => [m.key, figureLook(lookKeyOf(m, career.clubName, opponent))])), [men, career.clubName, opponent]);
   /* Round 1302: in a stoppage the match clock stands still and the action on the pitch runs on the stoppage's own.
      Round 1303 fix: a real goal's stoppage likewise. The last kick's is read off its own wind up, which started
      ACTION_SPAN before the whistle and has the ball in the net: a hair inside its end, so that last picture stays
@@ -1731,7 +1712,7 @@ export function LiveSimScreen({
               {/* The pitch: the shared surface (grass, markings, nets, ball), with this screen's own dots on it.
                   It takes every pixel the rows around it leave. */}
               <div className="cm-pitchbox">
-                <PitchSurface frame={motion} orientation={orientation} className="cm-stage-pitch" style={{ aspectRatio: 'auto' }} lift>
+                <PitchSurface frame={motion} orientation={orientation} className="cm-stage-pitch" style={{ aspectRatio: 'auto' }}>
                   {/* their dots: surnames (initials in a crowd) when the engine has an eleven for them, and each
                       slot's role (CB, ST) when it has none. Round 1340: never a number, the game holds no real
                       shirt numbers */}
@@ -1746,7 +1727,7 @@ export function LiveSimScreen({
                         className={cn('absolute flex items-center pointer-events-none', up ? 'flex-col-reverse' : 'flex-col')}
                         style={{ ...pitchSpot(d, orientation), transform: `translate(-50%, ${up ? -35 : -24}px)` }}
                       >
-                        <LivePitchPlayer color="#d6e6ed" keeper={d.keeper} pose={motion.poses[d.key]} look={looks.get(d.key)} keeperColor={OPP_KEEPER} />
+                        <LivePitchPlayer color="#d6e6ed" keeper={d.keeper} pose={motion.poses[d.key]} />
                         <span className={cn('cm-dot-label text-[9px] text-white/80 leading-none truncate tabular-nums', up ? 'mb-0.5' : 'mt-0.5')}>
                           {short.has(d.key) && m.name ? pitchInitials(m.name) || m.label : m.label}{m.gen ? '*' : ''}
                         </span>
@@ -1776,7 +1757,7 @@ export function LiveSimScreen({
                         )}
                         style={{ ...pitchSpot(d, orientation), transform: `translate(-50%, ${up ? -35 : -24}px)` }}
                       >
-                        <LivePitchPlayer color={clubColor} keeper={d.keeper} pose={motion.poses[d.key]} selected={picking === m.id} look={looks.get(d.key)} />
+                        <LivePitchPlayer color={clubColor} keeper={d.keeper} pose={motion.poses[d.key]} selected={picking === m.id} />
                         <span className={cn('cm-dot-label text-[9px] text-white/90 leading-none truncate tabular-nums', up ? 'mb-0.5' : 'mt-0.5')}>
                           {short.has(d.key) && m.name ? pitchInitials(m.name) || m.label : m.label}
                           {captain && (
@@ -1787,42 +1768,6 @@ export function LiveSimScreen({
                     );
                   })}
 
-                  {/* Round 1521: the foul the whistle has just stopped play for, over its spot: who it was by. The whistle
-                      and the card are the pitch's own cue; the name is that foul's own line of the feed. */}
-                  {motion.cue?.kind === 'foul' && pitchInput.feed[motion.cue.order]?.kind === 'foul' && (() => {
-                    const cue = motion.cue!;
-                    const foulLine = pitchInput.feed[cue.order];
-                    /* Round 1521 closing check: the name goes up once the man it names is at the spot. With no meeting
-                       drawn before the whistle he walks in during its first moments, and his name stood over an empty
-                       spot while he did (the walk's card shot at 390). The whistle itself is on from the start. */
-                    if (!cueManThere(motion)) return null;
-                    const nearTop = (orientation === 'landscape' ? cue.at.x : cue.at.y) < 16;
-                    const spot = pitchSpot({ x: Math.max(14, Math.min(86, cue.at.x)), y: Math.max(8, Math.min(92, cue.at.y)) }, orientation);
-                    /* With the event pill up (top 8%, two short lines), a name high on the pitch goes under the pill, never
-                       behind it: the walk at 1280 met "Booked: ..." drawn over "Foul by ..." at the top of the pitch. */
-                    const underPill = !!banner && (orientation === 'landscape' ? cue.at.x : cue.at.y) < 25;
-                    /* Round 1521 review: clear of the two men. The man who fouled stands a step on from the spot in his
-                       own direction, so the other side's man is drawn just above it on screen (either way up) and mine
-                       just below, and the man fouled stands a step the other way. The name goes on the side away from
-                       the man it names, past the man fouled and his name: the walk met "Foul by Hackney" drawn over
-                       Hackney, and over the names of the men around him. */
-                    const foulerAbove = foulLine.side === 'opp';
-                    const nearBottom = (orientation === 'landscape' ? cue.at.x : cue.at.y) > 84;
-                    const below = nearTop || underPill || (foulerAbove && !nearBottom);
-                    const drop = below ? (foulerAbove ? 26 : 34) : -64;
-                    return (
-                      <div
-                        data-cm-foul-cue={foulLine.side}
-                        data-cm-foul-order={cue.order}
-                        className="absolute z-20 pointer-events-none rounded-md border border-border bg-background/90 px-1.5 py-0.5 text-[10px] font-bold leading-tight text-foreground whitespace-nowrap"
-                        style={{ ...spot, ...(underPill ? { top: `max(${spot.top}, calc(8% + 32px))` } : {}), transform: `translate(-50%, ${drop}px)` }}
-                      >
-                        {foulLine.text
-                          ? <>Foul by {pitchName(foulLine.text)}{foulLine.side === 'opp' && oppGen(foulLine.text) && <MadeUpTag className="ml-1" />}</>
-                          : `Foul, ${foulLine.side === 'me' ? career.clubName : opponent}`}
-                      </div>
-                    );
-                  })()}
                   {reviewEvent?.review && (
                     <ClubManagerVarReview key={reviewEvent.review.id} review={reviewEvent.review}
                       club={reviewEvent.side === 'me' ? career.clubName : opponent} who={reviewEvent.text} minute={minuteLabel(reviewEvent)} reducedMotion={reducedMotion}

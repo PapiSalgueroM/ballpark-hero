@@ -90,12 +90,8 @@ export function signingSave(SB) {
 }
 
 /** A career one press before a won tournament card. Returns the save, the
-    seed it came from, how many seeds were tried, and the tournament.
-    Release BQ: { unseenWheel: true } also asks the save to hold a chance wheel
-    nobody has seen, which the search used to give by chance (seed 3 did until
-    Round 1525's season awards moved that career's events on purpose). A walk
-    that measures the wheel asks for it; the default search is unchanged. */
-export function wonTournamentSave(SB, { unseenWheel = false } = {}) {
+    seed it came from, how many seeds were tried, and the tournament. */
+export function wonTournamentSave(SB) {
   const sc = SB.soccer;
   const clubs = sc.FALLBACK_CLUBS;
   const real = Math.random;
@@ -111,7 +107,6 @@ export function wonTournamentSave(SB, { unseenWheel = false } = {}) {
       for (let g = 0; g < 400 && st && !st.retired; g += 1) {
         const t = st.pendingTournament;
         if (st.phase === 'ballon_dor' && t && t.myResult === 'Winner' && st.pendingBallonDor && st.pendingBallonDor.playerRank !== 1
-          && (!unseenWheel || (st.chanceWheel && !st.chanceWheel.seen))
           && whatIf(() => sc.dismissBallonDor(clone(st), clubs).phase) === 'world_cup') {
           return { save: JSON.stringify(st), seed, tried: seed, name: t.name, year: t.year, nation: t.nation, rank: st.pendingBallonDor.playerRank };
         }

@@ -22,7 +22,6 @@
 import { rngFrom, hashLabel, clamp, clampi } from '@/lib/careerEngine';
 import {
   makeFighter, ratingOf, simBout, weightById, WEIGHT_CLASSES,
-  mintFighterId, fighterClass, repairFighterIds,
   type Fighter, type WeightId, type Tactic, type BoutResult, type Method,
 } from '@/lib/fightCareer';
 
@@ -91,16 +90,7 @@ export interface GymState {
   soldFor?: number;
   /** Round 955: per fighter, the week of his last block and the work since his last fight. */
   training?: Record<string, GymCamp>;
-  /**
-   * Round 1546: the number the next man this gym meets will carry in his id
-   * (mintFighterId). Absent on a gym started before this round, whose men all
-   * wear "f" ids that no id minted from here on can equal.
-   */
-  nextFighterNo?: number;
 }
-
-/** Round 1546: the prefix of every fighter id this gym mints. Never "f". */
-const GYM_ID = 'g';
 
 export type GymExit = 'sold' | 'broke';
 
@@ -159,7 +149,7 @@ export function newGym(name: string, seedLabel?: string): GymState {
      the first decision should be which fight to take, not whether to exist. */
   for (let i = 0; i < 2; i += 1) {
     const w = WEIGHT_CLASSES[Math.floor(rng() * WEIGHT_CLASSES.length)].id;
-    const f = makeFighter(rng, 44 + rng() * 8, w, undefined, mintFighterId(g, GYM_ID));
+    const f = makeFighter(rng, 44 + rng() * 8, w);
     f.age = clampi(19 + rng() * 3, 19, 23);
     g.roster.push(f);
   }
@@ -185,7 +175,7 @@ export function prospectsFor(g: GymState): Prospect[] {
   const tier = 38 + (g.reputation / 100) * 34;
   for (let i = 0; i < 3; i += 1) {
     const w = WEIGHT_CLASSES[Math.floor(rng() * WEIGHT_CLASSES.length)].id;
-    const f = makeFighter(rng, clamp(tier + (rng() - 0.4) * 14, 30, 88), w, undefined, mintFighterId(g, GYM_ID));
+    const f = makeFighter(rng, clamp(tier + (rng() - 0.4) * 14, 30, 88), w);
     f.age = clampi(18 + rng() * 6, 18, 26);
     const fee = Math.round((0.02 + (ratingOf(f) / 100) ** 2.4 * 0.72) * 1000) / 1000;
     out.push({
@@ -217,10 +207,10 @@ export function signProspect(g: GymState, id: string): GymState | null {
 
 /* A fighter carries no weight class of his own on the Round 620 model, because
    there a career has exactly one. A gym has men at several, so the class is
-   derived from the man rather than stored twice and allowed to disagree.
-   Round 1546: it is the promoter's rule too, so it lives once in fightCareer.ts. */
+   derived from the man rather than stored twice and allowed to disagree. */
 export function guessWeight(f: Fighter): WeightId {
-  return fighterClass(f);
+  const idx = Math.abs(hashLabel(f.id)) % WEIGHT_CLASSES.length;
+  return WEIGHT_CLASSES[idx].id;
 }
 
 /**
@@ -630,20 +620,6 @@ export function sanitizeGym(g: GymState): GymState {
         if (okBlocks) clean[id] = { week: c.week, blocks };
       }
       out.training = clean;
-    }
-  }
-  /* Round 1546: a gym saved before the fix can hold two men under one id (a
-     prospect signed after a reload). The first keeps it, with his training;
-     the second gets his own and keeps the division he was showing. The men
-     waiting at the door are checked against the roster too, because signing
-     one puts him on it. */
-  if (Array.isArray(out.roster) && Array.isArray(out.prospects)) {
-    const waiting = out.prospects.map(p => p?.fighter);
-    const fixed = repairFighterIds(out, GYM_ID, [out.roster, waiting.filter((f): f is Fighter => !!f)]);
-    if (fixed.moved > 0) {
-      out.roster = fixed.lists[0];
-      let k = 0;
-      out.prospects = out.prospects.map(p => (p?.fighter ? { ...p, fighter: fixed.lists[1][k++] } : p));
     }
   }
   return out;

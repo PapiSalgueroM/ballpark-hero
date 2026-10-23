@@ -54,9 +54,6 @@ const override = process.env.FO_BOARD_NFL;
 const { default: Board } = (override
   ? await import(/* @vite-ignore */ override)
   : await import('@/components/front-office/FrontOfficeBoard')) as { default: ComponentType };
-/* Round 1550: the board fetches its career kit when a screen needs it (FrontOfficeLazyDesk.test.tsx drives that);
-   these cases drive the rules, so the kit is on the page before the board mounts. */
-await (await import('@/components/front-office/nflCareerKitLoad')).loadNflCareerKit();
 
 afterEach(() => { cleanup(); Math.random = REAL_RANDOM; localStorage.clear(); });
 
@@ -240,7 +237,6 @@ async function freshGame() {
   const { default: B } = (override
     ? await import(/* @vite-ignore */ override)
     : await import('@/components/front-office/FrontOfficeBoard')) as { default: ComponentType };
-  await (await import('@/components/front-office/nflCareerKitLoad')).loadNflCareerKit(); /* Round 1550, as above */
   return { E, FO_DEPTH, openNflDesk, Board: B };
 }
 /** FrontOfficeOnePress.test.tsx's save on the morning of the final week, made the same way. */

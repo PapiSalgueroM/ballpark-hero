@@ -407,9 +407,7 @@ if (!fs.existsSync(path.join(ROOT, 'dist', 'index.html'))) {
     const { loadEngine, signingSave, wonTournamentSave } = await import('./lib/careerMomentSaves.mjs');
     const engine = await loadEngine(ROOT);
     const signing = signingSave(engine);
-    /* Release BQ: the wheel section below measures the chance wheel this save holds, so the search asks for one
-       (Round 1525 moved seed 3's events and its save stopped holding one; the search used to give it by chance). */
-    const won = wonTournamentSave(engine, { unseenWheel: true });
+    const won = wonTournamentSave(engine);
     const SCENE_CLASSES = ['cmo-num-new', 'cmo-num-old', 'cmo-ink', 'cmo-ring', 'victory-cup', 'victory-rays', 'victory-ribbons'];
     const GONE_CLASSES = ['cmo-num-old', 'cmo-ring'];
     const surfaces = [

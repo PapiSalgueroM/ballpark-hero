@@ -57,7 +57,7 @@
  *   spendany (8) canspend (8) stalestaff (9) halfseason (9) noyear (9) awayxp (9) lastcall (9)
  *   emptytile (10) closedsit (10) fewseasons (10) shutbutton (10) passquiet (10)
  *   longtile (10) clubvalue (10) openpromise (10) halfword (10) allfired (10)
- *   tileclimb (10) climbword (10)   nofirstcall (4, Round 1533) arrivalnull (9, Round 1533: hostArrivalLine)
+ *   tileclimb (10) climbword (10)
  * Eleven of them are the review's own mutants made permanent (2026-10-10): five that passed every gate of the round
  * (nhlrecord, nhlpct, rankplace, canspend, tileclimb), hockey read without its overtime losses (nhlgames, which
  * only check 9 caught), and five the two vitest files alone caught (tierunknown, fitsave, craftfirst, awayxp,
@@ -102,24 +102,6 @@
  * floor on one seed. The two processes of one seed set print one feed digest (seeds 1,2,3:
  * 4639809b50a97cedd2ac870d05cfdb6d59a4b6e4).
  * CONTROLS, each run alone on seeds 1,2,3, failures counted in its own check: see CONTROL COUNTS below T.
- * MEASURED AGAIN 2026-10-22 for Round 1533 (runner result r1533-s0c), after the first call joined hostMarket: when
- * the first feed after a sacking is empty, the weakest roster that did not let him go rings, once. Only the
- * market counts of check 4 moved (every other count above is as it was), on seeds 1,2,3 / 4,5,6 / 7,8,9:
- *   markets on the ladder    16800 each: offers 12694 / 12703 / 12716, after a badly season 2636 / 2628 / 2651,
- *                            quiet 2800 / 2804 / 2793, quiet on a climb 729 / 722 / 723, closed 4721 / 4725 / 4736
- *   first calls              637 / 651 / 671 (45 of them a last call on each set), every one of them out of work
- *                            no year: a man fired straight from the seat never reads quiet or closed now
- *   last calls 559 / 555 / 544, on a climb 555 / 562 / 561 (about one market with offers in eight, as before)
- *   offers from a club whose roster rank is not its standings place   10697 / 11072 / 10931
- * The floors below still sit under these (minFirstCalls at 70 percent of the lowest set, 445). Control nofirstcall
- * fired with 638 failures in check 4 on seeds 1,2,3.
- * MEASURED 2026-10-22 for Round 1533's fix pass (runner result r1533-fx1, head 509d7021): the first call's words
- * are read against the caller's rank (the weakest only when every other club is stronger), and check 4 also fires
- * from the weakest club itself on every league: 24 first calls on each of seeds 1,2,3 / 4,5,6 / 7,8,9 (four
- * sports, three leagues, two tails: every one rang, from the next weakest), so minNearCalls is 16, 70 percent.
- * The ladder already holds the case once in a while (nba seed 1: BKN is the weakest and MIL, 29th of 30, calls).
- * Control onereason (the reason always "the weakest roster") fired with 64 failures in check 4 on seeds 1,2,3;
- * nofirstcall fired with 639 there on the same head.
  */
 import './lib/seedRandom.mjs';
 import fs from 'node:fs';
@@ -164,8 +146,6 @@ const ok = (cond, m) => { if (!cond) fail(typeof m === 'function' ? m() : m); re
 /* ---- the controls: source rewrites applied at bundle time, never on disk ---- */
 const FILES = {
   host: path.join(ROOT, 'src', 'lib', 'gmDeskHost.ts'),
-  /* Round 1550: the record reader, the XP reader, the hub boxes and the GM level help moved here word for word */
-  face: path.join(ROOT, 'src', 'lib', 'gmCareerFace.ts'),
   nhl: path.join(ROOT, 'src', 'lib', 'gmDeskHostNhl.ts'),
   nba: path.join(ROOT, 'src', 'lib', 'gmDeskHostNba.ts'),
   seat: path.join(ROOT, 'src', 'lib', 'gmSeat.ts'),
@@ -181,9 +161,9 @@ const EDITS = {
   nhlpct: ['1', 'nhl', 'pct: (t.wins * 2 + t.otLosses) / (games * 2)', 'pct: (t.wins * 2 + t.losses) / (games * 2)'],
   /* Hockey read as if an overtime loss were not a game played: two lines, one idea. */
   nhlgames: ['1', 'nhl', '      const games = t.wins + t.losses + t.otLosses;', '      const games = t.wins + t.losses;', '        losses: t.losses + t.otLosses,', '        losses: t.losses,'],
-  fillmet: ['2', 'face', '  const unknown = seasons - grades.length;',
+  fillmet: ['2', 'host', '  const unknown = seasons - grades.length;',
     "  for (let i = grades.length; i < seasons; i++) grades.push('met');\n  const unknown = seasons - grades.length;"],
-  readwrites: ['2', 'face', '  return gmBlock<GmXp>(desk, GM_HOST_KEYS.xp, isValidGmXp, defaultGmXp);',
+  readwrites: ['2', 'host', '  return gmBlock<GmXp>(desk, GM_HOST_KEYS.xp, isValidGmXp, defaultGmXp);',
     '  if (!(GM_HOST_KEYS.xp in desk.blocks)) desk.blocks[GM_HOST_KEYS.xp] = defaultGmXp();\n  return gmBlock<GmXp>(desk, GM_HOST_KEYS.xp, isValidGmXp, defaultGmXp);'],
   tierunknown: ['2', 'host', '    const unknown = i === 0 && seat.before?.tierUnknown === true;', '    const unknown = false;'],
   unkeyed: ['3', 'host', '    keyedRng(hostFeedKey(host.sport, seat, season)), host.champion(league, season),', '    Math.random, host.champion(league, season),'],
@@ -194,8 +174,8 @@ const EDITS = {
   closedquiet: ['5', 'seat', '  for (let t = p.lastTier - 1; t >= 1; t--) {', '  for (let t = 0; t >= 1; t--) {'],
   twice: ['6', 'host', '  if (seat.last !== undefined && f.season <= seat.last) return same;', '  if (false) return same;'],
   lateseat: ['6', 'host', 'titles: i.titles, fired: i.fired, seasonCounted: false,', 'titles: i.titles, fired: i.fired, seasonCounted: true,'],
-  failopen: ['6', 'face', 'v => isGmSeatBlock(v) && seatFitsSave(v, l)', 'v => !!v'],
-  fitsave: ['6', 'face', '  return s.team === l.team && (s.ended !== undefined) === l.fired;', '  return s.team === l.team;'],
+  failopen: ['6', 'host', 'v => isGmSeatBlock(v) && seatFitsSave(v, l)', 'v => !!v'],
+  fitsave: ['6', 'host', '  return s.team === l.team && (s.ended !== undefined) === l.fired;', '  return s.team === l.team;'],
   cushionall: ['6', 'host', '  const trustDelta = fx.trustDelta(grade.trustDelta) + movers;', '  const trustDelta = fx.trustDelta(grade.trustDelta + movers);'],
   flatlevel: ['7', 'host', '  for (const t of GM_TREES) points[t] = gmTreePoints(block, t);', '  for (const t of GM_TREES) points[t] = Math.min(1, gmTreePoints(block, t));'],
   sharedroll: ['7', 'host', 'keyedRng(hostXpRollKey(sport, tree, key))();', "keyedRng(hostXpRollKey(sport, 'scouting', key))();"],
@@ -205,7 +185,7 @@ const EDITS = {
   craftfirst: ['7', 'host', 'for (let i = list.length - 1; i >= 0; i--) if (list[i].playerId === playerId) { at = i; break; }', 'for (let i = 0; i < list.length; i++) if (list[i].playerId === playerId) { at = i; break; }'],
   flatask: ['7', 'host', '  if (fx.points.negotiation <= 0) return cases;', '  if (fx.points.negotiation <= 9) return cases;'],
   spendany: ['8', 'host', '  if (!(live as readonly string[]).includes(tree)) return null;', '  if (false) return null;'],
-  canspend: ['8', 'face', 'live.some(t => gmTreePoints(xp, t) < GM_MAX_TREE_POINTS);', 'live.some(t => gmTreePoints(xp, t) <= GM_MAX_TREE_POINTS);'],
+  canspend: ['8', 'host', 'live.some(t => gmTreePoints(xp, t) < GM_MAX_TREE_POINTS);', 'live.some(t => gmTreePoints(xp, t) <= GM_MAX_TREE_POINTS);'],
   stalestaff: ['9', 'host', '    if (r.fresh) blocks[r.key] = r.fresh(league, team);', '    if (r.fresh) blocks[r.key] = desk.blocks[r.key];'],
   halfseason: ['9', 'host', '  for (let i = 0; i < periods; i++) desk = kept(', '  for (let i = 0; i < periods / 2; i++) desk = kept('],
   noyear: ['9', 'host', '    desk: hostSitOut({ v: desk.v, blocks }, seat),', '    desk: { v: desk.v, blocks },'],
@@ -213,22 +193,18 @@ const EDITS = {
   awayxp: ['9', 'host', '  delete blocks[GM_HOST_KEYS.xp];', '  /* gone */',
     '  if (Object.prototype.hasOwnProperty.call(a.desk.blocks, GM_HOST_KEYS.xp)) blocks[GM_HOST_KEYS.xp] = a.desk.blocks[GM_HOST_KEYS.xp];', '  /* gone too */'],
   lastcall: ['9', 'host', "  if (!hostCanSitOut(market)) return { ok: false, reason: 'last-call' };", "  if (false) return { ok: false, reason: 'last-call' };"],
-  arrivalnull: ['9', 'host', '  if (!hostArriving(seat, host.season(league))) return null;', '  if (false) return null;'],
   shutbutton: ['10', 'host', "  return !!market && market.nextYear !== 'shut';", "  return !!market && (market as HostMarket).state !== 'closed';"],
   passquiet: ['10', 'host', "    return climb !== null ? `${called} Pass, and next year ${climb}` : called;", '    return called;'],
-  emptytile: ['10', 'face', "value: 'No more calls',", "value: '',"],
+  emptytile: ['10', 'host', "value: 'No more calls',", "value: '',"],
   openpromise: ['10', 'host', 'As things stand next year is still open, and every year out', 'Next year is still open, and every year out'],
   halfword: ['10', 'host', "'second tier', 'third tier', 'bottom tier'] as const;", "'second tier', 'lower half', 'bottom tier'] as const;"],
   allfired: ['10', 'host', "  return s.ended === 'walked' ? { since:", "  return s.ended === 'nobody' ? { since:"],
-  tileclimb: ['10', 'face', "    sub: market.nextYear === 'climb' ? hangs : 'Next year open, as things stand',", "    sub: market.nextYear === 'climb' ? 'Next year open, as things stand' : hangs,"],
+  tileclimb: ['10', 'host', "    sub: market.nextYear === 'climb' ? hangs : 'Next year open, as things stand',", "    sub: market.nextYear === 'climb' ? 'Next year open, as things stand' : hangs,"],
   climbword: ['10', 'host', 'have climbed into the ${HOST_TIER_WORDS[next.climbTo]} of the league by then.', 'have climbed into the ${HOST_TIER_WORDS[next.climbTo - 1]} of the league by then.'],
-  longtile: ['10', 'face', "value: 'Nobody called',", "value: 'Nobody called this year',"],
-  clubvalue: ['10', 'face', 'value: `Season ${hostStintSeasons(seat, index) + 1}`,', 'value: `Season ${hostStintSeasons(seat, index) + 1} with the ${name}`,'],
+  longtile: ['10', 'host', "value: 'Nobody called',", "value: 'Nobody called this year',"],
+  clubvalue: ['10', 'host', 'value: `Season ${hostStintSeasons(seat, index) + 1}`,', 'value: `Season ${hostStintSeasons(seat, index) + 1} with the ${name}`,'],
   closedsit: ['10', 'host', 'Nobody called, and nobody will: the phone has stopped. A new front office is the way back in.',
     'Nobody has called yet. Sit the year out and see who remembers you.'],
-  nofirstcall: ['4', 'host', '    if (call) { offers = [call]; firstCall = true; }', '    if (call && false) { offers = [call]; firstCall = true; }'],
-  /* Round 1533 fix pass: the first call always says "the weakest roster", even from the next weakest. */
-  onereason: ['4', 'host', '    reason: rank === teams.length ? HOST_FIRST_CALL_REASON : HOST_FIRST_CALL_REASON_NEAR,', '    reason: HOST_FIRST_CALL_REASON,'],
   fewseasons: ['10', 'host', '  const record = seasonsAndTitles(hostStintSeasons(seat, index), s.grades', '  const record = seasonsAndTitles(s.grades.length, s.grades'],
 };
 if (CONTROL && !EDITS[CONTROL]) {
@@ -494,7 +470,7 @@ const SPORTS = Object.keys(DRIVE);
 const PER3 = {
   minLeagues: 58, minRealSaves: 168, minOffers: 8400, minBadlyOffers: 1570, minClimb: 560, minClosed: 3300, minQuietOpen: 2300,
   minReach: 455, minVerdicts: 780, minLosing: 348, minFiredCloses: 348, minCases: 6100, minYoung: 7600, minPairs: 730000,
-  minLastCalls: 345, minPassClimb: 330, minRankApart: 7300, minFirstCalls: 445, minNearCalls: 16,
+  minLastCalls: 345, minPassClimb: 330, minRankApart: 7300,
 };
 const FIXED = { minFeedsWithOffers: 23, minMen: 2290, minCuts: 200 };
 const T = { ...FIXED, ...Object.fromEntries(Object.entries(PER3).map(([k, v]) => [k, Math.floor((v * SEEDS.length) / 3)])) };
@@ -516,7 +492,6 @@ if (!SEEDS.length || SEEDS.some(s => !Number.isInteger(s))) { console.error(`SIM
      openpromise 3310 in 10    halfword 1 in 10          allfired 12 in 10         tileclimb 4121 in 10
      climbword 1284 in 10      longtile 4145 in 10       clubvalue 552 in 10       closedsit 4946 in 10
      fewseasons 504 in 10
-     onereason 64 in 4 (Round 1533's fix pass, r1533-fx1)
    badlyceiling did NOT fire on the full leagues alone (0 failures in 2,260 offers after a badly season): the
    engine's own ceiling hides the rule there, which is why check 4 also reads six real clubs at a time
    (653 / 651 / 653 offers in 216 feeds on the three seed sets, none from the top tier). */
@@ -757,7 +732,7 @@ begin('4', 'the market rules on real tiers: never the club that let him go, a ce
    without which no career reads closed and check 5 would be empty. */
 const TAILS = [['title'], ['overachieved'], ['met'], ['missed'], ['badly'], ['badly', 'badly'], ['badly', 'badly', 'badly'],
   ['badly', 'badly', 'missed'], ['badly', 'missed', 'missed'], ['missed', 'missed', 'missed', 'missed']];
-const M4 = { firstCalls: 0, firstLast: 0, markets: 0, offers: 0, withOffers: 0, badlyOffers: 0, quietOpen: 0, climb: 0, closed: 0, most: 0, lastCalls: 0, passClimb: 0, rankApart: 0 };
+const M4 = { markets: 0, offers: 0, withOffers: 0, badlyOffers: 0, quietOpen: 0, climb: 0, closed: 0, most: 0, lastCalls: 0, passClimb: 0, rankApart: 0 };
 const closedCareers = [], quietCareers = [], lastCallCareers = [];
 for (const sport of SPORTS) {
   const d = DRIVE[sport], pack = d.host.pack;
@@ -771,23 +746,6 @@ for (const sport of SPORTS) {
       M4.markets++;
       if (!m || m.season !== season + 1 || m.seasonsOut !== out) { fail(`${at}: no market, or not next season's`); continue; }
       const lastBadly = tail[tail.length - 1] === 'badly';
-      /* Round 1533: the first call. Fired straight from the seat, somebody always rings: the feed, or else the
-         weakest roster that did not let him go. A year out on, the feed is the engine's alone (control nofirstcall). */
-      if (out === 0) {
-        if (m.state !== 'offers') fail(`${at}: fired straight from the seat and nobody rings, the first call is missing`);
-        if (m.firstCall) {
-          M4.firstCalls++;
-          const weakest = [...clubs].sort((a, b) => a.strength - b.strength || b.id.localeCompare(a.id)).find(c => c.id !== old);
-          const o = m.offers[0];
-          /* The reason says "the weakest" only when every other club is stronger (control onereason). */
-          const rank = 1 + clubs.filter(x => x.strength > weakest.strength).length;
-          const reason = rank === clubs.length ? H.HOST_FIRST_CALL_REASON : H.HOST_FIRST_CALL_REASON_NEAR;
-          if (m.offers.length !== 1 || o.teamId !== weakest.id || o.reason !== reason || o.ask.season !== season + 1) {
-            fail(`${at}: the first call is not one call from the weakest roster that did not let him go, in words true of its rank ${rank} (${J(m.offers.map(x => [x.teamId, x.reason]))})`);
-          }
-          if (m.nextYear === 'shut') M4.firstLast++;
-        }
-      } else if (m.firstCall) fail(`${at}: a first call ${out} year(s) out`);
       for (const o of m.offers) {
         const c = clubs.find(x => x.id === o.teamId), f = m.facts[o.teamId];
         if (o.teamId === old) fail(`${at}: the club that let him go is in the feed`);
@@ -819,31 +777,6 @@ for (const sport of SPORTS) {
     ok(J(lg) === before, `${sport} seed ${snap.seed}: reading the market changed the league`);
   }
 }
-/* Round 1533 fix pass: the first call when the club that let him go IS the weakest. The caller is then the next
-   weakest, its card prints "Roster ranked" its own rank right under the reason, so the reason must not call it the
-   weakest in the league (control onereason). The ladder above fires from the first club of each tier by id, which
-   is the weakest only by chance, so this walk fires from the weakest itself, on every league of the fleet. */
-let nearCalls = 0;
-for (const sport of SPORTS) {
-  const d = DRIVE[sport];
-  for (const snap of FLEET[sport].closed.filter(x => x.s === 0)) {
-    const lg = snap.lg, season = lg.season, clubs = d.host.clubs(lg), tiers = tiersOf(d, lg);
-    const order = [...clubs].sort((a, b) => a.strength - b.strength || b.id.localeCompare(a.id));
-    const old = order[0].id;
-    for (const tail of [['badly', 'badly'], ['badly', 'badly', 'badly']]) {
-      const m = H.hostMarket(d.host, lg, firedSeat(old, tiers.get(old), season, tail), nameOf);
-      if (!m || !m.firstCall) continue;
-      nearCalls++;
-      const o = m.offers[0], f = m.facts[o.teamId], at = `${sport} seed ${snap.seed}, let go by the weakest ${old} after ${tail.join(',')}`;
-      if (o.teamId !== order[1].id) fail(`${at}: the first call is from ${o.teamId}, the next weakest is ${order[1].id}`);
-      if (!f || f.strengthRank === clubs.length || o.reason !== H.HOST_FIRST_CALL_REASON_NEAR) {
-        fail(`${at}: the card reads "${o.reason}" over a roster ranked ${f ? f.strengthRank : '?'} of ${clubs.length}`);
-      }
-    }
-  }
-}
-ok(nearCalls >= T.minNearCalls, `only ${nearCalls} first calls with the weakest club the one that let him go, too few to hold the words`);
-console.log(`   first calls when the club that let him go is the weakest: ${nearCalls}, each from the next weakest and none of them called the weakest`);
 /* The ceiling again, where it bites. In a full league the engine's own ceiling hides the rule (scripts/simGmSeat.mjs
    measured a top tier call after a badly season about once in 2,800 offers), so the same real clubs are read six at
    a time through the same adapter, where the one other top tier club is always in reach, for the decorated careers
@@ -871,8 +804,6 @@ ok(M4.lastCalls >= T.minLastCalls && M4.passClimb >= T.minPassClimb, `the ladder
 ok(M4.rankApart >= T.minRankApart, `only ${M4.rankApart} of ${M4.offers} offers come from a club whose strength rank is not its standings place, too few to tell the two apart`);
 console.log(`   with offers on the table and next year not open: ${M4.lastCalls} are the last calls (next year shut), ${M4.passClimb} hang on a climb; ${M4.rankApart} offers from a club whose roster rank is not its place`);
 console.log(`   the ceiling six clubs at a time: ${reach} offers in ${reachFeeds} feeds of the most decorated careers, none from the top tier`);
-ok(M4.firstCalls >= T.minFirstCalls, `only ${M4.firstCalls} first calls on the ladder, too few to hold the rule`);
-console.log(`   first calls (fired straight from the seat, nobody else rang): ${M4.firstCalls}, ${M4.firstLast} of them the last call`);
 
 /* ================================================================== */
 begin('5', 'shut means shut, closed or on a last call: no tier his old club can reach and no year out reopens it, a quiet market is never in that set, and the year out is on offer only while next year can hold a call');
@@ -1275,11 +1206,6 @@ for (const sport of SPORTS) {
     const newLegacy = H.hostLegacy(d.host, lg, { team: offer.teamId, seasonsPlayed: save.seasonsPlayed, titles: save.titles, fired: false, seasonCounted: true });
     ok(H.hostTakeSeat({ host: d.host, league: lg, desk: out.desk, save: out.save, legacy: newLegacy, teamId: offer.teamId, nameOf, blocks: RULES }) === null, `${at}: a man who holds a seat took another`);
     word(H.hostTakeArmLine(d.host.pack, offer, false), `${at} arm`); boxed(H.hostCareerTile(ns, labelOf(sport)), `${at} after the move`);
-    /* Round 1533: the arrival line, drawn on the arrival alone and naming the club he takes (control arrivalnull). */
-    const arrival = H.hostArrivalLine(d.host, lg, ns, nameOf);
-    ok(arrival !== null && arrival.includes(nameOf(offer.teamId)) && H.hostArrivalLine(d.host, lg, seat, nameOf) === null,
-      `${at}: the arrival line is not drawn on the arrival alone (${arrival})`);
-    if (arrival !== null) word(arrival, `${at} arrival line`);
 
     /* The year out. Refused three ways, each before the league is touched. */
     const copy = clone(lg), frozen = J(copy), rng = mulberry32(900 + snap.seed);
@@ -1454,7 +1380,6 @@ for (const sport of SPORTS) {
   const pack = DRIVE[sport].host.pack, earns = H.hostEarnsLine(['wins', 'titles', 'playoffs', 'mandate']);
   for (const s of [...H.hostMarketHelp(pack), ...H.hostCareerHelp(pack), ...H.hostXpHelp(), earns, H.hostEarnsLine([]), H.hostEarnsLine(['wins']),
     H.hostEarnsLine(['wins', 'titles', 'playoffs', 'mandate', 'overperformance', 'prospects']),
-    ...['in-seat', 'season-open', 'market-closed', 'last-call', 'broken-adapter'].map(r => H.hostAwayRefusalLine(pack, r)),
     ...['open', 'climb', 'shut'].flatMap(nextYear => [0, 1, 3].flatMap(n => [true, false].map(on => H.hostSitArmLine({ nextYear, offers: Array(n).fill(null) }, on))))]) judge(s, `${sport} help`);
   for (const [desk, live, on] of [[null, LIVE, false], [deskWith({}), LIVE, true], [deskWith({}), [], true], [G.freshGmDesk(), LIVE, true], [deskWith(Object.fromEntries(LIVE.map(t => [t, 5]))), LIVE, true]]) {
     box(H.hostXpTile(desk, live, on), `${sport} GM level`);

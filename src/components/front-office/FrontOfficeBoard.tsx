@@ -38,20 +38,9 @@ import { cn } from '@/lib/utils';
 import { useRevealScroll } from '@/hooks/useRevealScroll';
 // Round 180: the owner upstairs, shared engine and card.
 import {
-  buildOwnerMandate, strengthRank, mandatePace, gradeSeason,
-  FO_TRUST_START, type OwnerMandate, type FoSportWords,
+  buildOwnerMandate, strengthRank, mandatePace, gradeSeason, applyMandateResult,
+  firedLine, nflPostseason, FO_TRUST_START, type OwnerMandate, type FoSportWords,
 } from '@/lib/foOwnerMandate';
-/* Round 1533: the GM's career. The desk host is the one place it lives for all four front offices
-   (src/lib/gmDeskHost.ts); this board binds it through the NFL's read adapter and src/lib/nflGmDesk.ts.
-   Round 1550: the page carries only what every screen reads (src/lib/gmCareerFace.ts: the record and XP readers,
-   the hub boxes, the summer's ask). The rest (the verdict, the market, a seat, the year out, the out of work
-   screen) is the career kit, fetched when it is needed: nflCareerKit.ts says when, `kitNeeded` below asks. */
-import { GM_HOST_KEYS, hostBoxLegacy, hostSeatOf, hostSummerMandate } from '@/lib/gmCareerFace';
-import type { GmCareerBinding } from '@/lib/gmDeskHost';
-import type { GmSeatPack } from '@/lib/gmSeat';
-import { loadNflCareerKit, nflCareerKitNow, type NflCareerKit } from '@/components/front-office/nflCareerKitLoad';
-import { GM_CAREER_PANELS } from '@/components/front-office-shared/gmCareerDesk';
-import type { GmTree } from '@/lib/gmXp';
 import OwnerMandateCard from '@/components/front-office-shared/OwnerMandateCard';
 /* Round 187: the verdict curtain. stageVerdict decides the presentation
    facts (confetti only for the champion GM, fired kills it outright) so
@@ -77,10 +66,9 @@ import {
   nflApplyTradeDeadMoney, nflDeadlineRefusal, nflDeskAfterWeek, nflDeskEdges, nflDeskOffseason, nflDeskWeekOptions,
   nflMirrorPickMove, nflNoteArrivals, nflPackageCapCheck, nflPicksOf, nflScoutRead, nflSignDraftee, nflStaffOf, nflTradeDeadMoney,
   nflTradeWindow, openNflDesk, syncNflPicks, NFL_DESK_KEYS,
-  nflSeasonCounted, NFL_XP_LIVE, NFL_XP_SOURCES,
 } from '@/lib/nflGmDesk';
 /* By its full path, not './': harnesses bundle a copy of this board from a temp folder. */
-import { NFL_DESK_PANELS, NFL_HUB_PANELS, NFL_RECAP_PANELS, type NflDeskFacts } from '@/components/front-office/NflGmDesk';
+import { NFL_DESK_PANELS, NFL_RECAP_PANELS, type NflDeskFacts } from '@/components/front-office/NflGmDesk';
 /* Round 1305: every score a GM reads is told by the football law for the
    winner the engine decided, and his club's games of the season are kept in
    the save. Both are needed in the press's own tick, so they are static;
@@ -100,40 +88,19 @@ import {
    game, the match clock and the "?" are one chunk the week box asks for
    when it opens; the press never waits on it. Made here, at module level:
    a lazy part must be the same component on every render. */
-import { GmPanelLoading, lazyPart } from '@/components/front-office-shared/gmLazyPanel';
+import { lazyPart } from '@/components/front-office-shared/gmLazyPanel';
 const NflGameDay = lazyPart<GmGameDayMount>(() => import('@/components/front-office/NflGameDay'));
 /* Round 1309: the bracket card, the face of the same box in the playoffs. Made
    once at module level, so the card, its "?" and the ledger's week names are
    one chunk the week box asks for. (Round 1307's note that the final week has
    no Watch is gone: Week 17 has Watch now, and its press opens the bracket.) */
 const NflBracket = lazyPart<GmBracketMount>(() => import('@/components/front-office/NflBracket'));
-/* Round 1550: the two binding fields only the screens behind the career boxes read (the seat pack, the earn line).
-   Those screens are drawn once the kit is here and never before, so a read without it is a bug and says so. */
-const careerKitOrThrow = (): NflCareerKit => {
-  const k = nflCareerKitNow();
-  if (!k) throw new Error('the career kit was read before it arrived');
-  return k;
-};
-/* Round 1550: where a career screen stands while the kit is on its way (a save loaded on the recap or the fired
-   screen, a career box opened): the holding box every lazy screen on this board shows, at the height of a screen,
-   and a retry if the fetch failed. */
-function CareerKitHolding({ failed, onRetry, minHeight = 320 }: { failed: boolean; onRetry: () => void; minHeight?: number }) {
-  if (!failed) return <GmPanelLoading minHeight={minHeight} />;
-  return (
-    <div role="status" data-career-kit-failed style={{ minHeight }} className="rounded-2xl border border-border bg-card p-4 text-center text-sm text-muted-foreground">
-      <p>That screen didn't load. Check your connection and try again.</p>
-      <button type="button" onClick={onRetry} className="mt-3 inline-flex min-h-[44px] items-center rounded-full border border-primary px-6 text-sm font-bold text-primary hover:bg-primary/10">
-        Try again
-      </button>
-    </div>
-  );
-}
 /* the three button rows of the playoffs (Week 17, and a round): stacked under sm, three a row from sm up, each one
    height whatever its words, so the box under them never moves from one round to the next */
 const PRESS_THREE = 'inline-flex min-h-[44px] w-full items-center justify-center gap-2 rounded-full px-4 py-2 text-sm font-bold leading-tight disabled:opacity-40 sm:h-14';
 
-/* Round 180: 'fired' is new. Zero trust upstairs ends the job the way a
-   Club Manager sacking does (Round 1533: the out of work screen, not the end of the save). */
+/* Round 180: 'fired' is new. Zero trust upstairs ends the save the way a
+   Club Manager sacking does. */
 type Phase = 'pick' | 'hub' | 'draft' | 'recap' | 'fired';
 type Tab = 'team' | 'market' | 'trade' | 'week' | 'standings';
 
@@ -266,10 +233,6 @@ export default function FrontOfficeBoard() {
   const [trust, setTrust] = useState(FO_TRUST_START);
   const [fired, setFired] = useState(false);
   const [gradeLine, setGradeLine] = useState<string | null>(null);
-  /* Round 1533: the GM XP the season's verdict paid, for the recap's line. Transient like a presser: a reload shows no line. */
-  const [xpLine, setXpLine] = useState<string | null>(null);
-  /* Round 1533's fix pass: the club he just took a seat at, so the arrival recap can bring its top onto the screen. */
-  const [landedAt, setLandedAt] = useState<string | null>(null);
   /* Round 192: the room. Presser transient; tilt and trade line persist. */
   const [presser, setPresser] = useState<GmPresser | null>(null);
   const [pressTilt, setPressTilt] = useState<-1 | 0 | 1>(0);
@@ -281,12 +244,6 @@ export default function FrontOfficeBoard() {
   const gmLive = useRef<GmDesk | null>(null);
   const setGm = (d: GmDesk | null) => { gmLive.current = d; setGmState(d); };
   const [gmOpen, setGmOpen] = useState<string | null>(null);
-  /* Round 1550: the career kit (nflCareerKit.ts), null until it has arrived. Read from the loader on the first
-     render, so a board mounted after it came (a later visit to the page in the same tab) never waits for it.
-     kitTry asks again after a fetch that failed (the holding box's button). */
-  const [kit, setKit] = useState<NflCareerKit | null>(nflCareerKitNow);
-  const [kitFailed, setKitFailed] = useState(false);
-  const [kitTry, setKitTry] = useState(0);
   /* Round 1305: the season's told games of his club. Every save reads the
      log from here, the desk's pattern above, so the press that has just told
      a game saves it through the persist calls as they stand. Null: nothing
@@ -349,39 +306,7 @@ export default function FrontOfficeBoard() {
     wideAtLoad ? { block: 'end' } : inBracket ? { block: 'end' } : undefined,
   );
 
-  /* Round 1533's fix pass (the review's finding 5): the two career screens a tap lands on bring their top onto the
-     screen, the owner's rule that the next step appears in view on its own. Measured at 390 by 844 with real taps,
-     "See who is calling" left the out of work card cut off at scrollY 270 and the take left the arrival's title,
-     arrival line and trust 877 px above the screen. Keyed to those two landings alone ('out' and the club he took),
-     so opening a box, a year out, a reload or an ordinary recap never moves the page. */
-  const careerRevealRef = useRevealScroll<HTMLDivElement>(
-    phase === 'fired' ? 'out' : landedAt === null ? 'none' : `arrival:${landedAt}`,
-    { enabled: phase === 'fired' || landedAt !== null, skipFirst: false },
-  );
-
   useGameCompletion('front-office', roomHeld ? roomHeld.won : wonTitleNow, titles * 100 + seasonsPlayed * 5);
-
-  /* Round 1550: the career kit is asked for when a screen needs it and at no other time: the recap and the fired
-     screen (a save that loads straight into either waits for it, then draws), a press conference to answer, a
-     career box opened, and the last week of the season, so the verdict's code is here before the press that
-     closes the season (the press buttons wait for it: closeWaits). A new front office fetches it with its league
-     (start). A season being played, the draft and the pick screen never ask. */
-  const careerBoxOpen = gmPanelFor(GM_CAREER_PANELS, gmOpen) !== null;
-  const kitNeeded = !kit && (
-    phase === 'recap' || phase === 'fired' || presser !== null || careerBoxOpen
-    || (phase === 'hub' && !!league && league.week >= REGULAR_WEEKS)
-  );
-  useEffect(() => {
-    if (!kitNeeded) return;
-    let live = true;
-    loadNflCareerKit().then(
-      k => { if (live) { setKitFailed(false); setKit(k); } },
-      () => { if (live) setKitFailed(true); },
-    );
-    return () => { live = false; };
-  }, [kitNeeded, kitTry]);
-  const closeWaits = !kit && phase === 'hub' && !!league && league.week >= REGULAR_WEEKS;
-  const retryKit = () => { setKitFailed(false); setKitTry(n => n + 1); };
 
   /* Round 180: rank my roster against the league and let ownership set the ask.
      Round 192: the press tilt can move it one tier either way. */
@@ -509,19 +434,14 @@ export default function FrontOfficeBoard() {
     setStarting(abbr);
     setStartError(false);
     let depth;
-    /* Round 1550: and the career kit beside it, fetched in parallel: his record opens on the day he takes the club,
-       at its tier (hostNewSeat below). A failed fetch of either starts nothing, as before. */
-    let k: NflCareerKit;
     try {
-      [{ FO_DEPTH: depth }, k] = await Promise.all([import('@/data/frontOfficeDepth'), loadNflCareerKit()]);
+      ({ FO_DEPTH: depth } = await import('@/data/frontOfficeDepth'));
     } catch {
       setStarting(null);
       setStartError(true);
       return;
     }
     setStarting(null);
-    setKit(k);
-    const { hostNewSeat, hostSeatTeams, leagueTiers, nflDeskHost } = k;
     /* Codex853: a new franchise is the player's answer to a save that would not
        open, so the notice goes once one really starts (not when the fetch fails). */
     setSaveError(false);
@@ -558,10 +478,6 @@ export default function FrontOfficeBoard() {
     /* Round 1019: a new front office opens with the desk on. Only a save from
        before it waits for the GM to open a desk box. */
     setGm(openNflDesk(lg, abbr)); setGmOpen(null);
-    /* Round 1533: and his record from the first day, so the Career box knows the tier he took over at (only a
-       record built from an older save leaves the tier off). */
-    setGm(withGmBlock(gmLive.current!, GM_HOST_KEYS.seat, hostNewSeat(abbr, leagueTiers(hostSeatTeams(nflDeskHost, lg, label)).get(abbr) ?? 4, lg.season)));
-    setXpLine(null);
     /* Round 1305: the games of the club he ran before are not this club's season. */
     setGameLog(null); /* a new franchise */
     setPlayoffs(null); ask.current = 'week'; setHeld(null); /* Round 1309: nor are his old club's playoffs */
@@ -572,12 +488,7 @@ export default function FrontOfficeBoard() {
      waits for the next mandate build. */
   const answerPress = (i: 0 | 1 | 2) => {
     if (!presser || !league) return;
-    /* Round 1550: a presser is only ever built by a path that already holds the kit (a start, a close, a seat
-       taken), so this guard never turns an answer away in play. */
-    if (!kit) return;
-    const { hostPressOption, hostXpEffects } = kit;
-    /* Round 1533: Media eases a gamble's odds (the same option when he has no point or it does not gamble); one draw either way. */
-    const res = applyGmPressChoice(trust, hostPressOption(presser.options[i], hostXpEffects(gm, 'nfl')), Math.random);
+    const res = applyGmPressChoice(trust, presser.options[i], Math.random);
     setTrust(res.trust);
     setPressTilt(res.tilt);
     setNewsFeed(f => [res.line, ...f].slice(0, 6));
@@ -638,10 +549,6 @@ export default function FrontOfficeBoard() {
      them. It is declared above playWeek on purpose (harnesses read playWeek
      as the text up to the next component level const). */
   const closeSeason = (lg: LeagueState, rounds: PlayoffRound[], champ: string) => {
-    /* Round 1550: the verdict is the career kit's. Every press that can reach here is made in the last week or the
-       playoffs, where the buttons wait for the kit (closeWaits), so it is here; the guard is for the type alone. */
-    if (!kit) return;
-    const { hostSeasonVerdict, hostXpRecapLine, nflDeskHost, nflOutcome } = kit;
     lg.champions.push({ season: lg.season, team: champ });
     setPlayoffRounds(rounds);
     setChampion(champ);
@@ -655,27 +562,17 @@ export default function FrontOfficeBoard() {
     let newTrust = trust, nowFired = fired;
     let gradeResult: ReturnType<typeof gradeSeason>['result'] | null = null;
     let gradeVerdict: string | null = null;
-    setXpLine(null);
     if (mandate) {
-      /* Round 1533: the verdict through the desk host. With the desk off it is gradeSeason then applyMandateResult
-         over the same grade, today's two calls exactly; with it on the season is also recorded once on his record
-         and pays its GM XP (the counters handed in are the ones before this season, the host's contract). */
-      /* The desk as it stands after the week's tick: the ref, which setGm moved in the same press (the render's
-         `gm` is the one from before the press). */
-      const deskNow = gmLive.current;
-      const v = hostSeasonVerdict(nflDeskHost, lg, {
-        team: myTeam, mandate, trust, fired, outcome: nflOutcome(lg, myTeam, rounds, champ), desk: deskNow, seasonsPlayed, titles,
-      });
-      const grade = v.grade!;
-      newTrust = v.trust;
-      nowFired = v.fired;
+      const post = nflPostseason(rounds, myTeam);
+      const grade = gradeSeason(mandate, { wins: lg.teams[myTeam].wins, ...post, wonTitle: won });
+      const applied = applyMandateResult(trust, grade);
+      newTrust = applied.trust;
+      nowFired = applied.fired;
       gradeResult = grade.result;
-      setTrust(v.trust);
-      setFired(v.fired);
+      setTrust(applied.trust);
+      setFired(applied.fired);
       setGradeLine(grade.verdict);
       gradeVerdict = grade.verdict;
-      if (v.desk && v.desk !== deskNow) setGm(v.desk);
-      setXpLine(v.desk && v.award && v.award.total > 0 ? hostXpRecapLine({ award: v.award, levelAfter: v.levelAfter, desk: v.desk }, NFL_XP_LIVE) : null);
     }
     /* Round 192: the room reacts to the season that actually happened.
        A fired GM gets no presser (the door shuts with one shake), and a
@@ -939,10 +836,7 @@ export default function FrontOfficeBoard() {
          and sets next season's ask. A defending champ is never asked for
          less than a deep run. Round 192: what you said at the podium tilts
          the ask one tier, then the tilt is spent. */
-      /* Round 1533: the ask he was shown is the ask he is graded on. The summer after he takes another club's
-         seat keeps the offer's ask (built for this new season); on every other path the stored one is a season old
-         and the ask built here stands, as before. */
-      const m = hostSummerMandate(mandate, mandateFor(lg, myTeam, champion === myTeam, pressTilt), lg.season);
+      const m = mandateFor(lg, myTeam, champion === myTeam, pressTilt);
       setMandate(m);
       /* Round 828 follow up: the offseason never cuts your club. If the picks
          took it past 53 the feed says so first, and Play waits for the cut. */
@@ -974,7 +868,6 @@ export default function FrontOfficeBoard() {
       setPlayoffRounds([]);
       setChampion('');
       setWonTitleNow(false);
-      setXpLine(null);
       setPressTilt(0);
       setSeasonTradeLine(null);
       /* Round 530: the phase stays 'draft' so the last pick's card is seen;
@@ -1226,7 +1119,6 @@ export default function FrontOfficeBoard() {
     setTrust(FO_TRUST_START);
     setFired(false);
     setGradeLine(null);
-    setXpLine(null);
     setPresser(null);
     setPressTilt(0);
     setSeasonTradeLine(null);
@@ -1239,9 +1131,7 @@ export default function FrontOfficeBoard() {
      the desk, switches it on: the ledgers are opened from the league as it
      stands (every pick on the old lists kept) and saved with it. */
   const openDesk = (key: string | null) => {
-    /* Round 1533: only a desk box of its own switches the desk on. A career box (Job market, Career, GM level)
-       opens through setGmOpen alone, so looking writes nothing. */
-    if (key !== null && !gm && league && gmPanelFor(NFL_DESK_PANELS, key)) {
+    if (key !== null && !gm && league) {
       const desk = openNflDesk(league, myTeam);
       const lg: LeagueState = JSON.parse(JSON.stringify(league));
       syncNflPicks(lg, nflPicksOf(desk, lg));
@@ -1254,121 +1144,6 @@ export default function FrontOfficeBoard() {
     setGm(next);
     persist({}, league, myTeam);
   };
-  /* Round 1533: a point into a tree this desk routes. A save whose desk is off has nothing to spend from. */
-  const spendPoint = (tree: GmTree) => {
-    /* Round 1550: the GM level screen is drawn only once the kit is here (careerBoxOpen asks for it) */
-    if (!gm || !kit) return;
-    const { hostSpendPoint } = kit;
-    const next = hostSpendPoint(gm, tree, NFL_XP_LIVE);
-    if (next) changeDesk(next);
-  };
-  /* Round 1533: the career half of the facts, built once a render for the three career boxes. His record is the
-     stored block when it fits the save, else the record a save older than the block stands on (never written
-     by reading). The market is read only while he is between seats. */
-  const careerOf = (lg: LeagueState): GmCareerBinding => {
-    /* Round 1550: before the kit is here the binding is the hub's, and the hub reads the two boxes off it and
-       nothing else. His record is the stored block when it fits the save (hostSeatOf, the same reader), else the
-       record a save older than the block stands on, built from the save alone (hostBoxLegacy says what it leaves
-       out and why the boxes never read it; scripts/simFoLazyDesk.mjs holds every box equal to the kit's own
-       record's). The screens behind the boxes, the only readers of the seat pack and the earn line, are drawn once
-       the kit is here, never before. */
-    if (!kit) {
-      const seat = hostSeatOf(gm, hostBoxLegacy({
-        team: myTeam, season: lg.season, seasonCounted: nflSeasonCounted(phase, gm), seasonsPlayed, titles, fired,
-      }));
-      return {
-        get pack(): GmSeatPack { return careerKitOrThrow().nflDeskHost.pack; },
-        seat, market: null, nameOf: label, live: NFL_XP_LIVE, deskOn: gm !== null,
-        get earns(): string { return careerKitOrThrow().hostEarnsLine(NFL_XP_SOURCES); },
-        take: offer => takeSeat(offer.teamId), sitOut: () => sitOut(), spend: spendPoint,
-      };
-    }
-    const { hostEarnsLine, hostMarket, nflDeskHost, nflLegacy } = kit;
-    const legacy = nflLegacy(lg, {
-      team: myTeam, seasonsPlayed, titles, fired, seasonCounted: nflSeasonCounted(phase, gm),
-      mandate, rounds: playoffRounds, champion,
-    });
-    const seat = hostSeatOf(gm, legacy);
-    return {
-      pack: nflDeskHost.pack, seat, market: fired ? hostMarket(nflDeskHost, lg, seat, label) : null, nameOf: label,
-      live: NFL_XP_LIVE, deskOn: gm !== null, earns: hostEarnsLine(NFL_XP_SOURCES),
-      take: offer => takeSeat(offer.teamId), sitOut: () => sitOut(), spend: spendPoint,
-    };
-  };
-  /* Round 1533: take another club's seat in the same league, the second tap of an offer. The host reads the offer
-     off the market itself (never trusted from the screen) and refuses anything else, leaving the league as it was.
-     On a move: the new club, trust back to the start, its ask, a new stint on his record from next season, its own
-     re-sign ledger and staff, his XP and the pick ledger untouched; his old club's depth chart back to automatic.
-     He meets the room on the arrival recap and runs his new club's draft from it. */
-  const takeSeat = (teamId: string) => {
-    if (phase !== 'fired' || !league || playoffsLive.current) return;
-    /* Round 1550: the market is drawn only once the kit is here (the fired screen waits for it) */
-    if (!kit) return;
-    const { nflLegacy, nflTakeSeat } = kit;
-    const lg: LeagueState = JSON.parse(JSON.stringify(league));
-    const legacy = nflLegacy(lg, {
-      team: myTeam, seasonsPlayed, titles, fired, seasonCounted: nflSeasonCounted(phase, gm),
-      mandate, rounds: playoffRounds, champion,
-    });
-    const r = nflTakeSeat(lg, gm, { myTeam, trust, fired, mandate, pressTilt, seasonTradeLine }, legacy, teamId, label);
-    if (!r) { setNewsFeed(f => ['That offer is not on the table any more.', ...f].slice(0, 6)); return; }
-    const next = r.save;
-    setLeague(lg);
-    setGm(r.desk);
-    setMyTeam(next.myTeam);
-    setTrust(next.trust ?? FO_TRUST_START);
-    setFired(false);
-    setMandate(next.mandate ?? null);
-    setPressTilt(0);
-    setSeasonTradeLine(null);
-    setGradeLine(null);
-    setXpLine(null);
-    setWonTitleNow(false);
-    setGameLog(null); /* his old club's games are not this club's season */
-    setHeld(null); setHeldRoom(null); setHeldBracket(null); setGmOpen(null);
-    setTab(null); setWeekResults([]); setFeedSlam(null); setCutArmed(null); setShopOffers([]); setShopTried(false);
-    setDraftNight(null); setPlayoffs(null); ask.current = 'week';
-    /* The introduction presser, the call start makes: first day, full room. */
-    setPresser(buildGmPresser(NFL_WORDS, {
-      justHired: true, teamLabel: label(teamId), fired: false, wonTitle: false,
-      gradeResult: null, tradeLine: null, seasonsPlayed,
-    }));
-    setNewsFeed([`You take over the ${label(teamId)}. The ${r.offer.ask.season} ask: ${r.offer.ask.text}`]);
-    setLandedAt(teamId);
-    setPhase('recap');
-    persist({
-      phase: 'recap', trust: next.trust, fired: false, mandate: next.mandate, pressTilt: 0, seasonTradeLine: null,
-      postseason: { rounds: playoffRounds, champion, gradeLine: null },
-    }, lg, teamId);
-  };
-  /* Round 1533: a season out, the second tap of "Stay out a year". The league plays its draft, its summer, its
-     seventeen weeks and its playoffs with nobody in his chair (the host's order, the NFL's own calls), and the year
-     goes on his record; his seasons and titles do not move. Saved here, so a reload cannot play it again. No
-     activity mark: a year out is not a press of Play (simSessionMarks holds the one mark to playWeek). */
-  const sitOut = () => {
-    if (phase !== 'fired' || !league || playoffsLive.current) return;
-    if (!kit) return; /* Round 1550: as takeSeat above */
-    const { hostAwayRefusalLine, hostSeasonAway, nflAwayHost, nflDeskHost, nflLegacy } = kit;
-    const lg: LeagueState = JSON.parse(JSON.stringify(league));
-    let desk = gm;
-    if (!desk) { desk = openNflDesk(lg, myTeam); syncNflPicks(lg, nflPicksOf(desk, lg)); }
-    const legacy = nflLegacy(lg, {
-      team: myTeam, seasonsPlayed, titles, fired, seasonCounted: nflSeasonCounted(phase, gm),
-      mandate, rounds: playoffRounds, champion,
-    });
-    const r = hostSeasonAway({ host: nflDeskHost, away: nflAwayHost(myTeam), league: lg, desk, legacy, rng: Math.random });
-    if (r.ok === false) { const why = hostAwayRefusalLine(nflDeskHost.pack, r.reason); setNewsFeed(f => [why, ...f].slice(0, 6)); return; }
-    setLeague(lg);
-    setGm(r.desk);
-    setGameLog(null);
-    setChampion(r.report.champion);
-    setPlayoffRounds([]);
-    setGradeLine(null);
-    setXpLine(null);
-    setGmOpen(null);
-    setNewsFeed([`You sat out ${r.report.season}. The ${label(r.report.champion)} won it.`]);
-    persist({ phase: 'fired', fired: true, postseason: { rounds: [], champion: r.report.champion, gradeLine: null } }, lg, myTeam);
-  };
   const deskFacts = (hub: NflDeskFacts['hub']): NflDeskFacts | null => league ? {
     teamId: myTeam, teamLabel: label(myTeam), seasonsPlayed, phase, hub, league,
     seasonOver: phase === 'recap', deskOn: gm !== null, clubName: label,
@@ -1377,7 +1152,6 @@ export default function FrontOfficeBoard() {
       setGm(desk); setLeague(lg); slamFeed(line);
       persist({}, lg, myTeam);
     },
-    career: careerOf(league),
   } : null;
 
   /* ------------------------------ pick screen ------------------------------ */
@@ -1481,27 +1255,19 @@ export default function FrontOfficeBoard() {
   };
 
   /* ---------------- Round 180: the reload path after a firing ---------------- */
-  /* Round 1533: out of work, not the end. The card says who let him go and what the phone did; the Job market,
-     Career and GM level boxes sit under it; a new front office (which deletes the save) takes two taps. */
   if (phase === 'fired') {
-    /* Round 1550: the out of work screen is the career kit's. A save that loads straight into it waits for the kit
-       in a holding box, then draws (kitNeeded asks for it). */
-    if (!kit) return <CareerKitHolding failed={kitFailed} onRetry={retryKit} />;
-    const { GmOutOfWork, hostOutOfWorkCard, nflDeskHost } = kit;
-    const outFacts = deskFacts(hubFacts)!; /* the league is set past the pick screen */
-    const market = outFacts.career.market;
     return (
-      <div ref={careerRevealRef}>
-        <GmOutOfWork<NflDeskFacts>
-          sport="nfl"
-          card={market ? hostOutOfWorkCard(nflDeskHost, league, outFacts.career.seat, market, label) : { title: `Let go by the ${label(myTeam)}`, lines: [] }}
-          desk={gm ?? readGmDesk(undefined)}
-          facts={outFacts}
-          open={gmOpen}
-          onOpen={openDesk}
-          onDesk={changeDesk}
-          onNewFrontOffice={reset}
-        />
+      <div className="space-y-4">
+        {/* Round 187: the door shuts with one honest shake, nothing more. */}
+        <div className="cm-loss-shake rounded-2xl border border-destructive/50 bg-card p-5 text-center">
+          <CelebrationStyles />
+          <p className="text-3xl">🪑</p>
+          <p className="cm-slam mt-2 font-display text-2xl font-black text-foreground" style={{ animationDelay: '0.1s' }}>Fired by {label(myTeam)}</p>
+          <p className="cm-rise mt-2 text-sm text-muted-foreground" style={{ animationDelay: '0.35s' }}>{firedLine(seasonsPlayed, titles)}</p>
+          <button onClick={reset} className="mt-4 inline-flex items-center gap-2 rounded-full bg-primary px-8 py-2.5 text-sm font-bold text-primary-foreground hover:opacity-90">
+            <RotateCcw className="h-4 w-4" /> Take another front office
+          </button>
+        </div>
       </div>
     );
   }
@@ -1509,25 +1275,12 @@ export default function FrontOfficeBoard() {
   /* ------------------------------ recap screen ------------------------------ */
   /* Round 1309: not while he watches the title game; full time (or Results) lets the hold go and the recap comes */
   if (phase === 'recap' && !hold) {
-    /* Round 1550: the recap reads his record through the kit (the arrival line, the market line). A season closed
-       in this tab already has it (the last week's buttons waited for it); a save that loads on the recap waits in a
-       holding box, then draws. */
-    if (!kit) return <CareerKitHolding failed={kitFailed} onRetry={retryKit} />;
-    const { hostArrivalLine, hostArriving, nflDeskHost, Phone } = kit;
     const table = standings(league.teams);
     const myRank = table.findIndex(t => t.abbr === myTeam) + 1;
     /* Round 187: the verdict curtain. Every string below is exactly what
        Round 180 wrote; stageVerdict only decides confetti and tone, and
        the harness pins that a good grade is not a parade. */
-    /* Round 1533: the arrival recap. The day he takes another club's seat the season on this screen was not his:
-       no title of his is staged, even when the club he joins won it, and the line under the title says who he
-       takes over. */
-    const recapCareer = careerOf(league);
-    const arriving = hostArriving(recapCareer.seat, league.season);
-    const arrivalLine = arriving ? hostArrivalLine(nflDeskHost, league, recapCareer.seat, label) : null;
-    const myTitle = champion === myTeam && !arriving;
-    const firedMarketLine = fired ? recapCareer.market?.line ?? '' : null;
-    const staging = stageVerdict({ iAmChampion: myTitle, fired });
+    const staging = stageVerdict({ iAmChampion: champion === myTeam, fired });
     /* Round 1019: the season is over and the summer runs after the draft, so
        the re-sign desk is a box here, under the verdict. Open, it takes the
        screen, with a back button to the recap. */
@@ -1542,7 +1295,6 @@ export default function FrontOfficeBoard() {
     return (
       <div className="space-y-4">
         <div
-          ref={careerRevealRef}
           data-verdict-reveal
           className={cn(
             'relative overflow-hidden rounded-2xl border bg-card p-5 text-center',
@@ -1557,9 +1309,7 @@ export default function FrontOfficeBoard() {
             {label(champion)} win the {league.season} title
           </p>
           <p className="cm-rise mt-1 text-sm text-muted-foreground" style={{ animationDelay: '0.3s' }}>
-            {arrivalLine !== null
-              ? arrivalLine
-              : myTitle
+            {champion === myTeam
               ? 'Your build. Your rings. The city is painted in your colors.'
               : `Your ${label(myTeam)} finished ${my.wins}-${my.losses}, No. ${myRank} overall.`}
           </p>
@@ -1569,10 +1319,6 @@ export default function FrontOfficeBoard() {
           )}
           {mandate && !fired && (
             <p className="cm-rise mt-1 text-[11px] text-muted-foreground" style={{ animationDelay: '0.7s' }}>Trust upstairs: {trust} of 100{trust <= 25 ? '. The seat is hot.' : '.'}</p>
-          )}
-          {/* Round 1533: what the season paid his GM, fired or not: his XP follows him. */}
-          {xpLine && (
-            <p data-gm-xp-recap className="cm-rise mt-1 text-[11px] font-semibold text-gold" style={{ animationDelay: '0.75s' }}>{xpLine}</p>
           )}
           <div className="mt-3 space-y-1 text-xs text-muted-foreground">
             {playoffRounds.map((r, i) => (
@@ -1586,13 +1332,12 @@ export default function FrontOfficeBoard() {
             <span className="rounded-full border border-border bg-background px-3 py-1.5">Titles <b className="text-gold">{titles}</b></span>
             <span className="rounded-full border border-border bg-background px-3 py-1.5">Seasons <b className="text-primary">{seasonsPlayed}</b></span>
           </div>
-          {/* Round 180: zero trust ends the job here instead of a draft. Round 1533: not the save. The market's own
-              line says what the phone did, and the button only opens the out of work screen the save already holds. */}
+          {/* Round 180: zero trust ends the save here instead of a draft. */}
           {fired ? (
             <div className="cm-loss-shake mt-4 rounded-2xl border border-destructive/50 bg-destructive/5 p-4">
-              <p className="text-sm font-bold text-destructive">🪑 {firedMarketLine}</p>
-              <button onClick={() => setPhase('fired')} className="mt-3 inline-flex min-h-[44px] items-center gap-2 rounded-full bg-primary px-8 py-2.5 text-sm font-bold text-primary-foreground hover:opacity-90">
-                <Phone className="h-4 w-4" /> See who is calling
+              <p className="text-sm font-bold text-destructive">🪑 {firedLine(seasonsPlayed, titles)}</p>
+              <button onClick={reset} className="mt-3 inline-flex items-center gap-2 rounded-full bg-primary px-8 py-2.5 text-sm font-bold text-primary-foreground hover:opacity-90">
+                <RotateCcw className="h-4 w-4" /> Take another front office
               </button>
             </div>
           ) : presser ? (
@@ -1612,7 +1357,7 @@ export default function FrontOfficeBoard() {
                 gameName="NFL Front Office"
                 gamePath="/front-office"
                 score={`${titles} titles in ${seasonsPlayed} seasons`}
-                customText={`NFL Front Office 🏈 ${myTitle ? `My ${label(myTeam)} just won it all!` : `${label(champion)} took the title.`} ${titles} rings in ${seasonsPlayed} seasons as a GM. douknowball.com/front-office`}
+                customText={`NFL Front Office 🏈 ${champion === myTeam ? `My ${label(myTeam)} just won it all!` : `${label(champion)} took the title.`} ${titles} rings in ${seasonsPlayed} seasons as a GM. douknowball.com/front-office`}
               />
             </div>
           )}
@@ -1743,7 +1488,7 @@ export default function FrontOfficeBoard() {
   const tiles = foHubTiles(hubFacts);
   /* Round 1019: the desk's boxes sit under the board's own; a desk panel open hides the board's boxes. */
   const hubDesk = deskFacts(hubFacts);
-  const deskPanelOpen = gmPanelFor(NFL_HUB_PANELS, gmOpen) !== null;
+  const deskPanelOpen = gmPanelFor(NFL_DESK_PANELS, gmOpen) !== null;
   const openPanel = (key: FoPanelKey) => { setCutArmed(null); setDepthView(null); setDepthPick(null); setRosterGroup(null); setGmOpen(null); setTab(key === 'play' ? 'week' : key); };
   /* Round 723: the chart the sim reads, and who it counts as starting today. */
   const chart = chartNow;
@@ -1967,8 +1712,6 @@ export default function FrontOfficeBoard() {
   return (
     <div className="space-y-4">
       <CelebrationStyles />
-      {/* Round 1550: the last week's buttons wait for the career kit; a fetch that failed says so here and asks again */}
-      {kitFailed && closeWaits && <CareerKitHolding failed onRetry={retryKit} minHeight={0} />}
       {/* status bar */}
       <div className="flex flex-wrap items-center justify-center gap-2 text-xs">
         <span className="rounded-full px-3 py-1 font-bold" style={{ background: t.color, color: '#fff' }}>{label(myTeam)}</span>
@@ -1999,19 +1742,10 @@ export default function FrontOfficeBoard() {
       {tab === null
         ? !deskPanelOpen && <FoHubTiles tiles={tiles} onOpen={openPanel} />
         : <FoPanelHeader title={panelTitle} onBack={() => setTab(null)} />}
-      {tab === null && hubDesk && (careerBoxOpen && !kit
-        /* Round 1550: a career box opened before the kit is here: the box's own header and the holding box, the shape
-           the mount draws for a screen still loading, until it arrives (kitNeeded asks for it) */
-        ? (
-          <div data-gm-desk="panel" data-gm-panel={gmPanelFor(GM_CAREER_PANELS, gmOpen)?.key} className="space-y-3">
-            <FoPanelHeader title={gmPanelFor(GM_CAREER_PANELS, gmOpen)?.title ?? ''} onBack={() => openDesk(null)} />
-            <CareerKitHolding failed={kitFailed} onRetry={retryKit} minHeight={220} />
-          </div>
-        )
-        : (
-          <GmDeskMount sport="nfl" desk={gm ?? readGmDesk(undefined)} facts={hubDesk} panels={NFL_HUB_PANELS}
-            open={gmOpen} onOpen={openDesk} onDesk={changeDesk} />
-        ))}
+      {tab === null && hubDesk && (
+        <GmDeskMount sport="nfl" desk={gm ?? readGmDesk(undefined)} facts={hubDesk} panels={NFL_DESK_PANELS}
+          open={gmOpen} onOpen={openDesk} onDesk={changeDesk} />
+      )}
 
       {newsFeed.length > 0 && (
         <div className="rounded-2xl border border-border bg-card p-3 text-xs text-muted-foreground">
@@ -2412,7 +2146,7 @@ export default function FrontOfficeBoard() {
             <div className={cn('grid grid-cols-1 gap-2', roundNow.mine ? 'sm:grid-cols-3' : 'sm:grid-cols-2')} data-press-row>
               <button
                 onClick={() => pressPlayoffs('round', false)}
-                disabled={overLimit > 0 || !!hold || closeWaits}
+                disabled={overLimit > 0 || !!hold}
                 data-press="round"
                 className={cn(PRESS_THREE, 'bg-primary text-primary-foreground hover:opacity-90')}
               >
@@ -2421,7 +2155,7 @@ export default function FrontOfficeBoard() {
               {roundNow.mine && (
                 <button
                   onClick={() => pressPlayoffs('round', true)}
-                  disabled={overLimit > 0 || !!hold || closeWaits}
+                  disabled={overLimit > 0 || !!hold}
                   data-watch-round
                   className={cn(PRESS_THREE, 'border border-primary text-primary hover:bg-primary/10')}
                 >
@@ -2430,7 +2164,7 @@ export default function FrontOfficeBoard() {
               )}
               <button
                 onClick={() => pressPlayoffs('rest', false)}
-                disabled={overLimit > 0 || !!hold || closeWaits}
+                disabled={overLimit > 0 || !!hold}
                 data-press="rest"
                 className={cn(PRESS_THREE, 'border border-border text-foreground hover:bg-muted/40')}
               >
@@ -2441,7 +2175,7 @@ export default function FrontOfficeBoard() {
             <div className={cn('grid grid-cols-1 gap-2', seenGame ? 'sm:grid-cols-3' : 'sm:grid-cols-2')} data-press-row>
               <button
                 onClick={() => pressPlayoffs('bracket', false)}
-                disabled={overLimit > 0 || !!hold || closeWaits}
+                disabled={overLimit > 0 || !!hold}
                 data-press="week"
                 className={cn(PRESS_THREE, 'bg-primary text-primary-foreground hover:opacity-90')}
               >
@@ -2450,7 +2184,7 @@ export default function FrontOfficeBoard() {
               {seenGame && (
                 <button
                   onClick={() => pressPlayoffs('bracket', true)}
-                  disabled={overLimit > 0 || !!hold || closeWaits}
+                  disabled={overLimit > 0 || !!hold}
                   data-watch-week
                   className={cn(PRESS_THREE, 'border border-primary text-primary hover:bg-primary/10')}
                 >
@@ -2459,7 +2193,7 @@ export default function FrontOfficeBoard() {
               )}
               <button
                 onClick={() => { ask.current = 'week'; playWeek(); }}
-                disabled={overLimit > 0 || !!hold || closeWaits}
+                disabled={overLimit > 0 || !!hold}
                 data-press="old"
                 className={cn(PRESS_THREE, 'border border-border text-foreground hover:bg-muted/40')}
               >
@@ -2470,7 +2204,7 @@ export default function FrontOfficeBoard() {
           <div className="flex flex-col items-center justify-center gap-2 sm:flex-row" data-press-row>
             <button
               onClick={() => { ask.current = 'week'; playWeek(); }}
-              disabled={overLimit > 0 || !!hold || closeWaits}
+              disabled={overLimit > 0 || !!hold}
               data-press="week"
               className="inline-flex min-h-[44px] items-center gap-2 rounded-full bg-primary px-8 py-2.5 text-sm font-bold text-primary-foreground hover:opacity-90 disabled:opacity-40"
             >
@@ -2479,7 +2213,7 @@ export default function FrontOfficeBoard() {
             {seenGame && (
               <button
                 onClick={() => { ask.current = 'week'; setHeld(league); playWeek(); }}
-                disabled={overLimit > 0 || !!hold || closeWaits}
+                disabled={overLimit > 0 || !!hold}
                 data-watch-week
                 className="inline-flex min-h-[44px] items-center rounded-full border border-primary px-6 py-2.5 text-sm font-bold text-primary hover:bg-primary/10 disabled:opacity-40"
               >
