@@ -1,4 +1,4 @@
-name: Career finite wall baseline
+name: Career finite wall functional pilot
 
 on:
   push:
@@ -13,12 +13,14 @@ concurrency:
 
 env:
   BASE_SOURCE: 179afd13f3e78d767576c3faaf218bcaa36a457f
+  ORIGINAL_BASELINE_SOURCE: 223e1cbe3eef07ace8497c3137744418c6b9c5d0
+  LEDGER_BASELINE_SOURCE: b58b6eea2cfed45a78792b86178000a98e370565
   CI: '1'
   SIM_NETWORK: offline
   TZ: UTC
 
 jobs:
-  original:
+  functional_pilot:
     runs-on: ubuntu-latest
     timeout-minutes: 20
     defaults:
@@ -33,10 +35,10 @@ jobs:
         with:
           node-version: 24
           cache: npm
-      - name: Exact original source and complete inventory
+      - name: Exact pilot inputs and complete source inventory
         run: |
           set -euo pipefail
-          out="$RUNNER_TEMP/career-finite-wall";test ! -e "$out";mkdir "$out"
+          out="$RUNNER_TEMP/career-finite-wall-pilot";test ! -e "$out";mkdir "$out";export CAREER_WALL_OUT="$out"
           echo "CAREER_WALL_OUT=$out" >> "$GITHUB_ENV"
           test "$GITHUB_REPOSITORY" = PapiSalgueroM/ballpark-hero
           test "$GITHUB_REPOSITORY_ID" = 1195729679
@@ -44,15 +46,38 @@ jobs:
           test "$(git rev-parse HEAD)" = "$GITHUB_SHA"
           git fetch --no-tags --depth=1 origin "$BASE_SOURCE" > "$out/base-fetch.log" 2>&1
           git merge-base --is-ancestor "$BASE_SOURCE" "$GITHUB_SHA"
-          git diff --exit-code "$BASE_SOURCE" HEAD -- . ':!docs/**' ':!src/test/careerWallShot.test.ts' ':!src/test/soccerMomentWallRules.test.ts' ':!.github/workflows/career-finite-wall.yml' > "$out/protected-source.log"
-          test "$(git hash-object src/lib/careerDrills.ts)" = 6125570ccdf2f037a7debeaa7ad14815e9ed860e
-          test "$(git hash-object src/components/soccer-career/DrillBoard.tsx)" = c3c6500b976bce912d3626643269fb1b5388234b
-          test "$(git hash-object src/lib/season/momentsSave.ts)" = c1ee578f855d29a107f8d69b71eb1258ed166ca9
+          git merge-base --is-ancestor "$ORIGINAL_BASELINE_SOURCE" "$GITHUB_SHA"
+          git merge-base --is-ancestor "$LEDGER_BASELINE_SOURCE" "$GITHUB_SHA"
           node <<'NODE'
-          const fs=require('node:fs'),assert=require('node:assert/strict'),crypto=require('node:crypto');
-          const pins={"src/test/careerWallShot.test.ts":"b75993336f618d9dc0322756dd021d71b4a412109bbe0be72f71208b464e54bb","src/test/soccerMomentWallRules.test.ts":"e5e8ca9ffc26e15bdaf51b057e55d34f4bd738c0325f7440f3df71fe8809605d"};
-          for(const [file,expected]of Object.entries(pins))assert.equal(crypto.createHash('sha256').update(fs.readFileSync(file)).digest('hex'),expected,file);
-          fs.writeFileSync(process.env.RUNNER_TEMP+'/career-finite-wall/source-binding.json',JSON.stringify({source:process.env.GITHUB_SHA,base:process.env.BASE_SOURCE,originalCoreBlob:'6125570ccdf2f037a7debeaa7ad14815e9ed860e',originalBoardBlob:'c3c6500b976bce912d3626643269fb1b5388234b',originalLedgerBlob:'c1ee578f855d29a107f8d69b71eb1258ed166ca9',pins},null,2)+'\n',{flag:'wx'});
+          const fs=require('node:fs'),assert=require('node:assert/strict'),crypto=require('node:crypto'),path=require('node:path'),{execFileSync}=require('node:child_process');
+          const raw='{"pins":{"src/lib/careerDrills.ts":"a5a66ed166667051d24e0d737f47941587b28edd633a7823c6e6741172db3c74","src/components/soccer-career/DrillBoard.tsx":"b7f50364498e5713559c906e9c963f0ea9c72aeb22ecacc0398e68c595b7992b","src/lib/season/momentsSave.ts":"2dfaf3a4e1300668e656f487befeb8fe50f76821d382262cf5b45a8c4f4218ab","src/components/soccer-career/SoccerMomentBoard.tsx":"a0e2c186cb8000d2ef687566749c27a6167d95af771f94a5164dc70fcbdbef7d","src/components/soccer-career/useSoccerMoments.tsx":"cf22ab07c57f6ccc707dfe0a21d2f5d46d1a495de94740c9d3eab674dd69c65e","src/test/drillBoardMarkup.test.tsx":"b21d91fac27944e0540879f2e22bfc2e11254d1aa4ef92e5582358e1936f5e91","src/test/careerWallShot.geometry.test.ts":"51ee1ed522169c337c64bf23f3a2c9f5edfbfbe895e5de7d42ddd3a267b8b027","src/test/careerWallShot.boundaries.test.ts":"a133c49c10ab112b49f711d6151ad9fa7b060b242b720d93e9a24d6b9631f2a3","src/test/DrillBoard.wall.test.tsx":"0a54cde76fa5bb7f3aaa22afec43dfa4800f95a87e8fadef70c8f1f4cd5a1d9e","src/test/careerWallShot.cohort.test.ts":"f6210dba5466647e4ceadc64b51e1fdbf9478821895d849ce7db00ea96bb4e56","src/test/soccerMomentWallIntegration.test.tsx":"c0c83f259f474a5ee4fb7f27fe8507669a0d1a65fcbc5f390fe72ab5fed6f527","src/test/DrillBoard.wall.flight.test.tsx":"a4445c4a499ffaf75970c1931962ddbdcbdbdffb1be5f9cc4409bcec72d18f0b","src/test/careerWallShot.moments.test.ts":"94fd30343abf144411f09f04b836fb0c073bbbf35147cb8df45447a679b355c4","src/test/drillKeyboardRouting.test.tsx":"4b9920639f57b50598c48da579e4d40f2104f9cd15fd16353f8b23f06e7b76ba","src/components/soccer-career/SoccerSeasonCentre.tsx":"5e0db02a60d0b5e630b501bb76b472d861a9b8e909fa9d1a6409e57eed1dc87a","src/test/careerWallShot.test.ts":"b75993336f618d9dc0322756dd021d71b4a412109bbe0be72f71208b464e54bb","src/test/soccerMomentWallRules.test.ts":"e5e8ca9ffc26e15bdaf51b057e55d34f4bd738c0325f7440f3df71fe8809605d","src/test/drillBoardMatch.test.tsx":"3641efe7c96f24e6500745940ce8957f2e9f686fe3bc2c739d189f4af7727c42"},"suites":[{"file":"src/test/careerWallShot.test.ts","tests":6},{"file":"src/test/soccerMomentWallRules.test.ts","tests":7},{"file":"src/test/careerWallShot.geometry.test.ts","tests":7},{"file":"src/test/careerWallShot.boundaries.test.ts","tests":3},{"file":"src/test/DrillBoard.wall.test.tsx","tests":7},{"file":"src/test/DrillBoard.wall.flight.test.tsx","tests":1},{"file":"src/test/careerWallShot.cohort.test.ts","tests":1},{"file":"src/test/careerWallShot.moments.test.ts","tests":1},{"file":"src/test/soccerMomentWallIntegration.test.tsx","tests":5},{"file":"src/test/drillBoardMarkup.test.tsx","tests":5},{"file":"src/test/drillBoardMatch.test.tsx","tests":6},{"file":"src/test/drillKeyboardRouting.test.tsx","tests":35}]}';
+          assert.equal(raw[0],'{','WALL_PILOT_MANIFEST_REQUIRED');
+          const manifest=JSON.parse(raw),out=process.env.CAREER_WALL_OUT;
+          assert.deepEqual(Object.keys(manifest).sort(),['pins','suites']);
+          assert(manifest.pins&&typeof manifest.pins==='object'&&!Array.isArray(manifest.pins));
+          assert(Array.isArray(manifest.suites)&&manifest.suites.length>0);
+          const production=['src/lib/careerDrills.ts','src/components/soccer-career/DrillBoard.tsx','src/lib/season/momentsSave.ts','src/components/soccer-career/useSoccerMoments.tsx','src/components/soccer-career/SoccerMomentBoard.tsx','src/components/soccer-career/SoccerSeasonCentre.tsx'];
+          const workflow='.github/workflows/career-finite-wall.yml';
+          const files=manifest.suites.map(s=>{assert.deepEqual(Object.keys(s).sort(),['file','tests']);assert(/^src\/test\/[A-Za-z0-9_./-]+\.test\.tsx?$/.test(s.file)&&!s.file.includes('..')&&!s.file.includes('//'));assert(Number.isSafeInteger(s.tests)&&s.tests>0);return s.file;});
+          assert.equal(new Set(files).size,files.length);
+          for(const required of ['src/test/careerWallShot.test.ts','src/test/soccerMomentWallRules.test.ts','src/test/drillBoardMarkup.test.tsx','src/test/drillBoardMatch.test.tsx','src/test/drillKeyboardRouting.test.tsx'])assert(files.includes(required),required);
+          assert.equal(manifest.suites.find(s=>s.file==='src/test/careerWallShot.test.ts').tests,6);
+          assert.equal(manifest.suites.find(s=>s.file==='src/test/soccerMomentWallRules.test.ts').tests,7);
+          assert.equal(manifest.pins['src/test/careerWallShot.test.ts'],'b75993336f618d9dc0322756dd021d71b4a412109bbe0be72f71208b464e54bb');
+          assert.equal(manifest.pins['src/test/soccerMomentWallRules.test.ts'],'e5e8ca9ffc26e15bdaf51b057e55d34f4bd738c0325f7440f3df71fe8809605d');
+          for(const file of [...production,...files])assert(Object.hasOwn(manifest.pins,file),file);
+          assert(!Object.hasOwn(manifest.pins,workflow),'workflow self binding uses its actual HEAD blob');
+          const hash=b=>crypto.createHash('sha256').update(b).digest('hex');
+          for(const [file,expected]of Object.entries(manifest.pins)){assert(/^[A-Za-z0-9_.\/-]+$/.test(file)&&!file.startsWith('/')&&!file.includes('..')&&!file.includes('//'));assert(/^[a-f0-9]{64}$/.test(expected));assert.equal(hash(fs.readFileSync(file)),expected,file);}
+          const git=args=>execFileSync('git',args,{encoding:'utf8'}).trim();
+          const protectedDiff=execFileSync('git',['diff',process.env.BASE_SOURCE,'HEAD','--','.',':!docs/**',':!'+workflow,...production.map(f=>':!'+f),...files.map(f=>':!'+f)],{encoding:'utf8'});
+          fs.writeFileSync(out+'/protected-source.log',protectedDiff,{flag:'wx'});
+          assert.equal(protectedDiff,'','source outside exact production/suite/workflow/docs scope changed');
+          const workflowBlob=git(['rev-parse','HEAD:'+workflow]);assert(/^[a-f0-9]{40}$/.test(workflowBlob));
+          assert.equal(git(['hash-object',workflow]),workflowBlob);
+          const binding={phase:'functional-pilot',source:process.env.GITHUB_SHA,tree:git(['rev-parse','HEAD^{tree}']),base:process.env.BASE_SOURCE,requiredBaselineSources:[process.env.ORIGINAL_BASELINE_SOURCE,process.env.LEDGER_BASELINE_SOURCE],workflow:{file:workflow,gitBlobSha1:workflowBlob,sha256:hash(fs.readFileSync(workflow))},manifestSha256:hash(Buffer.from(raw)),pins:manifest.pins,suites:manifest.suites,applicationQualified:false};
+          fs.writeFileSync(out+'/pilot-manifest.json',JSON.stringify(manifest,null,2)+'\n',{flag:'wx'});
+          fs.writeFileSync(out+'/source-binding.json',JSON.stringify(binding,null,2)+'\n',{flag:'wx'});
           NODE
           git rev-parse HEAD > "$out/head.txt"
           git rev-parse 'HEAD^{tree}' > "$out/tree.txt"
@@ -75,50 +100,37 @@ jobs:
           SIM_OFFLINE_RECEIPT="$out/legacy-drills.transport" timeout --signal=TERM --kill-after=15s 6m node scripts/simCareerDrills.mjs > "$out/legacy-drills.log" 2>&1
           SIM_OFFLINE_RECEIPT="$out/legacy-moments.transport" timeout --signal=TERM --kill-after=15s 6m node scripts/simSeasonMoments.mjs > "$out/legacy-moments.log" 2>&1
           test ! -s "$out/legacy-drills.transport";test ! -s "$out/legacy-moments.transport"
-      - name: Actual types and causal baseline
+      - name: Actual app types and registered functional pilot suites
         run: |
           set -euo pipefail
           out="$CAREER_WALL_OUT";export NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs"
           : > "$out/types.transport";: > "$out/tests.transport"
-          SIM_OFFLINE_RECEIPT="$out/types.transport" node_modules/.bin/tsc --noEmit -p tsconfig.app.json > "$out/types.log" 2>&1
           status=0
-          SIM_OFFLINE_RECEIPT="$out/tests.transport" timeout --signal=TERM --kill-after=15s 6m node_modules/.bin/vitest run src/test/careerWallShot.test.ts --maxWorkers=1 --no-file-parallelism --reporter=json --outputFile="$out/tests.json" > "$out/tests.log" 2>&1 || status=$?
-          printf '%s\n' "$status" > "$out/tests.exit";test "$status" -eq 1
-          node <<'NODE'
-          const fs=require('node:fs'),assert=require('node:assert/strict'),out=process.env.CAREER_WALL_OUT,r=JSON.parse(fs.readFileSync(out+'/tests.json','utf8'));
-          assert.equal(r.success,false);assert.equal(r.testResults.length,1);assert.equal(r.numTotalTests,6);assert.equal(r.numPassedTests,4);assert.equal(r.numFailedTests,2);assert.equal(r.numPendingTests,0);assert.equal(r.numTodoTests,0);
-          const failures=new Map([['allows a low shot around either end of the rules-2 wall','WALL_V2_FINITE_WINGS_CLEAR'],['allows a high shot above the rules-2 wall even when the old gap is closed','WALL_V2_ABOVE_WALL_CLEAR']]);
-          const suite=r.testResults[0];assert.equal(suite.name.replaceAll('\\','/').split('/').pop(),'careerWallShot.test.ts');assert.equal(suite.status,'failed');assert.equal(suite.assertionResults.length,6);
-          for(const row of suite.assertionResults){const marker=failures.get(row.title);if(marker){assert.equal(row.status,'failed');assert.equal(row.fullName.trim(),'career Wall Shot finite five-defender rules '+row.title);assert.equal(row.failureMessages.length,1);assert.match(row.failureMessages[0],/AssertionError:/);assert(row.failureMessages[0].includes(marker));}else{assert.equal(row.status,'passed');assert.deepEqual(row.failureMessages,[]);}}
-          for(const key of ['numRuntimeErrorTestSuites','numUnhandledErrors'])if(key in r)assert.equal(r[key],0);if('unhandledErrors'in r)assert.deepEqual(r.unhandledErrors,[]);
+          SIM_OFFLINE_RECEIPT="$out/types.transport" node_modules/.bin/tsc --noEmit -p tsconfig.app.json > "$out/types.log" 2>&1 || status=$?
+          printf '%s\n' "$status" > "$out/types.exit";test "$status" -eq 0
+          SIM_OFFLINE_RECEIPT="$out/tests.transport" timeout --signal=TERM --kill-after=15s 8m node <<'NODE'
+          const fs=require('node:fs'),assert=require('node:assert/strict'),path=require('node:path'),{spawnSync}=require('node:child_process'),out=process.env.CAREER_WALL_OUT;
+          const manifest=JSON.parse(fs.readFileSync(out+'/pilot-manifest.json','utf8')),files=manifest.suites.map(s=>s.file);
+          const log=fs.openSync(out+'/tests.log','wx');
+          let run;try{run=spawnSync('node_modules/.bin/vitest',['run',...files,'--maxWorkers=1','--no-file-parallelism','--reporter=json','--outputFile='+out+'/tests.json'],{stdio:['ignore',log,log],env:process.env,timeout:360000,killSignal:'SIGTERM'});}finally{fs.closeSync(log);}
+          fs.writeFileSync(out+'/tests.exit',run.status===null?'NO_EXIT_CODE\n':String(run.status)+'\n',{flag:'wx'});
+          fs.writeFileSync(out+'/tests-process.json',JSON.stringify({status:run.status,signal:run.signal,error:run.error?{name:run.error.name,message:run.error.message,code:run.error.code}:null},null,2)+'\n',{flag:'wx'});
+          assert.equal(run.error,undefined,'actual Vitest spawn/timeout error');assert.equal(run.signal,null);assert.equal(run.status,0);
+          const r=JSON.parse(fs.readFileSync(out+'/tests.json','utf8')),expected=new Map(manifest.suites.map(s=>[path.resolve(s.file),s.tests])),total=manifest.suites.reduce((n,s)=>n+s.tests,0);
+          assert.equal(r.success,true);assert.equal(r.testResults.length,expected.size);assert.equal(r.numTotalTests,total);assert.equal(r.numPassedTests,total);assert.equal(r.numFailedTests,0);assert.equal(r.numPendingTests,0);assert.equal(r.numTodoTests,0);
+          const seen=new Set();
+          for(const suite of r.testResults){const file=path.resolve(suite.name);assert(expected.has(file),file);assert(!seen.has(file),file);seen.add(file);assert.equal(suite.status,'passed');assert.equal(suite.assertionResults.length,expected.get(file));for(const row of suite.assertionResults){assert.equal(row.status,'passed',row.fullName);assert.deepEqual(row.failureMessages,[]);}}
+          assert.equal(seen.size,expected.size);
+          const runtimeKeys=['numRuntimeErrorTestSuites','numUnhandledErrors'];for(const key of runtimeKeys)if(key in r)assert.equal(r[key],0);if('unhandledErrors'in r)assert.deepEqual(r.unhandledErrors,[]);
           assert.doesNotMatch(fs.readFileSync(out+'/tests.log','utf8'),/Unhandled\s+(?:Errors?|Rejections?)|Uncaught\s+Exceptions?/i);
-          fs.writeFileSync(out+'/baseline-admission.json',JSON.stringify({source:process.env.GITHUB_SHA,ownedFailures:2,preservedPasses:4,markers:[...failures.values()],rawAbsentRuntimeCountersRemainUnknown:true},null,2)+'\n',{flag:'wx'});
+          fs.writeFileSync(out+'/functional-pilot-admission.json',JSON.stringify({status:'FUNCTIONAL_PILOT_ONLY',source:process.env.GITHUB_SHA,suites:manifest.suites,passed:total,observedRuntimeCounters:Object.fromEntries(runtimeKeys.filter(k=>k in r).map(k=>[k,r[k]])),absentRuntimeCountersUnknown:runtimeKeys.filter(k=>!(k in r)),applicationQualified:false,buildBrowserAndCopiedControlsNotRun:true},null,2)+'\n',{flag:'wx'});
           NODE
           test ! -s "$out/types.transport";test ! -s "$out/tests.transport"
-      - name: Actual old ledger persistence baseline
-        run: |
-          set -euo pipefail
-          out="$CAREER_WALL_OUT";export NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs"
-          : > "$out/moment-tests.transport"
-          status=0
-          SIM_OFFLINE_RECEIPT="$out/moment-tests.transport" timeout --signal=TERM --kill-after=15s 6m node_modules/.bin/vitest run src/test/soccerMomentWallRules.test.ts --maxWorkers=1 --no-file-parallelism --reporter=json --outputFile="$out/moment-tests.json" > "$out/moment-tests.log" 2>&1 || status=$?
-          printf '%s\n' "$status" > "$out/moment-tests.exit";test "$status" -eq 1
-          node <<'NODE'
-          const fs=require('node:fs'),assert=require('node:assert/strict'),out=process.env.CAREER_WALL_OUT,r=JSON.parse(fs.readFileSync(out+'/moment-tests.json','utf8'));
-          assert.equal(r.success,false);assert.equal(r.testResults.length,1);assert.equal(r.numTotalTests,7);assert.equal(r.numPassedTests,3);assert.equal(r.numFailedTests,4);assert.equal(r.numPendingTests,0);assert.equal(r.numTodoTests,0);
-          const failures=new Map([['retains every positive safe rule marker with used, settled and banked data on reload','MOMENT_WALL_RULE_READER_RETAINS'],['refuses invalid rule markers instead of silently treating their ledger as legacy','MOMENT_WALL_RULE_READER_REFUSES'],['stamps rule two atomically with a genuinely new used attempt','MOMENT_WALL_NEW_LEDGER_PINNED'],['stamps only the fresh rollover ledger while folding the exact previous tally','MOMENT_WALL_ROLLOVER_PINNED']]);
-          const suite=r.testResults[0];assert.equal(suite.name.replaceAll('\\','/').split('/').pop(),'soccerMomentWallRules.test.ts');assert.equal(suite.status,'failed');assert.equal(suite.assertionResults.length,7);
-          for(const row of suite.assertionResults){const marker=failures.get(row.title);if(marker){assert.equal(row.status,'failed');assert.equal(row.fullName.trim(),'Soccer moment wall rule persistence '+row.title);assert.equal(row.failureMessages.length,1);assert.match(row.failureMessages[0],/AssertionError:/);assert(row.failureMessages[0].includes(marker));}else{assert.equal(row.status,'passed');assert.deepEqual(row.failureMessages,[]);}}
-          for(const key of ['numRuntimeErrorTestSuites','numUnhandledErrors'])if(key in r)assert.equal(r[key],0);if('unhandledErrors'in r)assert.deepEqual(r.unhandledErrors,[]);
-          assert.doesNotMatch(fs.readFileSync(out+'/moment-tests.log','utf8'),/Unhandled\s+(?:Errors?|Rejections?)|Uncaught\s+Exceptions?/i);
-          fs.writeFileSync(out+'/moment-baseline-admission.json',JSON.stringify({source:process.env.GITHUB_SHA,ownedFailures:4,preservedPasses:3,markers:[...failures.values()],rawAbsentRuntimeCountersRemainUnknown:true},null,2)+'\n',{flag:'wx'});
-          NODE
-          test ! -s "$out/moment-tests.transport"
       - name: Always retain complete source and dependency holds
         if: always()
         run: |
           set -euo pipefail
-          out="$RUNNER_TEMP/career-finite-wall";mkdir -p "$out";failed=0
+          out="$RUNNER_TEMP/career-finite-wall-pilot";mkdir -p "$out";failed=0
           for manifest in source-before dependencies;do if test -f "$out/$manifest.sha256";then sha256sum --check "$out/$manifest.sha256" > "$out/final-$manifest-hold.log" 2>&1 || failed=1;else failed=1;fi;done
           git ls-files -z | sort -z > "$out/source-members.after";cmp "$out/source-members.before" "$out/source-members.after" || failed=1
           if test -f "$out/dependency-members.before";then find node_modules -path node_modules/.vite -prune -o -type f -print0 | sort -z > "$out/dependency-members.after";cmp "$out/dependency-members.before" "$out/dependency-members.after" || failed=1;fi
@@ -131,7 +143,7 @@ jobs:
       - uses: actions/upload-artifact@v4
         if: always()
         with:
-          name: career-finite-wall-original-${{ github.run_id }}-${{ github.run_attempt }}
-          path: ${{ runner.temp }}/career-finite-wall/
+          name: career-finite-wall-functional-pilot-${{ github.run_id }}-${{ github.run_attempt }}
+          path: ${{ runner.temp }}/career-finite-wall-pilot/
           if-no-files-found: error
           retention-days: 14

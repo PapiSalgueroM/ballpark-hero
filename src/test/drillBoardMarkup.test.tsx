@@ -51,7 +51,8 @@ afterEach(() => { cleanup(); vi.useRealTimers(); vi.restoreAllMocks(); });
 
 function drill(position: string, name: string) {
   /* five frames: the two after the round is over are where the match prop's edits sit */
-  expect(drillFrames(DrillBoard, fixture(position), name, seen)).toEqual({ live: true, ended: true, second: true });
+  const LegacyBoard = (props: Parameters<typeof DrillBoard>[0]) => <DrillBoard {...props} wallShotRules={1} />;
+  expect(drillFrames(LegacyBoard, fixture(position), name, seen)).toEqual({ live: true, ended: true, second: true });
 }
 
 describe('the training boards with no match prop', { timeout: 20000 }, () => {

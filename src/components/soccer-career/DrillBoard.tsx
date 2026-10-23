@@ -12,6 +12,7 @@ import {
   DRILL_META, drillForPosition, drillSeed, lehmer, ROUNDS_PER_RUN,
   sessionScore, drillBoost, drillHeadroom,
   buildWallShotRun, takeWallShot, wallGapAt, wallOpenAt, wallTravel, maxWallShotScore,
+  wallShotGeometry, wallShotContact, wallShotPreview, WALL_SHOT_HOW,
   buildTackleRun, makeTackle, tackleFeetAt, tackleBallAt, tackleDeadline, maxTackleScore,
   buildGloveRun, makeSave, gloveAt, gloveBallProgress, gloveDeadline, maxGloveScore,
   GLOVE_MAX_REACH, GLOVE_ORIGIN, GLOVE_HALF_WIDTH, GLOVE_HEIGHT,
@@ -46,7 +47,7 @@ type AnySetup = WallShotSetup | TackleSetup | GloveSetup;
 type AnyInput = WallShotInput | TackleInput | GloveInput;
 type AnyResult = WallShotResult | TackleResult | GloveResult;
 
-interface DrillRecord { score: number; count: number; banked: boolean; rounds: number }
+interface DrillRecord { score: number; count: number; banked: boolean; rounds: number; wallShotRules?: unknown }
 
 /** Round 1047: one round of a drill played inside a match (a Season Centre
  *  moment). The board plays round `round` of the run `seed` deals, draws from
@@ -58,6 +59,7 @@ export interface DrillMatch {
   kind: 'wallshot' | 'tackle' | 'gloves';
   seed: number;
   round: number;
+  wallShotRules?: number;
   rng: () => () => number;
   onResult: (r: { won: boolean; points: number; verdict: string; input: number[] }) => void;
 }
@@ -107,12 +109,16 @@ function readRecord(slug: string, today: string): DrillRecord | null {
     const rounds = f.rounds === undefined ? ROUNDS_PER_RUN : f.rounds;
     if (typeof rounds !== 'number' || !Number.isInteger(rounds) || rounds < 0 || rounds > ROUNDS_PER_RUN) return null;
     if (rounds < ROUNDS_PER_RUN && f.banked === true) return null;
-    return { score: f.score, count: f.count, banked: f.banked, rounds };
+    return { score: f.score, count: f.count, banked: f.banked, rounds,
+      ...(f.wallShotRules === undefined ? {} : { wallShotRules: f.wallShotRules }) };
   });
 }
 
-function buildRun(kind: DrillKind, seed: number): AnySetup[] {
-  if (kind === 'wallshot') return buildWallShotRun(seed);
+function buildRun(kind: DrillKind, seed: number, rules: 1 | 2 = 1): AnySetup[] {
+  if (kind === 'wallshot') {
+    const run = buildWallShotRun(seed);
+    return rules === 1 ? run : run.map(s => ({ ...s, wallShotRules: 2 as const, label: `${s.distance} m, five defenders` }));
+  }
   if (kind === 'tackle') return buildTackleRun(seed);
   return buildGloveRun(seed);
 }
@@ -146,9 +152,45 @@ function wallShotBall(result: WallShotResult, progress: number): { x: number; y:
   return { x: toViewX(sample.x), y: contact.y + (toViewY(sample.y) - contact.y) * afterWall };
 }
 
-export default function DrillBoard({ career, canBank, onBank, onBack, match }: {
+const savedWallRules = (value: unknown): 1 | 2 | null => value === undefined || value === 1 ? 1 : value === 2 ? 2 : null;
+
+const WALL_BASE_Y = GOAL_BOT + 26;
+const WALL_FIGURE_TOP = 35.2;
+const WALL_FIGURE_HALF = 10;
+const modernWallScale = (setup: WallShotSetup) => {
+  const wall = wallShotGeometry(setup);
+  const cellHalf = ((wall.hi - wall.lo) / wall.count) * ((GOAL_R - GOAL_L) / 2) / 2;
+  const x = cellHalf / WALL_FIGURE_HALF;
+  const y = 1.15;
+  return { x, y, height: WALL_FIGURE_TOP * y, unitsPerHeight: WALL_FIGURE_TOP * y / wall.top };
+};
+
+function finiteWallShotBall(result: WallShotResult, setup: WallShotSetup, progress: number): { x: number; y: number } {
+  const p = Math.max(0, Math.min(1, progress));
+  const atWall = wallShotContact(result.path);
+  const scale = modernWallScale(setup);
+  const wallY = (height: number) => WALL_BASE_Y - height * scale.unitsPerHeight;
+  const contact = { x: toViewX(atWall.x), y: wallY(atWall.y) };
+  const short = !result.hitWall && !result.hitPost && !result.onTarget && Math.abs(result.x) < 1 && result.y > 0 && result.y < 1;
+  const depth = result.hitWall ? Math.min(p, 0.45) : short ? Math.min(p, 0.74) : p;
+  const sample = result.path[Math.min(result.path.length - 1, Math.round(depth * (result.path.length - 1)))];
+  if (p <= 0.45) {
+    const approach = p / 0.45;
+    return { x: VIEW_W / 2 + (toViewX(sample.x) - VIEW_W / 2) * approach, y: VIEW_H - 12 + (wallY(sample.y) - (VIEW_H - 12)) * approach };
+  }
+  const afterWall = (p - 0.45) / 0.55;
+  if (result.hitWall) {
+    const rebound = afterWall * (2 - afterWall);
+    return { x: contact.x + (VIEW_W / 2 - contact.x) * rebound * 0.07, y: contact.y + rebound * 17 };
+  }
+  if (short) return { x: toViewX(sample.x), y: contact.y + (GOAL_BOT + 10 - contact.y) * afterWall };
+  return { x: toViewX(sample.x), y: contact.y + (toViewY(sample.y) - contact.y) * afterWall };
+}
+
+export default function DrillBoard({ career, canBank, onBank, onBack, match, wallShotRules = 2 }: {
   /** Round 1047: play one round inside a match instead of the training ground's ten. */
   match?: DrillMatch;
+  wallShotRules?: 1 | 2;
   career: CareerState;
   /** Whether the training ground still has this season's session to give. */
   canBank: boolean;
@@ -160,11 +202,16 @@ export default function DrillBoard({ career, canBank, onBank, onBack, match }: {
   const todayStr = useRef(getTodayET()).current;
   const kind = match ? match.kind : drillForPosition(career.position);
   const meta = DRILL_META[kind];
+  const matchWallRules = match && kind === 'wallshot' ? savedWallRules(match.wallShotRules) : 1;
+  const [activeWallRules, setActiveWallRules] = useState<1 | 2>(match ? matchWallRules ?? 1 : wallShotRules);
+  const [wallHelp, setWallHelp] = useState(false);
+  const shotInFlight = useRef(false);
+  const aimPointer = useRef<number | null>(null);
   const [record, setRecord] = useState<DrillRecord | null>(() => (match ? null : readRecord(meta.slug, todayStr)));
 
   const [mode, setMode] = useState<Mode>(match ? 'match' : 'daily');
   const [phase, setPhase] = useState<Phase>(match ? 'ready' : 'intro');
-  const [setups, setSetups] = useState<AnySetup[]>(() => (match ? buildRun(match.kind, match.seed) : []));
+  const [setups, setSetups] = useState<AnySetup[]>(() => (match ? buildRun(match.kind, match.seed, matchWallRules ?? 1) : []));
   const [idx, setIdx] = useState(match ? match.round : 0);
   const toldRef = useRef(false);
   const [score, setScore] = useState(0);
@@ -202,24 +249,27 @@ export default function DrillBoard({ career, canBank, onBank, onBack, match }: {
   const boardRef = useRef<SVGSVGElement | null>(null);
 
   const setup = setups[idx] ?? null;
+  const modernWall = kind === 'wallshot' && activeWallRules === 2;
+  const dailyRuleProblem = kind === 'wallshot' && record !== null && savedWallRules(record.wallShotRules) === null;
   const isDone = phase === 'done';
   const best = setups.length ? maxRun(kind, setups) : 0;
   const revealRef = useRevealScroll<HTMLDivElement>(`${phase}-${idx}`);
 
   useEffect(() => {
-    if (phase !== 'playing') return;
+    if (phase !== 'playing' || modernWall) return;
     let raf = 0;
     let timer = 0;
     const tick = () => { setNow(elapsed()); raf = requestAnimationFrame(tick); };
     if (prefersReducedMotion()) timer = window.setInterval(() => setNow(elapsed()), 125);
     else raf = requestAnimationFrame(tick);
     return () => { cancelAnimationFrame(raf); window.clearInterval(timer); };
-  }, [phase]);
+  }, [phase, modernWall]);
 
   const resetControls = useCallback(() => {
     setAimX(0); setAimY(0.8); setPower(0.65);
     setCursor({ x: 0.5, y: 0.5 });
     setDrag({ dx: 0, dy: 0 }); setDragging(false); dragStart.current = null;
+    aimPointer.current = null; shotInFlight.current = false; setWallHelp(false);
   }, []);
 
   const start = useCallback((m: Mode) => {
@@ -231,12 +281,16 @@ export default function DrillBoard({ career, canBank, onBank, onBack, match }: {
          and the same seeded ten are dealt from the start with every spray
          and every keeper dive already known. The seed is the date, so the
          deal cannot change; only the record can stop it being replayed. */
+      const rules = kind === 'wallshot' ? savedWallRules(record.wallShotRules) : 1;
+      if (rules === null) return;
       const done = record.rounds >= ROUNDS_PER_RUN;
       savedRef.current = done;
       setMode('daily');
+      setActiveWallRules(rules);
       const seed = drillSeed(kind, todayStr);
       rngRef.current = lehmer(seed ^ 0x5eed1234);
-      setSetups(buildRun(kind, seed));
+      if (kind === 'wallshot' && rules === 2) for (let n = 0; n < record.rounds * 4; n += 1) rngRef.current();
+      setSetups(buildRun(kind, seed, rules));
       setIdx(done ? ROUNDS_PER_RUN - 1 : record.rounds);
       setScore(record.score);
       setCount(record.count);
@@ -251,23 +305,31 @@ export default function DrillBoard({ career, canBank, onBank, onBack, match }: {
     rngRef.current = lehmer(seed ^ 0x5eed1234);
     resetFlight();
     setMode(m);
-    setSetups(buildRun(kind, seed));
+    const rules = kind === 'wallshot' ? wallShotRules : 1;
+    setActiveWallRules(rules);
+    setSetups(buildRun(kind, seed, rules));
+    if (m === 'daily' && kind === 'wallshot' && rules === 2) {
+      const rec: DrillRecord = { score: 0, count: 0, banked: false, rounds: 0, wallShotRules: 2 };
+      writeDailyRecord(meta.slug, todayStr, rec);
+      setRecord(rec);
+    }
     setIdx(0); setScore(0); setCount(0); setFouls(0);
     setResult(null); setInput(null);
     resetControls();
     savedRef.current = false;
     setPhase('ready');
-  }, [record, kind, todayStr, resetFlight, resetControls]);
+  }, [record, kind, todayStr, resetFlight, resetControls, wallShotRules, meta.slug]);
 
   const beginRound = useCallback(() => {
-    if (phase !== 'ready') return;
+    if (phase !== 'ready' || matchWallRules === null) return;
     startRef.current = performance.now();
     setNow(0);
     setPhase('playing');
-  }, [phase]);
+  }, [phase, matchWallRules]);
 
   const resolve = useCallback((raw: AnyInput) => {
-    if (phase !== 'playing' || !setup) return;
+    if (phase !== 'playing' || !setup || (modernWall && shotInFlight.current)) return;
+    if (modernWall) shotInFlight.current = true;
     const held = match ? matchInput(kind, raw) : null;
     const inp = held ? held.inp : raw;
     const rng = match ? match.rng() : rngRef.current;
@@ -288,7 +350,7 @@ export default function DrillBoard({ career, canBank, onBank, onBack, match }: {
       setPhase('roundEnd');
       if (match && held && !toldRef.current) { toldRef.current = true; match.onResult({ won, points: r.points, verdict: r.verdict, input: held.packed }); }
     });
-  }, [phase, setup, kind, launch, match]);
+  }, [phase, setup, kind, launch, match, modernWall]);
 
   /* The chance can run out without a press: the attacker leaves the screen,
      the ball crosses the line. */
@@ -317,10 +379,10 @@ export default function DrillBoard({ career, canBank, onBank, onBack, match }: {
     if (phase !== 'roundEnd' && phase !== 'done') return;
     const rounds = phase === 'done' ? ROUNDS_PER_RUN : Math.min(ROUNDS_PER_RUN, idx + 1);
     if (phase === 'done') savedRef.current = true;
-    const rec = { score, count, banked: false, rounds };
+    const rec = { score, count, banked: false, rounds, ...(kind === 'wallshot' && activeWallRules === 2 ? { wallShotRules: 2 } : {}) };
     writeDailyRecord(meta.slug, todayStr, rec);
     setRecord(rec);
-  }, [phase, mode, score, count, idx, meta.slug, todayStr]);
+  }, [phase, mode, score, count, idx, meta.slug, todayStr, kind, activeWallRules]);
 
   const bank = useCallback(() => {
     /* Only a finished run banks. Since the record is written after every
@@ -349,8 +411,8 @@ export default function DrillBoard({ career, canBank, onBank, onBack, match }: {
         else if (e.key === 'ArrowRight') { setAimX(x => Math.min(1.15, x + 0.06)); e.preventDefault(); }
         else if (e.key === 'ArrowUp') { setAimY(y => Math.min(1.1, y + 0.05)); e.preventDefault(); }
         else if (e.key === 'ArrowDown') { setAimY(y => Math.max(0, y - 0.05)); e.preventDefault(); }
-        else if (e.key === 'w' || e.key === 'W') setPower(p => Math.min(1, p + 0.05));
-        else if (e.key === 's' || e.key === 'S') setPower(p => Math.max(0.3, p - 0.05));
+        else if (e.key === 'w' || e.key === 'W') { setPower(p => Math.min(1, p + 0.05)); if (modernWall) e.preventDefault(); }
+        else if (e.key === 's' || e.key === 'S') { setPower(p => Math.max(0.3, p - 0.05)); if (modernWall) e.preventDefault(); }
         else if (e.key === ' ' && !e.repeat) { strike(); e.preventDefault(); }
       } else if (kind === 'tackle') {
         if (e.key === 'ArrowLeft') { setCursor(c => ({ ...c, x: Math.max(0, c.x - 0.04) })); e.preventDefault(); }
@@ -369,7 +431,7 @@ export default function DrillBoard({ career, canBank, onBank, onBack, match }: {
     };
     window.addEventListener('keydown', down);
     return () => window.removeEventListener('keydown', down);
-  }, [phase, kind, beginRound, strike, tackleAt, dive, cursor]);
+  }, [phase, kind, beginRound, strike, tackleAt, dive, cursor, modernWall]);
 
   /* Touch and mouse, on the board itself. */
   const viewPoint = (clientX: number, clientY: number) => {
@@ -383,6 +445,11 @@ export default function DrillBoard({ career, canBank, onBank, onBack, match }: {
     const p = viewPoint(e.clientX, e.clientY);
     if (!p) return;
     if (kind === 'wallshot') {
+      if (modernWall) {
+        if (e.button !== 0 || e.isPrimary === false || aimPointer.current !== null) return;
+        aimPointer.current = e.pointerId;
+        e.currentTarget.setPointerCapture(e.pointerId);
+      }
       setAimX(Math.max(-1.15, Math.min(1.15, ((p.vx - GOAL_L) / (GOAL_R - GOAL_L)) * 2 - 1)));
       setAimY(Math.max(0, Math.min(1.1, (GOAL_BOT - p.vy) / (GOAL_BOT - GOAL_TOP))));
       setDragging(true);
@@ -398,7 +465,7 @@ export default function DrillBoard({ career, canBank, onBank, onBack, match }: {
     }
   };
   const onMove = (e: ReactPointerEvent<SVGSVGElement>) => {
-    if (phase !== 'playing' || !dragging) return;
+    if (phase !== 'playing' || !dragging || (modernWall && aimPointer.current !== e.pointerId)) return;
     const p = viewPoint(e.clientX, e.clientY);
     if (!p) return;
     if (kind === 'wallshot') {
@@ -410,13 +477,21 @@ export default function DrillBoard({ career, canBank, onBank, onBack, match }: {
       setDrag({ dx: Math.max(-GLOVE_MAX_REACH, Math.min(GLOVE_MAX_REACH, dxM)), dy: Math.max(-1.0, Math.min(GLOVE_MAX_REACH, dyM)) });
     }
   };
-  const onUp = () => {
-    if (phase !== 'playing' || !dragging) return;
+  const releaseAim = (e: ReactPointerEvent<SVGSVGElement>) => {
+    const pointer = aimPointer.current;
+    aimPointer.current = null;
+    if (pointer !== null && e.currentTarget.hasPointerCapture(pointer)) e.currentTarget.releasePointerCapture(pointer);
+  };
+  const onUp = (e: ReactPointerEvent<SVGSVGElement>) => {
+    if (phase !== 'playing' || !dragging || (modernWall && aimPointer.current !== e.pointerId)) return;
     setDragging(false);
-    if (kind === 'wallshot') strike();
+    if (modernWall) releaseAim(e);
+    else if (kind === 'wallshot') strike();
     else if (kind === 'gloves') dive();
   };
-  const onCancel = () => {
+  const onCancel = (e: ReactPointerEvent<SVGSVGElement>) => {
+    if (modernWall && aimPointer.current !== e.pointerId) return;
+    if (modernWall) releaseAim(e);
     setDragging(false);
     dragStart.current = null;
   };
@@ -435,6 +510,10 @@ export default function DrillBoard({ career, canBank, onBank, onBack, match }: {
   const headroom = drillHeadroom(career);
   const boost = drillBoost(sessionScore(count), headroom);
 
+  if (match && matchWallRules === null) {
+    return <div role="alert" className="p-4">This saved Wall Shot uses unsupported rules. Your used attempt stays saved.</div>;
+  }
+
   if (phase === 'intro') {
     return (
       <div className="p-4 space-y-3">
@@ -446,7 +525,7 @@ export default function DrillBoard({ career, canBank, onBank, onBack, match }: {
           <div className="text-4xl">{meta.emoji}</div>
           <p className="mt-1 text-lg font-black">{meta.name}</p>
           <p className="mx-auto mt-2 max-w-sm text-[12px] text-muted-foreground">
-            {kind === 'wallshot' && 'A wall with a gap that opens and closes. Drag the goal to aim across and up, set your power, and let go as the gap opens. Pace gets there sooner and sprays wider. Ten shots.'}
+            {kind === 'wallshot' && (wallShotRules === 2 ? WALL_SHOT_HOW + ' Ten shots.' : 'A wall with a gap that opens and closes. Drag the goal to aim across and up, set your power, and let go as the gap opens. Pace gets there sooner and sprays wider. Ten shots.')}
             {kind === 'tackle' && 'He runs across you and every touch pushes the ball off his feet for a moment. Tap the ball, not the man, while it is loose. Tap him, or go through the ball while it sits at his feet, and it is a foul. Ten runs.'}
             {kind === 'gloves' && 'Hold and drag to set your dive: the direction is where you drag, the reach is how far. Let go to dive. A full stretch takes longer to get there than a hop, so the corner has to be left for early. Ten shots.'}
           </p>
@@ -461,8 +540,10 @@ export default function DrillBoard({ career, canBank, onBank, onBack, match }: {
             </p>
           )}
         </div>
+        {dailyRuleProblem && <p role="alert" className="text-sm">Today's saved Wall Shot uses unsupported rules. It stays saved. Practice is still available.</p>}
+        {kind === 'wallshot' && wallShotRules === 2 && record && savedWallRules(record.wallShotRules) === 1 && <p className="text-sm text-muted-foreground">Today's saved run keeps its original timed gap. Practice uses five defenders.</p>}
         <div className="flex flex-col gap-2 sm:flex-row">
-          <Button onClick={() => start('daily')} className="flex-1 gap-2">
+          <Button disabled={dailyRuleProblem} onClick={() => start('daily')} className="flex-1 gap-2">
             <CalendarDays className="h-4 w-4" /> {!record ? "Today's ten" : record.rounds < ROUNDS_PER_RUN ? "Finish today's ten" : "Today's result"}
           </Button>
           <Button variant="secondary" onClick={() => start('unlimited')} className="flex-1 gap-2">
@@ -486,12 +567,21 @@ export default function DrillBoard({ career, canBank, onBank, onBack, match }: {
       </div>
       )}
       {setup && <p className="text-center text-[11px] text-muted-foreground">{setup.label}</p>}
+      {modernWall && <div className="space-y-2">
+        <div className="flex justify-end"><Button variant="outline" className="min-h-11 min-w-11" aria-label="Wall Shot rules" aria-expanded={wallHelp} onClick={() => setWallHelp(v => !v)}>?</Button></div>
+        {wallHelp && setup && <div className="rounded-xl border border-border p-3 text-sm" aria-label="Wall Shot instructions">
+          <p>{WALL_SHOT_HOW}</p>
+          <p className="mt-2">From {(setup as WallShotSetup).distance} m, try 65 power and aim high above the defenders. The preview checks the wall, but spread and the keeper still matter. Release your aim, then press Shoot.</p>
+        </div>}
+      </div>}
 
       <svg
         data-drill-board={kind}
         data-drill-phase={phase}
         data-drill-motion={reducedMotion ? 'reduced' : 'full'}
         data-drill-time={tDraw}
+        data-wall-shot-rules={modernWall ? 2 : undefined}
+        onLostPointerCapture={modernWall ? onCancel : undefined}
         ref={boardRef}
         viewBox={`0 0 ${VIEW_W} ${VIEW_H}`}
         className={cn('w-full touch-none select-none rounded-2xl border border-border', kind === 'tackle' ? 'bg-[hsl(140_35%_20%)]' : 'bg-[hsl(140_35%_18%)]')}
@@ -527,9 +617,11 @@ export default function DrillBoard({ career, canBank, onBank, onBack, match }: {
         {kind === 'wallshot' && setup && (() => {
           const w = setup as WallShotSetup;
           const r = result as WallShotResult | null;
+          const geometry = modernWall ? wallShotGeometry(w) : null;
+          const scale = modernWall ? modernWallScale(w) : null;
           const gap = wallGapAt(w, tDraw);
-          const men: number[] = [];
-          for (let k = 0; k < 14; k += 1) {
+          const men: number[] = geometry ? geometry.centres : [];
+          if (!geometry) for (let k = 0; k < 14; k += 1) {
             const left = w.gapCentre - gap - WALL_MAN_HALF_STEP - WALL_MAN_STEP * k;
             const right = w.gapCentre + gap + WALL_MAN_HALF_STEP + WALL_MAN_STEP * k;
             if (left > -1.5) men.push(left);
@@ -539,10 +631,10 @@ export default function DrillBoard({ career, canBank, onBank, onBack, match }: {
           const kx = r ? toViewX(r.keeperX) : restX;
           const ky = r ? toViewY(r.keeperY) : GOAL_BOT - 20;
           const dive = r && phase !== 'playing' ? drawFlight : 0;
-          const ball = r && phase !== 'playing' ? wallShotBall(r, drawFlight) : null;
+          const ball = r && phase !== 'playing' ? modernWall ? finiteWallShotBall(r, w, drawFlight) : wallShotBall(r, drawFlight) : null;
           const glove = { x: restX + (kx - restX) * dive, y: GOAL_BOT - 20 + (ky - (GOAL_BOT - 20)) * dive };
           const catchProgress = r?.saved ? Math.max(0, (drawFlight - 0.8) / 0.2) : 0;
-          const jump = r && !reducedMotion ? Math.sin(Math.PI * Math.min(1, drawFlight / 0.65)) * 5 : 0;
+          const jump = !modernWall && r && !reducedMotion ? Math.sin(Math.PI * Math.min(1, drawFlight / 0.65)) * 5 : 0;
           const swing = r ? Math.sin(drawFlight * Math.PI) : 0;
           return (
             <>
@@ -551,7 +643,11 @@ export default function DrillBoard({ career, canBank, onBank, onBack, match }: {
                 catching={!!r?.saved && drawFlight >= 0.8}
                 contact={r?.saved ? { x: glove.x + (toViewX(r.x) - glove.x) * catchProgress, y: glove.y + (toViewY(r.y) - glove.y) * catchProgress } : undefined}
               />
-              {men.map((m, i) => <DrillFigure key={i} x={toViewX(m)} y={GOAL_BOT + 26 - jump} tint="wall" scale={1.15} wallHalfWidth={(WALL_MAN_HALF_STEP * ((GOAL_R - GOAL_L) / 2)) / 1.15 + 0.4} />)}
+              {geometry && scale ? <g data-wall-shot-wall data-wall-left={geometry.lo} data-wall-right={geometry.hi} data-wall-top={geometry.top} data-wall-head-y={WALL_BASE_Y - scale.height}>
+                {men.map((m, i) => <g key={i} data-wall-defender transform={`translate(${toViewX(m)} ${WALL_BASE_Y}) scale(${scale.x} ${scale.y})`}>
+                  <DrillFigure x={0} y={0} tint="wall" wallHalfWidth={WALL_FIGURE_HALF - 2.25} />
+                </g>)}
+              </g> : men.map((m, i) => <DrillFigure key={i} x={toViewX(m)} y={GOAL_BOT + 26 - jump} tint="wall" scale={1.15} wallHalfWidth={(WALL_MAN_HALF_STEP * ((GOAL_R - GOAL_L) / 2)) / 1.15 + 0.4} />)}
               <DrillFigure x={164} y={201} tint="you" scale={1.1} lean={r ? 7 + swing * 6 : -5} strike={r ? 0.5 + swing * 0.5 : 0}
                 reach={r ? { x: 14 + swing * 6, y: -3 - swing * 14 } : undefined} />
               {phase === 'playing' && (
@@ -659,32 +755,37 @@ export default function DrillBoard({ career, canBank, onBank, onBack, match }: {
           2026-09-05 at 390 wide. A timing drill cannot have its board move
           under the thumb that just pressed Start. 132 covers the tallest
           ready card (the wall shot's, three lines at 390 wide). */}
-      <div ref={revealRef} className="min-h-[132px]">
+      <div ref={revealRef} className={modernWall ? 'min-h-[220px]' : 'min-h-[132px]'}>
         {phase === 'ready' && (
           <div className="rounded-2xl border border-border bg-card p-3 text-center">
             <p className="text-[12px] text-muted-foreground">
-              {kind === 'wallshot' && 'Drag the goal to aim, let go to shoot as the gap opens. Arrow keys aim, W and S set power, space shoots.'}
+              {kind === 'wallshot' && (modernWall ? 'Drag the goal to aim, then release your aim and press Shoot. Aim over the heads or past an end. Arrows aim, W and S set power, space shoots.' : 'Drag the goal to aim, let go to shoot as the gap opens. Arrow keys aim, W and S set power, space shoots.')}
               {kind === 'tackle' && 'Tap the ball while it is off his feet. Arrow keys move the marker, space goes in.'}
               {kind === 'gloves' && 'Hold and drag to set the dive, let go to go. Arrow keys set it, space dives.'}
             </p>
-            <Button className="mt-2" onClick={beginRound}>{idx === 0 || match ? 'Start' : 'Next one'}</Button>
+            <Button className={cn('mt-2', modernWall && 'min-h-11')} onClick={beginRound}>{idx === 0 || match ? 'Start' : 'Next one'}</Button>
           </div>
         )}
 
         {phase === 'playing' && kind === 'wallshot' && (
           <div className="space-y-2 rounded-2xl border border-border bg-card p-3">
-            <p className="text-xs text-muted-foreground">Aim high through the gap. Medium power gives you more control.</p>
-            {setup && (() => {
+            <p className="text-xs text-muted-foreground">{modernWall ? 'Aim over the heads or past an end. Medium power gives you more control.' : 'Aim high through the gap. Medium power gives you more control.'}</p>
+            {setup && modernWall && (() => {
+              const preview = wallShotPreview({ x: aimX, y: aimY, power, press: now }, setup as WallShotSetup);
+              const words = { wall: 'Hits the wall. Aim higher or past an end.', weak: 'Too soft from here. Add a little power.', 'off-target': 'Off target. Bring the marker inside the posts.', clear: 'Clear path, but the keeper can still save it.' };
+              return <p data-wall-shot-cue={preview.reason} className="text-sm font-bold">{words[preview.reason]}</p>;
+            })()}
+            {setup && !modernWall && (() => {
               const opening = wallOpenAt(setup as WallShotSetup, now + wallTravel(power));
               return <p data-wall-shot-window={opening >= 0.75 ? 'open' : 'wait'} className={cn('text-xs font-bold', opening >= 0.75 ? 'text-emerald-400' : 'text-muted-foreground')}>{opening >= 0.75 ? 'Good window. Shoot now.' : 'Wait for the gap to open.'}</p>;
             })()}
             <div className="flex items-center gap-2 text-xs text-muted-foreground">
               <span className="w-14 shrink-0">Power</span>
               <input type="range" min={0.3} max={1} step={0.05} value={power} onChange={e => setPower(Number(e.target.value))}
-                className="flex-1 accent-[hsl(var(--primary))]" aria-label="How hard to hit it" />
+                className={cn('flex-1 accent-[hsl(var(--primary))]', modernWall && 'min-h-11')} aria-label="How hard to hit it" />
               <span className={cn('w-10 shrink-0 text-right tabular-nums', power > 0.85 ? 'text-destructive' : power > 0.65 ? 'text-amber-300' : '')}>{Math.round(power * 100)}</span>
             </div>
-            <Button size="sm" className="w-full" onClick={strike}>Shoot now</Button>
+            <Button size="sm" className={cn('w-full', modernWall && 'min-h-11')} onClick={strike}>{modernWall ? 'Shoot' : 'Shoot now'}</Button>
           </div>
         )}
         {phase === 'playing' && kind === 'tackle' && (

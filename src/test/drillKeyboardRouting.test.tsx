@@ -63,8 +63,8 @@ function fixture(position: Position): CareerState {
 function expectedRecord(kind: Kind) {
   const seed = drillSeed(kind, TODAY);
   if (kind === 'wallshot') {
-    const result = takeWallShot({ x: 0, y: 0.8, power: 0.65, press: 0.1 }, buildWallShotRun(seed)[0], lehmer(seed ^ 0x5eed1234));
-    return { score: result.points, count: result.won ? 1 : 0, banked: false, rounds: 1, v: 1, date: TODAY };
+    const result = takeWallShot({ x: 0, y: 0.8, power: 0.65, press: 0.1 }, { ...buildWallShotRun(seed)[0], wallShotRules: 2 }, lehmer(seed ^ 0x5eed1234));
+    return { score: result.points, count: result.won ? 1 : 0, banked: false, rounds: 1, wallShotRules: 2, v: 1, date: TODAY };
   }
   if (kind === 'tackle') {
     const result = makeTackle({ x: 0.5, y: 0.5, press: 0.1 }, buildTackleRun(seed)[0]);
@@ -129,6 +129,11 @@ describe('native keyboard routing around the actual career position drill', () =
         button.textContent?.includes(meta.name) && button.textContent.includes(`Your ${entry.position} drill.`));
       expect(tile).toBeTruthy(); fireEvent.click(tile!);
       fireEvent.click(view.getByRole('button', { name: "Today's ten" }));
+      if (entry.position === 'ST') {
+        const key = dailyRecordKey(meta.slug, TODAY);
+        const record = { score: 0, count: 0, banked: false, rounds: 0, wallShotRules: 2, v: 1, date: TODAY };
+        expectedStores = { local: { ...storesBefore.local, [key]: JSON.stringify(record) }, session: storesBefore.session };
+      }
       expect(board()).toHaveAttribute('data-drill-phase', 'ready');
       expect(view.getByText('Round 1/10')).toBeVisible();
       if (entry.scenario === 'playing-control' || entry.scenario === 'playing-body' || entry.scenario === 'range') {
