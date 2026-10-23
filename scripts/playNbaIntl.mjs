@@ -287,7 +287,8 @@ async function walkC(browser, size) {
     const t = await text(page);
     if (!t.includes('the 2027 Basketball World Cup in Qatar')) fail(id, 'the call does not name the 2027 World Cup in Qatar');
     if (!t.includes('This field is the game\'s own.')) fail(id, 'the generated field line is missing');
-    if (!t.includes('two group rounds as one')) fail(id, 'the format line is missing');
+    /* the review of Round 1544: no page read holds 2027's format, so the call must not claim two group rounds */
+    if (t.includes('two group rounds')) fail(id, 'the call claims a format the ledger has no source for');
   } catch (e) { fail(id, `the walk stopped: ${String(e).split('\n')[0].slice(0, 160)}`); } finally { await context.close(); }
 }
 

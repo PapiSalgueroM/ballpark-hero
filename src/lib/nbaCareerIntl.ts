@@ -219,7 +219,8 @@ export function nbaIntlSummerNotes(id: string, age: number): IntlSummerNotes {
     knockPct: Math.round(nbaIntlKnockChance(age) * 100),
     hurtCost: `health down ${INTL_KNOCK_HEALTH}, never below ${INTL_KNOCK_FLOOR}`,
     fieldNote: !e || e.kind === 'played' ? null : e.host ? 'This field is the game\'s own.' : 'Host and field are the game\'s own.',
-    playedAsNote: e && !e.shape.playable ? 'The game plays its two group rounds as one, into a round of 16.' : null,
+    /* only a played edition: the ledger has no source for a later World Cup's format, and a projected one has none */
+    playedAsNote: e && e.kind === 'played' && !e.shape.playable ? 'The game plays its two group rounds as one, into a round of 16.' : null,
     happened: e?.kind === 'played',
     nation: 'USA',
     statWords: [['pts', 'points'], ['reb', 'rebounds'], ['ast', 'assists']],

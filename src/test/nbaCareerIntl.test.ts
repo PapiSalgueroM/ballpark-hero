@@ -6,7 +6,7 @@ import { keyedRng } from '@/lib/keyedRng';
 import {
   INTL_CALL_UP_OVR, INTL_KNOCK_BASE, INTL_LIFT_CAP, INTL_LIFT_PER_POINT, INTL_MAX_AGE, INTL_MIN_HEALTH,
   NBA_CAREER_INTL, NBA_INTL_CALENDAR, nbaIntlCallOf, nbaIntlEditionLabel, nbaIntlHelpRules, nbaIntlLift,
-  nbaIntlLine, nbaIntlPlay, nbaIntlStrength, nbaIntlSummerOf, INTL_RUNG_STRENGTH,
+  nbaIntlLine, nbaIntlPlay, nbaIntlStrength, nbaIntlSummerNotes, nbaIntlSummerOf, INTL_RUNG_STRENGTH,
 } from '@/lib/nbaCareerIntl';
 import { intlRungHistory } from '@/lib/careerIntl';
 import { NBA_CAREER_SPORT } from '@/lib/nbaCareerSport';
@@ -48,6 +48,14 @@ describe('the summer after a season', () => {
     expect(nbaIntlEditionLabel('wc-2006')).toBe('the 2006 World Championship in Japan');
     expect(nbaIntlEditionLabel('wc-2027')).toBe('the 2027 Basketball World Cup in Qatar');
     expect(nbaIntlEditionLabel('oly-2036')).toBe('the 2036 Olympics');
+  });
+  it('names the two group rounds only for a World Cup really played that way (review of Round 1544: no source for 2027 on)', () => {
+    const fmt = 'The game plays its two group rounds as one, into a round of 16.';
+    expect(nbaIntlSummerNotes('wc-2019', 28).playedAsNote).toBe(fmt);
+    expect(nbaIntlSummerNotes('wc-2023', 28).playedAsNote).toBe(fmt);
+    /* the teeth: these World Cups carry the two round shape the game cannot play, so only their kind keeps the line off */
+    for (const id of ['wc-2027', 'wc-2031', 'wc-2035', 'wc-2039']) expect(NBA_INTL_CALENDAR.byId(id)?.shape.playable).toBe(false);
+    for (const id of ['wc-2027', 'wc-2031', 'wc-2035', 'wc-2039', 'oly-2004', 'oly-2028']) expect(nbaIntlSummerNotes(id, 28).playedAsNote).toBeNull();
   });
 });
 
