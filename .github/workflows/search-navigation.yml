@@ -46,6 +46,7 @@ jobs:
         run: |
           set -euo pipefail
           out="$RUNNER_TEMP/search-navigation"; test ! -e "$out"; mkdir "$out"
+          export SEARCH_QUAL_OUT="$out"
           echo "SEARCH_QUAL_OUT=$out" >> "$GITHUB_ENV"
           echo "FREE_KICK_FONT_CACHE=$out/font-cache" >> "$GITHUB_ENV"
           test "$GITHUB_REPOSITORY" = PapiSalgueroM/ballpark-hero
