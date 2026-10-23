@@ -1,0 +1,11 @@
+m-nosecond exit=0 1s | simUsConnectionsFacts: green. Every Baseball, NFL and NHL Connections group is held to the record, and no board has a second right answer the record can see (other tiles 
+m-nosecond-bell exit=0 0s | US_CONN_CONTROL=bell did NOT fire its own rule (second-fit x0 for Le'Veon Bell); the 1 other failures do not count for it (findings: no-fact 1). This control proves nothi
+m-reach exit=0 0s | simUsConnectionsFacts: green. Every Baseball, NFL and NHL Connections group is held to the record, and no board has a second right answer the record can see (other tiles 
+m-reach-karlsson exit=0 0s | US_CONN_CONTROL=karlsson did NOT fire its own rule (watch x0 for Erik Karlsson); the 1 other failures do not count for it (findings: no-fact 1). This control proves nothi
+n-identity exit=0 0s | simUsConnectionsFacts: green. Every Baseball, NFL and NHL Connections group is held to the record, and no board has a second right answer the record can see (other tiles 
+n-identity-twice exit=0 0s | US_CONN_CONTROL=twice did NOT fire its own rule (twice x0 for Rich Gossage); the 1 other failures do not count for it (findings: no-fact 1). This control proves nothing a
+m-nomember-arod exit=0 0s | US_CONN_CONTROL=arod did NOT fire its own rule (refuted x1, not-a-member x0 for Alex Rodriguez); the 5 other failures do not count for it (findings: refuted 1, no-fact 1,
+m-norefuted-arod exit=0 0s | US_CONN_CONTROL=arod did NOT fire its own rule (refuted x0, not-a-member x1 for Alex Rodriguez); the 10 other failures do not count for it (findings: no-fact 1, not-a-mem
+m-onehostok-onehost exit=0 0s | US_CONN_CONTROL=onehost did NOT fire its own rule (one-host x0 for Derek Jeter | Won Rookie of the Year); the 0 other failures do not count for it (findings: nothing). Th
+m-fingersdata exit=1 0s | simUsConnectionsFacts: 2 failures
+after-clean exit=0 0s | simUsConnectionsFacts: green. Every Baseball, NFL and NHL Connections group is held to the record, and no board has a second right answer the record can see (other tiles 
