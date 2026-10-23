@@ -1,0 +1,19 @@
+# Release BR, Round 1542 (NFL Front Office who scored, carried by 1562 at bc856874; its head ab162ea8 has the tree of 8fda1d1b2):
+# r1542-fx2-d (rc-fx2-d.txt), the sixteen simNflSeasonStats controls, each exit 1 FIRED on its
+# own section. Nothing dropped.
+c-liftdrift: mkdir -p /tmp/lb2 && git archive c9d18897201aae8528e635f03a877e78eb02ed5c src | tar -x -C /tmp/lb2 && LIFT_BASE=/tmp/lb2 NFL_STATS_CONTROL=liftdrift node scripts/simNflSeasonStats.mjs
+c-dropone: NFL_STATS_CONTROL=dropone node scripts/simNflSeasonStats.mjs
+c-nocatch: NFL_STATS_CONTROL=nocatch node scripts/simNflSeasonStats.mjs
+c-injured: NFL_STATS_CONTROL=injured node scripts/simNflSeasonStats.mjs
+c-swapsides: NFL_STATS_CONTROL=swapsides node scripts/simNflSeasonStats.mjs
+c-extradraw: NFL_STATS_CONTROL=extradraw node scripts/simNflSeasonStats.mjs
+c-unkeyed: NFL_STATS_CONTROL=unkeyed node scripts/simNflSeasonStats.mjs
+c-randomcredit: NFL_STATS_CONTROL=randomcredit node scripts/simNflSeasonStats.mjs
+c-tiebreak: NFL_STATS_CONTROL=tiebreak node scripts/simNflSeasonStats.mjs
+c-rookieall: NFL_STATS_CONTROL=rookieall node scripts/simNflSeasonStats.mjs
+c-closetwice: NFL_STATS_CONTROL=closetwice node scripts/simNflSeasonStats.mjs
+c-oldopen: NFL_STATS_CONTROL=oldopen node scripts/simNflSeasonStats.mjs
+c-wholeroster: NFL_STATS_CONTROL=wholeroster node scripts/simNflSeasonStats.mjs
+c-quote: NFL_STATS_CONTROL=quote node scripts/simNflSeasonStats.mjs
+c-passflip: NFL_STATS_CONTROL=passflip node scripts/simNflSeasonStats.mjs
+c-sackswap: NFL_STATS_CONTROL=sackswap node scripts/simNflSeasonStats.mjs
