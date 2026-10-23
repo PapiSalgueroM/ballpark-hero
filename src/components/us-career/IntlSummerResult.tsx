@@ -68,18 +68,22 @@ function BackButton({ onClick }: { onClick: () => void }) {
   );
 }
 
-function GameLine({ g, us, line, statWords }: { g: IntlGame; us: string; line?: Record<string, number>; statWords: IntlSummerResultProps['statWords'] }) {
+/** "1 assist", "3 assists": the words come plural. */
+const count = (n: number, word: string) => `${n} ${n === 1 ? word.replace(/s$/, '') : word}`;
+
+function GameLine({ g, us, line, statWords, bare }: { g: IntlGame; us: string; line?: Record<string, number>; statWords: IntlSummerResultProps['statWords']; bare?: boolean }) {
   const mine = g.a === us || g.b === us;
   const other = g.a === us ? g.b : g.a;
   const [own, theirs] = g.a === us ? [g.sa, g.sb] : [g.sb, g.sa];
   const head = mine
     ? <>{g.winner === us ? 'W' : 'L'} {own}-{theirs} v <FlagImg name={other} size={16} showLabel /></>
     : <><FlagImg name={g.a} size={16} showLabel /> {g.sa}-{g.sb} <FlagImg name={g.b} size={16} showLabel /></>;
+  const label = g.round === 'group' && g.group !== undefined ? groupName(g.group) : ROUND_WORDS[g.round];
   return (
     <li className="rounded-md border border-border/60 px-2 py-1.5 text-xs">
-      <span className="font-semibold">{ROUND_WORDS[g.round]}{g.group !== undefined && g.round === 'group' ? ` (${groupName(g.group)})` : ''}: </span>
+      {!bare && <span className="font-semibold">{label}: </span>}
       <span>{head}{g.ot ? ` (${g.ot === 1 ? 'OT' : `${g.ot} OT`})` : ''}</span>
-      {line && <span className="block text-muted-foreground">You: {statWords.map(([k, w]) => `${line[k] ?? 0} ${w}`).join(', ')}</span>}
+      {line && <span className="block text-muted-foreground">You: {statWords.map(([k, w]) => count(line[k] ?? 0, w)).join(', ')}</span>}
     </li>
   );
 }
@@ -94,7 +98,7 @@ export default function IntlSummerResult(p: IntlSummerResultProps) {
   const lineOf = (i: number) => t?.his.find(h => h.game === i)?.line;
   const myGroup = t ? t.groups.findIndex(g => g.teams.includes(us)) : -1;
   const rounds = t ? KNOCKOUT.filter(r => t.games.some(g => g.round === r)) : [];
-  const avg = p.statWords.map(([k, w]) => `${p.row.avg[k] ?? 0} ${w}`);
+  const avg = p.statWords.map(([k, w]) => count(p.row.avg[k] ?? 0, w));
   const avgWords = avg.length < 2 ? avg.join('') : `${avg.slice(0, -1).join(', ')} and ${avg[avg.length - 1]}`;
   const table = (i: number) => {
     const g = t?.groups[i];
@@ -147,7 +151,7 @@ export default function IntlSummerResult(p: IntlSummerResultProps) {
     body = (
       <>
         {table(view.i)}
-        <ul className="space-y-1.5">{t.games.filter(g => g.round === 'group' && g.group === view.i).map((g, j) => <GameLine key={j} g={g} us={us} statWords={p.statWords} />)}</ul>
+        <ul className="space-y-1.5">{t.games.filter(g => g.round === 'group' && g.group === view.i).map((g, j) => <GameLine key={j} g={g} us={us} statWords={p.statWords} bare />)}</ul>
         <BackButton onClick={() => setView({ k: 'bracket' })} />
       </>
     );
@@ -155,7 +159,7 @@ export default function IntlSummerResult(p: IntlSummerResultProps) {
     body = (
       <>
         <h4 className="text-sm font-bold">{ROUND_WORDS[view.r]}</h4>
-        <ul className="space-y-1.5">{t.games.filter(g => g.round === view.r).map((g, j) => <GameLine key={j} g={g} us={us} statWords={p.statWords} />)}</ul>
+        <ul className="space-y-1.5">{t.games.filter(g => g.round === view.r).map((g, j) => <GameLine key={j} g={g} us={us} statWords={p.statWords} bare />)}</ul>
         <BackButton onClick={() => setView({ k: 'bracket' })} />
       </>
     );
@@ -164,7 +168,7 @@ export default function IntlSummerResult(p: IntlSummerResultProps) {
       <>
         <div className="text-center space-y-1">
           <h3 className="text-lg font-black tracking-tight" data-intl-place={p.row.place}>{PLACE_WORDS[p.row.place]}</h3>
-          <p className="text-sm text-muted-foreground">{p.row.year}: {p.editionLabel.replace(/^the /, 'The ')}</p>
+          <p className="text-sm text-muted-foreground">{p.editionLabel.replace(/^the /, 'The ')}</p>
         </div>
         <p className="text-sm">Record {p.row.wins}-{p.row.games - p.row.wins}. You averaged {avgWords} a game.</p>
         <p className="text-sm">{p.row.hurt ? `You came home hurt: ${p.hurtCost}.` : 'You came home healthy.'}</p>
