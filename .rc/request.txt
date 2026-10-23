@@ -1,0 +1,6 @@
+tsc: node_modules/.bin/tsc --noEmit -p tsconfig.app.json
+desk-def: node scripts/simNbaGmDesk.mjs
+norival: node scripts/simNoRivalNames.mjs
+anchors: node scripts/simHarnessAnchors.mjs
+storage: node scripts/simStorageWrites.mjs
+ctl-dropone: SIM_NBA_GM_DESK_CONTROL=dropone node scripts/simNbaGmDesk.mjs
