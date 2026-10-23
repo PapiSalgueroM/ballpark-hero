@@ -10,7 +10,7 @@ concurrency:
   cancel-in-progress: false
 env:
   BASE_SOURCE: 3ac9d8ea8a13db824f88be2deb660e7f2e31fc35
-  EXPECTED_PARENT: 4e02a2075d35bc6d96f072470c665ca25879d41c
+  EXPECTED_PARENT: 574d11dcd33cb8326cc3013cdc5783db99c13b5c
   CI: '1'
   SIM_NETWORK: offline
   TZ: UTC
@@ -58,7 +58,7 @@ jobs:
           test "$(git rev-parse HEAD:src/hooks/useClubManager.ts)" = 65031ded26b48c0c24a4c1d2a34cee980ed94c27
           test "$(git rev-parse HEAD:src/components/club-manager/ClubManagerSeasonSummary.tsx)" = ec2e5c051f5a8dd56ac2dcae09aca3403031fcb4
           test "$(git rev-parse HEAD:src/components/club-manager/VeteranRetirementCard.tsx)" = 8d2a1594f8eaf1119b2fc55d774ac52fa3c1af48
-          test "$(git rev-parse HEAD:src/test/clubManagerVeteranHook.test.tsx)" = 4c0e4c591875dfa20efb31ee6df1abedba385875
+          test "$(git rev-parse HEAD:src/test/clubManagerVeteranHook.test.tsx)" = e189d039d6339ea896e03d33be96b7930393cf8f
           test "$(git rev-parse HEAD:src/test/VeteranRetirementCard.test.tsx)" = ba06e7824a79d41cd7ce9fcc25ba8513fc7e7abe
           printf '%s  %s\n' \
             45b9d486014720831f130000ff67d0d380f60c755bbb1afa3d0f9a833b2c4050 src/lib/clubManager.ts \
@@ -70,7 +70,7 @@ jobs:
             88df1c6320820399cf5e96512960375a10ca9723f5e5f465140ee5ec3f86481b src/hooks/useClubManager.ts \
             1a5ea0d99de65f52d9f60ba3aed6c364445241ce760d2bb2a71e7feea9a453c1 src/components/club-manager/ClubManagerSeasonSummary.tsx \
             af5023b72b58bd1171a0117302fd120d9d40a509f57653175fac9300d03f0a21 src/components/club-manager/VeteranRetirementCard.tsx \
-            54180befe83c9dff36893b737925e22e230bd2624a9e85b42a9d0c0522f8f511 src/test/clubManagerVeteranHook.test.tsx \
+            547f1a8953f638b3e335a2e73d69cdbc9f60aa06f91e51d027371f628017781c src/test/clubManagerVeteranHook.test.tsx \
             93a223b6349a56545b794604a2272127ec5df0c366e31906c28f756b30bf6e5b src/test/VeteranRetirementCard.test.tsx > "$out/input-pins.sha256"
           sha256sum --check "$out/input-pins.sha256" > "$out/input-pins.log"
           git rev-parse HEAD > "$out/head.txt";git rev-parse 'HEAD^{tree}' > "$out/tree.txt"
@@ -193,6 +193,96 @@ jobs:
           NODE
           printf '%s\n' "$classifier" > "$out/ui-classifier.exit";test "$classifier" -eq 0
           test ! -s "$out/ui.transport";test ! -s "$out/ui-classifier.transport"
+      - name: Effective copied-source zero-randomness control for the actual first hook case
+        timeout-minutes: 10
+        run: |
+          set -euo pipefail
+          out="$CM_VETERAN_OUT"
+          export NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs"
+          : > "$out/rng-control.transport";status=0
+          SIM_OFFLINE_RECEIPT="$out/rng-control.transport" node <<'NODE' > "$out/rng-control-runner.log" 2>&1 || status=$?
+          const fs=require('node:fs'),path=require('node:path'),crypto=require('node:crypto'),assert=require('node:assert/strict'),{spawnSync}=require('node:child_process');
+          const root=fs.realpathSync(process.cwd()),temp=fs.realpathSync(process.env.RUNNER_TEMP),parent=fs.realpathSync(process.env.CM_VETERAN_OUT);
+          assert(parent.startsWith(temp+path.sep)&&!parent.startsWith(root+path.sep));
+          assert.equal(process.env.CI,'1');assert.equal(process.env.SIM_NETWORK,'offline');
+          assert(/^[a-f0-9]{40}$/.test(process.env.GITHUB_SHA||''));assert(/^[1-9][0-9]*$/.test(process.env.GITHUB_RUN_ID||''));assert(/^[1-9][0-9]*$/.test(process.env.GITHUB_RUN_ATTEMPT||''));
+          for(const key of ['US_BOARD_CONTROL_ALIAS','US_BOARD_CONTROL_FILE','NO_DOUBLE_SWAP'])assert(!process.env[key],'Unexpected inherited alias '+key);
+          const sha=b=>crypto.createHash('sha256').update(b).digest('hex'),fileSha=f=>sha(fs.readFileSync(f));
+          const blob=b=>crypto.createHash('sha1').update(Buffer.from('blob '+b.length+'\0')).update(b).digest('hex');
+          const modulePath='src/lib/clubManagerVeteranRetirement.ts',testPath='src/test/clubManagerVeteranHook.test.tsx';
+          const original=fs.readFileSync(path.join(root,modulePath),'utf8'),sourceHash='cdaecb5ecd28187da8a1c62526c6b165289e76e37d30a01cba2ce7c4a16577ed';
+          assert.equal(sha(original),sourceHash);assert.equal(fileSha(path.join(root,testPath)),'547f1a8953f638b3e335a2e73d69cdbc9f60aa06f91e51d027371f628017781c');
+          assert.equal(blob(fs.readFileSync(path.join(root,'vitest.config.ts'))),'ed2a9dc677f77dfe95c061064eeff5782b856864');
+          assert.equal(fileSha(path.join(root,'scripts/lib/offlineTransport.cjs')),'e60ff1534307e449ccef598e3b7470dcba58681b82cea4005cec7319f14f9221');
+          assert.equal(process.env.NODE_OPTIONS,'--require='+path.join(root,'scripts/lib/offlineTransport.cjs'));
+          const before='export function applyVeteranRetirement(career: CareerState, playerId: string): CareerState | null {',after=before+'\n  Math.random();';
+          assert.equal(original.split(before).length,2,'CM_VETERAN_RNG_CONTROL_UNIQUE_SOURCE');
+          const changed=original.replace(before,after),changedHash='14b178d98c33480682b2a5e8d5d977b9ba70604edf6f2dfeca78f1f9d432daaf';
+          assert.notEqual(changed,original);assert.equal(sha(changed),changedHash);assert.equal(changed.split(after).length,2);
+          assert.equal(changed.replace(after,before),original,'CM_VETERAN_RNG_CONTROL_EXACT_WHOLE_INVERSE');
+          const out=path.join(parent,'rng-control'),active=path.join(temp,'cm-veteran-rng-'+process.env.GITHUB_RUN_ID+'-'+process.env.GITHUB_RUN_ATTEMPT+'-'+process.env.GITHUB_SHA);
+          assert(!fs.existsSync(out)&&!fs.existsSync(active));assert.equal(path.dirname(active),temp);assert(!active.startsWith(root+path.sep));
+          fs.mkdirSync(out);fs.mkdirSync(active);fs.symlinkSync(path.join(root,'node_modules'),path.join(active,'node_modules'),'dir');
+          const write=(name,b)=>fs.writeFileSync(path.join(out,name),b,{flag:'wx'}),json=(name,v)=>write(name,JSON.stringify(v,null,2)+'\n');
+          const inputPaths=[modulePath,testPath,'vitest.config.ts','scripts/lib/offlineTransport.cjs'];
+          const inputBefore=inputPaths.map(file=>({file,sha256:fileSha(path.join(root,file))}));
+          const copies=[['healthy.ts',original,sourceHash],['fault.ts',changed,changedHash],['restored.ts',original,sourceHash]].map(([name,body,expected])=>{
+            const actual=path.join(active,name),evidence=path.join(out,name);
+            fs.writeFileSync(actual,body,{flag:'wx'});write(name,body);
+            assert.equal(fileSha(actual),expected);assert.equal(fileSha(evidence),expected);
+            return {name,actual,evidence,bytes:Buffer.byteLength(body),sha256:expected};
+          });
+          function holds(){
+            assert.deepEqual(fs.readdirSync(active).sort(),['fault.ts','healthy.ts','node_modules','restored.ts']);
+            assert(fs.lstatSync(path.join(active,'node_modules')).isSymbolicLink());assert.equal(fs.realpathSync(path.join(active,'node_modules')),fs.realpathSync(path.join(root,'node_modules')));
+            for(const row of copies)for(const file of [row.actual,row.evidence]){assert(fs.lstatSync(file).isFile()&&!fs.lstatSync(file).isSymbolicLink());assert.equal(fs.statSync(file).size,row.bytes);assert.equal(fileSha(file),row.sha256);}
+            assert.deepEqual(inputPaths.map(file=>({file,sha256:fileSha(path.join(root,file))})),inputBefore);
+            return {copies,dependencyLinkTarget:fs.realpathSync(path.join(active,'node_modules')),inputBefore};
+          }
+          json('recipe.json',{target:modulePath,sourceHash,before,after,position:original.indexOf(before),changedHash,wholeInverseHash:sha(changed.replace(after,before)),actualConfigGit:'ed2a9dc677f77dfe95c061064eeff5782b856864',alias:'@/lib/clubManagerVeteranRetirement',noImportRewrite:true});
+          json('copies.before.json',holds());
+          const ancestor='Veteran review through the actual career hook and writer',titles=["saves the actual agreement before publication without changing phase or drawing randomness","records the actual deterministic decline without renewing or changing rewards","keeps memory and all old raw bytes on quota refusal and commits the actual retry","permits only one pending talk across different players and releases the lock after completion","uses the saved authoritative ref for successive decisions before the parent rerenders","returns false for a real core refusal without writing or publishing a candidate","preserves a future raw review ledger and refuses the actual unsupported decision","returns false when the lazy module transport fails without changing the saved career","refuses before importing when another tab already owns a newer fenced save","rechecks the actual save fence after the awaited import and retains the newer tab bytes","rechecks actual slot ownership after import and never overwrites the incoming slot","invalidates a pending talk when actual showSlots moves context in the same pending React turn","invalidates a pending talk when actual startNew moves context in the same pending React turn","invalidates a pending talk when actual nextSeason moves context in the same pending React turn","refuses after unmount while retaining the actual unmount save and releasing no late candidate"],wanted=ancestor+' '+titles[0],escape=s=>s.replace(/[.*+?^$()|[\]{}\\]/g,'\\$&'),strip=s=>s.replace(/\x1b\[[0-?]*[ -/]*[@-~]/g,'');
+          const summary={source:process.env.GITHUB_SHA,runId:process.env.GITHUB_RUN_ID,attempt:process.env.GITHUB_RUN_ATTEMPT,complete:false,runs:[],errors:[],applicationQualified:false,fullOldEngineParity:false,buildBrowserCapsQualified:false};
+          function run(label,copy,fault){
+            json(label+'.copies.before.json',holds());
+            const receipt=path.join(out,label+'.transport'),reportFile=path.join(out,label+'.json');write(label+'.transport','');
+            const env={...process.env,SIM_OFFLINE_RECEIPT:receipt};
+            if(copy){env.US_BOARD_CONTROL_ALIAS='@/lib/clubManagerVeteranRetirement';env.US_BOARD_CONTROL_FILE=copy.actual;}
+            const child=spawnSync(process.execPath,[path.join(root,'node_modules/vitest/vitest.mjs'),'run',testPath,'--maxWorkers=1','--no-file-parallelism','--reporter=default','--reporter=json','--outputFile='+reportFile,'--testNamePattern=^'+escape(wanted)+'$'],{cwd:root,env,encoding:'utf8',timeout:120000,maxBuffer:16*1024*1024});
+            write(label+'.stdout.log',child.stdout??'');write(label+'.stderr.log',child.stderr??'');
+            json(label+'.exit.json',{status:child.status,signal:child.signal,error:child.error?String(child.error):null,pid:child.pid});
+            assert(!child.error&&!child.signal&&Number.isInteger(child.pid)&&child.pid>0,'CM_VETERAN_RNG_CONTROL_REAL_PROCESS_'+label);
+            assert.equal(child.status,fault?1:0,'CM_VETERAN_RNG_CONTROL_EXIT_'+label);assert.equal(fs.statSync(receipt).size,0);
+            const report=JSON.parse(fs.readFileSync(reportFile,'utf8'));assert.equal(report.success,!fault);assert.equal(report.testResults.length,1);
+            for(const [key,value]of Object.entries({numTotalTests:15,numPassedTests:fault?0:1,numFailedTests:fault?1:0,numPendingTests:14,numTodoTests:0}))assert.equal(report[key],value,key);
+            const suite=report.testResults[0];assert.equal(path.resolve(suite.name),path.join(root,testPath));assert.equal(suite.assertionResults.length,15);assert.equal(suite.status,fault?'failed':'passed');if('message'in suite)assert.equal(suite.message,'');
+            const seen=new Set();let selected=null;
+            for(const row of suite.assertionResults){
+              assert(titles.includes(row.title)&&!seen.has(row.title));seen.add(row.title);assert.equal(row.fullName,ancestor+' '+row.title);
+              if(row.fullName===wanted)selected=row;else{assert.equal(row.status,'skipped');assert.deepEqual(row.failureMessages,[]);}
+            }
+            assert.equal(seen.size,15);assert(selected);assert.equal(selected.status,fault?'failed':'passed');
+            if(fault){assert.equal(selected.failureMessages.length,1);assert.match(selected.failureMessages[0],/^AssertionError: CM_VETERAN_HOOK_NO_RANDOMNESS:/);}
+            else assert.deepEqual(selected.failureMessages,[]);
+            const unknown=[];for(const key of ['numRuntimeErrorTestSuites','numUnhandledErrors']){if(key in report)assert.equal(report[key],0);else unknown.push(key);}if('unhandledErrors'in report)assert.deepEqual(report.unhandledErrors,[]);
+            const logs=(child.stdout??'')+(child.stderr??'');
+            assert.doesNotMatch(logs,/Unhandled\s+(?:Errors?|Rejections?)|Uncaught\s+Exceptions?|Failed to resolve import|Cannot find (?:module|package)|No test files found/i);
+            const diagnostic=strip(logs).split('\n').filter(line=>line.startsWith('CM_VETERAN_HOOK_RANDOM_CALL_STACKS '));assert.equal(diagnostic.length,1);
+            const stacks=JSON.parse(diagnostic[0].slice('CM_VETERAN_HOOK_RANDOM_CALL_STACKS '.length));assert(Array.isArray(stacks));
+            if(fault){assert.equal(stacks.length,1);assert(stacks[0].includes('applyVeteranRetirement')&&stacks[0].includes(copy.actual+':'),'CM_VETERAN_RNG_CONTROL_INJECTED_CALL_STACK');}
+            else assert.deepEqual(stacks,[]);
+            json(label+'.copies.after.json',holds());
+            summary.runs.push({label,pid:child.pid,exit:child.status,selectedFullName:wanted,selectedStatus:selected.status,skipped:14,sourceCopy:copy?copy.actual:null,sourceSha256:copy?copy.sha256:sourceHash,stacks,runtimeCountersAbsentUnknown:unknown,actualFailureMessage:fault?selected.failureMessages[0]:null});
+          }
+          let failure=null;
+          try{run('normal',null,false);run('healthy',copies[0],false);run('fault',copies[1],true);run('restored',copies[2],false);assert.equal(summary.runs.length,4);summary.complete=true;}
+          catch(error){failure=error;summary.errors.push(String(error?.stack??error));}
+          try{json('copies.after.json',holds());}catch(error){summary.complete=false;summary.errors.push(String(error?.stack??error));failure??=error;}
+          json('summary.json',summary);
+          if(failure)throw failure;
+          NODE
+          printf '%s\n' "$status" > "$out/rng-control.exit";test "$status" -eq 0
+          test ! -s "$out/rng-control.transport"
       - name: Always preserve all raw results and physical holds
         if: always()
         run: |
@@ -215,7 +305,8 @@ jobs:
           if test -f "$out/head.txt";then cmp "$out/head.txt" "$out/head-after.txt" || failed=1;else failed=1;fi
           git diff --exit-code HEAD > "$out/final-source-diff.log" || failed=1
           git status --porcelain --untracked-files=all > "$out/final-status.txt";test ! -s "$out/final-status.txt" || failed=1
-          for transport in types tests classifier world world-classifier ui ui-classifier;do test -f "$out/$transport.transport" && test ! -s "$out/$transport.transport" || failed=1;done
+          for transport in types tests classifier world world-classifier ui ui-classifier rng-control;do test -f "$out/$transport.transport" && test ! -s "$out/$transport.transport" || failed=1;done
+          for label in normal healthy fault restored;do test -f "$out/rng-control/$label.transport" && test ! -s "$out/rng-control/$label.transport" || failed=1;done
           while IFS= read -r -d '' file;do test ! -s "$file" || failed=1;done < <(find "$out" -type f -name '*.transport' -print0)
           printf '%s\n' "$failed" > "$out/final-holds.exit"
           (cd "$out";find . -type f ! -path ./evidence.sha256 -print0 | sort -z | xargs -0 sha256sum) > "$out/evidence.sha256"

@@ -121,7 +121,9 @@ function otherTabWrite() {
     'CM_VETERAN_HOOK_REAL_OTHER_TAB_WRITE').toBe('written');
   return raw();
 }
-beforeEach(() => {
+beforeEach(async () => {
+  // Initialize React's async task queue before observing game randomness.
+  await act(async () => {});
   vi.doUnmock('@/lib/clubManagerVeteranRetirement');
   localStorage.clear(); sessionStorage.clear(); saveFence.release(E.SAVE_KEY);
   current = null; commits = [];
