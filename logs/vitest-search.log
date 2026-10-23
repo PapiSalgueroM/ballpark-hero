@@ -1,0 +1,17 @@
+
+[1m[46m RUN [49m[22m [36mv3.2.7 [39m[90m/home/runner/work/ballpark-hero/ballpark-hero[39m
+
+ [32m✓[39m src/test/Search.navigation.test.tsx [2m([22m[2m9 tests[22m[2m)[22m[33m 2301[2mms[22m[39m
+   [33m[2m✓[22m[39m Search URL navigation ownership[2m > [22mclears a pending draft when the real Search games link opens the same URL [33m 940[2mms[22m[39m
+   [33m[2m✓[22m[39m Search URL navigation ownership[2m > [22mkeeps a newer draft coalesced with its own debounce replacement [33m 338[2mms[22m[39m
+ [32m✓[39m src/test/SiteMenu.test.tsx [2m([22m[2m6 tests[22m[2m)[22m[33m 2546[2mms[22m[39m
+   [33m[2m✓[22m[39m global top-left SiteMenu with the actual Sheet and router[2m > [22mopens a named dialog with the real site links and all six lightweight sports hubs [33m 1638[2mms[22m[39m
+ [32m✓[39m src/test/SiteMenu.lazy-loading.test.tsx [2m([22m[2m1 test[22m[2m)[22m[33m 609[2mms[22m[39m
+   [33m[2m✓[22m[39m cancels a pending real panel import without a late dialog, then reopens the actual healthy panel [33m 607[2mms[22m[39m
+ [32m✓[39m src/test/SiteMenu.load-failure.test.tsx [2m([22m[2m1 test[22m[2m)[22m[32m 264[2mms[22m[39m
+
+[2m Test Files [22m [1m[32m4 passed[39m[22m[90m (4)[39m
+[2m      Tests [22m [1m[32m17 passed[39m[22m[90m (17)[39m
+[2m   Start at [22m 13:19:07
+[2m   Duration [22m 13.11s[2m (transform 484ms, setup 368ms, collect 2.22s, tests 5.72s, environment 2.64s, prepare 714ms)[22m
+

@@ -1,0 +1,7 @@
+vitest-search exit=0 14s |    Duration  13.11s (transform 484ms, setup 368ms, collect 2.22s, tests 5.72s, environment 2.64s, prepare 714ms)
+simSiteSearch exit=0 4s | simSiteSearch: green. Every game is findable by name, typos included, and the ranking can explain itself.
+simNoRivalNames exit=0 31s | No rival product names found. 0 findings.
+simHarnessAnchors exit=0 97s | simHarnessAnchors: green. Every harness parses and none carries an unmatchable anchor.
+simStorageWrites exit=0 6s | simStorageWrites: all green (owed: 12)
+tsc exit=0 167s | 
+vitest-all exit=0 910s |  Test Files  644 passed | 2 skipped (646)
