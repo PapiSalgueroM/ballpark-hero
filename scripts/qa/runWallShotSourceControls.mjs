@@ -6,7 +6,7 @@ import { fileURLToPath } from 'node:url';
 import { execFileSync, spawnSync } from 'node:child_process';
 
 // Remote-only actual-import controls. This file does not change product sources.
-const MANIFEST_SHA = 'e72f8819fc3bca9a128d3bdb28202d91a6510495154b16adf23a806b5dd4b4a6';
+const MANIFEST_SHA = 'a25fea0ac81b96e1516539a259558e39b8fb827cebe8f8a8fd84ff3592127f15';
 const RECIPES_SHA = '2d7199f2a86efa12b618a7f16b4f944b3ed936fa45de558e45acd8c5ca2d1493';
 const CONFIG_BLOB = 'ed2a9dc677f77dfe95c061064eeff5782b856864';
 const MOMENT_RECIPES_SHA = 'b04ba053ceed1854dafab35e27f0b81bf7212b9993d2b93fcfdf0a91e4e72eb1';

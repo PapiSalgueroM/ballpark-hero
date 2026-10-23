@@ -72,7 +72,7 @@ jobs:
           NODE
           node <<'NODE'
           const fs=require('node:fs'),assert=require('node:assert/strict'),crypto=require('node:crypto');
-          const proofPins={"scripts/qa/runWallShotSourceControls.mjs":"cd4032aa107e3d44ddb23593d0e52d43488ea3400fdf781c0b47a196b8a0f9bc","scripts/qa/wallShot.manifest.json":"e72f8819fc3bca9a128d3bdb28202d91a6510495154b16adf23a806b5dd4b4a6","scripts/qa/wallShotSourceControls.json":"2d7199f2a86efa12b618a7f16b4f944b3ed936fa45de558e45acd8c5ca2d1493","scripts/qa/wallShotMomentControls.json":"b04ba053ceed1854dafab35e27f0b81bf7212b9993d2b93fcfdf0a91e4e72eb1"},manifest=JSON.parse(fs.readFileSync('scripts/qa/wallShot.manifest.json','utf8')),hash=b=>crypto.createHash('sha256').update(b).digest('hex');
+          const proofPins={"scripts/qa/runWallShotSourceControls.mjs":"9246818834a2bb8589299c6ee6d8233ce34caffb920481074938f6ddfd8b4b0c","scripts/qa/wallShot.manifest.json":"a25fea0ac81b96e1516539a259558e39b8fb827cebe8f8a8fd84ff3592127f15","scripts/qa/wallShotSourceControls.json":"2d7199f2a86efa12b618a7f16b4f944b3ed936fa45de558e45acd8c5ca2d1493","scripts/qa/wallShotMomentControls.json":"b04ba053ceed1854dafab35e27f0b81bf7212b9993d2b93fcfdf0a91e4e72eb1"},manifest=JSON.parse(fs.readFileSync('scripts/qa/wallShot.manifest.json','utf8')),hash=b=>crypto.createHash('sha256').update(b).digest('hex');
           assert.equal(manifest.suites.length,12);assert.equal(manifest.suites.reduce((n,s)=>n+s.tests,0),84);assert.equal(Object.keys(manifest.pins).length,18);
           for(const [file,pin] of Object.entries({...proofPins,...manifest.pins}))assert.equal(hash(fs.readFileSync(file)),pin,'WALL_FULL_INPUT '+file);
           NODE

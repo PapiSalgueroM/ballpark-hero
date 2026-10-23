@@ -1,5 +1,5 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
-import { act, cleanup, createEvent, fireEvent, render } from '@testing-library/react';
+import { act, cleanup, fireEvent, render } from '@testing-library/react';
 import DrillBoard from '@/components/soccer-career/DrillBoard';
 import type { CareerState } from '@/lib/soccerCareerEngine';
 import { buildWallShotRun, drillSeed, lehmer, takeWallShot, wallShotGeometry } from '@/lib/careerDrills';
@@ -7,13 +7,10 @@ import { readDailyRecord, writeDailyRecord } from '@/lib/dailyRecord';
 
 const date = '2026-10-23';
 const slug = 'career-drill-wallshot';
-let pointerDiagnosticShown = false;
 // The existing markup suite's minimal display fixture, not a shot/result substitute.
 const career = () => ({ position: 'ST', overall: 70, potential: 80, potentialEarned: 0, seasons: [{ year: 2026 }], trainingSeasonYear: 2025, statBoostNextSeason: {}, morale: 60, events: [] } as unknown as CareerState);
 
 class PointerInput extends MouseEvent {
-  declare readonly pointerId: number;
-  declare readonly isPrimary: boolean;
   constructor(type: string, init: MouseEventInit & { pointerId?: number; isPrimary?: boolean } = {}) {
     super(type, init);
     Object.defineProperties(this, { pointerId: { value: init.pointerId ?? 1 }, isPrimary: { value: init.isPrimary ?? true } });
@@ -21,7 +18,6 @@ class PointerInput extends MouseEvent {
 }
 
 beforeEach(() => {
-  pointerDiagnosticShown = false;
   vi.useFakeTimers({ toFake: ['Date', 'setTimeout', 'clearTimeout', 'setInterval', 'clearInterval', 'performance', 'requestAnimationFrame', 'cancelAnimationFrame'] });
   vi.setSystemTime(new Date(date + 'T12:00:00Z'));
   vi.stubGlobal('PointerEvent', PointerInput);
@@ -34,39 +30,12 @@ function geometry(svg: Element) {
   const capture = vi.fn((id: number) => { captured = id; });
   const release = vi.fn((id: number) => { if (captured === id) captured = null; });
   Object.defineProperties(svg, {
-    getBoundingClientRect: { configurable: true, value: () => new DOMRect(0, 0, 360, 210) },
+    getBoundingClientRect: { configurable: true, value: () => ({ left: 0, top: 0, width: 360, height: 210, right: 360, bottom: 210, x: 0, y: 0, toJSON: () => ({}) }) },
     setPointerCapture: { configurable: true, value: capture },
     hasPointerCapture: { configurable: true, value: (id: number) => captured === id },
     releasePointerCapture: { configurable: true, value: release },
   });
   return { capture, release };
-}
-function dispatchPointer(
-  node: Element, type: 'pointerdown' | 'pointermove' | 'pointerup' | 'pointercancel',
-  init: MouseEventInit & { pointerId?: number; isPrimary?: boolean } = {},
-) {
-  if (!pointerDiagnosticShown) {
-    pointerDiagnosticShown = true;
-    const probe = createEvent.pointerDown(node, init);
-    const ownerWindow = node.ownerDocument.defaultView;
-    console.info('WALL_UI_POINTER_EVENT_DIAGNOSTIC ' + JSON.stringify({
-      constructor: probe.constructor.name, type: probe.type,
-      button: Reflect.get(probe, 'button') ?? null, pointerId: Reflect.get(probe, 'pointerId') ?? null,
-      isPrimary: Reflect.get(probe, 'isPrimary') ?? null, clientX: Reflect.get(probe, 'clientX') ?? null, clientY: Reflect.get(probe, 'clientY') ?? null,
-      defaultViewIsGlobal: ownerWindow === globalThis,
-      ownerPointerConstructor: ownerWindow?.PointerEvent?.name ?? null,
-      globalPointerConstructor: globalThis.PointerEvent?.name ?? null,
-      isExplicitPointerInput: probe instanceof PointerInput,
-    }));
-  }
-  const event = new PointerInput(type, { bubbles: true, cancelable: type !== 'pointercancel', composed: true, ...init });
-  expect(event.button, 'WALL_UI_NATIVE_POINTER_BUTTON').toBe(init.button ?? 0);
-  expect(event.pointerId, 'WALL_UI_NATIVE_POINTER_ID').toBe(init.pointerId ?? 1);
-  expect(event.isPrimary, 'WALL_UI_NATIVE_POINTER_PRIMARY').toBe(init.isPrimary ?? true);
-  expect(event.clientX, 'WALL_UI_NATIVE_POINTER_X').toBe(init.clientX ?? 0);
-  expect(event.clientY, 'WALL_UI_NATIVE_POINTER_Y').toBe(init.clientY ?? 0);
-  // Dispatch this actual event, without depending on a window event-constructor lookup.
-  fireEvent(node, event);
 }
 function match(rules?: number) {
   const result = vi.fn();
@@ -97,9 +66,9 @@ describe('Wall Shot rules-2 real board', () => {
     fireEvent.click(view.getByRole('button', { name: 'Start' }));
     const svg = view.getByRole('img');
     const capture = geometry(svg);
-    dispatchPointer(svg, 'pointerdown', { pointerId: 5, button: 0, clientX: 220, clientY: 90 });
-    dispatchPointer(svg, 'pointermove', { pointerId: 5, clientX: 240, clientY: 60 });
-    dispatchPointer(svg, 'pointerup', { pointerId: 5, clientX: 240, clientY: 60 });
+    fireEvent.pointerDown(svg, { pointerId: 5, button: 0, clientX: 220, clientY: 90 });
+    fireEvent.pointerMove(svg, { pointerId: 5, clientX: 240, clientY: 60 });
+    fireEvent.pointerUp(svg, { pointerId: 5, clientX: 240, clientY: 60 });
     expect(capture.capture, 'WALL_UI_CAPTURE_REAL_AIM_POINTER').toHaveBeenCalledWith(5);
     expect(capture.release, 'WALL_UI_RELEASE_CAPTURE').toHaveBeenCalledWith(5);
     expect(svg.getAttribute('data-drill-phase'), 'WALL_UI_AIM_RELEASE_NOT_SHOT').toBe('playing');
@@ -117,10 +86,10 @@ describe('Wall Shot rules-2 real board', () => {
     fireEvent.click(view.getByRole('button', { name: 'Start' }));
     const svg = view.getByRole('img');
     geometry(svg);
-    dispatchPointer(svg, 'pointerdown', { pointerId: 5, button: 0, clientX: 240, clientY: 60 });
-    dispatchPointer(svg, 'pointermove', { pointerId: 6, clientX: 350, clientY: 0 });
-    dispatchPointer(svg, 'pointercancel', { pointerId: 5 });
-    dispatchPointer(svg, 'pointerup', { pointerId: 5 });
+    fireEvent.pointerDown(svg, { pointerId: 5, button: 0, clientX: 240, clientY: 60 });
+    fireEvent.pointerMove(svg, { pointerId: 6, clientX: 350, clientY: 0 });
+    fireEvent.pointerCancel(svg, { pointerId: 5 });
+    fireEvent.pointerUp(svg, { pointerId: 5 });
     expect(rng, 'WALL_UI_CANCEL_PRESERVES_ATTEMPT').not.toHaveBeenCalled();
     fireEvent.click(view.getByRole('button', { name: 'Shoot' }));
     finish();
@@ -133,8 +102,8 @@ describe('Wall Shot rules-2 real board', () => {
     const svg = view.getByRole('img');
     geometry(svg);
     const aim = (x: number, y: number) => {
-      dispatchPointer(svg, 'pointerdown', { pointerId: 1, button: 0, clientX: x, clientY: y });
-      dispatchPointer(svg, 'pointerup', { pointerId: 1 });
+      fireEvent.pointerDown(svg, { pointerId: 1, button: 0, clientX: x, clientY: y });
+      fireEvent.pointerUp(svg, { pointerId: 1 });
     };
     const centre = wallShotGeometry(buildWallShotRun(1454)[0]).centres[2];
     aim(60 + (centre + 1) * 120, 140);
