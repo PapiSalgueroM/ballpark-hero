@@ -143,7 +143,14 @@ describe('Veteran review through the actual career hook and writer', { timeout: 
     expect(R.previewVeteranRetirement(before, ids[0]).kind, 'CM_VETERAN_HOOK_ACTUAL_OFFER').toBe('offer');
     const expected = R.applyVeteranRetirement(before, ids[0]);
     expect(expected, 'CM_VETERAN_HOOK_ACTUAL_CANDIDATE').not.toBeNull();
-    const run = action(), draws = vi.spyOn(Math, 'random').mockClear();
+    const run = action();
+    const seededRandom = vi.mocked(Math.random).getMockImplementation();
+    expect(typeof seededRandom, 'CM_VETERAN_HOOK_SEEDED_RANDOM_FOUNDATION').toBe('function');
+    const randomCallStacks: string[] = [];
+    const draws = vi.spyOn(Math, 'random').mockClear().mockImplementation(() => {
+      randomCallStacks.push(new Error('CM_VETERAN_HOOK_RANDOM_CALL').stack ?? 'Caller stack unavailable');
+      return seededRandom!();
+    });
     let ok = false;
     await act(async () => { ok = await run(ids[0]); });
     expect(ok, 'CM_VETERAN_HOOK_AGREEMENT_SAVED').toBe(true);
@@ -152,6 +159,7 @@ describe('Veteran review through the actual career hook and writer', { timeout: 
     expect(publication, 'CM_VETERAN_HOOK_PUBLICATION_FOUNDATION').toBeDefined();
     expect(JSON.parse(publication!.raw!), 'CM_VETERAN_HOOK_SAVED_BEFORE_PUBLICATION').toEqual(expected);
     expect(read().phase).toBe('seasonEnd'); expect(read().summary).toBe(before.pendingSummary);
+    console.info('CM_VETERAN_HOOK_RANDOM_CALL_STACKS', JSON.stringify(randomCallStacks));
     expect(draws, 'CM_VETERAN_HOOK_NO_RANDOMNESS').not.toHaveBeenCalled();
     expect(JSON.stringify(before), 'CM_VETERAN_HOOK_INPUT_HELD').toBe(body);
     expect(career().xiIds).toEqual(before.xiIds); expect(career().xiDuties).toEqual(before.xiDuties);
