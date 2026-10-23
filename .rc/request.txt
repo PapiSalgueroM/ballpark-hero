@@ -1,0 +1,7 @@
+# Release BR, Round 1542 (NFL Front Office who scored, carried by 1562 at bc856874; its head ab162ea8 has the tree of 8fda1d1b2):
+# the save budget lines of r1542-vc2-a (rc-vc2-a.txt); c-tight exits 1 FIRED.
+vitest-sstats: node_modules/.bin/vitest run src/components/front-office/FrontOfficeSeasonStats.test.tsx src/lib/nflSeasonStats.test.ts src/components/front-office/FrontOfficeLazyDesk.test.tsx src/components/front-office-shared/FrontOfficeSeasonClose.test.tsx --testTimeout=300000 --hookTimeout=120000
+vitest-whole2: node_modules/.bin/vitest run src/components/front-office/FrontOfficeSeasonStats.test.tsx --testTimeout=300000 --hookTimeout=120000
+save-a: node_modules/.bin/vitest run src/components/front-office/FrontOfficeSeasonStats.test.tsx -t "the save it writes" --testTimeout=300000 --hookTimeout=120000
+save-b: node_modules/.bin/vitest run src/components/front-office/FrontOfficeSeasonStats.test.tsx -t "the save it writes" --testTimeout=300000 --hookTimeout=120000
+c-tight: NFL_SAVE_BUDGET_CONTROL=tight node_modules/.bin/vitest run src/components/front-office/FrontOfficeSeasonStats.test.tsx -t "the save it writes" --testTimeout=300000 --hookTimeout=120000
