@@ -1,0 +1,14 @@
+bindAt: scripts/simSoccerGridSearchDiscovery.mjs bound
+bindAt: 775564305e9d -> bf4513691d32
+runProver: p1429 at 5684cd0ed33a3230f930445671124aa5e64a1f75 (release BK bound: 21c8fc4b1d61 with its pinned bases bound to the joined tree)
+normal:16 finished,0 precise intended faults,0 held IO.
+bare:16 finished,0 precise intended faults,0 held IO.
+original:16 finished,5 precise intended faults,0 held IO.
+normalization-control:16 finished,3 precise intended faults,0 held IO.
+arrival-control:16 finished,2 precise intended faults,0 held IO.
+nonempty-control:16 finished,1 precise intended faults,0 held IO.
+escape-control:16 finished,1 precise intended faults,0 held IO.
+restored:16 finished,0 precise intended faults,0 held IO.
+{"kind":"SOCCER_GRID_SEARCH_RESULT","mode":"fixed","evidenceRoot":"/tmp/rp-out-p1429","modeEnvAbsent":false,"outEnvAbsent":false,"summarySha256":"04253d20cd4d83bc216162e21f2fbcd5413b0a7c6d564b0c6b237509f59da0a9","sourceHeld":true,"temporaryModulesRemoved":true,"productQualified":false}
+p1429 PROOF DONE
+runProver: p1429 exit 0
