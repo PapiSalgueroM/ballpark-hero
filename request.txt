@@ -1,0 +1,24 @@
+tsc: node_modules/.bin/tsc --noEmit -p tsconfig.app.json
+facts: node scripts/simUsConnectionsFacts.mjs
+ctl-arod: US_CONN_CONTROL=arod node scripts/simUsConnectionsFacts.mjs
+ctl-bell: US_CONN_CONTROL=bell node scripts/simUsConnectionsFacts.mjs
+ctl-karlsson: US_CONN_CONTROL=karlsson node scripts/simUsConnectionsFacts.mjs
+ctl-twice: US_CONN_CONTROL=twice node scripts/simUsConnectionsFacts.mjs
+ctl-onehost: US_CONN_CONTROL=onehost node scripts/simUsConnectionsFacts.mjs
+ctl-unjudged: US_CONN_CONTROL=unjudged node scripts/simUsConnectionsFacts.mjs
+ctl-bogus: US_CONN_CONTROL=nosuch node scripts/simUsConnectionsFacts.mjs
+conn1553: node scripts/simConnectionsFacts.mjs
+fair: node scripts/simFairPuzzles.mjs
+loss: node scripts/simConnectionsLoss.mjs
+shake: node scripts/simConnectionsShake.mjs
+daily: node scripts/simDaily.mjs
+rehearse: npm install --prefix /tmp/pgl1 @electric-sql/pglite >/dev/null 2>&1 && PGLITE_DIR=/tmp/pgl1 node scripts/qa/rehearseUsConnections1558.mjs
+reh-noguard: npm install --prefix /tmp/pgl2 @electric-sql/pglite >/dev/null 2>&1 && REHEARSE_CONTROL=noguard PGLITE_DIR=/tmp/pgl2 node scripts/qa/rehearseUsConnections1558.mjs
+reh-drift: npm install --prefix /tmp/pgl3 @electric-sql/pglite >/dev/null 2>&1 && REHEARSE_CONTROL=drift PGLITE_DIR=/tmp/pgl3 node scripts/qa/rehearseUsConnections1558.mjs
+dealt: node scripts/qa/connectionsDealtDay1558.mjs file 2026-10-23 +40
+guides: node scripts/simGuideHeadings.mjs
+search: node scripts/simSiteSearch.mjs
+rival: node scripts/simNoRivalNames.mjs
+storage: node scripts/simStorageWrites.mjs
+kw: node scripts/genSearchKeywords.mjs > /dev/null && git status --short && git diff --stat --exit-code src/data/searchKeywords.json
+vitest: node_modules/.bin/vitest run src/test/dailySaveParity.test.tsx src/test/dailySaveShapes.test.tsx src/test/dailySaveHardening.test.tsx src/test/nhlPlanningBench.test.tsx src/hooks/useConnectionsLoss.test.ts --testTimeout=300000 --hookTimeout=120000
