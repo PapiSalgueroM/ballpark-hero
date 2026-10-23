@@ -280,7 +280,9 @@ try {
         await input(page, row, 'Back to fixtures');
       }
       await input(page, row, 'Still build comparison');
-      const before = { sample: await page.evaluate(collect), fixture: await read(page) }; layout(before.sample); unchanged(before.fixture); exactPlan(before);
+      const before = { sample: await page.evaluate(collect), fixture: await read(page) };
+      save(spec.id + '-build-before-rerender.json', before);
+      layout(before.sample); unchanged(before.fixture); exactPlan(before);
       await input(page, row, 'Change only build');
       const after = await snapshot(page, row, 'build-only-rerender');
       const comparison = { before, after }; changedBuild(comparison); row.comparisons.push(comparison);
