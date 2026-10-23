@@ -42,6 +42,7 @@ import type { Formation, FormationSlot } from '@/lib/squadShape';
    position man here is graded by the same family table World XI uses.
    positionFit imports nothing but types, so there is no cycle. */
 import { ALL_POSITIONS, eligiblePositions, FIT_PENALTY, gradeFit, type FitGrade } from '@/lib/positionFit';
+import { readCoachedStyle, tickCoachedStyle, coachedStyleXi, coachedTrainingMultiplier, type CoachedStyle, type CoachedStyleCourse } from '@/lib/clubManagerTraits';
 /* Round 1146: the own goal rule the Soccer Career Season Centre reads too.
    It imports only the keyed generator, so there is no cycle. */
 import { ownGoalRole, ownGoalTagged } from '@/lib/ownGoalRule';
@@ -1183,6 +1184,8 @@ export interface LoanOut {
 }
 
 export interface CMPlayer {
+  coachedStyle?: CoachedStyle;
+  coachedStyleCourse?: CoachedStyleCourse;
   worldRosterKey?: string;
   worldRosterSince?: number;
   id: string;
@@ -1321,6 +1324,14 @@ export interface CMPlayer {
 /** Round 505: a second position in progress. weeksTotal is what it was
  *  quoted at, so a progress bar can be drawn off the two numbers. */
 export interface Retraining { to: Position; weeksLeft: number; weeksTotal: number; }
+
+/** Keep coaching payloads on explicit player reconstructions without assigning defaults. */
+function coachedStyleFields(player: Pick<CMPlayer, 'coachedStyle' | 'coachedStyleCourse'>): Pick<CMPlayer, 'coachedStyle' | 'coachedStyleCourse'> {
+  return {
+    ...(player.coachedStyle === undefined ? {} : { coachedStyle: player.coachedStyle }),
+    ...(player.coachedStyleCourse === undefined ? {} : { coachedStyleCourse: player.coachedStyleCourse }),
+  };
+}
 
 /* ---------- Round 127: squad roles and playing time promises ---------- */
 
@@ -1605,6 +1616,8 @@ export interface TierInfo { label: string; emoji: string; blurb: string; }
 export interface MentalityDef { id: Mentality; label: string; emoji: string; desc: string; }
 
 export interface MarketPlayer {
+  coachedStyle?: CoachedStyle;
+  coachedStyleCourse?: CoachedStyleCourse;
   worldRosterKey?: string;
   worldRosterSince?: number;
   potential?: number;
@@ -3214,6 +3227,8 @@ export type NextFixtureInfo =
  * halftime and picked back up.
  */
 export interface LiveMatch {
+  /** Only new kickoffs with a learned coached style opt in. Missing stays neutral. */
+  coachedStyleRules?: 1;
   /** Simplified reviews enabled only by a new modern Club Manager kickoff. */
   varReviews?: true;
   /** Round 1303: the kinds of review this match was kicked off with (a goal ruled out, a penalty given), so a
@@ -7155,6 +7170,7 @@ export function retrainRefusal(p: CMPlayer | undefined, to: Position): string | 
   if (p.position === 'GK' || to === 'GK') return 'Keepers stay keepers, and nobody else goes in goal.';
   if (!ALL_POSITIONS.includes(to)) return 'That is not a position.';
   if (heldPositions(p).includes(to)) return `He already plays ${to}.`;
+  if (p.coachedStyleCourse !== undefined) return 'Resolve his coached-style course before starting position retraining.';
   if (p.retraining) return `He is already learning ${p.retraining.to}. Stop that first if you want him on something else.`;
   return null;
 }
@@ -7554,6 +7570,8 @@ export function wageFor(p: CMPlayer): number {
    so one change makes all three honest at once. */
 
 export interface FreeAgent {
+  coachedStyle?: CoachedStyle;
+  coachedStyleCourse?: CoachedStyleCourse;
   name: string;
   position: Position;
   age: number;
@@ -7941,6 +7959,7 @@ export function releasePlayer(career: CareerState, playerId: string): CareerStat
       value: p.value, generated: madeUp(p) || undefined, ...(p.nation ? { nation: p.nation } : {}), since: career.season,
       /* Round 640 review: a founder's sale ratio goes with him. */
       founderSaleRatio: p.founderSaleRatio,
+      ...coachedStyleFields(p),
       reason: 'released', fromMyClub: true,
     }, career, remaining.map(x => x.name)),
     /* He cannot be sold back to you this season. */
@@ -8125,6 +8144,7 @@ export function signFreeAgent(career: CareerState, name: string): CareerState | 
        and releasing either one took both off the books. */
     id: freeSquadId(career.squad, `fa-${slug(fa.name)}-s${career.season}`),
     name: fa.name, position: fa.position, rating: fa.rating, age: fa.age,
+    ...coachedStyleFields(fa),
     fitness: 100, morale: 70, injuryWeeks: 0, suspendedMatches: 0,
     isYouth: false, seasonGoals: 0, seasonAssists: 0,
     value: fa.value, generated: fa.generated, ...(fa.nation ? { nation: fa.nation } : {}),
@@ -9834,6 +9854,9 @@ function completeSigning(
   loanTerms?: LoanTerms,
 ): CareerState | null {
   if (signingRefusal(career, mp, fee) !== null) return null;
+  const coachedRecord = mp.worldRosterKey
+    ? worldRosterView(career)?.records.find(r => r.key === mp.worldRosterKey && r.owner === mp.club && r.status === 'owned')
+    : undefined;
   const player: CMPlayer = {
     /* Round 567: unique inside THIS squad, see freeSquadId. Two real players
        whose names slug to one string are both signable and stay two men. */
@@ -9855,6 +9878,7 @@ function completeSigning(
     /* Round 1520: a made up man keeps his mark and his country whatever world he was bought in (before the round
        a career with no world seed bought him unmarked). */
     ...(mp.generated ? { generated: true, ...(mp.nation ? { nation: mp.nation } : {}) } : {}),
+    ...(coachedRecord ? coachedStyleFields(coachedRecord.player) : {}),
     onLoan: loan || undefined,
     // Round 105: a signing arrives on a real deal.
     contractYears: loan ? 1 : (terms ? terms.years : (mp.age >= 31 ? 2 : 4)),
@@ -16665,7 +16689,7 @@ function tacticEdge(state: CareerState, fx: MyFixture, xi: XiSlot[], instr: Team
 /** The first half's lambdas, the kick off formula: the talk, the press, the shape, the venue. Round 1522 review:
  *  `instr` has no default, so a caller that forgets the instructions in force fails the type gate rather than
  *  playing balanced football while the log says otherwise. */
-function firstHalfLambdas(state: CareerState, fx: MyFixture, xi: XiSlot[], mentality: Mentality, instr: TeamInstructions): { lamMine: number; lamOpp: number; mine: number; oppS: number } {
+function firstHalfLambdas(state: CareerState, fx: MyFixture, xi: XiSlot[], mentality: Mentality, instr: TeamInstructions, coachedRules: boolean): { lamMine: number; lamOpp: number; mine: number; oppS: number } {
   const talk = talkEdgeFor(state, xi, fx, state.teamTalk ?? null);
   const press = state.press;
   const mine = myMatchStrength(state, xi) + talk + (press?.nextSharpen ?? 0);
@@ -16677,7 +16701,9 @@ function firstHalfLambdas(state: CareerState, fx: MyFixture, xi: XiSlot[], menta
   const duty = dutyBoost(xi, state);
   /* Round 1522: and the instructions; on balanced they add exactly zero. */
   const tac = tacticEdge(state, fx, xi, instr, 1);
-  const [lamMine, lamOpp] = halfLambdas(mine, oppS, ment.atk + homeAtk + duty.atk + (tac ? tac.atk : 0), ment.def + oppAtk + duty.def + (tac ? tac.def : 0));
+  const styleAttack = coachedRules ? coachedStyleXi(xi, instr).attack : 0;
+  const attack = ment.atk + homeAtk + duty.atk + (tac ? tac.atk : 0);
+  const [lamMine, lamOpp] = halfLambdas(mine, oppS, styleAttack ? attack + styleAttack : attack, ment.def + oppAtk + duty.def + (tac ? tac.def : 0));
   /* Round 670: a match that can go to extra time draws at the deflator. */
   const k = etScale(fx);
   return { lamMine: lamMine * k, lamOpp: lamOpp * k, mine, oppS };
@@ -16716,7 +16742,9 @@ function secondHalfLambdas(
   const duty = dutyBoost(xi, state);
   /* Round 1522: the instructions in force now, half two's costs included; on balanced they add exactly zero. */
   const tac = tacticEdge(state, fx, xi, liveInstructions(live), 2);
-  const [lamMine, lamOpp] = halfLambdas(mine, oppS + fire, ment2.atk + homeAtk + opp2.def + duty.atk + (tac ? tac.atk : 0), ment2.def + oppAtk + opp2.atk + duty.def + (tac ? tac.def : 0));
+  const styleAttack = live.coachedStyleRules === 1 ? coachedStyleXi(xi, liveInstructions(live)).attack : 0;
+  const attack = ment2.atk + homeAtk + opp2.def + duty.atk + (tac ? tac.atk : 0);
+  const [lamMine, lamOpp] = halfLambdas(mine, oppS + fire, styleAttack ? attack + styleAttack : attack, ment2.def + oppAtk + opp2.atk + duty.def + (tac ? tac.def : 0));
   /* Round 670: the same deflator as the first half, and extra time's too. */
   const k = etScale(fx);
   return { lamMine: lamMine * k, lamOpp: lamOpp * k, mine, oppS };
@@ -17244,7 +17272,7 @@ function ensureFirstHalf(state: CareerState, entry: CalendarEntry, live: LiveMat
   const started = men(startedSlots);
   const dutyOf = dutyLookup(startedSlots);
   if (live.lamMine === undefined || live.lamOpp === undefined) {
-    const { lamMine, lamOpp } = firstHalfLambdas(state, fx, startedSlots, live.mentality, liveInstructions(live));
+    const { lamMine, lamOpp } = firstHalfLambdas(state, fx, startedSlots, live.mentality, liveInstructions(live), live.coachedStyleRules === 1);
     if (live.lamMine === undefined) live.lamMine = lamMine;
     if (live.lamOpp === undefined) live.lamOpp = lamOpp;
   }
@@ -17299,7 +17327,7 @@ function recutFirstHalf(state: CareerState, entry: CalendarEntry, live: LiveMatc
   live.h1Injuries = keepUpTo(live.h1Injuries, minute);
   const off = offPitchIds(live);
   const xi = livePairs(state, live).filter(x => !off.has(x.p.id));
-  const { lamMine, lamOpp, mine, oppS } = firstHalfLambdas(state, fx, xi, live.mentality, liveInstructions(live));
+  const { lamMine, lamOpp, mine, oppS } = firstHalfLambdas(state, fx, xi, live.mentality, liveInstructions(live), live.coachedStyleRules === 1);
   const share = (45 - minute) / 45;
   live.h1Segs = recutSegments(live.h1Segs, { from: 0, to: 45, lamMine: live.lamMine ?? lamMine, lamOpp: live.lamOpp ?? lamOpp }, minute, 45, lamMine, lamOpp);
   ({ lamMine: live.lamMine, lamOpp: live.lamOpp } = effectiveLambdas(live.h1Segs));
@@ -17388,7 +17416,7 @@ function recutBoard(state: CareerState, entry: CalendarEntry, live: LiveMatch, p
   }
   const off = offPitchIds(live);
   const xi = livePairs(state, live).filter(x => !off.has(x.p.id));
-  const first = period === 'h1' ? firstHalfLambdas(state, fx, xi, live.mentality, liveInstructions(live)) : null;
+  const first = period === 'h1' ? firstHalfLambdas(state, fx, xi, live.mentality, liveInstructions(live), live.coachedStyleRules === 1) : null;
   const { lamMine, lamOpp } = first
     ?? secondHalfLambdas(state, fx, live, xi, live.myGoals + (live.h2My ?? []).length, live.oppGoals + (live.h2Opp ?? []).length);
   /* A minute of the board counts `weight` times an ordinary one (see BOARD). */
@@ -17592,7 +17620,9 @@ function tickWeek(state: CareerState, playedIds: Set<string> | null): void {
     const fitness = fitnessAfterWeek(p.fitness, played, recoveryMod, flat);
     let injuryWeeks = Math.max(0, p.injuryWeeks - 1);
     if (knockRisk > 0 && injuryWeeks === 0 && Math.random() < knockRisk) injuryWeeks = injurySpell(state, ri(1, 3));
-    const out: CMPlayer = { ...p, fitness, injuryWeeks };
+    const out: CMPlayer = {
+      ...tickCoachedStyle(p, { owned: !p.onLoan, awayOnLoan: false }), fitness, injuryWeeks,
+    };
     /* Round 505: a week of work on a second position. At zero it joins
        his list, the oldest one beyond two making way, and the papers say
        so. Hashed off nothing: no draw, so the week's stream is untouched. */
@@ -19598,7 +19628,7 @@ export function developmentRate(p: CMPlayer, career: CareerState): number {
      Round 471: and his own coach, exactly 1 at level 1 and on an empty post,
      in the same place for the same reason. The training ground lifts the
      whole squad, the coach lifts his half of the pitch. */
-  return clamp(headroom * minutes * intensity * focus * staff * trainingGroundGrowthMult(career) * coachGrowthMult(career, p.position), 0.1, DEVELOPMENT_RATE_MAX);
+  return clamp(headroom * minutes * intensity * focus * staff * trainingGroundGrowthMult(career) * coachGrowthMult(career, p.position) * coachedTrainingMultiplier(p, plan.intensity), 0.1, DEVELOPMENT_RATE_MAX);
 }
 
 /**
@@ -20089,11 +20119,12 @@ function kickOff(state: CareerState, entry: CalendarEntry, varReviews: CmVarAsk 
   /* Round 505: the eleven WITH their slots, because the strength reads a
      man in his slot now. */
   const xi = effectiveXIWithSlots(state);
+  const coachedStyleRules = state.squad.some(p => readCoachedStyle(p) !== null);
   /* Round 135: whatever you said before kick off, and whatever you said into a
      microphone this week, is on the pitch with them for the first half.
      Round 157: keep the half's lambdas on the live match, so the full time
      xG line is read off the exact process that produced these goals. */
-  const { lamMine, lamOpp, mine, oppS } = firstHalfLambdas(state, fx, xi, state.mentality, instructionsOf(state));
+  const { lamMine, lamOpp, mine, oppS } = firstHalfLambdas(state, fx, xi, state.mentality, instructionsOf(state), coachedStyleRules);
   const ids = xi.map(x => x.p.id);
   /* Round 504: the other eleven, picked before anyone scores, so their
      scorers are men who are on the pitch and the report rates the same
@@ -20103,6 +20134,7 @@ function kickOff(state: CareerState, entry: CalendarEntry, varReviews: CmVarAsk 
      their teamsheet against me. */
   const squad = pickOppSquad(oppRosterFor(state, fx.opponent));
   const live: LiveMatch = {
+    ...(coachedStyleRules ? { coachedStyleRules: 1 as const } : {}),
     /* Round 1218: and only where the competition uses reviews in real life (scripts/data/cmVarCompetitions.json). */
     ...(varReviews && worldYear(state) >= 2026 && !isHistoricEra(state.eraId ?? DEFAULT_ERA_ID) && varKinds.length > 0
       /* Round 1510: a night keys its own competition (`oneOff:<row>` for a super cup), which no coverage row holds. */
@@ -21773,7 +21805,7 @@ function fillSquadGaps(
   const letGo = new Set(released);
   const fromReal = realPool
     .filter(f => !letGo.has(f.name) && !taken.has(f.name) && !retired.has(f.name) && band(f.rating))
-    .map(f => ({ name: f.name, club: '', position: f.position, age: f.age, rating: f.rating, price: 0, value: f.value, generated: f.generated, ...(f.nation ? { nation: f.nation } : {}), founderSaleRatio: f.founderSaleRatio }));
+    .map(f => ({ name: f.name, club: '', position: f.position, age: f.age, rating: f.rating, price: 0, value: f.value, generated: f.generated, ...(f.nation ? { nation: f.nation } : {}), founderSaleRatio: f.founderSaleRatio, ...coachedStyleFields(f) }));
   /* A made up journeyman is worth the floor and asks a wage off his squad, so
      the club pays him what he asks rather than what his value would price. */
   const askingWage = new Map(realPool.filter(f => f.wage !== undefined).map(f => [f.name, f.wage as number]));
@@ -21816,6 +21848,7 @@ function fillSquadGaps(
       seasonAssists: 0,
       value: mp.value,
       generated: mp.generated,
+      ...coachedStyleFields(mp),
       ...(mp.nation ? { nation: mp.nation } : {}),
       contractYears: mp.age >= 31 ? 2 : 3,
       wage: 0,
@@ -22158,6 +22191,7 @@ export function startNextSeason(career: CareerState, acceptOfferClub?: string): 
       /* Round 640 review: a founder's sale ratio walks with him, or letting a
          deal run out and signing him back would strip it for nothing. */
       founderSaleRatio: p.founderSaleRatio,
+      ...coachedStyleFields(p),
       reason: 'expired' as const,
       /* Round 619: these are MY players whose deals ran out, so the same season
          re-sign block has to apply to them too. Without this, letting every

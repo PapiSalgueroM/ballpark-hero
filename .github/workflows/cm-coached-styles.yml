@@ -1,4 +1,4 @@
-name: Club Manager coached styles original growth baseline
+name: Club Manager coached styles engine functional pilot
 on:
   push:
     branches: [codex/cm-coached-styles-20261023]
@@ -10,13 +10,14 @@ concurrency:
   cancel-in-progress: false
 env:
   BASE_SOURCE: 3e95583fd8131f3704591cd566677f8774a8e4c3
+  EXPECTED_PARENT: b3f8a9b35cd0d3c8a51a471fa13d01f0c947c3d7
   CI: '1'
   SIM_NETWORK: offline
   TZ: UTC
 jobs:
-  original_growth:
+  engine_pilot:
     runs-on: ubuntu-latest
-    timeout-minutes: 15
+    timeout-minutes: 35
     defaults:
       run:
         shell: bash
@@ -29,10 +30,10 @@ jobs:
         with:
           node-version: 24
           cache: npm
-      - name: Original application and exact new regression source
+      - name: Exact engine pilot inputs and protected application source
         run: |
           set -euo pipefail
-          out="$RUNNER_TEMP/cm-coached-styles-original";test ! -e "$out";mkdir "$out"
+          out="$RUNNER_TEMP/cm-coached-styles-engine-pilot";test ! -e "$out";mkdir "$out"
           echo "CM_STYLE_OUT=$out" >> "$GITHUB_ENV"
           test "$GITHUB_REPOSITORY" = PapiSalgueroM/ballpark-hero
           test "$GITHUB_REPOSITORY_ID" = 1195729679
@@ -40,11 +41,20 @@ jobs:
           test "$(git rev-parse HEAD)" = "$GITHUB_SHA"
           git fetch --no-tags --depth=1 origin "$BASE_SOURCE" > "$out/base-fetch.log" 2>&1
           git merge-base --is-ancestor "$BASE_SOURCE" "$GITHUB_SHA"
-          git diff --exit-code "$BASE_SOURCE" HEAD -- . ':!docs/**' ':!.github/workflows/cm-coached-styles.yml' ':!src/test/clubManagerTraitGrowth.test.ts' > "$out/original-application.log"
-          test "$(git rev-parse HEAD:src/lib/clubManager.ts)" = a505743537b383bc7885bb81f5a72c11e154b566
-          printf '%s  %s\n' a9f1de88051bb1a6c423f52a1633e8a9015cae111d7f1575de6c645f24a55989 src/test/clubManagerTraitGrowth.test.ts | sha256sum --check > "$out/test-pin.log"
+          test "$(git rev-parse HEAD^)" = "$EXPECTED_PARENT"
+          git diff --exit-code "$BASE_SOURCE" HEAD -- . ':!docs/**' ':!.github/workflows/cm-coached-styles.yml' ':!src/lib/clubManager.ts' ':!src/lib/clubManagerTraits.ts' ':!src/test/clubManagerTraitGrowth.test.ts' ':!src/test/clubManagerTraits.test.ts' ':!src/test/clubManagerTraitCourseConflict.test.ts' ':!src/test/clubManagerTraitIntegration.test.ts' > "$out/protected-application.log"
+          test "$(git rev-parse HEAD:src/lib/clubManager.ts)" = 1047f11b210b0910ab9470579a63713f57e2134a
+          test "$(git rev-parse HEAD:src/test/clubManagerTraitGrowth.test.ts)" = ca894eb2d6b12ad009907e25cbb2759a7a9b9816
+          printf '%s  %s\n' \
+            abae93ec4a9db43242098c5a233164288e0b733b9f09f657c672f7ba1bae21c5 src/lib/clubManager.ts \
+            8d75b2dac8fadfa2487c2e9d260f8e7bcc966827a8d04c0f7c5d3ec9253b9ea8 src/lib/clubManagerTraits.ts \
+            a9f1de88051bb1a6c423f52a1633e8a9015cae111d7f1575de6c645f24a55989 src/test/clubManagerTraitGrowth.test.ts \
+            66f1e50ee609f0eda255d92c0c1b857cc0297573b579a82c0ec6d3541dda397c src/test/clubManagerTraits.test.ts \
+            a891a2b3d7a3f092b5431771435feca53ab8880575122e0be8e4d37459f64eaf src/test/clubManagerTraitCourseConflict.test.ts \
+            12d5942859f90e23fc67121da977095a6f58413d33cac4ea2028519bd8d66ddf src/test/clubManagerTraitIntegration.test.ts > "$out/input-pins.sha256"
+          sha256sum --check "$out/input-pins.sha256" > "$out/input-pins.log"
           git rev-parse HEAD > "$out/head.txt";git rev-parse 'HEAD^{tree}' > "$out/tree.txt"
-          git rev-parse HEAD:src/lib/clubManager.ts > "$out/original-engine-blob.txt"
+          git rev-parse HEAD:src/lib/clubManager.ts > "$out/engine-blob.txt"
           git ls-files -z | sort -z > "$out/source-members.before"
           git ls-files -z | sort -z | xargs -0 sha256sum > "$out/source-before.sha256"
           git diff --exit-code HEAD > "$out/source-clean-before.log"
@@ -56,70 +66,116 @@ jobs:
           npm ci > "$out/install.log" 2>&1
           find node_modules -path node_modules/.vite -prune -o -type f -print0 | sort -z > "$out/dependency-members.before"
           find node_modules -path node_modules/.vite -prune -o -type f -print0 | sort -z | xargs -0 sha256sum > "$out/dependencies.sha256"
-      - name: Actual app types and original growth outcomes
+      - name: Actual application type gate
+        id: app_types
         run: |
           set -euo pipefail
           out="$CM_STYLE_OUT"
           export NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs"
-          : > "$out/types.transport";: > "$out/tests.transport";status=0
-          SIM_OFFLINE_RECEIPT="$out/types.transport" node_modules/.bin/tsc --noEmit -p tsconfig.app.json > "$out/types.log" 2>&1 || status=$?
-          printf '%s\n' "$status" > "$out/types.exit";test "$status" -eq 0
-          status=0
-          SIM_OFFLINE_RECEIPT="$out/tests.transport" timeout --signal=TERM --kill-after=15s 5m node_modules/.bin/vitest run src/test/clubManagerTraitGrowth.test.ts --maxWorkers=1 --no-file-parallelism --reporter=json --outputFile="$out/tests.json" > "$out/tests.log" 2>&1 || status=$?
-          printf '%s\n' "$status" > "$out/tests.exit";test "$status" -eq 1
-          node <<'NODE'
+          : > "$out/types.transport";status=0
+          SIM_OFFLINE_RECEIPT="$out/types.transport" timeout --signal=TERM --kill-after=15s 5m node_modules/.bin/tsc --noEmit -p tsconfig.app.json > "$out/types.log" 2>&1 || status=$?
+          printf '%s\n' "$status" > "$out/types.exit"
+          test "$status" -eq 0;test ! -s "$out/types.transport"
+      - name: Four actual suites and exactly 29 healthy cases
+        id: units
+        run: |
+          set -euo pipefail
+          out="$CM_STYLE_OUT"
+          export NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs"
+          : > "$out/tests.transport";: > "$out/unit-classifier.transport";status=0
+          SIM_OFFLINE_RECEIPT="$out/tests.transport" timeout --signal=TERM --kill-after=15s 5m node_modules/.bin/vitest run src/test/clubManagerTraitGrowth.test.ts src/test/clubManagerTraits.test.ts src/test/clubManagerTraitCourseConflict.test.ts src/test/clubManagerTraitIntegration.test.ts --maxWorkers=1 --no-file-parallelism --reporter=json --outputFile="$out/tests.json" > "$out/tests.log" 2>&1 || status=$?
+          printf '%s\n' "$status" > "$out/tests.exit";test "$status" -eq 0
+          SIM_OFFLINE_RECEIPT="$out/unit-classifier.transport" node <<'NODE'
           const fs=require('node:fs'),assert=require('node:assert/strict'),path=require('node:path'),out=process.env.CM_STYLE_OUT,r=JSON.parse(fs.readFileSync(out+'/tests.json','utf8'));
-          const owned=new Map([
-            ['uses the press coached style at double intensity','CM_STYLE_PRESS_MATCHING_GROWTH'],
-            ['uses the link coached style at normal intensity','CM_STYLE_LINK_MATCHING_GROWTH'],
-            ['uses the runner coached style at light intensity','CM_STYLE_RUNNER_MATCHING_GROWTH'],
-          ]);
-          const preserves=new Set([
-            'keeps press neutral at nonmatching normal intensity',
-            'keeps link neutral at nonmatching light intensity',
-            'keeps runner neutral at nonmatching double intensity',
-            'keeps unknown and malformed saved styles neutral without changing their data',
-            'keeps the existing development ceiling with a matching learned style',
-          ]);
-          assert.equal(r.success,false);assert.equal(r.testResults.length,1);
-          assert.equal(r.numTotalTests,8);assert.equal(r.numPassedTests,5);assert.equal(r.numFailedTests,3);assert.equal(r.numPendingTests,0);assert.equal(r.numTodoTests,0);
-          const suite=r.testResults[0];assert.equal(path.resolve(suite.name),path.resolve('src/test/clubManagerTraitGrowth.test.ts'));assert.equal(suite.status,'failed');assert.equal(suite.assertionResults.length,8);
-          const seen=new Set(),failures=[];
-          for(const row of suite.assertionResults){
-            assert(!seen.has(row.title));seen.add(row.title);
-            if(preserves.has(row.title)){assert.equal(row.status,'passed',row.fullName);assert.deepEqual(row.failureMessages,[]);continue;}
-            const marker=owned.get(row.title);assert(marker,row.fullName);assert.equal(row.status,'failed');assert.equal(row.failureMessages.length,1);
-            const message=row.failureMessages[0].replace(/\x1b\[[0-?]*[ -/]*[@-~]/g,'');
-            assert.match(message,/^\s*AssertionError:/);assert(message.includes(marker));assert.doesNotMatch(message,/\b(?:TypeError|ReferenceError|SyntaxError|RangeError)\s*:/);
-            failures.push({title:row.title,marker});
+          const expected=new Map([
+            ['src/test/clubManagerTraitGrowth.test.ts',8],
+            ['src/test/clubManagerTraits.test.ts',10],
+            ['src/test/clubManagerTraitCourseConflict.test.ts',3],
+            ['src/test/clubManagerTraitIntegration.test.ts',8],
+          ].map(([file,count])=>[path.resolve(file),count]));
+          assert.equal(r.success,true);assert.equal(r.testResults.length,4);
+          assert.equal(r.numTotalTests,29);assert.equal(r.numPassedTests,29);assert.equal(r.numFailedTests,0);assert.equal(r.numPendingTests,0);assert.equal(r.numTodoTests,0);
+          const files=new Set(),cases=[];
+          for(const suite of r.testResults){
+            assert.equal(typeof suite.name,'string');const file=path.resolve(suite.name),count=expected.get(file);assert(count,'Unexpected suite '+file);assert(!files.has(file));files.add(file);
+            assert.equal(suite.status,'passed');assert.equal(suite.assertionResults.length,count);if('message'in suite)assert.equal(suite.message,'');
+            const names=new Set();for(const row of suite.assertionResults){
+              assert.equal(row.status,'passed');assert.deepEqual(row.failureMessages,[]);assert.equal(typeof row.title,'string');assert(row.title.trim());assert.equal(typeof row.fullName,'string');assert(row.fullName.trim());assert(!names.has(row.fullName));names.add(row.fullName);cases.push({file,title:row.title,fullName:row.fullName,status:row.status});
+            }
           }
-          assert.equal(seen.size,8);assert.equal(failures.length,3);
+          assert.equal(files.size,4);assert.equal(cases.length,29);
           const runtime=['numRuntimeErrorTestSuites','numUnhandledErrors'];for(const key of runtime)if(key in r)assert.equal(r[key],0);if('unhandledErrors'in r)assert.deepEqual(r.unhandledErrors,[]);
           assert.doesNotMatch(fs.readFileSync(out+'/tests.log','utf8'),/Unhandled\s+(?:Errors?|Rejections?)|Uncaught\s+Exceptions?/i);
-          fs.writeFileSync(out+'/original-red-admission.json',JSON.stringify({phase:'original-growth-baseline',source:process.env.GITHUB_SHA,expectedOwnedFailures:failures,preservedPasses:5,observedRuntimeCounters:Object.fromEntries(runtime.filter(k=>k in r).map(k=>[k,r[k]])),absentRuntimeCountersUnknown:runtime.filter(k=>!(k in r)),applicationQualified:false},null,2)+'\n',{flag:'wx'});
+          fs.writeFileSync(out+'/unit-outcomes.json',JSON.stringify({phase:'cm-coached-styles-engine-pilot',source:process.env.GITHUB_SHA,runId:process.env.GITHUB_RUN_ID,attempt:process.env.GITHUB_RUN_ATTEMPT,expectedSuites:4,passedCases:cases,observedRuntimeCounters:Object.fromEntries(runtime.filter(k=>k in r).map(k=>[k,r[k]])),absentRuntimeCountersUnknown:runtime.filter(k=>!(k in r)),unhandledErrors:'unhandledErrors'in r?r.unhandledErrors:'UNKNOWN_ABSENT',applicationQualified:false,uiIntegrated:false,balanceQualified:false,oldWholeEngineParity:'OWED'},null,2)+'\n',{flag:'wx'});
           NODE
-          test ! -s "$out/types.transport";test ! -s "$out/tests.transport"
+          test ! -s "$out/tests.transport";test ! -s "$out/unit-classifier.transport"
+      - name: Original Club Manager sim
+        id: sim_core
+        if: ${{ !cancelled() && steps.app_types.outcome == 'success' }}
+        run: |
+          set -euo pipefail
+          out="$CM_STYLE_OUT"
+          export NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs"
+          : > "$out/simClubManager.transport";status=0
+          SIM_OFFLINE_RECEIPT="$out/simClubManager.transport" timeout --signal=TERM --kill-after=15s 5m node scripts/simClubManager.mjs > "$out/simClubManager.log" 2>&1 || status=$?
+          printf '%s\n' "$status" > "$out/simClubManager.exit"
+          test "$status" -eq 0;test ! -s "$out/simClubManager.transport"
+          grep -Fx 'ALL CLUB MANAGER SIMS PASSED' "$out/simClubManager.log"
+      - name: Original facilities sim
+        id: sim_facilities
+        if: ${{ !cancelled() && steps.app_types.outcome == 'success' }}
+        run: |
+          set -euo pipefail
+          out="$CM_STYLE_OUT"
+          export NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs"
+          : > "$out/simClubManagerFacilities.transport";status=0
+          SIM_OFFLINE_RECEIPT="$out/simClubManagerFacilities.transport" timeout --signal=TERM --kill-after=15s 5m node scripts/simClubManagerFacilities.mjs > "$out/simClubManagerFacilities.log" 2>&1 || status=$?
+          printf '%s\n' "$status" > "$out/simClubManagerFacilities.exit"
+          test "$status" -eq 0;test ! -s "$out/simClubManagerFacilities.transport"
+          grep -Fx 'simClubManagerFacilities: PASS. Four facilities that cost what the desk says, help what they say, and tax nobody who ignores them.' "$out/simClubManagerFacilities.log"
+      - name: Original save sim
+        id: sim_save
+        if: ${{ !cancelled() && steps.app_types.outcome == 'success' }}
+        run: |
+          set -euo pipefail
+          out="$CM_STYLE_OUT"
+          export NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs"
+          : > "$out/simClubManagerSave.transport";status=0
+          SIM_OFFLINE_RECEIPT="$out/simClubManagerSave.transport" timeout --signal=TERM --kill-after=15s 5m node scripts/simClubManagerSave.mjs > "$out/simClubManagerSave.log" 2>&1 || status=$?
+          printf '%s\n' "$status" > "$out/simClubManagerSave.exit"
+          test "$status" -eq 0;test ! -s "$out/simClubManagerSave.transport"
+          grep -Fx 'simClubManagerSave: all sections green' "$out/simClubManagerSave.log"
       - name: Always preserve all raw results and physical holds
         if: always()
         run: |
           set -euo pipefail
-          out="$RUNNER_TEMP/cm-coached-styles-original";mkdir -p "$out";failed=0
+          out="$RUNNER_TEMP/cm-coached-styles-engine-pilot";mkdir -p "$out";failed=0
           for manifest in source-before dependencies;do
             if test -f "$out/$manifest.sha256";then sha256sum --check "$out/$manifest.sha256" > "$out/final-$manifest-hold.log" 2>&1 || failed=1;else failed=1;fi
           done
-          git ls-files -z | sort -z > "$out/source-members.after"
+          git ls-files -z | sort -z > "$out/source-members.after" || failed=1
+          git ls-files -z | sort -z | xargs -0 sha256sum > "$out/source-after.sha256" || failed=1
           if test -f "$out/source-members.before";then cmp "$out/source-members.before" "$out/source-members.after" || failed=1;else failed=1;fi
-          if test -f "$out/dependency-members.before";then find node_modules -path node_modules/.vite -prune -o -type f -print0 | sort -z > "$out/dependency-members.after";cmp "$out/dependency-members.before" "$out/dependency-members.after" || failed=1;else failed=1;fi
+          if test -f "$out/source-before.sha256";then cmp "$out/source-before.sha256" "$out/source-after.sha256" || failed=1;else failed=1;fi
+          if test -d node_modules;then
+            find node_modules -path node_modules/.vite -prune -o -type f -print0 | sort -z > "$out/dependency-members.after" || failed=1
+            find node_modules -path node_modules/.vite -prune -o -type f -print0 | sort -z | xargs -0 sha256sum > "$out/dependencies-end.sha256" || failed=1
+          else failed=1;fi
+          if test -f "$out/dependency-members.before";then cmp "$out/dependency-members.before" "$out/dependency-members.after" || failed=1;else failed=1;fi
+          if test -f "$out/dependencies.sha256";then cmp "$out/dependencies.sha256" "$out/dependencies-end.sha256" || failed=1;else failed=1;fi
+          git rev-parse HEAD > "$out/head-after.txt" || failed=1
+          if test -f "$out/head.txt";then cmp "$out/head.txt" "$out/head-after.txt" || failed=1;else failed=1;fi
           git diff --exit-code HEAD > "$out/final-source-diff.log" || failed=1
           git status --porcelain --untracked-files=all > "$out/final-status.txt";test ! -s "$out/final-status.txt" || failed=1
           while IFS= read -r -d '' file;do test ! -s "$file" || failed=1;done < <(find "$out" -type f -name '*.transport' -print0)
           printf '%s\n' "$failed" > "$out/final-holds.exit"
+          printf '%s\n' '{"types":"${{ steps.app_types.outcome }}","units":"${{ steps.units.outcome }}","simClubManager":"${{ steps.sim_core.outcome }}","simClubManagerFacilities":"${{ steps.sim_facilities.outcome }}","simClubManagerSave":"${{ steps.sim_save.outcome }}","applicationQualified":false,"uiIntegrated":false,"balanceQualified":false,"oldWholeEngineParity":"OWED"}' > "$out/stage-outcomes.json"
           (cd "$out";find . -type f ! -path ./evidence.sha256 -print0 | sort -z | xargs -0 sha256sum) > "$out/evidence.sha256"
           exit "$failed"
       - uses: actions/upload-artifact@v4
         if: always()
         with:
-          name: cm-coached-styles-original-${{ github.run_id }}-${{ github.run_attempt }}
-          path: ${{ runner.temp }}/cm-coached-styles-original/
+          name: cm-coached-styles-engine-pilot-${{ github.run_id }}-${{ github.run_attempt }}
+          path: ${{ runner.temp }}/cm-coached-styles-engine-pilot/
           if-no-files-found: error
           retention-days: 14
