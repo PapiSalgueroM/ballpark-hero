@@ -1,0 +1,2 @@
+probe exit=0 0s | probe1 done
+facts exit=0 0s | simUsConnectionsFacts: green. Every Baseball, NFL and NHL Connections group is held to the record, and every board has one right answer.
