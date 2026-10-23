@@ -149,8 +149,8 @@ export function getCorruptionEvents(state: CareerState): RandomEvent[] {
     push({ id: 315, emoji: "🧺", title: "The Money Has Nowhere To Live",
       description: `You are sitting on €${dm.toFixed(1)}M that cannot be explained to anyone with a badge. Your accountant has started using the phrase "hypothetically speaking" a lot.`,
       category: "negative", choices: [
-        { label: "Buy a cash business to wash it through", emoji: "🧼", color: "bg-red-600", consequence: "Heat +12 now, but the shady shop unlocks proper laundering",
-          apply: s => { setFlag(s, "washArc", 1); heat(s, 12); s.events = [...s.events, "🧼 Bought into cash businesses. The car wash does remarkable numbers for a street with no traffic"]; return s; } },
+        { label: "Ask about cash businesses", emoji: "🧼", color: "bg-red-600", consequence: "Heat +12. To clean dirty money each season, buy a laundering item in My Life > The other list.",
+          apply: s => { setFlag(s, "washArc", 1); heat(s, 12); s.events = [...s.events, "🧼 You asked around about cash businesses. No purchase made."]; return s; } },
         { label: "Declare it all and pay the tax", emoji: "🧾", color: "bg-emerald-600", consequence: "Lose 55% to tax and penalties, Heat drops hard, Integrity +12",
           apply: s => { const keep = Math.round((s.dirtyMoney ?? 0) * 0.45 * 100) / 100; s.netWorth = Math.round((s.netWorth + keep) * 100) / 100; s.dirtyMoney = 0; heat(s, -35); s.integrityBonus += 12; setFlag(s, "washArc", 2); s.events = [...s.events, `🧾 Declared everything. The taxman took over half and gave back something better: sleep`]; return s; } },
         { label: "Bury it in a wall and forget about it", emoji: "🧱", color: "bg-muted", consequence: "Heat +5. It is still there. It is always still there",
