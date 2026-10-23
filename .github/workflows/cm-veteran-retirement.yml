@@ -10,7 +10,7 @@ concurrency:
   cancel-in-progress: false
 env:
   BASE_SOURCE: 3ac9d8ea8a13db824f88be2deb660e7f2e31fc35
-  EXPECTED_PARENT: f6dba0df4495959cad05db879e6aed50b35599ea
+  EXPECTED_PARENT: 290a52e4b1957d8bc127efbf9f7930788e7188b8
   CI: '1'
   SIM_NETWORK: offline
   TZ: UTC
@@ -30,7 +30,7 @@ jobs:
         with:
           node-version: 24
           cache: npm
-      - name: Exact two-path child, seven cumulative paths and frozen retirement inputs
+      - name: Exact six-path child, twelve cumulative paths and eleven frozen retirement bodies
         run: |
           set -euo pipefail
           out="$RUNNER_TEMP/cm-veteran-retirement-functional";test ! -e "$out";mkdir "$out"
@@ -43,20 +43,35 @@ jobs:
           git merge-base --is-ancestor "$BASE_SOURCE" "$GITHUB_SHA"
           git show -s --format=%P HEAD > "$out/parents.txt"
           test "$(cat "$out/parents.txt")" = "$EXPECTED_PARENT"
-          git diff --exit-code "$EXPECTED_PARENT" HEAD -- . ':!docs/**' ':!.github/workflows/cm-veteran-retirement.yml' ':!src/test/clubManagerVeteranWorldRoster.test.ts' > "$out/direct-child-scope.log"
-          git diff --exit-code "$BASE_SOURCE" HEAD -- . ':!docs/**' ':!.github/workflows/cm-veteran-retirement.yml' ':!src/lib/clubManager.ts' ':!src/lib/clubManagerCalendar.ts' ':!src/lib/clubManagerVeteranLedger.ts' ':!src/lib/clubManagerVeteranRetirement.ts' ':!src/test/clubManagerVeteranRetirement.test.ts' ':!src/test/clubManagerVeteranWorldRoster.test.ts' > "$out/finite-seven-path-scope.log"
+          git diff --exit-code "$EXPECTED_PARENT" HEAD -- . ':!docs/**' ':!.github/workflows/cm-veteran-retirement.yml' ':!src/hooks/useClubManager.ts' ':!src/components/club-manager/ClubManagerSeasonSummary.tsx' ':!src/components/club-manager/VeteranRetirementCard.tsx' ':!src/test/clubManagerVeteranHook.test.tsx' ':!src/test/VeteranRetirementCard.test.tsx' > "$out/direct-child-scope.log"
+          git diff --exit-code "$BASE_SOURCE" HEAD -- . ':!docs/**' ':!.github/workflows/cm-veteran-retirement.yml' ':!src/lib/clubManager.ts' ':!src/lib/clubManagerCalendar.ts' ':!src/lib/clubManagerVeteranLedger.ts' ':!src/lib/clubManagerVeteranRetirement.ts' ':!src/test/clubManagerVeteranRetirement.test.ts' ':!src/test/clubManagerVeteranWorldRoster.test.ts' ':!src/hooks/useClubManager.ts' ':!src/components/club-manager/ClubManagerSeasonSummary.tsx' ':!src/components/club-manager/VeteranRetirementCard.tsx' ':!src/test/clubManagerVeteranHook.test.tsx' ':!src/test/VeteranRetirementCard.test.tsx' > "$out/finite-twelve-path-scope.log"
           test "$(git rev-parse "$BASE_SOURCE:src/lib/clubManager.ts")" = a505743537b383bc7885bb81f5a72c11e154b566
           test "$(git rev-parse "$BASE_SOURCE:src/lib/clubManagerCalendar.ts")" = 3653027149d6a1bef4194e0bece4fb5783c1c1e2
           test "$(git rev-parse HEAD:src/lib/clubManager.ts)" = bc6fb5765f593fb2b046e9abd35730093772f637
           test "$(git rev-parse HEAD:src/lib/clubManagerCalendar.ts)" = a397581e069d7809f72a093d24d157b50c88e2d3
           test "$(git rev-parse HEAD:src/test/clubManagerVeteranWorldRoster.test.ts)" = 17f01cc5148c805efafe120f5af1c907bc2ee4f5
+          test "$(git rev-parse "$BASE_SOURCE:src/hooks/useClubManager.ts")" = 65bc9bbb622c67fbbcb25c949038571bbdc8600a
+          test "$(git rev-parse "$BASE_SOURCE:src/components/club-manager/ClubManagerSeasonSummary.tsx")" = 957eea4dc0b2385b71c0bc915783740f9a3bb4dc
+          test "$(git rev-parse HEAD:src/lib/clubManagerVeteranLedger.ts)" = 5a1bf64d3c7452164c440a16f7f392386dc550ed
+          test "$(git rev-parse HEAD:src/lib/clubManagerVeteranRetirement.ts)" = edf360bfea6e76e98a822d244f80b66175d157bb
+          test "$(git rev-parse HEAD:src/test/clubManagerVeteranRetirement.test.ts)" = a656d268bf605a3cff1bfa6b24284231a308f735
+          test "$(git rev-parse HEAD:src/hooks/useClubManager.ts)" = 65031ded26b48c0c24a4c1d2a34cee980ed94c27
+          test "$(git rev-parse HEAD:src/components/club-manager/ClubManagerSeasonSummary.tsx)" = ec2e5c051f5a8dd56ac2dcae09aca3403031fcb4
+          test "$(git rev-parse HEAD:src/components/club-manager/VeteranRetirementCard.tsx)" = 8d2a1594f8eaf1119b2fc55d774ac52fa3c1af48
+          test "$(git rev-parse HEAD:src/test/clubManagerVeteranHook.test.tsx)" = ef0d436058c71cd1b9c3fe9219c432d680e430b8
+          test "$(git rev-parse HEAD:src/test/VeteranRetirementCard.test.tsx)" = ba06e7824a79d41cd7ce9fcc25ba8513fc7e7abe
           printf '%s  %s\n' \
             45b9d486014720831f130000ff67d0d380f60c755bbb1afa3d0f9a833b2c4050 src/lib/clubManager.ts \
             7cdbc2e31172db5974f0753551133c61ae291662f5bd8e4b14f043d2267baf83 src/lib/clubManagerCalendar.ts \
             80f991a38069f29dd1fecc22a9cb9c0e3bb4945a33208fae1de8413fc6aefb17 src/lib/clubManagerVeteranLedger.ts \
             cdaecb5ecd28187da8a1c62526c6b165289e76e37d30a01cba2ce7c4a16577ed src/lib/clubManagerVeteranRetirement.ts \
             2cf79f78fc380fd9509eaeec5c88c76fd3dc1f91e9695f922b1248df608f90b5 src/test/clubManagerVeteranRetirement.test.ts \
-            5b5e2c8f2c3e24fd5c7c23d04863e05c7737e9127695f4bbc9f793b2c6355215 src/test/clubManagerVeteranWorldRoster.test.ts > "$out/input-pins.sha256"
+            5b5e2c8f2c3e24fd5c7c23d04863e05c7737e9127695f4bbc9f793b2c6355215 src/test/clubManagerVeteranWorldRoster.test.ts \
+            88df1c6320820399cf5e96512960375a10ca9723f5e5f465140ee5ec3f86481b src/hooks/useClubManager.ts \
+            1a5ea0d99de65f52d9f60ba3aed6c364445241ce760d2bb2a71e7feea9a453c1 src/components/club-manager/ClubManagerSeasonSummary.tsx \
+            af5023b72b58bd1171a0117302fd120d9d40a509f57653175fac9300d03f0a21 src/components/club-manager/VeteranRetirementCard.tsx \
+            2920caa8918ed82169bcb5c96a50f426e5d0b8ade9d270a02225961a9b4fc0c2 src/test/clubManagerVeteranHook.test.tsx \
+            93a223b6349a56545b794604a2272127ec5df0c366e31906c28f756b30bf6e5b src/test/VeteranRetirementCard.test.tsx > "$out/input-pins.sha256"
           sha256sum --check "$out/input-pins.sha256" > "$out/input-pins.log"
           git rev-parse HEAD > "$out/head.txt";git rev-parse 'HEAD^{tree}' > "$out/tree.txt"
           printf '%s\n' "$GITHUB_RUN_ID" > "$out/run-id.txt";printf '%s\n' "$GITHUB_RUN_ATTEMPT" > "$out/run-attempt.txt"
@@ -135,6 +150,49 @@ jobs:
           NODE
           printf '%s\n' "$classifier" > "$out/world-classifier.exit";test "$classifier" -eq 0
           test ! -s "$out/world.transport";test ! -s "$out/world-classifier.transport"
+      - name: Exact fifteen actual hook and five controlled-parent Card outcomes
+        run: |
+          set -euo pipefail
+          out="$CM_VETERAN_OUT"
+          export NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs"
+          : > "$out/ui.transport";: > "$out/ui-classifier.transport";status=0
+          SIM_OFFLINE_RECEIPT="$out/ui.transport" timeout --signal=TERM --kill-after=15s 10m node_modules/.bin/vitest run src/test/clubManagerVeteranHook.test.tsx src/test/VeteranRetirementCard.test.tsx --maxWorkers=1 --no-file-parallelism --reporter=default --reporter=json --outputFile="$out/ui.json" > "$out/ui.log" 2>&1 || status=$?
+          printf '%s\n' "$status" > "$out/ui.exit";test "$status" -eq 0
+          classifier=0
+          SIM_OFFLINE_RECEIPT="$out/ui-classifier.transport" node <<'NODE' || classifier=$?
+          const fs=require('node:fs'),assert=require('node:assert/strict'),path=require('node:path'),out=process.env.CM_VETERAN_OUT;
+          const r=JSON.parse(fs.readFileSync(out+'/ui.json','utf8'));
+          const contracts=[{"path":"src/test/clubManagerVeteranHook.test.tsx","ancestor":"Veteran review through the actual career hook and writer","titles":["saves the actual agreement before publication without changing phase or drawing randomness","records the actual deterministic decline without renewing or changing rewards","keeps memory and all old raw bytes on quota refusal and commits the actual retry","permits only one pending talk across different players and releases the lock after completion","uses the saved authoritative ref for successive decisions before the parent rerenders","returns false for a real core refusal without writing or publishing a candidate","preserves a future raw review ledger and refuses the actual unsupported decision","returns false when the lazy module transport fails without changing the saved career","refuses before importing when another tab already owns a newer fenced save","rechecks the actual save fence after the awaited import and retains the newer tab bytes","rechecks actual slot ownership after import and never overwrites the incoming slot","invalidates a pending talk when actual showSlots moves context in the same pending React turn","invalidates a pending talk when actual startNew moves context in the same pending React turn","invalidates a pending talk when actual nextSeason moves context in the same pending React turn","refuses after unmount while retaining the actual unmount save and releasing no late candidate"]},{"path":"src/test/VeteranRetirementCard.test.tsx","ancestor":"Veteran retirement card with actual career policy and saves","titles":["shows actual unchanged role and renewal terms, publishes the paid result and restores Back focus","keeps raw and published career on real quota refusal, then retries the same season successfully","records an actual wants-out decline with no renewal fee or role change","blocks an unknown saved ledger without a callback or raw repair","blocks duplicate taps and never invents success from true without published career props"]}];
+          const expected=new Map(contracts.map(c=>[path.resolve(c.path),{...c,titles:new Set(c.titles)}]));
+          assert.equal(expected.size,2);assert.equal(contracts[0].titles.length,15);assert.equal(contracts[1].titles.length,5);
+          assert.equal(r.success,true);assert.equal(r.testResults.length,2);
+          for(const [key,value]of Object.entries({numTotalTests:20,numPassedTests:20,numFailedTests:0,numPendingTests:0,numTodoTests:0}))assert.equal(r[key],value,key);
+          const files=new Set(),passed=[];
+          for(const suite of r.testResults){
+            const file=path.resolve(suite.name),contract=expected.get(file);
+            assert(contract,'Unexpected actual suite '+file);assert(!files.has(file));files.add(file);
+            assert.equal(suite.status,'passed');assert.equal(suite.assertionResults.length,contract.titles.size);
+            if('message'in suite)assert.equal(suite.message,'');
+            const seen=new Set();
+            for(const row of suite.assertionResults){
+              assert.equal(typeof row.title,'string');assert(contract.titles.has(row.title),row.title);assert(!seen.has(row.title));seen.add(row.title);
+              assert.equal(row.fullName,contract.ancestor+' '+row.title);assert.equal(row.status,'passed',row.fullName);assert.deepEqual(row.failureMessages,[]);passed.push(row.fullName);
+            }
+            assert.equal(seen.size,contract.titles.size);for(const title of contract.titles)assert(seen.has(title));
+          }
+          assert.equal(files.size,2);assert.equal(passed.length,20);
+          const runtime=['numRuntimeErrorTestSuites','numUnhandledErrors'];for(const key of runtime)if(key in r)assert.equal(r[key],0);
+          if('unhandledErrors'in r)assert.deepEqual(r.unhandledErrors,[]);
+          assert.doesNotMatch(fs.readFileSync(out+'/ui.log','utf8'),/Unhandled\s+(?:Errors?|Rejections?)|Uncaught\s+Exceptions?|Failed to resolve import|Cannot find (?:module|package)|No test files found/i);
+          for(const [file,count]of [['functional-admission.json',19],['world-admission.json',1]]){
+            const prior=JSON.parse(fs.readFileSync(out+'/'+file,'utf8'));
+            assert.equal(prior.source,process.env.GITHUB_SHA);assert.equal(prior.parent,process.env.EXPECTED_PARENT);assert.equal(prior.baseSource,process.env.BASE_SOURCE);
+            assert.equal(prior.runId,process.env.GITHUB_RUN_ID);assert.equal(prior.attempt,process.env.GITHUB_RUN_ATTEMPT);assert.equal(prior.passed.length,count);
+          }
+          fs.writeFileSync(out+'/ui-admission.json',JSON.stringify({phase:'veteran-hook15-card5-functional-only',source:process.env.GITHUB_SHA,parent:process.env.EXPECTED_PARENT,baseSource:process.env.BASE_SOURCE,runId:process.env.GITHUB_RUN_ID,attempt:process.env.GITHUB_RUN_ATTEMPT,passed,requiredPriorCoreCases:19,requiredPriorDeclaredWorldCases:1,totalRequiredFunctionalCases:40,observedRuntimeCounters:Object.fromEntries(runtime.filter(k=>k in r).map(k=>[k,r[k]])),absentRuntimeCountersUnknown:runtime.filter(k=>!(k in r)),unhandledErrors:'unhandledErrors'in r?r.unhandledErrors:'UNKNOWN_ABSENT',cardControlledParentFixtureOnly:true,seasonSummaryProductionMounted:false,applicationQualified:false,fullOldEngineParity:false,buildBrowserCapsQualified:false,balanceQualified:false},null,2)+'\n',{flag:'wx'});
+          NODE
+          printf '%s\n' "$classifier" > "$out/ui-classifier.exit";test "$classifier" -eq 0
+          test ! -s "$out/ui.transport";test ! -s "$out/ui-classifier.transport"
       - name: Always preserve all raw results and physical holds
         if: always()
         run: |
@@ -157,7 +215,7 @@ jobs:
           if test -f "$out/head.txt";then cmp "$out/head.txt" "$out/head-after.txt" || failed=1;else failed=1;fi
           git diff --exit-code HEAD > "$out/final-source-diff.log" || failed=1
           git status --porcelain --untracked-files=all > "$out/final-status.txt";test ! -s "$out/final-status.txt" || failed=1
-          for transport in types tests classifier world world-classifier;do test -f "$out/$transport.transport" && test ! -s "$out/$transport.transport" || failed=1;done
+          for transport in types tests classifier world world-classifier ui ui-classifier;do test -f "$out/$transport.transport" && test ! -s "$out/$transport.transport" || failed=1;done
           while IFS= read -r -d '' file;do test ! -s "$file" || failed=1;done < <(find "$out" -type f -name '*.transport' -print0)
           printf '%s\n' "$failed" > "$out/final-holds.exit"
           (cd "$out";find . -type f ! -path ./evidence.sha256 -print0 | sort -z | xargs -0 sha256sum) > "$out/evidence.sha256"
