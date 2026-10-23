@@ -1,0 +1,10 @@
+# Release BK final gate, part d (served): Round 1510 walk and its notile and swap controls (each must exit 1 and FIRE), playWorldUcl, Round 1509 board walk (walkBoard.mjs as extra file), sweepWeight (the three engine rows are the lead to raise). Runner rBKc-d on 696b697b.
+#!serve
+#!playwright
+#!serial
+walk: node scripts/playOneOffCups.mjs > /tmp/w.log 2>&1; s=$?; grep -E "FAIL|playOneOffCups" /tmp/w.log | head -20 | cut -c1-300; exit $s
+walk-notile: PLAY_ONEOFF_CONTROL=notile node scripts/playOneOffCups.mjs > /tmp/wn.log 2>&1; s=$?; tail -2 /tmp/wn.log | cut -c1-300; exit $s
+walk-swap: PLAY_ONEOFF_CONTROL=swap node scripts/playOneOffCups.mjs > /tmp/wsw.log 2>&1; s=$?; tail -2 /tmp/wsw.log | cut -c1-300; exit $s
+worldWalk: node scripts/playWorldUcl.mjs > /tmp/ww.log 2>&1; s=$?; grep -E "FAIL|playWorldUcl" /tmp/ww.log | head -10 | cut -c1-300; exit $s
+walkBoard: node .rc/x/walkBoard.mjs > /tmp/wb.log 2>&1; s=$?; tail -3 /tmp/wb.log | cut -c1-300; exit $s
+sweepWeight: SWEEP_OFFLINE=1 NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/sweepWeight.mjs > /tmp/sw.log 2>&1; s=$?; cp /tmp/sw.log $RC_OUT/sweepWeight.log; grep -E "FAIL|club-manager|manager-hot-seat|deadline-day|soccer-career |/soccer-grid|/build-your-xi|/nba-my-career|sweepWeight:" /tmp/sw.log | head -20 | cut -c1-200; exit $s
