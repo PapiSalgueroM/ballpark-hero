@@ -1,0 +1,7 @@
+#!serial
+# Release BR, Round 1552's fix2 date lines (r1552/.tmp-fx/fix2-1792696310/rc-fix2-b.txt): each moves
+# ONE_ANSWER_FROM on the runner only and restores src; date-1105-legacy exits 1 FIRED. Nothing dropped. The real
+# date is the lead's at publish (results-g/APPLY-1552.md).
+date-1026: grep -q "ONE_ANSWER_FROM = '2026-10-25';" src/lib/triviaQuestionBank.ts && sed -i "s/ONE_ANSWER_FROM = '2026-10-25';/ONE_ANSWER_FROM = '2026-10-26';/" src/lib/triviaQuestionBank.ts && grep -n "ONE_ANSWER_FROM = '2026-10-26';" src/lib/triviaQuestionBank.ts && node scripts/simTriviaBank.mjs; s=$?; git checkout -- src scripts; exit $s
+date-1105: grep -q "ONE_ANSWER_FROM = '2026-10-25';" src/lib/triviaQuestionBank.ts && sed -i "s/ONE_ANSWER_FROM = '2026-10-25';/ONE_ANSWER_FROM = '2026-11-05';/" src/lib/triviaQuestionBank.ts && grep -n "ONE_ANSWER_FROM = '2026-11-05';" src/lib/triviaQuestionBank.ts && node scripts/simTriviaBank.mjs; s=$?; git checkout -- src scripts; exit $s
+date-1105-legacy: grep -q "ONE_ANSWER_FROM = '2026-10-25';" src/lib/triviaQuestionBank.ts && sed -i "s/ONE_ANSWER_FROM = '2026-10-25';/ONE_ANSWER_FROM = '2026-11-05';/" src/lib/triviaQuestionBank.ts && grep -n "ONE_ANSWER_FROM = '2026-11-05';" src/lib/triviaQuestionBank.ts && TRIVIA_CONTROL=legacy node scripts/simTriviaBank.mjs; s=$?; git checkout -- src scripts; exit $s
