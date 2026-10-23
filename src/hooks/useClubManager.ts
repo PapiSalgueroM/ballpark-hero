@@ -27,7 +27,7 @@ import type { MatchFacts, LiveChange, Duty, SetPieceKey, Formation } from '@/lib
 import { tacticsImpl, type TeamInstructions } from '@/lib/clubManagerTacticsCore';
 import { carryShape } from '@/lib/clubManagerCarry';
 import type { Position } from '@/types/game';
-import { startCoachedStyle as startCoachedStyleForPlayer, cancelCoachedStyle as cancelCoachedStyleForPlayer } from '@/lib/clubManagerTraitEdits';
+import { tryStartCoachedStyle as startCoachedStyleForPlayer, tryCancelCoachedStyle as cancelCoachedStyleForPlayer } from '@/lib/clubManagerTraitEdits';
 import type { CoachedStyleId } from '@/lib/clubManagerTraitRuntime';
 import type { TransferStatus, FacilityKind, TrainingPlan, SquadRole, TalkTone, DealExtras } from '@/lib/clubManager';
 import type { NextFixtureInfo, TableRow, CustomClubSpec, ManagerSpec, ManagerEdit, BoardObjective } from '@/lib/clubManager';

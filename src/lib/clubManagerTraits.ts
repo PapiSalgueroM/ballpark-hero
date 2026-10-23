@@ -1,13 +1,14 @@
-import type { FitGrade } from '@/lib/positionFit';
+import { gradeFit, type FitGrade } from '@/lib/positionFit';
 import type { Duty, TrainingIntensity } from '@/lib/clubManager';
 import type { FormationSlot } from '@/lib/squadShape';
 import type { TeamInstructions } from '@/lib/clubManagerTacticsCore';
 import {
-  COACHED_STYLE_RULES, coachedStyleFitState, coachedStyleTraining, validCoachedStyleXi,
+  COACHED_STYLE_RULES, coachedStyleFitCode, coachedStyleTraining, validCoachedStyleXi,
   readCoachedStyle,
 } from '@/lib/clubManagerTraitRuntime';
 import type {
-  CoachedStyleId, CoachedStylePlayer, CoachedStyleXiSlot, CoachedStyleFit, CoachedStyleXiReport,
+  CoachedStyleId, CoachedStylePlayer, CoachedCourseContext, CoachedStyleEdit,
+  CoachedStyleXiSlot, CoachedStyleFit, CoachedStyleXiReport,
 } from '@/lib/clubManagerTraitRuntime';
 export { COACHED_STYLE_RULES } from '@/lib/clubManagerTraitRuntime';
 export type {
@@ -25,7 +26,42 @@ export const COACHED_STYLES: Record<CoachedStyleId, {
 
 export { readCoachedStyle, readCoachedStyleCourse } from '@/lib/clubManagerTraitRuntime';
 
-export { coachedCourseRefusal, startCoachedStyle, cancelCoachedStyle } from '@/lib/clubManagerTraitEdits';
+import {
+  coachedCourseRefusalCode, tryStartCoachedStyle, tryCancelCoachedStyle,
+} from '@/lib/clubManagerTraitEdits';
+
+const COURSE_REASONS = [
+  null,
+  'Finish the match before changing a coached-style course.',
+  'Only an owned player at this club can learn a coached style.',
+  'Coached styles are for outfield players.',
+  'This coached-style save needs review. Its stored data has been kept.',
+  'Finish or cancel position retraining first.',
+  'Choose one of the three coached styles.',
+  'Finish or cancel the current coached-style course first.',
+  'This player has already learned that coached style.',
+  'This player has no coached-style course to cancel.',
+] as const;
+
+export function coachedCourseRefusal(
+  player: CoachedStylePlayer, context: CoachedCourseContext, target?: CoachedStyleId,
+): string | null {
+  return COURSE_REASONS[coachedCourseRefusalCode(player, context, target)];
+}
+export function startCoachedStyle<T extends CoachedStylePlayer>(
+  player: T, target: CoachedStyleId, context: CoachedCourseContext,
+): CoachedStyleEdit<T> {
+  const edit = tryStartCoachedStyle(player, target, context);
+  return edit.ok === true ? { ok: true, reason: null, player: edit.player }
+    : { ok: false, player: edit.player, reason: COURSE_REASONS[edit.code] };
+}
+export function cancelCoachedStyle<T extends CoachedStylePlayer>(
+  player: T, context: CoachedCourseContext,
+): CoachedStyleEdit<T> {
+  const edit = tryCancelCoachedStyle(player, context);
+  return edit.ok === true ? { ok: true, player: edit.player, reason: null }
+    : { ok: false, player: edit.player, reason: COURSE_REASONS[edit.code] };
+}
 
 export { tickCoachedStyle } from '@/lib/clubManagerTraitRuntime';
 
@@ -52,12 +88,15 @@ export function coachedStyleFit(
   player: CoachedStylePlayer, slot: Pick<FormationSlot, 'allowed'> | null,
   duty: Duty | null, instructions: TeamInstructions,
 ): CoachedStyleFit {
-  const result = coachedStyleFitState(player, slot, duty, instructions);
-  if (result.status !== 0) return inactive(result.style, FIT_REASONS[result.status], result.fit);
+  const style = readCoachedStyle(player)?.id ?? null;
+  const status = coachedStyleFitCode(player, slot, duty, instructions);
+  const fit = (status === 0 || status >= 5) && slot
+    ? gradeFit([player.position, ...(player.secondaryPositions ?? [])], slot.allowed) : null;
+  if (status !== 0) return inactive(style, FIT_REASONS[status], fit);
   return {
-    style: result.style, active: true, fit: result.fit, attack: COACHED_STYLE_RULES.attackPerPlayer,
-    reason: result.style === 'press' ? 'Active with high pressing.'
-      : result.style === 'link' ? 'Active with patient tempo and this duty.' : 'Active with direct tempo and this duty.',
+    style, active: true, fit, attack: COACHED_STYLE_RULES.attackPerPlayer,
+    reason: style === 'press' ? 'Active with high pressing.'
+      : style === 'link' ? 'Active with patient tempo and this duty.' : 'Active with direct tempo and this duty.',
   };
 }
 

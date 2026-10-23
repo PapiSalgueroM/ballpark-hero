@@ -82,40 +82,33 @@ export function tickCoachedStyle<T extends CoachedStylePlayer>(
 }
 /** Zero is active; nonzero values map to the facade's unchanged readable reasons. */
 export type CoachedStyleFitStatus = 0 | 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9 | 10 | 11;
-export interface CoachedStyleFitState {
-  style: CoachedStyleId | null;
-  status: CoachedStyleFitStatus;
-  fit: FitGrade | null;
-}
-function fitState(style: CoachedStyleId | null, status: CoachedStyleFitStatus, fit: FitGrade | null = null): CoachedStyleFitState {
-  return { style, status, fit };
-}
+// Return only the shared eligibility code; the UI builds its readable result.
 /** UI metadata and development use this one matching-intensity policy. */
 export function coachedStyleTraining(style: CoachedStyleId): TrainingIntensity {
   return style === 'press' ? 'double' : style === 'link' ? 'normal' : 'light';
 }
-export function coachedStyleFitState(
+export function coachedStyleFitCode(
   player: CoachedStylePlayer, slot: Pick<FormationSlot, 'allowed'> | null,
   duty: Duty | null, instructions: TeamInstructions,
-): CoachedStyleFitState {
+): CoachedStyleFitStatus {
   const style = readCoachedStyle(player)?.id ?? null;
-  if (hasMalformedCoachedStyle(player)) return fitState(style, 1);
-  if (!style) return fitState(null, 2);
-  if (player.position === 'GK') return fitState(style, 3);
-  if (!slot) return fitState(style, 4);
+  if (hasMalformedCoachedStyle(player)) return 1;
+  if (!style) return 2;
+  if (player.position === 'GK') return 3;
+  if (!slot) return 4;
   const fit = gradeFit([player.position, ...(player.secondaryPositions ?? [])], slot.allowed);
-  if (fit !== 'natural' && fit !== 'family') return fitState(style, 5, fit);
+  if (fit !== 'natural' && fit !== 'family') return 5;
   if (style === 'press') {
-    if (instructions.press !== 1) return fitState(style, 6, fit);
-    if (!Number.isFinite(player.fitness) || player.fitness < 60 || player.fitness > 100) return fitState(style, 7, fit);
+    if (instructions.press !== 1) return 6;
+    if (!Number.isFinite(player.fitness) || player.fitness < 60 || player.fitness > 100) return 7;
   } else if (style === 'link') {
-    if (instructions.tempo !== -1) return fitState(style, 8, fit);
-    if (duty !== 'deepPlaymaker' && duty !== 'playmaker' && duty !== 'falseNine') return fitState(style, 9, fit);
+    if (instructions.tempo !== -1) return 8;
+    if (duty !== 'deepPlaymaker' && duty !== 'playmaker' && duty !== 'falseNine') return 9;
   } else {
-    if (instructions.tempo !== 1) return fitState(style, 10, fit);
-    if (duty !== 'targetMan' && duty !== 'poacher') return fitState(style, 11, fit);
+    if (instructions.tempo !== 1) return 10;
+    if (duty !== 'targetMan' && duty !== 'poacher') return 11;
   }
-  return fitState(style, 0, fit);
+  return 0;
 }
 export function validCoachedStyleXi(xi: readonly CoachedStyleXiSlot[]): boolean {
   const ids = xi.map(row => row.p.id);
@@ -124,7 +117,7 @@ export function validCoachedStyleXi(xi: readonly CoachedStyleXiSlot[]): boolean 
 /** Engine path: same actual-XI guards and capped count, without UI copy or detailed player reports. */
 export function coachedStyleAttack(xi: readonly CoachedStyleXiSlot[], instructions: TeamInstructions): number {
   if (!validCoachedStyleXi(xi)) return 0;
-  const activeCount = xi.filter(row => coachedStyleFitState(row.p, row.slot, row.duty, instructions).status === 0).length;
+  const activeCount = xi.filter(row => coachedStyleFitCode(row.p, row.slot, row.duty, instructions) === 0).length;
   return Math.min(COACHED_STYLE_RULES.attackCap, activeCount * COACHED_STYLE_RULES.attackPerPlayer);
 }
 

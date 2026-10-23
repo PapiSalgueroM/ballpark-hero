@@ -3,41 +3,46 @@ import {
   isCoachedStyleId as styleId, hasMalformedCoachedStyle as malformed,
 } from '@/lib/clubManagerTraitRuntime';
 import type {
-  CoachedStyleId, CoachedStylePlayer, CoachedCourseContext, CoachedStyleEdit,
+  CoachedStyleId, CoachedStylePlayer, CoachedCourseContext,
 } from '@/lib/clubManagerTraitRuntime';
 
-export function coachedCourseRefusal(
+export type CoachedStyleRefusalCode = 0 | 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9;
+export type CoachedStyleCodeEdit<T> =
+  | { ok: true; player: T; code: 0 }
+  | { ok: false; player: T; code: Exclude<CoachedStyleRefusalCode, 0> };
+
+export function coachedCourseRefusalCode(
   player: CoachedStylePlayer, context: CoachedCourseContext, target?: CoachedStyleId,
-): string | null {
-  if (context.live) return 'Finish the match before changing a coached-style course.';
-  if (!context.owned || context.awayOnLoan || player.onLoan) return 'Only an owned player at this club can learn a coached style.';
-  if (player.position === 'GK') return 'Coached styles are for outfield players.';
-  if (malformed(player)) return 'This coached-style save needs review. Its stored data has been kept.';
-  if (player.retraining) return 'Finish or cancel position retraining first.';
+): CoachedStyleRefusalCode {
+  if (context.live) return 1;
+  if (!context.owned || context.awayOnLoan || player.onLoan) return 2;
+  if (player.position === 'GK') return 3;
+  if (malformed(player)) return 4;
+  if (player.retraining) return 5;
   if (target !== undefined) {
-    if (!styleId(target)) return 'Choose one of the three coached styles.';
-    if (readCoachedStyleCourse(player)) return 'Finish or cancel the current coached-style course first.';
-    if (readCoachedStyle(player)?.id === target) return 'This player has already learned that coached style.';
+    if (!styleId(target)) return 6;
+    if (readCoachedStyleCourse(player)) return 7;
+    if (readCoachedStyle(player)?.id === target) return 8;
   }
-  return null;
+  return 0;
 }
-export function startCoachedStyle<T extends CoachedStylePlayer>(
+export function tryStartCoachedStyle<T extends CoachedStylePlayer>(
   player: T, target: CoachedStyleId, context: CoachedCourseContext,
-): CoachedStyleEdit<T> {
-  if (!styleId(target)) return { ok: false, player, reason: 'Choose one of the three coached styles.' };
-  const reason = coachedCourseRefusal(player, context, target);
-  if (reason) return { ok: false, player, reason };
-  return { ok: true, reason: null, player: {
+): CoachedStyleCodeEdit<T> {
+  if (!styleId(target)) return { ok: false, player, code: 6 };
+  const code = coachedCourseRefusalCode(player, context, target);
+  if (code) return { ok: false, player, code };
+  return { ok: true, code: 0, player: {
     ...player, coachedStyleCourse: { v: 1, to: target, weeksLeft: 6, weeksTotal: 6 },
   } };
 }
-export function cancelCoachedStyle<T extends CoachedStylePlayer>(
+export function tryCancelCoachedStyle<T extends CoachedStylePlayer>(
   player: T, context: CoachedCourseContext,
-): CoachedStyleEdit<T> {
-  const reason = coachedCourseRefusal(player, context);
-  if (reason) return { ok: false, player, reason };
-  if (!readCoachedStyleCourse(player)) return { ok: false, player, reason: 'This player has no coached-style course to cancel.' };
+): CoachedStyleCodeEdit<T> {
+  const code = coachedCourseRefusalCode(player, context);
+  if (code) return { ok: false, player, code };
+  if (!readCoachedStyleCourse(player)) return { ok: false, player, code: 9 };
   const next = { ...player };
   delete next.coachedStyleCourse;
-  return { ok: true, player: next, reason: null };
+  return { ok: true, player: next, code: 0 };
 }
