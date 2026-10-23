@@ -1,0 +1,24 @@
+1) every table the data draws reaches its saved page as a table, never as a run of paragraphs
+   23 data backed pages, 339 tables paired with their data, 0 rows written as paragraphs
+   5 format pages found in source, 5 with a literal header to hold them to
+2) every saved table carries the rows its data has, in order
+  FAIL: /records/afl-premiers, the 2020s: 6 rows saved, the data has 7
+  FAIL: /records/brownlow-medal-winners, the 2020s: 6 rows saved, the data has 7
+  FAIL: /records/dally-m-medal-winners, the 2020s: 6 rows saved, the data has 7
+  FAIL: /records/nrl-premiers, the 2020s: 6 rows saved, the data has 7
+  FAIL: /records, afl, newest ten: row 1 is ["2025","Brisbane Lions"], the data says ["2026","Brisbane Lions"]
+  FAIL: /records, brownlow, newest ten: row 1 is ["2025","Matt Rowell","Gold Coast","39"], the data says ["2026","Nick Daicos","Collingwood","47"]
+  FAIL: /records, dallym, newest ten: 11 rows saved, the data has 10
+  FAIL: /records, nrl, newest ten: row 1 is ["2025","Brisbane Broncos","NRL"], the data says ["2026","Sydney Roosters","NRL"]
+   331 tables match their data, 3132 saved rows compared
+3) no cell outside a table anywhere, tables hold only rows, and every page drawing a table is accounted for
+   171 saved pages, 0 loose table tags, 0 malformed table blocks
+   29 sitemap routes draw a table in source, 23 of them from committed data
+   not data backed: /conquest (0 tables saved; drawn from play or the database, reported not asserted)
+   not data backed: /world-cup-bracket (0 tables saved; drawn from play or the database, reported not asserted)
+   not data backed: /stadium-tycoon (0 tables saved; drawn from play or the database, reported not asserted)
+   not data backed: /conquest-nba (0 tables saved; drawn from play or the database, reported not asserted)
+   not data backed: /aussie-rules-manager (0 tables saved; drawn from play or the database, reported not asserted)
+   not data backed: /world-cup-2026-results (19 tables saved; drawn from play or the database, reported not asserted)
+
+simPrerenderTables: 8 failures in check 2.

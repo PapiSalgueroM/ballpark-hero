@@ -1,0 +1,50 @@
+1) every section has a slug, a route, a sitemap entry, a type and a saved page
+   13 slugs; 13 routes, 13 sitemap entries, 13 typed, 13 saved pages (comments stripped before reading)
+2) every row in recordBooks.json is in its saved page, under its own decade, and nothing else is
+  FAIL: afl 2020s: row 1 is "<tr><td>2025</td><td>Brisbane Lions</td></tr>" and the data says "<tr><td>2026</td><td>Brisbane Lions</td></tr>"
+  FAIL: brownlow 2020s: row 1 is "<tr><td>2025</td><td>Matt Rowell</td><td>Gold Coast</td><td>39</td></tr>" and the data says "<tr><td>2026</td><td>Nick Daicos</td><td>Collingwood</td><td>47</td></tr>"
+  FAIL: dallym 2020s: row 1 is "<tr><td>2025</td><td>James Tedesco</td></tr>" and the data says "<tr><td>2026</td><td>Nathan Cleary</td></tr>"
+  FAIL: nrl 2020s: row 1 is "<tr><td>2025</td><td>Brisbane Broncos</td><td>NRL</td></tr>" and the data says "<tr><td>2026</td><td>Sydney Roosters</td><td>NRL</td></tr>"
+   1163 of 1163 rows checked cell for cell
+3) the most titles table matches a recount of the JSON, per name as written
+  FAIL: afl: Brisbane Lions shows 5, the rows give 6
+  FAIL: afl: Brisbane Lions shows years 2001, 2002, 2003, 2024, 2025, the rows give 2001, 2002, 2003, 2024, 2025, 2026
+  FAIL: brownlow: the page says 74 names appear once, the rows give 75
+  FAIL: dallym: the page says 24 names appear once, the rows give 25
+  FAIL: nrl: Sydney Roosters shows 4, the rows give 5
+  FAIL: nrl: Sydney Roosters shows years 2002, 2013, 2018, 2019, the rows give 2002, 2013, 2018, 2019, 2026
+   13 of 13 tables match the recount
+4) the derived facts are span bound and the ones the rows give
+  FAIL: afl: the page does not say "130 years listed, 1897 to 2026."
+  FAIL: afl: the page does not say "Latest year listed: Brisbane Lions (2026)."
+  FAIL: afl: the page does not say "18 different club names appear on the list, 1897 to 2026."
+  FAIL: brownlow: the page does not say "99 years listed, 1924 to 2026. That is 113 medals in all, because some years have more than one."
+  FAIL: brownlow: the page does not say "Latest year listed: Nick Daicos (2026)."
+  FAIL: brownlow: the page does not say "92 different player names appear on the list, 1924 to 2026."
+   9 of 13 pages state their facts as the rows give them, rule above the leaders
+5) one h1, the promised h2s, one h3 per decade in the data
+   13 of 13 pages have the heading structure
+6) the head: title, description, canonical and breadcrumb
+  FAIL: afl: the description does not name the span the rows cover, 1897 to 2026
+  FAIL: brownlow: the description does not name the span the rows cover, 1924 to 2026
+  FAIL: dallym: the description does not name the span the rows cover, 1979 to 2026
+  FAIL: nrl: the description does not name the span the rows cover, 1908 to 2026
+   9 of 13 heads are right
+7) /records links all twelve pages, and each page links the others and /records from its own body
+   /records links 13 of 13; 13 pages link all the others and /records from their own body
+8) /records shows the newest ten seasons of each section, links each page by its span, and names the right leaders
+  FAIL: /records afl: 2026 Brisbane Lions is not shown
+  FAIL: /records afl: 2016 Western Bulldogs is shown, the eleventh season, so the index is carrying the full table again
+  FAIL: /records brownlow: 2026 Nick Daicos is not shown
+  FAIL: /records brownlow: 2016 Patrick Dangerfield is shown, the eleventh season, so the index is carrying the full table again
+  FAIL: /records dallym: 2026 Nathan Cleary is not shown
+  FAIL: /records dallym: 2016 Cooper Cronk is shown, the eleventh season, so the index is carrying the full table again
+   9 of 13 sections show exactly their newest ten seasons, a span bound link and the right leaders
+9) links in src: no old /records#key anchor, no unknown page, and every labelled record link worded by its span
+   2326 source files, 40 literal record page links (13 labelled in objects, 1 with inline JSX words, 0 worded wrong), 0 old anchors, 0 unknown pages
+10) blurbs and notes carry no counts next to a name, and every "since" year is where the rows start
+   27 sentences read, 9 "since" years checked against the rows
+11) every MVP column is counted into its own table, per name as written, span bound to the column
+   3 of 3 sections with an MVP column carry a table that matches the recount
+
+simRecordPages: 35 failures in checks 2, 3, 4, 6, 8.

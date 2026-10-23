@@ -1,0 +1,15 @@
+1) the committed file carries every section the page defines
+   13 sections, 1163 rows
+2) the committed file still agrees with the live database
+   sb: the database did not answer, skipped
+   nba: the database did not answer, skipped
+   ws: the database did not answer, skipped
+   cup: the database did not answer, skipped
+   0 sections compared against the live tables
+  FAIL: no section could be compared, so this section is not really testing anything
+3) the snapshot a crawler receives contains real champion names
+   76 of 78 sampled champions reach the snapshot
+  FAIL: brownlow: 1 of its newest champions are absent from the snapshot, so a crawler receives a heading with no table under it
+  FAIL: dallym: 1 of its newest champions are absent from the snapshot, so a crawler receives a heading with no table under it
+
+simRecordBooks: 3 failures

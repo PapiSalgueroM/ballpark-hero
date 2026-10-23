@@ -1,0 +1,16 @@
+1) the record is sound
+   91 rows, 1935 to 2025: 68 verified, 23 corrected, 0 dropped, checked 2026-09-30
+2) the record matches its pin
+   sha256 ca0912f9615ed4df... over 91 rows
+3) the migration's end state agrees with the record
+   182 row comparisons, 23 corrections traced from the read state
+4) no verified row is missing from the end state
+   91 of 91 verified rows present in both
+5) nothing beyond the verified rows remains, and nothing placeholder shaped
+   182 end state rows read, 0 dropped rows checked gone
+6) the migration is guarded and changes only what it says
+   1 UPDATE, guard on the value read, count guard 23, 23 header lines
+7) the Record Books page shows the record
+   91 page rows against 91 record rows, newest first
+
+simHeisman: green. 91 verified Heisman rows, the migration's end state equal to them, 23 corrections guarded, and the Record Books page showing the same rows.
