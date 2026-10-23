@@ -5,7 +5,9 @@
    Here it runs word for word in PGlite (the real engine inside node). Baseball sits on its own create and seed
    migration (20260526000007, bconn-001 to 060); the NFL and NHL tables have no create migration in the repo, so
    they are made in the same shape and hold the files' boards from before the round (nflconn-001 to 004,
-   nhlconn-001 to 004). Each table runs in two scenarios: "seed" (baseball exactly as its seed left it, the labels
+   nhlconn-001 to 004) as git holds them in scripts/data/usConnectionsPreRound1558.json, never the migration's
+   own old values, and check 0b fails when a migration old value is not that board (the review found the first
+   version seeded them from the migration, so nothing checked those two values independently). Each table runs in two scenarios: "seed" (baseball exactly as its seed left it, the labels
    of bconn-009, 012 and 015 still with the seed's dash) and "file" (every row holding the file's board from before
    the round), and in each one row the migration names drifts on purpose.
 
@@ -22,7 +24,9 @@
      PGLITE_DIR=/tmp/pgl node scripts/qa/rehearseUsConnections1558.mjs
    Negative controls, each must exit 1: REHEARSE_CONTROL=noguard strips the guard from all three blocks, so the
    drifted rows are overwritten; REHEARSE_CONTROL=drift renames one tile of bconn-010's new board in the migration
-   only, so check 0 finds the migration and the file apart. A control that cannot find what it changes exits 2
+   only, so check 0 finds the migration and the file apart; REHEARSE_CONTROL=oldvalue renames one tile of
+   nflconn-004's OLD board in the migration only, so check 0b finds it is not the board from before the round and
+   the NFL scenario finds the row drifted. A control that cannot find what it changes exits 2
    (ABORTED). It is not named sim*: the suite runner must not pick up a script that needs a package the repo does
    not carry. */
 import fs from 'node:fs';
@@ -32,7 +36,7 @@ import { fileURLToPath, pathToFileURL } from 'node:url';
 
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..', '..');
 const CONTROL = process.env.REHEARSE_CONTROL || '';
-if (CONTROL && CONTROL !== 'noguard' && CONTROL !== 'drift') { console.error(`REHEARSE_CONTROL=${CONTROL} is not a control this script knows, ABORTED`); process.exit(2); }
+if (CONTROL && CONTROL !== 'noguard' && CONTROL !== 'drift' && CONTROL !== 'oldvalue') { console.error(`REHEARSE_CONTROL=${CONTROL} is not a control this script knows, ABORTED`); process.exit(2); }
 const dir = process.env.PGLITE_DIR;
 if (!dir) { console.error('PGLITE_DIR is not set: see the header of this file. Nothing was run.'); process.exit(2); }
 const entry = path.join(dir, 'node_modules', '@electric-sql', 'pglite', 'dist', 'index.js');
@@ -60,6 +64,18 @@ if (CONTROL === 'drift') {
   if (drifted === line) { console.error('control drift: bconn-010 is not in the migration, ABORTED'); process.exit(2); }
   MIGRATION = MIGRATION.slice(0, at) + drifted + MIGRATION.slice(end);
 }
+if (CONTROL === 'oldvalue') {
+  /* the migration's guard value for nflconn-004 stops being the board from before the round */
+  const at = MIGRATION.indexOf("    ('nflconn-004', '");
+  const end = at < 0 ? -1 : MIGRATION.indexOf('\n', at);
+  const line = at < 0 ? '' : MIGRATION.slice(at, end);
+  const cut = line.indexOf("'::jsonb, '");
+  const changed = cut < 0 ? line : line.slice(0, cut).replace(/"players":\["[^"]*"/, '"players":["Not The Pre Round Player"') + line.slice(cut);
+  if (changed === line) { console.error('control oldvalue: nflconn-004 is not in the migration, ABORTED'); process.exit(2); }
+  MIGRATION = MIGRATION.slice(0, at) + changed + MIGRATION.slice(end);
+}
+/* the NFL and NHL boards from before the round, taken from git (eccb77b18), never from the migration */
+const PRE = JSON.parse(read('scripts/data/usConnectionsPreRound1558.json'));
 
 /* the migration's own rows by table: puzzle_id, a known old board, the new board */
 const rows = { baseball: [], nfl: [], nhl: [] };
@@ -102,6 +118,20 @@ export { nhlConnectionsPuzzles } from '${R}/src/data/nhlConnectionsPuzzles.ts';`
   }
 }
 
+/* 0b. NFL and NHL have no seed in the repo: every old value the migration guards on must be the board from before
+   the round as git holds it (scripts/data/usConnectionsPreRound1558.json), and that list is the file's ids in order */
+for (const s of ['nfl', 'nhl']) {
+  if (JSON.stringify(PRE[s].map(b => b.id)) !== JSON.stringify(files[s].map(b => b.id))) fail(`${s}: the pre-round boards and the file differ in ids or order`);
+  const pre = new Map(PRE[s].map(b => [b.id, b.groups]));
+  let tied = 0;
+  for (const r of rows[s]) {
+    if (!pre.has(r.id)) fail(`${s} ${r.id}: the migration guards a board that was not in the file before the round`);
+    else if (!same(pre.get(r.id), r.old)) fail(`${s} ${r.id}: the migration's old value is not the board from before the round (git ${PRE.base}), so the guard would call the live row drifted`);
+    else tied += 1;
+  }
+  console.log(`   ${s} pre-round: ${tied} of ${rows[s].length} old values in the migration equal the board from before the round (git ${PRE.base})`);
+}
+
 const CREATE = t => `create table public.${t} (id uuid primary key default gen_random_uuid(), puzzle_id text not null unique, groups_json jsonb not null, sort_order smallint not null, created_at timestamptz not null default now());`;
 /* the game deals from the valid boards only (four groups of five, twenty different names) */
 const valid = r => { const g = Array.isArray(r.groups_json) ? r.groups_json : []; const all = g.flatMap(x => x.players ?? []); return g.length === 4 && g.every(x => (x.players ?? []).length === 5) && new Set(all).size === 20; };
@@ -115,14 +145,14 @@ async function scenario(sport, name, driftId) {
   if (sport === 'baseball') await db.exec(SEED);
   else {
     await db.exec(CREATE(table));
-    for (const [i, b] of files[sport].entries()) {
-      const groups = firstOld.get(b.id) ?? b.groups;
-      await db.query(`insert into public.${table} (puzzle_id, groups_json, sort_order) values ($1, $2::jsonb, $3)`, [b.id, JSON.stringify(groups), i]);
+    /* the boards from before the round as git holds them, not the migration's old values (check 0b ties the two) */
+    for (const [i, b] of PRE[sport].entries()) {
+      await db.query(`insert into public.${table} (puzzle_id, groups_json, sort_order) values ($1, $2::jsonb, $3)`, [b.id, JSON.stringify(b.groups), i]);
     }
   }
-  /* the file scenario: every named row holds the file's board from before the round (the first old value the
-     migration knows for it; for bconn-009, 012 and 015 the seed's dashed spelling is the second) */
-  if (name === 'file') for (const [id, old] of firstOld) await db.query(`update public.${table} set groups_json = $1::jsonb where puzzle_id = $2`, [JSON.stringify(old), id]);
+  /* the baseball file scenario: every named row holds the file's board from before the round (the first old value
+     the migration knows for it; for bconn-009, 012 and 015 the seed's dashed spelling is the second) */
+  if (name === 'file' && sport === 'baseball') for (const [id, old] of firstOld) await db.query(`update public.${table} set groups_json = $1::jsonb where puzzle_id = $2`, [JSON.stringify(old), id]);
   const drifted = [{ theme: 'A drifted board', players: ['A', 'B', 'C', 'D', 'E'], difficulty: 'yellow' }];
   if (driftId) await db.query(`update public.${table} set groups_json = $1::jsonb where puzzle_id = $2`, [JSON.stringify(drifted), driftId]);
 
