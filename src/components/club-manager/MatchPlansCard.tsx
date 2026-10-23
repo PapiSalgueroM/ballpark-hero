@@ -4,6 +4,7 @@ import { cn } from '@/lib/utils';
 import { useRevealScroll } from '@/hooks/useRevealScroll';
 import { FORMATIONS, MENTALITIES, DUTY_INFO, SET_PIECE_KEYS, SET_PIECE_INFO } from '@/lib/clubManager';
 import type { CareerState } from '@/lib/clubManager';
+import { readCustomShape } from '@/lib/clubManagerPositions';
 import { MATCH_PLAN_LIMIT, MATCH_PLAN_NAME_LIMIT, canEditMatchPlans, matchPlansOf, previewMatchPlan } from '@/lib/clubManagerMatchPlans';
 
 interface MatchPlansCardProps {
@@ -29,6 +30,11 @@ export function MatchPlansCard({ career, open, onToggle, onSave, onApply, onDele
   const plan = plans.find(p => p.slot === selected);
   const preview = previewMatchPlan(career, selected);
   const editable = canEditMatchPlans(career);
+  const customPointsPresent = Object.prototype.hasOwnProperty.call(career, 'customShape');
+  const customShape = customPointsPresent
+    ? readCustomShape(career.customShape, career.formationIndex, FORMATIONS[career.formationIndex]?.slots ?? [])
+    : null;
+  const unsupportedCustomPoints = customPointsPresent && !customShape;
   const actionRef = useRevealScroll<HTMLDivElement>(`${open}:${selected}:${!!plan}:${saveReveal}`, { enabled: open, skipFirst: false, block: 'end' });
   const detailsRef = useRevealScroll<HTMLDivElement>(details, { enabled: open && details, skipFirst: false });
   const refused = notice === REFUSED_MATCH_PLAN;
@@ -53,7 +59,7 @@ export function MatchPlansCard({ career, open, onToggle, onSave, onApply, onDele
         <button type="button" aria-label="Match plan rules" aria-expanded={help} onClick={() => setHelp(!help)} className={button}><HelpCircle className="w-4 h-4" /></button>
       </div>
       <p className="text-muted-foreground">Keep up to three setups for this club. Preview uses your squad as it stands today.</p>
-      {help && <p data-cm-plan-rules className="rounded-lg bg-muted p-3 leading-relaxed">Save your formation, mentality, XI, duties, captain, set piece takers and shootout order together. For example, save your first XI, rotate on the pitch, then save a second plan. Preview shows who would start now, including injury or suspension replacements. Apply restores the saved picks; it does not heal players or lock in a result. A new club needs its own plans.</p>}
+      {help && <p data-cm-plan-rules className="rounded-lg bg-muted p-3 leading-relaxed">Save your formation, mentality, XI, duties, captain, set piece takers and shootout order together. For example, save your first XI, rotate on the pitch, then save a second plan. Preview shows who would start now, including injury or suspension replacements. Apply restores the saved picks; it does not heal players or lock in a result. Plans use preset positions. Reset custom positions before saving a plan; applying a plan clears supported custom positions. A new club needs its own plans.</p>}
       <div className="grid grid-cols-3 gap-1.5" aria-label="Plan slots">
         {Array.from({ length: MATCH_PLAN_LIMIT }, (_, slot) => {
           const saved = plans.find(p => p.slot === slot);
@@ -70,11 +76,14 @@ export function MatchPlansCard({ career, open, onToggle, onSave, onApply, onDele
             onChange={event => setName(event.target.value)} placeholder={`Plan ${selected + 1}`} disabled={!editable}
             className="mt-1 w-full min-h-[44px] rounded-lg border bg-background px-2 text-xs" />
         </label>
-        <button type="button" data-cm-plan-save disabled={!editable || !name.trim()}
+        <button type="button" data-cm-plan-save disabled={!editable || customPointsPresent || !name.trim()}
           onClick={() => { if (showResult(onSave(selected, name), `Saved ${name.trim().slice(0, MATCH_PLAN_NAME_LIMIT)}.`)) setSaveReveal(n => n + 1); }}
           className={cn(button, 'self-end border-primary text-primary')}>{plan ? 'Replace plan' : 'Save setup'}</button>
       </div>
       {!editable && <p role="status">Plans can be changed between matches while you manage this club.</p>}
+      {customPointsPresent && <p role="status" data-cm-plan-custom-positions>{unsupportedCustomPoints
+        ? 'These saved positions are not supported here. Match plans cannot be saved or applied. Your saved data has been kept.'
+        : 'Match plans use preset positions. Reset your custom positions before saving a plan. Applying a plan clears your custom positions.'}</p>}
       {preview && <div className="space-y-3" data-cm-plan-preview={selected}>
         <p className="font-semibold">{FORMATIONS[plan!.formationIndex].name} · {MENTALITIES.find(m => m.id === plan!.mentality)?.label}</p>
         <div className="grid grid-cols-2 gap-2 rounded-lg bg-muted p-2">
@@ -84,7 +93,7 @@ export function MatchPlansCard({ career, open, onToggle, onSave, onApply, onDele
         <p data-cm-plan-replacements>{preview.replacements ? `${preview.replacements} saved spot${preview.replacements === 1 ? '' : 's'} need a replacement.` : 'All saved picks can start.'} Strength includes current fitness, morale, form and position fit. Mentality and duties affect the match separately.</p>
         <div ref={detailsRef} className="space-y-3">
           <div ref={actionRef} data-cm-plan-actions className="grid grid-cols-2 gap-2 scroll-mb-3">
-            <button type="button" data-cm-plan-apply disabled={!editable} className={cn(button, 'bg-primary text-primary-foreground')}
+            <button type="button" data-cm-plan-apply disabled={!editable || unsupportedCustomPoints} className={cn(button, 'bg-primary text-primary-foreground')}
               onClick={() => showResult(onApply(selected), `Applied ${plan!.name}.`)}>Apply plan</button>
             <button type="button" aria-expanded={details} data-cm-plan-details onClick={() => setDetails(!details)} className={button}>{details ? 'Hide kickoff XI' : 'View kickoff XI'}</button>
           </div>

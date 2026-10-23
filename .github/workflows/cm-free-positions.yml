@@ -1,4 +1,4 @@
-name: Club Manager custom positions core controls and old compatibility
+name: Club Manager custom positions functional editor and old compatibility
 on:
   push:
     branches: [codex/cm-free-positions-20261023]
@@ -10,7 +10,7 @@ concurrency:
   cancel-in-progress: false
 env:
   BASE_SOURCE: 3e95583fd8131f3704591cd566677f8774a8e4c3
-  EXPECTED_PARENT: 669bc74b0df5f8000d15703efd7ff6bb8a80a749
+  EXPECTED_PARENT: 5ffb21e2a4968dc1e984d7e172fb9b69ba5850b5
   CI: '1'
   SIM_NETWORK: offline
   TZ: UTC
@@ -30,7 +30,7 @@ jobs:
         with:
           node-version: 24
           cache: npm
-      - name: Exact fixed core, held foundations and source-control inputs
+      - name: Exact joined editor, held core and current functional proof inputs
         run: |
           set -euo pipefail
           out="$RUNNER_TEMP/cm-free-positions-qualification";test ! -e "$out";mkdir "$out"
@@ -43,24 +43,49 @@ jobs:
           git merge-base --is-ancestor "$BASE_SOURCE" "$GITHUB_SHA"
           git show -s --format=%P HEAD > "$out/parents.txt"
           test "$(cat "$out/parents.txt")" = "$EXPECTED_PARENT"
-          git diff --exit-code "$EXPECTED_PARENT" HEAD -- . ':!docs/**' ':!.github/workflows/cm-free-positions.yml' ':!src/test/clubManagerPositionOldParity.test.ts' ':!scripts/qa/runClubManagerPositionOldParity.mjs' > "$out/direct-child-scope.log"
-          git diff --exit-code "$BASE_SOURCE" HEAD -- . ':!docs/**' ':!.github/workflows/cm-free-positions.yml' ':!src/lib/clubManager.ts' ':!src/test/clubManagerPositionIntegration.test.ts' ':!src/lib/clubManagerPositions.ts' ':!src/test/clubManagerPositions.test.ts' ':!src/test/TacticsScreen.freePositions.test.tsx' ':!src/test/clubManagerPositionLive.test.ts' ':!scripts/qa/cmPosition.controls.json' ':!scripts/qa/runCmPositionControls.mjs' ':!src/test/clubManagerPositionOldParity.test.ts' ':!scripts/qa/runClubManagerPositionOldParity.mjs' > "$out/original-application.log"
+          git diff --exit-code "$EXPECTED_PARENT" HEAD -- . ':!docs/**' ':!.github/workflows/cm-free-positions.yml' ':!src/components/club-manager/TacticsScreen.tsx' ':!src/hooks/useClubManager.ts' ':!src/lib/clubManagerCalendar.ts' ':!src/components/club-manager/MatchPlansCard.tsx' ':!src/components/club-manager/LiveSimScreen.tsx' ':!src/pages/ClubManager.tsx' ':!src/test/TacticsScreen.freePositions.test.tsx' ':!src/test/clubManagerPositionPersistence.test.tsx' ':!src/test/clubManagerPositionBlocked.test.tsx' ':!src/test/MatchPlansCard.customPositions.test.tsx' ':!src/test/LiveSimScreen.positionNotice.test.tsx' ':!scripts/qa/runCmPositionControls.mjs' > "$out/direct-child-scope.log"
+          git diff --exit-code "$BASE_SOURCE" HEAD -- . ':!docs/**' ':!.github/workflows/cm-free-positions.yml' ':!src/lib/clubManager.ts' ':!src/components/club-manager/TacticsScreen.tsx' ':!src/hooks/useClubManager.ts' ':!src/test/clubManagerPositionIntegration.test.ts' ':!src/lib/clubManagerPositions.ts' ':!src/test/clubManagerPositions.test.ts' ':!src/test/TacticsScreen.freePositions.test.tsx' ':!src/test/clubManagerPositionLive.test.ts' ':!scripts/qa/cmPosition.controls.json' ':!scripts/qa/runCmPositionControls.mjs' ':!src/test/clubManagerPositionOldParity.test.ts' ':!scripts/qa/runClubManagerPositionOldParity.mjs' ':!src/lib/clubManagerCalendar.ts' ':!src/components/club-manager/MatchPlansCard.tsx' ':!src/components/club-manager/LiveSimScreen.tsx' ':!src/pages/ClubManager.tsx' ':!src/test/clubManagerPositionPersistence.test.tsx' ':!src/test/clubManagerPositionBlocked.test.tsx' ':!src/test/MatchPlansCard.customPositions.test.tsx' ':!src/test/LiveSimScreen.positionNotice.test.tsx' > "$out/original-application.log"
           test "$(git rev-parse HEAD:src/lib/clubManager.ts)" = 5a2f1b3bcc52c2e4f8008859b699fe80d35ed223
-          test "$(git rev-parse HEAD:src/components/club-manager/TacticsScreen.tsx)" = 233cd8d7430147fd66182269859548ffe5fdce4f
-          test "$(git rev-parse HEAD:src/hooks/useClubManager.ts)" = 65bc9bbb622c67fbbcb25c949038571bbdc8600a
+          test "$(git rev-parse HEAD:src/components/club-manager/TacticsScreen.tsx)" = ed65aac928e20276623b6b3a041e625f4f8bae2b
+          test "$(git rev-parse HEAD:src/hooks/useClubManager.ts)" = a01604717c250503d6286c61aeddecb38d386fab
+          test "$(git rev-parse HEAD:src/test/clubManagerPositionIntegration.test.ts)" = c1eabe3e33ffc37aafbb4f34d4a3435d47fdf9b0
+          test "$(git rev-parse HEAD:src/lib/clubManagerPositions.ts)" = 999b26b065246a2bf2db452d17d96439e855c6af
+          test "$(git rev-parse HEAD:src/test/clubManagerPositions.test.ts)" = a075328b1967a6aebb2bddf30014eb308f682084
+          test "$(git rev-parse HEAD:src/test/TacticsScreen.freePositions.test.tsx)" = 85f4bed196a46bb77cd1793058981ecbd523b3f4
+          test "$(git rev-parse HEAD:src/test/clubManagerPositionLive.test.ts)" = b8174f45778f49e59cccfe0428daf4c4b5d7ec3d
+          test "$(git rev-parse HEAD:scripts/qa/cmPosition.controls.json)" = cb60f37c6a045db2ffee95446cda6c2439edc453
+          test "$(git rev-parse HEAD:scripts/qa/runCmPositionControls.mjs)" = 7014a10a0d0994fa504c097fd088547187fb82a7
+          test "$(git rev-parse HEAD:src/test/clubManagerPositionOldParity.test.ts)" = 8ca98f45c07d384a0c9cf53670c9004986d15876
+          test "$(git rev-parse HEAD:scripts/qa/runClubManagerPositionOldParity.mjs)" = 467c4ba5b04dae5f8867c61cbe6b08e0fd8f716c
+          test "$(git rev-parse HEAD:src/lib/clubManagerCalendar.ts)" = 26154b20490a02524b15627752aab6a3ee3eee7c
+          test "$(git rev-parse HEAD:src/components/club-manager/MatchPlansCard.tsx)" = 3dfd01c25a928a6d610218ad2c306c1e0bea7752
+          test "$(git rev-parse HEAD:src/components/club-manager/LiveSimScreen.tsx)" = 1a226406b4e60a5a943d4bb99be8325404d6d7e2
+          test "$(git rev-parse HEAD:src/pages/ClubManager.tsx)" = c4b9fe8a4fa8343d177188318629db0e4d4af68c
+          test "$(git rev-parse HEAD:src/test/clubManagerPositionPersistence.test.tsx)" = 648c2361ab1317c0651638a48b3fd4d272d9d0dc
+          test "$(git rev-parse HEAD:src/test/clubManagerPositionBlocked.test.tsx)" = 0f9c4de7514f0a7515d21e3abc37f9a4764309ec
+          test "$(git rev-parse HEAD:src/test/MatchPlansCard.customPositions.test.tsx)" = 22cfb18f5fb5f70178028e5324385523100f968c
+          test "$(git rev-parse HEAD:src/test/LiveSimScreen.positionNotice.test.tsx)" = 86c18f8813278f105aefd2305fe338f1d5d83096
           printf '%s  %s\n' \
             518f9be7ab031e8a4e922d65c4992d2e8e82f5ab0810e19abc6855907fa81f87 src/lib/clubManager.ts \
-            494b50ff2e32fb0862340374f3f6182000f44c9aefbea9920b63531e7009a4fa src/components/club-manager/TacticsScreen.tsx \
-            5eeafbeaf296adce0343d101d4c5213d12d6550e181a9af55a5dbd154452632c src/hooks/useClubManager.ts \
+            9814526d58ef3a363566bca54e84500d6399d33917cff6decedf3a7fb3c92f86 src/components/club-manager/TacticsScreen.tsx \
+            fc4e45c8d1df167b1bb846748af5fe0583af1cdf7154eedc7886b16296101fd4 src/hooks/useClubManager.ts \
             d6a8abf9ba8793ba0e87148dc9bf90e3892b4c9055e2820688bcbe9a35b64d77 src/test/clubManagerPositionIntegration.test.ts \
             ba6a2ab6f4a220439dec9373ba3655c7a962abaa640cc8f47c206644df0407a7 src/lib/clubManagerPositions.ts \
             625ee402d0d506d82f03c7f8bb7b8f524b2a7b5a2bf3b83254607b2b6aec6ed3 src/test/clubManagerPositions.test.ts \
-            1107a1ec8a496c65fd4c8653ccd239aa2cda2190945c56c6129d3985e59ed97d src/test/TacticsScreen.freePositions.test.tsx \
+            f7eee388e3bb0dda643e22f9b852f58088935cf7b48e88618bb11bfc7273903e src/test/TacticsScreen.freePositions.test.tsx \
             f9fdacec90b4190da5405f72524c91f45ad1449ca78e0d0535225638af5d7b00 src/test/clubManagerPositionLive.test.ts \
             2143e57f69c57d32ed2c501408dcdb9ecc4b85b061df67a79540a1a0b45cac55 scripts/qa/cmPosition.controls.json \
-            9980a421c1cb74580cb127732c534aac26abc3e20fc11f23bd4c94883cf60e96 scripts/qa/runCmPositionControls.mjs \
+            b6cee2f0616a2af08e483ace5ef564bc27716560ca6c5a122e8b6521d1795b58 scripts/qa/runCmPositionControls.mjs \
             590c31f4339f8fc5a0c340a9df6da4592670eef3d06c345996cba97b529b2613 src/test/clubManagerPositionOldParity.test.ts \
-            6f1b0a7e07bdb4383324f61d0a79ac5c2e6d39887bb09d6ba1147ee63a2e1421 scripts/qa/runClubManagerPositionOldParity.mjs > "$out/input-pins.sha256"
+            6f1b0a7e07bdb4383324f61d0a79ac5c2e6d39887bb09d6ba1147ee63a2e1421 scripts/qa/runClubManagerPositionOldParity.mjs \
+            9902769cf809a3b7d382c703615f5dbff0176d41c57a07306a6abb2d1a62f2f3 src/lib/clubManagerCalendar.ts \
+            95fce738e829b209d8b30a15163d95b619cb4b0f4e7ad65ac949fe028a03d90c src/components/club-manager/MatchPlansCard.tsx \
+            6e5a9d996d18a31c0bf18a43c0b5f3b00acdf5c79d68aa660072ca8addd0f7bb src/components/club-manager/LiveSimScreen.tsx \
+            412a7335e9510d8790c775074e366246b4404ec31c1d1151f4e29d76687d39c9 src/pages/ClubManager.tsx \
+            8813d544b85c52dfa44a10c76defb35f65b15bb5194814e631a30129c7bdece8 src/test/clubManagerPositionPersistence.test.tsx \
+            a56a5d45b70db95fce6619df2ec375b26fef93c0b0873876a7a48b9e9f03c99e src/test/clubManagerPositionBlocked.test.tsx \
+            1cd5cd04ea182d4d0b9349ea2e6759de0388bd9fecb921dc40d1db8418d490fb src/test/MatchPlansCard.customPositions.test.tsx \
+            f8150db55a30220f7eed32db1e8e63697cdee3bd77eff561b7b1af0c95e7fecd src/test/LiveSimScreen.positionNotice.test.tsx > "$out/input-pins.sha256"
           sha256sum --check "$out/input-pins.sha256" > "$out/input-pins.log"
           git rev-parse HEAD > "$out/head.txt";git rev-parse 'HEAD^{tree}' > "$out/tree.txt"
           printf '%s\n' "$GITHUB_RUN_ID" > "$out/run-id.txt"
@@ -180,41 +205,145 @@ jobs:
           NODE
           printf '%s\n' "$classifier" > "$out/live-classifier.exit";test "$classifier" -eq 0
           test ! -s "$out/live.transport";test ! -s "$out/live-classifier.transport"
-      - name: Exact three-case UI baseline with one owned Move-mode failure
+      - name: Exact forty-four editor, persistence, blocked-flow and notice outcomes
         run: |
           set -euo pipefail
           out="$CM_POSITION_OUT"
           export NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs"
           : > "$out/ui.transport";: > "$out/ui-classifier.transport";status=0
-          SIM_OFFLINE_RECEIPT="$out/ui.transport" timeout --signal=TERM --kill-after=15s 8m node_modules/.bin/vitest run src/test/TacticsScreen.freePositions.test.tsx --maxWorkers=1 --no-file-parallelism --reporter=default --reporter=json --outputFile="$out/ui.json" > "$out/ui.log" 2>&1 || status=$?
-          printf '%s\n' "$status" > "$out/ui.exit";test "$status" -eq 1
+          SIM_OFFLINE_RECEIPT="$out/ui.transport" timeout --signal=TERM --kill-after=15s 20m node_modules/.bin/vitest run src/test/TacticsScreen.freePositions.test.tsx src/test/clubManagerPositionPersistence.test.tsx src/test/clubManagerPositionBlocked.test.tsx src/test/MatchPlansCard.customPositions.test.tsx src/test/LiveSimScreen.positionNotice.test.tsx --maxWorkers=1 --no-file-parallelism --reporter=default --reporter=json --outputFile="$out/ui.json" > "$out/ui.log" 2>&1 || status=$?
+          printf '%s\n' "$status" > "$out/ui.exit";test "$status" -eq 0
           classifier=0
           SIM_OFFLINE_RECEIPT="$out/ui-classifier.transport" node <<'NODE' || classifier=$?
           const fs=require('node:fs'),assert=require('node:assert/strict'),path=require('node:path'),out=process.env.CM_POSITION_OUT,r=JSON.parse(fs.readFileSync(out+'/ui.json','utf8'));
-          const ancestor='Club Manager tactics position modes',owned='offers a separate Move players mode with all eleven numbered position slots',marker='CM_POSITION_MOVE_MODE_AVAILABLE';
-          const preserves=new Set([
-            'keeps a default-mode token tap opening the real slot picker without saving a shape',
-            'keeps default-mode dragging as one XI swap and discards a cancelled drag',
-          ]);
-          assert.equal(r.success,false);assert.equal(r.testResults.length,1);
-          assert.equal(r.numTotalTests,3);assert.equal(r.numPassedTests,2);assert.equal(r.numFailedTests,1);assert.equal(r.numPendingTests,0);assert.equal(r.numTodoTests,0);
-          const suite=r.testResults[0],seen=new Set(),failures=[],passes=[];
-          assert.equal(path.resolve(suite.name),path.resolve('src/test/TacticsScreen.freePositions.test.tsx'));
-          assert.equal(suite.status,'failed');assert.equal(suite.assertionResults.length,3);if('message'in suite)assert.equal(suite.message,'');
-          for(const row of suite.assertionResults){
-            assert.equal(typeof row.title,'string');assert(!seen.has(row.title));seen.add(row.title);
-            assert.equal(row.fullName,ancestor+' '+row.title);
-            if(preserves.has(row.title)){assert.equal(row.status,'passed',row.fullName);assert.deepEqual(row.failureMessages,[]);passes.push({title:row.title});continue;}
-            assert.equal(row.title,owned);assert.equal(row.status,'failed');assert.equal(row.failureMessages.length,1);
-            const message=row.failureMessages[0].replace(/\x1b\[[0-?]*[ -/]*[@-~]/g,'');
-            assert.match(message,/^\s*AssertionError:/);assert(message.includes(marker));
-            assert.doesNotMatch(message,/\b(?:TypeError|ReferenceError|SyntaxError|RangeError|TimeoutError)\s*:|\b(?:timed out|test timeout|hook timeout)\b/i);
-            failures.push({title:row.title,fullName:row.fullName,marker});
+          const specs=
+          [
+            {
+              "file": "src/test/TacticsScreen.freePositions.test.tsx",
+              "tests": 17,
+              "groups": [
+                {
+                  "ancestor": "Club Manager tactics position modes",
+                  "titles": [
+                    "offers a separate Move players mode with all eleven numbered position slots",
+                    "keeps a default-mode token tap opening the real slot picker without saving a shape",
+                    "keeps default-mode dragging as one XI swap and discards a cancelled drag"
+                  ]
+                },
+                {
+                  "ancestor": "Club Manager controlled base-position editor",
+                  "titles": [
+                    "moves numbered slots by two points with buttons and keyboard while preserving keeper role and bounds",
+                    "previews a real drag and commits once on release before showing only the parent-published shape",
+                    "rolls back a real pointercancel gesture without saving, swapping or reopening a picker",
+                    "rolls back a real lostpointercapture gesture without saving, swapping or reopening a picker",
+                    "rolls back a real blur gesture without saving, swapping or reopening a picker",
+                    "keeps the committed shape and truthful error after a refused move or reset",
+                    "resets a valid custom shape only after the parent publishes the saved preset",
+                    "blocks future editing without deleting raw data or invoking the writer",
+                    "blocks malformed editing without deleting raw data or invoking the writer",
+                    "blocks foreign-formation editing without deleting raw data or invoking the writer",
+                    "blocks live editing without deleting raw data or invoking the writer",
+                    "discards a preview when the authoritative formation or saved shape changes",
+                    "keeps overlapping slots individually reachable and applies mentality using their canonical roles",
+                    "reopens position rules and exposes labelled keyboard controls without changing the plan"
+                  ]
+                }
+              ]
+            },
+            {
+              "file": "src/test/clubManagerPositionPersistence.test.tsx",
+              "tests": 15,
+              "groups": [
+                {
+                  "ancestor": "Custom base positions through the actual career hook and storage",
+                  "titles": [
+                    "writes a copied valid shape before publishing it without changing canonical roles or player assignments",
+                    "keeps memory and old raw bytes when native storage refuses a move, then saves the actual retry",
+                    "resets only a supported saved shape and never publishes a refused reset",
+                    "uses the current ref for a set and reset in one pending React turn",
+                    "refuses stale formation indexes and malformed incoming points before touching the store",
+                    "preserves future stored shape data while blocking edits and legacy-plan application",
+                    "preserves null stored shape data while blocking edits and legacy-plan application",
+                    "preserves malformed stored shape data while blocking edits and legacy-plan application",
+                    "preserves foreign-formation stored shape data while blocking edits and legacy-plan application",
+                    "refuses a real live career without changing its stored match or advancing the engine",
+                    "refuses a stale action after the actual active manager slot changes",
+                    "respects a newer actual fenced write and never overwrites its career",
+                    "clears a supported shape on a preset change only after saving the real carried lineup",
+                    "refuses a plan that would omit custom points and saves or deletes an ordinary plan before acknowledgement",
+                    "atomically clears a supported custom shape when applying an actual existing legacy plan"
+                  ]
+                }
+              ]
+            },
+            {
+              "file": "src/test/clubManagerPositionBlocked.test.tsx",
+              "tests": 7,
+              "groups": [
+                {
+                  "ancestor": "Unsupported marked positioning stops real advancement",
+                  "titles": [
+                    "stops the real Calendar after its first actual blocked entry without a draw or save",
+                    "shows a truthful notice for actual play refusal while keeping phase, raw storage and rewards unchanged",
+                    "shows a truthful notice for actual quickPlay refusal while keeping phase, raw storage and rewards unchanged",
+                    "shows a truthful notice for actual secondHalf refusal while keeping phase, raw storage and rewards unchanged",
+                    "shows a truthful notice for actual simToWeek refusal while keeping phase, raw storage and rewards unchanged",
+                    "clears the old notice when the actual hook leaves that authoritative career",
+                    "keeps an actual ordinary unmarked Calendar window progressing with no position halt"
+                  ]
+                }
+              ]
+            },
+            {
+              "file": "src/test/MatchPlansCard.customPositions.test.tsx",
+              "tests": 3,
+              "groups": [
+                {
+                  "ancestor": "Match plan custom-position policy through the actual card, hook and writer",
+                  "titles": [
+                    "keeps ordinary plan saving available and shows Saved only after the actual hook accepts its write",
+                    "disables a lossy custom-position Save and explains the actual supported plan replacement",
+                    "keeps unsupported saved points untouched and explains why neither Save nor Apply is available"
+                  ]
+                }
+              ]
+            },
+            {
+              "file": "src/test/LiveSimScreen.positionNotice.test.tsx",
+              "tests": 2,
+              "groups": [
+                {
+                  "ancestor": "Saved-position refusal inside the actual expanded live match stage",
+                  "titles": [
+                    "puts the supplied hook notice inside the fixed stage flow before its strip",
+                    "keeps the actual expanded stage and its Back control unchanged when no notice is supplied"
+                  ]
+                }
+              ]
+            }
+          ];
+          assert.equal(specs.length,5);assert.equal(specs.reduce((n,s)=>n+s.tests,0),44);
+          assert.equal(r.success,true);assert.equal(r.testResults.length,5);
+          assert.equal(r.numTotalTests,44);assert.equal(r.numPassedTests,44);assert.equal(r.numFailedTests,0);assert.equal(r.numPendingTests,0);assert.equal(r.numTodoTests,0);
+          const seenFiles=new Set(),passed=[];
+          for(const suite of r.testResults){
+            const file=path.resolve(suite.name),spec=specs.find(s=>path.resolve(s.file)===file);
+            assert(spec,'CM_POSITION_FUNCTIONAL_UNDECLARED_SUITE:'+file);assert(!seenFiles.has(file),'CM_POSITION_FUNCTIONAL_DUPLICATE_SUITE:'+file);seenFiles.add(file);
+            assert.equal(suite.status,'passed');assert.equal(suite.assertionResults.length,spec.tests);if('message'in suite)assert.equal(suite.message,'');
+            const expected=new Map(spec.groups.flatMap(g=>g.titles.map(title=>[g.ancestor+' '+title,title]))),seen=new Set();
+            assert.equal(expected.size,spec.tests);
+            for(const row of suite.assertionResults){
+              assert.equal(typeof row.fullName,'string');assert(expected.has(row.fullName),row.fullName);assert(!seen.has(row.fullName),row.fullName);seen.add(row.fullName);
+              assert.equal(row.title,expected.get(row.fullName));assert.equal(row.status,'passed',row.fullName);assert.deepEqual(row.failureMessages,[]);
+            }
+            assert.equal(seen.size,expected.size);for(const fullName of expected.keys())assert(seen.has(fullName),fullName);
+            passed.push({file:spec.file,cases:seen.size,fullNames:[...seen]});
           }
-          assert.equal(seen.size,3);for(const title of [owned,...preserves])assert(seen.has(title));assert.equal(failures.length,1);assert.equal(passes.length,2);
+          assert.equal(seenFiles.size,5);for(const spec of specs)assert(seenFiles.has(path.resolve(spec.file)));
           const runtime=['numRuntimeErrorTestSuites','numUnhandledErrors'];for(const key of runtime)if(key in r)assert.equal(r[key],0);if('unhandledErrors'in r)assert.deepEqual(r.unhandledErrors,[]);
           assert.doesNotMatch(fs.readFileSync(out+'/ui.log','utf8'),/Unhandled\s+(?:Errors?|Rejections?)|Uncaught\s+Exceptions?|Failed to resolve import|Cannot find (?:module|package)|No test files found/i);
-          fs.writeFileSync(out+'/ui-red-admission.json',JSON.stringify({phase:'original-position-mode-ui-baseline',source:process.env.GITHUB_SHA,parent:process.env.EXPECTED_PARENT,runId:process.env.GITHUB_RUN_ID,attempt:process.env.GITHUB_RUN_ATTEMPT,expectedOwnedFailures:failures,preservedPasses:passes,observedRuntimeCounters:Object.fromEntries(runtime.filter(k=>k in r).map(k=>[k,r[k]])),absentRuntimeCountersUnknown:runtime.filter(k=>!(k in r)),unhandledErrors:'unhandledErrors'in r?r.unhandledErrors:'UNKNOWN_ABSENT',applicationQualified:false,balanceQualified:false,uiIntegrated:false},null,2)+'\n',{flag:'wx'});
+          fs.writeFileSync(out+'/ui-functional-admission.json',JSON.stringify({phase:'controlled-position-editor-and-actual-storage-functional',source:process.env.GITHUB_SHA,parent:process.env.EXPECTED_PARENT,runId:process.env.GITHUB_RUN_ID,attempt:process.env.GITHUB_RUN_ATTEMPT,passed,passedFunctionalCases:44,otherHeldUnitCases:50,intendedTotalNormalCases:94,observedRuntimeCounters:Object.fromEntries(runtime.filter(k=>k in r).map(k=>[k,r[k]])),absentRuntimeCountersUnknown:runtime.filter(k=>!(k in r)),unhandledErrors:'unhandledErrors'in r?r.unhandledErrors:'UNKNOWN_ABSENT',applicationQualified:false,balanceQualified:false,browserQualified:false,buildQualified:false},null,2)+'\n',{flag:'wx'});
           NODE
           printf '%s\n' "$classifier" > "$out/ui-classifier.exit";test "$classifier" -eq 0
           test ! -s "$out/ui.transport";test ! -s "$out/ui-classifier.transport"

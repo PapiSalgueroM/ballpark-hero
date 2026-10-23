@@ -341,6 +341,7 @@ const ClubManager = () => {
           {/* Round 1323: another tab has played this career on, so this one
               writes nothing more and covers itself until it is reloaded. */}
           {g.saveMoved && <Suspense fallback={null}><SaveMovedNotice message="This career moved on in another tab. Reload to carry on." /></Suspense>}
+          {g.positionNotice && <div role="alert" data-testid="cm-position-blocked" className="mb-4 rounded-xl border border-destructive/60 bg-destructive/10 px-4 py-3 text-sm text-foreground">{g.positionNotice}</div>}
           {inner}
         </div>
         <AdBanner slot="7540487748" format="horizontal" className="mt-8" />
@@ -849,6 +850,7 @@ const ClubManager = () => {
           career={g.career}
           live={g.career.live ?? null}
           report={g.phase === 'matchResult' ? g.report : null}
+          positionNotice={g.positionNotice}
           clubColor={liveClub.color}
           onSub={g.subAtHalftime}
           onShape={g.shapeAtHalftime}
@@ -1648,6 +1650,7 @@ const ClubManager = () => {
           <ScreenLoading><TacticsScreen
             career={c}
             onFormation={g.setFormationIndex}
+            onCustomShape={g.setCustomShape}
             onMentality={g.setMentality}
             onInstructions={g.setTeamInstructions}
             theirOpponent={g.facts?.opponent ?? null}

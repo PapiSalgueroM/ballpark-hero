@@ -121,6 +121,7 @@ interface LiveSimScreenProps {
   live: LiveMatch | null;
   report: MatchWeekReport | null;
   clubColor: string;
+  positionNotice?: string | null;
   onSub: (outId: string, inId: string) => void;
   onShape: (m: Mentality) => void;
   onTalk: (tone: TalkTone | null) => void;
@@ -561,7 +562,7 @@ function LiveStats({ stats, counts, clubName, opponent, mineFirst }: { stats: Ma
 }
 
 export function LiveSimScreen({
-  career, live, report, clubColor, onSub, onShape, onTalk, onSecondHalf, onExit, onStartSecondHalf, onStartExtraTime, onChange, onMark,
+  career, live, report, clubColor, positionNotice, onSub, onShape, onTalk, onSecondHalf, onExit, onStartSecondHalf, onStartExtraTime, onChange, onMark,
 }: LiveSimScreenProps) {
   /* The clock and the stage come off the save, so a match closed at the 30th
      minute opens again at the 30th. No randomness in here. */
@@ -1670,6 +1671,7 @@ export function LiveSimScreen({
         <div ref={stageBox} role="dialog" aria-label={`${career.clubName} against ${opponent}, the match`} tabIndex={-1} data-cm-live-stagebox="1" className="cm-stagebox bg-background text-foreground outline-none">
           <div className="cm-stage">
             <div className="cm-stage-main">
+              {positionNotice && <div role="alert" data-cm-live-position-notice="1" className="shrink-0 border-b border-destructive/60 bg-destructive/10 px-3 py-2 text-xs text-foreground">{positionNotice}</div>}
               {/* The strip: Back, the help, both clubs and the score, the clock. Two rows on a phone. */}
               <div data-cm-live-strip="1" className="cm-strip">
                 <button

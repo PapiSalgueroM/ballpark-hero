@@ -35,7 +35,7 @@ const inputPins={
   'src/lib/clubManagerPositions.ts':'ba6a2ab6f4a220439dec9373ba3655c7a962abaa640cc8f47c206644df0407a7',
   'src/test/clubManagerPositionIntegration.test.ts':'d6a8abf9ba8793ba0e87148dc9bf90e3892b4c9055e2820688bcbe9a35b64d77',
   'src/test/clubManagerPositions.test.ts':'625ee402d0d506d82f03c7f8bb7b8f524b2a7b5a2bf3b83254607b2b6aec6ed3',
-  'src/test/TacticsScreen.freePositions.test.tsx':'1107a1ec8a496c65fd4c8653ccd239aa2cda2190945c56c6129d3985e59ed97d',
+  'src/test/TacticsScreen.freePositions.test.tsx':'f7eee388e3bb0dda643e22f9b852f58088935cf7b48e88618bb11bfc7273903e',
   'scripts/qa/cmPosition.controls.json':'2143e57f69c57d32ed2c501408dcdb9ecc4b85b061df67a79540a1a0b45cac55',
   'vitest.config.ts':'6a68dd2f214dab4a3013eb41bad38eea65d703d61440002710ec246495e1c58a',
   'scripts/lib/offlineTransport.cjs':'e60ff1534307e449ccef598e3b7470dcba58681b82cea4005cec7319f14f9221',

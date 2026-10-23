@@ -634,7 +634,7 @@ export function targetWeekForDate(entryDates: CalDate[], week: number, date: Cal
   return target > week ? target : null;
 }
 
-export type SimHalt = 'window' | 'seasonOver' | 'sacked' | 'approach' | null;
+export type SimHalt = 'window' | 'seasonOver' | 'sacked' | 'approach' | 'position-state-invalid' | null;
 
 export interface SimRun {
   state: CareerState;
@@ -661,6 +661,7 @@ export function simToWeek(career: CareerState, targetWeek: number, opts?: { varR
   while (state.week < target) {
     const suitorBefore = state.approach?.club ?? null;
     const res = playNextEntry(state, { skipHalftime: true, untilWeek: target, ...(opts?.varReviews ? { varReviews: opts.varReviews } : {}) });
+    if (res.blocked === 'position-state-invalid') return { state: res.state, lastReport, halt: res.blocked };
     state = res.state;
     if (res.kind === 'window') return { state, lastReport, halt: 'window' };
     if (res.kind === 'seasonOver') return { state, lastReport, halt: 'seasonOver' };
