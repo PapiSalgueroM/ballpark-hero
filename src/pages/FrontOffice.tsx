@@ -1,4 +1,3 @@
-import { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { GameNavbar } from '@/components/game/GameNavbar';
 import { GameHelp } from '@/components/game/GameHelp';
@@ -7,6 +6,8 @@ import { GameNav } from '@/components/game/GameNav';
 import PageSeo from '@/components/seo/PageSeo';
 import GameSeoContent from '@/components/seo/GameSeoContent';
 import { hostXpHelp } from '@/lib/gmCareerFace'; /* Round 1550: the help's part of the career, not the whole host */
+/* Round 1542: who scored and the season's awards, from the rules themselves (the board holds the same module) */
+import { nflStatsHelp } from '@/lib/nflSeasonStats';
 
 /* Round 1130. A page that has a guide never renders the howToPlay prop below (GameSeoContent keeps it as a
    fallback only), and this page's guide is another round's file this week. So the opening rating rule reaches
@@ -31,26 +32,13 @@ function frontOfficeCareerRules(): string[] {
   ];
 }
 
-/* Round 1542: who scored and the season's awards, the rules with their worked example computed from the lib
-   (src/lib/nflSeasonRules.ts). Fetched beside the guide the ? panel already waits for, so the page every visitor
-   downloads does not carry the words; the panel is drawn once they are here, whole, so it never grows while open,
-   and without them if the fetch fails, so the rest of the rules are never lost. */
-function useFrontOfficeStatsRules(): string[] | null {
-  const [rules, setRules] = useState<string[] | null>(null);
-  useEffect(() => {
-    let live = true;
-    import('@/lib/nflSeasonRules').then(
-      m => { if (live) setRules(m.nflStatsHelp()); },
-      () => { if (live) setRules([]); },
-    );
-    return () => { live = false; };
-  }, []);
-  return rules;
+/* Round 1542: the season numbers' rules, built inside the component like the career's, the worked example computed */
+function frontOfficeStatsRules(): string[] {
+  return nflStatsHelp();
 }
 
 const FrontOffice = () => {
-  const statsRules = useFrontOfficeStatsRules();
-  const rules = [...FRONT_OFFICE_RATING_RULES, ...frontOfficeCareerRules(), ...(statsRules ?? [])];
+  const rules = [...FRONT_OFFICE_RATING_RULES, ...frontOfficeCareerRules(), ...frontOfficeStatsRules()];
   return (
     <>
       <PageSeo
@@ -60,7 +48,7 @@ const FrontOffice = () => {
       />
       <div className="min-h-screen bg-background text-foreground">
         <GameNavbar />
-        <div className="relative z-10 mx-auto w-full max-w-4xl">{statsRules && <GameHelp extraRules={rules} />}</div>
+        <div className="relative z-10 mx-auto w-full max-w-4xl"><GameHelp extraRules={rules} /></div>
         <main id="dukb-main" className="container max-w-2xl mx-auto px-4 py-6 pb-20">
           <div className="text-center mb-4">
             <h1 className="text-2xl font-display font-bold text-primary">NFL Front Office</h1>

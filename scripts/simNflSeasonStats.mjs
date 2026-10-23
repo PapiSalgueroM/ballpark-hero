@@ -59,10 +59,8 @@
  *    opens at about 620K of its own (every man carries his opening rating evidence), so the line was passed before
  *    this round. Printed too: the block's bytes (median, largest) and the lines a season both ways (the pool's, and
  *    men with a stat only: the brief's open question 1). Asserted: every line is a man who was in his club's pool.
- *  8 COPY AND PURITY: the lib, its awards (nflSeasonAwards.ts) and its words (nflSeasonRules.ts), nflDrives.ts and
- *    foSeasonClose.ts hold no Math.random, Date or localStorage (comments taken out); every sentence the lib builds
- *    has no quotation mark and no verb of speech. (The closing check of 2026-10-22 moved the awards and the words
- *    out of nflSeasonStats.ts so the page does not carry them; the harness reads the three files as one lib.)
+ *  8 COPY AND PURITY: the lib, nflDrives.ts and foSeasonClose.ts hold no Math.random, Date or localStorage
+ *    (comments taken out); every sentence the lib builds has no quotation mark and no verb of speech.
  *
  * CONTROLS
  *   liftdrift    MAX_FG 6 to 5 in this tree's nflDrives.ts                     -> section 1, red on every set
@@ -102,7 +100,6 @@ const DRIVES = 'src/lib/gameLaws/nflDrives.ts';
 const STATS = 'src/lib/nflSeasonStats.ts';
 const FO_STATS = 'src/lib/foSeasonStats.ts';
 const AWARDS = 'src/lib/nflSeasonAwards.ts';
-const RULES = 'src/lib/nflSeasonRules.ts';
 const CLOSE = 'src/lib/foSeasonClose.ts';
 
 /* `labels`: pieces of check labels that must ALL be among the reds of the control's section. `everySet`: the
@@ -124,7 +121,7 @@ const CONTROLS = {
   closetwice: { section: 5, labels: ['a second close writes no card twice'], needs: [5], patches: [{ file: CLOSE, from: '  if (done) return done;', to: '' }] },
   oldopen: { section: 6, labels: ['recording nothing and throwing nothing'], needs: [6], patches: [{ file: STATS, from: '  if (lg.week === 1 && !nflLiveStats(lg)) lg.stats = nflNewStats(lg.season);', to: '  if (!nflLiveStats(lg)) lg.stats = nflNewStats(lg.season);' }] },
   wholeroster: { section: 7, labels: ["every line is a man who was in his club's pool"], needs: [7], patches: [{ file: STATS, from: '      for (const m of nflPoolMen(s.pool)) {', to: '      for (const m of lg.teams[s.team].players) {' }] },
-  quote: { section: 8, labels: ['no quotation mark and no verb of speech'], needs: [8], patches: [{ file: RULES, from: '"Sacks come from the pass rush', to: '"The coach said: \\"Sacks come from the pass rush' }] },
+  quote: { section: 8, labels: ['no quotation mark and no verb of speech'], needs: [8], patches: [{ file: STATS, from: '"Sacks come from the pass rush', to: '"The coach said: \\"Sacks come from the pass rush' }] },
 };
 if (CONTROL && !CONTROLS[CONTROL]) { console.error(`unknown control ${CONTROL}: ${Object.keys(CONTROLS).join(', ')}`); process.exit(2); }
 if (CONTROL && CONTROLS[CONTROL].needs.some(s => !SECTIONS.includes(s))) { console.error(`control ${CONTROL} needs sections ${CONTROLS[CONTROL].needs.join(', ')}`); process.exit(2); }
@@ -170,7 +167,6 @@ const HEAD_ENTRY = [
   "export * as bind from './src/lib/frontOfficeGameDay.ts';",
   "export * as stats from './src/lib/nflSeasonStats.ts';",
   "export * as awards from './src/lib/nflSeasonAwards.ts';",
-  "export * as rules from './src/lib/nflSeasonRules.ts';",
   "export * as view from './src/lib/nflSeasonView.ts';",
   "export * as fo from './src/lib/foSeasonStats.ts';",
   "export { leagueNames } from './src/lib/foNames.ts';",
@@ -182,11 +178,10 @@ let fired;
 let B = null;
 try {
   ({ M, fired } = await bundle(HEAD_ENTRY, PATCHES, 'head'));
-  /* the awards and the close live in src/lib/nflSeasonAwards.ts (they ride in the career kit, not the page) and the
-     rules' words in src/lib/nflSeasonRules.ts (the page fetches them): the harness reads both beside the lines, as one lib */
+  /* the awards and the close live in src/lib/nflSeasonAwards.ts (they ride in the career kit, not the page): the
+     harness reads them beside the lines, as one lib */
   if (!M.awards || typeof M.awards.nflCloseSeasonStats !== 'function') throw new Error('src/lib/nflSeasonAwards.ts does not export nflCloseSeasonStats');
-  if (!M.rules || typeof M.rules.nflStatsHelp !== 'function') throw new Error('src/lib/nflSeasonRules.ts does not export nflStatsHelp');
-  M = { ...M, stats: { ...M.stats, ...M.awards, ...M.rules } };
+  M = { ...M, stats: { ...M.stats, ...M.awards } };
   if (SECTIONS.includes(1) && LIFT_BASE) {
     if (!fs.existsSync(path.join(LIFT_BASE, DRIVES)) && !fs.existsSync(path.join(LIFT_BASE, 'src/lib/gameLaws/nfl.ts'))) throw new Error(`LIFT_BASE ${LIFT_BASE} holds no NFL story law`);
     B = await bundleAt(LIFT_BASE, STORY_ENTRY, 'base');
@@ -755,7 +750,7 @@ if (SECTIONS.includes(8)) {
   const S = M.stats;
   console.log('');
   console.log('8. COPY AND PURITY');
-  for (const rel of [STATS, AWARDS, RULES, DRIVES, CLOSE]) {
+  for (const rel of [STATS, AWARDS, DRIVES, CLOSE]) {
     const code = codeOf(readSrc(rel));
     check(8, `${rel} holds no Math.random, no Date and no localStorage, comments taken out`, !/Math\.random|\bDate\b|localStorage/.test(code));
   }
