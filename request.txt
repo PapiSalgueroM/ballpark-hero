@@ -1,0 +1,37 @@
+# Release BQ, Round 1546 (closing head 30f50b00): fix-1546.md's gate (rc-fix-a.txt). Controls ids-* and retire-* except the seeds must exit 1.
+tsc: node_modules/.bin/tsc --noEmit -p tsconfig.app.json
+vitest: node_modules/.bin/vitest run src/test/fightCareerRetireBoard.test.tsx src/lib/fightGym.test.ts src/lib/fightPromoter.test.ts src/lib/fightCareerLife.test.ts src/test/boxingShowForecast.test.tsx src/test/fightCareerLifeBoard.test.tsx src/test/fightCareerRingPlayback.test.tsx src/test/noDoubleRecord.test.tsx --testTimeout=300000 --hookTimeout=120000
+simFightIds: node scripts/simFightIds.mjs
+simFightIds-base: git worktree add /tmp/base e3deb2cb && FIGHT_IDS_BASE_DIR=/tmp/base node scripts/simFightIds.mjs
+ids-counter: FIGHT_IDS_CONTROL=counter node scripts/simFightIds.mjs
+ids-norepair: FIGHT_IDS_CONTROL=norepair node scripts/simFightIds.mjs
+ids-noclass: FIGHT_IDS_CONTROL=noclass node scripts/simFightIds.mjs
+ids-drawid: FIGHT_IDS_CONTROL=drawid node scripts/simFightIds.mjs
+ids-startone: FIGHT_IDS_CONTROL=startone node scripts/simFightIds.mjs
+ids-nolift: FIGHT_IDS_CONTROL=nolift node scripts/simFightIds.mjs
+simFightCareerRetire: node scripts/simFightCareerRetire.mjs
+retire-seed9000: RETIRE_SEED0=9000 node scripts/simFightCareerRetire.mjs
+retire-seed15000: RETIRE_SEED0=15000 node scripts/simFightCareerRetire.mjs
+retire-seed21000: RETIRE_SEED0=21000 node scripts/simFightCareerRetire.mjs
+retire-nogate: RETIRE_CONTROL=nogate node scripts/simFightCareerRetire.mjs
+retire-gate1: RETIRE_CONTROL=gate1 node scripts/simFightCareerRetire.mjs
+retire-keepcards: RETIRE_CONTROL=keepcards node scripts/simFightCareerRetire.mjs
+retire-twice: RETIRE_CONTROL=twice node scripts/simFightCareerRetire.mjs
+retire-keyseed: RETIRE_CONTROL=keyseed node scripts/simFightCareerRetire.mjs
+retire-cleanrecord: RETIRE_CONTROL=cleanrecord node scripts/simFightCareerRetire.mjs
+retire-copy: RETIRE_CONTROL=copy node scripts/simFightCareerRetire.mjs
+simFightCareer: node scripts/simFightCareer.mjs
+simFightGym: node scripts/simFightGym.mjs
+simFightPromoter: node scripts/simFightPromoter.mjs
+simFightRingPlayback: node scripts/simFightRingPlayback.mjs
+simGuideHeadings: node scripts/simGuideHeadings.mjs
+simSiteSearch: node scripts/simSiteSearch.mjs
+simTrustCopy: node scripts/simTrustCopy.mjs
+simNoInventedQuotes: node scripts/simNoInventedQuotes.mjs
+simAccessibility: node scripts/simAccessibility.mjs
+simInventedNames: node scripts/simInventedNames.mjs
+simHarnessAnchors: node scripts/simHarnessAnchors.mjs
+simNoRivalNames: node scripts/simNoRivalNames.mjs
+simStorageWrites: node scripts/simStorageWrites.mjs
+simSaveKeeper: node scripts/simSaveKeeper.mjs
+simSaveFence: node scripts/simSaveFence.mjs
