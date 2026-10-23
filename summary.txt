@@ -1,0 +1,4 @@
+prove305 exit=0 15s | Creation fixed proof:4 current passes;2 exact original faults+2 preserves;4 restored passes;12 full observations;source and actual baseline raw held.
+prove306 exit=0 5s | Prepared actual-hook proof only. No browser, live database or physical-device root-cause qualification.
+wf303x exit=0 933s | wfrun career-pending-overall-gates.yml: 14 steps ran, 0 failed
+vitest-packets exit=0 4s |    Duration  4.12s (transform 2.41s, setup 254ms, collect 4.58s, tests 1.25s, environment 1.19s, prepare 253ms)
