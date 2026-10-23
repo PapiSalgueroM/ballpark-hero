@@ -1,0 +1,17 @@
+bindAt: scripts/simReportDraftLifecycle.mjs bound
+bindAt: 775564305e9d -> 9afad878515a
+runProver: p1426 at d277ccfe235989bee778f42c40186e15f665c1cb (release BK bound: 85fa75926838 with its pinned bases bound to the joined tree)
+normal: 14 passed, 0 expected failures, 0 skipped
+bare: 14 passed, 0 expected failures, 0 skipped
+original: 2 passed, 12 expected failures, 0 skipped
+completion-owner: 4 passed, 10 expected failures, 0 skipped
+timer-owner: 12 passed, 2 expected failures, 0 skipped
+restored: 14 passed, 0 expected failures, 0 skipped
+simReportDraftLifecycle: all declared cases and effective controls passed.
+simReportContext: all green
+context-nopath: control "nopath": 1 failure(s) fired in section 1 as expected, the check works
+context-footle: control "footle": 3 failure(s) fired in section 2 as expected, the check works
+context-privacy: control "privacy": 3 failure(s) fired in section 4 as expected, the check works
+context-diagnostics: control "diagnostics": 13 failure(s) fired in section 4 as expected, the check works
+p1426 PROOF DONE
+runProver: p1426 exit 0
