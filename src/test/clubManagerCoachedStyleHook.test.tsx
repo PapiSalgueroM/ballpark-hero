@@ -6,7 +6,7 @@ import { TrainingScreen } from '@/components/club-manager/TrainingScreen';
 import { CM_PARTIAL, CM_ROSTERS } from '@/data/clubManagerRosters';
 import { SAVE_KEY, loadCareer } from '@/lib/clubManager';
 import type { CareerState } from '@/lib/clubManager';
-import { readCoachedStyleCourse } from '@/lib/clubManagerTraits';
+import { readCoachedStyleCourse, startCoachedStyle, cancelCoachedStyle } from '@/lib/clubManagerTraits';
 
 vi.mock('@/lib/completions', () => ({
   recordCompletion: vi.fn(), recordActivity: vi.fn(), recordStreakDay: vi.fn(),
@@ -25,7 +25,7 @@ function Harness() {
   }, [g.career, g.coachedStyleSaveState]);
   return g.career
     ? <TrainingScreen career={g.career} onSetPlan={g.setTraining} onRetrain={g.retrain} onStopRetrain={g.stopRetrain}
-        onStartCoachedStyle={g.startCoachedStyle} onCancelCoachedStyle={g.cancelCoachedStyle}
+        onEditCoachedStyle={g.editCoachedStyle}
         coachedStyleSaveState={g.coachedStyleSaveState} />
     : <p>{g.phase}</p>;
 }
@@ -75,7 +75,7 @@ describe('Coached-style actions through the real career hook and writer', { time
     const { view, id } = await boot();
     const before = career();
     let ok = false;
-    act(() => { ok = read().startCoachedStyle(id, 'press'); });
+    act(() => { ok = read().editCoachedStyle(id, (player, context) => startCoachedStyle(player, 'press', context)); });
     expect(ok, 'COACHED_HOOK_START_ACTUAL_SAVE').toBe(true);
     expect(career() === before, 'COACHED_HOOK_START_NEW_CAREER').toBe(false);
     expect(readCoachedStyleCourse(career().squad.find(p => p.id === id)!)).toEqual({ v: 1, to: 'press', weeksLeft: 6, weeksTotal: 6 });
@@ -87,7 +87,7 @@ describe('Coached-style actions through the real career hook and writer', { time
     expect(view.container.querySelector('[data-cm-coached-course]')?.getAttribute('data-cm-coached-course'), 'COACHED_HOOK_CARD_REAL_COURSE').toBe('press');
     expect(view.container.querySelector('[data-cm-coached-save]')?.textContent, 'COACHED_HOOK_CARD_ACK_REAL').toBe('Saved');
 
-    act(() => { ok = read().cancelCoachedStyle(id); });
+    act(() => { ok = read().editCoachedStyle(id, (player, context) => cancelCoachedStyle(player, context)); });
     expect(ok, 'COACHED_HOOK_CANCEL_ACTUAL_SAVE').toBe(true);
     expect(readCoachedStyleCourse(career().squad.find(p => p.id === id)!)).toBeNull();
     expect(read().coachedStyleSaveState).toBe('saved');
@@ -104,7 +104,7 @@ describe('Coached-style actions through the real career hook and writer', { time
     expect(typeof raw, 'COACHED_HOOK_FAILED_START_OLD_RAW_PRESENT').toBe('string');
     const fault = rejectNativeWrites();
     let ok = true;
-    act(() => { ok = read().startCoachedStyle(id, 'press'); });
+    act(() => { ok = read().editCoachedStyle(id, (player, context) => startCoachedStyle(player, 'press', context)); });
     expect(fault.mock.calls.length > 0, 'COACHED_HOOK_NATIVE_START_FAULT_FIRED').toBe(true);
     expect(ok, 'COACHED_HOOK_FAILED_START_REFUSED').toBe(false);
     expect(career(), 'COACHED_HOOK_FAILED_START_NOT_PUBLISHED').toBe(before);
@@ -119,13 +119,13 @@ describe('Coached-style actions through the real career hook and writer', { time
   it('keeps an actual saved course and old raw body when cancel cannot be saved', async () => {
     const { id } = await boot();
     let ok = false;
-    act(() => { ok = read().startCoachedStyle(id, 'press'); });
+    act(() => { ok = read().editCoachedStyle(id, (player, context) => startCoachedStyle(player, 'press', context)); });
     expect(ok, 'COACHED_HOOK_CANCEL_HEALTHY_START').toBe(true);
     const before = career(), raw = localStorage.getItem(SAVE_KEY);
     expect(readCoachedStyleCourse(before.squad.find(p => p.id === id)!), 'COACHED_HOOK_CANCEL_COURSE_POSITIVE').not.toBeNull();
     expect(typeof raw, 'COACHED_HOOK_CANCEL_OLD_RAW_PRESENT').toBe('string');
     const fault = rejectNativeWrites();
-    act(() => { ok = read().cancelCoachedStyle(id); });
+    act(() => { ok = read().editCoachedStyle(id, (player, context) => cancelCoachedStyle(player, context)); });
     expect(fault.mock.calls.length > 0, 'COACHED_HOOK_NATIVE_CANCEL_FAULT_FIRED').toBe(true);
     expect(ok, 'COACHED_HOOK_FAILED_CANCEL_REFUSED').toBe(false);
     expect(career(), 'COACHED_HOOK_FAILED_CANCEL_NOT_PUBLISHED').toBe(before);
@@ -133,7 +133,7 @@ describe('Coached-style actions through the real career hook and writer', { time
     expect(readCoachedStyleCourse(career().squad.find(p => p.id === id)!)).toEqual({ v: 1, to: 'press', weeksLeft: 6, weeksTotal: 6 });
     expect(read().coachedStyleSaveState).toBe('blocked');
     fault.mockRestore();
-    act(() => { ok = read().cancelCoachedStyle(id); });
+    act(() => { ok = read().editCoachedStyle(id, (player, context) => cancelCoachedStyle(player, context)); });
     expect(ok, 'COACHED_HOOK_CANCEL_REAL_RETRY').toBe(true);
     expect(read().coachedStyleSaveState).toBe('saved');
   });
@@ -141,7 +141,7 @@ describe('Coached-style actions through the real career hook and writer', { time
   it('marks a real charged-week candidate waiting before the existing passive writer acknowledges it', async () => {
     const { id } = await boot();
     let ok = false;
-    act(() => { ok = read().startCoachedStyle(id, 'press'); });
+    act(() => { ok = read().editCoachedStyle(id, (player, context) => startCoachedStyle(player, 'press', context)); });
     expect(ok).toBe(true);
     const startWeek = career().week;
     commits = [];

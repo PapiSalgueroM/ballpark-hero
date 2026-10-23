@@ -40,9 +40,10 @@ export type CoachedStyleEdit<T> =
   | { ok: false; player: T; reason: string };
 
 // Original game tuning. These values have not been balance-qualified.
-export const COACHED_STYLE_RULES = {
-  weeks: 6, attackPerPlayer: 0.006, attackCap: 0.06, growthMultiplier: 1.05,
-} as const;
+export const COACHED_STYLE_WEEKS = 6;
+export const COACHED_STYLE_ATTACK_PER_PLAYER = 0.006;
+export const COACHED_STYLE_ATTACK_CAP = 0.06;
+export const COACHED_STYLE_GROWTH_MULTIPLIER = 1.05;
 export function isCoachedStyleId(value: unknown): value is CoachedStyleId {
   return value === 'press' || value === 'link' || value === 'runner';
 }
@@ -57,9 +58,9 @@ export function readCoachedStyle(player: CoachedStylePlayer): CoachedStyle | nul
 export function readCoachedStyleCourse(player: CoachedStylePlayer): CoachedStyleCourse | null {
   const value = player.coachedStyleCourse;
   return record(value) && Object.keys(value).length === 4 && value.v === 1 && isCoachedStyleId(value.to)
-    && value.weeksTotal === 6 && Number.isInteger(value.weeksLeft)
-    && (value.weeksLeft as number) >= 1 && (value.weeksLeft as number) <= 6
-    ? { v: 1, to: value.to, weeksLeft: value.weeksLeft as number, weeksTotal: 6 } : null;
+    && value.weeksTotal === COACHED_STYLE_WEEKS && Number.isInteger(value.weeksLeft)
+    && (value.weeksLeft as number) >= 1 && (value.weeksLeft as number) <= COACHED_STYLE_WEEKS
+    ? { v: 1, to: value.to, weeksLeft: value.weeksLeft as number, weeksTotal: COACHED_STYLE_WEEKS } : null;
 }
 export function hasMalformedCoachedStyle(player: CoachedStylePlayer): boolean {
   return (player.coachedStyle !== undefined && !readCoachedStyle(player))
@@ -118,12 +119,12 @@ export function validCoachedStyleXi(xi: readonly CoachedStyleXiSlot[]): boolean 
 export function coachedStyleAttack(xi: readonly CoachedStyleXiSlot[], instructions: TeamInstructions): number {
   if (!validCoachedStyleXi(xi)) return 0;
   const activeCount = xi.filter(row => coachedStyleFitCode(row.p, row.slot, row.duty, instructions) === 0).length;
-  return Math.min(COACHED_STYLE_RULES.attackCap, activeCount * COACHED_STYLE_RULES.attackPerPlayer);
+  return Math.min(COACHED_STYLE_ATTACK_CAP, activeCount * COACHED_STYLE_ATTACK_PER_PLAYER);
 }
 
 /** Multiply the existing raw development product before its existing clamp. Decline is unchanged. */
 export function coachedTrainingMultiplier(player: CoachedStylePlayer, intensity: TrainingIntensity): number {
   const style = readCoachedStyle(player)?.id;
   return style && player.position !== 'GK' && !hasMalformedCoachedStyle(player) && coachedStyleTraining(style) === intensity
-    ? COACHED_STYLE_RULES.growthMultiplier : 1;
+    ? COACHED_STYLE_GROWTH_MULTIPLIER : 1;
 }

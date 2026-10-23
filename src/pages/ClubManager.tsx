@@ -1500,7 +1500,7 @@ const ClubManager = () => {
               )}
 
               {hubPanel === 'training' && (
-                <ScreenLoading><TrainingScreen career={c} onSetPlan={g.setTraining} onRetrain={g.retrain} onStopRetrain={g.stopRetrain} onStartCoachedStyle={g.startCoachedStyle} onCancelCoachedStyle={g.cancelCoachedStyle} coachedStyleSaveState={g.coachedStyleSaveState} /></ScreenLoading>
+                <ScreenLoading><TrainingScreen career={c} onSetPlan={g.setTraining} onRetrain={g.retrain} onStopRetrain={g.stopRetrain} onEditCoachedStyle={g.editCoachedStyle} coachedStyleSaveState={g.coachedStyleSaveState} /></ScreenLoading>
               )}
 
               {hubPanel === 'roles' && <ScreenLoading><RolesScreen career={c} onSetRole={g.setRole} /></ScreenLoading>}

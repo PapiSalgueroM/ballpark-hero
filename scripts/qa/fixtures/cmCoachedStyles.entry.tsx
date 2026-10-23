@@ -92,16 +92,15 @@ function Fixture() {
     transitions.push({ identity: identity(g.career), save: g.coachedStyleSaveState, raw: localStorage.getItem(SAVE_KEY) });
   }, [g.career, g.coachedStyleSaveState]);
   const c = g.career;
-  const start: Api['startCoachedStyle'] = (id, style) => {
+  const edit: Api['editCoachedStyle'] = (id, make) => {
     const beforeIdentity = identity(g.career), beforeRaw = localStorage.getItem(SAVE_KEY);
-    const ok = g.startCoachedStyle(id, style);
-    actions.push({ kind: 'start', ok, beforeIdentity, beforeRaw });
-    return ok;
-  };
-  const cancel: Api['cancelCoachedStyle'] = id => {
-    const beforeIdentity = identity(g.career), beforeRaw = localStorage.getItem(SAVE_KEY);
-    const ok = g.cancelCoachedStyle(id);
-    actions.push({ kind: 'cancel', ok, beforeIdentity, beforeRaw });
+    let kind = 'refused';
+    const ok = g.editCoachedStyle(id, (player, context) => {
+      const result = make(player, context);
+      if (result.ok) kind = readCoachedStyleCourse(result.player) ? 'start' : 'cancel';
+      return result;
+    });
+    actions.push({ kind, ok, beforeIdentity, beforeRaw });
     return ok;
   };
   const club = Object.keys(CM_ROSTERS).find(name => !CM_PARTIAL.includes(name)) ?? Object.keys(CM_ROSTERS)[0];
@@ -125,7 +124,7 @@ function Fixture() {
     {g.saveMoved && <p role="alert">The actual save fence refused this page.</p>}
     {c && g.phase === 'hub' && <section data-cm-fixture-screen={screen}>
       {screen === 'training' && <TrainingScreen career={c} onSetPlan={g.setTraining} onRetrain={g.retrain} onStopRetrain={g.stopRetrain}
-        onStartCoachedStyle={start} onCancelCoachedStyle={cancel} coachedStyleSaveState={g.coachedStyleSaveState} />}
+        onEditCoachedStyle={edit} coachedStyleSaveState={g.coachedStyleSaveState} />}
       {screen === 'squad' && <SquadScreen squad={c.squad} xiIds={c.xiIds} eraId={c.eraId} career={c} coachedStyleSaveState={g.coachedStyleSaveState} />}
       {screen === 'tactics' && <TacticsScreen career={c} coachedStyleSaveState={g.coachedStyleSaveState}
         onFormation={g.setFormationIndex} onMentality={g.setMentality} onInstructions={g.setTeamInstructions}

@@ -22,13 +22,12 @@ import {
   applyForJob, joinClubInSummer,
   editManager,
 } from '@/lib/clubManager';
-import type { MarketDoor } from '@/lib/clubManager';
+import type { CMPlayer, MarketDoor } from '@/lib/clubManager';
 import type { MatchFacts, LiveChange, Duty, SetPieceKey, Formation } from '@/lib/clubManager';
 import { tacticsImpl, type TeamInstructions } from '@/lib/clubManagerTacticsCore';
 import { carryShape } from '@/lib/clubManagerCarry';
 import type { Position } from '@/types/game';
-import { tryStartCoachedStyle as startCoachedStyleForPlayer, tryCancelCoachedStyle as cancelCoachedStyleForPlayer } from '@/lib/clubManagerTraitEdits';
-import type { CoachedStyleId } from '@/lib/clubManagerTraitRuntime';
+import type { CoachedCourseContext, CoachedStyleEdit } from '@/lib/clubManagerTraitRuntime';
 import type { TransferStatus, FacilityKind, TrainingPlan, SquadRole, TalkTone, DealExtras } from '@/lib/clubManager';
 import type { NextFixtureInfo, TableRow, CustomClubSpec, ManagerSpec, ManagerEdit, BoardObjective } from '@/lib/clubManager';
 import { simToWeek as runSimToWeek, startMidSeason, joinClubNow } from '@/lib/clubManagerCalendar';
@@ -807,30 +806,15 @@ export function useClubManager() {
     setCareer(prev => (prev ? stopRetraining(prev, playerId) : prev));
   }, []);
 
-  const startCoachedStyle = useCallback((playerId: string, style: CoachedStyleId): boolean => {
+  const editCoachedStyle = useCallback((
+    playerId: string,
+    make: (player: CMPlayer, currentContext: CoachedCourseContext) => CoachedStyleEdit<CMPlayer>,
+  ): boolean => {
     const now = careerRef.current;
     if (!now || !holdsActiveSlot()) return false;
     const player = now.squad.find(candidate => candidate.id === playerId);
     if (!player) return false;
-    const edit = startCoachedStyleForPlayer(player, style, {
-      owned: !player.onLoan,
-      awayOnLoan: (now.loanedOut ?? []).some(row => row.player.id === playerId),
-      live: !!now.live,
-    });
-    if (!edit.ok) return false;
-    const next = { ...now, squad: now.squad.map(candidate => candidate.id === playerId ? edit.player : candidate) };
-    if (!persist(next)) return false;
-    careerRef.current = next;
-    setCareer(next);
-    return true;
-  }, [holdsActiveSlot, persist]);
-
-  const cancelCoachedStyle = useCallback((playerId: string): boolean => {
-    const now = careerRef.current;
-    if (!now || !holdsActiveSlot()) return false;
-    const player = now.squad.find(candidate => candidate.id === playerId);
-    if (!player) return false;
-    const edit = cancelCoachedStyleForPlayer(player, {
+    const edit = make(player, {
       owned: !player.onLoan,
       awayOnLoan: (now.loanedOut ?? []).some(row => row.player.id === playerId),
       live: !!now.live,
@@ -1403,7 +1387,7 @@ export function useClubManager() {
     resume, startNew, retire, chooseClub, confirmClub, confirmCustomClub,
     setFormationIndex, setMentality, setTeamInstructions, setXiSlot, swapXiSlots, autoPick,
     saveMatchPlan, applyMatchPlan, deleteMatchPlan,
-    setSlotDuty, assignSetPiece, autoPickSetPieces, setShootoutOrder: setShootoutOrderIds, retrain, stopRetrain, startCoachedStyle, cancelCoachedStyle,
+    setSlotDuty, assignSetPiece, autoPickSetPieces, setShootoutOrder: setShootoutOrderIds, retrain, stopRetrain, editCoachedStyle,
     play, quickPlay, continueFromReport, nextSeason,
     buy,
     negotiate, offer, walk, proposeTerms, buyLoanee, endLoanEarly, recallLoanee, answerApproach, setTickets, setConcessions, expandStadium, takeSponsor, pushSponsorOffer, buyFacility, waitAWeek, takeJob, acceptNation, resignNation, dismissNegotiation, clause, loan,

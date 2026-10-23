@@ -3,14 +3,20 @@ import type { Duty, TrainingIntensity } from '@/lib/clubManager';
 import type { FormationSlot } from '@/lib/squadShape';
 import type { TeamInstructions } from '@/lib/clubManagerTacticsCore';
 import {
-  COACHED_STYLE_RULES, coachedStyleFitCode, coachedStyleTraining, validCoachedStyleXi,
+  COACHED_STYLE_WEEKS, COACHED_STYLE_ATTACK_PER_PLAYER, COACHED_STYLE_ATTACK_CAP, COACHED_STYLE_GROWTH_MULTIPLIER,
+  coachedStyleFitCode, coachedStyleTraining, validCoachedStyleXi,
   readCoachedStyle,
 } from '@/lib/clubManagerTraitRuntime';
 import type {
   CoachedStyleId, CoachedStylePlayer, CoachedCourseContext, CoachedStyleEdit,
   CoachedStyleXiSlot, CoachedStyleFit, CoachedStyleXiReport,
 } from '@/lib/clubManagerTraitRuntime';
-export { COACHED_STYLE_RULES } from '@/lib/clubManagerTraitRuntime';
+export const COACHED_STYLE_RULES = {
+  get weeks(): typeof COACHED_STYLE_WEEKS { return COACHED_STYLE_WEEKS; },
+  get attackPerPlayer(): typeof COACHED_STYLE_ATTACK_PER_PLAYER { return COACHED_STYLE_ATTACK_PER_PLAYER; },
+  get attackCap(): typeof COACHED_STYLE_ATTACK_CAP { return COACHED_STYLE_ATTACK_CAP; },
+  get growthMultiplier(): typeof COACHED_STYLE_GROWTH_MULTIPLIER { return COACHED_STYLE_GROWTH_MULTIPLIER; },
+} as const;
 export type {
   CoachedStyleId, CoachedStyle, CoachedStyleCourse, CoachedStylePlayer, CoachedCourseContext,
   CoachedStyleXiSlot, CoachedStyleFit, CoachedStyleXiReport, CoachedStyleEdit,

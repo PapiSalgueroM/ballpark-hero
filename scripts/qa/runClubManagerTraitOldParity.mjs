@@ -23,10 +23,10 @@ fs.mkdirSync(out);
 const testFile = 'src/test/clubManagerTraitOldParity.test.ts';
 const inputs = [
   ['src/lib/clubManager.ts', 1242766, '29d7ec57f331816e241b1c05f66a7540403bff7e72a8a33d4bd6838c24664690'],
-  ['src/lib/clubManagerTraitRuntime.ts', 6204, '38d449b08f495618b3c5f95e20e5caa33dbb45c1ab229a3267c2feecb167f901'],
+  ['src/lib/clubManagerTraitRuntime.ts', 6309, '9c5a8327b2fd7fcf7c3f966e4dff93688790fdcd6e0d0d31afcf739be8c41da7'],
   ['src/lib/clubManagerTraitEdits.ts', 1982, '0e1ee98288cc370bc6bcf2bc507a2badae5f4f76a15ce53b50ce4c3ac8ccd18a'],
-  ['src/lib/clubManagerTraits.ts', 5557, 'b363f0de8ed5907949f6ab4e8e2b036e4170a3b02eaa6a731c78fb69b8b6ff8b'],
-  ['src/hooks/useClubManager.ts', 71590, '0a940065e95678260c35b3f199c90cdffdb82e34b5aa959b0ae2cc5b8195a355'],
+  ['src/lib/clubManagerTraits.ts', 6014, 'c2160119653e92d2274928f078d31e6d8b8a365b86bed801172a0edf370d210d'],
+  ['src/hooks/useClubManager.ts', 70753, '5ac14246dd3650c9736973229ae17f5cc0ca4de76cb5d815bb7f081179c08b8b'],
   [testFile, 6098, '384242306f55ceeaff77e9003f0b0c40829c82584e2378eb0b81a56376aa2d24'],
 ];
 for (const [file, bytes, sha] of inputs) {
