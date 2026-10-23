@@ -1,0 +1,3 @@
+#!serial
+vitest-sstats: node_modules/.bin/vitest run src/components/front-office/FrontOfficeSeasonStats.test.tsx src/lib/nflSeasonStats.test.ts --testTimeout=300000 --hookTimeout=120000
+mutH: node .rc/x/mutH.mjs && node_modules/.bin/vitest run src/components/front-office/FrontOfficeSeasonStats.test.tsx -t "bracket path" --testTimeout=300000 --hookTimeout=120000; s=$?; git checkout -- src scripts; exit $s

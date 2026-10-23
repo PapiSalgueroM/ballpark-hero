@@ -1,0 +1,18 @@
+
+[1m[46m RUN [49m[22m [36mv3.2.7 [39m[90m/home/runner/work/ballpark-hero/ballpark-hero[39m
+
+ [32m✓[39m src/lib/nflSeasonStats.test.ts [2m([22m[2m15 tests[22m[2m)[22m[32m 126[2mms[22m[39m
+Browserslist: browsers data (caniuse-lite) is 16 months old. Please run:
+  npx update-browserslist-db@latest
+  Why you should do it regularly: https://github.com/browserslist/update-db#readme
+[90mstdout[2m | src/components/front-office/FrontOfficeSeasonStats.test.tsx[2m > [22m[2mNFL front office: who scored, the load and the close[2m > [22m[2ma whole season on full rosters with lines and the desk on: the save it writes, measured
+[22m[39mMEASURED: the persisted save on full rosters with the desk on: 653932 characters at Week 1, 685433 after Week 16, 687755 on the recap (658014 without the block and the history); the block 29542, 451 lines, the history 180
+
+ [32m✓[39m src/components/front-office/FrontOfficeSeasonStats.test.tsx [2m([22m[2m13 tests[22m[2m)[22m[33m 1527[2mms[22m[39m
+   [33m[2m✓[22m[39m NFL front office: who scored, the load and the close[2m > [22ma whole season on full rosters with lines and the desk on: the save it writes, measured [33m 509[2mms[22m[39m
+
+[2m Test Files [22m [1m[32m2 passed[39m[22m[90m (2)[39m
+[2m      Tests [22m [1m[32m28 passed[39m[22m[90m (28)[39m
+[2m   Start at [22m 02:30:46
+[2m   Duration [22m 3.39s[2m (transform 1.11s, setup 116ms, collect 1.45s, tests 1.65s, environment 536ms, prepare 261ms)[22m
+
