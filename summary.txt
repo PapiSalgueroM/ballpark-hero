@@ -1,0 +1,4 @@
+c-passflip exit=1 70s | simNflSeasonStats: 113 checks, 5 failed (control passflip); section 1 skipped: LIFT_BASE is not set
+sim-lift exit=0 94s | simNflSeasonStats: 129 checks, 0 failed
+tsc exit=0 102s | 
+c-sackswap exit=1 53s | simNflSeasonStats: 113 checks, 5 failed (control sackswap); section 1 skipped: LIFT_BASE is not set

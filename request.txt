@@ -1,0 +1,4 @@
+tsc: node_modules/.bin/tsc --noEmit -p tsconfig.app.json
+sim-lift: mkdir -p /tmp/lb1 && git archive c9d18897201aae8528e635f03a877e78eb02ed5c src | tar -x -C /tmp/lb1 && LIFT_BASE=/tmp/lb1 node scripts/simNflSeasonStats.mjs
+c-passflip: NFL_STATS_CONTROL=passflip node scripts/simNflSeasonStats.mjs
+c-sackswap: NFL_STATS_CONTROL=sackswap node scripts/simNflSeasonStats.mjs
