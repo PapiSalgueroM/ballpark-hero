@@ -1,0 +1,42 @@
+MUTATION norefuted applied to scripts/simUsConnectionsFacts.mjs
+US_CONN_CONTROL=arod: the input was changed; this run must end red
+1) no group claims the present, and every recent year label is one the record judges
+   baseball: 0 present tense or unheld recent year labels
+   nfl: 0 present tense or unheld recent year labels
+   nhl: 0 present tense or unheld recent year labels
+2) no refuted claim is on a board
+   baseball: 31 refuted claims held off every board, 0 found
+   nfl: 0 refuted claims held off every board, 0 found
+   nhl: 0 refuted claims held off every board, 0 found
+3) the ledger stands on two hosts
+  FAIL: baseball bconn-001: the ledger flags "Won Rookie of the Year" and the board has no such group
+  FAIL: baseball bconn-001: Derek Jeter in "Hit 500+ career home runs" has no two host fact
+   baseball: 530 facts, 0 on one host; 89 flagged groups, 440 members held; 130 fixed findings
+   nfl: 11 facts, 0 on one host; 2 flagged groups, 10 members held; 1 fixed findings
+   nhl: 12 facts, 0 on one host; 2 flagged groups, 10 members held; 2 fixed findings
+4) one right answer: the shared cross check over every board
+  FAIL: baseball bconn-001 | not-a-member | Alex Rodriguez | Won MVP in both leagues
+  FAIL: baseball bconn-001 | not-a-member | Ichiro Suzuki | Won MVP in both leagues
+  FAIL: baseball bconn-001 | not-a-member | Mike Trout | Won MVP in both leagues
+  FAIL: baseball bconn-001 | not-a-member | Mike Piazza | Won MVP in both leagues
+  FAIL: baseball bconn-001 | not-a-member | Cal Ripken Jr. | Won MVP in both leagues
+  FAIL: baseball bconn-001 | not-a-member | Derek Jeter | Hit 500+ career home runs
+  FAIL: baseball bconn-001 | second-fit | Alex Rodriguez | Hit 500+ career home runs | listed under Won MVP in both leagues, so the board has two right answers
+   baseball: 60 boards, 240 of 240 groups judged; members 1198 judged (2 unknown), other tiles 3546 judged (54 unknown); 7 findings
+   nfl: 4 boards, 16 of 16 groups judged; members 80 judged (0 unknown), other tiles 239 judged (1 unknown); 0 findings
+   nhl: 4 boards, 16 of 16 groups judged; members 80 judged (0 unknown), other tiles 240 judged (0 unknown); 0 findings
+5) no man is a season from joining a group beside him
+  FAIL: baseball bconn-001: Mookie Betts ("Played for the Boston Red Sox") may join "Won MVP in both leagues": played in 2026 with an MVP in one league; the 2026 votes are named in November
+   baseball: 1 watched men beside a group they may join
+   nfl: 0 watched men beside a group they may join
+   nhl: 0 watched men beside a group they may join
+6) no man is dealt twice on one board
+   baseball: 0 men dealt twice
+   nfl: 0 men dealt twice
+   nhl: 0 men dealt twice
+7) what the record cannot judge may only get fewer
+   baseball: 0 groups nothing judges (ceiling 0), 2 members the record cannot place (ceiling 2)
+   nfl: 0 groups nothing judges (ceiling 0), 0 members the record cannot place (ceiling 0)
+   nhl: 0 groups nothing judges (ceiling 0), 0 members the record cannot place (ceiling 0)
+
+US_CONN_CONTROL=arod did NOT fire its own rule (refuted x0, not-a-member x1 for Alex Rodriguez); the 10 other failures do not count for it (findings: no-fact 1, not-a-member 6, second-fit 1, watch 1). This control proves nothing as the code stands.

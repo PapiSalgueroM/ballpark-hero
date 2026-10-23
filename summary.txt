@@ -1,0 +1,18 @@
+plain exit=0 0s | simUsConnectionsFacts: green. Every Baseball, NFL and NHL Connections group is held to the record, and every board has one right answer.
+ctl-arod exit=1 0s | US_CONN_CONTROL=arod fired its own rule 2 time(s): refuted x1, not-a-member x1 for Alex Rodriguez (all findings: refuted 1, no-fact 1, not-a-member 6, second-fit 1, watch
+ctl-bell exit=1 0s | US_CONN_CONTROL=bell fired its own rule 1 time(s): second-fit x1 for Le'Veon Bell (all findings: no-fact 1, second-fit 1; 2 failures in all)
+ctl-karlsson exit=1 0s | US_CONN_CONTROL=karlsson fired its own rule 1 time(s): watch x1 for Erik Karlsson (all findings: no-fact 1, watch 1; 2 failures in all)
+ctl-twice exit=1 0s | US_CONN_CONTROL=twice fired its own rule 1 time(s): twice x1 for Rich Gossage (all findings: no-fact 1, twice 1; 2 failures in all)
+ctl-onehost exit=1 0s | US_CONN_CONTROL=onehost fired its own rule 1 time(s): one-host x1 for Derek Jeter | Won Rookie of the Year (all findings: one-host 1; 1 failures in all)
+ctl-unjudged exit=1 0s | US_CONN_CONTROL=unjudged fired its own rule 1 time(s): unjudged x1 for Played in Japan before MLB (all findings: unjudged 1; 2 failures in all)
+ctl-bogus exit=2 0s | unknown US_CONN_CONTROL=nosuch
+m-nosecond exit=0 1s | simUsConnectionsFacts: green. Every Baseball, NFL and NHL Connections group is held to the record, and every board has one right answer.
+m-nosecond-bell exit=0 0s | US_CONN_CONTROL=bell did NOT fire its own rule (second-fit x0 for Le'Veon Bell); the 1 other failures do not count for it (findings: no-fact 1). This control proves nothi
+m-reach exit=0 0s | simUsConnectionsFacts: green. Every Baseball, NFL and NHL Connections group is held to the record, and every board has one right answer.
+m-reach-karlsson exit=0 0s | US_CONN_CONTROL=karlsson did NOT fire its own rule (watch x0 for Erik Karlsson); the 1 other failures do not count for it (findings: no-fact 1). This control proves nothi
+m-identity exit=0 0s | simUsConnectionsFacts: green. Every Baseball, NFL and NHL Connections group is held to the record, and every board has one right answer.
+m-identity-twice exit=0 0s | US_CONN_CONTROL=twice did NOT fire its own rule (twice x0 for Rich Gossage); the 1 other failures do not count for it (findings: no-fact 1). This control proves nothing a
+m-nomember-arod exit=0 0s | US_CONN_CONTROL=arod did NOT fire its own rule (refuted x1, not-a-member x0 for Alex Rodriguez); the 5 other failures do not count for it (findings: refuted 1, no-fact 1,
+m-norefuted-arod exit=0 0s | US_CONN_CONTROL=arod did NOT fire its own rule (refuted x0, not-a-member x1 for Alex Rodriguez); the 10 other failures do not count for it (findings: no-fact 1, not-a-mem
+m-onehostok-onehost exit=0 0s | US_CONN_CONTROL=onehost did NOT fire its own rule (one-host x0 for Derek Jeter | Won Rookie of the Year); the 0 other failures do not count for it (findings: nothing). Th
+after-clean exit=0 0s | simUsConnectionsFacts: green. Every Baseball, NFL and NHL Connections group is held to the record, and every board has one right answer.
