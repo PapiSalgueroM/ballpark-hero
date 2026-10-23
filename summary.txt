@@ -1,0 +1,6 @@
+build exit=0 33s | [dukb] inlined 1 stylesheet(s) and 1 module(s) into 181 snapshots (11 left alone)
+fonts exit=0 1s | Prepared 9 declared font dependencies for local fulfillment.
+derby-forwalk exit=0 3s | Derby history: 11 groups,24 full main season pairs,192 full campaign/RNG pairs,0 effective controls; artifacts /home/runner/work/ballpark-hero/ballpark-hero/.tmp-fx/derby
+psc1 exit=1 137s | playSeasonCentreMotion: 80 checks, 5 failed
+prm1 exit=1 42s | playReducedMotion: 1 problem(s) (1 of them the chance wheel's)
+pdh1 exit=0 53s | Derby history native: 904 checks,0 failed,9/9 journeys,4 copied observation controls; artifacts /home/runner/work/ballpark-hero/ballpark-hero/.tmp-fx/derby-history/native
