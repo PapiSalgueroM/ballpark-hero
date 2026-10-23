@@ -81,8 +81,11 @@ try {
   const fixtureBytes = fs.readFileSync(path.join(ROOT, FIXTURE)); report.fixture = bodyRef(fixtureBytes, 'fixture');
   const matches = JSON.parse(fixtureBytes).saves.filter(row => row.id === 'ere'); assert.equal(matches.length, 1);
   const input = copy(matches[0].state); assert.equal(input.phase, 'playing'); assert.equal(input.primeType, 'late');
-  report.boundaryEdits = put('boundary-edits', ['retired', 'phase'].map(key => ({ key, existed: Object.hasOwn(input, key), before: Object.hasOwn(input, key) ? copy(input[key]) : null, after: key === 'retired' ? true : 'retired' })));
-  input.retired = true; input.phase = 'retired'; report.input = put('whole-saved-input', input);
+  /* Release BP seam (Round 1519): a retired screen with nothing behind it is the stray flag Round 1519's repairCareer
+     puts back to play on, so the boundary also carries what the Just retire choice writes (choosePostRetirement:
+     postRetirementChoice 'retire' with the retired phase). No screen reads that field; the retired page is the same. */
+  report.boundaryEdits = put('boundary-edits', ['retired', 'phase', 'postRetirementChoice'].map(key => ({ key, existed: Object.hasOwn(input, key), before: Object.hasOwn(input, key) ? copy(input[key]) : null, after: key === 'retired' ? true : key === 'phase' ? 'retired' : 'retire' })));
+  input.retired = true; input.phase = 'retired'; input.postRetirementChoice = 'retire'; report.input = put('whole-saved-input', input);
   const entry = "export {repairCareer} from './src/lib/soccerCareerEngine';export {isSoccerCareerSave} from './src/lib/soccerCareerSave';export {buttonVariants} from './src/components/ui/button';export {cn} from './src/lib/utils';";
   const defineExpression = '{"DEV":false,"PROD":true,"MODE":"production"}';
   const compiled = await build({ stdin: { contents: entry, resolveDir: ROOT, sourcefile: 'retirement-oracle.ts', loader: 'ts' }, bundle: true, write: false, metafile: true,

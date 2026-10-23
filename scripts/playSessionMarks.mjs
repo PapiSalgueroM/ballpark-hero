@@ -24,6 +24,7 @@
  * playwright, and runs it only with --browser.)
  */
 import pw from './lib/playwrightLoader.mjs';
+import { answerConsent } from './lib/answerConsent.mjs';
 
 const { chromium } = pw;
 const BASE = process.env.BASE ?? process.env.SWEEP_BASE ?? 'http://localhost:4173';
@@ -67,6 +68,8 @@ const unscored = (m, game) =>
   await page.goto(`${BASE}/front-office`, { waitUntil: 'networkidle' });
   await page.waitForTimeout(1200);
   say(marks.length === 0, `no mark on page load (${marks.length} sent)`);
+  /* Round 1535: a first visit gets the cookie banner, which sits over the foot of the screen. */
+  await answerConsent(page);
   await page.locator('.grid button').first().click();
   await page.waitForTimeout(900);
   say(marks.length === 0, `no mark for picking a franchise (${marks.length} sent)`);
@@ -102,6 +105,7 @@ const unscored = (m, game) =>
   await page.goto(`${BASE}/stadium-tycoon`, { waitUntil: 'networkidle' });
   await page.waitForTimeout(1400);
   say(marks.length === 0, `no mark on tycoon load (${marks.length} sent)`);
+  await answerConsent(page);
   /* Round 583: a player with no save sees the rules first. Reading them is not play. */
   const letsGo = page.getByRole('button', { name: "Let's go", exact: true });
   say(await letsGo.count() === 1, 'the rules greet a player with no save');
@@ -142,6 +146,7 @@ const unscored = (m, game) =>
   await page.addInitScript(() => localStorage.setItem('rules-gate-seen:/nfl-my-career', '1'));
   await page.goto(`${BASE}/nfl-my-career`, { waitUntil: 'networkidle' });
   await page.waitForTimeout(1200);
+  await answerConsent(page);
   await page.locator('input[placeholder*="name"]').first().fill('Probe Player');
   await page.locator('button:has-text("Enter the draft")').click();
   await page.waitForTimeout(1000);

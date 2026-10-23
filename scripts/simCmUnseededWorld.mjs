@@ -71,6 +71,7 @@ import { withoutWorldSeed } from './lib/cmWorldSeed1250.mjs';
 import { withoutWatchedHolder } from './lib/worldUclHolder1502.mjs';
 import { withoutEuroBoard, withoutUelHolder } from './lib/worldUelHolder1509.mjs';
 import { withRulePreAz } from './lib/cmOwnClubMarket1339.mjs';
+import { withoutMadeUpNations } from './lib/cmNoMadeUpNations1520.mjs';
 
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 /* The first parent of merge e of Release AZ: Release AX as published (origin/main b6eb78e7).
@@ -116,6 +117,10 @@ async function engine(label, { base = false, edit = null } = {}) {
         let text = base
           ? lf(execFileSync('git', ['show', `${BASE}:${rel}`], { cwd: ROOT, encoding: 'utf8', maxBuffer: 1 << 26 }))
           : lf(fs.readFileSync(args.path, 'utf8'));
+        /* Round 1520: BASE predates made up men's countries, so every arm of this tree plays with them taken out
+           (scripts/lib/cmNoMadeUpNations1520.mjs, fail closed); simCmMadeUpNations section 7 proves that cut plays
+           as its base. */
+        if (!base) { try { text = withoutMadeUpNations(text, rel); } catch (e) { cannot(e.message); } }
         if (edit && rel === ENGINE) { text = edit(text); edited = true; }
         return { contents: text, loader: path.extname(args.path).slice(1), resolveDir: path.dirname(args.path) };
       });

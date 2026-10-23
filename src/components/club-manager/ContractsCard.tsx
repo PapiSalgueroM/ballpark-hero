@@ -430,7 +430,7 @@ export function ContractsCard({ career, onRenew, onRenewWithClause, onRelease, o
                   <div className="flex-1 min-w-0">
                     <div className="flex items-center gap-1 min-w-0">
                       <span className="min-w-0 text-xs text-foreground truncate" title={f.name}>{f.name}</span>
-                      {f.generated && <MadeUpTag title="Not a real player. This game made him up to fill the free agent list." />}
+                      {f.generated && <MadeUpTag title="Not a real player. This game made him up." />}
                     </div>
                     <div className="text-[9px] text-muted-foreground">
                       {f.position}, {f.rating} rated, {f.age}, {FREE_AGENT_REASON[f.reason]}

@@ -1,0 +1,1977 @@
+{
+ "note": "Round 1532 step 2a: the tuning run of brief-1532 design 3.5 on the engine with the law and the bonuses, laid onto a temp copy by scripts/lib/tycoonLaw.mjs. Win, draw and goal figures are means over seeds of each seed's share in the window, with the standard error of those means.",
+ "capturedAt": "2026-10-22",
+ "lib": "the engine before the law, patched in a temp copy",
+ "commit": "432ed9512a5601335dfcdffb267a7de48b0a7741",
+ "dt": 0.2,
+ "knob1": {
+  "sp": 0.85,
+  "ruling": "S1: overinvest is the over4 bot; SQUAD_POINTS 0.85",
+  "gOver4At60": 7,
+  "sixOverG": 0.85
+ },
+ "knob2": {
+  "A": {
+   "1": 34,
+   "2": 52,
+   "3": 59,
+   "4": 68,
+   "5": 73,
+   "6": 77,
+   "7": 81,
+   "8": 83,
+   "9": 86
+  },
+  "formula": "rivalStrength[d] = round(SP x A_d) - ARRIVAL_EDGE, forced strictly rising"
+ },
+ "knob4": {
+  "start": 1,
+  "r0": 1,
+  "ok": true,
+  "tried": [
+   {
+    "r0": 1,
+    "i": {
+     "ok": true,
+     "sec4": true,
+     "promo": 10.5,
+     "sell": 13.103,
+     "promotionFirst": 8,
+     "seasonOneShare": 0.9,
+     "seasonOneOf10": 8,
+     "seasonOneOf20": 18
+    },
+    "ii": {
+     "ok": true,
+     "hi": 1,
+     "lo": 0.2,
+     "gap": 0.8,
+     "se": 0.063,
+     "need": 0.476,
+     "neutral": 0.05
+    },
+    "iii": {
+     "ok": true,
+     "stuck3": 0,
+     "stuck6": 0,
+     "median3": 42,
+     "median6": 31.5
+    }
+   }
+  ]
+ },
+ "knob3": {
+  "grid": [
+   {
+    "ae": -2,
+    "table": [
+     1,
+     31,
+     46,
+     52,
+     60,
+     64,
+     67,
+     71,
+     73,
+     75
+    ],
+    "win": {
+     "mean": 53.9,
+     "se": 1.573
+    },
+    "draw": {
+     "mean": 24.1,
+     "se": 1.349
+    },
+    "goals": {
+     "mean": 2.615,
+     "se": 0.048
+    },
+    "gap": {
+     "mean": 4.934,
+     "se": 0.487
+    }
+   },
+   {
+    "ae": 0,
+    "table": [
+     1,
+     29,
+     44,
+     50,
+     58,
+     62,
+     65,
+     69,
+     71,
+     73
+    ],
+    "win": {
+     "mean": 57.5,
+     "se": 1.368
+    },
+    "draw": {
+     "mean": 23.1,
+     "se": 1.227
+    },
+    "goals": {
+     "mean": 2.602,
+     "se": 0.044
+    },
+    "gap": {
+     "mean": 6.04,
+     "se": 0.544
+    }
+   },
+   {
+    "ae": 2,
+    "table": [
+     1,
+     27,
+     42,
+     48,
+     56,
+     60,
+     63,
+     67,
+     69,
+     71
+    ],
+    "win": {
+     "mean": 59.5,
+     "se": 0.961
+    },
+    "draw": {
+     "mean": 23.4,
+     "se": 1.249
+    },
+    "goals": {
+     "mean": 2.581,
+     "se": 0.046
+    },
+    "gap": {
+     "mean": 7.149,
+     "se": 0.392
+    }
+   },
+   {
+    "ae": 4,
+    "table": [
+     1,
+     25,
+     40,
+     46,
+     54,
+     58,
+     61,
+     65,
+     67,
+     69
+    ],
+    "win": {
+     "mean": 64.6,
+     "se": 1.377
+    },
+    "draw": {
+     "mean": 20.9,
+     "se": 1.334
+    },
+    "goals": {
+     "mean": 2.569,
+     "se": 0.044
+    },
+    "gap": {
+     "mean": 8.716,
+     "se": 0.325
+    }
+   },
+   {
+    "ae": 6,
+    "table": [
+     1,
+     23,
+     38,
+     44,
+     52,
+     56,
+     59,
+     63,
+     65,
+     67
+    ],
+    "win": {
+     "mean": 68.7,
+     "se": 1.216
+    },
+    "draw": {
+     "mean": 20,
+     "se": 1.361
+    },
+    "goals": {
+     "mean": 2.575,
+     "se": 0.039
+    },
+    "gap": {
+     "mean": 10.723,
+     "se": 0.291
+    }
+   },
+   {
+    "ae": 8,
+    "table": [
+     1,
+     21,
+     36,
+     42,
+     50,
+     54,
+     57,
+     61,
+     63,
+     65
+    ],
+    "win": {
+     "mean": 73.6,
+     "se": 1.404
+    },
+    "draw": {
+     "mean": 17.4,
+     "se": 1.346
+    },
+    "goals": {
+     "mean": 2.567,
+     "se": 0.042
+    },
+    "gap": {
+     "mean": 12.539,
+     "se": 0.286
+    }
+   }
+  ],
+  "pick": 4,
+  "rule": "nearest 65, ties to the smaller edge (the harder ladder)"
+ },
+ "final": {
+  "table": {
+   "sp": 0.85,
+   "r": [
+    1,
+    25,
+    40,
+    46,
+    54,
+    58,
+    61,
+    65,
+    67,
+    69
+   ]
+  },
+  "R0": 1,
+  "arrivalEdge": 4,
+  "knob4": {
+   "r0": 1,
+   "i": {
+    "ok": true,
+    "sec4": true,
+    "promo": 10.5,
+    "sell": 13.103,
+    "promotionFirst": 8,
+    "seasonOneShare": 0.9,
+    "seasonOneOf10": 8,
+    "seasonOneOf20": 18
+   },
+   "ii": {
+    "ok": true,
+    "hi": 1,
+    "lo": 0.2,
+    "gap": 0.8,
+    "se": 0.063,
+    "need": 0.476,
+    "neutral": 0.05
+   },
+   "iii": {
+    "ok": true,
+    "stuck3": 0,
+    "stuck6": 0,
+    "median3": 42,
+    "median6": 31.5
+   }
+  },
+  "policies": {
+   "pace": {
+    "cal": {
+     "all": {
+      "w": {
+       "mean": 64.6,
+       "se": 1.377
+      },
+      "d": {
+       "mean": 20.9,
+       "se": 1.334
+      },
+      "goals": {
+       "mean": 2.569,
+       "se": 0.044
+      },
+      "gap": {
+       "mean": 8.716,
+       "se": 0.325
+      },
+      "streak": {
+       "mean": 4.082,
+       "se": 0.297
+      },
+      "gemsHour": {
+       "mean": 107.286,
+       "se": 2.064
+      },
+      "matches": {
+       "mean": 50,
+       "se": 0
+      }
+     },
+     "windows": {
+      "15-30": {
+       "w": {
+        "mean": 72.143,
+        "se": 3.661
+       },
+       "d": {
+        "mean": 20,
+        "se": 3.178
+       },
+       "goals": {
+        "mean": 2.643,
+        "se": 0.162
+       },
+       "gap": {
+        "mean": 12.955,
+        "se": 1.285
+       },
+       "streak": {
+        "mean": 6.143,
+        "se": 0.641
+       },
+       "gemsHour": {
+        "mean": 139.4,
+        "se": 6.185
+       },
+       "matches": {
+        "mean": 7,
+        "se": 0
+       }
+      },
+      "30-60": {
+       "w": {
+        "mean": 67.857,
+        "se": 2.288
+       },
+       "d": {
+        "mean": 20.357,
+        "se": 2.656
+       },
+       "goals": {
+        "mean": 2.7,
+        "se": 0.096
+       },
+       "gap": {
+        "mean": 9.803,
+        "se": 0.292
+       },
+       "streak": {
+        "mean": 4.554,
+        "se": 0.616
+       },
+       "gemsHour": {
+        "mean": 113.5,
+        "se": 3.89
+       },
+       "matches": {
+        "mean": 14,
+        "se": 0
+       }
+      },
+      "60-120": {
+       "w": {
+        "mean": 61.207,
+        "se": 1.936
+       },
+       "d": {
+        "mean": 21.379,
+        "se": 1.797
+       },
+       "goals": {
+        "mean": 2.488,
+        "se": 0.053
+       },
+       "gap": {
+        "mean": 7.169,
+        "se": 0.295
+       },
+       "streak": {
+        "mean": 3.357,
+        "se": 0.376
+       },
+       "gemsHour": {
+        "mean": 96.15,
+        "se": 3.545
+       },
+       "matches": {
+        "mean": 29,
+        "se": 0
+       }
+      },
+      "120-240": {
+       "w": {
+        "mean": 62.368,
+        "se": 1.503
+       },
+       "d": {
+        "mean": 20.965,
+        "se": 1.25
+       },
+       "goals": {
+        "mean": 2.606,
+        "se": 0.04
+       },
+       "gap": {
+        "mean": 6.873,
+        "se": 0.249
+       },
+       "streak": {
+        "mean": 3.515,
+        "se": 0.293
+       },
+       "gemsHour": {
+        "mean": 85.15,
+        "se": 2.658
+       },
+       "matches": {
+        "mean": 57,
+        "se": 0
+       }
+      }
+     },
+     "titles": {
+      "mean": 0.733,
+      "se": 0.024,
+      "pooled": 0.729
+     }
+    },
+    "hold": {
+     "all": {
+      "w": {
+       "mean": 66.6,
+       "se": 1.452
+      },
+      "d": {
+       "mean": 20.5,
+       "se": 1.075
+      },
+      "goals": {
+       "mean": 2.6,
+       "se": 0.045
+      },
+      "gap": {
+       "mean": 8.803,
+       "se": 0.372
+      },
+      "streak": {
+       "mean": 4.438,
+       "se": 0.401
+      },
+      "gemsHour": {
+       "mean": 110.657,
+       "se": 2.295
+      },
+      "matches": {
+       "mean": 50,
+       "se": 0
+      }
+     },
+     "windows": {
+      "15-30": {
+       "w": {
+        "mean": 75,
+        "se": 3.571
+       },
+       "d": {
+        "mean": 17.857,
+        "se": 3.719
+       },
+       "goals": {
+        "mean": 2.636,
+        "se": 0.143
+       },
+       "gap": {
+        "mean": 12.382,
+        "se": 1.273
+       },
+       "streak": {
+        "mean": 6.307,
+        "se": 0.536
+       },
+       "gemsHour": {
+        "mean": 148,
+        "se": 2.229
+       },
+       "matches": {
+        "mean": 7,
+        "se": 0
+       }
+      },
+      "30-60": {
+       "w": {
+        "mean": 67.857,
+        "se": 3.088
+       },
+       "d": {
+        "mean": 20.714,
+        "se": 2.066
+       },
+       "goals": {
+        "mean": 2.571,
+        "se": 0.09
+       },
+       "gap": {
+        "mean": 9.541,
+        "se": 0.349
+       },
+       "streak": {
+        "mean": 4.521,
+        "se": 0.674
+       },
+       "gemsHour": {
+        "mean": 109.8,
+        "se": 4.086
+       },
+       "matches": {
+        "mean": 14,
+        "se": 0
+       }
+      },
+      "60-120": {
+       "w": {
+        "mean": 63.966,
+        "se": 1.812
+       },
+       "d": {
+        "mean": 21.034,
+        "se": 1.695
+       },
+       "goals": {
+        "mean": 2.605,
+        "se": 0.071
+       },
+       "gap": {
+        "mean": 7.582,
+        "se": 0.317
+       },
+       "streak": {
+        "mean": 3.947,
+        "se": 0.377
+       },
+       "gemsHour": {
+        "mean": 101.75,
+        "se": 3.859
+       },
+       "matches": {
+        "mean": 29,
+        "se": 0
+       }
+      },
+      "120-240": {
+       "w": {
+        "mean": 59.211,
+        "se": 1.731
+       },
+       "d": {
+        "mean": 23.158,
+        "se": 1.283
+       },
+       "goals": {
+        "mean": 2.573,
+        "se": 0.047
+       },
+       "gap": {
+        "mean": 6.817,
+        "se": 0.303
+       },
+       "streak": {
+        "mean": 2.884,
+        "se": 0.27
+       },
+       "gemsHour": {
+        "mean": 80.475,
+        "se": 2.644
+       },
+       "matches": {
+        "mean": 57,
+        "se": 0
+       }
+      }
+     },
+     "titles": {
+      "mean": 0.727,
+      "se": 0.022,
+      "pooled": 0.725
+     }
+    }
+   },
+   "over4": {
+    "cal": {
+     "all": {
+      "w": {
+       "mean": 76.4,
+       "se": 1.236
+      },
+      "d": {
+       "mean": 16.2,
+       "se": 1.289
+      },
+      "goals": {
+       "mean": 2.582,
+       "se": 0.042
+      },
+      "gap": {
+       "mean": 13.639,
+       "se": 0.238
+      },
+      "streak": {
+       "mean": 6.239,
+       "se": 0.33
+      },
+      "gemsHour": {
+       "mean": 122.857,
+       "se": 1.403
+      },
+      "matches": {
+       "mean": 50,
+       "se": 0
+      }
+     },
+     "windows": {
+      "15-30": {
+       "w": {
+        "mean": 78.571,
+        "se": 2.838
+       },
+       "d": {
+        "mean": 16.429,
+        "se": 2.596
+       },
+       "goals": {
+        "mean": 2.65,
+        "se": 0.152
+       },
+       "gap": {
+        "mean": 15.82,
+        "se": 0.421
+       },
+       "streak": {
+        "mean": 7.136,
+        "se": 0.574
+       },
+       "gemsHour": {
+        "mean": 147.8,
+        "se": 3.524
+       },
+       "matches": {
+        "mean": 7,
+        "se": 0
+       }
+      },
+      "30-60": {
+       "w": {
+        "mean": 80.714,
+        "se": 2.323
+       },
+       "d": {
+        "mean": 15,
+        "se": 2.369
+       },
+       "goals": {
+        "mean": 2.743,
+        "se": 0.082
+       },
+       "gap": {
+        "mean": 14.946,
+        "se": 0.219
+       },
+       "streak": {
+        "mean": 7.193,
+        "se": 0.551
+       },
+       "gemsHour": {
+        "mean": 116.4,
+        "se": 2.886
+       },
+       "matches": {
+        "mean": 14,
+        "se": 0
+       }
+      },
+      "60-120": {
+       "w": {
+        "mean": 73.793,
+        "se": 1.811
+       },
+       "d": {
+        "mean": 16.724,
+        "se": 1.826
+       },
+       "goals": {
+        "mean": 2.488,
+        "se": 0.048
+       },
+       "gap": {
+        "mean": 12.483,
+        "se": 0.251
+       },
+       "streak": {
+        "mean": 5.562,
+        "se": 0.43
+       },
+       "gemsHour": {
+        "mean": 119.85,
+        "se": 2.544
+       },
+       "matches": {
+        "mean": 29,
+        "se": 0
+       }
+      }
+     },
+     "titles": {
+      "mean": 0.89,
+      "se": 0.027,
+      "pooled": 0.89
+     }
+    },
+    "hold": {
+     "all": {
+      "w": {
+       "mean": 78.7,
+       "se": 1.242
+      },
+      "d": {
+       "mean": 15.5,
+       "se": 1.004
+      },
+      "goals": {
+       "mean": 2.61,
+       "se": 0.039
+      },
+      "gap": {
+       "mean": 13.589,
+       "se": 0.298
+      },
+      "streak": {
+       "mean": 6.945,
+       "se": 0.362
+      },
+      "gemsHour": {
+       "mean": 127.829,
+       "se": 1.1
+      },
+      "matches": {
+       "mean": 50,
+       "se": 0
+      }
+     },
+     "windows": {
+      "15-30": {
+       "w": {
+        "mean": 84.286,
+        "se": 2.913
+       },
+       "d": {
+        "mean": 12.857,
+        "se": 2.913
+       },
+       "goals": {
+        "mean": 2.586,
+        "se": 0.135
+       },
+       "gap": {
+        "mean": 16.638,
+        "se": 0.924
+       },
+       "streak": {
+        "mean": 7.736,
+        "se": 0.459
+       },
+       "gemsHour": {
+        "mean": 154.4,
+        "se": 1.751
+       },
+       "matches": {
+        "mean": 7,
+        "se": 0
+       }
+      },
+      "30-60": {
+       "w": {
+        "mean": 80.714,
+        "se": 2.079
+       },
+       "d": {
+        "mean": 14.643,
+        "se": 1.595
+       },
+       "goals": {
+        "mean": 2.575,
+        "se": 0.088
+       },
+       "gap": {
+        "mean": 14.953,
+        "se": 0.236
+       },
+       "streak": {
+        "mean": 7.243,
+        "se": 0.481
+       },
+       "gemsHour": {
+        "mean": 115.1,
+        "se": 2.936
+       },
+       "matches": {
+        "mean": 14,
+        "se": 0
+       }
+      },
+      "60-120": {
+       "w": {
+        "mean": 76.379,
+        "se": 1.548
+       },
+       "d": {
+        "mean": 16.552,
+        "se": 1.493
+       },
+       "goals": {
+        "mean": 2.633,
+        "se": 0.067
+       },
+       "gap": {
+        "mean": 12.195,
+        "se": 0.224
+       },
+       "streak": {
+        "mean": 6.61,
+        "se": 0.485
+       },
+       "gemsHour": {
+        "mean": 127.55,
+        "se": 2.594
+       },
+       "matches": {
+        "mean": 29,
+        "se": 0
+       }
+      }
+     },
+     "titles": {
+      "mean": 0.97,
+      "se": 0.016,
+      "pooled": 0.97
+     }
+    }
+   },
+   "nosquad": {
+    "cal": {
+     "all": {
+      "w": {
+       "mean": 18,
+       "se": 2.699
+      },
+      "d": {
+       "mean": 15.3,
+       "se": 1.91
+      },
+      "goals": {
+       "mean": 2.682,
+       "se": 0.063
+      },
+      "gap": {
+       "mean": -14.523,
+       "se": 2.044
+      },
+      "streak": {
+       "mean": 0.482,
+       "se": 0.071
+      },
+      "gemsHour": {
+       "mean": 30.657,
+       "se": 3.458
+      },
+      "matches": {
+       "mean": 50,
+       "se": 0
+      }
+     },
+     "windows": {
+      "15-30": {
+       "w": {
+        "mean": 37.143,
+        "se": 4.681
+       },
+       "d": {
+        "mean": 15.714,
+        "se": 2.913
+       },
+       "goals": {
+        "mean": 2.721,
+        "se": 0.144
+       },
+       "gap": {
+        "mean": -5.618,
+        "se": 2.182
+       },
+       "streak": {
+        "mean": 0.943,
+        "se": 0.17
+       },
+       "gemsHour": {
+        "mean": 47.2,
+        "se": 6.678
+       },
+       "matches": {
+        "mean": 7,
+        "se": 0
+       }
+      },
+      "30-60": {
+       "w": {
+        "mean": 21.786,
+        "se": 3.825
+       },
+       "d": {
+        "mean": 18.929,
+        "se": 2.755
+       },
+       "goals": {
+        "mean": 2.761,
+        "se": 0.101
+       },
+       "gap": {
+        "mean": -11.72,
+        "se": 2.446
+       },
+       "streak": {
+        "mean": 0.6,
+        "se": 0.12
+       },
+       "gemsHour": {
+        "mean": 41,
+        "se": 6.084
+       },
+       "matches": {
+        "mean": 14,
+        "se": 0
+       }
+      },
+      "60-120": {
+       "w": {
+        "mean": 11.552,
+        "se": 3.107
+       },
+       "d": {
+        "mean": 13.448,
+        "se": 2.345
+       },
+       "goals": {
+        "mean": 2.634,
+        "se": 0.083
+       },
+       "gap": {
+        "mean": -18.025,
+        "se": 2.307
+       },
+       "streak": {
+        "mean": 0.314,
+        "se": 0.091
+       },
+       "gemsHour": {
+        "mean": 21.35,
+        "se": 4.852
+       },
+       "matches": {
+        "mean": 29,
+        "se": 0
+       }
+      }
+     },
+     "titles": {
+      "mean": 0.065,
+      "se": 0.011,
+      "pooled": 0.065
+     }
+    },
+    "hold": {
+     "all": {
+      "w": {
+       "mean": 17.2,
+       "se": 2.762
+      },
+      "d": {
+       "mean": 18,
+       "se": 1.609
+      },
+      "goals": {
+       "mean": 2.616,
+       "se": 0.054
+      },
+      "gap": {
+       "mean": -15.113,
+       "se": 1.814
+      },
+      "streak": {
+       "mean": 0.52,
+       "se": 0.083
+      },
+      "gemsHour": {
+       "mean": 31.2,
+       "se": 4.107
+      },
+      "matches": {
+       "mean": 50,
+       "se": 0
+      }
+     },
+     "windows": {
+      "15-30": {
+       "w": {
+        "mean": 35,
+        "se": 5.721
+       },
+       "d": {
+        "mean": 27.857,
+        "se": 4.69
+       },
+       "goals": {
+        "mean": 2.771,
+        "se": 0.146
+       },
+       "gap": {
+        "mean": -6.732,
+        "se": 2.533
+       },
+       "streak": {
+        "mean": 1.486,
+        "se": 0.305
+       },
+       "gemsHour": {
+        "mean": 43.2,
+        "se": 6.538
+       },
+       "matches": {
+        "mean": 7,
+        "se": 0
+       }
+      },
+      "30-60": {
+       "w": {
+        "mean": 23.214,
+        "se": 4.142
+       },
+       "d": {
+        "mean": 20.714,
+        "se": 2.637
+       },
+       "goals": {
+        "mean": 2.489,
+        "se": 0.074
+       },
+       "gap": {
+        "mean": -10.809,
+        "se": 2.534
+       },
+       "streak": {
+        "mean": 0.582,
+        "se": 0.105
+       },
+       "gemsHour": {
+        "mean": 38.7,
+        "se": 5.383
+       },
+       "matches": {
+        "mean": 14,
+        "se": 0
+       }
+      },
+      "60-120": {
+       "w": {
+        "mean": 10,
+        "se": 2.716
+       },
+       "d": {
+        "mean": 14.31,
+        "se": 1.738
+       },
+       "goals": {
+        "mean": 2.64,
+        "se": 0.099
+       },
+       "gap": {
+        "mean": -19.215,
+        "se": 1.762
+       },
+       "streak": {
+        "mean": 0.257,
+        "se": 0.07
+       },
+       "gemsHour": {
+        "mean": 24.45,
+        "se": 4.849
+       },
+       "matches": {
+        "mean": 29,
+        "se": 0
+       }
+      }
+     },
+     "titles": {
+      "mean": 0.075,
+      "se": 0.01,
+      "pooled": 0.075
+     }
+    }
+   },
+   "paceSell": {
+    "cal": {
+     "all": {
+      "w": {
+       "mean": 88.6,
+       "se": 0.835
+      },
+      "d": {
+       "mean": 9.3,
+       "se": 0.785
+      },
+      "goals": {
+       "mean": 2.857,
+       "se": 0.049
+      },
+      "gap": {
+       "mean": 24.351,
+       "se": 0.191
+      },
+      "streak": {
+       "mean": 6.21,
+       "se": 0.145
+      },
+      "gemsHour": {
+       "mean": 178.486,
+       "se": 1.439
+      },
+      "matches": {
+       "mean": 50,
+       "se": 0
+      }
+     },
+     "windows": {
+      "15-30": {
+       "w": {
+        "mean": 80,
+        "se": 3.794
+       },
+       "d": {
+        "mean": 12.857,
+        "se": 2.722
+       },
+       "goals": {
+        "mean": 2.857,
+        "se": 0.163
+       },
+       "gap": {
+        "mean": 19.037,
+        "se": 0.712
+       },
+       "streak": {
+        "mean": 3.643,
+        "se": 0.299
+       },
+       "gemsHour": {
+        "mean": 144,
+        "se": 7.049
+       },
+       "matches": {
+        "mean": 7,
+        "se": 0
+       }
+      },
+      "30-60": {
+       "w": {
+        "mean": 89.643,
+        "se": 1.677
+       },
+       "d": {
+        "mean": 9.643,
+        "se": 1.491
+       },
+       "goals": {
+        "mean": 3.154,
+        "se": 0.114
+       },
+       "gap": {
+        "mean": 26.48,
+        "se": 0.647
+       },
+       "streak": {
+        "mean": 4.893,
+        "se": 0.16
+       },
+       "gemsHour": {
+        "mean": 193.8,
+        "se": 2.326
+       },
+       "matches": {
+        "mean": 14,
+        "se": 0
+       }
+      },
+      "60-120": {
+       "w": {
+        "mean": 90.172,
+        "se": 1.098
+       },
+       "d": {
+        "mean": 8.276,
+        "se": 1.102
+       },
+       "goals": {
+        "mean": 2.714,
+        "se": 0.049
+       },
+       "gap": {
+        "mean": 24.607,
+        "se": 0.048
+       },
+       "streak": {
+        "mean": 7.466,
+        "se": 0.228
+       },
+       "gemsHour": {
+        "mean": 179.45,
+        "se": 1.2
+       },
+       "matches": {
+        "mean": 29,
+        "se": 0
+       }
+      },
+      "120-240": {
+       "w": {
+        "mean": 90.789,
+        "se": 0.881
+       },
+       "d": {
+        "mean": 8.421,
+        "se": 0.801
+       },
+       "goals": {
+        "mean": 2.913,
+        "se": 0.05
+       },
+       "gap": {
+        "mean": 24.584,
+        "se": 0.03
+       },
+       "streak": {
+        "mean": 8.71,
+        "se": 0.134
+       },
+       "gemsHour": {
+        "mean": 140.025,
+        "se": 0.536
+       },
+       "matches": {
+        "mean": 57,
+        "se": 0
+       }
+      }
+     },
+     "titles": {
+      "mean": 0.977,
+      "se": 0.009,
+      "pooled": 0.977
+     }
+    },
+    "hold": {
+     "all": {
+      "w": {
+       "mean": 89.6,
+       "se": 0.901
+      },
+      "d": {
+       "mean": 8.8,
+       "se": 0.911
+      },
+      "goals": {
+       "mean": 2.936,
+       "se": 0.047
+      },
+      "gap": {
+       "mean": 24.403,
+       "se": 0.201
+      },
+      "streak": {
+       "mean": 6.516,
+       "se": 0.136
+      },
+      "gemsHour": {
+       "mean": 180.4,
+       "se": 1.207
+      },
+      "matches": {
+       "mean": 50,
+       "se": 0
+      }
+     },
+     "windows": {
+      "15-30": {
+       "w": {
+        "mean": 82.143,
+        "se": 2.512
+       },
+       "d": {
+        "mean": 11.429,
+        "se": 2.663
+       },
+       "goals": {
+        "mean": 2.793,
+        "se": 0.131
+       },
+       "gap": {
+        "mean": 19.061,
+        "se": 0.757
+       },
+       "streak": {
+        "mean": 3.843,
+        "se": 0.181
+       },
+       "gemsHour": {
+        "mean": 152.2,
+        "se": 1.575
+       },
+       "matches": {
+        "mean": 7,
+        "se": 0
+       }
+      },
+      "30-60": {
+       "w": {
+        "mean": 93.214,
+        "se": 1.319
+       },
+       "d": {
+        "mean": 6.071,
+        "se": 1.19
+       },
+       "goals": {
+        "mean": 3.043,
+        "se": 0.089
+       },
+       "gap": {
+        "mean": 26.531,
+        "se": 0.657
+       },
+       "streak": {
+        "mean": 5.054,
+        "se": 0.145
+       },
+       "gemsHour": {
+        "mean": 195.8,
+        "se": 2.432
+       },
+       "matches": {
+        "mean": 14,
+        "se": 0
+       }
+      },
+      "60-120": {
+       "w": {
+        "mean": 89.655,
+        "se": 1.3
+       },
+       "d": {
+        "mean": 9.483,
+        "se": 1.273
+       },
+       "goals": {
+        "mean": 2.919,
+        "se": 0.076
+       },
+       "gap": {
+        "mean": 24.665,
+        "se": 0.055
+       },
+       "streak": {
+        "mean": 7.867,
+        "se": 0.199
+       },
+       "gemsHour": {
+        "mean": 179.75,
+        "se": 1.563
+       },
+       "matches": {
+        "mean": 29,
+        "se": 0
+       }
+      },
+      "120-240": {
+       "w": {
+        "mean": 90.263,
+        "se": 0.839
+       },
+       "d": {
+        "mean": 8.421,
+        "se": 0.715
+       },
+       "goals": {
+        "mean": 2.932,
+        "se": 0.061
+       },
+       "gap": {
+        "mean": 24.628,
+        "se": 0.064
+       },
+       "streak": {
+        "mean": 8.482,
+        "se": 0.157
+       },
+       "gemsHour": {
+        "mean": 139.725,
+        "se": 0.587
+       },
+       "matches": {
+        "mean": 57,
+        "se": 0
+       }
+      }
+     },
+     "titles": {
+      "mean": 0.984,
+      "se": 0.007,
+      "pooled": 0.983
+     }
+    }
+   }
+  },
+  "checks": [
+   {
+    "name": "holdout pace wins 55 to 75 with headroom",
+    "ok": true,
+    "detail": "66.6 (se 1.452), headroom needed 4.356",
+    "recipe": true
+   },
+   {
+    "name": "cal overinvest (over4) wins 76 to 86",
+    "ok": true,
+    "detail": "76.4",
+    "recipe": false
+   },
+   {
+    "name": "cal overinvest at least 4 above pace",
+    "ok": true,
+    "detail": "11.8",
+    "recipe": false
+   },
+   {
+    "name": "cal pace window 15-30 inside 50 to 80",
+    "ok": true,
+    "detail": "72.143",
+    "recipe": false
+   },
+   {
+    "name": "cal pace window 30-60 inside 50 to 80",
+    "ok": true,
+    "detail": "67.857",
+    "recipe": false
+   },
+   {
+    "name": "cal pace window 60-120 inside 50 to 80",
+    "ok": true,
+    "detail": "61.207",
+    "recipe": false
+   },
+   {
+    "name": "cal overinvest window 15-30 under 90",
+    "ok": true,
+    "detail": "78.571",
+    "recipe": false
+   },
+   {
+    "name": "cal overinvest window 30-60 under 90",
+    "ok": true,
+    "detail": "80.714",
+    "recipe": false
+   },
+   {
+    "name": "cal overinvest window 60-120 under 90",
+    "ok": true,
+    "detail": "73.793",
+    "recipe": false
+   },
+   {
+    "name": "cal pace draws 15 to 27",
+    "ok": true,
+    "detail": "20.9",
+    "recipe": false
+   },
+   {
+    "name": "cal pace goals 2.5 to 3.0",
+    "ok": true,
+    "detail": "2.569",
+    "recipe": false
+   },
+   {
+    "name": "cal pace titles a season 15 to 240 in 0.40 to 0.90",
+    "ok": true,
+    "detail": "0.733 (pooled 0.729)",
+    "recipe": false
+   },
+   {
+    "name": "cal nosquad clearly under pace",
+    "ok": true,
+    "detail": "pace 64.6 nosquad 18",
+    "recipe": false
+   },
+   {
+    "name": "hold overinvest (over4) wins 76 to 86",
+    "ok": true,
+    "detail": "78.7",
+    "recipe": true
+   },
+   {
+    "name": "hold overinvest at least 4 above pace",
+    "ok": true,
+    "detail": "12.1",
+    "recipe": false
+   },
+   {
+    "name": "hold pace window 15-30 inside 50 to 80",
+    "ok": true,
+    "detail": "75",
+    "recipe": false
+   },
+   {
+    "name": "hold pace window 30-60 inside 50 to 80",
+    "ok": true,
+    "detail": "67.857",
+    "recipe": false
+   },
+   {
+    "name": "hold pace window 60-120 inside 50 to 80",
+    "ok": true,
+    "detail": "63.966",
+    "recipe": false
+   },
+   {
+    "name": "hold overinvest window 15-30 under 90",
+    "ok": true,
+    "detail": "84.286",
+    "recipe": false
+   },
+   {
+    "name": "hold overinvest window 30-60 under 90",
+    "ok": true,
+    "detail": "80.714",
+    "recipe": false
+   },
+   {
+    "name": "hold overinvest window 60-120 under 90",
+    "ok": true,
+    "detail": "76.379",
+    "recipe": false
+   },
+   {
+    "name": "hold pace draws 15 to 27",
+    "ok": true,
+    "detail": "20.5",
+    "recipe": false
+   },
+   {
+    "name": "hold pace goals 2.5 to 3.0",
+    "ok": true,
+    "detail": "2.6",
+    "recipe": false
+   },
+   {
+    "name": "hold pace titles a season 15 to 240 in 0.40 to 0.90",
+    "ok": true,
+    "detail": "0.727 (pooled 0.725)",
+    "recipe": false
+   },
+   {
+    "name": "hold nosquad clearly under pace",
+    "ok": true,
+    "detail": "pace 66.6 nosquad 17.2",
+    "recipe": false
+   },
+   {
+    "name": "knob 4 holds on the final table",
+    "ok": true,
+    "detail": "season one 0.9, sec4 10.5 vs 13.103, sec3 gap 0.8 need 0.476, sec9 0 and 0",
+    "recipe": true
+   }
+  ],
+  "economy": {
+   "pace": {
+    "firstSellUp": {
+     "head": 12.77,
+     "base": 13.37
+    },
+    "income": {
+     "30": {
+      "head": 17861.742,
+      "base": 21155.507
+     },
+     "60": {
+      "head": 25591.793,
+      "base": 34433.314
+     },
+     "120": {
+      "head": 41685.296,
+      "base": 81037.765
+     }
+    },
+    "squad": {
+     "15": {
+      "head": 45,
+      "base": 44
+     },
+     "30": {
+      "head": 58,
+      "base": 59
+     },
+     "60": {
+      "head": 67,
+      "base": 68
+     },
+     "120": {
+      "head": 75,
+      "base": 77
+     }
+    },
+    "division": {
+     "15": {
+      "head": 1,
+      "base": 1
+     },
+     "30": {
+      "head": 2,
+      "base": 2
+     },
+     "60": {
+      "head": 3,
+      "base": 3
+     },
+     "120": {
+      "head": 5,
+      "base": 6
+     }
+    },
+    "meanStreak": 4.082,
+    "gemsHour": 107.286,
+    "firstPromotion": {
+     "head": 10.5,
+     "base": 10.5
+    },
+    "divisionMinutes": {
+     "1": 10.5,
+     "2": 21,
+     "3": 42,
+     "4": 71.4,
+     "5": 121.8,
+     "6": 159.6,
+     "7": 207.9,
+     "8": null,
+     "9": null
+    },
+    "winBonusSecAt120": {
+     "head": 20,
+     "base": 0.1322
+    },
+    "firsts": {
+     "win1": {
+      "head": 4.2,
+      "base": 4.2
+     },
+     "win10": {
+      "head": 27.3,
+      "base": 23.1
+     },
+     "win50": {
+      "head": 161.7,
+      "base": 107.1
+     },
+     "goals25": {
+      "head": 22.447,
+      "base": 9.753
+     },
+     "streak5": {
+      "head": 12.6,
+      "base": 12.6
+     },
+     "fans500": {
+      "head": 7.263,
+      "base": 7.343
+     },
+     "fans2k": {
+      "head": 12.723,
+      "base": 12.903
+     },
+     "fans10k": {
+      "head": 34.903,
+      "base": 32.557
+     },
+     "full": {
+      "head": 13.773,
+      "base": 13.827
+     },
+     "allTracks": {
+      "head": 3.337,
+      "base": 3.337
+     },
+     "ag25": {
+      "head": 22.447,
+      "base": 9.753
+     },
+     "ag100": {
+      "head": 113.937,
+      "base": 27.23
+     },
+     "ag500": {
+      "head": null,
+      "base": 96.11
+     },
+     "ag2000": {
+      "head": null,
+      "base": null
+     },
+     "aw1": {
+      "head": 4.2,
+      "base": 4.2
+     },
+     "aw10": {
+      "head": 27.3,
+      "base": 23.1
+     },
+     "aw50": {
+      "head": 161.7,
+      "base": 107.1
+     },
+     "aw150": {
+      "head": null,
+      "base": null
+     },
+     "aw400": {
+      "head": null,
+      "base": null
+     },
+     "as5": {
+      "head": 12.6,
+      "base": 12.6
+     },
+     "as10": {
+      "head": 29.4,
+      "base": 23.1
+     }
+    }
+   },
+   "over4": {
+    "firstSellUp": {
+     "head": 14.27,
+     "base": 14.77
+    },
+    "income": {
+     "30": {
+      "head": 20315.264,
+      "base": 20398.929
+     },
+     "60": {
+      "head": 32792.992,
+      "base": 33784.906
+     },
+     "120": {
+      "head": 60260.458,
+      "base": 79934.986
+     }
+    },
+    "squad": {
+     "15": {
+      "head": 50,
+      "base": 49
+     },
+     "30": {
+      "head": 65,
+      "base": 65
+     },
+     "60": {
+      "head": 75,
+      "base": 75
+     },
+     "120": {
+      "head": 83,
+      "base": 84
+     }
+    },
+    "division": {
+     "15": {
+      "head": 1,
+      "base": 1
+     },
+     "30": {
+      "head": 2,
+      "base": 2
+     },
+     "60": {
+      "head": 3,
+      "base": 3
+     },
+     "120": {
+      "head": 6,
+      "base": 6
+     }
+    },
+    "meanStreak": 6.239,
+    "gemsHour": 122.857
+   },
+   "nosquad": {
+    "firstSellUp": {
+     "head": 14.45,
+     "base": 14.717
+    },
+    "income": {
+     "30": {
+      "head": 8570.181,
+      "base": 8985.635
+     },
+     "60": {
+      "head": 12544.151,
+      "base": 12992.255
+     },
+     "120": {
+      "head": 15637.76,
+      "base": 15964.806
+     }
+    },
+    "squad": {
+     "15": {
+      "head": 0,
+      "base": 0
+     },
+     "30": {
+      "head": 0,
+      "base": 0
+     },
+     "60": {
+      "head": 0,
+      "base": 0
+     },
+     "120": {
+      "head": 0,
+      "base": 0
+     }
+    },
+    "division": {
+     "15": {
+      "head": 0,
+      "base": 0
+     },
+     "30": {
+      "head": 0,
+      "base": 0
+     },
+     "60": {
+      "head": 1,
+      "base": 1
+     },
+     "120": {
+      "head": 1,
+      "base": 1
+     }
+    },
+    "meanStreak": 0.482,
+    "gemsHour": 30.657
+   },
+   "paceSell": {
+    "firstSellUp": {
+     "head": 12.77,
+     "base": 13.37
+    },
+    "income": {
+     "30": {
+      "head": 7610.586,
+      "base": 7679.354
+     },
+     "60": {
+      "head": 38839.904,
+      "base": 41569.482
+     },
+     "120": {
+      "head": 117747.337,
+      "base": 120150.817
+     }
+    },
+    "squad": {
+     "15": {
+      "head": 45,
+      "base": 44
+     },
+     "30": {
+      "head": 43,
+      "base": 42
+     },
+     "60": {
+      "head": 63,
+      "base": 63
+     },
+     "120": {
+      "head": 80,
+      "base": 80
+     }
+    },
+    "division": {
+     "15": {
+      "head": 1,
+      "base": 1
+     },
+     "30": {
+      "head": 0,
+      "base": 0
+     },
+     "60": {
+      "head": 1,
+      "base": 1
+     },
+     "120": {
+      "head": 3,
+      "base": 3
+     }
+    },
+    "meanStreak": 6.21,
+    "gemsHour": 178.486,
+    "stars": [
+     {
+      "head": 21,
+      "base": 21
+     },
+     {
+      "head": 42,
+      "base": 42
+     },
+     {
+      "head": 73.5,
+      "base": 73.5
+     }
+    ]
+   }
+  }
+ },
+ "stop": null
+}

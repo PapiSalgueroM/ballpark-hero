@@ -7,9 +7,11 @@ import {
   slotPosition, defensiveLineY, lineLabel,
   benchFor, dutyOptions, slotDuty, DUTY_INFO,
   SET_PIECE_KEYS, SET_PIECE_INFO, setPieceCandidates,
-  SHOOTOUT_MAX_ORDER, shootoutOrderOf,
+  SHOOTOUT_MAX_ORDER, shootoutOrderOf, instructionsOf,
 } from '@/lib/clubManager';
 import type { CareerState, CMPlayer, Mentality, Duty, SetPieceKey, FitGrade } from '@/lib/clubManager';
+import { instructionsSummary, opponentStyle, type TeamInstructions } from '@/lib/clubManagerTactics';
+import { InstructionsPicker } from '@/components/club-manager/InstructionsPicker';
 import { ratingTint, SecondPositionChips } from '@/components/club-manager/SquadScreen';
 import { useRevealScroll } from '@/hooks/useRevealScroll';
 import { MatchPlansCard } from '@/components/club-manager/MatchPlansCard';
@@ -50,6 +52,10 @@ interface TacticsScreenProps {
   career: CareerState;
   onFormation: (idx: number) => void;
   onMentality: (m: Mentality) => void;
+  /** Round 1522: the four standing instructions. Without it the block is not drawn. */
+  onInstructions?: (i: TeamInstructions) => void;
+  /** Round 1522: the next opponent, for the line on how they play and what tends to work against it. */
+  theirOpponent?: string | null;
   onSlot: (slotIdx: number, playerId: string | null) => void;
   onSwap: (a: number, b: number) => void;
   onAutoPick: () => void;
@@ -112,10 +118,12 @@ interface TacticsScreenProps {
  * takers with the same-position-first lists the engine ranks.
  */
 export function TacticsScreen({
-  career, onFormation, onMentality, onSlot, onSwap, onAutoPick, onDuty, onSetPiece, onAutoSetPieces,
+  career, onFormation, onMentality, onInstructions, theirOpponent, onSlot, onSwap, onAutoPick, onDuty, onSetPiece, onAutoSetPieces,
   onShootoutOrder, openTileRequest, onOpenTileRequestDone, onSaveMatchPlan, onApplyMatchPlan, onDeleteMatchPlan,
 }: TacticsScreenProps) {
   const [openSlot, setOpenSlot] = useState<number | null>(null);
+  /* Round 1522: the instructions tile, folded until asked for. */
+  const [instrOpen, setInstrOpen] = useState(false);
   // A one-shot pitch flourish on top of the shape move, keyed so it replays.
   const [mentPulse, setMentPulse] = useState(0);
   const pitchRef = useRef<HTMLDivElement>(null);
@@ -435,6 +443,32 @@ export function TacticsScreen({
           ))}
         </div>
       </div>
+
+      {/* Round 1522: the four team instructions, beside the mentality. */}
+      {onInstructions && (
+        <div>
+          <div className="text-xs text-muted-foreground uppercase tracking-wider mb-1.5">Team instructions</div>
+          {/* One small tile until asked for, so the tab does not grow a long stack. */}
+          <button
+            type="button"
+            data-cm-instr-open="tab"
+            aria-expanded={instrOpen}
+            onClick={() => setInstrOpen(o => !o)}
+            className="w-full flex items-center justify-between gap-2 rounded-lg border border-border bg-card px-2.5 py-2 text-left hover:border-primary"
+          >
+            <span className="min-w-0">
+              <span className="block text-[11px] font-bold text-foreground truncate">{instructionsSummary(instructionsOf(career))}</span>
+              <span className="block text-[9px] text-muted-foreground">Pressing, tempo, width and the line. Each one has a cost.</span>
+            </span>
+            <ChevronDown className={cn('w-4 h-4 shrink-0 text-muted-foreground transition-transform', instrOpen && 'rotate-180')} />
+          </button>
+          {instrOpen && (
+            <div className="mt-1.5">
+              <InstructionsPicker value={instructionsOf(career)} onChange={onInstructions} theirStyle={theirOpponent ? opponentStyle(career, theirOpponent) : null} idPrefix="tab" />
+            </div>
+          )}
+        </div>
+      )}
 
       {/* Pitch */}
       <div ref={pitchWrapRef}>

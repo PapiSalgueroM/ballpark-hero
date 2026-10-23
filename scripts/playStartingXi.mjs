@@ -30,6 +30,7 @@
  */
 import pw from './lib/playwrightLoader.mjs';
 import { installServedCodeControl, controlledChecks } from './lib/servedCodeControl.mjs';
+import { answerConsent } from './lib/answerConsent.mjs';
 
 const { chromium } = pw;
 const BASE = process.env.BASE ?? process.env.SWEEP_BASE ?? 'http://localhost:4173';
@@ -67,8 +68,7 @@ await page.goto(`${BASE}/soccer-career`, { waitUntil: 'networkidle' });
 await page.waitForTimeout(1500);
 /* The consent bar is pinned to the bottom and eats clicks meant for the
    form below the fold, which is how this walk first failed. */
-const consent = page.locator('button:has-text("Essential only")');
-if (await consent.count()) { await consent.first().click(); await page.waitForTimeout(400); }
+await answerConsent(page); await page.waitForTimeout(400);
 const fresh = page.locator('button:has-text("Start Fresh"), button:has-text("New Career")');
 if (await fresh.count()) { await fresh.first().click(); await page.waitForTimeout(700); }
 await page.locator('#pname').fill('Probe Player');

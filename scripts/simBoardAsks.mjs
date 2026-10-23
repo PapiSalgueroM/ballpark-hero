@@ -73,6 +73,10 @@
  *   next season opens after a promise     67.5 kept, 64.5 no word,
  *                                         61.5 broken  kept > none > broken
  *
+ * Round 1520: a made up man counts for the country he carries (CMPlayer.nation,
+ * shown by shownNation), so section 1 meets a country ask by his flag the way
+ * the engine counts it, the cheapest man of either kind.
+ *
  * Run: node scripts/simBoardAsks.mjs
  */
 /* Round 299: seeded stream, see scripts/lib/seedRandom.mjs. First import on purpose. */
@@ -208,7 +212,6 @@ const {
 } = cm;
 const { setTicketPolicy } = fin;
 const { isBoardAsk, askCandidates, askExplainer } = asks;
-const { nationalityOf } = nations;
 
 /* Every playable save in the game: club plus era. */
 const worlds = [];
@@ -227,7 +230,7 @@ function satisfier(objective, market, budget, eraId) {
   for (const p of market) {
     if (p.price > budget) continue;
     let ok = false;
-    if (objective.id === 'natQuota') ok = nationalityOf(eraId, p.name) === objective.country;
+    if (objective.id === 'natQuota') ok = cm.shownNation(eraId, p) === objective.country;
     else if (objective.id === 'veterans') ok = p.age >= objective.minAge;
     else if (objective.id === 'posGap') ok = groupOf(p.position) === objective.posGroup;
     else if (objective.id === 'youngStar') ok = p.age <= objective.maxAge && p.rating >= objective.minRating;

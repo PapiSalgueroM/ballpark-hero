@@ -48,6 +48,7 @@
  * VERBOSE=1 prints every press including the quiet ones.
  */
 import pw from './lib/playwrightLoader.mjs';
+import { answerConsent } from './lib/answerConsent.mjs';
 import os from 'node:os';
 const { chromium } = pw;
 import { execSync } from 'node:child_process';
@@ -183,10 +184,10 @@ const WANT = /^(?!how to\b)(next year|next season|continue|next|start|begin|play
    is the opposite. Track stats and Report a bug sit on every single game page,
    and leaving them off this list is what had the harness pressing Track stats
    ten times in a row on Dart Draft and calling it a clean run. */
-const AVOID = /^(back|home|track stats|douknowball|how to play|report|share|copy|privacy|terms|about|contact|log ?in|sign ?up|essential only|accept all|give up|quit|forfeit|restart|new game|play again|start over|new career|reset|fire yourself|retire|walk away|sell club|end |menu)/i;
+const AVOID = /^(back|home|track stats|douknowball|how to play|report|share|copy|privacy|terms|about|contact|log ?in|sign ?up|reject all|essential only|accept all|save choices|give up|quit|forfeit|restart|new game|play again|start over|new career|reset|fire yourself|retire|walk away|sell club|end |menu)/i;
 
 async function clearOverlays(page) {
-  await page.getByRole('button', { name: /^essential only$/i }).first().click({ timeout: 1200 }).catch(() => {});
+  await answerConsent(page, { wait: 1200 });
   for (let i = 0; i < 3; i++) {
     const open = page.locator('[role="dialog"][data-state="open"], [role="alertdialog"][data-state="open"]');
     if (await open.count().catch(() => 0) === 0) break;
@@ -195,7 +196,7 @@ async function clearOverlays(page) {
     else await page.keyboard.press('Escape').catch(() => {});
     await page.waitForTimeout(250);
   }
-  await page.getByRole('button', { name: /^essential only$/i }).first().click({ timeout: 1200 }).catch(() => {});
+  await answerConsent(page, { wait: 1200 });
 }
 
 /* A smooth scroll is an animation, so scrollY has to be watched until it stops

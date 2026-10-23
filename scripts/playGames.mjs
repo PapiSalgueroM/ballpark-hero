@@ -23,6 +23,7 @@
  * ONLY=/route chases a single game, VERBOSE=1 prints every press.
  */
 import pw from './lib/playwrightLoader.mjs';
+import { answerConsent } from './lib/answerConsent.mjs';
 const { chromium } = pw;
 import fs from 'node:fs';
 
@@ -106,8 +107,7 @@ async function clearOverlays(page) {
   // Consent first: the dialog overlay covers the banner, so it has to be
   // answered before anything opens on top of it, and again afterwards in
   // case the dialog won the race.
-  await page.getByRole('button', { name: /^essential only$/i }).first()
-    .click({ timeout: 1200 }).catch(() => {});
+  await answerConsent(page, { wait: 1200 });
   for (let i = 0; i < 3; i++) {
     const open = page.locator('[role="dialog"][data-state="open"], [role="alertdialog"][data-state="open"]');
     if (await open.count().catch(() => 0) === 0) break;
@@ -119,8 +119,7 @@ async function clearOverlays(page) {
     }
     await page.waitForTimeout(250);
   }
-  await page.getByRole('button', { name: /^essential only$/i }).first()
-    .click({ timeout: 1200 }).catch(() => {});
+  await answerConsent(page, { wait: 1200 });
 }
 
 /* Data driven games fetch from Supabase, so "the screen is not ready yet" is
@@ -256,7 +255,7 @@ async function answerInput(page, tryClick, step) {
 // Never press the site chrome: Back and Home leave the game, which is not a
 // bug, it is the harness walking out of the room. How to play only reopens
 // the dialog we just closed, and Report opens a form over the game.
-const CHROME = /^(back|home|track stats|douknowball|menu|accept|essential only|share|copy|how to play|report|report a bug|report a problem|close|privacy|terms|about|contact|log in|sign up)$/i;
+const CHROME = /^(back|home|track stats|douknowball|menu|accept|accept all|reject all|essential only|save choices|share|copy|how to play|report|report a bug|report a problem|close|privacy|terms|about|contact|log in|sign up)$/i;
 /* Round 118: and never surrender. This is the same rule as never pressing Back
    or Home, one level in. On /transfer-path the harness opened the game and
    immediately pressed "Give up and see a path", then confirmed it with "Yes,

@@ -54,6 +54,11 @@ const SLOT_1311_BUDGET = [
   "const BUDGET = 532_500; // Round 1311, the league's awards on the records: measured healthy 504,692 to 507,107; duplicated career control 570,310 (was 495,000 from Round 1052: healthy 466,396 to 470,019, control 528,801)\n",
   'const BUDGET = 495_000; // Round 1052, 27 leagues: measured healthy 466,396 to 470,019; actual duplicated career control 528,801 (was 470,000: healthy 442,058 to 444,992, control 501,773)\n',
 ];
+/* Release BP: the Slots BUDGET moved again, to 562,500, with one more header paragraph right after Round 1311's (the
+   same shape: comment lines only, each exact text once). It is put back to Round 1311's line before the 1311 pair. */
+const SLOT_BP_FIRST = ' *   Release BP moved BUDGET to 562,500 (GitHub runners, remote checks rBP-trS-bp and rBP-trS-main,\n';
+const SLOT_BP_LAST = " *   healthy total and 43,489 under the control's, the margins the old number was set with.\n";
+const SLOT_BP_BUDGET = "const BUDGET = 562_500; // Release BP, main's growth since Round 1311 and Round 1520's made up countries: measured healthy 534,872 to 537,624; duplicated career control 605,989 (was 532,500 from Round 1311: healthy 504,692 to 507,107, control 570,310; before that 495,000 from Round 1052: healthy 466,396 to 470,019, control 528,801)\n";
 const harnessSource = (ref, name) => execFileSync('git', ['show', `${ref}:scripts/${name}`],
   { cwd: ROOT, encoding: 'utf8', maxBuffer: 64 * 1024 * 1024 }).replaceAll('\r\n', '\n');
 /* Release AZ fix (reviewer 2's MAJOR 2, reviewer 4's minor 5): SaveSize section 5 made its namesake pair
@@ -146,6 +151,17 @@ function historicalHarnessContract(name, source) {
     assert.equal(source.split(SLOT_INITIALIZER).length - 1, 0, 'The original initializer is replaced once');
     restored = source.replace(SLOT_IMPORT, '').replace(SLOT_ADAPTER, SLOT_INITIALIZER);
     representationAdapter = true;
+    if (restored.includes(SLOT_BP_BUDGET)) {
+      assert.equal(restored.split(SLOT_BP_BUDGET).length - 1, 1, 'One exact Release BP budget line');
+      assert.equal(restored.split(SLOT_BP_FIRST).length - 1, 1, 'One exact Release BP header paragraph start');
+      assert.equal(restored.split(SLOT_BP_LAST).length - 1, 1, 'One exact Release BP header paragraph end');
+      const start = restored.indexOf(SLOT_BP_FIRST), end = restored.indexOf(SLOT_BP_LAST) + SLOT_BP_LAST.length;
+      const block = restored.slice(start, end);
+      assert(start < end && block.split('\n').length <= 11 && block.slice(0, -1).split('\n').every(line => line.startsWith(' *   ')),
+        'The Release BP paragraph is header comment lines only');
+      restored = restored.slice(0, start) + restored.slice(end);
+      restored = restored.replace(SLOT_BP_BUDGET, () => SLOT_1311_BUDGET[0]);
+    }
     if (restored.includes(SLOT_1311_BUDGET[0])) {
       assert.equal(restored.split(SLOT_1311_BUDGET[0]).length - 1, 1, 'One exact Round 1311 budget line');
       assert.equal(restored.split(SLOT_1311_FIRST).length - 1, 1, 'One exact Round 1311 header paragraph start');

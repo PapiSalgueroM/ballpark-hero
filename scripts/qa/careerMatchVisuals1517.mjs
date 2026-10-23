@@ -27,7 +27,9 @@ const report = { source: SOURCE, baseline: '076091ac870db38b953ddf71d3252cf1ac55
   started: new Date().toISOString(), status: 'running', holds: [], cases: [], actualOutbound: 0 };
 const writeReport = () => fs.writeFileSync(path.join(OUT, 'report.json'), JSON.stringify(report, null, 2) + '\n');
 const enginePins = {
-  'src/lib/nbaMyCareer.ts': '026be724a8ea188fd8d6394395fa1db5f58fdd71787cc80a13f84a09789230f5',
+  /* Round 1523 lifted the NBA morale term into src/lib/careerForm.ts with a one line change; the NBA engine replays
+     byte identical (scripts/simCareerForm.mjs section 1), so only this pin moves (main's file was 026be724). */
+  'src/lib/nbaMyCareer.ts': '1190c2915f04cffb3876acc8fe7a64c26aa76e94d3cc5b35abafd7442fc38a6c',
   'src/lib/nbaCareerSport.ts': '17c511ff6cd160975a245e1e85dc3b685e35a0d36dfec82958b218c37fe34ae1',
   'src/lib/fightCareer.ts': 'ccdd83dfbbf41597a5d1890a45c9013ca82a234c7fa9786c00161c949063f5c3',
   'src/lib/fightCareerLifeFlow.ts': '0670e2903f91c4761fa3bc6b035748a391d53260179099d82a3f4b0577037dab',

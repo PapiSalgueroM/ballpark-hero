@@ -35,6 +35,7 @@ import { createRequire } from 'node:module';
 import { fileURLToPath } from 'node:url';
 import { build } from 'esbuild';
 import pw from './lib/playwrightLoader.mjs';
+import { answerConsent } from './lib/answerConsent.mjs';
 
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const DIST = path.resolve(ROOT, process.env.DIST || 'dist');
@@ -148,7 +149,7 @@ const diskRetired = async page => { const raw = await disk(page); try { return r
 async function land(page) {
   await page.goto(`${BASE}/club-manager`, { waitUntil: 'domcontentloaded' });
   await page.waitForLoadState('networkidle', { timeout: 8000 }).catch(() => {});
-  await page.getByRole('button', { name: /^essential only$/i }).first().click({ timeout: 1200 }).catch(() => {});
+  await answerConsent(page, { wait: 1200 });
   await page.locator('[data-testid="cm-slots"]').waitFor({ timeout: 15000 }).catch(() => {});
   return (await page.locator('[data-testid="cm-slots"]').count()) > 0;
 }

@@ -31,6 +31,7 @@ import fs from 'node:fs';
 import path from 'node:path';
 import { createHash } from 'node:crypto';
 import pw from './lib/playwrightLoader.mjs';
+import { answerConsent } from './lib/answerConsent.mjs';
 const { chromium, webkit } = pw;
 
 const BASE = process.env.SWEEP_BASE || 'http://127.0.0.1:4173';
@@ -106,7 +107,7 @@ async function openTactics(ctx) {
   page.on('pageerror', e => errs.push(String(e).split('\n')[0].slice(0, 160)));
   await page.goto(`${BASE}/club-manager`, { waitUntil: 'domcontentloaded', timeout: 25000 });
   await page.waitForTimeout(1400);
-  await page.getByRole('button', { name: /essential only|accept/i }).first().click({ timeout: 2000 }).catch(() => {});
+  await answerConsent(page, { wait: 2000 });
   await page.waitForTimeout(300);
   await page.getByRole('button', { name: /Start Fresh/i }).first().click({ timeout: 1500 }).catch(() => {});
   /* Round 132: the picker asks WHEN before it asks where. This wants the real

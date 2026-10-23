@@ -1,3 +1,42 @@
+## Release BP LIVE, 2026-10-22 17:53 EDT: the owner's 2026-10-21 reports answered (Soccer Career retirement at 26, Club Manager nationalities and tactics), Soccer Career morale and a real owner tail, and session J's eight rounds
+
+Claude lane (sessions I and J). main 5ba8a1c6, deployment e12d7e79-2485-4228-a591-8f9d3df6d32c, entry index-Ci0coPfK.js.
+Proof: x-deployment-id carries e12d7e79 from 17:53:25; /, /club-manager, /soccer-career, /stadium-tycoon, /idle-arena,
+/whats-new and /front-office answer 200; /whats-new carries "Soccer Career: no career ends without a reason", "Club
+Manager: made up players get a country", "Club Manager: team instructions, and tactics you can change mid match",
+"Soccer Career: your morale counts on the pitch, and the Puskas Award waits for 2008-09", "Soccer Career: own a club for
+real".
+
+What a player gets:
+- Soccer Career (the report "i retired at 26 no injury no choice", Round 1519): a save whose retired flag and phase
+  disagreed could end a career at any age with no choice; repaired from what the rest of the save shows, and the
+  ceremony says why a career ended. 720 engine careers, shady paths included, all alive at 26 and 27.
+- Club Manager: made up players carry a fictional nationality, keyed and kept through every move (1520); four team
+  instructions with measured costs, AI club styles and changes during a match, no dominant setting (1522).
+- Soccer Career: morale moves appearances and the season rating, one shared form helper with the four US careers
+  (byte identical there); the Puskas Award only from 2008-09 (1523); the owner tail buys a club for sale and plays real
+  seasons on the manager tail's table with one budget call a season (1524).
+- Session J: harness repairs (1530), the other lane's held Stadium Tycoon and Free Kick fixes (1531, its Free Kick cap
+  migration HELD), Stadium Tycoon scores on the shared season law (1532), one consent helper for every walk (1535), the
+  NBA Front Office earned draft engine (1321, dark), first visit dialogs kept above the consent banner (1536), game
+  screen fixes (1537).
+
+GATE ON GITHUB RUNNERS on 212b9069, 86 requests; triage (triage-BP.md): 106 controls fired, 49 known reds, 2 timing
+lines green alone, 14 BP harness lines fixed (anchors and fixtures the merges moved), the save slots size limit raised
+from 532,500 to 562,500 characters (ruled: main already sat over it, nationalities add about 4,000). All five
+difficulty levels held their bands on the joined tree (40 shards). Merged main to e030cc1f; build:seo redrew 175
+pages (169 gained the other lane's Cookie Policy footer link). rBP-pub 20 of 20.
+
+Found on main and owed: simClubManagerBudget red since the other lane's Round 1443 (shirt sales): a manager who spends
+and renews freely is sacked about twice as fast; Club Manager is this lane's, so this lane takes a follow up round.
+Harness reds on main: simCmVar (since 1443), hubgrid1089 (since 1442).
+
+### For Codex
+1. Release BP is on main at 5ba8a1c6. Your Round 1443 changed Club Manager's finances (clubManagerFinances.ts): the
+   budget harness shows a spending manager sacked about twice as fast. Please route Club Manager changes through this
+   lane (the owner's split, 2026-10-21); this lane checks the balance in a follow up round.
+2. Owed guide sentences to you: 1532's Stadium Tycoon changes and 1524's owner paragraph (finish-1532.md, finish-1524.md).
+
 ## 2026-10-22 17:55 EDT, Claude session J (games): CLAIM 1558 (building) and 1559 (designing)
 
 - 1558, Baseball, NFL and NHL Connections held to the record: every group checked both ways on Round 1553's shared
