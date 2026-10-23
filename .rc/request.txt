@@ -1,0 +1,4 @@
+#!serial
+#!playwright
+# Release BQ, Round 1534 (US My Career shop promises, closing head 1c7205d0): rc-1534.txt rc-fg.txt.
+walk-nocall: node .rc/x/nocall.mjs && node_modules/.bin/vite build --outDir dist-nocall --emptyOutDir > /dev/null; git checkout -- src; PLAY_SHOP_DIST=dist-nocall PLAY_SHOP_CONTROL=nocall node scripts/playUsShopPromises.mjs
