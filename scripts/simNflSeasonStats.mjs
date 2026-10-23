@@ -38,7 +38,10 @@
  *    (one in k of the pool's receivers; 1 is no effect), in two bands of his rating. Asserted: the lift of the band
  *    HIGH_4 and up exceeds the lift of the band LOW_4 and under by MARGIN_4. Printed: the brief's share and his
  *    catches a game per band (a WR1 rated high sits on a club that scores more, so a per game gap is no proof), the
- *    pass share by QB1 rating and the sacks a club game by rush less block. THE LOW BAND IS 73, NOT THE BRIEF'S 72:
+ *    pass share by QB1 rating and the sacks a club game by rush less block, five points a bucket. Asserted too (the
+ *    review of 2026-10-22 found both rules could be inverted with every gate green): the least squares slope of the
+ *    pass share on the QB1's rating above PASS_MARGIN_4, and of the sacks a club game on rush less block above
+ *    SACK_MARGIN_4, each set on its own (controls passflip and sackswap). THE LOW BAND IS 73, NOT THE BRIEF'S 72:
  *    the fleet is the real 2026 rosters at their opening, and a WR1 of 72 or under is 4 club games in 16 seasons
  *    (CLE's, when its receivers are hurt); 73 is MIA's WR1, about 1,400 club games a set. Lead's to rule on.
  *  5 AWARDS AND THE CLOSE, NFL_STATS_FRANCHISES (10) deep franchises over four seasons the board's way, the draft
@@ -68,6 +71,8 @@
  *   extradraw    a Math.random() in nflCreditGame                                -> section 3, red on every set
  *   unkeyed      the credit stream keyed to a counter at module scope            -> section 3, red on every set
  *   randomcredit every credit uniform over the eligible men, ratings ignored     -> section 4, red on every set
+ *   passflip     a touchdown is a pass when the draw is ABOVE the QB1's chance   -> section 4, red on every set
+ *   sackswap     nflSackChance called with the block first and the rush second  -> section 4, red on every set
  *   tiebreak     foRankAward with no games and id tie rule                       -> section 5
  *   rookieall    a line is a rookie's for every man ever drafted in the save     -> section 5
  *   closetwice   the once a season rule taken out of the shared close            -> section 5
@@ -108,6 +113,8 @@ const CONTROLS = {
   extradraw: { section: 3, labels: ['the same generator state and draw count after Week 17'], everySet: true, needs: [3], patches: [{ file: STATS, from: '  const rng = keyedRng(`${told.key}|credit`);', to: '  const rng = keyedRng(`${told.key}|credit`); Math.random();' }] },
   unkeyed: { section: 3, labels: ['the same week recorded twice gives the same block'], everySet: true, needs: [3], patches: [{ file: STATS, from: '  const rng = keyedRng(`${told.key}|credit`);', to: '  const rng = keyedRng(`${told.key}|credit|${(globalThis.__nflCreditCalls = (globalThis.__nflCreditCalls ?? 0) + 1)}`);' }] },
   randomcredit: { section: 4, labels: ["lift over a rating blind credit climbs with his rating"], everySet: true, needs: [4], patches: [{ file: STATS, from: '  const ws = men.map(m => Math.max(0, weight(m)));', to: '  const ws = men.map(m => (weight(m) > 0 ? 1 : 0));' }] },
+  passflip: { section: 4, labels: ['the pass share climbs with the QB1'], everySet: true, needs: [4], patches: [{ file: STATS, from: 'const catcher = s.pool.qb && kind < nflPassChance(s.pool.qb.ovr) ?', to: 'const catcher = s.pool.qb && kind > nflPassChance(s.pool.qb.ovr) ?' }] },
+  sackswap: { section: 4, labels: ['the sacks climb with the rush against the block'], everySet: true, needs: [4], patches: [{ file: STATS, from: 'const chance = nflSackChance(rush, mean(line.map(m => m.ovr), NFL_BLOCK_FLOOR));', to: 'const chance = nflSackChance(mean(line.map(m => m.ovr), NFL_BLOCK_FLOOR), rush);' }] },
   tiebreak: { section: 5, labels: ['a tie goes to more games, then the id'], needs: [5], patches: [{ file: FO_STATS, from: '.sort((a, b) => b.s - a.s || b.p.g - a.p.g || a.p.id.localeCompare(b.p.id))', to: '.sort((a, b) => b.s - a.s)' }] },
   rookieall: { section: 5, labels: ['the rookie lines are the first year men the harness drafted'], needs: [5], patches: [{ file: STATS, from: 'const line: NflSavedLine = men[m.id] ?? (m.rookieSeason === lg.season ?', to: 'const line: NflSavedLine = men[m.id] ?? (m.rookieSeason !== undefined ?' }] },
   closetwice: { section: 5, labels: ['a second close writes no card twice'], needs: [5], patches: [{ file: CLOSE, from: '  if (done) return done;', to: '' }] },
@@ -328,6 +335,21 @@ function cheapest(points) {
    0.503, 0.486, 0.568, 0.416, 0.535 (smallest 0.416); under randomcredit 0.121, 0.023, 0.080, -0.017, 0.094 (largest
    0.121). The margin sits half way, 0.15 from each. */
 const MARGIN_4 = 0.27;
+/* The two other rating rules the "?" states, each a least squares slope over every regular season club game of a set:
+   the pass share of credited touchdowns a point of QB1 rating (the rule's own slope is NFL_PASS_SLOPE, 0.01, inside
+   its clamp), and the sacks a club game a point of rush less block (NFL_SACK_TRIES times NFL_SACK_SLOPE, 0.08).
+   PROVISIONAL margins, half the rule's own slope, until the runner's measurement is written here. */
+const PASS_MARGIN_4 = 0.005;
+const SACK_MARGIN_4 = 0.04;
+const newFit = () => ({ n: 0, sx: 0, sy: 0, sxx: 0, sxy: 0, syy: 0 });
+function addFit(f, x, y) { f.n += 1; f.sx += x; f.sy += y; f.sxx += x * x; f.sxy += x * y; f.syy += y * y; }
+/* the slope and its standard error (the residual spread over the spread of x) */
+function slopeOf(f) {
+  const sxx = f.sxx - (f.sx * f.sx) / f.n, sxy = f.sxy - (f.sx * f.sy) / f.n, syy = f.syy - (f.sy * f.sy) / f.n;
+  if (!(f.n > 2) || !(sxx > 0)) return { b: NaN, se: NaN };
+  const b = sxy / sxx;
+  return { b, se: Math.sqrt(Math.max(0, syy - b * sxy) / (f.n - 2) / sxx) };
+}
 const HIGH_4 = 85;
 const LOW_4 = Number(process.env.NFL_STATS_LOW_BAND || 73);
 const measured4 = [];
@@ -340,7 +362,7 @@ if (SECTIONS.some(s => s === 2 || s === 3 || s === 4 || s === 7)) {
   for (const set of SEEDSETS) {
     const t2 = { td: tally(), kicks: tally(), cheap: tally(), pool: tally(), thrown: tally(), club: tally(), bounds: tally() };
     const t3 = { w17: tally(), after: tally(), results: tally(), league: tally(), twice: tally() };
-    const r4 = { hi: { games: 0, pass: 0, wr1: 0, blind: 0 }, lo: { games: 0, pass: 0, wr1: 0, blind: 0 }, qb: {}, sack: {}, dist: {} };
+    const r4 = { hi: { games: 0, pass: 0, wr1: 0, blind: 0 }, lo: { games: 0, pass: 0, wr1: 0, blind: 0 }, qb: {}, sack: {}, dist: {}, passFit: newFit(), sackFit: newFit() };
     let unclaimed = 0;
     let gamesSeen = 0;
     /* one game's credit beside its story, the rosters as it was played */
@@ -373,12 +395,19 @@ if (SECTIONS.some(s => s === 2 || s === 3 || s === 4 || s === 7)) {
         const eligible = sd.pool.skill.filter(p => M.stats.nflCatchWeight(p) > 0).length;
         const inPool = wr1 && sd.pool.skill.some(p => p.id === wr1.id);
         if (band && inPool) { band.games += 1; band.pass += passes.length; band.blind += passes.length / eligible; band.wr1 += passes.filter(cr => cr.scorer.id === wr1.id).length; }
-        if (sd.pool.qb) { const b = Math.floor(sd.pool.qb.ovr / 5) * 5; const q = (r4.qb[b] ??= { pass: 0, all: 0 }); q.pass += passes.length; q.all += sd.credits.length; }
+        if (sd.pool.qb) {
+          const b = Math.floor(sd.pool.qb.ovr / 5) * 5; const q = (r4.qb[b] ??= { pass: 0, all: 0 }); q.pass += passes.length; q.all += sd.credits.length;
+          /* the asserted pass rule: one point a credited touchdown, 1 a pass and 0 a run, against his QB1's rating */
+          for (const cr of sd.credits) addFit(r4.passFit, sd.pool.qb.ovr, cr.passer ? 1 : 0);
+        }
         const rushers = sd.pool.def.filter(p => p.pos === 'DL' || p.pos === 'LB');
         const line = E.unitStarters(lg.teams[other.team], ['OL'], E.OL_SLOTS);
         const avg = (xs, none) => (xs.length ? xs.reduce((a, b) => a + b, 0) / xs.length : none);
-        const gap = Math.round((avg(rushers.map(p => p.ovr), 60) - avg(line.map(p => p.ovr), 64)) / 5) * 5;
+        const edge = avg(rushers.map(p => p.ovr), 60) - avg(line.map(p => p.ovr), 64);
+        const gap = Math.round(edge / 5) * 5;
         const k = (r4.sack[gap] ??= { games: 0, sacks: 0 }); k.games += 1; k.sacks += Object.values(sd.sacks).reduce((a, b) => a + b, 0);
+        /* the asserted sack rule: the sacks this side landed in the game against its rush less the other side's block */
+        addFit(r4.sackFit, edge, sd.sackTries);
       }
     };
     for (const kind of FLEET.kinds) {
@@ -472,6 +501,12 @@ if (SECTIONS.some(s => s === 2 || s === 3 || s === 4 || s === 7)) {
       console.log(`  the lift (his catches over a rating blind credit's): ${HIGH_4} and up ${lift(r4.hi).toFixed(3)}, ${LOW_4} and under ${lift(r4.lo).toFixed(3)}`);
       check(4, `set ${set}: the WR1's lift over a rating blind credit climbs with his rating (gap ${gap.toFixed(4)}, margin ${MARGIN_4})`, gap > MARGIN_4);
       check(4, `set ${set}: the low band holds 500 club games or more (${r4.lo.games})`, r4.lo.games >= 500);
+      const ps = slopeOf(r4.passFit), ss = slopeOf(r4.sackFit);
+      measured4[measured4.length - 1].passSlope = ps.b;
+      measured4[measured4.length - 1].sackSlope = ss.b;
+      console.log(`  pass share a point of QB1 rating ${ps.b.toFixed(5)} (se ${ps.se.toFixed(5)}, ${r4.passFit.n} credited touchdowns); sacks a club game a point of rush less block ${ss.b.toFixed(4)} (se ${ss.se.toFixed(4)}, ${r4.sackFit.n} club games)`);
+      check(4, `set ${set}: the pass share climbs with the QB1's rating (slope ${ps.b.toFixed(5)}, margin ${PASS_MARGIN_4})`, ps.b > PASS_MARGIN_4);
+      check(4, `set ${set}: the sacks climb with the rush against the block (slope ${ss.b.toFixed(4)}, margin ${SACK_MARGIN_4})`, ss.b > SACK_MARGIN_4);
       console.log(`  WR1 ratings over the club games (printed): ${Object.keys(r4.dist).map(Number).sort((x, y) => x - y).map(k => `${k}: ${r4.dist[k]}`).join(", ")}`);
     }
   }
@@ -485,6 +520,8 @@ if (SECTIONS.some(s => s === 2 || s === 3 || s === 4 || s === 7)) {
     console.log(`  pass share of credited touchdowns by QB1 rating (printed): ${Object.keys(qb).map(Number).sort((x, y) => x - y).map(b => `${b}: ${(qb[b].pass / Math.max(1, qb[b].all)).toFixed(3)} of ${qb[b].all}`).join(' | ')}`);
     console.log(`  sacks a club game by rush less block, to the nearest 5 (printed): ${Object.keys(sk).map(Number).sort((x, y) => x - y).map(b => `${b}: ${(sk[b].sacks / sk[b].games).toFixed(2)} over ${sk[b].games}`).join(' | ')}`);
     console.log(`  gaps by set: ${measured4.map(m => `${m.set} ${m.gap.toFixed(4)}`).join(', ')}`);
+    console.log(`  pass slopes by set: ${measured4.map(m => `${m.set} ${m.passSlope.toFixed(5)}`).join(', ')}`);
+    console.log(`  sack slopes by set: ${measured4.map(m => `${m.set} ${m.sackSlope.toFixed(4)}`).join(', ')}`);
   }
 }
 
