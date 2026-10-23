@@ -1,0 +1,3 @@
+7b6ec515f6 rc request rBQ-fBIi2 for b35de41d99f520487def17591c00e71f935dd5d4
+b35de41d99 Release BQ build output: build:seo on ab485d7d (rBQ-seo), real changes only
+ab485d7dee Release BQ m17: merge origin/main at 46f7f3f6 (the lead's revert 570bb87a of the Lovable editor's types.ts, tree equal to 705f576c, and two board commits), after the triage seams
