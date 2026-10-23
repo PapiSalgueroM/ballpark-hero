@@ -1883,7 +1883,7 @@ export const BASKETBALL_CONTENT: GameContentMap = {
       {
         heading: "Draft classes and scouting uncertainty",
         items: [
-          "Each club starts with 2 simulation picks. Trades can leave you with fewer or more choices, and each selection spends one owned pick. With none left, finish the draft and offseason. The pool has at least 24 prospects, and rivals get two batches of up to five eligible selections in this abbreviated draft. Scouting grades can miss the truth by a few points either way.",
+          "Each club starts with 2 simulation picks. Trades can leave you with fewer or more choices, and each selection spends one owned pick. With none left, finish the draft and offseason. The pool has at least 24 prospects. Draft night runs in the order your record earns: the 14 clubs that missed the playoffs go into a lottery for the top four picks, on the odds the league used for its 2019 to 2026 drafts, then every club picks in its place over two rounds, and your staff can make your picks for you. A save that never opened the GM desk keeps the old short draft, where you pick first and the rivals follow. Scouting grades can miss the truth by a few points either way.",
         ],
       },
       {

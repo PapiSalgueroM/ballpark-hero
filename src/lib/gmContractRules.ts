@@ -236,7 +236,7 @@ export const CONTRACT_RULES: ContractRule[] = [
     sport: 'nba',
     name: 'Rookie scale',
     plain: 'A first round pick signs a rookie scale deal: two guaranteed seasons, then club options on the third and the fourth. Second round picks are not on the scale and sign whatever deal they agree.',
-    inGame: "With the desk on, a man this GM takes in the first round signs for all four seasons, the two options taken as picked up, because a deal here carries one salary for its whole length and the desk asks when it runs out. His salary is the engine's own figure for his rating, not the league's scale by draft slot. A second round pick keeps the deal the game has always given him.",
+    inGame: "With the desk on, a man this GM takes in the first round signs for all four seasons, the two options taken as picked up, because a deal here carries one salary for its whole length and the desk asks when it runs out. His salary is the engine's own figure for his rating, not the league's scale by draft slot. A second round pick signs a one season deal at the league minimum.",
     readOn: '2026-10-05',
     sources: [
       { url: 'https://www.hoopsrumors.com/2024/07/hoops-rumors-glossary-rookie-scale-2.html', says: 'Only first round picks are eligible for rookie scale deals: two guaranteed seasons with club options for the third and fourth; second rounders sign through the second round exception, cap room or other exceptions.' },
