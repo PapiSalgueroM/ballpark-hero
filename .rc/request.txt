@@ -1,0 +1,10 @@
+#!serve
+#!playwright
+tsc: node_modules/.bin/tsc --noEmit -p tsconfig.app.json
+vitest: node_modules/.bin/vitest run src/components/front-office-shared/FrontOfficeSeasonClose.test.tsx src/components/front-office/FrontOfficeSeasonStats.test.tsx src/components/nba-front-office/NbaSeasonStats.test.tsx src/lib/nflSeasonStats.test.ts --testTimeout=300000 --hookTimeout=120000
+walk: ENGINES=chromium node scripts/playFoSeasonCard.mjs
+playNflSeasonStats: ENGINES=chromium node scripts/playNflSeasonStats.mjs
+simHarnessAnchors: node scripts/simHarnessAnchors.mjs
+simNoRivalNames: node scripts/simNoRivalNames.mjs
+hashcmp: bash .rc/x/hashcmp.sh
+rwalk: node .rc/x/rwalk.mjs
