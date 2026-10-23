@@ -1,0 +1,9 @@
+applyCtl: the bridge is in the copy
+playCmWorldMoves: Everton seed 1, the opening window's Jurriën Timber from Arsenal to Manchester United (both in the league)
+FAIL (a) 320: the market's search for Jurriën Timber finds him at Manchester United [no row]
+FAIL (a) 390: the market's search for Jurriën Timber finds him at Manchester United [no row]
+FAIL (a) 1280: the market's search for Jurriën Timber finds him at Manchester United [no row]
+FAIL (b) Manchester United's club page lists Jurriën Timber
+FAIL (b) Arsenal's club page does not list Jurriën Timber
+ok   (errors) no page error on any page
+playCmWorldMoves: control norecord FIRED: (b) red
