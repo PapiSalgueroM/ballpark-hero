@@ -1,0 +1,4 @@
+#!serve
+#!playwright
+# Release BQ, Round 1548: the walk (rc-fix-walk.txt), the database host blocked by the walk.
+walk3: node .rc/x/r1548fix_walk3.mjs
