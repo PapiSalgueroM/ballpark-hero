@@ -779,6 +779,7 @@ export function TacticsScreen({
                 onClick={() => openPicker(i)}
                 className={cn(
                   'cm-token cm-slot absolute flex flex-col items-center',
+                  moveMode && 'min-h-11 min-w-11',
                   (lifted || !ready || (moveMode && positionPreview !== null)) && 'cm-still',
                   moveMode && positionSlot === i && 'outline outline-2 outline-yellow-400',
                 )}
