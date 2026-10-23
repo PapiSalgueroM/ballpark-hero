@@ -1,0 +1,8 @@
+m-gate1-retire exit=1 3s | simFightCareerRetire: 5 failure(s)
+m-gate1-vitest exit=1 3s | ::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/test/fightCareerRetireBoard.test.tsx,title=src/test/fightCareerRetireBoard.test.tsx > Fight Career board%2C
+m-gate5-retire exit=1 2s | simFightCareerRetire: 4 failure(s)
+m-gate5-guide exit=1 1s | simGuideHeadings: RED, 1 failure in section 4
+m-nolift exit=1 8s | simFightIds: 2 failure(s)
+m-keyseed exit=1 2s | simFightCareerRetire: 2 failure(s)
+mut-armed-vitest exit=1 3s | ::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/test/fightCareerRetireBoard.test.tsx,title=src/test/fightCareerRetireBoard.test.tsx > Fight Career board%2C
+clean exit=0 0s | 

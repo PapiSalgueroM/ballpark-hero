@@ -1,0 +1,10 @@
+#!serial
+# Release BQ, Round 1546: verify-1546.md's mutation replays (rc-ver-m.txt, #!serial; each line restores src and scripts, and clean proves it). Each m- line must exit 1 with MUTATION <name> APPLIED in its log.
+m-gate1-retire: node .rc/x/mut1546.mjs gate1 && node scripts/simFightCareerRetire.mjs; s=$?; git checkout -- src scripts; exit $s
+m-gate1-vitest: node .rc/x/mut1546.mjs gate1 && node_modules/.bin/vitest run src/test/fightCareerRetireBoard.test.tsx --testTimeout=300000 --hookTimeout=120000; s=$?; git checkout -- src scripts; exit $s
+m-gate5-retire: node .rc/x/mut1546.mjs gate5 && node scripts/simFightCareerRetire.mjs; s=$?; git checkout -- src scripts; exit $s
+m-gate5-guide: node .rc/x/mut1546.mjs gate5 && node scripts/simGuideHeadings.mjs; s=$?; git checkout -- src scripts; exit $s
+m-nolift: node .rc/x/mut1546.mjs nolift && node scripts/simFightIds.mjs; s=$?; git checkout -- src scripts; exit $s
+m-keyseed: node .rc/x/mut1546.mjs keyseed && node scripts/simFightCareerRetire.mjs; s=$?; git checkout -- src scripts; exit $s
+mut-armed-vitest: node .rc/x/mutfix1546.mjs armed && node_modules/.bin/vitest run src/test/fightCareerRetireBoard.test.tsx --testTimeout=300000 --hookTimeout=120000; s=$?; git checkout -- src scripts; exit $s
+clean: git status --short; test -z "$(git status --short -- src scripts)"
