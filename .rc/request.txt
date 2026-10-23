@@ -1,0 +1,14 @@
+#!serial
+# Release BQ, Round 1548: its eleven controls (rc-fix-b.txt, #!serial). Each ctl- line must exit 1 and say FIRED; clean-after must exit 0.
+ctl-ceiling: SIM_HALL_CONTROL=ceiling node scripts/simHallLongPlay.mjs
+ctl-fixedstep: SIM_HALL_CONTROL=fixedstep node scripts/simHallLongPlay.mjs
+ctl-fmtstop: SIM_HALL_CONTROL=fmtstop node scripts/simHallLongPlay.mjs
+ctl-novisible: SIM_HALL_CONTROL=novisible node scripts/simHallLongPlay.mjs
+ctl-awayafter: SIM_HALL_CONTROL=awayafter node scripts/simHallLongPlay.mjs
+ctl-hookfixed: SIM_HALL_CONTROL=hookfixed node scripts/simHallLongPlay.mjs
+ctl-hooknocopy: SIM_HALL_CONTROL=hooknocopy node scripts/simHallLongPlay.mjs
+ctl-hooknote: SIM_HALL_CONTROL=hooknote node scripts/simHallLongPlay.mjs
+ctl-hookvisible: SIM_HALL_CONTROL=hookvisible node scripts/simHallLongPlay.mjs
+ctl-hookstampnow: SIM_HALL_CONTROL=hookstampnow node scripts/simHallLongPlay.mjs
+ctl-hookcrash: SIM_HALL_CONTROL=hookcrash node scripts/simHallLongPlay.mjs
+clean-after: test -z "$(git status --porcelain -- src scripts)" && ! ls -d .hall-longplay-* 2>/dev/null && ! test -e dist
