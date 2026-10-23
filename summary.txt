@@ -1,0 +1,8 @@
+vitest exit=0 13s |    Duration  12.29s (transform 4.42s, setup 603ms, collect 9.91s, tests 13.57s, environment 3.00s, prepare 778ms)
+simNbaSeasonStats exit=0 22s | simNbaSeasonStats: 72 checks passed over 10 seeded franchises and 3 seasons each. Every game adds up, the box takes nothing from the league, the awards follow their rules
+simFoLazyDesk exit=0 39s | simFoLazyDesk: all checks passed
+simNoRivalNames exit=0 20s | No rival product names found. 0 findings.
+simTrustCopy exit=0 1s | simTrustCopy: green. One disclaimer under every page and one count of the games, the registry's own.
+simNflSeasonStats exit=0 79s | simNflSeasonStats: 114 checks, 0 failed; section 1 skipped: LIFT_BASE is not set
+tsc exit=0 106s | 
+simHarnessAnchors exit=0 55s | simHarnessAnchors: green. Every harness parses and none carries an unmatchable anchor.
