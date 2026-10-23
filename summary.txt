@@ -1,0 +1,2 @@
+vitest-sstats exit=0 3s |    Duration  3.16s (transform 1.05s, setup 94ms, collect 1.41s, tests 1.47s, environment 492ms, prepare 189ms)
+mutH exit=1 2s | ::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/components/front-office/FrontOfficeSeasonStats.test.tsx,title=src/components/front-office/FrontOfficeSeason
