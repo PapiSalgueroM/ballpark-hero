@@ -1,0 +1,10 @@
+#!serial
+n-nosecond-fair: node .rc/x/mut.mjs nosecond && FAIR_CONTROL=secondfit node scripts/simFairPuzzles.mjs; s=$?; git checkout -- src scripts; exit $s
+n-fair-ctl: FAIR_CONTROL=secondfit node scripts/simFairPuzzles.mjs
+n-identity: node .rc/x/mut.mjs identity && node scripts/simUsConnectionsFacts.mjs; s=$?; git checkout -- src scripts; exit $s
+n-identity-twice: node .rc/x/mut.mjs identity && US_CONN_CONTROL=twice node scripts/simUsConnectionsFacts.mjs; s=$?; git checkout -- src scripts; exit $s
+n-bellheld: node .rc/x/mut.mjs bellheld && US_CONN_CONTROL=bell node scripts/simUsConnectionsFacts.mjs; s=$?; git checkout -- src scripts; exit $s
+n-bellheld-nosecond: node .rc/x/mut.mjs bellheld && node .rc/x/mut.mjs nosecond && US_CONN_CONTROL=bell node scripts/simUsConnectionsFacts.mjs; s=$?; git checkout -- src scripts; exit $s
+n-karlheld: node .rc/x/mut.mjs karlheld && US_CONN_CONTROL=karlsson node scripts/simUsConnectionsFacts.mjs; s=$?; git checkout -- src scripts; exit $s
+n-karlheld-reach: node .rc/x/mut.mjs karlheld && node .rc/x/mut.mjs reach && US_CONN_CONTROL=karlsson node scripts/simUsConnectionsFacts.mjs; s=$?; git checkout -- src scripts; exit $s
+n-clean: git status --short scripts src && node scripts/simUsConnectionsFacts.mjs
