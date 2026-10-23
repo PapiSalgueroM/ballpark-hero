@@ -41,6 +41,8 @@
  *   Defensive Rookie of the Year: sacks, among first year men drafted in this
  *     save.
  * Ties go to more games, then the id. A rookie award needs at least one.
+ * They are named in src/lib/nflSeasonAwards.ts, which rides in the career kit
+ * with the season's verdict, so the page does not carry the close.
  *
  * Every number is this save's sim season, never a real statistic, and the
  * names are the save's rosters: nothing built on these lines quotes anybody.
@@ -48,8 +50,8 @@
  */
 import type { GmPlayer, GmTeamState, LeagueState } from './frontOffice';
 import { DEF_POS, DEF_SLOTS, OL_SLOTS, REPLACEMENT_OVR, SKILL_POS, SKILL_SLOTS, unitStarters } from './frontOffice';
-import { foRankAward, foSeasonPlayers, type FoSeasonStats, type FoStatLine } from './foSeasonStats';
-import { FO_HISTORY_CAP, foCloseOnce } from './foSeasonClose';
+import type { FoSeasonStats, FoStatLine } from './foSeasonStats';
+import { FO_HISTORY_CAP } from './foSeasonClose';
 import { keyedRng } from './keyedRng';
 import { gmStoryKey, type ToldGame } from './gmGameScore';
 import { nflDrivePair } from './gameLaws/nflDrives';
@@ -342,53 +344,20 @@ export function nflWinShare(stats: FoSeasonStats, team: string): number {
 /** The MVP score, the rule in the header. Exported so the harness can rank by it. */
 export const nflMvpScore = (stats: FoSeasonStats, p: FoStatLine): number => nflTouchdowns(p) + (p.tot.sk ?? 0) / 2 + NFL_MVP_WIN_WEIGHT * nflWinShare(stats, p.team);
 
-const pickOf = (p: FoStatLine): NflAwardPick => ({
-  id: p.id, name: p.name, team: p.team, pos: p.pos, g: p.g,
-  ptd: p.tot.ptd ?? 0, rtd: p.tot.rtd ?? 0, ctd: p.tot.ctd ?? 0, sk: p.tot.sk ?? 0,
-});
-
 /** Every man in the league, wherever he is: the rosters, the practice squads, the free agents, in that order. */
 export function nflEveryMan(lg: Pick<LeagueState, 'teams' | 'freeAgents'>): GmPlayer[][] {
   const teams = Object.values(lg.teams);
   return [...teams.map(t => t.players), ...teams.map(t => t.practice ?? []), lg.freeAgents ?? []];
 }
 
-/**
- * The season's awards from its lines, by the rules in the header, or null
- * when the league is not keeping lines for the season it is in. Pure.
- */
-export function nflSeasonAwards(lg: Pick<LeagueState, 'stats' | 'season' | 'teams' | 'freeAgents'>): NflSeasonAwards | null {
-  const live = nflLiveStats(lg);
-  if (!live) return null;
-  const stats = nflFoStats(live);
-  const men = foSeasonPlayers(stats);
-  const mvp = foRankAward(men, p => nflMvpScore(stats, p))[0] ?? null;
-  const rookies = men.filter(p => p.rookie);
-  const oroy = foRankAward(rookies.filter(p => nflTouchdowns(p) > 0), nflTouchdowns)[0] ?? null;
-  const droy = foRankAward(rookies.filter(p => (p.tot.sk ?? 0) > 0), p => p.tot.sk ?? 0)[0] ?? null;
-  return {
-    season: stats.season,
-    mvp: mvp ? pickOf(mvp) : null,
-    oroy: oroy ? pickOf(oroy) : null,
-    droy: droy ? pickOf(droy) : null,
-    rookies: nflEveryMan(lg).some(list => list.some(p => p.rookieSeason === stats.season)),
-  };
-}
+/* The season's awards (nflSeasonAwards) and the once close (nflCloseSeasonStats) are src/lib/nflSeasonAwards.ts's:
+   they run at the press that ends the season, which waits for the career kit, so they ride in the kit, not the page. */
 
 /** Every award a season handed out, as [key, man] pairs. */
 export function nflAwardList(a: NflSeasonAwards): [NflAwardKey, NflAwardPick][] {
   const out: [NflAwardKey, NflAwardPick][] = [];
   for (const k of NFL_AWARD_KEYS) { const m = a[k]; if (m) out.push([k, m]); }
   return out;
-}
-
-/**
- * Close the season's lines once (src/lib/foSeasonClose.ts): name the awards,
- * add them to the history and write each on the man's card wherever he is.
- * Null for a season the league was not keeping lines for.
- */
-export function nflCloseSeasonStats(lg: LeagueState): NflSeasonAwards | null {
-  return foCloseOnce(lg, () => nflSeasonAwards(lg), a => nflAwardList(a).map(([k, m]) => [NFL_AWARD_LABEL[k], m.id]), nflEveryMan(lg));
 }
 
 /**

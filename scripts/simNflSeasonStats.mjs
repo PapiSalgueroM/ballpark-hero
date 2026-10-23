@@ -99,6 +99,7 @@ const PER_KIND = Number(process.env.NFL_STATS_SEASONS || FLEET.perKind);
 const DRIVES = 'src/lib/gameLaws/nflDrives.ts';
 const STATS = 'src/lib/nflSeasonStats.ts';
 const FO_STATS = 'src/lib/foSeasonStats.ts';
+const AWARDS = 'src/lib/nflSeasonAwards.ts';
 const CLOSE = 'src/lib/foSeasonClose.ts';
 
 /* `labels`: pieces of check labels that must ALL be among the reds of the control's section. `everySet`: the
@@ -165,6 +166,7 @@ const HEAD_ENTRY = [
   ...STORY_ENTRY,
   "export * as bind from './src/lib/frontOfficeGameDay.ts';",
   "export * as stats from './src/lib/nflSeasonStats.ts';",
+  "export * as awards from './src/lib/nflSeasonAwards.ts';",
   "export * as view from './src/lib/nflSeasonView.ts';",
   "export * as fo from './src/lib/foSeasonStats.ts';",
   "export { leagueNames } from './src/lib/foNames.ts';",
@@ -176,6 +178,10 @@ let fired;
 let B = null;
 try {
   ({ M, fired } = await bundle(HEAD_ENTRY, PATCHES, 'head'));
+  /* the awards and the close live in src/lib/nflSeasonAwards.ts (they ride in the career kit, not the page): the
+     harness reads them beside the lines, as one lib */
+  if (!M.awards || typeof M.awards.nflCloseSeasonStats !== 'function') throw new Error('src/lib/nflSeasonAwards.ts does not export nflCloseSeasonStats');
+  M = { ...M, stats: { ...M.stats, ...M.awards } };
   if (SECTIONS.includes(1) && LIFT_BASE) {
     if (!fs.existsSync(path.join(LIFT_BASE, DRIVES)) && !fs.existsSync(path.join(LIFT_BASE, 'src/lib/gameLaws/nfl.ts'))) throw new Error(`LIFT_BASE ${LIFT_BASE} holds no NFL story law`);
     B = await bundleAt(LIFT_BASE, STORY_ENTRY, 'base');
@@ -744,7 +750,7 @@ if (SECTIONS.includes(8)) {
   const S = M.stats;
   console.log('');
   console.log('8. COPY AND PURITY');
-  for (const rel of [STATS, DRIVES, CLOSE]) {
+  for (const rel of [STATS, AWARDS, DRIVES, CLOSE]) {
     const code = codeOf(readSrc(rel));
     check(8, `${rel} holds no Math.random, no Date and no localStorage, comments taken out`, !/Math\.random|\bDate\b|localStorage/.test(code));
   }

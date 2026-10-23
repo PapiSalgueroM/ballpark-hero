@@ -79,6 +79,7 @@ try {
   ({ M } = await bundle([
     "export * as E from './src/lib/frontOffice.ts';",
     "export * as S from './src/lib/nflSeasonStats.ts';",
+    "export * as A from './src/lib/nflSeasonAwards.ts';",
     "export * as B from './src/lib/frontOfficeGameDay.ts';",
     "export * as D from './src/lib/gmGameDay.ts';",
     "export { NFL_GAME_DAY } from './src/lib/gameLaws/nflGameDay.ts';",
@@ -125,14 +126,14 @@ function plantSecondSeason() {
 function plantSecondSeasonOf(key) {
   const gen = seededGen(key);
   return withMathRandom(gen, () => {
-    const { E, S } = M;
+    const { E, S, A } = M;
     const lg = E.initLeague(Math.random, {});
     let user = Object.keys(lg.teams)[9];
     playWeeks(lg, user, 1, 17);
     lg.week = E.REGULAR_WEEKS;
     const { champion } = E.runPlayoffs(lg.teams, Math.random);
     lg.champions.push({ season: lg.season, team: champion });
-    const closed = S.nflCloseSeasonStats(lg);
+    const closed = A.nflCloseSeasonStats(lg);
     E.runOffseason(lg, Math.random, user);
     /* the badge's man: a first season winner still on a roster after the summer (a winner can retire in it) */
     const winners = S.nflAwardList(closed).map(([k, m]) => ({ id: m.id, name: m.name, label: `${closed.season} ${S.NFL_AWARD_LABEL[k]}` }));

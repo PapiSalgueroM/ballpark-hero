@@ -96,9 +96,10 @@ import { NFL_POSTSEASON, nflPlayTie, nflRoundsOf } from '@/lib/frontOfficePostse
 import {
   bracketChampion, bracketPairings, bracketWeek, openBracket, playBracketAll, playBracketWeek, type BracketFormat, type GmBracketSave,
 } from '@/lib/gmBracket';
-/* Round 1542: who scored, the recorder, the close and the readers (static), the roster badge, the season card's props */
+/* Round 1542: who scored, the recorder and the readers (static), the roster badge, the season card's props. The close
+   (nflCloseSeasonStats) comes with the career kit, in the press that already waits for it. */
 import {
-  nflAwardList, nflAwardsOf, nflCleanSave, nflCloseSeasonStats, nflMarkRookies, nflPlaysFor, nflRecordGame, nflRecordWeek, NFL_AWARD_LABEL,
+  nflAwardList, nflAwardsOf, nflCleanSave, nflMarkRookies, nflPlaysFor, nflRecordGame, nflRecordWeek, NFL_AWARD_LABEL,
 } from '@/lib/nflSeasonStats';
 import { FoAwardBadge } from '@/components/front-office-shared/FoAwardBadge';
 import type { NflSeasonCardProps } from '@/components/front-office/NflSeasonStats';
@@ -113,8 +114,8 @@ const NflGameDay = lazyPart<GmGameDayMount>(() => import('@/components/front-off
    one chunk the week box asks for. (Round 1307's note that the final week has
    no Watch is gone: Week 17 has Watch now, and its press opens the bracket.) */
 const NflBracket = lazyPart<GmBracketMount>(() => import('@/components/front-office/NflBracket'));
-/* Round 1542: who scored. The press credits every touchdown and sack and keeps the season's lines (the recorder, the
-   close and the readers are static: they run in the press's own tick and at load); the season card, its leaders, its
+/* Round 1542: who scored. The press credits every touchdown and sack and keeps the season's lines (the recorder and
+   the readers are static: they run in the press's own tick and at load; the close is the career kit's); the season card, its leaders, its
    words and the award history are one chunk the recap and Standings ask for. Their imports sit with the others above.
    The card has its own holding box, not the desk's (data-gm-panel-loading means the career kit is on its way, FrontOfficeLazyDesk.test.tsx):
    the same fixed height, so the recap and Standings do not jump when the card lands */
@@ -666,7 +667,7 @@ export default function FrontOfficeBoard() {
     /* Round 1550: the verdict is the career kit's. Every press that can reach here is made in the last week or the
        playoffs, where the buttons wait for the kit (closeWaits), so it is here; the guard is for the type alone. */
     if (!kit) return;
-    const { hostSeasonVerdict, hostXpRecapLine, nflDeskHost, nflOutcome } = kit;
+    const { hostSeasonVerdict, hostXpRecapLine, nflDeskHost, nflOutcome, nflCloseSeasonStats } = kit;
     lg.champions.push({ season: lg.season, team: champ });
     /* Round 1542: the season's awards, named once from its regular season lines and written on the winners' cards
        (src/lib/foSeasonClose.ts: a second close changes nothing). The feed says so when one of his men won. */

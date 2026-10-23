@@ -8,10 +8,11 @@ import { FO_HISTORY_CAP, foCloseOnce } from '@/lib/foSeasonClose';
 import { nflDrivePair } from '@/lib/gameLaws/nflDrives';
 import { keyedRng } from '@/lib/keyedRng';
 import {
-  NFL_AWARD_LABEL, nflAwardList, nflCleanSave, nflCloseSeasonStats, nflCreditGame, nflLiveStats, nflMarkRookies, nflMvpScore,
-  nflFoStats, nflNewStats, nflPassChance, nflPlaysFor, nflPool, nflPoolMen, nflRecordGame, nflRecordWeek, nflSackChance, nflSeasonAwards,
+  NFL_AWARD_LABEL, nflAwardList, nflCleanSave, nflCreditGame, nflLiveStats, nflMarkRookies, nflMvpScore,
+  nflFoStats, nflNewStats, nflPassChance, nflPlaysFor, nflPool, nflPoolMen, nflRecordGame, nflRecordWeek, nflSackChance,
   nflStatsHelp, nflUsage, readNflAwards, readNflStats, type NflSeasonAwards, type NflSeasonStats, type NflToldGame,
 } from '@/lib/nflSeasonStats';
+import { nflCloseSeasonStats, nflSeasonAwards } from '@/lib/nflSeasonAwards';
 import { NFL_NO_CLASS, NFL_NO_ROOKIES, NFL_SAT_OUT, nflAwardBoxes, nflHistoryRows } from '@/lib/nflSeasonView';
 
 let n = 0;
