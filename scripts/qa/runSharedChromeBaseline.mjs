@@ -3,7 +3,7 @@ import path from 'node:path';
 import assert from 'node:assert/strict';
 import { spawnSync } from 'node:child_process';
 
-function main() {
+async function main() {
   const root = process.cwd(), out = process.env.CHROME_BASELINE_OUT;
   assert(process.env.CI && out && path.isAbsolute(out), 'CHROME_BASELINE_REMOTE_SETUP');
   const recipes = [
