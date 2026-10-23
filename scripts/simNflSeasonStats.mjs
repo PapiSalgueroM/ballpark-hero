@@ -338,7 +338,15 @@ const MARGIN_4 = 0.27;
 /* The two other rating rules the "?" states, each a least squares slope over every regular season club game of a set:
    the pass share of credited touchdowns a point of QB1 rating (the rule's own slope is NFL_PASS_SLOPE, 0.01, inside
    its clamp), and the sacks a club game a point of rush less block (NFL_SACK_TRIES times NFL_SACK_SLOPE, 0.08).
-   PROVISIONAL margins, half the rule's own slope, until the runner's measurement is written here. */
+   MEASURED 2026-10-23 on a runner (rc r1542-fx-m1, head 009f22f96), all five seed sets, the whole fleet:
+     pass slope 0.00989, 0.01016, 0.00979, 0.01005, 0.00995 (smallest 0.00979, standard error 0.00022 on each set,
+       about 112,000 credited touchdowns a set); under passflip -0.00989 to -0.01016 (largest -0.00979);
+     sack slope 0.0801, 0.0776, 0.0795, 0.0797, 0.0801 (smallest 0.0776, standard error 0.0019 to 0.0020, 43,520 club
+       games a set); under sackswap -0.0794 to -0.0818 (largest -0.0790).
+   Half way between the clean smallest and the controls' largest is about zero, which would let a rule cut to a
+   sliver of itself pass. So each margin sits half way between the clean smallest and NO effect (0, what a rule
+   blind to rating gives), which the controls lie well beyond: 0.005 is about 22 standard errors from 0.00979 and 23 from
+   zero; 0.04 is 19 from 0.0776 and 20 from zero. */
 const PASS_MARGIN_4 = 0.005;
 const SACK_MARGIN_4 = 0.04;
 const newFit = () => ({ n: 0, sx: 0, sy: 0, sxx: 0, sxy: 0, syy: 0 });
