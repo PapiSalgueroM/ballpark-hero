@@ -1,0 +1,6 @@
+build exit=0 33s | [dukb] inlined 1 stylesheet(s) and 1 module(s) into 181 snapshots (11 left alone)
+walk exit=0 44s | playNflSeasonStats: 112 checks, 0 failed
+playGmPress-head exit=1 85s | playGmPress: 2 failures
+playGmPress-base exit=1 122s | playGmPress: 2 failures
+walk-nonames exit=1 81s | playNflSeasonStats: 112 checks, 12 failed (control nonames)
+walk-nocard exit=1 137s | playNflSeasonStats: 100 checks, 3 failed (control nocard)
