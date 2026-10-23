@@ -116,7 +116,14 @@ function plantWeek17() {
 }
 /** c and d: a league in Week 9 of its second season, the first closed with its awards, his club the MVP's. */
 function plantSecondSeason() {
-  const gen = seededGen('play nfl season stats|second season');
+  /* a first season's only award is its MVP (no class drafted yet), and he can retire in the summer: the first seed
+     whose winner is still on a roster is taken (the same one every run) */
+  let out = null;
+  for (let k = 0; k < 30 && !(out && out.badge); k += 1) out = plantSecondSeasonOf(`play nfl season stats|second season|${k}`);
+  return out;
+}
+function plantSecondSeasonOf(key) {
+  const gen = seededGen(key);
   return withMathRandom(gen, () => {
     const { E, S } = M;
     const lg = E.initLeague(Math.random, {});
@@ -278,12 +285,13 @@ async function pointCD(browser, size, second) {
   sayLayout(size, 'Standings', await layout(page, '[data-standings-faces], [data-award-history], [data-season-stats-pending]', EXEMPT));
   await toHub(page);
   await openTile(page, 'Roster');
-  const badge = await page.$eval(`[data-roster-row="${second.badge.id}"] [data-award-badge]`, e => ({ text: e.textContent || '', title: e.getAttribute('title') || '' })).catch(() => null);
-  say('d', !!badge && badge.text.includes(`Sim ${second.badge.label}`) && badge.title.includes("This save's sim awards, not real NFL ones"), `${size.w}: the MVP's roster row carries the sim badge${badge ? ` (${badge.text.trim()})` : ''}`);
-  const row = await page.$(`[data-roster-row="${second.badge.id}"]`);
+  const bid = second.badge ? second.badge.id : "no-winner";
+  const badge = await page.$eval(`[data-roster-row="${bid}"] [data-award-badge]`, e => ({ text: e.textContent || '', title: e.getAttribute('title') || '' })).catch(() => null);
+  say('d', !!badge && badge.text.includes(`Sim ${second.badge?.label}`) && badge.title.includes("This save's sim awards, not real NFL ones"), `${size.w}: the MVP's roster row carries the sim badge${badge ? ` (${badge.text.trim()})` : ''}`);
+  const row = await page.$(`[data-roster-row="${bid}"]`);
   if (row) await row.scrollIntoViewIfNeeded();
   await shot(page, size, 'd');
-  await shotEl(page, size, 'd', `[data-roster-row="${second.badge.id}"]`);
+  await shotEl(page, size, 'd', `[data-roster-row="${bid}"]`);
   say('e', errors.length === 0, `${size.w}, c and d: no page error${errors.length ? `: ${errors[0]}` : ''}`);
   await ctx.close();
 }
