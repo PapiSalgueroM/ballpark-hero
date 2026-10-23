@@ -1,0 +1,6 @@
+Soccer Career save recovery: 39/39 actual component checks passed.
+Soccer Career save recovery: 12 current, older, event, international, post-retirement and completion baselines passed.
+Soccer Career save recovery: 23 malformed core saves retain raw bytes, recover before render and delete only their own key on request.
+Soccer Career save recovery: malformed and primitive JSON, explicit new-career replacement and the clean creator passed.
+Soccer Career save recovery: restored retirements record zero completions; finishing a ceremony records once and stays once after reload.
+Soccer Career save recovery cleanup: temporary copies and reports removed; production page and reader bytes stayed identical.
