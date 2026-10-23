@@ -1,0 +1,9 @@
+tsc: node_modules/.bin/tsc --noEmit -p tsconfig.app.json
+before1: git show a909be448:src/components/front-office/FrontOfficeSeasonStats.test.tsx > src/components/front-office/FoSsBefore1.test.tsx && node_modules/.bin/vitest run src/components/front-office/FoSsBefore1.test.tsx -t "the save it writes" --testTimeout=300000 --hookTimeout=120000
+before2: git show a909be448:src/components/front-office/FrontOfficeSeasonStats.test.tsx > src/components/front-office/FoSsBefore2.test.tsx && node_modules/.bin/vitest run src/components/front-office/FoSsBefore2.test.tsx -t "the save it writes" --testTimeout=300000 --hookTimeout=120000
+before3: git show a909be448:src/components/front-office/FrontOfficeSeasonStats.test.tsx > src/components/front-office/FoSsBefore3.test.tsx && node_modules/.bin/vitest run src/components/front-office/FoSsBefore3.test.tsx -t "the save it writes" --testTimeout=300000 --hookTimeout=120000
+after1: node_modules/.bin/vitest run src/components/front-office/FrontOfficeSeasonStats.test.tsx -t "the save it writes" --testTimeout=300000 --hookTimeout=120000
+after2: node_modules/.bin/vitest run src/components/front-office/FrontOfficeSeasonStats.test.tsx -t "the save it writes" --testTimeout=300000 --hookTimeout=120000
+after3: node_modules/.bin/vitest run src/components/front-office/FrontOfficeSeasonStats.test.tsx -t "the save it writes" --testTimeout=300000 --hookTimeout=120000
+c-tight: NFL_SAVE_BUDGET_CONTROL=tight node_modules/.bin/vitest run src/components/front-office/FrontOfficeSeasonStats.test.tsx -t "the save it writes" --testTimeout=300000 --hookTimeout=120000
+vitest-sstats: node_modules/.bin/vitest run src/components/front-office/FrontOfficeSeasonStats.test.tsx src/lib/nflSeasonStats.test.ts --testTimeout=300000 --hookTimeout=120000
