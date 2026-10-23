@@ -9,9 +9,14 @@
  *     paths that hand the stored save back to persist (an old recap save's draft, a bracket started again);
  *   - the final week names the awards once, and a reload on the recap does not name them again;
  *   - a winner's roster row carries the sim badge, and a card that does not read shows none.
- * It also prints the real persisted byte length after a whole season with lines and the desk on.
+ * It also prints the real persisted byte length after a whole season with lines and the desk on, every id at the
+ * longest epoch the minter can draw (the same on every run, the most the ids can cost), and holds the recap's save
+ * inside the NFL save budget read from simNflFullRosters.mjs by its anchor (control NFL_SAVE_BUDGET_CONTROL=tight:
+ * the budget becomes the save after Week 16, so the recap must be over it and the case red).
  * The fleet's identities, determinism and the awards over many seasons are scripts/simNflSeasonStats.mjs's.
  */
+import fs from 'node:fs';
+import path from 'node:path';
 import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest';
 import { render, screen, fireEvent, cleanup } from '@testing-library/react';
 import type { ComponentType } from 'react';
@@ -34,6 +39,27 @@ vi.mock('@/hooks/useGameCompletion', () => ({ useGameCompletion: () => undefined
 vi.mock('@/lib/completions', () => ({ recordActivity: () => undefined }));
 vi.mock('@/components/game/ShareButtons', () => ({ default: () => null }));
 vi.mock('@/hooks/useRevealScroll', () => ({ useRevealScroll: () => ({ current: null }) }));
+/* Every id the engine mints carries an epoch (src/lib/entityIds.ts) drawn once a page from the real Math.random,
+   before this file seeds it: two numbers under 2^32 in base 36, so 14 characters at most and often 13 or 12. The
+   measured save moved by about 2K between two runs of one head (rc r1542-fx-fa and r1542-vc-b), and the desk's scout
+   reads hash the ids, so the season moved a little too. Here every id carries the LONGEST epoch the minter can draw,
+   with the minter's own counter: the same numbers on every run, and the most the ids can cost. */
+const LONGEST_EPOCH = vi.hoisted(() => (0xffffffff).toString(36).repeat(2));
+vi.mock('@/lib/entityIds', async importOriginal => {
+  const real = await importOriginal<typeof import('@/lib/entityIds')>();
+  return {
+    ...real,
+    makeIdMinter: (prefix: string) => {
+      const mint = real.makeIdMinter(prefix);
+      return () => {
+        const id = mint();
+        const n = /-(\d+)$/.exec(id);
+        if (!id.startsWith(prefix) || !n) throw new Error(`the minter's id ${id} is not ${prefix}<epoch>-<count>`);
+        return `${prefix}${LONGEST_EPOCH}-${n[1]}`;
+      };
+    },
+  };
+});
 vi.setConfig({ testTimeout: 300_000 });
 
 function lehmer(seed: number) {
@@ -266,6 +292,9 @@ describe('NFL front office: who scored, the load and the close', () => {
     if (deepOverLimit(league.teams[team]) > 0) cutDownToMax(league.teams[team], league.freeAgents);
     save(shape(league, team, { gm: openNflDesk(league, team) }));
     const opening = localStorage.getItem(SAVE_KEY)!.length;
+    const pinned = localStorage.getItem(SAVE_KEY)!.split(LONGEST_EPOCH).length - 1;
+    expect(pinned, 'the ids in the save carry the pinned epoch (else the measure is a run of the dice again)').toBeGreaterThan(0);
+    console.log(`MEASURED: ${pinned} ids in the Week 1 save carry the pinned epoch`);
     render(<Board />);
     for (let w = 1; w < REGULAR_WEEKS; w += 1) press(`Play Week ${w}`);
     const before = localStorage.getItem(SAVE_KEY)!.length;
@@ -276,10 +305,18 @@ describe('NFL front office: who scored, the load and the close', () => {
     const block = JSON.stringify(s.league.stats).length;
     const lines = Object.values(s.league.stats.lines as Record<string, object>).reduce((n: number, men) => n + Object.keys(men).length, 0);
     const without = JSON.stringify({ ...s, league: { ...s.league, stats: undefined, awards: undefined } }).length;
-    /* printed for the lead (the NFL save budget is simNflFullRosters.mjs's 700K): never asserted against it here */
-    console.log(`MEASURED: the persisted save on full rosters with the desk on: ${opening} characters at Week 1, ${before} after Week 16, ${bytes} on the recap (${without} without the block and the history); the block ${block}, ${lines} lines, the history ${JSON.stringify(s.league.awards).length}`);
+    /* The NFL save budget is simNflFullRosters.mjs's, read by its anchor: `stats.maxSave <= 700 * 1024`, in
+       characters of the saved JSON, so 716,800 (its own print says "700K" for 700 x 1024). */
+    const budgetSrc = fs.readFileSync(path.resolve(process.cwd(), 'scripts', 'simNflFullRosters.mjs'), 'utf8');
+    const anchors = [...budgetSrc.matchAll(/stats\.maxSave <= (\d+) \* 1024/g)];
+    expect(anchors, 'the budget anchor in simNflFullRosters.mjs, exactly once').toHaveLength(1);
+    const budget = process.env.NFL_SAVE_BUDGET_CONTROL === 'tight' ? before : Number(anchors[0][1]) * 1024;
+    if (process.env.NFL_SAVE_BUDGET_CONTROL) console.log(`NEGATIVE CONTROL ON: NFL_SAVE_BUDGET_CONTROL=${process.env.NFL_SAVE_BUDGET_CONTROL}; the budget is the save after Week 16 (${before}), so the recap must be over it`);
+    const k = (n: number) => `${(n / 1024).toFixed(1)}K`;
+    console.log(`MEASURED (ids at the longest epoch, ${LONGEST_EPOCH.length} characters): the persisted save on full rosters with the desk on: ${opening} characters (${k(opening)}) at Week 1, ${before} (${k(before)}) after Week 16, ${bytes} (${k(bytes)}) on the recap (${without} without the block and the history); the block ${block}, ${lines} lines, the history ${JSON.stringify(s.league.awards).length}; the budget ${budget} (${k(budget)}), ${budget - bytes} characters (${k(budget - bytes)}) left on the recap`);
     expect(s.league.stats.clubs[team][0]).toBe(REGULAR_WEEKS);
     expect(readNflStats(s.league.stats)).not.toBeNull();
+    expect(bytes, 'the recap save on full rosters with the desk on stays inside the NFL save budget').toBeLessThanOrEqual(budget);
   });
 });
 
