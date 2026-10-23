@@ -1,4 +1,4 @@
-import { useEffect, useId, useRef, useState, type ComponentType } from 'react';
+import { useEffect, useId, useRef, useState, type ComponentType, type KeyboardEvent } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { Menu } from 'lucide-react';
 import { Button } from '@/components/ui/button';
@@ -28,16 +28,22 @@ export function SiteMenu() {
     trigger.current?.focus({ preventScroll: true });
   };
 
+  const closeOnEscape = (event: KeyboardEvent) => {
+    if (!open || Panel || event.key !== 'Escape') return;
+    event.preventDefault();
+    close();
+  };
+
   return <>
     <Button ref={trigger} type="button" variant="ghost" aria-label="Open site menu"
       aria-haspopup="dialog" aria-expanded={open} aria-controls={open && Panel ? id : undefined}
       aria-busy={open && !Panel && !failed ? true : undefined}
-      onClick={() => setOpen(true)} className="h-11 min-h-11 shrink-0 self-start gap-2 rounded-none px-3 text-sm">
+      onClick={() => setOpen(true)} onKeyDown={closeOnEscape} className="h-11 min-h-11 shrink-0 self-start gap-2 rounded-none px-3 text-sm">
       <Menu className="h-5 w-5" aria-hidden="true" />
       Menu
     </Button>
     {Panel ? <Panel open={open} onOpenChange={setOpen} returnFocusRef={trigger} id={id} /> : open && (
-      <div role="region" aria-label="Site menu loading" data-site-chrome=""
+      <div role="region" aria-label="Site menu loading" data-site-chrome="" onKeyDown={closeOnEscape}
         className="fixed left-3 right-3 top-28 z-50 max-w-sm rounded-xl border border-border bg-card p-4 shadow-lg">
         <p role={failed ? 'alert' : 'status'} className="text-sm text-muted-foreground">
           {failed ? 'Menu could not load. Use Search Games, or refresh to try again.' : 'Loading menu...'}
