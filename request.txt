@@ -1,0 +1,6 @@
+#!build
+#!playwright
+simWritesAreSent: node scripts/simWritesAreSent.mjs
+simResultMoment: node scripts/simResultMoment.mjs
+seo-head: node scripts/simSeoDiscovery1444.mjs
+seo-main: git worktree add -q .wt-main origin/main && cd .wt-main && node scripts/simSeoDiscovery1444.mjs
