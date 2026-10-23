@@ -1,0 +1,4 @@
+tsc: node_modules/.bin/tsc --noEmit -p tsconfig.app.json
+vitest-menu: node_modules/.bin/vitest run src/test/SiteMenu.escape-failure.test.tsx src/test/SiteMenu.escape-loading.test.tsx src/test/Search.navigation.test.tsx src/components/front-office-shared/FrontOfficeGmCareer.test.tsx --testTimeout=300000
+rivals: node scripts/simNoRivalNames.mjs
+anchors: node scripts/simHarnessAnchors.mjs
