@@ -1,0 +1,8 @@
+build exit=0 27s | [dukb] inlined 1 stylesheet(s) and 1 module(s) into 181 snapshots (11 left alone)
+vitest-intl exit=0 10s |    Duration  9.45s (transform 3.12s, setup 465ms, collect 9.42s, tests 8.54s, environment 2.76s, prepare 762ms)
+sweepWeight exit=1 29s | sweepWeight: 1 failure
+playNbaIntl exit=0 42s | playNbaIntl: green. The call, Go and its result's views, Rest, a reload mid beat, the 2027 World Cup's lines and no call at 80 or in 2005, at 320, 390 and 1280; 24 screen
+weight-head exit=0 8s |   AppearanceBuilder:14.9 Celebration:0.8 CelebrationStyles:0.7 Confetti:0.6 GameHelp:0.8 GameNav:1.7 GameNavbar:3.7 GameReportContext:3.0 GameSeoContent:2.4 HowToPlayPopo
+tsc exit=0 68s | 
+mut-FMT exit=1 78s | MUTATION FMT CAUGHT (vitest=1 walk=1)
+simCareerIntl exit=0 83s | simCareerIntl: GREEN, 52755 checks over sections 1,2,3,4,6,12

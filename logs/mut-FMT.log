@@ -1,0 +1,16 @@
+mutation FMT applied to src/lib/nbaCareerIntl.ts
+[31m     → wc-2027: expected '🥉 BronzeThe 2027 Basketball World Cu…' not to contain 'two group rounds'[39m
+[31m     → wc-2035: expected '🥉 BronzeThe 2035 Basketball World Cu…' not to contain 'two group rounds'[39m
+[31m     → expected 'The game plays its two group rounds a…' to be null[39m
+[31m⎯⎯⎯⎯⎯⎯⎯[39m[1m[41m Failed Tests 3 [49m[22m[31m⎯⎯⎯⎯⎯⎯⎯[39m
+[41m[1m FAIL [22m[49m src/test/nbaCareerIntl.test.ts[2m > [22mthe summer after a season[2m > [22mnames the two group rounds only for a World Cup really played that way (review of Round 1544: no source for 2027 on)
+[31m[1mAssertionError[22m: expected 'The game plays its two group rounds a…' to be null[39m
+[41m[1m FAIL [22m[49m src/test/nbaIntlResultLines.test.tsx[2m > [22mthe result screen says only what is true of its summer[2m > [22ma summer still to come: never played, the field is the game's own
+[31m[1mAssertionError[22m: wc-2027: expected '🥉 BronzeThe 2027 Basketball World Cu…' not to contain 'two group rounds'[39m
+[41m[1m FAIL [22m[49m src/test/nbaIntlResultLines.test.tsx[2m > [22mthe result screen says only what is true of its summer[2m > [22ma projected summer: never played, host and field are the game's own
+[31m[1mAssertionError[22m: wc-2035: expected '🥉 BronzeThe 2035 Basketball World Cu…' not to contain 'two group rounds'[39m
+  FAIL c-320: the call claims a format the ledger has no source for
+playNbaIntl: RED, 1 failures
+  screenshots in /tmp/fx-FMT-shots: a-320-1-holding.png a-320-2-call.png a-320-3-result.png a-320-4-games.png a-320-5-bracket.png a-320-6-group-or-round.png a-320-7-summer-card.png a-390-1-holding.png a-390-2-call.png a-390-3-result.png a-390-4-games.png a-390-5-bracket.png a-390-6-group-or-round.pn
+playNbaIntl: RED, 1 failures
+MUTATION FMT CAUGHT (vitest=1 walk=1)
