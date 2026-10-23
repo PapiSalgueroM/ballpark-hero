@@ -1,0 +1,12 @@
+# Release BQ publish prep: build:seo on the merged head (origin/main plus the release and the triage seams), its changed files exported, then the readers of the saved pages and the weight on that runner.
+#!buildseo
+#!export
+#!serve
+#!serial
+simGuideHeadings: node scripts/simGuideHeadings.mjs
+simSiteSearch: node scripts/simSiteSearch.mjs
+simPrerender: node scripts/simPrerender.mjs
+simSitemap: node scripts/simSitemap.mjs
+simIndexNow: node scripts/simIndexNow.mjs
+simHeadTags: node scripts/simHeadTags.mjs
+sweepWeight: SWEEP_OFFLINE=1 node scripts/sweepWeight.mjs
