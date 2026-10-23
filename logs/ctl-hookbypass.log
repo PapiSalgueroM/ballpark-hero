@@ -1,0 +1,32 @@
+1) the wheel holds exactly the seven challenges the record can total
+   7 challenges, all 400 spins scoreable
+2) every team the game deals has franchise codes
+   30 teams, 50 codes, none shared; 4 relocated franchises carry their old codes
+3) fixed fives against hand computed numbers
+   five A 96 scores 79, five B 16.5 scores 10, best 119.5, worst 5.5
+4) Lowest turns the range round
+   five A: highest 79, lowest 21; 10 Lowest picks read best here and closeness the right way round; 40 random fives, highest plus lowest within 0 of 100
+5) separation over 300 seeded deals of real looking careers
+   300 deals: best five 100 and worst 0 on 300; random fives average 49.7 over 300
+   the old judge on the same careers: best five average 99.0, worst five 99.0, same band on 300 of 300
+6) the best and worst five equal a brute force over every five
+   120 extremes on 60 deals (27 with a shared name) and 360 on correlated deals match the brute force; the shared name trap totals 100
+7) the namesake guard
+   7 roster names, 13 census, span and games cases and 5 illegal fives behave
+8) steals and blocks only count careers that began in 1973-74 or later
+   9 cases
+9) per game rounds to one decimal, totals stay whole, nothing is invented
+   7 cases
+10) source: no model, no edge function, no NBA offline judge, points follow the score
+   hook and page call no model or edge function; the completion records the score
+11) every refusal names the player and carries no dash
+   28 refusals
+12) points are the score on the old 500 scale, and the hit mark is NBA Stat Line's
+   6 cases; hit mark 90, Stat Line's 90
+13) the hook's half: each pool is the dealt team's own search rows, and the five is scored in the spin's direction
+CONTROL hookbypass ON: the hook is loaded from a mutated copy
+   fixture five: highest 33, lowest 67; 11 hook checks; reads 11
+  FAIL (section 13): evaluateTeam does not hand scoreNbaLineup the challenge as dealt
+  FAIL (section 13): evaluateTeam scores or redirects the five itself
+
+simNbaStartingFive CONTROL hookbypass FIRED: section 13 went red as it must (red sections: 13)
