@@ -10,6 +10,7 @@ concurrency:
   cancel-in-progress: false
 env:
   BASE_SOURCE: 3ac9d8ea8a13db824f88be2deb660e7f2e31fc35
+  EXPECTED_PARENT: f6dba0df4495959cad05db879e6aed50b35599ea
   CI: '1'
   SIM_NETWORK: offline
   TZ: UTC
@@ -29,7 +30,7 @@ jobs:
         with:
           node-version: 24
           cache: npm
-      - name: Exact six-path child and frozen retirement inputs
+      - name: Exact two-path child, seven cumulative paths and frozen retirement inputs
         run: |
           set -euo pipefail
           out="$RUNNER_TEMP/cm-veteran-retirement-functional";test ! -e "$out";mkdir "$out"
@@ -41,18 +42,21 @@ jobs:
           git fetch --no-tags --depth=1 origin "$BASE_SOURCE" > "$out/base-fetch.log" 2>&1
           git merge-base --is-ancestor "$BASE_SOURCE" "$GITHUB_SHA"
           git show -s --format=%P HEAD > "$out/parents.txt"
-          test "$(cat "$out/parents.txt")" = "$BASE_SOURCE"
-          git diff --exit-code "$BASE_SOURCE" HEAD -- . ':!docs/**' ':!.github/workflows/cm-veteran-retirement.yml' ':!src/lib/clubManager.ts' ':!src/lib/clubManagerCalendar.ts' ':!src/lib/clubManagerVeteranLedger.ts' ':!src/lib/clubManagerVeteranRetirement.ts' ':!src/test/clubManagerVeteranRetirement.test.ts' > "$out/finite-six-path-scope.log"
+          test "$(cat "$out/parents.txt")" = "$EXPECTED_PARENT"
+          git diff --exit-code "$EXPECTED_PARENT" HEAD -- . ':!docs/**' ':!.github/workflows/cm-veteran-retirement.yml' ':!src/test/clubManagerVeteranWorldRoster.test.ts' > "$out/direct-child-scope.log"
+          git diff --exit-code "$BASE_SOURCE" HEAD -- . ':!docs/**' ':!.github/workflows/cm-veteran-retirement.yml' ':!src/lib/clubManager.ts' ':!src/lib/clubManagerCalendar.ts' ':!src/lib/clubManagerVeteranLedger.ts' ':!src/lib/clubManagerVeteranRetirement.ts' ':!src/test/clubManagerVeteranRetirement.test.ts' ':!src/test/clubManagerVeteranWorldRoster.test.ts' > "$out/finite-seven-path-scope.log"
           test "$(git rev-parse "$BASE_SOURCE:src/lib/clubManager.ts")" = a505743537b383bc7885bb81f5a72c11e154b566
           test "$(git rev-parse "$BASE_SOURCE:src/lib/clubManagerCalendar.ts")" = 3653027149d6a1bef4194e0bece4fb5783c1c1e2
           test "$(git rev-parse HEAD:src/lib/clubManager.ts)" = bc6fb5765f593fb2b046e9abd35730093772f637
           test "$(git rev-parse HEAD:src/lib/clubManagerCalendar.ts)" = a397581e069d7809f72a093d24d157b50c88e2d3
+          test "$(git rev-parse HEAD:src/test/clubManagerVeteranWorldRoster.test.ts)" = 17f01cc5148c805efafe120f5af1c907bc2ee4f5
           printf '%s  %s\n' \
             45b9d486014720831f130000ff67d0d380f60c755bbb1afa3d0f9a833b2c4050 src/lib/clubManager.ts \
             7cdbc2e31172db5974f0753551133c61ae291662f5bd8e4b14f043d2267baf83 src/lib/clubManagerCalendar.ts \
             80f991a38069f29dd1fecc22a9cb9c0e3bb4945a33208fae1de8413fc6aefb17 src/lib/clubManagerVeteranLedger.ts \
             cdaecb5ecd28187da8a1c62526c6b165289e76e37d30a01cba2ce7c4a16577ed src/lib/clubManagerVeteranRetirement.ts \
-            2cf79f78fc380fd9509eaeec5c88c76fd3dc1f91e9695f922b1248df608f90b5 src/test/clubManagerVeteranRetirement.test.ts > "$out/input-pins.sha256"
+            2cf79f78fc380fd9509eaeec5c88c76fd3dc1f91e9695f922b1248df608f90b5 src/test/clubManagerVeteranRetirement.test.ts \
+            5b5e2c8f2c3e24fd5c7c23d04863e05c7737e9127695f4bbc9f793b2c6355215 src/test/clubManagerVeteranWorldRoster.test.ts > "$out/input-pins.sha256"
           sha256sum --check "$out/input-pins.sha256" > "$out/input-pins.log"
           git rev-parse HEAD > "$out/head.txt";git rev-parse 'HEAD^{tree}' > "$out/tree.txt"
           printf '%s\n' "$GITHUB_RUN_ID" > "$out/run-id.txt";printf '%s\n' "$GITHUB_RUN_ATTEMPT" > "$out/run-attempt.txt"
@@ -102,10 +106,35 @@ jobs:
           const runtime=['numRuntimeErrorTestSuites','numUnhandledErrors'];for(const key of runtime)if(key in r)assert.equal(r[key],0);
           if('unhandledErrors'in r)assert.deepEqual(r.unhandledErrors,[]);
           assert.doesNotMatch(fs.readFileSync(out+'/tests.log','utf8'),/Unhandled\s+(?:Errors?|Rejections?)|Uncaught\s+Exceptions?|Failed to resolve import|Cannot find (?:module|package)|No test files found/i);
-          fs.writeFileSync(out+'/functional-admission.json',JSON.stringify({phase:'veteran-retirement-functional-only',source:process.env.GITHUB_SHA,parent:process.env.BASE_SOURCE,runId:process.env.GITHUB_RUN_ID,attempt:process.env.GITHUB_RUN_ATTEMPT,passed:[...seen],observedRuntimeCounters:Object.fromEntries(runtime.filter(k=>k in r).map(k=>[k,r[k]])),absentRuntimeCountersUnknown:runtime.filter(k=>!(k in r)),unhandledErrors:'unhandledErrors'in r?r.unhandledErrors:'UNKNOWN_ABSENT',applicationQualified:false,fullOldEngineParity:false,worldRosterOwnerConsistency:false,hookUiAdopted:false,buildBrowserCapsQualified:false,balanceQualified:false},null,2)+'\n',{flag:'wx'});
+          fs.writeFileSync(out+'/functional-admission.json',JSON.stringify({phase:'veteran-retirement-functional-only',source:process.env.GITHUB_SHA,parent:process.env.EXPECTED_PARENT,baseSource:process.env.BASE_SOURCE,runId:process.env.GITHUB_RUN_ID,attempt:process.env.GITHUB_RUN_ATTEMPT,passed:[...seen],observedRuntimeCounters:Object.fromEntries(runtime.filter(k=>k in r).map(k=>[k,r[k]])),absentRuntimeCountersUnknown:runtime.filter(k=>!(k in r)),unhandledErrors:'unhandledErrors'in r?r.unhandledErrors:'UNKNOWN_ABSENT',applicationQualified:false,fullOldEngineParity:false,worldRosterOwnerConsistency:false,hookUiAdopted:false,buildBrowserCapsQualified:false,balanceQualified:false},null,2)+'\n',{flag:'wx'});
           NODE
           printf '%s\n' "$classifier" > "$out/classifier.exit";test "$classifier" -eq 0
           test ! -s "$out/types.transport";test ! -s "$out/tests.transport";test ! -s "$out/classifier.transport"
+      - name: Exact certified-world veteran ownership and retirement outcome
+        run: |
+          set -euo pipefail
+          out="$CM_VETERAN_OUT"
+          export NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs"
+          : > "$out/world.transport";: > "$out/world-classifier.transport";status=0
+          SIM_OFFLINE_RECEIPT="$out/world.transport" timeout --signal=TERM --kill-after=15s 8m node_modules/.bin/vitest run src/test/clubManagerVeteranWorldRoster.test.ts --maxWorkers=1 --no-file-parallelism --reporter=default --reporter=json --outputFile="$out/world.json" > "$out/world.log" 2>&1 || status=$?
+          printf '%s\n' "$status" > "$out/world.exit";test "$status" -eq 0
+          classifier=0
+          SIM_OFFLINE_RECEIPT="$out/world-classifier.transport" node <<'NODE' || classifier=$?
+          const fs=require('node:fs'),assert=require('node:assert/strict'),path=require('node:path'),out=process.env.CM_VETERAN_OUT;
+          const r=JSON.parse(fs.readFileSync(out+'/world.json','utf8'));
+          const ancestor='One protected veteran summer in the actual certified world roster',title='keeps agreed current ownership and payload for one summer, then records the actual next retirement under the same key';
+          assert.equal(r.success,true);assert.equal(r.testResults.length,1);
+          for(const [key,value]of Object.entries({numTotalTests:1,numPassedTests:1,numFailedTests:0,numPendingTests:0,numTodoTests:0}))assert.equal(r[key],value,key);
+          const suite=r.testResults[0];assert.equal(path.resolve(suite.name),path.resolve('src/test/clubManagerVeteranWorldRoster.test.ts'));
+          assert.equal(suite.status,'passed');assert.equal(suite.assertionResults.length,1);if('message'in suite)assert.equal(suite.message,'');
+          const row=suite.assertionResults[0];assert.equal(row.title,title);assert.equal(row.fullName,ancestor+' '+title);assert.equal(row.status,'passed');assert.deepEqual(row.failureMessages,[]);
+          const runtime=['numRuntimeErrorTestSuites','numUnhandledErrors'];for(const key of runtime)if(key in r)assert.equal(r[key],0);
+          if('unhandledErrors'in r)assert.deepEqual(r.unhandledErrors,[]);
+          assert.doesNotMatch(fs.readFileSync(out+'/world.log','utf8'),/Unhandled\s+(?:Errors?|Rejections?)|Uncaught\s+Exceptions?|Failed to resolve import|Cannot find (?:module|package)|No test files found/i);
+          fs.writeFileSync(out+'/world-admission.json',JSON.stringify({phase:'veteran-certified-world-fixture-only',source:process.env.GITHUB_SHA,parent:process.env.EXPECTED_PARENT,baseSource:process.env.BASE_SOURCE,runId:process.env.GITHUB_RUN_ID,attempt:process.env.GITHUB_RUN_ATTEMPT,passed:[row.fullName],observedRuntimeCounters:Object.fromEntries(runtime.filter(k=>k in r).map(k=>[k,r[k]])),absentRuntimeCountersUnknown:runtime.filter(k=>!(k in r)),unhandledErrors:'unhandledErrors'in r?r.unhandledErrors:'UNKNOWN_ABSENT',declaredFictionalFixtureOnly:true,fullOldEngineParity:false,applicationQualified:false,hookUiAdopted:false,buildBrowserCapsQualified:false,balanceQualified:false},null,2)+'\n',{flag:'wx'});
+          NODE
+          printf '%s\n' "$classifier" > "$out/world-classifier.exit";test "$classifier" -eq 0
+          test ! -s "$out/world.transport";test ! -s "$out/world-classifier.transport"
       - name: Always preserve all raw results and physical holds
         if: always()
         run: |
@@ -128,7 +157,7 @@ jobs:
           if test -f "$out/head.txt";then cmp "$out/head.txt" "$out/head-after.txt" || failed=1;else failed=1;fi
           git diff --exit-code HEAD > "$out/final-source-diff.log" || failed=1
           git status --porcelain --untracked-files=all > "$out/final-status.txt";test ! -s "$out/final-status.txt" || failed=1
-          for transport in types tests classifier;do test -f "$out/$transport.transport" && test ! -s "$out/$transport.transport" || failed=1;done
+          for transport in types tests classifier world world-classifier;do test -f "$out/$transport.transport" && test ! -s "$out/$transport.transport" || failed=1;done
           while IFS= read -r -d '' file;do test ! -s "$file" || failed=1;done < <(find "$out" -type f -name '*.transport' -print0)
           printf '%s\n' "$failed" > "$out/final-holds.exit"
           (cd "$out";find . -type f ! -path ./evidence.sha256 -print0 | sort -z | xargs -0 sha256sum) > "$out/evidence.sha256"
