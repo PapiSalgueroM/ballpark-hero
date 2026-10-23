@@ -102,12 +102,20 @@ function collect() {
   const visible = node => node.getClientRects().length && getComputedStyle(node).display !== 'none' && getComputedStyle(node).visibility !== 'hidden';
   const targets = [...document.querySelectorAll('button')].filter(visible).map(node => ({ text: node.textContent, rect: rect(node), disabled: node.disabled }));
   const field = mini ?? surface, b = ball ? rect(ball) : null, a = air ? rect(air) : null, s = shadow ? rect(shadow) : null;
+  const directPlan = window.__PITCH_FLIGHT_FIXTURE__.read().comparison?.expected ?? null;
+  const projected = point => {
+    const probe = document.createElement('span');
+    probe.style.left = (100 - point.y) + '%'; probe.style.top = point.x + '%';
+    return { left: Number.parseFloat(probe.style.left), top: Number.parseFloat(probe.style.top) };
+  };
+  const planCss = directPlan ? { source: directPlan, ball: projected(directPlan.ball),
+    figures: directPlan.figures.map(point => ({ side: point.side, ...projected(point) })) } : null;
   return { viewport: { width: innerWidth, height: innerHeight, documentWidth: document.documentElement.scrollWidth, x: scrollX, y: scrollY },
     reduced: matchMedia('(prefers-reduced-motion: reduce)').matches, light: document.documentElement.classList.contains('light'),
     fonts: { status: document.fonts.status, inter: document.fonts.check('16px Inter'), display: document.fonts.check('16px "Space Grotesk"'), faces: [...document.fonts].map(f => ({ family: f.family, status: f.status })) },
     targets, field: field ? rect(field) : null, phase: mini?.getAttribute('data-pitch-phase') ?? surface?.getAttribute('data-cm-motion-phase'),
     goal: mini?.getAttribute('data-pitch-goal') ?? null, side: mini?.getAttribute('data-pitch-side') ?? null,
-    orientation: surface?.getAttribute('data-pm-orient') ?? null,
+    orientation: surface?.getAttribute('data-pm-orient') ?? null, planCss,
     surface: surface ? css(surface) : null,
     ball: ball ? { rect: b, css: css(ball), lift: ball.getAttribute('data-cm-ball-lift'), left: Number.parseFloat(ball.style.left), top: Number.parseFloat(ball.style.top), children: ball.children.length } : null,
     shadow: shadow ? { rect: s, css: css(shadow) } : null, air: air ? { rect: a, css: css(air) } : null,
@@ -150,9 +158,10 @@ function exactPlan(record) {
   const actual = record.sample, expected = record.fixture.comparison.expected;
   const close = (a, b) => assert(Math.abs(a - b) <= 1e-10, 'PITCH_REAL_BUILD_SCENE_COORDINATE');
   assert.equal(actual.orientation, 'landscape');
-  close(actual.ball.left, 100 - expected.ball.y); close(actual.ball.top, expected.ball.x);
+  assert.deepEqual(actual.planCss.source, expected, 'PITCH_EXPECTED_PLAN_REFERENCE_MATCH');
+  close(actual.ball.left, actual.planCss.ball.left); close(actual.ball.top, actual.planCss.ball.top);
   assert.equal(actual.figures.length, expected.figures.length);
-  actual.figures.forEach((p, i) => { assert.equal(p.side, expected.figures[i].side); close(p.left, 100 - expected.figures[i].y); close(p.top, expected.figures[i].x); });
+  actual.figures.forEach((p, i) => { assert.equal(p.side, expected.figures[i].side); close(p.left, actual.planCss.figures[i].left); close(p.top, actual.planCss.figures[i].top); });
 }
 function changedBuild(record) {
   assert.equal(record.after.fixture.comparison.clock, record.before.fixture.comparison.clock, 'PITCH_BUILD_CLOCK_HELD');
@@ -304,6 +313,8 @@ try {
     ['changed-paused-dom', first.pauses[0], c => { c.after.stageHtml += ' '; }, held, 'PITCH_PAUSED_EXACT_DOM'],
     ['terminal-still-airborne', first.terminal[0].sample, c => { c.ball.lift = '1'; }, flat, 'PITCH_TERMINAL_FLAT'],
     ['build-did-not-change', first.comparisons[0], c => { c.after.sample.ball = c.before.sample.ball; }, changedBuild, 'PITCH_BUILD_ONLY_VISIBLE_CHANGE'],
+    ['wrong-build-scene-coordinate', first.comparisons[0], c => { c.after.sample.ball.left += 0.01; }, c => exactPlan(c.after), 'PITCH_REAL_BUILD_SCENE_COORDINATE'],
+    ['wrong-reference-plan-source', first.comparisons[0], c => { c.after.sample.planCss.source.ball.x += 0.25; }, c => exactPlan(c.after), 'PITCH_EXPECTED_PLAN_REFERENCE_MATCH'],
     ['input-mutated-record', first.terminal[0].fixture, c => { c.inputsAfter += ' '; }, unchanged, 'PITCH_INPUTS_UNCHANGED'],
     ['short-control-record', first.terminal[0].sample, c => { c.targets[0].rect.height = 43; }, layout, 'PITCH_UI_TARGET_44'],
     ['unexpected-failed-request', first, c => { c.requestFailures.push({ url: BASE + '/unexpected.js', method: 'GET', type: 'script', errorText: 'net::ERR_FAILED' }); }, cleanNetwork, 'PITCH_NO_FAILED_REQUESTS'],
@@ -315,7 +326,7 @@ try {
     report.controls.push({ id, changed: true, marker, passed: true, scope: 'copied actual browser measurements only' });
   }
   assert.equal(report.contexts.length, 6); assert(report.contexts.every(row => row.complete));
-  assert.equal(report.controls.length, 8, 'PITCH_EIGHT_EFFECTIVE_RECORD_CONTROLS');
+  assert.equal(report.controls.length, 10, 'PITCH_TEN_EFFECTIVE_RECORD_CONTROLS');
   assert.equal(report.contexts.reduce((n, row) => n + row.snapshots.length, 0), 42, 'PITCH_FORTY_TWO_PNG_RECORDS');
   report.status = 'PITCH_NATIVE_CLOCK_BROWSER_COMPLETE'; report.complete = true;
 } catch (error) { report.errors.push(String(error.stack || error)); report.status = 'failed'; }
@@ -356,5 +367,5 @@ finally {
   save('report.json', report);
   fs.writeFileSync(path.join(BROWSER, 'evidence.sha256'), inventory(BROWSER).map(row => row.sha256 + '  ' + row.file).join('\n') + '\n', { flag: 'wx' });
 }
-console.log('Pitch native-clock styled fixture: ' + report.status + ', ' + report.contexts.filter(row => row.complete).length + '/6 contexts, ' + report.controls.length + '/8 copied-record controls.');
+console.log('Pitch native-clock styled fixture: ' + report.status + ', ' + report.contexts.filter(row => row.complete).length + '/6 contexts, ' + report.controls.length + '/10 copied-record controls.');
 if (!report.complete) process.exitCode = 1;
