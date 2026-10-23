@@ -7,11 +7,14 @@
  * "Sim" in front, and "+N more"; the title says they are this save's sim
  * awards. The names on a roster are real, so every award says it is a sim one.
  * Nothing at all for a man with none.
+ *
+ * Round 1562: 12 px (text-xs), and it wraps instead of cutting an award off
+ * on a phone, as the season card's names do.
  */
 export function FoAwardBadge({ awards, league }: { awards: readonly string[]; league: string }) {
   if (awards.length === 0) return null;
   return (
-    <span data-award-badge className="block truncate text-[10px] text-gold" title={`This save's sim awards, not real ${league} ones: ${awards.join(', ')}`}>
+    <span data-award-badge className="block break-words text-xs text-gold" title={`This save's sim awards, not real ${league} ones: ${awards.join(', ')}`}>
       🏅 {awards.slice(-2).reverse().map(a => `Sim ${a}`).join(', ')}{awards.length > 2 ? ` +${awards.length - 2} more` : ''}
     </span>
   );
