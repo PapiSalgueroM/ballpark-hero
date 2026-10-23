@@ -1,0 +1,6 @@
+norival exit=0 20s | No rival product names found. 0 findings.
+desk-def exit=0 45s | simNbaGmDesk: all seven checks passed (10 seeds x 10 seasons)
+storage exit=0 3s | simStorageWrites: all green (owed: 12)
+ctl-dropone exit=0 41s | simNbaGmDesk: control dropone fired (21 failures, as it should)
+anchors exit=0 69s | simHarnessAnchors: green. Every harness parses and none carries an unmatchable anchor.
+tsc exit=0 96s | 
