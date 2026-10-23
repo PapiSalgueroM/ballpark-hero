@@ -43,7 +43,9 @@ async function openMenu() {
 }
 
 async function expectClosed(marker: string) {
-  await waitFor(() => expect(screen.queryByRole('dialog', { name: 'Menu' }), marker).not.toBeInTheDocument());
+  await waitFor(() => {
+    if (screen.queryByRole('dialog', { name: 'Menu' })) throw new Error(marker + ': Menu dialog is still open');
+  });
 }
 
 describe('global top-left SiteMenu with the actual Sheet and router', () => {
@@ -66,7 +68,7 @@ describe('global top-left SiteMenu with the actual Sheet and router', () => {
     ];
     for (const [name, href] of links) {
       const link = menu.getByRole('link', { name });
-      expect(link, 'SITE_MENU_ACTUAL_HREF_' + href).toHaveAttribute('href', href);
+      expect(link.getAttribute('href'), 'SITE_MENU_ACTUAL_HREF_' + href).toBe(href);
       expect(link, 'SITE_MENU_VISIBLE_LINK_' + href).toBeVisible();
     }
     expect(menu.getAllByRole('link'), 'SITE_MENU_BOUNDED_LINK_SET').toHaveLength(17);
