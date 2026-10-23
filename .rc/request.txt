@@ -1,0 +1,14 @@
+#!serve
+#!playwright
+# Release BQ, Round 1534 (US My Career shop promises, closing head 1c7205d0): rc-1534.txt rc-ff.txt.
+# Dropped: weight-final (weight1534.mjs, a measure of four routes against 1534's own base 41368514).
+walk: node scripts/playUsShopPromises.mjs
+playUsDirtyMoney: node scripts/playUsDirtyMoney.mjs
+playNflTruth: node scripts/playNflTruth.mjs
+playUsCareerReports: node scripts/playUsCareerReports.mjs
+playUsMarketTalk: node scripts/playUsMarketTalk.mjs
+sweepWeight: SWEEP_OFFLINE=1 node scripts/sweepWeight.mjs
+qa-entry1031: node scripts/qa/careerEntryGuide1031.mjs
+qa-outcome1009: node scripts/qa/careerDecisionOutcome1009.mjs
+qa-review1008: node scripts/qa/careerSeasonReview1008.mjs
+qa-look996: node scripts/qa/careerLook996.mjs
