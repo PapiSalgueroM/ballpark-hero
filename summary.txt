@@ -1,0 +1,9 @@
+build exit=0 25s | [dukb] inlined 1 stylesheet(s) and 1 module(s) into 181 snapshots (11 left alone)
+helpWalk exit=0 5s | helpWalk: green, 2 of 2 sizes
+walk exit=0 42s | playNflSeasonStats: 112 checks, 0 failed
+playFoOneRating exit=0 15s | playFoOneRating: green. The roster shelf and the draft cards print the committed files' numbers at both sizes, and the ? panel carries the rating rule.
+playFrontOfficeGameDay exit=0 349s | playFrontOfficeGameDay: 386 checks, 0 failed
+weight-head exit=0 15s | weightFo head: /front-office load 387.6K gz over 43 files
+weight-base exit=0 70s | weightFo base: /front-office load 381.8K gz over 41 files
+mutH exit=1 2s | ::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/components/front-office/FrontOfficeSeasonStats.test.tsx,title=src/components/front-office/FrontOfficeSeason
+playGmCareer exit=0 452s | playGmCareer: green. 1 board, 3 sizes, four walks each and the slow kit walk at 390 and 1280.
