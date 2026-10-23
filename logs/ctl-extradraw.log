@@ -1,0 +1,5 @@
+NEGATIVE CONTROL ON: extradraw; section 3 must go red
+3) Media: every gamble lands exactly one step more often a level, the safe answers and the tilt never move, one draw an answer
+  FAIL [3]: the board's answerPress is not one eased option and one draw ({"random":2,"option":1,"effects":1})
+   4 pressers, 6 gambles and 6 safe answers at levels 0 to 5; landed of 1000: Intro 700/730/760/790/820/850; Intro 500/530/560/590/620/650; Podium 600/630/660/690/720/750; Scrum 450/480/510/540/570/600; Trade 700/730/760/790/820/850; Trade 550/580/610/640/670/700
+CONTROL extradraw: 1 rewrite(s) applied, 1 failure(s) in section 3 (FIRED)
