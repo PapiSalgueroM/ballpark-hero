@@ -1,0 +1,5 @@
+simGmInbox: 7 packs, nfl 10, nba 8, mlb 8, nhl 8, college 8, gym 6, afl 6 events, CONTROL=effectout, seed 1
+simGmInbox: 1 failure (CONTROL=effectout)
+simGmInbox: 7 packs, nfl 10, nba 8, mlb 8, nhl 8, college 8, gym 6, afl 6 events, CONTROL=effectrating, seed 1
+simGmInbox: 1 failure (CONTROL=effectrating)
+simGmInbox: 2 of 2 Round 1324 review controls fired

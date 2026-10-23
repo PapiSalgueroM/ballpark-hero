@@ -1,0 +1,5 @@
+anchor count 1
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 1 ⎯⎯⎯⎯⎯⎯⎯
+ FAIL  src/test/useSaveFenceWatch.test.tsx > useSaveFenceWatch > becoming visible checks, going hidden does not
+      Tests  1 failed | 8 passed (9)
+vitest exit 1, src files still changed after the restore: 0
