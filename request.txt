@@ -1,0 +1,12 @@
+# Release BR, Round 1554 (CFB Dynasty real season): r1554-f2-c (f2-1792698827/rc-c.txt), extra
+# oldsave1554.mjs. old keeps base 3ee0bf629: no cfb, cbb or college file differs between it and the BASE d3a334f6,
+# so it still isolates the round. c-oldrivals exits 1 FIRED. Nothing dropped.
+tsc: node_modules/.bin/tsc --noEmit -p tsconfig.app.json
+vitest: node_modules/.bin/vitest run src/components/cfb-dynasty src/components/cbb-dynasty src/components/college-dynasty src/lib/collegeSeat.test.ts src/lib/collegeRecruiting.test.ts src/test/cfbRecruitFilters.test.tsx --testTimeout=300000 --hookTimeout=120000
+board: node scripts/simCollegeDynastyBoard.mjs
+slate: node scripts/simCfbSlate.mjs
+c-oldrivals: CFB_SLATE_CONTROL=oldrivals node scripts/simCfbSlate.mjs
+old: git worktree add /tmp/base 3ee0bf629 >/dev/null 2>&1; node .rc/x/oldsave1554.mjs
+rival: node scripts/simNoRivalNames.mjs
+anchors: node scripts/simHarnessAnchors.mjs
+storage: node scripts/simStorageWrites.mjs
