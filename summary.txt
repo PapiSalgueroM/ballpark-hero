@@ -1,0 +1,7 @@
+build exit=0 33s | [dukb] inlined 1 stylesheet(s) and 1 module(s) into 181 snapshots (11 left alone)
+pm1 exit=0 139s | Soccer pending-morale browser: passed; 2189 checks, 14 played cases, 2 controls, 54 originals, 0 failures, 0 setup failures.
+pm2 exit=1 40s | Node.js v24.21.0
+sw1 exit=0 3s | simStorageWrites: all green (owed: 12)
+sw2 exit=0 3s | simStorageWrites: all green (owed: 12)
+sr1 exit=0 96s | All 1 harnesses green.
+sr2 exit=0 97s | All 1 harnesses green.
