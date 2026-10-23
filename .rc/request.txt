@@ -1,0 +1,15 @@
+# Release BR publish prep: build:seo on the merged head (the gate head ca0648c9, the lead's live pass 9829e974 and 0bd9d081, m11 origin/main 3e95583f), its changed files exported, then the readers of the saved pages and the weight on that runner.
+#!buildseo
+#!export
+#!serve
+#!serial
+simGuideHeadings: node scripts/simGuideHeadings.mjs
+simSiteSearch: node scripts/simSiteSearch.mjs
+simPrerender: node scripts/simPrerender.mjs
+simSitemap: node scripts/simSitemap.mjs
+simIndexNow: node scripts/simIndexNow.mjs
+simHeadTags: node scripts/simHeadTags.mjs
+simRecordPages: node scripts/simRecordPages.mjs
+simPrerenderTables: node scripts/simPrerenderTables.mjs
+simRecordBooks: node scripts/simRecordBooks.mjs
+sweepWeight: SWEEP_OFFLINE=1 node scripts/sweepWeight.mjs
