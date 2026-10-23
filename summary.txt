@@ -1,0 +1,2 @@
+m-jump exit=1 64s | playFoSeasonCard: 120 checks, 18 failed (points red: still)
+m-wide exit=1 62s | playFoSeasonCard: 120 checks, 12 failed (points red: page)
