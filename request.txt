@@ -1,0 +1,4 @@
+#!serve
+#!playwright
+playNflSeasonStats: ENGINES=chromium node scripts/playNflSeasonStats.mjs
+playFrontOfficeGameDay: ENGINES=chromium node scripts/playFrontOfficeGameDay.mjs
