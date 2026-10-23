@@ -1,0 +1,11 @@
+conductreal (sections 12) exit=1 | simEventDeck: 1 failure, red sections 12 (CONTROL=conductreal fired)
+slotopen (sections 12) exit=1 | simEventDeck: 1 failure, red sections 12 (CONTROL=slotopen fired)
+quoteslot (sections 12) exit=1 | simEventDeck: 1 failure, red sections 12 (CONTROL=quoteslot fired)
+untagged (sections 12) exit=1 | simEventDeck: 1 failure, red sections 12 (CONTROL=untagged fired)
+rosterword (sections 12) exit=1 | simEventDeck: 1 failure, red sections 12 (CONTROL=rosterword fired)
+conductlate (sections 12) exit=1 | simEventDeck: 1 failure, red sections 12 (CONTROL=conductlate fired)
+conductstale (sections 12) exit=1 | simEventDeck: 1 failure, red sections 12 (CONTROL=conductstale fired)
+conducttarget (sections 12) exit=1 | simEventDeck: 1 failure, red sections 12 (CONTROL=conducttarget fired)
+nullpass (sections 12) exit=1 | simEventDeck: 1 failure, red sections 12 (CONTROL=nullpass fired)
+speechpast (sections 12) exit=1 | simEventDeck: 1 failure, red sections 12 (CONTROL=speechpast fired)
+kctl: every control exited 1 and fired

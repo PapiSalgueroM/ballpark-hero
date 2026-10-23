@@ -1,0 +1,11 @@
+1) The real hook, rendered: a match is activity, a season end is one completion
+   vitest exit 0, 2 passed (2)
+2) Soccer Career, as code: the season advance pings activity and the file owns no completion
+   NEGATIVE CONTROL ON: the season ping swapped back to a completion in memory
+  FAIL: the season advance no longer pings recordActivity('/soccer-career') within 600 characters
+  FAIL: SoccerCareer.tsx calls recordCompletion('/soccer-career') 1 time(s); the scored completion is the retirement through useGameCompletion, a season is activity
+   advance calls: 1, no ping after the call (window 600), advance ping present: false, own completions: 1
+3) The ping is light, as code: recordActivity reaches neither the streak record nor the signed in save
+   body 755 characters, writes the anonymous row: true
+
+control "career": 2 failure(s) fired in section 2 as expected, the check works

@@ -1,0 +1,35 @@
+PASS career save retry normal
+simSoccerCareerSaveRetry: 8 actual outcomes passed.
+PASS career save retry warning
+simSoccerCareerSaveRetry warning: mapped save retry outcome rejected changed source; independent restore passed.
+PASS career save retry memory
+simSoccerCareerSaveRetry memory: mapped save retry outcome rejected changed source; independent restore passed.
+PASS career save retry disk
+simSoccerCareerSaveRetry disk: mapped save retry outcome rejected changed source; independent restore passed.
+PASS career save retry toast
+simSoccerCareerSaveRetry toast: mapped save retry outcome rejected changed source; independent restore passed.
+PASS career save retry repeatedToast
+simSoccerCareerSaveRetry repeatedToast: mapped save retry outcome rejected changed source; independent restore passed.
+PASS career save retry stale
+simSoccerCareerSaveRetry stale: mapped save retry outcome rejected changed source; independent restore passed.
+PASS career save retry staleCallback
+simSoccerCareerSaveRetry staleCallback: mapped save retry outcome rejected changed source; independent restore passed.
+PASS career save retry automatic
+simSoccerCareerSaveRetry automatic: mapped save retry outcome rejected changed source; independent restore passed.
+PASS career save retry retry
+simSoccerCareerSaveRetry retry: mapped save retry outcome rejected changed source; independent restore passed.
+PASS career save retry retryRng
+simSoccerCareerSaveRetry retryRng: mapped save retry outcome rejected changed source; independent restore passed.
+PASS career save retry retryReplay
+simSoccerCareerSaveRetry retryReplay: mapped save retry outcome rejected changed source; independent restore passed.
+PASS career save retry retryCompletion
+simSoccerCareerSaveRetry retryCompletion: mapped save retry outcome rejected changed source; independent restore passed.
+PASS career save retry clear
+simSoccerCareerSaveRetry clear: mapped save retry outcome rejected changed source; independent restore passed.
+PASS career save retry reset
+simSoccerCareerSaveRetry reset: mapped save retry outcome rejected changed source; independent restore passed.
+PASS career save retry notice
+simSoccerCareerSaveRetry notice: mapped save retry outcome rejected changed source; independent restore passed.
+PASS career save retry role
+simSoccerCareerSaveRetry role: mapped save retry outcome rejected changed source; independent restore passed.
+simSoccerCareerSaveRetry all: 8 actual outcomes and 16 effective faults passed.

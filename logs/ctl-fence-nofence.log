@@ -1,0 +1,22 @@
+NEGATIVE CONTROL ON: SAVE_FENCE_CONTROL=nofence rewrote saveFence.ts in the head bundle
+tabs: two tabs on one career, and a Hot Seat handover beside one
+  FAIL [tabs]: B1 BACK: the live viewer's write after the leave took the save from "Brighton week 5, 4 meetings, last Coventry City 0-0" to "Brighton week 1, 1 meetings, last Aston Villa 2-3"
+  B1 start: Brighton week 1, 1 meetings, last Aston Villa 2-3
+     after B played three: Brighton week 5, 4 meetings, last Coventry City 0-0
+     after A left: Brighton week 1, 1 meetings, last Aston Villa 2-3 (A saw the move: false, its leave write landed: true)
+  FAIL [tabs]: B1: tab A never saw that tab B had played on
+  FAIL [tabs]: B1: tab A's leave write landed over tab B's career
+  FAIL [tabs]: B1 CLOBBER: the save went from "Brighton week 5, 4 meetings, last Coventry City 0-0" back to "Brighton week 1, 1 meetings, last Aston Villa 2-3"
+  REPLAY 0: B wrote "Brighton week 6, 5 meetings, last Arsenal 1-1", stale A played "Brighton week 6, 5 meetings, last Arsenal 1-1", on disk after A: "Brighton week 6, 5 meetings, last Arsenal 1-1" (A refused 0 times)
+  FAIL [tabs]: M1 REPLAY 0: stale tab A was never refused
+  REPLAY 1: B wrote "Brighton week 7, 6 meetings, last Sunderland 2-2", stale A played "Brighton week 7, 6 meetings, last Sunderland 0-1", on disk after A: "Brighton week 7, 6 meetings, last Sunderland 0-1" (A refused 0 times)
+  FAIL [tabs]: M1 REPLAY 1: stale tab A replaced "Brighton week 7, 6 meetings, last Sunderland 2-2" with "Brighton week 7, 6 meetings, last Sunderland 0-1"
+  FAIL [tabs]: M1 REPLAY 1: stale tab A was never refused
+  REPLAY 2: B wrote "Brighton week 9, 7 meetings, last Crystal Palace 2-1", stale A played "Brighton week 9, 7 meetings, last Crystal Palace 3-0", on disk after A: "Brighton week 9, 7 meetings, last Crystal Palace 3-0" (A refused 0 times)
+  FAIL [tabs]: M1 REPLAY 2: stale tab A replaced "Brighton week 9, 7 meetings, last Crystal Palace 2-1" with "Brighton week 9, 7 meetings, last Crystal Palace 3-0"
+  FAIL [tabs]: M1 REPLAY 2: stale tab A was never refused
+  HOT SEAT: Arsenal handed over (saved): "Arsenal week 26, 26 meetings, last Hull City 2-0"; tab A saw it: false; after A left: "Everton week 2, 2 meetings, last Bournemouth 2-5"
+  FAIL [tabs]: HOT SEAT: tab A never saw the handover
+  FAIL [tabs]: HOT SEAT: tab A's leave write put "Everton week 2, 2 meetings, last Bournemouth 2-5" over the handover "Arsenal week 26, 26 meetings, last Hull City 2-0"
+  section tabs: 15 checks, 11 red
+CONTROL FIRED: SAVE_FENCE_CONTROL=nofence fired 1 times and section tabs went red with 11 findings

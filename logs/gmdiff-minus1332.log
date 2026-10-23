@@ -1,0 +1,6 @@
+treeWithoutMerge: 33159ad0717dffe602294bd0c2a54ac9ff019d87, dd692f64 without b9df63b4; conflicts kept from dd692f64: scripts/data/eventDeckWords.json, scripts/simEventDeck.mjs
+base 33159ad0717dffe602294bd0c2a54ac9ff019d87 (this head without Round 1332)
+seed 1: head exit 0, base exit 0, whole output identical (29 lines; last: simGmInbox: green.)
+seed 2: head exit 0, base exit 0, whole output identical (29 lines; last: simGmInbox: green.)
+seed 3: head exit 0, base exit 0, whole output identical (29 lines; last: simGmInbox: green.)
+gmdiff: all three seeds identical to the base and green
