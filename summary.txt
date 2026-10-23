@@ -1,0 +1,3 @@
+u11 exit=1 118s | simTriviaBank: 1 failure(s)
+u12345 exit=0 140s | simTriviaBank: all checks passed
+u777 exit=0 145s | simTriviaBank: all checks passed
