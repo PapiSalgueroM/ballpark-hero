@@ -1,0 +1,6 @@
+#!serial
+# Release BQ triage: the same sim lines on another head (main 705f576c2, m1 36c1887a, m2 f5a3c393).
+cls: node scripts/simCareerLeagueSeasons.mjs
+end41: SC_ENDINGS_BASE=41368514 node scripts/simSoccerCareerEndings.mjs
+dirty: B=$(node scripts/lib/treeWithoutMerge.mjs 353d1c26 65126da0) || exit 2; BASE=$B node scripts/simUsDirtyMoney.mjs
+td: node_modules/.bin/vitest run src/test/usCareerTruthDigest.test.ts --testTimeout=600000
