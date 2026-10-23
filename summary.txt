@@ -1,0 +1,10 @@
+build exit=0 26s | [dukb] inlined 1 stylesheet(s) and 1 module(s) into 181 snapshots (11 left alone)
+headsha exit=0 0s | ca0648c961 Release BR m10: merge origin/main at 179afd13 (the other lane's Round 1453 site menu Escape, its docs, and main's restore of the Lovable editor's commits: net 
+vitest-luton-unit exit=0 2s |    Duration  1.60s (transform 866ms, setup 42ms, collect 1.06s, tests 58ms, environment 176ms, prepare 71ms)
+luton-proof exit=0 13s | PASS Luton display component proof
+genCareerLeagueSeasons-check exit=0 0s | careerLeagueSeasons.ts is current
+simCareerLeagueSeasons exit=0 12s | simCareerLeagueSeasons: all sections green
+luton-walk exit=0 11s | lutonWalk: PASS 32 checks
+base-minus278 exit=0 27s | /tmp/wt-4174
+luton-walk-ctl-minus278 exit=0 10s | FIRED-OK
+playSoccerCareerOpponents exit=0 10s | playSoccerCareerOpponents: 164 checks, 0 failed
