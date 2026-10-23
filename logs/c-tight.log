@@ -1,0 +1,49 @@
+
+[1m[46m RUN [49m[22m [36mv3.2.7 [39m[90m/home/runner/work/ballpark-hero/ballpark-hero[39m
+
+Browserslist: browsers data (caniuse-lite) is 16 months old. Please run:
+  npx update-browserslist-db@latest
+  Why you should do it regularly: https://github.com/browserslist/update-db#readme
+[90mstdout[2m | src/components/front-office/FrontOfficeSeasonStats.test.tsx[2m > [22m[2mNFL front office: who scored, the load and the close[2m > [22m[2ma whole season on full rosters with lines and the desk on: the save it writes, measured
+[22m[39mMEASURED: 2235 ids in the Week 1 save carry the pinned epoch
+NEGATIVE CONTROL ON: NFL_SAVE_BUDGET_CONTROL=tight; the budget is the save after Week 16 (687113), so the recap must be over it
+MEASURED (ids at the longest epoch, 14 characters): the persisted save on full rosters with the desk on: 654984 characters (639.6K) at Week 1, 687113 (671.0K) after Week 16, 689531 (673.4K) on the recap (659071 without the block and the history); the block 30265, 458 lines, the history 176; the budget 687113 (671.0K), -2418 characters (-2.4K) left on the recap
+
+ [31m❯[39m src/components/front-office/FrontOfficeSeasonStats.test.tsx [2m([22m[2m13 tests[22m[2m | [22m[31m1 failed[39m[2m | [22m[33m12 skipped[39m[2m)[22m[33m 1468[2mms[22m[39m
+   [2m[90m↓[39m[22m NFL front office: who scored, the press and the save[2m > [22mthree presses from Week 1 record every game of each week, his games keep their credits, and the block reads back whole
+   [2m[90m↓[39m[22m NFL front office: who scored, the press and the save[2m > [22mthe recorder takes no draw: with it switched off the same presses draw the same numbers and save the same league
+   [2m[90m↓[39m[22m NFL front office: who scored, the press and the save[2m > [22ma save from before season lines, at Week 5, loads, plays on and writes no block until its next Week 1
+   [2m[90m↓[39m[22m NFL front office: who scored, the load and the close[2m > [22ma damaged block is deleted from the stored league on the draft restore of an old recap save
+   [2m[90m↓[39m[22m NFL front office: who scored, the load and the close[2m > [22mand on a bracket started again
+   [2m[90m↓[39m[22m NFL front office: who scored, the load and the close[2m > [22mthe final week names the awards once, writes them on the cards, and a reload on the recap names nothing again
+   [2m[90m↓[39m[22m NFL front office: who scored, the load and the close[2m > [22mthe bracket path ("Play Week 17", a round, then "Sim the rest") keeps his playoff games out of the lines, credits them for the tile, and closes once
+   [2m[90m↓[39m[22m NFL front office: who scored, the load and the close[2m > [22ma winner's roster row carries the sim badge, and a card that does not read shows none
+[31m   [31m×[31m NFL front office: who scored, the load and the close[2m > [22ma whole season on full rosters with lines and the desk on: the save it writes, measured[39m[33m 1465[2mms[22m[39m
+[31m     → the recap save on full rosters with the desk on stays inside the NFL save budget: expected 689531 to be less than or equal to 687113[39m
+   [2m[90m↓[39m[22m NFL front office: the season card and the history[2m > [22mStandings opens on the table, and its This season face draws the season so far and the award history
+   [2m[90m↓[39m[22m NFL front office: the season card and the history[2m > [22ma season sat out between two lined ones has its own history row saying so
+   [2m[90m↓[39m[22m NFL front office: the season card and the history[2m > [22mthe recap draws the closed season with its three award boxes, and a save with no lines says so
+   [2m[90m↓[39m[22m NFL front office: the draft stamps its first year men[2m > [22mevery man the draft brings in, his and the computer clubs', carries next season as his first year, and nobody else does
+
+[31m⎯⎯⎯⎯⎯⎯⎯[39m[1m[41m Failed Tests 1 [49m[22m[31m⎯⎯⎯⎯⎯⎯⎯[39m
+
+[41m[1m FAIL [22m[49m src/components/front-office/FrontOfficeSeasonStats.test.tsx[2m > [22mNFL front office: who scored, the load and the close[2m > [22ma whole season on full rosters with lines and the desk on: the save it writes, measured
+[31m[1mAssertionError[22m: the recap save on full rosters with the desk on stays inside the NFL save budget: expected 689531 to be less than or equal to 687113[39m
+[36m [2m❯[22m src/components/front-office/FrontOfficeSeasonStats.test.tsx:[2m319:103[22m[39m
+    [90m317| [39m    [34mexpect[39m(s[33m.[39mleague[33m.[39mstats[33m.[39mclubs[team][[34m0[39m])[33m.[39m[34mtoBe[39m([33mREGULAR_WEEKS[39m)[33m;[39m
+    [90m318| [39m    [34mexpect[39m([34mreadNflStats[39m(s[33m.[39mleague[33m.[39mstats))[33m.[39mnot[33m.[39m[34mtoBeNull[39m()[33m;[39m
+    [90m319| [39m    expect(bytes, 'the recap save on full rosters with the desk on sta…
+    [90m   | [39m                                                                                                      [31m^[39m
+    [90m320| [39m  })[33m;[39m
+    [90m321| [39m})[33m;[39m
+
+[31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/1]⎯[22m[39m
+
+
+[2m Test Files [22m [1m[31m1 failed[39m[22m[90m (1)[39m
+[2m      Tests [22m [1m[31m1 failed[39m[22m[2m | [22m[33m12 skipped[39m[90m (13)[39m
+[2m   Start at [22m 04:27:42
+[2m   Duration [22m 5.02s[2m (transform 1.92s, setup 100ms, collect 2.46s, tests 1.47s, environment 442ms, prepare 70ms)[22m
+
+
+::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/components/front-office/FrontOfficeSeasonStats.test.tsx,title=src/components/front-office/FrontOfficeSeasonStats.test.tsx > NFL front office%3A who scored%2C the load and the close > a whole season on full rosters with lines and the desk on%3A the save it writes%2C measured,line=319,column=103::AssertionError: the recap save on full rosters with the desk on stays inside the NFL save budget: expected 689531 to be less than or equal to 687113%0A ❯ src/components/front-office/FrontOfficeSeasonStats.test.tsx:319:103%0A%0A

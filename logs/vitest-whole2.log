@@ -1,0 +1,22 @@
+
+[1m[46m RUN [49m[22m [36mv3.2.7 [39m[90m/home/runner/work/ballpark-hero/ballpark-hero[39m
+
+Browserslist: browsers data (caniuse-lite) is 16 months old. Please run:
+  npx update-browserslist-db@latest
+  Why you should do it regularly: https://github.com/browserslist/update-db#readme
+[90mstdout[2m | src/components/front-office/FrontOfficeSeasonStats.test.tsx[2m > [22m[2mNFL front office: who scored, the load and the close[2m > [22m[2ma whole season on full rosters with lines and the desk on: the save it writes, measured
+[22m[39mMEASURED: 2235 ids in the Week 1 save carry the pinned epoch
+MEASURED (ids at the longest epoch, 14 characters): the persisted save on full rosters with the desk on: 656167 characters (640.8K) at Week 1, 688723 (672.6K) after Week 16, 691142 (674.9K) on the recap (660254 without the block and the history); the block 30692, 458 lines, the history 177; the budget 716800 (700.0K), 25658 characters (25.1K) left on the recap
+
+ [32m✓[39m src/components/front-office/FrontOfficeSeasonStats.test.tsx [2m([22m[2m13 tests[22m[2m)[22m[33m 5213[2mms[22m[39m
+   [33m[2m✓[22m[39m NFL front office: who scored, the press and the save[2m > [22mthree presses from Week 1 record every game of each week, his games keep their credits, and the block reads back whole [33m 612[2mms[22m[39m
+   [33m[2m✓[22m[39m NFL front office: who scored, the press and the save[2m > [22mthe recorder takes no draw: with it switched off the same presses draw the same numbers and save the same league [33m 555[2mms[22m[39m
+   [33m[2m✓[22m[39m NFL front office: who scored, the load and the close[2m > [22mthe bracket path ("Play Week 17", a round, then "Sim the rest") keeps his playoff games out of the lines, credits them for the tile, and closes once [33m 803[2mms[22m[39m
+   [33m[2m✓[22m[39m NFL front office: who scored, the load and the close[2m > [22ma whole season on full rosters with lines and the desk on: the save it writes, measured [33m 1599[2mms[22m[39m
+   [33m[2m✓[22m[39m NFL front office: the season card and the history[2m > [22mStandings opens on the table, and its This season face draws the season so far and the award history [33m 327[2mms[22m[39m
+
+[2m Test Files [22m [1m[32m1 passed[39m[22m[90m (1)[39m
+[2m      Tests [22m [1m[32m13 passed[39m[22m[90m (13)[39m
+[2m   Start at [22m 04:27:23
+[2m   Duration [22m 10.56s[2m (transform 2.66s, setup 147ms, collect 3.42s, tests 5.21s, environment 791ms, prepare 315ms)[22m
+

@@ -1,0 +1,9 @@
+vitest-whole2 exit=0 12s |    Duration  10.56s (transform 2.66s, setup 147ms, collect 3.42s, tests 5.21s, environment 791ms, prepare 315ms)
+vitest-sstats exit=0 13s |    Duration  11.73s (transform 4.54s, setup 793ms, collect 9.83s, tests 13.76s, environment 2.61s, prepare 1.27s)
+save-a exit=0 7s |    Duration  5.92s (transform 2.44s, setup 98ms, collect 3.40s, tests 1.51s, environment 384ms, prepare 171ms)
+save-b exit=0 7s |    Duration  5.42s (transform 2.19s, setup 107ms, collect 2.80s, tests 1.38s, environment 428ms, prepare 120ms)
+c-tight exit=1 6s | ::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/components/front-office/FrontOfficeSeasonStats.test.tsx,title=src/components/front-office/FrontOfficeSeason
+simFoLazyDesk exit=0 37s | simFoLazyDesk: all checks passed
+lazy-closestatic exit=1 36s | simFoLazyDesk CONTROL closestatic FIRED: section 1 went red with 2 failures (red sections 1)
+tsc exit=0 101s | 
+sim-lift exit=0 82s | simNflSeasonStats: 130 checks, 0 failed
