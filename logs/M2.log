@@ -1,0 +1,11 @@
+mutation M2 applied to src/lib/nbaCareerIntlGate.ts
+[31m     → expected 'The US national team wants you this s…' to be null[39m
+[31m⎯⎯⎯⎯⎯⎯⎯[39m[1m[41m Failed Tests 1 [49m[22m[31m⎯⎯⎯⎯⎯⎯⎯[39m
+[41m[1m FAIL [22m[49m src/test/nbaCareerIntl.test.ts[2m > [22mthe call[2m > [22mrest writes the year, the edition and went false, and nothing else
+[31m[1mAssertionError[22m: expected 'The US national team wants you this s…' to be null[39m
+[2m      Tests [22m [1m[31m1 failed[39m[22m[2m | [22m[1m[32m19 passed[39m[22m[90m (20)[39m
+::error file=/tmp/m2/src/test/nbaCareerIntl.test.ts,title=src/test/nbaCareerIntl.test.ts > the call > rest writes the year%2C the edition and went false%2C and nothing else,line=91,column=49::AssertionError: expected 'The US national team wants you this s…' to be null%0A%0A- Expected: %0Anull%0A%0A+ Received: %0A"The US national team wants you this summer. You decide next."%0A%0A ❯ src/test/nbaCareerIntl.test.ts:91:49%0A%0A
+  y2004: share of careers ever called if the bar were 84 to 92: 84 81.3, 85 71.3, 86 60.7, 87 46.0, 88 40.7, 89 32.0, 90 21.3, 91 15.3, 92 6.7
+  y2004: 244 edition summers rated 87 or more; held back by health under 50: 0 (0.0 percent), by age over 36: 2; by a career ending with that season: 2
+simCareerIntl: GREEN, 16962 checks over sections 4
+MUTATION M2 CAUGHT (vitest=1 sim=0)

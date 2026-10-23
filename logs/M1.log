@@ -1,0 +1,11 @@
+mutation M1 applied to src/lib/nbaCareerIntlGate.ts
+[31m     → expected undefined to be 'oly-2004' // Object.is equality[39m
+[31m⎯⎯⎯⎯⎯⎯⎯[39m[1m[41m Failed Tests 1 [49m[22m[31m⎯⎯⎯⎯⎯⎯⎯[39m
+[41m[1m FAIL [22m[49m src/test/nbaCareerIntl.test.ts[2m > [22mthe call[2m > [22mcomes at 87 and not at 86 (the lead's ruling L1 of Round 1544)
+[31m[1mAssertionError[22m: expected undefined to be 'oly-2004' // Object.is equality[39m
+[2m      Tests [22m [1m[31m1 failed[39m[22m[2m | [22m[1m[32m14 passed[39m[22m[90m (15)[39m
+::error file=/tmp/m1/src/test/nbaCareerIntl.test.ts,title=src/test/nbaCareerIntl.test.ts > the call > comes at 87 and not at 86 (the lead's ruling L1 of Round 1544),line=56,column=48::AssertionError: expected undefined to be 'oly-2004' // Object.is equality%0A%0A- Expected: %0A"oly-2004"%0A%0A+ Received: %0Aundefined%0A%0A ❯ src/test/nbaCareerIntl.test.ts:56:48%0A%0A
+  y2004: share of careers ever called if the bar were 84 to 92: 84 81.3, 85 71.3, 86 60.7, 87 46.0, 88 40.7, 89 32.0, 90 21.3, 91 15.3, 92 6.7
+  y2004: 244 edition summers rated 87 or more; held back by health under 50: 0 (0.0 percent), by age over 36: 2; by a career ending with that season: 2
+simCareerIntl: RED, 16857 checks, section 4: 315
+MUTATION M1 CAUGHT (vitest=1 sim=1)

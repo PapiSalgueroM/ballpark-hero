@@ -1,0 +1,12 @@
+mutation M6 applied to src/components/us-career/UsCareerBoard.tsx
+[31m     → expected 'season' to be 'event' // Object.is equality[39m
+[31m⎯⎯⎯⎯⎯⎯⎯[39m[1m[41m Failed Tests 1 [49m[22m[31m⎯⎯⎯⎯⎯⎯⎯[39m
+[41m[1m FAIL [22m[49m src/test/usCareerIntlBoard.test.tsx[2m > [22mNBA My Career: the national team on the board[2m > [22mplayed on the board: the curtain says it, the summer is dealt at the press, the call comes first and leaves the cards alone
+[31m[1mAssertionError[22m: expected 'season' to be 'event' // Object.is equality[39m
+[2m      Tests [22m [1m[31m1 failed[39m[22m[2m | [22m[1m[32m4 passed[39m[22m[90m (5)[39m
+::error file=/tmp/m6/src/test/usCareerIntlBoard.test.tsx,title=src/test/usCareerIntlBoard.test.tsx > NBA My Career%3A the national team on the board > played on the board%3A the curtain says it%2C the summer is dealt at the press%2C the call comes first and leaves the cards alone,line=182,column=25::AssertionError: expected 'season' to be 'event' // Object.is equality%0A%0AExpected: "event"%0AReceived: "season"%0A%0A ❯ src/test/usCareerIntlBoard.test.tsx:182:25%0A%0A
+  FAIL a-320: the save's phase is season, not the event it had
+  FAIL a-390: the save's phase is season, not the event it had
+  FAIL a-1280: the save's phase is season, not the event it had
+playNbaIntl: RED, 3 failures
+MUTATION M6 CAUGHT (vitest=1 walk=1)

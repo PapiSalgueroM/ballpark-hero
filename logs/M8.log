@@ -1,0 +1,11 @@
+mutation M8 applied to src/lib/careerIntl.ts
+[31m     → expected true to be false // Object.is equality[39m
+[31m⎯⎯⎯⎯⎯⎯⎯[39m[1m[41m Failed Tests 1 [49m[22m[31m⎯⎯⎯⎯⎯⎯⎯[39m
+[41m[1m FAIL [22m[49m src/lib/careerIntl.test.ts[2m > [22mrepair on load[2m > [22mdrops a stored last the replay equals, and keeps one it does not as a snapshot
+[31m[1mAssertionError[22m: expected true to be false // Object.is equality[39m
+[2m      Tests [22m [1m[31m1 failed[39m[22m[2m | [22m[1m[32m42 passed[39m[22m[90m (43)[39m
+::error file=/tmp/m8/src/lib/careerIntl.test.ts,title=src/lib/careerIntl.test.ts > repair on load > drops a stored last the replay equals%2C and keeps one it does not as a snapshot,line=337,column=40::AssertionError: expected true to be false // Object.is equality%0A%0A- Expected%0A+ Received%0A%0A- false%0A+ true%0A%0A ❯ src/lib/careerIntl.test.ts:337:40%0A%0A
+  FAIL [8] now 13: a kept snapshot is not what the screens show
+  200 tournaments of 60 go careers an era played again from the final save, byte identical; planted lasts: 59 equal to the replay dropped, 59 unequal kept
+simCareerIntl: RED, 505 checks, section 8: 118
+MUTATION M8 CAUGHT (vitest=1 sim=1)
