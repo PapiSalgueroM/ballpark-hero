@@ -1,0 +1,22 @@
+# Release BP (Round BPG): ROUND 1522's own proof lines (Club Manager: team instructions, AI styles, tactics changed
+# in play), from finish-1522.md, fix-1522.md and verify-1522.md as the round's runners ran them (r1522-t2, fx6, fx7,
+# fx8, vf2), proven on the release head by rBPg-m3 (merge m3) and on the final head. The fleet controls and the 80 set
+# dominance run are rc-BPc2.txt, sent on their own name (they are long).
+# BINDING. simCmMatchDay's base is cbc72c1d, a commit of the round's branch that only a merge keeps (the release
+# merged it, m3 8cc0e7c1). fx-slowload1522.mjs is r1522/.tmp-fx/fx-slowload.mjs unchanged (sha256 afa62d81...), the
+# fixer's walk of a tap made while the tactics chunk is late (slow) or lost (fail); it aborts the database host.
+# CONTROLS. ctl-quick-1522 exits 0 only when each control exits 1 and its last line says FIRED (exit 3 is a control
+# that did not fire, exit 2 an abort): mirror and helpwords (table 1 each), keyless (styles 5), weakpress (styles 2),
+# leak (balanced 6), the counts of r1522-c1, c2, fx8 and rBPg-m3.
+#!serve
+#!playwright
+units-1522: node_modules/.bin/vitest run src/lib/clubManagerTactics.test.ts src/hooks/useClubManager.test.ts --testTimeout=300000 --hookTimeout=120000 2>&1 | tail -6; exit ${PIPESTATUS[0]}
+tactics-1522: node scripts/simCmTactics.mjs > /tmp/t22.log 2>&1; s=$?; grep -E "dominance|adapt|read" /tmp/t22.log | grep -E "^ *ok|FAIL" | head -6 | cut -c1-200; tail -1 /tmp/t22.log | cut -c1-200; exit $s
+ctl-quick-1522: bad=0; for c in mirror helpwords keyless weakpress leak; do CM_TACTICS_CONTROL=$c node scripts/simCmTactics.mjs > /tmp/cq22-$c.log 2>&1; e=$?; echo "$c exit=$e $(tail -1 /tmp/cq22-$c.log | cut -c1-160)"; if [ $e -ne 1 ] || ! tail -1 /tmp/cq22-$c.log | grep -q "control $c FIRED"; then bad=1; fi; done; exit $bad
+md-1522: node scripts/simCmMatchDay.mjs 2>&1 | tail -2; exit ${PIPESTATUS[0]}
+walk-1522: node scripts/playCmTactics.mjs 2>&1 | tail -2; exit ${PIPESTATUS[0]}
+slow-1522: MODE=slow node .rc/x/fx-slowload1522.mjs 2>&1 | tail -3; exit ${PIPESTATUS[0]}
+fail-1522: MODE=fail node .rc/x/fx-slowload1522.mjs 2>&1 | tail -3; exit ${PIPESTATUS[0]}
+centre-1522: node scripts/simCmMatchCentre.mjs 2>&1 | tail -2; exit ${PIPESTATUS[0]}
+live-1522: node scripts/simLiveMatch.mjs 2>&1 | tail -2; exit ${PIPESTATUS[0]}
+copy-1522: node scripts/simCmCopy.mjs 2>&1 | tail -2; exit ${PIPESTATUS[0]}

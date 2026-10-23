@@ -1,0 +1,5 @@
+mirror exit=1 simCmTactics: control mirror FIRED (1 failures: table 1; must turn table red)
+helpwords exit=1 simCmTactics: control helpwords FIRED (1 failures: table 1; must turn table red)
+keyless exit=1 simCmTactics: control keyless FIRED (5 failures: styles 5; must turn styles red)
+weakpress exit=1 simCmTactics: control weakpress FIRED (2 failures: styles 2; must turn styles red)
+leak exit=1 simCmTactics: control leak FIRED (6 failures: balanced 6; must turn balanced red)

@@ -1,0 +1,3 @@
+  slow: save after the tap {"week":1,"played":1,"instr":{"press":1,"tempo":0,"width":0,"line":0}}
+fx-slowload slow: green, the tap played the match
+  page errors: 0 
