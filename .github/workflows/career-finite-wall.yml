@@ -52,9 +52,10 @@ jobs:
           const fs=require('node:fs'),assert=require('node:assert/strict'),crypto=require('node:crypto');
           const pins={"src/test/careerWallShot.test.ts":"b75993336f618d9dc0322756dd021d71b4a412109bbe0be72f71208b464e54bb","src/test/soccerMomentWallRules.test.ts":"e5e8ca9ffc26e15bdaf51b057e55d34f4bd738c0325f7440f3df71fe8809605d"};
           for(const [file,expected]of Object.entries(pins))assert.equal(crypto.createHash('sha256').update(fs.readFileSync(file)).digest('hex'),expected,file);
-          fs.writeFileSync(process.env.RUNNER_TEMP+'/career-finite-wall/source-binding.json',JSON.stringify({source:process.env.GITHUB_SHA,base:process.env.BASE_SOURCE,originalCoreBlob:'6125570ccdf2f037a7debeaa7ad14815e9ed860e',originalBoardBlob:'c3c6500b976bce912d3626643269fb1b5388234b',pins},null,2)+'\n',{flag:'wx'});
+          fs.writeFileSync(process.env.RUNNER_TEMP+'/career-finite-wall/source-binding.json',JSON.stringify({source:process.env.GITHUB_SHA,base:process.env.BASE_SOURCE,originalCoreBlob:'6125570ccdf2f037a7debeaa7ad14815e9ed860e',originalBoardBlob:'c3c6500b976bce912d3626643269fb1b5388234b',originalLedgerBlob:'c1ee578f855d29a107f8d69b71eb1258ed166ca9',pins},null,2)+'\n',{flag:'wx'});
           NODE
           git rev-parse HEAD > "$out/head.txt"
+          git rev-parse 'HEAD^{tree}' > "$out/tree.txt"
           git ls-files -z | sort -z > "$out/source-members.before"
           git ls-files -z | sort -z | xargs -0 sha256sum > "$out/source-before.sha256"
           git diff --exit-code HEAD > "$out/source-clean-before.log"
