@@ -367,7 +367,7 @@ function host2(work, n, m, P) {
       return need(v, am.length ? `Draft: ${am.map(d => `${d.year} round ${d.round}, ${d.team}`).join('; ')}` : `no amateur draft line${c.allStar ? `; ${/All-Star/.test(P.bling) ? 'an All-Star' : 'never an All-Star'}` : ''}`);
     }
     case 'hofPos': {
-      /* the share rule on the second host's own games by position (the appearances table): a third of his
+      /* the share rule on the second host's own games by position (the appearances table): 30 percent of his
          games there fits, under a tenth does not, between is unknown, as the record judges it */
       const sh = shareBR(P, c.pos);
       const v = !P.hof ? false : sh === null ? null : sh >= 0.3 ? true : sh < 0.1 ? false : null;
