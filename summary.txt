@@ -1,0 +1,4 @@
+cls exit=1 25s | simCareerLeagueSeasons: 3 failures (sections c)
+end41 exit=1 45s | FAIL: 1 check(s) failed
+dirty exit=0 42s | simUsDirtyMoney: all sections green
+td exit=0 29s |    Duration  27.90s (transform 809ms, setup 53ms, collect 1.02s, tests 26.28s, environment 237ms, prepare 94ms)
