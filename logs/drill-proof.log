@@ -1,0 +1,5 @@
+treeWithoutMerge: 3c1068662ffd2e77597cc849fdfb3dfe1229c7dd, 5afd6914 without 406c3c0a; conflicts kept from 5afd6914: none
+base 3c1068662ffd2e77597cc849fdfb3dfe1229c7dd (this head without PR334's merge 406c3c0a)
+runProver: drill at 3c1068662ffd2e77597cc849fdfb3dfe1229c7dd (5afd6914 without 406c3c0a (back to 99154ea3))
+PASS Drill pointer cancellation: three six-case arms, two original-binding assertion failures, five held markup cases, four diagnostic controls
+runProver: drill exit 0
