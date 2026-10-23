@@ -662,7 +662,7 @@ export const HOCKEY_CONTENT: GameContentMap = {
       {
         heading: "Five Penguins look automatic",
         paragraphs: [
-          "Say you spot five Penguins right away: Crosby, Malkin, Lemieux, Jagr and Fleury. Feels automatic, except the purple group on this imagined board is 1,000 point scorers, and Jagr fits both worlds.",
+          "Say you spot five Penguins right away: Crosby, Malkin, Lemieux, Jagr and Fleury. Feels automatic, except the purple group on this imagined board is 1,000 point scorers, and Jagr looks like he fits both.",
         ],
       },
       {
