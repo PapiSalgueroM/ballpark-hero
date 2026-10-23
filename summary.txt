@@ -1,0 +1,4 @@
+cls exit=0 16s | simCareerLeagueSeasons: all sections green
+end41 exit=0 57s | PASS: no career ends before the age rules without the player, and the pair is reconciled
+dirty exit=0 46s | simUsDirtyMoney: all sections green
+td exit=0 32s |    Duration  31.42s (transform 957ms, setup 57ms, collect 1.21s, tests 29.55s, environment 250ms, prepare 101ms)
