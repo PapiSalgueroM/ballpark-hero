@@ -1,0 +1,10 @@
+deck-b exit=0 65s | simSoccerDeck: green. Sections 6, 7, 9, 10 only.
+deck-a exit=0 83s | simSoccerDeck: green. Sections 1, 2, 3, 4, 5 only.
+deck-unattributed exit=1 31s | simSoccerDeck: 2 failures, red sections 2
+ls exit=0 29s | simCareerLeagueSeasons: all sections green
+deck-c exit=0 117s | simSoccerDeck: green. Sections 8 only.
+fair-unattributed exit=1 2s | Node.js v24.21.0
+ls-unattributed exit=0 30s | simCareerLeagueSeasons: all sections green
+fair exit=0 82s | simSoccerDeckFairness: all sections green
+truth-unattributed exit=1 74s | simSoccerWorldTruth: 5 FAILURES (section 2: 5)
+truth exit=0 83s | simSoccerWorldTruth: OK, every section green
