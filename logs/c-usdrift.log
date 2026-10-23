@@ -1,0 +1,8 @@
+5) the US careers replay byte identical with the base's careerAwards.ts (the draw moved to awardDraw.ts)
+   CONTROL usdrift: the MLB All-Star grade moved from 0.15 to 0.65 in this round's file
+   nba: 1620 seasons replayed, byte identical
+   nfl: 2592 seasons replayed, byte identical
+   mlb: 3564 seasons replayed, parts at record 32
+   FAIL mlb: this round's src/lib/careerAwards.ts parts from the base's at record 32
+   nhl: 1944 seasons replayed, byte identical
+simSoccerSeasonAwards: RED, 1 failure(s)
