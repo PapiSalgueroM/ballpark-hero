@@ -1,0 +1,17 @@
+build exit=0 33s | [dukb] inlined 1 stylesheet(s) and 1 module(s) into 181 snapshots (11 left alone)
+numberFormatting1085 exit=1 0s | Node.js v24.21.0
+managerMatchPlans1079 exit=1 0s | Node.js v24.21.0
+careerMatchVisuals1517 exit=1 0s | Node.js v24.21.0
+playAppearanceCategoryScroll exit=1 0s | Node.js v24.21.0
+playAppearanceSelectedContrast exit=1 0s | Node.js v24.21.0
+simNbaSeasonStats exit=0 17s | simNbaSeasonStats: 72 checks passed over 10 seeded franchises and 3 seasons each. Every game adds up, the box takes nothing from the league, the awards follow their rules
+simSaveKeeper exit=0 6s | simSaveKeeper: all green. The keeper holds on real saves of all 21 long games.
+simCareerEntryGuide exit=0 8s | simCareerEntryGuide normal: intended guide outcomes and independent baseline passed.
+simUsCoachRetirement exit=0 49s | PASS: ALL US COACHING RETIREMENT CHECKS PASSED
+simUsCareerSkips exit=0 113s | PASS: ALL US CAREER SKIP CHECKS PASSED
+simNbaAwardsSense exit=0 165s | simNbaAwardsSense: 164 checks, 0 failed (full size), 164s
+simCompletionOnce exit=0 7s | simCompletionOnce: all green
+simResultMoment exit=0 7s | simResultMoment: green. Every live game reaches the shared result moment or is listed with what it draws instead, the pill shows exactly the score it is given, the three 
+simUsCareerSaveRetry exit=0 155s | US career save retry: passed. Evidence at /home/runner/work/ballpark-hero/ballpark-hero/us-career-save-recovery-artifacts/outcomes
+simUsDirtyMoney exit=0 66s | simUsDirtyMoney: all sections green
+simUsSeasonCentre exit=0 85s | simUsSeasonCentre: 158 checks, 0 failed

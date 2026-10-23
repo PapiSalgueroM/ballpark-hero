@@ -1,0 +1,15 @@
+node:internal/modules/run_main:107
+    triggerUncaughtException(
+    ^
+
+AssertionError [ERR_ASSERTION]: Explicit original or fixed proof mode
+    at file:///home/runner/work/ballpark-hero/ballpark-hero/scripts/qa/playAppearanceSelectedContrast.mjs:14:1 {
+  generatedMessage: false,
+  code: 'ERR_ASSERTION',
+  actual: false,
+  expected: true,
+  operator: '==',
+  diff: 'simple'
+}
+
+Node.js v24.21.0
