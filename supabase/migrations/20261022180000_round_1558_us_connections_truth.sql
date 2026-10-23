@@ -44,9 +44,11 @@
 -- US_CONN_LIVE=baseball=<file>,nfl=<file>,nhl=<file> node scripts/simUsConnectionsFacts.mjs
 -- is the first look at them.
 --
--- Saved daily guesses find a solved group by its theme text (the sport hooks),
--- so a board renamed on the day it is dealt loses that day's solved groups on
--- screen. Apply on a day this rewrites no dealt board:
+-- A saved daily guess keeps the groups it solved as they were saved (the sport
+-- hooks), so on the day a rewritten board is dealt, a guess saved before the
+-- apply keeps showing the OLD group, false member and all, counts it toward
+-- 4/4 and strands the new members as tiles (played on a runner by the round's
+-- review). Apply on a day this rewrites no dealt board:
 -- node scripts/qa/connectionsDealtDay1558.mjs <sport>=<export.json>,... <YYYY-MM-DD>
 --
 -- A re-run after a good apply is a no-op (no row still holds an old board).

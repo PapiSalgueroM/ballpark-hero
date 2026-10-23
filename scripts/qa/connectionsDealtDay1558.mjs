@@ -1,9 +1,10 @@
 /* Round 1558: which Baseball, NFL and NHL Connections board is dealt on a day, and does the Round 1558 migration
    rewrite it?
 
-   Saved daily guesses find a solved group by its theme text (the sport hooks: useBaseballConnections,
-   useNflConnections, useNhlConnections), so a board whose labels change on the day it is dealt loses that day's
-   solved groups on screen. Run this with the lead's read only exports of the three tables (puzzle_id, sort_order,
+   A saved daily guess keeps the groups it solved as they were saved (the sport hooks: useBaseballConnections,
+   useNflConnections, useNhlConnections), so on the day a rewritten board is dealt, a guess saved before the
+   change keeps showing the OLD group, false member and all, counts it toward 4/4 and strands the new members as
+   tiles (the round's review played it on a runner). Run this with the lead's read only exports of the three tables (puzzle_id, sort_order,
    groups_json) before applying supabase/migrations/20261022180000_round_1558_us_connections_truth.sql, and apply
    on a day it says is clear for all three:
 
