@@ -1,0 +1,3 @@
+  fail: notice true "Your tactics did not load, so the next match cannot start yet. Reload the page to carry on."; save after {"week":0,"played":0,"instr":{"press":1,"tempo":0,"width":0,"line":0}}
+fx-slowload fail: green, the page says the tactics did not load and nothing played
+  page errors: 0 

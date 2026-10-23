@@ -1,0 +1,11 @@
+build exit=0 30s | [dukb] inlined 1 stylesheet(s) and 1 module(s) into 181 snapshots (11 left alone)
+units-1522 exit=0 7s |    Duration  6.13s (transform 2.70s, setup 162ms, collect 4.82s, tests 3.39s, environment 866ms, prepare 557ms)
+ctl-quick-1522 exit=0 16s | leak exit=1 simCmTactics: control leak FIRED (6 failures: balanced 6; must turn balanced red)
+md-1522 exit=0 33s | simCmMatchDay: all sections green (918 matches: 462 home, 448 away, 8 neutral)
+slow-1522 exit=0 16s |   page errors: 0 
+fail-1522 exit=0 11s |   page errors: 0 
+centre-1522 exit=0 5s | simCmMatchCentre: PASS. Every stat on the report and the live strip is counted off the committed play and lines, and every timeline row is an event the engine drew.
+live-1522 exit=0 6s | simLiveMatch: PASS. Each half is committed as one stream, the report is counted off it, a change keeps the past and redraws the future, and the other dugout fields eleven
+copy-1522 exit=0 41s | simCmCopy: green on this tree. Sections 1, 2, 3, 4, 5: Club Manager says what it means.
+walk-1522 exit=0 153s | playCmTactics: all green (41 checks)
+tactics-1522 exit=0 656s | simCmTactics: all green (sections table, styles, balanced, fleet)
