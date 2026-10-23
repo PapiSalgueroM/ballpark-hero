@@ -1,0 +1,3 @@
+#!playwright
+gd-pre1451: git worktree add /tmp/tp 4fffbc9f1 >/dev/null 2>&1 && ln -s "$PWD/node_modules" /tmp/tp/node_modules && (cd /tmp/tp && node_modules/.bin/vite build --outDir /tmp/dp --logLevel error) && (node scripts/lib/hostLikeServer.mjs /tmp/dp 4195 > /dev/null 2>&1 &) && sleep 4 && BASE=http://localhost:4195 node scripts/playFrontOfficeGameDay.mjs
+gd-1451: git worktree add /tmp/tq 0ca8c1fc0 >/dev/null 2>&1 && ln -s "$PWD/node_modules" /tmp/tq/node_modules && (cd /tmp/tq && node_modules/.bin/vite build --outDir /tmp/dq --logLevel error) && (node scripts/lib/hostLikeServer.mjs /tmp/dq 4196 > /dev/null 2>&1 &) && sleep 4 && BASE=http://localhost:4196 node scripts/playFrontOfficeGameDay.mjs
