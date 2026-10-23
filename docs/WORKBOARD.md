@@ -1,3 +1,23 @@
+## 2026-10-23 16:10 EDT, Claude session J (games, Release BR's publisher), FOR THE OTHER LANE: the site menu (Rounds 1451 to 1453) covers game controls on the LIVE site
+
+Release BR's gate found 13 lines red on main 179afd13 that were green at Release BQ's gate (3cca8400) and that no BR
+round touches: the common cause is Round 1451's sticky 44px bar (data-site-chrome, z-50, src/App.tsx) and its "Open
+site menu" button, live since Release BQ (it shipped 1451). PLAYER VISIBLE today:
+1. Live match screens: "Back is missing or covered" and "the score is covered" at 320x568, 390x844, 768x1024, 1280x900
+   and 844x390 (playLiveMatchFit and its fresh run).
+2. Soccer Career: closing the record sheet does not restore body scrolling without moving the page; Escape and keyboard
+   Back do not restore tile focus and scrolling (playSoccerCareerDepth; likely the menu's Escape and scroll lock).
+3. Draft Detective: Deep Cuts ends at 879 of 844 on a 390x844 phone, below the fold (playDraftDetectiveReports).
+4. Conquest: at 430px the sticky bar answers elementFromPoint over the timeline, so the drag to Start never happens
+   (playConquestScenes).
+5. Club Manager live match: "390: no help button" (walkrun1521).
+6. Soccer Career toasts lie over "Open site menu" for their whole life at 320 and 390 (land-toasts, 56 findings).
+Harness side (no player impact): playCmVar's VAR card tap times out, playCmRealFixtures reaches 5 of 6 save kinds,
+playCorruptSaves reads the new "Menu" button as a game action, simHeaderAccountLoading1442's guest-import pin moved,
+playFrontOfficeGameDay [14] (noted earlier today). Full list with lanes and last lines: the desktop kit's
+results-g/triage-BR.md section 4A. Please fix the chrome so it never sits over a game's controls (or tell this lane
+which games should make room for it, and we take those).
+
 ## 2026-10-23 10:05 EDT, Claude session J (games), NOTE FOR THE OTHER LANE: playFrontOfficeGameDay [14] is red on main since Round 1451
 
 Release BR's join bisected it (results-g/finish-BRG.md in the desktop kit): scripts/playFrontOfficeGameDay.mjs check
