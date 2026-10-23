@@ -48,10 +48,40 @@ has none (the review of Round 1544). src/test/nbaIntlResultLines.test.tsx holds 
 - Critic advice 23: a summer card that narrates a quiet summer at home can follow an Olympic summer; a later
   filter can read the summer's row.
 - The /nba-my-career weight row and the /nfl-my-career budget (the shared board grew) are the lead's (L7).
+  Measured with sweepWeight's method on runners: /nba-my-career 579.0K at BASE (32e8f7da with adb715be3, no
+  1541) and 581.5K on this branch, +2.5K where L5 asked for about 0.5K (the route chunk +1.8K: the gate about
+  0.5K and the help's words about 1.3K; the shared board chunk +0.7K); /nfl-my-career 493.5K to 494.1K against
+  its 493K row, so sweepWeight is red there. A lazy help (a GameHelp change, outside this round) would take
+  about 1.3K off /nba-my-career only; /nfl-my-career carries just the board's hunks and stays over 493 either
+  way. The lead rules: raise the rows, or order the lazy help and still raise /nfl-my-career.
 - From the review, left for Round 1557 or later: in a group or round list his own game reads "W 78-74 v Turkey"
   beside "Spain 104-62 Montenegro" (GameLine could draw his game the neutral way when `bare`); critic correction
   9's print line in each walk and test that plants a high NBA season; a retry in the holding box if the face's
   chunk fails twice; an old save already inside its summer cards meets the call once, after them.
+- From the review, also left (the lead waives or names a round): the call has no arrival of its own after the
+  season's curtain closes. intlCallYear joins the revealRef key at the press, in the same render as the curtain,
+  so the curtain closing is no key change. The base's summer card does the same (measured on 33d435858), and a
+  player who scrolls only as far as the button meets the call in view (7 of 7 runs); one who has scrolled far
+  down first can land below its top. One key term, or a useRevealScroll in the beat, would fix the call and the
+  summer card together, but it moves the board's scroll for every US career and needs a walk at 320, 390 and
+  1280 to prove the page never jumps, and it adds bytes to the shared board (see the weight above).
+- From the review, also left: section 8's first check of scripts/simCareerIntl.mjs ("the repair leaves every
+  real NBA save byte identical") runs over the 2 NBA saves scripts/realSaves.mjs builds, neither with an intl
+  block, so the repair returns at its first line and the check is true but nearly free. The repair's real paths
+  are the planted saves of the same section (59 equal, 59 unequal, 63 written by Round 1541's own code). A
+  wider real save set with a block is owed to whichever round next grows realSaves.mjs.
+
+## The release (the lead's, binding)
+
+- Rounds 1541, 1544 and 1557 ship on one train or not at all. "A medal goes in your Trophy Case" is on the
+  call card (src/components/us-career/IntlCallUpCard.tsx), in the help (the gate's rules,
+  src/lib/nbaCareerIntlGate.ts) and in What's New, and nothing on this branch reads the medal: the Trophy Case
+  rows are Round 1557's. If 1557 leaves the train, 1541 and 1544 leave with it.
+- The release's vitest line carries src/test/nbaCareerIntl.test.ts, src/lib/careerIntl.test.ts and
+  src/test/nbaIntlResultLines.test.tsx beside src/test/usCareerIntlBoard.test.tsx. The review's mutations M2,
+  M4, M13 and M14 were caught only by those unit files while the harness sections that own the rule stayed
+  green; the fix's N1, N2, N2b, N4, N5 and N9 guard lines that only those files test; and FMT (the format
+  line) is caught by them first and by the walk.
 - The replay is derived on read (L4), so src/lib/careerIntl.test.ts pins three literal toy summers (the key, the
   draw order, the generated field). A round that moves those numbers changes what every live save's past summers
   show: it must mean to, and say what happens to the saves already written.
