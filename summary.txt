@@ -1,0 +1,8 @@
+merge exit=0 1s | merged tree 594ae23e78b9cf2b0a793ca72c85d6cb02231698 parents a6bd126f7329544054d3aa468c6fe872d17dcd86 705f576c2aa1151ed4077965e285e8610e738ba6
+whatsnew exit=0 0s | head a8ce776bb66816948462c18b3bfbf6e658f52d4c
+tsc exit=0 70s | 
+desk-def exit=0 26s | simNbaGmDesk: all seven checks passed (10 seeds x 10 seasons)
+sitesearch exit=0 1s | simSiteSearch: green. Every game is findable by name, typos included, and the ranking can explain itself.
+guideheadings exit=0 0s | simGuideHeadings: green. 131 guides carry keyword h2s over h3 and h4 sections with every original sentence intact, and all 133 blocks render a clean outline.
+draftorder exit=0 7s | simGmDraftOrder: green. 603448 checks over 10 sections: the order is the league's, the lottery is drawn once on its own stream and saved, and nothing mounts the lift yet.
+vitest-earned exit=0 2s |    Duration  2.30s (transform 301ms, setup 73ms, collect 385ms, tests 1.12s, environment 316ms, prepare 114ms)

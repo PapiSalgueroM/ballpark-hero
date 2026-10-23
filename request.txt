@@ -1,0 +1,9 @@
+#!serial
+merge: git -c user.name=rc -c user.email=rc@example.invalid merge --no-edit 705f576c2aa1151ed4077965e285e8610e738ba6; echo "unmerged after merge: $(git diff --name-only --diff-filter=U | tr '\n' ' ')"; node scripts/genSearchKeywords.mjs && git add src/data/searchKeywords.json && test -z "$(git diff --name-only --diff-filter=U)" && git -c user.name=rc -c user.email=rc@example.invalid commit --no-edit -q && echo "merged tree $(git rev-parse HEAD^{tree}) parents $(git log -1 --format=%P)"
+whatsnew: echo "markers $(grep -cE '^(<<<<<<<|=======|>>>>>>>)' src/pages/WhatsNew.tsx)"; sed -n '26,34p' src/pages/WhatsNew.tsx | cut -c1-170; echo "head $(git rev-parse HEAD)"
+tsc: node_modules/.bin/tsc --noEmit -p tsconfig.app.json
+desk-def: node scripts/simNbaGmDesk.mjs
+sitesearch: node scripts/simSiteSearch.mjs
+guideheadings: node scripts/simGuideHeadings.mjs
+draftorder: node scripts/simGmDraftOrder.mjs
+vitest-earned: node_modules/.bin/vitest run src/lib/gmEarnedDraft.test.ts --testTimeout=300000 --hookTimeout=120000

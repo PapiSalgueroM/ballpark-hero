@@ -1,0 +1,11 @@
+markers 0
+      <section className="space-y-8 text-sm leading-relaxed text-muted-foreground">
+        <div>
+          <h2 className="text-lg font-semibold text-foreground mb-2">October 2026</h2>
+          <ul className="list-disc pl-5 space-y-2">
+            <li><strong className="text-foreground">NBA Front Office: your record finally earns your draft spot.</strong> In <Link to="/nba-front-office" className="text-
+            <li><strong className="text-foreground">NBA Front Office: the Roster tile tells you who is hurt all season.</strong> If you waived a man after the first round
+            <li><strong className="text-foreground">The rules stop hiding under the cookie bar.</strong> On your first visit to <Link to="/stadium-tycoon" className="text
+            <li><strong className="text-foreground">Stadium Tycoon: matches that finish like football, and a title race you can lose.</strong> In <Link to="/stadium-tycoo
+            <li><strong className="text-foreground">Soccer Career: own a club for real.</strong> Retire with €200M or more in <Link to="/soccer-career" className="text-
+head a8ce776bb66816948462c18b3bfbf6e658f52d4c

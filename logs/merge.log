@@ -1,0 +1,10 @@
+Auto-merging scripts/data/guideHeadingsFrozen.json
+Auto-merging src/data/searchKeywords.json
+CONFLICT (content): Merge conflict in src/data/searchKeywords.json
+Auto-merging src/pages/WhatsNew.tsx
+Automatic merge failed; fix conflicts and then commit the result.
+unmerged after merge: src/data/searchKeywords.json 
+searchKeywords.json: 133 of 133 games covered, 1215 keywords, 10978 bytes
+  filters: tf >= 2, df <= 33 of 133 guides, max 12 per game
+  guide source hash e3f33e9faaad864a
+merged tree 594ae23e78b9cf2b0a793ca72c85d6cb02231698 parents a6bd126f7329544054d3aa468c6fe872d17dcd86 705f576c2aa1151ed4077965e285e8610e738ba6
