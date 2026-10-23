@@ -1,0 +1,40 @@
+share judged pairs: 682 (members 200, other tiles 482)
+groups judged by share: 40
+members, lowest shares:
+  29.7%  v=null  bconn-041 "Hall of Fame third basemen" <- Paul Molitor
+  30.3%  v=true  bconn-057 "Hall of Fame left fielders" <- Stan Musial
+  33.8%  v=true  bconn-038 "Hall of Fame designated hitters / sluggers" <- Jim Thome
+  40.6%  v=true  bconn-035 "Hall of Fame first basemen" <- Harmon Killebrew
+  42.6%  v=true  bconn-022 "Hall of Fame first basemen" <- Frank Thomas
+  42.6%  v=true  bconn-028 "Hall of Fame first basemen" <- Frank Thomas
+  42.6%  v=true  bconn-045 "Hall of Fame first basemen" <- Frank Thomas
+  44.8%  v=true  bconn-028 "Hall of Fame right fielders" <- Frank Robinson
+other tiles, highest shares:
+  29.4%  v=null  bconn-028 "Hall of Fame left fielders" <- Frank Robinson
+  29.4%  v=null  bconn-035 "Hall of Fame left fielders" <- Frank Robinson
+  29.4%  v=null  bconn-057 "Hall of Fame left fielders" <- Frank Robinson
+  25.7%  v=null  bconn-057 "Hall of Fame right fielders" <- Stan Musial
+  24.0%  v=null  bconn-035 "Hall of Fame right fielders" <- Ty Cobb
+  24.0%  v=null  bconn-057 "Hall of Fame right fielders" <- Ty Cobb
+  23.2%  v=null  bconn-028 "Hall of Fame first basemen" <- Carl Yastrzemski
+  23.2%  v=null  bconn-035 "Hall of Fame first basemen" <- Carl Yastrzemski
+  22.5%  v=null  bconn-018 "Hall of Fame third basemen" <- Cal Ripken Jr.
+  22.5%  v=null  bconn-036 "Hall of Fame third basemen" <- Cal Ripken Jr.
+  22.5%  v=null  bconn-053 "Hall of Fame third basemen" <- Cal Ripken Jr.
+  21.5%  v=null  bconn-045 "Hall of Fame first basemen" <- Harry Heilmann
+other tiles under 10 percent: 445; highest:
+  9.9%  v=false  bconn-053 "Hall of Fame first basemen" <- Honus Wagner
+  9.7%  v=false  bconn-028 "Hall of Fame left fielders" <- Hank Aaron
+  9.7%  v=false  bconn-035 "Hall of Fame left fielders" <- Hank Aaron
+  9.7%  v=false  bconn-057 "Hall of Fame left fielders" <- Hank Aaron
+  9.6%  v=false  bconn-028 "Hall of Fame right fielders" <- Lou Brock
+other tiles in [5, 10): 47; in [10, 15): 11; in [10, 30): 37
+members in [30, 35): 2; under 30: 1; under 10: 0
+lines 30.0 / 10.0: members not fitting 1 (refuted 0); other tiles fitting 0, unknown 37
+lines 25.0 / 10.0: members not fitting 0 (refuted 0); other tiles fitting 4, unknown 33
+lines 35.0 / 10.0: members not fitting 3 (refuted 0); other tiles fitting 0, unknown 37
+lines 40.0 / 10.0: members not fitting 3 (refuted 0); other tiles fitting 0, unknown 37
+lines 50.0 / 10.0: members not fitting 13 (refuted 0); other tiles fitting 0, unknown 37
+lines 30.0 / 5.0: members not fitting 1 (refuted 0); other tiles fitting 0, unknown 84
+lines 30.0 / 15.0: members not fitting 1 (refuted 0); other tiles fitting 0, unknown 26
+lines 30.0 / 20.0: members not fitting 1 (refuted 0); other tiles fitting 0, unknown 12

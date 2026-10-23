@@ -1,0 +1,6 @@
+probe exit=0 1s | lines 30.0 / 20.0: members not fitting 1 (refuted 0); other tiles fitting 0, unknown 12
+move-hi25 exit=1 1s | simUsConnectionsFacts: 6 failures
+move-hi35 exit=1 1s | simUsConnectionsFacts: 1 failure
+move-lo05 exit=1 1s | simUsConnectionsFacts: 1 failure
+move-lo15 exit=1 1s | simUsConnectionsFacts: 1 failure
+after-clean exit=0 1s | simUsConnectionsFacts: green. Every Baseball, NFL and NHL Connections group is held to the record, and no board has a second right answer the record can see (other tiles 
