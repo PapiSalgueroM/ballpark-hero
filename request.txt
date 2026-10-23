@@ -1,0 +1,12 @@
+# Release BQ, Round 1525: its eleven controls (r1525-fx-g2, rc-fx-g2.txt). Each must exit 1 and say FIRED.
+c-stale: SIM_SEASON_AWARDS_CONTROL=stale node scripts/simSoccerSeasonAwards.mjs
+c-nogate: SIM_SEASON_AWARDS_CONTROL=nogate node scripts/simSoccerSeasonAwards.mjs
+c-dropcoins: SIM_SEASON_AWARDS_CONTROL=dropcoins node scripts/simSoccerSeasonAwards.mjs
+c-usdrift: SIM_SEASON_AWARDS_CONTROL=usdrift node scripts/simSoccerSeasonAwards.mjs
+c-pool: SIM_SEASON_AWARDS_CONTROL=pool node scripts/simSoccerSeasonAwards.mjs
+c-vanish: SIM_SEASON_AWARDS_CONTROL=vanish node scripts/simSoccerSeasonAwards.mjs
+c-fair: SIM_SEASON_AWARDS_CONTROL=fair node scripts/simSoccerSeasonAwards.mjs
+c-comeback: SIM_SEASON_AWARDS_CONTROL=comeback node scripts/simSoccerSeasonAwards.mjs
+c-young: SIM_SEASON_AWARDS_CONTROL=young node scripts/simSoccerSeasonAwards.mjs
+c-grade: SIM_SEASON_AWARDS_CONTROL=grade node scripts/simSoccerSeasonAwards.mjs
+c-key: SIM_SEASON_AWARDS_CONTROL=key node scripts/simSoccerSeasonAwards.mjs
