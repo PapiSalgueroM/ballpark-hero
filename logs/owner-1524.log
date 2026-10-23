@@ -1,0 +1,4 @@
+filesWithoutMerge: 7ea9995a00de127cbad7e8316bc26247be10d0bf, 9605d42a without 86b94e55 in src/lib/soccerCareerEngine.ts, src/lib/soccerCareerLeague.ts
+   30 seasons replayed under two Math.random streams: 0 came out different
+   16 seeded careers, 788 states and draw counts compared (96 manager seasons among them): 0 careers differ from the base
+simSoccerOwnerTail: green. The owner picks his club, plays on the table, and every call does what it says and none is best at everything.
