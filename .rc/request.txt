@@ -1,0 +1,11 @@
+tsc: node_modules/.bin/tsc --noEmit -p tsconfig.app.json
+facts: node scripts/simUsConnectionsFacts.mjs
+ctl-arod: US_CONN_CONTROL=arod node scripts/simUsConnectionsFacts.mjs
+ctl-bell: US_CONN_CONTROL=bell node scripts/simUsConnectionsFacts.mjs
+ctl-karlsson: US_CONN_CONTROL=karlsson node scripts/simUsConnectionsFacts.mjs
+ctl-twice: US_CONN_CONTROL=twice node scripts/simUsConnectionsFacts.mjs
+ctl-onehost: US_CONN_CONTROL=onehost node scripts/simUsConnectionsFacts.mjs
+ctl-unjudged: US_CONN_CONTROL=unjudged node scripts/simUsConnectionsFacts.mjs
+ctl-fingers: US_CONN_CONTROL=fingers node scripts/simUsConnectionsFacts.mjs
+ctl-bogus: US_CONN_CONTROL=nosuch node scripts/simUsConnectionsFacts.mjs
+probe: node .rc/x/probe1.mjs
