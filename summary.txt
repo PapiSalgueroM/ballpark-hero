@@ -1,0 +1,8 @@
+build exit=0 35s | [dukb] inlined 1 stylesheet(s) and 1 module(s) into 181 snapshots (11 left alone)
+vitest exit=0 5s |    Duration  3.60s (transform 885ms, setup 274ms, collect 1.57s, tests 1.20s, environment 1.48s, prepare 600ms)
+simNbaStartingFive exit=0 7s | simNbaStartingFive: green. 13 sections: every number from the record, every five scored against what its teams allowed.
+simNbaCourtSelection exit=0 3s | NBA court: CRLF executable controls bind, original bytes held, owned copies cleaned. Native keyboard/touch geometry is verified separately.
+simResultMoment exit=0 7s | simResultMoment: green. Every live game reaches the shared result moment or is listed with what it draws instead, the pill shows exactly the score it is given, the three 
+walk exit=1 43s | Node.js v24.21.0
+simHarnessAnchors exit=0 54s | simHarnessAnchors: green. Every harness parses and none carries an unmatchable anchor.
+tsc exit=0 89s | 
