@@ -1,0 +1,9 @@
+tsc: node_modules/.bin/tsc --noEmit -p tsconfig.app.json
+vitest-sstats: node_modules/.bin/vitest run src/components/front-office/FrontOfficeSeasonStats.test.tsx src/lib/nflSeasonStats.test.ts src/components/front-office/FrontOfficeLazyDesk.test.tsx src/components/front-office-shared/FrontOfficeSeasonClose.test.tsx --testTimeout=300000 --hookTimeout=120000
+sim-lift: mkdir -p /tmp/lb1 && git archive c9d18897201aae8528e635f03a877e78eb02ed5c src | tar -x -C /tmp/lb1 && LIFT_BASE=/tmp/lb1 node scripts/simNflSeasonStats.mjs
+c-quote: NFL_STATS_CONTROL=quote node scripts/simNflSeasonStats.mjs
+simFoLazyDesk: node scripts/simFoLazyDesk.mjs
+lazy-closestatic: SIM_FO_LAZY_DESK_CONTROL=closestatic node scripts/simFoLazyDesk.mjs
+simHarnessAnchors: node scripts/simHarnessAnchors.mjs
+simNoRivalNames: node scripts/simNoRivalNames.mjs
+simStorageWrites: node scripts/simStorageWrites.mjs

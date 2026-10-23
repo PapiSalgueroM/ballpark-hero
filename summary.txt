@@ -1,0 +1,9 @@
+vitest-sstats exit=0 9s |    Duration  8.89s (transform 3.42s, setup 403ms, collect 7.15s, tests 10.02s, environment 2.10s, prepare 563ms)
+c-quote exit=1 57s | simNflSeasonStats: 114 checks, 1 failed (control quote); section 1 skipped: LIFT_BASE is not set
+tsc exit=0 75s | 
+sim-lift exit=0 78s | simNflSeasonStats: 130 checks, 0 failed
+simFoLazyDesk exit=0 33s | simFoLazyDesk: all checks passed
+lazy-closestatic exit=1 34s | simFoLazyDesk CONTROL closestatic FIRED: section 1 went red with 2 failures (red sections 1)
+simStorageWrites exit=0 3s | simStorageWrites: all green (owed: 12)
+simNoRivalNames exit=0 16s | No rival product names found. 0 findings.
+simHarnessAnchors exit=0 49s | simHarnessAnchors: green. Every harness parses and none carries an unmatchable anchor.
