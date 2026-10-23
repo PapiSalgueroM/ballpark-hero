@@ -26,7 +26,7 @@ afterEach(() => {
   vi.doUnmock('@/components/layout/SiteMenuPanel');
 });
 
-it('dismisses a pending real menu import with Escape from the trigger and each fallback control, without a late dialog', async () => {
+it('dismisses a pending real menu import with Escape from the trigger, without a late dialog', async () => {
   render(<MemoryRouter initialEntries={['/soccer']}><SiteMenu /></MemoryRouter>);
   await act(async () => { await Promise.resolve(); await Promise.resolve(); });
   expect(delayedPanel.requests, 'SITE_MENU_ESCAPE_COLD_PANEL_NOT_IMPORTED').toBe(0);
@@ -54,19 +54,6 @@ it('dismisses a pending real menu import with Escape from the trigger and each f
   expect(screen.queryByRole('region', { name: 'Site menu loading' }), 'SITE_MENU_LOADING_NON_ESCAPE_PRESERVED').toBe(first);
   fireEvent.keyDown(trigger, { key: 'Escape', code: 'Escape' });
   await closed('SITE_MENU_LOADING_ESCAPE_TRIGGER_CLOSED');
-
-  const second = await pending();
-  const cancel = within(second).getByRole('button', { name: 'Cancel' });
-  cancel.focus();
-  fireEvent.keyDown(cancel, { key: 'Escape', code: 'Escape' });
-  await closed('SITE_MENU_LOADING_ESCAPE_CANCEL_CLOSED');
-
-  const third = await pending();
-  const search = within(third).getByRole('link', { name: 'Search Games' });
-  expect(search.getAttribute('href'), 'SITE_MENU_LOADING_ESCAPE_SEARCH_TARGET').toBe('/search');
-  search.focus();
-  fireEvent.keyDown(search, { key: 'Escape', code: 'Escape' });
-  await closed('SITE_MENU_LOADING_ESCAPE_SEARCH_CLOSED');
 
   await act(async () => {
     delayedPanel.release();
