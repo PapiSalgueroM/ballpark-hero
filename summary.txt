@@ -1,0 +1,13 @@
+tsc exit=0 87s | 
+shop-earnround exit=1 1s | simUsShopPromises: CONTROL earnround FIRED (red sections 6)
+shop exit=0 167s | simUsShopPromises: green (sections 0, 1, 2, 3, 4, 5, 6, 7, 8, 9)
+shop-nobank exit=1 1s | simUsShopPromises: CONTROL nobank FIRED (red sections 6)
+shop-basecheck exit=0 185s | simUsShopPromises: green (sections 0, 1, 2, 3, 4, 5, 6, 7, 8, 9)
+shop-clampdown exit=1 162s | simUsShopPromises: CONTROL clampdown FIRED (red sections 7)
+deckc exit=0 51s | simUsCareerDeckC: all checks passed
+shop-ppall exit=1 146s | simUsShopPromises: CONTROL potplusoneall FIRED (red sections 7)
+shop-pp1 exit=1 164s | simUsShopPromises: CONTROL potplusone FIRED (red sections 7)
+rival exit=0 18s | No rival product names found. 0 findings.
+storage exit=0 3s | simStorageWrites: all green (owed: 12)
+board exit=0 65s | simUsBoardParity: green. Four sports replayed click for click, save for save and screen for screen with the proved historical main775 coaching Panel.
+anchors exit=0 48s | simHarnessAnchors: green. Every harness parses and none carries an unmatchable anchor.
