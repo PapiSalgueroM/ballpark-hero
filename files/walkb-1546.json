@@ -1,0 +1,12 @@
+{
+  "retire": {
+    "stillArmed": 0,
+    "record": "11-0",
+    "onHub": true
+  },
+  "reset": {
+    "stillArmed": 0,
+    "record": "11-0",
+    "onHub": true
+  }
+}

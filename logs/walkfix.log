@@ -1,0 +1,9 @@
+   ok   the Retire button is 44 px tall
+   ok   the retire confirm buttons are 44 and 44 px tall
+   retire: back on the hub true, fights on the save 11, "Yes, hang them up" still open 0
+   ok   retire: the confirm was gone when the hub came back
+   reset: back on the hub true, fights on the save 11, "Yes, start again" still open 0
+   ok   reset: the confirm was gone when the hub came back
+   past list: 8 rows, 0 clipped, 8 show "walked away" in full, page 390 px wide
+   ok   every past fighter row shows its whole line at 390 px
+walkfix1546: all checks passed
