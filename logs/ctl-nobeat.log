@@ -1,0 +1,7 @@
+save A: last season 2003, phase event, the gate's call 2004
+save B: last season 2003, phase season, the gate's call 2004
+save C: last season 2026, phase season, the gate's call 2027
+save D1: last season 2003, phase season, the gate's call none
+save D2: last season 2004, phase season, the gate's call none
+  FAIL a-390: the walk stopped: TimeoutError: page.waitForSelector: Timeout 12000ms exceeded.
+playNbaIntl: CONTROL nobeat FIRED (walk (a) at 390 met no call, 1 failures)
