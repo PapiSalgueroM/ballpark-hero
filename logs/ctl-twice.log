@@ -1,0 +1,33 @@
+US_CONN_CONTROL=twice: the input was changed; this run must end red
+1) no group claims the present, and every recent year label is one the record judges
+   baseball: 0 present tense or unheld recent year labels
+   nfl: 0 present tense or unheld recent year labels
+   nhl: 0 present tense or unheld recent year labels
+2) no refuted claim is on a board
+   baseball: 32 refuted claims held off every board, 0 found
+   nfl: 0 refuted claims held off every board, 0 found
+   nhl: 0 refuted claims held off every board, 0 found
+3) the ledger stands on two hosts
+  FAIL: baseball bconn-049: Rich Gossage in "Hall of Fame relief pitchers" has no two host fact
+   baseball: 542 facts, 0 on one host; 91 flagged groups, 455 members held; 130 fixed findings
+   nfl: 11 facts, 0 on one host; 2 flagged groups, 10 members held; 1 fixed findings
+   nhl: 12 facts, 0 on one host; 2 flagged groups, 10 members held; 2 fixed findings
+4) one right answer: the shared cross check over every board
+   baseball: 60 boards, 240 of 240 groups judged; members 1198 judged (2 unknown), other tiles 3547 judged (53 unknown); 0 findings
+   nfl: 4 boards, 16 of 16 groups judged; members 80 judged (0 unknown), other tiles 239 judged (1 unknown); 0 findings
+   nhl: 4 boards, 16 of 16 groups judged; members 80 judged (0 unknown), other tiles 240 judged (0 unknown); 0 findings
+5) no man is a season from joining a group beside him
+   baseball: 0 watched men beside a group they may join
+   nfl: 0 watched men beside a group they may join
+   nhl: 0 watched men beside a group they may join
+6) no man is dealt twice on one board
+  FAIL: baseball bconn-049: "Goose Gossage" and "Rich Gossage" are the same man
+   baseball: 1 men dealt twice
+   nfl: 0 men dealt twice
+   nhl: 0 men dealt twice
+7) what the record cannot judge may only get fewer
+   baseball: 0 groups nothing judges (ceiling 0), 2 members the record cannot place (ceiling 2), 53 other tiles it cannot judge (ceiling 53)
+   nfl: 0 groups nothing judges (ceiling 0), 0 members the record cannot place (ceiling 0), 1 other tiles it cannot judge (ceiling 1)
+   nhl: 0 groups nothing judges (ceiling 0), 0 members the record cannot place (ceiling 0), 0 other tiles it cannot judge (ceiling 0)
+
+US_CONN_CONTROL=twice fired its own rule 1 time(s): twice x1 for Rich Gossage (all findings: no-fact 1, twice 1; 2 failures in all)
