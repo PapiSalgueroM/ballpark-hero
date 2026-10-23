@@ -1,0 +1,34 @@
+# Release BR, Round 1549 (Higher or Lower numbers current): r1549-fx-b (rc-fx-b.txt). hl-* exit 1 FIRED,
+# hl-bogus exits 2 ABORTED by design. simGuideHeadings stays red on /nba-higher-lower (section 4) until rgA's build:seo
+# redraws the saved page. Nothing dropped.
+tsc: node_modules/.bin/tsc --noEmit -p tsconfig.app.json
+simHigherLowerFacts: node scripts/simHigherLowerFacts.mjs
+hl-curryshort: HL_FACTS_CONTROL=curryshort node scripts/simHigherLowerFacts.mjs
+hl-nbaonesource: HL_FACTS_CONTROL=nbaonesource node scripts/simHigherLowerFacts.mjs
+hl-flagless: HL_FACTS_CONTROL=flagless node scripts/simHigherLowerFacts.mjs
+hl-throughprop: HL_FACTS_CONTROL=throughprop node scripts/simHigherLowerFacts.mjs
+hl-componentuntil: HL_FACTS_CONTROL=componentuntil node scripts/simHigherLowerFacts.mjs
+hl-examplestale: HL_FACTS_CONTROL=examplestale node scripts/simHigherLowerFacts.mjs
+hl-nbastale: HL_FACTS_CONTROL=nbastale node scripts/simHigherLowerFacts.mjs
+hl-playeduntil: HL_FACTS_CONTROL=playeduntil node scripts/simHigherLowerFacts.mjs
+hl-durantteam: HL_FACTS_CONTROL=durantteam node scripts/simHigherLowerFacts.mjs
+hl-henrystale: HL_FACTS_CONTROL=henrystale node scripts/simHigherLowerFacts.mjs
+hl-apmerge: HL_FACTS_CONTROL=apmerge node scripts/simHigherLowerFacts.mjs
+hl-nflstale: HL_FACTS_CONTROL=nflstale node scripts/simHigherLowerFacts.mjs
+hl-tennismerge: HL_FACTS_CONTROL=tennismerge node scripts/simHigherLowerFacts.mjs
+hl-stale: HL_FACTS_CONTROL=stale node scripts/simHigherLowerFacts.mjs
+hl-inversion: HL_FACTS_CONTROL=inversion node scripts/simHigherLowerFacts.mjs
+hl-nolast: HL_FACTS_CONTROL=nolast node scripts/simHigherLowerFacts.mjs
+hl-goalieok: HL_FACTS_CONTROL=goalieok node scripts/simHigherLowerFacts.mjs
+hl-heldfix: HL_FACTS_CONTROL=heldfix node scripts/simHigherLowerFacts.mjs
+hl-mlbstale: HL_FACTS_CONTROL=mlbstale node scripts/simHigherLowerFacts.mjs
+hl-bogus: HL_FACTS_CONTROL=bogus node scripts/simHigherLowerFacts.mjs
+simSportsFacts: node scripts/simSportsFacts.mjs
+simF1Champions: node scripts/simF1Champions.mjs
+simGuideHeadings: node scripts/simGuideHeadings.mjs
+simSiteSearch: node scripts/simSiteSearch.mjs
+simNoRivalNames: node scripts/simNoRivalNames.mjs
+simHarnessAnchors: node scripts/simHarnessAnchors.mjs
+simStorageWrites: node scripts/simStorageWrites.mjs
+simTrustCopy: node scripts/simTrustCopy.mjs
+simInventedNames: node scripts/simInventedNames.mjs
