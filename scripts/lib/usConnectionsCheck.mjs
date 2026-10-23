@@ -100,7 +100,18 @@ function posShare(m, set) {
   }
   return all > 0 ? at / all : null;
 }
-/** The share rule: at least 30 percent of his games there fits, under 10 percent does not, between is unknown. */
+/**
+ * The share rule: at least 30 percent of his games there fits, under 10 percent does not, between is unknown.
+ * Both are judgment lines with no headroom, measured 2026-10-22 over the 60 baseball boards (682 tile and
+ * group pairs the share decides, 200 members and 482 other tiles): the 30 line sits 0.3 points under a member
+ * who fits (Stan Musial, 30.3 percent in left field, bconn-057) and 0.6 points over the closest other tile
+ * (Frank Robinson, 29.4 percent in left field, unknown on bconn-028, 035 and 057); the 10 line sits 0.1
+ * points over an other tile that does not fit (Honus Wagner, 9.9 percent at first base, bconn-053). Moved to
+ * 25, four other tiles fit; to 35, two more members go unknown; the 10 line at 5 or 15 takes the other tiles
+ * the share leaves unknown from 37 (of the 53 baseball other tiles the record cannot judge) to 84 or 26.
+ * Section 7 of simUsConnectionsFacts holds the member and other unknowns at the ledger's ceilings exactly, so
+ * each of those moves turns it red; a pair between the lines is decided on two hosts, not by a new line.
+ */
 function shareVerdict(share) {
   if (share === null) return null;
   if (share >= 0.3) return true;
