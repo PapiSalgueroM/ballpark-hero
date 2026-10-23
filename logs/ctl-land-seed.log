@@ -1,0 +1,159 @@
+chainBase: src/lib/awardDraw.ts
+chainBase: src/lib/brokenSaveRecovery.ts
+chainBase: src/lib/careerAwards.ts
+chainBase: src/lib/careerDirtyMoney.ts
+chainBase: src/lib/careerDirtyMoneyDesk.ts
+chainBase: src/lib/careerForm.ts
+chainBase: src/lib/careerPreDraft.ts
+chainBase: src/lib/cbbDynasty.ts
+chainBase: src/lib/cfbDynasty.ts
+chainBase: src/lib/cfbSeatBind.ts
+chainBase: src/lib/champOrNot.ts
+chainBase: src/lib/clearWinner.ts
+chainBase: src/lib/clubDetailFixtures.ts
+chainBase: src/lib/clubManager.ts
+chainBase: src/lib/clubManagerBoardAsks.ts
+chainBase: src/lib/clubManagerBoardVerdict.ts
+chainBase: src/lib/clubManagerCalendar.ts
+chainBase: src/lib/clubManagerCarry.ts
+chainBase: src/lib/clubManagerDifficulty.ts
+chainBase: src/lib/clubManagerEras.ts
+chainBase: src/lib/clubManagerFinances.ts
+chainBase: src/lib/clubManagerMadeUpNations.ts
+chainBase: src/lib/clubManagerMeters.ts
+chainBase: src/lib/clubManagerRecords.ts
+chainBase: src/lib/clubManagerRetire.ts
+chainBase: src/lib/clubManagerSlots.ts
+chainBase: src/lib/clubManagerStart.ts
+chainBase: src/lib/clubManagerTactics.ts
+chainBase: src/lib/clubManagerTacticsCore.ts
+chainBase: src/lib/clubManagerUclGroups.ts
+chainBase: src/lib/clubManagerWorldRoster.ts
+chainBase: src/lib/clubManagerWorldView.ts
+chainBase: src/lib/cmMatchDisplay.ts
+chainBase: src/lib/cmSavePoints.ts
+chainBase: src/lib/cmSavePointsStore.ts
+chainBase: src/lib/collegeProgram.ts
+chainBase: src/lib/collegeSeat.ts
+chainBase: src/lib/conquestMarket.ts
+chainBase: src/lib/consentPreferences.ts
+chainBase: src/lib/consentedScripts.ts
+chainBase: src/lib/deadlineDay.ts
+chainBase: src/lib/euroAccess.ts
+chainBase: src/lib/faceOff.ts
+chainBase: src/lib/fightCareer.ts
+chainBase: src/lib/fightCareerLifeFlow.ts
+chainBase: src/lib/fightGym.ts
+chainBase: src/lib/fightPromoter.ts
+chainBase: src/lib/foSeasonClose.ts
+chainBase: src/lib/freeKick.ts
+chainBase: src/lib/freshBuild.ts
+chainBase: src/lib/frontOffice.ts
+chainBase: src/lib/gameLaws/nfl.ts
+chainBase: src/lib/gameLaws/nflDrives.ts
+chainBase: src/lib/gameLaws/nflGameDay.ts
+chainBase: src/lib/gmCareerFace.ts
+chainBase: src/lib/gmContractRules.ts
+chainBase: src/lib/gmContracts.ts
+chainBase: src/lib/gmContractsHostNba.ts
+chainBase: src/lib/gmDeskHost.ts
+chainBase: src/lib/gmDeskHostNfl.ts
+chainBase: src/lib/gmEarnedDraft.ts
+chainBase: src/lib/gmGameDay.ts
+chainBase: src/lib/gmGameDayView.ts
+chainBase: src/lib/gmGameLog.ts
+chainBase: src/lib/gmGameScore.ts
+chainBase: src/lib/gmInbox.ts
+chainBase: src/lib/gmSeat.ts
+chainBase: src/lib/gmSeatRecord.ts
+chainBase: src/lib/hallOfChampions.ts
+chainBase: src/lib/listQuiz.ts
+chainBase: src/lib/localLineupEval.ts
+chainBase: src/lib/managerDifficulty.ts
+chainBase: src/lib/managerHotSeat.ts
+chainBase: src/lib/mlbCareerCorruption.ts
+chainBase: src/lib/mlbMyCareer.ts
+chainBase: src/lib/nbaCareerCorruption.ts
+chainBase: src/lib/nbaEarnedDraft.ts
+chainBase: src/lib/nbaFrontOffice.ts
+chainBase: src/lib/nbaGmDesk.ts
+chainBase: src/lib/nbaMyCareer.ts
+chainBase: src/lib/nbaStartingFiveScore.ts
+chainBase: src/lib/nflCareerCorruption.ts
+chainBase: src/lib/nflGmCareer.ts
+chainBase: src/lib/nflGmDesk.ts
+chainBase: src/lib/nflMyCareer.ts
+chainBase: src/lib/nflSeasonAwards.ts
+chainBase: src/lib/nflSeasonStats.ts
+chainBase: src/lib/nflSeasonView.ts
+chainBase: src/lib/nhlCareerCorruption.ts
+chainBase: src/lib/nhlMyCareer.ts
+chainBase: src/lib/orderTheList.ts
+chainBase: src/lib/pageSchema.ts
+chainBase: src/lib/playerBingo.ts
+chainBase: src/lib/records.ts
+chainBase: src/lib/saveKeeper.ts
+chainBase: src/lib/season/historicalOpponentLabels.ts
+chainBase: src/lib/season/nba.ts
+chainBase: src/lib/seasonCalendar.ts
+chainBase: src/lib/soccerCareerAppearance.ts
+chainBase: src/lib/soccerCareerContracts.ts
+chainBase: src/lib/soccerCareerEngine.ts
+chainBase: src/lib/soccerCareerLeague.ts
+chainBase: src/lib/soccerCareerLife.ts
+chainBase: src/lib/soccerCareerLifeConsequences.ts
+chainBase: src/lib/soccerCareerOwner.ts
+chainBase: src/lib/soccerCareerRealismA.ts
+chainBase: src/lib/soccerCareerRetirementReason.ts
+chainBase: src/lib/soccerCareerRoutineEvents.ts
+chainBase: src/lib/soccerClubSquad.ts
+chainBase: src/lib/soccerClubSquadSheet.ts
+chainBase: src/lib/soccerDeck.ts
+chainBase: src/lib/soccerDeckGate.ts
+chainBase: src/lib/soccerOwnerGate.ts
+chainBase: src/lib/soccerPhone.ts
+chainBase: src/lib/soccerSeasonAwards.ts
+chainBase: src/lib/soccerWorldTruth.ts
+chainBase: src/lib/sportHub.ts
+chainBase: src/lib/stadiumTycoon.ts
+chainBase: src/lib/triviaQuestionBank.ts
+chainBase: src/lib/uclFormatHistoryEngine.ts
+chainBase: src/lib/usCareerAnnualBenefits.ts
+chainBase: src/lib/usCoachCareer.ts
+chainBase: src/lib/usCoachRetirement.ts
+chainBase: src/lib/whodTheyBeat.ts
+chainBase: src/lib/wonderkidFactory.ts
+chainBase: src/lib/worldCompetition.ts
+chainBase: src/lib/worldNights.ts
+chainBase: src/lib/worldOneOffs.ts
+chainBase: src/lib/worldXi.ts
+chainBase: 129 file(s) from HEAD into /tmp/lc
+chainBase: added data src/data/careerHistoricalOpponentDisplay.ts
+chainBase: added data src/data/cmOneOffRows.ts
+chainBase: added data src/data/collegeRivalries.ts
+chainBase: added data src/data/marketNamesakes.json
+chainBase: added data src/data/soccerDeck/index.ts
+chainBase: added data src/data/soccerDeck/starter.ts
+chainBase: added data src/data/soccerDeck/words.ts
+chainBase: 7 added data file(s) from HEAD into /tmp/lc
+deckBase1504: Round 1504's deck loader added to /tmp/lc/src/pages/SoccerCareer.tsx
+[31merror during build:
+[31msrc/hooks/useNbaLineup.ts (2:9): "localEvaluateNbaFive" is not exported by "src/lib/localLineupEval.ts", imported by "src/hooks/useNbaLineup.ts".[31m
+file: [36m/tmp/lc/src/hooks/useNbaLineup.ts:2:9[31m
+[33m
+1: import { useState, useCallback, useMemo, useEffect } from 'react';
+2: import { localEvaluateNbaFive } from '@/lib/localLineupEval';
+            ^
+3: import { getRandomNbaTeams, NBA_TEAMS, type NbaTeam } from '@/data/nbaTeams';
+4: import { getRandomStatChallenge } from '@/data/nbaStats';
+[31m
+    at getRollupError (file:///home/runner/work/ballpark-hero/ballpark-hero/node_modules/rollup/dist/es/shared/parseAst.js:317:41)
+    at error (file:///home/runner/work/ballpark-hero/ballpark-hero/node_modules/rollup/dist/es/shared/parseAst.js:313:42)
+    at Module.error (file:///home/runner/work/ballpark-hero/ballpark-hero/node_modules/rollup/dist/es/shared/node-entry.js:17285:16)
+    at Module.traceVariable (file:///home/runner/work/ballpark-hero/ballpark-hero/node_modules/rollup/dist/es/shared/node-entry.js:17718:29)
+    at ModuleScope.findVariable (file:///home/runner/work/ballpark-hero/ballpark-hero/node_modules/rollup/dist/es/shared/node-entry.js:15309:39)
+    at FunctionScope.findVariable (file:///home/runner/work/ballpark-hero/ballpark-hero/node_modules/rollup/dist/es/shared/node-entry.js:5453:38)
+    at FunctionBodyScope.findVariable (file:///home/runner/work/ballpark-hero/ballpark-hero/node_modules/rollup/dist/es/shared/node-entry.js:5453:38)
+    at ReturnValueScope.findVariable (file:///home/runner/work/ballpark-hero/ballpark-hero/node_modules/rollup/dist/es/shared/node-entry.js:5453:38)
+    at FunctionBodyScope.findVariable (file:///home/runner/work/ballpark-hero/ballpark-hero/node_modules/rollup/dist/es/shared/node-entry.js:5453:38)
+    at ParameterScope.findVariable (file:///home/runner/work/ballpark-hero/ballpark-hero/node_modules/rollup/dist/es/shared/node-entry.js:5453:38)[39m
