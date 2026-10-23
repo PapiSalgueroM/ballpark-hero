@@ -1,0 +1,8 @@
+guideRedrawn exit=0 1s | simGuideHeadings: green. 131 guides carry keyword h2s over h3 and h4 sections with every original sentence intact, and all 133 blocks render a clean outline.
+simFaceOff exit=0 0s | simFaceOff: green. The deck deals fair, the daily is shared, the rivals climb, and the record holds.
+simFaceOffDeadline exit=0 2s | Face Off deadline cleanup: owned copies/reports removed; production hook bytes held.
+simHigherLower exit=0 0s | simHigherLower: all sections green
+simHigherLowerReveal exit=0 2s | simHigherLowerReveal: 23 source inputs held, owned copies and report cleaned.
+simDailyStanding exit=0 0s | simDailyStanding: green. Ten daily results carry today's standing, each on its own scale, counted in the database, hidden under 20 players.
+simDateDraws exit=0 62s | simDateDraws: green. Every date-seeded draw reaches its whole pool or is fenced where measured.
+vitest exit=0 22s |    Duration  20.90s (transform 3.97s, setup 429ms, collect 6.14s, tests 21.40s, environment 2.15s, prepare 447ms)

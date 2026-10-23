@@ -1,0 +1,11 @@
+#!serial
+# Release BR, Round 1549: r1549-fx-c (rc-fx-c.txt), one at a time because guideRedrawn edits the saved
+# page of /nba-higher-lower on the runner and restores public. Nothing dropped.
+guideRedrawn: test "$(grep -c 'Reading the final season for career length' public/nba-higher-lower/index.html)" = 1 && sed -i 's/Reading the final season for career length/Remembering who is still adding points/' public/nba-higher-lower/index.html && node scripts/simGuideHeadings.mjs; s=$?; git checkout -- public; exit $s
+simFaceOff: node scripts/simFaceOff.mjs
+simFaceOffDeadline: node scripts/simFaceOffDeadline.mjs
+simHigherLower: node scripts/simHigherLower.mjs
+simHigherLowerReveal: node scripts/simHigherLowerReveal.mjs
+simDailyStanding: node scripts/simDailyStanding.mjs
+simDateDraws: node scripts/simDateDraws.mjs
+vitest: node_modules/.bin/vitest run src/test/higherLowerReveal.test.tsx src/test/dailySaveShapes.test.tsx src/test/resultScorePillComparison.test.tsx src/test/faceOffDeadline.test.tsx src/test/dailySaveParity.test.tsx --testTimeout=300000 --hookTimeout=120000
