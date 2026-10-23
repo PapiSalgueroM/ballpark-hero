@@ -1,0 +1,142 @@
+name: Club Manager veteran retirement functional pilot
+on:
+  push:
+    branches: [codex/cm-veteran-retirement-20261023]
+    paths-ignore: ['docs/**']
+permissions:
+  contents: read
+concurrency:
+  group: cm-veteran-retirement-${{ github.sha }}
+  cancel-in-progress: false
+env:
+  BASE_SOURCE: 3ac9d8ea8a13db824f88be2deb660e7f2e31fc35
+  CI: '1'
+  SIM_NETWORK: offline
+  TZ: UTC
+jobs:
+  veteran_outcomes:
+    runs-on: ubuntu-latest
+    timeout-minutes: 35
+    defaults:
+      run:
+        shell: bash
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 16
+          persist-credentials: false
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: npm
+      - name: Exact six-path child and frozen retirement inputs
+        run: |
+          set -euo pipefail
+          out="$RUNNER_TEMP/cm-veteran-retirement-functional";test ! -e "$out";mkdir "$out"
+          echo "CM_VETERAN_OUT=$out" >> "$GITHUB_ENV"
+          test "$GITHUB_REPOSITORY" = PapiSalgueroM/ballpark-hero
+          test "$GITHUB_REPOSITORY_ID" = 1195729679
+          test "$GITHUB_REF" = refs/heads/codex/cm-veteran-retirement-20261023
+          test "$(git rev-parse HEAD)" = "$GITHUB_SHA"
+          git fetch --no-tags --depth=1 origin "$BASE_SOURCE" > "$out/base-fetch.log" 2>&1
+          git merge-base --is-ancestor "$BASE_SOURCE" "$GITHUB_SHA"
+          git show -s --format=%P HEAD > "$out/parents.txt"
+          test "$(cat "$out/parents.txt")" = "$BASE_SOURCE"
+          git diff --exit-code "$BASE_SOURCE" HEAD -- . ':!docs/**' ':!.github/workflows/cm-veteran-retirement.yml' ':!src/lib/clubManager.ts' ':!src/lib/clubManagerCalendar.ts' ':!src/lib/clubManagerVeteranLedger.ts' ':!src/lib/clubManagerVeteranRetirement.ts' ':!src/test/clubManagerVeteranRetirement.test.ts' > "$out/finite-six-path-scope.log"
+          test "$(git rev-parse "$BASE_SOURCE:src/lib/clubManager.ts")" = a505743537b383bc7885bb81f5a72c11e154b566
+          test "$(git rev-parse "$BASE_SOURCE:src/lib/clubManagerCalendar.ts")" = 3653027149d6a1bef4194e0bece4fb5783c1c1e2
+          test "$(git rev-parse HEAD:src/lib/clubManager.ts)" = bc6fb5765f593fb2b046e9abd35730093772f637
+          test "$(git rev-parse HEAD:src/lib/clubManagerCalendar.ts)" = a397581e069d7809f72a093d24d157b50c88e2d3
+          printf '%s  %s\n' \
+            45b9d486014720831f130000ff67d0d380f60c755bbb1afa3d0f9a833b2c4050 src/lib/clubManager.ts \
+            7cdbc2e31172db5974f0753551133c61ae291662f5bd8e4b14f043d2267baf83 src/lib/clubManagerCalendar.ts \
+            80f991a38069f29dd1fecc22a9cb9c0e3bb4945a33208fae1de8413fc6aefb17 src/lib/clubManagerVeteranLedger.ts \
+            cdaecb5ecd28187da8a1c62526c6b165289e76e37d30a01cba2ce7c4a16577ed src/lib/clubManagerVeteranRetirement.ts \
+            2cf79f78fc380fd9509eaeec5c88c76fd3dc1f91e9695f922b1248df608f90b5 src/test/clubManagerVeteranRetirement.test.ts > "$out/input-pins.sha256"
+          sha256sum --check "$out/input-pins.sha256" > "$out/input-pins.log"
+          git rev-parse HEAD > "$out/head.txt";git rev-parse 'HEAD^{tree}' > "$out/tree.txt"
+          printf '%s\n' "$GITHUB_RUN_ID" > "$out/run-id.txt";printf '%s\n' "$GITHUB_RUN_ATTEMPT" > "$out/run-attempt.txt"
+          git rev-parse HEAD:.github/workflows/cm-veteran-retirement.yml > "$out/workflow-blob.txt"
+          sha256sum .github/workflows/cm-veteran-retirement.yml > "$out/workflow.sha256"
+          git ls-files -z | sort -z > "$out/source-members.before"
+          git ls-files -z | sort -z | xargs -0 sha256sum > "$out/source-before.sha256"
+          git diff --exit-code HEAD > "$out/source-clean-before.log"
+          test -z "$(git status --porcelain --untracked-files=all)"
+      - name: Locked installation and full dependency inventory
+        timeout-minutes: 10
+        run: |
+          set -euo pipefail
+          out="$CM_VETERAN_OUT"
+          npm ci > "$out/install.log" 2>&1
+          find node_modules -path node_modules/.vite -prune -o -type f -print0 | sort -z > "$out/dependency-members.before"
+          find node_modules -path node_modules/.vite -prune -o -type f -print0 | sort -z | xargs -0 sha256sum > "$out/dependencies.sha256"
+      - name: Actual app types and nineteen retirement outcomes
+        run: |
+          set -euo pipefail
+          out="$CM_VETERAN_OUT"
+          export NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs"
+          : > "$out/types.transport";: > "$out/tests.transport";: > "$out/classifier.transport";status=0
+          SIM_OFFLINE_RECEIPT="$out/types.transport" timeout --signal=TERM --kill-after=15s 5m node_modules/.bin/tsc --noEmit -p tsconfig.app.json > "$out/types.log" 2>&1 || status=$?
+          printf '%s\n' "$status" > "$out/types.exit";test "$status" -eq 0
+          status=0
+          SIM_OFFLINE_RECEIPT="$out/tests.transport" timeout --signal=TERM --kill-after=15s 18m node_modules/.bin/vitest run src/test/clubManagerVeteranRetirement.test.ts --maxWorkers=1 --no-file-parallelism --reporter=default --reporter=json --outputFile="$out/tests.json" > "$out/tests.log" 2>&1 || status=$?
+          printf '%s\n' "$status" > "$out/tests.exit";test "$status" -eq 0
+          classifier=0
+          SIM_OFFLINE_RECEIPT="$out/classifier.transport" node <<'NODE' || classifier=$?
+          const fs=require('node:fs'),assert=require('node:assert/strict'),path=require('node:path'),out=process.env.CM_VETERAN_OUT;
+          const r=JSON.parse(fs.readFileSync(out+'/tests.json','utf8'));
+          const titles=new Set(["keeps the actual age42 veteran for one summer, consumes his old draw, then retires him at43","uses the actual plain renewal once and retains its fee, wage, clause and role outcomes","does not renew or charge a covered existing contract","records a deterministic wants-out decline without charging or renewing","records a deterministic broken-promise decline without charging or renewing","allows a later-season review after decline but never another agreement for the same identity","refuses ambiguous current identities and does not protect two rows after an agreement","protects the agreed veteran from ordinary surplus trimming as well as retirement and expiry","preserves unknown review data and keeps ordinary rollover available: null","preserves unknown review data and keeps ordinary rollover available: {\"v\":2,\"reviews\":[],\"future\":\"kept\"}","blocks age, loan, absent and booked-job contexts without editing the player or ledger","refuses an unaffordable needed renewal atomically after a real affordable positive witness","keeps spent history across actual raw save/load and release, including a different later squad id","refuses a retired-name ghost and never overrides its ordinary retirement draw","accepts the actual appended ledger and refuses malformed histories without repairing them","does not read accessors or foreign array methods while refusing non-JSON ledger boundaries","carries agreed raw review history through the actual calendar job join without discarding it","carries future raw review history through the actual calendar job join without discarding it","keeps actual veteran decline and attained age identical to the old retired-row outcome"]);
+          const ancestor='Club Manager one protected veteran summer';
+          assert.equal(titles.size,19);
+          assert.equal(r.success,true);assert.equal(r.testResults.length,1);
+          for(const [key,value]of Object.entries({numTotalTests:19,numPassedTests:19,numFailedTests:0,numPendingTests:0,numTodoTests:0}))assert.equal(r[key],value,key);
+          const suite=r.testResults[0],seen=new Set();
+          assert.equal(path.resolve(suite.name),path.resolve('src/test/clubManagerVeteranRetirement.test.ts'));
+          assert.equal(suite.status,'passed');assert.equal(suite.assertionResults.length,19);
+          if('message'in suite)assert.equal(suite.message,'');
+          for(const row of suite.assertionResults){
+            assert.equal(typeof row.title,'string');assert(titles.has(row.title),row.title);assert(!seen.has(row.title));seen.add(row.title);
+            assert.equal(row.fullName,ancestor+' '+row.title);assert.equal(row.status,'passed',row.fullName);assert.deepEqual(row.failureMessages,[]);
+          }
+          assert.equal(seen.size,19);for(const title of titles)assert(seen.has(title));
+          const runtime=['numRuntimeErrorTestSuites','numUnhandledErrors'];for(const key of runtime)if(key in r)assert.equal(r[key],0);
+          if('unhandledErrors'in r)assert.deepEqual(r.unhandledErrors,[]);
+          assert.doesNotMatch(fs.readFileSync(out+'/tests.log','utf8'),/Unhandled\s+(?:Errors?|Rejections?)|Uncaught\s+Exceptions?|Failed to resolve import|Cannot find (?:module|package)|No test files found/i);
+          fs.writeFileSync(out+'/functional-admission.json',JSON.stringify({phase:'veteran-retirement-functional-only',source:process.env.GITHUB_SHA,parent:process.env.BASE_SOURCE,runId:process.env.GITHUB_RUN_ID,attempt:process.env.GITHUB_RUN_ATTEMPT,passed:[...seen],observedRuntimeCounters:Object.fromEntries(runtime.filter(k=>k in r).map(k=>[k,r[k]])),absentRuntimeCountersUnknown:runtime.filter(k=>!(k in r)),unhandledErrors:'unhandledErrors'in r?r.unhandledErrors:'UNKNOWN_ABSENT',applicationQualified:false,fullOldEngineParity:false,worldRosterOwnerConsistency:false,hookUiAdopted:false,buildBrowserCapsQualified:false,balanceQualified:false},null,2)+'\n',{flag:'wx'});
+          NODE
+          printf '%s\n' "$classifier" > "$out/classifier.exit";test "$classifier" -eq 0
+          test ! -s "$out/types.transport";test ! -s "$out/tests.transport";test ! -s "$out/classifier.transport"
+      - name: Always preserve all raw results and physical holds
+        if: always()
+        run: |
+          set -euo pipefail
+          out="$RUNNER_TEMP/cm-veteran-retirement-functional";mkdir -p "$out";failed=0
+          for manifest in source-before dependencies;do
+            if test -f "$out/$manifest.sha256";then sha256sum --check "$out/$manifest.sha256" > "$out/final-$manifest-hold.log" 2>&1 || failed=1;else failed=1;fi
+          done
+          git ls-files -z | sort -z > "$out/source-members.after" || failed=1
+          git ls-files -z | sort -z | xargs -0 sha256sum > "$out/source-after.sha256" || failed=1
+          if test -f "$out/source-members.before";then cmp "$out/source-members.before" "$out/source-members.after" || failed=1;else failed=1;fi
+          if test -f "$out/source-before.sha256";then cmp "$out/source-before.sha256" "$out/source-after.sha256" || failed=1;else failed=1;fi
+          if test -d node_modules;then
+            find node_modules -path node_modules/.vite -prune -o -type f -print0 | sort -z > "$out/dependency-members.after" || failed=1
+            find node_modules -path node_modules/.vite -prune -o -type f -print0 | sort -z | xargs -0 sha256sum > "$out/dependencies-end.sha256" || failed=1
+          else failed=1;fi
+          if test -f "$out/dependency-members.before";then cmp "$out/dependency-members.before" "$out/dependency-members.after" || failed=1;else failed=1;fi
+          if test -f "$out/dependencies.sha256";then cmp "$out/dependencies.sha256" "$out/dependencies-end.sha256" || failed=1;else failed=1;fi
+          git rev-parse HEAD > "$out/head-after.txt" || failed=1
+          if test -f "$out/head.txt";then cmp "$out/head.txt" "$out/head-after.txt" || failed=1;else failed=1;fi
+          git diff --exit-code HEAD > "$out/final-source-diff.log" || failed=1
+          git status --porcelain --untracked-files=all > "$out/final-status.txt";test ! -s "$out/final-status.txt" || failed=1
+          for transport in types tests classifier;do test -f "$out/$transport.transport" && test ! -s "$out/$transport.transport" || failed=1;done
+          while IFS= read -r -d '' file;do test ! -s "$file" || failed=1;done < <(find "$out" -type f -name '*.transport' -print0)
+          printf '%s\n' "$failed" > "$out/final-holds.exit"
+          (cd "$out";find . -type f ! -path ./evidence.sha256 -print0 | sort -z | xargs -0 sha256sum) > "$out/evidence.sha256"
+          exit "$failed"
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: cm-veteran-retirement-functional-${{ github.run_id }}-${{ github.run_attempt }}
+          path: ${{ runner.temp }}/cm-veteran-retirement-functional/
+          if-no-files-found: error
+          retention-days: 14

@@ -1,4 +1,5 @@
 import { foldSpecialLatin } from '@/lib/nameFold';
+import { protectedVeteranIds } from '@/lib/clubManagerVeteranLedger';
 import { nameModerationError } from '@/lib/nameModeration';
 import { realLeagueFixtureKeyForStart, realLeagueFixturePairs, realLeagueFixtureCoverage } from '@/lib/clubManagerFixtures';
 import { noteHighestScoring } from '@/lib/clubManagerRecords';
@@ -2892,6 +2893,8 @@ export interface CareerState {
   startOptions?: import('@/lib/clubManagerStart').StartOptions;
   /** Set by finishSeason so a reload mid-review can resume the summary. */
   pendingSummary: SeasonSummary | null;
+  /** Optional career-local veteran decisions. Unknown versions stay stored and grant no override. */
+  veteranReviews?: unknown;
   /** Round 70: the board's demands for this season. */
   boardObjectives?: BoardObjective[];
   /** Round 474: which shape of specific ask this save's objectives were built
@@ -22112,6 +22115,7 @@ export function startNextSeason(career: CareerState, acceptOfferClub?: string): 
      written into the new season's free agent pool below. */
   const walkedFree619: FreeAgent[] = [];
   // Round 71: loan players go back to their parent clubs at season's end.
+  const protectedVeterans = protectedVeteranIds(career, worldYear(career), moving);
   const afterLoans = career.squad.filter(p => !p.onLoan);
   // Round 94: and MY loanees come home, with a season of football in them.
   /* Round 508: some of them do not come home, because the club they spent the
@@ -22139,14 +22143,14 @@ export function startNextSeason(career: CareerState, acceptOfferClub?: string): 
        keepers last and wingers do not. */
     const stillPlaying: CMPlayer[] = [];
     for (const p of aged) {
-      if (Math.random() < retireChance(p.age, p.rating, p.position)) {
+      if (Math.random() < retireChance(p.age, p.rating, p.position) && !protectedVeterans.has(p.id)) {
         retiredNow.push({ name: p.name, age: p.age, rating: p.rating });
         rosterExits.push({ player: p, kind: 'retire' });
       } else {
         stillPlaying.push(p);
       }
     }
-    const walked = stillPlaying.filter(p => (p.contractYears ?? 1) <= 0);
+    const walked = stillPlaying.filter(p => (p.contractYears ?? 1) <= 0 && !protectedVeterans.has(p.id));
     for (const p of walked) { freeAgentNews.push(p.name); rosterExits.push({ player: p, kind: 'release' }); }
     /* Round 619: a deal that ran out does not delete the man. He walks for
        nothing, which is what Round 105 always said, and now there is somewhere
@@ -22168,7 +22172,7 @@ export function startNextSeason(career: CareerState, acceptOfferClub?: string): 
          for anybody who uses it. Let a man go and you lose him for a season. */
       fromMyClub: true as const,
     })));
-    squad = stillPlaying.filter(p => (p.contractYears ?? 1) > 0);
+    squad = stillPlaying.filter(p => (p.contractYears ?? 1) > 0 || protectedVeterans.has(p.id));
     /* Round 132: the club replaces what it lost. The old intake was a flat two
        or three kids a summer whatever happened, so a squad that lost six
        players to retirement and expiry came back six lighter and the auto top
@@ -22214,7 +22218,7 @@ export function startNextSeason(career: CareerState, acceptOfferClub?: string): 
          books. If there is nothing surplus to release, the squad simply runs
          one or two over, which is what it did before this round. */
       const spare = squad.filter(p =>
-        !p.academyGrad && (p.isYouth || (p.potential ?? p.rating) <= p.rating));
+        !protectedVeterans.has(p.id) && !p.academyGrad && (p.isYouth || (p.potential ?? p.rating) <= p.rating));
       spare.sort((a, b) => (a.isYouth ? 0 : 1) - (b.isYouth ? 0 : 1) || a.rating - b.rating);
       const cut = new Set(spare.slice(0, squad.length - SQUAD_LIMIT).map(p => p.id));
       for (const p of squad) if (cut.has(p.id)) { releasedNews.push(p.name); rosterExits.push({ player: p, kind: 'release' }); }

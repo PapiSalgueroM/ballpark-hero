@@ -1041,6 +1041,8 @@ export function joinClubNow(career: CareerState): CareerState | null {
     startOptions: career.startOptions,
     h2h: career.h2h,
     retiredNames: career.retiredNames,
+    ...(Object.prototype.hasOwnProperty.call(career, 'veteranReviews')
+      ? { veteranReviews: career.veteranReviews } : {}),
     /* Round 1344, the lead's ruling (brief decision 3): the run in started from the departed career's ledger and
        wrote every deal it played (the new club's opening window and any January between other clubs, a sale through
        a release clause), so the joined career takes the run in's ledger whole. A career with no seed writes none,
