@@ -1,0 +1,21 @@
+control fixedstep: the lib is a copy with one rewrite
+2) a hidden tab: 600 callbacks a minute apart
+   income 3317.25/s; ten hidden hours paid 4.9759e+5, the away rate times eight hours is 4.7768e+7 (x0.010417); meter undefined ms
+  FAIL: a hidden tab left open ten hours earned x0.0104 of eight hours at the away rate
+  FAIL: the absence meter stopped at undefined ms, the cap is 28800000
+  FAIL: the absence's takings read 0, the hidden tab was paid 497587.81196224684
+  FAIL: watching left the absence meter at 10800000 ms
+  FAIL: watching left the absence's takings at 12500000
+  FAIL: three hidden hours and seven closed paid x0.8781 of one eight hour absence
+  FAIL: seven closed hours after three hidden ones were not reported as capped
+  FAIL: after three hidden hours and seven closed the takings read 41797376.20482743, the absence paid 41946652.5484161
+  FAIL: only 0 of 30 one second wakes on a hidden page were paid as away time
+  FAIL: 30 hidden seconds paid x0.5000 of the away rule
+  FAIL: 30 hidden seconds left the absence meter at undefined ms, not 30000
+  FAIL: a 5 s gap on a visible page was paid x0.0500 of 5 watched seconds
+  FAIL: a 10 s gap on a visible page was paid as watched
+  FAIL: two asleep hours on a visible page paid x0.0001 of two away hours
+   watched minute x1.000000 of full rate; 3 h hidden then 7 h closed x0.878125 of one capped absence; 2 h asleep paid as away: false
+   30 hidden wakes a second apart: 0 paid as away, x0.500000 of the away rule, meter undefined ms
+   visible gaps: 5 s watched, 10 s watched (AWAY_AFTER_MS 5000)
+simHallLongPlay control fixedstep: FIRED, 14 failures in section 2 (red is the right answer)

@@ -1,0 +1,12 @@
+ctl-ceiling exit=1 15s | simHallLongPlay control ceiling: FIRED, 3 failures in section 1 (red is the right answer)
+ctl-fixedstep exit=1 0s | simHallLongPlay control fixedstep: FIRED, 14 failures in section 2 (red is the right answer)
+ctl-fmtstop exit=1 0s | simHallLongPlay control fmtstop: FIRED, 5 failures in section 3 (red is the right answer)
+ctl-novisible exit=1 0s | simHallLongPlay control novisible: FIRED, 3 failures in section 2 (red is the right answer)
+ctl-awayafter exit=1 0s | simHallLongPlay control awayafter: FIRED, 1 failure in section 2 (red is the right answer)
+ctl-hookfixed exit=1 1s | simHallLongPlay control hookfixed: FIRED, 5 failures in section 4 (red is the right answer)
+ctl-hooknocopy exit=1 1s | simHallLongPlay control hooknocopy: FIRED, 1 failure in section 4 (red is the right answer)
+ctl-hooknote exit=1 1s | simHallLongPlay control hooknote: FIRED, 2 failures in section 4 (red is the right answer)
+ctl-hookvisible exit=1 1s | simHallLongPlay control hookvisible: FIRED, 1 failure in section 4 (red is the right answer)
+ctl-hookstampnow exit=1 1s | simHallLongPlay control hookstampnow: FIRED, 1 failure in section 4 (red is the right answer)
+ctl-hookcrash exit=2 1s | simHallLongPlay control hookcrash: CRASHED, the hook suite ran 0 tests, not 8; a crash is not a fire, so this control proves nothing
+clean-after exit=0 0s | 
