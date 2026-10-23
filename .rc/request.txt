@@ -1,0 +1,5 @@
+#!serve
+#!playwright
+# Release BQ, Round 1546: verify-1546.md's walks (rc-ver-w.txt), the database host blocked by the walks.
+walkb: node .rc/x/walk1546b.mjs
+walkfix: node .rc/x/walkfix1546.mjs
