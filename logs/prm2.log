@@ -1,0 +1,47 @@
+
+prefers-reduced-motion: no-preference
+   rise      animation=cmRise         opacity=0 display=block
+   slam      animation=cmSlam         opacity=0 display=block
+   glow      animation=cmGoldGlow     opacity=1 display=block
+   confetti  animation=cmConfettiFall opacity=0 display=inline
+
+prefers-reduced-motion: reduce
+   rise      animation=none           opacity=1 display=block
+   slam      animation=none           opacity=1 display=block
+   glow      animation=none           opacity=1 display=block
+   confetti  animation=cmConfettiFall opacity=1 display=none
+
+Round 530 routes under prefers-reduced-motion: reduce, 20 routes served from dist
+   /                   text=22551 keyframeBlocks=3 ours=2 thirdParty=1 unguarded=0 reveal=10 animating=0 invisible=0 slowMotion=0/4603
+   /cfb-dynasty        text=9624 keyframeBlocks=1 ours=0 thirdParty=1 unguarded=0 reveal=0 animating=0 invisible=0 slowMotion=0/463
+   /cbb-dynasty        text=9458 keyframeBlocks=1 ours=0 thirdParty=1 unguarded=0 reveal=0 animating=0 invisible=0 slowMotion=0/449
+   /front-office       text=14082 keyframeBlocks=1 ours=0 thirdParty=1 unguarded=0 reveal=0 animating=0 invisible=0 slowMotion=0/432
+   /nba-front-office   text=13256 keyframeBlocks=1 ours=0 thirdParty=1 unguarded=0 reveal=0 animating=0 invisible=0 slowMotion=0/419
+   /mlb-front-office   text=9445 keyframeBlocks=1 ours=0 thirdParty=1 unguarded=0 reveal=0 animating=0 invisible=0 slowMotion=0/412
+   /nhl-front-office   text=13916 keyframeBlocks=1 ours=0 thirdParty=1 unguarded=0 reveal=0 animating=0 invisible=0 slowMotion=0/431
+   /nfl-my-career      text=29505 keyframeBlocks=1 ours=0 thirdParty=1 unguarded=0 reveal=0 animating=0 invisible=0 slowMotion=0/513
+   /nba-my-career      text=30952 keyframeBlocks=1 ours=0 thirdParty=1 unguarded=0 reveal=0 animating=0 invisible=0 slowMotion=0/514
+   /mlb-my-career      text=27539 keyframeBlocks=1 ours=0 thirdParty=1 unguarded=0 reveal=0 animating=0 invisible=0 slowMotion=0/506
+   /nhl-my-career      text=26649 keyframeBlocks=1 ours=0 thirdParty=1 unguarded=0 reveal=0 animating=0 invisible=0 slowMotion=0/482
+   /club-manager       text=40337 keyframeBlocks=1 ours=0 thirdParty=1 unguarded=0 reveal=0 animating=0 invisible=0 slowMotion=0/485
+   /soccer-career      text=18476 keyframeBlocks=1 ours=0 thirdParty=1 unguarded=0 reveal=0 animating=0 invisible=0 slowMotion=0/394
+   /rebuild            text=16051 keyframeBlocks=1 ours=0 thirdParty=1 unguarded=0 reveal=0 animating=0 invisible=0 slowMotion=0/336
+   /idle-arena         text=12012 keyframeBlocks=3 ours=2 thirdParty=1 unguarded=0 reveal=0 animating=0 invisible=0 slowMotion=0/375
+   /stadium-tycoon     text=21181 keyframeBlocks=4 ours=3 thirdParty=1 unguarded=0 reveal=0 animating=0 invisible=0 slowMotion=0/501
+   /wonderkid-factory  text=13563 keyframeBlocks=2 ours=1 thirdParty=1 unguarded=0 reveal=0 animating=0 invisible=0 slowMotion=0/350
+   /fight-career       text=14434 keyframeBlocks=1 ours=0 thirdParty=1 unguarded=0 reveal=0 animating=0 invisible=0 slowMotion=0/405
+   /fight-gym          text=7594 keyframeBlocks=1 ours=0 thirdParty=1 unguarded=0 reveal=0 animating=0 invisible=0 slowMotion=0/305
+   /fight-promoter     text=10901 keyframeBlocks=1 ours=0 thirdParty=1 unguarded=0 reveal=0 animating=0 invisible=0 slowMotion=0/322
+   Season Centre kick off  text=716 reveal=1 animating=0 invisible=0 slow=0
+   Season Centre matchday  text=573 reveal=1 animating=0 invisible=0 slow=0
+   Season Centre review    text=899 reveal=1 animating=0 invisible=0 slow=0
+   Round 1107 signing scene text=63 checked=5 animating=0 invisible=0 notGone=0 slow=0 confetti=0
+   Round 1107 trophy scene  text=73 checked=11 animating=0 invisible=0 notGone=0 slow=0 confetti=0
+  FAIL: chance wheel: the trophy save holds no unseen wheel, so nothing about the wheel was measured
+   Release AU    chance wheel pictures: /home/runner/work/_temp/rc-out/files
+   our own keyframe CSS was present and guarded on 4 of 20 routes; the rest had not reached a reveal yet
+   no preference /front-office    elements that move for more than 10ms: 73 of 432
+   no preference /fight-career    elements that move for more than 10ms: 60 of 405
+   no preference /stadium-tycoon  elements that move for more than 10ms: 85 of 501
+
+playReducedMotion: 1 problem(s) (1 of them the chance wheel's)

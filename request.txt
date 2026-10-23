@@ -1,0 +1,12 @@
+#!serve
+#!playwright
+#!serial
+# Release BQ triage: the three new walk reds, alone, twice each, with the setup lines rgH4 runs before the derby walk.
+fonts: mkdir -p .tmp-fx/font-cache && FREE_KICK_FONT_CACHE="$PWD/.tmp-fx/font-cache" node scripts/qa/freeKickLab1070.mjs --prefetch-fonts-only
+derby-forwalk: NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/simSoccerDerbyHistory.mjs
+psc1: node scripts/playSeasonCentreMotion.mjs
+prm1: node scripts/playReducedMotion.mjs
+pdh1: FREE_KICK_FONT_CACHE="$PWD/.tmp-fx/font-cache" NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/playDerbyHistory1195.mjs
+psc2: node scripts/playSeasonCentreMotion.mjs
+prm2: node scripts/playReducedMotion.mjs
+pdh2: FREE_KICK_FONT_CACHE="$PWD/.tmp-fx/font-cache" NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/playDerbyHistory1195.mjs
