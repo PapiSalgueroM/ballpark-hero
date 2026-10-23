@@ -1,0 +1,9 @@
+#!serve
+#!playwright
+# Release BR, Round 1554's walk (r1554/.tmp-fx/rc-walk.txt), extra walk1554.mjs (blocks the database host).
+# Release BR triage (rBR-tr): walk1554.mjs answers the cookie banner first (Reject all): since the other lane's Round
+# 1451 the sticky 44px site chrome plus the banner left no clickable point at 320x568. walk1554-banner is its control
+# (the banner left up, the walk as it was): it must exit 1.
+walk1554: node .rc/x/walk1554.mjs
+walk1554-banner: WALK1554_CONTROL=banner node .rc/x/walk1554.mjs
+playCollegeSeat: node scripts/playCollegeSeat.mjs
