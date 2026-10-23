@@ -1,0 +1,7 @@
+ M public/fight-career/index.html
+ M public/front-office/index.html
+ M public/rank-em/index.html
+ M public/sitemap.xml
+ M public/stadium-tycoon/index.html
+ M public/whats-new/index.html
+ M scripts/data/lastmod.json
