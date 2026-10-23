@@ -1,0 +1,7 @@
+NEGATIVE CONTROL ON: helpstatic; section 1 must go red
+1) the page carries the boxes and the loader, and not one module of the career kit
+   FAIL the page carries src/lib/nflSeasonRules.ts, which rides in the kit or the season card's chunk: src/pages/FrontOffice.tsx > src/lib/nflSeasonRules.ts
+   109 files reached from the page, 57 dynamic edges seen, 11 kit modules and 6 season modules checked absent
+2) the Career box drawn before the kit is the box drawn with it, save by save (the GM level box reads the desk alone, the same on both)
+   55296 saves over 3 leagues: the records differ in 30348, the kit's tier is not the bottom one in 39744, a last grade in 9216, a stored record read as itself in 13824
+simFoLazyDesk CONTROL helpstatic FIRED: section 1 went red with 1 failures (red sections 1)

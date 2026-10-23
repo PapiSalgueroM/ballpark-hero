@@ -1,0 +1,17 @@
+vitest-new exit=0 12s |    Duration  11.87s (transform 4.93s, setup 789ms, collect 9.12s, tests 15.29s, environment 4.51s, prepare 1.32s)
+vitest-board1 exit=0 25s |    Duration  24.78s (transform 3.61s, setup 408ms, collect 7.79s, tests 42.10s, environment 3.22s, prepare 875ms)
+vitest-board2 exit=0 14s |    Duration  13.65s (transform 5.83s, setup 744ms, collect 13.14s, tests 17.76s, environment 3.92s, prepare 1.16s)
+tsc exit=0 84s | 
+sim-lift exit=0 67s | simNflSeasonStats: 131 checks, 0 failed
+simGmGameDay exit=0 68s | simGmGameDay: 462 checks, 0 failed
+simGmReload exit=0 10s | simGmReload: all green. Four front offices keep a finished season through a reload, and none of them can play a closed one again.
+simSaveKeeper exit=0 5s | simSaveKeeper: all green. The keeper holds on real saves of all 21 long games.
+simHarnessAnchors exit=0 63s | simHarnessAnchors: green. Every harness parses and none carries an unmatchable anchor.
+gmgd-statsstory exit=1 74s | simGmGameDay: 462 checks, 1 failed (control statsstory)
+simStorageWrites exit=0 2s | simStorageWrites: all green (owed: 12)
+simNoRivalNames exit=0 15s | No rival product names found. 0 findings.
+simUsSeasonCentre exit=0 76s | simUsSeasonCentre: 158 checks, 0 failed
+simFoLazyDesk exit=0 26s | simFoLazyDesk: all checks passed
+lazy-closestatic exit=1 27s | simFoLazyDesk CONTROL closestatic FIRED: section 1 went red with 2 failures (red sections 1)
+lazy-helpstatic exit=1 21s | simFoLazyDesk CONTROL helpstatic FIRED: section 1 went red with 1 failures (red sections 1)
+c-quote exit=1 40s | simNflSeasonStats: 115 checks, 1 failed (control quote); section 1 skipped: LIFT_BASE is not set
