@@ -1,0 +1,4 @@
+treeWithoutMerge: 433ddea0bd8017504b9352d0a2a383dac380de5e, ea926b66 without 25e94416; conflicts kept from ea926b66: scripts/simSoccerCareerEndings.mjs, src/pages/WhatsNew.tsx
+  careers 240, alive at 26 240 (overall under 60 there 26), alive at 27 240
+  base 433ddea0: 240 careers, 0 differ from this tree
+PASS: no career ends before the age rules without the player, and the pair is reconciled

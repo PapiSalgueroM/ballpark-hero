@@ -1,0 +1,5 @@
+treeWithoutMerge: 433ddea0bd8017504b9352d0a2a383dac380de5e, ea926b66 without 25e94416; conflicts kept from ea926b66: scripts/simSoccerCareerEndings.mjs, src/pages/WhatsNew.tsx
+early exit=1 FAIL: 249 check(s) failed
+noreconcile exit=1 FAIL: 17 check(s) failed
+summary exit=1 FAIL: 2 check(s) failed
+noreason exit=1 FAIL: 4 check(s) failed
