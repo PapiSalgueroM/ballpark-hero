@@ -1,0 +1,26 @@
+save A: Liverpool against Newcastle (Premier League · Round 1), away, 61591 bytes
+save B: Liverpool against Nottingham Forest (Premier League · Round 2), home, 77327 bytes
+save C: Real Madrid against Villarreal (Copa del Rey · Final), neutral, 166991 bytes
+save E: Real Madrid against Roma (Champions League · Quarter-final · second leg), away, 148872 bytes
+save D: Eintracht Frankfurt with Ayoube Amaimouni-Echghouyab on 12 goals (planted), the tile should read "Amaimouni-Echghouyab: 12", 60395 bytes
+A-320: heights hub 31101, centre 30219, live 29342, interval 30820, report 31742; 19 timeline names, 0 marks (0 on the next line, no room on the last)
+A-390: heights hub 24882, centre 24049, live 23242, interval 24654, report 25422; 17 timeline names, 0 marks (0 on the next line, no room on the last)
+A-1280: heights hub 14669, centre 14247, live 13483, interval 14854, report 15211; 11 timeline names, 0 marks (0 on the next line, no room on the last)
+B-320: heights hub 31097, centre 30212, live 29342, interval 30820, report 31407; 13 timeline names, 0 marks (0 on the next line, no room on the last)
+B-390: heights hub 24882, centre 24075, live 23242, interval 24654, report 25148; 13 timeline names, 0 marks (0 on the next line, no room on the last)
+B-1280: heights hub 14669, centre 14259, live 13483, interval 14854, report 15359; 15 timeline names, 0 marks (0 on the next line, no room on the last)
+C-320: heights hub 31043, centre 30306, live 29342, interval 30805, report 31363; 13 timeline names, 0 marks (0 on the next line, no room on the last)
+C-390: heights hub 24817, centre 24155, live 23242, interval 24654, report 25364; 19 timeline names, 0 marks (0 on the next line, no room on the last)
+C-1280: heights hub 14640, centre 14353, live 13483, interval 14854, report 15423; 22 timeline names, 1 marks (0 on the next line, no room on the last)
+E-320: heights hub 31058, centre 30337, live 29342, interval 30854, report 31611; 20 timeline names, 0 marks (0 on the next line, no room on the last)
+E-390: heights hub 24837, centre 24169, live 23242, interval 24703, report 25373; 19 timeline names, 0 marks (0 on the next line, no room on the last)
+E-1280: heights hub 14640, centre 14354, live 13483, interval 14873, report 15271; 16 timeline names, 1 marks (0 on the next line, no room on the last)
+A-390-rm: heights hub 24882, centre 24049, live 23242, interval 24654, report 25390; 18 timeline names, 0 marks (0 on the next line, no room on the last)
+B-390-rm: heights hub 24882, centre 24075, live 23242, interval 24654, report 25326; 18 timeline names, 0 marks (0 on the next line, no room on the last)
+C-390-rm: heights hub 24817, centre 24155, live 23242, interval 24625, report 25184; 14 timeline names, 0 marks (0 on the next line, no room on the last)
+D-320: the Stats tile reads "Amaimouni-Echghouyab: 12" on 2 line(s), the tile 116 px tall
+D-320: in the shipped wording ("Isak: 12"), 0 of the 200 longest pitch names of the 2026-27 world pass two lines (the shortest of these names is 11 letters)
+D-320: in the first wording ("Isak leads with 12"), 2 of the 200 longest pitch names of the 2026-27 world pass two lines: Amaimouni-Echghouyab, Oxlade-Chamberlain (the shortest of these names is 11 letters)
+D-320: in the comma wording ("Isak, 12 goals"), 2 of the 200 longest pitch names of the 2026-27 world pass two lines: Amaimouni-Echghouyab, Oxlade-Chamberlain (the shortest of these names is 11 letters)
+15 walks, 267 checks, 179s; pictures in /home/runner/work/_temp/rc-out/files/matchday
+playCmMatchDay: green. 15 walks over 4 saves, every match day screen home side first, whole names on the timeline, a 44 px toggle, the page never moved
