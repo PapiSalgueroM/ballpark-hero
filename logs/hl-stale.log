@@ -1,0 +1,131 @@
+0) the ratchet: which Higher or Lower games have a record behind them
+   ok   10 of 11 fenced: hockey, nba, mlb, nfl, nfl-passYds, nfl-passTds, nfl-rushYds, nfl-recYds, nfl-recs, tennis
+        STILL OPEN, each one able to carry the same fault: cfb. A record for any of them joins it to this run.
+1) NHL Higher or Lower: the record is well formed and covers exactly the shipped players
+   ok   42 verified, 1 held from the file, 2 unverified, together exactly the 45 shipped players, read 2026-09-21 from public.nhl_player_stats
+2) NHL Higher or Lower: every verified player matches the record
+   FAIL Wayne Gretzky ships 2850 against a verified 2857
+3) NHL Higher or Lower: no pair is ordered against the record, which is the whole game
+   ok   all 903 matchups between the 43 players agree with the record
+4) NHL Higher or Lower: every player says what its number runs through
+   ok   45 players each name the lastSeason their careerPoints runs through
+5) NHL Higher or Lower: rows nobody could check say so, rather than passing as checked
+   ok   2 row(s) flagged unverified and left exactly as they shipped
+6) NHL Higher or Lower: rows held from the file keep the file's value, not the source's
+   ok   1 row(s) held from the file, each with the reason the source cannot be trusted for it
+1) NBA Higher or Lower: the record is well formed and covers exactly the shipped players
+   ok   68 verified, 12 held from the file, 0 unverified, together exactly the 80 shipped players, read 2026-09-22 from public.nba_player_stats (2026-09-22); StatMuse and ESPN, URLs per player, for every man of the latest season (2026-10-22); 10 of them each on two sources on two hosts
+2) NBA Higher or Lower: every verified player matches the record
+   ok   68 players agree with the record on careerPoints and lastSeason
+3) NBA Higher or Lower: no pair is ordered against the record, which is the whole game
+   ok   all 3160 matchups between the 80 players agree with the record
+4) NBA Higher or Lower: every player says what its number runs through
+   ok   80 players each name the lastSeason their careerPoints runs through
+5) NBA Higher or Lower: rows nobody could check say so, rather than passing as checked
+   ok   no row claims to be unverified, and none needs to be
+6) NBA Higher or Lower: rows held from the file keep the file's value, not the source's
+   ok   12 row(s) held from the file, each with the reason the source cannot be trusted for it
+1) MLB Higher or Lower: the record is well formed and covers exactly the shipped players
+   ok   55 verified, 0 held from the file, 0 unverified, together exactly the 55 shipped players, read 2026-09-28 from public.mlb_batting_stats
+2) MLB Higher or Lower: every verified player matches the record
+   ok   55 players agree with the record on careerHrs and lastSeason
+3) MLB Higher or Lower: no pair is ordered against the record, which is the whole game
+   ok   all 1475 matchups between the 55 players agree with the record
+4) MLB Higher or Lower: every player says what its number runs through
+   ok   55 players each name the lastSeason their careerHrs runs through
+5) MLB Higher or Lower: rows nobody could check say so, rather than passing as checked
+   ok   no row claims to be unverified, and none needs to be
+6) MLB Higher or Lower: rows held from the file keep the file's value, not the source's
+   ok   nothing is held back from the source
+1) NFL Higher or Lower (touchdowns): the record is well formed and covers exactly the shipped players
+   ok   60 verified, 0 held from the file, 0 unverified, together exactly the 60 shipped players, read 2026-10-22 from nfl.com and StatMuse (ESPN for ten players whose nfl.com page would not render), two per value, URLs per player; 60 of them each on two sources on two hosts
+2) NFL Higher or Lower (touchdowns): every verified player matches the record
+   ok   60 players agree with the record on careerTds and lastSeason
+3) NFL Higher or Lower (touchdowns): no pair is ordered against the record, which is the whole game
+   ok   all 1717 matchups between the 60 players agree with the record
+4) NFL Higher or Lower (touchdowns): every player says what its number runs through
+   ok   60 players each name the lastSeason their careerTds runs through
+5) NFL Higher or Lower (touchdowns): rows nobody could check say so, rather than passing as checked
+   ok   no row claims to be unverified, and none needs to be
+6) NFL Higher or Lower (touchdowns): rows held from the file keep the file's value, not the source's
+   ok   nothing is held back from the source
+1) NFL Higher or Lower (passing yards): the record is well formed and covers exactly the shipped players
+   ok   34 verified, 0 held from the file, 0 unverified, together exactly the 34 shipped players, read 2026-10-22 from nfl.com and StatMuse (ESPN for ten players whose nfl.com page would not render), two per value, URLs per player; 34 of them each on two sources on two hosts
+2) NFL Higher or Lower (passing yards): every verified player matches the record
+   ok   34 players agree with the record on value and lastSeason
+3) NFL Higher or Lower (passing yards): no pair is ordered against the record, which is the whole game
+   ok   all 561 matchups between the 34 players agree with the record
+4) NFL Higher or Lower (passing yards): every player says what its number runs through
+   ok   34 players each name the lastSeason their value runs through
+5) NFL Higher or Lower (passing yards): rows nobody could check say so, rather than passing as checked
+   ok   no row claims to be unverified, and none needs to be
+6) NFL Higher or Lower (passing yards): rows held from the file keep the file's value, not the source's
+   ok   nothing is held back from the source
+1) NFL Higher or Lower (passing touchdowns): the record is well formed and covers exactly the shipped players
+   ok   34 verified, 0 held from the file, 0 unverified, together exactly the 34 shipped players, read 2026-10-22 from nfl.com and StatMuse (ESPN for ten players whose nfl.com page would not render), two per value, URLs per player; 34 of them each on two sources on two hosts
+2) NFL Higher or Lower (passing touchdowns): every verified player matches the record
+   ok   34 players agree with the record on value and lastSeason
+3) NFL Higher or Lower (passing touchdowns): no pair is ordered against the record, which is the whole game
+   ok   all 561 matchups between the 34 players agree with the record
+4) NFL Higher or Lower (passing touchdowns): every player says what its number runs through
+   ok   34 players each name the lastSeason their value runs through
+5) NFL Higher or Lower (passing touchdowns): rows nobody could check say so, rather than passing as checked
+   ok   no row claims to be unverified, and none needs to be
+6) NFL Higher or Lower (passing touchdowns): rows held from the file keep the file's value, not the source's
+   ok   nothing is held back from the source
+1) NFL Higher or Lower (rushing yards): the record is well formed and covers exactly the shipped players
+   ok   31 verified, 0 held from the file, 0 unverified, together exactly the 31 shipped players, read 2026-10-22 from nfl.com and StatMuse (ESPN for ten players whose nfl.com page would not render), two per value, URLs per player; 31 of them each on two sources on two hosts
+2) NFL Higher or Lower (rushing yards): every verified player matches the record
+   ok   31 players agree with the record on value and lastSeason
+3) NFL Higher or Lower (rushing yards): no pair is ordered against the record, which is the whole game
+   ok   all 465 matchups between the 31 players agree with the record
+4) NFL Higher or Lower (rushing yards): every player says what its number runs through
+   ok   31 players each name the lastSeason their value runs through
+5) NFL Higher or Lower (rushing yards): rows nobody could check say so, rather than passing as checked
+   ok   no row claims to be unverified, and none needs to be
+6) NFL Higher or Lower (rushing yards): rows held from the file keep the file's value, not the source's
+   ok   nothing is held back from the source
+1) NFL Higher or Lower (receiving yards): the record is well formed and covers exactly the shipped players
+   ok   31 verified, 0 held from the file, 0 unverified, together exactly the 31 shipped players, read 2026-10-22 from nfl.com and StatMuse (ESPN for ten players whose nfl.com page would not render), two per value, URLs per player; 31 of them each on two sources on two hosts
+2) NFL Higher or Lower (receiving yards): every verified player matches the record
+   ok   31 players agree with the record on value and lastSeason
+3) NFL Higher or Lower (receiving yards): no pair is ordered against the record, which is the whole game
+   ok   all 465 matchups between the 31 players agree with the record
+4) NFL Higher or Lower (receiving yards): every player says what its number runs through
+   ok   31 players each name the lastSeason their value runs through
+5) NFL Higher or Lower (receiving yards): rows nobody could check say so, rather than passing as checked
+   ok   no row claims to be unverified, and none needs to be
+6) NFL Higher or Lower (receiving yards): rows held from the file keep the file's value, not the source's
+   ok   nothing is held back from the source
+1) NFL Higher or Lower (receptions): the record is well formed and covers exactly the shipped players
+   ok   30 verified, 0 held from the file, 0 unverified, together exactly the 30 shipped players, read 2026-10-22 from nfl.com and StatMuse (ESPN for ten players whose nfl.com page would not render), two per value, URLs per player; 30 of them each on two sources on two hosts
+2) NFL Higher or Lower (receptions): every verified player matches the record
+   ok   30 players agree with the record on value and lastSeason
+3) NFL Higher or Lower (receptions): no pair is ordered against the record, which is the whole game
+   ok   all 435 matchups between the 30 players agree with the record
+4) NFL Higher or Lower (receptions): every player says what its number runs through
+   ok   30 players each name the lastSeason their value runs through
+5) NFL Higher or Lower (receptions): rows nobody could check say so, rather than passing as checked
+   ok   no row claims to be unverified, and none needs to be
+6) NFL Higher or Lower (receptions): rows held from the file keep the file's value, not the source's
+   ok   nothing is held back from the source
+1) Tennis Higher or Lower: the record is well formed and covers exactly the shipped players
+   ok   44 verified, 0 held from the file, 0 unverified, together exactly the 44 shipped players, read 2026-10-22 from scripts/data/tennisSlamsVerified2026-09.json
+2) Tennis Higher or Lower: every verified player matches the record
+   ok   44 players agree with the record on slams and lastYear
+3) Tennis Higher or Lower: no pair is ordered against the record, which is the whole game
+   ok   all 868 matchups between the 44 players agree with the record
+4) Tennis Higher or Lower: every player says what its number runs through
+   ok   44 players each name the lastYear their slams runs through
+5) Tennis Higher or Lower: rows nobody could check say so, rather than passing as checked
+   ok   no row claims to be unverified, and none needs to be
+6) Tennis Higher or Lower: rows held from the file keep the file's value, not the source's
+   ok   nothing is held back from the source
+7) every Higher or Lower card says what its total runs through, and none says "played until"
+   ok   5 pages hand the shared line the value their total runs through, the line prints "through" it, and nothing says "played until"
+8) NBA Higher or Lower: every man who played in the latest season lists the team or teams he played for in it
+   ok   10 men played in 2025-26, and every card lists the team or teams he played for in it
+9) every number a worked example quotes is the number the card shows
+   ok   18 numbers quoted in the worked examples of 5 pages, each the number the card shows
+
+simHigherLowerFacts: control stale turned section(s) 2 red and nothing else. The check works.
