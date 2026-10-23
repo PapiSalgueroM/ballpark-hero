@@ -1,0 +1,38 @@
+#!serve
+#!playwright
+#!serial
+# RELEASE BQ TRIAGE (triage-BQ.md): #!serial added. simGoogleOnlyReturn makes temporary folders inside src (src/.google-paused-control-*)
+# while it runs, and simHomeSearchRecovery, run beside it three at a time, read one as it vanished (ENOENT) in the gate and again on
+# the final head; alone it is green twice (rBQ-trD2 shr1, shr2). Serial, the file takes about 13 minutes.
+# Release BQ, Round 1539, part C: the 24 rule fences and the readers of the touched files, under the offline transport. Run simHomeSearchRecovery alone if it dies on ENOENT beside simGoogleOnlyReturn.
+# Expected reds as rc-1539.txt says: simSchemaNames and simLeaderboardCaps (no database), simWritesAreSent, simPrerender (saved pages are build:seo's), simTycoonGoalFlight, simSetPiecePresentation, simTycoonSeasonReview.
+simLiveScores: NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/simLiveScores.mjs
+simNoRivalNames: NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/simNoRivalNames.mjs
+simInventedNames: NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/simInventedNames.mjs
+simHarnessAnchors: NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/simHarnessAnchors.mjs
+simNoInventedQuotes: NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/simNoInventedQuotes.mjs
+simNoInventedConduct: NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/simNoInventedConduct.mjs
+simLegalPages: NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/simLegalPages.mjs
+simSingleFooter: NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/simSingleFooter.mjs
+simCompletionSlugs: NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/simCompletionSlugs.mjs
+simCompletionOnce: NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/simCompletionOnce.mjs
+simNoDoubleRecord: NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/simNoDoubleRecord.mjs
+simDailyPuzzleContract: NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/simDailyPuzzleContract.mjs
+simDailySaveHardening: NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/simDailySaveHardening.mjs
+simWritesAreSent: NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/simWritesAreSent.mjs
+simSchemaNames: NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/simSchemaNames.mjs
+simFetchRetry: NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/simFetchRetry.mjs
+simGoogleOnlyReturn: NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/simGoogleOnlyReturn.mjs
+simReportRelay: NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/simReportRelay.mjs
+simNavbarStatsReads: NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/simNavbarStatsReads.mjs
+simLeaderboardCaps: NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/simLeaderboardCaps.mjs
+simScoringCoverage: NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/simScoringCoverage.mjs
+simSiteSearch: NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/simSiteSearch.mjs
+simGuideHeadings: NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/simGuideHeadings.mjs
+simStorageWrites: NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/simStorageWrites.mjs
+simAccessibility: NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/simAccessibility.mjs
+simTrustCopy: NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/simTrustCopy.mjs
+simPrerender: NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/simPrerender.mjs
+simHomeSearchRecovery: NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/simHomeSearchRecovery.mjs
+simTicker: NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/simTicker.mjs
+simSaveKeeper: NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/simSaveKeeper.mjs
