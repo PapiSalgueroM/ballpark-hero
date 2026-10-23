@@ -1,0 +1,8 @@
+build exit=0 33s | [dukb] inlined 1 stylesheet(s) and 1 module(s) into 181 snapshots (11 left alone)
+units-1519 exit=0 12s |    Duration  11.33s (transform 4.22s, setup 246ms, collect 7.38s, tests 10.49s, environment 1.12s, prepare 291ms)
+walk-1519 exit=0 46s | playSoccerCareerEndings: 57 checks, 0 failures
+endings-1519 exit=1 88s | FAIL: 1 check(s) failed
+deck-1519 exit=0 73s | simSoccerDeckFairness: all sections green
+truth-1519 exit=0 84s | simSoccerWorldTruth: OK, every section green
+awards-1519 exit=0 84s | simCareerAwardsNight: ALL 179 CHECKS PASSED
+ctl-1519 exit=0 299s | noreason exit=1 FAIL: 5 check(s) failed
