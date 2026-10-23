@@ -1,0 +1,6 @@
+#!serve
+#!playwright
+#!serial
+walk: git worktree add -f /tmp/wbase c9d18897201aae8528e635f03a877e78eb02ed5c > /dev/null 2>&1 && ln -s "$PWD/node_modules" /tmp/wbase/node_modules && (cd /tmp/wbase && npx vite build --outDir /tmp/dist-base --logLevel error) && (node scripts/lib/hostLikeServer.mjs /tmp/dist-base 4182 > /dev/null 2>&1 &) && sleep 3 && OLD_BASE=http://localhost:4182 BASE=http://localhost:4173 node .rc/x/rvwalk.mjs
+weight-head: LABEL=head BASE=http://localhost:4173 node .rc/x/weightFo.mjs
+weight-base: (node scripts/lib/hostLikeServer.mjs /tmp/dist-base 4185 > /dev/null 2>&1 &) && sleep 3 && LABEL=base BASE=http://localhost:4185 node .rc/x/weightFo.mjs

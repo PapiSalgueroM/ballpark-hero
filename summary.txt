@@ -1,0 +1,4 @@
+build exit=0 35s | [dukb] inlined 1 stylesheet(s) and 1 module(s) into 181 snapshots (11 left alone)
+walk exit=0 156s | rvwalk: 93 checks, 0 failed; pictures 60
+weight-head exit=0 15s | weightFo head: /front-office load 387.6K gz over 43 files
+weight-base exit=0 48s | weightFo base: /front-office load 381.8K gz over 41 files

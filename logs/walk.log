@@ -1,0 +1,138 @@
+Browserslist: browsers data (caniuse-lite) is 16 months old. Please run:
+  npx update-browserslist-db@latest
+  Why you should do it regularly: https://github.com/browserslist/update-db#readme
+
+[1m[33mwarn[39m[22m - The class `duration-[800ms]` is ambiguous and matches multiple utilities.
+[1m[33mwarn[39m[22m - If this is content and not a class, replace it with `duration-&lsqb;800ms&rsqb;` to silence this warning.
+[dukb] preload wrapper: a cancelled chunk error waits for the reload (vite 5.4.21)
+[dukb] inlined 1 stylesheet(s) and 1 module(s) into 181 snapshots (11 left alone)
+  (printed) base 390: scrollY around the Week 1 press 26 then 474
+  ok   [old] the base build saved a Week 5 save with no lines (week 5)
+  ok   [old] the base build played with no page error 
+  ok   [old] the old save's last game says who scored was not kept ("Who scored was not kept for this game.")
+  ok   [old] Week 5 played on the head: week 6, no block written (true)
+  (printed) old save, the head's own Week 5 game: "Who scored was not kept for this game." rows 0
+  ok   [old] Standings' This season says why there are no lines ("This save started before season lines were kept, so the 2026 season has none. Lines and aw")
+  ok   [old] the head loaded and played the old save with no page error 
+  (printed) base recap save phase recap
+  ok   [old] the old recap opens on the head and its card says why there are no lines ("This save started before season lines were kept, so the 2026 season ha")
+  ok   [old] the old recap loaded with no page error 
+
+390 by 844, reduced motion true
+  (printed) 390-rm: scrollY around the Week 1 press 26 then 495
+  ok   [new] 390-rm Week 1: a row for every touchdown of the story (6 rows, story 6): Q1 1:00 ARI Jacoby Brissett to Trey McBride 7-3 | Q2 8:00 SEA Sam Darnold to Jaxon Smith-Njigba 7-10
+  ok   [new] 390-rm Week 1: every name on a row is a man of that row's club 
+  ok   [new] 390-rm: the list's heading ("Touchdowns in this save's game")
+  ok   [new] 390-rm Watch Week 2: face result, list drawn while watching true
+  ok   [new] 390-rm Watch Week 2 at full time: 5 rows, story 5
+  ok   [new] 390-rm Week 2: every name on a row is a man of that row's club 
+  ok   [new] 390-rm: the Game Day "?" tells who scores (1493 chars)
+  ok   [new] 390-rm: after a reload the tile names the same scorers (5)
+  ok   [new] 390-rm: Standings opens on the table
+  ok   [new] 390-rm: This season draws the season so far
+  (printed) 390-rm: This season text: The 2026 season in numbersSim season: every line and award here comes from this save's games, not real NFL stats.AwardsLeadersYour linesArizona CardinalsGPTDRTDCTDSKJacoby Brissett23000Walter Nolen20002Trey McBride20020Michael Wilson20010Tyler Allgeier20100Roy
+  ok   [new] 390-rm: no horizontal overflow on Standings (0)
+  ok   [new] 390-rm: the page "?" carries the rules and the computed example
+  ok   [new] 390-rm: no page error 
+  (printed) 390-rm: after Play Week 17 the save is at week 18, bracket true
+  (printed) 390-rm: after one playoff round his last game is 2026|AFC Wild Card|CIN|KC|28-17 (AFC Wild Card)
+  ok   [recap] 390-rm: his playoff game's tile names every scorer (4 rows, story 4)
+  ok   [recap] 390-rm: the club lines hold the 17 regular season games only after a playoff round (17)
+  ok   [recap] 390-rm: the recap draws the closed season's card
+  ok   [recap] 390-rm: the close named an MVP once (1 entries, MVP Josh Allen BUF QB)
+  (printed) 390-rm: award boxes: MVPJosh Allen (BUF) 39 TD thrown, 3 run inRule: touchdowns he threw, ran in or caught, plus half his sacks, pl || Offensive Rookie of the YearNobody qualified.Rule: touchdowns he threw, ran in or caught, among first year men || Defensive Rookie of the YearNobody qualified.Rule: sacks, among first year men drafted in this save; rookie aw
+  (printed) 390-rm: award feed lines on screen: none
+  ok   [recap] 390-rm: no horizontal overflow on the recap (0)
+  ok   [recap] 390-rm: no page error 
+
+390 by 844, reduced motion false
+  (printed) 390-mo: scrollY around the Week 1 press 26 then 474
+  ok   [new] 390-mo Week 1: a row for every touchdown of the story (6 rows, story 6): Q1 1:00 ARI Jacoby Brissett to Trey McBride 7-3 | Q2 8:00 SEA Sam Darnold to Jaxon Smith-Njigba 7-10
+  ok   [new] 390-mo Week 1: every name on a row is a man of that row's club 
+  ok   [new] 390-mo: the list's heading ("Touchdowns in this save's game")
+  ok   [new] 390-mo Watch Week 2: face watch, list drawn while watching false
+  ok   [new] 390-mo Watch Week 2 at full time: 5 rows, story 5
+  ok   [new] 390-mo Week 2: every name on a row is a man of that row's club 
+  ok   [new] 390-mo: the Game Day "?" tells who scores (1493 chars)
+  ok   [new] 390-mo: after a reload the tile names the same scorers (5)
+  ok   [new] 390-mo: Standings opens on the table
+  ok   [new] 390-mo: This season draws the season so far
+  (printed) 390-mo: This season text: The 2026 season in numbersSim season: every line and award here comes from this save's games, not real NFL stats.AwardsLeadersYour linesArizona CardinalsGPTDRTDCTDSKJacoby Brissett23000Walter Nolen20002Trey McBride20020Michael Wilson20010Tyler Allgeier20100Roy
+  ok   [new] 390-mo: no horizontal overflow on Standings (0)
+  ok   [new] 390-mo: the page "?" carries the rules and the computed example
+  ok   [new] 390-mo: no page error 
+  (printed) 390-mo: after Play Week 17 the save is at week 18, bracket true
+  (printed) 390-mo: after one playoff round his last game is 2026|AFC Wild Card|DEN|CIN|45-29 (AFC Wild Card)
+  ok   [recap] 390-mo: his playoff game's tile names every scorer (7 rows, story 7)
+  ok   [recap] 390-mo: the club lines hold the 17 regular season games only after a playoff round (17)
+  ok   [recap] 390-mo: the recap draws the closed season's card
+  ok   [recap] 390-mo: the close named an MVP once (1 entries, MVP Jared Goff DET QB)
+  (printed) 390-mo: award boxes: MVPJared Goff (DET) 41 TD thrown, 1 run inRule: touchdowns he threw, ran in or caught, plus half his sacks, pl || Offensive Rookie of the YearNobody qualified.Rule: touchdowns he threw, ran in or caught, among first year men || Defensive Rookie of the YearNobody qualified.Rule: sacks, among first year men drafted in this save; rookie aw
+  (printed) 390-mo: award feed lines on screen: none
+  ok   [recap] 390-mo: no horizontal overflow on the recap (0)
+  ok   [recap] 390-mo: no page error 
+
+1280 by 900, reduced motion true
+  (printed) 1280-rm: scrollY around the Week 1 press 0 then 301
+  ok   [new] 1280-rm Week 1: a row for every touchdown of the story (6 rows, story 6): Q1 1:00 ARI Jacoby Brissett to Trey McBride 7-3 | Q2 8:00 SEA Sam Darnold to Jaxon Smith-Njigba 7-10
+  ok   [new] 1280-rm Week 1: every name on a row is a man of that row's club 
+  ok   [new] 1280-rm: the list's heading ("Touchdowns in this save's game")
+  ok   [new] 1280-rm Watch Week 2: face result, list drawn while watching true
+  ok   [new] 1280-rm Watch Week 2 at full time: 5 rows, story 5
+  ok   [new] 1280-rm Week 2: every name on a row is a man of that row's club 
+  ok   [new] 1280-rm: the Game Day "?" tells who scores (1493 chars)
+  ok   [new] 1280-rm: after a reload the tile names the same scorers (5)
+  ok   [new] 1280-rm: Standings opens on the table
+  ok   [new] 1280-rm: This season draws the season so far
+  (printed) 1280-rm: This season text: The 2026 season in numbersSim season: every line and award here comes from this save's games, not real NFL stats.AwardsLeadersYour linesArizona CardinalsGPTDRTDCTDSKJacoby Brissett23000Walter Nolen20002Trey McBride20020Michael Wilson20010Tyler Allgeier20100Roy
+  ok   [new] 1280-rm: no horizontal overflow on Standings (0)
+  ok   [new] 1280-rm: the page "?" carries the rules and the computed example
+  ok   [new] 1280-rm: no page error 
+  (printed) 1280-rm: after Play Week 17 the save is at week 18, bracket true
+  (printed) 1280-rm: after one playoff round his last game is 2026|AFC Wild Card|DEN|KC|29-41 (AFC Wild Card)
+  ok   [recap] 1280-rm: his playoff game's tile names every scorer (5 rows, story 5)
+  ok   [recap] 1280-rm: the club lines hold the 17 regular season games only after a playoff round (17)
+  ok   [recap] 1280-rm: the recap draws the closed season's card
+  ok   [recap] 1280-rm: the close named an MVP once (1 entries, MVP Drake Maye NE QB)
+  (printed) 1280-rm: award boxes: MVPDrake Maye (NE) 47 TD thrown, 1 run inRule: touchdowns he threw, ran in or caught, plus half his sacks, plu || Offensive Rookie of the YearNobody qualified.Rule: touchdowns he threw, ran in or caught, among first year men || Defensive Rookie of the YearNobody qualified.Rule: sacks, among first year men drafted in this save; rookie aw
+  (printed) 1280-rm: award feed lines on screen: none
+  ok   [recap] 1280-rm: no horizontal overflow on the recap (0)
+  ok   [recap] 1280-rm: no page error 
+
+1280 by 900, reduced motion false
+  (printed) 1280-mo: scrollY around the Week 1 press 0 then 301
+  ok   [new] 1280-mo Week 1: a row for every touchdown of the story (6 rows, story 6): Q1 1:00 ARI Jacoby Brissett to Trey McBride 7-3 | Q2 8:00 SEA Sam Darnold to Jaxon Smith-Njigba 7-10
+  ok   [new] 1280-mo Week 1: every name on a row is a man of that row's club 
+  ok   [new] 1280-mo: the list's heading ("Touchdowns in this save's game")
+  ok   [new] 1280-mo Watch Week 2: face watch, list drawn while watching false
+  ok   [new] 1280-mo Watch Week 2 at full time: 5 rows, story 5
+  ok   [new] 1280-mo Week 2: every name on a row is a man of that row's club 
+  ok   [new] 1280-mo: the Game Day "?" tells who scores (1493 chars)
+  ok   [new] 1280-mo: after a reload the tile names the same scorers (5)
+  ok   [new] 1280-mo: Standings opens on the table
+  ok   [new] 1280-mo: This season draws the season so far
+  (printed) 1280-mo: This season text: The 2026 season in numbersSim season: every line and award here comes from this save's games, not real NFL stats.AwardsLeadersYour linesArizona CardinalsGPTDRTDCTDSKJacoby Brissett23000Walter Nolen20002Trey McBride20020Michael Wilson20010Tyler Allgeier20100Roy
+  ok   [new] 1280-mo: no horizontal overflow on Standings (0)
+  ok   [new] 1280-mo: the page "?" carries the rules and the computed example
+  ok   [new] 1280-mo: no page error 
+  (printed) 1280-mo: after Play Week 17 the save is at week 18, bracket true
+  (printed) 1280-mo: after one playoff round his last game is 2026|NFC Wild Card|DET|SF|28-17 (NFC Wild Card)
+  ok   [recap] 1280-mo: his playoff game's tile names every scorer (2 rows, story 2)
+  ok   [recap] 1280-mo: the club lines hold the 17 regular season games only after a playoff round (17)
+  ok   [recap] 1280-mo: the recap draws the closed season's card
+  ok   [recap] 1280-mo: the close named an MVP once (1 entries, MVP Josh Allen BUF QB)
+  (printed) 1280-mo: award boxes: MVPJosh Allen (BUF) 48 TD thrownRule: touchdowns he threw, ran in or caught, plus half his sacks, plus 10 time || Offensive Rookie of the YearNobody qualified.Rule: touchdowns he threw, ran in or caught, among first year men || Defensive Rookie of the YearNobody qualified.Rule: sacks, among first year men drafted in this save; rookie aw
+  (printed) 1280-mo: award feed lines on screen: none
+  ok   [recap] 1280-mo: no horizontal overflow on the recap (0)
+  ok   [recap] 1280-mo: no page error 
+  ok   [badge] a second season plant with a first season MVP still on a roster (Jared Goff)
+  ok   [badge] 390-mo: the history names the first season's MVP (Award history, this saveYour club has won 1 award here. Sim seasons, not real NFL history.2026 · Champions DAL · MVP Jared Goff (DET)Seasons with no awards here)
+  ok   [badge] 390-mo: the MVP's row carries the badge (🏅 Sim 2026 MVP / This save's sim awards, not real NFL ones: 2026 MVP)
+  ok   [badge] 390-mo: no horizontal overflow on the roster (0)
+  ok   [badge] 390-mo: no page error 
+  ok   [badge] 1280-rm: the history names the first season's MVP (Award history, this saveYour club has won 1 award here. Sim seasons, not real NFL history.2026 · Champions DAL · MVP Jared Goff (DET)Seasons with no awards here)
+  ok   [badge] 1280-rm: the MVP's row carries the badge (🏅 Sim 2026 MVP / This save's sim awards, not real NFL ones: 2026 MVP)
+  ok   [badge] 1280-rm: no horizontal overflow on the roster (0)
+  ok   [badge] 1280-rm: no page error 
+
+rvwalk: 93 checks, 0 failed; pictures 60
