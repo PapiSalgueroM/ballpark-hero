@@ -37,8 +37,8 @@
     "date": "2026-10-01"
   },
   "/baseball-connections": {
-    "hash": "8998a74929dd67c6",
-    "date": "2026-10-01"
+    "hash": "7b16205425a8fa72",
+    "date": "2026-10-23"
   },
   "/budget-builder": {
     "hash": "7c578d5f75459bcd",
@@ -65,8 +65,8 @@
     "date": "2026-10-09"
   },
   "/cbb-dynasty": {
-    "hash": "555417813d415c1d",
-    "date": "2026-10-13"
+    "hash": "24fbf361b2fbda12",
+    "date": "2026-10-23"
   },
   "/cbb-grid": {
     "hash": "2312edafa6482e43",
@@ -77,8 +77,8 @@
     "date": "2026-10-01"
   },
   "/cfb-dynasty": {
-    "hash": "6bf161df1aa13476",
-    "date": "2026-10-13"
+    "hash": "493e6d65428b8001",
+    "date": "2026-10-23"
   },
   "/cfb-higher-lower": {
     "hash": "58cc3b373c79a019",
@@ -157,12 +157,12 @@
     "date": "2026-10-01"
   },
   "/f1-driver": {
-    "hash": "5918d54c56acb75c",
-    "date": "2026-09-19"
+    "hash": "240f8d0a0d003871",
+    "date": "2026-10-23"
   },
   "/f1-higher-lower": {
-    "hash": "24a34e1da96f7c47",
-    "date": "2026-09-19"
+    "hash": "cf38e505c03f8ee5",
+    "date": "2026-10-23"
   },
   "/face-off": {
     "hash": "0406b6fb7583c2ab",
@@ -365,8 +365,8 @@
     "date": "2026-10-06"
   },
   "/nba-front-office": {
-    "hash": "88858fa5724b357e",
-    "date": "2026-10-03"
+    "hash": "5837d2aef7e35319",
+    "date": "2026-10-23"
   },
   "/nba-gauntlet-draft": {
     "hash": "9de7039ef89d4830",
@@ -381,8 +381,8 @@
     "date": "2026-10-01"
   },
   "/nba-higher-lower": {
-    "hash": "06f9d47d69b371a8",
-    "date": "2026-09-30"
+    "hash": "c5e8d571dd910d3a",
+    "date": "2026-10-23"
   },
   "/nba-my-career": {
     "hash": "4cab423e39dc02f8",
@@ -393,8 +393,8 @@
     "date": "2026-09-30"
   },
   "/nba-starting-5": {
-    "hash": "ad16a2506e03948a",
-    "date": "2026-10-01"
+    "hash": "d7aebde6af49fdee",
+    "date": "2026-10-23"
   },
   "/nba-stat-line": {
     "hash": "5e9ed5bd99ff174d",
@@ -409,16 +409,16 @@
     "date": "2026-09-30"
   },
   "/nfl-connections": {
-    "hash": "e919e2bbbbda08c2",
-    "date": "2026-09-30"
+    "hash": "0c079d96f72f1f85",
+    "date": "2026-10-23"
   },
   "/nfl-gauntlet-draft": {
     "hash": "af1e06bb550473e6",
     "date": "2026-10-09"
   },
   "/nfl-higher-lower": {
-    "hash": "d605edf6730ad6c5",
-    "date": "2026-09-30"
+    "hash": "b2c6a4f99fb69b20",
+    "date": "2026-10-23"
   },
   "/nfl-my-career": {
     "hash": "883448c83d8ad6c8",
@@ -433,8 +433,8 @@
     "date": "2026-10-01"
   },
   "/nhl-connections": {
-    "hash": "5e94029143c0daa9",
-    "date": "2026-09-30"
+    "hash": "adfaecb30aee7fb3",
+    "date": "2026-10-23"
   },
   "/nhl-front-office": {
     "hash": "07544286355fd84c",
@@ -525,24 +525,24 @@
     "date": "2026-10-03"
   },
   "/records": {
-    "hash": "acdee1ac20841eca",
-    "date": "2026-10-13"
+    "hash": "4e03e6545fbac026",
+    "date": "2026-10-23"
   },
   "/records/afl-premiers": {
-    "hash": "ef3fc52143e2dc97",
-    "date": "2026-10-13"
+    "hash": "af37e7df85bf4e1b",
+    "date": "2026-10-23"
   },
   "/records/brownlow-medal-winners": {
-    "hash": "ad7d8865d956e964",
-    "date": "2026-10-13"
+    "hash": "bcfb408311452a10",
+    "date": "2026-10-23"
   },
   "/records/college-football-national-champions": {
     "hash": "4ebc9d3c96a53b71",
     "date": "2026-10-13"
   },
   "/records/dally-m-medal-winners": {
-    "hash": "776c85a810e07d7f",
-    "date": "2026-10-13"
+    "hash": "9d51b82fdade6d40",
+    "date": "2026-10-23"
   },
   "/records/english-football-champions": {
     "hash": "50ea575b820cb262",
@@ -561,8 +561,8 @@
     "date": "2026-10-13"
   },
   "/records/nrl-premiers": {
-    "hash": "9a36f36e2a0e6732",
-    "date": "2026-10-13"
+    "hash": "d535b1bbf2fad959",
+    "date": "2026-10-23"
   },
   "/records/stanley-cup-winners": {
     "hash": "1d06d0d7e24240aa",
@@ -641,8 +641,8 @@
     "date": "2026-09-19"
   },
   "/tennis-higher-lower": {
-    "hash": "83b674077e3c29d9",
-    "date": "2026-09-19"
+    "hash": "cee45f4ea3b6cb9b",
+    "date": "2026-10-23"
   },
   "/terms": {
     "hash": "805a1b67182ca255",
@@ -661,7 +661,7 @@
     "date": "2026-10-06"
   },
   "/whats-new": {
-    "hash": "4814bbb87aa39480",
+    "hash": "86354992d093f6cd",
     "date": "2026-10-23"
   },
   "/who-am-i": {

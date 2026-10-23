@@ -56,7 +56,7 @@
          KEEP THIS IN STEP WITH SITE_JSON_LD in src/lib/pageSchema.ts.
          scripts/simSchema.mjs parses this block and compares it against that
          export, so the two cannot drift apart quietly. -->
-    <script type="application/ld+json">[{"@context":"https://schema.org","@type":"WebSite","@id":"https://douknowball.com/#website","name":"DoUKnowBall","alternateName":"Do U Know Ball","url":"https://douknowball.com/","inLanguage":"en","publisher":{"@id":"https://douknowball.com/#org"}},{"@context":"https://schema.org","@type":"Organization","@id":"https://douknowball.com/#org","name":"DoUKnowBall","url":"https://douknowball.com/","logo":"https://douknowball.com/icon-512.png"},{"@context":"https://schema.org","@type":"WebApplication","@id":"https://douknowball.com/#webapp","name":"DoUKnowBall","url":"https://douknowball.com/","applicationCategory":"GameApplication","operatingSystem":"Web Browser","isAccessibleForFree":true,"offers":{"@type":"Offer","price":"0","priceCurrency":"USD"},"publisher":{"@id":"https://douknowball.com/#org"}}]</script><script type="application/ld+json" data-rh="true">{"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"DoUKnowBall","item":"https://douknowball.com"},{"@type":"ListItem","position":2,"name":"NBA Basketball Games","item":"https://douknowball.com/pro-basketball"},{"@type":"ListItem","position":3,"name":"NBA Starting 5","item":"https://douknowball.com/nba-starting-5"}]}</script><script type="application/ld+json" data-rh="true">{"@context":"https://schema.org","@type":"FAQPage","mainEntity":[{"@type":"Question","name":"Do the players have to be current?","acceptedAnswer":{"@type":"Answer","text":"No. The pool spans thousands of players across NBA history, as long as they played for the shown franchise."}},{"@type":"Question","name":"Why will the game not accept my guy at point guard?","acceptedAnswer":{"@type":"Answer","text":"Position data is coarse: guards fit either guard slot, forwards fit either forward slot, and centers fit center. If a player is listed as a forward, he cannot fill your PG hole."}},{"@type":"Question","name":"How is my lineup judged?","acceptedAnswer":{"@type":"Answer","text":"Each pick gets a value for the challenge stat, then the game writes a short verdict with a rating and headline you can share."}},{"@type":"Question","name":"Is NBA Starting 5 free to play?","acceptedAnswer":{"@type":"Answer","text":"Yes. NBA Starting 5 is free to play on DoUKnowBall, right in your browser. No download and no signup needed."}}]}</script><script type="application/ld+json" data-rh="true">{"@context":"https://schema.org","@type":"Game","name":"NBA Starting 5: Basketball Lineup Builder | DoUKnowBall","description":"Spin a stat challenge, then build a starting five with each pick from a random NBA franchise. Your memory of who played where is the game. Free basketball.","url":"https://douknowball.com/nba-starting-5","isAccessibleForFree":true,"gamePlatform":"Web Browser","publisher":{"@id":"https://douknowball.com/#org"}}</script>
+    <script type="application/ld+json">[{"@context":"https://schema.org","@type":"WebSite","@id":"https://douknowball.com/#website","name":"DoUKnowBall","alternateName":"Do U Know Ball","url":"https://douknowball.com/","inLanguage":"en","publisher":{"@id":"https://douknowball.com/#org"}},{"@context":"https://schema.org","@type":"Organization","@id":"https://douknowball.com/#org","name":"DoUKnowBall","url":"https://douknowball.com/","logo":"https://douknowball.com/icon-512.png"},{"@context":"https://schema.org","@type":"WebApplication","@id":"https://douknowball.com/#webapp","name":"DoUKnowBall","url":"https://douknowball.com/","applicationCategory":"GameApplication","operatingSystem":"Web Browser","isAccessibleForFree":true,"offers":{"@type":"Offer","price":"0","priceCurrency":"USD"},"publisher":{"@id":"https://douknowball.com/#org"}}]</script><script type="application/ld+json" data-rh="true">{"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"DoUKnowBall","item":"https://douknowball.com"},{"@type":"ListItem","position":2,"name":"NBA Basketball Games","item":"https://douknowball.com/pro-basketball"},{"@type":"ListItem","position":3,"name":"NBA Starting 5","item":"https://douknowball.com/nba-starting-5"}]}</script><script type="application/ld+json" data-rh="true">{"@context":"https://schema.org","@type":"FAQPage","mainEntity":[{"@type":"Question","name":"Do the players have to be current?","acceptedAnswer":{"@type":"Answer","text":"No. The pool spans thousands of players across NBA history, as long as they played for the shown franchise and have a career line in our stat table, which starts with careers from 1965-66."}},{"@type":"Question","name":"Why will the game not accept my guy at point guard?","acceptedAnswer":{"@type":"Answer","text":"Position data is coarse: guards fit either guard slot, forwards fit either forward slot, and centers fit center. If a player is listed as a forward, he cannot fill your PG hole."}},{"@type":"Question","name":"How is my lineup judged?","acceptedAnswer":{"@type":"Answer","text":"Each pick shows his real career number for the challenge, and your five is scored out of 100: the best five your teams allowed scores 100, the worst scores 0."}},{"@type":"Question","name":"Is NBA Starting 5 free to play?","acceptedAnswer":{"@type":"Answer","text":"Yes. NBA Starting 5 is free to play on DoUKnowBall, right in your browser. No download and no signup needed."}}]}</script><script type="application/ld+json" data-rh="true">{"@context":"https://schema.org","@type":"Game","name":"NBA Starting 5: Basketball Lineup Builder | DoUKnowBall","description":"Spin a stat challenge, then build a starting five with each pick from a random NBA franchise. Your memory of who played where is the game. Free basketball.","url":"https://douknowball.com/nba-starting-5","isAccessibleForFree":true,"gamePlatform":"Web Browser","publisher":{"@id":"https://douknowball.com/#org"}}</script>
     
     
     <!-- Round 286: the site's own social image, on its own domain. The old
@@ -244,7 +244,7 @@
 <p>The catch: each of your five picks must come from a random NBA franchise, so your plan is only as good as your memory of who played where.</p>
 <h2>How to play NBA Starting 5, a franchise lineup guessing game</h2>
 <h3>Spinning the stat challenge</h3>
-<li>Spin the stat challenge. It might be highest career PPG, lowest career fouls, most championships, tallest lineup, anything from a pool of 13 stats.</li>
+<li>Spin the stat challenge. It might be highest career PPG, lowest career blocks per game, most threes made, anything from a pool of 7 career stats.</li>
 <h3>Choosing a position to fill</h3>
 <li>Pick one of the five positions: PG, SG, SF, PF or C.</li>
 <h3>Naming a player from the random team</h3>
@@ -252,7 +252,7 @@
 <h3>Filling all five slots and tracking your total</h3>
 <li>Repeat until all five slots are filled, watching your running stat total.</li>
 <h3>Submitting the lineup for a verdict</h3>
-<li>Submit the lineup for a verdict: a rating, a headline and a short breakdown.</li>
+<li>Submit the lineup for a score out of 100 against the best five your teams allowed.</li>
 <h2>NBA Starting 5 rules for slots, teams and rerolls</h2>
 <h3>Five slots drawn from thirty franchises</h3>
 <li>Five slots, one random team per pick, drawn from all 30 NBA franchises.</li>
@@ -268,7 +268,7 @@
 <h3>An easy call at shooting guard</h3>
 <p>The wheel says highest career PPG. Your first slot is SG from the Bulls, and you do not overthink Michael Jordan.</p>
 <h3>Two tougher franchises and a rough verdict</h3>
-<p>Then it gets rude: PF from the Grizzlies, C from the Hornets. You dig up the best scorers you can remember, submit a total in the high 90s, and the verdict roasts your weakest link.</p>
+<p>Then it gets rude: PF from the Grizzlies, C from the Hornets. You dig up the best scorers you can remember, submit a total in the high 90s, and the score shows how far each pick fell short of the best his team allowed.</p>
 <h2>NBA Starting 5 tips for journeymen and reading the challenge</h2>
 <h3>Reading the challenge direction twice</h3>
 <li>Read the direction twice. On a lowest challenge, the stars you love are suddenly poison.</li>
@@ -278,11 +278,11 @@
 <li>Reroll early, not late. A bad team fit hurts more when only one slot is left.</li>
 <h2>NBA Starting 5 FAQ: player pool, positions and verdicts</h2>
 <h3>Do the players have to be current?</h3>
-<p>No. The pool spans thousands of players across NBA history, as long as they played for the shown franchise.</p>
+<p>No. The pool spans thousands of players across NBA history, as long as they played for the shown franchise and have a career line in our stat table, which starts with careers from 1965-66.</p>
 <h3>Why will the game not accept my guy at point guard?</h3>
 <p>Position data is coarse: guards fit either guard slot, forwards fit either forward slot, and centers fit center. If a player is listed as a forward, he cannot fill your PG hole.</p>
 <h3>How is my lineup judged?</h3>
-<p>Each pick gets a value for the challenge stat, then the game writes a short verdict with a rating and headline you can share.</p>
+<p>Each pick shows his real career number for the challenge, and your five is scored out of 100: the best five your teams allowed scores 100, the worst scores 0.</p>
 <h3>Is NBA Starting 5 free to play?</h3>
 <p>Yes. NBA Starting 5 is free to play on DoUKnowBall, right in your browser. No download and no signup needed.</p>
 <h2>More games to play</h2>
