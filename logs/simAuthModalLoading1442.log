@@ -1,0 +1,3 @@
+Auth modal loading: reopenFocus-actual, expected passed.
+Auth modal loading: reopenFocus-fault, expected failed.
+Auth modal loading: PASS, 7 actual outcomes and 7 effective copied faults.
