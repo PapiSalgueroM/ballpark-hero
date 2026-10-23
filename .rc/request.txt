@@ -1,0 +1,8 @@
+# Release BR, Round 1562 (the Front Office season card on a phone): r1562-f1's own lines (rc-f1.txt
+# tsc to simTrustCopy); its 24 fences are rc-BRz.txt.
+tsc: node_modules/.bin/tsc --noEmit -p tsconfig.app.json
+vitest: node_modules/.bin/vitest run src/components/front-office-shared/FrontOfficeSeasonClose.test.tsx src/components/nba-front-office/NbaSeasonStats.test.tsx src/components/front-office/FrontOfficeSeasonStats.test.tsx src/lib/nflSeasonStats.test.ts --testTimeout=300000 --hookTimeout=120000
+simNbaSeasonStats: node scripts/simNbaSeasonStats.mjs
+simNflSeasonStats: node scripts/simNflSeasonStats.mjs
+simFoLazyDesk: node scripts/simFoLazyDesk.mjs
+simTrustCopy: node scripts/simTrustCopy.mjs
