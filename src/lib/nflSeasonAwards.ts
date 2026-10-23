@@ -1,6 +1,6 @@
 /**
  * Round 1542: the NFL season's awards, named once when the season closes. The rules are the header of
- * src/lib/nflSeasonStats.ts and its NFL_AWARD_RULE; this file only applies them.
+ * src/lib/nflSeasonStats.ts and NFL_AWARD_RULE (src/lib/nflSeasonRules.ts); this file only applies them.
  *
  * WHY A FILE OF ITS OWN (the closing check of 2026-10-22, the weight of /front-office): the close runs in the press
  * that ends the season, and that press already waits for the career kit (the verdict is the kit's, closeWaits in

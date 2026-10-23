@@ -10,9 +10,10 @@ import { keyedRng } from '@/lib/keyedRng';
 import {
   NFL_AWARD_LABEL, nflAwardList, nflCleanSave, nflCreditGame, nflLiveStats, nflMarkRookies, nflMvpScore,
   nflFoStats, nflNewStats, nflPassChance, nflPlaysFor, nflPool, nflPoolMen, nflRecordGame, nflRecordWeek, nflSackChance,
-  nflStatsHelp, nflUsage, readNflAwards, readNflStats, type NflSeasonAwards, type NflSeasonStats, type NflToldGame,
+  nflUsage, readNflAwards, readNflStats, type NflSeasonAwards, type NflSeasonStats, type NflToldGame,
 } from '@/lib/nflSeasonStats';
 import { nflCloseSeasonStats, nflSeasonAwards } from '@/lib/nflSeasonAwards';
+import { nflStatsHelp } from '@/lib/nflSeasonRules';
 import { NFL_NO_CLASS, NFL_NO_ROOKIES, NFL_SAT_OUT, nflAwardBoxes, nflHistoryRows } from '@/lib/nflSeasonView';
 
 let n = 0;

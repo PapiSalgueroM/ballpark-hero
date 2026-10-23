@@ -11,9 +11,10 @@
 import { foRankAward, foSeasonPlayers } from './foSeasonStats';
 import { foClosedSeason } from './foSeasonClose';
 import {
-  NFL_AWARD_KEYS, NFL_AWARD_LABEL, NFL_AWARD_RULE, NFL_STAT_COLS, nflFoStats, nflLiveStats,
+  NFL_AWARD_KEYS, NFL_AWARD_LABEL, NFL_STAT_COLS, nflFoStats, nflLiveStats,
   type NflAwardPick, type NflSeasonAwards, type NflStatCol,
 } from './nflSeasonStats';
+import { NFL_AWARD_RULE } from './nflSeasonRules';
 import type { LeagueState } from './frontOffice';
 
 /** The NBA card's note with NFL in its place (NbaFrontOfficeBoard.tsx, SIM_NOTE). */
