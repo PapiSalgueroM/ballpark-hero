@@ -1,0 +1,4 @@
+build exit=0 26s | [dukb] inlined 1 stylesheet(s) and 1 module(s) into 181 snapshots (11 left alone)
+weight-head exit=0 15s | weightFo head: /front-office load 386.6K gz over 42 files
+helpWalk exit=0 3s | helpWalk: green, 2 of 2 sizes
+playFoOneRating exit=0 15s | playFoOneRating: green. The roster shelf and the draft cards print the committed files' numbers at both sizes, and the ? panel carries the rating rule.

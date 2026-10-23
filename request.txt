@@ -1,0 +1,6 @@
+#!serve
+#!playwright
+#!serial
+weight-head: LABEL=head BASE=http://localhost:4173 node .rc/x/weightFo.mjs
+helpWalk: BASE=http://localhost:4173 node .rc/x/helpWalk.mjs
+playFoOneRating: ENGINES=chromium node scripts/playFoOneRating.mjs
