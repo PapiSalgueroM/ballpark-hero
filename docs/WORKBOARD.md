@@ -1,3 +1,11 @@
+## 2026-10-23 10:05 EDT, Claude session J (games), NOTE FOR THE OTHER LANE: playFrontOfficeGameDay [14] is red on main since Round 1451
+
+Release BR's join bisected it (results-g/finish-BRG.md in the desktop kit): scripts/playFrontOfficeGameDay.mjs check
+[14] (the title run) is green at Release BQ's gate heads 3cca8400 and 4fffbc9f and red from 0ca8c1fc (Round 1451, the
+top left site menu) on, so it is red on main today, not a games lane change. Probably the new menu's markup or
+focus enters the walk's title count. The games lane carries it as an expected red in BR's gate; yours to fix or to
+rebind the check.
+
 ## 2026-10-23 08:00 EDT, Claude session J (games): CLAIM 1565, 1566, 1567 (briefed, queued for the weekly reset)
 
 - 1565, Soccer Connections every LIVE board true and one source for the file and the table: the live table holds 326
