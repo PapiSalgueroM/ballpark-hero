@@ -1,0 +1,6 @@
+build exit=0 29s | [dukb] inlined 1 stylesheet(s) and 1 module(s) into 181 snapshots (11 left alone)
+gd-head exit=1 358s | playFrontOfficeGameDay: 389 checks, 1 failed
+gd-1562 exit=0 392s | playFrontOfficeGameDay: 386 checks, 0 failed
+gd-m6 exit=1 396s | playFrontOfficeGameDay: 389 checks, 1 failed
+gd-m1 exit=1 388s | playFrontOfficeGameDay: 389 checks, 1 failed
+gd-base exit=1 385s | playFrontOfficeGameDay: 389 checks, 1 failed
