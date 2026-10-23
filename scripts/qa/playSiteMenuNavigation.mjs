@@ -136,12 +136,33 @@ async function normal(page, row, spec) {
     await opener(page).click(); await waitMenu(page); await page.keyboard.press('Escape'); await waitClosed(page);
   }
 }
+function checkNotice(sample) {
+  assert(sample.rects.length > 0 && sample.rects.every(rect => rect.left >= 0 && rect.top >= sample.headerBottom && rect.top >= 0 && rect.right <= sample.width && rect.bottom <= sample.height && rect.painted), 'MENU_NOTICE: message bounds clear the header and text-line centers are unobscured');
+}
+async function readableNotice(page, row, role) {
+  const sample = await page.getByRole('region', { name: 'Site menu loading', exact: true }).getByRole(role).evaluate(node => {
+    const range = document.createRange(); range.selectNodeContents(node);
+    return { text: node.textContent, width: innerWidth, height: innerHeight, headerBottom: document.querySelector('header[data-site-chrome]')?.getBoundingClientRect().bottom || 0, rects: [...range.getClientRects()].filter(rect => rect.width && rect.height).map(rect => ({
+      left: rect.left, top: rect.top, right: rect.right, bottom: rect.bottom, painted: node.contains(document.elementFromPoint(rect.left + rect.width / 2, rect.top + rect.height / 2)),
+    })) };
+  });
+  checkNotice(sample);
+  if (role === 'status') {
+    const changed = structuredClone(sample); changed.rects[0].painted = false;
+    recordControl('notice-message-paint', sample, changed, checkNotice, 'MENU_NOTICE');
+    const overlap = structuredClone(sample); overlap.rects[0].top = sample.headerBottom - 1;
+    assert(sample.headerBottom > 0 && overlap.rects[0].top >= 0, 'MENU_NOTICE: actual Home header for overlap control');
+    recordControl('notice-header-overlap', sample, overlap, checkNotice, 'MENU_NOTICE');
+  }
+  row.actions.push({ name: 'actual-readable-notice', role, passed: true, measurement: sample });
+}
 async function cold(page, row, spec, fault) {
   assert.equal(row.panelRequests.length, 0, 'MENU_LAZY: no panel request before actual first opening');
   if (spec.kind === 'delay') {
     fault.mode = 'delay'; await opener(page).click();
     await page.getByRole('status').filter({ hasText: 'Loading menu...' }).waitFor({ state: 'visible', timeout: timeout() });
     assert.equal(await opener(page).getAttribute('aria-busy'), 'true'); assert.equal(row.panelRequests.length, 1);
+    await readableNotice(page, row, 'status');
     await mark(page, row, 'held-loading'); await page.getByRole('region', { name: 'Site menu loading', exact: true }).getByRole('button', { name: 'Cancel', exact: true }).click();
     await opener(page).evaluate(node => { if (document.activeElement !== node) throw new Error('MENU_CANCEL: actual focus'); });
     fault.release(); await page.waitForTimeout(650);
@@ -160,6 +181,7 @@ async function cold(page, row, spec, fault) {
     const navCount = row.documents.length; await page.waitForTimeout(450); assert.equal(row.documents.length, navCount, 'MENU_CHUNK: no second automatic reload');
     const region = page.getByRole('region', { name: 'Site menu loading', exact: true });
     assert.equal(await region.getByRole('link', { name: 'Search Games', exact: true }).getAttribute('href'), '/search');
+    await readableNotice(page, row, 'alert');
     await mark(page, row, 'second-failure-alert');
     await region.getByRole('button', { name: 'Cancel', exact: true }).click(); await opener(page).evaluate(node => { if (document.activeElement !== node) throw new Error('MENU_CHUNK: fault Cancel focus'); });
     fault.mode = 'healthy'; await page.reload({ waitUntil: 'load', timeout: timeout(9000) }); await ready(page);
@@ -298,7 +320,7 @@ finally {
       report.holds.unchanged = true;
     } catch (error) { report.errors.push(failure(error)); }
     report.actual = { cases: report.cases.length, completeCases: report.cases.filter(row => row.complete).length, screenshots: report.cases.reduce((sum, row) => sum + row.snapshots.length, 0) };
-    report.complete = report.errors.length === 0 && report.holds.unchanged === true && report.actual.cases === specs.length && report.actual.completeCases === specs.length && report.controls.length === 9;
+    report.complete = report.errors.length === 0 && report.holds.unchanged === true && report.actual.cases === specs.length && report.actual.completeCases === specs.length && report.controls.length === 11;
     report.status = report.complete ? 'MENU_BROWSER_COMPLETE' : 'MENU_BROWSER_INCOMPLETE_OR_FAILED';
     write('report.json', report);
     const files = fs.readdirSync(OUT).sort(); assert(files.every(file => fs.lstatSync(path.join(OUT, file)).isFile() && !fs.lstatSync(path.join(OUT, file)).isSymbolicLink()), 'MENU_EVIDENCE: flat regular files only');

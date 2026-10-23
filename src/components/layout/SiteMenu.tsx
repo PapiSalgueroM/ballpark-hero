@@ -38,7 +38,7 @@ export function SiteMenu() {
     </Button>
     {Panel ? <Panel open={open} onOpenChange={setOpen} returnFocusRef={trigger} id={id} /> : open && (
       <div role="region" aria-label="Site menu loading" data-site-chrome=""
-        className="fixed left-3 right-3 top-14 z-50 max-w-sm rounded-xl border border-border bg-card p-4 shadow-lg">
+        className="fixed left-3 right-3 top-28 z-50 max-w-sm rounded-xl border border-border bg-card p-4 shadow-lg">
         <p role={failed ? 'alert' : 'status'} className="text-sm text-muted-foreground">
           {failed ? 'Menu could not load. Use Search Games, or refresh to try again.' : 'Loading menu...'}
         </p>
