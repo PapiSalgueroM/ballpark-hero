@@ -1,0 +1,182 @@
+name: Site Menu original host focus owned behavior baseline
+on:
+  push:
+    branches: [codex/site-menu-game-controls-20261023]
+    paths-ignore: ['docs/**']
+permissions:
+  contents: read
+concurrency:
+  group: site-menu-host-focus-${{ github.sha }}
+  cancel-in-progress: false
+env:
+  BASE_SOURCE: 3ac9d8ea8a13db824f88be2deb660e7f2e31fc35
+  EXPECTED_PARENT: 320056b0b6a6f61c0245faa3709cbbdb1372aa16
+  CI: '1'
+  SIM_NETWORK: offline
+  TZ: UTC
+jobs:
+  original_host:
+    runs-on: ubuntu-latest
+    timeout-minutes: 35
+    defaults:
+      run:
+        shell: bash
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 16
+          persist-credentials: false
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: npm
+      - name: Exact four-path test-only child with the entire original application held
+        run: |
+          set -euo pipefail
+          out="$RUNNER_TEMP/site-menu-host-original";test ! -e "$out";mkdir "$out"
+          export MENU_HOST_OUT="$out";echo "MENU_HOST_OUT=$out" >> "$GITHUB_ENV"
+          for transport in types old new classifier;do : > "$out/$transport.transport";done
+          test "$GITHUB_REPOSITORY" = PapiSalgueroM/ballpark-hero
+          test "$GITHUB_REPOSITORY_ID" = 1195729679
+          test "$GITHUB_REF" = refs/heads/codex/site-menu-game-controls-20261023
+          test "$(git rev-parse HEAD)" = "$GITHUB_SHA"
+          git fetch --no-tags --depth=1 origin "$BASE_SOURCE" > "$out/base-fetch.log" 2>&1
+          git merge-base --is-ancestor "$BASE_SOURCE" "$GITHUB_SHA" > "$out/base-ancestry.log" 2>&1
+          git show -s --format=%P HEAD > "$out/parents.txt";test "$(cat "$out/parents.txt")" = "$EXPECTED_PARENT"
+          git diff --exit-code "$EXPECTED_PARENT" HEAD -- . ':!docs/**' ':!.github/workflows/site-menu-host-focus.yml' ':!src/test/SiteMenu.host-focus.test.tsx' ':!src/test/SiteMenu.host-focus-loading.test.tsx' ':!src/test/SiteMenu.host-takeover.test.tsx' > "$out/direct-four-qa-paths.log"
+          git diff --exit-code "$BASE_SOURCE" HEAD -- . ':!docs/**' ':!scripts/qa/sharedChromePreload.cjs' ':!scripts/qa/runSharedChromeBaseline.mjs' ':!scripts/qa/playSharedChromeBaselineProbe.mjs' ':!.github/workflows/site-menu-game-controls.yml' ':!.github/workflows/site-menu-host-focus.yml' ':!src/test/SiteMenu.host-focus.test.tsx' ':!src/test/SiteMenu.host-focus-loading.test.tsx' ':!src/test/SiteMenu.host-takeover.test.tsx' > "$out/cumulative-eight-qa-paths.log"
+          git show "$EXPECTED_PARENT:.github/workflows/site-menu-game-controls.yml" | cmp .github/workflows/site-menu-game-controls.yml -
+          node <<'NODE'
+          const fs=require('node:fs'),assert=require('node:assert/strict'),cp=require('node:child_process'),{createHash}=require('node:crypto'),out=process.env.MENU_HOST_OUT,hash=b=>createHash('sha256').update(b).digest('hex');
+          const gitPins={"src/App.tsx":"b988c18c60d3fd7e1a010cb277a39736d07135e8","src/components/layout/SiteMenu.tsx":"40610855743cf57c033f3398d44e236f26ddfc89","src/components/layout/SiteMenuPanel.tsx":"a044e17ea18bc87ea64f88569e17340099aad5c0","src/components/layout/Header.tsx":"ea73eb5c4c6652c2684ab302a18381b78ad9cc4d","src/components/game/GameNavbar.tsx":"03423fde7f951c2d3c2f8fa33ce7bf9a2d3f9a84","src/index.css":"775df500bd7c9730e5b04aedd3d6b2a1564d49b4","src/test/SiteMenu.test.tsx":"4523ed1fa241b765d6cbe4f71f5eb14a14db89ad","src/test/SiteMenu.lazy-loading.test.tsx":"ed251b20e28a40fe041f00515c70cbb554968814","src/test/SiteMenu.load-failure.test.tsx":"623c8ebb1839a4f3e21d9520daf5effaee83610a","src/test/SiteMenu.escape-loading.test.tsx":"89e9627296cf1854ced6c540852577fa49ff9805","src/test/SiteMenu.escape-failure.test.tsx":"b140aa236900793ff7c12aed88070a9b82e7c87e","scripts/qa/sharedChromePreload.cjs":"8efcfc18ba520e637193e25c2bb8d4b97dd88919","scripts/qa/playSharedChromeBaselineProbe.mjs":"be869583553d2cbb8bb2091da46b82423e6cba17","scripts/qa/runSharedChromeBaseline.mjs":"a6169b54ef5f4afbbba794519a7679eaba4087cb",".github/workflows/site-menu-game-controls.yml":"4a5401464f08dfeeebcd3bbd3897449af490c4ca","package.json":"2ff64986fb76ebc51b706f2fd24765768874008a"},testPins=[{"target":"src/test/SiteMenu.host-focus.test.tsx","bytes":4210,"sha256":"365d062f609d47fb0a3b3874161f7025f9eadd3524e606a6df9609f067b484fa","gitBlob":"542d26787bf75b26d3ec302de7df49afce4533f3"},{"target":"src/test/SiteMenu.host-focus-loading.test.tsx","bytes":3726,"sha256":"710916224803753eb7a0380e710c8fd8b256f2422c58a3f9c3bffb205d2b0445","gitBlob":"fbb470342d0112fc6bddc701d1d76d278ce0c927"},{"target":"src/test/SiteMenu.host-takeover.test.tsx","bytes":3995,"sha256":"3e45f59b586b5118e93b4be4451e818c53bd37e730259fc9962c1fcf6e91ccb6","gitBlob":"1bde441aaf9b992e97912a1278edf15eadcb051a"}];
+          for(const [file,pin] of Object.entries(gitPins))assert.equal(cp.execFileSync('git',['hash-object',file],{encoding:'utf8'}).trim(),pin,file);
+          const actualTests=[];
+          for(const pin of testPins){const body=fs.readFileSync(pin.target);assert.equal(body.length,pin.bytes);assert.equal(hash(body),pin.sha256);assert.equal(cp.execFileSync('git',['hash-object',pin.target],{encoding:'utf8'}).trim(),pin.gitBlob);actualTests.push(pin);}
+          const workflow='.github/workflows/site-menu-host-focus.yml',gitBlob=cp.execFileSync('git',['rev-parse','HEAD:'+workflow],{encoding:'utf8'}).trim();assert.equal(cp.execFileSync('git',['hash-object',workflow],{encoding:'utf8'}).trim(),gitBlob);
+          fs.writeFileSync(out+'/source-binding.json',JSON.stringify({phase:'original-host-focus-test-only-baseline',source:process.env.GITHUB_SHA,parent:process.env.EXPECTED_PARENT,baseSource:process.env.BASE_SOURCE,tree:cp.execFileSync('git',['rev-parse','HEAD^{tree}'],{encoding:'utf8'}).trim(),run:process.env.GITHUB_RUN_ID,attempt:process.env.GITHUB_RUN_ATTEMPT,workflow:{file:workflow,gitBlobSha1:gitBlob,sha256:hash(fs.readFileSync(workflow))},originalSourceGitPins:gitPins,tests:actualTests,applicationQualified:false,productAdopted:false,browserExecuted:false,oldBaselineWorkflowByteHeld:true},null,2)+'\n',{flag:'wx'});
+          NODE
+          git rev-parse HEAD > "$out/head.txt";git rev-parse 'HEAD^{tree}' > "$out/tree.txt"
+          printf '%s\n' "$GITHUB_RUN_ID" > "$out/run-id.txt";printf '%s\n' "$GITHUB_RUN_ATTEMPT" > "$out/run-attempt.txt"
+          git rev-parse HEAD:.github/workflows/site-menu-host-focus.yml > "$out/workflow-blob.txt"
+          sha256sum .github/workflows/site-menu-host-focus.yml > "$out/workflow.sha256"
+          git ls-files -z | sort -z > "$out/source-members.before"
+          git ls-files -z | sort -z | xargs -0 sha256sum > "$out/source-before.sha256"
+          git diff --exit-code HEAD > "$out/source-clean-before.log"
+          test -z "$(git status --porcelain --untracked-files=all)"
+      - name: Locked installation and full dependency inventory
+        timeout-minutes: 10
+        run: |
+          set -euo pipefail
+          out="$MENU_HOST_OUT"
+          npm ci > "$out/install.log" 2>&1
+          find node_modules -path node_modules/.vite -prune -o -type f -print0 | sort -z > "$out/dependency-members.before"
+          find node_modules -path node_modules/.vite -prune -o -type f -print0 | sort -z | xargs -0 sha256sum > "$out/dependencies.sha256"
+      - name: Actual app types without application or helper edits
+        id: types
+        run: |
+          set -euo pipefail
+          out="$MENU_HOST_OUT";export NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs"
+          status=0
+          SIM_OFFLINE_RECEIPT="$out/types.transport" timeout --signal=TERM --kill-after=15s 5m node_modules/.bin/tsc --noEmit -p tsconfig.app.json > "$out/types.log" 2>&1 || status=$?
+          printf '%s\n' "$status" > "$out/types.exit";test "$status" -eq 0
+          test ! -s "$out/types.transport"
+      - name: Ten held Menu outcomes on the actual original component
+        id: old
+        run: |
+          set -euo pipefail
+          out="$MENU_HOST_OUT";export NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs"
+          status=0
+          SIM_OFFLINE_RECEIPT="$out/old.transport" timeout --signal=TERM --kill-after=15s 8m node_modules/.bin/vitest run src/test/SiteMenu.test.tsx src/test/SiteMenu.lazy-loading.test.tsx src/test/SiteMenu.load-failure.test.tsx src/test/SiteMenu.escape-loading.test.tsx src/test/SiteMenu.escape-failure.test.tsx --maxWorkers=1 --no-file-parallelism --reporter=default --reporter=json --outputFile="$out/old.json" > "$out/old.log" 2>&1 || status=$?
+          printf '%s\n' "$status" > "$out/old.exit";test "$status" -eq 0
+          test ! -s "$out/old.transport"
+      - name: Six host cases require four owned behavior failures and two preserves
+        id: new
+        run: |
+          set -euo pipefail
+          out="$MENU_HOST_OUT";export NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs"
+          status=0
+          SIM_OFFLINE_RECEIPT="$out/new.transport" timeout --signal=TERM --kill-after=15s 8m node_modules/.bin/vitest run src/test/SiteMenu.host-focus.test.tsx src/test/SiteMenu.host-focus-loading.test.tsx src/test/SiteMenu.host-takeover.test.tsx --maxWorkers=1 --no-file-parallelism --reporter=default --reporter=json --outputFile="$out/new.json" > "$out/new.log" 2>&1 || status=$?
+          printf '%s\n' "$status" > "$out/new.exit";test "$status" -eq 1
+          test ! -s "$out/new.transport"
+      - name: Exact named native assertion classification with no setup error credit
+        id: classifier
+        run: |
+          set -euo pipefail
+          out="$MENU_HOST_OUT";export NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs"
+          classifier=0
+          SIM_OFFLINE_RECEIPT="$out/classifier.transport" node <<'NODE' > "$out/classifier.log" 2>&1 || classifier=$?
+          const fs=require('node:fs'),assert=require('node:assert/strict'),path=require('node:path'),out=process.env.MENU_HOST_OUT;
+          const specs={"old":[{"file":"src/test/SiteMenu.test.tsx","ancestor":"global top-left SiteMenu with the actual Sheet and router","expectations":[{"title":"opens a named dialog with the real site links and all six lightweight sports hubs","status":"passed","marker":null},{"title":"lets real Radix Escape dismiss and return focus to the opening trigger","status":"passed","marker":null},{"title":"selects a real internal link, changes router location and closes","status":"passed","marker":null},{"title":"marks only the normalized current route and closes when that current link is selected","status":"passed","marker":null},{"title":"dismisses from the actual Sheet overlay and returns focus","status":"passed","marker":null},{"title":"closes on external search/hash and history key changes while the normalized path stays the same","status":"passed","marker":null}]},{"file":"src/test/SiteMenu.lazy-loading.test.tsx","ancestor":null,"expectations":[{"title":"cancels a pending real panel import without a late dialog, then reopens the actual healthy panel","status":"passed","marker":null}]},{"file":"src/test/SiteMenu.load-failure.test.tsx","ancestor":null,"expectations":[{"title":"shows truthful load failure with Search and Cancel, returns focus and never opens a dialog","status":"passed","marker":null}]},{"file":"src/test/SiteMenu.escape-loading.test.tsx","ancestor":null,"expectations":[{"title":"dismisses a pending real menu import with Escape from the trigger, without a late dialog","status":"passed","marker":null}]},{"file":"src/test/SiteMenu.escape-failure.test.tsx","ancestor":null,"expectations":[{"title":"dismisses an honest menu load failure with Escape from the trigger and each fallback control, without an automatic retry","status":"passed","marker":null}]}],"new":[{"file":"src/test/SiteMenu.host-focus.test.tsx","ancestor":null,"expectations":[{"title":"returns real Sheet escape focus to the visible host after the fallback is hidden","status":"failed","marker":"MENU_HOST_VISIBLE_FOCUS_RETURN"},{"title":"returns real Sheet close focus to the visible host after the fallback is hidden","status":"failed","marker":"MENU_HOST_VISIBLE_FOCUS_RETURN"},{"title":"keeps focus with the opening trigger while it remains visible","status":"passed","marker":null},{"title":"retains the original trigger fallback when no visible host exists","status":"passed","marker":null}]},{"file":"src/test/SiteMenu.host-focus-loading.test.tsx","ancestor":null,"expectations":[{"title":"returns pending import Escape focus to the arrived host and never opens a late Sheet","status":"failed","marker":"MENU_HOST_PENDING_MESSAGE_SURVIVES_HOST"}]},{"file":"src/test/SiteMenu.host-takeover.test.tsx","ancestor":null,"expectations":[{"title":"opens only one real Sheet when the arrived host takes over a pending fallback","status":"failed","marker":"MENU_HOST_TAKEOVER_SINGLE_SHEET"}]}]};
+          const forbidden=/Unhandled\s+(?:Errors?|Rejections?)|Uncaught\s+Exceptions?|Failed to resolve import|Cannot find (?:module|package)|No test files found|ReferenceError|TypeError|SyntaxError|TimeoutError|Test timed out|Hook timed out/i;
+          const runtimeKeys=['numRuntimeErrorTestSuites','numRuntimeErrors','numUnhandledErrors','unhandledErrorsCount','numErrors'];
+          const admissions=[];
+          for(const [label,total,passes,failures,success] of [['old',10,10,0,true],['new',6,2,4,false]]){
+            const r=JSON.parse(fs.readFileSync(out+'/'+label+'.json','utf8')),groups=specs[label],seenFiles=new Set(),cases=[];
+            assert.equal(fs.readFileSync(out+'/'+label+'.exit','utf8').trim(),label==='old'?'0':'1');
+            assert.equal(r.success,success);assert.equal(r.numTotalTests,total);assert.equal(r.numPassedTests,passes);assert.equal(r.numFailedTests,failures);assert.equal(r.numPendingTests,0);assert.equal(r.numTodoTests,0);
+            assert.equal(r.testResults.length,groups.length);
+            for(const suite of r.testResults){
+              const group=groups.find(x=>path.resolve(x.file)===path.resolve(suite.name));assert(group,'Unowned suite '+suite.name);assert(!seenFiles.has(group.file));seenFiles.add(group.file);
+              const expectedFailures=group.expectations.filter(x=>x.status==='failed').length;
+              assert.equal(suite.status,expectedFailures?'failed':'passed');assert.equal(suite.assertionResults.length,group.expectations.length);const seen=new Set();
+              if('message'in suite){assert.equal(typeof suite.message,'string');assert.doesNotMatch(suite.message,forbidden);}
+              for(const row of suite.assertionResults){
+                const expected=group.expectations.find(x=>x.title===row.title);assert(expected,'Unowned case '+row.title);assert(!seen.has(row.title));seen.add(row.title);
+                const ancestors=group.ancestor?[group.ancestor]:[];
+                assert.deepEqual(row.ancestorTitles,ancestors);assert.equal(row.fullName,[...ancestors,row.title].join(' '));assert.equal(row.status,expected.status);assert(Array.isArray(row.failureMessages));
+                if(expected.status==='failed'){
+                  assert.equal(row.failureMessages.length,1);const message=row.failureMessages[0];assert.equal(typeof message,'string');assert.match(message,/\bAssertionError\b/);assert(message.includes(expected.marker),'Missing owned marker '+expected.marker);assert.doesNotMatch(message,forbidden);
+                  cases.push({file:group.file,fullName:row.fullName,status:row.status,ownedAssertionMarker:expected.marker,actualFailureName:'AssertionError'});
+                }else{
+                  assert.deepEqual(row.failureMessages,[]);cases.push({file:group.file,fullName:row.fullName,status:row.status});
+                }
+              }
+              assert.equal(seen.size,group.expectations.length);
+            }
+            assert.equal(seenFiles.size,groups.length);
+            for(const key of runtimeKeys)if(key in r)assert.equal(r[key],0,key);
+            if('unhandledErrors'in r)assert.deepEqual(r.unhandledErrors,[]);
+            if('classificationErrors'in r){if(Array.isArray(r.classificationErrors))assert.deepEqual(r.classificationErrors,[]);else assert.equal(r.classificationErrors,0);}
+            const log=fs.readFileSync(out+'/'+label+'.log','utf8');assert.doesNotMatch(log,forbidden);
+            admissions.push({label,reportedTests:total,passed:passes,failed:failures,cases,observedRuntimeCounters:Object.fromEntries(runtimeKeys.filter(k=>k in r).map(k=>[k,r[k]])),absentRuntimeCountersUnknown:runtimeKeys.filter(k=>!(k in r)),unhandledErrors:'unhandledErrors'in r?r.unhandledErrors:'UNKNOWN_ABSENT',classificationErrors:'classificationErrors'in r?r.classificationErrors:'UNKNOWN_ABSENT'});
+          }
+          assert.equal(fs.readFileSync(out+'/types.exit','utf8').trim(),'0');
+          fs.writeFileSync(out+'/host-baseline-admission.json',JSON.stringify({status:'ORIGINAL_HOST_BEHAVIOR_OWNED_FAILURES_REPRODUCED',source:process.env.GITHUB_SHA,parent:process.env.EXPECTED_PARENT,baseSource:process.env.BASE_SOURCE,run:process.env.GITHUB_RUN_ID,attempt:process.env.GITHUB_RUN_ATTEMPT,oldCases:10,newCases:6,expectedNewPasses:2,ownedNewFailures:4,admissions,applicationQualified:false,productAdopted:false,browserQualified:false,livePublished:false},null,2)+'\n',{flag:'wx'});
+          NODE
+          printf '%s\n' "$classifier" > "$out/classifier.exit";test "$classifier" -eq 0
+          test ! -s "$out/classifier.transport"
+      - name: Always preserve all raw results and physical holds
+        if: always()
+        run: |
+          set -euo pipefail
+          out="$RUNNER_TEMP/site-menu-host-original";mkdir -p "$out";failed=0
+          for manifest in source-before dependencies;do
+            if test -f "$out/$manifest.sha256";then sha256sum --check "$out/$manifest.sha256" > "$out/final-$manifest-hold.log" 2>&1 || failed=1;else failed=1;fi
+          done
+          git ls-files -z | sort -z > "$out/source-members.after" || failed=1
+          git ls-files -z | sort -z | xargs -0 sha256sum > "$out/source-after.sha256" || failed=1
+          if test -f "$out/source-members.before";then cmp "$out/source-members.before" "$out/source-members.after" || failed=1;else failed=1;fi
+          if test -f "$out/source-before.sha256";then cmp "$out/source-before.sha256" "$out/source-after.sha256" || failed=1;else failed=1;fi
+          if test -d node_modules;then
+            find node_modules -path node_modules/.vite -prune -o -type f -print0 | sort -z > "$out/dependency-members.after" || failed=1
+            find node_modules -path node_modules/.vite -prune -o -type f -print0 | sort -z | xargs -0 sha256sum > "$out/dependencies-end.sha256" || failed=1
+          else failed=1;fi
+          if test -f "$out/dependency-members.before";then cmp "$out/dependency-members.before" "$out/dependency-members.after" || failed=1;else failed=1;fi
+          if test -f "$out/dependencies.sha256";then cmp "$out/dependencies.sha256" "$out/dependencies-end.sha256" || failed=1;else failed=1;fi
+          git rev-parse HEAD > "$out/head-after.txt" || failed=1
+          if test -f "$out/head.txt";then cmp "$out/head.txt" "$out/head-after.txt" || failed=1;else failed=1;fi
+          git diff --exit-code HEAD > "$out/final-source-diff.log" || failed=1
+          git status --porcelain --untracked-files=all > "$out/final-status.txt";test ! -s "$out/final-status.txt" || failed=1
+          for transport in types old new classifier;do test -f "$out/$transport.transport" && test ! -s "$out/$transport.transport" || failed=1;done
+          while IFS= read -r -d '' file;do test ! -s "$file" || failed=1;done < <(find "$out" -type f -name '*.transport' -print0)
+          printf 'phase=original-host-focus-baseline\nsource=%s\ntypes=%s\nold=%s\nnew=%s\nclassifier=%s\nfinalHoldsExit=%s\n' "$GITHUB_SHA" '${{ steps.types.outcome }}' '${{ steps.old.outcome }}' '${{ steps.new.outcome }}' '${{ steps.classifier.outcome }}' "$failed" > "$out/stages.txt"
+          printf '%s\n' "$failed" > "$out/final-holds.exit"
+          (cd "$out";find . -type f ! -path ./evidence.sha256 -print0 | sort -z | xargs -0 sha256sum) > "$out/evidence.sha256"
+          exit "$failed"
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: site-menu-host-original-${{ github.run_id }}-${{ github.run_attempt }}
+          path: ${{ runner.temp }}/site-menu-host-original/
+          if-no-files-found: error
+          retention-days: 14
