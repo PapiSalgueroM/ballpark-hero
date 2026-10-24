@@ -1,0 +1,4 @@
+#!build
+#!serial
+prerender-head: node scripts/simPrerender.mjs 2>&1 | tail -25; exit ${PIPESTATUS[0]}
+prerender-revert: R=$PWD; git worktree add -q --detach /tmp/rr 39316b915 && ln -s "$R/node_modules" /tmp/rr/node_modules && node .rc/x/revertNews.mjs /tmp/rr && (cd /tmp/rr && node_modules/.bin/vite build > /tmp/rr-build.log 2>&1 || { tail -20 /tmp/rr-build.log; exit 2; }) && cd /tmp/rr && node scripts/simPrerender.mjs 2>&1 | tail -25; exit ${PIPESTATUS[0]}
