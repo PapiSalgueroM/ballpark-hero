@@ -1,0 +1,223 @@
+name: Site Menu game finder test-first RED baseline
+on:
+  push:
+    branches: [codex/site-menu-game-finder-20261024]
+    paths-ignore: ['docs/**']
+permissions:
+  contents: read
+concurrency:
+  group: site-menu-finder-red-${{ github.sha }}
+  cancel-in-progress: false
+env:
+  BASE_SOURCE: c68efda97a1f53643965e09fd8f3beaa92952dee
+  EXPECTED_PARENT: c68efda97a1f53643965e09fd8f3beaa92952dee
+  CI: '1'
+  SIM_NETWORK: offline
+  TZ: UTC
+jobs:
+  finder_red:
+    runs-on: ubuntu-latest
+    timeout-minutes: 35
+    defaults:
+      run:
+        shell: bash
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 16
+          persist-credentials: false
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: npm
+      - name: Exact two-new-file child of c68 with all existing application bytes held
+        run: |
+          set -euo pipefail
+          out="$RUNNER_TEMP/site-menu-finder-red";test ! -e "$out";mkdir "$out"
+          export MENU_HOST_OUT="$out";echo "MENU_HOST_OUT=$out" >> "$GITHUB_ENV"
+          for transport in types old new classifier finder finder-classifier;do : > "$out/$transport.transport";done
+          test "$GITHUB_REPOSITORY" = PapiSalgueroM/ballpark-hero
+          test "$GITHUB_REPOSITORY_ID" = 1195729679
+          test "$GITHUB_REF" = refs/heads/codex/site-menu-game-finder-20261024
+          test "$(git rev-parse HEAD)" = "$GITHUB_SHA"
+          git fetch --no-tags --depth=1 origin "$BASE_SOURCE" > "$out/base-fetch.log" 2>&1
+          git merge-base --is-ancestor "$BASE_SOURCE" "$GITHUB_SHA" > "$out/base-ancestry.log" 2>&1
+          git show -s --format=%P HEAD > "$out/parents.txt";test "$(cat "$out/parents.txt")" = "$EXPECTED_PARENT"
+          git diff --exit-code "$EXPECTED_PARENT" HEAD -- . ':!.github/workflows/site-menu-finder.yml' ':!src/test/SiteMenu.finder.test.tsx' > "$out/direct-two-paths.log"
+          git diff --name-only "$EXPECTED_PARENT" HEAD > "$out/direct-two-paths.txt"
+          printf '%s\n' .github/workflows/site-menu-finder.yml src/test/SiteMenu.finder.test.tsx | cmp - "$out/direct-two-paths.txt"
+          git diff --exit-code "$BASE_SOURCE" HEAD -- . ':!.github/workflows/site-menu-finder.yml' ':!src/test/SiteMenu.finder.test.tsx' > "$out/baseline-two-new-paths.log"
+          git show "$EXPECTED_PARENT:.github/workflows/site-menu-game-controls.yml" | cmp .github/workflows/site-menu-game-controls.yml -
+          node <<'NODE'
+          const fs=require('node:fs'),assert=require('node:assert/strict'),cp=require('node:child_process'),{createHash}=require('node:crypto'),out=process.env.MENU_HOST_OUT,hash=b=>createHash('sha256').update(b).digest('hex');
+          const gitPins={"src/App.tsx":"5d7e1ed074f4c0f695b0d5548b0045fc25029f6a","src/components/layout/SiteMenu.tsx":"010a22378dce26603446a3b0877e8ae01394e213","src/components/layout/SiteMenuPanel.tsx":"fa5f9f245a958b652e207dab34f607f1bad9e0e8","src/components/layout/Header.tsx":"dca65fdf9611fa57bcb0924319a2ea7acbd70b09","src/components/game/GameNavbar.tsx":"c21b9478f449cfc385c8a61cd04a532068fd06b4","src/index.css":"f574ef6fb926c1d40b9f61845053d72e9bcd4eb2","src/test/SiteMenu.test.tsx":"4523ed1fa241b765d6cbe4f71f5eb14a14db89ad","src/test/SiteMenu.lazy-loading.test.tsx":"ed251b20e28a40fe041f00515c70cbb554968814","src/test/SiteMenu.load-failure.test.tsx":"623c8ebb1839a4f3e21d9520daf5effaee83610a","src/test/SiteMenu.escape-loading.test.tsx":"89e9627296cf1854ced6c540852577fa49ff9805","src/test/SiteMenu.escape-failure.test.tsx":"b140aa236900793ff7c12aed88070a9b82e7c87e","scripts/qa/sharedChromePreload.cjs":"8efcfc18ba520e637193e25c2bb8d4b97dd88919","scripts/qa/playSharedChromeBaselineProbe.mjs":"be869583553d2cbb8bb2091da46b82423e6cba17","scripts/qa/runSharedChromeBaseline.mjs":"0ea0446c6feb391db7fb93d5fe0e3b053da2a216",".github/workflows/site-menu-game-controls.yml":"4a5401464f08dfeeebcd3bbd3897449af490c4ca","package.json":"2ff64986fb76ebc51b706f2fd24765768874008a","src/components/layout/siteMenuFocus.ts":"b868509de43131b269da72b61c42a47667033251","scripts/qa/playSharedChromeHostProbe.mjs":"0b7c57b381e0babcc25ce6f53639dfb6a0127ef3","scripts/qa/playSharedChromeGeometry.mjs":"2c96d60fab32535ca937aa367625e99577d090d7"},testPins=[{"target":"src/test/SiteMenu.host-focus.test.tsx","bytes":4210,"sha256":"365d062f609d47fb0a3b3874161f7025f9eadd3524e606a6df9609f067b484fa","gitBlob":"542d26787bf75b26d3ec302de7df49afce4533f3"},{"target":"src/test/SiteMenu.host-focus-loading.test.tsx","bytes":3726,"sha256":"710916224803753eb7a0380e710c8fd8b256f2422c58a3f9c3bffb205d2b0445","gitBlob":"fbb470342d0112fc6bddc701d1d76d278ce0c927"},{"target":"src/test/SiteMenu.host-takeover.test.tsx","bytes":3995,"sha256":"3e45f59b586b5118e93b4be4451e818c53bd37e730259fc9962c1fcf6e91ccb6","gitBlob":"1bde441aaf9b992e97912a1278edf15eadcb051a"}];
+          const baseGitPins={"src/App.tsx":"5d7e1ed074f4c0f695b0d5548b0045fc25029f6a","src/components/layout/Header.tsx":"dca65fdf9611fa57bcb0924319a2ea7acbd70b09","src/components/game/GameNavbar.tsx":"c21b9478f449cfc385c8a61cd04a532068fd06b4","src/index.css":"f574ef6fb926c1d40b9f61845053d72e9bcd4eb2","src/components/layout/SiteMenu.tsx":"010a22378dce26603446a3b0877e8ae01394e213","src/components/layout/SiteMenuPanel.tsx":"fa5f9f245a958b652e207dab34f607f1bad9e0e8","src/components/layout/siteMenuFocus.ts":"b868509de43131b269da72b61c42a47667033251"},productPins=[{"target":"src/App.tsx","bytes":35834,"sha256":"59c629fc0e983c81608f8039eacac2d0bd14579bb26a24e05eef395dcc90a243","gitBlob":"5d7e1ed074f4c0f695b0d5548b0045fc25029f6a"},{"target":"src/components/layout/Header.tsx","bytes":11454,"sha256":"cd3cf85d6e41487f652dd21c034dea339feb6584dd9e9090c72156e26a387623","gitBlob":"dca65fdf9611fa57bcb0924319a2ea7acbd70b09"},{"target":"src/components/game/GameNavbar.tsx","bytes":13292,"sha256":"8cba2252b718a3eae8187ab58fde2b398384442884d943b89415deac32af4acc","gitBlob":"c21b9478f449cfc385c8a61cd04a532068fd06b4"},{"target":"src/index.css","bytes":18125,"sha256":"4fec0dd645ad93ada2ab81b133f1ca87275a5524e449f3282277da8ea70ddce3","gitBlob":"f574ef6fb926c1d40b9f61845053d72e9bcd4eb2"},{"target":"src/components/layout/SiteMenu.tsx","bytes":4142,"sha256":"3e65d0c62f5fe54f133ec93517fd4bed672d1a7640121a1b6e91eba8b07576c3","gitBlob":"010a22378dce26603446a3b0877e8ae01394e213"},{"target":"src/components/layout/SiteMenuPanel.tsx","bytes":3361,"sha256":"d0e1ea32843bb7b6100d30e09ff0daf91a62790aee3ca63a4739133a017597bb","gitBlob":"fa5f9f245a958b652e207dab34f607f1bad9e0e8"},{"target":"src/components/layout/siteMenuFocus.ts","bytes":696,"sha256":"82bec6d228e10c62ee2ad7eda02c4b29a72daa08e91cadce80c2fe33fd417994","gitBlob":"b868509de43131b269da72b61c42a47667033251"}];
+          for(const [file,pin] of Object.entries(baseGitPins))assert.equal(cp.execFileSync('git',['rev-parse',process.env.BASE_SOURCE+':'+file],{encoding:'utf8'}).trim(),pin,file);
+          for(const [file,pin] of Object.entries(gitPins))assert.equal(cp.execFileSync('git',['hash-object',file],{encoding:'utf8'}).trim(),pin,file);
+          for(const pin of productPins){const body=fs.readFileSync(pin.target);assert.equal(body.length,pin.bytes);assert.equal(hash(body),pin.sha256);assert.equal(cp.execFileSync('git',['hash-object',pin.target],{encoding:'utf8'}).trim(),pin.gitBlob);}
+          const actualTests=[];
+          const finderPin={"target":"src/test/SiteMenu.finder.test.tsx","bytes":15821,"sha256":"91b0365a2b637c20947b9c996a5d24551c6c95105988a3fa9e261ee9714bee8b","gitBlob":"dca14996069a9a82edf63f08b8abbf691385f362"};
+          for(const pin of testPins){const body=fs.readFileSync(pin.target);assert.equal(body.length,pin.bytes);assert.equal(hash(body),pin.sha256);assert.equal(cp.execFileSync('git',['hash-object',pin.target],{encoding:'utf8'}).trim(),pin.gitBlob);actualTests.push(pin);}
+          {const body=fs.readFileSync(finderPin.target);assert.equal(body.length,finderPin.bytes);assert.equal(hash(body),finderPin.sha256);assert.equal(cp.execFileSync('git',['hash-object',finderPin.target],{encoding:'utf8'}).trim(),finderPin.gitBlob);const exists=cp.spawnSync('git',['cat-file','-e',process.env.BASE_SOURCE+':'+finderPin.target],{encoding:'utf8'});assert.equal(exists.error,undefined);assert.equal(exists.signal,null);assert.equal(exists.status,128,'Finder test must be new against c68');}
+          const workflow='.github/workflows/site-menu-finder.yml',gitBlob=cp.execFileSync('git',['rev-parse','HEAD:'+workflow],{encoding:'utf8'}).trim();assert.equal(cp.execFileSync('git',['hash-object',workflow],{encoding:'utf8'}).trim(),gitBlob);
+          const priorWorkflow=cp.spawnSync('git',['cat-file','-e',process.env.BASE_SOURCE+':'+workflow],{encoding:'utf8'});assert.equal(priorWorkflow.error,undefined);assert.equal(priorWorkflow.signal,null);assert.equal(priorWorkflow.status,128,'Finder workflow must be new against c68');
+          fs.writeFileSync(out+'/source-binding.json',JSON.stringify({phase:'menu-finder-test-first-red-baseline',source:process.env.GITHUB_SHA,parent:process.env.EXPECTED_PARENT,baseSource:process.env.BASE_SOURCE,tree:cp.execFileSync('git',['rev-parse','HEAD^{tree}'],{encoding:'utf8'}).trim(),run:process.env.GITHUB_RUN_ID,attempt:process.env.GITHUB_RUN_ATTEMPT,workflow:{file:workflow,gitBlobSha1:gitBlob,sha256:hash(fs.readFileSync(workflow))},selectedSourceGitPins:gitPins,baseApplicationGitPins:baseGitPins,products:productPins,tests:actualTests,finderTest:finderPin,expectedFinderCases:8,expectedFinderOwnedFailures:8,productChanged:false,applicationQualified:false,productMerged:false,browserExecuted:false,oldBaselineWorkflowByteHeld:true},null,2)+'\n',{flag:'wx'});
+          NODE
+          git rev-parse HEAD > "$out/head.txt";git rev-parse 'HEAD^{tree}' > "$out/tree.txt"
+          printf '%s\n' "$GITHUB_RUN_ID" > "$out/run-id.txt";printf '%s\n' "$GITHUB_RUN_ATTEMPT" > "$out/run-attempt.txt"
+          git rev-parse HEAD:.github/workflows/site-menu-finder.yml > "$out/workflow-blob.txt"
+          sha256sum .github/workflows/site-menu-finder.yml > "$out/workflow.sha256"
+          git ls-files -z | sort -z > "$out/source-members.before"
+          git ls-files -z | sort -z | xargs -0 sha256sum > "$out/source-before.sha256"
+          git diff --exit-code HEAD > "$out/source-clean-before.log"
+          test -z "$(git status --porcelain --untracked-files=all)"
+      - name: Locked installation and full dependency inventory
+        timeout-minutes: 10
+        run: |
+          set -euo pipefail
+          out="$MENU_HOST_OUT"
+          npm ci > "$out/install.log" 2>&1
+          find node_modules -path node_modules/.vite -prune -o -type f -print0 | sort -z > "$out/dependency-members.before"
+          find node_modules -path node_modules/.vite -prune -o -type f -print0 | sort -z | xargs -0 sha256sum > "$out/dependencies.sha256"
+      - name: Actual app types on the unchanged c68 Menu application
+        id: types
+        run: |
+          set -euo pipefail
+          out="$MENU_HOST_OUT";export NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs"
+          status=0
+          SIM_OFFLINE_RECEIPT="$out/types.transport" timeout --signal=TERM --kill-after=15s 5m node_modules/.bin/tsc --noEmit -p tsconfig.app.json > "$out/types.log" 2>&1 || status=$?
+          printf '%s\n' "$status" > "$out/types.exit";test "$status" -eq 0
+          test ! -s "$out/types.transport"
+      - name: Ten held Menu outcomes on the actual candidate
+        id: old
+        run: |
+          set -euo pipefail
+          out="$MENU_HOST_OUT";export NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs"
+          status=0
+          SIM_OFFLINE_RECEIPT="$out/old.transport" timeout --signal=TERM --kill-after=15s 8m node_modules/.bin/vitest run src/test/SiteMenu.test.tsx src/test/SiteMenu.lazy-loading.test.tsx src/test/SiteMenu.load-failure.test.tsx src/test/SiteMenu.escape-loading.test.tsx src/test/SiteMenu.escape-failure.test.tsx --maxWorkers=1 --no-file-parallelism --reporter=default --reporter=json --outputFile="$out/old.json" > "$out/old.log" 2>&1 || status=$?
+          printf '%s\n' "$status" > "$out/old.exit";test "$status" -eq 0
+          test ! -s "$out/old.transport"
+      - name: Six held host cases must all pass
+        id: new
+        run: |
+          set -euo pipefail
+          out="$MENU_HOST_OUT";export NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs"
+          status=0
+          SIM_OFFLINE_RECEIPT="$out/new.transport" timeout --signal=TERM --kill-after=15s 8m node_modules/.bin/vitest run src/test/SiteMenu.host-focus.test.tsx src/test/SiteMenu.host-focus-loading.test.tsx src/test/SiteMenu.host-takeover.test.tsx --maxWorkers=1 --no-file-parallelism --reporter=default --reporter=json --outputFile="$out/new.json" > "$out/new.log" 2>&1 || status=$?
+          printf '%s\n' "$status" > "$out/new.exit";test "$status" -eq 0
+          test ! -s "$out/new.transport"
+      - name: Exact sixteen named passes with no setup or runtime error credit
+        id: classifier
+        run: |
+          set -euo pipefail
+          out="$MENU_HOST_OUT";export NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs"
+          classifier=0
+          SIM_OFFLINE_RECEIPT="$out/classifier.transport" node <<'NODE' > "$out/classifier.log" 2>&1 || classifier=$?
+          const fs=require('node:fs'),assert=require('node:assert/strict'),path=require('node:path'),out=process.env.MENU_HOST_OUT;
+          const specs={"old":[{"file":"src/test/SiteMenu.test.tsx","ancestor":"global top-left SiteMenu with the actual Sheet and router","expectations":[{"title":"opens a named dialog with the real site links and all six lightweight sports hubs","status":"passed","marker":null},{"title":"lets real Radix Escape dismiss and return focus to the opening trigger","status":"passed","marker":null},{"title":"selects a real internal link, changes router location and closes","status":"passed","marker":null},{"title":"marks only the normalized current route and closes when that current link is selected","status":"passed","marker":null},{"title":"dismisses from the actual Sheet overlay and returns focus","status":"passed","marker":null},{"title":"closes on external search/hash and history key changes while the normalized path stays the same","status":"passed","marker":null}]},{"file":"src/test/SiteMenu.lazy-loading.test.tsx","ancestor":null,"expectations":[{"title":"cancels a pending real panel import without a late dialog, then reopens the actual healthy panel","status":"passed","marker":null}]},{"file":"src/test/SiteMenu.load-failure.test.tsx","ancestor":null,"expectations":[{"title":"shows truthful load failure with Search and Cancel, returns focus and never opens a dialog","status":"passed","marker":null}]},{"file":"src/test/SiteMenu.escape-loading.test.tsx","ancestor":null,"expectations":[{"title":"dismisses a pending real menu import with Escape from the trigger, without a late dialog","status":"passed","marker":null}]},{"file":"src/test/SiteMenu.escape-failure.test.tsx","ancestor":null,"expectations":[{"title":"dismisses an honest menu load failure with Escape from the trigger and each fallback control, without an automatic retry","status":"passed","marker":null}]}],"new":[{"file":"src/test/SiteMenu.host-focus.test.tsx","ancestor":null,"expectations":[{"title":"returns real Sheet escape focus to the visible host after the fallback is hidden","status":"passed","marker":null},{"title":"returns real Sheet close focus to the visible host after the fallback is hidden","status":"passed","marker":null},{"title":"keeps focus with the opening trigger while it remains visible","status":"passed","marker":null},{"title":"retains the original trigger fallback when no visible host exists","status":"passed","marker":null}]},{"file":"src/test/SiteMenu.host-focus-loading.test.tsx","ancestor":null,"expectations":[{"title":"returns pending import Escape focus to the arrived host and never opens a late Sheet","status":"passed","marker":null}]},{"file":"src/test/SiteMenu.host-takeover.test.tsx","ancestor":null,"expectations":[{"title":"opens only one real Sheet when the arrived host takes over a pending fallback","status":"passed","marker":null}]}]};
+          const forbidden=/Unhandled\s+(?:Errors?|Rejections?)|Uncaught\s+Exceptions?|Failed to resolve import|Cannot find (?:module|package)|No test files found|ReferenceError|TypeError|SyntaxError|TimeoutError|Test timed out|Hook timed out/i;
+          const runtimeKeys=['numRuntimeErrorTestSuites','numRuntimeErrors','numUnhandledErrors','unhandledErrorsCount','numErrors'];
+          const admissions=[];
+          for(const [label,total,passes,failures,success] of [['old',10,10,0,true],['new',6,6,0,true]]){
+            const r=JSON.parse(fs.readFileSync(out+'/'+label+'.json','utf8')),groups=specs[label],seenFiles=new Set(),cases=[];
+            assert.equal(fs.readFileSync(out+'/'+label+'.exit','utf8').trim(),'0');
+            assert.equal(r.success,success);assert.equal(r.numTotalTests,total);assert.equal(r.numPassedTests,passes);assert.equal(r.numFailedTests,failures);assert.equal(r.numPendingTests,0);assert.equal(r.numTodoTests,0);
+            assert.equal(r.testResults.length,groups.length);
+            for(const suite of r.testResults){
+              const group=groups.find(x=>path.resolve(x.file)===path.resolve(suite.name));assert(group,'Unowned suite '+suite.name);assert(!seenFiles.has(group.file));seenFiles.add(group.file);
+              const expectedFailures=group.expectations.filter(x=>x.status==='failed').length;
+              assert.equal(suite.status,expectedFailures?'failed':'passed');assert.equal(suite.assertionResults.length,group.expectations.length);const seen=new Set();
+              if('message'in suite){assert.equal(typeof suite.message,'string');assert.doesNotMatch(suite.message,forbidden);}
+              for(const row of suite.assertionResults){
+                const expected=group.expectations.find(x=>x.title===row.title);assert(expected,'Unowned case '+row.title);assert(!seen.has(row.title));seen.add(row.title);
+                const ancestors=group.ancestor?[group.ancestor]:[];
+                assert.deepEqual(row.ancestorTitles,ancestors);assert.equal(row.fullName,[...ancestors,row.title].join(' '));assert.equal(row.status,expected.status);assert(Array.isArray(row.failureMessages));
+                if(expected.status==='failed'){
+                  assert.equal(row.failureMessages.length,1);const message=row.failureMessages[0];assert.equal(typeof message,'string');assert.match(message,/\bAssertionError\b/);assert(message.includes(expected.marker),'Missing owned marker '+expected.marker);assert.doesNotMatch(message,forbidden);
+                  cases.push({file:group.file,fullName:row.fullName,status:row.status,ownedAssertionMarker:expected.marker,actualFailureName:'AssertionError'});
+                }else{
+                  assert.deepEqual(row.failureMessages,[]);cases.push({file:group.file,fullName:row.fullName,status:row.status});
+                }
+              }
+              assert.equal(seen.size,group.expectations.length);
+            }
+            assert.equal(seenFiles.size,groups.length);
+            for(const key of runtimeKeys)if(key in r)assert.equal(r[key],0,key);
+            if('unhandledErrors'in r)assert.deepEqual(r.unhandledErrors,[]);
+            if('classificationErrors'in r){if(Array.isArray(r.classificationErrors))assert.deepEqual(r.classificationErrors,[]);else assert.equal(r.classificationErrors,0);}
+            const log=fs.readFileSync(out+'/'+label+'.log','utf8');assert.doesNotMatch(log,forbidden);
+            admissions.push({label,reportedTests:total,passed:passes,failed:failures,cases,observedRuntimeCounters:Object.fromEntries(runtimeKeys.filter(k=>k in r).map(k=>[k,r[k]])),absentRuntimeCountersUnknown:runtimeKeys.filter(k=>!(k in r)),unhandledErrors:'unhandledErrors'in r?r.unhandledErrors:'UNKNOWN_ABSENT',classificationErrors:'classificationErrors'in r?r.classificationErrors:'UNKNOWN_ABSENT'});
+          }
+          assert.equal(fs.readFileSync(out+'/types.exit','utf8').trim(),'0');
+          fs.writeFileSync(out+'/host-functional-admission.json',JSON.stringify({status:'MENU_HOST_FUNCTIONAL_ALL_16_PASSED',source:process.env.GITHUB_SHA,parent:process.env.EXPECTED_PARENT,baseSource:process.env.BASE_SOURCE,run:process.env.GITHUB_RUN_ID,attempt:process.env.GITHUB_RUN_ATTEMPT,oldCases:10,newCases:6,expectedNewPasses:6,ownedNewFailures:0,totalPassedCases:16,admissions,applicationQualified:false,productMerged:false,browserQualified:false,livePublished:false},null,2)+'\n',{flag:'wx'});
+          NODE
+          printf '%s\n' "$classifier" > "$out/classifier.exit";test "$classifier" -eq 0
+          test ! -s "$out/classifier.transport"
+      - name: Eight actual finder cases must reach the owned missing-field RED
+        id: finder
+        run: |
+          set -euo pipefail
+          out="$MENU_HOST_OUT";export NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs"
+          status=0
+          SIM_OFFLINE_RECEIPT="$out/finder.transport" timeout --signal=TERM --kill-after=15s 8m node_modules/.bin/vitest run src/test/SiteMenu.finder.test.tsx --maxWorkers=1 --no-file-parallelism --reporter=default --reporter=json --outputFile="$out/finder.json" > "$out/finder.log" 2>&1 || status=$?
+          printf '%s\n' "$status" > "$out/finder.exit";test "$status" -eq 1
+          test ! -s "$out/finder.transport"
+      - name: Admit only eight exact native missing-field AssertionErrors
+        id: finder_classifier
+        run: |
+          set -euo pipefail
+          out="$MENU_HOST_OUT";export NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs"
+          classifier=0
+          SIM_OFFLINE_RECEIPT="$out/finder-classifier.transport" node <<'NODE' > "$out/finder-classifier.log" 2>&1 || classifier=$?
+          const fs=require('node:fs'),assert=require('node:assert/strict'),path=require('node:path'),out=process.env.MENU_HOST_OUT;
+          const expectedTitles=["opens without editable autofocus and keeps original navigation","ranks actual catalog games and updates results as query changes","shows honest no results and clears without navigating","passes the full query to the existing search page","navigates to a game and closes including the current game","dismisses from the finder and returns visible trigger focus","clears the finder after close and a real route-key change","keeps draft searches out of the location and saved storage"],ancestor='Menu game finder',marker='MENU_FINDER_FIELD_PRESENT',file='src/test/SiteMenu.finder.test.tsx';
+          const forbidden=/Unhandled\s+(?:Errors?|Rejections?)|Uncaught\s+Exceptions?|Failed to resolve import|Cannot find (?:module|package)|No test files found|ReferenceError|TypeError|SyntaxError|TimeoutError|Test timed out|Hook timed out/i;
+          const runtimeKeys=['numRuntimeErrorTestSuites','numRuntimeErrors','numUnhandledErrors','unhandledErrorsCount','numErrors'];
+          assert.equal(fs.readFileSync(out+'/types.exit','utf8').trim(),'0');assert.equal(fs.readFileSync(out+'/old.exit','utf8').trim(),'0');assert.equal(fs.readFileSync(out+'/new.exit','utf8').trim(),'0');assert.equal(fs.readFileSync(out+'/classifier.exit','utf8').trim(),'0');
+          const held=JSON.parse(fs.readFileSync(out+'/host-functional-admission.json','utf8'));assert.equal(held.status,'MENU_HOST_FUNCTIONAL_ALL_16_PASSED');assert.equal(held.source,process.env.GITHUB_SHA);assert.equal(held.totalPassedCases,16);
+          assert.equal(fs.readFileSync(out+'/finder.exit','utf8').trim(),'1');
+          const r=JSON.parse(fs.readFileSync(out+'/finder.json','utf8'));assert.equal(r.success,false);assert.equal(r.numTotalTests,8);assert.equal(r.numPassedTests,0);assert.equal(r.numFailedTests,8);assert.equal(r.numPendingTests,0);assert.equal(r.numTodoTests,0);assert.equal(r.testResults.length,1);
+          const suite=r.testResults[0];assert.equal(path.resolve(suite.name),path.resolve(file));assert.equal(suite.status,'failed');assert.equal(suite.assertionResults.length,8);if('message'in suite){assert.equal(typeof suite.message,'string');assert.doesNotMatch(suite.message,forbidden);}
+          const seen=new Set(),cases=[];for(const row of suite.assertionResults){assert(expectedTitles.includes(row.title),'Unowned finder case '+row.title);assert(!seen.has(row.title),'Duplicate finder case '+row.title);seen.add(row.title);assert.deepEqual(row.ancestorTitles,[ancestor]);assert.equal(row.fullName,ancestor+' '+row.title);assert.equal(row.status,'failed');assert(Array.isArray(row.failureMessages));assert.equal(row.failureMessages.length,1);const message=row.failureMessages[0];assert.equal(typeof message,'string');assert.match(message,/\bAssertionError\b/);assert(message.includes(marker),'Missing owned finder marker');assert.doesNotMatch(message,forbidden);cases.push({file,fullName:row.fullName,status:row.status,ownedAssertionMarker:marker,actualFailureName:'AssertionError'});}
+          assert.equal(seen.size,expectedTitles.length);for(const title of expectedTitles)assert(seen.has(title));for(const key of runtimeKeys)if(key in r)assert.equal(r[key],0,key);if('unhandledErrors'in r)assert.deepEqual(r.unhandledErrors,[]);if('classificationErrors'in r){if(Array.isArray(r.classificationErrors))assert.deepEqual(r.classificationErrors,[]);else assert.equal(r.classificationErrors,0);}
+          assert.doesNotMatch(fs.readFileSync(out+'/finder.log','utf8'),forbidden);
+          fs.writeFileSync(out+'/finder-red-admission.json',JSON.stringify({status:'MENU_FINDER_TEST_FIRST_8_OWNED_RED',source:process.env.GITHUB_SHA,parent:process.env.EXPECTED_PARENT,baseSource:process.env.BASE_SOURCE,run:process.env.GITHUB_RUN_ID,attempt:process.env.GITHUB_RUN_ATTEMPT,heldMenuPasses:16,finderCases:8,ownedFinderFailures:8,finderPasses:0,cases,observedRuntimeCounters:Object.fromEntries(runtimeKeys.filter(k=>k in r).map(k=>[k,r[k]])),absentRuntimeCountersUnknown:runtimeKeys.filter(k=>!(k in r)),unhandledErrors:'unhandledErrors'in r?r.unhandledErrors:'UNKNOWN_ABSENT',classificationErrors:'classificationErrors'in r?r.classificationErrors:'UNKNOWN_ABSENT',productChanged:false,applicationQualified:false,productFixed:false,browserExecuted:false,livePublished:false},null,2)+'\n',{flag:'wx'});
+          NODE
+          printf '%s\n' "$classifier" > "$out/finder-classifier.exit";test "$classifier" -eq 0
+          test ! -s "$out/finder-classifier.transport"
+      - name: Always preserve all raw results and physical holds
+        if: always()
+        run: |
+          set -euo pipefail
+          out="$RUNNER_TEMP/site-menu-finder-red";mkdir -p "$out";failed=0
+          for manifest in source-before dependencies;do
+            if test -f "$out/$manifest.sha256";then sha256sum --check "$out/$manifest.sha256" > "$out/final-$manifest-hold.log" 2>&1 || failed=1;else failed=1;fi
+          done
+          git ls-files -z | sort -z > "$out/source-members.after" || failed=1
+          git ls-files -z | sort -z | xargs -0 sha256sum > "$out/source-after.sha256" || failed=1
+          if test -f "$out/source-members.before";then cmp "$out/source-members.before" "$out/source-members.after" || failed=1;else failed=1;fi
+          if test -f "$out/source-before.sha256";then cmp "$out/source-before.sha256" "$out/source-after.sha256" || failed=1;else failed=1;fi
+          if test -d node_modules;then
+            find node_modules -path node_modules/.vite -prune -o -type f -print0 | sort -z > "$out/dependency-members.after" || failed=1
+            find node_modules -path node_modules/.vite -prune -o -type f -print0 | sort -z | xargs -0 sha256sum > "$out/dependencies-end.sha256" || failed=1
+          else failed=1;fi
+          if test -f "$out/dependency-members.before";then cmp "$out/dependency-members.before" "$out/dependency-members.after" || failed=1;else failed=1;fi
+          if test -f "$out/dependencies.sha256";then cmp "$out/dependencies.sha256" "$out/dependencies-end.sha256" || failed=1;else failed=1;fi
+          git rev-parse HEAD > "$out/head-after.txt" || failed=1
+          if test -f "$out/head.txt";then cmp "$out/head.txt" "$out/head-after.txt" || failed=1;else failed=1;fi
+          git diff --exit-code HEAD > "$out/final-source-diff.log" || failed=1
+          git status --porcelain --untracked-files=all > "$out/final-status.txt";test ! -s "$out/final-status.txt" || failed=1
+          for transport in types old new classifier finder finder-classifier;do test -f "$out/$transport.transport" && test ! -s "$out/$transport.transport" || failed=1;done
+          while IFS= read -r -d '' file;do test ! -s "$file" || failed=1;done < <(find "$out" -type f -name '*.transport' -print0)
+          printf 'phase=menu-finder-test-first-red-baseline\nsource=%s\ntypes=%s\nold=%s\nnew=%s\nclassifier=%s\nfinder=%s\nfinderClassifier=%s\nfinalHoldsExit=%s\n' "$GITHUB_SHA" '${{ steps.types.outcome }}' '${{ steps.old.outcome }}' '${{ steps.new.outcome }}' '${{ steps.classifier.outcome }}' '${{ steps.finder.outcome }}' '${{ steps.finder_classifier.outcome }}' "$failed" > "$out/stages.txt"
+          printf '%s\n' "$failed" > "$out/final-holds.exit"
+          (cd "$out";find . -type f ! -path ./evidence.sha256 -print0 | sort -z | xargs -0 sha256sum) > "$out/evidence.sha256"
+          exit "$failed"
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: site-menu-finder-red-${{ github.run_id }}-${{ github.run_attempt }}
+          path: ${{ runner.temp }}/site-menu-finder-red/
+          if-no-files-found: error
+          retention-days: 14
+
