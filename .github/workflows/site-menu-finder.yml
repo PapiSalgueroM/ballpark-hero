@@ -10,7 +10,7 @@ concurrency:
   cancel-in-progress: false
 env:
   BASE_SOURCE: c68efda97a1f53643965e09fd8f3beaa92952dee
-  EXPECTED_PARENT: 43bd2cef7ee62639d09259e8aa2b991aa54d22a9
+  EXPECTED_PARENT: 50945894d77ea163fde99aa294bad34693924849
   CI: '1'
   SIM_NETWORK: offline
   TZ: UTC
@@ -30,7 +30,7 @@ jobs:
         with:
           node-version: 24
           cache: npm
-      - name: Exact five-path focus repair child with selected cold-cut and lazy navigation focus
+      - name: Exact two-path route diagnostic child with all selected production held
         run: |
           set -euo pipefail
           out="$RUNNER_TEMP/site-menu-finder-green";test ! -e "$out";mkdir "$out"
@@ -43,9 +43,9 @@ jobs:
           git fetch --no-tags --depth=1 origin "$BASE_SOURCE" > "$out/base-fetch.log" 2>&1
           git merge-base --is-ancestor "$BASE_SOURCE" "$GITHUB_SHA" > "$out/base-ancestry.log" 2>&1
           git show -s --format=%P HEAD > "$out/parents.txt";test "$(cat "$out/parents.txt")" = "$EXPECTED_PARENT"
-          git diff --exit-code "$EXPECTED_PARENT" HEAD -- . ':!.github/workflows/site-menu-finder.yml' ':!src/components/layout/SiteMenu.tsx' ':!src/components/layout/SiteMenuPanel.tsx' ':!src/components/layout/siteMenuNavigationFocus.ts' ':!src/test/SiteMenu.route-focus.test.tsx' > "$out/direct-five-paths.log"
-          git diff --name-only "$EXPECTED_PARENT" HEAD > "$out/direct-five-paths.txt"
-          printf '%s\n' .github/workflows/site-menu-finder.yml src/components/layout/SiteMenu.tsx src/components/layout/SiteMenuPanel.tsx src/components/layout/siteMenuNavigationFocus.ts src/test/SiteMenu.route-focus.test.tsx | cmp - "$out/direct-five-paths.txt"
+          git diff --exit-code "$EXPECTED_PARENT" HEAD -- . ':!.github/workflows/site-menu-finder.yml' ':!src/test/SiteMenu.route-focus.test.tsx' > "$out/direct-two-paths.log"
+          git diff --name-only "$EXPECTED_PARENT" HEAD > "$out/direct-two-paths.txt"
+          printf '%s\n' .github/workflows/site-menu-finder.yml src/test/SiteMenu.route-focus.test.tsx | cmp - "$out/direct-two-paths.txt"
           git diff --exit-code "$BASE_SOURCE" HEAD -- . ':!.github/workflows/site-menu-finder.yml' ':!src/components/layout/SiteMenu.tsx' ':!src/components/layout/SiteMenuPanel.tsx' ':!src/components/layout/siteMenuNavigationFocus.ts' ':!src/test/SiteMenu.finder.test.tsx' ':!src/test/SiteMenu.route-focus.test.tsx' ':!scripts/qa/playSiteMenuFinder.mjs' > "$out/cumulative-seven-paths.log"
           git diff --name-only "$BASE_SOURCE" HEAD > "$out/cumulative-seven-paths.txt"
           printf '%s\n' .github/workflows/site-menu-finder.yml scripts/qa/playSiteMenuFinder.mjs src/components/layout/SiteMenu.tsx src/components/layout/SiteMenuPanel.tsx src/components/layout/siteMenuNavigationFocus.ts src/test/SiteMenu.finder.test.tsx src/test/SiteMenu.route-focus.test.tsx | cmp - "$out/cumulative-seven-paths.txt"
@@ -62,9 +62,9 @@ jobs:
           const finderPin={"target":"src/test/SiteMenu.finder.test.tsx","bytes":15821,"sha256":"91b0365a2b637c20947b9c996a5d24551c6c95105988a3fa9e261ee9714bee8b","gitBlob":"dca14996069a9a82edf63f08b8abbf691385f362"};
           for(const pin of testPins){const body=fs.readFileSync(pin.target);assert.equal(body.length,pin.bytes);assert.equal(hash(body),pin.sha256);assert.equal(cp.execFileSync('git',['hash-object',pin.target],{encoding:'utf8'}).trim(),pin.gitBlob);actualTests.push(pin);}
           {const body=fs.readFileSync(finderPin.target);assert.equal(body.length,finderPin.bytes);assert.equal(hash(body),finderPin.sha256);assert.equal(cp.execFileSync('git',['hash-object',finderPin.target],{encoding:'utf8'}).trim(),finderPin.gitBlob);const exists=cp.spawnSync('git',['cat-file','-e',process.env.BASE_SOURCE+':'+finderPin.target],{encoding:'utf8'});assert.equal(exists.error,undefined);assert.equal(exists.signal,null);assert.equal(exists.status,128,'Finder test must be new against c68');}
-          const routePin={"target":"src/test/SiteMenu.route-focus.test.tsx","bytes":8507,"sha256":"a6bd39d439a10c6d876f47221a1fb110b25eff0f70a8e0357eb38ff23fa86d01","gitBlob":"d16e054349957b7a198f66001243c752a2d3c7de"},newNavigationPin={"target":"src/components/layout/siteMenuNavigationFocus.ts","bytes":3855,"sha256":"9f6d8685e515765fa11bb560d709d075916d1b769c4fff8d59c8afa41b505e16","gitBlob":"3c795d0726cf23067c1be9ffd25efbeed5c44d48"};
+          const routePin={"target":"src/test/SiteMenu.route-focus.test.tsx","bytes":8567,"sha256":"212fbeed55d46c1aeeb257cf30de472762065da659a326c1301783a7c8f2a399","gitBlob":"b2be3343c4685f943b7c0eba03662dc99a51576f"},newNavigationPin={"target":"src/components/layout/siteMenuNavigationFocus.ts","bytes":3855,"sha256":"9f6d8685e515765fa11bb560d709d075916d1b769c4fff8d59c8afa41b505e16","gitBlob":"3c795d0726cf23067c1be9ffd25efbeed5c44d48"};
           {const body=fs.readFileSync(routePin.target);assert.equal(body.length,routePin.bytes);assert.equal(hash(body),routePin.sha256);assert.equal(cp.execFileSync('git',['hash-object',routePin.target],{encoding:'utf8'}).trim(),routePin.gitBlob);}
-          for(const pin of [newNavigationPin,routePin])for(const ref of [process.env.BASE_SOURCE,process.env.EXPECTED_PARENT]){const prior=cp.spawnSync('git',['cat-file','-e',ref+':'+pin.target],{encoding:'utf8'});assert.equal(prior.error,undefined);assert.equal(prior.signal,null);assert.equal(prior.status,128,pin.target+' must be ADDED against '+ref);}
+          for(const pin of [newNavigationPin,routePin])for(const ref of [process.env.BASE_SOURCE,'43bd2cef7ee62639d09259e8aa2b991aa54d22a9']){const prior=cp.spawnSync('git',['cat-file','-e',ref+':'+pin.target],{encoding:'utf8'});assert.equal(prior.error,undefined);assert.equal(prior.signal,null);assert.equal(prior.status,128,pin.target+' must be ADDED against '+ref);}
           const workflow='.github/workflows/site-menu-finder.yml',gitBlob=cp.execFileSync('git',['rev-parse','HEAD:'+workflow],{encoding:'utf8'}).trim();assert.equal(cp.execFileSync('git',['hash-object',workflow],{encoding:'utf8'}).trim(),gitBlob);
           const priorWorkflow=cp.spawnSync('git',['cat-file','-e',process.env.BASE_SOURCE+':'+workflow],{encoding:'utf8'});assert.equal(priorWorkflow.error,undefined);assert.equal(priorWorkflow.signal,null);assert.equal(priorWorkflow.status,128,'Finder workflow must be new against c68');
           fs.writeFileSync(out+'/source-binding.json',JSON.stringify({phase:'menu-finder-route-functional-green-candidate',source:process.env.GITHUB_SHA,parent:process.env.EXPECTED_PARENT,baseSource:process.env.BASE_SOURCE,tree:cp.execFileSync('git',['rev-parse','HEAD^{tree}'],{encoding:'utf8'}).trim(),run:process.env.GITHUB_RUN_ID,attempt:process.env.GITHUB_RUN_ATTEMPT,workflow:{file:workflow,gitBlobSha1:gitBlob,sha256:hash(fs.readFileSync(workflow))},selectedSourceGitPins:gitPins,baseApplicationGitPins:baseGitPins,products:productPins,tests:actualTests,finderTest:finderPin,routeFocusTest:routePin,newNavigationHelper:newNavigationPin,expectedTotalPassedCases:26,expectedRouteFocusCases:2,expectedSourceFiles:5333,sourceCountDerivation:'admitted43bd5331 plus new lazy helper and new route-focus unit',expectedFinderCases:8,expectedFinderPasses:8,expectedFinderOwnedFailures:0,productChanged:true,applicationQualified:false,productMerged:false,browserExecuted:false,oldBaselineWorkflowByteHeld:true},null,2)+'\n',{flag:'wx'});
@@ -195,9 +195,16 @@ jobs:
         run: |
           set -euo pipefail
           out="$MENU_HOST_OUT";export NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs"
-          status=0
-          SIM_OFFLINE_RECEIPT="$out/route.transport" timeout --signal=TERM --kill-after=15s 8m node_modules/.bin/vitest run src/test/SiteMenu.route-focus.test.tsx --maxWorkers=1 --no-file-parallelism --reporter=default --reporter=json --outputFile="$out/route.json" > "$out/route.log" 2>&1 || status=$?
-          printf '%s\n' "$status" > "$out/route.exit";test "$status" -eq 0
+          set +e
+          SIM_OFFLINE_RECEIPT="$out/route.transport" timeout --signal=TERM --kill-after=15s 8m node_modules/.bin/vitest run src/test/SiteMenu.route-focus.test.tsx --maxWorkers=1 --no-file-parallelism --reporter=default --reporter=json --outputFile="$out/route.json" 2>&1 | tee "$out/route.log"
+          route_statuses=("${PIPESTATUS[@]}")
+          set -e
+          test "${#route_statuses[@]}" -eq 2
+          printf '%s\n' "${route_statuses[0]}" > "$out/route.exit"
+          printf '%s\n' "${route_statuses[1]}" > "$out/route-tee.exit"
+          printf 'vitestTimeoutExit=%s\nteeExit=%s\n' "${route_statuses[0]}" "${route_statuses[1]}" > "$out/route-pipeline-status.txt"
+          test "${route_statuses[1]}" -eq 0
+          test "${route_statuses[0]}" -eq 0
           test ! -s "$out/route.transport"
       - name: Admit only twenty-six exact named Menu and route-focus passes
         id: route_classifier
@@ -280,7 +287,7 @@ jobs:
       - uses: actions/setup-python@v5
         with:
           python-version: '3.12'
-      - name: Exact five-path focus repair with held common Menu and unchanged browser probe
+      - name: Exact two-path route diagnostic child and unchanged finder browser probe
         id: foundation
         run: |
           set -euo pipefail
@@ -295,9 +302,9 @@ jobs:
           test "$(git show -s --format=%P HEAD)" = "$EXPECTED_PARENT"
           git fetch --no-tags --depth=1 origin "$BASE_SOURCE" > "$out/base-fetch.log" 2>&1
           git merge-base --is-ancestor "$BASE_SOURCE" "$GITHUB_SHA" > "$out/base-ancestry.log" 2>&1
-          git diff --exit-code "$EXPECTED_PARENT" HEAD -- . ':!.github/workflows/site-menu-finder.yml' ':!src/components/layout/SiteMenu.tsx' ':!src/components/layout/SiteMenuPanel.tsx' ':!src/components/layout/siteMenuNavigationFocus.ts' ':!src/test/SiteMenu.route-focus.test.tsx' > "$out/direct-five-paths.log"
-          git diff --name-only "$EXPECTED_PARENT" HEAD > "$out/direct-five-paths.txt"
-          printf '%s\n' .github/workflows/site-menu-finder.yml src/components/layout/SiteMenu.tsx src/components/layout/SiteMenuPanel.tsx src/components/layout/siteMenuNavigationFocus.ts src/test/SiteMenu.route-focus.test.tsx | cmp - "$out/direct-five-paths.txt"
+          git diff --exit-code "$EXPECTED_PARENT" HEAD -- . ':!.github/workflows/site-menu-finder.yml' ':!src/test/SiteMenu.route-focus.test.tsx' > "$out/direct-two-paths.log"
+          git diff --name-only "$EXPECTED_PARENT" HEAD > "$out/direct-two-paths.txt"
+          printf '%s\n' .github/workflows/site-menu-finder.yml src/test/SiteMenu.route-focus.test.tsx | cmp - "$out/direct-two-paths.txt"
           git diff --exit-code "$BASE_SOURCE" HEAD -- . ':!.github/workflows/site-menu-finder.yml' ':!src/components/layout/SiteMenu.tsx' ':!src/components/layout/SiteMenuPanel.tsx' ':!src/components/layout/siteMenuNavigationFocus.ts' ':!src/test/SiteMenu.finder.test.tsx' ':!src/test/SiteMenu.route-focus.test.tsx' ':!scripts/qa/playSiteMenuFinder.mjs' > "$out/cumulative-seven-paths.log"
           git diff --name-only "$BASE_SOURCE" HEAD > "$out/cumulative-seven-paths.txt"
           printf '%s\n' .github/workflows/site-menu-finder.yml scripts/qa/playSiteMenuFinder.mjs src/components/layout/SiteMenu.tsx src/components/layout/SiteMenuPanel.tsx src/components/layout/siteMenuNavigationFocus.ts src/test/SiteMenu.finder.test.tsx src/test/SiteMenu.route-focus.test.tsx | cmp - "$out/cumulative-seven-paths.txt"
@@ -313,7 +320,7 @@ jobs:
           for(const [file,pin]of Object.entries(held))assert.equal(hash(fs.readFileSync(file)),pin,file);
           assert.equal(blob('scripts/sweepWeight.mjs'),'4383acaa3703eaef1b1ab504064a152e4eb26d35');
           const finderInputs=[{"file":"src/components/layout/SiteMenu.tsx","bytes":4077,"sha256":"37164ef8ad2b209db217319dc07bee76b47512ae6baece94f7fbf0e810136638","gitBlob":"e296c1c70ded965047a024558db1342f0b2a998f"},{"file":"src/components/layout/SiteMenuPanel.tsx","bytes":7003,"sha256":"eb8f60587ac6c09948984e4d61c6d71803371bd94eda7fb03a4ddfc63d35e020","gitBlob":"a8c35912268d2cb096d3c5974662de451f04dc59"},{"file":"src/components/layout/siteMenuFocus.ts","bytes":696,"sha256":"82bec6d228e10c62ee2ad7eda02c4b29a72daa08e91cadce80c2fe33fd417994","gitBlob":"b868509de43131b269da72b61c42a47667033251"},{"file":"src/components/ui/sheet.tsx","bytes":4197,"sha256":"e7d726b34d0f3214f597a844c7f2c4fc869933f7433eddb74e7fd2eb92500be3","gitBlob":"c414714b3eca22b7ccfca8238c0407a7a8c6a38b"},{"file":"src/lib/siteSearch.ts","bytes":20811,"sha256":"240544889a70763dcb70cc9cc4c300fb992cbfdaf972eecb972237f3ead2c179","gitBlob":"7143f9242bc36f448dd2b850dcf67804f682dbff"},{"file":"src/data/gameRegistry.ts","bytes":33311,"sha256":"7f8724177e7672a737035f9cbdf53a11121609a4a497e6d5ecef172e41c8a3b4","gitBlob":"2b408bc5b1b2127171519c9a1a5fb1f6b64262fb"},{"file":"src/pages/Search.tsx","bytes":16265,"sha256":"d285a5f6cef6d4e47e3fb3cb9944cfbc88cd64000cc5f7e75068cd83e761ff72","gitBlob":"2bcfb9dfc8a540c69bd4d5a59815f48aa0c2565b"},{"file":"src/pages/FreeKick.tsx","bytes":2653,"sha256":"f1e347a7cdc2c01038a5700a9f43bb1b0b4a59bbaf6b14b75eae664f438c4f25","gitBlob":"2877b3b824a6da865c6d7cc5b7db77c2ef88afb9"},{"file":"src/App.tsx","bytes":35834,"sha256":"59c629fc0e983c81608f8039eacac2d0bd14579bb26a24e05eef395dcc90a243","gitBlob":"5d7e1ed074f4c0f695b0d5548b0045fc25029f6a"},{"file":"scripts/lib/playwrightLoader.mjs","bytes":2777,"sha256":"94a07179be7ca6b9562d118b52c2d5d0dff0b6b2e29e49e4fea16fa2defb5a93","gitBlob":"4f7739e217e0a47ee82e6bfc8be1c04bed17454a"},{"file":"scripts/lib/offlineTransport.cjs","bytes":10660,"sha256":"e60ff1534307e449ccef598e3b7470dcba58681b82cea4005cec7319f14f9221","gitBlob":"0fda542a2649fe5da937c6976fd0f5b6073e74b6"},{"file":"scripts/qa/siteMenuNavigationSupport.mjs","bytes":11560,"sha256":"c70e3ecc412f16d3322047b13205716c644495f8c74b76eed83852c87f35d303","gitBlob":"7909ce5805171367646e17a468fd919b88ad710e"},{"file":"scripts/qa/sharedChromePreload.cjs","bytes":8000,"sha256":"9e9da5a8e8ae62578e08d0df3ab5dd80acdbee3c40e6862fce9a1e83af0da57f","gitBlob":"8efcfc18ba520e637193e25c2bb8d4b97dd88919"},{"file":"scripts/qa/playSiteMenuFinder.mjs","bytes":30189,"sha256":"2d86d5fa1f7559b7b13d963135c7e769e56800d7edb59ddf886219a4bf50989a","gitBlob":"a38346db83a43b89fc0e9a8229b5ca752d1d4e46"}];for(const pin of finderInputs){const body=fs.readFileSync(pin.file);assert.equal(body.length,pin.bytes,pin.file);assert.equal(hash(body),pin.sha256,pin.file);assert.equal(blob(pin.file),pin.gitBlob,pin.file);}
-          const addedInputs=[{"target":"src/components/layout/siteMenuNavigationFocus.ts","bytes":3855,"sha256":"9f6d8685e515765fa11bb560d709d075916d1b769c4fff8d59c8afa41b505e16","gitBlob":"3c795d0726cf23067c1be9ffd25efbeed5c44d48"},{"target":"src/test/SiteMenu.route-focus.test.tsx","bytes":8507,"sha256":"a6bd39d439a10c6d876f47221a1fb110b25eff0f70a8e0357eb38ff23fa86d01","gitBlob":"d16e054349957b7a198f66001243c752a2d3c7de"}];for(const pin of addedInputs){const body=fs.readFileSync(pin.target);assert.equal(body.length,pin.bytes,pin.target);assert.equal(hash(body),pin.sha256,pin.target);assert.equal(blob(pin.target),pin.gitBlob,pin.target);for(const ref of [process.env.BASE_SOURCE,process.env.EXPECTED_PARENT]){const prior=cp.spawnSync('git',['cat-file','-e',ref+':'+pin.target],{encoding:'utf8'});assert.equal(prior.error,undefined);assert.equal(prior.signal,null);assert.equal(prior.status,128,pin.target+' must be ADDED against '+ref);}}
+          const addedInputs=[{"target":"src/components/layout/siteMenuNavigationFocus.ts","bytes":3855,"sha256":"9f6d8685e515765fa11bb560d709d075916d1b769c4fff8d59c8afa41b505e16","gitBlob":"3c795d0726cf23067c1be9ffd25efbeed5c44d48"},{"target":"src/test/SiteMenu.route-focus.test.tsx","bytes":8567,"sha256":"212fbeed55d46c1aeeb257cf30de472762065da659a326c1301783a7c8f2a399","gitBlob":"b2be3343c4685f943b7c0eba03662dc99a51576f"}];for(const pin of addedInputs){const body=fs.readFileSync(pin.target);assert.equal(body.length,pin.bytes,pin.target);assert.equal(hash(body),pin.sha256,pin.target);assert.equal(blob(pin.target),pin.gitBlob,pin.target);for(const ref of [process.env.BASE_SOURCE,'43bd2cef7ee62639d09259e8aa2b991aa54d22a9']){const prior=cp.spawnSync('git',['cat-file','-e',ref+':'+pin.target],{encoding:'utf8'});assert.equal(prior.error,undefined);assert.equal(prior.signal,null);assert.equal(prior.status,128,pin.target+' must be ADDED against '+ref);}}
           const workflow='.github/workflows/site-menu-finder.yml';assert.equal(blob(workflow),cp.execFileSync('git',['rev-parse','HEAD:'+workflow],{encoding:'utf8'}).trim());
           fs.writeFileSync(out+'/source-binding.json',JSON.stringify({phase:'menu-finder-and-shared-browser-candidate',source:process.env.GITHUB_SHA,parent:process.env.EXPECTED_PARENT,base:process.env.BASE_SOURCE,tree:cp.execFileSync('git',['rev-parse','HEAD^{tree}'],{encoding:'utf8'}).trim(),run:process.env.GITHUB_RUN_ID,attempt:process.env.GITHUB_RUN_ATTEMPT,products,qa,references,held,workflow:{file:workflow,sha256:hash(fs.readFileSync(workflow)),gitBlob:blob(workflow)},functionalGate:'needs:finder_green actual26PASS',finderInputs,addedInputs,expectedSourceFiles:5333,sourceCountDerivation:'admitted43bd5331 plus new lazy helper and new route-focus unit',applicationQualified:false,livePublished:false},null,2)+'\n',{flag:'wx'});
           NODE

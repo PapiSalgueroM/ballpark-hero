@@ -92,11 +92,11 @@ async function selectFreeKick() {
   assert.equal(screen.queryByTestId('route-host'), null, 'MENU_ROUTE_NO_EARLY_HOST');
   const beforeKey = screen.getByTestId('route-location').getAttribute('data-route-key');
   fallback.focus();
-  assert.equal(document.activeElement, fallback, 'MENU_ROUTE_OPEN_FROM_REAL_TRIGGER_FOCUS');
+  assert.equal(document.activeElement === fallback, true, 'MENU_ROUTE_OPEN_FROM_REAL_TRIGGER_FOCUS');
   fireEvent.click(fallback);
   const dialog = await screen.findByRole('dialog', { name: 'Menu' });
-  await waitFor(() => assert.equal(document.activeElement,
-    within(dialog).getByRole('heading', { name: 'Menu' }), 'MENU_ROUTE_REAL_SHEET_OPEN_FOCUS'));
+  await waitFor(() => assert.equal(document.activeElement ===
+    within(dialog).getByRole('heading', { name: 'Menu' }), true, 'MENU_ROUTE_REAL_SHEET_OPEN_FOCUS'));
   const field = within(dialog).getByRole('searchbox', { name: 'Find a game' });
   assert(field instanceof HTMLInputElement, 'MENU_ROUTE_ACTUAL_FINDER_FIELD');
   fireEvent.change(field, { target: { value: 'Free Kick' } });
@@ -105,7 +105,7 @@ async function selectFreeKick() {
     .find(candidate => candidate.getAttribute('href') === '/free-kick');
   assert(link instanceof HTMLAnchorElement, 'MENU_ROUTE_REAL_FREE_KICK_FINDER_LINK');
   link.focus();
-  assert.equal(document.activeElement, link, 'MENU_ROUTE_SELECTED_LINK_FOCUS_FOUNDATION');
+  assert.equal(document.activeElement === link, true, 'MENU_ROUTE_SELECTED_LINK_FOCUS_FOUNDATION');
   await act(async () => { fireEvent.click(link, { button: 0 }); });
   await waitFor(() => {
     assert.equal(window.location.pathname, '/free-kick', 'MENU_ROUTE_BROWSER_URL_CHANGED');
@@ -114,7 +114,7 @@ async function selectFreeKick() {
     assert.notEqual(screen.getByTestId('route-location').getAttribute('data-route-key'), beforeKey,
       'MENU_ROUTE_REAL_LOCATION_KEY_CHANGED');
     assert.equal(screen.queryByRole('dialog', { name: 'Menu' }), null, 'MENU_ROUTE_REAL_SHEET_CLOSED');
-    assert.equal(document.activeElement, fallback, 'MENU_ROUTE_FALLBACK_FOCUS_BEFORE_HOST_ARRIVAL');
+    assert.equal(document.activeElement === fallback, true, 'MENU_ROUTE_FALLBACK_FOCUS_BEFORE_HOST_ARRIVAL');
   });
   assert.equal(screen.queryByTestId('route-host'), null, 'MENU_ROUTE_HOST_STILL_DELAYED_AFTER_CLOSE');
   assert(cssVisible(fallback), 'MENU_ROUTE_FALLBACK_STILL_VISIBLE_AFTER_CLOSE');
@@ -123,13 +123,13 @@ async function selectFreeKick() {
 
 function requireFocus(target: HTMLElement, marker: string) {
   assert(cssVisible(target), marker + '_CSS_VISIBLE');
-  assert.equal(document.activeElement, target, marker);
+  assert.equal(document.activeElement === target, true, marker);
 }
 
 function proveChangedFocusControl(target: HTMLElement, alternative: HTMLElement, marker: string) {
   alternative.focus();
-  assert.equal(document.activeElement, alternative, marker + '_CONTROL_CHANGED_ACTUAL_FOCUS');
-  assert.notEqual(document.activeElement, target, marker + '_CONTROL_IS_EFFECTIVE');
+  assert.equal(document.activeElement === alternative, true, marker + '_CONTROL_CHANGED_ACTUAL_FOCUS');
+  assert.equal(document.activeElement !== target, true, marker + '_CONTROL_IS_EFFECTIVE');
   assert.throws(() => requireFocus(target, marker),
     { name: 'AssertionError', code: 'ERR_ASSERTION', message: new RegExp(marker) },
     marker + '_CONTROL_OWNS_NATIVE_ASSERTION');
