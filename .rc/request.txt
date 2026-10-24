@@ -1,0 +1,8 @@
+#!serve
+#!playwright
+#!serial
+# Round 1568: which playCmRealFixtures case is missing on the head, then the same with scroll-mt-14 on the fixture coverage note (a trial, restored).
+fonts: mkdir -p .tmp-fx/font-cache && FREE_KICK_FONT_CACHE="$PWD/.tmp-fx/font-cache" node scripts/qa/freeKickLab1070.mjs --prefetch-fonts-only
+simCmRealFixtures-forwalk: NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/simCmRealFixtures.mjs
+cmrf-head: FREE_KICK_FONT_CACHE="$PWD/.tmp-fx/font-cache" NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/playCmRealFixtures.mjs > /tmp/cmrf.log 2>&1; s=$?; tail -3 /tmp/cmrf.log; node .rc/x/cmrfReport.mjs; exit $s
+cmrf-mut: node .rc/x/mutCov.mjs && node_modules/.bin/vite build > /tmp/mb.log 2>&1 && FREE_KICK_FONT_CACHE="$PWD/.tmp-fx/font-cache" NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/playCmRealFixtures.mjs > /tmp/cmrf2.log 2>&1; s=$?; tail -3 /tmp/cmrf2.log; node .rc/x/cmrfReport.mjs; git checkout -- src; exit $s
