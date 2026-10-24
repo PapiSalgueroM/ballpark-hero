@@ -214,6 +214,10 @@ const lastName = (n: string) => n.replace(' (Youth)', '').split(' ').slice(-1)[0
    even for a moment (a page control taking it would scroll the page under the stage). */
 const TAB_STOPS = 'a[href],area[href],button,input,select,textarea,iframe,summary,[tabindex],[contenteditable="true"]';
 function tabRoundTheStage(e: KeyboardEvent, stage: HTMLElement) {
+  const from = document.activeElement ?? document.body;
+  /* a dialog of its own outside the stage keeps its own Tab */
+  const own = from.closest('[role="dialog"],[role="alertdialog"]');
+  if (own && own !== stage && !stage.contains(own)) return;
   const stageLayer = Number(getComputedStyle(stage).zIndex) || 0;
   const layers = new Map<Element, number | null>();
   /* the z-index of the outermost positioned element around el that sets one, or null when none does */
@@ -234,7 +238,6 @@ function tabRoundTheStage(e: KeyboardEvent, stage: HTMLElement) {
     && !el.closest('[inert]') && el.getClientRects().length > 0 && getComputedStyle(el).visibility !== 'hidden');
   e.preventDefault();
   if (!stops.length) { stage.focus({ preventScroll: true }); return; }
-  const from = document.activeElement ?? document.body;
   let at = stops.indexOf(from as HTMLElement);
   if (at !== -1) at += e.shiftKey ? -1 : 1;
   /* focus on something that is not a stop (the stage box itself, the notice's own box): the nearest stop that way */
