@@ -10,7 +10,7 @@ concurrency:
   cancel-in-progress: false
 env:
   BASE_SOURCE: 3ac9d8ea8a13db824f88be2deb660e7f2e31fc35
-  EXPECTED_PARENT: c46e9b04ee4734769b57e601b3f93b54ad9311e8
+  EXPECTED_PARENT: 54e0b3aa30abdbec1509234654eb766a95c5142c
   CI: '1'
   SIM_NETWORK: offline
   TZ: UTC
@@ -30,7 +30,7 @@ jobs:
         with:
           node-version: 24
           cache: npm
-      - name: Exact runner-progress child with held product and eighteen cumulative paths
+      - name: Exact writer-preservation child with held product and nineteen cumulative paths
         run: |
           set -euo pipefail
           out="$RUNNER_TEMP/site-menu-host-functional";test ! -e "$out";mkdir "$out"
@@ -43,10 +43,10 @@ jobs:
           git fetch --no-tags --depth=1 origin "$BASE_SOURCE" > "$out/base-fetch.log" 2>&1
           git merge-base --is-ancestor "$BASE_SOURCE" "$GITHUB_SHA" > "$out/base-ancestry.log" 2>&1
           git show -s --format=%P HEAD > "$out/parents.txt";test "$(cat "$out/parents.txt")" = "$EXPECTED_PARENT"
-          git diff --exit-code "$EXPECTED_PARENT" HEAD -- . ':!docs/**' ':!.github/workflows/site-menu-host-focus.yml' ':!scripts/runAllSims.mjs' > "$out/direct-two-paths.log"
+          git diff --exit-code "$EXPECTED_PARENT" HEAD -- . ':!docs/**' ':!.github/workflows/site-menu-host-focus.yml' ':!scripts/simCareerWallShotFriendly.mjs' > "$out/direct-two-paths.log"
           git diff --name-only "$EXPECTED_PARENT" HEAD -- . ':!docs/**' > "$out/direct-two-paths.txt"
-          printf '%s\n' .github/workflows/site-menu-host-focus.yml scripts/runAllSims.mjs | cmp - "$out/direct-two-paths.txt"
-          git diff --exit-code "$BASE_SOURCE" HEAD -- . ':!docs/**' ':!scripts/qa/sharedChromePreload.cjs' ':!scripts/qa/runSharedChromeBaseline.mjs' ':!scripts/qa/playSharedChromeBaselineProbe.mjs' ':!.github/workflows/site-menu-game-controls.yml' ':!.github/workflows/site-menu-host-focus.yml' ':!src/test/SiteMenu.host-focus.test.tsx' ':!src/test/SiteMenu.host-focus-loading.test.tsx' ':!src/test/SiteMenu.host-takeover.test.tsx' ':!src/App.tsx' ':!src/components/layout/Header.tsx' ':!src/components/game/GameNavbar.tsx' ':!src/index.css' ':!src/components/layout/SiteMenu.tsx' ':!src/components/layout/SiteMenuPanel.tsx' ':!src/components/layout/siteMenuFocus.ts' ':!scripts/qa/playSharedChromeHostProbe.mjs' ':!scripts/qa/playSharedChromeGeometry.mjs' ':!scripts/runAllSims.mjs' > "$out/cumulative-eighteen-paths.log"
+          printf '%s\n' .github/workflows/site-menu-host-focus.yml scripts/simCareerWallShotFriendly.mjs | cmp - "$out/direct-two-paths.txt"
+          git diff --exit-code "$BASE_SOURCE" HEAD -- . ':!docs/**' ':!scripts/qa/sharedChromePreload.cjs' ':!scripts/qa/runSharedChromeBaseline.mjs' ':!scripts/qa/playSharedChromeBaselineProbe.mjs' ':!.github/workflows/site-menu-game-controls.yml' ':!.github/workflows/site-menu-host-focus.yml' ':!src/test/SiteMenu.host-focus.test.tsx' ':!src/test/SiteMenu.host-focus-loading.test.tsx' ':!src/test/SiteMenu.host-takeover.test.tsx' ':!src/App.tsx' ':!src/components/layout/Header.tsx' ':!src/components/game/GameNavbar.tsx' ':!src/index.css' ':!src/components/layout/SiteMenu.tsx' ':!src/components/layout/SiteMenuPanel.tsx' ':!src/components/layout/siteMenuFocus.ts' ':!scripts/qa/playSharedChromeHostProbe.mjs' ':!scripts/qa/playSharedChromeGeometry.mjs' ':!scripts/runAllSims.mjs' ':!scripts/simCareerWallShotFriendly.mjs' > "$out/cumulative-nineteen-paths.log"
           git show "$EXPECTED_PARENT:.github/workflows/site-menu-game-controls.yml" | cmp .github/workflows/site-menu-game-controls.yml -
           node <<'NODE'
           const fs=require('node:fs'),assert=require('node:assert/strict'),cp=require('node:child_process'),{createHash}=require('node:crypto'),out=process.env.MENU_HOST_OUT,hash=b=>createHash('sha256').update(b).digest('hex');
@@ -57,6 +57,7 @@ jobs:
           for(const pin of productPins){const body=fs.readFileSync(pin.target);assert.equal(body.length,pin.bytes);assert.equal(hash(body),pin.sha256);assert.equal(cp.execFileSync('git',['hash-object',pin.target],{encoding:'utf8'}).trim(),pin.gitBlob);}
           const actualTests=[];
           for(const pin of testPins){const body=fs.readFileSync(pin.target);assert.equal(body.length,pin.bytes);assert.equal(hash(body),pin.sha256);assert.equal(cp.execFileSync('git',['hash-object',pin.target],{encoding:'utf8'}).trim(),pin.gitBlob);actualTests.push(pin);}
+          const writerSourcePins=[{file:'scripts/simCareerLeagueFinish.mjs',bytes:56644,sha256:'f3fe9b30a28e9ba4a4777bd9d0b8edfee4ab42352d89911ac394323b68b2d939',gitBlob:'079fba58522f778553abdd11aa2e10e9d0e0f4ac'},{file:'scripts/simCareerWallShotFriendly.mjs',bytes:2795,sha256:'c10ade4a073f86485f8e845bda47a69797ebf507b150f493bacb069a7de2d689',gitBlob:'0e5824f0d0b2e868a96b992c1513642b88c6f1a7'},{file:'scripts/runAllSims.mjs',bytes:23202,sha256:'022e560112c369616222f85d98eac0a896b49a5c11b1100b89d3a6d7fe233a1c',gitBlob:'37f1869f39906c0129473f609fbaee55957171aa'}];for(const pin of writerSourcePins){const body=fs.readFileSync(pin.file);assert.equal(body.length,pin.bytes,pin.file);assert.equal(hash(body),pin.sha256,pin.file);assert.equal(cp.execFileSync('git',['hash-object',pin.file],{encoding:'utf8'}).trim(),pin.gitBlob,pin.file);}fs.writeFileSync(out+'/writer-critical-source-pins.json',JSON.stringify({source:process.env.GITHUB_SHA,parent:process.env.EXPECTED_PARENT,pins:writerSourcePins},null,2)+'\n',{flag:'wx'});
           const workflow='.github/workflows/site-menu-host-focus.yml',gitBlob=cp.execFileSync('git',['rev-parse','HEAD:'+workflow],{encoding:'utf8'}).trim();assert.equal(cp.execFileSync('git',['hash-object',workflow],{encoding:'utf8'}).trim(),gitBlob);
           fs.writeFileSync(out+'/source-binding.json',JSON.stringify({phase:'menu-host-functional-candidate',source:process.env.GITHUB_SHA,parent:process.env.EXPECTED_PARENT,baseSource:process.env.BASE_SOURCE,tree:cp.execFileSync('git',['rev-parse','HEAD^{tree}'],{encoding:'utf8'}).trim(),run:process.env.GITHUB_RUN_ID,attempt:process.env.GITHUB_RUN_ATTEMPT,workflow:{file:workflow,gitBlobSha1:gitBlob,sha256:hash(fs.readFileSync(workflow))},selectedSourceGitPins:gitPins,baseApplicationGitPins:baseGitPins,products:productPins,tests:actualTests,applicationQualified:false,productMerged:false,browserExecuted:false,oldBaselineWorkflowByteHeld:true},null,2)+'\n',{flag:'wx'});
           NODE
@@ -208,7 +209,7 @@ jobs:
       - uses: actions/setup-python@v5
         with:
           python-version: '3.12'
-      - name: Exact runner-progress child and held current Menu product
+      - name: Exact writer-preservation child and held current Menu product
         id: foundation
         run: |
           set -euo pipefail
@@ -223,9 +224,9 @@ jobs:
           test "$(git show -s --format=%P HEAD)" = "$EXPECTED_PARENT"
           git fetch --no-tags --depth=1 origin "$BASE_SOURCE" > "$out/base-fetch.log" 2>&1
           git merge-base --is-ancestor "$BASE_SOURCE" "$GITHUB_SHA" > "$out/base-ancestry.log" 2>&1
-          git diff --exit-code "$EXPECTED_PARENT" HEAD -- . ':!docs/**' ':!.github/workflows/site-menu-host-focus.yml' ':!scripts/runAllSims.mjs' > "$out/direct-two-paths.log"
+          git diff --exit-code "$EXPECTED_PARENT" HEAD -- . ':!docs/**' ':!.github/workflows/site-menu-host-focus.yml' ':!scripts/simCareerWallShotFriendly.mjs' > "$out/direct-two-paths.log"
           git diff --name-only "$EXPECTED_PARENT" HEAD -- . ':!docs/**' > "$out/direct-two-paths.txt"
-          printf '%s\n' .github/workflows/site-menu-host-focus.yml scripts/runAllSims.mjs | cmp - "$out/direct-two-paths.txt"
+          printf '%s\n' .github/workflows/site-menu-host-focus.yml scripts/simCareerWallShotFriendly.mjs | cmp - "$out/direct-two-paths.txt"
           git show "$EXPECTED_PARENT:.github/workflows/site-menu-game-controls.yml" | cmp .github/workflows/site-menu-game-controls.yml -
           node <<'NODE'
           const fs=require('node:fs'),assert=require('node:assert/strict'),cp=require('node:child_process'),{createHash}=require('node:crypto'),out=process.env.CHROME_BROWSER_OUT;
@@ -236,6 +237,7 @@ jobs:
           const held={'scripts/qa/sharedChromePreload.cjs':'9e9da5a8e8ae62578e08d0df3ab5dd80acdbee3c40e6862fce9a1e83af0da57f','scripts/qa/playSharedChromeBaselineProbe.mjs':'d3d1ca9cef28d0e32431f6731085e1fe8612c9374341a7d2f0f17e8af780e7d4','scripts/sweepWeight.mjs':'9cd525863b4ad836e258343b0947f01d19092a825c850be2e2a2733523af1a01'};
           for(const [file,pin]of Object.entries(held))assert.equal(hash(fs.readFileSync(file)),pin,file);
           assert.equal(blob('scripts/sweepWeight.mjs'),'4383acaa3703eaef1b1ab504064a152e4eb26d35');
+          const writerSourcePins=[{file:'scripts/simCareerLeagueFinish.mjs',bytes:56644,sha256:'f3fe9b30a28e9ba4a4777bd9d0b8edfee4ab42352d89911ac394323b68b2d939',gitBlob:'079fba58522f778553abdd11aa2e10e9d0e0f4ac'},{file:'scripts/simCareerWallShotFriendly.mjs',bytes:2795,sha256:'c10ade4a073f86485f8e845bda47a69797ebf507b150f493bacb069a7de2d689',gitBlob:'0e5824f0d0b2e868a96b992c1513642b88c6f1a7'},{file:'scripts/runAllSims.mjs',bytes:23202,sha256:'022e560112c369616222f85d98eac0a896b49a5c11b1100b89d3a6d7fe233a1c',gitBlob:'37f1869f39906c0129473f609fbaee55957171aa'}];for(const pin of writerSourcePins){const body=fs.readFileSync(pin.file);assert.equal(body.length,pin.bytes,pin.file);assert.equal(hash(body),pin.sha256,pin.file);assert.equal(cp.execFileSync('git',['hash-object',pin.file],{encoding:'utf8'}).trim(),pin.gitBlob,pin.file);}fs.writeFileSync(out+'/writer-critical-source-pins.json',JSON.stringify({source:process.env.GITHUB_SHA,parent:process.env.EXPECTED_PARENT,pins:writerSourcePins},null,2)+'\n',{flag:'wx'});
           const workflow='.github/workflows/site-menu-host-focus.yml';assert.equal(blob(workflow),cp.execFileSync('git',['rev-parse','HEAD:'+workflow],{encoding:'utf8'}).trim());
           fs.writeFileSync(out+'/source-binding.json',JSON.stringify({phase:'shared-chrome-fixed-browser-candidate',source:process.env.GITHUB_SHA,parent:process.env.EXPECTED_PARENT,base:process.env.BASE_SOURCE,tree:cp.execFileSync('git',['rev-parse','HEAD^{tree}'],{encoding:'utf8'}).trim(),run:process.env.GITHUB_RUN_ID,attempt:process.env.GITHUB_RUN_ATTEMPT,products,qa,references,held,workflow:{file:workflow,sha256:hash(fs.readFileSync(workflow)),gitBlob:blob(workflow)},functionalGate:'needs:functional_host actual16PASS',applicationQualified:false,livePublished:false},null,2)+'\n',{flag:'wx'});
           NODE
@@ -407,9 +409,52 @@ jobs:
           NODE
           test ! -s "$out/caps-server.transport";test ! -s "$out/caps.transport"
 
+      - name: Bind actual full-suite writer destinations and preserve default locations
+        id: writer_prepare
+        if: ${{ !cancelled() && steps.browser.outcome == 'success' && steps.readers.outcome == 'success' && steps.caps.outcome == 'success' }}
+        timeout-minutes: 2
+        run: |
+          set -euo pipefail
+          out="$CHROME_BROWSER_OUT"
+          test -d "$out"
+          test ! -e "$out/full-node-writer-binding.json"
+          : > "$out/writer-prepare.transport"
+          status=0
+          NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" SIM_OFFLINE_RECEIPT="$out/writer-prepare.transport" node <<'NODE' > "$out/writer-prepare.stdout.log" 2> "$out/writer-prepare.stderr.log" || status=$?
+          const fs=require('node:fs'),path=require('node:path'),a=require('node:assert/strict'),cp=require('node:child_process'),{createHash}=require('node:crypto');
+          const hash=b=>createHash('sha256').update(b).digest('hex'),root=fs.realpathSync(process.cwd()),out=fs.realpathSync(process.env.CHROME_BROWSER_OUT),reportRoot=path.join(out,'full-node-writer-reports');
+          function within(parent,child){const rel=path.relative(parent,child);return rel!==''&&!path.isAbsolute(rel)&&rel!=='..'&&!rel.startsWith('..'+path.sep);}
+          a(within(out,reportRoot)&&!within(root,reportRoot)&&reportRoot!==root,'WRITER_PREP_OUTSIDE_CHECKOUT');
+          a.equal(path.resolve(process.env.GITHUB_WORKSPACE),root,'WRITER_PREP_WORKSPACE');
+          for(const name of ['SIM_LEAGUE_FINISH_ARTIFACTS','SIM_WALL_SHOT_REPORT','SIM_LEAGUE_FINISH_CONTROL','SIM_LEAGUE_FINISH_ATTRIBUTION'])a(!process.env[name],'WRITER_PREP_NO_INHERITED_OVERRIDE_'+name);
+          const pins=[
+           {file:'scripts/simCareerLeagueFinish.mjs',bytes:56644,sha256:'f3fe9b30a28e9ba4a4777bd9d0b8edfee4ab42352d89911ac394323b68b2d939',gitBlob:'079fba58522f778553abdd11aa2e10e9d0e0f4ac'},
+           {file:'scripts/simCareerWallShotFriendly.mjs',bytes:2795,sha256:'c10ade4a073f86485f8e845bda47a69797ebf507b150f493bacb069a7de2d689',gitBlob:'0e5824f0d0b2e868a96b992c1513642b88c6f1a7'},
+           {file:'scripts/runAllSims.mjs',bytes:23202,sha256:'022e560112c369616222f85d98eac0a896b49a5c11b1100b89d3a6d7fe233a1c',gitBlob:'37f1869f39906c0129473f609fbaee55957171aa'},
+           {file:'scripts/lib/offlineTransport.cjs',sha256:'e60ff1534307e449ccef598e3b7470dcba58681b82cea4005cec7319f14f9221',gitBlob:'0fda542a2649fe5da937c6976fd0f5b6073e74b6'}
+          ];
+          for(const pin of pins){const b=fs.readFileSync(pin.file);if(pin.bytes!==undefined)a.equal(b.length,pin.bytes,pin.file);a.equal(hash(b),pin.sha256,pin.file);a.equal(cp.execFileSync('git',['hash-object',pin.file],{encoding:'utf8'}).trim(),pin.gitBlob,pin.file);}
+          function snapshot(target){const rows=[],errors=[];function walk(file,rel){const s=fs.lstatSync(file);if(s.isSymbolicLink()||(!s.isDirectory()&&!s.isFile())){rows.push({path:rel,type:'nonregular'});errors.push('nonregular:'+rel);return;}if(s.isDirectory()){rows.push({path:rel,type:'directory'});for(const name of fs.readdirSync(file).sort())walk(path.join(file,name),rel?rel+'/'+name:name);}else{const b=fs.readFileSync(file);rows.push({path:rel,type:'file',bytes:b.length,sha256:hash(b)});}}let exists=false;try{fs.lstatSync(target);exists=true;}catch(error){if(error.code!=='ENOENT')throw error;}if(exists)walk(target,'');return {path:target,exists,rows,errors};}
+          const tmpRoot=path.join(root,'.tmp-fx');if(fs.existsSync(tmpRoot)){const s=fs.lstatSync(tmpRoot);a(s.isDirectory()&&!s.isSymbolicLink(),'WRITER_PREP_DEFAULT_PARENT_REGULAR');}
+          const defaults=[path.join(root,'.tmp-fx/career-league-finish'),path.join(root,'.tmp-fx/wall-shot-tests.json')].map(snapshot);
+          for(const row of defaults)a.equal(row.errors.length,0,'WRITER_PREP_DEFAULT_REGULAR');
+          const leagueSources=['src/lib/soccerCareerEngine.ts','src/lib/soccerCareerLeague.ts','src/lib/careerEras.ts','src/lib/soccerCareerSelection.ts','src/lib/soccerCareerPreparation.ts','src/lib/soccerCareerMentor.ts','scripts/lib/careerDevelopmentAttribution1185.mjs','scripts/lib/careerStoryRoleAttribution1190.mjs','scripts/simCareerLeagueFinish.mjs'];
+          const sourceHashes=Object.fromEntries(leagueSources.map(file=>[file,hash(fs.readFileSync(file))]));
+          a(!fs.existsSync(reportRoot),'WRITER_PREP_FRESH_REPORT_ROOT');fs.mkdirSync(reportRoot);
+          const destinations={league:path.join(reportRoot,'career-league-finish'),leagueHealthy:path.join(reportRoot,'career-league-finish','healthy'),wall:path.join(reportRoot,'wall-shot-tests.json')};
+          for(const dest of Object.values(destinations))a(within(reportRoot,dest),'WRITER_PREP_DESTINATION');
+          const binding={v:1,source:process.env.GITHUB_SHA,parent:process.env.EXPECTED_PARENT,base:process.env.BASE_SOURCE,run:process.env.GITHUB_RUN_ID,attempt:process.env.GITHUB_RUN_ATTEMPT,root,out,reportRoot,destinations,pins,leagueSources:sourceHashes,defaultsBefore:defaults,sourceBasis:{head:'54e0b3aa30abdbec1509234654eb766a95c5142c',archiveSha256:'040734cea725e15559bf7caaa25585797aa73ae27d0ac0902e096058b381224b',allSourceBodies:5328,scriptBodies:1645,scanSha256:'827a30f6dc298c103b8aa13f68981a270de716c77337b076cf4b6ece14380427'},limits:['Outputs are redirected only. No harness is skipped or rerun here.','Wall JSON is overwritten by the real control run. Its healthy JSON is not separately retained.','Default location bytes and membership must remain identical. No cleanup is authorized.']};
+          fs.writeFileSync(path.join(out,'full-node-writer-binding.json'),JSON.stringify(binding,null,2)+'\n',{flag:'wx'});
+          fs.appendFileSync(process.env.GITHUB_ENV,'SIM_LEAGUE_FINISH_ARTIFACTS='+destinations.league+'\nSIM_WALL_SHOT_REPORT='+destinations.wall+'\n');
+          console.log('Writer destinations bound outside checkout; defaults and source inputs retained.');
+          NODE
+          printf '%s\n' "$status" > "$out/writer-prepare.exit"
+          test -f "$out/writer-prepare.transport";test ! -s "$out/writer-prepare.transport"
+          test "$status" -eq 0
+
       - name: Full unscoped offline node suite with actual plan and separate skips
         id: full_node
-        if: ${{ !cancelled() && steps.browser.outcome == 'success' && steps.readers.outcome == 'success' && steps.caps.outcome == 'success' }}
+        if: ${{ !cancelled() && steps.browser.outcome == 'success' && steps.readers.outcome == 'success' && steps.caps.outcome == 'success' && steps.writer_prepare.outcome == 'success' }}
         timeout-minutes: 80
         run: |
           set -euo pipefail
@@ -481,6 +526,96 @@ jobs:
           printf '%s\n' "$classified" > "$out/full-node-classifier.exit"
           test "$status" -eq 0;test "$classified" -eq 0
           for name in full-node-plan full-node-plan-binding full-node full-node-classifier;do test ! -s "$out/$name.transport";done
+
+      - name: Always retain redirected writer outputs and require complete actual writer proof
+        id: writer_oracle
+        if: always()
+        timeout-minutes: 5
+        run: |
+          set -euo pipefail
+          out="$RUNNER_TEMP/site-menu-shared-browser";mkdir -p "$out"
+          export CHROME_BROWSER_OUT="$out"
+          test ! -e "$out/full-node-writer-oracle.cjs"
+          cat > "$out/full-node-writer-oracle.cjs" <<'NODE'
+          const fs=require('node:fs'),path=require('node:path'),a=require('node:assert/strict'),cp=require('node:child_process'),{createHash}=require('node:crypto');
+          const hash=b=>createHash('sha256').update(b).digest('hex'),root=fs.realpathSync(process.cwd()),out=fs.realpathSync(process.env.CHROME_BROWSER_OUT),reportRoot=path.join(out,'full-node-writer-reports'),bindingFile=path.join(out,'full-node-writer-binding.json');
+          const write=(file,value)=>fs.writeFileSync(file,typeof value==='string'?value:JSON.stringify(value,null,2)+'\n',{flag:'wx'});
+          function snapshot(target){const rows=[],errors=[];function walk(file,rel){const s=fs.lstatSync(file);if(s.isSymbolicLink()||(!s.isDirectory()&&!s.isFile())){rows.push({path:rel,type:'nonregular'});errors.push('nonregular:'+rel);return;}if(s.isDirectory()){rows.push({path:rel,type:'directory'});for(const name of fs.readdirSync(file).sort())walk(path.join(file,name),rel?rel+'/'+name:name);}else{const b=fs.readFileSync(file);rows.push({path:rel,type:'file',bytes:b.length,sha256:hash(b)});}}let exists=false;try{fs.lstatSync(target);exists=true;}catch(error){if(error.code!=='ENOENT')throw error;}if(exists)walk(target,'');return {path:target,exists,rows,errors};}
+          function capture(){
+           const observed={v:1,source:process.env.GITHUB_SHA,run:process.env.GITHUB_RUN_ID,attempt:process.env.GITHUB_RUN_ATTEMPT,root,out,reportRoot,destinations:{league:path.join(reportRoot,'career-league-finish'),leagueHealthy:path.join(reportRoot,'career-league-finish','healthy'),wall:path.join(reportRoot,'wall-shot-tests.json')},defaultsAfter:[],inventory:null,sourcesAfter:{},writers:[],progressErrors:[],captureErrors:[]};
+           const attempt=(name,fn)=>{try{return fn();}catch(error){observed.captureErrors.push({name,message:String(error.message),stack:String(error.stack||'')});return null;}};
+           const binding=attempt('binding',()=>{const b=fs.readFileSync(bindingFile);observed.bindingSha256=hash(b);return JSON.parse(b);});
+           observed.inventory=attempt('output inventory',()=>snapshot(reportRoot));
+           for(const target of [path.join(root,'.tmp-fx/career-league-finish'),path.join(root,'.tmp-fx/wall-shot-tests.json')]){const row=attempt('default '+target,()=>snapshot(target));if(row)observed.defaultsAfter.push(row);}
+           if(binding){for(const file of [...new Set([...binding.pins.map(row=>row.file),...Object.keys(binding.leagueSources)])])attempt('source '+file,()=>{observed.sourcesAfter[file]=hash(fs.readFileSync(file));});}
+           const stdout=attempt('full stdout',()=>fs.readFileSync(path.join(out,'full-node.stdout.log'),'utf8')),stderr=attempt('full stderr',()=>fs.readFileSync(path.join(out,'full-node.stderr.log'),'utf8'));
+           observed.parentExit=attempt('parent exit',()=>Number(fs.readFileSync(path.join(out,'full-node.exit'),'utf8').trim()));
+           if(stdout!==null){observed.parentStdoutSha256=hash(stdout);const lines=stdout.split(/\r?\n/),pattern=/^  (PASS|FAIL|EMPTY|SKIP)\s+(\S+\.mjs)\s+([0-9]+(?:\.[0-9]+)?)s$/;let cursor=2;
+            for(let i=2;i<lines.length;i++){const match=lines[i].match(pattern);if(!match)continue;const body=lines.slice(cursor,i).join('\n');if(['simCareerLeagueFinish.mjs','simCareerWallShotFriendly.mjs'].includes(match[2])){const row={file:match[2],verdict:match[1],seconds:Number(match[3]),reportLine:i+1,stdout:body,stdoutSha256:hash(body)};observed.writers.push(row);write(path.join(out,match[2]+'.actual-output-'+observed.writers.length+'.log'),body);}cursor=i+1+(match[1]==='SKIP'&&lines[i+1]==='        it reached no database and said so, and the database is unreachable here (offline mode blocks production; no database probe was sent)'?1:0);}
+           }
+           if(stderr!==null){observed.parentStderrSha256=hash(stderr);observed.writerProgress=[];for(const line of stderr.split(/\r?\n/)){if(!line.startsWith('[SIM_RUNNER_PROGRESS] '))continue;try{const row=JSON.parse(line.slice('[SIM_RUNNER_PROGRESS] '.length));if(['simCareerLeagueFinish.mjs','simCareerWallShotFriendly.mjs'].includes(row.file))observed.writerProgress.push(row);}catch(error){observed.progressErrors.push(String(error.message));}}}
+           return observed;
+          }
+          function judge(value){
+           const binding=JSON.parse(fs.readFileSync(bindingFile));
+           a.equal(value.v,1,'WRITER_RECORD_VERSION');a.equal(value.source,process.env.GITHUB_SHA,'WRITER_SOURCE_IDENTITY');a.equal(value.run,process.env.GITHUB_RUN_ID,'WRITER_RUN_IDENTITY');a.equal(value.attempt,process.env.GITHUB_RUN_ATTEMPT,'WRITER_ATTEMPT_IDENTITY');
+           a.equal(value.root,root,'WRITER_ROOT_IDENTITY');a.equal(value.out,out,'WRITER_OUT_IDENTITY');a.equal(value.reportRoot,reportRoot,'WRITER_DESTINATION_BOUND');
+           a.deepEqual(value.destinations,{league:path.join(reportRoot,'career-league-finish'),leagueHealthy:path.join(reportRoot,'career-league-finish','healthy'),wall:path.join(reportRoot,'wall-shot-tests.json')},'WRITER_DESTINATION_BOUND');
+           a.equal(value.bindingSha256,hash(fs.readFileSync(bindingFile)),'WRITER_BINDING_HELD');a.equal(binding.source,value.source,'WRITER_BINDING_SOURCE');a.equal(binding.root,root);a.equal(binding.out,out);a.equal(binding.reportRoot,reportRoot);a.deepEqual(binding.destinations,value.destinations,'WRITER_BINDING_DESTINATIONS');
+           a.equal(value.captureErrors.length,0,'WRITER_CAPTURE_COMPLETE');a.equal(value.progressErrors.length,0,'WRITER_PROGRESS_READABLE');
+           a.deepEqual(value.defaultsAfter,binding.defaultsBefore,'WRITER_DEFAULT_BYTES_AND_MEMBERS_HELD');
+           for(const expected of binding.defaultsBefore)a.deepEqual(snapshot(expected.path),expected,'WRITER_DEFAULTS_STILL_HELD');
+           const expectedSources={...binding.leagueSources,...Object.fromEntries(binding.pins.map(row=>[row.file,row.sha256]))};
+           a.deepEqual(value.sourcesAfter,expectedSources,'WRITER_SOURCE_BYTES_HELD');for(const [file,digest]of Object.entries(expectedSources))a.equal(hash(fs.readFileSync(file)),digest,'WRITER_SOURCE_STILL_HELD');
+           a(value.inventory&&value.inventory.exists,'WRITER_OUTPUT_ROOT_EXISTS');a.equal(value.inventory.path,reportRoot,'WRITER_OUTPUT_ROOT_BOUND');a.equal(value.inventory.errors.length,0,'WRITER_OUTPUT_REGULAR');
+           const report=JSON.parse(fs.readFileSync(path.join(value.destinations.leagueHealthy,'report.json')));
+           a.equal(report.control,'','WRITER_LEAGUE_HEALTHY_ARM');a.equal(report.sourceHeld,true,'WRITER_LEAGUE_SOURCE_HELD');a.deepEqual(report.sourceBefore,binding.leagueSources,'WRITER_LEAGUE_SOURCE_BEFORE');a.deepEqual(report.sourceAfter,binding.leagueSources,'WRITER_LEAGUE_SOURCE_AFTER');a.deepEqual(report.red,[],'WRITER_LEAGUE_NO_RED');
+           a(Array.isArray(report.careers)&&report.careers.length===16,'WRITER_LEAGUE_SIXTEEN');a.deepEqual(report.careers.map(row=>row.seed),Array.from({length:16},(_,i)=>i+1),'WRITER_LEAGUE_SEED_MEMBERSHIP');
+           const attributed=report.careers[0].attributedDigest!==null,files=['wall-shot-tests.json','career-league-finish/healthy/report.json'];
+           for(const row of report.careers){a.equal(row.attributedDigest!==null,attributed,'WRITER_LEAGUE_ATTRIBUTION_CONSISTENT');for(const field of ['matches','originalMatches','historicalMatches','drawEqual'])a.equal(row[field],true,'WRITER_LEAGUE_'+field);for(const field of ['baseline','originalDigest','currentDigest','historicalDigest','beforeTrain'])a.match(row[field],/^[a-f0-9]{16}$/,'WRITER_LEAGUE_DIGEST_SHAPE');a.equal(row.originalDigest,row.beforeTrain);a.equal(row.historicalDigest,row.beforeTrain);a.equal(attributed?row.attributedDigest:row.currentDigest,row.baseline,'WRITER_LEAGUE_DIGEST_MATCH');
+            for(const arm of ['current','original','historical',...(attributed?['attributed']:[])])for(const kind of ['state','draws'])files.push('career-league-finish/healthy/'+row.seed+'-'+arm+'-'+kind+'.json');
+           }
+           if(attributed)files.push('career-league-finish/healthy/currentEngine.ts','career-league-finish/healthy/attributedEngine.ts');
+           const members=value.inventory.rows.filter(row=>row.type==='file');a.deepEqual(members.map(row=>row.path).sort(),files.sort(),'WRITER_COMPLETE_MEMBERSHIP');
+           a.deepEqual(value.inventory.rows.filter(row=>row.type==='directory').map(row=>row.path).sort(),['','career-league-finish','career-league-finish/healthy'],'WRITER_DIRECTORY_MEMBERSHIP');
+           for(const row of members){a(row.bytes>0,'WRITER_OUTPUT_NONEMPTY');const b=fs.readFileSync(path.join(reportRoot,row.path));a.equal(b.length,row.bytes,'WRITER_OUTPUT_DIGEST_HELD');a.equal(hash(b),row.sha256,'WRITER_OUTPUT_DIGEST_HELD');}
+           a.deepEqual(snapshot(reportRoot),value.inventory,'WRITER_FULL_OUTPUT_INVENTORY_HELD');
+           for(const row of report.careers){for(const arm of ['current','original','historical',...(attributed?['attributed']:[])]){const prefix=path.join(value.destinations.leagueHealthy,row.seed+'-'+arm),state=JSON.parse(fs.readFileSync(prefix+'-state.json')),draws=JSON.parse(fs.readFileSync(prefix+'-draws.json'));a(state&&typeof state==='object'&&!Array.isArray(state)&&Object.keys(state).length>0,'WRITER_STATE_RETAINED');a(Array.isArray(draws)&&draws.length>0,'WRITER_DRAW_VECTOR_RETAINED');a.equal(draws.length,row[arm+'Draws'],'WRITER_DRAW_COUNT_MATCH');}
+            a.deepEqual(JSON.parse(fs.readFileSync(path.join(value.destinations.leagueHealthy,row.seed+'-historical-draws.json'))),JSON.parse(fs.readFileSync(path.join(value.destinations.leagueHealthy,row.seed+'-original-draws.json'))),'WRITER_HISTORICAL_DRAW_BYTES_EQUIVALENT');
+           }
+           const wall=JSON.parse(fs.readFileSync(value.destinations.wall));a(Array.isArray(wall.testResults)&&wall.testResults.length>0,'WRITER_WALL_REAL_SUITES');a(wall.testResults.every(row=>Array.isArray(row.assertionResults)&&row.assertionResults.length>0),'WRITER_WALL_NO_IMPORT_ONLY_SUITE');
+           const assertions=wall.testResults.flatMap(row=>row.assertionResults);a.equal(assertions.length,3,'WRITER_WALL_THREE_REGISTERED_ASSERTIONS');a(assertions.every(row=>['passed','failed'].includes(row.status)),'WRITER_WALL_NO_SKIPPED_ASSERTION');a(assertions.some(row=>row.status==='failed'&&typeof row.fullName==='string'&&row.fullName.includes('modest aiming and timing errors')),'WRITER_WALL_FINAL_CONTROL_JSON');
+           for(const file of ['simCareerLeagueFinish.mjs','simCareerWallShotFriendly.mjs']){const rows=value.writers.filter(row=>row.file===file);a.equal(rows.length,1,'WRITER_ACTUAL_PARENT_ROW_ONCE');const row=rows[0];a.equal(row.verdict,'PASS','WRITER_ACTUAL_PARENT_PASS');a.equal(hash(row.stdout),row.stdoutSha256,'WRITER_ACTUAL_OUTPUT_HASH');a(!/NOTHING WAS CHECKED|\[SIM_OFFLINE_BLOCK\]/.test(row.stdout),'WRITER_ACTUAL_OUTPUT_CHECKED');const starts=value.writerProgress.filter(row=>row.file===file&&row.event==='start'),closes=value.writerProgress.filter(row=>row.file===file&&row.event==='close');a.equal(starts.length,1,'WRITER_ACTUAL_START_ONCE');a.equal(closes.length,1,'WRITER_ACTUAL_CLOSE_ONCE');a.equal(starts[0].v,1);a.equal(closes[0].v,1);a(Number.isInteger(starts[0].pid)&&starts[0].pid>0,'WRITER_ACTUAL_PID');a.equal(closes[0].pid,starts[0].pid);a.equal(closes[0].code,0,'WRITER_ACTUAL_CHILD_EXIT_ZERO');a.equal(closes[0].rawVerdict,'PASS','WRITER_ACTUAL_CHILD_PASS');
+            if(file==='simCareerLeagueFinish.mjs')a.equal(row.stdout.split(/\r?\n/).filter(line=>/^simCareerLeagueFinish: green\. \d+ careers, \d+ seasons, \d+ in a verified league; finish and title agree, the ladder holds, the historical stream holds after documented attribution and the elite boost reads the era\.$/.test(line)).length,1,'WRITER_LEAGUE_ACTUAL_HEALTHY_FOOTER');
+            else a.equal(row.stdout.split(/\r?\n/).filter(line=>line==='simCareerWallShotFriendly: forgiveness green, effective old-ladder control caught').length,1,'WRITER_WALL_ACTUAL_HEALTHY_AND_CONTROL_FOOTER');
+           }
+           a.equal(hash(fs.readFileSync(path.join(out,'full-node.stdout.log'))),value.parentStdoutSha256,'WRITER_PARENT_STDOUT_HELD');a.equal(hash(fs.readFileSync(path.join(out,'full-node.stderr.log'))),value.parentStderrSha256,'WRITER_PARENT_STDERR_HELD');
+           return {leagueCareers:report.careers.length,attributionUsed:attributed,reportFiles:members.length,wallFinalJson:'actual control run only',parentExit:value.parentExit};
+          }
+          if(process.argv[2]==='--judge'){const result=judge(JSON.parse(fs.readFileSync(process.argv[3])));console.log('full-node writer output oracle: complete');console.log(JSON.stringify(result));}
+          else if(process.argv[2]==='--run'){
+           const errors=[],controls=[],observed=capture(),record=path.join(out,'full-node-writer-observed.json');write(record,observed);
+           const evidenceRoot=path.join(out,'writer-output-oracle-controls');a(!fs.existsSync(evidenceRoot),'WRITER_CONTROL_FRESH');fs.mkdirSync(evidenceRoot);
+           function launch(name,input){const dir=path.join(evidenceRoot,name);fs.mkdirSync(dir);const inputFile=path.join(dir,'record.json'),bytes=fs.readFileSync(input);fs.writeFileSync(inputFile,bytes,{flag:'wx'});const receipt=path.join(dir,'node.transport');write(receipt,'');const r=cp.spawnSync(process.execPath,[__filename,'--judge',inputFile],{cwd:root,env:{...process.env,SIM_OFFLINE_RECEIPT:receipt},encoding:'utf8',timeout:15000});write(path.join(dir,'stdout.log'),r.stdout||'');write(path.join(dir,'stderr.log'),r.stderr||'');write(path.join(dir,'exit'),String(r.status)+'\n');a(!r.error&&r.signal===null&&Number.isInteger(r.status),'WRITER_CONTROL_PROCESS_COMPLETED');a.equal(fs.statSync(receipt).size,0,'WRITER_CONTROL_EMPTY_TRANSPORT');a.equal(hash(fs.readFileSync(inputFile)),hash(bytes),'WRITER_CONTROL_INPUT_HELD');return {name,exit:r.status,stdout:r.stdout||'',stderr:r.stderr||'',inputSha256:hash(bytes),dir};}
+           let result=null;try{
+            const healthy=launch('healthy',record);a.equal(healthy.exit,0,'WRITER_HEALTHY_ORACLE_EXIT');a(healthy.stdout.includes('full-node writer output oracle: complete'),'WRITER_HEALTHY_ORACLE_OUTPUT');result=judge(observed);
+            const recipes=[['escaped-target','WRITER_DESTINATION_BOUND',fault=>{fault.destinations.wall=path.join(root,'.tmp-fx/wall-shot-tests.json');}],['missing-member','WRITER_COMPLETE_MEMBERSHIP',fault=>{const index=fault.inventory.rows.findIndex(row=>row.type==='file');a(index>=0);fault.inventory.rows.splice(index,1);}],['changed-digest','WRITER_OUTPUT_DIGEST_HELD',fault=>{const row=fault.inventory.rows.find(row=>row.type==='file');a(row);row.sha256=row.sha256==='0'.repeat(64)?'1'.repeat(64):'0'.repeat(64);}]];
+            for(const [name,marker,change]of recipes){const fault=structuredClone(observed);change(fault);const faultFile=path.join(evidenceRoot,name+'.actual-record-fault.json');write(faultFile,fault);a.notEqual(hash(fs.readFileSync(faultFile)),hash(fs.readFileSync(record)),'WRITER_CONTROL_ACTUALLY_CHANGED');const failed=launch(name+'-fault',faultFile);a.equal(failed.exit,1,'WRITER_CONTROL_FAULT_EXIT');a(failed.stderr.includes('AssertionError')&&failed.stderr.includes(marker)&&failed.stderr.includes(__filename),'WRITER_CONTROL_OWNED_ASSERTION');const restoredFile=path.join(evidenceRoot,name+'.restored-record.json');fs.copyFileSync(record,restoredFile,fs.constants.COPYFILE_EXCL);a.equal(hash(fs.readFileSync(restoredFile)),hash(fs.readFileSync(record)),'WRITER_CONTROL_RESTORED_BYTES');const restored=launch(name+'-restored',restoredFile);a.equal(restored.exit,0,'WRITER_CONTROL_RESTORED_EXIT');a(restored.stdout.includes('full-node writer output oracle: complete'),'WRITER_CONTROL_RESTORED_OUTPUT');controls.push({name,marker,changed:true,faultExit:failed.exit,restoredExit:restored.exit,actualFailureName:'AssertionError',faultInputSha256:failed.inputSha256,restoredInputSha256:restored.inputSha256,scope:'Physical copied-actual-record output oracle. No writer source mutation or harness rerun.'});}
+            a.equal(controls.length,3,'WRITER_ALL_THREE_OUTPUT_CONTROLS');
+           }catch(error){errors.push({name:error.name,message:String(error.message),stack:String(error.stack||'')});}
+           write(path.join(out,'full-node-writer-admission.json'),{status:errors.length?'FULL_NODE_WRITER_OUTPUT_REFUSED':'FULL_NODE_WRITER_OUTPUT_PRESERVED',source:process.env.GITHUB_SHA,run:process.env.GITHUB_RUN_ID,attempt:process.env.GITHUB_RUN_ATTEMPT,recordSha256:hash(fs.readFileSync(record)),oracleSha256:hash(fs.readFileSync(__filename)),result,controls,errors,limits:['This is an independent output preservation oracle, not full-suite qualification.','Partial outputs are retained when the actual suite fails or times out. Missing final proof fails.','The wall final JSON belongs to the overwritten control run. Its healthy JSON was not retained.','Original raw stdout and actual zero-exit close records witness both writer executions.','Outer empty transport receipts do not claim empty child traffic. No defaults are deleted or ignored.']});
+           a.equal(errors.length,0,'WRITER_OUTPUT_ADMISSION');
+          }else throw new Error('writer oracle mode required');
+          
+          NODE
+          test ! -e "$out/writer-oracle.transport";: > "$out/writer-oracle.transport"
+          status=0
+          NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" SIM_OFFLINE_RECEIPT="$out/writer-oracle.transport" node "$out/full-node-writer-oracle.cjs" --run > "$out/writer-oracle.stdout.log" 2> "$out/writer-oracle.stderr.log" || status=$?
+          printf '%s\n' "$status" > "$out/writer-oracle.exit"
+          test -f "$out/writer-oracle.transport";test ! -s "$out/writer-oracle.transport"
+          test -f "$out/writer-prepare.transport";test ! -s "$out/writer-prepare.transport"
+          test -f "$out/writer-prepare.exit";test "$(cat "$out/writer-prepare.exit")" = 0
+          test "$status" -eq 0
 
       - name: Always retain fresh complete physical end inventories and all raw evidence
         id: holds
