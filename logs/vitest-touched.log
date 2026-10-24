@@ -1,0 +1,15 @@
+   [33m[2m✓[22m[39m The goal sequence[2m > [22mnothing says GOAL before the ball is in: not the list beside the pitch, not the line under it [33m 439[2mms[22m[39m
+   [33m[2m✓[22m[39m The goal sequence[2m > [22mno frame draws the new score before the ball is in [33m 466[2mms[22m[39m
+   [33m[2m✓[22m[39m The goal sequence[2m > [22ma goal with the last kick of a period takes nothing off the score while it winds up [33m 8132[2mms[22m[39m
+   [33m[2m✓[22m[39m The goal sequence[2m > [22ma line fired late by Skip is not played again when extra time starts [33m 9375[2mms[22m[39m
+   [33m[2m✓[22m[39m The goal sequence[2m > [22munder reduced motion the card is held for its first stretch only, and then the match runs on [33m 708[2mms[22m[39m
+   [33m[2m✓[22m[39m The goal sequence[2m > [22ma substitution in a goal's wind up takes the card with the action, and the score stops waiting [33m 379[2mms[22m[39m
+   [33m[2m✓[22m[39m The goal sequence[2m > [22ma goal still on its way when the line up changes off the clock keeps its net, its card and its men [33m 3082[2mms[22m[39m
+   [33m[2m✓[22m[39m Match mode[2m > [22mBack folds the match to a card and pauses it, and the card puts it back [33m 1168[2mms[22m[39m
+   [33m[2m✓[22m[39m Match mode[2m > [22mthe stats line a phone keeps in view reads the same count as the full stats [33m 1306[2mms[22m[39m
+
+[2m Test Files [22m [1m[32m11 passed[39m[22m[90m (11)[39m
+[2m      Tests [22m [1m[32m164 passed[39m[22m[90m (164)[39m
+[2m   Start at [22m 09:16:24
+[2m   Duration [22m 127.02s[2m (transform 9.71s, setup 1.51s, collect 24.74s, tests 218.16s, environment 9.44s, prepare 2.37s)[22m
+

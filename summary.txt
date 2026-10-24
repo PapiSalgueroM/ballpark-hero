@@ -1,0 +1,15 @@
+build exit=0 35s | [dukb] inlined 1 stylesheet(s) and 1 module(s) into 181 snapshots (11 left alone)
+simNoRivalNames exit=0 33s | No rival product names found. 0 findings.
+simHarnessAnchors exit=0 77s | simHarnessAnchors: green. Every harness parses and none carries an unmatchable anchor.
+simAccessibility exit=0 0s | simAccessibility: all green
+simTrustCopy exit=0 1s | simTrustCopy: green. One disclaimer under every page and one count of the games, the registry's own.
+simStatDetectiveMotion exit=0 14s | simStatDetectiveMotion: controls never alter engines, pools, routes, saved data or the original page.
+vitest-touched exit=0 128s |    Duration  127.02s (transform 9.71s, setup 1.51s, collect 24.74s, tests 218.16s, environment 9.44s, prepare 2.37s)
+simSafari exit=0 1s | simSafari: green. Nothing shipped here is known to break on the phone he plays it on.
+simLegalPages exit=0 1s | simLegalPages: all green
+tsc exit=0 138s | 
+simConquestScenes exit=0 10s | ALL CONQUEST SCENE CHECKS PASSED
+simSiteSearch exit=0 3s | simSiteSearch: green. Every game is findable by name, typos included, and the ranking can explain itself.
+simInventedNames exit=0 15s | simInventedNames: green. Every invented man on this site is invented all the way down.
+simReportedGamePools exit=0 7s | simReportedGamePools: ten offline actual-page and real-pool outcomes passed.
+simNoInventedQuotes exit=0 25s | simNoInventedQuotes: green. No real player is quoted or accused anywhere.
