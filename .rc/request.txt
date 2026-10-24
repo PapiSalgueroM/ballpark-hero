@@ -1,0 +1,4 @@
+#!serve
+#!playwright
+walk: node .rc/x/walk1568.mjs
+toasts-head: SOCCER_LANDING_HEAD_ONLY=1 SECTIONS=toasts SIZES=390x844,768x1024,844x390 EXTRA_SIZES= ENGINES=chromium node scripts/playSoccerLanding.mjs
