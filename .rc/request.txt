@@ -1,0 +1,15 @@
+#!serve
+#!playwright
+#!serial
+# Round 1568: the plain kit lines on origin/main as based (b20ec6664), built in /tmp/base and served by each harness itself (BASE and SWEEP_BASE unset, so nothing reads the head's served build).
+fonts: mkdir -p .tmp-fx/font-cache && FREE_KICK_FONT_CACHE="$PWD/.tmp-fx/font-cache" node scripts/qa/freeKickLab1070.mjs --prefetch-fonts-only
+base-build: git worktree add -q --detach /tmp/base b20ec6664 && ln -s "$PWD/node_modules" /tmp/base/node_modules && cd /tmp/base && git log --oneline -1 && node_modules/.bin/vite build > /tmp/base-build.log 2>&1 && tail -2 /tmp/base-build.log
+base-playLiveMatchFit: cd /tmp/base && env -u BASE -u SWEEP_BASE node scripts/playLiveMatchFit.mjs
+base-walk1521: R=$PWD; cd /tmp/base && env -u BASE -u SWEEP_BASE node "$R/.rc/x/walkrun1521.mjs"
+base-playCmVar: R=$PWD; cd /tmp/base && env -u BASE -u SWEEP_BASE FREE_KICK_FONT_CACHE="$R/.tmp-fx/font-cache" NODE_OPTIONS="--require=/tmp/base/scripts/lib/offlineTransport.cjs" node scripts/playCmVar.mjs
+base-simCmRealFixtures-forwalk: cd /tmp/base && env -u BASE -u SWEEP_BASE NODE_OPTIONS="--require=/tmp/base/scripts/lib/offlineTransport.cjs" node scripts/simCmRealFixtures.mjs
+base-playCmRealFixtures: R=$PWD; cd /tmp/base && env -u BASE -u SWEEP_BASE FREE_KICK_FONT_CACHE="$R/.tmp-fx/font-cache" NODE_OPTIONS="--require=/tmp/base/scripts/lib/offlineTransport.cjs" node scripts/playCmRealFixtures.mjs
+base-playSoccerCareerDepth: cd /tmp/base && env -u BASE -u SWEEP_BASE NODE_OPTIONS="--require=/tmp/base/scripts/lib/offlineTransport.cjs" node scripts/playSoccerCareerDepth.mjs
+base-playConquestScenes: cd /tmp/base && env -u BASE -u SWEEP_BASE ENGINES=chromium node scripts/playConquestScenes.mjs
+base-ctl-none-Conquest: cd /tmp/base && env -u BASE -u SWEEP_BASE ANSWER_CONSENT_CONTROL=none ENGINES=chromium node scripts/playConquestScenes.mjs
+base-playDraftDetectiveReports: cd /tmp/base && env -u BASE -u SWEEP_BASE NODE_OPTIONS="--require=/tmp/base/scripts/lib/offlineTransport.cjs" node scripts/playDraftDetectiveReports.mjs
