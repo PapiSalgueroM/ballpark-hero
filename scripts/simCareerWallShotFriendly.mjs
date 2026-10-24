@@ -6,7 +6,7 @@ import { spawnSync } from 'node:child_process';
 import { fileURLToPath } from 'node:url';
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const copy = path.join(ROOT, 'src/lib/__control_careerWallShotFriendly.ts');
-const report = path.join(ROOT, '.tmp-fx/wall-shot-tests.json');
+const report = process.env.SIM_WALL_SHOT_REPORT ? path.resolve(process.env.SIM_WALL_SHOT_REPORT) : path.join(ROOT, '.tmp-fx/wall-shot-tests.json');
 function run(file) {
   fs.mkdirSync(path.dirname(report), { recursive: true });
   if (fs.existsSync(report)) fs.unlinkSync(report);

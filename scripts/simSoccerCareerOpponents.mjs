@@ -10,7 +10,9 @@ const source = path.join(ROOT, 'src/lib/season/soccer.ts');
 const copy = path.join(ROOT, 'src/lib/season/__control_soccerOpponents.ts');
 const original = fs.readFileSync(source, 'utf8');
 const test = 'src/test/soccerSeasonOpponents.test.ts';
-const report = path.join(ROOT, '.tmp-fx/opponents-tests.json');
+const report = process.env.CAREER_OPPONENTS_ARTIFACTS
+  ? path.join(path.resolve(ROOT, process.env.CAREER_OPPONENTS_ARTIFACTS), 'opponents-tests.json')
+  : path.join(ROOT, '.tmp-fx/opponents-tests.json');
 function run(file) {
   fs.mkdirSync(path.dirname(report), { recursive: true });
   if (fs.existsSync(report)) fs.unlinkSync(report);

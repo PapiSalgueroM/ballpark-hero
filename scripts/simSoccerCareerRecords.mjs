@@ -6,7 +6,9 @@ import { fileURLToPath } from 'node:url';
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const source = path.join(ROOT, 'src/lib/soccerCareerRecords.ts');
 const copy = path.join(ROOT, 'src/lib/__control_soccerCareerRecords.ts');
-const report = path.join(ROOT, '.tmp-fx/career-records-tests.json');
+const report = process.env.CAREER_RECORDS_ARTIFACTS
+  ? path.join(path.resolve(ROOT, process.env.CAREER_RECORDS_ARTIFACTS), 'career-records-tests.json')
+  : path.join(ROOT, '.tmp-fx/career-records-tests.json');
 function run(file) {
   fs.mkdirSync(path.dirname(report), { recursive: true });
   if (fs.existsSync(report)) fs.unlinkSync(report);

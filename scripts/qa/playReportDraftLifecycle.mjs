@@ -23,9 +23,15 @@ const sourceFiles = [
   'src/lib/reportContext.ts', 'src/components/game/reportKinds.ts',
   'src/components/game/Footer.tsx', 'src/components/seo/GameSeoContent.tsx',
   'src/pages/PerfectSeasonNba.tsx', 'src/components/ui/dialog.tsx',
+  ...(mode === 'fixed' ? ['src/components/game/ReportSiteIssueForm.tsx'] : []),
 ];
 const source = sourceFiles.map((file, index) => {
-  const original = git(['show', originalHead + ':' + file]), actual = fs.readFileSync(file);
+  const actual = fs.readFileSync(file);
+  if (file === 'src/components/game/ReportSiteIssueForm.tsx') {
+    assert.equal(mode, 'fixed', 'The added lazy form belongs only to the fixed source arm');
+    return { file, originalSha256: null, actualSha256: hash(actual), sourceArm: 'added-fixed-lazy-module' };
+  }
+  const original = git(['show', originalHead + ':' + file]);
   assert.equal(original.equals(actual), index < 2 ? mode === 'baseline' : true, file + ' has its declared source arm');
   return { file, originalSha256: hash(original), actualSha256: hash(actual) };
 });

@@ -1,0 +1,340 @@
+name: Academy filter census targeted proof
+on:
+  push:
+    branches: [codex/academy-filter-census-20261024]
+    paths: [.github/workflows/academy-filter-census.yml, scripts/simAcademyFilters.mjs]
+permissions:
+  contents: read
+concurrency:
+  group: academy-filter-census-${{ github.sha }}
+  cancel-in-progress: false
+jobs:
+  academy_filter_census:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    defaults:
+      run:
+        shell: bash
+    env:
+      CI: "true"
+      SIM_NETWORK: offline
+      LC_ALL: C
+      PARENT: b55eecb193482158d9a1ca6aa432d0369e071c8a
+      PARENT_TREE: d7a74a021a050d6efb1a0abecc397ecd6fa9dadc
+      WORKFLOW_PATH: .github/workflows/academy-filter-census.yml
+    steps:
+      - name: Fresh outside-checkout evidence
+        run: |
+          set -euo pipefail
+          out="$RUNNER_TEMP/academy-filter-census-$GITHUB_RUN_ID-a$GITHUB_RUN_ATTEMPT"
+          test ! -e "$out"
+          mkdir "$out"
+          case "$(realpath "$out")/" in "$GITHUB_WORKSPACE/"*) exit 1;; esac
+          printf 'ACADEMY_OUT=%s\n' "$out" >> "$GITHUB_ENV"
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          persist-credentials: false
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "24.21.0"
+          cache: npm
+      - name: Exact parent, two paths and all current source pins
+        id: source
+        run: |
+          set -euo pipefail
+          cat > "$ACADEMY_OUT/critical.expected.json" <<'PINS'
+          [{"file":".github/workflows/sim-node-four-shards.yml","parent":{"bytes":196078,"sha256":"e59be70cdc1299da8709dfb08e366291b63c25459c70533d2a2566617ef7d257","gitBlob":"5260fdf47cd9eaa8461a7fdccf9dc73f3bcf38d4"},"candidate":{"bytes":196078,"sha256":"e59be70cdc1299da8709dfb08e366291b63c25459c70533d2a2566617ef7d257","gitBlob":"5260fdf47cd9eaa8461a7fdccf9dc73f3bcf38d4"},"sourceReference":"Root immutable actual-source adoption receipt; independent actual b55 recursive tree Git/size matched, no oversized whole WF leaf"},{"file":"package-lock.json","parent":{"bytes":309049,"sha256":"c7e3867eabf0bfa03a8aa6a5e601b0050b937ed210d48c6bbd241019e3c9ea76","gitBlob":"97d6f12a052f25f400462938c241789a083f0bfe"},"candidate":{"bytes":309049,"sha256":"c7e3867eabf0bfa03a8aa6a5e601b0050b937ed210d48c6bbd241019e3c9ea76","gitBlob":"97d6f12a052f25f400462938c241789a083f0bfe"},"sourceReference":"Native original54e body exact immutable b55 Git/size matched"},{"file":"package.json","parent":{"bytes":3495,"sha256":"acfe14626dea53cf5f9c5e0286b766a22237656b52aac4c888b080873ac90e31","gitBlob":"2ff64986fb76ebc51b706f2fd24765768874008a"},"candidate":{"bytes":3495,"sha256":"acfe14626dea53cf5f9c5e0286b766a22237656b52aac4c888b080873ac90e31","gitBlob":"2ff64986fb76ebc51b706f2fd24765768874008a"},"sourceReference":"Native original54e body exact immutable b55 Git/size matched"},{"file":"scripts/lib/offlineTransport.cjs","parent":{"bytes":10660,"sha256":"e60ff1534307e449ccef598e3b7470dcba58681b82cea4005cec7319f14f9221","gitBlob":"0fda542a2649fe5da937c6976fd0f5b6073e74b6"},"candidate":{"bytes":10660,"sha256":"e60ff1534307e449ccef598e3b7470dcba58681b82cea4005cec7319f14f9221","gitBlob":"0fda542a2649fe5da937c6976fd0f5b6073e74b6"},"sourceReference":"Native original54e body exact immutable b55 Git/size matched"},{"file":"scripts/runAllSims.mjs","parent":{"bytes":27075,"sha256":"9a69afdcfbea75e81f20146a8583c8a15cb86f3b1936ac20e3e1f1919fe061ed","gitBlob":"3be52303003d81d58afa88cbd8babad8cb43bcce"},"candidate":{"bytes":27075,"sha256":"9a69afdcfbea75e81f20146a8583c8a15cb86f3b1936ac20e3e1f1919fe061ed","gitBlob":"3be52303003d81d58afa88cbd8babad8cb43bcce"},"sourceReference":"Actual immutable b55 raw source GET, native concatenated/full SHA/Git matched"},{"file":"scripts/simAcademyFilters.mjs","parent":{"bytes":2551,"sha256":"86b96437cefe91e4141d8ecbbf87c5932104a3e5187ef2fc05ffcf5ef67f4c5c","gitBlob":"ede36ab852d7d74e40524cc2e51a8e0497f26649"},"candidate":{"bytes":2577,"sha256":"4b5fb6b39a488322e92f74a5aac275543ade64ab42d5e91e6d039bd0652e048c","gitBlob":"e386fb362d6061017d66006a7129466f619099e5"},"sourceReference":"Native original54e body exact immutable b55 Git/size matched"},{"file":"src/components/club-manager/AcademyScreen.tsx","parent":{"bytes":16927,"sha256":"e739605415661dbe82378703e8c03e07bf62b79afb6a01471ec85094d66fbd44","gitBlob":"1c71d0fb8400276f1ff9d45c51038d5655891c6c"},"candidate":{"bytes":16927,"sha256":"e739605415661dbe82378703e8c03e07bf62b79afb6a01471ec85094d66fbd44","gitBlob":"1c71d0fb8400276f1ff9d45c51038d5655891c6c"},"sourceReference":"Native original54e body exact immutable b55 Git/size matched"},{"file":"src/test/academyFilters.test.tsx","parent":{"bytes":8144,"sha256":"d57bced1bf6630d2b28b10fbf40ba4a406f5a27188bf0107678af76aa7da6718","gitBlob":"d99615471dc530cc49be8083dad3b7e1601d0f5e"},"candidate":{"bytes":8144,"sha256":"d57bced1bf6630d2b28b10fbf40ba4a406f5a27188bf0107678af76aa7da6718","gitBlob":"d99615471dc530cc49be8083dad3b7e1601d0f5e"},"sourceReference":"Native original54e body exact immutable b55 Git/size matched"},{"file":"src/test/setup.ts","parent":{"bytes":847,"sha256":"0175cc334b44d9874ff4bd8274a8cc165e9e84cd3738a4298f934db353887289","gitBlob":"df00cdf5c54e8c8efc71e46d7585ae76acb4fc8d"},"candidate":{"bytes":847,"sha256":"0175cc334b44d9874ff4bd8274a8cc165e9e84cd3738a4298f934db353887289","gitBlob":"df00cdf5c54e8c8efc71e46d7585ae76acb4fc8d"},"sourceReference":"Native original54e body exact immutable b55 Git/size matched"},{"file":"vitest.config.ts","parent":{"bytes":5364,"sha256":"6a68dd2f214dab4a3013eb41bad38eea65d703d61440002710ec246495e1c58a","gitBlob":"ed2a9dc677f77dfe95c061064eeff5782b856864"},"candidate":{"bytes":5364,"sha256":"6a68dd2f214dab4a3013eb41bad38eea65d703d61440002710ec246495e1c58a","gitBlob":"ed2a9dc677f77dfe95c061064eeff5782b856864"},"sourceReference":"Native original54e body exact immutable b55 Git/size matched"}]
+          PINS
+          sha256sum "$ACADEMY_OUT/critical.expected.json" > "$ACADEMY_OUT/critical.expected.sha256"
+          (set -o noclobber; : > "$ACADEMY_OUT/source.transport")
+          NODE_OPTIONS="--require=$GITHUB_WORKSPACE/scripts/lib/offlineTransport.cjs" SIM_OFFLINE_RECEIPT="$ACADEMY_OUT/source.transport" \
+            node --input-type=module > "$ACADEMY_OUT/source.stdout.log" 2> "$ACADEMY_OUT/source.stderr.log" <<'NODE'
+          import assert from 'node:assert/strict';
+          import fs from 'node:fs';
+          import path from 'node:path';
+          import { createHash } from 'node:crypto';
+          import { execFileSync } from 'node:child_process';
+          const out=process.env.ACADEMY_OUT,head=process.env.GITHUB_SHA,parent=process.env.PARENT,self=process.env.WORKFLOW_PATH;
+          const git=(...args)=>execFileSync('git',args,{encoding:'utf8'}),sha=body=>createHash('sha256').update(body).digest('hex');
+          assert.match(head,/^[a-f0-9]{40}$/);
+          assert.equal(process.env.GITHUB_REF,'refs/heads/codex/academy-filter-census-20261024');
+          assert.equal(git('rev-parse','HEAD').trim(),head);
+          assert.deepEqual(git('rev-list','--parents','-n','1','HEAD').trim().split(' '),[head,parent]);
+          assert.equal(git('rev-parse',parent+'^{tree}').trim(),process.env.PARENT_TREE);
+          assert.equal(git('status','--porcelain=v1','--untracked-files=all'),'');
+          const direct=git('diff','--name-status','--no-renames',parent,'HEAD').trim().split('\n');
+          assert.deepEqual(direct,['A\t'+self,'M\tscripts/simAcademyFilters.mjs']);
+          const old=git('ls-tree','-r','--name-only','-z',parent).split('\0').filter(Boolean),now=git('ls-files','-z').split('\0').filter(Boolean);
+          assert.equal(old.length,5341);assert.equal(now.length,5342);assert(!old.includes(self)&&now.includes(self));
+          assert.deepEqual(now.filter(file=>file!==self).sort(),old.sort());
+          const expected=JSON.parse(fs.readFileSync(path.join(out,'critical.expected.json'),'utf8'));
+          assert.equal(expected.length,10);assert.equal(new Set(expected.map(row=>row.file)).size,10);
+          const pins=expected.map(row=>{
+            const body=fs.readFileSync(row.file),actual={bytes:body.length,sha256:sha(body),gitBlob:git('rev-parse','HEAD:'+row.file).trim()};
+            assert.deepEqual(actual,row.candidate);assert.equal(git('rev-parse',parent+':'+row.file).trim(),row.parent.gitBlob);
+            return {file:row.file,...actual,parentGitBlob:row.parent.gitBlob};
+          });
+          const body=fs.readFileSync(self),workflow={file:self,bytes:body.length,sha256:sha(body),gitBlob:git('rev-parse','HEAD:'+self).trim()};
+          fs.writeFileSync(path.join(out,'source-binding.json'),JSON.stringify({head,parent,parentTree:process.env.PARENT_TREE,tree:git('rev-parse','HEAD^{tree}').trim(),source:5342,parentSource:5341,direct,pins,workflow,applicationQualified:false},null,2)+'\n',{flag:'wx'});
+          console.log('Exact two-path Academy source binding complete.');
+          NODE
+          printf '0\n' > "$ACADEMY_OUT/source.exit"
+          git ls-files -z | sort -z > "$ACADEMY_OUT/source-members.before"
+          xargs -0 sha256sum < "$ACADEMY_OUT/source-members.before" > "$ACADEMY_OUT/source-before.sha256"
+          cp "$WORKFLOW_PATH" "$ACADEMY_OUT/workflow.source.yml"
+          git rev-parse HEAD > "$ACADEMY_OUT/head.before"
+          git status --porcelain=v1 --untracked-files=all > "$ACADEMY_OUT/status.before"
+      - name: Locked dependencies and complete before inventory
+        id: install
+        timeout-minutes: 5
+        run: |
+          set -euo pipefail
+          set +e
+          npm ci --ignore-scripts --no-audit --no-fund > "$ACADEMY_OUT/install.stdout.log" 2> "$ACADEMY_OUT/install.stderr.log"
+          code=$?
+          printf '%s\n' "$code" > "$ACADEMY_OUT/install.exit"
+          cat "$ACADEMY_OUT/install.stdout.log"
+          cat "$ACADEMY_OUT/install.stderr.log" >&2
+          set -e
+          test "$code" -eq 0
+          find node_modules -type f -print0 | sort -z > "$ACADEMY_OUT/dependency-members.before"
+          xargs -0 sha256sum < "$ACADEMY_OUT/dependency-members.before" > "$ACADEMY_OUT/dependencies-before.sha256"
+          test "$(tr -cd '\0' < "$ACADEMY_OUT/dependency-members.before" | wc -c)" -eq 24466
+      - name: Actual app type gate under the original guard
+        id: types
+        timeout-minutes: 3
+        run: |
+          set -euo pipefail
+          (set -o noclobber; : > "$ACADEMY_OUT/types.transport")
+          set +e
+          NODE_OPTIONS="--require=$GITHUB_WORKSPACE/scripts/lib/offlineTransport.cjs" SIM_OFFLINE_RECEIPT="$ACADEMY_OUT/types.transport" \
+            node_modules/.bin/tsc --noEmit -p tsconfig.app.json > "$ACADEMY_OUT/types.stdout.log" 2> "$ACADEMY_OUT/types.stderr.log"
+          code=$?
+          printf '%s\n' "$code" > "$ACADEMY_OUT/types.exit"
+          printf 'status=%s\n' "$code" >> "$GITHUB_OUTPUT"
+          cat "$ACADEMY_OUT/types.stdout.log"
+          cat "$ACADEMY_OUT/types.stderr.log" >&2
+          exit "$code"
+      - name: Actual normal wrapper and native exit
+        id: normal
+        if: ${{ !cancelled() && steps.types.outputs.status == '0' }}
+        timeout-minutes: 3
+        run: |
+          set -euo pipefail
+          while IFS= read -r key; do
+            case "$key" in *_CONTROL|CONTROL|ATTRIBUTION|NO_DOUBLE_SWAP|SIM_RUNNER_ARTIFACTS) unset "$key";; esac
+          done < <(compgen -e)
+          (set -o noclobber; : > "$ACADEMY_OUT/normal.transport")
+          printf 'STARTED\n' > "$ACADEMY_OUT/normal.phase"
+          set +e
+          ACADEMY_FILTER_CONTROL='' NODE_OPTIONS="--require=$GITHUB_WORKSPACE/scripts/lib/offlineTransport.cjs" SIM_OFFLINE_RECEIPT="$ACADEMY_OUT/normal.transport" \
+            node scripts/simAcademyFilters.mjs > "$ACADEMY_OUT/normal.stdout.log" 2> "$ACADEMY_OUT/normal.stderr.log" &
+          child=$!
+          printf '%s\n' "$child" > "$ACADEMY_OUT/normal.pid"
+          wait "$child"
+          code=$?
+          printf '%s\n' "$code" > "$ACADEMY_OUT/normal.exit"
+          printf 'CLOSED\n' > "$ACADEMY_OUT/normal.phase"
+          cat "$ACADEMY_OUT/normal.stdout.log"
+          cat "$ACADEMY_OUT/normal.stderr.log" >&2
+          exit 0
+      - name: Actual unfilter wrapper and native exit
+        id: unfilter
+        if: ${{ !cancelled() && steps.types.outputs.status == '0' }}
+        timeout-minutes: 3
+        run: |
+          set -euo pipefail
+          while IFS= read -r key; do
+            case "$key" in *_CONTROL|CONTROL|ATTRIBUTION|NO_DOUBLE_SWAP|SIM_RUNNER_ARTIFACTS) unset "$key";; esac
+          done < <(compgen -e)
+          (set -o noclobber; : > "$ACADEMY_OUT/unfilter.transport")
+          printf 'STARTED\n' > "$ACADEMY_OUT/unfilter.phase"
+          set +e
+          ACADEMY_FILTER_CONTROL='unfilter' NODE_OPTIONS="--require=$GITHUB_WORKSPACE/scripts/lib/offlineTransport.cjs" SIM_OFFLINE_RECEIPT="$ACADEMY_OUT/unfilter.transport" \
+            node scripts/simAcademyFilters.mjs > "$ACADEMY_OUT/unfilter.stdout.log" 2> "$ACADEMY_OUT/unfilter.stderr.log" &
+          child=$!
+          printf '%s\n' "$child" > "$ACADEMY_OUT/unfilter.pid"
+          wait "$child"
+          code=$?
+          printf '%s\n' "$code" > "$ACADEMY_OUT/unfilter.exit"
+          printf 'CLOSED\n' > "$ACADEMY_OUT/unfilter.phase"
+          cat "$ACADEMY_OUT/unfilter.stdout.log"
+          cat "$ACADEMY_OUT/unfilter.stderr.log" >&2
+          exit 0
+      - name: Actual restored wrapper and native exit
+        id: restored
+        if: ${{ !cancelled() && steps.types.outputs.status == '0' }}
+        timeout-minutes: 3
+        run: |
+          set -euo pipefail
+          while IFS= read -r key; do
+            case "$key" in *_CONTROL|CONTROL|ATTRIBUTION|NO_DOUBLE_SWAP|SIM_RUNNER_ARTIFACTS) unset "$key";; esac
+          done < <(compgen -e)
+          (set -o noclobber; : > "$ACADEMY_OUT/restored.transport")
+          printf 'STARTED\n' > "$ACADEMY_OUT/restored.phase"
+          set +e
+          ACADEMY_FILTER_CONTROL='' NODE_OPTIONS="--require=$GITHUB_WORKSPACE/scripts/lib/offlineTransport.cjs" SIM_OFFLINE_RECEIPT="$ACADEMY_OUT/restored.transport" \
+            node scripts/simAcademyFilters.mjs > "$ACADEMY_OUT/restored.stdout.log" 2> "$ACADEMY_OUT/restored.stderr.log" &
+          child=$!
+          printf '%s\n' "$child" > "$ACADEMY_OUT/restored.pid"
+          wait "$child"
+          code=$?
+          printf '%s\n' "$code" > "$ACADEMY_OUT/restored.exit"
+          printf 'CLOSED\n' > "$ACADEMY_OUT/restored.phase"
+          cat "$ACADEMY_OUT/restored.stdout.log"
+          cat "$ACADEMY_OUT/restored.stderr.log" >&2
+          exit 0
+      - name: Require actual normal, unfilter and restored outcomes
+        id: classify
+        if: ${{ !cancelled() && steps.types.outputs.status == '0' }}
+        run: |
+          set -euo pipefail
+          (set -o noclobber; : > "$ACADEMY_OUT/classifier.transport")
+          set +e
+          NODE_OPTIONS="--require=$GITHUB_WORKSPACE/scripts/lib/offlineTransport.cjs" SIM_OFFLINE_RECEIPT="$ACADEMY_OUT/classifier.transport" \
+            node --input-type=module > "$ACADEMY_OUT/classifier.stdout.log" 2> "$ACADEMY_OUT/classifier.stderr.log" <<'NODE'
+          import assert from 'node:assert/strict';
+          import fs from 'node:fs';
+          import path from 'node:path';
+          import { createHash } from 'node:crypto';
+          const out=process.env.ACADEMY_OUT,sha=body=>createHash('sha256').update(body).digest('hex');
+          const write=(name,value)=>fs.writeFileSync(path.join(out,name),JSON.stringify(value,null,2)+'\n',{flag:'wx'});
+          const failedTitles=["combines both filters while keeping the original reported-ceiling order and source list","distinguishes no matches from an empty academy and resets both selections","passes the actual visible prospect ID to sign and release callbacks","keeps signing disabled for budget 4 and squad size 10","keeps signing disabled for budget 10 and squad size 30","retains the selected labels if signing or releasing removes the last match"],unaffectedTitles=["keeps the original intake explanation when there are no prospects","names every Sign him and Let go button after its own prospect, and each one acts on him"];
+          const good='simAcademyFilters: eight rendered combination, reset, callback and signing-rule checks passed.';
+          const fault='simAcademyFilters control: six rendered outcome checks rejected ignored selections; the empty intake and prospect button name checks stayed green.';
+          const read=name=>fs.readFileSync(path.join(out,name),'utf8');
+          const rows=['normal','unfilter','restored'].map(arm=>{
+            const st=fs.lstatSync(path.join(out,arm+'.transport'));
+            return {arm,pid:Number(read(arm+'.pid').trim()),exit:Number(read(arm+'.exit').trim()),phase:read(arm+'.phase').trim(),stdout:read(arm+'.stdout.log'),stderr:read(arm+'.stderr.log'),receipt:{regular:st.isFile(),symlink:st.isSymbolicLink(),bytes:st.size}};
+          });
+          function judge(values){
+            assert.deepEqual(values.map(row=>row.arm),['normal','unfilter','restored'],'ACADEMY_PROOF_THREE_ACTUAL_ARMS');
+            assert.equal(new Set(values.map(row=>row.pid)).size,3,'ACADEMY_PROOF_DISTINCT_NATIVE_PIDS');
+            for(const row of values){
+              assert(Number.isInteger(row.pid)&&row.pid>0&&row.phase==='CLOSED','ACADEMY_PROOF_NATIVE_CLOSED');
+              assert.equal(row.exit,0,'ACADEMY_PROOF_NATIVE_EXIT');
+              assert(row.receipt.regular&&!row.receipt.symlink&&row.receipt.bytes===0,'ACADEMY_PROOF_TRANSPORT');
+              const text=row.stdout+'\n'+row.stderr;
+              assert(text.includes('src/test/academyFilters.test.tsx'),'ACADEMY_PROOF_ACTUAL_TEST_FILE');
+              assert(!/Unhandled (?:Errors?|Rejections?)|Uncaught Exception|SyntaxError|ReferenceError|Cannot find (?:module|package)|Failed to (?:load|resolve) (?:url|import)/i.test(text),'ACADEMY_PROOF_NO_OBSERVED_SETUP_RUNTIME_ERROR');
+              if(row.arm==='unfilter'){
+                assert.equal((text.match(/^\s*Test Files\s+1 failed \(1\)\s*$/gm)||[]).length,1,'ACADEMY_PROOF_TEST_CENSUS');
+                assert.equal((text.match(/^\s*Tests\s+6 failed \| 2 passed \(8\)\s*$/gm)||[]).length,1,'ACADEMY_PROOF_TEST_CENSUS');
+                const names=[...text.matchAll(/^\s*FAIL\s+src\/test\/academyFilters\.test\.tsx > academy position and age filters > (.+)\s*$/gm)].map(match=>match[1].trim()).sort();
+                assert.deepEqual(names,[...failedTitles].sort(),'ACADEMY_PROOF_FAILED_CENSUS');
+                assert(text.includes('AssertionError'),'ACADEMY_PROOF_ACTUAL_FILTER_OUTCOME_FAILURE');
+                assert(row.stdout.trimEnd().endsWith(fault),'ACADEMY_PROOF_WRAPPER_FOOTER');
+              }else{
+                assert.equal((text.match(/^\s*Test Files\s+1 passed \(1\)\s*$/gm)||[]).length,1,'ACADEMY_PROOF_TEST_CENSUS');
+                assert.equal((text.match(/^\s*Tests\s+8 passed \(8\)\s*$/gm)||[]).length,1,'ACADEMY_PROOF_TEST_CENSUS');
+                assert(!/^\s*FAIL\s+/m.test(text),'ACADEMY_PROOF_TEST_CENSUS');
+                assert(row.stdout.trimEnd().endsWith(good),'ACADEMY_PROOF_WRAPPER_FOOTER');
+              }
+            }
+          }
+          judge(rows);
+          const original=Buffer.from(JSON.stringify(rows)+'\n');
+          fs.writeFileSync(path.join(out,'record-control-foundation.json'),original,{flag:'wx'});
+          const controls=[];
+          function control(id,mutate,marker){
+            const changed=JSON.parse(original);mutate(changed);const body=Buffer.from(JSON.stringify(changed)+'\n'),work=path.join(out,'record-control-'+id+'.work.json');
+            assert(!body.equals(original),'ACADEMY_RECORD_CONTROL_CHANGED');fs.writeFileSync(work,body,{flag:'wx'});
+            let error;try{judge(JSON.parse(fs.readFileSync(work,'utf8')));}catch(actual){error=actual;}
+            assert(error instanceof assert.AssertionError&&error.code==='ERR_ASSERTION'&&error.message.includes(marker),'ACADEMY_RECORD_CONTROL_OWNED');
+            fs.writeFileSync(path.join(out,'record-control-'+id+'.changed.json'),body,{flag:'wx'});
+            fs.writeFileSync(work,original);assert(fs.readFileSync(work).equals(original),'ACADEMY_RECORD_CONTROL_RESTORED');judge(JSON.parse(fs.readFileSync(work,'utf8')));
+            controls.push({id,marker,sourceSha256:sha(original),changedSha256:sha(body),restoredSha256:sha(fs.readFileSync(work)),error:{name:error.name,code:error.code,message:error.message,stack:error.stack},scope:'COPIED_ACTUAL_OUTPUT_RECORD_JUDGE_ONLY'});
+          }
+          control('wrong-normal-pass-total',v=>{const re=/Tests\s+8 passed \(8\)/g;assert.equal((v[0].stdout.match(re)||[]).length,1);v[0].stdout=v[0].stdout.replace(re,'Tests 7 passed (8)');},'ACADEMY_PROOF_TEST_CENSUS');
+          control('wrong-actual-failed-title',v=>{
+            const re=/FAIL\s+src\/test\/academyFilters\.test\.tsx > academy position and age filters > combines both filters while keeping the original reported-ceiling order and source list/g;
+            assert.equal((v[1].stdout.match(re)||[]).length,1);
+            v[1].stdout=v[1].stdout.replace(re,match=>match.replace(failedTitles[0],'changed copied record title'));
+          },'ACADEMY_PROOF_FAILED_CENSUS');
+          control('nonzero-native-wrapper',v=>{v[2].exit=1;},'ACADEMY_PROOF_NATIVE_EXIT');
+          control('nonempty-native-receipt',v=>{v[0].receipt.bytes=1;},'ACADEMY_PROOF_TRANSPORT');
+          write('record-controls.json',{status:'FOUR_ACTUAL_RECORD_CONTROLS_AND_RESTORES_EFFECTIVE',controls,applicationSourceFaultCredit:0,normalTestPassCredit:0});
+          write('targeted-admission.json',{status:'TARGETED_ACADEMY_WRAPPER_NORMAL_CONTROL_RESTORED_COMPLETE',source:process.env.GITHUB_SHA,normal:{passed:8},unfilter:{failed:6,passed:2,failedTitles,unaffectedTitles,unaffectedIdentityBasis:'Exact held eight-case source census minus six actual named failure headers and exact6failed/2passed(8) summary. Passed-case names are not separately printed by the unchanged default reporter.'},restored:{passed:8},wrapperRows:rows.map(r=>({arm:r.arm,pid:r.pid,nativeExit:r.exit,phase:r.phase,stdoutBytes:Buffer.byteLength(r.stdout),stdoutSha256:sha(r.stdout),stderrBytes:Buffer.byteLength(r.stderr),stderrSha256:sha(r.stderr),receipt:r.receipt})),recordJudgeControls:4,wrapperChildTimeoutMs:120000,childNativeStatusTelemetry:'NOT_SEPARATELY_RETAINED_BY_UNCHANGED_WRAPPER; original wrapper checks child status and actual summaries',optionalVitestRuntimeCounters:'UNKNOWN_NOT_RETAINED_BY_UNCHANGED_DEFAULT_REPORTER',backendQualified:false,fullSuiteQualified:false,browserExecuted:false,buildExecuted:false,published:false});
+          console.log('Academy targeted proof: actual normal8, unfilter6failed2passed, restored8, four copied-record controls.');
+          NODE
+          code=$?
+          printf '%s\n' "$code" > "$ACADEMY_OUT/classifier.exit"
+          cat "$ACADEMY_OUT/classifier.stdout.log"
+          cat "$ACADEMY_OUT/classifier.stderr.log" >&2
+          exit "$code"
+      - name: Always require complete physical end holds
+        if: always()
+        id: final
+        run: |
+          set -uo pipefail
+          fail=0
+          if test -s "$ACADEMY_OUT/source-before.sha256"; then
+            git ls-files -z | sort -z > "$ACADEMY_OUT/source-members.after"
+            xargs -0 sha256sum < "$ACADEMY_OUT/source-members.after" > "$ACADEMY_OUT/source-after.sha256"
+            cmp "$ACADEMY_OUT/source-members.before" "$ACADEMY_OUT/source-members.after" > "$ACADEMY_OUT/source-members-hold.log" 2>&1 || fail=1
+            cmp "$ACADEMY_OUT/source-before.sha256" "$ACADEMY_OUT/source-after.sha256" > "$ACADEMY_OUT/source-sha-hold.log" 2>&1 || fail=1
+            sha256sum -c "$ACADEMY_OUT/source-before.sha256" > "$ACADEMY_OUT/source-body-hold.log" 2>&1 || fail=1
+          else fail=1; fi
+          if test -s "$ACADEMY_OUT/dependencies-before.sha256"; then
+            find node_modules -type f -print0 | sort -z > "$ACADEMY_OUT/dependency-members.after"
+            xargs -0 sha256sum < "$ACADEMY_OUT/dependency-members.after" > "$ACADEMY_OUT/dependencies-after.sha256"
+            cmp "$ACADEMY_OUT/dependency-members.before" "$ACADEMY_OUT/dependency-members.after" > "$ACADEMY_OUT/dependency-members-hold.log" 2>&1 || fail=1
+            cmp "$ACADEMY_OUT/dependencies-before.sha256" "$ACADEMY_OUT/dependencies-after.sha256" > "$ACADEMY_OUT/dependency-sha-hold.log" 2>&1 || fail=1
+            sha256sum -c "$ACADEMY_OUT/dependencies-before.sha256" > "$ACADEMY_OUT/dependency-body-hold.log" 2>&1 || fail=1
+          else fail=1; fi
+          sha256sum -c "$ACADEMY_OUT/critical.expected.sha256" > "$ACADEMY_OUT/critical-expected-hold.log" 2>&1 || fail=1
+          git rev-parse HEAD > "$ACADEMY_OUT/head.after"
+          cmp "$ACADEMY_OUT/head.before" "$ACADEMY_OUT/head.after" > "$ACADEMY_OUT/head-hold.log" 2>&1 || fail=1
+          git diff --exit-code > "$ACADEMY_OUT/worktree-diff.log" 2>&1 || fail=1
+          git diff --cached --exit-code > "$ACADEMY_OUT/index-diff.log" 2>&1 || fail=1
+          git status --porcelain=v1 --untracked-files=all > "$ACADEMY_OUT/status.after"
+          test ! -s "$ACADEMY_OUT/status.after" || fail=1
+          cmp "$WORKFLOW_PATH" "$ACADEMY_OUT/workflow.source.yml" > "$ACADEMY_OUT/workflow-copy-hold.log" 2>&1 || fail=1
+          (set -o noclobber; : > "$ACADEMY_OUT/final.transport") || fail=1
+          NODE_OPTIONS="--require=$GITHUB_WORKSPACE/scripts/lib/offlineTransport.cjs" SIM_OFFLINE_RECEIPT="$ACADEMY_OUT/final.transport" \
+            node --input-type=module > "$ACADEMY_OUT/final.stdout.log" 2> "$ACADEMY_OUT/final.stderr.log" <<'NODE'
+          import assert from 'node:assert/strict';
+          import fs from 'node:fs';
+          import path from 'node:path';
+          import { createHash } from 'node:crypto';
+          import { execFileSync } from 'node:child_process';
+          const out=process.env.ACADEMY_OUT,sha=b=>createHash('sha256').update(b).digest('hex');
+          const expected=JSON.parse(fs.readFileSync(path.join(out,'critical.expected.json'),'utf8')),binding=JSON.parse(fs.readFileSync(path.join(out,'source-binding.json'),'utf8'));
+          assert.equal(execFileSync('git',['rev-parse','HEAD'],{encoding:'utf8'}).trim(),process.env.GITHUB_SHA);
+          const pins=expected.map(row=>{
+            const body=fs.readFileSync(row.file),actual={bytes:body.length,sha256:sha(body),gitBlob:execFileSync('git',['rev-parse','HEAD:'+row.file],{encoding:'utf8'}).trim()};
+            assert.deepEqual(actual,row.candidate);return {file:row.file,...actual,parentGitBlob:row.parent.gitBlob};
+          });
+          assert.deepEqual(pins,binding.pins);
+          for(const name of ['source','install','types','normal','unfilter','restored','classifier'])assert.equal(fs.readFileSync(path.join(out,name+'.exit'),'utf8').trim(),'0','ACADEMY_FINAL_REQUIRED_NATIVE_EXIT: '+name);
+          for(const name of ['source','types','normal','unfilter','restored','classifier','final']){
+            const st=fs.lstatSync(path.join(out,name+'.transport'));
+            assert(st.isFile()&&!st.isSymbolicLink()&&st.size===0,'ACADEMY_FINAL_PRESENT_EMPTY_RECEIPT: '+name);
+          }
+          const a=JSON.parse(fs.readFileSync(path.join(out,'targeted-admission.json'),'utf8'));
+          assert.equal(a.status,'TARGETED_ACADEMY_WRAPPER_NORMAL_CONTROL_RESTORED_COMPLETE');assert.equal(a.source,process.env.GITHUB_SHA);
+          assert.equal(a.recordJudgeControls,4);assert.equal(a.fullSuiteQualified,false);assert.equal(a.backendQualified,false);
+          fs.writeFileSync(path.join(out,'final-binding.json'),JSON.stringify({source:process.env.GITHUB_SHA,pins,currentSources:5342,dependencies:24466,presentEmptyReceipts:7,targetedOnly:true,fullSuiteQualified:false,browserExecuted:false,backendQualified:false},null,2)+'\n',{flag:'wx'});
+          NODE
+          code=$?
+          printf '%s\n' "$code" > "$ACADEMY_OUT/final-binding.exit"
+          test "$code" -eq 0 || fail=1
+          test ! -s "$ACADEMY_OUT/final.transport" || fail=1
+          printf '%s\n' "$fail" > "$ACADEMY_OUT/final-holds.exit"
+          exit "$fail"
+      - name: Always preserve stages and complete evidence
+        if: always()
+        run: |
+          set -euo pipefail
+          printf '%s\n' 'source=${{ steps.source.outcome }}' 'install=${{ steps.install.outcome }}' 'types=${{ steps.types.outcome }}' 'normal=${{ steps.normal.outcome }}' 'unfilter=${{ steps.unfilter.outcome }}' 'restored=${{ steps.restored.outcome }}' 'classifier=${{ steps.classify.outcome }}' 'final=${{ steps.final.outcome }}' > "$ACADEMY_OUT/stages.txt"
+          find "$ACADEMY_OUT" -mindepth 1 ! -type d ! -type f -print > "$ACADEMY_OUT/evidence-nonregular.txt"
+          test ! -s "$ACADEMY_OUT/evidence-nonregular.txt"
+          (cd "$ACADEMY_OUT"; find . -type f ! -name evidence.sha256 -print0 | sort -z | xargs -0 sha256sum > evidence.sha256)
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: academy-filter-census-${{ github.run_id }}-a${{ github.run_attempt }}
+          path: ${{ env.ACADEMY_OUT }}
+          if-no-files-found: error
+          retention-days: 30

@@ -318,11 +318,9 @@ const AppContent = () => {
       <ScrollToTop />
       <CookieConsent />
       {/* Round 167: the site's own wire across the top of every screen. */}
-      <div data-site-chrome="" className="sticky top-0 z-50 flex h-11 items-center border-b border-border/40 bg-background">
+      <LiveTicker />
+      <div data-site-chrome="" className="dukb-menu-fallback flex h-11 items-center border-b border-border/40 bg-background">
         <SiteMenu />
-        <div className="min-w-0 flex-1">
-          <LiveTicker />
-        </div>
       </div>
       {shouldShowHeader(pathname) && <Header />}
       {/* Round 1142: one line, game routes only, and only in a browser that

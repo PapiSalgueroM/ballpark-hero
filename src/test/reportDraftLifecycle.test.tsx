@@ -1,7 +1,7 @@
 import { act, cleanup, fireEvent, render } from '@testing-library/react';
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 import ReportQuestion from '@/components/game/ReportQuestion';
-import ReportSiteIssue from '@/components/game/ReportSiteIssue';
+import ReportSiteIssue from '@/components/game/ReportSiteIssueForm';
 
 const delivery = vi.hoisted(() => ({ invoke: vi.fn(), insert: vi.fn() }));
 vi.mock('@/integrations/supabase/client', () => ({ supabase: { functions: { invoke: delivery.invoke }, from: (table: string) => { expect(table).toBe('question_reports'); return { insert: delivery.insert }; } } }));
