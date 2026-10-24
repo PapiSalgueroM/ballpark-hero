@@ -22,7 +22,7 @@ for (const key of ['US_BOARD_CONTROL_ALIAS', 'US_BOARD_CONTROL_FILE', 'NO_DOUBLE
 fs.mkdirSync(out);
 const testFile = 'src/test/clubManagerTraitOldParity.test.ts';
 const inputs = [
-  ['src/lib/clubManager.ts', 1242766, '29d7ec57f331816e241b1c05f66a7540403bff7e72a8a33d4bd6838c24664690'],
+  ['src/lib/clubManager.ts', 1239505, 'c3370911a70a6891947b5a10131206cbd9b10c0f40ed3c9ebe57cb06454b4f35'],
   ['src/lib/clubManagerTraitRuntime.ts', 6309, '9c5a8327b2fd7fcf7c3f966e4dff93688790fdcd6e0d0d31afcf739be8c41da7'],
   ['src/lib/clubManagerTraitEdits.ts', 1982, '0e1ee98288cc370bc6bcf2bc507a2badae5f4f76a15ce53b50ce4c3ac8ccd18a'],
   ['src/lib/clubManagerTraits.ts', 6014, 'c2160119653e92d2274928f078d31e6d8b8a365b86bed801172a0edf370d210d'],

@@ -10,12 +10,12 @@ concurrency:
   cancel-in-progress: false
 env:
   BASE_SOURCE: 3e95583fd8131f3704591cd566677f8774a8e4c3
-  EXPECTED_PARENT: 95b5b82cbdfd021876fabfbe810ce5cd1ebf3994
+  EXPECTED_PARENT: 3d32942e21992e1d8136d0421837c275375ef1df
   CI: '1'
   SIM_NETWORK: offline
   TZ: UTC
   ENGINES: chromium
-  CM_COACHED_EXPECTED_PINS_JSON: '{"src/lib/clubManager.ts":"29d7ec57f331816e241b1c05f66a7540403bff7e72a8a33d4bd6838c24664690","src/lib/clubManagerTraitRuntime.ts":"9c5a8327b2fd7fcf7c3f966e4dff93688790fdcd6e0d0d31afcf739be8c41da7","src/lib/clubManagerTraitEdits.ts":"0e1ee98288cc370bc6bcf2bc507a2badae5f4f76a15ce53b50ce4c3ac8ccd18a","src/lib/clubManagerTraits.ts":"c2160119653e92d2274928f078d31e6d8b8a365b86bed801172a0edf370d210d","src/hooks/useClubManager.ts":"5ac14246dd3650c9736973229ae17f5cc0ca4de76cb5d815bb7f081179c08b8b","src/components/club-manager/CoachedStyleCard.tsx":"5c08f58715d3ec7378dd422c6765be74af0435e9548323c11eff029de36854f1","src/components/club-manager/TrainingScreen.tsx":"a7bf7feb203ddb1645fbc5d5d0eea801a0850097d34a8e469f461577b8e0ef8c","src/components/club-manager/SquadScreen.tsx":"fbb0cb94e6b2ab740e404e1e85a4f5388bed29927967d09259cafc230f84040c","src/components/club-manager/TacticsScreen.tsx":"3802cc0c2146c292a6a9d6fefac5334295360632bab66d9ec6b7b1e9fca896fd","src/pages/ClubManager.tsx":"f55c03ce8e2c55f4a4ded81ce5882f745e4d60bc50def80beb1dd014f164585b","src/index.css":"ada9cc819db63d0e2eb013bd3c29eec16877e2a30166c390b81901142369fef3","scripts/qa/fixtures/cmCoachedStyles.entry.tsx":"f4f71610d2790a97126d8c9a239217ef2ef83ad86e75927981b9d5434d696560","scripts/qa/fixtures/cmCoachedStyles.html":"35490024a1a9928a5563d6d41b428e11e6d3bcdc7ff53f9ce30bdd292e9ea805","scripts/qa/fixtures/cmCoachedStyles.vite.mjs":"3b2b00987d188893717cbe30728317cd703bbb3a94080a81556888c0fb03fe6b","scripts/qa/playCmCoachedStyles.mjs":"ed389cca7d89d28dd388b8d92a6987bc7419c7059061341e142bd1c0ed97ce42","scripts/qa/siteMenuNavigationSupport.mjs":"c70e3ecc412f16d3322047b13205716c644495f8c74b76eed83852c87f35d303","scripts/lib/hostLikeServer.mjs":"3958c9a3b4d9e49bb60a3b7dd72d81a997bd1caed56e82e4c3bae07e1a918ef0","scripts/lib/playwrightLoader.mjs":"94a07179be7ca6b9562d118b52c2d5d0dff0b6b2e29e49e4fea16fa2defb5a93"}'
+  CM_COACHED_EXPECTED_PINS_JSON: '{"src/lib/clubManager.ts":"c3370911a70a6891947b5a10131206cbd9b10c0f40ed3c9ebe57cb06454b4f35","src/lib/clubManagerTraitRuntime.ts":"9c5a8327b2fd7fcf7c3f966e4dff93688790fdcd6e0d0d31afcf739be8c41da7","src/lib/clubManagerTraitEdits.ts":"0e1ee98288cc370bc6bcf2bc507a2badae5f4f76a15ce53b50ce4c3ac8ccd18a","src/lib/clubManagerTraits.ts":"c2160119653e92d2274928f078d31e6d8b8a365b86bed801172a0edf370d210d","src/hooks/useClubManager.ts":"5ac14246dd3650c9736973229ae17f5cc0ca4de76cb5d815bb7f081179c08b8b","src/components/club-manager/CoachedStyleCard.tsx":"5c08f58715d3ec7378dd422c6765be74af0435e9548323c11eff029de36854f1","src/components/club-manager/TrainingScreen.tsx":"a7bf7feb203ddb1645fbc5d5d0eea801a0850097d34a8e469f461577b8e0ef8c","src/components/club-manager/SquadScreen.tsx":"fbb0cb94e6b2ab740e404e1e85a4f5388bed29927967d09259cafc230f84040c","src/components/club-manager/TacticsScreen.tsx":"cece9959abf2e8962d529610734b2a981db1bac05d96620ff3160484d7afb7e8","src/pages/ClubManager.tsx":"f55c03ce8e2c55f4a4ded81ce5882f745e4d60bc50def80beb1dd014f164585b","src/index.css":"ada9cc819db63d0e2eb013bd3c29eec16877e2a30166c390b81901142369fef3","scripts/qa/fixtures/cmCoachedStyles.entry.tsx":"f4f71610d2790a97126d8c9a239217ef2ef83ad86e75927981b9d5434d696560","scripts/qa/fixtures/cmCoachedStyles.html":"35490024a1a9928a5563d6d41b428e11e6d3bcdc7ff53f9ce30bdd292e9ea805","scripts/qa/fixtures/cmCoachedStyles.vite.mjs":"3b2b00987d188893717cbe30728317cd703bbb3a94080a81556888c0fb03fe6b","scripts/qa/playCmCoachedStyles.mjs":"c3ba394070a71991cec414db77e12c3647d49ca311fee9e1ef62316245dc54e3","scripts/qa/siteMenuNavigationSupport.mjs":"c70e3ecc412f16d3322047b13205716c644495f8c74b76eed83852c87f35d303","scripts/lib/hostLikeServer.mjs":"3958c9a3b4d9e49bb60a3b7dd72d81a997bd1caed56e82e4c3bae07e1a918ef0","scripts/lib/playwrightLoader.mjs":"94a07179be7ca6b9562d118b52c2d5d0dff0b6b2e29e49e4fea16fa2defb5a93","src/lib/clubManagerUiInfo.ts":"79beb9141e7b15555267d04dd0f6e7e3e7d35a2e6d8446da802df9cdbc6ea5e9","src/components/club-manager/MatchPlansCard.tsx":"9d126409895dcbb1eddb9fa56bf7a5e039401562a05320d217eb905f29de0e8e","src/components/club-manager/AcademyScreen.tsx":"c007e0d54ae26fccab8566250deb970e10815a31bf21ebc04f11036420b73bf0","src/components/club-manager/LiveTacticsPanel.tsx":"0e32170aac4965c00a46e8ce532ae47315fe9fa3528f2bc70f34db021351ad4d","scripts/simTacticsEngine.mjs":"114091dff18f7d3cbffab77f8b161b6b9662e9767b671eee1363ff6cba2c10b6","src/test/academyFilters.test.tsx":"5ae1954dbf8094380764b9e9859d9f45874e5cad72a9c25b2251ca15da40ad8e","scripts/qa/managerMatchPlans1079.mjs":"15128a4fea15c992e287d5c0e32836f8d72f8ae9f55cf2fab03f3316d5241226"}'
 jobs:
   engine_pilot:
     runs-on: ubuntu-latest
@@ -43,12 +43,28 @@ jobs:
           test "$(git rev-parse HEAD)" = "$GITHUB_SHA"
           git fetch --no-tags --depth=1 origin "$BASE_SOURCE" > "$out/base-fetch.log" 2>&1
           git merge-base --is-ancestor "$BASE_SOURCE" "$GITHUB_SHA"
-          test "$(git rev-parse HEAD^)" = "$EXPECTED_PARENT"
-          git diff --exit-code "$EXPECTED_PARENT" HEAD -- . ':!docs/**' ':!.github/workflows/cm-coached-styles.yml' ':!src/lib/clubManagerTraits.ts' ':!src/lib/clubManagerTraitRuntime.ts' ':!src/hooks/useClubManager.ts' ':!src/components/club-manager/TrainingScreen.tsx' ':!src/pages/ClubManager.tsx' ':!scripts/qa/fixtures/cmCoachedStyles.entry.tsx' ':!src/test/clubManagerCoachedStyleHook.test.tsx' ':!scripts/qa/runClubManagerTraitOldParity.mjs' > "$out/protected-application.log"
-          test "$(git rev-parse HEAD:src/lib/clubManager.ts)" = 2c48e94a7455860dd03efc8368a2029a3bf459cd
+          test "$(git show -s --format=%P HEAD)" = "$EXPECTED_PARENT"
+          git diff --exit-code "$EXPECTED_PARENT" HEAD -- . ':!docs/**' ':!.github/workflows/cm-coached-styles.yml' ':!src/lib/clubManager.ts' ':!src/lib/clubManagerUiInfo.ts' ':!src/components/club-manager/TacticsScreen.tsx' ':!src/components/club-manager/MatchPlansCard.tsx' ':!src/components/club-manager/AcademyScreen.tsx' ':!src/components/club-manager/LiveTacticsPanel.tsx' ':!scripts/simTacticsEngine.mjs' ':!src/test/academyFilters.test.tsx' ':!scripts/qa/managerMatchPlans1079.mjs' ':!scripts/qa/runClubManagerTraitOldParity.mjs' ':!scripts/qa/playCmCoachedStyles.mjs' > "$out/protected-application.log"
+          printf '%s\n' '.github/workflows/cm-coached-styles.yml' 'scripts/qa/managerMatchPlans1079.mjs' 'scripts/qa/playCmCoachedStyles.mjs' 'scripts/qa/runClubManagerTraitOldParity.mjs' 'scripts/simTacticsEngine.mjs' 'src/components/club-manager/AcademyScreen.tsx' 'src/components/club-manager/LiveTacticsPanel.tsx' 'src/components/club-manager/MatchPlansCard.tsx' 'src/components/club-manager/TacticsScreen.tsx' 'src/lib/clubManager.ts' 'src/lib/clubManagerUiInfo.ts' 'src/test/academyFilters.test.tsx' > "$out/direct-expected-paths.txt"
+          git diff --name-only "$EXPECTED_PARENT" HEAD -- . ':!docs/**' | LC_ALL=C sort > "$out/direct-actual-paths.txt"
+          cmp "$out/direct-expected-paths.txt" "$out/direct-actual-paths.txt"
+          printf '%s\n' '.github/workflows/cm-coached-styles.yml' 'scripts/qa/fixtures/cmCoachedStyles.entry.tsx' 'scripts/qa/fixtures/cmCoachedStyles.html' 'scripts/qa/fixtures/cmCoachedStyles.vite.mjs' 'scripts/qa/managerMatchPlans1079.mjs' 'scripts/qa/playCmCoachedStyles.mjs' 'scripts/qa/runClubManagerTraitOldParity.mjs' 'scripts/simTacticsEngine.mjs' 'src/components/club-manager/AcademyScreen.tsx' 'src/components/club-manager/CoachedStyleCard.tsx' 'src/components/club-manager/LiveTacticsPanel.tsx' 'src/components/club-manager/MatchPlansCard.tsx' 'src/components/club-manager/SquadScreen.tsx' 'src/components/club-manager/TacticsScreen.tsx' 'src/components/club-manager/TrainingScreen.tsx' 'src/hooks/useClubManager.ts' 'src/lib/clubManager.ts' 'src/lib/clubManagerTraitEdits.ts' 'src/lib/clubManagerTraitRuntime.ts' 'src/lib/clubManagerTraits.ts' 'src/lib/clubManagerUiInfo.ts' 'src/pages/ClubManager.tsx' 'src/test/TacticsScreen.coachedStyle.test.tsx' 'src/test/academyFilters.test.tsx' 'src/test/clubManagerCoachedStyleHook.test.tsx' 'src/test/clubManagerTraitCourseConflict.test.ts' 'src/test/clubManagerTraitGrowth.test.ts' 'src/test/clubManagerTraitIntegration.test.ts' 'src/test/clubManagerTraitOldParity.test.ts' 'src/test/clubManagerTraits.test.ts' > "$out/cumulative-expected-paths.txt"
+          git diff --name-only "$BASE_SOURCE" HEAD -- . ':!docs/**' | LC_ALL=C sort > "$out/cumulative-actual-paths.txt"
+          cmp "$out/cumulative-expected-paths.txt" "$out/cumulative-actual-paths.txt"
+          test "$(git rev-parse HEAD:src/lib/clubManager.ts)" = f37f6d73e026aa8110c0aac0c9d498af8df0c6de
+          test "$(git rev-parse HEAD:src/lib/clubManagerUiInfo.ts)" = c9f056d672bbe3acc034f4cf12de1355d2044777
+          test "$(git rev-parse HEAD:src/components/club-manager/TacticsScreen.tsx)" = 0040c6d1c2c70416a8529c762e3596335f5ed929
+          test "$(git rev-parse HEAD:src/components/club-manager/MatchPlansCard.tsx)" = a5c9ce92527d699454737fce0fed557fab3608b0
+          test "$(git rev-parse HEAD:src/components/club-manager/AcademyScreen.tsx)" = 6e2984fa76adeddd91db87c222113d600746975c
+          test "$(git rev-parse HEAD:src/components/club-manager/LiveTacticsPanel.tsx)" = b12a1a0303ec9b3d043bdac089b873a4cc35383c
+          test "$(git rev-parse HEAD:scripts/simTacticsEngine.mjs)" = d6bf2bc4e94db7bcb532e9b773fc584f334340a5
+          test "$(git rev-parse HEAD:src/test/academyFilters.test.tsx)" = 9213832ccaf8e2789d7388b6dd70089ced40836d
+          test "$(git rev-parse HEAD:scripts/qa/managerMatchPlans1079.mjs)" = aadd675d101b606a2f81dc2babe11d9e281653a4
+          test "$(git rev-parse HEAD:scripts/qa/runClubManagerTraitOldParity.mjs)" = 5a9a5a5cf80829396113c5647ffee75e38ec0d3e
+          test "$(git rev-parse HEAD:scripts/qa/playCmCoachedStyles.mjs)" = 71fa651bfb04a80cf98dbe7e33be565b1fa19d18
           test "$(git rev-parse HEAD:src/test/clubManagerTraitGrowth.test.ts)" = ca894eb2d6b12ad009907e25cbb2759a7a9b9816
           printf '%s  %s\n' \
-            29d7ec57f331816e241b1c05f66a7540403bff7e72a8a33d4bd6838c24664690 src/lib/clubManager.ts \
+            c3370911a70a6891947b5a10131206cbd9b10c0f40ed3c9ebe57cb06454b4f35 src/lib/clubManager.ts \
             c2160119653e92d2274928f078d31e6d8b8a365b86bed801172a0edf370d210d src/lib/clubManagerTraits.ts \
             9c5a8327b2fd7fcf7c3f966e4dff93688790fdcd6e0d0d31afcf739be8c41da7 src/lib/clubManagerTraitRuntime.ts \
             0e1ee98288cc370bc6bcf2bc507a2badae5f4f76a15ce53b50ce4c3ac8ccd18a src/lib/clubManagerTraitEdits.ts \
@@ -59,18 +75,27 @@ jobs:
             5c08f58715d3ec7378dd422c6765be74af0435e9548323c11eff029de36854f1 src/components/club-manager/CoachedStyleCard.tsx \
             a7bf7feb203ddb1645fbc5d5d0eea801a0850097d34a8e469f461577b8e0ef8c src/components/club-manager/TrainingScreen.tsx \
             fbb0cb94e6b2ab740e404e1e85a4f5388bed29927967d09259cafc230f84040c src/components/club-manager/SquadScreen.tsx \
-            3802cc0c2146c292a6a9d6fefac5334295360632bab66d9ec6b7b1e9fca896fd src/components/club-manager/TacticsScreen.tsx \
+            cece9959abf2e8962d529610734b2a981db1bac05d96620ff3160484d7afb7e8 src/components/club-manager/TacticsScreen.tsx \
             5ac14246dd3650c9736973229ae17f5cc0ca4de76cb5d815bb7f081179c08b8b src/hooks/useClubManager.ts \
             f55c03ce8e2c55f4a4ded81ce5882f745e4d60bc50def80beb1dd014f164585b src/pages/ClubManager.tsx \
             46e2f6b1ae2cc9bce4d07b76de8ad886eb57d1d5a944087baf130ac7451728c9 src/test/clubManagerCoachedStyleHook.test.tsx \
             ed8d6dae8518ccc39f63d3bb87d9980e7045275babdd88876449fd2cb771557e src/test/TacticsScreen.coachedStyle.test.tsx \
             384242306f55ceeaff77e9003f0b0c40829c82584e2378eb0b81a56376aa2d24 src/test/clubManagerTraitOldParity.test.ts \
-            52d55e0ce205d754f4549e5730c28d6832ceed1b2e73f4469f8578615190112f scripts/qa/runClubManagerTraitOldParity.mjs \
+            4910b5a8df1672a20faf143c9291b651b139c4d2b635a75344d5f0cac1fc3d5a scripts/qa/runClubManagerTraitOldParity.mjs \
             f4f71610d2790a97126d8c9a239217ef2ef83ad86e75927981b9d5434d696560 scripts/qa/fixtures/cmCoachedStyles.entry.tsx \
             35490024a1a9928a5563d6d41b428e11e6d3bcdc7ff53f9ce30bdd292e9ea805 scripts/qa/fixtures/cmCoachedStyles.html \
             3b2b00987d188893717cbe30728317cd703bbb3a94080a81556888c0fb03fe6b scripts/qa/fixtures/cmCoachedStyles.vite.mjs \
-            ed389cca7d89d28dd388b8d92a6987bc7419c7059061341e142bd1c0ed97ce42 scripts/qa/playCmCoachedStyles.mjs > "$out/input-pins.sha256"
+            c3ba394070a71991cec414db77e12c3647d49ca311fee9e1ef62316245dc54e3 scripts/qa/playCmCoachedStyles.mjs \
+            79beb9141e7b15555267d04dd0f6e7e3e7d35a2e6d8446da802df9cdbc6ea5e9 src/lib/clubManagerUiInfo.ts \
+            9d126409895dcbb1eddb9fa56bf7a5e039401562a05320d217eb905f29de0e8e src/components/club-manager/MatchPlansCard.tsx \
+            c007e0d54ae26fccab8566250deb970e10815a31bf21ebc04f11036420b73bf0 src/components/club-manager/AcademyScreen.tsx \
+            0e32170aac4965c00a46e8ce532ae47315fe9fa3528f2bc70f34db021351ad4d src/components/club-manager/LiveTacticsPanel.tsx \
+            114091dff18f7d3cbffab77f8b161b6b9662e9767b671eee1363ff6cba2c10b6 scripts/simTacticsEngine.mjs \
+            5ae1954dbf8094380764b9e9859d9f45874e5cad72a9c25b2251ca15da40ad8e src/test/academyFilters.test.tsx \
+            15128a4fea15c992e287d5c0e32836f8d72f8ae9f55cf2fab03f3316d5241226 scripts/qa/managerMatchPlans1079.mjs > "$out/input-pins.sha256"
           sha256sum --check "$out/input-pins.sha256" > "$out/input-pins.log"
+          test "$(wc -l < "$out/input-pins.sha256")" -eq 29
+          test -z "$(cut -d ' ' -f 3 "$out/input-pins.sha256" | sort | uniq -d)"
           git rev-parse HEAD > "$out/head.txt";git rev-parse 'HEAD^{tree}' > "$out/tree.txt"
           git rev-parse HEAD:src/lib/clubManager.ts > "$out/engine-blob.txt"
           git rev-parse HEAD:.github/workflows/cm-coached-styles.yml > "$out/workflow-blob.txt"
@@ -216,6 +241,86 @@ jobs:
           printf '%s\n' "$status" > "$out/simClubManagerSave.exit"
           test "$status" -eq 0;test ! -s "$out/simClubManagerSave.transport"
           grep -Fx 'simClubManagerSave: all sections green' "$out/simClubManagerSave.log"
+      - name: Full unchanged tactics engine legacy harness
+        timeout-minutes: 15
+        run: |
+          set -euo pipefail
+          out="$CM_STYLE_OUT"
+          : > "$out/legacy-tactics.transport";status=0
+          SIM_NETWORK=offline SIM_OFFLINE_RECEIPT="$out/legacy-tactics.transport" NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" timeout --signal=TERM --kill-after=15s 12m node scripts/simTacticsEngine.mjs > "$out/legacy-tactics.stdout.log" 2> "$out/legacy-tactics.stderr.log" || status=$?
+          printf '%s\n' "$status" > "$out/legacy-tactics.exit"
+          test "$status" -eq 0
+          test ! -s "$out/legacy-tactics.transport"
+      - name: All eight held academy cases and effective actual-record classifier controls
+        timeout-minutes: 10
+        run: |
+          set -euo pipefail
+          out="$CM_STYLE_OUT"
+          export NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs"
+          : > "$out/academy.transport";: > "$out/ui-info-classifier.transport";status=0
+          SIM_OFFLINE_RECEIPT="$out/academy.transport" timeout --signal=TERM --kill-after=15s 8m node_modules/.bin/vitest run src/test/academyFilters.test.tsx --maxWorkers=1 --no-file-parallelism --reporter=default --reporter=json --outputFile="$out/academy.json" > "$out/academy.log" 2>&1 || status=$?
+          printf '%s\n' "$status" > "$out/academy.exit";test "$status" -eq 0
+          classifier=0
+          SIM_OFFLINE_RECEIPT="$out/ui-info-classifier.transport" node > "$out/ui-info-classifier.log" 2>&1 <<'NODE' || classifier=$?
+          const fs=require('node:fs'),path=require('node:path'),assert=require('node:assert/strict'),{AssertionError}=require('node:assert'),crypto=require('node:crypto'),out=process.env.CM_STYLE_OUT;
+          const sha=b=>crypto.createHash('sha256').update(b).digest('hex'),write=(file,body)=>fs.writeFileSync(file,body,{flag:'wx'});
+          const titles=["combines both filters while keeping the original reported-ceiling order and source list","distinguishes no matches from an empty academy and resets both selections","keeps the original intake explanation when there are no prospects","passes the actual visible prospect ID to sign and release callbacks","names every Sign him and Let go button after its own prospect, and each one acts on him","keeps signing disabled for budget 4 and squad size 10","keeps signing disabled for budget 10 and squad size 30","retains the selected labels if signing or releasing removes the last match"],ancestor='academy position and age filters',runtime=['numRuntimeErrorTestSuites','numUnhandledErrors'];
+          assert.equal(new Set(titles).size,8);
+          const footer='simTacticsEngine: PASS. A man is read in his slot, a second position is earned over counted weeks, the armband and the takers reach the stream, a duty moves the football a little, the bench is ordered for the slot, and the seventeen shapes stand where they say.';
+          function legacy(stdout,stderr,exitText){
+            assert.match(exitText,/^(?:0|[1-9][0-9]{0,2})\n$/,'CM_TACTICS_REAL_EXIT_FORMAT');
+            assert.equal(Number(exitText.trim()),0,'CM_TACTICS_EXIT_ZERO');
+            assert.equal(stdout.split('\n').filter(line=>line===footer).length,1,'CM_TACTICS_EXACT_HEALTHY_FOOTER');
+            assert.doesNotMatch(stdout+'\n'+stderr,/^\s*FAIL \[|simTacticsEngine: \d+ FAILURES|(?:ReferenceError|TypeError|SyntaxError|ERR_MODULE_NOT_FOUND|MODULE_NOT_FOUND):|Unhandled\s+(?:Errors?|Rejections?)|Uncaught\s+Exceptions?/m,'CM_TACTICS_NO_RUNTIME_OR_SECTION_FAILURE');
+          }
+          function academy(r,log){
+            assert.equal(r.testResults.length,1,'CM_ACADEMY_EXACT_FILE_COUNT');
+            const suite=r.testResults[0],seen=new Set();
+            assert.equal(path.resolve(suite.name),path.resolve('src/test/academyFilters.test.tsx'),'CM_ACADEMY_EXACT_FILE');
+            assert.equal(suite.assertionResults.length,8,'CM_ACADEMY_EXACT_EIGHT_ROWS');
+            for(const row of suite.assertionResults){
+              assert.equal(typeof row.title,'string');assert(titles.includes(row.title),row.title);assert(!seen.has(row.title));seen.add(row.title);
+              assert.equal(row.fullName,ancestor+' '+row.title,'CM_ACADEMY_EXACT_FULL_NAME');
+              assert.equal(row.status,'passed','CM_ACADEMY_CASE_PASSED');assert.deepEqual(row.failureMessages,[]);
+            }
+            assert.equal(seen.size,8);for(const title of titles)assert(seen.has(title));
+            assert.equal(r.success,true);assert.equal(suite.status,'passed');if('message'in suite)assert.equal(suite.message,'');
+            for(const [key,value]of Object.entries({numTotalTests:8,numPassedTests:8,numFailedTests:0,numPendingTests:0,numTodoTests:0}))assert.equal(r[key],value,key);
+            for(const key of runtime)if(key in r)assert.equal(r[key],0);
+            if('unhandledErrors'in r)assert.deepEqual(r.unhandledErrors,[]);
+            assert.doesNotMatch(log,/Unhandled\s+(?:Errors?|Rejections?)|Uncaught\s+Exceptions?|Failed to resolve import|Cannot find (?:module|package)|No test files found/i);
+          }
+          const stdout=fs.readFileSync(out+'/legacy-tactics.stdout.log'),stderr=fs.readFileSync(out+'/legacy-tactics.stderr.log'),exit=fs.readFileSync(out+'/legacy-tactics.exit');
+          legacy(stdout.toString('utf8'),stderr.toString('utf8'),exit.toString('utf8'));
+          const actualAcademy=fs.readFileSync(out+'/academy.json'),actualLog=fs.readFileSync(out+'/academy.log','utf8'),report=JSON.parse(actualAcademy);
+          assert.equal(fs.readFileSync(out+'/academy.exit','utf8'),'0\n');academy(report,actualLog);
+          const dir=path.join(out,'ui-info-record-controls');assert(!fs.existsSync(dir));fs.mkdirSync(dir);
+          write(dir+'/actual-academy.healthy.json',actualAcademy);write(dir+'/actual-legacy.healthy.stdout.log',stdout);write(dir+'/actual-legacy.healthy.stderr.log',stderr);write(dir+'/actual-legacy.healthy.exit',exit);
+          const controls=[];
+          function refusal(id,marker,files,run){
+            let caught=null;try{run();}catch(error){caught=error;}
+            assert(caught instanceof AssertionError,id+' must reach a native AssertionError');
+            assert(caught.message.includes(marker),id+' must own '+marker);
+            const log=id+'.owned-error.log';write(path.join(dir,log),caught.stack+'\n');
+            controls.push({id,marker,recordDerivedFromActualHealthyOutput:true,physicalCopies:files.map(file=>({file,sha256:sha(fs.readFileSync(path.join(dir,file)))})),observedAssertion:{name:caught.name,code:caught.code,message:caught.message},observedValidation:'REJECTED',ownedErrorLog:log,subprocess:false});
+          }
+          const missing=JSON.parse(actualAcademy);assert.equal(missing.testResults[0].assertionResults.length,8);missing.testResults[0].assertionResults.pop();assert.equal(missing.testResults[0].assertionResults.length,7);
+          const missingBytes=Buffer.from(JSON.stringify(missing,null,2)+'\n');assert.notEqual(sha(missingBytes),sha(actualAcademy));write(dir+'/academy-missing-row.json',missingBytes);
+          refusal('academy-missing-row','CM_ACADEMY_EXACT_EIGHT_ROWS',['academy-missing-row.json'],()=>academy(JSON.parse(fs.readFileSync(dir+'/academy-missing-row.json')),actualLog));
+          const pending=JSON.parse(actualAcademy);assert.equal(pending.testResults[0].assertionResults[0].status,'passed');pending.testResults[0].assertionResults[0].status='pending';
+          const pendingBytes=Buffer.from(JSON.stringify(pending,null,2)+'\n');assert.notEqual(sha(pendingBytes),sha(actualAcademy));write(dir+'/academy-pending-case.json',pendingBytes);
+          refusal('academy-pending-case','CM_ACADEMY_CASE_PASSED',['academy-pending-case.json'],()=>academy(JSON.parse(fs.readFileSync(dir+'/academy-pending-case.json')),actualLog));
+          assert.equal(stdout.toString('utf8').split(footer).length,2);
+          const wrong=Buffer.from(stdout.toString('utf8').replace(footer,'simTacticsEngine: FAIL.'));assert.notEqual(sha(wrong),sha(stdout));write(dir+'/legacy-wrong-footer.stdout.log',wrong);write(dir+'/legacy-wrong-footer.stderr.log',stderr);write(dir+'/legacy-wrong-footer.exit',exit);
+          refusal('legacy-wrong-footer','CM_TACTICS_EXACT_HEALTHY_FOOTER',['legacy-wrong-footer.stdout.log','legacy-wrong-footer.stderr.log','legacy-wrong-footer.exit'],()=>legacy(fs.readFileSync(dir+'/legacy-wrong-footer.stdout.log','utf8'),fs.readFileSync(dir+'/legacy-wrong-footer.stderr.log','utf8'),fs.readFileSync(dir+'/legacy-wrong-footer.exit','utf8')));
+          const nonzero=Buffer.from('1\n');assert.notEqual(sha(nonzero),sha(exit));write(dir+'/legacy-nonzero.stdout.log',stdout);write(dir+'/legacy-nonzero.stderr.log',stderr);write(dir+'/legacy-nonzero.exit',nonzero);
+          refusal('legacy-nonzero-exit','CM_TACTICS_EXIT_ZERO',['legacy-nonzero.stdout.log','legacy-nonzero.stderr.log','legacy-nonzero.exit'],()=>legacy(fs.readFileSync(dir+'/legacy-nonzero.stdout.log','utf8'),fs.readFileSync(dir+'/legacy-nonzero.stderr.log','utf8'),fs.readFileSync(dir+'/legacy-nonzero.exit','utf8')));
+          assert.equal(controls.length,4);
+          write(out+'/ui-info-admission.json',JSON.stringify({source:process.env.GITHUB_SHA,parent:process.env.EXPECTED_PARENT,baseSource:process.env.BASE_SOURCE,runId:process.env.GITHUB_RUN_ID,attempt:process.env.GITHUB_RUN_ATTEMPT,legacyDefaultHarness:'PASS',legacyOutput:{stdout:sha(stdout),stderr:sha(stderr),exit:sha(exit)},academy:{file:'src/test/academyFilters.test.tsx',passed:report.testResults[0].assertionResults.map(row=>row.fullName),expandedCases:8,declarations:7,actualReportSha256:sha(actualAcademy)},copiedActualRecordControls:controls,observedRuntimeCounters:Object.fromEntries(runtime.filter(k=>k in report).map(k=>[k,report[k]])),absentRuntimeCountersUnknown:runtime.filter(k=>!(k in report)),unhandledErrors:'unhandledErrors'in report?report.unhandledErrors:'UNKNOWN_ABSENT',applicationQualified:false,buildBrowserCapsQualified:false},null,2)+'\n');
+          console.log('CM_UI_INFO_REAL_OUTPUTS_AND_FOUR_COPIED_RECORD_CONTROLS_PASS');
+          NODE
+          printf '%s\n' "$classifier" > "$out/ui-info-classifier.exit";test "$classifier" -eq 0
+          test ! -s "$out/academy.transport";test ! -s "$out/ui-info-classifier.transport"
       - name: Always preserve all raw results and physical holds
         if: always()
         run: |
@@ -238,6 +343,11 @@ jobs:
           if test -f "$out/head.txt";then cmp "$out/head.txt" "$out/head-after.txt" || failed=1;else failed=1;fi
           git diff --exit-code HEAD > "$out/final-source-diff.log" || failed=1
           git status --porcelain --untracked-files=all > "$out/final-status.txt";test ! -s "$out/final-status.txt" || failed=1
+          if test -f "$out/input-pins.sha256";then sha256sum --check "$out/input-pins.sha256" > "$out/final-critical-inputs.log" 2>&1 || failed=1;else failed=1;fi
+          for transport in types tests unit-classifier parity-runner parity-classifier simClubManager simClubManagerFacilities simClubManagerSave legacy-tactics academy ui-info-classifier;do test -f "$out/$transport.transport" && test ! -s "$out/$transport.transport" || failed=1;done
+          for stage in legacy-tactics academy ui-info-classifier;do test -f "$out/$stage.exit" && test "$(cat "$out/$stage.exit")" = 0 || failed=1;done
+          test -f "$out/ui-info-admission.json" || failed=1
+          grep -Fx 'CM_UI_INFO_REAL_OUTPUTS_AND_FOUR_COPIED_RECORD_CONTROLS_PASS' "$out/ui-info-classifier.log" > "$out/final-ui-info-admission.log" || failed=1
           while IFS= read -r -d '' file;do test ! -s "$file" || failed=1;done < <(find "$out" -type f -name '*.transport' -print0)
           printf '%s\n' "$failed" > "$out/final-holds.exit"
           printf '%s\n' '{"types":"${{ steps.app_types.outcome }}","units":"${{ steps.units.outcome }}","declaredOldParity":"${{ steps.old_parity.outcome }}","simClubManager":"${{ steps.sim_core.outcome }}","simClubManagerFacilities":"${{ steps.sim_facilities.outcome }}","simClubManagerSave":"${{ steps.sim_save.outcome }}","applicationQualified":false,"uiIntegrated":false,"balanceQualified":false,"oldWholeEngineParity":"OWED"}' > "$out/stage-outcomes.json"
@@ -266,7 +376,7 @@ jobs:
         with:
           node-version: 24
           cache: npm
-      - name: Exact current source and eighteen styled browser inputs
+      - name: Exact current source and twenty-five styled browser inputs
         run: |
           set -euo pipefail
           out="$RUNNER_TEMP/cm-coached-styles-browser-pilot";test ! -e "$out";mkdir "$out"
@@ -277,23 +387,40 @@ jobs:
           test "$GITHUB_REPOSITORY_ID" = 1195729679
           test "$GITHUB_REF" = refs/heads/codex/cm-coached-styles-20261023
           test "$(git rev-parse HEAD)" = "$GITHUB_SHA"
-          test "$(git rev-parse HEAD^)" = "$EXPECTED_PARENT"
+          test "$(git show -s --format=%P HEAD)" = "$EXPECTED_PARENT"
           git fetch --no-tags --depth=1 origin "$EXPECTED_PARENT" > "$out/parent-fetch.log" 2>&1
           git merge-base --is-ancestor "$EXPECTED_PARENT" "$GITHUB_SHA" > "$out/parent-ancestry.log" 2>&1
-          git diff --exit-code "$EXPECTED_PARENT" HEAD -- . ':!docs/**' ':!.github/workflows/cm-coached-styles.yml' ':!src/lib/clubManagerTraits.ts' ':!src/lib/clubManagerTraitRuntime.ts' ':!src/hooks/useClubManager.ts' ':!src/components/club-manager/TrainingScreen.tsx' ':!src/pages/ClubManager.tsx' ':!scripts/qa/fixtures/cmCoachedStyles.entry.tsx' ':!src/test/clubManagerCoachedStyleHook.test.tsx' ':!scripts/qa/runClubManagerTraitOldParity.mjs' > "$out/protected-current-source.log"
+          git diff --exit-code "$EXPECTED_PARENT" HEAD -- . ':!docs/**' ':!.github/workflows/cm-coached-styles.yml' ':!src/lib/clubManager.ts' ':!src/lib/clubManagerUiInfo.ts' ':!src/components/club-manager/TacticsScreen.tsx' ':!src/components/club-manager/MatchPlansCard.tsx' ':!src/components/club-manager/AcademyScreen.tsx' ':!src/components/club-manager/LiveTacticsPanel.tsx' ':!scripts/simTacticsEngine.mjs' ':!src/test/academyFilters.test.tsx' ':!scripts/qa/managerMatchPlans1079.mjs' ':!scripts/qa/runClubManagerTraitOldParity.mjs' ':!scripts/qa/playCmCoachedStyles.mjs' > "$out/protected-current-source.log"
+          printf '%s\n' '.github/workflows/cm-coached-styles.yml' 'scripts/qa/managerMatchPlans1079.mjs' 'scripts/qa/playCmCoachedStyles.mjs' 'scripts/qa/runClubManagerTraitOldParity.mjs' 'scripts/simTacticsEngine.mjs' 'src/components/club-manager/AcademyScreen.tsx' 'src/components/club-manager/LiveTacticsPanel.tsx' 'src/components/club-manager/MatchPlansCard.tsx' 'src/components/club-manager/TacticsScreen.tsx' 'src/lib/clubManager.ts' 'src/lib/clubManagerUiInfo.ts' 'src/test/academyFilters.test.tsx' > "$out/direct-expected-paths.txt"
+          git diff --name-only "$EXPECTED_PARENT" HEAD -- . ':!docs/**' | LC_ALL=C sort > "$out/direct-actual-paths.txt"
+          cmp "$out/direct-expected-paths.txt" "$out/direct-actual-paths.txt"
+          printf '%s\n' '.github/workflows/cm-coached-styles.yml' 'scripts/qa/fixtures/cmCoachedStyles.entry.tsx' 'scripts/qa/fixtures/cmCoachedStyles.html' 'scripts/qa/fixtures/cmCoachedStyles.vite.mjs' 'scripts/qa/managerMatchPlans1079.mjs' 'scripts/qa/playCmCoachedStyles.mjs' 'scripts/qa/runClubManagerTraitOldParity.mjs' 'scripts/simTacticsEngine.mjs' 'src/components/club-manager/AcademyScreen.tsx' 'src/components/club-manager/CoachedStyleCard.tsx' 'src/components/club-manager/LiveTacticsPanel.tsx' 'src/components/club-manager/MatchPlansCard.tsx' 'src/components/club-manager/SquadScreen.tsx' 'src/components/club-manager/TacticsScreen.tsx' 'src/components/club-manager/TrainingScreen.tsx' 'src/hooks/useClubManager.ts' 'src/lib/clubManager.ts' 'src/lib/clubManagerTraitEdits.ts' 'src/lib/clubManagerTraitRuntime.ts' 'src/lib/clubManagerTraits.ts' 'src/lib/clubManagerUiInfo.ts' 'src/pages/ClubManager.tsx' 'src/test/TacticsScreen.coachedStyle.test.tsx' 'src/test/academyFilters.test.tsx' 'src/test/clubManagerCoachedStyleHook.test.tsx' 'src/test/clubManagerTraitCourseConflict.test.ts' 'src/test/clubManagerTraitGrowth.test.ts' 'src/test/clubManagerTraitIntegration.test.ts' 'src/test/clubManagerTraitOldParity.test.ts' 'src/test/clubManagerTraits.test.ts' > "$out/cumulative-expected-paths.txt"
+          git diff --name-only "$BASE_SOURCE" HEAD -- . ':!docs/**' | LC_ALL=C sort > "$out/cumulative-actual-paths.txt"
+          cmp "$out/cumulative-expected-paths.txt" "$out/cumulative-actual-paths.txt"
           for file in package.json package-lock.json vitest.config.ts scripts/lib/offlineTransport.cjs scripts/lib/playwrightLoader.mjs scripts/lib/hostLikeServer.mjs scripts/qa/siteMenuNavigationSupport.mjs scripts/qa/freeKickLab1070.mjs scripts/sweepWeight.mjs scripts/playHomeFold.mjs;do
             git show "$EXPECTED_PARENT:$file" | cmp "$file" -
           done
+          test "$(git rev-parse HEAD:src/lib/clubManager.ts)" = f37f6d73e026aa8110c0aac0c9d498af8df0c6de
+          test "$(git rev-parse HEAD:src/lib/clubManagerUiInfo.ts)" = c9f056d672bbe3acc034f4cf12de1355d2044777
+          test "$(git rev-parse HEAD:src/components/club-manager/TacticsScreen.tsx)" = 0040c6d1c2c70416a8529c762e3596335f5ed929
+          test "$(git rev-parse HEAD:src/components/club-manager/MatchPlansCard.tsx)" = a5c9ce92527d699454737fce0fed557fab3608b0
+          test "$(git rev-parse HEAD:src/components/club-manager/AcademyScreen.tsx)" = 6e2984fa76adeddd91db87c222113d600746975c
+          test "$(git rev-parse HEAD:src/components/club-manager/LiveTacticsPanel.tsx)" = b12a1a0303ec9b3d043bdac089b873a4cc35383c
+          test "$(git rev-parse HEAD:scripts/simTacticsEngine.mjs)" = d6bf2bc4e94db7bcb532e9b773fc584f334340a5
+          test "$(git rev-parse HEAD:src/test/academyFilters.test.tsx)" = 9213832ccaf8e2789d7388b6dd70089ced40836d
+          test "$(git rev-parse HEAD:scripts/qa/managerMatchPlans1079.mjs)" = aadd675d101b606a2f81dc2babe11d9e281653a4
+          test "$(git rev-parse HEAD:scripts/qa/runClubManagerTraitOldParity.mjs)" = 5a9a5a5cf80829396113c5647ffee75e38ec0d3e
+          test "$(git rev-parse HEAD:scripts/qa/playCmCoachedStyles.mjs)" = 71fa651bfb04a80cf98dbe7e33be565b1fa19d18
           node <<'NODE'
           const fs=require('node:fs'),assert=require('node:assert/strict'),crypto=require('node:crypto'),cp=require('node:child_process');
-          const required=["src/lib/clubManager.ts","src/lib/clubManagerTraitRuntime.ts","src/lib/clubManagerTraitEdits.ts","src/lib/clubManagerTraits.ts","src/hooks/useClubManager.ts","src/components/club-manager/CoachedStyleCard.tsx","src/components/club-manager/TrainingScreen.tsx","src/components/club-manager/SquadScreen.tsx","src/components/club-manager/TacticsScreen.tsx","src/pages/ClubManager.tsx","src/index.css","scripts/qa/fixtures/cmCoachedStyles.entry.tsx","scripts/qa/fixtures/cmCoachedStyles.html","scripts/qa/fixtures/cmCoachedStyles.vite.mjs","scripts/qa/playCmCoachedStyles.mjs","scripts/qa/siteMenuNavigationSupport.mjs","scripts/lib/hostLikeServer.mjs","scripts/lib/playwrightLoader.mjs"],pins=JSON.parse(process.env.CM_COACHED_EXPECTED_PINS_JSON),hash=b=>crypto.createHash('sha256').update(b).digest('hex'),out=process.env.CM_COACHED_PILOT_OUT;
-          assert.deepEqual(Object.keys(pins).sort(),[...required].sort());assert.equal(required.length,18);
+          const required=["src/lib/clubManager.ts","src/lib/clubManagerTraitRuntime.ts","src/lib/clubManagerTraitEdits.ts","src/lib/clubManagerTraits.ts","src/hooks/useClubManager.ts","src/components/club-manager/CoachedStyleCard.tsx","src/components/club-manager/TrainingScreen.tsx","src/components/club-manager/SquadScreen.tsx","src/components/club-manager/TacticsScreen.tsx","src/pages/ClubManager.tsx","src/index.css","scripts/qa/fixtures/cmCoachedStyles.entry.tsx","scripts/qa/fixtures/cmCoachedStyles.html","scripts/qa/fixtures/cmCoachedStyles.vite.mjs","scripts/qa/playCmCoachedStyles.mjs","scripts/qa/siteMenuNavigationSupport.mjs","scripts/lib/hostLikeServer.mjs","scripts/lib/playwrightLoader.mjs","src/lib/clubManagerUiInfo.ts","src/components/club-manager/MatchPlansCard.tsx","src/components/club-manager/AcademyScreen.tsx","src/components/club-manager/LiveTacticsPanel.tsx","scripts/simTacticsEngine.mjs","src/test/academyFilters.test.tsx","scripts/qa/managerMatchPlans1079.mjs"],pins=JSON.parse(process.env.CM_COACHED_EXPECTED_PINS_JSON),hash=b=>crypto.createHash('sha256').update(b).digest('hex'),out=process.env.CM_COACHED_PILOT_OUT;
+          assert.deepEqual(Object.keys(pins).sort(),[...required].sort());assert.equal(required.length,25);
           for(const file of required){assert.match(pins[file],/^[a-f0-9]{64}$/);assert.equal(hash(fs.readFileSync(file)),pins[file],'CM_BROWSER_INPUT '+file);}
           const names=cp.execFileSync('git',['ls-files','-z'],{encoding:'utf8'}).split('\0');assert.equal(names.pop(),'');assert(names.length>0);assert.equal(new Set(names).size,names.length);
           fs.writeFileSync(out+'/browser-binding.json',JSON.stringify({sourceHead:process.env.GITHUB_SHA,trackedCount:names.length,playwrightVersion:'1.64.0',pins},null,2)+'\n',{flag:'wx'});
           const workflow='.github/workflows/cm-coached-styles.yml',blob=cp.execFileSync('git',['rev-parse','HEAD:'+workflow],{encoding:'utf8'}).trim();
           assert.equal(cp.execFileSync('git',['hash-object',workflow],{encoding:'utf8'}).trim(),blob);
-          fs.writeFileSync(out+'/source-binding.json',JSON.stringify({phase:'styled-component-browser',applicationQualified:false,source:process.env.GITHUB_SHA,parent:process.env.EXPECTED_PARENT,run:process.env.GITHUB_RUN_ID,attempt:process.env.GITHUB_RUN_ATTEMPT,tree:cp.execFileSync('git',['rev-parse','HEAD^{tree}'],{encoding:'utf8'}).trim(),workflow:{file:workflow,gitBlobSha1:blob,sha256:hash(fs.readFileSync(workflow))},requiredInputs:18,bindingSha256:hash(fs.readFileSync(out+'/browser-binding.json'))},null,2)+'\n',{flag:'wx'});
+          fs.writeFileSync(out+'/source-binding.json',JSON.stringify({phase:'styled-component-browser',applicationQualified:false,source:process.env.GITHUB_SHA,parent:process.env.EXPECTED_PARENT,run:process.env.GITHUB_RUN_ID,attempt:process.env.GITHUB_RUN_ATTEMPT,tree:cp.execFileSync('git',['rev-parse','HEAD^{tree}'],{encoding:'utf8'}).trim(),workflow:{file:workflow,gitBlobSha1:blob,sha256:hash(fs.readFileSync(workflow))},requiredInputs:25,bindingSha256:hash(fs.readFileSync(out+'/browser-binding.json'))},null,2)+'\n',{flag:'wx'});
           NODE
           git rev-parse HEAD > "$out/head.txt"
           git ls-files -z | sort -z > "$out/source-members.before"
@@ -469,6 +596,95 @@ jobs:
           fs.writeFileSync(out+'/caps-font-summary.json',JSON.stringify({complete:true,source:process.env.GITHUB_SHA,capRows:15,contexts:15,fontRows:fonts.length,localFlagDenials:flags.length,capSourceUnchanged:true},null,2)+'\n',{flag:'wx'});
           NODE
           test ! -s "$out/caps-server.transport";test ! -s "$out/caps.transport"
+      - name: Prepare exact existing match-plan fonts and nation flags
+        id: manager_cache
+        if: "!cancelled() && steps.types.outcome == 'success' && steps.browser_provision.outcome == 'success' && steps.build.outcome == 'success'"
+        timeout-minutes: 8
+        run: |
+          set -euo pipefail
+          out="$CM_COACHED_PILOT_OUT";cache="$out/manager-match-plans-cache"
+          test ! -e "$cache";test ! -e manager-match-plans-artifacts
+          status=0
+          env -u NODE_OPTIONS -u SIM_OFFLINE_RECEIPT MANAGER_MATCH_PLANS_FONT_CACHE="$cache" timeout --signal=TERM --kill-after=15s 6m node scripts/qa/managerMatchPlans1079.mjs --prefetch-fonts-only > "$out/manager-prefetch.stdout.log" 2> "$out/manager-prefetch.stderr.log" || status=$?
+          printf '%s\n' "$status" > "$out/manager-prefetch.exit";test "$status" -eq 0
+          export MANAGER_MATCH_PLANS_FONT_CACHE="$cache"
+          echo "MANAGER_MATCH_PLANS_FONT_CACHE=$cache" >> "$GITHUB_ENV"
+          : > "$out/manager-cache-validation.transport";status=0
+          SIM_OFFLINE_RECEIPT="$out/manager-cache-validation.transport" NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node > "$out/manager-cache-validation.log" 2>&1 <<'NODE' || status=$?
+          const fs=require('node:fs'),path=require('node:path'),assert=require('node:assert/strict'),crypto=require('node:crypto'),out=process.env.CM_COACHED_PILOT_OUT,cache=process.env.MANAGER_MATCH_PLANS_FONT_CACHE;
+          const sha=b=>crypto.createHash('sha256').update(b).digest('hex'),sheet=[...fs.readFileSync('index.html','utf8').matchAll(/<link\s+href="(https:\/\/fonts\.googleapis\.com\/[^\"]+)"\s+rel="stylesheet"/g)].map(row=>new URL(row[1]).href);
+          assert.equal(sheet.length,1);
+          const bytes=fs.readFileSync(path.join(cache,'manifest.json')),entries=JSON.parse(bytes),urls=new Map(),files=new Set();
+          assert(Array.isArray(entries)&&entries.length>0);
+          for(const row of entries){assert.equal(typeof row.url,'string');const url=new URL(row.url);assert.equal(url.href,row.url);assert(['https://fonts.googleapis.com','https://fonts.gstatic.com','https://flagcdn.com'].includes(url.origin));assert(!urls.has(row.url));assert.equal(row.file,sha(row.url));assert(!files.has(row.file));assert.match(row.sha256,/^[a-f0-9]{64}$/);assert.equal(typeof row.contentType,'string');assert.equal(sha(fs.readFileSync(path.join(cache,row.file))),row.sha256);urls.set(row.url,row);files.add(row.file);}
+          assert(urls.has(sheet[0]));
+          const css=fs.readFileSync(path.join(cache,urls.get(sheet[0]).file),'utf8'),fonts=[...new Set([...css.matchAll(/url\(\s*['"]?(https:\/\/[^)'"\s]+)/g)].map(row=>row[1]))];assert(fonts.length>0);for(const url of fonts)assert.equal(new URL(url).origin,'https://fonts.gstatic.com');
+          const engine=fs.readFileSync('src/lib/clubManager.ts','utf8'),flags=fs.readFileSync('src/components/FlagImg.tsx','utf8'),nations=engine.match(/export const NATIONS:[\s\S]*?\]\.map\(n =>/);assert(nations);
+          const codes=new Map([...flags.matchAll(/"([^"\n]+)":\s*"([a-z-]+)"/g)].map(row=>[row[1],row[2]])),nationCodes=[...new Set([...nations[0].matchAll(/name:\s*'([^']+)'/g)].map(row=>{const code=codes.get(row[1]);assert(code);return code;}))];assert(nationCodes.length>0);
+          const expected=[sheet[0],...fonts,...nationCodes.filter(code=>code!=='gb-eng').map(code=>'https://flagcdn.com/w40/'+code+'.png')];assert.equal(new Set(expected).size,expected.length);assert.deepEqual([...urls.keys()].sort(),expected.sort());
+          assert.deepEqual(fs.readdirSync(cache).sort(),['manifest.json',...files].sort());
+          fs.writeFileSync(out+'/manager-cache-validation.json',JSON.stringify({source:process.env.GITHUB_SHA,scope:'Original harness presentation dependency preparation only',manifestSha256:sha(bytes),entries:entries.map(row=>({url:row.url,file:row.file,sha256:row.sha256})),fonts:fonts.length,flagBodies:nationCodes.filter(code=>code!=='gb-eng').length,unknownDependencies:[]},null,2)+'\n',{flag:'wx'});
+          NODE
+          printf '%s\n' "$status" > "$out/manager-cache-validation.exit";test "$status" -eq 0
+          test ! -s "$out/manager-cache-validation.transport"
+          find "$cache" ! -type d ! -type f -print > "$out/manager-cache-nonregular.before";test ! -s "$out/manager-cache-nonregular.before"
+          find "$cache" -type f -print0 | sort -z > "$out/manager-cache-members.before"
+          find "$cache" -type f -print0 | sort -z | xargs -0 sha256sum > "$out/manager-cache.sha256"
+      - name: Unchanged actual match-plan journeys and effective report controls
+        id: manager_journeys
+        if: "!cancelled() && steps.types.outcome == 'success' && steps.browser_provision.outcome == 'success' && steps.build.outcome == 'success' && steps.manager_cache.outcome == 'success'"
+        timeout-minutes: 20
+        run: |
+          set -euo pipefail
+          out="$CM_COACHED_PILOT_OUT"
+          export NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs"
+          : > "$out/manager-journeys.transport";: > "$out/manager-classifier.transport";status=0
+          SIM_OFFLINE_RECEIPT="$out/manager-journeys.transport" timeout --signal=TERM --kill-after=15s 18m xvfb-run -a node scripts/qa/managerMatchPlans1079.mjs > "$out/manager-journeys.stdout.log" 2> "$out/manager-journeys.stderr.log" || status=$?
+          printf '%s\n' "$status" > "$out/manager-journeys.exit"
+          if test -d manager-match-plans-artifacts;then test ! -e "$out/manager-match-plans-artifacts";cp -R manager-match-plans-artifacts "$out/manager-match-plans-artifacts";fi
+          test "$status" -eq 0
+          classifier=0
+          SIM_OFFLINE_RECEIPT="$out/manager-classifier.transport" node > "$out/manager-classifier.log" 2>&1 <<'NODE' || classifier=$?
+          const fs=require('node:fs'),path=require('node:path'),assert=require('node:assert/strict'),{AssertionError}=require('node:assert'),crypto=require('node:crypto'),out=process.env.CM_COACHED_PILOT_OUT;
+          const sha=b=>crypto.createHash('sha256').update(b).digest('hex'),write=(file,body)=>fs.writeFileSync(file,body,{flag:'wx'}),footer='PASS manager match plans native: 3 actual hook journeys, 12 effective restored DOM faults, independent engine previews and kickoff, reload and club isolation.';
+          function judge(report,stdout,stderr,exitText){
+            assert.match(exitText,/^(?:0|[1-9][0-9]{0,2})\n$/,'CM_MATCH_PLAN_REAL_EXIT_FORMAT');assert.equal(Number(exitText.trim()),0,'CM_MATCH_PLAN_EXIT_ZERO');
+            assert.equal(stdout.split('\n').filter(line=>line===footer).length,1,'CM_MATCH_PLAN_EXACT_HEALTHY_FOOTER');
+            assert.doesNotMatch(stdout+'\n'+stderr,/(?:^|\n)(?:AssertionError|TypeError|ReferenceError|SyntaxError|RangeError|Error|ERR_MODULE_NOT_FOUND|MODULE_NOT_FOUND):|Unhandled\s+(?:Errors?|Rejections?)|Uncaught\s+Exceptions?/m,'CM_MATCH_PLAN_NO_RUNTIME_FAILURE');
+            assert.equal(report.cases.length,3,'CM_MATCH_PLAN_THREE_ACTUAL_JOURNEYS');
+            const profiles=[{width:320,height:780,touch:true,reduced:true,theme:'dark'},{width:390,height:844,touch:true,reduced:false,theme:'light'},{width:1280,height:720,touch:false,reduced:false,theme:'light'}],ids=[];
+            for(let i=0;i<profiles.length;i++){const row=report.cases[i],p=profiles[i],id=p.width+'-'+(p.touch?'touch':'keyboard')+'-'+p.theme;ids.push(id);assert.deepEqual(row.profile,p);assert.equal(row.id,id);assert.equal(row.passed,true,'CM_MATCH_PLAN_CASE_PASSED');assert(!('failure'in row));for(const key of ['errors','consoleErrors','sockets','networkWrites'])assert.deepEqual(row[key],[]);assert(row.events.some(event=>event.trusted&&event.type===(p.touch?'pointerdown':'keydown')));assert(row.fonts.length>0);}
+            assert.equal(report.controls.length,12,'CM_MATCH_PLAN_TWELVE_DOM_CONTROLS');
+            for(const id of ids){const controls=report.controls.filter(row=>row.profile===id);assert.deepEqual(controls.map(row=>row.name),['font','target','offscreen','lineup-offscreen']);for(const row of controls){assert.notDeepEqual(row.changed,row.before);assert.equal(row.rejection.name,'AssertionError');assert.equal(typeof row.rejection.message,'string');assert(row.rejection.message.length>0);assert.deepEqual(row.restored,row.before);}}
+            assert.equal(report.forwardedWrites,0);assert.equal(report.passed,true);assert.equal(report.sourcesHeld,true);assert.deepEqual(report.sourceAfter,report.sourceBefore);
+          }
+          const reportFile=out+'/manager-match-plans-artifacts/native/report.json',actualReport=fs.readFileSync(reportFile),stdout=fs.readFileSync(out+'/manager-journeys.stdout.log'),stderr=fs.readFileSync(out+'/manager-journeys.stderr.log'),exit=fs.readFileSync(out+'/manager-journeys.exit');
+          judge(JSON.parse(actualReport),stdout.toString('utf8'),stderr.toString('utf8'),exit.toString('utf8'));
+          const dir=out+'/manager-record-controls';assert(!fs.existsSync(dir));fs.mkdirSync(dir);const controls=[];
+          function check(id,marker,report,output,errorOutput,exitBytes){
+            const bodies={'report.json':report,'stdout.log':output,'stderr.log':errorOutput,'exit':exitBytes},relative=[];
+            assert(Object.keys(bodies).some(key=>sha(bodies[key])!==sha({'report.json':actualReport,'stdout.log':stdout,'stderr.log':stderr,'exit':exit}[key])),id+' changed actual bytes');
+            for(const [suffix,bytes]of Object.entries(bodies)){const file=id+'.'+suffix;write(path.join(dir,file),bytes);relative.push(file);}
+            let caught=null;try{judge(JSON.parse(fs.readFileSync(path.join(dir,id+'.report.json'))),fs.readFileSync(path.join(dir,id+'.stdout.log'),'utf8'),fs.readFileSync(path.join(dir,id+'.stderr.log'),'utf8'),fs.readFileSync(path.join(dir,id+'.exit'),'utf8'));}catch(error){caught=error;}
+            assert(caught instanceof AssertionError,id+' native assertion');assert(caught.message.includes(marker),id+' owns '+marker);const log=id+'.owned-error.log';write(path.join(dir,log),caught.stack+'\n');
+            controls.push({id,marker,recordDerivedFromActualHealthyOutput:true,subprocess:false,physicalCopies:relative.map(file=>({file,sha256:sha(fs.readFileSync(path.join(dir,file)))})),observedAssertion:{name:caught.name,code:caught.code,message:caught.message},observedValidation:'REJECTED',ownedErrorLog:log});
+          }
+          const failed=JSON.parse(actualReport);assert.equal(failed.cases[0].passed,true);failed.cases[0].passed=false;
+          check('manager-failed-actual-case','CM_MATCH_PLAN_CASE_PASSED',Buffer.from(JSON.stringify(failed,null,2)+'\n'),stdout,stderr,exit);
+          const missing=JSON.parse(actualReport);assert.equal(missing.controls.length,12);missing.controls.pop();assert.equal(missing.controls.length,11);
+          check('manager-missing-actual-dom-control','CM_MATCH_PLAN_TWELVE_DOM_CONTROLS',Buffer.from(JSON.stringify(missing,null,2)+'\n'),stdout,stderr,exit);
+          assert.equal(stdout.toString('utf8').split(footer).length,2);const noFooter=Buffer.from(stdout.toString('utf8').replace(footer,''));
+          check('manager-missing-actual-footer','CM_MATCH_PLAN_EXACT_HEALTHY_FOOTER',actualReport,noFooter,stderr,exit);
+          check('manager-nonzero-exit','CM_MATCH_PLAN_EXIT_ZERO',actualReport,stdout,stderr,Buffer.from('1\n'));
+          assert.equal(controls.length,4);
+          write(out+'/manager-admission.json',JSON.stringify({source:process.env.GITHUB_SHA,parent:process.env.EXPECTED_PARENT,baseSource:process.env.BASE_SOURCE,runId:process.env.GITHUB_RUN_ID,attempt:process.env.GITHUB_RUN_ATTEMPT,actualHarness:'scripts/qa/managerMatchPlans1079.mjs',journeys:3,effectiveActualDomControls:12,actualReportSha256:sha(actualReport),stdoutSha256:sha(stdout),stderrSha256:sha(stderr),exitSha256:sha(exit),copiedActualRecordControls:controls,runtimeCounters:'UNKNOWN_NOT_EXPOSED_BY_EXISTING_REPORT',applicationQualified:false},null,2)+'\n');
+          console.log('CM_MATCH_PLANS_THREE_REAL_JOURNEYS_AND_FOUR_RECORD_CONTROLS_PASS');
+          NODE
+          printf '%s\n' "$classifier" > "$out/manager-classifier.exit";test "$classifier" -eq 0
+          sha256sum --check "$out/manager-cache.sha256" > "$out/manager-cache-after.log"
+          find "$MANAGER_MATCH_PLANS_FONT_CACHE" -type f -print0 | sort -z > "$out/manager-cache-members.after"
+          cmp "$out/manager-cache-members.before" "$out/manager-cache-members.after"
+          test ! -s "$out/manager-journeys.transport";test ! -s "$out/manager-classifier.transport"
       - name: Always retain raw pilot evidence and all physical holds
         if: always()
         run: |
@@ -505,6 +721,22 @@ jobs:
             find "$out/cm-coached/fixture-dist" -type f -print0 | sort -z > "$out/fixture-members.after";cmp "$out/fixture-members.before" "$out/fixture-members.after" || failed=1
           fi
           if test -f "$out/browser-binding.json";then node -e 'const f=require("node:fs"),a=require("node:assert/strict"),h=b=>require("node:crypto").createHash("sha256").update(b).digest("hex"),p=process.env.CM_COACHED_PILOT_OUT,r=JSON.parse(f.readFileSync(p+"/source-binding.json"));a.equal(h(f.readFileSync(p+"/browser-binding.json")),r.bindingSha256)' > "$out/final-binding-hold.log" 2>&1 || failed=1;fi
+          for transport in types build fixture-build cm-browser readers-server homefold caps-server caps manager-cache-validation manager-journeys manager-classifier;do test -f "$out/$transport.transport" && test ! -s "$out/$transport.transport" || failed=1;done
+          for method in simAdsense simBrand simHeadTags simHiddenPages simHubs simIndexNow simIndexing simInternalLinks simNoRivalNames simPrerender simPrerenderBoot simRetiredRoutes simSchema simSitemap simSnapshotAssets simSiteSearch simGuideHeadings simLegalPages;do test -f "$out/$method.transport" && test ! -s "$out/$method.transport" || failed=1;done
+          for stage in manager-prefetch manager-cache-validation manager-journeys manager-classifier;do test -f "$out/$stage.exit" && test "$(cat "$out/$stage.exit")" = 0 || failed=1;done
+          test -f "$out/manager-admission.json" || failed=1
+          grep -Fx 'CM_MATCH_PLANS_THREE_REAL_JOURNEYS_AND_FOUR_RECORD_CONTROLS_PASS' "$out/manager-classifier.log" > "$out/final-manager-admission.log" || failed=1
+          if test -f "$out/manager-cache.sha256" && test -d "$out/manager-match-plans-cache";then
+            sha256sum --check "$out/manager-cache.sha256" > "$out/final-manager-cache-hold.log" 2>&1 || failed=1
+            find "$out/manager-match-plans-cache" ! -type d ! -type f -print > "$out/manager-cache-nonregular.after";test ! -s "$out/manager-cache-nonregular.after" || failed=1
+            find "$out/manager-match-plans-cache" -type f -print0 | sort -z > "$out/manager-cache-members.end";cmp "$out/manager-cache-members.before" "$out/manager-cache-members.end" || failed=1
+            find "$out/manager-match-plans-cache" -type f -print0 | sort -z | xargs -0 sha256sum > "$out/manager-cache-end.sha256";cmp "$out/manager-cache.sha256" "$out/manager-cache-end.sha256" || failed=1
+          else failed=1;fi
+          if test -f "$out/browser-binding.json";then
+            : > "$out/final-inputs.transport"
+            SIM_OFFLINE_RECEIPT="$out/final-inputs.transport" NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node -e 'const f=require("node:fs"),a=require("node:assert/strict"),h=b=>require("node:crypto").createHash("sha256").update(b).digest("hex"),r=JSON.parse(f.readFileSync(process.env.CM_COACHED_PILOT_OUT+"/browser-binding.json"));a.equal(Object.keys(r.pins).length,25);for(const [file,sha]of Object.entries(r.pins))a.equal(h(f.readFileSync(file)),sha)' > "$out/final-critical-inputs.log" 2>&1 || failed=1
+            test -f "$out/final-inputs.transport" && test ! -s "$out/final-inputs.transport" || failed=1
+          else failed=1;fi
           while IFS= read -r -d '' file;do test ! -s "$file" || failed=1;done < <(find "$out" -type f -name '*.transport' -print0)
           printf 'phase=styled-component-browser\napplicationQualified=false\nsource=%s\nappDependencies=%s\ntypes=%s\nbrowserPython=%s\nbrowserProvision=%s\nbuild=%s\nfixture=%s\nbrowser=%s\nreaders=%s\ncaps=%s\nfinalHoldsExit=%s\n' "$GITHUB_SHA" '${{ steps.app_dependencies.outcome }}' '${{ steps.types.outcome }}' '${{ steps.browser_python.outcome }}' '${{ steps.browser_provision.outcome }}' '${{ steps.build.outcome }}' '${{ steps.fixture.outcome }}' '${{ steps.browser.outcome }}' '${{ steps.readers.outcome }}' '${{ steps.caps.outcome }}' "$failed" > "$out/stages.txt"
           (cd "$out";find . -type f ! -path ./evidence.sha256 -print0 | sort -z | xargs -0 sha256sum) > "$out/evidence.sha256"

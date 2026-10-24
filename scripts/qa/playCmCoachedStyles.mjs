@@ -29,7 +29,14 @@ const required = ['src/lib/clubManager.ts', 'src/lib/clubManagerTraitRuntime.ts'
   'src/pages/ClubManager.tsx', 'src/index.css', 'scripts/qa/fixtures/cmCoachedStyles.entry.tsx',
   'scripts/qa/fixtures/cmCoachedStyles.html', 'scripts/qa/fixtures/cmCoachedStyles.vite.mjs',
   'scripts/qa/playCmCoachedStyles.mjs', 'scripts/qa/siteMenuNavigationSupport.mjs',
-  'scripts/lib/hostLikeServer.mjs', 'scripts/lib/playwrightLoader.mjs'];
+  'scripts/lib/hostLikeServer.mjs', 'scripts/lib/playwrightLoader.mjs',
+  'src/lib/clubManagerUiInfo.ts',
+  'src/components/club-manager/MatchPlansCard.tsx',
+  'src/components/club-manager/AcademyScreen.tsx',
+  'src/components/club-manager/LiveTacticsPanel.tsx',
+  'scripts/simTacticsEngine.mjs',
+  'src/test/academyFilters.test.tsx',
+  'scripts/qa/managerMatchPlans1079.mjs'];
 for (const file of required) {
   assert.match(binding.pins?.[file] || '', /^[a-f0-9]{64}$/, 'CM_SETUP_PIN_' + file);
   assert.equal(sha(fs.readFileSync(path.join(ROOT, file))), binding.pins[file], 'CM_SETUP_BODY_' + file);
