@@ -1,0 +1,9 @@
+kbd 390x844: after 2 Shift+Tab presses focus is on BAR Sign up to track your statsTra
+kbd 390x844: the focused menu button is hidden under the stage
+kbd 390x844: after Enter the menu dialog is {"label":"Join DoUKnowBallGuests earn po","rect":[0,159,390,685],"z":"50","seen":true,"focusInside":true}
+kbd 1280x900: after 2 Shift+Tab presses focus is on BAR Sign up to track your statsTra
+kbd 1280x900: the focused menu button is hidden under the stage
+kbd 1280x900: after Enter the menu dialog is {"label":"Join DoUKnowBallGuests earn po","rect":[416,195,864,705],"z":"50","seen":true,"focusInside":true}
+ghost 390x844: {"menu":[0,0,85,44],"resting":{"rect":[16,60,374,114],"at":["43,22:bar","43,40:bar","43,34:bar"]},"leaving":{"ghost":{"content":"\"\"","transform":"matrix(1, 0, 0, 2, 0, 0)","top":"0px","height":"54px"},"at":["43,22:bar","43,40:TOAST","43,34:TOAST"]}}
+ghost 320x640: {"menu":[0,0,85,44],"resting":{"rect":[16,60,304,114],"at":["43,22:bar","43,40:bar","43,34:bar"]},"leaving":{"ghost":{"content":"\"\"","transform":"matrix(1, 0, 0, 2, 0, 0)","top":"0px","height":"54px"},"at":["43,22:bar","43,40:TOAST","43,34:TOAST"]}}
+walk1568: green, parts ghost, kbd walked

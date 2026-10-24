@@ -1,0 +1,3 @@
+#!serve
+#!playwright
+ghost-kbd: WALK_PARTS=ghost,kbd node .rc/x/walk1568.mjs
