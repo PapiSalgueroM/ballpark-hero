@@ -11,6 +11,7 @@ import type { CareerState, SeasonSummary } from '@/lib/clubManager';
 import type { SeasonFate } from '@/lib/clubManagerBoardVerdict';
 import type { useClubManager } from '@/hooks/useClubManager';
 import { SavePointsDoor } from '@/components/club-manager/SavePointsDoor';
+import { VeteranRetirementCard } from '@/components/club-manager/VeteranRetirementCard';
 
 /* Round 633: the five terms, in the order they are worth. Kept beside the
    screen that prints them rather than in the engine, because the wording is
@@ -34,7 +35,7 @@ const FATE_WORD: Record<SeasonFate, string> = { up: 'promoted', down: 'relegated
 export default function ClubManagerSeasonSummary({ sm, c, g }: {
   sm: SeasonSummary;
   c: CareerState;
-  g: Pick<ReturnType<typeof useClubManager>, 'nextSeason' | 'startNew'> & Partial<Pick<ReturnType<typeof useClubManager>, 'pointsSlot'>>;
+  g: Pick<ReturnType<typeof useClubManager>, 'nextSeason' | 'startNew'> & Partial<Pick<ReturnType<typeof useClubManager>, 'pointsSlot' | 'reviewVeteran'>>;
 }) {
   const trophyLine = sm.trophies.length ? sm.trophies.map(() => '🏆').join('') : '-';
   /* Optional: a summary stored before Round 633 carries no breakdown, and the
@@ -171,6 +172,7 @@ export default function ClubManagerSeasonSummary({ sm, c, g }: {
               cm-gold-glow both set the animation shorthand and would cancel
               each other on one element, which would leave the trophy line at
               opacity 0 for good. */}
+          {g.reviewVeteran && <div className="mb-3"><VeteranRetirementCard career={c} onReview={g.reviewVeteran} /></div>}
           <div key={sm.season} data-season-lines className="text-left space-y-1.5 mb-2">
             <p className="cm-tick-in text-sm text-foreground flex items-start gap-2" style={tickIn()}>
               <Trophy className="w-3.5 h-3.5 text-primary mt-0.5 shrink-0" />

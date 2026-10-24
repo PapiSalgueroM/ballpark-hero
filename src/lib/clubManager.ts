@@ -1,4 +1,5 @@
 import { foldSpecialLatin } from '@/lib/nameFold';
+import { protectedVeteranIds } from '@/lib/clubManagerVeteranLedger';
 import { nameModerationError } from '@/lib/nameModeration';
 import { realLeagueFixtureKeyForStart, realLeagueFixturePairs, realLeagueFixtureCoverage } from '@/lib/clubManagerFixtures';
 import { noteHighestScoring } from '@/lib/clubManagerRecords';
@@ -2892,6 +2893,8 @@ export interface CareerState {
   startOptions?: import('@/lib/clubManagerStart').StartOptions;
   /** Set by finishSeason so a reload mid-review can resume the summary. */
   pendingSummary: SeasonSummary | null;
+  /** Optional career-local veteran decisions. Unknown versions stay stored and grant no override. */
+  veteranReviews?: unknown;
   /** Round 70: the board's demands for this season. */
   boardObjectives?: BoardObjective[];
   /** Round 474: which shape of specific ask this save's objectives were built
@@ -15936,13 +15939,6 @@ function fixExits(cards: CardLine[], injuries: InjuryLine[], goals: { name: stri
 
 export const SET_PIECE_KEYS: SetPieceKey[] = ['captain', 'cornersLeft', 'cornersRight', 'freeKicks', 'penalties'];
 
-export const SET_PIECE_INFO: Record<SetPieceKey, { label: string; blurb: string }> = {
-  captain: { label: 'Captain', blurb: 'Wears the armband. The eleven take a defeat a little better with him out there, and the job does him good.' },
-  cornersLeft: { label: 'Corners, left', blurb: 'Takes every corner from the left flag while he is on the pitch.' },
-  cornersRight: { label: 'Corners, right', blurb: 'Takes every corner from the right flag while he is on the pitch.' },
-  freeKicks: { label: 'Free kicks', blurb: 'Steps up for a direct free kick, and it is his goal when one goes in.' },
-  penalties: { label: 'Penalties', blurb: 'Takes the penalties, in the match and in a shootout, where his rating shifts the odds a touch.' },
-};
 
 /** Share of goals that came from the spot, and from a direct free kick, and
  *  share of saves that were a saved penalty. Decided when the chance is
@@ -19258,25 +19254,6 @@ export function academyUpgradeCost(level: number): number {
   return Math.max(3, Math.round(2 + Math.pow(clamp(level, 1, 20), 1.9) * 0.2));
 }
 
-export const FACILITY_INFO: Record<FacilityKind, { label: string; blurb: string; emoji: string }> = {
-  recruitment: {
-    label: 'Youth recruitment',
-    blurb: 'How far up the queue you are for the best local kids. Drives intake quality and how many turn up.',
-    emoji: '\u{1F50D}',
-  },
-  coaching: {
-    label: 'Coaching staff',
-    blurb: 'Better coaches develop EVERY player faster, not just the teenagers, and sharpen your scouting reports.',
-    emoji: '\u{1F9E2}',
-  },
-  facilities: {
-    /* Round 467: the first team's training ground is one of the four club
-       facilities now, so this youth building says what it is. */
-    label: 'Academy building',
-    blurb: 'The youth building itself. Lifts intake quality and helps everyone squeeze more out of the week.',
-    emoji: '\u{1F3DF}\uFE0F',
-  },
-};
 
 /** Spend the money, get the level. Refuses if you cannot afford it. */
 export function upgradeAcademy(career: CareerState, kind: FacilityKind): CareerState | null {
@@ -22112,6 +22089,7 @@ export function startNextSeason(career: CareerState, acceptOfferClub?: string): 
      written into the new season's free agent pool below. */
   const walkedFree619: FreeAgent[] = [];
   // Round 71: loan players go back to their parent clubs at season's end.
+  const protectedVeterans = protectedVeteranIds(career, worldYear(career), moving);
   const afterLoans = career.squad.filter(p => !p.onLoan);
   // Round 94: and MY loanees come home, with a season of football in them.
   /* Round 508: some of them do not come home, because the club they spent the
@@ -22139,14 +22117,14 @@ export function startNextSeason(career: CareerState, acceptOfferClub?: string): 
        keepers last and wingers do not. */
     const stillPlaying: CMPlayer[] = [];
     for (const p of aged) {
-      if (Math.random() < retireChance(p.age, p.rating, p.position)) {
+      if (Math.random() < retireChance(p.age, p.rating, p.position) && !protectedVeterans.has(p.id)) {
         retiredNow.push({ name: p.name, age: p.age, rating: p.rating });
         rosterExits.push({ player: p, kind: 'retire' });
       } else {
         stillPlaying.push(p);
       }
     }
-    const walked = stillPlaying.filter(p => (p.contractYears ?? 1) <= 0);
+    const walked = stillPlaying.filter(p => (p.contractYears ?? 1) <= 0 && !protectedVeterans.has(p.id));
     for (const p of walked) { freeAgentNews.push(p.name); rosterExits.push({ player: p, kind: 'release' }); }
     /* Round 619: a deal that ran out does not delete the man. He walks for
        nothing, which is what Round 105 always said, and now there is somewhere
@@ -22168,7 +22146,7 @@ export function startNextSeason(career: CareerState, acceptOfferClub?: string): 
          for anybody who uses it. Let a man go and you lose him for a season. */
       fromMyClub: true as const,
     })));
-    squad = stillPlaying.filter(p => (p.contractYears ?? 1) > 0);
+    squad = stillPlaying.filter(p => (p.contractYears ?? 1) > 0 || protectedVeterans.has(p.id));
     /* Round 132: the club replaces what it lost. The old intake was a flat two
        or three kids a summer whatever happened, so a squad that lost six
        players to retirement and expiry came back six lighter and the auto top
@@ -22214,7 +22192,7 @@ export function startNextSeason(career: CareerState, acceptOfferClub?: string): 
          books. If there is nothing surplus to release, the squad simply runs
          one or two over, which is what it did before this round. */
       const spare = squad.filter(p =>
-        !p.academyGrad && (p.isYouth || (p.potential ?? p.rating) <= p.rating));
+        !protectedVeterans.has(p.id) && !p.academyGrad && (p.isYouth || (p.potential ?? p.rating) <= p.rating));
       spare.sort((a, b) => (a.isYouth ? 0 : 1) - (b.isYouth ? 0 : 1) || a.rating - b.rating);
       const cut = new Set(spare.slice(0, squad.length - SQUAD_LIMIT).map(p => p.id));
       for (const p of squad) if (cut.has(p.id)) { releasedNews.push(p.name); rosterExits.push({ player: p, kind: 'release' }); }

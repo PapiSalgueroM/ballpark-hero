@@ -321,6 +321,17 @@ export function useClubManager() {
    */
   const careerRef = useRef<CareerState | null>(null);
   useEffect(() => { careerRef.current = career; }, [career]);
+  const veteranContext = useRef({ phase, epoch: 0 });
+  veteranContext.current.phase = phase;
+  const veteranPending = useRef(false);
+  const veteranMounted = useRef(false);
+  useEffect(() => {
+    veteranMounted.current = true;
+    return () => {
+      veteranMounted.current = false;
+      veteranContext.current.epoch += 1;
+    };
+  }, []);
 
   useEffect(() => {
     /* Round 634: the same write, and it reports. A refused write at pagehide
@@ -439,6 +450,28 @@ export function useClubManager() {
     setActiveTab('overview');
     return true;
   }, [holdsActiveSlot, persist]);
+
+  const reviewVeteran = useCallback(async (id: string): Promise<boolean> => {
+    const now = careerRef.current, slot = ownSlot.current, epoch = veteranContext.current.epoch;
+    if (veteranPending.current || !veteranMounted.current || veteranContext.current.phase !== 'seasonEnd'
+      || !now || !holdsActiveSlot() || movedOn()) return false;
+    veteranPending.current = true;
+    try {
+      const { applyVeteranRetirement } = await import('@/lib/clubManagerVeteranRetirement');
+      if (!veteranMounted.current || careerRef.current !== now || ownSlot.current !== slot
+        || veteranContext.current.phase !== 'seasonEnd' || veteranContext.current.epoch !== epoch
+        || !holdsActiveSlot() || movedOn()) return false;
+      const next = applyVeteranRetirement(now, id);
+      if (!next || !persist(next)) return false;
+      careerRef.current = next;
+      setCareer(next);
+      return true;
+    } catch {
+      return false;
+    } finally {
+      veteranPending.current = false;
+    }
+  }, [holdsActiveSlot, movedOn, persist]);
 
   /* ---------- Round 928: the manager slots ---------- */
 
@@ -590,6 +623,8 @@ export function useClubManager() {
   /** Back to the slots screen from inside a career, or from an era whose
    *  squads would not load (review: that screen had no way back). */
   const showSlots = useCallback(() => {
+    veteranContext.current.epoch += 1;
+    veteranContext.current.phase = 'resume';
     if (careerRef.current && holdsActiveSlot() && !saveCareer(careerRef.current)) movedOn();
     letGoIfStale();
     setBootError(null);
@@ -966,6 +1001,8 @@ export function useClubManager() {
 
   const nextSeason = useCallback((acceptOfferClub?: string) => {
     if (!career) return;
+    veteranContext.current.epoch += 1;
+    veteranContext.current.phase = 'hub';
     const s = startNextSeason(career, acceptOfferClub);
     setCareer(s);
     setSummary(null);
@@ -1356,7 +1393,7 @@ export function useClubManager() {
     pointsSlot: (): number | null => (holdsActiveSlot() ? ownSlot.current : null),
     phase, career, report, summary, activeTab, setActiveTab, pendingClub,
     market, nextFx, tableRows, myPosition, facts,
-    resume, startNew, retire, chooseClub, confirmClub, confirmCustomClub,
+    resume, startNew, retire, reviewVeteran, chooseClub, confirmClub, confirmCustomClub,
     setFormationIndex, setMentality, setTeamInstructions, setXiSlot, swapXiSlots, autoPick,
     saveMatchPlan, applyMatchPlan, deleteMatchPlan,
     setSlotDuty, assignSetPiece, autoPickSetPieces, setShootoutOrder: setShootoutOrderIds, retrain, stopRetrain,
