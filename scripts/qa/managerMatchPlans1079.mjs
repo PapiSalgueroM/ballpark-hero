@@ -167,7 +167,7 @@ async function fontProof(page) {
 try {
   const { build: bundle } = await import('esbuild');
   const baselineFile = path.join(temp, 'independent-engine.mjs');
-  await bundle({ entryPoints:[path.join(ROOT,'src/lib/clubManager.ts')], outfile:baselineFile, bundle:true, platform:'node', format:'esm', alias:{'@':path.join(ROOT,'src')}, logLevel:'silent' });
+  await bundle({ stdin:{contents:"export * from "+JSON.stringify(path.join(ROOT,'src/lib/clubManager.ts'))+"; export { DUTY_INFO } from "+JSON.stringify(path.join(ROOT,'src/lib/clubManagerUiInfo.ts'))+";",resolveDir:ROOT,loader:'ts'}, outfile:baselineFile, bundle:true, platform:'node', format:'esm', alias:{'@':path.join(ROOT,'src')}, logLevel:'silent' });
   fs.copyFileSync(baselineFile, path.join(OUT, 'independent-engine.mjs'));
   const previousStorage = Object.getOwnPropertyDescriptor(globalThis, 'localStorage');
   const baselineStore = new Map();
@@ -186,7 +186,7 @@ try {
     else Reflect.deleteProperty(globalThis, 'localStorage');
   }
   assert.deepEqual(Object.getOwnPropertyDescriptor(globalThis, 'localStorage'), previousStorage, 'Baseline import restores the exact Node storage global');
-  report.baseline = { sha256:digest(fs.readFileSync(baselineFile)), source:'Unchanged clubManager.ts bundled independently of React and match-plan helper', storage:'Fresh in-memory adapter at import only; original Node global restored before browser setup' };
+  report.baseline = { sha256:digest(fs.readFileSync(baselineFile)), source:'Actual clubManager.ts plus display-only duty metadata bundled independently of React and match-plan helper', storage:'Fresh in-memory adapter at import only; original Node global restored before browser setup' };
   const expectedPreview = (career, plan) => {
     const state = {...structuredClone(career), ...tactics(plan)};
     const formation = engine.FORMATIONS[state.formationIndex], actual = engine.effectiveXIWithSlots(state);

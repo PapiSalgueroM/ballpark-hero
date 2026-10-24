@@ -5,10 +5,11 @@ import { ArrowLeft, ChevronDown, Wand2, X } from 'lucide-react';
 import {
   FORMATIONS, MENTALITIES, resolveXI, isAvailable, xiFitReport, fitGrade, FIT_PENALTY,
   slotPosition, defensiveLineY, lineLabel,
-  benchFor, dutyOptions, slotDuty, DUTY_INFO,
-  SET_PIECE_KEYS, SET_PIECE_INFO, setPieceCandidates,
+  benchFor, dutyOptions, slotDuty,
+  SET_PIECE_KEYS, setPieceCandidates,
   SHOOTOUT_MAX_ORDER, shootoutOrderOf, instructionsOf,
 } from '@/lib/clubManager';
+import { SET_PIECE_INFO, DUTY_INFO } from '@/lib/clubManagerUiInfo';
 import type { CareerState, CMPlayer, Mentality, Duty, SetPieceKey, FitGrade } from '@/lib/clubManager';
 import { instructionsSummary, opponentStyle, type TeamInstructions } from '@/lib/clubManagerTactics';
 import { InstructionsPicker } from '@/components/club-manager/InstructionsPicker';

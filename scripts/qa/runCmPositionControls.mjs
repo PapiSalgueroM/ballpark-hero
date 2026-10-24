@@ -27,7 +27,7 @@ assert.equal(git(['rev-parse','HEAD']).trim(), process.env.GITHUB_SHA);
 assert.equal(git(['rev-parse','HEAD:vitest.config.ts']).trim(), 'ed2a9dc677f77dfe95c061064eeff5782b856864');
 assert.equal(process.env.NODE_OPTIONS, '--require=' + path.join(ROOT,'scripts/lib/offlineTransport.cjs'));
 const CORE='src/lib/clubManager.ts', TEST='src/test/clubManagerPositionLive.test.ts';
-const CORE_SHA='518f9be7ab031e8a4e922d65c4992d2e8e82f5ab0810e19abc6855907fa81f87';
+const CORE_SHA='eeb271dce618de6e1894f3a5432aa728cab8f98cadd31b79b0e4f50150d0d0b4';
 const recipeFile=path.join(ROOT,'scripts/qa/cmPosition.controls.json');
 const inputPins={
   [CORE]:CORE_SHA,
@@ -36,7 +36,7 @@ const inputPins={
   'src/test/clubManagerPositionIntegration.test.ts':'d6a8abf9ba8793ba0e87148dc9bf90e3892b4c9055e2820688bcbe9a35b64d77',
   'src/test/clubManagerPositions.test.ts':'625ee402d0d506d82f03c7f8bb7b8f524b2a7b5a2bf3b83254607b2b6aec6ed3',
   'src/test/TacticsScreen.freePositions.test.tsx':'f7eee388e3bb0dda643e22f9b852f58088935cf7b48e88618bb11bfc7273903e',
-  'scripts/qa/cmPosition.controls.json':'2143e57f69c57d32ed2c501408dcdb9ecc4b85b061df67a79540a1a0b45cac55',
+  'scripts/qa/cmPosition.controls.json':'079ae51343a1a2d6d0ad095e2a1c7dab467325de434326e982ca1428ca0d4991',
   'vitest.config.ts':'6a68dd2f214dab4a3013eb41bad38eea65d703d61440002710ec246495e1c58a',
   'scripts/lib/offlineTransport.cjs':'e60ff1534307e449ccef598e3b7470dcba58681b82cea4005cec7319f14f9221',
 };

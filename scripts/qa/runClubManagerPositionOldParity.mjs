@@ -22,7 +22,7 @@ for (const key of ['US_BOARD_CONTROL_ALIAS', 'US_BOARD_CONTROL_FILE', 'NO_DOUBLE
 fs.mkdirSync(out);
 const testFile = 'src/test/clubManagerPositionOldParity.test.ts';
 const inputs = [
-  ['src/lib/clubManager.ts', 1247018, '518f9be7ab031e8a4e922d65c4992d2e8e82f5ab0810e19abc6855907fa81f87'],
+  ['src/lib/clubManager.ts', 1243757, 'eeb271dce618de6e1894f3a5432aa728cab8f98cadd31b79b0e4f50150d0d0b4'],
   ['src/lib/clubManagerPositions.ts', 3861, 'ba6a2ab6f4a220439dec9373ba3655c7a962abaa640cc8f47c206644df0407a7'],
   [testFile, 9855, '590c31f4339f8fc5a0c340a9df6da4592670eef3d06c345996cba97b529b2613'],
 ];

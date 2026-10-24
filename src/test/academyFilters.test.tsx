@@ -13,12 +13,15 @@ import { afterEach, describe, expect, it, vi } from 'vitest';
 import type { CareerState, Prospect } from '@/lib/clubManager';
 import { AcademyScreen } from '@/components/club-manager/AcademyScreen';
 
+vi.mock('@/lib/clubManagerUiInfo', () => ({
+  FACILITY_INFO: Object.fromEntries(['recruitment', 'coaching', 'facilities'].map(kind => [kind, { emoji: '', label: kind, blurb: kind }])),
+}));
+
 vi.mock('@/lib/clubManager', () => ({
   SCOUT_REGIONS: [{ id: 'region', name: 'Region', flag: '' }],
   SCOUT_TRIPS: [{ weeks: 1 }, { weeks: 2 }],
   MAX_SCOUTS: 3,
   MAX_PROSPECTS: 20,
-  FACILITY_INFO: Object.fromEntries(['recruitment', 'coaching', 'facilities'].map(kind => [kind, { emoji: '', label: kind, blurb: kind }])),
   academyUpgradeCost: () => 1,
   tripCost: () => 1,
   money: (n: number) => `£${n}`,
