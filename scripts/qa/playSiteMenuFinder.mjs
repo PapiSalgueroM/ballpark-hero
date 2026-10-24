@@ -190,12 +190,17 @@ async function opened(page, row) {
   await target(page, field, 'Find a game', row);
   return { menu, field, baseline: sample };
 }
-async function waitClosed(page, menu) {
+async function waitClosed(page, menu, baseline) {
   await menu.waitFor({ state: 'hidden' });
-  await page.waitForFunction(() => {
+  await page.waitForFunction(expectedLocks => {
     const node = document.activeElement;
-    return node?.matches('button[aria-label="Open site menu"]') && node.getClientRects().length > 0;
-  });
+    const b = getComputedStyle(document.body), d = getComputedStyle(document.documentElement);
+    const locks = { bodyOverflow: b.overflow, bodyOverflowY: b.overflowY, rootOverflow: d.overflow, rootOverflowY: d.overflowY,
+      bodyPointer: b.pointerEvents, rootPointer: d.pointerEvents, bodyLock: document.body.getAttribute('data-scroll-locked') };
+    return node?.matches('button[aria-label="Open site menu"]') && node.getClientRects().length > 0
+      && Object.entries(expectedLocks).every(([key, value]) => locks[key] === value)
+      && !locks.bodyLock && locks.bodyPointer !== 'none' && locks.rootPointer !== 'none';
+  }, baseline.locks);
 }
 async function typed(page, field, value) {
   await field.press('ControlOrMeta+A'); await field.press('Backspace'); await field.pressSequentially(value);
@@ -249,7 +254,7 @@ async function journey(context, row) {
   assert.equal(grid.href, baseline.href, 'FINDER_DRAFT_URL: broad query stays local');
   await target(page, all, 'See all results navigation', row); await all.click();
   await page.waitForURL(url => url.pathname === '/search' && url.searchParams.get('q') === 'grid');
-  await waitClosed(page, menu);
+  await waitClosed(page, menu, baseline);
   await page.waitForFunction(() => document.querySelector('input[aria-label="Search games"]')?.value === 'grid'
     && document.querySelectorAll('#dukb-main a[data-result]').length > 6);
   row.searchReference = await page.locator('#dukb-main a[data-result]').evaluateAll(nodes => nodes.map(node => ({
@@ -266,7 +271,7 @@ async function journey(context, row) {
   await menu.locator('[aria-label="Game results"] a[href="/free-kick"]').waitFor();
   const dismiss = menu.getByRole('button', { name: 'Close', exact: true });
   await target(page, dismiss, 'Close after finder edit', row); await dismiss.click();
-  await waitClosed(page, menu);
+  await waitClosed(page, menu, baseline);
   row.dismissed = await snapshot(page, row, 'dismissed', false); closedReady(row.dismissed, baseline, '/search');
   ({ menu, field } = await opened(page, row));
   await typed(page, field, 'Free Kick');
@@ -277,7 +282,7 @@ async function journey(context, row) {
   await game.press('Enter');
   await page.waitForURL(url => url.pathname === '/free-kick' && !url.search && !url.hash);
   await page.getByRole('heading', { name: 'Free Kick', exact: true }).waitFor();
-  await waitClosed(page, menu);
+  await waitClosed(page, menu, baseline);
   row.gameClosed = await snapshot(page, row, 'free-kick-closed'); closedReady(row.gameClosed, baseline, '/free-kick');
   row.scrollProbe = await page.evaluate(() => {
     const before = scrollY, maximum = Math.max(0, document.documentElement.scrollHeight - innerHeight);
