@@ -1,0 +1,15 @@
+#!build
+tsc: node_modules/.bin/tsc --noEmit -p tsconfig.app.json
+vitest-touched: node_modules/.bin/vitest run src/test/calendarCurrentDate.test.tsx src/test/liveSimCelebration.test.tsx src/test/liveSimMotion.test.tsx src/test/pitchOwnGoal.test.tsx src/test/pitchRestartContinuity.test.tsx src/test/soccerCareerSaveFence.test.tsx src/test/soccerCareerSaveRetry.test.tsx src/test/soccerTransferBriefPage.test.tsx src/test/statDetectiveMotion.test.tsx src/test/statDetectiveScope.test.tsx src/test/statDetectiveSpans.test.tsx --testTimeout=300000 --hookTimeout=120000 2>&1 | tail -15; exit ${PIPESTATUS[0]}
+simNoRivalNames: node scripts/simNoRivalNames.mjs
+simHarnessAnchors: node scripts/simHarnessAnchors.mjs
+simAccessibility: node scripts/simAccessibility.mjs
+simTrustCopy: node scripts/simTrustCopy.mjs
+simStatDetectiveMotion: node scripts/simStatDetectiveMotion.mjs
+simConquestScenes: node scripts/simConquestScenes.mjs
+simSafari: node scripts/simSafari.mjs
+simLegalPages: node scripts/simLegalPages.mjs
+simInventedNames: node scripts/simInventedNames.mjs
+simNoInventedQuotes: node scripts/simNoInventedQuotes.mjs
+simSiteSearch: node scripts/simSiteSearch.mjs
+simReportedGamePools: node scripts/simReportedGamePools.mjs
