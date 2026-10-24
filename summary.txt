@@ -1,0 +1,8 @@
+build exit=0 35s | [dukb] inlined 1 stylesheet(s) and 1 module(s) into 181 snapshots (11 left alone)
+simNoRivalNames exit=0 33s | No rival product names found. 0 findings.
+simHarnessAnchors exit=0 95s | simHarnessAnchors: green. Every harness parses and none carries an unmatchable anchor.
+simStorageWrites exit=0 6s | simStorageWrites: all green (owed: 12)
+dashscan exit=0 0s | dashscan: 365 added lines against b20ec6664, 0 with an en or em dash; commit messages: 0
+dashscan-ctl exit=1 0s | dashscan: 366 added lines against b20ec6664, 1 with an en or em dash; commit messages: 0
+tsc exit=0 163s | 
+vitest-all exit=0 890s |    Duration  889.01s (transform 45.33s, setup 41.55s, collect 241.91s, tests 1910.85s, environment 282.33s, prepare 58.57s)

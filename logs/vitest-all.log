@@ -1,0 +1,40 @@
+ [32m✓[39m src/lib/fightPromoter.test.ts [2m([22m[2m7 tests[22m[2m)[22m[32m 26[2mms[22m[39m
+ [32m✓[39m src/test/rankShift.test.ts [2m([22m[2m7 tests[22m[2m)[22m[32m 192[2mms[22m[39m
+ [32m✓[39m src/test/seasonReplays.test.tsx [2m([22m[2m7 tests[22m[2m)[22m[32m 10[2mms[22m[39m
+ [32m✓[39m src/test/soccerBallonPoolRetirement.test.tsx [2m([22m[2m2 tests[22m[2m)[22m[32m 185[2mms[22m[39m
+ [32m✓[39m src/components/front-office-shared/GmBooksPanel.test.tsx [2m([22m[2m5 tests[22m[2m)[22m[32m 157[2mms[22m[39m
+ [32m✓[39m src/test/SiteMenu.escape-failure.test.tsx [2m([22m[2m1 test[22m[2m)[22m[32m 192[2mms[22m[39m
+ [32m✓[39m src/test/managerPenaltyMarkers.test.tsx [2m([22m[2m4 tests[22m[2m)[22m[32m 233[2mms[22m[39m
+ [32m✓[39m src/test/cmSavePointsHook.test.tsx [2m([22m[2m3 tests[22m[2m)[22m[33m 743[2mms[22m[39m
+   [33m[2m✓[22m[39m the hook asks the points record before a scored ping[2m > [22ma season with no mark pings its score (the baseline) [33m 444[2mms[22m[39m
+ [32m✓[39m src/data/pollFixtures.test.ts [2m([22m[2m4 tests[22m[2m)[22m[32m 35[2mms[22m[39m
+ [32m✓[39m src/components/home/PollOfTheDay.test.tsx [2m([22m[2m4 tests[22m[2m)[22m[32m 239[2mms[22m[39m
+ [32m✓[39m src/lib/clubManagerSubsRule.test.ts [2m([22m[2m5 tests[22m[2m)[22m[32m 18[2mms[22m[39m
+ [32m✓[39m src/lib/clubManagerGoalWeight.test.ts [2m([22m[2m3 tests[22m[2m)[22m[32m 79[2mms[22m[39m
+ [32m✓[39m src/test/perfectSeasonReport.test.tsx [2m([22m[2m1 test[22m[2m)[22m[32m 205[2mms[22m[39m
+ [32m✓[39m src/test/soccerSavePackedReaders.test.tsx [2m([22m[2m3 tests[22m[2m)[22m[32m 147[2mms[22m[39m
+ [32m✓[39m src/test/ownerMandateMotion.test.tsx [2m([22m[2m7 tests[22m[2m)[22m[32m 166[2mms[22m[39m
+ [32m✓[39m src/test/soccerAwardGeneration.test.ts [2m([22m[2m2 tests[22m[2m)[22m[32m 142[2mms[22m[39m
+ [32m✓[39m src/test/soccerPuskasYear1523.test.ts [2m([22m[2m3 tests[22m[2m)[22m[32m 12[2mms[22m[39m
+ [32m✓[39m src/test/SiteMenu.load-failure.test.tsx [2m([22m[2m1 test[22m[2m)[22m[32m 192[2mms[22m[39m
+[90mstdout[2m | src/test/careerWallShotFriendly.test.ts[2m > [22m[2mcareer wall shot forgiveness[2m > [22m[2mscores more with modest aiming and timing errors than the previous ladder
+[22m[39mwall shot forgiveness: 12810/18000 scored, previous 12565/18000
+
+ [32m✓[39m src/test/careerWallShotFriendly.test.ts [2m([22m[2m3 tests[22m[2m)[22m[32m 161[2mms[22m[39m
+ [32m✓[39m src/test/soccerBallonPoolReadAsAbsent.test.tsx [2m([22m[2m29 tests[22m[2m)[22m[33m 1220[2mms[22m[39m
+ [32m✓[39m src/test/reservedNames.test.ts [2m([22m[2m89 tests[22m[2m)[22m[32m 22[2mms[22m[39m
+ [32m✓[39m src/test/liveScoresTransport.test.ts [2m([22m[2m3 tests[22m[2m)[22m[32m 18[2mms[22m[39m
+ [32m✓[39m src/components/front-office-shared/DraftNightCard.test.tsx [2m([22m[2m3 tests[22m[2m)[22m[32m 22[2mms[22m[39m
+ [32m✓[39m src/test/legalAiTransparency1442.test.tsx [2m([22m[2m2 tests[22m[2m)[22m[32m 248[2mms[22m[39m
+ [32m✓[39m src/lib/careerChanceWheel.test.ts [2m([22m[2m10 tests[22m[2m)[22m[32m 9[2mms[22m[39m
+ [32m✓[39m src/pages/NotFound.test.tsx [2m([22m[2m1 test[22m[2m)[22m[32m 168[2mms[22m[39m
+ [32m✓[39m src/lib/gridRarity.test.ts [2m([22m[2m4 tests[22m[2m)[22m[32m 4[2mms[22m[39m
+ [32m✓[39m src/data/gameRegistry.test.ts [2m([22m[2m1 test[22m[2m)[22m[32m 5[2mms[22m[39m
+ [32m✓[39m src/lib/accountPrivacy.test.ts [2m([22m[2m10 tests[22m[2m)[22m[32m 19[2mms[22m[39m
+ [32m✓[39m src/test/example.test.ts [2m([22m[2m1 test[22m[2m)[22m[32m 3[2mms[22m[39m
+
+[2m Test Files [22m [1m[32m646 passed[39m[22m[2m | [22m[33m2 skipped[39m[90m (648)[39m
+[2m      Tests [22m [1m[32m9624 passed[39m[22m[2m | [22m[33m58 skipped[39m[90m (9682)[39m
+[2m   Start at [22m 10:50:18
+[2m   Duration [22m 889.01s[2m (transform 45.33s, setup 41.55s, collect 241.91s, tests 1910.85s, environment 282.33s, prepare 58.57s)[22m
+
