@@ -1,0 +1,86 @@
+cm 390x844 no-preference: stage z 55, bar [0,44], menu button under the stage true, body overflow "hidden"
+cm 390x844 no-preference Back: rect 4,2,48,46 centre answers itself
+cm 390x844 no-preference help: rect 52,2,96,46 centre answers itself
+cm 390x844 no-preference score: rect 163,48,228,80 centre answers itself
+cm 390x844 no-preference Pause: rect 0,798,54,842 centre answers itself
+cm 390x844 no-preference Squad: rect 280,798,334,842 centre answers itself
+cm 390x844 no-preference help open Close the help: rect 323,229,367,273 centre answers itself
+cm 390x844 no-preference squad open Close the panel: rect 336,442,380,486 centre answers itself
+cm 390x844 no-preference squad open Close: missing
+cm 390x844 no-preference: after Back stage 0 card 1 overflow "" text "Premier League · Round 1Everton0 - 0Crystal PalacePaused at 4'Back to the match"
+cm 390x844 no-preference: after a wheel of 400 the page is at scrollY 501
+cm 390x844 reduce: stage z 55, bar [0,44], menu button under the stage true, body overflow "hidden"
+cm 390x844 reduce Back: rect 4,2,48,46 centre answers itself
+cm 390x844 reduce help: rect 52,2,96,46 centre answers itself
+cm 390x844 reduce score: rect 163,48,228,80 centre answers itself
+cm 390x844 reduce Pause: rect 0,798,54,842 centre answers itself
+cm 390x844 reduce Squad: rect 280,798,334,842 centre answers itself
+cm 390x844 reduce help open Close the help: rect 323,229,367,273 centre answers itself
+cm 390x844 reduce squad open Close the panel: rect 336,442,380,486 centre answers itself
+cm 390x844 reduce squad open Close: missing
+cm 390x844 reduce: after Back stage 0 card 1 overflow "" text "Premier League · Round 1Everton0 - 0Crystal PalacePaused at 4'Back to the match"
+cm 390x844 reduce: after a wheel of 400 the page is at scrollY 501
+cm 1280x900 no-preference: stage z 55, bar [0,44], menu button under the stage true, body overflow "hidden"
+cm 1280x900 no-preference Back: rect 92,18,136,62 centre answers itself
+cm 1280x900 no-preference help: rect 142,18,186,62 centre answers itself
+cm 1280x900 no-preference score: rect 360,24,425,56 centre answers itself
+cm 1280x900 no-preference Pause: rect 92,838,190,882 centre answers itself
+cm 1280x900 no-preference Squad: rect 613,838,712,882 centre answers itself
+cm 1280x900 no-preference help open Close the help: rect 1131,25,1175,69 centre answers itself
+cm 1280x900 no-preference squad open Close the panel: rect 1144,12,1188,56 centre answers itself
+cm 1280x900 no-preference squad open Close: missing
+cm 1280x900 no-preference: after Back stage 0 card 1 overflow "" text "Premier League · Round 1Everton0 - 0Crystal PalacePaused at 4'Back to the match"
+cm 1280x900 no-preference: after a wheel of 400 the page is at scrollY 481
+cm 1280x900 reduce: stage z 55, bar [0,44], menu button under the stage true, body overflow "hidden"
+cm 1280x900 reduce Back: rect 92,18,136,62 centre answers itself
+cm 1280x900 reduce help: rect 142,18,186,62 centre answers itself
+cm 1280x900 reduce score: rect 360,24,425,56 centre answers itself
+cm 1280x900 reduce Pause: rect 92,838,190,882 centre answers itself
+cm 1280x900 reduce Squad: rect 613,838,712,882 centre answers itself
+cm 1280x900 reduce help open Close the help: rect 1131,25,1175,69 centre answers itself
+cm 1280x900 reduce squad open Close the panel: rect 1144,12,1188,56 centre answers itself
+cm 1280x900 reduce squad open Close: missing
+cm 1280x900 reduce: after Back stage 0 card 1 overflow "" text "Premier League · Round 1Everton0 - 0Crystal PalacePaused at 4'Back to the match"
+cm 1280x900 reduce: after a wheel of 400 the page is at scrollY 481
+cookie 390x844: banner fixed z 60 rect 0,611,390,844 pending 1; stage z 55 count 1
+cookie 390x844 banner button "Reject all" rect 16,784,112,828 answers itself
+cookie 390x844 banner button "Accept all" rect 120,784,222,828 answers itself
+cookie 390x844 banner button "Save choices" rect 230,784,353,828 answers itself
+cookie 390x844 stage under a pending banner Back: rect 4,2,48,46 centre answers itself
+cookie 390x844 stage under a pending banner help: rect 52,2,96,46 centre answers itself
+cookie 390x844 stage under a pending banner score: rect 163,48,228,80 centre answers itself
+cookie 390x844 stage under a pending banner Pause: rect 0,541,54,585 centre answers itself
+cookie 390x844 stage under a pending banner Squad: rect 280,541,334,585 centre answers itself
+cookie 390x844 after answering Back: rect 4,2,48,46 centre answers itself
+cookie 390x844 after answering help: rect 52,2,96,46 centre answers itself
+cookie 390x844 after answering score: rect 163,48,228,80 centre answers itself
+cookie 390x844 after answering Pause: rect 0,798,54,842 centre answers itself
+cookie 390x844 after answering Squad: rect 280,798,334,842 centre answers itself
+cookie 1280x900: banner fixed z 60 rect 0,735,1280,900 pending 1; stage z 55 count 1
+cookie 1280x900 banner button "Reject all" rect 256,840,352,884 answers itself
+cookie 1280x900 banner button "Accept all" rect 360,840,462,884 answers itself
+cookie 1280x900 banner button "Save choices" rect 470,840,593,884 answers itself
+cookie 1280x900 stage under a pending banner Back: rect 92,18,136,62 centre answers itself
+cookie 1280x900 stage under a pending banner help: rect 142,18,186,62 centre answers itself
+cookie 1280x900 stage under a pending banner score: rect 360,24,425,56 centre answers itself
+cookie 1280x900 stage under a pending banner Pause: rect 92,649,190,693 centre answers itself
+cookie 1280x900 stage under a pending banner Squad: rect 613,649,712,693 centre answers itself
+cookie 1280x900 after answering Back: rect 92,18,136,62 centre answers itself
+cookie 1280x900 after answering help: rect 142,18,186,62 centre answers itself
+cookie 1280x900 after answering score: rect 360,24,425,56 centre answers itself
+cookie 1280x900 after answering Pause: rect 92,838,190,882 centre answers itself
+cookie 1280x900 after answering Squad: rect 613,838,712,882 centre answers itself
+sd 320x568 no-preference: h1 [16,149,304,185] font 30px lines 1; Stars null; Deep Cuts null; sideways overflow false
+FINDING sd 320x568 no-preference: a difficulty button is missing
+sd 320x568 reduce: h1 [16,149,304,185] font 30px lines 1; Stars null; Deep Cuts null; sideways overflow false
+FINDING sd 320x568 reduce: a difficulty button is missing
+sd 390x844 no-preference: h1 [16,149,374,185] font 30px lines 1; Stars null; Deep Cuts null; sideways overflow false
+FINDING sd 390x844 no-preference: a difficulty button is missing
+sd 390x844 reduce: h1 [16,149,374,185] font 30px lines 1; Stars null; Deep Cuts null; sideways overflow false
+FINDING sd 390x844 reduce: a difficulty button is missing
+sd 1280x900 no-preference: h1 [320,137,960,185] font 48px lines 1; Stars null; Deep Cuts null; sideways overflow false
+FINDING sd 1280x900 no-preference: a difficulty button is missing
+sd 1280x900 reduce: h1 [320,137,960,185] font 48px lines 1; Stars null; Deep Cuts null; sideways overflow false
+FINDING sd 1280x900 reduce: a difficulty button is missing
+news: first entry "Club Manager's live match is back on top of the site menu. The new menu bar across the top was sitting over the match in"
+walk1568: RED, 6 findings
