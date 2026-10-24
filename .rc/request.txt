@@ -1,0 +1,7 @@
+#!serve
+#!playwright
+#!serial
+css-head: WALK_PARTS=css node .rc/x/walk1568.mjs
+css-m2b: R=$PWD; git worktree add -q --detach /tmp/m2b 492a07b5f && ln -s "$R/node_modules" /tmp/m2b/node_modules && node .rc/x/mut1568.mjs m2b /tmp/m2b && (cd /tmp/m2b && node_modules/.bin/vite build > /tmp/m2b-build.log 2>&1 || { tail -20 /tmp/m2b-build.log; exit 2; }) && WALK_DIST=/tmp/m2b/dist WALK_PORT=4379 WALK_PARTS=css WALK_TAG=m2b node .rc/x/walk1568.mjs
+css-m2: R=$PWD; git worktree add -q --detach /tmp/m2 492a07b5f && ln -s "$R/node_modules" /tmp/m2/node_modules && node .rc/x/mut1568.mjs m2 /tmp/m2 && (cd /tmp/m2 && node_modules/.bin/vite build > /tmp/m2-build.log 2>&1 || { tail -20 /tmp/m2-build.log; exit 2; }) && WALK_DIST=/tmp/m2/dist WALK_PORT=4380 WALK_PARTS=css WALK_TAG=m2 node .rc/x/walk1568.mjs
+css-rules: grep -o -h -E '[^}]{0,40}(mounted=false|removed=true)[^}]{0,120}\}' dist/assets/*.css | head -8; grep -o -h -E 'max-width:\s*600px[^@]{0,300}' dist/assets/*.css | head -4
