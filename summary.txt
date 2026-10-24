@@ -1,0 +1,5 @@
+m1-walk exit=0 50s | walk1568: green, parts cookie walked
+m1-livefit exit=0 140s | playLiveMatchFit: all green. The goal in order, reduced motion, the fit at five sizes, nothing moves the page, the reload, Back, a wide screen, an own goal drawn as one.
+m2-toasts exit=0 68s | playSoccerLanding: green at 390x844 (also no extra sizes; toasts), HEAD ONLY
+m2b-toasts exit=0 67s | playSoccerLanding: green at 390x844 (also no extra sizes; toasts), HEAD ONLY
+m3-conquest exit=0 99s | ALL CONQUEST SCENE SCREEN CHECKS PASSED

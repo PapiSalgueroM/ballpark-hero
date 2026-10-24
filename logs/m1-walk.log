@@ -1,0 +1,30 @@
+mut1568: m1 applied to src/components/club-manager/LiveSimMotion.css ("z-index:55;overflow:hidden" -> "z-index:65;overflow:hidden")
+cookie 390x844: banner fixed z 60 rect 0,611,390,844 pending 1; stage z 65 count 1
+cookie 390x844 banner button "Reject all" rect 16,784,112,828 answers itself
+cookie 390x844 banner button "Accept all" rect 120,784,222,828 answers itself
+cookie 390x844 banner button "Save choices" rect 230,784,353,828 answers itself
+cookie 390x844 stage under a pending banner Back: rect 4,2,48,46 centre answers itself
+cookie 390x844 stage under a pending banner help: rect 52,2,96,46 centre answers itself
+cookie 390x844 stage under a pending banner score: rect 163,48,228,80 centre answers itself
+cookie 390x844 stage under a pending banner Pause: rect 0,541,54,585 centre answers itself
+cookie 390x844 stage under a pending banner Squad: rect 280,541,334,585 centre answers itself
+cookie 390x844 after answering Back: rect 4,2,48,46 centre answers itself
+cookie 390x844 after answering help: rect 52,2,96,46 centre answers itself
+cookie 390x844 after answering score: rect 163,48,228,80 centre answers itself
+cookie 390x844 after answering Pause: rect 0,798,54,842 centre answers itself
+cookie 390x844 after answering Squad: rect 280,798,334,842 centre answers itself
+cookie 1280x900: banner fixed z 60 rect 0,735,1280,900 pending 1; stage z 65 count 1
+cookie 1280x900 banner button "Reject all" rect 256,840,352,884 answers itself
+cookie 1280x900 banner button "Accept all" rect 360,840,462,884 answers itself
+cookie 1280x900 banner button "Save choices" rect 470,840,593,884 answers itself
+cookie 1280x900 stage under a pending banner Back: rect 92,18,136,62 centre answers itself
+cookie 1280x900 stage under a pending banner help: rect 142,18,186,62 centre answers itself
+cookie 1280x900 stage under a pending banner score: rect 360,24,425,56 centre answers itself
+cookie 1280x900 stage under a pending banner Pause: rect 92,649,190,693 centre answers itself
+cookie 1280x900 stage under a pending banner Squad: rect 613,649,712,693 centre answers itself
+cookie 1280x900 after answering Back: rect 92,18,136,62 centre answers itself
+cookie 1280x900 after answering help: rect 142,18,186,62 centre answers itself
+cookie 1280x900 after answering score: rect 360,24,425,56 centre answers itself
+cookie 1280x900 after answering Pause: rect 92,838,190,882 centre answers itself
+cookie 1280x900 after answering Squad: rect 613,838,712,882 centre answers itself
+walk1568: green, parts cookie walked
