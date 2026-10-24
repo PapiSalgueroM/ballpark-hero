@@ -9,6 +9,7 @@ const base = 'http://127.0.0.1:4173';
 const mode = process.env.REPORT_DRAFT_MODE;
 const artifactRoot = process.env.REPORT_DRAFT_OUT;
 const originalHead = '775564305e9da84dab59f2b9fe246d044a3cc8e9';
+const sourcePins = [{"file":"src/components/game/ReportSiteIssue.tsx","original":{"bytes":6416,"sha256":"c70b226ed5d47fb9d1fd0e0e81f0f9a9957e136e4161f923c212027d061b1c31","gitBlob":"2e8260954f460f5e3b9e776913d72c84c652bfcc"},"current":{"bytes":2812,"sha256":"669cfbc62d506d839fe988e23406732c0023ccad326544a78a9e603c13c24ef9","gitBlob":"b014727c5ca6f398d9bd593d3aa596e2e948fd97"},"expectedDifferent":true},{"file":"src/components/game/ReportQuestion.tsx","original":{"bytes":6457,"sha256":"217cb9118e28dfc27ba9dfea3ff7e98ab4c66c13f42a8774a8913b30e3801342","gitBlob":"151d1a1e1e5875317f2573b9f411b458c7d764dd"},"current":{"bytes":6746,"sha256":"02b8fd8654cd1fd36000f618c7cf9b49c337215607523f4b8a83420cc8a115fb","gitBlob":"c8d175d3c25548450130c49246969c298a4f1243"},"expectedDifferent":true},{"file":"src/lib/reportContext.ts","original":{"bytes":3179,"sha256":"d81909a7e8b8adb07402aace3b5519c882750235cb8eebb9b0aa4f867ccd0490","gitBlob":"8fdc7777c10fc0bd8c3571ccc413ac5800e53141"},"current":{"bytes":3179,"sha256":"d81909a7e8b8adb07402aace3b5519c882750235cb8eebb9b0aa4f867ccd0490","gitBlob":"8fdc7777c10fc0bd8c3571ccc413ac5800e53141"},"expectedDifferent":false},{"file":"src/components/game/reportKinds.ts","original":{"bytes":2805,"sha256":"1fc7568b82924f211b5fe9bc30844355705b82a7cd475e960ff8e75c866e5947","gitBlob":"f73941384a0fe6c8087cf30fde2707f35d6b39de"},"current":{"bytes":2805,"sha256":"1fc7568b82924f211b5fe9bc30844355705b82a7cd475e960ff8e75c866e5947","gitBlob":"f73941384a0fe6c8087cf30fde2707f35d6b39de"},"expectedDifferent":false},{"file":"src/components/game/Footer.tsx","original":{"bytes":6582,"sha256":"9acf82a7b7a102803960160b9507eee4f87e94c2f922a49100e918079f56ab97","gitBlob":"63ea11694e2a199b71841b87574a558abdd1edb8"},"current":{"bytes":5898,"sha256":"4a355435dd03ded54bd4f775508f53044315ca9f4b527d0ba311113a081b19c1","gitBlob":"969a25f428fdb74df89c59342b6872bf97de08ba"},"expectedDifferent":true},{"file":"src/components/seo/GameSeoContent.tsx","original":{"bytes":19815,"sha256":"7a6939881bd1918d444ec1b2b72ed996bb596c598b313414add7bd2212a2c148","gitBlob":"fee19761e67b5db603647eb500fbf8c57e15c542"},"current":{"bytes":19815,"sha256":"7a6939881bd1918d444ec1b2b72ed996bb596c598b313414add7bd2212a2c148","gitBlob":"fee19761e67b5db603647eb500fbf8c57e15c542"},"expectedDifferent":false},{"file":"src/pages/PerfectSeasonNba.tsx","original":{"bytes":39583,"sha256":"f110a4a6c76ff6c27f22015998db6d2208bebee33576a56f098589d64795dd42","gitBlob":"edf47ea61379dfd23e6df85266d8954d74b7cdef"},"current":{"bytes":39583,"sha256":"f110a4a6c76ff6c27f22015998db6d2208bebee33576a56f098589d64795dd42","gitBlob":"edf47ea61379dfd23e6df85266d8954d74b7cdef"},"expectedDifferent":false},{"file":"src/components/ui/dialog.tsx","original":{"bytes":4041,"sha256":"db1fe38239f922d395d41471d8e9a996b9e8f6d87afddf9edbe3988f15a21fe8","gitBlob":"401b3b2aa4c9404d98d9f05bc3f88ce5eb6b19cd"},"current":{"bytes":4041,"sha256":"db1fe38239f922d395d41471d8e9a996b9e8f6d87afddf9edbe3988f15a21fe8","gitBlob":"401b3b2aa4c9404d98d9f05bc3f88ce5eb6b19cd"},"expectedDifferent":false}];
 assert(['baseline', 'fixed'].includes(mode), 'Explicit source arm');
 assert(['1', 'true'].includes(process.env.CI) && process.env.SIM_NETWORK === 'offline', 'Remote offline CI only');
 assert(process.env.NODE_OPTIONS?.includes('offlineTransport.cjs'), 'Ordinary offline transport inherited');
@@ -25,14 +26,23 @@ const sourceFiles = [
   'src/pages/PerfectSeasonNba.tsx', 'src/components/ui/dialog.tsx',
   ...(mode === 'fixed' ? ['src/components/game/ReportSiteIssueForm.tsx'] : []),
 ];
-const source = sourceFiles.map((file, index) => {
+assert.deepEqual(sourcePins.map(pin => pin.file), sourceFiles.filter(file => file !== 'src/components/game/ReportSiteIssueForm.tsx'), 'Eight canonical historical sources in order');
+const source = sourceFiles.map(file => {
   const actual = fs.readFileSync(file);
   if (file === 'src/components/game/ReportSiteIssueForm.tsx') {
     assert.equal(mode, 'fixed', 'The added lazy form belongs only to the fixed source arm');
     return { file, originalSha256: null, actualSha256: hash(actual), sourceArm: 'added-fixed-lazy-module' };
   }
-  const original = git(['show', originalHead + ':' + file]);
-  assert.equal(original.equals(actual), index < 2 ? mode === 'baseline' : true, file + ' has its declared source arm');
+  const original = git(['show', originalHead + ':' + file]), pin = sourcePins.find(row => row.file === file);
+  assert(pin, file + ' has a canonical source binding');
+  assert.equal(original.length, pin.original.bytes, file + ' historical bytes');
+  assert.equal(hash(original), pin.original.sha256, file + ' historical SHA');
+  assert.equal(git(['rev-parse', originalHead + ':' + file]).toString('utf8').trim(), pin.original.gitBlob, file + ' historical Git');
+  const selected = mode === 'baseline' ? pin.original : pin.current;
+  assert.equal(actual.length, selected.bytes, file + ' current bytes');
+  assert.equal(hash(actual), selected.sha256, file + ' current SHA');
+  assert.equal(git(['rev-parse', 'HEAD:' + file]).toString('utf8').trim(), selected.gitBlob, file + ' current Git');
+  assert.equal(original.equals(actual), mode === 'baseline' || !pin.expectedDifferent, file + ' has its declared source arm');
   return { file, originalSha256: hash(original), actualSha256: hash(actual) };
 });
 const sourceStatus = git(['status', '--porcelain=v1', '--untracked-files=all']);
