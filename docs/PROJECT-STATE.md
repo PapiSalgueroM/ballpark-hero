@@ -19225,3 +19225,14 @@ This isolated draft starts from main b20ec6664df9d4c58d63ea0596791d33b2a3b8fc. I
 The branch codex/home-daily-rail-targets-20261024 includes an ordinary-push workflow for the real app TypeScript gate, production build, existing HomeFront and HomeFold checks, all eighteen built-site readers, unchanged page caps and actual browser observations at 320, 390, 430, 640, 768 and 1440px in normal and reduced motion. Browser measurements and original PNGs require review. At source creation these checks have not run, so this note claims no runtime pass.
 
 Owner I retains joined game integration, main and publication. This draft does not integrate the separate football feature drafts or modify protected games, App, shared CSS, Toaster, dependencies, providers, consent policy or cap values. No merged or live claim. Historic Round 1441 preservation gaps remain open.
+
+
+## Root follow-up draft: Home sport-button targets, 2026-10-24
+
+The Daily puzzles arrow change at1952a73fcbea94cd1eb02fefeb8365eda0113140 completed ordinary-push run40139901984/a1. App types, production build, HomeFront/HomeFold, all18built-site readers and all15unchanged download caps passed. Actual browser measurements and18original screenshots were reviewed. The qualification is scoped to that exact source and offline dark Chromium; it is not a live release or full-game-suite pass.
+
+This follow-up starts from that qualified commit and changes one FavouriteSport button height class fromh-9 toh-11 (36px to44px). Labels, aria-pressed, onPick toggle, order, storage and responsive rail are unchanged. The existing draftPR398 and workflow file are reused. Cumulative product scope fromb20 is DailyRail plus FavouriteSport, with the same workflow and this append-only document.
+
+The new workflow plans fresh types/build, unchanged HomeFront/HomeFold and18built-site readers, unchanged caps, and raw observations at320/390/430/640/768/1440px under both motion settings. It records all13sport-button rectangles, native pointer/Enter/Space toggles, saved choice after reload and page/row stability after deliberate preparation. It retains the DailyRail observations too. At source creation the FavouriteSport checks remain unrun. No new unit test or automated geometry judge was added.
+
+Owner I retains protected joined game integration, main and publication. The draft remains unmerged and unpublished. Historic preservation gaps and the separate refused full-suite run remain open.

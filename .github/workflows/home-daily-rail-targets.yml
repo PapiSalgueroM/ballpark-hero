@@ -1,4 +1,4 @@
-name: Home daily rail targets
+name: Home control target verification
 on:
   push:
     branches:
@@ -13,7 +13,7 @@ jobs:
     runs-on: ubuntu-latest
     timeout-minutes: 120
     env:
-      EXPECTED_PARENT: b20ec6664df9d4c58d63ea0596791d33b2a3b8fc
+      EXPECTED_PARENT: 1952a73fcbea94cd1eb02fefeb8365eda0113140
       ENGINES: chromium
       CI: true
     defaults:
@@ -45,8 +45,8 @@ jobs:
           test "$(git rev-parse HEAD)" = "$GITHUB_SHA"
           test "$(git show -s --format=%P HEAD)" = "$EXPECTED_PARENT"
           git diff --name-status "$EXPECTED_PARENT" HEAD > "$out/direct-paths.txt"
-          printf 'A\t.github/workflows/home-daily-rail-targets.yml\nM\tdocs/PROJECT-STATE.md\nM\tsrc/components/home/DailyRail.tsx\n' | cmp - "$out/direct-paths.txt"
-          git diff --exit-code "$EXPECTED_PARENT" HEAD -- . ':!.github/workflows/home-daily-rail-targets.yml' ':!docs/PROJECT-STATE.md' ':!src/components/home/DailyRail.tsx' > "$out/other-source-held.log"
+          printf 'M\t.github/workflows/home-daily-rail-targets.yml\nM\tdocs/PROJECT-STATE.md\nM\tsrc/components/home/FavouriteSport.tsx\n' | cmp - "$out/direct-paths.txt"
+          git diff --exit-code "$EXPECTED_PARENT" HEAD -- . ':!.github/workflows/home-daily-rail-targets.yml' ':!docs/PROJECT-STATE.md' ':!src/components/home/FavouriteSport.tsx' > "$out/other-source-held.log"
           git rev-parse HEAD > "$out/head.txt";git rev-parse 'HEAD^{tree}' > "$out/tree.txt"
           git ls-files -z | sort -z > "$out/source-members.before"
           test "$(tr -cd '\000' < "$out/source-members.before" | wc -c)" -eq 5379
@@ -58,18 +58,19 @@ jobs:
           DAILY_OUT="$out" NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" SIM_OFFLINE_RECEIPT="$out/foundation.transport" node <<'NODE' > "$out/foundation.log" 2>&1
           const fs=require('node:fs'),cp=require('node:child_process'),assert=require('node:assert/strict'),{createHash}=require('node:crypto'),out=process.env.DAILY_OUT;
           const sha=b=>createHash('sha256').update(b).digest('hex'),blob=b=>createHash('sha1').update(Buffer.from('blob '+b.length+'\0')).update(b).digest('hex');
-          const target='src/components/home/DailyRail.tsx',before=cp.execFileSync('git',['show',process.env.EXPECTED_PARENT+':'+target]),after=fs.readFileSync(target);
-          assert.equal(before.length,8342);assert.equal(sha(before),'34ac0da5301a7e6281b8372b72eb5e4c0309626b3f30f3f9cf4a3b99b4acbeed');
-          assert.equal(blob(before),'2c5626c39fe0f29256e3c5869dfcbd72836cf4f5');
-          const old='grid h-9 w-9 place-items-center rounded-full border border-border bg-surface-1 text-muted-foreground transition-colors hover:border-primary/40 hover:text-foreground',next=old.replace('h-9 w-9','h-11 w-11');
-          assert.equal(before.toString().split(old).length-1,2);assert.equal(after.toString(),before.toString().split(old).join(next));
-          assert.equal(after.length,8346);assert.equal(sha(after),'aadb3132b78f5df02f530d6a5bc13b0a5499de85a654182ccba19e5f1db1b2a3');assert.equal(blob(after),'c635f0cd4716172d67ca3852c5dcfa6932ab7555');
+          const target='src/components/home/FavouriteSport.tsx',before=cp.execFileSync('git',['show',process.env.EXPECTED_PARENT+':'+target]),after=fs.readFileSync(target);
+          assert.equal(before.length,2567);assert.equal(sha(before),'40b04c143bace0c9d5cb9b4059b168e54ac6748de8cd8586d0fe70246a1593cc');
+          assert.equal(blob(before),'d258e232939118afe33c1b35fa2dede446808898');
+          const old="'inline-flex h-9 items-center gap-1.5 whitespace-nowrap rounded-full border px-3 text-xs font-semibold transition-colors'",next=old.replace('h-9','h-11');
+          assert.equal(before.toString().split(old).length-1,1);assert.equal(after.toString(),before.toString().split(old).join(next));
+          assert.equal(after.length,2568);assert.equal(sha(after),'f137be9c315d28a3fb8fbe5e0a60db31660115b61ca88fe75f192178540233e2');assert.equal(blob(after),'8f1cfc69c333d3fed3c8bb446a59c1adef62a369');
+          assert.equal(blob(fs.readFileSync('src/components/home/DailyRail.tsx')),'c635f0cd4716172d67ca3852c5dcfa6932ab7555');
           const doc='docs/PROJECT-STATE.md',prior=cp.execFileSync('git',['show',process.env.EXPECTED_PARENT+':'+doc],{maxBuffer:8*1024*1024}),current=fs.readFileSync(doc);
-          assert.equal(blob(prior),'8f378afd1e8f175dadef3d3de033e2f59366e308');assert(current.subarray(0,prior.length).equals(prior));assert(current.length>prior.length);assert(current.length-prior.length<4096);
+          assert.equal(blob(prior),'08941eaec115fce991a9edf732d94016bdbadeb1');assert(current.subarray(0,prior.length).equals(prior));assert(current.length>prior.length);assert(current.length-prior.length<4096);
           assert.equal(cp.execFileSync('git',['hash-object','scripts/sweepWeight.mjs'],{encoding:'utf8'}).trim(),'10fa2bd492f37a59f77af9356691d7b1248141de');
           assert.equal(sha(fs.readFileSync('scripts/lib/offlineTransport.cjs')),'e60ff1534307e449ccef598e3b7470dcba58681b82cea4005cec7319f14f9221');
-          assert.equal(cp.execFileSync('git',['ls-tree','-r','--name-only',process.env.EXPECTED_PARENT],{encoding:'utf8',maxBuffer:8*1024*1024}).trim().split('\n').length,5378);
-          fs.writeFileSync(out+'/source-binding.json',JSON.stringify({source:process.env.GITHUB_SHA,parent:process.env.EXPECTED_PARENT,tree:cp.execFileSync('git',['rev-parse','HEAD^{tree}'],{encoding:'utf8'}).trim(),run:process.env.GITHUB_RUN_ID,attempt:process.env.GITHUB_RUN_ATTEMPT,directPaths:3,parentBlobs:5378,sourceBlobs:5379,product:{target,bytes:after.length,sha256:sha(after),gitBlob:blob(after)},docPrefixHeld:true,protectedGamesAndCapsHeld:true,fullSuite:false,livePublished:false},null,2)+'\n',{flag:'wx'});
+          assert.equal(cp.execFileSync('git',['ls-tree','-r','--name-only',process.env.EXPECTED_PARENT],{encoding:'utf8',maxBuffer:8*1024*1024}).trim().split('\n').length,5379);
+          fs.writeFileSync(out+'/source-binding.json',JSON.stringify({source:process.env.GITHUB_SHA,parent:process.env.EXPECTED_PARENT,tree:cp.execFileSync('git',['rev-parse','HEAD^{tree}'],{encoding:'utf8'}).trim(),run:process.env.GITHUB_RUN_ID,attempt:process.env.GITHUB_RUN_ATTEMPT,directPaths:3,parentBlobs:5379,sourceBlobs:5379,product:{target,bytes:after.length,sha256:sha(after),gitBlob:blob(after)},docPrefixHeld:true,protectedGamesAndCapsHeld:true,fullSuite:false,livePublished:false},null,2)+'\n',{flag:'wx'});
           NODE
           test ! -s "$out/foundation.transport"
       - name: Locked packages and isolated browser tools
@@ -123,10 +124,33 @@ jobs:
               activeLabel:document.activeElement?.getAttribute('aria-label'),fonts:{status:document.fonts.status,inter:document.fonts.check('16px Inter'),display:document.fonts.check('16px "Space Grotesk"')},
               trusted:window.__siteMenuTrusted||[]};
           }
+          
+          function favouriteSample(){
+            const section=document.querySelector('[data-home-fav-sport]');
+            const rail=section.querySelector('div.overflow-x-auto');
+            const box=node=>{const r=node.getBoundingClientRect();return {x:r.x,y:r.y,width:r.width,height:r.height,right:r.right,bottom:r.bottom};};
+            return {viewport:{width:innerWidth,height:innerHeight,scrollX,scrollY,documentWidth:document.documentElement.scrollWidth},
+              reducedMotion:matchMedia('(prefers-reduced-motion: reduce)').matches,
+              section:{...box(section),documentTop:section.getBoundingClientRect().top+scrollY},
+              rail:{...box(rail),left:rail.scrollLeft,width:rail.clientWidth,contentWidth:rail.scrollWidth},
+              buttons:[...section.querySelectorAll('button[data-fav-sport]')].map(node=>{
+                const r=box(node),visible=node.getClientRects().length>0&&getComputedStyle(node).visibility!=='hidden';
+                const inViewport=visible&&r.x>=0&&r.y>=0&&r.right<=innerWidth&&r.bottom<=innerHeight;
+                return {sport:node.getAttribute('data-fav-sport'),label:node.textContent.trim(),pressed:node.getAttribute('aria-pressed'),...r,visible,inViewport,
+                  focused:document.activeElement===node,centerHit:visible&&node.contains(document.elementFromPoint(r.x+r.width/2,r.y+r.height/2))};
+              }),
+              stored:localStorage.getItem('dukb-fav-sport'),
+              firstSport:document.querySelector('section[data-sport]')?.getAttribute('data-sport')??null,
+              activeSport:document.activeElement?.getAttribute('data-fav-sport'),
+              activeTag:document.activeElement?.tagName??null,activeIsBody:document.activeElement===document.body,
+              fonts:{status:document.fonts.status,inter:document.fonts.check('16px Inter'),display:document.fonts.check('16px "Space Grotesk"')},
+              trusted:window.__siteMenuTrusted||[]};
+          }
+          
           try{
             for(const width of [320,390,430,640,768,1440])for(const motion of ['no-preference','reduce']){
               const id=width+'-'+motion,ctx=await browser.newContext({viewport:{width,height:900},reducedMotion:motion});
-              const record={id,width,motion,observations:[],errors:[],io:[]};
+              const record={id,width,motion,observations:[],favouriteObservations:[],errors:[],io:[]};
               const page=await ctx.newPage();
               page.on('pageerror',error=>record.errors.push({name:error.name,message:error.message,stack:error.stack}));
               await ctx.addInitScript(seed,{theme:'dark',pending:false});
@@ -162,7 +186,25 @@ jobs:
                   await page.keyboard.press('Space');await page.waitForTimeout(800);
                   record.observations.push({name:'keyboard-space-right',value:await page.evaluate(sample)});
                 }
-                await page.screenshot({path:path.join(out,id+'-rail.png')});
+                const favourite=page.locator('[data-home-fav-sport]');
+                const golf=page.locator('button[data-fav-sport="golf"]');
+                const observeFavourite=async name=>record.favouriteObservations.push({name,value:await page.evaluate(favouriteSample)});
+                await observeFavourite('before-preparation');
+                await favourite.scrollIntoViewIfNeeded();await golf.scrollIntoViewIfNeeded();
+                await page.waitForTimeout(250);await observeFavourite('pointer-ready');
+                const golfBox=await golf.boundingBox();
+                await page.mouse.click(golfBox.x+golfBox.width/2,golfBox.y+golfBox.height/2);
+                await page.waitForTimeout(250);await observeFavourite('pointer-golf');
+                await page.keyboard.press('Enter');
+                await page.waitForTimeout(250);await observeFavourite('keyboard-enter-clear');
+                await page.keyboard.press('Space');
+                await page.waitForTimeout(250);await observeFavourite('keyboard-space-golf');
+                await page.reload({waitUntil:'domcontentloaded'});
+                await favourite.waitFor();await page.evaluate(()=>document.fonts.ready);
+                await observeFavourite('after-reload');
+                await favourite.scrollIntoViewIfNeeded();await golf.scrollIntoViewIfNeeded();
+                await page.waitForTimeout(250);await observeFavourite('after-reload-prepared');
+                await page.screenshot({path:path.join(out,id+'-favourite.png')});
                 record.complete=true;
               }catch(error){record.failure={name:error.name,message:error.message,stack:error.stack};throw error;}
               finally{cases.push(record);fs.writeFileSync(path.join(out,id+'.json'),JSON.stringify(record,null,2)+'\n',{flag:'wx'});await ctx.close();}
