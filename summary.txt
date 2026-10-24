@@ -1,0 +1,10 @@
+build exit=0 28s | [dukb] inlined 1 stylesheet(s) and 1 module(s) into 181 snapshots (11 left alone)
+probe-head exit=0 50s | esc1568 [head]: green, parts esc, plain, ghost
+probe-mesc exit=1 74s | esc1568 [mesc]: RED, 4 findings
+probe-mg exit=1 35s | esc1568 [mg]: RED, 4 findings
+playConquestScenes exit=0 72s | ALL CONQUEST SCENE SCREEN CHECKS PASSED
+cq-margin exit=0 72s | control "margin": exactly the edge check went red, the check works
+cq-noscore exit=0 118s | control "noscore": exactly the score check went red, the check works
+ctl-none-Conquest exit=0 67s | ALL CONQUEST SCENE SCREEN CHECKS PASSED
+cq-m3 exit=1 102s |   - 5. the timeline's labels row and the slider's top edge answer themselves (/soccer-conquest @430)
+playLiveMatchFit exit=0 140s | playLiveMatchFit: all green. The goal in order, reduced motion, the fit at five sizes, nothing moves the page, the reload, Back, a wide screen, an own goal drawn as one.

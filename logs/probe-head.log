@@ -1,0 +1,17 @@
+[head] esc menu 390x844: focus is on BAR Open site menu
+[head] esc menu 390x844: after Enter {"stage":1,"card":0,"dialogs":["MenuFind games, sports and sit"]}
+[head] esc menu 390x844: after one Escape {"stage":1,"card":0,"dialogs":[]}
+[head] esc tab 390x844: focus is on BAR button opens a dialog Open site menu
+[head] esc tab 390x844: after Enter {"stage":1,"card":0,"dialogs":["MenuFind games, sports and sit"]}
+[head] esc tab 390x844: after one Escape {"stage":1,"card":0,"dialogs":[]}
+[head] esc menu 1280x900: focus is on BAR Open site menu
+[head] esc menu 1280x900: after Enter {"stage":1,"card":0,"dialogs":["MenuFind games, sports and sit"]}
+[head] esc menu 1280x900: after one Escape {"stage":1,"card":0,"dialogs":[]}
+[head] esc tab 1280x900: focus is on BAR button opens a dialog Open site menu
+[head] esc tab 1280x900: after Enter {"stage":1,"card":0,"dialogs":["MenuFind games, sports and sit"]}
+[head] esc tab 1280x900: after one Escape {"stage":1,"card":0,"dialogs":[]}
+[head] plain 390x844: before {"stage":1,"card":0,"dialogs":[]}, after one Escape {"stage":0,"card":1,"dialogs":[]}
+[head] plain 1280x900: before {"stage":1,"card":0,"dialogs":[]}, after one Escape {"stage":0,"card":1,"dialogs":[]}
+[head] ghost 390x844: {"menu":[0,0,85,44],"resting":{"rect":[16,60,374,114],"at":["43,22:bar","43,34:bar","43,40:bar"]},"leaving":{"ghost":{"display":"none","content":"\"\"","transform":"none"},"at":["43,22:bar","43,34:bar","43,40:bar"]}}
+[head] ghost 320x640: {"menu":[0,0,85,44],"resting":{"rect":[16,60,304,114],"at":["43,22:bar","43,34:bar","43,40:bar"]},"leaving":{"ghost":{"display":"none","content":"\"\"","transform":"none"},"at":["43,22:bar","43,34:bar","43,40:bar"]}}
+esc1568 [head]: green, parts esc, plain, ghost

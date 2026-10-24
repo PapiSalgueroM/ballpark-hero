@@ -1,0 +1,8 @@
+mutfix1568: mg applied to src/pages/SoccerCareer.tsx (" [@media(max-width:600px)]:data-[removed=true]:before:hidden" -> "")
+[mg] ghost 390x844: {"menu":[0,0,85,44],"resting":{"rect":[16,60,374,114],"at":["43,22:bar","43,34:bar","43,40:bar"]},"leaving":{"ghost":{"display":"block","content":"\"\"","transform":"matrix(1, 0, 0, 2, 0, 0)"},"at":["43,22:bar","43,34:TOAST","43,40:TOAST"]}}
+[mg] FINDING ghost 390x844: a point of the menu button answers the toast (43,34:TOAST)
+[mg] FINDING ghost 390x844: a point of the menu button answers the toast (43,40:TOAST)
+[mg] ghost 320x640: {"menu":[0,0,85,44],"resting":{"rect":[16,60,304,114],"at":["43,22:bar","43,34:bar","43,40:bar"]},"leaving":{"ghost":{"display":"block","content":"\"\"","transform":"matrix(1, 0, 0, 2, 0, 0)"},"at":["43,22:bar","43,34:TOAST","43,40:TOAST"]}}
+[mg] FINDING ghost 320x640: a point of the menu button answers the toast (43,34:TOAST)
+[mg] FINDING ghost 320x640: a point of the menu button answers the toast (43,40:TOAST)
+esc1568 [mg]: RED, 4 findings
