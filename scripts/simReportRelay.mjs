@@ -102,7 +102,7 @@ const fail = m => { failures += 1; bySection[section] = (bySection[section] || 0
 const read = p => fs.readFileSync(path.join(ROOT, p), 'utf8').replace(/\r\n/g, '\n');
 
 let relay = read('supabase/functions/report-relay/index.ts');
-let perQuestion = read('src/components/game/ReportQuestion.tsx');
+let perQuestion = read('src/components/game/ReportQuestionForm.tsx');
 const sitewide = read('src/components/game/ReportSiteIssueForm.tsx');
 const admin = read('src/pages/AdminReports.tsx');
 
