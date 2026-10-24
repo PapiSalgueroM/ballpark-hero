@@ -1459,7 +1459,9 @@ export function LiveSimScreen({
   };
   useEffect(() => {
     if (!stageUp) return;
-    const onKey = (e: KeyboardEvent) => { if (e.key === 'Escape') onEscape.current(); };
+    /* Round 1568: an Escape another layer already took (a Radix dialog or the site menu reached by Shift+Tab,
+       which close themselves and mark the key handled) is not also Back for the match. */
+    const onKey = (e: KeyboardEvent) => { if (e.key === 'Escape' && !e.defaultPrevented) onEscape.current(); };
     /* The button that opened the match is under the stage now. The keyboard starts from the stage itself,
        so the first Tab lands on Back and not on something that cannot be seen. */
     const box = stageBox.current;
