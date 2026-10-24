@@ -6,6 +6,7 @@ import { useDailyLegend } from '@/hooks/useDailyLegend';
 import { useAuth } from '@/contexts/AuthContext';
 import { AuthModal } from '@/components/auth/AuthModal';
 import SharedResultCard from '@/components/game/SharedResultCard';
+import { SiteMenu } from '@/components/layout/SiteMenu';
 
 const DailyLegendOverlay = lazy(() => import('./DailyLegendOverlay').then(module => ({ default: module.DailyLegendOverlay })));
 
@@ -98,7 +99,7 @@ export function GameNavbar() {
 
   return (
     <>
-      <nav data-site-chrome="" className="w-full bg-background/95 border-b border-border/40">
+      <nav data-site-chrome="" data-site-menu-host="" className="w-full bg-background/95 border-b border-border/40">
         {/* Round 129: flex-wrap, not grid. See the note above. The order swap is
             what puts the stats between the wordmark and Back on a desktop while
             keeping them on their own line on a phone: on the wrapped layout the
@@ -113,6 +114,8 @@ export function GameNavbar() {
             was, and simMobileChrome still measures every width. */}
         <div className="flex flex-wrap items-center justify-between gap-x-2 gap-y-1.5 px-3 py-2 lg:grid lg:grid-cols-[1fr_auto_1fr]">
           {/* Logo, left, bigger + stretched */}
+          <div className="order-1 flex min-w-0 items-center gap-1 lg:justify-self-start">
+          <SiteMenu mode="host" />
           <Link
             to="/"
             className="order-1 shrink-0 font-display font-black text-primary hover:opacity-80 transition-opacity lg:justify-self-start"
@@ -121,6 +124,7 @@ export function GameNavbar() {
               DoUKnowBall
             </span>
           </Link>
+          </div>
 
           {/* Back, right, boxed so it can't be missed. Second in the DOM so that
               on a phone it shares the top line with the logo instead of being
@@ -129,7 +133,7 @@ export function GameNavbar() {
             ref={backRef}
             onClick={() => navigate(-1)}
             aria-label="Go back"
-            className="order-2 lg:order-3 shrink-0 inline-flex items-center gap-1.5 rounded-lg border-2 border-primary/60 bg-surface-1 px-3 py-1.5 min-h-[36px] text-xs sm:text-sm font-semibold text-primary hover:bg-primary hover:text-primary-foreground transition-colors shadow-sm lg:justify-self-end"
+            className="order-2 lg:order-3 shrink-0 inline-flex items-center gap-1.5 rounded-lg border-2 border-primary/60 bg-surface-1 px-3 py-1.5 min-h-11 text-xs sm:text-sm font-semibold text-primary hover:bg-primary hover:text-primary-foreground transition-colors shadow-sm lg:justify-self-end"
           >
             <ArrowLeft className="w-4 h-4" />
             <span>Back</span>

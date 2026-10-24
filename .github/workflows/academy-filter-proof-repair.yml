@@ -1,0 +1,437 @@
+name: Academy exact outcomes and retained cache proof
+on:
+  push:
+    branches: [codex/academy-filter-proof-repair-20261024]
+    paths: [.github/workflows/academy-filter-proof-repair.yml]
+permissions:
+  contents: read
+concurrency:
+  group: academy-filter-proof-repair-${{ github.sha }}
+  cancel-in-progress: false
+jobs:
+  academy_filter_census:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    defaults:
+      run:
+        shell: bash
+    env:
+      CI: "true"
+      SIM_NETWORK: offline
+      LC_ALL: C
+      PARENT: 607d6e7ffa1e9f2f38e613865af4c76625d6d397
+      PARENT_TREE: 87ff0655cc96f93b89bae553af68d4b87aeeb564
+      WORKFLOW_PATH: .github/workflows/academy-filter-proof-repair.yml
+    steps:
+      - name: Fresh outside-checkout evidence
+        run: |
+          set -euo pipefail
+          out="$RUNNER_TEMP/academy-filter-proof-repair-$GITHUB_RUN_ID-a$GITHUB_RUN_ATTEMPT"
+          test ! -e "$out"
+          mkdir "$out"
+          case "$(realpath "$out")/" in "$GITHUB_WORKSPACE/"*) exit 1;; esac
+          printf 'ACADEMY_OUT=%s\n' "$out" >> "$GITHUB_ENV"
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          persist-credentials: false
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "24.21.0"
+          cache: npm
+      - name: Exact parent, one added workflow and all current source pins
+        id: source
+        run: |
+          set -euo pipefail
+          cat > "$ACADEMY_OUT/critical.expected.json" <<'PINS'
+          [{"file":".github/workflows/sim-node-four-shards.yml","parent":{"bytes":196078,"sha256":"e59be70cdc1299da8709dfb08e366291b63c25459c70533d2a2566617ef7d257","gitBlob":"5260fdf47cd9eaa8461a7fdccf9dc73f3bcf38d4"},"candidate":{"bytes":196078,"sha256":"e59be70cdc1299da8709dfb08e366291b63c25459c70533d2a2566617ef7d257","gitBlob":"5260fdf47cd9eaa8461a7fdccf9dc73f3bcf38d4"},"sourceReference":"Root immutable actual-source adoption receipt; independent actual b55 recursive tree Git/size matched, no oversized whole WF leaf"},{"file":"package-lock.json","parent":{"bytes":309049,"sha256":"c7e3867eabf0bfa03a8aa6a5e601b0050b937ed210d48c6bbd241019e3c9ea76","gitBlob":"97d6f12a052f25f400462938c241789a083f0bfe"},"candidate":{"bytes":309049,"sha256":"c7e3867eabf0bfa03a8aa6a5e601b0050b937ed210d48c6bbd241019e3c9ea76","gitBlob":"97d6f12a052f25f400462938c241789a083f0bfe"},"sourceReference":"Native original54e body exact immutable b55 Git/size matched"},{"file":"package.json","parent":{"bytes":3495,"sha256":"acfe14626dea53cf5f9c5e0286b766a22237656b52aac4c888b080873ac90e31","gitBlob":"2ff64986fb76ebc51b706f2fd24765768874008a"},"candidate":{"bytes":3495,"sha256":"acfe14626dea53cf5f9c5e0286b766a22237656b52aac4c888b080873ac90e31","gitBlob":"2ff64986fb76ebc51b706f2fd24765768874008a"},"sourceReference":"Native original54e body exact immutable b55 Git/size matched"},{"file":"scripts/lib/offlineTransport.cjs","parent":{"bytes":10660,"sha256":"e60ff1534307e449ccef598e3b7470dcba58681b82cea4005cec7319f14f9221","gitBlob":"0fda542a2649fe5da937c6976fd0f5b6073e74b6"},"candidate":{"bytes":10660,"sha256":"e60ff1534307e449ccef598e3b7470dcba58681b82cea4005cec7319f14f9221","gitBlob":"0fda542a2649fe5da937c6976fd0f5b6073e74b6"},"sourceReference":"Native original54e body exact immutable b55 Git/size matched"},{"file":"scripts/runAllSims.mjs","parent":{"bytes":27075,"sha256":"9a69afdcfbea75e81f20146a8583c8a15cb86f3b1936ac20e3e1f1919fe061ed","gitBlob":"3be52303003d81d58afa88cbd8babad8cb43bcce"},"candidate":{"bytes":27075,"sha256":"9a69afdcfbea75e81f20146a8583c8a15cb86f3b1936ac20e3e1f1919fe061ed","gitBlob":"3be52303003d81d58afa88cbd8babad8cb43bcce"},"sourceReference":"Actual immutable b55 raw source GET, native concatenated/full SHA/Git matched"},{"file":"scripts/simAcademyFilters.mjs","parent":{"bytes":2577,"sha256":"4b5fb6b39a488322e92f74a5aac275543ade64ab42d5e91e6d039bd0652e048c","gitBlob":"e386fb362d6061017d66006a7129466f619099e5"},"candidate":{"bytes":2577,"sha256":"4b5fb6b39a488322e92f74a5aac275543ade64ab42d5e91e6d039bd0652e048c","gitBlob":"e386fb362d6061017d66006a7129466f619099e5"},"sourceReference":"Actual corrected 2577-byte wrapper adopted at607d after four census/summary literal changes; current and parent SHA/Git held."},{"file":"src/components/club-manager/AcademyScreen.tsx","parent":{"bytes":16927,"sha256":"e739605415661dbe82378703e8c03e07bf62b79afb6a01471ec85094d66fbd44","gitBlob":"1c71d0fb8400276f1ff9d45c51038d5655891c6c"},"candidate":{"bytes":16927,"sha256":"e739605415661dbe82378703e8c03e07bf62b79afb6a01471ec85094d66fbd44","gitBlob":"1c71d0fb8400276f1ff9d45c51038d5655891c6c"},"sourceReference":"Native original54e body exact immutable b55 Git/size matched"},{"file":"src/test/academyFilters.test.tsx","parent":{"bytes":8144,"sha256":"d57bced1bf6630d2b28b10fbf40ba4a406f5a27188bf0107678af76aa7da6718","gitBlob":"d99615471dc530cc49be8083dad3b7e1601d0f5e"},"candidate":{"bytes":8144,"sha256":"d57bced1bf6630d2b28b10fbf40ba4a406f5a27188bf0107678af76aa7da6718","gitBlob":"d99615471dc530cc49be8083dad3b7e1601d0f5e"},"sourceReference":"Native original54e body exact immutable b55 Git/size matched"},{"file":"src/test/setup.ts","parent":{"bytes":847,"sha256":"0175cc334b44d9874ff4bd8274a8cc165e9e84cd3738a4298f934db353887289","gitBlob":"df00cdf5c54e8c8efc71e46d7585ae76acb4fc8d"},"candidate":{"bytes":847,"sha256":"0175cc334b44d9874ff4bd8274a8cc165e9e84cd3738a4298f934db353887289","gitBlob":"df00cdf5c54e8c8efc71e46d7585ae76acb4fc8d"},"sourceReference":"Native original54e body exact immutable b55 Git/size matched"},{"file":"vitest.config.ts","parent":{"bytes":5364,"sha256":"6a68dd2f214dab4a3013eb41bad38eea65d703d61440002710ec246495e1c58a","gitBlob":"ed2a9dc677f77dfe95c061064eeff5782b856864"},"candidate":{"bytes":5364,"sha256":"6a68dd2f214dab4a3013eb41bad38eea65d703d61440002710ec246495e1c58a","gitBlob":"ed2a9dc677f77dfe95c061064eeff5782b856864"},"sourceReference":"Native original54e body exact immutable b55 Git/size matched"}]
+          PINS
+          sha256sum "$ACADEMY_OUT/critical.expected.json" > "$ACADEMY_OUT/critical.expected.sha256"
+          (set -o noclobber; : > "$ACADEMY_OUT/source.transport")
+          NODE_OPTIONS="--require=$GITHUB_WORKSPACE/scripts/lib/offlineTransport.cjs" SIM_OFFLINE_RECEIPT="$ACADEMY_OUT/source.transport" \
+            node --input-type=module > "$ACADEMY_OUT/source.stdout.log" 2> "$ACADEMY_OUT/source.stderr.log" <<'NODE'
+          import assert from 'node:assert/strict';
+          import fs from 'node:fs';
+          import path from 'node:path';
+          import { createHash } from 'node:crypto';
+          import { execFileSync } from 'node:child_process';
+          const out=process.env.ACADEMY_OUT,head=process.env.GITHUB_SHA,parent=process.env.PARENT,self=process.env.WORKFLOW_PATH;
+          const git=(...args)=>execFileSync('git',args,{encoding:'utf8'}),sha=body=>createHash('sha256').update(body).digest('hex');
+          assert.match(head,/^[a-f0-9]{40}$/);
+          assert.equal(process.env.GITHUB_REF,'refs/heads/codex/academy-filter-proof-repair-20261024');
+          assert.equal(git('rev-parse','HEAD').trim(),head);
+          assert.deepEqual(git('rev-list','--parents','-n','1','HEAD').trim().split(' '),[head,parent]);
+          assert.equal(git('rev-parse',parent+'^{tree}').trim(),process.env.PARENT_TREE);
+          assert.equal(git('status','--porcelain=v1','--untracked-files=all'),'');
+          const direct=git('diff','--name-status','--no-renames',parent,'HEAD').trim().split('\n');
+          assert.deepEqual(direct,['A\t'+self]);
+          const old=git('ls-tree','-r','--name-only','-z',parent).split('\0').filter(Boolean),now=git('ls-files','-z').split('\0').filter(Boolean);
+          assert.equal(old.length,5342);assert.equal(now.length,5343);assert(!old.includes(self)&&now.includes(self));
+          assert.deepEqual(now.filter(file=>file!==self).sort(),old.sort());
+          const expected=JSON.parse(fs.readFileSync(path.join(out,'critical.expected.json'),'utf8'));
+          assert.equal(expected.length,10);assert.equal(new Set(expected.map(row=>row.file)).size,10);
+          const pins=expected.map(row=>{
+            const body=fs.readFileSync(row.file),actual={bytes:body.length,sha256:sha(body),gitBlob:git('rev-parse','HEAD:'+row.file).trim()};
+            assert.deepEqual(actual,row.candidate);assert.equal(git('rev-parse',parent+':'+row.file).trim(),row.parent.gitBlob);
+            return {file:row.file,...actual,parentGitBlob:row.parent.gitBlob};
+          });
+          const body=fs.readFileSync(self),workflow={file:self,bytes:body.length,sha256:sha(body),gitBlob:git('rev-parse','HEAD:'+self).trim()};
+          fs.writeFileSync(path.join(out,'source-binding.json'),JSON.stringify({head,parent,parentTree:process.env.PARENT_TREE,tree:git('rev-parse','HEAD^{tree}').trim(),source:5343,parentSource:5342,direct,pins,workflow,applicationQualified:false},null,2)+'\n',{flag:'wx'});
+          console.log('Exact one-added-workflow Academy source binding complete.');
+          NODE
+          printf '0\n' > "$ACADEMY_OUT/source.exit"
+          git ls-files -z | sort -z > "$ACADEMY_OUT/source-members.before"
+          xargs -0 sha256sum < "$ACADEMY_OUT/source-members.before" > "$ACADEMY_OUT/source-before.sha256"
+          cp "$WORKFLOW_PATH" "$ACADEMY_OUT/workflow.source.yml"
+          git rev-parse HEAD > "$ACADEMY_OUT/head.before"
+          git status --porcelain=v1 --untracked-files=all > "$ACADEMY_OUT/status.before"
+      - name: Locked dependencies and complete before inventory
+        id: install
+        timeout-minutes: 5
+        run: |
+          set -euo pipefail
+          set +e
+          npm ci --ignore-scripts --no-audit --no-fund > "$ACADEMY_OUT/install.stdout.log" 2> "$ACADEMY_OUT/install.stderr.log"
+          code=$?
+          printf '%s\n' "$code" > "$ACADEMY_OUT/install.exit"
+          cat "$ACADEMY_OUT/install.stdout.log"
+          cat "$ACADEMY_OUT/install.stderr.log" >&2
+          set -e
+          test "$code" -eq 0
+          find node_modules -type f -print0 | sort -z > "$ACADEMY_OUT/dependency-members.before"
+          xargs -0 sha256sum < "$ACADEMY_OUT/dependency-members.before" > "$ACADEMY_OUT/dependencies-before.sha256"
+          test "$(tr -cd '\0' < "$ACADEMY_OUT/dependency-members.before" | wc -c)" -eq 24466
+      - name: Actual app type gate under the original guard
+        id: types
+        timeout-minutes: 3
+        run: |
+          set -euo pipefail
+          (set -o noclobber; : > "$ACADEMY_OUT/types.transport")
+          set +e
+          NODE_OPTIONS="--require=$GITHUB_WORKSPACE/scripts/lib/offlineTransport.cjs" SIM_OFFLINE_RECEIPT="$ACADEMY_OUT/types.transport" \
+            node_modules/.bin/tsc --noEmit -p tsconfig.app.json > "$ACADEMY_OUT/types.stdout.log" 2> "$ACADEMY_OUT/types.stderr.log"
+          code=$?
+          printf '%s\n' "$code" > "$ACADEMY_OUT/types.exit"
+          printf 'status=%s\n' "$code" >> "$GITHUB_OUTPUT"
+          cat "$ACADEMY_OUT/types.stdout.log"
+          cat "$ACADEMY_OUT/types.stderr.log" >&2
+          exit "$code"
+      - name: Bind a fresh outside cache target and retain the generated guard
+        id: cache_setup
+        if: ${{ !cancelled() && steps.types.outputs.status == '0' }}
+        timeout-minutes: 1
+        run: |
+          set -euo pipefail
+          (set -o noclobber; : > "$ACADEMY_OUT/cache.transport")
+          printf '%s' 'J3VzZSBzdHJpY3QnOwpjb25zdCBmcz1yZXF1aXJlKCdub2RlOmZzJykscGF0aD1yZXF1aXJlKCdub2RlOnBhdGgnKSxjcnlwdG89cmVxdWlyZSgnbm9kZTpjcnlwdG8nKSxhPXJlcXVpcmUoJ25vZGU6YXNzZXJ0L3N0cmljdCcpOwpjb25zdCBvdXQ9cHJvY2Vzcy5lbnYuQUNBREVNWV9PVVQscm9vdD1wcm9jZXNzLmN3ZCgpLG1vZGU9cHJvY2Vzcy5hcmd2WzJdLGFybT1wcm9jZXNzLmFyZ3ZbM107CmEocGF0aC5pc0Fic29sdXRlKG91dCksJ0FDQURFTVlfQ0FDSEVfT1VUX0FCU09MVVRFJyk7YS5lcXVhbChmcy5yZWFscGF0aFN5bmMob3V0KSxvdXQsJ0FDQURFTVlfQ0FDSEVfT1VUX0NBTk9OSUNBTCcpO2EuZXF1YWwoZnMucmVhbHBhdGhTeW5jKHJvb3QpLHJvb3QsJ0FDQURFTVlfQ0FDSEVfUk9PVF9DQU5PTklDQUwnKTsKYSghb3V0LnN0YXJ0c1dpdGgocm9vdCtwYXRoLnNlcCkmJm91dCE9PXJvb3QsJ0FDQURFTVlfQ0FDSEVfT1VUU0lERV9DSEVDS09VVCcpOwpjb25zdCB0YXJnZXQ9cGF0aC5qb2luKG91dCwnY2FjaGUtbGl2ZScpLGxpbms9cGF0aC5qb2luKHJvb3QsJ25vZGVfbW9kdWxlcycsJy52aXRlJyksc25hcHNob3RzPXBhdGguam9pbihvdXQsJ2NhY2hlLXNuYXBzaG90cycpLGV4cGVjdGVkPSd2aXRlc3QvZGEzOWEzZWU1ZTZiNGIwZDMyNTViZmVmOTU2MDE4OTBhZmQ4MDcwOS9yZXN1bHRzLmpzb24nOwpjb25zdCBzaGE9Yj0+Y3J5cHRvLmNyZWF0ZUhhc2goJ3NoYTI1NicpLnVwZGF0ZShiKS5kaWdlc3QoJ2hleCcpLGpzb249Yj0+SlNPTi5wYXJzZShiLnRvU3RyaW5nKCd1dGY4JykpOwpjb25zdCB3cml0ZT0oZmlsZSx2YWx1ZSk9PmZzLndyaXRlRmlsZVN5bmMocGF0aC5qb2luKG91dCxmaWxlKSxKU09OLnN0cmluZ2lmeSh2YWx1ZSxudWxsLDIpKydcbicse2ZsYWc6J3d4J30pOwpmdW5jdGlvbiBhYnNlbnQoZmlsZSl7dHJ5e2ZzLmxzdGF0U3luYyhmaWxlKTthLmZhaWwoJ0FDQURFTVlfQ0FDSEVfRlJFU0hfQUJTRU5DRTogJytmaWxlKTt9Y2F0Y2goZSl7aWYoZS5jb2RlIT09J0VOT0VOVCcpdGhyb3cgZTt9fQpmdW5jdGlvbiBkaXJlY3Rvcmllcygpe2Zvcihjb25zdCBmaWxlIG9mIFtvdXQscGF0aC5kaXJuYW1lKGxpbmspLHRhcmdldF0pe2NvbnN0IHM9ZnMubHN0YXRTeW5jKGZpbGUpO2Eocy5pc0RpcmVjdG9yeSgpJiYhcy5pc1N5bWJvbGljTGluaygpLCdBQ0FERU1ZX0NBQ0hFX09XTkVEX0RJUkVDVE9SWScpO2EuZXF1YWwoZnMucmVhbHBhdGhTeW5jKGZpbGUpLGZpbGUsJ0FDQURFTVlfQ0FDSEVfRElSRUNUT1JZX0NBTk9OSUNBTCcpO319CmZ1bmN0aW9uIG9ic2VydmUoKXtkaXJlY3RvcmllcygpO2NvbnN0IHM9ZnMubHN0YXRTeW5jKGxpbmspO3JldHVybiB7cm9vdCxvdXQsbGluayx0YXJnZXQsc3ltYm9saWNMaW5rOnMuaXNTeW1ib2xpY0xpbmsoKSxyZWFkbGluazpmcy5yZWFkbGlua1N5bmMobGluaykscmVhbHBhdGg6ZnMucmVhbHBhdGhTeW5jKGxpbmspLHRhcmdldERpcmVjdG9yeTpmcy5sc3RhdFN5bmModGFyZ2V0KS5pc0RpcmVjdG9yeSgpJiYhZnMubHN0YXRTeW5jKHRhcmdldCkuaXNTeW1ib2xpY0xpbmsoKX07fQpmdW5jdGlvbiBqdWRnZUxpbmsocil7YS5lcXVhbChyLnJvb3Qscm9vdCwnQUNBREVNWV9DQUNIRV9MSU5LX0lERU5USVRZJyk7YS5lcXVhbChyLm91dCxvdXQsJ0FDQURFTVlfQ0FDSEVfTElOS19JREVOVElUWScpO2EuZXF1YWwoci5saW5rLGxpbmssJ0FDQURFTVlfQ0FDSEVfTElOS19JREVOVElUWScpO2EuZXF1YWwoci50YXJnZXQsdGFyZ2V0LCdBQ0FERU1ZX0NBQ0hFX0xJTktfSURFTlRJVFknKTthKHIuc3ltYm9saWNMaW5rJiZyLnRhcmdldERpcmVjdG9yeSwnQUNBREVNWV9DQUNIRV9MSU5LX1NIQVBFJyk7YS5lcXVhbChyLnJlYWRsaW5rLHRhcmdldCwnQUNBREVNWV9DQUNIRV9FWEFDVF9SRUFETElOSycpO2EuZXF1YWwoci5yZWFscGF0aCx0YXJnZXQsJ0FDQURFTVlfQ0FDSEVfRVhBQ1RfUkVBTFBBVEgnKTt9CmZ1bmN0aW9uIGhlbGQoKXtjb25zdCByPW9ic2VydmUoKTtqdWRnZUxpbmsocik7YS5kZWVwRXF1YWwocixqc29uKGZzLnJlYWRGaWxlU3luYyhwYXRoLmpvaW4ob3V0LCdjYWNoZS1iaW5kaW5nLmpzb24nKSkpLCdBQ0FERU1ZX0NBQ0hFX0JPVU5EX0lERU5USVRZJyk7cmV0dXJuIHI7fQpmdW5jdGlvbiBpbnZlbnRvcnkoY29weSl7CiBjb25zdCByb3dzPVtdLG5vbnJlZ3VsYXI9W107CiBmdW5jdGlvbiB3YWxrKGRpcixyZWxhdGl2ZSl7Zm9yKGNvbnN0IG5hbWUgb2YgZnMucmVhZGRpclN5bmMoZGlyKS5zb3J0KCkpe2NvbnN0IHNvdXJjZT1wYXRoLmpvaW4oZGlyLG5hbWUpLHJlbD1yZWxhdGl2ZT9yZWxhdGl2ZSsnLycrbmFtZTpuYW1lLHM9ZnMubHN0YXRTeW5jKHNvdXJjZSk7CiAgaWYocy5pc1N5bWJvbGljTGluaygpfHwoIXMuaXNEaXJlY3RvcnkoKSYmIXMuaXNGaWxlKCkpKXtub25yZWd1bGFyLnB1c2goe2ZpbGU6cmVsLHR5cGU6cy5pc1N5bWJvbGljTGluaygpPydzeW1saW5rJzonbm9ucmVndWxhcid9KTtjb250aW51ZTt9CiAgaWYocy5pc0RpcmVjdG9yeSgpKXthLmVxdWFsKGZzLnJlYWxwYXRoU3luYyhzb3VyY2UpLHNvdXJjZSwnQUNBREVNWV9DQUNIRV9ESVJFQ1RPUllfRVNDQVBFJyk7d2Fsayhzb3VyY2UscmVsKTtjb250aW51ZTt9CiAgY29uc3QgZmQ9ZnMub3BlblN5bmMoc291cmNlLGZzLmNvbnN0YW50cy5PX1JET05MWXxmcy5jb25zdGFudHMuT19OT0ZPTExPVyk7bGV0IGJvZHk7CiAgdHJ5e2NvbnN0IGJlZm9yZT1mcy5mc3RhdFN5bmMoZmQpO2EoYmVmb3JlLmlzRmlsZSgpJiZiZWZvcmUuZGV2PT09cy5kZXYmJmJlZm9yZS5pbm89PT1zLmlubywnQUNBREVNWV9DQUNIRV9SRUdVTEFSX05PRk9MTE9XJyk7Ym9keT1mcy5yZWFkRmlsZVN5bmMoZmQpO2NvbnN0IGFmdGVyPWZzLmZzdGF0U3luYyhmZCk7YShiZWZvcmUuc2l6ZT09PWFmdGVyLnNpemUmJmJlZm9yZS5tdGltZU1zPT09YWZ0ZXIubXRpbWVNcyYmYm9keS5sZW5ndGg9PT1hZnRlci5zaXplLCdBQ0FERU1ZX0NBQ0hFX1NUQUJMRV9CT0RZJyk7fWZpbmFsbHl7ZnMuY2xvc2VTeW5jKGZkKTt9CiAgcm93cy5wdXNoKHtmaWxlOnJlbCxieXRlczpib2R5Lmxlbmd0aCxzaGEyNTY6c2hhKGJvZHkpfSk7CiAgaWYoY29weSl7Y29uc3QgZGVzdD1wYXRoLmpvaW4oY29weSwnYm9kaWVzJyxyZWwpO2ZzLm1rZGlyU3luYyhwYXRoLmRpcm5hbWUoZGVzdCkse3JlY3Vyc2l2ZTp0cnVlfSk7ZnMud3JpdGVGaWxlU3luYyhkZXN0LGJvZHkse2ZsYWc6J3d4J30pO30KIH19CiB3YWxrKHRhcmdldCwnJyk7cmV0dXJuIHtyb3dzLG5vbnJlZ3VsYXJ9Owp9CmZ1bmN0aW9uIGJvZHlQYXRoKGRpcixyb3cpe2EoIXBhdGguaXNBYnNvbHV0ZShyb3cuZmlsZSkmJiFyb3cuZmlsZS5zcGxpdCgnLycpLnNvbWUoeD0+eD09PScuLid8fHg9PT0nJyksJ0FDQURFTVlfQ0FDSEVfU0FGRV9NRU1CRVInKTtyZXR1cm4gcGF0aC5qb2luKGRpciwnYm9kaWVzJyxyb3cuZmlsZSk7fQpmdW5jdGlvbiBqdWRnZVNuYXBzaG90KHIsZGlyKXsKIGp1ZGdlTGluayhyLmlkZW50aXR5KTthLmVxdWFsKHIubm9ucmVndWxhci5sZW5ndGgsMCwnQUNBREVNWV9DQUNIRV9OT05SRUdVTEFSJyk7CiBjb25zdCBzZWVuPW5ldyBTZXQoKTtmb3IoY29uc3Qgcm93IG9mIHIucm93cyl7YSghc2Vlbi5oYXMocm93LmZpbGUpLCdBQ0FERU1ZX0NBQ0hFX1VOSVFVRV9NRU1CRVInKTtzZWVuLmFkZChyb3cuZmlsZSk7Y29uc3QgZmlsZT1ib2R5UGF0aChkaXIscm93KSxzPWZzLmxzdGF0U3luYyhmaWxlKTthKHMuaXNGaWxlKCkmJiFzLmlzU3ltYm9saWNMaW5rKCksJ0FDQURFTVlfQ0FDSEVfU05BUFNIT1RfUkVHVUxBUicpO2NvbnN0IGJvZHk9ZnMucmVhZEZpbGVTeW5jKGZpbGUpO2EuZXF1YWwoYm9keS5sZW5ndGgscm93LmJ5dGVzLCdBQ0FERU1ZX0NBQ0hFX1NOQVBTSE9UX0hBU0gnKTthLmVxdWFsKHNoYShib2R5KSxyb3cuc2hhMjU2LCdBQ0FERU1ZX0NBQ0hFX1NOQVBTSE9UX0hBU0gnKTt9CiBjb25zdCBmb3VuZD1yLnJvd3MuZmluZCh4PT54LmZpbGU9PT1leHBlY3RlZCk7YShmb3VuZCYmZm91bmQuYnl0ZXM+MCwnQUNBREVNWV9DQUNIRV9FWFBFQ1RFRF9SRVNVTFRTJyk7CiBjb25zdCBkYXRhPWpzb24oZnMucmVhZEZpbGVTeW5jKGJvZHlQYXRoKGRpcixmb3VuZCkpKTthLmVxdWFsKGRhdGEudmVyc2lvbiwnMy4yLjcnLCdBQ0FERU1ZX0NBQ0hFX0VYUEVDVEVEX1NDSEVNQScpO2EoQXJyYXkuaXNBcnJheShkYXRhLnJlc3VsdHMpLCdBQ0FERU1ZX0NBQ0hFX0VYUEVDVEVEX1NDSEVNQScpOwogY29uc3QgY2FzZXM9ZGF0YS5yZXN1bHRzLmZpbHRlcih4PT5BcnJheS5pc0FycmF5KHgpJiZ4WzBdPT09JzpzcmMvdGVzdC9hY2FkZW15RmlsdGVycy50ZXN0LnRzeCcpO2EuZXF1YWwoY2FzZXMubGVuZ3RoLDEsJ0FDQURFTVlfQ0FDSEVfQUNUVUFMX1RFU1RfS0VZJyk7YS5lcXVhbChjYXNlc1swXVsxXS5mYWlsZWQsci5hcm09PT0ndW5maWx0ZXInLCdBQ0FERU1ZX0NBQ0hFX0FDVFVBTF9BUk0nKTthKE51bWJlci5pc0Zpbml0ZShjYXNlc1swXVsxXS5kdXJhdGlvbikmJmNhc2VzWzBdWzFdLmR1cmF0aW9uPj0wLCdBQ0FERU1ZX0NBQ0hFX0FDVFVBTF9EVVJBVElPTicpOwp9CmZ1bmN0aW9uIHNhdmVkKHdoaWNoKXtyZXR1cm4gcGF0aC5qb2luKHNuYXBzaG90cyx3aGljaCk7fQpmdW5jdGlvbiB2ZXJpZnlTbmFwc2hvdCh3aGljaCl7Y29uc3QgZGlyPXNhdmVkKHdoaWNoKSxyPWpzb24oZnMucmVhZEZpbGVTeW5jKHBhdGguam9pbihkaXIsJ3NuYXBzaG90Lmpzb24nKSkpO2EuZXF1YWwoci5hcm0sd2hpY2gpO2p1ZGdlU25hcHNob3QocixkaXIpO3JldHVybiByO30KaWYobW9kZT09PSdzZXR1cCcpewogYWJzZW50KGxpbmspO2Fic2VudCh0YXJnZXQpO2Fic2VudChzbmFwc2hvdHMpO2ZzLm1rZGlyU3luYyh0YXJnZXQpO2ZzLm1rZGlyU3luYyhzbmFwc2hvdHMpOwogY29uc3QgbW9kdWxlcz1bWydub2RlX21vZHVsZXMvdml0ZXN0L2Rpc3QvY2h1bmtzL2NsaS1hcGkuRFZlMG5XVXguanMnLCc0YzJmZWNmZWI5NzZlZTljZGYwMGNmNGEwM2RhZWY0NjJjZWZkMDhlMGU1MDJiMmNlN2MxZGFmM2FjNTQwMTM1J10sWydub2RlX21vZHVsZXMvdml0ZS9kaXN0L25vZGUvY2h1bmtzL2RlcC1CSzNiMmpCYS5qcycsJ2JmYTk0MTg2ZGFmZjUzNWZlZmRmMjg2MDg4YzE1ODhmYWQ2YjAyYzAxZWYxMWNkM2I0MmE2Y2IzZTRjOTA3NjcnXV07CiBmb3IoY29uc3QgW2ZpbGUsaGFzaF1vZiBtb2R1bGVzKWEuZXF1YWwoc2hhKGZzLnJlYWRGaWxlU3luYyhwYXRoLmpvaW4ocm9vdCxmaWxlKSkpLGhhc2gsJ0FDQURFTVlfQ0FDSEVfUElOTkVEX1BBQ0tBR0VfU09VUkNFJyk7CiBmcy5zeW1saW5rU3luYyh0YXJnZXQsbGluaywnZGlyJyk7Y29uc3Qgcj1vYnNlcnZlKCk7anVkZ2VMaW5rKHIpO3dyaXRlKCdjYWNoZS1iaW5kaW5nLmpzb24nLHIpO2EuZXF1YWwoaW52ZW50b3J5KCkucm93cy5sZW5ndGgsMCwnQUNBREVNWV9DQUNIRV9GUkVTSF9FTVBUWScpO2NvbnNvbGUubG9nKCdBY2FkZW15IGNhY2hlOiBmcmVzaCBvd25lZCBzeW1saW5rIGJvdW5kLCBubyBjb25maWd1cmF0aW9uIG9yIGRlcGVuZGVuY3kgc291cmNlIGNoYW5nZWQuJyk7Cn1lbHNlIGlmKG1vZGU9PT0nYmVmb3JlJyl7CiBhKFsnbm9ybWFsJywndW5maWx0ZXInLCdyZXN0b3JlZCddLmluY2x1ZGVzKGFybSkpO2NvbnN0IGlkZW50aXR5PWhlbGQoKSxsaXZlPWludmVudG9yeSgpO2EuZXF1YWwobGl2ZS5ub25yZWd1bGFyLmxlbmd0aCwwLCdBQ0FERU1ZX0NBQ0hFX05PTlJFR1VMQVInKTsKIGlmKGFybT09PSdub3JtYWwnKWEuZXF1YWwobGl2ZS5yb3dzLmxlbmd0aCwwLCdBQ0FERU1ZX0NBQ0hFX0ZSRVNIX0VNUFRZJyk7CiBlbHNle2NvbnN0IHByZXZpb3VzPXZlcmlmeVNuYXBzaG90KGFybT09PSd1bmZpbHRlcic/J25vcm1hbCc6J3VuZmlsdGVyJyk7YS5kZWVwRXF1YWwobGl2ZS5yb3dzLHByZXZpb3VzLnJvd3MsJ0FDQURFTVlfQ0FDSEVfQkVGT1JFX05FWFRfT1ZFUldSSVRFJyk7fQogd3JpdGUoJ2NhY2hlLWJlZm9yZS0nK2FybSsnLmpzb24nLHtpZGVudGl0eSxyb3dzOmxpdmUucm93cyxwcmV2aW91c1NuYXBzaG90UmVjaGVja2VkOmFybSE9PSdub3JtYWwnfSk7Cn1lbHNlIGlmKG1vZGU9PT0nc25hcHNob3QnKXsKIGEoWydub3JtYWwnLCd1bmZpbHRlcicsJ3Jlc3RvcmVkJ10uaW5jbHVkZXMoYXJtKSk7Y29uc3QgaWRlbnRpdHk9aGVsZCgpLGRpcj1zYXZlZChhcm0pO2Fic2VudChkaXIpO2ZzLm1rZGlyU3luYyhkaXIpO2NvbnN0IHI9e2FybSxpZGVudGl0eSwuLi5pbnZlbnRvcnkoZGlyKX07CiBmcy53cml0ZUZpbGVTeW5jKHBhdGguam9pbihkaXIsJ3NuYXBzaG90Lmpzb24nKSxKU09OLnN0cmluZ2lmeShyLG51bGwsMikrJ1xuJyx7ZmxhZzond3gnfSk7CiBmcy53cml0ZUZpbGVTeW5jKHBhdGguam9pbihkaXIsJ21lbWJlcnMubnVsJyksQnVmZmVyLmZyb20oci5yb3dzLm1hcCh4PT54LmZpbGUrJ1wwJykuam9pbignJykpLHtmbGFnOid3eCd9KTsKIGZzLndyaXRlRmlsZVN5bmMocGF0aC5qb2luKGRpciwnYm9kaWVzLnNoYTI1NicpLHIucm93cy5tYXAoeD0+eC5zaGEyNTYrJyAgYm9kaWVzLycreC5maWxlKydcbicpLmpvaW4oJycpLHtmbGFnOid3eCd9KTsKIGp1ZGdlU25hcHNob3QocixkaXIpO2hlbGQoKTtjb25zb2xlLmxvZygnQWNhZGVteSBjYWNoZSAnK2FybSsnOiAnK3Iucm93cy5sZW5ndGgrJyBhY3R1YWwgYm9keSBmaWxlcyByZXRhaW5lZCBiZWZvcmUgdGhlIG5leHQgYXJtLicpOwp9ZWxzZSBpZihtb2RlPT09J2ZpbmFsJyl7CiBoZWxkKCk7Y29uc3QgcmVjb3Jkcz1bJ25vcm1hbCcsJ3VuZmlsdGVyJywncmVzdG9yZWQnXS5tYXAodmVyaWZ5U25hcHNob3QpLGxpdmU9aW52ZW50b3J5KCk7YS5lcXVhbChsaXZlLm5vbnJlZ3VsYXIubGVuZ3RoLDAsJ0FDQURFTVlfQ0FDSEVfTk9OUkVHVUxBUicpO2EuZGVlcEVxdWFsKGxpdmUucm93cyxyZWNvcmRzWzJdLnJvd3MsJ0FDQURFTVlfQ0FDSEVfRklOQUxfTElWRV9IRUxEJyk7CiBjb25zdCBvcmlnaW5hbD1mcy5yZWFkRmlsZVN5bmMocGF0aC5qb2luKHNhdmVkKCdub3JtYWwnKSwnc25hcHNob3QuanNvbicpKSxjb250cm9scz1bXTsKIGNvbnN0IGRpcj1wYXRoLmpvaW4ob3V0LCdjYWNoZS1yZWNvcmQtY29udHJvbHMnKTthYnNlbnQoZGlyKTtmcy5ta2RpclN5bmMoZGlyKTsKIGZ1bmN0aW9uIGNvbnRyb2woaWQsbXV0YXRlLG1hcmtlcil7Y29uc3Qgcj1qc29uKG9yaWdpbmFsKTttdXRhdGUocik7Y29uc3QgYm9keT1CdWZmZXIuZnJvbShKU09OLnN0cmluZ2lmeShyLG51bGwsMikrJ1xuJyk7YSghYm9keS5lcXVhbHMob3JpZ2luYWwpLCdBQ0FERU1ZX0NBQ0hFX0NPTlRST0xfQ0hBTkdFRCcpO2NvbnN0IGNoYW5nZWQ9cGF0aC5qb2luKGRpcixpZCsnLmNoYW5nZWQuanNvbicpLHJlc3RvcmVkPXBhdGguam9pbihkaXIsaWQrJy53b3JrLmpzb24nKTtmcy53cml0ZUZpbGVTeW5jKGNoYW5nZWQsYm9keSx7ZmxhZzond3gnfSk7ZnMud3JpdGVGaWxlU3luYyhyZXN0b3JlZCxvcmlnaW5hbCx7ZmxhZzond3gnfSk7bGV0IGVycm9yO3RyeXtqdWRnZVNuYXBzaG90KGpzb24oYm9keSksc2F2ZWQoJ25vcm1hbCcpKTt9Y2F0Y2goZSl7ZXJyb3I9ZTt9YShlcnJvciBpbnN0YW5jZW9mIGEuQXNzZXJ0aW9uRXJyb3ImJmVycm9yLmNvZGU9PT0nRVJSX0FTU0VSVElPTicmJmVycm9yLm1lc3NhZ2UuaW5jbHVkZXMobWFya2VyKSwnQUNBREVNWV9DQUNIRV9DT05UUk9MX09XTkVEJyk7YShmcy5yZWFkRmlsZVN5bmMocmVzdG9yZWQpLmVxdWFscyhvcmlnaW5hbCksJ0FDQURFTVlfQ0FDSEVfQ09OVFJPTF9SRVNUT1JFRCcpO2p1ZGdlU25hcHNob3QoanNvbihmcy5yZWFkRmlsZVN5bmMocmVzdG9yZWQpKSxzYXZlZCgnbm9ybWFsJykpO2NvbnRyb2xzLnB1c2goe2lkLG1hcmtlcixmb3VuZGF0aW9uOidjYWNoZS1zbmFwc2hvdHMvbm9ybWFsL3NuYXBzaG90Lmpzb24nLGNoYW5nZWQ6J2NhY2hlLXJlY29yZC1jb250cm9scy8nK2lkKycuY2hhbmdlZC5qc29uJyxyZXN0b3JlZDonY2FjaGUtcmVjb3JkLWNvbnRyb2xzLycraWQrJy53b3JrLmpzb24nLHNvdXJjZVNoYTI1NjpzaGEob3JpZ2luYWwpLGNoYW5nZWRTaGEyNTY6c2hhKGJvZHkpLHJlc3RvcmVkU2hhMjU2OnNoYShmcy5yZWFkRmlsZVN5bmMocmVzdG9yZWQpKSxlcnJvcjp7bmFtZTplcnJvci5uYW1lLGNvZGU6ZXJyb3IuY29kZSxtZXNzYWdlOmVycm9yLm1lc3NhZ2Usc3RhY2s6ZXJyb3Iuc3RhY2t9LHNjb3BlOidDT1BJRURfQUNUVUFMX0NBQ0hFX01FVEFEQVRBX0pVREdFX09OTFknfSk7fQogY29udHJvbCgnbm90LWxpbmsnLHI9PntyLmlkZW50aXR5LnN5bWJvbGljTGluaz1mYWxzZTt9LCdBQ0FERU1ZX0NBQ0hFX0xJTktfU0hBUEUnKTsKIGNvbnRyb2woJ3dyb25nLXJlYWRsaW5rJyxyPT57ci5pZGVudGl0eS5yZWFkbGluaz10YXJnZXQrJy1vdGhlcic7fSwnQUNBREVNWV9DQUNIRV9FWEFDVF9SRUFETElOSycpOwogY29udHJvbCgnZXNjYXBlZC1yZWFscGF0aCcscj0+e3IuaWRlbnRpdHkucmVhbHBhdGg9cGF0aC5kaXJuYW1lKG91dCk7fSwnQUNBREVNWV9DQUNIRV9FWEFDVF9SRUFMUEFUSCcpOwogY29udHJvbCgnbWlzc2luZy1yZXN1bHRzJyxyPT57ci5yb3dzPXIucm93cy5maWx0ZXIoeD0+eC5maWxlIT09ZXhwZWN0ZWQpO30sJ0FDQURFTVlfQ0FDSEVfRVhQRUNURURfUkVTVUxUUycpOwogY29udHJvbCgnd3JvbmctYm9keS1oYXNoJyxyPT57ci5yb3dzLmZpbmQoeD0+eC5maWxlPT09ZXhwZWN0ZWQpLnNoYTI1Nj0nMCcucmVwZWF0KDY0KTt9LCdBQ0FERU1ZX0NBQ0hFX1NOQVBTSE9UX0hBU0gnKTsKIHdyaXRlKCdjYWNoZS1yZWNvcmQtY29udHJvbHMuanNvbicse3N0YXR1czonRklWRV9BQ1RVQUxfQ0FDSEVfTUVUQURBVEFfQ09OVFJPTFNfQU5EX1JFU1RPUkVTJyxjb250cm9scyxmaWxlc3lzdGVtTXV0YXRpb25DcmVkaXQ6MH0pOwogd3JpdGUoJ2NhY2hlLWZpbmFsLWJpbmRpbmcuanNvbicse3N0YXR1czonQUNUVUFMX1RIUkVFX0FSTV9DQUNIRV9CT0RJRVNfQU5EX0xJTktfSEVMRCcsaWRlbnRpdHk6aGVsZCgpLGV4cGVjdGVkLGFybXM6cmVjb3Jkcy5tYXAocj0+KHthcm06ci5hcm0sZmlsZXM6ci5yb3dzLmxlbmd0aCxyb3dzOnIucm93c30pKSxyZWNvcmRKdWRnZUNvbnRyb2xzOjUsc291cmNlRmVhc2liaWxpdHlPbmx5QmVmb3JlVGhpc1J1bjp0cnVlLHRyYW5zaWVudEludGVybWVkaWF0ZVdyaXRlc1F1YWxpZmllZDpmYWxzZX0pOwp9ZWxzZSBhLmZhaWwoJ1Vua25vd24gQWNhZGVteSBjYWNoZSBtb2RlJyk7Cg==' | base64 --decode > "$ACADEMY_OUT/academy-cache-helper.cjs"
+          printf '%s  %s\n' '19876030ae3f4ef788d0908b84ac37d1a03edf81d11cbff08a38cb06c9bcdd60' "$ACADEMY_OUT/academy-cache-helper.cjs" > "$ACADEMY_OUT/cache-helper.sha256"
+          sha256sum -c "$ACADEMY_OUT/cache-helper.sha256" > "$ACADEMY_OUT/cache-helper-before.log"
+          set +e
+          NODE_OPTIONS="--require=$GITHUB_WORKSPACE/scripts/lib/offlineTransport.cjs" SIM_OFFLINE_RECEIPT="$ACADEMY_OUT/cache.transport" \
+            node "$ACADEMY_OUT/academy-cache-helper.cjs" setup > "$ACADEMY_OUT/cache-setup.stdout.log" 2> "$ACADEMY_OUT/cache-setup.stderr.log"
+          code=$?
+          printf '%s\n' "$code" > "$ACADEMY_OUT/cache-setup.exit"
+          cat "$ACADEMY_OUT/cache-setup.stdout.log"
+          cat "$ACADEMY_OUT/cache-setup.stderr.log" >&2
+          exit "$code"
+      - name: Actual normal wrapper and native exit
+        id: normal
+        if: ${{ !cancelled() && steps.types.outputs.status == '0' && steps.cache_setup.outcome == 'success' }}
+        timeout-minutes: 3
+        run: |
+          set -euo pipefail
+          while IFS= read -r key; do
+            case "$key" in *_CONTROL|CONTROL|ATTRIBUTION|NO_DOUBLE_SWAP|SIM_RUNNER_ARTIFACTS) unset "$key";; esac
+          done < <(compgen -e)
+          (set -o noclobber; : > "$ACADEMY_OUT/normal.transport")
+          set +e
+          NODE_OPTIONS="--require=$GITHUB_WORKSPACE/scripts/lib/offlineTransport.cjs" SIM_OFFLINE_RECEIPT="$ACADEMY_OUT/cache.transport" \
+            node "$ACADEMY_OUT/academy-cache-helper.cjs" before normal > "$ACADEMY_OUT/cache-before-normal.stdout.log" 2> "$ACADEMY_OUT/cache-before-normal.stderr.log"
+          cache_before=$?
+          printf '%s\n' "$cache_before" > "$ACADEMY_OUT/cache-before-normal.exit"
+          if test "$cache_before" -ne 0; then cat "$ACADEMY_OUT/cache-before-normal.stderr.log" >&2; exit "$cache_before"; fi
+          printf 'STARTED\n' > "$ACADEMY_OUT/normal.phase"
+          set +e
+          ACADEMY_FILTER_CONTROL='' NODE_OPTIONS="--require=$GITHUB_WORKSPACE/scripts/lib/offlineTransport.cjs" SIM_OFFLINE_RECEIPT="$ACADEMY_OUT/normal.transport" \
+            node scripts/simAcademyFilters.mjs > "$ACADEMY_OUT/normal.stdout.log" 2> "$ACADEMY_OUT/normal.stderr.log" &
+          child=$!
+          printf '%s\n' "$child" > "$ACADEMY_OUT/normal.pid"
+          wait "$child"
+          code=$?
+          printf '%s\n' "$code" > "$ACADEMY_OUT/normal.exit"
+          printf 'CLOSED\n' > "$ACADEMY_OUT/normal.phase"
+          cat "$ACADEMY_OUT/normal.stdout.log"
+          cat "$ACADEMY_OUT/normal.stderr.log" >&2
+          exit 0
+      - name: Always retain normal cache bodies before a later arm can overwrite
+        id: cache_normal
+        if: ${{ always() && steps.cache_setup.outcome == 'success' && steps.normal.outcome != 'skipped' }}
+        timeout-minutes: 1
+        run: |
+          set +e
+          set -uo pipefail
+          NODE_OPTIONS="--require=$GITHUB_WORKSPACE/scripts/lib/offlineTransport.cjs" SIM_OFFLINE_RECEIPT="$ACADEMY_OUT/cache.transport" \
+            node "$ACADEMY_OUT/academy-cache-helper.cjs" snapshot normal > "$ACADEMY_OUT/cache-normal.stdout.log" 2> "$ACADEMY_OUT/cache-normal.stderr.log"
+          code=$?
+          printf '%s\n' "$code" > "$ACADEMY_OUT/cache-normal.exit"
+          cat "$ACADEMY_OUT/cache-normal.stdout.log"
+          cat "$ACADEMY_OUT/cache-normal.stderr.log" >&2
+          exit "$code"
+      - name: Actual unfilter wrapper and native exit
+        id: unfilter
+        if: ${{ !cancelled() && steps.types.outputs.status == '0' && steps.cache_setup.outcome == 'success' && steps.cache_normal.outcome == 'success' }}
+        timeout-minutes: 3
+        run: |
+          set -euo pipefail
+          while IFS= read -r key; do
+            case "$key" in *_CONTROL|CONTROL|ATTRIBUTION|NO_DOUBLE_SWAP|SIM_RUNNER_ARTIFACTS) unset "$key";; esac
+          done < <(compgen -e)
+          (set -o noclobber; : > "$ACADEMY_OUT/unfilter.transport")
+          set +e
+          NODE_OPTIONS="--require=$GITHUB_WORKSPACE/scripts/lib/offlineTransport.cjs" SIM_OFFLINE_RECEIPT="$ACADEMY_OUT/cache.transport" \
+            node "$ACADEMY_OUT/academy-cache-helper.cjs" before unfilter > "$ACADEMY_OUT/cache-before-unfilter.stdout.log" 2> "$ACADEMY_OUT/cache-before-unfilter.stderr.log"
+          cache_before=$?
+          printf '%s\n' "$cache_before" > "$ACADEMY_OUT/cache-before-unfilter.exit"
+          if test "$cache_before" -ne 0; then cat "$ACADEMY_OUT/cache-before-unfilter.stderr.log" >&2; exit "$cache_before"; fi
+          printf 'STARTED\n' > "$ACADEMY_OUT/unfilter.phase"
+          set +e
+          ACADEMY_FILTER_CONTROL='unfilter' NODE_OPTIONS="--require=$GITHUB_WORKSPACE/scripts/lib/offlineTransport.cjs" SIM_OFFLINE_RECEIPT="$ACADEMY_OUT/unfilter.transport" \
+            node scripts/simAcademyFilters.mjs > "$ACADEMY_OUT/unfilter.stdout.log" 2> "$ACADEMY_OUT/unfilter.stderr.log" &
+          child=$!
+          printf '%s\n' "$child" > "$ACADEMY_OUT/unfilter.pid"
+          wait "$child"
+          code=$?
+          printf '%s\n' "$code" > "$ACADEMY_OUT/unfilter.exit"
+          printf 'CLOSED\n' > "$ACADEMY_OUT/unfilter.phase"
+          cat "$ACADEMY_OUT/unfilter.stdout.log"
+          cat "$ACADEMY_OUT/unfilter.stderr.log" >&2
+          exit 0
+      - name: Always retain unfilter cache bodies before a later arm can overwrite
+        id: cache_unfilter
+        if: ${{ always() && steps.cache_setup.outcome == 'success' && steps.unfilter.outcome != 'skipped' }}
+        timeout-minutes: 1
+        run: |
+          set +e
+          set -uo pipefail
+          NODE_OPTIONS="--require=$GITHUB_WORKSPACE/scripts/lib/offlineTransport.cjs" SIM_OFFLINE_RECEIPT="$ACADEMY_OUT/cache.transport" \
+            node "$ACADEMY_OUT/academy-cache-helper.cjs" snapshot unfilter > "$ACADEMY_OUT/cache-unfilter.stdout.log" 2> "$ACADEMY_OUT/cache-unfilter.stderr.log"
+          code=$?
+          printf '%s\n' "$code" > "$ACADEMY_OUT/cache-unfilter.exit"
+          cat "$ACADEMY_OUT/cache-unfilter.stdout.log"
+          cat "$ACADEMY_OUT/cache-unfilter.stderr.log" >&2
+          exit "$code"
+      - name: Actual restored wrapper and native exit
+        id: restored
+        if: ${{ !cancelled() && steps.types.outputs.status == '0' && steps.cache_setup.outcome == 'success' && steps.cache_unfilter.outcome == 'success' }}
+        timeout-minutes: 3
+        run: |
+          set -euo pipefail
+          while IFS= read -r key; do
+            case "$key" in *_CONTROL|CONTROL|ATTRIBUTION|NO_DOUBLE_SWAP|SIM_RUNNER_ARTIFACTS) unset "$key";; esac
+          done < <(compgen -e)
+          (set -o noclobber; : > "$ACADEMY_OUT/restored.transport")
+          set +e
+          NODE_OPTIONS="--require=$GITHUB_WORKSPACE/scripts/lib/offlineTransport.cjs" SIM_OFFLINE_RECEIPT="$ACADEMY_OUT/cache.transport" \
+            node "$ACADEMY_OUT/academy-cache-helper.cjs" before restored > "$ACADEMY_OUT/cache-before-restored.stdout.log" 2> "$ACADEMY_OUT/cache-before-restored.stderr.log"
+          cache_before=$?
+          printf '%s\n' "$cache_before" > "$ACADEMY_OUT/cache-before-restored.exit"
+          if test "$cache_before" -ne 0; then cat "$ACADEMY_OUT/cache-before-restored.stderr.log" >&2; exit "$cache_before"; fi
+          printf 'STARTED\n' > "$ACADEMY_OUT/restored.phase"
+          set +e
+          ACADEMY_FILTER_CONTROL='' NODE_OPTIONS="--require=$GITHUB_WORKSPACE/scripts/lib/offlineTransport.cjs" SIM_OFFLINE_RECEIPT="$ACADEMY_OUT/restored.transport" \
+            node scripts/simAcademyFilters.mjs > "$ACADEMY_OUT/restored.stdout.log" 2> "$ACADEMY_OUT/restored.stderr.log" &
+          child=$!
+          printf '%s\n' "$child" > "$ACADEMY_OUT/restored.pid"
+          wait "$child"
+          code=$?
+          printf '%s\n' "$code" > "$ACADEMY_OUT/restored.exit"
+          printf 'CLOSED\n' > "$ACADEMY_OUT/restored.phase"
+          cat "$ACADEMY_OUT/restored.stdout.log"
+          cat "$ACADEMY_OUT/restored.stderr.log" >&2
+          exit 0
+      - name: Always retain restored cache bodies before a later arm can overwrite
+        id: cache_restored
+        if: ${{ always() && steps.cache_setup.outcome == 'success' && steps.restored.outcome != 'skipped' }}
+        timeout-minutes: 1
+        run: |
+          set +e
+          set -uo pipefail
+          NODE_OPTIONS="--require=$GITHUB_WORKSPACE/scripts/lib/offlineTransport.cjs" SIM_OFFLINE_RECEIPT="$ACADEMY_OUT/cache.transport" \
+            node "$ACADEMY_OUT/academy-cache-helper.cjs" snapshot restored > "$ACADEMY_OUT/cache-restored.stdout.log" 2> "$ACADEMY_OUT/cache-restored.stderr.log"
+          code=$?
+          printf '%s\n' "$code" > "$ACADEMY_OUT/cache-restored.exit"
+          cat "$ACADEMY_OUT/cache-restored.stdout.log"
+          cat "$ACADEMY_OUT/cache-restored.stderr.log" >&2
+          exit "$code"
+      - name: Require actual normal, unfilter and restored outcomes
+        id: classify
+        if: ${{ !cancelled() && steps.types.outputs.status == '0' }}
+        run: |
+          set -euo pipefail
+          (set -o noclobber; : > "$ACADEMY_OUT/classifier.transport")
+          set +e
+          NODE_OPTIONS="--require=$GITHUB_WORKSPACE/scripts/lib/offlineTransport.cjs" SIM_OFFLINE_RECEIPT="$ACADEMY_OUT/classifier.transport" \
+            node --input-type=module > "$ACADEMY_OUT/classifier.stdout.log" 2> "$ACADEMY_OUT/classifier.stderr.log" <<'NODE'
+          import assert from 'node:assert/strict';
+          import fs from 'node:fs';
+          import path from 'node:path';
+          import { createHash } from 'node:crypto';
+          const out=process.env.ACADEMY_OUT,sha=body=>createHash('sha256').update(body).digest('hex');
+          const write=(name,value)=>fs.writeFileSync(path.join(out,name),JSON.stringify(value,null,2)+'\n',{flag:'wx'});
+          const failedTitles=["combines both filters while keeping the original reported-ceiling order and source list","distinguishes no matches from an empty academy and resets both selections","passes the actual visible prospect ID to sign and release callbacks","keeps signing disabled for budget 4 and squad size 10","keeps signing disabled for budget 10 and squad size 30","retains the selected labels if signing or releasing removes the last match"],unaffectedTitles=["keeps the original intake explanation when there are no prospects","names every Sign him and Let go button after its own prospect, and each one acts on him"];
+          const good='simAcademyFilters: eight rendered combination, reset, callback and signing-rule checks passed.';
+          const fault='simAcademyFilters control: six rendered outcome checks rejected ignored selections; the empty intake and prospect button name checks stayed green.';
+          const read=name=>fs.readFileSync(path.join(out,name),'utf8');
+          const rows=['normal','unfilter','restored'].map(arm=>{
+            const st=fs.lstatSync(path.join(out,arm+'.transport'));
+            return {arm,pid:Number(read(arm+'.pid').trim()),exit:Number(read(arm+'.exit').trim()),phase:read(arm+'.phase').trim(),stdout:read(arm+'.stdout.log'),stderr:read(arm+'.stderr.log'),receipt:{regular:st.isFile(),symlink:st.isSymbolicLink(),bytes:st.size}};
+          });
+          function judge(values){
+            assert.deepEqual(values.map(row=>row.arm),['normal','unfilter','restored'],'ACADEMY_PROOF_THREE_ACTUAL_ARMS');
+            assert.equal(new Set(values.map(row=>row.pid)).size,3,'ACADEMY_PROOF_DISTINCT_NATIVE_PIDS');
+            for(const row of values){
+              assert(Number.isInteger(row.pid)&&row.pid>0&&row.phase==='CLOSED','ACADEMY_PROOF_NATIVE_CLOSED');
+              assert.equal(row.exit,0,'ACADEMY_PROOF_NATIVE_EXIT');
+              assert(row.receipt.regular&&!row.receipt.symlink&&row.receipt.bytes===0,'ACADEMY_PROOF_TRANSPORT');
+              const text=row.stdout+'\n'+row.stderr;
+              assert(text.includes('src/test/academyFilters.test.tsx'),'ACADEMY_PROOF_ACTUAL_TEST_FILE');
+              assert(!/Unhandled (?:Errors?|Rejections?)|Uncaught Exception|SyntaxError|ReferenceError|Cannot find (?:module|package)|Failed to (?:load|resolve) (?:url|import)/i.test(text),'ACADEMY_PROOF_NO_OBSERVED_SETUP_RUNTIME_ERROR');
+              if(row.arm==='unfilter'){
+                assert.equal((text.match(/^\s*Test Files\s+1 failed \(1\)\s*$/gm)||[]).length,1,'ACADEMY_PROOF_TEST_CENSUS');
+                assert.equal((text.match(/^\s*Tests\s+6 failed \| 2 passed \(8\)\s*$/gm)||[]).length,1,'ACADEMY_PROOF_TEST_CENSUS');
+                const names=[...text.matchAll(/^\s*FAIL\s+src\/test\/academyFilters\.test\.tsx > academy position and age filters > (.+)\s*$/gm)].map(match=>match[1].trim()).sort();
+                assert.deepEqual(names,[...failedTitles].sort(),'ACADEMY_PROOF_FAILED_CENSUS');
+                const blocks=[...text.matchAll(/^[ \t]*FAIL[ \t]+src\/test\/academyFilters\.test\.tsx > academy position and age filters > ([^\n]+)\n([^\n]*)/gm)];
+                assert.equal(blocks.length,6,'ACADEMY_PROOF_ACTUAL_FILTER_OUTCOME_FAILURE');
+                const ordinary=new Set([failedTitles[0],failedTitles[1],failedTitles[5]]);
+                for(const block of blocks){
+                  const title=block[1].trim(),heading=block[2];assert(failedTitles.includes(title),'ACADEMY_PROOF_FAILED_CENSUS');
+                  if(ordinary.has(title))assert.equal(heading,'Error: expect(element).toHaveTextContent()','ACADEMY_PROOF_ACTUAL_FILTER_OUTCOME_FAILURE');
+                  else assert(heading.startsWith('TestingLibraryElementError: Found multiple elements with the role "button" and name ')&&heading.includes('/^Sign him: /'),'ACADEMY_PROOF_ACTUAL_FILTER_OUTCOME_FAILURE');
+                }
+                const actualPassed=[...text.matchAll(/^[ \t]*✓ academy position and age filters > (.+?) \d+ms[ \t]*$/gm)].map(match=>match[1]).sort();
+                assert.deepEqual(actualPassed,[...unaffectedTitles].sort(),'ACADEMY_PROOF_ACTUAL_PRESERVED_TITLES');
+                assert(row.stdout.trimEnd().endsWith(fault),'ACADEMY_PROOF_WRAPPER_FOOTER');
+              }else{
+                assert.equal((text.match(/^\s*Test Files\s+1 passed \(1\)\s*$/gm)||[]).length,1,'ACADEMY_PROOF_TEST_CENSUS');
+                assert.equal((text.match(/^\s*Tests\s+8 passed \(8\)\s*$/gm)||[]).length,1,'ACADEMY_PROOF_TEST_CENSUS');
+                assert(!/^\s*FAIL\s+/m.test(text),'ACADEMY_PROOF_TEST_CENSUS');
+                assert(row.stdout.trimEnd().endsWith(good),'ACADEMY_PROOF_WRAPPER_FOOTER');
+              }
+            }
+          }
+          judge(rows);
+          const original=Buffer.from(JSON.stringify(rows)+'\n');
+          fs.writeFileSync(path.join(out,'record-control-foundation.json'),original,{flag:'wx'});
+          const controls=[];
+          function control(id,mutate,marker){
+            const changed=JSON.parse(original);mutate(changed);const body=Buffer.from(JSON.stringify(changed)+'\n'),work=path.join(out,'record-control-'+id+'.work.json');
+            assert(!body.equals(original),'ACADEMY_RECORD_CONTROL_CHANGED');fs.writeFileSync(work,body,{flag:'wx'});
+            let error;try{judge(JSON.parse(fs.readFileSync(work,'utf8')));}catch(actual){error=actual;}
+            assert(error instanceof assert.AssertionError&&error.code==='ERR_ASSERTION'&&error.message.includes(marker),'ACADEMY_RECORD_CONTROL_OWNED');
+            fs.writeFileSync(path.join(out,'record-control-'+id+'.changed.json'),body,{flag:'wx'});
+            fs.writeFileSync(work,original);assert(fs.readFileSync(work).equals(original),'ACADEMY_RECORD_CONTROL_RESTORED');judge(JSON.parse(fs.readFileSync(work,'utf8')));
+            controls.push({id,marker,sourceSha256:sha(original),changedSha256:sha(body),restoredSha256:sha(fs.readFileSync(work)),error:{name:error.name,code:error.code,message:error.message,stack:error.stack},scope:'COPIED_ACTUAL_OUTPUT_RECORD_JUDGE_ONLY'});
+          }
+          control('wrong-normal-pass-total',v=>{const re=/Tests\s+8 passed \(8\)/g;assert.equal((v[0].stdout.match(re)||[]).length,1);v[0].stdout=v[0].stdout.replace(re,'Tests 7 passed (8)');},'ACADEMY_PROOF_TEST_CENSUS');
+          control('wrong-actual-failed-title',v=>{
+            const re=/FAIL\s+src\/test\/academyFilters\.test\.tsx > academy position and age filters > combines both filters while keeping the original reported-ceiling order and source list/g;
+            assert.equal((v[1].stdout.match(re)||[]).length,1);
+            v[1].stdout=v[1].stdout.replace(re,match=>match.replace(failedTitles[0],'changed copied record title'));
+          },'ACADEMY_PROOF_FAILED_CENSUS');
+          control('nonzero-native-wrapper',v=>{v[2].exit=1;},'ACADEMY_PROOF_NATIVE_EXIT');
+          control('nonempty-native-receipt',v=>{v[0].receipt.bytes=1;},'ACADEMY_PROOF_TRANSPORT');
+          control('wrong-owned-error-heading',v=>{const re=/^Error: expect\(element\)\.toHaveTextContent\(\)$/gm;assert.equal((v[1].stdout.match(re)||[]).length,3);v[1].stdout=v[1].stdout.replace(/^Error: expect\(element\)\.toHaveTextContent\(\)$/m,'Error: changed copied record heading');},'ACADEMY_PROOF_ACTUAL_FILTER_OUTCOME_FAILURE');
+          write('record-controls.json',{status:'FIVE_ACTUAL_RECORD_CONTROLS_AND_RESTORES_EFFECTIVE',controls,applicationSourceFaultCredit:0,normalTestPassCredit:0});
+          write('targeted-admission.json',{status:'TARGETED_ACADEMY_WRAPPER_NORMAL_CONTROL_RESTORED_COMPLETE',source:process.env.GITHUB_SHA,normal:{passed:8},unfilter:{failed:6,passed:2,failedTitles,unaffectedTitles,unaffectedIdentityBasis:'Both exact passed titles are printed in the actual unfilter output and required alongside all six exact failed-title/error-heading families.'},restored:{passed:8},wrapperRows:rows.map(r=>({arm:r.arm,pid:r.pid,nativeExit:r.exit,phase:r.phase,stdoutBytes:Buffer.byteLength(r.stdout),stdoutSha256:sha(r.stdout),stderrBytes:Buffer.byteLength(r.stderr),stderrSha256:sha(r.stderr),receipt:r.receipt})),recordJudgeControls:5,wrapperChildTimeoutMs:120000,childNativeStatusTelemetry:'NOT_SEPARATELY_RETAINED_BY_UNCHANGED_WRAPPER; original wrapper checks child status and actual summaries',optionalVitestRuntimeCounters:'UNKNOWN_NOT_RETAINED_BY_UNCHANGED_DEFAULT_REPORTER',backendQualified:false,fullSuiteQualified:false,browserExecuted:false,buildExecuted:false,published:false});
+          console.log('Academy targeted proof: actual normal8, unfilter6failed2passed, restored8, five copied-record controls.');
+          NODE
+          code=$?
+          printf '%s\n' "$code" > "$ACADEMY_OUT/classifier.exit"
+          cat "$ACADEMY_OUT/classifier.stdout.log"
+          cat "$ACADEMY_OUT/classifier.stderr.log" >&2
+          exit "$code"
+      - name: Always require complete physical end holds
+        if: always()
+        id: final
+        run: |
+          set +e
+          set -uo pipefail
+          fail=0
+          if test -s "$ACADEMY_OUT/source-before.sha256"; then
+            git ls-files -z | sort -z > "$ACADEMY_OUT/source-members.after"
+            xargs -0 sha256sum < "$ACADEMY_OUT/source-members.after" > "$ACADEMY_OUT/source-after.sha256"
+            cmp "$ACADEMY_OUT/source-members.before" "$ACADEMY_OUT/source-members.after" > "$ACADEMY_OUT/source-members-hold.log" 2>&1 || fail=1
+            cmp "$ACADEMY_OUT/source-before.sha256" "$ACADEMY_OUT/source-after.sha256" > "$ACADEMY_OUT/source-sha-hold.log" 2>&1 || fail=1
+            sha256sum -c "$ACADEMY_OUT/source-before.sha256" > "$ACADEMY_OUT/source-body-hold.log" 2>&1 || fail=1
+          else fail=1; fi
+          if test -s "$ACADEMY_OUT/dependencies-before.sha256"; then
+            find node_modules -type f -print0 | sort -z > "$ACADEMY_OUT/dependency-members.after"
+            xargs -0 sha256sum < "$ACADEMY_OUT/dependency-members.after" > "$ACADEMY_OUT/dependencies-after.sha256"
+            cmp "$ACADEMY_OUT/dependency-members.before" "$ACADEMY_OUT/dependency-members.after" > "$ACADEMY_OUT/dependency-members-hold.log" 2>&1 || fail=1
+            cmp "$ACADEMY_OUT/dependencies-before.sha256" "$ACADEMY_OUT/dependencies-after.sha256" > "$ACADEMY_OUT/dependency-sha-hold.log" 2>&1 || fail=1
+            sha256sum -c "$ACADEMY_OUT/dependencies-before.sha256" > "$ACADEMY_OUT/dependency-body-hold.log" 2>&1 || fail=1
+          else fail=1; fi
+          sha256sum -c "$ACADEMY_OUT/critical.expected.sha256" > "$ACADEMY_OUT/critical-expected-hold.log" 2>&1 || fail=1
+          git rev-parse HEAD > "$ACADEMY_OUT/head.after"
+          cmp "$ACADEMY_OUT/head.before" "$ACADEMY_OUT/head.after" > "$ACADEMY_OUT/head-hold.log" 2>&1 || fail=1
+          git diff --exit-code > "$ACADEMY_OUT/worktree-diff.log" 2>&1 || fail=1
+          git diff --cached --exit-code > "$ACADEMY_OUT/index-diff.log" 2>&1 || fail=1
+          git status --porcelain=v1 --untracked-files=all > "$ACADEMY_OUT/status.after"
+          test ! -s "$ACADEMY_OUT/status.after" || fail=1
+          cmp "$WORKFLOW_PATH" "$ACADEMY_OUT/workflow.source.yml" > "$ACADEMY_OUT/workflow-copy-hold.log" 2>&1 || fail=1
+          sha256sum -c "$ACADEMY_OUT/cache-helper.sha256" > "$ACADEMY_OUT/cache-helper-after.log" 2>&1 || fail=1
+          NODE_OPTIONS="--require=$GITHUB_WORKSPACE/scripts/lib/offlineTransport.cjs" SIM_OFFLINE_RECEIPT="$ACADEMY_OUT/cache.transport" \
+            node "$ACADEMY_OUT/academy-cache-helper.cjs" final > "$ACADEMY_OUT/cache-final.stdout.log" 2> "$ACADEMY_OUT/cache-final.stderr.log"
+          cache_final=$?
+          printf '%s\n' "$cache_final" > "$ACADEMY_OUT/cache-final.exit"
+          test "$cache_final" -eq 0 || fail=1
+          (set -o noclobber; : > "$ACADEMY_OUT/final.transport") || fail=1
+          NODE_OPTIONS="--require=$GITHUB_WORKSPACE/scripts/lib/offlineTransport.cjs" SIM_OFFLINE_RECEIPT="$ACADEMY_OUT/final.transport" \
+            node --input-type=module > "$ACADEMY_OUT/final.stdout.log" 2> "$ACADEMY_OUT/final.stderr.log" <<'NODE'
+          import assert from 'node:assert/strict';
+          import fs from 'node:fs';
+          import path from 'node:path';
+          import { createHash } from 'node:crypto';
+          import { execFileSync } from 'node:child_process';
+          const out=process.env.ACADEMY_OUT,sha=b=>createHash('sha256').update(b).digest('hex');
+          const expected=JSON.parse(fs.readFileSync(path.join(out,'critical.expected.json'),'utf8')),binding=JSON.parse(fs.readFileSync(path.join(out,'source-binding.json'),'utf8'));
+          assert.equal(execFileSync('git',['rev-parse','HEAD'],{encoding:'utf8'}).trim(),process.env.GITHUB_SHA);
+          const pins=expected.map(row=>{
+            const body=fs.readFileSync(row.file),actual={bytes:body.length,sha256:sha(body),gitBlob:execFileSync('git',['rev-parse','HEAD:'+row.file],{encoding:'utf8'}).trim()};
+            assert.deepEqual(actual,row.candidate);return {file:row.file,...actual,parentGitBlob:row.parent.gitBlob};
+          });
+          assert.deepEqual(pins,binding.pins);
+          for(const name of ['source','install','types','cache-setup','cache-before-normal','cache-normal','normal','cache-before-unfilter','cache-unfilter','unfilter','cache-before-restored','cache-restored','restored','classifier','cache-final'])assert.equal(fs.readFileSync(path.join(out,name+'.exit'),'utf8').trim(),'0','ACADEMY_FINAL_REQUIRED_NATIVE_EXIT: '+name);
+          for(const name of ['source','types','normal','unfilter','restored','classifier','final','cache']){
+            const st=fs.lstatSync(path.join(out,name+'.transport'));
+            assert(st.isFile()&&!st.isSymbolicLink()&&st.size===0,'ACADEMY_FINAL_PRESENT_EMPTY_RECEIPT: '+name);
+          }
+          const a=JSON.parse(fs.readFileSync(path.join(out,'targeted-admission.json'),'utf8'));
+          assert.equal(a.status,'TARGETED_ACADEMY_WRAPPER_NORMAL_CONTROL_RESTORED_COMPLETE');assert.equal(a.source,process.env.GITHUB_SHA);
+          assert.equal(a.recordJudgeControls,5);assert.equal(a.fullSuiteQualified,false);assert.equal(a.backendQualified,false);
+          const cache=JSON.parse(fs.readFileSync(path.join(out,'cache-final-binding.json'),'utf8')),cacheControls=JSON.parse(fs.readFileSync(path.join(out,'cache-record-controls.json'),'utf8'));
+          assert.equal(cache.status,'ACTUAL_THREE_ARM_CACHE_BODIES_AND_LINK_HELD');assert.equal(cache.arms.length,3);assert.equal(cache.recordJudgeControls,5);assert.equal(cacheControls.controls.length,5);
+          fs.writeFileSync(path.join(out,'final-binding.json'),JSON.stringify({source:process.env.GITHUB_SHA,pins,currentSources:5343,dependencies:24466,presentEmptyReceipts:8,cacheActualArms:3,cacheRecordControls:5,outputRecordControls:5,targetedOnly:true,fullSuiteQualified:false,browserExecuted:false,backendQualified:false},null,2)+'\n',{flag:'wx'});
+          NODE
+          code=$?
+          printf '%s\n' "$code" > "$ACADEMY_OUT/final-binding.exit"
+          test "$code" -eq 0 || fail=1
+          test ! -s "$ACADEMY_OUT/final.transport" || fail=1
+          printf '%s\n' "$fail" > "$ACADEMY_OUT/final-holds.exit"
+          exit "$fail"
+      - name: Always preserve stages and complete evidence
+        if: always()
+        run: |
+          set -euo pipefail
+          printf '%s\n' 'source=${{ steps.source.outcome }}' 'install=${{ steps.install.outcome }}' 'types=${{ steps.types.outcome }}' 'cacheSetup=${{ steps.cache_setup.outcome }}' 'normal=${{ steps.normal.outcome }}' 'unfilter=${{ steps.unfilter.outcome }}' 'restored=${{ steps.restored.outcome }}' 'classifier=${{ steps.classify.outcome }}' 'final=${{ steps.final.outcome }}' > "$ACADEMY_OUT/stages.txt"
+          find "$ACADEMY_OUT" -mindepth 1 ! -type d ! -type f -print > "$ACADEMY_OUT/evidence-nonregular.txt"
+          test ! -s "$ACADEMY_OUT/evidence-nonregular.txt"
+          (cd "$ACADEMY_OUT"; find . -type f ! -name evidence.sha256 -print0 | sort -z | xargs -0 sha256sum > evidence.sha256)
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: academy-filter-proof-repair-${{ github.run_id }}-a${{ github.run_attempt }}
+          path: ${{ env.ACADEMY_OUT }}
+          if-no-files-found: error
+          retention-days: 30

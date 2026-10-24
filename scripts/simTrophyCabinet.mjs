@@ -8,7 +8,9 @@ import { fileURLToPath } from 'node:url';
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const source = path.join(ROOT, 'src/components/soccer-career/TrophyCabinet.tsx');
 const copy = path.join(ROOT, 'src/components/soccer-career/__control_TrophyCabinet.tsx');
-const report = path.join(ROOT, '.tmp-fx/trophy-tests.json');
+const report = process.env.TROPHY_CABINET_ARTIFACTS
+  ? path.join(path.resolve(ROOT, process.env.TROPHY_CABINET_ARTIFACTS), 'trophy-tests.json')
+  : path.join(ROOT, '.tmp-fx/trophy-tests.json');
 function run(file) {
   fs.mkdirSync(path.dirname(report), { recursive: true });
   if (fs.existsSync(report)) fs.unlinkSync(report);

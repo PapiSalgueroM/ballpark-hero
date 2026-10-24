@@ -6,7 +6,9 @@ import { spawnSync } from 'node:child_process';
 import { fileURLToPath } from 'node:url';
 
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
-const report = path.join(ROOT, '.tmp-fx/competition-navigation-tests.json');
+const report = process.env.SOCCER_COMPETITION_NAVIGATION_ARTIFACTS
+  ? path.join(path.resolve(ROOT, process.env.SOCCER_COMPETITION_NAVIGATION_ARTIFACTS), 'competition-navigation-tests.json')
+  : path.join(ROOT, '.tmp-fx/competition-navigation-tests.json');
 const copies = [];
 function run(alias, file) {
   fs.mkdirSync(path.dirname(report), { recursive: true });

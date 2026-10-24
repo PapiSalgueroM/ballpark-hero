@@ -32,13 +32,13 @@ try {
   assert.match(output, /academyFilters\.test\.tsx/, 'The actual component tests must run');
   if (control) {
     assert.notEqual(run.status, 0, diagnostic);
-    assert.match(output, /6 failed.*1 passed/, diagnostic);
+    assert.match(output, /6 failed.*2 passed/, diagnostic);
     assert.match(output, /AssertionError|expected/i, diagnostic);
-    console.log('simAcademyFilters control: six rendered outcome checks rejected ignored selections; the empty intake check stayed green.');
+    console.log('simAcademyFilters control: six rendered outcome checks rejected ignored selections; the empty intake and prospect button name checks stayed green.');
   } else {
     assert.equal(run.status, 0, diagnostic);
-    assert.match(output, /7 passed/, diagnostic);
-    console.log('simAcademyFilters: seven rendered combination, reset, callback and signing-rule checks passed.');
+    assert.match(output, /8 passed/, diagnostic);
+    console.log('simAcademyFilters: eight rendered combination, reset, callback and signing-rule checks passed.');
   }
 } finally {
   if (copy) await rm(copy, { force: true });
