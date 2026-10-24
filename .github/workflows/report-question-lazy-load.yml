@@ -1,0 +1,323 @@
+name: Question report form old eager owned RED
+on:
+  push:
+    branches: [codex/report-question-lazy-load-20261024]
+    paths-ignore: ['docs/**']
+permissions:
+  contents: read
+concurrency:
+  group: report-question-old-eager-red-${{ github.sha }}
+  cancel-in-progress: false
+env:
+  BASE_SOURCE: 020cc59a23c5439d43976c5e41efaac8792ab771
+  EXPECTED_PARENT: 020cc59a23c5439d43976c5e41efaac8792ab771
+  CI: '1'
+  SIM_NETWORK: offline
+  TZ: UTC
+jobs:
+  old_eager_red:
+    runs-on: ubuntu-latest
+    timeout-minutes: 35
+    defaults:
+      run:
+        shell: bash
+    steps:
+      - name: Fresh outside-checkout raw evidence
+        run: |
+          set -euo pipefail
+          base="$RUNNER_TEMP/report-question-old-eager-red";test ! -e "$base";mkdir -m 700 "$base"
+          out="$base/evidence";mkdir -m 700 "$out"
+          export QUESTION_RED_OUT="$out";echo "QUESTION_RED_OUT=$out" >> "$GITHUB_ENV"
+          printf '%s\n' "$GITHUB_SHA" > "$out/head.txt"
+          printf '%s\n' "$GITHUB_RUN_ID" > "$out/run-id.txt"
+          printf '%s\n' "$GITHUB_RUN_ATTEMPT" > "$out/run-attempt.txt"
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          persist-credentials: false
+          ref: ${{ github.sha }}
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24.21.0
+          cache: npm
+      - name: Exact three additions on immutable020cc with all existing application and tests held
+        id: source
+        timeout-minutes: 3
+        run: |
+          set -euo pipefail
+          out="$QUESTION_RED_OUT"
+          test "$GITHUB_REPOSITORY" = PapiSalgueroM/ballpark-hero
+          test "$GITHUB_REPOSITORY_ID" = 1195729679
+          test "$GITHUB_REF" = refs/heads/codex/report-question-lazy-load-20261024
+          test "$(git rev-parse HEAD)" = "$GITHUB_SHA"
+          test "$(git show -s --format=%P HEAD)" = "$EXPECTED_PARENT"
+          test "$EXPECTED_PARENT" = "$BASE_SOURCE"
+          test "$(git rev-parse "$BASE_SOURCE^{tree}")" = 6657b129f46e1eabca86e7a740fb31de930eaeb5
+          git diff --name-status "$EXPECTED_PARENT" HEAD > "$out/direct-and-cumulative-paths.txt"
+          printf 'A\t.github/workflows/report-question-lazy-load.yml\nA\tsrc/components/game/ReportQuestionForm.tsx\nA\tsrc/test/ReportQuestion.pending.test.tsx\n' | cmp - "$out/direct-and-cumulative-paths.txt"
+          git diff --exit-code "$BASE_SOURCE" HEAD -- . ':!.github/workflows/report-question-lazy-load.yml' ':!src/components/game/ReportQuestionForm.tsx' ':!src/test/ReportQuestion.pending.test.tsx' > "$out/all-old-source-held.log"
+          git rev-parse HEAD^{tree} > "$out/tree.txt"
+          git ls-files -z | sort -z > "$out/source-members.before"
+          test "$(tr -cd '\000' < "$out/source-members.before" | wc -c)" -eq 5344
+          xargs -0 sha256sum < "$out/source-members.before" > "$out/source-before.sha256"
+          git status --porcelain --untracked-files=all > "$out/status-before.txt";test ! -s "$out/status-before.txt"
+          for name in NODE_OPTIONS NO_DOUBLE_SWAP US_BOARD_CONTROL_ALIAS US_BOARD_CONTROL_FILE TYCOON_AWAY_CONTROL COMPLETION_HOOK OWNED_TIMEOUTS_HOOK CONQUEST_NBA_HOOK CONQUEST_NBA_BOARD POLL_FIXTURES DAILY_RECORD_CONTROL TYCOON_ROOMS_PAGE TYCOON_LOADS_STADIUM_HOOK TYCOON_LOADS_ACADEMY_HOOK TYCOON_LOADS_STADIUM_LIB TYCOON_LOADS_ACADEMY_LIB TYCOON_PITCH_COMPONENT TYCOON_PACKS_REWARDS TYCOON_PACKS_PANEL;do
+            if printenv "$name" > /dev/null;then printf '%s\n' "Inherited application override refused: $name" >&2;exit 1;fi
+          done
+          base64 --decode > "$out/inspector.cjs" <<'INSPECTOR_BYTES'
+          J3VzZSBzdHJpY3QnOwpjb25zdCBmcz1yZXF1aXJlKCdub2RlOmZzJykscGF0aD1yZXF1aXJlKCdub2RlOnBhdGgnKSxjcD1yZXF1aXJlKCdub2RlOmNoaWxk
+          X3Byb2Nlc3MnKSxhPXJlcXVpcmUoJ25vZGU6YXNzZXJ0L3N0cmljdCcpLHtjcmVhdGVIYXNofT1yZXF1aXJlKCdub2RlOmNyeXB0bycpOwpjb25zdCBST09U
+          PXByb2Nlc3MuY3dkKCksT1VUPXByb2Nlc3MuZW52LlFVRVNUSU9OX1JFRF9PVVQsV09SS0ZMT1c9Jy5naXRodWIvd29ya2Zsb3dzL3JlcG9ydC1xdWVzdGlv
+          bi1sYXp5LWxvYWQueW1sJyxCQVNFPScwMjBjYzU5YTIzYzU0MzlkNDM5NzZjNWU0MWVmYWFjODc5MmFiNzcxJyxUUkVFPSc2NjU3YjEyOWY0NmUxZWFiY2E4
+          NmU3YTc0MGZiMzFkZTkzMGVhZWI1JzsKYShPVVQmJnBhdGguaXNBYnNvbHV0ZShPVVQpKTtjb25zdCByZWFsT3V0PWZzLnJlYWxwYXRoU3luYyhPVVQpLHJl
+          YWxSb290PWZzLnJlYWxwYXRoU3luYyhST09UKTthKHJlYWxPdXQhPT1yZWFsUm9vdCYmIXJlYWxPdXQuc3RhcnRzV2l0aChyZWFsUm9vdCtwYXRoLnNlcCks
+          J1FVRVNUSU9OX1JFRF9PVVRTSURFX0NIRUNLT1VUJyk7CmNvbnN0IFBJTlM9W3siZmlsZSI6InNyYy9jb21wb25lbnRzL2dhbWUvUmVwb3J0UXVlc3Rpb24u
+          dHN4IiwiYnl0ZXMiOjY3NDYsInNoYTI1NiI6IjAyYjhmZDg2NTRjZDFmZDM2MDAwZjYxOGM3Y2Y5YjQ5YzMzNzIxNTYwNzUyM2Y0YjhhODM0MjBjYzhhMTE1
+          ZmIiLCJnaXRCbG9iIjoiYzhkMTc1ZDNjMjU1NDg0NTAxMzBjNDkyNDY5NjljMjk4YTRmMTI0MyIsImJhc2VIZWxkIjp0cnVlfSx7ImZpbGUiOiJzcmMvaG9v
+          a3MvdXNlUmVwb3J0RHJhZnRMaWZlY3ljbGUudHMiLCJieXRlcyI6MjI3MCwic2hhMjU2IjoiM2RjMTg3MWQ4YWY1Njc4ZTRjNjI3MWUzMzAxMGZhNDY2MmM2
+          YjdmYzNlMzg4NDNhMjI1YTIxOGQ3OWY1NTY1ZiIsImdpdEJsb2IiOiJiODAwNDI5ZWJhNzI3NGU3NmQ0MmNkMzY2ZjkzM2UyNzJkNzZiYWMwIiwiYmFzZUhl
+          bGQiOnRydWV9LHsiZmlsZSI6InNyYy9saWIvZnJlc2hCdWlsZC50cyIsImJ5dGVzIjoxMTI0MCwic2hhMjU2IjoiNzgyNzYyNzRlODZlMDA5ZWIyOGNjMTI2
+          ZDNkOTdiMzFjMGZkYmJkN2YxZjhhNjQ1ZTVhNTQ4ZjcyY2Y5NjUxOSIsImdpdEJsb2IiOiIyOTUwMTllNzc2OTg2MDdhNzAzOTBlNWU2ZGU2ZWU4MTMwZWFh
+          ZTI3IiwiYmFzZUhlbGQiOnRydWV9LHsiZmlsZSI6InNyYy9jb21wb25lbnRzL3VpL2RpYWxvZy50c3giLCJieXRlcyI6NDA0MSwic2hhMjU2IjoiZGIxZmUz
+          ODIzOWY5MjJkMzk1ZDQxNDcxZDhlOWE5OTZiOWU4ZjZkODdhZmRkZjllZGJlMzk4OGYxNWEyMWZlOCIsImdpdEJsb2IiOiI0MDFiM2IyYWE0Yzk0MDRkOThk
+          OWYwNWJjM2Y4OGNlNWViNmIxOWNkIiwiYmFzZUhlbGQiOnRydWV9LHsiZmlsZSI6InNyYy9jb21wb25lbnRzL2dhbWUvcmVwb3J0S2luZHMudHMiLCJieXRl
+          cyI6MjgwNSwic2hhMjU2IjoiMWZjNzU2OGI4MjkyNGYyMTFiNWZlOWJjMzA4NDQzNTU3MDViODJhN2NkNDc1ZTk2MGZmOGU3NWM4NjZlNTk0NyIsImdpdEJs
+          b2IiOiJmNzM5NDEzODRhMGZlNmM4MDg3Y2YzMGZkZTI3MDdmMzVkNmIzOWRlIiwiYmFzZUhlbGQiOnRydWV9LHsiZmlsZSI6InNyYy9saWIvcmVwb3J0Q29u
+          dGV4dC50cyIsImJ5dGVzIjozMTc5LCJzaGEyNTYiOiJkODE5MDlhN2U4YjhhZGIwNzQwMmFhY2UzYjU1MTljODgyNzUwMjM1Y2I4ZWViYjliMGFhNGY4Njdj
+          Y2QwNDkwIiwiZ2l0QmxvYiI6IjhmZGM3Nzc3YzEwZmMwYmQ4YzM1NzFjY2M0MTNhYzU4MDBlNTMxNDEiLCJiYXNlSGVsZCI6dHJ1ZX0seyJmaWxlIjoidml0
+          ZXN0LmNvbmZpZy50cyIsImJ5dGVzIjo1MzY0LCJzaGEyNTYiOiI2YTY4ZGQyZjIxNGRhYjRhMzAxM2ViNDFiYWQzOGVlYTY1ZDcwM2Q2MTQ0MDAwMjcxMGVj
+          MjQ2NDk1ZTFjNThhIiwiZ2l0QmxvYiI6ImVkMmE5ZGM2NzdmNzdkZmU5NWMwNjEwNjRlZWZmNTc4MmI4NTY4NjQiLCJiYXNlSGVsZCI6dHJ1ZX0seyJmaWxl
+          Ijoic3JjL3Rlc3Qvc2V0dXAudHMiLCJieXRlcyI6ODQ3LCJzaGEyNTYiOiIwMTc1Y2MzMzRiNDRkOTg3NGZmNGJkODI3NGE4Y2MxNjVlOWU4NGNkMzczOGE0
+          Mjk4ZjkzNGRiMzUzODg3Mjg5IiwiZ2l0QmxvYiI6ImRmMDBjZGY1YzU0ZThjOGVmYzcxZTQ2ZDc1ODVhZTc2YWNiNGZjOGQiLCJiYXNlSGVsZCI6dHJ1ZX0s
+          eyJmaWxlIjoicGFja2FnZS5qc29uIiwiYnl0ZXMiOjM0OTUsInNoYTI1NiI6ImFjZmUxNDYyNmRlYTUzY2Y1ZjljNWUwMjg2Yjc2NmEyMjIzNzY1NmI1MmFh
+          YzRjODg4YjA4MDg3M2FjOTBlMzEiLCJnaXRCbG9iIjoiMmZmNjQ5ODZmYjc2ZWJjNTFiNzA2ZjJmZDI0NzY1NzY4ODc0MDA4YSIsImJhc2VIZWxkIjp0cnVl
+          fSx7ImZpbGUiOiJwYWNrYWdlLWxvY2suanNvbiIsImJ5dGVzIjozMDkwNDksInNoYTI1NiI6ImM3ZTM4NjdlYWJmMGJmYTAzYThhYTZhNWU2MDFiMDA1MGI5
+          MzdlZDIxMGQ0OGM2YmJkMjQxMDE5ZTNjOWVhNzYiLCJnaXRCbG9iIjoiOTdkNmYxMmEwNTJmMjVmNDAwNDYyOTM4YzI0MTc4OWEwODNmMGJmZSIsImJhc2VI
+          ZWxkIjp0cnVlfSx7ImZpbGUiOiJzY3JpcHRzL2xpYi9vZmZsaW5lVHJhbnNwb3J0LmNqcyIsImJ5dGVzIjoxMDY2MCwic2hhMjU2IjoiZTYwZmYxNTM0MzA3
+          ZTQ0OWNjZWY1OThlM2I3NDcwZGNiYTU4NjgxYjgyY2VhNDAwNWNlYzczMTlmMTRmOTIyMSIsImdpdEJsb2IiOiIwZmRhNTQyYTI2NDlmZTVkYTkzN2M2OTc2
+          ZmQwZjViNjA3M2U3NGI2IiwiYmFzZUhlbGQiOnRydWV9LHsiZmlsZSI6InRzY29uZmlnLmFwcC5qc29uIiwiYnl0ZXMiOjY4MCwic2hhMjU2IjoiYjEyMDMw
+          YmZlMjFlYTViZTY2NjcwODQyYzcxZDY2ZDE5NGQxNzcxZjkzZjBiOGMwNzZlOTdjODY3YjRiMDU1MiIsImdpdEJsb2IiOiI1MWY1ODFkZDkxNjQxYjRjMWYx
+          MjE5ZjY0Njc4OGU3M2NmNmJmMDBjIiwiYmFzZUhlbGQiOnRydWV9LHsiZmlsZSI6InNyYy9jb21wb25lbnRzL2dhbWUvUmVwb3J0UXVlc3Rpb25Gb3JtLnRz
+          eCIsImJ5dGVzIjo0NCwic2hhMjU2IjoiMTg0N2IwYWU4ZTU0NWJkNTVjMDQ2MmZiNzEwMTc0MjU1OTQyZjg2YjczZGEzYzk1OTlhY2Y3ZGRiNTU3YWJlZSIs
+          ImdpdEJsb2IiOiI4MzJmZTE1MWM2M2I0OTA1MjJiNWMxMzYyMjJjZmFiNDMyNGQ2ZDIyIiwiYmFzZUhlbGQiOmZhbHNlfSx7ImZpbGUiOiJzcmMvdGVzdC9S
+          ZXBvcnRRdWVzdGlvbi5wZW5kaW5nLnRlc3QudHN4IiwiYnl0ZXMiOjIyOTEsInNoYTI1NiI6IjcxN2Q3OTA5ZjcxYzRlOTI1ZDkwMWQ5ZTBlZmE5OTUwZWU3
+          Njc5ZDgwOTc4ZTdkMDI2MDRiYWNiZDE2MjgzZGQiLCJnaXRCbG9iIjoiODdjMzY1Y2VjODBlOWY0ZGE2NWQ4ZTE3MTI4YzQzMDk2NjJhYmM0ZSIsImJhc2VI
+          ZWxkIjpmYWxzZX1dOwpjb25zdCBQUklNQVJZPXtmaWxlOidzcmMvdGVzdC9SZXBvcnRRdWVzdGlvbi5wZW5kaW5nLnRlc3QudHN4Jyx0aXRsZToncXVlc3Rp
+          b24gcmVwb3J0OiB3YWl0cyBmb3IgdGhlIGFjdHVhbCBxdWVzdGlvbiBmb3JtIGNodW5rIGJlZm9yZSBvcGVuaW5nIGEgcmVwb3J0IGRpYWxvZycsYW5jZXN0
+          b3JzOltdLG1hcmtlcjonUkVQT1JUX1FVRVNUSU9OX0ZPUk1fRklSU1RfTE9BRF9XQUlUU19GT1JfQ0hVTksnfTsKY29uc3Qgc2hhPWI9PmNyZWF0ZUhhc2go
+          J3NoYTI1NicpLnVwZGF0ZShiKS5kaWdlc3QoJ2hleCcpLGdpdD0oLi4uYXJncyk9PmNwLmV4ZWNGaWxlU3luYygnZ2l0JyxhcmdzLHtlbmNvZGluZzondXRm
+          OCd9KS50cmltKCksd3JpdGU9KG5hbWUsdmFsdWUpPT5mcy53cml0ZUZpbGVTeW5jKHBhdGguam9pbihPVVQsbmFtZSksSlNPTi5zdHJpbmdpZnkodmFsdWUs
+          bnVsbCwyKSsnXG4nLHtmbGFnOid3eCd9KTsKY29uc3QgcmVhZD1uYW1lPT57Y29uc3QgZmlsZT1wYXRoLmpvaW4oT1VULG5hbWUpLHN0PWZzLmxzdGF0U3lu
+          YyhmaWxlKTthKHN0LmlzRmlsZSgpJiYhc3QuaXNTeW1ib2xpY0xpbmsoKSxuYW1lKTtyZXR1cm4gZnMucmVhZEZpbGVTeW5jKGZpbGUpO30sZXhpdD1uYW1l
+          PT57Y29uc3Qgdj1yZWFkKG5hbWUpLnRvU3RyaW5nKCd1dGY4JykudHJpbSgpO2EoL14oPzowfDEpJC8udGVzdCh2KSxuYW1lKTtyZXR1cm4gTnVtYmVyKHYp
+          O307CmNvbnN0IEZPUkJJRERFTj0vVW5oYW5kbGVkXHMrKD86RXJyb3JzP3xSZWplY3Rpb25zPyl8VW5jYXVnaHRccytFeGNlcHRpb25zP3xGYWlsZWQgdG8g
+          cmVzb2x2ZSBpbXBvcnR8Q2Fubm90IGZpbmQgKD86bW9kdWxlfHBhY2thZ2UpfE5vIHRlc3QgZmlsZXMgZm91bmR8UmVmZXJlbmNlRXJyb3J8VHlwZUVycm9y
+          fFN5bnRheEVycm9yfFRpbWVvdXRFcnJvcnxUZXN0IHRpbWVkIG91dHxIb29rIHRpbWVkIG91dC9pOwpjb25zdCBLRVlTPVsnbnVtUnVudGltZUVycm9yVGVz
+          dFN1aXRlcycsJ251bVJ1bnRpbWVFcnJvcnMnLCdudW1VbmhhbmRsZWRFcnJvcnMnLCd1bmhhbmRsZWRFcnJvcnNDb3VudCcsJ251bUVycm9ycyddOwpmdW5j
+          dGlvbiBpZGVudGl0eSgpewogYS5lcXVhbChnaXQoJ3Jldi1wYXJzZScsJ0hFQUQnKSxwcm9jZXNzLmVudi5HSVRIVUJfU0hBKTthLmVxdWFsKGdpdCgnc2hv
+          dycsJy1zJywnLS1mb3JtYXQ9JVAnLCdIRUFEJyksQkFTRSk7YS5lcXVhbChwcm9jZXNzLmVudi5CQVNFX1NPVVJDRSxCQVNFKTthLmVxdWFsKHByb2Nlc3Mu
+          ZW52LkVYUEVDVEVEX1BBUkVOVCxCQVNFKTthLmVxdWFsKGdpdCgncmV2LXBhcnNlJyxCQVNFKydee3RyZWV9JyksVFJFRSk7CiBhLmVxdWFsKFBJTlMubGVu
+          Z3RoLDE0KTthLmVxdWFsKG5ldyBTZXQoUElOUy5tYXAocD0+cC5maWxlKSkuc2l6ZSwxNCk7CiBmb3IoY29uc3QgcCBvZiBQSU5TKXtjb25zdCBzdD1mcy5s
+          c3RhdFN5bmMocC5maWxlKTthKHN0LmlzRmlsZSgpJiYhc3QuaXNTeW1ib2xpY0xpbmsoKSxwLmZpbGUpO2NvbnN0IGI9ZnMucmVhZEZpbGVTeW5jKHAuZmls
+          ZSk7YS5lcXVhbChiLmxlbmd0aCxwLmJ5dGVzLHAuZmlsZSk7YS5lcXVhbChzaGEoYikscC5zaGEyNTYscC5maWxlKTthLmVxdWFsKGdpdCgncmV2LXBhcnNl
+          JywnSEVBRDonK3AuZmlsZSkscC5naXRCbG9iLHAuZmlsZSk7YS5lcXVhbChnaXQoJ2hhc2gtb2JqZWN0JyxwLmZpbGUpLHAuZ2l0QmxvYixwLmZpbGUpO2lm
+          KHAuYmFzZUhlbGQpYS5lcXVhbChnaXQoJ3Jldi1wYXJzZScsQkFTRSsnOicrcC5maWxlKSxwLmdpdEJsb2IscC5maWxlKTtlbHNle2NvbnN0IHI9Y3Auc3Bh
+          d25TeW5jKCdnaXQnLFsnY2F0LWZpbGUnLCctZScsQkFTRSsnOicrcC5maWxlXSx7ZW5jb2Rpbmc6J3V0ZjgnfSk7YS5lcXVhbChyLmVycm9yLHVuZGVmaW5l
+          ZCk7YS5lcXVhbChyLnNpZ25hbCxudWxsKTthLmVxdWFsKHIuc3RhdHVzLDEyOCwnTkVXX1BBVEhfQUJTRU5UX0ZST01fQkFTRTogJytwLmZpbGUpO319CiBj
+          b25zdCBhYnNlbnQ9Y3Auc3Bhd25TeW5jKCdnaXQnLFsnY2F0LWZpbGUnLCctZScsQkFTRSsnOicrV09SS0ZMT1ddLHtlbmNvZGluZzondXRmOCd9KTthLmVx
+          dWFsKGFic2VudC5lcnJvcix1bmRlZmluZWQpO2EuZXF1YWwoYWJzZW50LnNpZ25hbCxudWxsKTthLmVxdWFsKGFic2VudC5zdGF0dXMsMTI4LCdORVdfV09S
+          S0ZMT1dfQUJTRU5UX0ZST01fQkFTRScpOwogY29uc3QgYm9keT1mcy5yZWFkRmlsZVN5bmMoV09SS0ZMT1cpLGJsb2I9Z2l0KCdyZXYtcGFyc2UnLCdIRUFE
+          OicrV09SS0ZMT1cpO2EuZXF1YWwoZ2l0KCdoYXNoLW9iamVjdCcsV09SS0ZMT1cpLGJsb2IpOwogY29uc3QgcmVzdWx0PXtwaGFzZTonb2xkLWVhZ2VyLW93
+          bmVkLVJFRCcsc291cmNlOnByb2Nlc3MuZW52LkdJVEhVQl9TSEEscGFyZW50OkJBU0UsYmFzZTpCQVNFLHRyZWU6Z2l0KCdyZXYtcGFyc2UnLCdIRUFEXnt0
+          cmVlfScpLHJ1bjpwcm9jZXNzLmVudi5HSVRIVUJfUlVOX0lELGF0dGVtcHQ6cHJvY2Vzcy5lbnYuR0lUSFVCX1JVTl9BVFRFTVBULHdvcmtmbG93OntmaWxl
+          OldPUktGTE9XLGJ5dGVzOmJvZHkubGVuZ3RoLHNoYTI1NjpzaGEoYm9keSksZ2l0QmxvYjpibG9ifSxwaW5zOlBJTlMsdHJhY2tlZFNvdXJjZUV4cGVjdGVk
+          OjUzNDQsb3JpZ2luYWxFYWdlclF1ZXN0aW9uSGVsZDp0cnVlLGluZXJ0UmVzb2x2ZXJPbmx5QWRkZWQ6dHJ1ZSxhbGxQYXJlbnRTb3VyY2VzSGVsZDp0cnVl
+          LHByb2R1Y3RGaXhlZDpmYWxzZSxhcHBsaWNhdGlvblF1YWxpZmllZDpmYWxzZSxicm93c2VyRXhlY3V0ZWQ6ZmFsc2UsZnVsbFN1aXRlRXhlY3V0ZWQ6ZmFs
+          c2UscHVibGlzaGVkOmZhbHNlfTtyZXR1cm4gcmVzdWx0Owp9CmZ1bmN0aW9uIGhlYWx0aHlDb3VudGVycyhyKXsKIGNvbnN0IG9ic2VydmVkPXt9LHVua25v
+          d249W107Zm9yKGNvbnN0IGsgb2YgS0VZUyl7aWYoayBpbiByKXthLmVxdWFsKHJba10sMCxrKTtvYnNlcnZlZFtrXT1yW2tdO31lbHNlIHVua25vd24ucHVz
+          aChrKTt9CiBpZigndW5oYW5kbGVkRXJyb3JzJ2luIHIpYS5kZWVwRXF1YWwoci51bmhhbmRsZWRFcnJvcnMsW10pOwogaWYoJ2NsYXNzaWZpY2F0aW9uRXJy
+          b3JzJ2luIHIpe2lmKEFycmF5LmlzQXJyYXkoci5jbGFzc2lmaWNhdGlvbkVycm9ycykpYS5kZWVwRXF1YWwoci5jbGFzc2lmaWNhdGlvbkVycm9ycyxbXSk7
+          ZWxzZSBhLmVxdWFsKHIuY2xhc3NpZmljYXRpb25FcnJvcnMsMCk7fQogcmV0dXJuIHtvYnNlcnZlZFJ1bnRpbWVDb3VudGVyczpvYnNlcnZlZCxhYnNlbnRS
+          dW50aW1lQ291bnRlcnNVbmtub3duOnVua25vd24sdW5oYW5kbGVkRXJyb3JzOid1bmhhbmRsZWRFcnJvcnMnaW4gcj9yLnVuaGFuZGxlZEVycm9yczonVU5L
+          Tk9XTl9BQlNFTlQnLGNsYXNzaWZpY2F0aW9uRXJyb3JzOidjbGFzc2lmaWNhdGlvbkVycm9ycydpbiByP3IuY2xhc3NpZmljYXRpb25FcnJvcnM6J1VOS05P
+          V05fQUJTRU5UJ307Cn0KZnVuY3Rpb24gcmVwb3J0KG5hbWUsdG90YWwscGFzc2VkLGZhaWxlZCxmaWxlcyl7CiBjb25zdCByPUpTT04ucGFyc2UocmVhZChu
+          YW1lKycuanNvbicpKTthLmVxdWFsKHIuc3VjY2VzcyxmYWlsZWQ9PT0wKTthLmVxdWFsKHIubnVtVG90YWxUZXN0cyx0b3RhbCk7YS5lcXVhbChyLm51bVBh
+          c3NlZFRlc3RzLHBhc3NlZCk7YS5lcXVhbChyLm51bUZhaWxlZFRlc3RzLGZhaWxlZCk7YS5lcXVhbChyLm51bVBlbmRpbmdUZXN0cywwKTthLmVxdWFsKHIu
+          bnVtVG9kb1Rlc3RzLDApO2EoQXJyYXkuaXNBcnJheShyLnRlc3RSZXN1bHRzKSk7YS5lcXVhbChyLnRlc3RSZXN1bHRzLmxlbmd0aCxmaWxlcy5sZW5ndGgp
+          O2NvbnN0IGFjdHVhbEZpbGVzPW5ldyBTZXQoKTsKIGZvcihjb25zdCBzdWl0ZSBvZiByLnRlc3RSZXN1bHRzKXtjb25zdCBmaWxlPWZpbGVzLmZpbmQoZj0+
+          cGF0aC5yZXNvbHZlKHN1aXRlLm5hbWUpPT09cGF0aC5yZXNvbHZlKGYpKTthKGZpbGUsJ1VOT1dORURfU1VJVEU6ICcrc3VpdGUubmFtZSk7YSghYWN0dWFs
+          RmlsZXMuaGFzKGZpbGUpLCdEVVBMSUNBVEVfU1VJVEUnKTthY3R1YWxGaWxlcy5hZGQoZmlsZSk7YS5lcXVhbChzdWl0ZS5zdGF0dXMsZmFpbGVkPydmYWls
+          ZWQnOidwYXNzZWQnKTthKEFycmF5LmlzQXJyYXkoc3VpdGUuYXNzZXJ0aW9uUmVzdWx0cykpO2lmKCdtZXNzYWdlJ2luIHN1aXRlKXthLmVxdWFsKHR5cGVv
+          ZiBzdWl0ZS5tZXNzYWdlLCdzdHJpbmcnKTthLmRvZXNOb3RNYXRjaChzdWl0ZS5tZXNzYWdlLEZPUkJJRERFTik7fX0KIGEuZXF1YWwoYWN0dWFsRmlsZXMu
+          c2l6ZSxmaWxlcy5sZW5ndGgpO2EuZG9lc05vdE1hdGNoKHJlYWQobmFtZSsnLmxvZycpLnRvU3RyaW5nKCd1dGY4JyksRk9SQklEREVOKTtyZXR1cm4ge3Is
+          Y291bnRlcnM6aGVhbHRoeUNvdW50ZXJzKHIpfTsKfQpmdW5jdGlvbiByZWQoKXsKIGEuZXF1YWwoZXhpdCgnaW5zdGFsbC5leGl0JyksMCk7YS5lcXVhbChl
+          eGl0KCdpbnN0YWxsLnRlZS5leGl0JyksMCk7YS5lcXVhbChleGl0KCd0eXBlcy5leGl0JyksMCk7YS5lcXVhbChleGl0KCd0eXBlcy50ZWUuZXhpdCcpLDAp
+          O2EuZXF1YWwoZXhpdCgncHJpbWFyeS5leGl0JyksMSk7YS5lcXVhbChleGl0KCdwcmltYXJ5LnRlZS5leGl0JyksMCk7CiBjb25zdCB7cixjb3VudGVyc309
+          cmVwb3J0KCdwcmltYXJ5JywxLDAsMSxbUFJJTUFSWS5maWxlXSksc3VpdGU9ci50ZXN0UmVzdWx0c1swXTthLmVxdWFsKHN1aXRlLmFzc2VydGlvblJlc3Vs
+          dHMubGVuZ3RoLDEpO2NvbnN0IHJvdz1zdWl0ZS5hc3NlcnRpb25SZXN1bHRzWzBdO2EuZXF1YWwocm93LnRpdGxlLFBSSU1BUlkudGl0bGUpO2EuZGVlcEVx
+          dWFsKHJvdy5hbmNlc3RvclRpdGxlcyxbXSk7YS5lcXVhbChyb3cuZnVsbE5hbWUsUFJJTUFSWS50aXRsZSk7YS5lcXVhbChyb3cuc3RhdHVzLCdmYWlsZWQn
+          KTthKEFycmF5LmlzQXJyYXkocm93LmZhaWx1cmVNZXNzYWdlcykpO2EuZXF1YWwocm93LmZhaWx1cmVNZXNzYWdlcy5sZW5ndGgsMSk7Y29uc3QgbWVzc2Fn
+          ZT1yb3cuZmFpbHVyZU1lc3NhZ2VzWzBdO2EuZXF1YWwodHlwZW9mIG1lc3NhZ2UsJ3N0cmluZycpO2EubWF0Y2gobWVzc2FnZSwvXGJBc3NlcnRpb25FcnJv
+          clxiLyk7YShtZXNzYWdlLmluY2x1ZGVzKFBSSU1BUlkubWFya2VyKSwnTUlTU0lOR19PV05FRF9QUklNQVJZX01BUktFUicpO2EubWF0Y2gobWVzc2FnZSwv
+          ZXhwZWN0ZWRccysxXHMrdG8gYmVccytcKz8wXGIvaSwnT1dORURfQUNUVUFMX0RJQUxPR19PTkVfRVhQRUNURURfWkVSTycpO2EuZG9lc05vdE1hdGNoKG1l
+          c3NhZ2UsRk9SQklEREVOKTsKIGNvbnN0IHJlc3VsdD17c3RhdHVzOidSRVBPUlRfUVVFU1RJT05fT0xEX0VBR0VSX09ORV9PV05FRF9SRUQnLHBoYXNlOidv
+          bGQtZWFnZXItb3duZWQtUkVEJyxzb3VyY2U6cHJvY2Vzcy5lbnYuR0lUSFVCX1NIQSxwYXJlbnQ6QkFTRSxiYXNlOkJBU0UscnVuOnByb2Nlc3MuZW52LkdJ
+          VEhVQl9SVU5fSUQsYXR0ZW1wdDpwcm9jZXNzLmVudi5HSVRIVUJfUlVOX0FUVEVNUFQsb3RoZXJDYXNlc0V4ZWN1dGVkOjAsbmV3Q2FzZXM6MSxuZXdQYXNz
+          ZWQ6MCxvd25lZE5ld0ZhaWx1cmVzOjEsY2FzZTp7ZmlsZTpQUklNQVJZLmZpbGUsZnVsbE5hbWU6cm93LmZ1bGxOYW1lLGFuY2VzdG9yczpyb3cuYW5jZXN0
+          b3JUaXRsZXMsc3RhdHVzOnJvdy5zdGF0dXMsYWN0dWFsRmFpbHVyZU5hbWU6J0Fzc2VydGlvbkVycm9yJyxvd25lZE1hcmtlcjpQUklNQVJZLm1hcmtlcixh
+          Y3R1YWxEaWFsb2dDb3VudDoxLGV4cGVjdGVkRGlhbG9nQ291bnQ6MH0sLi4uY291bnRlcnMscHJvZHVjdEZpeGVkOmZhbHNlLGFwcGxpY2F0aW9uUXVhbGlm
+          aWVkOmZhbHNlLGJyb3dzZXJFeGVjdXRlZDpmYWxzZSxmdWxsU3VpdGVFeGVjdXRlZDpmYWxzZSxwdWJsaXNoZWQ6ZmFsc2V9O3dyaXRlKCdwcmltYXJ5LXJl
+          ZC1hZG1pc3Npb24uanNvbicscmVzdWx0KTtjb25zb2xlLmxvZyhKU09OLnN0cmluZ2lmeShyZXN1bHQpKTsKfQpjb25zdCBtb2RlPXByb2Nlc3MuYXJndlsy
+          XTsKaWYobW9kZT09PSdzb3VyY2UnKXtjb25zdCByZXN1bHQ9aWRlbnRpdHkoKTt3cml0ZSgnc291cmNlLWJpbmRpbmcuanNvbicscmVzdWx0KTtjb25zb2xl
+          LmxvZyhKU09OLnN0cmluZ2lmeShyZXN1bHQpKTt9CmVsc2UgaWYobW9kZT09PSdyZWQnKXJlZCgpOwplbHNlIGlmKG1vZGU9PT0nZmluYWwnKXsKIGNvbnN0
+          IHJlc3VsdD1pZGVudGl0eSgpLGJlZm9yZT1KU09OLnBhcnNlKHJlYWQoJ3NvdXJjZS1iaW5kaW5nLmpzb24nKSk7YS5kZWVwRXF1YWwocmVzdWx0LGJlZm9y
+          ZSk7CiBjb25zdCBwcmltYXJ5PUpTT04ucGFyc2UocmVhZCgncHJpbWFyeS1yZWQtYWRtaXNzaW9uLmpzb24nKSk7YS5lcXVhbChwcmltYXJ5LnNvdXJjZSxy
+          ZXN1bHQuc291cmNlKTthLmVxdWFsKHByaW1hcnkuc3RhdHVzLCdSRVBPUlRfUVVFU1RJT05fT0xEX0VBR0VSX09ORV9PV05FRF9SRUQnKTthLmVxdWFsKHBy
+          aW1hcnkub3duZWROZXdGYWlsdXJlcywxKTthLmVxdWFsKHByaW1hcnkub3RoZXJDYXNlc0V4ZWN1dGVkLDApOwogZm9yKGNvbnN0IG5hbWUgb2YgWydzb3Vy
+          Y2UnLCd0eXBlcycsJ3ByaW1hcnknLCdwcmltYXJ5LWNsYXNzaWZpZXInXSl7Y29uc3Qgc3Q9ZnMubHN0YXRTeW5jKHBhdGguam9pbihPVVQsbmFtZSsnLnRy
+          YW5zcG9ydCcpKTthKHN0LmlzRmlsZSgpJiYhc3QuaXNTeW1ib2xpY0xpbmsoKSYmc3Quc2l6ZT09PTAsJ1FVRVNUSU9OX1JFUVVJUkVEX0NPTVBMRVRFRF9S
+          RUNFSVBUOiAnK25hbWUpO30KIGZvcihjb25zdCBuYW1lIG9mIFsnc291cmNlJywnaW5zdGFsbCcsJ2luc3RhbGwudGVlJywndHlwZXMnLCd0eXBlcy50ZWUn
+          LCdwcmltYXJ5LnRlZScsJ3ByaW1hcnktY2xhc3NpZmllciddKWEuZXF1YWwoZXhpdChuYW1lKycuZXhpdCcpLDAsbmFtZSk7YS5lcXVhbChleGl0KCdwcmlt
+          YXJ5LmV4aXQnKSwxKTsKIHdyaXRlKCdmaW5hbC1iaW5kaW5nLmpzb24nLHsuLi5yZXN1bHQsc2NvcGVkU3RhdHVzOidSRVBPUlRfUVVFU1RJT05fT0xEX0VB
+          R0VSX1JFRF9PTkxZJyxvdGhlckNhc2VzRXhlY3V0ZWQ6MCxvd25lZFByaW1hcnlGYWlsZWQ6MX0pO2NvbnNvbGUubG9nKCdSRVBPUlRfUVVFU1RJT05fU09V
+          UkNFX0FORF9PV05FRF9SRURfRU5EX0JJTkRJTkdTX0hFTEQnKTsKfQplbHNlIHRocm93IG5ldyBFcnJvcignVW5rbm93biBpbnNwZWN0b3IgbW9kZScpOwo=
+          INSPECTOR_BYTES
+          printf '%s  %s\n' 34890e366fbd1e7cba9f03543517d5ba9e207579524d58037a8a1aec87a8d498 "$out/inspector.cjs" > "$out/inspector.sha256"
+          sha256sum -c "$out/inspector.sha256" > "$out/inspector-source-before.log"
+          set -o noclobber;: > "$out/source.transport";set +o noclobber
+          status=0
+          NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" SIM_OFFLINE_RECEIPT="$out/source.transport" node "$out/inspector.cjs" source > "$out/source-binding.stdout.log" 2> "$out/source-binding.stderr.log" || status=$?
+          printf '%s\n' "$status" > "$out/source.exit";test "$status" -eq 0
+          test -f "$out/source.transport" && test ! -s "$out/source.transport"
+      - name: Locked installation and complete dependency inventory
+        id: dependencies
+        timeout-minutes: 6
+        run: |
+          set -euo pipefail
+          out="$QUESTION_RED_OUT"
+          set +e
+          timeout --signal=TERM --kill-after=15s 5m npm ci 2>&1 | tee "$out/install.log"
+          statuses=("${PIPESTATUS[@]}")
+          set -e
+          printf '%s\n' "${statuses[0]}" > "$out/install.exit";printf '%s\n' "${statuses[1]}" > "$out/install.tee.exit"
+          test "${#statuses[@]}" -eq 2;test "${statuses[0]}" -eq 0;test "${statuses[1]}" -eq 0
+          find node_modules -path node_modules/.vite -prune -o -type f -print0 | sort -z > "$out/dependency-members.before"
+          test "$(tr -cd '\000' < "$out/dependency-members.before" | wc -c)" -eq 24466
+          xargs -0 sha256sum < "$out/dependency-members.before" > "$out/dependencies.sha256"
+      - name: Actual app types with the original eager Question launcher
+        id: types
+        timeout-minutes: 6
+        run: |
+          set -euo pipefail
+          out="$QUESTION_RED_OUT"
+          set -o noclobber;: > "$out/types.transport";set +o noclobber
+          set +e
+          NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" SIM_OFFLINE_RECEIPT="$out/types.transport" timeout --signal=TERM --kill-after=15s 5m node_modules/.bin/tsc --noEmit -p tsconfig.app.json 2>&1 | tee "$out/types.log"
+          statuses=("${PIPESTATUS[@]}")
+          set -e
+          printf '%s\n' "${statuses[0]}" > "$out/types.exit";printf '%s\n' "${statuses[1]}" > "$out/types.tee.exit"
+          test "${#statuses[@]}" -eq 2;test "${statuses[0]}" -eq 0;test "${statuses[1]}" -eq 0
+          test -f "$out/types.transport" && test ! -s "$out/types.transport"
+      - name: One actual primary case must reach its owned immediate Dialog count RED
+        id: primary
+        timeout-minutes: 9
+        run: |
+          set -euo pipefail
+          out="$QUESTION_RED_OUT"
+          set -o noclobber;: > "$out/primary.transport";set +o noclobber
+          set +e
+          NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" SIM_OFFLINE_RECEIPT="$out/primary.transport" timeout --signal=TERM --kill-after=15s 8m node_modules/.bin/vitest run src/test/ReportQuestion.pending.test.tsx --maxWorkers=1 --no-file-parallelism --reporter=default --reporter=json --outputFile="$out/primary.json" 2>&1 | tee "$out/primary.log"
+          statuses=("${PIPESTATUS[@]}")
+          set -e
+          printf '%s\n' "${statuses[0]}" > "$out/primary.exit";printf '%s\n' "${statuses[1]}" > "$out/primary.tee.exit"
+          test "${#statuses[@]}" -eq 2;test "${statuses[0]}" -eq 1;test "${statuses[1]}" -eq 0
+          test -f "$out/primary.transport" && test ! -s "$out/primary.transport"
+      - name: Admit only the exact native old-eager AssertionError with actual1 expected0
+        id: primary_classifier
+        timeout-minutes: 2
+        run: |
+          set -euo pipefail
+          out="$QUESTION_RED_OUT"
+          sha256sum -c "$out/inspector.sha256" > "$out/inspector-before-primary-classifier.log"
+          set -o noclobber;: > "$out/primary-classifier.transport";set +o noclobber
+          status=0
+          NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" SIM_OFFLINE_RECEIPT="$out/primary-classifier.transport" node "$out/inspector.cjs" red > "$out/primary-classifier.stdout.log" 2> "$out/primary-classifier.stderr.log" || status=$?
+          printf '%s\n' "$status" > "$out/primary-classifier.exit";test "$status" -eq 0
+          test -f "$out/primary-classifier.transport" && test ! -s "$out/primary-classifier.transport"
+      - name: Always retain actual raw results and require all physical end holds
+        id: holds
+        if: ${{ always() }}
+        timeout-minutes: 3
+        run: |
+          set -uo pipefail
+          out="$QUESTION_RED_OUT";failed=0
+          if test -f "$out/source-before.sha256";then
+            sha256sum -c "$out/source-before.sha256" > "$out/final-source-hold.log" 2>&1 || failed=1
+            git ls-files -z | sort -z > "$out/source-members.after" || failed=1
+            cmp "$out/source-members.before" "$out/source-members.after" > "$out/final-source-members.log" 2>&1 || failed=1
+            xargs -0 sha256sum < "$out/source-members.after" > "$out/source-after.sha256" || failed=1
+            cmp "$out/source-before.sha256" "$out/source-after.sha256" > "$out/final-source-sha.log" 2>&1 || failed=1
+          else failed=1;fi
+          if test -f "$out/dependencies.sha256";then
+            sha256sum -c "$out/dependencies.sha256" > "$out/final-dependencies-hold.log" 2>&1 || failed=1
+            find node_modules -path node_modules/.vite -prune -o -type f -print0 | sort -z > "$out/dependency-members.after" || failed=1
+            cmp "$out/dependency-members.before" "$out/dependency-members.after" > "$out/final-dependency-members.log" 2>&1 || failed=1
+            xargs -0 sha256sum < "$out/dependency-members.after" > "$out/dependencies-end.sha256" || failed=1
+            cmp "$out/dependencies.sha256" "$out/dependencies-end.sha256" > "$out/final-dependency-sha.log" 2>&1 || failed=1
+          else failed=1;fi
+          if test -f "$out/inspector.sha256";then sha256sum -c "$out/inspector.sha256" > "$out/inspector-source-final.log" 2>&1 || failed=1;else failed=1;fi
+          git rev-parse HEAD > "$out/head-after.txt" || failed=1
+          cmp "$out/head.txt" "$out/head-after.txt" > "$out/final-head.log" 2>&1 || failed=1
+          git diff --exit-code HEAD > "$out/final-source-diff.log" 2>&1 || failed=1
+          git status --porcelain --untracked-files=all > "$out/final-status.txt" || failed=1
+          test ! -s "$out/final-status.txt" || failed=1
+          final_status=1
+          if test -f "$out/inspector.cjs";then
+            set -o noclobber;: > "$out/final.transport";set +o noclobber
+            final_status=0
+            NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" SIM_OFFLINE_RECEIPT="$out/final.transport" node "$out/inspector.cjs" final > "$out/final-binding.stdout.log" 2> "$out/final-binding.stderr.log" || final_status=$?
+          fi
+          printf '%s\n' "$final_status" > "$out/final-binding.exit";test "$final_status" -eq 0 || failed=1
+          if test -f "$out/inspector.sha256";then sha256sum -c "$out/inspector.sha256" > "$out/inspector-after-final-process.log" 2>&1 || failed=1;else failed=1;fi
+          git ls-files -z | sort -z > "$out/source-members.completed" || failed=1
+          cmp "$out/source-members.before" "$out/source-members.completed" > "$out/completed-source-members.log" 2>&1 || failed=1
+          xargs -0 sha256sum < "$out/source-members.completed" > "$out/source-completed.sha256" || failed=1
+          cmp "$out/source-before.sha256" "$out/source-completed.sha256" > "$out/completed-source-sha.log" 2>&1 || failed=1
+          find node_modules -path node_modules/.vite -prune -o -type f -print0 | sort -z > "$out/dependency-members.completed" || failed=1
+          cmp "$out/dependency-members.before" "$out/dependency-members.completed" > "$out/completed-dependency-members.log" 2>&1 || failed=1
+          xargs -0 sha256sum < "$out/dependency-members.completed" > "$out/dependencies-completed.sha256" || failed=1
+          cmp "$out/dependencies.sha256" "$out/dependencies-completed.sha256" > "$out/completed-dependency-sha.log" 2>&1 || failed=1
+          git rev-parse HEAD > "$out/head-completed.txt" || failed=1
+          cmp "$out/head.txt" "$out/head-completed.txt" > "$out/completed-head.log" 2>&1 || failed=1
+          git rev-parse HEAD^{tree} > "$out/tree-completed.txt" || failed=1
+          cmp "$out/tree.txt" "$out/tree-completed.txt" > "$out/completed-tree.log" 2>&1 || failed=1
+          git diff --exit-code HEAD > "$out/completed-source-diff.log" 2>&1 || failed=1
+          git status --porcelain --untracked-files=all > "$out/completed-status.txt" || failed=1
+          test ! -s "$out/completed-status.txt" || failed=1
+          for name in source types primary primary-classifier final;do test -f "$out/$name.transport" && test ! -L "$out/$name.transport" && test ! -s "$out/$name.transport" || failed=1;done
+          for name in source install install.tee types types.tee primary.tee primary-classifier;do test -f "$out/$name.exit" && test "$(cat "$out/$name.exit")" = 0 || failed=1;done
+          test -f "$out/primary.exit" && test "$(cat "$out/primary.exit")" = 1 || failed=1
+          printf '%s\n' "$failed" > "$out/final-holds.exit";test "$failed" -eq 0
+      - name: Always preserve scoped stages, manifest and original logs
+        if: ${{ always() }}
+        env:
+          SOURCE_OUTCOME: ${{ steps.source.outcome }}
+          TYPES_OUTCOME: ${{ steps.types.outcome }}
+          PRIMARY_OUTCOME: ${{ steps.primary.outcome }}
+          PRIMARY_CLASSIFIER_OUTCOME: ${{ steps.primary_classifier.outcome }}
+          HOLDS_OUTCOME: ${{ steps.holds.outcome }}
+        run: |
+          set -euo pipefail
+          out="$QUESTION_RED_OUT"
+          printf '%s\n' 'phase=old-eager-owned-RED' "source=$GITHUB_SHA" "sourceGate=$SOURCE_OUTCOME" "types=$TYPES_OUTCOME" "otherCasesExecuted=0" "primaryProcess=$PRIMARY_OUTCOME" "ownedPrimaryClassifier=$PRIMARY_CLASSIFIER_OUTCOME" "finalHolds=$HOLDS_OUTCOME" 'applicationFixed=false' 'browserExecuted=false' 'buildExecuted=false' 'fullSuiteExecuted=false' 'existingCapsUnwaived=true' 'published=false' > "$out/stages.txt"
+          find "$out" ! -type d ! -type f -print > "$out/evidence-nonregular.txt";test ! -s "$out/evidence-nonregular.txt"
+          (cd "$out" && find . -type f ! -name evidence.sha256 -print0 | sort -z | xargs -0 sha256sum > evidence.sha256)
+      - uses: actions/upload-artifact@v4
+        if: ${{ always() }}
+        with:
+          name: report-question-old-eager-red-${{ github.run_id }}-a${{ github.run_attempt }}
+          path: ${{ env.QUESTION_RED_OUT }}
+          include-hidden-files: true
+          if-no-files-found: error
+          retention-days: 30
+
