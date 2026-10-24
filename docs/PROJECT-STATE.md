@@ -19216,3 +19216,12 @@ The two initial fixture failures39940913787 and39943246891 remain separate from 
 Evidence packet: C:/Users/antho/dukb-handoff/2026-10-23/search-navigation. Root qualification c565e4bb892d6f5392e942e329af0b1661faba1e626bddb051ab76276d2e88b5; Root pixels743d12524f3b65bf0752151b2cfdbb7c3866377866360b6f66c60a4875cfdb26; independent integrated audit4e7ff7ad3b766d00b3f7f5ac280ed0b9d67fd91e8a27416cd182579a76da9dac. The normal saved-picks archive is also retained as2ca41f45c885f8066326880fe73480b83b0ee3ae7a3c4b08503c94fc74fa3e98.
 
 I retains sole publication. Root did not publish this Search correction and makes no new live-site claim. Analytics remains paused. No local application execution, cleanup, old checkout reset, data/provider/account change or protected game adoption occurred. Primary WORKBOARD and the continuation checkpoint receive only this exact note through the reviewed exclusive-lock append helper, with actual full-prefix backups/readback and both protected indexes checked before and finally. Earlier preservation gaps remain unwaived.
+
+
+## Root draft: Home Daily puzzles arrow targets, 2026-10-24
+
+This isolated draft starts from main b20ec6664df9d4c58d63ea0596791d33b2a3b8fc. It changes only the two existing DailyRail arrow size classes from 36px to 44px. The arrows remain hidden below 640px. Labels, handlers, the daily catalog, date selection and reduced-motion behavior are unchanged.
+
+The branch codex/home-daily-rail-targets-20261024 includes an ordinary-push workflow for the real app TypeScript gate, production build, existing HomeFront and HomeFold checks, all eighteen built-site readers, unchanged page caps and actual browser observations at 320, 390, 430, 640, 768 and 1440px in normal and reduced motion. Browser measurements and original PNGs require review. At source creation these checks have not run, so this note claims no runtime pass.
+
+Owner I retains joined game integration, main and publication. This draft does not integrate the separate football feature drafts or modify protected games, App, shared CSS, Toaster, dependencies, providers, consent policy or cap values. No merged or live claim. Historic Round 1441 preservation gaps remain open.
