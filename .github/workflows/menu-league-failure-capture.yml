@@ -1,0 +1,266 @@
+name: Menu League failure capture, diagnostic only
+
+on:
+  push:
+    branches: [codex/menu-league-failure-capture-20261024]
+
+permissions:
+  contents: read
+concurrency:
+  group: menu-league-failure-capture-${{ github.sha }}
+  cancel-in-progress: false
+env:
+  CI: '1'
+  SIM_NETWORK: offline
+  TZ: UTC
+  EXPECTED_PARENT: 3878953df3743b721f7901ed978e2a8803428356
+
+jobs:
+  diagnostic_capture:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    defaults:
+      run:
+        shell: bash
+    steps:
+      - name: Fresh outside-checkout evidence
+        id: evidence
+        run: |
+          set -euo pipefail
+          base="$RUNNER_TEMP/menu-league-failure-capture"
+          test ! -e "$base"
+          mkdir -m 700 "$base"
+          out="$base/evidence"
+          reports="$base/reports/career-league-finish"
+          mkdir -m 700 "$out"
+          printf '%s\n' "LEAGUE_CAPTURE_OUT=$out" "LEAGUE_CAPTURE_REPORT_ROOT=$reports" >> "$GITHUB_ENV"
+          printf '%s\n' "$GITHUB_SHA" > "$out/head.txt"
+          printf '%s\n' "$GITHUB_RUN_ID" > "$out/run-id.txt"
+          printf '%s\n' "$GITHUB_RUN_ATTEMPT" > "$out/run-attempt.txt"
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          persist-credentials: false
+          ref: ${{ github.sha }}
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24.21.0
+          cache: npm
+      - name: Exact one-added-workflow child and all held source inputs
+        id: source
+        timeout-minutes: 2
+        run: |
+          set -euo pipefail
+          out="$LEAGUE_CAPTURE_OUT"
+          test "$(git rev-list --parents -n 1 HEAD)" = "$GITHUB_SHA $EXPECTED_PARENT"
+          git rev-parse HEAD > "$out/actual-head.txt"
+          git rev-parse HEAD^{tree} > "$out/tree.txt"
+          git rev-parse HEAD^ > "$out/parent.txt"
+          git status --porcelain --untracked-files=all > "$out/status-before.txt"
+          test ! -s "$out/status-before.txt"
+          git diff --name-status "$EXPECTED_PARENT" HEAD > "$out/direct-paths.txt"
+          printf 'M\t.github/workflows/menu-league-failure-capture.yml\n' | cmp - "$out/direct-paths.txt"
+          git diff --exit-code "$EXPECTED_PARENT" HEAD -- . ':!.github/workflows/menu-league-failure-capture.yml' > "$out/all-old-source-held.log"
+          git diff --name-status c68efda97a1f53643965e09fd8f3beaa92952dee HEAD > "$out/cumulative-paths.txt"
+          printf 'A\t.github/workflows/menu-league-failure-capture.yml\n' | cmp - "$out/cumulative-paths.txt"
+          git diff --exit-code c68efda97a1f53643965e09fd8f3beaa92952dee HEAD -- . ':!.github/workflows/menu-league-failure-capture.yml' > "$out/all-c68-source-held.log"
+          git ls-files -z | sort -z > "$out/source-members.before"
+          test "$(tr -cd '\000' < "$out/source-members.before" | wc -c)" -eq 5329
+          xargs -0 sha256sum < "$out/source-members.before" > "$out/source-before.sha256"
+          test -z "$(printenv NODE_OPTIONS || true)"
+          printf '%s  scripts/lib/offlineTransport.cjs\n' e60ff1534307e449ccef598e3b7470dcba58681b82cea4005cec7319f14f9221 | sha256sum -c - > "$out/offline-guard-source-hold.log"
+          for name in SIM_LEAGUE_FINISH_CONTROL SIM_LEAGUE_FINISH_ATTRIBUTION SIM_LEAGUE_FINISH_CHAIN_REF SIM_LEAGUE_FINISH_ARTIFACTS; do
+            if printenv "$name" > /dev/null; then printf '%s\n' "Inherited override refused: $name" >&2; exit 1; fi
+          done
+          : > "$out/source.transport"
+          NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" SIM_OFFLINE_RECEIPT="$out/source.transport" node <<'NODE' > "$out/source-binding.log" 2>&1
+          const fs=require('node:fs'),a=require('node:assert/strict'),cp=require('node:child_process'),{createHash}=require('node:crypto'),out=process.env.LEAGUE_CAPTURE_OUT;
+          const hash=b=>createHash('sha256').update(b).digest('hex'),pins=[{"file":"scripts/simCareerLeagueFinish.mjs","bytes":56644,"sha256":"f3fe9b30a28e9ba4a4777bd9d0b8edfee4ab42352d89911ac394323b68b2d939","gitBlob":"079fba58522f778553abdd11aa2e10e9d0e0f4ac"},{"file":"scripts/lib/careerDevelopmentAttribution1185.mjs","bytes":3417,"sha256":"7f8362e9a4f3b9576bc216cca0463aff808996d58b9151dafa6b91feb0fe019e","gitBlob":"22a0e6e7830aa489aede6b7e5584cc713fc73521"},{"file":"scripts/lib/careerStoryRoleAttribution1190.mjs","bytes":4720,"sha256":"b37e49c0cf109e87ed7b4cbcc76ac75eb148d33af9deaf3ec9c24c8100cfe7b0","gitBlob":"c1ba5b025cd11428bd68c5598e5a6ce4f942a51d"},{"file":"scripts/lib/careerNextTenAttribution1197.mjs","bytes":4865,"sha256":"ce8c8db60c389243b3ac96d22b07ee8339ecbc442eff7319fcec7fa017368640","gitBlob":"c9fe76d14f7d33298cc6c7c8215aa9c8fddf5b10"},{"file":"scripts/lib/careerVeteranPay1262.mjs","bytes":5072,"sha256":"a6ddbd7c7d9f13e65ca9b0197ca31d6fca858eef61e06553f511643e270cc630","gitBlob":"23d78a0037098e1fb72766c4b03088607f186bcb"},{"file":"scripts/lib/careerAwardGenerations1318.mjs","bytes":3956,"sha256":"2d00a9f988ae0d6ef26adac57513467d28eac0cb84006f7048981478db46b86f","gitBlob":"93bedc429204e4a8075cb1d6b5fafee8c30f9b83"},{"file":"scripts/lib/careerDeckFair1327.mjs","bytes":86773,"sha256":"4f3b7073510b5b63f6300ee2bb642d470f8233d237344330043bc5169369dda5","gitBlob":"b99fcd3ed84ac6b616367da3d439c4c79022ce04"},{"file":"scripts/lib/careerWorldTruth1329.mjs","bytes":30192,"sha256":"9acc1e1b6469b1cc038718c25a047f8f0ddf018a8626829a5db7b7327ebd8bf2","gitBlob":"8dc0dce77a13188eb939f78b0eb1850ba81a39f2"},{"file":"scripts/lib/careerSoccerDeck1334.mjs","bytes":13837,"sha256":"ab6f0165eb58ce8b06973841983f06a61cf565a261567573ecfdbc9f0aeaf68e","gitBlob":"cb15a38b58b61226dc0201630db33304c8bc7fb7"},{"file":"scripts/lib/careerLifeChainBF.mjs","bytes":4315,"sha256":"4ed9c83cc6aaa8e968fff0553842d11640ff8bbabfc558239a9c148aa4efce22","gitBlob":"ac50944916d582e266bafaa00a1c49981459d5ad"},{"file":"scripts/lib/soccerTrain1178.mjs","bytes":4361,"sha256":"e1b1088e3b5c3434bace4e0c175f2d2b29712ff5c8c0a86f9021690b94be1c32","gitBlob":"464be6083428ee4ed224a8d3392d210c4b0393f5"},{"file":"scripts/lib/careerAwardsNight1172.mjs","bytes":12776,"sha256":"6995886b118c264e752c23a1dffd6b9a39f3e431a89c528194ed101ac641da32","gitBlob":"8d2361b9629c7c22bf588ec85e2c5eb8399bddd3"},{"file":"scripts/lib/careerSoccerMorale1523.mjs","bytes":9101,"sha256":"bb6d677aaef64196144801991c553e69d90c8badbde01f57cc4a929dd2ab55ec","gitBlob":"af334e87a77a055b65ec2fee023dcf3ac83c2110"},{"file":"scripts/lib/careerSoccerOwner1524.mjs","bytes":13282,"sha256":"efb9ac58091db6b9492d8eb58a4e72080dcd6cfb4f7894c36848f340eff793a3","gitBlob":"adb297a0955f220f24972ff20dd990828ff64e4c"},{"file":"scripts/lib/careerSoccerAwards1525.mjs","bytes":14412,"sha256":"49fe8b553bb3a48275cc0c1740bf12bd15c4851d43c15a0db014f2e158745dab","gitBlob":"7c55be6fca4dcfea874543431a10931dbe462772"},{"file":"scripts/lib/careerLeagueWorld1175.mjs","bytes":8098,"sha256":"6f82d79fa9dd72a17dad7e348e324114224fa157991ebc9c7abcd7e2f0a51630","gitBlob":"c75128e88071d329b2fe8d973af897fe2207dd91"},{"file":"scripts/lib/careerDiscipline1176.mjs","bytes":2670,"sha256":"0d65bb1ae5d0402c296cd148cacf7cd44a7efea7d4ee0054925a5f75dfb202da","gitBlob":"f8122fd4c192e02744ebec2fb81892cf6c97259d"},{"file":"scripts/lib/soccerContractBaseline1177.mjs","bytes":1047,"sha256":"56cbfc693512b3ff9a0ef584f9c37e6e82c9f43672b0a5445ee51b489b24b88e","gitBlob":"66988cc5d647b82dacbcca15ca4b65fd881086e2"},{"file":"scripts/runAllSims.mjs","bytes":23202,"sha256":"022e560112c369616222f85d98eac0a896b49a5c11b1100b89d3a6d7fe233a1c","gitBlob":"37f1869f39906c0129473f609fbaee55957171aa"},{"file":"scripts/lib/offlineTransport.cjs","bytes":10660,"sha256":"e60ff1534307e449ccef598e3b7470dcba58681b82cea4005cec7319f14f9221","gitBlob":"0fda542a2649fe5da937c6976fd0f5b6073e74b6"},{"file":"package.json","bytes":3495,"sha256":"acfe14626dea53cf5f9c5e0286b766a22237656b52aac4c888b080873ac90e31","gitBlob":"2ff64986fb76ebc51b706f2fd24765768874008a"},{"file":"package-lock.json","bytes":309049,"sha256":"c7e3867eabf0bfa03a8aa6a5e601b0050b937ed210d48c6bbd241019e3c9ea76","gitBlob":"97d6f12a052f25f400462938c241789a083f0bfe"},{"file":"src/lib/soccerCareerEngine.ts","bytes":550526,"sha256":"d2c4d26eb5ca12646f69e0d07cffab685f1660ff95ea33011ed97f64847bb8b1","gitBlob":"1ecd36c893395485a93d91cb1905ff78c83c7741"},{"file":"src/lib/soccerCareerLeague.ts","bytes":47199,"sha256":"adb5555de0adc046bed402fd7386305baf5ce9e96aba023b6a64541f9785ca68","gitBlob":"7b65ad0ad43825dcc159db83de100eda8330c102"},{"file":"src/lib/soccerCareerLeagueWorld.ts","bytes":15636,"sha256":"360c629f5d6ecc9cd959f5aae9a3791eb99b4f5cecdca2236da563168c2bb8c6","gitBlob":"72fcabdd0c557a743aa849b01208140c3030048f"},{"file":"src/lib/careerEras.ts","bytes":105789,"sha256":"f3e7347f58abe993db9fd72e9896ea0767a6ca7eb3b19861b75b92b387f89c1c","gitBlob":"e037022342382b1df9c8a5ede620d2cce480bc23"},{"file":"src/lib/soccerCareerSelection.ts","bytes":2446,"sha256":"9cc9ec464a161658a022b43ee7142c90def0a2306e7e66678a74bfdd72498e4d","gitBlob":"55f9503e304e31bdc163085b12d2e5e1cc12d012"},{"file":"src/lib/soccerCareerPreparation.ts","bytes":3721,"sha256":"b6abd752e7030e8376c7ac2c00cce1296e7cb83f6220786c22335190de0014ca","gitBlob":"2837f87e567b3934f727b74e96c3ca1425f27648"},{"file":"src/lib/soccerCareerMentor.ts","bytes":7446,"sha256":"0b541682cd9280f5d38c357409cfdb05f9ba7bee602ae88e2ca26e1cdbdbe07e","gitBlob":"552435816268202edecf5dc2e732cd4d1543927c"},{"file":"src/lib/soccerCareerLife.ts","bytes":105609,"sha256":"1ba72d3a9b0f1fd30fe45eab2d5e34a955369effa6b224e02a9db3e3db92befc","gitBlob":"592170d7967162d9967e3cf13e22333afb840732"},{"file":"src/lib/soccerCareerContracts.ts","bytes":3157,"sha256":"153167ffd1b746d0311c07002b3dbdce996bdcf070b4496e381f0f78bcc7100a","gitBlob":"c145d47ddaed57c4b6866dc7cc93b8e4ef6ce1bd"},{"file":"src/lib/soccerCareerRealismA.ts","bytes":81400,"sha256":"a8b8a21392d5026039e0bac6b3138043d2e75782be5ebb35cec7057f5e4a60e2","gitBlob":"c1dbab5463347da75002b33159ff2f9edcb303fe"},{"file":"scripts/simCareerWallShotFriendly.mjs","bytes":2795,"sha256":"c10ade4a073f86485f8e845bda47a69797ebf507b150f493bacb069a7de2d689","gitBlob":"0e5824f0d0b2e868a96b992c1513642b88c6f1a7"},{"file":".github/workflows/site-menu-host-focus.yml","bytes":106724,"sha256":"e54de7ec00dcc2b9ba66a045089cb28b164cc734ecf062d591fa900f7b7e8c95","gitBlob":"48b1654ca393ec85bfdc6c263a02d6ad2d1fda83"}];
+          const names=fs.readFileSync(out+'/source-members.before','utf8').split('\0').filter(Boolean);
+          a.equal(names.length,5329,'EXACT5329_TRACKED_SOURCE_INPUTS');a.equal(new Set(names).size,5329,'UNIQUE_SOURCE_MEMBERS');
+          for(const pin of pins){const b=fs.readFileSync(pin.file);a.equal(b.length,pin.bytes,pin.file);a.equal(hash(b),pin.sha256,pin.file);a.equal(cp.execFileSync('git',['rev-parse','HEAD:'+pin.file],{encoding:'utf8'}).trim(),pin.gitBlob,pin.file);a(names.includes(pin.file),pin.file);}
+          const refs=['4ab80fa978cf362427bcd024c64c6691e7f83c2a','de39ef18d2187ca98ccc57d4ef7ebc33c0f6bd6a','4ae7a534'];
+          const history=refs.map(ref=>{const r=cp.spawnSync('git',['rev-parse','--verify',ref+'^{commit}'],{encoding:'utf8'});return {requested:ref,status:r.status,signal:r.signal,error:r.error?String(r.error):null,stdout:r.stdout,stderr:r.stderr};});
+          fs.writeFileSync(out+'/source-binding.json',JSON.stringify({source:process.env.GITHUB_SHA,parent:process.env.EXPECTED_PARENT,tree:cp.execFileSync('git',['rev-parse','HEAD^{tree}'],{encoding:'utf8'}).trim(),run:process.env.GITHUB_RUN_ID,attempt:process.env.GITHUB_RUN_ATTEMPT,workflow:{file:'.github/workflows/menu-league-failure-capture.yml',sha256:hash(fs.readFileSync('.github/workflows/menu-league-failure-capture.yml')),gitBlob:cp.execFileSync('git',['rev-parse','HEAD:.github/workflows/menu-league-failure-capture.yml'],{encoding:'utf8'}).trim()},sourceCount:names.length,pins,history,historyProbeDoesNotReplaceActualHarnessError:true,diagnosticOnly:true,applicationQualified:false},null,2)+'\n',{flag:'wx'});
+          NODE
+          test ! -s "$out/source.transport"
+      - name: Locked dependencies and complete before inventory
+        id: dependencies
+        timeout-minutes: 6
+        run: |
+          set -euo pipefail
+          out="$LEAGUE_CAPTURE_OUT"
+          status=0
+          timeout --signal=TERM --kill-after=15s 5m npm ci > "$out/install.log" 2>&1 || status=$?
+          printf '%s\n' "$status" > "$out/install.exit"
+          test "$status" -eq 0
+          find node_modules -path node_modules/.vite -prune -o -type f -print0 | sort -z > "$out/dependency-members.before"
+          xargs -0 sha256sum < "$out/dependency-members.before" > "$out/dependencies.sha256"
+          test "$(tr -cd '\000' < "$out/dependency-members.before" | wc -c)" -eq 24466
+      - name: Source-bound raw capture and original default snapshots
+        id: prepare
+        run: |
+          set -euo pipefail
+          out="$LEAGUE_CAPTURE_OUT"
+          for name in capture-before league capture-after holds; do : > "$out/$name.transport"; done
+          cat > "$out/capture.cjs" <<'CAPTURE'
+          const fs=require('node:fs'),path=require('node:path'),a=require('node:assert/strict'),{createHash}=require('node:crypto');
+          const out=process.env.LEAGUE_CAPTURE_OUT,root=process.cwd(),reports=process.env.LEAGUE_CAPTURE_REPORT_ROOT;
+          const sha=b=>createHash('sha256').update(b).digest('hex');
+          a(path.isAbsolute(out)&&path.isAbsolute(reports)&&!out.startsWith(root+'/')&&!reports.startsWith(root+'/'),'DIAGNOSTIC_OUTSIDE_CHECKOUT');
+          function snapshot(base,copyTo){
+            const rows=[],errors=[];
+            const walk=(full,rel)=>{
+              try{
+                const st=fs.lstatSync(full);
+                if(st.isSymbolicLink()||(!st.isFile()&&!st.isDirectory())){errors.push({path:rel,error:'NONREGULAR_REFUSED'});return;}
+                if(st.isDirectory()){rows.push({path:rel,type:'directory'});for(const name of fs.readdirSync(full).sort()){a(/^[A-Za-z0-9_.-]+$/.test(name)&&name!=='.'&&name!=='..','SAFE_OUTPUT_NAME');walk(path.join(full,name),rel?rel+'/'+name:name);}return;}
+                const fd=fs.openSync(full,fs.constants.O_RDONLY|fs.constants.O_NOFOLLOW);
+                let b;try{a(fs.fstatSync(fd).isFile(),'REGULAR_OUTPUT');b=fs.readFileSync(fd);}finally{fs.closeSync(fd);}
+                const row={path:rel,type:'file',bytes:b.length,sha256:sha(b)};
+                if(rel.endsWith('.json')){try{JSON.parse(b.toString('utf8'));row.json='READABLE';}catch(error){row.json='PARSE_ERROR_RETAINED';row.parseError=String(error);}}
+                if(copyTo){const dest=path.join(copyTo,rel);a(dest.startsWith(copyTo+path.sep),'COPY_INSIDE_EVIDENCE');fs.mkdirSync(path.dirname(dest),{recursive:true});fs.writeFileSync(dest,b,{flag:'wx'});a.equal(sha(fs.readFileSync(dest)),row.sha256,'ACTUAL_PARTIAL_COPY_READBACK');row.evidencePath=path.relative(out,dest).split(path.sep).join('/');}
+                rows.push(row);
+              }catch(error){errors.push({path:rel,error:String(error.stack||error)});}
+            };
+            let exists=false;try{exists=fs.lstatSync(base,{throwIfNoEntry:false})!==undefined;}catch(error){errors.push({path:'',error:String(error.stack||error)});}if(exists)walk(base,'');
+            return {path:base,exists,rows,errors};
+          }
+          const defaults=()=>['.tmp-fx/career-league-finish','.tmp-fx/wall-shot-tests.json'].map(p=>snapshot(path.join(root,p)));
+          const stage=process.argv[2],write=(name,value)=>fs.writeFileSync(path.join(out,name),JSON.stringify(value,null,2)+'\n',{flag:'wx'});
+          if(stage==='before'){
+            const before=defaults(),fresh=snapshot(reports);
+            write('defaults-before.json',before);
+            write('report-root-before.json',fresh);
+            a(before.every(row=>row.errors.length===0),'DEFAULT_SNAPSHOTS_READABLE');
+            a(!fresh.exists&&fresh.errors.length===0,'FRESH_REPORT_DESTINATION');
+          }else{
+            a.equal(stage,'after','KNOWN_CAPTURE_STAGE');
+            const before=JSON.parse(fs.readFileSync(path.join(out,'defaults-before.json'),'utf8')),after=defaults();
+            const inventory=snapshot(reports,path.join(out,'partial-reports'));
+            const read=name=>fs.existsSync(path.join(out,name))?fs.readFileSync(path.join(out,name)):null;
+            const exitBytes=read('league.exit'),stdout=read('league.stdout.log'),stderr=read('league.stderr.log');
+            const actualExit=exitBytes?exitBytes.toString('utf8').trim():'NOT_RUN';
+            const sameDefaults=JSON.stringify(before)===JSON.stringify(after);
+            write('diagnostic-capture.json',{status:actualExit==='NOT_RUN'?'DIAGNOSTIC_NOT_RUN':actualExit==='0'?'DIAGNOSTIC_CAPTURE_ACTUAL_EXIT_ZERO':'EXPECTED_DIAGNOSTIC_NONZERO_NO_HEALTHY_CREDIT',
+              source:process.env.GITHUB_SHA,parent:process.env.EXPECTED_PARENT,run:process.env.GITHUB_RUN_ID,attempt:process.env.GITHUB_RUN_ATTEMPT,
+              command:['node','scripts/simCareerLeagueFinish.mjs'],positionalArgs:[],cwd:root,reportRoot:reports,
+              actualExit,stdout:stdout?{bytes:stdout.length,sha256:sha(stdout)}:null,stderr:stderr?{bytes:stderr.length,sha256:sha(stderr)}:null,
+              defaultsBefore:before,defaultsAfter:after,defaultsHeld:sameDefaults,reportInventory:inventory,
+              stackCause:'UNCLASSIFIED_RAW_STREAMS_FOR_HUMAN_REVIEW',ownedAssertionCount:'UNKNOWN_NOT_CLASSIFIED',
+              wholeSuiteReplayed:false,harnessHealthyCredit:false,applicationQualified:false,
+              bounds:{jobMinutes:15,commandMinutes:5,killAfterSeconds:15,measured:false},
+              limits:['One independent diagnostic execution only; not a full-suite replay, source repair or waiver.','Partial JSON parse errors are retained, not converted to owned behavior failures.','The unchanged harness may clean its own temporary bundle as before; this workflow performs no cleanup.']});
+            a(before.every(row=>row.errors.length===0)&&after.every(row=>row.errors.length===0),'DEFAULT_SNAPSHOTS_READABLE');
+            a(sameDefaults,'ORIGINAL_DEFAULT_REPORTS_HELD');
+            a.equal(inventory.errors.length,0,'SAFE_PARTIAL_REGULAR_OUTPUT_INVENTORY');
+          }
+          CAPTURE
+          status=0
+          NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" SIM_OFFLINE_RECEIPT="$out/capture-before.transport" node "$out/capture.cjs" before > "$out/capture-before.stdout.log" 2> "$out/capture-before.stderr.log" || status=$?
+          printf '%s\n' "$status" > "$out/capture-before.exit"
+          test "$status" -eq 0
+          test ! -s "$out/capture-before.transport"
+      - name: One exact original League command, immediate raw streams
+        id: league
+        timeout-minutes: 6
+        run: |
+          set -euo pipefail
+          out="$LEAGUE_CAPTURE_OUT"
+          unset ONLY BROWSER SIM_RUNNER_PROGRESS
+          streams="$RUNNER_TEMP/menu-league-failure-capture/streams"
+          mkdir -m 700 "$streams"
+          mkfifo "$streams/stdout" "$streams/stderr"
+          tee "$out/league.stdout.log" < "$streams/stdout" &
+          stdout_pid=$!
+          tee "$out/league.stderr.log" < "$streams/stderr" >&2 &
+          stderr_pid=$!
+          status=0
+          SIM_NETWORK=offline SIM_FULL_OUTPUT=1 SIM_LEAGUE_FINISH_ARTIFACTS="$LEAGUE_CAPTURE_REPORT_ROOT" NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" SIM_OFFLINE_RECEIPT="$out/league.transport" timeout --signal=TERM --kill-after=15s 5m node scripts/simCareerLeagueFinish.mjs > "$streams/stdout" 2> "$streams/stderr" || status=$?
+          printf '%s\n' "$status" > "$out/league.exit"
+          stdout_status=0; wait "$stdout_pid" || stdout_status=$?
+          stderr_status=0; wait "$stderr_pid" || stderr_status=$?
+          printf '%s\n' "$stdout_status" > "$out/tee-stdout.exit"
+          printf '%s\n' "$stderr_status" > "$out/tee-stderr.exit"
+          test "$stdout_status" -eq 0
+          test "$stderr_status" -eq 0
+          printf '%s\n' 'Diagnostic execution captured. Nonzero is not an owned regression classification or healthy harness credit.'
+      - name: Always retain every safe regular partial report and actual failure
+        id: capture
+        if: ${{ always() }}
+        run: |
+          set -euo pipefail
+          out="$LEAGUE_CAPTURE_OUT"
+          status=1
+          if test -f "$out/capture.cjs"; then
+            status=0
+            NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" SIM_OFFLINE_RECEIPT="$out/capture-after.transport" node "$out/capture.cjs" after > "$out/capture-after.stdout.log" 2> "$out/capture-after.stderr.log" || status=$?
+          else
+            printf '%s\n' 'Capture preparation did not complete; no harness outcome is inferred.' > "$out/capture-after.stderr.log"
+          fi
+          printf '%s\n' "$status" > "$out/capture-after.exit"
+          test "$status" -eq 0
+          test ! -s "$out/capture-after.transport"
+      - name: Always require full source, dependency, receipt and HEAD holds
+        id: holds
+        if: ${{ always() }}
+        run: |
+          set -uo pipefail
+          out="$LEAGUE_CAPTURE_OUT"
+          failed=0
+          if test -f "$out/source-before.sha256"; then
+            sha256sum -c "$out/source-before.sha256" > "$out/final-source-hold.log" 2>&1 || failed=1
+            git ls-files -z | sort -z > "$out/source-members.after"
+            cmp "$out/source-members.before" "$out/source-members.after" > "$out/final-source-members.log" 2>&1 || failed=1
+            xargs -0 sha256sum < "$out/source-members.after" > "$out/source-after.sha256" || failed=1
+            cmp "$out/source-before.sha256" "$out/source-after.sha256" > "$out/final-source-sha.log" 2>&1 || failed=1
+          else failed=1; fi
+          if test -f "$out/dependencies.sha256"; then
+            sha256sum -c "$out/dependencies.sha256" > "$out/final-dependencies-hold.log" 2>&1 || failed=1
+            find node_modules -path node_modules/.vite -prune -o -type f -print0 | sort -z > "$out/dependency-members.after"
+            cmp "$out/dependency-members.before" "$out/dependency-members.after" > "$out/final-dependency-members.log" 2>&1 || failed=1
+            xargs -0 sha256sum < "$out/dependency-members.after" > "$out/dependencies-end.sha256" || failed=1
+            cmp "$out/dependencies.sha256" "$out/dependencies-end.sha256" > "$out/final-dependency-sha.log" 2>&1 || failed=1
+          else failed=1; fi
+          git rev-parse HEAD > "$out/head-after.txt" || failed=1
+          test "$(cat "$out/head-after.txt")" = "$GITHUB_SHA" || failed=1
+          git diff --exit-code > "$out/final-source-diff.log" 2>&1 || failed=1
+          git status --porcelain --untracked-files=all > "$out/final-status.txt" || failed=1
+          test ! -s "$out/final-status.txt" || failed=1
+          for name in source capture-before league capture-after holds; do
+            test -f "$out/$name.transport" && test ! -s "$out/$name.transport" || failed=1
+          done
+          if test -f "$out/diagnostic-capture.json"; then
+            NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" SIM_OFFLINE_RECEIPT="$out/holds.transport" node <<'NODE' > "$out/final-capture-binding.log" 2>&1 || failed=1
+          const fs=require('node:fs'),a=require('node:assert/strict'),{createHash}=require('node:crypto'),out=process.env.LEAGUE_CAPTURE_OUT,hash=b=>createHash('sha256').update(b).digest('hex'),c=JSON.parse(fs.readFileSync(out+'/diagnostic-capture.json'));
+          a.equal(c.source,process.env.GITHUB_SHA);a.equal(c.parent,process.env.EXPECTED_PARENT);a(/^\d+$/.test(c.actualExit),'ACTUAL_CHILD_EXIT_RETAINED');
+          a.equal(c.defaultsHeld,true);a.equal(c.reportInventory.errors.length,0);
+          for(const name of ['tee-stdout.exit','tee-stderr.exit'])a.equal(fs.readFileSync(out+'/'+name,'utf8').trim(),'0','RAW_AND_CONSOLE_CAPTURE_COMPLETE');
+          for(const [name,row] of [['league.stdout.log',c.stdout],['league.stderr.log',c.stderr]]){const b=fs.readFileSync(out+'/'+name);a.equal(b.length,row.bytes);a.equal(hash(b),row.sha256);}
+          for(const row of c.reportInventory.rows.filter(row=>row.type==='file')){const b=fs.readFileSync(out+'/'+row.evidencePath);a.equal(b.length,row.bytes);a.equal(hash(b),row.sha256);}
+          NODE
+          else failed=1; fi
+          printf '%s\n' "$failed" > "$out/final-holds.exit"
+          test "$failed" -eq 0
+      - name: Always record scoped stages and manifest
+        if: ${{ always() }}
+        env:
+          SOURCE_OUTCOME: ${{ steps.source.outcome }}
+          DEPENDENCY_OUTCOME: ${{ steps.dependencies.outcome }}
+          PREPARE_OUTCOME: ${{ steps.prepare.outcome }}
+          LEAGUE_STEP_OUTCOME: ${{ steps.league.outcome }}
+          CAPTURE_OUTCOME: ${{ steps.capture.outcome }}
+          HOLDS_OUTCOME: ${{ steps.holds.outcome }}
+        run: |
+          set -euo pipefail
+          out="$LEAGUE_CAPTURE_OUT"
+          printf '%s\n' "phase=league-failure-capture-diagnostic-only" "source=$GITHUB_SHA" "sourceGate=$SOURCE_OUTCOME" "dependencies=$DEPENDENCY_OUTCOME" "prepare=$PREPARE_OUTCOME" "leagueCaptureStep=$LEAGUE_STEP_OUTCOME" "partialCapture=$CAPTURE_OUTCOME" "endHolds=$HOLDS_OUTCOME" "wholeSuiteReplayed=false" "harnessHealthyCredit=false" "applicationQualified=false" > "$out/stages.txt"
+          (cd "$out" && find . -type f ! -name evidence.sha256 -print0 | sort -z | xargs -0 sha256sum > evidence.sha256)
+      - uses: actions/upload-artifact@v4
+        if: ${{ always() }}
+        with:
+          name: menu-league-failure-capture-${{ github.run_id }}-a${{ github.run_attempt }}
+          path: ${{ env.LEAGUE_CAPTURE_OUT }}
+          include-hidden-files: true
+          if-no-files-found: error
+          retention-days: 30
