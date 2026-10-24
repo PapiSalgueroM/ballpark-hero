@@ -10,7 +10,7 @@ concurrency:
   cancel-in-progress: false
 env:
   BASE_SOURCE: 3ac9d8ea8a13db824f88be2deb660e7f2e31fc35
-  EXPECTED_PARENT: 4250d75208f627f3ed52b81d9b485d614a4a7a43
+  EXPECTED_PARENT: 8fa7a9163ea47752948938f7272a8acf3c7d654a
   CI: '1'
   SIM_NETWORK: offline
   TZ: UTC
@@ -30,7 +30,7 @@ jobs:
         with:
           node-version: 24
           cache: npm
-      - name: Exact two-path observation QA child with held product and seventeen cumulative paths
+      - name: Exact workflow-only child with held product and seventeen cumulative paths
         run: |
           set -euo pipefail
           out="$RUNNER_TEMP/site-menu-host-functional";test ! -e "$out";mkdir "$out"
@@ -43,7 +43,9 @@ jobs:
           git fetch --no-tags --depth=1 origin "$BASE_SOURCE" > "$out/base-fetch.log" 2>&1
           git merge-base --is-ancestor "$BASE_SOURCE" "$GITHUB_SHA" > "$out/base-ancestry.log" 2>&1
           git show -s --format=%P HEAD > "$out/parents.txt";test "$(cat "$out/parents.txt")" = "$EXPECTED_PARENT"
-          git diff --exit-code "$EXPECTED_PARENT" HEAD -- . ':!docs/**' ':!.github/workflows/site-menu-host-focus.yml' ':!scripts/qa/playSharedChromeGeometry.mjs' > "$out/direct-two-qa-paths.log"
+          git diff --exit-code "$EXPECTED_PARENT" HEAD -- . ':!docs/**' ':!.github/workflows/site-menu-host-focus.yml' > "$out/direct-one-workflow-path.log"
+          git diff --name-only "$EXPECTED_PARENT" HEAD -- . ':!docs/**' > "$out/direct-one-workflow-path.txt"
+          printf '%s\n' .github/workflows/site-menu-host-focus.yml | cmp - "$out/direct-one-workflow-path.txt"
           git diff --exit-code "$BASE_SOURCE" HEAD -- . ':!docs/**' ':!scripts/qa/sharedChromePreload.cjs' ':!scripts/qa/runSharedChromeBaseline.mjs' ':!scripts/qa/playSharedChromeBaselineProbe.mjs' ':!.github/workflows/site-menu-game-controls.yml' ':!.github/workflows/site-menu-host-focus.yml' ':!src/test/SiteMenu.host-focus.test.tsx' ':!src/test/SiteMenu.host-focus-loading.test.tsx' ':!src/test/SiteMenu.host-takeover.test.tsx' ':!src/App.tsx' ':!src/components/layout/Header.tsx' ':!src/components/game/GameNavbar.tsx' ':!src/index.css' ':!src/components/layout/SiteMenu.tsx' ':!src/components/layout/SiteMenuPanel.tsx' ':!src/components/layout/siteMenuFocus.ts' ':!scripts/qa/playSharedChromeHostProbe.mjs' ':!scripts/qa/playSharedChromeGeometry.mjs' > "$out/cumulative-seventeen-paths.log"
           git show "$EXPECTED_PARENT:.github/workflows/site-menu-game-controls.yml" | cmp .github/workflows/site-menu-game-controls.yml -
           node <<'NODE'
@@ -188,7 +190,7 @@ jobs:
     needs: functional_host
     if: ${{ needs.functional_host.result == 'success' }}
     runs-on: ubuntu-latest
-    timeout-minutes: 130
+    timeout-minutes: 160
     env:
       ENGINES: chromium
     defaults:
@@ -206,7 +208,7 @@ jobs:
       - uses: actions/setup-python@v5
         with:
           python-version: '3.12'
-      - name: Exact two-path observation QA child and held current Menu product
+      - name: Exact workflow-only child and held current Menu product
         id: foundation
         run: |
           set -euo pipefail
@@ -221,7 +223,9 @@ jobs:
           test "$(git show -s --format=%P HEAD)" = "$EXPECTED_PARENT"
           git fetch --no-tags --depth=1 origin "$BASE_SOURCE" > "$out/base-fetch.log" 2>&1
           git merge-base --is-ancestor "$BASE_SOURCE" "$GITHUB_SHA" > "$out/base-ancestry.log" 2>&1
-          git diff --exit-code "$EXPECTED_PARENT" HEAD -- . ':!docs/**' ':!.github/workflows/site-menu-host-focus.yml' ':!scripts/qa/playSharedChromeGeometry.mjs' > "$out/direct-two-qa-paths.log"
+          git diff --exit-code "$EXPECTED_PARENT" HEAD -- . ':!docs/**' ':!.github/workflows/site-menu-host-focus.yml' > "$out/direct-one-workflow-path.log"
+          git diff --name-only "$EXPECTED_PARENT" HEAD -- . ':!docs/**' > "$out/direct-one-workflow-path.txt"
+          printf '%s\n' .github/workflows/site-menu-host-focus.yml | cmp - "$out/direct-one-workflow-path.txt"
           git show "$EXPECTED_PARENT:.github/workflows/site-menu-game-controls.yml" | cmp .github/workflows/site-menu-game-controls.yml -
           node <<'NODE'
           const fs=require('node:fs'),assert=require('node:assert/strict'),cp=require('node:child_process'),{createHash}=require('node:crypto'),out=process.env.CHROME_BROWSER_OUT;
@@ -403,6 +407,81 @@ jobs:
           NODE
           test ! -s "$out/caps-server.transport";test ! -s "$out/caps.transport"
 
+      - name: Full unscoped offline node suite with actual plan and separate skips
+        id: full_node
+        if: ${{ !cancelled() && steps.browser.outcome == 'success' && steps.readers.outcome == 'success' && steps.caps.outcome == 'success' }}
+        timeout-minutes: 80
+        run: |
+          set -euo pipefail
+          out="$CHROME_BROWSER_OUT";unset ONLY BROWSER
+          export NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs"
+          for name in full-node-plan full-node-plan-binding full-node full-node-classifier;do : > "$out/$name.transport";done
+          status=0
+          SIM_NETWORK=offline SIM_OFFLINE_RECEIPT="$out/full-node-plan.transport" timeout --signal=TERM --kill-after=15s 1m node scripts/runAllSims.mjs --plan-json > "$out/full-node-plan.json" 2> "$out/full-node-plan.stderr.log" || status=$?
+          printf '%s\n' "$status" > "$out/full-node-plan.exit";test "$status" -eq 0;test ! -s "$out/full-node-plan.transport"
+          bound=0
+          SIM_NETWORK=offline SIM_OFFLINE_RECEIPT="$out/full-node-plan-binding.transport" node <<'NODE' > "$out/full-node-plan-binding.log" 2>&1 || bound=$?
+          const fs=require('node:fs'),a=require('node:assert/strict'),cp=require('node:child_process'),{createHash}=require('node:crypto'),out=process.env.CHROME_BROWSER_OUT,hash=b=>createHash('sha256').update(b).digest('hex');
+          const pins={'scripts/runAllSims.mjs':'a7d56d224a472b8eacfe1c4fd2f672f962259d28','scripts/lib/offlineTransport.cjs':'0fda542a2649fe5da937c6976fd0f5b6073e74b6'};
+          const sourcePins=Object.entries(pins).map(([file,gitBlob])=>{a.equal(cp.execFileSync('git',['hash-object',file],{encoding:'utf8'}).trim(),gitBlob,file);return {file,gitBlob,sha256:hash(fs.readFileSync(file))};});
+          const planBytes=fs.readFileSync(out+'/full-node-plan.json'),plan=JSON.parse(planBytes),eligible=fs.readdirSync('scripts').filter(f=>/^(sim|play|sweep)[A-Za-z0-9]*\.mjs$/.test(f)&&f!=='runAllSims.mjs').sort();
+          function planValid(p,e){a.deepEqual(Object.keys(p).sort(),['browserGroup','nodeGroup'],'FULL_NODE_PLAN_KEYS');for(const key of ['nodeGroup','browserGroup']){a(Array.isArray(p[key]),'FULL_NODE_PLAN_ARRAY');a(p[key].every(f=>typeof f==='string'&&/^(sim|play|sweep)[A-Za-z0-9]*\.mjs$/.test(f)),'FULL_NODE_PLAN_NAMES');a.deepEqual([...new Set(p[key])].sort(),p[key],'FULL_NODE_PLAN_UNIQUE_SORTED');}a(p.nodeGroup.length>0,'FULL_NODE_PLAN_NONEMPTY');a.deepEqual([...p.nodeGroup,...p.browserGroup].sort(),e,'FULL_NODE_PLAN_MEMBERSHIP');}
+          planValid(plan,eligible);
+          const changed=structuredClone(plan);changed.nodeGroup.pop();a.notEqual(hash(JSON.stringify(changed)),hash(JSON.stringify(plan)),'FULL_NODE_PLAN_CONTROL_CHANGED');let caught;try{planValid(changed,eligible);}catch(error){caught=error;}a(caught&&caught.name==='AssertionError'&&String(caught.message).includes('FULL_NODE_PLAN_MEMBERSHIP'),'FULL_NODE_PLAN_CONTROL_EFFECTIVE');
+          fs.writeFileSync(out+'/full-node-eligible.json',JSON.stringify(eligible,null,2)+'\n',{flag:'wx'});
+          fs.writeFileSync(out+'/full-node-plan-binding.json',JSON.stringify({source:process.env.GITHUB_SHA,base:process.env.BASE_SOURCE,planSha256:hash(planBytes),eligibleSha256:hash(JSON.stringify(eligible)),eligible:eligible.length,node:plan.nodeGroup.length,browser:plan.browserGroup.length,sourcePins,control:{name:'missing actual planned member',changed:true,ownedMarker:'FULL_NODE_PLAN_MEMBERSHIP',actualFailureName:caught.name},bounds:{jobMinutes:160,stepMinutes:80,fullNodeOuterMinutes:78,measured:false},coverage:'Node group only. Browser group omitted from this step. Database skips never count as passes.'},null,2)+'\n',{flag:'wx'});
+          NODE
+          printf '%s\n' "$bound" > "$out/full-node-plan-binding.exit";test "$bound" -eq 0
+          test ! -s "$out/full-node-plan-binding.transport"
+          sha256sum "$out/full-node-plan.json" "$out/full-node-eligible.json" "$out/full-node-plan-binding.json" > "$out/full-node-plan.sha256"
+          status=0
+          SIM_NETWORK=offline SIM_FULL_OUTPUT=1 SIM_OFFLINE_RECEIPT="$out/full-node.transport" timeout --signal=TERM --kill-after=30s 78m node scripts/runAllSims.mjs > "$out/full-node.stdout.log" 2> "$out/full-node.stderr.log" || status=$?
+          printf '%s\n' "$status" > "$out/full-node.exit"
+          classified=0
+          SIM_NETWORK=offline SIM_OFFLINE_RECEIPT="$out/full-node-classifier.transport" node <<'NODE' > "$out/full-node-classifier.log" 2>&1 || classified=$?
+          const fs=require('node:fs'),a=require('node:assert/strict'),{createHash}=require('node:crypto'),out=process.env.CHROME_BROWSER_OUT,hash=b=>createHash('sha256').update(b).digest('hex');
+          const plan=JSON.parse(fs.readFileSync(out+'/full-node-plan.json')),binding=JSON.parse(fs.readFileSync(out+'/full-node-plan-binding.json'));
+          const stdout=fs.readFileSync(out+'/full-node.stdout.log','utf8'),stderr=fs.readFileSync(out+'/full-node.stderr.log','utf8'),lines=stdout.split(/\r?\n/),exit=Number(fs.readFileSync(out+'/full-node.exit','utf8').trim());
+          const expectedNetwork='Network mode: offline, loopback only, no production probe or database retries.',expectedRunning='Running '+plan.nodeGroup.length+' node harness'+(plan.nodeGroup.length===1?'':'es');
+          const offlineWhy='it reached no database and said so, and the database is unreachable here (offline mode blocks production; no database probe was sent)';
+          const rowPattern=/^  (PASS|FAIL|EMPTY|SKIP)\s+(\S+\.mjs)\s+([0-9]+(?:\.[0-9]+)?)s$/,rows=[];let cursor=2;
+          for(let i=2;i<lines.length;i++){const match=lines[i].match(rowPattern);if(!match)continue;const body=lines.slice(cursor,i),why=match[1]==='SKIP'&&lines[i+1]==='        '+offlineWhy?offlineWhy:'';rows.push({file:match[2],verdict:match[1],seconds:Number(match[3]),reportLine:i+1,why,outputSha256:hash(body.join('\n')),outputLines:body.filter(line=>line.trim()&&!/^\[SIM_OFFLINE_BLOCK\] (database|external) /.test(line)).length,nothingChecked:/NOTHING WAS CHECKED/i.test(body.join('\n')),blocks:body.filter(line=>/^\[SIM_OFFLINE_BLOCK\] (database|external) /.test(line))});cursor=i+1+(why?1:0);}
+          const nonempty=lines.filter(line=>line.trim()),last=nonempty.at(-1)||'',summaryMatch=last.match(/^All (\d+) harnesses green(?:, (\d+) skipped above)?\.$/),summary=summaryMatch?{green:Number(summaryMatch[1]),skipped:Number(summaryMatch[2]||0)}:null;
+          const skipLine=lines.filter(line=>/^\d+ harness(?:es)? SKIPPED, not run and not counted: /.test(line)),browserLine=lines.filter(line=>/^Skipping \d+ browser harness(?:es)? \(/.test(line));
+          const observed={exit,network:lines[0],running:lines[1],rows,summary,skipLine,browserLine,stderrBlocks:stderr.split(/\r?\n/).filter(line=>/^\[SIM_OFFLINE_BLOCK\]/.test(line))};
+          function judge(value){
+            a.equal(value.exit,0,'FULL_NODE_EXIT_ZERO');a.equal(value.network,expectedNetwork,'FULL_NODE_OFFLINE_MODE');a.equal(value.running,expectedRunning,'FULL_NODE_ACTUAL_PLAN_COUNT');
+            a.deepEqual(value.rows.map(row=>row.file).sort(),plan.nodeGroup,'FULL_NODE_EXACT_ROW_COVERAGE');a.equal(value.stderrBlocks.length,0,'FULL_NODE_NO_PARENT_TRANSPORT');
+            for(const row of value.rows){a(['PASS','SKIP'].includes(row.verdict),'FULL_NODE_ROW_STATUS');if(row.verdict==='PASS'){a(row.outputLines>=4,'FULL_NODE_OUTPUT_NOT_EMPTY');a.equal(row.nothingChecked,false,'FULL_NODE_PASS_CHECKED_SOMETHING');a.equal(row.blocks.length,0,'FULL_NODE_PASS_NO_BLOCKS');a.equal(row.why,'','FULL_NODE_PASS_NO_REFUSAL');}else{a.equal(row.why,offlineWhy,'FULL_NODE_SKIP_DATABASE_REASON');a.equal(row.nothingChecked,true,'FULL_NODE_SKIP_CHECKED_NOTHING');a(row.blocks.length>0&&row.blocks.every(line=>/^\[SIM_OFFLINE_BLOCK\] database /.test(line)),'FULL_NODE_SKIP_DATABASE_ONLY');}}
+            const skips=value.rows.filter(row=>row.verdict==='SKIP'),passes=value.rows.filter(row=>row.verdict==='PASS');
+            a(value.summary,'FULL_NODE_FINAL_SUMMARY');a.deepEqual(value.summary,{green:passes.length,skipped:skips.length},'FULL_NODE_SUMMARY_COUNTS');
+            const expectedSkips=skips.length?[skips.length+' harness'+(skips.length===1?'':'es')+' SKIPPED, not run and not counted: '+skips.map(row=>row.file.replace('.mjs','')).join(', ')+'.']:[];
+            a.deepEqual(value.skipLine,expectedSkips,'FULL_NODE_SKIP_NAMES');
+            const expectedBrowsers=plan.browserGroup.length?['Skipping '+plan.browserGroup.length+' browser harness'+(plan.browserGroup.length===1?'':'es')+' ('+plan.browserGroup.map(file=>file.replace('.mjs','')).join(', ')+'). Pass --browser to include them.']:[];
+            a.deepEqual(value.browserLine,expectedBrowsers,'FULL_NODE_BROWSER_OMISSIONS');
+            return {passes:passes.length,skips:skips.map(row=>row.file),browserOmitted:plan.browserGroup.length};
+          }
+          const controls=[],errors=[];let result=null;
+          try{
+            a.equal(hash(fs.readFileSync(out+'/full-node-plan.json')),binding.planSha256,'FULL_NODE_PLAN_HELD');a.equal(binding.source,process.env.GITHUB_SHA);
+            result=judge(observed);
+            function control(name,marker,change){const fault=structuredClone(observed);change(fault);a.notEqual(hash(JSON.stringify(fault)),hash(JSON.stringify(observed)),'FULL_NODE_CONTROL_CHANGED');let caught;try{judge(fault);}catch(error){caught=error;}a(caught&&caught.name==='AssertionError'&&String(caught.message).includes(marker),'FULL_NODE_CONTROL_OWNED');controls.push({name,changed:true,marker,actualFailureName:caught.name});}
+            control('missing actual harness row','FULL_NODE_EXACT_ROW_COVERAGE',fault=>fault.rows.pop());
+            control('duplicate actual harness row','FULL_NODE_EXACT_ROW_COVERAGE',fault=>fault.rows.push(structuredClone(fault.rows[0])));
+            control('timeout is not qualification','FULL_NODE_EXIT_ZERO',fault=>fault.exit=124);
+            control('wrong final green count','FULL_NODE_SUMMARY_COUNTS',fault=>fault.summary.green++);
+            const passIndex=observed.rows.findIndex(row=>row.verdict==='PASS');a(passIndex>=0,'FULL_NODE_CONTROL_ACTUAL_PASS');
+            control('external block cannot pass','FULL_NODE_PASS_NO_BLOCKS',fault=>fault.rows[passIndex].blocks.push('[SIM_OFFLINE_BLOCK] external CONTROL https://control.invalid'));
+            control('nothing checked cannot pass','FULL_NODE_PASS_CHECKED_SOMETHING',fault=>fault.rows[passIndex].nothingChecked=true);
+            const skipIndex=observed.rows.findIndex(row=>row.verdict==='SKIP');if(skipIndex>=0)control('skip needs actual nothing-checked evidence','FULL_NODE_SKIP_CHECKED_NOTHING',fault=>fault.rows[skipIndex].nothingChecked=false);
+          }catch(error){errors.push({name:error.name,message:String(error.message),stack:String(error.stack||'')});}
+          fs.writeFileSync(out+'/full-node-admission.json',JSON.stringify({status:errors.length?'FULL_NODE_REFUSED':'FULL_NODE_OFFLINE_GROUP_COMPLETE',source:process.env.GITHUB_SHA,base:process.env.BASE_SOURCE,run:process.env.GITHUB_RUN_ID,attempt:process.env.GITHUB_RUN_ATTEMPT,exit,eligible:binding.eligible,plannedNode:plan.nodeGroup.length,plannedBrowser:plan.browserGroup.length,result,rows,summary,lastOutputLine:last,stdoutSha256:hash(stdout),stderrSha256:hash(stderr),controls,errors,bounds:binding.bounds,applicationQualified:false,limits:['Only the node group is covered. Browser omissions and database skips are retained, not passed.','The runner creates and deletes its own child transport receipts; their blocked database diagnostics remain in the retained full stdout. Four empty outer receipts do not claim empty child traffic.','No full-site, real database, publication or screenshot qualification is implied.']},null,2)+'\n',{flag:'wx'});
+          a.equal(errors.length,0,'FULL_NODE_ADMISSION');
+          NODE
+          printf '%s\n' "$classified" > "$out/full-node-classifier.exit"
+          test "$status" -eq 0;test "$classified" -eq 0
+          for name in full-node-plan full-node-plan-binding full-node full-node-classifier;do test ! -s "$out/$name.transport";done
+
       - name: Always retain fresh complete physical end inventories and all raw evidence
         id: holds
         if: always()
@@ -456,12 +535,12 @@ jobs:
           const geometry=JSON.parse(fs.readFileSync(out+'/geometry/geometry-report.json','utf8')),records=fs.readFileSync(out+'/geometry/geometry-sockets.jsonl','utf8').split('\n').filter(Boolean).map(line=>JSON.parse(line));assert.deepEqual(records,geometry.owningGuardObservation.records);assert.equal(records.length,4);assert.equal(geometry.complete,true);assert.equal(geometry.owningGuardObservation.failure,null);
           NODE
           else failed=1;fi
-          required=(build server recipes host browser-classifier geometry-guard-copy readers-server homefold caps-server caps holds)
+          required=(build server recipes host browser-classifier geometry-guard-copy readers-server homefold caps-server caps holds full-node-plan full-node-plan-binding full-node full-node-classifier)
           for method in simAdsense simBrand simHeadTags simHiddenPages simHubs simIndexNow simIndexing simInternalLinks simNoRivalNames simPrerender simPrerenderBoot simRetiredRoutes simSchema simSitemap simSnapshotAssets simSiteSearch simGuideHeadings simLegalPages;do required+=("$method");done
           for name in "${required[@]}";do test -f "$out/$name.transport" && test ! -s "$out/$name.transport" || failed=1;done
           for recipe in live-fit draft-fold conquest-hit career-depth route-menu-preserve;do test -f "$out/$recipe/node.transport" && test ! -s "$out/$recipe/node.transport" || failed=1;done
           while IFS= read -r -d '' file;do if test "$file" != "$out/geometry.transport";then test ! -s "$file" || failed=1;fi;done < <(find "$out" -type f -name '*.transport' -print0)
-          printf 'phase=menu-shared-browser-candidate\nsource=%s\nfunctionalDependency=%s\nbuild=%s\nbrowser=%s\nreaders=%s\ncaps=%s\nfinalHoldsExit=%s\n' "$GITHUB_SHA" '${{ needs.functional_host.result }}' '${{ steps.build.outcome }}' '${{ steps.browser.outcome }}' '${{ steps.readers.outcome }}' '${{ steps.caps.outcome }}' "$failed" > "$out/stages.txt"
+          printf 'phase=menu-shared-browser-candidate\nsource=%s\nfunctionalDependency=%s\nbuild=%s\nbrowser=%s\nreaders=%s\ncaps=%s\nfullNode=%s\nfinalHoldsExit=%s\n' "$GITHUB_SHA" '${{ needs.functional_host.result }}' '${{ steps.build.outcome }}' '${{ steps.browser.outcome }}' '${{ steps.readers.outcome }}' '${{ steps.caps.outcome }}' '${{ steps.full_node.outcome }}' "$failed" > "$out/stages.txt"
           printf '%s\n' "$failed" > "$out/final-holds.exit"
           (cd "$out";find . -type f ! -path ./evidence.sha256 -print0 | sort -z | xargs -0 sha256sum) > "$out/evidence.sha256"
           exit "$failed"
