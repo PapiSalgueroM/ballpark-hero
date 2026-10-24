@@ -1,0 +1,11 @@
+#!serve
+#!playwright
+#!serial
+# Round 1568 final proof, part 1: the live match walk, its four controls (each must exit 1 and say it turned its section red "as it must" / "on the line it must"), the fresh seed, and the page weights.
+playLiveMatchFit: node scripts/playLiveMatchFit.mjs
+livefit-bar: LIVE_FIT_CONTROL=bar node scripts/playLiveMatchFit.mjs
+livefit-silentlist: LIVE_FIT_CONTROL=silentlist node scripts/playLiveMatchFit.mjs
+livefit-earlyscore: LIVE_FIT_CONTROL=earlyscore node scripts/playLiveMatchFit.mjs
+livefit-nocard: LIVE_FIT_CONTROL=nocard node scripts/playLiveMatchFit.mjs
+playLiveMatchFit-fresh: LIVE_FIT_SEED=fresh node scripts/playLiveMatchFit.mjs
+sweepWeight: SWEEP_OFFLINE=1 node scripts/sweepWeight.mjs
