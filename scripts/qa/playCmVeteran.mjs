@@ -286,7 +286,9 @@ async function settle(page, row) {
   await idle(page);
 }
 async function selectVeteran(page, row) {
-  const select = page.getByLabel('Veteran to review', { exact: true });
+  const region = page.getByRole('region', { name: 'Veteran talks', exact: true });
+  const select = region.getByRole('combobox');
+  assert.equal(await select.count(), 1, 'CM_VETERAN_ONE_ACTUAL_COMBOBOX');
   await target(page, row, select); await select.focus();
   const wanted = (await read(page)).playerId;
   const choices = await select.locator('option').evaluateAll(nodes => nodes.map(node => node.value));

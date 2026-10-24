@@ -10,12 +10,12 @@ concurrency:
   cancel-in-progress: false
 env:
   BASE_SOURCE: 3ac9d8ea8a13db824f88be2deb660e7f2e31fc35
-  EXPECTED_PARENT: eb42c184b39295a67c33792edead75a76ec812d4
+  EXPECTED_PARENT: 223bbef3a137cfe4049ba14b4b5870a80cb6c5ec
   CI: '1'
   SIM_NETWORK: offline
   TZ: UTC
   ENGINES: chromium
-  CM_VETERAN_EXPECTED_PINS_JSON: '{"src/lib/clubManager.ts":"45b9d486014720831f130000ff67d0d380f60c755bbb1afa3d0f9a833b2c4050","src/lib/clubManagerCalendar.ts":"7cdbc2e31172db5974f0753551133c61ae291662f5bd8e4b14f043d2267baf83","src/lib/clubManagerVeteranLedger.ts":"80f991a38069f29dd1fecc22a9cb9c0e3bb4945a33208fae1de8413fc6aefb17","src/lib/clubManagerVeteranRetirement.ts":"cdaecb5ecd28187da8a1c62526c6b165289e76e37d30a01cba2ce7c4a16577ed","src/hooks/useClubManager.ts":"88df1c6320820399cf5e96512960375a10ca9723f5e5f465140ee5ec3f86481b","src/components/club-manager/ClubManagerSeasonSummary.tsx":"1a5ea0d99de65f52d9f60ba3aed6c364445241ce760d2bb2a71e7feea9a453c1","src/components/club-manager/VeteranRetirementCard.tsx":"af5023b72b58bd1171a0117302fd120d9d40a509f57653175fac9300d03f0a21","src/index.css":"ada9cc819db63d0e2eb013bd3c29eec16877e2a30166c390b81901142369fef3","scripts/lib/hostLikeServer.mjs":"3958c9a3b4d9e49bb60a3b7dd72d81a997bd1caed56e82e4c3bae07e1a918ef0","src/components/game/ResultScreen.tsx":"29c771e6d41e570d94195ac62e0fb569d4b8d41bffcf5244f58ba70693d0006e","scripts/qa/siteMenuNavigationSupport.mjs":"c70e3ecc412f16d3322047b13205716c644495f8c74b76eed83852c87f35d303","scripts/lib/playwrightLoader.mjs":"94a07179be7ca6b9562d118b52c2d5d0dff0b6b2e29e49e4fea16fa2defb5a93","scripts/qa/fixtures/cmVeteran.entry.tsx":"6606fe65c8e1fc727366212f2bb3dff5fea2b58ad93edc186891c5008fb8e3e7","scripts/qa/fixtures/cmVeteran.html":"3668568002e653cc73d2b4bf568a5a6ef1d6bbd0cc6c8225b77b517011d4747e","scripts/qa/fixtures/cmVeteran.vite.mjs":"4ad5c1664b3112e9ce3bfc95306098ea65fc671f26f4eeae2b6673ffd5adc80b","scripts/qa/playCmVeteran.mjs":"e899dda049c19c840f2991f38a5f4f40fff25b85112b7eb667978f2513fa2471"}'
+  CM_VETERAN_EXPECTED_PINS_JSON: '{"src/lib/clubManager.ts":"45b9d486014720831f130000ff67d0d380f60c755bbb1afa3d0f9a833b2c4050","src/lib/clubManagerCalendar.ts":"7cdbc2e31172db5974f0753551133c61ae291662f5bd8e4b14f043d2267baf83","src/lib/clubManagerVeteranLedger.ts":"80f991a38069f29dd1fecc22a9cb9c0e3bb4945a33208fae1de8413fc6aefb17","src/lib/clubManagerVeteranRetirement.ts":"cdaecb5ecd28187da8a1c62526c6b165289e76e37d30a01cba2ce7c4a16577ed","src/hooks/useClubManager.ts":"88df1c6320820399cf5e96512960375a10ca9723f5e5f465140ee5ec3f86481b","src/components/club-manager/ClubManagerSeasonSummary.tsx":"1a5ea0d99de65f52d9f60ba3aed6c364445241ce760d2bb2a71e7feea9a453c1","src/components/club-manager/VeteranRetirementCard.tsx":"af5023b72b58bd1171a0117302fd120d9d40a509f57653175fac9300d03f0a21","src/index.css":"ada9cc819db63d0e2eb013bd3c29eec16877e2a30166c390b81901142369fef3","scripts/lib/hostLikeServer.mjs":"3958c9a3b4d9e49bb60a3b7dd72d81a997bd1caed56e82e4c3bae07e1a918ef0","src/components/game/ResultScreen.tsx":"29c771e6d41e570d94195ac62e0fb569d4b8d41bffcf5244f58ba70693d0006e","scripts/qa/siteMenuNavigationSupport.mjs":"c70e3ecc412f16d3322047b13205716c644495f8c74b76eed83852c87f35d303","scripts/lib/playwrightLoader.mjs":"94a07179be7ca6b9562d118b52c2d5d0dff0b6b2e29e49e4fea16fa2defb5a93","scripts/qa/fixtures/cmVeteran.entry.tsx":"6606fe65c8e1fc727366212f2bb3dff5fea2b58ad93edc186891c5008fb8e3e7","scripts/qa/fixtures/cmVeteran.html":"3668568002e653cc73d2b4bf568a5a6ef1d6bbd0cc6c8225b77b517011d4747e","scripts/qa/fixtures/cmVeteran.vite.mjs":"4ad5c1664b3112e9ce3bfc95306098ea65fc671f26f4eeae2b6673ffd5adc80b","scripts/qa/playCmVeteran.mjs":"caf48941c3fa4df327b20e64fa7742649ffc1ba1cae551c949a52b8eaa0d4c97"}'
 jobs:
   veteran_outcomes:
     runs-on: ubuntu-latest
@@ -32,7 +32,7 @@ jobs:
         with:
           node-version: 24
           cache: npm
-      - name: Exact five-path child, eighteen cumulative paths and seventeen frozen proof bodies
+      - name: Exact two-path child, eighteen cumulative paths and seventeen frozen proof bodies
         run: |
           set -euo pipefail
           out="$RUNNER_TEMP/cm-veteran-retirement-functional";test ! -e "$out";mkdir "$out"
@@ -45,9 +45,9 @@ jobs:
           git merge-base --is-ancestor "$BASE_SOURCE" "$GITHUB_SHA"
           git show -s --format=%P HEAD > "$out/parents.txt"
           test "$(cat "$out/parents.txt")" = "$EXPECTED_PARENT"
-          git diff --exit-code "$EXPECTED_PARENT" HEAD -- . ':!docs/**' ':!.github/workflows/cm-veteran-retirement.yml' ':!scripts/qa/playCmVeteran.mjs' ':!scripts/qa/fixtures/cmVeteran.entry.tsx' ':!scripts/qa/fixtures/cmVeteran.html' ':!scripts/qa/fixtures/cmVeteran.vite.mjs' > "$out/direct-child-scope.log"
+          git diff --exit-code "$EXPECTED_PARENT" HEAD -- . ':!docs/**' ':!.github/workflows/cm-veteran-retirement.yml' ':!scripts/qa/playCmVeteran.mjs' > "$out/direct-child-scope.log"
           git diff --name-only "$EXPECTED_PARENT" HEAD -- . ':!docs/**' | sort > "$out/direct-child-members.txt"
-          printf '%s\n' .github/workflows/cm-veteran-retirement.yml scripts/qa/playCmVeteran.mjs scripts/qa/fixtures/cmVeteran.entry.tsx scripts/qa/fixtures/cmVeteran.html scripts/qa/fixtures/cmVeteran.vite.mjs | sort | cmp - "$out/direct-child-members.txt"
+          printf '%s\n' .github/workflows/cm-veteran-retirement.yml scripts/qa/playCmVeteran.mjs | sort | cmp - "$out/direct-child-members.txt"
           git diff --exit-code "$BASE_SOURCE" HEAD -- . ':!docs/**' ':!.github/workflows/cm-veteran-retirement.yml' ':!src/lib/clubManager.ts' ':!src/lib/clubManagerCalendar.ts' ':!src/lib/clubManagerVeteranLedger.ts' ':!src/lib/clubManagerVeteranRetirement.ts' ':!src/test/clubManagerVeteranRetirement.test.ts' ':!src/test/clubManagerVeteranWorldRoster.test.ts' ':!src/hooks/useClubManager.ts' ':!src/components/club-manager/ClubManagerSeasonSummary.tsx' ':!src/components/club-manager/VeteranRetirementCard.tsx' ':!src/test/clubManagerVeteranHook.test.tsx' ':!src/test/VeteranRetirementCard.test.tsx' ':!src/test/clubManagerVeteranOldParity.test.ts' ':!scripts/qa/runClubManagerVeteranOldParity.mjs' ':!scripts/qa/playCmVeteran.mjs' ':!scripts/qa/fixtures/cmVeteran.entry.tsx' ':!scripts/qa/fixtures/cmVeteran.html' ':!scripts/qa/fixtures/cmVeteran.vite.mjs' > "$out/finite-eighteen-path-scope.log"
           git diff --name-only "$BASE_SOURCE" HEAD -- . ':!docs/**' | sort > "$out/cumulative-members.txt"
           printf '%s\n' .github/workflows/cm-veteran-retirement.yml src/lib/clubManager.ts src/lib/clubManagerCalendar.ts src/lib/clubManagerVeteranLedger.ts src/lib/clubManagerVeteranRetirement.ts src/test/clubManagerVeteranRetirement.test.ts src/test/clubManagerVeteranWorldRoster.test.ts src/hooks/useClubManager.ts src/components/club-manager/ClubManagerSeasonSummary.tsx src/components/club-manager/VeteranRetirementCard.tsx src/test/clubManagerVeteranHook.test.tsx src/test/VeteranRetirementCard.test.tsx src/test/clubManagerVeteranOldParity.test.ts scripts/qa/runClubManagerVeteranOldParity.mjs scripts/qa/playCmVeteran.mjs scripts/qa/fixtures/cmVeteran.entry.tsx scripts/qa/fixtures/cmVeteran.html scripts/qa/fixtures/cmVeteran.vite.mjs | sort | cmp - "$out/cumulative-members.txt"
@@ -71,7 +71,7 @@ jobs:
           test "$(git rev-parse HEAD:scripts/qa/fixtures/cmVeteran.entry.tsx)" = d3839d2f97ded5918425b41d1e8b329cd888b88e
           test "$(git rev-parse HEAD:scripts/qa/fixtures/cmVeteran.html)" = b8ff0e3aa80f8d92cb1281a5e245343856013416
           test "$(git rev-parse HEAD:scripts/qa/fixtures/cmVeteran.vite.mjs)" = 9ba10a987985cbd2e8cd26f7dd346bed844ea4ac
-          test "$(git rev-parse HEAD:scripts/qa/playCmVeteran.mjs)" = 85e7b205293e00e1d46504bbb973633b8af10ab4
+          test "$(git rev-parse HEAD:scripts/qa/playCmVeteran.mjs)" = 193d1370175ca0562685a2910ea7d615cbdd9985
           printf '%s  %s\n' \
             45b9d486014720831f130000ff67d0d380f60c755bbb1afa3d0f9a833b2c4050 src/lib/clubManager.ts \
             7cdbc2e31172db5974f0753551133c61ae291662f5bd8e4b14f043d2267baf83 src/lib/clubManagerCalendar.ts \
@@ -89,7 +89,7 @@ jobs:
             6606fe65c8e1fc727366212f2bb3dff5fea2b58ad93edc186891c5008fb8e3e7 scripts/qa/fixtures/cmVeteran.entry.tsx \
             3668568002e653cc73d2b4bf568a5a6ef1d6bbd0cc6c8225b77b517011d4747e scripts/qa/fixtures/cmVeteran.html \
             4ad5c1664b3112e9ce3bfc95306098ea65fc671f26f4eeae2b6673ffd5adc80b scripts/qa/fixtures/cmVeteran.vite.mjs \
-            e899dda049c19c840f2991f38a5f4f40fff25b85112b7eb667978f2513fa2471 scripts/qa/playCmVeteran.mjs > "$out/input-pins.sha256"
+            caf48941c3fa4df327b20e64fa7742649ffc1ba1cae551c949a52b8eaa0d4c97 scripts/qa/playCmVeteran.mjs > "$out/input-pins.sha256"
           sha256sum --check "$out/input-pins.sha256" > "$out/input-pins.log"
           git rev-parse HEAD > "$out/head.txt";git rev-parse 'HEAD^{tree}' > "$out/tree.txt"
           printf '%s\n' "$GITHUB_RUN_ID" > "$out/run-id.txt";printf '%s\n' "$GITHUB_RUN_ATTEMPT" > "$out/run-attempt.txt"
@@ -372,7 +372,7 @@ jobs:
         with:
           node-version: 24
           cache: npm
-      - name: Exact five-path child, eighteen cumulative paths and sixteen actual browser inputs
+      - name: Exact two-path child, eighteen cumulative paths and sixteen actual browser inputs
         run: |
           set -euo pipefail
           out="$RUNNER_TEMP/cm-veteran-styled-release";test ! -e "$out";mkdir "$out"
@@ -386,9 +386,9 @@ jobs:
           test "$(git rev-parse HEAD^)" = "$EXPECTED_PARENT"
           git fetch --no-tags --depth=1 origin "$EXPECTED_PARENT" > "$out/parent-fetch.log" 2>&1
           git merge-base --is-ancestor "$EXPECTED_PARENT" "$GITHUB_SHA" > "$out/parent-ancestry.log" 2>&1
-          git diff --exit-code "$EXPECTED_PARENT" HEAD -- . ':!docs/**' ':!.github/workflows/cm-veteran-retirement.yml' ':!scripts/qa/playCmVeteran.mjs' ':!scripts/qa/fixtures/cmVeteran.entry.tsx' ':!scripts/qa/fixtures/cmVeteran.html' ':!scripts/qa/fixtures/cmVeteran.vite.mjs' > "$out/protected-current-source.log"
+          git diff --exit-code "$EXPECTED_PARENT" HEAD -- . ':!docs/**' ':!.github/workflows/cm-veteran-retirement.yml' ':!scripts/qa/playCmVeteran.mjs' > "$out/protected-current-source.log"
           git diff --name-only "$EXPECTED_PARENT" HEAD -- . ':!docs/**' | sort > "$out/direct-child-members.txt"
-          printf '%s\n' .github/workflows/cm-veteran-retirement.yml scripts/qa/playCmVeteran.mjs scripts/qa/fixtures/cmVeteran.entry.tsx scripts/qa/fixtures/cmVeteran.html scripts/qa/fixtures/cmVeteran.vite.mjs | sort | cmp - "$out/direct-child-members.txt"
+          printf '%s\n' .github/workflows/cm-veteran-retirement.yml scripts/qa/playCmVeteran.mjs | sort | cmp - "$out/direct-child-members.txt"
           for file in package.json package-lock.json vitest.config.ts scripts/lib/offlineTransport.cjs scripts/qa/freeKickLab1070.mjs scripts/sweepWeight.mjs scripts/playHomeFold.mjs src/lib/clubManager.ts src/lib/clubManagerCalendar.ts src/lib/clubManagerVeteranLedger.ts src/lib/clubManagerVeteranRetirement.ts src/hooks/useClubManager.ts src/components/club-manager/ClubManagerSeasonSummary.tsx src/components/club-manager/VeteranRetirementCard.tsx src/components/game/ResultScreen.tsx src/index.css scripts/qa/siteMenuNavigationSupport.mjs scripts/lib/hostLikeServer.mjs scripts/lib/playwrightLoader.mjs;do
             git show "$EXPECTED_PARENT:$file" | cmp "$file" -
           done
