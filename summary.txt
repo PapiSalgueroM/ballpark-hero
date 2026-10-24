@@ -1,0 +1,6 @@
+build exit=0 33s | [dukb] inlined 1 stylesheet(s) and 1 module(s) into 181 snapshots (11 left alone)
+fonts exit=0 1s | Prepared 9 declared font dependencies for local fulfillment.
+simCmRealFixtures-forwalk exit=0 4s | simCmRealFixtures normal premier: 10 outcome groups passed on 20 clubs, 38 matchdays and 380 fixtures, BASE GROUPS NOT RUN.
+playCmRealFixtures exit=1 18s | Node.js v24.21.0
+playCmVar exit=0 608s | playCmVar: green. Every review a player can meet was shown whole, at its minute, over nothing else, and every match settled as the engine settles it.
+walk1521 exit=0 570s | walkrun: green, every size walked, screenshots in RC_OUT
