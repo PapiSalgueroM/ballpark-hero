@@ -208,8 +208,8 @@ const lastName = (n: string) => n.replace(' (Youth)', '').split(' ').slice(-1)[0
    over it, and never reach the page under it. Before this, two Shift+Tab presses from Back put the focus on the
    page's sign up button under the stage, and Enter opened a dialog nobody could see that also took the pointer
    from the match. A control outside the stage is a stop only when the outermost layer around it sits above the
-   stage's own (the cookie notice at 60 while it waits for an answer, the toasts), so the notice stays reachable
-   and the site's bar (50) and its dialogs do not. The stage's keydown listener calls this for every Tab: it moves
+   stage's own and is on the screen (the cookie notice at 60 while it waits for an answer, the toasts), so the
+   notice stays reachable and the site's bar (50), its dialogs and its skip link do not. The stage's keydown listener calls this for every Tab: it moves
    the focus itself and keeps the browser's own move from happening, so nothing under the stage takes the focus
    even for a moment (a page control taking it would scroll the page under the stage). */
 const TAB_STOPS = 'a[href],area[href],button,input,select,textarea,iframe,summary,[tabindex],[contenteditable="true"]';
@@ -219,22 +219,30 @@ function tabRoundTheStage(e: KeyboardEvent, stage: HTMLElement) {
   const own = from.closest('[role="dialog"],[role="alertdialog"]');
   if (own && own !== stage && !stage.contains(own)) return;
   const stageLayer = Number(getComputedStyle(stage).zIndex) || 0;
-  const layers = new Map<Element, number | null>();
-  /* the z-index of the outermost positioned element around el that sets one, or null when none does */
-  const outerLayer = (el: Element | null): number | null => {
+  const layers = new Map<Element, Element | null>();
+  /* the outermost positioned element around el (el itself included) that sets a z-index, or null when none does */
+  const outerLayer = (el: Element | null): Element | null => {
     if (!el || el === document.body) return null;
     if (layers.has(el)) return layers.get(el) ?? null;
-    let z = outerLayer(el.parentElement);
-    if (z === null) {
+    let layer = outerLayer(el.parentElement);
+    if (!layer) {
       const s = getComputedStyle(el);
-      if (s.position !== 'static' && s.zIndex !== 'auto') z = Number(s.zIndex);
+      if (s.position !== 'static' && s.zIndex !== 'auto') layer = el;
     }
-    layers.set(el, z);
-    return z;
+    layers.set(el, layer);
+    return layer;
+  };
+  /* over the stage: in a layer above the stage's own that is on the screen. The site's skip link sits at 100 but is
+     parked above the window until it has the focus, and it leads into the page under the stage, so it is not one. */
+  const overStage = (el: Element) => {
+    const layer = outerLayer(el);
+    if (!layer || !(Number(getComputedStyle(layer).zIndex) > stageLayer)) return false;
+    const r = layer.getBoundingClientRect();
+    return r.bottom > 0 && r.right > 0 && r.top < window.innerHeight && r.left < window.innerWidth;
   };
   const stops = [...document.querySelectorAll<HTMLElement>(TAB_STOPS)].filter(el =>
     el.tabIndex >= 0 && !(el as HTMLButtonElement).disabled
-    && (stage.contains(el) || (outerLayer(el) ?? -Infinity) > stageLayer)
+    && (stage.contains(el) || overStage(el))
     && !el.closest('[inert]') && el.getClientRects().length > 0 && getComputedStyle(el).visibility !== 'hidden');
   e.preventDefault();
   if (!stops.length) { stage.focus({ preventScroll: true }); return; }
