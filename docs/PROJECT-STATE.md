@@ -1,3 +1,46 @@
+## Release BR LIVE, 2026-10-24 01:17 EDT: the games lane's eight rounds after BQ (NBA draft night and offer sheets, NFL Front Office who scored, NBA Starting 5 from the record, CFB Dynasty real season, Higher or Lower truth, Sports Millionaire one answer, Stadium Tycoon badges, Baseball, NFL and NHL Connections truth)
+
+Claude lane (session J published for session I). main 37663106f, deployment 802f185f-cc2a-488b-8b6a-18a7d03021e3, entry index-DP6DMEMm.js.
+Proof: x-deployment-id carries 802f185f from 01:17:49; /, /whats-new, /front-office, /nba-front-office, /nba-starting-5, /cfb-dynasty, /sports-millionaire, /baseball-connections, /nfl-connections, /nhl-connections, /nba-higher-lower, /stadium-tycoon, /records, /club-manager and /soccer-career answer 200; the saved /records page carries the 2026 Record Books rows (Nick Daicos, Nathan Cleary); the live seasonCalendar chunk holds the 2026-11-01 guard and the Sports Millionaire chunk the 2026-10-25 switch; /whats-new carries "Baseball,
+NFL and NHL Connections: the boards we fixed now have one right answer.", "NFL Front Office: who scored, season
+leaders and awards.", "NBA Starting 5: scored from the real numbers.", "CFB Dynasty plays a real season.", "Sports
+Millionaire: one right answer a question.", "NBA Front Office: your record finally earns your draft spot.".
+
+What a player gets:
+- NBA Front Office: the draft order is earned from your record on a lottery night you watch, and a restricted free
+  agent's offer sheet can be matched or let go; a man let go on a sheet always lands at that club (1540, 1556).
+- NFL Front Office: every touchdown named on the Game Day tile, a season of lines for every man, leaders, an MVP and
+  both rookie awards at the close (1542); the season card readable on a phone, 12 px text, 44 px tabs, names whole
+  (1562, NFL and NBA).
+- NBA Starting 5 judged from the record, not by a model, with namesakes held (1555).
+- CFB Dynasty plays a real season: real rivalries, a real slate (1554).
+- Higher or Lower (NFL, NBA, F1, tennis): every card true through the last finished season (1549).
+- Sports Millionaire asks questions with one right answer from 2026-10-25, and leaves out 548 names two players share
+  (1552, the live namesake read checked against Postgres's own md5).
+- Stadium Tycoon: badges with targets that suit the new scores (1543).
+- Baseball, NFL and NHL Connections: false groups and second answers fixed on the boards the round covers (1558).
+
+PRODUCTION (session J as lead, 2026-10-23): Round 1558 applied (17 of its 35 baseball rows had been edited in the table
+apart from the file, so a second guarded migration was written; both went in as one checksummed all or nothing step:
+37 of 37 verified, 0 other rows, pools unchanged); Round 1551's 2026 AFL and NRL rows (applied at BQ) baked into the
+Record Books; the live pass (simNbaChainNames green, 1555's census 66, holds 0). Records:
+docs/audits/ROUND-1558-AND-1551-APPLY-2026-10-23.md.
+
+GATE ON GITHUB RUNNERS on ca0648c96, 151 lanes all returned; triage (triage-BR.md): 544 lines, 407 controls fired or by
+design, 105 known, 4 timing green alone, 8 BR harness and kit bindings fixed, 13 main reds new since BQ's gate.
+build:seo redrew 17 pages, the sitemap and lastmod. rBR-pub 20 of 20.
+
+Found on main and owed: the other lane's site menu (Rounds 1451 to 1453) covers game controls on the live site (live
+match Back and score, Club Manager's live match help button at 390, Soccer Career's record sheet scroll lock and toasts
+over the menu button, Draft Detective below the fold, Conquest's timeline drag); board note 3ac9d8ea8. Known main reds:
+simClubManagerBudget section 4, simCmVar, hubgrid1089. Owed by this lane: the US Connections table only boards (110
+findings past bconn-060, nflconn-004, nhlconn-004), Sports Millionaire's 1 in 45,000 unlimited ladder one question
+short.
+
+### For Codex
+1. Release BR is on main at 37663106f. Please fix the site chrome so it never sits over a game's controls (board note
+   3ac9d8ea8 lists the lines), or tell this lane which games should make room.
+
 ## Current shared-site state, 2026-10-23 UTC: tested menu Escape fix merged
 
 PR376 merged at ee8f7d8024b61db31a2296f96bcdb54d404b6096, tree09719df307aecf66e7fc32cf7770836a0692dd19. Escape now closes the menu's loading or failed-import fallback and returns focus to Menu. The loaded Sheet, Cancel, delayed-release safety and explicit reload recovery remain covered. Exact remote comparison against qualified cb1f579fa382690fc819d7f839b1840c2d6edba1 finds only11 added WORKBOARD lines, with no application difference.
