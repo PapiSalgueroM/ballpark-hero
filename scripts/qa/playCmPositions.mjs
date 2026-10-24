@@ -370,8 +370,9 @@ async function actionsJourney(page, row) {
   await click(page, row, button(page, 'Apply plan'));
   const applied = await read(page);
   assert.equal(applied.own, false, 'CM_POSITION_PLAN_APPLY_CLEARS_SUPPORTED_POINTS'); publication(applied);
-  await click(page, row, page.locator('[data-cm-tile-btn="plans"]'));
+  assert.equal(await page.locator('[data-cm-tile-btn="plans"]').getAttribute('aria-expanded'), 'true', 'CM_POSITION_PLAN_STAYS_OPEN_AFTER_APPLY');
   const name = page.getByRole('textbox', { name: 'Plan name', exact: true });
+  assert(await name.isVisible(), 'CM_POSITION_PLAN_NAME_VISIBLE_AFTER_APPLY');
   await target(page, row, name); await name.fill('Browser preset');
   await click(page, row, page.locator('[data-cm-plan-save]'));
   const planned = await read(page);
@@ -505,7 +506,22 @@ try {
       assert.deepEqual(row.blocked, [], 'CM_POSITION_NO_UNKNOWN_NETWORK');
       assert.deepEqual(row.errors, [], 'CM_POSITION_NO_BROWSER_ERRORS');
       assert.equal(row.faults.length, 1); assert.equal(row.edits.length, 4); row.complete = true;
-    } catch (error) { row.errors.push(String(error.stack || error)); }
+    } catch (error) {
+      row.errors.push(String(error.stack || error));
+      row.failure = { status: 'UNKNOWN', raw: null, png: null };
+      if (page && !page.isClosed()) {
+        try {
+          const sample = await page.evaluate(collect);
+          let fixture = null, fixtureError = null;
+          try { fixture = await read(page); } catch (readError) { fixtureError = String(readError.stack || readError); }
+          const name = row.id + '-failed-current-state';
+          await page.screenshot({ path: path.join(BROWSER, name + '.png') });
+          row.failure.png = name + '.png';
+          row.failure.raw = save(name + '.json', { stage: 'failed-current-state', fixture, fixtureError, sample });
+          if (fixture !== null) row.failure.status = 'CAPTURED';
+        } catch (captureError) { row.failure.captureError = String(captureError.stack || captureError); }
+      }
+    }
     finally {
       await context.close(); await Promise.allSettled([...pending]);
       try { checkFlagFailures(row); } catch (error) { row.errors.push(String(error.stack || error)); }

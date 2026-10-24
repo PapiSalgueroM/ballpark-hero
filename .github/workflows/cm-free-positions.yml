@@ -10,12 +10,12 @@ concurrency:
   cancel-in-progress: false
 env:
   BASE_SOURCE: 3e95583fd8131f3704591cd566677f8774a8e4c3
-  EXPECTED_PARENT: aa549c10ce7d12a95e918ebc4702043826d6086c
+  EXPECTED_PARENT: 7dbb376bbdacbc59e077b804ee870c80bcd2378a
   CI: '1'
   SIM_NETWORK: offline
   TZ: UTC
   ENGINES: chromium
-  CM_POSITION_EXPECTED_PINS_JSON: '{"src/lib/clubManager.ts":"518f9be7ab031e8a4e922d65c4992d2e8e82f5ab0810e19abc6855907fa81f87","src/components/club-manager/TacticsScreen.tsx":"afd54621a7c7255097751f679d8d31c59c684ee0d733a49db4a5be47a7190a8c","src/hooks/useClubManager.ts":"fc4e45c8d1df167b1bb846748af5fe0583af1cdf7154eedc7886b16296101fd4","src/lib/clubManagerPositions.ts":"ba6a2ab6f4a220439dec9373ba3655c7a962abaa640cc8f47c206644df0407a7","src/lib/clubManagerCalendar.ts":"9902769cf809a3b7d382c703615f5dbff0176d41c57a07306a6abb2d1a62f2f3","src/components/club-manager/MatchPlansCard.tsx":"95fce738e829b209d8b30a15163d95b619cb4b0f4e7ad65ac949fe028a03d90c","src/components/club-manager/LiveSimScreen.tsx":"6e5a9d996d18a31c0bf18a43c0b5f3b00acdf5c79d68aa660072ca8addd0f7bb","src/pages/ClubManager.tsx":"412a7335e9510d8790c775074e366246b4404ec31c1d1151f4e29d76687d39c9","src/components/club-manager/LiveSimMotion.css":"b3945ea0833e9b1064fc2b89710c8a1cea58b74aa361aea7d0f31b6dc31aec04","src/index.css":"ada9cc819db63d0e2eb013bd3c29eec16877e2a30166c390b81901142369fef3","scripts/qa/siteMenuNavigationSupport.mjs":"c70e3ecc412f16d3322047b13205716c644495f8c74b76eed83852c87f35d303","scripts/lib/hostLikeServer.mjs":"3958c9a3b4d9e49bb60a3b7dd72d81a997bd1caed56e82e4c3bae07e1a918ef0","scripts/lib/playwrightLoader.mjs":"94a07179be7ca6b9562d118b52c2d5d0dff0b6b2e29e49e4fea16fa2defb5a93","scripts/qa/fixtures/cmPositions.entry.tsx":"c637c5ad358a93caa0f3355139f2502dc173f5d90c55f28f23af3b2dad40af48","scripts/qa/fixtures/cmPositions.html":"7425efd0581255d732380634c5e23c327652298ddf81dc9d4626b81833ec56d6","scripts/qa/fixtures/cmPositions.vite.mjs":"9b24e0257b653894e9656f159a1df90b0826fc339fd1969b8885628e006896f6","scripts/qa/playCmPositions.mjs":"87838695405a207e24c93f1795a8947ffc4849de9d540081f61ee6873478da4b"}'
+  CM_POSITION_EXPECTED_PINS_JSON: '{"src/lib/clubManager.ts":"518f9be7ab031e8a4e922d65c4992d2e8e82f5ab0810e19abc6855907fa81f87","src/components/club-manager/TacticsScreen.tsx":"afd54621a7c7255097751f679d8d31c59c684ee0d733a49db4a5be47a7190a8c","src/hooks/useClubManager.ts":"fc4e45c8d1df167b1bb846748af5fe0583af1cdf7154eedc7886b16296101fd4","src/lib/clubManagerPositions.ts":"ba6a2ab6f4a220439dec9373ba3655c7a962abaa640cc8f47c206644df0407a7","src/lib/clubManagerCalendar.ts":"9902769cf809a3b7d382c703615f5dbff0176d41c57a07306a6abb2d1a62f2f3","src/components/club-manager/MatchPlansCard.tsx":"95fce738e829b209d8b30a15163d95b619cb4b0f4e7ad65ac949fe028a03d90c","src/components/club-manager/LiveSimScreen.tsx":"6e5a9d996d18a31c0bf18a43c0b5f3b00acdf5c79d68aa660072ca8addd0f7bb","src/pages/ClubManager.tsx":"412a7335e9510d8790c775074e366246b4404ec31c1d1151f4e29d76687d39c9","src/components/club-manager/LiveSimMotion.css":"b3945ea0833e9b1064fc2b89710c8a1cea58b74aa361aea7d0f31b6dc31aec04","src/index.css":"ada9cc819db63d0e2eb013bd3c29eec16877e2a30166c390b81901142369fef3","scripts/qa/siteMenuNavigationSupport.mjs":"c70e3ecc412f16d3322047b13205716c644495f8c74b76eed83852c87f35d303","scripts/lib/hostLikeServer.mjs":"3958c9a3b4d9e49bb60a3b7dd72d81a997bd1caed56e82e4c3bae07e1a918ef0","scripts/lib/playwrightLoader.mjs":"94a07179be7ca6b9562d118b52c2d5d0dff0b6b2e29e49e4fea16fa2defb5a93","scripts/qa/fixtures/cmPositions.entry.tsx":"c637c5ad358a93caa0f3355139f2502dc173f5d90c55f28f23af3b2dad40af48","scripts/qa/fixtures/cmPositions.html":"7425efd0581255d732380634c5e23c327652298ddf81dc9d4626b81833ec56d6","scripts/qa/fixtures/cmPositions.vite.mjs":"9b24e0257b653894e9656f159a1df90b0826fc339fd1969b8885628e006896f6","scripts/qa/playCmPositions.mjs":"8d9c794300b8b9176424e2ed9593fb94ae1be6c541d7a47d8f96a508c17a8957"}'
 jobs:
   original_positions:
     runs-on: ubuntu-latest
@@ -70,7 +70,7 @@ jobs:
           test "$(git rev-parse HEAD:scripts/qa/fixtures/cmPositions.entry.tsx)" = 6108b97a059d36f2b376049b8f1a6fb5984558ec
           test "$(git rev-parse HEAD:scripts/qa/fixtures/cmPositions.html)" = fc5bbdff14d182b182c29153e5f4a47709e16a7a
           test "$(git rev-parse HEAD:scripts/qa/fixtures/cmPositions.vite.mjs)" = bbfebfb5b68789acc62b489641f59d8eba1f1861
-          test "$(git rev-parse HEAD:scripts/qa/playCmPositions.mjs)" = 0987968b8a4d61cd66e3aac09d90600bad3d96ac
+          test "$(git rev-parse HEAD:scripts/qa/playCmPositions.mjs)" = 8c6b58f80d90a853ca8d6d75ed54acbac9ce697e
           printf '%s  %s\n' \
             518f9be7ab031e8a4e922d65c4992d2e8e82f5ab0810e19abc6855907fa81f87 src/lib/clubManager.ts \
             afd54621a7c7255097751f679d8d31c59c684ee0d733a49db4a5be47a7190a8c src/components/club-manager/TacticsScreen.tsx \
@@ -95,7 +95,7 @@ jobs:
             c637c5ad358a93caa0f3355139f2502dc173f5d90c55f28f23af3b2dad40af48 scripts/qa/fixtures/cmPositions.entry.tsx \
             7425efd0581255d732380634c5e23c327652298ddf81dc9d4626b81833ec56d6 scripts/qa/fixtures/cmPositions.html \
             9b24e0257b653894e9656f159a1df90b0826fc339fd1969b8885628e006896f6 scripts/qa/fixtures/cmPositions.vite.mjs \
-            87838695405a207e24c93f1795a8947ffc4849de9d540081f61ee6873478da4b scripts/qa/playCmPositions.mjs > "$out/input-pins.sha256"
+            8d9c794300b8b9176424e2ed9593fb94ae1be6c541d7a47d8f96a508c17a8957 scripts/qa/playCmPositions.mjs > "$out/input-pins.sha256"
           sha256sum --check "$out/input-pins.sha256" > "$out/input-pins.log"
           git rev-parse HEAD > "$out/head.txt";git rev-parse 'HEAD^{tree}' > "$out/tree.txt"
           printf '%s\n' "$GITHUB_RUN_ID" > "$out/run-id.txt"
