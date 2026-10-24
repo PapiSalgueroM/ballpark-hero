@@ -1,0 +1,15 @@
+#!serve
+#!playwright
+#!serial
+tsc: node_modules/.bin/tsc --noEmit -p tsconfig.app.json
+sweepWeight: SWEEP_OFFLINE=1 node scripts/sweepWeight.mjs
+simNoRivalNames: node scripts/simNoRivalNames.mjs
+simHarnessAnchors: node scripts/simHarnessAnchors.mjs
+simStorageWrites: node scripts/simStorageWrites.mjs
+dashscan: node .rc/x/dashscan.mjs b20ec6664
+dashscan-ctl: DASH_CONTROL=1 node .rc/x/dashscan.mjs b20ec6664
+playSoccerCareerDepth: NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/playSoccerCareerDepth.mjs
+playConquestScenes: ENGINES=chromium node scripts/playConquestScenes.mjs
+cq-margin: CONQUEST_SCENES_CONTROL=margin ENGINES=chromium node scripts/playConquestScenes.mjs
+playLiveMatchFit: node scripts/playLiveMatchFit.mjs
+probe-head: node .rc/x/esc1568.mjs
