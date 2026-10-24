@@ -5,6 +5,7 @@ import { HUB_NAV } from '@/lib/sportHubNav';
 import { useRoutePath } from '@/hooks/useRoutePath';
 import { isBrowse, searchSite } from '@/lib/siteSearch';
 import { focusSiteMenuTrigger } from './siteMenuFocus';
+import { restoreMenuNavigationFocus, type MenuNavigationSelection } from './siteMenuNavigationFocus';
 
 export interface SiteMenuPanelProps {
   open: boolean;
@@ -23,12 +24,23 @@ export function SiteMenuPanel({ open, onOpenChange, returnFocusRef, returnFocusA
   const [query, setQuery] = useState('');
   const heading = useRef<HTMLHeadingElement>(null);
   const field = useRef<HTMLInputElement>(null);
+  const navigation = useRef<MenuNavigationSelection | null>(null);
   const searching = !isBrowse(query);
   const results = useMemo(() => isBrowse(query) ? [] : searchSite(query), [query]);
   useEffect(() => { if (!open) setQuery(''); }, [open]);
   const link = (to: string, label: string, detail?: string) => (
     <SheetClose asChild key={to}>
       <Link to={to} aria-current={path === to ? 'page' : undefined}
+        onClick={event => {
+          navigation.current = null;
+          const node = event.currentTarget;
+          if (event.defaultPrevented || event.button !== 0 || event.metaKey || event.ctrlKey
+            || event.shiftKey || event.altKey || node.hasAttribute('download')
+            || (node.target && node.target.toLowerCase() !== '_self')) return;
+          const from = new URL(window.location.href), to = new URL(node.href);
+          if (to.origin === from.origin && to.pathname !== from.pathname)
+            navigation.current = { link: node, fromHref: from.href, toHref: to.href };
+        }}
         className={`flex min-h-11 items-center rounded-lg px-3 py-2 text-sm font-medium focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring ${path === to ? 'bg-primary/10 text-primary' : 'hover:bg-accent hover:text-accent-foreground'}`}>
         <span className="min-w-0 break-words">
           {label}{detail && <span className="block text-xs font-normal text-muted-foreground"> {detail}</span>}
@@ -40,12 +52,18 @@ export function SiteMenuPanel({ open, onOpenChange, returnFocusRef, returnFocusA
     <Sheet open={open} onOpenChange={onOpenChange}>
       <SheetContent side="left" id={id} data-site-chrome=""
         onOpenAutoFocus={event => {
+          navigation.current = null;
           event.preventDefault();
           heading.current?.focus({ preventScroll: true });
         }}
         onCloseAutoFocus={event => {
           event.preventDefault();
-          if (returnFocusAllowed?.() !== false) focusSiteMenuTrigger(returnFocusRef.current);
+          const selected = navigation.current;
+          navigation.current = null;
+          if (returnFocusAllowed?.() === false) return;
+          if (selected) restoreMenuNavigationFocus(returnFocusRef.current, selected,
+            () => returnFocusAllowed?.() !== false);
+          else focusSiteMenuTrigger(returnFocusRef.current);
         }}
         className="flex h-[100dvh] w-[calc(100vw_-_1rem)] max-w-sm flex-col gap-0 p-0 motion-reduce:!animate-none motion-reduce:!transition-none [&>button]:inline-flex [&>button]:h-11 [&>button]:w-11 [&>button]:items-center [&>button]:justify-center">
         <SheetHeader className="shrink-0 p-5 pr-16 text-left">

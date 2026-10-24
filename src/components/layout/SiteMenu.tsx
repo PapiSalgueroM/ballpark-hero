@@ -46,15 +46,13 @@ export function SiteMenu({ mode = 'fallback' }: SiteMenuProps) {
   useEffect(() => { changeOpen(false); }, [key]);
   useEffect(() => {
     if (!open || Panel || failed) return;
-    let active = true;
     const token = {};
     pendingImport.current = token;
     import('./SiteMenuPanel').then(
-      module => { if (active && currentOpen.current && pendingImport.current === token) setPanel(() => module.SiteMenuPanel); },
-      () => { if (active && currentOpen.current && pendingImport.current === token) setFailed(true); },
+      module => { if (currentOpen.current && pendingImport.current === token) setPanel(() => module.SiteMenuPanel); },
+      () => { if (currentOpen.current && pendingImport.current === token) setFailed(true); },
     );
     return () => {
-      active = false;
       if (pendingImport.current === token) pendingImport.current = null;
     };
   }, [open, Panel, failed]);
