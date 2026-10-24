@@ -1,0 +1,6 @@
+build exit=0 35s | [dukb] inlined 1 stylesheet(s) and 1 module(s) into 181 snapshots (11 left alone)
+land-toasts exit=0 420s | playSoccerLanding: green at 320x640, 390x844, 1280x900 (also no extra sizes; toasts, bytes), every marked section red on the base
+toastbar exit=1 84s | CONTROL FIRED: SOCCER_LANDING_CONTROL=toastbar put the higher toast, the exit slide and the exit ghost back on a phone and the bar reach went red on each
+lt-m2 exit=1 78s | playSoccerLanding: RED, 34 finding(s)
+lt-m2b exit=1 78s | playSoccerLanding: RED, 2 finding(s)
+lt-mg exit=1 79s | playSoccerLanding: RED, 6 finding(s)
