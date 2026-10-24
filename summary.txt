@@ -1,0 +1,8 @@
+build exit=0 34s | [dukb] inlined 1 stylesheet(s) and 1 module(s) into 181 snapshots (11 left alone)
+playLiveMatchFit exit=0 143s | playLiveMatchFit: all green. The goal in order, reduced motion, the fit at five sizes, nothing moves the page, the reload, Back, a wide screen, an own goal drawn as one.
+livefit-bar exit=1 59s | playLiveMatchFit: control bar turned section 3 red and left sections 1, 2 and 4 green, as it must.
+livefit-silentlist exit=1 71s | playLiveMatchFit: control silentlist turned section 7 red on the line it must (the list never said this goal, 2 GOAL! rewritten) and left the rest green.
+livefit-earlyscore exit=1 71s | playLiveMatchFit: control earlyscore turned section 7 red on the line it must (the score changed before the ball was in, 1 node touched) and left the rest green.
+livefit-nocard exit=1 71s | playLiveMatchFit: control nocard turned section 7 red on the line it must (no scorer card was ever on screen, 1 node touched) and left the rest green.
+playLiveMatchFit-fresh exit=0 156s | playLiveMatchFit: all green. The goal in order, reduced motion, the fit at five sizes, nothing moves the page, the reload, Back, a wide screen, an own goal drawn as one.
+sweepWeight exit=0 28s | sweepWeight: green. Every page is inside its budget, and the budgets came down this round.
