@@ -1,0 +1,8 @@
+build exit=0 35s | [dukb] inlined 1 stylesheet(s) and 1 module(s) into 181 snapshots (11 left alone)
+tsc exit=0 69s | 
+probe-head exit=0 53s | esc1568 [head]: green, parts esc, plain, ghost
+probe-mesc exit=1 80s | esc1568 [mesc]: RED, 4 findings
+probe-mg exit=1 41s | esc1568 [mg]: RED, 4 findings
+playConquestScenes exit=0 77s | ALL CONQUEST SCENE SCREEN CHECKS PASSED
+cq-margin exit=0 75s | control "margin": exactly the edge check went red, the check works
+cq-m3 exit=1 112s |   - 5. the timeline's labels row and the slider's top edge answer themselves (/soccer-conquest @430)

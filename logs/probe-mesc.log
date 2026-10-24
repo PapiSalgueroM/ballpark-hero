@@ -1,0 +1,20 @@
+mutfix1568: mesc applied to src/components/club-manager/LiveSimScreen.tsx ("if (e.key === 'Escape' && !e.defaultPrevented) onEscape.current();" -> "if (e.key === 'Escape') onEscape.current();")
+[mesc] esc menu 390x844: focus is on BAR Open site menu
+[mesc] esc menu 390x844: after Enter {"stage":1,"card":0,"dialogs":["MenuFind games, sports and sit"]}
+[mesc] esc menu 390x844: after one Escape {"stage":0,"card":1,"dialogs":[]}
+[mesc] FINDING esc menu 390x844: one Escape closed the dialog AND left the match (stage 0, card 1)
+[mesc] esc tab 390x844: focus is on BAR button opens a dialog Open site menu
+[mesc] esc tab 390x844: after Enter {"stage":1,"card":0,"dialogs":["MenuFind games, sports and sit"]}
+[mesc] esc tab 390x844: after one Escape {"stage":0,"card":1,"dialogs":[]}
+[mesc] FINDING esc tab 390x844: one Escape closed the dialog AND left the match (stage 0, card 1)
+[mesc] esc menu 1280x900: focus is on BAR Open site menu
+[mesc] esc menu 1280x900: after Enter {"stage":1,"card":0,"dialogs":["MenuFind games, sports and sit"]}
+[mesc] esc menu 1280x900: after one Escape {"stage":0,"card":1,"dialogs":[]}
+[mesc] FINDING esc menu 1280x900: one Escape closed the dialog AND left the match (stage 0, card 1)
+[mesc] esc tab 1280x900: focus is on BAR button opens a dialog Open site menu
+[mesc] esc tab 1280x900: after Enter {"stage":1,"card":0,"dialogs":["MenuFind games, sports and sit"]}
+[mesc] esc tab 1280x900: after one Escape {"stage":0,"card":1,"dialogs":[]}
+[mesc] FINDING esc tab 1280x900: one Escape closed the dialog AND left the match (stage 0, card 1)
+[mesc] plain 390x844: before {"stage":1,"card":0,"dialogs":[]}, after one Escape {"stage":0,"card":1,"dialogs":[]}
+[mesc] plain 1280x900: before {"stage":1,"card":0,"dialogs":[]}, after one Escape {"stage":0,"card":1,"dialogs":[]}
+esc1568 [mesc]: RED, 4 findings
