@@ -24,7 +24,7 @@
  *      the interest the payment saves; added by the closing check of 2026-10-22, before it the call cost nothing).
  *   4) No dominant choice: over the same fleet, at a 6 season horizon every call beats every other call somewhere
  *      (points or money) by a margin, and at 3, 6 and 10 seasons no call is the best at both.
- *   5) An owner save from before this round (written by the base engine itself) loads, keeps its club and its
+ *   5) An owner save written by the pinned pre-owner engine and serializer loads, keeps its club and its
  *      rows byte for byte, and plays on from its next season on the table.
  *   6) Careers that never buy a club are byte equal to the base: seeded careers to retirement, then the manager,
  *      pundit and walk away tails, on the base engine and this one, every state after every step and the
@@ -70,10 +70,12 @@
  * (section 0, the owner tail in memory before it is loaded), bands (section 1, three clubs a band), overprice
  * (section 1, a band offered to a man 60M short of its price). Added by the closing check: debtfree (section 3, the
  * lenders' fee set to 0, so paying the debt down costs nothing again).
- * Options: SIM_OWNER_BASE=<sha> (default: git merge-base HEAD origin/main), SIM_OWNER_SALT=<n> (default 1),
+ * Options: SIM_OWNER_BASE=<sha> (section 6 only, default: git merge-base HEAD origin/main), SIM_OWNER_SALT=<n> (default 1),
  * SIM_OWNER_ONLY=<sections, e.g. 3,4>.
  */
 import { build } from 'esbuild';
+import assert from 'node:assert/strict';
+import { createHash } from 'node:crypto';
 import { execFileSync } from 'node:child_process';
 import fs from 'node:fs';
 import os from 'node:os';
@@ -119,9 +121,24 @@ const lf = s => s.split('\r\n').join('\n');
 /* The base: the tree this round is cut from, or the merge base once main is merged in. */
 const git = args => execFileSync('git', args, { cwd: ROOT, encoding: 'utf8', maxBuffer: 64 << 20 }).trim();
 let BASE = process.env.SIM_OWNER_BASE || '';
-if (!BASE && ONLY.has(5) || !BASE && ONLY.has(6)) {
+if (!BASE && ONLY.has(6)) {
   try { BASE = git(['merge-base', 'HEAD', 'origin/main']); } catch { BASE = ''; }
   if (!BASE) { console.error('no base: set SIM_OWNER_BASE or fetch origin/main'); process.exit(2); }
+}
+
+/* Section 5 uses the actual sole parent of the owner feature, not a drifting merge base.
+   Only engine, league and save bodies are historical; other bundle dependencies stay current. */
+const OWNER_SAVE_BASE = '776d10722df4e2b8c735170de02e9762522ce09a';
+const OWNER_SAVE_PINS = [{"bytes":545071,"gitBlob":"c49e915024c4bb97940e1bd379c7cf24ae7257df","sha256":"0b3d35bc584867da38ced517c5d2ed9c2507fbced8c200c916f5b830ed39d5a1","file":"src/lib/soccerCareerEngine.ts"},{"bytes":44200,"gitBlob":"2c7406713c8311c37547fe647e4eaa1d364c6b57","sha256":"f6771f12686c39aabd2cbc67c5ac2ca3968f80b4326b4f1cd4407cae74edd49c","file":"src/lib/soccerCareerLeague.ts"},{"bytes":6287,"gitBlob":"86ec011693fd5bc702b5e8ccec05d27775a72a76","sha256":"b486dfd8c4073230b6967c674058e46c7b56a6afd2a8a165f1e215501205477a","file":"src/lib/soccerCareerSave.ts"}];
+if (ONLY.has(5)) {
+  assert.equal(git(['rev-parse', OWNER_SAVE_BASE + '^{commit}']), OWNER_SAVE_BASE, 'OWNER_COMPAT_WRITER_SOURCE_BINDING');
+  for (const pin of OWNER_SAVE_PINS) {
+    const body = execFileSync('git', ['show', OWNER_SAVE_BASE + ':' + pin.file], { cwd: ROOT, maxBuffer: 64 << 20 });
+    assert.equal(body.length, pin.bytes, 'OWNER_COMPAT_WRITER_SOURCE_BINDING');
+    assert.equal(createHash('sha256').update(body).digest('hex'), pin.sha256, 'OWNER_COMPAT_WRITER_SOURCE_BINDING');
+    assert.equal(git(['rev-parse', OWNER_SAVE_BASE + ':' + pin.file]), pin.gitBlob, 'OWNER_COMPAT_WRITER_SOURCE_BINDING');
+  }
+  console.log('OWNER_COMPAT_WRITER ' + JSON.stringify({ commit: OWNER_SAVE_BASE, files: OWNER_SAVE_PINS, otherDependencies: 'CURRENT_BUNDLE_GRAPH_NOT_FROZEN_HISTORICAL_REPOSITORY' }));
 }
 
 const tmp = fs.mkdtempSync(path.join(os.tmpdir(), 'ownertail-'));
@@ -155,6 +172,15 @@ const basePlugin = { name: 'owner-base', setup(b) {
     return { contents: lf(git(['show', `${BASE}:${file}`])), loader: 'ts' };
   });
 } };
+/* No owner object is invented or edited to create the historical save. */
+const ownerSavePlugin = { name: 'owner-save-writer', setup(b) {
+  const want = new Map(OWNER_SAVE_PINS.map(pin => [norm(path.join(ROOT, pin.file)), pin.file]));
+  b.onLoad({ filter: /\.(ts|tsx)$/ }, args => {
+    const file = want.get(norm(args.path));
+    if (!file) return undefined;
+    return { contents: lf(git(['show', OWNER_SAVE_BASE + ':' + file])), loader: 'ts' };
+  });
+} };
 const R = p => path.join(ROOT, p).replaceAll('\\', '/');
 async function bundle(name, entry, plugins) {
   const ENTRY = path.join(tmp, `${name}.entry.mjs`);
@@ -170,10 +196,12 @@ if (CONTROL) {
   if (applied !== CONTROLS[CONTROL].length) { console.error(`control ${CONTROL}: applied ${applied} of ${CONTROLS[CONTROL].length} edits`); process.exit(2); }
   console.log(`CONTROL ${CONTROL} applied: this run is meant to go red`);
 }
-const BASEM = (ONLY.has(5) || ONLY.has(6)) ? await bundle('base', `export * as engine from '${R(ENGINE)}';\n`, [basePlugin]) : null;
+const BASEM = ONLY.has(6) ? await bundle('base', `export * as engine from '${R(ENGINE)}';\n`, [basePlugin]) : null;
 if (BASEM) console.log(`base ${BASE.slice(0, 10)}`);
+const SAVEM = ONLY.has(5) ? await bundle('historical-owner-save', "export * as engine from '" + R(ENGINE) + "';\nexport * as save from '" + R('src/lib/soccerCareerSave.ts') + "';\n", [ownerSavePlugin]) : null;
 await E.loadManagerMarket();
 if (BASEM) await BASEM.engine.loadManagerMarket();
+if (SAVEM) await SAVEM.engine.loadManagerMarket();
 const CLUBS = E.FALLBACK_CLUBS;
 
 const REAL_RANDOM = Math.random;
@@ -513,17 +541,29 @@ if (ONLY.has(4)) {
 }
 
 if (ONLY.has(5)) {
-  console.log('5) An owner save from before this round plays on');
-  const BE = BASEM.engine;
+  console.log('5) Pinned pre-owner writer saves play on through the current reader');
+  const BE = SAVEM.engine, BS = SAVEM.save;
   const c0 = playToCeremony(BE, 11);
+  assert(c0 && c0.retired === true && c0.ownerState == null, 'OWNER_COMPAT_WRITER_SETUP');
+  const ownerSetup = (value, stage, index, season) => {
+    console.log('OWNER_COMPAT_SETUP ' + JSON.stringify({ writer: OWNER_SAVE_BASE, stage, index, phase: value?.phase, hasOwnerState: value?.ownerState != null, season: value?.ownerState?.season, rows: value?.ownerState?.seasonResults?.length }));
+    assert(value && value.phase === 'owner_season' && value.ownerState && typeof value.ownerState.club === 'string'
+      && value.ownerState.season === season && Array.isArray(value.ownerState.seasonResults)
+      && value.ownerState.seasonResults.length === season, 'OWNER_COMPAT_WRITER_SETUP');
+  };
   let ok = 0, problems = 0;
   const examples = [];
   for (let i = 0; i < 12; i += 1) {
-    /* the old save, written by the base engine: its random club, two of its coin seasons */
+    /* The pinned historical writer buys its generated club and plays two actual seasons. */
     let old = seeded(500 + i, () => BE.choosePostRetirement({ ...c0, playerName: `Old ${i}`, netWorth: 300 }, 'owner', BE.FALLBACK_CLUBS)).value;
-    for (let k = 0; k < 2; k += 1) old = seeded(600 + i * 10 + k, () => BE.advanceOwnerSeason(old)).value;
-    const raw = S.serializeSoccerCareerSave(old);
+    ownerSetup(old, 'purchased', i, 0);
+    for (let k = 0; k < 2; k += 1) {
+      old = seeded(600 + i * 10 + k, () => BE.advanceOwnerSeason(old)).value;
+      ownerSetup(old, 'historical-season', i, k + 1);
+    }
+    const raw = BS.serializeSoccerCareerSave(old);
     const loaded = S.parseSoccerCareerSave(raw);
+    assert(S.isSoccerCareerSave(loaded) && loaded.ownerState, 'OWNER_COMPAT_WRITER_SETUP');
     const issues = [];
     if (!S.isSoccerCareerSave(loaded)) issues.push('the save does not load');
     const oldRows = JSON.stringify(old.ownerState.seasonResults);
@@ -546,7 +586,7 @@ if (ONLY.has(5)) {
     if (!S.isSoccerCareerSave(S.parseSoccerCareerSave(S.serializeSoccerCareerSave(c)))) issues.push('the save after the new seasons does not load');
     if (issues.length) { problems += 1; if (examples.length < 3) examples.push(`${old.ownerState.club}: ${issues[0]}`); } else ok += 1;
   }
-  console.log(`   12 old owner saves (base ${BASE.slice(0, 8)}): ${ok} load, keep their club and rows, and play on the table; ${problems} do not`);
+  console.log(`   12 pinned pre-owner writer saves (${OWNER_SAVE_BASE.slice(0, 8)}): ${ok} load, keep their club and rows, and play on the table; ${problems} do not`);
   for (const e of examples) console.log(`     e.g. ${e}`);
   if (problems > 0) fail(`${problems} of 12 old owner saves did not play on`);
 }
