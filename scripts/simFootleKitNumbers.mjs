@@ -71,15 +71,22 @@ const M = await import(pathToFileURL(BUNDLE).href);
 const rows = [];
 for (let from = 0; ; from += 1000) {
   let page = null;
-  try {
-    const r = await fetch(`${URL_}/rest/v1/player_market_values?select=player_name,club&year=eq.2026&order=player_name.asc`,
-      { headers: { ...HEAD, Range: `${from}-${from + 999}` } });
-    if (r.ok) page = await r.json();
-  } catch { /* retried once below */ }
-  if (page === null) { await new Promise(r => setTimeout(r, 800)); continue; }
+  for (let attempt = 0; attempt < 2; attempt++) {
+    try {
+      const r = await fetch(`${URL_}/rest/v1/player_market_values?select=player_name,club&year=eq.2026&order=player_name.asc`,
+        { headers: { ...HEAD, Range: `${from}-${from + 999}` } });
+      if (!r.ok) throw new Error(`HTTP ${r.status}`);
+      page = await r.json();
+      if (!Array.isArray(page)) throw new Error('Pool response is not an array');
+      break;
+    } catch (error) {
+      if (attempt === 1) throw new Error(`Footle kit pool could not be verified for range ${from}-${from + 999}`, { cause: error });
+      await new Promise(r => setTimeout(r, 800));
+    }
+  }
   rows.push(...page);
   if (page.length < 1000) break;
-  if (from > 20000) break;
+  if (from > 20000) throw new Error('Footle kit pool pagination limit reached before a complete pool was verified');
 }
 const clubOf = new Map(rows.map(r => [r.player_name, r.club]));
 const names = Object.keys(M.footleEnrichment);

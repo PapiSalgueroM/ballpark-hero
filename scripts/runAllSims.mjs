@@ -27,10 +27,11 @@
  * takes minutes and because Playwright cannot reach the live domain from a
  * sandbox anyway, so it serves dist/ instead.
  */
-import { readdirSync, readFileSync, existsSync, mkdtempSync, writeFileSync, unlinkSync, rmdirSync } from 'node:fs';
+import { readdirSync, readFileSync, existsSync, mkdtempSync, writeFileSync, unlinkSync, rmdirSync, mkdirSync, realpathSync } from 'node:fs';
 import { spawn } from 'node:child_process';
 import { tmpdir } from 'node:os';
-import { randomUUID } from 'node:crypto';
+import { randomUUID, createHash } from 'node:crypto';
+import { errorMonitor } from 'node:events';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 import ts from 'typescript';
@@ -138,6 +139,38 @@ if (process.argv.includes('--plan-json')) {
   console.log(JSON.stringify({ nodeGroup, browserGroup }));
   process.exit(0);
 }
+let captureFolder = null;
+let captureSequence = 0;
+function captureWrite(file, body, flag = 'a') {
+  try { writeFileSync(file, body, { flag }); }
+  catch (error) { throw new Error('SIM_RUNNER_CAPTURE_IO: ' + file, { cause: error }); }
+}
+function captureEvent(row) {
+  if (captureFolder) captureWrite(path.join(captureFolder, 'events.jsonl'), JSON.stringify({ v: 1, ...row }) + '\n');
+}
+function captureChunk(capture, kind, chunk) {
+  if (!capture) return;
+  const stream = capture[kind];
+  captureWrite(path.join(captureFolder, stream.file), chunk);
+  stream.hash.update(chunk); stream.bytes += chunk.length;
+}
+if (process.env.SIM_RUNNER_ARTIFACTS !== undefined) {
+  const requested = process.env.SIM_RUNNER_ARTIFACTS;
+  if (!path.isAbsolute(requested)) throw new Error('SIM_RUNNER_CAPTURE_SETUP: fresh absolute outside directory required');
+  const folder = path.resolve(requested), parent = realpathSync(path.dirname(folder)), root = realpathSync(ROOT);
+  if (parent === root || parent.startsWith(root + path.sep)) throw new Error('SIM_RUNNER_CAPTURE_SETUP: directory must stay outside checkout');
+  captureFolder = path.join(parent, path.basename(folder));
+  mkdirSync(captureFolder, { mode: 0o700 });
+  const body = readFileSync(fileURLToPath(import.meta.url));
+  captureWrite(path.join(captureFolder, 'manifest.json'), JSON.stringify({
+    v: 1, runner: { file: 'scripts/runAllSims.mjs', bytes: body.length, sha256: createHash('sha256').update(body).digest('hex') },
+    declaredSource: process.env.GITHUB_SHA ?? null, argv: process.argv, node: process.version, network: NETWORK,
+    nodeGroup, browserGroup, wantBrowser: WANT_BROWSER, planned: [...nodeGroup, ...(WANT_BROWSER ? browserGroup : [])],
+    finalSuiteVerdict: false,
+  }, null, 2) + '\n', 'wx');
+  captureWrite(path.join(captureFolder, 'events.jsonl'), '', 'wx');
+}
+
 const trafficFolder = OFFLINE ? mkdtempSync(path.join(tmpdir(), 'dukb-sim-traffic-')) : null;
 const cleanupTraffic = () => { if (trafficFolder) rmdirSync(trafficFolder); };
 
@@ -147,9 +180,9 @@ const cleanupTraffic = () => { if (trafficFolder) rmdirSync(trafficFolder); };
    "sweepGames,playGames,simTactics,playClubManager" as a URL path and it died on
    an invalid URL, which reads exactly like a broken harness and is not one.
    A runner has to hand its children a clean environment rather than leaking the
-   flags that were meant for itself, so both of this file's own controls are
+   flags that were meant for itself, so this file's own controls are
    stripped on the way down. */
-const OWN_CONTROLS = ['ONLY', 'BROWSER'];
+const OWN_CONTROLS = ['ONLY', 'BROWSER', 'SIM_RUNNER_PROGRESS', 'SIM_RUNNER_ARTIFACTS'];
 
 function run(file, extraEnv = {}) {
   return new Promise((resolve) => {
@@ -163,15 +196,33 @@ function run(file, extraEnv = {}) {
       childEnv.SIM_OFFLINE_RECEIPT = receipt;
       childEnv.NODE_OPTIONS = `${childEnv.NODE_OPTIONS || ''} --require ${JSON.stringify(PRELOAD.replaceAll('\\', '/'))}`.trim();
     }
+    let capture = null;
+    if (captureFolder) {
+      const id = String(++captureSequence).padStart(6, '0') + '-' + file;
+      capture = { id, sourceSha256: createHash('sha256').update(readFileSync(path.join(HERE, file))).digest('hex'),
+        stdout: { file: id + '.stdout.log', bytes: 0, hash: createHash('sha256') },
+        stderr: { file: id + '.stderr.log', bytes: 0, hash: createHash('sha256') } };
+      for (const stream of [capture.stdout, capture.stderr]) captureWrite(path.join(captureFolder, stream.file), '', 'wx');
+    }
     const child = spawn(process.execPath, [path.join(HERE, file)], {
       cwd: ROOT,
       env: childEnv,
     });
-    child.stdout.on('data', (d) => { out += d; });
-    child.stderr.on('data', (d) => { out += d; });
-    child.on('close', (code) => {
+    if (capture) {
+      captureEvent({ event: 'start', id: capture.id, file, sourceSha256: capture.sourceSha256,
+        argv: [process.execPath, path.join(HERE, file)], cwd: ROOT, pid: child.pid ?? null,
+        transportSource: receipt, transportCopy: receipt ? capture.id + '.transport.log' : null });
+      child.on(errorMonitor, (error) => captureEvent({ event: 'error', id: capture.id, file,
+        name: error.name, message: error.message, stack: error.stack, code: error.code ?? null, syscall: error.syscall ?? null }));
+      child.on('exit', (code, signal) => captureEvent({ event: 'exit', id: capture.id, file, code, signal }));
+    }
+    if (process.env.SIM_RUNNER_PROGRESS === '1') process.stderr.write('[SIM_RUNNER_PROGRESS] ' + JSON.stringify({ v: 1, event: 'start', file, pid: child.pid ?? null }) + '\n');
+    child.stdout.on('data', (d) => { out += d; captureChunk(capture, 'stdout', d); });
+    child.stderr.on('data', (d) => { out += d; captureChunk(capture, 'stderr', d); });
+    child.on('close', (code, signal) => {
       const ms = Date.now() - started;
       const receiptLines = receipt ? readFileSync(receipt, 'utf8').split('\n') : [];
+      if (capture && receipt) captureWrite(path.join(captureFolder, capture.id + '.transport.log'), readFileSync(receipt), 'wx');
       if (receipt) unlinkSync(receipt);
       const blocks = [...new Set([...out.split('\n'), ...receiptLines].filter(l => TRANSPORT_BLOCK.test(l)))];
       const lines = out.split('\n').filter(l => l.trim() && !TRANSPORT_BLOCK.test(l)).length;
@@ -185,6 +236,12 @@ function run(file, extraEnv = {}) {
         verdict = 'FAIL';
         why = 'it reported success after an offline transport block; checks needing live data did not run';
       }
+      if (process.env.SIM_RUNNER_PROGRESS === '1') process.stderr.write('[SIM_RUNNER_PROGRESS] ' + JSON.stringify({ v: 1, event: 'close', file, pid: child.pid ?? null, code, rawVerdict: verdict, ms, lines, outputBytes: Buffer.byteLength(out), transportBlockCount: blocks.length }) + '\n');
+      if (capture) captureEvent({ event: 'close', id: capture.id, file, code, signal,
+        rawVerdict: verdict, why, ms, lines, transportBlockCount: blocks.length, finalVerdict: false,
+        stdout: { file: capture.stdout.file, bytes: capture.stdout.bytes, sha256: capture.stdout.hash.digest('hex') },
+        stderr: { file: capture.stderr.file, bytes: capture.stderr.bytes, sha256: capture.stderr.hash.digest('hex') },
+        transportCopy: receipt ? capture.id + '.transport.log' : null });
       resolve({ file, verdict, why, ms, lines, out, blocks });
     });
   });
@@ -429,15 +486,15 @@ if (skipped.length) {
 if (!failures.length) {
   const ran = nodeResults.length + (WANT_BROWSER ? browserGroup.length : 0) - skipped.length;
   console.log(`All ${ran} harnesses green${skipped.length ? `, ${skipped.length} skipped above` : ''}.`);
-  process.exit(0);
+  process.exitCode = 0;
+} else {
+  for (const f of failures) {
+    console.log(`----- ${f.file} (${f.verdict}) -----`);
+    const lines = f.out.split('\n');
+    const interesting = lines.filter((l) => /FAIL|BROKEN|Error|error:/.test(l)).slice(0, 12);
+    console.log((interesting.length ? interesting : lines.slice(-14)).join('\n'));
+    console.log('');
+  }
+  console.log(`${failures.length} harness${failures.length === 1 ? '' : 'es'} not green.`);
+  process.exitCode = 1;
 }
-
-for (const f of failures) {
-  console.log(`----- ${f.file} (${f.verdict}) -----`);
-  const lines = f.out.split('\n');
-  const interesting = lines.filter((l) => /FAIL|BROKEN|Error|error:/.test(l)).slice(0, 12);
-  console.log((interesting.length ? interesting : lines.slice(-14)).join('\n'));
-  console.log('');
-}
-console.log(`${failures.length} harness${failures.length === 1 ? '' : 'es'} not green.`);
-process.exit(1);
