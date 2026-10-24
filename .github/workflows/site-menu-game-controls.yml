@@ -1,0 +1,209 @@
+name: Shared chrome current-game baseline
+on:
+  push:
+    branches: [codex/site-menu-game-controls-20261023]
+    paths-ignore: ['docs/**']
+permissions:
+  contents: read
+concurrency:
+  group: shared-chrome-baseline-${{ github.sha }}
+  cancel-in-progress: false
+env:
+  BASE_SOURCE: 3ac9d8ea8a13db824f88be2deb660e7f2e31fc35
+  EXPECTED_PARENT: f8a5af237aadbba08268c0b7582d7cd62c113d27
+  CI: '1'
+  SIM_NETWORK: offline
+  ENGINES: chromium
+  TZ: UTC
+jobs:
+  baseline:
+    runs-on: ubuntu-latest
+    timeout-minutes: 100
+    defaults:
+      run:
+        shell: bash
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 32
+          persist-credentials: false
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: npm
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Exact baseline source and untouched application
+        id: foundation
+        run: |
+          set -euo pipefail
+          out="$RUNNER_TEMP/shared-chrome-baseline";test ! -e "$out";mkdir "$out"
+          export CHROME_BASELINE_OUT="$out"
+          echo "CHROME_BASELINE_OUT=$out" >> "$GITHUB_ENV"
+          echo "FREE_KICK_FONT_CACHE=$out/font-cache" >> "$GITHUB_ENV"
+          test "$GITHUB_REPOSITORY" = PapiSalgueroM/ballpark-hero
+          test "$GITHUB_REPOSITORY_ID" = 1195729679
+          test "$GITHUB_REF" = refs/heads/codex/site-menu-game-controls-20261023
+          test "$(git rev-parse HEAD)" = "$GITHUB_SHA"
+          test "$(git show -s --format=%P HEAD)" = "$EXPECTED_PARENT"
+          git fetch --no-tags --depth=1 origin "$BASE_SOURCE" > "$out/base-fetch.log" 2>&1
+          git merge-base --is-ancestor "$BASE_SOURCE" "$GITHUB_SHA" > "$out/base-ancestry.log" 2>&1
+          git diff --exit-code "$BASE_SOURCE" HEAD -- . ':!docs/**' ':!scripts/qa/sharedChromePreload.cjs' ':!scripts/qa/runSharedChromeBaseline.mjs' ':!scripts/qa/playSharedChromeBaselineProbe.mjs' ':!.github/workflows/site-menu-game-controls.yml' > "$out/unchanged-application.log"
+          git diff --exit-code "$EXPECTED_PARENT" HEAD -- . ':!docs/**' ':!scripts/qa/runSharedChromeBaseline.mjs' ':!.github/workflows/site-menu-game-controls.yml' > "$out/child-workflow-only.log"
+          node <<'NODE'
+          const fs=require('node:fs'),assert=require('node:assert/strict'),cp=require('node:child_process');
+          const pins={"src/App.tsx":"b988c18c60d3fd7e1a010cb277a39736d07135e8","src/components/layout/SiteMenu.tsx":"40610855743cf57c033f3398d44e236f26ddfc89","src/components/layout/SiteMenuPanel.tsx":"a044e17ea18bc87ea64f88569e17340099aad5c0","src/components/layout/Header.tsx":"ea73eb5c4c6652c2684ab302a18381b78ad9cc4d","src/components/game/GameNavbar.tsx":"03423fde7f951c2d3c2f8fa33ce7bf9a2d3f9a84","src/components/layout/TopTicker.tsx":"6ab10b47788d9f49d38057e27eb91424b7e37d0a","src/index.css":"775df500bd7c9730e5b04aedd3d6b2a1564d49b4","scripts/playLiveMatchFit.mjs":"5d86ee9cd1b56195f5351c280b98f017928a6183","scripts/playDraftDetectiveReports.mjs":"d66cc510ee293e5cf63c88495353f22ea5d2b4b1","scripts/playConquestScenes.mjs":"b00b809acbdbf97f073c8065c23d47efcc402916","scripts/playSoccerCareerDepth.mjs":"0f06484bf701a6a4defdf1d0ed1c5024227b57bf","scripts/playFrontOfficeGameDay.mjs":"02fb40faf3240c8d80ed9605798353b8a94944f4","scripts/simMobileChrome.mjs":"76556f7b1ed64474dd792765f074d1b6cd574eab","scripts/playHomeFold.mjs":"dd7dc642eb0908d568472b553f6501a676f734e2",".github/workflows/site-menu-navigation.yml":"af81708239759db5d8e078213c31259b9d6a9342","scripts/qa/siteMenuNavigationSupport.mjs":"7909ce5805171367646e17a468fd919b88ad710e","src/test/SiteMenu.test.tsx":"4523ed1fa241b765d6cbe4f71f5eb14a14db89ad","src/test/SiteMenu.lazy-loading.test.tsx":"ed251b20e28a40fe041f00515c70cbb554968814","src/test/SiteMenu.load-failure.test.tsx":"623c8ebb1839a4f3e21d9520daf5effaee83610a","src/test/SiteMenu.escape-loading.test.tsx":"89e9627296cf1854ced6c540852577fa49ff9805","src/test/SiteMenu.escape-failure.test.tsx":"b140aa236900793ff7c12aed88070a9b82e7c87e","scripts/qa/sharedChromePreload.cjs":"8efcfc18ba520e637193e25c2bb8d4b97dd88919","scripts/qa/playSharedChromeBaselineProbe.mjs":"be869583553d2cbb8bb2091da46b82423e6cba17","scripts/qa/runSharedChromeBaseline.mjs":"a6169b54ef5f4afbbba794519a7679eaba4087cb","package.json":"2ff64986fb76ebc51b706f2fd24765768874008a","vite.config.ts":"0112b6ac4f2ad80b2fc04f9ec2f7185300913e7d","scripts/genSeoMetaParts.mjs":"4ea8d8661a3d99ae44f55aec38b443a80ca43318","scripts/lib/vitePreloadWait.mjs":"71fa0511c465d1faa8c9b1e534f5810447d97786","src/lib/completions.ts":"61daf9b6c528f884551cd1d42f71357681c8728a","src/hooks/useGameCompletion.ts":"b104822551fd5d9b1c5d6ddb14f01c79e5a662b2","src/lib/badges.ts":"28dd3c34beafa659426523f3996f86c9193a1f2d","src/components/conquest/ImperialismBoardShared.tsx":"52f579dbeca9414dfdca2c6410ca9122f2d98544","src/data/conquestSports.ts":"1255f0ab0be494ab111995762a57a8018ada4ae4","src/data/soccerConquest.ts":"370baf910baca2181b6d5dbe7f50b2722dcdbc27","src/pages/Search.tsx":"2bcfb9dfc8a540c69bd4d5a59815f48aa0c2565b"};
+          for(const [file,pin] of Object.entries(pins))assert.equal(cp.execFileSync('git',['hash-object',file],{encoding:'utf8'}).trim(),pin,file);
+          fs.writeFileSync(process.env.CHROME_BASELINE_OUT+'/source-binding.json',JSON.stringify({phase:'unchanged-application-baseline',source:process.env.GITHUB_SHA,base:process.env.BASE_SOURCE,parent:process.env.EXPECTED_PARENT,buildSourceBasis:{command:'npm run build',script:'vite build',browserInvocation:'not-invoked-by-pinned-production-build-hooks',paths:["package.json","vite.config.ts","scripts/genSeoMetaParts.mjs","scripts/lib/vitePreloadWait.mjs"]},completionSourceBasis:{ref:'ecb7c594993ff00bb88156391f68fc2af4a5a529',paths:["src/lib/completions.ts","src/hooks/useGameCompletion.ts","src/lib/badges.ts","src/components/conquest/ImperialismBoardShared.tsx","src/data/conquestSports.ts","src/data/soccerConquest.ts","src/pages/Search.tsx"],methods:['POST','GET'],policy:'Exact Conquest request shapes receive local403 offline refusal, never a write success or completion rows',guest:'same-context dukb-guest-handle',unknowns:'unchanged abort and classifier refusal'},run:process.env.GITHUB_RUN_ID,attempt:process.env.GITHUB_RUN_ATTEMPT,applicationQualified:false,pins},null,2)+'\n',{flag:'wx'});
+          NODE
+          git rev-parse HEAD > "$out/head.txt";git rev-parse HEAD^{tree} > "$out/tree.txt"
+          printf '%s\n' "$GITHUB_RUN_ID" > "$out/run-id.txt";printf '%s\n' "$GITHUB_RUN_ATTEMPT" > "$out/run-attempt.txt"
+          git ls-files -z | sort -z > "$out/source-members.before"
+          git ls-files -z | sort -z | xargs -0 sha256sum > "$out/source-before.sha256"
+          git diff --exit-code HEAD > "$out/source-clean-before.log"
+          test -z "$(git status --porcelain --untracked-files=all)"
+      - name: Locked dependencies and already used browser/font stack
+        id: install
+        timeout-minutes: 12
+        run: |
+          set -euo pipefail
+          out="$CHROME_BASELINE_OUT"
+          printf '%s npm-ci\n' "$(date -u +%FT%TZ)" > "$out/setup-progress.log"
+          npm ci > "$out/install.log" 2>&1
+          browser_tools="$RUNNER_TEMP/shared-chrome-browser-tools";test ! -e "$browser_tools"
+          printf '%s playwright\n' "$(date -u +%FT%TZ)" >> "$out/setup-progress.log"
+          npm install --prefix "$browser_tools" --no-save --package-lock=false playwright@1.64.0 > "$out/browser-install.log" 2>&1
+          test ! -e node_modules/playwright;test ! -e node_modules/playwright-core
+          ln -s "$browser_tools/node_modules/playwright" node_modules/playwright
+          ln -s "$browser_tools/node_modules/playwright-core" node_modules/playwright-core
+          node "$browser_tools/node_modules/playwright/cli.js" install --with-deps chromium > "$out/chromium-install.log" 2>&1
+          python -m pip install fonttools pillow > "$out/python-install.log" 2>&1
+          FREE_KICK_FONT_CACHE="$out/font-cache" node scripts/qa/freeKickLab1070.mjs --prefetch-fonts-only > "$out/font-prefetch.log" 2>&1
+          manifest_sha=$(sha256sum "$out/font-cache/manifest.json" | cut -d ' ' -f 1)
+          echo "FONT_CACHE_MANIFEST_SHA256=$manifest_sha" >> "$GITHUB_ENV"
+          find node_modules -path node_modules/.vite -prune -o -type f -print0 | sort -z | xargs -0 sha256sum > "$out/dependencies.sha256"
+          find node_modules -path node_modules/.vite -prune -o -type f -print0 | sort -z > "$out/dependency-members.before"
+          find "$browser_tools/node_modules" -type f -print0 | sort -z | xargs -0 sha256sum > "$out/browser-tools.sha256"
+          find "$browser_tools/node_modules" -type f -print0 | sort -z > "$out/browser-members.before"
+          find "$out/font-cache" -type f -print0 | sort -z | xargs -0 sha256sum > "$out/font-cache.sha256"
+          find "$out/font-cache" -type f -print0 | sort -z > "$out/font-members.before"
+          printf '%s ready\n' "$(date -u +%FT%TZ)" >> "$out/setup-progress.log"
+      - name: Actual app types and all ten existing menu cases
+        id: units
+        timeout-minutes: 8
+        run: |
+          set -euo pipefail
+          out="$CHROME_BASELINE_OUT";export NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs"
+          : > "$out/types.transport";: > "$out/menu.transport"
+          status=0;SIM_OFFLINE_RECEIPT="$out/types.transport" node_modules/.bin/tsc --noEmit -p tsconfig.app.json > "$out/types.log" 2>&1 || status=$?
+          printf '%s\n' "$status" > "$out/types.exit";test "$status" -eq 0;test ! -s "$out/types.transport"
+          unset NO_DOUBLE_SWAP
+          status=0;SIM_OFFLINE_RECEIPT="$out/menu.transport" timeout --signal=TERM --kill-after=15s 6m node_modules/.bin/vitest run src/test/SiteMenu.test.tsx src/test/SiteMenu.lazy-loading.test.tsx src/test/SiteMenu.load-failure.test.tsx src/test/SiteMenu.escape-loading.test.tsx src/test/SiteMenu.escape-failure.test.tsx --maxWorkers=1 --no-file-parallelism --reporter=json --outputFile="$out/menu.json" > "$out/menu.log" 2>&1 || status=$?
+          printf '%s\n' "$status" > "$out/menu.exit"
+          node <<'NODE'
+          const fs=require('node:fs'),assert=require('node:assert/strict'),out=process.env.CHROME_BASELINE_OUT,r=JSON.parse(fs.readFileSync(out+'/menu.json','utf8'));
+          assert.equal(fs.readFileSync(out+'/menu.exit','utf8').trim(),'0');
+          assert.equal(r.numTotalTests,10);assert.equal(r.numPassedTests,10);assert.equal(r.numFailedTests,0);assert.equal(r.numPendingTests,0);assert.equal(r.numTodoTests,0);assert.equal(r.success,true);
+          const expected={'SiteMenu.test.tsx':6,'SiteMenu.lazy-loading.test.tsx':1,'SiteMenu.load-failure.test.tsx':1,'SiteMenu.escape-loading.test.tsx':1,'SiteMenu.escape-failure.test.tsx':1};
+          for(const [file,count] of Object.entries(expected)){const rows=r.testResults.filter(s=>s.name.replaceAll('\\','/').endsWith('/'+file));assert.equal(rows.length,1);assert.equal(rows[0].status,'passed');assert.equal(rows[0].assertionResults.length,count);assert(rows[0].assertionResults.every(x=>x.status==='passed'&&x.failureMessages.length===0));}
+          for(const key of ['numRuntimeErrorTestSuites','numUnhandledErrors'])if(Object.hasOwn(r,key))assert.equal(r[key],0,key);
+          if(Object.hasOwn(r,'unhandledErrors'))assert.deepEqual(r.unhandledErrors,[]);
+          NODE
+          test ! -s "$out/menu.transport"
+      - name: One completed application build and observed browser I/O status
+        id: build
+        timeout-minutes: 15
+        run: |
+          set -euo pipefail
+          out="$CHROME_BASELINE_OUT";mkdir "$out/build-evidence"
+          : > "$out/build.transport"
+          status=0
+          NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs --require=$PWD/scripts/qa/sharedChromePreload.cjs" CHROME_RECIPE_OUT="$out/build-evidence" SIM_OFFLINE_RECEIPT="$out/build.transport" npm run build > "$out/build.log" 2>&1 || status=$?
+          printf '%s\n' "$status" > "$out/build.exit";test "$status" -eq 0;test ! -s "$out/build.transport"
+          node <<'NODE'
+          const fs=require('node:fs'),assert=require('node:assert/strict'),p=process.env.CHROME_BASELINE_OUT+'/build-evidence/browser-io.jsonl';
+          const present=fs.existsSync(p),rows=present?fs.readFileSync(p,'utf8').split('\n').filter(s=>s.trim()).map(s=>JSON.parse(s)):null;
+          if(present){assert(rows.every(x=>x&&typeof x==='object'&&!Array.isArray(x)&&typeof x.kind==='string'),'Well-formed observed build browser I/O');assert(!rows.some(x=>x.kind==='unknown'),'No unknown external build browser transport');}
+          const sourceBasis=JSON.parse(fs.readFileSync(process.env.CHROME_BASELINE_OUT+'/source-binding.json','utf8')).buildSourceBasis;
+          fs.writeFileSync(process.env.CHROME_BASELINE_OUT+'/build-evidence/browser-io-status.json',JSON.stringify({status:present?'OBSERVED_BROWSER_IO_CHECKED':'ABSENT_UNKNOWN_NOT_FONT_USE',browserIoFilePresent:present,observedRows:present?rows.length:null,observedUnknownRows:present?rows.filter(x=>x.kind==='unknown').length:null,preparedFontEvents:present?rows.filter(x=>x.kind==='prepared-font').length:null,fontLoadedClaim:false,sourceBasis},null,2)+'\n',{flag:'wx'});
+          NODE
+          find dist ! -type d ! -type f -print > "$out/dist-nonregular.before";test ! -s "$out/dist-nonregular.before"
+          find dist -type f -print0 | sort -z | xargs -0 sha256sum > "$out/dist.sha256"
+          find dist -type f -print0 | sort -z > "$out/dist-members.before"
+          tar -cf "$out/dist.tar" -C dist .
+      - name: Serial unchanged game witnesses and real delayed menu preserve
+        id: browser
+        if: ${{ !cancelled() && steps.build.outcome == 'success' }}
+        timeout-minutes: 56
+        run: |
+          set -euo pipefail
+          out="$CHROME_BASELINE_OUT"
+          : > "$out/server.transport"
+          NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" SIM_OFFLINE_RECEIPT="$out/server.transport" node scripts/lib/hostLikeServer.mjs dist 4173 > "$out/server.log" 2>&1 &
+          server=$!;trap 'kill "$server" 2>/dev/null || true' EXIT
+          ready=0;for attempt in 1 2 3 4 5 6 7 8;do if curl --fail --silent http://127.0.0.1:4173/ > /dev/null;then ready=1;break;fi;sleep 1;done;test "$ready" -eq 1
+          : > "$out/baseline.transport";: > "$out/baseline-classifier.transport"
+          status=0
+          NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs --require=$PWD/scripts/qa/sharedChromePreload.cjs" SIM_OFFLINE_RECEIPT="$out/baseline.transport" timeout --signal=TERM --kill-after=20s 55m node scripts/qa/runSharedChromeBaseline.mjs > "$out/baseline.log" 2>&1 || status=$?
+          printf '%s\n' "$status" > "$out/baseline.exit";test ! -s "$out/server.transport";test ! -s "$out/baseline.transport";test "$status" -eq 0
+          NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" SIM_OFFLINE_RECEIPT="$out/baseline-classifier.transport" node <<'NODE'
+          const fs=require('node:fs'),assert=require('node:assert/strict'),r=JSON.parse(fs.readFileSync(process.env.CHROME_BASELINE_OUT+'/baseline-report.json','utf8'));
+          assert.equal(r.status,'CURRENT_SHARED_CHROME_RED_OBSERVED');assert.equal(r.source,process.env.GITHUB_SHA);assert.equal(r.base,process.env.BASE_SOURCE);assert.equal(r.applicationQualified,false);assert.equal(r.runs.length,5);assert(r.runs.every(x=>x.errors.length===0));
+          NODE
+          test ! -s "$out/baseline-classifier.transport"
+      - name: Always retain full unchanged source/dependency/build holds
+        id: holds
+        if: always()
+        run: |
+          set -euo pipefail
+          out="$RUNNER_TEMP/shared-chrome-baseline";mkdir -p "$out";failed=0
+          for name in source-before dependencies browser-tools font-cache;do
+            if test -f "$out/$name.sha256";then sha256sum --check "$out/$name.sha256" > "$out/final-$name-hold.log" 2>&1 || failed=1;else failed=1;fi
+          done
+          git ls-files -z | sort -z > "$out/source-members.after"
+          git ls-files -z | sort -z | xargs -0 sha256sum > "$out/source-after.sha256"
+          if test -f "$out/source-before.sha256";then cmp "$out/source-before.sha256" "$out/source-after.sha256" || failed=1;else failed=1;fi
+          if test -f "$out/source-members.before";then cmp "$out/source-members.before" "$out/source-members.after" || failed=1;else failed=1;fi
+          git rev-parse HEAD > "$out/head-after.txt";test "$(cat "$out/head-after.txt")" = "$GITHUB_SHA" || failed=1
+          git diff --exit-code HEAD > "$out/final-source-diff.log" || failed=1
+          git status --porcelain --untracked-files=all > "$out/final-status.txt";test ! -s "$out/final-status.txt" || failed=1
+          if test -f "$out/dependency-members.before";then find node_modules -path node_modules/.vite -prune -o -type f -print0 | sort -z > "$out/dependency-members.after";cmp "$out/dependency-members.before" "$out/dependency-members.after" || failed=1;else failed=1;fi
+          if test -f "$out/browser-members.before";then find "$RUNNER_TEMP/shared-chrome-browser-tools/node_modules" -type f -print0 | sort -z > "$out/browser-members.after";cmp "$out/browser-members.before" "$out/browser-members.after" || failed=1;else failed=1;fi
+          if test -f "$out/font-members.before";then find "$out/font-cache" -type f -print0 | sort -z > "$out/font-members.after";cmp "$out/font-members.before" "$out/font-members.after" || failed=1;else failed=1;fi
+          if test -f "$out/dependencies.sha256";then
+            find node_modules -path node_modules/.vite -prune -o -type f -print0 | sort -z | xargs -0 sha256sum > "$out/dependencies-end.sha256"
+            cmp "$out/dependencies.sha256" "$out/dependencies-end.sha256" || failed=1
+          fi
+          if test -f "$out/browser-tools.sha256";then
+            find "$RUNNER_TEMP/shared-chrome-browser-tools/node_modules" -type f -print0 | sort -z | xargs -0 sha256sum > "$out/browser-tools-end.sha256"
+            cmp "$out/browser-tools.sha256" "$out/browser-tools-end.sha256" || failed=1
+          fi
+          if test -f "$out/font-cache.sha256";then
+            find "$out/font-cache" -type f -print0 | sort -z | xargs -0 sha256sum > "$out/font-cache-end.sha256"
+            cmp "$out/font-cache.sha256" "$out/font-cache-end.sha256" || failed=1
+          fi
+          if test -f "$out/dist.sha256";then
+            find dist -type f -print0 | sort -z | xargs -0 sha256sum > "$out/dist-end.sha256"
+            cmp "$out/dist.sha256" "$out/dist-end.sha256" || failed=1
+            sha256sum --check "$out/dist.sha256" > "$out/final-dist-hold.log" 2>&1 || failed=1
+            find dist -type f -print0 | sort -z > "$out/dist-members.after";cmp "$out/dist-members.before" "$out/dist-members.after" || failed=1
+            find dist ! -type d ! -type f -print > "$out/dist-nonregular.after";test ! -s "$out/dist-nonregular.after" || failed=1
+          else failed=1;fi
+          for name in types menu build server baseline baseline-classifier;do
+            test -f "$out/$name.transport" && test ! -s "$out/$name.transport" || failed=1
+          done
+          for recipe in live-fit draft-fold conquest-hit career-depth route-menu-preserve;do
+            test -f "$out/$recipe/node.transport" && test ! -s "$out/$recipe/node.transport" || failed=1
+          done
+          while IFS= read -r -d '' file;do test ! -s "$file" || failed=1;done < <(find "$out" -type f -name '*.transport' -print0)
+          printf 'phase=unchanged-application-baseline\nsource=%s\nfoundation=%s\ninstall=%s\nunits=%s\nbuild=%s\nbrowserBaseline=%s\napplicationQualified=false\nfinalHoldsExit=%s\n' "$GITHUB_SHA" '${{ steps.foundation.outcome }}' '${{ steps.install.outcome }}' '${{ steps.units.outcome }}' '${{ steps.build.outcome }}' '${{ steps.browser.outcome }}' "$failed" > "$out/stages.txt"
+          (cd "$out";find . -type f ! -path ./evidence.sha256 -print0 | sort -z | xargs -0 sha256sum) > "$out/evidence.sha256"
+          exit "$failed"
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: shared-chrome-baseline-${{ github.run_id }}-${{ github.run_attempt }}
+          path: ${{ runner.temp }}/shared-chrome-baseline/
+          if-no-files-found: error
+          retention-days: 14

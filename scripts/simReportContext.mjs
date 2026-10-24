@@ -76,8 +76,8 @@ console.log('1) Both report forms use the bounded shared context on both deliver
   if (!/Object\.entries\(gameContext\)/.test(helper)) fail('the shared context does not read the explicit game fields');
   if (!/JSON\.stringify\(value\)\.length\s*<\s*CONTEXT_LIMIT/.test(helper) || !/const CONTEXT_LIMIT\s*=\s*1500/.test(helper)) fail('the context no longer fits the existing relay email budget');
   const surfaces = [
-    ['src/components/game/ReportQuestion.tsx', /buildReportContext\(gameContext\)/],
-    ['src/components/game/ReportSiteIssue.tsx', /buildReportContext\(\{\},\s*""\)/],
+    ['src/components/game/ReportQuestionForm.tsx', /buildReportContext\(gameContext\)/],
+    ['src/components/game/ReportSiteIssueForm.tsx', /buildReportContext\(\{\},\s*""\)/],
   ];
   for (const [file, call] of surfaces) {
     const source = read(file);

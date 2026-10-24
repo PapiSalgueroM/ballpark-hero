@@ -18,18 +18,20 @@ const OUT = path.join(evidenceRoot, 'unit');
 fs.mkdirSync(OUT, { recursive: true });
 const TEMP = fs.mkdtempSync(path.join(os.tmpdir(), 'report-draft-modules-'));
 const BASE = '775564305e9da84dab59f2b9fe246d044a3cc8e9';
+const siteAlias = MODE === 'baseline' ? '@/components/game/ReportSiteIssue' : '@/components/game/ReportSiteIssueForm';
+const questionAlias = MODE === 'baseline' ? '@/components/game/ReportQuestion' : '@/components/game/ReportQuestionForm';
 const forms = {
-  '@/components/game/ReportQuestion': 'src/components/game/ReportQuestion.tsx',
-  '@/components/game/ReportSiteIssue': 'src/components/game/ReportSiteIssue.tsx',
+  [questionAlias]: MODE === 'baseline' ? 'src/components/game/ReportQuestion.tsx' : 'src/components/game/ReportQuestionForm.tsx',
+  [siteAlias]: MODE === 'baseline' ? 'src/components/game/ReportSiteIssue.tsx' : 'src/components/game/ReportSiteIssueForm.tsx',
 };
-const heldFiles = [...Object.values(forms), 'src/test/reportDraftLifecycle.test.tsx',
+const heldFiles = [...Object.values(forms), ...(MODE === 'fixed' ? ['src/components/game/ReportSiteIssue.tsx', 'src/components/game/ReportQuestion.tsx'] : []), 'src/test/reportDraftLifecycle.test.tsx',
   'src/test/reportDetails.test.tsx', 'src/test/reportContext.test.ts',
   'src/lib/reportContext.ts', 'src/components/game/reportKinds.ts', 'vitest.config.ts'];
 const hookFile = 'src/hooks/useReportDraftLifecycle.ts';
 if (MODE === 'fixed') heldFiles.push(hookFile);
 const hash = bytes => createHash('sha256').update(bytes).digest('hex');
 const sourceBefore = Object.fromEntries(heldFiles.map(file => [file, Buffer.from(fs.readFileSync(path.join(ROOT, file), 'utf8').replace(/\r\n/g, '\n'))]));
-assert.equal(hash(sourceBefore['src/test/reportDraftLifecycle.test.tsx']), 'ca6774ec49cdf7fe4d64aff59deebab94bc43f9925833c4f7a9d8a631dca3255', 'The admitted fourteen-case test body is frozen');
+assert.equal(hash(sourceBefore['src/test/reportDraftLifecycle.test.tsx']), MODE === 'baseline' ? 'ca6774ec49cdf7fe4d64aff59deebab94bc43f9925833c4f7a9d8a631dca3255' : 'bf49d268c31cd98c59faf201ac198514c976fb2b0576496e3b8b1b1e0a2a770f', 'The admitted fourteen-case body is frozen apart from the explicit form imports');
 const runtimeAliases = {
   'react/jsx-dev-runtime': require.resolve('react/jsx-dev-runtime'),
   'react/jsx-runtime': require.resolve('react/jsx-runtime'),
@@ -62,6 +64,7 @@ function run(name, aliases = {}, want = { passed: 14, failed: 0 }, pattern, bare
   const env = { ...process.env, SIM_OFFLINE_RECEIPT: receipt };
   if (bare) delete env.NO_DOUBLE_SWAP;
   else env.NO_DOUBLE_SWAP = JSON.stringify({ ...runtimeAliases, ...aliases });
+  fs.writeFileSync(receipt, '', { flag: 'wx' });
   const child = spawnSync(process.execPath, args, { cwd: ROOT, encoding: 'utf8', maxBuffer: 32 * 1024 * 1024, timeout: 240000,
     env });
   const output = (child.stdout || '') + (child.stderr || '');
@@ -88,7 +91,8 @@ function run(name, aliases = {}, want = { passed: 14, failed: 0 }, pattern, bare
     assert(/AssertionError/.test(messages), `${name}: failure must be an actual assertion`);
     assert(!/TestingLibraryElementError|Test timed out|Cannot find module|Failed to resolve import|Transform failed|ReferenceError|SyntaxError|TypeError/.test(messages), `${name}: no preparation or lookup failure credit`);
   }
-  assert(!fs.existsSync(receipt) || fs.statSync(receipt).size === 0, `${name}: child transport receipt must be empty`);
+  const receiptStat = fs.lstatSync(receipt);
+  assert(receiptStat.isFile() && !receiptStat.isSymbolicLink() && receiptStat.size === 0, `${name}: child transport receipt must be present, regular and empty`);
   summary.push({ name, passed: result.numPassedTests, failed: result.numFailedTests, pending, bare,
     failures: failures.map(test => ({ name: test.fullName, messages: test.failureMessages })) });
   console.log(`${name}: ${want.passed} passed, ${want.failed} expected failures, ${pending} skipped`);
@@ -110,13 +114,43 @@ function originalFailures(name, aliases) {
 function recoverOriginalForms() {
   const hookImport = "import { useReportDraftLifecycle } from '@/hooks/useReportDraftLifecycle';\n";
   const specs = [
-    { alias: '@/components/game/ReportQuestion', header: 'const ReportQuestion = ({ gameType, gameContext = {}, kinds = REPORT_REASONS }: ReportQuestionProps) => {',
+    { alias: '@/components/game/ReportQuestionForm', header: 'const ReportQuestion = ({ gameType, gameContext = {}, kinds = REPORT_REASONS }: ReportQuestionProps) => {',
       importAnchor: "import { REPORT_KINDS_QUESTION } from '@/components/game/reportKinds';\n", field: 'reason', setter: 'setReason', option: 'r' },
-    { alias: '@/components/game/ReportSiteIssue', header: 'export function ReportSiteIssue() {',
+    { alias: '@/components/game/ReportSiteIssueForm', header: 'export function ReportSiteIssue() {',
       importAnchor: "import { buildReportContext } from '@/lib/reportContext';\n", field: 'kind', setter: 'setKind', option: 'k' },
   ];
   for (const spec of specs) {
-    const file = forms[spec.alias], fixed = sourceBefore[file].toString('utf8');
+    const file = forms[spec.alias], actualFixed = sourceBefore[file].toString('utf8');
+    let fixed = actualFixed;
+    const lazyHunks = spec.alias === '@/components/game/ReportSiteIssueForm' ? [
+      {
+        "name": "react-effect-import",
+        "before": "import { useRef, useState } from 'react';\n",
+        "after": "import { useEffect, useRef, useState } from 'react';\n"
+      },
+      {
+        "name": "initial-opening-prop",
+        "before": "export function ReportSiteIssue() {\n",
+        "after": "export function ReportSiteIssueForm({ initiallyOpen = false }: { initiallyOpen?: boolean }) {\n"
+      },
+      {
+        "name": "one-initial-opening",
+        "before": "  const { open, status, changeOpen, markDraftChanged, beginSubmission, completeSubmission, failSubmission } = useReportDraftLifecycle();\n",
+        "after": "  const { open, status, changeOpen, markDraftChanged, beginSubmission, completeSubmission, failSubmission } = useReportDraftLifecycle();\n  const initialOpening = useRef(initiallyOpen);\n\n  useEffect(() => {\n    if (!initialOpening.current) return;\n    initialOpening.current = false;\n    changeOpen(true);\n  }, [changeOpen]);\n"
+      },
+      {
+        "name": "default-lazy-export",
+        "before": "export default ReportSiteIssue;\n",
+        "after": "export default ReportSiteIssueForm;\n"
+      }
+    ] : spec.alias === '@/components/game/ReportQuestionForm' ? [{"name":"react-one-shot-effect-import","before":"import { useRef, useState } from 'react';","after":"import { useEffect, useRef, useState } from 'react';"},{"name":"exported-form-props-and-optional-initial-opening","before":"interface ReportQuestionProps {\n  gameType: string;\n  gameContext?: Record<string, unknown>;\n  /** Release BA: a page that asks no questions passes REPORT_KINDS_SITEWIDE, so it\n   *  offers no Duplicate question chip. Defaults to the per question list. */\n  kinds?: readonly string[];\n}","after":"export interface ReportQuestionFormProps {\n  gameType: string;\n  gameContext?: Record<string, unknown>;\n  /** Release BA: a page that asks no questions passes REPORT_KINDS_SITEWIDE, so it\n   *  offers no Duplicate question chip. Defaults to the per question list. */\n  kinds?: readonly string[];\n  initiallyOpen?: boolean;\n}"},{"name":"named-real-form-default-false-initial-opening","before":"const ReportQuestion = ({ gameType, gameContext = {}, kinds = REPORT_REASONS }: ReportQuestionProps) => {","after":"const ReportQuestionForm = ({ gameType, gameContext = {}, kinds = REPORT_REASONS, initiallyOpen = false }: ReportQuestionFormProps) => {"},{"name":"proven-one-shot-opening-effect","before":"  const { open, status, changeOpen, markDraftChanged, beginSubmission, completeSubmission, failSubmission } = useReportDraftLifecycle();\n","after":"  const { open, status, changeOpen, markDraftChanged, beginSubmission, completeSubmission, failSubmission } = useReportDraftLifecycle();\n  const initialOpening = useRef(initiallyOpen);\n\n  useEffect(() => {\n    if (!initialOpening.current) return;\n    initialOpening.current = false;\n    changeOpen(true);\n  }, [changeOpen]);\n"},{"name":"default-real-form-export","before":"export default ReportQuestion;","after":"export default ReportQuestionForm;"}] : [];
+    for (const hunk of [...lazyHunks].reverse()) {
+      assert.equal(fixed.split(hunk.after).length, 2, file + ': one actual lazy ' + hunk.name + ' inverse');
+      const next = fixed.replace(hunk.after, hunk.before);
+      assert.notEqual(next, fixed, file + ': lazy inverse changes source');
+      fixed = next;
+    }
+    if (lazyHunks.length) assert.equal(hash(fixed), spec.alias === '@/components/game/ReportQuestionForm' ? '02b8fd8654cd1fd36000f618c7cf9b49c337215607523f4b8a83420cc8a115fb' : '4e5c2049c07a2aa5154ba05f6d5ee973af549f9b09233f556fe8547efcf210ca', file + ': entire actual eager form recovered before historical lifecycle inverse');
     const hunks = [
       { name: 'lifecycle import', fixed: spec.importAnchor + hookImport, original: spec.importAnchor },
       { name: 'dialog open state', fixed: spec.header + '\n', original: spec.header + '\n  const [open, setOpen] = useState(false);\n' },
@@ -152,10 +186,18 @@ function recoverOriginalForms() {
       forward = forward.replace(hunk.original, hunk.fixed);
     }
     assert.equal(forward, fixed, `${file}: forward replacements recover the entire fixed form`);
+    let actualForward = forward;
+    for (const hunk of lazyHunks) {
+      assert.equal(actualForward.split(hunk.before).length, 2, file + ': one actual lazy ' + hunk.name + ' forward');
+      const next = actualForward.replace(hunk.before, hunk.after);
+      assert.notEqual(next, actualForward, file + ': lazy forward changes source');
+      actualForward = next;
+    }
+    assert.equal(actualForward, actualFixed, file + ': forwards recover the entire actual lazy form');
     const name = 'recovered-' + path.basename(file), retained = path.join(OUT, name), copy = path.join(TEMP, name);
     fs.writeFileSync(retained, recovered); fs.writeFileSync(copy, recovered); originalAliases[spec.alias] = copy;
-    formInverses.push({ file, recoveredFile: name, fixedSha256: hash(fixed), originalSha256: hash(original[file]),
-      recoveredSha256: hash(recovered), forwardSha256: hash(forward), hunks });
+    formInverses.push({ file, recoveredFile: name, fixedSha256: hash(actualFixed), eagerSha256: hash(fixed), originalSha256: hash(original[file]),
+      recoveredSha256: hash(recovered), forwardSha256: hash(actualForward), hunks, lazyHunks });
   }
 }
 
@@ -202,7 +244,8 @@ function controlFailures(name, aliases, indexes) {
 
 try {
   for (const [alias, file] of Object.entries(forms)) {
-    const read = spawnSync('git', ['show', `${BASE}:${file}`], { cwd: ROOT, encoding: 'utf8', maxBuffer: 4 * 1024 * 1024 });
+    const historicalFile = file === 'src/components/game/ReportSiteIssueForm.tsx' ? 'src/components/game/ReportSiteIssue.tsx' : file === 'src/components/game/ReportQuestionForm.tsx' ? 'src/components/game/ReportQuestion.tsx' : file;
+    const read = spawnSync('git', ['show', `${BASE}:${historicalFile}`], { cwd: ROOT, encoding: 'utf8', maxBuffer: 4 * 1024 * 1024 });
     assert.ifError(read.error); assert.equal(read.status, 0, `Read actual original ${file}: ${read.stderr}`);
     original[file] = read.stdout;
     fs.writeFileSync(path.join(OUT, 'original-' + path.basename(file)), read.stdout);
