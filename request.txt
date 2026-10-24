@@ -1,0 +1,14 @@
+#!serve
+#!playwright
+#!serial
+playLiveMatchFit: node scripts/playLiveMatchFit.mjs
+livefit-bar: LIVE_FIT_CONTROL=bar node scripts/playLiveMatchFit.mjs
+livefit-silentlist: LIVE_FIT_CONTROL=silentlist node scripts/playLiveMatchFit.mjs
+livefit-earlyscore: LIVE_FIT_CONTROL=earlyscore node scripts/playLiveMatchFit.mjs
+livefit-nocard: LIVE_FIT_CONTROL=nocard node scripts/playLiveMatchFit.mjs
+livefit-fresh: LIVE_FIT_SEED=fresh node scripts/playLiveMatchFit.mjs
+playDraftDetectiveReports: NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/playDraftDetectiveReports.mjs
+playConquestScenes: ENGINES=chromium node scripts/playConquestScenes.mjs
+ctl-none-Conquest: ANSWER_CONSENT_CONTROL=none ENGINES=chromium node scripts/playConquestScenes.mjs
+ctl-noscore-Conquest: CONQUEST_SCENES_CONTROL=noscore ENGINES=chromium node scripts/playConquestScenes.mjs
+playSoccerCareerDepth: NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/playSoccerCareerDepth.mjs
