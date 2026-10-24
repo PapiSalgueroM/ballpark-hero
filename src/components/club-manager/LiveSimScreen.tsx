@@ -204,6 +204,45 @@ const DEFAULT_OPP_FORMATION = 1;
 
 const lastName = (n: string) => n.replace(' (Youth)', '').split(' ').slice(-1)[0];
 
+/* Round 1568 (closing check): while the stage is up, Tab and Shift+Tab go round the stage and whatever is drawn
+   over it, and never reach the page under it. Before this, two Shift+Tab presses from Back put the focus on the
+   page's sign up button under the stage, and Enter opened a dialog nobody could see that also took the pointer
+   from the match. A control outside the stage is a stop only when the outermost layer around it sits above the
+   stage's own (the cookie notice at 60 while it waits for an answer, the toasts), so the notice stays reachable
+   and the site's bar (50) and its dialogs do not. The stage's keydown listener calls this for every Tab: it moves
+   the focus itself and keeps the browser's own move from happening, so nothing under the stage takes the focus
+   even for a moment (a page control taking it would scroll the page under the stage). */
+const TAB_STOPS = 'a[href],area[href],button,input,select,textarea,iframe,summary,[tabindex],[contenteditable="true"]';
+function tabRoundTheStage(e: KeyboardEvent, stage: HTMLElement) {
+  const stageLayer = Number(getComputedStyle(stage).zIndex) || 0;
+  const layers = new Map<Element, number | null>();
+  /* the z-index of the outermost positioned element around el that sets one, or null when none does */
+  const outerLayer = (el: Element | null): number | null => {
+    if (!el || el === document.body) return null;
+    if (layers.has(el)) return layers.get(el) ?? null;
+    let z = outerLayer(el.parentElement);
+    if (z === null) {
+      const s = getComputedStyle(el);
+      if (s.position !== 'static' && s.zIndex !== 'auto') z = Number(s.zIndex);
+    }
+    layers.set(el, z);
+    return z;
+  };
+  const stops = [...document.querySelectorAll<HTMLElement>(TAB_STOPS)].filter(el =>
+    el.tabIndex >= 0 && !(el as HTMLButtonElement).disabled
+    && (stage.contains(el) || (outerLayer(el) ?? -Infinity) > stageLayer)
+    && !el.closest('[inert]') && el.getClientRects().length > 0 && getComputedStyle(el).visibility !== 'hidden');
+  e.preventDefault();
+  if (!stops.length) { stage.focus({ preventScroll: true }); return; }
+  const from = document.activeElement ?? document.body;
+  let at = stops.indexOf(from as HTMLElement);
+  if (at !== -1) at += e.shiftKey ? -1 : 1;
+  /* focus on something that is not a stop (the stage box itself, the notice's own box): the nearest stop that way */
+  else if (e.shiftKey) at = stops.reduce((last, s, i) => (from.compareDocumentPosition(s) & Node.DOCUMENT_POSITION_PRECEDING ? i : last), -1);
+  else at = Math.max(0, stops.findIndex(s => from.compareDocumentPosition(s) & Node.DOCUMENT_POSITION_FOLLOWING));
+  stops[((at % stops.length) + stops.length) % stops.length].focus();
+}
+
 function initialStage(live: LiveMatch | null, report: MatchWeekReport | null): Stage {
   if (report) return 'done';
   if (!live) return 'first';
@@ -1461,7 +1500,11 @@ export function LiveSimScreen({
     if (!stageUp) return;
     /* Round 1568: an Escape another layer already took (a Radix dialog or the site menu reached by Shift+Tab,
        which close themselves and mark the key handled) is not also Back for the match. */
-    const onKey = (e: KeyboardEvent) => { if (e.key === 'Escape' && !e.defaultPrevented) onEscape.current(); };
+    const onKey = (e: KeyboardEvent) => {
+      if (e.defaultPrevented) return;
+      if (e.key === 'Escape') onEscape.current();
+      else if (e.key === 'Tab' && !e.altKey && !e.ctrlKey && !e.metaKey && stageBox.current) tabRoundTheStage(e, stageBox.current);
+    };
     /* The button that opened the match is under the stage now. The keyboard starts from the stage itself,
        so the first Tab lands on Back and not on something that cannot be seen. */
     const box = stageBox.current;
@@ -1668,7 +1711,8 @@ export function LiveSimScreen({
         </div>
       ) : (
         /* The stage covers the window, so it says what it is and takes the keyboard when it opens. It is not
-           marked modal: the cookie notice is drawn over it from outside it and has to stay reachable. */
+           marked modal: the cookie notice is drawn over it from outside it and has to stay reachable. Tab keeps
+           to the stage and the layers over it (tabRoundTheStage, Round 1568). */
         <div ref={stageBox} role="dialog" aria-label={`${career.clubName} against ${opponent}, the match`} tabIndex={-1} data-cm-live-stagebox="1" className="cm-stagebox bg-background text-foreground outline-none">
           <div className="cm-stage">
             <div className="cm-stage-main">
