@@ -1,0 +1,22 @@
+[head] kbd 390x844: two Shift+Tab from Back put the focus on stage Skip; after Enter {"stage":0,"card":0,"dialogs":[]}
+[head] FINDING kbd 390x844: the stage was gone after Enter (card 0)
+[head] FINDING kbd 390x844: probe threw locator.focus: Timeout 30000ms exceeded.
+[head] kbd 1280x900: two Shift+Tab from Back put the focus on stage Skip; after Enter {"stage":0,"card":0,"dialogs":[]}
+[head] FINDING kbd 1280x900: the stage was gone after Enter (card 0)
+[head] FINDING kbd 1280x900: probe threw locator.focus: Timeout 30000ms exceeded.
+[head] banner 390x844: {"box":true,"note":true,"pending":true,"stageBottom":535,"noticeTop":559,"strip":24,"y":547,"at":"stage"}
+[head] banner 390x844: Tab x29: s s s s s s s s s s s s s s s s s s s s N N N N N N under BACK s
+[head] FINDING banner 390x844: Tab landed under the stage 1 times (a "Skip to main content")
+[head] banner 390x844: Shift+Tab x29: under N N N N N N s s s s s s s s s s s s s s s s s s s s BACK under
+[head] FINDING banner 390x844: Shift+Tab landed under the stage 2 times (a "Skip to main content"; a "Skip to main content")
+[head] banner 1280x900: {"box":true,"note":true,"pending":true,"stageBottom":711,"noticeTop":735,"strip":24,"y":723,"at":"stage"}
+[head] banner 1280x900: Tab x28: s s s s s s s s s s s s s s s s s s s N N N N N N under BACK s
+[head] FINDING banner 1280x900: Tab landed under the stage 1 times (a "Skip to main content")
+[head] banner 1280x900: Shift+Tab x28: under N N N N N N s s s s s s s s s s s s s s s s s s s BACK under
+[head] FINDING banner 1280x900: Shift+Tab landed under the stage 2 times (a "Skip to main content"; a "Skip to main content")
+[head] banner 320x568: {"box":true,"note":true,"pending":true,"stageBottom":239,"noticeTop":263,"strip":24,"y":251,"at":"stage"}
+[head] banner 320x568: Tab x29: s s s s s s s s s s s s s s s s s s s s N N N N N N under BACK s
+[head] FINDING banner 320x568: Tab landed under the stage 1 times (a "Skip to main content")
+[head] banner 320x568: Shift+Tab x29: under N N N N N N s s s s s s s s s s s s s s s s s s s s BACK under
+[head] FINDING banner 320x568: Shift+Tab landed under the stage 2 times (a "Skip to main content"; a "Skip to main content")
+fix2probe [head]: RED, 10 findings

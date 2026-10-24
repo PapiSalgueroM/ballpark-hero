@@ -1,0 +1,36 @@
+[base] kbd 390x844: two Shift+Tab from Back put the focus UNDER the stage on button "Sign up to track your statsTra" in the site bar; after Enter {"stage":1,"card":0,"dialogs":["Join DoUKnowBallGuests earn po"]}
+[base] FINDING kbd 390x844: two Shift+Tab presses from Back reached button "Sign up to track your statsTra" in the site bar under the stage
+[base] FINDING kbd 390x844: Enter opened ["Join DoUKnowBallGuests earn po"] outside the stage
+[base] kbd 390x844: Shift+Tab x23: under under under under under under body under under under under under under under under under under under under under under under under
+[base] FINDING kbd 390x844: Shift+Tab landed under the stage 22 times (button "How to play"; button "Sign up to track your statsTra" in the site bar)
+[base] kbd 390x844: Tab x23: s s s s s s s s s s s s s s s s s s s s under under under
+[base] FINDING kbd 390x844: Tab landed under the stage 3 times (button "Report a problem"; a "🪑Manager Hot SeatTake over a ")
+[base] kbd 1280x900: two Shift+Tab from Back put the focus UNDER the stage on button "Sign up to track your statsTra" in the site bar; after Enter {"stage":1,"card":0,"dialogs":["Join DoUKnowBallGuests earn po"]}
+[base] FINDING kbd 1280x900: two Shift+Tab presses from Back reached button "Sign up to track your statsTra" in the site bar under the stage
+[base] FINDING kbd 1280x900: Enter opened ["Join DoUKnowBallGuests earn po"] outside the stage
+[base] kbd 1280x900: Shift+Tab x22: under under under under under under body under under under under under under under under under under under under under under under
+[base] FINDING kbd 1280x900: Shift+Tab landed under the stage 21 times (button "How to play"; button "Sign up to track your statsTra" in the site bar)
+[base] kbd 1280x900: Tab x22: s s s s s s s s s s s s s s s s s s s under under under
+[base] FINDING kbd 1280x900: Tab landed under the stage 3 times (button "Report a problem"; a "🪑Manager Hot SeatTake over a ")
+[base] banner 390x844: {"box":true,"note":true,"pending":true,"stageBottom":535,"noticeTop":559,"strip":24,"y":547,"at":"PAGE p"}
+[base] FINDING banner 390x844: the strip between the stage and the notice (24 px) answers PAGE p
+[base] banner 390x844: Tab x29: s s s s s s s s s s s s s s s s s s s s under under under under under under under under under
+[base] FINDING banner 390x844: Tab landed under the stage 9 times (button "Report a problem"; a "🪑Manager Hot SeatTake over a ")
+[base] FINDING banner 390x844: Tab x29 never reached the cookie notice
+[base] banner 390x844: Shift+Tab x29: under under under under under under body N N N N N N under under under under under under under under under under under under under under under under
+[base] FINDING banner 390x844: Shift+Tab landed under the stage 22 times (button "How to play"; button "Sign up to track your statsTra" in the site bar)
+[base] banner 1280x900: {"box":true,"note":true,"pending":true,"stageBottom":711,"noticeTop":735,"strip":24,"y":723,"at":"PAGE p"}
+[base] FINDING banner 1280x900: the strip between the stage and the notice (24 px) answers PAGE p
+[base] banner 1280x900: Tab x28: s s s s s s s s s s s s s s s s s s s under under under under under under under under under
+[base] FINDING banner 1280x900: Tab landed under the stage 9 times (button "Report a problem"; a "🪑Manager Hot SeatTake over a ")
+[base] FINDING banner 1280x900: Tab x28 never reached the cookie notice
+[base] banner 1280x900: Shift+Tab x28: under under under under under under body N N N N N N under under under under under under under under under under under under under under under
+[base] FINDING banner 1280x900: Shift+Tab landed under the stage 21 times (button "How to play"; button "Sign up to track your statsTra" in the site bar)
+[base] banner 320x568: {"box":true,"note":true,"pending":true,"stageBottom":239,"noticeTop":263,"strip":24,"y":251,"at":"PAGE h2"}
+[base] FINDING banner 320x568: the strip between the stage and the notice (24 px) answers PAGE h2
+[base] banner 320x568: Tab x29: s s s s s s s s s s s s s s s s s s s s under under under under under under under under under
+[base] FINDING banner 320x568: Tab landed under the stage 9 times (button "Report a problem"; a "🪑Manager Hot SeatTake over a ")
+[base] FINDING banner 320x568: Tab x29 never reached the cookie notice
+[base] banner 320x568: Shift+Tab x29: under under under under under under body N N N N N N under under under under under under under under under under under under under under under under
+[base] FINDING banner 320x568: Shift+Tab landed under the stage 22 times (button "How to play"; button "Sign up to track your statsTra" in the site bar)
+fix2probe [base]: RED, 20 findings

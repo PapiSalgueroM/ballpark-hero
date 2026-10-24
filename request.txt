@@ -1,0 +1,10 @@
+#!serve
+#!playwright
+#!serial
+tsc: node_modules/.bin/tsc --noEmit -p tsconfig.app.json
+base-build: git worktree add -q --detach /tmp/base 39316b915 && ln -s "$PWD/node_modules" /tmp/base/node_modules && (cd /tmp/base && git log --oneline -1 && node_modules/.bin/vite build > /tmp/base-build.log 2>&1 && tail -1 /tmp/base-build.log)
+probe-head: node .rc/x/fix2probe.mjs
+probe-base: PROBE_DIST=/tmp/base/dist PROBE_PORT=4391 PROBE_TAG=base node .rc/x/fix2probe.mjs
+playLiveMatchFit: node scripts/playLiveMatchFit.mjs
+lmf-tabout: LIVE_FIT_CONTROL=tabout node scripts/playLiveMatchFit.mjs
+lmf-base: cp scripts/playLiveMatchFit.mjs /tmp/base/scripts/playLiveMatchFit.mjs && cd /tmp/base && PORT=4291 node scripts/playLiveMatchFit.mjs

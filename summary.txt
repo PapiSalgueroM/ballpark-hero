@@ -1,0 +1,8 @@
+build exit=0 36s | [dukb] inlined 1 stylesheet(s) and 1 module(s) into 181 snapshots (11 left alone)
+tsc exit=0 69s | 
+base-build exit=0 35s | [dukb] inlined 1 stylesheet(s) and 1 module(s) into 181 snapshots (11 left alone)
+probe-head exit=1 99s | fix2probe [head]: RED, 10 findings
+probe-base exit=1 39s | fix2probe [base]: RED, 20 findings
+playLiveMatchFit exit=1 143s | playLiveMatchFit: 1 failure.
+lmf-tabout exit=1 71s | playLiveMatchFit: control tabout turned section 6 red on the line it must (with every Tab swallowed before the stage heard it, the focus reached the page under the stage 
+lmf-base exit=1 142s | playLiveMatchFit: 1 failure.
