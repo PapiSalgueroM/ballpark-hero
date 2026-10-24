@@ -1,0 +1,12 @@
+#!serve
+#!playwright
+#!serial
+probe-head: node .rc/x/esc1568.mjs
+probe-mesc: R=$PWD; git worktree add -q --detach /tmp/mesc 27af2371b && ln -s "$R/node_modules" /tmp/mesc/node_modules && node .rc/x/mutfix1568.mjs mesc /tmp/mesc && (cd /tmp/mesc && node_modules/.bin/vite build > /tmp/mesc-build.log 2>&1 || { tail -20 /tmp/mesc-build.log; exit 2; }) && PROBE_DIST=/tmp/mesc/dist PROBE_PORT=4391 PROBE_TAG=mesc PROBE_PARTS=esc,plain node .rc/x/esc1568.mjs
+probe-mg: R=$PWD; git worktree add -q --detach /tmp/mg 27af2371b && ln -s "$R/node_modules" /tmp/mg/node_modules && node .rc/x/mutfix1568.mjs mg /tmp/mg && (cd /tmp/mg && node_modules/.bin/vite build > /tmp/mg-build.log 2>&1 || { tail -20 /tmp/mg-build.log; exit 2; }) && PROBE_DIST=/tmp/mg/dist PROBE_PORT=4392 PROBE_SRC=/tmp/mg PROBE_TAG=mg PROBE_PARTS=ghost node .rc/x/esc1568.mjs
+playConquestScenes: ENGINES=chromium node scripts/playConquestScenes.mjs
+cq-margin: CONQUEST_SCENES_CONTROL=margin ENGINES=chromium node scripts/playConquestScenes.mjs
+cq-noscore: CONQUEST_SCENES_CONTROL=noscore ENGINES=chromium node scripts/playConquestScenes.mjs
+ctl-none-Conquest: ANSWER_CONSENT_CONTROL=none ENGINES=chromium node scripts/playConquestScenes.mjs
+cq-m3: R=$PWD; git worktree add -q --detach /tmp/m3 27af2371b && ln -s "$R/node_modules" /tmp/m3/node_modules && node .rc/x/mutfix1568.mjs m3 /tmp/m3 && (cd /tmp/m3 && node_modules/.bin/vite build > /tmp/m3-build.log 2>&1 || { tail -20 /tmp/m3-build.log; exit 2; }) && cd /tmp/m3 && env -u BASE -u SWEEP_BASE CONQUEST_SCENES_PORT=4498 ENGINES=chromium node scripts/playConquestScenes.mjs
+playLiveMatchFit: node scripts/playLiveMatchFit.mjs
