@@ -28,7 +28,7 @@ fs.mkdirSync(out); fs.mkdirSync(active);
 fs.symlinkSync(path.join(root, 'node_modules'), path.join(active, 'node_modules'), 'dir');
 const testFile = 'src/test/clubManagerVeteranOldParity.test.ts';
 const inputs = [
-  ['src/lib/clubManager.ts', 1240980, '45b9d486014720831f130000ff67d0d380f60c755bbb1afa3d0f9a833b2c4050'],
+  ['src/lib/clubManager.ts', 1239425, 'c7ee964763ae197adaf9bd8ce49a02a4f1b89c62cf2dacca55e2f87ae375053a'],
   ['src/lib/clubManagerCalendar.ts', 57102, '7cdbc2e31172db5974f0753551133c61ae291662f5bd8e4b14f043d2267baf83'],
   ['src/lib/clubManagerVeteranLedger.ts', 4600, '80f991a38069f29dd1fecc22a9cb9c0e3bb4945a33208fae1de8413fc6aefb17'],
   ['src/lib/clubManagerVeteranRetirement.ts', 4168, 'cdaecb5ecd28187da8a1c62526c6b165289e76e37d30a01cba2ce7c4a16577ed'],

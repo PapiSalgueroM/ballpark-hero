@@ -28,7 +28,14 @@ const required = ['src/lib/clubManager.ts', 'src/lib/clubManagerCalendar.ts',
   'src/components/club-manager/VeteranRetirementCard.tsx', 'src/components/game/ResultScreen.tsx', 'src/index.css',
   'scripts/qa/fixtures/cmVeteran.entry.tsx', 'scripts/qa/fixtures/cmVeteran.html',
   'scripts/qa/fixtures/cmVeteran.vite.mjs', 'scripts/qa/playCmVeteran.mjs',
-  'scripts/qa/siteMenuNavigationSupport.mjs', 'scripts/lib/hostLikeServer.mjs', 'scripts/lib/playwrightLoader.mjs'];
+  'scripts/qa/siteMenuNavigationSupport.mjs', 'scripts/lib/hostLikeServer.mjs', 'scripts/lib/playwrightLoader.mjs',
+  'src/lib/clubManagerUiInfo.ts',
+  'src/components/club-manager/TacticsScreen.tsx',
+  'src/components/club-manager/AcademyScreen.tsx',
+  'src/components/club-manager/MatchPlansCard.tsx',
+  'src/test/academyFilters.test.tsx',
+  'scripts/simTacticsEngine.mjs',
+  'scripts/qa/runClubManagerVeteranOldParity.mjs'];
 for (const file of required) {
   assert.match(binding.pins?.[file] || '', /^[a-f0-9]{64}$/, 'CM_SETUP_PIN_' + file);
   assert.equal(sha(fs.readFileSync(path.join(ROOT, file))), binding.pins[file], 'CM_SETUP_BODY_' + file);
@@ -297,6 +304,8 @@ async function selectVeteran(page, row) {
   for (let i = 0; i < index; i++) await page.keyboard.press('ArrowDown');
   await page.keyboard.press('Enter'); await idle(page);
   assert.equal(await select.inputValue(), wanted, 'CM_VETERAN_NATIVE_SELECT_COMMITTED');
+  await select.press('Tab');
+  assert.equal(await select.inputValue(), wanted, 'CM_VETERAN_NATIVE_SELECT_COMMITTED');
 }
 async function open(page, row) { await click(page, row, button(page, 'Veteran talks')); await selectVeteran(page, row); }
 async function snapshot(page, row, stage) {
@@ -351,6 +360,9 @@ async function actionsJourney(page, row) {
   const paid = await ask(page, row, 'agreed'); saved(paid, 'agreed'); row.saved.push(paid);
   await snapshot(page, row, 'agreement-saved');
   const back = button(page, 'Back to season review');
+  const beforeBackPreparation = await page.evaluate(collect);
+  await back.evaluate(node => node.scrollIntoView({ block: 'center', inline: 'nearest', behavior: 'instant' }));
+  row.deliberateScrolls.push({ label: 'Back target centre preparation', before: beforeBackPreparation, after: await page.evaluate(collect) });
   await target(page, row, back); await back.focus();
   const before = await read(page), beforeSample = await page.evaluate(collect);
   await page.keyboard.press('Enter'); await idle(page);

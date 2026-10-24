@@ -10,12 +10,12 @@ concurrency:
   cancel-in-progress: false
 env:
   BASE_SOURCE: 3ac9d8ea8a13db824f88be2deb660e7f2e31fc35
-  EXPECTED_PARENT: 223bbef3a137cfe4049ba14b4b5870a80cb6c5ec
+  EXPECTED_PARENT: d8998201deffbd3ec504e360b8ccb8bbba3c1a11
   CI: '1'
   SIM_NETWORK: offline
   TZ: UTC
   ENGINES: chromium
-  CM_VETERAN_EXPECTED_PINS_JSON: '{"src/lib/clubManager.ts":"45b9d486014720831f130000ff67d0d380f60c755bbb1afa3d0f9a833b2c4050","src/lib/clubManagerCalendar.ts":"7cdbc2e31172db5974f0753551133c61ae291662f5bd8e4b14f043d2267baf83","src/lib/clubManagerVeteranLedger.ts":"80f991a38069f29dd1fecc22a9cb9c0e3bb4945a33208fae1de8413fc6aefb17","src/lib/clubManagerVeteranRetirement.ts":"cdaecb5ecd28187da8a1c62526c6b165289e76e37d30a01cba2ce7c4a16577ed","src/hooks/useClubManager.ts":"88df1c6320820399cf5e96512960375a10ca9723f5e5f465140ee5ec3f86481b","src/components/club-manager/ClubManagerSeasonSummary.tsx":"1a5ea0d99de65f52d9f60ba3aed6c364445241ce760d2bb2a71e7feea9a453c1","src/components/club-manager/VeteranRetirementCard.tsx":"af5023b72b58bd1171a0117302fd120d9d40a509f57653175fac9300d03f0a21","src/index.css":"ada9cc819db63d0e2eb013bd3c29eec16877e2a30166c390b81901142369fef3","scripts/lib/hostLikeServer.mjs":"3958c9a3b4d9e49bb60a3b7dd72d81a997bd1caed56e82e4c3bae07e1a918ef0","src/components/game/ResultScreen.tsx":"29c771e6d41e570d94195ac62e0fb569d4b8d41bffcf5244f58ba70693d0006e","scripts/qa/siteMenuNavigationSupport.mjs":"c70e3ecc412f16d3322047b13205716c644495f8c74b76eed83852c87f35d303","scripts/lib/playwrightLoader.mjs":"94a07179be7ca6b9562d118b52c2d5d0dff0b6b2e29e49e4fea16fa2defb5a93","scripts/qa/fixtures/cmVeteran.entry.tsx":"6606fe65c8e1fc727366212f2bb3dff5fea2b58ad93edc186891c5008fb8e3e7","scripts/qa/fixtures/cmVeteran.html":"3668568002e653cc73d2b4bf568a5a6ef1d6bbd0cc6c8225b77b517011d4747e","scripts/qa/fixtures/cmVeteran.vite.mjs":"4ad5c1664b3112e9ce3bfc95306098ea65fc671f26f4eeae2b6673ffd5adc80b","scripts/qa/playCmVeteran.mjs":"caf48941c3fa4df327b20e64fa7742649ffc1ba1cae551c949a52b8eaa0d4c97"}'
+  CM_VETERAN_EXPECTED_PINS_JSON: '{"src/lib/clubManager.ts":"c7ee964763ae197adaf9bd8ce49a02a4f1b89c62cf2dacca55e2f87ae375053a","src/lib/clubManagerCalendar.ts":"7cdbc2e31172db5974f0753551133c61ae291662f5bd8e4b14f043d2267baf83","src/lib/clubManagerVeteranLedger.ts":"80f991a38069f29dd1fecc22a9cb9c0e3bb4945a33208fae1de8413fc6aefb17","src/lib/clubManagerVeteranRetirement.ts":"cdaecb5ecd28187da8a1c62526c6b165289e76e37d30a01cba2ce7c4a16577ed","src/hooks/useClubManager.ts":"88df1c6320820399cf5e96512960375a10ca9723f5e5f465140ee5ec3f86481b","src/components/club-manager/ClubManagerSeasonSummary.tsx":"1a5ea0d99de65f52d9f60ba3aed6c364445241ce760d2bb2a71e7feea9a453c1","src/components/club-manager/VeteranRetirementCard.tsx":"af5023b72b58bd1171a0117302fd120d9d40a509f57653175fac9300d03f0a21","src/index.css":"ada9cc819db63d0e2eb013bd3c29eec16877e2a30166c390b81901142369fef3","scripts/lib/hostLikeServer.mjs":"3958c9a3b4d9e49bb60a3b7dd72d81a997bd1caed56e82e4c3bae07e1a918ef0","src/components/game/ResultScreen.tsx":"29c771e6d41e570d94195ac62e0fb569d4b8d41bffcf5244f58ba70693d0006e","scripts/qa/siteMenuNavigationSupport.mjs":"c70e3ecc412f16d3322047b13205716c644495f8c74b76eed83852c87f35d303","scripts/lib/playwrightLoader.mjs":"94a07179be7ca6b9562d118b52c2d5d0dff0b6b2e29e49e4fea16fa2defb5a93","scripts/qa/fixtures/cmVeteran.entry.tsx":"6606fe65c8e1fc727366212f2bb3dff5fea2b58ad93edc186891c5008fb8e3e7","scripts/qa/fixtures/cmVeteran.html":"3668568002e653cc73d2b4bf568a5a6ef1d6bbd0cc6c8225b77b517011d4747e","scripts/qa/fixtures/cmVeteran.vite.mjs":"4ad5c1664b3112e9ce3bfc95306098ea65fc671f26f4eeae2b6673ffd5adc80b","scripts/qa/playCmVeteran.mjs":"34e010479c9689b990b5df50fa994feaf006e2da88660639d24819e6da7c9b60","src/lib/clubManagerUiInfo.ts":"926d11b61dac24077618f667bdd2f91f00e9f6535bcd55007283c08ed667041e","src/components/club-manager/TacticsScreen.tsx":"015f0dfd3531e858f0a122e1def14e09d918b4af0df5900b119469521f133aef","src/components/club-manager/AcademyScreen.tsx":"71a4e33e003d91658d1202c9d10aea2c7623a69c9909136820be89633b4e9791","src/components/club-manager/MatchPlansCard.tsx":"ae1631cd1bb573538858dd04c9afbaf9a84803c97c3f6706bec8b9740696fa09","src/test/academyFilters.test.tsx":"0b5b2a404ec6935410a9200bf7455d61defd8ca29883881505c30d6fdab8fd48","scripts/simTacticsEngine.mjs":"9f0b8646bbba89cc1275c10cd9f1ba33e480eff926a77a69264f1f351ba480ac","scripts/qa/runClubManagerVeteranOldParity.mjs":"ffe08cd7396538cfed99057df1caf7f8559e9c024ea92700ac7dc439cd003c65"}'
 jobs:
   veteran_outcomes:
     runs-on: ubuntu-latest
@@ -32,7 +32,7 @@ jobs:
         with:
           node-version: 24
           cache: npm
-      - name: Exact two-path child, eighteen cumulative paths and seventeen frozen proof bodies
+      - name: Exact ten-path child, twenty-four cumulative paths and twenty-three pinned proof bodies
         run: |
           set -euo pipefail
           out="$RUNNER_TEMP/cm-veteran-retirement-functional";test ! -e "$out";mkdir "$out"
@@ -45,15 +45,15 @@ jobs:
           git merge-base --is-ancestor "$BASE_SOURCE" "$GITHUB_SHA"
           git show -s --format=%P HEAD > "$out/parents.txt"
           test "$(cat "$out/parents.txt")" = "$EXPECTED_PARENT"
-          git diff --exit-code "$EXPECTED_PARENT" HEAD -- . ':!docs/**' ':!.github/workflows/cm-veteran-retirement.yml' ':!scripts/qa/playCmVeteran.mjs' > "$out/direct-child-scope.log"
+          git diff --exit-code "$EXPECTED_PARENT" HEAD -- . ':!docs/**' ':!.github/workflows/cm-veteran-retirement.yml' ':!src/lib/clubManagerUiInfo.ts' ':!src/lib/clubManager.ts' ':!src/components/club-manager/TacticsScreen.tsx' ':!src/components/club-manager/AcademyScreen.tsx' ':!src/components/club-manager/MatchPlansCard.tsx' ':!src/test/academyFilters.test.tsx' ':!scripts/simTacticsEngine.mjs' ':!scripts/qa/playCmVeteran.mjs' ':!scripts/qa/runClubManagerVeteranOldParity.mjs' > "$out/direct-child-scope.log"
           git diff --name-only "$EXPECTED_PARENT" HEAD -- . ':!docs/**' | sort > "$out/direct-child-members.txt"
-          printf '%s\n' .github/workflows/cm-veteran-retirement.yml scripts/qa/playCmVeteran.mjs | sort | cmp - "$out/direct-child-members.txt"
-          git diff --exit-code "$BASE_SOURCE" HEAD -- . ':!docs/**' ':!.github/workflows/cm-veteran-retirement.yml' ':!src/lib/clubManager.ts' ':!src/lib/clubManagerCalendar.ts' ':!src/lib/clubManagerVeteranLedger.ts' ':!src/lib/clubManagerVeteranRetirement.ts' ':!src/test/clubManagerVeteranRetirement.test.ts' ':!src/test/clubManagerVeteranWorldRoster.test.ts' ':!src/hooks/useClubManager.ts' ':!src/components/club-manager/ClubManagerSeasonSummary.tsx' ':!src/components/club-manager/VeteranRetirementCard.tsx' ':!src/test/clubManagerVeteranHook.test.tsx' ':!src/test/VeteranRetirementCard.test.tsx' ':!src/test/clubManagerVeteranOldParity.test.ts' ':!scripts/qa/runClubManagerVeteranOldParity.mjs' ':!scripts/qa/playCmVeteran.mjs' ':!scripts/qa/fixtures/cmVeteran.entry.tsx' ':!scripts/qa/fixtures/cmVeteran.html' ':!scripts/qa/fixtures/cmVeteran.vite.mjs' > "$out/finite-eighteen-path-scope.log"
+          printf '%s\n' .github/workflows/cm-veteran-retirement.yml src/lib/clubManagerUiInfo.ts src/lib/clubManager.ts src/components/club-manager/TacticsScreen.tsx src/components/club-manager/AcademyScreen.tsx src/components/club-manager/MatchPlansCard.tsx src/test/academyFilters.test.tsx scripts/simTacticsEngine.mjs scripts/qa/playCmVeteran.mjs scripts/qa/runClubManagerVeteranOldParity.mjs | sort | cmp - "$out/direct-child-members.txt"
+          git diff --exit-code "$BASE_SOURCE" HEAD -- . ':!docs/**' ':!.github/workflows/cm-veteran-retirement.yml' ':!src/lib/clubManager.ts' ':!src/lib/clubManagerCalendar.ts' ':!src/lib/clubManagerVeteranLedger.ts' ':!src/lib/clubManagerVeteranRetirement.ts' ':!src/test/clubManagerVeteranRetirement.test.ts' ':!src/test/clubManagerVeteranWorldRoster.test.ts' ':!src/hooks/useClubManager.ts' ':!src/components/club-manager/ClubManagerSeasonSummary.tsx' ':!src/components/club-manager/VeteranRetirementCard.tsx' ':!src/test/clubManagerVeteranHook.test.tsx' ':!src/test/VeteranRetirementCard.test.tsx' ':!src/test/clubManagerVeteranOldParity.test.ts' ':!scripts/qa/runClubManagerVeteranOldParity.mjs' ':!scripts/qa/playCmVeteran.mjs' ':!scripts/qa/fixtures/cmVeteran.entry.tsx' ':!scripts/qa/fixtures/cmVeteran.html' ':!scripts/qa/fixtures/cmVeteran.vite.mjs' ':!src/lib/clubManagerUiInfo.ts' ':!src/components/club-manager/TacticsScreen.tsx' ':!src/components/club-manager/AcademyScreen.tsx' ':!src/components/club-manager/MatchPlansCard.tsx' ':!src/test/academyFilters.test.tsx' ':!scripts/simTacticsEngine.mjs' > "$out/finite-twenty-four-path-scope.log"
           git diff --name-only "$BASE_SOURCE" HEAD -- . ':!docs/**' | sort > "$out/cumulative-members.txt"
-          printf '%s\n' .github/workflows/cm-veteran-retirement.yml src/lib/clubManager.ts src/lib/clubManagerCalendar.ts src/lib/clubManagerVeteranLedger.ts src/lib/clubManagerVeteranRetirement.ts src/test/clubManagerVeteranRetirement.test.ts src/test/clubManagerVeteranWorldRoster.test.ts src/hooks/useClubManager.ts src/components/club-manager/ClubManagerSeasonSummary.tsx src/components/club-manager/VeteranRetirementCard.tsx src/test/clubManagerVeteranHook.test.tsx src/test/VeteranRetirementCard.test.tsx src/test/clubManagerVeteranOldParity.test.ts scripts/qa/runClubManagerVeteranOldParity.mjs scripts/qa/playCmVeteran.mjs scripts/qa/fixtures/cmVeteran.entry.tsx scripts/qa/fixtures/cmVeteran.html scripts/qa/fixtures/cmVeteran.vite.mjs | sort | cmp - "$out/cumulative-members.txt"
+          printf '%s\n' .github/workflows/cm-veteran-retirement.yml src/lib/clubManager.ts src/lib/clubManagerCalendar.ts src/lib/clubManagerVeteranLedger.ts src/lib/clubManagerVeteranRetirement.ts src/test/clubManagerVeteranRetirement.test.ts src/test/clubManagerVeteranWorldRoster.test.ts src/hooks/useClubManager.ts src/components/club-manager/ClubManagerSeasonSummary.tsx src/components/club-manager/VeteranRetirementCard.tsx src/test/clubManagerVeteranHook.test.tsx src/test/VeteranRetirementCard.test.tsx src/test/clubManagerVeteranOldParity.test.ts scripts/qa/runClubManagerVeteranOldParity.mjs scripts/qa/playCmVeteran.mjs scripts/qa/fixtures/cmVeteran.entry.tsx scripts/qa/fixtures/cmVeteran.html scripts/qa/fixtures/cmVeteran.vite.mjs src/lib/clubManagerUiInfo.ts src/components/club-manager/TacticsScreen.tsx src/components/club-manager/AcademyScreen.tsx src/components/club-manager/MatchPlansCard.tsx src/test/academyFilters.test.tsx scripts/simTacticsEngine.mjs | sort | cmp - "$out/cumulative-members.txt"
           test "$(git rev-parse "$BASE_SOURCE:src/lib/clubManager.ts")" = a505743537b383bc7885bb81f5a72c11e154b566
           test "$(git rev-parse "$BASE_SOURCE:src/lib/clubManagerCalendar.ts")" = 3653027149d6a1bef4194e0bece4fb5783c1c1e2
-          test "$(git rev-parse HEAD:src/lib/clubManager.ts)" = bc6fb5765f593fb2b046e9abd35730093772f637
+          test "$(git rev-parse HEAD:src/lib/clubManager.ts)" = 7e1d319d2951c78c406d62989055b01783eb56d9
           test "$(git rev-parse HEAD:src/lib/clubManagerCalendar.ts)" = a397581e069d7809f72a093d24d157b50c88e2d3
           test "$(git rev-parse HEAD:src/test/clubManagerVeteranWorldRoster.test.ts)" = 17f01cc5148c805efafe120f5af1c907bc2ee4f5
           test "$(git rev-parse "$BASE_SOURCE:src/hooks/useClubManager.ts")" = 65bc9bbb622c67fbbcb25c949038571bbdc8600a
@@ -67,13 +67,19 @@ jobs:
           test "$(git rev-parse HEAD:src/test/clubManagerVeteranHook.test.tsx)" = e189d039d6339ea896e03d33be96b7930393cf8f
           test "$(git rev-parse HEAD:src/test/VeteranRetirementCard.test.tsx)" = ba06e7824a79d41cd7ce9fcc25ba8513fc7e7abe
           test "$(git rev-parse HEAD:src/test/clubManagerVeteranOldParity.test.ts)" = d485c5b7ce32868e2cbfaf3aedb75e8e683b78eb
-          test "$(git rev-parse HEAD:scripts/qa/runClubManagerVeteranOldParity.mjs)" = d8c55e23f5fb4484970807350e56b4379d7be647
+          test "$(git rev-parse HEAD:scripts/qa/runClubManagerVeteranOldParity.mjs)" = 21e4aca9ba79b5bfa9fbec87fbd984d13f8f0fe2
           test "$(git rev-parse HEAD:scripts/qa/fixtures/cmVeteran.entry.tsx)" = d3839d2f97ded5918425b41d1e8b329cd888b88e
           test "$(git rev-parse HEAD:scripts/qa/fixtures/cmVeteran.html)" = b8ff0e3aa80f8d92cb1281a5e245343856013416
           test "$(git rev-parse HEAD:scripts/qa/fixtures/cmVeteran.vite.mjs)" = 9ba10a987985cbd2e8cd26f7dd346bed844ea4ac
-          test "$(git rev-parse HEAD:scripts/qa/playCmVeteran.mjs)" = 193d1370175ca0562685a2910ea7d615cbdd9985
+          test "$(git rev-parse HEAD:scripts/qa/playCmVeteran.mjs)" = 9797d91d95c65345fb8334f6a97be0902df4c1e2
+          test "$(git rev-parse HEAD:src/lib/clubManagerUiInfo.ts)" = 60bac6823fa3d6e22a7fc52ac5b9d7d640b1e717
+          test "$(git rev-parse HEAD:src/components/club-manager/TacticsScreen.tsx)" = a85bbff760230696c89a98b4af6a46567b6f6247
+          test "$(git rev-parse HEAD:src/components/club-manager/AcademyScreen.tsx)" = 2d3ca44121cf0a84dad9b965328bd0c970403be3
+          test "$(git rev-parse HEAD:src/components/club-manager/MatchPlansCard.tsx)" = b810d257856d61f14ad1d2c953f3944ea3e02793
+          test "$(git rev-parse HEAD:src/test/academyFilters.test.tsx)" = c2d432043c153bcf56a881d264d7077c74c7ba3d
+          test "$(git rev-parse HEAD:scripts/simTacticsEngine.mjs)" = 1b446b8b2cf1d36f5b1a52d720561e7c1a60d6de
           printf '%s  %s\n' \
-            45b9d486014720831f130000ff67d0d380f60c755bbb1afa3d0f9a833b2c4050 src/lib/clubManager.ts \
+            c7ee964763ae197adaf9bd8ce49a02a4f1b89c62cf2dacca55e2f87ae375053a src/lib/clubManager.ts \
             7cdbc2e31172db5974f0753551133c61ae291662f5bd8e4b14f043d2267baf83 src/lib/clubManagerCalendar.ts \
             80f991a38069f29dd1fecc22a9cb9c0e3bb4945a33208fae1de8413fc6aefb17 src/lib/clubManagerVeteranLedger.ts \
             cdaecb5ecd28187da8a1c62526c6b165289e76e37d30a01cba2ce7c4a16577ed src/lib/clubManagerVeteranRetirement.ts \
@@ -85,11 +91,17 @@ jobs:
             547f1a8953f638b3e335a2e73d69cdbc9f60aa06f91e51d027371f628017781c src/test/clubManagerVeteranHook.test.tsx \
             93a223b6349a56545b794604a2272127ec5df0c366e31906c28f756b30bf6e5b src/test/VeteranRetirementCard.test.tsx \
             cd687fbfc4ccd85990528e36e471833dffd65b492eb8e12b15d9b325baa800a6 src/test/clubManagerVeteranOldParity.test.ts \
-            d8a781471aa6172eb4ad53a769045dad40a940bdb7da937ab63b47590fb56521 scripts/qa/runClubManagerVeteranOldParity.mjs \
+            ffe08cd7396538cfed99057df1caf7f8559e9c024ea92700ac7dc439cd003c65 scripts/qa/runClubManagerVeteranOldParity.mjs \
             6606fe65c8e1fc727366212f2bb3dff5fea2b58ad93edc186891c5008fb8e3e7 scripts/qa/fixtures/cmVeteran.entry.tsx \
             3668568002e653cc73d2b4bf568a5a6ef1d6bbd0cc6c8225b77b517011d4747e scripts/qa/fixtures/cmVeteran.html \
             4ad5c1664b3112e9ce3bfc95306098ea65fc671f26f4eeae2b6673ffd5adc80b scripts/qa/fixtures/cmVeteran.vite.mjs \
-            caf48941c3fa4df327b20e64fa7742649ffc1ba1cae551c949a52b8eaa0d4c97 scripts/qa/playCmVeteran.mjs > "$out/input-pins.sha256"
+            34e010479c9689b990b5df50fa994feaf006e2da88660639d24819e6da7c9b60 scripts/qa/playCmVeteran.mjs \
+            926d11b61dac24077618f667bdd2f91f00e9f6535bcd55007283c08ed667041e src/lib/clubManagerUiInfo.ts \
+            015f0dfd3531e858f0a122e1def14e09d918b4af0df5900b119469521f133aef src/components/club-manager/TacticsScreen.tsx \
+            71a4e33e003d91658d1202c9d10aea2c7623a69c9909136820be89633b4e9791 src/components/club-manager/AcademyScreen.tsx \
+            ae1631cd1bb573538858dd04c9afbaf9a84803c97c3f6706bec8b9740696fa09 src/components/club-manager/MatchPlansCard.tsx \
+            0b5b2a404ec6935410a9200bf7455d61defd8ca29883881505c30d6fdab8fd48 src/test/academyFilters.test.tsx \
+            9f0b8646bbba89cc1275c10cd9f1ba33e480eff926a77a69264f1f351ba480ac scripts/simTacticsEngine.mjs > "$out/input-pins.sha256"
           sha256sum --check "$out/input-pins.sha256" > "$out/input-pins.log"
           git rev-parse HEAD > "$out/head.txt";git rev-parse 'HEAD^{tree}' > "$out/tree.txt"
           printf '%s\n' "$GITHUB_RUN_ID" > "$out/run-id.txt";printf '%s\n' "$GITHUB_RUN_ATTEMPT" > "$out/run-attempt.txt"
@@ -320,6 +332,86 @@ jobs:
           test -s "$out/rollover-parity/parity.json"
           test -s "$out/rollover-parity/copies.after.json"
 
+      - name: Full unchanged tactics engine legacy harness
+        timeout-minutes: 15
+        run: |
+          set -euo pipefail
+          out="$CM_VETERAN_OUT"
+          : > "$out/legacy-tactics.transport";status=0
+          SIM_NETWORK=offline SIM_OFFLINE_RECEIPT="$out/legacy-tactics.transport" NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" timeout --signal=TERM --kill-after=15s 12m node scripts/simTacticsEngine.mjs > "$out/legacy-tactics.stdout.log" 2> "$out/legacy-tactics.stderr.log" || status=$?
+          printf '%s\n' "$status" > "$out/legacy-tactics.exit"
+          test "$status" -eq 0
+          test ! -s "$out/legacy-tactics.transport"
+      - name: All eight held academy cases and effective actual-record classifier controls
+        timeout-minutes: 10
+        run: |
+          set -euo pipefail
+          out="$CM_VETERAN_OUT"
+          export NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs"
+          : > "$out/academy.transport";: > "$out/ui-info-classifier.transport";status=0
+          SIM_OFFLINE_RECEIPT="$out/academy.transport" timeout --signal=TERM --kill-after=15s 8m node_modules/.bin/vitest run src/test/academyFilters.test.tsx --maxWorkers=1 --no-file-parallelism --reporter=default --reporter=json --outputFile="$out/academy.json" > "$out/academy.log" 2>&1 || status=$?
+          printf '%s\n' "$status" > "$out/academy.exit";test "$status" -eq 0
+          classifier=0
+          SIM_OFFLINE_RECEIPT="$out/ui-info-classifier.transport" node > "$out/ui-info-classifier.log" 2>&1 <<'NODE' || classifier=$?
+          const fs=require('node:fs'),path=require('node:path'),assert=require('node:assert/strict'),{AssertionError}=require('node:assert'),crypto=require('node:crypto'),out=process.env.CM_VETERAN_OUT;
+          const sha=b=>crypto.createHash('sha256').update(b).digest('hex'),write=(file,body)=>fs.writeFileSync(file,body,{flag:'wx'});
+          const titles=["combines both filters while keeping the original reported-ceiling order and source list","distinguishes no matches from an empty academy and resets both selections","keeps the original intake explanation when there are no prospects","passes the actual visible prospect ID to sign and release callbacks","names every Sign him and Let go button after its own prospect, and each one acts on him","keeps signing disabled for budget 4 and squad size 10","keeps signing disabled for budget 10 and squad size 30","retains the selected labels if signing or releasing removes the last match"],ancestor='academy position and age filters',runtime=['numRuntimeErrorTestSuites','numUnhandledErrors'];
+          assert.equal(new Set(titles).size,8);
+          const footer='simTacticsEngine: PASS. A man is read in his slot, a second position is earned over counted weeks, the armband and the takers reach the stream, a duty moves the football a little, the bench is ordered for the slot, and the seventeen shapes stand where they say.';
+          function legacy(stdout,stderr,exitText){
+            assert.match(exitText,/^(?:0|[1-9][0-9]{0,2})\n$/,'CM_TACTICS_REAL_EXIT_FORMAT');
+            assert.equal(Number(exitText.trim()),0,'CM_TACTICS_EXIT_ZERO');
+            assert.equal(stdout.split('\n').filter(line=>line===footer).length,1,'CM_TACTICS_EXACT_HEALTHY_FOOTER');
+            assert.doesNotMatch(stdout+'\n'+stderr,/^\s*FAIL \[|simTacticsEngine: \d+ FAILURES|(?:ReferenceError|TypeError|SyntaxError|ERR_MODULE_NOT_FOUND|MODULE_NOT_FOUND):|Unhandled\s+(?:Errors?|Rejections?)|Uncaught\s+Exceptions?/m,'CM_TACTICS_NO_RUNTIME_OR_SECTION_FAILURE');
+          }
+          function academy(r,log){
+            assert.equal(r.testResults.length,1,'CM_ACADEMY_EXACT_FILE_COUNT');
+            const suite=r.testResults[0],seen=new Set();
+            assert.equal(path.resolve(suite.name),path.resolve('src/test/academyFilters.test.tsx'),'CM_ACADEMY_EXACT_FILE');
+            assert.equal(suite.assertionResults.length,8,'CM_ACADEMY_EXACT_EIGHT_ROWS');
+            for(const row of suite.assertionResults){
+              assert.equal(typeof row.title,'string');assert(titles.includes(row.title),row.title);assert(!seen.has(row.title));seen.add(row.title);
+              assert.equal(row.fullName,ancestor+' '+row.title,'CM_ACADEMY_EXACT_FULL_NAME');
+              assert.equal(row.status,'passed','CM_ACADEMY_CASE_PASSED');assert.deepEqual(row.failureMessages,[]);
+            }
+            assert.equal(seen.size,8);for(const title of titles)assert(seen.has(title));
+            assert.equal(r.success,true);assert.equal(suite.status,'passed');if('message'in suite)assert.equal(suite.message,'');
+            for(const [key,value]of Object.entries({numTotalTests:8,numPassedTests:8,numFailedTests:0,numPendingTests:0,numTodoTests:0}))assert.equal(r[key],value,key);
+            for(const key of runtime)if(key in r)assert.equal(r[key],0);
+            if('unhandledErrors'in r)assert.deepEqual(r.unhandledErrors,[]);
+            assert.doesNotMatch(log,/Unhandled\s+(?:Errors?|Rejections?)|Uncaught\s+Exceptions?|Failed to resolve import|Cannot find (?:module|package)|No test files found/i);
+          }
+          const stdout=fs.readFileSync(out+'/legacy-tactics.stdout.log'),stderr=fs.readFileSync(out+'/legacy-tactics.stderr.log'),exit=fs.readFileSync(out+'/legacy-tactics.exit');
+          legacy(stdout.toString('utf8'),stderr.toString('utf8'),exit.toString('utf8'));
+          const actualAcademy=fs.readFileSync(out+'/academy.json'),actualLog=fs.readFileSync(out+'/academy.log','utf8'),report=JSON.parse(actualAcademy);
+          assert.equal(fs.readFileSync(out+'/academy.exit','utf8'),'0\n');academy(report,actualLog);
+          const dir=path.join(out,'ui-info-record-controls');assert(!fs.existsSync(dir));fs.mkdirSync(dir);
+          write(dir+'/actual-academy.healthy.json',actualAcademy);write(dir+'/actual-legacy.healthy.stdout.log',stdout);write(dir+'/actual-legacy.healthy.stderr.log',stderr);write(dir+'/actual-legacy.healthy.exit',exit);
+          const controls=[];
+          function refusal(id,marker,files,run){
+            let caught=null;try{run();}catch(error){caught=error;}
+            assert(caught instanceof AssertionError,id+' must reach a native AssertionError');
+            assert(caught.message.includes(marker),id+' must own '+marker);
+            const log=id+'.owned-error.log';write(path.join(dir,log),caught.stack+'\n');
+            controls.push({id,marker,recordDerivedFromActualHealthyOutput:true,physicalCopies:files.map(file=>({file,sha256:sha(fs.readFileSync(path.join(dir,file)))})),observedAssertion:{name:caught.name,code:caught.code,message:caught.message},observedValidation:'REJECTED',ownedErrorLog:log,subprocess:false});
+          }
+          const missing=JSON.parse(actualAcademy);assert.equal(missing.testResults[0].assertionResults.length,8);missing.testResults[0].assertionResults.pop();assert.equal(missing.testResults[0].assertionResults.length,7);
+          const missingBytes=Buffer.from(JSON.stringify(missing,null,2)+'\n');assert.notEqual(sha(missingBytes),sha(actualAcademy));write(dir+'/academy-missing-row.json',missingBytes);
+          refusal('academy-missing-row','CM_ACADEMY_EXACT_EIGHT_ROWS',['academy-missing-row.json'],()=>academy(JSON.parse(fs.readFileSync(dir+'/academy-missing-row.json')),actualLog));
+          const pending=JSON.parse(actualAcademy);assert.equal(pending.testResults[0].assertionResults[0].status,'passed');pending.testResults[0].assertionResults[0].status='pending';
+          const pendingBytes=Buffer.from(JSON.stringify(pending,null,2)+'\n');assert.notEqual(sha(pendingBytes),sha(actualAcademy));write(dir+'/academy-pending-case.json',pendingBytes);
+          refusal('academy-pending-case','CM_ACADEMY_CASE_PASSED',['academy-pending-case.json'],()=>academy(JSON.parse(fs.readFileSync(dir+'/academy-pending-case.json')),actualLog));
+          assert.equal(stdout.toString('utf8').split(footer).length,2);
+          const wrong=Buffer.from(stdout.toString('utf8').replace(footer,'simTacticsEngine: FAIL.'));assert.notEqual(sha(wrong),sha(stdout));write(dir+'/legacy-wrong-footer.stdout.log',wrong);write(dir+'/legacy-wrong-footer.stderr.log',stderr);write(dir+'/legacy-wrong-footer.exit',exit);
+          refusal('legacy-wrong-footer','CM_TACTICS_EXACT_HEALTHY_FOOTER',['legacy-wrong-footer.stdout.log','legacy-wrong-footer.stderr.log','legacy-wrong-footer.exit'],()=>legacy(fs.readFileSync(dir+'/legacy-wrong-footer.stdout.log','utf8'),fs.readFileSync(dir+'/legacy-wrong-footer.stderr.log','utf8'),fs.readFileSync(dir+'/legacy-wrong-footer.exit','utf8')));
+          const nonzero=Buffer.from('1\n');assert.notEqual(sha(nonzero),sha(exit));write(dir+'/legacy-nonzero.stdout.log',stdout);write(dir+'/legacy-nonzero.stderr.log',stderr);write(dir+'/legacy-nonzero.exit',nonzero);
+          refusal('legacy-nonzero-exit','CM_TACTICS_EXIT_ZERO',['legacy-nonzero.stdout.log','legacy-nonzero.stderr.log','legacy-nonzero.exit'],()=>legacy(fs.readFileSync(dir+'/legacy-nonzero.stdout.log','utf8'),fs.readFileSync(dir+'/legacy-nonzero.stderr.log','utf8'),fs.readFileSync(dir+'/legacy-nonzero.exit','utf8')));
+          assert.equal(controls.length,4);
+          write(out+'/ui-info-admission.json',JSON.stringify({source:process.env.GITHUB_SHA,parent:process.env.EXPECTED_PARENT,baseSource:process.env.BASE_SOURCE,runId:process.env.GITHUB_RUN_ID,attempt:process.env.GITHUB_RUN_ATTEMPT,legacyDefaultHarness:'PASS',legacyOutput:{stdout:sha(stdout),stderr:sha(stderr),exit:sha(exit)},academy:{file:'src/test/academyFilters.test.tsx',passed:report.testResults[0].assertionResults.map(row=>row.fullName),expandedCases:8,declarations:7,actualReportSha256:sha(actualAcademy)},copiedActualRecordControls:controls,observedRuntimeCounters:Object.fromEntries(runtime.filter(k=>k in report).map(k=>[k,report[k]])),absentRuntimeCountersUnknown:runtime.filter(k=>!(k in report)),unhandledErrors:'unhandledErrors'in report?report.unhandledErrors:'UNKNOWN_ABSENT',applicationQualified:false,buildBrowserCapsQualified:false},null,2)+'\n');
+          console.log('CM_UI_INFO_REAL_OUTPUTS_AND_FOUR_COPIED_RECORD_CONTROLS_PASS');
+          NODE
+          printf '%s\n' "$classifier" > "$out/ui-info-classifier.exit";test "$classifier" -eq 0
+          test ! -s "$out/academy.transport";test ! -s "$out/ui-info-classifier.transport"
       - name: Always preserve all raw results and physical holds
         if: always()
         run: |
@@ -342,9 +434,10 @@ jobs:
           if test -f "$out/head.txt";then cmp "$out/head.txt" "$out/head-after.txt" || failed=1;else failed=1;fi
           git diff --exit-code HEAD > "$out/final-source-diff.log" || failed=1
           git status --porcelain --untracked-files=all > "$out/final-status.txt";test ! -s "$out/final-status.txt" || failed=1
-          for transport in types tests classifier world world-classifier ui ui-classifier rng-control rollover-parity;do test -f "$out/$transport.transport" && test ! -s "$out/$transport.transport" || failed=1;done
+          for transport in types tests classifier world world-classifier ui ui-classifier rng-control rollover-parity legacy-tactics academy ui-info-classifier;do test -f "$out/$transport.transport" && test ! -s "$out/$transport.transport" || failed=1;done
           for label in normal healthy fault restored;do test -f "$out/rng-control/$label.transport" && test ! -s "$out/rng-control/$label.transport" || failed=1;done
           for label in candidate frozen-original extra-rollover-draw changed-rollover-budget restored-original;do test -f "$out/rollover-parity/$label.transport" && test ! -s "$out/rollover-parity/$label.transport" || failed=1;done
+          test -s "$out/ui-info-admission.json" || failed=1
           while IFS= read -r -d '' file;do test ! -s "$file" || failed=1;done < <(find "$out" -type f -name '*.transport' -print0)
           printf '%s\n' "$failed" > "$out/final-holds.exit"
           (cd "$out";find . -type f ! -path ./evidence.sha256 -print0 | sort -z | xargs -0 sha256sum) > "$out/evidence.sha256"
@@ -372,7 +465,7 @@ jobs:
         with:
           node-version: 24
           cache: npm
-      - name: Exact two-path child, eighteen cumulative paths and sixteen actual browser inputs
+      - name: Exact ten-path child, twenty-four cumulative paths and twenty-three actual browser inputs
         run: |
           set -euo pipefail
           out="$RUNNER_TEMP/cm-veteran-styled-release";test ! -e "$out";mkdir "$out"
@@ -386,22 +479,25 @@ jobs:
           test "$(git rev-parse HEAD^)" = "$EXPECTED_PARENT"
           git fetch --no-tags --depth=1 origin "$EXPECTED_PARENT" > "$out/parent-fetch.log" 2>&1
           git merge-base --is-ancestor "$EXPECTED_PARENT" "$GITHUB_SHA" > "$out/parent-ancestry.log" 2>&1
-          git diff --exit-code "$EXPECTED_PARENT" HEAD -- . ':!docs/**' ':!.github/workflows/cm-veteran-retirement.yml' ':!scripts/qa/playCmVeteran.mjs' > "$out/protected-current-source.log"
+          git diff --exit-code "$EXPECTED_PARENT" HEAD -- . ':!docs/**' ':!.github/workflows/cm-veteran-retirement.yml' ':!src/lib/clubManagerUiInfo.ts' ':!src/lib/clubManager.ts' ':!src/components/club-manager/TacticsScreen.tsx' ':!src/components/club-manager/AcademyScreen.tsx' ':!src/components/club-manager/MatchPlansCard.tsx' ':!src/test/academyFilters.test.tsx' ':!scripts/simTacticsEngine.mjs' ':!scripts/qa/playCmVeteran.mjs' ':!scripts/qa/runClubManagerVeteranOldParity.mjs' > "$out/protected-current-source.log"
           git diff --name-only "$EXPECTED_PARENT" HEAD -- . ':!docs/**' | sort > "$out/direct-child-members.txt"
-          printf '%s\n' .github/workflows/cm-veteran-retirement.yml scripts/qa/playCmVeteran.mjs | sort | cmp - "$out/direct-child-members.txt"
-          for file in package.json package-lock.json vitest.config.ts scripts/lib/offlineTransport.cjs scripts/qa/freeKickLab1070.mjs scripts/sweepWeight.mjs scripts/playHomeFold.mjs src/lib/clubManager.ts src/lib/clubManagerCalendar.ts src/lib/clubManagerVeteranLedger.ts src/lib/clubManagerVeteranRetirement.ts src/hooks/useClubManager.ts src/components/club-manager/ClubManagerSeasonSummary.tsx src/components/club-manager/VeteranRetirementCard.tsx src/components/game/ResultScreen.tsx src/index.css scripts/qa/siteMenuNavigationSupport.mjs scripts/lib/hostLikeServer.mjs scripts/lib/playwrightLoader.mjs;do
+          printf '%s\n' .github/workflows/cm-veteran-retirement.yml src/lib/clubManagerUiInfo.ts src/lib/clubManager.ts src/components/club-manager/TacticsScreen.tsx src/components/club-manager/AcademyScreen.tsx src/components/club-manager/MatchPlansCard.tsx src/test/academyFilters.test.tsx scripts/simTacticsEngine.mjs scripts/qa/playCmVeteran.mjs scripts/qa/runClubManagerVeteranOldParity.mjs | sort | cmp - "$out/direct-child-members.txt"
+          for file in package.json package-lock.json vitest.config.ts scripts/lib/offlineTransport.cjs scripts/qa/freeKickLab1070.mjs scripts/sweepWeight.mjs scripts/playHomeFold.mjs src/lib/clubManagerCalendar.ts src/lib/clubManagerVeteranLedger.ts src/lib/clubManagerVeteranRetirement.ts src/hooks/useClubManager.ts src/components/club-manager/ClubManagerSeasonSummary.tsx src/components/club-manager/VeteranRetirementCard.tsx src/components/game/ResultScreen.tsx src/index.css scripts/qa/siteMenuNavigationSupport.mjs scripts/lib/hostLikeServer.mjs scripts/lib/playwrightLoader.mjs;do
             git show "$EXPECTED_PARENT:$file" | cmp "$file" -
           done
           node <<'NODE'
           const fs=require('node:fs'),assert=require('node:assert/strict'),crypto=require('node:crypto'),cp=require('node:child_process');
-          const required=["src/lib/clubManager.ts","src/lib/clubManagerCalendar.ts","src/lib/clubManagerVeteranLedger.ts","src/lib/clubManagerVeteranRetirement.ts","src/hooks/useClubManager.ts","src/components/club-manager/ClubManagerSeasonSummary.tsx","src/components/club-manager/VeteranRetirementCard.tsx","src/components/game/ResultScreen.tsx","src/index.css","scripts/qa/fixtures/cmVeteran.entry.tsx","scripts/qa/fixtures/cmVeteran.html","scripts/qa/fixtures/cmVeteran.vite.mjs","scripts/qa/playCmVeteran.mjs","scripts/qa/siteMenuNavigationSupport.mjs","scripts/lib/hostLikeServer.mjs","scripts/lib/playwrightLoader.mjs"],pins=JSON.parse(process.env.CM_VETERAN_EXPECTED_PINS_JSON),hash=b=>crypto.createHash('sha256').update(b).digest('hex'),out=process.env.CM_VETERAN_STYLE_OUT;
-          assert.deepEqual(Object.keys(pins).sort(),[...required].sort());assert.equal(required.length,16);
+          const required=["src/lib/clubManager.ts","src/lib/clubManagerCalendar.ts","src/lib/clubManagerVeteranLedger.ts","src/lib/clubManagerVeteranRetirement.ts","src/hooks/useClubManager.ts","src/components/club-manager/ClubManagerSeasonSummary.tsx","src/components/club-manager/VeteranRetirementCard.tsx","src/components/game/ResultScreen.tsx","src/index.css","scripts/qa/fixtures/cmVeteran.entry.tsx","scripts/qa/fixtures/cmVeteran.html","scripts/qa/fixtures/cmVeteran.vite.mjs","scripts/qa/playCmVeteran.mjs","scripts/qa/siteMenuNavigationSupport.mjs","scripts/lib/hostLikeServer.mjs","scripts/lib/playwrightLoader.mjs","src/lib/clubManagerUiInfo.ts","src/components/club-manager/TacticsScreen.tsx","src/components/club-manager/AcademyScreen.tsx","src/components/club-manager/MatchPlansCard.tsx","src/test/academyFilters.test.tsx","scripts/simTacticsEngine.mjs","scripts/qa/runClubManagerVeteranOldParity.mjs"],pins=JSON.parse(process.env.CM_VETERAN_EXPECTED_PINS_JSON),hash=b=>crypto.createHash('sha256').update(b).digest('hex'),out=process.env.CM_VETERAN_STYLE_OUT;
+          assert.deepEqual(Object.keys(pins).sort(),[...required].sort());assert.equal(required.length,23);
           for(const file of required){assert.match(pins[file],/^[a-f0-9]{64}$/);assert.equal(hash(fs.readFileSync(file)),pins[file],'CM_VETERAN_BROWSER_INPUT '+file);}
+          const criticalGit={"src/lib/clubManagerUiInfo.ts":"60bac6823fa3d6e22a7fc52ac5b9d7d640b1e717","src/lib/clubManager.ts":"7e1d319d2951c78c406d62989055b01783eb56d9","src/components/club-manager/TacticsScreen.tsx":"a85bbff760230696c89a98b4af6a46567b6f6247","src/components/club-manager/AcademyScreen.tsx":"2d3ca44121cf0a84dad9b965328bd0c970403be3","src/components/club-manager/MatchPlansCard.tsx":"b810d257856d61f14ad1d2c953f3944ea3e02793","src/test/academyFilters.test.tsx":"c2d432043c153bcf56a881d264d7077c74c7ba3d","scripts/simTacticsEngine.mjs":"1b446b8b2cf1d36f5b1a52d720561e7c1a60d6de","scripts/qa/playCmVeteran.mjs":"9797d91d95c65345fb8334f6a97be0902df4c1e2","scripts/qa/runClubManagerVeteranOldParity.mjs":"21e4aca9ba79b5bfa9fbec87fbd984d13f8f0fe2"};
+          for(const [file,blob]of Object.entries(criticalGit))assert.equal(cp.execFileSync('git',['rev-parse','HEAD:'+file],{encoding:'utf8'}).trim(),blob,'CM_VETERAN_CRITICAL_GIT '+file);
+          fs.writeFileSync(out+'/critical-source-git.json',JSON.stringify(criticalGit,null,2)+'\n',{flag:'wx'});
           const names=cp.execFileSync('git',['ls-files','-z'],{encoding:'utf8'}).split('\0');assert.equal(names.pop(),'');assert(names.length>0);assert.equal(new Set(names).size,names.length);
           fs.writeFileSync(out+'/browser-binding.json',JSON.stringify({sourceHead:process.env.GITHUB_SHA,trackedCount:names.length,playwrightVersion:'1.64.0',pins},null,2)+'\n',{flag:'wx'});
           const workflow='.github/workflows/cm-veteran-retirement.yml',blob=cp.execFileSync('git',['rev-parse','HEAD:'+workflow],{encoding:'utf8'}).trim();
           assert.equal(cp.execFileSync('git',['hash-object',workflow],{encoding:'utf8'}).trim(),blob);
-          fs.writeFileSync(out+'/source-binding.json',JSON.stringify({phase:'styled-cm-veteran',applicationQualified:false,source:process.env.GITHUB_SHA,parent:process.env.EXPECTED_PARENT,run:process.env.GITHUB_RUN_ID,attempt:process.env.GITHUB_RUN_ATTEMPT,tree:cp.execFileSync('git',['rev-parse','HEAD^{tree}'],{encoding:'utf8'}).trim(),workflow:{file:workflow,gitBlobSha1:blob,sha256:hash(fs.readFileSync(workflow))},requiredInputs:16,bindingSha256:hash(fs.readFileSync(out+'/browser-binding.json'))},null,2)+'\n',{flag:'wx'});
+          fs.writeFileSync(out+'/source-binding.json',JSON.stringify({phase:'styled-cm-veteran',applicationQualified:false,source:process.env.GITHUB_SHA,parent:process.env.EXPECTED_PARENT,run:process.env.GITHUB_RUN_ID,attempt:process.env.GITHUB_RUN_ATTEMPT,tree:cp.execFileSync('git',['rev-parse','HEAD^{tree}'],{encoding:'utf8'}).trim(),workflow:{file:workflow,gitBlobSha1:blob,sha256:hash(fs.readFileSync(workflow))},requiredInputs:23,bindingSha256:hash(fs.readFileSync(out+'/browser-binding.json'))},null,2)+'\n',{flag:'wx'});
           NODE
           git rev-parse HEAD > "$out/head.txt"
           git ls-files -z | sort -z > "$out/source-members.before"
