@@ -13,7 +13,7 @@ env:
   CI: '1'
   SIM_NETWORK: offline
   TZ: UTC
-  EXPECTED_PARENT: c68efda97a1f53643965e09fd8f3beaa92952dee
+  EXPECTED_PARENT: f0c140f9462ddc8ad046ab06d842e887abfb5369
 
 jobs:
   diagnostic_capture:
@@ -39,7 +39,7 @@ jobs:
           printf '%s\n' "$GITHUB_RUN_ATTEMPT" > "$out/run-attempt.txt"
       - uses: actions/checkout@v4
         with:
-          fetch-depth: 0
+          fetch-depth: 32
           persist-credentials: false
           ref: ${{ github.sha }}
       - uses: actions/setup-node@v4
@@ -59,8 +59,11 @@ jobs:
           git status --porcelain --untracked-files=all > "$out/status-before.txt"
           test ! -s "$out/status-before.txt"
           git diff --name-status "$EXPECTED_PARENT" HEAD > "$out/direct-paths.txt"
-          printf 'A\t.github/workflows/menu-league-failure-capture.yml\n' | cmp - "$out/direct-paths.txt"
+          printf 'M\t.github/workflows/menu-league-failure-capture.yml\n' | cmp - "$out/direct-paths.txt"
           git diff --exit-code "$EXPECTED_PARENT" HEAD -- . ':!.github/workflows/menu-league-failure-capture.yml' > "$out/all-old-source-held.log"
+          git diff --name-status c68efda97a1f53643965e09fd8f3beaa92952dee HEAD > "$out/cumulative-paths.txt"
+          printf 'A\t.github/workflows/menu-league-failure-capture.yml\n' | cmp - "$out/cumulative-paths.txt"
+          git diff --exit-code c68efda97a1f53643965e09fd8f3beaa92952dee HEAD -- . ':!.github/workflows/menu-league-failure-capture.yml' > "$out/all-c68-source-held.log"
           git ls-files -z | sort -z > "$out/source-members.before"
           test "$(tr -cd '\000' < "$out/source-members.before" | wc -c)" -eq 5329
           xargs -0 sha256sum < "$out/source-members.before" > "$out/source-before.sha256"
