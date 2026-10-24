@@ -1,0 +1,10 @@
+#!serve
+#!playwright
+#!serial
+fonts: mkdir -p .tmp-fx/font-cache && FREE_KICK_FONT_CACHE="$PWD/.tmp-fx/font-cache" node scripts/qa/freeKickLab1070.mjs --prefetch-fonts-only
+simCmRealFixtures-forwalk: NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/simCmRealFixtures.mjs
+playCmRealFixtures: FREE_KICK_FONT_CACHE="$PWD/.tmp-fx/font-cache" NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/playCmRealFixtures.mjs
+playCmVar: FREE_KICK_FONT_CACHE="$PWD/.tmp-fx/font-cache" NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/playCmVar.mjs
+walk1521: node .rc/x/walkrun1521.mjs
+land-toasts: git worktree add -q --detach /tmp/lt b59ebe2b && ln -s "$PWD/node_modules" /tmp/lt/node_modules && git diff 082fc277 2083b375 -- src/pages/SoccerCareer.tsx src/lib/soccerCareerSave.ts | git -C /tmp/lt apply && bash .rc/x/chainBase.sh /tmp/lt && node .rc/x/deckBase1504.mjs /tmp/lt && (cd /tmp/lt && node_modules/.bin/vite build > /tmp/lt-build.log 2>&1 || { tail -20 /tmp/lt-build.log; exit 2; }) && mkdir -p "$TMPDIR/out" && RC_OUT="$TMPDIR/out" PORT=4181 BASE_PORT=4182 SECTIONS=toasts,bytes SOCCER_LANDING_BASE_DIST=/tmp/lt/dist ENGINES=chromium node scripts/playSoccerLanding.mjs 2>&1 | tee "$TMPDIR/ctl.log"; s=${PIPESTATUS[0]}; [ $s -eq 0 ] && grep -qE 'playSoccerLanding: green at .*; toasts, bytes\), every marked section red on the base' "$TMPDIR/ctl.log"
+toastbar: mkdir -p "$RC_OUT/tb" && RC_OUT="$RC_OUT/tb" PORT=4183 SOCCER_LANDING_CONTROL=toastbar ENGINES=chromium node scripts/playSoccerLanding.mjs

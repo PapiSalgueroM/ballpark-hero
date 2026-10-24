@@ -1,0 +1,8 @@
+build exit=0 35s | [dukb] inlined 1 stylesheet(s) and 1 module(s) into 181 snapshots (11 left alone)
+fonts exit=0 0s | Prepared 9 declared font dependencies for local fulfillment.
+simCmRealFixtures-forwalk exit=0 4s | simCmRealFixtures normal premier: 10 outcome groups passed on 20 clubs, 38 matchdays and 380 fixtures, BASE GROUPS NOT RUN.
+playCmRealFixtures exit=0 24s | playCmRealFixtures: 2 viewports, 6 real/legacy/later-season calendar and actual Quick Sim journeys, 18 neutral real-opening results, 2 effective controls; full saved stat
+playCmVar exit=0 613s | playCmVar: green. Every review a player can meet was shown whole, at its minute, over nothing else, and every match settled as the engine settles it.
+walk1521 exit=0 558s | walkrun: green, every size walked, screenshots in RC_OUT
+land-toasts exit=0 421s | playSoccerLanding: green at 320x640, 390x844, 1280x900 (also no extra sizes; toasts, bytes), every marked section red on the base
+toastbar exit=1 85s | CONTROL FIRED: SOCCER_LANDING_CONTROL=toastbar put the higher toast, the exit slide and the exit ghost back on a phone and the bar reach went red on each
