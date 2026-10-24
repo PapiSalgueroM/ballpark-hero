@@ -5,7 +5,9 @@ import { fileURLToPath } from 'node:url';
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const source = path.join(ROOT, 'src/lib/season/soccer.ts');
 const copy = path.join(ROOT, 'src/lib/season/__control_soccerAvailability.ts');
-const report = path.join(ROOT, '.tmp-fx/soccer-availability-tests.json');
+const report = process.env.SOCCER_AVAILABILITY_ARTIFACTS
+  ? path.join(path.resolve(ROOT, process.env.SOCCER_AVAILABILITY_ARTIFACTS), 'soccer-availability-tests.json')
+  : path.join(ROOT, '.tmp-fx/soccer-availability-tests.json');
 function run(file) {
   fs.mkdirSync(path.dirname(report), { recursive: true });
   if (fs.existsSync(report)) fs.unlinkSync(report);
