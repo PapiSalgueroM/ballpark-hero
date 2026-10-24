@@ -132,7 +132,9 @@ function collect() {
       }
     }
   }
-  return { stage, viewport: { width: innerWidth, height: innerHeight, scrollX, scrollY, documentWidth: document.documentElement.scrollWidth },
+  return { stage, viewport: { width: innerWidth, height: innerHeight, scrollX, scrollY, documentWidth: document.documentElement.scrollWidth,
+      scrollHeight: document.documentElement.scrollHeight, clientHeight: document.documentElement.clientHeight,
+      maxScrollY: Math.max(0, document.documentElement.scrollHeight - document.documentElement.clientHeight) },
     theme: { light: document.documentElement.classList.contains('light'), reduced: matchMedia('(prefers-reduced-motion: reduce)').matches },
     fonts: { status: document.fonts.status, inter: document.fonts.check('16px Inter'), display: document.fonts.check('16px "Space Grotesk"'),
       faces: [...document.fonts].map(face => ({ family: face.family, status: face.status })) },
@@ -203,7 +205,16 @@ function checkStage(record) {
   }
   for (const item of stage.targets) assert(item.rect.width >= 44 && item.rect.height >= 44, 'CM_POSITION_STAGE_CONTROL_44');
 }
-function steady(record) { assert(Math.abs(record.after.viewport.scrollY - record.before.viewport.scrollY) <= 0.5, 'CM_POSITION_EDIT_NO_SCROLL_JUMP'); }
+function steady(record) {
+  for (const sample of [record.before, record.after]) {
+    const p = sample.pitch;
+    assert(p && p.width > 0 && p.height > 0 && p.x < sample.viewport.width && p.right > 0
+      && p.y < sample.viewport.height && p.bottom > 0, 'CM_POSITION_EDIT_VISIBLE_PITCH_ANCHOR');
+  }
+  for (const key of ['x', 'y', 'width', 'height'])
+    assert(Math.abs(record.after.pitch[key] - record.before.pitch[key]) <= 0.5, 'CM_POSITION_EDIT_NO_VISIBLE_JUMP');
+  assert(Math.abs(record.after.viewport.scrollX - record.before.viewport.scrollX) <= 0.5, 'CM_POSITION_EDIT_HORIZONTAL_SCROLL_HELD');
+}
 function painted(target) {
   assert(target.rect.width >= 44 && target.rect.height >= 44, 'CM_POSITION_USED_TARGET_44');
   assert(target.rect.x >= 0 && target.rect.y >= 0 && target.rect.right <= target.viewport.width && target.rect.bottom <= target.viewport.height, 'CM_POSITION_USED_TARGET_IN_VIEW');
@@ -275,6 +286,7 @@ async function keyMove(page, row, index, key) {
   const before = await read(page), scrollBefore = await page.evaluate(collect);
   await page.keyboard.press(key); await idle(page);
   const after = await read(page), sample = await page.evaluate(collect);
+  assert(await token.evaluate(node => document.activeElement === node), 'CM_POSITION_NATIVE_KEY_FOCUS_HELD');
   row.steadyRecords.push({ before: scrollBefore, after: sample });
   steady(row.steadyRecords.at(-1));
   return { before, after, sample };
@@ -512,7 +524,7 @@ try {
     ['disk-late-publication', first.edits[0].after, c => { c.transitions.at(-1).rawShape = null; }, publication, 'CM_POSITION_DISK_BEFORE_PUBLICATION'],
     ['hidden-used-target', first.beforeInputs[0].target, c => { c.painted = false; }, painted, 'CM_POSITION_USED_TARGET_PAINTED'],
     ['short-used-target', first.beforeInputs[0].target, c => { c.rect.height = 43; }, painted, 'CM_POSITION_USED_TARGET_44'],
-    ['edit-scroll-jump', first.steadyRecords[0], c => { c.after.viewport.scrollY += 2; }, steady, 'CM_POSITION_EDIT_NO_SCROLL_JUMP'],
+    ['edit-scroll-jump', first.steadyRecords[0], c => { c.after.pitch.y += 2; }, steady, 'CM_POSITION_EDIT_NO_VISIBLE_JUMP'],
     ['obscured-stage-text', first.stageRecord, c => { c.sample.stage.fragments[0].painted = false; }, checkStage, 'CM_POSITION_STAGE_NOTICE_TEXT_UNOBSCURED'],
     ['unexpected-failed-request', first, c => { c.requestFailures.push({ url: BASE + '/unexpected.js', method: 'GET', type: 'script', errorText: 'net::ERR_FAILED' }); }, checkFlagFailures, 'CM_UI_FAILED_REQUESTS_ARE_EXACT_FLAGS'],
   ];
