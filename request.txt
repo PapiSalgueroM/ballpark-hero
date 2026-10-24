@@ -1,0 +1,7 @@
+#!serve
+#!playwright
+#!serial
+base-build: git worktree add -q --detach /tmp/base b20ec6664 && ln -s "$PWD/node_modules" /tmp/base/node_modules && (cd /tmp/base && git log --oneline -1 && node_modules/.bin/vite build > /tmp/base-build.log 2>&1 && tail -1 /tmp/base-build.log)
+walk-head: WALK_PARTS=sd,oldsave OLD_DIST=/tmp/base/dist node .rc/x/walk1568.mjs
+walk-base-sd: WALK_DIST=/tmp/base/dist WALK_PORT=4378 WALK_PARTS=sd WALK_TAG=base node .rc/x/walk1568.mjs
+base-toasts-768: mkdir -p "$RC_OUT/base768" && cd /tmp/base && env -u BASE -u SWEEP_BASE RC_OUT="$RC_OUT/base768" SOCCER_LANDING_HEAD_ONLY=1 SECTIONS=toasts SIZES=768x1024 EXTRA_SIZES= PORT=4187 ENGINES=chromium node scripts/playSoccerLanding.mjs

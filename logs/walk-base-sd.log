@@ -1,0 +1,17 @@
+sd 320x568 no-preference: title glyphs [37,156,283,237]; help ? {"box":[0,133,44,177],"icon":[8,145,28,165]}
+sd 320x568 no-preference: h1 [16,157,304,237] font 36px lines 2; Stars {"rect":[16,611,304,749],"self":false}; Deep Cuts {"rect":[16,761,304,899],"self":false}; sideways overflow false
+sd 320x568 reduce: title glyphs [37,156,283,237]; help ? {"box":[0,133,44,177],"icon":[8,145,28,165]}
+sd 320x568 reduce: h1 [16,157,304,237] font 36px lines 2; Stars {"rect":[16,611,304,749],"self":false}; Deep Cuts {"rect":[16,761,304,899],"self":false}; sideways overflow false
+sd 390x844 no-preference: title glyphs [72,156,318,237]; help ? {"box":[0,133,44,177],"icon":[8,145,28,165]}
+sd 390x844 no-preference: h1 [16,157,374,237] font 36px lines 2; Stars {"rect":[16,591,374,729],"self":true}; Deep Cuts {"rect":[16,741,374,879],"self":true}; sideways overflow false
+FINDING sd 390x844 no-preference: Deep Cuts ends at 879 of 844
+FINDING sd 390x844 no-preference: the title takes 2 lines
+sd 390x844 reduce: title glyphs [72,156,318,237]; help ? {"box":[0,133,44,177],"icon":[8,145,28,165]}
+sd 390x844 reduce: h1 [16,157,374,237] font 36px lines 2; Stars {"rect":[16,591,374,729],"self":true}; Deep Cuts {"rect":[16,741,374,879],"self":true}; sideways overflow false
+FINDING sd 390x844 reduce: Deep Cuts ends at 879 of 844
+FINDING sd 390x844 reduce: the title takes 2 lines
+sd 1280x900 no-preference: title glyphs [393,133,887,189]; help ? {"box":[192,97,236,141],"icon":[200,107,224,131]}
+sd 1280x900 no-preference: h1 [320,137,960,185] font 48px lines 1; Stars {"rect":[320,423,634,561],"self":true}; Deep Cuts {"rect":[646,423,960,561],"self":true}; sideways overflow false
+sd 1280x900 reduce: title glyphs [393,133,887,189]; help ? {"box":[192,97,236,141],"icon":[200,107,224,131]}
+sd 1280x900 reduce: h1 [320,137,960,185] font 48px lines 1; Stars {"rect":[320,423,634,561],"self":true}; Deep Cuts {"rect":[646,423,960,561],"self":true}; sideways overflow false
+walk1568: RED, 4 findings

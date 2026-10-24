@@ -1,0 +1,51 @@
+seed 1987332285; arms head; sections toasts; sizes 768x1024
+== head 768x1024
+   30 toast sample(s) of 15 toast(s) over a drive through youth, contract_offer, playing, phone: bought Hire in 🏠Where you live17 left , newspaper, season_summary, ballon_dor, social_media_action, random_events, transfer_window, stopped with what it needed after 30 steps, 30 steps, 4 Next Year or Next Season presses (3 Next Season)
+     "Signed with QPR!" first frame at 206,-21 356x54 (scrollY 109, step 3 (contract_offer: Sign contract)): nothing under it
+     "Signed with QPR!" settled at 206,32 356x54 (scrollY 109, step 3 (contract_offer: Sign contract)): ["heading Danny Okafor-Whitfield","control in the page 🚪 Retire"]
+  FAIL [toasts 768x1024]: "Signed with QPR!" (settled, step 3 (contract_offer: Sign contract)) lies over ["control in the page 🚪 Retire"]
+     "🏢 Rent Apartment is yours" first frame at 206,-21 356x54 (scrollY 109, phone (bought Hire in 🏠Where you live17 left )): nothing under it
+     "🏢 Rent Apartment is yours" settled at 206,32 356x53 (scrollY 109, phone (bought Hire in 🏠Where you live17 left )): nothing under it
+     "🏋️ Post training video" first frame at 206,-21 356x54 (scrollY 109, step 8 (social_media_action: 🏋️Post training videoShow off your skil)): nothing under it
+     "🏋️ Post training video" settled at 206,32 356x54 (scrollY 109, step 8 (social_media_action: 🏋️Post training videoShow off your skil)): ["heading Danny Okafor-Whitfield","control in the page 🚪 Retire"]
+  FAIL [toasts 768x1024]: "🏋️ Post training video" (settled, step 8 (social_media_action: 🏋️Post training videoShow off your skil)) lies over ["control in the page 🚪 Retire"]
+     "You finish with your weaker foot every session. Shooting next season +1, Pace ne" first frame at 206,-41 356x73 (scrollY 109, step 10 (random_events: 📋Do the weaker foot workShooting next s)): nothing under it
+     "You finish with your weaker foot every session. Shooting next season +1, Pace ne" settled at 206,32 356x73 (scrollY 109, step 10 (random_events: 📋Do the weaker foot workShooting next s)): ["heading Danny Okafor-Whitfield","control in the page 🚪 Retire"]
+  FAIL [toasts 768x1024]: "You finish with your weaker foot every session. Shooting next season +1, Pace ne" (settled, step 10 (random_events: 📋Do the weaker foot workShooting next s)) lies over ["control in the page 🚪 Retire"]
+     "Fame comes easy: followers grow 60% faster, sponsors pay 25% more, scandals stin" first frame at 206,-41 356x73 (scrollY 109, step 11 (random_events: 🎭The ShowmanFame comes easy: followers )): nothing under it
+     "Fame comes easy: followers grow 60% faster, sponsors pay 25% more, scandals stin" settled at 206,32 356x73 (scrollY 109, step 11 (random_events: 🎭The ShowmanFame comes easy: followers )): ["heading Danny Okafor-Whitfield","control in the page 🚪 Retire"]
+  FAIL [toasts 768x1024]: "Fame comes easy: followers grow 60% faster, sponsors pay 25% more, scandals stin" (settled, step 11 (random_events: 🎭The ShowmanFame comes easy: followers )) lies over ["control in the page 🚪 Retire"]
+     "Physical +3 and Pace +1 next season, Morale -6" first frame at 206,-21 356x54 (scrollY 109, step 12 (random_events: 🥦Full compliance for a seasonPhysical +)): nothing under it
+     "Physical +3 and Pace +1 next season, Morale -6" settled at 206,32 356x54 (scrollY 109, step 12 (random_events: 🥦Full compliance for a seasonPhysical +)): ["heading Danny Okafor-Whitfield","control in the page 🚪 Retire"]
+  FAIL [toasts 768x1024]: "Physical +3 and Pace +1 next season, Morale -6" (settled, step 12 (random_events: 🥦Full compliance for a seasonPhysical +)) lies over ["control in the page 🚪 Retire"]
+     "Morale +10, now in a relationship" first frame at 206,-21 356x54 (scrollY 109, step 13 (random_events: 💕Start datingMorale +10, now in a relat)): nothing under it
+     "Morale +10, now in a relationship" settled at 206,32 356x54 (scrollY 109, step 13 (random_events: 💕Start datingMorale +10, now in a relat)): ["heading Danny Okafor-Whitfield","control in the page 🚪 Retire"]
+  FAIL [toasts 768x1024]: "Morale +10, now in a relationship" (settled, step 13 (random_events: 💕Start datingMorale +10, now in a relat)) lies over ["control in the page 🚪 Retire"]
+     "Staying at QPR" first frame at 206,-21 356x54 (scrollY 109, step 14 (transfer_window: Stay and fight for place 💪)): nothing under it
+     "Staying at QPR" settled at 206,32 356x54 (scrollY 109, step 14 (transfer_window: Stay and fight for place 💪)): ["heading Danny Okafor-Whitfield","control in the page 🚪 Retire"]
+  FAIL [toasts 768x1024]: "Staying at QPR" (settled, step 14 (transfer_window: Stay and fight for place 💪)) lies over ["control in the page 🚪 Retire"]
+     "🏋️ Post training video" first frame at 206,-21 356x54 (scrollY 259, step 8 (social_media_action: 🏋️Post training videoShow off your skil)): nothing under it
+     "🏋️ Post training video" settled at 206,32 356x54 (scrollY 259, step 8 (social_media_action: 🏋️Post training videoShow off your skil)): nothing under it
+     "You put your name down for penalties. Shooting next season +1, Dribbling next se" first frame at 206,-41 356x73 (scrollY 259, step 24 (random_events: 📋Put your name downShooting next season)): nothing under it
+     "You put your name down for penalties. Shooting next season +1, Dribbling next se" settled at 206,32 356x73 (scrollY 259, step 24 (random_events: 📋Put your name downShooting next season)): nothing under it
+     "Family rates: tiny 3% transfer cut, zero income cut, slightly weak contracts, ch" first frame at 206,-41 356x73 (scrollY 259, step 25 (random_events: 🧢Cousin RickyFamily rates: tiny 3% tran)): nothing under it
+     "Family rates: tiny 3% transfer cut, zero income cut, slightly weak contracts, ch" settled at 206,32 356x73 (scrollY 259, step 25 (random_events: 🧢Cousin RickyFamily rates: tiny 3% tran)): nothing under it
+     "Shooting +2, Dribbling +2, Morale +10" first frame at 206,-21 356x54 (scrollY 259, step 26 (random_events: 💪Wear it with prideShooting +2, Dribbli)): nothing under it
+     "Shooting +2, Dribbling +2, Morale +10" settled at 206,32 356x54 (scrollY 259, step 26 (random_events: 💪Wear it with prideShooting +2, Dribbli)): nothing under it
+     "Could go 10x (+€2M), double (+€200k) or crash (-€200k)" first frame at 206,-41 356x73 (scrollY 259, step 27 (random_events: 🪙Invest €200kCould go 10x (+€2M), doubl)): nothing under it
+     "Could go 10x (+€2M), double (+€200k) or crash (-€200k)" settled at 206,32 356x73 (scrollY 259, step 27 (random_events: 🪙Invest €200kCould go 10x (+€2M), doubl)): nothing under it
+     "Popularity +3, Followers +0.5M" first frame at 206,-21 356x54 (scrollY 259, step 28 (random_events: 😂Laugh and applaudPopularity +3, Follow)): nothing under it
+     "Popularity +3, Followers +0.5M" settled at 206,32 356x54 (scrollY 259, step 28 (random_events: 😂Laugh and applaudPopularity +3, Follow)): nothing under it
+     "Staying at QPR" first frame at 206,-21 356x54 (scrollY 259, step 14 (transfer_window: Stay and fight for place 💪)): nothing under it
+     "Staying at QPR" settled at 206,32 356x54 (scrollY 259, step 14 (transfer_window: Stay and fight for place 💪)): nothing under it
+     coverage contract signing: 1 sampled
+     coverage random event choice: 9 sampled
+     coverage transfer window choice: 2 sampled
+     coverage phone purchase: 1 sampled
+     coverage social media post: 2 sampled
+     coverage moral dilemma: 0 sampled (not raised on this career; listed, not judged)
+     coverage loan: 0 sampled (not raised on this career; listed, not judged)
+     coverage extension: 0 sampled (not raised on this career; listed, not judged)
+     coverage Week by week refusal: 0 sampled (not raised on this career; listed, not judged)
+  head toasts: 7 finding(s)
+playSoccerLanding: RED, 7 finding(s)

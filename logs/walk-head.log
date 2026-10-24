@@ -1,0 +1,21 @@
+oldsave: base live true; base storage keys 6; cm save 77501 chars; soccer save 4261 chars
+oldsave head: live true stage 1 z 55
+oldsave head stage Back: rect 4,2,48,46 centre answers itself
+oldsave head stage help: rect 52,2,96,46 centre answers itself
+oldsave head stage score: rect 163,48,228,80 centre answers itself
+oldsave head stage Pause: rect 0,798,54,842 centre answers itself
+oldsave head stage Squad: rect 280,798,334,842 centre answers itself
+oldsave head soccer: action bar 1, name shown 1
+sd 320x568 no-preference: title glyphs [57,149,263,220]; help ? {"box":[0,133,44,177],"icon":[8,145,28,165]}
+sd 320x568 no-preference: h1 [16,149,304,221] font 30px lines 2; Stars {"rect":[16,595,304,733],"self":false}; Deep Cuts {"rect":[16,745,304,883],"self":false}; sideways overflow false
+sd 320x568 reduce: title glyphs [57,149,263,220]; help ? {"box":[0,133,44,177],"icon":[8,145,28,165]}
+sd 320x568 reduce: h1 [16,149,304,221] font 30px lines 2; Stars {"rect":[16,595,304,733],"self":false}; Deep Cuts {"rect":[16,745,304,883],"self":false}; sideways overflow false
+sd 390x844 no-preference: title glyphs [41,149,349,184]; help ? {"box":[0,133,44,177],"icon":[8,145,28,165]}
+sd 390x844 no-preference: h1 [16,149,374,185] font 30px lines 1; Stars {"rect":[16,539,374,677],"self":true}; Deep Cuts {"rect":[16,689,374,827],"self":true}; sideways overflow false
+sd 390x844 reduce: title glyphs [41,149,349,184]; help ? {"box":[0,133,44,177],"icon":[8,145,28,165]}
+sd 390x844 reduce: h1 [16,149,374,185] font 30px lines 1; Stars {"rect":[16,539,374,677],"self":true}; Deep Cuts {"rect":[16,689,374,827],"self":true}; sideways overflow false
+sd 1280x900 no-preference: title glyphs [393,133,887,189]; help ? {"box":[192,97,236,141],"icon":[200,107,224,131]}
+sd 1280x900 no-preference: h1 [320,137,960,185] font 48px lines 1; Stars {"rect":[320,423,634,561],"self":true}; Deep Cuts {"rect":[646,423,960,561],"self":true}; sideways overflow false
+sd 1280x900 reduce: title glyphs [393,133,887,189]; help ? {"box":[192,97,236,141],"icon":[200,107,224,131]}
+sd 1280x900 reduce: h1 [320,137,960,185] font 48px lines 1; Stars {"rect":[320,423,634,561],"self":true}; Deep Cuts {"rect":[646,423,960,561],"self":true}; sideways overflow false
+walk1568: green, parts sd, oldsave walked
