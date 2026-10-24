@@ -1,0 +1,6 @@
+build exit=0 35s | [dukb] inlined 1 stylesheet(s) and 1 module(s) into 181 snapshots (11 left alone)
+probeFocus exit=0 2s | probeFocus: done
+probeCm exit=0 35s | probeCm: done, 5 of 5 sizes reached the stage
+probeDD exit=0 9s | playDraftDetectiveReports: 44 checks, 0 failed. Screenshots and evidence: /home/runner/work/ballpark-hero/ballpark-hero/.tmp-fx/draft-detective-shots
+land-toasts exit=1 420s | playSoccerLanding: RED, 28 finding(s)
+playLiveMatchFit exit=0 142s | playLiveMatchFit: all green. The goal in order, reduced motion, the fit at five sizes, nothing moves the page, the reload, Back, a wide screen, an own goal drawn as one.

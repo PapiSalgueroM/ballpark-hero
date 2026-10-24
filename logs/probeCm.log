@@ -1,0 +1,46 @@
+== 320x568 live=true
+  bar [0,0,320,44] sticky z50 | stage [0,0,320,568] z55 | cookie []
+  back [4,2,48,46] self=true at=path
+  help [52,2,96,46] self=true at=button[How watching a match works]
+  score [128,48,193,80] self=true at=div
+  controls: Pause:ok | 0.5x:ok | 1x:ok | 2x:ok | 4x:ok | Squad and stamin:ok | Skip:ok
+  back chain: div.cm-stage(relative) > div.cm-stagebox.bg-background(fixed,z55) > div.relative(relative) > div.relative.mx-auto(relative)
+  bar chain: div.sticky.top-0(sticky,z50)
+  after Back: {"clicked":"clicked","stage":0,"card":1,"lock":"","menuOpen":false}
+== 390x844 live=true
+  bar [0,0,390,44] sticky z50 | stage [0,0,390,844] z55 | cookie []
+  back [4,2,48,46] self=true at=path
+  help [52,2,96,46] self=true at=button[How watching a match works]
+  score [163,48,228,80] self=true at=div
+  controls: Pause:ok | 0.5x:ok | 1x:ok | 2x:ok | 4x:ok | Squad and stamin:ok | Skip:ok
+  back chain: div.cm-stage(relative) > div.cm-stagebox.bg-background(fixed,z55) > div.relative(relative) > div.relative.mx-auto(relative)
+  bar chain: div.sticky.top-0(sticky,z50)
+  after Back: {"clicked":"clicked","stage":0,"card":1,"lock":"","menuOpen":false}
+== 768x1024 live=true
+  bar [0,0,768,44] sticky z50 | stage [0,0,768,1024] z55 | cookie []
+  back [12,12,56,56] self=true at=path
+  help [62,12,106,56] self=true at=button[How watching a match works]
+  score [166,60,231,92] self=true at=div
+  controls: Pause:ok | 0.5x:ok | 1x:ok | 2x:ok | 4x:ok | Squad and stamin:ok | Skip:ok
+  back chain: div.cm-stage(relative) > div.cm-stagebox.bg-background(fixed,z55) > div.relative(relative) > div.relative.mx-auto(relative)
+  bar chain: div.sticky.top-0(sticky,z50)
+  after Back: {"clicked":"clicked","stage":0,"card":1,"lock":"","menuOpen":false}
+== 1280x900 live=true
+  bar [0,0,1280,44] sticky z50 | stage [0,0,1280,900] z55 | cookie []
+  back [92,18,136,62] self=true at=path
+  help [142,18,186,62] self=true at=button[How watching a match works]
+  score [360,24,425,56] self=true at=div
+  controls: Pause:ok | 0.5x:ok | 1x:ok | 2x:ok | 4x:ok | Squad and stamin:ok | Skip:ok
+  back chain: div.cm-stage(relative) > div.cm-stagebox.bg-background(fixed,z55) > div.relative(relative) > div.relative.mx-auto(relative)
+  bar chain: div.sticky.top-0(sticky,z50)
+  after Back: {"clicked":"clicked","stage":0,"card":1,"lock":"","menuOpen":false}
+== 844x390 live=true
+  bar [0,0,844,44] sticky z50 | stage [0,0,844,390] z55 | cookie []
+  back [528,2,572,46] self=true at=path
+  help [576,2,620,46] self=true at=button[How watching a match works]
+  score [652,48,717,80] self=true at=div
+  controls: Pause:ok | 0.5x:ok | 1x:ok | 2x:ok | 4x:ok | Squad and stamin:ok | Skip:ok
+  back chain: div.cm-stage(relative) > div.cm-stagebox.bg-background(fixed,z55) > div.relative(relative) > div.relative.mx-auto(relative)
+  bar chain: div.sticky.top-0(sticky,z50)
+  after Back: {"clicked":"clicked","stage":0,"card":1,"lock":"","menuOpen":false}
+probeCm: done, 5 of 5 sizes reached the stage

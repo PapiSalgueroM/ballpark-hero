@@ -1,0 +1,852 @@
+[
+ {
+  "size": "320x568",
+  "live": true,
+  "m": {
+   "win": [
+    320,
+    568
+   ],
+   "bar": [
+    0,
+    0,
+    320,
+    44
+   ],
+   "barZ": "sticky z50",
+   "barChain": [
+    "div.sticky.top-0(sticky,z50)"
+   ],
+   "stage": [
+    0,
+    0,
+    320,
+    568
+   ],
+   "stageZ": "55",
+   "back": {
+    "r": [
+     4,
+     2,
+     48,
+     46
+    ],
+    "hit": {
+     "self": true,
+     "at": "path"
+    }
+   },
+   "help": {
+    "r": [
+     52,
+     2,
+     96,
+     46
+    ],
+    "hit": {
+     "self": true,
+     "at": "button[How watching a match works]"
+    }
+   },
+   "score": {
+    "r": [
+     128,
+     48,
+     193,
+     80
+    ],
+    "hit": {
+     "self": true,
+     "at": "div"
+    }
+   },
+   "controls": [
+    {
+     "n": "Pause",
+     "r": [
+      0,
+      522,
+      44,
+      566
+     ],
+     "hit": {
+      "self": true,
+      "at": "svg"
+     }
+    },
+    {
+     "n": "0.5x",
+     "r": [
+      46,
+      522,
+      90,
+      566
+     ],
+     "hit": {
+      "self": true,
+      "at": "button"
+     }
+    },
+    {
+     "n": "1x",
+     "r": [
+      92,
+      522,
+      136,
+      566
+     ],
+     "hit": {
+      "self": true,
+      "at": "button"
+     }
+    },
+    {
+     "n": "2x",
+     "r": [
+      138,
+      522,
+      182,
+      566
+     ],
+     "hit": {
+      "self": true,
+      "at": "button"
+     }
+    },
+    {
+     "n": "4x",
+     "r": [
+      184,
+      522,
+      228,
+      566
+     ],
+     "hit": {
+      "self": true,
+      "at": "button"
+     }
+    },
+    {
+     "n": "Squad and stamin",
+     "r": [
+      230,
+      522,
+      274,
+      566
+     ],
+     "hit": {
+      "self": true,
+      "at": "svg"
+     }
+    },
+    {
+     "n": "Skip",
+     "r": [
+      276,
+      522,
+      320,
+      566
+     ],
+     "hit": {
+      "self": true,
+      "at": "button"
+     }
+    }
+   ],
+   "backChain": [
+    "div.cm-stage(relative)",
+    "div.cm-stagebox.bg-background(fixed,z55)",
+    "div.relative(relative)",
+    "div.relative.mx-auto(relative)"
+   ],
+   "cookie": []
+  },
+  "after": {
+   "clicked": "clicked",
+   "stage": 0,
+   "card": 1,
+   "lock": "",
+   "menuOpen": false
+  }
+ },
+ {
+  "size": "390x844",
+  "live": true,
+  "m": {
+   "win": [
+    390,
+    844
+   ],
+   "bar": [
+    0,
+    0,
+    390,
+    44
+   ],
+   "barZ": "sticky z50",
+   "barChain": [
+    "div.sticky.top-0(sticky,z50)"
+   ],
+   "stage": [
+    0,
+    0,
+    390,
+    844
+   ],
+   "stageZ": "55",
+   "back": {
+    "r": [
+     4,
+     2,
+     48,
+     46
+    ],
+    "hit": {
+     "self": true,
+     "at": "path"
+    }
+   },
+   "help": {
+    "r": [
+     52,
+     2,
+     96,
+     46
+    ],
+    "hit": {
+     "self": true,
+     "at": "button[How watching a match works]"
+    }
+   },
+   "score": {
+    "r": [
+     163,
+     48,
+     228,
+     80
+    ],
+    "hit": {
+     "self": true,
+     "at": "div"
+    }
+   },
+   "controls": [
+    {
+     "n": "Pause",
+     "r": [
+      0,
+      798,
+      54,
+      842
+     ],
+     "hit": {
+      "self": true,
+      "at": "svg"
+     }
+    },
+    {
+     "n": "0.5x",
+     "r": [
+      56,
+      798,
+      110,
+      842
+     ],
+     "hit": {
+      "self": true,
+      "at": "button"
+     }
+    },
+    {
+     "n": "1x",
+     "r": [
+      112,
+      798,
+      166,
+      842
+     ],
+     "hit": {
+      "self": true,
+      "at": "button"
+     }
+    },
+    {
+     "n": "2x",
+     "r": [
+      168,
+      798,
+      222,
+      842
+     ],
+     "hit": {
+      "self": true,
+      "at": "button"
+     }
+    },
+    {
+     "n": "4x",
+     "r": [
+      224,
+      798,
+      278,
+      842
+     ],
+     "hit": {
+      "self": true,
+      "at": "button"
+     }
+    },
+    {
+     "n": "Squad and stamin",
+     "r": [
+      280,
+      798,
+      334,
+      842
+     ],
+     "hit": {
+      "self": true,
+      "at": "svg"
+     }
+    },
+    {
+     "n": "Skip",
+     "r": [
+      336,
+      798,
+      390,
+      842
+     ],
+     "hit": {
+      "self": true,
+      "at": "button"
+     }
+    }
+   ],
+   "backChain": [
+    "div.cm-stage(relative)",
+    "div.cm-stagebox.bg-background(fixed,z55)",
+    "div.relative(relative)",
+    "div.relative.mx-auto(relative)"
+   ],
+   "cookie": []
+  },
+  "after": {
+   "clicked": "clicked",
+   "stage": 0,
+   "card": 1,
+   "lock": "",
+   "menuOpen": false
+  }
+ },
+ {
+  "size": "768x1024",
+  "live": true,
+  "m": {
+   "win": [
+    768,
+    1024
+   ],
+   "bar": [
+    0,
+    0,
+    768,
+    44
+   ],
+   "barZ": "sticky z50",
+   "barChain": [
+    "div.sticky.top-0(sticky,z50)"
+   ],
+   "stage": [
+    0,
+    0,
+    768,
+    1024
+   ],
+   "stageZ": "55",
+   "back": {
+    "r": [
+     12,
+     12,
+     56,
+     56
+    ],
+    "hit": {
+     "self": true,
+     "at": "path"
+    }
+   },
+   "help": {
+    "r": [
+     62,
+     12,
+     106,
+     56
+    ],
+    "hit": {
+     "self": true,
+     "at": "button[How watching a match works]"
+    }
+   },
+   "score": {
+    "r": [
+     166,
+     60,
+     231,
+     92
+    ],
+    "hit": {
+     "self": true,
+     "at": "div"
+    }
+   },
+   "controls": [
+    {
+     "n": "Pause",
+     "r": [
+      12,
+      962,
+      60,
+      1006
+     ],
+     "hit": {
+      "self": true,
+      "at": "svg"
+     }
+    },
+    {
+     "n": "0.5x",
+     "r": [
+      66,
+      962,
+      114,
+      1006
+     ],
+     "hit": {
+      "self": true,
+      "at": "button"
+     }
+    },
+    {
+     "n": "1x",
+     "r": [
+      120,
+      962,
+      168,
+      1006
+     ],
+     "hit": {
+      "self": true,
+      "at": "button"
+     }
+    },
+    {
+     "n": "2x",
+     "r": [
+      174,
+      962,
+      222,
+      1006
+     ],
+     "hit": {
+      "self": true,
+      "at": "button"
+     }
+    },
+    {
+     "n": "4x",
+     "r": [
+      228,
+      962,
+      276,
+      1006
+     ],
+     "hit": {
+      "self": true,
+      "at": "button"
+     }
+    },
+    {
+     "n": "Squad and stamin",
+     "r": [
+      282,
+      962,
+      330,
+      1006
+     ],
+     "hit": {
+      "self": true,
+      "at": "svg"
+     }
+    },
+    {
+     "n": "Skip",
+     "r": [
+      336,
+      962,
+      384,
+      1006
+     ],
+     "hit": {
+      "self": true,
+      "at": "button"
+     }
+    }
+   ],
+   "backChain": [
+    "div.cm-stage(relative)",
+    "div.cm-stagebox.bg-background(fixed,z55)",
+    "div.relative(relative)",
+    "div.relative.mx-auto(relative)"
+   ],
+   "cookie": []
+  },
+  "after": {
+   "clicked": "clicked",
+   "stage": 0,
+   "card": 1,
+   "lock": "",
+   "menuOpen": false
+  }
+ },
+ {
+  "size": "1280x900",
+  "live": true,
+  "m": {
+   "win": [
+    1280,
+    900
+   ],
+   "bar": [
+    0,
+    0,
+    1280,
+    44
+   ],
+   "barZ": "sticky z50",
+   "barChain": [
+    "div.sticky.top-0(sticky,z50)"
+   ],
+   "stage": [
+    0,
+    0,
+    1280,
+    900
+   ],
+   "stageZ": "55",
+   "back": {
+    "r": [
+     92,
+     18,
+     136,
+     62
+    ],
+    "hit": {
+     "self": true,
+     "at": "path"
+    }
+   },
+   "help": {
+    "r": [
+     142,
+     18,
+     186,
+     62
+    ],
+    "hit": {
+     "self": true,
+     "at": "button[How watching a match works]"
+    }
+   },
+   "score": {
+    "r": [
+     360,
+     24,
+     425,
+     56
+    ],
+    "hit": {
+     "self": true,
+     "at": "div"
+    }
+   },
+   "controls": [
+    {
+     "n": "Pause",
+     "r": [
+      92,
+      838,
+      190,
+      882
+     ],
+     "hit": {
+      "self": true,
+      "at": "svg"
+     }
+    },
+    {
+     "n": "0.5x",
+     "r": [
+      196,
+      838,
+      295,
+      882
+     ],
+     "hit": {
+      "self": true,
+      "at": "button"
+     }
+    },
+    {
+     "n": "1x",
+     "r": [
+      301,
+      838,
+      399,
+      882
+     ],
+     "hit": {
+      "self": true,
+      "at": "button"
+     }
+    },
+    {
+     "n": "2x",
+     "r": [
+      405,
+      838,
+      503,
+      882
+     ],
+     "hit": {
+      "self": true,
+      "at": "button"
+     }
+    },
+    {
+     "n": "4x",
+     "r": [
+      509,
+      838,
+      607,
+      882
+     ],
+     "hit": {
+      "self": true,
+      "at": "button"
+     }
+    },
+    {
+     "n": "Squad and stamin",
+     "r": [
+      613,
+      838,
+      712,
+      882
+     ],
+     "hit": {
+      "self": true,
+      "at": "svg"
+     }
+    },
+    {
+     "n": "Skip",
+     "r": [
+      718,
+      838,
+      816,
+      882
+     ],
+     "hit": {
+      "self": true,
+      "at": "button"
+     }
+    }
+   ],
+   "backChain": [
+    "div.cm-stage(relative)",
+    "div.cm-stagebox.bg-background(fixed,z55)",
+    "div.relative(relative)",
+    "div.relative.mx-auto(relative)"
+   ],
+   "cookie": []
+  },
+  "after": {
+   "clicked": "clicked",
+   "stage": 0,
+   "card": 1,
+   "lock": "",
+   "menuOpen": false
+  }
+ },
+ {
+  "size": "844x390",
+  "live": true,
+  "m": {
+   "win": [
+    844,
+    390
+   ],
+   "bar": [
+    0,
+    0,
+    844,
+    44
+   ],
+   "barZ": "sticky z50",
+   "barChain": [
+    "div.sticky.top-0(sticky,z50)"
+   ],
+   "stage": [
+    0,
+    0,
+    844,
+    390
+   ],
+   "stageZ": "55",
+   "back": {
+    "r": [
+     528,
+     2,
+     572,
+     46
+    ],
+    "hit": {
+     "self": true,
+     "at": "path"
+    }
+   },
+   "help": {
+    "r": [
+     576,
+     2,
+     620,
+     46
+    ],
+    "hit": {
+     "self": true,
+     "at": "button[How watching a match works]"
+    }
+   },
+   "score": {
+    "r": [
+     652,
+     48,
+     717,
+     80
+    ],
+    "hit": {
+     "self": true,
+     "at": "div"
+    }
+   },
+   "controls": [
+    {
+     "n": "Pause",
+     "r": [
+      524,
+      344,
+      568,
+      388
+     ],
+     "hit": {
+      "self": true,
+      "at": "svg"
+     }
+    },
+    {
+     "n": "0.5x",
+     "r": [
+      570,
+      344,
+      614,
+      388
+     ],
+     "hit": {
+      "self": true,
+      "at": "button"
+     }
+    },
+    {
+     "n": "1x",
+     "r": [
+      616,
+      344,
+      660,
+      388
+     ],
+     "hit": {
+      "self": true,
+      "at": "button"
+     }
+    },
+    {
+     "n": "2x",
+     "r": [
+      662,
+      344,
+      706,
+      388
+     ],
+     "hit": {
+      "self": true,
+      "at": "button"
+     }
+    },
+    {
+     "n": "4x",
+     "r": [
+      708,
+      344,
+      752,
+      388
+     ],
+     "hit": {
+      "self": true,
+      "at": "button"
+     }
+    },
+    {
+     "n": "Squad and stamin",
+     "r": [
+      754,
+      344,
+      798,
+      388
+     ],
+     "hit": {
+      "self": true,
+      "at": "svg"
+     }
+    },
+    {
+     "n": "Skip",
+     "r": [
+      800,
+      344,
+      844,
+      388
+     ],
+     "hit": {
+      "self": true,
+      "at": "button"
+     }
+    }
+   ],
+   "backChain": [
+    "div.cm-stage(relative)",
+    "div.cm-stagebox.bg-background(fixed,z55)",
+    "div.relative(relative)",
+    "div.relative.mx-auto(relative)"
+   ],
+   "cookie": []
+  },
+  "after": {
+   "clicked": "clicked",
+   "stage": 0,
+   "card": 1,
+   "lock": "",
+   "menuOpen": false
+  }
+ }
+]

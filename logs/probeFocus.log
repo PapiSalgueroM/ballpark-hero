@@ -1,0 +1,25 @@
+430x844 no scroll-margin
+  A  Shift+Tab to the input: 407-437 scrollY 1355 hit tl
+  A2 input.focus(): 407-437 scrollY 1355 hit tl
+  A3 scrollIntoViewIfNeeded: 407-437 scrollY 1355 hit tl
+  B  Tab to the tile: 757-839 scrollY 0 hit foot
+  B3 scrollIntoViewIfNeeded tile: 757-839 scrollY 0 hit foot
+430x844 WITH scroll-margin (top 80 on the input, bottom 96 on the tile)
+  A  Shift+Tab to the input: 447-477 scrollY 1315 hit tl
+  A2 input.focus(): 447-477 scrollY 1315 hit tl
+  A3 scrollIntoViewIfNeeded: 447-477 scrollY 1315 hit tl
+  B  Tab to the tile: 666-748 scrollY 91 hit tile
+  B3 scrollIntoViewIfNeeded tile: 666-748 scrollY 91 hit tile
+390x844 no scroll-margin
+  A  Shift+Tab to the input: 407-437 scrollY 1355 hit tl
+  A2 input.focus(): 407-437 scrollY 1355 hit tl
+  A3 scrollIntoViewIfNeeded: 407-437 scrollY 1355 hit tl
+  B  Tab to the tile: 757-839 scrollY 0 hit foot
+  B3 scrollIntoViewIfNeeded tile: 757-839 scrollY 0 hit foot
+390x844 WITH scroll-margin (top 80 on the input, bottom 96 on the tile)
+  A  Shift+Tab to the input: 447-477 scrollY 1315 hit tl
+  A2 input.focus(): 447-477 scrollY 1315 hit tl
+  A3 scrollIntoViewIfNeeded: 447-477 scrollY 1315 hit tl
+  B  Tab to the tile: 666-748 scrollY 91 hit tile
+  B3 scrollIntoViewIfNeeded tile: 666-748 scrollY 91 hit tile
+probeFocus: done
