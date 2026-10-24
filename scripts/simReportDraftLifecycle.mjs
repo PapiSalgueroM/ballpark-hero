@@ -63,6 +63,7 @@ function run(name, aliases = {}, want = { passed: 14, failed: 0 }, pattern, bare
   const env = { ...process.env, SIM_OFFLINE_RECEIPT: receipt };
   if (bare) delete env.NO_DOUBLE_SWAP;
   else env.NO_DOUBLE_SWAP = JSON.stringify({ ...runtimeAliases, ...aliases });
+  fs.writeFileSync(receipt, '', { flag: 'wx' });
   const child = spawnSync(process.execPath, args, { cwd: ROOT, encoding: 'utf8', maxBuffer: 32 * 1024 * 1024, timeout: 240000,
     env });
   const output = (child.stdout || '') + (child.stderr || '');
@@ -89,7 +90,8 @@ function run(name, aliases = {}, want = { passed: 14, failed: 0 }, pattern, bare
     assert(/AssertionError/.test(messages), `${name}: failure must be an actual assertion`);
     assert(!/TestingLibraryElementError|Test timed out|Cannot find module|Failed to resolve import|Transform failed|ReferenceError|SyntaxError|TypeError/.test(messages), `${name}: no preparation or lookup failure credit`);
   }
-  assert(!fs.existsSync(receipt) || fs.statSync(receipt).size === 0, `${name}: child transport receipt must be empty`);
+  const receiptStat = fs.lstatSync(receipt);
+  assert(receiptStat.isFile() && !receiptStat.isSymbolicLink() && receiptStat.size === 0, `${name}: child transport receipt must be present, regular and empty`);
   summary.push({ name, passed: result.numPassedTests, failed: result.numFailedTests, pending, bare,
     failures: failures.map(test => ({ name: test.fullName, messages: test.failureMessages })) });
   console.log(`${name}: ${want.passed} passed, ${want.failed} expected failures, ${pending} skipped`);

@@ -182,7 +182,9 @@ console.log('3) the admin screen prints the delivery answer, unknown included');
 
 section = 4;
 console.log('4) the live table carries the column');
-{
+if (process.env.SIM_NETWORK === 'offline') {
+  console.log('   SKIPPED: live emailed column schema is UNVERIFIED because SIM_NETWORK=offline; no database request was attempted.');
+} else {
   const url = /const SUPABASE_URL = ['"]([^'"]+)['"]/.exec(read('src/integrations/supabase/client.ts'));
   const key = /const SUPABASE_PUBLISHABLE_KEY = ['"]([^'"]+)['"]/.exec(read('src/integrations/supabase/client.ts'));
   if (!url || !key) {
