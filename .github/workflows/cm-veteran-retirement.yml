@@ -10,7 +10,7 @@ concurrency:
   cancel-in-progress: false
 env:
   BASE_SOURCE: 3ac9d8ea8a13db824f88be2deb660e7f2e31fc35
-  EXPECTED_PARENT: 52e783c49295cd31925123b93e35eaab860d89f8
+  EXPECTED_PARENT: 711b3a0a86e8d5cf2141e1d8edc847a204074a4d
   CI: '1'
   SIM_NETWORK: offline
   TZ: UTC
@@ -62,8 +62,8 @@ jobs:
           test "$(git rev-parse HEAD:src/components/club-manager/VeteranRetirementCard.tsx)" = 8d2a1594f8eaf1119b2fc55d774ac52fa3c1af48
           test "$(git rev-parse HEAD:src/test/clubManagerVeteranHook.test.tsx)" = e189d039d6339ea896e03d33be96b7930393cf8f
           test "$(git rev-parse HEAD:src/test/VeteranRetirementCard.test.tsx)" = ba06e7824a79d41cd7ce9fcc25ba8513fc7e7abe
-          test "$(git rev-parse HEAD:src/test/clubManagerVeteranOldParity.test.ts)" = c13126791d25305dc8e04ff3fbd433c447315b0b
-          test "$(git rev-parse HEAD:scripts/qa/runClubManagerVeteranOldParity.mjs)" = 02529791f6454f356060995ec62cd726f28ab84c
+          test "$(git rev-parse HEAD:src/test/clubManagerVeteranOldParity.test.ts)" = d485c5b7ce32868e2cbfaf3aedb75e8e683b78eb
+          test "$(git rev-parse HEAD:scripts/qa/runClubManagerVeteranOldParity.mjs)" = d8c55e23f5fb4484970807350e56b4379d7be647
           printf '%s  %s\n' \
             45b9d486014720831f130000ff67d0d380f60c755bbb1afa3d0f9a833b2c4050 src/lib/clubManager.ts \
             7cdbc2e31172db5974f0753551133c61ae291662f5bd8e4b14f043d2267baf83 src/lib/clubManagerCalendar.ts \
@@ -76,8 +76,8 @@ jobs:
             af5023b72b58bd1171a0117302fd120d9d40a509f57653175fac9300d03f0a21 src/components/club-manager/VeteranRetirementCard.tsx \
             547f1a8953f638b3e335a2e73d69cdbc9f60aa06f91e51d027371f628017781c src/test/clubManagerVeteranHook.test.tsx \
             93a223b6349a56545b794604a2272127ec5df0c366e31906c28f756b30bf6e5b src/test/VeteranRetirementCard.test.tsx \
-            829a421e01c7f67730b2542c5c540f96ae73701bbf9532d436f20432c340bdcb src/test/clubManagerVeteranOldParity.test.ts \
-            0b296690becc5385812cddf75d57e79f169d8248b7ecb98d7f4146bf0a874a20 scripts/qa/runClubManagerVeteranOldParity.mjs > "$out/input-pins.sha256"
+            cd687fbfc4ccd85990528e36e471833dffd65b492eb8e12b15d9b325baa800a6 src/test/clubManagerVeteranOldParity.test.ts \
+            d8a781471aa6172eb4ad53a769045dad40a940bdb7da937ab63b47590fb56521 scripts/qa/runClubManagerVeteranOldParity.mjs > "$out/input-pins.sha256"
           sha256sum --check "$out/input-pins.sha256" > "$out/input-pins.log"
           git rev-parse HEAD > "$out/head.txt";git rev-parse 'HEAD^{tree}' > "$out/tree.txt"
           printf '%s\n' "$GITHUB_RUN_ID" > "$out/run-id.txt";printf '%s\n' "$GITHUB_RUN_ATTEMPT" > "$out/run-attempt.txt"

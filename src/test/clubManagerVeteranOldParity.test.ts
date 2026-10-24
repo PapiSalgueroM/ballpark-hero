@@ -29,7 +29,8 @@ afterAll(() => {
 });
 
 describe('Frozen old whole-engine veteran rollover compatibility', { timeout: 120000 }, () => {
-  it.each(cases)('records complete states and all draws: $title', async scenario => {
+  for (const scenario of cases) {
+  it('records complete states and all draws: ' + scenario.title, async () => {
     let seed = scenario.seed;
     const draws: number[] = [], frames: Probe['frames'] = [];
     const random = vi.spyOn(Math, 'random').mockImplementation(() => {
@@ -121,4 +122,5 @@ describe('Frozen old whole-engine veteran rollover compatibility', { timeout: 12
       saveFence.release(E.SAVE_KEY);
     } finally { random.mockRestore(); }
   });
+  }
 });

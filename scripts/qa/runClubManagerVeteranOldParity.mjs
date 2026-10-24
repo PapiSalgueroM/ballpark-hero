@@ -32,7 +32,7 @@ const inputs = [
   ['src/lib/clubManagerCalendar.ts', 57102, '7cdbc2e31172db5974f0753551133c61ae291662f5bd8e4b14f043d2267baf83'],
   ['src/lib/clubManagerVeteranLedger.ts', 4600, '80f991a38069f29dd1fecc22a9cb9c0e3bb4945a33208fae1de8413fc6aefb17'],
   ['src/lib/clubManagerVeteranRetirement.ts', 4168, 'cdaecb5ecd28187da8a1c62526c6b165289e76e37d30a01cba2ce7c4a16577ed'],
-  [testFile, 7775, '829a421e01c7f67730b2542c5c540f96ae73701bbf9532d436f20432c340bdcb'],
+  [testFile, 7806, 'cd687fbfc4ccd85990528e36e471833dffd65b492eb8e12b15d9b325baa800a6'],
 ];
 const originals = [
   ['core', oldCorePath, 1240569, '05de3cfca8d978e6117979fb29b82b2ece7b9fb6ee1f2ce3c051e379e36de86e', 'a505743537b383bc7885bb81f5a72c11e154b566'],
