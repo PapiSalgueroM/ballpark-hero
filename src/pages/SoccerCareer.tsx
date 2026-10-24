@@ -866,11 +866,13 @@ const SAVE_KEY = "soccerCareerSave";
    (Round 1451's sticky bar is 44 px tall), so a toast never lies over "Open site menu" and the gap above it
    (the library's 15 px hover strip) stays below the bar too. On a phone a toast also fades in and out where it
    rests: the library slides a top toast in from one toast height above and back up on the way out, and that
-   slide crossed the bar (scripts/playSoccerLanding.mjs reads the first frame). Wider screens keep the narrow
-   centred toast and its slide. */
+   slide crossed the bar (scripts/playSoccerLanding.mjs reads the first frame). And on a phone a leaving toast
+   drops the library's exit ghost (a ::before scaled to twice the toast's height, kept for 200 ms so a mouse
+   hover is not lost): it reached half a toast's height above it, over the bottom of the menu button. Wider screens keep
+   the narrow centred toast, its slide and its ghost. */
 const PAGE_TOAST = {
   position: "top-center",
-  className: "[@media(max-width:600px)]:top-11 [@media(max-width:600px)]:data-[mounted=false]:[--y:translateY(0)] [@media(max-width:600px)]:data-[removed=true]:data-[front=true]:[--y:translateY(0)]",
+  className: "[@media(max-width:600px)]:top-11 [@media(max-width:600px)]:data-[mounted=false]:[--y:translateY(0)] [@media(max-width:600px)]:data-[removed=true]:data-[front=true]:[--y:translateY(0)] [@media(max-width:600px)]:data-[removed=true]:before:hidden",
 } as const;
 /* Round 1504: the longest a deck card's answer waits for the deck chunk before it says so (handleEventChoice).
    scripts/playSoccerDeck.mjs read the deck's first load (7 chunks, 30.1K gzipped) at 334 ms on a phone line of
