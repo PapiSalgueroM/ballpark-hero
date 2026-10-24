@@ -1,0 +1,5 @@
+build exit=0 28s | [dukb] inlined 1 stylesheet(s) and 1 module(s) into 181 snapshots (11 left alone)
+fonts exit=0 0s | Prepared 9 declared font dependencies for local fulfillment.
+simCmRealFixtures-forwalk exit=0 3s | simCmRealFixtures normal premier: 10 outcome groups passed on 20 clubs, 38 matchdays and 380 fixtures, BASE GROUPS NOT RUN.
+cmrf-head exit=1 18s | cmrfReport: 5 cases, controls ["visible-fixture","neutral-result"]
+cmrf-mut exit=0 48s | cmrfReport: 6 cases, controls ["visible-fixture","neutral-result"]

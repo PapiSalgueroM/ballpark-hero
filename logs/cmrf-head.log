@@ -1,0 +1,11 @@
+}
+
+Node.js v24.21.0
+CASE 390-real passed=false
+  error: AssertionError [ERR_ASSERTION]: calendar-sources: the actual content must become readable and stable after its native interaction |     at captureVisible (file:///home/runner/work/ballpark-hero/ballpark-hero/scripts/playCmRealFixtures.mjs:170:5) |     at async journey (file:///home/runner/work/ballpark-hero/ballpark-hero/scripts/playCmRealFixtures.mjs:208:114)
+  capture calendar-sources FAILED: box {"x":16,"y":-0.5,"width":358,"height":82,"top":-0.5,"bottom":81.5,"right":374} viewport {"width":390,"height":844,"scrollX":0,"scrollY":703,"documentWidth":390} readable false
+CASE 390-later passed=true
+CASE 1280-real passed=true
+CASE 1280-legacy passed=true
+CASE 1280-later passed=true
+cmrfReport: 5 cases, controls ["visible-fixture","neutral-result"]
