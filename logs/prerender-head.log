@@ -1,0 +1,25 @@
+   the calendar is retired and stays retired; drift is held by section 13 and playSnapshotDrift
+8) nothing a page renders is thrown away for being long
+  FAIL: /whats-new drops the entry "Club Manager's live match is back on top of the site menu.", which means the extractor is throwing away real content again
+   470 of 471 changelog entries reach the shipped page
+9) no link is written into a snapshot twice
+   the consumed-anchor guard is in place; 2 block-then-same-link adjacencies (reported, not asserted on: honest repeat linking looks identical)
+10) the snapshot styling does not outlive the snapshot
+   171 snapshots, 0 leaking padding onto the live app, 0 missing the wrapper
+11) exactly one canonical per shipped document
+   172 documents, 0 with more than one canonical, worst 1
+12) no shipped page has a running clock frozen into it
+   172 documents, 0 carrying a frozen clock
+13) everything the ticker computes declares itself volatile
+   no push list, 2 computed elements checked for data-no-prerender, LIVE chip present
+   172 documents, 0 carrying a frozen score card
+14) no page in the sitemap ships a noindex
+   172 sitemap documents, 0 carrying a noindex
+   the snapshot write holds: it replaces, it rides out a transient hold, it throws rather than
+   damage the old page, it does not retry a genuine error, and it leaves no litter
+16) no random pick seeds React state directly
+   2325 source files scanned, 23 raw random initialiser(s), 22 file(s) on the frozen baseline, 0 new
+17) no saved page opens on a frozen loading line
+   172 documents read, 0 waiting lines found
+
+simPrerender: 1 failure
