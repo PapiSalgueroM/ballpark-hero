@@ -13,7 +13,7 @@ env:
   CI: '1'
   SIM_NETWORK: offline
   TZ: UTC
-  EXPECTED_PARENT: f0c140f9462ddc8ad046ab06d842e887abfb5369
+  EXPECTED_PARENT: 3878953df3743b721f7901ed978e2a8803428356
 
 jobs:
   diagnostic_capture:
@@ -39,7 +39,7 @@ jobs:
           printf '%s\n' "$GITHUB_RUN_ATTEMPT" > "$out/run-attempt.txt"
       - uses: actions/checkout@v4
         with:
-          fetch-depth: 32
+          fetch-depth: 0
           persist-credentials: false
           ref: ${{ github.sha }}
       - uses: actions/setup-node@v4
