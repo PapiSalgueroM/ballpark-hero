@@ -10,14 +10,14 @@ concurrency:
   cancel-in-progress: false
 env:
   BASE_SOURCE: 3ac9d8ea8a13db824f88be2deb660e7f2e31fc35
-  EXPECTED_PARENT: 574d11dcd33cb8326cc3013cdc5783db99c13b5c
+  EXPECTED_PARENT: 52e783c49295cd31925123b93e35eaab860d89f8
   CI: '1'
   SIM_NETWORK: offline
   TZ: UTC
 jobs:
   veteran_outcomes:
     runs-on: ubuntu-latest
-    timeout-minutes: 35
+    timeout-minutes: 65
     defaults:
       run:
         shell: bash
@@ -30,7 +30,7 @@ jobs:
         with:
           node-version: 24
           cache: npm
-      - name: Exact two-path child, twelve cumulative paths and eleven frozen retirement bodies
+      - name: Exact three-path child, fourteen cumulative paths and thirteen frozen retirement bodies
         run: |
           set -euo pipefail
           out="$RUNNER_TEMP/cm-veteran-retirement-functional";test ! -e "$out";mkdir "$out"
@@ -43,8 +43,10 @@ jobs:
           git merge-base --is-ancestor "$BASE_SOURCE" "$GITHUB_SHA"
           git show -s --format=%P HEAD > "$out/parents.txt"
           test "$(cat "$out/parents.txt")" = "$EXPECTED_PARENT"
-          git diff --exit-code "$EXPECTED_PARENT" HEAD -- . ':!docs/**' ':!.github/workflows/cm-veteran-retirement.yml' ':!src/test/clubManagerVeteranHook.test.tsx' > "$out/direct-child-scope.log"
-          git diff --exit-code "$BASE_SOURCE" HEAD -- . ':!docs/**' ':!.github/workflows/cm-veteran-retirement.yml' ':!src/lib/clubManager.ts' ':!src/lib/clubManagerCalendar.ts' ':!src/lib/clubManagerVeteranLedger.ts' ':!src/lib/clubManagerVeteranRetirement.ts' ':!src/test/clubManagerVeteranRetirement.test.ts' ':!src/test/clubManagerVeteranWorldRoster.test.ts' ':!src/hooks/useClubManager.ts' ':!src/components/club-manager/ClubManagerSeasonSummary.tsx' ':!src/components/club-manager/VeteranRetirementCard.tsx' ':!src/test/clubManagerVeteranHook.test.tsx' ':!src/test/VeteranRetirementCard.test.tsx' > "$out/finite-twelve-path-scope.log"
+          git diff --exit-code "$EXPECTED_PARENT" HEAD -- . ':!docs/**' ':!.github/workflows/cm-veteran-retirement.yml' ':!src/test/clubManagerVeteranOldParity.test.ts' ':!scripts/qa/runClubManagerVeteranOldParity.mjs' > "$out/direct-child-scope.log"
+          git diff --name-only "$EXPECTED_PARENT" HEAD -- . ':!docs/**' | sort > "$out/direct-child-members.txt"
+          printf '%s\n' .github/workflows/cm-veteran-retirement.yml scripts/qa/runClubManagerVeteranOldParity.mjs src/test/clubManagerVeteranOldParity.test.ts | sort | cmp - "$out/direct-child-members.txt"
+          git diff --exit-code "$BASE_SOURCE" HEAD -- . ':!docs/**' ':!.github/workflows/cm-veteran-retirement.yml' ':!src/lib/clubManager.ts' ':!src/lib/clubManagerCalendar.ts' ':!src/lib/clubManagerVeteranLedger.ts' ':!src/lib/clubManagerVeteranRetirement.ts' ':!src/test/clubManagerVeteranRetirement.test.ts' ':!src/test/clubManagerVeteranWorldRoster.test.ts' ':!src/hooks/useClubManager.ts' ':!src/components/club-manager/ClubManagerSeasonSummary.tsx' ':!src/components/club-manager/VeteranRetirementCard.tsx' ':!src/test/clubManagerVeteranHook.test.tsx' ':!src/test/VeteranRetirementCard.test.tsx' ':!src/test/clubManagerVeteranOldParity.test.ts' ':!scripts/qa/runClubManagerVeteranOldParity.mjs' > "$out/finite-fourteen-path-scope.log"
           test "$(git rev-parse "$BASE_SOURCE:src/lib/clubManager.ts")" = a505743537b383bc7885bb81f5a72c11e154b566
           test "$(git rev-parse "$BASE_SOURCE:src/lib/clubManagerCalendar.ts")" = 3653027149d6a1bef4194e0bece4fb5783c1c1e2
           test "$(git rev-parse HEAD:src/lib/clubManager.ts)" = bc6fb5765f593fb2b046e9abd35730093772f637
@@ -60,6 +62,8 @@ jobs:
           test "$(git rev-parse HEAD:src/components/club-manager/VeteranRetirementCard.tsx)" = 8d2a1594f8eaf1119b2fc55d774ac52fa3c1af48
           test "$(git rev-parse HEAD:src/test/clubManagerVeteranHook.test.tsx)" = e189d039d6339ea896e03d33be96b7930393cf8f
           test "$(git rev-parse HEAD:src/test/VeteranRetirementCard.test.tsx)" = ba06e7824a79d41cd7ce9fcc25ba8513fc7e7abe
+          test "$(git rev-parse HEAD:src/test/clubManagerVeteranOldParity.test.ts)" = c13126791d25305dc8e04ff3fbd433c447315b0b
+          test "$(git rev-parse HEAD:scripts/qa/runClubManagerVeteranOldParity.mjs)" = 02529791f6454f356060995ec62cd726f28ab84c
           printf '%s  %s\n' \
             45b9d486014720831f130000ff67d0d380f60c755bbb1afa3d0f9a833b2c4050 src/lib/clubManager.ts \
             7cdbc2e31172db5974f0753551133c61ae291662f5bd8e4b14f043d2267baf83 src/lib/clubManagerCalendar.ts \
@@ -71,7 +75,9 @@ jobs:
             1a5ea0d99de65f52d9f60ba3aed6c364445241ce760d2bb2a71e7feea9a453c1 src/components/club-manager/ClubManagerSeasonSummary.tsx \
             af5023b72b58bd1171a0117302fd120d9d40a509f57653175fac9300d03f0a21 src/components/club-manager/VeteranRetirementCard.tsx \
             547f1a8953f638b3e335a2e73d69cdbc9f60aa06f91e51d027371f628017781c src/test/clubManagerVeteranHook.test.tsx \
-            93a223b6349a56545b794604a2272127ec5df0c366e31906c28f756b30bf6e5b src/test/VeteranRetirementCard.test.tsx > "$out/input-pins.sha256"
+            93a223b6349a56545b794604a2272127ec5df0c366e31906c28f756b30bf6e5b src/test/VeteranRetirementCard.test.tsx \
+            829a421e01c7f67730b2542c5c540f96ae73701bbf9532d436f20432c340bdcb src/test/clubManagerVeteranOldParity.test.ts \
+            0b296690becc5385812cddf75d57e79f169d8248b7ecb98d7f4146bf0a874a20 scripts/qa/runClubManagerVeteranOldParity.mjs > "$out/input-pins.sha256"
           sha256sum --check "$out/input-pins.sha256" > "$out/input-pins.log"
           git rev-parse HEAD > "$out/head.txt";git rev-parse 'HEAD^{tree}' > "$out/tree.txt"
           printf '%s\n' "$GITHUB_RUN_ID" > "$out/run-id.txt";printf '%s\n' "$GITHUB_RUN_ATTEMPT" > "$out/run-attempt.txt"
@@ -283,6 +289,25 @@ jobs:
           NODE
           printf '%s\n' "$status" > "$out/rng-control.exit";test "$status" -eq 0
           test ! -s "$out/rng-control.transport"
+      - name: Frozen-old complete rollover and draw-tape parity with effective comparators
+        timeout-minutes: 52
+        run: |
+          set -euo pipefail
+          out="$CM_VETERAN_OUT"
+          original="$RUNNER_TEMP/cm-veteran-frozen-$GITHUB_RUN_ID-$GITHUB_RUN_ATTEMPT-$GITHUB_SHA"
+          test ! -e "$original";mkdir "$original"
+          (set -C;git show "$BASE_SOURCE:src/lib/clubManager.ts" > "$original/core.ts")
+          (set -C;git show "$BASE_SOURCE:src/lib/clubManagerCalendar.ts" > "$original/calendar.ts")
+          printf '%s\n' '05de3cfca8d978e6117979fb29b82b2ece7b9fb6ee1f2ce3c051e379e36de86e  '"$original/core.ts" 'ee7a0ad2086ea52d10ef30f3fc02a4479132899eb30cbab815753cad3b4d6f6b  '"$original/calendar.ts" | sha256sum --check
+          : > "$out/rollover-parity.transport"
+          status=0
+          CM_VETERAN_PARITY_OUT="$out/rollover-parity" CM_VETERAN_ORIGINAL_CORE="$original/core.ts" CM_VETERAN_ORIGINAL_CALENDAR="$original/calendar.ts" SIM_NETWORK=offline SIM_OFFLINE_RECEIPT="$out/rollover-parity.transport" NODE_OPTIONS="--require=$GITHUB_WORKSPACE/scripts/lib/offlineTransport.cjs" node scripts/qa/runClubManagerVeteranOldParity.mjs > "$out/rollover-parity-runner.log" 2>&1 || status=$?
+          printf '%s\n' "$status" > "$out/rollover-parity.exit"
+          test "$status" -eq 0
+          test ! -s "$out/rollover-parity.transport"
+          test -s "$out/rollover-parity/parity.json"
+          test -s "$out/rollover-parity/copies.after.json"
+
       - name: Always preserve all raw results and physical holds
         if: always()
         run: |
@@ -305,8 +330,9 @@ jobs:
           if test -f "$out/head.txt";then cmp "$out/head.txt" "$out/head-after.txt" || failed=1;else failed=1;fi
           git diff --exit-code HEAD > "$out/final-source-diff.log" || failed=1
           git status --porcelain --untracked-files=all > "$out/final-status.txt";test ! -s "$out/final-status.txt" || failed=1
-          for transport in types tests classifier world world-classifier ui ui-classifier rng-control;do test -f "$out/$transport.transport" && test ! -s "$out/$transport.transport" || failed=1;done
+          for transport in types tests classifier world world-classifier ui ui-classifier rng-control rollover-parity;do test -f "$out/$transport.transport" && test ! -s "$out/$transport.transport" || failed=1;done
           for label in normal healthy fault restored;do test -f "$out/rng-control/$label.transport" && test ! -s "$out/rng-control/$label.transport" || failed=1;done
+          for label in candidate frozen-original extra-rollover-draw changed-rollover-budget restored-original;do test -f "$out/rollover-parity/$label.transport" && test ! -s "$out/rollover-parity/$label.transport" || failed=1;done
           while IFS= read -r -d '' file;do test ! -s "$file" || failed=1;done < <(find "$out" -type f -name '*.transport' -print0)
           printf '%s\n' "$failed" > "$out/final-holds.exit"
           (cd "$out";find . -type f ! -path ./evidence.sha256 -print0 | sort -z | xargs -0 sha256sum) > "$out/evidence.sha256"
