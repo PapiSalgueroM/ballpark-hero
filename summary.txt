@@ -1,0 +1,5 @@
+build exit=0 27s | [dukb] inlined 1 stylesheet(s) and 1 module(s) into 181 snapshots (11 left alone)
+probeDD exit=1 9s | playDraftDetectiveReports: 44 checks, 1 failed. Screenshots and evidence: /home/runner/work/ballpark-hero/ballpark-hero/.tmp-fx/draft-detective-shots
+probeCq exit=1 71s |   - 5. release returns the map to now (/soccer-conquest @430)
+probeCq-sm exit=0 36s | ALL CONQUEST SCENE SCREEN CHECKS PASSED
+probeSCD exit=1 12s | playSoccerCareerDepth: 80 checks, 4 failed
