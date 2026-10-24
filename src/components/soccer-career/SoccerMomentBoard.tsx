@@ -19,11 +19,13 @@ export function preloadMomentBoard(board: PositionDrillKind): Promise<unknown> {
 
 const nothing = () => {};
 
-export default function SoccerMomentBoard({ career, board, seed, round, rng, onInput }: {
+export default function SoccerMomentBoard({ career, board, seed, round, rng, onInput, wallShotRules }: {
   career: CareerState;
   board: PositionDrillKind;
   seed: number;
   round: number;
+  /** The claimed ledger rule, pinned for this board. Missing is legacy. */
+  wallShotRules?: number;
   /** A fresh generator for the round's one resolve. */
   rng: () => () => number;
   /** Called once with the input the round was played with. */
@@ -31,7 +33,7 @@ export default function SoccerMomentBoard({ career, board, seed, round, rng, onI
 }) {
   /* one match for the life of the board: the round is dealt once */
   // eslint-disable-next-line react-hooks/exhaustive-deps
-  const drill = useMemo(() => (board === 'throughball' ? null : { kind: board, seed, round, rng, onResult: (r: { input: number[] }) => onInput(r.input) }), []);
+  const drill = useMemo(() => (board === 'throughball' ? null : { kind: board, seed, round, rng, wallShotRules, onResult: (r: { input: number[] }) => onInput(r.input) }), []);
   // eslint-disable-next-line react-hooks/exhaustive-deps
   const through = useMemo(() => (board === 'throughball' ? { seed, round, onResult: (r: { input: number[] }) => onInput(r.input) } : null), []);
   return (
