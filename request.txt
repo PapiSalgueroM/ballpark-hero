@@ -1,0 +1,10 @@
+#!serve
+#!playwright
+#!serial
+# Round 1568 measure, Club Manager, on origin/main as based (b20ec666): the probe, then the red lines as the kit sends them.
+fonts: mkdir -p .tmp-fx/font-cache && FREE_KICK_FONT_CACHE="$PWD/.tmp-fx/font-cache" node scripts/qa/freeKickLab1070.mjs --prefetch-fonts-only
+probeCm: node .rc/x/probeCm.mjs
+playLiveMatchFit: node scripts/playLiveMatchFit.mjs
+walk1521: node .rc/x/walkrun1521.mjs
+playCmVar: FREE_KICK_FONT_CACHE="$PWD/.tmp-fx/font-cache" NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/playCmVar.mjs
+playCmRealFixtures: FREE_KICK_FONT_CACHE="$PWD/.tmp-fx/font-cache" NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/playCmRealFixtures.mjs

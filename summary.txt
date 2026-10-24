@@ -1,0 +1,7 @@
+build exit=0 26s | [dukb] inlined 1 stylesheet(s) and 1 module(s) into 181 snapshots (11 left alone)
+fonts exit=0 0s | Prepared 9 declared font dependencies for local fulfillment.
+probeCm exit=0 49s | probeCm: done, 5 of 5 sizes reached the stage
+playLiveMatchFit exit=1 153s | playLiveMatchFit: 6 failures.
+walk1521 exit=1 703s | walkrun: RED, 1 failures
+playCmVar exit=1 625s | playCmVar: FAILED.
+playCmRealFixtures exit=1 1s | Node.js v24.21.0
