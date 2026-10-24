@@ -864,8 +864,14 @@ const SAVE_KEY = "soccerCareerSave";
    the Training and Phone buttons and the choices a card reveals under them.
    Round 1568: on a phone (the toast library's own 600 px line) they start 44 px lower, under the site's bar
    (Round 1451's sticky bar is 44 px tall), so a toast never lies over "Open site menu" and the gap above it
-   (the library's 15 px hover strip) stays below the bar too. Wider screens keep the narrow centred toast. */
-const PAGE_TOAST = { position: "top-center", className: "[@media(max-width:600px)]:top-11" } as const;
+   (the library's 15 px hover strip) stays below the bar too. On a phone a toast also fades in and out where it
+   rests: the library slides a top toast in from one toast height above and back up on the way out, and that
+   slide crossed the bar (scripts/playSoccerLanding.mjs reads the first frame). Wider screens keep the narrow
+   centred toast and its slide. */
+const PAGE_TOAST = {
+  position: "top-center",
+  className: "[@media(max-width:600px)]:top-11 [@media(max-width:600px)]:data-[mounted=false]:[--y:translateY(0)] [@media(max-width:600px)]:data-[removed=true]:data-[front=true]:[--y:translateY(0)]",
+} as const;
 /* Round 1504: the longest a deck card's answer waits for the deck chunk before it says so (handleEventChoice).
    scripts/playSoccerDeck.mjs read the deck's first load (7 chunks, 30.1K gzipped) at 334 ms on a phone line of
    150 ms latency and 1.6 Mbps (rc r1504-s7); about 2.6 s on a 2G line of 250 Kbps and 800 ms by the same bytes. */

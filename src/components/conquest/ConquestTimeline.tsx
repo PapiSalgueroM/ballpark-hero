@@ -26,11 +26,14 @@ export default function ConquestTimeline({ labels, index, onChange, disabled = f
         <span data-timeline-label className="text-foreground">{labels[at] ?? ''}</span>
         <span>{labels[last] ?? ''}</span>
       </div>
+      {/* Round 1568: scroll-mt-20 (80 px) keeps the slider and its labels row below the site's 44 px bar when the
+          browser brings it into view. Coming back up from the recap (Shift+Tab, or a scroll into view) used to park
+          it at the very top edge, under the bar, where the bar took the press at 430 wide. */}
       <input
         type="range"
         data-timeline
         data-stops={labels.length}
-        className="cq-timeline mt-1 w-full"
+        className="cq-timeline mt-1 w-full scroll-mt-20"
         min={0}
         max={last}
         step={1}
