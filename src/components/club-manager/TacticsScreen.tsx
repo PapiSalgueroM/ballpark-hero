@@ -5,16 +5,18 @@ import { ArrowLeft, ChevronDown, Wand2, X } from 'lucide-react';
 import {
   FORMATIONS, MENTALITIES, resolveXI, isAvailable, xiFitReport, fitGrade, FIT_PENALTY,
   slotPosition, defensiveLineY, lineLabel,
-  benchFor, dutyOptions, slotDuty, DUTY_INFO,
-  SET_PIECE_KEYS, SET_PIECE_INFO, setPieceCandidates,
+  benchFor, dutyOptions, slotDuty,
+  SET_PIECE_KEYS, setPieceCandidates,
   SHOOTOUT_MAX_ORDER, shootoutOrderOf, instructionsOf,
 } from '@/lib/clubManager';
+import { SET_PIECE_INFO, DUTY_INFO } from '@/lib/clubManagerUiInfo';
 import type { CareerState, CMPlayer, Mentality, Duty, SetPieceKey, FitGrade } from '@/lib/clubManager';
 import { instructionsSummary, opponentStyle, type TeamInstructions } from '@/lib/clubManagerTactics';
 import { InstructionsPicker } from '@/components/club-manager/InstructionsPicker';
 import { ratingTint, SecondPositionChips } from '@/components/club-manager/SquadScreen';
 import { useRevealScroll } from '@/hooks/useRevealScroll';
 import { MatchPlansCard } from '@/components/club-manager/MatchPlansCard';
+import { readCustomShape, type CustomShapePoint } from '@/lib/clubManagerPositions';
 
 const lastName = (n: string) => n.replace(' (Youth)', '').split(' ').slice(-1)[0];
 
@@ -50,6 +52,7 @@ const BACK_LINES: { label: string; digit: string }[] = [
 
 interface TacticsScreenProps {
   career: CareerState;
+  onCustomShape?: (formationIndex: number, points: readonly CustomShapePoint[] | null) => boolean;
   onFormation: (idx: number) => void;
   onMentality: (m: Mentality) => void;
   /** Round 1522: the four standing instructions. Without it the block is not drawn. */
@@ -119,7 +122,7 @@ interface TacticsScreenProps {
  */
 export function TacticsScreen({
   career, onFormation, onMentality, onInstructions, theirOpponent, onSlot, onSwap, onAutoPick, onDuty, onSetPiece, onAutoSetPieces,
-  onShootoutOrder, openTileRequest, onOpenTileRequestDone, onSaveMatchPlan, onApplyMatchPlan, onDeleteMatchPlan,
+  onShootoutOrder, openTileRequest, onOpenTileRequestDone, onSaveMatchPlan, onApplyMatchPlan, onDeleteMatchPlan, onCustomShape,
 }: TacticsScreenProps) {
   const [openSlot, setOpenSlot] = useState<number | null>(null);
   /* Round 1522: the instructions tile, folded until asked for. */
@@ -135,6 +138,19 @@ export function TacticsScreen({
   // A drag ends in a click event on most engines. This stops that click from
   // opening the picker on top of the swap you just made.
   const clickGuard = useRef(0);
+
+  const [moveMode, setMoveMode] = useState(false);
+  const [positionSlot, setPositionSlot] = useState(0);
+  const [positionHelp, setPositionHelp] = useState(false);
+  const [positionError, setPositionError] = useState<string | null>(null);
+  const [positionWaiting, setPositionWaiting] = useState(false);
+  const [positionPreview, setPositionPreview] = useState<readonly CustomShapePoint[] | null>(null);
+  const positionPress = useRef<{
+    index: number; formationIndex: number; career: CareerState; pointerId: number;
+    target: HTMLButtonElement; startX: number; startY: number; moved: boolean;
+    points: readonly CustomShapePoint[];
+  } | null>(null);
+
   /* Round 505: the two halves of a tap-tap placement. A spot you tapped
      (the bench reorders for it), and a bench man you tapped (the next spot
      you tap takes him). Only one of the two is ever the "first tap". */
@@ -167,6 +183,100 @@ export function TacticsScreen({
   }, [career.formationIndex]);
 
   const formation = FORMATIONS[career.formationIndex] ?? FORMATIONS[0];
+
+  const realFormation = Number.isSafeInteger(career.formationIndex)
+    && career.formationIndex >= 0 && FORMATIONS[career.formationIndex] === formation;
+  const customShape = realFormation ? readCustomShape(career.customShape, career.formationIndex, formation.slots) : null;
+  const positionNeedsReview = career.customShape !== undefined && !customShape;
+  const canMovePositions = !!onCustomShape && realFormation && !positionNeedsReview && !career.live;
+  const committedPoints = useMemo(() => customShape?.points
+    ?? formation.slots.map(sl => ({ x: sl.x, y: sl.y })), [customShape, formation]);
+  const pointForSlot = useCallback((i: number) => moveMode
+    ? (positionPreview ?? committedPoints)[i]
+    : slotPosition(formation.slots[i], career.mentality, customShape?.points[i]),
+  [moveMode, positionPreview, committedPoints, formation, career.mentality, customShape]);
+
+  const cancelPosition = useCallback(() => {
+    const held = positionPress.current;
+    positionPress.current = null;
+    setPositionPreview(null);
+    if (held) {
+      try { held.target.releasePointerCapture(held.pointerId); } catch { /* capture already ended */ }
+    }
+  }, []);
+  useEffect(() => {
+    cancelPosition();
+    setPositionWaiting(false);
+  }, [career, cancelPosition]);
+  useEffect(() => {
+    setMoveMode(false); setPositionSlot(0); cancelPosition();
+  }, [career.formationIndex, cancelPosition]);
+  useEffect(() => {
+    window.addEventListener('blur', cancelPosition);
+    return () => { window.removeEventListener('blur', cancelPosition); };
+  }, [cancelPosition]);
+
+  const savePositions = (points: readonly CustomShapePoint[] | null) => {
+    if (!canMovePositions || positionWaiting || !onCustomShape) return;
+    setPositionError(null);
+    if (onCustomShape(career.formationIndex, points)) setPositionWaiting(true);
+    else setPositionError('This position change was not saved. Your saved shape is still shown.');
+  };
+  const nudgePosition = (index: number, dx: number, dy: number) => {
+    if (!moveMode || !canMovePositions || positionWaiting) return;
+    const before = committedPoints[index];
+    const point = { x: Math.max(6, Math.min(94, before.x + dx)),
+      y: Math.max(6, Math.min(94, before.y + dy)) };
+    if (point.x === before.x && point.y === before.y) return;
+    savePositions(committedPoints.map((held, i) => i === index ? point : { x: held.x, y: held.y }));
+  };
+  const positionPoint = (held: NonNullable<typeof positionPress.current>, e: React.PointerEvent<HTMLButtonElement>) => {
+    const rect = pitchRef.current?.getBoundingClientRect();
+    if (!rect?.width || !rect.height || !Number.isFinite(e.clientX) || !Number.isFinite(e.clientY)) return null;
+    const before = held.points[held.index];
+    return { x: Math.max(6, Math.min(94, before.x + (e.clientX - held.startX) * 100 / rect.width)),
+      y: Math.max(6, Math.min(94, before.y + (e.clientY - held.startY) * 100 / rect.height)) };
+  };
+  const positionDown = (index: number) => (e: React.PointerEvent<HTMLButtonElement>) => {
+    if (!canMovePositions || positionWaiting || e.button !== 0 || e.isPrimary === false) return;
+    cancelPosition(); setPositionSlot(index); setPositionError(null);
+    positionPress.current = { index, formationIndex: career.formationIndex, career, pointerId: e.pointerId,
+      target: e.currentTarget, startX: e.clientX, startY: e.clientY, moved: false,
+      points: committedPoints.map(point => ({ x: point.x, y: point.y })) };
+    try { e.currentTarget.setPointerCapture(e.pointerId); } catch { /* continue with owned pointer events */ }
+  };
+  const positionMove = (e: React.PointerEvent<HTMLButtonElement>) => {
+    const held = positionPress.current;
+    if (!held || held.pointerId !== e.pointerId) return;
+    if (held.career !== career || !canMovePositions) { cancelPosition(); return; }
+    if (!held.moved && Math.abs(e.clientX - held.startX) + Math.abs(e.clientY - held.startY) < DRAG_SLOP) return;
+    const point = positionPoint(held, e);
+    if (!point) return;
+    held.moved = true;
+    setPositionPreview(held.points.map((before, i) => i === held.index ? point : before));
+  };
+  const positionUp = (e: React.PointerEvent<HTMLButtonElement>) => {
+    const held = positionPress.current;
+    if (!held || held.pointerId !== e.pointerId) return;
+    const valid = held.career === career && held.formationIndex === career.formationIndex && canMovePositions;
+    const point = positionPoint(held, e);
+    const moved = held.moved || Math.abs(e.clientX - held.startX) + Math.abs(e.clientY - held.startY) >= DRAG_SLOP;
+    cancelPosition();
+    if (!valid || !moved || !point) return;
+    clickGuard.current = Date.now();
+    const before = held.points[held.index];
+    if (point.x !== before.x || point.y !== before.y)
+      savePositions(held.points.map((p, i) => i === held.index ? point : { x: p.x, y: p.y }));
+  };
+  const positionKey = (index: number) => (e: React.KeyboardEvent<HTMLButtonElement>) => {
+    if (!moveMode || e.altKey || e.ctrlKey || e.metaKey) return;
+    if (e.key === 'Escape') { e.preventDefault(); cancelPosition(); return; }
+    const step = e.key === 'ArrowUp' ? [0, -2] : e.key === 'ArrowDown' ? [0, 2]
+      : e.key === 'ArrowLeft' ? [-2, 0] : e.key === 'ArrowRight' ? [2, 0] : null;
+    if (!step || positionSlot !== index) return;
+    e.preventDefault(); nudgePosition(index, step[0], step[1]);
+  };
+
   const xi = resolveXI(career);
   const slot = openSlot !== null ? formation.slots[openSlot] : null;
   const usedIds = new Set(career.xiIds.filter((id): id is string => !!id));
@@ -237,7 +347,7 @@ export function TacticsScreen({
     let best = -1;
     let bestDist = Infinity;
     for (let i = 0; i < formation.slots.length; i++) {
-      const pos = slotPosition(formation.slots[i], career.mentality);
+      const pos = pointForSlot(i);
       // The pitch is taller than it is wide, so measure in real pixels.
       const ddx = ((pos.x - px) / 100) * r.width;
       const ddy = ((pos.y - py) / 100) * r.height;
@@ -245,14 +355,14 @@ export function TacticsScreen({
       if (dist < bestDist) { bestDist = dist; best = i; }
     }
     return bestDist <= Math.max(48, r.width * 0.17) ? best : -1;
-  }, [formation, career.mentality]);
+  }, [formation, pointForSlot]);
 
   /** Pointer delta, held inside the grass so a lifted token never disappears. */
   const clampDelta = (from: number, rawX: number, rawY: number) => {
     const el = pitchRef.current;
     const r = el?.getBoundingClientRect();
     if (!r || !r.width || !r.height) return { dx: rawX, dy: rawY };
-    const base = slotPosition(formation.slots[from], career.mentality);
+    const base = pointForSlot(from);
     const minX = ((4 - base.x) / 100) * r.width;
     const maxX = ((96 - base.x) / 100) * r.width;
     const minY = ((4 - base.y) / 100) * r.height;
@@ -297,6 +407,7 @@ export function TacticsScreen({
 
   /** A tap on a spot: the second half of a bench pick, or the first half of one plus the picker. */
   const openPicker = (i: number) => {
+    if (moveMode) { setPositionSlot(i); return; }
     if (Date.now() - clickGuard.current < 500) return;
     if (benchPick !== null) {
       onSlot(i, benchPick);
@@ -374,7 +485,7 @@ export function TacticsScreen({
     ? (xi[drag.over] ? lastName(xi[drag.over]!.name) : formation.slots[drag.over].label)
     : '';
 
-  const hint = drag
+  const hint = moveMode ? 'Select a numbered spot, then drag its base position or use the movement controls.' : drag
     ? (overName ? `Drop to swap ${dragName} with ${overName}` : `Moving ${dragName}, let go on someone to swap`)
     : benchMan
       ? `Tap a spot on the pitch for ${lastName(benchMan.name)}.`
@@ -470,6 +581,45 @@ export function TacticsScreen({
         </div>
       )}
 
+
+      {onCustomShape && <div className="rounded-xl border border-border bg-card p-2 space-y-2" style={{ overflowAnchor: 'none' }}>
+        <div className="flex gap-2">
+          <button type="button" aria-pressed={!moveMode} onClick={() => { cancelPosition(); setMoveMode(false); }}
+            className="min-h-11 flex-1 rounded-lg border border-border px-2 text-xs font-bold">Swap players</button>
+          <button type="button" aria-pressed={moveMode} disabled={!canMovePositions || positionWaiting}
+            onClick={() => { handleCancel(); setOpenSlot(null); setSelSlot(null); setBenchPick(null); setDutySlot(null); setMoveMode(true); }}
+            className="min-h-11 flex-1 rounded-lg border border-border px-2 text-xs font-bold disabled:opacity-50">Move players</button>
+          <button type="button" aria-label="Position rules" aria-expanded={positionHelp} onClick={() => setPositionHelp(v => !v)}
+            className="min-h-11 min-w-11 rounded-lg border border-border text-sm font-bold">?</button>
+        </div>
+        {positionNeedsReview || !realFormation
+          ? <p className="text-xs text-muted-foreground">This stored shape needs review. Its data has been kept.</p>
+          : career.live ? <p className="text-xs text-muted-foreground">Finish the match before moving base positions.</p> : null}
+        {positionHelp && <div role="region" aria-label="Position rules" className="rounded-lg bg-secondary/40 p-2 text-xs space-y-1">
+          <p>Swap players keeps the existing XI swaps. Move players edits base positions, including the keeper. Overlapping spots are allowed; use Position slot to reach each one.</p>
+          <p>Mentality still shifts your saved base positions at kickoff. Slot roles and duties stay with their numbered spots.</p>
+          <p>Buttons and arrow keys move two points. For example, moving right from X40 puts that spot at X42. Coordinates stay between 6 and 94.</p>
+          <p>A drag is a preview until release. Cancel, lost capture or leaving the window discards it. A refused save keeps the committed shape. Reset to preset only clears a supported saved shape.</p>
+        </div>}
+        {moveMode && <div className="space-y-2">
+          <p className="text-xs text-muted-foreground">Set the base shape here. Your mentality is applied at kickoff.</p>
+          <select aria-label="Position slot" value={positionSlot} onChange={e => { cancelPosition(); setPositionSlot(Number(e.target.value)); }}
+            className="min-h-11 w-full rounded-lg border border-border bg-secondary px-2 text-xs">
+            {formation.slots.map((sl, i) => <option key={i} value={i}>{i + 1}. {sl.label}</option>)}
+          </select>
+          <div className="grid grid-cols-2 gap-2">
+            {([['Move up', 0, -2], ['Move down', 0, 2], ['Move left', -2, 0], ['Move right', 2, 0]] as const).map(([label, dx, dy]) =>
+              <button key={label} type="button" disabled={!canMovePositions || positionWaiting}
+                onClick={() => nudgePosition(positionSlot, dx, dy)}
+                className="min-h-11 rounded-lg border border-border px-2 text-xs font-bold disabled:opacity-50">{label}</button>)}
+          </div>
+          <button type="button" disabled={!canMovePositions || positionWaiting || !customShape} onClick={() => savePositions(null)}
+            className="min-h-11 w-full rounded-lg border border-border px-2 text-xs font-bold disabled:opacity-50">Reset to preset</button>
+        </div>}
+        {positionWaiting && <p role="status" className="text-xs text-muted-foreground">Waiting for the saved shape.</p>}
+        {positionError && <p role="alert" className="text-xs text-destructive">{positionError}</p>}
+      </div>}
+
       {/* Pitch */}
       <div ref={pitchWrapRef}>
         <div className="flex items-center justify-between mb-1.5">
@@ -511,7 +661,7 @@ export function TacticsScreen({
           <div className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 w-16 h-16 rounded-full border border-border/40" />
 
           {/* The back line, so you can see the block move and not just feel it. */}
-          <div
+          {!moveMode && !customShape && <div
             data-cm-defline={Math.round(lineY * 10) / 10}
             className={cn('cm-line absolute inset-x-0 pointer-events-none', !ready && 'cm-still')}
             style={{
@@ -523,7 +673,7 @@ export function TacticsScreen({
             <span className="absolute right-1.5 -top-3.5 text-[8px] uppercase tracking-wider text-primary/70 font-bold">
               {lineLabel(career.mentality)}
             </span>
-          </div>
+          </div>}
 
           {/* One-shot mentality flourish, keyed so every click replays it. */}
           {mentPulse > 0 && career.mentality !== 'balanced' && (
@@ -558,8 +708,8 @@ export function TacticsScreen({
               token rather than a child, because a button cannot hold a
               button, placed by the same slot maths and riding the same
               mentality shift. */}
-          {formation.slots.map((sl, i) => {
-            const pos = slotPosition(sl, career.mentality);
+          {!moveMode && formation.slots.map((sl, i) => {
+            const pos = pointForSlot(i);
             const shiftX = ((pos.x - sl.x) / 100) * box.w;
             const shiftY = ((pos.y - sl.y) / 100) * box.h;
             const d = slotDuty(career, formation, i);
@@ -596,7 +746,7 @@ export function TacticsScreen({
             const p = xi[i];
             const unavailable = p ? !isAvailable(p) : false;
             const grade = fit.grades[i];
-            const pos = slotPosition(sl, career.mentality);
+            const pos = pointForSlot(i);
             const shiftX = ((pos.x - sl.x) / 100) * box.w;
             const shiftY = ((pos.y - sl.y) / 100) * box.h;
             const lifted = drag !== null && drag.from === i;
@@ -615,18 +765,24 @@ export function TacticsScreen({
                 data-cm-pid={p ? p.id : ''}
                 data-cm-shift={`${Math.round(shiftX)},${Math.round(shiftY)}`}
                 data-cm-fit={grade ?? ''}
-                data-cm-selected={selSlot === i ? '1' : undefined}
+                data-cm-selected={(moveMode ? positionSlot === i : selSlot === i) ? '1' : undefined}
                 data-cm-captain={p && p.id === captainId ? '1' : undefined}
-                aria-label={`${sl.label}, ${p ? p.name : 'empty'}${grade && grade !== 'natural' ? `, ${fitWord(grade)}` : ''}. Drag onto another spot to swap, or tap to pick someone else.`}
-                onPointerDown={handleDown(i)}
-                onPointerMove={handleMove}
-                onPointerUp={handleUp}
-                onPointerCancel={handleCancel}
+                aria-label={moveMode ? 'Position slot ' + (i + 1) + ', ' + sl.label + '. Use arrow keys or drag to move.' : `${sl.label}, ${p ? p.name : 'empty'}${grade && grade !== 'natural' ? `, ${fitWord(grade)}` : ''}. Drag onto another spot to swap, or tap to pick someone else.`}
+                onPointerDown={moveMode ? positionDown(i) : handleDown(i)}
+                onPointerMove={moveMode ? positionMove : handleMove}
+                onPointerUp={moveMode ? positionUp : handleUp}
+                onPointerCancel={moveMode ? cancelPosition : handleCancel}
+                onLostPointerCapture={moveMode ? cancelPosition : undefined}
+                onBlur={moveMode ? e => { if (positionPress.current?.target === e.currentTarget) cancelPosition(); } : undefined}
+                onFocus={() => { if (moveMode) setPositionSlot(i); }}
+                onKeyDown={positionKey(i)}
                 onDragStart={e => e.preventDefault()}
                 onClick={() => openPicker(i)}
                 className={cn(
                   'cm-token cm-slot absolute flex flex-col items-center',
-                  (lifted || !ready) && 'cm-still',
+                  moveMode && 'min-h-11 min-w-11',
+                  (lifted || !ready || (moveMode && positionPreview !== null)) && 'cm-still',
+                  moveMode && positionSlot === i && 'outline outline-2 outline-yellow-400',
                 )}
                 style={{
                   left: `${sl.x}%`,

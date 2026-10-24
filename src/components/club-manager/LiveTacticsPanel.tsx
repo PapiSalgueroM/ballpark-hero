@@ -7,9 +7,10 @@ import { useState } from 'react';
 import { ChevronDown } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import {
-  FORMATIONS, DUTY_INFO, dutyOptions, liveGoneIds, liveInstructions,
+  FORMATIONS, dutyOptions, liveGoneIds, liveInstructions,
   type CareerState, type Duty, type LiveChange, type LiveMatch,
 } from '@/lib/clubManager';
+import { DUTY_INFO } from '@/lib/clubManagerUiInfo';
 import { InstructionsPicker } from '@/components/club-manager/InstructionsPicker';
 import { opponentStyle } from '@/lib/clubManagerTactics';
 
