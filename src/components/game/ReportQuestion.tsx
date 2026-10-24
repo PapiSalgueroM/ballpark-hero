@@ -1,4 +1,5 @@
 import { useEffect, useRef, useState, type ComponentType } from 'react';
+import { createPortal } from 'react-dom';
 import { Flag } from 'lucide-react';
 import { reloadToRetryChunk } from '@/lib/freshBuild';
 import type { ReportQuestionFormProps } from './ReportQuestionForm';
@@ -68,25 +69,35 @@ const ReportQuestion = (props: Omit<ReportQuestionFormProps, 'initiallyOpen'>) =
         <Flag className="w-3 h-3" />
         Report a problem
       </button>
-      {loading && <span role="status">Loading report form...</span>}
-      {failed && <span role="alert">{failed}</span>}
-      {failed && (
-        <button
-          type="button"
-          onClick={() => {
-            if (!reloadToRetryChunk()) {
-              setFailed('The page could not refresh. Check your connection and any waiting save, then try again.');
-            }
-          }}
-          className="min-h-11 min-w-11 underline hover:text-foreground"
+      {(loading || failed) && createPortal(
+        <span
+          role="group"
+          aria-label="Report form"
+          data-report-feedback="question"
+          className="fixed inset-x-3 top-3 z-[60] mx-auto flex max-h-[calc(50dvh-1.5rem)] max-w-sm flex-wrap items-center justify-center gap-2 overflow-y-auto rounded-lg border border-border bg-background p-3 text-center text-sm text-foreground shadow-lg"
         >
-          Refresh page
-        </button>
-      )}
-      {(loading || failed) && (
-        <button type="button" onClick={cancel} className="min-h-11 min-w-11 underline hover:text-foreground">
-          Cancel
-        </button>
+          {loading && <span role="status" className="basis-full">Loading report form...</span>}
+          {failed && <span role="alert" className="basis-full">{failed}</span>}
+          {failed && (
+            <button
+              type="button"
+              onClick={() => {
+                if (!reloadToRetryChunk()) {
+                  setFailed('The page could not refresh. Check your connection and any waiting save, then try again.');
+                }
+              }}
+              className="min-h-11 min-w-11 underline hover:text-foreground"
+            >
+              Refresh page
+            </button>
+          )}
+          {(loading || failed) && (
+            <button type="button" onClick={cancel} className="min-h-11 min-w-11 underline hover:text-foreground">
+              Cancel
+            </button>
+          )}
+        </span>,
+        document.body,
       )}
     </span>
   );
