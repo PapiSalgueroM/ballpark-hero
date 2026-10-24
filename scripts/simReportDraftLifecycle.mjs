@@ -18,18 +18,19 @@ const OUT = path.join(evidenceRoot, 'unit');
 fs.mkdirSync(OUT, { recursive: true });
 const TEMP = fs.mkdtempSync(path.join(os.tmpdir(), 'report-draft-modules-'));
 const BASE = '775564305e9da84dab59f2b9fe246d044a3cc8e9';
+const siteAlias = MODE === 'baseline' ? '@/components/game/ReportSiteIssue' : '@/components/game/ReportSiteIssueForm';
 const forms = {
   '@/components/game/ReportQuestion': 'src/components/game/ReportQuestion.tsx',
-  '@/components/game/ReportSiteIssue': 'src/components/game/ReportSiteIssue.tsx',
+  [siteAlias]: MODE === 'baseline' ? 'src/components/game/ReportSiteIssue.tsx' : 'src/components/game/ReportSiteIssueForm.tsx',
 };
-const heldFiles = [...Object.values(forms), 'src/test/reportDraftLifecycle.test.tsx',
+const heldFiles = [...Object.values(forms), ...(MODE === 'fixed' ? ['src/components/game/ReportSiteIssue.tsx'] : []), 'src/test/reportDraftLifecycle.test.tsx',
   'src/test/reportDetails.test.tsx', 'src/test/reportContext.test.ts',
   'src/lib/reportContext.ts', 'src/components/game/reportKinds.ts', 'vitest.config.ts'];
 const hookFile = 'src/hooks/useReportDraftLifecycle.ts';
 if (MODE === 'fixed') heldFiles.push(hookFile);
 const hash = bytes => createHash('sha256').update(bytes).digest('hex');
 const sourceBefore = Object.fromEntries(heldFiles.map(file => [file, Buffer.from(fs.readFileSync(path.join(ROOT, file), 'utf8').replace(/\r\n/g, '\n'))]));
-assert.equal(hash(sourceBefore['src/test/reportDraftLifecycle.test.tsx']), 'ca6774ec49cdf7fe4d64aff59deebab94bc43f9925833c4f7a9d8a631dca3255', 'The admitted fourteen-case test body is frozen');
+assert.equal(hash(sourceBefore['src/test/reportDraftLifecycle.test.tsx']), MODE === 'baseline' ? 'ca6774ec49cdf7fe4d64aff59deebab94bc43f9925833c4f7a9d8a631dca3255' : '1d38b64e89ef6afb9049dd5a8a55889e7f8d9719539f77ae0077d7b7155e5f5a', 'The admitted fourteen-case body is frozen apart from the explicit footer form import');
 const runtimeAliases = {
   'react/jsx-dev-runtime': require.resolve('react/jsx-dev-runtime'),
   'react/jsx-runtime': require.resolve('react/jsx-runtime'),
@@ -112,11 +113,41 @@ function recoverOriginalForms() {
   const specs = [
     { alias: '@/components/game/ReportQuestion', header: 'const ReportQuestion = ({ gameType, gameContext = {}, kinds = REPORT_REASONS }: ReportQuestionProps) => {',
       importAnchor: "import { REPORT_KINDS_QUESTION } from '@/components/game/reportKinds';\n", field: 'reason', setter: 'setReason', option: 'r' },
-    { alias: '@/components/game/ReportSiteIssue', header: 'export function ReportSiteIssue() {',
+    { alias: '@/components/game/ReportSiteIssueForm', header: 'export function ReportSiteIssue() {',
       importAnchor: "import { buildReportContext } from '@/lib/reportContext';\n", field: 'kind', setter: 'setKind', option: 'k' },
   ];
   for (const spec of specs) {
-    const file = forms[spec.alias], fixed = sourceBefore[file].toString('utf8');
+    const file = forms[spec.alias], actualFixed = sourceBefore[file].toString('utf8');
+    let fixed = actualFixed;
+    const lazyHunks = spec.alias === '@/components/game/ReportSiteIssueForm' ? [
+      {
+        "name": "react-effect-import",
+        "before": "import { useRef, useState } from 'react';\n",
+        "after": "import { useEffect, useRef, useState } from 'react';\n"
+      },
+      {
+        "name": "initial-opening-prop",
+        "before": "export function ReportSiteIssue() {\n",
+        "after": "export function ReportSiteIssueForm({ initiallyOpen = false }: { initiallyOpen?: boolean }) {\n"
+      },
+      {
+        "name": "one-initial-opening",
+        "before": "  const { open, status, changeOpen, markDraftChanged, beginSubmission, completeSubmission, failSubmission } = useReportDraftLifecycle();\n",
+        "after": "  const { open, status, changeOpen, markDraftChanged, beginSubmission, completeSubmission, failSubmission } = useReportDraftLifecycle();\n  const initialOpening = useRef(initiallyOpen);\n\n  useEffect(() => {\n    if (!initialOpening.current) return;\n    initialOpening.current = false;\n    changeOpen(true);\n  }, [changeOpen]);\n"
+      },
+      {
+        "name": "default-lazy-export",
+        "before": "export default ReportSiteIssue;\n",
+        "after": "export default ReportSiteIssueForm;\n"
+      }
+    ] : [];
+    for (const hunk of [...lazyHunks].reverse()) {
+      assert.equal(fixed.split(hunk.after).length, 2, file + ': one actual lazy ' + hunk.name + ' inverse');
+      const next = fixed.replace(hunk.after, hunk.before);
+      assert.notEqual(next, fixed, file + ': lazy inverse changes source');
+      fixed = next;
+    }
+    if (lazyHunks.length) assert.equal(hash(fixed), '4e5c2049c07a2aa5154ba05f6d5ee973af549f9b09233f556fe8547efcf210ca', file + ': entire actual eager form recovered before historical lifecycle inverse');
     const hunks = [
       { name: 'lifecycle import', fixed: spec.importAnchor + hookImport, original: spec.importAnchor },
       { name: 'dialog open state', fixed: spec.header + '\n', original: spec.header + '\n  const [open, setOpen] = useState(false);\n' },
@@ -152,10 +183,18 @@ function recoverOriginalForms() {
       forward = forward.replace(hunk.original, hunk.fixed);
     }
     assert.equal(forward, fixed, `${file}: forward replacements recover the entire fixed form`);
+    let actualForward = forward;
+    for (const hunk of lazyHunks) {
+      assert.equal(actualForward.split(hunk.before).length, 2, file + ': one actual lazy ' + hunk.name + ' forward');
+      const next = actualForward.replace(hunk.before, hunk.after);
+      assert.notEqual(next, actualForward, file + ': lazy forward changes source');
+      actualForward = next;
+    }
+    assert.equal(actualForward, actualFixed, file + ': forwards recover the entire actual lazy form');
     const name = 'recovered-' + path.basename(file), retained = path.join(OUT, name), copy = path.join(TEMP, name);
     fs.writeFileSync(retained, recovered); fs.writeFileSync(copy, recovered); originalAliases[spec.alias] = copy;
-    formInverses.push({ file, recoveredFile: name, fixedSha256: hash(fixed), originalSha256: hash(original[file]),
-      recoveredSha256: hash(recovered), forwardSha256: hash(forward), hunks });
+    formInverses.push({ file, recoveredFile: name, fixedSha256: hash(actualFixed), eagerSha256: hash(fixed), originalSha256: hash(original[file]),
+      recoveredSha256: hash(recovered), forwardSha256: hash(actualForward), hunks, lazyHunks });
   }
 }
 
@@ -202,7 +241,8 @@ function controlFailures(name, aliases, indexes) {
 
 try {
   for (const [alias, file] of Object.entries(forms)) {
-    const read = spawnSync('git', ['show', `${BASE}:${file}`], { cwd: ROOT, encoding: 'utf8', maxBuffer: 4 * 1024 * 1024 });
+    const historicalFile = file === 'src/components/game/ReportSiteIssueForm.tsx' ? 'src/components/game/ReportSiteIssue.tsx' : file;
+    const read = spawnSync('git', ['show', `${BASE}:${historicalFile}`], { cwd: ROOT, encoding: 'utf8', maxBuffer: 4 * 1024 * 1024 });
     assert.ifError(read.error); assert.equal(read.status, 0, `Read actual original ${file}: ${read.stderr}`);
     original[file] = read.stdout;
     fs.writeFileSync(path.join(OUT, 'original-' + path.basename(file)), read.stdout);

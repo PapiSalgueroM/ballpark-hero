@@ -103,7 +103,7 @@ const read = p => fs.readFileSync(path.join(ROOT, p), 'utf8').replace(/\r\n/g, '
 
 let relay = read('supabase/functions/report-relay/index.ts');
 let perQuestion = read('src/components/game/ReportQuestion.tsx');
-const sitewide = read('src/components/game/ReportSiteIssue.tsx');
+const sitewide = read('src/components/game/ReportSiteIssueForm.tsx');
 const admin = read('src/pages/AdminReports.tsx');
 
 if (CONTROL === 'silent') {
