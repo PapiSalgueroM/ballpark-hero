@@ -486,15 +486,15 @@ if (skipped.length) {
 if (!failures.length) {
   const ran = nodeResults.length + (WANT_BROWSER ? browserGroup.length : 0) - skipped.length;
   console.log(`All ${ran} harnesses green${skipped.length ? `, ${skipped.length} skipped above` : ''}.`);
-  process.exit(0);
+  process.exitCode = 0;
+} else {
+  for (const f of failures) {
+    console.log(`----- ${f.file} (${f.verdict}) -----`);
+    const lines = f.out.split('\n');
+    const interesting = lines.filter((l) => /FAIL|BROKEN|Error|error:/.test(l)).slice(0, 12);
+    console.log((interesting.length ? interesting : lines.slice(-14)).join('\n'));
+    console.log('');
+  }
+  console.log(`${failures.length} harness${failures.length === 1 ? '' : 'es'} not green.`);
+  process.exitCode = 1;
 }
-
-for (const f of failures) {
-  console.log(`----- ${f.file} (${f.verdict}) -----`);
-  const lines = f.out.split('\n');
-  const interesting = lines.filter((l) => /FAIL|BROKEN|Error|error:/.test(l)).slice(0, 12);
-  console.log((interesting.length ? interesting : lines.slice(-14)).join('\n'));
-  console.log('');
-}
-console.log(`${failures.length} harness${failures.length === 1 ? '' : 'es'} not green.`);
-process.exit(1);
