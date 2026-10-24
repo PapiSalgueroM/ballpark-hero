@@ -1,0 +1,12 @@
+build exit=0 34s | [dukb] inlined 1 stylesheet(s) and 1 module(s) into 181 snapshots (11 left alone)
+fonts exit=0 1s | Prepared 9 declared font dependencies for local fulfillment.
+base-build exit=0 36s | [dukb] inlined 1 stylesheet(s) and 1 module(s) into 181 snapshots (11 left alone)
+base-playLiveMatchFit exit=1 155s | playLiveMatchFit: 6 failures.
+base-walk1521 exit=1 723s | walkrun: RED, 1 failures
+base-playCmVar exit=1 629s | playCmVar: FAILED.
+base-simCmRealFixtures-forwalk exit=0 4s | simCmRealFixtures normal premier: 10 outcome groups passed on 20 clubs, 38 matchdays and 380 fixtures, BASE GROUPS NOT RUN.
+base-playCmRealFixtures exit=1 21s | Node.js v24.21.0
+base-playSoccerCareerDepth exit=1 17s | playSoccerCareerDepth: 80 checks, 4 failed
+base-playConquestScenes exit=1 75s |   - 5. release returns the map to now (/soccer-conquest @430)
+base-ctl-none-Conquest exit=1 65s |   - 5. release returns the map to now (/soccer-conquest @430)
+base-playDraftDetectiveReports exit=1 10s | playDraftDetectiveReports: 44 checks, 1 failed. Screenshots and evidence: /tmp/base/.tmp-fx/draft-detective-shots
