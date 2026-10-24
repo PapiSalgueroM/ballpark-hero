@@ -1,6 +1,6 @@
 import { act, cleanup, fireEvent, render } from '@testing-library/react';
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
-import ReportQuestion from '@/components/game/ReportQuestion';
+import ReportQuestion from '@/components/game/ReportQuestionForm';
 import ReportSiteIssue from '@/components/game/ReportSiteIssueForm';
 import { REPORT_KINDS_SITEWIDE } from '@/components/game/reportKinds';
 

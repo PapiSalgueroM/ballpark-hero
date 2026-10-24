@@ -1,6 +1,6 @@
 import { act, cleanup, fireEvent, render } from '@testing-library/react';
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
-import ReportQuestion from '@/components/game/ReportQuestion';
+import ReportQuestion from '@/components/game/ReportQuestionForm';
 import ReportSiteIssue from '@/components/game/ReportSiteIssueForm';
 
 const delivery = vi.hoisted(() => ({ invoke: vi.fn(), insert: vi.fn() }));
