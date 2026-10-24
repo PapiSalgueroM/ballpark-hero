@@ -1,0 +1,8 @@
+#!serve
+#!playwright
+#!serial
+# Round 1568 measure, Stat Detective, Conquest and Soccer Career, on origin/main as based (b20ec666): copies of the harnesses that print boxes and hit tests.
+probeDD: node .rc/x/patchDD.mjs && NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/_probeDD.mjs; s=$?; rm -f scripts/_probeDD.mjs; exit $s
+probeCq: node .rc/x/patchCq.mjs && ENGINES=chromium node scripts/_probeCq.mjs; s=$?; rm -f scripts/_probeCq.mjs; exit $s
+probeCq-sm: node .rc/x/patchCq.mjs && PROBE_SM=1 ENGINES=chromium WIDTHS=430 node scripts/_probeCq.mjs; s=$?; rm -f scripts/_probeCq.mjs; exit $s
+probeSCD: node .rc/x/patchSCD.mjs && NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/_probeSCD.mjs; s=$?; rm -f scripts/_probeSCD.mjs; exit $s
