@@ -1,0 +1,13 @@
+build exit=0 25s | [dukb] inlined 1 stylesheet(s) and 1 module(s) into 181 snapshots (11 left alone)
+base-build exit=0 25s | [dukb] inlined 1 stylesheet(s) and 1 module(s) into 181 snapshots (11 left alone)
+usSeam exit=0 32s | playUsCareerSaveSeam: 15 journeys, 71 checks, 0 failed
+usSeam-nostick exit=1 9s | playUsCareerSaveSeam: 4 journeys, 40 checks, 4 failed (control nostick)
+usSeam-hidden exit=1 9s | playUsCareerSaveSeam: 4 journeys, 40 checks, 8 failed (control hidden)
+usSeam-base exit=1 21s | playUsCareerSaveSeam: 12 journeys, 60 checks, 4 failed
+simNoRivalNames exit=0 10s | No rival product names found. 0 findings.
+simHarnessAnchors exit=0 33s | simHarnessAnchors: green. Every harness parses and none carries an unmatchable anchor.
+simStorageWrites exit=0 2s | simStorageWrites: all green (owed: 12)
+simTrustCopy exit=0 1s | simTrustCopy: green. One disclaimer under every page and one count of the games, the registry's own.
+dashscan exit=0 0s | dashscan: 538 added lines against b20ec6664, 0 with an en or em dash; commit messages: 0
+dashscan-ctl exit=1 0s | dashscan: 539 added lines against b20ec6664, 1 with an en or em dash; commit messages: 0
+vitest-all exit=0 512s |    Duration  510.54s (transform 26.57s, setup 23.57s, collect 146.78s, tests 1066.19s, environment 165.23s, prepare 35.53s)
