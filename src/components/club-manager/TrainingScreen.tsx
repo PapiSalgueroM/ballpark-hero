@@ -12,6 +12,9 @@ import { ALL_POSITIONS } from '@/lib/positionFit';
 import type { Position } from '@/types/game';
 import { useRevealScroll } from '@/hooks/useRevealScroll';
 import { SecondPositionChips } from '@/components/club-manager/SquadScreen';
+import { CoachedStyleCard } from '@/components/club-manager/CoachedStyleCard';
+import { startCoachedStyle, cancelCoachedStyle } from '@/lib/clubManagerTraits';
+import type { CoachedCourseContext, CoachedStyleEdit } from '@/lib/clubManagerTraits';
 
 interface TrainingScreenProps {
   career: CareerState;
@@ -19,6 +22,11 @@ interface TrainingScreenProps {
   /** Round 505: put a man to work on a second position, and call it off. */
   onRetrain: (playerId: string, to: Position) => void;
   onStopRetrain: (playerId: string) => void;
+  onEditCoachedStyle?: (
+    playerId: string,
+    make: (player: CMPlayer, currentContext: CoachedCourseContext) => CoachedStyleEdit<CMPlayer>,
+  ) => boolean;
+  coachedStyleSaveState?: 'saved' | 'blocked' | 'waiting';
 }
 
 const INTENSITIES: TrainingIntensity[] = ['light', 'normal', 'double'];
@@ -181,7 +189,7 @@ function RetrainCard({ career, onRetrain, onStopRetrain }: { career: CareerState
  * on Saturday, and how often somebody pulls up in a session.
  * Round 505: and the third card, a second position learned over weeks.
  */
-export function TrainingScreen({ career, onSetPlan, onRetrain, onStopRetrain }: TrainingScreenProps) {
+export function TrainingScreen({ career, onSetPlan, onRetrain, onStopRetrain, onEditCoachedStyle, coachedStyleSaveState = 'waiting' }: TrainingScreenProps) {
   const plan = career.training ?? { intensity: 'normal' as TrainingIntensity, focus: 'balanced' as TrainingFocus };
   const growing = developingPlayers(career).slice(0, 10);
 
@@ -234,6 +242,10 @@ export function TrainingScreen({ career, onSetPlan, onRetrain, onStopRetrain }: 
       </div>
 
       <RetrainCard career={career} onRetrain={onRetrain} onStopRetrain={onStopRetrain} />
+
+      {onEditCoachedStyle && <CoachedStyleCard career={career} saveState={coachedStyleSaveState}
+        onStart={(id, style) => onEditCoachedStyle(id, (player, context) => startCoachedStyle(player, style, context))}
+        onCancel={id => onEditCoachedStyle(id, (player, context) => cancelCoachedStyle(player, context))} />}
 
       <div className="bg-card border border-border rounded-xl p-3">
         <div className="text-[10px] text-muted-foreground uppercase tracking-wider mb-1">Who is actually getting better</div>

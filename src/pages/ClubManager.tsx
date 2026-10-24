@@ -1500,7 +1500,7 @@ const ClubManager = () => {
               )}
 
               {hubPanel === 'training' && (
-                <ScreenLoading><TrainingScreen career={c} onSetPlan={g.setTraining} onRetrain={g.retrain} onStopRetrain={g.stopRetrain} /></ScreenLoading>
+                <ScreenLoading><TrainingScreen career={c} onSetPlan={g.setTraining} onRetrain={g.retrain} onStopRetrain={g.stopRetrain} onEditCoachedStyle={g.editCoachedStyle} coachedStyleSaveState={g.coachedStyleSaveState} /></ScreenLoading>
               )}
 
               {hubPanel === 'roles' && <ScreenLoading><RolesScreen career={c} onSetRole={g.setRole} /></ScreenLoading>}
@@ -1634,7 +1634,7 @@ const ClubManager = () => {
         {/* -------- Squad -------- */}
         <TabsContent value="squad">
           <div className="space-y-3">
-            <ScreenLoading><SquadScreen squad={c.squad} xiIds={c.xiIds} eraId={c.eraId} captainId={c.setPieces?.captain ?? null} career={c} /></ScreenLoading>
+            <ScreenLoading><SquadScreen squad={c.squad} xiIds={c.xiIds} eraId={c.eraId} captainId={c.setPieces?.captain ?? null} career={c} coachedStyleSaveState={g.coachedStyleSaveState} /></ScreenLoading>
             {/* Round 193: the contracts desk, built in Round 105 and never
                mounted until now, so renewals were unreachable for 88 rounds.
                Plain renewal or the cheaper clause deal, and every clause you
@@ -1647,6 +1647,7 @@ const ClubManager = () => {
         <TabsContent value="tactics">
           <ScreenLoading><TacticsScreen
             career={c}
+            coachedStyleSaveState={g.coachedStyleSaveState}
             onFormation={g.setFormationIndex}
             onMentality={g.setMentality}
             onInstructions={g.setTeamInstructions}

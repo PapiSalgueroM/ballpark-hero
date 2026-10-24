@@ -3,18 +3,20 @@ import { cn } from '@/lib/utils';
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog';
 import { ArrowLeft, ChevronDown, Wand2, X } from 'lucide-react';
 import {
-  FORMATIONS, MENTALITIES, resolveXI, isAvailable, xiFitReport, fitGrade, FIT_PENALTY,
+  FORMATIONS, MENTALITIES, resolveXI, effectiveXIWithSlots, isAvailable, xiFitReport, fitGrade, FIT_PENALTY,
   slotPosition, defensiveLineY, lineLabel,
-  benchFor, dutyOptions, slotDuty, DUTY_INFO,
-  SET_PIECE_KEYS, SET_PIECE_INFO, setPieceCandidates,
+  benchFor, dutyOptions, slotDuty,
+  SET_PIECE_KEYS, setPieceCandidates,
   SHOOTOUT_MAX_ORDER, shootoutOrderOf, instructionsOf,
 } from '@/lib/clubManager';
 import type { CareerState, CMPlayer, Mentality, Duty, SetPieceKey, FitGrade } from '@/lib/clubManager';
+import { DUTY_INFO, SET_PIECE_INFO } from '@/lib/clubManagerUiInfo';
 import { instructionsSummary, opponentStyle, type TeamInstructions } from '@/lib/clubManagerTactics';
 import { InstructionsPicker } from '@/components/club-manager/InstructionsPicker';
 import { ratingTint, SecondPositionChips } from '@/components/club-manager/SquadScreen';
 import { useRevealScroll } from '@/hooks/useRevealScroll';
 import { MatchPlansCard } from '@/components/club-manager/MatchPlansCard';
+import { COACHED_STYLES, coachedStyleFit, coachedStyleXi } from '@/lib/clubManagerTraits';
 
 const lastName = (n: string) => n.replace(' (Youth)', '').split(' ').slice(-1)[0];
 
@@ -50,6 +52,7 @@ const BACK_LINES: { label: string; digit: string }[] = [
 
 interface TacticsScreenProps {
   career: CareerState;
+  coachedStyleSaveState?: 'saved' | 'blocked' | 'waiting';
   onFormation: (idx: number) => void;
   onMentality: (m: Mentality) => void;
   /** Round 1522: the four standing instructions. Without it the block is not drawn. */
@@ -120,6 +123,7 @@ interface TacticsScreenProps {
 export function TacticsScreen({
   career, onFormation, onMentality, onInstructions, theirOpponent, onSlot, onSwap, onAutoPick, onDuty, onSetPiece, onAutoSetPieces,
   onShootoutOrder, openTileRequest, onOpenTileRequestDone, onSaveMatchPlan, onApplyMatchPlan, onDeleteMatchPlan,
+  coachedStyleSaveState = 'waiting',
 }: TacticsScreenProps) {
   const [openSlot, setOpenSlot] = useState<number | null>(null);
   /* Round 1522: the instructions tile, folded until asked for. */
@@ -173,6 +177,9 @@ export function TacticsScreen({
   const lineY = defensiveLineY(formation, career.mentality);
   const baseLineY = defensiveLineY(formation, 'balanced');
   const fit = xiFitReport(career);
+  const effectiveRows = effectiveXIWithSlots(career);
+  const coachedXi = coachedStyleXi(effectiveRows, instructionsOf(career));
+  const coachedSaveWords = coachedStyleSaveState === 'saved' ? 'Saved' : coachedStyleSaveState === 'blocked' ? 'Not saved' : 'Waiting for save';
   const captainId = career.setPieces?.captain ?? null;
   const byId = (id: string | null | undefined): CMPlayer | null => (id ? career.squad.find(p => p.id === id) ?? null : null);
   const benchMan = byId(benchPick);
@@ -384,6 +391,13 @@ export function TacticsScreen({
 
   const dutySheetSlot = dutySlot !== null ? formation.slots[dutySlot] ?? null : null;
   const dutyNow = dutySlot !== null ? slotDuty(career, formation, dutySlot) : null;
+  const dutyPlayer = dutySlot !== null ? xi[dutySlot] : null;
+  const dutyInCurrentXi = !!dutyPlayer && !!dutySheetSlot
+    && effectiveRows.some(row => row.p.id === dutyPlayer.id && row.slot === dutySheetSlot);
+  const dutyStyle = dutyPlayer ? {
+    ...coachedStyleFit(dutyPlayer, dutySheetSlot, dutyNow, instructionsOf(career)),
+    ...(!dutyInCurrentXi ? { active: false, attack: 0, reason: 'This player is not in the current available XI for this slot.' } : {}),
+  } : null;
   const sp = career.setPieces;
 
   return (
@@ -488,6 +502,9 @@ export function TacticsScreen({
             fit adjusted: {fit.raw} on paper, {fit.rating} the way the match reads them. A neighbouring position costs {FIT_PENALTY.family} on that man, the wrong line {FIT_PENALTY.wrong}, a keeper swap {FIT_PENALTY.keeper}.
           </p>
         )}
+        <p className="mb-1 text-xs text-muted-foreground" data-cm-coached-active={coachedXi.activeCount}>
+          {coachedXi.activeCount} coached styles active for this plan. <span data-cm-coached-save={coachedStyleSaveState}>{coachedSaveWords}</span>
+        </p>
         <style>{`
           @keyframes cmSurge { 0% { opacity: 0; transform: translateY(0); } 30% { opacity: 0.85; } 100% { opacity: 0; transform: translateY(var(--surge, -46px)); } }
           @keyframes cmHold { 0% { opacity: 0; transform: scaleX(0.6); } 40% { opacity: 0.8; } 100% { opacity: 0; transform: scaleX(1.15); } }
@@ -688,6 +705,12 @@ export function TacticsScreen({
                 <X className="w-4 h-4" />
               </button>
             </div>
+            {dutyStyle && <div className="mt-2 space-y-1 rounded-lg border border-border/50 p-2 text-xs" data-cm-duty-coached-style={dutyPlayer?.id}>
+              <p className="font-bold">Coached style: {dutyStyle.style ? COACHED_STYLES[dutyStyle.style].label : 'No coached style yet'}</p>
+              <p data-cm-coached-used={dutyStyle.active ? '1' : '0'}>{dutyStyle.reason}</p>
+              {dutyStyle.style && coachedStyleSaveState === 'saved' && <p className="text-muted-foreground">Learned in this career.</p>}
+              {dutyStyle.style && <p data-cm-coached-save={coachedStyleSaveState} className="text-muted-foreground">{coachedSaveWords}</p>}
+            </div>}
             <div className="space-y-1 mt-1">
               {dutyOptions(dutySheetSlot).map(d => (
                 <button

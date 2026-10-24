@@ -18,11 +18,14 @@ vi.mock('@/lib/clubManager', () => ({
   SCOUT_TRIPS: [{ weeks: 1 }, { weeks: 2 }],
   MAX_SCOUTS: 3,
   MAX_PROSPECTS: 20,
-  FACILITY_INFO: Object.fromEntries(['recruitment', 'coaching', 'facilities'].map(kind => [kind, { emoji: '', label: kind, blurb: kind }])),
   academyUpgradeCost: () => 1,
   tripCost: () => 1,
   money: (n: number) => `£${n}`,
   moneyIn: () => (n: number) => `£${n}`,
+}));
+
+vi.mock('@/lib/clubManagerUiInfo', () => ({
+  FACILITY_INFO: Object.fromEntries(['recruitment', 'coaching', 'facilities'].map(kind => [kind, { emoji: '', label: kind, blurb: kind }])),
 }));
 
 function prospect(id: string, name: string, position: Prospect['position'], age: number, highGuess: number, fee = 0): Prospect {
