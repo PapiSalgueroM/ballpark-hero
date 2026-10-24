@@ -2,6 +2,10 @@
 @tailwind components;
 @tailwind utilities;
 
+body:has([data-site-menu-host]) .dukb-menu-fallback {
+  display: none;
+}
+
 @layer base {
   :root {
     --background: 225 25% 6%;
