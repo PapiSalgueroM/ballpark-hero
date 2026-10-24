@@ -10,7 +10,7 @@ concurrency:
   cancel-in-progress: false
 env:
   BASE_SOURCE: 5e6cbdc0d4c73c8a7c342d1f1c53d58339822da8
-  EXPECTED_PARENT: ba11403e3b4f4606dfd823f56a656150d1e4eba9
+  EXPECTED_PARENT: 020cc59a23c5439d43976c5e41efaac8792ab771
   CI: '1'
   SIM_NETWORK: offline
   TZ: UTC
@@ -40,7 +40,7 @@ jobs:
         with:
           node-version: 24.21.0
           cache: npm
-      - name: Exact two-path historical binding repair child with all other Report sources held, cumulative fifteen paths
+      - name: Exact two-path activation wire vocabulary repair child with all other Report sources held, cumulative fifteen paths
         id: source
         timeout-minutes: 3
         run: |
@@ -51,11 +51,11 @@ jobs:
           test "$GITHUB_REF" = refs/heads/codex/report-form-lazy-load-20261024
           test "$(git rev-parse HEAD)" = "$GITHUB_SHA"
           test "$(git show -s --format=%P HEAD)" = "$EXPECTED_PARENT"
-          test "$(git rev-parse "$EXPECTED_PARENT^{tree}")" = 97660b0e96a497222415059d49f8e1e8a4b3cbf4
+          test "$(git rev-parse "$EXPECTED_PARENT^{tree}")" = 6657b129f46e1eabca86e7a740fb31de930eaeb5
           test "$(git rev-parse "$BASE_SOURCE^{tree}")" = f0835f57707bdbafb9de5a2b03da142af2eb9d82
           git diff --name-status "$EXPECTED_PARENT" HEAD > "$out/direct-paths.txt"
-          printf 'M\t.github/workflows/report-form-lazy-load.yml\nM\tscripts/qa/playReportDraftLifecycle.mjs\n' | cmp - "$out/direct-paths.txt"
-          git diff --exit-code "$EXPECTED_PARENT" HEAD -- . ':!.github/workflows/report-form-lazy-load.yml' ':!scripts/qa/playReportDraftLifecycle.mjs' > "$out/all-parent-source-held.log"
+          printf 'M\t.github/workflows/report-form-lazy-load.yml\nM\tscripts/qa/playReportSiteIssueActivation.mjs\n' | cmp - "$out/direct-paths.txt"
+          git diff --exit-code "$EXPECTED_PARENT" HEAD -- . ':!.github/workflows/report-form-lazy-load.yml' ':!scripts/qa/playReportSiteIssueActivation.mjs' > "$out/all-parent-source-held.log"
           git diff --name-status "$BASE_SOURCE" HEAD > "$out/cumulative-paths.txt"
           printf 'A\t.github/workflows/report-form-lazy-load.yml\nM\tscripts/qa/playReportDraftLifecycle.mjs\nA\tscripts/qa/playReportSiteIssueActivation.mjs\nM\tscripts/simReportContext.mjs\nM\tscripts/simReportDraftLifecycle.mjs\nM\tscripts/simReportRelay.mjs\nM\tsrc/components/game/ReportSiteIssue.tsx\nA\tsrc/components/game/ReportSiteIssueForm.tsx\nA\tsrc/test/ReportSiteIssue.cancel-pending.test.tsx\nA\tsrc/test/ReportSiteIssue.cancel-queued.test.tsx\nA\tsrc/test/ReportSiteIssue.integration.test.tsx\nA\tsrc/test/ReportSiteIssue.load-error.test.tsx\nA\tsrc/test/ReportSiteIssue.pending.test.tsx\nM\tsrc/test/reportDetails.test.tsx\nM\tsrc/test/reportDraftLifecycle.test.tsx\n' | cmp - "$out/cumulative-paths.txt"
           git diff --exit-code "$BASE_SOURCE" HEAD -- . ':!src/components/game/ReportSiteIssueForm.tsx' ':!src/test/ReportSiteIssue.pending.test.tsx' ':!.github/workflows/report-form-lazy-load.yml' ':!scripts/qa/playReportDraftLifecycle.mjs' ':!scripts/qa/playReportSiteIssueActivation.mjs' ':!scripts/simReportContext.mjs' ':!scripts/simReportDraftLifecycle.mjs' ':!scripts/simReportRelay.mjs' ':!src/components/game/ReportSiteIssue.tsx' ':!src/test/ReportSiteIssue.cancel-pending.test.tsx' ':!src/test/ReportSiteIssue.cancel-queued.test.tsx' ':!src/test/ReportSiteIssue.integration.test.tsx' ':!src/test/ReportSiteIssue.load-error.test.tsx' ':!src/test/reportDetails.test.tsx' ':!src/test/reportDraftLifecycle.test.tsx' > "$out/all-old-source-held.log"
@@ -73,8 +73,8 @@ jobs:
           aXJlKCdub2RlOmNyeXB0bycpOwpjb25zdCBST09UPXByb2Nlc3MuY3dkKCksT1VUPXByb2Nlc3MuZW52LlJFUE9SVF9HUkVFTl9P
           VVQsV09SS0ZMT1c9Jy5naXRodWIvd29ya2Zsb3dzL3JlcG9ydC1mb3JtLWxhenktbG9hZC55bWwnLEJBU0U9JzVlNmNiZGMwZDRj
           NzNjOGE3YzM0MmQxZjFjNTNkNTgzMzk4MjJkYTgnLFRSRUU9J2YwODM1ZjU3NzA3YmRiYWZiOWRlNWEyYjAzZGExNDJhZjJlYjlk
-          ODInLFBBUkVOVD0nYmExMTQwM2UzYjRmNDYwNmRmZDgyM2Y1NmE2NTYxNTBkMWU0ZWJhOScsUEFSRU5UX1RSRUU9Jzk3NjYwYjBl
-          OTZhNDk3MjIyNDE1MDU5ZDQ5ZjhlMWU4YTRiM2NiZjQnOwphKE9VVCYmcGF0aC5pc0Fic29sdXRlKE9VVCkpO2NvbnN0IHJlYWxP
+          ODInLFBBUkVOVD0nMDIwY2M1OWEyM2M1NDM5ZDQzOTc2YzVlNDFlZmFhYzg3OTJhYjc3MScsUEFSRU5UX1RSRUU9JzY2NTdiMTI5
+          ZjQ2ZTFlYWJjYTg2ZTdhNzQwZmIzMWRlOTMwZWFlYjUnOwphKE9VVCYmcGF0aC5pc0Fic29sdXRlKE9VVCkpO2NvbnN0IHJlYWxP
           dXQ9ZnMucmVhbHBhdGhTeW5jKE9VVCkscmVhbFJvb3Q9ZnMucmVhbHBhdGhTeW5jKFJPT1QpO2EocmVhbE91dCE9PXJlYWxSb290
           JiYhcmVhbE91dC5zdGFydHNXaXRoKHJlYWxSb290K3BhdGguc2VwKSwnUkVQT1JUX1JFRF9PVVRTSURFX0NIRUNLT1VUJyk7CmNv
           bnN0IFBJTlM9W3siZmlsZSI6InNyYy9jb21wb25lbnRzL2dhbWUvUmVwb3J0U2l0ZUlzc3VlLnRzeCIsImJ5dGVzIjoyODEyLCJz
@@ -159,7 +159,7 @@ jobs:
           YS9wbGF5UmVwb3J0RHJhZnRMaWZlY3ljbGUubWpzIiwiYnl0ZXMiOjMyMDgyLCJzaGEyNTYiOiIyYWU1YjgxMjYxZjk1MmQ5YzM3
           ZGYwZDBmYjVjYjYxOWMxMTJkZjhlMzYyYzE2YTlkMTkzNDA4ODQwM2ExNzA5IiwiZ2l0QmxvYiI6IjdiZTM0MmE5NDUwMWYzNTAw
           YTkzMTNlNmQ1OWM5MzU0YzUwOGI0NGIiLCJiYXNlR2l0QmxvYiI6ImFhMzNmMGM2YjA4YWQzM2I2OGVkNGVhNTI2OGYyNzhiZWQx
-          YjFjYTIiLCJwYXJlbnRHaXRCbG9iIjoiODBlMzBkYzFmMGUyODNjYmZiMjA4N2M3Y2JhYjM1YzY3MzI2ZTJmNSJ9LHsiZmlsZSI6
+          YjFjYTIiLCJwYXJlbnRHaXRCbG9iIjoiN2JlMzQyYTk0NTAxZjM1MDBhOTMxM2U2ZDU5YzkzNTRjNTA4YjQ0YiJ9LHsiZmlsZSI6
           InNjcmlwdHMvc2ltUmVwb3J0RHJhZnRMaWZlY3ljbGUubWpzIiwiYnl0ZXMiOjIwMTQ4LCJzaGEyNTYiOiI2MjE4Y2ZlZWE0NjYw
           ZjZhNDgxZmNiOWY1MzlmNjFlMjJkYjE4YzBhMjRiNGQ2MzliY2YyNjMzM2IwZmVlNDZjIiwiZ2l0QmxvYiI6Ijc5YmIyYmUwYjMw
           NmJlODJkMDQ4ZGU4ODgzOGQ4MTJmYTk2ZmRhNjIiLCJiYXNlR2l0QmxvYiI6Ijk4ODA5ZWM4YWRhNzA5ZTcxNmMwNzI1N2VjYTM1
@@ -738,7 +738,7 @@ jobs:
           T1JUX0ZPUk1fU09VUkNFX0FORF80MF9GVU5DVElPTkFMX0VORF9CSU5ESU5HU19IRUxEJyk7Cn0KZWxzZSB0aHJvdyBuZXcgRXJy
           b3IoJ1Vua25vd24gaW5zcGVjdG9yIG1vZGUnKTsK
           INSPECTOR_BYTES
-          printf '%s  %s\n' a5d17ffd7b584238ccf4fde555d7d575ce31cbb7dbbc9e5c93e6d7c074603957 "$out/inspector.cjs" > "$out/inspector.sha256"
+          printf '%s  %s\n' cc00dac705669abfb1160d8aa94d1ab899b7ea8e139e4aef7942622ce12d9bb5 "$out/inspector.cjs" > "$out/inspector.sha256"
           sha256sum -c "$out/inspector.sha256" > "$out/inspector-source-before.log"
           set -o noclobber;: > "$out/source.transport";set +o noclobber
           status=0
@@ -1153,9 +1153,9 @@ jobs:
           test "$(git show -s --format=%P HEAD)" = "$EXPECTED_PARENT"
           git fetch --no-tags origin "$BASE_SOURCE" > "$out/base-fetch.log" 2>&1
           git merge-base --is-ancestor "$BASE_SOURCE" "$GITHUB_SHA" > "$out/base-ancestry.log" 2>&1
-          git diff --exit-code "$EXPECTED_PARENT" HEAD -- . ':!.github/workflows/report-form-lazy-load.yml' ':!scripts/qa/playReportDraftLifecycle.mjs' > "$out/direct-two-paths.log"
+          git diff --exit-code "$EXPECTED_PARENT" HEAD -- . ':!.github/workflows/report-form-lazy-load.yml' ':!scripts/qa/playReportSiteIssueActivation.mjs' > "$out/direct-two-paths.log"
           git diff --name-status "$EXPECTED_PARENT" HEAD > "$out/direct-two-paths.txt"
-          printf 'M\t.github/workflows/report-form-lazy-load.yml\nM\tscripts/qa/playReportDraftLifecycle.mjs\n' | cmp - "$out/direct-two-paths.txt"
+          printf 'M\t.github/workflows/report-form-lazy-load.yml\nM\tscripts/qa/playReportSiteIssueActivation.mjs\n' | cmp - "$out/direct-two-paths.txt"
           git diff --exit-code "$REPORT_BASE_SOURCE" HEAD -- . ':!.github/workflows/report-form-lazy-load.yml' ':!scripts/qa/playReportDraftLifecycle.mjs' ':!scripts/qa/playReportSiteIssueActivation.mjs' ':!scripts/simReportContext.mjs' ':!scripts/simReportDraftLifecycle.mjs' ':!scripts/simReportRelay.mjs' ':!src/components/game/ReportSiteIssue.tsx' ':!src/components/game/ReportSiteIssueForm.tsx' ':!src/test/ReportSiteIssue.cancel-pending.test.tsx' ':!src/test/ReportSiteIssue.cancel-queued.test.tsx' ':!src/test/ReportSiteIssue.integration.test.tsx' ':!src/test/ReportSiteIssue.load-error.test.tsx' ':!src/test/ReportSiteIssue.pending.test.tsx' ':!src/test/reportDetails.test.tsx' ':!src/test/reportDraftLifecycle.test.tsx' > "$out/cumulative-fifteen-paths.log"
           git diff --name-status "$REPORT_BASE_SOURCE" HEAD > "$out/cumulative-fifteen-paths.txt"
           printf 'A\t.github/workflows/report-form-lazy-load.yml\nM\tscripts/qa/playReportDraftLifecycle.mjs\nA\tscripts/qa/playReportSiteIssueActivation.mjs\nM\tscripts/simReportContext.mjs\nM\tscripts/simReportDraftLifecycle.mjs\nM\tscripts/simReportRelay.mjs\nM\tsrc/components/game/ReportSiteIssue.tsx\nA\tsrc/components/game/ReportSiteIssueForm.tsx\nA\tsrc/test/ReportSiteIssue.cancel-pending.test.tsx\nA\tsrc/test/ReportSiteIssue.cancel-queued.test.tsx\nA\tsrc/test/ReportSiteIssue.integration.test.tsx\nA\tsrc/test/ReportSiteIssue.load-error.test.tsx\nA\tsrc/test/ReportSiteIssue.pending.test.tsx\nM\tsrc/test/reportDetails.test.tsx\nM\tsrc/test/reportDraftLifecycle.test.tsx\n' | cmp - "$out/cumulative-fifteen-paths.txt"
@@ -1640,9 +1640,9 @@ jobs:
           In0seyJmaWxlIjoic3JjL2NvbXBvbmVudHMvZ2FtZS9SZXBvcnRTaXRlSXNzdWVGb3JtLnRzeCIsImJ5dGVzIjo2OTY0LCJzaGEy
           NTYiOiIwNzcyM2JlNzQ5ZGU2NTdkYjA1MzgyNGI3NTM0ZDk3M2Y1ZGM3ZWVkNmZjNDk4ZjZmZTc2NTFiOWQxNzc3ZTM2IiwiZ2l0
           QmxvYiI6IjMxNDM4M2QzYzJiYTQ2NWNlMzMzMThhY2UyNTM2ZTk1NjcxMmI5NmQifSx7ImZpbGUiOiJzY3JpcHRzL3FhL3BsYXlS
-          ZXBvcnRTaXRlSXNzdWVBY3RpdmF0aW9uLm1qcyIsImJ5dGVzIjozODcwOSwic2hhMjU2IjoiN2Y0ZTBmYTA3MDBiMTVjYjhmODEy
-          M2JkZjk3ZTM3ODYwODRkMTk2NWFmNDEzNWJmMWI1OWUyZjVkN2JkYTFiMSIsImdpdEJsb2IiOiJmYzhjZTRmMWJhZDAwN2E5Mjcy
-          OWY0ZTcxOGExMjZmNmQ3OWRhOGE2In1dOwpmdW5jdGlvbiBzb3VyY2UoKXsKIGEuZXF1YWwoZ2l0KCdyZXYtcGFyc2UnLCdIRUFE
+          ZXBvcnRTaXRlSXNzdWVBY3RpdmF0aW9uLm1qcyIsImJ5dGVzIjo0MDYyMSwic2hhMjU2IjoiZGM1M2FhZTg2ZjhhZDhmNmViODgy
+          MmZiNTE1MmU4NDU0MmFmYjZhZDg4NGZkZjk5ZTdkZjc5NDM1MGE4N2EyZiIsImdpdEJsb2IiOiIzZTc1YTdmMmZiY2YyNDU2Nzk2
+          ZTRkZjA1YjBjYzEwNjFkMmJmZmI5In1dOwpmdW5jdGlvbiBzb3VyY2UoKXsKIGEuZXF1YWwoZ2l0KCdyZXYtcGFyc2UnLCdIRUFE
           JykscHJvY2Vzcy5lbnYuR0lUSFVCX1NIQSk7YS5lcXVhbChnaXQoJ3Nob3cnLCctcycsJy0tZm9ybWF0PSVQJywnSEVBRCcpLHBy
           b2Nlc3MuZW52LkVYUEVDVEVEX1BBUkVOVCk7CiBhLmVxdWFsKGdpdCgnbHMtZmlsZXMnLCcteicpLnNwbGl0KCdcMCcpLmZpbHRl
           cihCb29sZWFuKS5sZW5ndGgsNTM0MSk7CiBmb3IoY29uc3QgcCBvZiBbLi4uUkVQT1JUX1BJTlMsLi4uQUNUSVZBVElPTl9QSU5T
@@ -1762,7 +1762,7 @@ jobs:
           PWxvYWQoZGlyKycvcmVwb3J0Lmpzb24nKSxiaW5kaW5nPWxvYWQoZGlyKycvYmluZGluZy5qc29uJyk7CiBhLmVxdWFsKHIuc3Rh
           dHVzLCdSRVBPUlRfRk9PVEVSX0FDVElWQVRJT05fQ09NUExFVEUnKTthLmVxdWFsKHIuY29tcGxldGUsdHJ1ZSk7YS5lcXVhbChy
           LnNvdXJjZSxwcm9jZXNzLmVudi5HSVRIVUJfU0hBKTthLmRlZXBFcXVhbChyLnBsYW5uZWQse2NvbnRleHRzOjgsc2NyZWVuc2hv
-          dHM6NDAsanVkZ2VDb250cm9sczoxMX0pO2EuZGVlcEVxdWFsKHIuZmFpbHVyZXMsW10pO2EuZGVlcEVxdWFsKHIuaG9sZHMse3Nv
+          dHM6NDAsanVkZ2VDb250cm9sczoxNH0pO2EuZGVlcEVxdWFsKHIuZmFpbHVyZXMsW10pO2EuZGVlcEVxdWFsKHIuaG9sZHMse3Nv
           dXJjZTp0cnVlLGZvbnQ6dHJ1ZSxkaXN0OnRydWV9KTsKIGEuZXF1YWwoYmluZGluZy5zb3VyY2VIZWFkLHByb2Nlc3MuZW52LkdJ
           VEhVQl9TSEEpO2EuZXF1YWwoYmluZGluZy50cmFja2VkQ291bnQsNTM0MSk7YS5lcXVhbChiaW5kaW5nLnBsYXl3cmlnaHRWZXJz
           aW9uLCcxLjY0LjAnKTthLmRlZXBFcXVhbChiaW5kaW5nLnBpbnMsQUNUSVZBVElPTl9QSU5TKTsKIGEuZGVlcEVxdWFsKGxvYWQo
@@ -1794,48 +1794,67 @@ jobs:
           VF9CT0RZX1JFTEVBU0UnXSxbJ21pc3NpbmctYWN0dWFsLW1vZHVsZScsJ1JFUE9SVF9BQ1RJVkFUSU9OX0FDVFVBTF9NT0RVTEUn
           XSxbJ21pc3NpbmctcmVmcmVzaC1yZWZ1c2FsJywnUkVQT1JUX1JFRlJFU0hfR1VBUkRFRF9SRUZVU0FMJ10sWyduby11c2VyLXJl
           ZnJlc2gtbmF2aWdhdGlvbicsJ1JFUE9SVF9VU0VSX1JFRlJFU0hfTkFWSUdBVElPTiddLFsncmVwb3J0LWF0dGVtcHQnLCdSRVBP
-          UlRfTk9fU0VORCddXTsKIGEuZGVlcEVxdWFsKHIuY29udHJvbHMubWFwKHg9Plt4LmlkLHgubWFya2VyXSksZXhwZWN0ZWQpOwog
-          Y29uc3QgZm91bmRhdGlvbj1yZWFkKGRpcisnL2NvbnRyb2wtZm91bmRhdGlvbi5qc29uJykscGFyc2VkPUpTT04ucGFyc2UoZm91
-          bmRhdGlvbik7YShyLmNvbnRleHRzLnNvbWUoeD0+SlNPTi5zdHJpbmdpZnkoeCk9PT1KU09OLnN0cmluZ2lmeShwYXJzZWQuaGVh
-          bHRoeSkpKTthKHIuY29udGV4dHMuc29tZSh4PT5KU09OLnN0cmluZ2lmeSh4KT09PUpTT04uc3RyaW5naWZ5KHBhcnNlZC5mYWls
-          ZWQpKSk7CiBmb3IoY29uc3Qgcm93IG9mIHIuY29udHJvbHMpe2EuZXF1YWwocm93LmZvdW5kYXRpb24sJ2NvbnRyb2wtZm91bmRh
-          dGlvbi5qc29uJyk7YS5lcXVhbChyb3cuY2hhbmdlZCwnY29udHJvbC0nK3Jvdy5pZCsnLmNoYW5nZWQuanNvbicpO2EuZXF1YWwo
-          cm93LnJlc3RvcmVkLCdjb250cm9sLScrcm93LmlkKycud29yay5qc29uJyk7Y29uc3QgY2hhbmdlZD1yZWFkKGRpcisnLycrcm93
-          LmNoYW5nZWQpLHJlc3RvcmVkPXJlYWQoZGlyKycvJytyb3cucmVzdG9yZWQpO2EuZXF1YWwoZm91bmRhdGlvbi5sZW5ndGgscm93
-          LnNvdXJjZUJ5dGVzKTthLmVxdWFsKGNoYW5nZWQubGVuZ3RoLHJvdy5jaGFuZ2VkQnl0ZXMpO2EuZXF1YWwoc2hhKGZvdW5kYXRp
-          b24pLHJvdy5zb3VyY2VTaGEyNTYpO2EuZXF1YWwoc2hhKGNoYW5nZWQpLHJvdy5jaGFuZ2VkU2hhMjU2KTthLm5vdEVxdWFsKHJv
-          dy5zb3VyY2VTaGEyNTYscm93LmNoYW5nZWRTaGEyNTYpO2EuZXF1YWwoc2hhKHJlc3RvcmVkKSxyb3cucmVzdG9yZWRTaGEyNTYp
-          O2EocmVzdG9yZWQuZXF1YWxzKGZvdW5kYXRpb24pKTthLmVxdWFsKHJvdy5lcnJvci5uYW1lLCdBc3NlcnRpb25FcnJvcicpO2Eu
-          ZXF1YWwocm93LmVycm9yLmNvZGUsJ0VSUl9BU1NFUlRJT04nKTthKHJvdy5lcnJvci5tZXNzYWdlLmluY2x1ZGVzKHJvdy5tYXJr
-          ZXIpKTt9CiBjb25zdCBhY3R1YWxNb2R1bGU9bG9hZChkaXIrJy9hY3R1YWwtZm9ybS1tb2R1bGUuanNvbicpO2EubWF0Y2goYWN0
-          dWFsTW9kdWxlLmZpbGUsL15hc3NldHNcL1JlcG9ydFNpdGVJc3N1ZUZvcm0tW0EtWmEtejAtOV8tXStcLmpzJC8pO2NvbnN0IG1v
-          ZHVsZUJvZHk9ZnMucmVhZEZpbGVTeW5jKHBhdGguam9pbihST09ULCdkaXN0JyxhY3R1YWxNb2R1bGUuZmlsZSkpO2EuZXF1YWwo
-          bW9kdWxlQm9keS5sZW5ndGgsYWN0dWFsTW9kdWxlLmJ5dGVzKTthLmVxdWFsKHNoYShtb2R1bGVCb2R5KSxhY3R1YWxNb2R1bGUu
-          c2hhMjU2KTsKIGNvbnN0IGNhdGFsb2c9cmVndWxhckludmVudG9yeShkaXIpLmZpbHRlcih4PT54LmZpbGUhPT0nZXZpZGVuY2Uu
-          c2hhMjU2JyksbWFuaWZlc3Q9cmVhZChkaXIrJy9ldmlkZW5jZS5zaGEyNTYnKS50b1N0cmluZygpO2NvbnN0IHJvd3M9bWFuaWZl
-          c3Quc3BsaXQoJ1xuJyk7YS5lcXVhbChyb3dzLnBvcCgpLCcnKTthLmVxdWFsKHJvd3MubGVuZ3RoLGNhdGFsb2cubGVuZ3RoKTtj
-          b25zdCBsaXN0ZWQ9bmV3IE1hcCgpO2Zvcihjb25zdCBsaW5lIG9mIHJvd3Mpe2NvbnN0IG09bGluZS5tYXRjaCgvXihbYS1mMC05
-          XXs2NH0pICAoLispJC8pO2EobSk7c2FmZU5hbWUobVsyXSk7YSghbGlzdGVkLmhhcyhtWzJdKSk7bGlzdGVkLnNldChtWzJdLG1b
-          MV0pO31mb3IoY29uc3Qgcm93IG9mIGNhdGFsb2cpYS5lcXVhbChsaXN0ZWQuZ2V0KHJvdy5maWxlKSxyb3cuc2hhMjU2LHJvdy5m
-          aWxlKTsKIHdyaXRlKCdyZXBvcnQtYWN0aXZhdGlvbi1hZG1pc3Npb24uanNvbicse3N0YXR1czonQUNUVUFMX0ZPT1RFUl9BQ1RJ
-          VkFUSU9OXzhfQ09OVEVYVFNfNDBfT1JJR0lOQUxTXzExX1JFQ09SRF9DT05UUk9MU19QQVNTRUQnLHNvdXJjZTpwcm9jZXNzLmVu
-          di5HSVRIVUJfU0hBLGNvbnRleHRzOjgsb3JpZ2luYWxQTkdzOjQwLGNvcGllZE9ic2VydmF0aW9uQ29udHJvbHM6MTEsaW1hZ2Vz
-          LGFjdHVhbE1vZHVsZSxub1NlbmRPYnNlcnZlZDp0cnVlLGxpbWl0czpyLmxpbWl0cyxhcHBsaWNhdGlvblF1YWxpZmllZDpmYWxz
-          ZSxmdWxsTm9kZUV4ZWN1dGVkOmZhbHNlLGxpdmVQdWJsaXNoZWQ6ZmFsc2V9KTsKfQpjb25zdCBtb2RlPXByb2Nlc3MuYXJndlsy
-          XTsKaWYobW9kZT09PSdzb3VyY2UnKXtjb25zdCByZXN1bHQ9c291cmNlKCk7bGVnYWN5SGlzdG9yaWNhbFByb2JlKCk7d3JpdGUo
-          J3JlcG9ydC1zb3VyY2UtYmluZGluZy5qc29uJyxyZXN1bHQpO3dyaXRlKCdyZXBvcnQtYWN0aXZhdGlvbi5iaW5kaW5nLmpzb24n
-          LHtwbGF5d3JpZ2h0VmVyc2lvbjonMS42NC4wJyxzb3VyY2VIZWFkOnByb2Nlc3MuZW52LkdJVEhVQl9TSEEsdHJhY2tlZENvdW50
-          OjUzNDEscGluczpBQ1RJVkFUSU9OX1BJTlN9KTt9CmVsc2UgaWYobW9kZT09PSdsZWdhY3knKWxlZ2FjeSgpOwplbHNlIGlmKG1v
-          ZGU9PT0nYWN0aXZhdGlvbicpYWN0aXZhdGlvbigpOwplbHNlIGlmKG1vZGU9PT0nZmluYWwnKXthLmRlZXBFcXVhbChzb3VyY2Uo
-          KSxsb2FkKCdyZXBvcnQtc291cmNlLWJpbmRpbmcuanNvbicpKTtsZWdhY3lIaXN0b3JpY2FsRmluYWwoKTthLmVxdWFsKGxvYWQo
-          J3JlcG9ydC1sZWdhY3ktYWRtaXNzaW9uLmpzb24nKS5zb3VyY2UscHJvY2Vzcy5lbnYuR0lUSFVCX1NIQSk7YS5lcXVhbChsb2Fk
-          KCdyZXBvcnQtYWN0aXZhdGlvbi1hZG1pc3Npb24uanNvbicpLnNvdXJjZSxwcm9jZXNzLmVudi5HSVRIVUJfU0hBKTt3cml0ZSgn
-          cmVwb3J0LWJyb3dzZXItZmluYWwtYmluZGluZy5qc29uJyx7c291cmNlOnByb2Nlc3MuZW52LkdJVEhVQl9TSEEsbGVnYWN5Q29u
-          dGV4dHM6MTIsYWN0aXZhdGlvbkNvbnRleHRzOjgsYWN0aXZhdGlvbk9yaWdpbmFsUE5Hczo0MCxhY3RpdmF0aW9uUmVjb3JkQ29u
-          dHJvbHM6MTEsZnVsbE5vZGVFeGVjdXRlZDpmYWxzZSxhcHBsaWNhdGlvblF1YWxpZmllZDpmYWxzZX0pO30KZWxzZSB0aHJvdyBu
-          ZXcgRXJyb3IoJ1Vua25vd24gUmVwb3J0IGJyb3dzZXIgaW5zcGVjdG9yIG1vZGUnKTsKCg==
+          UlRfTk9fU0VORCddLFsnd2lyZS11bmtub3duLW5hdGl2ZS1lcnJvcicsJ1JFUE9SVF9OQVRJVkVfQ0hVTktfRkFJTFVSRSddLFsn
+          d2lyZS11bmtub3duLWNvbnNvbGUtdmFyaWFudCcsJ1JFUE9SVF9VTkNPUlJFTEFURURfQ09OU09MRSddLFsnd2lyZS1vbmxpbmUt
+          bmF0aXZlLWZhaWx1cmUnLCdSRVBPUlRfTkFUSVZFX0NIVU5LX0ZBSUxVUkUnXV07CiBhLmRlZXBFcXVhbChyLmNvbnRyb2xzLm1h
+          cCh4PT5beC5pZCx4Lm1hcmtlcl0pLGV4cGVjdGVkKTsKIGNvbnN0IGZvdW5kYXRpb249cmVhZChkaXIrJy9jb250cm9sLWZvdW5k
+          YXRpb24uanNvbicpLHBhcnNlZD1KU09OLnBhcnNlKGZvdW5kYXRpb24pO2Eoci5jb250ZXh0cy5zb21lKHg9PkpTT04uc3RyaW5n
+          aWZ5KHgpPT09SlNPTi5zdHJpbmdpZnkocGFyc2VkLmhlYWx0aHkpKSk7YShyLmNvbnRleHRzLnNvbWUoeD0+SlNPTi5zdHJpbmdp
+          ZnkoeCk9PT1KU09OLnN0cmluZ2lmeShwYXJzZWQuZmFpbGVkKSkpOwogZm9yKGNvbnN0IHJvdyBvZiByLmNvbnRyb2xzKXthLmVx
+          dWFsKHJvdy5mb3VuZGF0aW9uLCdjb250cm9sLWZvdW5kYXRpb24uanNvbicpO2EuZXF1YWwocm93LmNoYW5nZWQsJ2NvbnRyb2wt
+          Jytyb3cuaWQrJy5jaGFuZ2VkLmpzb24nKTthLmVxdWFsKHJvdy5yZXN0b3JlZCwnY29udHJvbC0nK3Jvdy5pZCsnLndvcmsuanNv
+          bicpO2NvbnN0IGNoYW5nZWQ9cmVhZChkaXIrJy8nK3Jvdy5jaGFuZ2VkKSxyZXN0b3JlZD1yZWFkKGRpcisnLycrcm93LnJlc3Rv
+          cmVkKTthLmVxdWFsKGZvdW5kYXRpb24ubGVuZ3RoLHJvdy5zb3VyY2VCeXRlcyk7YS5lcXVhbChjaGFuZ2VkLmxlbmd0aCxyb3cu
+          Y2hhbmdlZEJ5dGVzKTthLmVxdWFsKHNoYShmb3VuZGF0aW9uKSxyb3cuc291cmNlU2hhMjU2KTthLmVxdWFsKHNoYShjaGFuZ2Vk
+          KSxyb3cuY2hhbmdlZFNoYTI1Nik7YS5ub3RFcXVhbChyb3cuc291cmNlU2hhMjU2LHJvdy5jaGFuZ2VkU2hhMjU2KTthLmVxdWFs
+          KHNoYShyZXN0b3JlZCkscm93LnJlc3RvcmVkU2hhMjU2KTthKHJlc3RvcmVkLmVxdWFscyhmb3VuZGF0aW9uKSk7YS5lcXVhbChy
+          b3cuZXJyb3IubmFtZSwnQXNzZXJ0aW9uRXJyb3InKTthLmVxdWFsKHJvdy5lcnJvci5jb2RlLCdFUlJfQVNTRVJUSU9OJyk7YShy
+          b3cuZXJyb3IubWVzc2FnZS5pbmNsdWRlcyhyb3cubWFya2VyKSk7fQogY29uc3Qgd2lyZT1sb2FkKGRpcisnL2NvbnRyb2wtd2ly
+          ZS1pby1mb3VuZGF0aW9uLmpzb24nKTthLmVxdWFsKHdpcmUuaWQscGFyc2VkLmZhaWxlZC5pZCk7YS5lcXVhbCh3aXJlLmNvbnRl
+          eHRJZCxwYXJzZWQuZmFpbGVkLmNvbnRleHRJZCk7YS5kZWVwRXF1YWwod2lyZS5yb3dzLGlvLmZpbHRlcih4PT54LmNvbnRleHQ9
+          PT1wYXJzZWQuZmFpbGVkLmNvbnRleHRJZCksJ1JFUE9SVF9XSVJFX0NPTlRST0xfQUNUVUFMX0NPTlRFWFRfSU8nKTsKIGZvcihj
+          b25zdCBjb250cm9sIG9mIHIuY29udHJvbHMuc2xpY2UoMTEpKXsKICBhLmVxdWFsKGNvbnRyb2wud2lyZUZvdW5kYXRpb24sJ2Nv
+          bnRyb2wtd2lyZS1pby1mb3VuZGF0aW9uLmpzb24nKTthLmVxdWFsKGNvbnRyb2wuc2NvcGUsJ0FDVFVBTF9CUk9XU0VSX1JFQ09S
+          RF9KVURHRV9PTkxZX05PVF9TT1VSQ0VfRkFVTFQnKTthLm1hdGNoKGNvbnRyb2wuZXJyb3Iuc3RhY2ssL2F0IHdpcmVSZWFkeSBc
+          KC8pOwogIGNvbnN0IGNoYW5nZWQ9bG9hZChkaXIrJy8nK2NvbnRyb2wuY2hhbmdlZCksZXhwZWN0ZWQ9SlNPTi5wYXJzZShmb3Vu
+          ZGF0aW9uKSxmYWlsdXJlPWV4cGVjdGVkLmZhaWxlZC53aXJlLnJlcXVlc3RGYWlsdXJlcy5maW5kKHg9PngudXJsPT09bG9hZChk
+          aXIrJy9hY3R1YWwtZm9ybS1tb2R1bGUuanNvbicpLnVybCk7CiAgYShmYWlsdXJlLCdSRVBPUlRfV0lSRV9DT05UUk9MX0FDVFVB
+          TF9GQUlMVVJFX0ZPVU5EQVRJT04nKTsKICBpZihjb250cm9sLmlkPT09J3dpcmUtdW5rbm93bi1uYXRpdmUtZXJyb3InKWZhaWx1
+          cmUuZXJyb3I9J25ldDo6RVJSX0JMT0NLRURfQllfQ0xJRU5ULlVua25vd24nOwogIGVsc2UgaWYoY29udHJvbC5pZD09PSd3aXJl
+          LXVua25vd24tY29uc29sZS12YXJpYW50Jyl7Y29uc3QgY29uc29sZVJvdz1leHBlY3RlZC5mYWlsZWQud2lyZS5jb25zb2xlRXJy
+          b3JzLmZpbmQoeD0+eC5sb2NhdGlvbi51cmw9PT1mYWlsdXJlLnVybCk7YShjb25zb2xlUm93KTtjb25zb2xlUm93LnRleHQ9J0Zh
+          aWxlZCB0byBsb2FkIHJlc291cmNlOiBuZXQ6OkVSUl9CTE9DS0VEX0JZX0NMSUVOVC5Vbmtub3duJzt9CiAgZWxzZSB7YS5lcXVh
+          bChjb250cm9sLmlkLCd3aXJlLW9ubGluZS1uYXRpdmUtZmFpbHVyZScpO2ZhaWx1cmUubmF0aXZlT2ZmbGluZT1mYWxzZTt9CiAg
+          YS5kZWVwRXF1YWwoY2hhbmdlZCxleHBlY3RlZCwnUkVQT1JUX1dJUkVfQ09OVFJPTF9FWEFDVF9QSFlTSUNBTF9NVVRBVElPTicp
+          OwogfQogY29uc3QgYWN0dWFsTW9kdWxlPWxvYWQoZGlyKycvYWN0dWFsLWZvcm0tbW9kdWxlLmpzb24nKTthLm1hdGNoKGFjdHVh
+          bE1vZHVsZS5maWxlLC9eYXNzZXRzXC9SZXBvcnRTaXRlSXNzdWVGb3JtLVtBLVphLXowLTlfLV0rXC5qcyQvKTtjb25zdCBtb2R1
+          bGVCb2R5PWZzLnJlYWRGaWxlU3luYyhwYXRoLmpvaW4oUk9PVCwnZGlzdCcsYWN0dWFsTW9kdWxlLmZpbGUpKTthLmVxdWFsKG1v
+          ZHVsZUJvZHkubGVuZ3RoLGFjdHVhbE1vZHVsZS5ieXRlcyk7YS5lcXVhbChzaGEobW9kdWxlQm9keSksYWN0dWFsTW9kdWxlLnNo
+          YTI1Nik7CiBjb25zdCBjYXRhbG9nPXJlZ3VsYXJJbnZlbnRvcnkoZGlyKS5maWx0ZXIoeD0+eC5maWxlIT09J2V2aWRlbmNlLnNo
+          YTI1NicpLG1hbmlmZXN0PXJlYWQoZGlyKycvZXZpZGVuY2Uuc2hhMjU2JykudG9TdHJpbmcoKTtjb25zdCByb3dzPW1hbmlmZXN0
+          LnNwbGl0KCdcbicpO2EuZXF1YWwocm93cy5wb3AoKSwnJyk7YS5lcXVhbChyb3dzLmxlbmd0aCxjYXRhbG9nLmxlbmd0aCk7Y29u
+          c3QgbGlzdGVkPW5ldyBNYXAoKTtmb3IoY29uc3QgbGluZSBvZiByb3dzKXtjb25zdCBtPWxpbmUubWF0Y2goL14oW2EtZjAtOV17
+          NjR9KSAgKC4rKSQvKTthKG0pO3NhZmVOYW1lKG1bMl0pO2EoIWxpc3RlZC5oYXMobVsyXSkpO2xpc3RlZC5zZXQobVsyXSxtWzFd
+          KTt9Zm9yKGNvbnN0IHJvdyBvZiBjYXRhbG9nKWEuZXF1YWwobGlzdGVkLmdldChyb3cuZmlsZSkscm93LnNoYTI1Nixyb3cuZmls
+          ZSk7CiB3cml0ZSgncmVwb3J0LWFjdGl2YXRpb24tYWRtaXNzaW9uLmpzb24nLHtzdGF0dXM6J0FDVFVBTF9GT09URVJfQUNUSVZB
+          VElPTl84X0NPTlRFWFRTXzQwX09SSUdJTkFMU18xNF9SRUNPUkRfQ09OVFJPTFNfUEFTU0VEJyxzb3VyY2U6cHJvY2Vzcy5lbnYu
+          R0lUSFVCX1NIQSxjb250ZXh0czo4LG9yaWdpbmFsUE5Hczo0MCxjb3BpZWRPYnNlcnZhdGlvbkNvbnRyb2xzOjE0LGltYWdlcyxh
+          Y3R1YWxNb2R1bGUsbm9TZW5kT2JzZXJ2ZWQ6dHJ1ZSxsaW1pdHM6ci5saW1pdHMsYXBwbGljYXRpb25RdWFsaWZpZWQ6ZmFsc2Us
+          ZnVsbE5vZGVFeGVjdXRlZDpmYWxzZSxsaXZlUHVibGlzaGVkOmZhbHNlfSk7Cn0KY29uc3QgbW9kZT1wcm9jZXNzLmFyZ3ZbMl07
+          CmlmKG1vZGU9PT0nc291cmNlJyl7Y29uc3QgcmVzdWx0PXNvdXJjZSgpO2xlZ2FjeUhpc3RvcmljYWxQcm9iZSgpO3dyaXRlKCdy
+          ZXBvcnQtc291cmNlLWJpbmRpbmcuanNvbicscmVzdWx0KTt3cml0ZSgncmVwb3J0LWFjdGl2YXRpb24uYmluZGluZy5qc29uJyx7
+          cGxheXdyaWdodFZlcnNpb246JzEuNjQuMCcsc291cmNlSGVhZDpwcm9jZXNzLmVudi5HSVRIVUJfU0hBLHRyYWNrZWRDb3VudDo1
+          MzQxLHBpbnM6QUNUSVZBVElPTl9QSU5TfSk7fQplbHNlIGlmKG1vZGU9PT0nbGVnYWN5JylsZWdhY3koKTsKZWxzZSBpZihtb2Rl
+          PT09J2FjdGl2YXRpb24nKWFjdGl2YXRpb24oKTsKZWxzZSBpZihtb2RlPT09J2ZpbmFsJyl7YS5kZWVwRXF1YWwoc291cmNlKCks
+          bG9hZCgncmVwb3J0LXNvdXJjZS1iaW5kaW5nLmpzb24nKSk7bGVnYWN5SGlzdG9yaWNhbEZpbmFsKCk7YS5lcXVhbChsb2FkKCdy
+          ZXBvcnQtbGVnYWN5LWFkbWlzc2lvbi5qc29uJykuc291cmNlLHByb2Nlc3MuZW52LkdJVEhVQl9TSEEpO2EuZXF1YWwobG9hZCgn
+          cmVwb3J0LWFjdGl2YXRpb24tYWRtaXNzaW9uLmpzb24nKS5zb3VyY2UscHJvY2Vzcy5lbnYuR0lUSFVCX1NIQSk7d3JpdGUoJ3Jl
+          cG9ydC1icm93c2VyLWZpbmFsLWJpbmRpbmcuanNvbicse3NvdXJjZTpwcm9jZXNzLmVudi5HSVRIVUJfU0hBLGxlZ2FjeUNvbnRl
+          eHRzOjEyLGFjdGl2YXRpb25Db250ZXh0czo4LGFjdGl2YXRpb25PcmlnaW5hbFBOR3M6NDAsYWN0aXZhdGlvblJlY29yZENvbnRy
+          b2xzOjE0LGZ1bGxOb2RlRXhlY3V0ZWQ6ZmFsc2UsYXBwbGljYXRpb25RdWFsaWZpZWQ6ZmFsc2V9KTt9CmVsc2UgdGhyb3cgbmV3
+          IEVycm9yKCdVbmtub3duIFJlcG9ydCBicm93c2VyIGluc3BlY3RvciBtb2RlJyk7Cgo=
           REPORT_BROWSER_INSPECTOR
-          printf '%s  %s\n' b65056ba8cd65d790d4b10ba40a0ca4180e7b9814728ce86e79084daac928e99 "$out/report-browser-inspector.cjs" > "$out/report-browser-inspector.sha256"
+          printf '%s  %s\n' 3479d4847dc3e86994d948643a69049fe54d29089ed0384d0276b06450f730a7 "$out/report-browser-inspector.cjs" > "$out/report-browser-inspector.sha256"
           sha256sum -c "$out/report-browser-inspector.sha256" > "$out/report-browser-inspector-source-before.log"
           : > "$out/report-source.transport";status=0
           NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" SIM_OFFLINE_RECEIPT="$out/report-source.transport" timeout --signal=TERM --kill-after=15s 90s node "$out/report-browser-inspector.cjs" source > "$out/report-source.stdout.log" 2> "$out/report-source.stderr.log" || status=$?
@@ -1865,7 +1884,7 @@ jobs:
           for name in report-legacy-server report-legacy report-legacy-classifier;do test -f "$out/$name.transport" && test ! -s "$out/$name.transport" || failed=1;done
           sha256sum -c "$out/report-browser-inspector.sha256" > "$out/report-inspector-after-legacy.log" || failed=1
           exit "$failed"
-      - name: Actual Footer no-send activation in eight contexts with forty original PNGs and eleven record controls
+      - name: Actual Footer no-send activation in eight contexts with forty original PNGs and fourteen record controls
         id: report_activation
         if: ${{ !cancelled() && steps.build.outcome == 'success' && steps.report_browser_source.outcome == 'success' }}
         timeout-minutes: 14

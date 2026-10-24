@@ -181,20 +181,23 @@ function wireReady(row,io){
  assert(io.every(r=>['prepared-font','source-shell-fixture','local-flag-abort'].includes(r.kind)),'REPORT_BOUNDARY_KNOWN_ONLY');
  const flags=io.filter(r=>r.kind==='local-flag-abort').map(r=>r.url),expected=[...flags];
  if(row.arm==='failed')expected.push(FORM.url);
+ const formAborts=row.formRequests.filter(r=>r.aborted),deliberateInspectorAbort=row.arm==='failed'&&formAborts.length===1&&formAborts[0]===row.formRequests[0]&&formAborts[0].url===FORM.url&&formAborts[0].method==='GET'&&formAborts[0].type==='script'&&formAborts[0].documentOrdinal===1&&formAborts[0].finished===false&&formAborts[0].failure==='net::ERR_BLOCKED_BY_CLIENT.Inspector'&&io.every(r=>r.context===row.contextId);
  let freshness=0;
  for(const failure of row.wire.requestFailures){
-  if(failure.url===FORM.url&&row.arm==='failed'){assert.equal(failure.method,'GET');assert.equal(failure.type,'script');assert(['net::ERR_BLOCKED_BY_CLIENT','net::ERR_INTERNET_DISCONNECTED'].includes(failure.error)&&failure.nativeOffline,'REPORT_NATIVE_CHUNK_FAILURE');continue;}
+  if(failure.url===FORM.url&&row.arm==='failed'){assert.equal(failure.method,'GET');assert.equal(failure.type,'script');assert((['net::ERR_BLOCKED_BY_CLIENT','net::ERR_INTERNET_DISCONNECTED'].includes(failure.error)||(failure.error==='net::ERR_BLOCKED_BY_CLIENT.Inspector'&&deliberateInspectorAbort))&&failure.nativeOffline,'REPORT_NATIVE_CHUNK_FAILURE');continue;}
   if(flags.includes(failure.url)){assert.equal(failure.method,'GET');assert.equal(failure.type,'image');assert.equal(failure.error,'net::ERR_BLOCKED_BY_CLIENT');continue;}
   const url=new URL(failure.url),sourceFresh=url.origin===BASE&&url.pathname==='/'&&[...url.searchParams.keys()].join('|')==='fresh'&&/^\d+$/.test(url.searchParams.get('fresh'));
   assert(sourceFresh&&row.arm==='failed'&&failure.nativeOffline&&failure.method==='GET'&&failure.type==='fetch'&&failure.error==='net::ERR_INTERNET_DISCONNECTED','REPORT_UNCORRELATED_REQUEST_FAILURE');
   freshness++;assert(freshness<=1,'REPORT_EXTRA_OFFLINE_FRESHNESS');expected.push(failure.url);
  }
  assert.deepEqual(row.wire.requestFailures.map(r=>r.url).sort(),expected.sort(),'REPORT_EXACT_FAILURE_MULTISET');
- const consoleUrls=row.wire.consoleErrors.map(r=>{assert(['Failed to load resource: net::ERR_BLOCKED_BY_CLIENT','Failed to load resource: net::ERR_INTERNET_DISCONNECTED'].includes(r.text),'REPORT_UNCORRELATED_CONSOLE');return r.location.url;}).sort();
+ const consoleUrls=row.wire.consoleErrors.map(r=>{assert(['Failed to load resource: net::ERR_BLOCKED_BY_CLIENT','Failed to load resource: net::ERR_INTERNET_DISCONNECTED'].includes(r.text)||(r.text==='Failed to load resource: net::ERR_BLOCKED_BY_CLIENT.Inspector'&&r.location.url===FORM.url&&deliberateInspectorAbort&&row.wire.requestFailures.some(f=>f.url===FORM.url&&f.method==='GET'&&f.type==='script'&&f.error==='net::ERR_BLOCKED_BY_CLIENT.Inspector'&&f.nativeOffline)),'REPORT_UNCORRELATED_CONSOLE');return r.location.url;}).sort();
  assert.deepEqual(consoleUrls,[...expected].sort(),'REPORT_EXACT_CONSOLE_MULTISET');
  assert.equal(row.formRequests.filter(r=>r.aborted).length,row.arm==='failed'?1:0,'REPORT_EXACT_DELIBERATE_CHUNK_REFUSAL');
 }
-function controls(healthyRow,failedRow){
+function controls(healthyRow,failedRow,failedIo){
+ assert.equal(healthyRow.completed,true,'REPORT_WIRE_CONTROL_HEALTHY_COMPLETED');assert.equal(failedRow.completed,true,'REPORT_WIRE_CONTROL_FAILED_JOURNEY_COMPLETED');wireReady(failedRow,failedIo);
+ write('control-wire-io-foundation.json',{id:failedRow.id,contextId:failedRow.contextId,rows:failedIo});
  const foundation={healthy:healthyRow,failed:failedRow},original=JSON.stringify(foundation)+'\n',result=[];
  fs.writeFileSync(path.join(OUT,'control-foundation.json'),original,{flag:'wx'});
  const one=(id,mutate,judge,marker)=>{
@@ -218,6 +221,10 @@ function controls(healthyRow,failedRow){
  one('missing-refresh-refusal',x=>{x.failed.refused.alert=FAILURE;},x=>refusalReady(x.failed.refused,x.failed.failed),'REPORT_REFRESH_GUARDED_REFUSAL');
  one('no-user-refresh-navigation',x=>{x.failed.reloaded.navigationCount=x.failed.refused.navigationCount;},x=>reloadReady(x.failed.reloaded,x.failed.refused),'REPORT_USER_REFRESH_NAVIGATION');
  one('report-attempt',x=>{x.healthy.reportAttempts.push({kind:'changed-actual-record-judge-control-only'});},x=>noSend(x.healthy),'REPORT_NO_SEND');
+ one('wire-unknown-native-error',x=>{x.failed.wire.requestFailures.find(f=>f.url===FORM.url).error='net::ERR_BLOCKED_BY_CLIENT.Unknown';},x=>wireReady(x.failed,failedIo),'REPORT_NATIVE_CHUNK_FAILURE');
+ one('wire-unknown-console-variant',x=>{x.failed.wire.consoleErrors.find(r=>r.location.url===FORM.url).text='Failed to load resource: net::ERR_BLOCKED_BY_CLIENT.Unknown';},x=>wireReady(x.failed,failedIo),'REPORT_UNCORRELATED_CONSOLE');
+ one('wire-online-native-failure',x=>{x.failed.wire.requestFailures.find(f=>f.url===FORM.url).nativeOffline=false;},x=>wireReady(x.failed,failedIo),'REPORT_NATIVE_CHUNK_FAILURE');
+ for(const row of result.slice(11))row.wireFoundation='control-wire-io-foundation.json';
  return result;
 }
 let FORM;
@@ -240,7 +247,7 @@ async function main(){
  loadFonts(process.env.FREE_KICK_FONT_CACHE,process.env.FONT_CACHE_MANIFEST_SHA256);const fontBefore=inventory(process.env.FREE_KICK_FONT_CACHE),distBefore=inventory(DIST);
  const modules=distBefore.filter(r=>/^assets\/ReportSiteIssueForm-[A-Za-z0-9_-]+\.js$/.test(r.file));assert.equal(modules.length,1,'REPORT_EXACT_LAZY_MODULE_FOUNDATION');FORM={...modules[0],url:BASE+'/'+modules[0].file};
  write('binding.json',binding);write('source-before.json',before);write('dist-before.json',distBefore);write('font-before.json',fontBefore);write('actual-form-module.json',FORM);
- const report={version:1,status:'REFUSED',source:process.env.GITHUB_SHA,phase:'ACTUAL_FOOTER_NO_SEND_ACTIVATION',planned:{contexts:8,screenshots:40,judgeControls:11},scope:'Actual built About Footer, lazy activation/cancellation/draft/focus/native offline refusal/user refresh only',limits:['No report submission/delivery or exercised backend guard claim.','No pending-save/prerender refusal, OS keyboard, whole-site, gzip savings, cap pass, live publication or source-fault browser controls.'],contexts:[],controls:[],failures:[]};
+ const report={version:1,status:'REFUSED',source:process.env.GITHUB_SHA,phase:'ACTUAL_FOOTER_NO_SEND_ACTIVATION',planned:{contexts:8,screenshots:40,judgeControls:14},scope:'Actual built About Footer, lazy activation/cancellation/draft/focus/native offline refusal/user refresh only',limits:['No report submission/delivery or exercised backend guard claim.','No pending-save/prerender refusal, OS keyboard, whole-site, gzip savings, cap pass, live publication or source-fault browser controls.'],contexts:[],controls:[],failures:[]};
  let browser;
  try{
   browser=await pw.chromium.launch({headless:true,timeout:30000});
@@ -306,7 +313,7 @@ async function main(){
   }
   assert.equal(report.contexts.length,8,'REPORT_CONTEXT_COUNT');assert(report.contexts.every(r=>r.completed),'REPORT_ALL_ACTUAL_JOURNEYS_COMPLETE');
   assert.equal(report.contexts.reduce((n,r)=>n+r.images.length,0),40,'REPORT_ORIGINAL_PNG_COUNT');
-  report.controls=controls(report.contexts.find(r=>r.arm==='healthy'),report.contexts.find(r=>r.arm==='failed'));assert.equal(report.controls.length,11,'REPORT_EFFECTIVE_JUDGE_CONTROLS');
+  const failedControlRow=report.contexts.find(r=>r.arm==='failed');report.controls=controls(report.contexts.find(r=>r.arm==='healthy'),failedControlRow,ioRows().filter(r=>r.context===failedControlRow.contextId));assert.equal(report.controls.length,14,'REPORT_EFFECTIVE_JUDGE_CONTROLS');
   report.status='REPORT_FOOTER_ACTIVATION_COMPLETE';report.complete=true;
  }catch(e){report.failures.push({name:e.name,message:e.message,stack:e.stack});report.complete=false;}
  finally{
