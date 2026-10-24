@@ -756,14 +756,79 @@ if (balanceInChildren) {
   console.log(`6) balance: one child per sport, careers a seed ${BAL_SIZES}, ${BAL_SEEDS} seeds`);
   const t6 = Date.now();
   const { spawn } = await import('node:child_process');
-  const runs = Object.keys(SPORTS).map(slug => new Promise(resolve => {
+  /* SUMMER_CHILD_OBSERVER_BEGIN */
+  function createSummerChildObservation(sourceFile, errorMonitor, createHash, sports) {
+    const requested = process.env.SIM_US_SUMMER_CHILD_ARTIFACTS;
+    if (!requested) return null;
+    const inside = (p, base) => p === base || p.startsWith(base + path.sep);
+    let sink;
+    try {
+      sink = path.resolve(requested);
+      const parent = path.dirname(sink);
+      if (!path.isAbsolute(requested) || fs.existsSync(sink) || fs.realpathSync(parent) !== parent ||
+          inside(sink, fs.realpathSync(ROOT)) || inside(sink, fs.realpathSync(TMP))) throw new Error('unsafe sink');
+    } catch (error) { throw new Error('SUMMER_OBSERVER_FRESH_OUTSIDE_SINK', { cause: error }); }
+    const io = work => { try { return work(); } catch (error) { throw new Error('SUMMER_OBSERVER_INFRASTRUCTURE', { cause: error }); } };
+    const hash = b => createHash('sha256').update(b).digest('hex');
+    const identity = file => {
+      const bytes = io(() => fs.readFileSync(file));
+      return { file, bytes: bytes.length, sha256: hash(bytes), gitBlob: createHash('sha1').update(Buffer.concat([Buffer.from('blob ' + bytes.length + '\0'), bytes])).digest('hex') };
+    };
+    io(() => fs.mkdirSync(sink, { mode: 0o700 }));
+    const factorySource = identity(sourceFile), executing = identity(path.resolve(process.argv[1]));
+    const save = (name, value) => io(() => fs.writeFileSync(path.join(sink, name), JSON.stringify(value, null, 2) + '\n', { flag: 'wx' }));
+    const parentEvents = path.join(sink, 'parent.events.ndjson');
+    io(() => fs.writeFileSync(parentEvents, '', { flag: 'wx' }));
+    save('invocation.json', { v: 1, scope: 'NESTED_LIFECYCLE_OBSERVATION_ONLY_NO_GAME_VERDICT', parentPid: process.pid, factorySource, executing, sports: sports.slice(), cwd: ROOT, argv: process.argv.slice(), source: process.env.GITHUB_SHA || null, run: process.env.GITHUB_RUN_ID || null, attempt: process.env.GITHUB_RUN_ATTEMPT || null, sharedInheritedReceipt: process.env.SIM_OFFLINE_RECEIPT || null, perSportReceipt: false });
+    const contexts = [], started = process.hrtime.bigint();
+    return {
+      before(index, slug, executable, argv, cwd) {
+        if (sports[index] !== slug || contexts[index]) throw new Error('SUMMER_OBSERVER_INFRASTRUCTURE invalid child identity');
+        const prefix = String(index).padStart(2, '0') + '-' + slug, eventsFile = path.join(sink, prefix + '.events.ndjson');
+        for (const suffix of ['stdout.log', 'stderr.log', 'events.ndjson']) io(() => fs.writeFileSync(path.join(sink, prefix + '.' + suffix), '', { flag: 'wx' }));
+        let ordinal = 0, childPid = null;
+        const row = { index, slug, prefix, closed: false }; contexts[index] = row;
+        const event = (name, fields = {}) => io(() => fs.appendFileSync(eventsFile, JSON.stringify({ v: 1, ordinal: ordinal++, event: name, utc: new Date().toISOString(), elapsedMs: Number(process.hrtime.bigint() - started) / 1e6, parentPid: process.pid, pid: childPid, index, slug, executable, argv: argv.slice(), cwd, factorySourceSha256: factorySource.sha256, ...fields }) + '\n'));
+        event('attempt');
+        return {
+          data(stream, bytes) { io(() => fs.appendFileSync(path.join(sink, prefix + '.' + stream + '.log'), bytes)); },
+          attach(child) {
+            child.once('spawn', () => { childPid = child.pid; event('spawn'); });
+            child.on(errorMonitor, error => {
+              try { event('errorMonitor', { error: { name: error.name, code: error.code || null, message: error.message, stack: error.stack } }); }
+              catch (observationError) {
+                try { process.stderr.write('SUMMER_OBSERVER_INFRASTRUCTURE errorMonitor\n' + observationError.stack + '\n' + (observationError.cause?.stack || '') + '\nORIGINAL_SPAWN_ERROR\n' + error.stack + '\n'); } catch { /* preserve the original native error */ }
+              }
+            });
+            child.once('exit', (code, signal) => event('exit', { code, signal }));
+            child.once('close', (code, signal) => {
+              const streams = {};
+              for (const stream of ['stdout', 'stderr']) { const bytes = io(() => fs.readFileSync(path.join(sink, prefix + '.' + stream + '.log'))); streams[stream] = { bytes: bytes.length, sha256: hash(bytes) }; }
+              event('close', { code, signal, streams }); row.closed = true;
+            });
+          },
+        };
+      },
+      complete() {
+        if (contexts.length !== sports.length || !sports.every((_, index) => contexts[index]?.closed)) throw new Error('SUMMER_OBSERVER_INFRASTRUCTURE incomplete closure');
+        io(() => fs.appendFileSync(parentEvents, JSON.stringify({ v: 1, event: 'complete', utc: new Date().toISOString(), elapsedMs: Number(process.hrtime.bigint() - started) / 1e6, parentPid: process.pid, indexes: contexts.map(row => row.index), gameVerdict: 'NOT_ASSIGNED' }) + '\n'));
+      },
+    };
+  }
+/* SUMMER_CHILD_OBSERVER_END */
+  const summerObservation = process.env.SIM_US_SUMMER_CHILD_ARTIFACTS
+    ? createSummerChildObservation(fileURLToPath(import.meta.url), (await import('node:events')).errorMonitor, (await import('node:crypto')).createHash, Object.keys(SPORTS))
+    : null;
+  const runs = Object.keys(SPORTS).map((slug, index) => new Promise(resolve => {
     const tmp = fs.mkdtempSync(path.join(TMP, `child-${slug}-`));
+    const observation = summerObservation ? summerObservation.before(index, slug, process.execPath, [fileURLToPath(import.meta.url)], ROOT) : null;
     const child = spawn(process.execPath, [fileURLToPath(import.meta.url)], {
       cwd: ROOT, env: { ...process.env, SIM_CHILD: '1', SIM_SPORTS: slug, SIM_SECTIONS: '6', TEMP: tmp, TMP: tmp, TMPDIR: tmp },
     });
+    if (observation) observation.attach(child);
     let text = '';
-    child.stdout.on('data', d => { text += d; });
-    child.stderr.on('data', d => { text += d; });
+    child.stdout.on('data', d => { text += d; if (observation) observation.data('stdout', d); });
+    child.stderr.on('data', d => { text += d; if (observation) observation.data('stderr', d); });
     child.on('close', code => resolve({ slug, code, text }));
   }));
   for (const r of await Promise.all(runs)) {
@@ -771,6 +836,7 @@ if (balanceInChildren) {
     for (const l of keep) console.log(l);
     if (r.code !== 0) fail('6', `${r.slug}: the balance child exited ${r.code}`);
   }
+  if (summerObservation) summerObservation.complete();
   console.log(`   balance ran in ${((Date.now() - t6) / 1000).toFixed(1)} s`);
 }
 if (want('6') && !balanceInChildren) {
