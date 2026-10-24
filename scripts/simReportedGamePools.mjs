@@ -59,7 +59,9 @@ try {
     env.NO_DOUBLE_SWAP = JSON.stringify({ [control.alias]: copy });
     console.log(`Effective copied control ${mode}: exact binding changed once.`);
   }
-  const report = path.join(root, '.tmp-fx', `reported-pools-${mode || 'healthy'}.json`);
+  const report = process.env.REPORTED_POOLS_ARTIFACTS
+    ? path.join(path.resolve(root, process.env.REPORTED_POOLS_ARTIFACTS), `reported-pools-${mode || 'healthy'}.json`)
+    : path.join(root, '.tmp-fx', `reported-pools-${mode || 'healthy'}.json`);
   await mkdir(path.dirname(report), { recursive: true }); await rm(report, { force: true });
   const run = spawnSync(process.execPath, [path.join(root, 'node_modules/vitest/vitest.mjs'), 'run', 'src/test/statDetectiveScope.test.tsx', 'src/test/dartDraftPools.test.ts', '--reporter=verbose', '--reporter=json', `--outputFile.json=${report}`, '--testTimeout=60000'], { cwd: root, env, encoding: 'utf8', timeout: 180000 });
   const output = `${run.stdout || ''}\n${run.stderr || ''}`; process.stdout.write(output);
