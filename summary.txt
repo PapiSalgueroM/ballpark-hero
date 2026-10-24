@@ -1,0 +1,6 @@
+build exit=0 34s | [dukb] inlined 1 stylesheet(s) and 1 module(s) into 181 snapshots (11 left alone)
+base-build exit=0 35s | [dukb] inlined 1 stylesheet(s) and 1 module(s) into 181 snapshots (11 left alone)
+sheets-head exit=0 26s | walk1568: green, parts scsheets walked
+sheets-base exit=0 24s | walk1568: green, parts scsheets walked
+sweepWeight exit=0 31s | sweepWeight: green. Every page is inside its budget, and the budgets came down this round.
+simPrerender exit=1 1s | simPrerender: 1 failure

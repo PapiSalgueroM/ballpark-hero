@@ -1,0 +1,23 @@
+sheets 390x844: 5 sheet openers: ["👥 SquadYour teammatesThe plan: First na","🎯 Season targetChoose a personal challe","🏃 Preseason planBalanced, or choose you","📖 Record bookYour best seasons and ever","Review representation"]
+sheets 390x844 "👥 SquadYour teammatesThe plan: First na": dialog 12,184,378,660 z auto; its top answers itself; lock "visible"; scrollY 147 -> 147; closers [{"name":"← Back to your caree","rect":[29,599,361,643],"self":true,"at":"button"}]
+sheets 390x844 "👥 SquadYour teammatesThe plan: First na": after Escape dialogs 0, lock "", scrollY 147, focus back on the opener true
+sheets 390x844 "🎯 Season targetChoose a personal challe": dialog 0,126,390,718 z 50; its top answers itself; lock "hidden"; scrollY 222 -> 222; closers [{"name":"Back to your career","rect":[25,649,365,693],"self":true,"at":"button"},{"name":"Close","rect":[337,135,381,179],"self":true,"at":"svg"}]
+sheets 390x844 "🎯 Season targetChoose a personal challe": after Escape dialogs 0, lock "", scrollY 222, focus back on the opener true
+sheets 390x844 "🏃 Preseason planBalanced, or choose you": dialog 0,158,390,686 z 50; its top answers itself; lock "hidden"; scrollY 286 -> 286; closers [{"name":"Close","rect":[337,167,381,211],"self":true,"at":"svg"}]
+sheets 390x844 "🏃 Preseason planBalanced, or choose you": after Escape dialogs 0, lock "", scrollY 286, focus back on the opener true
+sheets 390x844 "📖 Record bookYour best seasons and ever": dialog 12,140,378,704 z auto; its top answers itself; lock "hidden"; scrollY 359 -> 359; closers [{"name":"Close","rect":[300,647,365,691],"self":true,"at":"button"}]
+sheets 390x844 "📖 Record bookYour best seasons and ever": after Escape dialogs 0, lock "", scrollY 359, focus back on the opener true
+sheets 390x844 "Review representation": dialog 16,163,374,681 z 50; its top answers itself; lock "hidden"; scrollY 911 -> 911; closers [{"name":"Back","rect":[33,620,166,664],"self":true,"at":"button"},{"name":"Close","rect":[321,172,365,216],"self":true,"at":"svg"}]
+sheets 390x844 "Review representation": after Escape dialogs 0, lock "", scrollY 911, focus back on the opener true
+sheets 1280x900: 5 sheet openers: ["👥 SquadYour teammatesThe plan: First na","🎯 Season targetChoose a personal challe","🏃 Preseason planBalanced, or choose you","📖 Record bookYour best seasons and ever","Review representation"]
+sheets 1280x900 "👥 SquadYour teammatesThe plan: First na": dialog 416,212,864,688 z auto; its top answers itself; lock "visible"; scrollY 0 -> 0; closers [{"name":"← Back to your caree","rect":[433,627,847,671],"self":true,"at":"button"}]
+sheets 1280x900 "👥 SquadYour teammatesThe plan: First na": after Escape dialogs 0, lock "", scrollY 0, focus back on the opener true
+sheets 1280x900 "🎯 Season targetChoose a personal challe": dialog 384,172,896,728 z 50; its top answers itself; lock "hidden"; scrollY 26 -> 26; closers [{"name":"Back to your career","rect":[409,659,871,703],"self":true,"at":"button"},{"name":"Close","rect":[843,181,887,225],"self":true,"at":"svg"}]
+sheets 1280x900 "🎯 Season targetChoose a personal challe": after Escape dialogs 0, lock "", scrollY 26, focus back on the opener true
+sheets 1280x900 "🏃 Preseason planBalanced, or choose you": dialog 384,222,896,678 z 50; its top answers itself; lock "hidden"; scrollY 90 -> 90; closers [{"name":"Close","rect":[843,231,887,275],"self":true,"at":"svg"}]
+sheets 1280x900 "🏃 Preseason planBalanced, or choose you": after Escape dialogs 0, lock "", scrollY 90, focus back on the opener true
+sheets 1280x900 "📖 Record bookYour best seasons and ever": dialog 384,176,896,724 z auto; its top answers itself; lock "hidden"; scrollY 163 -> 163; closers [{"name":"Close","rect":[818,667,883,711],"self":true,"at":"button"}]
+sheets 1280x900 "📖 Record bookYour best seasons and ever": after Escape dialogs 0, lock "", scrollY 163, focus back on the opener true
+sheets 1280x900 "Review representation": dialog 416,220,864,680 z 50; its top answers itself; lock "hidden"; scrollY 629 -> 629; closers [{"name":"Back","rect":[433,619,611,663],"self":true,"at":"button"},{"name":"Close","rect":[811,229,855,273],"self":true,"at":"svg"}]
+sheets 1280x900 "Review representation": after Escape dialogs 0, lock "", scrollY 629, focus back on the opener true
+walk1568: green, parts scsheets walked
