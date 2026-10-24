@@ -1,0 +1,8 @@
+mut1568: m2 applied to src/pages/SoccerCareer.tsx ("[@media(max-width:600px)]:top-11 " -> "[@media(max-width:600px)]:top-8 ")
+css 390x844: {"entering":{"y":"translateY(0)","top":"0px"},"resting":{"y":"translateY(0)","top":"0px"},"leaving":{"y":"translateY(0)","top":"0px"},"behind":{"y":"","top":"0px"},"strip":{"height":"0px","bottom":"0px"}}
+FINDING css 390x844: a resting phone toast's top is 0px, not 44px
+css 320x640: {"entering":{"y":"translateY(0)","top":"0px"},"resting":{"y":"translateY(0)","top":"0px"},"leaving":{"y":"translateY(0)","top":"0px"},"behind":{"y":"","top":"0px"},"strip":{"height":"0px","bottom":"0px"}}
+FINDING css 320x640: a resting phone toast's top is 0px, not 44px
+css 601x900: {"entering":{"y":"translateY(-100%)","top":"0px"},"resting":{"y":"translateY(0)","top":"0px"},"leaving":{"y":"translateY(calc(1 * -100%))","top":"0px"},"behind":{"y":"","top":"0px"},"strip":{"height":"0px","bottom":"0px"}}
+css 1280x900: {"entering":{"y":"translateY(-100%)","top":"0px"},"resting":{"y":"translateY(0)","top":"0px"},"leaving":{"y":"translateY(calc(1 * -100%))","top":"0px"},"behind":{"y":"","top":"0px"},"strip":{"height":"0px","bottom":"0px"}}
+walk1568: RED, 2 findings

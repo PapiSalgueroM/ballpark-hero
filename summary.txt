@@ -1,0 +1,5 @@
+build exit=0 34s | [dukb] inlined 1 stylesheet(s) and 1 module(s) into 181 snapshots (11 left alone)
+css-head exit=0 11s | walk1568: green, parts css walked
+css-m2b exit=1 46s | walk1568: RED, 2 findings
+css-m2 exit=1 44s | walk1568: RED, 2 findings
+css-rules exit=0 2s | max-width:600px){.\[\
