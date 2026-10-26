@@ -14,7 +14,7 @@ jobs:
     env:
       CI: true
       SIM_NETWORK: offline
-      EXPECTED_PARENT: b20ec6664df9d4c58d63ea0596791d33b2a3b8fc
+      EXPECTED_PARENT: 0700094621c3425ed825c0ae91dff579b9f88400
     defaults:
       run:
         shell: bash
@@ -42,15 +42,18 @@ jobs:
           test "$GITHUB_REF" = refs/heads/codex/world-xi-nations-20261025
           test "$(git rev-parse HEAD)" = "$GITHUB_SHA"
           test "$(git show -s --format=%P HEAD)" = "$EXPECTED_PARENT"
-          test "$(git rev-parse "$EXPECTED_PARENT^{tree}")" = 51e0c6a06a6c4fb7d143b4d408eb5a9437737553
+          test "$(git rev-parse "$EXPECTED_PARENT^{tree}")" = 4c87828321dffb323dc688c6c141882b5af149e9
           git diff --name-status "$EXPECTED_PARENT" HEAD > "$out/direct-paths.txt"
-          printf 'A\t.github/workflows/world-xi-nations.yml\nA\tsrc/test/worldXiNations.test.tsx\n' | cmp - "$out/direct-paths.txt"
+          printf 'M\t.github/workflows/world-xi-nations.yml\n' | cmp - "$out/direct-paths.txt"
+          base=b20ec6664df9d4c58d63ea0596791d33b2a3b8fc
+          git diff --name-status "$base" HEAD > "$out/cumulative-paths.txt"
+          printf 'A\t.github/workflows/world-xi-nations.yml\nA\tsrc/test/worldXiNations.test.tsx\n' | cmp - "$out/cumulative-paths.txt"
           for file in .github/workflows/world-xi-nations.yml src/test/worldXiNations.test.tsx;do
-            if git cat-file -e "$EXPECTED_PARENT:$file" 2>> "$out/parent-absence.stderr";then printf 'Unexpected existing parent path: %s\n' "$file";exit 1;fi
+            if git cat-file -e "$base:$file" 2>> "$out/original-base-absence.stderr";then printf 'Unexpected existing original-base path: %s\n' "$file";exit 1;fi
           done
-          git diff --exit-code "$EXPECTED_PARENT" HEAD -- . ':!.github/workflows/world-xi-nations.yml' ':!src/test/worldXiNations.test.tsx' > "$out/other-source-held.log"
+          git diff --exit-code "$EXPECTED_PARENT" HEAD -- . ':!.github/workflows/world-xi-nations.yml' > "$out/other-source-held.log"
           git ls-tree -r --name-only "$EXPECTED_PARENT" > "$out/parent-members.txt"
-          test "$(wc -l < "$out/parent-members.txt")" -eq 5378
+          test "$(wc -l < "$out/parent-members.txt")" -eq 5380
           git rev-parse HEAD > "$out/head.txt";git rev-parse 'HEAD^{tree}' > "$out/tree.txt"
           git ls-files -z | sort -z > "$out/source-members.before"
           test "$(tr -cd '\000' < "$out/source-members.before" | wc -c)" -eq 5380
@@ -65,7 +68,7 @@ jobs:
           const fs=require('node:fs'),path=require('node:path'),cp=require('node:child_process'),assert=require('node:assert/strict'),{createHash}=require('node:crypto');
           const {stripVTControlCharacters}=require('node:util');
           const ROOT=fs.realpathSync(process.cwd()),OUT=fs.realpathSync(process.env.WORLD_XI_OUT),SELF=fs.realpathSync(__filename);
-          const PARENT='b20ec6664df9d4c58d63ea0596791d33b2a3b8fc',PARENT_TREE='51e0c6a06a6c4fb7d143b4d408eb5a9437737553';
+          const PARENT='0700094621c3425ed825c0ae91dff579b9f88400',PARENT_TREE='4c87828321dffb323dc688c6c141882b5af149e9';
           const WF='.github/workflows/world-xi-nations.yml',TEST='src/test/worldXiNations.test.tsx';
           const PINS={
            'src/lib/worldXi.ts':'d30a6de90d868e789a76d21cf8b87696786f89d2',
@@ -113,7 +116,7 @@ jobs:
            for(const [file,expected]of Object.entries(PINS)){
             const body=regular(file);assert.equal(blob(body),expected,'WORLD_XI_CRITICAL_SOURCE');
             assert.equal(git(['rev-parse','HEAD:'+file]),expected);
-            if(file!==TEST)assert.equal(git(['rev-parse',PARENT+':'+file]),expected);
+            assert.equal(git(['rev-parse',PARENT+':'+file]),expected);
             source[file]={bytes:body.length,sha256:sha(body),gitBlob:expected};
            }
            const test=regular(TEST);assert.equal(test.length,12022);assert.equal(sha(test),'7f945518353818a4bd7cedf0d9854232ce554103673bbc57e561c4d4ffb1cb59');
@@ -123,7 +126,7 @@ jobs:
            const names=cp.execFileSync('git',['ls-files','-z']);
            const files=names.toString().split('\0');assert.equal(files.pop(),'');assert.equal(files.length,5380);
            for(const file of files){regular(file);const real=fs.realpathSync(file);assert(real.startsWith(ROOT+path.sep),'WORLD_XI_SOURCE_ESCAPE');}
-           return {phase:'old-page-owned-RED',source:process.env.GITHUB_SHA,parent:PARENT,parentTree:PARENT_TREE,tree:git(['rev-parse','HEAD^{tree}']),run:process.env.GITHUB_RUN_ID,attempt:process.env.GITHUB_RUN_ATTEMPT,processPid:process.pid,parentBlobs:5378,sourceBlobs:5380,directPaths:2,source,helper:{file:SELF,bytes:regular(SELF).length,sha256:sha(regular(SELF))},applicationChange:false,fullSuite:false,browser:false,livePublished:false};
+           return {phase:'old-page-owned-RED',source:process.env.GITHUB_SHA,parent:PARENT,parentTree:PARENT_TREE,tree:git(['rev-parse','HEAD^{tree}']),run:process.env.GITHUB_RUN_ID,attempt:process.env.GITHUB_RUN_ATTEMPT,processPid:process.pid,parentBlobs:5380,sourceBlobs:5380,directPaths:1,criticalSources:source,helper:{file:SELF,bytes:regular(SELF).length,sha256:sha(regular(SELF))},applicationChange:false,fullSuite:false,browser:false,livePublished:false};
           }
           function native(id,status){
            const r=json(id+'.closed.json');assert.equal(r.id,id);
@@ -167,7 +170,8 @@ jobs:
             assert(error.includes(c.marker+':'),'WORLD_XI_RED_OWNED_MARKER');
             assert(error.includes('worldXiNations.test.tsx:'),'WORLD_XI_RED_TEST_STACK');
             assert(!/TypeError|ReferenceError|SyntaxError|TestingLibraryElementError|TimeoutError|Test timed out|Failed to load|Cannot find module|Cannot find package/i.test(error),'WORLD_XI_RED_NOT_INFRASTRUCTURE');
-            assert(error.includes('expected '+c.actual+' to be '+c.expected),'WORLD_XI_RED_NUMERIC_WITNESS');
+            const actualDisplay=c.actual===0?'+0':String(c.actual);
+            assert(error.includes('expected '+actualDisplay+' to be '+c.expected),'WORLD_XI_RED_NUMERIC_WITNESS');
            }
            return {oldRows,newRows};
           }
@@ -248,17 +252,24 @@ jobs:
               row.failureMessages[0]=before.replace(needle,'UNOWNED_MARKER');
               assert.notEqual(row.failureMessages[0],before);assert.equal(row.failureMessages[0].split(needle).length-1,0);
               return {field:'actual owned failure marker',needle,replacement:'UNOWNED_MARKER',beforeSha256:sha(before),afterSha256:sha(row.failureMessages[0]),changed:true};
-             },'WORLD_XI_RED_OWNED_MARKER')
+             },'WORLD_XI_RED_OWNED_MARKER'),
+             control('red-numeric-witness',oldSeed,newSeed,(_o,n)=>{
+              const row=n.testResults.flatMap(f=>f.assertionResults).find(a=>a.title===NEW.cases[1].title),before=row.failureMessages[0],needle='expected +0 to be 1',replacement='expected 2 to be 1';
+              assert.equal(before.split(needle).length-1,1,'WORLD_XI_CONTROL_EXACT_NUMERIC_NEEDLE');
+              row.failureMessages[0]=before.replace(needle,replacement);
+              assert.notEqual(row.failureMessages[0],before);assert.equal(row.failureMessages[0].split(needle).length-1,0);assert.equal(row.failureMessages[0].split(replacement).length-1,1);
+              return {field:'actual second owned failure numeric witness',needle,replacement,beforeSha256:sha(before),afterSha256:sha(row.failureMessages[0]),changed:true};
+             },'WORLD_XI_RED_NUMERIC_WITNESS')
             ];
             save('baseline-admission.json',{phase:'old-page-owned-RED',source:process.env.GITHUB_SHA,run:process.env.GITHUB_RUN_ID,attempt:process.env.GITHUB_RUN_ATTEMPT,pid:process.pid,typesExit:0,oldPass:judged.oldRows.map(a=>a.fullName),expectedOwnedFailures:judged.newRows.map(a=>({fullName:a.fullName,status:a.status,kind:'AssertionError',failureMessages:a.failureMessages})),classifierControls:controls,absentRuntimeCounters:'UNKNOWN',newFeatureImplemented:false,fullSuite:false,browser:false});
             return;
            }
            if(mode==='final'){
-            const before=json('source-binding.json'),now=binding();assert.deepEqual(now.source,before.source,'WORLD_XI_END_SOURCE');
+            const before=json('source-binding.json'),now=binding();assert.equal(now.source,process.env.GITHUB_SHA,'WORLD_XI_END_COMMIT');assert.equal(before.source,process.env.GITHUB_SHA,'WORLD_XI_START_COMMIT');assert.deepEqual(now.criticalSources,before.criticalSources,'WORLD_XI_END_SOURCE');
             assert.deepEqual(now.helper,before.helper,'WORLD_XI_END_GENERATED');
             for(const [id,status]of [['types',0],['old-tests',0],['nations',1],['classifier',0]])native(id,status);
             for(const name of ['foundation','orchestrator']){assert.equal(regular(output(name+'.transport')).length,0);assert.equal(regular(output(name+'.exit')).toString().trim(),'0');}
-            const admission=json('baseline-admission.json');assert.equal(admission.source,process.env.GITHUB_SHA);assert.equal(admission.classifierControls.length,3);assert(admission.classifierControls.every(c=>c.changed&&c.restored));
+            const admission=json('baseline-admission.json');assert.equal(admission.source,process.env.GITHUB_SHA);assert.equal(admission.classifierControls.length,4);assert(admission.classifierControls.every(c=>c.changed&&c.restored));
             save('final-binding.json',{pid:process.pid,source:process.env.GITHUB_SHA,run:process.env.GITHUB_RUN_ID,attempt:process.env.GITHUB_RUN_ATTEMPT,phase:admission.phase,sourceHeld:true,generatedHeld:true,oldPass:7,newOwnedFailures:2,qualifiedFeature:false});
             return;
            }
@@ -266,7 +277,7 @@ jobs:
           }
           main(process.argv[2]).then(()=>console.log('World XI baseline '+process.argv[2]+' complete, pid '+process.pid)).catch(error=>{console.error(error.stack||error);process.exitCode=1;});
           HELPER
-          printf 'fe11fb26bb3e13bc1504a095a3e61e76a88b8c8025dd357952820906370d178a  %s\n' "$out/world-xi-baseline.cjs" > "$out/generated.sha256"
+          printf 'db8d53d9188caad3f5f256e4048a925f477348cda145a1261877261d433bd570  %s\n' "$out/world-xi-baseline.cjs" > "$out/generated.sha256"
           sha256sum -c "$out/generated.sha256" > "$out/generated-before.log"
           : > "$out/foundation.transport";status=0
           NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" SIM_OFFLINE_RECEIPT="$out/foundation.transport" node "$out/world-xi-baseline.cjs" source > "$out/foundation.stdout" 2> "$out/foundation.stderr" || status=$?
