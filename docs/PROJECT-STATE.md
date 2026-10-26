@@ -19216,3 +19216,14 @@ The two initial fixture failures39940913787 and39943246891 remain separate from 
 Evidence packet: C:/Users/antho/dukb-handoff/2026-10-23/search-navigation. Root qualification c565e4bb892d6f5392e942e329af0b1661faba1e626bddb051ab76276d2e88b5; Root pixels743d12524f3b65bf0752151b2cfdbb7c3866377866360b6f66c60a4875cfdb26; independent integrated audit4e7ff7ad3b766d00b3f7f5ac280ed0b9d67fd91e8a27416cd182579a76da9dac. The normal saved-picks archive is also retained as2ca41f45c885f8066326880fe73480b83b0ee3ae7a3c4b08503c94fc74fa3e98.
 
 I retains sole publication. Root did not publish this Search correction and makes no new live-site claim. Analytics remains paused. No local application execution, cleanup, old checkout reset, data/provider/account change or protected game adoption occurred. Primary WORKBOARD and the continuation checkpoint receive only this exact note through the reviewed exclusive-lock append helper, with actual full-prefix backups/readback and both protected indexes checked before and finally. Earlier preservation gaps remain unwaived.
+
+
+## 2026-10-26: Projected original discovery caller fixture repair pending
+
+The first caller QA run, 40394815170 attempt 1, is refused. Its missing-caller baseline reached one owned CM_DISCOVERY_API assertion with eight filtered cases, then the real app type check failed because the test's SeasonWorld fixture omitted uclField and keepLeagueOverrides. Final refusal receipt: 0333f8c09a79aa32b383d7cefc096449206e3525a7beeb9f466fbca133e6de65. The original artifact is preserved.
+
+This sibling supplies uclField: null and keepLeagueOverrides: false in that same fixture. All nine case titles and assertions, 111 unchanged regressions and three source-control recipes are held. The corrected caller run remains unrun. It must qualify the owned baseline, app types, nine normal caller cases, 111 regressions, three physical source triplets and all 16 guarded cohorts before any green claim.
+
+The canonical product source remains held. The QA branch adds only a workflow, tracked helper and held test plus this append, for 5,381 source files with all 5,377 other b20 parent bodies held. Raw-view qualification on 40384956132 attempt 1 is separate.
+
+Projected discovery does not assign current club, seller, contract, price, availability or national eligibility. Pruned terminal history and search performance remain unresolved. Owner I actual-source composition, browser and pixels, main and publication remain separate. No user-save reproduction, product adoption or live claim is made.
