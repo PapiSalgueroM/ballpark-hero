@@ -19216,3 +19216,12 @@ The two initial fixture failures39940913787 and39943246891 remain separate from 
 Evidence packet: C:/Users/antho/dukb-handoff/2026-10-23/search-navigation. Root qualification c565e4bb892d6f5392e942e329af0b1661faba1e626bddb051ab76276d2e88b5; Root pixels743d12524f3b65bf0752151b2cfdbb7c3866377866360b6f66c60a4875cfdb26; independent integrated audit4e7ff7ad3b766d00b3f7f5ac280ed0b9d67fd91e8a27416cd182579a76da9dac. The normal saved-picks archive is also retained as2ca41f45c885f8066326880fe73480b83b0ee3ae7a3c4b08503c94fc74fa3e98.
 
 I retains sole publication. Root did not publish this Search correction and makes no new live-site claim. Analytics remains paused. No local application execution, cleanup, old checkout reset, data/provider/account change or protected game adoption occurred. Primary WORKBOARD and the continuation checkpoint receive only this exact note through the reviewed exclusive-lock append helper, with actual full-prefix backups/readback and both protected indexes checked before and finally. Earlier preservation gaps remain unwaived.
+
+
+## Pending QA: playable national coach prototype, 2026-10-26
+
+Prepared a detached shadow qualification for a current-year national team prototype. The protected Club Manager product is not adopted by this commit. New accepted modern national jobs enter a selectable squad and XI flow, one own fixture per action; older jobs opt in. Availability uses tracked save players and verified nationality, excluding untracked projected discoveries. Saved terminal, owned and loan status retains precedence. No real sporting rows or simulation probabilities change.
+
+The proposed QA runs the baseline entry assertion, the real app type gate, all 12 new cases, 25 unchanged national-window and save cases, and four physical focused source healthy/fault/restored controls. It compares complete international outcomes from the actual baseline and candidate using identical fixed RNG streams. Section 6 of simNationJob explicitly models an older save without the new opt-in block; its assertions and other sections stay held. The full source graph, locked dependencies and raw process evidence remain guarded.
+
+Runtime is UNRUN at source preparation. This is source review and detached QA only. Build, browser play, live match visualization, balance, performance and protected Owner I integration still need separate evidence. The earlier broad retention-only experiment remains rejected by the unchanged age guard. No market, caller, national data or public deployment adoption is claimed.
