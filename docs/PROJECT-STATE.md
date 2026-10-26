@@ -19224,3 +19224,11 @@ Detached run 40391686261 remains refused. All 97 normal cases passed, nine physi
 This candidate makes both existing key writers explicit while keeping the same selected career, serialization, notices and reset behavior. The fail-closed save detector and every test stay unchanged. Twenty pinned source overlays still run only in a complete tracked-source shadow. Corrected type, regression, control, parity and source-harness qualification is pending at preparation.
 
 Canonical game and save modules stay unchanged on this QA branch. Owner I retains protected current-source integration, build, all readers, unchanged caps, mobile checks and publication. No aggregate pass, full suite, live result, real rosters, photos or logos are claimed. The earlier refused branches and originals remain retained.
+
+### 2026-10-26 Aussie real club names, detached QA qualified
+
+The optional real club names career and shared-save proposal passed detached QA at source 038b09e9e0046cfd7d586a5fe2bc4450f2d80dd0, run 40396743331. The real app type gate, all 97 cases, nine physical source controls and both source harnesses passed. Four fixed fictional careers per arm matched every recorded state and action through two completed seasons each. The original artifact and complete source, dependency and shadow holds were verified.
+
+The 20 proposed overlays are still confined to detached source copies. Existing fictional careers keep their save identities; real-name careers use a separate key, generated players and simulated starts. Earlier chooser-test and static save-writer refusals remain retained, with no checks waived.
+
+Owner I still owns current protected integration and the normal build, built readers, unchanged caps, mobile browser, main and publication gates. No live, full-site, cloud backup or real-roster claim is made. This outcome append changes only PROJECT-STATE; qualification belongs to the tested source above, not a later docs-only commit.
