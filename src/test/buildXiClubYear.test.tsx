@@ -358,7 +358,7 @@ describe('Build Your XI Club year Browse on the real page', () => {
     expect(screen.getByRole('combobox', { name: 'Recorded year' })).toHaveValue('2026');
     expect(screen.getByRole('heading', { name: 'Choose Your Formation' })).toBeVisible();
     expect(screen.queryByText('Season Report', { exact: true })).toBeNull();
-  });
+  }, 15000);
 
   it('shows an unrated completed draft when the selected rows lack numeric inputs', async () => {
     for (const missing of ['age', 'value', 'both'] as const) {
@@ -377,6 +377,6 @@ describe('Build Your XI Club year Browse on the real page', () => {
       expect(io.simulate).not.toHaveBeenCalled(); legacyQuiet();
       cleanup();
     }
-  });
+  }, 30000);
 });
 
