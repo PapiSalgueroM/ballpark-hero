@@ -1,0 +1,193 @@
+name: Aussie real club names detached qualification
+on:
+  push:
+    branches: [codex/aussie-real-club-choice-qualification-20261026]
+permissions:
+  contents: read
+concurrency:
+  group: aussie-real-club-${{ github.ref }}
+  cancel-in-progress: false
+jobs:
+  contracts:
+    runs-on: ubuntu-latest
+    timeout-minutes: 60
+    env:
+      CI: true
+      SIM_NETWORK: offline
+      AUSSIE_QA_PHASE: real-club-shadow
+      EXPECTED_PARENT: b20ec6664df9d4c58d63ea0596791d33b2a3b8fc
+    defaults:
+      run:
+        shell: bash
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          persist-credentials: false
+          ref: ${{ github.sha }}
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: npm
+      - name: Bind detached inputs and hold canonical products
+        id: foundation
+        timeout-minutes: 5
+        run: |
+          set -euo pipefail
+          out="$RUNNER_TEMP/aussie-real-club-qualification"
+          baseline="$RUNNER_TEMP/aussie-real-club-baseline"
+          shadow="$RUNNER_TEMP/aussie-real-club-candidate"
+          for dir in "$out" "$baseline" "$shadow";do test ! -e "$dir";test ! -L "$dir";done
+          mkdir "$out"
+          export AUSSIE_QA_OUT="$out" AUSSIE_QA_BASELINE="$baseline" AUSSIE_QA_SHADOW="$shadow"
+          echo "AUSSIE_QA_OUT=$out" >> "$GITHUB_ENV"
+          echo "AUSSIE_QA_BASELINE=$baseline" >> "$GITHUB_ENV"
+          echo "AUSSIE_QA_SHADOW=$shadow" >> "$GITHUB_ENV"
+          for name in SIM_SEED BYXI_CONTROL BYXI_SEED BYXI_PRINT_DIGEST NODE_OPTIONS NODE_PATH VITEST ONLY BROWSER TYCOON_AWAY_CONTROL COMPLETION_HOOK OWNED_TIMEOUTS_HOOK CONQUEST_NBA_HOOK CONQUEST_NBA_BOARD POLL_FIXTURES US_BOARD_CONTROL_ALIAS US_BOARD_CONTROL_FILE DAILY_RECORD_CONTROL NO_DOUBLE_SWAP AUSSIE_MANAGER_CONTROL AUSSIE_RULES_BOARD_CONTROL AUSSIE_LEAGUE_BOARD_CONTROL HOME_FRONT_CONTROL SIM_SAVE_KEEPER_CONTROL;do test ! -v "$name";done
+          test "$GITHUB_REPOSITORY" = PapiSalgueroM/ballpark-hero
+          test "$GITHUB_REPOSITORY_ID" = 1195729679
+          test "$GITHUB_REF" = refs/heads/codex/aussie-real-club-choice-qualification-20261026
+          test "$(git rev-parse HEAD)" = "$GITHUB_SHA"
+          test "$(git show -s --format=%P HEAD)" = "$EXPECTED_PARENT"
+          test "$(git rev-parse "$EXPECTED_PARENT^{tree}")" = 51e0c6a06a6c4fb7d143b4d408eb5a9437737553
+          git diff --name-status "$EXPECTED_PARENT" HEAD > "$out/direct-paths.txt"
+          printf 'A\t.github/workflows/aussie-real-club-names-qualification.yml\nM\tdocs/PROJECT-STATE.md\nA\tscripts/qa/aussie-real-club-names/fictional-outcome-collector.ts\nA\tscripts/qa/aussie-real-club-names/overlays.part001.gz.b64\nA\tscripts/qa/aussie-real-club-names/overlays.part002.gz.b64\nA\tscripts/qa/aussie-real-club-names/qualification.cjs\n' | cmp - "$out/direct-paths.txt"
+          git diff --exit-code "$EXPECTED_PARENT" HEAD -- . ':!.github/workflows/aussie-real-club-names-qualification.yml' ':!docs/PROJECT-STATE.md' ':!scripts/qa/aussie-real-club-names/qualification.cjs' ':!scripts/qa/aussie-real-club-names/fictional-outcome-collector.ts' ':!scripts/qa/aussie-real-club-names/overlays.part001.gz.b64' ':!scripts/qa/aussie-real-club-names/overlays.part002.gz.b64' > "$out/all-other-parent-source-held.log"
+          for file in .github/workflows/aussie-real-club-names-qualification.yml scripts/qa/aussie-real-club-names/qualification.cjs scripts/qa/aussie-real-club-names/fictional-outcome-collector.ts scripts/qa/aussie-real-club-names/overlays.part001.gz.b64 scripts/qa/aussie-real-club-names/overlays.part002.gz.b64;do test -z "$(git ls-tree -r --name-only "$EXPECTED_PARENT" -- "$file")";done
+          git ls-tree -r --name-only "$EXPECTED_PARENT" > "$out/parent-members.txt"
+          test "$(wc -l < "$out/parent-members.txt")" -eq 5378
+          git rev-parse HEAD > "$out/head.txt"
+          git rev-parse 'HEAD^{tree}' > "$out/tree.txt"
+          git ls-files -z | sort -z > "$out/source-members.before"
+          test "$(tr -cd '\000' < "$out/source-members.before" | wc -c)" -eq 5383
+          xargs -0 sha256sum < "$out/source-members.before" > "$out/source.sha256"
+          git status --porcelain --untracked-files=all > "$out/status-before.txt"
+          test ! -s "$out/status-before.txt"
+          git diff --exit-code HEAD > "$out/source-clean-before.log"
+          git archive --format=tar HEAD > "$out/source.tar"
+          printf 'e60ff1534307e449ccef598e3b7470dcba58681b82cea4005cec7319f14f9221  scripts/lib/offlineTransport.cjs\n' | sha256sum -c - > "$out/guard-before.log"
+          cat > "$out/qa-inputs.sha256" <<'AUSSIE_QA_INPUT_PINS'
+          d067dda5fb6752409b79b69f6ad71bf4eccd02edb9c85c15579d3fcbb609cd80  scripts/qa/aussie-real-club-names/qualification.cjs
+          e71358ac5f826f3b21eab102940edee3c0f96d8fc3f557bd145b2fd664db1f0c  scripts/qa/aussie-real-club-names/fictional-outcome-collector.ts
+          ed19745359fcd1845dda2816f32e82ac6a5b9ccf7329506a99d3b3a6bee2059c  scripts/qa/aussie-real-club-names/overlays.part001.gz.b64
+          0399208e763d9cbfc2b4fc8c371677612903feade7a6506a98a7931e2508d51b  scripts/qa/aussie-real-club-names/overlays.part002.gz.b64
+          AUSSIE_QA_INPUT_PINS
+          sha256sum -c "$out/qa-inputs.sha256" > "$out/qa-inputs-before.log"
+          cat > "$out/overlay-targets.txt" <<'AUSSIE_QA_OVERLAY_TARGETS'
+          src/lib/aussieRulesClubNames.ts
+          src/lib/aussieRulesLeague.ts
+          src/hooks/useAussieRulesLeague.ts
+          src/components/aussie-rules-manager/AussieRulesLeagueBoard.tsx
+          src/pages/AussieRulesManager.tsx
+          src/data/gameContent/aussieRulesManagement.ts
+          src/data/seoMeta.ts
+          src/data/seoMetaParts/seoMetaPart00.ts
+          src/data/gameRegistry.ts
+          src/test/aussieRulesRealClubNames.test.tsx
+          docs/audits/AUSSIE-REAL-CLUB-NAMES-2026-10.md
+          src/data/continueSaves.ts
+          src/lib/saveKeeper.ts
+          src/lib/brokenSaveRecovery.ts
+          src/components/BrokenSaveRestore.tsx
+          src/test/aussieRulesSaveIntegration.test.tsx
+          src/test/saveKeeper.test.ts
+          scripts/simHomeFront.mjs
+          scripts/simSaveKeeper.mjs
+          src/test/aussieRulesManagerBoard.test.tsx
+          AUSSIE_QA_OVERLAY_TARGETS
+          : > "$out/foundation.transport";status=0
+          NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" SIM_OFFLINE_RECEIPT="$out/foundation.transport" node scripts/qa/aussie-real-club-names/qualification.cjs source > "$out/foundation.stdout" 2> "$out/foundation.stderr" &
+          pid=$!;printf '%s\n' "$pid" > "$out/foundation.pid";wait "$pid" || status=$?
+          printf '%s\n' "$status" > "$out/foundation.exit";test "$status" -eq 0;test ! -s "$out/foundation.transport"
+      - name: Install exact locked packages
+        id: install
+        timeout-minutes: 20
+        run: |
+          set -euo pipefail
+          out="$AUSSIE_QA_OUT";status=0
+          npm ci > "$out/npm-ci.stdout" 2> "$out/npm-ci.stderr" &
+          pid=$!;printf '%s\n' "$pid" > "$out/npm-ci.pid";wait "$pid" || status=$?
+          printf '%s\n' "$status" > "$out/npm-ci.exit";test "$status" -eq 0
+          find node_modules -type f -print0 | sort -z > "$out/dependency-members.before"
+          test "$(tr -cd '\000' < "$out/dependency-members.before" | wc -c)" -eq 24466
+          xargs -0 sha256sum < "$out/dependency-members.before" > "$out/dependencies.sha256"
+          find node_modules -type l -printf '%p\t%l\0' | sort -z > "$out/dependency-links.before"
+          find node_modules ! -type d ! -type f ! -type l -print > "$out/dependency-nonregular.before"
+          test ! -s "$out/dependency-nonregular.before"
+      - name: Types fourteen new cases old regressions parity and nine source triplets
+        id: checks
+        timeout-minutes: 50
+        run: |
+          set -euo pipefail
+          out="$AUSSIE_QA_OUT"
+          sha256sum -c "$out/qa-inputs.sha256" > "$out/qa-inputs-pre-consumer.log"
+          : > "$out/orchestrator.transport";status=0
+          NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" SIM_OFFLINE_RECEIPT="$out/orchestrator.transport" node scripts/qa/aussie-real-club-names/qualification.cjs checks > "$out/orchestrator.stdout" 2> "$out/orchestrator.stderr" &
+          pid=$!;printf '%s\n' "$pid" > "$out/orchestrator.pid";wait "$pid" || status=$?
+          printf '%s\n' "$status" > "$out/orchestrator.exit";test "$status" -eq 0;test ! -s "$out/orchestrator.transport"
+      - name: Hold canonical sources dependencies inputs and both shadows
+        id: holds
+        if: ${{ always() && steps.foundation.outcome != 'skipped' }}
+        timeout-minutes: 8
+        run: |
+          set -euo pipefail
+          set +e
+          out="$AUSSIE_QA_OUT";failed=0
+          for name in source dependencies qa-inputs;do
+            if test -f "$out/$name.sha256" && test ! -L "$out/$name.sha256";then sha256sum -c "$out/$name.sha256" > "$out/$name-hold.log" 2>&1 || failed=1;else printf 'Missing required manifest\n' > "$out/$name-hold.log";failed=1;fi
+          done
+          git ls-files -z | sort -z > "$out/source-members.after"
+          cmp "$out/source-members.before" "$out/source-members.after" > "$out/source-members-hold.log" 2>&1 || failed=1
+          xargs -0 sha256sum < "$out/source-members.after" > "$out/source-after.sha256"
+          tar --null -T "$out/source-members.after" -cf "$out/source-after.tar" || failed=1
+          git diff --exit-code HEAD > "$out/source-dirty-after.log" 2>&1 || failed=1
+          git status --porcelain --untracked-files=all > "$out/status-after.txt"
+          test -f "$out/status-after.txt" && test ! -s "$out/status-after.txt" && test ! -s "$out/source-dirty-after.log" || failed=1
+          find node_modules -type f -print0 | sort -z > "$out/dependency-members.after"
+          cmp "$out/dependency-members.before" "$out/dependency-members.after" > "$out/dependency-members-hold.log" 2>&1 || failed=1
+          xargs -0 sha256sum < "$out/dependency-members.after" > "$out/dependencies-after.sha256"
+          find node_modules -type l -printf '%p\t%l\0' | sort -z > "$out/dependency-links.after"
+          cmp "$out/dependency-links.before" "$out/dependency-links.after" > "$out/dependency-links-hold.log" 2>&1 || failed=1
+          find node_modules ! -type d ! -type f ! -type l -print > "$out/dependency-nonregular.after"
+          test ! -s "$out/dependency-nonregular.after" || failed=1
+          for role in baseline candidate;do
+            if test "$role" = baseline;then root="$AUSSIE_QA_BASELINE";else root="$AUSSIE_QA_SHADOW";fi
+            if test -d "$root" && test ! -L "$root";then
+              find "$root" -type f -print0 | sort -z > "$out/$role-members.final"
+              xargs -0 -r sha256sum < "$out/$role-members.final" > "$out/$role-final.sha256"
+              find "$root" -type l -printf '%p\t%l\0' | sort -z > "$out/$role-links.final"
+              find "$root" ! -type d ! -type f ! -type l -print > "$out/$role-nonregular.final"
+              test ! -s "$out/$role-nonregular.final" || failed=1
+            else printf 'Required shadow missing\n' > "$out/$role-nonregular.final";failed=1;fi
+          done
+          if test -f "$out/overlay-targets.txt";then
+            while IFS= read -r file;do
+              if test -f "$AUSSIE_QA_SHADOW/$file" && test ! -L "$AUSSIE_QA_SHADOW/$file";then mkdir -p "$out/candidate-final/$(dirname "$file")";cp -- "$AUSSIE_QA_SHADOW/$file" "$out/candidate-final/$file";else failed=1;fi
+            done < "$out/overlay-targets.txt"
+          else failed=1;fi
+          : > "$out/final.transport";status=0
+          NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" SIM_OFFLINE_RECEIPT="$out/final.transport" node scripts/qa/aussie-real-club-names/qualification.cjs final > "$out/final.stdout" 2> "$out/final.stderr" &
+          pid=$!;printf '%s\n' "$pid" > "$out/final.pid";wait "$pid" || status=$?
+          printf '%s\n' "$status" > "$out/final.exit";test "$status" -eq 0 || failed=1
+          for name in foundation orchestrator final;do
+            test -f "$out/$name.transport" && test ! -L "$out/$name.transport" && test ! -s "$out/$name.transport" || failed=1
+            test -f "$out/$name.exit" && test ! -L "$out/$name.exit" && test "$(cat "$out/$name.exit")" = 0 || failed=1
+          done
+          test "$(cat "$out/npm-ci.exit")" = 0 || failed=1
+          sha256sum -c "$out/qa-inputs.sha256" > "$out/qa-inputs-final-hold.log" 2>&1 || failed=1
+          printf '%s\n' "$failed" > "$out/final-holds.exit";exit "$failed"
+      - name: Seal original evidence including partial failures
+        if: ${{ always() && steps.foundation.outcome != 'skipped' }}
+        run: |
+          set -euo pipefail
+          out="$AUSSIE_QA_OUT";test -d "$out";cd "$out"
+          find . ! -type d ! -type f -print > nonregular.txt
+          test ! -s nonregular.txt
+          find . -type f ! -name evidence.sha256 -print0 | sort -z | xargs -0 sha256sum > evidence.sha256
+      - uses: actions/upload-artifact@v4
+        if: ${{ always() && steps.foundation.outcome != 'skipped' }}
+        with:
+          name: aussie-real-club-names-qualification-${{ github.run_id }}-a${{ github.run_attempt }}
+          path: ${{ env.AUSSIE_QA_OUT }}
+          if-no-files-found: error
+          retention-days: 30

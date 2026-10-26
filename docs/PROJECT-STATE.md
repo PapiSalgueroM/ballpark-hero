@@ -19216,3 +19216,11 @@ The two initial fixture failures39940913787 and39943246891 remain separate from 
 Evidence packet: C:/Users/antho/dukb-handoff/2026-10-23/search-navigation. Root qualification c565e4bb892d6f5392e942e329af0b1661faba1e626bddb051ab76276d2e88b5; Root pixels743d12524f3b65bf0752151b2cfdbb7c3866377866360b6f66c60a4875cfdb26; independent integrated audit4e7ff7ad3b766d00b3f7f5ac280ed0b9d67fd91e8a27416cd182579a76da9dac. The normal saved-picks archive is also retained as2ca41f45c885f8066326880fe73480b83b0ee3ae7a3c4b08503c94fc74fa3e98.
 
 I retains sole publication. Root did not publish this Search correction and makes no new live-site claim. Analytics remains paused. No local application execution, cleanup, old checkout reset, data/provider/account change or protected game adoption occurred. Primary WORKBOARD and the continuation checkpoint receive only this exact note through the reviewed exclusive-lock append helper, with actual full-prefix backups/readback and both protected indexes checked before and finally. Earlier preservation gaps remain unwaived.
+
+### 2026-10-26 Aussie real club names, corrected detached QA candidate
+
+The first detached run 40387510511 is refused. App types and both new seven-case suites passed, but the old manager-board rules test expected 18 fictional clubs before selecting the new career chooser. This candidate adds that real Fictional clubs click before every original assertion. All 97 cases and their titles remain. Corrected qualification is pending at preparation.
+
+Twenty pinned source overlays run only in a full tracked-source shadow. The canonical game, engines and save modules stay unchanged. The optional real-name career uses a separate identity and save key with generated players and simulated starts. Existing v1 and v2 careers remain available. Planned checks still include nine physical source controls and complete fixed fictional outcome comparison. No corrected pass, full suite, build, browser, cloud backup or live claim is made.
+
+Owner I retains protected current-source integration, build, readers, unchanged caps, mobile checks and publication. The failed branch and original evidence remain retained.
