@@ -19216,3 +19216,14 @@ The two initial fixture failures39940913787 and39943246891 remain separate from 
 Evidence packet: C:/Users/antho/dukb-handoff/2026-10-23/search-navigation. Root qualification c565e4bb892d6f5392e942e329af0b1661faba1e626bddb051ab76276d2e88b5; Root pixels743d12524f3b65bf0752151b2cfdbb7c3866377866360b6f66c60a4875cfdb26; independent integrated audit4e7ff7ad3b766d00b3f7f5ac280ed0b9d67fd91e8a27416cd182579a76da9dac. The normal saved-picks archive is also retained as2ca41f45c885f8066326880fe73480b83b0ee3ae7a3c4b08503c94fc74fa3e98.
 
 I retains sole publication. Root did not publish this Search correction and makes no new live-site claim. Analytics remains paused. No local application execution, cleanup, old checkout reset, data/provider/account change or protected game adoption occurred. Primary WORKBOARD and the continuation checkpoint receive only this exact note through the reviewed exclusive-lock append helper, with actual full-prefix backups/readback and both protected indexes checked before and finally. Earlier preservation gaps remain unwaived.
+
+## 2026-10-26, detached raw active-original projection qualification
+
+A QA-only proposal is prepared for a raw original-player trajectory view beside the unchanged Club Manager projection. The view may include originals still represented in modeled squads. Its source club is an identity anchor, not a current seller, career status, national eligibility or availability verdict.
+
+The earlier broad retirement-only squad candidate was rejected by the unchanged modern population age guard. This proposal leaves canonical squad projection and its default keyed draws unchanged. Only a detached full-source shadow receives the new raw view.
+
+Planned remote evidence: a real candidate-shadow app type check, one owned missing-API failure on the unchanged baseline, all eight focused tests, and three physical source fault triplets with exact restoration. The tests compare complete canonical worlds and retain complete compared world bodies. Source and locked dependency holds, native statuses, raw streams and offline receipts remain required.
+
+Runtime is UNRUN at source preparation. No caller, ownership or career-ledger precedence, market, national selection, UI or save integration is adopted. Negotiated retirement protections in owned saves remain authoritative. Performance, caching and later integration still need separate qualification. No main merge or publication is authorized by this QA proposal.
+
