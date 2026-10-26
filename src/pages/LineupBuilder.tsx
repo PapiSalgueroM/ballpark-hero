@@ -416,7 +416,7 @@ const LineupBuilder = () => {
                         searchOptions={{ source: teamScopedSource ?? SOCCER_MARKET_VALUE_SOURCE, exclude: excludedPlayers, boostNames: cappedNames, ...(isClubYear && browsingPlayers ? { minChars: 0, limit: 50 } : {}) }}
                         placeholder={currentTeam ? `Search a ${currentTeam.name} player...` : 'Enter player name...'}
                         disabled={isValidating}
-                        autoFocus={!(isClubYear && browsingPlayers)}
+                        autoFocus={!isClubYear}
                         emptyText={isClubYear ? 'No matching records. Try another name or reroll the club.' : undefined}
                         validateOnly
                       />
