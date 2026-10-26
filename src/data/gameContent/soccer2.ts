@@ -1220,7 +1220,7 @@ export const SOCCER_CONTENT_2: GameContentMap = {
         ],
       },
       {
-        heading: "Browsing for a hard-to-remember goalkeeper",
+        heading: "Browsing for a goalkeeper you cannot remember",
         items: [
           "Need a keeper in Club year draft? Select GK, then Browse players and look through the matching records instead of guessing a name.",
         ],

@@ -492,7 +492,7 @@ async function main() {
             const assigned = await clubLabel(page), ci = Object.keys(CLUBS).indexOf(assigned.name);
             const name = 'Fictional Pick ' + ci + ' ' + index;
             await type(page, row, name);
-            const option = page.getByRole('option').filter({ hasText: new RegExp('^' + name + '(?:\\s|$)') });
+            const option = page.getByRole('option').filter({ has: page.locator('span.text-sm.font-medium').filter({ hasText: new RegExp('^' + name + '$') }) });
             await tap(option, page, row, 'pick slot ' + index);
             if (index < 10) await progress(page, index + 1);
             else await page.getByRole('button', { name: 'Submit Team', exact: true }).waitFor({ state: 'visible' });
