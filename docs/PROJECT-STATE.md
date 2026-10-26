@@ -19216,3 +19216,12 @@ The two initial fixture failures39940913787 and39943246891 remain separate from 
 Evidence packet: C:/Users/antho/dukb-handoff/2026-10-23/search-navigation. Root qualification c565e4bb892d6f5392e942e329af0b1661faba1e626bddb051ab76276d2e88b5; Root pixels743d12524f3b65bf0752151b2cfdbb7c3866377866360b6f66c60a4875cfdb26; independent integrated audit4e7ff7ad3b766d00b3f7f5ac280ed0b9d67fd91e8a27416cd182579a76da9dac. The normal saved-picks archive is also retained as2ca41f45c885f8066326880fe73480b83b0ee3ae7a3c4b08503c94fc74fa3e98.
 
 I retains sole publication. Root did not publish this Search correction and makes no new live-site claim. Analytics remains paused. No local application execution, cleanup, old checkout reset, data/provider/account change or protected game adoption occurred. Primary WORKBOARD and the continuation checkpoint receive only this exact note through the reviewed exclusive-lock append helper, with actual full-prefix backups/readback and both protected indexes checked before and finally. Earlier preservation gaps remain unwaived.
+
+
+## 2026-10-26 CM era retention paired diagnostic
+
+This source round adds a detached QA workflow and two recording tools. Protected Club Manager product, roster, retirement and save code stays unchanged in the checkout. The original and the frozen retirement-only proposal run from separate outside copies of the same source graph.
+
+The planned comparison records 92 actual projected worlds across the 2005 and current eras, unseeded and seed 31. It retains both arms before judging the original modern unseeded population, age and strength guards. The mean-age ceiling stays 27.5. A copied-world age control must reject and restore exact bytes. The reported Barcelona identity is a background-projection regression, not a reproduced user save.
+
+Validation is pending at preparation. A candidate guard failure must remain a failure with its actual worlds and raw errors retained. The retirement-only proposal is NOT_ADOPTION_READY: its effect on aging and identity retention must be measured. The four detached regression cases, two source-control triplets, remaining full harness and Owner I review are separate pending requirements. No new sports data, probability tuning, product fix, main merge or publication is included.

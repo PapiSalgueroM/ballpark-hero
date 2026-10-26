@@ -1,0 +1,242 @@
+name: CM era retention paired diagnostic
+on:
+  push:
+    branches: [codex/cm-era-retention-diagnostic-20261026]
+permissions:
+  contents: read
+concurrency:
+  group: cm-era-retention-${{ github.ref }}
+  cancel-in-progress: false
+jobs:
+  diagnostic:
+    runs-on: ubuntu-latest
+    timeout-minutes: 45
+    env:
+      CI: true
+      SIM_NETWORK: offline
+      EXPECTED_PARENT: b20ec6664df9d4c58d63ea0596791d33b2a3b8fc
+    defaults:
+      run:
+        shell: bash
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          persist-credentials: false
+          ref: ${{ github.sha }}
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: npm
+      - name: Bind QA source and prepare detached source copies
+        id: foundation
+        timeout-minutes: 5
+        run: |
+          set -euo pipefail
+          out="$RUNNER_TEMP/cm-era-retention-diagnostic"
+          roots="$RUNNER_TEMP/cm-era-retention-source-roots"
+          test ! -e "$out";test ! -L "$out";mkdir "$out"
+          test ! -e "$roots";test ! -L "$roots"
+          export CM_ERA_OUT="$out";echo "CM_ERA_OUT=$out" >> "$GITHUB_ENV"
+          export CM_ERA_ROOTS="$roots";echo "CM_ERA_ROOTS=$roots" >> "$GITHUB_ENV"
+          for name in SIM_ERAS_CONTROL SIM_SEED CM_ERA_CONTROL NODE_OPTIONS NODE_PATH NO_DOUBLE_SWAP VITEST ONLY;do test ! -v "$name";done
+          test "$GITHUB_REPOSITORY" = PapiSalgueroM/ballpark-hero
+          test "$GITHUB_REPOSITORY_ID" = 1195729679
+          test "$GITHUB_REF" = refs/heads/codex/cm-era-retention-diagnostic-20261026
+          test "$(git rev-parse HEAD)" = "$GITHUB_SHA"
+          test "$(git show -s --format=%P HEAD)" = "$EXPECTED_PARENT"
+          test "$(git rev-parse "$EXPECTED_PARENT^{tree}")" = 51e0c6a06a6c4fb7d143b4d408eb5a9437737553
+          git diff --name-status "$EXPECTED_PARENT" HEAD > "$out/direct-paths.txt"
+          printf 'A\t.github/workflows/cm-era-retention-diagnostic.yml\nM\tdocs/PROJECT-STATE.md\nA\tscripts/qa/judgeCmEraRetention.mjs\nA\tscripts/qa/recordCmEraRetention.mjs\n' | cmp - "$out/direct-paths.txt"
+          git diff --exit-code "$EXPECTED_PARENT" HEAD -- . ':!.github/workflows/cm-era-retention-diagnostic.yml' ':!docs/PROJECT-STATE.md' ':!scripts/qa/judgeCmEraRetention.mjs' ':!scripts/qa/recordCmEraRetention.mjs' > "$out/all-other-parent-source-held.log"
+          git ls-tree -r --name-only "$EXPECTED_PARENT" > "$out/parent-members.txt"
+          test "$(wc -l < "$out/parent-members.txt")" -eq 5378
+          git rev-parse HEAD > "$out/head.txt";git rev-parse 'HEAD^{tree}' > "$out/tree.txt"
+          git ls-files -z | sort -z > "$out/source-members.before"
+          test "$(tr -cd '\000' < "$out/source-members.before" | wc -c)" -eq 5381
+          xargs -0 sha256sum < "$out/source-members.before" > "$out/source.sha256"
+          git status --porcelain --untracked-files=all > "$out/status-before.txt";test ! -s "$out/status-before.txt"
+          git diff --exit-code HEAD > "$out/source-clean-before.log"
+          git archive --format=tar HEAD > "$out/source.tar"
+          printf 'e60ff1534307e449ccef598e3b7470dcba58681b82cea4005cec7319f14f9221  scripts/lib/offlineTransport.cjs\n1150b95459022f847766b934caf2952280554dd07dc4f1697725c520e5d746da  scripts/qa/recordCmEraRetention.mjs\n321099673a9c76377a84229cd5e486d89b67a89b488957a473e16a63196d7894  scripts/qa/judgeCmEraRetention.mjs\n' | sha256sum -c - > "$out/critical-before.log"
+          cat > "$out/native.payload.gz.b64" <<'CM_ERA_NATIVE_GZIP_BASE64'
+          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
+          CM_ERA_NATIVE_GZIP_BASE64
+          base64 --decode "$out/native.payload.gz.b64" | gzip -dc > "$out/cm-era-retention-native.cjs"
+          printf 'cf62e7e8aa3147fe46e9f9734d15f18427d9d5d7ece81ca88c0230d123de80f0  %s\n' "$out/cm-era-retention-native.cjs" > "$out/generated.sha256"
+          printf '1e82c6d877408a7fb186e3c0a2fe0a948ccaaf08c8998fdf6ab14883a1467da4  %s\n' "$out/native.payload.gz.b64" > "$out/payload.sha256"
+          sha256sum -c "$out/generated.sha256" > "$out/generated-before.log"
+          sha256sum -c "$out/payload.sha256" > "$out/payload-before.log"
+          : > "$out/foundation.transport";status=0
+          NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" SIM_OFFLINE_RECEIPT="$out/foundation.transport" node "$out/cm-era-retention-native.cjs" source > "$out/foundation.stdout" 2> "$out/foundation.stderr" &
+          pid=$!;printf '%s\n' "$pid" > "$out/foundation.pid";wait "$pid" || status=$?
+          printf '%s\n' "$status" > "$out/foundation.exit";test "$status" -eq 0;test ! -s "$out/foundation.transport"
+      - name: Install exact locked packages
+        id: install
+        timeout-minutes: 20
+        run: |
+          set -euo pipefail
+          out="$CM_ERA_OUT";status=0
+          npm ci > "$out/npm-ci.stdout" 2> "$out/npm-ci.stderr" &
+          pid=$!;printf '%s\n' "$pid" > "$out/npm-ci.pid";wait "$pid" || status=$?
+          printf '%s\n' "$status" > "$out/npm-ci.exit";test "$status" -eq 0
+          find node_modules -type f -print0 | sort -z > "$out/dependency-members.before"
+          test "$(tr -cd '\000' < "$out/dependency-members.before" | wc -c)" -eq 24466
+          xargs -0 sha256sum < "$out/dependency-members.before" > "$out/dependencies.sha256"
+          find node_modules -type l -printf '%p\t%l\0' | sort -z > "$out/dependency-links.before"
+          find node_modules ! -type d ! -type f ! -type l -print > "$out/dependency-nonregular.before"
+          test ! -s "$out/dependency-nonregular.before"
+          for arm in baseline candidate;do
+            root="$CM_ERA_ROOTS/$arm";test -d "$root";test ! -L "$root"
+            ln -s "$PWD/node_modules" "$root/node_modules"
+            find "$root" -type f -print0 | sort -z > "$out/$arm-source-members.before"
+            test "$(tr -cd '\000' < "$out/$arm-source-members.before" | wc -c)" -eq 23
+            xargs -0 sha256sum < "$out/$arm-source-members.before" > "$out/$arm-sources.sha256"
+            find "$root" -type l -printf '%p\t%l\0' | sort -z > "$out/$arm-source-links.before"
+            find "$root" ! -type d ! -type f ! -type l -print > "$out/$arm-source-nonregular.before";test ! -s "$out/$arm-source-nonregular.before"
+          done
+      - name: Record both full world arms before the unchanged guard judgment
+        id: checks
+        timeout-minutes: 27
+        run: |
+          set -euo pipefail
+          out="$CM_ERA_OUT"
+          sha256sum -c "$out/generated.sha256" > "$out/generated-pre-consumer.log"
+          sha256sum -c "$out/payload.sha256" > "$out/payload-pre-consumer.log"
+          : > "$out/orchestrator.transport";status=0
+          NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" SIM_OFFLINE_RECEIPT="$out/orchestrator.transport" node "$out/cm-era-retention-native.cjs" checks > "$out/orchestrator.stdout" 2> "$out/orchestrator.stderr" &
+          pid=$!;printf '%s\n' "$pid" > "$out/orchestrator.pid";wait "$pid" || status=$?
+          printf '%s\n' "$status" > "$out/orchestrator.exit";test "$status" -eq 0;test ! -s "$out/orchestrator.transport"
+      - name: Hold canonical and detached sources dependencies and partial evidence
+        id: holds
+        if: ${{ always() && steps.foundation.outcome != 'skipped' }}
+        timeout-minutes: 5
+        run: |
+          set -euo pipefail
+          set +e
+          out="$CM_ERA_OUT";failed=0
+          for name in source dependencies generated payload baseline-sources candidate-sources;do
+            if test -f "$out/$name.sha256" && test ! -L "$out/$name.sha256";then sha256sum -c "$out/$name.sha256" > "$out/$name-hold.log" 2>&1 || failed=1;else printf 'Missing required manifest\n' > "$out/$name-hold.log";failed=1;fi
+          done
+          git ls-files -z | sort -z > "$out/source-members.after"
+          cmp "$out/source-members.before" "$out/source-members.after" > "$out/source-members-hold.log" 2>&1 || failed=1
+          xargs -0 sha256sum < "$out/source-members.after" > "$out/source-after.sha256"
+          tar --null -T "$out/source-members.after" -cf "$out/source-after.tar" || failed=1
+          git diff --exit-code HEAD > "$out/source-dirty-after.log" 2>&1 || failed=1
+          git status --porcelain --untracked-files=all > "$out/status-after.txt"
+          test -f "$out/status-after.txt" && test ! -s "$out/status-after.txt" && test ! -s "$out/source-dirty-after.log" || failed=1
+          find node_modules -type f -print0 | sort -z > "$out/dependency-members.after"
+          cmp "$out/dependency-members.before" "$out/dependency-members.after" > "$out/dependency-members-hold.log" 2>&1 || failed=1
+          xargs -0 sha256sum < "$out/dependency-members.after" > "$out/dependencies-after.sha256"
+          find node_modules -type l -printf '%p\t%l\0' | sort -z > "$out/dependency-links.after"
+          cmp "$out/dependency-links.before" "$out/dependency-links.after" > "$out/dependency-links-hold.log" 2>&1 || failed=1
+          find node_modules ! -type d ! -type f ! -type l -print > "$out/dependency-nonregular.after";test ! -s "$out/dependency-nonregular.after" || failed=1
+          for arm in baseline candidate;do
+            root="$CM_ERA_ROOTS/$arm"
+            if test -d "$root" && test ! -L "$root";then
+              find "$root" -type f -print0 | sort -z > "$out/$arm-source-members.after"
+              cmp "$out/$arm-source-members.before" "$out/$arm-source-members.after" > "$out/$arm-source-members-hold.log" 2>&1 || failed=1
+              xargs -0 sha256sum < "$out/$arm-source-members.after" > "$out/$arm-sources-after.sha256"
+              find "$root" -type l -printf '%p\t%l\0' | sort -z > "$out/$arm-source-links.after"
+              cmp "$out/$arm-source-links.before" "$out/$arm-source-links.after" > "$out/$arm-source-links-hold.log" 2>&1 || failed=1
+              find "$root" ! -type d ! -type f ! -type l -print > "$out/$arm-source-nonregular.after";test ! -s "$out/$arm-source-nonregular.after" || failed=1
+            else printf 'Required source copy missing\n' > "$out/$arm-source-members-hold.log";failed=1;fi
+          done
+          : > "$out/final.transport";status=0
+          NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" SIM_OFFLINE_RECEIPT="$out/final.transport" node "$out/cm-era-retention-native.cjs" final > "$out/final.stdout" 2> "$out/final.stderr" &
+          pid=$!;printf '%s\n' "$pid" > "$out/final.pid";wait "$pid" || status=$?
+          printf '%s\n' "$status" > "$out/final.exit";test "$status" -eq 0 || failed=1
+          for name in foundation orchestrator final;do
+            test -f "$out/$name.transport" && test ! -L "$out/$name.transport" && test ! -s "$out/$name.transport" || failed=1
+            test -f "$out/$name.exit" && test ! -L "$out/$name.exit" && test "$(cat "$out/$name.exit")" = 0 || failed=1
+          done
+          for file in source-binding.json candidate-source-edit.json source-copies.expected.json source-copies.initial.json source-copies.before.json source-copies.final.json diagnostic-native-status.json final-binding.json native-selected-processes.json final-admission.json;do test -f "$out/$file" && test ! -L "$out/$file" || failed=1;done
+          printf '%s\n' "$failed" > "$out/final-holds.exit";test "$failed" -eq 0
+      - name: Seal actual retained regular evidence
+        if: ${{ always() }}
+        timeout-minutes: 5
+        run: |
+          set -euo pipefail
+          out="$CM_ERA_OUT";test -d "$out";test ! -L "$out"
+          find "$out" ! -type d ! -type f -print > "$out/evidence-nonregular.txt";test ! -s "$out/evidence-nonregular.txt"
+          find "$out" -type f ! -name evidence.sha256 -print0 | sort -z > "$out/evidence-members.list"
+          xargs -0 sha256sum < "$out/evidence-members.list" > "$out/evidence.sha256"
+          sha256sum -c "$out/evidence.sha256" > /dev/null
+      - uses: actions/upload-artifact@v4
+        if: ${{ always() }}
+        with:
+          name: cm-era-retention-${{ github.run_id }}-a${{ github.run_attempt }}
+          path: ${{ env.CM_ERA_OUT }}
+          if-no-files-found: error
+          compression-level: 6
+          retention-days: 7
