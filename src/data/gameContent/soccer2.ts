@@ -1099,8 +1099,8 @@ export const SOCCER_CONTENT_2: GameContentMap = {
 
   '/build-your-xi': {
     intro: [
-      "Choose a formation and fill all 11 positions. Mixed is the default clubs and countries game. Club year draft gives you 11 different clubs and asks for matching player records from one recorded year.",
-      "Mixed keeps its usual AI verdict and season report. Club year draft uses the value and age on your selected records for a fictional season, rather than treating every player as a peak version. If a value or age is missing, you can still finish with an unrated draft.",
+      "Choose a formation and fill 11 slots. Mixed is the default clubs and countries mode. Club year draft uses 11 different clubs, not nations, and records from one year.",
+      "Mixed keeps its AI verdict and season report. Club year draft uses your selected values and ages for a fictional season. Missing either leaves the completed XI unrated.",
     ],
     headings: {
       howToPlay: "How to play Build Your XI, a free soccer lineup builder game",
@@ -1113,29 +1113,27 @@ export const SOCCER_CONTENT_2: GameContentMap = {
       {
         heading: "Choosing Mixed or Club year draft",
         items: [
-          "Mixed is selected by default. Keep it for the usual clubs and nations challenge, or choose Club year draft before starting.",
-          "Club year draft lets you choose a recorded year from 2004 to 2026. Choose your year before the formation; it stays fixed for the draft.",
+          "Choose a recorded year from 2004 to 2026 before the formation. It stays fixed for the draft.",
           "Choose one of 6 formations: 4-3-3, 4-4-2, 3-5-2, 4-2-3-1, 3-4-3, or 5-3-2.",
         ],
       },
       {
         heading: "Drawing teams and choosing an empty slot",
         items: [
-          "Mixed draws clubs or nations. Club year draft starts with 11 different clubs, with no national teams in that draw.",
           "Tap any empty position on the pitch. Fill it with a player who matches the current team and fits that position.",
         ],
       },
       {
         heading: "Searching or browsing matching player records",
         items: [
-          "Type a name and choose a suggestion. In Club year draft, the selected record must match both the club and your recorded year, and the position still has to fit.",
-          "Cannot think of a name? Tap Browse players in Club year draft to open matching records without typing. Start typing to narrow the suggestions.",
+          "Type a name and choose a suggestion that fits the slot. Club year picks must match both club and recorded year.",
+          "Tap Browse players to see matching Club year records, or type to narrow them. Records may be incomplete, not a full squad or proof of every appearance.",
         ],
         subsections: [
           {
             heading: "Rerolling an assignment you hate",
             items: [
-              "No matching record? Try another name or reroll. Club year draft gives you a different club and keeps the same recorded year.",
+              "No matching record? Try another name or reroll. Club year rerolls change the club, keeping the year.",
             ],
           },
           {
@@ -1150,7 +1148,6 @@ export const SOCCER_CONTENT_2: GameContentMap = {
         heading: "Submitting your finished XI for a rating",
         items: [
           "Fill all 11 slots and check the role fit, chemistry and balance tiles under the pitch. Mixed uses its usual evaluation when you submit.",
-          "Club year draft uses the value and age from your selected records. With enough data, it shows a fictional season report. Missing value or age leaves the completed draft unrated instead of guessing a rating.",
         ],
       },
     ],
@@ -1159,7 +1156,6 @@ export const SOCCER_CONTENT_2: GameContentMap = {
         heading: "Wrong answers cost nothing to retry",
         items: [
           "Wrong answers are rejected with a reason but cost nothing. Retry until a valid name lands.",
-          "Club year draft needs a matching club record from your chosen year. A record only from another year does not count, even if the player matches the club.",
         ],
       },
       {
@@ -1178,7 +1174,7 @@ export const SOCCER_CONTENT_2: GameContentMap = {
         heading: "Chemistry and the Mixed backup judge",
         items: [
           "Chemistry: two players standing next to each other on the pitch who are at the same club on our data add +0.6 to the side, from the same country +0.2, up to +2 in all.",
-          "In Mixed, the built in offline judge can grade the XI if the AI judge is unreachable. Club year draft uses the selected records instead of that AI rating.",
+          "Mixed uses its offline backup if the AI cannot respond. Club year draft uses the selected records instead.",
         ],
       },
       {
@@ -1187,14 +1183,6 @@ export const SOCCER_CONTENT_2: GameContentMap = {
           "Role fit: a player in a slot his recorded positions cover plays at full value. Next door, like a right back at left back, costs 2 rating points on him, averaged over the eleven. The slot check never lets anyone further out of position than that.",
           "Balance: no defensive midfielder in a CM or CDM slot costs the side 1, and a wide slot held by someone who is not a wide player, like a centre back at full back, costs 0.5 for that flank.",
           "The season report says what role fit, chemistry and balance were each worth in league points, by replaying the same season without each one.",
-        ],
-      },
-      {
-        heading: "What a recorded year means",
-        items: [
-          "The year filters the records we hold. Browse players is not a complete squad list, and some players may be missing.",
-          "A Club year rating uses the selected record's value and age, not an invented replacement. A missing value or age leaves the draft unrated.",
-          "The season report is fictional. It does not claim real results or every appearance from that year.",
         ],
       },
     ],
@@ -1220,12 +1208,6 @@ export const SOCCER_CONTENT_2: GameContentMap = {
         ],
       },
       {
-        heading: "Browsing for a goalkeeper you cannot remember",
-        items: [
-          "Need a keeper in Club year draft? Select GK, then Browse players and look through the matching records instead of guessing a name.",
-        ],
-      },
-      {
         heading: "Putting clubmates side by side for chemistry",
         items: [
           "Two players from the same club or country only link when they stand next to each other, so use your slot choice to put them side by side.",
@@ -1234,7 +1216,7 @@ export const SOCCER_CONTENT_2: GameContentMap = {
       {
         heading: "Letting autocomplete fix a rejected spelling",
         items: [
-          "Pick from the suggestions so the selected record travels with the name. In Club year draft, search or Browse players can only show records we hold, not a complete club squad.",
+          "If a right sounding name is rejected, let the search autocomplete the spelling for you.",
         ],
       },
     ],
@@ -1253,7 +1235,7 @@ export const SOCCER_CONTENT_2: GameContentMap = {
       },
       {
         q: "What does the rating look like?",
-        a: "Mixed keeps its rating headline and written analysis, with every player judged at his peak. Club year draft uses the value and age on the records you picked for that year. When those records can all be rated, the fictional season report shows a squad rating out of 100, league finish, points, trophies, a top scorer and simulated player stats, with role fit, chemistry and balance included. These are simulated results, not a replay of the real season. If a selected record is missing value or age, the XI can finish as an unrated recorded draft.",
+        a: "Mixed judges every player at his peak and gives a headline, analysis and season report. Club year draft uses selected values and ages, or stays unrated if either is missing. Its fictional report includes a squad rating out of 100, league finish, points, trophies, top scorer and player stats, with role fit, chemistry and balance.",
       },
     ],
   },
