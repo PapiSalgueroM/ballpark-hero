@@ -187,7 +187,7 @@ try {
       const draw=page.getByRole('button',{name:'Draw my 11 nations',exact:true});
       await draw.waitFor();await page.evaluate(()=>document.fonts.ready);
       const group=page.getByRole('group',{name:'Nation pool',exact:true});
-      await group.scrollIntoViewIfNeeded();
+      await group.evaluate(element=>element.scrollIntoView({block:'center',inline:'nearest',behavior:'instant'}));
       const initialSample=await observe('expanded-default',true);
       if(width===320 && motion==='no-preference') record.geometryControls=geometryControls(initialSample);
       assert.equal(await page.getByText(/^13 nations are in the draw\./).count(),1);
@@ -245,7 +245,7 @@ try {
       await page.getByRole('button',{name:'Play again',exact:true}).click();
       assert.equal(await page.getByRole('button',{name:'2026 Nations',exact:true}).getAttribute('aria-pressed'),'true');
       assert.equal(await page.getByText(/^12 nations are in the draw\./).count(),1);
-      await group.scrollIntoViewIfNeeded();await observe('2026-replay',true);
+      await group.evaluate(element=>element.scrollIntoView({block:'center',inline:'nearest',behavior:'instant'}));await observe('2026-replay',true);
       assert.equal(record.errors.length,0,'WORLD_XI_BROWSER_RUNTIME: no page errors');
       assert.equal(record.transportErrors.length,0,'WORLD_XI_BROWSER_TRANSPORT: all accepted fixtures have exact source shape');
       const reads=record.io.filter(row=>row.kind==='fictional-database-read');
