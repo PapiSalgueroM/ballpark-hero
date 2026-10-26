@@ -19234,3 +19234,21 @@ The unchanged live-pool gates simWorldXiPositions and simWorldXiDefensiveMids re
 Transfer Path: the Endrick/Carvajal refusal is a missing Carvajal Real Madrid2024-2025 career row, not a reason to relax season matching. Official club and UEFA records confirm their shared season. An outside intake packet and four unrun actual-graph regression cases are prepared for Owner I. The2025-26 half-season claim remains unverified. No career-data or database repair has been applied here.
 
 Evidence: C:/Users/antho/dukb-handoff/2026-10-24, World XI packets and transfer-path-shared-season-discovery-v1 plus transfer-path-shared-season-regression-proposal-v1. Historic1441's10 missing folders/785 entries remain open. Both protected indexes remain pinned; older checkouts and evidence are preserved.
+
+### 2026-10-26: World XI derived-content followup and fresh report intake
+
+Draft PR399 remains on the owned World XI branch. Main and publication remain Owner I's lane. This entry is authored before the next strict final verification, so its results remain pending here.
+
+The first final run40272503815/a1 at3557f833 was refused. Types and all17 tests passed, but simSiteSearch found the stale guide keyword hash, simGuideHeadings found the intentionally edited World XI instructions missing from its frozen record, and the browser's390px replay observation aligned the mode buttons beneath the sticky Menu strip. All originals remain retained. No failed check was waived. The V5 browser driver changes only the two deliberate group preparations to native centered scrolling and keeps every geometry, hit, transport and journey assertion.
+
+Normal derived run40276093890/a1 at14a50f3dc5804b5ea13442e5445aa7f544d56336, treea431c8b9fb20abcc6bf444a1474d2c8a36005fe6, is qualified for two output bodies only. It ran unchanged simGuideHeadings.mjs --refresh /world-xi and genSearchKeywords.mjs. The actual frozen guide record changes only World XI howToPlay/rules/tips plus normal refresh metadata; all130 other route records and the example remain held. All133 search keys and their order remain held; only World XI's keyword value changed. The source hash is2b1c9def77cb66db. Root and CM independently checked original output bodies, full source/dependency holds and three effective copied-output judge controls.
+
+This round adopts those actual generated bodies: guideHeadingsFrozen.json383110bytes/Gite0ca753ea4ce4fb1ab1781ee424085b03cc81878 and searchKeywords.json10974bytes/Gitc392d26946dc120410560f8e2b44390896259e11. This is normal generation, with no hand-edited guide entries, changed search algorithm or guard exemption.
+
+The next final source keeps V5 and requires fresh app types, all17 tests, build, both local World XI report sims, all18 completed-dist readers, unchanged15-route caps and all12 browser contexts with original pixels reviewed separately. The two live-roster gates remain UNVERIFIED and required before Owner I's big production ship. No full-suite, real-roster, main-merge or publication claim is made.
+
+The new report batch is preserved outside the checkout. Root claimed only Build Your XI's same-side LB-at-LWB and RB-at-RWB grading seam, a focused six-test source and its existing sim expectation seam. Those proposals remain unrun and unapplied until a tests-only RED baseline qualifies. Shared positionFit and all protected Club Manager/Soccer source remain held.
+
+Current-main and Owner I source maps separate missing shirt-number customization, selectable national squads, general board wage/budget requests, global cups and expanded awards from existing mechanics. PR384 already contains the separate retirement-talk draft. The disappearing Messi/Ronaldo save is unreproduced; expired-contract release and retirement must not be conflated. Transfer Path's verified2024-25 shared-season data intake remains unapplied under Owner I integration.
+
+Historic1441's10 missing folders and785 entries remain OPEN. No old checkout, prefix or original evidence was removed. Exact final outcomes belong in PR399 and the retained closure evidence, without rewriting this pre-verification statement.

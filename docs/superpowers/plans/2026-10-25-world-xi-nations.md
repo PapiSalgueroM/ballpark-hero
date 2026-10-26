@@ -98,3 +98,11 @@ Final verification is a later ordinary commit adopting those actual outputs, bro
 Source inspection confirmed the two older live-pool gates cannot qualify under the original offline guard. simWorldXiPositions and simWorldXiDefensiveMids stay UNVERIFIED and required for a big production ship. This is consistent with the original plan's blocked-read rule; neither is silently counted as PASS.
 
 At the time this ledger is authored, final clean-source/browser/readers/caps/pixels remain pending. The later draft PR and closure packet record actual results. No real roster count, official squad, whole-site/full-suite or live publication result is inferred. Main integration and publication remain with Owner I.
+
+## Followup after the first final run
+
+Actual final40272503815/a1 remains refused. Its two stale derived-content gates and390px replay hit failure were investigated from retained originals. V5 centers only the existing two group observation preparations; no hit predicate or gameplay condition changes.
+
+Qualified derived40276093890/a1 executed the two existing normal generators and retained actual before/after/partial bodies. Only the intended guide record and search index changed. All130 other frozen routes, the World XI example, all133 search keys and other132 keyword values remain held. Three physical copied-output controls prove the output judges, not product gameplay.
+
+Adopt exact actual Gite0ca753ea4ce4fb1ab1781ee424085b03cc81878 and Gitc392d26946dc120410560f8e2b44390896259e11, then run the unchanged strict final verification protocol on a fresh source commit. Final types/build/test/sim/reader/cap/browser and pixel results are pending when this append is authored. Keep the two live-roster gates explicitly unverified and Owner I integration/publication separate. The earlier failed run is never reclassified.
