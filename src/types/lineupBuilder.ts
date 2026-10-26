@@ -50,6 +50,8 @@ export interface TeamAssignment {
   isNation: boolean;
 }
 
+export type DraftChoice = { mode: 'mixed' } | { mode: 'club-year'; year: number };
+
 export type GamePhase = 'formation' | 'building' | 'reviewing' | 'result';
 
 export interface AIVerdict {
