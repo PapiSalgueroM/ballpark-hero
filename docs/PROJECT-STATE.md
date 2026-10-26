@@ -19225,3 +19225,14 @@ The first raw-original qualification at 6d191860ae7143b5f521cd258c76fcc4c68994f3
 This separate QA-only branch starts from b20ec6664df9d4c58d63ea0596791d33b2a3b8fc. The shadow now receives every tracked source file with exact body checks. The raw original candidate, eight tests, baseline fixture, type command, dependency lock and time limits are unchanged. Only the isolated shadow receives the candidate; the canonical game engine is held. The same baseline, type, normal, source-control and preservation checks must pass on actual evidence.
 
 This prototype supplies projected original records with origin provenance only. Career ownership, retired-ledger precedence, market availability, current club and national eligibility remain separate work. Owner I retains protected product integration, main and publication. All five newest reports remain open. No user save reproduction, full suite, browser or live result is claimed.
+
+
+## 2026-10-26: Raw original view QA qualified, canonical game held
+
+The full-source shadow correction at cab045c3f7ab3bfbb6bb3891a31abbff04697a64, run 40384956132 attempt 1, is qualified for isolated QA only. The real app type check exited 0 and all eight normal cases passed. One expected missing-API baseline assertion and all three physical source-control triplets produced their exact owned failures. Each source triplet was 0/1/0 with full restoration. Four physical copied-report controls and one missing-link diagnostic also rejected their intended faults in process, without extra native-process credit.
+
+The original has 392 regular members and 391 matching seal rows. All 15 selected guarded cohorts have empty receipts. Full comparisons cover 54 healthy scope triples, 162 world bodies, with canonical worlds unchanged before and after raw reads. Both 5,381-body source archives and all 24,466 dependency hash/member records held without exclusions. The earlier 40381783506 attempt 1 remains refused.
+
+The candidate was applied only inside the detached shadow. The canonical game engine, current saves and UI were not changed. Raw records supply original trajectories and origin provenance, not current club, seller, career availability or national eligibility. Pruned retirement authority, caller precedence and performance remain unresolved. No user-save reproduction, browser, build, full suite, main or live result is claimed. Owner I retains product integration and publication.
+
+Final audit: remote-cm-active-original-full-source-40384956132-a1/FINAL-QUALIFIED-ADMISSION.json, SHA256 d133d12cd2c9f11da8a1506a275e0fcf2ec4e5ce1f5fbdeaa0e094553883e45a.
