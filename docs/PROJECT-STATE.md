@@ -19216,3 +19216,12 @@ The two initial fixture failures39940913787 and39943246891 remain separate from 
 Evidence packet: C:/Users/antho/dukb-handoff/2026-10-23/search-navigation. Root qualification c565e4bb892d6f5392e942e329af0b1661faba1e626bddb051ab76276d2e88b5; Root pixels743d12524f3b65bf0752151b2cfdbb7c3866377866360b6f66c60a4875cfdb26; independent integrated audit4e7ff7ad3b766d00b3f7f5ac280ed0b9d67fd91e8a27416cd182579a76da9dac. The normal saved-picks archive is also retained as2ca41f45c885f8066326880fe73480b83b0ee3ae7a3c4b08503c94fc74fa3e98.
 
 I retains sole publication. Root did not publish this Search correction and makes no new live-site claim. Analytics remains paused. No local application execution, cleanup, old checkout reset, data/provider/account change or protected game adoption occurred. Primary WORKBOARD and the continuation checkpoint receive only this exact note through the reviewed exclusive-lock append helper, with actual full-prefix backups/readback and both protected indexes checked before and finally. Earlier preservation gaps remain unwaived.
+
+
+## 2026-10-26: Active-original view full-source shadow correction
+
+The first raw-original qualification at 6d191860ae7143b5f521cd258c76fcc4c68994f3, run 40381783506 attempt 1, is refused. The isolated copy omitted tracked scripts and Supabase modules required by app imports. The app type check exited 2 with 17 TS2307 errors. One expected missing-API baseline assertion ran; the normal eight cases and three source-control triplets did not run. The original artifact and partial evidence are retained. No product regression or fix is established by that run.
+
+This separate QA-only branch starts from b20ec6664df9d4c58d63ea0596791d33b2a3b8fc. The shadow now receives every tracked source file with exact body checks. The raw original candidate, eight tests, baseline fixture, type command, dependency lock and time limits are unchanged. Only the isolated shadow receives the candidate; the canonical game engine is held. The same baseline, type, normal, source-control and preservation checks must pass on actual evidence.
+
+This prototype supplies projected original records with origin provenance only. Career ownership, retired-ledger precedence, market availability, current club and national eligibility remain separate work. Owner I retains protected product integration, main and publication. All five newest reports remain open. No user save reproduction, full suite, browser or live result is claimed.
