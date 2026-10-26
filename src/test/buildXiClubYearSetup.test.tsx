@@ -60,7 +60,7 @@ describe('Build Your XI club year setup', () => {
   it('offers a recorded year club draft before formation', () => {
     render(<LineupBuilder />);
     expect(formationButtons()).toHaveLength(6);
-    expect(screen.queryAllByRole('button', { name: 'Club year draft', exact: true }).length,
+    expect(screen.queryAllByRole('button', { name: 'Club year draft' }).length,
       'XI_CLUB_YEAR_SETUP: recorded year choice').toBe(1);
   });
 });

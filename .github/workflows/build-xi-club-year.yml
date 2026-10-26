@@ -14,7 +14,7 @@ jobs:
     env:
       CI: true
       SIM_NETWORK: offline
-      EXPECTED_PARENT: cb1c2025a31a7e01ad41ffd5f3a76d9b3ab9ed1f
+      EXPECTED_PARENT: 3225a0c11d9638e3683003cf3e0ec3a1d3a8d711
     defaults:
       run:
         shell: bash
@@ -42,18 +42,18 @@ jobs:
           test "$GITHUB_REF" = refs/heads/codex/build-xi-club-year-20261026
           test "$(git rev-parse HEAD)" = "$GITHUB_SHA"
           test "$(git show -s --format=%P HEAD)" = "$EXPECTED_PARENT"
-          test "$(git rev-parse "$EXPECTED_PARENT^{tree}")" = 1b0ee1a3de32c5185c9725b3962f485c2dbb5bef
+          test "$(git rev-parse "$EXPECTED_PARENT^{tree}")" = 844013655bdad832e28910b9e44e5da079af78b0
           git diff --name-status "$EXPECTED_PARENT" HEAD > "$out/direct-paths.txt"
-          printf 'A\t.github/workflows/build-xi-club-year.yml\nA\tdocs/superpowers/plans/2026-10-26-build-xi-club-year.md\nA\tsrc/test/buildXiClubYearSetup.test.tsx\n' | cmp - "$out/direct-paths.txt"
+          printf 'M\t.github/workflows/build-xi-club-year.yml\nM\tsrc/test/buildXiClubYearSetup.test.tsx\n' | cmp - "$out/direct-paths.txt"
           base=cb1c2025a31a7e01ad41ffd5f3a76d9b3ab9ed1f
           git diff --name-status "$base" HEAD > "$out/cumulative-paths.txt"
           printf 'A\t.github/workflows/build-xi-club-year.yml\nA\tdocs/superpowers/plans/2026-10-26-build-xi-club-year.md\nA\tsrc/test/buildXiClubYearSetup.test.tsx\n' | cmp - "$out/cumulative-paths.txt"
           for file in .github/workflows/build-xi-club-year.yml docs/superpowers/plans/2026-10-26-build-xi-club-year.md src/test/buildXiClubYearSetup.test.tsx;do
             if git cat-file -e "$base:$file" 2>> "$out/original-base-absence.stderr";then printf 'Unexpected existing original-base path: %s\n' "$file";exit 1;fi
           done
-          git diff --exit-code "$EXPECTED_PARENT" HEAD -- . ':!.github/workflows/build-xi-club-year.yml' ':!docs/superpowers/plans/2026-10-26-build-xi-club-year.md' ':!src/test/buildXiClubYearSetup.test.tsx' > "$out/other-source-held.log"
+          git diff --exit-code "$EXPECTED_PARENT" HEAD -- . ':!.github/workflows/build-xi-club-year.yml' ':!src/test/buildXiClubYearSetup.test.tsx' > "$out/other-source-held.log"
           git ls-tree -r --name-only "$EXPECTED_PARENT" > "$out/parent-members.txt"
-          test "$(wc -l < "$out/parent-members.txt")" -eq 5381
+          test "$(wc -l < "$out/parent-members.txt")" -eq 5384
           git rev-parse HEAD > "$out/head.txt";git rev-parse 'HEAD^{tree}' > "$out/tree.txt"
           git ls-files -z | sort -z > "$out/source-members.before"
           test "$(tr -cd '\000' < "$out/source-members.before" | wc -c)" -eq 5384
@@ -69,7 +69,7 @@ jobs:
           const fs=require('node:fs'),path=require('node:path'),cp=require('node:child_process'),assert=require('node:assert/strict'),{createHash}=require('node:crypto');
           const {stripVTControlCharacters}=require('node:util');
           const ROOT=fs.realpathSync(process.cwd()),OUT=fs.realpathSync(process.env.BUILD_XI_OUT),SELF=fs.realpathSync(__filename);
-          const PARENT='cb1c2025a31a7e01ad41ffd5f3a76d9b3ab9ed1f',PARENT_TREE='1b0ee1a3de32c5185c9725b3962f485c2dbb5bef';
+          const PARENT='3225a0c11d9638e3683003cf3e0ec3a1d3a8d711',PARENT_TREE='844013655bdad832e28910b9e44e5da079af78b0';
           const WF='.github/workflows/build-xi-club-year.yml',TEST='src/test/buildXiClubYearSetup.test.tsx',PLAN='docs/superpowers/plans/2026-10-26-build-xi-club-year.md';
           const PINS={
            "src/lib/xiFit.ts": "f2fb9c20467651b632e7715cb8b1ffd69fe6f296",
@@ -132,18 +132,19 @@ jobs:
             assert.equal(git(['rev-parse',PARENT+':'+file]),expected);
             source[file]={bytes:body.length,sha256:sha(body),gitBlob:expected};
            }
-           for(const [file,bytes,expected]of [[TEST,3174,'3428e51c4dd832ebbb0eb15fcd5a3413757d60928bee9aa800d62124f77af9d0'],[PLAN,3984,'cd991dc36574fe9555a6c77e6dfbfd8fd9be878575ed08087d51d1e66959a83c']]){
+           for(const [file,bytes,expected,parentGit]of [[TEST,3161,'1cc88f882ca918a028962ec7a735f9163b1e974a927fd2e0f12d977f8c9568c9','b3405f0ad760cff012e1e4e603c983f48bba49c7'],[PLAN,3984,'cd991dc36574fe9555a6c77e6dfbfd8fd9be878575ed08087d51d1e66959a83c','18999dd7b01f94ef56e4af0920eae48530e3cc6f']]){
             const body=regular(file);assert.equal(body.length,bytes);assert.equal(sha(body),expected,'BUILD_XI_NEW_SOURCE');
             assert.equal(blob(body),git(['rev-parse','HEAD:'+file]));
-            assert.equal(git(['ls-tree','--name-only',PARENT,'--',file]),'','BUILD_XI_NEW_SOURCE_ABSENT_IN_PARENT');
+            assert.equal(git(['rev-parse',PARENT+':'+file]),parentGit,'BUILD_XI_EXISTING_PARENT_SOURCE');
             source[file]={bytes:body.length,sha256:sha(body),gitBlob:blob(body)};
            }
+           assert.equal(git(['rev-parse',PARENT+':'+WF]),'6e0202aeb9b9e9ad8037b4b71ac994ba293582b0','BUILD_XI_PARENT_WORKFLOW');
            const wf=regular(WF);assert.equal(blob(wf),git(['rev-parse','HEAD:'+WF]));
            source[WF]={bytes:wf.length,sha256:sha(wf),gitBlob:blob(wf)};
            const names=cp.execFileSync('git',['ls-files','-z']);
            const files=names.toString().split('\0');assert.equal(files.pop(),'');assert.equal(files.length,5384);
            for(const file of files){regular(file);const real=fs.realpathSync(file);assert(real.startsWith(ROOT+path.sep),'BUILD_XI_SOURCE_ESCAPE');}
-           return {phase:'club-year-setup-owned-RED',source:process.env.GITHUB_SHA,parent:PARENT,parentTree:PARENT_TREE,tree:git(['rev-parse','HEAD^{tree}']),run:process.env.GITHUB_RUN_ID,attempt:process.env.GITHUB_RUN_ATTEMPT,processPid:process.pid,parentBlobs:5381,sourceBlobs:5384,directPaths:3,criticalSources:source,helper:{file:SELF,bytes:regular(SELF).length,sha256:sha(regular(SELF))},applicationChange:false,fullSuite:false,browser:false,livePublished:false};
+           return {phase:'club-year-setup-owned-RED',source:process.env.GITHUB_SHA,parent:PARENT,parentTree:PARENT_TREE,tree:git(['rev-parse','HEAD^{tree}']),run:process.env.GITHUB_RUN_ID,attempt:process.env.GITHUB_RUN_ATTEMPT,processPid:process.pid,parentBlobs:5384,sourceBlobs:5384,directPaths:2,criticalSources:source,helper:{file:SELF,bytes:regular(SELF).length,sha256:sha(regular(SELF))},applicationChange:false,fullSuite:false,browser:false,livePublished:false};
           }
           function native(id,status){
            const r=json(id+'.closed.json');assert.equal(r.id,id);
@@ -294,7 +295,7 @@ jobs:
           }
           main(process.argv[2]).then(()=>console.log('Build XI baseline '+process.argv[2]+' complete, pid '+process.pid)).catch(error=>{console.error(error.stack||error);process.exitCode=1;});
           HELPER
-          printf '4f7e600cab99c0b52e630bce0c4e309f7a873b4ada7ee1c3e0d207ec1bfd9067  %s\n' "$out/build-xi-club-year-baseline.cjs" > "$out/generated.sha256"
+          printf '23e9b80679cd01dcc5ba4e1f142ec0a4ba74104bdd9e73f6959000c7a9377bd2  %s\n' "$out/build-xi-club-year-baseline.cjs" > "$out/generated.sha256"
           sha256sum -c "$out/generated.sha256" > "$out/generated-before.log"
           : > "$out/foundation.transport";status=0
           NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" SIM_OFFLINE_RECEIPT="$out/foundation.transport" node "$out/build-xi-club-year-baseline.cjs" source > "$out/foundation.stdout" 2> "$out/foundation.stderr" || status=$?
