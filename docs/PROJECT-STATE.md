@@ -19216,3 +19216,39 @@ The two initial fixture failures39940913787 and39943246891 remain separate from 
 Evidence packet: C:/Users/antho/dukb-handoff/2026-10-23/search-navigation. Root qualification c565e4bb892d6f5392e942e329af0b1661faba1e626bddb051ab76276d2e88b5; Root pixels743d12524f3b65bf0752151b2cfdbb7c3866377866360b6f66c60a4875cfdb26; independent integrated audit4e7ff7ad3b766d00b3f7f5ac280ed0b9d67fd91e8a27416cd182579a76da9dac. The normal saved-picks archive is also retained as2ca41f45c885f8066326880fe73480b83b0ee3ae7a3c4b08503c94fc74fa3e98.
 
 I retains sole publication. Root did not publish this Search correction and makes no new live-site claim. Analytics remains paused. No local application execution, cleanup, old checkout reset, data/provider/account change or protected game adoption occurred. Primary WORKBOARD and the continuation checkpoint receive only this exact note through the reviewed exclusive-lock append helper, with actual full-prefix backups/readback and both protected indexes checked before and finally. Earlier preservation gaps remain unwaived.
+
+## World XI nation pools candidate, 2026-10-26
+
+Branch codex/world-xi-nations-20261025 adds Expanded (default), Classic and 2026 Nations to the existing World XI page. Expanded includes nonempty country buckets with actual slot-fit checks. Classic keeps the original data object and draw behavior. 2026 Nations intersects available game countries with the existing verified tournament field. It uses existing game players, not official tournament squads. Draws, suggestions, respins, the reel and result/share labels use the selected pool. The optional season remains the same 38-game league. No real player rows, scoring rules, position rules or shared simulation engine changed.
+
+The owned RED baseline is qualified at 049f75a3d044e5b9b0233fd0891036a1246a3c3a, run40267999442/a1. Old7 passed and the two new actual-page assertions failed on the intended missing behaviors. The earlier40265267185 run remains refused.
+
+Implementation source e113bb232f1bbc38abc7c8ce40830b2ba5cf14e9/tree3fb895c497666b8c493a64ca06123d556e932b39 passed actual app types and all17 related cases in run40270445637/a1. Two physical helper-source faults produced their owned failures; exact restored sources passed both actual-page cases. Scoped prerender, derived sitemap and both builds completed. Root independently admitted the once-retained original60,819,496-byte artifact (SHA2568c58ccb9fd4b5f5fb32fc20c49d67ee600c126b2264d75c351228fdd765a5c18), all5383 source bodies, other5380 source holds, full first/final824-file dist copies and16 empty guarded cohort receipts.
+
+Only public/world-xi/index.html, public/sitemap.xml and scripts/data/lastmod.json were regenerated. Other sitemap rows and ledger entries remain held. The final build's snapshot receives the unchanged Vite plugin's normal asset tags; the committed snapshot stays hash free.
+
+This append is authored before the final clean-source verification run. That run checks fresh types/build17, two existing local report/season sims, all18 completed-dist readers, unchanged fatal weight caps, and12 actual-page browser contexts using disclosed fictional transport. Original pixels require Root and independent review. Results and exact final head belong in the draft PR and retained closure evidence. No result of that later run is asserted here.
+
+The unchanged live-pool gates simWorldXiPositions and simWorldXiDefensiveMids remain UNVERIFIED in this offline lane. They need the live database before a big production ship. No all-suite, real-roster coverage or publication claim is made. Owner I retains main integration and publication.
+
+Transfer Path: the Endrick/Carvajal refusal is a missing Carvajal Real Madrid2024-2025 career row, not a reason to relax season matching. Official club and UEFA records confirm their shared season. An outside intake packet and four unrun actual-graph regression cases are prepared for Owner I. The2025-26 half-season claim remains unverified. No career-data or database repair has been applied here.
+
+Evidence: C:/Users/antho/dukb-handoff/2026-10-24, World XI packets and transfer-path-shared-season-discovery-v1 plus transfer-path-shared-season-regression-proposal-v1. Historic1441's10 missing folders/785 entries remain open. Both protected indexes remain pinned; older checkouts and evidence are preserved.
+
+### 2026-10-26: World XI derived-content followup and fresh report intake
+
+Draft PR399 remains on the owned World XI branch. Main and publication remain Owner I's lane. This entry is authored before the next strict final verification, so its results remain pending here.
+
+The first final run40272503815/a1 at3557f833 was refused. Types and all17 tests passed, but simSiteSearch found the stale guide keyword hash, simGuideHeadings found the intentionally edited World XI instructions missing from its frozen record, and the browser's390px replay observation aligned the mode buttons beneath the sticky Menu strip. All originals remain retained. No failed check was waived. The V5 browser driver changes only the two deliberate group preparations to native centered scrolling and keeps every geometry, hit, transport and journey assertion.
+
+Normal derived run40276093890/a1 at14a50f3dc5804b5ea13442e5445aa7f544d56336, treea431c8b9fb20abcc6bf444a1474d2c8a36005fe6, is qualified for two output bodies only. It ran unchanged simGuideHeadings.mjs --refresh /world-xi and genSearchKeywords.mjs. The actual frozen guide record changes only World XI howToPlay/rules/tips plus normal refresh metadata; all130 other route records and the example remain held. All133 search keys and their order remain held; only World XI's keyword value changed. The source hash is2b1c9def77cb66db. Root and CM independently checked original output bodies, full source/dependency holds and three effective copied-output judge controls.
+
+This round adopts those actual generated bodies: guideHeadingsFrozen.json383110bytes/Gite0ca753ea4ce4fb1ab1781ee424085b03cc81878 and searchKeywords.json10974bytes/Gitc392d26946dc120410560f8e2b44390896259e11. This is normal generation, with no hand-edited guide entries, changed search algorithm or guard exemption.
+
+The next final source keeps V5 and requires fresh app types, all17 tests, build, both local World XI report sims, all18 completed-dist readers, unchanged15-route caps and all12 browser contexts with original pixels reviewed separately. The two live-roster gates remain UNVERIFIED and required before Owner I's big production ship. No full-suite, real-roster, main-merge or publication claim is made.
+
+The new report batch is preserved outside the checkout. Root claimed only Build Your XI's same-side LB-at-LWB and RB-at-RWB grading seam, a focused six-test source and its existing sim expectation seam. Those proposals remain unrun and unapplied until a tests-only RED baseline qualifies. Shared positionFit and all protected Club Manager/Soccer source remain held.
+
+Current-main and Owner I source maps separate missing shirt-number customization, selectable national squads, general board wage/budget requests, global cups and expanded awards from existing mechanics. PR384 already contains the separate retirement-talk draft. The disappearing Messi/Ronaldo save is unreproduced; expired-contract release and retirement must not be conflated. Transfer Path's verified2024-25 shared-season data intake remains unapplied under Owner I integration.
+
+Historic1441's10 missing folders and785 entries remain OPEN. No old checkout, prefix or original evidence was removed. Exact final outcomes belong in PR399 and the retained closure evidence, without rewriting this pre-verification statement.

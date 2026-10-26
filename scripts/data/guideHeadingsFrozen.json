@@ -3709,14 +3709,16 @@
     },
     "/world-xi": {
       "howToPlay": [
-        "Pick one of 9 formations, a timer (none, 90 seconds or 60 seconds for the whole XI), and your respin budget.",
+        "Choose Expanded, Classic or 2026 Nations, then pick one of 9 formations, a timer (none, 90 seconds or 60 seconds for the whole XI), and your respin budget.",
         "Hit draw and the reel reveals your nations in random slot order.",
         "Type 2 or more letters and pick a player of that nationality who covers the slot.",
         "Wrong position picks bounce off harmlessly with an explanation. Confirmed picks lock for good.",
         "Fill all 11 to win, then check squad value and chemistry, and simulate a season if you are curious. The report has a month by month tab, a player stats tab and a share card with your finish, top scorer and player of the season."
       ],
       "rules": [
-        "Every slot gets a different nation, and only countries with depth make the draw: at least 2 goalkeepers, 2 centre backs, 3 defenders, 3 midfielders and 2 strikers in the database.",
+        "Expanded uses more nations from the existing player pool, including countries that only cover a few positions. Every drawn nation still needs a player who fits its assigned slot, and all eleven nations are different.",
+        "Classic keeps the original depth rule: at least 2 goalkeepers, 2 centre backs, 3 defenders, 3 midfielders and 2 strikers in the database.",
+        "2026 Nations uses countries from the tournament that are available in the game. Players come from the existing game pool. The optional season simulation is still a 38-game club league.",
         "Respins reroll a nation you cannot solve, shared across all slots. You choose your budget before the draw: none, 3, 5 or 10, with 3 as the default.",
         "Position families count: wingers cover both flanks, central midfielders cover holding and attacking slots, strikers and centre forwards swap freely, full backs cover wing back slots. Front line winger slots take wingers and wide midfielders only, never wing backs.",
         "The timer covers the whole run, and zero on the clock ends it. The season sim rates your XI out of 100 across a 38 game, 20 team league.",
@@ -3728,7 +3730,7 @@
       ],
       "tips": [
         "Bank time on the easy slots. In timed modes the clock is the real opponent.",
-        "Spend respins on goalkeepers and centre backs, where thin footballing nations truly have nobody famous.",
+        "Save respins for nations and positions you find hardest. Try Classic if you want deeper player pools while learning the game.",
         "Suggestions only show players from the drawn country, so an empty list means wrong spelling or wrong idea."
       ]
     }
