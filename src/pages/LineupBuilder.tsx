@@ -66,6 +66,7 @@ const LineupBuilder = () => {
   const inputOwner = useRef<HTMLDivElement>(null);
   const isClubYear = draftChoice.mode === 'club-year';
   const recordedYear = draftChoice.mode === 'club-year' ? draftChoice.year : null;
+  const searchDisabled = isValidating || selectedPositionIndex === null || !currentTeam || isSpinning || checkingDown;
 
   useEffect(() => {
     setBrowsingPlayers(false);
@@ -386,16 +387,16 @@ const LineupBuilder = () => {
                 </p>
               )}
 
-              {selectedPositionIndex !== null && currentTeam && !isSpinning && !checkingDown && (
+              {(isClubYear || (selectedPositionIndex !== null && currentTeam && !isSpinning && !checkingDown)) && (
                 <div className="animate-fade-in space-y-3">
                   <p className="text-sm text-center text-muted-foreground">
-                    Filling: <span className="font-bold text-primary">{positions[selectedPositionIndex]?.label}</span>
+                    {selectedPositionIndex === null ? 'Select a position on the pitch' : <>Filling: <span className="font-bold text-primary">{positions[selectedPositionIndex]?.label}</span></>}
                   </p>
 
                   {isClubYear && (
                     <div className="flex flex-wrap items-center justify-between gap-2">
                       <p className="text-xs text-muted-foreground">Matching records, recorded year {recordedYear}</p>
-                      <button type="button" disabled={isValidating} className="min-h-11 rounded-xl bg-secondary px-3 py-2 text-sm font-semibold text-secondary-foreground disabled:opacity-50"
+                      <button type="button" disabled={searchDisabled} className="min-h-11 rounded-xl bg-secondary px-3 py-2 text-sm font-semibold text-secondary-foreground disabled:opacity-50"
                         onClick={() => {
                           inputRevision.current += 1;
                           setPlayerInput('');
@@ -415,7 +416,7 @@ const LineupBuilder = () => {
                         onSelect={handleSelectPlayer}
                         searchOptions={{ source: teamScopedSource ?? SOCCER_MARKET_VALUE_SOURCE, exclude: excludedPlayers, boostNames: cappedNames, ...(isClubYear && browsingPlayers ? { minChars: 0, limit: 50 } : {}) }}
                         placeholder={currentTeam ? `Search a ${currentTeam.name} player...` : 'Enter player name...'}
-                        disabled={isValidating}
+                        disabled={searchDisabled}
                         autoFocus={!isClubYear}
                         emptyText={isClubYear ? 'No matching records. Try another name or reroll the club.' : undefined}
                         validateOnly
@@ -437,7 +438,7 @@ const LineupBuilder = () => {
                 </div>
               )}
 
-              {selectedPositionIndex === null && !isSpinning && (
+              {!isClubYear && selectedPositionIndex === null && !isSpinning && (
                 <p className="text-center text-sm text-muted-foreground animate-fade-in">
                   ↓ Select a position on the pitch
                 </p>
