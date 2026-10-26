@@ -1,0 +1,336 @@
+name: NBA season twenty saved board contracts
+on:
+  push:
+    branches: [codex/nba-season20-qualification-20261026]
+permissions:
+  contents: read
+concurrency:
+  group: nba-season20-${{ github.ref }}
+  cancel-in-progress: false
+jobs:
+  contracts:
+    runs-on: ubuntu-latest
+    timeout-minutes: 60
+    env:
+      CI: true
+      SIM_NETWORK: offline
+      NBA20_PHASE: saved-board-contracts
+      EXPECTED_PARENT: cdf8c797960f9c66e8f4e5fe874ba8fa7c76305c
+    defaults:
+      run:
+        shell: bash
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          persist-credentials: false
+          ref: ${{ github.sha }}
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: npm
+      - name: Bind detached test source and hold every product path
+        id: foundation
+        timeout-minutes: 5
+        run: |
+          set -euo pipefail
+          out="$RUNNER_TEMP/nba-season20-contracts"
+          test ! -e "$out";test ! -L "$out";mkdir "$out"
+          export NBA20_OUT="$out";echo "NBA20_OUT=$out" >> "$GITHUB_ENV"
+          shadow="$RUNNER_TEMP/nba-season20-source-shadow"
+          test ! -e "$shadow";test ! -L "$shadow"
+          export NBA20_SHADOW="$shadow";echo "NBA20_SHADOW=$shadow" >> "$GITHUB_ENV"
+          for name in SIM_SEED BYXI_CONTROL BYXI_SEED BYXI_PRINT_DIGEST NODE_OPTIONS NODE_PATH VITEST ONLY BROWSER TYCOON_AWAY_CONTROL COMPLETION_HOOK OWNED_TIMEOUTS_HOOK CONQUEST_NBA_HOOK CONQUEST_NBA_BOARD POLL_FIXTURES US_BOARD_CONTROL_ALIAS US_BOARD_CONTROL_FILE DAILY_RECORD_CONTROL TYCOON_ROOMS_PAGE TYCOON_LOADS_STADIUM_HOOK TYCOON_LOADS_ACADEMY_HOOK TYCOON_LOADS_STADIUM_LIB TYCOON_LOADS_ACADEMY_LIB TYCOON_PITCH_COMPONENT TYCOON_PACKS_REWARDS TYCOON_PACKS_PANEL NO_DOUBLE_SWAP;do test ! -v "$name";done
+          test "$GITHUB_REPOSITORY" = PapiSalgueroM/ballpark-hero
+          test "$GITHUB_REPOSITORY_ID" = 1195729679
+          test "$GITHUB_REF" = refs/heads/codex/nba-season20-qualification-20261026
+          test "$(git rev-parse HEAD)" = "$GITHUB_SHA"
+          test "$(git show -s --format=%P HEAD)" = "$EXPECTED_PARENT"
+          test "$(git rev-parse "$EXPECTED_PARENT^{tree}")" = e074f907f51661a7fa4f0f5dc25c155e74f96e45
+          git diff --name-status "$EXPECTED_PARENT" HEAD > "$out/direct-paths.txt"
+          printf 'M\t.github/workflows/nba-season20-qualification.yml\nM\tdocs/PROJECT-STATE.md\nM\tsrc/test/usCareerMarketBoard.test.tsx\n' | cmp - "$out/direct-paths.txt"
+          git diff --exit-code "$EXPECTED_PARENT" HEAD -- . ':!.github/workflows/nba-season20-qualification.yml' ':!docs/PROJECT-STATE.md' ':!src/test/usCareerMarketBoard.test.tsx' > "$out/all-other-parent-source-held.log"
+          test "$(git rev-parse 'b20ec6664df9d4c58d63ea0596791d33b2a3b8fc^{tree}')" = 51e0c6a06a6c4fb7d143b4d408eb5a9437737553
+          git diff --name-status b20ec6664df9d4c58d63ea0596791d33b2a3b8fc HEAD > "$out/cumulative-paths.txt"
+          printf 'A\t.github/workflows/nba-season20-qualification.yml\nM\tdocs/PROJECT-STATE.md\nM\tsrc/test/usCareerMarketBoard.test.tsx\n' | cmp - "$out/cumulative-paths.txt"
+          git diff --exit-code b20ec6664df9d4c58d63ea0596791d33b2a3b8fc HEAD -- . ':!.github/workflows/nba-season20-qualification.yml' ':!docs/PROJECT-STATE.md' ':!src/test/usCareerMarketBoard.test.tsx' > "$out/all-other-base-source-held.log"
+          git ls-tree -r --name-only "$EXPECTED_PARENT" > "$out/parent-members.txt"
+          test "$(wc -l < "$out/parent-members.txt")" -eq 5379
+          git rev-parse HEAD > "$out/head.txt";git rev-parse 'HEAD^{tree}' > "$out/tree.txt"
+          git ls-files -z | sort -z > "$out/source-members.before"
+          test "$(tr -cd '\000' < "$out/source-members.before" | wc -c)" -eq 5379
+          xargs -0 sha256sum < "$out/source-members.before" > "$out/source.sha256"
+          git status --porcelain --untracked-files=all > "$out/status-before.txt";test ! -s "$out/status-before.txt"
+          git diff --exit-code HEAD > "$out/source-clean-before.log"
+          git archive --format=tar HEAD > "$out/source.tar"
+          printf 'e60ff1534307e449ccef598e3b7470dcba58681b82cea4005cec7319f14f9221  scripts/lib/offlineTransport.cjs\n' | sha256sum -c - > "$out/guard-before.log"
+          cat > "$out/helper.payload.gz.b64" <<'NBA20_HELPER_GZIP_BASE64'
+          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
+          y33YWei7wD7/C+JtNslvpgAA
+          NBA20_HELPER_GZIP_BASE64
+          base64 --decode "$out/helper.payload.gz.b64" | gzip -dc > "$out/nba-season20-qualification.cjs"
+          printf 'adea3cdc40411580f61381cabf85d0b3553ac7619561a49d577338199e41482c  %s\n' "$out/nba-season20-qualification.cjs" > "$out/generated.sha256"
+          printf 'f98d8745210ae4b3152eb9ab51c9fd54304a791fc299951481c22b0c1de93e8b  %s\n' "$out/helper.payload.gz.b64" > "$out/payload.sha256"
+          sha256sum -c "$out/generated.sha256" > "$out/generated-before.log"
+          sha256sum -c "$out/payload.sha256" > "$out/payload-before.log"
+          : > "$out/foundation.transport";status=0
+          NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" SIM_OFFLINE_RECEIPT="$out/foundation.transport" node "$out/nba-season20-qualification.cjs" source > "$out/foundation.stdout" 2> "$out/foundation.stderr" &
+          pid=$!;printf '%s\n' "$pid" > "$out/foundation.pid";wait "$pid" || status=$?
+          printf '%s\n' "$status" > "$out/foundation.exit";test "$status" -eq 0;test ! -s "$out/foundation.transport"
+      - name: Install exact locked packages
+        id: install
+        timeout-minutes: 20
+        run: |
+          set -euo pipefail
+          out="$NBA20_OUT";status=0
+          npm ci > "$out/npm-ci.stdout" 2> "$out/npm-ci.stderr" &
+          pid=$!;printf '%s\n' "$pid" > "$out/npm-ci.pid";wait "$pid" || status=$?
+          printf '%s\n' "$status" > "$out/npm-ci.exit";test "$status" -eq 0
+          find node_modules -type f -print0 | sort -z > "$out/dependency-members.before"
+          test "$(tr -cd '\000' < "$out/dependency-members.before" | wc -c)" -eq 24466
+          xargs -0 sha256sum < "$out/dependency-members.before" > "$out/dependencies.sha256"
+          find node_modules -type l -printf '%p\t%l\0' | sort -z > "$out/dependency-links.before"
+          find node_modules ! -type d ! -type f ! -type l -print > "$out/dependency-nonregular.before"
+          test ! -s "$out/dependency-nonregular.before"
+      - name: Sixteen board cases and six physical source control triplets
+        id: checks
+        timeout-minutes: 50
+        run: |
+          set -euo pipefail
+          out="$NBA20_OUT"
+          sha256sum -c "$out/generated.sha256" > "$out/generated-pre-consumer.log"
+          sha256sum -c "$out/payload.sha256" > "$out/payload-pre-consumer.log"
+          : > "$out/orchestrator.transport";status=0
+          NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" SIM_OFFLINE_RECEIPT="$out/orchestrator.transport" node "$out/nba-season20-qualification.cjs" checks > "$out/orchestrator.stdout" 2> "$out/orchestrator.stderr" &
+          pid=$!;printf '%s\n' "$pid" > "$out/orchestrator.pid";wait "$pid" || status=$?
+          printf '%s\n' "$status" > "$out/orchestrator.exit";test "$status" -eq 0;test ! -s "$out/orchestrator.transport"
+      - name: Hold canonical sources dependencies generated helper and shadow restoration
+        id: holds
+        if: ${{ always() && steps.foundation.outcome != 'skipped' }}
+        timeout-minutes: 5
+        run: |
+          set -euo pipefail
+          set +e
+          out="$NBA20_OUT";failed=0
+          for name in source dependencies generated payload;do
+            if test -f "$out/$name.sha256" && test ! -L "$out/$name.sha256";then sha256sum -c "$out/$name.sha256" > "$out/$name-hold.log" 2>&1 || failed=1;else printf 'Missing required manifest\n' > "$out/$name-hold.log";failed=1;fi
+          done
+          git ls-files -z | sort -z > "$out/source-members.after"
+          cmp "$out/source-members.before" "$out/source-members.after" > "$out/source-members-hold.log" 2>&1 || failed=1
+          xargs -0 sha256sum < "$out/source-members.after" > "$out/source-after.sha256"
+          tar --null -T "$out/source-members.after" -cf "$out/source-after.tar" || failed=1
+          git diff --exit-code HEAD > "$out/source-dirty-after.log" 2>&1 || failed=1
+          git status --porcelain --untracked-files=all > "$out/status-after.txt"
+          test -f "$out/status-after.txt" && test ! -s "$out/status-after.txt" && test ! -s "$out/source-dirty-after.log" || failed=1
+          find node_modules -type f -print0 | sort -z > "$out/dependency-members.after"
+          cmp "$out/dependency-members.before" "$out/dependency-members.after" > "$out/dependency-members-hold.log" 2>&1 || failed=1
+          xargs -0 sha256sum < "$out/dependency-members.after" > "$out/dependencies-after.sha256"
+          find node_modules -type l -printf '%p\t%l\0' | sort -z > "$out/dependency-links.after"
+          cmp "$out/dependency-links.before" "$out/dependency-links.after" > "$out/dependency-links-hold.log" 2>&1 || failed=1
+          find node_modules ! -type d ! -type f ! -type l -print > "$out/dependency-nonregular.after";test ! -s "$out/dependency-nonregular.after" || failed=1
+          shadow="$NBA20_SHADOW"
+          if test -d "$shadow" && test ! -L "$shadow";then
+            find "$shadow" -type f -print0 | sort -z > "$out/shadow-members.final"
+            xargs -0 -r sha256sum < "$out/shadow-members.final" > "$out/shadow-final.sha256"
+            find "$shadow" -type l -printf '%p\t%l\0' | sort -z > "$out/shadow-links.final"
+            find "$shadow" ! -type d ! -type f ! -type l -print > "$out/shadow-nonregular.final";test ! -s "$out/shadow-nonregular.final" || failed=1
+            for file in src/components/us-career/UsCareerBoard.tsx src/lib/nbaMyCareer.ts;do
+              if test -f "$shadow/$file" && test ! -L "$shadow/$file";then mkdir -p "$out/shadow-final/$(dirname "$file")";cp -- "$shadow/$file" "$out/shadow-final/$file";else failed=1;fi
+            done
+          else printf 'Required shadow missing\n' > "$out/shadow-nonregular.final";failed=1;fi
+          : > "$out/final.transport";status=0
+          NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" SIM_OFFLINE_RECEIPT="$out/final.transport" node "$out/nba-season20-qualification.cjs" final > "$out/final.stdout" 2> "$out/final.stderr" &
+          pid=$!;printf '%s\n' "$pid" > "$out/final.pid";wait "$pid" || status=$?
+          printf '%s\n' "$status" > "$out/final.exit";test "$status" -eq 0 || failed=1
+          for name in foundation orchestrator final;do
+            test -f "$out/$name.transport" && test ! -L "$out/$name.transport" && test ! -s "$out/$name.transport" || failed=1
+            test -f "$out/$name.exit" && test ! -L "$out/$name.exit" && test "$(cat "$out/$name.exit")" = 0 || failed=1
+          done
+          test "$(cat "$out/npm-ci.exit")" = 0 || failed=1
+          sha256sum -c "$out/generated.sha256" > "$out/generated-final-hold.log" 2>&1 || failed=1
+          sha256sum -c "$out/payload.sha256" > "$out/payload-final-hold.log" 2>&1 || failed=1
+          printf '%s\n' "$failed" > "$out/final-holds.exit";exit "$failed"
+      - name: Seal originals and partial failures
+        if: ${{ always() && steps.foundation.outcome != 'skipped' }}
+        run: |
+          set -euo pipefail
+          out="$NBA20_OUT";test -d "$out";cd "$out"
+          find . ! -type d ! -type f -print > nonregular.txt
+          test ! -s nonregular.txt
+          find . -type f ! -name evidence.sha256 -print0 | sort -z | xargs -0 sha256sum > evidence.sha256
+      - uses: actions/upload-artifact@v4
+        if: ${{ always() && steps.foundation.outcome != 'skipped' }}
+        with:
+          name: nba-season20-contracts-${{ github.run_id }}-a${{ github.run_attempt }}
+          path: ${{ env.NBA20_OUT }}
+          if-no-files-found: error
+          retention-days: 30
