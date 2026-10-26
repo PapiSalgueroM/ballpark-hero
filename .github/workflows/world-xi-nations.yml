@@ -1,0 +1,347 @@
+name: World XI nations owned baseline
+on:
+  push:
+    branches: [codex/world-xi-nations-20261025]
+permissions:
+  contents: read
+concurrency:
+  group: world-xi-nations-${{ github.ref }}
+  cancel-in-progress: false
+jobs:
+  baseline:
+    runs-on: ubuntu-latest
+    timeout-minutes: 35
+    env:
+      CI: true
+      SIM_NETWORK: offline
+      EXPECTED_PARENT: b20ec6664df9d4c58d63ea0596791d33b2a3b8fc
+    defaults:
+      run:
+        shell: bash
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          persist-credentials: false
+          ref: ${{ github.sha }}
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: npm
+      - name: Bind the test-only baseline and preserve every other parent path
+        id: foundation
+        timeout-minutes: 5
+        run: |
+          set -euo pipefail
+          out="$RUNNER_TEMP/world-xi-nations-baseline"
+          test ! -e "$out";test ! -L "$out";mkdir "$out"
+          export WORLD_XI_OUT="$out";echo "WORLD_XI_OUT=$out" >> "$GITHUB_ENV"
+          for name in NODE_OPTIONS NODE_PATH VITEST ONLY BROWSER TYCOON_AWAY_CONTROL COMPLETION_HOOK OWNED_TIMEOUTS_HOOK CONQUEST_NBA_HOOK CONQUEST_NBA_BOARD POLL_FIXTURES US_BOARD_CONTROL_ALIAS US_BOARD_CONTROL_FILE DAILY_RECORD_CONTROL TYCOON_ROOMS_PAGE TYCOON_LOADS_STADIUM_HOOK TYCOON_LOADS_ACADEMY_HOOK TYCOON_LOADS_STADIUM_LIB TYCOON_LOADS_ACADEMY_LIB TYCOON_PITCH_COMPONENT TYCOON_PACKS_REWARDS TYCOON_PACKS_PANEL NO_DOUBLE_SWAP;do test ! -v "$name";done
+          test "$GITHUB_REPOSITORY" = PapiSalgueroM/ballpark-hero
+          test "$GITHUB_REPOSITORY_ID" = 1195729679
+          test "$GITHUB_REF" = refs/heads/codex/world-xi-nations-20261025
+          test "$(git rev-parse HEAD)" = "$GITHUB_SHA"
+          test "$(git show -s --format=%P HEAD)" = "$EXPECTED_PARENT"
+          test "$(git rev-parse "$EXPECTED_PARENT^{tree}")" = 51e0c6a06a6c4fb7d143b4d408eb5a9437737553
+          git diff --name-status "$EXPECTED_PARENT" HEAD > "$out/direct-paths.txt"
+          printf 'A\t.github/workflows/world-xi-nations.yml\nA\tsrc/test/worldXiNations.test.tsx\n' | cmp - "$out/direct-paths.txt"
+          for file in .github/workflows/world-xi-nations.yml src/test/worldXiNations.test.tsx;do
+            if git cat-file -e "$EXPECTED_PARENT:$file" 2>> "$out/parent-absence.stderr";then printf 'Unexpected existing parent path: %s\n' "$file";exit 1;fi
+          done
+          git diff --exit-code "$EXPECTED_PARENT" HEAD -- . ':!.github/workflows/world-xi-nations.yml' ':!src/test/worldXiNations.test.tsx' > "$out/other-source-held.log"
+          git ls-tree -r --name-only "$EXPECTED_PARENT" > "$out/parent-members.txt"
+          test "$(wc -l < "$out/parent-members.txt")" -eq 5378
+          git rev-parse HEAD > "$out/head.txt";git rev-parse 'HEAD^{tree}' > "$out/tree.txt"
+          git ls-files -z | sort -z > "$out/source-members.before"
+          test "$(tr -cd '\000' < "$out/source-members.before" | wc -c)" -eq 5380
+          git ls-files -z | sort -z | xargs -0 sha256sum > "$out/source.sha256"
+          git diff --exit-code HEAD > "$out/source-clean-before.log"
+          git status --porcelain --untracked-files=all > "$out/status-before.txt"
+          test ! -s "$out/status-before.txt"
+          git archive --format=tar HEAD > "$out/source.tar"
+          printf 'e60ff1534307e449ccef598e3b7470dcba58681b82cea4005cec7319f14f9221  scripts/lib/offlineTransport.cjs\n' | sha256sum -c - > "$out/offline-guard-before.log"
+          cat > "$out/world-xi-baseline.cjs" <<'HELPER'
+          'use strict';
+          const fs=require('node:fs'),path=require('node:path'),cp=require('node:child_process'),assert=require('node:assert/strict'),{createHash}=require('node:crypto');
+          const {stripVTControlCharacters}=require('node:util');
+          const ROOT=fs.realpathSync(process.cwd()),OUT=fs.realpathSync(process.env.WORLD_XI_OUT),SELF=fs.realpathSync(__filename);
+          const PARENT='b20ec6664df9d4c58d63ea0596791d33b2a3b8fc',PARENT_TREE='51e0c6a06a6c4fb7d143b4d408eb5a9437737553';
+          const WF='.github/workflows/world-xi-nations.yml',TEST='src/test/worldXiNations.test.tsx';
+          const PINS={
+           'src/lib/worldXi.ts':'d30a6de90d868e789a76d21cf8b87696786f89d2',
+           'src/pages/WorldXi.tsx':'8bfda7ebab01f5af2c5e12e0b98611e74c141d83',
+           'src/data/wc2026Results.ts':'66895c18e8cc9f2f03be03fb50c1ed1f537399a9',
+           'src/test/worldXiRespins.test.tsx':'c24155ca3220823587d5ab5fe7d3e76d098547d8',
+           'src/test/worldXiSummary.test.tsx':'5c5af750d3f81258d0d69fcdeef12322b903edda',
+           'src/test/setup.ts':'df00cdf5c54e8c8efc71e46d7585ae76acb4fc8d',
+           'vitest.config.ts':'ed2a9dc677f77dfe95c061064eeff5782b856864',
+           'package-lock.json':'97d6f12a052f25f400462938c241789a083f0bfe',
+           [TEST]:'51e2c0ec6cd2cd647a4d85edbf89c4637e9edb12'
+          };
+          const OLD=[
+           {file:'src/test/worldXiRespins.test.tsx',ancestor:'World XI respin budget (Round 743)',titles:[
+            'a pick of 10 on the setup screen starts the game with 10 respins',
+            'a pick of None starts the game with no respins',
+            'three stays the default when nothing is picked']},
+           {file:'src/test/worldXiSummary.test.tsx',ancestor:'World XI ratings and club chemistry display',titles:[
+            'shows the exact card overall for every player after simulation',
+            'shows the actual shared-club pairs behind the chemistry count',
+            'shows zero shared clubs and clears the old detail on replay',
+            'keeps the real season inputs and match average distinct from card overall']}
+          ];
+          const NEW={file:TEST,ancestor:'World XI nation pools on the real page',cases:[
+           {title:'expands the default deck and completes a real draw with a goalkeeper-only nation',marker:'WORLD_XI_EXPANDED_DEFAULT',actual:12,expected:13},
+           {title:'keeps the 2026 nation pool through respin, result, share and replay',marker:'WORLD_XI_2026_MODE',actual:0,expected:1}
+          ]};
+          const sha=b=>createHash('sha256').update(b).digest('hex');
+          const blob=b=>createHash('sha1').update(Buffer.from('blob '+b.length+'\0')).update(b).digest('hex');
+          const output=name=>{assert.equal(path.basename(name),name);return path.join(OUT,name);};
+          const write=(name,body)=>fs.writeFileSync(output(name),body,{flag:'wx'});
+          const save=(name,value)=>write(name,JSON.stringify(value,null,2)+'\n');
+          const json=name=>JSON.parse(fs.readFileSync(output(name),'utf8'));
+          const git=args=>cp.execFileSync('git',args,{encoding:'utf8',maxBuffer:16*1024*1024}).trim();
+          assert.notEqual(OUT,ROOT);assert(!OUT.startsWith(ROOT+path.sep));
+          function regular(file){const s=fs.lstatSync(file);assert(s.isFile()&&!s.isSymbolicLink(),'WORLD_XI_REGULAR_FILE');return fs.readFileSync(file);}
+          function binding(){
+           assert.equal(process.env.GITHUB_REPOSITORY,'PapiSalgueroM/ballpark-hero');
+           assert.equal(process.env.GITHUB_REPOSITORY_ID,'1195729679');
+           assert.equal(process.env.GITHUB_REF,'refs/heads/codex/world-xi-nations-20261025');
+           assert.equal(git(['rev-parse','HEAD']),process.env.GITHUB_SHA);
+           assert.equal(git(['show','-s','--format=%P','HEAD']),PARENT);
+           assert.equal(git(['rev-parse',PARENT+'^{tree}']),PARENT_TREE);
+           const source={};
+           for(const [file,expected]of Object.entries(PINS)){
+            const body=regular(file);assert.equal(blob(body),expected,'WORLD_XI_CRITICAL_SOURCE');
+            assert.equal(git(['rev-parse','HEAD:'+file]),expected);
+            if(file!==TEST)assert.equal(git(['rev-parse',PARENT+':'+file]),expected);
+            source[file]={bytes:body.length,sha256:sha(body),gitBlob:expected};
+           }
+           const test=regular(TEST);assert.equal(test.length,12022);assert.equal(sha(test),'7f945518353818a4bd7cedf0d9854232ce554103673bbc57e561c4d4ffb1cb59');
+           const wf=regular(WF);assert.equal(blob(wf),git(['rev-parse','HEAD:'+WF]));
+           source[WF]={bytes:wf.length,sha256:sha(wf),gitBlob:blob(wf)};
+           assert.equal(sha(regular('scripts/lib/offlineTransport.cjs')),'e60ff1534307e449ccef598e3b7470dcba58681b82cea4005cec7319f14f9221');
+           const names=cp.execFileSync('git',['ls-files','-z']);
+           const files=names.toString().split('\0');assert.equal(files.pop(),'');assert.equal(files.length,5380);
+           for(const file of files){regular(file);const real=fs.realpathSync(file);assert(real.startsWith(ROOT+path.sep),'WORLD_XI_SOURCE_ESCAPE');}
+           return {phase:'old-page-owned-RED',source:process.env.GITHUB_SHA,parent:PARENT,parentTree:PARENT_TREE,tree:git(['rev-parse','HEAD^{tree}']),run:process.env.GITHUB_RUN_ID,attempt:process.env.GITHUB_RUN_ATTEMPT,processPid:process.pid,parentBlobs:5378,sourceBlobs:5380,directPaths:2,source,helper:{file:SELF,bytes:regular(SELF).length,sha256:sha(regular(SELF))},applicationChange:false,fullSuite:false,browser:false,livePublished:false};
+          }
+          function native(id,status){
+           const r=json(id+'.closed.json');assert.equal(r.id,id);
+           assert(Number.isInteger(r.pid)&&r.pid>0,'WORLD_XI_NATIVE_PID');
+           assert.equal(r.status,status,'WORLD_XI_NATIVE_STATUS');assert.equal(r.signal,null);assert.equal(r.error,null);
+           assert.equal(r.closed,true);assert.equal(r.deadlineExpired,false);assert.deepEqual(r.signalAttempts,[]);
+           assert.equal(r.receiptBytes,0);assert.equal(regular(output(id+'.transport')).length,0);
+           for(const stream of ['stdout','stderr']){const b=regular(output(id+'.'+stream));assert.equal(b.length,r[stream+'Bytes']);assert.equal(sha(b),r[stream+'Sha256']);}
+           return r;
+          }
+          function rows(report,spec,status){
+           assert.equal(report.numPendingTests,0,'WORLD_XI_NO_PENDING');assert.equal(report.numTodoTests,0,'WORLD_XI_NO_TODO');
+           assert(Array.isArray(report.testResults));assert.equal(report.testResults.length,spec.length,'WORLD_XI_FILE_CENSUS');
+           const actual=[];
+           for(const s of spec){
+            const file=report.testResults.filter(f=>path.resolve(f.name)===path.resolve(s.file));
+            assert.equal(file.length,1,'WORLD_XI_FILE_IDENTITY');assert.equal(file[0].message??'','','WORLD_XI_NO_FILE_ERROR');
+            assert.equal(file[0].status,status==='passed'?'passed':'failed');
+            assert(Array.isArray(file[0].assertionResults));assert.equal(file[0].assertionResults.length,s.titles.length,'WORLD_XI_CASE_CENSUS');
+            for(const title of s.titles){
+             const matches=file[0].assertionResults.filter(a=>a.title===title);
+             assert.equal(matches.length,1,'WORLD_XI_CASE_IDENTITY');
+             const a=matches[0];assert.deepEqual(a.ancestorTitles,[s.ancestor]);assert.equal(a.fullName,s.ancestor+' '+title);
+             assert.equal(a.status,status,status==='passed'?'WORLD_XI_OLD_PASS':'WORLD_XI_RED_STATUS');
+             assert(Array.isArray(a.failureMessages));if(status==='passed')assert.deepEqual(a.failureMessages,[]);
+             actual.push(a);
+            }
+           }
+           assert.equal(new Set(actual.map(a=>a.fullName)).size,actual.length);return actual;
+          }
+          function classify(oldReport,newReport){
+           assert.equal(oldReport.success,true);assert.equal(oldReport.numTotalTests,7);assert.equal(oldReport.numPassedTests,7);assert.equal(oldReport.numFailedTests,0);
+           const oldRows=rows(oldReport,OLD,'passed');
+           assert.equal(newReport.success,false);assert.equal(newReport.numTotalTests,2);assert.equal(newReport.numPassedTests,0);assert.equal(newReport.numFailedTests,2);
+           const newRows=rows(newReport,[{file:TEST,ancestor:NEW.ancestor,titles:NEW.cases.map(c=>c.title)}],'failed');
+           for(const c of NEW.cases){
+            const a=newRows.find(a=>a.title===c.title);assert.equal(a.failureMessages.length,1,'WORLD_XI_RED_ONE_ERROR');
+            const rawError=a.failureMessages[0];assert.equal(typeof rawError,'string');
+            const error=stripVTControlCharacters(rawError);
+            assert(/^\s*AssertionError(?::|\s|\[)/.test(error),'WORLD_XI_RED_ASSERTION_KIND');
+            assert(error.includes(c.marker+':'),'WORLD_XI_RED_OWNED_MARKER');
+            assert(error.includes('worldXiNations.test.tsx:'),'WORLD_XI_RED_TEST_STACK');
+            assert(!/TypeError|ReferenceError|SyntaxError|TestingLibraryElementError|TimeoutError|Test timed out|Failed to load|Cannot find module|Cannot find package/i.test(error),'WORLD_XI_RED_NOT_INFRASTRUCTURE');
+            assert(error.includes('expected '+c.actual+' to be '+c.expected),'WORLD_XI_RED_NUMERIC_WITNESS');
+           }
+           return {oldRows,newRows};
+          }
+          function classifyFiles(oldPath,newPath){return classify(JSON.parse(regular(oldPath)),JSON.parse(regular(newPath)));}
+          function control(name,oldSeed,newSeed,change,marker){
+           const dir=path.join(OUT,'classifier-controls',name);fs.mkdirSync(dir,{recursive:true});
+           const op=path.join(dir,'old.work.json'),np=path.join(dir,'new.work.json');
+           fs.writeFileSync(op,oldSeed,{flag:'wx'});fs.writeFileSync(np,newSeed,{flag:'wx'});
+           classifyFiles(op,np);
+           const oldObject=JSON.parse(oldSeed),newObject=JSON.parse(newSeed);
+           const beforeOld=Buffer.from(JSON.stringify(oldObject,null,2)+'\n'),beforeNew=Buffer.from(JSON.stringify(newObject,null,2)+'\n');
+           const targetedMutation=change(oldObject,newObject);assert(targetedMutation&&targetedMutation.changed===true,'WORLD_XI_CONTROL_TARGET_CHANGED');
+           const changedOld=Buffer.from(JSON.stringify(oldObject,null,2)+'\n'),changedNew=Buffer.from(JSON.stringify(newObject,null,2)+'\n');
+           assert(!changedOld.equals(beforeOld)||!changedNew.equals(beforeNew),'WORLD_XI_CONTROL_CHANGED');
+           fs.writeFileSync(path.join(dir,'old.changed.json'),changedOld,{flag:'wx'});fs.writeFileSync(path.join(dir,'new.changed.json'),changedNew,{flag:'wx'});
+           fs.writeFileSync(op,changedOld);fs.writeFileSync(np,changedNew);
+           let caught=null;try{classifyFiles(op,np);}catch(error){caught=error;}
+           assert(caught instanceof assert.AssertionError,'WORLD_XI_CONTROL_NATIVE_ASSERTION');assert(caught.message.includes(marker),'WORLD_XI_CONTROL_OWNED');
+           fs.writeFileSync(path.join(dir,'failure.stack.txt'),caught.stack+'\n',{flag:'wx'});
+           fs.writeFileSync(op,oldSeed);fs.writeFileSync(np,newSeed);
+           assert(regular(op).equals(oldSeed));assert(regular(np).equals(newSeed));classifyFiles(op,np);
+           return {name,scope:'copied-actual-report classifier only, no test execution fault',marker,errorName:caught.name,code:caught.code,changed:true,restored:true,targetedMutation,normalizedOldBeforeSha256:sha(beforeOld),normalizedNewBeforeSha256:sha(beforeNew),oldSeedSha256:sha(oldSeed),newSeedSha256:sha(newSeed),changedOldSha256:sha(changedOld),changedNewSha256:sha(changedNew)};
+          }
+          async function run(id,args,status,deadlineMs){
+           const receipt=output(id+'.transport');write(id+'.transport','');
+           const so=fs.openSync(output(id+'.stdout'),'wx'),se=fs.openSync(output(id+'.stderr'),'wx');
+           const r={id,command:process.execPath,args,startedAt:new Date().toISOString(),pid:null,status:null,signal:null,error:null,closed:false,deadlineMs,deadlineExpired:false,signalAttempts:[]};
+           const child=cp.spawn(process.execPath,args,{cwd:ROOT,detached:true,stdio:['ignore',so,se],env:{...process.env,NODE_OPTIONS:'--require='+path.join(ROOT,'scripts/lib/offlineTransport.cjs'),SIM_OFFLINE_RECEIPT:receipt,SIM_NETWORK:'offline'}});
+           r.pid=child.pid??null;save(id+'.start.json',r);
+           let term=null,kill=null;
+           const signalGroup=signal=>{const a={signal,at:new Date().toISOString(),error:null};try{process.kill(-child.pid,signal);}catch(e){a.error={name:e.name,message:e.message,code:e.code??null};}r.signalAttempts.push(a);};
+           if(child.pid)term=setTimeout(()=>{r.deadlineExpired=true;signalGroup('SIGTERM');kill=setTimeout(()=>{if(!r.closed)signalGroup('SIGKILL');},15000);},deadlineMs);
+           child.on('error',e=>r.error={name:e.name,message:e.message,code:e.code??null});
+           await new Promise(resolve=>child.on('close',(code,signal)=>{r.status=code;r.signal=signal;r.closed=true;r.closedAt=new Date().toISOString();resolve();}));
+           if(term)clearTimeout(term);if(kill)clearTimeout(kill);fs.closeSync(so);fs.closeSync(se);
+           r.receiptBytes=regular(receipt).length;
+           for(const stream of ['stdout','stderr']){const b=regular(output(id+'.'+stream));r[stream+'Bytes']=b.length;r[stream+'Sha256']=sha(b);}
+           save(id+'.closed.json',r);return {record:r,expectedStatus:status};
+          }
+          async function main(mode){
+           if(mode==='source'){save('source-binding.json',binding());return;}
+           if(mode==='checks'){
+            save('orchestrator.start.json',{pid:process.pid,source:process.env.GITHUB_SHA,mode});
+            const commands=[
+             ['types',['node_modules/typescript/bin/tsc','--noEmit','-p','tsconfig.app.json'],0,240000],
+             ['old-tests',['node_modules/vitest/vitest.mjs','run','src/test/worldXiRespins.test.tsx','src/test/worldXiSummary.test.tsx','--no-cache','--maxWorkers=1','--no-file-parallelism','--reporter=verbose','--reporter=json','--outputFile='+output('old-tests.json')],0,240000],
+             ['nations',['node_modules/vitest/vitest.mjs','run',TEST,'--no-cache','--maxWorkers=1','--no-file-parallelism','--reporter=verbose','--reporter=json','--outputFile='+output('nations.json')],1,240000],
+             ['classifier',[SELF,'judge'],0,60000]
+            ];
+            const nativeRows=[];for(const [id,args,status,deadline]of commands)nativeRows.push(await run(id,args,status,deadline));
+            save('native-processes.json',{phase:'old-page-owned-RED',pid:process.pid,rows:nativeRows,fullSuite:false});
+            for(const {record:r,expectedStatus}of nativeRows)native(r.id,expectedStatus);
+            assert.equal(new Set(nativeRows.map(x=>x.record.pid)).size,4);
+            return;
+           }
+           if(mode==='judge'){
+            for(const [id,status]of [['types',0],['old-tests',0],['nations',1]])native(id,status);
+            for(const id of ['old-tests','nations']){
+             const logs=regular(output(id+'.stdout')).toString()+'\n'+regular(output(id+'.stderr')).toString();
+             assert(!/Unhandled (?:Errors?|Rejection|Exception)|Error during collection|Failed to load url|Cannot find module|Cannot find package|Test timed out|worker exited unexpectedly/i.test(logs),'WORLD_XI_NO_RUNTIME_CREDIT');
+            }
+            const oldSeed=regular(output('old-tests.json')),newSeed=regular(output('nations.json')),judged=classify(JSON.parse(oldSeed),JSON.parse(newSeed));
+            const controls=[
+             control('old-pass-row',oldSeed,newSeed,o=>{
+              const row=o.testResults[0].assertionResults[0];assert.equal(row.status,'passed');row.status='failed';assert.equal(row.status,'failed');
+              return {field:'old actual assertion status',before:'passed',after:row.status,changed:true};
+             },'WORLD_XI_OLD_PASS'),
+             control('red-error-kind',oldSeed,newSeed,(_o,n)=>{
+              const row=n.testResults.flatMap(f=>f.assertionResults).find(a=>a.title===NEW.cases[0].title),before=row.failureMessages[0];
+              assert.equal(before.split('AssertionError').length-1,1,'WORLD_XI_CONTROL_EXACT_KIND_NEEDLE');
+              row.failureMessages[0]=before.replace('AssertionError','TypeError');
+              assert.notEqual(row.failureMessages[0],before);assert.equal(row.failureMessages[0].split('AssertionError').length-1,0);
+              return {field:'actual owned failure error kind',needle:'AssertionError',replacement:'TypeError',beforeSha256:sha(before),afterSha256:sha(row.failureMessages[0]),changed:true};
+             },'WORLD_XI_RED_ASSERTION_KIND'),
+             control('red-owned-marker',oldSeed,newSeed,(_o,n)=>{
+              const row=n.testResults.flatMap(f=>f.assertionResults).find(a=>a.title===NEW.cases[0].title),before=row.failureMessages[0],needle=NEW.cases[0].marker;
+              assert.equal(before.split(needle).length-1,1,'WORLD_XI_CONTROL_EXACT_MARKER_NEEDLE');
+              row.failureMessages[0]=before.replace(needle,'UNOWNED_MARKER');
+              assert.notEqual(row.failureMessages[0],before);assert.equal(row.failureMessages[0].split(needle).length-1,0);
+              return {field:'actual owned failure marker',needle,replacement:'UNOWNED_MARKER',beforeSha256:sha(before),afterSha256:sha(row.failureMessages[0]),changed:true};
+             },'WORLD_XI_RED_OWNED_MARKER')
+            ];
+            save('baseline-admission.json',{phase:'old-page-owned-RED',source:process.env.GITHUB_SHA,run:process.env.GITHUB_RUN_ID,attempt:process.env.GITHUB_RUN_ATTEMPT,pid:process.pid,typesExit:0,oldPass:judged.oldRows.map(a=>a.fullName),expectedOwnedFailures:judged.newRows.map(a=>({fullName:a.fullName,status:a.status,kind:'AssertionError',failureMessages:a.failureMessages})),classifierControls:controls,absentRuntimeCounters:'UNKNOWN',newFeatureImplemented:false,fullSuite:false,browser:false});
+            return;
+           }
+           if(mode==='final'){
+            const before=json('source-binding.json'),now=binding();assert.deepEqual(now.source,before.source,'WORLD_XI_END_SOURCE');
+            assert.deepEqual(now.helper,before.helper,'WORLD_XI_END_GENERATED');
+            for(const [id,status]of [['types',0],['old-tests',0],['nations',1],['classifier',0]])native(id,status);
+            for(const name of ['foundation','orchestrator']){assert.equal(regular(output(name+'.transport')).length,0);assert.equal(regular(output(name+'.exit')).toString().trim(),'0');}
+            const admission=json('baseline-admission.json');assert.equal(admission.source,process.env.GITHUB_SHA);assert.equal(admission.classifierControls.length,3);assert(admission.classifierControls.every(c=>c.changed&&c.restored));
+            save('final-binding.json',{pid:process.pid,source:process.env.GITHUB_SHA,run:process.env.GITHUB_RUN_ID,attempt:process.env.GITHUB_RUN_ATTEMPT,phase:admission.phase,sourceHeld:true,generatedHeld:true,oldPass:7,newOwnedFailures:2,qualifiedFeature:false});
+            return;
+           }
+           throw Error('Unknown baseline helper mode');
+          }
+          main(process.argv[2]).then(()=>console.log('World XI baseline '+process.argv[2]+' complete, pid '+process.pid)).catch(error=>{console.error(error.stack||error);process.exitCode=1;});
+          HELPER
+          printf 'fe11fb26bb3e13bc1504a095a3e61e76a88b8c8025dd357952820906370d178a  %s\n' "$out/world-xi-baseline.cjs" > "$out/generated.sha256"
+          sha256sum -c "$out/generated.sha256" > "$out/generated-before.log"
+          : > "$out/foundation.transport";status=0
+          NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" SIM_OFFLINE_RECEIPT="$out/foundation.transport" node "$out/world-xi-baseline.cjs" source > "$out/foundation.stdout" 2> "$out/foundation.stderr" || status=$?
+          printf '%s\n' "$status" > "$out/foundation.exit"
+          test "$status" -eq 0;test ! -s "$out/foundation.transport"
+      - name: Install only locked project dependencies
+        id: install
+        timeout-minutes: 15
+        run: |
+          set -euo pipefail
+          out="$WORLD_XI_OUT";status=0
+          npm ci > "$out/npm-ci.stdout" 2> "$out/npm-ci.stderr" &
+          pid=$!;printf '%s\n' "$pid" > "$out/npm-ci.pid"
+          wait "$pid" || status=$?
+          printf '%s\n' "$status" > "$out/npm-ci.exit"
+          test "$status" -eq 0
+          find node_modules -type f -print0 | sort -z > "$out/dependency-members.before"
+          test "$(tr -cd '\000' < "$out/dependency-members.before" | wc -c)" -eq 24466
+          find node_modules -type f -print0 | sort -z | xargs -0 sha256sum > "$out/dependencies.sha256"
+          find node_modules -type l -printf '%p\t%l\0' | sort -z > "$out/dependency-links.before"
+          find node_modules ! -type d ! -type f ! -type l -print > "$out/dependency-nonregular.before"
+          test ! -s "$out/dependency-nonregular.before"
+      - name: Real types unchanged seven cases and two owned baseline failures
+        id: checks
+        timeout-minutes: 15
+        run: |
+          set -euo pipefail
+          out="$WORLD_XI_OUT"
+          sha256sum -c "$out/generated.sha256" > "$out/generated-pre-consumer.log"
+          : > "$out/orchestrator.transport";status=0
+          NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" SIM_OFFLINE_RECEIPT="$out/orchestrator.transport" node "$out/world-xi-baseline.cjs" checks > "$out/orchestrator.stdout" 2> "$out/orchestrator.stderr" || status=$?
+          printf '%s\n' "$status" > "$out/orchestrator.exit"
+          test "$status" -eq 0;test ! -s "$out/orchestrator.transport"
+      - name: Complete source installed dependency generated and process holds
+        id: holds
+        if: ${{ always() && steps.foundation.outcome != 'skipped' }}
+        timeout-minutes: 5
+        run: |
+          set -euo pipefail
+          out="$WORLD_XI_OUT";failed=0
+          for name in source dependencies generated;do
+            if test -f "$out/$name.sha256";then sha256sum -c "$out/$name.sha256" > "$out/$name-hold.log" 2>&1 || failed=1;else printf 'Missing required manifest\n' > "$out/$name-hold.log";failed=1;fi
+          done
+          git ls-files -z | sort -z > "$out/source-members.after"
+          cmp "$out/source-members.before" "$out/source-members.after" > "$out/source-members-hold.log" 2>&1 || failed=1
+          find node_modules -type f -print0 | sort -z > "$out/dependency-members.after"
+          cmp "$out/dependency-members.before" "$out/dependency-members.after" > "$out/dependency-members-hold.log" 2>&1 || failed=1
+          find node_modules -type f -print0 | sort -z | xargs -0 sha256sum > "$out/dependencies-after.sha256"
+          find node_modules -type l -printf '%p\t%l\0' | sort -z > "$out/dependency-links.after"
+          cmp "$out/dependency-links.before" "$out/dependency-links.after" > "$out/dependency-links-hold.log" 2>&1 || failed=1
+          find node_modules ! -type d ! -type f ! -type l -print > "$out/dependency-nonregular.after"
+          test ! -s "$out/dependency-nonregular.after" || failed=1
+          git diff --exit-code HEAD > "$out/source-clean-after.log" 2>&1 || failed=1
+          git status --porcelain --untracked-files=all > "$out/status-after.txt"
+          test ! -s "$out/status-after.txt" || failed=1
+          : > "$out/final.transport";status=0
+          NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" SIM_OFFLINE_RECEIPT="$out/final.transport" node "$out/world-xi-baseline.cjs" final > "$out/final.stdout" 2> "$out/final.stderr" || status=$?
+          printf '%s\n' "$status" > "$out/final.exit"
+          test "$status" -eq 0 || failed=1
+          for name in foundation orchestrator types old-tests nations classifier final;do test -f "$out/$name.transport" && test ! -s "$out/$name.transport" || failed=1;done
+          sha256sum -c "$out/generated.sha256" > "$out/generated-final-hold.log" 2>&1 || failed=1
+          printf '%s\n' "$failed" > "$out/final-holds.exit"
+          exit "$failed"
+      - name: Seal retained originals and partial failures
+        if: ${{ always() && steps.foundation.outcome != 'skipped' }}
+        run: |
+          set -euo pipefail
+          out="$WORLD_XI_OUT";test -d "$out";cd "$out"
+          find . ! -type d ! -type f -print > nonregular.txt
+          test ! -s nonregular.txt
+          find . -type f ! -name evidence.sha256 -print0 | sort -z | xargs -0 sha256sum > evidence.sha256
+      - uses: actions/upload-artifact@v4
+        if: ${{ always() && steps.foundation.outcome != 'skipped' }}
+        with:
+          name: world-xi-nations-owned-red-${{ github.run_id }}-a${{ github.run_attempt }}
+          path: ${{ env.WORLD_XI_OUT }}
+          if-no-files-found: error
+          retention-days: 30
