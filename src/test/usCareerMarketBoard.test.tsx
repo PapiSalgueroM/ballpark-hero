@@ -199,7 +199,7 @@ describe('NBA season twenty contract paths on the saved board', () => {
   });
 
   it('keeps an already retired season-twenty save out of contract talks', () => {
-    const c = nbaSeasonTwenty(0); c.retired = true; c.retirement = { retiredYear: c.year - 1 };
+    const c = nbaSeasonTwenty(0); c.retired = true;
     storeNbaTwenty(c, 'retired');
     const raw = localStorage.getItem(NBA_CAREER_SPORT.saveKey);
     const view = mount(NBA_CAREER_SPORT);

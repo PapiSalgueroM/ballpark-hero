@@ -19227,3 +19227,12 @@ The cases cover expired deals, final-year extension offers, a legitimate null of
 Remote qualification is pending at preparation. The plan is the actual app type gate, all sixteen cases, six focused healthy/fault/restored source-control triplets and four copied-report classifier controls. It preserves the original offline guard, canonical product sources and locked dependencies. The PR and retained CI receipt record the actual outcome; this note does not preclaim a pass.
 
 No game engine, save format, product behavior, sports data, provider or dependency changes are included. This is not a live or full-suite qualification. Owner I retains protected product and save integration, main merge and publication. The user's affected save and exact reported failure remain unreproduced.
+
+
+## 2026-10-26 NBA season twenty fixture typing correction
+
+This is a detached testing-only follow-up. The first ordinary push run, 40361968441 attempt 1, stopped at the app TypeScript gate with TS2339: the retired-save fixture assigned a `retirement` property that is not part of `NbaCareerState`. That run remains refused. No board case or source control executed.
+
+The correction removes that unsupported assignment and keeps `retired = true`, the saved retired phase, all 16 test titles and every assertion. Product and save-engine files stay unchanged. The existing ten board cases, six late-career cases, six focused source-control triplets, four copied-report controls and missing-link control still need actual remote qualification on this source commit. The selected native child limit remains 240 seconds.
+
+Validation is pending at preparation. This source note grants no product fix, full-suite, live, main or publication credit. Owner I retains protected career and save integration.
