@@ -19216,3 +19216,14 @@ The two initial fixture failures39940913787 and39943246891 remain separate from 
 Evidence packet: C:/Users/antho/dukb-handoff/2026-10-23/search-navigation. Root qualification c565e4bb892d6f5392e942e329af0b1661faba1e626bddb051ab76276d2e88b5; Root pixels743d12524f3b65bf0752151b2cfdbb7c3866377866360b6f66c60a4875cfdb26; independent integrated audit4e7ff7ad3b766d00b3f7f5ac280ed0b9d67fd91e8a27416cd182579a76da9dac. The normal saved-picks archive is also retained as2ca41f45c885f8066326880fe73480b83b0ee3ae7a3c4b08503c94fc74fa3e98.
 
 I retains sole publication. Root did not publish this Search correction and makes no new live-site claim. Analytics remains paused. No local application execution, cleanup, old checkout reset, data/provider/account change or protected game adoption occurred. Primary WORKBOARD and the continuation checkpoint receive only this exact note through the reviewed exclusive-lock append helper, with actual full-prefix backups/readback and both protected indexes checked before and finally. Earlier preservation gaps remain unwaived.
+
+
+## 2026-10-26 NBA season twenty saved board checks, candidate
+
+A detached test-only candidate extends src/test/usCareerMarketBoard.test.tsx from ten cases to sixteen. The original ten-case source stays exact. The six new cases use the real board and NBA binding with fictional twenty-row saved states, not twenty actual sequential seasons.
+
+The cases cover expired deals, final-year extension offers, a legitimate null offer and its Play the year out action, continuation with two years remaining, exact market reload and an already retired save. They distinguish the existing twenty-one-season retirement limit from age and rating triggers. They do not establish a universal no-offer bug or change retirement rules.
+
+Remote qualification is pending at preparation. The plan is the actual app type gate, all sixteen cases, six focused healthy/fault/restored source-control triplets and four copied-report classifier controls. It preserves the original offline guard, canonical product sources and locked dependencies. The PR and retained CI receipt record the actual outcome; this note does not preclaim a pass.
+
+No game engine, save format, product behavior, sports data, provider or dependency changes are included. This is not a live or full-suite qualification. Owner I retains protected product and save integration, main merge and publication. The user's affected save and exact reported failure remain unreproduced.
