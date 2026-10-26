@@ -1099,8 +1099,8 @@ export const SOCCER_CONTENT_2: GameContentMap = {
 
   '/build-your-xi': {
     intro: [
-      "Build Your XI hands you a formation, then a slot machine assigns a random club or country to every position. Your job is naming a player from that exact team who fits each slot.",
-      "When the eleventh name lands, an AI referee grades the lineup and writes a short scouting report, then a season report plays a full year out with your XI: league finish, points, trophies and a top scorer. No two teams ever come out alike.",
+      "Choose a formation and fill all 11 positions. Mixed is the default clubs and countries game. Club year draft gives you 11 different clubs and asks for matching player records from one recorded year.",
+      "Mixed keeps its usual AI verdict and season report. Club year draft uses the value and age on your selected records for a fictional season, rather than treating every player as a peak version. If a value or age is missing, you can still finish with an unrated draft.",
     ],
     headings: {
       howToPlay: "How to play Build Your XI, a free soccer lineup builder game",
@@ -1111,27 +1111,37 @@ export const SOCCER_CONTENT_2: GameContentMap = {
     },
     howToPlaySections: [
       {
-        heading: "Choosing one of six formations",
+        heading: "Choosing Mixed or Club year draft",
         items: [
+          "Mixed is selected by default. Keep it for the usual clubs and nations challenge, or choose Club year draft before starting.",
+          "Club year draft lets you choose a recorded year from 2004 to 2026. Choose your year before the formation; it stays fixed for the draft.",
           "Choose one of 6 formations: 4-3-3, 4-4-2, 3-5-2, 4-2-3-1, 3-4-3, or 5-3-2.",
         ],
       },
       {
-        heading: "Spinning a club or country per slot",
+        heading: "Drawing teams and choosing an empty slot",
         items: [
-          "Tap a position. The spinner shows which club or national team that slot is locked to.",
+          "Mixed draws clubs or nations. Club year draft starts with 11 different clubs, with no national teams in that draw.",
+          "Tap any empty position on the pitch. Fill it with a player who matches the current team and fits that position.",
         ],
       },
       {
-        heading: "Typing a player who fits the slot",
+        heading: "Searching or browsing matching player records",
         items: [
-          "Type a player from that team who fits. The game verifies the answer before it counts.",
+          "Type a name and choose a suggestion. In Club year draft, the selected record must match both the club and your recorded year, and the position still has to fit.",
+          "Cannot think of a name? Tap Browse players in Club year draft to open matching records without typing. Start typing to narrow the suggestions.",
         ],
         subsections: [
           {
             heading: "Rerolling an assignment you hate",
             items: [
-              "Hate an assignment? Reroll it for a different team.",
+              "No matching record? Try another name or reroll. Club year draft gives you a different club and keeps the same recorded year.",
+            ],
+          },
+          {
+            heading: "A recorded goalkeeper example",
+            items: [
+              "Choose 2010, tap GK and use Browse players. A goalkeeper record from the current club in 2010 can fill that slot; a record only from a different year cannot.",
             ],
           },
         ],
@@ -1139,7 +1149,8 @@ export const SOCCER_CONTENT_2: GameContentMap = {
       {
         heading: "Submitting your finished XI for a rating",
         items: [
-          "Fill all 11 slots, check the role fit, chemistry and balance tiles under the pitch, then submit for the AI rating.",
+          "Fill all 11 slots and check the role fit, chemistry and balance tiles under the pitch. Mixed uses its usual evaluation when you submit.",
+          "Club year draft uses the value and age from your selected records. With enough data, it shows a fictional season report. Missing value or age leaves the completed draft unrated instead of guessing a rating.",
         ],
       },
     ],
@@ -1148,6 +1159,7 @@ export const SOCCER_CONTENT_2: GameContentMap = {
         heading: "Wrong answers cost nothing to retry",
         items: [
           "Wrong answers are rejected with a reason but cost nothing. Retry until a valid name lands.",
+          "Club year draft needs a matching club record from your chosen year. A record only from another year does not count, even if the player matches the club.",
         ],
       },
       {
@@ -1163,10 +1175,10 @@ export const SOCCER_CONTENT_2: GameContentMap = {
         ],
       },
       {
-        heading: "Scoring chemistry and the offline backup judge",
+        heading: "Chemistry and the Mixed backup judge",
         items: [
           "Chemistry: two players standing next to each other on the pitch who are at the same club on our data add +0.6 to the side, from the same country +0.2, up to +2 in all.",
-          "If the AI judge is unreachable, a built in offline judge grades you instead, so a run never dead ends.",
+          "In Mixed, the built in offline judge can grade the XI if the AI judge is unreachable. Club year draft uses the selected records instead of that AI rating.",
         ],
       },
       {
@@ -1175,6 +1187,14 @@ export const SOCCER_CONTENT_2: GameContentMap = {
           "Role fit: a player in a slot his recorded positions cover plays at full value. Next door, like a right back at left back, costs 2 rating points on him, averaged over the eleven. The slot check never lets anyone further out of position than that.",
           "Balance: no defensive midfielder in a CM or CDM slot costs the side 1, and a wide slot held by someone who is not a wide player, like a centre back at full back, costs 0.5 for that flank.",
           "The season report says what role fit, chemistry and balance were each worth in league points, by replaying the same season without each one.",
+        ],
+      },
+      {
+        heading: "What a recorded year means",
+        items: [
+          "The year filters the records we hold. Browse players is not a complete squad list, and some players may be missing.",
+          "A Club year rating uses the selected record's value and age, not an invented replacement. A missing value or age leaves the draft unrated.",
+          "The season report is fictional. It does not claim real results or every appearance from that year.",
         ],
       },
     ],
@@ -1200,9 +1220,9 @@ export const SOCCER_CONTENT_2: GameContentMap = {
         ],
       },
       {
-        heading: "Naming goalkeepers from small clubs",
+        heading: "Browsing for a hard-to-remember goalkeeper",
         items: [
-          "Small club on the wheel? Goalkeepers are easy to name, elite wingers are not.",
+          "Need a keeper in Club year draft? Select GK, then Browse players and look through the matching records instead of guessing a name.",
         ],
       },
       {
@@ -1214,7 +1234,7 @@ export const SOCCER_CONTENT_2: GameContentMap = {
       {
         heading: "Letting autocomplete fix a rejected spelling",
         items: [
-          "If a right sounding name is rejected, let the search autocomplete the spelling for you.",
+          "Pick from the suggestions so the selected record travels with the name. In Club year draft, search or Browse players can only show records we hold, not a complete club squad.",
         ],
       },
     ],
@@ -1233,7 +1253,7 @@ export const SOCCER_CONTENT_2: GameContentMap = {
       },
       {
         q: "What does the rating look like?",
-        a: "A rating headline, a short written analysis of your picks, and your role fit, chemistry and balance tiles. Under it comes a season report: a squad rating out of 100, where you finish in a 20 team league, points, trophies and a top scorer, plus how your defence, midfield and attack compare and what role fit, chemistry and balance were each worth in points. Two tabs open the season month by month and give every pick his appearances, goals, assists and average rating, and one line says what a different shape or a stronger pick in your weakest slot would have changed on the same rolls. Every player is judged at his peak, so retired greats are not marked down for being retired.",
+        a: "Mixed keeps its rating headline and written analysis, with every player judged at his peak. Club year draft uses the value and age on the records you picked for that year. When those records can all be rated, the fictional season report shows a squad rating out of 100, league finish, points, trophies, a top scorer and simulated player stats, with role fit, chemistry and balance included. These are simulated results, not a replay of the real season. If a selected record is missing value or age, the XI can finish as an unrated recorded draft.",
       },
     ],
   },

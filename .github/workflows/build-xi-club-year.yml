@@ -1,4 +1,4 @@
-name: Build Your XI Club year owned baseline
+name: Build Your XI Club year guarded generation
 on:
   push:
     branches: [codex/build-xi-club-year-20261026]
@@ -8,13 +8,16 @@ concurrency:
   group: build-xi-club-year-${{ github.ref }}
   cancel-in-progress: false
 jobs:
-  baseline:
+  green:
     runs-on: ubuntu-latest
-    timeout-minutes: 45
+    timeout-minutes: 60
     env:
       CI: true
       SIM_NETWORK: offline
-      EXPECTED_PARENT: 3225a0c11d9638e3683003cf3e0ec3a1d3a8d711
+      ENGINES: chromium
+      PYTHONDONTWRITEBYTECODE: 1
+      EXPECTED_PARENT: a2c2ebda101d01660bccd61df23d57475c1f2515
+      BUILD_XI_PHASE: club-year-generation
     defaults:
       run:
         shell: bash
@@ -28,308 +31,154 @@ jobs:
         with:
           node-version: 24
           cache: npm
-      - name: Bind the test-only baseline and preserve every other parent path
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Bind reviewed Club year source and preserve every other parent path
         id: foundation
         timeout-minutes: 5
         run: |
           set -euo pipefail
-          out="$RUNNER_TEMP/build-xi-club-year-baseline"
+          out="$RUNNER_TEMP/build-xi-club-year-green"
           test ! -e "$out";test ! -L "$out";mkdir "$out"
           export BUILD_XI_OUT="$out";echo "BUILD_XI_OUT=$out" >> "$GITHUB_ENV"
+          tmp="$RUNNER_TEMP/build-xi-club-year-generator-tmp"
+          test ! -e "$tmp";test ! -L "$tmp";mkdir "$tmp"
+          export BUILD_XI_GENERATOR_TMP="$tmp";echo "BUILD_XI_GENERATOR_TMP=$tmp" >> "$GITHUB_ENV"
           for name in SIM_SEED BYXI_CONTROL BYXI_SEED BYXI_PRINT_DIGEST NODE_OPTIONS NODE_PATH VITEST ONLY BROWSER TYCOON_AWAY_CONTROL COMPLETION_HOOK OWNED_TIMEOUTS_HOOK CONQUEST_NBA_HOOK CONQUEST_NBA_BOARD POLL_FIXTURES US_BOARD_CONTROL_ALIAS US_BOARD_CONTROL_FILE DAILY_RECORD_CONTROL TYCOON_ROOMS_PAGE TYCOON_LOADS_STADIUM_HOOK TYCOON_LOADS_ACADEMY_HOOK TYCOON_LOADS_STADIUM_LIB TYCOON_LOADS_ACADEMY_LIB TYCOON_PITCH_COMPONENT TYCOON_PACKS_REWARDS TYCOON_PACKS_PANEL NO_DOUBLE_SWAP;do test ! -v "$name";done
           test "$GITHUB_REPOSITORY" = PapiSalgueroM/ballpark-hero
           test "$GITHUB_REPOSITORY_ID" = 1195729679
           test "$GITHUB_REF" = refs/heads/codex/build-xi-club-year-20261026
+          test "$BUILD_XI_PHASE" = club-year-generation
           test "$(git rev-parse HEAD)" = "$GITHUB_SHA"
           test "$(git show -s --format=%P HEAD)" = "$EXPECTED_PARENT"
-          test "$(git rev-parse "$EXPECTED_PARENT^{tree}")" = 844013655bdad832e28910b9e44e5da079af78b0
+          test "$(git rev-parse "$EXPECTED_PARENT^{tree}")" = a68f434019f451df90b65c41aae8b22437814f4d
           git diff --name-status "$EXPECTED_PARENT" HEAD > "$out/direct-paths.txt"
-          printf 'M\t.github/workflows/build-xi-club-year.yml\nM\tsrc/test/buildXiClubYearSetup.test.tsx\n' | cmp - "$out/direct-paths.txt"
+          printf 'M\t.github/workflows/build-xi-club-year.yml\nM\tdocs/superpowers/plans/2026-10-26-build-xi-club-year.md\nA\tscripts/qa/playBuildXiClubYear.mjs\nM\tsrc/components/game/PlayerAutocomplete.tsx\nM\tsrc/components/lineup/LineupHowToPlay.tsx\nM\tsrc/components/lineup/TeamSpinner.tsx\nM\tsrc/data/gameContent/soccer2.ts\nM\tsrc/hooks/useLineupBuilder.ts\nM\tsrc/pages/LineupBuilder.tsx\nA\tsrc/test/buildXiClubYear.test.tsx\nA\tsrc/test/playerAutocompleteHighlightScroll.test.tsx\nM\tsrc/types/lineupBuilder.ts\n' | cmp - "$out/direct-paths.txt"
           base=cb1c2025a31a7e01ad41ffd5f3a76d9b3ab9ed1f
           git diff --name-status "$base" HEAD > "$out/cumulative-paths.txt"
-          printf 'A\t.github/workflows/build-xi-club-year.yml\nA\tdocs/superpowers/plans/2026-10-26-build-xi-club-year.md\nA\tsrc/test/buildXiClubYearSetup.test.tsx\n' | cmp - "$out/cumulative-paths.txt"
-          for file in .github/workflows/build-xi-club-year.yml docs/superpowers/plans/2026-10-26-build-xi-club-year.md src/test/buildXiClubYearSetup.test.tsx;do
-            if git cat-file -e "$base:$file" 2>> "$out/original-base-absence.stderr";then printf 'Unexpected existing original-base path: %s\n' "$file";exit 1;fi
+          printf 'A\t.github/workflows/build-xi-club-year.yml\nA\tdocs/superpowers/plans/2026-10-26-build-xi-club-year.md\nA\tscripts/qa/playBuildXiClubYear.mjs\nM\tsrc/components/game/PlayerAutocomplete.tsx\nM\tsrc/components/lineup/LineupHowToPlay.tsx\nM\tsrc/components/lineup/TeamSpinner.tsx\nM\tsrc/data/gameContent/soccer2.ts\nM\tsrc/hooks/useLineupBuilder.ts\nM\tsrc/pages/LineupBuilder.tsx\nA\tsrc/test/buildXiClubYear.test.tsx\nA\tsrc/test/buildXiClubYearSetup.test.tsx\nA\tsrc/test/playerAutocompleteHighlightScroll.test.tsx\nM\tsrc/types/lineupBuilder.ts\n' | cmp - "$out/cumulative-paths.txt"
+          for file in src/test/buildXiClubYear.test.tsx src/test/playerAutocompleteHighlightScroll.test.tsx scripts/qa/playBuildXiClubYear.mjs;do
+            if git cat-file -e "$EXPECTED_PARENT:$file" 2>> "$out/new-parent-absence.stderr";then printf 'Unexpected existing parent path: %s\n' "$file";exit 1;fi
           done
-          git diff --exit-code "$EXPECTED_PARENT" HEAD -- . ':!.github/workflows/build-xi-club-year.yml' ':!src/test/buildXiClubYearSetup.test.tsx' > "$out/other-source-held.log"
+          git diff --exit-code "$EXPECTED_PARENT" HEAD -- . ':!.github/workflows/build-xi-club-year.yml' ':!docs/superpowers/plans/2026-10-26-build-xi-club-year.md' ':!scripts/qa/playBuildXiClubYear.mjs' ':!src/components/game/PlayerAutocomplete.tsx' ':!src/components/lineup/LineupHowToPlay.tsx' ':!src/components/lineup/TeamSpinner.tsx' ':!src/data/gameContent/soccer2.ts' ':!src/hooks/useLineupBuilder.ts' ':!src/pages/LineupBuilder.tsx' ':!src/test/buildXiClubYear.test.tsx' ':!src/test/playerAutocompleteHighlightScroll.test.tsx' ':!src/types/lineupBuilder.ts' > "$out/other-parent-source-held.log"
           git ls-tree -r --name-only "$EXPECTED_PARENT" > "$out/parent-members.txt"
           test "$(wc -l < "$out/parent-members.txt")" -eq 5384
           git rev-parse HEAD > "$out/head.txt";git rev-parse 'HEAD^{tree}' > "$out/tree.txt"
           git ls-files -z | sort -z > "$out/source-members.before"
-          test "$(tr -cd '\000' < "$out/source-members.before" | wc -c)" -eq 5384
+          test "$(tr -cd '\000' < "$out/source-members.before" | wc -c)" -eq 5387
           git ls-files -z | sort -z | xargs -0 sha256sum > "$out/source.sha256"
+          git ls-files -z -- . ':!scripts/data/guideHeadingsFrozen.json' ':!src/data/searchKeywords.json' ':!public/build-your-xi/index.html' ':!public/sitemap.xml' ':!scripts/data/lastmod.json' | sort -z > "$out/source-held-members.before"
+          test "$(tr -cd '\000' < "$out/source-held-members.before" | wc -c)" -eq 5382
+          xargs -0 sha256sum < "$out/source-held-members.before" > "$out/source-held.sha256"
           git diff --exit-code HEAD > "$out/source-clean-before.log"
-          git status --porcelain --untracked-files=all > "$out/status-before.txt"
-          test ! -s "$out/status-before.txt"
+          git status --porcelain --untracked-files=all > "$out/status-before.txt";test ! -s "$out/status-before.txt"
           git archive --format=tar HEAD > "$out/source.tar"
           printf 'e60ff1534307e449ccef598e3b7470dcba58681b82cea4005cec7319f14f9221  scripts/lib/offlineTransport.cjs\n' | sha256sum -c - > "$out/offline-guard-before.log"
-          cat > "$out/build-xi-club-year-baseline.cjs" <<'HELPER'
-          'use strict';
-          async function main(mode){
-          const fs=require('node:fs'),path=require('node:path'),cp=require('node:child_process'),assert=require('node:assert/strict'),{createHash}=require('node:crypto');
-          const {stripVTControlCharacters}=require('node:util');
-          const ROOT=fs.realpathSync(process.cwd()),OUT=fs.realpathSync(process.env.BUILD_XI_OUT),SELF=fs.realpathSync(__filename);
-          const PARENT='3225a0c11d9638e3683003cf3e0ec3a1d3a8d711',PARENT_TREE='844013655bdad832e28910b9e44e5da079af78b0';
-          const WF='.github/workflows/build-xi-club-year.yml',TEST='src/test/buildXiClubYearSetup.test.tsx',PLAN='docs/superpowers/plans/2026-10-26-build-xi-club-year.md';
-          const PINS={
-           "src/lib/xiFit.ts": "f2fb9c20467651b632e7715cb8b1ffd69fe6f296",
-           "src/lib/positionFit.ts": "868a0f0f92fedfde8f09d8fe31a4495f4965272e",
-           "src/types/lineupBuilder.ts": "4fd4b014374ec316497b59fbd1c17cfda9007b35",
-           "src/lib/squadDeal.ts": "726c554d99de4c285604e23cbe1d6def78477bcb",
-           "src/lib/squadShape.ts": "b116f1dfb7cde01be9904c98e263c514bfc114aa",
-           "src/lib/chemistry.ts": "8636d72d2c322105b1ba88f3bdbb71d52da4a856",
-           "src/data/lineupTeams.ts": "cf7cd045678992998f826fab7c4cb65e36151124",
-           "src/components/lineup/XiFitBreakdown.tsx": "8aa7ee3c1e9112bf6550cfe9b564d5a6a5cbaa40",
-           "src/lib/worldXi.ts": "d30a6de90d868e789a76d21cf8b87696786f89d2",
-           "src/components/world-xi/SeasonReportTabs.tsx": "87fc5819e629e3b1200a5bab65fc0cec2535b885",
-           "scripts/simBuildYourXiFit.mjs": "3c0f8ad7e52d08de3d2aa25484ddaa466552bc81",
-           "scripts/lib/seedRandom.mjs": "13e2534d2936880c0529a37190050fffb7d8df7d",
-           "scripts/lib/offlineTransport.cjs": "0fda542a2649fe5da937c6976fd0f5b6073e74b6",
-           "src/test/setup.ts": "df00cdf5c54e8c8efc71e46d7585ae76acb4fc8d",
-           "vitest.config.ts": "ed2a9dc677f77dfe95c061064eeff5782b856864",
-           "package.json": "2ff64986fb76ebc51b706f2fd24765768874008a",
-           "package-lock.json": "97d6f12a052f25f400462938c241789a083f0bfe",
-           "tsconfig.app.json": "51f581dd91641b4c1f1219f646788e73cf6bf00c",
-           "src/pages/LineupBuilder.tsx": "6560dfa0caeb8fb776017478a9ab173bffb0f4e2",
-           "src/hooks/useLineupBuilder.ts": "369487db56b37c031257b97e89e4303b0228c640",
-           "src/components/lineup/TeamSpinner.tsx": "e8149bf242ee85a8dd2b3c6860f3d8c08a950e6a",
-           "src/components/lineup/LineupHowToPlay.tsx": "d59b8988df15a5ed1efd1d7cf2f931962c57263d",
-           "src/lib/playerSearch.ts": "0d19f2c23735eb30512dc7fc3a447eacef5e128f",
-           "src/components/game/PlayerAutocomplete.tsx": "1ba70bc2e8134f1f3c196ab37d5b7b2eafd61d29"
-          };
-          const NEW={file:TEST,ancestor:'Build Your XI club year setup',cases:[
-           {
-            "title": "keeps the mixed draft and six formations available",
-            "status": "passed"
-           },
-           {
-            "title": "offers a recorded year club draft before formation",
-            "marker": "XI_CLUB_YEAR_SETUP",
-            "status": "failed"
-           }
-          ]};
-          const sha=b=>createHash('sha256').update(b).digest('hex');
-          const blob=b=>createHash('sha1').update(Buffer.from('blob '+b.length+'\0')).update(b).digest('hex');
-          const output=name=>{assert.equal(path.basename(name),name);return path.join(OUT,name);};
-          const write=(name,body)=>fs.writeFileSync(output(name),body,{flag:'wx'});
-          const save=(name,value)=>write(name,JSON.stringify(value,null,2)+'\n');
-          const json=name=>JSON.parse(fs.readFileSync(output(name),'utf8'));
-          const git=args=>cp.execFileSync('git',args,{encoding:'utf8',maxBuffer:16*1024*1024}).trim();
-          assert.notEqual(OUT,ROOT);assert(!OUT.startsWith(ROOT+path.sep));
-          function regular(file){const s=fs.lstatSync(file);assert(s.isFile()&&!s.isSymbolicLink(),'BUILD_XI_REGULAR_FILE');return fs.readFileSync(file);}
-          function binding(){
-           assert.equal(process.env.GITHUB_REPOSITORY,'PapiSalgueroM/ballpark-hero');
-           assert.equal(process.env.GITHUB_REPOSITORY_ID,'1195729679');
-           assert.equal(process.env.GITHUB_REF,'refs/heads/codex/build-xi-club-year-20261026');
-           assert.equal(git(['rev-parse','HEAD']),process.env.GITHUB_SHA);
-           assert.equal(git(['show','-s','--format=%P','HEAD']),PARENT);
-           assert.equal(git(['rev-parse',PARENT+'^{tree}']),PARENT_TREE);
-           for(const name of ['SIM_SEED','BYXI_CONTROL','BYXI_SEED','BYXI_PRINT_DIGEST'])assert.equal(process.env[name],undefined,'BUILD_XI_NO_INHERITED_HARNESS_OVERRIDE');
-           const source={};
-           for(const [file,expected]of Object.entries(PINS)){
-            const body=regular(file);assert.equal(blob(body),expected,'BUILD_XI_CRITICAL_SOURCE');
-            assert.equal(git(['rev-parse','HEAD:'+file]),expected);
-            assert.equal(git(['rev-parse',PARENT+':'+file]),expected);
-            source[file]={bytes:body.length,sha256:sha(body),gitBlob:expected};
-           }
-           for(const [file,bytes,expected,parentGit]of [[TEST,3161,'1cc88f882ca918a028962ec7a735f9163b1e974a927fd2e0f12d977f8c9568c9','b3405f0ad760cff012e1e4e603c983f48bba49c7'],[PLAN,3984,'cd991dc36574fe9555a6c77e6dfbfd8fd9be878575ed08087d51d1e66959a83c','18999dd7b01f94ef56e4af0920eae48530e3cc6f']]){
-            const body=regular(file);assert.equal(body.length,bytes);assert.equal(sha(body),expected,'BUILD_XI_NEW_SOURCE');
-            assert.equal(blob(body),git(['rev-parse','HEAD:'+file]));
-            assert.equal(git(['rev-parse',PARENT+':'+file]),parentGit,'BUILD_XI_EXISTING_PARENT_SOURCE');
-            source[file]={bytes:body.length,sha256:sha(body),gitBlob:blob(body)};
-           }
-           assert.equal(git(['rev-parse',PARENT+':'+WF]),'6e0202aeb9b9e9ad8037b4b71ac994ba293582b0','BUILD_XI_PARENT_WORKFLOW');
-           const wf=regular(WF);assert.equal(blob(wf),git(['rev-parse','HEAD:'+WF]));
-           source[WF]={bytes:wf.length,sha256:sha(wf),gitBlob:blob(wf)};
-           const names=cp.execFileSync('git',['ls-files','-z']);
-           const files=names.toString().split('\0');assert.equal(files.pop(),'');assert.equal(files.length,5384);
-           for(const file of files){regular(file);const real=fs.realpathSync(file);assert(real.startsWith(ROOT+path.sep),'BUILD_XI_SOURCE_ESCAPE');}
-           return {phase:'club-year-setup-owned-RED',source:process.env.GITHUB_SHA,parent:PARENT,parentTree:PARENT_TREE,tree:git(['rev-parse','HEAD^{tree}']),run:process.env.GITHUB_RUN_ID,attempt:process.env.GITHUB_RUN_ATTEMPT,processPid:process.pid,parentBlobs:5384,sourceBlobs:5384,directPaths:2,criticalSources:source,helper:{file:SELF,bytes:regular(SELF).length,sha256:sha(regular(SELF))},applicationChange:false,fullSuite:false,browser:false,livePublished:false};
-          }
-          function native(id,status){
-           const r=json(id+'.closed.json');assert.equal(r.id,id);
-           assert(Number.isInteger(r.pid)&&r.pid>0,'BUILD_XI_NATIVE_PID');
-           assert.equal(r.status,status,'BUILD_XI_NATIVE_STATUS');assert.equal(r.signal,null);assert.equal(r.error,null);
-           assert.equal(r.closed,true);assert.equal(r.deadlineExpired,false);assert.deepEqual(r.signalAttempts,[]);
-           assert.equal(r.receiptBytes,0);assert.equal(regular(output(id+'.transport')).length,0);
-           for(const stream of ['stdout','stderr']){const b=regular(output(id+'.'+stream));assert.equal(b.length,r[stream+'Bytes']);assert.equal(sha(b),r[stream+'Sha256']);}
-           return r;
-          }
-          function classify(report){
-           assert.equal(report.success,false);assert.equal(report.numTotalTests,2);assert.equal(report.numPassedTests,1);assert.equal(report.numFailedTests,1);
-           assert.equal(report.numPendingTests,0,'BUILD_XI_NO_PENDING');assert.equal(report.numTodoTests,0,'BUILD_XI_NO_TODO');
-           assert(Array.isArray(report.testResults));assert.equal(report.testResults.length,1,'BUILD_XI_FILE_CENSUS');
-           const file=report.testResults[0];assert.equal(path.resolve(file.name),path.resolve(TEST),'BUILD_XI_FILE_IDENTITY');
-           assert.equal(file.message??'','','BUILD_XI_NO_FILE_ERROR');assert.equal(file.status,'failed');
-           assert(Array.isArray(file.assertionResults));assert.equal(file.assertionResults.length,2,'BUILD_XI_CASE_CENSUS');
-           const actual=[];
-           for(const c of NEW.cases){
-            const matches=file.assertionResults.filter(a=>a.title===c.title);assert.equal(matches.length,1,'BUILD_XI_CASE_IDENTITY');
-            const a=matches[0];assert.deepEqual(a.ancestorTitles,[NEW.ancestor]);assert.equal(a.fullName,NEW.ancestor+' '+c.title);
-            assert.equal(a.status,c.status,c.status==='passed'?'BUILD_XI_HOLD_PASS':'BUILD_XI_RED_STATUS');assert(Array.isArray(a.failureMessages));
-            if(c.status==='passed')assert.deepEqual(a.failureMessages,[]);
-            else{
-             assert.equal(a.failureMessages.length,1,'BUILD_XI_RED_ONE_ERROR');
-             const rawError=a.failureMessages[0];assert.equal(typeof rawError,'string');const error=stripVTControlCharacters(rawError);
-             assert(/^\s*AssertionError(?::|\s|\[)/.test(error),'BUILD_XI_RED_ASSERTION_KIND');
-             assert(error.includes(c.marker+':'),'BUILD_XI_RED_OWNED_MARKER');
-             assert(error.includes('buildXiClubYearSetup.test.tsx:'),'BUILD_XI_RED_TEST_STACK');
-             assert(!/TypeError|ReferenceError|SyntaxError|TestingLibraryElementError|TimeoutError|Test timed out|Failed to load|Cannot find module|Cannot find package/i.test(error),'BUILD_XI_RED_NOT_INFRASTRUCTURE');
-             const witness=/expected (\+?0) to be 1(?=\s|$)/.exec(error);
-             assert(witness,'BUILD_XI_RED_NUMERIC_WITNESS');
-            }
-            actual.push(a);
-           }
-           assert.equal(new Set(actual.map(a=>a.fullName)).size,2);return actual;
-          }
-          function classifyFile(file){return classify(JSON.parse(regular(file)));}
-          function harness(){
-           const r=native('existing-fit',0),stdout=regular(output('existing-fit.stdout')).toString(),stderr=regular(output('existing-fit.stderr')).toString();
-           for(const n of [1,2,3,4,5])assert.equal((stdout.match(new RegExp('^'+n+'\\) .+$','gm'))??[]).length,1,'BUILD_XI_EXISTING_SECTION_CENSUS');
-           assert(/^4\) World XI's seasons are the ones it played before this round \(240 squads\)\r?$/m.test(stdout),'BUILD_XI_240_SEASONS');
-           assert(/^   digest 2f8cca6578202d4b1ccf3dbc45be0908cef51bf5be50b91a6ff2365722ea6c6c\r?$/m.test(stdout),'BUILD_XI_ORIGINAL_WORLD_XI_DIGEST');
-           assert.equal((stdout.match(/^simBuildYourXiFit: all checks green\r?$/gm)??[]).length,1,'BUILD_XI_EXISTING_GREEN_FOOTER');
-           assert(!/FAIL \[|CONTROL (?:FIRED|DID NOT)|NEGATIVE CONTROL ON/.test(stdout+'\n'+stderr),'BUILD_XI_EXISTING_NOT_CONTROL');
-           return {pid:r.pid,status:r.status,sections:[1,2,3,4,5],worldXiSquads:240,originalWorldXiDigest:'2f8cca6578202d4b1ccf3dbc45be0908cef51bf5be50b91a6ff2365722ea6c6c',existingHarnessUnmodified:true};
-          }
-          function control(name,seed,change,marker){
-           const dir=path.join(OUT,'classifier-controls',name);fs.mkdirSync(dir,{recursive:true});
-           const work=path.join(dir,'report.work.json');fs.writeFileSync(work,seed,{flag:'wx'});
-           fs.writeFileSync(path.join(dir,'report.actual.json'),seed,{flag:'wx'});classifyFile(work);
-           const record=JSON.parse(seed),normalizedBefore=Buffer.from(JSON.stringify(record,null,2)+'\n');
-           const targetedMutation=change(record);assert(targetedMutation&&targetedMutation.changed===true,'BUILD_XI_CONTROL_TARGET_CHANGED');
-           const changed=Buffer.from(JSON.stringify(record,null,2)+'\n');assert(!changed.equals(normalizedBefore),'BUILD_XI_CONTROL_CHANGED');
-           fs.writeFileSync(path.join(dir,'report.changed.json'),changed,{flag:'wx'});fs.writeFileSync(work,changed);
-           let caught=null;
-           try{try{classifyFile(work);}catch(error){caught=error;}
-            assert(caught instanceof assert.AssertionError,'BUILD_XI_CONTROL_NATIVE_ASSERTION');assert(caught.message.includes(marker),'BUILD_XI_CONTROL_OWNED');
-            fs.writeFileSync(path.join(dir,'failure.stack.txt'),caught.stack+'\n',{flag:'wx'});
-           }finally{
-            fs.writeFileSync(work,seed);assert(regular(work).equals(seed));
-            fs.writeFileSync(path.join(dir,'report.restored.json'),regular(work),{flag:'wx'});classifyFile(work);
-           }
-           return {name,pid:process.pid,scope:'copied actual Vitest report, three in-process judge calls only, no native test fault statuses',marker,errorName:caught.name,code:caught.code,changed:true,restored:true,targetedMutation,diagnosticVerdicts:['accepted','owned-refusal','accepted'],seedSha256:sha(seed),normalizedBeforeSha256:sha(normalizedBefore),changedSha256:sha(changed),restoredSha256:sha(regular(work))};
-          }
-          async function run(id,args,status,deadlineMs){
-           const receipt=output(id+'.transport');write(id+'.transport','');
-           const so=fs.openSync(output(id+'.stdout'),'wx'),se=fs.openSync(output(id+'.stderr'),'wx');
-           const r={id,command:process.execPath,args,startedAt:new Date().toISOString(),pid:null,status:null,signal:null,error:null,closed:false,deadlineMs,deadlineExpired:false,signalAttempts:[]};
-           const child=cp.spawn(process.execPath,args,{cwd:ROOT,detached:true,stdio:['ignore',so,se],env:{...process.env,NODE_OPTIONS:'--require='+path.join(ROOT,'scripts/lib/offlineTransport.cjs'),SIM_OFFLINE_RECEIPT:receipt,SIM_NETWORK:'offline'}});
-           r.pid=child.pid??null;save(id+'.start.json',r);
-           let term=null,kill=null;
-           const signalGroup=signal=>{const a={signal,at:new Date().toISOString(),error:null};try{process.kill(-child.pid,signal);}catch(e){a.error={name:e.name,message:e.message,code:e.code??null};}r.signalAttempts.push(a);};
-           if(child.pid)term=setTimeout(()=>{r.deadlineExpired=true;signalGroup('SIGTERM');kill=setTimeout(()=>{if(!r.closed)signalGroup('SIGKILL');},15000);},deadlineMs);
-           child.on('error',e=>r.error={name:e.name,message:e.message,code:e.code??null});
-           await new Promise(resolve=>child.on('close',(code,signal)=>{r.status=code;r.signal=signal;r.closed=true;r.closedAt=new Date().toISOString();resolve();}));
-           if(term)clearTimeout(term);if(kill)clearTimeout(kill);fs.closeSync(so);fs.closeSync(se);
-           r.receiptBytes=regular(receipt).length;
-           for(const stream of ['stdout','stderr']){const b=regular(output(id+'.'+stream));r[stream+'Bytes']=b.length;r[stream+'Sha256']=sha(b);}
-           save(id+'.closed.json',r);return {record:r,expectedStatus:status};
-          }
-          async function execute(mode){
-           if(mode==='source'){save('source-binding.json',binding());return;}
-           if(mode==='checks'){
-            save('orchestrator.start.json',{pid:process.pid,source:process.env.GITHUB_SHA,mode});
-            const commands=[
-             ['types',['node_modules/typescript/bin/tsc','--noEmit','-p','tsconfig.app.json'],0,240000],
-             ['existing-fit',['scripts/simBuildYourXiFit.mjs'],0,240000],
-             ['club-year-setup',['node_modules/vitest/vitest.mjs','run',TEST,'--no-cache','--maxWorkers=1','--no-file-parallelism','--reporter=verbose','--reporter=json','--outputFile='+output('club-year-setup.json')],1,240000],
-             ['classifier',[SELF,'judge'],0,60000]
-            ];
-            const nativeRows=[];for(const [id,args,status,deadline]of commands)nativeRows.push(await run(id,args,status,deadline));
-            save('native-processes.json',{phase:'club-year-setup-owned-RED',pid:process.pid,rows:nativeRows,fullSuite:false});
-            for(const {record:r,expectedStatus}of nativeRows)native(r.id,expectedStatus);
-            assert.equal(new Set(nativeRows.map(x=>x.record.pid)).size,4);
-            return;
-           }
-           if(mode==='judge'){
-            for(const [id,status]of [['types',0],['existing-fit',0],['club-year-setup',1]])native(id,status);
-            for(const id of ['existing-fit','club-year-setup']){
-             const logs=regular(output(id+'.stdout')).toString()+'\n'+regular(output(id+'.stderr')).toString();
-             assert(!/Unhandled (?:Errors?|Rejection|Exception)|Error during collection|Failed to load url|Cannot find module|Cannot find package|Test timed out|worker exited unexpectedly/i.test(logs),'BUILD_XI_NO_RUNTIME_CREDIT');
-            }
-            const existing=harness(),seed=regular(output('club-year-setup.json')),judged=classify(JSON.parse(seed));
-            const controls=[
-             control('hold-pass-row',seed,n=>{
-              const row=n.testResults[0].assertionResults.find(a=>a.title===NEW.cases[0].title);assert.equal(row.status,'passed');row.status='failed';
-              return {field:'actual nonowned assertion status',before:'passed',after:row.status,changed:true};
-             },'BUILD_XI_HOLD_PASS'),
-             control('red-error-kind',seed,n=>{
-              const row=n.testResults[0].assertionResults.find(a=>a.title===NEW.cases[1].title),before=row.failureMessages[0];
-              assert.equal(before.split('AssertionError').length-1,1,'BUILD_XI_CONTROL_EXACT_KIND_NEEDLE');
-              row.failureMessages[0]=before.replace('AssertionError','ReferenceError');assert.notEqual(row.failureMessages[0],before);
-              return {field:'actual owned error kind',needle:'AssertionError',replacement:'ReferenceError',beforeSha256:sha(before),afterSha256:sha(row.failureMessages[0]),changed:true};
-             },'BUILD_XI_RED_ASSERTION_KIND'),
-             control('red-owned-marker',seed,n=>{
-              const row=n.testResults[0].assertionResults.find(a=>a.title===NEW.cases[1].title),before=row.failureMessages[0],needle=NEW.cases[1].marker;
-              assert.equal(before.split(needle).length-1,1,'BUILD_XI_CONTROL_EXACT_MARKER_NEEDLE');
-              row.failureMessages[0]=before.replace(needle,'UNOWNED_MARKER');assert.notEqual(row.failureMessages[0],before);
-              return {field:'actual owned failure marker',needle,replacement:'UNOWNED_MARKER',beforeSha256:sha(before),afterSha256:sha(row.failureMessages[0]),changed:true};
-             },'BUILD_XI_RED_OWNED_MARKER'),
-             control('red-numeric-witness',seed,n=>{
-              const row=n.testResults[0].assertionResults.find(a=>a.title===NEW.cases[1].title),before=row.failureMessages[0];
-              const normalized=stripVTControlCharacters(before),match=/expected (\+?0) to be 1(?=\s|$)/.exec(normalized);assert(match,'BUILD_XI_CONTROL_NUMERIC_FOUNDATION');
-              const needle=match[0],replacement=needle.replace(/expected \+?0/,'expected 2');
-              assert.equal(before.split(needle).length-1,1,'BUILD_XI_CONTROL_EXACT_NUMERIC_NEEDLE');
-              row.failureMessages[0]=before.replace(needle,replacement);assert.notEqual(row.failureMessages[0],before);
-              assert.equal(row.failureMessages[0].split(needle).length-1,0);assert.equal(row.failureMessages[0].split(replacement).length-1,1);
-              return {field:'actual setup owned numeric witness',needle,replacement,beforeSha256:sha(before),afterSha256:sha(row.failureMessages[0]),changed:true};
-             },'BUILD_XI_RED_NUMERIC_WITNESS')
-            ];
-            save('baseline-admission.json',{phase:'club-year-setup-owned-RED',source:process.env.GITHUB_SHA,run:process.env.GITHUB_RUN_ID,attempt:process.env.GITHUB_RUN_ATTEMPT,pid:process.pid,typesExit:0,existingHarness:existing,heldPass:judged.filter(a=>a.status==='passed').map(a=>a.fullName),expectedOwnedFailures:judged.filter(a=>a.status==='failed').map(a=>({fullName:a.fullName,status:a.status,kind:'AssertionError',failureMessages:a.failureMessages})),classifierControls:controls,absentRuntimeCounters:'UNKNOWN',newFeatureImplemented:false,fullSuite:false,browser:false});
-            return;
-           }
-           if(mode==='final'){
-            const before=json('source-binding.json'),now=binding();assert.equal(now.source,process.env.GITHUB_SHA,'BUILD_XI_END_COMMIT');assert.equal(before.source,process.env.GITHUB_SHA,'BUILD_XI_START_COMMIT');assert.deepEqual(now.criticalSources,before.criticalSources,'BUILD_XI_END_SOURCE');
-            assert.deepEqual(now.helper,before.helper,'BUILD_XI_END_GENERATED');
-            for(const [id,status]of [['types',0],['existing-fit',0],['club-year-setup',1],['classifier',0]])native(id,status);
-            for(const name of ['foundation','orchestrator']){assert.equal(regular(output(name+'.transport')).length,0);assert.equal(regular(output(name+'.exit')).toString().trim(),'0');}
-            const admission=json('baseline-admission.json');assert.equal(admission.source,process.env.GITHUB_SHA);assert.equal(admission.classifierControls.length,4);assert(admission.classifierControls.every(c=>c.changed&&c.restored&&c.seedSha256===c.restoredSha256));
-            assert.equal(admission.heldPass.length,1);assert.equal(admission.expectedOwnedFailures.length,1);
-            save('final-binding.json',{pid:process.pid,source:process.env.GITHUB_SHA,run:process.env.GITHUB_RUN_ID,attempt:process.env.GITHUB_RUN_ATTEMPT,phase:admission.phase,sourceHeld:true,generatedHeld:true,heldPass:1,newOwnedFailures:1,existingHarness:admission.existingHarness,qualifiedFeature:false});
-            return;
-           }
-           throw Error('Unknown baseline helper mode');
-          }
-          await execute(mode);
-          }
-          main(process.argv[2]).then(()=>console.log('Build XI baseline '+process.argv[2]+' complete, pid '+process.pid)).catch(error=>{console.error(error.stack||error);process.exitCode=1;});
-          HELPER
-          printf '23e9b80679cd01dcc5ba4e1f142ec0a4ba74104bdd9e73f6959000c7a9377bd2  %s\n' "$out/build-xi-club-year-baseline.cjs" > "$out/generated.sha256"
+          cat > "$out/helper.payload.gz.b64" <<'HELPER_GZIP_BASE64'
+          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
+          HELPER_GZIP_BASE64
+          base64 --decode "$out/helper.payload.gz.b64" | gzip -dc > "$out/build-xi-club-year-green.cjs"
+          base64 --decode > "$out/caps-preload.cjs" <<'CAPS_BASE64'
+          J3VzZSBzdHJpY3QnOwpjb25zdCBmcz1yZXF1aXJlKCdub2RlOmZzJykscGF0aD1yZXF1aXJlKCdub2RlOnBhdGgnKSxhc3NlcnQ9cmVxdWlyZSgnbm9kZTphc3NlcnQvc3RyaWN0Jykse2NyZWF0ZUhhc2h9PXJlcXVpcmUoJ25vZGU6Y3J5cHRvJyk7CmNvbnN0IHNoYT1iPT5jcmVhdGVIYXNoKCdzaGEyNTYnKS51cGRhdGUoYikuZGlnZXN0KCdoZXgnKTsKY29uc3QgZGlyPXByb2Nlc3MuZW52LkZSRUVfS0lDS19GT05UX0NBQ0hFLG1hbmlmZXN0PWZzLnJlYWRGaWxlU3luYyhwYXRoLmpvaW4oZGlyLCdtYW5pZmVzdC5qc29uJykpOwphc3NlcnQuZXF1YWwoc2hhKG1hbmlmZXN0KSxwcm9jZXNzLmVudi5GT05UX0NBQ0hFX01BTklGRVNUX1NIQTI1Nik7CmNvbnN0IGZvbnRzPW5ldyBNYXAoKTsKZm9yKGNvbnN0IGVudHJ5IG9mIEpTT04ucGFyc2UobWFuaWZlc3QpKXsKICBjb25zdCB1PW5ldyBVUkwoZW50cnkudXJsKTthc3NlcnQoWydodHRwczovL2ZvbnRzLmdvb2dsZWFwaXMuY29tJywnaHR0cHM6Ly9mb250cy5nc3RhdGljLmNvbSddLmluY2x1ZGVzKHUub3JpZ2luKSk7CiAgYXNzZXJ0LmVxdWFsKGVudHJ5LmZpbGUsc2hhKGVudHJ5LnVybCkpO2Fzc2VydCghZm9udHMuaGFzKGVudHJ5LnVybCkpOwogIGNvbnN0IGJvZHk9ZnMucmVhZEZpbGVTeW5jKHBhdGguam9pbihkaXIsZW50cnkuZmlsZSkpO2Fzc2VydC5lcXVhbChzaGEoYm9keSksZW50cnkuc2hhMjU2KTtmb250cy5zZXQoZW50cnkudXJsLHsuLi5lbnRyeSxib2R5fSk7Cn0KY29uc3QgcHc9cmVxdWlyZShwYXRoLmpvaW4ocHJvY2Vzcy5jd2QoKSwnbm9kZV9tb2R1bGVzL3BsYXl3cmlnaHQtY29yZScpKSxsYXVuY2g9cHcuY2hyb21pdW0ubGF1bmNoLmJpbmQocHcuY2hyb21pdW0pOwpwdy5jaHJvbWl1bS5sYXVuY2g9YXN5bmMgb3B0aW9ucz0+ewogIGNvbnN0IGJyb3dzZXI9YXdhaXQgbGF1bmNoKG9wdGlvbnMpLG5ld0NvbnRleHQ9YnJvd3Nlci5uZXdDb250ZXh0LmJpbmQoYnJvd3Nlcik7CiAgYnJvd3Nlci5uZXdDb250ZXh0PWFzeW5jIG9wdGlvbnM9PnsKICAgIGNvbnN0IGNvbnRleHQ9YXdhaXQgbmV3Q29udGV4dChvcHRpb25zKTsKICAgIGF3YWl0IGNvbnRleHQucm91dGUoJyoqLyonLGFzeW5jIHJvdXRlPT57CiAgICAgIGNvbnN0IHJlcT1yb3V0ZS5yZXF1ZXN0KCksdT1uZXcgVVJMKHJlcS51cmwoKSksZW50cnk9Zm9udHMuZ2V0KHJlcS51cmwoKSk7CiAgICAgIGlmKGVudHJ5JiZyZXEubWV0aG9kKCk9PT0nR0VUJyYmWydzdHlsZXNoZWV0JywnZm9udCddLmluY2x1ZGVzKHJlcS5yZXNvdXJjZVR5cGUoKSkpewogICAgICAgIGZzLmFwcGVuZEZpbGVTeW5jKHByb2Nlc3MuZW52LkJVSUxEX1hJX09VVCsnL2NhcHMtcHJlcGFyZWQtaW8uanNvbmwnLEpTT04uc3RyaW5naWZ5KHtraW5kOidwcmVwYXJlZC1mb250Jyx1cmw6cmVxLnVybCgpLHNoYTI1NjplbnRyeS5zaGEyNTZ9KSsnXG4nKTsKICAgICAgICByZXR1cm4gcm91dGUuZnVsZmlsbCh7c3RhdHVzOjIwMCxjb250ZW50VHlwZTplbnRyeS5jb250ZW50VHlwZSxib2R5OmVudHJ5LmJvZHl9KTsKICAgICAgfQogICAgICBpZih1Lm9yaWdpbj09PSdodHRwczovL2ZsYWdjZG4uY29tJyYmIXUudXNlcm5hbWUmJiF1LnBhc3N3b3JkJiYhdS5zZWFyY2gmJiF1Lmhhc2gmJnJlcS5tZXRob2QoKT09PSdHRVQnJiZyZXEucmVzb3VyY2VUeXBlKCk9PT0naW1hZ2UnJiYvXlwvKD86d1sxLTldWzAtOV17MCwyfVwvfGhbMS05XVswLTldezAsMn1cL3xbMS05XVswLTldezAsMn14WzEtOV1bMC05XXswLDJ9XC8pP1thLXpdezJ9KD86LVthLXowLTldezEsOH0pP1wuKD86cG5nfHdlYnB8c3ZnKSQvLnRlc3QodS5wYXRobmFtZSkpewogICAgICAgIGZzLmFwcGVuZEZpbGVTeW5jKHByb2Nlc3MuZW52LkJVSUxEX1hJX09VVCsnL2NhcHMtcHJlcGFyZWQtaW8uanNvbmwnLEpTT04uc3RyaW5naWZ5KHtraW5kOidmbGFnLWFib3J0Jyx1cmw6cmVxLnVybCgpfSkrJ1xuJyk7CiAgICAgICAgcmV0dXJuIHJvdXRlLmFib3J0KCk7CiAgICAgIH0KICAgICAgcmV0dXJuIHJvdXRlLmZhbGxiYWNrKCk7CiAgICB9KTsKICAgIHJldHVybiBjb250ZXh0OwogIH07CiAgcmV0dXJuIGJyb3dzZXI7Cn07Cg==
+          CAPS_BASE64
+          base64 --decode > "$out/prerender-fonts.cjs" <<'PRERENDER_BASE64'
+          J3VzZSBzdHJpY3QnOwpjb25zdCBmcz1yZXF1aXJlKCdub2RlOmZzJykscGF0aD1yZXF1aXJlKCdub2RlOnBhdGgnKSxhc3NlcnQ9cmVxdWlyZSgnbm9kZTphc3NlcnQvc3RyaWN0Jykse2NyZWF0ZUhhc2h9PXJlcXVpcmUoJ25vZGU6Y3J5cHRvJyk7CmNvbnN0IHNoYT1iPT5jcmVhdGVIYXNoKCdzaGEyNTYnKS51cGRhdGUoYikuZGlnZXN0KCdoZXgnKTsKY29uc3Qgb3V0PWZzLnJlYWxwYXRoU3luYyhwcm9jZXNzLmVudi5CVUlMRF9YSV9PVVQpLGRpcj1mcy5yZWFscGF0aFN5bmMocHJvY2Vzcy5lbnYuRlJFRV9LSUNLX0ZPTlRfQ0FDSEUpOwpjb25zdCByZWd1bGFyPWZpbGU9Pntjb25zdCBzPWZzLmxzdGF0U3luYyhmaWxlKTthc3NlcnQocy5pc0ZpbGUoKSYmIXMuaXNTeW1ib2xpY0xpbmsoKSk7cmV0dXJuIGZzLnJlYWRGaWxlU3luYyhmaWxlKTt9Owpjb25zdCBtYW5pZmVzdD1yZWd1bGFyKHBhdGguam9pbihkaXIsJ21hbmlmZXN0Lmpzb24nKSk7YXNzZXJ0LmVxdWFsKHNoYShtYW5pZmVzdCkscHJvY2Vzcy5lbnYuRk9OVF9DQUNIRV9NQU5JRkVTVF9TSEEyNTYpOwpjb25zdCBmb250cz1uZXcgTWFwKCk7CmZvcihjb25zdCBlbnRyeSBvZiBKU09OLnBhcnNlKG1hbmlmZXN0KSl7CiBjb25zdCB1PW5ldyBVUkwoZW50cnkudXJsKTthc3NlcnQoWydodHRwczovL2ZvbnRzLmdvb2dsZWFwaXMuY29tJywnaHR0cHM6Ly9mb250cy5nc3RhdGljLmNvbSddLmluY2x1ZGVzKHUub3JpZ2luKSk7CiBhc3NlcnQuZXF1YWwoZW50cnkuZmlsZSxzaGEoZW50cnkudXJsKSk7YXNzZXJ0KCFmb250cy5oYXMoZW50cnkudXJsKSk7CiBjb25zdCBib2R5PXJlZ3VsYXIocGF0aC5qb2luKGRpcixlbnRyeS5maWxlKSk7YXNzZXJ0LmVxdWFsKHNoYShib2R5KSxlbnRyeS5zaGEyNTYpO2ZvbnRzLnNldChlbnRyeS51cmwsey4uLmVudHJ5LGJvZHl9KTsKfQpjb25zdCBpbz1lbnRyeT0+ZnMuYXBwZW5kRmlsZVN5bmMocGF0aC5qb2luKG91dCwncHJlcmVuZGVyLXByZXBhcmVkLWlvLmpzb25sJyksSlNPTi5zdHJpbmdpZnkoZW50cnkpKydcbicpOwpjb25zdCBwdz1yZXF1aXJlKHBhdGguam9pbihwcm9jZXNzLmN3ZCgpLCdub2RlX21vZHVsZXMvcGxheXdyaWdodC1jb3JlJykpLGxhdW5jaD1wdy5jaHJvbWl1bS5sYXVuY2guYmluZChwdy5jaHJvbWl1bSk7CnB3LmNocm9taXVtLmxhdW5jaD1hc3luYyBvcHRpb25zPT57CiBjb25zdCBicm93c2VyPWF3YWl0IGxhdW5jaChvcHRpb25zKSxuZXdDb250ZXh0PWJyb3dzZXIubmV3Q29udGV4dC5iaW5kKGJyb3dzZXIpOwogYnJvd3Nlci5uZXdDb250ZXh0PWFzeW5jIG9wdGlvbnM9PnsKICBjb25zdCBjb250ZXh0PWF3YWl0IG5ld0NvbnRleHQoey4uLm9wdGlvbnMsc2VydmljZVdvcmtlcnM6J2Jsb2NrJ30pOwogIGF3YWl0IGNvbnRleHQucm91dGVXZWJTb2NrZXQoJyoqLyonLGFzeW5jIHNvY2tldD0+e2NvbnN0IHVybD1uZXcgVVJMKHNvY2tldC51cmwoKSk7aW8oe2tpbmQ6J3Vua25vd24tYWJvcnQnLGNoYW5uZWw6J3dlYnNvY2tldCcsb3JpZ2luOnVybC5vcmlnaW4scGF0aDp1cmwucGF0aG5hbWV9KTthd2FpdCBzb2NrZXQuY2xvc2Uoe2NvZGU6MTAwOCxyZWFzb246J09mZmxpbmUgdmVyaWZpZXInfSk7fSk7CiAgYXdhaXQgY29udGV4dC5yb3V0ZSgnKiovKicsYXN5bmMgcm91dGU9PnsKICAgY29uc3QgcmVxPXJvdXRlLnJlcXVlc3QoKSx1PW5ldyBVUkwocmVxLnVybCgpKSxlbnRyeT1mb250cy5nZXQocmVxLnVybCgpKTsKICAgaWYoZW50cnkmJnJlcS5tZXRob2QoKT09PSdHRVQnJiZbJ3N0eWxlc2hlZXQnLCdmb250J10uaW5jbHVkZXMocmVxLnJlc291cmNlVHlwZSgpKSl7CiAgICBpbyh7a2luZDoncHJlcGFyZWQtZm9udCcsdXJsOnJlcS51cmwoKSxzaGEyNTY6ZW50cnkuc2hhMjU2fSk7CiAgICByZXR1cm4gcm91dGUuZnVsZmlsbCh7c3RhdHVzOjIwMCxjb250ZW50VHlwZTplbnRyeS5jb250ZW50VHlwZSxib2R5OmVudHJ5LmJvZHl9KTsKICAgfQogICBpZih1Lm9yaWdpbj09PSdodHRwOi8vMTI3LjAuMC4xOjQzMTAnJiYhdS51c2VybmFtZSYmIXUucGFzc3dvcmQmJiF1LnNlYXJjaCYmIXUuaGFzaCYmWydHRVQnLCdIRUFEJ10uaW5jbHVkZXMocmVxLm1ldGhvZCgpKSlyZXR1cm4gcm91dGUuY29udGludWUoKTsKICAgaWYodS5vcmlnaW49PT0naHR0cHM6Ly9mbGFnY2RuLmNvbScmJiF1LnVzZXJuYW1lJiYhdS5wYXNzd29yZCYmIXUuc2VhcmNoJiYhdS5oYXNoJiZyZXEubWV0aG9kKCk9PT0nR0VUJyYmcmVxLnJlc291cmNlVHlwZSgpPT09J2ltYWdlJyYmL15cLyg/OndbMS05XVswLTldezAsMn1cL3xoWzEtOV1bMC05XXswLDJ9XC98WzEtOV1bMC05XXswLDJ9eFsxLTldWzAtOV17MCwyfVwvKT9bYS16XXsyfSg/Oi1bYS16MC05XXsxLDh9KT9cLig/OnBuZ3x3ZWJwfHN2ZykkLy50ZXN0KHUucGF0aG5hbWUpKXsKICAgIGlvKHtraW5kOidmbGFnLWFib3J0Jyx1cmw6cmVxLnVybCgpfSk7cmV0dXJuIHJvdXRlLmFib3J0KCk7CiAgIH0KICAgaW8oe2tpbmQ6J3Vua25vd24tYWJvcnQnLHVybDpyZXEudXJsKCksbWV0aG9kOnJlcS5tZXRob2QoKSxyZXNvdXJjZVR5cGU6cmVxLnJlc291cmNlVHlwZSgpfSk7cmV0dXJuIHJvdXRlLmFib3J0KCk7CiAgfSk7CiAgcmV0dXJuIGNvbnRleHQ7CiB9OwogcmV0dXJuIGJyb3dzZXI7Cn07Cgo=
+          PRERENDER_BASE64
+          printf '89767472b92c9a29f9b213a7a375f9933d0ae98260d197cf71206c061a2e70f9  %s\nf00bdbf577607029625636b970b5126579c64a5540959cae9bf34559580dbd6e  %s\n9fa5aa86e8763ebdf600594b1c11b8903f5a40b06a26e7e4d3f5ceb81fd1304b  %s\n' "$out/build-xi-club-year-green.cjs" "$out/caps-preload.cjs" "$out/prerender-fonts.cjs" > "$out/generated.sha256"
+          printf '0f46bbf98aeddb807afb4ad890f59ac9b9fe7217d1b5e0312868661a29b635c5  %s\n' "$out/helper.payload.gz.b64" > "$out/payload.sha256"
           sha256sum -c "$out/generated.sha256" > "$out/generated-before.log"
+          sha256sum -c "$out/payload.sha256" > "$out/payload-before.log"
           : > "$out/foundation.transport";status=0
-          NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" SIM_OFFLINE_RECEIPT="$out/foundation.transport" node "$out/build-xi-club-year-baseline.cjs" source > "$out/foundation.stdout" 2> "$out/foundation.stderr" || status=$?
+          NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" SIM_OFFLINE_RECEIPT="$out/foundation.transport" node "$out/build-xi-club-year-green.cjs" source > "$out/foundation.stdout" 2> "$out/foundation.stderr" || status=$?
           printf '%s\n' "$status" > "$out/foundation.exit"
           test "$status" -eq 0;test ! -s "$out/foundation.transport"
-      - name: Install only locked project dependencies
+      - name: Locked packages and isolated cap tools
         id: install
-        timeout-minutes: 15
+        timeout-minutes: 20
         run: |
           set -euo pipefail
           out="$BUILD_XI_OUT";status=0
           npm ci > "$out/npm-ci.stdout" 2> "$out/npm-ci.stderr" &
           pid=$!;printf '%s\n' "$pid" > "$out/npm-ci.pid"
           wait "$pid" || status=$?
-          printf '%s\n' "$status" > "$out/npm-ci.exit"
-          test "$status" -eq 0
+          printf '%s\n' "$status" > "$out/npm-ci.exit";test "$status" -eq 0
+          tools="$RUNNER_TEMP/build-xi-cap-tools";engines="$RUNNER_TEMP/build-xi-cap-engines"
+          test ! -e "$tools";test ! -L "$tools";test ! -e "$engines";test ! -L "$engines"
+          echo "BUILD_XI_BROWSER_TOOLS=$tools" >> "$GITHUB_ENV";echo "PLAYWRIGHT_BROWSERS_PATH=$engines" >> "$GITHUB_ENV"
+          export PLAYWRIGHT_BROWSERS_PATH="$engines"
+          status=0;npm install --prefix "$tools" --no-save --package-lock=false playwright@1.64.0 > "$out/playwright-install.stdout" 2> "$out/playwright-install.stderr" &
+          pid=$!;printf '%s\n' "$pid" > "$out/playwright-install.pid";wait "$pid" || status=$?
+          printf '%s\n' "$status" > "$out/playwright-install.exit";test "$status" -eq 0
+          test ! -e node_modules/playwright;test ! -e node_modules/playwright-core
+          ln -s "$tools/node_modules/playwright" node_modules/playwright
+          ln -s "$tools/node_modules/playwright-core" node_modules/playwright-core
+          status=0;node "$tools/node_modules/playwright/cli.js" install --with-deps chromium > "$out/chromium-install.stdout" 2> "$out/chromium-install.stderr" &
+          pid=$!;printf '%s\n' "$pid" > "$out/chromium-install.pid";wait "$pid" || status=$?
+          printf '%s\n' "$status" > "$out/chromium-install.exit";test "$status" -eq 0
+          status=0;python -m pip install fonttools pillow > "$out/python-install.stdout" 2> "$out/python-install.stderr" &
+          pid=$!;printf '%s\n' "$pid" > "$out/python-install.pid";wait "$pid" || status=$?
+          printf '%s\n' "$status" > "$out/python-install.exit";test "$status" -eq 0
+          python -m pip freeze > "$out/python-packages.before"
+          python -c "import pathlib,fontTools,PIL;print(pathlib.Path(fontTools.__file__).parent);print(pathlib.Path(PIL.__file__).parent)" > "$out/python-roots.txt"
+          while IFS= read -r dir;do find "$dir" -type f -print0;done < "$out/python-roots.txt" | sort -z > "$out/python-tools-members.before"
+          xargs -0 sha256sum < "$out/python-tools-members.before" > "$out/python-tools.sha256"
+          status=0;FREE_KICK_FONT_CACHE="$out/font-cache" node scripts/qa/freeKickLab1070.mjs --prefetch-fonts-only > "$out/font-prefetch.stdout" 2> "$out/font-prefetch.stderr" &
+          pid=$!;printf '%s\n' "$pid" > "$out/font-prefetch.pid";wait "$pid" || status=$?
+          printf '%s\n' "$status" > "$out/font-prefetch.exit";test "$status" -eq 0
+          echo "FREE_KICK_FONT_CACHE=$out/font-cache" >> "$GITHUB_ENV"
+          echo "FONT_CACHE_MANIFEST_SHA256=$(sha256sum "$out/font-cache/manifest.json" | cut -d ' ' -f1)" >> "$GITHUB_ENV"
           find node_modules -type f -print0 | sort -z > "$out/dependency-members.before"
           test "$(tr -cd '\000' < "$out/dependency-members.before" | wc -c)" -eq 24466
           find node_modules -type f -print0 | sort -z | xargs -0 sha256sum > "$out/dependencies.sha256"
           find node_modules -type l -printf '%p\t%l\0' | sort -z > "$out/dependency-links.before"
           find node_modules ! -type d ! -type f ! -type l -print > "$out/dependency-nonregular.before"
           test ! -s "$out/dependency-nonregular.before"
-      - name: Real types unchanged fit harness and two exact setup outcomes
+          for name in playwright playwright-core;do readlink -f "node_modules/$name";done > "$out/browser-links.before"
+          for pair in "browser-tools:$tools" "browser-engines:$engines" "font-cache:$out/font-cache";do
+            name="${pair%%:*}";dir="${pair#*:}"
+            find "$dir" -type f -print0 | sort -z > "$out/$name-members.before"
+            find "$dir" -type f -print0 | sort -z | xargs -0 sha256sum > "$out/$name.sha256"
+            find "$dir" -type l -printf '%p\t%l\0' | sort -z > "$out/$name-links.before"
+            find "$dir" ! -type d ! -type f ! -type l -print > "$out/$name-nonregular.before";test ! -s "$out/$name-nonregular.before"
+          done
+          tar -cf "$out/browser-tools.tar" -C "$tools" .
+      - name: Twenty frozen cases both original fit trips five new source trips and original controls
         id: checks
-        timeout-minutes: 15
+        timeout-minutes: 50
         run: |
           set -euo pipefail
           out="$BUILD_XI_OUT"
           sha256sum -c "$out/generated.sha256" > "$out/generated-pre-consumer.log"
+          sha256sum -c "$out/payload.sha256" > "$out/payload-pre-consumer.log"
           : > "$out/orchestrator.transport";status=0
-          NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" SIM_OFFLINE_RECEIPT="$out/orchestrator.transport" node "$out/build-xi-club-year-baseline.cjs" checks > "$out/orchestrator.stdout" 2> "$out/orchestrator.stderr" || status=$?
+          NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" SIM_OFFLINE_RECEIPT="$out/orchestrator.transport" node "$out/build-xi-club-year-green.cjs" checks > "$out/orchestrator.stdout" 2> "$out/orchestrator.stderr" || status=$?
           printf '%s\n' "$status" > "$out/orchestrator.exit"
           test "$status" -eq 0;test ! -s "$out/orchestrator.transport"
-      - name: Complete source installed dependency generated and process holds
+      - name: Normal guide search scoped snapshot and sitemap generation
+        id: generation
+        timeout-minutes: 50
+        run: |
+          set -euo pipefail
+          out="$BUILD_XI_OUT"
+          sha256sum -c "$out/generated.sha256" > "$out/generated-pre-generation.log"
+          sha256sum -c "$out/payload.sha256" > "$out/payload-pre-generation.log"
+          : > "$out/generation.transport";status=0
+          NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" SIM_OFFLINE_RECEIPT="$out/generation.transport" node "$out/build-xi-club-year-green.cjs" generate > "$out/generation.stdout" 2> "$out/generation.stderr" || status=$?
+          printf '%s\n' "$status" > "$out/generation.exit"
+          test "$status" -eq 0;test ! -s "$out/generation.transport"
+      - name: Completed build all eighteen readers unchanged caps and Club year browser
+        id: built
+        timeout-minutes: 50
+        run: |
+          set -euo pipefail
+          out="$BUILD_XI_OUT";sha256sum -c "$out/generated.sha256" > "$out/generated-pre-built.log"
+          sha256sum -c "$out/payload.sha256" > "$out/payload-pre-built.log"
+          : > "$out/built.transport";status=0
+          NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" SIM_OFFLINE_RECEIPT="$out/built.transport" node "$out/build-xi-club-year-green.cjs" built > "$out/built.stdout" 2> "$out/built.stderr" || status=$?
+          printf '%s\n' "$status" > "$out/built.exit"
+          test "$status" -eq 0;test ! -s "$out/built.transport"
+      - name: Complete source dependency tool font dist generated and process holds
         id: holds
         if: ${{ always() && steps.foundation.outcome != 'skipped' }}
         timeout-minutes: 5
@@ -337,11 +186,15 @@ jobs:
           set -euo pipefail
           set +e
           out="$BUILD_XI_OUT";failed=0
-          for name in source dependencies generated;do
-            if test -f "$out/$name.sha256";then sha256sum -c "$out/$name.sha256" > "$out/$name-hold.log" 2>&1 || failed=1;else printf 'Missing required manifest\n' > "$out/$name-hold.log";failed=1;fi
+          for name in source-held dependencies generated payload browser-tools browser-engines font-cache python-tools dist;do
+            if test -f "$out/$name.sha256" && test ! -L "$out/$name.sha256";then sha256sum -c "$out/$name.sha256" > "$out/$name-hold.log" 2>&1 || failed=1;else printf 'Missing required manifest\n' > "$out/$name-hold.log";failed=1;fi
           done
           git ls-files -z | sort -z > "$out/source-members.after"
           cmp "$out/source-members.before" "$out/source-members.after" > "$out/source-members-hold.log" 2>&1 || failed=1
+          git ls-files -z -- . ':!scripts/data/guideHeadingsFrozen.json' ':!src/data/searchKeywords.json' ':!public/build-your-xi/index.html' ':!public/sitemap.xml' ':!scripts/data/lastmod.json' | sort -z > "$out/source-held-members.after"
+          cmp "$out/source-held-members.before" "$out/source-held-members.after" > "$out/source-held-members-hold.log" 2>&1 || failed=1
+          git ls-files -z | sort -z | xargs -0 sha256sum > "$out/source-after.sha256"
+          tar --null -T "$out/source-members.after" -cf "$out/source-after.tar" || failed=1
           find node_modules -type f -print0 | sort -z > "$out/dependency-members.after"
           cmp "$out/dependency-members.before" "$out/dependency-members.after" > "$out/dependency-members-hold.log" 2>&1 || failed=1
           find node_modules -type f -print0 | sort -z | xargs -0 sha256sum > "$out/dependencies-after.sha256"
@@ -349,17 +202,48 @@ jobs:
           cmp "$out/dependency-links.before" "$out/dependency-links.after" > "$out/dependency-links-hold.log" 2>&1 || failed=1
           find node_modules ! -type d ! -type f ! -type l -print > "$out/dependency-nonregular.after"
           test ! -s "$out/dependency-nonregular.after" || failed=1
-          git diff --exit-code HEAD > "$out/source-clean-after.log" 2>&1 || failed=1
+          for name in playwright playwright-core;do readlink -f "node_modules/$name" || failed=1;done > "$out/browser-links.after"
+          cmp "$out/browser-links.before" "$out/browser-links.after" > "$out/browser-links-hold.log" 2>&1 || failed=1
+          for pair in "browser-tools:${BUILD_XI_BROWSER_TOOLS-}" "browser-engines:${PLAYWRIGHT_BROWSERS_PATH-}" "font-cache:$out/font-cache";do
+            name="${pair%%:*}";dir="${pair#*:}"
+            if ! test -d "$dir";then printf 'Missing owned resource directory\n' > "$out/$name-members-hold.log";failed=1;continue;fi
+            find "$dir" -type f -print0 | sort -z > "$out/$name-members.after"
+            cmp "$out/$name-members.before" "$out/$name-members.after" > "$out/$name-members-hold.log" 2>&1 || failed=1
+            find "$dir" -type l -printf '%p\t%l\0' | sort -z > "$out/$name-links.after"
+            cmp "$out/$name-links.before" "$out/$name-links.after" > "$out/$name-links-hold.log" 2>&1 || failed=1
+            find "$dir" ! -type d ! -type f ! -type l -print > "$out/$name-nonregular.after";test ! -s "$out/$name-nonregular.after" || failed=1
+          done
+          python -m pip freeze > "$out/python-packages.after"
+          cmp "$out/python-packages.before" "$out/python-packages.after" > "$out/python-packages-hold.log" 2>&1 || failed=1
+          while IFS= read -r dir;do find "$dir" -type f -print0;done < "$out/python-roots.txt" | sort -z > "$out/python-tools-members.after"
+          cmp "$out/python-tools-members.before" "$out/python-tools-members.after" > "$out/python-tools-members-hold.log" 2>&1 || failed=1
+          find dist -type f -print0 | sort -z > "$out/dist-members.after"
+          cmp "$out/dist-members.before" "$out/dist-members.after" > "$out/dist-members-hold.log" 2>&1 || failed=1
+          git diff --name-status HEAD > "$out/source-dirty-after.log" 2>&1 || failed=1
           git status --porcelain --untracked-files=all > "$out/status-after.txt"
-          test ! -s "$out/status-after.txt" || failed=1
+          test -f "$out/status-after.txt" || failed=1
+          tmp="${BUILD_XI_GENERATOR_TMP-}"
+          if test -d "$tmp" && test ! -L "$tmp";then
+            find "$tmp" ! -type d ! -type f -print > "$out/generator-temp-nonregular.txt"
+            test ! -s "$out/generator-temp-nonregular.txt" || failed=1
+            find "$tmp" -type f -print0 | sort -z > "$out/generator-temp-members.final"
+            xargs -0 -r sha256sum < "$out/generator-temp-members.final" > "$out/generator-temp.sha256"
+            tar -cf "$out/generator-temp.tar" -C "$tmp" . || failed=1
+          else printf 'Missing owned generator temp root\n' > "$out/generator-temp-nonregular.txt";failed=1;fi
+          if test -d dist && test ! -L dist;then tar -cf "$out/dist-partial.tar" -C dist . || failed=1;fi
           : > "$out/final.transport";status=0
-          NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" SIM_OFFLINE_RECEIPT="$out/final.transport" node "$out/build-xi-club-year-baseline.cjs" final > "$out/final.stdout" 2> "$out/final.stderr" || status=$?
-          printf '%s\n' "$status" > "$out/final.exit"
-          test "$status" -eq 0 || failed=1
-          for name in foundation orchestrator types existing-fit club-year-setup classifier final;do test -f "$out/$name.transport" && test ! -L "$out/$name.transport" && test ! -s "$out/$name.transport" || failed=1;done
+          NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" SIM_OFFLINE_RECEIPT="$out/final.transport" node "$out/build-xi-club-year-green.cjs" final > "$out/final.stdout" 2> "$out/final.stderr" || status=$?
+          printf '%s\n' "$status" > "$out/final.exit";test "$status" -eq 0 || failed=1
+          for name in foundation orchestrator generation built final types existing-fit wingback setup club-year scroll classifier caps browser server;do test -f "$out/$name.transport" && test ! -L "$out/$name.transport" && test ! -s "$out/$name.transport" || failed=1;done
+          for id in year-admission year-query browse-reopen missing-age-default highlight-scroll;do for role in healthy fault restored;do name="feature-$id-$role";test -f "$out/$name.transport" && test ! -L "$out/$name.transport" && test ! -s "$out/$name.transport" || failed=1;done;done
+          for name in guide-refresh search-keywords seo-parts-check routes-only build-first prerender sitemap build-final;do test -f "$out/$name.transport" && test ! -L "$out/$name.transport" && test ! -s "$out/$name.transport" || failed=1;done
+          for id in left-back-wingback-penalty right-back-wingback-penalty;do for role in healthy fault restored;do name="source-$id-$role";test -f "$out/$name.transport" && test ! -L "$out/$name.transport" && test ! -s "$out/$name.transport" || failed=1;done;done
+          for control in nofit farlinks alias reach nocap tileraw nogate leak oldcrash;do name="harness-$control";test -f "$out/$name.transport" && test ! -L "$out/$name.transport" && test ! -s "$out/$name.transport" || failed=1;done
+          for reader in simAdsense simBrand simHeadTags simHiddenPages simHubs simIndexNow simIndexing simInternalLinks simNoRivalNames simPrerender simPrerenderBoot simRetiredRoutes simSchema simSitemap simSnapshotAssets simSiteSearch simGuideHeadings simLegalPages;do test -f "$out/$reader.transport" && test ! -L "$out/$reader.transport" && test ! -s "$out/$reader.transport" || failed=1;done
+          for name in npm-ci playwright-install chromium-install python-install font-prefetch;do test "$(cat "$out/$name.exit")" = 0 || failed=1;done
           sha256sum -c "$out/generated.sha256" > "$out/generated-final-hold.log" 2>&1 || failed=1
-          printf '%s\n' "$failed" > "$out/final-holds.exit"
-          exit "$failed"
+          sha256sum -c "$out/payload.sha256" > "$out/payload-final-hold.log" 2>&1 || failed=1
+          printf '%s\n' "$failed" > "$out/final-holds.exit";exit "$failed"
       - name: Seal retained originals and partial failures
         if: ${{ always() && steps.foundation.outcome != 'skipped' }}
         run: |
@@ -371,7 +255,7 @@ jobs:
       - uses: actions/upload-artifact@v4
         if: ${{ always() && steps.foundation.outcome != 'skipped' }}
         with:
-          name: build-xi-club-year-owned-red-${{ github.run_id }}-a${{ github.run_attempt }}
+          name: build-xi-club-year-green-generation-${{ github.run_id }}-a${{ github.run_attempt }}
           path: ${{ env.BUILD_XI_OUT }}
           if-no-files-found: error
           retention-days: 30

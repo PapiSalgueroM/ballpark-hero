@@ -17,7 +17,7 @@ export function LineupHowToPlay({ open, onOpenChange }: LineupHowToPlayProps) {
 
         <div className="space-y-5 text-sm">
           <p className="text-muted-foreground text-center">
-            Pick a formation, then fill every position with a real player from the club or nation you get.
+            Choose Mixed or Club year draft, then a formation. Fill every position with matching players from the clubs or nations you get.
           </p>
 
           <section>
@@ -40,6 +40,20 @@ export function LineupHowToPlay({ open, onOpenChange }: LineupHowToPlayProps) {
           </section>
 
           <section>
+            <h3 className="font-bold text-foreground mb-2">Club year draft</h3>
+            <ul className="space-y-1.5 text-muted-foreground">
+              <li>• Choose a recorded year before your formation. Every draw and reroll uses clubs only, and your year stays fixed</li>
+              <li>• Tap any empty position, then search or use Browse players for matching records. Some players may be missing</li>
+              <li>• The selected record must match the club and year, and the position still has to fit</li>
+              <li>• If there is no match, try another player or reroll the club</li>
+              <li>• Ratings use the value and age on your selected records. If either is missing, the draft can finish without a rating</li>
+            </ul>
+            <p className="mt-2 rounded-lg bg-secondary/40 px-3 py-2 text-xs text-muted-foreground">
+              Example: Club X, recorded year Y. A matching Club X record from Y can count. A record only from a different year cannot.
+            </p>
+          </section>
+
+          <section>
             <h3 className="font-bold text-foreground mb-2">📝 Filling Positions</h3>
             <ul className="space-y-1.5 text-muted-foreground">
               <li>• Tap any empty position on the pitch to select it</li>
@@ -57,6 +71,7 @@ export function LineupHowToPlay({ open, onOpenChange }: LineupHowToPlayProps) {
               <li>• A keeper only ever goes in goal, and only a keeper goes in goal</li>
             </ul>
             <div className="mt-2 space-y-1 rounded-lg bg-secondary/40 px-3 py-2 text-xs text-muted-foreground">
+              <p className="font-semibold text-foreground">Mixed examples</p>
               <p><span className="text-correct font-semibold">Works:</span> Barcelona, CM slot, Sergio Busquets (a defensive mid, same family)</p>
               <p><span className="text-correct font-semibold">Works:</span> Real Madrid, RB slot, Sergio Ramos (a centre back can shift out)</p>
               <p><span className="text-destructive font-semibold">Refused:</span> Barcelona, CM slot, Marc-André ter Stegen (he is a goalkeeper)</p>
@@ -81,10 +96,10 @@ export function LineupHowToPlay({ open, onOpenChange }: LineupHowToPlayProps) {
           <section>
             <h3 className="font-bold text-foreground mb-2">🏆 Rating & Sharing</h3>
             <ul className="space-y-1.5 text-muted-foreground">
-              <li>• Submit your finished team for an <span className="text-primary font-semibold">AI rating</span></li>
+              <li>• Submit your finished team. Mixed uses its existing <span className="text-primary font-semibold">AI rating</span>; Club year draft uses its selected records</li>
               <li>• Then a <span className="text-foreground font-semibold">season report</span>: squad rating, where you finish, points, trophies and a top scorer</li>
               <li>• Under it, a month by month tab and a player stats tab (goals and assists add up to the team's, and clean sheets are the ones each man played in), young player and goal of the season, and one line on what a different shape or a stronger pick in your weakest slot would have changed on the same rolls</li>
-              <li>• Every player is judged at his peak, so retired legends are not punished for being retired</li>
+              <li>• Mixed judges every player at his peak. Club year draft uses the selected recorded year for its simulated season</li>
               <li>• Share your lineup and challenge friends to beat it</li>
             </ul>
           </section>

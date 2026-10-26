@@ -33,3 +33,15 @@ Run real app TypeScript, build, all completed-build readers and the original dow
 No player, club, value, age or appearance record is invented or added. Annual stored values are not official season rosters. Existing shared search, provider configuration, privacy/consent controls and budget limits stay intact. No new route or dependency is needed.
 
 Owner I retains protected data integration, main and publication. This plan and its tests are draft work, not a live feature. Local application execution remains unavailable under the current preservation restrictions; ordinary source pushes provide remote validation. No CI rerun or dispatch is part of this plan.
+
+## Source review and verification updates
+
+The feature candidates keep Mixed as the default and add Club year draft with a fixed recorded year from 2004 through 2026. Each club supplies one player for any open position. Browse uses up to fifty matching stored records, and typed search keeps the existing eight-result limit. Stored records can be incomplete.
+
+The new mode rejects absent or conflicting year, club, identity or position metadata before the all-time validator. Its completed report uses the selected records with the existing fit and season engine. Missing value or age leaves the completed draft unrated. A reset invalidates an older history response without changing the history request's existing timeout.
+
+The source review also found that the shared picker could highlight a row outside its visible dropdown. The narrow additional change scrolls only that dropdown to reveal the selected row. It preserves the existing search, selection, pointer, touch and keyboard commands. Two focused DOM tests and an original-source omission control supplement the real browser checks.
+
+The first tests-only run, 40290957484 attempt1 at3225a0c11d9638e3683003cf3e0ec3a1d3a8d711, is refused. It showed the intended missing-feature assertion, but the real app type check also found an unsupported test selector option. Removing that option preserves the full accessible-name match and assertions. A new ordinary source commit must qualify the full baseline before feature adoption.
+
+The next checks cover the real page at320,390 and1280 widths, years2010 and2026, browsing, repeated activation, keyboard visibility, clubs-only rerolls, eleven picks, the selected-record report and replay. Existing Mixed behavior and relevant shared-picker/search/history tests remain part of verification. Screenshots and raw partial results must survive failures. No feature, full-suite, live-data or publication success is implied by this source plan.
