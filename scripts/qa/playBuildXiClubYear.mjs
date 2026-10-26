@@ -437,7 +437,7 @@ async function main() {
           await page.keyboard.press('Escape');
           check(await page.getByRole('listbox').count() === 0, 'XI_BROWSER_ESCAPE_CLOSES');
           await browse(page, row);
-          await tap(page.getByRole('heading', { name: 'Build Your XI', exact: true }), page, row, 'outside picker heading');
+          await tap(page.getByRole('heading', { name: 'BUILD YOUR XI', exact: true }), page, row, 'outside picker heading');
           check(await page.getByRole('listbox').count() === 0, 'XI_BROWSER_OUTSIDE_CLOSES');
           await browse(page, row);
           await prepare(input(page), page, row);
