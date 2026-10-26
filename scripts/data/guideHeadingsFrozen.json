@@ -151,18 +151,21 @@
     },
     "/build-your-xi": {
       "howToPlay": [
+        "Choose a recorded year from 2004 to 2026 before the formation. It stays fixed for the draft.",
         "Choose one of 6 formations: 4-3-3, 4-4-2, 3-5-2, 4-2-3-1, 3-4-3, or 5-3-2.",
-        "Tap a position. The spinner shows which club or national team that slot is locked to.",
-        "Type a player from that team who fits. The game verifies the answer before it counts.",
-        "Hate an assignment? Reroll it for a different team.",
-        "Fill all 11 slots, check the role fit, chemistry and balance tiles under the pitch, then submit for the AI rating."
+        "Tap any empty position on the pitch. Fill it with a player who matches the current team and fits that position.",
+        "Type a name and choose a suggestion that fits the slot. Club year picks must match both club and recorded year.",
+        "Tap Browse players to see matching Club year records, or type to narrow them. Records may be incomplete, not a full squad or proof of every appearance.",
+        "No matching record? Try another name or reroll. Club year rerolls change the club, keeping the year.",
+        "Choose 2010, tap GK and use Browse players. A goalkeeper record from the current club in 2010 can fill that slot; a record only from a different year cannot.",
+        "Fill all 11 slots and check the role fit, chemistry and balance tiles under the pitch. Mixed uses its usual evaluation when you submit."
       ],
       "rules": [
         "Wrong answers are rejected with a reason but cost nothing. Retry until a valid name lands.",
         "A slot takes a player who plays there or right beside it: full backs and wing backs cover each other, wingers count on both flanks, CM covers CDM and CAM, strikers cover each other. A keeper only ever goes in goal.",
         "No duplicate players across your XI.",
         "Chemistry: two players standing next to each other on the pitch who are at the same club on our data add +0.6 to the side, from the same country +0.2, up to +2 in all.",
-        "If the AI judge is unreachable, a built in offline judge grades you instead, so a run never dead ends.",
+        "Mixed uses its offline backup if the AI cannot respond. Club year draft uses the selected records instead.",
         "Role fit: a player in a slot his recorded positions cover plays at full value. Next door, like a right back at left back, costs 2 rating points on him, averaged over the eleven. The slot check never lets anyone further out of position than that.",
         "Balance: no defensive midfielder in a CM or CDM slot costs the side 1, and a wide slot held by someone who is not a wide player, like a centre back at full back, costs 0.5 for that flank.",
         "The season report says what role fit, chemistry and balance were each worth in league points, by replaying the same season without each one."
@@ -173,7 +176,6 @@
       ],
       "tips": [
         "Reroll thin assignments before typing, knowing the spin can land somewhere worse.",
-        "Small club on the wheel? Goalkeepers are easy to name, elite wingers are not.",
         "Two players from the same club or country only link when they stand next to each other, so use your slot choice to put them side by side.",
         "If a right sounding name is rejected, let the search autocomplete the spelling for you."
       ]
