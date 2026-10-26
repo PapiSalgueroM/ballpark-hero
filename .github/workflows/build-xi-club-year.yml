@@ -1,0 +1,376 @@
+name: Build Your XI Club year owned baseline
+on:
+  push:
+    branches: [codex/build-xi-club-year-20261026]
+permissions:
+  contents: read
+concurrency:
+  group: build-xi-club-year-${{ github.ref }}
+  cancel-in-progress: false
+jobs:
+  baseline:
+    runs-on: ubuntu-latest
+    timeout-minutes: 45
+    env:
+      CI: true
+      SIM_NETWORK: offline
+      EXPECTED_PARENT: cb1c2025a31a7e01ad41ffd5f3a76d9b3ab9ed1f
+    defaults:
+      run:
+        shell: bash
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          persist-credentials: false
+          ref: ${{ github.sha }}
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: npm
+      - name: Bind the test-only baseline and preserve every other parent path
+        id: foundation
+        timeout-minutes: 5
+        run: |
+          set -euo pipefail
+          out="$RUNNER_TEMP/build-xi-club-year-baseline"
+          test ! -e "$out";test ! -L "$out";mkdir "$out"
+          export BUILD_XI_OUT="$out";echo "BUILD_XI_OUT=$out" >> "$GITHUB_ENV"
+          for name in SIM_SEED BYXI_CONTROL BYXI_SEED BYXI_PRINT_DIGEST NODE_OPTIONS NODE_PATH VITEST ONLY BROWSER TYCOON_AWAY_CONTROL COMPLETION_HOOK OWNED_TIMEOUTS_HOOK CONQUEST_NBA_HOOK CONQUEST_NBA_BOARD POLL_FIXTURES US_BOARD_CONTROL_ALIAS US_BOARD_CONTROL_FILE DAILY_RECORD_CONTROL TYCOON_ROOMS_PAGE TYCOON_LOADS_STADIUM_HOOK TYCOON_LOADS_ACADEMY_HOOK TYCOON_LOADS_STADIUM_LIB TYCOON_LOADS_ACADEMY_LIB TYCOON_PITCH_COMPONENT TYCOON_PACKS_REWARDS TYCOON_PACKS_PANEL NO_DOUBLE_SWAP;do test ! -v "$name";done
+          test "$GITHUB_REPOSITORY" = PapiSalgueroM/ballpark-hero
+          test "$GITHUB_REPOSITORY_ID" = 1195729679
+          test "$GITHUB_REF" = refs/heads/codex/build-xi-club-year-20261026
+          test "$(git rev-parse HEAD)" = "$GITHUB_SHA"
+          test "$(git show -s --format=%P HEAD)" = "$EXPECTED_PARENT"
+          test "$(git rev-parse "$EXPECTED_PARENT^{tree}")" = 1b0ee1a3de32c5185c9725b3962f485c2dbb5bef
+          git diff --name-status "$EXPECTED_PARENT" HEAD > "$out/direct-paths.txt"
+          printf 'A\t.github/workflows/build-xi-club-year.yml\nA\tdocs/superpowers/plans/2026-10-26-build-xi-club-year.md\nA\tsrc/test/buildXiClubYearSetup.test.tsx\n' | cmp - "$out/direct-paths.txt"
+          base=cb1c2025a31a7e01ad41ffd5f3a76d9b3ab9ed1f
+          git diff --name-status "$base" HEAD > "$out/cumulative-paths.txt"
+          printf 'A\t.github/workflows/build-xi-club-year.yml\nA\tdocs/superpowers/plans/2026-10-26-build-xi-club-year.md\nA\tsrc/test/buildXiClubYearSetup.test.tsx\n' | cmp - "$out/cumulative-paths.txt"
+          for file in .github/workflows/build-xi-club-year.yml docs/superpowers/plans/2026-10-26-build-xi-club-year.md src/test/buildXiClubYearSetup.test.tsx;do
+            if git cat-file -e "$base:$file" 2>> "$out/original-base-absence.stderr";then printf 'Unexpected existing original-base path: %s\n' "$file";exit 1;fi
+          done
+          git diff --exit-code "$EXPECTED_PARENT" HEAD -- . ':!.github/workflows/build-xi-club-year.yml' ':!docs/superpowers/plans/2026-10-26-build-xi-club-year.md' ':!src/test/buildXiClubYearSetup.test.tsx' > "$out/other-source-held.log"
+          git ls-tree -r --name-only "$EXPECTED_PARENT" > "$out/parent-members.txt"
+          test "$(wc -l < "$out/parent-members.txt")" -eq 5381
+          git rev-parse HEAD > "$out/head.txt";git rev-parse 'HEAD^{tree}' > "$out/tree.txt"
+          git ls-files -z | sort -z > "$out/source-members.before"
+          test "$(tr -cd '\000' < "$out/source-members.before" | wc -c)" -eq 5384
+          git ls-files -z | sort -z | xargs -0 sha256sum > "$out/source.sha256"
+          git diff --exit-code HEAD > "$out/source-clean-before.log"
+          git status --porcelain --untracked-files=all > "$out/status-before.txt"
+          test ! -s "$out/status-before.txt"
+          git archive --format=tar HEAD > "$out/source.tar"
+          printf 'e60ff1534307e449ccef598e3b7470dcba58681b82cea4005cec7319f14f9221  scripts/lib/offlineTransport.cjs\n' | sha256sum -c - > "$out/offline-guard-before.log"
+          cat > "$out/build-xi-club-year-baseline.cjs" <<'HELPER'
+          'use strict';
+          async function main(mode){
+          const fs=require('node:fs'),path=require('node:path'),cp=require('node:child_process'),assert=require('node:assert/strict'),{createHash}=require('node:crypto');
+          const {stripVTControlCharacters}=require('node:util');
+          const ROOT=fs.realpathSync(process.cwd()),OUT=fs.realpathSync(process.env.BUILD_XI_OUT),SELF=fs.realpathSync(__filename);
+          const PARENT='cb1c2025a31a7e01ad41ffd5f3a76d9b3ab9ed1f',PARENT_TREE='1b0ee1a3de32c5185c9725b3962f485c2dbb5bef';
+          const WF='.github/workflows/build-xi-club-year.yml',TEST='src/test/buildXiClubYearSetup.test.tsx',PLAN='docs/superpowers/plans/2026-10-26-build-xi-club-year.md';
+          const PINS={
+           "src/lib/xiFit.ts": "f2fb9c20467651b632e7715cb8b1ffd69fe6f296",
+           "src/lib/positionFit.ts": "868a0f0f92fedfde8f09d8fe31a4495f4965272e",
+           "src/types/lineupBuilder.ts": "4fd4b014374ec316497b59fbd1c17cfda9007b35",
+           "src/lib/squadDeal.ts": "726c554d99de4c285604e23cbe1d6def78477bcb",
+           "src/lib/squadShape.ts": "b116f1dfb7cde01be9904c98e263c514bfc114aa",
+           "src/lib/chemistry.ts": "8636d72d2c322105b1ba88f3bdbb71d52da4a856",
+           "src/data/lineupTeams.ts": "cf7cd045678992998f826fab7c4cb65e36151124",
+           "src/components/lineup/XiFitBreakdown.tsx": "8aa7ee3c1e9112bf6550cfe9b564d5a6a5cbaa40",
+           "src/lib/worldXi.ts": "d30a6de90d868e789a76d21cf8b87696786f89d2",
+           "src/components/world-xi/SeasonReportTabs.tsx": "87fc5819e629e3b1200a5bab65fc0cec2535b885",
+           "scripts/simBuildYourXiFit.mjs": "3c0f8ad7e52d08de3d2aa25484ddaa466552bc81",
+           "scripts/lib/seedRandom.mjs": "13e2534d2936880c0529a37190050fffb7d8df7d",
+           "scripts/lib/offlineTransport.cjs": "0fda542a2649fe5da937c6976fd0f5b6073e74b6",
+           "src/test/setup.ts": "df00cdf5c54e8c8efc71e46d7585ae76acb4fc8d",
+           "vitest.config.ts": "ed2a9dc677f77dfe95c061064eeff5782b856864",
+           "package.json": "2ff64986fb76ebc51b706f2fd24765768874008a",
+           "package-lock.json": "97d6f12a052f25f400462938c241789a083f0bfe",
+           "tsconfig.app.json": "51f581dd91641b4c1f1219f646788e73cf6bf00c",
+           "src/pages/LineupBuilder.tsx": "6560dfa0caeb8fb776017478a9ab173bffb0f4e2",
+           "src/hooks/useLineupBuilder.ts": "369487db56b37c031257b97e89e4303b0228c640",
+           "src/components/lineup/TeamSpinner.tsx": "e8149bf242ee85a8dd2b3c6860f3d8c08a950e6a",
+           "src/components/lineup/LineupHowToPlay.tsx": "d59b8988df15a5ed1efd1d7cf2f931962c57263d",
+           "src/lib/playerSearch.ts": "0d19f2c23735eb30512dc7fc3a447eacef5e128f",
+           "src/components/game/PlayerAutocomplete.tsx": "1ba70bc2e8134f1f3c196ab37d5b7b2eafd61d29"
+          };
+          const NEW={file:TEST,ancestor:'Build Your XI club year setup',cases:[
+           {
+            "title": "keeps the mixed draft and six formations available",
+            "status": "passed"
+           },
+           {
+            "title": "offers a recorded year club draft before formation",
+            "marker": "XI_CLUB_YEAR_SETUP",
+            "status": "failed"
+           }
+          ]};
+          const sha=b=>createHash('sha256').update(b).digest('hex');
+          const blob=b=>createHash('sha1').update(Buffer.from('blob '+b.length+'\0')).update(b).digest('hex');
+          const output=name=>{assert.equal(path.basename(name),name);return path.join(OUT,name);};
+          const write=(name,body)=>fs.writeFileSync(output(name),body,{flag:'wx'});
+          const save=(name,value)=>write(name,JSON.stringify(value,null,2)+'\n');
+          const json=name=>JSON.parse(fs.readFileSync(output(name),'utf8'));
+          const git=args=>cp.execFileSync('git',args,{encoding:'utf8',maxBuffer:16*1024*1024}).trim();
+          assert.notEqual(OUT,ROOT);assert(!OUT.startsWith(ROOT+path.sep));
+          function regular(file){const s=fs.lstatSync(file);assert(s.isFile()&&!s.isSymbolicLink(),'BUILD_XI_REGULAR_FILE');return fs.readFileSync(file);}
+          function binding(){
+           assert.equal(process.env.GITHUB_REPOSITORY,'PapiSalgueroM/ballpark-hero');
+           assert.equal(process.env.GITHUB_REPOSITORY_ID,'1195729679');
+           assert.equal(process.env.GITHUB_REF,'refs/heads/codex/build-xi-club-year-20261026');
+           assert.equal(git(['rev-parse','HEAD']),process.env.GITHUB_SHA);
+           assert.equal(git(['show','-s','--format=%P','HEAD']),PARENT);
+           assert.equal(git(['rev-parse',PARENT+'^{tree}']),PARENT_TREE);
+           for(const name of ['SIM_SEED','BYXI_CONTROL','BYXI_SEED','BYXI_PRINT_DIGEST'])assert.equal(process.env[name],undefined,'BUILD_XI_NO_INHERITED_HARNESS_OVERRIDE');
+           const source={};
+           for(const [file,expected]of Object.entries(PINS)){
+            const body=regular(file);assert.equal(blob(body),expected,'BUILD_XI_CRITICAL_SOURCE');
+            assert.equal(git(['rev-parse','HEAD:'+file]),expected);
+            assert.equal(git(['rev-parse',PARENT+':'+file]),expected);
+            source[file]={bytes:body.length,sha256:sha(body),gitBlob:expected};
+           }
+           for(const [file,bytes,expected]of [[TEST,3174,'3428e51c4dd832ebbb0eb15fcd5a3413757d60928bee9aa800d62124f77af9d0'],[PLAN,3984,'cd991dc36574fe9555a6c77e6dfbfd8fd9be878575ed08087d51d1e66959a83c']]){
+            const body=regular(file);assert.equal(body.length,bytes);assert.equal(sha(body),expected,'BUILD_XI_NEW_SOURCE');
+            assert.equal(blob(body),git(['rev-parse','HEAD:'+file]));
+            assert.equal(git(['ls-tree','--name-only',PARENT,'--',file]),'','BUILD_XI_NEW_SOURCE_ABSENT_IN_PARENT');
+            source[file]={bytes:body.length,sha256:sha(body),gitBlob:blob(body)};
+           }
+           const wf=regular(WF);assert.equal(blob(wf),git(['rev-parse','HEAD:'+WF]));
+           source[WF]={bytes:wf.length,sha256:sha(wf),gitBlob:blob(wf)};
+           const names=cp.execFileSync('git',['ls-files','-z']);
+           const files=names.toString().split('\0');assert.equal(files.pop(),'');assert.equal(files.length,5384);
+           for(const file of files){regular(file);const real=fs.realpathSync(file);assert(real.startsWith(ROOT+path.sep),'BUILD_XI_SOURCE_ESCAPE');}
+           return {phase:'club-year-setup-owned-RED',source:process.env.GITHUB_SHA,parent:PARENT,parentTree:PARENT_TREE,tree:git(['rev-parse','HEAD^{tree}']),run:process.env.GITHUB_RUN_ID,attempt:process.env.GITHUB_RUN_ATTEMPT,processPid:process.pid,parentBlobs:5381,sourceBlobs:5384,directPaths:3,criticalSources:source,helper:{file:SELF,bytes:regular(SELF).length,sha256:sha(regular(SELF))},applicationChange:false,fullSuite:false,browser:false,livePublished:false};
+          }
+          function native(id,status){
+           const r=json(id+'.closed.json');assert.equal(r.id,id);
+           assert(Number.isInteger(r.pid)&&r.pid>0,'BUILD_XI_NATIVE_PID');
+           assert.equal(r.status,status,'BUILD_XI_NATIVE_STATUS');assert.equal(r.signal,null);assert.equal(r.error,null);
+           assert.equal(r.closed,true);assert.equal(r.deadlineExpired,false);assert.deepEqual(r.signalAttempts,[]);
+           assert.equal(r.receiptBytes,0);assert.equal(regular(output(id+'.transport')).length,0);
+           for(const stream of ['stdout','stderr']){const b=regular(output(id+'.'+stream));assert.equal(b.length,r[stream+'Bytes']);assert.equal(sha(b),r[stream+'Sha256']);}
+           return r;
+          }
+          function classify(report){
+           assert.equal(report.success,false);assert.equal(report.numTotalTests,2);assert.equal(report.numPassedTests,1);assert.equal(report.numFailedTests,1);
+           assert.equal(report.numPendingTests,0,'BUILD_XI_NO_PENDING');assert.equal(report.numTodoTests,0,'BUILD_XI_NO_TODO');
+           assert(Array.isArray(report.testResults));assert.equal(report.testResults.length,1,'BUILD_XI_FILE_CENSUS');
+           const file=report.testResults[0];assert.equal(path.resolve(file.name),path.resolve(TEST),'BUILD_XI_FILE_IDENTITY');
+           assert.equal(file.message??'','','BUILD_XI_NO_FILE_ERROR');assert.equal(file.status,'failed');
+           assert(Array.isArray(file.assertionResults));assert.equal(file.assertionResults.length,2,'BUILD_XI_CASE_CENSUS');
+           const actual=[];
+           for(const c of NEW.cases){
+            const matches=file.assertionResults.filter(a=>a.title===c.title);assert.equal(matches.length,1,'BUILD_XI_CASE_IDENTITY');
+            const a=matches[0];assert.deepEqual(a.ancestorTitles,[NEW.ancestor]);assert.equal(a.fullName,NEW.ancestor+' '+c.title);
+            assert.equal(a.status,c.status,c.status==='passed'?'BUILD_XI_HOLD_PASS':'BUILD_XI_RED_STATUS');assert(Array.isArray(a.failureMessages));
+            if(c.status==='passed')assert.deepEqual(a.failureMessages,[]);
+            else{
+             assert.equal(a.failureMessages.length,1,'BUILD_XI_RED_ONE_ERROR');
+             const rawError=a.failureMessages[0];assert.equal(typeof rawError,'string');const error=stripVTControlCharacters(rawError);
+             assert(/^\s*AssertionError(?::|\s|\[)/.test(error),'BUILD_XI_RED_ASSERTION_KIND');
+             assert(error.includes(c.marker+':'),'BUILD_XI_RED_OWNED_MARKER');
+             assert(error.includes('buildXiClubYearSetup.test.tsx:'),'BUILD_XI_RED_TEST_STACK');
+             assert(!/TypeError|ReferenceError|SyntaxError|TestingLibraryElementError|TimeoutError|Test timed out|Failed to load|Cannot find module|Cannot find package/i.test(error),'BUILD_XI_RED_NOT_INFRASTRUCTURE');
+             const witness=/expected (\+?0) to be 1(?=\s|$)/.exec(error);
+             assert(witness,'BUILD_XI_RED_NUMERIC_WITNESS');
+            }
+            actual.push(a);
+           }
+           assert.equal(new Set(actual.map(a=>a.fullName)).size,2);return actual;
+          }
+          function classifyFile(file){return classify(JSON.parse(regular(file)));}
+          function harness(){
+           const r=native('existing-fit',0),stdout=regular(output('existing-fit.stdout')).toString(),stderr=regular(output('existing-fit.stderr')).toString();
+           for(const n of [1,2,3,4,5])assert.equal((stdout.match(new RegExp('^'+n+'\\) .+$','gm'))??[]).length,1,'BUILD_XI_EXISTING_SECTION_CENSUS');
+           assert(/^4\) World XI's seasons are the ones it played before this round \(240 squads\)\r?$/m.test(stdout),'BUILD_XI_240_SEASONS');
+           assert(/^   digest 2f8cca6578202d4b1ccf3dbc45be0908cef51bf5be50b91a6ff2365722ea6c6c\r?$/m.test(stdout),'BUILD_XI_ORIGINAL_WORLD_XI_DIGEST');
+           assert.equal((stdout.match(/^simBuildYourXiFit: all checks green\r?$/gm)??[]).length,1,'BUILD_XI_EXISTING_GREEN_FOOTER');
+           assert(!/FAIL \[|CONTROL (?:FIRED|DID NOT)|NEGATIVE CONTROL ON/.test(stdout+'\n'+stderr),'BUILD_XI_EXISTING_NOT_CONTROL');
+           return {pid:r.pid,status:r.status,sections:[1,2,3,4,5],worldXiSquads:240,originalWorldXiDigest:'2f8cca6578202d4b1ccf3dbc45be0908cef51bf5be50b91a6ff2365722ea6c6c',existingHarnessUnmodified:true};
+          }
+          function control(name,seed,change,marker){
+           const dir=path.join(OUT,'classifier-controls',name);fs.mkdirSync(dir,{recursive:true});
+           const work=path.join(dir,'report.work.json');fs.writeFileSync(work,seed,{flag:'wx'});
+           fs.writeFileSync(path.join(dir,'report.actual.json'),seed,{flag:'wx'});classifyFile(work);
+           const record=JSON.parse(seed),normalizedBefore=Buffer.from(JSON.stringify(record,null,2)+'\n');
+           const targetedMutation=change(record);assert(targetedMutation&&targetedMutation.changed===true,'BUILD_XI_CONTROL_TARGET_CHANGED');
+           const changed=Buffer.from(JSON.stringify(record,null,2)+'\n');assert(!changed.equals(normalizedBefore),'BUILD_XI_CONTROL_CHANGED');
+           fs.writeFileSync(path.join(dir,'report.changed.json'),changed,{flag:'wx'});fs.writeFileSync(work,changed);
+           let caught=null;
+           try{try{classifyFile(work);}catch(error){caught=error;}
+            assert(caught instanceof assert.AssertionError,'BUILD_XI_CONTROL_NATIVE_ASSERTION');assert(caught.message.includes(marker),'BUILD_XI_CONTROL_OWNED');
+            fs.writeFileSync(path.join(dir,'failure.stack.txt'),caught.stack+'\n',{flag:'wx'});
+           }finally{
+            fs.writeFileSync(work,seed);assert(regular(work).equals(seed));
+            fs.writeFileSync(path.join(dir,'report.restored.json'),regular(work),{flag:'wx'});classifyFile(work);
+           }
+           return {name,pid:process.pid,scope:'copied actual Vitest report, three in-process judge calls only, no native test fault statuses',marker,errorName:caught.name,code:caught.code,changed:true,restored:true,targetedMutation,diagnosticVerdicts:['accepted','owned-refusal','accepted'],seedSha256:sha(seed),normalizedBeforeSha256:sha(normalizedBefore),changedSha256:sha(changed),restoredSha256:sha(regular(work))};
+          }
+          async function run(id,args,status,deadlineMs){
+           const receipt=output(id+'.transport');write(id+'.transport','');
+           const so=fs.openSync(output(id+'.stdout'),'wx'),se=fs.openSync(output(id+'.stderr'),'wx');
+           const r={id,command:process.execPath,args,startedAt:new Date().toISOString(),pid:null,status:null,signal:null,error:null,closed:false,deadlineMs,deadlineExpired:false,signalAttempts:[]};
+           const child=cp.spawn(process.execPath,args,{cwd:ROOT,detached:true,stdio:['ignore',so,se],env:{...process.env,NODE_OPTIONS:'--require='+path.join(ROOT,'scripts/lib/offlineTransport.cjs'),SIM_OFFLINE_RECEIPT:receipt,SIM_NETWORK:'offline'}});
+           r.pid=child.pid??null;save(id+'.start.json',r);
+           let term=null,kill=null;
+           const signalGroup=signal=>{const a={signal,at:new Date().toISOString(),error:null};try{process.kill(-child.pid,signal);}catch(e){a.error={name:e.name,message:e.message,code:e.code??null};}r.signalAttempts.push(a);};
+           if(child.pid)term=setTimeout(()=>{r.deadlineExpired=true;signalGroup('SIGTERM');kill=setTimeout(()=>{if(!r.closed)signalGroup('SIGKILL');},15000);},deadlineMs);
+           child.on('error',e=>r.error={name:e.name,message:e.message,code:e.code??null});
+           await new Promise(resolve=>child.on('close',(code,signal)=>{r.status=code;r.signal=signal;r.closed=true;r.closedAt=new Date().toISOString();resolve();}));
+           if(term)clearTimeout(term);if(kill)clearTimeout(kill);fs.closeSync(so);fs.closeSync(se);
+           r.receiptBytes=regular(receipt).length;
+           for(const stream of ['stdout','stderr']){const b=regular(output(id+'.'+stream));r[stream+'Bytes']=b.length;r[stream+'Sha256']=sha(b);}
+           save(id+'.closed.json',r);return {record:r,expectedStatus:status};
+          }
+          async function execute(mode){
+           if(mode==='source'){save('source-binding.json',binding());return;}
+           if(mode==='checks'){
+            save('orchestrator.start.json',{pid:process.pid,source:process.env.GITHUB_SHA,mode});
+            const commands=[
+             ['types',['node_modules/typescript/bin/tsc','--noEmit','-p','tsconfig.app.json'],0,240000],
+             ['existing-fit',['scripts/simBuildYourXiFit.mjs'],0,240000],
+             ['club-year-setup',['node_modules/vitest/vitest.mjs','run',TEST,'--no-cache','--maxWorkers=1','--no-file-parallelism','--reporter=verbose','--reporter=json','--outputFile='+output('club-year-setup.json')],1,240000],
+             ['classifier',[SELF,'judge'],0,60000]
+            ];
+            const nativeRows=[];for(const [id,args,status,deadline]of commands)nativeRows.push(await run(id,args,status,deadline));
+            save('native-processes.json',{phase:'club-year-setup-owned-RED',pid:process.pid,rows:nativeRows,fullSuite:false});
+            for(const {record:r,expectedStatus}of nativeRows)native(r.id,expectedStatus);
+            assert.equal(new Set(nativeRows.map(x=>x.record.pid)).size,4);
+            return;
+           }
+           if(mode==='judge'){
+            for(const [id,status]of [['types',0],['existing-fit',0],['club-year-setup',1]])native(id,status);
+            for(const id of ['existing-fit','club-year-setup']){
+             const logs=regular(output(id+'.stdout')).toString()+'\n'+regular(output(id+'.stderr')).toString();
+             assert(!/Unhandled (?:Errors?|Rejection|Exception)|Error during collection|Failed to load url|Cannot find module|Cannot find package|Test timed out|worker exited unexpectedly/i.test(logs),'BUILD_XI_NO_RUNTIME_CREDIT');
+            }
+            const existing=harness(),seed=regular(output('club-year-setup.json')),judged=classify(JSON.parse(seed));
+            const controls=[
+             control('hold-pass-row',seed,n=>{
+              const row=n.testResults[0].assertionResults.find(a=>a.title===NEW.cases[0].title);assert.equal(row.status,'passed');row.status='failed';
+              return {field:'actual nonowned assertion status',before:'passed',after:row.status,changed:true};
+             },'BUILD_XI_HOLD_PASS'),
+             control('red-error-kind',seed,n=>{
+              const row=n.testResults[0].assertionResults.find(a=>a.title===NEW.cases[1].title),before=row.failureMessages[0];
+              assert.equal(before.split('AssertionError').length-1,1,'BUILD_XI_CONTROL_EXACT_KIND_NEEDLE');
+              row.failureMessages[0]=before.replace('AssertionError','ReferenceError');assert.notEqual(row.failureMessages[0],before);
+              return {field:'actual owned error kind',needle:'AssertionError',replacement:'ReferenceError',beforeSha256:sha(before),afterSha256:sha(row.failureMessages[0]),changed:true};
+             },'BUILD_XI_RED_ASSERTION_KIND'),
+             control('red-owned-marker',seed,n=>{
+              const row=n.testResults[0].assertionResults.find(a=>a.title===NEW.cases[1].title),before=row.failureMessages[0],needle=NEW.cases[1].marker;
+              assert.equal(before.split(needle).length-1,1,'BUILD_XI_CONTROL_EXACT_MARKER_NEEDLE');
+              row.failureMessages[0]=before.replace(needle,'UNOWNED_MARKER');assert.notEqual(row.failureMessages[0],before);
+              return {field:'actual owned failure marker',needle,replacement:'UNOWNED_MARKER',beforeSha256:sha(before),afterSha256:sha(row.failureMessages[0]),changed:true};
+             },'BUILD_XI_RED_OWNED_MARKER'),
+             control('red-numeric-witness',seed,n=>{
+              const row=n.testResults[0].assertionResults.find(a=>a.title===NEW.cases[1].title),before=row.failureMessages[0];
+              const normalized=stripVTControlCharacters(before),match=/expected (\+?0) to be 1(?=\s|$)/.exec(normalized);assert(match,'BUILD_XI_CONTROL_NUMERIC_FOUNDATION');
+              const needle=match[0],replacement=needle.replace(/expected \+?0/,'expected 2');
+              assert.equal(before.split(needle).length-1,1,'BUILD_XI_CONTROL_EXACT_NUMERIC_NEEDLE');
+              row.failureMessages[0]=before.replace(needle,replacement);assert.notEqual(row.failureMessages[0],before);
+              assert.equal(row.failureMessages[0].split(needle).length-1,0);assert.equal(row.failureMessages[0].split(replacement).length-1,1);
+              return {field:'actual setup owned numeric witness',needle,replacement,beforeSha256:sha(before),afterSha256:sha(row.failureMessages[0]),changed:true};
+             },'BUILD_XI_RED_NUMERIC_WITNESS')
+            ];
+            save('baseline-admission.json',{phase:'club-year-setup-owned-RED',source:process.env.GITHUB_SHA,run:process.env.GITHUB_RUN_ID,attempt:process.env.GITHUB_RUN_ATTEMPT,pid:process.pid,typesExit:0,existingHarness:existing,heldPass:judged.filter(a=>a.status==='passed').map(a=>a.fullName),expectedOwnedFailures:judged.filter(a=>a.status==='failed').map(a=>({fullName:a.fullName,status:a.status,kind:'AssertionError',failureMessages:a.failureMessages})),classifierControls:controls,absentRuntimeCounters:'UNKNOWN',newFeatureImplemented:false,fullSuite:false,browser:false});
+            return;
+           }
+           if(mode==='final'){
+            const before=json('source-binding.json'),now=binding();assert.equal(now.source,process.env.GITHUB_SHA,'BUILD_XI_END_COMMIT');assert.equal(before.source,process.env.GITHUB_SHA,'BUILD_XI_START_COMMIT');assert.deepEqual(now.criticalSources,before.criticalSources,'BUILD_XI_END_SOURCE');
+            assert.deepEqual(now.helper,before.helper,'BUILD_XI_END_GENERATED');
+            for(const [id,status]of [['types',0],['existing-fit',0],['club-year-setup',1],['classifier',0]])native(id,status);
+            for(const name of ['foundation','orchestrator']){assert.equal(regular(output(name+'.transport')).length,0);assert.equal(regular(output(name+'.exit')).toString().trim(),'0');}
+            const admission=json('baseline-admission.json');assert.equal(admission.source,process.env.GITHUB_SHA);assert.equal(admission.classifierControls.length,4);assert(admission.classifierControls.every(c=>c.changed&&c.restored&&c.seedSha256===c.restoredSha256));
+            assert.equal(admission.heldPass.length,1);assert.equal(admission.expectedOwnedFailures.length,1);
+            save('final-binding.json',{pid:process.pid,source:process.env.GITHUB_SHA,run:process.env.GITHUB_RUN_ID,attempt:process.env.GITHUB_RUN_ATTEMPT,phase:admission.phase,sourceHeld:true,generatedHeld:true,heldPass:1,newOwnedFailures:1,existingHarness:admission.existingHarness,qualifiedFeature:false});
+            return;
+           }
+           throw Error('Unknown baseline helper mode');
+          }
+          await execute(mode);
+          }
+          main(process.argv[2]).then(()=>console.log('Build XI baseline '+process.argv[2]+' complete, pid '+process.pid)).catch(error=>{console.error(error.stack||error);process.exitCode=1;});
+          HELPER
+          printf '4f7e600cab99c0b52e630bce0c4e309f7a873b4ada7ee1c3e0d207ec1bfd9067  %s\n' "$out/build-xi-club-year-baseline.cjs" > "$out/generated.sha256"
+          sha256sum -c "$out/generated.sha256" > "$out/generated-before.log"
+          : > "$out/foundation.transport";status=0
+          NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" SIM_OFFLINE_RECEIPT="$out/foundation.transport" node "$out/build-xi-club-year-baseline.cjs" source > "$out/foundation.stdout" 2> "$out/foundation.stderr" || status=$?
+          printf '%s\n' "$status" > "$out/foundation.exit"
+          test "$status" -eq 0;test ! -s "$out/foundation.transport"
+      - name: Install only locked project dependencies
+        id: install
+        timeout-minutes: 15
+        run: |
+          set -euo pipefail
+          out="$BUILD_XI_OUT";status=0
+          npm ci > "$out/npm-ci.stdout" 2> "$out/npm-ci.stderr" &
+          pid=$!;printf '%s\n' "$pid" > "$out/npm-ci.pid"
+          wait "$pid" || status=$?
+          printf '%s\n' "$status" > "$out/npm-ci.exit"
+          test "$status" -eq 0
+          find node_modules -type f -print0 | sort -z > "$out/dependency-members.before"
+          test "$(tr -cd '\000' < "$out/dependency-members.before" | wc -c)" -eq 24466
+          find node_modules -type f -print0 | sort -z | xargs -0 sha256sum > "$out/dependencies.sha256"
+          find node_modules -type l -printf '%p\t%l\0' | sort -z > "$out/dependency-links.before"
+          find node_modules ! -type d ! -type f ! -type l -print > "$out/dependency-nonregular.before"
+          test ! -s "$out/dependency-nonregular.before"
+      - name: Real types unchanged fit harness and two exact setup outcomes
+        id: checks
+        timeout-minutes: 15
+        run: |
+          set -euo pipefail
+          out="$BUILD_XI_OUT"
+          sha256sum -c "$out/generated.sha256" > "$out/generated-pre-consumer.log"
+          : > "$out/orchestrator.transport";status=0
+          NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" SIM_OFFLINE_RECEIPT="$out/orchestrator.transport" node "$out/build-xi-club-year-baseline.cjs" checks > "$out/orchestrator.stdout" 2> "$out/orchestrator.stderr" || status=$?
+          printf '%s\n' "$status" > "$out/orchestrator.exit"
+          test "$status" -eq 0;test ! -s "$out/orchestrator.transport"
+      - name: Complete source installed dependency generated and process holds
+        id: holds
+        if: ${{ always() && steps.foundation.outcome != 'skipped' }}
+        timeout-minutes: 5
+        run: |
+          set -euo pipefail
+          set +e
+          out="$BUILD_XI_OUT";failed=0
+          for name in source dependencies generated;do
+            if test -f "$out/$name.sha256";then sha256sum -c "$out/$name.sha256" > "$out/$name-hold.log" 2>&1 || failed=1;else printf 'Missing required manifest\n' > "$out/$name-hold.log";failed=1;fi
+          done
+          git ls-files -z | sort -z > "$out/source-members.after"
+          cmp "$out/source-members.before" "$out/source-members.after" > "$out/source-members-hold.log" 2>&1 || failed=1
+          find node_modules -type f -print0 | sort -z > "$out/dependency-members.after"
+          cmp "$out/dependency-members.before" "$out/dependency-members.after" > "$out/dependency-members-hold.log" 2>&1 || failed=1
+          find node_modules -type f -print0 | sort -z | xargs -0 sha256sum > "$out/dependencies-after.sha256"
+          find node_modules -type l -printf '%p\t%l\0' | sort -z > "$out/dependency-links.after"
+          cmp "$out/dependency-links.before" "$out/dependency-links.after" > "$out/dependency-links-hold.log" 2>&1 || failed=1
+          find node_modules ! -type d ! -type f ! -type l -print > "$out/dependency-nonregular.after"
+          test ! -s "$out/dependency-nonregular.after" || failed=1
+          git diff --exit-code HEAD > "$out/source-clean-after.log" 2>&1 || failed=1
+          git status --porcelain --untracked-files=all > "$out/status-after.txt"
+          test ! -s "$out/status-after.txt" || failed=1
+          : > "$out/final.transport";status=0
+          NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" SIM_OFFLINE_RECEIPT="$out/final.transport" node "$out/build-xi-club-year-baseline.cjs" final > "$out/final.stdout" 2> "$out/final.stderr" || status=$?
+          printf '%s\n' "$status" > "$out/final.exit"
+          test "$status" -eq 0 || failed=1
+          for name in foundation orchestrator types existing-fit club-year-setup classifier final;do test -f "$out/$name.transport" && test ! -L "$out/$name.transport" && test ! -s "$out/$name.transport" || failed=1;done
+          sha256sum -c "$out/generated.sha256" > "$out/generated-final-hold.log" 2>&1 || failed=1
+          printf '%s\n' "$failed" > "$out/final-holds.exit"
+          exit "$failed"
+      - name: Seal retained originals and partial failures
+        if: ${{ always() && steps.foundation.outcome != 'skipped' }}
+        run: |
+          set -euo pipefail
+          out="$BUILD_XI_OUT";test -d "$out";cd "$out"
+          find . ! -type d ! -type f -print > nonregular.txt
+          test ! -s nonregular.txt
+          find . -type f ! -name evidence.sha256 -print0 | sort -z | xargs -0 sha256sum > evidence.sha256
+      - uses: actions/upload-artifact@v4
+        if: ${{ always() && steps.foundation.outcome != 'skipped' }}
+        with:
+          name: build-xi-club-year-owned-red-${{ github.run_id }}-a${{ github.run_attempt }}
+          path: ${{ env.BUILD_XI_OUT }}
+          if-no-files-found: error
+          retention-days: 30
