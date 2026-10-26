@@ -58,6 +58,7 @@ vi.mock('@/components/game/ReportQuestion', () => ({ default: () => null }));
 import LineupBuilder from '@/pages/LineupBuilder';
 import { useLineupBuilder } from '@/hooks/useLineupBuilder';
 import { FORMATIONS } from '@/types/lineupBuilder';
+import { displayName } from '@/lib/playerSearch';
 import { clubTableNames, clubs } from '@/data/lineupTeams';
 
 type Choice = { mode: 'mixed' } | { mode: 'club-year'; year: number };
@@ -151,7 +152,7 @@ async function browse() {
   return field();
 }
 function option(name: string) {
-  const found = screen.getAllByRole('option').find(node => within(node).queryByText(name, { exact: true }));
+  const found = screen.getAllByRole('option').find(node => within(node).queryByText(displayName(name), { exact: true }));
   expect(found, 'Actual shared picker must offer the exact fixture record').toBeDefined();
   return found!;
 }
