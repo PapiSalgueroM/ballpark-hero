@@ -86,3 +86,15 @@ Root and an independent peer examine raw evidence and actual pixels before scope
 The retained1952 source.tar is an immutable witness for these b20 WorldXI bodies because that qualified child changed only DailyRail, its Home workflow and a docs append. Page:32711bytes/Git8bfda7ebab01f5af2c5e12e0b98611e74c141d83. Core:67740bytes/Gitd30a6de90d868e789a76d21cf8b87696786f89d2. Exact pins and source limits accompany this outside proposal.
 
 The separate two-source field discovery is9872bytes/SHA2202abc8c43ad366be43e9a3692d13b8150eb8af9d0ee6b1fed943254106bebb. It binds current b20 source plus existing WC2026_GROUPS and official field sources. Its earlier membership-only recommendation is superseded here by Root's selected cloned-map merge. No new country, player, squad or runtime data is authored by this plan.
+
+## Execution ledger, 2026-10-26, before final verification
+
+The source design is implemented at e113bb232f1bbc38abc7c8ce40830b2ba5cf14e9. Baseline40267999442/a1 is admitted from actual owned RED; the prior failed baseline remains refused. Generation40270445637/a1 is independently admitted from originals: actual app types0, all17 related cases PASS, Expanded and2026 filter source faults each own their intended failure, and exact source restoration returns both page cases to PASS.
+
+The scoped generator changed only the World XI snapshot, sitemap and lastmod ledger. Actual new blobs are e11ee10b5f525c91341db3c2621174b2388abeb9, e3721eca8f3e6a2dbb41afc993dc9c1242ce23c1 and4b4aafa562a9601b9e4f482375418670f04a0ed7 respectively. Other source bodies, sitemap rows and ledger records remain held. Public snapshot and completed-dist copy differ only by the unchanged build plugin's exact normal asset injection.
+
+Final verification is a later ordinary commit adopting those actual outputs, browser harness and these documentation appends. Its scope is types/build17, the two local WorldXIReport/SeasonReport sims, all18 completed-dist readers, original fatal caps,12 real-page fictional-transport contexts, six effective copied-observation geometry controls and manual original-pixel review. The harness keeps all imported runtime evaluation inside its main function.
+
+Source inspection confirmed the two older live-pool gates cannot qualify under the original offline guard. simWorldXiPositions and simWorldXiDefensiveMids stay UNVERIFIED and required for a big production ship. This is consistent with the original plan's blocked-read rule; neither is silently counted as PASS.
+
+At the time this ledger is authored, final clean-source/browser/readers/caps/pixels remain pending. The later draft PR and closure packet record actual results. No real roster count, official squad, whole-site/full-suite or live publication result is inferred. Main integration and publication remain with Owner I.

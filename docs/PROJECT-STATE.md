@@ -19216,3 +19216,21 @@ The two initial fixture failures39940913787 and39943246891 remain separate from 
 Evidence packet: C:/Users/antho/dukb-handoff/2026-10-23/search-navigation. Root qualification c565e4bb892d6f5392e942e329af0b1661faba1e626bddb051ab76276d2e88b5; Root pixels743d12524f3b65bf0752151b2cfdbb7c3866377866360b6f66c60a4875cfdb26; independent integrated audit4e7ff7ad3b766d00b3f7f5ac280ed0b9d67fd91e8a27416cd182579a76da9dac. The normal saved-picks archive is also retained as2ca41f45c885f8066326880fe73480b83b0ee3ae7a3c4b08503c94fc74fa3e98.
 
 I retains sole publication. Root did not publish this Search correction and makes no new live-site claim. Analytics remains paused. No local application execution, cleanup, old checkout reset, data/provider/account change or protected game adoption occurred. Primary WORKBOARD and the continuation checkpoint receive only this exact note through the reviewed exclusive-lock append helper, with actual full-prefix backups/readback and both protected indexes checked before and finally. Earlier preservation gaps remain unwaived.
+
+## World XI nation pools candidate, 2026-10-26
+
+Branch codex/world-xi-nations-20261025 adds Expanded (default), Classic and 2026 Nations to the existing World XI page. Expanded includes nonempty country buckets with actual slot-fit checks. Classic keeps the original data object and draw behavior. 2026 Nations intersects available game countries with the existing verified tournament field. It uses existing game players, not official tournament squads. Draws, suggestions, respins, the reel and result/share labels use the selected pool. The optional season remains the same 38-game league. No real player rows, scoring rules, position rules or shared simulation engine changed.
+
+The owned RED baseline is qualified at 049f75a3d044e5b9b0233fd0891036a1246a3c3a, run40267999442/a1. Old7 passed and the two new actual-page assertions failed on the intended missing behaviors. The earlier40265267185 run remains refused.
+
+Implementation source e113bb232f1bbc38abc7c8ce40830b2ba5cf14e9/tree3fb895c497666b8c493a64ca06123d556e932b39 passed actual app types and all17 related cases in run40270445637/a1. Two physical helper-source faults produced their owned failures; exact restored sources passed both actual-page cases. Scoped prerender, derived sitemap and both builds completed. Root independently admitted the once-retained original60,819,496-byte artifact (SHA2568c58ccb9fd4b5f5fb32fc20c49d67ee600c126b2264d75c351228fdd765a5c18), all5383 source bodies, other5380 source holds, full first/final824-file dist copies and16 empty guarded cohort receipts.
+
+Only public/world-xi/index.html, public/sitemap.xml and scripts/data/lastmod.json were regenerated. Other sitemap rows and ledger entries remain held. The final build's snapshot receives the unchanged Vite plugin's normal asset tags; the committed snapshot stays hash free.
+
+This append is authored before the final clean-source verification run. That run checks fresh types/build17, two existing local report/season sims, all18 completed-dist readers, unchanged fatal weight caps, and12 actual-page browser contexts using disclosed fictional transport. Original pixels require Root and independent review. Results and exact final head belong in the draft PR and retained closure evidence. No result of that later run is asserted here.
+
+The unchanged live-pool gates simWorldXiPositions and simWorldXiDefensiveMids remain UNVERIFIED in this offline lane. They need the live database before a big production ship. No all-suite, real-roster coverage or publication claim is made. Owner I retains main integration and publication.
+
+Transfer Path: the Endrick/Carvajal refusal is a missing Carvajal Real Madrid2024-2025 career row, not a reason to relax season matching. Official club and UEFA records confirm their shared season. An outside intake packet and four unrun actual-graph regression cases are prepared for Owner I. The2025-26 half-season claim remains unverified. No career-data or database repair has been applied here.
+
+Evidence: C:/Users/antho/dukb-handoff/2026-10-24, World XI packets and transfer-path-shared-season-discovery-v1 plus transfer-path-shared-season-regression-proposal-v1. Historic1441's10 missing folders/785 entries remain open. Both protected indexes remain pinned; older checkouts and evidence are preserved.
