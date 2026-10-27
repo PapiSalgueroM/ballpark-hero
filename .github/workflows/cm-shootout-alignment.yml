@@ -1,4 +1,5 @@
 name: Club Manager shootout alignment
+# Browser fixture uses Buffer response bytes and retains request diagnostics.
 on:
   push:
     branches: [codex/cm-shootout-alignment-20261027]

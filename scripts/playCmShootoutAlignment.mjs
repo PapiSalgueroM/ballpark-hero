@@ -41,7 +41,7 @@ const client = [
 const built = await build({ stdin: { contents: client, resolveDir: ROOT, sourcefile: 'alignment-client.jsx', loader: 'jsx' },
   bundle: true, write: false, platform: 'browser', format: 'esm', jsx: 'automatic', alias: { '@': path.join(ROOT, 'src') },
   define: { 'process.env.NODE_ENV': '"production"', 'import.meta.env': '{}' }, logLevel: 'error' });
-const bundle = built.outputFiles[0].contents;
+const bundle = Buffer.from(built.outputFiles[0].contents);
 fs.writeFileSync(path.join(folder, 'client.js'), bundle);
 report.clientBundleSha256 = hash(bundle); report.fixtureSha256 = fixtureHash;
 const template = fs.readFileSync(path.join(ROOT, 'dist/index.html'), 'utf8');
@@ -94,12 +94,13 @@ try {
   await ready; browser = await pw.chromium.launch({ headless: true });
   for (const profile of [{ width: 320, height: 780 }, { width: 390, height: 844 }, { width: 1280, height: 900 }]) {
     for (const fixture of fixtures.rows) {
-      const id = profile.width + '-' + fixture.id, row = { id, ...profile, errors: [], assetErrors: [], blocked: [], snapshots: [] };
+      const id = profile.width + '-' + fixture.id, row = { id, ...profile, errors: [], assetErrors: [], blocked: [], requests: [], requestFailures: [], snapshots: [] };
       report.cases.push(row);
       const context = await browser.newContext({ viewport: profile, isMobile: profile.width < 600, hasTouch: profile.width < 600,
         colorScheme: 'dark', reducedMotion: 'reduce', serviceWorkers: 'block' });
       await context.route('**/*', route => {
         const request = route.request(), url = new URL(request.url());
+        row.requests.push({ method: request.method(), url: url.href }); save();
         if (!['GET', 'HEAD'].includes(request.method())) { row.blocked.push({ method: request.method(), url: url.href }); return route.fulfill({ status: 405, body: '' }); }
         if (url.origin === BASE) {
           if (url.pathname === '/__alignment/fixture.json') return route.fulfill({ json: fixture.props });
@@ -113,6 +114,7 @@ try {
       });
       const page = await context.newPage();
       page.on('pageerror', error => row.errors.push(String(error)));
+      page.on('requestfailed', request => { row.requestFailures.push({ url: request.url(), failure: request.failure() }); save(); });
       page.on('console', message => { if (message.type() === 'error') row.errors.push(message.text()); });
       page.on('response', response => { if (response.url().startsWith(BASE) && response.status() >= 400) row.assetErrors.push(response.status() + ' ' + response.url()); });
       try {
