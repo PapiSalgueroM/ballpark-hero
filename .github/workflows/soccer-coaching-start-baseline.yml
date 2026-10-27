@@ -1,0 +1,68 @@
+name: Soccer coaching start consumer baseline
+on:
+  push:
+    branches: [codex/sc-coaching-start-20261027]
+    paths:
+      - .github/workflows/soccer-coaching-start-baseline.yml
+      - scripts/qa/soccerCoachingStartConsumer.mjs
+      - src/test/soccerCareerCoachingStart.consumer.test.tsx
+permissions:
+  contents: read
+concurrency:
+  group: soccer-coaching-start-baseline-${{ github.ref }}
+  cancel-in-progress: false
+defaults:
+  run:
+    shell: bash
+env:
+  CI: '1'
+  SIM_NETWORK: offline
+  SC_COACHING_START_PHASE: baseline
+jobs:
+  consumer:
+    runs-on: ubuntu-latest
+    timeout-minutes: 12
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.sha }}
+          fetch-depth: 0
+          persist-credentials: false
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: npm
+      - name: Retain exact source and locked dependencies
+        run: |
+          set -euo pipefail
+          mkdir -p coaching-start-artifacts
+          git rev-parse HEAD > coaching-start-artifacts/source-head.txt
+          git rev-parse HEAD^{tree} > coaching-start-artifacts/source-tree.txt
+          git archive --format=tar HEAD > coaching-start-artifacts/source.tar
+          git ls-files -z | sort -z | xargs -0 sha256sum > coaching-start-artifacts/source-before.sha256
+          sha256sum package.json package-lock.json > coaching-start-artifacts/dependency-source.sha256
+          npm ci
+      - name: Frozen test-first source pins and real application types
+        run: |
+          set -euo pipefail
+          echo 'b7d5cc20c3eb6e082c2a2a4fa2e60c18d96230bc13d3ccbe234eb00f369d546f  src/test/soccerCareerCoachingStart.consumer.test.tsx' | sha256sum --check
+          echo '9d487086bb2f9f61d9ec68a71e4256e3da657d1cc8bb27eb022d79f0a9a8c433  scripts/qa/soccerCoachingStartConsumer.mjs' | sha256sum --check
+          NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node node_modules/typescript/bin/tsc --noEmit -p tsconfig.app.json 2>&1 | tee coaching-start-artifacts/types.log
+      - name: Actual before consumers with cause-qualified missing chooser RED
+        run: |
+          set -euo pipefail
+          NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/qa/soccerCoachingStartConsumer.mjs 2>&1 | tee coaching-start-artifacts/consumer.log
+      - name: Hold all canonical tracked sources
+        if: always()
+        run: |
+          set -euo pipefail
+          sha256sum -c coaching-start-artifacts/source-before.sha256 > coaching-start-artifacts/source-held.log
+          git diff --exit-code HEAD
+      - name: Preserve original baseline evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: soccer-coaching-start-baseline-${{ github.run_id }}-${{ github.run_attempt }}
+          retention-days: 7
+          if-no-files-found: error
+          path: coaching-start-artifacts/
