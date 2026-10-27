@@ -116,7 +116,7 @@ jobs:
         run: |
           set -o pipefail
           env -u CM_SHOOTOUT_RESULTS_PHASE -u CM_SHOOTOUT_RESULTS_BASELINE -u CM_SHOOTOUT_RESULTS_OUT NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/simCmShootoutResults.mjs 2>&1 | tee shootout-results-artifacts/ordinary.log
-      - name: Existing shootout order guards and all thirteen source controls
+      - name: Existing order guards, twelve source faults and baseline-adapter control
         run: |
           set -o pipefail
           export NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs"
@@ -136,14 +136,26 @@ jobs:
           assert.equal(Number(process.env.LEGACY_EXIT), 1);
           assert.equal(report.runtimeErrors.length, 0);
           assert(report.sources.every(row => row.held));
-          assert.equal(report.mutation.control, id);
-          assert.equal(report.mutation.hits, 1);
-          assert.equal(report.mutation.changed, true);
-          assert.notEqual(report.mutation.beforeHash, report.mutation.afterHash);
           const failures = Object.values(report.failedSections).flat();
           assert(failures.length > 0);
-          if (id === 'tie-record') assert(failures.some(text => text.includes('incomplete or contradictory')));
-          console.log(id + ': effective source fault rejected with original source and runtime held.');
+          if (id === 'keepleague') {
+            const healthy = JSON.parse(fs.readFileSync(process.env.CM_SHOOTOUT_ARTIFACTS + '/normal-baseline.json'));
+            assert.equal(report.mutation, null);
+            assert(healthy.executedSources.some(row => row.role === 'leagueout1052'));
+            assert(report.executedSources.every(row => row.role !== 'leagueout1052'));
+            assert.deepEqual(Object.keys(report.failedSections).sort(), ['4', '5']);
+            assert(report.summary.paired < healthy.summary.paired);
+            assert.equal(healthy.oldLoad.paired, true);
+            assert.equal(report.oldLoad.paired, false);
+            console.log(id + ': actual baseline-adapter omission rejected; this is not a source mutation.');
+          } else {
+            assert.equal(report.mutation.control, id);
+            assert.equal(report.mutation.hits, 1);
+            assert.equal(report.mutation.changed, true);
+            assert.notEqual(report.mutation.beforeHash, report.mutation.afterHash);
+            if (id === 'tie-record') assert(failures.some(text => text.includes('incomplete or contradictory')));
+            console.log(id + ': effective source fault rejected with original source and runtime held.');
+          }
           NODE
           done
       - name: Isolated browser and logo build tools
