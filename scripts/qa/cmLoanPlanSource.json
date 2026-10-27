@@ -1,7 +1,7 @@
 {
   "status": "SOURCE ONLY ALL RUNTIME UNRUN, bounded explicit-action scope",
   "foundation": "12c1b2cd001f9309a31a887e5c432ca63c373852",
-  "selected": "candidate-rescope-v3",
+  "selected": "candidate-rescope-v4",
   "fixed": [
     {
       "path": "scripts/qa/cmLoanPlanParity.mjs",
@@ -40,9 +40,9 @@
     },
     {
       "path": "src/lib/clubManagerLoanDevelopment.ts",
-      "bytes": 14663,
-      "sha256": "0d1f4e1768750efe479914d9146f7aff6793ba029b9496fa6380be2781aef75b",
-      "gitBlob": "bd316afa8e9a828125b4af6d9f72f77fe5ff0a5e",
+      "bytes": 14696,
+      "sha256": "78031cb13d92669c011e6052fac21ae47ffa7f42d710b8fe6a454988e125d231",
+      "gitBlob": "98265b3e10752b671127c1b23d6725d83d28e47b",
       "originalBlob": null
     },
     {
@@ -445,7 +445,7 @@
     "simSnapshotAssets"
   ],
   "browser": "Separate native actual-card captures remain owed; this workflow makes no new pixel/full-route claim",
-  "scope": "Projected host choice, unchanged actual terms and authority, explicit saved check-ins and recall log only. No automatic annual, bought or returned closeout. Engine exact I, lazy client supplies synchronous live-state transform after existing hook guards, persistence before adoption. Current-season log also binds observedWeek to the current saved week. Recall logs identify the unique actual newly appended squad member even when exact-I authority rekeys a legacy loanee ID.",
+  "scope": "Projected host choice, unchanged actual terms and authority, explicit saved check-ins and recall log only. No automatic annual, bought or returned closeout. Engine exact I, lazy client supplies synchronous live-state transform after existing hook guards, persistence before adoption. Current-season log also binds observedWeek to the current saved week. Recall logs identify the unique actual newly appended squad member even when exact-I authority rekeys a legacy loanee ID. One contextual type annotation fixes the actual remote entry.kind TS2322; no value or branch change.",
   "omittedPriorPath": "src/lib/clubManagerLoanSettlement.ts: delete from prior proposal branch; absent in I and this selected proposal",
   "mandatoryHostPoolOracle": "Separate same-engine observer of original private buyerPool against actual projected eligible hosts across real, partial and historical fixtures; runtime unrun"
 }

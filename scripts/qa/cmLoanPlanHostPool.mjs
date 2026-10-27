@@ -5,7 +5,7 @@ import path from 'node:path';
 import { createHash } from 'node:crypto';
 import { createRequire } from 'node:module';
 import { build } from 'esbuild';
-const METADATA_PIN = '7bd732597db0d3f061c7124c659ec714d268cfc2584a8f6d36d81be73cd51518';
+const METADATA_PIN = 'da4cf9f00efbac60132c34ae6343a3aab7d3e7d389a7c9d82ed2d7159d45f563';
 const I_ENGINE = '05de3cfca8d978e6117979fb29b82b2ece7b9fb6ee1f2ce3c051e379e36de86e';
 const sha = value => createHash('sha256').update(value).digest('hex');
 const data = value => value === undefined ? ['undefined'] : typeof value === 'function' ? ['function', value.name, value.length]

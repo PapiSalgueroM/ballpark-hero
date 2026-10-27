@@ -207,7 +207,7 @@ export function recordLoanDevelopmentLog(
     || kind === 'check-in' && actualRating !== actualLoan.rating
     || kind === 'recalled' && !context.windowOpen) return null;
   const { opportunity: _opportunity, review: _review, ...base } = record;
-  const entry = { ...base, kind, observedYear: context.worldYear, observedSeason: context.season,
+  const entry: Omit<LoanDevelopmentLog, 'key'> = { ...base, kind, observedYear: context.worldYear, observedSeason: context.season,
     observedWeek: context.week, rating: actualRating, ratingChange: actualRating - record.ratingAtStart };
   return { ...entry, key: JSON.stringify([entry.id, kind, entry.observedYear, entry.observedSeason, entry.observedWeek]) };
 }
