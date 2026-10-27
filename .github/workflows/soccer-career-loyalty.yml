@@ -143,9 +143,15 @@ jobs:
           set -euo pipefail
           export NODE_OPTIONS="--require=$GITHUB_WORKSPACE/scripts/lib/offlineTransport.cjs --require=$GITHUB_WORKSPACE/scripts/qa/soccerCareerLoyaltyPresentation.cjs"
           cd "$BUILD_ROOT"
-          PRERENDER_ONLY=/soccer-career npm run build:seo 2>&1 | tee "$GITHUB_WORKSPACE/loyalty-artifacts/build/outcomes.log"
+          PRERENDER_ONLY=/soccer-career,/whats-new npm run build:seo 2>&1 | tee "$GITHUB_WORKSPACE/loyalty-artifacts/build/outcomes.log"
           find dist -type f -print0 | sort -z | xargs -0 sha256sum > "$GITHUB_WORKSPACE/loyalty-artifacts/build/dist-sha256.txt"
           find public -type f -print0 | sort -z | xargs -0 sha256sum > "$GITHUB_WORKSPACE/loyalty-artifacts/build/public-after-sha256.txt"
+          mkdir -p "$GITHUB_WORKSPACE/loyalty-artifacts/build/generated"
+          cp public/soccer-career/index.html "$GITHUB_WORKSPACE/loyalty-artifacts/build/generated/soccer-career.html"
+          cp public/whats-new/index.html "$GITHUB_WORKSPACE/loyalty-artifacts/build/generated/whats-new.html"
+          git show HEAD:scripts/data/lastmod.json > "$GITHUB_WORKSPACE/loyalty-artifacts/build/generated/lastmod-before.json"
+          cp scripts/data/lastmod.json "$GITHUB_WORKSPACE/loyalty-artifacts/build/generated/lastmod-after.json"
+          git diff --binary HEAD -- public/soccer-career/index.html public/whats-new/index.html scripts/data/lastmod.json public/sitemap.xml > "$GITHUB_WORKSPACE/loyalty-artifacts/build/generated/targeted-generated.patch"
       - name: All15 rebuilt-site readers
         run: |
           set -euo pipefail
