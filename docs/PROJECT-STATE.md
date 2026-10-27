@@ -19229,3 +19229,12 @@ Winner and global RNG sequence stay exact; a detached keyed stream produces at m
 Bingo PR408 is ready for I atfb42ded0a7eccb3efab00a961cbf366089788fa0, qualified app78ca56a5/run40447951445. Twelve derived categories and phone label wrapping passed68Bingo cases,42actual offline boards across320/390/1280, source/browser controls, types/build/readers/caps; prior complete app9634PASS/58SKIP at48b1488f remains precisely prior to the one-span wrapping class. No real records added. Minimize detached generation/browser evidence is being admitted separately on the immutable I12c1 shadow, not product adoption.
 
 I retains protected integration, current-target gates, main and sole publication. J retains Headlines. Root drafts/index/stashes, both index pins and previous refused originals remain untouched. No local application, Node, npm, compiler, browser, test, Git or cleanup ran.
+
+
+## 2026-10-27: Isolated match-plan persistence control correction prepared
+
+The automatically triggered shootout PR410 match-plan run40453298849 refused its persistence copied fault because the expected hook text note(saveCareer(career)); no longer exists. Actual normal13cases,33other source controls, native journeys and20reader outputs passed. The hook is byte-identical in immutable b20 and the tested shootout proposal b32, so the setup failure predates the shootout change. Full original intake and the zero-anchor failure remain retained at C:/Users/antho/dukb-handoff/2026-10-27/shootout-additional-pr-ci/match-plans-40453298849.
+
+This QA-only child selects parentb32e83adc8df4e9dd7390f18ee98d88825cd1e02 so qualification exercises the actual shootout proposal. It changes only the persistence control from/to strings to the real unique write const ok = saveCareer(c); and skipped-write mutant const ok = true;. All13case mappings,33othercontrols and assertions are byte-held; full positioned inverse restores the original script. No hook, engine, save, data or UI implementation change. Frozen historical guards stay intact.
+
+A dedicated remote/offline workflow will run real app types, all13normalcases/all34physical source faults and source holds, with actual mutation/report/integrity records. Qualification is PENDING, not a pass. No build, complete suite, current combined target, protected integration, main or live claim. Source-only proposal C:/Users/antho/dukb-handoff/2026-10-27/cm-plans-persistence-control-v1. I retains protected composition/main/publication; root source/index/stashes and all previous originals remain preserved.
