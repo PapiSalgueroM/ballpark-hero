@@ -1,0 +1,146 @@
+name: Programme menu browser compatibility
+on:
+  push:
+    branches: [codex/sc-programme-browser-20261027]
+    paths:
+      - .github/workflows/programme-menu-browser.yml
+      - scripts/playCareerProgramme.mjs
+      - scripts/simCareerProgramme.mjs
+permissions:
+  contents: read
+concurrency:
+  group: programme-menu-browser-${{ github.ref }}
+  cancel-in-progress: false
+defaults:
+  run:
+    shell: bash
+env:
+  CI: '1'
+  SIM_NETWORK: offline
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    timeout-minutes: 40
+    env:
+      ENGINES: chromium
+      SWEEP_OFFLINE: '1'
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.sha }}
+          fetch-depth: 0
+          persist-credentials: false
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: npm
+      - name: Retain source and prepare isolated presentation dependencies
+        run: |
+          set -euo pipefail
+          export PLAYWRIGHT_BROWSERS_PATH="$RUNNER_TEMP/soccer-loyalty-browsers"
+          echo "PLAYWRIGHT_BROWSERS_PATH=$PLAYWRIGHT_BROWSERS_PATH" >> "$GITHUB_ENV"
+          mkdir -p loyalty-artifacts/build
+          git rev-parse HEAD > loyalty-artifacts/source-head.txt
+          git rev-parse HEAD^{tree} > loyalty-artifacts/source-tree.txt
+          git archive --format=tar HEAD > loyalty-artifacts/source.tar
+          git ls-files -z | sort -z | xargs -0 sha256sum > loyalty-artifacts/source-before.sha256
+          npm ci
+          npm install --prefix "$RUNNER_TEMP/soccer-loyalty-pw" --ignore-scripts --no-audit --no-fund playwright@1.64.0
+          ln -s "$RUNNER_TEMP/soccer-loyalty-pw/node_modules/playwright" node_modules/playwright
+          ln -s "$RUNNER_TEMP/soccer-loyalty-pw/node_modules/playwright-core" node_modules/playwright-core
+          node "$RUNNER_TEMP/soccer-loyalty-pw/node_modules/playwright/cli.js" install --with-deps chromium
+          cp "$RUNNER_TEMP/soccer-loyalty-pw/package-lock.json" loyalty-artifacts/playwright-lock.json
+          python -m pip install fonttools pillow
+          python -m pip freeze > loyalty-artifacts/python-dependencies.txt
+          node scripts/qa/soccerCareerLoyaltyPresentation.cjs --prefetch-loyalty-fonts
+          git worktree add --detach "$RUNNER_TEMP/soccer-loyalty-build" HEAD
+          ln -s "$PWD/node_modules" "$RUNNER_TEMP/soccer-loyalty-build/node_modules"
+          echo "BUILD_ROOT=$RUNNER_TEMP/soccer-loyalty-build" >> "$GITHUB_ENV"
+          echo "SC_LOYALTY_FONT_MANIFEST=$PWD/loyalty-artifacts/font-cache/manifest.json" >> "$GITHUB_ENV"
+      - name: Exact selected application and repaired QA sources
+        run: |
+          set -euo pipefail
+          echo '4348db850efb1208a3d6238d4b812751ff94369f0140356caf2597b28f55c847  scripts/simCareerProgramme.mjs' | sha256sum --check
+          echo '04b612a8f92db1a64cd967a454a0bee5adcd942bd026ef75da1d76c2e296b895  scripts/playCareerProgramme.mjs' | sha256sum --check
+          node - <<'NODE' | tee loyalty-artifacts/build/selected-source.log
+          const fs=require('node:fs'),crypto=require('node:crypto'),assert=require('node:assert/strict');
+          const sha=body=>crypto.createHash('sha256').update(body).digest('hex');
+          const blob=body=>crypto.createHash('sha1').update('blob '+body.length+'\0').update(body).digest('hex');
+          const body=fs.readFileSync('qa/soccer-career-loyalty-v2.1/SOURCE-READY.json');
+          assert.equal(sha(body),'3ea2b473d7ac00ee36bfff7b5c67a7d9276d82d3abc0bae721947095f8dd88f0');
+          const meta=JSON.parse(body);assert.equal(meta.files.length,11);
+          const rows=meta.files.map(row=>{const bytes=fs.readFileSync(row.path);assert.equal(bytes.length,row.bytes,row.path);assert.equal(sha(bytes),row.sha256,row.path);assert.equal(blob(bytes),row.gitBlob,row.path);return{path:row.path,bytes:bytes.length,sha256:sha(bytes),gitBlob:blob(bytes)};});
+          fs.writeFileSync('loyalty-artifacts/build/selected-source.json',JSON.stringify(rows,null,2));
+          console.log('All11 selected bodies match byte/SHA/Git pins. Both actual QA scripts match selected SHA pins.');
+          NODE
+      - name: Actual application type gate
+        run: |
+          set -euo pipefail
+          cd "$BUILD_ROOT"
+          NODE_OPTIONS="--require=$GITHUB_WORKSPACE/scripts/lib/offlineTransport.cjs" node node_modules/typescript/bin/tsc --noEmit -p tsconfig.app.json 2>&1 | tee "$GITHUB_WORKSPACE/loyalty-artifacts/build/types.log"
+      - name: Scoped Soccer Career production build
+        run: |
+          set -euo pipefail
+          export NODE_OPTIONS="--require=$GITHUB_WORKSPACE/scripts/lib/offlineTransport.cjs --require=$GITHUB_WORKSPACE/scripts/qa/soccerCareerLoyaltyPresentation.cjs"
+          cd "$BUILD_ROOT"
+          PRERENDER_ONLY=/soccer-career,/whats-new npm run build:seo 2>&1 | tee "$GITHUB_WORKSPACE/loyalty-artifacts/build/outcomes.log"
+          find dist -type f -print0 | sort -z | xargs -0 sha256sum > "$GITHUB_WORKSPACE/loyalty-artifacts/build/dist-sha256.txt"
+          find public -type f -print0 | sort -z | xargs -0 sha256sum > "$GITHUB_WORKSPACE/loyalty-artifacts/build/public-after-sha256.txt"
+          mkdir -p "$GITHUB_WORKSPACE/loyalty-artifacts/build/generated"
+          cp public/soccer-career/index.html "$GITHUB_WORKSPACE/loyalty-artifacts/build/generated/soccer-career.html"
+          cp public/whats-new/index.html "$GITHUB_WORKSPACE/loyalty-artifacts/build/generated/whats-new.html"
+          git show HEAD:scripts/data/lastmod.json > "$GITHUB_WORKSPACE/loyalty-artifacts/build/generated/lastmod-before.json"
+          cp scripts/data/lastmod.json "$GITHUB_WORKSPACE/loyalty-artifacts/build/generated/lastmod-after.json"
+          git diff --binary HEAD -- public/soccer-career/index.html public/whats-new/index.html scripts/data/lastmod.json public/sitemap.xml > "$GITHUB_WORKSPACE/loyalty-artifacts/build/generated/targeted-generated.patch"
+      - name: All15 rebuilt-site readers
+        run: |
+          set -euo pipefail
+          export NODE_OPTIONS="--require=$GITHUB_WORKSPACE/scripts/lib/offlineTransport.cjs --require=$GITHUB_WORKSPACE/scripts/qa/soccerCareerLoyaltyPresentation.cjs"
+          cd "$BUILD_ROOT"
+          export ONLY=simAdsense,simBrand,simHeadTags,simHiddenPages,simHubs,simIndexNow,simIndexing,simInternalLinks,simNoRivalNames,simPrerender,simPrerenderBoot,simRetiredRoutes,simSchema,simSitemap,simSnapshotAssets
+          node scripts/runAllSims.mjs --browser --plan-json > "$GITHUB_WORKSPACE/loyalty-artifacts/build/readers-plan.json"
+          node scripts/runAllSims.mjs --browser 2>&1 | tee "$GITHUB_WORKSPACE/loyalty-artifacts/build/readers.log"
+          node scripts/qa/soccerCareerLoyaltyAdmission.mjs readers "$GITHUB_WORKSPACE/loyalty-artifacts/build/readers-plan.json" "$GITHUB_WORKSPACE/loyalty-artifacts/build/readers.log"
+      - name: All15 unchanged fatal route caps
+        run: |
+          set -euo pipefail
+          export NODE_OPTIONS="--require=$GITHUB_WORKSPACE/scripts/lib/offlineTransport.cjs --require=$GITHUB_WORKSPACE/scripts/qa/soccerCareerLoyaltyPresentation.cjs"
+          cd "$BUILD_ROOT"
+          node scripts/lib/hostLikeServer.mjs dist 4173 > "$GITHUB_WORKSPACE/loyalty-artifacts/build/preview.log" 2>&1 &
+          server=$!
+          trap 'kill "$server" 2>/dev/null || true' EXIT
+          ready=0
+          for i in $(seq 1 30); do if curl -fsS http://127.0.0.1:4173/ >/dev/null; then ready=1; break; fi; sleep 1; done
+          test "$ready" -eq 1
+          BASE=http://127.0.0.1:4173 SWEEP_BASE=http://127.0.0.1:4173 SWEEP_OFFLINE=1 node scripts/sweepWeight.mjs 2>&1 | tee "$GITHUB_WORKSPACE/loyalty-artifacts/build/weight.log"
+          node scripts/qa/soccerCareerLoyaltyAdmission.mjs caps "$GITHUB_WORKSPACE/loyalty-artifacts/build/weight.log"
+      - name: Actual fixture producer and all21 existing source controls
+        run: |
+          set -euo pipefail
+          cd "$BUILD_ROOT"
+          mkdir -p career-programme-artifacts "$GITHUB_WORKSPACE/loyalty-artifacts/programme"
+          trap 'cp -a career-programme-artifacts "$GITHUB_WORKSPACE/loyalty-artifacts/programme/"' EXIT
+          NODE_OPTIONS="--require=$GITHUB_WORKSPACE/scripts/lib/offlineTransport.cjs" node scripts/simCareerProgramme.mjs 2>&1 | tee "$GITHUB_WORKSPACE/loyalty-artifacts/build/programme-sim.log"
+      - name: Full existing21 native programme journeys
+        run: |
+          set -euo pipefail
+          export NODE_OPTIONS="--require=$GITHUB_WORKSPACE/scripts/lib/offlineTransport.cjs --require=$GITHUB_WORKSPACE/scripts/qa/soccerCareerLoyaltyPresentation.cjs"
+          cd "$BUILD_ROOT"
+          mkdir -p career-programme-artifacts "$GITHUB_WORKSPACE/loyalty-artifacts/programme"
+          trap 'cp -a career-programme-artifacts "$GITHUB_WORKSPACE/loyalty-artifacts/programme/"' EXIT
+          FREE_KICK_FONT_CACHE="$GITHUB_WORKSPACE/loyalty-artifacts/font-cache" node scripts/playCareerProgramme.mjs 2>&1 | tee "$GITHUB_WORKSPACE/loyalty-artifacts/build/programme-browser.log"
+      - name: Hold canonical source and cap policy
+        if: always()
+        run: |
+          set -euo pipefail
+          sha256sum -c loyalty-artifacts/source-before.sha256 > loyalty-artifacts/source-held.log
+          git diff --exit-code HEAD
+          if [ -n "${BUILD_ROOT:-}" ]; then git -C "$BUILD_ROOT" diff --exit-code HEAD -- scripts/sweepWeight.mjs; git -C "$BUILD_ROOT" diff --binary > loyalty-artifacts/build/generated.patch; fi
+      - name: Preserve complete browser qualification evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: programme-menu-browser-${{ github.run_id }}-${{ github.run_attempt }}
+          retention-days: 7
+          path: loyalty-artifacts/
+          if-no-files-found: error
