@@ -19216,3 +19216,11 @@ The two initial fixture failures39940913787 and39943246891 remain separate from 
 Evidence packet: C:/Users/antho/dukb-handoff/2026-10-23/search-navigation. Root qualification c565e4bb892d6f5392e942e329af0b1661faba1e626bddb051ab76276d2e88b5; Root pixels743d12524f3b65bf0752151b2cfdbb7c3866377866360b6f66c60a4875cfdb26; independent integrated audit4e7ff7ad3b766d00b3f7f5ac280ed0b9d67fd91e8a27416cd182579a76da9dac. The normal saved-picks archive is also retained as2ca41f45c885f8066326880fe73480b83b0ee3ae7a3c4b08503c94fc74fa3e98.
 
 I retains sole publication. Root did not publish this Search correction and makes no new live-site claim. Analytics remains paused. No local application execution, cleanup, old checkout reset, data/provider/account change or protected game adoption occurred. Primary WORKBOARD and the continuation checkpoint receive only this exact note through the reviewed exclusive-lock append helper, with actual full-prefix backups/readback and both protected indexes checked before and finally. Earlier preservation gaps remain unwaived.
+
+## Club Manager Minimize detached UI qualification, pending
+
+This QA branch tests a clearer Minimize button in the existing live match viewer. The proposed button keeps the existing match handler, adds visible text and a 44px minimum target, and changes no match, save or consent rules. The product overlay stays outside the canonical game source.
+
+The detached source basis is Owner I commit12c1b2cd001f9309a31a887e5c432ca63c373852. Planned checks are the real baseline and shadow app type gates, the shadow production build, all18 existing built readers, unchanged weight caps, the existing normal live-match walk and its Tab-containment fault. A QA-only no-forward adapter retains actual layout, focus, scroll, network and original screenshot evidence.
+
+All runtime results and manual pixel review are pending at preparation. No full-suite, current combined I branch, real-save, main or live qualification is claimed. Owner I still owns integration and publication. The live-view report remains open until the current combined product is verified.
