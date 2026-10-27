@@ -19224,3 +19224,11 @@ This QA branch tests a clearer Minimize button in the existing live match viewer
 The detached source basis is Owner I commit12c1b2cd001f9309a31a887e5c432ca63c373852. Planned checks are the real baseline and shadow app type gates, the shadow production build, all18 existing built readers, unchanged weight caps, the existing normal live-match walk and its Tab-containment fault. A QA-only no-forward adapter retains actual layout, focus, scroll, network and original screenshot evidence.
 
 All runtime results and manual pixel review are pending at preparation. No full-suite, current combined I branch, real-save, main or live qualification is claimed. Owner I still owns integration and publication. The live-view report remains open until the current combined product is verified.
+## Club Manager Minimize snapshot prerequisite, pending
+
+The first detached run40440748070 is refused. Both real app type gates, the build and nine readers passed. simPrerender then found an existing I-branch changelog entry missing from the What's New snapshot. The remaining readers, caps and Minimize normal/tabout walks did not run. There are no browser records or screenshots to credit.
+
+This source follow-up uses the existing scoped What's New prerender, sitemap/lastmod generator and final build. Only the actual snapshot, ledger and sitemap may change in the shadow. Other route rows, llms.txt, application sources and all existing judges stay held. The canonical branch still carries QA and this pending note only.
+
+Regeneration, remaining checks and original layout/pixel review are pending on this source. No protected product, saved career, current combined I branch, full-suite, main or live qualification is claimed. Owner I retains integration and publication. The live-view report stays open.
+The header-date-only follow-up allows only the ISO date token inside the generator's exact two adjacent header lines. Every other sitemap skeleton byte, non-target route and ledger row, unrelated public file and llms.txt stays held. A fourth copied-record control must reject a non-date header edit and restore the original record. The planned 31 native cohorts are unchanged. This source correction and all generation, browser and manual pixel qualification remain unrun.
