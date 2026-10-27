@@ -17,7 +17,7 @@ const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const phase = process.env.CM_SHOOTOUT_RESULTS_PHASE ?? 'fixed';
 let baseline = process.env.CM_SHOOTOUT_RESULTS_BASELINE;
 let output = process.env.CM_SHOOTOUT_RESULTS_OUT;
-const candidate = path.join(ROOT, 'src/lib/clubManager.ts');
+const candidate = process.env.CM_SHOOTOUT_RESULTS_CANDIDATE ?? path.join(ROOT, 'src/lib/clubManager.ts');
 const originalBlob = 'a505743537b383bc7885bb81f5a72c11e154b566';
 const realRandom = Math.random;
 const realNow = Date.now;
@@ -123,6 +123,7 @@ function checkKicks(report) {
 
 try {
   assert.ok(['baseline', 'fixed'].includes(phase), 'Explicit baseline/fixed phase required');
+  assert.ok(path.isAbsolute(candidate), 'Absolute candidate source required');
   temporary = fs.mkdtempSync(path.join(os.tmpdir(), 'cm-shootout-results-'));
   if (baseline === undefined) {
     baseline = path.join(temporary, 'immutable-b20.ts');
