@@ -14,8 +14,8 @@ const fixture = JSON.parse(fs.readFileSync(path.join(ROOT, 'scripts/data/careerL
 assert(fixture);
 const entry = path.join(WEB, 'entry.tsx');
 fs.writeFileSync(entry, fs.readFileSync(path.join(ROOT, 'scripts/qa/soccerCareerLoyaltyBrowser.entry.txt'), 'utf8'));
-const compile = reviewCopy => build({ entryPoints: [entry], outfile: path.join(WEB, 'app.js'), bundle: true, platform: 'browser', format: 'esm',
-  target: 'es2022', jsx: 'automatic', nodePaths: [path.join(ROOT, 'node_modules')], alias: { ...(reviewCopy ? { '@/components/soccer-career/SoccerOfferReview': reviewCopy } : {}), '@': path.join(ROOT, 'src') },
+const compile = (reviewCopy, programmeCopy) => build({ entryPoints: [entry], outfile: path.join(WEB, 'app.js'), bundle: true, platform: 'browser', format: 'esm',
+  target: 'es2022', jsx: 'automatic', nodePaths: [path.join(ROOT, 'node_modules')], alias: { ...(reviewCopy ? { '@/components/soccer-career/SoccerOfferReview': reviewCopy } : {}), ...(programmeCopy ? { '@/components/soccer-career/SoccerCareerProgramme': programmeCopy } : {}), '@': path.join(ROOT, 'src') },
   define: { 'import.meta.env': '{}' }, metafile: true, logLevel: 'silent' });
 const bundle = await compile();
 fs.writeFileSync(path.join(OUT, 'bundle-inputs.json'), JSON.stringify(bundle.metafile, null, 2));
@@ -106,6 +106,19 @@ const state = async page => {
   await page.waitForFunction(() => typeof window.__LOYALTY_SNAPSHOT__ === 'function');
   return page.evaluate(() => window.__LOYALTY_SNAPSHOT__());
 };
+const openerFocus = page => page.evaluate(() => {
+  const active = document.activeElement, opener = document.querySelector('[data-open-plans]');
+  return { restored: !!opener && active === opener, tag: active?.tagName, text: active?.textContent, scrollY };
+});
+async function awaitOpenerFocus(page, row) {
+  row.closeFocus = { immediate: await openerFocus(page) }; flush(false);
+  try {
+    await page.waitForFunction(() => {
+      const opener = document.querySelector('[data-open-plans]');
+      return !!opener && document.activeElement === opener;
+    }, null, { timeout: 2000 });
+  } finally { row.closeFocus.eventual = await openerFocus(page); flush(false); }
+}
 try {
   for (const width of [320, 390, 1280]) for (const mode of ['payment', 'forfeit', 'counteroffer']) {
     const prefix = width + '-' + mode;
@@ -139,6 +152,7 @@ try {
     assert.equal(await page.locator('[data-programme-body]').evaluate(element => element.scrollTop), top);
     assert(await page.locator('[data-programme-tile="loyalty"]').evaluate(element => document.activeElement === element));
     await page.locator('[data-programme-close]').click();
+    await awaitOpenerFocus(page, row);
     assert(await page.locator('[data-open-plans]').evaluate(element => document.activeElement === element));
     assert.equal(await page.evaluate(() => scrollY), windowTop);
     const saved = await state(page);
@@ -270,9 +284,69 @@ try {
     } catch (error) { await retainFailure(row, page, variant, error); throw error; }
     finally { await context?.close(); }
   }
-  assert.equal(controls.length, 3);
+  const programmePath = 'src/components/soccer-career/SoccerCareerProgramme.tsx';
+  const originalProgramme = fs.readFileSync(path.join(ROOT, programmePath), 'utf8');
+  const focusFrom = 'onCloseAutoFocus={event => { event.preventDefault(); opener.current?.focus({ preventScroll: true }); }}';
+  const focusTo = 'onCloseAutoFocus={event => { event.preventDefault(); }}';
+  assert.equal(originalProgramme.split(focusFrom).length - 1, 1);
+  const badProgramme = originalProgramme.replace(focusFrom, focusTo), programmeCopy = path.join(OUT, 'control-programme.tsx');
+  assert.notEqual(sha(badProgramme), sha(originalProgramme));
+  fs.writeFileSync(programmeCopy, badProgramme);
+  const focusSource = { path: programmePath, copy: programmeCopy, from: focusFrom, to: focusTo,
+    originalSha256: sha(originalProgramme), changedSha256: sha(badProgramme) };
+  fs.writeFileSync(path.join(OUT, 'focus-control-source.json'), JSON.stringify(focusSource, null, 2));
+  for (const variant of ['owned-missing-opener-focus-fault', 'restored-opener-focus']) {
+    const row = { variant, status: 'STARTED', expectedOwnedFault: variant === 'owned-missing-opener-focus-fault', blocked: [], errors: [] };
+    controls.push(row); flush(false);
+    if (!row.expectedOwnedFault) fs.writeFileSync(programmeCopy, originalProgramme);
+    row.programmeCopySha256 = sha(fs.readFileSync(programmeCopy));
+    assert.equal(row.programmeCopySha256, row.expectedOwnedFault ? focusSource.changedSha256 : focusSource.originalSha256);
+    const executable = await compile(undefined, programmeCopy);
+    fs.writeFileSync(path.join(OUT, variant + '.bundle-inputs.json'), JSON.stringify(executable.metafile, null, 2));
+    row.bundleSha256 = sha(fs.readFileSync(path.join(WEB, 'app.js')));
+    let context, page;
+    try {
+      context = await browser.newContext({ viewport: { width: 390, height: 844 }, serviceWorkers: 'block' });
+      await context.route('**/*', route => {
+        const url = route.request().url();
+        if (url.startsWith(base + '/')) return route.continue();
+        const cached = fontMap.get(url);
+        if (cached) return route.fulfill(cached);
+        row.blocked.push(new URL(url).origin); return route.abort();
+      });
+      await context.addInitScript(value => { window.__LOYALTY_FIXTURE__ = value; Math.random = () => 0.1; }, fixture);
+      page = await context.newPage(); page.on('pageerror', error => row.errors.push(error.message));
+      await page.goto(base); await page.locator('[data-open-plans]').waitFor();
+      await page.evaluate(() => scrollTo(0, 180));
+      row.windowTop = await page.evaluate(() => scrollY);
+      await plans(page, true);
+      row.selectedQuote = (await state(page)).ledger.pending;
+      assert.equal(row.selectedQuote.weeklyWage, 9000); assert.equal(row.selectedQuote.bonusEuros, 156000);
+      row.independentSelectedQuotePassed = true;
+      await page.locator('[data-programme-close]').click();
+      let rejection;
+      try { await awaitOpenerFocus(page, row); }
+      catch (error) { rejection = error; }
+      if (row.expectedOwnedFault) {
+        assert.equal(rejection?.name, 'TimeoutError', 'Dropped callback specifically rejects bounded exact-opener focus wait');
+        assert.equal(row.closeFocus.eventual.restored, false);
+        await retainFailure(row, page, variant, rejection);
+        row.status = 'EXPECTED_REJECTION'; row.restoredBy = 'restored-opener-focus';
+      } else {
+        assert.equal(rejection, undefined);
+        assert(await page.locator('[data-open-plans]').evaluate(element => document.activeElement === element));
+        assert.equal(await page.evaluate(() => scrollY), row.windowTop);
+        row.status = 'PASSED';
+      }
+      assert.deepEqual(row.blocked, []); assert.deepEqual(row.errors, []); flush(false);
+    } catch (error) { await retainFailure(row, page, variant, error); throw error; }
+    finally { await context?.close(); }
+  }
+  assert.equal(sha(fs.readFileSync(programmeCopy)), focusSource.originalSha256);
+  assert.equal(sha(fs.readFileSync(path.join(ROOT, programmePath))), focusSource.originalSha256);
+  assert.equal(controls.length, 5);
   fs.writeFileSync(path.join(OUT, 'outcomes.json'), JSON.stringify({ complete: true, scope: 'Actual mounted Programme and OfferReview components plus actual engine callbacks. Full main-page navigation is outside this component qualification.', results, controls }, null, 2));
-  console.log('Loyalty mounted UI:9normal contexts across320,390,1280, plus owned font denial, warning fault and restoration.');
+  console.log('Loyalty mounted UI:9normal contexts across320,390,1280, plus owned font denial, warning fault/restoration and opener-focus fault/restoration.');
   console.log('Actual choice, counteroffer refusal/refresh, pay/forfeit outcomes and official reloads observed.');
   console.log('Actual dialog bounds,44px targets and programme focus/list/window scroll restoration checked.');
   console.log('No external transport attempts or page errors; raw observations and PNGs retained.');

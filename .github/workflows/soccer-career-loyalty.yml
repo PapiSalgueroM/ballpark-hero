@@ -161,12 +161,6 @@ jobs:
           node scripts/runAllSims.mjs --browser --plan-json > "$GITHUB_WORKSPACE/loyalty-artifacts/build/readers-plan.json"
           node scripts/runAllSims.mjs --browser 2>&1 | tee "$GITHUB_WORKSPACE/loyalty-artifacts/build/readers.log"
           node scripts/qa/soccerCareerLoyaltyAdmission.mjs readers "$GITHUB_WORKSPACE/loyalty-artifacts/build/readers-plan.json" "$GITHUB_WORKSPACE/loyalty-artifacts/build/readers.log"
-      - name: Actual mounted new UI at320,390,1280
-        run: |
-          set -euo pipefail
-          export NODE_OPTIONS="--require=$GITHUB_WORKSPACE/scripts/lib/offlineTransport.cjs --require=$GITHUB_WORKSPACE/scripts/qa/soccerCareerLoyaltyPresentation.cjs"
-          cd "$BUILD_ROOT"
-          SC_LOYALTY_BROWSER_OUT="$GITHUB_WORKSPACE/loyalty-artifacts/browser" node scripts/qa/soccerCareerLoyaltyBrowser.mjs 2>&1 | tee "$GITHUB_WORKSPACE/loyalty-artifacts/build/browser.log"
       - name: All15 unchanged fatal route caps
         run: |
           set -euo pipefail
@@ -180,6 +174,12 @@ jobs:
           test "$ready" -eq 1
           BASE=http://127.0.0.1:4173 SWEEP_BASE=http://127.0.0.1:4173 SWEEP_OFFLINE=1 node scripts/sweepWeight.mjs 2>&1 | tee "$GITHUB_WORKSPACE/loyalty-artifacts/build/weight.log"
           node scripts/qa/soccerCareerLoyaltyAdmission.mjs caps "$GITHUB_WORKSPACE/loyalty-artifacts/build/weight.log"
+      - name: Actual mounted new UI at320,390,1280
+        run: |
+          set -euo pipefail
+          export NODE_OPTIONS="--require=$GITHUB_WORKSPACE/scripts/lib/offlineTransport.cjs --require=$GITHUB_WORKSPACE/scripts/qa/soccerCareerLoyaltyPresentation.cjs"
+          cd "$BUILD_ROOT"
+          SC_LOYALTY_BROWSER_OUT="$GITHUB_WORKSPACE/loyalty-artifacts/browser" node scripts/qa/soccerCareerLoyaltyBrowser.mjs 2>&1 | tee "$GITHUB_WORKSPACE/loyalty-artifacts/build/browser.log"
       - name: Hold canonical source and cap policy
         if: always()
         run: |
