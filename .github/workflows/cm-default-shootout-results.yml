@@ -16,7 +16,7 @@ jobs:
       CI: '1'
       SIM_NETWORK: offline
       CM_SHOOTOUT_RESULTS_PHASE: baseline
-      CM_SHOOTOUT_RESULTS_BASELINE: ${{ runner.temp }}/clubManager.original.ts
+      CM_SHOOTOUT_RESULTS_BASELINE: ${{ github.workspace }}/shootout-results-artifacts/clubManager.original.ts
       CM_SHOOTOUT_RESULTS_OUT: ${{ github.workspace }}/shootout-results-artifacts/cohort
     steps:
       - uses: actions/checkout@v4
