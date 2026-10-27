@@ -19216,3 +19216,30 @@ The two initial fixture failures39940913787 and39943246891 remain separate from 
 Evidence packet: C:/Users/antho/dukb-handoff/2026-10-23/search-navigation. Root qualification c565e4bb892d6f5392e942e329af0b1661faba1e626bddb051ab76276d2e88b5; Root pixels743d12524f3b65bf0752151b2cfdbb7c3866377866360b6f66c60a4875cfdb26; independent integrated audit4e7ff7ad3b766d00b3f7f5ac280ed0b9d67fd91e8a27416cd182579a76da9dac. The normal saved-picks archive is also retained as2ca41f45c885f8066326880fe73480b83b0ee3ae7a3c4b08503c94fc74fa3e98.
 
 I retains sole publication. Root did not publish this Search correction and makes no new live-site claim. Analytics remains paused. No local application execution, cleanup, old checkout reset, data/provider/account change or protected game adoption occurred. Primary WORKBOARD and the continuation checkpoint receive only this exact note through the reviewed exclusive-lock append helper, with actual full-prefix backups/readback and both protected indexes checked before and finally. Earlier preservation gaps remain unwaived.
+
+
+## Pending QA: playable national coach prototype, 2026-10-26
+
+Prepared a detached shadow qualification for a current-year national team prototype. The protected Club Manager product is not adopted by this commit. New accepted modern national jobs enter a selectable squad and XI flow, one own fixture per action; older jobs opt in. Availability uses tracked save players and verified nationality, excluding untracked projected discoveries. Saved terminal, owned and loan status retains precedence. No real sporting rows or simulation probabilities change.
+
+The proposed QA runs the baseline entry assertion, the real app type gate, all 12 new cases, 25 unchanged national-window and save cases, and four physical focused source healthy/fault/restored controls. It compares complete international outcomes from the actual baseline and candidate using identical fixed RNG streams. Section 6 of simNationJob explicitly models an older save without the new opt-in block; its assertions and other sections stay held. The full source graph, locked dependencies and raw process evidence remain guarded.
+
+Runtime is UNRUN at source preparation. This is source review and detached QA only. Build, browser play, live match visualization, balance, performance and protected Owner I integration still need separate evidence. The earlier broad retention-only experiment remains rejected by the unchanged age guard. No market, caller, national data or public deployment adoption is claimed.
+
+
+## Pending QA correction: national career panel callback fixtures, 2026-10-26
+
+The first detached national-coach shadow run40401987898/a1 is refused. Its actual app type gate returned2 with nine TS2322 errors: three existing career-panel fixture mocks omit the four newly required national actions. Baseline entry validation produced the intended owned +0 to1 failure; the baseline original national-job harness and24 full international outcome records ran successfully. Candidate12-case,25-case regression,source-control and paired-outcome qualification did not run. Source and locked dependency holds passed; none of this qualifies the candidate feature.
+
+The source correction adds those four callbacks only to the existing mocks in ManagerFace,cmTablesTruth and numberFormatting. Production callbacks remain required, and all original assertions and titles stay held. The next detached run will execute those three suites in baseline and candidate shadows (77 cases per arm), compare their actual full report identity multisets, and retain the existing12 new cases,25 regressions and four source triplets. No corrected execution result is claimed at preparation. Protected Owner I integration, browser play,build/readers/caps,balance,performance and live-match visualization remain separate.
+
+
+## Detached national coach QA outcome (2026-10-27 UTC)
+
+The shadow prototype qualified on tested head c3c67da87a00459522a61bfa1f7115b973d9bbf8, run 40440140013/a1. The candidate app type gate returned 0. All 12 new cases, 25 existing regressions and 77 affected career-panel cases passed. The same 77 panel cases also passed against the unchanged baseline, with exact full title and ancestor identity multisets.
+
+Four physical source controls ran healthy/fault/restored 0/1/0 and restored the complete sources. They cover retired-player precedence, actual calendar year, stale fixture ownership and actual selected-XI scoring inputs. The score fault keeps logged strength intact. Actual b20 and candidate international implementations produced 24 complete byte-equal outcome records per arm under identical fixed streams. This is a finite preservation check, not a balance claim.
+
+The retained original has 420 regular bodies and 419 sealed bodies. Both complete 5380-body source archives, 43 critical pins, 5382-file shadow, 24466 remote installed-dependency before/end hashes, 27 selected process cohorts and all control receipts were audited. The first run 40401987898 remains refused at its type gate. The repair added the four required callbacks only to three existing test mocks; production callbacks remain required.
+
+This qualifies detached QA only. No canonical national product or protected Owner I integration is adopted. Build, all built readers, fatal caps, actual browser play, hook auto-save, phone focus/scroll/pixels, balance, performance and live match visualization remain unqualified. Unknown or untracked records stay excluded from national eligibility. No sporting data or probability tuning was added. The outcome is recorded by a docs-only [skip ci] commit; the tested head above remains the runtime authority.
