@@ -1,6 +1,6 @@
 import type { LoanDevelopmentRecord } from '@/lib/clubManagerLoanDevelopment';
-import { recordLoanPlanRecall, recordLoanPlanSeason } from '@/lib/clubManagerLoanPlan';
-import type { LoanPlanSummary } from '@/lib/clubManagerLoanPlan';
+import { makeLoanPlanContext, recordLoanPlanRecall, recordLoanPlanSeason } from '@/lib/clubManagerLoanSettlement';
+import type { LoanPlanSummary } from '@/lib/clubManagerLoanSettlement';
 import { foldSpecialLatin } from '@/lib/nameFold';
 import { nameModerationError } from '@/lib/nameModeration';
 import { realLeagueFixtureKeyForStart, realLeagueFixturePairs, realLeagueFixtureCoverage } from '@/lib/clubManagerFixtures';
@@ -11238,6 +11238,9 @@ export function loanPlanHostClubs(career: CareerState): string[] {
   return buyerPool(career);
 }
 
+const loanPlanSettlementContext = (c: CareerState, player: CMPlayer) =>
+  makeLoanPlanContext(c, player, worldYear, loanOutRefusal);
+
 /**
  * Tell the world what you are doing with a player. Pass null to take the
  * label back off.
@@ -11497,7 +11500,7 @@ export function recallLoanedPlayer(career: CareerState, playerId: string): Caree
     transferLog: [...(career.transferLog ?? [])],
   };
   pushNews(state, { name: back.name, from: entry.club, to: state.clubName, fee: 0, loan: true });
-  return recordLoanPlanRecall(career, state, entry, back);
+  return recordLoanPlanRecall(career, state, entry, back, loanPlanSettlementContext);
 }
 
 /**
@@ -22784,7 +22787,7 @@ export function startNextSeason(career: CareerState, acceptOfferClub?: string): 
   /* Round 310: promotion and relegation lead the whole summer, same seat,
      same reason, prepended last so they sit on top of the feed. */
   if (pr.lines.length) state.aiHeadlines = [...pr.lines, ...state.aiHeadlines].slice(0, 8);
-  return snapshotWorldRosterClub(recordLoanPlanSeason(career, state, loanReturn, loanPlanAgedReturned), state.clubName);
+  return snapshotWorldRosterClub(recordLoanPlanSeason(career, state, loanReturn, loanPlanAgedReturned, loanPlanSettlementContext), state.clubName);
 }
 
 /* ================================================================== */

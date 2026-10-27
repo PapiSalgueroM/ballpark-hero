@@ -77,7 +77,7 @@ fs.writeFileSync(entry, "export * as cm from " + JSON.stringify(path.join(ROOT, 
 await build({ entryPoints: [entry], bundle: true, platform: 'node', format: 'cjs',
   alias: { '@': path.join(ROOT, 'src') }, jsx: 'automatic', outfile: bundle, logLevel: 'error' });
 const sourceFiles = ['src/lib/clubManager.ts', 'src/hooks/useClubManager.ts', 'src/components/club-manager/TransferScreen.tsx',
-  'src/lib/clubManagerLoanPlan.ts', 'src/lib/clubManagerLoanDevelopment.ts'];
+  'src/lib/clubManagerLoanPlan.ts', 'src/lib/clubManagerLoanDevelopment.ts', 'src/lib/clubManagerLoanSettlement.ts'];
 const held = () => Object.fromEntries(sourceFiles.filter(f => fs.existsSync(path.join(ROOT, f)))
   .map(f => [f, sha(fs.readFileSync(path.join(ROOT, f)).toString('utf8'))]));
 const sourceBefore = held(), normalRandom = Math.random, normalNow = Date.now;

@@ -44,6 +44,7 @@ jobs:
       - name: Exact old app RED, fixed cases, physical controls and paired outcomes
         run: |
           set -euo pipefail
+          echo '4cf47bfcbaa35c49615e373d64adba2c351dc1e584be5d1f5f824997cb142b65  scripts/qa/cmLoanPlanSource.json' | sha256sum -c -
           node scripts/qa/cmLoanPlanQualification.mjs methods 2>&1 | tee "$CM_LOAN_PLAN_ARTIFACTS/controller.log"
       - name: Isolated browser and logo tools
         run: |

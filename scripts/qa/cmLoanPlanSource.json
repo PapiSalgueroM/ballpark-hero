@@ -1,13 +1,13 @@
 {
   "status": "SOURCE ONLY ALL RUNTIME UNRUN",
   "foundation": "12c1b2cd001f9309a31a887e5c432ca63c373852",
-  "selected": "candidate-ui-v6",
+  "selected": "candidate-ui-v8",
   "fixed": [
     {
       "path": "scripts/qa/cmLoanPlanParity.mjs",
-      "bytes": 8612,
-      "sha256": "108da2bf5de568ebdda62de65eb0ac3c40a3b96359b5e2cf7751ed15700cf370",
-      "gitBlob": "88a285c406d47d6b6662fa894a2d9e2a508bd99d",
+      "bytes": 8652,
+      "sha256": "98833f7fd906342aae578ffaa5c4d44eb5a890019d24850a6979e61c48cc7c2a",
+      "gitBlob": "7dda0395bbe4670ea5cde078229c24e97889a2f2",
       "originalBlob": null
     },
     {
@@ -33,9 +33,9 @@
     },
     {
       "path": "src/lib/clubManager.ts",
-      "bytes": 1241336,
-      "sha256": "328cfcbb15b8e605b4173e3d2459015a75cf716c3f95f9649d3e73cd90f9f276",
-      "gitBlob": "19abed1a3837e1b36ab94ea30d09cdf0d0f5c66f",
+      "bytes": 1241557,
+      "sha256": "d78e62d3dbd83119796046df162060540f394cf0450f1418002713c0d593b984",
+      "gitBlob": "ff65e9950346ca96db843bb5966a78120eac9355",
       "originalBlob": "a505743537b383bc7885bb81f5a72c11e154b566"
     },
     {
@@ -47,9 +47,9 @@
     },
     {
       "path": "src/lib/clubManagerLoanPlan.ts",
-      "bytes": 9329,
-      "sha256": "0984997edc4461944030046d1f68487fd1046d838da3532f28ded23820cfca1a",
-      "gitBlob": "5909c6b91a5eadb58d324dd3c09c1de81097439c",
+      "bytes": 7054,
+      "sha256": "66d3752b6e45425a776537b64583ba7cd4d7f42a5a05a7d773d8ee95b4a7b9ef",
+      "gitBlob": "612e34e1c42eed80ce628684531f7740abc7f7ce",
       "originalBlob": null
     },
     {
@@ -78,6 +78,13 @@
       "bytes": 18377,
       "sha256": "6c32e7c88612e81b76d8308f2f5500f83c5578baa1bc4cb45290c923fe1c8d3f",
       "gitBlob": "b881366f5523d5cdb1f19b87ecc86eb5fc87320b",
+      "originalBlob": null
+    },
+    {
+      "path": "src/lib/clubManagerLoanSettlement.ts",
+      "bytes": 3890,
+      "sha256": "10661dc8f042888158943adb99f82e19ce0e5a8de097f23759cf6178bf0bda35",
+      "gitBlob": "bc242dbc8b660fd43e370845201be6913ddaa3fe",
       "originalBlob": null
     }
   ],

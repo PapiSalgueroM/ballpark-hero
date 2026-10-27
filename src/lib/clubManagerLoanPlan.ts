@@ -1,4 +1,9 @@
 import {
+  available, makeLoanPlanContext, fact, playerKey, type LoanPlanSummary,
+  recordLoanPlanRecall as settleRecall, recordLoanPlanSeason as settleSeason,
+} from '@/lib/clubManagerLoanSettlement';
+export type { LoanPlanSummary } from '@/lib/clubManagerLoanSettlement';
+import {
   acceptBid, isPartialClub, loanOutFee, loanOutPlayer, loanOutRefusal, loanPlanHostClubs,
   oppRosterFor, recallLoanedPlayer, sellValue, worldYear,
 } from '@/lib/clubManager';
@@ -6,34 +11,32 @@ import type { CareerState, CMPlayer, LoanOut } from '@/lib/clubManager';
 import { loanOutTermsFor } from '@/lib/clubManagerDeals';
 import { plainCopy } from '@/lib/clubManagerWorldRoster';
 import {
-  appendLoanDevelopmentHistory, closeLoanDevelopment, loanDevelopmentCanRecall, loanDevelopmentMatches, loanDevelopmentOf,
+  appendLoanDevelopmentHistory, loanDevelopmentCanRecall, loanDevelopmentMatches, loanDevelopmentOf,
   quoteLoanDevelopment, reviewLoanDevelopment, startLoanDevelopment,
 } from '@/lib/clubManagerLoanDevelopment';
 import type {
-  LoanDevelopmentContext, LoanDevelopmentHost, LoanDevelopmentLoan, LoanDevelopmentQuote, LoanDevelopmentRecord,
-  LoanDevelopmentSummary,
+  LoanDevelopmentContext, LoanDevelopmentHost, LoanDevelopmentQuote, LoanDevelopmentRecord,
 } from '@/lib/clubManagerLoanDevelopment';
 
 export interface LoanPlanRequest {
   playerId: string; hostClub: string; source: 'standard' | 'bid'; token: string;
 }
 export interface LoanPlanPreview extends LoanPlanRequest { quote: LoanDevelopmentQuote }
-export type LoanPlanSummary = LoanDevelopmentSummary & { ratingStage?: 'annual' | 'return' | 'recall' };
 
-const playerKey = (player: CMPlayer) => player.worldRosterKey ? 'world:' + player.worldRosterKey : 'squad:' + player.id;
-function available(c: CareerState): boolean {
-  return !c.retired && !c.sacked && !c.wilderness && !c.live && !c.pendingSummary && c.week < c.calendar.length;
-}
 function context(c: CareerState, player: CMPlayer): LoanDevelopmentContext {
-  return { eraId: c.eraId ?? 'now', worldYear: worldYear(c), season: c.season, week: c.week,
-    calendarLength: c.calendar.length, clubName: c.clubName, windowOpen: c.transferWindow !== null,
-    canLoan: available(c) && loanOutRefusal(c, player.id) === null, alreadyLoaned: player.loanOutSeason === c.season };
+  return makeLoanPlanContext(c, player, worldYear, loanOutRefusal);
 }
-function fact(c: CareerState, loan: LoanOut): LoanDevelopmentLoan {
-  return { playerKey: playerKey(loan.player), playerName: loan.player.name, parentClub: c.clubName,
-    hostClub: loan.club, season: loan.season, fee: loan.fee, recallFee: loan.recallFee,
-    optionFee: loan.optionFee, rating: loan.player.rating };
+export function recordLoanPlanRecall(before: CareerState, after: CareerState, loan: LoanOut, player: CMPlayer): CareerState {
+  return settleRecall(before, after, loan, player, context);
 }
+export function recordLoanPlanSeason(
+  before: CareerState, after: CareerState,
+  returned: { home: CMPlayer[]; bought: { club: string; player: CMPlayer }[] },
+  agedReturned?: CMPlayer[],
+): CareerState {
+  return settleSeason(before, after, returned, agedReturned, context);
+}
+
 export function loanPlanRecordOf(c: CareerState, loan: LoanOut): LoanDevelopmentRecord | null {
   const record = loan.development;
   return loanDevelopmentMatches(record, context(c, loan.player), fact(c, loan)) ? record : null;
@@ -106,39 +109,6 @@ export function recallPlannedLoanee(c: CareerState, playerId: string, recordId: 
   if (!loan || !record || record.id !== recordId
     || !loanDevelopmentCanRecall(record, context(c, loan.player), fact(c, loan), c.budget, c.squad.length)) return null;
   return recallLoanedPlayer(plainCopy(c), playerId);
-}
-function archive(
-  before: CareerState, after: CareerState, loan: LoanOut,
-  kind: LoanDevelopmentSummary['kind'], player: CMPlayer, ratingStage: LoanPlanSummary['ratingStage'],
-): CareerState {
-  const record = loanDevelopmentOf(loan.development);
-  if (!record) return after;
-  const clock = { ...context(after, loan.player), clubName: before.clubName };
-  const summary = closeLoanDevelopment(record, clock, fact(before, loan), { kind, rating: player.rating });
-  if (!summary) return after;
-  const history = appendLoanDevelopmentHistory(after.loanPlanHistory, { ...summary, ratingStage } as LoanPlanSummary);
-  return history ? { ...after, loanPlanHistory: [...history] as LoanPlanSummary[] } : after;
-}
-export function recordLoanPlanRecall(before: CareerState, after: CareerState, loan: LoanOut, player: CMPlayer): CareerState {
-  return loan.development === undefined ? after : archive(before, after, loan, 'recalled', player, 'recall');
-}
-export function recordLoanPlanSeason(
-  before: CareerState, after: CareerState,
-  returned: { home: CMPlayer[]; bought: { club: string; player: CMPlayer }[] },
-  agedReturned?: CMPlayer[],
-): CareerState {
-  if (!(before.loanedOut ?? []).some(l => l.development !== undefined)) return after;
-  let next = after;
-  for (const loan of before.loanedOut ?? []) {
-    if (!loanDevelopmentOf(loan.development)) continue;
-    const bought = returned.bought.filter(sale => sale.club === loan.club && playerKey(sale.player) === playerKey(loan.player));
-    if (bought.length === 1) { next = archive(before, next, loan, 'bought', bought[0].player, 'return'); continue; }
-    const indices = returned.home.map((p, index) => playerKey(p) === playerKey(loan.player) ? index : -1).filter(index => index >= 0);
-    if (indices.length !== 1) continue;
-    const index = indices[0], settled = agedReturned?.[index] ?? returned.home[index];
-    next = archive(before, next, loan, 'returned', settled, agedReturned?.[index] ? 'annual' : 'return');
-  }
-  return next;
 }
 export function loanPlanHistoryOf(c: CareerState): readonly LoanPlanSummary[] | null {
   const history = c.loanPlanHistory;
