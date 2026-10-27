@@ -1,0 +1,81 @@
+name: Soccer Career programme expectations and full units
+on:
+  push:
+    branches: [codex/soccer-career-loyalty-20261027]
+    paths:
+      - .github/workflows/soccer-career-loyalty-units.yml
+      - src/lib/soccerCareerProgramme.test.ts
+      - src/test/soccerCareerProgrammeUi.test.tsx
+permissions:
+  contents: read
+concurrency:
+  group: soccer-programme-units-${{ github.ref }}
+  cancel-in-progress: false
+jobs:
+  units:
+    runs-on: ubuntu-latest
+    timeout-minutes: 45
+    defaults:
+      run:
+        shell: bash
+    env:
+      CI: '1'
+      SIM_NETWORK: offline
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.sha }}
+          fetch-depth: 0
+          persist-credentials: false
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: npm
+      - name: Retain immutable source and install locked dependencies
+        run: |
+          set -euo pipefail
+          mkdir -p programme-unit-artifacts
+          git rev-parse HEAD > programme-unit-artifacts/source-head.txt
+          git rev-parse HEAD^{tree} > programme-unit-artifacts/source-tree.txt
+          git archive --format=tar HEAD > programme-unit-artifacts/source.tar
+          git ls-files -z | sort -z | xargs -0 sha256sum > programme-unit-artifacts/source-before.sha256
+          npm ci
+      - name: Verify unchanged application and selected expectation sources
+        run: |
+          set -euo pipefail
+          node - <<'NODE' | tee programme-unit-artifacts/source-pins.log
+          const fs = require('node:fs'), crypto = require('node:crypto'), assert = require('node:assert/strict');
+          const hash = bytes => crypto.createHash('sha256').update(bytes).digest('hex');
+          const manifestBytes = fs.readFileSync('qa/soccer-career-loyalty-v2.1/SOURCE-READY.json');
+          assert.equal(hash(manifestBytes), '573c56d21177fa3a2b62a5ff74ef7e5f626f8fae3f2d47b577f1506a0f160bee');
+          const manifest = JSON.parse(manifestBytes); assert.equal(manifest.files.length, 11);
+          for (const row of manifest.files) assert.equal(hash(fs.readFileSync(row.path)), row.sha256, row.path);
+          for (const [path, expected] of [['src/lib/soccerCareerProgramme.test.ts','0aa83c6371c847812662c61551a9e9365f65f6aed174c6333713cff1b9e50cef'],['src/test/soccerCareerProgrammeUi.test.tsx','844de8eefb431ab62123f7db1557df4a7019f0d4d2d0d744d0463716a26b5037']]) assert.equal(hash(fs.readFileSync(path)), expected, path);
+          fs.writeFileSync('programme-unit-artifacts/source-pins.json', JSON.stringify({ product: manifest.files, unchangedProduct: true, testOnlyCorrection: true }, null, 2));
+          console.log('All 11 application pins and both expectation source pins match.');
+          NODE
+      - name: Actual application types
+        run: |
+          set -euo pipefail
+          node node_modules/typescript/bin/tsc --noEmit -p tsconfig.app.json 2>&1 | tee programme-unit-artifacts/types.log
+      - name: Both corrected files with every later assertion
+        run: |
+          set -euo pipefail
+          NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node node_modules/vitest/vitest.mjs run src/lib/soccerCareerProgramme.test.ts src/test/soccerCareerProgrammeUi.test.tsx --maxWorkers=2 --no-file-parallelism --reporter=verbose --reporter=json --outputFile.json=programme-unit-artifacts/focused.json 2>&1 | tee programme-unit-artifacts/focused.log
+      - name: Complete actual application suite
+        run: |
+          set -euo pipefail
+          NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node node_modules/vitest/vitest.mjs run --maxWorkers=2 --no-file-parallelism --reporter=verbose --reporter=json --outputFile.json=programme-unit-artifacts/full.json 2>&1 | tee programme-unit-artifacts/full.log
+      - name: Exact canonical source holds
+        if: always()
+        run: |
+          set -euo pipefail
+          sha256sum -c programme-unit-artifacts/source-before.sha256 > programme-unit-artifacts/source-held.log
+          git diff --exit-code HEAD
+      - name: Retain actual reports and immutable source
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: soccer-programme-units-${{ github.run_id }}-${{ github.run_attempt }}
+          retention-days: 7
+          path: programme-unit-artifacts/
