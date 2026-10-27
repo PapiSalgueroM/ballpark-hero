@@ -1,0 +1,54 @@
+name: Player Bingo additional categories
+on:
+  push:
+    branches: [codex/player-bingo-more-categories-20261026]
+    paths: [.github/workflows/player-bingo-more-categories.yml]
+permissions:
+  contents: read
+concurrency:
+  group: bingo-categories-${{ github.ref }}
+  cancel-in-progress: false
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    timeout-minutes: 40
+    env:
+      CI: '1'
+      SIM_NETWORK: offline
+      PLAYER_BINGO_CATEGORIES_PHASE: baseline
+      PLAYER_BINGO_CATEGORIES_OUT: ${{ github.workspace }}/bingo-category-artifacts
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          persist-credentials: false
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: npm
+      - name: Record source and block production transport
+        run: |
+          mkdir -p "$PLAYER_BINGO_CATEGORIES_OUT"
+          git rev-parse HEAD > "$PLAYER_BINGO_CATEGORIES_OUT/head.txt"
+          git diff --stat b20ec6664df9d4c58d63ea0596791d33b2a3b8fc > "$PLAYER_BINGO_CATEGORIES_OUT/change-stat.txt"
+          echo '127.0.0.1 flawuiqbvjobmkfkauhw.supabase.co' | sudo tee -a /etc/hosts
+          sha256sum package.json package-lock.json bun.lock > "$PLAYER_BINGO_CATEGORIES_OUT/packages.sha256"
+      - name: Install locked packages
+        run: npm ci
+      - name: Application types
+        run: |
+          set -o pipefail
+          NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node_modules/.bin/tsc --noEmit -p tsconfig.app.json 2>&1 | tee "$PLAYER_BINGO_CATEGORIES_OUT/types.log"
+      - name: Category outcomes and effective controls
+        run: |
+          set -o pipefail
+          NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/simPlayerBingoCategories.mjs 2>&1 | tee "$PLAYER_BINGO_CATEGORIES_OUT/categories.log"
+      - name: Preserve package inputs
+        if: always()
+        run: sha256sum -c "$PLAYER_BINGO_CATEGORIES_OUT/packages.sha256"
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: bingo-categories-${{ github.run_id }}
+          path: bingo-category-artifacts/
+          retention-days: 14
