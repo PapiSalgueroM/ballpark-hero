@@ -103,7 +103,6 @@ jobs:
     runs-on: ubuntu-latest
     timeout-minutes: 40
     env:
-      PLAYWRIGHT_BROWSERS_PATH: ${{ runner.temp }}/soccer-loyalty-browsers
       ENGINES: chromium
       SWEEP_OFFLINE: '1'
     steps:
@@ -119,6 +118,8 @@ jobs:
       - name: Retain source and prepare isolated presentation dependencies
         run: |
           set -euo pipefail
+          export PLAYWRIGHT_BROWSERS_PATH="$RUNNER_TEMP/soccer-loyalty-browsers"
+          echo "PLAYWRIGHT_BROWSERS_PATH=$PLAYWRIGHT_BROWSERS_PATH" >> "$GITHUB_ENV"
           mkdir -p loyalty-artifacts/build
           git rev-parse HEAD > loyalty-artifacts/source-head.txt
           git rev-parse HEAD^{tree} > loyalty-artifacts/source-tree.txt
@@ -137,10 +138,10 @@ jobs:
           ln -s "$PWD/node_modules" "$RUNNER_TEMP/soccer-loyalty-build/node_modules"
           echo "BUILD_ROOT=$RUNNER_TEMP/soccer-loyalty-build" >> "$GITHUB_ENV"
           echo "SC_LOYALTY_FONT_MANIFEST=$PWD/loyalty-artifacts/font-cache/manifest.json" >> "$GITHUB_ENV"
-          echo "NODE_OPTIONS=--require=$PWD/scripts/lib/offlineTransport.cjs --require=$PWD/scripts/qa/soccerCareerLoyaltyPresentation.cjs" >> "$GITHUB_ENV"
       - name: Scoped Soccer Career production build
         run: |
           set -euo pipefail
+          export NODE_OPTIONS="--require=$GITHUB_WORKSPACE/scripts/lib/offlineTransport.cjs --require=$GITHUB_WORKSPACE/scripts/qa/soccerCareerLoyaltyPresentation.cjs"
           cd "$BUILD_ROOT"
           PRERENDER_ONLY=/soccer-career npm run build:seo 2>&1 | tee "$GITHUB_WORKSPACE/loyalty-artifacts/build/outcomes.log"
           find dist -type f -print0 | sort -z | xargs -0 sha256sum > "$GITHUB_WORKSPACE/loyalty-artifacts/build/dist-sha256.txt"
@@ -148,6 +149,7 @@ jobs:
       - name: All15 rebuilt-site readers
         run: |
           set -euo pipefail
+          export NODE_OPTIONS="--require=$GITHUB_WORKSPACE/scripts/lib/offlineTransport.cjs --require=$GITHUB_WORKSPACE/scripts/qa/soccerCareerLoyaltyPresentation.cjs"
           cd "$BUILD_ROOT"
           export ONLY=simAdsense,simBrand,simHeadTags,simHiddenPages,simHubs,simIndexNow,simIndexing,simInternalLinks,simNoRivalNames,simPrerender,simPrerenderBoot,simRetiredRoutes,simSchema,simSitemap,simSnapshotAssets
           node scripts/runAllSims.mjs --browser --plan-json > "$GITHUB_WORKSPACE/loyalty-artifacts/build/readers-plan.json"
@@ -156,11 +158,13 @@ jobs:
       - name: Actual mounted new UI at320,390,1280
         run: |
           set -euo pipefail
+          export NODE_OPTIONS="--require=$GITHUB_WORKSPACE/scripts/lib/offlineTransport.cjs --require=$GITHUB_WORKSPACE/scripts/qa/soccerCareerLoyaltyPresentation.cjs"
           cd "$BUILD_ROOT"
           SC_LOYALTY_BROWSER_OUT="$GITHUB_WORKSPACE/loyalty-artifacts/browser" node scripts/qa/soccerCareerLoyaltyBrowser.mjs 2>&1 | tee "$GITHUB_WORKSPACE/loyalty-artifacts/build/browser.log"
       - name: All15 unchanged fatal route caps
         run: |
           set -euo pipefail
+          export NODE_OPTIONS="--require=$GITHUB_WORKSPACE/scripts/lib/offlineTransport.cjs --require=$GITHUB_WORKSPACE/scripts/qa/soccerCareerLoyaltyPresentation.cjs"
           cd "$BUILD_ROOT"
           node scripts/lib/hostLikeServer.mjs dist 4173 > "$GITHUB_WORKSPACE/loyalty-artifacts/build/preview.log" 2>&1 &
           server=$!
