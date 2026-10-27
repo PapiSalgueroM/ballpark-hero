@@ -53,7 +53,12 @@ async function main() {
     fs.writeFileSync(planCopy, source);
     const outfile = path.join(OUT, name + '.cjs');
     const built = await build({ entryPoints: [entry], outfile, bundle: true, platform: 'node', format: 'cjs', jsx: 'automatic',
-      nodePaths: [path.join(ROOT, 'node_modules')], alias: { '@/lib/clubManager': observer, '@': path.join(ROOT, 'src') }, metafile: true, logLevel: 'error' });
+      nodePaths: [path.join(ROOT, 'node_modules')], alias: { '@/lib/clubManager': observer, '@': path.join(ROOT, 'src') }, metafile: true, logLevel: 'error',
+      plugins: [{ name: 'original-relative-engine', setup(bundler) {
+        bundler.onResolve({ filter: /^\.\/clubManager$/ }, args =>
+          path.resolve(args.importer) === path.join(ROOT, 'src/lib/managerJobMarket.ts')
+            ? { path: observer } : undefined);
+      } }] });
     fs.writeFileSync(path.join(OUT, name + '.metafile.json'), JSON.stringify(built.metafile, null, 2));
     row.bundleSha256 = sha(fs.readFileSync(outfile)); oneEngine(Object.keys(built.metafile.inputs), observer, canonical);
     const storage = new Map(); globalThis.localStorage = { getItem: key => storage.get(key) ?? null,

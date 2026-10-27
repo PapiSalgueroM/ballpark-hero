@@ -49,7 +49,7 @@ jobs:
       - name: Original destination pool and real loan authority
         run: |
           set -euo pipefail
-          echo 'e9fa401ea414825edcf4a241ca87b6add3bf4778008574ea6a2fb0ad85a4027b  scripts/qa/cmLoanPlanHostPool.mjs' | sha256sum --check
+          echo '849b2e414fdd69e864ceabc7e02754e3639dc35f71dcd819733f8f24601f2469  scripts/qa/cmLoanPlanHostPool.mjs' | sha256sum --check
           CM_LOAN_HOST_MANIFEST=scripts/qa/cmLoanPlanSource.json CM_LOAN_HOST_OUT="$CM_LOAN_PLAN_ARTIFACTS/hosts" NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/qa/cmLoanPlanHostPool.mjs 2>&1 | tee "$CM_LOAN_PLAN_ARTIFACTS/hosts.log"
       - name: Isolated browser and logo tools
         run: |
