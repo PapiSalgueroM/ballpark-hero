@@ -180,6 +180,24 @@ jobs:
           export NODE_OPTIONS="--require=$GITHUB_WORKSPACE/scripts/lib/offlineTransport.cjs --require=$GITHUB_WORKSPACE/scripts/qa/soccerCareerLoyaltyPresentation.cjs"
           cd "$BUILD_ROOT"
           SC_LOYALTY_BROWSER_OUT="$GITHUB_WORKSPACE/loyalty-artifacts/browser" node scripts/qa/soccerCareerLoyaltyBrowser.mjs 2>&1 | tee "$GITHUB_WORKSPACE/loyalty-artifacts/build/browser.log"
+      - name: Actual copied-page contract review loading
+        run: |
+          set -euo pipefail
+          export NODE_OPTIONS="--require=$GITHUB_WORKSPACE/scripts/lib/offlineTransport.cjs --require=$GITHUB_WORKSPACE/scripts/qa/soccerCareerLoyaltyPresentation.cjs"
+          cd "$BUILD_ROOT"
+          SC_LOYALTY_LOADING_MANIFEST="$BUILD_ROOT/qa/soccer-career-loyalty-v2.1/SOURCE-READY.json" SC_LOYALTY_LOADING_OUT="$GITHUB_WORKSPACE/loyalty-artifacts/review-loading" node scripts/qa/playSoccerLoyaltyLoading.mjs 2>&1 | tee "$GITHUB_WORKSPACE/loyalty-artifacts/build/review-loading.log"
+      - name: Actual copied-page phone cold and cached loading
+        run: |
+          set -euo pipefail
+          export NODE_OPTIONS="--require=$GITHUB_WORKSPACE/scripts/lib/offlineTransport.cjs --require=$GITHUB_WORKSPACE/scripts/qa/soccerCareerLoyaltyPresentation.cjs"
+          cd "$BUILD_ROOT"
+          SC_PHONE_LOADING_MANIFEST="$BUILD_ROOT/qa/soccer-career-loyalty-v2.1/SOURCE-READY.json" SC_PHONE_LOADING_OUT="$GITHUB_WORKSPACE/loyalty-artifacts/phone-loading" node scripts/qa/playSoccerPhoneLoading.mjs 2>&1 | tee "$GITHUB_WORKSPACE/loyalty-artifacts/build/phone-loading.log"
+      - name: Existing real career route utilities and saved-byte regression
+        run: |
+          set -euo pipefail
+          export NODE_OPTIONS="--require=$GITHUB_WORKSPACE/scripts/lib/offlineTransport.cjs --require=$GITHUB_WORKSPACE/scripts/qa/soccerCareerLoyaltyPresentation.cjs"
+          cd "$BUILD_ROOT"
+          FREE_KICK_FONT_CACHE="$GITHUB_WORKSPACE/loyalty-artifacts/font-cache" SHOTS="$GITHUB_WORKSPACE/loyalty-artifacts/utilities" node scripts/playCareerStoryRole.mjs 2>&1 | tee "$GITHUB_WORKSPACE/loyalty-artifacts/build/utilities.log"
       - name: Hold canonical source and cap policy
         if: always()
         run: |

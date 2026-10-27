@@ -56,6 +56,74 @@ async function retainFailure(row, page, label, error) {
   } else row.captureErrors.push('Page was not created');
   flush(false);
 }
+async function settleEntryAnimations(page, label) {
+  const result = await page.evaluate(async () => {
+    const dialog = document.querySelector('[role="dialog"]');
+    if (!dialog) return { status: 'refused', reason: 'No actual dialog mounted', before: null, after: null };
+    const active = () => dialog.getAnimations({ subtree: true }).filter(animation => {
+      const end = animation.effect?.getComputedTiming().endTime;
+      return typeof end === 'number' && Number.isFinite(end) && (animation.playState === 'running' || animation.pending);
+    });
+    const inspect = () => {
+      const rect = dialog.getBoundingClientRect(), style = getComputedStyle(dialog);
+      return {
+        connected: dialog.isConnected,
+        rect: { left: rect.left, right: rect.right, top: rect.top, bottom: rect.bottom, width: rect.width, height: rect.height },
+        transform: style.transform, width: style.width, height: style.height,
+        animationName: style.animationName, animationDuration: style.animationDuration,
+        animations: dialog.getAnimations({ subtree: true }).map(animation => {
+          const timing = animation.effect?.getComputedTiming();
+          return { name: animation.animationName ?? animation.transitionProperty ?? null,
+            playState: animation.playState, pending: animation.pending, currentTime: animation.currentTime,
+            endTime: typeof timing?.endTime === 'number' && Number.isFinite(timing.endTime) ? timing.endTime : String(timing?.endTime),
+            progress: timing?.progress ?? null };
+        }),
+        targets: [...dialog.querySelectorAll('button')].map(element => {
+          const box = element.getBoundingClientRect(), css = getComputedStyle(element);
+          return { label: element.getAttribute('aria-label') || element.textContent,
+            left: box.left, top: box.top, width: box.width, height: box.height,
+            cssWidth: css.width, cssHeight: css.height, transform: css.transform };
+        }),
+        state: typeof window.__LOYALTY_SNAPSHOT__ === 'function' ? window.__LOYALTY_SNAPSHOT__() : null,
+      };
+    };
+    const before = inspect(), started = performance.now();
+    let timedOut = false, timer;
+    const work = async () => {
+      let previous, stableFrames = 0;
+      while (!timedOut) {
+        if (!dialog.isConnected || document.querySelector('[role="dialog"]') !== dialog) throw Error('Actual dialog changed while settling');
+        const animations = active();
+        if (animations.length) {
+          await Promise.all(animations.map(animation => animation.finished.catch(() => undefined)));
+          previous = undefined; stableFrames = 0; continue;
+        }
+        await new Promise(resolve => requestAnimationFrame(resolve));
+        if (active().length) { previous = undefined; stableFrames = 0; continue; }
+        const observed = inspect(), signature = JSON.stringify({ rect: observed.rect, transform: observed.transform, targets: observed.targets });
+        stableFrames = signature === previous ? stableFrames + 1 : 0; previous = signature;
+        if (stableFrames >= 2) return observed;
+      }
+      throw Error('Entry animation deadline elapsed');
+    };
+    try {
+      const after = await Promise.race([work(), new Promise((resolve, reject) => {
+        timer = setTimeout(() => {
+          timedOut = true;
+          const error = Error('Finite entry animations did not settle within2000ms'); error.name = 'TimeoutError'; reject(error);
+        }, 2000);
+      })]);
+      return { status: 'settled', before, after, elapsedMs: performance.now() - started };
+    } catch (error) {
+      return { status: 'rejected', before, after: inspect(), elapsedMs: performance.now() - started,
+        reason: { name: error.name, message: error.message } };
+    } finally { timedOut = true; clearTimeout(timer); }
+  });
+  fs.writeFileSync(path.join(OUT, label + '.entry-animations.json'), JSON.stringify(result, null, 2));
+  assert.equal(result.status, 'settled', label + ': actual finite entry animations completed and geometry stabilized');
+  assert.deepEqual(result.after.state, result.before.state, label + ': entry observation changes no career state');
+  return result;
+}
 async function snapshot(page, label) {
   const loadedFonts = await page.evaluate(async () => {
     await document.fonts.ready;
@@ -66,6 +134,7 @@ async function snapshot(page, label) {
   });
   fs.writeFileSync(path.join(OUT, label + '.fonts.json'), JSON.stringify(loadedFonts, null, 2));
   assert(loadedFonts.every(font => font.count > 0 && font.loaded), label + ': actual declared fonts loaded');
+  const entryAnimations = await settleEntryAnimations(page, label);
   const observation = await page.evaluate(() => {
     const dialog = document.querySelector('[role="dialog"]');
     const box = dialog?.getBoundingClientRect();
@@ -80,7 +149,7 @@ async function snapshot(page, label) {
       bodyScroll: document.querySelector('[data-programme-body]')?.scrollTop,
       text: dialog?.textContent, state: window.__LOYALTY_SNAPSHOT__() };
   });
-  fs.writeFileSync(path.join(OUT, label + '.observation.json'), JSON.stringify({ label, loadedFonts, ...observation }, null, 2));
+  fs.writeFileSync(path.join(OUT, label + '.observation.json'), JSON.stringify({ label, loadedFonts, entryAnimations, ...observation }, null, 2));
   assert(observation.dialog, label + ': actual dialog mounted');
   assert(observation.scrollWidth <= observation.viewport.width + 1, label + ': no horizontal overflow');
   assert(observation.dialog.left >= -1 && observation.dialog.right <= observation.viewport.width + 1);
@@ -89,7 +158,7 @@ async function snapshot(page, label) {
   assert(observation.targets.every(target => target.width >= 43.5 && target.height >= 43.5), label + ':44px targets');
   const image = label + '.png';
   await page.screenshot({ path: path.join(OUT, image), fullPage: false });
-  return { label, image, loadedFonts, ...observation };
+  return { label, image, loadedFonts, entryAnimations, ...observation };
 }
 async function plans(page, select) {
   await page.locator('[data-open-plans]').click();
