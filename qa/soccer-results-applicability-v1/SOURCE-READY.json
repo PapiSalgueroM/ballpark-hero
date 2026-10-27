@@ -1,0 +1,112 @@
+{
+  "status": "SOURCE READY FOR ROOT REVIEW; runtime UNRUN",
+  "sourceRef": "b20ec6664df9d4c58d63ea0596791d33b2a3b8fc",
+  "scope": "QA only; no app or historical proof changes",
+  "historicalBase": "afd8f6863681507693a3af34b6038e049dfcd419",
+  "historicalEngineBlob": "185e25df98b8299ebc1132facf1998908e9198bd",
+  "currentMainIEngineBlob": "1ecd36c893395485a93d91cb1905ff78c83c7741",
+  "selected": [
+    {
+      "path": "candidate/scripts/qa/soccerResultsApplicability.mjs",
+      "bytes": 2488,
+      "sha256": "a899afb7a6827b84511fc10c34b5015b9a1e60ae2d4826b93477ae56dd53889b",
+      "gitBlob": "6b35e4a1b3354b9f2aba8063f464be1fe25791b5"
+    },
+    {
+      "path": "candidate/.github/workflows/soccer-results-layout.yml",
+      "bytes": 5972,
+      "sha256": "2cd81552f961627f252ed7f4a02bef1b3f24ec36e59b8d5e94a7f4d76bed93c5",
+      "gitBlob": "3a3366e2ad7e6564e71e585e13fdb6c3767feb6c"
+    }
+  ],
+  "immutableOriginals": [
+    {
+      "path": "original/.github/workflows/soccer-results-layout.yml",
+      "bytes": 5356,
+      "sha256": "58c67b8c4163c023ed6d7564d726d94ffa202e79320be0a0872d8ccf8773438e",
+      "gitBlob": "2b5a5046f2b6af7d7c6ed369509605cccd47c5dd"
+    },
+    {
+      "path": "original/scripts/playSoccerResultsLayout.mjs",
+      "bytes": 33898,
+      "sha256": "cea8956a089bd7114f9c326bb91c037437becb074284a982b8de288ba59d08b9",
+      "gitBlob": "a72482698dc53f744ed21a1962752071389e5b68"
+    },
+    {
+      "path": "original/scripts/qa/soccerResultsLayout.mjs",
+      "bytes": 11342,
+      "sha256": "d5612876ab6bc2d1e912b7751ae6212bcbdca787cbd060c5bcfa3f949a151c6c",
+      "gitBlob": "47824c7a6cc12d988087f47acf0c62eca652d87b"
+    }
+  ],
+  "qualificationOnly": [
+    {
+      "path": "QUALIFICATION.md",
+      "bytes": 3997,
+      "sha256": "1c2ed8efe35a62f8fc0f29c3de6bc2162dafb707d5565b7d04106aeb5b937468",
+      "gitBlob": "0bc397d11732b7fdb7a758676d89382f976bad5e"
+    },
+    {
+      "path": "qualify.sh",
+      "bytes": 4874,
+      "sha256": "e57533f74e2bc3268b67b2e63a29184df3c3bbc5766dc1e97a4dfb60239d4c48",
+      "gitBlob": "47c21928571a3c48e9b32e6a897761fb227f89ee"
+    },
+    {
+      "path": "EXACT-EDITS.json",
+      "bytes": 1225,
+      "sha256": "14421d96cbec6e8837197012b630904bc42b990b4c097d5fa63ea640564faf0f",
+      "gitBlob": "31b7d60fb8965735ad5d08adf597c3aaca8b2743"
+    }
+  ],
+  "workflowExactSpans": 3,
+  "workflowEffects": [
+    "Add standalone preflight path to PR trigger",
+    "Invoke after Node setup and before Python/npm/browser/build; save source identities and JSON/log",
+    "Recorded-facts !cancelled step also requires applicability success; other runtime steps already default-success/build-success gated"
+  ],
+  "held": [
+    "Existing BASE declaration and full helper bytes",
+    "Full late browser script including engine equality assertion",
+    "Every app/data/dependency/control source and all existing layout assertions",
+    "Full-history checkout, both evidence uploads, and source hold"
+  ],
+  "standalone": {
+    "baseDuplication": "Exact historical literal intentionally duplicated, no app/esbuild import or JavaScript source parsing",
+    "exitCodes": {
+      "match": 0,
+      "mismatch": 1,
+      "infrastructure": 2
+    },
+    "identityOutput": "Expected/current commit, tree, HEAD/worktree blobs, raw and normalized SHA256/byte count",
+    "comparison": "Exact existing UTF8 + trim/CRLF normalization",
+    "imports": "Node standard libraries only"
+  },
+  "remotePlan": {
+    "holds": "Canonical file SHA checks plus tracked src/scripts/workflow/package Git diff after all cases",
+    "physicalCopies": "Original, normalized and changed actual BASE engine bodies retained in output",
+    "prerequisites": [
+      "Clean full-history remote checkout",
+      "Node24 available",
+      "No node_modules/dependency install"
+    ],
+    "expectedCases": [
+      "current: mismatch/1, marker absent",
+      "BASE: match/0, marker present",
+      "physical CRLF plus outer whitespace: raw changed, normalized match/0, marker present",
+      "physical appended void token: normalized changed, mismatch/1, marker absent",
+      "same-copy exact restoration: full comparison equals original BASE row, marker present",
+      "missing root: error/2, marker absent"
+    ],
+    "command": "bash <staged qualification-only path>/qualify.sh",
+    "runtime": "UNRUN"
+  },
+  "limits": [
+    "No local Node/Git/app/test/browser execution or CI/ref/source mutation",
+    "No app, layout, historical fixture or whole-repository qualification",
+    "Marker proves only the shell boundary immediately after the preflight; actual workflow skipped-step metadata remains required for the full stopping claim",
+    "Current workflow is expected to remain red when its historical engine is inapplicable",
+    "No missing-script or infrastructure error counts as the intended red",
+    "draft-source-read-v1 is preserved unselected; do not stage it"
+  ]
+}
