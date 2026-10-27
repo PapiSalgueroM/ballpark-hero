@@ -56,6 +56,15 @@ async function openPlan() {
   fireEvent.click(screen.getByRole('button', { name: /^Sell/ }));
   fireEvent.click(await screen.findByRole('button', { name: /^Loan plan/ }));
 }
+/** waitAWeek is the unemployment action. This drives the actual club calendar and its report. */
+async function advanceCalendarEntry() {
+  const before = api.career!.week;
+  await act(async () => { api.quickPlay(); });
+  await waitFor(() => expect(api.career!.week).toBeGreaterThan(before));
+  if (api.phase === 'matchResult') act(() => api.continueFromReport());
+  await waitFor(() => expect(api.phase).toBe('hub'));
+  expect(api.career!.wilderness).toBeFalsy();
+}
 function selectStandard(playerId: string, hostClub = 'Ajax') {
   fireEvent.change(screen.getByLabelText('Loan plan player'), { target: { value: playerId } });
   fireEvent.change(screen.getByLabelText('Loan plan host'), { target: { value: hostClub } });
@@ -167,7 +176,7 @@ describe('Loan plan through the actual transfer screen and saved hook', () => {
     await openPlan(); selectStandard(p.id); confirm();
     await waitFor(() => expect(planOf(api.career!)).toBeTruthy());
     const rating = api.career!.loanedOut![0].player.rating;
-    act(() => api.waitAWeek());
+    await advanceCalendarEntry();
     await waitFor(() => expect(api.career!.week).toBeGreaterThan(0));
     fireEvent.click(screen.getByRole('button', { name: 'Review loan plan' }));
     await waitFor(() => expect(planOf(api.career!)!.review).toBeTruthy());
@@ -220,8 +229,9 @@ describe('Loan plan through the actual transfer screen and saved hook', () => {
     const element = screen.getByTestId('loan-plan-preview');
     const request: Request = { playerId: element.getAttribute('data-player')!, hostClub: element.getAttribute('data-host')!,
       source: element.getAttribute('data-source') as Request['source'], token: element.getAttribute('data-token')! };
-    const week = api.career!.week; act(() => api.waitAWeek());
+    const week = api.career!.week; await advanceCalendarEntry();
     await waitFor(() => expect(api.career!.week).toBeGreaterThan(week));
+    expect(api.career!.transferWindow).not.toBeNull();
     const before = JSON.stringify(api.career), disk = localStorage.getItem(SAVE_KEY);
     act(() => expect(api.agreeLoanPlan!(request)).toBe(false));
     expect(JSON.stringify(api.career)).toBe(before); expect(localStorage.getItem(SAVE_KEY)).toBe(disk);
@@ -234,7 +244,7 @@ describe('Loan plan through the actual transfer screen and saved hook', () => {
     const element = screen.getByTestId('loan-plan-preview');
     const request: Request = { playerId: element.getAttribute('data-player')!, hostClub: element.getAttribute('data-host')!,
       source: element.getAttribute('data-source') as Request['source'], token: element.getAttribute('data-token')! };
-    act(() => api.waitAWeek());
+    await advanceCalendarEntry();
     await waitFor(() => expect(api.career!.transferWindow).toBeNull());
     expect(screen.getByRole('button', { name: 'Confirm loan plan' })).toBeDisabled();
     const before = JSON.stringify(api.career), disk = localStorage.getItem(SAVE_KEY);

@@ -1,5 +1,5 @@
 name: Loan plan early application gate
-# V4 explicitly narrows known roster observations under the application type settings.
+# V5 tests advance the club calendar through actual quick play and report continuation.
 on:
   push:
     branches: [codex/cm-loan-plan-20261027]
