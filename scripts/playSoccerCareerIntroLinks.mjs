@@ -153,16 +153,28 @@ try {
     }
   }
   for (const target of contract.targets) {
-    const row = { href: target.href, blocked: [], emptyBackendFixtures: [] }, context = await contextFor({ width: 390, height: 844 }, row);
+    const row = { href: target.href, blocked: [], emptyBackendFixtures: [], errors: [] }, context = await contextFor({ width: 390, height: 844 }, row);
+    report.destinations.push(row); const page = await context.newPage();
+    page.on('pageerror', error => row.errors.push(String(error)));
     try {
-      const page = await context.newPage(); await page.goto(BASE + '/soccer-career', { waitUntil: 'domcontentloaded' }); await answerConsent(page);
+      await page.goto(BASE + '/soccer-career', { waitUntil: 'domcontentloaded' }); await answerConsent(page);
       const intro = page.locator('section[data-seo-content="ready"] article > div').first(); await intro.waitFor();
       await intro.locator('a[href="' + target.href + '"]').click(); await page.waitForURL(BASE + target.href);
+      row.afterClick = { url: page.url(), headings: await page.locator('h1,h2').allTextContents() }; save();
+      await page.waitForFunction(text => [...document.querySelectorAll('h1,h2')]
+        .some(heading => heading.textContent.toLowerCase().includes(text.toLowerCase())), target.text);
       await page.locator('section[data-seo-content="ready"] article').waitFor();
-      row.headings = await page.locator('h1,h2').allTextContents();
+      row.url = page.url(); row.headings = await page.locator('h1,h2').allTextContents();
       assert(row.headings.some(text => text.toLowerCase().includes(target.text.toLowerCase())), 'Real destination heading matches the linked game');
-      assert.deepEqual(row.blocked, []); row.passed = true; report.destinations.push(row);
-    } finally { await context.close(); }
+      assert.deepEqual(row.blocked, []); row.passed = true;
+    } catch (error) {
+      row.error = String(error.stack || error); row.url = page.url();
+      row.headings = await page.locator('h1,h2').allTextContents().catch(() => []);
+      const name = 'destination-' + target.href.slice(1);
+      await page.screenshot({ path: path.join(folder, name + '-failure.png'), fullPage: true }).catch(() => {});
+      await page.content().then(html => fs.writeFileSync(path.join(folder, name + '-failure.html'), html)).catch(() => {});
+      throw error;
+    } finally { await context.close(); save(); }
   }
   assert.equal(report.cases.length, 12); assert(report.cases.every(row => row.passed), 'Every raw/client route and viewport passes');
   assert.equal(report.controls.length, 7); assert.equal(report.destinations.length, 2);
