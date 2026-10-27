@@ -425,7 +425,7 @@ const PlayerBingo = () => {
                     style={shakeId === cell.id ? { animation: 'pb-shake 0.4s' } : undefined}
                   >
                     <span className="text-base md:text-lg leading-none mb-1"><FlagFromEmoji emoji={cell.icon} size={18} /></span>
-                    <span className="text-[9px] md:text-[10px] font-semibold leading-tight text-foreground">
+                    <span className="w-full min-w-0 break-words text-[9px] md:text-[10px] font-semibold leading-tight text-foreground">
                       {cell.label}
                     </span>
                     {lockedBy && (
