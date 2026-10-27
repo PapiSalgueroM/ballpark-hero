@@ -19216,3 +19216,64 @@ The two initial fixture failures39940913787 and39943246891 remain separate from 
 Evidence packet: C:/Users/antho/dukb-handoff/2026-10-23/search-navigation. Root qualification c565e4bb892d6f5392e942e329af0b1661faba1e626bddb051ab76276d2e88b5; Root pixels743d12524f3b65bf0752151b2cfdbb7c3866377866360b6f66c60a4875cfdb26; independent integrated audit4e7ff7ad3b766d00b3f7f5ac280ed0b9d67fd91e8a27416cd182579a76da9dac. The normal saved-picks archive is also retained as2ca41f45c885f8066326880fe73480b83b0ee3ae7a3c4b08503c94fc74fa3e98.
 
 I retains sole publication. Root did not publish this Search correction and makes no new live-site claim. Analytics remains paused. No local application execution, cleanup, old checkout reset, data/provider/account change or protected game adoption occurred. Primary WORKBOARD and the continuation checkpoint receive only this exact note through the reviewed exclusive-lock append helper, with actual full-prefix backups/readback and both protected indexes checked before and finally. Earlier preservation gaps remain unwaived.
+
+
+## 2026-10-26 NBA season twenty saved board checks, candidate
+
+A detached test-only candidate extends src/test/usCareerMarketBoard.test.tsx from ten cases to sixteen. The original ten-case source stays exact. The six new cases use the real board and NBA binding with fictional twenty-row saved states, not twenty actual sequential seasons.
+
+The cases cover expired deals, final-year extension offers, a legitimate null offer and its Play the year out action, continuation with two years remaining, exact market reload and an already retired save. They distinguish the existing twenty-one-season retirement limit from age and rating triggers. They do not establish a universal no-offer bug or change retirement rules.
+
+Remote qualification is pending at preparation. The plan is the actual app type gate, all sixteen cases, six focused healthy/fault/restored source-control triplets and four copied-report classifier controls. It preserves the original offline guard, canonical product sources and locked dependencies. The PR and retained CI receipt record the actual outcome; this note does not preclaim a pass.
+
+No game engine, save format, product behavior, sports data, provider or dependency changes are included. This is not a live or full-suite qualification. Owner I retains protected product and save integration, main merge and publication. The user's affected save and exact reported failure remain unreproduced.
+
+
+## 2026-10-26 NBA season twenty fixture typing correction
+
+This is a detached testing-only follow-up. The first ordinary push run, 40361968441 attempt 1, stopped at the app TypeScript gate with TS2339: the retired-save fixture assigned a `retirement` property that is not part of `NbaCareerState`. That run remains refused. No board case or source control executed.
+
+The correction removes that unsupported assignment and keeps `retired = true`, the saved retired phase, all 16 test titles and every assertion. Product and save-engine files stay unchanged. The existing ten board cases, six late-career cases, six focused source-control triplets, four copied-report controls and missing-link control still need actual remote qualification on this source commit. The selected native child limit remains 240 seconds.
+
+Validation is pending at preparation. This source note grants no product fix, full-suite, live, main or publication credit. Owner I retains protected career and save integration.
+
+## 2026-10-26 NBA season twenty saved-board checks qualified, report remains open
+
+Ordinary push run 40367454610/a1 on d1b63d31b546f3bd21d8eebb0dc2ef03f67d4177 (tree 60e203d033a0bd1b56d5c7cdeb4f6d921f68efaa) is scoped QUALIFIED. The real app type check exited 0. All sixteen frozen saved-board cases passed: ten original cases plus six NBA late-career cases. Six physical shadow-source triplets each produced native 0/1/0 with the intended owned AssertionError, fifteen other cases filtered per invocation, exact full source inverses and finally restores.
+
+Four physical single-field copied-report controls and one missing shadow node_modules link diagnostic each produced effective in-process 0/1/0 and exact restoration. They add no native processes. Twenty supervised commands and three outer guarded cohorts have exact actual PIDs, raw streams and twenty-three present empty transport receipts. Locked install was separately recorded. All 5,379 tracked source bodies, both retained source TARs, twenty-six critical sources, generated helper/payload and 24,466 remote dependency hashes/members/links held, with zero exceptions. Installed dependency bodies were not archived for local physical rehash.
+
+Final audit: remote-nba-season20-qualification-40367454610-a1/FINAL-QUALIFIED-ADMISSION.json, 9,227 bytes, SHA256 91b63265f5d38c3f6a9b5cbd2f29424a123d10fc115b6067a1add021607a3b1f. Prior run 40361968441/a1 stays REFUSED at TSC2 with zero cases run.
+
+These are fictional saved-state checks, not twenty sequential played seasons or reproduction of the reported user save. No product fix, browser, build, full-suite, main or live-publication claim is made. The separate conditional ExtensionCard copy remains source only and owed I integration/current-target verification. The NBA report remains OPEN.
+
+### NBA fresh careers and extension copy, detached QA pending
+
+PR402 qualified real app types and 16 saved-board cases on d1b63d31. Its result head b1e39a6c adds only the outcome note. Those cases use constructed saved careers, so they do not establish that a fresh player reaches season twenty.
+
+This separate QA branch adds one real-board diagnostic using eight fixed seeds. Each career starts empty, follows enabled game controls and records actual saved history, actions and random draws. Baseline and candidate each run app types, the unchanged 16 cases and this diagnostic. Five physical copied-data controls per arm check the diagnostic's outcome guards. There are no new copy tests or repeated old engine fault trips.
+
+The candidate changes only two ExtensionCard render spans in a detached full-source copy. It explains the null offer and makes free agency conditional on the career continuing. Canonical product code, saves, contracts, retirement and all other game logic stay held. Both arms must retain the same actual state, actions and random traces, with only the reviewed displayed copy allowed to differ.
+
+Qualification is pending at preparation. A legal early retirement or NOT_REACHED outcome is recorded honestly. Neither proves this report fixed or refuted. The reporter's save is unavailable. This round does not qualify a build, browser layout, full suite, product integration or live release. Protected game integration remains with its owner.
+
+
+### NBA fresh-career QA, opt-in follow-up pending
+
+Focused run 40449653194 tested d21a41e5 on the PR402 result base. All six commands passed: app types, the unchanged 16 saved-board cases and the real eight-seed progression diagnostic on each arm. The complete 2,486-action comparison held saved careers, history, selected buttons and random traces. All five physical copied-data controls passed per arm.
+
+Both arms ended with 18, 19, 18, 19, 17, 19, 20 and 19 actual season rows. Seed 6 reached twenty, then retired at age 39 with OVR 64 and no contract years left. Its active nineteen-row and retired twenty-row reloads held. Opening-null and offered extension screens were observed; withdrawn feedback remains untested. Only the reviewed displayed ExtensionCard copy differed.
+
+This follow-up makes the diagnostic opt-in, so ordinary Vitest discovery does not require its evidence output setting. Its configured run must still execute the one case with zero skips. The guard-only successor is pending qualification at preparation. The earlier focused evidence stays intact.
+
+The copy remains a detached shadow overlay. No gameplay, save, retirement or contract code is adopted. The reporter's save is unavailable, and this does not claim the reported bug fixed or refuted, a full suite, build, browser check or live release.
+
+
+### NBA fresh-career focused QA outcome
+
+Successor run 40451712991/a1 qualified source 17867703bc584cae9e2d8a2e51cef1f674fe5b4e. Both arms passed real app types, the unchanged 16 saved-board cases and the configured v3 diagnostic. The diagnostic actually executed once per arm with zero skipped or pending cases.
+
+Each arm retained 149 genuine season rows and 1,243 actions across eight fresh careers. The paired saved states, actions and random traces matched. The same seed reached twenty and retired at OVR 64; its nineteen-row and retired twenty-row reloads held. All five physical copied-data controls passed per arm, with canonical source and dependency holds intact.
+
+The opt-in guard's behavior without its output setting is source-reviewed, not a full-suite runtime result. Copy v4 remains in the detached source copy, and withdrawn feedback remains untested. No gameplay or save fix, reporter-save reproduction or refutation, build, browser, full-suite or live release claim is made. The final outcome commit changes only this document.
+

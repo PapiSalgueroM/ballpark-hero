@@ -1,0 +1,156 @@
+name: NBA fresh career progression and extension copy
+on:
+  push:
+    branches: [codex/nba-career-progression-20261027]
+permissions:
+  contents: read
+concurrency:
+  group: nba-fresh-career-${{ github.ref }}
+  cancel-in-progress: false
+jobs:
+  progression:
+    runs-on: ubuntu-latest
+    timeout-minutes: 60
+    env:
+      CI: true
+      SIM_NETWORK: offline
+      EXPECTED_PARENT: d21a41e5f9c4fe1ff5bff3f234a21429177cd943
+    defaults:
+      run:
+        shell: bash
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          persist-credentials: false
+          ref: ${{ github.sha }}
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: npm
+      - name: Bind four QA paths and hold existing product bodies
+        id: foundation
+        timeout-minutes: 5
+        run: |
+          set -euo pipefail
+          out="$RUNNER_TEMP/nba-fresh-career-evidence"
+          shadow="$RUNNER_TEMP/nba-fresh-career-candidate"
+          test ! -e "$out";test ! -L "$out";test ! -e "$shadow";test ! -L "$shadow"
+          mkdir "$out"
+          export NBA_PROGRESSION_OUT="$out" NBA_PROGRESSION_SHADOW="$shadow"
+          echo "NBA_PROGRESSION_OUT=$out" >> "$GITHUB_ENV"
+          echo "NBA_PROGRESSION_SHADOW=$shadow" >> "$GITHUB_ENV"
+          for name in SIM_SEED BYXI_CONTROL BYXI_SEED BYXI_PRINT_DIGEST NODE_OPTIONS NODE_PATH VITEST ONLY BROWSER TYCOON_AWAY_CONTROL COMPLETION_HOOK OWNED_TIMEOUTS_HOOK CONQUEST_NBA_HOOK CONQUEST_NBA_BOARD POLL_FIXTURES US_BOARD_CONTROL_ALIAS US_BOARD_CONTROL_FILE DAILY_RECORD_CONTROL TYCOON_ROOMS_PAGE TYCOON_LOADS_STADIUM_HOOK TYCOON_LOADS_ACADEMY_HOOK TYCOON_LOADS_STADIUM_LIB TYCOON_LOADS_ACADEMY_LIB TYCOON_PITCH_COMPONENT TYCOON_PACKS_REWARDS TYCOON_PACKS_PANEL NO_DOUBLE_SWAP NBA_SEASON20_PROGRESSION_OUT;do test ! -v "$name";done
+          test "$GITHUB_REPOSITORY" = PapiSalgueroM/ballpark-hero
+          test "$GITHUB_REPOSITORY_ID" = 1195729679
+          test "$GITHUB_REF" = refs/heads/codex/nba-career-progression-20261027
+          test "$(git rev-parse HEAD)" = "$GITHUB_SHA"
+          test "$(git show -s --format=%P HEAD)" = "$EXPECTED_PARENT"
+          test "$(git rev-parse "$EXPECTED_PARENT^{tree}")" = 079088a31dd834fba1df086317b49fc945d35e3b
+          git diff --name-status "$EXPECTED_PARENT" HEAD > "$out/direct-paths.txt"
+          printf 'M\t.github/workflows/nba-career-progression.yml\nM\tdocs/PROJECT-STATE.md\nM\tscripts/qa/nbaCareerProgression.cjs\nM\tsrc/test/nbaSeason20BoardProgression.test.tsx\n' | cmp - "$out/direct-paths.txt"
+          git diff --exit-code "$EXPECTED_PARENT" HEAD -- . ':!.github/workflows/nba-career-progression.yml' ':!docs/PROJECT-STATE.md' ':!scripts/qa/nbaCareerProgression.cjs' ':!src/test/nbaSeason20BoardProgression.test.tsx' > "$out/all-other-parent-source-held.log"
+          git ls-tree -r --name-only "$EXPECTED_PARENT" > "$out/parent-members.txt"
+          test "$(wc -l < "$out/parent-members.txt")" -eq 5382
+          test "$(git rev-parse "$EXPECTED_PARENT:.github/workflows/nba-career-progression.yml")" = fd39d1f2350eee51c162155774e095e8c218fb2d
+          test "$(git rev-parse "$EXPECTED_PARENT:scripts/qa/nbaCareerProgression.cjs")" = 0c18ae11ed927ee741555637273ac6c856e3988e
+          test "$(git rev-parse "$EXPECTED_PARENT:src/test/nbaSeason20BoardProgression.test.tsx")" = 863f3c21365e33d9d9e3ab34b97fc3e49bf64cd6
+          git rev-parse HEAD > "$out/head.txt";git rev-parse 'HEAD^{tree}' > "$out/tree.txt"
+          git ls-files -z | sort -z > "$out/source-members.before"
+          test "$(tr -cd '\000' < "$out/source-members.before" | wc -c)" -eq 5382
+          xargs -0 sha256sum < "$out/source-members.before" > "$out/source.sha256"
+          git status --porcelain --untracked-files=all > "$out/status-before.txt";test ! -s "$out/status-before.txt"
+          git diff --exit-code HEAD > "$out/source-clean-before.log"
+          git archive --format=tar HEAD > "$out/source.tar"
+          printf '155e39d027449871cae9b8bddce37df44231662dcfb1982ed2556c4610e4a2fb  scripts/qa/nbaCareerProgression.cjs\n5848a3864b81178e4235f35bb73c7eb32090f374b8554e62ceb594b4cb627348  src/test/nbaSeason20BoardProgression.test.tsx\ne60ff1534307e449ccef598e3b7470dcba58681b82cea4005cec7319f14f9221  scripts/lib/offlineTransport.cjs\n' > "$out/selected.sha256"
+          sha256sum -c "$out/selected.sha256" > "$out/selected-before.log"
+          : > "$out/foundation.transport";status=0
+          NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" SIM_OFFLINE_RECEIPT="$out/foundation.transport" node scripts/qa/nbaCareerProgression.cjs source > "$out/foundation.stdout" 2> "$out/foundation.stderr" &
+          pid=$!;printf '%s\n' "$pid" > "$out/foundation.pid";wait "$pid" || status=$?
+          printf '%s\n' "$status" > "$out/foundation.exit";test "$status" -eq 0;test ! -s "$out/foundation.transport"
+      - name: Install exact locked packages
+        id: install
+        timeout-minutes: 20
+        run: |
+          set -euo pipefail
+          out="$NBA_PROGRESSION_OUT";status=0
+          npm ci > "$out/npm-ci.stdout" 2> "$out/npm-ci.stderr" &
+          pid=$!;printf '%s\n' "$pid" > "$out/npm-ci.pid";wait "$pid" || status=$?
+          printf '%s\n' "$status" > "$out/npm-ci.exit";test "$status" -eq 0
+          find node_modules -type f -print0 | sort -z > "$out/dependency-members.before"
+          test "$(tr -cd '\000' < "$out/dependency-members.before" | wc -c)" -eq 24466
+          xargs -0 sha256sum < "$out/dependency-members.before" > "$out/dependencies.sha256"
+          find node_modules -type l -printf '%p\t%l\0' | sort -z > "$out/dependency-links.before"
+          find node_modules ! -type d ! -type f ! -type l -print > "$out/dependency-nonregular.before"
+          test ! -s "$out/dependency-nonregular.before"
+      - name: Six positive baseline and candidate commands
+        id: checks
+        timeout-minutes: 30
+        run: |
+          set -euo pipefail
+          out="$NBA_PROGRESSION_OUT"
+          sha256sum -c "$out/selected.sha256" > "$out/selected-pre-consumer.log"
+          : > "$out/orchestrator.transport";status=0
+          NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" SIM_OFFLINE_RECEIPT="$out/orchestrator.transport" node scripts/qa/nbaCareerProgression.cjs checks > "$out/orchestrator.stdout" 2> "$out/orchestrator.stderr" &
+          pid=$!;printf '%s\n' "$pid" > "$out/orchestrator.pid";wait "$pid" || status=$?
+          printf '%s\n' "$status" > "$out/orchestrator.exit";test "$status" -eq 0;test ! -s "$out/orchestrator.transport"
+      - name: Hold original source dependencies and copied candidate
+        id: holds
+        if: ${{ always() && steps.foundation.outcome != 'skipped' }}
+        timeout-minutes: 5
+        run: |
+          set -euo pipefail
+          set +e
+          out="$NBA_PROGRESSION_OUT";failed=0
+          for name in source dependencies selected;do
+            if test -f "$out/$name.sha256" && test ! -L "$out/$name.sha256";then sha256sum -c "$out/$name.sha256" > "$out/$name-hold.log" 2>&1 || failed=1;else printf 'Missing required manifest\n' > "$out/$name-hold.log";failed=1;fi
+          done
+          git ls-files -z | sort -z > "$out/source-members.after"
+          cmp "$out/source-members.before" "$out/source-members.after" > "$out/source-members-hold.log" 2>&1 || failed=1
+          xargs -0 sha256sum < "$out/source-members.after" > "$out/source-after.sha256"
+          tar --null -T "$out/source-members.after" -cf "$out/source-after.tar" || failed=1
+          git diff --exit-code HEAD > "$out/source-dirty-after.log" 2>&1 || failed=1
+          git status --porcelain --untracked-files=all > "$out/status-after.txt"
+          test ! -s "$out/status-after.txt" && test ! -s "$out/source-dirty-after.log" || failed=1
+          find node_modules -type f -print0 | sort -z > "$out/dependency-members.after"
+          cmp "$out/dependency-members.before" "$out/dependency-members.after" > "$out/dependency-members-hold.log" 2>&1 || failed=1
+          xargs -0 sha256sum < "$out/dependency-members.after" > "$out/dependencies-after.sha256"
+          find node_modules -type l -printf '%p\t%l\0' | sort -z > "$out/dependency-links.after"
+          cmp "$out/dependency-links.before" "$out/dependency-links.after" > "$out/dependency-links-hold.log" 2>&1 || failed=1
+          find node_modules ! -type d ! -type f ! -type l -print > "$out/dependency-nonregular.after";test ! -s "$out/dependency-nonregular.after" || failed=1
+          shadow="$NBA_PROGRESSION_SHADOW"
+          if test -d "$shadow" && test ! -L "$shadow";then
+            find "$shadow" -type f -print0 | sort -z > "$out/shadow-members.final"
+            xargs -0 -r sha256sum < "$out/shadow-members.final" > "$out/shadow-final.sha256"
+            find "$shadow" -type l -printf '%p\t%l\0' | sort -z > "$out/shadow-links.final"
+            find "$shadow" ! -type d ! -type f ! -type l -print > "$out/shadow-nonregular.final";test ! -s "$out/shadow-nonregular.final" || failed=1
+            mkdir -p "$out/copy-v4/final"
+            cp -- "$shadow/src/components/us-career/ExtensionCard.tsx" "$out/copy-v4/final/ExtensionCard.tsx" || failed=1
+          else printf 'Required shadow missing\n' > "$out/shadow-nonregular.final";failed=1;fi
+          : > "$out/final.transport";status=0
+          NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" SIM_OFFLINE_RECEIPT="$out/final.transport" node scripts/qa/nbaCareerProgression.cjs final > "$out/final.stdout" 2> "$out/final.stderr" &
+          pid=$!;printf '%s\n' "$pid" > "$out/final.pid";wait "$pid" || status=$?
+          printf '%s\n' "$status" > "$out/final.exit";test "$status" -eq 0 || failed=1
+          for name in foundation orchestrator final;do
+            test -f "$out/$name.transport" && test ! -L "$out/$name.transport" && test ! -s "$out/$name.transport" || failed=1
+            test -f "$out/$name.exit" && test ! -L "$out/$name.exit" && test "$(cat "$out/$name.exit")" = 0 || failed=1
+          done
+          test "$(cat "$out/npm-ci.exit")" = 0 || failed=1
+          sha256sum -c "$out/selected.sha256" > "$out/selected-final-hold.log" 2>&1 || failed=1
+          printf '%s\n' "$failed" > "$out/final-holds.exit";exit "$failed"
+      - name: Seal original and partial evidence
+        if: ${{ always() && steps.foundation.outcome != 'skipped' }}
+        run: |
+          set -euo pipefail
+          out="$NBA_PROGRESSION_OUT";test -d "$out";cd "$out"
+          find . ! -type d ! -type f -print > nonregular.txt
+          test ! -s nonregular.txt
+          find . -type f ! -name evidence.sha256 -print0 | sort -z | xargs -0 sha256sum > evidence.sha256
+      - uses: actions/upload-artifact@v4
+        if: ${{ always() && steps.foundation.outcome != 'skipped' }}
+        with:
+          name: nba-fresh-career-${{ github.run_id }}-a${{ github.run_attempt }}
+          path: ${{ env.NBA_PROGRESSION_OUT }}
+          if-no-files-found: error
+          retention-days: 30
+
