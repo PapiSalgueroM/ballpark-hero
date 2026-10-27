@@ -19246,3 +19246,14 @@ Four physical single-field copied-report controls and one missing shadow node_mo
 Final audit: remote-nba-season20-qualification-40367454610-a1/FINAL-QUALIFIED-ADMISSION.json, 9,227 bytes, SHA256 91b63265f5d38c3f6a9b5cbd2f29424a123d10fc115b6067a1add021607a3b1f. Prior run 40361968441/a1 stays REFUSED at TSC2 with zero cases run.
 
 These are fictional saved-state checks, not twenty sequential played seasons or reproduction of the reported user save. No product fix, browser, build, full-suite, main or live-publication claim is made. The separate conditional ExtensionCard copy remains source only and owed I integration/current-target verification. The NBA report remains OPEN.
+
+### NBA fresh careers and extension copy, detached QA pending
+
+PR402 qualified real app types and 16 saved-board cases on d1b63d31. Its result head b1e39a6c adds only the outcome note. Those cases use constructed saved careers, so they do not establish that a fresh player reaches season twenty.
+
+This separate QA branch adds one real-board diagnostic using eight fixed seeds. Each career starts empty, follows enabled game controls and records actual saved history, actions and random draws. Baseline and candidate each run app types, the unchanged 16 cases and this diagnostic. Five physical copied-data controls per arm check the diagnostic's outcome guards. There are no new copy tests or repeated old engine fault trips.
+
+The candidate changes only two ExtensionCard render spans in a detached full-source copy. It explains the null offer and makes free agency conditional on the career continuing. Canonical product code, saves, contracts, retirement and all other game logic stay held. Both arms must retain the same actual state, actions and random traces, with only the reviewed displayed copy allowed to differ.
+
+Qualification is pending at preparation. A legal early retirement or NOT_REACHED outcome is recorded honestly. Neither proves this report fixed or refuted. The reporter's save is unavailable. This round does not qualify a build, browser layout, full suite, product integration or live release. Protected game integration remains with its owner.
+
