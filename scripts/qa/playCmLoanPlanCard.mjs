@@ -17,7 +17,7 @@ const hash = bytes => createHash('sha256').update(bytes).digest('hex');
 const meta = JSON.parse(fs.readFileSync(path.join(ROOT, 'scripts/qa/cmLoanPlanSource.json'), 'utf8'));
 const held = () => Object.fromEntries(meta.fixed.map(file => [file.path, hash(fs.readFileSync(path.join(ROOT, file.path)))]));
 const report = { coverage: 'Actual LoanPlanCard in an isolated component frame, real loan/recall/calendar adapter and saveCareer. Production CSS/fonts. No full route, TransferScreen, hook phase/slot gates, complete suite or cold-download acceptance.',
-  sourceBefore: held(), profiles: [], controls: [], forwardedExternalRequests: 0 };
+  sourceBefore: held(), profiles: [], controls: [], controlAttempts: [], forwardedExternalRequests: 0 };
 for (const file of meta.fixed) assert.equal(report.sourceBefore[file.path], file.sha256, 'Selected source body');
 const save = () => fs.writeFileSync(path.join(folder, 'report.json'), JSON.stringify(report, null, 2));
 save();
@@ -86,16 +86,27 @@ const ready = new Promise((resolve, reject) => {
   server.stderr.on('data', data => { serverLog += data; });
 });
 async function measure(page) {
-  return page.locator('#loan-plan-root').evaluate(root => ({
-    viewport: innerWidth, scrollWidth: document.documentElement.scrollWidth,
-    controls: [...root.querySelectorAll('button,select')].filter(el => el.getClientRects().length).map(el => {
-      const rect = el.getBoundingClientRect();
-      return { text: el.getAttribute('aria-label') || el.textContent, x: rect.x, right: rect.right, height: rect.height };
-    }),
-  }));
+  const requested = page.viewportSize();
+  assert(requested && requested.width > 0, 'The actual requested Playwright viewport exists');
+  await page.evaluate(() => new Promise(resolve => requestAnimationFrame(() => requestAnimationFrame(resolve))));
+  const measured = await page.locator('#loan-plan-root').evaluate(root => {
+    const frame = root.closest('#loan-plan-frame').getBoundingClientRect();
+    return {
+      viewport: innerWidth, scrollWidth: document.documentElement.scrollWidth,
+      frame: { x: frame.x, right: frame.right, width: frame.width },
+      controls: [...root.querySelectorAll('button,select')].filter(el => el.getClientRects().length).map(el => {
+        const rect = el.getBoundingClientRect();
+        return { text: el.getAttribute('aria-label') || el.textContent, x: rect.x, right: rect.right, height: rect.height };
+      }),
+    };
+  });
+  return { ...measured, requestedViewport: requested.width };
 }
 function geometry(value) {
   assert(value.controls.length > 0, 'Actual card controls are measured');
+  assert(value.viewport <= value.requestedViewport + 1 && value.scrollWidth <= value.requestedViewport + 1
+    && value.frame.x >= -0.75 && value.frame.right <= value.requestedViewport + 0.75,
+    'No horizontal component overflow at the requested viewport');
   assert(value.scrollWidth <= value.viewport + 1, 'No horizontal component overflow');
   assert(value.controls.every(control => control.height >= 43.5 && control.right - control.x >= 43.5), 'Every card control retains a44px touch target');
   assert(value.controls.every(control => control.x >= -0.75 && control.right <= value.viewport + 0.75), 'Every card control fits the viewport');
@@ -169,14 +180,30 @@ try {
           { name: 'touch-width', css: '#loan-plan-root button[aria-label="Loan plan rules"]{min-width:18px!important;width:18px!important;padding-left:0!important;padding-right:0!important}', error: /44px touch target/ },
           { name: 'overflow', css: '#loan-plan-frame{width:calc(100vw + 90px)!important;max-width:none!important}', error: /horizontal component overflow/ },
         ]) {
-          const before = await measure(page); geometry(before);
           const css = Buffer.from(control.css); fs.writeFileSync(path.join(folder, 'control-' + control.name + '.css'), css);
-          const style = await page.addStyleTag({ content: control.css }), changed = await measure(page);
-          assert.notDeepEqual(changed, before, 'Copied visual control physically changes measured geometry');
-          assert.throws(() => geometry(changed), control.error, 'Intended visual failure');
-          await page.screenshot({ path: path.join(folder, 'control-' + control.name + '.png'), fullPage: true });
-          await style.evaluate(el => el.remove()); const restored = await measure(page); geometry(restored);
-          assert.deepEqual(restored, before, 'Exact geometry restored after copied style removal');
+          const before = await measure(page), observation = { name: control.name, cssSha256: hash(css), before };
+          report.controlAttempts.push(observation);
+          const retain = () => {
+            fs.writeFileSync(path.join(folder, 'control-' + control.name + '.geometry.json'), JSON.stringify(observation, null, 2)); save();
+          };
+          retain(); geometry(before);
+          const style = await page.addStyleTag({ content: control.css });
+          let changed, restored;
+          try {
+            changed = await measure(page); observation.changed = changed;
+            observation.appliedCSS = await style.textContent(); retain();
+            assert.equal(observation.appliedCSS, control.css, 'The exact copied physical style is applied');
+            assert.notDeepEqual(changed, before, 'Copied visual control physically changes measured geometry');
+            if (control.name === 'overflow') assert(changed.frame.width > before.frame.width + 1
+              && changed.frame.right > changed.requestedViewport + 1, 'The physical copied frame exceeds the requested viewport');
+            assert.throws(() => geometry(changed), control.error, 'Intended visual failure');
+            await page.screenshot({ path: path.join(folder, 'control-' + control.name + '.png'), fullPage: true });
+          } catch (error) {
+            observation.failure = String(error.stack || error); retain(); throw error;
+          } finally {
+            await style.evaluate(el => el.remove()); restored = await measure(page); observation.restored = restored; retain();
+            geometry(restored); assert.deepEqual(restored, before, 'Exact geometry restored after copied style removal');
+          }
           report.controls.push({ name: control.name, cssSha256: hash(css), classifierStatuses: [0, 1, 0], before, changed, restored }); save();
         }
       }

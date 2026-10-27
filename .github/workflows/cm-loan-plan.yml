@@ -78,10 +78,6 @@ jobs:
             if grep -E '(^|[[:space:]])(SKIP|EMPTY)([[:space:]]|$)' "$CM_LOAN_PLAN_ARTIFACTS/$harness.log"; then failed=1; fi
           done
           exit "$failed"
-      - name: Actual LoanPlanCard component on phones and desktop
-        run: |
-          set -euo pipefail
-          NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/qa/playCmLoanPlanCard.mjs 2>&1 | tee "$CM_LOAN_PLAN_ARTIFACTS/card-browser.log"
       - name: All fifteen unchanged route download limits
         run: |
           set -euo pipefail
@@ -94,6 +90,10 @@ jobs:
           done
           curl -fsS http://127.0.0.1:4173/ > /dev/null
           BASE=http://127.0.0.1:4173 SWEEP_OFFLINE=1 NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/sweepWeight.mjs 2>&1 | tee "$CM_LOAN_PLAN_ARTIFACTS/weights.log"
+      - name: Actual LoanPlanCard component on phones and desktop
+        run: |
+          set -euo pipefail
+          NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/qa/playCmLoanPlanCard.mjs 2>&1 | tee "$CM_LOAN_PLAN_ARTIFACTS/card-browser.log"
       - name: Exact source restoration and holds
         if: always()
         run: |
