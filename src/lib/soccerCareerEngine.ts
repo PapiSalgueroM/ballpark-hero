@@ -2875,13 +2875,13 @@ export function repairCareer<T extends CareerState>(state: T): T {
      This is the only place that runs on load, so it is where they come back. */
   if (s.phase === "season_summary" && !s.pendingSummary) s.phase = "playing";
   reconcileRetirement(s);
+  if (!s.primeType) s.primeType = rollPrimeType();
   if (s.loyaltyContracts !== undefined) {
     const fixed = repairLoyalty(s);
     if (fixed.loyaltyContracts === undefined) delete s.loyaltyContracts;
     else s.loyaltyContracts = fixed.loyaltyContracts;
     if (fixed !== s) s.events = fixed.events;
   }
-  if (!s.primeType) s.primeType = rollPrimeType();
   /* Round 217: saves from before the loan move have neither field. Null is
      the exact old behaviour: no loan running, no offers pending. */
   if (s.loan === undefined) s.loan = null;

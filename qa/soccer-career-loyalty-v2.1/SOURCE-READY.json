@@ -1,6 +1,6 @@
 {
   "schema": 1,
-  "status": "V2.3 PAGE-ONLY PHONE SURFACE LAZY SOURCE SUCCESSOR, RUNTIME UNRUN",
+  "status": "V2.4 ENGINE REPAIR PLACEMENT SOURCE SUCCESSOR, RUNTIME UNRUN",
   "sourceRef": "12c1b2cd001f9309a31a887e5c432ca63c373852",
   "sourceTree": "74358aec6fc334a3507aa202a2a86cad4142f6a7",
   "sourceParent": "c4a7d2efb4d9edac23e7a98901a4f09677adb652",
@@ -31,8 +31,8 @@
     {
       "path": "src/lib/soccerCareerEngine.ts",
       "bytes": 551628,
-      "sha256": "1e028bbd16a0305bd95eb0d16e86c9d4587dc3ade721ff75761797e47f5b9ae4",
-      "gitBlob": "40f28d557c18be92c6cd027f5057c9d457775c80"
+      "sha256": "d7d94a36b796af66914cdf9bd4803cf42b027f423ceb8baac9fb144677de7030",
+      "gitBlob": "8a927bd55b650feb3378b6cf3d4c9d54b1cb6199"
     },
     {
       "path": "src/lib/soccerCareerLoyalty.ts",
@@ -101,7 +101,7 @@
       "originalGitBlob": "1ecd36c893395485a93d91cb1905ff78c83c7741",
       "originalSha256": "d2c4d26eb5ca12646f69e0d07cffab685f1660ff95ea33011ed97f64847bb8b1",
       "candidateBytes": 551628,
-      "candidateSha256": "1e028bbd16a0305bd95eb0d16e86c9d4587dc3ade721ff75761797e47f5b9ae4",
+      "candidateSha256": "d7d94a36b796af66914cdf9bd4803cf42b027f423ceb8baac9fb144677de7030",
       "ownedSpans": 15,
       "wholeInverse": true
     },
@@ -194,7 +194,7 @@
   },
   "receipts": {
     "specSha256": "1860bd26bb6670260a0b957e1d481b27ce326203aeb1110ba3711442fa5b57ec",
-    "overlayReceiptSha256": "697771a8112811430fe7606ae7107523defa85431131ffed9516bb3f03551285",
+    "overlayReceiptSha256": "4eada943e7b2d0f5ac01f231588807fa99d2c97574136cf88a614caee174437a",
     "faultManifestSha256": "a2e17d57772a269c755ccab7c17bd463dca0282a9bc09276b50c94f7cdeb6c55",
     "qualificationSha256": "e434d108a2e38bbbd9a7349f925a32915a282806e71e6953aad7c457b252e200",
     "v2ReceiptSha256": "1a959cd555b081072ed63da07df4444edfaac2f6a7cf592bf5b06f06833353d8"
@@ -215,21 +215,21 @@
     "native320/390/1280 choice/payment/forfeiture/officialreload/focus/scroll outcomes"
   ],
   "notes": "V2-SPEC.md and QUALIFICATION.md carry corrections and exact remote plan. Frozen v1 remains held. No product adoption, runtime qualification or publication.",
-  "successorOf": "../soccer-career-loyalty-v2/SOURCE-READY.json",
+  "successorOf": "../soccer-career-loyalty-v2.3/SOURCE-READY.json",
   "v2ProductDelta": "Only3positioned spans in new pure module; six existing application overlays held exactly.",
   "recordedServicePolicy": "Only appended row.onLoanFrom or row.club. Non-service labels and foreign employers close fixed-term promise with gap, no accrual, payment or deadline extension.",
   "sameClubRevisionPolicy": "Same selected employer requires current matching quote key; refresh or cash recovers; other current employer remains cash eligible.",
   "originalProposal": "../soccer-career-loyalty-v1/SOURCE-READY.json",
   "compatibilityDelta": "TEST-V2-TO-V2.1-DELTA.json only changes new engine tests for ES2020 and old CareerState typing. Product and other10candidate bodies held.",
   "successor": {
-    "previous": "V2.2 preserved",
+    "previous": "V2.3 preserved",
     "changedBodies": [
-      "src/pages/SoccerCareer.tsx"
+      "src/lib/soccerCareerEngine.ts"
     ],
-    "phoneBoundary": "Defaultlazy plus page-local PhoneSurface using existing CentreMountBoundary andSuspense.44px closeable loadingdialog capturesoriginalopener beforeloadingfocus andrestoresonlywholeSurfaceclose.",
-    "held": "PhonePanelbody andallbusinesscallbacks/prop expressions, Review-onlyboundary, all10otherselectedbodies, engines/RNG/formulas/save",
-    "basis": "Actual Review-only40502416040 SC841.1K against840K, onlyroutefailed. New saving UNMEASURED.",
-    "wholeInverse": "Four unique V2.2 spans andcombined8I page spans wholeforward/inverse exact",
-    "qa": "Actual firstheldphonechunk pendingClose andcachedreopen/loadedclose mustreturnoriginalopener, nofocusstealwhilepanelopen; actualunchangedphonehelpers andall15capsrequired."
+    "engineChange": "Move only the existing optional repairLoyalty block below the complete existing primeType default if. Original retirement/prime anchor restored.",
+    "held": "Other10selected bodies and all14other engine Iops; all6overlay files/36span total remain, only one repair op location changes. No old kit,guard,rule or coefficient changes.",
+    "basis": "Actual PR415 four legacy inverse refusals before outcomes, caused by split Round1334 engine-3 anchor.",
+    "scopeLimit": "Missing primeType and events together can change insertion order; no universal typed/raw byte claim. Required corpus will compare actual legacy/no-ledger and opt-in repair values/draws/serialization.",
+    "qa": "Root/Bingo own remote proof plus full existing qualification and application units before any new acceptance."
   }
 }
