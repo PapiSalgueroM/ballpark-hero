@@ -1,22 +1,33 @@
-# Club Manager shootout results
+# Club Manager shootout report qualification, 2026-10-27
 
-Default shootouts previously kept only who won. Named kicks and totals were supplied only when a manager had set a taker order. Newly played default shootouts now provide the recorded total and chronological scored/saved/missed list already shown by the match report and live match viewer.
+Default shootouts now provide the existing match report with the penalty score and every recorded taker's scored, saved or missed kick. The engine preserves the original winner and global random stream, accepts only a complete matching shootout record from a bounded detached stream, and keeps explicit taker orders and old saves unchanged.
 
-The original winner decision and its one global random draw are retained. That draw seeds a detached stream using the existing shootout simulation and default finishing players. At most128 samples are tried; only a matching winner with totals backed by the last recorded kick is accepted. Exhaustion preserves the winner and supplies no invented record. Existing selected orders and the existing fifty-round explicit-order fallback are unchanged. Old transient reports are not reconstructed or added to saves. No real player record or saved-state schema changes.
+## Engine qualification
 
-Qualified application source33632bdfd48d418f31890fca12d802e768995ef0, run40450183759/a1. Verification job122011446266 and application-units job122011446368 both succeeded. Actual evidence:
+Application source33632bdfd48d418f31890fca12d802e768995ef0 passed run40450183759/a1. Evidence includes159 actual match state/random-stream preservation cases,10 effective output controls,7 focused cases,1 actual simulation-to-list rendering case,4 engine source faults,13 legacy controls, the real application type gate, build:seo,15 rebuilt-site readers and15 unchanged download caps. The complete app unit suite at this source passed9632 cases with58 skips (648 files passed,2 skipped). This full-suite result precedes the two display-class changes below.
 
-- App types: zero errors.
--159 actual matches against immutable b20ec6664df9d4c58d63ea0596791d33b2a3b8fc: whole state159/159, global draw values/count159/159 and other report content159/159 held. Ten changed-input output controls were rejected. Ordinary auto-discovered invocation passed the same proof.
-- Seven focused cases passed, including absent/empty/departed orders, deterministic replay, optional detached RNG, original global RNG behavior, old explicit-order fallback and bounded exhaustion. One actual simulation-to-ShootoutKicks display case passed, checking total3-0 and every scored/saved/missed taker.
-- Four effective physical engine faults were rejected for the intended outcomes, with complete reverse and canonical source holds: omit detail, extra global draw, ignore winner and ignore completeness.
-- Existing order/keeper harness passed all sections. All twelve previous controls remain effective, plus tied-record normalization rejection: twelve source faults and one existing baseline-adapter omission in total. Healthy keeper comparison used4000 shootouts per arm, and450 thin-side cup matches included46 actual shootouts.
-- Complete application unit suite:648 files passed and2 files skipped;9632 cases passed and58 skipped,9690total. No failed case. Four shootout-named files supplied23 passing cases with no skips. This is the application unit suite, not the complete sim/browser suite.
-- build:seo, all15 rebuilt-site readers and all15 unchanged route download caps passed, sequentially after the build. Generated patch604bytes changes only the sitemap generator comment date. No generated content or ledger adoption.
-- Independent native archive reviews read actual focused/control/full-unit outcomes. No new browser pixel/layout review is claimed; rendering coverage is the actual React component case and the existing unchanged display.
+The historical comparison retains raw reports and removes only validated new default kick detail plus the exact new score suffix. It is bound to immutable main b20ec6664df9d4c58d63ea0596791d33b2a3b8fc and needs Owner I's combined-target reconciliation.
 
-Final verify artifact12710207942 is95013987bytes, SHA2562ae126a648dc3a171cfc9bdc4e6b421e9310cdd92cbb561716e39717876c813c. Full-unit artifact12710149853 is1006429bytes, SHA256f19e01a5a9a13af93488d572e8ec4fa43c7113b33478cbcd1143de268cd8c2c1. Both originals were acquired once and retained outside the protected working tree.
+## Display qualification
 
-Baseline04eec182509d1d8558d8a5988780b03f9de14b05/run40444158592 compared159 actual matches against immutable b20:39 missing-detail assertions, all state/random-stream/other-report checks passed, ten effective output controls. Seven focused cases had six intended failures and one preservation pass. Earlier workflow-context and JSON-clone method failures remain retained and are not gameplay qualification. First fixed4c4924b113d72ecc2e081334be1c0ea04da3954a/run40448829018 passed its full application unit job and product proofs but was refused because the workflow classified the existing league-adapter omission as a nonexistent source mutation. Final33632 changed that QA classifier only.
+Wider automatic PR checks exposed two previously unreached default-shootout blocks aligned to the left. The display fix changes only two classes in ShootoutKicks.tsx: text-left becomes text-center and the player-name group gains justify-center. Scores, names, outcomes, report props and simulation results are held.
 
-The historical guard removes only validated new default detail and the exact penalty-event score suffix from its legacy comparison; raw reports/hashes remain retained. New immutable-base proof is scoped to b20 and must be reconciled with Owner I's combined current-target engine/state changes. I retains protected composition, main and publication. This proposal is ready for integration review. No main, complete simulation/browser suite or live result is claimed.
+Source1c58b41e2cc956c2d5a793ec1ce7d6a715e36c32 (tree df3ed038ed6dcc2dd085191fb629f713c2fbfc80) passed run40468296993/a1/job122068956609:
+
+- Real app types and12 focused cases across3 files passed.
+- The unchanged original MatchScreen harness reached the actual Everton/Derby County and Ajax/Utrecht penalty fixtures. Baseline had exactly2 section4 failures, fixed had0, the two-class inverse restored exactly2, and the b20 engine with no default kick list passed. Captured fixture props were preserved and inverse HTML restored the original output.
+- Seven effective MatchScreen controls and five effective LiveMatch controls passed their rejection/restoration checks. The separate old nooppsubs control refused its moved anchor before and after, with identical logs; no control credit is claimed for it.
+- The real MatchReportCard mounted in a p-4 component frame with production CSS and fonts passed6 layouts at320/390/1280 and6 class inverses. Parent actually viewed4 selected screenshots, including the left-aligned control. An independent peer actually viewed the remaining3 screenshots. All7 views were readable with no visible overlap. Independent native admission28888bdeb91695e3d3d65120f4a380d4cbbf3b376839d32285fe7713cc80a82c confirms103 archive bodies,4265 selected source-manifest checks, all phase/fixture/inverse results,15 readers and unchanged caps.
+- The scoped build, all15 rebuilt-site readers, all15 unchanged download caps and tracked-source holds passed. Generated output differed only in the sitemap generator comment date; no generated page or ledger adoption is included.
+
+This browser proof covers the actual component frame. It does not claim the full Club Manager route, hook, navigation or persistence.
+
+The final original artifact12718085541 is37996284bytes, SHA25609c7f28db860dfe686ff2ee4eceb9a0494eae0d8c725320f6a1d0c2999cc268d. It was acquired once; native body hashes preceded JSON admission. First attempt40466025200 failed before browser DOM navigation because the route fulfillment body used Uint8Array. The selected helper converts that same bundle to Buffer and adds request traces. Assertions, geometry thresholds, fixture props, product code and actual bundle bytes were held. That original failure is retained.
+
+## Save-control correction and integration limits
+
+The chain also includes the separately qualified Match Plans persistence negative-control repair. It changes only the stale save-control source anchor to the real saveCareer(c) line, with a true result substitute. Run40458115939 passed13 normal cases,34 physical source faults,35 integrity records and full tracked-source holds. No product hook behavior changed.
+
+Six additional automatic PR workflows failed on the prior b32 head. Their originals and exact classifications are retained in the continuation handoff: old whole-source fences, historical fixture mismatches, a stale save-control anchor and the two real alignment failures above. The scoped fixes do not turn those frozen results into passes. A combined current-target gate is still required.
+
+Owner I retains protected composition, main and publication. Historical reports are not rebuilt. Exhaustion retains the original winner without inventing kicks. No main merge, complete simulation/browser suite or live result is claimed.
