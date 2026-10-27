@@ -1,0 +1,13 @@
+{
+  "schema": 1,
+  "from": "../soccer-career-loyalty-workflow-v2",
+  "changes": [
+    "All3jobs fetch full immutable history, units1to0",
+    "Cap server is existing hostLikeServer with explicit127.0.0.1 BASE and offlineflag, readiness required",
+    "Actual reader plan15/PASS15/closing15 and no SKIP or EMPTY",
+    "Actual15cap measurements plus original rounded fatal semantics and840ceiling",
+    "Cached fonts include CORS and actualdeclared loadedfont observations"
+  ],
+  "controllerHeld": true,
+  "entryHeld": true
+}

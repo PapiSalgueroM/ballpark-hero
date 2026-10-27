@@ -1,0 +1,146 @@
+{
+  "schema": 4,
+  "status": "SOURCE-ONLY DRAFT, NO PARSER/RUNTIME/CI CREDIT",
+  "successorOf": "../soccer-career-loyalty-workflow-v3",
+  "previousDraftReceiptSha256": "7d74c91557d9b48131880a1cfd3fb8e121c781323f112cd6d4a1114c2454a368",
+  "selectedSource": "12c1b2cd001f9309a31a887e5c432ca63c373852",
+  "selectedManifest": "fb269ba3dd4b68d6700e0d85cf48481459378742a39fa15730e48ffdd6d5c803",
+  "targetBranch": "codex/soccer-career-loyalty-20261027",
+  "targetWorkflow": ".github/workflows/soccer-career-loyalty.yml",
+  "files": [
+    {
+      "path": "README.md",
+      "bytes": 4426,
+      "sha256": "19199c19c86290d2e16a556b98308f42ffb448a329396e4f87e472e8ded3894a",
+      "gitBlob": "4525930aad6c32f38b4af344b2087b04c3f622d7"
+    },
+    {
+      "path": "V3-METHOD-DELTA.json",
+      "bytes": 536,
+      "sha256": "c69d8d9c10d66bc0ec308c431d103e1185b6d53c5de44beed5bb8d1b2556cd95",
+      "gitBlob": "ed132b5b96208ecabecab7ea305c41e212995fb2"
+    },
+    {
+      "path": "V3-TO-V4-METHOD-DELTA.json",
+      "bytes": 39559,
+      "sha256": "e27b2bc6719b0e87dd1318a41261df2361363fea1af8f0703d1efed25673fcc5",
+      "gitBlob": "8c26a5767ae6c8cee90260bf4eb854b706c75251"
+    },
+    {
+      "path": "V4-NOTES.md",
+      "bytes": 2254,
+      "sha256": "02ced5d9e1b8616c708b4d041ed37a1a417e85280a93a255e9b2600ef44b7c4a",
+      "gitBlob": "68eade6160d53e847c22bb71ba43cd7b2ed2485d"
+    },
+    {
+      "path": "peer-bingo-v1/review-receipt.json",
+      "bytes": 6841,
+      "sha256": "4559b2e93a59747f9e595462a3cd54a9f1434808db64f346dbec984d6a73c4a6",
+      "gitBlob": "1ac4aeb3431674732322e2018452fecc0fff63ee"
+    },
+    {
+      "path": ".github/workflows/soccer-career-loyalty.yml",
+      "bytes": 9061,
+      "sha256": "a638df0b45fe2b0f42dd0ea3ba765fbf21a179d4bbe9f7c8d59c738c9be9a2d4",
+      "gitBlob": "5b83748b4eb83449ea146108395e66911a728a06"
+    },
+    {
+      "path": "qa/soccer-career-loyalty-v2.1/QUALIFICATION.md",
+      "bytes": 4994,
+      "sha256": "e434d108a2e38bbbd9a7349f925a32915a282806e71e6953aad7c457b252e200",
+      "gitBlob": "2e7c7753229048548f0f09d4c2445bd37efb4c45"
+    },
+    {
+      "path": "qa/soccer-career-loyalty-v2.1/SOURCE-FAULTS.json",
+      "bytes": 5951,
+      "sha256": "a2e17d57772a269c755ccab7c17bd463dca0282a9bc09276b50c94f7cdeb6c55",
+      "gitBlob": "0aa39fab52c426887869141d93466bde70d86370"
+    },
+    {
+      "path": "qa/soccer-career-loyalty-v2.1/SOURCE-READY.json",
+      "bytes": 10314,
+      "sha256": "fb269ba3dd4b68d6700e0d85cf48481459378742a39fa15730e48ffdd6d5c803",
+      "gitBlob": "d6be968a380bae2dd52a1951ba3289cfbfc9c9ea"
+    },
+    {
+      "path": "qa/soccer-career-loyalty-v2.1/TEST-V2-TO-V2.1-DELTA.json",
+      "bytes": 15832,
+      "sha256": "6dc278c1ee7c2493ed8c415f4382ec660387a33520aee09da9d93a2565647b42",
+      "gitBlob": "3aa55c73e1b2f3f31a7e788f27743aeb80c99b2a"
+    },
+    {
+      "path": "qa/soccer-career-loyalty-v2.1/V1-TO-V2-DELTA.json",
+      "bytes": 1090,
+      "sha256": "0855e31ab515e1660c2083d9fa7e9f9bf3f396278dbdcc28494a4a54d8c70cda",
+      "gitBlob": "cdcb4a0a9ee7160397c0ff2ee1650e0829a78efe"
+    },
+    {
+      "path": "qa/soccer-career-loyalty-v2.1/V2-RECEIPT.json",
+      "bytes": 9065,
+      "sha256": "1a959cd555b081072ed63da07df4444edfaac2f6a7cf592bf5b06f06833353d8",
+      "gitBlob": "e188a2059298bab9f869cf27a8832127d9257b50"
+    },
+    {
+      "path": "qa/soccer-career-loyalty-v2.1/V2-SPEC.md",
+      "bytes": 1281,
+      "sha256": "b4f14a66b127b4a3a54dfd63c6b20796cc80a033ad5d39cad6703056741f2f60",
+      "gitBlob": "4625617376b2ee9663a7e3365aa0acad819001c0"
+    },
+    {
+      "path": "scripts/qa/soccerCareerLoyaltyAdmission.mjs",
+      "bytes": 2632,
+      "sha256": "834a132f47d2bf7d574ed6df015e3e999dd695b5f07b270e295fd246c6f076c6",
+      "gitBlob": "89c8abcc2d88947cdf6389226b93136adebb1e9e"
+    },
+    {
+      "path": "scripts/qa/soccerCareerLoyaltyBrowser.entry.txt",
+      "bytes": 4077,
+      "sha256": "dbec64831b073b6b91c4045824cc8a9e9e90ac4f8b97a70d8f6bcfc0552696ea",
+      "gitBlob": "78bad9355c2101a7708c0b4a0310428c4025efef"
+    },
+    {
+      "path": "scripts/qa/soccerCareerLoyaltyBrowser.mjs",
+      "bytes": 19419,
+      "sha256": "7a2356ac71772a26c4a727a7349f672565e17ac46477455f838be55f16ada906",
+      "gitBlob": "53ec068cd84c43467ec0d9f341328cc601bb949b"
+    },
+    {
+      "path": "scripts/qa/soccerCareerLoyaltyPresentation.cjs",
+      "bytes": 2902,
+      "sha256": "16c9d2e06f42ba8cc6cfd49e73678dfc00698fdaac8e0cb4ad3152e9ed70545a",
+      "gitBlob": "9e5bd42888763f41b7a9bff645f6db39272cdfe4"
+    },
+    {
+      "path": "scripts/qa/soccerCareerLoyaltyQualification.mjs",
+      "bytes": 14686,
+      "sha256": "ca53ff271f0b57ccabd0b4166b4f23b81b7066f5506eca50c5eb85e085bb1342",
+      "gitBlob": "1bc6de378244d84c9d00fc8be020ade84901c90a"
+    }
+  ],
+  "heldFromV3": [
+    "README.md",
+    "V3-METHOD-DELTA.json",
+    "peer-bingo-v1/review-receipt.json",
+    ".github/workflows/soccer-career-loyalty.yml",
+    "qa/soccer-career-loyalty-v2.1/QUALIFICATION.md",
+    "qa/soccer-career-loyalty-v2.1/SOURCE-FAULTS.json",
+    "qa/soccer-career-loyalty-v2.1/SOURCE-READY.json",
+    "qa/soccer-career-loyalty-v2.1/TEST-V2-TO-V2.1-DELTA.json",
+    "qa/soccer-career-loyalty-v2.1/V1-TO-V2-DELTA.json",
+    "qa/soccer-career-loyalty-v2.1/V2-RECEIPT.json",
+    "qa/soccer-career-loyalty-v2.1/V2-SPEC.md",
+    "scripts/qa/soccerCareerLoyaltyAdmission.mjs",
+    "scripts/qa/soccerCareerLoyaltyBrowser.entry.txt",
+    "scripts/qa/soccerCareerLoyaltyPresentation.cjs"
+  ],
+  "changedPaths": [
+    "scripts/qa/soccerCareerLoyaltyQualification.mjs",
+    "scripts/qa/soccerCareerLoyaltyBrowser.mjs"
+  ],
+  "wholeMethodInverses": true,
+  "diagnosticControls": 2,
+  "normalBrowserCases": 9,
+  "browserControls": 3,
+  "plannedPNGs": 36,
+  "remaining": "Independent source peer, actual remote baseline/fixed/control/parity/build/units/reader/cap/browser evidence and image review. No product/main/publication change."
+}
