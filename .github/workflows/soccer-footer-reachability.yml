@@ -1,0 +1,143 @@
+name: Soccer footer reachability
+on:
+  push:
+    branches: [codex/sc-footer-reachability-20261027]
+    paths:
+      - scripts/qa/playSoccerFooterReachability.mjs
+      - .github/workflows/soccer-footer-reachability.yml
+permissions:
+  contents: read
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: false
+jobs:
+  original:
+    runs-on: ubuntu-latest
+    timeout-minutes: 40
+    defaults:
+      run:
+        shell: bash
+    env:
+      CI: '1'
+      SIM_NETWORK: offline
+      ENGINES: chromium
+      CAREER_SEASON_LOCAL_ONLY: '1'
+      FOOTER_REACHABILITY_ARTIFACTS: ${{ github.workspace }}/footer-reachability-artifacts
+      FREE_KICK_FONT_CACHE: ${{ github.workspace }}/footer-reachability-artifacts/font-cache
+      PRERENDER_ONLY: /soccer-career,/whats-new
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.sha }}
+          fetch-depth: 0
+          persist-credentials: false
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: npm
+      - name: Freeze original source and isolated build tree
+        run: |
+          set -euo pipefail
+          test "$GITHUB_REF_NAME" = codex/sc-footer-reachability-20261027
+          test "$(git rev-parse HEAD)" = "$GITHUB_SHA"
+          mkdir -p "$FOOTER_REACHABILITY_ARTIFACTS/generation"
+          git rev-parse HEAD HEAD^{tree} > "$FOOTER_REACHABILITY_ARTIFACTS/head-tree.txt"
+          git diff --name-only b20ec6664df9d4c58d63ea0596791d33b2a3b8fc HEAD > "$FOOTER_REACHABILITY_ARTIFACTS/changed-paths.txt"
+          while IFS= read -r file; do
+            case "$file" in
+              scripts/qa/playSoccerFooterReachability.mjs|.github/workflows/soccer-footer-reachability.yml|docs/PROJECT-STATE.md) ;;
+              *) echo "Unexpected source delta: $file"; exit 1 ;;
+            esac
+          done < "$FOOTER_REACHABILITY_ARTIFACTS/changed-paths.txt"
+          printf '%s  %s\n' ac7ff287343df49088c475aa326e74361b84e031cf4acd623276623df9c656f8 scripts/qa/playSoccerFooterReachability.mjs | sha256sum --check
+          git archive --format=tar HEAD > "$FOOTER_REACHABILITY_ARTIFACTS/source.tar"
+          git archive --format=tar b20ec6664df9d4c58d63ea0596791d33b2a3b8fc > "$FOOTER_REACHABILITY_ARTIFACTS/original-main.tar"
+          git ls-tree -r HEAD > "$FOOTER_REACHABILITY_ARTIFACTS/source-tree.txt"
+          git ls-files -z | xargs -0 sha256sum > "$FOOTER_REACHABILITY_ARTIFACTS/tracked-before.sha256"
+          sha256sum "$FOOTER_REACHABILITY_ARTIFACTS/source.tar" "$FOOTER_REACHABILITY_ARTIFACTS/original-main.tar" > "$FOOTER_REACHABILITY_ARTIFACTS/source-archive-hashes.txt"
+          build_root="$RUNNER_TEMP/footer-reachability-build-$GITHUB_RUN_ID-$GITHUB_RUN_ATTEMPT"
+          git worktree add --detach "$build_root" HEAD
+          echo "FOOTER_BUILD_ROOT=$build_root" >> "$GITHUB_ENV"
+          echo "PLAYWRIGHT_BROWSERS_PATH=$RUNNER_TEMP/footer-reachability-chromium-$GITHUB_RUN_ID-$GITHUB_RUN_ATTEMPT" >> "$GITHUB_ENV"
+          echo '127.0.0.1 flawuiqbvjobmkfkauhw.supabase.co' | sudo tee -a /etc/hosts
+          npm ci 2>&1 | tee "$FOOTER_REACHABILITY_ARTIFACTS/npm-ci.log"
+          ln -s "$GITHUB_WORKSPACE/node_modules" "$build_root/node_modules"
+          find node_modules -type f -print0 | sort -z | xargs -0 sha256sum > "$FOOTER_REACHABILITY_ARTIFACTS/installed-files.sha256"
+      - name: Real application types and helper syntax
+        run: |
+          set -euo pipefail
+          NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node_modules/.bin/tsc --noEmit -p tsconfig.app.json 2>&1 | tee "$FOOTER_REACHABILITY_ARTIFACTS/types.log"
+          node --check scripts/qa/playSoccerFooterReachability.mjs
+      - name: Fixed browser tools and retained font cache
+        run: |
+          set -euo pipefail
+          browser_tools="$RUNNER_TEMP/footer-reachability-tools-$GITHUB_RUN_ID-$GITHUB_RUN_ATTEMPT"
+          mkdir -p "$browser_tools"
+          printf '{"private":true,"dependencies":{"playwright":"1.64.0"}}\n' > "$browser_tools/package.json"
+          npm install --prefix "$browser_tools" --ignore-scripts --no-audit --no-fund 2>&1 | tee "$FOOTER_REACHABILITY_ARTIFACTS/browser-install.log"
+          test ! -e node_modules/playwright
+          test ! -e node_modules/playwright-core
+          ln -s "$browser_tools/node_modules/playwright" node_modules/playwright
+          ln -s "$browser_tools/node_modules/playwright-core" node_modules/playwright-core
+          cp "$browser_tools/package.json" "$FOOTER_REACHABILITY_ARTIFACTS/browser-package.json"
+          cp "$browser_tools/package-lock.json" "$FOOTER_REACHABILITY_ARTIFACTS/browser-package-lock.json"
+          node "$browser_tools/node_modules/playwright/cli.js" install --with-deps chromium 2>&1 | tee "$FOOTER_REACHABILITY_ARTIFACTS/chromium.log"
+          python -m pip install fonttools pillow 2>&1 | tee "$FOOTER_REACHABILITY_ARTIFACTS/python-tools.log"
+          node scripts/qa/freeKickLab1070.mjs --prefetch-fonts-only 2>&1 | tee "$FOOTER_REACHABILITY_ARTIFACTS/fonts.log"
+          find "$browser_tools/node_modules" -type f -print0 | sort -z | xargs -0 sha256sum > "$FOOTER_REACHABILITY_ARTIFACTS/browser-tools.sha256"
+      - name: Isolated real SEO build and raw generated boundaries
+        run: |
+          set -euo pipefail
+          cd "$FOOTER_BUILD_ROOT"
+          for route in soccer-career whats-new; do cp "public/$route/index.html" "$FOOTER_REACHABILITY_ARTIFACTS/generation/$route.before.html"; done
+          cp scripts/data/lastmod.json "$FOOTER_REACHABILITY_ARTIFACTS/generation/lastmod.before.json"
+          retain_generation() {
+            git diff -- public scripts/data/lastmod.json > "$FOOTER_REACHABILITY_ARTIFACTS/generation/full.diff"
+            for route in soccer-career whats-new; do cp "public/$route/index.html" "$FOOTER_REACHABILITY_ARTIFACTS/generation/$route.after.html" || true; done
+            cp scripts/data/lastmod.json "$FOOTER_REACHABILITY_ARTIFACTS/generation/lastmod.after.json" || true
+          }
+          trap retain_generation EXIT
+          NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" npm run build:seo 2>&1 | tee "$FOOTER_REACHABILITY_ARTIFACTS/build.log"
+          find dist -type f -print0 | sort -z | xargs -0 sha256sum > "$FOOTER_REACHABILITY_ARTIFACTS/dist.sha256"
+      - name: All fifteen rebuilt-site readers
+        run: |
+          set -euo pipefail
+          cd "$FOOTER_BUILD_ROOT"
+          ONLY=simAdsense,simBrand,simHeadTags,simHiddenPages,simHubs,simIndexNow,simIndexing,simInternalLinks,simNoRivalNames,simPrerender,simPrerenderBoot,simRetiredRoutes,simSchema,simSitemap,simSnapshotAssets NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/runAllSims.mjs --browser 2>&1 | tee "$FOOTER_REACHABILITY_ARTIFACTS/readers.log"
+          test "$(grep -c '^All 15 harnesses green\.$' "$FOOTER_REACHABILITY_ARTIFACTS/readers.log")" = 1
+      - name: All fifteen unchanged fatal download caps
+        run: |
+          set -euo pipefail
+          cd "$FOOTER_BUILD_ROOT"
+          NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/lib/hostLikeServer.mjs dist 4173 > "$FOOTER_REACHABILITY_ARTIFACTS/weight-server.log" 2>&1 &
+          server_pid=$!
+          trap 'kill "$server_pid" 2>/dev/null || true' EXIT
+          for attempt in 1 2 3 4 5; do if curl --fail --silent http://127.0.0.1:4173/ > /dev/null; then break; fi; sleep 1; done
+          curl --fail --silent http://127.0.0.1:4173/ > /dev/null
+          BASE=http://127.0.0.1:4173 SWEEP_OFFLINE=1 NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/sweepWeight.mjs 2>&1 | tee "$FOOTER_REACHABILITY_ARTIFACTS/weights.log"
+      - name: Original-only footer line reachability and focused action trace
+        run: |
+          set -euo pipefail
+          cd "$FOOTER_BUILD_ROOT"
+          FOOTER_REACHABILITY_OUT="$FOOTER_REACHABILITY_ARTIFACTS/browser" NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/qa/playSoccerFooterReachability.mjs 2>&1 | tee "$FOOTER_REACHABILITY_ARTIFACTS/browser.log"
+      - name: Preserve every canonical source body and built source boundary
+        if: always()
+        run: |
+          set -euo pipefail
+          sha256sum --check "$FOOTER_REACHABILITY_ARTIFACTS/tracked-before.sha256" > "$FOOTER_REACHABILITY_ARTIFACTS/tracked-after.log"
+          git status --porcelain --untracked-files=no > "$FOOTER_REACHABILITY_ARTIFACTS/tracked-status-after.txt"
+          test ! -s "$FOOTER_REACHABILITY_ARTIFACTS/tracked-status-after.txt"
+          if test -f "$FOOTER_REACHABILITY_ARTIFACTS/installed-files.sha256"; then sha256sum --check "$FOOTER_REACHABILITY_ARTIFACTS/installed-files.sha256" > "$FOOTER_REACHABILITY_ARTIFACTS/installed-holds.log"; fi
+          if test -f "$FOOTER_REACHABILITY_ARTIFACTS/browser-tools.sha256"; then sha256sum --check "$FOOTER_REACHABILITY_ARTIFACTS/browser-tools.sha256" > "$FOOTER_REACHABILITY_ARTIFACTS/browser-tools-holds.log"; fi
+          if test -n "${FOOTER_BUILD_ROOT:-}"; then
+            git -C "$FOOTER_BUILD_ROOT" diff --exit-code HEAD -- src scripts .github/workflows docs index.html package.json package-lock.json bun.lock ':!scripts/data/lastmod.json'
+            if test -f "$FOOTER_REACHABILITY_ARTIFACTS/dist.sha256"; then (cd "$FOOTER_BUILD_ROOT" && sha256sum --check "$FOOTER_REACHABILITY_ARTIFACTS/dist.sha256") > "$FOOTER_REACHABILITY_ARTIFACTS/dist-holds.log"; fi
+          fi
+      - name: Retain original evidence including failures
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: soccer-footer-reachability-${{ github.run_id }}-${{ github.run_attempt }}
+          path: footer-reachability-artifacts/
+          if-no-files-found: error
+          retention-days: 14
