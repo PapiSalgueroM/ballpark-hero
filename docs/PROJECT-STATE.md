@@ -19261,3 +19261,10 @@ Exactly1of15unchanged cap rows fails: /soccer-grid rounds320K against319K,319.5K
 The selected source-only correction shortens only the2new contextual sentences, saving151source bytes. Both exact anchor labels/targets,original paragraph text,allotherguide entries,sharedrenderer/types andtest/assertion/cap logic remain held. Source soccer2 SHA2560a2ee79469b76bffc0931b86a9beb7590fe7310b815e6a6d45c32dabef0ee36e,whole inverse to3d3d29e8verified. Actual gzip savings and new cap results are UNRUN at this authoring point. No budget is relaxed.
 
 The full-history app run40477104570/job122097932512 onf77749ff944d64471064c827b28dbad22c580e20 passed9630cases with58skips (9688total),realtypesandphysicalhistoricalfixturesheld. Originalartifact12722282056 is1337612bytes,SHA256b23c9e05310e874b9e64d8d718ff075f7c4fbdb2c287d56332a71b3c3244fd0f;all21ZIPbodieshashed beforeJSON. That full-suite result precedes this2sentence-only correction; current focused/render/browser/readers/caps will qualify the copy, and no full current-suite rerun is inferred. Owner I still retains joined-target gates,mainandpublication. No live or ranking result is claimed.
+
+
+### Short-copy source pin correction
+
+Run40483040271/sourceb380bc99e58202029b2932d5aca800fd96721376 stopped before renderer cases because the QA helper still pinned the previous long-copy soccer2 hash3d3d29e8. Actual short-copy body0a2ee794 matches the151byte reduction and native Git blob. Types and6focused cases passed; build/browser/readers/caps did not run. Originalartifact12723159030 is36065410bytes,SHA2562f07170cc1c17977545e0c801bd1656477efae552e129f0cfe9fb8c0b991815d, acquired once after a no-file regional transport timeout, with21safe body hashes beforeJSON. Intake receipt SHA256c73ee4566a8098942753fef4bdec14eb15cfcab9c24cdd36068f46d166d2a20b.
+
+This follow-up refreshes that one immutable QA source pin to exact0a2ee794 and changes the workflow trigger comment. Product,classifiers,allassertions andall15cap thresholds remain held. Compiled gzip effect remains UNRUN at authoring. No full current-suite or cap pass is inferred.

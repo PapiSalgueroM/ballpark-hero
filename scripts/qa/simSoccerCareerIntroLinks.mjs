@@ -25,7 +25,7 @@ const report = { mode, cases: [], sourceBefore: held() };
 assert.equal(hash(fs.readFileSync(original)), '7a6939881bd1918d444ec1b2b72ed996bb596c598b313414add7bd2212a2c148');
 assert.equal(hash(fs.readFileSync(renderer)), '23230e28533360d9b0661a6e47c88e63639fed624727ad87e3d5f34210d84212');
 let soccerSource = fs.readFileSync(soccer, 'utf8');
-assert.equal(hash(Buffer.from(soccerSource)), '3d3d29e8fdc7f4d445dbe8b5ea6a6ff2e3e384c53ed2b636b95dd67c0ad8bb59');
+assert.equal(hash(Buffer.from(soccerSource)), '0a2ee79469b76bffc0931b86a9beb7590fe7310b815e6a6d45c32dabef0ee36e');
 if (mode === 'href-control') {
   const before = "{ paragraph: 0, text: 'Wonderkid Factory', to: '/wonderkid-factory' }";
   const after = "{ paragraph: 0, text: 'Wonderkid Factory', to: '/contract-chaos' }";
