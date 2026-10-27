@@ -19268,3 +19268,12 @@ This follow-up makes the diagnostic opt-in, so ordinary Vitest discovery does no
 
 The copy remains a detached shadow overlay. No gameplay, save, retirement or contract code is adopted. The reporter's save is unavailable, and this does not claim the reported bug fixed or refuted, a full suite, build, browser check or live release.
 
+
+### NBA fresh-career focused QA outcome
+
+Successor run 40451712991/a1 qualified source 17867703bc584cae9e2d8a2e51cef1f674fe5b4e. Both arms passed real app types, the unchanged 16 saved-board cases and the configured v3 diagnostic. The diagnostic actually executed once per arm with zero skipped or pending cases.
+
+Each arm retained 149 genuine season rows and 1,243 actions across eight fresh careers. The paired saved states, actions and random traces matched. The same seed reached twenty and retired at OVR 64; its nineteen-row and retired twenty-row reloads held. All five physical copied-data controls passed per arm, with canonical source and dependency holds intact.
+
+The opt-in guard's behavior without its output setting is source-reviewed, not a full-suite runtime result. Copy v4 remains in the detached source copy, and withdrawn feedback remains untested. No gameplay or save fix, reporter-save reproduction or refutation, build, browser, full-suite or live release claim is made. The final outcome commit changes only this document.
+
