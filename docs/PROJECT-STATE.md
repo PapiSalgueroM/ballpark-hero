@@ -19268,3 +19268,10 @@ The full-history app run40477104570/job122097932512 onf77749ff944d64471064c827b2
 Run40483040271/sourceb380bc99e58202029b2932d5aca800fd96721376 stopped before renderer cases because the QA helper still pinned the previous long-copy soccer2 hash3d3d29e8. Actual short-copy body0a2ee794 matches the151byte reduction and native Git blob. Types and6focused cases passed; build/browser/readers/caps did not run. Originalartifact12723159030 is36065410bytes,SHA2562f07170cc1c17977545e0c801bd1656477efae552e129f0cfe9fb8c0b991815d, acquired once after a no-file regional transport timeout, with21safe body hashes beforeJSON. Intake receipt SHA256c73ee4566a8098942753fef4bdec14eb15cfcab9c24cdd36068f46d166d2a20b.
 
 This follow-up refreshes that one immutable QA source pin to exact0a2ee794 and changes the workflow trigger comment. Product,classifiers,allassertions andall15cap thresholds remain held. Compiled gzip effect remains UNRUN at authoring. No full current-suite or cap pass is inferred.
+
+
+## Soccer Career contextual links qualified for integration review
+
+Final source d745815f9fde04eba6970e31c1425f5565ae699b/run40485985900 passes app types,6focused cases,3renderer arms,133loaded/132unchanged-unannotated guides,12raw/client cases+7controls+2targets,all15rebuiltreaders+3guideguards,all15unchangedcaps,4deltacontrols/4308otherheld and4262sourcechecks. Parentactuallyviewed320/390 intro captures, peer1280; readableunderlinedlinks/focus,nooverlap. Original12724889612/39254446B/SHA3bf35ca814a880f2d21735b9a436a44c432b1f145ac2154d9f4bf0a13a2d25af admittedonce with94bodyhashes. Peerreceipt3e6772cb9b86725fb93b62cb484aebd6c9affe32e7c1a46ea78afeafaf4df6b4. Fullhistory9630pass/58skip onf777 precedes2sentence-onlyshortening and is recordedwiththatlimit. See docs/SOCCER-CAREER-INTERNAL-LINKS-2026-10-27.md for exactsource/evidence/bounds.
+
+This is ready for Owner I's protected integration review, not canonical adoption or publication. I must regenerate the target snapshot/lastmod/sitemap from joined source. No ranking or live result is claimed.
