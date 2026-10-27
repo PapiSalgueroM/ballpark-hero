@@ -1,0 +1,20 @@
+{
+  "exactSourceStages": 2,
+  "candidate": {
+    "gitBlob": "fd50a1341bfdd62d457922f06abb9226c814e9f6",
+    "bytes": 8044,
+    "sha256": "9f7aff137651107c21a5eb62b52af7b9fd8e7fd771a9165c2f076e01d225875b"
+  },
+  "basisRef": "b20ec6664df9d4c58d63ea0596791d33b2a3b8fc",
+  "basis": {
+    "gitBlob": "ed81c8eeccb6dd1db17b5a4f18fe1ed37350a2ca",
+    "bytes": 7894,
+    "sha256": "5ed63734357603416bf0ba86989a37905b45de0072b85ffdec47ae7d5f732b77"
+  },
+  "withdrawnFeedbackPreserved": true,
+  "utc": "2026-10-27T03:26:21.4697530Z",
+  "condition": "o || talk.pushed",
+  "runtime": "UNRUN",
+  "wholeForwardAndInverse": true,
+  "canonicalAdoption": false
+}

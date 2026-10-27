@@ -1,0 +1,42 @@
+{
+  "v2": {
+    "gitBlob": "b1277a1fbdac862720a72916a23ea26d65002bff",
+    "bytes": 7947,
+    "sha256": "761eae85ae9a3c5ad58b44f8509a9a93b397fc45344f14d79396a281ed161ad0"
+  },
+  "bothIndicesHeld": true,
+  "basis": {
+    "gitBlob": "ed81c8eeccb6dd1db17b5a4f18fe1ed37350a2ca",
+    "bytes": 7894,
+    "sha256": "5ed63734357603416bf0ba86989a37905b45de0072b85ffdec47ae7d5f732b77"
+  },
+  "openingNullOnly": true,
+  "v3CorrectionForwardInverseExact": true,
+  "storedNoteHeld": true,
+  "selected": {
+    "gitBlob": "fd50a1341bfdd62d457922f06abb9226c814e9f6",
+    "bytes": 8044,
+    "sha256": "9f7aff137651107c21a5eb62b52af7b9fd8e7fd771a9165c2f076e01d225875b"
+  },
+  "offeredAndPushedNotesHeld": true,
+  "schema": "nba-extension-copy-v4-native-proof-v1",
+  "v3PreservedUnselected": {
+    "gitBlob": "e00cc5dd6100b2bf5e55bd84f4077ece85c8e1a8",
+    "bytes": 8029,
+    "sha256": "18d361145754aad672df950ef0c77a682849a9592bfae7720016e51e093ad3c1"
+  },
+  "b20ForwardInverseExact": true,
+  "runtime": "UNRUN",
+  "noProtectedOrRemoteChanges": true,
+  "b20ActualRetainedTarJoinProof": {
+    "path": "C:/Users/antho/dukb-handoff/2026-10-24/nba-extension-copy-proposal-v3/NATIVE-SOURCE-PROOF.json",
+    "bytes": 1429,
+    "sha256": "5d8cb2f229c49cefc3b15974a30fd1f60676e2a96abc01e5c3d00b91cd8389e7"
+  },
+  "v2ForwardInverseExact": true,
+  "sourceFacts": {
+    "withdrawalSource": "usCareerExtension.ts lines212-219: pushed=true,pulled=true,offer=null,explicit withdrawal note",
+    "boardConstraint": "pushMarketExtension excludes initial null and already pushed; returns actual wheel result. Card returns wheel until acknowledged, then retains actual note for pushed talks."
+  },
+  "allOtherV2BytesHeld": true
+}

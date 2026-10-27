@@ -1,0 +1,59 @@
+{
+  "selected": {
+    "path": "C:\\Users\\antho\\dukb-handoff\\2026-10-24\\nba-extension-copy-proposal-v4\\ExtensionCard.candidate.tsx",
+    "gitBlob": "fd50a1341bfdd62d457922f06abb9226c814e9f6",
+    "bytes": 8044,
+    "sha256": "9f7aff137651107c21a5eb62b52af7b9fd8e7fd771a9165c2f076e01d225875b"
+  },
+  "noCanonicalWrites": true,
+  "change": "Only the initial null-offer note is neutral. Actual offered and pushed/withdrawn notes remain unchanged.",
+  "maps": [
+    {
+      "path": "C:\\Users\\antho\\dukb-handoff\\2026-10-24\\nba-extension-copy-proposal-v4\\b20-to-v4.literal-map.json",
+      "gitBlob": "699647859f336d861e134f25b80341442376f8c4",
+      "bytes": 2695,
+      "sha256": "9b35efec010834476dce7c62d6ddaa24b2c78fc5cc2b532b88813a5856575de3"
+    },
+    {
+      "path": "C:\\Users\\antho\\dukb-handoff\\2026-10-24\\nba-extension-copy-proposal-v4\\v2-to-v4.literal-map.json",
+      "gitBlob": "12e2faacd5d443e8b3114455bb24f6f272f2a097",
+      "bytes": 1357,
+      "sha256": "e3aa6b812803726279e2c9391b6eb1727304396365ca2916055f02d1f5f74c3a"
+    },
+    {
+      "path": "C:\\Users\\antho\\dukb-handoff\\2026-10-24\\nba-extension-copy-proposal-v4\\v3-to-v4.literal-map.json",
+      "gitBlob": "f85af2775cdc515f1442af7babbd5c2c42efd9f3",
+      "bytes": 1439,
+      "sha256": "e1c5fb0917241b616e77f3f041ac9a05dbee37bdd6c8a36d80a862ef342df4d5"
+    }
+  ],
+  "status": "SOURCE_READY_NOT_ADOPTED_RUNTIME_UNRUN",
+  "schema": "nba-extension-copy-v4-source-ready-v1",
+  "qualification": "No application, type, test, build, browser or workflow executed. PR402 runtime is not v4 qualification.",
+  "predecessor": {
+    "reason": "Null-only rendering hid explicit withdrawal feedback. V4 preserves note when offer exists OR talk was pushed.",
+    "status": "PRESERVED_UNSELECTED",
+    "folder": "nba-extension-copy-proposal-v3"
+  },
+  "basisRef": "b20ec6664df9d4c58d63ea0596791d33b2a3b8fc",
+  "safeWrites": "CreateNew, <=100KiB leaves, Flush(true), complete native readback, free64MiB floor",
+  "held": "Every other v2 byte, callbacks/buttons/focus/wheel acknowledgment/stored note/market rules/retirement/save logic",
+  "diagnosis": {
+    "path": "C:\\Users\\antho\\dukb-handoff\\2026-10-24\\nba-extension-copy-proposal-v4\\NBA-PROGRESSION-FINDING.md",
+    "gitBlob": "dddd76a380e23df3170d4d5f590447e47dabefc8",
+    "bytes": 3677,
+    "sha256": "c0ed7a53081ac316feb2f0352859d828d2d19a08f0862b847ebea629a7f7a497"
+  },
+  "futureCheck": "Actual twenty-season board progression, not another preset fixture",
+  "noWorkflow": true,
+  "noRemoteActions": true,
+  "ownership": "Owner I current-target composition and publication",
+  "bothExactIndicesBeforeFinally": true,
+  "target": "src/components/us-career/ExtensionCard.tsx",
+  "nativeProof": {
+    "path": "C:\\Users\\antho\\dukb-handoff\\2026-10-24\\nba-extension-copy-proposal-v4\\NATIVE-SOURCE-PROOF.json",
+    "gitBlob": "0bf928019d8c3a5e8d2c2e694613904cc13546d6",
+    "bytes": 1735,
+    "sha256": "74b9922001a003bededce44f2cffa114612fedf739caa41a3f540ec8f837ff73"
+  }
+}

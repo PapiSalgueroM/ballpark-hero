@@ -1,0 +1,44 @@
+{
+  "candidate": {
+    "gitBlob": "fd50a1341bfdd62d457922f06abb9226c814e9f6",
+    "bytes": 8044,
+    "sha256": "9f7aff137651107c21a5eb62b52af7b9fd8e7fd771a9165c2f076e01d225875b"
+  },
+  "basis": {
+    "gitBlob": "e00cc5dd6100b2bf5e55bd84f4077ece85c8e1a8",
+    "bytes": 8029,
+    "sha256": "18d361145754aad672df950ef0c77a682849a9592bfae7720016e51e093ad3c1"
+  },
+  "wholeInverseExact": true,
+  "target": "src/components/us-career/ExtensionCard.tsx",
+  "stages": [
+    {
+      "afterUtf8Positions": [
+        3920
+      ],
+      "stageAfter": {
+        "gitBlob": "fd50a1341bfdd62d457922f06abb9226c814e9f6",
+        "bytes": 8044,
+        "sha256": "9f7aff137651107c21a5eb62b52af7b9fd8e7fd771a9165c2f076e01d225875b"
+      },
+      "occurrences": 1,
+      "beforePositions": [
+        3920
+      ],
+      "beforeUtf8Positions": [
+        3920
+      ],
+      "before": ">{o ? talk.note : 'No extension is on the table. Your current deal still covers this season.'}</p>",
+      "stageBefore": {
+        "gitBlob": "e00cc5dd6100b2bf5e55bd84f4077ece85c8e1a8",
+        "bytes": 8029,
+        "sha256": "18d361145754aad672df950ef0c77a682849a9592bfae7720016e51e093ad3c1"
+      },
+      "fullPositionedInverse": true,
+      "after": ">{o || talk.pushed ? talk.note : 'No extension is on the table. Your current deal still covers this season.'}</p>",
+      "afterPositions": [
+        3920
+      ]
+    }
+  ]
+}

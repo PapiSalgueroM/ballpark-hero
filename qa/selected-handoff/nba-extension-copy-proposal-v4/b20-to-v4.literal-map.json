@@ -1,0 +1,72 @@
+{
+  "candidate": {
+    "gitBlob": "fd50a1341bfdd62d457922f06abb9226c814e9f6",
+    "bytes": 8044,
+    "sha256": "9f7aff137651107c21a5eb62b52af7b9fd8e7fd771a9165c2f076e01d225875b"
+  },
+  "basis": {
+    "gitBlob": "ed81c8eeccb6dd1db17b5a4f18fe1ed37350a2ca",
+    "bytes": 7894,
+    "sha256": "5ed63734357603416bf0ba86989a37905b45de0072b85ffdec47ae7d5f732b77"
+  },
+  "wholeInverseExact": true,
+  "target": "src/components/us-career/ExtensionCard.tsx",
+  "stages": [
+    {
+      "afterUtf8Positions": [
+        3216
+      ],
+      "stageAfter": {
+        "gitBlob": "b1277a1fbdac862720a72916a23ea26d65002bff",
+        "bytes": 7947,
+        "sha256": "761eae85ae9a3c5ad58b44f8509a9a93b397fc45344f14d79396a281ed161ad0"
+      },
+      "occurrences": 1,
+      "beforePositions": [
+        3216
+      ],
+      "beforeUtf8Positions": [
+        3216
+      ],
+      "before": "          This is the last {seasonWord} on your deal. Sign the extension and you are set,\n          usually a little under what the open market pays. Turn it down and you play the\n          year out and reach free agency, where everybody bids and nothing is promised.",
+      "stageBefore": {
+        "gitBlob": "ed81c8eeccb6dd1db17b5a4f18fe1ed37350a2ca",
+        "bytes": 7894,
+        "sha256": "5ed63734357603416bf0ba86989a37905b45de0072b85ffdec47ae7d5f732b77"
+      },
+      "fullPositionedInverse": true,
+      "after": "          This is the last {seasonWord} on your current deal.{' '}\n          {o ? 'You can sign the extension or turn it down and play the year out.' : 'There is no extension offer right now. Choose Play the year out to continue.'}\n          {' '}Playing out this deal leads to free agency only if your career continues.",
+      "afterPositions": [
+        3216
+      ]
+    },
+    {
+      "afterUtf8Positions": [
+        3920
+      ],
+      "stageAfter": {
+        "gitBlob": "fd50a1341bfdd62d457922f06abb9226c814e9f6",
+        "bytes": 8044,
+        "sha256": "9f7aff137651107c21a5eb62b52af7b9fd8e7fd771a9165c2f076e01d225875b"
+      },
+      "occurrences": 1,
+      "beforePositions": [
+        3920
+      ],
+      "beforeUtf8Positions": [
+        3920
+      ],
+      "before": ">{talk.note}</p>",
+      "stageBefore": {
+        "gitBlob": "b1277a1fbdac862720a72916a23ea26d65002bff",
+        "bytes": 7947,
+        "sha256": "761eae85ae9a3c5ad58b44f8509a9a93b397fc45344f14d79396a281ed161ad0"
+      },
+      "fullPositionedInverse": true,
+      "after": ">{o || talk.pushed ? talk.note : 'No extension is on the table. Your current deal still covers this season.'}</p>",
+      "afterPositions": [
+        3920
+      ]
+    }
+  ]
+}
