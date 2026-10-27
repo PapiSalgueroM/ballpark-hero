@@ -1,5 +1,4 @@
-name: Loan plan early application gate
-# V6 keeps ordinary recall available when optional metadata belongs to another actual loan.
+name: Club Manager Loan plan qualification
 on:
   push:
     branches: [codex/cm-loan-plan-20261027]
@@ -7,19 +6,22 @@ on:
 permissions:
   contents: read
 concurrency:
-  group: cm-loan-plan-early-${{ github.ref }}
+  group: cm-loan-plan-${{ github.ref }}
   cancel-in-progress: false
 jobs:
-  application-gate:
+  qualify:
     runs-on: ubuntu-latest
-    timeout-minutes: 30
+    timeout-minutes: 60
     defaults:
       run:
         shell: bash
     env:
       CI: '1'
       SIM_NETWORK: offline
-      OUT: ${{ github.workspace }}/loan-plan-early-artifacts
+      ENGINES: chromium
+      PRERENDER_ONLY: /club-manager,/whats-new
+      CM_LOAN_PLAN_ARTIFACTS: ${{ github.workspace }}/cm-loan-plan-artifacts
+      FREE_KICK_FONT_CACHE: ${{ github.workspace }}/cm-loan-plan-artifacts/font-cache
     steps:
       - uses: actions/checkout@v4
         with:
@@ -30,35 +32,77 @@ jobs:
         with:
           node-version: 24
           cache: npm
-      - name: Retain exact inputs and install locked dependencies
+      - name: Preserve source and install locked dependencies
         run: |
           set -euo pipefail
-          mkdir -p "$OUT"
-          git rev-parse HEAD > "$OUT/source-head.txt"
-          git rev-parse HEAD^{tree} > "$OUT/source-tree.txt"
-          git ls-files -z -- src scripts .github/workflows index.html package.json package-lock.json tsconfig.app.json | sort -z | xargs -0 sha256sum > "$OUT/source-before.sha256"
-          git archive --format=tar HEAD -- scripts/qa/cmLoanPlanParity.mjs src/components/club-manager/LoanPlanCard.tsx src/components/club-manager/TransferScreen.tsx src/hooks/useClubManager.ts src/lib/clubManager.ts src/lib/clubManagerLoanDevelopment.ts src/lib/clubManagerLoanPlan.ts src/pages/ClubManager.tsx src/test/clubManagerLoanDevelopment.test.ts src/test/clubManagerLoanPlanIntegration.test.ts src/test/clubManagerLoanPlanMounted.test.tsx .github/workflows/cm-loan-plan.yml package.json package-lock.json tsconfig.app.json > "$OUT/selected-source.tar"
+          mkdir -p "$CM_LOAN_PLAN_ARTIFACTS"
+          git rev-parse HEAD > "$CM_LOAN_PLAN_ARTIFACTS/source-head.txt"
+          git rev-parse HEAD^{tree} > "$CM_LOAN_PLAN_ARTIFACTS/source-tree.txt"
+          git archive --format=tar HEAD > "$CM_LOAN_PLAN_ARTIFACTS/source.tar"
+          git archive --format=tar 12c1b2cd001f9309a31a887e5c432ca63c373852 > "$CM_LOAN_PLAN_ARTIFACTS/original-I.tar"
           npm ci
-      - name: Correct application type gate
+      - name: Exact old app RED, fixed cases, physical controls and paired outcomes
         run: |
           set -euo pipefail
-          NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node_modules/.bin/tsc --noEmit -p tsconfig.app.json 2>&1 | tee "$OUT/types.log"
-      - name: Actual new pure mounted and integration cases
+          node scripts/qa/cmLoanPlanQualification.mjs methods 2>&1 | tee "$CM_LOAN_PLAN_ARTIFACTS/controller.log"
+      - name: Isolated browser and logo tools
         run: |
           set -euo pipefail
-          NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" npm test -- --run src/test/clubManagerLoanDevelopment.test.ts src/test/clubManagerLoanPlanIntegration.test.ts src/test/clubManagerLoanPlanMounted.test.tsx --maxWorkers=1 --no-file-parallelism --reporter=default --reporter=json --outputFile="$OUT/unit.json" 2>&1 | tee "$OUT/unit.log"
-      - name: Always verify tracked source holds
+          npm install --prefix "$RUNNER_TEMP/loan-plan-browser" --no-save --package-lock=false playwright@1.64.0
+          ln -s "$RUNNER_TEMP/loan-plan-browser/node_modules/playwright" node_modules/playwright
+          ln -s "$RUNNER_TEMP/loan-plan-browser/node_modules/playwright-core" node_modules/playwright-core
+          node "$RUNNER_TEMP/loan-plan-browser/node_modules/playwright/cli.js" install --with-deps chromium
+          python -m pip install fonttools pillow
+          node scripts/qa/freeKickLab1070.mjs --prefetch-fonts-only > "$CM_LOAN_PLAN_ARTIFACTS/fonts.log" 2>&1
+      - name: Production build with Manager and updates snapshots
+        run: |
+          set -euo pipefail
+          mkdir -p "$CM_LOAN_PLAN_ARTIFACTS/generated/before"
+          cp public/club-manager/index.html "$CM_LOAN_PLAN_ARTIFACTS/generated/before/club-manager.html"
+          cp public/whats-new/index.html "$CM_LOAN_PLAN_ARTIFACTS/generated/before/whats-new.html"
+          cp scripts/data/lastmod.json "$CM_LOAN_PLAN_ARTIFACTS/generated/before/lastmod.json"
+          NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" npm run build:seo 2>&1 | tee "$CM_LOAN_PLAN_ARTIFACTS/build.log"
+          git diff --binary HEAD -- public scripts/data/lastmod.json > "$CM_LOAN_PLAN_ARTIFACTS/generated.patch"
+          mkdir -p "$CM_LOAN_PLAN_ARTIFACTS/generated"
+          cp public/club-manager/index.html "$CM_LOAN_PLAN_ARTIFACTS/generated/club-manager.html"
+          cp public/whats-new/index.html "$CM_LOAN_PLAN_ARTIFACTS/generated/whats-new.html"
+          cp public/sitemap.xml "$CM_LOAN_PLAN_ARTIFACTS/generated/sitemap.xml"
+          cp scripts/data/lastmod.json "$CM_LOAN_PLAN_ARTIFACTS/generated/lastmod.json"
+      - name: All fifteen actual rebuilt readers
+        run: |
+          set -euo pipefail
+          failed=0
+          for harness in simAdsense simBrand simHeadTags simHiddenPages simHubs simIndexNow simIndexing simInternalLinks simNoRivalNames simPrerender simPrerenderBoot simRetiredRoutes simSchema simSitemap simSnapshotAssets; do
+            ONLY="$harness" NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/runAllSims.mjs --browser 2>&1 | tee "$CM_LOAN_PLAN_ARTIFACTS/$harness.log" || failed=1
+            if ! grep -F 'All 1 harnesses green.' "$CM_LOAN_PLAN_ARTIFACTS/$harness.log"; then failed=1; fi
+            if grep -E '(^|[[:space:]])(SKIP|EMPTY)([[:space:]]|$)' "$CM_LOAN_PLAN_ARTIFACTS/$harness.log"; then failed=1; fi
+          done
+          exit "$failed"
+      - name: Actual LoanPlanCard component on phones and desktop
+        run: |
+          set -euo pipefail
+          NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/qa/playCmLoanPlanCard.mjs 2>&1 | tee "$CM_LOAN_PLAN_ARTIFACTS/card-browser.log"
+      - name: All fifteen unchanged route download limits
+        run: |
+          set -euo pipefail
+          node scripts/lib/hostLikeServer.mjs dist 4173 > "$CM_LOAN_PLAN_ARTIFACTS/host.log" 2>&1 &
+          host_pid=$!
+          trap 'kill "$host_pid" 2>/dev/null || true' EXIT
+          for attempt in $(seq 1 30); do
+            if curl -fsS http://127.0.0.1:4173/ > /dev/null; then break; fi
+            sleep 1
+          done
+          curl -fsS http://127.0.0.1:4173/ > /dev/null
+          BASE=http://127.0.0.1:4173 SWEEP_OFFLINE=1 NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/sweepWeight.mjs 2>&1 | tee "$CM_LOAN_PLAN_ARTIFACTS/weights.log"
+      - name: Exact source restoration and holds
         if: always()
         run: |
           set -euo pipefail
-          if test -f "$OUT/source-before.sha256"; then
-            sha256sum -c "$OUT/source-before.sha256" > "$OUT/source-held.log"
-          fi
-          git diff --exit-code HEAD -- src scripts .github/workflows index.html package.json package-lock.json tsconfig.app.json
-      - name: Always retain original gate observations
+          node scripts/qa/cmLoanPlanQualification.mjs final 2>&1 | tee "$CM_LOAN_PLAN_ARTIFACTS/final-holds.log"
+      - name: Preserve actual original outputs and source
         if: always()
         uses: actions/upload-artifact@v4
         with:
-          name: loan-plan-early-${{ github.run_id }}-${{ github.run_attempt }}
+          name: cm-loan-plan-${{ github.run_id }}-${{ github.run_attempt }}
           retention-days: 7
-          path: loan-plan-early-artifacts/
+          path: cm-loan-plan-artifacts/
