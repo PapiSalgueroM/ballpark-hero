@@ -131,6 +131,8 @@ export default function Search() {
   };
 
   const onKeyDown = (e: ReactKeyboardEvent) => {
+    // Leave conversion keys to the input method.
+    if (e.nativeEvent.isComposing || e.nativeEvent.keyCode === 229) return;
     const target = e.target as HTMLElement;
     /* The sport dropdown owns every arrow key it gets: up and down are how a
        native select is operated, and stealing them would break it. */

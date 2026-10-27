@@ -1,0 +1,363 @@
+name: Search composition keyboard verification
+on:
+  push:
+    paths-ignore: ['docs/**']
+    branches:
+      - codex/search-composition-20261027
+permissions:
+  contents: read
+concurrency:
+  group: search-composition-${{ github.ref }}
+  cancel-in-progress: false
+jobs:
+  search-composition:
+    runs-on: ubuntu-latest
+    timeout-minutes: 120
+    env:
+      EXPECTED_PARENT: b20ec6664df9d4c58d63ea0596791d33b2a3b8fc
+      ENGINES: chromium
+      CI: true
+    defaults:
+      run:
+        shell: bash
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          persist-credentials: false
+          ref: ${{ github.sha }}
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: npm
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Bind exact source and prepare readable verification payloads
+        id: foundation
+        run: |
+          set -euo pipefail
+          out="$RUNNER_TEMP/search-composition";test ! -e "$out";mkdir "$out"
+          echo "SEARCH_COMPOSITION_EVIDENCE=$out" >> "$GITHUB_ENV"
+          echo "SEARCH_COMPOSITION_SOURCE_SHADOW=$RUNNER_TEMP/search-composition-source-shadow" >> "$GITHUB_ENV"
+          export SEARCH_COMPOSITION_EVIDENCE="$out" SEARCH_COMPOSITION_SOURCE_SHADOW="$RUNNER_TEMP/search-composition-source-shadow"
+          echo "FREE_KICK_FONT_CACHE=$out/font-cache" >> "$GITHUB_ENV"
+          git rev-parse HEAD > "$out/head.txt";git rev-parse 'HEAD^{tree}' > "$out/tree.txt"
+          git diff --name-status "$EXPECTED_PARENT" HEAD > "$out/direct-paths.txt"
+          git diff --exit-code "$EXPECTED_PARENT" HEAD -- . ':!.github/workflows/search-composition.yml' ':!docs/PROJECT-STATE.md' ':!src/pages/Search.tsx' ':!src/test/Search.composition.test.tsx' ':!scripts/qa/playSearchComposition.mjs' > "$out/other-source-held.log"
+          git ls-files -z | sort -z > "$out/source-members.before"
+          test "$(tr -cd '\000' < "$out/source-members.before" | wc -c)" -eq 5381
+          git ls-files -z | sort -z | xargs -0 sha256sum > "$out/source.sha256"
+          git diff --exit-code HEAD > "$out/source-clean-before.log"
+          test -z "$(git status --porcelain --untracked-files=all)"
+          git archive --format=tar HEAD > "$out/source.tar"
+          cat > "$out/search-composition.cjs" <<'RUNNER'
+          'use strict';
+          const fs=require('node:fs'),cp=require('node:child_process'),path=require('node:path'),assert=require('node:assert/strict'),{createHash}=require('node:crypto');
+          const ROOT=process.cwd(),OUT=process.env.SEARCH_COMPOSITION_EVIDENCE,SHADOW=process.env.SEARCH_COMPOSITION_SOURCE_SHADOW;
+          const PARENT='b20ec6664df9d4c58d63ea0596791d33b2a3b8fc',PARENT_TREE='51e0c6a06a6c4fb7d143b4d408eb5a9437737553';
+          const TARGET='src/pages/Search.tsx',TEST='src/test/Search.composition.test.tsx',WF='.github/workflows/search-composition.yml';
+          const HELD=[{"path":"scripts/simAdsense.mjs","bytes":29408,"sha256":"4b59a16cb1f9ad9fdbc61d48929a6ee1039eb82601c7745c1c4711aefebe40d3","gitBlob":"767fd4119f1f24c5dda295834abad29887edc71f"},{"path":"scripts/simBrand.mjs","bytes":15815,"sha256":"68d70a75423a5b016ea16d3273c7fe4b1b3df631cfeaf03a23f0b02dc0895391","gitBlob":"c17f21d76cecce77f0ccbae7986e79f88ee121f5"},{"path":"scripts/simHeadTags.mjs","bytes":9031,"sha256":"e5f5430f845399ca4f4b9e495f9701bac98c546915a0ffa0d35e71548b19e7b8","gitBlob":"a2d1cd4548e5f06a72960b2a9393eee741b1abb6"},{"path":"scripts/simHiddenPages.mjs","bytes":5262,"sha256":"9b814aa337e45f6378fe8118d7beddfc10a4f5597b119edf95ab33c48a396cff","gitBlob":"f5951796f3d1c8f535cfcaf3198f0806c7fa57d2"},{"path":"scripts/simHubs.mjs","bytes":19480,"sha256":"34544d701b5efe92389ddda30541e2f7608104a04076f1504c7aab590212a1e4","gitBlob":"ef8c89f4ed25d000cb4d4796f515b6660c6c5d3e"},{"path":"scripts/simIndexNow.mjs","bytes":5747,"sha256":"7713c136f132acbee99fb9c7540346298739e75c2a915d20b32d7e760f2bfdeb","gitBlob":"970df1757c5cf8ad7c68d5e96e3e4432678a5e3c"},{"path":"scripts/simIndexing.mjs","bytes":17439,"sha256":"e34f8f0cbc2d1611b2506c27f9be3ac99a61b2a1b2c84c2ad70a3887f3b808da","gitBlob":"ded7b515505b7d7dc3e94e0d33a25db69fd2f695"},{"path":"scripts/simInternalLinks.mjs","bytes":10063,"sha256":"77694c675c5a813a31d60c9cb114f2574075383c8b432887ec25c10ae7c9f7aa","gitBlob":"4963212706d2df4d802f0a584a6a0b825bc64dac"},{"path":"scripts/simNoRivalNames.mjs","bytes":20911,"sha256":"eb779b90da75b3433ef7cdf88b753c7c33722d8d4d1f59fd37bcb4fe6d4a0c4a","gitBlob":"0cc180c43c692ed65fb067e7f187826806845798"},{"path":"scripts/simPrerender.mjs","bytes":57615,"sha256":"fc74c7a19531ab7a3e6f72e7630fdbc05cf4d4df62fd747deffa098ad2283a48","gitBlob":"69b86c4732c86e3852d30a2abf3343f655ea728d"},{"path":"scripts/simPrerenderBoot.mjs","bytes":14435,"sha256":"d9e6372062a669c51c3f36d2f034f0f1c261f6906725b82893642c404b72bd1c","gitBlob":"5ded1f8ccc2e65766d15cb0d59957754180ff4f5"},{"path":"scripts/simRetiredRoutes.mjs","bytes":7219,"sha256":"74a961483d97fe48519745a36c91fa504b59e067b2453a9708ab1755f7a7a59e","gitBlob":"e88b9715bb5409c88b5a6059e422ccd872edc272"},{"path":"scripts/simSchema.mjs","bytes":15368,"sha256":"fc97df743c48145c91b43b4a3357cd6ea421e9210f496aa7965664b2d61b4636","gitBlob":"793c7b1e646dafcf3d664263a94144af18e24ee6"},{"path":"scripts/simSitemap.mjs","bytes":10368,"sha256":"c0d0c63af03f9dd54d2633c549ea2d1588214df61f2b5d1e90bfafbccc621edf","gitBlob":"517bac00ae17c029d57c7bfa5bbc55ec78eb9d15"},{"path":"scripts/simSnapshotAssets.mjs","bytes":11524,"sha256":"929040c81c7ae027972b35f4ea629ae69d39e3cbc4797bdf8e2df3d25d204317","gitBlob":"66eaed1457e5ac3087b62d7e46328951f49618c9"},{"path":"scripts/simSiteSearch.mjs","bytes":26005,"sha256":"dc7b5f4445f64c9a8a5f2b2f67b8034c10f732806d07ddf21648936385e9f374","gitBlob":"6be8e1603e84e1a8799099e1558c415bc87a42a7"},{"path":"scripts/simGuideHeadings.mjs","bytes":30691,"sha256":"aceb7d2b481054cea5f1e0f4606ff749e33f33b21c882f0aaa7e113563da58c0","gitBlob":"fa23f7e6ace62d8e71e3585ab6afbe4dbef0f674"},{"path":"scripts/simLegalPages.mjs","bytes":15304,"sha256":"837c41f7fb8e76010aa7c1b00ef530f8454f35076bedd7e980045e94c354674a","gitBlob":"e639acb6bf70d4924b2811410dbb3f2b078b03a8"},{"path":"vitest.config.ts","bytes":5364,"sha256":"6a68dd2f214dab4a3013eb41bad38eea65d703d61440002710ec246495e1c58a","gitBlob":"ed2a9dc677f77dfe95c061064eeff5782b856864"},{"path":"src/test/setup.ts","bytes":847,"sha256":"0175cc334b44d9874ff4bd8274a8cc165e9e84cd3738a4298f934db353887289","gitBlob":"df00cdf5c54e8c8efc71e46d7585ae76acb4fc8d"},{"path":"scripts/qa/siteMenuNavigationSupport.mjs","bytes":11560,"sha256":"c70e3ecc412f16d3322047b13205716c644495f8c74b76eed83852c87f35d303","gitBlob":"7909ce5805171367646e17a468fd919b88ad710e"},{"path":"scripts/lib/offlineTransport.cjs","bytes":10660,"sha256":"e60ff1534307e449ccef598e3b7470dcba58681b82cea4005cec7319f14f9221","gitBlob":"0fda542a2649fe5da937c6976fd0f5b6073e74b6"},{"path":"scripts/lib/hostLikeServer.mjs","bytes":2690,"sha256":"3958c9a3b4d9e49bb60a3b7dd72d81a997bd1caed56e82e4c3bae07e1a918ef0","gitBlob":"21059d5e8114669df61106c125d5272d357b6236"},{"path":"scripts/lib/playwrightLoader.mjs","bytes":2777,"sha256":"94a07179be7ca6b9562d118b52c2d5d0dff0b6b2e29e49e4fea16fa2defb5a93","gitBlob":"4f7739e217e0a47ee82e6bfc8be1c04bed17454a"},{"path":"scripts/qa/freeKickLab1070.mjs","bytes":27126,"sha256":"6279c8f608e56439e73f0bbcda73f9ed69e15d48e9b13119de4d6a7f05fb46b7","gitBlob":"1cf030d9182fd4fd68fca39f32e757c69bf9e58a"},{"path":"scripts/sweepWeight.mjs","bytes":97218,"sha256":"4e6e69a1cd9b58f585890c82cd698e598f8c112f88de4c0c9d10fc0f56feb81b","gitBlob":"10fa2bd492f37a59f77af9356691d7b1248141de"},{"path":"package.json","bytes":3495,"sha256":"acfe14626dea53cf5f9c5e0286b766a22237656b52aac4c888b080873ac90e31","gitBlob":"2ff64986fb76ebc51b706f2fd24765768874008a"},{"path":"package-lock.json","bytes":309049,"sha256":"c7e3867eabf0bfa03a8aa6a5e601b0050b937ed210d48c6bbd241019e3c9ea76","gitBlob":"97d6f12a052f25f400462938c241789a083f0bfe"},{"path":"tsconfig.app.json","bytes":680,"sha256":"b12030bfe21ea5be66670842c71d66d194d1771f93f0b8c076e97c867b4b0552","gitBlob":"51f581dd91641b4c1f1219f646788e73cf6bf00c"},{"path":"src/test/Search.navigation.test.tsx","bytes":11542,"sha256":"c5fcbc9bc0b721e3e83ff0dcfcacc0162aeb3f3ee0381806de73477f156c6224","gitBlob":"f611775e31d432effab8ad62395094105c3283c5"},{"path":"src/lib/siteSearch.ts","bytes":20811,"sha256":"240544889a70763dcb70cc9cc4c300fb992cbfdaf972eecb972237f3ead2c179","gitBlob":"7143f9242bc36f448dd2b850dcf67804f682dbff"},{"path":"src/data/gameRegistry.ts","bytes":33311,"sha256":"7f8724177e7672a737035f9cbdf53a11121609a4a497e6d5ecef172e41c8a3b4","gitBlob":"2b408bc5b1b2127171519c9a1a5fb1f6b64262fb"},{"path":"src/hooks/useGamePicks.ts","bytes":3123,"sha256":"7e9cf419276d2c56dbc8ce86a815e59debbbaca680cdf14ab99efe93609ac7c4","gitBlob":"3b4fc3428fd9c0f67e75084b62731eb4c79bf097"},{"path":"src/components/game/GamePickButton.tsx","bytes":1468,"sha256":"0c07e71d2dbea2573d8737cdedb4d59c8ecd135406db5c45f0b89b33725b78f3","gitBlob":"e0046330fec0c09ec5827b21a7919727cef4e7fa"}];
+          const PINS=[{"path":"src/pages/Search.tsx","bytes":16391,"sha256":"535a063b299e4785288ece4d5ebf4b8666f5ed31c8ee8eba6c5c65fbde465cbb","gitBlob":"e57d7e47960828682b07451d565b06cb48993479"},{"path":"src/test/Search.composition.test.tsx","bytes":6149,"sha256":"8e2850b7551e14161d63230d8033d5fff04ba02ad405c10dbaa3739c245aa08b","gitBlob":"36bb1c7554f775bcb2f1875894dcde4c617f0b4f"},{"path":"scripts/qa/playSearchComposition.mjs","bytes":10896,"sha256":"426f4eccb007c4964c1c544cb3b8d96f1349ef759636f9f4e897f97aeae78241","gitBlob":"20931f0e3badc61c116fddc771de71eb5bdbc41d"},{"path":"docs/PROJECT-STATE.md","bytes":1861490,"sha256":"cda540a313847a3250852cd011dadca8c48c086fd4404b280593356971970ccc","gitBlob":"616972d620217de753f5a5ec2c581f8ef12c4a61"}];
+          const SUITE='Search composition keyboard ownership',TITLES=["does not consume modern composing ArrowDown","does not consume modern composing ArrowUp","does not consume modern composing Escape","does not consume legacy composing ArrowDown","does not consume legacy composing ArrowUp","does not consume legacy composing Escape","keeps ordinary ArrowDown navigation through actual results","keeps ordinary ArrowUp navigation through actual results","keeps ordinary Escape clearing and the empty-query no-op","leaves ordinary Left and Right in the input to native text editing","leaves native sport select keys and filtering intact"],MARKERS=["SEARCH_COMPOSITION_MODERN_ARROWDOWN_UNCONSUMED","SEARCH_COMPOSITION_MODERN_ARROWUP_UNCONSUMED","SEARCH_COMPOSITION_MODERN_ESCAPE_UNCONSUMED","SEARCH_COMPOSITION_LEGACY_ARROWDOWN_UNCONSUMED","SEARCH_COMPOSITION_LEGACY_ARROWUP_UNCONSUMED","SEARCH_COMPOSITION_LEGACY_ESCAPE_UNCONSUMED"],OLD=[["src/test/Search.navigation.test.tsx","Search URL navigation ownership",["clears a pending draft when the real Search games link opens the same URL","adopts an external PUSH to the previous query instead of the pending draft","adopts an external REPLACE to the previous query instead of the pending draft","keeps a newer draft coalesced with its own debounce replacement","lets an external identical replacement win after an own replacement and newer draft in one act","adopts actual Back and Forward locations while cancelling each pending draft","replaces only the final rapid edit while retaining unrelated parameters and previous history","adopts the same query with changed unrelated URL parameters and cancels the draft","does not navigate from a pending timer after the real leave link unmounts Search"]]];
+          const GUARD="    // Leave conversion keys to the input method.\n    if (e.nativeEvent.isComposing || e.nativeEvent.keyCode === 229) return;\n";
+          const READERS=["simAdsense","simBrand","simHeadTags","simHiddenPages","simHubs","simIndexNow","simIndexing","simInternalLinks","simNoRivalNames","simPrerender","simPrerenderBoot","simRetiredRoutes","simSchema","simSitemap","simSnapshotAssets","simSiteSearch","simGuideHeadings","simLegalPages"];
+          const sha=b=>createHash('sha256').update(b).digest('hex'),blob=b=>createHash('sha1').update(Buffer.from('blob '+b.length+'\0')).update(b).digest('hex');
+          const save=(name,value)=>fs.writeFileSync(path.join(OUT,name),JSON.stringify(value,null,2)+'\n',{flag:'wx'});
+          const raw=(name,value)=>fs.writeFileSync(path.join(OUT,name),value,{flag:'wx'});
+          const git=(args)=>cp.execFileSync('git',args,{cwd:ROOT,maxBuffer:32*1024*1024});
+          const pin=b=>({bytes:b.length,sha256:sha(b),gitBlob:blob(b)});
+          function samePin(b,p,label){assert.equal(b.length,p.bytes,label+' bytes');assert.equal(sha(b),p.sha256,label+' SHA');assert.equal(blob(b),p.gitBlob,label+' Git');}
+          function paths(){return git(['ls-files','-z']).toString().split('\0').filter(Boolean).sort();}
+          function snapshot(root=ROOT){return paths().map(file=>{const f=path.join(root,file),s=fs.lstatSync(f);assert(s.isFile()&&!s.isSymbolicLink(),'SEARCH_COMPOSITION_SOURCE_REGULAR '+file);return {file,...pin(fs.readFileSync(f))};});}
+          function linkHold(){const f=path.join(SHADOW,'node_modules');assert(fs.lstatSync(f).isSymbolicLink(),'SEARCH_COMPOSITION_SHADOW_LINK');assert.equal(fs.realpathSync(f),fs.realpathSync(path.join(ROOT,'node_modules')),'SEARCH_COMPOSITION_SHADOW_LINK_TARGET');}
+          function shadowMembers(){
+           linkHold();const expected=paths(),directories=new Set(['']);
+           for(const file of expected){let dir=path.posix.dirname(file);while(dir!=='.'){directories.add(dir);dir=path.posix.dirname(dir);}}
+           const files=[];
+           function walk(dir){
+            for(const name of fs.readdirSync(path.join(SHADOW,dir)).sort()){
+             const relative=dir?dir+'/'+name:name,absolute=path.join(SHADOW,relative);
+             if(relative==='node_modules'){linkHold();continue;}
+             const stat=fs.lstatSync(absolute);assert(!stat.isSymbolicLink(),'SEARCH_COMPOSITION_SHADOW_NO_EXTRA_LINK '+relative);
+             if(stat.isDirectory()){assert(directories.has(relative),'SEARCH_COMPOSITION_SHADOW_NO_EXTRA_DIRECTORY '+relative);walk(relative);}
+             else{assert(stat.isFile(),'SEARCH_COMPOSITION_SHADOW_REGULAR '+relative);files.push(relative);}
+            }
+           }
+           walk('');assert.deepEqual(files.sort(),expected,'SEARCH_COMPOSITION_SHADOW_COMPLETE_MEMBERS');return files;
+          }
+          function hold(root,before){if(root===SHADOW)shadowMembers();assert.deepEqual(snapshot(root),before,'SEARCH_COMPOSITION_COMPLETE_SOURCE_HOLD '+root);}
+          function foundation(){
+           assert.equal(process.env.GITHUB_REPOSITORY,'PapiSalgueroM/ballpark-hero');assert.equal(process.env.GITHUB_REPOSITORY_ID,'1195729679');
+           assert.equal(process.env.GITHUB_REF,'refs/heads/codex/search-composition-20261027');
+           assert.equal(git(['rev-parse','HEAD']).toString().trim(),process.env.GITHUB_SHA);
+           assert.equal(git(['show','-s','--format=%P','HEAD']).toString().trim(),PARENT);assert.equal(git(['rev-parse',PARENT+'^{tree}']).toString().trim(),PARENT_TREE);
+           assert.equal(git(['ls-tree','-r','--name-only',PARENT]).toString().trim().split('\n').length,5378);
+           const expected=['A\t'+WF,'M\tdocs/PROJECT-STATE.md','A\tscripts/qa/playSearchComposition.mjs','M\t'+TARGET,'A\t'+TEST].sort();
+           assert.deepEqual(git(['diff','--name-status',PARENT,'HEAD']).toString().trim().split('\n').sort(),expected);
+           assert.equal(paths().length,5381);assert.equal(git(['status','--porcelain','--untracked-files=all']).length,0);
+           for(const p of [...HELD,...PINS]){samePin(fs.readFileSync(p.path),p,p.path);if(HELD.includes(p))assert.equal(blob(git(['show',PARENT+':'+p.path])),p.gitBlob,'Parent '+p.path);}
+           const priorSearch=git(['show',PARENT+':'+TARGET]);
+           samePin(priorSearch,{bytes:16265,sha256:'d285a5f6cef6d4e47e3fb3cb9944cfbc88cd64000cc5f7e75068cd83e761ff72',gitBlob:'2bcfb9dfc8a540c69bd4d5a59815f48aa0c2565b'},'Parent Search');
+           for(const file of [TEST,'scripts/qa/playSearchComposition.mjs',WF])assert.equal(git(['ls-tree',PARENT,'--',file]).length,0,'Parent absence '+file);
+           const prior=git(['show',PARENT+':docs/PROJECT-STATE.md']),doc=fs.readFileSync('docs/PROJECT-STATE.md');
+           samePin(prior,{bytes:1860109,sha256:'20bfd9466033d70020d8ba6295b393a394f8c0fb5a40152b813937230a226ee1',gitBlob:'8f378afd1e8f175dadef3d3de033e2f59366e308'},'Doc prefix');
+           assert(doc.subarray(0,prior.length).equals(prior));assert.equal(doc.length-prior.length,1381);assert.equal(sha(doc.subarray(prior.length)),'2e4c9f8f873796fbbf8bb1d71acf02010e0e969a0005b8eac603f43d121ccee9');
+           raw('search.parent.tsx',priorSearch);raw('search.selected.tsx',fs.readFileSync(TARGET));save('all-source.before.json',snapshot());
+           save('source-binding.json',{source:process.env.GITHUB_SHA,parent:PARENT,parentTree:PARENT_TREE,tree:git(['rev-parse','HEAD^{tree}']).toString().trim(),run:process.env.GITHUB_RUN_ID,attempt:process.env.GITHUB_RUN_ATTEMPT,parentBlobs:5378,sourceBlobs:5381,directPaths:5,otherParentBlobsHeld:5376,criticalSources:[...HELD,...PINS,{path:WF,...pin(fs.readFileSync(WF))}],docPrefixHeld:true,fullSuite:false,livePublished:false});
+          }
+          function readReport(name,root){
+           const r=JSON.parse(fs.readFileSync(path.join(OUT,name),'utf8'));assert.equal(r.success,r.numFailedTests===0,'SEARCH_COMPOSITION_REPORT_SUCCESS');assert.equal(r.numRuntimeErrorTestSuites??0,0,'SEARCH_COMPOSITION_NO_COLLECTION_FAILURE');assert(!(r.unhandledErrors?.length),'SEARCH_COMPOSITION_NO_UNHANDLED');
+           const rows=[];assert(r.testResults.length>0);
+           for(const suite of r.testResults){assert.equal(suite.message??'','','SEARCH_COMPOSITION_NO_SUITE_ERROR');assert(suite.name.startsWith(root+path.sep),'SEARCH_COMPOSITION_REPORT_ROOT');for(const row of suite.assertionResults??[])rows.push({file:path.relative(root,suite.name).split(path.sep).join('/'),...row});}
+           assert.equal(rows.length,r.numTotalTests,'SEARCH_COMPOSITION_REPORT_TOTAL');return {r,rows};
+          }
+          const key=row=>JSON.stringify([row.file,row.ancestorTitles,row.title]);
+          function ownedMessage(row,index){
+           assert.equal(row.failureMessages.length,1,'SEARCH_COMPOSITION_SINGLE_OWNED_FAILURE');const m=row.failureMessages[0].replace(/\x1b\[[0-9;]*m/g,'');
+           assert(m.includes('Search.composition.test.tsx'),'SEARCH_COMPOSITION_OWNED_STACK');
+           assert(!/TestingLibraryElementError|Unhandled|timed out|Failed to resolve import|Cannot find (?:module|package)|SyntaxError|TypeError|ReferenceError/.test(m),'SEARCH_COMPOSITION_NO_INFRA_RED');
+           assert(/AssertionError/.test(m)&&m.includes(MARKERS[index])&&/expected true to be false\b/.test(m),'SEARCH_COMPOSITION_OWNED_UNCONSUMED_ASSERTION');
+          }
+          function newReport(name,mode){
+           const {r,rows}=readReport(name,SHADOW);assert.equal(r.numTotalTests,11);assert.equal(r.testResults.length,1);
+           assert.deepEqual(rows.map(key).sort(),TITLES.map(title=>key({file:TEST,ancestorTitles:[SUITE],title})).sort(),'SEARCH_COMPOSITION_EXACT_NEW_IDENTITIES');
+           const failed=rows.filter(x=>x.status==='failed'),passed=rows.filter(x=>x.status==='passed'),pending=rows.filter(x=>x.status==='pending'||x.status==='skipped');
+           assert.equal(failed.length+passed.length+pending.length,11);
+           assert.equal(r.numFailedTests,failed.length,'SEARCH_COMPOSITION_FAILED_AGGREGATE');assert.equal(r.numPassedTests,passed.length,'SEARCH_COMPOSITION_PASSED_AGGREGATE');assert.equal(r.numPendingTests,pending.length,'SEARCH_COMPOSITION_PENDING_AGGREGATE');assert.equal(r.numTodoTests,0,'SEARCH_COMPOSITION_NO_TODO');
+           assert.equal(pending.length,0,'SEARCH_COMPOSITION_ALL_CASES_EXECUTED');for(const row of passed)assert.equal(row.failureMessages.length,0,'SEARCH_COMPOSITION_NONFAILURE_MESSAGES_EMPTY');
+           if(mode==='healthy'){assert.equal(failed.length,0);assert.equal(passed.length,11);}
+           else{assert.equal(mode,'baseline');assert.equal(failed.length,6);assert.equal(passed.length,5);assert.deepEqual(failed.map(x=>x.title).sort(),TITLES.slice(0,6).sort());for(let index=0;index<6;index++)ownedMessage(failed.find(x=>x.title===TITLES[index]),index);}
+           return {name,mode,passed:passed.length,failed:failed.length,filtered:pending.length,rows:rows.map(x=>({file:x.file,ancestors:x.ancestorTitles,title:x.title,status:x.status,failureMessages:x.failureMessages}))};
+          }
+          function oldReport(name){
+           const {r,rows}=readReport(name,ROOT),want=OLD.flatMap(([file,ancestor,titles])=>titles.map(title=>({file,ancestorTitles:ancestor?[ancestor]:[],title})));
+           assert.equal(r.numTotalTests,9);assert.equal(r.numPassedTests,9);assert.equal(r.numFailedTests,0);assert.equal(r.numPendingTests,0);assert.equal(r.numTodoTests,0,'SEARCH_COMPOSITION_OLD_NO_TODO');assert.equal(r.testResults.length,1);
+           assert.deepEqual(rows.map(key).sort(),want.map(key).sort(),'SEARCH_COMPOSITION_EXACT_OLD_IDENTITIES');for(const row of rows){assert.equal(row.status,'passed');assert.equal(row.failureMessages.length,0);}
+           return {name,cases:9,rows:rows.map(x=>({file:x.file,ancestors:x.ancestorTitles,title:x.title,status:x.status}))};
+          }
+          const guard=path.join(ROOT,'scripts/lib/offlineTransport.cjs'),rows=[],failures=[];
+          const deadlines={types:240000,old:240000,healthy:240000,baseline:240000,restored:240000,build:900000,'composition-browser':240000,caps:300000};
+          async function run(id,command,args=[],extra={},expectedStatus=0,cwd=ROOT){
+           const deadlineMs=deadlines[id]??180000;
+           const receipt=path.join(OUT,id+'.transport');fs.writeFileSync(receipt,'',{flag:'wx'});
+           const stdout=fs.openSync(path.join(OUT,id+'.stdout'),'wx'),stderr=fs.openSync(path.join(OUT,id+'.stderr'),'wx');
+           const record={id,command,args,cwd,expectedStatus,startedAt:new Date().toISOString(),pid:null,status:null,signal:null,error:null,closed:false,deadlineMs,deadlineExpired:false,signalAttempts:[]};
+           const child=cp.spawn(command,args,{cwd,detached:true,stdio:['ignore',stdout,stderr],env:{...process.env,NODE_OPTIONS:'--require='+guard,SIM_OFFLINE_RECEIPT:receipt,...extra}});
+           record.pid=child.pid??null;save(id+'.start.json',record);
+           let termTimer=null,killTimer=null;
+           const signalGroup=signal=>{
+            const attempt={signal,at:new Date().toISOString(),error:null};
+            try{process.kill(-child.pid,signal);}catch(error){attempt.error={name:error.name,message:error.message,code:error.code??null};}
+            record.signalAttempts.push(attempt);
+           };
+           if(child.pid)termTimer=setTimeout(()=>{
+            record.deadlineExpired=true;signalGroup('SIGTERM');
+            killTimer=setTimeout(()=>{if(!record.closed)signalGroup('SIGKILL');},15000);
+           },deadlineMs);
+           child.on('error',error=>record.error={name:error.name,message:error.message,code:error.code??null});
+           await new Promise(resolve=>child.on('close',(status,signal)=>{record.status=status;record.signal=signal;record.closed=true;record.closedAt=new Date().toISOString();resolve();}));
+           if(termTimer)clearTimeout(termTimer);if(killTimer)clearTimeout(killTimer);
+           fs.closeSync(stdout);fs.closeSync(stderr);
+           for(const [field,suffix] of [['receipt','.transport'],['stdout','.stdout'],['stderr','.stderr']]){const b=fs.readFileSync(path.join(OUT,id+suffix));record[field+'Bytes']=b.length;record[field+'Sha256']=sha(b);}
+           save(id+'.closed.json',record);rows.push(record);
+           if(record.deadlineExpired||record.status!==expectedStatus||record.signal!==null||record.error||record.receiptBytes!==0)failures.push(id);
+           return record;
+          }
+          function requireNative(row){assert.equal(row.deadlineExpired,false,'SEARCH_COMPOSITION_NATIVE_DEADLINE');assert.equal(row.status,row.expectedStatus,'SEARCH_COMPOSITION_NATIVE_STATUS');assert.equal(row.signal,null);assert.equal(row.error,null);assert.equal(row.receiptBytes,0);}
+          function unitArgs(root,files,name){
+           return [path.join(ROOT,'node_modules/vitest/vitest.mjs'),'run',...files,'--config',path.join(root,'vitest.config.ts'),'--root',root,'--no-cache','--maxWorkers=1','--no-file-parallelism','--reporter=json','--outputFile='+path.join(OUT,name)];
+          }function shadowPrepare(){
+           assert(path.isAbsolute(SHADOW)&&!SHADOW.startsWith(OUT+path.sep)&&!SHADOW.startsWith(ROOT+path.sep),'SEARCH_COMPOSITION_SEPARATE_SHADOW');assert(!fs.existsSync(SHADOW),'SEARCH_COMPOSITION_FRESH_SHADOW');fs.mkdirSync(SHADOW);
+           for(const file of paths()){const f=path.join(SHADOW,file);fs.mkdirSync(path.dirname(f),{recursive:true});fs.copyFileSync(path.join(ROOT,file),f,fs.constants.COPYFILE_EXCL);}
+           fs.symlinkSync(path.join(ROOT,'node_modules'),path.join(SHADOW,'node_modules'),'dir');linkHold();const before=snapshot();hold(SHADOW,before);save('shadow-source.before.json',before);return before;
+          }
+          function searchWrite(role,before,after){
+           assert(!before.equals(after),'SEARCH_COMPOSITION_EFFECTIVE_SOURCE_CHANGE');const f=path.join(SHADOW,TARGET);assert(fs.readFileSync(f).equals(before));raw(role+'.before.tsx',before);fs.writeFileSync(f,after);assert(fs.readFileSync(f).equals(after));raw(role+'.changed.tsx',after);
+          }
+          function searchRestore(role,selected){fs.writeFileSync(path.join(SHADOW,TARGET),selected);assert(fs.readFileSync(path.join(SHADOW,TARGET)).equals(selected));raw(role+'.restored.tsx',selected);}
+          async function functional(){
+           const before=JSON.parse(fs.readFileSync(path.join(OUT,'all-source.before.json'),'utf8')),shadow=shadowPrepare(),selected=fs.readFileSync(TARGET),admissions=[];
+           requireNative(await run('types',process.execPath,['node_modules/typescript/bin/tsc','--noEmit','-p','tsconfig.app.json']));
+           requireNative(await run('old',process.execPath,unitArgs(ROOT,OLD.map(x=>x[0]),'old.json')));admissions.push(oldReport('old.json'));
+           requireNative(await run('healthy',process.execPath,unitArgs(SHADOW,[TEST],'healthy.json'),{},0,SHADOW));admissions.push(newReport('healthy.json','healthy'));hold(ROOT,before);hold(SHADOW,shadow);
+           const prior=fs.readFileSync(path.join(OUT,'search.parent.tsx')),text=selected.toString('utf8'),offset=text.indexOf(GUARD);
+           assert.equal(text.split(GUARD).length-1,1,'SEARCH_COMPOSITION_UNIQUE_GUARD');
+           assert.equal(text.replace(GUARD,''),prior.toString('utf8'),'SEARCH_COMPOSITION_EXACT_WHOLE_BASELINE');
+           assert.equal(prior.toString('utf8').slice(0,offset)+GUARD+prior.toString('utf8').slice(offset),text,'SEARCH_COMPOSITION_BASELINE_FULL_INVERSE');
+           save('baseline-search.source.json',{target:TARGET,literalSpan:{before:GUARD,after:''},stagePin:{before:pin(selected),after:pin(prior)},indexUtf16:offset,indexUtf8:Buffer.byteLength(text.slice(0,offset)),wholeInverseExact:true});
+           try{searchWrite('baseline-search',selected,prior);requireNative(await run('baseline',process.execPath,unitArgs(SHADOW,[TEST],'baseline.json'),{},1,SHADOW));admissions.push(newReport('baseline.json','baseline'));}
+           finally{searchRestore('baseline-search',selected);hold(SHADOW,shadow);hold(ROOT,before);}
+           requireNative(await run('restored',process.execPath,unitArgs(SHADOW,[TEST],'restored.json'),{},0,SHADOW));admissions.push(newReport('restored.json','healthy'));hold(SHADOW,shadow);hold(ROOT,before);
+           save('functional-admission.json',{source:process.env.GITHUB_SHA,oldCases:9,newCases:11,baseline:{failed:6,passed:5},physicalGuardControls:1,admissions,canonicalHeld:true,shadowRestored:true,fullSuite:false});
+          }
+          async function checks(){
+           let server=null,serverDone=null;const before=JSON.parse(fs.readFileSync(path.join(OUT,'all-source.before.json'),'utf8'));
+           try{
+            await functional();requireNative(await run('build','npm',['run','build']));
+            cp.execFileSync('bash',['-eu','-o','pipefail','-c','find dist -type f -print0 | sort -z > "$SEARCH_COMPOSITION_EVIDENCE/dist-members.before"; find dist -type f -print0 | sort -z | xargs -0 sha256sum > "$SEARCH_COMPOSITION_EVIDENCE/dist.sha256"; tar -cf "$SEARCH_COMPOSITION_EVIDENCE/dist.tar" -C dist .']);
+            for(const name of READERS)await run(name,process.execPath,['scripts/'+name+'.mjs']);
+            const receipt=path.join(OUT,'server.transport');fs.writeFileSync(receipt,'',{flag:'wx'});
+            const stdout=fs.openSync(path.join(OUT,'server.stdout'),'wx'),stderr=fs.openSync(path.join(OUT,'server.stderr'),'wx');
+            const sr={pid:null,status:null,signal:null,error:null,startedAt:new Date().toISOString(),closed:false};
+            server=cp.spawn(process.execPath,['scripts/lib/hostLikeServer.mjs','dist','4173'],{detached:true,stdio:['ignore',stdout,stderr],env:{...process.env,NODE_OPTIONS:'--require='+guard,SIM_OFFLINE_RECEIPT:receipt}});
+            sr.pid=server.pid??null;save('server.start.json',sr);
+            serverDone=new Promise(resolve=>{server.on('error',e=>sr.error={name:e.name,message:e.message,code:e.code??null});server.on('close',(status,signal)=>{sr.status=status;sr.signal=signal;sr.closed=true;sr.closedAt=new Date().toISOString();fs.closeSync(stdout);fs.closeSync(stderr);for(const [field,suffix] of [['receipt','.transport'],['stdout','.stdout'],['stderr','.stderr']]){const b=fs.readFileSync(path.join(OUT,'server'+suffix));sr[field+'Bytes']=b.length;sr[field+'Sha256']=sha(b);}save('server.closed.json',sr);resolve();});});
+            for(let attempt=0;;attempt++){try{const response=await fetch('http://127.0.0.1:4173/');if(!response.ok)throw Error('Server not ready');await response.arrayBuffer();break;}catch(error){if(attempt===9)throw error;await new Promise(resolve=>setTimeout(resolve,500));}}
+            await run('composition-browser',process.execPath,['scripts/qa/playSearchComposition.mjs'],{SEARCH_COMPOSITION_OUT:path.join(OUT,'search-composition-browser')});
+            await run('caps',process.execPath,['scripts/sweepWeight.mjs'],{BASE:'http://127.0.0.1:4173',SWEEP_BASE:'http://127.0.0.1:4173',SWEEP_OFFLINE:'1',NODE_OPTIONS:'--require='+guard+' --require='+path.join(OUT,'caps-preload.cjs')});
+           }catch(error){save('orchestration-error.json',{name:error.name,message:error.message,stack:error.stack});failures.push('orchestration');}
+           finally{
+            if(server){if(!server.killed)server.kill('SIGTERM');const timer=setTimeout(()=>{if(server.exitCode===null&&server.signalCode===null)try{process.kill(-server.pid,'SIGKILL');}catch{}},15000);await serverDone;clearTimeout(timer);}
+            hold(ROOT,before);if(fs.existsSync(SHADOW))hold(SHADOW,before);
+            save('native-processes.json',{source:process.env.GITHUB_SHA,run:process.env.GITHUB_RUN_ID,attempt:process.env.GITHUB_RUN_ATTEMPT,rows,failures,expectedCommands:26,fullSuite:false,livePublished:false,pixelsReviewed:false});
+           }
+           process.exitCode=failures.length?1:0;
+          }
+          function final(){
+           const before=JSON.parse(fs.readFileSync(path.join(OUT,'all-source.before.json'),'utf8'));hold(ROOT,before);hold(SHADOW,before);save('all-source.after.json',snapshot());save('shadow-source.after.json',snapshot(SHADOW));
+           const n=JSON.parse(fs.readFileSync(path.join(OUT,'native-processes.json'),'utf8'));assert.equal(n.rows.length,26);assert.equal(n.failures.length,0);assert.equal(new Set(n.rows.map(x=>x.pid)).size,26);for(const row of n.rows)requireNative(row);
+           oldReport('old.json');newReport('healthy.json','healthy');newReport('baseline.json','baseline');newReport('restored.json','healthy');
+           const server=JSON.parse(fs.readFileSync(path.join(OUT,'server.closed.json'),'utf8'));assert.equal(server.closed,true);assert.equal(server.error,null);assert.equal(server.receiptBytes,0);assert(server.status===0||server.signal==='SIGTERM','SEARCH_COMPOSITION_SERVER_CLOSED');
+           const observed=JSON.parse(fs.readFileSync(path.join(OUT,'search-composition-browser/browser-observations.json'),'utf8'));assert.equal(observed.source,process.env.GITHUB_SHA);assert.equal(observed.syntheticComposition,true);assert.equal(observed.osImeTested,false);assert.equal(observed.pixelsReviewed,false);assert.equal(observed.cases.length,2);
+           assert.deepEqual(observed.cases.map(x=>x.id),['328-515-dark','1280-900-light']);
+           for(const c of observed.cases){assert.equal(c.complete,true);assert.equal(c.failure,undefined);assert.equal(c.errors.length,0);assert.equal(c.observations.length,16);}
+           save('final-admission.json',{source:process.env.GITHUB_SHA,parent:PARENT,sourceBlobs:5381,directPaths:5,supervised:26,expectedZero:25,expectedOwnedRed:1,oldCases:9,newCases:11,baseline:{passed:5,ownedFailed:6},physicalGuardControls:1,newBrowserContexts:2,pixelsReviewed:false,syntheticComposition:true,osImeTested:false,fullSuite:false,livePublished:false});
+          }async function main(){assert(OUT&&path.isAbsolute(OUT));assert(SHADOW&&path.isAbsolute(SHADOW));const mode=process.argv[2];assert(['foundation','checks','final'].includes(mode));if(mode==='foundation')foundation();else if(mode==='checks')await checks();else final();}
+          main().catch(error=>{console.error(error);process.exitCode=1;});
+          RUNNER
+          cat > "$out/caps-preload.cjs" <<'PRELOAD'
+          'use strict';
+          const fs=require('node:fs'),path=require('node:path'),assert=require('node:assert/strict'),{createHash}=require('node:crypto');
+          const sha=b=>createHash('sha256').update(b).digest('hex');
+          const dir=process.env.FREE_KICK_FONT_CACHE,manifest=fs.readFileSync(path.join(dir,'manifest.json'));
+          assert.equal(sha(manifest),process.env.FONT_CACHE_MANIFEST_SHA256);
+          const fonts=new Map();
+          for(const entry of JSON.parse(manifest)){
+            const u=new URL(entry.url);assert(['https://fonts.googleapis.com','https://fonts.gstatic.com'].includes(u.origin));
+            assert.equal(entry.file,sha(entry.url));assert(!fonts.has(entry.url));
+            const body=fs.readFileSync(path.join(dir,entry.file));assert.equal(sha(body),entry.sha256);fonts.set(entry.url,{...entry,body});
+          }
+          const pw=require(path.join(process.cwd(),'node_modules/playwright-core')),launch=pw.chromium.launch.bind(pw.chromium);
+          pw.chromium.launch=async options=>{
+            const browser=await launch(options),newContext=browser.newContext.bind(browser);
+            browser.newContext=async options=>{
+              const context=await newContext(options);
+              await context.route('**/*',async route=>{
+                const req=route.request(),u=new URL(req.url()),entry=fonts.get(req.url());
+                if(entry&&req.method()==='GET'&&['stylesheet','font'].includes(req.resourceType())){
+                  fs.appendFileSync(process.env.SEARCH_COMPOSITION_EVIDENCE+'/caps-prepared-io.jsonl',JSON.stringify({kind:'prepared-font',url:req.url(),sha256:entry.sha256})+'\n');
+                  return route.fulfill({status:200,contentType:entry.contentType,body:entry.body});
+                }
+                if(u.origin==='https://flagcdn.com'&&!u.username&&!u.password&&!u.search&&!u.hash&&req.method()==='GET'&&req.resourceType()==='image'&&/^\/(?:w[1-9][0-9]{0,2}\/|h[1-9][0-9]{0,2}\/|[1-9][0-9]{0,2}x[1-9][0-9]{0,2}\/)?[a-z]{2}(?:-[a-z0-9]{1,8})?\.(?:png|webp|svg)$/.test(u.pathname)){
+                  fs.appendFileSync(process.env.SEARCH_COMPOSITION_EVIDENCE+'/caps-prepared-io.jsonl',JSON.stringify({kind:'flag-abort',url:req.url()})+'\n');
+                  return route.abort();
+                }
+                return route.fallback();
+              });
+              return context;
+            };
+            return browser;
+          };
+          PRELOAD
+          : > "$out/payload-prepare.transport";status=0
+          NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" SIM_OFFLINE_RECEIPT="$out/payload-prepare.transport" node <<'PAYLOAD' > "$out/payload-prepare.stdout" 2> "$out/payload-prepare.stderr" &
+          const fs=require('node:fs'),assert=require('node:assert/strict'),{createHash}=require('node:crypto'),out=process.env.SEARCH_COMPOSITION_EVIDENCE;
+          const sha=b=>createHash('sha256').update(b).digest('hex');
+          const runner=fs.readFileSync(out+'/search-composition.cjs'),preload=fs.readFileSync(out+'/caps-preload.cjs');
+          assert.equal(runner.length,29601);assert.equal(sha(runner),'6b19c3a2e34bab98b430c0c7e7e042ca0d3775ec3f8ad51dddc39bfa6f9cc2a1');
+          assert.equal(preload.length,2128);assert.equal(sha(preload),'60413b983ce16c42b476a417866ebb4762273e7ad08c2cd94449a224772dbe54');
+          fs.writeFileSync(out+'/payload-binding.json',JSON.stringify({runner:{bytes:runner.length,sha256:sha(runner)},preload:{bytes:preload.length,sha256:sha(preload)}},null,2)+'\n',{flag:'wx'});
+          PAYLOAD
+          pid=$!;printf '%s\n' "$pid" > "$out/payload-prepare.pid";wait "$pid" || status=$?
+          printf '%s\n' "$status" > "$out/payload-prepare.exit"
+          test "$status" -eq 0;test ! -s "$out/payload-prepare.transport"
+          : > "$out/foundation.transport";status=0
+          NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" SIM_OFFLINE_RECEIPT="$out/foundation.transport" node "$out/search-composition.cjs" foundation > "$out/foundation.stdout" 2> "$out/foundation.stderr" &
+          pid=$!;printf '%s\n' "$pid" > "$out/foundation.pid";wait "$pid" || status=$?
+          printf '%s\n' "$status" > "$out/foundation.exit"
+          test "$status" -eq 0;test ! -s "$out/foundation.transport"
+          find "$out" -maxdepth 1 -type f -name '*.cjs' -print0 | sort -z | xargs -0 sha256sum > "$out/generated.sha256"
+      - name: Locked packages and isolated browser tools
+        id: install
+        timeout-minutes: 15
+        run: |
+          set -euo pipefail
+          out="$SEARCH_COMPOSITION_EVIDENCE"
+          npm ci > "$out/npm-ci.log" 2>&1
+          browser_tools="$RUNNER_TEMP/search-composition-tools";test ! -e "$browser_tools"
+          echo "SEARCH_COMPOSITION_BROWSER_TOOLS=$browser_tools" >> "$GITHUB_ENV"
+          npm install --prefix "$browser_tools" --no-save --package-lock=false playwright@1.64.0 > "$out/playwright-install.log" 2>&1
+          test ! -e node_modules/playwright;test ! -e node_modules/playwright-core
+          ln -s "$browser_tools/node_modules/playwright" node_modules/playwright
+          ln -s "$browser_tools/node_modules/playwright-core" node_modules/playwright-core
+          for name in playwright playwright-core;do readlink -f "node_modules/$name";done > "$out/browser-links.before"
+          node "$browser_tools/node_modules/playwright/cli.js" install --with-deps chromium > "$out/chromium-install.log" 2>&1
+          python -m pip install fonttools pillow > "$out/python-install.log" 2>&1
+          FREE_KICK_FONT_CACHE="$out/font-cache" node scripts/qa/freeKickLab1070.mjs --prefetch-fonts-only > "$out/font-prefetch.log" 2>&1
+          echo "FONT_CACHE_MANIFEST_SHA256=$(sha256sum "$out/font-cache/manifest.json" | cut -d ' ' -f 1)" >> "$GITHUB_ENV"
+          find node_modules -type f -print0 | sort -z > "$out/dependency-members.before"
+          find node_modules -type f -print0 | sort -z | xargs -0 sha256sum > "$out/dependencies.sha256"
+          find "$browser_tools" -type f -print0 | sort -z > "$out/browser-members.before"
+          find "$browser_tools" -type f -print0 | sort -z | xargs -0 sha256sum > "$out/browser-tools.sha256"
+          find "$out/font-cache" -type f -print0 | sort -z > "$out/font-members.before"
+          find "$out/font-cache" -type f -print0 | sort -z | xargs -0 sha256sum > "$out/font-cache.sha256"
+      - name: Exact Search composition tests original baseline build18 readers browser and unchanged caps
+        id: checks
+        run: |
+          set -euo pipefail
+          out="$SEARCH_COMPOSITION_EVIDENCE";status=0
+          : > "$out/orchestrator.transport"
+          NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" SIM_OFFLINE_RECEIPT="$out/orchestrator.transport" node "$out/search-composition.cjs" checks > "$out/orchestrator.stdout" 2> "$out/orchestrator.stderr" &
+          pid=$!;printf '%s\n' "$pid" > "$out/orchestrator.pid";wait "$pid" || status=$?
+          printf '%s\n' "$status" > "$out/orchestrator.exit"
+          test "$status" -eq 0;test ! -s "$out/orchestrator.transport"
+      - name: Complete source dependency tool font and dist holds
+        id: holds
+        if: ${{ always() && steps.install.outcome == 'success' }}
+        run: |
+          set -euo pipefail
+          out="$SEARCH_COMPOSITION_EVIDENCE";failed=0
+          for name in source dependencies browser-tools font-cache generated dist;do
+            if test -f "$out/$name.sha256";then sha256sum -c "$out/$name.sha256" > "$out/$name-hold.log" 2>&1 || failed=1;else printf 'Missing required manifest\n' > "$out/$name-hold.log";failed=1;fi
+          done
+          git ls-files -z | sort -z > "$out/source-members.after"
+          cmp "$out/source-members.before" "$out/source-members.after" || failed=1
+          find node_modules -type f -print0 | sort -z > "$out/dependency-members.after"
+          cmp "$out/dependency-members.before" "$out/dependency-members.after" || failed=1
+          find "$SEARCH_COMPOSITION_BROWSER_TOOLS" -type f -print0 | sort -z > "$out/browser-members.after"
+          cmp "$out/browser-members.before" "$out/browser-members.after" || failed=1
+          find "$out/font-cache" -type f -print0 | sort -z > "$out/font-members.after"
+          cmp "$out/font-members.before" "$out/font-members.after" || failed=1
+          find dist -type f -print0 | sort -z > "$out/dist-members.after"
+          cmp "$out/dist-members.before" "$out/dist-members.after" || failed=1
+          for name in playwright playwright-core;do readlink -f "node_modules/$name";done > "$out/browser-links.after"
+          cmp "$out/browser-links.before" "$out/browser-links.after" || failed=1
+          git diff --exit-code HEAD > "$out/source-clean-after.log" || failed=1
+          test -z "$(git status --porcelain --untracked-files=all)" || failed=1
+          tar -cf "$out/source-after.tar" --null -T "$out/source-members.after"
+          if test -d dist;then tar -cf "$out/dist-after.tar" -C dist .;fi
+          for name in payload-prepare foundation orchestrator server;do test -f "$out/$name.transport" && test ! -s "$out/$name.transport" || failed=1;done
+          : > "$out/final.transport";status=0
+          NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" SIM_OFFLINE_RECEIPT="$out/final.transport" node "$out/search-composition.cjs" final > "$out/final.stdout" 2> "$out/final.stderr" &
+          pid=$!;printf '%s\n' "$pid" > "$out/final.pid";wait "$pid" || status=$?
+          printf '%s\n' "$status" > "$out/final.exit"
+          test "$status" -eq 0 || failed=1;test ! -s "$out/final.transport" || failed=1
+          printf '%s\n' "$failed" > "$out/final-holds.exit"
+          exit "$failed"
+      - name: Seal all retained evidence including partial failures
+        if: ${{ always() && steps.foundation.outcome != 'skipped' }}
+        run: |
+          set -euo pipefail
+          out="$SEARCH_COMPOSITION_EVIDENCE";test -d "$out"
+          cd "$out"
+          find . ! -type d ! -type f -print > nonregular.txt
+          test ! -s nonregular.txt
+          find . -type f ! -name evidence.sha256 -print0 | sort -z | xargs -0 sha256sum > evidence.sha256
+      - uses: actions/upload-artifact@v4
+        if: ${{ always() && steps.foundation.outcome != 'skipped' }}
+        with:
+          name: search-composition-${{ github.run_id }}-a${{ github.run_attempt }}
+          path: ${{ env.SEARCH_COMPOSITION_EVIDENCE }}
+          if-no-files-found: error
+          retention-days: 30
