@@ -6,7 +6,7 @@
  *
  * Before this round a Club Manager shootout was one draw: 0.5, plus the
  * strength gap times 0.012, plus the assigned penalty taker's edge, clamped
- * to 0.2..0.8. It still is, for every save that never set an order. With an
+ * to 0.2..0.8. Its winner still is, for every save that never set an order. With an
  * order set on the tactics tab (CareerState.shootoutOrder, player ids, up
  * to eleven) the shootout goes kick by kick: shootoutTakerOrder walks the
  * listed men still on the pitch in the manager's order, then the unlisted
@@ -18,6 +18,10 @@
  * a side cannot be caught, then sudden death round the list. The report
  * carries every kick (MatchWeekReport.shootout), decidedBy and shootoutWon
  * exactly as before.
+ * Default-order details now use a detached stream. Historical comparisons
+ * remove only those details and their exact penalty-event count suffix;
+ * every other report field, the whole saved state and the next draw stay
+ * held. Raw report hashes remain beside the normalized historical hashes.
  *
  * Sections, each against the real engine bundled with esbuild:
  *   1) The walk, through the whole match. One base career (Real Madrid,
@@ -326,8 +330,8 @@ if (CONTROL) {
       'shootoutKeeperEdge (the clamp)');
   } else if (CONTROL === 'unsetpath') {
     engine = swap(engine,
-      '  if (!order) return { won: Math.random() < clamp(0.5 + (mine - oppS) * 0.012 + shootoutTakerEdge(taker), 0.2, 0.8) };\n',
-      '  if (!order) { Math.random(); return { won: Math.random() < clamp(0.5 + (mine - oppS) * 0.012 + shootoutTakerEdge(taker), 0.2, 0.8) }; }\n',
+      '  const roll = order ? null : Math.random();\n',
+      '  const roll = order ? null : (Math.random(), Math.random());\n',
       'settleShootout (the one draw path)');
   } else if (CONTROL === 'ownkeeper') {
     engine = swap(engine,
@@ -598,6 +602,8 @@ console.log(`   base: ${CLUB}, cup ${cupEntry.cupRound} in week ${atCup.week}, s
 /** One cup match from the base, on a seed, and the next number off the stream once it is over. */
 function playCup(state, seed, engine = cm) {
   return withSeed(seed, () => {
+    const noOrder = typeof engine.shootoutOrderOf === 'function'
+      ? engine.shootoutOrderOf(state) === null : !state.shootoutOrder?.length;
     const r = engine.playNextEntry(state, { skipHalftime: true });
     if (r.kind !== 'match' || !r.report) abort(`seed ${seed}: the cup week did not play a match (${r.kind})`);
     if (r.report.competition !== 'cup') abort(`seed ${seed}: played a ${r.report.competition} match, not the cup`);
@@ -619,12 +625,37 @@ function playCup(state, seed, engine = cm) {
          under unsetpath). The other results, ratings and books drawn after
          the shootout cannot all land the same. */
       hash: fnv(JSON.stringify({ report: rep, state: r.state })),
+      legacyHash: fnv(JSON.stringify({ report: legacyDefaultReport(rep, noOrder), state: r.state })),
+      noOrder,
       report: rep,
       state: r.state,
     };
   });
 }
 const row = ({ seed, decidedBy, shootoutWon, homeGoals, awayGoals, next, hash }) => ({ seed, decidedBy, shootoutWon, homeGoals, awayGoals, next, hash });
+const legacyRow = out => ({ ...row(out), hash: out.legacyHash ?? out.hash });
+function legacyDefaultReport(report, noOrder) {
+  if (!noOrder || !report.shootout) return report;
+  const detail = report.shootout;
+  const last = Array.isArray(detail.kicks) ? detail.kicks[detail.kicks.length - 1] : null;
+  if (report.decidedBy !== 'pens' || !Number.isInteger(detail.mine) || !Number.isInteger(detail.theirs)
+    || detail.mine < 0 || detail.theirs < 0 || last?.mine !== detail.mine || last?.theirs !== detail.theirs
+    || (detail.mine > detail.theirs) !== (report.shootoutWon ?? report.won)) {
+    fail('Default shootout details cannot be removed from an incomplete or contradictory report');
+    return report;
+  }
+  const stem = (report.shootoutWon ?? report.won)
+    ? '🥅 Nerves of steel. You win the shootout.'
+    : '🥅 Heartbreak from the spot: shootout defeat.';
+  const counted = `${stem.slice(0, -1)} ${detail.mine}-${detail.theirs}.`;
+  const indices = report.events.flatMap((event, i) => event === counted ? [i] : []);
+  if (indices.length !== 1) {
+    fail('Default shootout report has no unique exact penalty-event count suffix');
+    return report;
+  }
+  const { shootout, ...legacy } = report;
+  return { ...legacy, events: report.events.map((event, i) => i === indices[0] ? stem : event) };
+}
 const sortedJSON = value => JSON.stringify(value, (_key, item) => item && typeof item === 'object' && !Array.isArray(item)
   ? Object.fromEntries(Object.keys(item).sort().map(key => [key, item[key]])) : item);
 function compareContent(candidate, baseline) {
@@ -639,7 +670,7 @@ function compareContent(candidate, baseline) {
        field out on both sides. scripts/simCmLeagueBook.mjs holds the book itself, and that the whole save
        but the book and the count of draws are what they were with the book taken out of the engine. */
     delete state.leagueBook;
-    const content = sortedJSON({ report: out.report, state });
+    const content = sortedJSON({ report: legacyDefaultReport(out.report, out.noOrder), state });
     return { present, inactive, content, hash: createHash('sha256').update(content).digest('hex') };
   });
   const [a, b] = readings;
@@ -900,6 +931,7 @@ const baselineEvidence = { baselineRef: '5b70b05f', baselineSourceHash, rows: []
   let same = 0;
   let pens = 0;
   let withKicks = 0;
+  let defaultPens = 0;
   let shown = 0;
   let sameBaseline = 0;
   let sameRaw = 0;
@@ -916,8 +948,8 @@ const baselineEvidence = { baselineRef: '5b70b05f', baselineSourceHash, rows: []
       if (altContent.paired) { out = alt; content = altContent; by1052 += 1; }
     }
     const got = row(out);
-    const goldenCandidate = JSON.stringify(got) === JSON.stringify(want);
-    const goldenBaseline = JSON.stringify(base) === JSON.stringify(want);
+    const goldenCandidate = JSON.stringify(legacyRow(out)) === JSON.stringify(want);
+    const goldenBaseline = JSON.stringify(legacyRow(baselineOut)) === JSON.stringify(want);
     const rawPaired = JSON.stringify(got) === JSON.stringify(base);
     if (!rawPaired && !baselineEvidence.firstDifference) baselineEvidence.firstDifference = {
       seed: want.seed, candidate: { report: out.report, state: out.state },
@@ -930,18 +962,20 @@ const baselineEvidence = { baselineRef: '5b70b05f', baselineSourceHash, rows: []
     if (goldenBaseline) baselineGolden += 1;
     if (goldenCandidate !== goldenBaseline) fail(`ancient golden mismatch differs from actual pre-1072 main at seed ${want.seed}`);
     if (out.report.shootout) withKicks += 1;
+    if (out.report.decidedBy === 'pens') defaultPens += 1;
     if (want.decidedBy === 'pens') pens += 1;
     if (goldenCandidate) same += 1;
   }
   console.log(`   ${same} of ${fixture.rows.length} rows reproduced (${pens} of them shootouts, written from ${fixture.writtenFrom} on ${fixture.writtenOn}); ${withKicks} carried kicks`);
-  console.log(`   ${sameBaseline} of ${fixture.rows.length} rows equal actual pre-1072 main in result, next draw and full content (${sameRaw} raw hashes); ancient golden mismatches candidate ${fixture.rows.length - same}, baseline ${fixture.rows.length - baselineGolden}`);
+  console.log(`   ${sameBaseline} of ${fixture.rows.length} rows equal actual pre-1072 main in result, next draw and full content after the default-detail allowance (${sameRaw} raw hashes); ancient golden mismatches candidate ${fixture.rows.length - same}, baseline ${fixture.rows.length - baselineGolden}`);
   baselineEvidence.summary = { rows: fixture.rows.length, paired: sameBaseline, rawPaired: sameRaw,
-    goldenCandidateMismatches: fixture.rows.length - same, goldenBaselineMismatches: fixture.rows.length - baselineGolden };
+    goldenCandidateMismatches: fixture.rows.length - same, goldenBaselineMismatches: fixture.rows.length - baselineGolden,
+    defaultPens, withKicks };
   if (by1052) console.log(`   ${by1052} of those rows equal it only with Round 1052's league and Round 1520's made up countries taken out of this tree's world in memory (the move is that round's)`);
   baselineEvidence.summary.by1052 = by1052;
   if (sameBaseline !== fixture.rows.length) fail(`${fixture.rows.length - sameBaseline} rows differ from the actual pre-1072 engine with no order set`);
   if (same !== baselineGolden) fail(`ancient golden matching counts differ: candidate ${same}, actual pre-1072 main ${baselineGolden}`);
-  if (withKicks) fail(`${withKicks} reports carried shootout kicks with no order set`);
+  if (withKicks !== defaultPens) fail(`${withKicks} default-order reports carried kicks for ${defaultPens} actual shootouts`);
   if (pens < 12) fail(`the fixture holds only ${pens} shootouts, under the floor of 12`);
 
   /* Release AL (2026-10-07): the same comparison on section 1's base. The
@@ -975,11 +1009,11 @@ const baselineEvidence = { baselineRef: '5b70b05f', baselineSourceHash, rows: []
     if (out.report.shootout) namedKicks += 1;
   }
   const livePens = baselineEvidence.rows.filter(r => r.baseline.decidedBy === 'pens').length;
-  console.log(`   on section 1's base: ${namedSame} of ${NAMED_SEEDS.length} rows equal actual pre-1072 main in result, next draw and full content, ${namedPens} of them settled on penalties by main (${livePens} on the fixture's base)`);
+  console.log(`   on section 1's base: ${namedSame} of ${NAMED_SEEDS.length} rows equal actual pre-1072 main in result, next draw and full content after the default-detail allowance, ${namedPens} of them settled on penalties by main (${livePens} on the fixture's base)`);
   if (namedBy1052) console.log(`   ${namedBy1052} of those rows equal it only with Round 1052's league and Round 1520's made up countries taken out of this tree's world in memory`);
   baselineEvidence.namedBase = { seed: NAMED_BASE_SEED, rows: NAMED_SEEDS.length, paired: namedSame, pens: namedPens, by1052: namedBy1052 };
   if (namedSame !== NAMED_SEEDS.length) fail(`${NAMED_SEEDS.length - namedSame} rows on section 1's base differ from the actual pre-1072 engine with no order set`);
-  if (namedKicks) fail(`${namedKicks} reports on section 1's base carried shootout kicks with no order set`);
+  if (namedKicks !== namedPens) fail(`${namedKicks} default-order reports on section 1's base carried kicks for ${namedPens} actual shootouts`);
   if (namedPens < 12) fail(`main settles only ${namedPens} of the rows on section 1's base on penalties, under the floor of 12, so the one draw path is barely walked`);
 }
 
@@ -1031,8 +1065,8 @@ section = 5;
       if (altContent.paired) { out = alt; content = altContent; oldBy1052 = true; }
     }
     const got = row(out);
-    const goldenCandidate = JSON.stringify(got) === JSON.stringify(probe);
-    const goldenBaseline = JSON.stringify(base) === JSON.stringify(probe);
+    const goldenCandidate = JSON.stringify(legacyRow(out)) === JSON.stringify(probe);
+    const goldenBaseline = JSON.stringify(legacyRow(baselineOut)) === JSON.stringify(probe);
     const rawPaired = JSON.stringify(got) === JSON.stringify(base);
     baselineEvidence.oldLoad = { seed: probe.seed, candidate: got, baseline: base, goldenCandidate, goldenBaseline, rawPaired, by1052: oldBy1052, ...content };
     if (oldBy1052) console.log(`   the old save equals actual pre-1072 main only with Round 1052's league and Round 1520's made up countries taken out of this tree's world in memory`);
