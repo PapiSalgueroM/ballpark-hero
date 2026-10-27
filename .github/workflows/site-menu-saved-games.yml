@@ -1,0 +1,377 @@
+name: Saved games menu verification
+on:
+  push:
+    paths-ignore: ['docs/**']
+    branches:
+      - codex/site-menu-saved-games-20261027
+permissions:
+  contents: read
+concurrency:
+  group: site-menu-saved-games-${{ github.ref }}
+  cancel-in-progress: false
+jobs:
+  saved-menu:
+    runs-on: ubuntu-latest
+    timeout-minutes: 120
+    env:
+      EXPECTED_PARENT: b20ec6664df9d4c58d63ea0596791d33b2a3b8fc
+      ENGINES: chromium
+      CI: true
+    defaults:
+      run:
+        shell: bash
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          persist-credentials: false
+          ref: ${{ github.sha }}
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: npm
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Bind exact source and prepare readable verification payloads
+        id: foundation
+        run: |
+          set -euo pipefail
+          out="$RUNNER_TEMP/saved-games-menu";test ! -e "$out";mkdir "$out"
+          echo "SAVED_MENU_EVIDENCE=$out" >> "$GITHUB_ENV"
+          echo "SAVED_MENU_SOURCE_SHADOW=$RUNNER_TEMP/saved-games-menu-source-shadow" >> "$GITHUB_ENV"
+          export SAVED_MENU_EVIDENCE="$out" SAVED_MENU_SOURCE_SHADOW="$RUNNER_TEMP/saved-games-menu-source-shadow"
+          echo "FREE_KICK_FONT_CACHE=$out/font-cache" >> "$GITHUB_ENV"
+          git rev-parse HEAD > "$out/head.txt";git rev-parse 'HEAD^{tree}' > "$out/tree.txt"
+          git diff --name-status "$EXPECTED_PARENT" HEAD > "$out/direct-paths.txt"
+          git diff --exit-code "$EXPECTED_PARENT" HEAD -- . ':!.github/workflows/site-menu-saved-games.yml' ':!docs/PROJECT-STATE.md' ':!src/components/layout/SiteMenuPanel.tsx' ':!src/test/SiteMenu.saved-games.test.tsx' ':!scripts/qa/playSiteMenuSavedGames.mjs' > "$out/other-source-held.log"
+          git ls-files -z | sort -z > "$out/source-members.before"
+          test "$(tr -cd '\000' < "$out/source-members.before" | wc -c)" -eq 5381
+          git ls-files -z | sort -z | xargs -0 sha256sum > "$out/source.sha256"
+          git diff --exit-code HEAD > "$out/source-clean-before.log"
+          test -z "$(git status --porcelain --untracked-files=all)"
+          git archive --format=tar HEAD > "$out/source.tar"
+          cat > "$out/saved-games-menu.cjs" <<'RUNNER'
+          'use strict';
+          const fs=require('node:fs'),cp=require('node:child_process'),path=require('node:path'),assert=require('node:assert/strict'),{createHash}=require('node:crypto');
+          const ROOT=process.cwd(),OUT=process.env.SAVED_MENU_EVIDENCE,SHADOW=process.env.SAVED_MENU_SOURCE_SHADOW;
+          const PARENT='b20ec6664df9d4c58d63ea0596791d33b2a3b8fc',PARENT_TREE='51e0c6a06a6c4fb7d143b4d408eb5a9437737553';
+          const TARGET='src/components/layout/SiteMenuPanel.tsx',TEST='src/test/SiteMenu.saved-games.test.tsx',WF='.github/workflows/site-menu-saved-games.yml';
+          const HELD=[{"path":"src/test/SiteMenu.test.tsx","bytes":7414,"sha256":"7ad9fc3c8f668198975778e91c4dddafd056aaf93d3a39fbfc3b9296cb3661cd","gitBlob":"4523ed1fa241b765d6cbe4f71f5eb14a14db89ad"},{"path":"src/test/SiteMenu.lazy-loading.test.tsx","bytes":3486,"sha256":"dc00fd495c0f1b5fb5481ac0f5a0e13c57989ba926317205f227a8f23232bc4e","gitBlob":"ed251b20e28a40fe041f00515c70cbb554968814"},{"path":"src/test/SiteMenu.load-failure.test.tsx","bytes":2450,"sha256":"6fe114520604c4642805d22922c6587c8a765995c7d6418a6724f940a8746dde","gitBlob":"623c8ebb1839a4f3e21d9520daf5effaee83610a"},{"path":"src/test/SiteMenu.escape-loading.test.tsx","bytes":3841,"sha256":"1dfd8609855050e913a6a0471ae4a90dfe4c2b8390d8f502cbb0e1768c1613a8","gitBlob":"89e9627296cf1854ced6c540852577fa49ff9805"},{"path":"src/test/SiteMenu.escape-failure.test.tsx","bytes":3150,"sha256":"eefd09f4ec92c6105cea3eae2cfc1fe4c09a271d97c54afc92a0086bd7c13202","gitBlob":"b140aa236900793ff7c12aed88070a9b82e7c87e"},{"path":"scripts/simAdsense.mjs","bytes":29408,"sha256":"4b59a16cb1f9ad9fdbc61d48929a6ee1039eb82601c7745c1c4711aefebe40d3","gitBlob":"767fd4119f1f24c5dda295834abad29887edc71f"},{"path":"scripts/simBrand.mjs","bytes":15815,"sha256":"68d70a75423a5b016ea16d3273c7fe4b1b3df631cfeaf03a23f0b02dc0895391","gitBlob":"c17f21d76cecce77f0ccbae7986e79f88ee121f5"},{"path":"scripts/simHeadTags.mjs","bytes":9031,"sha256":"e5f5430f845399ca4f4b9e495f9701bac98c546915a0ffa0d35e71548b19e7b8","gitBlob":"a2d1cd4548e5f06a72960b2a9393eee741b1abb6"},{"path":"scripts/simHiddenPages.mjs","bytes":5262,"sha256":"9b814aa337e45f6378fe8118d7beddfc10a4f5597b119edf95ab33c48a396cff","gitBlob":"f5951796f3d1c8f535cfcaf3198f0806c7fa57d2"},{"path":"scripts/simHubs.mjs","bytes":19480,"sha256":"34544d701b5efe92389ddda30541e2f7608104a04076f1504c7aab590212a1e4","gitBlob":"ef8c89f4ed25d000cb4d4796f515b6660c6c5d3e"},{"path":"scripts/simIndexNow.mjs","bytes":5747,"sha256":"7713c136f132acbee99fb9c7540346298739e75c2a915d20b32d7e760f2bfdeb","gitBlob":"970df1757c5cf8ad7c68d5e96e3e4432678a5e3c"},{"path":"scripts/simIndexing.mjs","bytes":17439,"sha256":"e34f8f0cbc2d1611b2506c27f9be3ac99a61b2a1b2c84c2ad70a3887f3b808da","gitBlob":"ded7b515505b7d7dc3e94e0d33a25db69fd2f695"},{"path":"scripts/simInternalLinks.mjs","bytes":10063,"sha256":"77694c675c5a813a31d60c9cb114f2574075383c8b432887ec25c10ae7c9f7aa","gitBlob":"4963212706d2df4d802f0a584a6a0b825bc64dac"},{"path":"scripts/simNoRivalNames.mjs","bytes":20911,"sha256":"eb779b90da75b3433ef7cdf88b753c7c33722d8d4d1f59fd37bcb4fe6d4a0c4a","gitBlob":"0cc180c43c692ed65fb067e7f187826806845798"},{"path":"scripts/simPrerender.mjs","bytes":57615,"sha256":"fc74c7a19531ab7a3e6f72e7630fdbc05cf4d4df62fd747deffa098ad2283a48","gitBlob":"69b86c4732c86e3852d30a2abf3343f655ea728d"},{"path":"scripts/simPrerenderBoot.mjs","bytes":14435,"sha256":"d9e6372062a669c51c3f36d2f034f0f1c261f6906725b82893642c404b72bd1c","gitBlob":"5ded1f8ccc2e65766d15cb0d59957754180ff4f5"},{"path":"scripts/simRetiredRoutes.mjs","bytes":7219,"sha256":"74a961483d97fe48519745a36c91fa504b59e067b2453a9708ab1755f7a7a59e","gitBlob":"e88b9715bb5409c88b5a6059e422ccd872edc272"},{"path":"scripts/simSchema.mjs","bytes":15368,"sha256":"fc97df743c48145c91b43b4a3357cd6ea421e9210f496aa7965664b2d61b4636","gitBlob":"793c7b1e646dafcf3d664263a94144af18e24ee6"},{"path":"scripts/simSitemap.mjs","bytes":10368,"sha256":"c0d0c63af03f9dd54d2633c549ea2d1588214df61f2b5d1e90bfafbccc621edf","gitBlob":"517bac00ae17c029d57c7bfa5bbc55ec78eb9d15"},{"path":"scripts/simSnapshotAssets.mjs","bytes":11524,"sha256":"929040c81c7ae027972b35f4ea629ae69d39e3cbc4797bdf8e2df3d25d204317","gitBlob":"66eaed1457e5ac3087b62d7e46328951f49618c9"},{"path":"scripts/simSiteSearch.mjs","bytes":26005,"sha256":"dc7b5f4445f64c9a8a5f2b2f67b8034c10f732806d07ddf21648936385e9f374","gitBlob":"6be8e1603e84e1a8799099e1558c415bc87a42a7"},{"path":"scripts/simGuideHeadings.mjs","bytes":30691,"sha256":"aceb7d2b481054cea5f1e0f4606ff749e33f33b21c882f0aaa7e113563da58c0","gitBlob":"fa23f7e6ace62d8e71e3585ab6afbe4dbef0f674"},{"path":"scripts/simLegalPages.mjs","bytes":15304,"sha256":"837c41f7fb8e76010aa7c1b00ef530f8454f35076bedd7e980045e94c354674a","gitBlob":"e639acb6bf70d4924b2811410dbb3f2b078b03a8"},{"path":"vitest.config.ts","bytes":5364,"sha256":"6a68dd2f214dab4a3013eb41bad38eea65d703d61440002710ec246495e1c58a","gitBlob":"ed2a9dc677f77dfe95c061064eeff5782b856864"},{"path":"src/test/setup.ts","bytes":847,"sha256":"0175cc334b44d9874ff4bd8274a8cc165e9e84cd3738a4298f934db353887289","gitBlob":"df00cdf5c54e8c8efc71e46d7585ae76acb4fc8d"},{"path":"src/data/continueSaves.ts","bytes":8812,"sha256":"63eb23dace02f55ada90d10659b882a8e7480cfbc20b7fc8a7d98cc2560ea4a5","gitBlob":"dd3f8ac2525b88ce9e19f81599aa606f08d707c4"},{"path":"src/components/layout/SiteMenu.tsx","bytes":2621,"sha256":"cefcb359a8e02fe39a77e7de812299b8579441923ee41e81f592f8cf57ebf85f","gitBlob":"40610855743cf57c033f3398d44e236f26ddfc89"},{"path":"scripts/qa/playSiteMenuNavigation.mjs","bytes":34232,"sha256":"e00805160124e1f7746a3e64154e8c1f0393711e7d5a0e3a3f9c6d338c373707","gitBlob":"561529de19b9cd946c0f752ae84b75cd2c59432e"},{"path":"scripts/qa/siteMenuNavigationSupport.mjs","bytes":11560,"sha256":"c70e3ecc412f16d3322047b13205716c644495f8c74b76eed83852c87f35d303","gitBlob":"7909ce5805171367646e17a468fd919b88ad710e"},{"path":"scripts/playHomeFold.mjs","bytes":30517,"sha256":"71d0de390454ee6be32c219896a2f513ecb9fc9b74dda9f56496c7206fc42861","gitBlob":"dd7dc642eb0908d568472b553f6501a676f734e2"},{"path":"scripts/simHomeFront.mjs","bytes":49797,"sha256":"6ec6de2ba8dec167795a8ae72a945004300da30e09aa01d686c75c9d7e7aa8f3","gitBlob":"7c6ada9c784a407fce290e50a7d3aaeb3b5fb492"},{"path":"scripts/lib/offlineTransport.cjs","bytes":10660,"sha256":"e60ff1534307e449ccef598e3b7470dcba58681b82cea4005cec7319f14f9221","gitBlob":"0fda542a2649fe5da937c6976fd0f5b6073e74b6"},{"path":"scripts/lib/hostLikeServer.mjs","bytes":2690,"sha256":"3958c9a3b4d9e49bb60a3b7dd72d81a997bd1caed56e82e4c3bae07e1a918ef0","gitBlob":"21059d5e8114669df61106c125d5272d357b6236"},{"path":"scripts/lib/playwrightLoader.mjs","bytes":2777,"sha256":"94a07179be7ca6b9562d118b52c2d5d0dff0b6b2e29e49e4fea16fa2defb5a93","gitBlob":"4f7739e217e0a47ee82e6bfc8be1c04bed17454a"},{"path":"scripts/qa/freeKickLab1070.mjs","bytes":27126,"sha256":"6279c8f608e56439e73f0bbcda73f9ed69e15d48e9b13119de4d6a7f05fb46b7","gitBlob":"1cf030d9182fd4fd68fca39f32e757c69bf9e58a"},{"path":"scripts/sweepWeight.mjs","bytes":97218,"sha256":"4e6e69a1cd9b58f585890c82cd698e598f8c112f88de4c0c9d10fc0f56feb81b","gitBlob":"10fa2bd492f37a59f77af9356691d7b1248141de"},{"path":"package.json","bytes":3495,"sha256":"acfe14626dea53cf5f9c5e0286b766a22237656b52aac4c888b080873ac90e31","gitBlob":"2ff64986fb76ebc51b706f2fd24765768874008a"},{"path":"package-lock.json","bytes":309049,"sha256":"c7e3867eabf0bfa03a8aa6a5e601b0050b937ed210d48c6bbd241019e3c9ea76","gitBlob":"97d6f12a052f25f400462938c241789a083f0bfe"},{"path":"tsconfig.app.json","bytes":680,"sha256":"b12030bfe21ea5be66670842c71d66d194d1771f93f0b8c076e97c867b4b0552","gitBlob":"51f581dd91641b4c1f1219f646788e73cf6bf00c"}];
+          const PINS=[{"path":"src/components/layout/SiteMenuPanel.tsx","bytes":3793,"sha256":"43e1d862b0dbe3948c66dd2167fb73c6df01a42f59acda6f1f4438c2e12066a0","gitBlob":"6b562fcb2afba0be3c45c7f05889998358f98474"},{"path":"src/test/SiteMenu.saved-games.test.tsx","bytes":4667,"sha256":"b2c7a65634f55f6982ee8d4908a47150bc43512a0e3aff3556428cc2bd35adb2","gitBlob":"b82118eaddbfd9e20dbfc66c8b7c4bf11fa69bfb"},{"path":"scripts/qa/playSiteMenuSavedGames.mjs","bytes":9388,"sha256":"394fe6dc43bc64e68b0be903d6d2cd15897209f7268312a83025943ac634de55","gitBlob":"913c0d0014c0d913d88fe2c3fef1bb6014259f59"},{"path":"docs/PROJECT-STATE.md","bytes":1861258,"sha256":"0f50478ba76dee93555635f785051acb2b5402fada0c76ecd6938eb966452f79","gitBlob":"3940ce5569c38e277f7b10bf2513355198e9c310"}];
+          const SUITE='saved games in the actual site menu',TITLES=["keeps the existing navigation and no empty saved section for a new visitor","links only catalogue saves without parsing, displaying or changing their contents","discovers added saves and removes deleted shortcuts the next time the menu opens","still opens normal navigation when the browser blocks access to storage","navigates from a saved shortcut, closes, returns focus and preserves the save"],OLD=[["src/test/SiteMenu.test.tsx","global top-left SiteMenu with the actual Sheet and router",["opens a named dialog with the real site links and all six lightweight sports hubs","lets real Radix Escape dismiss and return focus to the opening trigger","selects a real internal link, changes router location and closes","marks only the normalized current route and closes when that current link is selected","dismisses from the actual Sheet overlay and returns focus","closes on external search/hash and history key changes while the normalized path stays the same"]],["src/test/SiteMenu.lazy-loading.test.tsx","",["cancels a pending real panel import without a late dialog, then reopens the actual healthy panel"]],["src/test/SiteMenu.load-failure.test.tsx","",["shows truthful load failure with Search and Cancel, returns focus and never opens a dialog"]],["src/test/SiteMenu.escape-loading.test.tsx","",["dismisses a pending real menu import with Escape from the trigger, without a late dialog"]],["src/test/SiteMenu.escape-failure.test.tsx","",["dismisses an honest menu load failure with Escape from the trigger and each fallback control, without an automatic retry"]]],RECIPES=[{"id":"empty","index":0,"spans":[{"before":"saved = savedGames(window.localStorage);","after":"saved = savedGames({ getItem: () => '' });"}],"bytes":3795,"sha256":"3083893ccf230278c7d440e45954554a57b0953913c123d05d2f85bf33041634"},{"id":"privacy","index":1,"spans":[{"before":"saved = savedGames(window.localStorage);","after":"window.localStorage.setItem('soccerCareerSave', 'SAVED_MENU_CONTROL_CHANGED'); saved = savedGames(window.localStorage);"}],"bytes":3872,"sha256":"c23200d2f83dea0287e733fb799ed7912375f94100885e2158cb79157af9eb50"},{"id":"refresh","index":2,"spans":[{"before":"export function SiteMenuPanel(","after":"let savedMenuControlCache: SavedGame[] | undefined;\n\nexport function SiteMenuPanel("},{"before":"saved = savedGames(window.localStorage);","after":"saved = savedMenuControlCache ?? (savedMenuControlCache = savedGames(window.localStorage));"}],"bytes":3897,"sha256":"cec59e659654988d5395f40bd7704d99580443208012b2531820221dda64c042"},{"id":"blocked","index":3,"spans":[{"before":"catch { saved = []; }","after":"catch { saved = savedGames({ getItem: () => '' }); }"}],"bytes":3824,"sha256":"c511efedbe8ff336843f3995d1810d6fd01698515a93daf89452376c53979550"},{"id":"navigation","index":4,"spans":[{"before":"saved.map(({ game }) => link(game.path, game.label))","after":"saved.map(({ game }) => link('/search', game.label))"}],"bytes":3793,"sha256":"a847f103cd96aad6d3d5cc6847cff7a9a8ae421181304b795419e46cc580dac0"}];
+          const READERS=["simAdsense","simBrand","simHeadTags","simHiddenPages","simHubs","simIndexNow","simIndexing","simInternalLinks","simNoRivalNames","simPrerender","simPrerenderBoot","simRetiredRoutes","simSchema","simSitemap","simSnapshotAssets","simSiteSearch","simGuideHeadings","simLegalPages"];
+          const sha=b=>createHash('sha256').update(b).digest('hex'),blob=b=>createHash('sha1').update(Buffer.from('blob '+b.length+'\0')).update(b).digest('hex');
+          const save=(name,value)=>fs.writeFileSync(path.join(OUT,name),JSON.stringify(value,null,2)+'\n',{flag:'wx'});
+          const raw=(name,value)=>fs.writeFileSync(path.join(OUT,name),value,{flag:'wx'});
+          const git=(args)=>cp.execFileSync('git',args,{cwd:ROOT,maxBuffer:32*1024*1024});
+          const pin=b=>({bytes:b.length,sha256:sha(b),gitBlob:blob(b)});
+          function samePin(b,p,label){assert.equal(b.length,p.bytes,label+' bytes');assert.equal(sha(b),p.sha256,label+' SHA');assert.equal(blob(b),p.gitBlob,label+' Git');}
+          function paths(){return git(['ls-files','-z']).toString().split('\0').filter(Boolean).sort();}
+          function snapshot(root=ROOT){return paths().map(file=>{const f=path.join(root,file),s=fs.lstatSync(f);assert(s.isFile()&&!s.isSymbolicLink(),'SAVED_MENU_SOURCE_REGULAR '+file);return {file,...pin(fs.readFileSync(f))};});}
+          function linkHold(){const f=path.join(SHADOW,'node_modules');assert(fs.lstatSync(f).isSymbolicLink(),'SAVED_MENU_SHADOW_LINK');assert.equal(fs.realpathSync(f),fs.realpathSync(path.join(ROOT,'node_modules')),'SAVED_MENU_SHADOW_LINK_TARGET');}
+          function shadowMembers(){
+           linkHold();const expected=paths(),directories=new Set(['']);
+           for(const file of expected){let dir=path.posix.dirname(file);while(dir!=='.'){directories.add(dir);dir=path.posix.dirname(dir);}}
+           const files=[];
+           function walk(dir){
+            for(const name of fs.readdirSync(path.join(SHADOW,dir)).sort()){
+             const relative=dir?dir+'/'+name:name,absolute=path.join(SHADOW,relative);
+             if(relative==='node_modules'){linkHold();continue;}
+             const stat=fs.lstatSync(absolute);assert(!stat.isSymbolicLink(),'SAVED_MENU_SHADOW_NO_EXTRA_LINK '+relative);
+             if(stat.isDirectory()){assert(directories.has(relative),'SAVED_MENU_SHADOW_NO_EXTRA_DIRECTORY '+relative);walk(relative);}
+             else{assert(stat.isFile(),'SAVED_MENU_SHADOW_REGULAR '+relative);files.push(relative);}
+            }
+           }
+           walk('');assert.deepEqual(files.sort(),expected,'SAVED_MENU_SHADOW_COMPLETE_MEMBERS');return files;
+          }
+          function hold(root,before){if(root===SHADOW)shadowMembers();assert.deepEqual(snapshot(root),before,'SAVED_MENU_COMPLETE_SOURCE_HOLD '+root);}
+          function foundation(){
+           assert.equal(process.env.GITHUB_REPOSITORY,'PapiSalgueroM/ballpark-hero');assert.equal(process.env.GITHUB_REPOSITORY_ID,'1195729679');
+           assert.equal(process.env.GITHUB_REF,'refs/heads/codex/site-menu-saved-games-20261027');
+           assert.equal(git(['rev-parse','HEAD']).toString().trim(),process.env.GITHUB_SHA);
+           assert.equal(git(['show','-s','--format=%P','HEAD']).toString().trim(),PARENT);assert.equal(git(['rev-parse',PARENT+'^{tree}']).toString().trim(),PARENT_TREE);
+           assert.equal(git(['ls-tree','-r','--name-only',PARENT]).toString().trim().split('\n').length,5378);
+           const expected=['A\t'+WF,'M\tdocs/PROJECT-STATE.md','A\tscripts/qa/playSiteMenuSavedGames.mjs','M\t'+TARGET,'A\t'+TEST].sort();
+           assert.deepEqual(git(['diff','--name-status',PARENT,'HEAD']).toString().trim().split('\n').sort(),expected);
+           assert.equal(paths().length,5381);assert.equal(git(['status','--porcelain','--untracked-files=all']).length,0);
+           for(const p of [...HELD,...PINS]){samePin(fs.readFileSync(p.path),p,p.path);if(HELD.includes(p))assert.equal(blob(git(['show',PARENT+':'+p.path])),p.gitBlob,'Parent '+p.path);}
+           const priorPanel=git(['show',PARENT+':'+TARGET]);
+           samePin(priorPanel,{bytes:3191,sha256:'1a3b2475a8129d471f37f9c134a97ac7b373e5d91a535f95f4fedccafa9b0256',gitBlob:'a044e17ea18bc87ea64f88569e17340099aad5c0'},'Parent panel');
+           for(const file of [TEST,'scripts/qa/playSiteMenuSavedGames.mjs',WF])assert.equal(git(['ls-tree',PARENT,'--',file]).length,0,'Parent absence '+file);
+           const prior=git(['show',PARENT+':docs/PROJECT-STATE.md']),doc=fs.readFileSync('docs/PROJECT-STATE.md');
+           samePin(prior,{bytes:1860109,sha256:'20bfd9466033d70020d8ba6295b393a394f8c0fb5a40152b813937230a226ee1',gitBlob:'8f378afd1e8f175dadef3d3de033e2f59366e308'},'Doc prefix');
+           assert(doc.subarray(0,prior.length).equals(prior));assert.equal(doc.length-prior.length,1149);assert.equal(sha(doc.subarray(prior.length)),'b3abd9549ac3d13d77b4a7779c0581c69dca96c317c66f8cb897b6e7a1ccd705');
+           raw('panel.parent.tsx',priorPanel);raw('panel.selected.tsx',fs.readFileSync(TARGET));save('all-source.before.json',snapshot());
+           save('source-binding.json',{source:process.env.GITHUB_SHA,parent:PARENT,parentTree:PARENT_TREE,tree:git(['rev-parse','HEAD^{tree}']).toString().trim(),run:process.env.GITHUB_RUN_ID,attempt:process.env.GITHUB_RUN_ATTEMPT,parentBlobs:5378,sourceBlobs:5381,directPaths:5,otherParentBlobsHeld:5376,criticalSources:[...HELD,...PINS,{path:WF,...pin(fs.readFileSync(WF))}],docPrefixHeld:true,fullSuite:false,livePublished:false});
+          }
+          function readReport(name,root){
+           const r=JSON.parse(fs.readFileSync(path.join(OUT,name),'utf8'));assert.equal(r.success,r.numFailedTests===0,'SAVED_MENU_REPORT_SUCCESS');assert.equal(r.numRuntimeErrorTestSuites??0,0,'SAVED_MENU_NO_COLLECTION_FAILURE');assert(!(r.unhandledErrors?.length),'SAVED_MENU_NO_UNHANDLED');
+           const rows=[];assert(r.testResults.length>0);
+           for(const suite of r.testResults){assert.equal(suite.message??'','','SAVED_MENU_NO_SUITE_ERROR');assert(suite.name.startsWith(root+path.sep),'SAVED_MENU_REPORT_ROOT');for(const row of suite.assertionResults??[])rows.push({file:path.relative(root,suite.name).split(path.sep).join('/'),...row});}
+           assert.equal(rows.length,r.numTotalTests,'SAVED_MENU_REPORT_TOTAL');return {r,rows};
+          }
+          const key=row=>JSON.stringify([row.file,row.ancestorTitles,row.title]);
+          function ownedMessage(row,index,baseline=false){
+           assert.equal(row.failureMessages.length,1,'SAVED_MENU_SINGLE_OWNED_FAILURE');const m=row.failureMessages[0].replace(/\x1b\[[0-9;]*m/g,'');
+           assert(m.includes('SiteMenu.saved-games.test.tsx'),'SAVED_MENU_OWNED_STACK');
+           assert(!/TestingLibraryElementError|Unhandled|timed out|Failed to resolve import|SyntaxError|TypeError|ReferenceError/.test(m),'SAVED_MENU_NO_INFRA_RED');
+           if(baseline||index===2){assert(/AssertionError/.test(m)&&m.includes('SAVED_MENU_REGION_REQUIRED'),'SAVED_MENU_OWNED_REGION_MARKER');}
+           else if(index===0||index===3){assert(m.includes('expect(element).not.toBeInTheDocument()')&&m.includes('expected document not to contain element')&&m.includes('Saved games'),'SAVED_MENU_OWNED_UNEXPECTED_REGION');}
+           else if(index===1){assert(/AssertionError/.test(m)&&m.includes('SAVED_MENU_CONTROL_CHANGED')&&m.includes('private-club-marker'),'SAVED_MENU_OWNED_RAW_SAVE');}
+           else if(index===4){assert(m.includes('/soccer-career')&&m.includes('/search')&&m.includes('toHaveTextContent'),'SAVED_MENU_OWNED_ROUTE');}
+          }
+          function newReport(name,mode,focus){
+           const {r,rows}=readReport(name,SHADOW);assert.equal(r.numTotalTests,5);assert.equal(r.testResults.length,1);
+           assert.deepEqual(rows.map(key).sort(),TITLES.map(title=>key({file:TEST,ancestorTitles:[SUITE],title})).sort(),'SAVED_MENU_EXACT_NEW_IDENTITIES');
+           const failed=rows.filter(x=>x.status==='failed'),passed=rows.filter(x=>x.status==='passed'),pending=rows.filter(x=>x.status==='pending'||x.status==='skipped');
+           assert.equal(failed.length+passed.length+pending.length,5);
+           assert.equal(r.numFailedTests,failed.length,'SAVED_MENU_FAILED_AGGREGATE');assert.equal(r.numPassedTests,passed.length,'SAVED_MENU_PASSED_AGGREGATE');assert.equal(r.numPendingTests,pending.length,'SAVED_MENU_PENDING_AGGREGATE');assert.equal(r.numTodoTests,0,'SAVED_MENU_NO_TODO');
+           for(const row of [...passed,...pending])assert.equal(row.failureMessages.length,0,'SAVED_MENU_NONFAILURE_MESSAGES_EMPTY');
+           if(mode==='healthy'){assert.equal(failed.length,0);assert.equal(pending.length,0);assert.equal(passed.length,5);assert.equal(r.numPassedTests,5);assert.equal(r.numPendingTests,0);}
+           else{
+            const indices=mode==='baseline'?[1,2,4]:[focus];assert.equal(failed.length,indices.length);assert.equal(passed.length,mode==='baseline'?2:0);assert.equal(pending.length,mode==='baseline'?0:4);
+            assert.deepEqual(failed.map(x=>x.title).sort(),indices.map(i=>TITLES[i]).sort());
+            for(const index of indices)ownedMessage(failed.find(x=>x.title===TITLES[index]),index,mode==='baseline');
+           }
+           return {name,mode,focus:focus??null,passed:passed.length,failed:failed.length,filtered:pending.length,rows:rows.map(x=>({file:x.file,ancestors:x.ancestorTitles,title:x.title,status:x.status,failureMessages:x.failureMessages}))};
+          }
+          function oldReport(name){
+           const {r,rows}=readReport(name,ROOT),want=OLD.flatMap(([file,ancestor,titles])=>titles.map(title=>({file,ancestorTitles:ancestor?[ancestor]:[],title})));
+           assert.equal(r.numTotalTests,10);assert.equal(r.numPassedTests,10);assert.equal(r.numFailedTests,0);assert.equal(r.numPendingTests,0);assert.equal(r.numTodoTests,0,'SAVED_MENU_OLD_NO_TODO');assert.equal(r.testResults.length,5);
+           assert.deepEqual(rows.map(key).sort(),want.map(key).sort(),'SAVED_MENU_EXACT_OLD_IDENTITIES');for(const row of rows){assert.equal(row.status,'passed');assert.equal(row.failureMessages.length,0);}
+           return {name,cases:10,rows:rows.map(x=>({file:x.file,ancestors:x.ancestorTitles,title:x.title,status:x.status}))};
+          }
+          const guard=path.join(ROOT,'scripts/lib/offlineTransport.cjs'),rows=[],failures=[];
+          const deadlines={types:240000,old:240000,healthy:240000,baseline:240000,restored:240000,build:900000,homefront:180000,homefold:240000,'old-browser':600000,'saved-browser':240000,caps:300000};
+          async function run(id,command,args=[],extra={},expectedStatus=0,cwd=ROOT){
+           const deadlineMs=deadlines[id]??(id.startsWith('fault-')?240000:180000);
+           const receipt=path.join(OUT,id+'.transport');fs.writeFileSync(receipt,'',{flag:'wx'});
+           const stdout=fs.openSync(path.join(OUT,id+'.stdout'),'wx'),stderr=fs.openSync(path.join(OUT,id+'.stderr'),'wx');
+           const record={id,command,args,cwd,expectedStatus,startedAt:new Date().toISOString(),pid:null,status:null,signal:null,error:null,closed:false,deadlineMs,deadlineExpired:false,signalAttempts:[]};
+           const child=cp.spawn(command,args,{cwd,detached:true,stdio:['ignore',stdout,stderr],env:{...process.env,NODE_OPTIONS:'--require='+guard,SIM_OFFLINE_RECEIPT:receipt,...extra}});
+           record.pid=child.pid??null;save(id+'.start.json',record);
+           let termTimer=null,killTimer=null;
+           const signalGroup=signal=>{
+            const attempt={signal,at:new Date().toISOString(),error:null};
+            try{process.kill(-child.pid,signal);}catch(error){attempt.error={name:error.name,message:error.message,code:error.code??null};}
+            record.signalAttempts.push(attempt);
+           };
+           if(child.pid)termTimer=setTimeout(()=>{
+            record.deadlineExpired=true;signalGroup('SIGTERM');
+            killTimer=setTimeout(()=>{if(!record.closed)signalGroup('SIGKILL');},15000);
+           },deadlineMs);
+           child.on('error',error=>record.error={name:error.name,message:error.message,code:error.code??null});
+           await new Promise(resolve=>child.on('close',(status,signal)=>{record.status=status;record.signal=signal;record.closed=true;record.closedAt=new Date().toISOString();resolve();}));
+           if(termTimer)clearTimeout(termTimer);if(killTimer)clearTimeout(killTimer);
+           fs.closeSync(stdout);fs.closeSync(stderr);
+           for(const [field,suffix] of [['receipt','.transport'],['stdout','.stdout'],['stderr','.stderr']]){const b=fs.readFileSync(path.join(OUT,id+suffix));record[field+'Bytes']=b.length;record[field+'Sha256']=sha(b);}
+           save(id+'.closed.json',record);rows.push(record);
+           if(record.deadlineExpired||record.status!==expectedStatus||record.signal!==null||record.error||record.receiptBytes!==0)failures.push(id);
+           return record;
+          }
+          function requireNative(row){assert.equal(row.deadlineExpired,false,'SAVED_MENU_NATIVE_DEADLINE');assert.equal(row.status,row.expectedStatus,'SAVED_MENU_NATIVE_STATUS');assert.equal(row.signal,null);assert.equal(row.error,null);assert.equal(row.receiptBytes,0);}
+          function unitArgs(root,files,name,focus){
+           const args=[path.join(ROOT,'node_modules/vitest/vitest.mjs'),'run',...files,'--config',path.join(root,'vitest.config.ts'),'--root',root,'--no-cache','--maxWorkers=1','--no-file-parallelism','--reporter=json','--outputFile='+path.join(OUT,name)];
+           if(focus!==undefined)args.push('-t','^'+(SUITE+' '+TITLES[focus]).replace(/[.*+?^$()|[\]\\{}]/g,'\\$&')+'$');return args;
+          }
+          function shadowPrepare(){
+           assert(path.isAbsolute(SHADOW)&&!SHADOW.startsWith(OUT+path.sep)&&!SHADOW.startsWith(ROOT+path.sep),'SAVED_MENU_SEPARATE_SHADOW');assert(!fs.existsSync(SHADOW),'SAVED_MENU_FRESH_SHADOW');fs.mkdirSync(SHADOW);
+           for(const file of paths()){const f=path.join(SHADOW,file);fs.mkdirSync(path.dirname(f),{recursive:true});fs.copyFileSync(path.join(ROOT,file),f,fs.constants.COPYFILE_EXCL);}
+           fs.symlinkSync(path.join(ROOT,'node_modules'),path.join(SHADOW,'node_modules'),'dir');linkHold();const before=snapshot();hold(SHADOW,before);save('shadow-source.before.json',before);return before;
+          }
+          function panelWrite(role,before,after){
+           assert(!before.equals(after),'SAVED_MENU_EFFECTIVE_SOURCE_CHANGE');const f=path.join(SHADOW,TARGET);assert(fs.readFileSync(f).equals(before));raw(role+'.before.tsx',before);fs.writeFileSync(f,after);assert(fs.readFileSync(f).equals(after));raw(role+'.changed.tsx',after);
+          }
+          function panelRestore(role,selected){fs.writeFileSync(path.join(SHADOW,TARGET),selected);assert(fs.readFileSync(path.join(SHADOW,TARGET)).equals(selected));raw(role+'.restored.tsx',selected);}
+          async function functional(){
+           const before=JSON.parse(fs.readFileSync(path.join(OUT,'all-source.before.json'),'utf8')),shadow=shadowPrepare(),selected=fs.readFileSync(TARGET),admissions=[];
+           requireNative(await run('types',process.execPath,['node_modules/typescript/bin/tsc','--noEmit','-p','tsconfig.app.json']));
+           requireNative(await run('old',process.execPath,unitArgs(ROOT,OLD.map(x=>x[0]),'old.json')));admissions.push(oldReport('old.json'));
+           requireNative(await run('healthy',process.execPath,unitArgs(SHADOW,[TEST],'healthy.json'),{},0,SHADOW));admissions.push(newReport('healthy.json','healthy'));hold(ROOT,before);hold(SHADOW,shadow);
+           const prior=fs.readFileSync(path.join(OUT,'panel.parent.tsx'));
+           try{panelWrite('baseline-panel',selected,prior);requireNative(await run('baseline',process.execPath,unitArgs(SHADOW,[TEST],'baseline.json'),{},1,SHADOW));admissions.push(newReport('baseline.json','baseline'));}
+           finally{panelRestore('baseline-panel',selected);hold(SHADOW,shadow);hold(ROOT,before);}
+           for(const spec of RECIPES){
+            let text=selected.toString('utf8');const stages=[];
+            for(const span of spec.spans){assert.equal(text.split(span.before).length-1,1,'SAVED_MENU_UNIQUE_FAULT '+spec.id);const index=text.indexOf(span.before),next=text.replace(span.before,span.after);stages.push({before:pin(Buffer.from(text)),after:pin(Buffer.from(next)),indexUtf16:index,indexUtf8:Buffer.byteLength(text.slice(0,index)),...span});text=next;}
+            const changed=Buffer.from(text);assert.equal(changed.length,spec.bytes);assert.equal(sha(changed),spec.sha256);assert(!changed.equals(selected));
+            try{panelWrite('fault-'+spec.id,selected,changed);save('fault-'+spec.id+'.source.json',{id:spec.id,stages,target:TITLES[spec.index]});
+             requireNative(await run('fault-'+spec.id,process.execPath,unitArgs(SHADOW,[TEST],'fault-'+spec.id+'.json',spec.index),{},1,SHADOW));admissions.push(newReport('fault-'+spec.id+'.json','fault',spec.index));
+            }finally{panelRestore('fault-'+spec.id,selected);hold(SHADOW,shadow);hold(ROOT,before);}
+           }
+           requireNative(await run('restored',process.execPath,unitArgs(SHADOW,[TEST],'restored.json'),{},0,SHADOW));admissions.push(newReport('restored.json','healthy'));hold(SHADOW,shadow);hold(ROOT,before);
+           save('functional-admission.json',{source:process.env.GITHUB_SHA,oldCases:10,newCases:5,baseline:{failed:3,passed:2},physicalSourceFaults:5,admissions,canonicalHeld:true,shadowRestored:true,fullSuite:false});
+          }
+          async function checks(){
+           let server=null,serverDone=null;const before=JSON.parse(fs.readFileSync(path.join(OUT,'all-source.before.json'),'utf8'));
+           try{
+            await functional();requireNative(await run('build','npm',['run','build']));
+            cp.execFileSync('bash',['-eu','-o','pipefail','-c','find dist -type f -print0 | sort -z > "$SAVED_MENU_EVIDENCE/dist-members.before"; find dist -type f -print0 | sort -z | xargs -0 sha256sum > "$SAVED_MENU_EVIDENCE/dist.sha256"; tar -cf "$SAVED_MENU_EVIDENCE/dist.tar" -C dist .']);
+            await run('homefront',process.execPath,['scripts/simHomeFront.mjs']);for(const name of READERS)await run(name,process.execPath,['scripts/'+name+'.mjs']);
+            const receipt=path.join(OUT,'server.transport');fs.writeFileSync(receipt,'',{flag:'wx'});
+            const stdout=fs.openSync(path.join(OUT,'server.stdout'),'wx'),stderr=fs.openSync(path.join(OUT,'server.stderr'),'wx');
+            const sr={pid:null,status:null,signal:null,error:null,startedAt:new Date().toISOString(),closed:false};
+            server=cp.spawn(process.execPath,['scripts/lib/hostLikeServer.mjs','dist','4173'],{detached:true,stdio:['ignore',stdout,stderr],env:{...process.env,NODE_OPTIONS:'--require='+guard,SIM_OFFLINE_RECEIPT:receipt}});
+            sr.pid=server.pid??null;save('server.start.json',sr);
+            serverDone=new Promise(resolve=>{server.on('error',e=>sr.error={name:e.name,message:e.message,code:e.code??null});server.on('close',(status,signal)=>{sr.status=status;sr.signal=signal;sr.closed=true;sr.closedAt=new Date().toISOString();fs.closeSync(stdout);fs.closeSync(stderr);for(const [field,suffix] of [['receipt','.transport'],['stdout','.stdout'],['stderr','.stderr']]){const b=fs.readFileSync(path.join(OUT,'server'+suffix));sr[field+'Bytes']=b.length;sr[field+'Sha256']=sha(b);}save('server.closed.json',sr);resolve();});});
+            for(let attempt=0;;attempt++){try{const response=await fetch('http://127.0.0.1:4173/');if(!response.ok)throw Error('Server not ready');await response.arrayBuffer();break;}catch(error){if(attempt===9)throw error;await new Promise(resolve=>setTimeout(resolve,500));}}
+            await run('homefold',process.execPath,['scripts/playHomeFold.mjs'],{BASE:'http://127.0.0.1:4173'});
+            await run('old-browser',process.execPath,['scripts/qa/playSiteMenuNavigation.mjs'],{BASE:'http://127.0.0.1:4173',SOURCE_SHA:process.env.GITHUB_SHA,SITE_MENU_OUT:path.join(OUT,'site-menu-browser')});
+            await run('saved-browser',process.execPath,['scripts/qa/playSiteMenuSavedGames.mjs'],{SAVED_MENU_OUT:path.join(OUT,'saved-games-browser')});
+            await run('caps',process.execPath,['scripts/sweepWeight.mjs'],{BASE:'http://127.0.0.1:4173',SWEEP_BASE:'http://127.0.0.1:4173',SWEEP_OFFLINE:'1',NODE_OPTIONS:'--require='+guard+' --require='+path.join(OUT,'caps-preload.cjs')});
+           }catch(error){save('orchestration-error.json',{name:error.name,message:error.message,stack:error.stack});failures.push('orchestration');}
+           finally{
+            if(server){if(!server.killed)server.kill('SIGTERM');const timer=setTimeout(()=>{if(server.exitCode===null&&server.signalCode===null)try{process.kill(-server.pid,'SIGKILL');}catch{}},15000);await serverDone;clearTimeout(timer);}
+            hold(ROOT,before);if(fs.existsSync(SHADOW))hold(SHADOW,before);
+            save('native-processes.json',{source:process.env.GITHUB_SHA,run:process.env.GITHUB_RUN_ID,attempt:process.env.GITHUB_RUN_ATTEMPT,rows,failures,expectedCommands:34,fullSuite:false,livePublished:false,pixelsReviewed:false});
+           }
+           process.exitCode=failures.length?1:0;
+          }
+          function final(){
+           const before=JSON.parse(fs.readFileSync(path.join(OUT,'all-source.before.json'),'utf8'));hold(ROOT,before);hold(SHADOW,before);save('all-source.after.json',snapshot());save('shadow-source.after.json',snapshot(SHADOW));
+           const n=JSON.parse(fs.readFileSync(path.join(OUT,'native-processes.json'),'utf8'));assert.equal(n.rows.length,34);assert.equal(n.failures.length,0);assert.equal(new Set(n.rows.map(x=>x.pid)).size,34);for(const row of n.rows)requireNative(row);
+           oldReport('old.json');newReport('healthy.json','healthy');newReport('baseline.json','baseline');for(const spec of RECIPES)newReport('fault-'+spec.id+'.json','fault',spec.index);newReport('restored.json','healthy');
+           const server=JSON.parse(fs.readFileSync(path.join(OUT,'server.closed.json'),'utf8'));assert.equal(server.closed,true);assert.equal(server.error,null);assert.equal(server.receiptBytes,0);assert(server.status===0||server.signal==='SIGTERM','SAVED_MENU_SERVER_CLOSED');
+           const observed=JSON.parse(fs.readFileSync(path.join(OUT,'saved-games-browser/browser-observations.json'),'utf8'));assert.equal(observed.source,process.env.GITHUB_SHA);assert.equal(observed.observationsOnly,true);assert.equal(observed.cases.length,6);
+           for(const c of observed.cases){assert.equal(c.complete,true);assert.equal(c.failure,undefined);assert.equal(c.errors.length,0);assert.equal(c.observations.length,11);}
+           save('final-admission.json',{source:process.env.GITHUB_SHA,parent:PARENT,sourceBlobs:5381,directPaths:5,supervised:34,expectedZero:28,expectedOwnedRed:6,oldCases:10,newCases:5,baseline:{passed:2,ownedFailed:3},sourceFaults:5,newBrowserContexts:6,pixelsReviewed:false,browserObservationsOnly:true,savedNavigationVerifiedBy:'actual MemoryRouter unit test',fullSuite:false,livePublished:false});
+          }
+          async function main(){assert(OUT&&path.isAbsolute(OUT));assert(SHADOW&&path.isAbsolute(SHADOW));const mode=process.argv[2];assert(['foundation','checks','final'].includes(mode));if(mode==='foundation')foundation();else if(mode==='checks')await checks();else final();}
+          main().catch(error=>{console.error(error);process.exitCode=1;});
+          RUNNER
+          cat > "$out/caps-preload.cjs" <<'PRELOAD'
+          'use strict';
+          const fs=require('node:fs'),path=require('node:path'),assert=require('node:assert/strict'),{createHash}=require('node:crypto');
+          const sha=b=>createHash('sha256').update(b).digest('hex');
+          const dir=process.env.FREE_KICK_FONT_CACHE,manifest=fs.readFileSync(path.join(dir,'manifest.json'));
+          assert.equal(sha(manifest),process.env.FONT_CACHE_MANIFEST_SHA256);
+          const fonts=new Map();
+          for(const entry of JSON.parse(manifest)){
+            const u=new URL(entry.url);assert(['https://fonts.googleapis.com','https://fonts.gstatic.com'].includes(u.origin));
+            assert.equal(entry.file,sha(entry.url));assert(!fonts.has(entry.url));
+            const body=fs.readFileSync(path.join(dir,entry.file));assert.equal(sha(body),entry.sha256);fonts.set(entry.url,{...entry,body});
+          }
+          const pw=require(path.join(process.cwd(),'node_modules/playwright-core')),launch=pw.chromium.launch.bind(pw.chromium);
+          pw.chromium.launch=async options=>{
+            const browser=await launch(options),newContext=browser.newContext.bind(browser);
+            browser.newContext=async options=>{
+              const context=await newContext(options);
+              await context.route('**/*',async route=>{
+                const req=route.request(),u=new URL(req.url()),entry=fonts.get(req.url());
+                if(entry&&req.method()==='GET'&&['stylesheet','font'].includes(req.resourceType())){
+                  fs.appendFileSync(process.env.SAVED_MENU_EVIDENCE+'/caps-prepared-io.jsonl',JSON.stringify({kind:'prepared-font',url:req.url(),sha256:entry.sha256})+'\n');
+                  return route.fulfill({status:200,contentType:entry.contentType,body:entry.body});
+                }
+                if(u.origin==='https://flagcdn.com'&&!u.username&&!u.password&&!u.search&&!u.hash&&req.method()==='GET'&&req.resourceType()==='image'&&/^\/(?:w[1-9][0-9]{0,2}\/|h[1-9][0-9]{0,2}\/|[1-9][0-9]{0,2}x[1-9][0-9]{0,2}\/)?[a-z]{2}(?:-[a-z0-9]{1,8})?\.(?:png|webp|svg)$/.test(u.pathname)){
+                  fs.appendFileSync(process.env.SAVED_MENU_EVIDENCE+'/caps-prepared-io.jsonl',JSON.stringify({kind:'flag-abort',url:req.url()})+'\n');
+                  return route.abort();
+                }
+                return route.fallback();
+              });
+              return context;
+            };
+            return browser;
+          };
+          PRELOAD
+          : > "$out/payload-prepare.transport";status=0
+          NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" SIM_OFFLINE_RECEIPT="$out/payload-prepare.transport" node <<'PAYLOAD' > "$out/payload-prepare.stdout" 2> "$out/payload-prepare.stderr" &
+          const fs=require('node:fs'),assert=require('node:assert/strict'),{createHash}=require('node:crypto'),out=process.env.SAVED_MENU_EVIDENCE;
+          const sha=b=>createHash('sha256').update(b).digest('hex');
+          const runner=fs.readFileSync(out+'/saved-games-menu.cjs'),preload=fs.readFileSync(out+'/caps-preload.cjs');
+          assert.equal(runner.length,33105);assert.equal(sha(runner),'5dc4851de2eb69c6e392c95c819ce1a151b0907394892df96567eddcec4b54ff');
+          assert.equal(preload.length,2112);assert.equal(sha(preload),'d371fc39d21d719c5e9faab1250f9c6f80254a15b44f43798f6a37ebb13b34b7');
+          fs.writeFileSync(out+'/payload-binding.json',JSON.stringify({runner:{bytes:runner.length,sha256:sha(runner)},preload:{bytes:preload.length,sha256:sha(preload)}},null,2)+'\n',{flag:'wx'});
+          PAYLOAD
+          pid=$!;printf '%s\n' "$pid" > "$out/payload-prepare.pid";wait "$pid" || status=$?
+          printf '%s\n' "$status" > "$out/payload-prepare.exit"
+          test "$status" -eq 0;test ! -s "$out/payload-prepare.transport"
+          : > "$out/foundation.transport";status=0
+          NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" SIM_OFFLINE_RECEIPT="$out/foundation.transport" node "$out/saved-games-menu.cjs" foundation > "$out/foundation.stdout" 2> "$out/foundation.stderr" &
+          pid=$!;printf '%s\n' "$pid" > "$out/foundation.pid";wait "$pid" || status=$?
+          printf '%s\n' "$status" > "$out/foundation.exit"
+          test "$status" -eq 0;test ! -s "$out/foundation.transport"
+          find "$out" -maxdepth 1 -type f -name '*.cjs' -print0 | sort -z | xargs -0 sha256sum > "$out/generated.sha256"
+      - name: Locked packages and isolated browser tools
+        id: install
+        timeout-minutes: 15
+        run: |
+          set -euo pipefail
+          out="$SAVED_MENU_EVIDENCE"
+          npm ci > "$out/npm-ci.log" 2>&1
+          browser_tools="$RUNNER_TEMP/saved-games-menu-tools";test ! -e "$browser_tools"
+          echo "SAVED_MENU_BROWSER_TOOLS=$browser_tools" >> "$GITHUB_ENV"
+          npm install --prefix "$browser_tools" --no-save --package-lock=false playwright@1.64.0 > "$out/playwright-install.log" 2>&1
+          test ! -e node_modules/playwright;test ! -e node_modules/playwright-core
+          ln -s "$browser_tools/node_modules/playwright" node_modules/playwright
+          ln -s "$browser_tools/node_modules/playwright-core" node_modules/playwright-core
+          for name in playwright playwright-core;do readlink -f "node_modules/$name";done > "$out/browser-links.before"
+          node "$browser_tools/node_modules/playwright/cli.js" install --with-deps chromium > "$out/chromium-install.log" 2>&1
+          python -m pip install fonttools pillow > "$out/python-install.log" 2>&1
+          FREE_KICK_FONT_CACHE="$out/font-cache" node scripts/qa/freeKickLab1070.mjs --prefetch-fonts-only > "$out/font-prefetch.log" 2>&1
+          echo "FONT_CACHE_MANIFEST_SHA256=$(sha256sum "$out/font-cache/manifest.json" | cut -d ' ' -f 1)" >> "$GITHUB_ENV"
+          find node_modules -type f -print0 | sort -z > "$out/dependency-members.before"
+          find node_modules -type f -print0 | sort -z | xargs -0 sha256sum > "$out/dependencies.sha256"
+          find "$browser_tools" -type f -print0 | sort -z > "$out/browser-members.before"
+          find "$browser_tools" -type f -print0 | sort -z | xargs -0 sha256sum > "$out/browser-tools.sha256"
+          find "$out/font-cache" -type f -print0 | sort -z > "$out/font-members.before"
+          find "$out/font-cache" -type f -print0 | sort -z | xargs -0 sha256sum > "$out/font-cache.sha256"
+      - name: Exact menu tests five source faults build readers browsers and original caps
+        id: checks
+        run: |
+          set -euo pipefail
+          out="$SAVED_MENU_EVIDENCE";status=0
+          : > "$out/orchestrator.transport"
+          NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" SIM_OFFLINE_RECEIPT="$out/orchestrator.transport" node "$out/saved-games-menu.cjs" checks > "$out/orchestrator.stdout" 2> "$out/orchestrator.stderr" &
+          pid=$!;printf '%s\n' "$pid" > "$out/orchestrator.pid";wait "$pid" || status=$?
+          printf '%s\n' "$status" > "$out/orchestrator.exit"
+          test "$status" -eq 0;test ! -s "$out/orchestrator.transport"
+      - name: Complete source dependency tool font and dist holds
+        id: holds
+        if: ${{ always() && steps.install.outcome == 'success' }}
+        run: |
+          set -euo pipefail
+          out="$SAVED_MENU_EVIDENCE";failed=0
+          for name in source dependencies browser-tools font-cache generated dist;do
+            if test -f "$out/$name.sha256";then sha256sum -c "$out/$name.sha256" > "$out/$name-hold.log" 2>&1 || failed=1;else printf 'Missing required manifest\n' > "$out/$name-hold.log";failed=1;fi
+          done
+          git ls-files -z | sort -z > "$out/source-members.after"
+          cmp "$out/source-members.before" "$out/source-members.after" || failed=1
+          find node_modules -type f -print0 | sort -z > "$out/dependency-members.after"
+          cmp "$out/dependency-members.before" "$out/dependency-members.after" || failed=1
+          find "$SAVED_MENU_BROWSER_TOOLS" -type f -print0 | sort -z > "$out/browser-members.after"
+          cmp "$out/browser-members.before" "$out/browser-members.after" || failed=1
+          find "$out/font-cache" -type f -print0 | sort -z > "$out/font-members.after"
+          cmp "$out/font-members.before" "$out/font-members.after" || failed=1
+          find dist -type f -print0 | sort -z > "$out/dist-members.after"
+          cmp "$out/dist-members.before" "$out/dist-members.after" || failed=1
+          for name in playwright playwright-core;do readlink -f "node_modules/$name";done > "$out/browser-links.after"
+          cmp "$out/browser-links.before" "$out/browser-links.after" || failed=1
+          git diff --exit-code HEAD > "$out/source-clean-after.log" || failed=1
+          test -z "$(git status --porcelain --untracked-files=all)" || failed=1
+          tar -cf "$out/source-after.tar" --null -T "$out/source-members.after"
+          if test -d dist;then tar -cf "$out/dist-after.tar" -C dist .;fi
+          for name in payload-prepare foundation orchestrator server;do test -f "$out/$name.transport" && test ! -s "$out/$name.transport" || failed=1;done
+          : > "$out/final.transport";status=0
+          NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" SIM_OFFLINE_RECEIPT="$out/final.transport" node "$out/saved-games-menu.cjs" final > "$out/final.stdout" 2> "$out/final.stderr" &
+          pid=$!;printf '%s\n' "$pid" > "$out/final.pid";wait "$pid" || status=$?
+          printf '%s\n' "$status" > "$out/final.exit"
+          test "$status" -eq 0 || failed=1;test ! -s "$out/final.transport" || failed=1
+          printf '%s\n' "$failed" > "$out/final-holds.exit"
+          exit "$failed"
+      - name: Seal all retained evidence including partial failures
+        if: ${{ always() && steps.foundation.outcome != 'skipped' }}
+        run: |
+          set -euo pipefail
+          out="$SAVED_MENU_EVIDENCE";test -d "$out"
+          cd "$out"
+          find . ! -type d ! -type f -print > nonregular.txt
+          test ! -s nonregular.txt
+          find . -type f ! -name evidence.sha256 -print0 | sort -z | xargs -0 sha256sum > evidence.sha256
+      - uses: actions/upload-artifact@v4
+        if: ${{ always() && steps.foundation.outcome != 'skipped' }}
+        with:
+          name: site-menu-saved-games-${{ github.run_id }}-a${{ github.run_attempt }}
+          path: ${{ env.SAVED_MENU_EVIDENCE }}
+          if-no-files-found: error
+          retention-days: 30
