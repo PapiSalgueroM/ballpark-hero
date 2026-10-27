@@ -19216,3 +19216,20 @@ The two initial fixture failures39940913787 and39943246891 remain separate from 
 Evidence packet: C:/Users/antho/dukb-handoff/2026-10-23/search-navigation. Root qualification c565e4bb892d6f5392e942e329af0b1661faba1e626bddb051ab76276d2e88b5; Root pixels743d12524f3b65bf0752151b2cfdbb7c3866377866360b6f66c60a4875cfdb26; independent integrated audit4e7ff7ad3b766d00b3f7f5ac280ed0b9d67fd91e8a27416cd182579a76da9dac. The normal saved-picks archive is also retained as2ca41f45c885f8066326880fe73480b83b0ee3ae7a3c4b08503c94fc74fa3e98.
 
 I retains sole publication. Root did not publish this Search correction and makes no new live-site claim. Analytics remains paused. No local application execution, cleanup, old checkout reset, data/provider/account change or protected game adoption occurred. Primary WORKBOARD and the continuation checkpoint receive only this exact note through the reviewed exclusive-lock append helper, with actual full-prefix backups/readback and both protected indexes checked before and finally. Earlier preservation gaps remain unwaived.
+
+
+## 2026-10-26: Projected original caller regression-name QA pending
+
+Caller runs 40394815170 and 40398410153 remain refused for test-fixture faults. Season-4 run 40401259215 attempt 1 passed the real app type check, all nine caller cases and all 111 reported regression cases. The overall QA run is still refused: its strict regression identity judge expected unquoted table values while the actual reporter prints quoted strings. Final refusal: 2a8b192b40906fd701091c9cd7418a735605b8eef27e40a65a3275b73e2b41ab. All originals remain preserved.
+
+This sibling changes only the expected title and fullName formatting of 43 source-bound interpolated regression rows. The other 68 rows, ancestor arrays, exact 111-case count and duplicate-four multiplicity remain held. The strict judge, all product and test bodies, all caller assertions and three source-control recipes remain unchanged. Source and report controls were unrun in 40401259215, so no effectiveness credit is borrowed. The new run remains unrun and must complete all 13 supervised commands and 16 guarded cohorts.
+
+The b20-based branch adds only QA workflow, tracked helper and held test plus this append: 5,381 source files, with all 5,377 other parent bodies held. Raw-view qualification on 40384956132 is separate. Projected records do not establish current club, seller, contract, price, availability or national eligibility. Pruned terminal history and performance remain unresolved. Owner I integration, browser and pixels, main and publication are separate. No user-save reproduction, product adoption or live claim is made.
+
+### 2026-10-27: Original-player discovery QA qualified, integration pending
+
+Detached run 40403812446/a1 at 4743dce8d7a419c114dddb94e630d8d28518bead qualified the read-only original-player discovery proposal. Real app type-check passed, all 9 caller cases and all 111 unchanged regression cases passed, and three physical source controls produced 0/1/0 results with exact restoration. Five copied-report diagnostics and one missing-link diagnostic also rejected their intended changes. The 13 supervised commands and three outer cohorts kept all 16 transport receipts empty.
+
+The retained original is 90,215,124 bytes, SHA256 7afd1355093002382c0e480a5f9c4e43bb85573669ebf03f565afee1121f1044. Final admission is in the handoff folder under remote-cm-original-discovery-regression-names-40403812446-a1/FINAL-QUALIFIED-ADMISSION.json (7,606 bytes, SHA256 a29cedfc9fa65fbb1a9d1788532ccbb82096ba3ec8aeb9cb64259edfb5a247a4). Full canonical source and remote dependency holds passed; the three product overlays ran only in the detached shadow.
+
+This qualifies discovery and a usable closed-window name query. It does not restore a canonical player, prove an affected save fixed, recover discarded ownership history, or make an untracked player eligible for a national call-up. Build, browser, performance, full-suite, integration and live checks remain outstanding. Owner I retains protected product integration and sole publication. Earlier refused originals remain preserved.
