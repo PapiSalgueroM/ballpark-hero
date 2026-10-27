@@ -19257,3 +19257,14 @@ The candidate changes only two ExtensionCard render spans in a detached full-sou
 
 Qualification is pending at preparation. A legal early retirement or NOT_REACHED outcome is recorded honestly. Neither proves this report fixed or refuted. The reporter's save is unavailable. This round does not qualify a build, browser layout, full suite, product integration or live release. Protected game integration remains with its owner.
 
+
+### NBA fresh-career QA, opt-in follow-up pending
+
+Focused run 40449653194 tested d21a41e5 on the PR402 result base. All six commands passed: app types, the unchanged 16 saved-board cases and the real eight-seed progression diagnostic on each arm. The complete 2,486-action comparison held saved careers, history, selected buttons and random traces. All five physical copied-data controls passed per arm.
+
+Both arms ended with 18, 19, 18, 19, 17, 19, 20 and 19 actual season rows. Seed 6 reached twenty, then retired at age 39 with OVR 64 and no contract years left. Its active nineteen-row and retired twenty-row reloads held. Opening-null and offered extension screens were observed; withdrawn feedback remains untested. Only the reviewed displayed ExtensionCard copy differed.
+
+This follow-up makes the diagnostic opt-in, so ordinary Vitest discovery does not require its evidence output setting. Its configured run must still execute the one case with zero skips. The guard-only successor is pending qualification at preparation. The earlier focused evidence stays intact.
+
+The copy remains a detached shadow overlay. No gameplay, save, retirement or contract code is adopted. The reporter's save is unavailable, and this does not claim the reported bug fixed or refuted, a full suite, build, browser check or live release.
+

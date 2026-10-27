@@ -165,7 +165,7 @@ async function landed(container: HTMLElement) {
 
 afterEach(() => { cleanup(); vi.useRealTimers(); vi.restoreAllMocks(); vi.unstubAllGlobals(); });
 
-describe('NBA fresh-board season progression diagnostic', () => {
+describe.skipIf(!process.env.NBA_SEASON20_PROGRESSION_OUT)('NBA fresh-board season progression diagnostic', () => {
   it('records eight legal seeded careers without fabricating a season-twenty state', async () => {
     const output = writer();
     const start = performance.now(), limit = start + 210000;
