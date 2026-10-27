@@ -1,9 +1,11 @@
 /* Actual cup matches against immutable b20 source. No ancient outcome hash is
    treated as current truth. Baseline must fail only the absent-order detail
    requirement; infrastructure errors use exit 2 and never earn expected-red credit.
-   Run with CM_SHOOTOUT_RESULTS_BASELINE pointing to the exact original engine,
-   CM_SHOOTOUT_RESULTS_OUT to a new output directory, and PHASE baseline or fixed. */
+   Ordinary discovery defaults to fixed, reads immutable b20 from Git history,
+   and writes a unique .sim-artifacts directory. Explicit phase, baseline and
+   output inputs keep the same contract as the detached qualification. */
 import assert from 'node:assert/strict';
+import { execFileSync } from 'node:child_process';
 import { createHash } from 'node:crypto';
 import fs from 'node:fs';
 import os from 'node:os';
@@ -12,9 +14,9 @@ import { fileURLToPath, pathToFileURL } from 'node:url';
 import { buildSync } from 'esbuild';
 
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
-const phase = process.env.CM_SHOOTOUT_RESULTS_PHASE;
-const baseline = process.env.CM_SHOOTOUT_RESULTS_BASELINE;
-const output = process.env.CM_SHOOTOUT_RESULTS_OUT;
+const phase = process.env.CM_SHOOTOUT_RESULTS_PHASE ?? 'fixed';
+let baseline = process.env.CM_SHOOTOUT_RESULTS_BASELINE;
+let output = process.env.CM_SHOOTOUT_RESULTS_OUT;
 const candidate = path.join(ROOT, 'src/lib/clubManager.ts');
 const originalBlob = 'a505743537b383bc7885bb81f5a72c11e154b566';
 const realRandom = Math.random;
@@ -24,7 +26,7 @@ let temporary;
 let receipt;
 let ownsOutput = false;
 
-const copy = value => JSON.parse(JSON.stringify(value));
+const copy = value => structuredClone(value);
 const hash = bytes => createHash('sha256').update(bytes).digest('hex');
 const blob = bytes => createHash('sha1').update(`blob ${bytes.length}\0`).update(bytes).digest('hex');
 const record = (name, value) => fs.writeFileSync(path.join(output, name), JSON.stringify(value, null, 2) + '\n');
@@ -121,18 +123,31 @@ function checkKicks(report) {
 
 try {
   assert.ok(['baseline', 'fixed'].includes(phase), 'Explicit baseline/fixed phase required');
+  temporary = fs.mkdtempSync(path.join(os.tmpdir(), 'cm-shootout-results-'));
+  if (baseline === undefined) {
+    baseline = path.join(temporary, 'immutable-b20.ts');
+    const bytes = execFileSync('git', ['show', 'b20ec6664df9d4c58d63ea0596791d33b2a3b8fc:src/lib/clubManager.ts'],
+      { cwd: ROOT, maxBuffer: 4 * 1024 * 1024, timeout: 15000 });
+    fs.writeFileSync(baseline, bytes);
+  }
   assert.ok(baseline && path.isAbsolute(baseline), 'Absolute immutable baseline source required');
-  assert.ok(output && path.isAbsolute(output), 'Absolute new output directory required');
-  assert.ok(!fs.existsSync(output), 'Output directory must be new');
-  fs.mkdirSync(output, { recursive: true });
-  ownsOutput = true;
+  if (output === undefined) {
+    const artifacts = path.join(ROOT, '.sim-artifacts');
+    fs.mkdirSync(artifacts, { recursive: true });
+    output = fs.mkdtempSync(path.join(artifacts, 'cm-shootout-results-'));
+    ownsOutput = true;
+  } else {
+    assert.ok(output && path.isAbsolute(output), 'Absolute new output directory required');
+    assert.ok(!fs.existsSync(output), 'Output directory must be new');
+    fs.mkdirSync(output, { recursive: true });
+    ownsOutput = true;
+  }
   const baselineBytes = fs.readFileSync(baseline);
   const candidateBytes = fs.readFileSync(candidate);
   assert.equal(blob(baselineBytes), originalBlob, 'Baseline is not immutable b20 engine');
   if (phase === 'baseline') assert.equal(blob(candidateBytes), originalBlob, 'Baseline phase contains product changes');
   receipt = { phase, baselineBlob: originalBlob, candidateBlob: blob(candidateBytes),
     baselineSha256: hash(baselineBytes), candidateSha256: hash(candidateBytes), cases: [], failures: [], controls: [] };
-  temporary = fs.mkdtempSync(path.join(os.tmpdir(), 'cm-shootout-results-'));
   Object.defineProperty(globalThis, 'localStorage', { configurable: true, value: {
     getItem: () => null, setItem: () => { throw new Error('Match proof unexpectedly wrote storage'); }, removeItem: () => {},
   } });
@@ -250,6 +265,10 @@ try {
   receipt.status = receipt.failures.length ? 'assertion-failure' : 'passed';
   record('summary.json', receipt);
   console.log(`Shootout results: ${receipt.cases.length} actual matches compared; ${receipt.failures.length} assertions failed; preservation ${receipt.preservationPassed ? 'passed' : 'FAILED'}.`);
+  console.log(`Current witnesses: shootout win ${witnesses.win}, shootout loss ${witnesses.loss}, ordinary match ${witnesses.regular}.`);
+  const passed = label => receipt.cases.filter(item => item.passed.includes(label)).length;
+  console.log(`Preservation: whole state ${passed('whole-state')}/${receipt.cases.length}, global draw values/count ${passed('global-draw-values-and-count')}/${receipt.cases.length}, other report content ${passed('all-other-report-content')}/${receipt.cases.length}.`);
+  console.log(`Negative controls: ${receipt.controls.filter(control => control.changed && control.rejected).length}/${receipt.controls.length} changed inputs rejected. Evidence: ${output}`);
   for (const failure of receipt.failures.slice(0, 5)) console.error(`${failure.mode}/${failure.seed} ${failure.label}: ${failure.message.split('\n')[0]}`);
   if (phase === 'baseline') console.log(`Cause-qualified baseline red: ${receipt.expectedBaselineRed ? 'YES' : 'NO'}.`);
   else console.log(receipt.failures.length ? 'SHOOTOUT RESULTS CHECKS FAILED' : 'ALL SHOOTOUT RESULTS CHECKS PASSED');
