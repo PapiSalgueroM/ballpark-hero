@@ -25,7 +25,9 @@ const source = heldLib.toString('utf8').replaceAll('\r\n', '\n');
    changed fetchWorldCupSets in playerBingo.ts; main's file held 9195E989... before that merge. */
 /* Rodri sparse-history correction: the whole-library pin is retaken for the new personal honour.
    Existing title predicates, Vitinha rows and all four executable controls remain held. */
-assert.equal(hash(Buffer.from(source)), 'B446D6FEBC197D9210A01624BD41F71A31CD65EFAD5FF566FDF64DB0EBF792AC');
+/* Category expansion: pin retaken for twelve derived tiles and their groups.
+   Personal honours, identity rules and all existing executable controls are held. */
+assert.equal(hash(Buffer.from(source)), '8207B3A625C9E0B7929C154F3F72C367F69D3588364B90CA34EEA196DC19FBB1');
 assert.equal(hash(heldTest), '0AE18AE01A012509200926DB6F66BA115C81AF718FD07B308299DFE21EB4EB72');
 writeFileSync(path.join(out, 'source.raw.ts'), heldLib);
 writeFileSync(path.join(out, 'source.LF.ts'), source);
