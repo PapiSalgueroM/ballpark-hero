@@ -89,7 +89,7 @@ try {
   assert.ok(ready, 'hostLikeServer serves the actual build');
   browser = await pw.chromium.launch();
   for (const [width, height] of [[320, 780], [390, 844], [1280, 900]]) {
-    const row = { width, height, errors: [], requests: [], boards: [], covered: [], placement: null, control: null, status: 'running' };
+    const row = { width, height, errors: [], requests: [], boards: [], covered: [], placement: null, control: null, wrapControl: null, status: 'running' };
     report.viewports.push(row); save();
     const context = await browser.newContext({ viewport: { width, height }, reducedMotion: 'reduce' });
     let page;
@@ -143,14 +143,42 @@ try {
         assert.equal(await grid.locator(':scope > *').nth(12).getByText('FREE', { exact: true }).count(), 1, 'The actual free cell is in the center');
         assert.equal(await grid.getByText('FREE', { exact: true }).count(), 1, 'One actual free center');
         const measured = await inspect();
+        row.boards.push({ seed, ...measured }); save();
         assert.deepEqual(measured.issues, [], 'Every actual label is visible, complete and contained');
         const labels = measured.cells.map(cell => cell.title);
         const discovered = labels.filter(label => added.has(label) && !seen.has(label));
         discovered.forEach(label => seen.add(label));
         if (discovered.length) await grid.screenshot({ path: path.join(out, 'categories-' + width + '-' + seed + '.png') });
-        row.boards.push({ seed, ...measured }); row.covered = [...seen]; save();
+        row.covered = [...seen]; save();
         if (seed === 1) {
           await grid.screenshot({ path: path.join(out, 'board-' + width + '.png') });
+          if (width === 320) {
+            const originalClass = 'text-[9px] md:text-[10px] font-semibold leading-tight text-foreground';
+            const fixedClass = 'w-full min-w-0 break-words ' + originalClass;
+            const heldClasses = await tiles.evaluateAll(buttons => buttons.map(button => button.querySelector(':scope > span:nth-of-type(2)').className));
+            assert.equal(heldClasses.length, 24);
+            assert.ok(heldClasses.every(value => value === fixedClass), 'All actual labels carry the responsive width and word wrapping');
+            const changed = await tiles.evaluateAll((buttons, value) => buttons.reduce((count, button) => {
+              const label = button.querySelector(':scope > span:nth-of-type(2)'), before = label.className;
+              label.className = value; return count + Number(before !== label.className);
+            }, 0), originalClass);
+            row.wrapControl = { changed, originalClass, heldClasses, raw: null, restored: null };
+            assert.equal(changed, 24, 'The complete original class replaces exactly 24 actual label classes');
+            try {
+              row.wrapControl.raw = await inspect();
+              await grid.screenshot({ path: path.join(out, 'original-class-control-320.png') });
+            } finally {
+              await tiles.evaluateAll((buttons, classes) => buttons.forEach((button, index) => { button.querySelector(':scope > span:nth-of-type(2)').className = classes[index]; }), heldClasses);
+              row.wrapControl.restored = await inspect(); save();
+            }
+            assert.deepEqual(row.wrapControl.raw.issues, [
+              { kind: 'label-overflow', title: 'Played for Manchester United' },
+              { kind: 'label-overflow', title: 'Champions League winner' },
+              { kind: 'label-overflow', title: 'Goalkeeper' },
+            ], 'The complete old class reproduces the three retained 320px overflow defects');
+            assert.deepEqual(row.wrapControl.restored.issues, [], 'Restoring the complete responsive class restores clean label geometry');
+            row.wrapControl.passed = true; save();
+          }
           const victim = tiles.first().locator(':scope > span:nth-of-type(2)');
           const target = await tiles.first().getAttribute('title');
           const changed = await victim.evaluate(label => { const before = label.hidden; label.hidden = true; return !before && label.hidden; });
