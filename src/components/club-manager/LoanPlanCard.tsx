@@ -4,9 +4,8 @@ import { useRevealScroll } from '@/hooks/useRevealScroll';
 import { cn } from '@/lib/utils';
 import { isPartialClub, loanOutRefusal, moneyIn } from '@/lib/clubManager';
 import type { CareerState } from '@/lib/clubManager';
-import { loanDevelopmentOf } from '@/lib/clubManagerLoanDevelopment';
 import {
-  loanPlanHistoryOf, loanPlanHosts, loanPlanPreview, loanPlanUnavailableReason,
+  loanPlanHistoryOf, loanPlanHosts, loanPlanPreview, loanPlanRecordOf, loanPlanUnavailableReason,
 } from '@/lib/clubManagerLoanPlan';
 import type { LoanPlanPreview, LoanPlanRequest } from '@/lib/clubManagerLoanPlan';
 
@@ -97,7 +96,7 @@ export function LoanPlanCard({ career, onAgree, onReview, onRecall }: LoanPlanCa
       {plans.length > 0 && <div data-testid="loan-plan-active" className="space-y-2">
         <h3 className="font-semibold">Active plans</h3>
         {plans.map(loan => {
-          const record = loanDevelopmentOf(loan.development);
+          const record = loanPlanRecordOf(career, loan);
           if (!record) return <p key={loan.player.id}>The saved plan for {loan.player.name} is unavailable. Its loan terms remain on the transfer desk.</p>;
           const current = record.review?.opportunity ?? record.opportunity;
           const canRecall = career.transferWindow !== null && loan.recallFee !== undefined

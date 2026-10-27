@@ -4,6 +4,7 @@ import {
   appendLoanDevelopmentHistory,
   closeLoanDevelopment,
   loanDevelopmentCanRecall,
+  loanDevelopmentMatches,
   loanDevelopmentOf,
   loanOpportunityOf,
   quoteLoanDevelopment,
@@ -129,6 +130,15 @@ describe('loan development agreement and saved reviews', () => {
 
   it('records an unavailable current estimate honestly and refuses wrong loan/date identity', () => {
     const record = agreed();
+    expect(loanDevelopmentMatches(record, context(), loan())).toBe(true);
+    expect(loanDevelopmentMatches(record, { ...context(), windowOpen: false }, loan())).toBe(true);
+    for (const foreign of [
+      { ...loan(), playerKey: 'squad:another' }, { ...loan(), playerName: 'Another player' },
+      { ...loan(), parentClub: 'Another employer' }, { ...loan(), hostClub: 'Another host' },
+      { ...loan(), season: 2 }, { ...loan(), fee: 0.9 }, { ...loan(), recallFee: 0.5 },
+      { ...loan(), optionFee: 12 },
+    ]) expect(loanDevelopmentMatches(record, context(), foreign)).toBe(false);
+    expect(loanDevelopmentMatches(record, { ...context(), week: 1 }, loan())).toBe(false);
     const unknown = reviewLoanDevelopment(record, nextWeek(), loan(), { ...nextHost(), partial: true })!;
     expect(unknown.review!.opportunity).toEqual({ partial: true, reason: 'CM_PARTIAL' });
     for (const wrong of [

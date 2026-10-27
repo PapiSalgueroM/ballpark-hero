@@ -9,6 +9,8 @@ import { TransferScreen } from '@/components/club-manager/TransferScreen';
 import { useClubManager } from '@/hooks/useClubManager';
 import type { ClubManagerGame } from '@/hooks/useClubManager';
 import { SLOTS_INDEX_KEY } from '@/lib/clubManagerSlots';
+import { agreeLoanPlan, loanPlanPreview, recallPlannedLoanee } from '@/lib/clubManagerLoanPlan';
+import { loanDevelopmentOf } from '@/lib/clubManagerLoanDevelopment';
 
 vi.mock('@/lib/completions', () => ({ recordCompletion: vi.fn(), recordActivity: vi.fn(), recordStreakDay: vi.fn() }));
 type Request = { playerId: string; hostClub: string; source: 'standard' | 'bid'; token: string };
@@ -191,7 +193,9 @@ describe('Loan plan through the actual transfer screen and saved hook', () => {
     await openPlan(); selectStandard(p.id); confirm();
     await waitFor(() => expect(planOf(api.career!)).toBeTruthy());
     const fee = api.career!.loanedOut![0].recallFee!, budget = api.career!.budget;
+    expect(screen.queryByRole('button', { name: /^Recall ·/ })).toBeNull();
     fireEvent.click(screen.getByRole('button', { name: 'Recall planned player' }));
+    expect(plannedRecallCalls).toBe(1);
     await waitFor(() => expect(api.career!.loanedOut).toHaveLength(0));
     expect(api.career!.budget).toBe(Math.round((budget - fee) * 10) / 10);
     const returned = api.career!.squad.find(x => x.name === p.name)!;
@@ -270,6 +274,32 @@ describe('Loan plan through the actual transfer screen and saved hook', () => {
   it('keeps actual legacy recall available for malformed optional plan metadata', async () => {
     const c = fixture(), p = eligible(c), old = loanOutPlayer(c, p.id, 'Ajax')!;
     (old.loanedOut![0] as unknown as { development: unknown }).development = { version: 2 };
+    await mountCareer(old);
+    fireEvent.click(screen.getByRole('button', { name: /^Sell/ }));
+    const before = clone(api.career!), fee = before.loanedOut![0].recallFee!;
+    const expected = recallLoanedPlayer(clone(before), p.id)!;
+    expect(expected).toBeTruthy();
+    fireEvent.click(screen.getByRole('button', { name: /^Recall ·/ }));
+    await waitFor(() => expect(api.career!.loanedOut).toHaveLength(0));
+    expect(plannedRecallCalls).toBe(0);
+    expect(api.career!.budget).toBe(Math.round((before.budget - fee) * 10) / 10);
+    expect(api.career).toEqual(expected);
+    await waitFor(() => expect(JSON.parse(localStorage.getItem(SAVE_KEY)!)).toEqual(api.career));
+  });
+
+  it('keeps actual legacy recall available for a schema-valid foreign loan record', async () => {
+    const c = fixture(), foreign = eligible(c), preview = loanPlanPreview(c, foreign.id, 'Ajax', 'standard');
+    expect(preview).toBeTruthy();
+    const planned = agreeLoanPlan(clone(c), preview!)!;
+    expect(planned).toBeTruthy();
+    const p = c.squad.find(player => player.id !== foreign.id && player.position !== 'GK'
+      && loanOutRefusal(c, player.id) === null)!;
+    expect(p).toBeTruthy();
+    const old = loanOutPlayer(clone(c), p.id, 'Ajax', loanOutFee(p))!;
+    old.loanedOut![0].development = clone(planned.loanedOut![0].development);
+    const record = loanDevelopmentOf(old.loanedOut![0].development);
+    expect(record).toBeTruthy();
+    expect(recallPlannedLoanee(old, p.id, record!.id)).toBeNull();
     await mountCareer(old);
     fireEvent.click(screen.getByRole('button', { name: /^Sell/ }));
     const before = clone(api.career!), fee = before.loanedOut![0].recallFee!;

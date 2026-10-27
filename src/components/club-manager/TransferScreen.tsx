@@ -1,6 +1,6 @@
 import { lazy, Suspense, useEffect, useLayoutEffect, useMemo, useRef, useState } from 'react';
 import type { LoanPlanRequest } from '@/lib/clubManagerLoanPlan';
-import { loanDevelopmentOf } from '@/lib/clubManagerLoanDevelopment';
+import { loanPlanRecordOf } from '@/lib/clubManagerLoanPlan';
 import { cn } from '@/lib/utils';
 import { bannerClearance } from '@/components/club-manager/deskCue';
 /* Round 194: the nationality filter, CM-7's last open line. Per-world maps
@@ -1050,7 +1050,7 @@ export function TransferScreen({
                           {l.club} can buy him for {money(l.optionFee)}
                         </span>
                       )}
-                      {l.recallFee !== undefined && !(loanDevelopmentOf(l.development) && onRecallLoanPlan) && (
+                      {l.recallFee !== undefined && !(loanPlanRecordOf(career, l) && onRecallLoanPlan) && (
                         <button
                           onClick={() => onRecallLoanee(l.player.id)}
                           disabled={!windowOpen || l.recallFee > career.budget || career.squad.length >= 30}

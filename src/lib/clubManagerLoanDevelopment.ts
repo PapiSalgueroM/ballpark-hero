@@ -143,6 +143,15 @@ export function loanDevelopmentOf(value: unknown): LoanDevelopmentRecord | null 
   return value as unknown as LoanDevelopmentRecord;
 }
 
+/** Identity and saved-date binding, independent of current recall window, funds or squad room. */
+export function loanDevelopmentMatches(
+  value: unknown, context: LoanDevelopmentContext, actualLoan: LoanDevelopmentLoan,
+): value is LoanDevelopmentRecord {
+  const record = loanDevelopmentOf(value);
+  return record !== null && record !== undefined && sameSeason(record, context) && sameLoan(record, actualLoan)
+    && context.week >= (record.review?.week ?? record.startedWeek);
+}
+
 export function startLoanDevelopment(
   quote: LoanDevelopmentQuote, displayedToken: string, actualLoan: LoanDevelopmentLoan,
 ): LoanDevelopmentRecord | null {
@@ -183,9 +192,8 @@ export function loanDevelopmentCanRecall(
   record: LoanDevelopmentRecord, context: LoanDevelopmentContext, actualLoan: LoanDevelopmentLoan,
   budget: number, squadSize: number,
 ): boolean {
-  return !!loanDevelopmentOf(record) && sameSeason(record, context)
-    && context.week >= (record.review?.week ?? record.startedWeek)
-    && context.windowOpen && sameLoan(record, actualLoan) && actualLoan.recallFee !== undefined
+  return loanDevelopmentMatches(record, context, actualLoan)
+    && context.windowOpen && actualLoan.recallFee !== undefined
     && money(actualLoan.recallFee) && money(budget) && budget >= actualLoan.recallFee
     && count(squadSize) && squadSize < 30;
 }

@@ -1,5 +1,5 @@
 name: Loan plan early application gate
-# V5 tests advance the club calendar through actual quick play and report continuation.
+# V6 keeps ordinary recall available when optional metadata belongs to another actual loan.
 on:
   push:
     branches: [codex/cm-loan-plan-20261027]

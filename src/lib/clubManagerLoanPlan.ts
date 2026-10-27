@@ -6,11 +6,11 @@ import type { CareerState, CMPlayer, LoanOut } from '@/lib/clubManager';
 import { loanOutTermsFor } from '@/lib/clubManagerDeals';
 import { plainCopy } from '@/lib/clubManagerWorldRoster';
 import {
-  appendLoanDevelopmentHistory, closeLoanDevelopment, loanDevelopmentCanRecall, loanDevelopmentOf,
+  appendLoanDevelopmentHistory, closeLoanDevelopment, loanDevelopmentCanRecall, loanDevelopmentMatches, loanDevelopmentOf,
   quoteLoanDevelopment, reviewLoanDevelopment, startLoanDevelopment,
 } from '@/lib/clubManagerLoanDevelopment';
 import type {
-  LoanDevelopmentContext, LoanDevelopmentHost, LoanDevelopmentLoan, LoanDevelopmentQuote,
+  LoanDevelopmentContext, LoanDevelopmentHost, LoanDevelopmentLoan, LoanDevelopmentQuote, LoanDevelopmentRecord,
   LoanDevelopmentSummary,
 } from '@/lib/clubManagerLoanDevelopment';
 
@@ -33,6 +33,10 @@ function fact(c: CareerState, loan: LoanOut): LoanDevelopmentLoan {
   return { playerKey: playerKey(loan.player), playerName: loan.player.name, parentClub: c.clubName,
     hostClub: loan.club, season: loan.season, fee: loan.fee, recallFee: loan.recallFee,
     optionFee: loan.optionFee, rating: loan.player.rating };
+}
+export function loanPlanRecordOf(c: CareerState, loan: LoanOut): LoanDevelopmentRecord | null {
+  const record = loan.development;
+  return loanDevelopmentMatches(record, context(c, loan.player), fact(c, loan)) ? record : null;
 }
 function hostFacts(c: CareerState, player: CMPlayer, clubName: string): LoanDevelopmentHost {
   const partial = isPartialClub(clubName, c.eraId);
