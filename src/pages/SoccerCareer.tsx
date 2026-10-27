@@ -124,7 +124,7 @@ import { AwardsNightCard, SpeechChoices, SpokenSpeech } from "@/components/caree
 import { availableSpeeches, givenSpeechOf } from "@/lib/careerAwardsNight";
 import { CelebrationStyles, revealDelay } from "@/components/club-manager/Celebration";
 import { SignedSlip } from "@/components/soccer-career/SignedSlip";
-import { SoccerOfferReview } from "@/components/soccer-career/SoccerOfferReview";
+const SoccerOfferReview = lazy(() => import("@/components/soccer-career/SoccerOfferReview").then(m => ({ default: m.SoccerOfferReview })));
 import { buildSoccerOfferReview } from "@/lib/soccerOfferReview";
 import type { SignedNote } from "@/components/soccer-career/SignedSlip";
 import { AcademyFocusPicker, AcademyReportCard } from "@/components/soccer-career/AcademyReportCard";
@@ -613,7 +613,9 @@ function OfferCard({ offer, onAccept, career }: { offer: ContractOffer; onAccept
       {review.loyaltyQuote && <p data-loyalty-offer className="text-xs text-emerald-400">Loyalty deal: {moneyLine('€' + review.loyaltyQuote.bonusEuros.toLocaleString('en-US'))} after {review.loyaltyQuote.years} recorded contract seasons. Leaving early forfeits it.</p>}
       {review.loyaltyForfeitEuros && <p data-loyalty-forfeit className="text-xs text-amber-400">A permanent move here forfeits {moneyLine('€' + review.loyaltyForfeitEuros.toLocaleString('en-US'))} of unpaid loyalty pay.</p>}
       {career && <OfferFitLine offer={offer} career={career} />}
-      <SoccerOfferReview club={offer.club.name} review={review} onAccept={onAccept} />
+      <Suspense fallback={<div role="status" data-offer-review-loading className="flex h-11 items-center justify-center rounded-lg border border-border text-sm text-muted-foreground">Opening contract review...</div>}>
+        <SoccerOfferReview club={offer.club.name} review={review} onAccept={onAccept} />
+      </Suspense>
     </div>
   );
 }

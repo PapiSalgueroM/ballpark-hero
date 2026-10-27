@@ -1,0 +1,56 @@
+[
+  {
+    "path": "src/components/soccer-career/SoccerCareerProgramme.tsx",
+    "originalGitBlob": "7bbce13b45a4c6adbfc212c7f0e67153f0ab7d4c",
+    "originalSha256": "8c5e304d52baa4ea9ad9984873e256fd2c753c077c370c482e9f457cea21d385",
+    "candidateBytes": 9343,
+    "candidateSha256": "99cac99276e89a3b14ac960c1a7535d31ab211a393b6b7c3f28d0acc3d0c00a4",
+    "ownedSpans": 1,
+    "wholeInverse": true
+  },
+  {
+    "path": "src/components/soccer-career/SoccerOfferReview.tsx",
+    "originalGitBlob": "1ab4d6cf4359f162b602e1a35554c8ea32af3030",
+    "originalSha256": "f23c377a68dcca896fb5918481621f02132b454008390bb372e0fd7ebad1709f",
+    "candidateBytes": 7774,
+    "candidateSha256": "4a0f3c1ecf9b38153e4702d08cd0efb33f8f4e0096dc543a84c5b352602ed4b8",
+    "ownedSpans": 2,
+    "wholeInverse": true
+  },
+  {
+    "path": "src/lib/soccerCareerEngine.ts",
+    "originalGitBlob": "1ecd36c893395485a93d91cb1905ff78c83c7741",
+    "originalSha256": "d2c4d26eb5ca12646f69e0d07cffab685f1660ff95ea33011ed97f64847bb8b1",
+    "candidateBytes": 551628,
+    "candidateSha256": "1e028bbd16a0305bd95eb0d16e86c9d4587dc3ade721ff75761797e47f5b9ae4",
+    "ownedSpans": 15,
+    "wholeInverse": true
+  },
+  {
+    "path": "src/lib/soccerCareerProgramme.ts",
+    "originalGitBlob": "0cfa74e1b12ee264db8b9e9cdb97c70167a62eb2",
+    "originalSha256": "eeec8ca94c9552970f6ce61bdcab2b8f92b64b9f085198f084df7245ae5b2f48",
+    "candidateBytes": 33338,
+    "candidateSha256": "6808495106b7cd2dda2c2c4dbb493498c1b12f2cd2bd6ada7a3a3e80d8bee79b",
+    "ownedSpans": 7,
+    "wholeInverse": true
+  },
+  {
+    "path": "src/lib/soccerOfferReview.ts",
+    "originalGitBlob": "89cbf24631547bde8e1f314f6e9ffa167951e8ea",
+    "originalSha256": "eae164d0c2a2401a6548f2669106b5526ece1594ed02980ccd1476e347df2745",
+    "candidateBytes": 2154,
+    "candidateSha256": "07967edc27eeb05edda1c2b7799320a1ba1e5d87020ac54e85782c831a57e766",
+    "ownedSpans": 3,
+    "wholeInverse": true
+  },
+  {
+    "path": "src/pages/SoccerCareer.tsx",
+    "originalGitBlob": "e623a581819e30aef3f126af82430030f54412cd",
+    "originalSha256": "574a5bf3335a6869235b9eb634ee86d95616e4696cf32370b5de73fc95b0b9c4",
+    "candidateBytes": 273414,
+    "candidateSha256": "b022a80c0766b4e9bd99c6ab2315d7414d4542d2c1fbac1cce7b82f7525b7e52",
+    "ownedSpans": 4,
+    "wholeInverse": true
+  }
+]
