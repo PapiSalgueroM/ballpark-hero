@@ -47,6 +47,7 @@ jobs:
           NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/simCmShootoutResults.mjs 2>&1 | tee shootout-results-artifacts/cohort.log
           status=${PIPESTATUS[0]}
           set -e
+          if test "$status" -gt 1; then exit "$status"; fi
           export SHOOTOUT_SIM_EXIT="$status"
           node <<'NODE'
           const fs = require('node:fs');
