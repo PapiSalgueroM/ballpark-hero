@@ -331,10 +331,10 @@
   "controls": [
     {
       "name": "partial",
-      "target": "refuses partial and unknown previews without a global draw or input-state materialization",
-      "to": "  const partial = false;",
-      "from": "  const partial = isPartialClub(clubName, c.eraId);",
-      "file": "src/lib/clubManagerLoanPlan.ts"
+      "target": "fails closed on partial, stale, wrong-era, wrong-position and malformed host facts",
+      "to": "",
+      "from": " || host.partial !== false",
+      "file": "src/lib/clubManagerLoanDevelopment.ts"
     },
     {
       "name": "fee",

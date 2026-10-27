@@ -44,12 +44,12 @@ jobs:
       - name: Scoped old app RED, explicit actions, physical controls and paired outcomes
         run: |
           set -euo pipefail
-          echo 'da4cf9f00efbac60132c34ae6343a3aab7d3e7d389a7c9d82ed2d7159d45f563  scripts/qa/cmLoanPlanSource.json' | sha256sum --check
+          echo '1f9d51fd3cd26d7b8aaf9dc9faf99103f3021f460c92daf89885c7e4d23a7e66  scripts/qa/cmLoanPlanSource.json' | sha256sum --check
           node scripts/qa/cmLoanPlanQualification.mjs methods 2>&1 | tee "$CM_LOAN_PLAN_ARTIFACTS/controller.log"
       - name: Original destination pool and real loan authority
         run: |
           set -euo pipefail
-          echo '1ad86513f4f7dfe639035be8c0516a95acca5116b02221b0892c164d9fdf59f2  scripts/qa/cmLoanPlanHostPool.mjs' | sha256sum --check
+          echo 'e9fa401ea414825edcf4a241ca87b6add3bf4778008574ea6a2fb0ad85a4027b  scripts/qa/cmLoanPlanHostPool.mjs' | sha256sum --check
           CM_LOAN_HOST_MANIFEST=scripts/qa/cmLoanPlanSource.json CM_LOAN_HOST_OUT="$CM_LOAN_PLAN_ARTIFACTS/hosts" NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/qa/cmLoanPlanHostPool.mjs 2>&1 | tee "$CM_LOAN_PLAN_ARTIFACTS/hosts.log"
       - name: Isolated browser and logo tools
         run: |
