@@ -48,9 +48,9 @@
     "path": "src/pages/SoccerCareer.tsx",
     "originalGitBlob": "e623a581819e30aef3f126af82430030f54412cd",
     "originalSha256": "574a5bf3335a6869235b9eb634ee86d95616e4696cf32370b5de73fc95b0b9c4",
-    "candidateBytes": 273414,
-    "candidateSha256": "b022a80c0766b4e9bd99c6ab2315d7414d4542d2c1fbac1cce7b82f7525b7e52",
-    "ownedSpans": 4,
+    "candidateBytes": 274876,
+    "candidateSha256": "c4e4df814b0532afaecdf3c686f5e00ff3490eac58c46db57b625163930da74b",
+    "ownedSpans": 8,
     "wholeInverse": true
   }
 ]

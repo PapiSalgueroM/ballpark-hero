@@ -8,7 +8,7 @@ import { spawnSync, execFileSync } from 'node:child_process';
 const ROOT = process.cwd(), BASE = '12c1b2cd001f9309a31a887e5c432ca63c373852';
 const META = path.join(ROOT, 'qa/soccer-career-loyalty-v2.1');
 const OUT = path.join(ROOT, 'loyalty-artifacts/proof');
-const MANIFEST_PIN = '4acc0e0db371bc717665f5e51996f7a4731e5df8f305cd9da80234bd2b714214';
+const MANIFEST_PIN = '573c56d21177fa3a2b62a5ff74ef7e5f626f8fae3f2d47b577f1506a0f160bee';
 const TESTS = ['src/test/soccerCareerLoyalty.test.ts', 'src/test/soccerCareerLoyalty.engine.test.ts', 'src/test/soccerCareerLoyalty.review.test.tsx'];
 const INDEPENDENT = 'keeps cash and absent legacy ledgers neutral';
 const sha = body => createHash('sha256').update(body).digest('hex');
