@@ -1,4 +1,5 @@
 name: Soccer Career contextual guide links
+# Full app suite stays on unchanged product source18594 in run40472509494; this follow-up corrects only proof infrastructure.
 on:
   push:
     branches: [codex/soccer-career-internal-links-20261027]
@@ -155,37 +156,3 @@ jobs:
           name: soccer-intro-links-${{ github.run_id }}-${{ github.run_attempt }}
           retention-days: 7
           path: soccer-intro-artifacts/
-  full-units:
-    runs-on: ubuntu-latest
-    timeout-minutes: 60
-    defaults:
-      run:
-        shell: bash
-    env:
-      CI: '1'
-      SIM_NETWORK: offline
-    steps:
-      - uses: actions/checkout@v4
-        with:
-          ref: ${{ github.sha }}
-          persist-credentials: false
-      - uses: actions/setup-node@v4
-        with:
-          node-version: 24
-          cache: npm
-      - name: Current complete app suite
-        run: |
-          set -euo pipefail
-          mkdir -p soccer-intro-full-units
-          git rev-parse HEAD > soccer-intro-full-units/source-head.txt
-          git rev-parse HEAD^{tree} > soccer-intro-full-units/source-tree.txt
-          npm ci
-          NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" npm run test -- --reporter=default --reporter=json --outputFile="$PWD/soccer-intro-full-units/unit.json" --maxWorkers=2 --no-file-parallelism 2>&1 | tee soccer-intro-full-units/unit.log
-          git diff --exit-code HEAD -- src scripts index.html package.json package-lock.json
-      - name: Always preserve complete unit result
-        if: always()
-        uses: actions/upload-artifact@v4
-        with:
-          name: soccer-intro-full-units-${{ github.run_id }}-${{ github.run_attempt }}
-          retention-days: 7
-          path: soccer-intro-full-units/

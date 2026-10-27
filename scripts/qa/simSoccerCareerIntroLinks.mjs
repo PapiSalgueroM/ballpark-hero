@@ -60,7 +60,7 @@ const entry = [
   '}',
 ].join('\n');
 const bundle = path.join(folder, 'actual-render.cjs');
-await build({ stdin: { contents: entry, resolveDir: ROOT, sourcefile: 'seo-intro-render.mjs' }, bundle: true, platform: 'node', format: 'cjs',
+await build({ stdin: { contents: entry, resolveDir: ROOT, sourcefile: 'seo-intro-render.mjs' }, bundle: true, platform: 'node', format: 'cjs', jsx: 'automatic',
   outfile: bundle, nodePaths: [path.join(ROOT, 'node_modules')], alias: { '@': path.join(ROOT, 'src') }, define: { 'process.env.NODE_ENV': '"production"' }, logLevel: 'error', plugins: [{ name: 'fixture-data-only',
     setup(builder) {
       builder.onResolve({ filter: /^@\/data\/gameContent\/loader$/ }, () => ({ path: 'loader-shim', namespace: 'seo-proof' }));
