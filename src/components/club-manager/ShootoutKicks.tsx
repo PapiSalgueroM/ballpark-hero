@@ -6,8 +6,8 @@ import { MadeUpTag } from '@/components/club-manager/SquadScreen';
  * Round 782: the shootout kick by kick, the same list on the live screen at
  * the whistle and on the full time card. One row a kick in the order they
  * were taken, who stepped up, what happened, and the count as it stood, in
- * my orientation. Only drawn when the report carries the kicks, which is
- * only when the manager had set a shootout order.
+ * my orientation. Drawn when a newly played report carries its recorded
+ * kicks, with a chosen taker order or the default order.
  */
 const RESULT: Record<'scored' | 'saved' | 'missed', { icon: string; word: string }> = {
   scored: { icon: '⚽', word: 'scored' },
