@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom';
 import { Sheet, SheetClose, SheetContent, SheetDescription, SheetHeader, SheetTitle } from '@/components/ui/sheet';
 import { HUB_NAV } from '@/lib/sportHubNav';
 import { useRoutePath } from '@/hooks/useRoutePath';
+import { savedGames, type SavedGame } from '@/data/continueSaves';
 
 export interface SiteMenuPanelProps {
   open: boolean;
@@ -17,6 +18,10 @@ const SITE_LINKS = [['/about', 'About'], ['/contact', 'Contact'], ['/privacy', '
 
 export function SiteMenuPanel({ open, onOpenChange, returnFocusRef, id }: SiteMenuPanelProps) {
   const path = useRoutePath();
+  let saved: SavedGame[] = [];
+  if (open) {
+    try { saved = savedGames(window.localStorage); } catch { saved = []; }
+  }
   const link = (to: string, label: string) => (
     <SheetClose asChild key={to}>
       <Link to={to} aria-current={path === to ? 'page' : undefined}
@@ -41,6 +46,11 @@ export function SiteMenuPanel({ open, onOpenChange, returnFocusRef, id }: SiteMe
               <h3 className="mb-2 px-3 text-sm font-semibold text-muted-foreground">Play</h3>
               <div className="grid grid-cols-2 gap-1">{PLAY_LINKS.map(([to, label]) => link(to, label))}</div>
             </section>
+            {saved.length > 0 && <section aria-label="Saved games" data-no-prerender="">
+              <h3 className="mb-1 px-3 text-sm font-semibold text-muted-foreground">Saved games</h3>
+              <p className="mb-2 px-3 text-xs text-muted-foreground">Saved in this browser</p>
+              <div className="space-y-1">{saved.map(({ game }) => link(game.path, game.label))}</div>
+            </section>}
             <section>
               <h3 className="mb-2 px-3 text-sm font-semibold text-muted-foreground">Sports</h3>
               <div className="grid grid-cols-2 gap-1">{HUB_NAV.map(hub => link(hub.route, hub.navLabel))}</div>

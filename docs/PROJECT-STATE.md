@@ -19216,3 +19216,32 @@ The two initial fixture failures39940913787 and39943246891 remain separate from 
 Evidence packet: C:/Users/antho/dukb-handoff/2026-10-23/search-navigation. Root qualification c565e4bb892d6f5392e942e329af0b1661faba1e626bddb051ab76276d2e88b5; Root pixels743d12524f3b65bf0752151b2cfdbb7c3866377866360b6f66c60a4875cfdb26; independent integrated audit4e7ff7ad3b766d00b3f7f5ac280ed0b9d67fd91e8a27416cd182579a76da9dac. The normal saved-picks archive is also retained as2ca41f45c885f8066326880fe73480b83b0ee3ae7a3c4b08503c94fc74fa3e98.
 
 I retains sole publication. Root did not publish this Search correction and makes no new live-site claim. Analytics remains paused. No local application execution, cleanup, old checkout reset, data/provider/account change or protected game adoption occurred. Primary WORKBOARD and the continuation checkpoint receive only this exact note through the reviewed exclusive-lock append helper, with actual full-prefix backups/readback and both protected indexes checked before and finally. Earlier preservation gaps remain unwaived.
+
+
+## 2026-10-27: Saved games in the site menu
+
+Prepared an isolated shared-menu update against b20ec6664df9d4c58d63ea0596791d33b2a3b8fc. Opening Menu reads the existing local save catalogue and shows an optional Saved games section after Play. Links reuse the current route, close and focus behavior. New visitors see no empty section, and the next opening reflects added or removed saves. Save contents are not parsed or changed. Personal shortcuts are excluded from prerendered content.
+
+The product change is limited to SiteMenuPanel.tsx. The registry, game engines, save formats, providers and consent policy stay unchanged. Five functional cases and six browser contexts are prepared with types, the existing Menu checks, build, completed-build readers and unchanged download caps. These checks are not yet run at this source-recording point. A later result must state actual outcomes and limits.
+
+Finder PR385 and its retained failed cap result remain independent. Owner I retains composition with other menu work, current-target integration, main merge and publication. This source proposal is not live. Prior preservation debt remains open.
+
+## 2026-10-27: Saved games menu verification result
+
+The Saved games menu change was tested at 3aaef2a036d4141a412d1d20111036d1634b4b46 in ordinary-push run 40458756276, attempt 1. Draft PR412: https://github.com/PapiSalgueroM/ballpark-hero/pull/412. Its sole parent is b20ec6664df9d4c58d63ea0596791d33b2a3b8fc.
+
+The app type check, production build, ten existing Menu cases, five new cases, restored five-case run, HomeFront, HomeFold, both Menu browser drivers, eighteen completed-build readers and all fifteen unchanged fatal download caps passed. The old panel produced three owned missing-section failures and two passes. Each of five physical source faults produced its intended case failure. All 34 supervised commands had their expected exit, no deadline or signal failure and empty execution transport output. These checks do not represent the full simulation suite. Fault verification uses the full physical source copies and independently derived whole-stage hashes and inverses; the runtime source.json before/after fields contain literal spans, not stage-pin objects.
+
+Six offline Chromium contexts cover small phones, desktop, light and dark themes and reduced motion. The menu shows no empty saved section, follows the existing 21-game catalogue, refreshes when reopened, and preserves focus, navigation and page scroll behavior. Settled saved-link targets measure 44px tall. Actual saved-link route and close behavior is verified by MemoryRouter; the browser journeys use Accessibility rather than opening synthetic career saves.
+
+Independent manual review covered all eighteen original screenshots and all sixty-six recorded observations. No material issue was found in the settled menu views. The 1,386 sampled values for the existing twenty-one game-save keys remained exact. This covers those sampled keys, not the complete storage map or a real visitor's save. An additional independent product-source review found no actionable issue.
+
+The scoped final audit is FINAL-QUALIFIED-SAVED-GAMES-MENU.json, 9,847 bytes, SHA256 9dd5dd1dd6cab33ae45c1dc443acdd6256991bea982476da37b0b1e10f4c3d12, retained in the 2026-10-27 handoff under remote-saved-games-menu-40458756276-a1.
+
+The original 92,526,331-byte artifact is retained with SHA256 8c239b32098b16b1aed511eb011cfef47cb340231c6f4640735130030b71a284. The first copy timed out before headers and left no original. One authorized fresh reference and recovery copy succeeded. All 402 regular ZIP bodies were hashed before JSON interpretation; the root seal has 400 rows and the nested browser seal has 83 rows. The two seal files are the expected unindexed members. The initial generic-reader refusal is retained.
+
+This result is bounded to the tested source and selected checks. Normal-motion observations taken during opening include transient negative panel x; settled frames are inside the viewport. The initial 430px observation has fonts loading, with menu frames loaded. No physical-phone, iOS, live-backend, continuous-animation or complete browser-engine/Python/OS tool-body preservation claim is made.
+
+Both physical source archives match all 5,381 tracked blobs and modes in the tested tree. The complete recorded source-shadow manifests also match. Resource checks cover 24,466 dependency records, 176 isolated browser-package records, two explicit resolved links, ten physical font files and all 824 bodies in each build archive. Installed dependency and browser-package bodies are evidenced by the remote checks, not separately archived local copies. No second complete physical shadow archive is claimed. Retained warnings concern old browser data, an ambiguous duration utility, large chunks and the outer PS1 setting. Two deliberately induced legacy-browser 503 console errors are also retained. No clean-stderr or clean-console claim is made.
+
+The result record is a docs-only child of the tested head. Product, test and workflow bytes remain those tested. PR412 stays draft and unmerged. I owns composition with the independent Menu finder PR385, current-target gates, main integration and sole publication. PR385's separate failed-cap result remains open. This change is not live. The earlier preservation gap of ten missing folders and 785 entries also remains open.
