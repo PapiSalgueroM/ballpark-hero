@@ -1,0 +1,77 @@
+name: Soccer Career programme expectation controls
+on:
+  push:
+    branches: [codex/soccer-career-loyalty-20261027]
+    paths:
+      - .github/workflows/soccer-career-programme-controls.yml
+      - scripts/qa/soccerProgrammeExpectationControls.mjs
+permissions:
+  contents: read
+concurrency:
+  group: soccer-programme-controls-${{ github.ref }}
+  cancel-in-progress: false
+jobs:
+  controls:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    defaults:
+      run:
+        shell: bash
+    env:
+      CI: '1'
+      SIM_NETWORK: offline
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.sha }}
+          fetch-depth: 0
+          persist-credentials: false
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: npm
+      - name: Retain immutable source and install locked dependencies
+        run: |
+          set -euo pipefail
+          mkdir -p programme-control-artifacts
+          git rev-parse HEAD > programme-control-artifacts/source-head.txt
+          git rev-parse HEAD^{tree} > programme-control-artifacts/source-tree.txt
+          git archive --format=tar HEAD > programme-control-artifacts/source.tar
+          git ls-files -z | sort -z | xargs -0 sha256sum > programme-control-artifacts/source-before.sha256
+          npm ci
+      - name: Verify unchanged application and selected expectation sources
+        run: |
+          set -euo pipefail
+          node - <<'NODE' | tee programme-control-artifacts/source-pins.log
+          const fs = require('node:fs'), crypto = require('node:crypto'), assert = require('node:assert/strict');
+          const hash = bytes => crypto.createHash('sha256').update(bytes).digest('hex');
+          assert.equal(hash(fs.readFileSync('scripts/qa/soccerProgrammeExpectationControls.mjs')), 'a7e2e849ac5e06a6e6dcc46f673824c0e720144fd4da9434fc3beea03936aa2c');
+          const manifestBytes = fs.readFileSync('qa/soccer-career-loyalty-v2.1/SOURCE-READY.json');
+          assert.equal(hash(manifestBytes), '573c56d21177fa3a2b62a5ff74ef7e5f626f8fae3f2d47b577f1506a0f160bee');
+          const manifest = JSON.parse(manifestBytes); assert.equal(manifest.files.length, 11);
+          for (const row of manifest.files) assert.equal(hash(fs.readFileSync(row.path)), row.sha256, row.path);
+          for (const [path, expected] of [['src/lib/soccerCareerProgramme.test.ts','0aa83c6371c847812662c61551a9e9365f65f6aed174c6333713cff1b9e50cef'],['src/test/soccerCareerProgrammeUi.test.tsx','844de8eefb431ab62123f7db1557df4a7019f0d4d2d0d744d0463716a26b5037']]) assert.equal(hash(fs.readFileSync(path)), expected, path);
+          fs.writeFileSync('programme-control-artifacts/source-pins.json', JSON.stringify({ product: manifest.files, unchangedProduct: true, testOnlyCorrection: true }, null, 2));
+          console.log('All 11 application pins and both expectation source pins match.');
+          NODE
+      - name: Actual application types
+        run: |
+          set -euo pipefail
+          node node_modules/typescript/bin/tsc --noEmit -p tsconfig.app.json 2>&1 | tee programme-control-artifacts/types.log
+      - name: Physical programme contract controls with exact restoration
+        run: |
+          set -euo pipefail
+          SC_PROGRAMME_CONTROL_OUT="$GITHUB_WORKSPACE/programme-control-artifacts" NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/qa/soccerProgrammeExpectationControls.mjs 2>&1 | tee programme-control-artifacts/controls.log
+      - name: Exact canonical source holds
+        if: always()
+        run: |
+          set -euo pipefail
+          sha256sum -c programme-control-artifacts/source-before.sha256 > programme-control-artifacts/source-held.log
+          git diff --exit-code HEAD
+      - name: Retain actual reports and immutable source
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: soccer-programme-units-${{ github.run_id }}-${{ github.run_attempt }}
+          retention-days: 7
+          path: programme-control-artifacts/
