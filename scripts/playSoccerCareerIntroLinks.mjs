@@ -56,6 +56,11 @@ async function contextFor(profile, row, javaScriptEnabled = true, rawOverride) {
       return route.continue();
     }
     if (request.method() === 'GET' && fonts.has(url.href)) return route.fulfill({ status: 200, ...fonts.get(url.href) });
+    if (request.method() === 'GET' && request.resourceType() === 'image' && url.origin === 'https://flagcdn.com'
+      && /^\/w40\/(ar|br|de|es|fr|it|pt)\.png$/.test(url.pathname) && !url.search) {
+      (row.cosmeticFlagFallbacks ??= []).push(url.href);
+      return route.fulfill({ status: 200, contentType: 'image/svg+xml', body: '<svg xmlns="http://www.w3.org/2000/svg" width="1" height="1"/>' });
+    }
     if (/\.supabase\.co$/.test(url.hostname)) {
       row.emptyBackendFixtures.push({ method: request.method(), path: url.pathname });
       if (url.pathname === '/auth/v1/user') return route.fulfill({ status: 401, json: { message: 'No session' } });
