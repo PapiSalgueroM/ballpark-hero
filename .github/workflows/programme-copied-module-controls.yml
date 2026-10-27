@@ -1,0 +1,93 @@
+name: Programme copied-module control qualification
+on:
+  push:
+    branches: [codex/sc-programme-control-20261027]
+permissions:
+  contents: read
+concurrency:
+  group: programme-copied-module-control-${{ github.ref }}
+  cancel-in-progress: false
+defaults:
+  run:
+    shell: bash
+env:
+  CI: '1'
+  SIM_NETWORK: offline
+jobs:
+  controls:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.sha }}
+          fetch-depth: 0
+          persist-credentials: false
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: npm
+      - name: Retain exact source and install locked dependencies
+        run: |
+          set -euo pipefail
+          mkdir -p programme-control-artifacts
+          git rev-parse HEAD > programme-control-artifacts/source-head.txt
+          git rev-parse HEAD^{tree} > programme-control-artifacts/source-tree.txt
+          git archive --format=tar HEAD > programme-control-artifacts/source.tar
+          git ls-files -z | sort -z | xargs -0 sha256sum > programme-control-artifacts/source-before.sha256
+          npm ci
+      - name: Hold all production bodies and corrected case sources
+        run: |
+          set -euo pipefail
+          node - <<'NODE' | tee programme-control-artifacts/selected-source.log
+          const fs=require('node:fs'),crypto=require('node:crypto'),assert=require('node:assert/strict');
+          const hash=body=>crypto.createHash('sha256').update(body).digest('hex');
+          assert.equal(hash(fs.readFileSync('scripts/simCareerProgramme.mjs')),'4348db850efb1208a3d6238d4b812751ff94369f0140356caf2597b28f55c847');
+          const body=fs.readFileSync('qa/soccer-career-loyalty-v2.1/SOURCE-READY.json');
+          assert.equal(hash(body),'3ea2b473d7ac00ee36bfff7b5c67a7d9276d82d3abc0bae721947095f8dd88f0');
+          const meta=JSON.parse(body);assert.equal(meta.files.length,11);
+          for(const row of meta.files)assert.equal(hash(fs.readFileSync(row.path)),row.sha256,row.path);
+          for(const [file,sha]of [['src/lib/soccerCareerProgramme.test.ts','0aa83c6371c847812662c61551a9e9365f65f6aed174c6333713cff1b9e50cef'],['src/test/soccerCareerProgrammeUi.test.tsx','844de8eefb431ab62123f7db1557df4a7019f0d4d2d0d744d0463716a26b5037']])assert.equal(hash(fs.readFileSync(file)),sha,file);
+          console.log('All 11 selected production bodies and both 100-case source files held.');
+          NODE
+      - name: Actual app types
+        run: |
+          set -euo pipefail
+          node node_modules/typescript/bin/tsc --noEmit -p tsconfig.app.json 2>&1 | tee programme-control-artifacts/types.log
+      - name: All 100 current Programme cases before controls
+        run: |
+          set -euo pipefail
+          NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node node_modules/vitest/vitest.mjs run src/lib/soccerCareerProgramme.test.ts src/test/soccerCareerProgrammeUi.test.tsx --maxWorkers=1 --minWorkers=1 --reporter=default --reporter=json --outputFile=programme-control-artifacts/before.json 2>&1 | tee programme-control-artifacts/before.log
+      - name: Actual original engine outcomes and all 21 unchanged physical controls
+        run: |
+          set -euo pipefail
+          CAREER_PROGRAMME_OUT="$PWD/programme-control-artifacts/outcomes" NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/simCareerProgramme.mjs 2>&1 | tee programme-control-artifacts/controls.log
+      - name: All 100 restored cases and exact identities
+        run: |
+          set -euo pipefail
+          NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node node_modules/vitest/vitest.mjs run src/lib/soccerCareerProgramme.test.ts src/test/soccerCareerProgrammeUi.test.tsx --maxWorkers=1 --minWorkers=1 --reporter=default --reporter=json --outputFile=programme-control-artifacts/after.json 2>&1 | tee programme-control-artifacts/after.log
+          node - <<'NODE' | tee programme-control-artifacts/actual-receipt.log
+          const fs=require('node:fs'),assert=require('node:assert/strict');
+          const read=file=>JSON.parse(fs.readFileSync('programme-control-artifacts/'+file,'utf8'));
+          const identities=j=>j.testResults.flatMap(s=>s.assertionResults.map(a=>a.fullName)).sort();
+          const before=read('before.json'),after=read('after.json');
+          for(const j of[before,after]){assert.equal(j.numTotalTests,100);assert.equal(j.numPassedTests,100);assert.equal(j.numFailedTests,0);assert.equal(j.numPendingTests,0);}
+          assert.deepEqual(identities(before),identities(after));assert.equal(new Set(identities(before)).size,100);
+          const report=read('outcomes/outcomes.json');
+          const expected=['tactics','position','set_pieces','promise','negotiation','bonuses','adaptation','fitness','captain','loan','us-workload','us-tactics','us-expectation','us-partnership','us-bonus','us-reinvention','ui-scroll','ui-focus','wheel-roll','wheel-ack','wheel-ui'];
+          assert.deepEqual(report.controls.map(r=>r.id),expected);
+          for(const row of report.controls){assert.equal(row.effective,true);assert(row.failed.length>0);assert.notEqual(row.originalSha256,row.faultySha256);}
+          console.log('Before and restored100/100, same unique identities; all21 controls reached actual intended assertion failures.');
+          NODE
+      - name: All canonical source bodies held
+        if: always()
+        run: |
+          set -euo pipefail
+          sha256sum -c programme-control-artifacts/source-before.sha256 > programme-control-artifacts/source-held.log
+          git diff --exit-code HEAD -- src scripts .github/workflows qa > programme-control-artifacts/source-diff.log
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: programme-copied-module-controls-${{ github.run_id }}
+          path: programme-control-artifacts
+          if-no-files-found: error
