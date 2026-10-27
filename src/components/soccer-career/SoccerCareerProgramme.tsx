@@ -87,6 +87,7 @@ export default function SoccerCareerProgramme({ career, onChange, onClose }: {
           <p>Pick a tile, read its effect and tradeoff, then choose an available option. Each plan belongs to the club and season shown in its detail.</p>
           <p>Some choices need a transfer offer, a loan, an injury return or the captain's armband. An unavailable choice explains what is missing.</p>
           <p>A plan is not a guaranteed result. The detail shows your current choice and the outcome your career actually kept. Opening, reading or closing this screen does not change your career.</p>
+          <p>Loyalty contracts use the first permanent offer shown in the plan. Cash keeps the higher weekly wage. Loyalty cuts it by 10% and pays the quoted amount only after the full recorded term. For example, EUR 10,000 a week for two years becomes EUR 9,000 a week plus EUR 156,000 at completion. Leaving after one season means EUR 468,000 salary and no payout. A loan keeps the parent club's rights; a permanent move, early expiry or retirement forfeits unpaid loyalty pay. Existing performance bonuses stay separate.</p>
           <p>Use Cancel plan when it is offered to remove a queued choice. A completed deal or recorded season cannot be undone here.</p>
           <h3 className="font-bold">Example</h3>
           <p>Open Tactical role and compare the available roles. Read both the effect and the tradeoff before choosing. Your choice is kept for the eligible season; after that season, check its recorded outcome instead of assuming the preview happened.</p>

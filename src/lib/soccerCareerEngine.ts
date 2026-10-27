@@ -8,6 +8,7 @@ import { cancelReducedRole, queueReducedRole, reducedRoleSwing, settleReducedRol
 import { personalGoalMilestoneNews } from './soccerCareerMilestone';
 import { soccerExtensionQuote, soccerTransferTerms, soccerWageDemand } from '@/lib/soccerCareerContracts';
 import { programmeEffects, prepareSoccerProgramme, settleSoccerProgramme, interruptSoccerProgramme, completeProgrammeLoanBuy, programmePromiseBroken } from './soccerCareerProgramme';
+import { canAcceptLoyaltyOffer, loyaltySigningWage, commitLoyaltySigning, settleLoyaltySeason, closeLoyaltyForRetirement, closeLoyaltyForExpiry, clearLoyaltyChoice, repairLoyalty, type SoccerLoyaltyState } from './soccerCareerLoyalty';
 import type { SoccerProgrammeState, SoccerProgrammeReceipt } from './soccerCareerProgramme';
 import { announceSoccerFarewell, farewellSeasonComplete, readSoccerFarewell, type SoccerFarewellPlan } from './soccerCareerFarewell';
 import { clearTransferBrief, previewTransferBrief, readTransferBrief, storeTransferBriefResult, transferBriefCandidates, type SoccerTransferBrief, type TransferBriefPreview } from './soccerCareerTransferBrief';
@@ -930,6 +931,7 @@ export interface CareerState {
   /** Round 1190: four fewer planned league games at this club next year. */
   reducedRole?: ReducedRolePlan;
   programme?: SoccerProgrammeState;
+  loyaltyContracts?: SoccerLoyaltyState;
   chanceWheel?: CareerChanceWheelReceipt;
   transferBrief?: SoccerTransferBrief;
   playerName: string;
@@ -2423,7 +2425,7 @@ export function dismissMoralDilemma(prev: CareerState, clubs: ClubData[]): Caree
         club, contractYears: 4,
         wage: soccerTransferTerms(s, Math.max(s.weeklyWage, wageForTier(club.tier, s.overall)), 4).wage,
         transferFee: realisticTransferFee(s.overall, s.age),
-      });
+      }, true);
       moved.events = [...s.events, ...moved.events];
       return moved;
     }
@@ -2873,6 +2875,12 @@ export function repairCareer<T extends CareerState>(state: T): T {
      This is the only place that runs on load, so it is where they come back. */
   if (s.phase === "season_summary" && !s.pendingSummary) s.phase = "playing";
   reconcileRetirement(s);
+  if (s.loyaltyContracts !== undefined) {
+    const fixed = repairLoyalty(s);
+    if (fixed.loyaltyContracts === undefined) delete s.loyaltyContracts;
+    else s.loyaltyContracts = fixed.loyaltyContracts;
+    if (fixed !== s) s.events = fixed.events;
+  }
   if (!s.primeType) s.primeType = rollPrimeType();
   /* Round 217: saves from before the loan move have neither field. Null is
      the exact old behaviour: no loan running, no offers pending. */
@@ -3272,6 +3280,7 @@ function simulateSeasonFinances(s: CareerState, season: SeasonRecord): void {
   }
   // Family life events
   simulateFamilyLife(s);
+  Object.assign(s, settleLoyaltySeason(s, season));
 }
 
 function simulateFamilyLife(s: CareerState): void {
@@ -4493,6 +4502,7 @@ function enterTransferWindow(s: CareerState, clubs: ClubData[]): void {
     s.transferSituation = determineTransferSituation(s, clubs);
     s.badSeasonStreak = strikes.length >= 3 ? (s.badSeasonStreak ?? 0) + 1 : 0;
     const sit = s.transferSituation;
+    Object.assign(s, closeLoyaltyForExpiry(s));
     if (sit.type === "frozen_out") {
       s.morale = clamp(s.morale - 12, 0, 100);
       s.events.push(
@@ -4580,7 +4590,7 @@ export function acceptLoan(prev: CareerState, offer: ContractOffer): CareerState
   // Round 244: a captain who leaves on loan hands the armband over; it can
   // be earned back, it is never kept warm.
   endClubCaptaincy(s, "loan");
-  return s;
+  return clearLoyaltyChoice(s);
 }
 
 /** Complete a new club listing using its existing offer, then show the move once. */
@@ -4590,7 +4600,7 @@ export function completeClubVerdictMove(prev: CareerState): CareerState {
   const loan = verdict.mode === "loan_listed";
   const offer = verdict.offers.find(candidate => !!candidate.isLoan === loan);
   if (!offer || (loan && prev.loan)) return prev;
-  const moved = loan ? acceptLoan(prev, offer) : acceptOffer(prev, offer);
+  const moved = loan ? acceptLoan(prev, offer) : acceptOffer(prev, offer, true);
   moved.phase = "transfer_window";
   moved.transferSituation = {
     type: "club_move", mode: loan ? "loan" : "sale", fromClub: prev.currentClub,
@@ -5049,7 +5059,9 @@ export function advanceYouthYear(prev: CareerState, clubs: ClubData[]): CareerSt
 }
 
 /* ─── Accept contract offer ─── */
-export function acceptOffer(prev: CareerState, offer: ContractOffer): CareerState {
+export function acceptOffer(prev: CareerState, offer: ContractOffer, clubDirected = false): CareerState {
+  const loyaltyBaseWage = Math.round(offer.wage * agentWageMult(prev.agentId));
+  if (!clubDirected && !canAcceptLoyaltyOffer(prev, offer, loyaltyBaseWage)) return prev;
   const s = { ...prev };
   if (offer.club.name !== prev.currentClub || prev.loan) cancelReducedRole(s);
   clearTransferBrief(s, prev, projectLeagueApps);
@@ -5062,7 +5074,7 @@ export function acceptOffer(prev: CareerState, offer: ContractOffer): CareerStat
   s.currentClubTier = offer.club.tier; s.currentClubColor = offer.club.color; s.currentLeague = offer.club.league;
   s.contractYearsLeft = offer.contractYears;
   // Round 49: your agent's negotiating skill decides the final wage
-  s.weeklyWage = Math.round(offer.wage * agentWageMult(prev.agentId));
+  s.weeklyWage = loyaltySigningWage(prev, offer, loyaltyBaseWage);
   /* Round 257: a freeze out belongs to the club that imposed it. Walk out of
      the door and it does not follow you. */
   s.frozenOut = 0;
@@ -5092,7 +5104,7 @@ export function acceptOffer(prev: CareerState, offer: ContractOffer): CareerStat
       ? `🏠 One of our own! The ${offer.club.name} academy kid signs a first-team deal. The ultras already have a chant ready.`
       : `🏠 THE HOMECOMING! ${s.playerName} returns to ${offer.club.name}, the club that raised them. Scenes outside the stadium.`);
   }
-  return s;
+  return commitLoyaltySigning(prev, s, offer, loyaltyBaseWage);
 }
 
 /* ─── Round 124: international football lives in soccerInternational.ts ───
@@ -5495,6 +5507,7 @@ export function advanceProSeason(prev: CareerState, clubs: ClubData[]): CareerSt
     delete s.seasonAmbition;
     delete s.seasonPreparation;
     Object.assign(s, endCareerMentorForRetirement(s));
+    Object.assign(s, closeLoyaltyForRetirement(s));
     cancelReducedRole(s);
     const reason = s.age >= 45 ? "👋 Hung up the boots at 45. An incredible career!" : "👋 Body can no longer keep up. Forced retirement";
     s.events.push(reason);
@@ -8216,6 +8229,7 @@ export function stayAtClub(prev: CareerState): CareerState {
 /* ─── Sign extension ─── */
 export function signExtension(prev: CareerState): CareerState {
   const s = { ...prev };
+  Object.assign(s, closeLoyaltyForExpiry(s));
   clearTransferBrief(s, prev, projectLeagueApps);
   const quote = soccerExtensionQuote(s);
   const extraYears = quote.contractYears ?? rand(2, 4);
@@ -8765,6 +8779,7 @@ export function manualRetire(prev: CareerState): CareerState {
   delete s.seasonAmbition;
   delete s.seasonPreparation;
   Object.assign(s, endCareerMentorForRetirement(s));
+  Object.assign(s, closeLoyaltyForRetirement(s));
   cancelReducedRole(s);
   if (readSoccerFarewell(s) && s.loan) {
     const back = s.loan;
@@ -8875,6 +8890,7 @@ export function acceptRetirementSuggestion(prev: CareerState): CareerState {
   delete s.seasonAmbition;
   delete s.seasonPreparation;
   Object.assign(s, endCareerMentorForRetirement(s));
+  Object.assign(s, closeLoyaltyForRetirement(s));
   cancelReducedRole(s);
   s.retired = true;
   s.events = [...s.events, "👋 Announced retirement from professional football"];

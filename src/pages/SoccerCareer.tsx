@@ -610,6 +610,8 @@ function OfferCard({ offer, onAccept, career }: { offer: ContractOffer; onAccept
         <span className="text-[10px] px-1.5 py-0.5 rounded bg-muted/40">Tier {offer.club.tier}</span>
       </div>
       {review.wageDelta !== null && review.wageDelta < 0 && <div className="text-xs text-amber-400">Lower weekly wage than your current deal</div>}
+      {review.loyaltyQuote && <p data-loyalty-offer className="text-xs text-emerald-400">Loyalty deal: {moneyLine('€' + review.loyaltyQuote.bonusEuros.toLocaleString('en-US'))} after {review.loyaltyQuote.years} recorded contract seasons. Leaving early forfeits it.</p>}
+      {review.loyaltyForfeitEuros && <p data-loyalty-forfeit className="text-xs text-amber-400">A permanent move here forfeits {moneyLine('€' + review.loyaltyForfeitEuros.toLocaleString('en-US'))} of unpaid loyalty pay.</p>}
       {career && <OfferFitLine offer={offer} career={career} />}
       <SoccerOfferReview club={offer.club.name} review={review} onAccept={onAccept} />
     </div>
@@ -1157,6 +1159,7 @@ export default function SoccerCareer() {
   const handleAcceptOffer = (offer: ContractOffer) => {
     if (!career) return;
     const next = acceptOffer(career, offer);
+    if (next === career) return;
     setCareer(next);
     // Round 530: the slip prints the engine's wage, after the agent's cut, never the offer's.
     setSignedNote({ kind: "transfer", club: next.currentClub, years: next.contractYearsLeft, wage: next.weeklyWage, forCareer: next });
