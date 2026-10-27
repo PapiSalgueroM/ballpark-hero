@@ -1,9 +1,11 @@
 # Player Bingo category expansion
 
-Adds twelve criteria derived from player data already loaded by Player Bingo: full-backs, wingers, two middle value bands, two middle age bands, combined attacking seasons, appearance totals, scoring in fewer appearances and discipline combinations. Fixed criteria increase from 52 to 64. Each still needs eight supported pool players to reach a board.
+Twelve criteria from already-loaded metadata expand fixed categories from52 to64. They cover full-backs, wingers, middle age/value bands, combined attacking seasons, appearances, scoring in fewer appearances and discipline combinations. A tile still needs eight supported pool players. No new player records, achievement lists, tables or external facts are imported.
 
-The original criterion IDs and predicates, 24-square board, quotas, scoring and deck algorithms are preserved. Related appearance and discipline alternatives share exclusion groups. No player data, achievement lists, validators, database tables or external facts are added.
+Existing IDs, predicates, quotas, scoring and deck rules are preserved. Related alternatives share exclusion groups. Category labels now wrap within narrow tiles; restoring the original classes reproduces the three320px overflow defects.
 
-Unchanged-source baseline ad372160036e9364c31fb7298444cb02e44ea40b, run40441132045, passed the actual application type gate. The ten frozen tests produced exactly nine missing-category failures and one preservation pass. The fixed source is pending remote qualification; no live change is claimed.
+Qualified source78ca56a59a2bc1c2d765db4bf1355a07d7647290/run40447951445 passed app types, all10 category cases,18 effective source faults, immutable-original/red and restored controls, existing Bingo controls,68Bingo cases, SEO build,15readers and15unchanged route caps. The actual offline page passed42boards at320/390/1280, all12 additions at each width, real valid placements, hidden-label controls and whole-original-class overflow/restoration. Five selected positive/control images were viewed across main and independent peer.
 
-The focused proof covers boundaries, unknown values, same-season requirements, minimum support and 128 deterministic fixture boards with distinct-player winning lines in their first sixty draws. This is bounded constructed-input coverage. Current production support and browser/release checks remain separate. The existing honours source pin is refreshed for this exact library while retaining its four executable controls.
+The preceding full app suite at48b1488f passed9634cases/647files with58cases in2files skipped. Only the wrapping class and browser proof changed after that run; the full suite is not claimed rerun on78. The first browser failure is retained. Generated output differs only in a sitemap generator comment date.
+
+This is constructed-input and bounded UI qualification. Owner I retains combined-target integration, current production support checks and publication. No main merge or live deployment is claimed. Full receipt is appended to PROJECT-STATE.
