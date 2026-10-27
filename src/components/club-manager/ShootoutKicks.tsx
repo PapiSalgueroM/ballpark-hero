@@ -24,7 +24,7 @@ const MADE_UP_TAKER = 'Not a real player. We hold fewer than eleven real names f
 
 export function ShootoutKicks({ shootout, clubName, opponent, className }: { shootout: ShootoutDetail; clubName: string; opponent: string; className?: string }) {
   return (
-    <div className={cn('bg-card border border-border rounded-xl p-3 text-left', className)} data-cm-shootout={`${shootout.mine}-${shootout.theirs}`}>
+    <div className={cn('bg-card border border-border rounded-xl p-3 text-center', className)} data-cm-shootout={`${shootout.mine}-${shootout.theirs}`}>
       <div className="flex items-center justify-between mb-1.5">
         <span className="text-[10px] text-muted-foreground uppercase tracking-wider">Penalties, kick by kick</span>
         <span className="text-xs font-bold font-display text-foreground tabular-nums">{shootout.mine}-{shootout.theirs}</span>
@@ -51,7 +51,7 @@ export function ShootoutKicks({ shootout, clubName, opponent, className }: { sho
                   the part that can shorten, so only a very long name ever does. */}
               <span className="flex min-w-0 flex-1 flex-col sm:flex-row sm:items-center sm:gap-2">
                 <span className="truncate text-[9px] uppercase tracking-wider text-muted-foreground sm:w-[72px] sm:shrink-0">{k.side === 'me' ? clubName : opponent}</span>
-                <span className="flex min-w-0 items-center gap-1 sm:flex-1">
+                <span className="flex min-w-0 items-center justify-center gap-1 sm:flex-1">
                   <span data-cm-pen-taker className="truncate text-foreground">{k.taker}</span>
                   {k.gen && <MadeUpTag title={FILL_IN.test(k.taker) ? MADE_UP_TAKER : undefined} />}
                 </span>
