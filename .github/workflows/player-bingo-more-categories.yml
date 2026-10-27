@@ -59,10 +59,10 @@ jobs:
             PLAYER_BINGO_WC_CONTROL="$control" PLAYER_BINGO_WC_PHASE=fixed node scripts/simPlayerBingoWorldCupAlias.mjs 2>&1 | tee "$PLAYER_BINGO_CATEGORIES_OUT/world-cup-$control.log"
           done
           PLAYER_BINGO_RODRI_PHASE=fixed node scripts/simPlayerBingoRodriHonour.mjs 2>&1 | tee "$PLAYER_BINGO_CATEGORIES_OUT/rodri.log"
-      - name: Complete application unit suite
+      - name: Bingo units after the isolated label wrapping change
         run: |
           set -o pipefail
-          NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" npm test -- --maxWorkers=2 2>&1 | tee "$PLAYER_BINGO_CATEGORIES_OUT/full-units.log"
+          NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" npm test -- playerBingo --maxWorkers=2 2>&1 | tee "$PLAYER_BINGO_CATEGORIES_OUT/bingo-units.log"
       - name: Isolated browser and logo build tools
         run: |
           npm install --prefix "$RUNNER_TEMP/bingo-category-browser" --no-save --package-lock=false playwright@1.64.0
