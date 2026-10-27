@@ -19216,3 +19216,34 @@ The two initial fixture failures39940913787 and39943246891 remain separate from 
 Evidence packet: C:/Users/antho/dukb-handoff/2026-10-23/search-navigation. Root qualification c565e4bb892d6f5392e942e329af0b1661faba1e626bddb051ab76276d2e88b5; Root pixels743d12524f3b65bf0752151b2cfdbb7c3866377866360b6f66c60a4875cfdb26; independent integrated audit4e7ff7ad3b766d00b3f7f5ac280ed0b9d67fd91e8a27416cd182579a76da9dac. The normal saved-picks archive is also retained as2ca41f45c885f8066326880fe73480b83b0ee3ae7a3c4b08503c94fc74fa3e98.
 
 I retains sole publication. Root did not publish this Search correction and makes no new live-site claim. Analytics remains paused. No local application execution, cleanup, old checkout reset, data/provider/account change or protected game adoption occurred. Primary WORKBOARD and the continuation checkpoint receive only this exact note through the reviewed exclusive-lock append helper, with actual full-prefix backups/readback and both protected indexes checked before and finally. Earlier preservation gaps remain unwaived.
+
+## 2026-10-27: Preserve Search input composition
+
+Prepared an isolated Search keyboard correction against b20ec6664df9d4c58d63ea0596791d33b2a3b8fc. The page currently handles arrow and Escape shortcuts without checking whether the event belongs to an input method. The proposed guard returns for native isComposing or keyCode 229 before the existing shortcuts. The compatibility fallback follows [MDN's keydown guidance](https://developer.mozilla.org/en-US/docs/Web/API/Element/keydown_event#keydown_events_with_ime).
+
+The product change is limited to one guard and its comment in src/pages/Search.tsx. URL and debounce ownership from PR374, matching, ranking, the catalogue, picks, saves and layout stay unchanged. The separate Menu finder and Saved games proposals remain independent.
+
+Prepared verification covers eleven actual Search component cases, the existing nine navigation cases, a complete-original-source negative control, restored source, two offline browser contexts, app types, build, eighteen completed-build readers and unchanged download caps. Browser composition events are synthetic and do not qualify a real OS input method. No runtime result is claimed by this source note.
+
+I retains current-target integration, main and publication. No live change or full-suite qualification is claimed. Previous evidence and the unresolved preservation gap remain held.
+
+
+## Root Search composition guard, verified delivery, 2026-10-27 UTC
+
+Search shortcuts now leave input-method conversion keys alone. The two-line guard returns for native isComposing or keyCode 229 before ArrowUp, ArrowDown and Escape handling. Ordinary shortcuts, query debouncing, URL parameters, sport filters and saved picks retain their existing implementation. This is a keyboard ownership fix; it does not add language matching or claim actual operating-system IME testing.
+
+Draft PR413: https://github.com/PapiSalgueroM/ballpark-hero/pull/413. Branch codex/search-composition-20261027. Qualified source 6921741d68f57806e0d15e94df5c0cd0a049bc2d, tree 50b661a371daa7fc6bb81342d76ad1571e05fc12, sole parent b20ec6664df9d4c58d63ea0596791d33b2a3b8fc. Exactly five direct paths changed and all other 5,376 parent blobs/modes are held. The production change is only src/pages/Search.tsx.
+
+Ordinary-push run40468317928/attempt1/job122069025187 succeeded. The actual app TypeScript check and production build passed. Existing9 navigation cases, healthy11 and restored11 composition/ordinary cases passed. The complete original Search source produced exactly6 owned UNCONSUMED assertion failures and5 passes, proving the guard fixes the reproduced behavior. All26 supervised processes had expected25zero plus1ownedone; the server and4outer consumers bring the selected cohort count to31, with empty execution transport receipts. Absent optional runtime/unhandled counters remain unknown, not measured zero.
+
+All18 completed-build readers and15 unchanged fatal download caps passed. The two built Chromium contexts (328x515dark and1280x900light) retained32 observations and2 original PNGs, both independently reviewed. Twelve synthetic composition probes preserved the query, URL, focus and22result rows. Sixteen trusted ordinary keydowns verified result navigation, caret movement, native sport filtering and Escape. All60 sampled font/width states were clean. Root also viewed both original PNGs and found no search-control overlap or clipping. Real OS IME and physical-device behavior remain untested.
+
+The separate automatic Game picks verification40468321647/attempt1/job122069037231 reports SUCCESS in GitHub metadata. Its artifact was not acquired or audited here; this is status evidence only.
+
+Sole original artifact.zip is88,071,912bytes, SHA2565f2365a0ead2b4eaa2702260bb27577f47fd6114e65f8b04a963daeddaa51536, retained under C:/Users/antho/dukb-handoff/2026-10-27/remote-search-composition-40468317928-a1. Acquisition was exactly1catalog/1reference/1copy/1original, with no recovery. All234 physical ZIP bodies and the233-row root seal were checked before artifact JSON. Final joined qualification is FINAL-QUALIFIED-SEARCH-COMPOSITION.json in that folder.
+
+Independent native audits verified both5,381-body canonical source TARs against the exact Git tree, the complete original-Search mutation and restoration, all39 critical source pins and full canonical/shadow before/final manifests. Resource scope covers24,466 dependency regular-file records,176 isolated browser-package records,2 explicit package links,10 physical font files and both824-file physical dist archives. Installed package bodies rely on complete remote manifests and checksum rows, not local body archives. Git executable modes are held; raw Git-archive0664/0775 and checkout0644/0755 permissions are recorded separately.
+
+Existing build warnings remain. Qualification does not cover actual operating-system IME, full simulation suite, all routes, Safari, physical devices, WCAG, live backend, general OS/tool body preservation or publication. Earlier preservation debt of10 missing folders/785 entries remains unresolved. No local application/Git/test/build execution, cleanup, archive, CI dispatch/rerun/cancel, provider or save change occurred.
+
+The final outcome appendix preserves the complete tested document prefix. Owner I retains current-target composition, required integration checks, main and sole publication. PR413 remains independent from Saved games Menu PR412 and Menu finder PR385. This change is not live.
