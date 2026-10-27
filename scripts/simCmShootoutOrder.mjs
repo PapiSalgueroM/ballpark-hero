@@ -134,6 +134,9 @@
  *     Section 3 must go red.
  *   CM_SHOOTOUT_CONTROL=unsetpath    the one draw path takes one extra
  *     number off the stream first. Section 4 must go red (and 5 with it).
+ *   CM_SHOOTOUT_CONTROL=tie-record   a losing default record is made tied,
+ *     holding its winner, save and draws. Sections 4 and 5 must reject it
+ *     as incomplete, even when its last kick agrees with the tied totals.
  *   CM_SHOOTOUT_CONTROL=ownkeeper    runShootout reads each kick against
  *     the kicking side's own keeper. Section 6a must go red.
  *   CM_SHOOTOUT_CONTROL=wrongkeeper  shootoutSides takes the last man who
@@ -278,7 +281,7 @@ const BUNDLE = `${TMP}/${TAG}.bundle.mjs`;
 const FIXTURE = `${ROOT}/scripts/data/cmShootoutUnset782.json`;
 
 const CONTROL = process.env.CM_SHOOTOUT_CONTROL || '';
-const KNOWN = ['ignoreorder', 'noskip', 'nocap', 'unsetpath', 'ownkeeper', 'wrongkeeper', 'nooppkeeper', 'oppworst', 'thinside', 'nomakeup', 'keeperonfull', 'keepleague'];
+const KNOWN = ['ignoreorder', 'noskip', 'nocap', 'unsetpath', 'tie-record', 'ownkeeper', 'wrongkeeper', 'nooppkeeper', 'oppworst', 'thinside', 'nomakeup', 'keeperonfull', 'keepleague'];
 if (CONTROL && !KNOWN.includes(CONTROL)) {
   console.error(`CM_SHOOTOUT_CONTROL=${CONTROL} is not a control this harness knows (${KNOWN.join(', ')})`);
   process.exit(2); /* 2, like a runtime error below: a control that never ran must not read as one that fired (1) */
@@ -333,6 +336,11 @@ if (CONTROL) {
       '  const roll = order ? null : Math.random();\n',
       '  const roll = order ? null : (Math.random(), Math.random());\n',
       'settleShootout (the one draw path)');
+  } else if (CONTROL === 'tie-record') {
+    engine = swap(engine,
+      '        return { won, detail };\n',
+      '        if (!won) { detail.theirs = detail.mine; const last = detail.kicks[detail.kicks.length - 1]; if (last) last.theirs = detail.mine; }\n        return { won, detail };\n',
+      'settleShootout (a tied losing default record)');
   } else if (CONTROL === 'ownkeeper') {
     engine = swap(engine,
       '    const p = shootoutKickChance(taker, them.keeperRating);\n',
@@ -639,7 +647,7 @@ function legacyDefaultReport(report, noOrder) {
   const detail = report.shootout;
   const last = Array.isArray(detail.kicks) ? detail.kicks[detail.kicks.length - 1] : null;
   if (report.decidedBy !== 'pens' || !Number.isInteger(detail.mine) || !Number.isInteger(detail.theirs)
-    || detail.mine < 0 || detail.theirs < 0 || last?.mine !== detail.mine || last?.theirs !== detail.theirs
+    || detail.mine < 0 || detail.theirs < 0 || detail.mine === detail.theirs || last?.mine !== detail.mine || last?.theirs !== detail.theirs
     || (detail.mine > detail.theirs) !== (report.shootoutWon ?? report.won)) {
     fail('Default shootout details cannot be removed from an incomplete or contradictory report');
     return report;
