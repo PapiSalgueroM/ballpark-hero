@@ -1747,11 +1747,15 @@ export const SOCCER_CONTENT_2: GameContentMap = {
 
   '/soccer-career': {
     intro: [
-      "Every soccer career simulator promises the same fantasy: start as a nobody, retire as a legend. This one makes the middle the good part. You begin at 16 in a youth academy and live season by season through contracts, transfers, injuries, feuds, trophies, and increasingly questionable purchases, until the game hands down a legacy verdict.",
-      "It is the most played game on DoUKnowBall, and it sits closer to a life sim than to a match engine. You never dribble anyone. You make decisions, and the sim turns them into a story that is different every run.",
+      "Every soccer career simulator promises the same fantasy: start as a nobody, retire as a legend. This one makes the middle the good part. You begin at 16 in a youth academy and live season by season through contracts, transfers, injuries, feuds, trophies, and increasingly questionable purchases, until the game hands down a legacy verdict. For the academy side, Wonderkid Factory lets you scout generated prospects, develop them and decide when to sell.",
+      "It is the most played game on DoUKnowBall, and it sits closer to a life sim than to a match engine. You never dribble anyone. You make decisions, and the sim turns them into a story that is different every run. If weighing offers is your favourite part, Contract Chaos puts you in the agent's seat to compare wages, squad role and release clauses.",
       "Your save lives in your browser, one career at a time, so choices carry weight into the years that follow them.",
       "You build your player's actual face before kickoff: skin tone, hairstyle and colour, facial hair, a boot line, an accessory, and a signature celebration that gets described every time you score. That look follows you onto the Ballon d'Or stage and into your retirement send off.",
       "There is a dirty side too. Bent officials, betting syndicates, kickbacks, offshore accounts and laundering fronts all sit there waiting, each one heating up a hidden investigation meter. Take enough envelopes and the dawn raid comes, then the trial, then a season inside and a comeback from nothing.",
+    ],
+    introLinks: [
+      { paragraph: 0, text: 'Wonderkid Factory', to: '/wonderkid-factory' },
+      { paragraph: 1, text: 'Contract Chaos', to: '/contract-chaos' },
     ],
     headings: {
       howToPlay: "How to play Soccer Career, a free football career simulation game",

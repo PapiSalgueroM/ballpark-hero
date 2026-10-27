@@ -259,9 +259,17 @@ const GameSeoContent = ({ title, description, howToPlay, pageHasOwnH1, children,
       {content && (
         <article className="mt-10 text-left text-sm text-muted-foreground leading-relaxed space-y-8">
           <div className="space-y-3">
-            {content.intro.map((p, i) => (
-              <p key={i}>{p}</p>
-            ))}
+            {content.intro.map((p, i) => {
+              const link = content.introLinks?.find(item => item.paragraph === i);
+              const start = link ? p.indexOf(link.text) : -1;
+              return (
+                <p key={i}>
+                  {link && start >= 0 ? (
+                    <>{p.slice(0, start)}<Link to={link.to} className="text-primary underline underline-offset-2">{link.text}</Link>{p.slice(start + link.text.length)}</>
+                  ) : p}
+                </p>
+              );
+            })}
           </div>
 
           <div>
