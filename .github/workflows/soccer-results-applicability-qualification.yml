@@ -1,0 +1,55 @@
+name: Results applicability preflight qualification
+on:
+  push:
+    branches: [codex/sc-results-applicability-20261027]
+permissions:
+  contents: read
+concurrency:
+  group: results-applicability-${{ github.ref }}
+  cancel-in-progress: false
+defaults:
+  run:
+    shell: bash
+jobs:
+  source-gate:
+    runs-on: ubuntu-latest
+    timeout-minutes: 12
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.sha }}
+          fetch-depth: 0
+          persist-credentials: false
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+      - name: Bind exact source before any setup
+        run: |
+          set -euo pipefail
+          mkdir -p results-applicability-artifacts
+          git rev-parse HEAD HEAD^{tree} > results-applicability-artifacts/head-tree.txt
+          git archive --format=tar HEAD > results-applicability-artifacts/source.tar
+          git ls-files -z | sort -z | xargs -0 sha256sum > results-applicability-artifacts/tracked-before.sha256
+          echo 'a899afb7a6827b84511fc10c34b5015b9a1e60ae2d4826b93477ae56dd53889b  scripts/qa/soccerResultsApplicability.mjs' | sha256sum --check
+          echo '2cd81552f961627f252ed7f4a02bef1b3f24ec36e59b8d5e94a7f4d76bed93c5  .github/workflows/soccer-results-layout.yml' | sha256sum --check
+          echo 'cea8956a089bd7114f9c326bb91c037437becb074284a982b8de288ba59d08b9  scripts/playSoccerResultsLayout.mjs' | sha256sum --check
+          echo 'd5612876ab6bc2d1e912b7751ae6212bcbdca787cbd060c5bcfa3f949a151c6c  scripts/qa/soccerResultsLayout.mjs' | sha256sum --check
+          echo 'e57533f74e2bc3268b67b2e63a29184df3c3bbc5766dc1e97a4dfb60239d4c48  qa/soccer-results-applicability-v1/qualify.sh' | sha256sum --check
+          node --check scripts/qa/soccerResultsApplicability.mjs
+      - name: Actual current refusal and physical BASE controls
+        run: |
+          set -euo pipefail
+          RESULTS_APPLICABILITY_OUT="$PWD/results-applicability-artifacts/cases" bash qa/soccer-results-applicability-v1/qualify.sh 2>&1 | tee results-applicability-artifacts/qualification.log
+      - name: Every tracked source remains held
+        if: always()
+        run: |
+          set -euo pipefail
+          sha256sum -c results-applicability-artifacts/tracked-before.sha256 > results-applicability-artifacts/tracked-held.log
+          git diff --exit-code HEAD
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: soccer-results-applicability-${{ github.run_id }}
+          path: results-applicability-artifacts/
+          if-no-files-found: error
+          retention-days: 7

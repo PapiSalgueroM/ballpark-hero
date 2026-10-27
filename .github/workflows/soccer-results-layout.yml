@@ -9,6 +9,7 @@ on:
       - src/components/soccer-career/TrainingPanel.tsx
       - scripts/playSoccerResultsLayout.mjs
       - scripts/qa/soccerResultsLayout.mjs
+      - scripts/qa/soccerResultsApplicability.mjs
   workflow_dispatch:
 permissions:
   contents: read
@@ -37,6 +38,14 @@ jobs:
         with:
           node-version: 24
           cache: npm
+      - name: Historical engine applicability before setup
+        id: applicability
+        run: |
+          set -euo pipefail
+          mkdir -p soccer-results-layout-artifacts
+          git rev-parse HEAD > soccer-results-layout-artifacts/source-head.txt
+          git rev-parse "HEAD^{tree}" > soccer-results-layout-artifacts/source-tree.txt
+          node scripts/qa/soccerResultsApplicability.mjs "$PWD" soccer-results-layout-artifacts/applicability.json 2>&1 | tee soccer-results-layout-artifacts/applicability.log
       - uses: actions/setup-python@v5
         with:
           python-version: '3.12'
@@ -58,7 +67,7 @@ jobs:
           node_modules/.bin/tsc --noEmit -p tsconfig.app.json 2>&1 | tee soccer-results-layout-artifacts/types.log
           npm run build 2>&1 | tee soccer-results-layout-artifacts/build.log
       - name: Existing recorded facts and phone restoration tests
-        if: ${{ !cancelled() }}
+        if: ${{ !cancelled() && steps.applicability.outcome == 'success' }}
         run: |
           NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node node_modules/vitest/vitest.mjs run src/test/careerRecordedStats.test.tsx src/test/phonePanelFocus.test.tsx --maxWorkers=1 --minWorkers=1 --reporter=default --reporter=json --outputFile=soccer-results-layout-artifacts/units.json 2>&1 | tee soccer-results-layout-artifacts/units.log
           node scripts/qa/soccerResultsLayout.mjs units

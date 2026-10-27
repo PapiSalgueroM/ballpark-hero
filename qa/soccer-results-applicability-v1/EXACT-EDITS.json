@@ -1,0 +1,17 @@
+{
+  "path": ".github/workflows/soccer-results-layout.yml",
+  "edits": [
+    {
+      "before": "      - scripts/qa/soccerResultsLayout.mjs\n",
+      "after": "      - scripts/qa/soccerResultsLayout.mjs\n      - scripts/qa/soccerResultsApplicability.mjs\n"
+    },
+    {
+      "before": "      - uses: actions/setup-python@v5\n",
+      "after": "      - name: Historical engine applicability before setup\n        id: applicability\n        run: |\n          set -euo pipefail\n          mkdir -p soccer-results-layout-artifacts\n          git rev-parse HEAD > soccer-results-layout-artifacts/source-head.txt\n          git rev-parse \"HEAD^{tree}\" > soccer-results-layout-artifacts/source-tree.txt\n          node scripts/qa/soccerResultsApplicability.mjs \"$PWD\" soccer-results-layout-artifacts/applicability.json 2>&1 | tee soccer-results-layout-artifacts/applicability.log\n      - uses: actions/setup-python@v5\n"
+    },
+    {
+      "before": "      - name: Existing recorded facts and phone restoration tests\n        if: ${{ !cancelled() }}\n",
+      "after": "      - name: Existing recorded facts and phone restoration tests\n        if: ${{ !cancelled() && steps.applicability.outcome == 'success' }}\n"
+    }
+  ]
+}
