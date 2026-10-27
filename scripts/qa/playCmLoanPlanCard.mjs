@@ -27,8 +27,16 @@ const client = [
   "import { LoanPlanCard } from '@/components/club-manager/LoanPlanCard';",
   "import { SAVE_KEY, startCareer, loadCareer, saveCareer, loanOutFee, loanOutRefusal, playNextEntry } from '@/lib/clubManager';",
   "import { loanPlanHosts, loanPlanPreview } from '@/lib/clubManagerLoanPlan';",
+  "window.__loanPlanBootstrap = null;",
   "let live = loadCareer();",
-  "if (!live) { live = startCareer('Everton'); if (!saveCareer(live)) throw Error('Actual fixture save failed'); }",
+  "if (!live) {",
+  "  live = startCareer('Everton'); if (!saveCareer(live)) throw Error('Actual fixture save failed');",
+  "  const beforeDisk = localStorage.getItem(SAVE_KEY);",
+  "  live = loadCareer(); if (!live) throw Error('Actual fixture normalization load failed');",
+  "  const normalizedState = JSON.stringify(live);",
+  "  if (!saveCareer(live)) throw Error('Actual fixture normalized save failed');",
+  "  window.__loanPlanBootstrap = { beforeDisk, normalizedState, normalizedDisk: localStorage.getItem(SAVE_KEY) };",
+  "}",
   "let adopt;",
   "function commit(next) { if (!next || !saveCareer(next)) return false; live = next; adopt(next); return true; }",
   "window.__loanPlanProof = {",
@@ -159,6 +167,8 @@ try {
         checked: document.fonts.check('400 16px "' + name + '"'),
         loaded: [...document.fonts].some(face => face.family.replaceAll('"', '').includes(name) && face.status === 'loaded') })));
       assert(row.fonts.every(font => font.checked && font.loaded), 'Production fonts actually loaded');
+      row.fixtureBootstrap = await page.evaluate(() => window.__loanPlanBootstrap);
+      fs.writeFileSync(path.join(folder, id + '-fixture-bootstrap.json'), JSON.stringify(row.fixtureBootstrap, null, 2)); save();
       const initial = await capture('closed'), candidate = await page.evaluate(() => window.__loanPlanProof.candidate());
       row.candidate = candidate;
       await page.getByRole('button', { name: /^Loan plan/ }).click();

@@ -1,17 +1,17 @@
-name: Club Manager Loan plan qualification
+name: Club Manager Loan plan browser successor
 on:
   push:
-    branches: [codex/cm-loan-plan-20261027]
+    branches: [codex/cm-loan-plan-browser-20261027]
     paths: [.github/workflows/cm-loan-plan.yml]
 permissions:
   contents: read
 concurrency:
-  group: cm-loan-plan-${{ github.ref }}
+  group: cm-loan-plan-browser-${{ github.ref }}
   cancel-in-progress: false
 jobs:
   qualify:
     runs-on: ubuntu-latest
-    timeout-minutes: 60
+    timeout-minutes: 35
     defaults:
       run:
         shell: bash
@@ -20,8 +20,8 @@ jobs:
       SIM_NETWORK: offline
       ENGINES: chromium
       PRERENDER_ONLY: /club-manager,/whats-new
-      CM_LOAN_PLAN_ARTIFACTS: ${{ github.workspace }}/cm-loan-plan-artifacts
-      FREE_KICK_FONT_CACHE: ${{ github.workspace }}/cm-loan-plan-artifacts/font-cache
+      CM_LOAN_PLAN_ARTIFACTS: ${{ github.workspace }}/cm-loan-plan-browser-artifacts
+      FREE_KICK_FONT_CACHE: ${{ github.workspace }}/cm-loan-plan-browser-artifacts/font-cache
     steps:
       - uses: actions/checkout@v4
         with:
@@ -41,16 +41,26 @@ jobs:
           git archive --format=tar HEAD > "$CM_LOAN_PLAN_ARTIFACTS/source.tar"
           git archive --format=tar 12c1b2cd001f9309a31a887e5c432ca63c373852 > "$CM_LOAN_PLAN_ARTIFACTS/original-I.tar"
           npm ci
-      - name: Scoped old app RED, explicit actions, physical controls and paired outcomes
+      - name: Hold selected source and create the complete pre-build ledger
         run: |
           set -euo pipefail
-          echo '1f9d51fd3cd26d7b8aaf9dc9faf99103f3021f460c92daf89885c7e4d23a7e66  scripts/qa/cmLoanPlanSource.json' | sha256sum --check
-          node scripts/qa/cmLoanPlanQualification.mjs methods 2>&1 | tee "$CM_LOAN_PLAN_ARTIFACTS/controller.log"
-      - name: Original destination pool and real loan authority
+          node - <<'NODE' | tee "$CM_LOAN_PLAN_ARTIFACTS/source-pins.log"
+          const fs = require('node:fs'), path = require('node:path'), crypto = require('node:crypto'), assert = require('node:assert/strict'), { execFileSync } = require('node:child_process');
+          const hash = body => crypto.createHash('sha256').update(body).digest('hex');
+          const pins = [['scripts/qa/cmLoanPlanSource.json','1f9d51fd3cd26d7b8aaf9dc9faf99103f3021f460c92daf89885c7e4d23a7e66'],['scripts/qa/cmLoanPlanQualification.mjs','17d2a969ba990f9cb2889d0f46f8802040e55577e22390eb4a1aa6e9ba77e866'],['scripts/qa/cmLoanPlanHostPool.mjs','849b2e414fdd69e864ceabc7e02754e3639dc35f71dcd819733f8f24601f2469'],['scripts/qa/playCmLoanPlanCard.mjs','6fbd60afd184ec7479097e26b1dec199efec513fc0c92d70a2870b0c9546be27']];
+          for (const [file, expected] of pins) assert.equal(hash(fs.readFileSync(file)), expected, file);
+          const meta = JSON.parse(fs.readFileSync('scripts/qa/cmLoanPlanSource.json')); assert.equal(meta.fixed.length, 11);
+          for (const file of meta.fixed) { const body = fs.readFileSync(file.path); assert.equal(body.length, file.bytes, file.path); assert.equal(hash(body), file.sha256, file.path); }
+          const files = execFileSync('git', ['ls-files','-z']).toString('utf8').split('\0').filter(Boolean);
+          const tracked = Object.fromEntries(files.map(file => { const body = fs.readFileSync(file); return [file, { bytes: body.length, sha256: hash(body) }]; }));
+          fs.writeFileSync(path.join(process.env.CM_LOAN_PLAN_ARTIFACTS, 'tracked-before.json'), JSON.stringify(tracked, null, 2));
+          fs.writeFileSync(path.join(process.env.CM_LOAN_PLAN_ARTIFACTS, 'source-pins.json'), JSON.stringify({ selected: meta.fixed, qaPins: pins, trackedCount: files.length }, null, 2));
+          console.log('All 11 selected bodies and QA pins held; exact full tracked-before ledger retained.');
+          NODE
+      - name: Actual application types
         run: |
           set -euo pipefail
-          echo '849b2e414fdd69e864ceabc7e02754e3639dc35f71dcd819733f8f24601f2469  scripts/qa/cmLoanPlanHostPool.mjs' | sha256sum --check
-          CM_LOAN_HOST_MANIFEST=scripts/qa/cmLoanPlanSource.json CM_LOAN_HOST_OUT="$CM_LOAN_PLAN_ARTIFACTS/hosts" NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/qa/cmLoanPlanHostPool.mjs 2>&1 | tee "$CM_LOAN_PLAN_ARTIFACTS/hosts.log"
+          node node_modules/typescript/bin/tsc --noEmit -p tsconfig.app.json 2>&1 | tee "$CM_LOAN_PLAN_ARTIFACTS/types-current.log"
       - name: Isolated browser and logo tools
         run: |
           set -euo pipefail
@@ -109,6 +119,6 @@ jobs:
         if: always()
         uses: actions/upload-artifact@v4
         with:
-          name: cm-loan-plan-${{ github.run_id }}-${{ github.run_attempt }}
+          name: cm-loan-plan-browser-${{ github.run_id }}-${{ github.run_attempt }}
           retention-days: 7
-          path: cm-loan-plan-artifacts/
+          path: cm-loan-plan-browser-artifacts/
