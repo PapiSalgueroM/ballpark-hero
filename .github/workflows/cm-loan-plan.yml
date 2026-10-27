@@ -1,0 +1,63 @@
+name: Loan plan early application gate
+on:
+  push:
+    branches: [codex/cm-loan-plan-20261027]
+    paths: [.github/workflows/cm-loan-plan.yml]
+permissions:
+  contents: read
+concurrency:
+  group: cm-loan-plan-early-${{ github.ref }}
+  cancel-in-progress: false
+jobs:
+  application-gate:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    defaults:
+      run:
+        shell: bash
+    env:
+      CI: '1'
+      SIM_NETWORK: offline
+      OUT: ${{ github.workspace }}/loan-plan-early-artifacts
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.sha }}
+          fetch-depth: 0
+          persist-credentials: false
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: npm
+      - name: Retain exact inputs and install locked dependencies
+        run: |
+          set -euo pipefail
+          mkdir -p "$OUT"
+          git rev-parse HEAD > "$OUT/source-head.txt"
+          git rev-parse HEAD^{tree} > "$OUT/source-tree.txt"
+          git ls-files -z -- src scripts .github/workflows index.html package.json package-lock.json tsconfig.app.json | sort -z | xargs -0 sha256sum > "$OUT/source-before.sha256"
+          git archive --format=tar HEAD -- scripts/qa/cmLoanPlanParity.mjs src/components/club-manager/LoanPlanCard.tsx src/components/club-manager/TransferScreen.tsx src/hooks/useClubManager.ts src/lib/clubManager.ts src/lib/clubManagerLoanDevelopment.ts src/lib/clubManagerLoanPlan.ts src/pages/ClubManager.tsx src/test/clubManagerLoanDevelopment.test.ts src/test/clubManagerLoanPlanIntegration.test.ts src/test/clubManagerLoanPlanMounted.test.tsx .github/workflows/cm-loan-plan.yml package.json package-lock.json tsconfig.app.json > "$OUT/selected-source.tar"
+          npm ci
+      - name: Correct application type gate
+        run: |
+          set -euo pipefail
+          NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node_modules/.bin/tsc --noEmit -p tsconfig.app.json 2>&1 | tee "$OUT/types.log"
+      - name: Actual new pure mounted and integration cases
+        run: |
+          set -euo pipefail
+          NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" npm test -- --run src/test/clubManagerLoanDevelopment.test.ts src/test/clubManagerLoanPlanIntegration.test.ts src/test/clubManagerLoanPlanMounted.test.tsx --maxWorkers=1 --no-file-parallelism --reporter=default --reporter=json --outputFile="$OUT/unit.json" 2>&1 | tee "$OUT/unit.log"
+      - name: Always verify tracked source holds
+        if: always()
+        run: |
+          set -euo pipefail
+          if test -f "$OUT/source-before.sha256"; then
+            sha256sum -c "$OUT/source-before.sha256" > "$OUT/source-held.log"
+          fi
+          git diff --exit-code HEAD -- src scripts .github/workflows index.html package.json package-lock.json tsconfig.app.json
+      - name: Always retain original gate observations
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: loan-plan-early-${{ github.run_id }}-${{ github.run_attempt }}
+          retention-days: 7
+          path: loan-plan-early-artifacts/

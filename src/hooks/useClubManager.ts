@@ -1,5 +1,7 @@
 import { useState, useEffect, useMemo, useCallback, useRef } from 'react';
 import { recordCompletion, recordActivity, recordStreakDay } from '@/lib/completions';
+import { agreeLoanPlan as agreePlan, reviewLoanPlan as reviewPlan, recallPlannedLoanee as recallPlan } from '@/lib/clubManagerLoanPlan';
+import type { LoanPlanRequest } from '@/lib/clubManagerLoanPlan';
 import { saveMatchPlan as savePlan, applyMatchPlan as applyPlan, deleteMatchPlan as deletePlan } from '@/lib/clubManagerMatchPlans';
 import {
   CareerState, MatchWeekReport, SeasonSummary, MarketPlayer, Mentality,
@@ -1165,6 +1167,26 @@ export function useClubManager() {
     setCareer(prev => (prev ? loanOutPlayer(prev, playerId) ?? prev : prev));
   }, []);
 
+  const commitLoanPlan = useCallback((make: (c: CareerState) => CareerState | null): boolean => {
+    if (phase !== 'hub' || !holdsActiveSlot() || movedOn()) return false;
+    const now = careerRef.current;
+    if (!now) return false;
+    const next = make(now);
+    if (!next) return false;
+    if (next === now) return true;
+    if (!persist(next)) return false;
+    careerRef.current = next;
+    setCareer(next);
+    setDeskNote(null);
+    return true;
+  }, [phase, holdsActiveSlot, movedOn, persist]);
+  const agreeLoanPlan = useCallback((request: LoanPlanRequest) =>
+    commitLoanPlan(c => agreePlan(c, request)), [commitLoanPlan]);
+  const reviewLoanPlan = useCallback((playerId: string) =>
+    commitLoanPlan(c => reviewPlan(c, playerId)), [commitLoanPlan]);
+  const recallPlannedLoanee = useCallback((playerId: string, recordId: string) =>
+    commitLoanPlan(c => recallPlan(c, playerId, recordId)), [commitLoanPlan]);
+
   /* ---------- Round 105: contracts ---------- */
   const renew = useCallback((playerId: string) => {
     setCareer(prev => (prev ? renewContract(prev, playerId) ?? prev : prev));
@@ -1366,7 +1388,7 @@ export function useClubManager() {
     appointStaff, payOffStaff, matchStaff, letStaffGo, spendPoint, updateManager,
     setCurrency, setNationJobs, setStrictness, turnOnNoSack, setDifficulty,
     acceptIncomingBid, rejectIncomingBid,
-    setStatus, loanOut, renew, renewWithClause, terminate, signFree, setRole,
+    setStatus, loanOut, agreeLoanPlan, reviewLoanPlan, recallPlannedLoanee, renew, renewWithClause, terminate, signFree, setRole,
     upgradeFacility, sendScout, callScoutHome, promote, release, setTraining,
     subAtHalftime, shapeAtHalftime, changeAtHalftime, secondHalf, startSecondHalfLive, startExtraTimeLive, changeAt, markMinute,
     talk, halftimeTalk, sayIt, sendAssistant,

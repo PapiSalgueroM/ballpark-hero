@@ -1,3 +1,6 @@
+import type { LoanDevelopmentRecord } from '@/lib/clubManagerLoanDevelopment';
+import { recordLoanPlanRecall, recordLoanPlanSeason } from '@/lib/clubManagerLoanPlan';
+import type { LoanPlanSummary } from '@/lib/clubManagerLoanPlan';
 import { foldSpecialLatin } from '@/lib/nameFold';
 import { nameModerationError } from '@/lib/nameModeration';
 import { realLeagueFixtureKeyForStart, realLeagueFixturePairs, realLeagueFixtureCoverage } from '@/lib/clubManagerFixtures';
@@ -1180,6 +1183,7 @@ export interface LoanOut {
    * is exactly the behaviour those saves already have.
    */
   recallFee?: number;
+  development?: LoanDevelopmentRecord;
 }
 
 export interface CMPlayer {
@@ -2908,6 +2912,7 @@ export interface CareerState {
   incomingBids?: IncomingBid[];
   /** Round 94: my players out on loan, returning at the end of the season. */
   loanedOut?: LoanOut[];
+  loanPlanHistory?: LoanPlanSummary[];
   /** Round 95: live standings for every league that is not mine, by league id. */
   world?: Record<string, WorldLeague>;
   worldRoster?: WorldRosterState;
@@ -11228,6 +11233,11 @@ function buyerPool(state: CareerState): string[] {
     .filter(n => n !== state.clubName);
 }
 
+/** The same eligible destinations used by the existing loan action. */
+export function loanPlanHostClubs(career: CareerState): string[] {
+  return buyerPool(career);
+}
+
 /**
  * Tell the world what you are doing with a player. Pass null to take the
  * label back off.
@@ -11487,7 +11497,7 @@ export function recallLoanedPlayer(career: CareerState, playerId: string): Caree
     transferLog: [...(career.transferLog ?? [])],
   };
   pushNews(state, { name: back.name, from: entry.club, to: state.clubName, fee: 0, loan: true });
-  return state;
+  return recordLoanPlanRecall(career, state, entry, back);
 }
 
 /**
@@ -22118,6 +22128,7 @@ export function startNextSeason(career: CareerState, acceptOfferClub?: string): 
      season at took up the option agreed when they left. That is money in and a
      sale on the record, so it is settled here rather than inside the return. */
   const loanReturn = returnLoanedPlayers(career);
+  let loanPlanAgedReturned: CMPlayer[] | undefined;
   const homeFromLoan = loanReturn.home;
   let rosterCareer: CareerState = career;
   for (const sale of loanReturn.bought) rosterCareer = recordActualRosterTransfer(rosterCareer, sale.player, career.clubName, sale.club, 'permanent');
@@ -22129,6 +22140,7 @@ export function startNextSeason(career: CareerState, acceptOfferClub?: string): 
     // Round 105: deals run down over the summer and the expired walk for
     // nothing. This is the price of never sitting down with your own players.
     const aged = [...afterLoans, ...homeFromLoan].map(p => agePlayer(p, career));
+    if ((career.loanedOut ?? []).some(l => l.development !== undefined)) loanPlanAgedReturned = aged.slice(afterLoans.length);
     /* Round 132: and some of them stop playing altogether. Before this the
        ONLY way a player ever left on age was the line below, "age < 38 or
        rated 70 plus", which meant a good veteran simply never went: measured
@@ -22772,7 +22784,7 @@ export function startNextSeason(career: CareerState, acceptOfferClub?: string): 
   /* Round 310: promotion and relegation lead the whole summer, same seat,
      same reason, prepended last so they sit on top of the feed. */
   if (pr.lines.length) state.aiHeadlines = [...pr.lines, ...state.aiHeadlines].slice(0, 8);
-  return snapshotWorldRosterClub(state, state.clubName);
+  return snapshotWorldRosterClub(recordLoanPlanSeason(career, state, loanReturn, loanPlanAgedReturned), state.clubName);
 }
 
 /* ================================================================== */
