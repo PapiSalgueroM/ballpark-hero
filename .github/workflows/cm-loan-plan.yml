@@ -41,11 +41,16 @@ jobs:
           git archive --format=tar HEAD > "$CM_LOAN_PLAN_ARTIFACTS/source.tar"
           git archive --format=tar 12c1b2cd001f9309a31a887e5c432ca63c373852 > "$CM_LOAN_PLAN_ARTIFACTS/original-I.tar"
           npm ci
-      - name: Exact old app RED, fixed cases, physical controls and paired outcomes
+      - name: Scoped old app RED, explicit actions, physical controls and paired outcomes
         run: |
           set -euo pipefail
-          echo '4cf47bfcbaa35c49615e373d64adba2c351dc1e584be5d1f5f824997cb142b65  scripts/qa/cmLoanPlanSource.json' | sha256sum -c -
+          echo '7bd732597db0d3f061c7124c659ec714d268cfc2584a8f6d36d81be73cd51518  scripts/qa/cmLoanPlanSource.json' | sha256sum --check
           node scripts/qa/cmLoanPlanQualification.mjs methods 2>&1 | tee "$CM_LOAN_PLAN_ARTIFACTS/controller.log"
+      - name: Original destination pool and real loan authority
+        run: |
+          set -euo pipefail
+          echo '83102f842f4ec889821e78a4daf7ad4820e4dbc0d4303f30f1e8f8ada72bb034  scripts/qa/cmLoanPlanHostPool.mjs' | sha256sum --check
+          CM_LOAN_HOST_MANIFEST=scripts/qa/cmLoanPlanSource.json CM_LOAN_HOST_OUT="$CM_LOAN_PLAN_ARTIFACTS/hosts" NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/qa/cmLoanPlanHostPool.mjs 2>&1 | tee "$CM_LOAN_PLAN_ARTIFACTS/hosts.log"
       - name: Isolated browser and logo tools
         run: |
           set -euo pipefail

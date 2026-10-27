@@ -9,18 +9,16 @@ import { TransferScreen } from '@/components/club-manager/TransferScreen';
 import { useClubManager } from '@/hooks/useClubManager';
 import type { ClubManagerGame } from '@/hooks/useClubManager';
 import { SLOTS_INDEX_KEY } from '@/lib/clubManagerSlots';
-import { agreeLoanPlan, loanPlanPreview, recallPlannedLoanee } from '@/lib/clubManagerLoanPlan';
+import { agreeLoanPlan, loanPlanLoans, loanPlanHistoryOf, loanPlanPreview, recallPlannedLoanee, reviewLoanPlan } from '@/lib/clubManagerLoanPlan';
 import { loanDevelopmentOf } from '@/lib/clubManagerLoanDevelopment';
 
 vi.mock('@/lib/completions', () => ({ recordCompletion: vi.fn(), recordActivity: vi.fn(), recordStreakDay: vi.fn() }));
 type Request = { playerId: string; hostClub: string; source: 'standard' | 'bid'; token: string };
 type PlanApi = ClubManagerGame & {
-  agreeLoanPlan?: (request: Request) => boolean;
-  reviewLoanPlan?: (playerId: string) => boolean;
-  recallPlannedLoanee?: (playerId: string, recordId: string) => boolean;
+  commitLoanPlan?: (make: (current: CareerState) => CareerState | null) => boolean;
 };
 let api: PlanApi;
-let plannedRecallCalls = 0;
+let planCommitCalls = 0;
 const clone = <T,>(value: T): T => JSON.parse(JSON.stringify(value));
 const stream = (initial: number) => {
   let seed = initial;
@@ -35,10 +33,9 @@ function eligible(c: CareerState) {
 function Harness() {
   const g = useClubManager() as PlanApi; api = g;
   if (!g.career) return <p>Opening career</p>;
-  const plans = { onAgreeLoanPlan: g.agreeLoanPlan, onReviewLoanPlan: g.reviewLoanPlan,
-    onRecallLoanPlan: g.recallPlannedLoanee ? (id: string, recordId: string) => {
-      plannedRecallCalls += 1; return g.recallPlannedLoanee!(id, recordId);
-    } : undefined };
+  const plans = { onCommitLoanPlan: g.commitLoanPlan ? (make: (current: CareerState) => CareerState | null) => {
+    planCommitCalls += 1; return g.commitLoanPlan!(make);
+  } : undefined };
   return <TransferScreen career={g.career} market={g.market}
     onNegotiate={g.negotiate} onOffer={g.offer} onWalk={g.walk} onDismissNegotiation={g.dismissNegotiation}
     onClause={g.clause} onLoan={g.loan} onAcceptBid={g.acceptIncomingBid}
@@ -74,10 +71,10 @@ function selectStandard(playerId: string, hostClub = 'Ajax') {
 }
 function confirm() { fireEvent.click(screen.getByRole('button', { name: 'Confirm loan plan' })); }
 function planOf(c: CareerState) {
-  return (c.loanedOut?.[0] as { development?: { id: string; review?: { week: number; ratingChange: number } } } | undefined)?.development;
+  return loanPlanLoans(c)[0]?.development;
 }
 beforeEach(() => {
-  localStorage.clear(); plannedRecallCalls = 0;
+  localStorage.clear(); planCommitCalls = 0;
   vi.spyOn(Math, 'random').mockImplementation(stream(1079));
   vi.spyOn(Date, 'now').mockReturnValue(1791360000000);
   Element.prototype.scrollIntoView = vi.fn();
@@ -186,6 +183,15 @@ describe('Loan plan through the actual transfer screen and saved hook', () => {
     expect(planOf(api.career!)!.review!.ratingChange).toBe(0);
     await waitFor(() => expect(JSON.parse(localStorage.getItem(SAVE_KEY)!)).toEqual(api.career));
     expect(screen.getByTestId('loan-plan-active')).not.toHaveTextContent('minutes played');
+    const history = loanPlanHistoryOf(api.career!)!;
+    expect(history).toHaveLength(1);
+    expect(history[0]).toMatchObject({ kind: 'check-in', observedWeek: api.career!.week, rating, ratingChange: 0 });
+    expect(screen.getByTestId('loan-plan-history')).toHaveTextContent('Recorded check-ins and recalls');
+    expect(screen.getByTestId('loan-plan-history')).toHaveTextContent('A normal loan return adds no entry');
+    const sameWeek = api.career, disk = localStorage.getItem(SAVE_KEY);
+    fireEvent.click(screen.getByRole('button', { name: 'Review loan plan' }));
+    expect(api.career).toBe(sameWeek); expect(localStorage.getItem(SAVE_KEY)).toBe(disk);
+    expect(loanPlanHistoryOf(api.career!)).toEqual(history);
   });
 
   it('recalls through the existing engine, pays its fee and retains the one-loan season stamp', async () => {
@@ -194,14 +200,16 @@ describe('Loan plan through the actual transfer screen and saved hook', () => {
     await waitFor(() => expect(planOf(api.career!)).toBeTruthy());
     const fee = api.career!.loanedOut![0].recallFee!, budget = api.career!.budget;
     expect(screen.queryByRole('button', { name: /^Recall ·/ })).toBeNull();
+    const beforeRecallCommits = planCommitCalls;
     fireEvent.click(screen.getByRole('button', { name: 'Recall planned player' }));
-    expect(plannedRecallCalls).toBe(1);
+    expect(planCommitCalls).toBe(beforeRecallCommits + 1);
     await waitFor(() => expect(api.career!.loanedOut).toHaveLength(0));
     expect(api.career!.budget).toBe(Math.round((budget - fee) * 10) / 10);
     const returned = api.career!.squad.find(x => x.name === p.name)!;
     expect(returned.loanOutSeason).toBe(api.career!.season);
     expect(loanOutRefusal(api.career!, returned.id)).toContain('once this season');
-    expect(screen.getByTestId('loan-plan-history')).toHaveTextContent('recalled');
+    expect(screen.getByTestId('loan-plan-history')).toHaveTextContent('Recorded check-ins and recalls');
+    expect(loanPlanHistoryOf(api.career!)![0].kind).toBe('recalled');
     await waitFor(() => expect(JSON.parse(localStorage.getItem(SAVE_KEY)!)).toEqual(api.career));
   });
 
@@ -237,7 +245,7 @@ describe('Loan plan through the actual transfer screen and saved hook', () => {
     await waitFor(() => expect(api.career!.week).toBeGreaterThan(week));
     expect(api.career!.transferWindow).not.toBeNull();
     const before = JSON.stringify(api.career), disk = localStorage.getItem(SAVE_KEY);
-    act(() => expect(api.agreeLoanPlan!(request)).toBe(false));
+    act(() => expect(api.commitLoanPlan!(current => agreeLoanPlan(current, request))).toBe(false));
     expect(JSON.stringify(api.career)).toBe(before); expect(localStorage.getItem(SAVE_KEY)).toBe(disk);
   });
 
@@ -252,7 +260,7 @@ describe('Loan plan through the actual transfer screen and saved hook', () => {
     await waitFor(() => expect(api.career!.transferWindow).toBeNull());
     expect(screen.getByRole('button', { name: 'Confirm loan plan' })).toBeDisabled();
     const before = JSON.stringify(api.career), disk = localStorage.getItem(SAVE_KEY);
-    act(() => expect(api.agreeLoanPlan!(request)).toBe(false));
+    act(() => expect(api.commitLoanPlan!(current => agreeLoanPlan(current, request))).toBe(false));
     expect(JSON.stringify(api.career)).toBe(before); expect(localStorage.getItem(SAVE_KEY)).toBe(disk);
   });
 
@@ -264,8 +272,8 @@ describe('Loan plan through the actual transfer screen and saved hook', () => {
     expect(screen.queryByRole('button', { name: 'Review loan plan' })).toBeNull();
     const before = JSON.stringify(api.career), disk = localStorage.getItem(SAVE_KEY);
     act(() => {
-      expect(api.reviewLoanPlan!(p.id)).toBe(false);
-      expect(api.recallPlannedLoanee!(p.id, 'unsupported')).toBe(false);
+      expect(api.commitLoanPlan!(current => reviewLoanPlan(current, p.id))).toBe(false);
+      expect(api.commitLoanPlan!(current => recallPlannedLoanee(current, p.id, 'unsupported'))).toBe(false);
     });
     expect(JSON.stringify(api.career)).toBe(before); expect(localStorage.getItem(SAVE_KEY)).toBe(disk);
   });
@@ -281,7 +289,7 @@ describe('Loan plan through the actual transfer screen and saved hook', () => {
     expect(expected).toBeTruthy();
     fireEvent.click(screen.getByRole('button', { name: /^Recall ·/ }));
     await waitFor(() => expect(api.career!.loanedOut).toHaveLength(0));
-    expect(plannedRecallCalls).toBe(0);
+    expect(planCommitCalls).toBe(0);
     expect(api.career!.budget).toBe(Math.round((before.budget - fee) * 10) / 10);
     expect(api.career).toEqual(expected);
     await waitFor(() => expect(JSON.parse(localStorage.getItem(SAVE_KEY)!)).toEqual(api.career));
@@ -296,8 +304,8 @@ describe('Loan plan through the actual transfer screen and saved hook', () => {
       && loanOutRefusal(c, player.id) === null)!;
     expect(p).toBeTruthy();
     const old = loanOutPlayer(clone(c), p.id, 'Ajax', loanOutFee(p))!;
-    old.loanedOut![0].development = clone(planned.loanedOut![0].development);
-    const record = loanDevelopmentOf(old.loanedOut![0].development);
+    loanPlanLoans(old)[0].development = clone(loanPlanLoans(planned)[0].development);
+    const record = loanDevelopmentOf(loanPlanLoans(old)[0].development);
     expect(record).toBeTruthy();
     expect(recallPlannedLoanee(old, p.id, record!.id)).toBeNull();
     await mountCareer(old);
@@ -307,7 +315,7 @@ describe('Loan plan through the actual transfer screen and saved hook', () => {
     expect(expected).toBeTruthy();
     fireEvent.click(screen.getByRole('button', { name: /^Recall ·/ }));
     await waitFor(() => expect(api.career!.loanedOut).toHaveLength(0));
-    expect(plannedRecallCalls).toBe(0);
+    expect(planCommitCalls).toBe(0);
     expect(api.career!.budget).toBe(Math.round((before.budget - fee) * 10) / 10);
     expect(api.career).toEqual(expected);
     await waitFor(() => expect(JSON.parse(localStorage.getItem(SAVE_KEY)!)).toEqual(api.career));

@@ -1,11 +1,12 @@
 import { describe, expect, it, vi } from 'vitest';
 import {
   LOAN_DEVELOPMENT_HISTORY_LIMIT,
-  appendLoanDevelopmentHistory,
-  closeLoanDevelopment,
+  appendLoanDevelopmentLog,
+  recordLoanDevelopmentLog,
   loanDevelopmentCanRecall,
   loanDevelopmentMatches,
   loanDevelopmentOf,
+  loanDevelopmentLogOf,
   loanOpportunityOf,
   quoteLoanDevelopment,
   reviewLoanDevelopment,
@@ -13,7 +14,7 @@ import {
 } from '@/lib/clubManagerLoanDevelopment';
 import type {
   LoanDevelopmentContext, LoanDevelopmentHost, LoanDevelopmentLoan,
-  LoanDevelopmentOffer, LoanDevelopmentPlayer, LoanDevelopmentSummary,
+  LoanDevelopmentOffer, LoanDevelopmentPlayer, LoanDevelopmentLog,
 } from '@/lib/clubManagerLoanDevelopment';
 
 function context(): LoanDevelopmentContext {
@@ -70,7 +71,7 @@ describe('loan development opportunity and exact existing terms', () => {
     for (const unknown of [
       { ...host(), partial: true }, { ...host(), week: 1 }, { ...host(), eraId: '1990' },
       { ...host(), worldYear: 2025 }, { ...host(), position: 'GK' },
-      { ...host(), ratings: [Number.NaN] },
+      { ...host(), ratings: [] }, { ...host(), ratings: [Number.NaN] },
     ]) {
       expect(loanOpportunityOf(context(), player(), unknown)).toEqual({ partial: true, reason: 'CM_PARTIAL' });
       expect(quoteLoanDevelopment(context(), player(), offer(), unknown)).toBeNull();
@@ -86,6 +87,8 @@ describe('loan development opportunity and exact existing terms', () => {
     expect(loanDevelopmentOf({ ...record, fee: Number.NaN })).toBeNull();
     expect(loanDevelopmentOf({ ...record, id: 'wrong-player' })).toBeNull();
     expect(loanDevelopmentOf({ ...record, opportunity: { ...record.opportunity, higherRated: 3 } })).toBeNull();
+    expect(loanDevelopmentOf({ ...record, opportunity: { partial: false, higherRated: 0,
+      equallyRated: 0, observedPlayers: 0, estimatedRole: 'leading' } })).toBeNull();
   });
 });
 
@@ -125,6 +128,9 @@ describe('loan development agreement and saved reviews', () => {
     expect(loanDevelopmentOf(JSON.parse(JSON.stringify(reviewed)))).toEqual(reviewed);
     expect(JSON.stringify(actual)).toBe(before);
     expect(record.review).toBeUndefined();
+    const immediate = reviewLoanDevelopment(record, context(), loan(), host())!;
+    expect(immediate.review).toMatchObject({ week: 2, rating: 72, ratingChange: 0 });
+    expect(reviewLoanDevelopment(immediate, context(), loan(), host())).toBe(immediate);
     expect(reviewLoanDevelopment(reviewed, context(), loan(), host())).toBeNull();
   });
 
@@ -149,7 +155,7 @@ describe('loan development agreement and saved reviews', () => {
   });
 });
 
-describe('loan development legal recall and one closeout', () => {
+describe('loan plan recall and recorded actions', () => {
   it('projects only the existing open-window, fee and squad-room recall constraints', () => {
     const record = agreed();
     expect(loanDevelopmentCanRecall(record, context(), loan(), 0.4, 29)).toBe(true);
@@ -163,35 +169,47 @@ describe('loan development legal recall and one closeout', () => {
     expect(loanDevelopmentCanRecall(reviewed, context(), loan(), 10, 20)).toBe(false);
   });
 
-  it('archives actual settled ratings without adding any growth or touching a player', () => {
-    const record = agreed(), originalLoan = loan();
-    const end = { ...context(), worldYear: 2027, season: 2, week: 0, windowOpen: false };
-    const before = JSON.stringify(originalLoan);
-    const summary = closeLoanDevelopment(record, end, originalLoan, { kind: 'returned', rating: 75 })!;
-    expect(summary).toMatchObject({ id: record.id, kind: 'returned', endSeason: 2, endWeek: 0,
-      ratingAtStart: 72, ratingAtEnd: 75, ratingChange: 3 });
-    expect(JSON.stringify(originalLoan)).toBe(before);
-    expect(closeLoanDevelopment(record, end, originalLoan, { kind: 'returned', rating: Number.NaN })).toBeNull();
-    expect(closeLoanDevelopment(record, { ...end, season: 3, worldYear: 2028 }, originalLoan, { kind: 'returned', rating: 75 })).toBeNull();
-    expect(closeLoanDevelopment(record, { ...context(), windowOpen: false }, originalLoan, { kind: 'recalled', rating: 72 })).toBeNull();
-    expect(closeLoanDevelopment(record, context(), originalLoan, { kind: 'returned', rating: 75 })).toBeNull();
-    expect(closeLoanDevelopment(record, { ...end, week: 4 }, originalLoan, { kind: 'returned', rating: 75 })).toBeNull();
+  it('records only explicit check-ins and recalls from matching current loan facts', () => {
+    const record = agreed(), actual = loan(), before = JSON.stringify(actual);
+    const checkIn = recordLoanDevelopmentLog(record, context(), actual, 'check-in', actual.rating)!;
+    expect(checkIn).toMatchObject({ id: record.id, kind: 'check-in', observedSeason: 1,
+      observedWeek: 2, rating: 72, ratingChange: 0 });
+    const recalled = recordLoanDevelopmentLog(record, context(), actual, 'recalled', 72)!;
+    expect(recalled.kind).toBe('recalled');
+    expect(recalled.key).not.toBe(checkIn.key);
+    expect(JSON.stringify(actual)).toBe(before);
+    expect(recordLoanDevelopmentLog(record, context(), actual, 'returned', 72)).toBeNull();
+    expect(recordLoanDevelopmentLog(record, context(), actual, 'bought', 72)).toBeNull();
+    expect(recordLoanDevelopmentLog(record, context(), actual, 'check-in', 73)).toBeNull();
+    expect(recordLoanDevelopmentLog(record, { ...context(), windowOpen: false }, actual, 'recalled', 72)).toBeNull();
+    expect(recordLoanDevelopmentLog(record, { ...context(), worldYear: 2027, season: 2, week: 0 }, actual, 'check-in', 72)).toBeNull();
+    expect(recordLoanDevelopmentLog(record, context(), { ...actual, playerKey: 'squad:another' }, 'check-in', 72)).toBeNull();
   });
 
-  it('bounds history and makes duplicate closeout an exact no-op', () => {
-    let history: readonly LoanDevelopmentSummary[] | undefined;
+  it('bounds recorded log and makes duplicate check-ins exact no-ops', () => {
+    let history: readonly LoanDevelopmentLog[] | undefined;
     for (let index = 0; index < LOAN_DEVELOPMENT_HISTORY_LIMIT + 2; index += 1) {
       const p = { ...player(), key: 'squad:p' + index };
-      const q = quoteLoanDevelopment(context(), p, offer(), host())!;
+      const quote = quoteLoanDevelopment(context(), p, offer(), host())!;
       const actual = { ...loan(), playerKey: p.key };
-      const record = startLoanDevelopment(q, q.token, actual)!;
-      const summary = closeLoanDevelopment(record, context(), actual, { kind: 'recalled', rating: 72 })!;
-      history = appendLoanDevelopmentHistory(history, summary)!;
+      const record = startLoanDevelopment(quote, quote.token, actual)!;
+      const entry = recordLoanDevelopmentLog(record, context(), actual, 'check-in', actual.rating)!;
+      history = appendLoanDevelopmentLog(history, entry)!;
     }
     expect(history).toHaveLength(LOAN_DEVELOPMENT_HISTORY_LIMIT);
     const last = history![history!.length - 1];
-    expect(appendLoanDevelopmentHistory(history, last)).toBe(history);
-    expect(appendLoanDevelopmentHistory(history, { ...last, ratingAtEnd: 73, ratingChange: 1 })).toBeNull();
+    expect(appendLoanDevelopmentLog(history, last)).toBe(history);
+    expect(appendLoanDevelopmentLog(history, { ...last, rating: 73, ratingChange: 1 })).toBeNull();
+    expect(loanDevelopmentLogOf(JSON.parse(JSON.stringify(history)))).toEqual(history);
+    expect(loanDevelopmentLogOf([{ ...last, kind: 'returned' }])).toBeNull();
+    for (const invalid of [
+      { ...last, version: 2 }, { ...last, key: 'wrong-key' },
+      { ...last, observedYear: last.observedYear + 1 },
+      { ...last, observedSeason: last.observedSeason + 1 },
+      { ...last, observedWeek: last.startedWeek - 1 },
+      { ...last, ratingChange: 1 },
+    ]) expect(loanDevelopmentLogOf([invalid])).toBeNull();
+    expect(loanDevelopmentLogOf([last, last])).toBeNull();
   });
 
   it('is deterministic and reads no wall clock or global random source', () => {

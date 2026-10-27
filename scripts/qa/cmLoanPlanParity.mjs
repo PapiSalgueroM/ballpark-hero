@@ -38,8 +38,14 @@ function compare(baseline, fixed) {
         assert.equal(now.career.loanedOut?.length, 1);
         assert.equal(now.career.loanedOut[0].development?.version, 1, 'Actual opt-in record is present');
       }
-      if (b.mode === 'recall' && old.label === 'recalled') assert.equal(now.career.loanPlanHistory?.length, 1);
-      if (old.label === 'rollover') { assert.equal(now.career.loanPlanHistory?.length, 1); annual++; }
+      if (b.mode === 'recall' && old.label === 'recalled') {
+        assert.equal(now.career.loanPlanHistory?.length, 1);
+        assert.equal(now.career.loanPlanHistory[0].kind, 'recalled');
+      }
+      if (old.label === 'rollover') {
+        assert.equal(now.career.loanPlanHistory, undefined, 'Ordinary annual returns add no claimed action log');
+        annual++;
+      }
     }
   }
   assert(annual > 0, 'At least one actual completed annual loan is required');
@@ -62,11 +68,11 @@ if (phase === 'compare') {
     controls.push({ kind, before, changed: sha(copy), originalHeld: sha(fixed) });
   }
   fs.writeFileSync(path.join(OUT, 'comparison.json'), JSON.stringify({
-    status: 'PASS', cases: fixed.cases.length, actualAnnualClosures: annual,
+    status: 'PASS', cases: fixed.cases.length, actualAnnualReturns: annual,
     baseline: sha(baseline), fixed: sha(fixed), controls,
     exception: 'Only opt-in loan.development and top-level loanPlanHistory; default cases have no exceptions',
   }, null, 2));
-  console.log('Loan plan paired proof: 12 full-state/all-draw cases, ' + annual + ' actual annual closures, 4 changed copied controls.');
+  console.log('Loan plan paired proof: 12 full-state/all-draw cases, ' + annual + ' actual annual returns, 4 changed copied controls.');
   process.exit(0);
 }
 assert(['baseline', 'fixed'].includes(phase), 'Choose baseline, fixed or compare');
@@ -77,7 +83,7 @@ fs.writeFileSync(entry, "export * as cm from " + JSON.stringify(path.join(ROOT, 
 await build({ entryPoints: [entry], bundle: true, platform: 'node', format: 'cjs',
   alias: { '@': path.join(ROOT, 'src') }, jsx: 'automatic', outfile: bundle, logLevel: 'error' });
 const sourceFiles = ['src/lib/clubManager.ts', 'src/hooks/useClubManager.ts', 'src/components/club-manager/TransferScreen.tsx',
-  'src/lib/clubManagerLoanPlan.ts', 'src/lib/clubManagerLoanDevelopment.ts', 'src/lib/clubManagerLoanSettlement.ts'];
+  'src/lib/clubManagerLoanPlan.ts', 'src/lib/clubManagerLoanDevelopment.ts'];
 const held = () => Object.fromEntries(sourceFiles.filter(f => fs.existsSync(path.join(ROOT, f)))
   .map(f => [f, sha(fs.readFileSync(path.join(ROOT, f)).toString('utf8'))]));
 const sourceBefore = held(), normalRandom = Math.random, normalNow = Date.now;
@@ -102,8 +108,8 @@ try {
     assert(player, 'An actual legally loanable player is required');
     const hosts = cm.REAL_LEAGUES.flatMap(l => cm.playableClubs(l.id).slice(0, 8).map(c => c.name))
       .filter(name => name !== club && !cm.isPartialClub(name, career.eraId));
-    const host = hosts.find(name => cm.oppRosterFor(career, name).length > 0);
-    assert(host, 'An actual era-valid covered host is required');
+    const host = hosts.find(name => cm.oppRosterFor(career, name).some(p => p.p === player.position));
+    assert(host, 'An actual era-valid host with primary-position observations is required');
     if (phase === 'fixed' && mode !== 'default') {
       const quote = plan.loanPlanPreview(career, player.id, host, 'standard');
       assert(quote, 'Actual standard terms can be previewed');

@@ -26,7 +26,7 @@ const client = [
   "import { createRoot } from 'react-dom/client';",
   "import { LoanPlanCard } from '@/components/club-manager/LoanPlanCard';",
   "import { SAVE_KEY, startCareer, loadCareer, saveCareer, loanOutFee, loanOutRefusal, playNextEntry } from '@/lib/clubManager';",
-  "import { agreeLoanPlan, reviewLoanPlan, recallPlannedLoanee, loanPlanHosts, loanPlanPreview } from '@/lib/clubManagerLoanPlan';",
+  "import { loanPlanHosts, loanPlanPreview } from '@/lib/clubManagerLoanPlan';",
   "let live = loadCareer();",
   "if (!live) { live = startCareer('Everton'); if (!saveCareer(live)) throw Error('Actual fixture save failed'); }",
   "let adopt;",
@@ -47,8 +47,7 @@ const client = [
   "    if (!commit(result.state)) throw Error('Actual calendar save failed'); return result.kind; },",
   "};",
   "function Frame() { const [career, setCareer] = useState(live); adopt = setCareer;",
-  "  return <LoanPlanCard career={career} onAgree={request => commit(agreeLoanPlan(live, request))}",
-  "    onReview={id => commit(reviewLoanPlan(live, id))} onRecall={(id, record) => commit(recallPlannedLoanee(live, id, record))} />; }",
+  "  return <LoanPlanCard career={career} onCommit={make => commit(make(live))} />; }",
   "createRoot(document.getElementById('loan-plan-root')).render(<Frame />);",
 ].join('\n');
 fs.writeFileSync(path.join(folder, 'client.tsx'), client);
@@ -224,8 +223,14 @@ try {
       const reviewed = await capture('reviewed'), reviewedLoan = reviewed.loanedOut.find(value => value.player.id === candidate.id);
       assert.equal(reviewedLoan.development.review.week, reviewed.week);
       assert.equal(reviewedLoan.development.review.ratingChange, reviewedLoan.player.rating - loan.development.ratingAtStart);
-      const projected = JSON.parse(JSON.stringify(reviewed)); delete projected.loanedOut.find(value => value.player.id === candidate.id).development.review;
-      assert.deepEqual(projected, advanced, 'Review changes only the actual one-loan review metadata');
+      assert.equal(reviewed.loanPlanHistory.length, 1);
+      assert.equal(reviewed.loanPlanHistory[0].kind, 'check-in');
+      assert.equal(reviewed.loanPlanHistory[0].observedWeek, reviewed.week);
+      assert.equal(reviewed.loanPlanHistory[0].rating, reviewedLoan.player.rating);
+      const projected = JSON.parse(JSON.stringify(reviewed));
+      delete projected.loanedOut.find(value => value.player.id === candidate.id).development.review;
+      delete projected.loanPlanHistory;
+      assert.deepEqual(projected, advanced, 'Review changes only the actual one-loan review and recorded check-in');
       const recallFee = reviewedLoan.recallFee; assert(Number.isFinite(recallFee));
       await page.getByRole('button', { name: 'Recall planned player', exact: true }).click();
       await page.getByTestId('loan-plan-history').waitFor();
@@ -233,7 +238,9 @@ try {
       assert(!recalled.loanedOut.some(value => value.player.id === candidate.id));
       assert(recalled.squad.some(value => value.id === candidate.id));
       assert.equal(recalled.budget, Math.round((reviewed.budget - recallFee) * 10) / 10);
-      assert.equal(recalled.loanPlanHistory.length, 1); assert.equal(recalled.loanPlanHistory[0].kind, 'recalled');
+      assert.equal(recalled.loanPlanHistory.length, 2);
+      assert.deepEqual(recalled.loanPlanHistory.map(row => row.kind), ['check-in', 'recalled']);
+      assert.deepEqual(recalled.loanPlanHistory[0], reviewed.loanPlanHistory[0]);
       await page.reload({ waitUntil: 'domcontentloaded' }); await page.getByRole('button', { name: /^Loan plan/ }).click();
       assert.deepEqual(await capture('reloaded-history'), recalled);
       await page.getByRole('button', { name: 'Loan plan rules', exact: true }).click();

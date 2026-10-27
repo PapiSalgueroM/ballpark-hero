@@ -1,5 +1,4 @@
 import { lazy, Suspense, useEffect, useLayoutEffect, useMemo, useRef, useState } from 'react';
-import type { LoanPlanRequest } from '@/lib/clubManagerLoanPlan';
 import { loanPlanRecordOf } from '@/lib/clubManagerLoanPlan';
 import { cn } from '@/lib/utils';
 import { bannerClearance } from '@/components/club-manager/deskCue';
@@ -73,9 +72,7 @@ interface TransferScreenProps {
   /* Round 94: the transfer-status controls. */
   onSetStatus: (playerId: string, status: TransferStatus | null) => void;
   onLoanOut: (playerId: string) => void;
-  onAgreeLoanPlan?: (request: LoanPlanRequest) => boolean;
-  onReviewLoanPlan?: (playerId: string) => boolean;
-  onRecallLoanPlan?: (playerId: string, recordId: string) => boolean;
+  onCommitLoanPlan?: (make: (c: CareerState) => CareerState | null) => boolean;
   /* Round 506: the personal terms table, and the two loan figures. */
   onProposeTerms: (terms: PersonalTerms) => void;
   onBuyLoanee: (playerId: string) => void;
@@ -112,7 +109,7 @@ export function TransferScreen({
   onNegotiate, onOffer, onWalk, onDismissNegotiation, onClause, onLoan,
   onAcceptBid, onRejectBid, onSetStatus, onLoanOut,
   onProposeTerms, onBuyLoanee, onEndLoanEarly, onRecallLoanee,
-  deskNote, onClearNote, onAgreeLoanPlan, onReviewLoanPlan, onRecallLoanPlan,
+  deskNote, onClearNote, onCommitLoanPlan,
 }: TransferScreenProps) {
   /* Round 514: the money symbol follows the start option. Shadowing the
      import here is one line instead of a career argument on every call. */
@@ -967,9 +964,9 @@ export function TransferScreen({
 
       {mode === 'sell' && (
         <div className="space-y-2">
-          {onAgreeLoanPlan && onReviewLoanPlan && onRecallLoanPlan && (
+          {onCommitLoanPlan && (
             <Suspense fallback={<p className="text-xs text-muted-foreground">Opening loan plans...</p>}>
-              <LoanPlanCard career={career} onAgree={onAgreeLoanPlan} onReview={onReviewLoanPlan} onRecall={onRecallLoanPlan} />
+              <LoanPlanCard career={career} onCommit={onCommitLoanPlan} />
             </Suspense>
           )}
           {/* Round 71: incoming bids for my players */}
@@ -1050,7 +1047,7 @@ export function TransferScreen({
                           {l.club} can buy him for {money(l.optionFee)}
                         </span>
                       )}
-                      {l.recallFee !== undefined && !(loanPlanRecordOf(career, l) && onRecallLoanPlan) && (
+                      {l.recallFee !== undefined && !(loanPlanRecordOf(career, l) && onCommitLoanPlan) && (
                         <button
                           onClick={() => onRecallLoanee(l.player.id)}
                           disabled={!windowOpen || l.recallFee > career.budget || career.squad.length >= 30}

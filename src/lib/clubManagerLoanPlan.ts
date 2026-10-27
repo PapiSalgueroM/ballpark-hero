@@ -1,45 +1,60 @@
 import {
-  available, makeLoanPlanContext, fact, playerKey, type LoanPlanSummary,
-  recordLoanPlanRecall as settleRecall, recordLoanPlanSeason as settleSeason,
-} from '@/lib/clubManagerLoanSettlement';
-export type { LoanPlanSummary } from '@/lib/clubManagerLoanSettlement';
-import {
-  acceptBid, isPartialClub, loanOutFee, loanOutPlayer, loanOutRefusal, loanPlanHostClubs,
-  oppRosterFor, recallLoanedPlayer, sellValue, worldYear,
+  acceptBid, isPartialClub, loanOutFee, loanOutPlayer, loanOutRefusal, isHistoricEra, ERA_LEAGUES, eraClubDefFor,
+  REAL_LEAGUES, playableClubs, oppRosterFor, recallLoanedPlayer, sellValue, worldYear,
 } from '@/lib/clubManager';
 import type { CareerState, CMPlayer, LoanOut } from '@/lib/clubManager';
 import { loanOutTermsFor } from '@/lib/clubManagerDeals';
 import { plainCopy } from '@/lib/clubManagerWorldRoster';
 import {
-  appendLoanDevelopmentHistory, loanDevelopmentCanRecall, loanDevelopmentMatches, loanDevelopmentOf,
+  appendLoanDevelopmentLog, recordLoanDevelopmentLog, loanDevelopmentLogOf,
+  loanDevelopmentCanRecall, loanDevelopmentMatches, loanDevelopmentOf,
   quoteLoanDevelopment, reviewLoanDevelopment, startLoanDevelopment,
 } from '@/lib/clubManagerLoanDevelopment';
 import type {
-  LoanDevelopmentContext, LoanDevelopmentHost, LoanDevelopmentQuote, LoanDevelopmentRecord,
+  LoanDevelopmentContext, LoanDevelopmentHost, LoanDevelopmentLoan, LoanDevelopmentQuote, LoanDevelopmentRecord,
+  LoanDevelopmentLog,
 } from '@/lib/clubManagerLoanDevelopment';
 
 export interface LoanPlanRequest {
   playerId: string; hostClub: string; source: 'standard' | 'bid'; token: string;
 }
 export interface LoanPlanPreview extends LoanPlanRequest { quote: LoanDevelopmentQuote }
+export interface PlannedLoan extends LoanOut { development?: LoanDevelopmentRecord }
+export type LoanPlanCareer = CareerState & { loanedOut?: PlannedLoan[]; loanPlanHistory?: readonly LoanDevelopmentLog[] };
 
+export function loanPlanLoans(c: CareerState): PlannedLoan[] { return c.loanedOut ?? []; }
+const playerKey = (player: CMPlayer) => player.worldRosterKey ? 'world:' + player.worldRosterKey : 'squad:' + player.id;
+function available(c: CareerState): boolean {
+  return !c.retired && !c.sacked && !c.wilderness && !c.live && !c.pendingSummary && c.week < c.calendar.length;
+}
 function context(c: CareerState, player: CMPlayer): LoanDevelopmentContext {
-  return makeLoanPlanContext(c, player, worldYear, loanOutRefusal);
+  return { eraId: c.eraId ?? 'now', worldYear: worldYear(c), season: c.season, week: c.week,
+    calendarLength: c.calendar.length, clubName: c.clubName, windowOpen: c.transferWindow !== null,
+    canLoan: available(c) && loanOutRefusal(c, player.id) === null, alreadyLoaned: player.loanOutSeason === c.season };
 }
-export function recordLoanPlanRecall(before: CareerState, after: CareerState, loan: LoanOut, player: CMPlayer): CareerState {
-  return settleRecall(before, after, loan, player, context);
+function fact(c: CareerState, loan: LoanOut): LoanDevelopmentLoan {
+  return { playerKey: playerKey(loan.player), playerName: loan.player.name, parentClub: c.clubName,
+    hostClub: loan.club, season: loan.season, fee: loan.fee, recallFee: loan.recallFee,
+    optionFee: loan.optionFee, rating: loan.player.rating };
 }
-export function recordLoanPlanSeason(
-  before: CareerState, after: CareerState,
-  returned: { home: CMPlayer[]; bought: { club: string; player: CMPlayer }[] },
-  agedReturned?: CMPlayer[],
-): CareerState {
-  return settleSeason(before, after, returned, agedReturned, context);
-}
-
-export function loanPlanRecordOf(c: CareerState, loan: LoanOut): LoanDevelopmentRecord | null {
+export function loanPlanRecordOf(c: CareerState, loan: PlannedLoan): LoanDevelopmentRecord | null {
   const record = loan.development;
   return loanDevelopmentMatches(record, context(c, loan.player), fact(c, loan)) ? record : null;
+}
+/** Read-only projection of the unchanged authority's eligible destinations. */
+function eligibleHostPool(state: CareerState): string[] {
+  if (state.eraId && isHistoricEra(state.eraId)) {
+    const leagues = ERA_LEAGUES[state.eraId] ?? [];
+    return leagues
+      .flatMap(l => l.clubs
+        .map(c => eraClubDefFor(c, state.eraId))
+        .sort((a, b) => a.expectation - b.expectation)
+        .slice(0, 8)
+        .map(c => c.name))
+      .filter(n => n !== state.clubName);
+  }
+  return REAL_LEAGUES.flatMap(l => playableClubs(l.id).slice(0, 8).map(c => c.name))
+    .filter(n => n !== state.clubName);
 }
 function hostFacts(c: CareerState, player: CMPlayer, clubName: string): LoanDevelopmentHost {
   const partial = isPartialClub(clubName, c.eraId);
@@ -56,7 +71,7 @@ function displayedToken(quote: LoanDevelopmentQuote, source: LoanPlanRequest['so
   ] : null]);
 }
 export function loanPlanHosts(c: CareerState): string[] {
-  return available(c) ? [...new Set(loanPlanHostClubs(c))].sort((a, b) => a.localeCompare(b)) : [];
+  return available(c) ? [...new Set(eligibleHostPool(c))].sort((a, b) => a.localeCompare(b)) : [];
 }
 export function loanPlanUnavailableReason(c: CareerState, id: string, host: string): string {
   return loanOutRefusal(c, id) ?? (isPartialClub(host, c.eraId)
@@ -66,7 +81,7 @@ export function loanPlanUnavailableReason(c: CareerState, id: string, host: stri
 export function loanPlanPreview(
   c: CareerState, playerId: string, hostClub: string, source: LoanPlanRequest['source'],
 ): LoanPlanPreview | null {
-  if (!available(c) || !['standard', 'bid'].includes(source) || !loanPlanHostClubs(c).includes(hostClub)) return null;
+  if (!available(c) || !['standard', 'bid'].includes(source) || !eligibleHostPool(c).includes(hostClub)) return null;
   const players = c.squad.filter(p => p.id === playerId);
   if (players.length !== 1) return null;
   const player = players[0], bid = c.incomingBids?.find(b => b.playerId === playerId);
@@ -78,45 +93,57 @@ export function loanPlanPreview(
   if (!quote) return null;
   return { playerId, hostClub, source, quote, token: displayedToken(quote, source, c, playerId) };
 }
-export function agreeLoanPlan(c: CareerState, request: LoanPlanRequest): CareerState | null {
+export function agreeLoanPlan(c: CareerState, request: LoanPlanRequest): LoanPlanCareer | null {
   const preview = loanPlanPreview(c, request.playerId, request.hostClub, request.source);
   if (!preview || preview.token !== request.token) return null;
   const copy = plainCopy(c);
   const next = request.source === 'bid' ? acceptBid(copy, request.playerId)
     : loanOutPlayer(copy, request.playerId, request.hostClub, preview.quote.offer.fee);
   if (!next) return null;
-  const matches = (next.loanedOut ?? []).filter(l =>
-    l.player.id === request.playerId && l.club === request.hostClub && l.season === c.season);
+  const loans = loanPlanLoans(next);
+  const matches = loans.filter(l => l.player.id === request.playerId && l.club === request.hostClub && l.season === c.season);
   if (matches.length !== 1 || matches[0].development !== undefined) return null;
   const loan = matches[0], record = startLoanDevelopment(preview.quote, preview.quote.token, fact(c, loan));
   if (!record) return null;
-  return { ...next, loanedOut: next.loanedOut!.map(l => l === loan ? { ...l, development: record } : l) };
+  return { ...next, loanedOut: loans.map(l => l === loan ? { ...l, development: record } : l) };
 }
-export function reviewLoanPlan(c: CareerState, playerId: string): CareerState | null {
+function historyField(c: CareerState): unknown {
+  return (c as CareerState & { loanPlanHistory?: unknown }).loanPlanHistory;
+}
+function withLog(c: LoanPlanCareer, entry: LoanDevelopmentLog | null): LoanPlanCareer {
+  if (!entry) return c;
+  const previous = historyField(c), history = appendLoanDevelopmentLog(previous, entry);
+  return history && history !== previous ? { ...c, loanPlanHistory: history } : c;
+}
+export function reviewLoanPlan(c: CareerState, playerId: string): LoanPlanCareer | null {
   if (!available(c)) return null;
-  const loan = c.loanedOut?.find(l => l.player.id === playerId);
+  const loans = loanPlanLoans(c), loan = loans.find(l => l.player.id === playerId);
   const record = loanDevelopmentOf(loan?.development);
   if (!loan || !record) return null;
-  const reviewed = reviewLoanDevelopment(record, context(c, loan.player), fact(c, loan), hostFacts(c, loan.player, loan.club));
+  const clock = context(c, loan.player), actual = fact(c, loan);
+  const reviewed = reviewLoanDevelopment(record, clock, actual, hostFacts(c, loan.player, loan.club));
   if (!reviewed) return null;
   if (reviewed === record) return c;
-  return { ...c, loanedOut: c.loanedOut!.map(l => l === loan ? { ...l, development: reviewed } : l) };
+  const next = { ...c, loanedOut: loans.map(l => l === loan ? { ...l, development: reviewed } : l) };
+  return withLog(next, recordLoanDevelopmentLog(reviewed, clock, actual, 'check-in', loan.player.rating));
 }
-export function recallPlannedLoanee(c: CareerState, playerId: string, recordId: string): CareerState | null {
+export function recallPlannedLoanee(c: CareerState, playerId: string, recordId: string): LoanPlanCareer | null {
   if (!available(c)) return null;
-  const loan = c.loanedOut?.find(l => l.player.id === playerId);
+  const loan = loanPlanLoans(c).find(l => l.player.id === playerId);
   const record = loanDevelopmentOf(loan?.development);
   if (!loan || !record || record.id !== recordId
     || !loanDevelopmentCanRecall(record, context(c, loan.player), fact(c, loan), c.budget, c.squad.length)) return null;
-  return recallLoanedPlayer(plainCopy(c), playerId);
+  const beforeIds = new Set(c.squad.map(player => player.id));
+  const next = recallLoanedPlayer(plainCopy(c), playerId);
+  if (!next) return null;
+  const returned = next.squad.filter(player => !beforeIds.has(player.id));
+  if (returned.length !== 1) return null;
+  return withLog(next, recordLoanDevelopmentLog(record, context(c, loan.player), fact(c, loan), 'recalled', returned[0].rating));
 }
-export function loanPlanHistoryOf(c: CareerState): readonly LoanPlanSummary[] | null {
-  const history = c.loanPlanHistory;
-  if (history === undefined) return [];
-  if (!Array.isArray(history) || history.length > 12 || new Set(history.map(row => row?.id)).size !== history.length) return null;
-  for (const row of history) {
-    if (!appendLoanDevelopmentHistory(undefined, row)
-      || row.ratingStage !== undefined && !['annual', 'return', 'recall'].includes(row.ratingStage)) return null;
-  }
-  return history;
+export function loanPlanHistoryOf(c: CareerState): readonly LoanDevelopmentLog[] | null {
+  const history = loanDevelopmentLogOf(historyField(c));
+  if (history === null) return null;
+  const rows = history ?? [], year = worldYear(c);
+  return rows.some(row => row.eraId !== (c.eraId ?? 'now') || row.observedYear > year || row.observedSeason > c.season
+    || row.observedYear === year && row.observedSeason === c.season && row.observedWeek > c.week) ? null : rows;
 }

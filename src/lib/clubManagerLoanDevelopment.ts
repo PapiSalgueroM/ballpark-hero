@@ -31,9 +31,9 @@ export interface LoanDevelopmentRecord {
   opportunity: KnownLoanOpportunity;
   review?: { week: number; rating: number; ratingChange: number; opportunity: LoanOpportunity };
 }
-export type LoanDevelopmentSummary = Omit<LoanDevelopmentRecord, 'opportunity' | 'review'> & {
-  kind: 'recalled' | 'returned' | 'bought'; endYear: number; endSeason: number; endWeek: number;
-  ratingAtEnd: number; ratingChange: number;
+export type LoanDevelopmentLog = Omit<LoanDevelopmentRecord, 'opportunity' | 'review'> & {
+  key: string; kind: 'check-in' | 'recalled'; observedYear: number; observedSeason: number; observedWeek: number;
+  rating: number; ratingChange: number;
 };
 
 const object = (value: unknown): value is Record<string, unknown> =>
@@ -64,7 +64,7 @@ function validOffer(value: LoanDevelopmentOffer): boolean {
 }
 function knownOpportunity(value: unknown): value is KnownLoanOpportunity {
   return object(value) && value.partial === false && count(value.higherRated) && count(value.equallyRated)
-    && count(value.observedPlayers) && value.observedPlayers <= 30
+    && count(value.observedPlayers) && value.observedPlayers > 0 && value.observedPlayers <= 30
     && value.higherRated + value.equallyRated <= value.observedPlayers
     && value.estimatedRole === role(value.higherRated, value.equallyRated);
 }
@@ -109,7 +109,7 @@ export function loanOpportunityOf(
   if (!validContext(context) || !validPlayer(player) || host.partial !== false
     || host.eraId !== context.eraId || host.worldYear !== context.worldYear || host.season !== context.season
     || host.week !== context.week || host.position !== player.position || !text(host.clubName)
-    || !Array.isArray(host.ratings) || host.ratings.length > 30 || !host.ratings.every(rating)) {
+    || !Array.isArray(host.ratings) || host.ratings.length === 0 || host.ratings.length > 30 || !host.ratings.every(rating)) {
     return { partial: true, reason: 'CM_PARTIAL' };
   }
   const higherRated = host.ratings.filter(value => value > player.rating).length;
@@ -179,7 +179,7 @@ export function reviewLoanDevelopment(
   if (!loanDevelopmentOf(record) || !sameSeason(record, context) || !sameLoan(record, actualLoan)) return null;
   const lastWeek = record.review?.week ?? record.startedWeek;
   if (context.week < lastWeek) return null;
-  if (context.week === lastWeek) return record;
+  if (context.week === lastWeek && record.review) return record;
   const opportunity = host.clubName === record.hostClub
     ? loanOpportunityOf(context, { key: record.playerKey, name: record.playerName, position: record.position, rating: actualLoan.rating }, host)
     : { partial: true as const, reason: 'CM_PARTIAL' as const };
@@ -198,42 +198,43 @@ export function loanDevelopmentCanRecall(
     && count(squadSize) && squadSize < 30;
 }
 
-export function closeLoanDevelopment(
+export function recordLoanDevelopmentLog(
   record: LoanDevelopmentRecord, context: LoanDevelopmentContext, actualLoan: LoanDevelopmentLoan,
-  outcome: { kind: 'recalled' | 'returned' | 'bought'; rating: number },
-): LoanDevelopmentSummary | null {
-  if (!loanDevelopmentOf(record) || !validContext(context) || !sameLoan(record, actualLoan)
-    || !rating(outcome.rating) || context.eraId !== record.eraId || context.clubName !== record.sourceClub
-    || !['recalled', 'returned', 'bought'].includes(outcome.kind)) return null;
-  const same = sameSeason(record, context);
-  const rollover = context.season === record.season + 1 && context.worldYear === record.worldYear + 1 && context.week === 0;
-  if (outcome.kind === 'recalled' ? !same || !context.windowOpen
-    : !(same && context.week === context.calendarLength) && !rollover) return null;
-  if (same && context.week < (record.review?.week ?? record.startedWeek)) return null;
+  kind: unknown, actualRating: number,
+): LoanDevelopmentLog | null {
+  if (!loanDevelopmentMatches(record, context, actualLoan) || !rating(actualRating)
+    || kind !== 'check-in' && kind !== 'recalled'
+    || kind === 'check-in' && actualRating !== actualLoan.rating
+    || kind === 'recalled' && !context.windowOpen) return null;
   const { opportunity: _opportunity, review: _review, ...base } = record;
-  return { ...base, kind: outcome.kind, endYear: context.worldYear, endSeason: context.season,
-    endWeek: context.week, ratingAtEnd: outcome.rating, ratingChange: outcome.rating - record.ratingAtStart };
+  const entry = { ...base, kind, observedYear: context.worldYear, observedSeason: context.season,
+    observedWeek: context.week, rating: actualRating, ratingChange: actualRating - record.ratingAtStart };
+  return { ...entry, key: JSON.stringify([entry.id, kind, entry.observedYear, entry.observedSeason, entry.observedWeek]) };
 }
-
-function validSummary(value: unknown): value is LoanDevelopmentSummary {
-  if (!validBase(value) || !['recalled', 'returned', 'bought'].includes(String(value.kind))
-    || !positive(value.endYear) || !positive(value.endSeason) || !count(value.endWeek)
-    || !rating(value.ratingAtEnd) || value.ratingChange !== value.ratingAtEnd - Number(value.ratingAtStart)) return false;
-  return value.endSeason === value.season && value.endYear === value.worldYear && value.endWeek >= Number(value.startedWeek)
-    || value.kind !== 'recalled' && value.endSeason === Number(value.season) + 1 && value.endYear === Number(value.worldYear) + 1;
+function validLog(value: unknown): value is LoanDevelopmentLog {
+  return validBase(value) && (value.kind === 'check-in' || value.kind === 'recalled')
+    && value.observedYear === value.worldYear && value.observedSeason === value.season
+    && count(value.observedWeek) && value.observedWeek >= Number(value.startedWeek)
+    && rating(value.rating) && value.ratingChange === value.rating - Number(value.ratingAtStart)
+    && value.key === JSON.stringify([value.id, value.kind, value.observedYear, value.observedSeason, value.observedWeek]);
 }
-function summaryToken(value: LoanDevelopmentSummary): string {
-  return JSON.stringify([value.id, value.playerName, value.position, value.fee, value.recallFee ?? null,
+function logToken(value: LoanDevelopmentLog): string {
+  return JSON.stringify([value.key, value.id, value.playerName, value.position, value.fee, value.recallFee ?? null,
     value.optionFee ?? null, value.startedWeek, value.ratingAtStart, value.kind,
-    value.endYear, value.endSeason, value.endWeek, value.ratingAtEnd, value.ratingChange]);
+    value.observedYear, value.observedSeason, value.observedWeek, value.rating, value.ratingChange]);
 }
-export function appendLoanDevelopmentHistory(
-  history: readonly LoanDevelopmentSummary[] | undefined, summary: LoanDevelopmentSummary,
-): readonly LoanDevelopmentSummary[] | null {
-  if (!validSummary(summary) || history !== undefined && (!Array.isArray(history)
-    || history.length > LOAN_DEVELOPMENT_HISTORY_LIMIT || !history.every(validSummary)
-    || new Set(history.map(item => item.id)).size !== history.length)) return null;
-  const existing = history?.find(item => item.id === summary.id);
-  if (existing) return summaryToken(existing) === summaryToken(summary) ? history! : null;
-  return [...(history ?? []), summary].slice(-LOAN_DEVELOPMENT_HISTORY_LIMIT);
+export function loanDevelopmentLogOf(value: unknown): readonly LoanDevelopmentLog[] | null | undefined {
+  if (value === undefined) return undefined;
+  if (!Array.isArray(value) || value.length > LOAN_DEVELOPMENT_HISTORY_LIMIT
+    || !value.every(validLog) || new Set(value.map(row => row.key)).size !== value.length) return null;
+  return value;
+}
+export function appendLoanDevelopmentLog(
+  value: unknown, entry: LoanDevelopmentLog,
+): readonly LoanDevelopmentLog[] | null {
+  const history = loanDevelopmentLogOf(value);
+  if (history === null || !validLog(entry)) return null;
+  const existing = history?.find(row => row.key === entry.key);
+  if (existing) return logToken(existing) === logToken(entry) ? history! : null;
+  return [...(history ?? []), entry].slice(-LOAN_DEVELOPMENT_HISTORY_LIMIT);
 }

@@ -1687,9 +1687,7 @@ const ClubManager = () => {
             onRejectBid={g.rejectIncomingBid}
             onSetStatus={g.setStatus}
             onLoanOut={g.loanOut}
-            onAgreeLoanPlan={g.agreeLoanPlan}
-            onReviewLoanPlan={g.reviewLoanPlan}
-            onRecallLoanPlan={g.recallPlannedLoanee}
+            onCommitLoanPlan={g.commitLoanPlan}
             onProposeTerms={g.proposeTerms}
             onBuyLoanee={g.buyLoanee}
             onEndLoanEarly={g.endLoanEarly}

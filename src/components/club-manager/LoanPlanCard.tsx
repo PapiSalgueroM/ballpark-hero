@@ -5,19 +5,18 @@ import { cn } from '@/lib/utils';
 import { isPartialClub, loanOutRefusal, moneyIn } from '@/lib/clubManager';
 import type { CareerState } from '@/lib/clubManager';
 import {
+  agreeLoanPlan, reviewLoanPlan, recallPlannedLoanee, loanPlanLoans,
   loanPlanHistoryOf, loanPlanHosts, loanPlanPreview, loanPlanRecordOf, loanPlanUnavailableReason,
 } from '@/lib/clubManagerLoanPlan';
 import type { LoanPlanPreview, LoanPlanRequest } from '@/lib/clubManagerLoanPlan';
 
 interface LoanPlanCardProps {
   career: CareerState;
-  onAgree: (request: LoanPlanRequest) => boolean;
-  onReview: (playerId: string) => boolean;
-  onRecall: (playerId: string, recordId: string) => boolean;
+  onCommit: (make: (c: CareerState) => CareerState | null) => boolean;
 }
 const ROLE = { leading: 'Leading on ratings', competing: 'Competing for a place', depth: 'Behind other options' };
 
-export function LoanPlanCard({ career, onAgree, onReview, onRecall }: LoanPlanCardProps) {
+export function LoanPlanCard({ career, onCommit }: LoanPlanCardProps) {
   const [open, setOpen] = useState(false), [rules, setRules] = useState(true);
   const [playerId, setPlayerId] = useState(''), [host, setHost] = useState('');
   const [preview, setPreview] = useState<LoanPlanPreview | null>(null), [notice, setNotice] = useState('');
@@ -25,7 +24,7 @@ export function LoanPlanCard({ career, onAgree, onReview, onRecall }: LoanPlanCa
   const money = moneyIn(career), player = career.squad.find(p => p.id === playerId);
   const bid = career.incomingBids?.find(b => b.playerId === playerId && b.loan);
   const hosts = loanPlanHosts(career), history = loanPlanHistoryOf(career);
-  const plans = (career.loanedOut ?? []).filter(l => l.development !== undefined);
+  const plans = loanPlanLoans(career).filter(l => l.development !== undefined);
   const reveal = useRevealScroll<HTMLDivElement>([open, preview?.token ?? '', notice].join('|'),
     { enabled: open, skipFirst: false, block: 'end' });
   const button = 'min-h-[44px] min-w-[44px] rounded-lg border px-3 text-xs font-semibold disabled:opacity-50';
@@ -86,7 +85,7 @@ export function LoanPlanCard({ career, onAgree, onReview, onRecall }: LoanPlanCa
             among {preview.quote.opportunity.observedPlayers} named players at this primary position.</p>
           <button type="button" className={cn(button, 'border-primary')} disabled={career.transferWindow === null}
             onClick={() => {
-              const ok = onAgree(preview);
+              const ok = onCommit(current => agreeLoanPlan(current, preview));
               setNotice(ok ? 'Loan plan saved. The player is now out on loan.' : 'That loan plan changed or could not be saved. Refresh the terms and try again.');
               if (ok) { setPreview(null); setPlayerId(''); setHost(''); }
             }}>Confirm loan plan</button>
@@ -108,18 +107,19 @@ export function LoanPlanCard({ career, onAgree, onReview, onRecall }: LoanPlanCa
               ? 'Projected opportunity: ' + ROLE[current.estimatedRole] + '. ' + current.higherRated + ' higher-rated players at this primary position.'
               : 'Current roster coverage is thin, so no opportunity estimate is available.'}</p>
             <div className="flex flex-wrap gap-2">
-              <button type="button" className={button} onClick={() => setNotice(onReview(loan.player.id) ? 'Loan review saved.' : 'That review could not be saved. Reopen the active manager and try again.')}>Review loan plan</button>
+              <button type="button" className={button} onClick={() => setNotice(onCommit(current => reviewLoanPlan(current, loan.player.id)) ? 'Loan review saved.' : 'That review could not be saved. Reopen the active manager and try again.')}>Review loan plan</button>
               <button type="button" className={button} disabled={!canRecall}
-                onClick={() => setNotice(onRecall(loan.player.id, record.id) ? 'Player recalled and loan plan closed.' : 'That recall could not be saved. Check the window, fee and active manager.')}>Recall planned player</button>
+                onClick={() => setNotice(onCommit(current => recallPlannedLoanee(current, loan.player.id, record.id)) ? 'Player recalled and loan plan closed.' : 'That recall could not be saved. Check the window, fee and active manager.')}>Recall planned player</button>
             </div>
           </div>;
         })}
       </div>}
       {history === null ? <p>Saved loan-plan history is unavailable.</p> : history.length > 0 && <div data-testid="loan-plan-history" className="space-y-1">
-        <h3 className="font-semibold">Recent plans</h3>
-        {[...history].reverse().map(row => <p key={row.id}>
-          {row.playerName} at {row.hostClub}: {row.kind}. Rating {row.ratingAtStart} to {row.ratingAtEnd}
-          {' '}({row.ratingStage === 'annual' ? 'after annual development' : row.ratingStage === 'return' ? 'at loan return' : 'at close'}).
+        <h3 className="font-semibold">Recorded check-ins and recalls</h3>
+        <p className="text-muted-foreground">This log only records your check-ins and recalls. A normal loan return adds no entry.</p>
+        {[...history].reverse().map(row => <p key={row.key}>
+          {row.playerName} at {row.hostClub}: {row.kind === 'check-in' ? 'check-in' : 'recall'}.
+          {' '}Rating {row.ratingAtStart} to {row.rating}, recorded in {row.observedYear}, week {row.observedWeek}.
         </p>)}
       </div>}
     </section>}

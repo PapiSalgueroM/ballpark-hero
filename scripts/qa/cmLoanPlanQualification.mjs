@@ -112,30 +112,23 @@ function test(cwd, name, files, pattern, exit = 0) {
   execute(cwd, name, 'npm', args, true, exit);
   return rows(output, path.join(OUT, name + '.log'));
 }
-function baselineCases(records, base) {
-  assert.equal(records.length, 21);
-  const location = fs.readFileSync(path.join(base, 'src/test/clubManagerLoanPlanIntegration.test.ts'), 'utf8')
-    .split('\n').findIndex(line => line.includes('expect(fixed.career.loanPlanHistory).toHaveLength(1)')) + 1;
-  assert(location > 0);
+function baselineCases(records) {
+  assert.equal(records.length, 22);
   for (const expected of meta.baseline) {
     const actual = records.find(row => row.title === expected.title);
     assert(actual, 'Actual baseline case collected: ' + expected.title);
     assert.equal(actual.status, expected.status, expected.title);
     if (actual.status === 'failed') {
       assert(!/Failed to resolve import|Cannot find module|does not provide an export|SyntaxError|ReferenceError|is not a function/.test(actual.failure));
-      if (expected.cause === 'missing Loan plan tile') {
-        assert(/Unable to find role=["']button["'] and name [^\n]*Loan plan/.test(actual.failure), 'Exact missing tile failure');
-      } else {
-        assert(/Target cannot be null|expected undefined|Cannot read properties of undefined/.test(actual.failure), 'Missing closeout value');
-        assert(actual.failure.includes('clubManagerLoanPlanIntegration.test.ts:' + location + ':'), 'Exact intended assertion location');
-      }
+      assert.equal(expected.cause, 'missing Loan plan tile');
+      assert(/Unable to find role=["']button["'] and name [^\n]*Loan plan/.test(actual.failure), 'Exact missing tile failure');
     }
   }
-  assert.equal(records.filter(row => row.status === 'failed').length, 13);
-  assert.equal(records.filter(row => row.status === 'passed').length, 8);
+  assert.equal(records.filter(row => row.status === 'failed').length, 12);
+  assert.equal(records.filter(row => row.status === 'passed').length, 10);
 }
 function fixedCases(records) {
-  assert.equal(records.length, 33);
+  assert.equal(records.length, 34);
   for (const source of meta.tests) for (const title of source.sourceCaseNames)
     assert.equal(records.find(row => row.title === title)?.status, 'passed', 'Actual fixed case: ' + title);
 }
@@ -161,7 +154,7 @@ fs.writeFileSync(path.join(OUT, 'source.tar'), git(['archive', '--format=tar', '
 fs.writeFileSync(path.join(OUT, 'original-I.tar'), git(['archive', '--format=tar', meta.foundation]));
 for (const file of meta.fixed) assert.equal(hash(fs.readFileSync(path.join(ROOT, file.path))), file.sha256, 'Selected body: ' + file.path);
 const allowed = new Set([...meta.fixed.map(file => file.path), 'scripts/qa/cmLoanPlanQualification.mjs',
-  'scripts/qa/cmLoanPlanSource.json', 'scripts/qa/playCmLoanPlanCard.mjs', '.github/workflows/cm-loan-plan.yml', 'docs/PROJECT-STATE.md']);
+  'scripts/qa/cmLoanPlanSource.json', 'scripts/qa/playCmLoanPlanCard.mjs', 'scripts/qa/cmLoanPlanHostPool.mjs', '.github/workflows/cm-loan-plan.yml', 'docs/PROJECT-STATE.md']);
 const changed = git(['diff', '--name-only', meta.foundation, 'HEAD']).toString('utf8').trim().split('\n').filter(Boolean);
 assert(changed.every(file => allowed.has(file)), 'Only the declared isolated I source/QA/append-doc paths differ');
 if (changed.includes('docs/PROJECT-STATE.md')) assert(fs.readFileSync(path.join(ROOT, 'docs/PROJECT-STATE.md'), 'utf8')
@@ -176,8 +169,6 @@ execute(BASE, 'original-install', 'npm', ['ci'], false);
 execute(BASE, 'original-types', path.join(BASE, 'node_modules/.bin/tsc'), ['--noEmit', '-p', 'tsconfig.app.json']);
 execute(ROOT, 'fixed-types', path.join(ROOT, 'node_modules/.bin/tsc'), ['--noEmit', '-p', 'tsconfig.app.json']);
 const engine = path.join(BASE, 'src/lib/clubManager.ts'), originalEngine = fs.readFileSync(engine);
-const bridge = '\n\nexport function loanPlanHostClubs(career: CareerState): string[] { return buyerPool(career); }\n';
-assert(!originalEngine.toString('utf8').includes('export function loanPlanHostClubs'));
 const common = meta.fixed.filter(file => file.originalBlob === null), copied = [];
 const originalPaths = git(['ls-tree', '-rz', '--name-only', meta.foundation]).toString('utf8').split('\0').filter(Boolean);
 const originalBefore = Object.fromEntries(originalPaths.map(file => [file, hash(fs.readFileSync(path.join(BASE, file)))]));
@@ -191,17 +182,11 @@ try {
     fs.copyFileSync(path.join(ROOT, file.path), destination);
     copied.push(file.path);
   }
-  fs.writeFileSync(engine, Buffer.concat([originalEngine, Buffer.from(bridge)]));
-  fs.writeFileSync(path.join(OUT, 'baseline-reader-bridge.ts.txt'), bridge);
-  fs.copyFileSync(engine, path.join(OUT, 'baseline-engine-bridged.ts'));
-  put('baseline-reader-bridge.json', { original: hash(originalEngine), changed: hash(fs.readFileSync(engine)),
-    scope: 'Read-only access to existing buyerPool for common observers; all old business-action/consumer bodies stay exact' });
-  baselineCases(test(BASE, 'original-cases', meta.tests.filter(t => !t.path.endsWith('clubManagerLoanDevelopment.test.ts')).map(t => t.path), null, 1), BASE);
+  baselineCases(test(BASE, 'original-cases', meta.tests.filter(t => !t.path.endsWith('clubManagerLoanDevelopment.test.ts')).map(t => t.path), null, 1));
   diagnosticControls(path.join(OUT, 'original-cases.json'), path.join(OUT, 'original-cases.log'));
-  put('original-qualified-red.json', { status: 'PASS', assertions: 21, intendedRed: 13, preservations: 8,
-    limit: 'Old app consumers and annual seam only; new helper semantics are not claimed absent' });
+  put('original-qualified-red.json', { status: 'PASS', assertions: 22, intendedRed: 12, preservations: 10,
+    limit: 'Old app consumers only; common new helper behavior and unchanged annual settlement are preservation cases' });
 } finally {
-  fs.writeFileSync(engine, originalEngine);
   for (const file of copied) if (fs.existsSync(path.join(BASE, file))) fs.unlinkSync(path.join(BASE, file));
   assert.equal(hash(fs.readFileSync(engine)), hash(originalEngine), 'Whole original engine restored');
   const originalAfter = Object.fromEntries(originalPaths.map(file => [file, hash(fs.readFileSync(path.join(BASE, file)))]));
@@ -249,7 +234,7 @@ for (const harness of meta.regressionHarnesses) {
   assert(output.includes('All 1 harnesses green.') && !/(^|\s)(SKIP|EMPTY)(\s|$)/m.test(output), 'Actual complete existing harness closing output');
 }
 assert.deepEqual(tracked(), JSON.parse(fs.readFileSync(path.join(OUT, 'tracked-before.json'), 'utf8')), 'Every tracked body is restored before build');
-put('methods-qualified.json', { status: 'PASS', original: '13 exact missing-consumer assertions and8preservations',
-  fixed: 33, sourceControls: controls.length, copiedDiagnosticControls: 3, existingCases: regression.length, pairs: 12, copiedPairControls: 4,
+put('methods-qualified.json', { status: 'PASS', original: '12 exact missing-consumer assertions and10preservations',
+  fixed: 34, sourceControls: controls.length, copiedDiagnosticControls: 3, existingCases: regression.length, pairs: 12, copiedPairControls: 4,
   limit: 'No build, cap, pixel, joined-target or full-suite acceptance from this methods receipt' });
-console.log('Loan plan methods: actual original RED, fixed33,9sourcecontrols, paired outcomes and existing focused regressions passed.');
+console.log('Loan plan methods: actual original RED, fixed34,11sourcecontrols, paired outcomes and existing focused regressions passed.');
