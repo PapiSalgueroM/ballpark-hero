@@ -1,4 +1,5 @@
 name: Loan plan early application gate
+# V4 explicitly narrows known roster observations under the application type settings.
 on:
   push:
     branches: [codex/cm-loan-plan-20261027]

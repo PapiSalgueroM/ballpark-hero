@@ -126,7 +126,7 @@ export function quoteLoanDevelopment(
     || !context.canLoan || context.alreadyLoaned || !validPlayer(player) || !validOffer(offer)
     || offer.clubName === context.clubName || host.clubName !== offer.clubName) return null;
   const opportunity = loanOpportunityOf(context, player, host);
-  if (opportunity.partial) return null;
+  if (opportunity.partial !== false) return null;
   const quote = { context: { ...context }, player: { ...player }, offer: { ...offer }, opportunity };
   return { ...quote, token: tokenOf(quote) };
 }

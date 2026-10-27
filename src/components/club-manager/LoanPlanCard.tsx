@@ -105,8 +105,9 @@ export function LoanPlanCard({ career, onAgree, onReview, onRecall }: LoanPlanCa
           return <div key={record.id} className="rounded-lg border p-3 space-y-2">
             <p className="font-semibold">{loan.player.name} at {loan.club}</p>
             <p>Agreed fee {money(record.fee)}. Rating change {record.review ? (record.review.ratingChange > 0 ? '+' : '') + record.review.ratingChange : 'not reviewed yet'}.</p>
-            <p>{current.partial ? 'Current roster coverage is thin, so no opportunity estimate is available.'
-              : 'Projected opportunity: ' + ROLE[current.estimatedRole] + '. ' + current.higherRated + ' higher-rated players at this primary position.'}</p>
+            <p>{current.partial === false
+              ? 'Projected opportunity: ' + ROLE[current.estimatedRole] + '. ' + current.higherRated + ' higher-rated players at this primary position.'
+              : 'Current roster coverage is thin, so no opportunity estimate is available.'}</p>
             <div className="flex flex-wrap gap-2">
               <button type="button" className={button} onClick={() => setNotice(onReview(loan.player.id) ? 'Loan review saved.' : 'That review could not be saved. Reopen the active manager and try again.')}>Review loan plan</button>
               <button type="button" className={button} disabled={!canRecall}
