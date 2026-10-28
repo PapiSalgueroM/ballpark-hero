@@ -57,7 +57,8 @@ const expected = [
       "an explicit Save arrival commits only once through StrictMode effect replay",
       "a delayed Save arrival from a replaced career refuses rather than changing the new career",
       "help and its Back preserve the list and return focus to the actual help opener",
-      "the real transfer screen returns Find to ordinary Buy search without talking paying or loaning"
+      "the real transfer screen returns Find to ordinary Buy search without talking paying or loaning",
+      "shows twelve saved targets as compact View tiles and opens only one current detail before Back with no write or draw"
     ],
     "path": "src/test/clubManagerRecruitmentBoard.test.tsx"
   },
@@ -80,10 +81,10 @@ const expected = [
   }
 ];
 const manifestRaw = fs.readFileSync(MANIFEST);
-assert.equal(sha(manifestRaw), '282b5cf5bc141fc9be92ab7b6f4178f4aef6bc3d50fe7fe0653c7fb8044e590e');
+assert.equal(sha(manifestRaw), '0a5d3d71315f35ab3426a60e1460cc42b21a5523ef97626e7640b0b9c1605ed0');
 const manifest = JSON.parse(manifestRaw);
 const faultsRaw = fs.readFileSync(FAULTS);
-assert.equal(sha(faultsRaw), '7809a1037955cc2e2cdf943eecca318b7acce2da76986b07a58cc0e68971103c');
+assert.equal(sha(faultsRaw), '10ad5e4f281587081e755a24b3c589cc750e70f8c149e4af2e3ba490c92a622b');
 const faults = JSON.parse(faultsRaw).faults;
 assert.equal(faults.length, 10);
 const held = {
@@ -131,10 +132,10 @@ const noInfrastructure = (value, log) => {
 };
 function focused(value, log, report, fault) {
   noInfrastructure(value, log);
-  assert.equal(value.numTotalTests, 37); assert.equal(value.numTodoTests, 0);
-  assert.equal(value.numPassedTests, fault ? 1 : 37);
+  assert.equal(value.numTotalTests, 38); assert.equal(value.numTodoTests, 0);
+  assert.equal(value.numPassedTests, fault ? 1 : 38);
   assert.equal(value.numFailedTests, fault ? 1 : 0);
-  assert.equal(value.numPendingTests, fault ? 35 : 0);
+  assert.equal(value.numPendingTests, fault ? 36 : 0);
   assert.equal(value.success, !fault);
   assert(Array.isArray(value.testResults) && value.testResults.length === 4);
   const all = [];
@@ -143,7 +144,7 @@ function focused(value, log, report, fault) {
     assert.equal(suites.length, 1, 'One actual focused file');
     const suite = suites[0], rows = suite.assertionResults;
     assert.equal(rows.length, target.titles.length);
-    assert.deepEqual(rows.map(row => row.fullName).sort(), target.titles.map(title => target.prefix + ' ' + title).sort(), 'Exact all37 identities');
+    assert.deepEqual(rows.map(row => row.fullName).sort(), target.titles.map(title => target.prefix + ' ' + title).sort(), 'Exact all38 identities');
     if (!fault) assert.equal(suite.status, 'passed', 'Healthy file passed');
     for (const row of rows) {
       const targetName = fault && fullName(fault.test, fault.target);
@@ -165,18 +166,18 @@ function focused(value, log, report, fault) {
       all.push({file: target.path, name: row.fullName, status: row.status});
     }
   }
-  assert.equal(all.length, 37); assert.equal(new Set(all.map(row => row.name)).size, 37);
+  assert.equal(all.length, 38); assert.equal(new Set(all.map(row => row.name)).size, 38);
   const clean = plain(log), files = clean.match(/^\s*Test Files[^\n]*\(4\)\s*$/gm) || [];
   assert.equal(files.length, 1, 'Complete actual four-file closing');
   if (fault) {
-    assert(/^\s*Tests\s+1 failed\s*\|\s*1 passed\s*\|\s*35 skipped\s+\(37\)\s*$/m.test(clean), 'Complete actual control case closing');
+    assert(/^\s*Tests\s+1 failed\s*\|\s*1 passed\s*\|\s*36 skipped\s+\(38\)\s*$/m.test(clean), 'Complete actual control case closing');
   } else {
     assert.equal(value.numFailedTestSuites, 0);
     assert(/^\s*Test Files\s+4 passed\s+\(4\)\s*$/m.test(clean), 'Complete healthy file closing');
-    assert(/^\s*Tests\s+37 passed\s+\(37\)\s*$/m.test(clean), 'Complete healthy case closing');
+    assert(/^\s*Tests\s+38 passed\s+\(38\)\s*$/m.test(clean), 'Complete healthy case closing');
   }
   assert(clean.includes('JSON report written to ' + report), 'Actual JSON-written closing');
-  return {total:37, passed:fault ? 1 : 37, failed:fault ? 1 : 0, skipped:fault ? 35 : 0};
+  return {total:38, passed:fault ? 1 : 38, failed:fault ? 1 : 0, skipped:fault ? 36 : 0};
 }
 function runFocused(cwd, label, fault) {
   const dir = path.join(OUT, label); fs.mkdirSync(dir, {recursive:true});
@@ -249,15 +250,15 @@ function controls() {
         diagnostics.push({kind:'method-error',copiedOnly:true,changed:true,rejected:true,originalReadmitted:true});
       }
       const restored=runFocused(work,'faults/'+fault.id+'/restored');
-      results.push({id:fault.id,sourceChanged:true,targetFailed:outcome.actual.failed===1,independentPassed:outcome.actual.passed===1,unselectedSkipped:35,sourceRestored:true,all37Restored:restored.actual.passed===37});
+      results.push({id:fault.id,sourceChanged:true,targetFailed:outcome.actual.failed===1,independentPassed:outcome.actual.passed===1,unselectedSkipped:36,sourceRestored:true,all38Restored:restored.actual.passed===38});
       write(path.join(OUT,'physical-controls-progress.json'),results);
     }
     assert.equal(results.length,10);
     const after=Object.fromEntries(tracked.map(file=>[file,sha(fs.readFileSync(path.join(work,file)))]));
     assert.deepEqual(after,before,'All controlled source bodies restored');
     write(path.join(OUT,'controlled-after.json'),after);
-    write(path.join(OUT,'PROOF-ADMISSION.json'),{status:'37_CASES_AND10_EFFECTIVE_PHYSICAL_CONTROLS',healthy:healthy.actual,controls:results,copiedDiagnostics:diagnostics,controlledTrackedBodies:tracked.length,limits:'Physical source bodies and real test outcomes establish compilation/behavior effect. No esbuild metafile claim for the Vitest runner. Browser/build/default pairs are separate mandatory gates.'});
-    console.log('PASS recruitment proof:37 healthy,10 changed physical target failures with independent passes,10 same-copy37-case restores,4 copied diagnostic refusals/restores');
+    write(path.join(OUT,'PROOF-ADMISSION.json'),{status:'38_CASES_AND10_EFFECTIVE_PHYSICAL_CONTROLS',healthy:healthy.actual,controls:results,copiedDiagnostics:diagnostics,controlledTrackedBodies:tracked.length,limits:'Physical source bodies and real test outcomes establish compilation/behavior effect. No esbuild metafile claim for the Vitest runner. Browser/build/default pairs are separate mandatory gates.'});
+    console.log('PASS recruitment proof:38 healthy,10 changed physical target failures with independent passes,10 same-copy38-case restores,4 copied diagnostic refusals/restores');
   } finally { fs.rmSync(work,{recursive:true,force:true}); }
 }
 function multiset(rows) {
@@ -275,13 +276,14 @@ function units() {
     noInfrastructure(value,cli);assert.equal(value.success,true);assert.equal(value.numFailedTestSuites,0);assert.equal(value.numFailedTests,0);assert.equal(value.numPendingTests,58);assert.equal(value.numTodoTests,0);
     const rows=[];for(const suite of value.testResults){assert(['passed','skipped'].includes(suite.status),'NO_FAILED_FILES');for(const row of suite.assertionResults){assert(['passed','skipped'].includes(row.status));assert.equal(row.failureMessages.length,0);rows.push([suite.name.replaceAll('\\','/').replace(/^.*?\/ballpark-hero\/ballpark-hero\//,''),row.fullName,row.status]);}}
     assert.equal(rows.length,value.numTotalTests);assert.equal(rows.filter(row=>row[2]==='passed').length,value.numPassedTests);
+    assert.equal(rows.length,9754,'MEASURED9753_PLUS_ONE_CURRENT_CASE');assert.equal(value.numPassedTests,9696,'CURRENT9696_PASSES');assert.equal(value.testResults.length,655,'UNCHANGED655_TEST_FILES');
     assert.deepEqual(multiset(rows.filter(row=>row[2]==='skipped')),multiset(skipped),'EXACT58_SKIP_IDENTITIES');
-    for(const file of expected){const actual=rows.filter(row=>row[0]===file.path);assert.deepEqual(actual.map(row=>[row[1],row[2]]).sort(),file.titles.map(title=>[file.prefix+' '+title,'passed']).sort(),'ALL37_CURRENT_CASES');}
+    for(const file of expected){const actual=rows.filter(row=>row[0]===file.path);assert.deepEqual(actual.map(row=>[row[1],row[2]]).sort(),file.titles.map(title=>[file.prefix+' '+title,'passed']).sort(),'ALL38_CURRENT_CASES');}
     const clean=plain(cli),fileLines=clean.match(/\bTest Files[^\n]*\((\d+)\)/g)||[],caseLines=clean.match(/\bTests[^\n]*\((\d+)\)/g)||[];
     assert.equal(fileLines.length,1,'ACTUAL_CLI_FILE_CLOSING');assert.equal(caseLines.length,1,'ACTUAL_CLI_CASE_CLOSING');
     assert.equal(Number(fileLines[0].match(/\((\d+)\)/)[1]),value.testResults.length);assert.equal(Number(caseLines[0].match(/\((\d+)\)/)[1]),rows.length);
     assert(clean.includes('JSON report written to '+report),'ACTUAL_JSON_WRITTEN');
-    return{total:rows.length,passed:value.numPassedTests,skipped:58,files:value.testResults.length,newCases:37};
+    return{total:rows.length,passed:value.numPassedTests,skipped:58,files:value.testResults.length,newCases:38};
   }
   const actual=admit(value,cli),copied=[];
   for(const kind of ['suite-message','failed-suites-cli','skip-identity']){
@@ -296,7 +298,7 @@ function units() {
   }
   assert.equal(sha(fs.readFileSync(report)),sha(raw));assert.equal(fs.readFileSync(log,'utf8'),cli);
   write(path.join(OUT,'UNIT-ADMISSION.json'),{status:'FRESH_FULL_CURRENT_SUITE_PASS',actual,copiedDiagnostics:copied,priorSkipReference:{head:reference.sourceHead,rawReportSha256:reference.rawReportSha256},limits:'Fresh current whole suite. Prior9755 is used ONLY for58 skipped identities, not as a CM denominator or claimed prior416 full execution. All pre-existing base test source files are unchanged in the bounded source diff.'});
-  console.log('PASS fresh entire recruitment source suite with37 current cases and exact58 prior skipped identities');
+  console.log('PASS fresh entire recruitment source suite with38 current cases and exact58 prior skipped identities');
 }
 const mode=process.argv[2]||'proof';
 if(mode==='proof')controls();

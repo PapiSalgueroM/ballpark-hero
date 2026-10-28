@@ -16,14 +16,21 @@ interface Props {
 }
 const button = 'min-h-11 min-w-11 rounded-lg border border-border px-3 py-2 text-sm font-bold break-words';
 export function RecruitmentBoard({ career, market, initial, onCommit, onBack, onFind }: Props) {
-  const root = useRevealScroll<HTMLElement>('recruitment', { skipFirst: false });
+  const [selected, setSelected] = useState<string | null>(null);
+  const [help, setHelp] = useState(false);
+  const root = useRevealScroll<HTMLElement>(help ? 'recruitment-help' : selected ?? 'recruitment', { skipFirst: false });
   const heading = useRef<HTMLHeadingElement>(null);
+  const detailHeading = useRef<HTMLHeadingElement>(null);
+  const tileButtons = useRef(new Map<string, HTMLButtonElement>());
   const attempted = useRef<RecruitmentPick>();
   const helpButton = useRef<HTMLButtonElement>(null);
-  const [help, setHelp] = useState(false);
   const [message, setMessage] = useState('');
   const saved = recruitmentOf(career), targets = saved?.targets ?? [];
+  const selectedTarget = targets.find(target => recruitmentKey(target) === selected);
+  const overview = targets.length > 1 && !selectedTarget;
+  const showing = targets.length === 1 ? targets : selectedTarget ? [selectedTarget] : [];
   const cash = moneyIn(career), closed = career.transferWindow === null;
+  useEffect(() => { if (selectedTarget) detailHeading.current?.focus({ preventScroll: true }); }, [selectedTarget]);
   useEffect(() => { heading.current?.focus({ preventScroll: true }); }, []);
   useEffect(() => {
     if (!initial || attempted.current === initial) return;
@@ -34,14 +41,18 @@ export function RecruitmentBoard({ career, market, initial, onCommit, onBack, on
   const remove = (target: RecruitmentTarget) => {
     const ok = onCommit(current => current === career ? removeRecruitment(current, target) : null);
     setMessage(ok ? 'Target removed.' : 'Could not remove this target. Check the save notice and try again.');
-    if (ok) requestAnimationFrame(() => heading.current?.focus({ preventScroll: true }));
+    if (ok) { setSelected(null); requestAnimationFrame(() => heading.current?.focus({ preventScroll: true })); }
   };
   return (
     <section ref={root} aria-labelledby="cm-recruitment-title" className="min-w-0 space-y-3">
       <div className="flex items-start justify-between gap-2">
         <button className={button} onClick={() => {
           if (help) { setHelp(false); requestAnimationFrame(() => helpButton.current?.focus({ preventScroll: true })); }
-          else onBack();
+          else if (selectedTarget && targets.length > 1) {
+            const key = recruitmentKey(selectedTarget);
+            setSelected(null);
+            requestAnimationFrame(() => tileButtons.current.get(key)?.focus({ preventScroll: true }));
+          } else onBack();
         }}>Back</button>
         <div className="min-w-0 text-center">
           <h3 ref={heading} tabIndex={-1} id="cm-recruitment-title" className="text-lg font-black break-words">Recruitment shortlist</h3>
@@ -62,14 +73,25 @@ export function RecruitmentBoard({ career, market, initial, onCommit, onBack, on
         <div className="space-y-3">
           {closed && <p className="text-sm text-muted-foreground">The transfer window is shut. You can compare and remove targets; Find in Buy returns when it opens.</p>}
           {!targets.length && <p className="rounded-xl border border-border p-3 text-sm">No saved targets for this club and world. Use Save beside a player on Buy.</p>}
-          {targets.map(target => {
+          {overview ? <div className="grid grid-cols-2 sm:grid-cols-3 gap-2">
+            {targets.map(target => {
+              const key = recruitmentKey(target), player = resolveRecruitmentTarget(career, target, market);
+              const name = player?.name ?? target.name;
+              return <button key={key} aria-label={`View ${name}`} className="min-h-20 min-w-0 rounded-xl border border-border bg-card p-3 text-left"
+                ref={node => { if (node) tileButtons.current.set(key, node); else tileButtons.current.delete(key); }}
+                onClick={() => setSelected(key)}>
+                <span className="block font-bold text-sm break-words">{name}</span>
+                <span className="block text-xs text-muted-foreground break-words">{player?.club ?? target.club} · {player?.position ?? target.position}</span>
+              </button>;
+            })}
+          </div> : showing.map(target => {
             const player = resolveRecruitmentTarget(career, target, market);
             const peers = player ? [...career.squad].filter(p => p.position === player.position)
               .sort((a, b) => b.rating - a.rating || a.name.localeCompare(b.name)).slice(0, 3) : [];
             const name = player?.name ?? target.name;
             return (
               <article key={recruitmentKey(target)} aria-label={name} className="min-w-0 rounded-xl border border-border bg-card p-3 space-y-3">
-                <h4 className="font-bold break-words">{name}</h4>
+                <h4 ref={detailHeading} tabIndex={-1} className="font-bold break-words">{name}</h4>
                 {player ? <>
                   <p className="text-xs text-muted-foreground break-words">{player.club}{player.generated ? ' · MADE UP' : ''}</p>
                   <dl className="grid grid-cols-2 sm:grid-cols-4 gap-2 text-sm">

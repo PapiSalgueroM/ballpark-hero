@@ -1,5 +1,5 @@
 {
-  "status": "PRODUCT AND37TEST SOURCE READY, ALL NEW RUNTIME UNRUN",
+  "status": "BOARD-ONLY TILE SUCCESSOR SOURCE READY, FIXED38/FULL/NATIVE RUNTIME UNRUN",
   "base": {
     "commit": "14ec28b1cbc82b1abcdf14244dec7acae25d1507",
     "tree": "80463ee325a10284f2a0a4d92e983b73adaabff9"
@@ -17,63 +17,63 @@
   "files": [
     {
       "path": "src/components/club-manager/RecruitmentBoard.tsx",
-      "localPath": "C:\\Users\\antho\\dukb-handoff\\2026-10-27\\cm-recruitment-shortlist-v1\\candidate-v1\\src\\components\\club-manager\\RecruitmentBoard.tsx",
-      "bytes": 6922,
-      "sha256": "b07756e6f8ea795e0301f7b58272bc9f0718d1baf9869cf2fd562d069b150f45",
-      "gitBlob": "a5874ff4889ea56d62e2d7762de3a54290dcca9a"
+      "localPath": "C:/Users/antho/dukb-handoff/2026-10-27/cm-recruitment-shortlist-v1/candidate-tiles-v2/src/components/club-manager/RecruitmentBoard.tsx",
+      "bytes": 8704,
+      "sha256": "0018b9509aa02ae73f3c85a2833eb9c2df364ed0502bb0fdbe44ad5f57eeb83b",
+      "gitBlob": "64189e7f8e0a43dd889864ec27bf492b7f9dccf3"
     },
     {
       "path": "src/components/club-manager/TransferScreen.tsx",
-      "localPath": "C:\\Users\\antho\\dukb-handoff\\2026-10-27\\cm-recruitment-shortlist-v1\\candidate-v1\\src\\components\\club-manager\\TransferScreen.tsx",
+      "localPath": "C:/Users/antho/dukb-handoff/2026-10-27/cm-recruitment-shortlist-v1/candidate-tiles-v2/src/components/club-manager/TransferScreen.tsx",
       "bytes": 76910,
       "sha256": "aaab301934c2411d459e84202641b78113f9dd5503966acd1b32651094e0514a",
       "gitBlob": "0885718df16e150b83c42644c3c39594a554d9be"
     },
     {
       "path": "src/hooks/useClubManager.ts",
-      "localPath": "C:\\Users\\antho\\dukb-handoff\\2026-10-27\\cm-recruitment-shortlist-v1\\candidate-v1\\src\\hooks\\useClubManager.ts",
+      "localPath": "C:/Users/antho/dukb-handoff/2026-10-27/cm-recruitment-shortlist-v1/candidate-tiles-v2/src/hooks/useClubManager.ts",
       "bytes": 70744,
       "sha256": "dce880b04eb80792eb3ea97354aa5f0d146f89c5280f57055c04dbb1db274b62",
       "gitBlob": "7297073ea60b93501df48ea9b7dfc74edd2217de"
     },
     {
       "path": "src/lib/clubManagerRecruitment.ts",
-      "localPath": "C:\\Users\\antho\\dukb-handoff\\2026-10-27\\cm-recruitment-shortlist-v1\\candidate-v1\\src\\lib\\clubManagerRecruitment.ts",
+      "localPath": "C:/Users/antho/dukb-handoff/2026-10-27/cm-recruitment-shortlist-v1/candidate-tiles-v2/src/lib/clubManagerRecruitment.ts",
       "bytes": 4308,
       "sha256": "da6727441f25fb38cdfb9915b712c91f976614ca687b658179cdb63bad1ac8e2",
       "gitBlob": "caa7fd65ad86a79c16b73f0253021fc2b6343cee"
     },
     {
       "path": "src/pages/ClubManager.tsx",
-      "localPath": "C:\\Users\\antho\\dukb-handoff\\2026-10-27\\cm-recruitment-shortlist-v1\\candidate-v1\\src\\pages\\ClubManager.tsx",
+      "localPath": "C:/Users/antho/dukb-handoff/2026-10-27/cm-recruitment-shortlist-v1/candidate-tiles-v2/src/pages/ClubManager.tsx",
       "bytes": 104290,
       "sha256": "d58544fbbd346a26dc79741c4bcd2bedf7f8ee2a4c24adf57ba2329c5eb8feb3",
       "gitBlob": "e011dd037f611721fac7649128c23e6d9af355c9"
     },
     {
       "path": "src/test/clubManagerRecruitment.test.ts",
-      "localPath": "C:\\Users\\antho\\dukb-handoff\\2026-10-27\\cm-recruitment-shortlist-v1\\candidate-v1\\src\\test\\clubManagerRecruitment.test.ts",
+      "localPath": "C:/Users/antho/dukb-handoff/2026-10-27/cm-recruitment-shortlist-v1/candidate-tiles-v2/src/test/clubManagerRecruitment.test.ts",
       "bytes": 8900,
       "sha256": "ecfa9e87a9b5b1fc03ba746db9cf7c47185560a21c2a72e3b05749ee99b54bba",
       "gitBlob": "225e55417b13ac02d40be6a75c3d0a54aff19302"
     },
     {
       "path": "src/test/clubManagerRecruitmentBaseline.test.tsx",
-      "localPath": "C:\\Users\\antho\\dukb-handoff\\2026-10-27\\cm-recruitment-shortlist-v1\\candidate-v1\\src\\test\\clubManagerRecruitmentBaseline.test.tsx",
+      "localPath": "C:/Users/antho/dukb-handoff/2026-10-27/cm-recruitment-shortlist-v1/candidate-tiles-v2/src/test/clubManagerRecruitmentBaseline.test.tsx",
       "bytes": 8490,
       "sha256": "221815aef3f0d385205c8d5cbf014dc25f84dd3b2d2c1f23f46d990aa514ed46",
       "gitBlob": "23fbabdbf6164fa16ce3b7a806ec749a63949561"
     },
     {
       "path": "src/test/clubManagerRecruitmentBoard.test.tsx",
-      "localPath": "C:\\Users\\antho\\dukb-handoff\\2026-10-27\\cm-recruitment-shortlist-v1\\candidate-v1\\src\\test\\clubManagerRecruitmentBoard.test.tsx",
-      "bytes": 8858,
-      "sha256": "e73efdd79547a2a3e5deef209cce1f693d3fb7855fb17738d7313e1f75004569",
-      "gitBlob": "7081448deed81dd4017dfe0e403ec4236cee89bf"
+      "localPath": "C:/Users/antho/dukb-handoff/2026-10-27/cm-recruitment-shortlist-v1/candidate-tiles-v2/src/test/clubManagerRecruitmentBoard.test.tsx",
+      "bytes": 10884,
+      "sha256": "3af188a27874669edec2e6be82322a942c272bfaa1d0647301293e392f84905b",
+      "gitBlob": "820627a87cdb45c586622b1379892ba8aa4c07fa"
     },
     {
       "path": "src/test/clubManagerRecruitmentHook.test.tsx",
-      "localPath": "C:\\Users\\antho\\dukb-handoff\\2026-10-27\\cm-recruitment-shortlist-v1\\candidate-v1\\src\\test\\clubManagerRecruitmentHook.test.tsx",
+      "localPath": "C:/Users/antho/dukb-handoff/2026-10-27/cm-recruitment-shortlist-v1/candidate-tiles-v2/src/test/clubManagerRecruitmentHook.test.tsx",
       "bytes": 14061,
       "sha256": "72bab9edf09a85b9f279a25f7856e4d27d1991029bdbefee3e8627a672208047",
       "gitBlob": "c435c9777b697a8eb5c53f1a06b805a80e519170"
@@ -82,10 +82,10 @@
   "tests": {
     "baseline": 6,
     "pureHelper": 11,
-    "actualBoardAndTransfer": 9,
+    "actualBoardAndTransfer": 10,
     "actualHookSaveSlotFence": 11,
-    "total": 37,
-    "hookSourcePeer": "Identity-noop successfultrue preserves no-write assertions; phase-onlysamecareer staleOLDcallback refuses. Source read, runtimeUNRUN."
+    "total": 38,
+    "hookSourcePeer": "All11hookcases physicallyheld from qualified282b source; current38run stillrequired."
   },
   "exactEdits": {
     "path": "C:\\Users\\antho\\dukb-handoff\\2026-10-27\\cm-recruitment-shortlist-v1\\PRODUCT-QUALIFIED416-EXACT-EDITS-v3.json",
@@ -107,12 +107,54 @@
     "Board can only Find in Buy and Remove; no financial callback props or new purchase path",
     "Optional metadata only explicitAdd/Remove; exactcontext club/era/startyear/seed; strictstablekey, boundedlegacyavailablefacts",
     "Rootphase-review correction is owned layoutref phase===hub?career:null withcareer+phase dependencies andunmountcleanup;oldcallbackscope tested",
-    "No routecap increase; measured current635.5/636 means buildcapgate still required"
+    "No routecap increase; measured current635.5/636 means buildcapgate still required",
+    "Tiles successor changes ONLYownedBoard UIstate/conditionalrender/focus/reveal behavior, plus the independentlyREDqualified38thtest; other7selected bodies physicallyheld",
+    "Multiple targets show2column compactViewtiles(sm3columns); one current detail usesexistingfacts/peers/Find/Remove; single-target directflow retained",
+    "Help/detail/list revealusesexistingglobaluseRevealScroll unchanged; detailBack restoresactualViewtileref preventScroll, no customscroll",
+    "No helper/engine/market/Transfer/hook/Page/Loan/sourceidentity/persistence/RNGkernel changes",
+    "Available compacttile primaryposition usescurrentresolvedrecord, unavailablefallbackusesoriginalsavedidentityposition"
   ],
   "limits": [
-    "Native authoring/hash/source read only, no local app/Node/Git/compiler/parser/test/browser",
-    "37cases are expected fixedpass count, not executed credit",
-    "Physicalfaults/fullunits/defaultstateRNGpairs/build/15readers/15caps/browser/pixels all remain to execute remotely",
-    "Handoff owns CM remote qualification and original artifacts, Root owns source/ref delivery and protected integration; no main/live change"
-  ]
+    "Native source/hash/wholeinverse authoring only,no localruntime/Node/Git/compiler/parser/browser",
+    "Original282b37/full/pairs/readers/caps receipts remain prior-source credit only; newBoard38/full/current10faults/12pairs/build/readers/caps/native18 mustrun",
+    "Test38 actualRED qualified onlyfirstmissingtile assertion; laterdetail/Back assertions notyetexecuted anddoesnotprove Backfocus",
+    "Browser18 originalpixels/currentfacts/focus/heading/sourceholds requirefutureactualremote admission; no wholeRoute/chrome/coldchunk or universalWCAG claim",
+    "Root/Handoff own product/fullremote delivery and originalqualification; Bingo owns isolatedbrowserQAbranch/singleoriginal afterpeer; no main/I/publish action"
+  ],
+  "previousQualifiedSource": {
+    "manifestSha256": "282b5cf5bc141fc9be92ab7b6f4178f4aef6bc3d50fe7fe0653c7fb8044e590e",
+    "commit": "8e884d528391f0f3375d39ebbef971d0358b96a1",
+    "tree": "137a89b63074645d195ff07a2cac82b632c2fe78",
+    "boundedRawPairPeer": "ece7d6288cace97eb08d5b6ed2534fb33d7bd3e1fb811b35dc4b5d2f3d6aa90a",
+    "heldOtherBodies": 7
+  },
+  "tilesRed": {
+    "run": 40634752470,
+    "head": "bcf0342a12f3007ccc195dff6c65ca824f4910c8",
+    "tree": "0733a95df944e7e911fe4496543d71d1dde21e79",
+    "rootAdmissionSha256": "3d3254fe6a6c12c1294b9a6a02a92fd2c7d4a016f8fe2ee1b1ecc4c278a34ba9",
+    "soleOwnerAdmissionSha256": "1cf023a39dc288e5f6fd18f1211a4dc78bcf19a7558d1cbabd60eecca37f796a",
+    "independentRawPeerSha256": "48fd19eeeac09844a67c8c8ad20464b3f18193c5bd6d00ba32ad0ed834bde30a",
+    "actual": "Types0;38cases1preciseMISSING_VIEW_TILE AssertionError atnewcase141+37oldPASS,0pendingtodo/infra;threeCOPIEDdiagnosticrefusals/readmissions;ZIP/TAR/sourceheld",
+    "heldNewTestSha256": "3af188a27874669edec2e6be82322a942c272bfaa1d0647301293e392f84905b"
+  },
+  "boardExactEdits": {
+    "path": "C:/Users/antho/dukb-handoff/2026-10-27/cm-recruitment-shortlist-v1/BOARD-TILES-EXACT-EDITS-v1.json",
+    "sha256": "4d0737775b66c260f9c626e28d2c337e3a19a9384089e3bedfc8302e62bda0f9",
+    "spans": 6,
+    "wholeForwardInverse": true,
+    "oldBoardSha256": "b07756e6f8ea795e0301f7b58272bc9f0718d1baf9869cf2fd562d069b150f45",
+    "newBoardSha256": "853668c0fc6d1b61e1c93db3b646a820b0b2b2399d22119e32adeb13b771a71e",
+    "followupPositionDelta": "BOARD-TILES-V1-TO-V2-EXACT-EDIT.json"
+  },
+  "tilePositionSuccessor": {
+    "previousManifestSha256": "0f6765e698543f47ccb5b4dd9d7f2cee681f3960734aa1682c45264c50b98099",
+    "exactDeltaPath": "C:/Users/antho/dukb-handoff/2026-10-27/cm-recruitment-shortlist-v1/BOARD-TILES-V1-TO-V2-EXACT-EDIT.json",
+    "exactDeltaSha256": "3645a0a1eaf622ec803d35bde7442254ac14884c371949fc703143e17e341d26",
+    "spans": 1,
+    "wholeForwardInverse": true,
+    "otherEightBodiesHeld": true,
+    "old38TestHeld": true,
+    "runtime": "UNRUN"
+  }
 }

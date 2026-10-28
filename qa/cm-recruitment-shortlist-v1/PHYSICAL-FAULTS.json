@@ -1,6 +1,6 @@
 {
   "status": "SOURCE ONLY, all controls runtime UNRUN",
-  "productManifestSha": "282b5cf5bc141fc9be92ab7b6f4178f4aef6bc3d50fe7fe0653c7fb8044e590e",
+  "productManifestSha": "0a5d3d71315f35ab3426a60e1460cc42b21a5523ef97626e7640b0b9c1605ed0",
   "faults": [
     {
       "id": "cap",
@@ -99,7 +99,7 @@
       "target": "Find passes only the current row and makes no write or random draw",
       "healthyTest": "src/test/clubManagerRecruitment.test.ts",
       "healthy": "reads absent and malformed metadata without changing a byte or consuming a draw",
-      "sourceSha256": "b07756e6f8ea795e0301f7b58272bc9f0718d1baf9869cf2fd562d069b150f45"
+      "sourceSha256": "0018b9509aa02ae73f3c85a2833eb9c2df364ed0502bb0fdbe44ad5f57eeb83b"
     },
     {
       "id": "current-price",
@@ -110,8 +110,8 @@
       "target": "shows the supplied current record, existing primary-position peers and no persisted price",
       "healthyTest": "src/test/clubManagerRecruitment.test.ts",
       "healthy": "reads absent and malformed metadata without changing a byte or consuming a draw",
-      "sourceSha256": "b07756e6f8ea795e0301f7b58272bc9f0718d1baf9869cf2fd562d069b150f45"
+      "sourceSha256": "0018b9509aa02ae73f3c85a2833eb9c2df364ed0502bb0fdbe44ad5f57eeb83b"
     }
   ],
-  "required": "Physical changed copy with actual SHA/compiled/metafile/raw cause, named target assertion fails, independent healthy case passes, exact same-copy source restoration then all37 pass. Canonical bodies always held. Do not infer effectiveness from these static unique anchors."
+  "required": "Physical changed copy with actual SHA/compiled/metafile/raw cause, named target assertion fails, independent healthy case passes, exact same-copy source restoration then all38 pass. Canonical bodies always held. Do not infer effectiveness from these static unique anchors."
 }

@@ -11,7 +11,7 @@ fs.mkdirSync(OUT, { recursive: true });
 const sha = value => createHash('sha256').update(value).digest('hex');
 const write = (name, value) => fs.writeFileSync(path.join(OUT, name), JSON.stringify(value) + '\n');
 const selector = fs.readFileSync('qa/cm-recruitment-shortlist-v1/SOURCE-READY.json');
-assert.equal(sha(selector), '282b5cf5bc141fc9be92ab7b6f4178f4aef6bc3d50fe7fe0653c7fb8044e590e');
+assert.equal(sha(selector), '0a5d3d71315f35ab3426a60e1460cc42b21a5523ef97626e7640b0b9c1605ed0');
 const selected = JSON.parse(selector);
 const held = [...selected.files.map(row => row.path), 'src/lib/clubManager.ts', 'src/lib/clubManagerDeals.ts',
   'src/lib/clubManagerLoanDevelopment.ts', 'src/lib/clubManagerLoanPlan.ts', 'src/components/club-manager/LoanPlanCard.tsx'];

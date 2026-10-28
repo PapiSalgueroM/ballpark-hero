@@ -57,10 +57,10 @@ jobs:
           git archive --format=tar HEAD > "$CM_RECRUITMENT_OUT/source.tar"
           git ls-tree -r HEAD > "$CM_RECRUITMENT_OUT/source-tree.txt"
           git ls-files -z | sort -z | xargs -0 sha256sum > "$CM_RECRUITMENT_OUT/tracked-before.sha256"
-          printf '%s  %s\n' 75e41ed2c40f9c1e6072335970f04b3856268f9581065dde676ef81e3102997c scripts/qa/cmRecruitmentQualification.mjs | sha256sum --check
-          printf '%s  %s\n' 7809a1037955cc2e2cdf943eecca318b7acce2da76986b07a58cc0e68971103c qa/cm-recruitment-shortlist-v1/PHYSICAL-FAULTS.json | sha256sum --check
+          printf '%s  %s\n' cb75ad11a4a75089b94a10117d56a0b0bfae4ca42cebbac1300564f1bbeeac74 scripts/qa/cmRecruitmentQualification.mjs | sha256sum --check
+          printf '%s  %s\n' 10ad5e4f281587081e755a24b3c589cc750e70f8c149e4af2e3ba490c92a622b qa/cm-recruitment-shortlist-v1/PHYSICAL-FAULTS.json | sha256sum --check
           printf '%s  %s\n' 7683dcf0c68363481fce260efe3f005ef1337de74dbbf95cf5ca2851e435d0b8 qa/cm-recruitment-shortlist-v1/legacy-unit-identities.json.gz | sha256sum --check
-          printf '%s  %s\n' 415a3a37de15dce509fc0f9d96929a962d01567991656037c3c6c7f46087c22f scripts/qa/cmRecruitmentPairs.mjs | sha256sum --check
+          printf '%s  %s\n' 7055ef731f5141d012b213fc57cdc5b8d26e749b475446ba548d1afa10e224ce scripts/qa/cmRecruitmentPairs.mjs | sha256sum --check
           node scripts/qa/cmRecruitmentQualification.mjs source 2>&1 | tee "$CM_RECRUITMENT_OUT/source-pins.log"
           echo '127.0.0.1 flawuiqbvjobmkfkauhw.supabase.co' | sudo tee -a /etc/hosts
           npm ci 2>&1 | tee "$CM_RECRUITMENT_OUT/npm-ci.log"
@@ -68,7 +68,7 @@ jobs:
         run: |
           set -euo pipefail
           NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node_modules/.bin/tsc --noEmit -p tsconfig.app.json 2>&1 | tee "$CM_RECRUITMENT_OUT/types.log"
-      - name: All37 cases and ten changed physical controls with same-copy restores
+      - name: All38 cases and ten changed physical controls with same-copy restores
         run: |
           set -euo pipefail
           NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/qa/cmRecruitmentQualification.mjs proof 2>&1 | tee "$CM_RECRUITMENT_OUT/controller.log"
@@ -121,10 +121,10 @@ jobs:
           git archive --format=tar HEAD > "$CM_RECRUITMENT_OUT/source.tar"
           git ls-tree -r HEAD > "$CM_RECRUITMENT_OUT/source-tree.txt"
           git ls-files -z | sort -z | xargs -0 sha256sum > "$CM_RECRUITMENT_OUT/tracked-before.sha256"
-          printf '%s  %s\n' 75e41ed2c40f9c1e6072335970f04b3856268f9581065dde676ef81e3102997c scripts/qa/cmRecruitmentQualification.mjs | sha256sum --check
-          printf '%s  %s\n' 7809a1037955cc2e2cdf943eecca318b7acce2da76986b07a58cc0e68971103c qa/cm-recruitment-shortlist-v1/PHYSICAL-FAULTS.json | sha256sum --check
+          printf '%s  %s\n' cb75ad11a4a75089b94a10117d56a0b0bfae4ca42cebbac1300564f1bbeeac74 scripts/qa/cmRecruitmentQualification.mjs | sha256sum --check
+          printf '%s  %s\n' 10ad5e4f281587081e755a24b3c589cc750e70f8c149e4af2e3ba490c92a622b qa/cm-recruitment-shortlist-v1/PHYSICAL-FAULTS.json | sha256sum --check
           printf '%s  %s\n' 7683dcf0c68363481fce260efe3f005ef1337de74dbbf95cf5ca2851e435d0b8 qa/cm-recruitment-shortlist-v1/legacy-unit-identities.json.gz | sha256sum --check
-          printf '%s  %s\n' 415a3a37de15dce509fc0f9d96929a962d01567991656037c3c6c7f46087c22f scripts/qa/cmRecruitmentPairs.mjs | sha256sum --check
+          printf '%s  %s\n' 7055ef731f5141d012b213fc57cdc5b8d26e749b475446ba548d1afa10e224ce scripts/qa/cmRecruitmentPairs.mjs | sha256sum --check
           node scripts/qa/cmRecruitmentQualification.mjs source 2>&1 | tee "$CM_RECRUITMENT_OUT/source-pins.log"
           echo '127.0.0.1 flawuiqbvjobmkfkauhw.supabase.co' | sudo tee -a /etc/hosts
           npm ci 2>&1 | tee "$CM_RECRUITMENT_OUT/npm-ci.log"
@@ -184,10 +184,10 @@ jobs:
           git archive --format=tar HEAD > "$CM_RECRUITMENT_OUT/source.tar"
           git ls-tree -r HEAD > "$CM_RECRUITMENT_OUT/source-tree.txt"
           git ls-files -z | sort -z | xargs -0 sha256sum > "$CM_RECRUITMENT_OUT/tracked-before.sha256"
-          printf '%s  %s\n' 75e41ed2c40f9c1e6072335970f04b3856268f9581065dde676ef81e3102997c scripts/qa/cmRecruitmentQualification.mjs | sha256sum --check
-          printf '%s  %s\n' 7809a1037955cc2e2cdf943eecca318b7acce2da76986b07a58cc0e68971103c qa/cm-recruitment-shortlist-v1/PHYSICAL-FAULTS.json | sha256sum --check
+          printf '%s  %s\n' cb75ad11a4a75089b94a10117d56a0b0bfae4ca42cebbac1300564f1bbeeac74 scripts/qa/cmRecruitmentQualification.mjs | sha256sum --check
+          printf '%s  %s\n' 10ad5e4f281587081e755a24b3c589cc750e70f8c149e4af2e3ba490c92a622b qa/cm-recruitment-shortlist-v1/PHYSICAL-FAULTS.json | sha256sum --check
           printf '%s  %s\n' 7683dcf0c68363481fce260efe3f005ef1337de74dbbf95cf5ca2851e435d0b8 qa/cm-recruitment-shortlist-v1/legacy-unit-identities.json.gz | sha256sum --check
-          printf '%s  %s\n' 415a3a37de15dce509fc0f9d96929a962d01567991656037c3c6c7f46087c22f scripts/qa/cmRecruitmentPairs.mjs | sha256sum --check
+          printf '%s  %s\n' 7055ef731f5141d012b213fc57cdc5b8d26e749b475446ba548d1afa10e224ce scripts/qa/cmRecruitmentPairs.mjs | sha256sum --check
           node scripts/qa/cmRecruitmentQualification.mjs source 2>&1 | tee "$CM_RECRUITMENT_OUT/source-pins.log"
           echo '127.0.0.1 flawuiqbvjobmkfkauhw.supabase.co' | sudo tee -a /etc/hosts
           npm ci 2>&1 | tee "$CM_RECRUITMENT_OUT/npm-ci.log"
