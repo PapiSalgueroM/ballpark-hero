@@ -5,7 +5,7 @@
    premier, championship, laliga, brasileirao, seriea, bundesliga,
    ligue1, eredivisie, saudi, mlsEast, mlsWest, primeira, scottish,
    superlig, bundesliga2, proleague, austria, greece, denmark,
-   switzerland, croatia, ligamx, aleague.
+   switzerland, croatia, ligamx, aleague, ligue2.
    Rosters baked 2026-10-07.
    The file has no imports on purpose, so the Soccer Career page never pulls
    Club Manager into its bundle. */
@@ -282,6 +282,23 @@ export const CAREER_CLUB_POOL: CareerPoolClub[] = [
   { id: "cm-perth-glory", name: "Perth Glory", country: "Australia", tier: 4, color: "#5c2d91", league: "A-League" },
   { id: "cm-sydney-fc", name: "Sydney FC", country: "Australia", tier: 4, color: "#6cabdd", league: "A-League" },
   { id: "cm-western-sydney-wanderers", name: "Western Sydney Wanderers", country: "Australia", tier: 4, color: "#d02128", league: "A-League" },
+  { id: "cm-metz", name: "Metz", country: "France", tier: 4, color: "#a01d3c", league: "Ligue 2" },
+  { id: "cm-saint-etienne", name: "Saint-Etienne", country: "France", tier: 4, color: "#0a7040", league: "Ligue 2" },
+  { id: "cm-red-star-fc", name: "Red Star FC", country: "France", tier: 4, color: "#0a7040", league: "Ligue 2" },
+  { id: "cm-reims", name: "Reims", country: "France", tier: 4, color: "#d02128", league: "Ligue 2" },
+  { id: "cm-montpellier", name: "Montpellier", country: "France", tier: 4, color: "#1b458f", league: "Ligue 2" },
+  { id: "cm-nancy", name: "Nancy", country: "France", tier: 4, color: "#d02128", league: "Ligue 2" },
+  { id: "cm-annecy", name: "Annecy", country: "France", tier: 4, color: "#d02128", league: "Ligue 2" },
+  { id: "cm-sochaux", name: "Sochaux", country: "France", tier: 4, color: "#f7d417", league: "Ligue 2" },
+  { id: "cm-dijon", name: "Dijon", country: "France", tier: 4, color: "#d02128", league: "Ligue 2" },
+  { id: "cm-pau", name: "Pau", country: "France", tier: 4, color: "#f7d417", league: "Ligue 2" },
+  { id: "cm-guingamp", name: "Guingamp", country: "France", tier: 4, color: "#d02128", league: "Ligue 2" },
+  { id: "cm-dunkerque", name: "Dunkerque", country: "France", tier: 4, color: "#1b458f", league: "Ligue 2" },
+  { id: "cm-grenoble", name: "Grenoble", country: "France", tier: 4, color: "#1b458f", league: "Ligue 2" },
+  { id: "cm-rodez", name: "Rodez", country: "France", tier: 4, color: "#d02128", league: "Ligue 2" },
+  { id: "cm-clermont", name: "Clermont", country: "France", tier: 4, color: "#d02128", league: "Ligue 2" },
+  { id: "cm-boulogne", name: "Boulogne", country: "France", tier: 4, color: "#d02128", league: "Ligue 2" },
+  { id: "cm-laval", name: "Laval", country: "France", tier: 4, color: "#ff6600", league: "Ligue 2" },
 ];
 
 /** Every generated league as the career knows it (hand clubs included),
@@ -313,6 +330,7 @@ export const CAREER_LEAGUE_LADDER: Record<string, string[][]> = {
   "HNL": [["Dinamo Zagreb"], ["Hajduk Split"], ["Gorica", "Istra 1961", "Lokomotiva Zagreb", "Osijek", "Rijeka", "Rudes", "Slaven Belupo", "Varazdin"]],
   "Liga MX": [["Tigres UANL"], ["Monterrey"], ["Club America"], ["Toluca"], ["Cruz Azul"], ["Chivas"], ["Leon"], ["Pumas"], ["Necaxa"], ["Atletico San Luis"], ["FC Juarez"], ["Pachuca"], ["Atlante", "Atlas", "Puebla", "Queretaro", "Santos Laguna", "Tijuana"]],
   "A-League": [["Adelaide United"], ["Melbourne City"], ["Sydney FC"], ["Newcastle Jets"], ["Auckland FC"], ["Macarthur FC"], ["Melbourne Victory"], ["Perth Glory"], ["Wellington Phoenix"], ["Western Sydney Wanderers"], ["Brisbane Roar"], ["Central Coast Mariners"]],
+  "Ligue 2": [["Nantes"], ["Saint-Etienne"], ["Reims"], ["Annecy", "Boulogne", "Clermont", "Dijon", "Dunkerque", "Grenoble", "Guingamp", "Laval", "Metz", "Montpellier", "Nancy", "Pau", "Red Star FC", "Rodez", "Sochaux"]],
 };
 
 /** The first season (start year) the game offers a generated club, for the
@@ -361,5 +379,7 @@ export const CAREER_POOL_SINCE: Record<string, number> = {
   "Necaxa": 2026, "Puebla": 2026, "Queretaro": 2026, "Tijuana": 2026, "FC Juarez": 2026, "Atletico San Luis": 2026,
   "Atlante": 2026, "Adelaide United": 2026, "Brisbane Roar": 2026, "Central Coast Mariners": 2026,
   "Macarthur FC": 2026, "Melbourne City": 2026, "Newcastle Jets": 2026, "Perth Glory": 2026, "Sydney FC": 2026,
-  "Western Sydney Wanderers": 2026,
+  "Western Sydney Wanderers": 2026, "Metz": 2026, "Saint-Etienne": 2026, "Red Star FC": 2026, "Reims": 2026,
+  "Montpellier": 2026, "Nancy": 2026, "Annecy": 2026, "Sochaux": 2026, "Dijon": 2026, "Pau": 2026, "Guingamp": 2026,
+  "Dunkerque": 2026, "Grenoble": 2026, "Rodez": 2026, "Clermont": 2026, "Boulogne": 2026, "Laval": 2026,
 };

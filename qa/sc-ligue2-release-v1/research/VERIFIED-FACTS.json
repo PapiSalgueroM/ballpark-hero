@@ -1,0 +1,438 @@
+{
+  "status": "RESEARCH ONLY, no product/data edits and no runtime",
+  "readDate": "2026-10-28",
+  "sourceFamily": "main b20ec6664df9d4c58d63ea0596791d33b2a3b8fc; selected files match qualified SC419 and CM420 source families",
+  "selectedBatch": "All18 existing Ligue2 clubs,17 new generated SoccerCareer rows;9 missing CM decorative primary colours",
+  "colourPolicy": "Independently verified facts are colour words. Existing game palette rendering can be reused by the product author. No option is claimed as an official numeric brand colour. No kit, crest or image is shipped.",
+  "missingColourClubCount": 9,
+  "clubs": [
+    {
+      "cmName": "Red Star FC",
+      "careerId": "cm-red-star-fc",
+      "colour": "green and white",
+      "primaryWord": "green",
+      "sources": [
+        {
+          "url": "https://www.redstar.fr/2016-07-25/les-pros/les-nouveaux-maillots-du-red-star/",
+          "publisher": "Red Star FC",
+          "published": "2016-07-25",
+          "read": "2026-10-28",
+          "quote": "Le Vert et le Blanc",
+          "locator": "home-shirt introduction",
+          "access": "opened-text"
+        },
+        {
+          "url": "https://www.usldunkerque.com/presentation-red-star/",
+          "publisher": "USL Dunkerque, separate club publisher",
+          "published": "2017-08-01",
+          "read": "2026-10-28",
+          "quote": "Couleurs : Vert et blanc",
+          "locator": "club profile",
+          "access": "opened-text"
+        }
+      ]
+    },
+    {
+      "cmName": "Annecy",
+      "careerId": "cm-annecy",
+      "colour": "red",
+      "primaryWord": "red",
+      "sources": [
+        {
+          "url": "https://www.fc-annecy.fr/news/fiche-actualite/sortie-du-maillot-domicile-2021-2022",
+          "publisher": "FC Annecy",
+          "published": "2021-07-29",
+          "read": "2026-10-28",
+          "quote": "D’un rouge historique pour le club",
+          "locator": "home-shirt section",
+          "access": "opened-text"
+        },
+        {
+          "url": "https://maligue2.fr/2024/02/06/les-secrets-des-maillots-de-ligue-2-episode-1-4/",
+          "publisher": "MaLigue2, Etienne Comte original reporting",
+          "published": "2024-02-06",
+          "read": "2026-10-28",
+          "quote": "le FCA a toujours évolué en rouge",
+          "locator": "Annecy history section",
+          "access": "search-returned article text; later direct open timed out"
+        }
+      ],
+      "additionalCorroboration": {
+        "url": "https://www.odsradio.com/news/locales/110043/fc-annecy-le-nouveau-maillot-domicile-rend-hommage-au-stade-du-coteau",
+        "publisher": "ODS Radio, Alexis Andre",
+        "published": "2026-08-03",
+        "read": "2026-10-28",
+        "quote": "Sa teinte rouge",
+        "locator": "2026-27 home-shirt introduction",
+        "access": "opened-text"
+      },
+      "scope": "Only red is selected. White is not needed for the primary dot. Current ODS launch reporting is supplemental."
+    },
+    {
+      "cmName": "Pau",
+      "careerId": "cm-pau",
+      "colour": "yellow and blue",
+      "primaryWord": "yellow",
+      "sources": [
+        {
+          "url": "https://www.paufc.fr/club/identite",
+          "publisher": "Pau FC",
+          "published": null,
+          "read": "2026-10-28",
+          "quote": "Jaune & Bleu",
+          "locator": "Nos couleurs",
+          "access": "opened-text"
+        },
+        {
+          "url": "https://www.usldunkerque.com/presentation-pau-fc/",
+          "publisher": "USL Dunkerque, separate club publisher",
+          "published": "2017-07-25",
+          "read": "2026-10-28",
+          "quote": "Couleurs : Jaune et bleu",
+          "locator": "club profile",
+          "access": "opened-text"
+        }
+      ]
+    },
+    {
+      "cmName": "Dunkerque",
+      "careerId": "cm-dunkerque",
+      "colour": "blue and white",
+      "primaryWord": "blue",
+      "sources": [
+        {
+          "url": "https://www.usldunkerque.com/les-horaires-douverture-de-la-boutique/",
+          "publisher": "USL Dunkerque",
+          "published": "2025-12-13",
+          "read": "2026-10-28",
+          "quote": "aux couleurs bleu et blanc",
+          "locator": "official club shop article",
+          "access": "opened-text"
+        },
+        {
+          "url": "https://www.sofoot.com/articles/dunkerque-en-ligue-2-et-a-bon-port-24-ans-plus-tard-france",
+          "publisher": "So Foot, Florent Caffery original reporting/interview",
+          "published": "2020-05-15",
+          "read": "2026-10-28",
+          "quote": "sous le maillot bleu et blanc",
+          "locator": "Dunkerque club-history interview paragraph",
+          "access": "search-returned article text; direct open timed out"
+        }
+      ],
+      "scope": "Independent original interview/reporting, not club tweets embedded on a second host."
+    },
+    {
+      "cmName": "Grenoble",
+      "careerId": "cm-grenoble",
+      "colour": "blue and white",
+      "primaryWord": "blue",
+      "sources": [
+        {
+          "url": "https://gf38.fr/gaetan-paquiez-quitte-le-grenoble-foot-38/",
+          "publisher": "Grenoble Foot38",
+          "published": "2026-05-27",
+          "read": "2026-10-28",
+          "quote": "Sous le maillot bleu et blanc",
+          "locator": "club statement, factual colour phrase only",
+          "access": "opened-text"
+        },
+        {
+          "url": "https://www.grenoblefoot.info/passion-partage-et-convivialite-retour-sur-lhistoire-dun-tifo/",
+          "publisher": "Grenoble Foot Info / Metro-Sports, original supporter interview",
+          "published": "2017-04-25",
+          "read": "2026-10-28",
+          "quote": "bleu et blanc, les couleurs du club",
+          "locator": "interview about club colours",
+          "access": "opened-text"
+        }
+      ],
+      "scope": "Official brand PDF later403 is excluded from required evidence and its numeric code is not selected."
+    },
+    {
+      "cmName": "Rodez",
+      "careerId": "cm-rodez",
+      "colour": "red and yellow",
+      "primaryWord": "red",
+      "sources": [
+        {
+          "url": "https://rodezaveyronfootball.com/2026/07/porte-ensemble-domicile-2026-2027/",
+          "publisher": "Rodez Aveyron Football",
+          "published": "2026-07-21",
+          "read": "2026-10-28",
+          "quote": "le rouge et le jaune",
+          "locator": "2026-27 home-shirt identity paragraph",
+          "access": "opened-text"
+        },
+        {
+          "url": "https://maligue2.fr/2024/05/06/les-secrets-des-maillots-de-ligue-2-episode-4-4-qrm-rodez-asse-estac-vafc/",
+          "publisher": "MaLigue2, Etienne Comte original reporting",
+          "published": "2024-05-06",
+          "read": "2026-10-28",
+          "quote": "Le rouge et le jaune sont une évidence",
+          "locator": "Rodez section",
+          "access": "opened-text"
+        }
+      ]
+    },
+    {
+      "cmName": "Clermont",
+      "careerId": "cm-clermont",
+      "colour": "red and blue",
+      "primaryWord": "red",
+      "sources": [
+        {
+          "url": "https://www.clermontfoot.com/nouveau-maillot-domicile-2025-2026-kappa-et-les-rayures-rouge-et-bleu-signent-un-retour-iconique",
+          "publisher": "Clermont Foot63",
+          "published": "2025-07-11",
+          "read": "2026-10-28",
+          "quote": "bleu marine et rouge profond",
+          "locator": "home-shirt design and historic identity",
+          "access": "opened-text"
+        },
+        {
+          "url": "https://sportune.20minutes.fr/sport-business/football/clermont-foot-devoile-les-maillots-2021-22-de-sa-1re-saison-en-ligue-1-263168",
+          "publisher": "Sportune, Thomas Filhol original unveiling report",
+          "published": "2021-07-10",
+          "read": "2026-10-28",
+          "quote": "En rouge et bleu à domicile",
+          "locator": "home-shirt description",
+          "access": "opened-text"
+        }
+      ],
+      "scope": "Colour identity, no exact kit or brand-swatch claim."
+    },
+    {
+      "cmName": "Boulogne",
+      "careerId": "cm-boulogne",
+      "colour": "red and black",
+      "primaryWord": "red",
+      "sources": [
+        {
+          "url": "https://www.usbco.com/actu/informations-deplacement-clermont-foot-63",
+          "publisher": "US Boulogne CO",
+          "published": "2026-09-10",
+          "read": "2026-10-28",
+          "quote": "accompagner les Rouge et Noir",
+          "locator": "club travel information",
+          "access": "opened-text"
+        },
+        {
+          "url": "https://le11hdf.fr/national-lus-boulogne-change-encore-son-ecusson/",
+          "publisher": "Le11HDF, Enzo Notargiacomo original report",
+          "published": "2025-06-24",
+          "read": "2026-10-28",
+          "quote": "ses couleurs : le noir et le rouge",
+          "locator": "reporter conclusion after supporter criticism",
+          "access": "opened-text"
+        }
+      ],
+      "scope": "Boulogne-sur-Mer, USBCO. Not Boulogne-Billancourt."
+    },
+    {
+      "cmName": "Laval",
+      "careerId": "cm-laval",
+      "colour": "tango (orange) and black",
+      "primaryWord": "orange",
+      "sources": [
+        {
+          "url": "https://www.fclorient.bzh/de-lorient-a-laval-le-tango-et-noir-dans-la-peau/",
+          "publisher": "FC Lorient, separate club publisher",
+          "published": "2025-02-19",
+          "read": "2026-10-28",
+          "quote": "le tango et noir (ou orange et noir",
+          "locator": "article about both professional clubs",
+          "access": "opened-text"
+        },
+        {
+          "url": "https://www.sportstrategies.com/le-stade-lavallois-confie-son-logo-a-ses-fans/",
+          "publisher": "Sport Strategies, independent business publisher",
+          "published": "2015-01-29",
+          "read": "2026-10-28",
+          "quote": "les couleurs du logo doivent être déclinables en tango et noir",
+          "locator": "professional club identity brief",
+          "access": "opened-text"
+        }
+      ],
+      "scope": "Tango/orange wording, not an exact shade or kit-pattern claim."
+    }
+  ],
+  "numericBrandHexSelected": false,
+  "renderingReuseOptions": [
+    {
+      "word": "red",
+      "existingHex": "#d02128",
+      "example": "Reims / Nancy / Dijon / Guingamp"
+    },
+    {
+      "word": "green",
+      "existingHex": "#0a7040",
+      "example": "Saint-Étienne"
+    },
+    {
+      "word": "blue",
+      "existingHex": "#1b458f",
+      "example": "Montpellier"
+    },
+    {
+      "word": "yellow",
+      "existingHex": "#f7d417",
+      "example": "Sochaux"
+    },
+    {
+      "word": "orange",
+      "existingHex": "#ff6600",
+      "example": "Lorient"
+    }
+  ],
+  "renderingOptionsStatus": "Read from actual main CLUB_COLORS. Suggestions only, not production data or official brand-code claims.",
+  "season": {
+    "label": "Ligue 2",
+    "season": "2026-27",
+    "size": 18,
+    "games": 34,
+    "regularShape": "plain, one group, home and away",
+    "points": [
+      3,
+      1,
+      0
+    ],
+    "freshOfficialMembership": {
+      "url": "https://www.lfp.fr/article/ligue-2-bkt-le-calendrier-de-la-saison-2026-2027",
+      "publisher": "LFP",
+      "published": "2026-06-10",
+      "read": "2026-10-28",
+      "quote": "34 journées",
+      "locator": "complete first-round nine pairings",
+      "normalizedMembers": [
+        "Sochaux",
+        "Saint-Etienne",
+        "Boulogne",
+        "Nancy",
+        "Clermont",
+        "Reims",
+        "Dunkerque",
+        "Grenoble",
+        "Metz",
+        "Guingamp",
+        "Montpellier",
+        "Dijon",
+        "Nantes",
+        "Red Star FC",
+        "Pau",
+        "Annecy",
+        "Rodez",
+        "Laval"
+      ]
+    },
+    "freshIndependentClubSchedule": {
+      "url": "https://www.asse.fr/fr/actualites/le-calendrier-2026-2027-devoile--ac40700",
+      "publisher": "AS Saint-Etienne",
+      "published": "2026-06-10",
+      "read": "2026-10-28",
+      "quote": "Le calendrier des 34 journées",
+      "countedRows": 34,
+      "opponents": [
+        "Sochaux",
+        "Clermont",
+        "Grenoble",
+        "Dijon",
+        "Montpellier",
+        "Dunkerque",
+        "Metz",
+        "Rodez",
+        "Red Star FC",
+        "Nantes",
+        "Guingamp",
+        "Laval",
+        "Reims",
+        "Nancy",
+        "Pau",
+        "Annecy",
+        "Boulogne"
+      ],
+      "homePerOpponent": 1,
+      "awayPerOpponent": 1,
+      "limit": "Intro calls14May a Pau match but actual table has Rodez14May/Pau22May. Only counted membership/34/home-away is selected; no exact dates are imported."
+    },
+    "freshOfficialRule": {
+      "url": "https://www.lfp.fr/assets/26_27_Reglement_Competitions_08_09_2026_45d0881157.pdf",
+      "publisher": "LFP",
+      "version": "2026-27, filename revision2026-09-08",
+      "read": "2026-10-28",
+      "pageIndex": 16,
+      "printedPage": 121,
+      "articles": [
+        "518",
+        "518 BIS"
+      ],
+      "shortQuotes": [
+        "18 clubs en un seul groupe",
+        "phase aller comptant 17 matchs",
+        "phase retour comptant 17 matchs",
+        "3 points",
+        "1 point",
+        "0 point"
+      ],
+      "observed": "18 clubs, one group;17 outward and17 return matches; win3 draw1 loss0."
+    },
+    "existingPointsCorroboration": "The retained ESPN standings witness read2026-10-07 records Pts=3W+D on18/18 rows. Dated existing input, not freshly refetched here.",
+    "scope": "No new tiebreak, playoffs, sanctions or exact fixture dates imported. Promotion/relegation playoffs follow the regular table and remain explicitly simplified in the game.",
+    "members": [
+      "Metz",
+      "Nantes",
+      "Saint-Etienne",
+      "Red Star FC",
+      "Reims",
+      "Montpellier",
+      "Nancy",
+      "Annecy",
+      "Sochaux",
+      "Dijon",
+      "Pau",
+      "Guingamp",
+      "Dunkerque",
+      "Grenoble",
+      "Rodez",
+      "Clermont",
+      "Boulogne",
+      "Laval"
+    ],
+    "existingMembership": [
+      {
+        "url": "https://site.api.espn.com/apis/v2/sports/soccer/fra.2/standings?season=2026",
+        "read": "2026-10-07",
+        "says": "ESPN's standings feed, season 2026: 18 clubs, all 18 of Club Manager's by name; Pts = 3W + D on 18 of 18 rows"
+      },
+      {
+        "url": "https://www.footmercato.net/france/ligue-2/classement",
+        "read": "2026-10-07",
+        "says": "the table: 18 clubs, all 18 of Club Manager's by name"
+      }
+    ],
+    "existingFormat": [
+      {
+        "url": "https://site.api.espn.com/apis/site/v2/sports/soccer/fra.2/scoreboard?dates=YYYYMMDD",
+        "read": "2026-10-07",
+        "says": "ESPN's scoreboard feed read for every day of the season calendar (54 dates, 2026-08-08 to 2027-05-22): 306 fixtures, 18 clubs, 34 games a club, 153 pairs meet 2 times"
+      }
+    ],
+    "bothFreshMembershipSetsEqualHeld18": true
+  },
+  "accessLimits": [
+    "Annecy MaLigue2 and Dunkerque So Foot paragraphs returned as indexed article text; later direct opens timed out. No saved raw HTTP-body claim.",
+    "No required pair counts Wikipedia, copied club tweets on a second host, automatic logo-palette sites, historical1995 colour lists or unread municipal PDF snippets.",
+    "Official Grenoble brand PDF later403 excluded from required evidence; its numeric code is not selected."
+  ],
+  "noChanges": [
+    "HELD_LEAGUES",
+    "CLUB_COLORS",
+    "facts input",
+    "generated pool",
+    "engine executable code",
+    "CM rosters",
+    "historical eras",
+    "database",
+    "remote refs"
+  ],
+  "runtime": "UNRUN"
+}

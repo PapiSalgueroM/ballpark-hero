@@ -1,0 +1,273 @@
+{
+  "status": "SOURCE_READY_ALL_RUNTIME_UNRUN",
+  "parentCommit": "92f19661d534e5c3151ea2a30834c5d3b91cb2fa",
+  "parentTree": "787c56129c8098b8cf472fc778dc72bc34ca0d9e",
+  "sourceFamily": "SC419e1b plus admitted baseline954d and generatorprobe92f; no main/live adoption",
+  "allowedPaths": [
+    "src/data/soccerCareerClubPool.ts",
+    "scripts/simCareerClubPool.mjs",
+    "scripts/qa/ligue2ReleaseFixed.mjs",
+    "scripts/qa/playLigue2Release.mjs",
+    "scripts/qa/ligue2ReleaseQualification.mjs",
+    "qa/sc-ligue2-release-v1/PRODUCT-SOURCE-READY.json",
+    "qa/sc-ligue2-release-v1/PHYSICAL-CONTROLS.json",
+    "qa/sc-ligue2-release-v1/retained/fixtures.json",
+    "qa/sc-ligue2-release-v1/retained/old-generic.save.txt",
+    "qa/sc-ligue2-release-v1/research/VERIFIED-FACTS.json",
+    "qa/sc-ligue2-release-v1/legacy-skipped-identities.json",
+    "qa/sc-ligue2-release-v1/RELEASE-SOURCE-READY.json",
+    ".github/workflows/sc-ligue2-release.yml"
+  ],
+  "files": [
+    {
+      "path": "src/lib/clubManager.ts",
+      "bytes": 1240848,
+      "sha256": "a4c8260bced0db3582437461afe6e6616f465e0b0b1ec887ba301757364681dd",
+      "gitBlob": "be0d8b8fe962f7bff0ed36dee421939b0b728cdf"
+    },
+    {
+      "path": "scripts/data/soccerCareerFacts.json",
+      "bytes": 163464,
+      "sha256": "352d9e65f0661c2943ca1bf5b5129e7cb405c3d8c4aa6dbe3bad6dad60f1349a",
+      "gitBlob": "243991ff827226cf197ca6450cf0c9ee40fdc709"
+    },
+    {
+      "path": "scripts/lib/careerClubPool.mjs",
+      "bytes": 22388,
+      "sha256": "b2e24ba13301ec48c0119e69bf614bbc0f0e7f344103a5f1baddaffdfe325190",
+      "gitBlob": "e05c4ad14d82b3c610d403f91f11a7b2debd0a67"
+    },
+    {
+      "path": "src/data/soccerCareerClubPool.ts",
+      "bytes": 46309,
+      "sha256": "4fca8dcc0d83efaa0d79d58833a03d3f2787cd44fb5ea93a90c3cf207ef5efd2",
+      "gitBlob": "9247463ff836992a4ea43fb79c5c18b19ffe673d"
+    },
+    {
+      "path": "src/data/leagueFormat.ts",
+      "bytes": 7039,
+      "sha256": "dc73e10402d270a6ed01c0fab4f8165d305f336a55a238d863c9b310f7f8ab4d",
+      "gitBlob": "ee63dcd69a02079ecb4cafdaf740ddc8a836e705"
+    },
+    {
+      "path": "src/lib/soccerCareerLeague.ts",
+      "bytes": 47020,
+      "sha256": "0519defdf1ac93f69b83f14b11d36f1b9d2544f7bb6c60ba97c4539710cd9b52",
+      "gitBlob": "4289b67b17952e3210e3c7593a5f9ad0327024a3"
+    },
+    {
+      "path": "src/lib/soccerCareerDerby.ts",
+      "bytes": 23357,
+      "sha256": "c6a6859a5fd24f18d6a2e05b258ad9dddbc271a81d42c1767560d4a8cee8d906",
+      "gitBlob": "4a14cd2ad13505990122383f7595689bb1e8df6e"
+    },
+    {
+      "path": "src/lib/soccerCareerEngine.ts",
+      "bytes": 552035,
+      "sha256": "155ab5a169deefce1b65100d8022b45f41512835c15b045673f92a93f32a92de",
+      "gitBlob": "0e2a098b1792c48572be511c500bfbb4ea9d1668"
+    },
+    {
+      "path": "src/lib/soccerCareerCoachingStart.ts",
+      "bytes": 4043,
+      "sha256": "7720957192ccb8a0de5b1fef64817e409ee30d7ce7dd035425e598d0fd903aff",
+      "gitBlob": "0733d114d66b748131ac2c623fb858c6d9c97fd2"
+    },
+    {
+      "path": "src/lib/careerEras.ts",
+      "bytes": 105789,
+      "sha256": "f3e7347f58abe993db9fd72e9896ea0767a6ca7eb3b19861b75b92b387f89c1c",
+      "gitBlob": "e037022342382b1df9c8a5ede620d2cce480bc23"
+    },
+    {
+      "path": "src/lib/soccerCareerSave.ts",
+      "bytes": 6287,
+      "sha256": "b486dfd8c4073230b6967c674058e46c7b56a6afd2a8a165f1e215501205477a",
+      "gitBlob": "86ec011693fd5bc702b5e8ccec05d27775a72a76"
+    },
+    {
+      "path": "src/lib/soccerCareerLeagueWorld.ts",
+      "bytes": 15636,
+      "sha256": "360c629f5d6ecc9cd959f5aae9a3791eb99b4f5cecdca2236da563168c2bb8c6",
+      "gitBlob": "72fcabdd0c557a743aa849b01208140c3030048f"
+    },
+    {
+      "path": "src/lib/soccerCareerLife.ts",
+      "bytes": 105609,
+      "sha256": "1ba72d3a9b0f1fd30fe45eab2d5e34a955369effa6b224e02a9db3e3db92befc",
+      "gitBlob": "592170d7967162d9967e3cf13e22333afb840732"
+    },
+    {
+      "path": "src/lib/soccerCareerLoyalty.ts",
+      "bytes": 12855,
+      "sha256": "3296bbf33e1b148a7d69ea30c0e8e64a4eaa724e56b4c50c735089a340b79d54",
+      "gitBlob": "db056195a1dd1d5d2c2a35dc137e553663396dd2"
+    },
+    {
+      "path": "qa/sc-ligue2-release-v1/original/soccerCareerCoachingStart.ts",
+      "bytes": 3740,
+      "sha256": "816ddd0c3c0e3e5538ffe0cc08828cb60b10b70a91280fb04a917897891679fc",
+      "gitBlob": "31832575462ba134937d62384c358c2c79f51032"
+    },
+    {
+      "path": "qa/sc-ligue2-release-v1/original/soccerCareerEngine.ts",
+      "bytes": 53,
+      "sha256": "aac460377e77782787790595e445ad662c6cb4ccfb2ef097286bc74c10f3f016",
+      "gitBlob": "1b174fec64943520d52da7dddfd68a5fe188d6b5"
+    },
+    {
+      "path": "qa/sc-ligue2-release-v1/retained/fixtures.json",
+      "bytes": 26146,
+      "sha256": "3ba6f1cbc7ddf56ec2938e3822b83b4920128cd1c8c9736eef46b0608ede4fa1",
+      "gitBlob": "ec21ca626b2d120f2f64dfd280b65f4047ec1f03"
+    },
+    {
+      "path": "qa/sc-ligue2-release-v1/retained/old-generic.save.txt",
+      "bytes": 6412,
+      "sha256": "81777bcd5a7631c70edf52c626484c00e0a687ab2fd9a7fae7f3c3a2ade0da25",
+      "gitBlob": "01bd361ead98a5a78726437d3bb3f796d42b3ed3"
+    },
+    {
+      "path": "qa/sc-ligue2-release-v1/research/VERIFIED-FACTS.json",
+      "bytes": 15944,
+      "sha256": "24ba62d691c0cd088fa6356f58b7d9ac20fd25e998929998b689eab8247e9a5a",
+      "gitBlob": "7db4f649e3c9ff9ce5dd9581b13c904f69cb0399"
+    },
+    {
+      "path": "qa/sc-ligue2-release-v1/PRODUCT-SOURCE-READY.json",
+      "bytes": 4550,
+      "sha256": "ca4be0b4b16d7d345603854d9294b528e82019861121a63a64e3ce7d326f10d0",
+      "gitBlob": "c18c9fa9500ae0d246ec14e4965e07985a9cae56"
+    },
+    {
+      "path": "scripts/qa/ligue2ReleaseFixed.mjs",
+      "bytes": 27087,
+      "sha256": "5aca2a3373917e5f8d7864505e0e6981777d4ddd7c5d16db2a1137dff0350d6e",
+      "gitBlob": "eae85d82824c3b07a8eb816522251ef49eb603d5"
+    },
+    {
+      "path": "scripts/simCareerClubPool.mjs",
+      "bytes": 69556,
+      "sha256": "ede304d9b5af9be1b4904bd7e8493fe9e91ade48b8a62b8f0ceb5e89a06989d1",
+      "gitBlob": "c8480a3e1e47e689d3df6997f17aa9c3e961f4ab"
+    },
+    {
+      "path": "scripts/qa/playLigue2Release.mjs",
+      "bytes": 24986,
+      "sha256": "cf98d7f26499286dc32a25b8eb2ce5d92a6e9711670f0c883f556d01ad454730",
+      "gitBlob": "888f239bdb43240133a2c39d4941bec326f01241"
+    },
+    {
+      "path": "scripts/qa/ligue2ReleaseQualification.mjs",
+      "bytes": 19300,
+      "sha256": "60e9f584a8b344461079979e665d1022d7e434ce80ca13ba9d16479204075956",
+      "gitBlob": "902e740f01aa3236e930f7ad9402b20384843bfe"
+    },
+    {
+      "path": "qa/sc-ligue2-release-v1/PHYSICAL-CONTROLS.json",
+      "bytes": 7432,
+      "sha256": "32af8f14c90353af1cc0144ea7924edcaee7a2f331fc88e7ccfa65b2422402e8",
+      "gitBlob": "4f6ef344720b778996bec29dc6f25ed32630b844"
+    },
+    {
+      "path": "qa/sc-ligue2-release-v1/legacy-skipped-identities.json",
+      "bytes": 11072,
+      "sha256": "e9665db483d02cf65aad4163cc302b5aa71be318b2a4bc73a659c62bcf0fca5d",
+      "gitBlob": "3ee01ce0fa814fceace81ef81b7150a627f99ce3"
+    }
+  ],
+  "productManifest": "qa/sc-ligue2-release-v1/PRODUCT-SOURCE-READY.json",
+  "productManifestSHA256": "ca4be0b4b16d7d345603854d9294b528e82019861121a63a64e3ce7d326f10d0",
+  "fixedCases": [
+    {
+      "name": "complete initial-contract pool and since boundary",
+      "marker": "LIGUE2_POOL"
+    },
+    {
+      "name": "complete modern finish ladder",
+      "marker": "LIGUE2_LADDER"
+    },
+    {
+      "name": "playing table size points and cadence boundary",
+      "marker": "LIGUE2_TABLE"
+    },
+    {
+      "name": "historic default manager entry excludes the appended17",
+      "marker": "LIGUE2_DEFAULT_ENTRY"
+    },
+    {
+      "name": "historic coursework read and commit exclude the appended17",
+      "marker": "LIGUE2_COURSEWORK_ENTRY"
+    },
+    {
+      "name": "existing190 hand definitions remain frozen",
+      "marker": "LIGUE2_OLD_DEFINITIONS"
+    },
+    {
+      "name": "retained generic lower-club offer survives codec and acceptance",
+      "marker": "LIGUE2_RETAINED_SAVE"
+    }
+  ],
+  "fixedSourcePaths": [
+    "src/lib/clubManager.ts",
+    "scripts/data/soccerCareerFacts.json",
+    "scripts/lib/careerClubPool.mjs",
+    "src/data/soccerCareerClubPool.ts",
+    "src/data/leagueFormat.ts",
+    "src/lib/soccerCareerLeague.ts",
+    "src/lib/soccerCareerDerby.ts",
+    "src/lib/soccerCareerEngine.ts",
+    "src/lib/soccerCareerCoachingStart.ts",
+    "src/lib/careerEras.ts",
+    "src/lib/soccerCareerSave.ts",
+    "src/lib/soccerCareerLeagueWorld.ts",
+    "src/lib/soccerCareerLife.ts",
+    "src/lib/soccerCareerLoyalty.ts",
+    "qa/sc-ligue2-release-v1/original/soccerCareerCoachingStart.ts",
+    "qa/sc-ligue2-release-v1/original/soccerCareerEngine.ts",
+    "qa/sc-ligue2-release-v1/retained/fixtures.json",
+    "qa/sc-ligue2-release-v1/retained/old-generic.save.txt",
+    "qa/sc-ligue2-release-v1/research/VERIFIED-FACTS.json",
+    "qa/sc-ligue2-release-v1/PRODUCT-SOURCE-READY.json",
+    "scripts/qa/ligue2ReleaseFixed.mjs"
+  ],
+  "physicalControlsPath": "qa/sc-ligue2-release-v1/PHYSICAL-CONTROLS.json",
+  "physicalControls": 10,
+  "eachMutantFailed": 1,
+  "eachMutantPassed": 6,
+  "eachRestoredPassed": 7,
+  "fixedCopiedDiagnostics": 6,
+  "skipReferencePath": "qa/sc-ligue2-release-v1/legacy-skipped-identities.json",
+  "freshFullSuite": "Actual complete currentsuite/zero failure/58exactskips, no borrowed total",
+  "unitCopiedDiagnostics": 7,
+  "focusedHarnesses": [
+    "simCareerClubPool",
+    "simCareerLeagueWorld",
+    "simCareerLeagueFinish",
+    "simCareerDerbies",
+    "simCareerEras",
+    "simSoccerCareerLeagueWorld"
+  ],
+  "browser": {
+    "source": "scripts/qa/playLigue2Release.mjs",
+    "routes": 3,
+    "viewports": [
+      320,
+      390,
+      1280
+    ],
+    "captures": 12,
+    "copiedGuards": 4,
+    "scope": "Actual /soccer-career route, canonicalnewcluboffer/accept/codec and2027season/table. Pixelclaim only after actual individualoriginalviews."
+  },
+  "fullSims": "Unchanged default offline node profile, actual --plan-json selection retained, browserprofile not opted in; explicit existing skips and alloutput retained",
+  "build": "Detached two-routeSEO; all15readers/15unchangedcaps; browser then fullsims, no build concurrency",
+  "references": {
+    "baselineNative": "e718c8cad3a1c40e2c0419a5516d47249e89d1263ff0f76feb262bb1313a6842",
+    "generatorNative": "940248b030a97b83f5486b44d59c9538a72e9f1e810015d48aff3528adec4c62",
+    "consumerSource": "eaa1b0df7582e869074c365de6472d87c4382b47978d6b6809f92c823405f3ee",
+    "consumerPeer": "3067bd310a6b51b0eb656d2a52e8435a3b09e218d45979678311b482e7bb2677",
+    "browserRootGO": "294480ea61bd95b27e45269638d694ce0679b8c827c546fd64a822a6cee1e123"
+  },
+  "limits": "All fixedruntime unrun. Oldreference replaces only SC419engine+generatedpool; other bundled dependencies candidate. Moduleinitialization excluded/unmeasured. No universalCI/live/publish claim."
+}

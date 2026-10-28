@@ -1,0 +1,313 @@
+name: Soccer Career Ligue 2 frozen release qualification
+on:
+  push:
+    branches: [codex/sc-ligue2-release-20261028]
+    paths:
+      - .github/workflows/sc-ligue2-release.yml
+      - 'src/**'
+      - 'scripts/data/soccerCareerFacts.json'
+      - 'scripts/lib/careerClubPool.mjs'
+      - 'scripts/simCareerClubPool.mjs'
+      - 'scripts/qa/ligue2Release*.mjs'
+      - 'scripts/qa/playLigue2Release.mjs'
+      - 'qa/sc-ligue2-release-v1/**'
+permissions:
+  contents: read
+concurrency:
+  group: sc-ligue2-release-${{ github.sha }}
+  cancel-in-progress: false
+defaults:
+  run:
+    shell: bash
+jobs:
+  proof:
+    runs-on: ubuntu-latest
+    timeout-minutes: 60
+    env:
+      CI: '1'
+      SIM_NETWORK: offline
+      CAREER_SEASON_LOCAL_ONLY: '1'
+      ENGINES: chromium
+      SC_LIGUE2_RELEASE_OUT: ${{ github.workspace }}/ligue2-release-artifacts/proof
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.sha }}
+          fetch-depth: 0
+          persist-credentials: false
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: npm
+      - name: Exact selected frozen source and original archive
+        run: |
+          set -euo pipefail
+          test "$GITHUB_REF_NAME" = codex/sc-ligue2-release-20261028
+          test "$(git rev-parse HEAD)" = "$GITHUB_SHA"
+          test "$(git rev-parse HEAD^)" = 92f19661d534e5c3151ea2a30834c5d3b91cb2fa
+          test "$(git rev-list --parents -n 1 HEAD | wc -w)" = 2
+          mkdir -p "$SC_LIGUE2_RELEASE_OUT"
+          git rev-parse HEAD HEAD^{tree} > "$SC_LIGUE2_RELEASE_OUT/head-tree.txt"
+          git archive --format=tar HEAD > "$SC_LIGUE2_RELEASE_OUT/source.tar"
+          git ls-tree -r HEAD > "$SC_LIGUE2_RELEASE_OUT/source-tree.txt"
+          git ls-files -z | sort -z | xargs -0 sha256sum > "$SC_LIGUE2_RELEASE_OUT/tracked-before.sha256"
+          printf '%s  %s\n' cea8ca2e467ec8eb3c0470f549fbf6eee1649aa26ddc5c44af5e852feb8bff99 qa/sc-ligue2-release-v1/RELEASE-SOURCE-READY.json | sha256sum --check
+          printf '%s  %s\n' 60e9f584a8b344461079979e665d1022d7e434ce80ca13ba9d16479204075956 scripts/qa/ligue2ReleaseQualification.mjs | sha256sum --check
+          node --check scripts/qa/ligue2ReleaseQualification.mjs
+          node --check scripts/qa/ligue2ReleaseFixed.mjs
+          node --check scripts/qa/playLigue2Release.mjs
+          NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/qa/ligue2ReleaseQualification.mjs source 2>&1 | tee "$SC_LIGUE2_RELEASE_OUT/source-pins.log"
+          git diff --name-only HEAD^ HEAD | sort > "$SC_LIGUE2_RELEASE_OUT/changed-paths.txt"
+          diff -u <(node -e 'const fs=require("fs");const s=JSON.parse(fs.readFileSync("qa/sc-ligue2-release-v1/RELEASE-SOURCE-READY.json"));console.log(s.allowedPaths.sort().join("\n"))') "$SC_LIGUE2_RELEASE_OUT/changed-paths.txt"
+          echo '127.0.0.1 flawuiqbvjobmkfkauhw.supabase.co' | sudo tee -a /etc/hosts
+          npm ci 2>&1 | tee "$SC_LIGUE2_RELEASE_OUT/npm-ci.log"
+      - name: Real application types
+        run: |
+          set -euo pipefail
+          NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node_modules/.bin/tsc --noEmit -p tsconfig.app.json 2>&1 | tee "$SC_LIGUE2_RELEASE_OUT/types.log"
+      - name: Seven actual fixed cases, physical controls and same-copy restorations
+        run: |
+          set -euo pipefail
+          NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/qa/ligue2ReleaseQualification.mjs fixed 2>&1 | tee "$SC_LIGUE2_RELEASE_OUT/fixed-admission.log"
+      - name: Six unchanged focused career harnesses at ordinary defaults
+        run: |
+          set -euo pipefail
+          ONLY=simCareerClubPool,simCareerLeagueWorld,simCareerLeagueFinish,simCareerDerbies,simCareerEras,simSoccerCareerLeagueWorld NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/runAllSims.mjs --plan-json > "$SC_LIGUE2_RELEASE_OUT/focused-sims-plan.json"
+          ONLY=simCareerClubPool,simCareerLeagueWorld,simCareerLeagueFinish,simCareerDerbies,simCareerEras,simSoccerCareerLeagueWorld SIM_FULL_OUTPUT=1 NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/runAllSims.mjs 2>&1 | tee "$SC_LIGUE2_RELEASE_OUT/focused-sims.log"
+          test "$(grep -c '^All 6 harnesses green\.$' "$SC_LIGUE2_RELEASE_OUT/focused-sims.log")" = 1
+      - name: Every tracked canonical source held
+        if: always()
+        run: |
+          set -euo pipefail
+          sha256sum --check "$SC_LIGUE2_RELEASE_OUT/tracked-before.sha256" > "$SC_LIGUE2_RELEASE_OUT/tracked-held.log"
+          git status --porcelain --untracked-files=no > "$SC_LIGUE2_RELEASE_OUT/tracked-status.txt"
+          test ! -s "$SC_LIGUE2_RELEASE_OUT/tracked-status.txt"
+          git diff --exit-code HEAD
+      - name: Retain original proof evidence including failure
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: sc-ligue2-release-proof-${{ github.run_id }}-${{ github.run_attempt }}
+          path: ligue2-release-artifacts/proof/
+          if-no-files-found: error
+          retention-days: 14
+  units:
+    runs-on: ubuntu-latest
+    timeout-minutes: 60
+    env:
+      CI: '1'
+      SIM_NETWORK: offline
+      CAREER_SEASON_LOCAL_ONLY: '1'
+      ENGINES: chromium
+      SC_LIGUE2_RELEASE_OUT: ${{ github.workspace }}/ligue2-release-artifacts/units
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.sha }}
+          fetch-depth: 2
+          persist-credentials: false
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: npm
+      - name: Exact selected frozen source and original archive
+        run: |
+          set -euo pipefail
+          test "$GITHUB_REF_NAME" = codex/sc-ligue2-release-20261028
+          test "$(git rev-parse HEAD)" = "$GITHUB_SHA"
+          test "$(git rev-parse HEAD^)" = 92f19661d534e5c3151ea2a30834c5d3b91cb2fa
+          test "$(git rev-list --parents -n 1 HEAD | wc -w)" = 2
+          mkdir -p "$SC_LIGUE2_RELEASE_OUT"
+          git rev-parse HEAD HEAD^{tree} > "$SC_LIGUE2_RELEASE_OUT/head-tree.txt"
+          git archive --format=tar HEAD > "$SC_LIGUE2_RELEASE_OUT/source.tar"
+          git ls-tree -r HEAD > "$SC_LIGUE2_RELEASE_OUT/source-tree.txt"
+          git ls-files -z | sort -z | xargs -0 sha256sum > "$SC_LIGUE2_RELEASE_OUT/tracked-before.sha256"
+          printf '%s  %s\n' cea8ca2e467ec8eb3c0470f549fbf6eee1649aa26ddc5c44af5e852feb8bff99 qa/sc-ligue2-release-v1/RELEASE-SOURCE-READY.json | sha256sum --check
+          printf '%s  %s\n' 60e9f584a8b344461079979e665d1022d7e434ce80ca13ba9d16479204075956 scripts/qa/ligue2ReleaseQualification.mjs | sha256sum --check
+          node --check scripts/qa/ligue2ReleaseQualification.mjs
+          node --check scripts/qa/ligue2ReleaseFixed.mjs
+          node --check scripts/qa/playLigue2Release.mjs
+          NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/qa/ligue2ReleaseQualification.mjs source 2>&1 | tee "$SC_LIGUE2_RELEASE_OUT/source-pins.log"
+          git diff --name-only HEAD^ HEAD | sort > "$SC_LIGUE2_RELEASE_OUT/changed-paths.txt"
+          diff -u <(node -e 'const fs=require("fs");const s=JSON.parse(fs.readFileSync("qa/sc-ligue2-release-v1/RELEASE-SOURCE-READY.json"));console.log(s.allowedPaths.sort().join("\n"))') "$SC_LIGUE2_RELEASE_OUT/changed-paths.txt"
+          echo '127.0.0.1 flawuiqbvjobmkfkauhw.supabase.co' | sudo tee -a /etc/hosts
+          npm ci 2>&1 | tee "$SC_LIGUE2_RELEASE_OUT/npm-ci.log"
+      - name: Real application types
+        run: |
+          set -euo pipefail
+          NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node_modules/.bin/tsc --noEmit -p tsconfig.app.json 2>&1 | tee "$SC_LIGUE2_RELEASE_OUT/types.log"
+      - name: Fresh complete actual unit suite without supplied observer env
+        run: |
+          set -euo pipefail
+          set +e
+          env -u SC_COACHING_START_OBSERVER -u SC_MANAGER_REVIEW_OBSERVER NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node node_modules/vitest/vitest.mjs run --maxWorkers=1 --minWorkers=1 --reporter=default --reporter=json --outputFile.json="$SC_LIGUE2_RELEASE_OUT/full-units.json" 2>&1 | tee "$SC_LIGUE2_RELEASE_OUT/full-units.log"
+          statuses=("${PIPESTATUS[@]}")
+          set -e
+          printf '%s\n' "${statuses[0]}" > "$SC_LIGUE2_RELEASE_OUT/full-units-exit.txt"
+          test "${statuses[0]}" = 0
+          test "${statuses[1]}" = 0
+          NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/qa/ligue2ReleaseQualification.mjs units 2>&1 | tee "$SC_LIGUE2_RELEASE_OUT/unit-admission.log"
+      - name: Every tracked canonical source held
+        if: always()
+        run: |
+          set -euo pipefail
+          sha256sum --check "$SC_LIGUE2_RELEASE_OUT/tracked-before.sha256" > "$SC_LIGUE2_RELEASE_OUT/tracked-held.log"
+          git status --porcelain --untracked-files=no > "$SC_LIGUE2_RELEASE_OUT/tracked-status.txt"
+          test ! -s "$SC_LIGUE2_RELEASE_OUT/tracked-status.txt"
+          git diff --exit-code HEAD
+      - name: Retain original units evidence including failure
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: sc-ligue2-release-units-${{ github.run_id }}-${{ github.run_attempt }}
+          path: ligue2-release-artifacts/units/
+          if-no-files-found: error
+          retention-days: 14
+  build:
+    runs-on: ubuntu-latest
+    timeout-minutes: 90
+    env:
+      CI: '1'
+      SIM_NETWORK: offline
+      CAREER_SEASON_LOCAL_ONLY: '1'
+      ENGINES: chromium
+      SC_LIGUE2_RELEASE_OUT: ${{ github.workspace }}/ligue2-release-artifacts/build
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.sha }}
+          fetch-depth: 0
+          persist-credentials: false
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: npm
+      - name: Exact selected frozen source and original archive
+        run: |
+          set -euo pipefail
+          test "$GITHUB_REF_NAME" = codex/sc-ligue2-release-20261028
+          test "$(git rev-parse HEAD)" = "$GITHUB_SHA"
+          test "$(git rev-parse HEAD^)" = 92f19661d534e5c3151ea2a30834c5d3b91cb2fa
+          test "$(git rev-list --parents -n 1 HEAD | wc -w)" = 2
+          mkdir -p "$SC_LIGUE2_RELEASE_OUT"
+          git rev-parse HEAD HEAD^{tree} > "$SC_LIGUE2_RELEASE_OUT/head-tree.txt"
+          git archive --format=tar HEAD > "$SC_LIGUE2_RELEASE_OUT/source.tar"
+          git ls-tree -r HEAD > "$SC_LIGUE2_RELEASE_OUT/source-tree.txt"
+          git ls-files -z | sort -z | xargs -0 sha256sum > "$SC_LIGUE2_RELEASE_OUT/tracked-before.sha256"
+          printf '%s  %s\n' cea8ca2e467ec8eb3c0470f549fbf6eee1649aa26ddc5c44af5e852feb8bff99 qa/sc-ligue2-release-v1/RELEASE-SOURCE-READY.json | sha256sum --check
+          printf '%s  %s\n' 60e9f584a8b344461079979e665d1022d7e434ce80ca13ba9d16479204075956 scripts/qa/ligue2ReleaseQualification.mjs | sha256sum --check
+          node --check scripts/qa/ligue2ReleaseQualification.mjs
+          node --check scripts/qa/ligue2ReleaseFixed.mjs
+          node --check scripts/qa/playLigue2Release.mjs
+          NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/qa/ligue2ReleaseQualification.mjs source 2>&1 | tee "$SC_LIGUE2_RELEASE_OUT/source-pins.log"
+          git diff --name-only HEAD^ HEAD | sort > "$SC_LIGUE2_RELEASE_OUT/changed-paths.txt"
+          diff -u <(node -e 'const fs=require("fs");const s=JSON.parse(fs.readFileSync("qa/sc-ligue2-release-v1/RELEASE-SOURCE-READY.json"));console.log(s.allowedPaths.sort().join("\n"))') "$SC_LIGUE2_RELEASE_OUT/changed-paths.txt"
+          echo '127.0.0.1 flawuiqbvjobmkfkauhw.supabase.co' | sudo tee -a /etc/hosts
+          npm ci 2>&1 | tee "$SC_LIGUE2_RELEASE_OUT/npm-ci.log"
+      - name: Real application types
+        run: |
+          set -euo pipefail
+          NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node_modules/.bin/tsc --noEmit -p tsconfig.app.json 2>&1 | tee "$SC_LIGUE2_RELEASE_OUT/types.log"
+      - name: Detached build, browser tools and exact retained fonts
+        env:
+          FREE_KICK_FONT_CACHE: ${{ github.workspace }}/ligue2-release-artifacts/build/font-cache
+        run: |
+          set -euo pipefail
+          build_root="$RUNNER_TEMP/ligue2-build-$GITHUB_RUN_ID-$GITHUB_RUN_ATTEMPT"
+          git worktree add --detach "$build_root" HEAD
+          ln -s "$GITHUB_WORKSPACE/node_modules" "$build_root/node_modules"
+          echo "LIGUE2_BUILD_ROOT=$build_root" >> "$GITHUB_ENV"
+          browser_tools="$RUNNER_TEMP/ligue2-browser-tools-$GITHUB_RUN_ID-$GITHUB_RUN_ATTEMPT"
+          mkdir -p "$browser_tools"
+          printf '{"private":true,"dependencies":{"playwright":"1.64.0"}}\n' > "$browser_tools/package.json"
+          npm install --prefix "$browser_tools" --ignore-scripts --no-audit --no-fund 2>&1 | tee "$SC_LIGUE2_RELEASE_OUT/browser-install.log"
+          test ! -e node_modules/playwright
+          test ! -e node_modules/playwright-core
+          ln -s "$browser_tools/node_modules/playwright" node_modules/playwright
+          ln -s "$browser_tools/node_modules/playwright-core" node_modules/playwright-core
+          cp "$browser_tools/package.json" "$SC_LIGUE2_RELEASE_OUT/browser-package.json"
+          cp "$browser_tools/package-lock.json" "$SC_LIGUE2_RELEASE_OUT/browser-package-lock.json"
+          export PLAYWRIGHT_BROWSERS_PATH="$RUNNER_TEMP/ligue2-chromium-$GITHUB_RUN_ID-$GITHUB_RUN_ATTEMPT"
+          echo "PLAYWRIGHT_BROWSERS_PATH=$PLAYWRIGHT_BROWSERS_PATH" >> "$GITHUB_ENV"
+          node "$browser_tools/node_modules/playwright/cli.js" install --with-deps chromium 2>&1 | tee "$SC_LIGUE2_RELEASE_OUT/chromium.log"
+          python -m pip install fonttools pillow 2>&1 | tee "$SC_LIGUE2_RELEASE_OUT/python-tools.log"
+          node scripts/qa/freeKickLab1070.mjs --prefetch-fonts-only 2>&1 | tee "$SC_LIGUE2_RELEASE_OUT/font-prefetch.log"
+      - name: Actual two-route SEO build in detached tree
+        env:
+          PRERENDER_ONLY: /soccer-career,/whats-new
+        run: |
+          set -euo pipefail
+          cd "$LIGUE2_BUILD_ROOT"
+          mkdir -p "$SC_LIGUE2_RELEASE_OUT/generation"
+          for route in soccer-career whats-new; do cp "public/$route/index.html" "$SC_LIGUE2_RELEASE_OUT/generation/$route.before.html"; done
+          cp scripts/data/lastmod.json "$SC_LIGUE2_RELEASE_OUT/generation/lastmod.before.json"
+          retain_generation() {
+            git diff -- public scripts/data/lastmod.json > "$SC_LIGUE2_RELEASE_OUT/generation/full.diff"
+            for route in soccer-career whats-new; do cp "public/$route/index.html" "$SC_LIGUE2_RELEASE_OUT/generation/$route.after.html" || true; done
+            cp scripts/data/lastmod.json "$SC_LIGUE2_RELEASE_OUT/generation/lastmod.after.json" || true
+          }
+          trap retain_generation EXIT
+          NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" npm run build:seo 2>&1 | tee "$SC_LIGUE2_RELEASE_OUT/build.log"
+          find dist -type f -print0 | sort -z | xargs -0 sha256sum > "$SC_LIGUE2_RELEASE_OUT/dist.sha256"
+      - name: All fifteen rebuilt-site readers
+        run: |
+          set -euo pipefail
+          cd "$LIGUE2_BUILD_ROOT"
+          ONLY=simAdsense,simBrand,simHeadTags,simHiddenPages,simHubs,simIndexNow,simIndexing,simInternalLinks,simNoRivalNames,simPrerender,simPrerenderBoot,simRetiredRoutes,simSchema,simSitemap,simSnapshotAssets NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/runAllSims.mjs --browser 2>&1 | tee "$SC_LIGUE2_RELEASE_OUT/readers.log"
+          test "$(grep -c '^All 15 harnesses green\.$' "$SC_LIGUE2_RELEASE_OUT/readers.log")" = 1
+      - name: All fifteen unchanged fatal download caps
+        run: |
+          set -euo pipefail
+          cd "$LIGUE2_BUILD_ROOT"
+          NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/lib/hostLikeServer.mjs dist 4173 > "$SC_LIGUE2_RELEASE_OUT/weight-server.log" 2>&1 &
+          server_pid=$!
+          trap 'kill "$server_pid" 2>/dev/null || true' EXIT
+          for attempt in 1 2 3 4 5; do if curl --fail --silent http://127.0.0.1:4173/ > /dev/null; then break; fi; sleep 1; done
+          curl --fail --silent http://127.0.0.1:4173/ > /dev/null
+          BASE=http://127.0.0.1:4173 SWEEP_OFFLINE=1 NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/sweepWeight.mjs 2>&1 | tee "$SC_LIGUE2_RELEASE_OUT/weights.log"
+      - name: Three actual Ligue 2 routes on the same frozen built source
+        env:
+          FREE_KICK_FONT_CACHE: ${{ github.workspace }}/ligue2-release-artifacts/build/font-cache
+          SC_LIGUE2_BROWSER_OUT: ${{ github.workspace }}/ligue2-release-artifacts/build/browser
+        run: |
+          set -euo pipefail
+          cd "$LIGUE2_BUILD_ROOT"
+          NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/qa/playLigue2Release.mjs 2>&1 | tee "$SC_LIGUE2_RELEASE_OUT/browser.log"
+          grep -Fx 'LIGUE2_BROWSER: 3 actual routes, 12 captures, genuine new-club contract, 2027 season, 18-club/34-game tables and official reload, 4 COPIED guards passed' "$SC_LIGUE2_RELEASE_OUT/browser.log" > /dev/null
+      - name: Full unchanged default offline node sim profile after build and browser
+        run: |
+          set -euo pipefail
+          cd "$LIGUE2_BUILD_ROOT"
+          env -u ONLY -u BROWSER NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/runAllSims.mjs --plan-json > "$SC_LIGUE2_RELEASE_OUT/full-sims-plan.json"
+          set +e
+          env -u ONLY -u BROWSER SIM_FULL_OUTPUT=1 NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/runAllSims.mjs 2>&1 | tee "$SC_LIGUE2_RELEASE_OUT/full-sims.log"
+          statuses=("${PIPESTATUS[@]}")
+          set -e
+          printf '%s\n' "${statuses[0]}" > "$SC_LIGUE2_RELEASE_OUT/full-sims-exit.txt"
+          test "${statuses[0]}" = 0
+          test "${statuses[1]}" = 0
+          NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/qa/ligue2ReleaseQualification.mjs sims 2>&1 | tee "$SC_LIGUE2_RELEASE_OUT/sim-admission.log"
+      - name: Exact built source and distribution held
+        if: always()
+        run: |
+          set -euo pipefail
+          if test -n "${LIGUE2_BUILD_ROOT:-}"; then
+            git -C "$LIGUE2_BUILD_ROOT" diff --exit-code HEAD -- src scripts qa .github/workflows docs package.json package-lock.json bun.lock index.html ':!scripts/data/lastmod.json'
+            if test -f "$SC_LIGUE2_RELEASE_OUT/dist.sha256"; then (cd "$LIGUE2_BUILD_ROOT" && sha256sum --check "$SC_LIGUE2_RELEASE_OUT/dist.sha256") > "$SC_LIGUE2_RELEASE_OUT/dist-held.log"; fi
+          fi
+      - name: Every tracked canonical source held
+        if: always()
+        run: |
+          set -euo pipefail
+          sha256sum --check "$SC_LIGUE2_RELEASE_OUT/tracked-before.sha256" > "$SC_LIGUE2_RELEASE_OUT/tracked-held.log"
+          git status --porcelain --untracked-files=no > "$SC_LIGUE2_RELEASE_OUT/tracked-status.txt"
+          test ! -s "$SC_LIGUE2_RELEASE_OUT/tracked-status.txt"
+          git diff --exit-code HEAD
+      - name: Retain original build evidence including failure
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: sc-ligue2-release-build-${{ github.run_id }}-${{ github.run_attempt }}
+          path: ligue2-release-artifacts/build/
+          if-no-files-found: error
+          retention-days: 14

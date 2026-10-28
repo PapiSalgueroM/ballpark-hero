@@ -1,0 +1,93 @@
+{
+  "status": "PRODUCT_SOURCE_READY_FIXED_RUNTIME_PENDING",
+  "parent": "e1b33581532b1514e4510e9d89e633e5305fa963",
+  "tree": "efa6983f4797eb4a263479aa47637c8798958cf3",
+  "productPaths": 9,
+  "files": [
+    {
+      "path": "src/lib/clubManager.ts",
+      "bytes": 1240848,
+      "sha256": "a4c8260bced0db3582437461afe6e6616f465e0b0b1ec887ba301757364681dd",
+      "gitBlob": "be0d8b8fe962f7bff0ed36dee421939b0b728cdf",
+      "originalSHA256": "05de3cfca8d978e6117979fb29b82b2ece7b9fb6ee1f2ce3c051e379e36de86e",
+      "originalGitBlob": "a505743537b383bc7885bb81f5a72c11e154b566"
+    },
+    {
+      "path": "scripts/lib/careerClubPool.mjs",
+      "bytes": 22388,
+      "sha256": "b2e24ba13301ec48c0119e69bf614bbc0f0e7f344103a5f1baddaffdfe325190",
+      "gitBlob": "e05c4ad14d82b3c610d403f91f11a7b2debd0a67",
+      "originalSHA256": "44d22724251bfb81daf858ecf90464495076772a781ddceee61dbeb28d0dc253",
+      "originalGitBlob": "244dbd4c24f771baca38e8749a044d825eef20b2"
+    },
+    {
+      "path": "src/data/leagueFormat.ts",
+      "bytes": 7039,
+      "sha256": "dc73e10402d270a6ed01c0fab4f8165d305f336a55a238d863c9b310f7f8ab4d",
+      "gitBlob": "ee63dcd69a02079ecb4cafdaf740ddc8a836e705",
+      "originalSHA256": "76d189179c606475113e7289a1145a9d2036c7741b7c918aed0efd796bebc0ec",
+      "originalGitBlob": "df8aa75d55eda49dcdc455e2be9d86c57848a3a7"
+    },
+    {
+      "path": "src/lib/soccerCareerLeague.ts",
+      "bytes": 47020,
+      "sha256": "0519defdf1ac93f69b83f14b11d36f1b9d2544f7bb6c60ba97c4539710cd9b52",
+      "gitBlob": "4289b67b17952e3210e3c7593a5f9ad0327024a3",
+      "originalSHA256": "adb5555de0adc046bed402fd7386305baf5ce9e96aba023b6a64541f9785ca68",
+      "originalGitBlob": "7b65ad0ad43825dcc159db83de100eda8330c102"
+    },
+    {
+      "path": "src/lib/soccerCareerDerby.ts",
+      "bytes": 23357,
+      "sha256": "c6a6859a5fd24f18d6a2e05b258ad9dddbc271a81d42c1767560d4a8cee8d906",
+      "gitBlob": "4a14cd2ad13505990122383f7595689bb1e8df6e",
+      "originalSHA256": "eafe7005ece8fe2b4c44e380ba5d980a6535d3700f3a05be69f65e776288db99",
+      "originalGitBlob": "60478118d744b618e30f8ed651055c12449592b8"
+    },
+    {
+      "path": "src/lib/soccerCareerEngine.ts",
+      "bytes": 552035,
+      "sha256": "155ab5a169deefce1b65100d8022b45f41512835c15b045673f92a93f32a92de",
+      "gitBlob": "0e2a098b1792c48572be511c500bfbb4ea9d1668",
+      "originalSHA256": "d7d94a36b796af66914cdf9bd4803cf42b027f423ceb8baac9fb144677de7030",
+      "originalGitBlob": "8a927bd55b650feb3378b6cf3d4c9d54b1cb6199"
+    },
+    {
+      "path": "src/lib/soccerCareerCoachingStart.ts",
+      "bytes": 4043,
+      "sha256": "7720957192ccb8a0de5b1fef64817e409ee30d7ce7dd035425e598d0fd903aff",
+      "gitBlob": "0733d114d66b748131ac2c623fb858c6d9c97fd2",
+      "originalSHA256": "816ddd0c3c0e3e5538ffe0cc08828cb60b10b70a91280fb04a917897891679fc",
+      "originalGitBlob": "31832575462ba134937d62384c358c2c79f51032"
+    },
+    {
+      "path": "scripts/data/soccerCareerFacts.json",
+      "bytes": 163464,
+      "sha256": "352d9e65f0661c2943ca1bf5b5129e7cb405c3d8c4aa6dbe3bad6dad60f1349a",
+      "gitBlob": "243991ff827226cf197ca6450cf0c9ee40fdc709",
+      "originalSHA256": "30f66a537a7cb5546f3c4694b60370c7230b99e38f47799236b1f47c586058a5",
+      "originalGitBlob": "668ec82179b21e3314d5e1907635f565e4259765"
+    },
+    {
+      "path": "src/data/soccerCareerClubPool.ts",
+      "bytes": 46309,
+      "sha256": "4fca8dcc0d83efaa0d79d58833a03d3f2787cd44fb5ea93a90c3cf207ef5efd2",
+      "gitBlob": "9247463ff836992a4ea43fb79c5c18b19ffe673d",
+      "originalSHA256": "735d636cb22c14794692fef45e22323fe85d3c38cbbdbaa1df1ccc7aba961bd8",
+      "originalGitBlob": "15fe51c1cfa9ffbd43bd86576ad7bbc3bea8840c"
+    }
+  ],
+  "manualSourceReadySHA256": "0830cf10c78cdf9b224995c3d7ab08cdcb42037b69ea122645923f7a263a0d64",
+  "generated": {
+    "run": "40689820761",
+    "head": "92f19661d534e5c3151ea2a30834c5d3b91cb2fa",
+    "admissionSHA256": "940248b030a97b83f5486b44d59c9538a72e9f1e810015d48aff3528adec4c62",
+    "source": "actual admitted generator output, copied byte-exact",
+    "added": 17,
+    "oldGeneratedHeld": 270,
+    "newLadderMembers": 18,
+    "newSince2026": 17
+  },
+  "policy": "Intentional modern catalogue/future RNG expansion; saved current records/pending objects and pre2026 new17 exclusion are required. No cap/margin changes.",
+  "runtime": "Manual product fixed qualification remains UNRUN. Actual generator-only probe is admitted; no blanket pass inferred."
+}

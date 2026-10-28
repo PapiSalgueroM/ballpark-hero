@@ -1,0 +1,191 @@
+{
+  "status": "SOURCE_READY_PHYSICAL_EFFECTIVENESS_UNRUN",
+  "controls": [
+    {
+      "name": "new-generated-row",
+      "path": "src/data/soccerCareerClubPool.ts",
+      "sourceSHA256": "4fca8dcc0d83efaa0d79d58833a03d3f2787cd44fb5ea93a90c3cf207ef5efd2",
+      "targetIndex": 0,
+      "independentIndex": 5,
+      "expectedFailureIndices": [
+        0
+      ],
+      "marker": "LIGUE2_POOL",
+      "scope": "Remove actual added Red Star row, valid TypeScript",
+      "mutation": {
+        "kind": "span",
+        "before": "  { id: \"cm-red-star-fc\", name: \"Red Star FC\", country: \"France\", tier: 4, color: \"#0a7040\", league: \"Ligue 2\" },\n",
+        "after": "",
+        "count": 1
+      }
+    },
+    {
+      "name": "ladder-member",
+      "path": "src/data/soccerCareerClubPool.ts",
+      "sourceSHA256": "4fca8dcc0d83efaa0d79d58833a03d3f2787cd44fb5ea93a90c3cf207ef5efd2",
+      "targetIndex": 1,
+      "independentIndex": 5,
+      "expectedFailureIndices": [
+        1
+      ],
+      "marker": "LIGUE2_LADDER",
+      "scope": "Remove one real shared-group member only",
+      "mutation": {
+        "kind": "span",
+        "before": "  \"Ligue 2\": [[\"Nantes\"], [\"Saint-Etienne\"], [\"Reims\"], [\"Annecy\", \"Boulogne\", \"Clermont\", \"Dijon\", \"Dunkerque\", \"Grenoble\", \"Guingamp\", \"Laval\", \"Metz\", \"Montpellier\", \"Nancy\", \"Pau\", \"Red Star FC\", \"Rodez\", \"Sochaux\"]],",
+        "after": "  \"Ligue 2\": [[\"Nantes\"], [\"Saint-Etienne\"], [\"Reims\"], [\"Annecy\", \"Boulogne\", \"Clermont\", \"Dijon\", \"Dunkerque\", \"Grenoble\", \"Guingamp\", \"Laval\", \"Montpellier\", \"Nancy\", \"Pau\", \"Red Star FC\", \"Rodez\", \"Sochaux\"]],",
+        "count": 1
+      }
+    },
+    {
+      "name": "playing-size-promotion",
+      "path": "src/lib/soccerCareerLeague.ts",
+      "sourceSHA256": "0519defdf1ac93f69b83f14b11d36f1b9d2544f7bb6c60ba97c4539710cd9b52",
+      "targetIndex": 2,
+      "independentIndex": 5,
+      "expectedFailureIndices": [
+        2
+      ],
+      "marker": "LIGUE2_TABLE",
+      "scope": "Exact original size file restores only the two owned size-placement hunks, including DUGOUT18",
+      "mutation": {
+        "kind": "reference",
+        "ref": "e1b33581532b1514e4510e9d89e633e5305fa963",
+        "sha256": "adb5555de0adc046bed402fd7386305baf5ce9e96aba023b6a64541f9785ca68",
+        "gitBlob": "7b65ad0ad43825dcc159db83de100eda8330c102"
+      }
+    },
+    {
+      "name": "default-manager-year",
+      "path": "src/lib/soccerCareerEngine.ts",
+      "sourceSHA256": "155ab5a169deefce1b65100d8022b45f41512835c15b045673f92a93f32a92de",
+      "targetIndex": 3,
+      "independentIndex": 5,
+      "expectedFailureIndices": [
+        3
+      ],
+      "marker": "LIGUE2_DEFAULT_ENTRY",
+      "scope": "Remove only new default eligibility conjunct",
+      "mutation": {
+        "kind": "span",
+        "before": "c.tier >= 3 && managerEntryClubInYear(c, firstYear)",
+        "after": "c.tier >= 3",
+        "count": 1
+      }
+    },
+    {
+      "name": "coursework-read-and-commit-year",
+      "path": "src/lib/soccerCareerCoachingStart.ts",
+      "sourceSHA256": "7720957192ccb8a0de5b1fef64817e409ee30d7ce7dd035425e598d0fd903aff",
+      "targetIndex": 4,
+      "independentIndex": 5,
+      "expectedFailureIndices": [
+        4
+      ],
+      "marker": "LIGUE2_COURSEWORK_ENTRY",
+      "scope": "Bypass both actual eligibility sites, valid syntax",
+      "mutation": {
+        "kind": "span",
+        "before": "  const eligible = clubs.filter(club => managerEntryClubInYear(club, (state.seasons[state.seasons.length - 1]?.year ?? 2024) + 1));",
+        "after": "  const eligible = clubs;",
+        "count": 2
+      }
+    },
+    {
+      "name": "since-reader-integration",
+      "path": "src/lib/careerEras.ts",
+      "sourceSHA256": "f3e7347f58abe993db9fd72e9896ea0767a6ca7eb3b19861b75b92b387f89c1c",
+      "targetIndex": 0,
+      "independentIndex": 5,
+      "expectedFailureIndices": [
+        0
+      ],
+      "marker": "LIGUE2_POOL",
+      "scope": "Inherited reader-integration omission, not a direct new generated year-field mutation",
+      "mutation": {
+        "kind": "span",
+        "before": "  ...CAREER_POOL_SINCE,\n",
+        "after": "",
+        "count": 1
+      }
+    },
+    {
+      "name": "plain-format-window",
+      "path": "src/data/leagueFormat.ts",
+      "sourceSHA256": "dc73e10402d270a6ed01c0fab4f8165d305f336a55a238d863c9b310f7f8ab4d",
+      "targetIndex": 2,
+      "independentIndex": 5,
+      "expectedFailureIndices": [
+        2
+      ],
+      "marker": "LIGUE2_TABLE",
+      "scope": "Remove only new plain3point Ligue2 window",
+      "mutation": {
+        "kind": "reference",
+        "ref": "e1b33581532b1514e4510e9d89e633e5305fa963",
+        "sha256": "76d189179c606475113e7289a1145a9d2036c7741b7c918aed0efd796bebc0ec",
+        "gitBlob": "df8aa75d55eda49dcdc455e2be9d86c57848a3a7"
+      }
+    },
+    {
+      "name": "cadence-window",
+      "path": "src/lib/soccerCareerDerby.ts",
+      "sourceSHA256": "c6a6859a5fd24f18d6a2e05b258ad9dddbc271a81d42c1767560d4a8cee8d906",
+      "targetIndex": 2,
+      "independentIndex": 5,
+      "expectedFailureIndices": [
+        2
+      ],
+      "marker": "LIGUE2_TABLE",
+      "scope": "Remove only new two-meeting Ligue2 window",
+      "mutation": {
+        "kind": "reference",
+        "ref": "e1b33581532b1514e4510e9d89e633e5305fa963",
+        "sha256": "eafe7005ece8fe2b4c44e380ba5d980a6535d3700f3a05be69f65e776288db99",
+        "gitBlob": "60478118d744b618e30f8ed651055c12449592b8"
+      }
+    },
+    {
+      "name": "new-cm-colours",
+      "path": "src/lib/clubManager.ts",
+      "sourceSHA256": "a4c8260bced0db3582437461afe6e6616f465e0b0b1ec887ba301757364681dd",
+      "targetIndex": 0,
+      "independentIndex": 5,
+      "expectedFailureIndices": [
+        0
+      ],
+      "marker": "LIGUE2_POOL",
+      "scope": "Exact original CM body removes only the nine new decorative colour entries",
+      "mutation": {
+        "kind": "reference",
+        "ref": "e1b33581532b1514e4510e9d89e633e5305fa963",
+        "sha256": "05de3cfca8d978e6117979fb29b82b2ece7b9fb6ee1f2ce3c051e379e36de86e",
+        "gitBlob": "a505743537b383bc7885bb81f5a72c11e154b566"
+      }
+    },
+    {
+      "name": "sealed-provenance-association",
+      "path": "scripts/data/soccerCareerFacts.json",
+      "sourceSHA256": "352d9e65f0661c2943ca1bf5b5129e7cb405c3d8c4aa6dbe3bad6dad60f1349a",
+      "targetIndex": 0,
+      "independentIndex": 5,
+      "expectedFailureIndices": [
+        0
+      ],
+      "marker": "LIGUE2_POOL",
+      "scope": "Keep valid URL/host/JSON while breaking exact accepted research association",
+      "mutation": {
+        "kind": "span",
+        "before": "https://www.redstar.fr/2016-07-25/les-pros/les-nouveaux-maillots-du-red-star/",
+        "after": "https://www.redstar.fr/COPIED-provenance",
+        "count": 1
+      }
+    }
+  ],
+  "healthyCases": 7,
+  "expectedEachFailed": 1,
+  "expectedEachPassed": 6,
+  "independentIndex": 5,
+  "restoreCases": 7,
+  "scope": "One owned physical copy; exact one-file mutation with explicit two-site coursework count, then same-copy exact restoration/full7PASS. Reference replacements invert only previously verified owned hunks. Canonical source never mutated."
+}
