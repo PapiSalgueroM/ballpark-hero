@@ -51,8 +51,8 @@ jobs:
       - name: Source preflight and actual application types
         run: |
           set -euo pipefail
-          echo '18f6fbebdfeca4b86705921fef73f1c729abff73abf6bab319d32f55d5a131cf  qa/sc-manager-job-review-v1/SOURCE-READY.json' | sha256sum --check
-          echo 'd0f5efce8cd74d6acea805afd187fb026901a3825a1bf7b295d8f33cf3db777f  scripts/qa/soccerManagerJobReviewFixed.mjs' | sha256sum --check
+          echo '34c8dae8ffc872f9a5275b8c7552f98324d030047c090143fa03df9fa63b0764  qa/sc-manager-job-review-v1/SOURCE-READY.json' | sha256sum --check
+          echo 'eea1b3b884140023eb163edd7142c7bb106ab39f4dd9c1385a31a734985118ee  scripts/qa/soccerManagerJobReviewFixed.mjs' | sha256sum --check
           echo 'd7d94a36b796af66914cdf9bd4803cf42b027f423ceb8baac9fb144677de7030  src/lib/soccerCareerEngine.ts' | sha256sum --check
           NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node node_modules/typescript/bin/tsc --noEmit -p tsconfig.app.json 2>&1 | tee manager-job-review-fixed-artifacts/types.log
       - name: Actual 28 fixed cases and no-env current page observer
