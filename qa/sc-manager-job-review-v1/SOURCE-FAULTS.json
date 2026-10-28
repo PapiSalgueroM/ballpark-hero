@@ -1,0 +1,104 @@
+{
+  "version": 1,
+  "productSelectorSha256": "34c8dae8ffc872f9a5275b8c7552f98324d030047c090143fa03df9fa63b0764",
+  "faults": [
+    {
+      "id": "omit-stage",
+      "path": "src/lib/soccerCareerManagerJobReview.ts",
+      "before": "if (!review?.enabled || state.phase !== 'manager_season' || !Array.isArray(clubs)) return finished;",
+      "after": "if (true || !review?.enabled || state.phase !== 'manager_season' || !Array.isArray(clubs)) return finished;",
+      "targetCase": "stages only the actual completed poach and preserves all draws national flags money and table",
+      "independentCase": "existing unemployed job acceptance preserves complete state save and zero draws"
+    },
+    {
+      "id": "extra-global-draw",
+      "path": "src/lib/soccerCareerManagerJobReview.ts",
+      "before": "const finished = advanceManagerSeason(state, clubs);",
+      "after": "const finished = advanceManagerSeason(state, clubs); Math.random();",
+      "targetCase": "absent false and malformed optional preferences preserve canonical state save and every draw",
+      "witness": "pure-pairs",
+      "independentCase": "existing unemployed job acceptance preserves complete state save and zero draws"
+    },
+    {
+      "id": "original-tier-binding",
+      "path": "src/lib/soccerCareerManagerJobReview.ts",
+      "before": "if (!source || !destination || row.tier !== after.clubTier",
+      "after": "if (!source || source.tier !== before.clubTier || !destination || row.tier !== after.clubTier",
+      "targetCase": "a club promoted above its original data tier still stages its actual earned approach",
+      "independentCase": "existing unemployed job acceptance preserves complete state save and zero draws"
+    },
+    {
+      "id": "accept-keeps-source",
+      "path": "src/lib/soccerCareerManagerJobReview.ts",
+      "before": "applyEmployment(ms, accepting ? pending.to : pending.from)",
+      "after": "applyEmployment(ms, pending.from)",
+      "targetCase": "accept restores the exact canonical employment era row text and full completed season",
+      "independentCase": "existing unemployed job acceptance preserves complete state save and zero draws"
+    },
+    {
+      "id": "stay-takes-destination",
+      "path": "src/lib/soccerCareerManagerJobReview.ts",
+      "before": "applyEmployment(ms, accepting ? pending.to : pending.from)",
+      "after": "applyEmployment(ms, pending.to)",
+      "targetCase": "stay preserves the completed season and records a declined move without a false hire claim",
+      "independentCase": "existing unemployed job acceptance preserves complete state save and zero draws"
+    },
+    {
+      "id": "stale-quote-accepted",
+      "path": "src/lib/soccerCareerManagerJobReview.ts",
+      "before": "quote.source !== state || ",
+      "after": "",
+      "targetCase": "stale and duplicate choice requests leave the current state untouched without random work",
+      "independentCase": "existing unemployed job acceptance preserves complete state save and zero draws"
+    },
+    {
+      "id": "pending-advances-year",
+      "path": "src/lib/soccerCareerManagerJobReview.ts",
+      "before": "if (review?.pending) return state;",
+      "after": "if (false && review?.pending) return state;",
+      "targetCase": "pending choices block another season and mode changes with zero draws",
+      "independentCase": "existing unemployed job acceptance preserves complete state save and zero draws"
+    },
+    {
+      "id": "stay-false-hire",
+      "path": "src/lib/soccerCareerManagerJobReview.ts",
+      "before": "result: accepting ? pending.rowResult : replaceOwned(pending.rowResult, pending, stayText(pending))!",
+      "after": "result: pending.rowResult",
+      "targetCase": "stay preserves the completed season and records a declined move without a false hire claim",
+      "independentCase": "existing unemployed job acceptance preserves complete state save and zero draws"
+    },
+    {
+      "id": "choice-changes-cash",
+      "path": "src/lib/soccerCareerManagerJobReview.ts",
+      "before": "return { ...state, managerState: { ...applyEmployment(ms, accepting ? pending.to : pending.from)",
+      "after": "return { ...state, netWorth: state.netWorth + 0.1, managerState: { ...applyEmployment(ms, accepting ? pending.to : pending.from)",
+      "targetCase": "a current quote preserves cash phone and appended events made after the approach",
+      "independentCase": "existing unemployed job acceptance preserves complete state save and zero draws"
+    },
+    {
+      "id": "accept-keeps-pending-event",
+      "path": "src/lib/soccerCareerManagerJobReview.ts",
+      "before": "events[pending.eventIndex] = accepting ? pending.eventResult : replaceOwned(pending.eventResult, pending, stayText(pending))!;",
+      "after": "events[pending.eventIndex] = state.events[pending.eventIndex];",
+      "targetCase": "accept restores the exact canonical employment era row text and full completed season",
+      "independentCase": "existing unemployed job acceptance preserves complete state save and zero draws"
+    },
+    {
+      "id": "unsafe-react-updater",
+      "path": "src/hooks/useSoccerManagerJobReview.ts",
+      "before": "    const next = transform(live.career);\n    if (next === live.career) return;\n    committed.current = { career: next, clubs: live.clubs };\n    setCareer(next);",
+      "after": "    setCareer(current => {\n      if (!current) return current;\n      const next = transform(current);\n      committed.current = { career: next, clubs: live.clubs };\n      return next;\n    });",
+      "targetCase": "StrictMode queued render constructs one canonical season and uses value adoption",
+      "witness": "transaction",
+      "independentCase": "existing unemployed job acceptance preserves complete state save and zero draws"
+    },
+    {
+      "id": "accept-button-sends-stay",
+      "path": "src/components/soccer-career/SoccerManagerJobReview.tsx",
+      "before": "onResolve?.(quote, 'accept')",
+      "after": "onResolve?.(quote, 'stay')",
+      "targetCase": "shows the actual earned destination and both decisions with no simulation work",
+      "independentCase": "existing unemployed job acceptance preserves complete state save and zero draws"
+    }
+  ]
+}

@@ -1,0 +1,31 @@
+{
+  "scope": "Copied-test diagnostic statements only; every existing test assertion and case identity remains held. Observers and app fault all restore before full28 rerun.",
+  "observers": [
+    {
+      "path": "src/test/soccerCareerManagerJobReview.test.ts",
+      "operations": [
+        {
+          "before": "import { describe, expect, it } from 'vitest';",
+          "after": "import { describe, expect, it } from 'vitest';\nimport { appendFileSync } from 'node:fs';"
+        },
+        {
+          "before": "function equalRun(actual: ReturnType<typeof seeded<CareerState>>, expected: ReturnType<typeof seeded<CareerState>>) {",
+          "after": "function equalRun(actual: ReturnType<typeof seeded<CareerState>>, expected: ReturnType<typeof seeded<CareerState>>) {\n  if (process.env.SC_MANAGER_REVIEW_PAIR_TRACE) appendFileSync(process.env.SC_MANAGER_REVIEW_PAIR_TRACE, JSON.stringify({ actual, expected, actualSave: serializeSoccerCareerSave(actual.value), expectedSave: serializeSoccerCareerSave(expected.value) }) + '\\n');"
+        }
+      ]
+    },
+    {
+      "path": "src/test/soccerCareerManagerJobReview.transaction.test.tsx",
+      "operations": [
+        {
+          "before": "import React, { StrictMode, useCallback, useLayoutEffect, useState } from 'react';",
+          "after": "import React, { StrictMode, useCallback, useLayoutEffect, useState } from 'react';\nimport { writeFileSync } from 'node:fs';"
+        },
+        {
+          "before": "    const actual = seeded(22, () => { act(() => { host.current.queueRender(); host.current.advance(); }); return host.current.state; });",
+          "after": "    const actual = seeded(22, () => { act(() => { host.current.queueRender(); host.current.advance(); }); return host.current.state; });\n    if (process.env.SC_MANAGER_REVIEW_TRANSACTION_TRACE) writeFileSync(process.env.SC_MANAGER_REVIEW_TRANSACTION_TRACE, JSON.stringify({ expected, actual, revision: host.current.revision }));"
+        }
+      ]
+    }
+  ]
+}

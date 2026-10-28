@@ -1,0 +1,72 @@
+name: Soccer manager job review physical controls
+on:
+  push:
+    branches: [codex/sc-manager-job-review-controls-20261028]
+    paths:
+      - .github/workflows/soccer-manager-job-review-controls.yml
+      - scripts/qa/soccerManagerJobReviewControls.mjs
+      - qa/sc-manager-job-review-v1/SOURCE-FAULTS.json
+      - qa/sc-manager-job-review-v1/CONTROL-OBSERVERS.json
+permissions:
+  contents: read
+concurrency:
+  group: sc-manager-job-review-controls-${{ github.sha }}
+  cancel-in-progress: false
+defaults:
+  run:
+    shell: bash
+env:
+  CI: '1'
+  SIM_NETWORK: offline
+jobs:
+  controls:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.sha }}
+          fetch-depth: 0
+          persist-credentials: false
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: npm
+      - name: Retain actual source and dependency pins
+        run: |
+          set -euo pipefail
+          mkdir -p manager-job-review-control-artifacts
+          git rev-parse HEAD > manager-job-review-control-artifacts/source-head.txt
+          git rev-parse HEAD^{tree} > manager-job-review-control-artifacts/source-tree.txt
+          git archive --format=tar HEAD > manager-job-review-control-artifacts/source.tar
+          git ls-files -z | sort -z | xargs -0 sha256sum > manager-job-review-control-artifacts/source-before.sha256
+          sha256sum package.json package-lock.json > manager-job-review-control-artifacts/dependency-source.sha256
+          git merge-base --is-ancestor 5203a5c8e90ad375d0b50caafa4f10903ce5c18e HEAD
+          npm ci
+      - name: Frozen source and real app type gate
+        run: |
+          set -euo pipefail
+          echo '34c8dae8ffc872f9a5275b8c7552f98324d030047c090143fa03df9fa63b0764  qa/sc-manager-job-review-v1/SOURCE-READY.json' | sha256sum --check
+          echo 'd7e6fdd871edb3c4411b304e61153c84f7ab6c7a8db6ca375b4786ac9c1f53a8  scripts/qa/soccerManagerJobReviewControls.mjs' | sha256sum --check
+          echo '6449f6f7589a6a7c3040c554744cee9a7e5b3d26e609ed6599cb1d39cd5b3613  qa/sc-manager-job-review-v1/SOURCE-FAULTS.json' | sha256sum --check
+          echo 'd15b2e6a3f049e0236f0582347c208018fc7efb50a809393950d10714cb737e4  qa/sc-manager-job-review-v1/CONTROL-OBSERVERS.json' | sha256sum --check
+          echo 'd7d94a36b796af66914cdf9bd4803cf42b027f423ceb8baac9fb144677de7030  src/lib/soccerCareerEngine.ts' | sha256sum --check
+          NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node node_modules/typescript/bin/tsc --noEmit -p tsconfig.app.json 2>&1 | tee manager-job-review-control-artifacts/types.log
+      - name: Actual physical source faults and full same-copy restorations
+        run: |
+          set -euo pipefail
+          NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/qa/soccerManagerJobReviewControls.mjs 2>&1 | tee manager-job-review-control-artifacts/controls.log
+      - name: Hold every canonical source body
+        if: always()
+        run: |
+          set -euo pipefail
+          sha256sum --check manager-job-review-control-artifacts/source-before.sha256 > manager-job-review-control-artifacts/source-held.log
+          git diff --exit-code HEAD
+      - name: Preserve original physical control evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: sc-manager-job-review-controls-${{ github.run_id }}-${{ github.run_attempt }}
+          retention-days: 7
+          if-no-files-found: error
+          path: manager-job-review-control-artifacts/
