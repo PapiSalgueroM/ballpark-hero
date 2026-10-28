@@ -1,0 +1,120 @@
+{
+  "status": "FROZEN_PRODUCT_CANDIDATE_REMOTE_UNRUN",
+  "sourceRef": "4a3f6b3f33c9f467bc093bbb48a77c42006e3134",
+  "sourceTree": "a85fe2b35176254f6047febf276ac5ba337a7d94",
+  "baseline": {
+    "run": 40622551769,
+    "head": "4834de2dbee41d0a9ef56e18962ae9aad9c46358",
+    "admissionSha256": "45f4199a1603c4124be498df58c2d3648e20028d85583819ba3813c5587505f8",
+    "rootAdmissionSha256": "e769e277fff083663e46363a0f575dfb39de519374853ee1c391de6756903fe8"
+  },
+  "files": [
+    {
+      "path": "scripts/qa/buildSoccerManagerJobReviewObserver.mjs",
+      "bytes": 5545,
+      "sha256": "df4249fc68b942915ce3068cf0cc992288e2cbba211a6cc338a161959773223f",
+      "git": "ea910fc5ecebef595be199954dcf556002848039"
+    },
+    {
+      "path": "src/components/soccer-career/SoccerManagerJobReview.tsx",
+      "bytes": 2883,
+      "sha256": "a3277865c1d1c623d01f893e125701b49a269b64728371b1f5da9aca68286b9b",
+      "git": "232d0b3df627744fa2a8d2f97744897973ab56f0"
+    },
+    {
+      "path": "src/hooks/useSoccerManagerJobReview.ts",
+      "bytes": 1630,
+      "sha256": "e36b4ad3e7230ed6a22a552c046f056056190263e685fb8fd2f584afd03df3bf",
+      "git": "b344961c16e30cb55fcd90b5d9b70ee1a44c93f1"
+    },
+    {
+      "path": "src/lib/soccerCareerManagerJobReview.ts",
+      "bytes": 9544,
+      "sha256": "f689d2fb791aef673ce112703f44b04e8a61b382ac4a657475f7dc7a79b9f1b6",
+      "git": "c91f8fc1a3cfd8b2b74289de501d4964a5d06921"
+    },
+    {
+      "path": "src/pages/SoccerCareer.tsx",
+      "bytes": 279959,
+      "sha256": "c1d57dd1e2baf7fdaad7e7706200b38f5c8de92ff27af87ceed2ef054e74dc7f",
+      "git": "ff11c9b4973b1defb9624edaadc606e015ecec18"
+    },
+    {
+      "path": "src/test/soccerCareerManagerJobReview.card.test.tsx",
+      "bytes": 3553,
+      "sha256": "8465facd644c0ffe3b655b4f33d64be88498c582be3c47499ef14aad90d50de8",
+      "git": "a362973182ef77fba739bdfc124920fa57f5d453"
+    },
+    {
+      "path": "src/test/soccerCareerManagerJobReview.consumer.test.tsx",
+      "bytes": 9146,
+      "sha256": "ff909f687731622ef8b47d5b3ceb4f005e7e9b15db39330d52e78525970597d4",
+      "git": "a7426295011be8568a42f4cb8a14fa04fe5cbe4f"
+    },
+    {
+      "path": "src/test/soccerCareerManagerJobReview.test.ts",
+      "bytes": 14280,
+      "sha256": "c25e60f5ec7e0fd8424a7f55e39447483824321c4f0a936f8978c52f4eade283",
+      "git": "ca1f4fb39d27c052bbcc218c603732bd785a3e55"
+    },
+    {
+      "path": "src/test/soccerCareerManagerJobReview.transaction.test.tsx",
+      "bytes": 6494,
+      "sha256": "da3b4d95818407719b0ef4a6cc0c5bc212975bba4a32e5b9f58c5a2c1090940c",
+      "git": "ca392abad0a94d5b02efe472d7fcf85084052d6e"
+    },
+    {
+      "path": "src/test/helpers/managerJobReviewFixtures.ts",
+      "bytes": 2201,
+      "sha256": "29347b9a3248dc9d085cca98dc68dbc1ef7baf94a8e119ccd51434cce6378da4",
+      "git": "46a628c62dd0f6ab3b8395a6d5d7d470c363f42b"
+    }
+  ],
+  "heldSource": [
+    {
+      "path": "src/lib/managerJobMarket.ts",
+      "git": "82e11ce8c1c76b780059969674a26ad368bd4db4",
+      "bytes": 3955
+    },
+    {
+      "path": "src/lib/managerOffers.ts",
+      "git": "b251b339a7ff0b6d1f8d2e9692adef8229ebedd5",
+      "bytes": 12319
+    },
+    {
+      "path": "src/lib/soccerCareerEngine.ts",
+      "git": "8a927bd55b650feb3378b6cf3d4c9d54b1cb6199",
+      "bytes": 551628
+    },
+    {
+      "path": "src/lib/soccerCareerLeague.ts",
+      "git": "7b65ad0ad43825dcc159db83de100eda8330c102",
+      "bytes": 47199
+    },
+    {
+      "path": "src/lib/soccerCareerSave.ts",
+      "git": "86ec011693fd5bc702b5e8ccec05d27775a72a76",
+      "bytes": 6287
+    }
+  ],
+  "caseCounts": {
+    "pure": 14,
+    "transaction": 6,
+    "card": 4,
+    "existingConsumer": 4,
+    "total": 28
+  },
+  "pageOverlay": {
+    "path": "src/pages/SoccerCareer.tsx",
+    "literalSpans": 11,
+    "wholeInverseExact": true,
+    "sourceGit": "d662e1a2094b7e94380d1d2b2aacd6619ea804d0"
+  },
+  "notes": [
+    "Engine8a927, serializer, manager market/offers/league held.",
+    "Source club binding uses unique existing name and captured current tier, supports genuine prior promotions without altering club data. Destination binds actual canonical offer tier and era league.",
+    "Canonical national flag, final table/cup, retirement money and RNG suffix settle before staging.",
+    "Existing consumer and Node-child observer are exact held baseline bodies, with no-env collection available.",
+    "No current-target adoption, I composition/main/publication or real-data edits."
+  ]
+}

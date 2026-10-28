@@ -1,0 +1,75 @@
+name: Soccer manager job review early fixed
+on:
+  push:
+    branches: [codex/sc-manager-job-review-20261028]
+    paths:
+      - .github/workflows/soccer-manager-job-review-fixed.yml
+      - scripts/qa/soccerManagerJobReviewFixed.mjs
+      - qa/sc-manager-job-review-v1/SOURCE-READY.json
+      - src/lib/soccerCareerManagerJobReview.ts
+      - src/hooks/useSoccerManagerJobReview.ts
+      - src/components/soccer-career/SoccerManagerJobReview.tsx
+      - src/pages/SoccerCareer.tsx
+      - src/test/soccerCareerManagerJobReview*
+      - src/test/helpers/managerJobReviewFixtures.ts
+permissions:
+  contents: read
+concurrency:
+  group: sc-manager-job-review-fixed-${{ github.sha }}
+  cancel-in-progress: false
+defaults:
+  run:
+    shell: bash
+env:
+  CI: '1'
+  SIM_NETWORK: offline
+jobs:
+  fixed:
+    runs-on: ubuntu-latest
+    timeout-minutes: 12
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.sha }}
+          fetch-depth: 0
+          persist-credentials: false
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: npm
+      - name: Retain immutable source and dependency pins
+        run: |
+          set -euo pipefail
+          mkdir -p manager-job-review-fixed-artifacts
+          git rev-parse HEAD > manager-job-review-fixed-artifacts/source-head.txt
+          git rev-parse HEAD^{tree} > manager-job-review-fixed-artifacts/source-tree.txt
+          git archive --format=tar HEAD > manager-job-review-fixed-artifacts/source.tar
+          git ls-files -z | sort -z | xargs -0 sha256sum > manager-job-review-fixed-artifacts/source-before.sha256
+          sha256sum package.json package-lock.json > manager-job-review-fixed-artifacts/dependency-source.sha256
+          git merge-base --is-ancestor 4a3f6b3f33c9f467bc093bbb48a77c42006e3134 HEAD
+          npm ci
+      - name: Source preflight and actual application types
+        run: |
+          set -euo pipefail
+          echo '18f6fbebdfeca4b86705921fef73f1c729abff73abf6bab319d32f55d5a131cf  qa/sc-manager-job-review-v1/SOURCE-READY.json' | sha256sum --check
+          echo 'd0f5efce8cd74d6acea805afd187fb026901a3825a1bf7b295d8f33cf3db777f  scripts/qa/soccerManagerJobReviewFixed.mjs' | sha256sum --check
+          echo 'd7d94a36b796af66914cdf9bd4803cf42b027f423ceb8baac9fb144677de7030  src/lib/soccerCareerEngine.ts' | sha256sum --check
+          NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node node_modules/typescript/bin/tsc --noEmit -p tsconfig.app.json 2>&1 | tee manager-job-review-fixed-artifacts/types.log
+      - name: Actual 28 fixed cases and no-env current page observer
+        run: |
+          set -euo pipefail
+          NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/qa/soccerManagerJobReviewFixed.mjs 2>&1 | tee manager-job-review-fixed-artifacts/fixed.log
+      - name: Hold every canonical tracked body
+        if: always()
+        run: |
+          set -euo pipefail
+          sha256sum --check manager-job-review-fixed-artifacts/source-before.sha256 > manager-job-review-fixed-artifacts/source-held.log
+          git diff --exit-code HEAD
+      - name: Preserve original early fixed evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: sc-manager-job-review-fixed-${{ github.run_id }}-${{ github.run_attempt }}
+          retention-days: 7
+          if-no-files-found: error
+          path: manager-job-review-fixed-artifacts/
