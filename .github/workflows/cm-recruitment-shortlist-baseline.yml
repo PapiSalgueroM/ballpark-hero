@@ -1,0 +1,79 @@
+name: CM recruitment shortlist intended baseline
+on:
+  push:
+    branches: [codex/cm-recruitment-shortlist-baseline-20261028]
+    paths:
+      - src/test/clubManagerRecruitmentBaseline.test.tsx
+      - scripts/qa/cmRecruitmentBaseline.mjs
+      - .github/workflows/cm-recruitment-shortlist-baseline.yml
+  workflow_dispatch:
+permissions:
+  contents: read
+concurrency:
+  group: cm-recruitment-baseline-${{ github.sha }}
+  cancel-in-progress: false
+defaults:
+  run:
+    shell: bash
+jobs:
+  baseline:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    env:
+      CI: '1'
+      SIM_NETWORK: offline
+      CAREER_SEASON_LOCAL_ONLY: '1'
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.sha }}
+          fetch-depth: 0
+          persist-credentials: false
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: npm
+      - name: Exact qualified Loan416 family and source archive
+        run: |
+          set -euo pipefail
+          export CM_RECRUITMENT_OUT="$PWD/cm-recruitment-baseline-artifacts"
+          mkdir -p "$CM_RECRUITMENT_OUT"
+          echo "CM_RECRUITMENT_OUT=$CM_RECRUITMENT_OUT" >> "$GITHUB_ENV"
+          test "$GITHUB_REF_NAME" = codex/cm-recruitment-shortlist-baseline-20261028
+          test "$(git rev-parse HEAD)" = "$GITHUB_SHA"
+          test "$(git rev-parse HEAD^)" = 14ec28b1cbc82b1abcdf14244dec7acae25d1507
+          git rev-parse HEAD HEAD^{tree} > "$CM_RECRUITMENT_OUT/head-tree.txt"
+          git archive --format=tar HEAD > "$CM_RECRUITMENT_OUT/source.tar"
+          git ls-tree -r HEAD > "$CM_RECRUITMENT_OUT/source-tree.txt"
+          git ls-files -z | sort -z | xargs -0 sha256sum > "$CM_RECRUITMENT_OUT/tracked-before.sha256"
+          printf '%s  %s\n' fee778438ca3ad90eec31ab10e8cc188634b3b7f4acfbf40c3cbec7429c059ed scripts/qa/cmRecruitmentBaseline.mjs | sha256sum --check
+          node scripts/qa/cmRecruitmentBaseline.mjs source 2>&1 | tee "$CM_RECRUITMENT_OUT/source-pins.log"
+          echo '127.0.0.1 flawuiqbvjobmkfkauhw.supabase.co' | sudo tee -a /etc/hosts
+      - name: Install exact lock dependencies
+        run: |
+          set -euo pipefail
+          npm ci 2>&1 | tee "$CM_RECRUITMENT_OUT/npm-ci.log"
+      - name: Real application type gate
+        run: |
+          set -euo pipefail
+          NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node_modules/.bin/tsc --noEmit -p tsconfig.app.json 2>&1 | tee "$CM_RECRUITMENT_OUT/types.log"
+      - name: Six actual cases and strict intended RED admission
+        run: |
+          set -euo pipefail
+          NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/qa/cmRecruitmentBaseline.mjs run 2>&1 | tee "$CM_RECRUITMENT_OUT/controller.log"
+      - name: Every tracked source body held
+        if: always()
+        run: |
+          set -euo pipefail
+          sha256sum --check "$CM_RECRUITMENT_OUT/tracked-before.sha256" > "$CM_RECRUITMENT_OUT/tracked-held.log"
+          git status --porcelain --untracked-files=no > "$CM_RECRUITMENT_OUT/tracked-status.txt"
+          test ! -s "$CM_RECRUITMENT_OUT/tracked-status.txt"
+          git diff --exit-code HEAD
+      - name: Retain original baseline including failure
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: cm-recruitment-baseline-${{ github.run_id }}-${{ github.run_attempt }}
+          path: cm-recruitment-baseline-artifacts/
+          if-no-files-found: error
+          retention-days: 14
