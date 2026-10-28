@@ -1,0 +1,80 @@
+name: Soccer manager job review baseline
+on:
+  push:
+    branches: [codex/sc-manager-job-review-20261028]
+    paths:
+      - .github/workflows/soccer-manager-job-review-baseline.yml
+      - scripts/qa/buildSoccerManagerJobReviewObserver.mjs
+      - scripts/qa/soccerManagerJobReviewBaseline.mjs
+      - src/test/soccerCareerManagerJobReview.consumer.test.tsx
+      - qa/sc-manager-job-review-v1/TEST-FIRST-SOURCE-READY.json
+permissions:
+  contents: read
+concurrency:
+  group: sc-manager-job-review-baseline-${{ github.ref }}
+  cancel-in-progress: false
+defaults:
+  run:
+    shell: bash
+env:
+  CI: '1'
+  SIM_NETWORK: offline
+jobs:
+  baseline:
+    runs-on: ubuntu-latest
+    timeout-minutes: 12
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.sha }}
+          fetch-depth: 0
+          persist-credentials: false
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: npm
+      - name: Retain exact source and locked dependencies
+        run: |
+          set -euo pipefail
+          mkdir -p manager-job-review-artifacts
+          git rev-parse HEAD > manager-job-review-artifacts/source-head.txt
+          git rev-parse HEAD^{tree} > manager-job-review-artifacts/source-tree.txt
+          git archive --format=tar HEAD > manager-job-review-artifacts/source.tar
+          git ls-files -z | sort -z | xargs -0 sha256sum > manager-job-review-artifacts/source-before.sha256
+          sha256sum package.json package-lock.json > manager-job-review-artifacts/dependency-source.sha256
+          git merge-base --is-ancestor 4a3f6b3f33c9f467bc093bbb48a77c42006e3134 HEAD
+          git diff --name-only 4a3f6b3f33c9f467bc093bbb48a77c42006e3134 HEAD > manager-job-review-artifacts/baseline-diff.txt
+          cat > manager-job-review-artifacts/expected-diff.txt <<'EOF'
+          .github/workflows/soccer-manager-job-review-baseline.yml
+          qa/sc-manager-job-review-v1/TEST-FIRST-SOURCE-READY.json
+          scripts/qa/buildSoccerManagerJobReviewObserver.mjs
+          scripts/qa/soccerManagerJobReviewBaseline.mjs
+          src/test/soccerCareerManagerJobReview.consumer.test.tsx
+          EOF
+          diff -u manager-job-review-artifacts/expected-diff.txt manager-job-review-artifacts/baseline-diff.txt
+          npm ci
+      - name: Frozen QA pins and actual application types
+        run: |
+          set -euo pipefail
+          echo 'df4249fc68b942915ce3068cf0cc992288e2cbba211a6cc338a161959773223f  scripts/qa/buildSoccerManagerJobReviewObserver.mjs' | sha256sum --check
+          echo 'ff909f687731622ef8b47d5b3ceb4f005e7e9b15db39330d52e78525970597d4  src/test/soccerCareerManagerJobReview.consumer.test.tsx' | sha256sum --check
+          echo '67fde30369ce31255093d02b09ea75e50223d4e5cf4fd7a086e9d48ea0cb4fee  scripts/qa/soccerManagerJobReviewBaseline.mjs' | sha256sum --check
+          NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node node_modules/typescript/bin/tsc --noEmit -p tsconfig.app.json 2>&1 | tee manager-job-review-artifacts/types.log
+      - name: Actual missing-controls RED with full canonical preservation
+        run: |
+          set -euo pipefail
+          NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/qa/soccerManagerJobReviewBaseline.mjs 2>&1 | tee manager-job-review-artifacts/baseline.log
+      - name: Hold every canonical tracked body
+        if: always()
+        run: |
+          set -euo pipefail
+          sha256sum --check manager-job-review-artifacts/source-before.sha256 > manager-job-review-artifacts/source-held.log
+          git diff --exit-code HEAD
+      - name: Preserve original baseline evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: sc-manager-job-review-baseline-${{ github.run_id }}-${{ github.run_attempt }}
+          retention-days: 7
+          if-no-files-found: error
+          path: manager-job-review-artifacts/

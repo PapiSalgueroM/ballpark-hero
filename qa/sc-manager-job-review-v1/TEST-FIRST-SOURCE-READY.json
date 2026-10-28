@@ -1,0 +1,43 @@
+{
+  "status": "FROZEN_TEST_FIRST_SOURCE_ONLY_RUNTIME_UNRUN",
+  "baseline": {
+    "commit": "4a3f6b3f33c9f467bc093bbb48a77c42006e3134",
+    "tree": "a85fe2b35176254f6047febf276ac5ba337a7d94"
+  },
+  "files": [
+    {
+      "path": ".github/workflows/soccer-manager-job-review-baseline.yml",
+      "bytes": 3943,
+      "sha256": "2de3f604a3a7737e58661a7d5220873becf6ce966360a91da401d9a568bad20f",
+      "git": "39b11a054a1843f2abea2545a36fe51b5596c56f"
+    },
+    {
+      "path": "scripts/qa/buildSoccerManagerJobReviewObserver.mjs",
+      "bytes": 5545,
+      "sha256": "df4249fc68b942915ce3068cf0cc992288e2cbba211a6cc338a161959773223f",
+      "git": "ea910fc5ecebef595be199954dcf556002848039"
+    },
+    {
+      "path": "scripts/qa/soccerManagerJobReviewBaseline.mjs",
+      "bytes": 9241,
+      "sha256": "67fde30369ce31255093d02b09ea75e50223d4e5cf4fd7a086e9d48ea0cb4fee",
+      "git": "a476cc0916d27f7e9086fee665ebcae3a478fcbd"
+    },
+    {
+      "path": "src/test/soccerCareerManagerJobReview.consumer.test.tsx",
+      "bytes": 9146,
+      "sha256": "ff909f687731622ef8b47d5b3ceb4f005e7e9b15db39330d52e78525970597d4",
+      "git": "a7426295011be8568a42f4cb8a14fa04fe5cbe4f"
+    }
+  ],
+  "cases": {
+    "total": 4,
+    "intendedMissingPanelRed": 2,
+    "canonicalPreservationPass": 2,
+    "canonicalPairs": 33
+  },
+  "scope": "Actual ManagerPanel; append-only Node child observer; outer Page advance handler not exercised",
+  "engineHeld": "8a927bd55b650feb3378b6cf3d4c9d54b1cb6199",
+  "contractSha256": "e6e24727667552b4de5be47af478fc0b3b7d7b3fb1a787ac5c4372be0d8e51e6",
+  "copiedDiagnosticControls": 3
+}
