@@ -1,0 +1,44 @@
+{
+  "status": "QUALIFIED_SOURCE_PUSHED_NOT_MERGED_OR_PUBLISHED",
+  "clean": {
+    "branch": "codex/sc-training-pending-escape-20261028",
+    "head": "89dec7530d5e0e60ef3ad6737ada2cfcdbed602c",
+    "tree": "267699da26bd0123ffd95c4ece3ccb7a213e16f6",
+    "parent": "b20ec6664df9d4c58d63ea0596791d33b2a3b8fc",
+    "paths": [
+      {
+        "path": "src/pages/SoccerCareer.tsx",
+        "gitBlob": "62fb240557c1d46815e3addaf45d292ecac8e8db",
+        "bytes": 271923,
+        "sha256": "d053e83c7c533349e4884c2c7806698092bfe38c2ba106e4d3db11e539a23a0a"
+      },
+      {
+        "path": "docs/PROJECT-STATE.md",
+        "gitBlob": "aac25028f446e5f69f0328a95b2f22fcca316cb6",
+        "bytes": 1864299,
+        "sha256": "a726e453958aad5465f55a1dab7bdbc8ffc879cb052459c6afbfa8644b49a8b7",
+        "baseBytes": 1860109,
+        "basePrefixByteExact": true,
+        "appendBytes": 4190
+      }
+    ],
+    "allOtherMain5376BlobsAndModesHeld": true
+  },
+  "qualification": {
+    "file": "QUALIFICATION.json",
+    "sha256": "fd9674091856fbdd1cd4b3b55bba7b7f53791c53e9d500b1208795dc6f8f0f63",
+    "run": 40672910354,
+    "head": "f7beb214fa5f0f2d2f0dc20a2d647c1e0d193a95",
+    "tree": "535c063d8233dbf119254830c8e95a9c22aa3fbc",
+    "sameSingleApplicationBody": true
+  },
+  "scope": "Pending Training fallback gains Back to career and Escape through existing close/focus helpers. Clean feature excludes temporary QA files, report collector, diagnostic markers and diagnostic tests.",
+  "limits": [
+    "Controlled trap reproduced; neither original reporter save or exact cause supplied.",
+    "All6 saved age19to20 advances, not6completed seasons;5newspaper and1rehab_choice.",
+    "58 existing skips retained;0 added unit cases. New regression is actual browser.",
+    "Caps retain existing rounded gates, no cap increase.",
+    "Source qualification and push do not establish main integration or publication.",
+    "I retains current-target composition and publication."
+  ]
+}

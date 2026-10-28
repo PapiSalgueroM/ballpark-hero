@@ -1,0 +1,147 @@
+{
+  "status": "QUALIFIED_FALLBACK_ONLY_SOURCE",
+  "run": 40672910354,
+  "head": "f7beb214fa5f0f2d2f0dc20a2d647c1e0d193a95",
+  "tree": "535c063d8233dbf119254830c8e95a9c22aa3fbc",
+  "parent": "b20ec6664df9d4c58d63ea0596791d33b2a3b8fc",
+  "page": {
+    "path": "src/pages/SoccerCareer.tsx",
+    "bytes": 271923,
+    "sha256": "d053e83c7c533349e4884c2c7806698092bfe38c2ba106e4d3db11e539a23a0a",
+    "gitBlob": "62fb240557c1d46815e3addaf45d292ecac8e8db",
+    "scope": "OnlypendingTrainingfallbackgainsvisibleBackandexistingEscape/focusclosehelpers",
+    "oneSpanWholeInverseToMain": true
+  },
+  "originals": [
+    {
+      "kind": "build",
+      "artifactId": 12809128160,
+      "bytes": 38610432,
+      "sha256": "4e059c61abbf852ebcbc101e878bb51aad66db9812cf982e71b311f4e4b5e9ff",
+      "zipBodies": 89
+    },
+    {
+      "kind": "units",
+      "artifactId": 12810136599,
+      "bytes": 37558684,
+      "sha256": "2c2e4b6803b992d828cfd4b47510a2c5e8c6e2b713705c7be34e9bbf26df3005",
+      "zipBodies": 19
+    }
+  ],
+  "allOriginalsAcquiredOnce": true,
+  "allBodiesHashedBeforeJson": true,
+  "eachTarRegularBodies": 5383,
+  "eachTarPaxBodies": 1,
+  "bothSourceTarSHA256": "98583d265902229ef02db88c9a699010484165404a1bea10add6f3ed74671a36",
+  "bothNativeGitAndBeforeFinalSourceBodies": 5383,
+  "otherMainBodiesHeld": 5377,
+  "selectedAndHeldPins": 7,
+  "qaPaths": 5,
+  "productPaths": 1,
+  "canonicalCollectorHeld": true,
+  "diagnosticTestAbsent": true,
+  "unitAdmissionSHA256": "bfe2e406d0f3db13e725100fc2a20cc0eed96ee721c1c652ebab5190b33e47d8",
+  "buildAdmissionSHA256": "0a95131f182183606a0512e8b5c29a6ee68f4dd6c2cf4755f3fc2811c350a574",
+  "independentBuildRawPeerSHA256": "7bd8076808a7988e882064af6aff5194028b58e31541c26d5fbe0acaadc3e6ea",
+  "current12FreshVisualUnionSHA256": "4696889a377e8cc8d4c7021b151c289c11bf1d5664acdef96f9b6b0a0155b9d0",
+  "actual": {
+    "fullFiles": 648,
+    "fullFilesPassed": 646,
+    "fullFilesSkipped": 2,
+    "fullTests": 9682,
+    "fullPassed": 9624,
+    "exactExistingSkips": 58,
+    "failed": 0,
+    "infra": 0,
+    "addedUnitCases": 0,
+    "realTypesPassedBothJobs": true,
+    "rebuiltReadersPassed": 15,
+    "unchangedCapsPassed": 15,
+    "actualBrowserContexts": 6,
+    "saved19to20Advances": [
+      {
+        "case": "1536-desktop",
+        "kind": "normal",
+        "label": "Normal Next",
+        "fromAge": 19,
+        "toAge": 20,
+        "finalPhase": "newspaper"
+      },
+      {
+        "case": "1536-desktop",
+        "kind": "back",
+        "label": "Next while chunk still unresolved",
+        "fromAge": 19,
+        "toAge": 20,
+        "finalPhase": "newspaper"
+      },
+      {
+        "case": "1536-desktop",
+        "kind": "escape",
+        "label": "Next after cached training Close",
+        "fromAge": 19,
+        "toAge": 20,
+        "finalPhase": "rehab_choice"
+      },
+      {
+        "case": "390-phone",
+        "kind": "normal",
+        "label": "Normal Next",
+        "fromAge": 19,
+        "toAge": 20,
+        "finalPhase": "newspaper"
+      },
+      {
+        "case": "390-phone",
+        "kind": "back",
+        "label": "Next while chunk still unresolved",
+        "fromAge": 19,
+        "toAge": 20,
+        "finalPhase": "newspaper"
+      },
+      {
+        "case": "390-phone",
+        "kind": "escape",
+        "label": "Next after cached training Close",
+        "fromAge": 19,
+        "toAge": 20,
+        "finalPhase": "newspaper"
+      }
+    ],
+    "heldCancellationsAndLateEvaluations": 4,
+    "captureBindings": 12,
+    "originalPngsActuallyViewed": 12,
+    "distinctPngBodies": 8,
+    "copiedControls": 6
+  },
+  "testFirstBaseline": {
+    "run": 40658274659,
+    "admissionSHA256": "a8d5343dfeb83cef0fb94184db969c57c62b27af37ae88c62cae79e75b0e8d23",
+    "actualProfiles": 2,
+    "exactMissingCancelFailures": 2,
+    "healthyRestorationAdvances": 4,
+    "originalPngsActuallyViewed": 8
+  },
+  "deferred": {
+    "optionalReportCollectorMarkersTests": true,
+    "capRedRuns": [
+      40664971209,
+      40668819073
+    ]
+  },
+  "docBase": {
+    "path": "C:/Users/antho/dukb-handoff/2026-10-28/sc-next-season-report-v1/main-source-retained/docs/PROJECT-STATE.md",
+    "bytes": 1860109,
+    "sha256": "20bfd9466033d70020d8ba6295b393a394f8c0fb5a40152b813937230a226ee1",
+    "gitBlob": "8f378afd1e8f175dadef3d3de033e2f59366e308"
+  },
+  "delivery": "Rootowns clean2pathPage+append-onlydocPR;noQAhelpers/selector/workflows/tests/collector incleanfeature",
+  "protectedMainIAndPublicationUnchanged": true,
+  "limits": [
+    "Savedage19to20 is the actualsignal,not completedseasons oruniformnewspaperphase.",
+    "Fiveadvancesendnewspaper,desktopcachedClosearmendsrehab_choice.",
+    "ReproducedunresolvedTrainingdownloadtrap,not provenoriginalreportcausality.",
+    "Freshsourcequalificationis not merge orpublishedsiteadoption.",
+    "No universalvisual/accessibility/perfectnetworkclaim, no newrealdata orenginechange."
+  ]
+}
