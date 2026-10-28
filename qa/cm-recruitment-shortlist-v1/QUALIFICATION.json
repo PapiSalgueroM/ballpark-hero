@@ -1,0 +1,510 @@
+{
+  "version": 1,
+  "status": "QUALIFIED_CLEAN_SOURCE_PUSHED_PR420_OPEN_NOT_MERGED_OR_PUBLISHED",
+  "feature": "Club Manager current-market recruitment shortlist",
+  "date": "2026-10-28",
+  "base": {
+    "commit": "14ec28b1cbc82b1abcdf14244dec7acae25d1507",
+    "tree": "80463ee325a10284f2a0a4d92e983b73adaabff9"
+  },
+  "selectedManifestSHA256": "0a5d3d71315f35ab3426a60e1460cc42b21a5523ef97626e7640b0b9c1605ed0",
+  "selectedFiles": [
+    {
+      "path": "src/components/club-manager/RecruitmentBoard.tsx",
+      "bytes": 8704,
+      "sha256": "0018b9509aa02ae73f3c85a2833eb9c2df364ed0502bb0fdbe44ad5f57eeb83b",
+      "gitBlob": "64189e7f8e0a43dd889864ec27bf492b7f9dccf3"
+    },
+    {
+      "path": "src/components/club-manager/TransferScreen.tsx",
+      "bytes": 76910,
+      "sha256": "aaab301934c2411d459e84202641b78113f9dd5503966acd1b32651094e0514a",
+      "gitBlob": "0885718df16e150b83c42644c3c39594a554d9be"
+    },
+    {
+      "path": "src/hooks/useClubManager.ts",
+      "bytes": 70744,
+      "sha256": "dce880b04eb80792eb3ea97354aa5f0d146f89c5280f57055c04dbb1db274b62",
+      "gitBlob": "7297073ea60b93501df48ea9b7dfc74edd2217de"
+    },
+    {
+      "path": "src/lib/clubManagerRecruitment.ts",
+      "bytes": 4308,
+      "sha256": "da6727441f25fb38cdfb9915b712c91f976614ca687b658179cdb63bad1ac8e2",
+      "gitBlob": "caa7fd65ad86a79c16b73f0253021fc2b6343cee"
+    },
+    {
+      "path": "src/pages/ClubManager.tsx",
+      "bytes": 104290,
+      "sha256": "d58544fbbd346a26dc79741c4bcd2bedf7f8ee2a4c24adf57ba2329c5eb8feb3",
+      "gitBlob": "e011dd037f611721fac7649128c23e6d9af355c9"
+    },
+    {
+      "path": "src/test/clubManagerRecruitment.test.ts",
+      "bytes": 8900,
+      "sha256": "ecfa9e87a9b5b1fc03ba746db9cf7c47185560a21c2a72e3b05749ee99b54bba",
+      "gitBlob": "225e55417b13ac02d40be6a75c3d0a54aff19302"
+    },
+    {
+      "path": "src/test/clubManagerRecruitmentBaseline.test.tsx",
+      "bytes": 8490,
+      "sha256": "221815aef3f0d385205c8d5cbf014dc25f84dd3b2d2c1f23f46d990aa514ed46",
+      "gitBlob": "23fbabdbf6164fa16ce3b7a806ec749a63949561"
+    },
+    {
+      "path": "src/test/clubManagerRecruitmentBoard.test.tsx",
+      "bytes": 10884,
+      "sha256": "3af188a27874669edec2e6be82322a942c272bfaa1d0647301293e392f84905b",
+      "gitBlob": "820627a87cdb45c586622b1379892ba8aa4c07fa"
+    },
+    {
+      "path": "src/test/clubManagerRecruitmentHook.test.tsx",
+      "bytes": 14061,
+      "sha256": "72bab9edf09a85b9f279a25f7856e4d27d1991029bdbefee3e8627a672208047",
+      "gitBlob": "c435c9777b697a8eb5c53f1a06b805a80e519170"
+    }
+  ],
+  "behavior": [
+    "Explicitly save up to 12 target identities for this club and saved world, remove them or Find in Buy.",
+    "Current market facts and up to three same-primary-position squad peers; multiple targets use compact tiles and a single detail with Back.",
+    "Unavailable saved identities remain removable. No automatic metadata repair or background writes.",
+    "Only ordinary Buy retains financial authority; shortlist cannot negotiate or purchase.",
+    "Existing guarded official persistence, slot/fence/quota handling and latest-committed state scope are retained."
+  ],
+  "held": {
+    "loanDevelopment": "98265b3e10752b671127c1b23d6725d83d28e47b",
+    "loanCard": "b7b713399752fd97a5b27174108f2488d85bd037",
+    "loanPlan": "419b68389dad53c297d1a225611a653c0ed83b30",
+    "engine": "a505743537b383bc7885bb81f5a72c11e154b566",
+    "deals": "6e62966e4950ac6e2fa0577f45d21527b9266ce6"
+  },
+  "baseline": {
+    "run": 40622342213,
+    "actual": "Four missing-feature assertion failures, two preservation passes, real app types zero",
+    "rootAdmissionSHA256": "7c64cd7e22fc873725de2def85c54d34d423d64409d44ffb79f585e531c0f856"
+  },
+  "tileRegression": {
+    "run": 40634752470,
+    "head": "bcf0342a12f3007ccc195dff6c65ca824f4910c8",
+    "tree": "0733a95df944e7e911fe4496543d71d1dde21e79",
+    "rootAdmissionSha256": "3d3254fe6a6c12c1294b9a6a02a92fd2c7d4a016f8fe2ee1b1ecc4c278a34ba9",
+    "soleOwnerAdmissionSha256": "1cf023a39dc288e5f6fd18f1211a4dc78bcf19a7558d1cbabd60eecca37f796a",
+    "independentRawPeerSha256": "48fd19eeeac09844a67c8c8ad20464b3f18193c5bd6d00ba32ad0ed834bde30a",
+    "actual": "Types0;38cases1preciseMISSING_VIEW_TILE AssertionError atnewcase141+37oldPASS,0pendingtodo/infra;threeCOPIEDdiagnosticrefusals/readmissions;ZIP/TAR/sourceheld",
+    "heldNewTestSha256": "3af188a27874669edec2e6be82322a942c272bfaa1d0647301293e392f84905b"
+  },
+  "currentFull": {
+    "status": "CURRENT38_TYPES_PHYSICAL_PAIRS_FRESH_FULL_UNITS_BUILD_SOURCE_ADMITTED_BROWSER_SEPARATE",
+    "run": 40640073328,
+    "attempt": 1,
+    "head": "efedad5a30f51e0cb38d522bd6a4bc24189db03d",
+    "tree": "3fe82feca4fb638d0d202c053f5d3e22b78cfb31",
+    "parent": "8e884d528391f0f3375d39ebbef971d0358b96a1",
+    "selectedManifest": "0a5d3d71315f35ab3426a60e1460cc42b21a5523ef97626e7640b0b9c1605ed0",
+    "originals": [
+      {
+        "acquisitions": 1,
+        "zipRegularBodies": 177,
+        "allZIPAndTARBodiesHashedBeforeArchivedJSON": true,
+        "artifact": 12795975532,
+        "sha256": "444adebbe1999bf26da68ffee51d47979c1acde774da5d8c37ba75f1916eeaeb",
+        "bytes": 89182999,
+        "scope": "proof",
+        "path": "C:/Users/antho/dukb-handoff/2026-10-27/cm-recruitment-shortlist-v1/remote-40640073328/proof/original.zip",
+        "job": 122655914014
+      },
+      {
+        "acquisitions": 1,
+        "zipRegularBodies": 39,
+        "allZIPAndTARBodiesHashedBeforeArchivedJSON": true,
+        "artifact": 12795965277,
+        "sha256": "f477f1f0fd666e984aea31a56b60f683d892492dcc6fde151834aee60badc39b",
+        "bytes": 37039333,
+        "scope": "build",
+        "path": "C:/Users/antho/dukb-handoff/2026-10-27/cm-recruitment-shortlist-v1/remote-40640073328/build/original.zip",
+        "job": 122655913906
+      },
+      {
+        "acquisitions": 1,
+        "zipRegularBodies": 21,
+        "allZIPAndTARBodiesHashedBeforeArchivedJSON": true,
+        "artifact": 12796201126,
+        "sha256": "df1fa660e6d14db0179ba2e04b60062b15922d18e4ea9f81901dc550a42036da",
+        "bytes": 39875062,
+        "scope": "units",
+        "path": "C:/Users/antho/dukb-handoff/2026-10-27/cm-recruitment-shortlist-v1/remote-40640073328/units/original.zip",
+        "job": 122655913656
+      }
+    ],
+    "totalRegularZIPBodies": 237,
+    "allRegularAndPaxTARBodiesHashedBeforeArchivedJSON": true,
+    "source": {
+      "allThreeSourceArchivesByteEqual": true,
+      "exactChangedPaths": [
+        ".github/workflows/cm-recruitment-shortlist-fixed.yml",
+        "qa/cm-recruitment-shortlist-v1/PHYSICAL-FAULTS.json",
+        "qa/cm-recruitment-shortlist-v1/SOURCE-READY.json",
+        "scripts/qa/cmRecruitmentPairs.mjs",
+        "scripts/qa/cmRecruitmentQualification.mjs",
+        "src/components/club-manager/RecruitmentBoard.tsx",
+        "src/test/clubManagerRecruitmentBoard.test.tsx"
+      ],
+      "selectedBodyPins": 14,
+      "parentCommonBodiesHeld": 5396,
+      "allNativeGitTreeBridges": 16209,
+      "canonicalInitialFinalHoldsEachJob": 5403,
+      "qaPins": 6,
+      "PAX": "efedad5a30f51e0cb38d522bd6a4bc24189db03d",
+      "sourceTarBytes": 143872000,
+      "regularBodies": 5403,
+      "sourceTarSHA256": "957a3f769f4a920dfa26c6e7d81b21b9a4fa866fbba598b36a00327ee3310373",
+      "controlledSourceTarBodyMapExact": true
+    },
+    "actual": {
+      "fullSuite": {
+        "copiedDiagnostics": 3,
+        "exact58SkippedIdentityStatusMultiset": true,
+        "files": 655,
+        "filesPassed": 653,
+        "durationSeconds": 1303.1,
+        "failed": 0,
+        "total": 9754,
+        "skipped": 58,
+        "filesSkipped": 2,
+        "noSuiteCLIInfrastructure": true,
+        "passed": 9696,
+        "owned38Passed": true,
+        "priorActual9753IdentityStatusMultisetHeldPlusOnlyNewTilePass": true
+      },
+      "pairs": {
+        "cases": 12,
+        "originalReadmissions": true,
+        "standaloneArms": 24,
+        "onlyOwnedRecruitmentProjected": true,
+        "actualArmClosuresAndRollovers": 12,
+        "copiedObservationRefusals": 5,
+        "annualScenarios": 6,
+        "recordedBeforeAfterSourcePins": 14,
+        "canonicalEngineInputs": 1,
+        "typedCoreFullTrimLeanDrawVectorAndNextEqual": true
+      },
+      "realAppTypeErrors": 0,
+      "focused": {
+        "total": 38,
+        "files": 4,
+        "skipped": 0,
+        "passed": 38,
+        "failed": 0,
+        "exactIdentities": true
+      },
+      "physical": {
+        "copiedInfrastructureDiagnostics": 4,
+        "eachAll38RestoredPass": true,
+        "eachActualTargetFail": 1,
+        "eachIndependentPass": 1,
+        "samePhysicalSourceRestores": 10,
+        "eachUnselectedFiltered": 36,
+        "changedFaults": 10
+      },
+      "build": {
+        "distInitialFinalBodies": 826,
+        "completed": true,
+        "unchangedFatalRoundedDownloadCaps": 15,
+        "rebuiltReaders": 15,
+        "keyPrintedCaps": [
+          {
+            "budgetKB": 636,
+            "route": "/club-manager",
+            "roundedKB": 636,
+            "files": 43,
+            "actualFatalScriptPass": true,
+            "tenthKB": 635.6
+          },
+          {
+            "budgetKB": 840,
+            "route": "/soccer-career",
+            "roundedKB": 839,
+            "files": 50,
+            "actualFatalScriptPass": true,
+            "tenthKB": 839.4
+          },
+          {
+            "budgetKB": 650,
+            "route": "/manager-hot-seat",
+            "roundedKB": 650,
+            "files": 45,
+            "actualFatalScriptPass": true,
+            "tenthKB": 649.7
+          },
+          {
+            "budgetKB": 660,
+            "route": "/deadline-day",
+            "roundedKB": 660,
+            "files": 48,
+            "actualFatalScriptPass": true,
+            "tenthKB": 659.5
+          }
+        ],
+        "sourceAndDistHolds": true
+      }
+    },
+    "receipts": {
+      "source": {
+        "sha256": "140dc6988fa7b6187048d81d9935bde073d8f73ca5832d21ff44328575b22449",
+        "path": "C:/Users/antho/dukb-handoff/2026-10-27/cm-recruitment-shortlist-v1/remote-40640073328/COMMON-SOURCE-ADMISSION.json"
+      },
+      "current38Types": {
+        "sha256": "63dfc0ce6a5065416d009173a3ae4801c8da348044d2306e022b69497c44906c",
+        "path": "C:/Users/antho/dukb-handoff/2026-10-27/cm-recruitment-shortlist-v1/remote-40640073328/proof/CURRENT38-TYPES-SOURCE-ADMISSION.json"
+      },
+      "physical": {
+        "sha256": "9c3409394bd87b17e40a8a6ba89512a4718ae047a4d7c58980635b1fbe261f67",
+        "path": "C:/Users/antho/dukb-handoff/2026-10-27/cm-recruitment-shortlist-v1/remote-40640073328/proof/PHYSICAL-ADMISSION.json"
+      },
+      "pairs": {
+        "sha256": "3889162ef56aec3bd8a23c13e9e9905a05cfccfdc1ae78031a8f8128b5837b09",
+        "path": "C:/Users/antho/dukb-handoff/2026-10-27/cm-recruitment-shortlist-v1/remote-40640073328/proof/peer-discovery-pairs-v1/REVIEW-RECEIPT.json"
+      },
+      "units": {
+        "sha256": "4ed5b283867058769dc23cd7ccae54a28b961670063f07ccd227cd4ff0a4cb43",
+        "path": "C:/Users/antho/dukb-handoff/2026-10-27/cm-recruitment-shortlist-v1/remote-40640073328/units/FINAL-UNIT-ADMISSION-v2.json"
+      },
+      "build": {
+        "sha256": "0060314e31714e9e052e9e9054a0cd654d1997e0237c6926f1d06f2e4b9706c6",
+        "path": "C:/Users/antho/dukb-handoff/2026-10-27/cm-recruitment-shortlist-v1/remote-40640073328/build/FINAL-BUILD-ADMISSION.json"
+      }
+    },
+    "generation": {
+      "requestedRoutes": [
+        "/club-manager",
+        "/whats-new"
+      ],
+      "whatsNewOneInheritedSourceItem": true,
+      "clubSnapshotByteExact": true,
+      "canonicalAdoption": false,
+      "rawBeforeAfterAndFullPatchRetained": true,
+      "onlyLedgerRecord": "/whats-new",
+      "fullPatchPaths": [
+        "public/sitemap.xml",
+        "public/whats-new/index.html",
+        "scripts/data/lastmod.json"
+      ],
+      "detachedQAOnly": true
+    },
+    "browser": {
+      "noOriginalAcquiredByThisOwner": true,
+      "soleOriginalOwner": "Bingo",
+      "status": "SEPARATE_ACTIVE_NOT_CREDITED",
+      "run": 40643672069,
+      "head": "50317516c71aa7b927336dd7885feabee6ac3816",
+      "expected": "6componentjourneys18normalPNGs8COPIEDcontrols"
+    },
+    "limits": [
+      "All local work is native PowerShell/.NET archive/hash/text/JSON review. Actual application execution occurred only in the recorded remote Actions jobs.",
+      "No current browser gameplay, screenshot, full-route or cold-chunk proof is claimed here. The separately running browser qualification and actual individual PNG review remain required.",
+      "All three saved annual targets were legacy identities at save; two later resolve to keys. No keyed-at-save annual or host-growth claim.",
+      "Five paired observation controls are COPIED changes with specific refusal and original readmission, not same changed-copy restoration. Physical ten source controls have actual same-copy source and38-case restores.",
+      "The prior SC9755 reference is used only for58 skipped identity/status multiplicities. Fresh currentCM9754 is the observed denominator; previousCM9753 status multiset is independently held plus only the new tile case.",
+      "Download caps use unchanged Math.round(total/1024) fatal comparisons. Printed tenthKB values are supplemental, exact gzip byte totals were not emitted.",
+      "Generated snapshots/ledger/sitemap changes are retained detached QA evidence, not canonical source adoption, I composition, main merge or publication."
+    ],
+    "admissionSHA256": "6585f49a3c751acd6d09cfe327b915093eed485ec8d0fd2e57f0badb66276e78"
+  },
+  "browser": {
+    "status": "NATIVE_COMPONENT_FRAME_QUALIFICATION_CLOSED",
+    "run": 40643672069,
+    "head": "50317516c71aa7b927336dd7885feabee6ac3816",
+    "tree": "487fffbf8d708a9b6148d4ab799492245cb9e101",
+    "artifact": 12796782219,
+    "bytes": 41184334,
+    "zipSHA256": "74a466a63bee6504d65fd7d21667f720ad5c7b2bce41f2f9624919bb5223ec30",
+    "soleOriginalOwner": "Bingo",
+    "rootSix320PNGReceiptSHA256": "f9e00fbef6a08bb881df62a32f477a8f0199039beca7df7d0f0e51b7d02d9377",
+    "desktopSix1280PNGReceiptSHA256": "8f587029178479654ab2ba50e046124480a99337967550ca6aeb02c28ebbf6a1",
+    "phoneSix390PNGReceiptSHA256": "a5b6ab94b6f283e8e2947f6a12e83d63d484ee58fc9cfab8ab790e4586a9f9ae",
+    "actualIndividualOriginalPNGViews": 18,
+    "job": 122667403802,
+    "parent": "efedad5a30f51e0cb38d522bd6a4bc24189db03d",
+    "parentTree": "3fe82feca4fb638d0d202c053f5d3e22b78cfb31",
+    "selectedProductManifest": "0a5d3d71315f35ab3426a60e1460cc42b21a5523ef97626e7640b0b9c1605ed0",
+    "original": {
+      "id": 12796782219,
+      "bytes": 41184334,
+      "sha256": "74a466a63bee6504d65fd7d21667f720ad5c7b2bce41f2f9624919bb5223ec30",
+      "downloadAttempts": 1,
+      "allZIPBodies": 132,
+      "allTARBodies": 5405,
+      "sourceTarSha256": "047846f1326d9534698cb2312b27b8d00dd6c8c100516e4c20998d7d86abeeac",
+      "inventorySha256": "9b4aab77dc0f8ba90a81392edea6eee4e565d81ff02310c298473bfb3fe37d74",
+      "tarInventorySha256": "286d4ca9397ef1dfc3d2c197c745de9a004eada23b5db43869df3005e4512eae"
+    },
+    "actual": {
+      "profiles": 6,
+      "single": 3,
+      "filled": 3,
+      "stateBindings": 33,
+      "originalPNGs": 18,
+      "copiedDetectorRecords": 8,
+      "pageConsoleErrors": 0,
+      "unknownRequests": 0,
+      "forwardedExternalHttp": 0,
+      "builtReaders": 15,
+      "roundedFatalCaps": 15,
+      "heldDistFiles": 826
+    },
+    "source": {
+      "gitTreeBodyBridges": 5405,
+      "parentBodiesHeld": 5403,
+      "onlyTwoQAAdds": true,
+      "allTrackedBeforeFinal": 5405,
+      "actualSelectedPins": 14,
+      "metafileCanonicalEngine": 1,
+      "copiedEngine": 0,
+      "engineA505Bytes": 1240569,
+      "clientSha256": "fb2158385e475aa61a949aa2ad5cb21e966797f45f71bb4d7a5dfcbb9d5df00f",
+      "syntaxAndTypes": "ActualstepsSUCCESS plus0-byte retainedlogs; commands sourcebound to remote node--check and tsconfig.app tsc"
+    },
+    "rawAdmission": {
+      "path": "C:/Users/antho/dukb-handoff/2026-10-27/cm-recruitment-shortlist-v1/remote-40643672069/RAW-STATE-SOURCE-ADMISSION.json",
+      "sha256": "c941457cf4a5a11fbde2bc95fcddf7a86796eed233f8a7e4c909f8c120a65989"
+    },
+    "visualUnion": {
+      "path": "C:/Users/antho/dukb-handoff/2026-10-27/cm-recruitment-shortlist-v1/remote-40643672069/VISUAL-18-UNION.json",
+      "sha256": "3ee8240e510be455138be241ba9ab53fb9c6a2cb73ca7a515a754155ab02e44b",
+      "views": 18,
+      "allIndividualOriginals": true,
+      "allHashIdentitiesHeld": true
+    },
+    "currentFunctionalSourceQualification": {
+      "run": 40640073328,
+      "receiptSha256": "6585f49a3c751acd6d09cfe327b915093eed485ec8d0fd2e57f0badb66276e78",
+      "owner": "Handoff",
+      "scope": "Separate admittedcurrent38/types/10physical38restores/12pairs/full9754/9696PASS58oldskip/15readers15roundedcaps/sourceholds, no duplicate acquisition bynativeowner"
+    },
+    "generation": {
+      "trackedPaths": [
+        "public/sitemap.xml",
+        "public/whats-new/index.html",
+        "scripts/data/lastmod.json"
+      ],
+      "changedLedgerEntries": [
+        "/whats-new"
+      ],
+      "clubManagerRawHTMLHeld": true,
+      "whatsNewBeforeHash": "ab330ed3dbc6ee03fefb29a31b09e4764be56bd4a6c486fd0428b650643d7a08",
+      "whatsNewAfterHash": "2ba6193e0615ba8c4ef71bc402816dc6afddb70500bb38ba224d4aa95b25fca8",
+      "retainedDiffSha256": "2600176d4116258a135f0f87fd7f74d90119e2471316e0b62f48911df6ae31f0",
+      "sourceAdoptedGeneratedChanges": false
+    },
+    "publication": "No main/I/merge/live action. OnlytwoisolatedQAfiles pushedabovequalifiedefed. Root/Handoffowncleanfeature source/doc delivery.",
+    "limits": [
+      "Native PowerShell/.NET/hash/JSON/text inspection only, no local Node/app/compiler/parser/browser/Git orduplicateoriginal acquisition",
+      "Actual TransferScreen/RecruitmentBoard componentframe withproductionCSS/fonts; no wholeClubManagerroute/chrome/productioncoldchunk oractualhookphase/slot/fence/quota claim",
+      "WholeJSONstate andofficialdisk byte equality checked at33capturebindings; typed undefined/nonfinite semantics are separatelycovered bycurrent12pairedproof, notJSONUIrecords",
+      "Filled12metadata adds/two save calls are explicitsetupfixture only, nottwelveuserSaveclicks; measuredView/detail/Back actions preservestate/raw/drawcount/acceptedparentcommits",
+      "CurrentDOMfact equality executesinheldPlaywrightsource. Nativepeer bindsactualselected objects/state/HTML/PNG, doesnotrunHTMLparser/canonicalengine locally",
+      "ImmediateBackfocus is recorded, onlyeventual<=2sec andsettledactualViewfocusrequired; actualscrollvalues retained",
+      "EightCOPIED detector controls sourceholds mutations/assertions/samecopyrestores; changedobservations wereinmemory, notseparate raw changedJSONfiles orphysicalUI/sourcefaults",
+      "Fatalcaps useheldroundedK gates; tenthsK rows retained, no stricterunroundedcapclaim orbudgetchange",
+      "Generation isscopedtrackedWhatsNewHTML+ledgerrow+sitemaprow/headerdate; unrelatedtrackedpublicfiles heldbydiff, no generatedartifactadoption",
+      "All18actualpixelviews/limits requireseparateassignedreceipts; root320BackBac/k wrap isknownaestheticlimit, no allgallery/WCAG/globalno-overlapclaim",
+      "Component-frame originalPNG observations only,no contactsheets/fullroute/chrome/live/I-target/WCAG/globalno-overlap acceptance",
+      "Root320 Back label wraps Bac/k butisfullyvisible; bounded aestheticfinding retained,no new productchange requested",
+      "Exactdimensions/focus/disabledstate/transactions/RNG come fromrawbrowser/source proof, notpixels",
+      "Offlineflag images arecounted cosmeticSVGfixtures, noflagfidelity claim"
+    ],
+    "finalAdmissionSHA256": "2b308d20cf7fdc99e60845a0be4cbfef5ac461f18c0b31b0159658e325b72a10",
+    "allOriginalPNGsActuallyViewed": 18
+  },
+  "limits": [
+    "Application, browser, compiler and test execution only occurred in the identified remote Actions jobs. Local work was native source, archive, hashing, JSON and pixel review.",
+    "Full suite, physical controls and native browser are separate observations, with original identities and scopes retained.",
+    "Annual paired targets were legacy identities at save, two later resolved to keys. No keyed-at-save annual-growth claim.",
+    "All screenshot/browser proof is a component frame, not the full route, production chrome or cold lazy import.",
+    "At320 the visible Back label wraps over two lines. No blocked action or overlap observed in the six Root original views.",
+    "Unchanged download budgets use fatal Math.round(total/1024) comparisons. TenthKB output is supplemental and not an exact byte ceiling.",
+    "Detached regenerated snapshots, sitemap and ledger are proof outputs only. Source proposal does not merge main, compose protected release or publish the live site.",
+    "Old282b qualification remains historical source credit, not evidence for the current tile implementation."
+  ],
+  "clean": {
+    "url": "https://github.com/PapiSalgueroM/ballpark-hero/pull/420",
+    "branch": "codex/cm-recruitment-shortlist-20261028",
+    "head": "11aa2a6ef34c3cda3d2d88d95b2fd7d41fbbcd9e",
+    "tree": "bf5e6d0a486f81f3310af7932111bae57b241008",
+    "base": "14ec28b1cbc82b1abcdf14244dec7acae25d1507",
+    "baseBranch": "codex/cm-loan-plan-20261027",
+    "paths": [
+      {
+        "path": "docs/PROJECT-STATE.md",
+        "gitBlob": "2c638efd3aa809d066e9cdb77505580344036dc5",
+        "status": "modified"
+      },
+      {
+        "path": "src/components/club-manager/RecruitmentBoard.tsx",
+        "gitBlob": "64189e7f8e0a43dd889864ec27bf492b7f9dccf3",
+        "status": "added"
+      },
+      {
+        "path": "src/components/club-manager/TransferScreen.tsx",
+        "gitBlob": "0885718df16e150b83c42644c3c39594a554d9be",
+        "status": "modified"
+      },
+      {
+        "path": "src/hooks/useClubManager.ts",
+        "gitBlob": "7297073ea60b93501df48ea9b7dfc74edd2217de",
+        "status": "modified"
+      },
+      {
+        "path": "src/lib/clubManagerRecruitment.ts",
+        "gitBlob": "caa7fd65ad86a79c16b73f0253021fc2b6343cee",
+        "status": "added"
+      },
+      {
+        "path": "src/pages/ClubManager.tsx",
+        "gitBlob": "e011dd037f611721fac7649128c23e6d9af355c9",
+        "status": "modified"
+      },
+      {
+        "path": "src/test/clubManagerRecruitment.test.ts",
+        "gitBlob": "225e55417b13ac02d40be6a75c3d0a54aff19302",
+        "status": "added"
+      },
+      {
+        "path": "src/test/clubManagerRecruitmentBaseline.test.tsx",
+        "gitBlob": "23fbabdbf6164fa16ce3b7a806ec749a63949561",
+        "status": "added"
+      },
+      {
+        "path": "src/test/clubManagerRecruitmentBoard.test.tsx",
+        "gitBlob": "820627a87cdb45c586622b1379892ba8aa4c07fa",
+        "status": "added"
+      },
+      {
+        "path": "src/test/clubManagerRecruitmentHook.test.tsx",
+        "gitBlob": "c435c9777b697a8eb5c53f1a06b805a80e519170",
+        "status": "added"
+      }
+    ],
+    "allTenPinsCheckedByRoot": true,
+    "pushReceiptSHA256": "75edeb403f1bd36909c1154fe2f4131f4e04c04b9426ef2761bd427a83e6a4ae",
+    "doc": {
+      "baseBytes": 1894211,
+      "basePrefixByteExact": true,
+      "localPath": "C:/Users/antho/dukb-handoff/2026-10-27/cm-recruitment-shortlist-v1/clean-feature-v1/candidate/docs/PROJECT-STATE.md",
+      "bytes": 1901247,
+      "gitBlob": "2c638efd3aa809d066e9cdb77505580344036dc5",
+      "baseGitBlob": "5c9ad3586d376435d54905eb50650f93d9201e48",
+      "sha256": "790f681f216b7634eb2dd489d04c463092247c1b9553e17de7c4266b408949f6",
+      "baseSHA256": "2fcb8975c8bdeb188adec307b2d6b83fd0bb84e86cc0f17a0f97afc443dd9e3d",
+      "path": "docs/PROJECT-STATE.md",
+      "appendBytes": 7036
+    },
+    "mergeableAtRead": true,
+    "mergeableStateAtRead": "unstable"
+  },
+  "preservedTargets": {
+    "main": "b20ec6664df9d4c58d63ea0596791d33b2a3b8fc",
+    "protectedOwnerI": "12c1b2cd001f9309a31a887e5c432ca63c373852",
+    "livePublicationPerformed": false
+  }
+}
