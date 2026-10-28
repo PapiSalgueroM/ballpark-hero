@@ -1,0 +1,86 @@
+name: Soccer Career Ligue 2 intended baseline
+on:
+  push:
+    branches: [codex/sc-ligue2-baseline-20261028]
+    paths:
+      - .github/workflows/sc-ligue2-baseline.yml
+      - scripts/qa/scLigue2BaselineQualification.mjs
+      - scripts/qa/ligue2ReleaseBaseline.mjs
+      - 'qa/sc-ligue2-release-v1/**'
+permissions:
+  contents: read
+concurrency:
+  group: sc-ligue2-baseline-${{ github.sha }}
+  cancel-in-progress: false
+defaults:
+  run:
+    shell: bash
+jobs:
+  baseline:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    env:
+      CI: '1'
+      SIM_NETWORK: offline
+      CAREER_SEASON_LOCAL_ONLY: '1'
+      SC_LIGUE2_ARTIFACTS: ${{ github.workspace }}/ligue2-baseline-artifacts
+      SC_LIGUE2_BASELINE_OUT: ${{ github.workspace }}/ligue2-baseline-artifacts/consumer
+      SC_LIGUE2_QUAL_OUT: ${{ github.workspace }}/ligue2-baseline-artifacts/qualification
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.sha }}
+          fetch-depth: 2
+          persist-credentials: false
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: npm
+      - name: Exact immutable parent, seven QA paths and original sources
+        run: |
+          set -euo pipefail
+          test "$GITHUB_REF_NAME" = codex/sc-ligue2-baseline-20261028
+          test "$(git rev-parse HEAD)" = "$GITHUB_SHA"
+          test "$(git rev-parse HEAD^)" = e1b33581532b1514e4510e9d89e633e5305fa963
+          test "$(git rev-list --parents -n 1 HEAD | wc -w)" = 2
+          mkdir -p "$SC_LIGUE2_ARTIFACTS"
+          git rev-parse HEAD HEAD^{tree} > "$SC_LIGUE2_ARTIFACTS/head-tree.txt"
+          git archive --format=tar HEAD > "$SC_LIGUE2_ARTIFACTS/source.tar"
+          git ls-tree -r HEAD > "$SC_LIGUE2_ARTIFACTS/source-tree.txt"
+          git ls-files -z | sort -z | xargs -0 sha256sum > "$SC_LIGUE2_ARTIFACTS/tracked-before.sha256"
+          printf '%s  %s\n' 097c7b3558708ffe023bb65e01e97a4ab60db35f714aede56162cd92f64c5b4d qa/sc-ligue2-release-v1/BASELINE-SOURCE-READY.json | sha256sum --check
+          printf '%s  %s\n' 3e4c7d2e68ae4a119363fe4452671d5e189a21b24a4ddb3ec89d72d1d2f8445d scripts/qa/scLigue2BaselineQualification.mjs | sha256sum --check
+          printf '%s  %s\n' 4502950f9fdf5f0a3597872ea77ab5d239cd911b3ba679b76f243e7c49783cfc scripts/qa/ligue2ReleaseBaseline.mjs | sha256sum --check
+          printf '%s  %s\n' 8a9cae104adc5ce0b7713b7eee42d4bb4e8f5d60aac68d809b6cf472c0c42992 qa/sc-ligue2-release-v1/TEST-FIRST-SOURCE-READY.json | sha256sum --check
+          node --check scripts/qa/scLigue2BaselineQualification.mjs
+          node --check scripts/qa/ligue2ReleaseBaseline.mjs
+          NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/qa/scLigue2BaselineQualification.mjs source 2>&1 | tee "$SC_LIGUE2_ARTIFACTS/source-pins.log"
+          git diff --name-only e1b33581532b1514e4510e9d89e633e5305fa963 HEAD | sort > "$SC_LIGUE2_ARTIFACTS/changed-paths.txt"
+          diff -u "$SC_LIGUE2_QUAL_OUT/expected-paths.txt" "$SC_LIGUE2_ARTIFACTS/changed-paths.txt"
+          echo '127.0.0.1 flawuiqbvjobmkfkauhw.supabase.co' | sudo tee -a /etc/hosts
+          npm ci 2>&1 | tee "$SC_LIGUE2_ARTIFACTS/npm-ci.log"
+      - name: Real application types
+        run: |
+          set -euo pipefail
+          NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node_modules/.bin/tsc --noEmit -p tsconfig.app.json 2>&1 | tee "$SC_LIGUE2_ARTIFACTS/types.log"
+      - name: Seven actual cases, five precise feature assertions and two preservation passes
+        run: |
+          set -euo pipefail
+          NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/qa/scLigue2BaselineQualification.mjs run 2>&1 | tee "$SC_LIGUE2_ARTIFACTS/admission.log"
+          grep -Fx 'LIGUE2_BASELINE_QUALIFIED: 7 cases, 5 intended feature assertions, 2 preservation passes, 8 COPIED diagnostic controls, 0 method errors' "$SC_LIGUE2_ARTIFACTS/admission.log" > /dev/null
+      - name: Every tracked source held, including failures
+        if: always()
+        run: |
+          set -euo pipefail
+          sha256sum --check "$SC_LIGUE2_ARTIFACTS/tracked-before.sha256" > "$SC_LIGUE2_ARTIFACTS/tracked-held.log"
+          git status --porcelain --untracked-files=no > "$SC_LIGUE2_ARTIFACTS/tracked-status.txt"
+          test ! -s "$SC_LIGUE2_ARTIFACTS/tracked-status.txt"
+          git diff --exit-code HEAD
+      - name: Retain original baseline, fixtures and failures
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: sc-ligue2-baseline-${{ github.run_id }}-${{ github.run_attempt }}
+          path: ligue2-baseline-artifacts/
+          if-no-files-found: error
+          retention-days: 14

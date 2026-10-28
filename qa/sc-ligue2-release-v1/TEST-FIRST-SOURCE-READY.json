@@ -1,0 +1,160 @@
+{
+  "status": "SOURCE ONLY, baseline runtime UNRUN",
+  "baseCommit": "e1b33581532b1514e4510e9d89e633e5305fa963",
+  "baseTree": "efa6983f4797eb4a263479aa47637c8798958cf3",
+  "designManifestSHA256": "75c8c2300d5cb74e24072a9df208e053c7dbac35381e5b225889ca794400d09b",
+  "consumer": "scripts/qa/ligue2ReleaseBaseline.mjs",
+  "consumerCommand": "node scripts/qa/ligue2ReleaseBaseline.mjs",
+  "outputEnv": "SC_LIGUE2_BASELINE_OUT",
+  "defaultOutput": "ligue2-baseline-artifacts",
+  "rawExpectedExit": 1,
+  "baselineExpected": {
+    "cases": 7,
+    "passed": 2,
+    "assertionFailures": 5,
+    "methodErrors": 0,
+    "preciseClosing": "LIGUE2_BASELINE: 7 cases; 2 passed; 5 assertion failures; 0 method errors; source held"
+  },
+  "cases": [
+    {
+      "index": 0,
+      "name": "complete initial-contract pool and since boundary",
+      "status": "failed",
+      "errorName": "AssertionError",
+      "requiredMessagePrefix": "MISSING_LIGUE2_PLAYING_POOL"
+    },
+    {
+      "index": 1,
+      "name": "complete modern finish ladder",
+      "status": "failed",
+      "errorName": "AssertionError",
+      "requiredMessagePrefix": "MISSING_LIGUE2_LADDER"
+    },
+    {
+      "index": 2,
+      "name": "playing table size points and cadence boundary",
+      "status": "failed",
+      "errorName": "AssertionError",
+      "requiredMessagePrefix": "MISSING_LIGUE2_TABLE_GATE"
+    },
+    {
+      "index": 3,
+      "name": "historic default manager entry excludes the appended17",
+      "status": "failed",
+      "errorName": "AssertionError",
+      "requiredMessagePrefix": "MISSING_LIGUE2_RETIREMENT_YEAR_GATE"
+    },
+    {
+      "index": 4,
+      "name": "historic coursework read and commit exclude the appended17",
+      "status": "failed",
+      "errorName": "AssertionError",
+      "requiredMessagePrefix": "MISSING_LIGUE2_COURSEWORK_YEAR_GATE"
+    },
+    {
+      "index": 5,
+      "name": "existing190 hand definitions remain frozen",
+      "status": "passed",
+      "errorName": null,
+      "requiredMessagePrefix": null
+    },
+    {
+      "index": 6,
+      "name": "retained generic lower-club offer survives codec and acceptance",
+      "status": "passed",
+      "errorName": null,
+      "requiredMessagePrefix": null
+    }
+  ],
+  "scope": "Baseline only. Complete initial-contract definitions, ladder and table; not18 entirely new transfer destinations. Physical appended17 are controlled real CM identities, not canonical product writes. No generic-colour derive refusal counts as RED.",
+  "preservation": "Actual exported HAND_CLUBS190 identity/fingerprint; actual old accented generic projection/raw offer, official codec/repair and canonical acceptance. The retained old generic raw fixture must feed fixed replay later, never be regenerated from expanded data.",
+  "observer": "Byte-exact original coursework module816ddd plus a53B canonical-engine forwarder. Genuine old-source quote source===the historical input; current commit executes BEFORE owned list/refusal assertion.",
+  "requiredClassifier": "Strict7case names/statuses/5AssertionError prefixes, exact closing/raw1, zero methodErrors and no infrastructure field. No unknown assertion or module/fixture/timeout/method failure counts as RED; complete14critical source map equality and all tracked source holds. Effective changed copied diagnostic controls and readmission supplied by the workflow owner.",
+  "peer": "test-first-v1/peer-discovery-v1/REVIEW-RECEIPT.json SHAb22f0a45ec6995a89b963e3079e76c1d541cb32381f3f4d86579b54d0a7c6ffe",
+  "productWrites": 0,
+  "controllerWorkflowOwner": "handoff_review; Root reviews before any remote push",
+  "localRuntime": "NONE",
+  "files": [
+    {
+      "path": "qa/sc-ligue2-release-v1/original/soccerCareerCoachingStart.ts",
+      "bytes": 3740,
+      "sha256": "816ddd0c3c0e3e5538ffe0cc08828cb60b10b70a91280fb04a917897891679fc",
+      "gitBlob": "31832575462ba134937d62384c358c2c79f51032"
+    },
+    {
+      "path": "qa/sc-ligue2-release-v1/original/soccerCareerEngine.ts",
+      "bytes": 53,
+      "sha256": "aac460377e77782787790595e445ad662c6cb4ccfb2ef097286bc74c10f3f016",
+      "gitBlob": "1b174fec64943520d52da7dddfd68a5fe188d6b5"
+    },
+    {
+      "path": "scripts/qa/ligue2ReleaseBaseline.mjs",
+      "bytes": 14062,
+      "sha256": "4502950f9fdf5f0a3597872ea77ab5d239cd911b3ba679b76f243e7c49783cfc",
+      "gitBlob": "9a44d0422c94521f4a8fa4d39b36196d7cdc7a17"
+    }
+  ],
+  "sourcePins": [
+    {
+      "path": "scripts/data/soccerCareerFacts.json",
+      "bytes": 155064,
+      "sha256": "30f66a537a7cb5546f3c4694b60370c7230b99e38f47799236b1f47c586058a5"
+    },
+    {
+      "path": "scripts/lib/careerClubPool.mjs",
+      "bytes": 22479,
+      "sha256": "44d22724251bfb81daf858ecf90464495076772a781ddceee61dbeb28d0dc253"
+    },
+    {
+      "path": "src/data/leagueFormat.ts",
+      "bytes": 7008,
+      "sha256": "76d189179c606475113e7289a1145a9d2036c7741b7c918aed0efd796bebc0ec"
+    },
+    {
+      "path": "src/data/soccerCareerClubPool.ts",
+      "bytes": 43978,
+      "sha256": "735d636cb22c14794692fef45e22323fe85d3c38cbbdbaa1df1ccc7aba961bd8"
+    },
+    {
+      "path": "src/lib/careerEras.ts",
+      "bytes": 105789,
+      "sha256": "f3e7347f58abe993db9fd72e9896ea0767a6ca7eb3b19861b75b92b387f89c1c"
+    },
+    {
+      "path": "src/lib/clubManager.ts",
+      "bytes": 1240569,
+      "sha256": "05de3cfca8d978e6117979fb29b82b2ece7b9fb6ee1f2ce3c051e379e36de86e"
+    },
+    {
+      "path": "src/lib/soccerCareerCoachingStart.ts",
+      "bytes": 3740,
+      "sha256": "816ddd0c3c0e3e5538ffe0cc08828cb60b10b70a91280fb04a917897891679fc"
+    },
+    {
+      "path": "src/lib/soccerCareerDerby.ts",
+      "bytes": 23313,
+      "sha256": "eafe7005ece8fe2b4c44e380ba5d980a6535d3700f3a05be69f65e776288db99"
+    },
+    {
+      "path": "src/lib/soccerCareerEngine.ts",
+      "bytes": 551628,
+      "sha256": "d7d94a36b796af66914cdf9bd4803cf42b027f423ceb8baac9fb144677de7030"
+    },
+    {
+      "path": "src/lib/soccerCareerLeague.ts",
+      "bytes": 47199,
+      "sha256": "adb5555de0adc046bed402fd7386305baf5ce9e96aba023b6a64541f9785ca68"
+    },
+    {
+      "path": "src/lib/soccerCareerLeagueWorld.ts",
+      "bytes": 15636,
+      "sha256": "360c629f5d6ecc9cd959f5aae9a3791eb99b4f5cecdca2236da563168c2bb8c6"
+    },
+    {
+      "path": "src/lib/soccerCareerSave.ts",
+      "bytes": 6287,
+      "sha256": "b486dfd8c4073230b6967c674058e46c7b56a6afd2a8a165f1e215501205477a"
+    }
+  ],
+  "criticalSourceBeforeAfterCount": 14
+}

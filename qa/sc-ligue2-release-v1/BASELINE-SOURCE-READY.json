@@ -1,0 +1,183 @@
+{
+  "status": "BASELINE_SOURCE_FROZEN_RUNTIME_UNRUN",
+  "baseCommit": "e1b33581532b1514e4510e9d89e633e5305fa963",
+  "baseTree": "efa6983f4797eb4a263479aa47637c8798958cf3",
+  "baseRegularBodies": 5428,
+  "expectedRegularBodies": 5435,
+  "branch": "codex/sc-ligue2-baseline-20261028",
+  "allowedChanges": [
+    ".github/workflows/sc-ligue2-baseline.yml",
+    "scripts/qa/scLigue2BaselineQualification.mjs",
+    "scripts/qa/ligue2ReleaseBaseline.mjs",
+    "qa/sc-ligue2-release-v1/BASELINE-SOURCE-READY.json",
+    "qa/sc-ligue2-release-v1/TEST-FIRST-SOURCE-READY.json",
+    "qa/sc-ligue2-release-v1/original/soccerCareerCoachingStart.ts",
+    "qa/sc-ligue2-release-v1/original/soccerCareerEngine.ts"
+  ],
+  "critical": [
+    {
+      "path": "scripts/data/soccerCareerFacts.json",
+      "bytes": 155064,
+      "sha256": "30f66a537a7cb5546f3c4694b60370c7230b99e38f47799236b1f47c586058a5",
+      "gitBlob": "668ec82179b21e3314d5e1907635f565e4259765"
+    },
+    {
+      "path": "scripts/lib/careerClubPool.mjs",
+      "bytes": 22479,
+      "sha256": "44d22724251bfb81daf858ecf90464495076772a781ddceee61dbeb28d0dc253",
+      "gitBlob": "244dbd4c24f771baca38e8749a044d825eef20b2"
+    },
+    {
+      "path": "src/data/leagueFormat.ts",
+      "bytes": 7008,
+      "sha256": "76d189179c606475113e7289a1145a9d2036c7741b7c918aed0efd796bebc0ec",
+      "gitBlob": "df8aa75d55eda49dcdc455e2be9d86c57848a3a7"
+    },
+    {
+      "path": "src/data/soccerCareerClubPool.ts",
+      "bytes": 43978,
+      "sha256": "735d636cb22c14794692fef45e22323fe85d3c38cbbdbaa1df1ccc7aba961bd8",
+      "gitBlob": "15fe51c1cfa9ffbd43bd86576ad7bbc3bea8840c"
+    },
+    {
+      "path": "src/lib/careerEras.ts",
+      "bytes": 105789,
+      "sha256": "f3e7347f58abe993db9fd72e9896ea0767a6ca7eb3b19861b75b92b387f89c1c",
+      "gitBlob": "e037022342382b1df9c8a5ede620d2cce480bc23"
+    },
+    {
+      "path": "src/lib/clubManager.ts",
+      "bytes": 1240569,
+      "sha256": "05de3cfca8d978e6117979fb29b82b2ece7b9fb6ee1f2ce3c051e379e36de86e",
+      "gitBlob": "a505743537b383bc7885bb81f5a72c11e154b566"
+    },
+    {
+      "path": "src/lib/soccerCareerCoachingStart.ts",
+      "bytes": 3740,
+      "sha256": "816ddd0c3c0e3e5538ffe0cc08828cb60b10b70a91280fb04a917897891679fc",
+      "gitBlob": "31832575462ba134937d62384c358c2c79f51032"
+    },
+    {
+      "path": "src/lib/soccerCareerDerby.ts",
+      "bytes": 23313,
+      "sha256": "eafe7005ece8fe2b4c44e380ba5d980a6535d3700f3a05be69f65e776288db99",
+      "gitBlob": "60478118d744b618e30f8ed651055c12449592b8"
+    },
+    {
+      "path": "src/lib/soccerCareerEngine.ts",
+      "bytes": 551628,
+      "sha256": "d7d94a36b796af66914cdf9bd4803cf42b027f423ceb8baac9fb144677de7030",
+      "gitBlob": "8a927bd55b650feb3378b6cf3d4c9d54b1cb6199"
+    },
+    {
+      "path": "src/lib/soccerCareerLeague.ts",
+      "bytes": 47199,
+      "sha256": "adb5555de0adc046bed402fd7386305baf5ce9e96aba023b6a64541f9785ca68",
+      "gitBlob": "7b65ad0ad43825dcc159db83de100eda8330c102"
+    },
+    {
+      "path": "src/lib/soccerCareerLeagueWorld.ts",
+      "bytes": 15636,
+      "sha256": "360c629f5d6ecc9cd959f5aae9a3791eb99b4f5cecdca2236da563168c2bb8c6",
+      "gitBlob": "72fcabdd0c557a743aa849b01208140c3030048f"
+    },
+    {
+      "path": "src/lib/soccerCareerSave.ts",
+      "bytes": 6287,
+      "sha256": "b486dfd8c4073230b6967c674058e46c7b56a6afd2a8a165f1e215501205477a",
+      "gitBlob": "86ec011693fd5bc702b5e8ccec05d27775a72a76"
+    },
+    {
+      "path": "qa/sc-ligue2-release-v1/original/soccerCareerCoachingStart.ts",
+      "bytes": 3740,
+      "sha256": "816ddd0c3c0e3e5538ffe0cc08828cb60b10b70a91280fb04a917897891679fc",
+      "gitBlob": "31832575462ba134937d62384c358c2c79f51032"
+    },
+    {
+      "path": "qa/sc-ligue2-release-v1/original/soccerCareerEngine.ts",
+      "bytes": 53,
+      "sha256": "aac460377e77782787790595e445ad662c6cb4ccfb2ef097286bc74c10f3f016",
+      "gitBlob": "1b174fec64943520d52da7dddfd68a5fe188d6b5"
+    }
+  ],
+  "producers": [
+    {
+      "path": "scripts/qa/ligue2ReleaseBaseline.mjs",
+      "bytes": 14062,
+      "sha256": "4502950f9fdf5f0a3597872ea77ab5d239cd911b3ba679b76f243e7c49783cfc",
+      "gitBlob": "9a44d0422c94521f4a8fa4d39b36196d7cdc7a17"
+    },
+    {
+      "path": "qa/sc-ligue2-release-v1/TEST-FIRST-SOURCE-READY.json",
+      "bytes": 6590,
+      "sha256": "8a9cae104adc5ce0b7713b7eee42d4bb4e8f5d60aac68d809b6cf472c0c42992",
+      "gitBlob": "1f1a88b1046cf7b8d8a381f7e6b4406135ab4588"
+    }
+  ],
+  "cases": [
+    {
+      "index": 0,
+      "name": "complete initial-contract pool and since boundary",
+      "status": "failed",
+      "errorName": "AssertionError",
+      "requiredMessagePrefix": "MISSING_LIGUE2_PLAYING_POOL"
+    },
+    {
+      "index": 1,
+      "name": "complete modern finish ladder",
+      "status": "failed",
+      "errorName": "AssertionError",
+      "requiredMessagePrefix": "MISSING_LIGUE2_LADDER"
+    },
+    {
+      "index": 2,
+      "name": "playing table size points and cadence boundary",
+      "status": "failed",
+      "errorName": "AssertionError",
+      "requiredMessagePrefix": "MISSING_LIGUE2_TABLE_GATE"
+    },
+    {
+      "index": 3,
+      "name": "historic default manager entry excludes the appended17",
+      "status": "failed",
+      "errorName": "AssertionError",
+      "requiredMessagePrefix": "MISSING_LIGUE2_RETIREMENT_YEAR_GATE"
+    },
+    {
+      "index": 4,
+      "name": "historic coursework read and commit exclude the appended17",
+      "status": "failed",
+      "errorName": "AssertionError",
+      "requiredMessagePrefix": "MISSING_LIGUE2_COURSEWORK_YEAR_GATE"
+    },
+    {
+      "index": 5,
+      "name": "existing190 hand definitions remain frozen",
+      "status": "passed",
+      "errorName": null,
+      "requiredMessagePrefix": null
+    },
+    {
+      "index": 6,
+      "name": "retained generic lower-club offer survives codec and acceptance",
+      "status": "passed",
+      "errorName": null,
+      "requiredMessagePrefix": null
+    }
+  ],
+  "closing": "LIGUE2_BASELINE: 7 cases; 2 passed; 5 assertion failures; 0 method errors; source held",
+  "expected": {
+    "cases": 7,
+    "passed": 2,
+    "assertionFailures": 5,
+    "methodErrors": 0,
+    "rawExit": 1,
+    "copiedDiagnosticControls": 8
+  },
+  "testFirstSourcePeerSHA256": "b22f0a45ec6995a89b963e3079e76c1d541cb32381f3f4d86579b54d0a7c6ffe",
+  "testFirstRootPeerSHA256": "949432676c2df87fd19fb1ba03225f20142edd35237ae57969108254f4dfbe85",
+  "causalFragmentSHA256": "024aced6ff6164fa6f1c6330aafaed3c6ecc3952940fb40e727419f79b8d21c5",
+  "observer": "Existing bundleCareerSources appends only CM private STRENGTH_PRIORS export. No engine transform or stubPool passed. Immutable old coaching3740B and53B canonicalengine forwarder share actual engine bundle.",
+  "scope": "Baseline only. No product/data writes, no fixed pass, no build/fullsuite/browser claim. No missingmodule/method/import/unknownassertion may earn intendedRED.",
+  "preserve": "Actual old generic case7 raw save and canonical acceptance must be retained for later fixed replay, never regenerated from expanded data."
+}
