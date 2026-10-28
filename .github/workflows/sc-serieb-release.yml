@@ -1,7 +1,7 @@
-name: Soccer Career Serie B frozen release qualification
+name: Soccer Career Serie B corrected proof qualification
 on:
   push:
-    branches: [codex/sc-serieb-release-20261028]
+    branches: [codex/sc-serieb-proof-retry-20261028]
     paths:
       - .github/workflows/sc-serieb-release.yml
       - 'src/**'
@@ -42,16 +42,16 @@ jobs:
       - name: Exact selected frozen source and original archive
         run: |
           set -euo pipefail
-          test "$GITHUB_REF_NAME" = codex/sc-serieb-release-20261028
+          test "$GITHUB_REF_NAME" = codex/sc-serieb-proof-retry-20261028
           test "$(git rev-parse HEAD)" = "$GITHUB_SHA"
-          test "$(git rev-parse HEAD^)" = 47dc71eafa15870935718f032ff545fb07de0110
+          test "$(git rev-parse HEAD^)" = ee90eee01f3b4612e1a11992bdf64f93c3ff3de9
           test "$(git rev-list --parents -n 1 HEAD | wc -w)" = 2
           mkdir -p "$SC_SERIEB_RELEASE_OUT"
           git rev-parse HEAD HEAD^{tree} > "$SC_SERIEB_RELEASE_OUT/head-tree.txt"
           git archive --format=tar HEAD > "$SC_SERIEB_RELEASE_OUT/source.tar"
           git ls-tree -r HEAD > "$SC_SERIEB_RELEASE_OUT/source-tree.txt"
           git ls-files -z | sort -z | xargs -0 sha256sum > "$SC_SERIEB_RELEASE_OUT/tracked-before.sha256"
-          printf '%s  %s\n' fc44474483a632c6bb57c7f2fa1ec27c574497a201ffb3ca508cb4949fdae6cf qa/sc-serieb-release-v1/RELEASE-SOURCE-READY.json | sha256sum --check
+          printf '%s  %s\n' b018bb8a980ca2d92fc44cda4f6e9ee7b0507c8d5eec2f3c88c576a1d9a3c833 qa/sc-serieb-release-v1/RELEASE-SOURCE-READY.json | sha256sum --check
           printf '%s  %s\n' 441cf5ba425c4a4cc9699799bec0eb0848b929771609c811148f25ee417c6c8b scripts/qa/serieBReleaseQualification.mjs | sha256sum --check
           node --check scripts/qa/serieBReleaseQualification.mjs
           node --check scripts/qa/serieBReleaseFixed.mjs
@@ -194,245 +194,5 @@ jobs:
         with:
           name: sc-serieb-release-proof-${{ github.run_id }}-${{ github.run_attempt }}
           path: serieB-release-artifacts/proof/
-          if-no-files-found: error
-          retention-days: 14
-  units:
-    runs-on: ubuntu-latest
-    timeout-minutes: 60
-    env:
-      CI: '1'
-      SIM_NETWORK: offline
-      CAREER_SEASON_LOCAL_ONLY: '1'
-      ENGINES: chromium
-      SC_SERIEB_RELEASE_OUT: ${{ github.workspace }}/serieB-release-artifacts/units
-    steps:
-      - uses: actions/checkout@v4
-        with:
-          ref: ${{ github.sha }}
-          fetch-depth: 0
-          persist-credentials: false
-      - uses: actions/setup-node@v4
-        with:
-          node-version: 24
-          cache: npm
-      - name: Exact selected frozen source and original archive
-        run: |
-          set -euo pipefail
-          test "$GITHUB_REF_NAME" = codex/sc-serieb-release-20261028
-          test "$(git rev-parse HEAD)" = "$GITHUB_SHA"
-          test "$(git rev-parse HEAD^)" = 47dc71eafa15870935718f032ff545fb07de0110
-          test "$(git rev-list --parents -n 1 HEAD | wc -w)" = 2
-          mkdir -p "$SC_SERIEB_RELEASE_OUT"
-          git rev-parse HEAD HEAD^{tree} > "$SC_SERIEB_RELEASE_OUT/head-tree.txt"
-          git archive --format=tar HEAD > "$SC_SERIEB_RELEASE_OUT/source.tar"
-          git ls-tree -r HEAD > "$SC_SERIEB_RELEASE_OUT/source-tree.txt"
-          git ls-files -z | sort -z | xargs -0 sha256sum > "$SC_SERIEB_RELEASE_OUT/tracked-before.sha256"
-          printf '%s  %s\n' fc44474483a632c6bb57c7f2fa1ec27c574497a201ffb3ca508cb4949fdae6cf qa/sc-serieb-release-v1/RELEASE-SOURCE-READY.json | sha256sum --check
-          printf '%s  %s\n' 441cf5ba425c4a4cc9699799bec0eb0848b929771609c811148f25ee417c6c8b scripts/qa/serieBReleaseQualification.mjs | sha256sum --check
-          node --check scripts/qa/serieBReleaseQualification.mjs
-          node --check scripts/qa/serieBReleaseFixed.mjs
-          node --check scripts/qa/playSerieBRelease.mjs
-          NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/qa/serieBReleaseQualification.mjs source 2>&1 | tee "$SC_SERIEB_RELEASE_OUT/source-pins.log"
-          git diff --name-only HEAD^ HEAD | sort > "$SC_SERIEB_RELEASE_OUT/changed-paths.txt"
-          diff -u <(node -e 'const fs=require("fs");const s=JSON.parse(fs.readFileSync("qa/sc-serieb-release-v1/RELEASE-SOURCE-READY.json"));console.log(s.allowedPaths.sort().join("\n"))') "$SC_SERIEB_RELEASE_OUT/changed-paths.txt"
-          echo '127.0.0.1 flawuiqbvjobmkfkauhw.supabase.co' | sudo tee -a /etc/hosts
-          npm ci 2>&1 | tee "$SC_SERIEB_RELEASE_OUT/npm-ci.log"
-      - name: Real application types
-        run: |
-          set -euo pipefail
-          NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node_modules/.bin/tsc --noEmit -p tsconfig.app.json 2>&1 | tee "$SC_SERIEB_RELEASE_OUT/types.log"
-      - name: Exact physical historical inputs used by existing unit tests
-        run: |
-          set -euo pipefail
-          mkdir -p "$SC_SERIEB_RELEASE_OUT/historical-physical-inputs"
-          specs=(
-            '2b7dda2951fb9b63e76a2af66970cb682f312105:src/lib/cageClash.ts'
-            '31a4ec01:src/lib/cageClash.ts'
-            '56356be9:src/lib/frontOffice.ts'
-            '56356be9:src/data/frontOfficePlayers.ts'
-            '56356be9:src/data/frontOfficeDepth.ts'
-            'e8b39ccc:src/lib/nbaFrontOffice.ts'
-            'e8b39ccc:src/lib/nbaSeasonStats.ts'
-            'e8b39ccc:src/lib/nbaRotation.ts'
-            'e8b39ccc:src/data/conquestDataNba.ts'
-            '6b7596d2:src/lib/nhlFrontOffice.ts'
-            '6b7596d2:src/data/nhlFoPlayers.ts'
-          )
-          : > "$SC_SERIEB_RELEASE_OUT/historical-physical-inputs.tsv"
-          index=0
-          for spec in "${specs[@]}"; do
-            index=$((index + 1))
-            target="$SC_SERIEB_RELEASE_OUT/historical-physical-inputs/$index.source"
-            git show "$spec" > "$target"
-            test -s "$target"
-            printf '%s\t%s\t%s\t%s\n' "$spec" "$(git rev-parse "$spec")" "$(wc -c < "$target")" "$(sha256sum "$target" | cut -d ' ' -f 1)" >> "$SC_SERIEB_RELEASE_OUT/historical-physical-inputs.tsv"
-          done
-          test "$index" = 11
-      - name: Fresh complete actual unit suite without supplied observer env
-        run: |
-          set -euo pipefail
-          set +e
-          env -u SC_COACHING_START_OBSERVER -u SC_MANAGER_REVIEW_OBSERVER NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node node_modules/vitest/vitest.mjs run --maxWorkers=1 --minWorkers=1 --reporter=default --reporter=json --outputFile.json="$SC_SERIEB_RELEASE_OUT/full-units.json" 2>&1 | tee "$SC_SERIEB_RELEASE_OUT/full-units.log"
-          statuses=("${PIPESTATUS[@]}")
-          set -e
-          printf '%s\n' "${statuses[0]}" > "$SC_SERIEB_RELEASE_OUT/full-units-exit.txt"
-          test "${statuses[0]}" = 0
-          test "${statuses[1]}" = 0
-          NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/qa/serieBReleaseQualification.mjs units 2>&1 | tee "$SC_SERIEB_RELEASE_OUT/unit-admission.log"
-      - name: Every tracked canonical source held
-        if: always()
-        run: |
-          set -euo pipefail
-          sha256sum --check "$SC_SERIEB_RELEASE_OUT/tracked-before.sha256" > "$SC_SERIEB_RELEASE_OUT/tracked-held.log"
-          git status --porcelain --untracked-files=no > "$SC_SERIEB_RELEASE_OUT/tracked-status.txt"
-          test ! -s "$SC_SERIEB_RELEASE_OUT/tracked-status.txt"
-          git diff --exit-code HEAD
-      - name: Retain original units evidence including failure
-        if: always()
-        uses: actions/upload-artifact@v4
-        with:
-          name: sc-serieb-release-units-${{ github.run_id }}-${{ github.run_attempt }}
-          path: serieB-release-artifacts/units/
-          if-no-files-found: error
-          retention-days: 14
-  build:
-    runs-on: ubuntu-latest
-    timeout-minutes: 90
-    env:
-      CI: '1'
-      SIM_NETWORK: offline
-      CAREER_SEASON_LOCAL_ONLY: '1'
-      ENGINES: chromium
-      SC_SERIEB_RELEASE_OUT: ${{ github.workspace }}/serieB-release-artifacts/build
-    steps:
-      - uses: actions/checkout@v4
-        with:
-          ref: ${{ github.sha }}
-          fetch-depth: 0
-          persist-credentials: false
-      - uses: actions/setup-node@v4
-        with:
-          node-version: 24
-          cache: npm
-      - name: Exact selected frozen source and original archive
-        run: |
-          set -euo pipefail
-          test "$GITHUB_REF_NAME" = codex/sc-serieb-release-20261028
-          test "$(git rev-parse HEAD)" = "$GITHUB_SHA"
-          test "$(git rev-parse HEAD^)" = 47dc71eafa15870935718f032ff545fb07de0110
-          test "$(git rev-list --parents -n 1 HEAD | wc -w)" = 2
-          mkdir -p "$SC_SERIEB_RELEASE_OUT"
-          git rev-parse HEAD HEAD^{tree} > "$SC_SERIEB_RELEASE_OUT/head-tree.txt"
-          git archive --format=tar HEAD > "$SC_SERIEB_RELEASE_OUT/source.tar"
-          git ls-tree -r HEAD > "$SC_SERIEB_RELEASE_OUT/source-tree.txt"
-          git ls-files -z | sort -z | xargs -0 sha256sum > "$SC_SERIEB_RELEASE_OUT/tracked-before.sha256"
-          printf '%s  %s\n' fc44474483a632c6bb57c7f2fa1ec27c574497a201ffb3ca508cb4949fdae6cf qa/sc-serieb-release-v1/RELEASE-SOURCE-READY.json | sha256sum --check
-          printf '%s  %s\n' 441cf5ba425c4a4cc9699799bec0eb0848b929771609c811148f25ee417c6c8b scripts/qa/serieBReleaseQualification.mjs | sha256sum --check
-          node --check scripts/qa/serieBReleaseQualification.mjs
-          node --check scripts/qa/serieBReleaseFixed.mjs
-          node --check scripts/qa/playSerieBRelease.mjs
-          NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/qa/serieBReleaseQualification.mjs source 2>&1 | tee "$SC_SERIEB_RELEASE_OUT/source-pins.log"
-          git diff --name-only HEAD^ HEAD | sort > "$SC_SERIEB_RELEASE_OUT/changed-paths.txt"
-          diff -u <(node -e 'const fs=require("fs");const s=JSON.parse(fs.readFileSync("qa/sc-serieb-release-v1/RELEASE-SOURCE-READY.json"));console.log(s.allowedPaths.sort().join("\n"))') "$SC_SERIEB_RELEASE_OUT/changed-paths.txt"
-          echo '127.0.0.1 flawuiqbvjobmkfkauhw.supabase.co' | sudo tee -a /etc/hosts
-          npm ci 2>&1 | tee "$SC_SERIEB_RELEASE_OUT/npm-ci.log"
-      - name: Real application types
-        run: |
-          set -euo pipefail
-          NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node_modules/.bin/tsc --noEmit -p tsconfig.app.json 2>&1 | tee "$SC_SERIEB_RELEASE_OUT/types.log"
-      - name: Detached build, browser tools and exact retained fonts
-        env:
-          FREE_KICK_FONT_CACHE: ${{ github.workspace }}/serieB-release-artifacts/build/font-cache
-        run: |
-          set -euo pipefail
-          build_root="$RUNNER_TEMP/serieB-build-$GITHUB_RUN_ID-$GITHUB_RUN_ATTEMPT"
-          git worktree add --detach "$build_root" HEAD
-          ln -s "$GITHUB_WORKSPACE/node_modules" "$build_root/node_modules"
-          echo "SERIEB_BUILD_ROOT=$build_root" >> "$GITHUB_ENV"
-          browser_tools="$RUNNER_TEMP/serieB-browser-tools-$GITHUB_RUN_ID-$GITHUB_RUN_ATTEMPT"
-          mkdir -p "$browser_tools"
-          printf '{"private":true,"dependencies":{"playwright":"1.64.0"}}\n' > "$browser_tools/package.json"
-          npm install --prefix "$browser_tools" --ignore-scripts --no-audit --no-fund 2>&1 | tee "$SC_SERIEB_RELEASE_OUT/browser-install.log"
-          test ! -e node_modules/playwright
-          test ! -e node_modules/playwright-core
-          ln -s "$browser_tools/node_modules/playwright" node_modules/playwright
-          ln -s "$browser_tools/node_modules/playwright-core" node_modules/playwright-core
-          cp "$browser_tools/package.json" "$SC_SERIEB_RELEASE_OUT/browser-package.json"
-          cp "$browser_tools/package-lock.json" "$SC_SERIEB_RELEASE_OUT/browser-package-lock.json"
-          export PLAYWRIGHT_BROWSERS_PATH="$RUNNER_TEMP/serieB-chromium-$GITHUB_RUN_ID-$GITHUB_RUN_ATTEMPT"
-          echo "PLAYWRIGHT_BROWSERS_PATH=$PLAYWRIGHT_BROWSERS_PATH" >> "$GITHUB_ENV"
-          node "$browser_tools/node_modules/playwright/cli.js" install --with-deps chromium 2>&1 | tee "$SC_SERIEB_RELEASE_OUT/chromium.log"
-          python -m pip install fonttools pillow 2>&1 | tee "$SC_SERIEB_RELEASE_OUT/python-tools.log"
-          node scripts/qa/freeKickLab1070.mjs --prefetch-fonts-only 2>&1 | tee "$SC_SERIEB_RELEASE_OUT/font-prefetch.log"
-      - name: Actual two-route SEO build in detached tree
-        env:
-          PRERENDER_ONLY: /soccer-career,/whats-new
-        run: |
-          set -euo pipefail
-          cd "$SERIEB_BUILD_ROOT"
-          mkdir -p "$SC_SERIEB_RELEASE_OUT/generation"
-          for route in soccer-career whats-new; do cp "public/$route/index.html" "$SC_SERIEB_RELEASE_OUT/generation/$route.before.html"; done
-          cp scripts/data/lastmod.json "$SC_SERIEB_RELEASE_OUT/generation/lastmod.before.json"
-          retain_generation() {
-            git diff -- public scripts/data/lastmod.json > "$SC_SERIEB_RELEASE_OUT/generation/full.diff"
-            for route in soccer-career whats-new; do cp "public/$route/index.html" "$SC_SERIEB_RELEASE_OUT/generation/$route.after.html" || true; done
-            cp scripts/data/lastmod.json "$SC_SERIEB_RELEASE_OUT/generation/lastmod.after.json" || true
-          }
-          trap retain_generation EXIT
-          NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" npm run build:seo 2>&1 | tee "$SC_SERIEB_RELEASE_OUT/build.log"
-          find dist -type f -print0 | sort -z | xargs -0 sha256sum > "$SC_SERIEB_RELEASE_OUT/dist.sha256"
-      - name: All fifteen rebuilt-site readers
-        run: |
-          set -euo pipefail
-          cd "$SERIEB_BUILD_ROOT"
-          set +e
-          ONLY=simAdsense,simBrand,simHeadTags,simHiddenPages,simHubs,simIndexNow,simIndexing,simInternalLinks,simNoRivalNames,simPrerender,simPrerenderBoot,simRetiredRoutes,simSchema,simSitemap,simSnapshotAssets NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/runAllSims.mjs --browser > "$SC_SERIEB_RELEASE_OUT/readers.log" 2>&1
-          actual_exit=$?
-          set -e
-          printf '%s\n' "$actual_exit" > "$SC_SERIEB_RELEASE_OUT/readers-exit.txt"
-          cat "$SC_SERIEB_RELEASE_OUT/readers.log"
-          test "$actual_exit" = 0
-          test "$(grep -c '^All 15 harnesses green\.$' "$SC_SERIEB_RELEASE_OUT/readers.log")" = 1
-      - name: All fifteen unchanged fatal download caps
-        run: |
-          set -euo pipefail
-          cd "$SERIEB_BUILD_ROOT"
-          NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/lib/hostLikeServer.mjs dist 4173 > "$SC_SERIEB_RELEASE_OUT/weight-server.log" 2>&1 &
-          server_pid=$!
-          trap 'kill "$server_pid" 2>/dev/null || true' EXIT
-          for attempt in 1 2 3 4 5; do if curl --fail --silent http://127.0.0.1:4173/ > /dev/null; then break; fi; sleep 1; done
-          curl --fail --silent http://127.0.0.1:4173/ > /dev/null
-          BASE=http://127.0.0.1:4173 SWEEP_OFFLINE=1 NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/sweepWeight.mjs 2>&1 | tee "$SC_SERIEB_RELEASE_OUT/weights.log"
-      - name: Three actual Serie B routes on the same frozen built source
-        env:
-          FREE_KICK_FONT_CACHE: ${{ github.workspace }}/serieB-release-artifacts/build/font-cache
-          SC_SERIEB_BROWSER_OUT: ${{ github.workspace }}/serieB-release-artifacts/build/browser
-        run: |
-          set -euo pipefail
-          cd "$SERIEB_BUILD_ROOT"
-          NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/qa/playSerieBRelease.mjs 2>&1 | tee "$SC_SERIEB_RELEASE_OUT/browser.log"
-          grep -Fx 'SERIEB_BROWSER: 3 actual routes, 12 captures, genuine new-club contract, 2027 season, 20-club/38-game tables and official reload, 6 COPIED guards passed' "$SC_SERIEB_RELEASE_OUT/browser.log" > /dev/null
-      - name: Exact built source and distribution held
-        if: always()
-        run: |
-          set -euo pipefail
-          if test -n "${SERIEB_BUILD_ROOT:-}"; then
-            git -C "$SERIEB_BUILD_ROOT" diff --exit-code HEAD -- src scripts qa .github/workflows docs package.json package-lock.json bun.lock index.html ':!scripts/data/lastmod.json'
-            if test -f "$SC_SERIEB_RELEASE_OUT/dist.sha256"; then (cd "$SERIEB_BUILD_ROOT" && sha256sum --check "$SC_SERIEB_RELEASE_OUT/dist.sha256") > "$SC_SERIEB_RELEASE_OUT/dist-held.log"; fi
-          fi
-      - name: Every tracked canonical source held
-        if: always()
-        run: |
-          set -euo pipefail
-          sha256sum --check "$SC_SERIEB_RELEASE_OUT/tracked-before.sha256" > "$SC_SERIEB_RELEASE_OUT/tracked-held.log"
-          git status --porcelain --untracked-files=no > "$SC_SERIEB_RELEASE_OUT/tracked-status.txt"
-          test ! -s "$SC_SERIEB_RELEASE_OUT/tracked-status.txt"
-          git diff --exit-code HEAD
-      - name: Retain original build evidence including failure
-        if: always()
-        uses: actions/upload-artifact@v4
-        with:
-          name: sc-serieb-release-build-${{ github.run_id }}-${{ github.run_attempt }}
-          path: serieB-release-artifacts/build/
           if-no-files-found: error
           retention-days: 14

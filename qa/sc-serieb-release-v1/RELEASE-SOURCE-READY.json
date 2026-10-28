@@ -1,33 +1,12 @@
 {
-  "status": "SOURCE_READY_BOUNDED_QUALIFICATION_ALL_RUNTIME_UNRUN",
-  "parentCommit": "47dc71eafa15870935718f032ff545fb07de0110",
-  "parentTree": "33d045e5772867c42167818caf1fe63dc94fb8cf",
-  "sourceFamily": "Clean source-vetted Draft423 on Draft422, both global qualifications remain pending. Only24QA additions, all5428 parent blobs held.",
+  "status": "SOURCE_READY_PROOF_ONLY_ADAPTER_RETRY_RUNTIME_UNRUN",
+  "parentCommit": "ee90eee01f3b4612e1a11992bdf64f93c3ff3de9",
+  "parentTree": "5e73abab1ed88dffe975000caa7f4e711c612e57",
+  "sourceFamily": "Proof-only QA successor to failed ee90 proof. All5452 existing paths held, exactly3QA modifications. All product/app, generator, sampler, unit and browser source bodies remain those of clean Draft42347dc.",
   "allowedPaths": [
     ".github/workflows/sc-serieb-release.yml",
-    "qa/sc-serieb-release-v1/FIXED-CONSUMER-SOURCE.json",
-    "qa/sc-serieb-release-v1/legacy-full-unit-identities.json.gz",
-    "qa/sc-serieb-release-v1/legacy-skipped-identities.json",
-    "qa/sc-serieb-release-v1/PHYSICAL-CONTROLS.json",
-    "qa/sc-serieb-release-v1/PRODUCT-SOURCE-READY.json",
-    "qa/sc-serieb-release-v1/original/soccerCareerClubPool.ts",
-    "qa/sc-serieb-release-v1/original/soccerCareerCoachingStart.ts",
-    "qa/sc-serieb-release-v1/original/soccerCareerEngine.ts",
-    "qa/sc-serieb-release-v1/research/COLOUR-WORD-LEDGER.json",
-    "qa/sc-serieb-release-v1/research/PALETTE-DESIGN.json",
-    "qa/sc-serieb-release-v1/retained/fixtures.json",
-    "qa/sc-serieb-release-v1/retained/modern-fixture.json",
-    "qa/sc-serieb-release-v1/retained/old-generic.save.txt",
-    "qa/sc-serieb-release-v1/retained/old-choices/club-loan.golden.json",
-    "qa/sc-serieb-release-v1/retained/old-choices/club-loan.save.txt",
-    "qa/sc-serieb-release-v1/retained/old-choices/elected-loyalty.golden.json",
-    "qa/sc-serieb-release-v1/retained/old-choices/elected-loyalty.save.txt",
-    "qa/sc-serieb-release-v1/retained/old-choices/permanent-transfer.golden.json",
-    "qa/sc-serieb-release-v1/retained/old-choices/permanent-transfer.save.txt",
-    "scripts/qa/playSerieBRelease.mjs",
-    "scripts/qa/serieBReleaseFixed.mjs",
-    "scripts/qa/serieBReleaseQualification.mjs",
-    "qa/sc-serieb-release-v1/RELEASE-SOURCE-READY.json"
+    "qa/sc-serieb-release-v1/RELEASE-SOURCE-READY.json",
+    "scripts/qa/serieBReleaseFixed.mjs"
   ],
   "files": [
     {
@@ -254,9 +233,9 @@
     },
     {
       "path": "scripts/qa/serieBReleaseFixed.mjs",
-      "bytes": 28080,
-      "sha256": "9ed95446ac71cbc59afef173d88bf91a31dddc098d6e5ae22ef06b7c9e6bccc2",
-      "gitBlob": "06738923e54c8663e8635ab436c4a10f229955ab"
+      "bytes": 28093,
+      "sha256": "6156b1c2f2ede15fc968a0818bc46cb816e4a0cdd5a5c9bc377991fdc26e772f",
+      "gitBlob": "2da748c0bfe714c64fdc7b7878561937b720d131"
     },
     {
       "path": "scripts/qa/serieBReleaseQualification.mjs",
@@ -536,7 +515,20 @@
     "productGO": "ecde8e1f16fa2007877610b8081d9fcb85b86f1630476595562c80b265b83e48",
     "fixedPacket": "ff11b433ba95a82fabdcaca85223eb25b4fcde2b075ebc90efe5834717257aad",
     "fixedGO": "c7bd92a1386008e6d4f668c29416e22b86bc9b8e7095d2bbe559adf66bfb1dad",
-    "absoluteGoldenFixtureAdmission": "8866e4acb9ece45fed252884b25ecd6d0b10ffb7c75c6ca5e25b9f3e1c732c07"
+    "absoluteGoldenFixtureAdmission": "8866e4acb9ece45fed252884b25ecd6d0b10ffb7c75c6ca5e25b9f3e1c732c07",
+    "consumerAdapterCorrection": "de333ae7d7087681b43cfb53ada4a24dfd28d89fb537d5c678f3a5baa8fade50",
+    "failedProofAdmission": "640b9654cb736d0b402a423df0b45aab4a095fcf02f33cf4ef8fd74701fa72aa"
   },
-  "limits": "Bounded source-vetted qualification only, no global or main/live claim. Historical manager-quote bundle freezes only oldEngine+pool+Coaching; all other dependencies are current. Absolute old transaction preservation uses three captured pre-product full outputs. Module initialization excluded/unmeasured. No cap/margin/historical proof changes."
+  "limits": "Bounded source-vetted qualification only, no global or main/live claim. Historical manager-quote bundle freezes only oldEngine+pool+Coaching; all other dependencies are current. Absolute old transaction preservation uses three captured pre-product full outputs. Module initialization excluded/unmeasured. No cap/margin/historical proof changes.",
+  "retry": {
+    "jobs": [
+      "proof"
+    ],
+    "failedOriginalRun": "40758869761",
+    "failedOriginalJob": "123065043128",
+    "method": "Existing production sinceInput(ROOT) adapter at two derive calls, no assertion/golden/fixture/product change.",
+    "existingUnitsBuild": "Original40758869761 producers continue untouched; this retry launches neither job.",
+    "sourceEquivalence": "All17 selected app pins, unit classifier, browser18154, sampler72a204, product0cfa, spec e713 and descriptord765 held. Only QA consumer changes13bytes; selector and workflow rebind retry.",
+    "noNewGlobalProfile": true
+  }
 }

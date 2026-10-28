@@ -3,7 +3,7 @@ import fs from 'node:fs';
 import os from 'node:os';
 import path from 'node:path';
 import {createHash} from 'node:crypto';
-import {bundleCareerSources,deriveCareerClubPool,poolInputs} from '../lib/careerClubPool.mjs';
+import {bundleCareerSources,deriveCareerClubPool,poolInputs,sinceInput} from '../lib/careerClubPool.mjs';
 assert(process.env.CI,'Remote CI only');
 const ROOT=process.cwd(),OUT=path.resolve(process.env.SC_SERIEB_FIXED_OUT||'serieb-fixed-artifacts');
 const SPEC='qa/sc-serieb-release-v1/FIXED-CONSUMER-SOURCE.json',SPEC_SHA='e7139a610101b59f5bb7a19a05c4911d251c9c3f1e541e10bbedc5f9411f1608';
@@ -96,7 +96,7 @@ try{
     says:[x.quote,x.secondQuote,x.thirdQuote].filter(Boolean).join('; '),access:x.access,...(x.published?{published:x.published}:{}),locator:x.locator}));
    assert.deepEqual(actual.sources,expected,m);
   }
-  const fresh=deriveCareerClubPool({...inputs,since:facts.clubSince});row.observation.derived={rows:fresh.rows,poolSince:fresh.poolSince};
+  const fresh=deriveCareerClubPool({...inputs,since:sinceInput(ROOT)});row.observation.derived={rows:fresh.rows,poolSince:fresh.poolSince};
   assert.deepEqual(mod.pool.CAREER_CLUB_POOL,fresh.rows,m);assert.deepEqual(mod.pool.CAREER_POOL_SINCE,fresh.poolSince,m);
   const witnesses=[],attempts=[],found=new Set(),low={pace:45,shooting:45,passing:45,dribbling:45,defending:45,physical:45,reflexes:45};
   for(let attempt=0;attempt<spec.boots.ceiling&&found.size<20;attempt++){
@@ -123,7 +123,7 @@ try{
   row.observation={groups,flat,oldLadders:old.pool.CAREER_LEAGUE_LADDER};
   assert.deepEqual(sort(flat),sort(EXPECTED),m);assert.equal(new Set(flat).size,20,m);assert.equal(Object.keys(mod.pool.CAREER_LEAGUE_LADDER).length,24,m);
   for(const [league,ladder] of Object.entries(old.pool.CAREER_LEAGUE_LADDER))assert.deepEqual(mod.pool.CAREER_LEAGUE_LADDER[league],ladder,m);
-  const fresh=deriveCareerClubPool({...inputs,since:facts.clubSince});assert.deepEqual(groups,fresh.ladder[LABEL],m);
+  const fresh=deriveCareerClubPool({...inputs,since:sinceInput(ROOT)});assert.deepEqual(groups,fresh.ladder[LABEL],m);
  });
  await test(2,row=>{
   const m=markers[2],at=year=>{const size=mod.league.leagueSizeFor(LABEL,year);return{year,size,dugout:mod.league.leagueSizeFor(LABEL,year,true),points:mod.format.leagueFormatFor(LABEL,year),meetings:mod.derby.derbyMeetings(LABEL,year),games:size===null?null:2*(size-1)};};
