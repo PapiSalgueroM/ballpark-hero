@@ -59,7 +59,7 @@ jobs:
       - name: Exact selected application and native QA source
         run: |
           set -euo pipefail
-          echo 'c0f896cf56bc2d78d5ace83a8448ad4d2ef1fbc41eaaced0736c551b459039ff  scripts/qa/playSoccerCoachingStart.mjs' | sha256sum --check
+          echo '8c950279fb51645f385ca94a1b2bca6c61e75a68153c3c66e614f4a9ab40b871  scripts/qa/playSoccerCoachingStart.mjs' | sha256sum --check
           node - <<'NODE' | tee loyalty-artifacts/build/selected-source.log
           const fs=require('node:fs'),crypto=require('node:crypto'),assert=require('node:assert/strict');
           const sha=body=>crypto.createHash('sha256').update(body).digest('hex');
