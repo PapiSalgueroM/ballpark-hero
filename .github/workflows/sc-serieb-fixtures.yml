@@ -1,0 +1,99 @@
+name: Soccer Career old Serie B choice acquisition
+on:
+  push:
+    branches: [codex/sc-serieb-old-choices-v2-20261028]
+    paths:
+      - .github/workflows/sc-serieb-fixtures.yml
+      - scripts/qa/acquireSerieBOldChoices.mjs
+      - qa/sc-serieb-release-v1/FIXTURE-ACQUISITION-SOURCE.json
+permissions:
+  contents: read
+concurrency:
+  group: sc-serieb-old-choices-${{ github.sha }}
+  cancel-in-progress: false
+defaults:
+  run:
+    shell: bash
+jobs:
+  acquire:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    env:
+      CI: '1'
+      SIM_NETWORK: offline
+      CAREER_SEASON_LOCAL_ONLY: '1'
+      SC_SERIEB_SOURCE_BASE: a4805f9d0e5816d19a1490ee6bb511966c617785
+      SC_SERIEB_SOURCE_TREE: a0f25d5bd854823b3a625932d8dff336bc400e0b
+      SC_SERIEB_FIXTURE_ARTIFACTS: ${{ github.workspace }}/serieb-fixture-artifacts
+      SC_SERIEB_FIXTURES_OUT: ${{ github.workspace }}/serieb-fixture-artifacts/acquisition
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.sha }}
+          fetch-depth: 2
+          persist-credentials: false
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: npm
+      - name: Exact source-vetted parent, three QA additions and source pins
+        run: |
+          set -euo pipefail
+          mkdir -p "$SC_SERIEB_FIXTURE_ARTIFACTS"
+          git rev-parse HEAD HEAD^{tree} > "$SC_SERIEB_FIXTURE_ARTIFACTS/head-tree.txt"
+          git archive --format=tar HEAD > "$SC_SERIEB_FIXTURE_ARTIFACTS/source.tar"
+          git ls-tree -r HEAD > "$SC_SERIEB_FIXTURE_ARTIFACTS/source-tree.txt"
+          git ls-files -z | sort -z | xargs -0 sha256sum > "$SC_SERIEB_FIXTURE_ARTIFACTS/tracked-before.sha256"
+          test "$GITHUB_REF_NAME" = codex/sc-serieb-old-choices-v2-20261028
+          test "$(git rev-parse HEAD)" = "$GITHUB_SHA"
+          test "$(git rev-parse HEAD^)" = "$SC_SERIEB_SOURCE_BASE"
+          test "$(git rev-parse "$SC_SERIEB_SOURCE_BASE^{tree}")" = "$SC_SERIEB_SOURCE_TREE"
+          test "$(git rev-list --parents -n 1 HEAD | wc -w)" = 2
+          printf '%s  %s\n' ab23168104f8598a8fc7fb82d2a0fb460064773e027221c17974b35f9e095cad qa/sc-serieb-release-v1/FIXTURE-ACQUISITION-SOURCE.json | sha256sum --check
+          printf '%s  %s\n' 3dfca0f8c1308e55076bc9cf61697bc93f3eb0ec5d9e614ea3d8c3403adf65e1 scripts/qa/acquireSerieBOldChoices.mjs | sha256sum --check
+          node --check scripts/qa/acquireSerieBOldChoices.mjs
+          node --input-type=module <<'NODE'
+          import assert from 'node:assert/strict';
+          import fs from 'node:fs';
+          import path from 'node:path';
+          import {createHash} from 'node:crypto';
+          import {execFileSync} from 'node:child_process';
+          const sha=b=>createHash('sha256').update(b).digest('hex');
+          const selector=JSON.parse(fs.readFileSync('qa/sc-serieb-release-v1/FIXTURE-ACQUISITION-SOURCE.json'));
+          assert.equal(selector.baseCommit,process.env.SC_SERIEB_SOURCE_BASE);
+          assert.equal(selector.baseTree,process.env.SC_SERIEB_SOURCE_TREE);
+          assert.equal(selector.parentStatus,'Source-vetted candidate parent, global qualification pending');
+          const pins=selector.critical;
+          const rows=pins.map(p=>{const b=fs.readFileSync(p.path);assert.equal(sha(b),p.sha256,p.path);if(p.bytes!==undefined)assert.equal(b.length,p.bytes,p.path);return{path:p.path,bytes:b.length,sha256:sha(b)};});
+          const changes=execFileSync('git',['diff','--name-status',selector.baseCommit,'HEAD'],{encoding:'utf8'}).trim().split('\n').map(x=>x.split('\t'));
+          assert.deepEqual(changes.map(x=>x[0]),selector.allowedChanges.map(()=> 'A'));
+          assert.deepEqual(changes.map(x=>x[1]).sort(),[...selector.allowedChanges].sort());
+          fs.writeFileSync(path.join(process.env.SC_SERIEB_FIXTURE_ARTIFACTS,'source-pins.json'),JSON.stringify({parent:selector.baseCommit,tree:selector.baseTree,qualification:'pending',rows,changes},null,2));
+          NODE
+          echo '127.0.0.1 flawuiqbvjobmkfkauhw.supabase.co' | sudo tee -a /etc/hosts
+          npm ci 2>&1 | tee "$SC_SERIEB_FIXTURE_ARTIFACTS/npm-ci.log"
+      - name: Real application types on the held old source
+        run: |
+          set -euo pipefail
+          NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node_modules/.bin/tsc --noEmit -p tsconfig.app.json 2>&1 | tee "$SC_SERIEB_FIXTURE_ARTIFACTS/types.log"
+      - name: Acquire three genuine later-choice witnesses and replay official saves
+        run: |
+          set -euo pipefail
+          NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/qa/acquireSerieBOldChoices.mjs 2>&1 | tee "$SC_SERIEB_FIXTURE_ARTIFACTS/acquisition.log"
+          grep -Fx 'SERIEB_OLD_CHOICES_ACQUIRED: 3 genuine witnesses, 4 COPIED controls, source held' "$SC_SERIEB_FIXTURE_ARTIFACTS/acquisition.log" > /dev/null
+      - name: Every tracked source held, including acquisition failures
+        if: always()
+        run: |
+          set -euo pipefail
+          sha256sum --check "$SC_SERIEB_FIXTURE_ARTIFACTS/tracked-before.sha256" > "$SC_SERIEB_FIXTURE_ARTIFACTS/tracked-held.log"
+          git status --porcelain --untracked-files=no > "$SC_SERIEB_FIXTURE_ARTIFACTS/tracked-status.txt"
+          test ! -s "$SC_SERIEB_FIXTURE_ARTIFACTS/tracked-status.txt"
+          git diff --exit-code HEAD
+      - name: Retain source, exact raw witnesses, action tapes and failures
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: sc-serieb-old-choices-${{ github.run_id }}-${{ github.run_attempt }}
+          path: serieb-fixture-artifacts/
+          if-no-files-found: error
+          retention-days: 14
