@@ -1,0 +1,118 @@
+{
+  "status": "PRODUCT AND37TEST SOURCE READY, ALL NEW RUNTIME UNRUN",
+  "base": {
+    "commit": "14ec28b1cbc82b1abcdf14244dec7acae25d1507",
+    "tree": "80463ee325a10284f2a0a4d92e983b73adaabff9"
+  },
+  "baseline": {
+    "run": 40622342213,
+    "rootAdmissionSha256": "7c64cd7e22fc873725de2def85c54d34d423d64409d44ffb79f585e531c0f856",
+    "actual": "6 cases:4precise missing-feature assertion failures,2preservation passes;type0;3changedCOPIEDdiagnosticrefusals/restores;all5393sourceholds",
+    "testHeld": "221815aef3f0d385205c8d5cbf014dc25f84dd3b2d2c1f23f46d990aa514ed46"
+  },
+  "contract": {
+    "path": "DESIGN-TEST-CONTRACT-v3.md",
+    "sha256": "44cdf5989b563c99fe873a94e2bb0ccda52a0fa3beaebe0b3eb966333fe2a71b"
+  },
+  "files": [
+    {
+      "path": "src/components/club-manager/RecruitmentBoard.tsx",
+      "localPath": "C:\\Users\\antho\\dukb-handoff\\2026-10-27\\cm-recruitment-shortlist-v1\\candidate-v1\\src\\components\\club-manager\\RecruitmentBoard.tsx",
+      "bytes": 6922,
+      "sha256": "b07756e6f8ea795e0301f7b58272bc9f0718d1baf9869cf2fd562d069b150f45",
+      "gitBlob": "a5874ff4889ea56d62e2d7762de3a54290dcca9a"
+    },
+    {
+      "path": "src/components/club-manager/TransferScreen.tsx",
+      "localPath": "C:\\Users\\antho\\dukb-handoff\\2026-10-27\\cm-recruitment-shortlist-v1\\candidate-v1\\src\\components\\club-manager\\TransferScreen.tsx",
+      "bytes": 76910,
+      "sha256": "aaab301934c2411d459e84202641b78113f9dd5503966acd1b32651094e0514a",
+      "gitBlob": "0885718df16e150b83c42644c3c39594a554d9be"
+    },
+    {
+      "path": "src/hooks/useClubManager.ts",
+      "localPath": "C:\\Users\\antho\\dukb-handoff\\2026-10-27\\cm-recruitment-shortlist-v1\\candidate-v1\\src\\hooks\\useClubManager.ts",
+      "bytes": 70744,
+      "sha256": "dce880b04eb80792eb3ea97354aa5f0d146f89c5280f57055c04dbb1db274b62",
+      "gitBlob": "7297073ea60b93501df48ea9b7dfc74edd2217de"
+    },
+    {
+      "path": "src/lib/clubManagerRecruitment.ts",
+      "localPath": "C:\\Users\\antho\\dukb-handoff\\2026-10-27\\cm-recruitment-shortlist-v1\\candidate-v1\\src\\lib\\clubManagerRecruitment.ts",
+      "bytes": 4308,
+      "sha256": "da6727441f25fb38cdfb9915b712c91f976614ca687b658179cdb63bad1ac8e2",
+      "gitBlob": "caa7fd65ad86a79c16b73f0253021fc2b6343cee"
+    },
+    {
+      "path": "src/pages/ClubManager.tsx",
+      "localPath": "C:\\Users\\antho\\dukb-handoff\\2026-10-27\\cm-recruitment-shortlist-v1\\candidate-v1\\src\\pages\\ClubManager.tsx",
+      "bytes": 104290,
+      "sha256": "d58544fbbd346a26dc79741c4bcd2bedf7f8ee2a4c24adf57ba2329c5eb8feb3",
+      "gitBlob": "e011dd037f611721fac7649128c23e6d9af355c9"
+    },
+    {
+      "path": "src/test/clubManagerRecruitment.test.ts",
+      "localPath": "C:\\Users\\antho\\dukb-handoff\\2026-10-27\\cm-recruitment-shortlist-v1\\candidate-v1\\src\\test\\clubManagerRecruitment.test.ts",
+      "bytes": 8900,
+      "sha256": "ecfa9e87a9b5b1fc03ba746db9cf7c47185560a21c2a72e3b05749ee99b54bba",
+      "gitBlob": "225e55417b13ac02d40be6a75c3d0a54aff19302"
+    },
+    {
+      "path": "src/test/clubManagerRecruitmentBaseline.test.tsx",
+      "localPath": "C:\\Users\\antho\\dukb-handoff\\2026-10-27\\cm-recruitment-shortlist-v1\\candidate-v1\\src\\test\\clubManagerRecruitmentBaseline.test.tsx",
+      "bytes": 8490,
+      "sha256": "221815aef3f0d385205c8d5cbf014dc25f84dd3b2d2c1f23f46d990aa514ed46",
+      "gitBlob": "23fbabdbf6164fa16ce3b7a806ec749a63949561"
+    },
+    {
+      "path": "src/test/clubManagerRecruitmentBoard.test.tsx",
+      "localPath": "C:\\Users\\antho\\dukb-handoff\\2026-10-27\\cm-recruitment-shortlist-v1\\candidate-v1\\src\\test\\clubManagerRecruitmentBoard.test.tsx",
+      "bytes": 8858,
+      "sha256": "e73efdd79547a2a3e5deef209cce1f693d3fb7855fb17738d7313e1f75004569",
+      "gitBlob": "7081448deed81dd4017dfe0e403ec4236cee89bf"
+    },
+    {
+      "path": "src/test/clubManagerRecruitmentHook.test.tsx",
+      "localPath": "C:\\Users\\antho\\dukb-handoff\\2026-10-27\\cm-recruitment-shortlist-v1\\candidate-v1\\src\\test\\clubManagerRecruitmentHook.test.tsx",
+      "bytes": 14061,
+      "sha256": "72bab9edf09a85b9f279a25f7856e4d27d1991029bdbefee3e8627a672208047",
+      "gitBlob": "c435c9777b697a8eb5c53f1a06b805a80e519170"
+    }
+  ],
+  "tests": {
+    "baseline": 6,
+    "pureHelper": 11,
+    "actualBoardAndTransfer": 9,
+    "actualHookSaveSlotFence": 11,
+    "total": 37,
+    "hookSourcePeer": "Identity-noop successfultrue preserves no-write assertions; phase-onlysamecareer staleOLDcallback refuses. Source read, runtimeUNRUN."
+  },
+  "exactEdits": {
+    "path": "C:\\Users\\antho\\dukb-handoff\\2026-10-27\\cm-recruitment-shortlist-v1\\PRODUCT-QUALIFIED416-EXACT-EDITS-v3.json",
+    "sha256": "3bc591fd9ccb90c4775e98499f3ddf9c3a9baf180261b81a2245e2368c7e2738",
+    "spans": 13,
+    "wholeForwardInverse": true
+  },
+  "physicallyHeld": {
+    "loanDevelopment": "98265b3e10752b671127c1b23d6725d83d28e47b",
+    "loanCard": "b7b713399752fd97a5b27174108f2488d85bd037",
+    "loanPlan": "419b68389dad53c297d1a225611a653c0ed83b30",
+    "engine": "a505743537b383bc7885bb81f5a72c11e154b566",
+    "deals": "6e62966e4950ac6e2fa0577f45d21527b9266ce6"
+  },
+  "boundaries": [
+    "No engine file authored or changed; no database/data/globalstyle/sitechrome/nationalcoach/tactic/shootout/financialauthority changes",
+    "All existing Loan writer/Sell/recall/Page wiring held by complete source inverse",
+    "Helper runtime is imported only by lazy Board; existing hook/Transfer import its erased types only",
+    "Board can only Find in Buy and Remove; no financial callback props or new purchase path",
+    "Optional metadata only explicitAdd/Remove; exactcontext club/era/startyear/seed; strictstablekey, boundedlegacyavailablefacts",
+    "Rootphase-review correction is owned layoutref phase===hub?career:null withcareer+phase dependencies andunmountcleanup;oldcallbackscope tested",
+    "No routecap increase; measured current635.5/636 means buildcapgate still required"
+  ],
+  "limits": [
+    "Native authoring/hash/source read only, no local app/Node/Git/compiler/parser/test/browser",
+    "37cases are expected fixedpass count, not executed credit",
+    "Physicalfaults/fullunits/defaultstateRNGpairs/build/15readers/15caps/browser/pixels all remain to execute remotely",
+    "Handoff owns CM remote qualification and original artifacts, Root owns source/ref delivery and protected integration; no main/live change"
+  ]
+}
