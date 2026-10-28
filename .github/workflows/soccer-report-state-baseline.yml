@@ -1,0 +1,110 @@
+name: Soccer Career report state baseline
+on:
+  push:
+    branches: [codex/sc-report-state-baseline-20261028]
+    paths:
+      - src/test/reportContextSoccerCareerDiagnostic.test.ts
+      - .github/workflows/soccer-report-state-baseline.yml
+permissions:
+  contents: read
+jobs:
+  baseline:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    env:
+      CI: '1'
+      SIM_NETWORK: offline
+      OUT: ${{ github.workspace }}/report-state-baseline-artifacts
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.sha }}
+          fetch-depth: 0
+          persist-credentials: false
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: npm
+      - name: Exact test-only source and original archive
+        run: |
+          set -euo pipefail
+          mkdir -p "$OUT"
+          test "$GITHUB_REF_NAME" = codex/sc-report-state-baseline-20261028
+          test "$(git rev-parse HEAD)" = "$GITHUB_SHA"
+          test "$(git rev-parse HEAD^)" = b20ec6664df9d4c58d63ea0596791d33b2a3b8fc
+          git rev-parse HEAD HEAD^{tree} > "$OUT/head-tree.txt"
+          git archive --format=tar HEAD > "$OUT/source.tar"
+          git ls-tree -r HEAD > "$OUT/source-tree.txt"
+          git ls-files -z | sort -z | xargs -0 sha256sum > "$OUT/tracked-before.sha256"
+          printf '%s  %s\n' 6d2f68fea770201de2429230d44e3476c658eb02933cd92106e6e32bec71746a src/test/reportContextSoccerCareerDiagnostic.test.ts | sha256sum --check
+          printf '%s  %s\n' d81909a7e8b8adb07402aace3b5519c882750235cb8eebb9b0aa4f867ccd0490 src/lib/reportContext.ts | sha256sum --check
+          printf '%s  %s\n' 2a0295cf7f76c3f37d502a53674e7da0299fddc3d56a2c7a19b225b95799d711 src/pages/SoccerCareer.tsx | sha256sum --check
+          git diff --name-only HEAD^ HEAD | sort > "$OUT/changed-paths.txt"
+          printf '%s\n' .github/workflows/soccer-report-state-baseline.yml src/test/reportContextSoccerCareerDiagnostic.test.ts | sort > "$OUT/expected-paths.txt"
+          diff -u "$OUT/expected-paths.txt" "$OUT/changed-paths.txt"
+          npm ci 2>&1 | tee "$OUT/npm-ci.log"
+      - name: Real app types
+        run: |
+          set -euo pipefail
+          NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node_modules/.bin/tsc --noEmit -p tsconfig.app.json 2>&1 | tee "$OUT/types.log"
+      - name: Four actual report cases and expected missing diagnostic assertion
+        run: |
+          set -euo pipefail
+          set +e
+          NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node node_modules/vitest/vitest.mjs run src/test/reportContextSoccerCareerDiagnostic.test.ts --maxWorkers=1 --minWorkers=1 --reporter=default --reporter=json --outputFile="$OUT/vitest.json" 2>&1 | tee "$OUT/vitest.log"
+          status=${PIPESTATUS[0]}
+          set -e
+          printf '%s\n' "$status" > "$OUT/vitest-exit.txt"
+          node --input-type=module <<'NODE'
+          import fs from 'node:fs'; import path from 'node:path'; import assert from 'node:assert/strict';
+          const out=process.env.OUT, read=name=>fs.readFileSync(path.join(out,name),'utf8');
+          const actual=JSON.parse(read('vitest.json')), code=Number(read('vitest-exit.txt'));
+          const log=read('vitest.log').replace(/\u001b\[[0-?]*[ -/]*[@-~]/g,'');
+          const names=["captures current phase and training-open state from the explicit page marker","keeps existing context unchanged without the explicit page marker","keeps existing context unchanged on another route even with the marker","preserves explicit caller details and shared report metadata"];
+          function admit(result,status){
+            assert.equal(status,1,'actual expected assertion exit');
+            assert.equal(result.numTotalTests,4);assert.equal(result.numPassedTests,3);assert.equal(result.numFailedTests,1);
+            assert.equal(result.numPendingTests,0);assert.equal(result.numTodoTests,0);
+            assert.equal(result.testResults.length,1);assert.equal(result.testResults[0].message,'','no collection/setup error');
+            const rows=result.testResults[0].assertionResults;assert.equal(rows.length,4);
+            assert.deepEqual(rows.map(r=>r.title).sort(),names.slice().sort(),'all exact case identities');
+            for(const row of rows){
+              assert.deepEqual(row.ancestorTitles,['Soccer Career report diagnostics']);
+              if(row.title===names[0]){
+                assert.equal(row.status,'failed');
+                assert(row.failureMessages.some(m=>m.includes('AssertionError')&&m.includes('MISSING_CAREER_STATE_DIAGNOSTIC')),'owned missing diagnostic assertion');
+                assert(!row.failureMessages.some(m=>/TypeError|ReferenceError|SyntaxError|Cannot find module/.test(m)),'no method error');
+              }else{assert.equal(row.status,'passed');assert.equal(row.failureMessages.length,0);}
+            }
+            return rows;
+          }
+          const rows=admit(actual,code);
+          assert(!/Unhandled Errors?\b|Vitest caught [1-9]\d* unhandled|Unhandled Rejection|Uncaught Exception|Failed Suites/.test(log),'no outside-row infrastructure errors');
+          assert(/Tests\s+1 failed\s*\|\s*3 passed\s*\(4\)/.test(log),'actual four-case CLI closing');
+          assert(log.includes('JSON report written to '+path.join(out,'vitest.json')),'actual report closing');
+          const controls=[];
+          for(const kind of ['missing-owned-marker','unexpected-preservation-failure']){
+            const copy=structuredClone(actual),before=JSON.stringify(copy),row=copy.testResults[0].assertionResults.find(r=>r.title===(kind==='missing-owned-marker'?names[0]:names[1]));
+            if(kind==='missing-owned-marker')row.failureMessages=['AssertionError: OTHER_MARKER'];else row.status='failed';
+            assert.notEqual(JSON.stringify(copy),before,'control actually changes data');
+            let refused=false;try{admit(copy,code);}catch(error){assert(error instanceof assert.AssertionError);refused=true;}
+            assert(refused,'changed copied diagnostic refused');admit(actual,code);controls.push({kind,copiedDiagnosticOnly:true,changed:true,refused:true,originalReadmitted:true});
+          }
+          fs.writeFileSync(path.join(out,'admission.json'),JSON.stringify({status:'EXPECTED_RED_CONFIRMED',cases:rows.map(({title,status,failureMessages})=>({title,status,failureMessages})),code,controls,scope:'Actual existing builder with literal DOM fixtures, zero product changes. Copied report controls are not physical UI/source faults.'},null,2));
+          console.log('REPORT_STATE_BASELINE: 4 actual cases, 1 owned missing diagnostic assertion, 3 preservation passes, 0 skips or infrastructure errors');
+          NODE
+      - name: Whole tracked source held
+        if: always()
+        run: |
+          set -euo pipefail
+          sha256sum --check "$OUT/tracked-before.sha256" > "$OUT/tracked-held.log"
+          git status --porcelain --untracked-files=no > "$OUT/tracked-status.txt"
+          test ! -s "$OUT/tracked-status.txt"
+          git diff --exit-code HEAD
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: sc-report-state-baseline-${{ github.run_id }}-${{ github.run_attempt }}
+          path: report-state-baseline-artifacts/
+          if-no-files-found: error
+          retention-days: 14
