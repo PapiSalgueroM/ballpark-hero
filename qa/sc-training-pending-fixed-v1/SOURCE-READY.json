@@ -1,0 +1,84 @@
+{
+  "base": "b20ec6664df9d4c58d63ea0596791d33b2a3b8fc",
+  "productScope": "Pending training fallback only. Optional report collector, markers and diagnostic tests are deferred.",
+  "productProducerSHA256": "e43c96553d54ea7b373fe6025e596d39cc6e7b2cf79793761d9953ec78faa233",
+  "files": [
+    {
+      "path": "src/pages/SoccerCareer.tsx",
+      "bytes": 271923,
+      "sha256": "d053e83c7c533349e4884c2c7806698092bfe38c2ba106e4d3db11e539a23a0a",
+      "gitBlob": "62fb240557c1d46815e3addaf45d292ecac8e8db"
+    }
+  ],
+  "held": [
+    {
+      "path": "src/lib/soccerCareerEngine.ts",
+      "bytes": 550526,
+      "sha256": "d2c4d26eb5ca12646f69e0d07cffab685f1660ff95ea33011ed97f64847bb8b1",
+      "gitBlob": "1ecd36c893395485a93d91cb1905ff78c83c7741"
+    },
+    {
+      "path": "src/lib/soccerCareerSave.ts",
+      "bytes": 6287,
+      "sha256": "b486dfd8c4073230b6967c674058e46c7b56a6afd2a8a165f1e215501205477a",
+      "gitBlob": "86ec011693fd5bc702b5e8ccec05d27775a72a76"
+    },
+    {
+      "path": "src/components/soccer-career/TrainingPanel.tsx",
+      "bytes": 31509,
+      "sha256": "725e95d14cee44b459fe5c19662ad8b1dc69364d69289b46527081a1c0ab2e61",
+      "gitBlob": "7027493bc968cf77bdcde7c6e21646441dc40bd4"
+    },
+    {
+      "path": "scripts/data/careerLeagueWorldSaves1100.json",
+      "bytes": 102331,
+      "sha256": "1c2ac7441402ad6db4916c844181b869a3550726c7e0afed4cce194f5e6ca8ef",
+      "gitBlob": "81425f731297f0ff72fc4e163dfe1a4cb86814ab"
+    },
+    {
+      "path": "src/lib/completions.ts",
+      "bytes": 23048,
+      "sha256": "be1c754df700ad104672c30ab2a4a42c146a4cfabc6f8c98dc2b9dc13b79b3b4",
+      "gitBlob": "61daf9b6c528f884551cd1d42f71357681c8728a"
+    },
+    {
+      "path": "src/lib/reportContext.ts",
+      "bytes": 3179,
+      "sha256": "d81909a7e8b8adb07402aace3b5519c882750235cb8eebb9b0aa4f867ccd0490",
+      "gitBlob": "8fdc7777c10fc0bd8c3571ccc413ac5800e53141"
+    }
+  ],
+  "expectedFocused": 0,
+  "focused": [],
+  "allowedChanges": [
+    ".github/workflows/soccer-training-pending-fixed.yml",
+    "qa/sc-training-pending-fixed-v1/SOURCE-READY.json",
+    "qa/sc-training-pending-fixed-v1/legacy-skipped-identities.json",
+    "scripts/qa/playSoccerTrainingPending.mjs",
+    "scripts/qa/scTrainingPendingQualification.mjs",
+    "src/pages/SoccerCareer.tsx"
+  ],
+  "skipReference": {
+    "path": "qa/sc-training-pending-fixed-v1/legacy-skipped-identities.json",
+    "sha256": "a766ff371ad26c3e5cc7ec7d687a638b043f726406d02f27531cf12d3910e5fd"
+  },
+  "trainingBaseline": {
+    "run": 40658274659,
+    "admissionSHA256": "a8d5343dfeb83cef0fb94184db969c57c62b27af37ae88c62cae79e75b0e8d23"
+  },
+  "newRegression": "Actual route browser only:6freshcontexts,6savedadvances,4heldcancels/latemoduleevaluations,12captures,6COPIEDobservations",
+  "deferred": {
+    "reportContextGit": "8fdc7777c10fc0bd8c3571ccc413ac5800e53141",
+    "diagnosticTestAbsent": "src/test/reportContextSoccerCareerDiagnostic.test.ts",
+    "capRedRuns": [
+      40664971209,
+      40668819073
+    ]
+  },
+  "limits": [
+    "Fresh fullsuite actual denominator only, exact58oldskip identities. No addedunitcase or focusedclaim.",
+    "All12capturebindings officialsavedplaying/age19 andactualpending/loadedvisibility.",
+    "No cause attribution for either live user report.",
+    "No cap raise or guard relaxation. All fixedruntime stillUNRUN."
+  ]
+}
