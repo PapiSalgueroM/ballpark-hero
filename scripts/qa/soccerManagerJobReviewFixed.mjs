@@ -12,7 +12,7 @@ const record={status:'RUNNING'};
 json('admission.json',record);
 try{
  const body=fs.readFileSync(path.join(ROOT,'qa/sc-manager-job-review-v1/SOURCE-READY.json'));
- assert.equal(sha(body),'18f6fbebdfeca4b86705921fef73f1c729abff73abf6bab319d32f55d5a131cf','Exact frozen candidate selector');
+ assert.equal(sha(body),'34c8dae8ffc872f9a5275b8c7552f98324d030047c090143fa03df9fa63b0764','Exact frozen candidate selector');
  const meta=JSON.parse(body);
  assert.equal(meta.files.length,10);
  const hashes=()=>Object.fromEntries(meta.files.map(row=>[row.path,sha(fs.readFileSync(path.join(ROOT,row.path)))]));

@@ -35,9 +35,9 @@
     },
     {
       "path": "src/pages/SoccerCareer.tsx",
-      "bytes": 279959,
-      "sha256": "c1d57dd1e2baf7fdaad7e7706200b38f5c8de92ff27af87ceed2ef054e74dc7f",
-      "git": "ff11c9b4973b1defb9624edaadc606e015ecec18"
+      "bytes": 279960,
+      "sha256": "9c1a815ace46874dd596c101bc40d92eef7d154303fba5ea9f47b56b3d12810e",
+      "git": "6f580f65289a7ba6c1813fb8099b97f40ec245a3"
     },
     {
       "path": "src/test/soccerCareerManagerJobReview.card.test.tsx",
@@ -116,5 +116,7 @@
     "Canonical national flag, final table/cup, retirement money and RNG suffix settle before staging.",
     "Existing consumer and Node-child observer are exact held baseline bodies, with no-env collection available.",
     "No current-target adoption, I composition/main/publication or real-data edits."
-  ]
+  ],
+  "successorOfManifest": "18f6fbebdfeca4b86705921fef73f1c729abff73abf6bab319d32f55d5a131cf",
+  "successorReason": "Actual remote TS1005: one missing conditional closing brace. Page-only one character correction; all other9 bodies held, all28 tests held."
 }

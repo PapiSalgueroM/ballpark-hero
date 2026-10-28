@@ -3196,7 +3196,7 @@ function ManagerPanel({ manager, career, clubs, onAdvance, onEnd, onAcceptOffer,
       </div>}
       {(rules || review?.pending) && <Suspense fallback={<div className="space-y-2"><p role="status" className="min-h-11 text-xs">Opening job review...</p>{rules && <button className="min-h-11 w-full rounded-lg border border-border p-2 text-xs" onClick={closeRules}>Back</button>}</div>}>
         <SoccerManagerJobReview career={career} clubs={clubs} help={rules} onBack={closeRules} onResolve={onResolveJob} />
-      </Suspense>
+      </Suspense>}
 
       {/* Round 530: the results, then the final table under them, tick in on
           one clock, top to bottom. Keyed on the season plus index so a new
