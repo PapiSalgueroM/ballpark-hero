@@ -64,10 +64,10 @@ function run(root,label,selected){
     const target=rows.find(row=>row.title===selected[0]),independent=rows.find(row=>row.title===selected[1]);
     assert.equal(target.status,'failed');assert.equal(independent.status,'passed');
     assert.equal(rows.filter(row=>row.status==='failed').length,1);assert.equal(rows.filter(row=>row.status==='passed').length,1);
-    assert.equal(rows.filter(row=>row.status==='pending').length,20);
+    assert.equal(rows.filter(row=>row.status==='skipped').length,20);
     assert(target.failureMessages.length>0&&target.failureMessages.every(message=>/AssertionError|Error: expect\(/.test(message)&&!/Cannot find module|Failed to resolve|ReferenceError|TypeError|timed out|Invalid Chai property/i.test(message)),'Intended assertion failure only');
   }
-  return{status:child.status,passed:rows.filter(row=>row.status==='passed').length,failed:rows.filter(row=>row.status==='failed').length,filtered:rows.filter(row=>row.status==='pending').length,report:path.basename(report),log:path.basename(log)};
+  return{status:child.status,passed:rows.filter(row=>row.status==='passed').length,failed:rows.filter(row=>row.status==='failed').length,filtered:rows.filter(row=>row.status==='skipped').length,report:path.basename(report),log:path.basename(log)};
 }
 save();
 try{

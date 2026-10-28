@@ -10,7 +10,7 @@ const pins={
   [metaPath]:'d5122abea6ae1f52285cd2fd01bfca257808e3c1ff24f821151ddeb60c3538be',
   'qa/soccer-career-coaching-start-v1/SOURCE-FAULTS.json':'030ec20aa115c1aec45485c0191fda2d81e7b59f942fa130e154d2650ad62eb2',
   'scripts/qa/soccerCoachingStartConsumer.mjs':'4be9f4bd583adadbfd9f64fd1997b81861f8d368dd3bc1b6c36204b9fb623996',
-  'scripts/qa/soccerCoachingStartControls.mjs':'2adc28c881990d23a5240ee72f4b8a8e8cb268cc68377181b1b46d42d1e3a259',
+  'scripts/qa/soccerCoachingStartControls.mjs':'c64ddeafdf6cbe6075a920365afca98fdcc72477dd2b06689273728645ae538f',
   'scripts/qa/buildSoccerCoachingStartObserver.mjs':'d4a763951584530eff61dde9b7aac8b63afc02d45471deb7d4fff483fd36975e',
   'src/test/soccerCareerCoachingStart.consumer.test.tsx':'2a1d221b7640053953699c033a1db525b5f2cbe98878d4742f40ba951a978c5a',
   'src/test/soccerCareerCoachingStart.consumer.lifecycle.test.tsx':'1557248d14394b2baefac89e5ed81ed595f267d41b52354ca8fc7cac37459c25',
@@ -106,12 +106,12 @@ function admit(jsonFile,logFile,full=false){
  const suites=result.testResults,rows=suites.flatMap(suite=>suite.assertionResults);
  if(full){
   assert.equal(rows.length,9755);assert.equal(result.numTotalTests,9755);assert.equal(result.numPassedTests,9697);assert.equal(result.numFailedTests,0);assert.equal(result.numPendingTests,58);
-  const skipped=suites.flatMap(suite=>suite.assertionResults.filter(row=>row.status==='pending').map(row=>path.relative(ROOT,suite.name).replaceAll('\\','/')+'\0'+row.fullName)).sort();
+  const skipped=suites.flatMap(suite=>suite.assertionResults.filter(row=>row.status==='skipped').map(row=>path.relative(ROOT,suite.name).replaceAll('\\','/')+'\0'+row.fullName)).sort();
   assert.deepEqual(skipped,[...expectedSkipped].sort(),'Exact58 inherited skipped identities held');
-  assert(rows.every(row=>row.status==='passed'||row.status==='pending'));
+  assert(rows.every(row=>row.status==='passed'||row.status==='skipped'));
  }else{assert.equal(suites.length,5);assert.equal(rows.length,34);assert(rows.every(row=>row.status==='passed'));assert.equal(result.numPendingTests,0);}
  for(const [file,count]of Object.entries(focused)){const suite=suites.find(suite=>path.relative(ROOT,suite.name).replaceAll('\\','/')===file);assert(suite,file+' actually collected');assert.equal(suite.assertionResults.length,count);assert(suite.assertionResults.every(row=>row.status==='passed'),file+' has no filtered/skipped cases');}
- return{files:suites.length,total:rows.length,passed:rows.filter(row=>row.status==='passed').length,pending:rows.filter(row=>row.status==='pending').length,failed:rows.filter(row=>row.status==='failed').length};
+ return{files:suites.length,total:rows.length,passed:rows.filter(row=>row.status==='passed').length,pending:rows.filter(row=>row.status==='skipped').length,failed:rows.filter(row=>row.status==='failed').length};
 }
 function child(label,args,env){
  const file=path.join(OUT,label+'.log'),fd=fs.openSync(file,'w');let run;
