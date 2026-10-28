@@ -2,6 +2,7 @@ import { getTodayET } from '@/lib/dateUtils';
 
 const CONTEXT_LIMIT = 1500;
 const RESERVED = new Set(['path', 'date', 'submittedAt', 'source', 'diagnostics', 'contextTruncated']);
+const CAREER_PHASES = /^(creation|youth|contract_offer|playing|newspaper|season_summary|transfer_window|random_events|international_debut|world_cup|rivalry_event|ballon_dor|retirement_(ceremony|suggestion)|post_retirement|(manager|pundit|owner)_season|social_media_action|moral_dilemma|red_card_appeal_result|rehab_choice|retired)(?![\s\S])/;
 
 /** Only caller-supplied game details and these small diagnostics enter a report. */
 export function buildReportContext(
@@ -47,6 +48,18 @@ export function buildReportContext(
     else shortened = true;
   }
   if (Object.keys(gameContext).length > 16) shortened = true;
+  if (/^\/soccer-career\/?$/.test(window.location.pathname)
+    && !Object.prototype.hasOwnProperty.call(gameContext, 'soccerCareer')) {
+    const markers = document.querySelectorAll<HTMLElement>('[data-soccer-career-report="v1"]');
+    if (markers.length === 1) {
+      const { scReportPhase: phase, scReportTrainingOpen: trainingOpen } = markers[0].dataset;
+      if (phase && CAREER_PHASES.test(phase) && (trainingOpen === 'true' || trainingOpen === 'false')) {
+        const soccerCareer = { phase, trainingOpen: trainingOpen === 'true' };
+        if (fits({ ...context, soccerCareer })) context.soccerCareer = soccerCareer;
+        else shortened = true;
+      }
+    }
+  }
   context.contextTruncated = shortened;
 
   const entry = document.querySelector<HTMLScriptElement>('script[type="module"][src]');

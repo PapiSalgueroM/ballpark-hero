@@ -1,0 +1,282 @@
+name: Soccer Career training recovery qualification
+on:
+  push:
+    branches: [codex/sc-training-pending-fixed-v2-20261028]
+    paths:
+      - 'src/**'
+      - scripts/qa/playSoccerTrainingPending.mjs
+      - scripts/qa/scTrainingPendingQualification.mjs
+      - 'qa/sc-training-pending-fixed-v1/**'
+      - .github/workflows/soccer-training-pending-fixed.yml
+permissions:
+  contents: read
+concurrency:
+  group: sc-training-fixed-${{ github.sha }}
+  cancel-in-progress: false
+defaults:
+  run:
+    shell: bash
+jobs:
+  focused:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    env:
+      CI: '1'
+      SIM_NETWORK: offline
+      CAREER_SEASON_LOCAL_ONLY: '1'
+      SC_TRAINING_FIXED_OUT: ${{ github.workspace }}/training-fixed-artifacts/focused
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.sha }}
+          fetch-depth: 0
+          persist-credentials: false
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: npm
+      - name: Exact fixed source, original archive and offline dependencies
+        run: |
+          set -euo pipefail
+          test "$GITHUB_REF_NAME" = codex/sc-training-pending-fixed-v2-20261028
+          test "$(git rev-parse HEAD)" = "$GITHUB_SHA"
+          mkdir -p "$SC_TRAINING_FIXED_OUT"
+          git rev-parse HEAD HEAD^{tree} > "$SC_TRAINING_FIXED_OUT/head-tree.txt"
+          git archive --format=tar HEAD > "$SC_TRAINING_FIXED_OUT/source.tar"
+          git ls-tree -r HEAD > "$SC_TRAINING_FIXED_OUT/source-tree.txt"
+          git ls-files -z | sort -z | xargs -0 sha256sum > "$SC_TRAINING_FIXED_OUT/tracked-before.sha256"
+          test "$(git rev-parse HEAD^)" = b20ec6664df9d4c58d63ea0596791d33b2a3b8fc
+          test "$(git rev-list --parents -n 1 HEAD | wc -w)" = 2
+          printf '%s  %s\n' 53ee363158093fe7c2ea607a54176f8a5d470d7c74c4e358d4b59ebb0da0b593 qa/sc-training-pending-fixed-v1/SOURCE-READY.json | sha256sum --check
+          printf '%s  %s\n' b8dca0189014894d0ba76ed71977bc6d94b583f7697d2b4b5568730e8530dcf4 scripts/qa/scTrainingPendingQualification.mjs | sha256sum --check
+          printf '%s  %s\n' e36c8dad576ac3ecb2cd75cd7d57cb53832bb2666363a85d06ffbaf1142c424d scripts/qa/playSoccerTrainingPending.mjs | sha256sum --check
+          node --check scripts/qa/scTrainingPendingQualification.mjs
+          node --check scripts/qa/playSoccerTrainingPending.mjs
+          NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/qa/scTrainingPendingQualification.mjs source 2>&1 | tee "$SC_TRAINING_FIXED_OUT/source-pins.log"
+          git diff --name-only b20ec6664df9d4c58d63ea0596791d33b2a3b8fc HEAD | sort > "$SC_TRAINING_FIXED_OUT/changed-paths.txt"
+          diff -u "$SC_TRAINING_FIXED_OUT/expected-paths.txt" "$SC_TRAINING_FIXED_OUT/changed-paths.txt"
+          echo '127.0.0.1 flawuiqbvjobmkfkauhw.supabase.co' | sudo tee -a /etc/hosts
+          npm ci 2>&1 | tee "$SC_TRAINING_FIXED_OUT/npm-ci.log"
+      - name: Real application types
+        run: |
+          set -euo pipefail
+          NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node_modules/.bin/tsc --noEmit -p tsconfig.app.json 2>&1 | tee "$SC_TRAINING_FIXED_OUT/types.log"
+      - name: All frozen diagnostic cases with exact identities
+        run: |
+          set -euo pipefail
+          NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/qa/scTrainingPendingQualification.mjs focused 2>&1 | tee "$SC_TRAINING_FIXED_OUT/admission.log"
+      - name: Every tracked canonical source held
+        if: always()
+        run: |
+          set -euo pipefail
+          sha256sum --check "$SC_TRAINING_FIXED_OUT/tracked-before.sha256" > "$SC_TRAINING_FIXED_OUT/tracked-held.log"
+          git status --porcelain --untracked-files=no > "$SC_TRAINING_FIXED_OUT/tracked-status.txt"
+          test ! -s "$SC_TRAINING_FIXED_OUT/tracked-status.txt"
+          git diff --exit-code HEAD
+      - name: Retain original focused including failure
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: sc-training-fixed-focused-${{ github.run_id }}-${{ github.run_attempt }}
+          path: training-fixed-artifacts/focused/
+          if-no-files-found: error
+          retention-days: 14
+  units:
+    runs-on: ubuntu-latest
+    timeout-minutes: 45
+    env:
+      CI: '1'
+      SIM_NETWORK: offline
+      CAREER_SEASON_LOCAL_ONLY: '1'
+      SC_TRAINING_FIXED_OUT: ${{ github.workspace }}/training-fixed-artifacts/units
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.sha }}
+          fetch-depth: 0
+          persist-credentials: false
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: npm
+      - name: Exact fixed source, original archive and offline dependencies
+        run: |
+          set -euo pipefail
+          test "$GITHUB_REF_NAME" = codex/sc-training-pending-fixed-v2-20261028
+          test "$(git rev-parse HEAD)" = "$GITHUB_SHA"
+          mkdir -p "$SC_TRAINING_FIXED_OUT"
+          git rev-parse HEAD HEAD^{tree} > "$SC_TRAINING_FIXED_OUT/head-tree.txt"
+          git archive --format=tar HEAD > "$SC_TRAINING_FIXED_OUT/source.tar"
+          git ls-tree -r HEAD > "$SC_TRAINING_FIXED_OUT/source-tree.txt"
+          git ls-files -z | sort -z | xargs -0 sha256sum > "$SC_TRAINING_FIXED_OUT/tracked-before.sha256"
+          test "$(git rev-parse HEAD^)" = b20ec6664df9d4c58d63ea0596791d33b2a3b8fc
+          test "$(git rev-list --parents -n 1 HEAD | wc -w)" = 2
+          printf '%s  %s\n' 53ee363158093fe7c2ea607a54176f8a5d470d7c74c4e358d4b59ebb0da0b593 qa/sc-training-pending-fixed-v1/SOURCE-READY.json | sha256sum --check
+          printf '%s  %s\n' b8dca0189014894d0ba76ed71977bc6d94b583f7697d2b4b5568730e8530dcf4 scripts/qa/scTrainingPendingQualification.mjs | sha256sum --check
+          printf '%s  %s\n' e36c8dad576ac3ecb2cd75cd7d57cb53832bb2666363a85d06ffbaf1142c424d scripts/qa/playSoccerTrainingPending.mjs | sha256sum --check
+          node --check scripts/qa/scTrainingPendingQualification.mjs
+          node --check scripts/qa/playSoccerTrainingPending.mjs
+          NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/qa/scTrainingPendingQualification.mjs source 2>&1 | tee "$SC_TRAINING_FIXED_OUT/source-pins.log"
+          git diff --name-only b20ec6664df9d4c58d63ea0596791d33b2a3b8fc HEAD | sort > "$SC_TRAINING_FIXED_OUT/changed-paths.txt"
+          diff -u "$SC_TRAINING_FIXED_OUT/expected-paths.txt" "$SC_TRAINING_FIXED_OUT/changed-paths.txt"
+          echo '127.0.0.1 flawuiqbvjobmkfkauhw.supabase.co' | sudo tee -a /etc/hosts
+          npm ci 2>&1 | tee "$SC_TRAINING_FIXED_OUT/npm-ci.log"
+      - name: Fresh complete current application suite and exact58 old skip identities
+        run: |
+          set -euo pipefail
+          NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/qa/scTrainingPendingQualification.mjs full 2>&1 | tee "$SC_TRAINING_FIXED_OUT/admission.log"
+      - name: Every tracked canonical source held
+        if: always()
+        run: |
+          set -euo pipefail
+          sha256sum --check "$SC_TRAINING_FIXED_OUT/tracked-before.sha256" > "$SC_TRAINING_FIXED_OUT/tracked-held.log"
+          git status --porcelain --untracked-files=no > "$SC_TRAINING_FIXED_OUT/tracked-status.txt"
+          test ! -s "$SC_TRAINING_FIXED_OUT/tracked-status.txt"
+          git diff --exit-code HEAD
+      - name: Retain original units including failure
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: sc-training-fixed-units-${{ github.run_id }}-${{ github.run_attempt }}
+          path: training-fixed-artifacts/units/
+          if-no-files-found: error
+          retention-days: 14
+  build_browser:
+    runs-on: ubuntu-latest
+    timeout-minutes: 45
+    env:
+      CI: '1'
+      SIM_NETWORK: offline
+      CAREER_SEASON_LOCAL_ONLY: '1'
+      ENGINES: chromium
+      SC_TRAINING_FIXED_OUT: ${{ github.workspace }}/training-fixed-artifacts/build
+      SC_TRAINING_PENDING_OUT: ${{ github.workspace }}/training-fixed-artifacts/build/browser
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.sha }}
+          fetch-depth: 0
+          persist-credentials: false
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: npm
+      - name: Exact fixed source, original archive and offline dependencies
+        run: |
+          set -euo pipefail
+          test "$GITHUB_REF_NAME" = codex/sc-training-pending-fixed-v2-20261028
+          test "$(git rev-parse HEAD)" = "$GITHUB_SHA"
+          mkdir -p "$SC_TRAINING_FIXED_OUT"
+          git rev-parse HEAD HEAD^{tree} > "$SC_TRAINING_FIXED_OUT/head-tree.txt"
+          git archive --format=tar HEAD > "$SC_TRAINING_FIXED_OUT/source.tar"
+          git ls-tree -r HEAD > "$SC_TRAINING_FIXED_OUT/source-tree.txt"
+          git ls-files -z | sort -z | xargs -0 sha256sum > "$SC_TRAINING_FIXED_OUT/tracked-before.sha256"
+          test "$(git rev-parse HEAD^)" = b20ec6664df9d4c58d63ea0596791d33b2a3b8fc
+          test "$(git rev-list --parents -n 1 HEAD | wc -w)" = 2
+          printf '%s  %s\n' 53ee363158093fe7c2ea607a54176f8a5d470d7c74c4e358d4b59ebb0da0b593 qa/sc-training-pending-fixed-v1/SOURCE-READY.json | sha256sum --check
+          printf '%s  %s\n' b8dca0189014894d0ba76ed71977bc6d94b583f7697d2b4b5568730e8530dcf4 scripts/qa/scTrainingPendingQualification.mjs | sha256sum --check
+          printf '%s  %s\n' e36c8dad576ac3ecb2cd75cd7d57cb53832bb2666363a85d06ffbaf1142c424d scripts/qa/playSoccerTrainingPending.mjs | sha256sum --check
+          node --check scripts/qa/scTrainingPendingQualification.mjs
+          node --check scripts/qa/playSoccerTrainingPending.mjs
+          NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/qa/scTrainingPendingQualification.mjs source 2>&1 | tee "$SC_TRAINING_FIXED_OUT/source-pins.log"
+          git diff --name-only b20ec6664df9d4c58d63ea0596791d33b2a3b8fc HEAD | sort > "$SC_TRAINING_FIXED_OUT/changed-paths.txt"
+          diff -u "$SC_TRAINING_FIXED_OUT/expected-paths.txt" "$SC_TRAINING_FIXED_OUT/changed-paths.txt"
+          echo '127.0.0.1 flawuiqbvjobmkfkauhw.supabase.co' | sudo tee -a /etc/hosts
+          npm ci 2>&1 | tee "$SC_TRAINING_FIXED_OUT/npm-ci.log"
+      - name: Isolated build browser tools and retained fonts
+        id: tools
+        env:
+          FREE_KICK_FONT_CACHE: ${{ github.workspace }}/training-fixed-artifacts/build/font-cache
+        run: |
+          set -euo pipefail
+          build_root="$RUNNER_TEMP/sc-training-fixed-build-$GITHUB_RUN_ID-$GITHUB_RUN_ATTEMPT"
+          git worktree add --detach "$build_root" HEAD
+          ln -s "$GITHUB_WORKSPACE/node_modules" "$build_root/node_modules"
+          echo "SC_TRAINING_FIXED_BUILD_ROOT=$build_root" >> "$GITHUB_ENV"
+          browser_tools="$RUNNER_TEMP/sc-training-fixed-tools-$GITHUB_RUN_ID-$GITHUB_RUN_ATTEMPT"
+          mkdir -p "$browser_tools"
+          printf '{"private":true,"dependencies":{"playwright":"1.64.0"}}\n' > "$browser_tools/package.json"
+          npm install --prefix "$browser_tools" --ignore-scripts --no-audit --no-fund 2>&1 | tee "$SC_TRAINING_FIXED_OUT/browser-install.log"
+          test ! -e node_modules/playwright
+          test ! -e node_modules/playwright-core
+          ln -s "$browser_tools/node_modules/playwright" node_modules/playwright
+          ln -s "$browser_tools/node_modules/playwright-core" node_modules/playwright-core
+          cp "$browser_tools/package.json" "$SC_TRAINING_FIXED_OUT/browser-package.json"
+          cp "$browser_tools/package-lock.json" "$SC_TRAINING_FIXED_OUT/browser-package-lock.json"
+          export PLAYWRIGHT_BROWSERS_PATH="$RUNNER_TEMP/sc-training-fixed-chromium-$GITHUB_RUN_ID-$GITHUB_RUN_ATTEMPT"
+          echo "PLAYWRIGHT_BROWSERS_PATH=$PLAYWRIGHT_BROWSERS_PATH" >> "$GITHUB_ENV"
+          node "$browser_tools/node_modules/playwright/cli.js" install --with-deps chromium 2>&1 | tee "$SC_TRAINING_FIXED_OUT/chromium.log"
+          python -m pip install fonttools pillow 2>&1 | tee "$SC_TRAINING_FIXED_OUT/python-tools.log"
+          node scripts/qa/freeKickLab1070.mjs --prefetch-fonts-only 2>&1 | tee "$SC_TRAINING_FIXED_OUT/font-prefetch.log"
+      - name: Actual two-route SEO build in detached tree
+        id: build
+        env:
+          PRERENDER_ONLY: /soccer-career,/whats-new
+        run: |
+          set -euo pipefail
+          cd "$SC_TRAINING_FIXED_BUILD_ROOT"
+          mkdir -p "$SC_TRAINING_FIXED_OUT/generation"
+          for route in soccer-career whats-new; do cp "public/$route/index.html" "$SC_TRAINING_FIXED_OUT/generation/$route.before.html"; done
+          cp scripts/data/lastmod.json "$SC_TRAINING_FIXED_OUT/generation/lastmod.before.json"
+          retain_generation() {
+            git diff -- public scripts/data/lastmod.json > "$SC_TRAINING_FIXED_OUT/generation/full.diff"
+            for route in soccer-career whats-new; do cp "public/$route/index.html" "$SC_TRAINING_FIXED_OUT/generation/$route.after.html" || true; done
+            cp scripts/data/lastmod.json "$SC_TRAINING_FIXED_OUT/generation/lastmod.after.json" || true
+          }
+          trap retain_generation EXIT
+          NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" npm run build:seo 2>&1 | tee "$SC_TRAINING_FIXED_OUT/build.log"
+          find dist -type f -print0 | sort -z | xargs -0 sha256sum > "$SC_TRAINING_FIXED_OUT/dist.sha256"
+      - name: All fifteen rebuilt-site readers
+        id: readers
+        if: ${{ !cancelled() && steps.build.outcome == 'success' }}
+        run: |
+          set -euo pipefail
+          cd "$SC_TRAINING_FIXED_BUILD_ROOT"
+          ONLY=simAdsense,simBrand,simHeadTags,simHiddenPages,simHubs,simIndexNow,simIndexing,simInternalLinks,simNoRivalNames,simPrerender,simPrerenderBoot,simRetiredRoutes,simSchema,simSitemap,simSnapshotAssets NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/runAllSims.mjs --browser 2>&1 | tee "$SC_TRAINING_FIXED_OUT/readers.log"
+          test "$(grep -c '^All 15 harnesses green\.$' "$SC_TRAINING_FIXED_OUT/readers.log")" = 1
+      - name: All fifteen unchanged fatal download caps
+        id: caps
+        if: ${{ !cancelled() && steps.build.outcome == 'success' }}
+        run: |
+          set -euo pipefail
+          cd "$SC_TRAINING_FIXED_BUILD_ROOT"
+          NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/lib/hostLikeServer.mjs dist 4173 > "$SC_TRAINING_FIXED_OUT/weight-server.log" 2>&1 &
+          server_pid=$!
+          trap 'kill "$server_pid" 2>/dev/null || true' EXIT
+          for attempt in 1 2 3 4 5; do if curl --fail --silent http://127.0.0.1:4173/ > /dev/null; then break; fi; sleep 1; done
+          curl --fail --silent http://127.0.0.1:4173/ > /dev/null
+          BASE=http://127.0.0.1:4173 SWEEP_OFFLINE=1 NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/sweepWeight.mjs 2>&1 | tee "$SC_TRAINING_FIXED_OUT/weights.log"
+      - name: Actual fixed Back and Escape, preserved save, late release and healthy Next
+        id: baseline
+        if: ${{ !cancelled() && steps.build.outcome == 'success' }}
+        env:
+          FREE_KICK_FONT_CACHE: ${{ github.workspace }}/training-fixed-artifacts/build/font-cache
+        run: |
+          set -euo pipefail
+          cd "$SC_TRAINING_FIXED_BUILD_ROOT"
+          NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/qa/playSoccerTrainingPending.mjs 2>&1 | tee "$SC_TRAINING_FIXED_OUT/browser.log"
+          grep -Fx 'TRAINING_PENDING_FIXED: 2 profiles, 6 actual advances, 4 held chunk requests, 4 pending cancellations, 12 original PNGs, 6 copied controls, 0 errors' "$SC_TRAINING_FIXED_OUT/browser.log" > /dev/null
+      - name: Exact built sources and distribution held
+        if: always()
+        run: |
+          set -euo pipefail
+          if test -n "${SC_TRAINING_FIXED_BUILD_ROOT:-}"; then
+            git -C "$SC_TRAINING_FIXED_BUILD_ROOT" diff --exit-code HEAD -- src scripts qa .github/workflows docs package.json package-lock.json bun.lock index.html ':!scripts/data/lastmod.json'
+            if test -f "$SC_TRAINING_FIXED_OUT/dist.sha256"; then (cd "$SC_TRAINING_FIXED_BUILD_ROOT" && sha256sum --check "$SC_TRAINING_FIXED_OUT/dist.sha256") > "$SC_TRAINING_FIXED_OUT/dist-held.log"; fi
+          fi
+      - name: Every tracked canonical source held
+        if: always()
+        run: |
+          set -euo pipefail
+          sha256sum --check "$SC_TRAINING_FIXED_OUT/tracked-before.sha256" > "$SC_TRAINING_FIXED_OUT/tracked-held.log"
+          git status --porcelain --untracked-files=no > "$SC_TRAINING_FIXED_OUT/tracked-status.txt"
+          test ! -s "$SC_TRAINING_FIXED_OUT/tracked-status.txt"
+          git diff --exit-code HEAD
+      - name: Retain original baseline, source, build and browser evidence including failure
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: sc-training-fixed-build-${{ github.run_id }}-${{ github.run_attempt }}
+          path: training-fixed-artifacts/build/
+          if-no-files-found: error
+          retention-days: 14
