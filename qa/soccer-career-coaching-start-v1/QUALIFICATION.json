@@ -1,0 +1,266 @@
+{
+  "schema": 1,
+  "status": "QUALIFIED_SOURCE_PROPOSAL_NOT_MERGED_OR_PUBLISHED",
+  "qualifiedUtc": "2026-10-28",
+  "feature": "Optional first manager club selection for exact reviewed coaching coursework at first retirement entry",
+  "cleanSourceTree": "b188e112209bb12cb8dd3264ec1c1cbb81fa767f",
+  "applicationBodies": [
+    {
+      "path": "src/components/soccer-career/CoachingStartChooser.tsx",
+      "bytes": 3696,
+      "sha256": "96728e690cfb11e26e27d5f708f5d0ab0b4b63c69188f4ad8bae4fcb8bb43eed",
+      "gitBlob": "b9960b2d237a2d08adfd2277a0e9bbf998d853ad"
+    },
+    {
+      "path": "src/components/soccer-career/SoccerCareerProgramme.tsx",
+      "bytes": 9343,
+      "sha256": "99cac99276e89a3b14ac960c1a7535d31ab211a393b6b7c3f28d0acc3d0c00a4",
+      "gitBlob": "12b1dc2e51836ddfcb65d2d8f8d0a8613661a337"
+    },
+    {
+      "path": "src/components/soccer-career/SoccerOfferReview.tsx",
+      "bytes": 7774,
+      "sha256": "4a0f3c1ecf9b38153e4702d08cd0efb33f8f4e0096dc543a84c5b352602ed4b8",
+      "gitBlob": "91f4d8c072b316d6cd83ee3ca2959ae60c906b26"
+    },
+    {
+      "path": "src/lib/soccerCareerCoachingStart.ts",
+      "bytes": 3740,
+      "sha256": "816ddd0c3c0e3e5538ffe0cc08828cb60b10b70a91280fb04a917897891679fc",
+      "gitBlob": "31832575462ba134937d62384c358c2c79f51032"
+    },
+    {
+      "path": "src/lib/soccerCareerEngine.ts",
+      "bytes": 551628,
+      "sha256": "d7d94a36b796af66914cdf9bd4803cf42b027f423ceb8baac9fb144677de7030",
+      "gitBlob": "8a927bd55b650feb3378b6cf3d4c9d54b1cb6199"
+    },
+    {
+      "path": "src/lib/soccerCareerLoyalty.ts",
+      "bytes": 12855,
+      "sha256": "3296bbf33e1b148a7d69ea30c0e8e64a4eaa724e56b4c50c735089a340b79d54",
+      "gitBlob": "db056195a1dd1d5d2c2a35dc137e553663396dd2"
+    },
+    {
+      "path": "src/lib/soccerCareerProgramme.ts",
+      "bytes": 33338,
+      "sha256": "6808495106b7cd2dda2c2c4dbb493498c1b12f2cd2bd6ada7a3a3e80d8bee79b",
+      "gitBlob": "995f50a7c6c154cae497e9a2c13e10776264c6bd"
+    },
+    {
+      "path": "src/lib/soccerOfferReview.ts",
+      "bytes": 2154,
+      "sha256": "07967edc27eeb05edda1c2b7799320a1ba1e5d87020ac54e85782c831a57e766",
+      "gitBlob": "3b6f6c3e1edc2b002f9e675a3825887631b65830"
+    },
+    {
+      "path": "src/hooks/useSoccerCoachingStart.ts",
+      "bytes": 1046,
+      "sha256": "ffc939cb394ccdc20f388041fe89d93dddac131580ca2a50a29d6f004a714b6f",
+      "gitBlob": "baf970108738e4f3699d3d8a0efe1715fdcaeae4"
+    },
+    {
+      "path": "src/pages/SoccerCareer.tsx",
+      "bytes": 277375,
+      "sha256": "a06bd76c5409ce35bd9376af22ba21293820bfa497793a57b74c832d276ea1bf",
+      "gitBlob": "d662e1a2094b7e94380d1d2b2aacd6619ea804d0"
+    }
+  ],
+  "behavior": {
+    "coursework": "Exact numeric3 records reviewed coursework, no licence or rating/money bonus",
+    "choices": "Up to3 distinct existing tier>=3 starter records, tier is strength marker",
+    "authority": "Unchanged canonical singleton choosePostRetirement initializer, existing1draw; latest committed state/current club binding; value setter outside updater",
+    "default": "Usual manager entry retained; no engine, data or save-schema edit",
+    "phone": "New chooser root uses existing useRevealScroll with skipFirst:false; global hook unchanged"
+  },
+  "fullSuite": {
+    "head": "2df38534a5b8e3e04312f733ccb26c926d6cfd26",
+    "run": 40612998993,
+    "job": 122568804947,
+    "artifact": 12785261384,
+    "artifactSha256": "412c64d0e8e5c8bb7c8a9c4a00b3ae4418120af1cf5272bea13ba01a090258e0",
+    "admissionSha256": "a7f2bae73ff269b60b1dffff6add9ce3fcd05c34babdcf93c12f590823a1aca2",
+    "tests": 9755,
+    "passed": 9697,
+    "unchangedSkipped": 58,
+    "failed": 0,
+    "files": 656,
+    "passingFiles": 654,
+    "skippedFiles": 2,
+    "oldIdentitiesAndStatusesHeld": 9721,
+    "sourceBodiesHeld": 5430,
+    "actualNoEnvFeatureCasesPassed": 34
+  },
+  "focused": {
+    "head": "a409bccad04486dcec1fed8663f310161ed78342",
+    "run": 40615091369,
+    "artifact": 12784184647,
+    "artifactSha256": "fcb81d7bea7edabaac4b3597a7f5d9e0deb8ffd2c1626cfe69d86ba3a3668e9d",
+    "admissionSha256": "78151d81ab3493feff909868daf6705de6ed64e3ca4c8ba2b8424966957a6fb8",
+    "realTypes": 0,
+    "noEnvCases": 34,
+    "suppliedActualConsumers": 4,
+    "physicalSourceFaults": 11,
+    "perFault": "1 intended assertion failure,1 independent pass,20 filtered skips",
+    "sameCopyRestores": 11,
+    "actualCasesPerRestore": 22,
+    "unsafeUpdater": {
+      "actualDraws": 2,
+      "healthyDraws": 1,
+      "queuedRevisionAsserted": 1,
+      "followingDrawChanged": true
+    },
+    "sourceBodiesHeld": 5430
+  },
+  "native": {
+    "head": "99f179650369278b1b14c5f371fd69b84120d1e3",
+    "run": 40613727135,
+    "artifact": 12784357540,
+    "artifactSha256": "e514af307f0b526a8841cf2016550c00b6ecdcd28ed9f7eca99c9b15d50a7fb0",
+    "admissionSha256": "51765465a5fa683a9e71fbf00c686aed37d365061449e8e4603268c619997653",
+    "viewports": [
+      320,
+      390,
+      430,
+      1440
+    ],
+    "phases": [
+      "retirement_ceremony",
+      "post_retirement"
+    ],
+    "journeys": 8,
+    "freshContexts": 16,
+    "checks": 624,
+    "geometryRecords": 112,
+    "fullCanonicalStateByteManagerRngNextReloadPairs": 16,
+    "actualDisplayedSecondClubBindings": 8,
+    "copiedDiagnosticControls": 1,
+    "diagnosticEffectiveness": "same copied full body healthy/rejected/restored0/1/0; no served-source claim",
+    "sourceBodiesHeld": 5432,
+    "screenshots": 32,
+    "actualOriginalPixelViews": 32,
+    "pngInventorySha256": "59d64c44eb79b590262d65e236c94df23e2668304654c853db8b48e57691a983",
+    "visualReceiptSha256": [
+      "b766f3d66568c4c2d2e60e5ad03705d620e424cbbd9028cf41f3b1ee26f4a359",
+      "02ba02a702ff4f04778bd46ad6075b7111edafc2fb9720abe064a300e4b90ce7",
+      "9f04037727ac18cac3bc756d1f4c3a44f5a6ffd36b270af22a0cb35c1de1a10e"
+    ]
+  },
+  "build": {
+    "head": "2df38534a5b8e3e04312f733ccb26c926d6cfd26",
+    "run": 40612998993,
+    "artifact": 12784315607,
+    "artifactSha256": "5d29e638d32cdad4e9dc93e3c4d219d8bbc7186a3036cb620e8e5b3543fe0489",
+    "admissionSha256": "3e721b51804c8f54887ea6fbd13b5293987a64c7d588255798b0302465ed8e92",
+    "rebuiltReadersPassed": 15,
+    "unchangedFatalCapsPassed": 15,
+    "distFilesHeld": 828,
+    "soccerCareerGzipK": 827.9,
+    "soccerCareerBudgetK": 840
+  },
+  "parity": {
+    "appBodiesIdenticalAcrossProducers": 10,
+    "fullSuiteSelector": "73f0282fba85e4dd5454b5dcec01c3bfa96366f4170d898f9d82a41e2bc565da",
+    "finalProofSelector": "82034d926ac30e7a5bdf642023c900f3635e1939c1a6d299b2765e5f6cccea2f",
+    "testOnlyDelta": "Transaction Host queues an unrelated real state update and asserts revision1 to force real StrictMode updater replay; other case assertions retained",
+    "appParityReceiptSha256": "037fc39ab318aabf5655826e0b0375d21e0e4166ea34d9d073b99f23e8fd5706",
+    "limits": "Do not claim the stronger transaction test was byte-identical to the full-suite test input"
+  },
+  "delivery": {
+    "cleanScope": "4app files,5test files,1actual-page Node child observer builder,append-only project state. Temporary qualifiers stay on pushed QA branches.",
+    "basePR": 415,
+    "protectedCompositionAndPublicationOwner": "I",
+    "mainObserved": "b20ec6664df9d4c58d63ea0596791d33b2a3b8fc",
+    "previousFinishedPRs": [
+      {
+        "pr": 402,
+        "state": "open",
+        "merged": false,
+        "head": "b1e39a6cfe41c1869392db3670123c7f7ba6d9ff",
+        "branch": "codex/nba-season20-qualification-20261026"
+      },
+      {
+        "pr": 405,
+        "state": "open",
+        "merged": false,
+        "head": "3b975634a1e2788d8a49167c0aeb8c736de8488d",
+        "branch": "codex/aussie-real-club-writer-qualification-20261026"
+      },
+      {
+        "pr": 406,
+        "state": "open",
+        "merged": false,
+        "head": "cd5cf7ddcca7ad117b4517004f4f10c7469384f0",
+        "branch": "codex/cm-original-discovery-regression-names-20261026"
+      },
+      {
+        "pr": 407,
+        "state": "open",
+        "merged": false,
+        "head": "65f85c90b8503eb469a3a09f08b7be8284a7c98d",
+        "branch": "codex/cm-national-coach-shadow-20261026"
+      },
+      {
+        "pr": 408,
+        "state": "open",
+        "merged": false,
+        "head": "fb42ded0a7eccb3efab00a961cbf366089788fa0",
+        "branch": "codex/player-bingo-more-categories-20261026"
+      },
+      {
+        "pr": 410,
+        "state": "open",
+        "merged": false,
+        "head": "d9b4a99a2eedca5e521750e708db14aa35e007a7",
+        "branch": "codex/cm-default-shootout-results-20261026"
+      },
+      {
+        "pr": 411,
+        "state": "open",
+        "merged": false,
+        "head": "a9df166748b77b9c7f824975ff5ce849a3bb536b",
+        "branch": "codex/cm-minimize-generation-shadow-20261027"
+      },
+      {
+        "pr": 414,
+        "state": "open",
+        "merged": false,
+        "head": "f320dc068fd7530d7093dcdce68b0d5a24ac75e1",
+        "branch": "codex/soccer-career-internal-links-20261027"
+      },
+      {
+        "pr": 415,
+        "state": "open",
+        "merged": false,
+        "head": "d272f1cb8197c3f5a884688fd592ecca623a076e",
+        "branch": "codex/soccer-career-loyalty-20261027"
+      },
+      {
+        "pr": 416,
+        "state": "open",
+        "merged": false,
+        "head": "14ec28b1cbc82b1abcdf14244dec7acae25d1507",
+        "branch": "codex/cm-loan-plan-20261027"
+      },
+      {
+        "pr": 417,
+        "state": "open",
+        "merged": false,
+        "head": "80e0585440321b643d0f13c83468271aa42e237e",
+        "branch": "codex/sc-results-applicability-20261027"
+      }
+    ],
+    "selectedPreviousSourceBackup": {
+      "branch": "codex/selected-nba-source-handoff-20261027",
+      "head": "864c3c2476b1bdddb5b3453aafc628b884b7f9d5",
+      "originalFiles": 9,
+      "status": "SOURCE_READY_NOT_ADOPTED_RUNTIME_UNRUN"
+    }
+  },
+  "limits": [
+    "Every original acquired once by its assigned owner; all regular ZIP/TAR bodies hashed before archived JSON admission.",
+    "Native fixtures explicitly set saved coursework/presentation eligibility; no new natural progression claimed.",
+    "No whole-site/current-I/live deployment or general no-overlap/accessibility claim.",
+    "No main merge, publication, dependency/provider/schema/real-data edits."
+  ]
+}

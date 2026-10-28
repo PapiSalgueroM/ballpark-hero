@@ -1,0 +1,60 @@
+{
+  "status": "NATIVE_APPLICATION_SOURCE_PARITY_CONFIRMED",
+  "full2dfManifest": "73f0282fba85e4dd5454b5dcec01c3bfa96366f4170d898f9d82a41e2bc565da",
+  "focusedProofManifest": "82034d926ac30e7a5bdf642023c900f3635e1939c1a6d299b2765e5f6cccea2f",
+  "applicationSourceBodies": 10,
+  "pins": [
+    {
+      "path": "src/components/soccer-career/CoachingStartChooser.tsx",
+      "sha256": "96728e690cfb11e26e27d5f708f5d0ab0b4b63c69188f4ad8bae4fcb8bb43eed",
+      "gitBlob": "b9960b2d237a2d08adfd2277a0e9bbf998d853ad"
+    },
+    {
+      "path": "src/components/soccer-career/SoccerCareerProgramme.tsx",
+      "sha256": "99cac99276e89a3b14ac960c1a7535d31ab211a393b6b7c3f28d0acc3d0c00a4",
+      "gitBlob": "12b1dc2e51836ddfcb65d2d8f8d0a8613661a337"
+    },
+    {
+      "path": "src/components/soccer-career/SoccerOfferReview.tsx",
+      "sha256": "4a0f3c1ecf9b38153e4702d08cd0efb33f8f4e0096dc543a84c5b352602ed4b8",
+      "gitBlob": "91f4d8c072b316d6cd83ee3ca2959ae60c906b26"
+    },
+    {
+      "path": "src/lib/soccerCareerCoachingStart.ts",
+      "sha256": "816ddd0c3c0e3e5538ffe0cc08828cb60b10b70a91280fb04a917897891679fc",
+      "gitBlob": "31832575462ba134937d62384c358c2c79f51032"
+    },
+    {
+      "path": "src/lib/soccerCareerEngine.ts",
+      "sha256": "d7d94a36b796af66914cdf9bd4803cf42b027f423ceb8baac9fb144677de7030",
+      "gitBlob": "8a927bd55b650feb3378b6cf3d4c9d54b1cb6199"
+    },
+    {
+      "path": "src/lib/soccerCareerLoyalty.ts",
+      "sha256": "3296bbf33e1b148a7d69ea30c0e8e64a4eaa724e56b4c50c735089a340b79d54",
+      "gitBlob": "db056195a1dd1d5d2c2a35dc137e553663396dd2"
+    },
+    {
+      "path": "src/lib/soccerCareerProgramme.ts",
+      "sha256": "6808495106b7cd2dda2c2c4dbb493498c1b12f2cd2bd6ada7a3a3e80d8bee79b",
+      "gitBlob": "995f50a7c6c154cae497e9a2c13e10776264c6bd"
+    },
+    {
+      "path": "src/lib/soccerOfferReview.ts",
+      "sha256": "07967edc27eeb05edda1c2b7799320a1ba1e5d87020ac54e85782c831a57e766",
+      "gitBlob": "3b6f6c3e1edc2b002f9e675a3825887631b65830"
+    },
+    {
+      "path": "src/hooks/useSoccerCoachingStart.ts",
+      "sha256": "ffc939cb394ccdc20f388041fe89d93dddac131580ca2a50a29d6f004a714b6f",
+      "gitBlob": "baf970108738e4f3699d3d8a0efe1715fdcaeae4"
+    },
+    {
+      "path": "src/pages/SoccerCareer.tsx",
+      "sha256": "a06bd76c5409ce35bd9376af22ba21293820bfa497793a57b74c832d276ea1bf",
+      "gitBlob": "d662e1a2094b7e94380d1d2b2aacd6619ea804d0"
+    }
+  ],
+  "onlySelectedBodyChange": "src/test/soccerCareerCoachingTransaction.test.tsx",
+  "limit": "This is application-sourceparity only. Laterstrengthenedqueuedtestneedsactualdedicatedproof; fullsuitebelongsactual2dfhead/oldtestdriveruntilitsowneradmission."
+}
