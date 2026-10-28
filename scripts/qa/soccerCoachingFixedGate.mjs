@@ -11,7 +11,7 @@ const pins={
   'qa/soccer-career-coaching-start-v1/SOURCE-FAULTS.json':'030ec20aa115c1aec45485c0191fda2d81e7b59f942fa130e154d2650ad62eb2',
   'scripts/qa/soccerCoachingStartConsumer.mjs':'4be9f4bd583adadbfd9f64fd1997b81861f8d368dd3bc1b6c36204b9fb623996',
   'scripts/qa/soccerCoachingStartControls.mjs':'2adc28c881990d23a5240ee72f4b8a8e8cb268cc68377181b1b46d42d1e3a259',
-  'scripts/qa/buildSoccerCoachingStartObserver.mjs':'0c85bb482c920a1d745f67733165b721eb6fe3122141ef28b9bed73d0064bc16',
+  'scripts/qa/buildSoccerCoachingStartObserver.mjs':'d4a763951584530eff61dde9b7aac8b63afc02d45471deb7d4fff483fd36975e',
   'src/test/soccerCareerCoachingStart.consumer.test.tsx':'2a1d221b7640053953699c033a1db525b5f2cbe98878d4742f40ba951a978c5a',
   'src/test/soccerCareerCoachingStart.consumer.lifecycle.test.tsx':'1557248d14394b2baefac89e5ed81ed595f267d41b52354ca8fc7cac37459c25',
 };
