@@ -1,0 +1,90 @@
+name: Soccer Career Serie B intended baseline
+on:
+  push:
+    branches: [codex/sc-serieb-baseline-v2-20261028]
+    paths:
+      - .github/workflows/sc-serieb-baseline.yml
+      - scripts/qa/scSerieBBaselineQualification.mjs
+      - scripts/qa/serieBReleaseBaseline.mjs
+      - 'qa/sc-serieb-release-v1/**'
+permissions:
+  contents: read
+concurrency:
+  group: sc-serieb-baseline-${{ github.sha }}
+  cancel-in-progress: false
+defaults:
+  run:
+    shell: bash
+jobs:
+  baseline:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    env:
+      CI: '1'
+      SIM_NETWORK: offline
+      CAREER_SEASON_LOCAL_ONLY: '1'
+      SC_SERIEB_SOURCE_BASE: a4805f9d0e5816d19a1490ee6bb511966c617785
+      SC_SERIEB_SOURCE_TREE: a0f25d5bd854823b3a625932d8dff336bc400e0b
+      SC_SERIEB_ARTIFACTS: ${{ github.workspace }}/serieb-baseline-artifacts
+      SC_SERIEB_BASELINE_OUT: ${{ github.workspace }}/serieb-baseline-artifacts/consumer
+      SC_SERIEB_QUAL_OUT: ${{ github.workspace }}/serieb-baseline-artifacts/qualification
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.sha }}
+          fetch-depth: 2
+          persist-credentials: false
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: npm
+      - name: Source-vetted clean parent, seven QA additions and original source
+        run: |
+          set -euo pipefail
+          mkdir -p "$SC_SERIEB_ARTIFACTS"
+          git rev-parse HEAD HEAD^{tree} > "$SC_SERIEB_ARTIFACTS/head-tree.txt"
+          git archive --format=tar HEAD > "$SC_SERIEB_ARTIFACTS/source.tar"
+          git ls-tree -r HEAD > "$SC_SERIEB_ARTIFACTS/source-tree.txt"
+          git ls-files -z | sort -z | xargs -0 sha256sum > "$SC_SERIEB_ARTIFACTS/tracked-before.sha256"
+          test "$GITHUB_REF_NAME" = codex/sc-serieb-baseline-v2-20261028
+          test "$(git rev-parse HEAD)" = "$GITHUB_SHA"
+          [[ "$SC_SERIEB_SOURCE_BASE" =~ ^[0-9a-f]{40}$ ]]
+          [[ "$SC_SERIEB_SOURCE_TREE" =~ ^[0-9a-f]{40}$ ]]
+          test "$(git rev-parse HEAD^)" = "$SC_SERIEB_SOURCE_BASE"
+          test "$(git rev-parse "$SC_SERIEB_SOURCE_BASE^{tree}")" = "$SC_SERIEB_SOURCE_TREE"
+          test "$(git rev-list --parents -n 1 HEAD | wc -w)" = 2
+          printf '%s  %s\n' 71e0f950ea1f7c282915d0a8896f00ff54ca8002e6fdc535fbec62c9ab10b3c1 qa/sc-serieb-release-v1/BASELINE-SOURCE-READY.json | sha256sum --check
+          printf '%s  %s\n' 1fc3048712ec50a144b983094a4022a3bf0af2dfb037c935d6b08e951f139f8e scripts/qa/scSerieBBaselineQualification.mjs | sha256sum --check
+          printf '%s  %s\n' 1c846af6c2191d8ea9621cdcb19e34fa14d4958dca4091f132cfaf192726ce4b scripts/qa/serieBReleaseBaseline.mjs | sha256sum --check
+          node --check scripts/qa/scSerieBBaselineQualification.mjs
+          node --check scripts/qa/serieBReleaseBaseline.mjs
+          NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/qa/scSerieBBaselineQualification.mjs source 2>&1 | tee "$SC_SERIEB_ARTIFACTS/source-pins.log"
+          git diff --name-only "$SC_SERIEB_SOURCE_BASE" HEAD | sort > "$SC_SERIEB_ARTIFACTS/changed-paths.txt"
+          diff -u "$SC_SERIEB_QUAL_OUT/expected-paths.txt" "$SC_SERIEB_ARTIFACTS/changed-paths.txt"
+          echo '127.0.0.1 flawuiqbvjobmkfkauhw.supabase.co' | sudo tee -a /etc/hosts
+          npm ci 2>&1 | tee "$SC_SERIEB_ARTIFACTS/npm-ci.log"
+      - name: Real application types
+        run: |
+          set -euo pipefail
+          NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node_modules/.bin/tsc --noEmit -p tsconfig.app.json 2>&1 | tee "$SC_SERIEB_ARTIFACTS/types.log"
+      - name: Seven actual cases, five precise assertions and two preservation passes
+        run: |
+          set -euo pipefail
+          NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/qa/scSerieBBaselineQualification.mjs run 2>&1 | tee "$SC_SERIEB_ARTIFACTS/admission.log"
+          grep -Fx 'SERIEB_BASELINE_QUALIFIED: 7 cases, 5 intended feature assertions, 2 preservation passes, 9 COPIED diagnostic controls, 0 method errors' "$SC_SERIEB_ARTIFACTS/admission.log" > /dev/null
+      - name: Every tracked source held, including failures
+        if: always()
+        run: |
+          set -euo pipefail
+          sha256sum --check "$SC_SERIEB_ARTIFACTS/tracked-before.sha256" > "$SC_SERIEB_ARTIFACTS/tracked-held.log"
+          git status --porcelain --untracked-files=no > "$SC_SERIEB_ARTIFACTS/tracked-status.txt"
+          test ! -s "$SC_SERIEB_ARTIFACTS/tracked-status.txt"
+          git diff --exit-code HEAD
+      - name: Retain original source, fixtures and failures
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: sc-serieb-baseline-${{ github.run_id }}-${{ github.run_attempt }}
+          path: serieb-baseline-artifacts/
+          if-no-files-found: error
+          retention-days: 14

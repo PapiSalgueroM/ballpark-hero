@@ -1,0 +1,230 @@
+{
+  "schema": 1,
+  "status": "SOURCE_VETTED_DRAFT_PARENT_BOUND_GLOBAL_QUALIFICATION_PENDING",
+  "baseCommit": "a4805f9d0e5816d19a1490ee6bb511966c617785",
+  "baseTree": "a0f25d5bd854823b3a625932d8dff336bc400e0b",
+  "parentStatus": "Source-vetted candidate parent, global qualification pending",
+  "referenceProductManifestSHA256": "02da0797213ad87d8bf9122099e2ff910aa5f5c09fcf0237736df56043392ab0",
+  "referenceRun": "40713259023",
+  "critical": [
+    {
+      "path": "src/lib/clubManager.ts",
+      "bytes": 1240848,
+      "sha256": "a4c8260bced0db3582437461afe6e6616f465e0b0b1ec887ba301757364681dd",
+      "gitBlob": "be0d8b8fe962f7bff0ed36dee421939b0b728cdf"
+    },
+    {
+      "path": "scripts/lib/careerClubPool.mjs",
+      "bytes": 22388,
+      "sha256": "b2e24ba13301ec48c0119e69bf614bbc0f0e7f344103a5f1baddaffdfe325190",
+      "gitBlob": "e05c4ad14d82b3c610d403f91f11a7b2debd0a67"
+    },
+    {
+      "path": "src/data/leagueFormat.ts",
+      "bytes": 7039,
+      "sha256": "dc73e10402d270a6ed01c0fab4f8165d305f336a55a238d863c9b310f7f8ab4d",
+      "gitBlob": "ee63dcd69a02079ecb4cafdaf740ddc8a836e705"
+    },
+    {
+      "path": "src/lib/soccerCareerLeague.ts",
+      "bytes": 47020,
+      "sha256": "0519defdf1ac93f69b83f14b11d36f1b9d2544f7bb6c60ba97c4539710cd9b52",
+      "gitBlob": "4289b67b17952e3210e3c7593a5f9ad0327024a3"
+    },
+    {
+      "path": "src/lib/soccerCareerDerby.ts",
+      "bytes": 23357,
+      "sha256": "c6a6859a5fd24f18d6a2e05b258ad9dddbc271a81d42c1767560d4a8cee8d906",
+      "gitBlob": "4a14cd2ad13505990122383f7595689bb1e8df6e"
+    },
+    {
+      "path": "src/lib/soccerCareerEngine.ts",
+      "bytes": 552035,
+      "sha256": "bc616834e0a5399fcd3ec55d519ead1b194281a9801e3da8a43bf421cd5153b2",
+      "gitBlob": "d40a6e9492e5a1a7c908dc1af7382d649b2b3fe7"
+    },
+    {
+      "path": "src/lib/soccerCareerCoachingStart.ts",
+      "bytes": 4043,
+      "sha256": "7720957192ccb8a0de5b1fef64817e409ee30d7ce7dd035425e598d0fd903aff",
+      "gitBlob": "0733d114d66b748131ac2c623fb858c6d9c97fd2"
+    },
+    {
+      "path": "scripts/data/soccerCareerFacts.json",
+      "bytes": 163464,
+      "sha256": "352d9e65f0661c2943ca1bf5b5129e7cb405c3d8c4aa6dbe3bad6dad60f1349a",
+      "gitBlob": "243991ff827226cf197ca6450cf0c9ee40fdc709"
+    },
+    {
+      "path": "src/data/soccerCareerClubPool.ts",
+      "bytes": 46309,
+      "sha256": "4fca8dcc0d83efaa0d79d58833a03d3f2787cd44fb5ea93a90c3cf207ef5efd2",
+      "gitBlob": "9247463ff836992a4ea43fb79c5c18b19ffe673d"
+    },
+    {
+      "path": "src/lib/careerEras.ts",
+      "bytes": 105789,
+      "sha256": "f3e7347f58abe993db9fd72e9896ea0767a6ca7eb3b19861b75b92b387f89c1c",
+      "gitBlob": "e037022342382b1df9c8a5ede620d2cce480bc23"
+    },
+    {
+      "path": "src/lib/soccerCareerSave.ts",
+      "bytes": 6287,
+      "sha256": "b486dfd8c4073230b6967c674058e46c7b56a6afd2a8a165f1e215501205477a",
+      "gitBlob": "86ec011693fd5bc702b5e8ccec05d27775a72a76"
+    },
+    {
+      "path": "src/lib/soccerCareerLeagueWorld.ts",
+      "bytes": 15636,
+      "sha256": "360c629f5d6ecc9cd959f5aae9a3791eb99b4f5cecdca2236da563168c2bb8c6",
+      "gitBlob": "72fcabdd0c557a743aa849b01208140c3030048f"
+    },
+    {
+      "path": "qa/sc-serieb-release-v1/original/soccerCareerClubPool.ts",
+      "bytes": 46309,
+      "sha256": "4fca8dcc0d83efaa0d79d58833a03d3f2787cd44fb5ea93a90c3cf207ef5efd2",
+      "gitBlob": "9247463ff836992a4ea43fb79c5c18b19ffe673d"
+    },
+    {
+      "path": "qa/sc-serieb-release-v1/retained/fixtures.json",
+      "bytes": 26146,
+      "sha256": "3ba6f1cbc7ddf56ec2938e3822b83b4920128cd1c8c9736eef46b0608ede4fa1",
+      "gitBlob": "ec21ca626b2d120f2f64dfd280b65f4047ec1f03"
+    },
+    {
+      "path": "qa/sc-serieb-release-v1/retained/old-generic.save.txt",
+      "bytes": 6412,
+      "sha256": "81777bcd5a7631c70edf52c626484c00e0a687ab2fd9a7fae7f3c3a2ade0da25",
+      "gitBlob": "01bd361ead98a5a78726437d3bb3f796d42b3ed3"
+    }
+  ],
+  "producers": [
+    {
+      "path": "scripts/qa/serieBReleaseBaseline.mjs",
+      "bytes": 18414,
+      "sha256": "1c846af6c2191d8ea9621cdcb19e34fa14d4958dca4091f132cfaf192726ce4b",
+      "gitBlob": "65b33d8cb3fbdc5672549336909ffa46952cd2de"
+    }
+  ],
+  "allowedChanges": [
+    ".github/workflows/sc-serieb-baseline.yml",
+    "scripts/qa/scSerieBBaselineQualification.mjs",
+    "scripts/qa/serieBReleaseBaseline.mjs",
+    "qa/sc-serieb-release-v1/BASELINE-SOURCE-READY.json",
+    "qa/sc-serieb-release-v1/original/soccerCareerClubPool.ts",
+    "qa/sc-serieb-release-v1/retained/fixtures.json",
+    "qa/sc-serieb-release-v1/retained/old-generic.save.txt"
+  ],
+  "cases": [
+    {
+      "index": 0,
+      "name": "complete initial-contract pool and since boundary",
+      "status": "failed",
+      "requiredMessagePrefix": "MISSING_SERIEB_PLAYING_POOL"
+    },
+    {
+      "index": 1,
+      "name": "complete modern finish ladder",
+      "status": "failed",
+      "requiredMessagePrefix": "MISSING_SERIEB_LADDER"
+    },
+    {
+      "index": 2,
+      "name": "playing table size points and cadence boundary",
+      "status": "failed",
+      "requiredMessagePrefix": "MISSING_SERIEB_TABLE_GATE"
+    },
+    {
+      "index": 3,
+      "name": "historic default manager entry excludes the appended20",
+      "status": "failed",
+      "requiredMessagePrefix": "MISSING_SERIEB_RETIREMENT_YEAR_GATE"
+    },
+    {
+      "index": 4,
+      "name": "historic coursework read and commit exclude the appended20",
+      "status": "failed",
+      "requiredMessagePrefix": "MISSING_SERIEB_COURSEWORK_YEAR_GATE"
+    },
+    {
+      "index": 5,
+      "name": "existing190 hand287 generated23 ladders and L2 eligibility remain frozen",
+      "status": "passed",
+      "requiredMessagePrefix": null
+    },
+    {
+      "index": 6,
+      "name": "retained raw and genuine pending offer survive codec and acceptance",
+      "status": "passed",
+      "requiredMessagePrefix": null
+    }
+  ],
+  "expectedAddedNames": [
+    "Cremonese",
+    "Verona",
+    "Pisa",
+    "Avellino",
+    "Carrarese",
+    "Catanzaro",
+    "Cesena",
+    "Empoli",
+    "Entella",
+    "Juve Stabia",
+    "Mantova",
+    "Modena",
+    "Padova",
+    "Palermo",
+    "Sampdoria",
+    "Sudtirol",
+    "Vicenza",
+    "Arezzo",
+    "Benevento",
+    "Ascoli"
+  ],
+  "expectedAddedIds": [
+    "cm-cremonese",
+    "cm-verona",
+    "cm-pisa",
+    "cm-avellino",
+    "cm-carrarese",
+    "cm-catanzaro",
+    "cm-cesena",
+    "cm-empoli",
+    "cm-entella",
+    "cm-juve-stabia",
+    "cm-mantova",
+    "cm-modena",
+    "cm-padova",
+    "cm-palermo",
+    "cm-sampdoria",
+    "cm-sudtirol",
+    "cm-vicenza",
+    "cm-arezzo",
+    "cm-benevento",
+    "cm-ascoli"
+  ],
+  "oldL2DeniedIds": [
+    "cm-metz",
+    "cm-saint-etienne",
+    "cm-red-star-fc",
+    "cm-reims",
+    "cm-montpellier",
+    "cm-nancy",
+    "cm-annecy",
+    "cm-sochaux",
+    "cm-dijon",
+    "cm-pau",
+    "cm-guingamp",
+    "cm-dunkerque",
+    "cm-grenoble",
+    "cm-rodez",
+    "cm-clermont",
+    "cm-boulogne",
+    "cm-laval"
+  ],
+  "closing": "SERIEB_BASELINE: 7 cases; 2 passed; 5 assertion failures; 0 method errors; source held",
+  "copiedControls": 9,
+  "baselineOnly": true,
+  "productImplementationAuthorized": false,
+  "limits": "No global qualification/shipment claim. Parent/tree must be explicitly source-vetted and bound after clean draft delivery. Original French raw81777 is additional preservation only; genuine pre-product SerieB transfer/loan and elected-loyalty acquisition remains required before product edits."
+}
