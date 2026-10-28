@@ -1,4 +1,4 @@
-import { useState, useEffect, useMemo, useCallback, useRef } from 'react';
+import { useState, useEffect, useLayoutEffect, useMemo, useCallback, useRef } from 'react';
 import { recordCompletion, recordActivity, recordStreakDay } from '@/lib/completions';
 import { saveMatchPlan as savePlan, applyMatchPlan as applyPlan, deleteMatchPlan as deletePlan } from '@/lib/clubManagerMatchPlans';
 import {
@@ -321,6 +321,11 @@ export function useClubManager() {
    */
   const careerRef = useRef<CareerState | null>(null);
   useEffect(() => { careerRef.current = career; }, [career]);
+  const recruitmentCurrent = useRef<CareerState | null>(null);
+  useLayoutEffect(() => {
+    recruitmentCurrent.current = phase === 'hub' ? career : null;
+    return () => { recruitmentCurrent.current = null; };
+  }, [career, phase]);
 
   useEffect(() => {
     /* Round 634: the same write, and it reports. A refused write at pagehide
@@ -1179,6 +1184,20 @@ export function useClubManager() {
     return true;
   }, [phase, holdsActiveSlot, movedOn, persist]);
 
+  const commitRecruitment = useCallback((make: (c: CareerState) => CareerState | null): boolean => {
+    if (phase !== 'hub' || !holdsActiveSlot() || movedOn()) return false;
+    const now = recruitmentCurrent.current;
+    if (!now) return false;
+    const next = make(now);
+    if (!next) return false;
+    if (next === now) return true;
+    if (!persist(next)) return false;
+    recruitmentCurrent.current = next;
+    careerRef.current = next;
+    setCareer(next);
+    return true;
+  }, [phase, holdsActiveSlot, movedOn, persist]);
+
   /* ---------- Round 105: contracts ---------- */
   const renew = useCallback((playerId: string) => {
     setCareer(prev => (prev ? renewContract(prev, playerId) ?? prev : prev));
@@ -1380,7 +1399,7 @@ export function useClubManager() {
     appointStaff, payOffStaff, matchStaff, letStaffGo, spendPoint, updateManager,
     setCurrency, setNationJobs, setStrictness, turnOnNoSack, setDifficulty,
     acceptIncomingBid, rejectIncomingBid,
-    setStatus, loanOut, commitLoanPlan, renew, renewWithClause, terminate, signFree, setRole,
+    setStatus, loanOut, commitLoanPlan, commitRecruitment, renew, renewWithClause, terminate, signFree, setRole,
     upgradeFacility, sendScout, callScoutHome, promote, release, setTraining,
     subAtHalftime, shapeAtHalftime, changeAtHalftime, secondHalf, startSecondHalfLive, startExtraTimeLive, changeAt, markMinute,
     talk, halftimeTalk, sayIt, sendAssistant,
