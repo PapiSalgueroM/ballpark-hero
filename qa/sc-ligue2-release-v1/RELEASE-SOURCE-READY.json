@@ -1,18 +1,11 @@
 {
   "status": "SOURCE_READY_ALL_RUNTIME_UNRUN",
-  "parentCommit": "d56650a91b409828f6586434137872dd44937e35",
-  "parentTree": "10014d5ed5c866245ce84710e06d416530832f1e",
+  "parentCommit": "c83c1a1ca5d188c969a7d168eef2498a87a9df4a",
+  "parentTree": "a125e960b7db113310ea41328069a44cd41506ef",
   "sourceFamily": "SC419e1b plus admitted baseline954d and generatorprobe92f; no main/live adoption",
   "allowedPaths": [
-    "src/lib/soccerCareerEngine.ts",
-    "src/lib/soccerCareerLeague.test.ts",
-    "src/test/cmWorldIdentity1052.test.ts",
-    "qa/sc-ligue2-release-v1/PRODUCT-SOURCE-READY.json",
-    "scripts/qa/ligue2ReleaseFixed.mjs",
-    "scripts/qa/playLigue2Release.mjs",
-    "qa/sc-ligue2-release-v1/PHYSICAL-CONTROLS.json",
-    "qa/sc-ligue2-release-v1/RELEASE-SOURCE-READY.json",
-    ".github/workflows/sc-ligue2-release.yml"
+    ".github/workflows/sc-ligue2-release.yml",
+    "qa/sc-ligue2-release-v1/RELEASE-SOURCE-READY.json"
   ],
   "files": [
     {

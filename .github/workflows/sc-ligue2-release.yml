@@ -1,7 +1,7 @@
 name: Soccer Career Ligue 2 frozen release qualification
 on:
   push:
-    branches: [codex/sc-ligue2-release-v3-20261028]
+    branches: [codex/sc-ligue2-release-v4-20261028]
     paths:
       - .github/workflows/sc-ligue2-release.yml
       - 'src/**'
@@ -42,16 +42,16 @@ jobs:
       - name: Exact selected frozen source and original archive
         run: |
           set -euo pipefail
-          test "$GITHUB_REF_NAME" = codex/sc-ligue2-release-v3-20261028
+          test "$GITHUB_REF_NAME" = codex/sc-ligue2-release-v4-20261028
           test "$(git rev-parse HEAD)" = "$GITHUB_SHA"
-          test "$(git rev-parse HEAD^)" = d56650a91b409828f6586434137872dd44937e35
+          test "$(git rev-parse HEAD^)" = c83c1a1ca5d188c969a7d168eef2498a87a9df4a
           test "$(git rev-list --parents -n 1 HEAD | wc -w)" = 2
           mkdir -p "$SC_LIGUE2_RELEASE_OUT"
           git rev-parse HEAD HEAD^{tree} > "$SC_LIGUE2_RELEASE_OUT/head-tree.txt"
           git archive --format=tar HEAD > "$SC_LIGUE2_RELEASE_OUT/source.tar"
           git ls-tree -r HEAD > "$SC_LIGUE2_RELEASE_OUT/source-tree.txt"
           git ls-files -z | sort -z | xargs -0 sha256sum > "$SC_LIGUE2_RELEASE_OUT/tracked-before.sha256"
-          printf '%s  %s\n' 276dec396dd56ea0b52eaac5b3996ef0cc3da4095a14327363567a5ab6026794 qa/sc-ligue2-release-v1/RELEASE-SOURCE-READY.json | sha256sum --check
+          printf '%s  %s\n' f6277162b2fa3a53c8177c71fa62a3be9ff96c312899fafc112ad1b6c6ceaba7 qa/sc-ligue2-release-v1/RELEASE-SOURCE-READY.json | sha256sum --check
           printf '%s  %s\n' 60e9f584a8b344461079979e665d1022d7e434ce80ca13ba9d16479204075956 scripts/qa/ligue2ReleaseQualification.mjs | sha256sum --check
           node --check scripts/qa/ligue2ReleaseQualification.mjs
           node --check scripts/qa/ligue2ReleaseFixed.mjs
@@ -196,16 +196,16 @@ jobs:
       - name: Exact selected frozen source and original archive
         run: |
           set -euo pipefail
-          test "$GITHUB_REF_NAME" = codex/sc-ligue2-release-v3-20261028
+          test "$GITHUB_REF_NAME" = codex/sc-ligue2-release-v4-20261028
           test "$(git rev-parse HEAD)" = "$GITHUB_SHA"
-          test "$(git rev-parse HEAD^)" = d56650a91b409828f6586434137872dd44937e35
+          test "$(git rev-parse HEAD^)" = c83c1a1ca5d188c969a7d168eef2498a87a9df4a
           test "$(git rev-list --parents -n 1 HEAD | wc -w)" = 2
           mkdir -p "$SC_LIGUE2_RELEASE_OUT"
           git rev-parse HEAD HEAD^{tree} > "$SC_LIGUE2_RELEASE_OUT/head-tree.txt"
           git archive --format=tar HEAD > "$SC_LIGUE2_RELEASE_OUT/source.tar"
           git ls-tree -r HEAD > "$SC_LIGUE2_RELEASE_OUT/source-tree.txt"
           git ls-files -z | sort -z | xargs -0 sha256sum > "$SC_LIGUE2_RELEASE_OUT/tracked-before.sha256"
-          printf '%s  %s\n' 276dec396dd56ea0b52eaac5b3996ef0cc3da4095a14327363567a5ab6026794 qa/sc-ligue2-release-v1/RELEASE-SOURCE-READY.json | sha256sum --check
+          printf '%s  %s\n' f6277162b2fa3a53c8177c71fa62a3be9ff96c312899fafc112ad1b6c6ceaba7 qa/sc-ligue2-release-v1/RELEASE-SOURCE-READY.json | sha256sum --check
           printf '%s  %s\n' 60e9f584a8b344461079979e665d1022d7e434ce80ca13ba9d16479204075956 scripts/qa/ligue2ReleaseQualification.mjs | sha256sum --check
           node --check scripts/qa/ligue2ReleaseQualification.mjs
           node --check scripts/qa/ligue2ReleaseFixed.mjs
@@ -275,7 +275,7 @@ jobs:
           retention-days: 14
   build:
     runs-on: ubuntu-latest
-    timeout-minutes: 90
+    timeout-minutes: 360
     env:
       CI: '1'
       SIM_NETWORK: offline
@@ -295,16 +295,16 @@ jobs:
       - name: Exact selected frozen source and original archive
         run: |
           set -euo pipefail
-          test "$GITHUB_REF_NAME" = codex/sc-ligue2-release-v3-20261028
+          test "$GITHUB_REF_NAME" = codex/sc-ligue2-release-v4-20261028
           test "$(git rev-parse HEAD)" = "$GITHUB_SHA"
-          test "$(git rev-parse HEAD^)" = d56650a91b409828f6586434137872dd44937e35
+          test "$(git rev-parse HEAD^)" = c83c1a1ca5d188c969a7d168eef2498a87a9df4a
           test "$(git rev-list --parents -n 1 HEAD | wc -w)" = 2
           mkdir -p "$SC_LIGUE2_RELEASE_OUT"
           git rev-parse HEAD HEAD^{tree} > "$SC_LIGUE2_RELEASE_OUT/head-tree.txt"
           git archive --format=tar HEAD > "$SC_LIGUE2_RELEASE_OUT/source.tar"
           git ls-tree -r HEAD > "$SC_LIGUE2_RELEASE_OUT/source-tree.txt"
           git ls-files -z | sort -z | xargs -0 sha256sum > "$SC_LIGUE2_RELEASE_OUT/tracked-before.sha256"
-          printf '%s  %s\n' 276dec396dd56ea0b52eaac5b3996ef0cc3da4095a14327363567a5ab6026794 qa/sc-ligue2-release-v1/RELEASE-SOURCE-READY.json | sha256sum --check
+          printf '%s  %s\n' f6277162b2fa3a53c8177c71fa62a3be9ff96c312899fafc112ad1b6c6ceaba7 qa/sc-ligue2-release-v1/RELEASE-SOURCE-READY.json | sha256sum --check
           printf '%s  %s\n' 60e9f584a8b344461079979e665d1022d7e434ce80ca13ba9d16479204075956 scripts/qa/ligue2ReleaseQualification.mjs | sha256sum --check
           node --check scripts/qa/ligue2ReleaseQualification.mjs
           node --check scripts/qa/ligue2ReleaseFixed.mjs
