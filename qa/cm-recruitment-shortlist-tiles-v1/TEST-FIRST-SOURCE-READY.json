@@ -1,0 +1,41 @@
+{
+  "status": "TEST-FIRST SOURCE READY, RED and product successor UNRUN",
+  "path": "src/test/clubManagerRecruitmentBoard.test.tsx",
+  "localPath": "C:/Users/antho/dukb-handoff/2026-10-27/cm-recruitment-shortlist-v1/test-filled-list-v2/src/test/clubManagerRecruitmentBoard.test.tsx",
+  "bytes": 10884,
+  "sha256": "3af188a27874669edec2e6be82322a942c272bfaa1d0647301293e392f84905b",
+  "gitBlob": "820627a87cdb45c586622b1379892ba8aa4c07fa",
+  "baseProductManifest": "282b5cf5bc141fc9be92ab7b6f4178f4aef6bc3d50fe7fe0653c7fb8044e590e",
+  "baseCommit": "8e884d528391f0f3375d39ebbef971d0358b96a1",
+  "baseTree": "137a89b63074645d195ff07a2cac82b632c2fe78",
+  "caseTitle": "shows twelve saved targets as compact View tiles and opens only one current detail before Back with no write or draw",
+  "expectedFirstFailure": "MISSING_VIEW_TILE",
+  "expectedResult": {
+    "realTypes": 0,
+    "total": 38,
+    "intendedAssertionFailures": 1,
+    "oldPreservationPasses": 37,
+    "skip": 0,
+    "todo": 0,
+    "infrastructure": 0
+  },
+  "testContract": [
+    "Actual startCareer and twelve distinct current market rows via existing helper, no fake host/player data",
+    "Filled list has12 accessible View-name buttons,zero full articles/Asking-price blocks; selected eighth actual target opens exactlyone current full article",
+    "Find returns exact current actual market object; Back returnsall12tiles and doesnotcall outeronBack",
+    "Allnavigation preservesfullsavedbytes/writes0/draws0; old9Boardcases and other28cases physicallyheld"
+  ],
+  "exactDelta": {
+    "path": "C:/Users/antho/dukb-handoff/2026-10-27/cm-recruitment-shortlist-v1/test-filled-list-v2/V1-TO-V2-EXACT-EDITS.json",
+    "sha256": "d2f2fcb617c989fac841584b9dd9f64006a9aa441ce815a2196a113443caf890",
+    "wholeInverse": true,
+    "spans": 7,
+    "scope": "Remove only unsupportedByRole exact flags; string accessible names exact by default, all text flags held"
+  },
+  "boundaries": [
+    "No Board/helper/engine/Transfer/hook/Page product changes authored",
+    "Oldbrowserf731/a54b frozenNOTlaunched; freshmulti-targetbrowser scope requiredafteractualRED andminimalBoard successor",
+    "Handoff owns boundedTDDremote/original; Root mustadmitactual1RED+37PASS before Boardimplementation",
+    "Native authoring/hash/source only,no localruntime/Node/Git/compiler/parser/browser"
+  ]
+}
