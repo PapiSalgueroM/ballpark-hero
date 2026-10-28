@@ -1,0 +1,3053 @@
+{
+  "sourceRecordSHA256": "1290fcb98c3f202aa9edde56329b5d6ad7829924a34119802a32670dfb54ccc0",
+  "rawSHA256": "a43490e71cf126466d605ad62c7bf5e5ababb96c5ef293f33b502882c1f1bb1d",
+  "seed": 91002,
+  "kind": "elected-loyalty",
+  "slot": "offer",
+  "offer": {
+    "club": {
+      "id": "career-lower-carrarese",
+      "name": "Carrarese",
+      "country": "Italy",
+      "tier": 4,
+      "color": "#64748b",
+      "league": "Serie B"
+    },
+    "contractYears": 5,
+    "wage": 3579,
+    "transferFee": 0.6,
+    "isDreamClub": false,
+    "isPayCut": false
+  },
+  "sourceState": {
+    "playerName": "Serie B Retained Choices",
+    "nationality": "France",
+    "position": "CM",
+    "era": "2020s",
+    "age": 18,
+    "potential": 65,
+    "potentialEarned": 0,
+    "eliteStreak": 0,
+    "startingOverall": 55,
+    "physique": {
+      "heightCm": 180,
+      "weightKg": 75
+    },
+    "attrShape": {},
+    "karma": 50,
+    "phoneUsedIds": [
+      "lost_wallet",
+      "barber_cut"
+    ],
+    "phoneInbox": [
+      {
+        "id": "lost_wallet-2026",
+        "defId": "lost_wallet",
+        "from": "Groundskeeper",
+        "emoji": "👛",
+        "text": "Found a wallet in the car park with 800 quid inside. No ID. What do I do with it?",
+        "year": 2026,
+        "choices": [
+          {
+            "label": "Hand it to reception",
+            "reply": "Reception, mate. Someone's having a bad day",
+            "karma": 6
+          },
+          {
+            "label": "Finders keepers",
+            "reply": "That's the football gods paying you. Keep it",
+            "karma": -6
+          }
+        ]
+      },
+      {
+        "id": "barber_cut-2026",
+        "defId": "barber_cut",
+        "from": "Barber",
+        "emoji": "💈",
+        "text": "New style idea for you. Bold. Might break the internet, might get you fined by the boss. You in?",
+        "year": 2026,
+        "choices": [
+          {
+            "label": "Send it",
+            "reply": "Chair. Tomorrow. Do your worst",
+            "karma": 2,
+            "popularity": 4
+          },
+          {
+            "label": "Keep it classic",
+            "reply": "Usual trim mate, big game week",
+            "karma": 1
+          }
+        ]
+      }
+    ],
+    "currentClub": "Lyon",
+    "currentClubCountry": "France",
+    "currentClubTier": 2,
+    "currentClubColor": "#1C2C5B",
+    "currentLeague": "Ligue 1",
+    "contractYearsLeft": 4,
+    "weeklyWage": 12136,
+    "marketValue": 2,
+    "pace": 58,
+    "shooting": 59,
+    "passing": 61,
+    "dribbling": 60,
+    "defending": 58,
+    "physical": 60,
+    "reflexes": 58,
+    "overall": 59,
+    "seasons": [
+      {
+        "year": 2026,
+        "age": 16,
+        "club": "Lyon Youth",
+        "clubCountry": "France",
+        "clubTier": 2,
+        "apps": 0,
+        "goals": 0,
+        "assists": 0,
+        "cleanSheets": 0,
+        "yellowCards": 0,
+        "redCards": 0,
+        "rating": 0,
+        "leagueTitle": false,
+        "domesticCup": false,
+        "championsLeague": false,
+        "worldCup": false,
+        "ballonDor": false,
+        "ballonDorRank": null,
+        "type": "youth",
+        "intApps": 0,
+        "intGoals": 0,
+        "intAssists": 0,
+        "intRating": 0,
+        "tournament": null,
+        "tournamentResult": null
+      },
+      {
+        "year": 2027,
+        "age": 17,
+        "club": "Lyon Youth",
+        "clubCountry": "France",
+        "clubTier": 2,
+        "apps": 15,
+        "goals": 1,
+        "assists": 3,
+        "cleanSheets": 0,
+        "yellowCards": 1,
+        "redCards": 0,
+        "rating": 0,
+        "leagueTitle": false,
+        "domesticCup": false,
+        "championsLeague": false,
+        "worldCup": false,
+        "ballonDor": false,
+        "ballonDorRank": null,
+        "type": "youth",
+        "intApps": 0,
+        "intGoals": 0,
+        "intAssists": 0,
+        "intRating": 0,
+        "tournament": null,
+        "tournamentResult": null
+      },
+      {
+        "year": 2028,
+        "age": 18,
+        "club": "Lyon",
+        "clubCountry": "France",
+        "clubTier": 2,
+        "apps": 26,
+        "leagueApps": 14,
+        "goals": 5,
+        "assists": 6,
+        "cleanSheets": 0,
+        "yellowCards": 3,
+        "redCards": 0,
+        "rating": 5.6,
+        "ovr": 59,
+        "injury": null,
+        "injuryWeeks": 0,
+        "injurySevere": false,
+        "leagueTitle": false,
+        "leagueFinish": 10,
+        "leagueSize": 18,
+        "derbies": [
+          {
+            "rival": "Marseille",
+            "name": "Choc des Olympiques",
+            "kind": "rivalry",
+            "meetings": [
+              {
+                "home": false,
+                "gf": 2,
+                "ga": 0,
+                "played": true,
+                "goals": 0
+              },
+              {
+                "home": true,
+                "gf": 1,
+                "ga": 1,
+                "played": false,
+                "goals": 0
+              }
+            ]
+          }
+        ],
+        "domesticCup": false,
+        "championsLeague": false,
+        "worldCup": false,
+        "ballonDor": false,
+        "ballonDorRank": null,
+        "type": "playing",
+        "intApps": 0,
+        "intGoals": 0,
+        "intAssists": 0,
+        "intRating": 0,
+        "tournament": "European Championship",
+        "tournamentResult": null,
+        "leagueWorld": {
+          "league": "Ligue 1",
+          "members": [
+            "PSG",
+            "Lyon",
+            "Marseille",
+            "Monaco",
+            "Lille",
+            "Nice",
+            "Strasbourg",
+            "Rennes",
+            "Lens",
+            "Lorient",
+            "Toulouse",
+            "Auxerre",
+            "Paris FC",
+            "Brest",
+            "Angers",
+            "Le Havre",
+            "Le Mans",
+            "Troyes"
+          ],
+          "champion": "Marseille",
+          "simulation": "simulated",
+          "movements": [
+            {
+              "club": "Monaco",
+              "from": "Ligue 1",
+              "to": "Ligue 2",
+              "kind": "relegated"
+            },
+            {
+              "club": "Paris FC",
+              "from": "Ligue 1",
+              "to": "Ligue 2",
+              "kind": "relegated"
+            }
+          ]
+        },
+        "cupRun": {
+          "cup": "Coupe de France",
+          "stages": [
+            {
+              "stage": "early",
+              "won": true
+            },
+            {
+              "stage": "QF",
+              "opp": "Boulogne",
+              "won": false,
+              "for": 1,
+              "against": 3,
+              "home": false
+            }
+          ],
+          "opening": {
+            "opp": "Strasbourg",
+            "country": "France",
+            "league": "Ligue 1",
+            "won": true,
+            "for": 3,
+            "against": 0,
+            "home": true
+          }
+        }
+      }
+    ],
+    "events": [
+      "🔥 Choc des Olympiques against Marseille: W 2-0 away, D 1-1 at home (you missed it).",
+      "🌍 England won the European Championship.",
+      "🎭 You leaned into it: The Showman is born",
+      "🦝 Gaffer Two is now official staff. Attendance: perfect",
+      "🤝 Lent a teammate €200k on a handshake"
+    ],
+    "retired": false,
+    "phase": "transfer_window",
+    "pendingOffers": [],
+    "pendingSummary": null,
+    "transferSituation": {
+      "type": "request_result",
+      "offer": {
+        "club": {
+          "id": "career-lower-carrarese",
+          "name": "Carrarese",
+          "country": "Italy",
+          "tier": 4,
+          "color": "#64748b",
+          "league": "Serie B"
+        },
+        "contractYears": 5,
+        "wage": 3579,
+        "transferFee": 0.6,
+        "isDreamClub": false,
+        "isPayCut": false
+      }
+    },
+    "loan": null,
+    "pendingLoanOffers": [
+      {
+        "club": {
+          "id": "cm-toluca",
+          "name": "Toluca",
+          "country": "Mexico",
+          "tier": 3,
+          "color": "#d02128",
+          "league": "Liga MX"
+        },
+        "contractYears": 1,
+        "wage": 12136,
+        "transferFee": 0,
+        "isLoan": true
+      },
+      {
+        "club": {
+          "id": "cm-sporting-kansas-city",
+          "name": "Sporting Kansas City",
+          "country": "USA",
+          "tier": 4,
+          "color": "#91b0d5",
+          "league": "MLS"
+        },
+        "contractYears": 1,
+        "wage": 12136,
+        "transferFee": 0,
+        "isLoan": true
+      }
+    ],
+    "pendingEvents": [],
+    "lastEventId": 236,
+    "statBoostNextSeason": {},
+    "pendingNews": [],
+    "internationalCareer": false,
+    "sponsorDeal": null,
+    "totalEarnings": 0.63,
+    "popularity": 22,
+    "morale": 80,
+    "isLeader": false,
+    "hasRelationship": false,
+    "intStats": {
+      "caps": 0,
+      "goals": 0,
+      "assists": 0,
+      "tournaments": 0,
+      "worldCups": 0,
+      "continentals": 0,
+      "worldCupWins": 0,
+      "continentalWins": 0,
+      "isCaptain": false,
+      "isRetired": false,
+      "debutYear": null,
+      "debutAge": null,
+      "worldCupResults": [],
+      "squadSnubs": 0,
+      "failedQualifications": 0
+    },
+    "pendingWorldCup": null,
+    "pendingTournament": null,
+    "lastTournament": {
+      "year": 2028,
+      "name": "European Championship",
+      "short": "Euros",
+      "kind": "Continental",
+      "confederation": "UEFA",
+      "nation": "France",
+      "teams": 24,
+      "qualifying": {
+        "confederation": "UEFA",
+        "table": [
+          {
+            "nation": "France",
+            "played": 10,
+            "won": 9,
+            "drawn": 1,
+            "lost": 0,
+            "gf": 34,
+            "ga": 4,
+            "points": 28
+          },
+          {
+            "nation": "Romania",
+            "played": 10,
+            "won": 5,
+            "drawn": 3,
+            "lost": 2,
+            "gf": 14,
+            "ga": 10,
+            "points": 18
+          },
+          {
+            "nation": "Georgia",
+            "played": 10,
+            "won": 3,
+            "drawn": 2,
+            "lost": 5,
+            "gf": 10,
+            "ga": 14,
+            "points": 11
+          },
+          {
+            "nation": "Wales",
+            "played": 10,
+            "won": 3,
+            "drawn": 2,
+            "lost": 5,
+            "gf": 15,
+            "ga": 22,
+            "points": 11
+          },
+          {
+            "nation": "Lithuania",
+            "played": 10,
+            "won": 2,
+            "drawn": 2,
+            "lost": 6,
+            "gf": 13,
+            "ga": 24,
+            "points": 8
+          },
+          {
+            "nation": "Azerbaijan",
+            "played": 10,
+            "won": 1,
+            "drawn": 4,
+            "lost": 5,
+            "gf": 12,
+            "ga": 24,
+            "points": 7
+          }
+        ],
+        "myPosition": 1,
+        "through": 3,
+        "qualified": true,
+        "automatic": false
+      },
+      "qualified": true,
+      "squad": {
+        "called": false,
+        "role": null,
+        "myRank": 14,
+        "poolSize": 14,
+        "places": 6,
+        "myScore": 0,
+        "cutScore": 81,
+        "reason": "You are not in the France setup.",
+        "xi": {
+          "formation": "4-3-3",
+          "gk": [
+            {
+              "slot": "GK",
+              "name": "Sylvain Ferrand",
+              "ovr": 87,
+              "me": false
+            }
+          ],
+          "def": [
+            {
+              "slot": "LB",
+              "name": "Hervé Noirot",
+              "ovr": 81,
+              "me": false
+            },
+            {
+              "slot": "CB",
+              "name": "Damien Thibaudeau",
+              "ovr": 87,
+              "me": false
+            },
+            {
+              "slot": "CB",
+              "name": "Maxence Lallemand",
+              "ovr": 86,
+              "me": false
+            },
+            {
+              "slot": "RB",
+              "name": "Baptiste Beaumont",
+              "ovr": 83,
+              "me": false
+            }
+          ],
+          "mid": [
+            {
+              "slot": "CM",
+              "name": "Yann Delcourt",
+              "ovr": 86,
+              "me": false
+            },
+            {
+              "slot": "CDM",
+              "name": "Nolan Guillory",
+              "ovr": 85,
+              "me": false
+            },
+            {
+              "slot": "CM",
+              "name": "Émile Rousselot",
+              "ovr": 86,
+              "me": false
+            }
+          ],
+          "att": [
+            {
+              "slot": "LW",
+              "name": "Alban Chauvet",
+              "ovr": 84,
+              "me": false
+            },
+            {
+              "slot": "ST",
+              "name": "Corentin Vaugrenard",
+              "ovr": 88,
+              "me": false
+            },
+            {
+              "slot": "RW",
+              "name": "Loïc Marchetti",
+              "ovr": 84,
+              "me": false
+            }
+          ],
+          "mySlot": null,
+          "aheadOfMe": null
+        }
+      },
+      "groupTable": [
+        {
+          "nation": "Croatia",
+          "played": 3,
+          "won": 2,
+          "drawn": 1,
+          "lost": 0,
+          "gf": 5,
+          "ga": 1,
+          "points": 7
+        },
+        {
+          "nation": "Wales",
+          "played": 3,
+          "won": 2,
+          "drawn": 1,
+          "lost": 0,
+          "gf": 4,
+          "ga": 2,
+          "points": 7
+        },
+        {
+          "nation": "France",
+          "played": 3,
+          "won": 1,
+          "drawn": 0,
+          "lost": 2,
+          "gf": 3,
+          "ga": 3,
+          "points": 3
+        },
+        {
+          "nation": "Slovakia",
+          "played": 3,
+          "won": 0,
+          "drawn": 0,
+          "lost": 3,
+          "gf": 1,
+          "ga": 7,
+          "points": 0
+        }
+      ],
+      "bracket": [
+        {
+          "round": "R16",
+          "slot": 0,
+          "home": "Ukraine",
+          "away": "Belgium",
+          "homeGoals": 1,
+          "awayGoals": 1,
+          "pens": true,
+          "winner": "Belgium",
+          "mine": false
+        },
+        {
+          "round": "R16",
+          "slot": 1,
+          "home": "England",
+          "away": "Italy",
+          "homeGoals": 2,
+          "awayGoals": 0,
+          "pens": false,
+          "winner": "England",
+          "mine": false
+        },
+        {
+          "round": "R16",
+          "slot": 2,
+          "home": "Norway",
+          "away": "Spain",
+          "homeGoals": 1,
+          "awayGoals": 3,
+          "pens": false,
+          "winner": "Spain",
+          "mine": false
+        },
+        {
+          "round": "R16",
+          "slot": 3,
+          "home": "Germany",
+          "away": "Romania",
+          "homeGoals": 1,
+          "awayGoals": 0,
+          "pens": false,
+          "winner": "Germany",
+          "mine": false
+        },
+        {
+          "round": "R16",
+          "slot": 4,
+          "home": "Croatia",
+          "away": "Turkey",
+          "homeGoals": 2,
+          "awayGoals": 0,
+          "pens": false,
+          "winner": "Croatia",
+          "mine": false
+        },
+        {
+          "round": "R16",
+          "slot": 5,
+          "home": "Wales",
+          "away": "France",
+          "homeGoals": 1,
+          "awayGoals": 1,
+          "pens": true,
+          "winner": "Wales",
+          "mine": true
+        },
+        {
+          "round": "R16",
+          "slot": 6,
+          "home": "Switzerland",
+          "away": "Netherlands",
+          "homeGoals": 1,
+          "awayGoals": 1,
+          "pens": true,
+          "winner": "Netherlands",
+          "mine": false
+        },
+        {
+          "round": "R16",
+          "slot": 7,
+          "home": "Serbia",
+          "away": "Greece",
+          "homeGoals": 3,
+          "awayGoals": 0,
+          "pens": false,
+          "winner": "Serbia",
+          "mine": false
+        },
+        {
+          "round": "QF",
+          "slot": 0,
+          "home": "Belgium",
+          "away": "England",
+          "homeGoals": 2,
+          "awayGoals": 3,
+          "pens": false,
+          "winner": "England",
+          "mine": false
+        },
+        {
+          "round": "QF",
+          "slot": 1,
+          "home": "Spain",
+          "away": "Germany",
+          "homeGoals": 1,
+          "awayGoals": 3,
+          "pens": false,
+          "winner": "Germany",
+          "mine": false
+        },
+        {
+          "round": "QF",
+          "slot": 2,
+          "home": "Croatia",
+          "away": "Wales",
+          "homeGoals": 2,
+          "awayGoals": 1,
+          "pens": false,
+          "winner": "Croatia",
+          "mine": false
+        },
+        {
+          "round": "QF",
+          "slot": 3,
+          "home": "Netherlands",
+          "away": "Serbia",
+          "homeGoals": 4,
+          "awayGoals": 0,
+          "pens": false,
+          "winner": "Netherlands",
+          "mine": false
+        },
+        {
+          "round": "SF",
+          "slot": 0,
+          "home": "England",
+          "away": "Germany",
+          "homeGoals": 3,
+          "awayGoals": 1,
+          "pens": false,
+          "winner": "England",
+          "mine": false
+        },
+        {
+          "round": "SF",
+          "slot": 1,
+          "home": "Croatia",
+          "away": "Netherlands",
+          "homeGoals": 3,
+          "awayGoals": 4,
+          "pens": false,
+          "winner": "Netherlands",
+          "mine": false
+        },
+        {
+          "round": "F",
+          "slot": 0,
+          "home": "England",
+          "away": "Netherlands",
+          "homeGoals": 1,
+          "awayGoals": 1,
+          "pens": true,
+          "winner": "England",
+          "mine": false
+        }
+      ],
+      "champion": "England",
+      "runnerUp": "Netherlands",
+      "groupLabel": "Group E",
+      "thirdsThrough": 4,
+      "myResult": "Not Selected",
+      "matches": [],
+      "playerApps": 0,
+      "playerGoals": 0,
+      "playerAssists": 0,
+      "playerAvgRating": 0,
+      "goldenBoot": false,
+      "bestPlayer": false
+    },
+    "intlHistory": [
+      {
+        "year": 2028,
+        "short": "Euros",
+        "nation": "France",
+        "champion": "England",
+        "myResult": "",
+        "apps": 0,
+        "goals": 0
+      }
+    ],
+    "rival": null,
+    "rivalCreated": false,
+    "pendingRivalryEvent": null,
+    "lastRivalryEventId": null,
+    "rivalrySummary": null,
+    "netWorth": 0.38,
+    "lifestyleLevel": "Humble",
+    "lifestyleCostPerYear": 0.05,
+    "socialMediaFollowers": 1.16,
+    "sponsorshipIncome": 0,
+    "properties": [],
+    "investments": [],
+    "consecutiveDeficitYears": 0,
+    "agentFeesPaid": 0,
+    "family": {
+      "isMarried": false,
+      "marriedAge": null,
+      "children": 0,
+      "isDivorced": false,
+      "divorceAge": null
+    },
+    "purchasedItems": [],
+    "investmentHoldings": [],
+    "totalAssetValue": 0,
+    "customYearlyCosts": 0,
+    "awards": [],
+    "pendingBallonDor": null,
+    "lastUCLResult": {
+      "qualified": false,
+      "matches": [],
+      "result": "N/A",
+      "playerGoals": 0,
+      "isTopScorer": false,
+      "seasonYear": 2028,
+      "club": "Lyon"
+    },
+    "legacy": null,
+    "postRetirementChoice": null,
+    "managerState": null,
+    "isFinalSeason": false,
+    "isPundit": false,
+    "punditEvents": [],
+    "primeType": "late",
+    "socialMediaActionUsedThisSeason": false,
+    "socialMediaFocusBoost": false,
+    "pendingCoverAthleteEvent": false,
+    "coverAthleteAccepted": false,
+    "activeSponsorship": null,
+    "personality": "showman",
+    "agentId": null,
+    "lifeFlags": {
+      "teammateLoan": 1
+    },
+    "appearance": null,
+    "corruptionHeat": 0,
+    "dirtyMoney": 0,
+    "prisonSeasons": 0,
+    "academyClubName": "Lyon",
+    "moralDilemmasTriggered": [],
+    "pendingMoralDilemma": null,
+    "pedSeasonsRemaining": 0,
+    "pedActive": false,
+    "matchFixBanned": 0,
+    "divingActive": false,
+    "integrityBonus": 2,
+    "pendingAppealResult": null,
+    "childEventsSeen": [],
+    "pregnancyAnnounced": false,
+    "punditState": null,
+    "ownerState": null,
+    "peakOverall": 59,
+    "retirementSuggested": false,
+    "phone": {
+      "threads": [
+        {
+          "id": "th_x_groundskeeper",
+          "c": "other",
+          "name": "Groundskeeper",
+          "emoji": "💬",
+          "lines": [
+            {
+              "w": 0,
+              "t": "Found a wallet in the car park with 800 quid inside. No ID. What do I do with it?",
+              "y": 2026
+            },
+            {
+              "w": 0,
+              "t": "Chasing this one. Let me know either way.",
+              "y": 2027
+            }
+          ],
+          "rel": 36,
+          "pending": {
+            "kind": "legacy",
+            "msgId": "lost_wallet-2026"
+          },
+          "waiting": 2027,
+          "cold": 1,
+          "seen": [],
+          "lastReplyYear": null
+        },
+        {
+          "id": "th_dad",
+          "c": "dad",
+          "name": "Dad",
+          "emoji": "🧔",
+          "lines": [
+            {
+              "w": 0,
+              "t": "Watched it back three times. You were dropping too deep in the second half son. Coming to get the ball because you wanted a touch.",
+              "y": 2026
+            },
+            {
+              "w": 0,
+              "t": "Hello? Anyone in there?",
+              "y": 2027
+            }
+          ],
+          "rel": 36,
+          "pending": {
+            "kind": "convo",
+            "convo": "dad_analysis",
+            "beat": 0
+          },
+          "waiting": 2027,
+          "cold": 1,
+          "seen": [
+            "dad_analysis"
+          ],
+          "lastReplyYear": null
+        },
+        {
+          "id": "th_x_barber",
+          "c": "other",
+          "name": "Barber",
+          "emoji": "💬",
+          "lines": [
+            {
+              "w": 0,
+              "t": "New style idea for you. Bold. Might break the internet, might get you fined by the boss. You in?",
+              "y": 2026
+            },
+            {
+              "w": 0,
+              "t": "Chasing this one. Let me know either way.",
+              "y": 2027
+            }
+          ],
+          "rel": 36,
+          "pending": {
+            "kind": "legacy",
+            "msgId": "barber_cut-2026"
+          },
+          "waiting": 2027,
+          "cold": 1,
+          "seen": [],
+          "lastReplyYear": null
+        }
+      ],
+      "feed": [
+        "⭐ Leverkusen are champions of Europe.",
+        "🏆 Arsenal win the Premier League.",
+        "🏆 Barcelona win La Liga.",
+        "🌍 England win the European Championship.",
+        "🔮 Your world's 2028-29, as it played out:"
+      ],
+      "world": {
+        "year": 2028,
+        "ucl": "Leverkusen",
+        "leagues": {
+          "Premier League": "Arsenal",
+          "La Liga": "Barcelona",
+          "Bundesliga": "Bayern Munich",
+          "Serie A": "Juventus",
+          "Ligue 1": "Marseille",
+          "Primeira Liga": "Porto",
+          "Eredivisie": "Feyenoord",
+          "Scottish Premiership": "Rangers",
+          "Brasileirao": "Palmeiras",
+          "Saudi Pro League": "Al Hilal",
+          "MLS": "Seattle Sounders",
+          "K League 1": "Ulsan HD",
+          "Championship": "Bolton Wanderers",
+          "2. Bundesliga": "Holstein Kiel",
+          "Ligue 2": "Red Star FC",
+          "Serie B": "Cremonese",
+          "Segunda Division": "Albacete"
+        },
+        "cups": {
+          "Premier League": "Man United",
+          "La Liga": "Athletic Bilbao",
+          "Bundesliga": "Dortmund",
+          "Serie A": "Juventus",
+          "Ligue 1": "Monaco",
+          "Primeira Liga": "Porto",
+          "Eredivisie": "Feyenoord",
+          "Scottish Premiership": "Celtic",
+          "Brasileirao": "Palmeiras",
+          "Saudi Pro League": "Al Ittihad",
+          "MLS": "Inter Miami",
+          "K League 1": "Pohang Steelers"
+        },
+        "moves": [],
+        "topScorer": null,
+        "intl": {
+          "name": "European Championship",
+          "champion": "England"
+        }
+      },
+      "clubs": {
+        "Kylian Mbappé": "Real Madrid",
+        "Erling Haaland": "Man City",
+        "Jude Bellingham": "Real Madrid",
+        "Vinícius Jr": "Real Madrid",
+        "Lamine Yamal": "Barcelona",
+        "Florian Wirtz": "Liverpool",
+        "Jamal Musiala": "Bayern Munich",
+        "Bukayo Saka": "Arsenal",
+        "Pedri": "Barcelona",
+        "Rodri": "Barcelona",
+        "Federico Valverde": "Real Madrid",
+        "Harry Kane": "Bayern Munich",
+        "Mohamed Salah": "Trabzonspor",
+        "Phil Foden": "Man City",
+        "Declan Rice": "Arsenal",
+        "Raphinha": "Barcelona",
+        "Endrick": "Real Madrid",
+        "Nico Williams": "Athletic Bilbao",
+        "Désiré Doué": "PSG",
+        "Kobbie Mainoo": "Man United",
+        "Gianluigi Donnarumma": "Man City",
+        "Ousmane Dembélé": "PSG"
+      },
+      "rivalClub": null,
+      "seed": 767208762,
+      "offers": 0,
+      "perksTaken": 0
+    },
+    "frozenOut": 0,
+    "badSeasonStreak": 0,
+    "story": [
+      {
+        "year": 2026,
+        "age": 16,
+        "club": "Lyon Youth",
+        "lines": [
+          "📋 Joined Lyon Youth Academy aged 16"
+        ]
+      },
+      {
+        "year": 2027,
+        "age": 17,
+        "club": "Lyon Youth",
+        "lines": [
+          "📈 Stats improved during youth development (OVR 59)",
+          "📩 Professional contract offers received!",
+          "✍️ Signed with Lyon 🇫🇷 (5yr, €12k/wk)",
+          "🏠 One of our own! The Lyon academy kid signs a first-team deal. The ultras already have a chant ready."
+        ]
+      }
+    ],
+    "sponsorBonus": 0,
+    "money": {
+      "seed": 4290540860,
+      "vault": 0,
+      "hold": {
+        "ladder": 0,
+        "bricks": 0,
+        "cleats": 0,
+        "screens": 0,
+        "spark": 0
+      },
+      "cost": {
+        "ladder": 0,
+        "bricks": 0,
+        "cleats": 0,
+        "screens": 0,
+        "spark": 0
+      },
+      "price": {
+        "ladder": 105.6,
+        "bricks": 104.6,
+        "cleats": 123.6,
+        "screens": 79.63,
+        "spark": 138.5
+      },
+      "hist": {
+        "ladder": [
+          100,
+          102.35,
+          105.6
+        ],
+        "bricks": [
+          100,
+          97.87,
+          104.6
+        ],
+        "cleats": [
+          100,
+          104.12,
+          123.6
+        ],
+        "screens": [
+          100,
+          108.33,
+          79.63
+        ],
+        "spark": [
+          100,
+          84.49,
+          138.5
+        ]
+      },
+      "log": [],
+      "year": 2028,
+      "age": 2,
+      "won": 0,
+      "lost": 0,
+      "cPlays": 0,
+      "cNet": 0,
+      "cYear": 0,
+      "cShut": false,
+      "aYear": 0,
+      "aBest": 0,
+      "aPlays": 0
+    },
+    "leagueWorld": {
+      "year": 2029,
+      "leagues": {
+        "Premier League": [
+          "Arsenal",
+          "Man City",
+          "Liverpool",
+          "Chelsea",
+          "Man United",
+          "Tottenham",
+          "Newcastle",
+          "Nottingham Forest",
+          "Brighton",
+          "Aston Villa",
+          "Everton",
+          "Fulham",
+          "Crystal Palace",
+          "Brentford",
+          "Bournemouth",
+          "Sunderland",
+          "Hull City",
+          "Bolton Wanderers",
+          "Burnley",
+          "Sheffield United"
+        ],
+        "Championship": [
+          "West Ham",
+          "Wolves",
+          "Southampton",
+          "Middlesbrough",
+          "Swansea City",
+          "Birmingham City",
+          "Norwich City",
+          "Stoke City",
+          "Watford",
+          "Wrexham",
+          "Derby County",
+          "QPR",
+          "West Brom",
+          "Bristol City",
+          "Millwall",
+          "Preston North End",
+          "Charlton Athletic",
+          "Blackburn Rovers",
+          "Cardiff City",
+          "Lincoln City",
+          "Portsmouth",
+          "Leeds United",
+          "Coventry City",
+          "Ipswich Town"
+        ],
+        "Bundesliga": [
+          "Bayern Munich",
+          "Dortmund",
+          "Leipzig",
+          "Stuttgart",
+          "Leverkusen",
+          "Frankfurt",
+          "Hoffenheim",
+          "Augsburg",
+          "Hamburg",
+          "Mainz",
+          "Gladbach",
+          "Koln",
+          "Union Berlin",
+          "Werder Bremen",
+          "Paderborn",
+          "Elversberg",
+          "Holstein Kiel",
+          "Greuther Furth"
+        ],
+        "2. Bundesliga": [
+          "Wolfsburg",
+          "St. Pauli",
+          "Heidenheim",
+          "Nurnberg",
+          "Arminia Bielefeld",
+          "Bochum",
+          "Braunschweig",
+          "Darmstadt",
+          "Dynamo Dresden",
+          "Energie Cottbus",
+          "Hannover 96",
+          "Hertha Berlin",
+          "Kaiserslautern",
+          "Karlsruhe",
+          "Magdeburg",
+          "Osnabruck",
+          "Freiburg",
+          "Schalke 04"
+        ],
+        "Ligue 1": [
+          "PSG",
+          "Lyon",
+          "Marseille",
+          "Lille",
+          "Nice",
+          "Strasbourg",
+          "Rennes",
+          "Lens",
+          "Lorient",
+          "Toulouse",
+          "Auxerre",
+          "Brest",
+          "Angers",
+          "Le Havre",
+          "Le Mans",
+          "Troyes",
+          "Red Star FC",
+          "Nantes"
+        ],
+        "Ligue 2": [
+          "Metz",
+          "Saint-Étienne",
+          "Reims",
+          "Montpellier",
+          "Nancy",
+          "Annecy",
+          "Sochaux",
+          "Dijon",
+          "Pau",
+          "Guingamp",
+          "Dunkerque",
+          "Grenoble",
+          "Rodez",
+          "Clermont",
+          "Boulogne",
+          "Laval",
+          "Monaco",
+          "Paris FC"
+        ],
+        "Serie A": [
+          "Inter Milan",
+          "Juventus",
+          "Roma",
+          "Como",
+          "AC Milan",
+          "Napoli",
+          "Atalanta",
+          "Fiorentina",
+          "Lazio",
+          "Genoa",
+          "Parma",
+          "Udinese",
+          "Cagliari",
+          "Lecce",
+          "Monza",
+          "Venezia",
+          "Frosinone",
+          "Cremonese",
+          "Juve Stabia",
+          "Avellino"
+        ],
+        "Serie B": [
+          "Verona",
+          "Pisa",
+          "Carrarese",
+          "Catanzaro",
+          "Cesena",
+          "Empoli",
+          "Entella",
+          "Mantova",
+          "Modena",
+          "Padova",
+          "Palermo",
+          "Sampdoria",
+          "Südtirol",
+          "Vicenza",
+          "Arezzo",
+          "Benevento",
+          "Ascoli",
+          "Sassuolo",
+          "Torino",
+          "Bologna"
+        ],
+        "La Liga": [
+          "Real Madrid",
+          "Barcelona",
+          "Atletico Madrid",
+          "Athletic Bilbao",
+          "Sevilla",
+          "Villarreal",
+          "Real Sociedad",
+          "Real Betis",
+          "Celta Vigo",
+          "Levante",
+          "Getafe",
+          "Racing Santander",
+          "Rayo Vallecano",
+          "Osasuna",
+          "Elche",
+          "Alaves",
+          "Malaga",
+          "Albacete",
+          "Sabadell",
+          "Girona"
+        ],
+        "Segunda Division": [
+          "Real Oviedo",
+          "Mallorca",
+          "Eibar",
+          "Castellón",
+          "Almería",
+          "Burgos",
+          "Sporting Gijón",
+          "Granada",
+          "Las Palmas",
+          "Tenerife",
+          "Leganés",
+          "Valladolid",
+          "Córdoba",
+          "Eldense",
+          "Cádiz",
+          "FC Andorra",
+          "Ceuta",
+          "Deportivo",
+          "Espanyol",
+          "Valencia"
+        ]
+      },
+      "movements": [
+        {
+          "club": "Leeds United",
+          "from": "Premier League",
+          "to": "Championship",
+          "kind": "relegated"
+        },
+        {
+          "club": "Coventry City",
+          "from": "Premier League",
+          "to": "Championship",
+          "kind": "relegated"
+        },
+        {
+          "club": "Ipswich Town",
+          "from": "Premier League",
+          "to": "Championship",
+          "kind": "relegated"
+        },
+        {
+          "club": "Bolton Wanderers",
+          "from": "Championship",
+          "to": "Premier League",
+          "kind": "promoted"
+        },
+        {
+          "club": "Burnley",
+          "from": "Championship",
+          "to": "Premier League",
+          "kind": "promoted"
+        },
+        {
+          "club": "Sheffield United",
+          "from": "Championship",
+          "to": "Premier League",
+          "kind": "promoted"
+        },
+        {
+          "club": "Freiburg",
+          "from": "Bundesliga",
+          "to": "2. Bundesliga",
+          "kind": "relegated"
+        },
+        {
+          "club": "Schalke 04",
+          "from": "Bundesliga",
+          "to": "2. Bundesliga",
+          "kind": "relegated"
+        },
+        {
+          "club": "Holstein Kiel",
+          "from": "2. Bundesliga",
+          "to": "Bundesliga",
+          "kind": "promoted"
+        },
+        {
+          "club": "Greuther Furth",
+          "from": "2. Bundesliga",
+          "to": "Bundesliga",
+          "kind": "promoted"
+        },
+        {
+          "club": "Monaco",
+          "from": "Ligue 1",
+          "to": "Ligue 2",
+          "kind": "relegated"
+        },
+        {
+          "club": "Paris FC",
+          "from": "Ligue 1",
+          "to": "Ligue 2",
+          "kind": "relegated"
+        },
+        {
+          "club": "Red Star FC",
+          "from": "Ligue 2",
+          "to": "Ligue 1",
+          "kind": "promoted"
+        },
+        {
+          "club": "Nantes",
+          "from": "Ligue 2",
+          "to": "Ligue 1",
+          "kind": "promoted"
+        },
+        {
+          "club": "Sassuolo",
+          "from": "Serie A",
+          "to": "Serie B",
+          "kind": "relegated"
+        },
+        {
+          "club": "Torino",
+          "from": "Serie A",
+          "to": "Serie B",
+          "kind": "relegated"
+        },
+        {
+          "club": "Bologna",
+          "from": "Serie A",
+          "to": "Serie B",
+          "kind": "relegated"
+        },
+        {
+          "club": "Cremonese",
+          "from": "Serie B",
+          "to": "Serie A",
+          "kind": "promoted"
+        },
+        {
+          "club": "Juve Stabia",
+          "from": "Serie B",
+          "to": "Serie A",
+          "kind": "promoted"
+        },
+        {
+          "club": "Avellino",
+          "from": "Serie B",
+          "to": "Serie A",
+          "kind": "promoted"
+        },
+        {
+          "club": "Deportivo",
+          "from": "La Liga",
+          "to": "Segunda Division",
+          "kind": "relegated"
+        },
+        {
+          "club": "Espanyol",
+          "from": "La Liga",
+          "to": "Segunda Division",
+          "kind": "relegated"
+        },
+        {
+          "club": "Valencia",
+          "from": "La Liga",
+          "to": "Segunda Division",
+          "kind": "relegated"
+        },
+        {
+          "club": "Albacete",
+          "from": "Segunda Division",
+          "to": "La Liga",
+          "kind": "promoted"
+        },
+        {
+          "club": "Sabadell",
+          "from": "Segunda Division",
+          "to": "La Liga",
+          "kind": "promoted"
+        },
+        {
+          "club": "Girona",
+          "from": "Segunda Division",
+          "to": "La Liga",
+          "kind": "promoted"
+        }
+      ]
+    },
+    "generatedBallonPool": {
+      "version": 1,
+      "year": 2028,
+      "nextId": 3,
+      "entries": [
+        {
+          "name": "Ferdi Doornbos",
+          "nationality": "Belgium",
+          "position": "LW",
+          "club": "AC Milan",
+          "baseGoals": [
+            10,
+            28
+          ],
+          "id": 0,
+          "role": "primary",
+          "slot": 0,
+          "seed": 9900,
+          "firstYear": 2028,
+          "entryAge": 26,
+          "retiredYear": null
+        },
+        {
+          "name": "Shohei Nishizawa",
+          "nationality": "Japan",
+          "position": "CDM",
+          "club": "Chelsea",
+          "baseGoals": [
+            2,
+            8
+          ],
+          "id": 1,
+          "role": "primary",
+          "slot": 1,
+          "seed": 9901,
+          "firstYear": 2028,
+          "entryAge": 27,
+          "retiredYear": null
+        },
+        {
+          "name": "Agustín Quiroga",
+          "nationality": "Argentina",
+          "position": "RW",
+          "club": "Arsenal",
+          "baseGoals": [
+            10,
+            28
+          ],
+          "id": 2,
+          "role": "primary",
+          "slot": 2,
+          "seed": 9902,
+          "firstYear": 2028,
+          "entryAge": 27,
+          "retiredYear": null
+        }
+      ]
+    },
+    "eventLastFired": {
+      "200": 2028,
+      "236": 2028,
+      "247": 2028
+    },
+    "loyaltyContracts": {
+      "v": 1,
+      "deals": [],
+      "pending": {
+        "key": "[\"Serie B Retained Choices\",\"\",\"transfer_window\",2029,\"[\\\"Carrarese\\\",\\\"Italy\\\",\\\"Serie B\\\",\\\"#64748b\\\",4,3579,5,0.6,false,false,false,false]\",3579]",
+        "offerToken": "[\"Carrarese\",\"Italy\",\"Serie B\",\"#64748b\",4,3579,5,0.6,false,false,false,false]",
+        "club": "Carrarese",
+        "firstYear": 2029,
+        "finalYear": 2033,
+        "years": 5,
+        "baseWeeklyWage": 3579,
+        "weeklyWage": 3221,
+        "bonusEuros": 139581
+      }
+    }
+  },
+  "loaded": {
+      "value": {
+        "before": "{\"playerName\":\"Serie B Retained Choices\",\"nationality\":\"France\",\"position\":\"CM\",\"era\":\"2020s\",\"age\":18,\"potential\":65,\"potentialEarned\":0,\"eliteStreak\":0,\"startingOverall\":55,\"physique\":{\"heightCm\":180,\"weightKg\":75},\"attrShape\":{},\"karma\":50,\"phoneUsedIds\":[\"lost_wallet\",\"barber_cut\"],\"phoneInbox\":[{\"id\":\"lost_wallet-2026\",\"defId\":\"lost_wallet\",\"from\":\"Groundskeeper\",\"emoji\":\"👛\",\"text\":\"Found a wallet in the car park with 800 quid inside. No ID. What do I do with it?\",\"year\":2026,\"choices\":[{\"label\":\"Hand it to reception\",\"reply\":\"Reception, mate. Someone's having a bad day\",\"karma\":6},{\"label\":\"Finders keepers\",\"reply\":\"That's the football gods paying you. Keep it\",\"karma\":-6}]},{\"id\":\"barber_cut-2026\",\"defId\":\"barber_cut\",\"from\":\"Barber\",\"emoji\":\"💈\",\"text\":\"New style idea for you. Bold. Might break the internet, might get you fined by the boss. You in?\",\"year\":2026,\"choices\":[{\"label\":\"Send it\",\"reply\":\"Chair. Tomorrow. Do your worst\",\"karma\":2,\"popularity\":4},{\"label\":\"Keep it classic\",\"reply\":\"Usual trim mate, big game week\",\"karma\":1}]}],\"currentClub\":\"Lyon\",\"currentClubCountry\":\"France\",\"currentClubTier\":2,\"currentClubColor\":\"#1C2C5B\",\"currentLeague\":\"Ligue 1\",\"contractYearsLeft\":4,\"weeklyWage\":12136,\"marketValue\":2,\"pace\":58,\"shooting\":59,\"passing\":61,\"dribbling\":60,\"defending\":58,\"physical\":60,\"reflexes\":58,\"overall\":59,\"seasons\":[{\"year\":2026,\"age\":16,\"club\":\"Lyon Youth\",\"clubCountry\":\"France\",\"clubTier\":2,\"apps\":0,\"goals\":0,\"assists\":0,\"cleanSheets\":0,\"yellowCards\":0,\"redCards\":0,\"rating\":0,\"leagueTitle\":false,\"domesticCup\":false,\"championsLeague\":false,\"worldCup\":false,\"ballonDor\":false,\"ballonDorRank\":null,\"type\":\"youth\",\"intApps\":0,\"intGoals\":0,\"intAssists\":0,\"intRating\":0,\"tournament\":null,\"tournamentResult\":null},{\"year\":2027,\"age\":17,\"club\":\"Lyon Youth\",\"clubCountry\":\"France\",\"clubTier\":2,\"apps\":15,\"goals\":1,\"assists\":3,\"cleanSheets\":0,\"yellowCards\":1,\"redCards\":0,\"rating\":0,\"leagueTitle\":false,\"domesticCup\":false,\"championsLeague\":false,\"worldCup\":false,\"ballonDor\":false,\"ballonDorRank\":null,\"type\":\"youth\",\"intApps\":0,\"intGoals\":0,\"intAssists\":0,\"intRating\":0,\"tournament\":null,\"tournamentResult\":null},{\"year\":2028,\"age\":18,\"club\":\"Lyon\",\"clubCountry\":\"France\",\"clubTier\":2,\"apps\":26,\"leagueApps\":14,\"goals\":5,\"assists\":6,\"cleanSheets\":0,\"yellowCards\":3,\"redCards\":0,\"rating\":5.6,\"ovr\":59,\"injury\":null,\"injuryWeeks\":0,\"injurySevere\":false,\"leagueTitle\":false,\"leagueFinish\":10,\"leagueSize\":18,\"derbies\":[{\"rival\":\"Marseille\",\"name\":\"Choc des Olympiques\",\"kind\":\"rivalry\",\"meetings\":[{\"home\":false,\"gf\":2,\"ga\":0,\"played\":true,\"goals\":0},{\"home\":true,\"gf\":1,\"ga\":1,\"played\":false,\"goals\":0}]}],\"domesticCup\":false,\"championsLeague\":false,\"worldCup\":false,\"ballonDor\":false,\"ballonDorRank\":null,\"type\":\"playing\",\"intApps\":0,\"intGoals\":0,\"intAssists\":0,\"intRating\":0,\"tournament\":\"European Championship\",\"tournamentResult\":null,\"leagueWorld\":{\"league\":\"Ligue 1\",\"members\":[\"PSG\",\"Lyon\",\"Marseille\",\"Monaco\",\"Lille\",\"Nice\",\"Strasbourg\",\"Rennes\",\"Lens\",\"Lorient\",\"Toulouse\",\"Auxerre\",\"Paris FC\",\"Brest\",\"Angers\",\"Le Havre\",\"Le Mans\",\"Troyes\"],\"champion\":\"Marseille\",\"simulation\":\"simulated\",\"movements\":[{\"club\":\"Monaco\",\"from\":\"Ligue 1\",\"to\":\"Ligue 2\",\"kind\":\"relegated\"},{\"club\":\"Paris FC\",\"from\":\"Ligue 1\",\"to\":\"Ligue 2\",\"kind\":\"relegated\"}]},\"cupRun\":{\"cup\":\"Coupe de France\",\"stages\":[{\"stage\":\"early\",\"won\":true},{\"stage\":\"QF\",\"opp\":\"Boulogne\",\"won\":false,\"for\":1,\"against\":3,\"home\":false}],\"opening\":{\"opp\":\"Strasbourg\",\"country\":\"France\",\"league\":\"Ligue 1\",\"won\":true,\"for\":3,\"against\":0,\"home\":true}}}],\"events\":[\"🔥 Choc des Olympiques against Marseille: W 2-0 away, D 1-1 at home (you missed it).\",\"🌍 England won the European Championship.\",\"🎭 You leaned into it: The Showman is born\",\"🦝 Gaffer Two is now official staff. Attendance: perfect\",\"🤝 Lent a teammate €200k on a handshake\"],\"retired\":false,\"phase\":\"transfer_window\",\"pendingOffers\":[],\"pendingSummary\":null,\"transferSituation\":{\"type\":\"request_result\",\"offer\":{\"club\":{\"id\":\"career-lower-carrarese\",\"name\":\"Carrarese\",\"country\":\"Italy\",\"tier\":4,\"color\":\"#64748b\",\"league\":\"Serie B\"},\"contractYears\":5,\"wage\":3579,\"transferFee\":0.6,\"isDreamClub\":false,\"isPayCut\":false}},\"loan\":null,\"pendingLoanOffers\":[{\"club\":{\"id\":\"cm-toluca\",\"name\":\"Toluca\",\"country\":\"Mexico\",\"tier\":3,\"color\":\"#d02128\",\"league\":\"Liga MX\"},\"contractYears\":1,\"wage\":12136,\"transferFee\":0,\"isLoan\":true},{\"club\":{\"id\":\"cm-sporting-kansas-city\",\"name\":\"Sporting Kansas City\",\"country\":\"USA\",\"tier\":4,\"color\":\"#91b0d5\",\"league\":\"MLS\"},\"contractYears\":1,\"wage\":12136,\"transferFee\":0,\"isLoan\":true}],\"pendingEvents\":[],\"lastEventId\":236,\"statBoostNextSeason\":{},\"pendingNews\":[],\"internationalCareer\":false,\"sponsorDeal\":null,\"totalEarnings\":0.63,\"popularity\":22,\"morale\":80,\"isLeader\":false,\"hasRelationship\":false,\"intStats\":{\"caps\":0,\"goals\":0,\"assists\":0,\"tournaments\":0,\"worldCups\":0,\"continentals\":0,\"worldCupWins\":0,\"continentalWins\":0,\"isCaptain\":false,\"isRetired\":false,\"debutYear\":null,\"debutAge\":null,\"worldCupResults\":[],\"squadSnubs\":0,\"failedQualifications\":0},\"pendingWorldCup\":null,\"pendingTournament\":null,\"lastTournament\":{\"year\":2028,\"name\":\"European Championship\",\"short\":\"Euros\",\"kind\":\"Continental\",\"confederation\":\"UEFA\",\"nation\":\"France\",\"teams\":24,\"qualifying\":{\"confederation\":\"UEFA\",\"table\":[{\"nation\":\"France\",\"played\":10,\"won\":9,\"drawn\":1,\"lost\":0,\"gf\":34,\"ga\":4,\"points\":28},{\"nation\":\"Romania\",\"played\":10,\"won\":5,\"drawn\":3,\"lost\":2,\"gf\":14,\"ga\":10,\"points\":18},{\"nation\":\"Georgia\",\"played\":10,\"won\":3,\"drawn\":2,\"lost\":5,\"gf\":10,\"ga\":14,\"points\":11},{\"nation\":\"Wales\",\"played\":10,\"won\":3,\"drawn\":2,\"lost\":5,\"gf\":15,\"ga\":22,\"points\":11},{\"nation\":\"Lithuania\",\"played\":10,\"won\":2,\"drawn\":2,\"lost\":6,\"gf\":13,\"ga\":24,\"points\":8},{\"nation\":\"Azerbaijan\",\"played\":10,\"won\":1,\"drawn\":4,\"lost\":5,\"gf\":12,\"ga\":24,\"points\":7}],\"myPosition\":1,\"through\":3,\"qualified\":true,\"automatic\":false},\"qualified\":true,\"squad\":{\"called\":false,\"role\":null,\"myRank\":14,\"poolSize\":14,\"places\":6,\"myScore\":0,\"cutScore\":81,\"reason\":\"You are not in the France setup.\",\"xi\":{\"formation\":\"4-3-3\",\"gk\":[{\"slot\":\"GK\",\"name\":\"Sylvain Ferrand\",\"ovr\":87,\"me\":false}],\"def\":[{\"slot\":\"LB\",\"name\":\"Hervé Noirot\",\"ovr\":81,\"me\":false},{\"slot\":\"CB\",\"name\":\"Damien Thibaudeau\",\"ovr\":87,\"me\":false},{\"slot\":\"CB\",\"name\":\"Maxence Lallemand\",\"ovr\":86,\"me\":false},{\"slot\":\"RB\",\"name\":\"Baptiste Beaumont\",\"ovr\":83,\"me\":false}],\"mid\":[{\"slot\":\"CM\",\"name\":\"Yann Delcourt\",\"ovr\":86,\"me\":false},{\"slot\":\"CDM\",\"name\":\"Nolan Guillory\",\"ovr\":85,\"me\":false},{\"slot\":\"CM\",\"name\":\"Émile Rousselot\",\"ovr\":86,\"me\":false}],\"att\":[{\"slot\":\"LW\",\"name\":\"Alban Chauvet\",\"ovr\":84,\"me\":false},{\"slot\":\"ST\",\"name\":\"Corentin Vaugrenard\",\"ovr\":88,\"me\":false},{\"slot\":\"RW\",\"name\":\"Loïc Marchetti\",\"ovr\":84,\"me\":false}],\"mySlot\":null,\"aheadOfMe\":null}},\"groupTable\":[{\"nation\":\"Croatia\",\"played\":3,\"won\":2,\"drawn\":1,\"lost\":0,\"gf\":5,\"ga\":1,\"points\":7},{\"nation\":\"Wales\",\"played\":3,\"won\":2,\"drawn\":1,\"lost\":0,\"gf\":4,\"ga\":2,\"points\":7},{\"nation\":\"France\",\"played\":3,\"won\":1,\"drawn\":0,\"lost\":2,\"gf\":3,\"ga\":3,\"points\":3},{\"nation\":\"Slovakia\",\"played\":3,\"won\":0,\"drawn\":0,\"lost\":3,\"gf\":1,\"ga\":7,\"points\":0}],\"bracket\":[{\"round\":\"R16\",\"slot\":0,\"home\":\"Ukraine\",\"away\":\"Belgium\",\"homeGoals\":1,\"awayGoals\":1,\"pens\":true,\"winner\":\"Belgium\",\"mine\":false},{\"round\":\"R16\",\"slot\":1,\"home\":\"England\",\"away\":\"Italy\",\"homeGoals\":2,\"awayGoals\":0,\"pens\":false,\"winner\":\"England\",\"mine\":false},{\"round\":\"R16\",\"slot\":2,\"home\":\"Norway\",\"away\":\"Spain\",\"homeGoals\":1,\"awayGoals\":3,\"pens\":false,\"winner\":\"Spain\",\"mine\":false},{\"round\":\"R16\",\"slot\":3,\"home\":\"Germany\",\"away\":\"Romania\",\"homeGoals\":1,\"awayGoals\":0,\"pens\":false,\"winner\":\"Germany\",\"mine\":false},{\"round\":\"R16\",\"slot\":4,\"home\":\"Croatia\",\"away\":\"Turkey\",\"homeGoals\":2,\"awayGoals\":0,\"pens\":false,\"winner\":\"Croatia\",\"mine\":false},{\"round\":\"R16\",\"slot\":5,\"home\":\"Wales\",\"away\":\"France\",\"homeGoals\":1,\"awayGoals\":1,\"pens\":true,\"winner\":\"Wales\",\"mine\":true},{\"round\":\"R16\",\"slot\":6,\"home\":\"Switzerland\",\"away\":\"Netherlands\",\"homeGoals\":1,\"awayGoals\":1,\"pens\":true,\"winner\":\"Netherlands\",\"mine\":false},{\"round\":\"R16\",\"slot\":7,\"home\":\"Serbia\",\"away\":\"Greece\",\"homeGoals\":3,\"awayGoals\":0,\"pens\":false,\"winner\":\"Serbia\",\"mine\":false},{\"round\":\"QF\",\"slot\":0,\"home\":\"Belgium\",\"away\":\"England\",\"homeGoals\":2,\"awayGoals\":3,\"pens\":false,\"winner\":\"England\",\"mine\":false},{\"round\":\"QF\",\"slot\":1,\"home\":\"Spain\",\"away\":\"Germany\",\"homeGoals\":1,\"awayGoals\":3,\"pens\":false,\"winner\":\"Germany\",\"mine\":false},{\"round\":\"QF\",\"slot\":2,\"home\":\"Croatia\",\"away\":\"Wales\",\"homeGoals\":2,\"awayGoals\":1,\"pens\":false,\"winner\":\"Croatia\",\"mine\":false},{\"round\":\"QF\",\"slot\":3,\"home\":\"Netherlands\",\"away\":\"Serbia\",\"homeGoals\":4,\"awayGoals\":0,\"pens\":false,\"winner\":\"Netherlands\",\"mine\":false},{\"round\":\"SF\",\"slot\":0,\"home\":\"England\",\"away\":\"Germany\",\"homeGoals\":3,\"awayGoals\":1,\"pens\":false,\"winner\":\"England\",\"mine\":false},{\"round\":\"SF\",\"slot\":1,\"home\":\"Croatia\",\"away\":\"Netherlands\",\"homeGoals\":3,\"awayGoals\":4,\"pens\":false,\"winner\":\"Netherlands\",\"mine\":false},{\"round\":\"F\",\"slot\":0,\"home\":\"England\",\"away\":\"Netherlands\",\"homeGoals\":1,\"awayGoals\":1,\"pens\":true,\"winner\":\"England\",\"mine\":false}],\"champion\":\"England\",\"runnerUp\":\"Netherlands\",\"groupLabel\":\"Group E\",\"thirdsThrough\":4,\"myResult\":\"Not Selected\",\"matches\":[],\"playerApps\":0,\"playerGoals\":0,\"playerAssists\":0,\"playerAvgRating\":0,\"goldenBoot\":false,\"bestPlayer\":false},\"intlHistory\":[{\"year\":2028,\"short\":\"Euros\",\"nation\":\"France\",\"champion\":\"England\",\"myResult\":\"\",\"apps\":0,\"goals\":0}],\"rival\":null,\"rivalCreated\":false,\"pendingRivalryEvent\":null,\"lastRivalryEventId\":null,\"rivalrySummary\":null,\"netWorth\":0.38,\"lifestyleLevel\":\"Humble\",\"lifestyleCostPerYear\":0.05,\"socialMediaFollowers\":1.16,\"sponsorshipIncome\":0,\"properties\":[],\"investments\":[],\"consecutiveDeficitYears\":0,\"agentFeesPaid\":0,\"family\":{\"isMarried\":false,\"marriedAge\":null,\"children\":0,\"isDivorced\":false,\"divorceAge\":null},\"purchasedItems\":[],\"investmentHoldings\":[],\"totalAssetValue\":0,\"customYearlyCosts\":0,\"awards\":[],\"pendingBallonDor\":null,\"lastUCLResult\":{\"qualified\":false,\"matches\":[],\"result\":\"N/A\",\"playerGoals\":0,\"isTopScorer\":false,\"seasonYear\":2028,\"club\":\"Lyon\"},\"legacy\":null,\"postRetirementChoice\":null,\"managerState\":null,\"isFinalSeason\":false,\"isPundit\":false,\"punditEvents\":[],\"primeType\":\"late\",\"socialMediaActionUsedThisSeason\":false,\"socialMediaFocusBoost\":false,\"pendingCoverAthleteEvent\":false,\"coverAthleteAccepted\":false,\"activeSponsorship\":null,\"personality\":\"showman\",\"agentId\":null,\"lifeFlags\":{\"teammateLoan\":1},\"appearance\":null,\"corruptionHeat\":0,\"dirtyMoney\":0,\"prisonSeasons\":0,\"academyClubName\":\"Lyon\",\"moralDilemmasTriggered\":[],\"pendingMoralDilemma\":null,\"pedSeasonsRemaining\":0,\"pedActive\":false,\"matchFixBanned\":0,\"divingActive\":false,\"integrityBonus\":2,\"pendingAppealResult\":null,\"childEventsSeen\":[],\"pregnancyAnnounced\":false,\"punditState\":null,\"ownerState\":null,\"peakOverall\":59,\"retirementSuggested\":false,\"phone\":{\"threads\":[{\"id\":\"th_x_groundskeeper\",\"c\":\"other\",\"name\":\"Groundskeeper\",\"emoji\":\"💬\",\"lines\":[{\"w\":0,\"t\":\"Found a wallet in the car park with 800 quid inside. No ID. What do I do with it?\",\"y\":2026},{\"w\":0,\"t\":\"Chasing this one. Let me know either way.\",\"y\":2027}],\"rel\":36,\"pending\":{\"kind\":\"legacy\",\"msgId\":\"lost_wallet-2026\"},\"waiting\":2027,\"cold\":1,\"seen\":[],\"lastReplyYear\":null},{\"id\":\"th_dad\",\"c\":\"dad\",\"name\":\"Dad\",\"emoji\":\"🧔\",\"lines\":[{\"w\":0,\"t\":\"Watched it back three times. You were dropping too deep in the second half son. Coming to get the ball because you wanted a touch.\",\"y\":2026},{\"w\":0,\"t\":\"Hello? Anyone in there?\",\"y\":2027}],\"rel\":36,\"pending\":{\"kind\":\"convo\",\"convo\":\"dad_analysis\",\"beat\":0},\"waiting\":2027,\"cold\":1,\"seen\":[\"dad_analysis\"],\"lastReplyYear\":null},{\"id\":\"th_x_barber\",\"c\":\"other\",\"name\":\"Barber\",\"emoji\":\"💬\",\"lines\":[{\"w\":0,\"t\":\"New style idea for you. Bold. Might break the internet, might get you fined by the boss. You in?\",\"y\":2026},{\"w\":0,\"t\":\"Chasing this one. Let me know either way.\",\"y\":2027}],\"rel\":36,\"pending\":{\"kind\":\"legacy\",\"msgId\":\"barber_cut-2026\"},\"waiting\":2027,\"cold\":1,\"seen\":[],\"lastReplyYear\":null}],\"feed\":[\"⭐ Leverkusen are champions of Europe.\",\"🏆 Arsenal win the Premier League.\",\"🏆 Barcelona win La Liga.\",\"🌍 England win the European Championship.\",\"🔮 Your world's 2028-29, as it played out:\"],\"world\":{\"year\":2028,\"ucl\":\"Leverkusen\",\"leagues\":{\"Premier League\":\"Arsenal\",\"La Liga\":\"Barcelona\",\"Bundesliga\":\"Bayern Munich\",\"Serie A\":\"Juventus\",\"Ligue 1\":\"Marseille\",\"Primeira Liga\":\"Porto\",\"Eredivisie\":\"Feyenoord\",\"Scottish Premiership\":\"Rangers\",\"Brasileirao\":\"Palmeiras\",\"Saudi Pro League\":\"Al Hilal\",\"MLS\":\"Seattle Sounders\",\"K League 1\":\"Ulsan HD\",\"Championship\":\"Bolton Wanderers\",\"2. Bundesliga\":\"Holstein Kiel\",\"Ligue 2\":\"Red Star FC\",\"Serie B\":\"Cremonese\",\"Segunda Division\":\"Albacete\"},\"cups\":{\"Premier League\":\"Man United\",\"La Liga\":\"Athletic Bilbao\",\"Bundesliga\":\"Dortmund\",\"Serie A\":\"Juventus\",\"Ligue 1\":\"Monaco\",\"Primeira Liga\":\"Porto\",\"Eredivisie\":\"Feyenoord\",\"Scottish Premiership\":\"Celtic\",\"Brasileirao\":\"Palmeiras\",\"Saudi Pro League\":\"Al Ittihad\",\"MLS\":\"Inter Miami\",\"K League 1\":\"Pohang Steelers\"},\"moves\":[],\"topScorer\":null,\"intl\":{\"name\":\"European Championship\",\"champion\":\"England\"}},\"clubs\":{\"Kylian Mbappé\":\"Real Madrid\",\"Erling Haaland\":\"Man City\",\"Jude Bellingham\":\"Real Madrid\",\"Vinícius Jr\":\"Real Madrid\",\"Lamine Yamal\":\"Barcelona\",\"Florian Wirtz\":\"Liverpool\",\"Jamal Musiala\":\"Bayern Munich\",\"Bukayo Saka\":\"Arsenal\",\"Pedri\":\"Barcelona\",\"Rodri\":\"Barcelona\",\"Federico Valverde\":\"Real Madrid\",\"Harry Kane\":\"Bayern Munich\",\"Mohamed Salah\":\"Trabzonspor\",\"Phil Foden\":\"Man City\",\"Declan Rice\":\"Arsenal\",\"Raphinha\":\"Barcelona\",\"Endrick\":\"Real Madrid\",\"Nico Williams\":\"Athletic Bilbao\",\"Désiré Doué\":\"PSG\",\"Kobbie Mainoo\":\"Man United\",\"Gianluigi Donnarumma\":\"Man City\",\"Ousmane Dembélé\":\"PSG\"},\"rivalClub\":null,\"seed\":767208762,\"offers\":0,\"perksTaken\":0},\"frozenOut\":0,\"badSeasonStreak\":0,\"story\":[{\"year\":2026,\"age\":16,\"club\":\"Lyon Youth\",\"lines\":[\"📋 Joined Lyon Youth Academy aged 16\"]},{\"year\":2027,\"age\":17,\"club\":\"Lyon Youth\",\"lines\":[\"📈 Stats improved during youth development (OVR 59)\",\"📩 Professional contract offers received!\",\"✍️ Signed with Lyon 🇫🇷 (5yr, €12k/wk)\",\"🏠 One of our own! The Lyon academy kid signs a first-team deal. The ultras already have a chant ready.\"]}],\"sponsorBonus\":0,\"money\":{\"seed\":4290540860,\"vault\":0,\"hold\":{\"ladder\":0,\"bricks\":0,\"cleats\":0,\"screens\":0,\"spark\":0},\"cost\":{\"ladder\":0,\"bricks\":0,\"cleats\":0,\"screens\":0,\"spark\":0},\"price\":{\"ladder\":105.6,\"bricks\":104.6,\"cleats\":123.6,\"screens\":79.63,\"spark\":138.5},\"hist\":{\"ladder\":[100,102.35,105.6],\"bricks\":[100,97.87,104.6],\"cleats\":[100,104.12,123.6],\"screens\":[100,108.33,79.63],\"spark\":[100,84.49,138.5]},\"log\":[],\"year\":2028,\"age\":2,\"won\":0,\"lost\":0,\"cPlays\":0,\"cNet\":0,\"cYear\":0,\"cShut\":false,\"aYear\":0,\"aBest\":0,\"aPlays\":0},\"leagueWorld\":{\"year\":2029,\"leagues\":{\"Premier League\":[\"Arsenal\",\"Man City\",\"Liverpool\",\"Chelsea\",\"Man United\",\"Tottenham\",\"Newcastle\",\"Nottingham Forest\",\"Brighton\",\"Aston Villa\",\"Everton\",\"Fulham\",\"Crystal Palace\",\"Brentford\",\"Bournemouth\",\"Sunderland\",\"Hull City\",\"Bolton Wanderers\",\"Burnley\",\"Sheffield United\"],\"Championship\":[\"West Ham\",\"Wolves\",\"Southampton\",\"Middlesbrough\",\"Swansea City\",\"Birmingham City\",\"Norwich City\",\"Stoke City\",\"Watford\",\"Wrexham\",\"Derby County\",\"QPR\",\"West Brom\",\"Bristol City\",\"Millwall\",\"Preston North End\",\"Charlton Athletic\",\"Blackburn Rovers\",\"Cardiff City\",\"Lincoln City\",\"Portsmouth\",\"Leeds United\",\"Coventry City\",\"Ipswich Town\"],\"Bundesliga\":[\"Bayern Munich\",\"Dortmund\",\"Leipzig\",\"Stuttgart\",\"Leverkusen\",\"Frankfurt\",\"Hoffenheim\",\"Augsburg\",\"Hamburg\",\"Mainz\",\"Gladbach\",\"Koln\",\"Union Berlin\",\"Werder Bremen\",\"Paderborn\",\"Elversberg\",\"Holstein Kiel\",\"Greuther Furth\"],\"2. Bundesliga\":[\"Wolfsburg\",\"St. Pauli\",\"Heidenheim\",\"Nurnberg\",\"Arminia Bielefeld\",\"Bochum\",\"Braunschweig\",\"Darmstadt\",\"Dynamo Dresden\",\"Energie Cottbus\",\"Hannover 96\",\"Hertha Berlin\",\"Kaiserslautern\",\"Karlsruhe\",\"Magdeburg\",\"Osnabruck\",\"Freiburg\",\"Schalke 04\"],\"Ligue 1\":[\"PSG\",\"Lyon\",\"Marseille\",\"Lille\",\"Nice\",\"Strasbourg\",\"Rennes\",\"Lens\",\"Lorient\",\"Toulouse\",\"Auxerre\",\"Brest\",\"Angers\",\"Le Havre\",\"Le Mans\",\"Troyes\",\"Red Star FC\",\"Nantes\"],\"Ligue 2\":[\"Metz\",\"Saint-Étienne\",\"Reims\",\"Montpellier\",\"Nancy\",\"Annecy\",\"Sochaux\",\"Dijon\",\"Pau\",\"Guingamp\",\"Dunkerque\",\"Grenoble\",\"Rodez\",\"Clermont\",\"Boulogne\",\"Laval\",\"Monaco\",\"Paris FC\"],\"Serie A\":[\"Inter Milan\",\"Juventus\",\"Roma\",\"Como\",\"AC Milan\",\"Napoli\",\"Atalanta\",\"Fiorentina\",\"Lazio\",\"Genoa\",\"Parma\",\"Udinese\",\"Cagliari\",\"Lecce\",\"Monza\",\"Venezia\",\"Frosinone\",\"Cremonese\",\"Juve Stabia\",\"Avellino\"],\"Serie B\":[\"Verona\",\"Pisa\",\"Carrarese\",\"Catanzaro\",\"Cesena\",\"Empoli\",\"Entella\",\"Mantova\",\"Modena\",\"Padova\",\"Palermo\",\"Sampdoria\",\"Südtirol\",\"Vicenza\",\"Arezzo\",\"Benevento\",\"Ascoli\",\"Sassuolo\",\"Torino\",\"Bologna\"],\"La Liga\":[\"Real Madrid\",\"Barcelona\",\"Atletico Madrid\",\"Athletic Bilbao\",\"Sevilla\",\"Villarreal\",\"Real Sociedad\",\"Real Betis\",\"Celta Vigo\",\"Levante\",\"Getafe\",\"Racing Santander\",\"Rayo Vallecano\",\"Osasuna\",\"Elche\",\"Alaves\",\"Malaga\",\"Albacete\",\"Sabadell\",\"Girona\"],\"Segunda Division\":[\"Real Oviedo\",\"Mallorca\",\"Eibar\",\"Castellón\",\"Almería\",\"Burgos\",\"Sporting Gijón\",\"Granada\",\"Las Palmas\",\"Tenerife\",\"Leganés\",\"Valladolid\",\"Córdoba\",\"Eldense\",\"Cádiz\",\"FC Andorra\",\"Ceuta\",\"Deportivo\",\"Espanyol\",\"Valencia\"]},\"movements\":[{\"club\":\"Leeds United\",\"from\":\"Premier League\",\"to\":\"Championship\",\"kind\":\"relegated\"},{\"club\":\"Coventry City\",\"from\":\"Premier League\",\"to\":\"Championship\",\"kind\":\"relegated\"},{\"club\":\"Ipswich Town\",\"from\":\"Premier League\",\"to\":\"Championship\",\"kind\":\"relegated\"},{\"club\":\"Bolton Wanderers\",\"from\":\"Championship\",\"to\":\"Premier League\",\"kind\":\"promoted\"},{\"club\":\"Burnley\",\"from\":\"Championship\",\"to\":\"Premier League\",\"kind\":\"promoted\"},{\"club\":\"Sheffield United\",\"from\":\"Championship\",\"to\":\"Premier League\",\"kind\":\"promoted\"},{\"club\":\"Freiburg\",\"from\":\"Bundesliga\",\"to\":\"2. Bundesliga\",\"kind\":\"relegated\"},{\"club\":\"Schalke 04\",\"from\":\"Bundesliga\",\"to\":\"2. Bundesliga\",\"kind\":\"relegated\"},{\"club\":\"Holstein Kiel\",\"from\":\"2. Bundesliga\",\"to\":\"Bundesliga\",\"kind\":\"promoted\"},{\"club\":\"Greuther Furth\",\"from\":\"2. Bundesliga\",\"to\":\"Bundesliga\",\"kind\":\"promoted\"},{\"club\":\"Monaco\",\"from\":\"Ligue 1\",\"to\":\"Ligue 2\",\"kind\":\"relegated\"},{\"club\":\"Paris FC\",\"from\":\"Ligue 1\",\"to\":\"Ligue 2\",\"kind\":\"relegated\"},{\"club\":\"Red Star FC\",\"from\":\"Ligue 2\",\"to\":\"Ligue 1\",\"kind\":\"promoted\"},{\"club\":\"Nantes\",\"from\":\"Ligue 2\",\"to\":\"Ligue 1\",\"kind\":\"promoted\"},{\"club\":\"Sassuolo\",\"from\":\"Serie A\",\"to\":\"Serie B\",\"kind\":\"relegated\"},{\"club\":\"Torino\",\"from\":\"Serie A\",\"to\":\"Serie B\",\"kind\":\"relegated\"},{\"club\":\"Bologna\",\"from\":\"Serie A\",\"to\":\"Serie B\",\"kind\":\"relegated\"},{\"club\":\"Cremonese\",\"from\":\"Serie B\",\"to\":\"Serie A\",\"kind\":\"promoted\"},{\"club\":\"Juve Stabia\",\"from\":\"Serie B\",\"to\":\"Serie A\",\"kind\":\"promoted\"},{\"club\":\"Avellino\",\"from\":\"Serie B\",\"to\":\"Serie A\",\"kind\":\"promoted\"},{\"club\":\"Deportivo\",\"from\":\"La Liga\",\"to\":\"Segunda Division\",\"kind\":\"relegated\"},{\"club\":\"Espanyol\",\"from\":\"La Liga\",\"to\":\"Segunda Division\",\"kind\":\"relegated\"},{\"club\":\"Valencia\",\"from\":\"La Liga\",\"to\":\"Segunda Division\",\"kind\":\"relegated\"},{\"club\":\"Albacete\",\"from\":\"Segunda Division\",\"to\":\"La Liga\",\"kind\":\"promoted\"},{\"club\":\"Sabadell\",\"from\":\"Segunda Division\",\"to\":\"La Liga\",\"kind\":\"promoted\"},{\"club\":\"Girona\",\"from\":\"Segunda Division\",\"to\":\"La Liga\",\"kind\":\"promoted\"}]},\"generatedBallonPool\":{\"version\":1,\"year\":2028,\"nextId\":3,\"entries\":[{\"name\":\"Ferdi Doornbos\",\"nationality\":\"Belgium\",\"position\":\"LW\",\"club\":\"AC Milan\",\"baseGoals\":[10,28],\"id\":0,\"role\":\"primary\",\"slot\":0,\"seed\":9900,\"firstYear\":2028,\"entryAge\":26,\"retiredYear\":null},{\"name\":\"Shohei Nishizawa\",\"nationality\":\"Japan\",\"position\":\"CDM\",\"club\":\"Chelsea\",\"baseGoals\":[2,8],\"id\":1,\"role\":\"primary\",\"slot\":1,\"seed\":9901,\"firstYear\":2028,\"entryAge\":27,\"retiredYear\":null},{\"name\":\"Agustín Quiroga\",\"nationality\":\"Argentina\",\"position\":\"RW\",\"club\":\"Arsenal\",\"baseGoals\":[10,28],\"id\":2,\"role\":\"primary\",\"slot\":2,\"seed\":9902,\"firstYear\":2028,\"entryAge\":27,\"retiredYear\":null}]},\"eventLastFired\":{\"200\":2028,\"236\":2028,\"247\":2028},\"loyaltyContracts\":{\"v\":1,\"deals\":[],\"pending\":{\"key\":\"[\\\"Serie B Retained Choices\\\",\\\"\\\",\\\"transfer_window\\\",2029,\\\"[\\\\\\\"Carrarese\\\\\\\",\\\\\\\"Italy\\\\\\\",\\\\\\\"Serie B\\\\\\\",\\\\\\\"#64748b\\\\\\\",4,3579,5,0.6,false,false,false,false]\\\",3579]\",\"offerToken\":\"[\\\"Carrarese\\\",\\\"Italy\\\",\\\"Serie B\\\",\\\"#64748b\\\",4,3579,5,0.6,false,false,false,false]\",\"club\":\"Carrarese\",\"firstYear\":2029,\"finalYear\":2033,\"years\":5,\"baseWeeklyWage\":3579,\"weeklyWage\":3221,\"bonusEuros\":139581}}}",
+        "inputAfter": "{\"playerName\":\"Serie B Retained Choices\",\"nationality\":\"France\",\"position\":\"CM\",\"era\":\"2020s\",\"age\":18,\"potential\":65,\"potentialEarned\":0,\"eliteStreak\":0,\"startingOverall\":55,\"physique\":{\"heightCm\":180,\"weightKg\":75},\"attrShape\":{},\"karma\":50,\"phoneUsedIds\":[\"lost_wallet\",\"barber_cut\"],\"phoneInbox\":[{\"id\":\"lost_wallet-2026\",\"defId\":\"lost_wallet\",\"from\":\"Groundskeeper\",\"emoji\":\"👛\",\"text\":\"Found a wallet in the car park with 800 quid inside. No ID. What do I do with it?\",\"year\":2026,\"choices\":[{\"label\":\"Hand it to reception\",\"reply\":\"Reception, mate. Someone's having a bad day\",\"karma\":6},{\"label\":\"Finders keepers\",\"reply\":\"That's the football gods paying you. Keep it\",\"karma\":-6}]},{\"id\":\"barber_cut-2026\",\"defId\":\"barber_cut\",\"from\":\"Barber\",\"emoji\":\"💈\",\"text\":\"New style idea for you. Bold. Might break the internet, might get you fined by the boss. You in?\",\"year\":2026,\"choices\":[{\"label\":\"Send it\",\"reply\":\"Chair. Tomorrow. Do your worst\",\"karma\":2,\"popularity\":4},{\"label\":\"Keep it classic\",\"reply\":\"Usual trim mate, big game week\",\"karma\":1}]}],\"currentClub\":\"Lyon\",\"currentClubCountry\":\"France\",\"currentClubTier\":2,\"currentClubColor\":\"#1C2C5B\",\"currentLeague\":\"Ligue 1\",\"contractYearsLeft\":4,\"weeklyWage\":12136,\"marketValue\":2,\"pace\":58,\"shooting\":59,\"passing\":61,\"dribbling\":60,\"defending\":58,\"physical\":60,\"reflexes\":58,\"overall\":59,\"seasons\":[{\"year\":2026,\"age\":16,\"club\":\"Lyon Youth\",\"clubCountry\":\"France\",\"clubTier\":2,\"apps\":0,\"goals\":0,\"assists\":0,\"cleanSheets\":0,\"yellowCards\":0,\"redCards\":0,\"rating\":0,\"leagueTitle\":false,\"domesticCup\":false,\"championsLeague\":false,\"worldCup\":false,\"ballonDor\":false,\"ballonDorRank\":null,\"type\":\"youth\",\"intApps\":0,\"intGoals\":0,\"intAssists\":0,\"intRating\":0,\"tournament\":null,\"tournamentResult\":null},{\"year\":2027,\"age\":17,\"club\":\"Lyon Youth\",\"clubCountry\":\"France\",\"clubTier\":2,\"apps\":15,\"goals\":1,\"assists\":3,\"cleanSheets\":0,\"yellowCards\":1,\"redCards\":0,\"rating\":0,\"leagueTitle\":false,\"domesticCup\":false,\"championsLeague\":false,\"worldCup\":false,\"ballonDor\":false,\"ballonDorRank\":null,\"type\":\"youth\",\"intApps\":0,\"intGoals\":0,\"intAssists\":0,\"intRating\":0,\"tournament\":null,\"tournamentResult\":null},{\"year\":2028,\"age\":18,\"club\":\"Lyon\",\"clubCountry\":\"France\",\"clubTier\":2,\"apps\":26,\"leagueApps\":14,\"goals\":5,\"assists\":6,\"cleanSheets\":0,\"yellowCards\":3,\"redCards\":0,\"rating\":5.6,\"ovr\":59,\"injury\":null,\"injuryWeeks\":0,\"injurySevere\":false,\"leagueTitle\":false,\"leagueFinish\":10,\"leagueSize\":18,\"derbies\":[{\"rival\":\"Marseille\",\"name\":\"Choc des Olympiques\",\"kind\":\"rivalry\",\"meetings\":[{\"home\":false,\"gf\":2,\"ga\":0,\"played\":true,\"goals\":0},{\"home\":true,\"gf\":1,\"ga\":1,\"played\":false,\"goals\":0}]}],\"domesticCup\":false,\"championsLeague\":false,\"worldCup\":false,\"ballonDor\":false,\"ballonDorRank\":null,\"type\":\"playing\",\"intApps\":0,\"intGoals\":0,\"intAssists\":0,\"intRating\":0,\"tournament\":\"European Championship\",\"tournamentResult\":null,\"leagueWorld\":{\"league\":\"Ligue 1\",\"members\":[\"PSG\",\"Lyon\",\"Marseille\",\"Monaco\",\"Lille\",\"Nice\",\"Strasbourg\",\"Rennes\",\"Lens\",\"Lorient\",\"Toulouse\",\"Auxerre\",\"Paris FC\",\"Brest\",\"Angers\",\"Le Havre\",\"Le Mans\",\"Troyes\"],\"champion\":\"Marseille\",\"simulation\":\"simulated\",\"movements\":[{\"club\":\"Monaco\",\"from\":\"Ligue 1\",\"to\":\"Ligue 2\",\"kind\":\"relegated\"},{\"club\":\"Paris FC\",\"from\":\"Ligue 1\",\"to\":\"Ligue 2\",\"kind\":\"relegated\"}]},\"cupRun\":{\"cup\":\"Coupe de France\",\"stages\":[{\"stage\":\"early\",\"won\":true},{\"stage\":\"QF\",\"opp\":\"Boulogne\",\"won\":false,\"for\":1,\"against\":3,\"home\":false}],\"opening\":{\"opp\":\"Strasbourg\",\"country\":\"France\",\"league\":\"Ligue 1\",\"won\":true,\"for\":3,\"against\":0,\"home\":true}}}],\"events\":[\"🔥 Choc des Olympiques against Marseille: W 2-0 away, D 1-1 at home (you missed it).\",\"🌍 England won the European Championship.\",\"🎭 You leaned into it: The Showman is born\",\"🦝 Gaffer Two is now official staff. Attendance: perfect\",\"🤝 Lent a teammate €200k on a handshake\"],\"retired\":false,\"phase\":\"transfer_window\",\"pendingOffers\":[],\"pendingSummary\":null,\"transferSituation\":{\"type\":\"request_result\",\"offer\":{\"club\":{\"id\":\"career-lower-carrarese\",\"name\":\"Carrarese\",\"country\":\"Italy\",\"tier\":4,\"color\":\"#64748b\",\"league\":\"Serie B\"},\"contractYears\":5,\"wage\":3579,\"transferFee\":0.6,\"isDreamClub\":false,\"isPayCut\":false}},\"loan\":null,\"pendingLoanOffers\":[{\"club\":{\"id\":\"cm-toluca\",\"name\":\"Toluca\",\"country\":\"Mexico\",\"tier\":3,\"color\":\"#d02128\",\"league\":\"Liga MX\"},\"contractYears\":1,\"wage\":12136,\"transferFee\":0,\"isLoan\":true},{\"club\":{\"id\":\"cm-sporting-kansas-city\",\"name\":\"Sporting Kansas City\",\"country\":\"USA\",\"tier\":4,\"color\":\"#91b0d5\",\"league\":\"MLS\"},\"contractYears\":1,\"wage\":12136,\"transferFee\":0,\"isLoan\":true}],\"pendingEvents\":[],\"lastEventId\":236,\"statBoostNextSeason\":{},\"pendingNews\":[],\"internationalCareer\":false,\"sponsorDeal\":null,\"totalEarnings\":0.63,\"popularity\":22,\"morale\":80,\"isLeader\":false,\"hasRelationship\":false,\"intStats\":{\"caps\":0,\"goals\":0,\"assists\":0,\"tournaments\":0,\"worldCups\":0,\"continentals\":0,\"worldCupWins\":0,\"continentalWins\":0,\"isCaptain\":false,\"isRetired\":false,\"debutYear\":null,\"debutAge\":null,\"worldCupResults\":[],\"squadSnubs\":0,\"failedQualifications\":0},\"pendingWorldCup\":null,\"pendingTournament\":null,\"lastTournament\":{\"year\":2028,\"name\":\"European Championship\",\"short\":\"Euros\",\"kind\":\"Continental\",\"confederation\":\"UEFA\",\"nation\":\"France\",\"teams\":24,\"qualifying\":{\"confederation\":\"UEFA\",\"table\":[{\"nation\":\"France\",\"played\":10,\"won\":9,\"drawn\":1,\"lost\":0,\"gf\":34,\"ga\":4,\"points\":28},{\"nation\":\"Romania\",\"played\":10,\"won\":5,\"drawn\":3,\"lost\":2,\"gf\":14,\"ga\":10,\"points\":18},{\"nation\":\"Georgia\",\"played\":10,\"won\":3,\"drawn\":2,\"lost\":5,\"gf\":10,\"ga\":14,\"points\":11},{\"nation\":\"Wales\",\"played\":10,\"won\":3,\"drawn\":2,\"lost\":5,\"gf\":15,\"ga\":22,\"points\":11},{\"nation\":\"Lithuania\",\"played\":10,\"won\":2,\"drawn\":2,\"lost\":6,\"gf\":13,\"ga\":24,\"points\":8},{\"nation\":\"Azerbaijan\",\"played\":10,\"won\":1,\"drawn\":4,\"lost\":5,\"gf\":12,\"ga\":24,\"points\":7}],\"myPosition\":1,\"through\":3,\"qualified\":true,\"automatic\":false},\"qualified\":true,\"squad\":{\"called\":false,\"role\":null,\"myRank\":14,\"poolSize\":14,\"places\":6,\"myScore\":0,\"cutScore\":81,\"reason\":\"You are not in the France setup.\",\"xi\":{\"formation\":\"4-3-3\",\"gk\":[{\"slot\":\"GK\",\"name\":\"Sylvain Ferrand\",\"ovr\":87,\"me\":false}],\"def\":[{\"slot\":\"LB\",\"name\":\"Hervé Noirot\",\"ovr\":81,\"me\":false},{\"slot\":\"CB\",\"name\":\"Damien Thibaudeau\",\"ovr\":87,\"me\":false},{\"slot\":\"CB\",\"name\":\"Maxence Lallemand\",\"ovr\":86,\"me\":false},{\"slot\":\"RB\",\"name\":\"Baptiste Beaumont\",\"ovr\":83,\"me\":false}],\"mid\":[{\"slot\":\"CM\",\"name\":\"Yann Delcourt\",\"ovr\":86,\"me\":false},{\"slot\":\"CDM\",\"name\":\"Nolan Guillory\",\"ovr\":85,\"me\":false},{\"slot\":\"CM\",\"name\":\"Émile Rousselot\",\"ovr\":86,\"me\":false}],\"att\":[{\"slot\":\"LW\",\"name\":\"Alban Chauvet\",\"ovr\":84,\"me\":false},{\"slot\":\"ST\",\"name\":\"Corentin Vaugrenard\",\"ovr\":88,\"me\":false},{\"slot\":\"RW\",\"name\":\"Loïc Marchetti\",\"ovr\":84,\"me\":false}],\"mySlot\":null,\"aheadOfMe\":null}},\"groupTable\":[{\"nation\":\"Croatia\",\"played\":3,\"won\":2,\"drawn\":1,\"lost\":0,\"gf\":5,\"ga\":1,\"points\":7},{\"nation\":\"Wales\",\"played\":3,\"won\":2,\"drawn\":1,\"lost\":0,\"gf\":4,\"ga\":2,\"points\":7},{\"nation\":\"France\",\"played\":3,\"won\":1,\"drawn\":0,\"lost\":2,\"gf\":3,\"ga\":3,\"points\":3},{\"nation\":\"Slovakia\",\"played\":3,\"won\":0,\"drawn\":0,\"lost\":3,\"gf\":1,\"ga\":7,\"points\":0}],\"bracket\":[{\"round\":\"R16\",\"slot\":0,\"home\":\"Ukraine\",\"away\":\"Belgium\",\"homeGoals\":1,\"awayGoals\":1,\"pens\":true,\"winner\":\"Belgium\",\"mine\":false},{\"round\":\"R16\",\"slot\":1,\"home\":\"England\",\"away\":\"Italy\",\"homeGoals\":2,\"awayGoals\":0,\"pens\":false,\"winner\":\"England\",\"mine\":false},{\"round\":\"R16\",\"slot\":2,\"home\":\"Norway\",\"away\":\"Spain\",\"homeGoals\":1,\"awayGoals\":3,\"pens\":false,\"winner\":\"Spain\",\"mine\":false},{\"round\":\"R16\",\"slot\":3,\"home\":\"Germany\",\"away\":\"Romania\",\"homeGoals\":1,\"awayGoals\":0,\"pens\":false,\"winner\":\"Germany\",\"mine\":false},{\"round\":\"R16\",\"slot\":4,\"home\":\"Croatia\",\"away\":\"Turkey\",\"homeGoals\":2,\"awayGoals\":0,\"pens\":false,\"winner\":\"Croatia\",\"mine\":false},{\"round\":\"R16\",\"slot\":5,\"home\":\"Wales\",\"away\":\"France\",\"homeGoals\":1,\"awayGoals\":1,\"pens\":true,\"winner\":\"Wales\",\"mine\":true},{\"round\":\"R16\",\"slot\":6,\"home\":\"Switzerland\",\"away\":\"Netherlands\",\"homeGoals\":1,\"awayGoals\":1,\"pens\":true,\"winner\":\"Netherlands\",\"mine\":false},{\"round\":\"R16\",\"slot\":7,\"home\":\"Serbia\",\"away\":\"Greece\",\"homeGoals\":3,\"awayGoals\":0,\"pens\":false,\"winner\":\"Serbia\",\"mine\":false},{\"round\":\"QF\",\"slot\":0,\"home\":\"Belgium\",\"away\":\"England\",\"homeGoals\":2,\"awayGoals\":3,\"pens\":false,\"winner\":\"England\",\"mine\":false},{\"round\":\"QF\",\"slot\":1,\"home\":\"Spain\",\"away\":\"Germany\",\"homeGoals\":1,\"awayGoals\":3,\"pens\":false,\"winner\":\"Germany\",\"mine\":false},{\"round\":\"QF\",\"slot\":2,\"home\":\"Croatia\",\"away\":\"Wales\",\"homeGoals\":2,\"awayGoals\":1,\"pens\":false,\"winner\":\"Croatia\",\"mine\":false},{\"round\":\"QF\",\"slot\":3,\"home\":\"Netherlands\",\"away\":\"Serbia\",\"homeGoals\":4,\"awayGoals\":0,\"pens\":false,\"winner\":\"Netherlands\",\"mine\":false},{\"round\":\"SF\",\"slot\":0,\"home\":\"England\",\"away\":\"Germany\",\"homeGoals\":3,\"awayGoals\":1,\"pens\":false,\"winner\":\"England\",\"mine\":false},{\"round\":\"SF\",\"slot\":1,\"home\":\"Croatia\",\"away\":\"Netherlands\",\"homeGoals\":3,\"awayGoals\":4,\"pens\":false,\"winner\":\"Netherlands\",\"mine\":false},{\"round\":\"F\",\"slot\":0,\"home\":\"England\",\"away\":\"Netherlands\",\"homeGoals\":1,\"awayGoals\":1,\"pens\":true,\"winner\":\"England\",\"mine\":false}],\"champion\":\"England\",\"runnerUp\":\"Netherlands\",\"groupLabel\":\"Group E\",\"thirdsThrough\":4,\"myResult\":\"Not Selected\",\"matches\":[],\"playerApps\":0,\"playerGoals\":0,\"playerAssists\":0,\"playerAvgRating\":0,\"goldenBoot\":false,\"bestPlayer\":false},\"intlHistory\":[{\"year\":2028,\"short\":\"Euros\",\"nation\":\"France\",\"champion\":\"England\",\"myResult\":\"\",\"apps\":0,\"goals\":0}],\"rival\":null,\"rivalCreated\":false,\"pendingRivalryEvent\":null,\"lastRivalryEventId\":null,\"rivalrySummary\":null,\"netWorth\":0.38,\"lifestyleLevel\":\"Humble\",\"lifestyleCostPerYear\":0.05,\"socialMediaFollowers\":1.16,\"sponsorshipIncome\":0,\"properties\":[],\"investments\":[],\"consecutiveDeficitYears\":0,\"agentFeesPaid\":0,\"family\":{\"isMarried\":false,\"marriedAge\":null,\"children\":0,\"isDivorced\":false,\"divorceAge\":null},\"purchasedItems\":[],\"investmentHoldings\":[],\"totalAssetValue\":0,\"customYearlyCosts\":0,\"awards\":[],\"pendingBallonDor\":null,\"lastUCLResult\":{\"qualified\":false,\"matches\":[],\"result\":\"N/A\",\"playerGoals\":0,\"isTopScorer\":false,\"seasonYear\":2028,\"club\":\"Lyon\"},\"legacy\":null,\"postRetirementChoice\":null,\"managerState\":null,\"isFinalSeason\":false,\"isPundit\":false,\"punditEvents\":[],\"primeType\":\"late\",\"socialMediaActionUsedThisSeason\":false,\"socialMediaFocusBoost\":false,\"pendingCoverAthleteEvent\":false,\"coverAthleteAccepted\":false,\"activeSponsorship\":null,\"personality\":\"showman\",\"agentId\":null,\"lifeFlags\":{\"teammateLoan\":1},\"appearance\":null,\"corruptionHeat\":0,\"dirtyMoney\":0,\"prisonSeasons\":0,\"academyClubName\":\"Lyon\",\"moralDilemmasTriggered\":[],\"pendingMoralDilemma\":null,\"pedSeasonsRemaining\":0,\"pedActive\":false,\"matchFixBanned\":0,\"divingActive\":false,\"integrityBonus\":2,\"pendingAppealResult\":null,\"childEventsSeen\":[],\"pregnancyAnnounced\":false,\"punditState\":null,\"ownerState\":null,\"peakOverall\":59,\"retirementSuggested\":false,\"phone\":{\"threads\":[{\"id\":\"th_x_groundskeeper\",\"c\":\"other\",\"name\":\"Groundskeeper\",\"emoji\":\"💬\",\"lines\":[{\"w\":0,\"t\":\"Found a wallet in the car park with 800 quid inside. No ID. What do I do with it?\",\"y\":2026},{\"w\":0,\"t\":\"Chasing this one. Let me know either way.\",\"y\":2027}],\"rel\":36,\"pending\":{\"kind\":\"legacy\",\"msgId\":\"lost_wallet-2026\"},\"waiting\":2027,\"cold\":1,\"seen\":[],\"lastReplyYear\":null},{\"id\":\"th_dad\",\"c\":\"dad\",\"name\":\"Dad\",\"emoji\":\"🧔\",\"lines\":[{\"w\":0,\"t\":\"Watched it back three times. You were dropping too deep in the second half son. Coming to get the ball because you wanted a touch.\",\"y\":2026},{\"w\":0,\"t\":\"Hello? Anyone in there?\",\"y\":2027}],\"rel\":36,\"pending\":{\"kind\":\"convo\",\"convo\":\"dad_analysis\",\"beat\":0},\"waiting\":2027,\"cold\":1,\"seen\":[\"dad_analysis\"],\"lastReplyYear\":null},{\"id\":\"th_x_barber\",\"c\":\"other\",\"name\":\"Barber\",\"emoji\":\"💬\",\"lines\":[{\"w\":0,\"t\":\"New style idea for you. Bold. Might break the internet, might get you fined by the boss. You in?\",\"y\":2026},{\"w\":0,\"t\":\"Chasing this one. Let me know either way.\",\"y\":2027}],\"rel\":36,\"pending\":{\"kind\":\"legacy\",\"msgId\":\"barber_cut-2026\"},\"waiting\":2027,\"cold\":1,\"seen\":[],\"lastReplyYear\":null}],\"feed\":[\"⭐ Leverkusen are champions of Europe.\",\"🏆 Arsenal win the Premier League.\",\"🏆 Barcelona win La Liga.\",\"🌍 England win the European Championship.\",\"🔮 Your world's 2028-29, as it played out:\"],\"world\":{\"year\":2028,\"ucl\":\"Leverkusen\",\"leagues\":{\"Premier League\":\"Arsenal\",\"La Liga\":\"Barcelona\",\"Bundesliga\":\"Bayern Munich\",\"Serie A\":\"Juventus\",\"Ligue 1\":\"Marseille\",\"Primeira Liga\":\"Porto\",\"Eredivisie\":\"Feyenoord\",\"Scottish Premiership\":\"Rangers\",\"Brasileirao\":\"Palmeiras\",\"Saudi Pro League\":\"Al Hilal\",\"MLS\":\"Seattle Sounders\",\"K League 1\":\"Ulsan HD\",\"Championship\":\"Bolton Wanderers\",\"2. Bundesliga\":\"Holstein Kiel\",\"Ligue 2\":\"Red Star FC\",\"Serie B\":\"Cremonese\",\"Segunda Division\":\"Albacete\"},\"cups\":{\"Premier League\":\"Man United\",\"La Liga\":\"Athletic Bilbao\",\"Bundesliga\":\"Dortmund\",\"Serie A\":\"Juventus\",\"Ligue 1\":\"Monaco\",\"Primeira Liga\":\"Porto\",\"Eredivisie\":\"Feyenoord\",\"Scottish Premiership\":\"Celtic\",\"Brasileirao\":\"Palmeiras\",\"Saudi Pro League\":\"Al Ittihad\",\"MLS\":\"Inter Miami\",\"K League 1\":\"Pohang Steelers\"},\"moves\":[],\"topScorer\":null,\"intl\":{\"name\":\"European Championship\",\"champion\":\"England\"}},\"clubs\":{\"Kylian Mbappé\":\"Real Madrid\",\"Erling Haaland\":\"Man City\",\"Jude Bellingham\":\"Real Madrid\",\"Vinícius Jr\":\"Real Madrid\",\"Lamine Yamal\":\"Barcelona\",\"Florian Wirtz\":\"Liverpool\",\"Jamal Musiala\":\"Bayern Munich\",\"Bukayo Saka\":\"Arsenal\",\"Pedri\":\"Barcelona\",\"Rodri\":\"Barcelona\",\"Federico Valverde\":\"Real Madrid\",\"Harry Kane\":\"Bayern Munich\",\"Mohamed Salah\":\"Trabzonspor\",\"Phil Foden\":\"Man City\",\"Declan Rice\":\"Arsenal\",\"Raphinha\":\"Barcelona\",\"Endrick\":\"Real Madrid\",\"Nico Williams\":\"Athletic Bilbao\",\"Désiré Doué\":\"PSG\",\"Kobbie Mainoo\":\"Man United\",\"Gianluigi Donnarumma\":\"Man City\",\"Ousmane Dembélé\":\"PSG\"},\"rivalClub\":null,\"seed\":767208762,\"offers\":0,\"perksTaken\":0},\"frozenOut\":0,\"badSeasonStreak\":0,\"story\":[{\"year\":2026,\"age\":16,\"club\":\"Lyon Youth\",\"lines\":[\"📋 Joined Lyon Youth Academy aged 16\"]},{\"year\":2027,\"age\":17,\"club\":\"Lyon Youth\",\"lines\":[\"📈 Stats improved during youth development (OVR 59)\",\"📩 Professional contract offers received!\",\"✍️ Signed with Lyon 🇫🇷 (5yr, €12k/wk)\",\"🏠 One of our own! The Lyon academy kid signs a first-team deal. The ultras already have a chant ready.\"]}],\"sponsorBonus\":0,\"money\":{\"seed\":4290540860,\"vault\":0,\"hold\":{\"ladder\":0,\"bricks\":0,\"cleats\":0,\"screens\":0,\"spark\":0},\"cost\":{\"ladder\":0,\"bricks\":0,\"cleats\":0,\"screens\":0,\"spark\":0},\"price\":{\"ladder\":105.6,\"bricks\":104.6,\"cleats\":123.6,\"screens\":79.63,\"spark\":138.5},\"hist\":{\"ladder\":[100,102.35,105.6],\"bricks\":[100,97.87,104.6],\"cleats\":[100,104.12,123.6],\"screens\":[100,108.33,79.63],\"spark\":[100,84.49,138.5]},\"log\":[],\"year\":2028,\"age\":2,\"won\":0,\"lost\":0,\"cPlays\":0,\"cNet\":0,\"cYear\":0,\"cShut\":false,\"aYear\":0,\"aBest\":0,\"aPlays\":0},\"leagueWorld\":{\"year\":2029,\"leagues\":{\"Premier League\":[\"Arsenal\",\"Man City\",\"Liverpool\",\"Chelsea\",\"Man United\",\"Tottenham\",\"Newcastle\",\"Nottingham Forest\",\"Brighton\",\"Aston Villa\",\"Everton\",\"Fulham\",\"Crystal Palace\",\"Brentford\",\"Bournemouth\",\"Sunderland\",\"Hull City\",\"Bolton Wanderers\",\"Burnley\",\"Sheffield United\"],\"Championship\":[\"West Ham\",\"Wolves\",\"Southampton\",\"Middlesbrough\",\"Swansea City\",\"Birmingham City\",\"Norwich City\",\"Stoke City\",\"Watford\",\"Wrexham\",\"Derby County\",\"QPR\",\"West Brom\",\"Bristol City\",\"Millwall\",\"Preston North End\",\"Charlton Athletic\",\"Blackburn Rovers\",\"Cardiff City\",\"Lincoln City\",\"Portsmouth\",\"Leeds United\",\"Coventry City\",\"Ipswich Town\"],\"Bundesliga\":[\"Bayern Munich\",\"Dortmund\",\"Leipzig\",\"Stuttgart\",\"Leverkusen\",\"Frankfurt\",\"Hoffenheim\",\"Augsburg\",\"Hamburg\",\"Mainz\",\"Gladbach\",\"Koln\",\"Union Berlin\",\"Werder Bremen\",\"Paderborn\",\"Elversberg\",\"Holstein Kiel\",\"Greuther Furth\"],\"2. Bundesliga\":[\"Wolfsburg\",\"St. Pauli\",\"Heidenheim\",\"Nurnberg\",\"Arminia Bielefeld\",\"Bochum\",\"Braunschweig\",\"Darmstadt\",\"Dynamo Dresden\",\"Energie Cottbus\",\"Hannover 96\",\"Hertha Berlin\",\"Kaiserslautern\",\"Karlsruhe\",\"Magdeburg\",\"Osnabruck\",\"Freiburg\",\"Schalke 04\"],\"Ligue 1\":[\"PSG\",\"Lyon\",\"Marseille\",\"Lille\",\"Nice\",\"Strasbourg\",\"Rennes\",\"Lens\",\"Lorient\",\"Toulouse\",\"Auxerre\",\"Brest\",\"Angers\",\"Le Havre\",\"Le Mans\",\"Troyes\",\"Red Star FC\",\"Nantes\"],\"Ligue 2\":[\"Metz\",\"Saint-Étienne\",\"Reims\",\"Montpellier\",\"Nancy\",\"Annecy\",\"Sochaux\",\"Dijon\",\"Pau\",\"Guingamp\",\"Dunkerque\",\"Grenoble\",\"Rodez\",\"Clermont\",\"Boulogne\",\"Laval\",\"Monaco\",\"Paris FC\"],\"Serie A\":[\"Inter Milan\",\"Juventus\",\"Roma\",\"Como\",\"AC Milan\",\"Napoli\",\"Atalanta\",\"Fiorentina\",\"Lazio\",\"Genoa\",\"Parma\",\"Udinese\",\"Cagliari\",\"Lecce\",\"Monza\",\"Venezia\",\"Frosinone\",\"Cremonese\",\"Juve Stabia\",\"Avellino\"],\"Serie B\":[\"Verona\",\"Pisa\",\"Carrarese\",\"Catanzaro\",\"Cesena\",\"Empoli\",\"Entella\",\"Mantova\",\"Modena\",\"Padova\",\"Palermo\",\"Sampdoria\",\"Südtirol\",\"Vicenza\",\"Arezzo\",\"Benevento\",\"Ascoli\",\"Sassuolo\",\"Torino\",\"Bologna\"],\"La Liga\":[\"Real Madrid\",\"Barcelona\",\"Atletico Madrid\",\"Athletic Bilbao\",\"Sevilla\",\"Villarreal\",\"Real Sociedad\",\"Real Betis\",\"Celta Vigo\",\"Levante\",\"Getafe\",\"Racing Santander\",\"Rayo Vallecano\",\"Osasuna\",\"Elche\",\"Alaves\",\"Malaga\",\"Albacete\",\"Sabadell\",\"Girona\"],\"Segunda Division\":[\"Real Oviedo\",\"Mallorca\",\"Eibar\",\"Castellón\",\"Almería\",\"Burgos\",\"Sporting Gijón\",\"Granada\",\"Las Palmas\",\"Tenerife\",\"Leganés\",\"Valladolid\",\"Córdoba\",\"Eldense\",\"Cádiz\",\"FC Andorra\",\"Ceuta\",\"Deportivo\",\"Espanyol\",\"Valencia\"]},\"movements\":[{\"club\":\"Leeds United\",\"from\":\"Premier League\",\"to\":\"Championship\",\"kind\":\"relegated\"},{\"club\":\"Coventry City\",\"from\":\"Premier League\",\"to\":\"Championship\",\"kind\":\"relegated\"},{\"club\":\"Ipswich Town\",\"from\":\"Premier League\",\"to\":\"Championship\",\"kind\":\"relegated\"},{\"club\":\"Bolton Wanderers\",\"from\":\"Championship\",\"to\":\"Premier League\",\"kind\":\"promoted\"},{\"club\":\"Burnley\",\"from\":\"Championship\",\"to\":\"Premier League\",\"kind\":\"promoted\"},{\"club\":\"Sheffield United\",\"from\":\"Championship\",\"to\":\"Premier League\",\"kind\":\"promoted\"},{\"club\":\"Freiburg\",\"from\":\"Bundesliga\",\"to\":\"2. Bundesliga\",\"kind\":\"relegated\"},{\"club\":\"Schalke 04\",\"from\":\"Bundesliga\",\"to\":\"2. Bundesliga\",\"kind\":\"relegated\"},{\"club\":\"Holstein Kiel\",\"from\":\"2. Bundesliga\",\"to\":\"Bundesliga\",\"kind\":\"promoted\"},{\"club\":\"Greuther Furth\",\"from\":\"2. Bundesliga\",\"to\":\"Bundesliga\",\"kind\":\"promoted\"},{\"club\":\"Monaco\",\"from\":\"Ligue 1\",\"to\":\"Ligue 2\",\"kind\":\"relegated\"},{\"club\":\"Paris FC\",\"from\":\"Ligue 1\",\"to\":\"Ligue 2\",\"kind\":\"relegated\"},{\"club\":\"Red Star FC\",\"from\":\"Ligue 2\",\"to\":\"Ligue 1\",\"kind\":\"promoted\"},{\"club\":\"Nantes\",\"from\":\"Ligue 2\",\"to\":\"Ligue 1\",\"kind\":\"promoted\"},{\"club\":\"Sassuolo\",\"from\":\"Serie A\",\"to\":\"Serie B\",\"kind\":\"relegated\"},{\"club\":\"Torino\",\"from\":\"Serie A\",\"to\":\"Serie B\",\"kind\":\"relegated\"},{\"club\":\"Bologna\",\"from\":\"Serie A\",\"to\":\"Serie B\",\"kind\":\"relegated\"},{\"club\":\"Cremonese\",\"from\":\"Serie B\",\"to\":\"Serie A\",\"kind\":\"promoted\"},{\"club\":\"Juve Stabia\",\"from\":\"Serie B\",\"to\":\"Serie A\",\"kind\":\"promoted\"},{\"club\":\"Avellino\",\"from\":\"Serie B\",\"to\":\"Serie A\",\"kind\":\"promoted\"},{\"club\":\"Deportivo\",\"from\":\"La Liga\",\"to\":\"Segunda Division\",\"kind\":\"relegated\"},{\"club\":\"Espanyol\",\"from\":\"La Liga\",\"to\":\"Segunda Division\",\"kind\":\"relegated\"},{\"club\":\"Valencia\",\"from\":\"La Liga\",\"to\":\"Segunda Division\",\"kind\":\"relegated\"},{\"club\":\"Albacete\",\"from\":\"Segunda Division\",\"to\":\"La Liga\",\"kind\":\"promoted\"},{\"club\":\"Sabadell\",\"from\":\"Segunda Division\",\"to\":\"La Liga\",\"kind\":\"promoted\"},{\"club\":\"Girona\",\"from\":\"Segunda Division\",\"to\":\"La Liga\",\"kind\":\"promoted\"}]},\"generatedBallonPool\":{\"version\":1,\"year\":2028,\"nextId\":3,\"entries\":[{\"name\":\"Ferdi Doornbos\",\"nationality\":\"Belgium\",\"position\":\"LW\",\"club\":\"AC Milan\",\"baseGoals\":[10,28],\"id\":0,\"role\":\"primary\",\"slot\":0,\"seed\":9900,\"firstYear\":2028,\"entryAge\":26,\"retiredYear\":null},{\"name\":\"Shohei Nishizawa\",\"nationality\":\"Japan\",\"position\":\"CDM\",\"club\":\"Chelsea\",\"baseGoals\":[2,8],\"id\":1,\"role\":\"primary\",\"slot\":1,\"seed\":9901,\"firstYear\":2028,\"entryAge\":27,\"retiredYear\":null},{\"name\":\"Agustín Quiroga\",\"nationality\":\"Argentina\",\"position\":\"RW\",\"club\":\"Arsenal\",\"baseGoals\":[10,28],\"id\":2,\"role\":\"primary\",\"slot\":2,\"seed\":9902,\"firstYear\":2028,\"entryAge\":27,\"retiredYear\":null}]},\"eventLastFired\":{\"200\":2028,\"236\":2028,\"247\":2028},\"loyaltyContracts\":{\"v\":1,\"deals\":[],\"pending\":{\"key\":\"[\\\"Serie B Retained Choices\\\",\\\"\\\",\\\"transfer_window\\\",2029,\\\"[\\\\\\\"Carrarese\\\\\\\",\\\\\\\"Italy\\\\\\\",\\\\\\\"Serie B\\\\\\\",\\\\\\\"#64748b\\\\\\\",4,3579,5,0.6,false,false,false,false]\\\",3579]\",\"offerToken\":\"[\\\"Carrarese\\\",\\\"Italy\\\",\\\"Serie B\\\",\\\"#64748b\\\",4,3579,5,0.6,false,false,false,false]\",\"club\":\"Carrarese\",\"firstYear\":2029,\"finalYear\":2033,\"years\":5,\"baseWeeklyWage\":3579,\"weeklyWage\":3221,\"bonusEuros\":139581}}}",
+        "value": {
+          "playerName": "Serie B Retained Choices",
+          "nationality": "France",
+          "position": "CM",
+          "era": "2020s",
+          "age": 18,
+          "potential": 65,
+          "potentialEarned": 0,
+          "eliteStreak": 0,
+          "startingOverall": 55,
+          "physique": {
+            "heightCm": 180,
+            "weightKg": 75
+          },
+          "attrShape": {},
+          "karma": 50,
+          "phoneUsedIds": [
+            "lost_wallet",
+            "barber_cut"
+          ],
+          "phoneInbox": [
+            {
+              "id": "lost_wallet-2026",
+              "defId": "lost_wallet",
+              "from": "Groundskeeper",
+              "emoji": "👛",
+              "text": "Found a wallet in the car park with 800 quid inside. No ID. What do I do with it?",
+              "year": 2026,
+              "choices": [
+                {
+                  "label": "Hand it to reception",
+                  "reply": "Reception, mate. Someone's having a bad day",
+                  "karma": 6
+                },
+                {
+                  "label": "Finders keepers",
+                  "reply": "That's the football gods paying you. Keep it",
+                  "karma": -6
+                }
+              ]
+            },
+            {
+              "id": "barber_cut-2026",
+              "defId": "barber_cut",
+              "from": "Barber",
+              "emoji": "💈",
+              "text": "New style idea for you. Bold. Might break the internet, might get you fined by the boss. You in?",
+              "year": 2026,
+              "choices": [
+                {
+                  "label": "Send it",
+                  "reply": "Chair. Tomorrow. Do your worst",
+                  "karma": 2,
+                  "popularity": 4
+                },
+                {
+                  "label": "Keep it classic",
+                  "reply": "Usual trim mate, big game week",
+                  "karma": 1
+                }
+              ]
+            }
+          ],
+          "currentClub": "Carrarese",
+          "currentClubCountry": "Italy",
+          "currentClubTier": 4,
+          "currentClubColor": "#64748b",
+          "currentLeague": "Serie B",
+          "contractYearsLeft": 5,
+          "weeklyWage": 3221,
+          "marketValue": 2,
+          "pace": 58,
+          "shooting": 59,
+          "passing": 61,
+          "dribbling": 60,
+          "defending": 58,
+          "physical": 60,
+          "reflexes": 58,
+          "overall": 59,
+          "seasons": [
+            {
+              "year": 2026,
+              "age": 16,
+              "club": "Lyon Youth",
+              "clubCountry": "France",
+              "clubTier": 2,
+              "apps": 0,
+              "goals": 0,
+              "assists": 0,
+              "cleanSheets": 0,
+              "yellowCards": 0,
+              "redCards": 0,
+              "rating": 0,
+              "leagueTitle": false,
+              "domesticCup": false,
+              "championsLeague": false,
+              "worldCup": false,
+              "ballonDor": false,
+              "ballonDorRank": null,
+              "type": "youth",
+              "intApps": 0,
+              "intGoals": 0,
+              "intAssists": 0,
+              "intRating": 0,
+              "tournament": null,
+              "tournamentResult": null
+            },
+            {
+              "year": 2027,
+              "age": 17,
+              "club": "Lyon Youth",
+              "clubCountry": "France",
+              "clubTier": 2,
+              "apps": 15,
+              "goals": 1,
+              "assists": 3,
+              "cleanSheets": 0,
+              "yellowCards": 1,
+              "redCards": 0,
+              "rating": 0,
+              "leagueTitle": false,
+              "domesticCup": false,
+              "championsLeague": false,
+              "worldCup": false,
+              "ballonDor": false,
+              "ballonDorRank": null,
+              "type": "youth",
+              "intApps": 0,
+              "intGoals": 0,
+              "intAssists": 0,
+              "intRating": 0,
+              "tournament": null,
+              "tournamentResult": null
+            },
+            {
+              "year": 2028,
+              "age": 18,
+              "club": "Lyon",
+              "clubCountry": "France",
+              "clubTier": 2,
+              "apps": 26,
+              "leagueApps": 14,
+              "goals": 5,
+              "assists": 6,
+              "cleanSheets": 0,
+              "yellowCards": 3,
+              "redCards": 0,
+              "rating": 5.6,
+              "ovr": 59,
+              "injury": null,
+              "injuryWeeks": 0,
+              "injurySevere": false,
+              "leagueTitle": false,
+              "leagueFinish": 10,
+              "leagueSize": 18,
+              "derbies": [
+                {
+                  "rival": "Marseille",
+                  "name": "Choc des Olympiques",
+                  "kind": "rivalry",
+                  "meetings": [
+                    {
+                      "home": false,
+                      "gf": 2,
+                      "ga": 0,
+                      "played": true,
+                      "goals": 0
+                    },
+                    {
+                      "home": true,
+                      "gf": 1,
+                      "ga": 1,
+                      "played": false,
+                      "goals": 0
+                    }
+                  ]
+                }
+              ],
+              "domesticCup": false,
+              "championsLeague": false,
+              "worldCup": false,
+              "ballonDor": false,
+              "ballonDorRank": null,
+              "type": "playing",
+              "intApps": 0,
+              "intGoals": 0,
+              "intAssists": 0,
+              "intRating": 0,
+              "tournament": "European Championship",
+              "tournamentResult": null,
+              "leagueWorld": {
+                "league": "Ligue 1",
+                "members": [
+                  "PSG",
+                  "Lyon",
+                  "Marseille",
+                  "Monaco",
+                  "Lille",
+                  "Nice",
+                  "Strasbourg",
+                  "Rennes",
+                  "Lens",
+                  "Lorient",
+                  "Toulouse",
+                  "Auxerre",
+                  "Paris FC",
+                  "Brest",
+                  "Angers",
+                  "Le Havre",
+                  "Le Mans",
+                  "Troyes"
+                ],
+                "champion": "Marseille",
+                "simulation": "simulated",
+                "movements": [
+                  {
+                    "club": "Monaco",
+                    "from": "Ligue 1",
+                    "to": "Ligue 2",
+                    "kind": "relegated"
+                  },
+                  {
+                    "club": "Paris FC",
+                    "from": "Ligue 1",
+                    "to": "Ligue 2",
+                    "kind": "relegated"
+                  }
+                ]
+              },
+              "cupRun": {
+                "cup": "Coupe de France",
+                "stages": [
+                  {
+                    "stage": "early",
+                    "won": true
+                  },
+                  {
+                    "stage": "QF",
+                    "opp": "Boulogne",
+                    "won": false,
+                    "for": 1,
+                    "against": 3,
+                    "home": false
+                  }
+                ],
+                "opening": {
+                  "opp": "Strasbourg",
+                  "country": "France",
+                  "league": "Ligue 1",
+                  "won": true,
+                  "for": 3,
+                  "against": 0,
+                  "home": true
+                }
+              }
+            }
+          ],
+          "events": [
+            "🔥 Choc des Olympiques against Marseille: W 2-0 away, D 1-1 at home (you missed it).",
+            "🌍 England won the European Championship.",
+            "🎭 You leaned into it: The Showman is born",
+            "🦝 Gaffer Two is now official staff. Attendance: perfect",
+            "🤝 Lent a teammate €200k on a handshake",
+            "✍️ Signed with Carrarese 🇮🇹 (5yr, €3k/wk) · Agent fee: €0.1M",
+            "Loyalty contract: EUR 3,221 a week, EUR 139,581 after 5 recorded contract seasons."
+          ],
+          "retired": false,
+          "phase": "playing",
+          "pendingOffers": [],
+          "pendingSummary": null,
+          "transferSituation": null,
+          "loan": null,
+          "pendingLoanOffers": null,
+          "pendingEvents": [],
+          "lastEventId": 236,
+          "statBoostNextSeason": {},
+          "pendingNews": [],
+          "internationalCareer": false,
+          "sponsorDeal": null,
+          "totalEarnings": 0.63,
+          "popularity": 22,
+          "morale": 80,
+          "isLeader": false,
+          "hasRelationship": false,
+          "intStats": {
+            "caps": 0,
+            "goals": 0,
+            "assists": 0,
+            "tournaments": 0,
+            "worldCups": 0,
+            "continentals": 0,
+            "worldCupWins": 0,
+            "continentalWins": 0,
+            "isCaptain": false,
+            "isRetired": false,
+            "debutYear": null,
+            "debutAge": null,
+            "worldCupResults": [],
+            "squadSnubs": 0,
+            "failedQualifications": 0
+          },
+          "pendingWorldCup": null,
+          "pendingTournament": null,
+          "lastTournament": {
+            "year": 2028,
+            "name": "European Championship",
+            "short": "Euros",
+            "kind": "Continental",
+            "confederation": "UEFA",
+            "nation": "France",
+            "teams": 24,
+            "qualifying": {
+              "confederation": "UEFA",
+              "table": [
+                {
+                  "nation": "France",
+                  "played": 10,
+                  "won": 9,
+                  "drawn": 1,
+                  "lost": 0,
+                  "gf": 34,
+                  "ga": 4,
+                  "points": 28
+                },
+                {
+                  "nation": "Romania",
+                  "played": 10,
+                  "won": 5,
+                  "drawn": 3,
+                  "lost": 2,
+                  "gf": 14,
+                  "ga": 10,
+                  "points": 18
+                },
+                {
+                  "nation": "Georgia",
+                  "played": 10,
+                  "won": 3,
+                  "drawn": 2,
+                  "lost": 5,
+                  "gf": 10,
+                  "ga": 14,
+                  "points": 11
+                },
+                {
+                  "nation": "Wales",
+                  "played": 10,
+                  "won": 3,
+                  "drawn": 2,
+                  "lost": 5,
+                  "gf": 15,
+                  "ga": 22,
+                  "points": 11
+                },
+                {
+                  "nation": "Lithuania",
+                  "played": 10,
+                  "won": 2,
+                  "drawn": 2,
+                  "lost": 6,
+                  "gf": 13,
+                  "ga": 24,
+                  "points": 8
+                },
+                {
+                  "nation": "Azerbaijan",
+                  "played": 10,
+                  "won": 1,
+                  "drawn": 4,
+                  "lost": 5,
+                  "gf": 12,
+                  "ga": 24,
+                  "points": 7
+                }
+              ],
+              "myPosition": 1,
+              "through": 3,
+              "qualified": true,
+              "automatic": false
+            },
+            "qualified": true,
+            "squad": {
+              "called": false,
+              "role": null,
+              "myRank": 14,
+              "poolSize": 14,
+              "places": 6,
+              "myScore": 0,
+              "cutScore": 81,
+              "reason": "You are not in the France setup.",
+              "xi": {
+                "formation": "4-3-3",
+                "gk": [
+                  {
+                    "slot": "GK",
+                    "name": "Sylvain Ferrand",
+                    "ovr": 87,
+                    "me": false
+                  }
+                ],
+                "def": [
+                  {
+                    "slot": "LB",
+                    "name": "Hervé Noirot",
+                    "ovr": 81,
+                    "me": false
+                  },
+                  {
+                    "slot": "CB",
+                    "name": "Damien Thibaudeau",
+                    "ovr": 87,
+                    "me": false
+                  },
+                  {
+                    "slot": "CB",
+                    "name": "Maxence Lallemand",
+                    "ovr": 86,
+                    "me": false
+                  },
+                  {
+                    "slot": "RB",
+                    "name": "Baptiste Beaumont",
+                    "ovr": 83,
+                    "me": false
+                  }
+                ],
+                "mid": [
+                  {
+                    "slot": "CM",
+                    "name": "Yann Delcourt",
+                    "ovr": 86,
+                    "me": false
+                  },
+                  {
+                    "slot": "CDM",
+                    "name": "Nolan Guillory",
+                    "ovr": 85,
+                    "me": false
+                  },
+                  {
+                    "slot": "CM",
+                    "name": "Émile Rousselot",
+                    "ovr": 86,
+                    "me": false
+                  }
+                ],
+                "att": [
+                  {
+                    "slot": "LW",
+                    "name": "Alban Chauvet",
+                    "ovr": 84,
+                    "me": false
+                  },
+                  {
+                    "slot": "ST",
+                    "name": "Corentin Vaugrenard",
+                    "ovr": 88,
+                    "me": false
+                  },
+                  {
+                    "slot": "RW",
+                    "name": "Loïc Marchetti",
+                    "ovr": 84,
+                    "me": false
+                  }
+                ],
+                "mySlot": null,
+                "aheadOfMe": null
+              }
+            },
+            "groupTable": [
+              {
+                "nation": "Croatia",
+                "played": 3,
+                "won": 2,
+                "drawn": 1,
+                "lost": 0,
+                "gf": 5,
+                "ga": 1,
+                "points": 7
+              },
+              {
+                "nation": "Wales",
+                "played": 3,
+                "won": 2,
+                "drawn": 1,
+                "lost": 0,
+                "gf": 4,
+                "ga": 2,
+                "points": 7
+              },
+              {
+                "nation": "France",
+                "played": 3,
+                "won": 1,
+                "drawn": 0,
+                "lost": 2,
+                "gf": 3,
+                "ga": 3,
+                "points": 3
+              },
+              {
+                "nation": "Slovakia",
+                "played": 3,
+                "won": 0,
+                "drawn": 0,
+                "lost": 3,
+                "gf": 1,
+                "ga": 7,
+                "points": 0
+              }
+            ],
+            "bracket": [
+              {
+                "round": "R16",
+                "slot": 0,
+                "home": "Ukraine",
+                "away": "Belgium",
+                "homeGoals": 1,
+                "awayGoals": 1,
+                "pens": true,
+                "winner": "Belgium",
+                "mine": false
+              },
+              {
+                "round": "R16",
+                "slot": 1,
+                "home": "England",
+                "away": "Italy",
+                "homeGoals": 2,
+                "awayGoals": 0,
+                "pens": false,
+                "winner": "England",
+                "mine": false
+              },
+              {
+                "round": "R16",
+                "slot": 2,
+                "home": "Norway",
+                "away": "Spain",
+                "homeGoals": 1,
+                "awayGoals": 3,
+                "pens": false,
+                "winner": "Spain",
+                "mine": false
+              },
+              {
+                "round": "R16",
+                "slot": 3,
+                "home": "Germany",
+                "away": "Romania",
+                "homeGoals": 1,
+                "awayGoals": 0,
+                "pens": false,
+                "winner": "Germany",
+                "mine": false
+              },
+              {
+                "round": "R16",
+                "slot": 4,
+                "home": "Croatia",
+                "away": "Turkey",
+                "homeGoals": 2,
+                "awayGoals": 0,
+                "pens": false,
+                "winner": "Croatia",
+                "mine": false
+              },
+              {
+                "round": "R16",
+                "slot": 5,
+                "home": "Wales",
+                "away": "France",
+                "homeGoals": 1,
+                "awayGoals": 1,
+                "pens": true,
+                "winner": "Wales",
+                "mine": true
+              },
+              {
+                "round": "R16",
+                "slot": 6,
+                "home": "Switzerland",
+                "away": "Netherlands",
+                "homeGoals": 1,
+                "awayGoals": 1,
+                "pens": true,
+                "winner": "Netherlands",
+                "mine": false
+              },
+              {
+                "round": "R16",
+                "slot": 7,
+                "home": "Serbia",
+                "away": "Greece",
+                "homeGoals": 3,
+                "awayGoals": 0,
+                "pens": false,
+                "winner": "Serbia",
+                "mine": false
+              },
+              {
+                "round": "QF",
+                "slot": 0,
+                "home": "Belgium",
+                "away": "England",
+                "homeGoals": 2,
+                "awayGoals": 3,
+                "pens": false,
+                "winner": "England",
+                "mine": false
+              },
+              {
+                "round": "QF",
+                "slot": 1,
+                "home": "Spain",
+                "away": "Germany",
+                "homeGoals": 1,
+                "awayGoals": 3,
+                "pens": false,
+                "winner": "Germany",
+                "mine": false
+              },
+              {
+                "round": "QF",
+                "slot": 2,
+                "home": "Croatia",
+                "away": "Wales",
+                "homeGoals": 2,
+                "awayGoals": 1,
+                "pens": false,
+                "winner": "Croatia",
+                "mine": false
+              },
+              {
+                "round": "QF",
+                "slot": 3,
+                "home": "Netherlands",
+                "away": "Serbia",
+                "homeGoals": 4,
+                "awayGoals": 0,
+                "pens": false,
+                "winner": "Netherlands",
+                "mine": false
+              },
+              {
+                "round": "SF",
+                "slot": 0,
+                "home": "England",
+                "away": "Germany",
+                "homeGoals": 3,
+                "awayGoals": 1,
+                "pens": false,
+                "winner": "England",
+                "mine": false
+              },
+              {
+                "round": "SF",
+                "slot": 1,
+                "home": "Croatia",
+                "away": "Netherlands",
+                "homeGoals": 3,
+                "awayGoals": 4,
+                "pens": false,
+                "winner": "Netherlands",
+                "mine": false
+              },
+              {
+                "round": "F",
+                "slot": 0,
+                "home": "England",
+                "away": "Netherlands",
+                "homeGoals": 1,
+                "awayGoals": 1,
+                "pens": true,
+                "winner": "England",
+                "mine": false
+              }
+            ],
+            "champion": "England",
+            "runnerUp": "Netherlands",
+            "groupLabel": "Group E",
+            "thirdsThrough": 4,
+            "myResult": "Not Selected",
+            "matches": [],
+            "playerApps": 0,
+            "playerGoals": 0,
+            "playerAssists": 0,
+            "playerAvgRating": 0,
+            "goldenBoot": false,
+            "bestPlayer": false
+          },
+          "intlHistory": [
+            {
+              "year": 2028,
+              "short": "Euros",
+              "nation": "France",
+              "champion": "England",
+              "myResult": "",
+              "apps": 0,
+              "goals": 0
+            }
+          ],
+          "rival": null,
+          "rivalCreated": false,
+          "pendingRivalryEvent": null,
+          "lastRivalryEventId": null,
+          "rivalrySummary": null,
+          "netWorth": 0.38,
+          "lifestyleLevel": "Humble",
+          "lifestyleCostPerYear": 0.05,
+          "socialMediaFollowers": 1.16,
+          "sponsorshipIncome": 0,
+          "properties": [],
+          "investments": [],
+          "consecutiveDeficitYears": 0,
+          "agentFeesPaid": 0.06,
+          "family": {
+            "isMarried": false,
+            "marriedAge": null,
+            "children": 0,
+            "isDivorced": false,
+            "divorceAge": null
+          },
+          "purchasedItems": [],
+          "investmentHoldings": [],
+          "totalAssetValue": 0,
+          "customYearlyCosts": 0,
+          "awards": [],
+          "pendingBallonDor": null,
+          "lastUCLResult": {
+            "qualified": false,
+            "matches": [],
+            "result": "N/A",
+            "playerGoals": 0,
+            "isTopScorer": false,
+            "seasonYear": 2028,
+            "club": "Lyon"
+          },
+          "legacy": null,
+          "postRetirementChoice": null,
+          "managerState": null,
+          "isFinalSeason": false,
+          "isPundit": false,
+          "punditEvents": [],
+          "primeType": "late",
+          "socialMediaActionUsedThisSeason": false,
+          "socialMediaFocusBoost": false,
+          "pendingCoverAthleteEvent": false,
+          "coverAthleteAccepted": false,
+          "activeSponsorship": null,
+          "personality": "showman",
+          "agentId": null,
+          "lifeFlags": {
+            "teammateLoan": 1
+          },
+          "appearance": null,
+          "corruptionHeat": 0,
+          "dirtyMoney": 0,
+          "prisonSeasons": 0,
+          "academyClubName": "Lyon",
+          "moralDilemmasTriggered": [],
+          "pendingMoralDilemma": null,
+          "pedSeasonsRemaining": 0,
+          "pedActive": false,
+          "matchFixBanned": 0,
+          "divingActive": false,
+          "integrityBonus": 2,
+          "pendingAppealResult": null,
+          "childEventsSeen": [],
+          "pregnancyAnnounced": false,
+          "punditState": null,
+          "ownerState": null,
+          "peakOverall": 59,
+          "retirementSuggested": false,
+          "phone": {
+            "threads": [
+              {
+                "id": "th_x_groundskeeper",
+                "c": "other",
+                "name": "Groundskeeper",
+                "emoji": "💬",
+                "lines": [
+                  {
+                    "w": 0,
+                    "t": "Found a wallet in the car park with 800 quid inside. No ID. What do I do with it?",
+                    "y": 2026
+                  },
+                  {
+                    "w": 0,
+                    "t": "Chasing this one. Let me know either way.",
+                    "y": 2027
+                  }
+                ],
+                "rel": 36,
+                "pending": {
+                  "kind": "legacy",
+                  "msgId": "lost_wallet-2026"
+                },
+                "waiting": 2027,
+                "cold": 1,
+                "seen": [],
+                "lastReplyYear": null
+              },
+              {
+                "id": "th_dad",
+                "c": "dad",
+                "name": "Dad",
+                "emoji": "🧔",
+                "lines": [
+                  {
+                    "w": 0,
+                    "t": "Watched it back three times. You were dropping too deep in the second half son. Coming to get the ball because you wanted a touch.",
+                    "y": 2026
+                  },
+                  {
+                    "w": 0,
+                    "t": "Hello? Anyone in there?",
+                    "y": 2027
+                  }
+                ],
+                "rel": 36,
+                "pending": {
+                  "kind": "convo",
+                  "convo": "dad_analysis",
+                  "beat": 0
+                },
+                "waiting": 2027,
+                "cold": 1,
+                "seen": [
+                  "dad_analysis"
+                ],
+                "lastReplyYear": null
+              },
+              {
+                "id": "th_x_barber",
+                "c": "other",
+                "name": "Barber",
+                "emoji": "💬",
+                "lines": [
+                  {
+                    "w": 0,
+                    "t": "New style idea for you. Bold. Might break the internet, might get you fined by the boss. You in?",
+                    "y": 2026
+                  },
+                  {
+                    "w": 0,
+                    "t": "Chasing this one. Let me know either way.",
+                    "y": 2027
+                  }
+                ],
+                "rel": 36,
+                "pending": {
+                  "kind": "legacy",
+                  "msgId": "barber_cut-2026"
+                },
+                "waiting": 2027,
+                "cold": 1,
+                "seen": [],
+                "lastReplyYear": null
+              }
+            ],
+            "feed": [
+              "⭐ Leverkusen are champions of Europe.",
+              "🏆 Arsenal win the Premier League.",
+              "🏆 Barcelona win La Liga.",
+              "🌍 England win the European Championship.",
+              "🔮 Your world's 2028-29, as it played out:"
+            ],
+            "world": {
+              "year": 2028,
+              "ucl": "Leverkusen",
+              "leagues": {
+                "Premier League": "Arsenal",
+                "La Liga": "Barcelona",
+                "Bundesliga": "Bayern Munich",
+                "Serie A": "Juventus",
+                "Ligue 1": "Marseille",
+                "Primeira Liga": "Porto",
+                "Eredivisie": "Feyenoord",
+                "Scottish Premiership": "Rangers",
+                "Brasileirao": "Palmeiras",
+                "Saudi Pro League": "Al Hilal",
+                "MLS": "Seattle Sounders",
+                "K League 1": "Ulsan HD",
+                "Championship": "Bolton Wanderers",
+                "2. Bundesliga": "Holstein Kiel",
+                "Ligue 2": "Red Star FC",
+                "Serie B": "Cremonese",
+                "Segunda Division": "Albacete"
+              },
+              "cups": {
+                "Premier League": "Man United",
+                "La Liga": "Athletic Bilbao",
+                "Bundesliga": "Dortmund",
+                "Serie A": "Juventus",
+                "Ligue 1": "Monaco",
+                "Primeira Liga": "Porto",
+                "Eredivisie": "Feyenoord",
+                "Scottish Premiership": "Celtic",
+                "Brasileirao": "Palmeiras",
+                "Saudi Pro League": "Al Ittihad",
+                "MLS": "Inter Miami",
+                "K League 1": "Pohang Steelers"
+              },
+              "moves": [],
+              "topScorer": null,
+              "intl": {
+                "name": "European Championship",
+                "champion": "England"
+              }
+            },
+            "clubs": {
+              "Kylian Mbappé": "Real Madrid",
+              "Erling Haaland": "Man City",
+              "Jude Bellingham": "Real Madrid",
+              "Vinícius Jr": "Real Madrid",
+              "Lamine Yamal": "Barcelona",
+              "Florian Wirtz": "Liverpool",
+              "Jamal Musiala": "Bayern Munich",
+              "Bukayo Saka": "Arsenal",
+              "Pedri": "Barcelona",
+              "Rodri": "Barcelona",
+              "Federico Valverde": "Real Madrid",
+              "Harry Kane": "Bayern Munich",
+              "Mohamed Salah": "Trabzonspor",
+              "Phil Foden": "Man City",
+              "Declan Rice": "Arsenal",
+              "Raphinha": "Barcelona",
+              "Endrick": "Real Madrid",
+              "Nico Williams": "Athletic Bilbao",
+              "Désiré Doué": "PSG",
+              "Kobbie Mainoo": "Man United",
+              "Gianluigi Donnarumma": "Man City",
+              "Ousmane Dembélé": "PSG"
+            },
+            "rivalClub": null,
+            "seed": 767208762,
+            "offers": 0,
+            "perksTaken": 0
+          },
+          "frozenOut": 0,
+          "badSeasonStreak": 0,
+          "story": [
+            {
+              "year": 2026,
+              "age": 16,
+              "club": "Lyon Youth",
+              "lines": [
+                "📋 Joined Lyon Youth Academy aged 16"
+              ]
+            },
+            {
+              "year": 2027,
+              "age": 17,
+              "club": "Lyon Youth",
+              "lines": [
+                "📈 Stats improved during youth development (OVR 59)",
+                "📩 Professional contract offers received!",
+                "✍️ Signed with Lyon 🇫🇷 (5yr, €12k/wk)",
+                "🏠 One of our own! The Lyon academy kid signs a first-team deal. The ultras already have a chant ready."
+              ]
+            }
+          ],
+          "sponsorBonus": 0,
+          "money": {
+            "seed": 4290540860,
+            "vault": 0,
+            "hold": {
+              "ladder": 0,
+              "bricks": 0,
+              "cleats": 0,
+              "screens": 0,
+              "spark": 0
+            },
+            "cost": {
+              "ladder": 0,
+              "bricks": 0,
+              "cleats": 0,
+              "screens": 0,
+              "spark": 0
+            },
+            "price": {
+              "ladder": 105.6,
+              "bricks": 104.6,
+              "cleats": 123.6,
+              "screens": 79.63,
+              "spark": 138.5
+            },
+            "hist": {
+              "ladder": [
+                100,
+                102.35,
+                105.6
+              ],
+              "bricks": [
+                100,
+                97.87,
+                104.6
+              ],
+              "cleats": [
+                100,
+                104.12,
+                123.6
+              ],
+              "screens": [
+                100,
+                108.33,
+                79.63
+              ],
+              "spark": [
+                100,
+                84.49,
+                138.5
+              ]
+            },
+            "log": [],
+            "year": 2028,
+            "age": 2,
+            "won": 0,
+            "lost": 0,
+            "cPlays": 0,
+            "cNet": 0,
+            "cYear": 0,
+            "cShut": false,
+            "aYear": 0,
+            "aBest": 0,
+            "aPlays": 0
+          },
+          "leagueWorld": {
+            "year": 2029,
+            "leagues": {
+              "Premier League": [
+                "Arsenal",
+                "Man City",
+                "Liverpool",
+                "Chelsea",
+                "Man United",
+                "Tottenham",
+                "Newcastle",
+                "Nottingham Forest",
+                "Brighton",
+                "Aston Villa",
+                "Everton",
+                "Fulham",
+                "Crystal Palace",
+                "Brentford",
+                "Bournemouth",
+                "Sunderland",
+                "Hull City",
+                "Bolton Wanderers",
+                "Burnley",
+                "Sheffield United"
+              ],
+              "Championship": [
+                "West Ham",
+                "Wolves",
+                "Southampton",
+                "Middlesbrough",
+                "Swansea City",
+                "Birmingham City",
+                "Norwich City",
+                "Stoke City",
+                "Watford",
+                "Wrexham",
+                "Derby County",
+                "QPR",
+                "West Brom",
+                "Bristol City",
+                "Millwall",
+                "Preston North End",
+                "Charlton Athletic",
+                "Blackburn Rovers",
+                "Cardiff City",
+                "Lincoln City",
+                "Portsmouth",
+                "Leeds United",
+                "Coventry City",
+                "Ipswich Town"
+              ],
+              "Bundesliga": [
+                "Bayern Munich",
+                "Dortmund",
+                "Leipzig",
+                "Stuttgart",
+                "Leverkusen",
+                "Frankfurt",
+                "Hoffenheim",
+                "Augsburg",
+                "Hamburg",
+                "Mainz",
+                "Gladbach",
+                "Koln",
+                "Union Berlin",
+                "Werder Bremen",
+                "Paderborn",
+                "Elversberg",
+                "Holstein Kiel",
+                "Greuther Furth"
+              ],
+              "2. Bundesliga": [
+                "Wolfsburg",
+                "St. Pauli",
+                "Heidenheim",
+                "Nurnberg",
+                "Arminia Bielefeld",
+                "Bochum",
+                "Braunschweig",
+                "Darmstadt",
+                "Dynamo Dresden",
+                "Energie Cottbus",
+                "Hannover 96",
+                "Hertha Berlin",
+                "Kaiserslautern",
+                "Karlsruhe",
+                "Magdeburg",
+                "Osnabruck",
+                "Freiburg",
+                "Schalke 04"
+              ],
+              "Ligue 1": [
+                "PSG",
+                "Lyon",
+                "Marseille",
+                "Lille",
+                "Nice",
+                "Strasbourg",
+                "Rennes",
+                "Lens",
+                "Lorient",
+                "Toulouse",
+                "Auxerre",
+                "Brest",
+                "Angers",
+                "Le Havre",
+                "Le Mans",
+                "Troyes",
+                "Red Star FC",
+                "Nantes"
+              ],
+              "Ligue 2": [
+                "Metz",
+                "Saint-Étienne",
+                "Reims",
+                "Montpellier",
+                "Nancy",
+                "Annecy",
+                "Sochaux",
+                "Dijon",
+                "Pau",
+                "Guingamp",
+                "Dunkerque",
+                "Grenoble",
+                "Rodez",
+                "Clermont",
+                "Boulogne",
+                "Laval",
+                "Monaco",
+                "Paris FC"
+              ],
+              "Serie A": [
+                "Inter Milan",
+                "Juventus",
+                "Roma",
+                "Como",
+                "AC Milan",
+                "Napoli",
+                "Atalanta",
+                "Fiorentina",
+                "Lazio",
+                "Genoa",
+                "Parma",
+                "Udinese",
+                "Cagliari",
+                "Lecce",
+                "Monza",
+                "Venezia",
+                "Frosinone",
+                "Cremonese",
+                "Juve Stabia",
+                "Avellino"
+              ],
+              "Serie B": [
+                "Verona",
+                "Pisa",
+                "Carrarese",
+                "Catanzaro",
+                "Cesena",
+                "Empoli",
+                "Entella",
+                "Mantova",
+                "Modena",
+                "Padova",
+                "Palermo",
+                "Sampdoria",
+                "Südtirol",
+                "Vicenza",
+                "Arezzo",
+                "Benevento",
+                "Ascoli",
+                "Sassuolo",
+                "Torino",
+                "Bologna"
+              ],
+              "La Liga": [
+                "Real Madrid",
+                "Barcelona",
+                "Atletico Madrid",
+                "Athletic Bilbao",
+                "Sevilla",
+                "Villarreal",
+                "Real Sociedad",
+                "Real Betis",
+                "Celta Vigo",
+                "Levante",
+                "Getafe",
+                "Racing Santander",
+                "Rayo Vallecano",
+                "Osasuna",
+                "Elche",
+                "Alaves",
+                "Malaga",
+                "Albacete",
+                "Sabadell",
+                "Girona"
+              ],
+              "Segunda Division": [
+                "Real Oviedo",
+                "Mallorca",
+                "Eibar",
+                "Castellón",
+                "Almería",
+                "Burgos",
+                "Sporting Gijón",
+                "Granada",
+                "Las Palmas",
+                "Tenerife",
+                "Leganés",
+                "Valladolid",
+                "Córdoba",
+                "Eldense",
+                "Cádiz",
+                "FC Andorra",
+                "Ceuta",
+                "Deportivo",
+                "Espanyol",
+                "Valencia"
+              ]
+            },
+            "movements": [
+              {
+                "club": "Leeds United",
+                "from": "Premier League",
+                "to": "Championship",
+                "kind": "relegated"
+              },
+              {
+                "club": "Coventry City",
+                "from": "Premier League",
+                "to": "Championship",
+                "kind": "relegated"
+              },
+              {
+                "club": "Ipswich Town",
+                "from": "Premier League",
+                "to": "Championship",
+                "kind": "relegated"
+              },
+              {
+                "club": "Bolton Wanderers",
+                "from": "Championship",
+                "to": "Premier League",
+                "kind": "promoted"
+              },
+              {
+                "club": "Burnley",
+                "from": "Championship",
+                "to": "Premier League",
+                "kind": "promoted"
+              },
+              {
+                "club": "Sheffield United",
+                "from": "Championship",
+                "to": "Premier League",
+                "kind": "promoted"
+              },
+              {
+                "club": "Freiburg",
+                "from": "Bundesliga",
+                "to": "2. Bundesliga",
+                "kind": "relegated"
+              },
+              {
+                "club": "Schalke 04",
+                "from": "Bundesliga",
+                "to": "2. Bundesliga",
+                "kind": "relegated"
+              },
+              {
+                "club": "Holstein Kiel",
+                "from": "2. Bundesliga",
+                "to": "Bundesliga",
+                "kind": "promoted"
+              },
+              {
+                "club": "Greuther Furth",
+                "from": "2. Bundesliga",
+                "to": "Bundesliga",
+                "kind": "promoted"
+              },
+              {
+                "club": "Monaco",
+                "from": "Ligue 1",
+                "to": "Ligue 2",
+                "kind": "relegated"
+              },
+              {
+                "club": "Paris FC",
+                "from": "Ligue 1",
+                "to": "Ligue 2",
+                "kind": "relegated"
+              },
+              {
+                "club": "Red Star FC",
+                "from": "Ligue 2",
+                "to": "Ligue 1",
+                "kind": "promoted"
+              },
+              {
+                "club": "Nantes",
+                "from": "Ligue 2",
+                "to": "Ligue 1",
+                "kind": "promoted"
+              },
+              {
+                "club": "Sassuolo",
+                "from": "Serie A",
+                "to": "Serie B",
+                "kind": "relegated"
+              },
+              {
+                "club": "Torino",
+                "from": "Serie A",
+                "to": "Serie B",
+                "kind": "relegated"
+              },
+              {
+                "club": "Bologna",
+                "from": "Serie A",
+                "to": "Serie B",
+                "kind": "relegated"
+              },
+              {
+                "club": "Cremonese",
+                "from": "Serie B",
+                "to": "Serie A",
+                "kind": "promoted"
+              },
+              {
+                "club": "Juve Stabia",
+                "from": "Serie B",
+                "to": "Serie A",
+                "kind": "promoted"
+              },
+              {
+                "club": "Avellino",
+                "from": "Serie B",
+                "to": "Serie A",
+                "kind": "promoted"
+              },
+              {
+                "club": "Deportivo",
+                "from": "La Liga",
+                "to": "Segunda Division",
+                "kind": "relegated"
+              },
+              {
+                "club": "Espanyol",
+                "from": "La Liga",
+                "to": "Segunda Division",
+                "kind": "relegated"
+              },
+              {
+                "club": "Valencia",
+                "from": "La Liga",
+                "to": "Segunda Division",
+                "kind": "relegated"
+              },
+              {
+                "club": "Albacete",
+                "from": "Segunda Division",
+                "to": "La Liga",
+                "kind": "promoted"
+              },
+              {
+                "club": "Sabadell",
+                "from": "Segunda Division",
+                "to": "La Liga",
+                "kind": "promoted"
+              },
+              {
+                "club": "Girona",
+                "from": "Segunda Division",
+                "to": "La Liga",
+                "kind": "promoted"
+              }
+            ]
+          },
+          "generatedBallonPool": {
+            "version": 1,
+            "year": 2028,
+            "nextId": 3,
+            "entries": [
+              {
+                "name": "Ferdi Doornbos",
+                "nationality": "Belgium",
+                "position": "LW",
+                "club": "AC Milan",
+                "baseGoals": [
+                  10,
+                  28
+                ],
+                "id": 0,
+                "role": "primary",
+                "slot": 0,
+                "seed": 9900,
+                "firstYear": 2028,
+                "entryAge": 26,
+                "retiredYear": null
+              },
+              {
+                "name": "Shohei Nishizawa",
+                "nationality": "Japan",
+                "position": "CDM",
+                "club": "Chelsea",
+                "baseGoals": [
+                  2,
+                  8
+                ],
+                "id": 1,
+                "role": "primary",
+                "slot": 1,
+                "seed": 9901,
+                "firstYear": 2028,
+                "entryAge": 27,
+                "retiredYear": null
+              },
+              {
+                "name": "Agustín Quiroga",
+                "nationality": "Argentina",
+                "position": "RW",
+                "club": "Arsenal",
+                "baseGoals": [
+                  10,
+                  28
+                ],
+                "id": 2,
+                "role": "primary",
+                "slot": 2,
+                "seed": 9902,
+                "firstYear": 2028,
+                "entryAge": 27,
+                "retiredYear": null
+              }
+            ]
+          },
+          "eventLastFired": {
+            "200": 2028,
+            "236": 2028,
+            "247": 2028
+          },
+          "loyaltyContracts": {
+            "v": 1,
+            "deals": [
+              {
+                "id": "[\"Serie B Retained Choices\",\"\",\"transfer_window\",2029,\"[\\\"Carrarese\\\",\\\"Italy\\\",\\\"Serie B\\\",\\\"#64748b\\\",4,3579,5,0.6,false,false,false,false]\",3579]",
+                "club": "Carrarese",
+                "firstYear": 2029,
+                "finalYear": 2033,
+                "years": 5,
+                "baseWeeklyWage": 3579,
+                "weeklyWage": 3221,
+                "bonusEuros": 139581,
+                "completed": 0,
+                "lastYear": 2028,
+                "status": "active",
+                "paidEuros": 0
+              }
+            ]
+          }
+        },
+        "raw": "{\"playerName\":\"Serie B Retained Choices\",\"nationality\":\"France\",\"position\":\"CM\",\"era\":\"2020s\",\"age\":18,\"potential\":65,\"potentialEarned\":0,\"eliteStreak\":0,\"startingOverall\":55,\"physique\":{\"heightCm\":180,\"weightKg\":75},\"attrShape\":{},\"karma\":50,\"phoneUsedIds\":[\"lost_wallet\",\"barber_cut\"],\"phoneInbox\":[{\"id\":\"lost_wallet-2026\",\"defId\":\"lost_wallet\",\"from\":\"Groundskeeper\",\"emoji\":\"👛\",\"text\":\"Found a wallet in the car park with 800 quid inside. No ID. What do I do with it?\",\"year\":2026,\"choices\":[{\"label\":\"Hand it to reception\",\"reply\":\"Reception, mate. Someone's having a bad day\",\"karma\":6},{\"label\":\"Finders keepers\",\"reply\":\"That's the football gods paying you. Keep it\",\"karma\":-6}]},{\"id\":\"barber_cut-2026\",\"defId\":\"barber_cut\",\"from\":\"Barber\",\"emoji\":\"💈\",\"text\":\"New style idea for you. Bold. Might break the internet, might get you fined by the boss. You in?\",\"year\":2026,\"choices\":[{\"label\":\"Send it\",\"reply\":\"Chair. Tomorrow. Do your worst\",\"karma\":2,\"popularity\":4},{\"label\":\"Keep it classic\",\"reply\":\"Usual trim mate, big game week\",\"karma\":1}]}],\"currentClub\":\"Carrarese\",\"currentClubCountry\":\"Italy\",\"currentClubTier\":4,\"currentClubColor\":\"#64748b\",\"currentLeague\":\"Serie B\",\"contractYearsLeft\":5,\"weeklyWage\":3221,\"marketValue\":2,\"pace\":58,\"shooting\":59,\"passing\":61,\"dribbling\":60,\"defending\":58,\"physical\":60,\"reflexes\":58,\"overall\":59,\"seasons\":[{\"year\":2026,\"age\":16,\"club\":\"Lyon Youth\",\"clubCountry\":\"France\",\"clubTier\":2,\"apps\":0,\"goals\":0,\"assists\":0,\"cleanSheets\":0,\"yellowCards\":0,\"redCards\":0,\"rating\":0,\"leagueTitle\":false,\"domesticCup\":false,\"championsLeague\":false,\"worldCup\":false,\"ballonDor\":false,\"ballonDorRank\":null,\"type\":\"youth\",\"intApps\":0,\"intGoals\":0,\"intAssists\":0,\"intRating\":0,\"tournament\":null,\"tournamentResult\":null},{\"year\":2027,\"age\":17,\"club\":\"Lyon Youth\",\"clubCountry\":\"France\",\"clubTier\":2,\"apps\":15,\"goals\":1,\"assists\":3,\"cleanSheets\":0,\"yellowCards\":1,\"redCards\":0,\"rating\":0,\"leagueTitle\":false,\"domesticCup\":false,\"championsLeague\":false,\"worldCup\":false,\"ballonDor\":false,\"ballonDorRank\":null,\"type\":\"youth\",\"intApps\":0,\"intGoals\":0,\"intAssists\":0,\"intRating\":0,\"tournament\":null,\"tournamentResult\":null},{\"year\":2028,\"age\":18,\"club\":\"Lyon\",\"clubCountry\":\"France\",\"clubTier\":2,\"apps\":26,\"leagueApps\":14,\"goals\":5,\"assists\":6,\"cleanSheets\":0,\"yellowCards\":3,\"redCards\":0,\"rating\":5.6,\"ovr\":59,\"injury\":null,\"injuryWeeks\":0,\"injurySevere\":false,\"leagueTitle\":false,\"leagueFinish\":10,\"leagueSize\":18,\"derbies\":[{\"rival\":\"Marseille\",\"name\":\"Choc des Olympiques\",\"kind\":\"rivalry\",\"meetings\":[{\"home\":false,\"gf\":2,\"ga\":0,\"played\":true,\"goals\":0},{\"home\":true,\"gf\":1,\"ga\":1,\"played\":false,\"goals\":0}]}],\"domesticCup\":false,\"championsLeague\":false,\"worldCup\":false,\"ballonDor\":false,\"ballonDorRank\":null,\"type\":\"playing\",\"intApps\":0,\"intGoals\":0,\"intAssists\":0,\"intRating\":0,\"tournament\":\"European Championship\",\"tournamentResult\":null,\"leagueWorld\":{\"league\":\"Ligue 1\",\"members\":[\"PSG\",\"Lyon\",\"Marseille\",\"Monaco\",\"Lille\",\"Nice\",\"Strasbourg\",\"Rennes\",\"Lens\",\"Lorient\",\"Toulouse\",\"Auxerre\",\"Paris FC\",\"Brest\",\"Angers\",\"Le Havre\",\"Le Mans\",\"Troyes\"],\"champion\":\"Marseille\",\"simulation\":\"simulated\",\"movements\":[{\"club\":\"Monaco\",\"from\":\"Ligue 1\",\"to\":\"Ligue 2\",\"kind\":\"relegated\"},{\"club\":\"Paris FC\",\"from\":\"Ligue 1\",\"to\":\"Ligue 2\",\"kind\":\"relegated\"}]},\"cupRun\":{\"cup\":\"Coupe de France\",\"stages\":[{\"stage\":\"early\",\"won\":true},{\"stage\":\"QF\",\"opp\":\"Boulogne\",\"won\":false,\"for\":1,\"against\":3,\"home\":false}],\"opening\":{\"opp\":\"Strasbourg\",\"country\":\"France\",\"league\":\"Ligue 1\",\"won\":true,\"for\":3,\"against\":0,\"home\":true}}}],\"events\":[\"🔥 Choc des Olympiques against Marseille: W 2-0 away, D 1-1 at home (you missed it).\",\"🌍 England won the European Championship.\",\"🎭 You leaned into it: The Showman is born\",\"🦝 Gaffer Two is now official staff. Attendance: perfect\",\"🤝 Lent a teammate €200k on a handshake\",\"✍️ Signed with Carrarese 🇮🇹 (5yr, €3k/wk) · Agent fee: €0.1M\",\"Loyalty contract: EUR 3,221 a week, EUR 139,581 after 5 recorded contract seasons.\"],\"retired\":false,\"phase\":\"playing\",\"pendingOffers\":[],\"pendingSummary\":null,\"transferSituation\":null,\"loan\":null,\"pendingLoanOffers\":null,\"pendingEvents\":[],\"lastEventId\":236,\"statBoostNextSeason\":{},\"pendingNews\":[],\"internationalCareer\":false,\"sponsorDeal\":null,\"totalEarnings\":0.63,\"popularity\":22,\"morale\":80,\"isLeader\":false,\"hasRelationship\":false,\"intStats\":{\"caps\":0,\"goals\":0,\"assists\":0,\"tournaments\":0,\"worldCups\":0,\"continentals\":0,\"worldCupWins\":0,\"continentalWins\":0,\"isCaptain\":false,\"isRetired\":false,\"debutYear\":null,\"debutAge\":null,\"worldCupResults\":[],\"squadSnubs\":0,\"failedQualifications\":0},\"pendingWorldCup\":null,\"pendingTournament\":null,\"lastTournament\":{\"year\":2028,\"name\":\"European Championship\",\"short\":\"Euros\",\"kind\":\"Continental\",\"confederation\":\"UEFA\",\"nation\":\"France\",\"teams\":24,\"qualifying\":{\"confederation\":\"UEFA\",\"table\":[{\"nation\":\"France\",\"played\":10,\"won\":9,\"drawn\":1,\"lost\":0,\"gf\":34,\"ga\":4,\"points\":28},{\"nation\":\"Romania\",\"played\":10,\"won\":5,\"drawn\":3,\"lost\":2,\"gf\":14,\"ga\":10,\"points\":18},{\"nation\":\"Georgia\",\"played\":10,\"won\":3,\"drawn\":2,\"lost\":5,\"gf\":10,\"ga\":14,\"points\":11},{\"nation\":\"Wales\",\"played\":10,\"won\":3,\"drawn\":2,\"lost\":5,\"gf\":15,\"ga\":22,\"points\":11},{\"nation\":\"Lithuania\",\"played\":10,\"won\":2,\"drawn\":2,\"lost\":6,\"gf\":13,\"ga\":24,\"points\":8},{\"nation\":\"Azerbaijan\",\"played\":10,\"won\":1,\"drawn\":4,\"lost\":5,\"gf\":12,\"ga\":24,\"points\":7}],\"myPosition\":1,\"through\":3,\"qualified\":true,\"automatic\":false},\"qualified\":true,\"squad\":{\"called\":false,\"role\":null,\"myRank\":14,\"poolSize\":14,\"places\":6,\"myScore\":0,\"cutScore\":81,\"reason\":\"You are not in the France setup.\",\"xi\":{\"formation\":\"4-3-3\",\"gk\":[{\"slot\":\"GK\",\"name\":\"Sylvain Ferrand\",\"ovr\":87,\"me\":false}],\"def\":[{\"slot\":\"LB\",\"name\":\"Hervé Noirot\",\"ovr\":81,\"me\":false},{\"slot\":\"CB\",\"name\":\"Damien Thibaudeau\",\"ovr\":87,\"me\":false},{\"slot\":\"CB\",\"name\":\"Maxence Lallemand\",\"ovr\":86,\"me\":false},{\"slot\":\"RB\",\"name\":\"Baptiste Beaumont\",\"ovr\":83,\"me\":false}],\"mid\":[{\"slot\":\"CM\",\"name\":\"Yann Delcourt\",\"ovr\":86,\"me\":false},{\"slot\":\"CDM\",\"name\":\"Nolan Guillory\",\"ovr\":85,\"me\":false},{\"slot\":\"CM\",\"name\":\"Émile Rousselot\",\"ovr\":86,\"me\":false}],\"att\":[{\"slot\":\"LW\",\"name\":\"Alban Chauvet\",\"ovr\":84,\"me\":false},{\"slot\":\"ST\",\"name\":\"Corentin Vaugrenard\",\"ovr\":88,\"me\":false},{\"slot\":\"RW\",\"name\":\"Loïc Marchetti\",\"ovr\":84,\"me\":false}],\"mySlot\":null,\"aheadOfMe\":null}},\"groupTable\":[{\"nation\":\"Croatia\",\"played\":3,\"won\":2,\"drawn\":1,\"lost\":0,\"gf\":5,\"ga\":1,\"points\":7},{\"nation\":\"Wales\",\"played\":3,\"won\":2,\"drawn\":1,\"lost\":0,\"gf\":4,\"ga\":2,\"points\":7},{\"nation\":\"France\",\"played\":3,\"won\":1,\"drawn\":0,\"lost\":2,\"gf\":3,\"ga\":3,\"points\":3},{\"nation\":\"Slovakia\",\"played\":3,\"won\":0,\"drawn\":0,\"lost\":3,\"gf\":1,\"ga\":7,\"points\":0}],\"bracket\":[{\"round\":\"R16\",\"slot\":0,\"home\":\"Ukraine\",\"away\":\"Belgium\",\"homeGoals\":1,\"awayGoals\":1,\"pens\":true,\"winner\":\"Belgium\",\"mine\":false},{\"round\":\"R16\",\"slot\":1,\"home\":\"England\",\"away\":\"Italy\",\"homeGoals\":2,\"awayGoals\":0,\"pens\":false,\"winner\":\"England\",\"mine\":false},{\"round\":\"R16\",\"slot\":2,\"home\":\"Norway\",\"away\":\"Spain\",\"homeGoals\":1,\"awayGoals\":3,\"pens\":false,\"winner\":\"Spain\",\"mine\":false},{\"round\":\"R16\",\"slot\":3,\"home\":\"Germany\",\"away\":\"Romania\",\"homeGoals\":1,\"awayGoals\":0,\"pens\":false,\"winner\":\"Germany\",\"mine\":false},{\"round\":\"R16\",\"slot\":4,\"home\":\"Croatia\",\"away\":\"Turkey\",\"homeGoals\":2,\"awayGoals\":0,\"pens\":false,\"winner\":\"Croatia\",\"mine\":false},{\"round\":\"R16\",\"slot\":5,\"home\":\"Wales\",\"away\":\"France\",\"homeGoals\":1,\"awayGoals\":1,\"pens\":true,\"winner\":\"Wales\",\"mine\":true},{\"round\":\"R16\",\"slot\":6,\"home\":\"Switzerland\",\"away\":\"Netherlands\",\"homeGoals\":1,\"awayGoals\":1,\"pens\":true,\"winner\":\"Netherlands\",\"mine\":false},{\"round\":\"R16\",\"slot\":7,\"home\":\"Serbia\",\"away\":\"Greece\",\"homeGoals\":3,\"awayGoals\":0,\"pens\":false,\"winner\":\"Serbia\",\"mine\":false},{\"round\":\"QF\",\"slot\":0,\"home\":\"Belgium\",\"away\":\"England\",\"homeGoals\":2,\"awayGoals\":3,\"pens\":false,\"winner\":\"England\",\"mine\":false},{\"round\":\"QF\",\"slot\":1,\"home\":\"Spain\",\"away\":\"Germany\",\"homeGoals\":1,\"awayGoals\":3,\"pens\":false,\"winner\":\"Germany\",\"mine\":false},{\"round\":\"QF\",\"slot\":2,\"home\":\"Croatia\",\"away\":\"Wales\",\"homeGoals\":2,\"awayGoals\":1,\"pens\":false,\"winner\":\"Croatia\",\"mine\":false},{\"round\":\"QF\",\"slot\":3,\"home\":\"Netherlands\",\"away\":\"Serbia\",\"homeGoals\":4,\"awayGoals\":0,\"pens\":false,\"winner\":\"Netherlands\",\"mine\":false},{\"round\":\"SF\",\"slot\":0,\"home\":\"England\",\"away\":\"Germany\",\"homeGoals\":3,\"awayGoals\":1,\"pens\":false,\"winner\":\"England\",\"mine\":false},{\"round\":\"SF\",\"slot\":1,\"home\":\"Croatia\",\"away\":\"Netherlands\",\"homeGoals\":3,\"awayGoals\":4,\"pens\":false,\"winner\":\"Netherlands\",\"mine\":false},{\"round\":\"F\",\"slot\":0,\"home\":\"England\",\"away\":\"Netherlands\",\"homeGoals\":1,\"awayGoals\":1,\"pens\":true,\"winner\":\"England\",\"mine\":false}],\"champion\":\"England\",\"runnerUp\":\"Netherlands\",\"groupLabel\":\"Group E\",\"thirdsThrough\":4,\"myResult\":\"Not Selected\",\"matches\":[],\"playerApps\":0,\"playerGoals\":0,\"playerAssists\":0,\"playerAvgRating\":0,\"goldenBoot\":false,\"bestPlayer\":false},\"intlHistory\":[{\"year\":2028,\"short\":\"Euros\",\"nation\":\"France\",\"champion\":\"England\",\"myResult\":\"\",\"apps\":0,\"goals\":0}],\"rival\":null,\"rivalCreated\":false,\"pendingRivalryEvent\":null,\"lastRivalryEventId\":null,\"rivalrySummary\":null,\"netWorth\":0.38,\"lifestyleLevel\":\"Humble\",\"lifestyleCostPerYear\":0.05,\"socialMediaFollowers\":1.16,\"sponsorshipIncome\":0,\"properties\":[],\"investments\":[],\"consecutiveDeficitYears\":0,\"agentFeesPaid\":0.06,\"family\":{\"isMarried\":false,\"marriedAge\":null,\"children\":0,\"isDivorced\":false,\"divorceAge\":null},\"purchasedItems\":[],\"investmentHoldings\":[],\"totalAssetValue\":0,\"customYearlyCosts\":0,\"awards\":[],\"pendingBallonDor\":null,\"lastUCLResult\":{\"qualified\":false,\"matches\":[],\"result\":\"N/A\",\"playerGoals\":0,\"isTopScorer\":false,\"seasonYear\":2028,\"club\":\"Lyon\"},\"legacy\":null,\"postRetirementChoice\":null,\"managerState\":null,\"isFinalSeason\":false,\"isPundit\":false,\"punditEvents\":[],\"primeType\":\"late\",\"socialMediaActionUsedThisSeason\":false,\"socialMediaFocusBoost\":false,\"pendingCoverAthleteEvent\":false,\"coverAthleteAccepted\":false,\"activeSponsorship\":null,\"personality\":\"showman\",\"agentId\":null,\"lifeFlags\":{\"teammateLoan\":1},\"appearance\":null,\"corruptionHeat\":0,\"dirtyMoney\":0,\"prisonSeasons\":0,\"academyClubName\":\"Lyon\",\"moralDilemmasTriggered\":[],\"pendingMoralDilemma\":null,\"pedSeasonsRemaining\":0,\"pedActive\":false,\"matchFixBanned\":0,\"divingActive\":false,\"integrityBonus\":2,\"pendingAppealResult\":null,\"childEventsSeen\":[],\"pregnancyAnnounced\":false,\"punditState\":null,\"ownerState\":null,\"peakOverall\":59,\"retirementSuggested\":false,\"phone\":{\"threads\":[{\"id\":\"th_x_groundskeeper\",\"c\":\"other\",\"name\":\"Groundskeeper\",\"emoji\":\"💬\",\"lines\":[{\"w\":0,\"t\":\"Found a wallet in the car park with 800 quid inside. No ID. What do I do with it?\",\"y\":2026},{\"w\":0,\"t\":\"Chasing this one. Let me know either way.\",\"y\":2027}],\"rel\":36,\"pending\":{\"kind\":\"legacy\",\"msgId\":\"lost_wallet-2026\"},\"waiting\":2027,\"cold\":1,\"seen\":[],\"lastReplyYear\":null},{\"id\":\"th_dad\",\"c\":\"dad\",\"name\":\"Dad\",\"emoji\":\"🧔\",\"lines\":[{\"w\":0,\"t\":\"Watched it back three times. You were dropping too deep in the second half son. Coming to get the ball because you wanted a touch.\",\"y\":2026},{\"w\":0,\"t\":\"Hello? Anyone in there?\",\"y\":2027}],\"rel\":36,\"pending\":{\"kind\":\"convo\",\"convo\":\"dad_analysis\",\"beat\":0},\"waiting\":2027,\"cold\":1,\"seen\":[\"dad_analysis\"],\"lastReplyYear\":null},{\"id\":\"th_x_barber\",\"c\":\"other\",\"name\":\"Barber\",\"emoji\":\"💬\",\"lines\":[{\"w\":0,\"t\":\"New style idea for you. Bold. Might break the internet, might get you fined by the boss. You in?\",\"y\":2026},{\"w\":0,\"t\":\"Chasing this one. Let me know either way.\",\"y\":2027}],\"rel\":36,\"pending\":{\"kind\":\"legacy\",\"msgId\":\"barber_cut-2026\"},\"waiting\":2027,\"cold\":1,\"seen\":[],\"lastReplyYear\":null}],\"feed\":[\"⭐ Leverkusen are champions of Europe.\",\"🏆 Arsenal win the Premier League.\",\"🏆 Barcelona win La Liga.\",\"🌍 England win the European Championship.\",\"🔮 Your world's 2028-29, as it played out:\"],\"world\":{\"year\":2028,\"ucl\":\"Leverkusen\",\"leagues\":{\"Premier League\":\"Arsenal\",\"La Liga\":\"Barcelona\",\"Bundesliga\":\"Bayern Munich\",\"Serie A\":\"Juventus\",\"Ligue 1\":\"Marseille\",\"Primeira Liga\":\"Porto\",\"Eredivisie\":\"Feyenoord\",\"Scottish Premiership\":\"Rangers\",\"Brasileirao\":\"Palmeiras\",\"Saudi Pro League\":\"Al Hilal\",\"MLS\":\"Seattle Sounders\",\"K League 1\":\"Ulsan HD\",\"Championship\":\"Bolton Wanderers\",\"2. Bundesliga\":\"Holstein Kiel\",\"Ligue 2\":\"Red Star FC\",\"Serie B\":\"Cremonese\",\"Segunda Division\":\"Albacete\"},\"cups\":{\"Premier League\":\"Man United\",\"La Liga\":\"Athletic Bilbao\",\"Bundesliga\":\"Dortmund\",\"Serie A\":\"Juventus\",\"Ligue 1\":\"Monaco\",\"Primeira Liga\":\"Porto\",\"Eredivisie\":\"Feyenoord\",\"Scottish Premiership\":\"Celtic\",\"Brasileirao\":\"Palmeiras\",\"Saudi Pro League\":\"Al Ittihad\",\"MLS\":\"Inter Miami\",\"K League 1\":\"Pohang Steelers\"},\"moves\":[],\"topScorer\":null,\"intl\":{\"name\":\"European Championship\",\"champion\":\"England\"}},\"clubs\":{\"Kylian Mbappé\":\"Real Madrid\",\"Erling Haaland\":\"Man City\",\"Jude Bellingham\":\"Real Madrid\",\"Vinícius Jr\":\"Real Madrid\",\"Lamine Yamal\":\"Barcelona\",\"Florian Wirtz\":\"Liverpool\",\"Jamal Musiala\":\"Bayern Munich\",\"Bukayo Saka\":\"Arsenal\",\"Pedri\":\"Barcelona\",\"Rodri\":\"Barcelona\",\"Federico Valverde\":\"Real Madrid\",\"Harry Kane\":\"Bayern Munich\",\"Mohamed Salah\":\"Trabzonspor\",\"Phil Foden\":\"Man City\",\"Declan Rice\":\"Arsenal\",\"Raphinha\":\"Barcelona\",\"Endrick\":\"Real Madrid\",\"Nico Williams\":\"Athletic Bilbao\",\"Désiré Doué\":\"PSG\",\"Kobbie Mainoo\":\"Man United\",\"Gianluigi Donnarumma\":\"Man City\",\"Ousmane Dembélé\":\"PSG\"},\"rivalClub\":null,\"seed\":767208762,\"offers\":0,\"perksTaken\":0},\"frozenOut\":0,\"badSeasonStreak\":0,\"story\":[{\"year\":2026,\"age\":16,\"club\":\"Lyon Youth\",\"lines\":[\"📋 Joined Lyon Youth Academy aged 16\"]},{\"year\":2027,\"age\":17,\"club\":\"Lyon Youth\",\"lines\":[\"📈 Stats improved during youth development (OVR 59)\",\"📩 Professional contract offers received!\",\"✍️ Signed with Lyon 🇫🇷 (5yr, €12k/wk)\",\"🏠 One of our own! The Lyon academy kid signs a first-team deal. The ultras already have a chant ready.\"]}],\"sponsorBonus\":0,\"money\":{\"seed\":4290540860,\"vault\":0,\"hold\":{\"ladder\":0,\"bricks\":0,\"cleats\":0,\"screens\":0,\"spark\":0},\"cost\":{\"ladder\":0,\"bricks\":0,\"cleats\":0,\"screens\":0,\"spark\":0},\"price\":{\"ladder\":105.6,\"bricks\":104.6,\"cleats\":123.6,\"screens\":79.63,\"spark\":138.5},\"hist\":{\"ladder\":[100,102.35,105.6],\"bricks\":[100,97.87,104.6],\"cleats\":[100,104.12,123.6],\"screens\":[100,108.33,79.63],\"spark\":[100,84.49,138.5]},\"log\":[],\"year\":2028,\"age\":2,\"won\":0,\"lost\":0,\"cPlays\":0,\"cNet\":0,\"cYear\":0,\"cShut\":false,\"aYear\":0,\"aBest\":0,\"aPlays\":0},\"leagueWorld\":{\"year\":2029,\"leagues\":{\"Premier League\":[\"Arsenal\",\"Man City\",\"Liverpool\",\"Chelsea\",\"Man United\",\"Tottenham\",\"Newcastle\",\"Nottingham Forest\",\"Brighton\",\"Aston Villa\",\"Everton\",\"Fulham\",\"Crystal Palace\",\"Brentford\",\"Bournemouth\",\"Sunderland\",\"Hull City\",\"Bolton Wanderers\",\"Burnley\",\"Sheffield United\"],\"Championship\":[\"West Ham\",\"Wolves\",\"Southampton\",\"Middlesbrough\",\"Swansea City\",\"Birmingham City\",\"Norwich City\",\"Stoke City\",\"Watford\",\"Wrexham\",\"Derby County\",\"QPR\",\"West Brom\",\"Bristol City\",\"Millwall\",\"Preston North End\",\"Charlton Athletic\",\"Blackburn Rovers\",\"Cardiff City\",\"Lincoln City\",\"Portsmouth\",\"Leeds United\",\"Coventry City\",\"Ipswich Town\"],\"Bundesliga\":[\"Bayern Munich\",\"Dortmund\",\"Leipzig\",\"Stuttgart\",\"Leverkusen\",\"Frankfurt\",\"Hoffenheim\",\"Augsburg\",\"Hamburg\",\"Mainz\",\"Gladbach\",\"Koln\",\"Union Berlin\",\"Werder Bremen\",\"Paderborn\",\"Elversberg\",\"Holstein Kiel\",\"Greuther Furth\"],\"2. Bundesliga\":[\"Wolfsburg\",\"St. Pauli\",\"Heidenheim\",\"Nurnberg\",\"Arminia Bielefeld\",\"Bochum\",\"Braunschweig\",\"Darmstadt\",\"Dynamo Dresden\",\"Energie Cottbus\",\"Hannover 96\",\"Hertha Berlin\",\"Kaiserslautern\",\"Karlsruhe\",\"Magdeburg\",\"Osnabruck\",\"Freiburg\",\"Schalke 04\"],\"Ligue 1\":[\"PSG\",\"Lyon\",\"Marseille\",\"Lille\",\"Nice\",\"Strasbourg\",\"Rennes\",\"Lens\",\"Lorient\",\"Toulouse\",\"Auxerre\",\"Brest\",\"Angers\",\"Le Havre\",\"Le Mans\",\"Troyes\",\"Red Star FC\",\"Nantes\"],\"Ligue 2\":[\"Metz\",\"Saint-Étienne\",\"Reims\",\"Montpellier\",\"Nancy\",\"Annecy\",\"Sochaux\",\"Dijon\",\"Pau\",\"Guingamp\",\"Dunkerque\",\"Grenoble\",\"Rodez\",\"Clermont\",\"Boulogne\",\"Laval\",\"Monaco\",\"Paris FC\"],\"Serie A\":[\"Inter Milan\",\"Juventus\",\"Roma\",\"Como\",\"AC Milan\",\"Napoli\",\"Atalanta\",\"Fiorentina\",\"Lazio\",\"Genoa\",\"Parma\",\"Udinese\",\"Cagliari\",\"Lecce\",\"Monza\",\"Venezia\",\"Frosinone\",\"Cremonese\",\"Juve Stabia\",\"Avellino\"],\"Serie B\":[\"Verona\",\"Pisa\",\"Carrarese\",\"Catanzaro\",\"Cesena\",\"Empoli\",\"Entella\",\"Mantova\",\"Modena\",\"Padova\",\"Palermo\",\"Sampdoria\",\"Südtirol\",\"Vicenza\",\"Arezzo\",\"Benevento\",\"Ascoli\",\"Sassuolo\",\"Torino\",\"Bologna\"],\"La Liga\":[\"Real Madrid\",\"Barcelona\",\"Atletico Madrid\",\"Athletic Bilbao\",\"Sevilla\",\"Villarreal\",\"Real Sociedad\",\"Real Betis\",\"Celta Vigo\",\"Levante\",\"Getafe\",\"Racing Santander\",\"Rayo Vallecano\",\"Osasuna\",\"Elche\",\"Alaves\",\"Malaga\",\"Albacete\",\"Sabadell\",\"Girona\"],\"Segunda Division\":[\"Real Oviedo\",\"Mallorca\",\"Eibar\",\"Castellón\",\"Almería\",\"Burgos\",\"Sporting Gijón\",\"Granada\",\"Las Palmas\",\"Tenerife\",\"Leganés\",\"Valladolid\",\"Córdoba\",\"Eldense\",\"Cádiz\",\"FC Andorra\",\"Ceuta\",\"Deportivo\",\"Espanyol\",\"Valencia\"]},\"movements\":[{\"club\":\"Leeds United\",\"from\":\"Premier League\",\"to\":\"Championship\",\"kind\":\"relegated\"},{\"club\":\"Coventry City\",\"from\":\"Premier League\",\"to\":\"Championship\",\"kind\":\"relegated\"},{\"club\":\"Ipswich Town\",\"from\":\"Premier League\",\"to\":\"Championship\",\"kind\":\"relegated\"},{\"club\":\"Bolton Wanderers\",\"from\":\"Championship\",\"to\":\"Premier League\",\"kind\":\"promoted\"},{\"club\":\"Burnley\",\"from\":\"Championship\",\"to\":\"Premier League\",\"kind\":\"promoted\"},{\"club\":\"Sheffield United\",\"from\":\"Championship\",\"to\":\"Premier League\",\"kind\":\"promoted\"},{\"club\":\"Freiburg\",\"from\":\"Bundesliga\",\"to\":\"2. Bundesliga\",\"kind\":\"relegated\"},{\"club\":\"Schalke 04\",\"from\":\"Bundesliga\",\"to\":\"2. Bundesliga\",\"kind\":\"relegated\"},{\"club\":\"Holstein Kiel\",\"from\":\"2. Bundesliga\",\"to\":\"Bundesliga\",\"kind\":\"promoted\"},{\"club\":\"Greuther Furth\",\"from\":\"2. Bundesliga\",\"to\":\"Bundesliga\",\"kind\":\"promoted\"},{\"club\":\"Monaco\",\"from\":\"Ligue 1\",\"to\":\"Ligue 2\",\"kind\":\"relegated\"},{\"club\":\"Paris FC\",\"from\":\"Ligue 1\",\"to\":\"Ligue 2\",\"kind\":\"relegated\"},{\"club\":\"Red Star FC\",\"from\":\"Ligue 2\",\"to\":\"Ligue 1\",\"kind\":\"promoted\"},{\"club\":\"Nantes\",\"from\":\"Ligue 2\",\"to\":\"Ligue 1\",\"kind\":\"promoted\"},{\"club\":\"Sassuolo\",\"from\":\"Serie A\",\"to\":\"Serie B\",\"kind\":\"relegated\"},{\"club\":\"Torino\",\"from\":\"Serie A\",\"to\":\"Serie B\",\"kind\":\"relegated\"},{\"club\":\"Bologna\",\"from\":\"Serie A\",\"to\":\"Serie B\",\"kind\":\"relegated\"},{\"club\":\"Cremonese\",\"from\":\"Serie B\",\"to\":\"Serie A\",\"kind\":\"promoted\"},{\"club\":\"Juve Stabia\",\"from\":\"Serie B\",\"to\":\"Serie A\",\"kind\":\"promoted\"},{\"club\":\"Avellino\",\"from\":\"Serie B\",\"to\":\"Serie A\",\"kind\":\"promoted\"},{\"club\":\"Deportivo\",\"from\":\"La Liga\",\"to\":\"Segunda Division\",\"kind\":\"relegated\"},{\"club\":\"Espanyol\",\"from\":\"La Liga\",\"to\":\"Segunda Division\",\"kind\":\"relegated\"},{\"club\":\"Valencia\",\"from\":\"La Liga\",\"to\":\"Segunda Division\",\"kind\":\"relegated\"},{\"club\":\"Albacete\",\"from\":\"Segunda Division\",\"to\":\"La Liga\",\"kind\":\"promoted\"},{\"club\":\"Sabadell\",\"from\":\"Segunda Division\",\"to\":\"La Liga\",\"kind\":\"promoted\"},{\"club\":\"Girona\",\"from\":\"Segunda Division\",\"to\":\"La Liga\",\"kind\":\"promoted\"}]},\"generatedBallonPool\":{\"version\":1,\"year\":2028,\"nextId\":3,\"entries\":[{\"name\":\"Ferdi Doornbos\",\"nationality\":\"Belgium\",\"position\":\"LW\",\"club\":\"AC Milan\",\"baseGoals\":[10,28],\"id\":0,\"role\":\"primary\",\"slot\":0,\"seed\":9900,\"firstYear\":2028,\"entryAge\":26,\"retiredYear\":null},{\"name\":\"Shohei Nishizawa\",\"nationality\":\"Japan\",\"position\":\"CDM\",\"club\":\"Chelsea\",\"baseGoals\":[2,8],\"id\":1,\"role\":\"primary\",\"slot\":1,\"seed\":9901,\"firstYear\":2028,\"entryAge\":27,\"retiredYear\":null},{\"name\":\"Agustín Quiroga\",\"nationality\":\"Argentina\",\"position\":\"RW\",\"club\":\"Arsenal\",\"baseGoals\":[10,28],\"id\":2,\"role\":\"primary\",\"slot\":2,\"seed\":9902,\"firstYear\":2028,\"entryAge\":27,\"retiredYear\":null}]},\"eventLastFired\":{\"200\":2028,\"236\":2028,\"247\":2028},\"loyaltyContracts\":{\"v\":1,\"deals\":[{\"id\":\"[\\\"Serie B Retained Choices\\\",\\\"\\\",\\\"transfer_window\\\",2029,\\\"[\\\\\\\"Carrarese\\\\\\\",\\\\\\\"Italy\\\\\\\",\\\\\\\"Serie B\\\\\\\",\\\\\\\"#64748b\\\\\\\",4,3579,5,0.6,false,false,false,false]\\\",3579]\",\"club\":\"Carrarese\",\"firstYear\":2029,\"finalYear\":2033,\"years\":5,\"baseWeeklyWage\":3579,\"weeklyWage\":3221,\"bonusEuros\":139581,\"completed\":0,\"lastYear\":2028,\"status\":\"active\",\"paidEuros\":0}]}}"
+      },
+      "draws": [],
+      "next": 0.689353097230196
+    }
+}

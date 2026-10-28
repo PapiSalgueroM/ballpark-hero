@@ -1,0 +1,495 @@
+{
+  "value": {
+    "playerName": "Ligue2 Modern Boundary",
+    "nationality": "France",
+    "position": "CM",
+    "era": "2020s",
+    "age": 17,
+    "potential": 80,
+    "potentialEarned": 0,
+    "eliteStreak": 0,
+    "startingOverall": 70,
+    "physique": {
+      "heightCm": 180,
+      "weightKg": 75
+    },
+    "attrShape": {},
+    "karma": 50,
+    "phoneUsedIds": [
+      "barber_cut",
+      "kid_dm"
+    ],
+    "phoneInbox": [
+      {
+        "id": "barber_cut-2026",
+        "defId": "barber_cut",
+        "from": "Barber",
+        "emoji": "💈",
+        "text": "New style idea for you. Bold. Might break the internet, might get you fined by the boss. You in?",
+        "year": 2026,
+        "choices": [
+          {
+            "label": "Send it",
+            "reply": "Chair. Tomorrow. Do your worst",
+            "karma": 2,
+            "popularity": 4
+          },
+          {
+            "label": "Keep it classic",
+            "reply": "Usual trim mate, big game week",
+            "karma": 1
+          }
+        ]
+      },
+      {
+        "id": "kid_dm-2026",
+        "defId": "kid_dm",
+        "from": "Fan DM",
+        "emoji": "🧒",
+        "text": "ur my favorite player ever. im in hospital and my dream is a signed shirt. no worries if not",
+        "year": 2026,
+        "choices": [
+          {
+            "label": "Send a signed shirt and visit",
+            "reply": "Shirt is on the way and I'm coming to see you next week. Stay strong",
+            "karma": 12,
+            "popularity": 6,
+            "cash": -0.1
+          },
+          {
+            "label": "Send the shirt",
+            "reply": "On its way little legend",
+            "karma": 6,
+            "popularity": 3
+          },
+          {
+            "label": "Ignore it",
+            "reply": "",
+            "karma": -8
+          }
+        ]
+      }
+    ],
+    "currentClub": "Marseille",
+    "currentClubCountry": "France",
+    "currentClubTier": 2,
+    "currentClubColor": "#2FA0DA",
+    "currentLeague": "Ligue 1",
+    "contractYearsLeft": 5,
+    "weeklyWage": 15446,
+    "marketValue": 21.1,
+    "pace": 71,
+    "shooting": 75,
+    "passing": 72,
+    "dribbling": 73,
+    "defending": 72,
+    "physical": 72,
+    "reflexes": 75,
+    "overall": 73,
+    "seasons": [
+      {
+        "year": 2026,
+        "age": 16,
+        "club": "Marseille Youth",
+        "clubCountry": "France",
+        "clubTier": 2,
+        "apps": 0,
+        "goals": 0,
+        "assists": 0,
+        "cleanSheets": 0,
+        "yellowCards": 0,
+        "redCards": 0,
+        "rating": 0,
+        "leagueTitle": false,
+        "domesticCup": false,
+        "championsLeague": false,
+        "worldCup": false,
+        "ballonDor": false,
+        "ballonDorRank": null,
+        "type": "youth",
+        "intApps": 0,
+        "intGoals": 0,
+        "intAssists": 0,
+        "intRating": 0,
+        "tournament": null,
+        "tournamentResult": null
+      },
+      {
+        "year": 2027,
+        "age": 17,
+        "club": "Marseille Youth",
+        "clubCountry": "France",
+        "clubTier": 2,
+        "apps": 10,
+        "goals": 1,
+        "assists": 1,
+        "cleanSheets": 0,
+        "yellowCards": 3,
+        "redCards": 0,
+        "rating": 0,
+        "leagueTitle": false,
+        "domesticCup": false,
+        "championsLeague": false,
+        "worldCup": false,
+        "ballonDor": false,
+        "ballonDorRank": null,
+        "type": "youth",
+        "intApps": 0,
+        "intGoals": 0,
+        "intAssists": 0,
+        "intRating": 0,
+        "tournament": null,
+        "tournamentResult": null
+      }
+    ],
+    "events": [
+      "📈 Stats improved during youth development (OVR 73)",
+      "📩 Professional contract offers received!",
+      "✍️ Signed with Marseille 🇫🇷 (5yr, €15k/wk)",
+      "🏠 One of our own! The Marseille academy kid signs a first-team deal. The ultras already have a chant ready.",
+      "👋 Announced retirement from professional football"
+    ],
+    "retired": true,
+    "phase": "retirement_ceremony",
+    "pendingOffers": [],
+    "pendingSummary": null,
+    "transferSituation": null,
+    "loan": null,
+    "pendingLoanOffers": null,
+    "pendingEvents": [],
+    "lastEventId": null,
+    "statBoostNextSeason": {},
+    "pendingNews": [],
+    "internationalCareer": false,
+    "sponsorDeal": null,
+    "totalEarnings": 0,
+    "popularity": 20,
+    "morale": 75,
+    "isLeader": false,
+    "hasRelationship": false,
+    "intStats": {
+      "caps": 0,
+      "goals": 0,
+      "assists": 0,
+      "tournaments": 0,
+      "worldCups": 0,
+      "continentals": 0,
+      "worldCupWins": 0,
+      "continentalWins": 0,
+      "isCaptain": false,
+      "isRetired": false,
+      "debutYear": null,
+      "debutAge": null,
+      "worldCupResults": [],
+      "squadSnubs": 0,
+      "failedQualifications": 0
+    },
+    "pendingWorldCup": null,
+    "pendingTournament": null,
+    "lastTournament": null,
+    "intlHistory": [],
+    "rival": null,
+    "rivalCreated": false,
+    "pendingRivalryEvent": null,
+    "lastRivalryEventId": null,
+    "rivalrySummary": null,
+    "netWorth": 0,
+    "lifestyleLevel": "Humble",
+    "lifestyleCostPerYear": 0.02,
+    "socialMediaFollowers": 0,
+    "sponsorshipIncome": 0,
+    "properties": [],
+    "investments": [],
+    "consecutiveDeficitYears": 0,
+    "agentFeesPaid": 0,
+    "family": {
+      "isMarried": false,
+      "marriedAge": null,
+      "children": 0,
+      "isDivorced": false,
+      "divorceAge": null
+    },
+    "purchasedItems": [],
+    "investmentHoldings": [],
+    "totalAssetValue": 0,
+    "customYearlyCosts": 0,
+    "awards": [],
+    "pendingBallonDor": null,
+    "lastUCLResult": null,
+    "legacy": {
+      "score": 0,
+      "tier": "JOURNEYMAN",
+      "breakdown": [
+        {
+          "label": "Goals",
+          "points": 0
+        },
+        {
+          "label": "Assists",
+          "points": 0
+        },
+        {
+          "label": "Champions League",
+          "points": 0
+        },
+        {
+          "label": "League Titles",
+          "points": 0
+        },
+        {
+          "label": "Domestic Cups",
+          "points": 0
+        },
+        {
+          "label": "Ballon d'Or",
+          "points": 0
+        },
+        {
+          "label": "International",
+          "points": 0
+        },
+        {
+          "label": "Club Loyalty",
+          "points": 0
+        },
+        {
+          "label": "Longevity",
+          "points": 0
+        },
+        {
+          "label": "The Climb",
+          "points": -6
+        }
+      ]
+    },
+    "postRetirementChoice": null,
+    "managerState": null,
+    "isFinalSeason": false,
+    "isPundit": false,
+    "punditEvents": [],
+    "primeType": "late",
+    "socialMediaActionUsedThisSeason": false,
+    "socialMediaFocusBoost": false,
+    "pendingCoverAthleteEvent": false,
+    "coverAthleteAccepted": false,
+    "activeSponsorship": null,
+    "personality": null,
+    "agentId": null,
+    "lifeFlags": {
+      "coachingBadges": 3
+    },
+    "appearance": null,
+    "corruptionHeat": 0,
+    "dirtyMoney": 0,
+    "prisonSeasons": 0,
+    "academyClubName": "Marseille",
+    "moralDilemmasTriggered": [],
+    "pendingMoralDilemma": null,
+    "pedSeasonsRemaining": 0,
+    "pedActive": false,
+    "matchFixBanned": 0,
+    "divingActive": false,
+    "integrityBonus": 0,
+    "pendingAppealResult": null,
+    "childEventsSeen": [],
+    "pregnancyAnnounced": false,
+    "punditState": null,
+    "ownerState": null,
+    "peakOverall": 70,
+    "retirementSuggested": false,
+    "phone": {
+      "threads": [
+        {
+          "id": "th_x_barber",
+          "c": "other",
+          "name": "Barber",
+          "emoji": "💬",
+          "lines": [
+            {
+              "w": 0,
+              "t": "New style idea for you. Bold. Might break the internet, might get you fined by the boss. You in?",
+              "y": 2026
+            }
+          ],
+          "rel": 50,
+          "pending": {
+            "kind": "legacy",
+            "msgId": "barber_cut-2026"
+          },
+          "waiting": 2026,
+          "cold": 0,
+          "seen": [],
+          "lastReplyYear": null
+        },
+        {
+          "id": "th_grandad",
+          "c": "grandad",
+          "name": "Grandad",
+          "emoji": "🧓",
+          "lines": [
+            {
+              "w": 0,
+              "t": "Your father says you are worrying too much. He worries too much. Runs in the family.",
+              "y": 2026
+            }
+          ],
+          "rel": 50,
+          "pending": {
+            "kind": "convo",
+            "convo": "grandad_advice",
+            "beat": 0
+          },
+          "waiting": 2026,
+          "cold": 0,
+          "seen": [
+            "grandad_advice"
+          ],
+          "lastReplyYear": null
+        },
+        {
+          "id": "th_x_fandm",
+          "c": "other",
+          "name": "Fan DM",
+          "emoji": "💬",
+          "lines": [
+            {
+              "w": 0,
+              "t": "ur my favorite player ever. im in hospital and my dream is a signed shirt. no worries if not",
+              "y": 2026
+            }
+          ],
+          "rel": 50,
+          "pending": {
+            "kind": "legacy",
+            "msgId": "kid_dm-2026"
+          },
+          "waiting": 2026,
+          "cold": 0,
+          "seen": [],
+          "lastReplyYear": null
+        }
+      ],
+      "feed": [],
+      "world": null,
+      "clubs": {},
+      "rivalClub": null,
+      "seed": 206550034,
+      "offers": 0,
+      "perksTaken": 0
+    },
+    "frozenOut": 0,
+    "badSeasonStreak": 0,
+    "story": [
+      {
+        "year": 2026,
+        "age": 16,
+        "club": "Marseille Youth",
+        "lines": [
+          "📋 Joined Marseille Youth Academy aged 16"
+        ]
+      }
+    ],
+    "sponsorBonus": 0,
+    "money": {
+      "seed": 825426940,
+      "vault": 0,
+      "hold": {
+        "ladder": 0,
+        "bricks": 0,
+        "cleats": 0,
+        "screens": 0,
+        "spark": 0
+      },
+      "cost": {
+        "ladder": 0,
+        "bricks": 0,
+        "cleats": 0,
+        "screens": 0,
+        "spark": 0
+      },
+      "price": {
+        "ladder": 102.65,
+        "bricks": 102.11,
+        "cleats": 101.79,
+        "screens": 117.72,
+        "spark": 32
+      },
+      "hist": {
+        "ladder": [
+          100,
+          102.65
+        ],
+        "bricks": [
+          100,
+          102.11
+        ],
+        "cleats": [
+          100,
+          101.79
+        ],
+        "screens": [
+          100,
+          117.72
+        ],
+        "spark": [
+          100,
+          32
+        ]
+      },
+      "log": [],
+      "year": 2027,
+      "age": 1,
+      "won": 0,
+      "lost": 0,
+      "cPlays": 0,
+      "cNet": 0,
+      "cYear": 0,
+      "cShut": false,
+      "aYear": 0,
+      "aBest": 0,
+      "aPlays": 0
+    }
+  },
+  "draws": [
+    0.45540769933722913,
+    0.30849614599719644,
+    0.6611574492417276,
+    0.6184752183035016,
+    0.15228010178543627,
+    0.22184331016615033,
+    0.682859911583364,
+    0.8014086990151554,
+    0.29346877010539174,
+    0.042668113484978676,
+    0.06658769561909139,
+    0.6195805927272886,
+    0.3888109920080751,
+    0.11450255266390741,
+    0.17949429899454117,
+    0.3310605422593653,
+    0.4067008001729846,
+    0.9208663781173527,
+    0.565062012989074,
+    0.0017315458972007036,
+    0.20382882142439485,
+    0.2760949197690934,
+    0.7780529276933521,
+    0.9534042535815388,
+    0.9422036779578775,
+    0.7651577505748719,
+    0.2784948379267007,
+    0.27409576065838337,
+    0.4140278613194823,
+    0.28665599692612886,
+    0.6637790391687304,
+    0.8424506385345012,
+    0.301185158547014,
+    0.9186419141478837,
+    0.08037824835628271,
+    0.040804988238960505,
+    0.3353756181895733,
+    0.7733533135615289
+  ],
+  "next": 0.7419539161492139,
+  "scope": "Actual old constructor/youth/offer/accept/repair/manualRetire path with2026 start; coursework3 is a labelled presentation flag, not earned progression."
+}

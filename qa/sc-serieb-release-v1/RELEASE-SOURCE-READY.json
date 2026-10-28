@@ -1,0 +1,542 @@
+{
+  "status": "SOURCE_READY_BOUNDED_QUALIFICATION_ALL_RUNTIME_UNRUN",
+  "parentCommit": "47dc71eafa15870935718f032ff545fb07de0110",
+  "parentTree": "33d045e5772867c42167818caf1fe63dc94fb8cf",
+  "sourceFamily": "Clean source-vetted Draft423 on Draft422, both global qualifications remain pending. Only24QA additions, all5428 parent blobs held.",
+  "allowedPaths": [
+    ".github/workflows/sc-serieb-release.yml",
+    "qa/sc-serieb-release-v1/FIXED-CONSUMER-SOURCE.json",
+    "qa/sc-serieb-release-v1/legacy-full-unit-identities.json.gz",
+    "qa/sc-serieb-release-v1/legacy-skipped-identities.json",
+    "qa/sc-serieb-release-v1/PHYSICAL-CONTROLS.json",
+    "qa/sc-serieb-release-v1/PRODUCT-SOURCE-READY.json",
+    "qa/sc-serieb-release-v1/original/soccerCareerClubPool.ts",
+    "qa/sc-serieb-release-v1/original/soccerCareerCoachingStart.ts",
+    "qa/sc-serieb-release-v1/original/soccerCareerEngine.ts",
+    "qa/sc-serieb-release-v1/research/COLOUR-WORD-LEDGER.json",
+    "qa/sc-serieb-release-v1/research/PALETTE-DESIGN.json",
+    "qa/sc-serieb-release-v1/retained/fixtures.json",
+    "qa/sc-serieb-release-v1/retained/modern-fixture.json",
+    "qa/sc-serieb-release-v1/retained/old-generic.save.txt",
+    "qa/sc-serieb-release-v1/retained/old-choices/club-loan.golden.json",
+    "qa/sc-serieb-release-v1/retained/old-choices/club-loan.save.txt",
+    "qa/sc-serieb-release-v1/retained/old-choices/elected-loyalty.golden.json",
+    "qa/sc-serieb-release-v1/retained/old-choices/elected-loyalty.save.txt",
+    "qa/sc-serieb-release-v1/retained/old-choices/permanent-transfer.golden.json",
+    "qa/sc-serieb-release-v1/retained/old-choices/permanent-transfer.save.txt",
+    "scripts/qa/playSerieBRelease.mjs",
+    "scripts/qa/serieBReleaseFixed.mjs",
+    "scripts/qa/serieBReleaseQualification.mjs",
+    "qa/sc-serieb-release-v1/RELEASE-SOURCE-READY.json"
+  ],
+  "files": [
+    {
+      "path": "src/lib/clubManager.ts",
+      "bytes": 1241181,
+      "sha256": "135929be1da2fc592d2eb40f9bfdf7a3eb6b90ba911b4f5379cf5e662987621e",
+      "gitBlob": "aff16d7d51de6da8dd1d16893c9c03acc57cb97f"
+    },
+    {
+      "path": "scripts/lib/careerClubPool.mjs",
+      "bytes": 22296,
+      "sha256": "ded92933aa4790e4c4a532647d09e5ee3c65b22dfec57432de18d25641d9dce0",
+      "gitBlob": "16ccc6137958a1adf2e40e5d26b99de466b38e24"
+    },
+    {
+      "path": "src/data/leagueFormat.ts",
+      "bytes": 7070,
+      "sha256": "915b4acd46f103d7c371d58c043c600a85e4e592ae6b59d5a8000d930e76fca5",
+      "gitBlob": "802650466c0c4439f12c741e7d1ae28957280f9b"
+    },
+    {
+      "path": "src/lib/soccerCareerLeague.ts",
+      "bytes": 47020,
+      "sha256": "fe3efae2f43e780c2cd4d13ca7fa85f023a2fefe8cf1b002866a1cf0d963268a",
+      "gitBlob": "9c05bf681f30bcd3703f55ad72c1289f4eeb9844"
+    },
+    {
+      "path": "src/lib/soccerCareerDerby.ts",
+      "bytes": 23401,
+      "sha256": "24b47bb4f83a37f4c43fcd5cb42be7976eac299a5bec0f7673af0621c6c804e8",
+      "gitBlob": "e25062b2b6560957feb414fd709b7bbc5b4af7ba"
+    },
+    {
+      "path": "src/lib/soccerCareerEngine.ts",
+      "bytes": 552077,
+      "sha256": "bf4beb5151213325277a44c83cef6a72528d14b612368b8db70c7b2288508708",
+      "gitBlob": "97e40cf67e30c3cbf6425eab95afa0c53a20d66b"
+    },
+    {
+      "path": "src/lib/soccerCareerCoachingStart.ts",
+      "bytes": 4043,
+      "sha256": "7720957192ccb8a0de5b1fef64817e409ee30d7ce7dd035425e598d0fd903aff",
+      "gitBlob": "0733d114d66b748131ac2c623fb858c6d9c97fd2"
+    },
+    {
+      "path": "scripts/data/soccerCareerFacts.json",
+      "bytes": 176880,
+      "sha256": "35b8f45234d485190098746e8f04ab1d2db386bc4f44b1224c7f7e76a462fe4a",
+      "gitBlob": "6ac25dc9d27bb0295f0e268be79990cf69086f7f"
+    },
+    {
+      "path": "src/data/soccerCareerClubPool.ts",
+      "bytes": 49030,
+      "sha256": "5e565223239c8bb5ea8f5be3d2ecfb5c72ed026d3598031fcb5221f265e01d58",
+      "gitBlob": "83e9df78441c0d16509f80b8ec0bfbadb0f08f26"
+    },
+    {
+      "path": "src/lib/careerEras.ts",
+      "bytes": 105789,
+      "sha256": "f3e7347f58abe993db9fd72e9896ea0767a6ca7eb3b19861b75b92b387f89c1c",
+      "gitBlob": "e037022342382b1df9c8a5ede620d2cce480bc23"
+    },
+    {
+      "path": "src/lib/soccerCareerSave.ts",
+      "bytes": 6287,
+      "sha256": "b486dfd8c4073230b6967c674058e46c7b56a6afd2a8a165f1e215501205477a",
+      "gitBlob": "86ec011693fd5bc702b5e8ccec05d27775a72a76"
+    },
+    {
+      "path": "src/lib/soccerCareerLeagueWorld.ts",
+      "bytes": 15636,
+      "sha256": "360c629f5d6ecc9cd959f5aae9a3791eb99b4f5cecdca2236da563168c2bb8c6",
+      "gitBlob": "72fcabdd0c557a743aa849b01208140c3030048f"
+    },
+    {
+      "path": "src/lib/soccerCareerLife.ts",
+      "bytes": 105609,
+      "sha256": "1ba72d3a9b0f1fd30fe45eab2d5e34a955369effa6b224e02a9db3e3db92befc",
+      "gitBlob": "592170d7967162d9967e3cf13e22333afb840732"
+    },
+    {
+      "path": "src/lib/soccerCareerLoyalty.ts",
+      "bytes": 12855,
+      "sha256": "3296bbf33e1b148a7d69ea30c0e8e64a4eaa724e56b4c50c735089a340b79d54",
+      "gitBlob": "db056195a1dd1d5d2c2a35dc137e553663396dd2"
+    },
+    {
+      "path": "scripts/simCareerClubPool.mjs",
+      "bytes": 69585,
+      "sha256": "72a20476e826f482bd9e21890000ba2d59f391152177e154025484b5ea8d989b",
+      "gitBlob": "e818bc4cb798eda0bd69cfe38f497b51800d6da1"
+    },
+    {
+      "path": "src/lib/soccerCareerLeague.test.ts",
+      "bytes": 28994,
+      "sha256": "55d8f1e6af32a3b6498295d0e712fb1a6ee0e3fc204d74314d6db51c922d81f2",
+      "gitBlob": "3eeb71927250a19b6a7c1b5f5476d633b4bf25cd"
+    },
+    {
+      "path": "src/test/cmWorldIdentity1052.test.ts",
+      "bytes": 13366,
+      "sha256": "9735cd94d699af6247894de3af2705012096fa59a5f541640929c5b90d001ecb",
+      "gitBlob": "05ed085f6c3a0c8a46cc8d19523474af545888cb"
+    },
+    {
+      "path": "qa/sc-serieb-release-v1/FIXED-CONSUMER-SOURCE.json",
+      "bytes": 10636,
+      "sha256": "e7139a610101b59f5bb7a19a05c4911d251c9c3f1e541e10bbedc5f9411f1608",
+      "gitBlob": "aa4d252d5571f74c68b7254250e8f53a09843d5d"
+    },
+    {
+      "path": "qa/sc-serieb-release-v1/legacy-full-unit-identities.json.gz",
+      "bytes": 247425,
+      "sha256": "cdb7ed47a0a3604b16e16288466b545a5711e9646e0903cbc22c5b3ed5796ffa",
+      "gitBlob": "f6fabc3d0a0bd11b015d43fb837fccd1f7d0ba37"
+    },
+    {
+      "path": "qa/sc-serieb-release-v1/legacy-skipped-identities.json",
+      "bytes": 11072,
+      "sha256": "e9665db483d02cf65aad4163cc302b5aa71be318b2a4bc73a659c62bcf0fca5d",
+      "gitBlob": "3ee01ce0fa814fceace81ef81b7150a627f99ce3"
+    },
+    {
+      "path": "qa/sc-serieb-release-v1/PHYSICAL-CONTROLS.json",
+      "bytes": 12790,
+      "sha256": "d7651e890240228b7b904110d8ef93d301b9d82452ab968efc85d715b85a405c",
+      "gitBlob": "fbf15b36575960a91a57ad2a93b73520667e1187"
+    },
+    {
+      "path": "qa/sc-serieb-release-v1/PRODUCT-SOURCE-READY.json",
+      "bytes": 6075,
+      "sha256": "0cfa7c58be4db439aa8535a0e18b74cfd54a3d3896f17551d26f2a976064c2b9",
+      "gitBlob": "675332665791ddecff20e4202aae54490ab45b0c"
+    },
+    {
+      "path": "qa/sc-serieb-release-v1/original/soccerCareerClubPool.ts",
+      "bytes": 46309,
+      "sha256": "4fca8dcc0d83efaa0d79d58833a03d3f2787cd44fb5ea93a90c3cf207ef5efd2",
+      "gitBlob": "9247463ff836992a4ea43fb79c5c18b19ffe673d"
+    },
+    {
+      "path": "qa/sc-serieb-release-v1/original/soccerCareerCoachingStart.ts",
+      "bytes": 4043,
+      "sha256": "7720957192ccb8a0de5b1fef64817e409ee30d7ce7dd035425e598d0fd903aff",
+      "gitBlob": "0733d114d66b748131ac2c623fb858c6d9c97fd2"
+    },
+    {
+      "path": "qa/sc-serieb-release-v1/original/soccerCareerEngine.ts",
+      "bytes": 552035,
+      "sha256": "bc616834e0a5399fcd3ec55d519ead1b194281a9801e3da8a43bf421cd5153b2",
+      "gitBlob": "d40a6e9492e5a1a7c908dc1af7382d649b2b3fe7"
+    },
+    {
+      "path": "qa/sc-serieb-release-v1/research/COLOUR-WORD-LEDGER.json",
+      "bytes": 20847,
+      "sha256": "9dc7192ff95e070efcbe2bf392aaa3b67afb606bdda6f360e5634cdad60d2fa0",
+      "gitBlob": "78db0ba21d9ee2972a7717eb265deb800b6df634"
+    },
+    {
+      "path": "qa/sc-serieb-release-v1/research/PALETTE-DESIGN.json",
+      "bytes": 3802,
+      "sha256": "ef4e384cd154d91ddf33eaa44e8b91662f008d845528bc45b6efb70d04355c7e",
+      "gitBlob": "6e5b859d8355a2d85038b07923a901d17ebeae9c"
+    },
+    {
+      "path": "qa/sc-serieb-release-v1/retained/fixtures.json",
+      "bytes": 38248,
+      "sha256": "a44938775caabdabb5d446addd6a073ba26465435a86f1ffb9a0864317868ab5",
+      "gitBlob": "7c0d9337cf2fa6d0cfde5ed1d4f603a58b8c56ca"
+    },
+    {
+      "path": "qa/sc-serieb-release-v1/retained/modern-fixture.json",
+      "bytes": 11955,
+      "sha256": "ac2a1b9739578af9cf6f2ccf983f07f5c68a257bde2d39050a7ad02408a99ab5",
+      "gitBlob": "c256c45e5d3fb837640540169b49c71b4250d460"
+    },
+    {
+      "path": "qa/sc-serieb-release-v1/retained/old-generic.save.txt",
+      "bytes": 6412,
+      "sha256": "81777bcd5a7631c70edf52c626484c00e0a687ab2fd9a7fae7f3c3a2ade0da25",
+      "gitBlob": "01bd361ead98a5a78726437d3bb3f796d42b3ed3"
+    },
+    {
+      "path": "qa/sc-serieb-release-v1/retained/old-choices/club-loan.golden.json",
+      "bytes": 175648,
+      "sha256": "067d174dd041c1b217935d5ce2144b4ace3d783f0b877e471e6d326649435ba0",
+      "gitBlob": "0a7b2a577864f5ee1aa759e9ae2eaf03a20aa58c"
+    },
+    {
+      "path": "qa/sc-serieb-release-v1/retained/old-choices/club-loan.save.txt",
+      "bytes": 22847,
+      "sha256": "fb70e8e3b0e7926320db55a1665e3939f5f5da9f1579c233ed2d8d77f9686256",
+      "gitBlob": "8e145a5eace62ee79d8bc4dc045d9d4493256f3a"
+    },
+    {
+      "path": "qa/sc-serieb-release-v1/retained/old-choices/elected-loyalty.golden.json",
+      "bytes": 154074,
+      "sha256": "edf55a503bef313ee1daac54ad31a1368968da74e13005d724828e15f5166962",
+      "gitBlob": "3c69b017a64b46e717ed47fc4d9f8c9f597bb2a1"
+    },
+    {
+      "path": "qa/sc-serieb-release-v1/retained/old-choices/elected-loyalty.save.txt",
+      "bytes": 20624,
+      "sha256": "a43490e71cf126466d605ad62c7bf5e5ababb96c5ef293f33b502882c1f1bb1d",
+      "gitBlob": "852f71fda04ef84ac00cc58a18a4358c5a1890f1"
+    },
+    {
+      "path": "qa/sc-serieb-release-v1/retained/old-choices/permanent-transfer.golden.json",
+      "bytes": 150999,
+      "sha256": "fc8d531d4e051533ca456914495b62e341e326a0e44f7371468b988d77924d81",
+      "gitBlob": "59c368c22dbceeb398311b45ce42c6b62f36fa0a"
+    },
+    {
+      "path": "qa/sc-serieb-release-v1/retained/old-choices/permanent-transfer.save.txt",
+      "bytes": 20168,
+      "sha256": "e36ab900709fe90e88fcf541949bd6335678f94e82906ddbbbe2a3a4223e4342",
+      "gitBlob": "033b31d56fe56ad849ce7bc130f13eaf0ebf865a"
+    },
+    {
+      "path": "scripts/qa/playSerieBRelease.mjs",
+      "bytes": 27065,
+      "sha256": "18154cf793c2576fe231473c843ff28ee83ee91dc0abdbb16007bc725d894b57",
+      "gitBlob": "c6f9e65871ab3d703463db60d88aa9faace7b3bc"
+    },
+    {
+      "path": "scripts/qa/serieBReleaseFixed.mjs",
+      "bytes": 28080,
+      "sha256": "9ed95446ac71cbc59afef173d88bf91a31dddc098d6e5ae22ef06b7c9e6bccc2",
+      "gitBlob": "06738923e54c8663e8635ab436c4a10f229955ab"
+    },
+    {
+      "path": "scripts/qa/serieBReleaseQualification.mjs",
+      "bytes": 22321,
+      "sha256": "441cf5ba425c4a4cc9699799bec0eb0848b929771609c811148f25ee417c6c8b",
+      "gitBlob": "d3856f661a52f3a2c92d0eda811f4e3d4f877c67"
+    }
+  ],
+  "criticalSourcePaths": [
+    "src/lib/clubManager.ts",
+    "scripts/lib/careerClubPool.mjs",
+    "src/data/leagueFormat.ts",
+    "src/lib/soccerCareerLeague.ts",
+    "src/lib/soccerCareerDerby.ts",
+    "src/lib/soccerCareerEngine.ts",
+    "src/lib/soccerCareerCoachingStart.ts",
+    "scripts/data/soccerCareerFacts.json",
+    "src/data/soccerCareerClubPool.ts",
+    "src/lib/careerEras.ts",
+    "src/lib/soccerCareerSave.ts",
+    "src/lib/soccerCareerLeagueWorld.ts",
+    "src/lib/soccerCareerLife.ts",
+    "src/lib/soccerCareerLoyalty.ts"
+  ],
+  "productManifest": "qa/sc-serieb-release-v1/PRODUCT-SOURCE-READY.json",
+  "productManifestSHA256": "0cfa7c58be4db439aa8535a0e18b74cfd54a3d3896f17551d26f2a976064c2b9",
+  "fixedSpecPath": "qa/sc-serieb-release-v1/FIXED-CONSUMER-SOURCE.json",
+  "fixedConsumerPath": "scripts/qa/serieBReleaseFixed.mjs",
+  "fixedCases": [
+    {
+      "name": "complete initial-contract pool and since boundary",
+      "marker": "SERIEB_POOL"
+    },
+    {
+      "name": "complete modern finish ladder",
+      "marker": "SERIEB_LADDER"
+    },
+    {
+      "name": "playing table size points and cadence boundary",
+      "marker": "SERIEB_TABLE"
+    },
+    {
+      "name": "historic default manager entry excludes the appended20",
+      "marker": "SERIEB_DEFAULT_ENTRY"
+    },
+    {
+      "name": "historic coursework read and commit exclude the appended20",
+      "marker": "SERIEB_COURSEWORK_ENTRY"
+    },
+    {
+      "name": "existing190 hand287 generated23 ladders and L2 eligibility remain frozen",
+      "marker": "SERIEB_OLD_DEFINITIONS"
+    },
+    {
+      "name": "original saved choices match captured pre-product accepted outcomes",
+      "marker": "SERIEB_RETAINED_SAVE"
+    }
+  ],
+  "fixedSourcePaths": [
+    "src/lib/clubManager.ts",
+    "scripts/lib/careerClubPool.mjs",
+    "src/data/leagueFormat.ts",
+    "src/lib/soccerCareerLeague.ts",
+    "src/lib/soccerCareerDerby.ts",
+    "src/lib/soccerCareerEngine.ts",
+    "src/lib/soccerCareerCoachingStart.ts",
+    "scripts/data/soccerCareerFacts.json",
+    "src/data/soccerCareerClubPool.ts",
+    "src/lib/careerEras.ts",
+    "src/lib/soccerCareerSave.ts",
+    "src/lib/soccerCareerLeagueWorld.ts",
+    "src/lib/soccerCareerLife.ts",
+    "src/lib/soccerCareerLoyalty.ts",
+    "qa/sc-serieb-release-v1/original/soccerCareerClubPool.ts",
+    "qa/sc-serieb-release-v1/original/soccerCareerCoachingStart.ts",
+    "qa/sc-serieb-release-v1/original/soccerCareerEngine.ts",
+    "qa/sc-serieb-release-v1/research/COLOUR-WORD-LEDGER.json",
+    "qa/sc-serieb-release-v1/research/PALETTE-DESIGN.json",
+    "qa/sc-serieb-release-v1/retained/fixtures.json",
+    "qa/sc-serieb-release-v1/retained/modern-fixture.json",
+    "qa/sc-serieb-release-v1/retained/old-generic.save.txt",
+    "qa/sc-serieb-release-v1/retained/old-choices/club-loan.golden.json",
+    "qa/sc-serieb-release-v1/retained/old-choices/club-loan.save.txt",
+    "qa/sc-serieb-release-v1/retained/old-choices/elected-loyalty.golden.json",
+    "qa/sc-serieb-release-v1/retained/old-choices/elected-loyalty.save.txt",
+    "qa/sc-serieb-release-v1/retained/old-choices/permanent-transfer.golden.json",
+    "qa/sc-serieb-release-v1/retained/old-choices/permanent-transfer.save.txt",
+    "qa/sc-serieb-release-v1/FIXED-CONSUMER-SOURCE.json",
+    "qa/sc-serieb-release-v1/PRODUCT-SOURCE-READY.json",
+    "scripts/qa/serieBReleaseFixed.mjs"
+  ],
+  "physicalControlsPath": "qa/sc-serieb-release-v1/PHYSICAL-CONTROLS.json",
+  "physicalControls": 10,
+  "physicalFailureSets": [
+    {
+      "name": "new-generated-row",
+      "failed": [
+        0
+      ],
+      "independent": 5
+    },
+    {
+      "name": "ladder-member",
+      "failed": [
+        1
+      ],
+      "independent": 5
+    },
+    {
+      "name": "playing-size-promotion",
+      "failed": [
+        2
+      ],
+      "independent": 5
+    },
+    {
+      "name": "default-only-serieb-bypass",
+      "failed": [
+        3
+      ],
+      "independent": 5
+    },
+    {
+      "name": "shared-serieb-predicate",
+      "failed": [
+        0,
+        3,
+        4
+      ],
+      "independent": 5
+    },
+    {
+      "name": "new-serieb-since-entry",
+      "failed": [
+        0,
+        3,
+        4
+      ],
+      "independent": 5
+    },
+    {
+      "name": "plain-format-window",
+      "failed": [
+        2
+      ],
+      "independent": 5
+    },
+    {
+      "name": "cadence-window",
+      "failed": [
+        2
+      ],
+      "independent": 5
+    },
+    {
+      "name": "new-cm-colour",
+      "failed": [
+        0
+      ],
+      "independent": 5
+    },
+    {
+      "name": "sealed-provenance-association",
+      "failed": [
+        0
+      ],
+      "independent": 5
+    }
+  ],
+  "eachRestoredPassed": 7,
+  "fixedCopiedDiagnostics": 6,
+  "goldenCapturedOutputReplays": 3,
+  "goldenCopiedControls": 4,
+  "actualBootsRequired": 20,
+  "skipReferencePath": "qa/sc-serieb-release-v1/legacy-skipped-identities.json",
+  "unitReferencePath": "qa/sc-serieb-release-v1/legacy-full-unit-identities.json.gz",
+  "unitReferenceRenames": [
+    {
+      "file": "src/lib/soccerCareerLeague.test.ts",
+      "from": "managerLeagueField (Round 1029) knows the Championship's size from 2004, and the held second flights for the dugout only",
+      "to": "managerLeagueField (Round 1029) knows the Championship's size from 2004, and the second-flight size windows"
+    },
+    {
+      "file": "src/test/cmWorldIdentity1052.test.ts",
+      "from": "Round 1052: the world before the round is still there, untouched rejects an outside-nine copied colour change and readmits its restoration",
+      "to": "Round 1052: the world before the round is still there, untouched rejects an outside-twenty copied colour change and readmits its restoration"
+    },
+    {
+      "file": "src/test/cmWorldIdentity1052.test.ts",
+      "from": "Round 1052: the world before the round is still there, untouched rejects an inside-nine copied colour change and readmits its restoration",
+      "to": "Round 1052: the world before the round is still there, untouched rejects an inside-twenty copied colour change and readmits its restoration"
+    },
+    {
+      "file": "src/test/cmWorldIdentity1052.test.ts",
+      "from": "Round 1052: the world before the round is still there, untouched rejects an inside-nine copied budget change and readmits its restoration",
+      "to": "Round 1052: the world before the round is still there, untouched rejects an inside-twenty copied budget change and readmits its restoration"
+    }
+  ],
+  "unitReferenceSource": {
+    "status": "ACTUAL_ADMITTED_UNIT_IDENTITY_REFERENCE_ONLY",
+    "sourceRun": 40724819933,
+    "sourceJob": 122945128154,
+    "sourceHead": "0e5c6f1f3272c6621400c33f4d1974d8c613131d",
+    "sourceTree": "d68abcdb548bd5512a4534c7301adb09f3b5d49b",
+    "sourceUnitAdmissionSHA256": "d0024202bb2798ba28257d70aa60c7b121f5a1d18cd40aa6335469858598aa34",
+    "sourceRawIdentityFileSHA256": "c8d19e1691bc3f19491930a9f721dbff8d7c1fbc3b1d787ab06a0625ca3bd479",
+    "path": "qa/sc-serieb-release-v1/legacy-full-unit-identities.json.gz",
+    "bytes": 247425,
+    "sha256": "cdb7ed47a0a3604b16e16288466b545a5711e9646e0903cbc22c5b3ed5796ffa",
+    "rows": 9786,
+    "passed": 9728,
+    "skipped": 58,
+    "renames": [
+      {
+        "file": "src/lib/soccerCareerLeague.test.ts",
+        "from": "managerLeagueField (Round 1029) knows the Championship's size from 2004, and the held second flights for the dugout only",
+        "to": "managerLeagueField (Round 1029) knows the Championship's size from 2004, and the second-flight size windows"
+      },
+      {
+        "file": "src/test/cmWorldIdentity1052.test.ts",
+        "from": "Round 1052: the world before the round is still there, untouched rejects an outside-nine copied colour change and readmits its restoration",
+        "to": "Round 1052: the world before the round is still there, untouched rejects an outside-twenty copied colour change and readmits its restoration"
+      },
+      {
+        "file": "src/test/cmWorldIdentity1052.test.ts",
+        "from": "Round 1052: the world before the round is still there, untouched rejects an inside-nine copied colour change and readmits its restoration",
+        "to": "Round 1052: the world before the round is still there, untouched rejects an inside-twenty copied colour change and readmits its restoration"
+      },
+      {
+        "file": "src/test/cmWorldIdentity1052.test.ts",
+        "from": "Round 1052: the world before the round is still there, untouched rejects an inside-nine copied budget change and readmits its restoration",
+        "to": "Round 1052: the world before the round is still there, untouched rejects an inside-twenty copied budget change and readmits its restoration"
+      }
+    ],
+    "limits": "Reference from actual successful V4 unit job only. Overall V4 workflow has failed observer metadata and pending global profile. Current fresh suite must provide its own exit0, full JSON and CLI closings and all-case status multiset with only these four exact title projections."
+  },
+  "freshFullSuite": "Fresh actual complete report/CLI/rawexit. Complete previous actual V4 unit identities projected only through four exact title renames, no other addition/deletion/status change; preserve58 exact skip identities and duplicate multiplicity.",
+  "unitCopiedDiagnostics": 8,
+  "focusedHarnesses": [
+    "simCareerClubPool",
+    "simCareerLeagueWorld",
+    "simCareerLeagueFinish",
+    "simCareerDerbies",
+    "simCareerEras",
+    "simSoccerCareerLeagueWorld"
+  ],
+  "browser": {
+    "helper": "scripts/qa/playSerieBRelease.mjs",
+    "sha256": "18154cf793c2576fe231473c843ff28ee83ee91dc0abdbb16007bc725d894b57",
+    "actualRoutes": 3,
+    "viewports": [
+      320,
+      390,
+      1280
+    ],
+    "normalCaptures": 12,
+    "copiedControls": 6,
+    "closing": "SERIEB_BROWSER: 3 actual routes, 12 captures, genuine new-club contract, 2027 season, 20-club/38-game tables and official reload, 6 COPIED guards passed",
+    "sourceGO": "03888908779ea8d76997f073cabfa014f29d7d7c3246a48e31af31c1ef6dd02e",
+    "scope": "Actual route, genuine new SerieB offer and accepted contract, Italy fixture,2027 senior season,20clubs38games, visible+saved league identity and official reload; six copied observations, no fault-pixel credit."
+  },
+  "fullSims": {
+    "runInThisWorkflow": false,
+    "reason": "Root requested no extra819 global profile while existing Ligue2V4 remains active. Global qualification is pending separately, no global-green claim."
+  },
+  "build": {
+    "realTypesInEachJob": true,
+    "twoRouteSEO": true,
+    "readers": 15,
+    "unchangedFatalCaps": 15,
+    "noSimsDuringBuild": true,
+    "allSourceAndDistHolds": true
+  },
+  "references": {
+    "manual": "9d3948f94bdb6980e8f9cc4f67bbb0b81fad214d2a5829757f0c3a36e6e06dcf",
+    "generatorAdmission": "1841586a2bec59c64477f3aa614eda7d3f7c040496a0aecbbc529143ede96e7a",
+    "productGO": "ecde8e1f16fa2007877610b8081d9fcb85b86f1630476595562c80b265b83e48",
+    "fixedPacket": "ff11b433ba95a82fabdcaca85223eb25b4fcde2b075ebc90efe5834717257aad",
+    "fixedGO": "c7bd92a1386008e6d4f668c29416e22b86bc9b8e7095d2bbe559adf66bfb1dad",
+    "absoluteGoldenFixtureAdmission": "8866e4acb9ece45fed252884b25ecd6d0b10ffb7c75c6ca5e25b9f3e1c732c07"
+  },
+  "limits": "Bounded source-vetted qualification only, no global or main/live claim. Historical manager-quote bundle freezes only oldEngine+pool+Coaching; all other dependencies are current. Absolute old transaction preservation uses three captured pre-product full outputs. Module initialization excluded/unmeasured. No cap/margin/historical proof changes."
+}

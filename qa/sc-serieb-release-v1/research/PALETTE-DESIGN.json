@@ -1,0 +1,133 @@
+{
+  "status": "DESIGN_ONLY_EXISTING_DECORATIVE_PALETTE_FROZEN",
+  "sourceProductManifest": "02da0797213ad87d8bf9122099e2ff910aa5f5c09fcf0237736df56043392ab0",
+  "clubManagerSHA256": "a4c8260bced0db3582437461afe6e6616f465e0b0b1ec887ba301757364681dd",
+  "researchReceiptSHA256": "4c6849dc0bd8020080660665e9ac943bc4f2d014ee14195a32da44007489e3bf",
+  "colourWordLedgerSHA256": "9dc7192ff95e070efcbe2bf392aaa3b67afb606bdda6f360e5634cdad60d2fa0",
+  "selections": [
+    {
+      "verifiedColourWords": [
+        "green",
+        "white"
+      ],
+      "paletteClub": "Moreirense",
+      "paletteLiteral": "'Moreirense': '#0a7040'",
+      "careerName": "Avellino",
+      "cmName": "Avellino",
+      "hex": "#0a7040"
+    },
+    {
+      "verifiedColourWords": [
+        "azure",
+        "yellow"
+      ],
+      "paletteClub": "Frosinone",
+      "paletteLiteral": "'Frosinone': '#f7d417'",
+      "careerName": "Carrarese",
+      "cmName": "Carrarese",
+      "hex": "#f7d417"
+    },
+    {
+      "verifiedColourWords": [
+        "yellow",
+        "red"
+      ],
+      "paletteClub": "Braga",
+      "paletteLiteral": "'Braga': '#d02128'",
+      "careerName": "Catanzaro",
+      "cmName": "Catanzaro",
+      "hex": "#d02128"
+    },
+    {
+      "verifiedColourWords": [
+        "white",
+        "sky blue"
+      ],
+      "paletteClub": "Lazio",
+      "paletteLiteral": "'Lazio': '#87d8f7'",
+      "careerName": "Entella",
+      "cmName": "Entella",
+      "hex": "#87d8f7"
+    },
+    {
+      "verifiedColourWords": [
+        "yellow",
+        "blue"
+      ],
+      "paletteClub": "Frosinone",
+      "paletteLiteral": "'Frosinone': '#f7d417'",
+      "careerName": "Juve Stabia",
+      "cmName": "Juve Stabia",
+      "hex": "#f7d417"
+    },
+    {
+      "verifiedColourWords": [
+        "white",
+        "red"
+      ],
+      "paletteClub": "Braga",
+      "paletteLiteral": "'Braga': '#d02128'",
+      "careerName": "Mantova",
+      "cmName": "Mantova",
+      "hex": "#d02128"
+    },
+    {
+      "verifiedColourWords": [
+        "yellow",
+        "blue"
+      ],
+      "paletteClub": "Frosinone",
+      "paletteLiteral": "'Frosinone': '#f7d417'",
+      "careerName": "Modena",
+      "cmName": "Modena",
+      "hex": "#f7d417"
+    },
+    {
+      "verifiedColourWords": [
+        "white",
+        "red"
+      ],
+      "paletteClub": "Braga",
+      "paletteLiteral": "'Braga': '#d02128'",
+      "careerName": "Padova",
+      "cmName": "Padova",
+      "hex": "#d02128"
+    },
+    {
+      "verifiedColourWords": [
+        "white",
+        "red"
+      ],
+      "paletteClub": "Braga",
+      "paletteLiteral": "'Braga': '#d02128'",
+      "careerName": "Sudtirol",
+      "cmName": "Südtirol",
+      "hex": "#d02128"
+    },
+    {
+      "verifiedColourWords": [
+        "white",
+        "red"
+      ],
+      "paletteClub": "Braga",
+      "paletteLiteral": "'Braga': '#d02128'",
+      "careerName": "Vicenza",
+      "cmName": "Vicenza",
+      "hex": "#d02128"
+    },
+    {
+      "verifiedColourWords": [
+        "amaranto"
+      ],
+      "paletteClub": "Hearts",
+      "paletteLiteral": "'Hearts': '#7d1c2a'",
+      "careerName": "Arezzo",
+      "cmName": "Arezzo",
+      "hex": "#7d1c2a"
+    }
+  ],
+  "missingTargets": 11,
+  "newHexValues": 0,
+  "scope": "Display palette choices only. Every selected hex already occurs in the existing CLUB_COLORS map. Two independent sources support the colour words; no exact numeric shade is claimed official. No club crest, kit or player image is imported.",
+  "limits": "Design only. Actual baseline admission and genuine old Serie B choice acquisition remain mandatory before product edits. All existing colours, source bodies and game data remain untouched."
+}

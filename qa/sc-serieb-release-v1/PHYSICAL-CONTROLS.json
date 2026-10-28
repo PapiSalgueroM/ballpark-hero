@@ -1,0 +1,390 @@
+{
+  "status": "SOURCE_READY_PHYSICAL_EFFECTIVENESS_UNRUN",
+  "controls": [
+    {
+      "name": "new-generated-row",
+      "path": "src/data/soccerCareerClubPool.ts",
+      "sourceSHA256": "5e565223239c8bb5ea8f5be3d2ecfb5c72ed026d3598031fcb5221f265e01d58",
+      "expectedChangedSourceSHA256": "05777f7f1cbba94047f4fcd369d2defdaddd0ac77d16f03c46fa196efb15146a",
+      "targetIndex": 0,
+      "independentIndex": 5,
+      "expectedFailureIndices": [
+        0
+      ],
+      "expectedFailureMarkers": {
+        "0": "SERIEB_POOL"
+      },
+      "expectedCaseStatuses": [
+        "failed",
+        "passed",
+        "passed",
+        "passed",
+        "passed",
+        "passed",
+        "passed"
+      ],
+      "expectedTotals": {
+        "cases": 7,
+        "failed": 1,
+        "passed": 6,
+        "methodErrors": 0,
+        "goldenCopiedControls": 4
+      },
+      "scope": "Remove one actual new Avellino row, valid source; old287 untouched",
+      "mutation": {
+        "kind": "span",
+        "before": "  { id: \"cm-avellino\", name: \"Avellino\", country: \"Italy\", tier: 4, color: \"#0a7040\", league: \"Serie B\" },\n",
+        "after": "",
+        "count": 1
+      }
+    },
+    {
+      "name": "ladder-member",
+      "path": "src/data/soccerCareerClubPool.ts",
+      "sourceSHA256": "5e565223239c8bb5ea8f5be3d2ecfb5c72ed026d3598031fcb5221f265e01d58",
+      "expectedChangedSourceSHA256": "7f3d3dd627b2e4b69f3df76db958b976d2e807112712df72f251608b15a4b16a",
+      "targetIndex": 1,
+      "independentIndex": 5,
+      "expectedFailureIndices": [
+        1
+      ],
+      "expectedFailureMarkers": {
+        "1": "SERIEB_LADDER"
+      },
+      "expectedCaseStatuses": [
+        "passed",
+        "failed",
+        "passed",
+        "passed",
+        "passed",
+        "passed",
+        "passed"
+      ],
+      "expectedTotals": {
+        "cases": 7,
+        "failed": 1,
+        "passed": 6,
+        "methodErrors": 0,
+        "goldenCopiedControls": 4
+      },
+      "scope": "Remove only one current Avellino member from actual new ladder; all old23 ladders held",
+      "mutation": {
+        "kind": "span",
+        "before": "  \"Serie B\": [[\"Pisa\"], [\"Verona\"], [\"Arezzo\", \"Ascoli\", \"Avellino\", \"Benevento\", \"Carrarese\", \"Catanzaro\", \"Cesena\", \"Cremonese\", \"Empoli\", \"Entella\", \"Juve Stabia\", \"Mantova\", \"Modena\", \"Padova\", \"Palermo\", \"Sampdoria\", \"Sudtirol\", \"Vicenza\"]],",
+        "after": "  \"Serie B\": [[\"Pisa\"], [\"Verona\"], [\"Arezzo\", \"Ascoli\", \"Benevento\", \"Carrarese\", \"Catanzaro\", \"Cesena\", \"Cremonese\", \"Empoli\", \"Entella\", \"Juve Stabia\", \"Mantova\", \"Modena\", \"Padova\", \"Palermo\", \"Sampdoria\", \"Sudtirol\", \"Vicenza\"]],",
+        "count": 1
+      }
+    },
+    {
+      "name": "playing-size-promotion",
+      "path": "src/lib/soccerCareerLeague.ts",
+      "sourceSHA256": "fe3efae2f43e780c2cd4d13ca7fa85f023a2fefe8cf1b002866a1cf0d963268a",
+      "expectedChangedSourceSHA256": "0519defdf1ac93f69b83f14b11d36f1b9d2544f7bb6c60ba97c4539710cd9b52",
+      "targetIndex": 2,
+      "independentIndex": 5,
+      "expectedFailureIndices": [
+        2
+      ],
+      "expectedFailureMarkers": {
+        "2": "SERIEB_TABLE"
+      },
+      "expectedCaseStatuses": [
+        "passed",
+        "passed",
+        "failed",
+        "passed",
+        "passed",
+        "passed",
+        "passed"
+      ],
+      "expectedTotals": {
+        "cases": 7,
+        "failed": 1,
+        "passed": 6,
+        "methodErrors": 0,
+        "goldenCopiedControls": 4
+      },
+      "scope": "Exact a480 size body puts only SerieB20 back in dugout; current L2 and old windows held",
+      "mutation": {
+        "kind": "reference",
+        "ref": "a4805f9d0e5816d19a1490ee6bb511966c617785",
+        "sha256": "0519defdf1ac93f69b83f14b11d36f1b9d2544f7bb6c60ba97c4539710cd9b52",
+        "gitBlob": "4289b67b17952e3210e3c7593a5f9ad0327024a3"
+      }
+    },
+    {
+      "name": "default-only-serieb-bypass",
+      "path": "src/lib/soccerCareerEngine.ts",
+      "sourceSHA256": "bf4beb5151213325277a44c83cef6a72528d14b612368b8db70c7b2288508708",
+      "expectedChangedSourceSHA256": "add05aa0d85418d53f542ece664872bed33d0a6fd49941cce9b53afc319c304e",
+      "targetIndex": 3,
+      "independentIndex": 5,
+      "expectedFailureIndices": [
+        3
+      ],
+      "expectedFailureMarkers": {
+        "3": "SERIEB_DEFAULT_ENTRY"
+      },
+      "expectedCaseStatuses": [
+        "passed",
+        "passed",
+        "passed",
+        "failed",
+        "passed",
+        "passed",
+        "passed"
+      ],
+      "expectedTotals": {
+        "cases": 7,
+        "failed": 1,
+        "passed": 6,
+        "methodErrors": 0,
+        "goldenCopiedControls": 4
+      },
+      "scope": "Bypass only SerieB at real default caller, keeping all old L2 filtering and independent C5 intact",
+      "mutation": {
+        "kind": "span",
+        "before": "c.tier >= 3 && managerEntryClubInYear(c, firstYear)",
+        "after": "c.tier >= 3 && (c.league === 'Serie B' || managerEntryClubInYear(c, firstYear))",
+        "count": 1
+      }
+    },
+    {
+      "name": "shared-serieb-predicate",
+      "path": "src/lib/soccerCareerEngine.ts",
+      "sourceSHA256": "bf4beb5151213325277a44c83cef6a72528d14b612368b8db70c7b2288508708",
+      "expectedChangedSourceSHA256": "7bd43ae5add04d2ed48405e290f28a9552d98c81693bb6d1f7b352529effff87",
+      "targetIndex": 0,
+      "independentIndex": 5,
+      "expectedFailureIndices": [
+        0,
+        3,
+        4
+      ],
+      "expectedFailureMarkers": {
+        "0": "SERIEB_POOL",
+        "3": "SERIEB_DEFAULT_ENTRY",
+        "4": "SERIEB_COURSEWORK_ENTRY"
+      },
+      "expectedCaseStatuses": [
+        "failed",
+        "passed",
+        "passed",
+        "failed",
+        "failed",
+        "passed",
+        "passed"
+      ],
+      "expectedTotals": {
+        "cases": 7,
+        "failed": 3,
+        "passed": 4,
+        "methodErrors": 0,
+        "goldenCopiedControls": 4
+      },
+      "scope": "Drop only SerieB from canonical shared predicate: owned census, actual default and actual coursework all fail; old L2 remains guarded",
+      "mutation": {
+        "kind": "span",
+        "before": " || row.league === 'Serie B'",
+        "after": "",
+        "count": 1
+      }
+    },
+    {
+      "name": "new-serieb-since-entry",
+      "path": "src/data/soccerCareerClubPool.ts",
+      "sourceSHA256": "5e565223239c8bb5ea8f5be3d2ecfb5c72ed026d3598031fcb5221f265e01d58",
+      "expectedChangedSourceSHA256": "fd82d843b9d82bbe433466ccfd0b3804720fc8f7e9cfee716a4ee8135818ee1b",
+      "targetIndex": 0,
+      "independentIndex": 5,
+      "expectedFailureIndices": [
+        0,
+        3,
+        4
+      ],
+      "expectedFailureMarkers": {
+        "0": "SERIEB_POOL",
+        "3": "SERIEB_DEFAULT_ENTRY",
+        "4": "SERIEB_COURSEWORK_ENTRY"
+      },
+      "expectedCaseStatuses": [
+        "failed",
+        "passed",
+        "passed",
+        "failed",
+        "failed",
+        "passed",
+        "passed"
+      ],
+      "expectedTotals": {
+        "cases": 7,
+        "failed": 3,
+        "passed": 4,
+        "methodErrors": 0,
+        "goldenCopiedControls": 4
+      },
+      "scope": "Change only new Avellino since2026 to2025, exposing new historical eligibility; all old287 since entries held",
+      "mutation": {
+        "kind": "span",
+        "before": "\"Avellino\": 2026",
+        "after": "\"Avellino\": 2025",
+        "count": 1
+      }
+    },
+    {
+      "name": "plain-format-window",
+      "path": "src/data/leagueFormat.ts",
+      "sourceSHA256": "915b4acd46f103d7c371d58c043c600a85e4e592ae6b59d5a8000d930e76fca5",
+      "expectedChangedSourceSHA256": "dc73e10402d270a6ed01c0fab4f8165d305f336a55a238d863c9b310f7f8ab4d",
+      "targetIndex": 2,
+      "independentIndex": 5,
+      "expectedFailureIndices": [
+        2
+      ],
+      "expectedFailureMarkers": {
+        "2": "SERIEB_TABLE"
+      },
+      "expectedCaseStatuses": [
+        "passed",
+        "passed",
+        "failed",
+        "passed",
+        "passed",
+        "passed",
+        "passed"
+      ],
+      "expectedTotals": {
+        "cases": 7,
+        "failed": 1,
+        "passed": 6,
+        "methodErrors": 0,
+        "goldenCopiedControls": 4
+      },
+      "scope": "Remove only new SerieB plain3point row, all old windows held",
+      "mutation": {
+        "kind": "span",
+        "before": "  \"Serie B\": [{ from: 2026 }],\n",
+        "after": "",
+        "count": 1
+      }
+    },
+    {
+      "name": "cadence-window",
+      "path": "src/lib/soccerCareerDerby.ts",
+      "sourceSHA256": "24b47bb4f83a37f4c43fcd5cb42be7976eac299a5bec0f7673af0621c6c804e8",
+      "expectedChangedSourceSHA256": "c6a6859a5fd24f18d6a2e05b258ad9dddbc271a81d42c1767560d4a8cee8d906",
+      "targetIndex": 2,
+      "independentIndex": 5,
+      "expectedFailureIndices": [
+        2
+      ],
+      "expectedFailureMarkers": {
+        "2": "SERIEB_TABLE"
+      },
+      "expectedCaseStatuses": [
+        "passed",
+        "passed",
+        "failed",
+        "passed",
+        "passed",
+        "passed",
+        "passed"
+      ],
+      "expectedTotals": {
+        "cases": 7,
+        "failed": 1,
+        "passed": 6,
+        "methodErrors": 0,
+        "goldenCopiedControls": 4
+      },
+      "scope": "Remove only new SerieB two-meetings row, all old windows held",
+      "mutation": {
+        "kind": "span",
+        "before": "  \"Serie B\": [{ from: 2026, meetings: 2 }],\n",
+        "after": "",
+        "count": 1
+      }
+    },
+    {
+      "name": "new-cm-colour",
+      "path": "src/lib/clubManager.ts",
+      "sourceSHA256": "135929be1da2fc592d2eb40f9bfdf7a3eb6b90ba911b4f5379cf5e662987621e",
+      "expectedChangedSourceSHA256": "e57297a53bd75c2a25db3f96e4ee4ae19b210ac69d8b3b19e9a67283f9b6bb29",
+      "targetIndex": 0,
+      "independentIndex": 5,
+      "expectedFailureIndices": [
+        0
+      ],
+      "expectedFailureMarkers": {
+        "0": "SERIEB_POOL"
+      },
+      "expectedCaseStatuses": [
+        "failed",
+        "passed",
+        "passed",
+        "passed",
+        "passed",
+        "passed",
+        "passed"
+      ],
+      "expectedTotals": {
+        "cases": 7,
+        "failed": 1,
+        "passed": 6,
+        "methodErrors": 0,
+        "goldenCopiedControls": 4
+      },
+      "scope": "Change only Carrarese to another valid existing non-grey palette value; C0 rejects approved-colour mismatch while C1 ladder derivation remains valid",
+      "mutation": {
+        "kind": "span",
+        "before": "'Carrarese': '#f7d417', ",
+        "after": "'Carrarese': '#0a7040', ",
+        "count": 1
+      }
+    },
+    {
+      "name": "sealed-provenance-association",
+      "path": "scripts/data/soccerCareerFacts.json",
+      "sourceSHA256": "35b8f45234d485190098746e8f04ab1d2db386bc4f44b1224c7f7e76a462fe4a",
+      "expectedChangedSourceSHA256": "3dfd78c80cf0cd40b4fe900ef06c0d3abad3137d6cc2a9202209345f6ac8f6e9",
+      "targetIndex": 0,
+      "independentIndex": 5,
+      "expectedFailureIndices": [
+        0
+      ],
+      "expectedFailureMarkers": {
+        "0": "SERIEB_POOL"
+      },
+      "expectedCaseStatuses": [
+        "failed",
+        "passed",
+        "passed",
+        "passed",
+        "passed",
+        "passed",
+        "passed"
+      ],
+      "expectedTotals": {
+        "cases": 7,
+        "failed": 1,
+        "passed": 6,
+        "methodErrors": 0,
+        "goldenCopiedControls": 4
+      },
+      "scope": "Keep JSON and valid https URL while breaking exact sealed research association for one new record",
+      "mutation": {
+        "kind": "span",
+        "before": "https://carraresecalcio1908.it/presentazione-home-kit-stagione-2024-2025/",
+        "after": "https://carraresecalcio1908.it/presentazione-home-kit-stagione-2024-2025/?qa=wrong-provenance",
+        "count": 1
+      }
+    }
+  ],
+  "healthyCases": 7,
+  "independentIndex": 5,
+  "restoreCases": 7,
+  "perControlFailureSets": true,
+  "uniformFailureCount": false,
+  "sourcePins": "Actual admitted generated5e565 and sevenmanual product bodies",
+  "scope": "Exactly one declared changed app path per controlled copy, immutable selectors/fixtures/goldens held. Assert native expected changed hash; sourceBefore/After must hold it. Only exact expected case/error/marker set accepted; independent C5 alwaysPASS. Restore SAME physical copy to canonical SHA then all7positive/4goldenCOPIED again. Runtime effect is unrun."
+}

@@ -1,0 +1,120 @@
+{
+  "status": "PRODUCT_SOURCE_READY_FIXED_RUNTIME_PENDING",
+  "parent": "a4805f9d0e5816d19a1490ee6bb511966c617785",
+  "tree": "a0f25d5bd854823b3a625932d8dff336bc400e0b",
+  "parentStatus": "Source-vetted clean Draft422 candidate, Ligue 2 global qualification pending",
+  "productPaths": 8,
+  "files": [
+    {
+      "path": "src/lib/clubManager.ts",
+      "bytes": 1241181,
+      "sha256": "135929be1da2fc592d2eb40f9bfdf7a3eb6b90ba911b4f5379cf5e662987621e",
+      "gitBlob": "aff16d7d51de6da8dd1d16893c9c03acc57cb97f",
+      "originalBytes": 1240848,
+      "originalSHA256": "a4c8260bced0db3582437461afe6e6616f465e0b0b1ec887ba301757364681dd",
+      "originalGitBlob": "be0d8b8fe962f7bff0ed36dee421939b0b728cdf"
+    },
+    {
+      "path": "scripts/data/soccerCareerFacts.json",
+      "bytes": 176880,
+      "sha256": "35b8f45234d485190098746e8f04ab1d2db386bc4f44b1224c7f7e76a462fe4a",
+      "gitBlob": "6ac25dc9d27bb0295f0e268be79990cf69086f7f",
+      "originalBytes": 163464,
+      "originalSHA256": "352d9e65f0661c2943ca1bf5b5129e7cb405c3d8c4aa6dbe3bad6dad60f1349a",
+      "originalGitBlob": "243991ff827226cf197ca6450cf0c9ee40fdc709"
+    },
+    {
+      "path": "scripts/lib/careerClubPool.mjs",
+      "bytes": 22296,
+      "sha256": "ded92933aa4790e4c4a532647d09e5ee3c65b22dfec57432de18d25641d9dce0",
+      "gitBlob": "16ccc6137958a1adf2e40e5d26b99de466b38e24",
+      "originalBytes": 22388,
+      "originalSHA256": "b2e24ba13301ec48c0119e69bf614bbc0f0e7f344103a5f1baddaffdfe325190",
+      "originalGitBlob": "e05c4ad14d82b3c610d403f91f11a7b2debd0a67"
+    },
+    {
+      "path": "src/data/leagueFormat.ts",
+      "bytes": 7070,
+      "sha256": "915b4acd46f103d7c371d58c043c600a85e4e592ae6b59d5a8000d930e76fca5",
+      "gitBlob": "802650466c0c4439f12c741e7d1ae28957280f9b",
+      "originalBytes": 7039,
+      "originalSHA256": "dc73e10402d270a6ed01c0fab4f8165d305f336a55a238d863c9b310f7f8ab4d",
+      "originalGitBlob": "ee63dcd69a02079ecb4cafdaf740ddc8a836e705"
+    },
+    {
+      "path": "src/lib/soccerCareerLeague.ts",
+      "bytes": 47020,
+      "sha256": "fe3efae2f43e780c2cd4d13ca7fa85f023a2fefe8cf1b002866a1cf0d963268a",
+      "gitBlob": "9c05bf681f30bcd3703f55ad72c1289f4eeb9844",
+      "originalBytes": 47020,
+      "originalSHA256": "0519defdf1ac93f69b83f14b11d36f1b9d2544f7bb6c60ba97c4539710cd9b52",
+      "originalGitBlob": "4289b67b17952e3210e3c7593a5f9ad0327024a3"
+    },
+    {
+      "path": "src/lib/soccerCareerDerby.ts",
+      "bytes": 23401,
+      "sha256": "24b47bb4f83a37f4c43fcd5cb42be7976eac299a5bec0f7673af0621c6c804e8",
+      "gitBlob": "e25062b2b6560957feb414fd709b7bbc5b4af7ba",
+      "originalBytes": 23357,
+      "originalSHA256": "c6a6859a5fd24f18d6a2e05b258ad9dddbc271a81d42c1767560d4a8cee8d906",
+      "originalGitBlob": "4a14cd2ad13505990122383f7595689bb1e8df6e"
+    },
+    {
+      "path": "src/lib/soccerCareerEngine.ts",
+      "bytes": 552077,
+      "sha256": "bf4beb5151213325277a44c83cef6a72528d14b612368b8db70c7b2288508708",
+      "gitBlob": "97e40cf67e30c3cbf6425eab95afa0c53a20d66b",
+      "originalBytes": 552035,
+      "originalSHA256": "bc616834e0a5399fcd3ec55d519ead1b194281a9801e3da8a43bf421cd5153b2",
+      "originalGitBlob": "d40a6e9492e5a1a7c908dc1af7382d649b2b3fe7"
+    },
+    {
+      "path": "src/data/soccerCareerClubPool.ts",
+      "bytes": 49030,
+      "sha256": "5e565223239c8bb5ea8f5be3d2ecfb5c72ed026d3598031fcb5221f265e01d58",
+      "gitBlob": "83e9df78441c0d16509f80b8ec0bfbadb0f08f26",
+      "originalBytes": 46309,
+      "originalSHA256": "4fca8dcc0d83efaa0d79d58833a03d3f2787cd44fb5ea93a90c3cf207ef5efd2",
+      "originalGitBlob": "9247463ff836992a4ea43fb79c5c18b19ffe673d"
+    }
+  ],
+  "held": {
+    "path": "src/lib/soccerCareerCoachingStart.ts",
+    "bytes": 4043,
+    "sha256": "7720957192ccb8a0de5b1fef64817e409ee30d7ce7dd035425e598d0fd903aff",
+    "gitBlob": "0733d114d66b748131ac2c623fb858c6d9c97fd2",
+    "scope": "Whole body remains the existing eligible-caller, no caller edit"
+  },
+  "manualManifestSHA256": "9d3948f94bdb6980e8f9cc4f67bbb0b81fad214d2a5829757f0c3a36e6e06dcf",
+  "manualRootSourceGO": "22272238604a7e50c3f5c860c1e27ad24767fc79544b7f5ac271b3fcdfb8451a",
+  "manualPeerSourceGO": "cce38126f1839faaea623a89f0791afe4a114358b917b0373e85bd1aea48bd1c",
+  "actualBaselineAdmissionSHA256": "02e135eeedb20d3783eeb2bb54114b0ab7269c16012e5b6b9bc9d9528f35c303",
+  "actualGenuineFixtureAdmissionSHA256": "8866e4acb9ece45fed252884b25ecd6d0b10ffb7c75c6ca5e25b9f3e1c732c07",
+  "actualGeneratorAdmissionSHA256": "1841586a2bec59c64477f3aa614eda7d3f7c040496a0aecbbc529143ede96e7a",
+  "generator": {
+    "run": 40752259970,
+    "head": "cbaf3ebd4671433a1dac78a16d818d20755bf013",
+    "tree": "9dda4eb9d88f40bf20c6363e48a137cc7cb92ef9",
+    "soleParent": "a905e676527e1ec93bdf7e3f5ed1c8c33e1bf087",
+    "originalSHA256": "6e1928744fce72268381ba075c01fd3a8744498dee7f1a36fbbd880f9e62c690",
+    "outputSHA256": "5e565223239c8bb5ea8f5be3d2ecfb5c72ed026d3598031fcb5221f265e01d58",
+    "outputGitBlob": "83e9df78441c0d16509f80b8ec0bfbadb0f08f26",
+    "outputBytes": 49030,
+    "existingGeneratorOnly": true,
+    "outputHandAuthored": false,
+    "oldRowsHeldOrdered": 287,
+    "newRows": 307,
+    "addedRows": 20,
+    "oldLaddersHeld": 23,
+    "newTotalLadders": 24,
+    "newLadderClubs": 20,
+    "newSince2026": 20,
+    "HAND190Fingerprint": "e12e673153af2568",
+    "all5438SourceBodiesAndFinalHolds": true,
+    "copiedObservationControls": 5,
+    "samplerRawExit": 1,
+    "samplerExactOldRationalRefusals": 12,
+    "samplerAccountingScope": "Measured only. Current unchanged samplerede304 is red on exactly twelve prior rational statements. No fixed sampler qualification or historical margin change."
+  },
+  "limits": "Eight exact product bodies only. Fixed cases, all20 actual boots, absolute old raw transaction replay, physical controls/restores, sampler successor, fresh units, build/readers/caps/browser remain pending. No new full global profile launched while existing Ligue 2 V4 runs."
+}

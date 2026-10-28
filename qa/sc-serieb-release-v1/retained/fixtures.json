@@ -1,0 +1,1496 @@
+{
+  "value": {
+    "offered": {
+      "playerName": "SerieB Boundary",
+      "nationality": "France",
+      "position": "CM",
+      "era": "2000s",
+      "age": 17,
+      "potential": 80,
+      "potentialEarned": 0,
+      "eliteStreak": 0,
+      "startingOverall": 70,
+      "physique": {
+        "heightCm": 180,
+        "weightKg": 75
+      },
+      "attrShape": {},
+      "karma": 50,
+      "phoneUsedIds": [
+        "lost_wallet",
+        "youth_bully"
+      ],
+      "phoneInbox": [
+        {
+          "id": "lost_wallet-2008",
+          "defId": "lost_wallet",
+          "from": "Groundskeeper",
+          "emoji": "👛",
+          "text": "Found a wallet in the car park with 800 quid inside. No ID. What do I do with it?",
+          "year": 2008,
+          "choices": [
+            {
+              "label": "Hand it to reception",
+              "reply": "Reception, mate. Someone's having a bad day",
+              "karma": 6
+            },
+            {
+              "label": "Finders keepers",
+              "reply": "That's the football gods paying you. Keep it",
+              "karma": -6
+            }
+          ]
+        },
+        {
+          "id": "youth_bully-2008",
+          "defId": "youth_bully",
+          "from": "Academy mate",
+          "emoji": "🥺",
+          "text": "The older lads keep hiding my boots and binning my kit. Coach says toughen up. Don't know what to do.",
+          "year": 2008,
+          "choices": [
+            {
+              "label": "Stand up for him",
+              "reply": "Sit with me at lunch. If they touch your stuff again they deal with me",
+              "karma": 10,
+              "morale": 2
+            },
+            {
+              "label": "Stay out of it",
+              "reply": "Rough mate. Keep your head down",
+              "karma": -6
+            }
+          ]
+        }
+      ],
+      "currentClub": "PSG Youth",
+      "currentClubCountry": "France",
+      "currentClubTier": 2,
+      "currentClubColor": "#004170",
+      "currentLeague": "Ligue 1",
+      "contractYearsLeft": 2,
+      "weeklyWage": 500,
+      "marketValue": 22.2,
+      "pace": 75,
+      "shooting": 73,
+      "passing": 71,
+      "dribbling": 74,
+      "defending": 75,
+      "physical": 75,
+      "reflexes": 71,
+      "overall": 74,
+      "seasons": [
+        {
+          "year": 2008,
+          "age": 16,
+          "club": "PSG Youth",
+          "clubCountry": "France",
+          "clubTier": 2,
+          "apps": 0,
+          "goals": 0,
+          "assists": 0,
+          "cleanSheets": 0,
+          "yellowCards": 0,
+          "redCards": 0,
+          "rating": 0,
+          "leagueTitle": false,
+          "domesticCup": false,
+          "championsLeague": false,
+          "worldCup": false,
+          "ballonDor": false,
+          "ballonDorRank": null,
+          "type": "youth",
+          "intApps": 0,
+          "intGoals": 0,
+          "intAssists": 0,
+          "intRating": 0,
+          "tournament": null,
+          "tournamentResult": null
+        },
+        {
+          "year": 2009,
+          "age": 17,
+          "club": "PSG Youth",
+          "clubCountry": "France",
+          "clubTier": 2,
+          "apps": 12,
+          "goals": 3,
+          "assists": 3,
+          "cleanSheets": 0,
+          "yellowCards": 2,
+          "redCards": 0,
+          "rating": 0,
+          "leagueTitle": false,
+          "domesticCup": false,
+          "championsLeague": false,
+          "worldCup": false,
+          "ballonDor": false,
+          "ballonDorRank": null,
+          "type": "youth",
+          "intApps": 0,
+          "intGoals": 0,
+          "intAssists": 0,
+          "intRating": 0,
+          "tournament": null,
+          "tournamentResult": null
+        }
+      ],
+      "events": [
+        "📈 Stats improved during youth development (OVR 74)",
+        "📩 Professional contract offers received!"
+      ],
+      "retired": false,
+      "phase": "contract_offer",
+      "pendingOffers": [
+        {
+          "club": {
+            "id": "fb-6",
+            "name": "PSG",
+            "country": "France",
+            "tier": 2,
+            "color": "#004170",
+            "league": "Ligue 1"
+          },
+          "contractYears": 5,
+          "wage": 9554,
+          "transferFee": 0,
+          "isHomegrown": true
+        },
+        {
+          "club": {
+            "id": "fb-94",
+            "name": "Racing Club",
+            "country": "Argentina",
+            "tier": 2,
+            "color": "#75AADB",
+            "league": "Liga Profesional"
+          },
+          "contractYears": 2,
+          "wage": 9121,
+          "transferFee": 0
+        },
+        {
+          "club": {
+            "id": "fb-84",
+            "name": "Olympiacos",
+            "country": "Greece",
+            "tier": 2,
+            "color": "#D6202B",
+            "league": "Super League Greece"
+          },
+          "contractYears": 4,
+          "wage": 13542,
+          "transferFee": 0
+        },
+        {
+          "club": {
+            "id": "fb-182",
+            "name": "Columbus Crew",
+            "country": "USA",
+            "tier": 3,
+            "color": "#FEDD00",
+            "league": "MLS"
+          },
+          "contractYears": 4,
+          "wage": 7783,
+          "transferFee": 0
+        }
+      ],
+      "pendingSummary": null,
+      "transferSituation": null,
+      "loan": null,
+      "pendingLoanOffers": null,
+      "pendingEvents": [],
+      "lastEventId": null,
+      "statBoostNextSeason": {},
+      "pendingNews": [],
+      "internationalCareer": false,
+      "sponsorDeal": null,
+      "totalEarnings": 0,
+      "popularity": 10,
+      "morale": 67,
+      "isLeader": false,
+      "hasRelationship": false,
+      "intStats": {
+        "caps": 0,
+        "goals": 0,
+        "assists": 0,
+        "tournaments": 0,
+        "worldCups": 0,
+        "continentals": 0,
+        "worldCupWins": 0,
+        "continentalWins": 0,
+        "isCaptain": false,
+        "isRetired": false,
+        "debutYear": null,
+        "debutAge": null,
+        "worldCupResults": [],
+        "squadSnubs": 0,
+        "failedQualifications": 0
+      },
+      "pendingWorldCup": null,
+      "pendingTournament": null,
+      "lastTournament": null,
+      "intlHistory": [],
+      "rival": null,
+      "rivalCreated": false,
+      "pendingRivalryEvent": null,
+      "lastRivalryEventId": null,
+      "rivalrySummary": null,
+      "netWorth": 0,
+      "lifestyleLevel": "Humble",
+      "lifestyleCostPerYear": 0.02,
+      "socialMediaFollowers": 0,
+      "sponsorshipIncome": 0,
+      "properties": [],
+      "investments": [],
+      "consecutiveDeficitYears": 0,
+      "agentFeesPaid": 0,
+      "family": {
+        "isMarried": false,
+        "marriedAge": null,
+        "children": 0,
+        "isDivorced": false,
+        "divorceAge": null
+      },
+      "purchasedItems": [],
+      "investmentHoldings": [],
+      "totalAssetValue": 0,
+      "customYearlyCosts": 0,
+      "awards": [],
+      "pendingBallonDor": null,
+      "lastUCLResult": null,
+      "legacy": null,
+      "postRetirementChoice": null,
+      "managerState": null,
+      "isFinalSeason": false,
+      "isPundit": false,
+      "punditEvents": [],
+      "primeType": "extended",
+      "socialMediaActionUsedThisSeason": false,
+      "socialMediaFocusBoost": false,
+      "pendingCoverAthleteEvent": false,
+      "coverAthleteAccepted": false,
+      "activeSponsorship": null,
+      "personality": null,
+      "agentId": null,
+      "lifeFlags": {},
+      "appearance": null,
+      "corruptionHeat": 0,
+      "dirtyMoney": 0,
+      "prisonSeasons": 0,
+      "academyClubName": "PSG",
+      "moralDilemmasTriggered": [],
+      "pendingMoralDilemma": null,
+      "pedSeasonsRemaining": 0,
+      "pedActive": false,
+      "matchFixBanned": 0,
+      "divingActive": false,
+      "integrityBonus": 0,
+      "pendingAppealResult": null,
+      "childEventsSeen": [],
+      "pregnancyAnnounced": false,
+      "punditState": null,
+      "ownerState": null,
+      "peakOverall": 70,
+      "retirementSuggested": false,
+      "phone": {
+        "threads": [
+          {
+            "id": "th_x_groundskeeper",
+            "c": "other",
+            "name": "Groundskeeper",
+            "emoji": "💬",
+            "lines": [
+              {
+                "w": 0,
+                "t": "Found a wallet in the car park with 800 quid inside. No ID. What do I do with it?",
+                "y": 2008
+              }
+            ],
+            "rel": 50,
+            "pending": {
+              "kind": "legacy",
+              "msgId": "lost_wallet-2008"
+            },
+            "waiting": 2008,
+            "cold": 0,
+            "seen": [],
+            "lastReplyYear": null
+          },
+          {
+            "id": "th_youthcoach",
+            "c": "youthcoach",
+            "name": "Old youth coach",
+            "emoji": "👴",
+            "lines": [
+              {
+                "w": 0,
+                "t": "Still got the team photo from your first season up on the wall. You are the small angry one at the front.",
+                "y": 2008
+              }
+            ],
+            "rel": 50,
+            "pending": {
+              "kind": "convo",
+              "convo": "youth_pride",
+              "beat": 0
+            },
+            "waiting": 2008,
+            "cold": 0,
+            "seen": [
+              "youth_pride"
+            ],
+            "lastReplyYear": null
+          },
+          {
+            "id": "th_academy",
+            "c": "academy",
+            "name": "Academy kid",
+            "emoji": "🌱",
+            "lines": [
+              {
+                "w": 0,
+                "t": "The older lads keep hiding my boots and binning my kit. Coach says toughen up. Don't know what to do.",
+                "y": 2008
+              }
+            ],
+            "rel": 50,
+            "pending": {
+              "kind": "legacy",
+              "msgId": "youth_bully-2008"
+            },
+            "waiting": 2008,
+            "cold": 0,
+            "seen": [],
+            "lastReplyYear": null
+          }
+        ],
+        "feed": [],
+        "world": null,
+        "clubs": {},
+        "rivalClub": null,
+        "seed": 276596008,
+        "offers": 0,
+        "perksTaken": 0
+      },
+      "frozenOut": 0,
+      "badSeasonStreak": 0,
+      "story": [
+        {
+          "year": 2008,
+          "age": 16,
+          "club": "PSG Youth",
+          "lines": [
+            "📋 Joined PSG Youth Academy aged 16"
+          ]
+        }
+      ],
+      "sponsorBonus": 0,
+      "money": {
+        "seed": 356599697,
+        "vault": 0,
+        "hold": {
+          "ladder": 0,
+          "bricks": 0,
+          "cleats": 0,
+          "screens": 0,
+          "spark": 0
+        },
+        "cost": {
+          "ladder": 0,
+          "bricks": 0,
+          "cleats": 0,
+          "screens": 0,
+          "spark": 0
+        },
+        "price": {
+          "ladder": 106.74,
+          "bricks": 99.9,
+          "cleats": 106.34,
+          "screens": 78.2,
+          "spark": 67.5
+        },
+        "hist": {
+          "ladder": [
+            100,
+            106.74
+          ],
+          "bricks": [
+            100,
+            99.9
+          ],
+          "cleats": [
+            100,
+            106.34
+          ],
+          "screens": [
+            100,
+            78.2
+          ],
+          "spark": [
+            100,
+            67.5
+          ]
+        },
+        "log": [],
+        "year": 2009,
+        "age": 1,
+        "won": 0,
+        "lost": 0,
+        "cPlays": 0,
+        "cNet": 0,
+        "cYear": 0,
+        "cShut": false,
+        "aYear": 0,
+        "aBest": 0,
+        "aPlays": 0
+      }
+    },
+    "playing": {
+      "playerName": "SerieB Boundary",
+      "nationality": "France",
+      "position": "CM",
+      "era": "2000s",
+      "age": 17,
+      "potential": 80,
+      "potentialEarned": 0,
+      "eliteStreak": 0,
+      "startingOverall": 70,
+      "physique": {
+        "heightCm": 180,
+        "weightKg": 75
+      },
+      "attrShape": {},
+      "karma": 50,
+      "phoneUsedIds": [
+        "lost_wallet",
+        "youth_bully"
+      ],
+      "phoneInbox": [
+        {
+          "id": "lost_wallet-2008",
+          "defId": "lost_wallet",
+          "from": "Groundskeeper",
+          "emoji": "👛",
+          "text": "Found a wallet in the car park with 800 quid inside. No ID. What do I do with it?",
+          "year": 2008,
+          "choices": [
+            {
+              "label": "Hand it to reception",
+              "reply": "Reception, mate. Someone's having a bad day",
+              "karma": 6
+            },
+            {
+              "label": "Finders keepers",
+              "reply": "That's the football gods paying you. Keep it",
+              "karma": -6
+            }
+          ]
+        },
+        {
+          "id": "youth_bully-2008",
+          "defId": "youth_bully",
+          "from": "Academy mate",
+          "emoji": "🥺",
+          "text": "The older lads keep hiding my boots and binning my kit. Coach says toughen up. Don't know what to do.",
+          "year": 2008,
+          "choices": [
+            {
+              "label": "Stand up for him",
+              "reply": "Sit with me at lunch. If they touch your stuff again they deal with me",
+              "karma": 10,
+              "morale": 2
+            },
+            {
+              "label": "Stay out of it",
+              "reply": "Rough mate. Keep your head down",
+              "karma": -6
+            }
+          ]
+        }
+      ],
+      "currentClub": "PSG",
+      "currentClubCountry": "France",
+      "currentClubTier": 2,
+      "currentClubColor": "#004170",
+      "currentLeague": "Ligue 1",
+      "contractYearsLeft": 5,
+      "weeklyWage": 9554,
+      "marketValue": 22.2,
+      "pace": 75,
+      "shooting": 73,
+      "passing": 71,
+      "dribbling": 74,
+      "defending": 75,
+      "physical": 75,
+      "reflexes": 71,
+      "overall": 74,
+      "seasons": [
+        {
+          "year": 2008,
+          "age": 16,
+          "club": "PSG Youth",
+          "clubCountry": "France",
+          "clubTier": 2,
+          "apps": 0,
+          "goals": 0,
+          "assists": 0,
+          "cleanSheets": 0,
+          "yellowCards": 0,
+          "redCards": 0,
+          "rating": 0,
+          "leagueTitle": false,
+          "domesticCup": false,
+          "championsLeague": false,
+          "worldCup": false,
+          "ballonDor": false,
+          "ballonDorRank": null,
+          "type": "youth",
+          "intApps": 0,
+          "intGoals": 0,
+          "intAssists": 0,
+          "intRating": 0,
+          "tournament": null,
+          "tournamentResult": null
+        },
+        {
+          "year": 2009,
+          "age": 17,
+          "club": "PSG Youth",
+          "clubCountry": "France",
+          "clubTier": 2,
+          "apps": 12,
+          "goals": 3,
+          "assists": 3,
+          "cleanSheets": 0,
+          "yellowCards": 2,
+          "redCards": 0,
+          "rating": 0,
+          "leagueTitle": false,
+          "domesticCup": false,
+          "championsLeague": false,
+          "worldCup": false,
+          "ballonDor": false,
+          "ballonDorRank": null,
+          "type": "youth",
+          "intApps": 0,
+          "intGoals": 0,
+          "intAssists": 0,
+          "intRating": 0,
+          "tournament": null,
+          "tournamentResult": null
+        }
+      ],
+      "events": [
+        "📈 Stats improved during youth development (OVR 74)",
+        "📩 Professional contract offers received!",
+        "✍️ Signed with PSG 🇫🇷 (5yr, €10k/wk)",
+        "🏠 One of our own! The PSG academy kid signs a first-team deal. The ultras already have a chant ready."
+      ],
+      "retired": false,
+      "phase": "playing",
+      "pendingOffers": [],
+      "pendingSummary": null,
+      "transferSituation": null,
+      "loan": null,
+      "pendingLoanOffers": null,
+      "pendingEvents": [],
+      "lastEventId": null,
+      "statBoostNextSeason": {},
+      "pendingNews": [],
+      "internationalCareer": false,
+      "sponsorDeal": null,
+      "totalEarnings": 0,
+      "popularity": 20,
+      "morale": 75,
+      "isLeader": false,
+      "hasRelationship": false,
+      "intStats": {
+        "caps": 0,
+        "goals": 0,
+        "assists": 0,
+        "tournaments": 0,
+        "worldCups": 0,
+        "continentals": 0,
+        "worldCupWins": 0,
+        "continentalWins": 0,
+        "isCaptain": false,
+        "isRetired": false,
+        "debutYear": null,
+        "debutAge": null,
+        "worldCupResults": [],
+        "squadSnubs": 0,
+        "failedQualifications": 0
+      },
+      "pendingWorldCup": null,
+      "pendingTournament": null,
+      "lastTournament": null,
+      "intlHistory": [],
+      "rival": null,
+      "rivalCreated": false,
+      "pendingRivalryEvent": null,
+      "lastRivalryEventId": null,
+      "rivalrySummary": null,
+      "netWorth": 0,
+      "lifestyleLevel": "Humble",
+      "lifestyleCostPerYear": 0.02,
+      "socialMediaFollowers": 0,
+      "sponsorshipIncome": 0,
+      "properties": [],
+      "investments": [],
+      "consecutiveDeficitYears": 0,
+      "agentFeesPaid": 0,
+      "family": {
+        "isMarried": false,
+        "marriedAge": null,
+        "children": 0,
+        "isDivorced": false,
+        "divorceAge": null
+      },
+      "purchasedItems": [],
+      "investmentHoldings": [],
+      "totalAssetValue": 0,
+      "customYearlyCosts": 0,
+      "awards": [],
+      "pendingBallonDor": null,
+      "lastUCLResult": null,
+      "legacy": null,
+      "postRetirementChoice": null,
+      "managerState": null,
+      "isFinalSeason": false,
+      "isPundit": false,
+      "punditEvents": [],
+      "primeType": "extended",
+      "socialMediaActionUsedThisSeason": false,
+      "socialMediaFocusBoost": false,
+      "pendingCoverAthleteEvent": false,
+      "coverAthleteAccepted": false,
+      "activeSponsorship": null,
+      "personality": null,
+      "agentId": null,
+      "lifeFlags": {},
+      "appearance": null,
+      "corruptionHeat": 0,
+      "dirtyMoney": 0,
+      "prisonSeasons": 0,
+      "academyClubName": "PSG",
+      "moralDilemmasTriggered": [],
+      "pendingMoralDilemma": null,
+      "pedSeasonsRemaining": 0,
+      "pedActive": false,
+      "matchFixBanned": 0,
+      "divingActive": false,
+      "integrityBonus": 0,
+      "pendingAppealResult": null,
+      "childEventsSeen": [],
+      "pregnancyAnnounced": false,
+      "punditState": null,
+      "ownerState": null,
+      "peakOverall": 70,
+      "retirementSuggested": false,
+      "phone": {
+        "threads": [
+          {
+            "id": "th_x_groundskeeper",
+            "c": "other",
+            "name": "Groundskeeper",
+            "emoji": "💬",
+            "lines": [
+              {
+                "w": 0,
+                "t": "Found a wallet in the car park with 800 quid inside. No ID. What do I do with it?",
+                "y": 2008
+              }
+            ],
+            "rel": 50,
+            "pending": {
+              "kind": "legacy",
+              "msgId": "lost_wallet-2008"
+            },
+            "waiting": 2008,
+            "cold": 0,
+            "seen": [],
+            "lastReplyYear": null
+          },
+          {
+            "id": "th_youthcoach",
+            "c": "youthcoach",
+            "name": "Old youth coach",
+            "emoji": "👴",
+            "lines": [
+              {
+                "w": 0,
+                "t": "Still got the team photo from your first season up on the wall. You are the small angry one at the front.",
+                "y": 2008
+              }
+            ],
+            "rel": 50,
+            "pending": {
+              "kind": "convo",
+              "convo": "youth_pride",
+              "beat": 0
+            },
+            "waiting": 2008,
+            "cold": 0,
+            "seen": [
+              "youth_pride"
+            ],
+            "lastReplyYear": null
+          },
+          {
+            "id": "th_academy",
+            "c": "academy",
+            "name": "Academy kid",
+            "emoji": "🌱",
+            "lines": [
+              {
+                "w": 0,
+                "t": "The older lads keep hiding my boots and binning my kit. Coach says toughen up. Don't know what to do.",
+                "y": 2008
+              }
+            ],
+            "rel": 50,
+            "pending": {
+              "kind": "legacy",
+              "msgId": "youth_bully-2008"
+            },
+            "waiting": 2008,
+            "cold": 0,
+            "seen": [],
+            "lastReplyYear": null
+          }
+        ],
+        "feed": [],
+        "world": null,
+        "clubs": {},
+        "rivalClub": null,
+        "seed": 276596008,
+        "offers": 0,
+        "perksTaken": 0
+      },
+      "frozenOut": 0,
+      "badSeasonStreak": 0,
+      "story": [
+        {
+          "year": 2008,
+          "age": 16,
+          "club": "PSG Youth",
+          "lines": [
+            "📋 Joined PSG Youth Academy aged 16"
+          ]
+        }
+      ],
+      "sponsorBonus": 0,
+      "money": {
+        "seed": 356599697,
+        "vault": 0,
+        "hold": {
+          "ladder": 0,
+          "bricks": 0,
+          "cleats": 0,
+          "screens": 0,
+          "spark": 0
+        },
+        "cost": {
+          "ladder": 0,
+          "bricks": 0,
+          "cleats": 0,
+          "screens": 0,
+          "spark": 0
+        },
+        "price": {
+          "ladder": 106.74,
+          "bricks": 99.9,
+          "cleats": 106.34,
+          "screens": 78.2,
+          "spark": 67.5
+        },
+        "hist": {
+          "ladder": [
+            100,
+            106.74
+          ],
+          "bricks": [
+            100,
+            99.9
+          ],
+          "cleats": [
+            100,
+            106.34
+          ],
+          "screens": [
+            100,
+            78.2
+          ],
+          "spark": [
+            100,
+            67.5
+          ]
+        },
+        "log": [],
+        "year": 2009,
+        "age": 1,
+        "won": 0,
+        "lost": 0,
+        "cPlays": 0,
+        "cNet": 0,
+        "cYear": 0,
+        "cShut": false,
+        "aYear": 0,
+        "aBest": 0,
+        "aPlays": 0
+      }
+    },
+    "retired": {
+      "playerName": "SerieB Boundary",
+      "nationality": "France",
+      "position": "CM",
+      "era": "2000s",
+      "age": 17,
+      "potential": 80,
+      "potentialEarned": 0,
+      "eliteStreak": 0,
+      "startingOverall": 70,
+      "physique": {
+        "heightCm": 180,
+        "weightKg": 75
+      },
+      "attrShape": {},
+      "karma": 50,
+      "phoneUsedIds": [
+        "lost_wallet",
+        "youth_bully"
+      ],
+      "phoneInbox": [
+        {
+          "id": "lost_wallet-2008",
+          "defId": "lost_wallet",
+          "from": "Groundskeeper",
+          "emoji": "👛",
+          "text": "Found a wallet in the car park with 800 quid inside. No ID. What do I do with it?",
+          "year": 2008,
+          "choices": [
+            {
+              "label": "Hand it to reception",
+              "reply": "Reception, mate. Someone's having a bad day",
+              "karma": 6
+            },
+            {
+              "label": "Finders keepers",
+              "reply": "That's the football gods paying you. Keep it",
+              "karma": -6
+            }
+          ]
+        },
+        {
+          "id": "youth_bully-2008",
+          "defId": "youth_bully",
+          "from": "Academy mate",
+          "emoji": "🥺",
+          "text": "The older lads keep hiding my boots and binning my kit. Coach says toughen up. Don't know what to do.",
+          "year": 2008,
+          "choices": [
+            {
+              "label": "Stand up for him",
+              "reply": "Sit with me at lunch. If they touch your stuff again they deal with me",
+              "karma": 10,
+              "morale": 2
+            },
+            {
+              "label": "Stay out of it",
+              "reply": "Rough mate. Keep your head down",
+              "karma": -6
+            }
+          ]
+        }
+      ],
+      "currentClub": "PSG",
+      "currentClubCountry": "France",
+      "currentClubTier": 2,
+      "currentClubColor": "#004170",
+      "currentLeague": "Ligue 1",
+      "contractYearsLeft": 5,
+      "weeklyWage": 9554,
+      "marketValue": 22.2,
+      "pace": 75,
+      "shooting": 73,
+      "passing": 71,
+      "dribbling": 74,
+      "defending": 75,
+      "physical": 75,
+      "reflexes": 71,
+      "overall": 74,
+      "seasons": [
+        {
+          "year": 2008,
+          "age": 16,
+          "club": "PSG Youth",
+          "clubCountry": "France",
+          "clubTier": 2,
+          "apps": 0,
+          "goals": 0,
+          "assists": 0,
+          "cleanSheets": 0,
+          "yellowCards": 0,
+          "redCards": 0,
+          "rating": 0,
+          "leagueTitle": false,
+          "domesticCup": false,
+          "championsLeague": false,
+          "worldCup": false,
+          "ballonDor": false,
+          "ballonDorRank": null,
+          "type": "youth",
+          "intApps": 0,
+          "intGoals": 0,
+          "intAssists": 0,
+          "intRating": 0,
+          "tournament": null,
+          "tournamentResult": null
+        },
+        {
+          "year": 2009,
+          "age": 17,
+          "club": "PSG Youth",
+          "clubCountry": "France",
+          "clubTier": 2,
+          "apps": 12,
+          "goals": 3,
+          "assists": 3,
+          "cleanSheets": 0,
+          "yellowCards": 2,
+          "redCards": 0,
+          "rating": 0,
+          "leagueTitle": false,
+          "domesticCup": false,
+          "championsLeague": false,
+          "worldCup": false,
+          "ballonDor": false,
+          "ballonDorRank": null,
+          "type": "youth",
+          "intApps": 0,
+          "intGoals": 0,
+          "intAssists": 0,
+          "intRating": 0,
+          "tournament": null,
+          "tournamentResult": null
+        }
+      ],
+      "events": [
+        "📈 Stats improved during youth development (OVR 74)",
+        "📩 Professional contract offers received!",
+        "✍️ Signed with PSG 🇫🇷 (5yr, €10k/wk)",
+        "🏠 One of our own! The PSG academy kid signs a first-team deal. The ultras already have a chant ready.",
+        "👋 Announced retirement from professional football"
+      ],
+      "retired": true,
+      "phase": "retirement_ceremony",
+      "pendingOffers": [],
+      "pendingSummary": null,
+      "transferSituation": null,
+      "loan": null,
+      "pendingLoanOffers": null,
+      "pendingEvents": [],
+      "lastEventId": null,
+      "statBoostNextSeason": {},
+      "pendingNews": [],
+      "internationalCareer": false,
+      "sponsorDeal": null,
+      "totalEarnings": 0,
+      "popularity": 20,
+      "morale": 75,
+      "isLeader": false,
+      "hasRelationship": false,
+      "intStats": {
+        "caps": 0,
+        "goals": 0,
+        "assists": 0,
+        "tournaments": 0,
+        "worldCups": 0,
+        "continentals": 0,
+        "worldCupWins": 0,
+        "continentalWins": 0,
+        "isCaptain": false,
+        "isRetired": false,
+        "debutYear": null,
+        "debutAge": null,
+        "worldCupResults": [],
+        "squadSnubs": 0,
+        "failedQualifications": 0
+      },
+      "pendingWorldCup": null,
+      "pendingTournament": null,
+      "lastTournament": null,
+      "intlHistory": [],
+      "rival": null,
+      "rivalCreated": false,
+      "pendingRivalryEvent": null,
+      "lastRivalryEventId": null,
+      "rivalrySummary": null,
+      "netWorth": 0,
+      "lifestyleLevel": "Humble",
+      "lifestyleCostPerYear": 0.02,
+      "socialMediaFollowers": 0,
+      "sponsorshipIncome": 0,
+      "properties": [],
+      "investments": [],
+      "consecutiveDeficitYears": 0,
+      "agentFeesPaid": 0,
+      "family": {
+        "isMarried": false,
+        "marriedAge": null,
+        "children": 0,
+        "isDivorced": false,
+        "divorceAge": null
+      },
+      "purchasedItems": [],
+      "investmentHoldings": [],
+      "totalAssetValue": 0,
+      "customYearlyCosts": 0,
+      "awards": [],
+      "pendingBallonDor": null,
+      "lastUCLResult": null,
+      "legacy": {
+        "score": 0,
+        "tier": "JOURNEYMAN",
+        "breakdown": [
+          {
+            "label": "Goals",
+            "points": 0
+          },
+          {
+            "label": "Assists",
+            "points": 0
+          },
+          {
+            "label": "Champions League",
+            "points": 0
+          },
+          {
+            "label": "League Titles",
+            "points": 0
+          },
+          {
+            "label": "Domestic Cups",
+            "points": 0
+          },
+          {
+            "label": "Ballon d'Or",
+            "points": 0
+          },
+          {
+            "label": "International",
+            "points": 0
+          },
+          {
+            "label": "Club Loyalty",
+            "points": 0
+          },
+          {
+            "label": "Longevity",
+            "points": 0
+          },
+          {
+            "label": "The Climb",
+            "points": -6
+          }
+        ]
+      },
+      "postRetirementChoice": null,
+      "managerState": null,
+      "isFinalSeason": false,
+      "isPundit": false,
+      "punditEvents": [],
+      "primeType": "extended",
+      "socialMediaActionUsedThisSeason": false,
+      "socialMediaFocusBoost": false,
+      "pendingCoverAthleteEvent": false,
+      "coverAthleteAccepted": false,
+      "activeSponsorship": null,
+      "personality": null,
+      "agentId": null,
+      "lifeFlags": {
+        "coachingBadges": 3
+      },
+      "appearance": null,
+      "corruptionHeat": 0,
+      "dirtyMoney": 0,
+      "prisonSeasons": 0,
+      "academyClubName": "PSG",
+      "moralDilemmasTriggered": [],
+      "pendingMoralDilemma": null,
+      "pedSeasonsRemaining": 0,
+      "pedActive": false,
+      "matchFixBanned": 0,
+      "divingActive": false,
+      "integrityBonus": 0,
+      "pendingAppealResult": null,
+      "childEventsSeen": [],
+      "pregnancyAnnounced": false,
+      "punditState": null,
+      "ownerState": null,
+      "peakOverall": 70,
+      "retirementSuggested": false,
+      "phone": {
+        "threads": [
+          {
+            "id": "th_x_groundskeeper",
+            "c": "other",
+            "name": "Groundskeeper",
+            "emoji": "💬",
+            "lines": [
+              {
+                "w": 0,
+                "t": "Found a wallet in the car park with 800 quid inside. No ID. What do I do with it?",
+                "y": 2008
+              }
+            ],
+            "rel": 50,
+            "pending": {
+              "kind": "legacy",
+              "msgId": "lost_wallet-2008"
+            },
+            "waiting": 2008,
+            "cold": 0,
+            "seen": [],
+            "lastReplyYear": null
+          },
+          {
+            "id": "th_youthcoach",
+            "c": "youthcoach",
+            "name": "Old youth coach",
+            "emoji": "👴",
+            "lines": [
+              {
+                "w": 0,
+                "t": "Still got the team photo from your first season up on the wall. You are the small angry one at the front.",
+                "y": 2008
+              }
+            ],
+            "rel": 50,
+            "pending": {
+              "kind": "convo",
+              "convo": "youth_pride",
+              "beat": 0
+            },
+            "waiting": 2008,
+            "cold": 0,
+            "seen": [
+              "youth_pride"
+            ],
+            "lastReplyYear": null
+          },
+          {
+            "id": "th_academy",
+            "c": "academy",
+            "name": "Academy kid",
+            "emoji": "🌱",
+            "lines": [
+              {
+                "w": 0,
+                "t": "The older lads keep hiding my boots and binning my kit. Coach says toughen up. Don't know what to do.",
+                "y": 2008
+              }
+            ],
+            "rel": 50,
+            "pending": {
+              "kind": "legacy",
+              "msgId": "youth_bully-2008"
+            },
+            "waiting": 2008,
+            "cold": 0,
+            "seen": [],
+            "lastReplyYear": null
+          }
+        ],
+        "feed": [],
+        "world": null,
+        "clubs": {},
+        "rivalClub": null,
+        "seed": 276596008,
+        "offers": 0,
+        "perksTaken": 0
+      },
+      "frozenOut": 0,
+      "badSeasonStreak": 0,
+      "story": [
+        {
+          "year": 2008,
+          "age": 16,
+          "club": "PSG Youth",
+          "lines": [
+            "📋 Joined PSG Youth Academy aged 16"
+          ]
+        }
+      ],
+      "sponsorBonus": 0,
+      "money": {
+        "seed": 356599697,
+        "vault": 0,
+        "hold": {
+          "ladder": 0,
+          "bricks": 0,
+          "cleats": 0,
+          "screens": 0,
+          "spark": 0
+        },
+        "cost": {
+          "ladder": 0,
+          "bricks": 0,
+          "cleats": 0,
+          "screens": 0,
+          "spark": 0
+        },
+        "price": {
+          "ladder": 106.74,
+          "bricks": 99.9,
+          "cleats": 106.34,
+          "screens": 78.2,
+          "spark": 67.5
+        },
+        "hist": {
+          "ladder": [
+            100,
+            106.74
+          ],
+          "bricks": [
+            100,
+            99.9
+          ],
+          "cleats": [
+            100,
+            106.34
+          ],
+          "screens": [
+            100,
+            78.2
+          ],
+          "spark": [
+            100,
+            67.5
+          ]
+        },
+        "log": [],
+        "year": 2009,
+        "age": 1,
+        "won": 0,
+        "lost": 0,
+        "cPlays": 0,
+        "cNet": 0,
+        "cYear": 0,
+        "cShut": false,
+        "aYear": 0,
+        "aBest": 0,
+        "aPlays": 0
+      }
+    },
+    "firstYear": 2010,
+    "steps": 1
+  },
+  "draws": [
+    0.05345564498566091,
+    0.41544084530323744,
+    0.9439498502761126,
+    0.6677102774847299,
+    0.4726092910859734,
+    0.8147605329286307,
+    0.8110708680469543,
+    0.5794871563557535,
+    0.36488375533372164,
+    0.22006580443121493,
+    0.8516957785468549,
+    0.3725859415717423,
+    0.19040898443199694,
+    0.8429539592470974,
+    0.34533619647845626,
+    0.789420954650268,
+    0.7018796019256115,
+    0.24094771267846227,
+    0.9692753632552922,
+    0.13882029429078102,
+    0.3800669719930738,
+    0.5699523801449686,
+    0.41113788494840264,
+    0.8150580190122128,
+    0.3286263400223106,
+    0.9367692219093442,
+    0.9555235526058823,
+    0.14876757515594363,
+    0.0934734030161053,
+    0.7942726348992437,
+    0.495134157827124,
+    0.9020596682094038,
+    0.46185478498227894,
+    0.9296746712643653,
+    0.8356173343490809,
+    0.7806803528219461,
+    0.27835841104388237,
+    0.8370990501716733
+  ],
+  "next": 0.26952497637830675,
+  "appendedDefinitions": [
+    {
+      "id": "cm-cremonese",
+      "name": "Cremonese",
+      "country": "Italy",
+      "tier": 4,
+      "color": "#e3546c",
+      "league": "Serie B"
+    },
+    {
+      "id": "cm-verona",
+      "name": "Verona",
+      "country": "Italy",
+      "tier": 4,
+      "color": "#ffdd00",
+      "league": "Serie B"
+    },
+    {
+      "id": "cm-pisa",
+      "name": "Pisa",
+      "country": "Italy",
+      "tier": 4,
+      "color": "#3a6fc4",
+      "league": "Serie B"
+    },
+    {
+      "id": "cm-avellino",
+      "name": "Avellino",
+      "country": "Italy",
+      "tier": 4,
+      "color": "#8899aa",
+      "league": "Serie B"
+    },
+    {
+      "id": "cm-carrarese",
+      "name": "Carrarese",
+      "country": "Italy",
+      "tier": 4,
+      "color": "#8899aa",
+      "league": "Serie B"
+    },
+    {
+      "id": "cm-catanzaro",
+      "name": "Catanzaro",
+      "country": "Italy",
+      "tier": 4,
+      "color": "#8899aa",
+      "league": "Serie B"
+    },
+    {
+      "id": "cm-cesena",
+      "name": "Cesena",
+      "country": "Italy",
+      "tier": 4,
+      "color": "#d5d5d5",
+      "league": "Serie B"
+    },
+    {
+      "id": "cm-empoli",
+      "name": "Empoli",
+      "country": "Italy",
+      "tier": 4,
+      "color": "#1a5dad",
+      "league": "Serie B"
+    },
+    {
+      "id": "cm-entella",
+      "name": "Entella",
+      "country": "Italy",
+      "tier": 4,
+      "color": "#8899aa",
+      "league": "Serie B"
+    },
+    {
+      "id": "cm-juve-stabia",
+      "name": "Juve Stabia",
+      "country": "Italy",
+      "tier": 4,
+      "color": "#8899aa",
+      "league": "Serie B"
+    },
+    {
+      "id": "cm-mantova",
+      "name": "Mantova",
+      "country": "Italy",
+      "tier": 4,
+      "color": "#8899aa",
+      "league": "Serie B"
+    },
+    {
+      "id": "cm-modena",
+      "name": "Modena",
+      "country": "Italy",
+      "tier": 4,
+      "color": "#8899aa",
+      "league": "Serie B"
+    },
+    {
+      "id": "cm-padova",
+      "name": "Padova",
+      "country": "Italy",
+      "tier": 4,
+      "color": "#8899aa",
+      "league": "Serie B"
+    },
+    {
+      "id": "cm-palermo",
+      "name": "Palermo",
+      "country": "Italy",
+      "tier": 4,
+      "color": "#e75ba5",
+      "league": "Serie B"
+    },
+    {
+      "id": "cm-sampdoria",
+      "name": "Sampdoria",
+      "country": "Italy",
+      "tier": 4,
+      "color": "#1b5497",
+      "league": "Serie B"
+    },
+    {
+      "id": "cm-sudtirol",
+      "name": "Sudtirol",
+      "country": "Italy",
+      "tier": 4,
+      "color": "#8899aa",
+      "league": "Serie B"
+    },
+    {
+      "id": "cm-vicenza",
+      "name": "Vicenza",
+      "country": "Italy",
+      "tier": 4,
+      "color": "#8899aa",
+      "league": "Serie B"
+    },
+    {
+      "id": "cm-arezzo",
+      "name": "Arezzo",
+      "country": "Italy",
+      "tier": 4,
+      "color": "#8899aa",
+      "league": "Serie B"
+    },
+    {
+      "id": "cm-benevento",
+      "name": "Benevento",
+      "country": "Italy",
+      "tier": 4,
+      "color": "#f5d800",
+      "league": "Serie B"
+    },
+    {
+      "id": "cm-ascoli",
+      "name": "Ascoli",
+      "country": "Italy",
+      "tier": 4,
+      "color": "#c9c9c9",
+      "league": "Serie B"
+    }
+  ],
+  "oldPoolCount": 477,
+  "scope": "Actual constructor/youth/accept/manualRetire. Coursework3 is a labelled test presentation flag. Appended20 map actual CM identities/current colours, including11 neutral greys; no full unheld derive or grey-fence RED."
+}

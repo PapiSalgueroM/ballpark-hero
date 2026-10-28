@@ -1,0 +1,508 @@
+{
+  "schema": 1,
+  "status": "RESEARCH_ONLY",
+  "readDate": "2026-10-28",
+  "scope": "Eleven missing word-colour pairs for the existing Serie B catalogue. No hex values, assets, players, ratings or product changes.",
+  "clubs": [
+    {
+      "cmName": "Avellino",
+      "careerName": "Avellino",
+      "words": [
+        "green",
+        "white"
+      ],
+      "sources": [
+        {
+          "publisher": "US Avellino 1912",
+          "publisherGroup": "US Avellino 1912",
+          "kind": "club original history",
+          "url": "https://www.usavellino1912.com/club/storia-del-club/",
+          "published": null,
+          "locator": "Le origini dei colori sociali, paragraph naming the biancoverde shirt",
+          "quote": "la maglia biancoverde",
+          "access": "direct text read"
+        },
+        {
+          "publisher": "Magica Pro",
+          "publisherGroup": "Magica Pro",
+          "kind": "original opponent history article by Michele Balossino",
+          "url": "https://www.magicapro.it/serie-b/avellino-storia-e-colori-della-maglia-dei-lupi/",
+          "published": "2015-01-15",
+          "locator": "Avellino, storia e colori della maglia dei Lupi; colour-history paragraph",
+          "quote": "maglia verde e i pantaloncini bianchi",
+          "access": "direct text read"
+        }
+      ],
+      "independence": "Different club and editorial publishers, separate history articles. Only the agreeing colour words are selected; their historical anecdotes are not imported."
+    },
+    {
+      "cmName": "Carrarese",
+      "careerName": "Carrarese",
+      "words": [
+        "azure",
+        "yellow"
+      ],
+      "sources": [
+        {
+          "publisher": "Carrarese Calcio 1908",
+          "publisherGroup": "Carrarese Calcio 1908",
+          "kind": "club original home-kit announcement",
+          "url": "https://carraresecalcio1908.it/presentazione-home-kit-stagione-2024-2025/",
+          "published": "2024-08-03",
+          "locator": "Home-shirt description",
+          "quote": "dominata dall’azzurro",
+          "secondQuote": "pin stripes gialle",
+          "access": "direct text read"
+        },
+        {
+          "publisher": "La Nazione",
+          "publisherGroup": "QN / Monrif",
+          "kind": "original local report by Gianluca Bondielli",
+          "url": "https://www.lanazione.it/massa-carrara/cronaca/carrarese-lesodo-del-popolo-azzurro-pullman-per-benevento-e-maxischermo-a-marina-ded96ee1",
+          "published": "2024-05-30",
+          "locator": "Supporters report, two club colours",
+          "quote": "due colori, il giallo e l’azzurro",
+          "access": "direct text read"
+        }
+      ],
+      "independence": "Club shirt announcement and separate newspaper supporters report."
+    },
+    {
+      "cmName": "Catanzaro",
+      "careerName": "Catanzaro",
+      "words": [
+        "yellow",
+        "red"
+      ],
+      "sources": [
+        {
+          "publisher": "US Catanzaro 1929",
+          "publisherGroup": "US Catanzaro 1929",
+          "kind": "club original announcement",
+          "url": "https://www.uscatanzaro1929.com/2026/10/25/michele-mignani-nuovo-allenatore/",
+          "published": "2026-10-25",
+          "locator": "First paragraph, club colour adjective",
+          "quote": "società giallorossa",
+          "access": "direct text read"
+        },
+        {
+          "publisher": "Carrarese Calcio 1908",
+          "publisherGroup": "Carrarese Calcio 1908",
+          "kind": "original opponent match report",
+          "url": "https://carraresecalcio1908.it/3918-2/",
+          "published": "2026-03-04",
+          "locator": "Carrarese-Catanzaro, paragraph for minute 41",
+          "quote": "le maglie giallo rosse",
+          "access": "direct text read"
+        }
+      ],
+      "independence": "Different clubs, an own-club announcement and an opponent's original match narrative. No coaching or match-result fact selected."
+    },
+    {
+      "cmName": "Entella",
+      "careerName": "Entella",
+      "words": [
+        "white",
+        "sky blue"
+      ],
+      "sources": [
+        {
+          "publisher": "Virtus Entella",
+          "publisherGroup": "Virtus Entella",
+          "kind": "club original identity feature",
+          "url": "https://www.entella.it/prima-squadra/albiceleste-quei-chiavaresi-di-buenos-aires-da-domani-su-entella-tube/",
+          "published": null,
+          "locator": "Paragraph describing the two colours of the club shirt",
+          "quote": "il bianco e il celeste",
+          "access": "direct text read"
+        },
+        {
+          "publisher": "PianetaEmpoli",
+          "publisherGroup": "Associazione Pianetaempoli.it",
+          "kind": "original feature and interview by Massimiliano Ciabattini",
+          "url": "https://www.pianetaempoli.it/virtus-entella-si-puo-fare/",
+          "published": "2019-12-13",
+          "locator": "Club-shirt history before the marketing-director interview",
+          "quote": "I colori bianco e celeste",
+          "access": "direct text read"
+        }
+      ],
+      "independence": "Club feature and separate registered publication's original feature/interview. Celeste is normalized to sky blue, not an exact shade."
+    },
+    {
+      "cmName": "Juve Stabia",
+      "careerName": "Juve Stabia",
+      "words": [
+        "yellow",
+        "blue"
+      ],
+      "sources": [
+        {
+          "publisher": "SS Juve Stabia",
+          "publisherGroup": "SS Juve Stabia",
+          "kind": "club original home-kit announcement",
+          "url": "https://www.ssjuvestabia.it/lhome-kit-2025-26-delle-vespe/",
+          "requestedUrl": "https://www.ssjuvestabia.it/blog/lhome-kit-2025-26-delle-vespe/",
+          "published": null,
+          "seasonOnPage": "2025-26",
+          "locator": "First paragraph",
+          "quote": "colori storici giallo e blu",
+          "access": "direct text read after redirect"
+        },
+        {
+          "publisher": "PianetaEmpoli",
+          "publisherGroup": "Associazione Pianetaempoli.it",
+          "kind": "original editorial history by Fabrizio Fioravanti",
+          "url": "https://www.pianetaempoli.it/la-storia-degli-altri-jive-stabia/",
+          "published": "2025-12-12",
+          "locator": "COLORI SOCIALI section",
+          "quote": "il giallo ed il blu",
+          "access": "direct text read"
+        }
+      ],
+      "independence": "Own-club kit account and a different publication's editorial history. The selected colour wording is not a second copy of the kit announcement."
+    },
+    {
+      "cmName": "Mantova",
+      "careerName": "Mantova",
+      "words": [
+        "white",
+        "red"
+      ],
+      "sources": [
+        {
+          "publisher": "Mantova 1911 eStore",
+          "publisherGroup": "Mantova 1911",
+          "kind": "club official home-shirt description",
+          "url": "https://shop.mantova1911.club/products/mantova-1911-maglia-gara-home-2026-27",
+          "published": null,
+          "seasonOnPage": "2026-27",
+          "locator": "Product description, paragraph after La maglia bianca",
+          "quote": "il bianco",
+          "secondQuote": "bordato di rosso",
+          "access": "direct text read"
+        },
+        {
+          "publisher": "MantovaNotizie",
+          "publisherGroup": "MantovaNotizie.com",
+          "kind": "original local club guide",
+          "url": "https://www.mantovanotizie.com/guida-mantova/ac-mantova-calcio",
+          "published": null,
+          "locator": "I colori sociali paragraph",
+          "quote": "il bianco e il rosso",
+          "access": "direct text read"
+        }
+      ],
+      "independence": "Club store and separate local editorial guide. No assumption that a red-primary historical rendering is the current home shirt."
+    },
+    {
+      "cmName": "Modena",
+      "careerName": "Modena",
+      "words": [
+        "yellow",
+        "blue"
+      ],
+      "sources": [
+        {
+          "publisher": "Modena FC",
+          "publisherGroup": "Modena FC",
+          "kind": "club original 2026-27 shirt announcement",
+          "url": "https://modenacalcio.com/una-citta-due-colori-tre-maglie-ununica-grande-passione/",
+          "published": "2026-07-15",
+          "locator": "Home-shirt paragraph",
+          "quote": "l’inconfondibile giallo del Modena",
+          "secondQuote": "banda orizzontale blu",
+          "access": "direct text read"
+        },
+        {
+          "publisher": "PianetaEmpoli",
+          "publisherGroup": "Associazione Pianetaempoli.it",
+          "kind": "original editorial history by Fabrizio Fioravanti",
+          "url": "https://www.pianetaempoli.it/la-storia-degli-altri-modena/",
+          "published": "2025-10-24",
+          "locator": "COLORI SOCIALI section",
+          "quote": "giallo e blu",
+          "access": "direct text read"
+        }
+      ],
+      "independence": "Club announcement and separate editorial history. Other historical assertions in the article are excluded."
+    },
+    {
+      "cmName": "Padova",
+      "careerName": "Padova",
+      "words": [
+        "white",
+        "red"
+      ],
+      "sources": [
+        {
+          "publisher": "Calcio Padova",
+          "publisherGroup": "Calcio Padova",
+          "kind": "club published partnership announcement",
+          "url": "https://www.padovacalcio.it/macron-calciopadova-partnership/",
+          "published": "2023-08-30",
+          "locator": "Paragraph naming social colours",
+          "quote": "il bianco e il rosso come colori sociali",
+          "access": "direct text read"
+        },
+        {
+          "publisher": "Gli Eroi del Calcio",
+          "publisherGroup": "Gli Eroi del Calcio / Sport Review",
+          "kind": "original historical collection research by Marco Cianfanelli",
+          "url": "https://www.glieroidelcalcio.com/i-gagliardetti-ditalia-il-padova/",
+          "published": "2024-03-20",
+          "locator": "Opening paragraph",
+          "quote": "i colori bianco e rosso",
+          "access": "direct text read"
+        }
+      ],
+      "independence": "Club partnership account and independent author's collection-history article. A syndicated copy of the partnership statement is not counted."
+    },
+    {
+      "cmName": "Südtirol",
+      "careerName": "Sudtirol",
+      "words": [
+        "white",
+        "red"
+      ],
+      "sources": [
+        {
+          "publisher": "FC Südtirol official shop",
+          "publisherGroup": "FC Südtirol",
+          "kind": "club official home-shirt description",
+          "url": "https://shop.fc-suedtirol.com/products/match-home-jersey-26-27-copia",
+          "published": null,
+          "seasonOnPage": "2026-27",
+          "locator": "Maglia Home FC Südtirol 2026/2027, description",
+          "quote": "Classico bianco con maniche bianche",
+          "secondQuote": "motivo rosso",
+          "access": "direct text read"
+        },
+        {
+          "publisher": "FIGC",
+          "publisherGroup": "FIGC",
+          "kind": "official club registration directory",
+          "url": "https://www.figc.it/media/2330/comunicato-ufficiale-n-015-del-4-09-2018.pdf",
+          "published": "2018-09-04",
+          "locator": "PDF page 4 of 11, FUSSBALCLUB SÜDTIROL S.R.L. row, COLORI SOCIALI",
+          "quote": "MAGLIA BIANCO ROSSA",
+          "access": "direct PDF text read"
+        }
+      ],
+      "independence": "Club shop and independently published federation directory. The directory is a 2018 youth-competition registration source, not a second current adult-kit announcement; it agrees with the current club source on word identity only."
+    },
+    {
+      "cmName": "Vicenza",
+      "careerName": "Vicenza",
+      "words": [
+        "white",
+        "red"
+      ],
+      "sources": [
+        {
+          "publisher": "LR Vicenza",
+          "publisherGroup": "LR Vicenza",
+          "kind": "club original home-shirt announcement",
+          "url": "https://www.lrvicenza.net/svelata-la-nuova-divisa-home-lr-vicenza-2020-2021/",
+          "published": "2020-09-23",
+          "bodyDateline": "2020-09-24",
+          "locator": "Shirt-description paragraph",
+          "quote": "strisce verticali bianche e rosse",
+          "access": "direct text read"
+        },
+        {
+          "publisher": "Comune di Vicenza",
+          "publisherGroup": "Comune di Vicenza",
+          "kind": "original municipal ceremony statement",
+          "url": "https://www.comune.vicenza.it/Novita/Comunicati/La-tribuna-d-onore-del-Menti-intitolata-a-Savoini-a-dieci-anni-dalla-scomparsa-dell-ex-giocatore-e-allenatore-biancorosso",
+          "published": "2026-05-08",
+          "locator": "Mayor's account identifying the Vicenza shirt",
+          "quote": "la maglia biancorossa",
+          "access": "direct text read"
+        }
+      ],
+      "independence": "Club kit account and civic publisher's original stadium-honour account. No player biography or quotation is imported into product."
+    },
+    {
+      "cmName": "Arezzo",
+      "careerName": "Arezzo",
+      "words": [
+        "amaranto"
+      ],
+      "sources": [
+        {
+          "publisher": "SS Arezzo official store",
+          "publisherGroup": "SS Arezzo",
+          "kind": "club original identity description",
+          "url": "https://store.ssarezzo.it/",
+          "published": null,
+          "locator": "CHI SIAMO",
+          "quote": "i colori amaranto",
+          "access": "direct text read"
+        },
+        {
+          "publisher": "La Nazione",
+          "publisherGroup": "QN / Monrif",
+          "kind": "original centenary-book report by Luca Amorosi",
+          "url": "https://www.lanazione.it/arezzo/cronaca/cento-anni-color-amaranto-sabato-il-regalo-ai-lettori-bbeafdb1",
+          "published": "2023-12-12",
+          "locator": "Final visible article paragraph",
+          "quote": "è arrivata all’amaranto",
+          "access": "direct text read"
+        }
+      ],
+      "independence": "Club store identity and newspaper's own history-book reporting. Amaranto is retained as a colour word, with no numeric shade claim."
+    }
+  ],
+  "format": {
+    "season": "2026-27",
+    "regularSeason": {
+      "clubs": 20,
+      "gamesPerClub": 38,
+      "homeAndAway": true,
+      "fixtures": 380,
+      "points": [
+        3,
+        1,
+        0
+      ]
+    },
+    "existingWitness": {
+      "publisher": "ESPN",
+      "url": "https://site.api.espn.com/apis/site/v2/sports/soccer/ita.2/scoreboard?dates=YYYYMMDD",
+      "read": "2026-10-07",
+      "access": "inherited exact held facts record, not re-executed",
+      "says": "Existing census: 71 dates, 380 fixtures, 20 clubs, 38 each, 190 pairs twice."
+    },
+    "newSources": [
+      {
+        "publisher": "Lega B",
+        "publisherGroup": "Lega B",
+        "url": "https://www.legab.it/news/i-criteri-della-serie-bkt-2026-2027",
+        "published": "2026-07-21",
+        "quote": "38 giornate di campionato",
+        "locator": "Lead and criteria 1/5 distinguish outward and return fixtures",
+        "says": "Current season has 38 rounds and outward/return legs.",
+        "access": "direct text read"
+      },
+      {
+        "publisher": "Lega B",
+        "publisherGroup": "Lega B",
+        "url": "https://www.legab.it/news/le-novita-della-serie-bkt-2026-2027",
+        "published": "2026-08-18",
+        "quote": "15 squadre su 20",
+        "locator": "Opening paragraph",
+        "says": "Current season has 20 clubs.",
+        "access": "direct text read"
+      },
+      {
+        "publisher": "Lega B",
+        "publisherGroup": "Lega B",
+        "url": "https://d5rzfs5ck83rq.cloudfront.net/legab.it/documenti/2023-24/Linee-Guida-SERIE-B-2024-2029.pdf",
+        "published": null,
+        "seasonsOnDocument": [
+          "2024-25",
+          "2025-26",
+          "2026-27",
+          "2027-28",
+          "2028-29"
+        ],
+        "quote": "partecipazione di 20 squadre",
+        "secondQuote": "un incontro in casa e uno in trasferta",
+        "thirdQuote": "380 eventi",
+        "locator": "PDF page 4 of 56, Parte II paragraph 1",
+        "says": "Twenty clubs meet every other club once home and once away, 380 regular-season fixtures. Same document allows possible later reduction, so current season news supplies freshness.",
+        "access": "direct PDF text read"
+      },
+      {
+        "publisher": "FIGC",
+        "publisherGroup": "FIGC",
+        "url": "https://files.figc.it/view/acePublic/alias/contentid/1qzg5l96u12qfpnd689/0/tit3_noif_art_da47a70_------------aggiornato-al_CU209A_del_06-05-2026.pdf",
+        "published": "2026-05-06",
+        "quote": "tre punti per la gara vinta",
+        "secondQuote": "di un punto",
+        "thirdQuote": "non vengono attribuiti punti",
+        "locator": "PDF page 12 of 32, Art.51 paragraphs 1 and 2; linked by current FIGC NOIF index",
+        "says": "Home/away competition and 3 for a win, 1 for a draw, 0 for a loss. No tiebreak or playoff rule selected.",
+        "access": "direct PDF text read"
+      }
+    ],
+    "publisherCount": 3,
+    "independence": "ESPN held census, Lega B original league documents and FIGC original rules are separate publishers. The three Lega B URLs count as one publisher.",
+    "excluded": "Playoff thresholds, sanctions, detailed tiebreaks, match dates and other rules are not selected. The older NOIF July 2025 PDF is not the selected current rules witness."
+  },
+  "membershipCrosscheck": {
+    "season": "2026-27",
+    "url": "https://www.legab.it/seriebkt/calendario/2026-2027/stagione-regolare/h-verona",
+    "publisher": "Lega B",
+    "readDate": "2026-10-28",
+    "access": "direct text read",
+    "method": "Hellas Verona plus all 19 distinct opponents in the first outward schedule; identities only, no results or dates imported.",
+    "officialDisplayNames": [
+      "Hellas Verona",
+      "Ascoli",
+      "Padova",
+      "Arezzo",
+      "Benevento",
+      "L.R. Vicenza",
+      "Modena",
+      "Catanzaro",
+      "Pisa",
+      "Juve Stabia",
+      "Carrarese",
+      "Mantova",
+      "Cesena",
+      "Virtus Entella",
+      "Empoli",
+      "Palermo",
+      "Avellino",
+      "Südtirol",
+      "Cremonese",
+      "Sampdoria"
+    ],
+    "normalizations": {
+      "Hellas Verona": "Verona",
+      "L.R. Vicenza": "Vicenza",
+      "Virtus Entella": "Entella",
+      "Südtirol": "Sudtirol"
+    },
+    "agreesWithHeldTwenty": true,
+    "limit": "This is a fresh official identity crosscheck, not a replay of the held ESPN/Sky census."
+  },
+  "accessLimits": [
+    {
+      "url": "https://www.fc-suedtirol.com/files/content/1211207_8380_2_0/mai-juni-2016.pdf",
+      "result": "Full direct read refused as over tool size limit, 17474589 bytes",
+      "countedAsRequiredWitness": false
+    },
+    {
+      "url": "https://img.legaseriea.it/vimages/6895caeb/colori%20divise%20da%20gioco%20Coppa%20Italia%202025-2026_Organico__.pdf",
+      "result": "Direct read returned 502",
+      "countedAsRequiredWitness": false
+    },
+    {
+      "url": "https://d5rzfs5ck83rq.cloudfront.net/wp-content/uploads/2020/05/08144651/Bmag_n1_2020-2.pdf",
+      "result": "Full direct read refused as over tool size limit, 30351515 bytes",
+      "countedAsRequiredWitness": false
+    },
+    {
+      "url": "https://www.entella.it/prima-squadra/match-report-entella-juve-stabia-1-1-2/",
+      "result": "Search-index text visible, direct read returned 403",
+      "countedAsRequiredWitness": false
+    },
+    {
+      "url": "https://www.legab.it/classifica",
+      "result": "Direct route unavailable; actual season-specific official calendar used instead",
+      "countedAsRequiredWitness": false
+    }
+  ],
+  "limits": [
+    "No source or data file is changed by this research packet.",
+    "No hexadecimal colour has been selected or described as official.",
+    "No crests, kits, player images or other assets were downloaded for shipment.",
+    "Web text was read through the browser tool. No native hash of a complete publisher response body is claimed.",
+    "Two publisher witnesses are recorded for each colour-word identity; undated pages are explicitly undated.",
+    "Nine existing coloured CM records remain held and are not re-certified by these eleven pairs.",
+    "Future catalogue expansion and its effect on offers/RNG require separate test-first authorization and remote qualification."
+  ]
+}

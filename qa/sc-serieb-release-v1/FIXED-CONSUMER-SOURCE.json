@@ -1,0 +1,242 @@
+{
+  "schema": 1,
+  "status": "SOURCE_SELECTED_FIXED_RUNTIME_UNRUN",
+  "ready": true,
+  "sourceBase": "a4805f9d0e5816d19a1490ee6bb511966c617785",
+  "sourceTree": "a0f25d5bd854823b3a625932d8dff336bc400e0b",
+  "sourceBaseStatus": "Source-vetted clean draft, global qualification pending",
+  "manualSourceManifestSHA256": "9d3948f94bdb6980e8f9cc4f67bbb0b81fad214d2a5829757f0c3a36e6e06dcf",
+  "productManifestPath": "qa/sc-serieb-release-v1/PRODUCT-SOURCE-READY.json",
+  "productManifestSHA256": "0cfa7c58be4db439aa8535a0e18b74cfd54a3d3896f17551d26f2a976064c2b9",
+  "generatedSHA256": "5e565223239c8bb5ea8f5be3d2ecfb5c72ed026d3598031fcb5221f265e01d58",
+  "critical": [
+    {
+      "path": "src/lib/clubManager.ts",
+      "bytes": 1241181,
+      "sha256": "135929be1da2fc592d2eb40f9bfdf7a3eb6b90ba911b4f5379cf5e662987621e",
+      "gitBlob": "aff16d7d51de6da8dd1d16893c9c03acc57cb97f"
+    },
+    {
+      "path": "scripts/lib/careerClubPool.mjs",
+      "bytes": 22296,
+      "sha256": "ded92933aa4790e4c4a532647d09e5ee3c65b22dfec57432de18d25641d9dce0",
+      "gitBlob": "16ccc6137958a1adf2e40e5d26b99de466b38e24"
+    },
+    {
+      "path": "src/data/leagueFormat.ts",
+      "bytes": 7070,
+      "sha256": "915b4acd46f103d7c371d58c043c600a85e4e592ae6b59d5a8000d930e76fca5",
+      "gitBlob": "802650466c0c4439f12c741e7d1ae28957280f9b"
+    },
+    {
+      "path": "src/lib/soccerCareerLeague.ts",
+      "bytes": 47020,
+      "sha256": "fe3efae2f43e780c2cd4d13ca7fa85f023a2fefe8cf1b002866a1cf0d963268a",
+      "gitBlob": "9c05bf681f30bcd3703f55ad72c1289f4eeb9844"
+    },
+    {
+      "path": "src/lib/soccerCareerDerby.ts",
+      "bytes": 23401,
+      "sha256": "24b47bb4f83a37f4c43fcd5cb42be7976eac299a5bec0f7673af0621c6c804e8",
+      "gitBlob": "e25062b2b6560957feb414fd709b7bbc5b4af7ba"
+    },
+    {
+      "path": "src/lib/soccerCareerEngine.ts",
+      "bytes": 552077,
+      "sha256": "bf4beb5151213325277a44c83cef6a72528d14b612368b8db70c7b2288508708",
+      "gitBlob": "97e40cf67e30c3cbf6425eab95afa0c53a20d66b"
+    },
+    {
+      "path": "src/lib/soccerCareerCoachingStart.ts",
+      "bytes": 4043,
+      "sha256": "7720957192ccb8a0de5b1fef64817e409ee30d7ce7dd035425e598d0fd903aff",
+      "gitBlob": "0733d114d66b748131ac2c623fb858c6d9c97fd2"
+    },
+    {
+      "path": "scripts/data/soccerCareerFacts.json",
+      "bytes": 176880,
+      "sha256": "35b8f45234d485190098746e8f04ab1d2db386bc4f44b1224c7f7e76a462fe4a",
+      "gitBlob": "6ac25dc9d27bb0295f0e268be79990cf69086f7f"
+    },
+    {
+      "path": "src/data/soccerCareerClubPool.ts",
+      "bytes": 49030,
+      "sha256": "5e565223239c8bb5ea8f5be3d2ecfb5c72ed026d3598031fcb5221f265e01d58",
+      "gitBlob": "83e9df78441c0d16509f80b8ec0bfbadb0f08f26"
+    },
+    {
+      "path": "src/lib/careerEras.ts",
+      "bytes": 105789,
+      "sha256": "f3e7347f58abe993db9fd72e9896ea0767a6ca7eb3b19861b75b92b387f89c1c",
+      "gitBlob": "e037022342382b1df9c8a5ede620d2cce480bc23"
+    },
+    {
+      "path": "src/lib/soccerCareerSave.ts",
+      "bytes": 6287,
+      "sha256": "b486dfd8c4073230b6967c674058e46c7b56a6afd2a8a165f1e215501205477a",
+      "gitBlob": "86ec011693fd5bc702b5e8ccec05d27775a72a76"
+    },
+    {
+      "path": "src/lib/soccerCareerLeagueWorld.ts",
+      "bytes": 15636,
+      "sha256": "360c629f5d6ecc9cd959f5aae9a3791eb99b4f5cecdca2236da563168c2bb8c6",
+      "gitBlob": "72fcabdd0c557a743aa849b01208140c3030048f"
+    },
+    {
+      "path": "src/lib/soccerCareerLife.ts",
+      "sha256": "1ba72d3a9b0f1fd30fe45eab2d5e34a955369effa6b224e02a9db3e3db92befc"
+    },
+    {
+      "path": "src/lib/soccerCareerLoyalty.ts",
+      "sha256": "3296bbf33e1b148a7d69ea30c0e8e64a4eaa724e56b4c50c735089a340b79d54"
+    }
+  ],
+  "retained": [
+    {
+      "path": "qa/sc-serieb-release-v1/original/soccerCareerClubPool.ts",
+      "bytes": 46309,
+      "sha256": "4fca8dcc0d83efaa0d79d58833a03d3f2787cd44fb5ea93a90c3cf207ef5efd2"
+    },
+    {
+      "path": "qa/sc-serieb-release-v1/original/soccerCareerCoachingStart.ts",
+      "bytes": 4043,
+      "sha256": "7720957192ccb8a0de5b1fef64817e409ee30d7ce7dd035425e598d0fd903aff"
+    },
+    {
+      "path": "qa/sc-serieb-release-v1/original/soccerCareerEngine.ts",
+      "bytes": 552035,
+      "sha256": "bc616834e0a5399fcd3ec55d519ead1b194281a9801e3da8a43bf421cd5153b2"
+    },
+    {
+      "path": "qa/sc-serieb-release-v1/research/COLOUR-WORD-LEDGER.json",
+      "bytes": 20847,
+      "sha256": "9dc7192ff95e070efcbe2bf392aaa3b67afb606bdda6f360e5634cdad60d2fa0"
+    },
+    {
+      "path": "qa/sc-serieb-release-v1/research/PALETTE-DESIGN.json",
+      "bytes": 3802,
+      "sha256": "ef4e384cd154d91ddf33eaa44e8b91662f008d845528bc45b6efb70d04355c7e"
+    },
+    {
+      "path": "qa/sc-serieb-release-v1/retained/fixtures.json",
+      "bytes": 38248,
+      "sha256": "a44938775caabdabb5d446addd6a073ba26465435a86f1ffb9a0864317868ab5"
+    },
+    {
+      "path": "qa/sc-serieb-release-v1/retained/modern-fixture.json",
+      "bytes": 11955,
+      "sha256": "ac2a1b9739578af9cf6f2ccf983f07f5c68a257bde2d39050a7ad02408a99ab5"
+    },
+    {
+      "path": "qa/sc-serieb-release-v1/retained/old-generic.save.txt",
+      "bytes": 6412,
+      "sha256": "81777bcd5a7631c70edf52c626484c00e0a687ab2fd9a7fae7f3c3a2ade0da25"
+    },
+    {
+      "path": "qa/sc-serieb-release-v1/retained/old-choices/club-loan.golden.json",
+      "bytes": 175648,
+      "sha256": "067d174dd041c1b217935d5ce2144b4ace3d783f0b877e471e6d326649435ba0"
+    },
+    {
+      "path": "qa/sc-serieb-release-v1/retained/old-choices/club-loan.save.txt",
+      "bytes": 22847,
+      "sha256": "fb70e8e3b0e7926320db55a1665e3939f5f5da9f1579c233ed2d8d77f9686256"
+    },
+    {
+      "path": "qa/sc-serieb-release-v1/retained/old-choices/elected-loyalty.golden.json",
+      "bytes": 154074,
+      "sha256": "edf55a503bef313ee1daac54ad31a1368968da74e13005d724828e15f5166962"
+    },
+    {
+      "path": "qa/sc-serieb-release-v1/retained/old-choices/elected-loyalty.save.txt",
+      "bytes": 20624,
+      "sha256": "a43490e71cf126466d605ad62c7bf5e5ababb96c5ef293f33b502882c1f1bb1d"
+    },
+    {
+      "path": "qa/sc-serieb-release-v1/retained/old-choices/permanent-transfer.golden.json",
+      "bytes": 150999,
+      "sha256": "fc8d531d4e051533ca456914495b62e341e326a0e44f7371468b988d77924d81"
+    },
+    {
+      "path": "qa/sc-serieb-release-v1/retained/old-choices/permanent-transfer.save.txt",
+      "bytes": 20168,
+      "sha256": "e36ab900709fe90e88fcf541949bd6335678f94e82906ddbbbe2a3a4223e4342"
+    }
+  ],
+  "goldenOrigins": [
+    {
+      "kind": "club-loan",
+      "originalRecord": "remote-40737595998/artifact/acquisition/club-loan.json",
+      "originalRecordSHA256": "b1fb10725cf0399b96fd8186776363eec22d6d0e729db5c830dcb7065f1e8716",
+      "golden": "qa/sc-serieb-release-v1/retained/old-choices/club-loan.golden.json",
+      "raw": "qa/sc-serieb-release-v1/retained/old-choices/club-loan.save.txt",
+      "rawSHA256": "fb70e8e3b0e7926320db55a1665e3939f5f5da9f1579c233ed2d8d77f9686256",
+      "recordedSeed": 91001,
+      "loadedFieldRawTextExact": true,
+      "sourceStateFieldRawTextExact": true
+    },
+    {
+      "kind": "permanent-transfer",
+      "originalRecord": "remote-40737595998/artifact/acquisition/permanent-transfer.json",
+      "originalRecordSHA256": "169adba1573a3a4f1fe23d92dcc9255252e91a56f75f4e27cc7d612367c1638a",
+      "golden": "qa/sc-serieb-release-v1/retained/old-choices/permanent-transfer.golden.json",
+      "raw": "qa/sc-serieb-release-v1/retained/old-choices/permanent-transfer.save.txt",
+      "rawSHA256": "e36ab900709fe90e88fcf541949bd6335678f94e82906ddbbbe2a3a4223e4342",
+      "recordedSeed": 91000,
+      "loadedFieldRawTextExact": true,
+      "sourceStateFieldRawTextExact": true
+    },
+    {
+      "kind": "elected-loyalty",
+      "originalRecord": "remote-40737595998/artifact/acquisition/elected-loyalty.json",
+      "originalRecordSHA256": "1290fcb98c3f202aa9edde56329b5d6ad7829924a34119802a32670dfb54ccc0",
+      "golden": "qa/sc-serieb-release-v1/retained/old-choices/elected-loyalty.golden.json",
+      "raw": "qa/sc-serieb-release-v1/retained/old-choices/elected-loyalty.save.txt",
+      "rawSHA256": "a43490e71cf126466d605ad62c7bf5e5ababb96c5ef293f33b502882c1f1bb1d",
+      "recordedSeed": 91002,
+      "loadedFieldRawTextExact": true,
+      "sourceStateFieldRawTextExact": true
+    }
+  ],
+  "cases": [
+    "complete initial-contract pool and since boundary",
+    "complete modern finish ladder",
+    "playing table size points and cadence boundary",
+    "historic default manager entry excludes the appended20",
+    "historic coursework read and commit exclude the appended20",
+    "existing190 hand287 generated23 ladders and L2 eligibility remain frozen",
+    "original saved choices match captured pre-product accepted outcomes"
+  ],
+  "markers": [
+    "SERIEB_POOL",
+    "SERIEB_LADDER",
+    "SERIEB_TABLE",
+    "SERIEB_DEFAULT_ENTRY",
+    "SERIEB_COURSEWORK_ENTRY",
+    "SERIEB_OLD_DEFINITIONS",
+    "SERIEB_RETAINED_SAVE"
+  ],
+  "healthyCases": 7,
+  "goldenCopiedControls": 4,
+  "boots": {
+    "ceiling": 4096,
+    "potential": 55,
+    "fullPool": true,
+    "overall": 45,
+    "nationality": "Italy"
+  },
+  "referenceScope": "Only oldEnginebc616, oldpool4fca and unchanged coaching772 are frozen in historical/quote arm; all other dependencies are current. No reference bundle serves golden saved-choice outputs.",
+  "qualificationParent": {
+    "commit": "47dc71eafa15870935718f032ff545fb07de0110",
+    "tree": "33d045e5772867c42167818caf1fe63dc94fb8cf",
+    "status": "Source-vetted clean Draft423; fixed/global qualification pending"
+  },
+  "generatorAdmissionSHA256": "1841586a2bec59c64477f3aa614eda7d3f7c040496a0aecbbc529143ede96e7a",
+  "rootProductGoSHA256": "ecde8e1f16fa2007877610b8081d9fcb85b86f1630476595562c80b265b83e48",
+  "retainedActorOrigins": {
+    "historical": "Actual original SerieB baseline40734310067 consumer/fixtures.json a4493877, including its already-labelled presentation flag",
+    "modern": "Actual original L2proof40713259023 healthy/modern-fixture.json ac2a1b97, including its already-labelled presentation flag",
+    "regeneration": "None"
+  },
+  "wrapperContract": "Healthy source preflight must pin all14canonical bodies. Each physical copy may differ only by declared actually changed span/hash; retain all immutable inputs. Consumer records sourceBefore/After and exercises owned assertions, no broad allow-drift flag. Same-copy exact restore then all7positives."
+}
