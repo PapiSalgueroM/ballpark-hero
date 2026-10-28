@@ -11,7 +11,7 @@ import {build} from 'esbuild';
 import pw from '../lib/playwrightLoader.mjs';
 assert(process.env.CI,'Coaching native checks run remotely');
 const ROOT=process.cwd(),OUT=path.resolve(process.env.SC_COACHING_BROWSER_OUT||'coaching-start-artifacts/native');
-const KEY='soccerCareerSave',NOW=1791586800000,META='qa/soccer-career-coaching-start-v1/SOURCE-READY.json',PIN='d5122abea6ae1f52285cd2fd01bfca257808e3c1ff24f821151ddeb60c3538be';
+const KEY='soccerCareerSave',NOW=1791586800000,META='qa/soccer-career-coaching-start-v1/SOURCE-READY.json',PIN='73f0282fba85e4dd5454b5dcec01c3bfa96366f4170d898f9d82a41e2bc565da';
 const sha=value=>createHash('sha256').update(value).digest('hex'),copy=value=>structuredClone(value);
 const sameManagerState=(actual,expected)=>JSON.stringify(actual.managerState)===JSON.stringify(expected.managerState);
 fs.mkdirSync(OUT,{recursive:true});
