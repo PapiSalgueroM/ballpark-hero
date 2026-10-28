@@ -1688,6 +1688,7 @@ const ClubManager = () => {
             onSetStatus={g.setStatus}
             onLoanOut={g.loanOut}
             onCommitLoanPlan={g.commitLoanPlan}
+            onCommitRecruitment={g.commitRecruitment}
             onProposeTerms={g.proposeTerms}
             onBuyLoanee={g.buyLoanee}
             onEndLoanEarly={g.endLoanEarly}

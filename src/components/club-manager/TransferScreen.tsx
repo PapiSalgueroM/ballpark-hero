@@ -1,5 +1,6 @@
 import { lazy, Suspense, useEffect, useLayoutEffect, useMemo, useRef, useState } from 'react';
 import { loanPlanRecordOf } from '@/lib/clubManagerLoanPlan';
+import type { RecruitmentCommit, RecruitmentPick } from '@/lib/clubManagerRecruitment';
 import { cn } from '@/lib/utils';
 import { bannerClearance } from '@/components/club-manager/deskCue';
 /* Round 194: the nationality filter, CM-7's last open line. Per-world maps
@@ -27,6 +28,7 @@ import { ratingTint, MadeUpTag } from '@/components/club-manager/SquadScreen';
 import { CelebrationStyles, revealDelay } from '@/components/club-manager/Celebration';
 
 const LoanPlanCard = lazy(() => import('@/components/club-manager/LoanPlanCard').then(m => ({ default: m.LoanPlanCard })));
+const RecruitmentBoard = lazy(() => import('@/components/club-manager/RecruitmentBoard').then(m => ({ default: m.RecruitmentBoard })));
 
 type PosFilter = 'ALL' | 'GK' | 'DEF' | 'MID' | 'ATT';
 
@@ -73,6 +75,7 @@ interface TransferScreenProps {
   onSetStatus: (playerId: string, status: TransferStatus | null) => void;
   onLoanOut: (playerId: string) => void;
   onCommitLoanPlan?: (make: (c: CareerState) => CareerState | null) => boolean;
+  onCommitRecruitment?: RecruitmentCommit;
   /* Round 506: the personal terms table, and the two loan figures. */
   onProposeTerms: (terms: PersonalTerms) => void;
   onBuyLoanee: (playerId: string) => void;
@@ -109,7 +112,7 @@ export function TransferScreen({
   onNegotiate, onOffer, onWalk, onDismissNegotiation, onClause, onLoan,
   onAcceptBid, onRejectBid, onSetStatus, onLoanOut,
   onProposeTerms, onBuyLoanee, onEndLoanEarly, onRecallLoanee,
-  deskNote, onClearNote, onCommitLoanPlan,
+  deskNote, onClearNote, onCommitLoanPlan, onCommitRecruitment,
 }: TransferScreenProps) {
   /* Round 514: the money symbol follows the start option. Shadowing the
      import here is one line instead of a career argument on every call. */
@@ -117,6 +120,8 @@ export function TransferScreen({
   const [filter, setFilter] = useState<PosFilter>('ALL');
   const [query, setQuery] = useState('');
   const [mode, setMode] = useState<'buy' | 'sell' | 'news'>('buy');
+  const [shortlist, setShortlist] = useState<RecruitmentPick | null | false>(false);
+  const shortlistOpener = useRef<HTMLButtonElement | null>(null);
   const [newsSort, setNewsSort] = useState<'recent' | 'fee'>('recent');
   const [newsClub, setNewsClub] = useState<'all' | 'mine'>('all');
   const [newsPage, setNewsPage] = useState(0);
@@ -358,6 +363,19 @@ export function TransferScreen({
       .slice(0, 10),
     [career],
   );
+
+  if (shortlist !== false && onCommitRecruitment) {
+    const close = () => {
+      setShortlist(false);
+      requestAnimationFrame(() => (shortlistOpener.current?.isConnected ? shortlistOpener.current : document.querySelector<HTMLButtonElement>('[data-cm-shortlist-open]'))?.focus({ preventScroll: true }));
+    };
+    return <Suspense fallback={<div className="space-y-2"><p role="status">Opening shortlist...</p><button className="min-h-11 min-w-11 px-3 rounded-lg border" onClick={close}>Back</button></div>}>
+      <RecruitmentBoard career={career} market={market} initial={shortlist || undefined} onCommit={onCommitRecruitment} onBack={close} onFind={player => {
+        setMode('buy'); setFilter('ALL'); setPosExact('any'); setAgeBand('any'); setPriceBand('any'); setLeaguePick('any'); setNatPick('any'); setQuery(player.name);
+        close();
+      }} />
+    </Suspense>;
+  }
 
   return (
     <div className="space-y-4">
@@ -772,6 +790,8 @@ export function TransferScreen({
         </div>
       )}
 
+      {onCommitRecruitment && <button data-cm-shortlist-open className="min-h-11 min-w-11 w-full rounded-lg border border-border px-3 text-sm font-bold" onClick={e => { shortlistOpener.current = e.currentTarget; setShortlist(null); }}>Shortlist</button>}
+
       {/* Mode toggle */}
       <div className="grid grid-cols-3 gap-1.5">
         <button
@@ -913,6 +933,7 @@ export function TransferScreen({
                   </div>
                   <span className={cn('text-sm font-bold font-display', ratingTint(m.rating))}>{m.rating}</span>
                   <div className="shrink-0 flex flex-col gap-1 items-stretch">
+                    {onCommitRecruitment && <button className="min-h-11 min-w-11 rounded-lg border border-border px-2 text-xs font-bold" aria-label={`Save ${m.name}`} onClick={e => { shortlistOpener.current = e.currentTarget; setShortlist({ career, player: m }); }}>Save</button>}
                     <button
                       onClick={() => onNegotiate(m)}
                       disabled={negBusy || cold}
