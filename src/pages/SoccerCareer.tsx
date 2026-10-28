@@ -1531,7 +1531,7 @@ export default function SoccerCareer() {
           loaded, puts the whole thing back in the clear. It is a static class,
           not something that changes as you scroll, so it cannot interact with
           the lift measurement. */}
-      <div className={`min-h-screen bg-background text-foreground flex flex-col ${career ? 'pb-[88px]' : ''}`}>
+      <div data-soccer-career-report="v1" data-sc-report-phase={career?.phase ?? "creation"} data-sc-report-training-open={trainingOpen ? "true" : "false"} className={`min-h-screen bg-background text-foreground flex flex-col ${career ? 'pb-[88px]' : ''}`}>
         <GameNavbar />
         <div className={`relative z-10 mx-auto w-full max-w-4xl ${career ? "h-11 sm:h-0" : ""}`}>
           <GameHelp extraRules={[...DERBY_HELP_RULES,
@@ -1673,7 +1673,14 @@ export default function SoccerCareer() {
             )}
             {trainingOpen && (
               <CentreMountBoundary what="training ground" onClose={closeTraining}>
-                <Suspense fallback={<div className="fixed inset-0 z-50 flex items-center justify-center bg-black/70" data-training-loading><div className="rounded-2xl border border-border bg-card px-5 py-4 text-sm">🏋️ Opening the training ground...</div></div>}>
+                <Suspense fallback={
+                  <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/70 p-4" data-training-loading>
+                    <div role="dialog" aria-modal="true" aria-label="Opening the training ground" tabIndex={-1} ref={focusDialogOnMount} onKeyDown={escapeCloses(closeTraining)} className="w-full max-w-sm rounded-2xl border border-border bg-card px-5 py-4 text-sm">
+                      <p>🏋️ Opening the training ground...</p>
+                      <Button onClick={closeTraining} variant="outline" className="mt-4 h-11 w-full font-bold">Back to career</Button>
+                    </div>
+                  </div>
+                }>
                   <TrainingPanel
                     career={career}
                     available={trainingAvailable(career)}

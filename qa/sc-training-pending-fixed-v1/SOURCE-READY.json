@@ -1,0 +1,103 @@
+{
+  "base": "b20ec6664df9d4c58d63ea0596791d33b2a3b8fc",
+  "productSelectionSHA256": "6421f74d4809608fe487a4f09f8b5e6e1ba50f3a435bf46bd47864168257874f",
+  "files": [
+    {
+      "path": "src/pages/SoccerCareer.tsx",
+      "bytes": 272068,
+      "sha256": "c79872b212a1c69713bd4e66a1a692a49483e49811bdd05e73c5197bda05d965",
+      "gitBlob": "eada8c381e1cad7b79b66dc77f1ebb7d31cc7d11"
+    },
+    {
+      "path": "src/lib/reportContext.ts",
+      "bytes": 4358,
+      "sha256": "14c8553bb5f3e4d1e3f7e6a3f0d314b970015ae093f482531ca04f1dc9218362",
+      "gitBlob": "7c5cd109e1b3bb8a1bd7c6e96b60490237592551"
+    },
+    {
+      "path": "src/test/reportContextSoccerCareerDiagnostic.test.ts",
+      "bytes": 4345,
+      "sha256": "6d2f68fea770201de2429230d44e3476c658eb02933cd92106e6e32bec71746a",
+      "gitBlob": "6648a4b8057f1fabe29fe3bf77b11f8a21866869"
+    }
+  ],
+  "held": [
+    {
+      "path": "src/lib/soccerCareerEngine.ts",
+      "bytes": 550526,
+      "sha256": "d2c4d26eb5ca12646f69e0d07cffab685f1660ff95ea33011ed97f64847bb8b1",
+      "gitBlob": "1ecd36c893395485a93d91cb1905ff78c83c7741"
+    },
+    {
+      "path": "src/lib/soccerCareerSave.ts",
+      "bytes": 6287,
+      "sha256": "b486dfd8c4073230b6967c674058e46c7b56a6afd2a8a165f1e215501205477a",
+      "gitBlob": "86ec011693fd5bc702b5e8ccec05d27775a72a76"
+    },
+    {
+      "path": "src/components/soccer-career/TrainingPanel.tsx",
+      "bytes": 31509,
+      "sha256": "725e95d14cee44b459fe5c19662ad8b1dc69364d69289b46527081a1c0ab2e61",
+      "gitBlob": "7027493bc968cf77bdcde7c6e21646441dc40bd4"
+    },
+    {
+      "path": "scripts/data/careerLeagueWorldSaves1100.json",
+      "bytes": 102331,
+      "sha256": "1c2ac7441402ad6db4916c844181b869a3550726c7e0afed4cce194f5e6ca8ef",
+      "gitBlob": "81425f731297f0ff72fc4e163dfe1a4cb86814ab"
+    },
+    {
+      "path": "src/lib/completions.ts",
+      "bytes": 23048,
+      "sha256": "be1c754df700ad104672c30ab2a4a42c146a4cfabc6f8c98dc2b9dc13b79b3b4",
+      "gitBlob": "61daf9b6c528f884551cd1d42f71357681c8728a"
+    }
+  ],
+  "expectedFocused": 4,
+  "focused": [
+    {
+      "file": "src/test/reportContextSoccerCareerDiagnostic.test.ts",
+      "name": "Soccer Career report diagnostics captures current phase and training-open state from the explicit page marker"
+    },
+    {
+      "file": "src/test/reportContextSoccerCareerDiagnostic.test.ts",
+      "name": "Soccer Career report diagnostics keeps existing context unchanged without the explicit page marker"
+    },
+    {
+      "file": "src/test/reportContextSoccerCareerDiagnostic.test.ts",
+      "name": "Soccer Career report diagnostics keeps existing context unchanged on another route even with the marker"
+    },
+    {
+      "file": "src/test/reportContextSoccerCareerDiagnostic.test.ts",
+      "name": "Soccer Career report diagnostics preserves explicit caller details and shared report metadata"
+    }
+  ],
+  "allowedChanges": [
+    ".github/workflows/soccer-training-pending-fixed.yml",
+    "qa/sc-training-pending-fixed-v1/legacy-skipped-identities.json",
+    "qa/sc-training-pending-fixed-v1/SOURCE-READY.json",
+    "scripts/qa/playSoccerTrainingPending.mjs",
+    "scripts/qa/scTrainingPendingQualification.mjs",
+    "src/lib/reportContext.ts",
+    "src/pages/SoccerCareer.tsx",
+    "src/test/reportContextSoccerCareerDiagnostic.test.ts"
+  ],
+  "skipReference": {
+    "path": "qa/sc-training-pending-fixed-v1/legacy-skipped-identities.json",
+    "sha256": "a766ff371ad26c3e5cc7ec7d687a638b043f726406d02f27531cf12d3910e5fd"
+  },
+  "trainingBaseline": {
+    "run": 40658274659,
+    "admissionSHA256": "a8d5343dfeb83cef0fb94184db969c57c62b27af37ae88c62cae79e75b0e8d23"
+  },
+  "diagnosticBaseline": {
+    "run": 40659447430,
+    "admissionSHA256": "d4e74be2a13d8c5c0c6dc7030ced6436aadcb0e2c2140322c7680d534a5d7416"
+  },
+  "limits": [
+    "Final fixed runtime UNRUN",
+    "Fresh full-suite denominator only; prior reference supplies58exactskipidentities",
+    "Six browser diagnostic controls are copied observations, not served source mutations",
+    "No live report causal attribution or current published compiled-byte identity claim"
+  ]
+}
