@@ -64,20 +64,24 @@ const seeded = (s: number) => { let x = (s >>> 0) || 1; return () => { x ^= x <<
 const fixture: any = fs.existsSync(FIXTURE) ? JSON.parse(fs.readFileSync(FIXTURE, 'utf8')) : null;
 const got: any = {};
 /* The approved display-only delta is checked before its old colour is projected for the photograph. */
-const APPROVED_L2_COLOURS: Record<string, string> = {
+const APPROVED_DISPLAY_COLOURS: Record<string, string> = {
   'Red Star FC': '#0a7040', Annecy: '#d02128', Pau: '#f7d417',
   Dunkerque: '#1b458f', Grenoble: '#1b458f', Rodez: '#d02128',
   Clermont: '#d02128', Boulogne: '#d02128', Laval: '#ff6600',
+  Avellino: '#0a7040', Carrarese: '#f7d417', Catanzaro: '#d02128',
+  Entella: '#87d8f7', 'Juve Stabia': '#f7d417', Mantova: '#d02128',
+  Modena: '#f7d417', Padova: '#d02128', 'Südtirol': '#d02128',
+  Vicenza: '#d02128', Arezzo: '#7d1c2a',
 };
 const actualDisplayColours: Record<string, unknown> = {};
 const clubObservations: Record<string, any> = {};
-const approvedColour = (club: string) => Object.prototype.hasOwnProperty.call(APPROVED_L2_COLOURS, club);
+const approvedColour = (club: string) => Object.prototype.hasOwnProperty.call(APPROVED_DISPLAY_COLOURS, club);
 const legacyClubDigest = (club: string, value: any): string => {
   const def = approvedColour(club) && value.def ? { ...value.def, color: '#8899aa' } : value.def;
   return sha({ rows: value.rows, def, xi: value.xi, preview: value.preview, partial: value.partial, nats: value.nats });
 };
 const assertClubSnapshot = (clubs: Record<string, string>, colours: Record<string, unknown>): void => {
-  expect(colours, 'approved Ligue 2 display colours').toEqual(APPROVED_L2_COLOURS);
+  expect(colours, 'approved Ligue 2 and Serie B display colours').toEqual(APPROVED_DISPLAY_COLOURS);
   const names = Object.keys(fixture.clubs);
   const moved = names.filter(n => clubs[n] !== fixture.clubs[n]);
   expect(moved, `clubs whose digest moved: ${moved.join(', ')}`).toEqual([]);
@@ -185,16 +189,16 @@ describe('Round 1052: the world before the round is still there, untouched', () 
     if (RECORD) return;
     assertClubSnapshot(got.clubs, actualDisplayColours);
   });
-  it.skipIf(RECORD || !!CONTROL)('rejects an outside-nine copied colour change and readmits its restoration', () => {
+  it.skipIf(RECORD || !!CONTROL)('rejects an outside-twenty copied colour change and readmits its restoration', () => {
     copiedControl('Sevilla', 'color', '#8899aa', 'clubs whose digest moved: Sevilla');
   });
-  it.skipIf(RECORD || !!CONTROL)('rejects an inside-nine copied colour change and readmits its restoration', () => {
-    copiedControl('Annecy', 'color', '#8899aa', 'approved Ligue 2 display colours');
+  it.skipIf(RECORD || !!CONTROL)('rejects an inside-twenty copied colour change and readmits its restoration', () => {
+    copiedControl('Carrarese', 'color', '#8899aa', 'approved Ligue 2 and Serie B display colours');
   });
-  it.skipIf(RECORD || !!CONTROL)('rejects an inside-nine copied budget change and readmits its restoration', () => {
-    const budget = clubObservations.Annecy?.def?.budget;
+  it.skipIf(RECORD || !!CONTROL)('rejects an inside-twenty copied budget change and readmits its restoration', () => {
+    const budget = clubObservations.Carrarese?.def?.budget;
     expect(typeof budget).toBe('number'); expect(Number.isFinite(budget)).toBe(true);
-    copiedControl('Annecy', 'budget', budget + 1, 'clubs whose digest moved: Annecy');
+    copiedControl('Carrarese', 'budget', budget + 1, 'clubs whose digest moved: Carrarese');
   });
   it('keeps the free agent pool', () => {
     if (RECORD) return;

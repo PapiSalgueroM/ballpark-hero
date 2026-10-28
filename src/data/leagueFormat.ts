@@ -102,6 +102,7 @@ export const LEAGUE_FORMAT: Readonly<Record<string, readonly FormatWindow[]>> = 
   "2. Bundesliga": [{ from: 2026 }],
   "Brasileirao": [{ from: 2026 }],
   "Ligue 2": [{ from: 2026 }],
+  "Serie B": [{ from: 2026 }],
 };
 
 /* Round 1100: the leagues that are not one plain table (they split, play in

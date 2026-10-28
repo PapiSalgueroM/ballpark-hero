@@ -8798,10 +8798,10 @@ export function manualRetire(prev: CareerState): CareerState {
   return s;
 }
 
-/** Only the newly listed Ligue 2 clubs wait until their verified season. */
+/** Only the newly listed Ligue 2 and Serie B clubs wait until their verified season. */
 export function managerEntryClubInYear(club: Pick<ClubData, 'id'> | null | undefined, year: number): boolean {
   return !club || year >= 2026 || !CAREER_CLUB_POOL.some(row =>
-    row.id === club.id && row.league === 'Ligue 2' && CAREER_POOL_SINCE[row.name] === 2026);
+    row.id === club.id && (row.league === 'Ligue 2' || row.league === 'Serie B') && CAREER_POOL_SINCE[row.name] === 2026);
 }
 
 /* ─── Post-retirement choices ─── */
