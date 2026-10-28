@@ -20,7 +20,7 @@ let observerBuild;
 save();
 try {
   const metaBody=read('qa/soccer-career-coaching-start-v1/SOURCE-READY.json');
-  assert.equal(sha(metaBody),'73f0282fba85e4dd5454b5dcec01c3bfa96366f4170d898f9d82a41e2bc565da');
+  assert.equal(sha(metaBody),'82034d926ac30e7a5bdf642023c900f3635e1939c1a6d299b2765e5f6cccea2f');
   const meta=JSON.parse(metaBody);assert.equal(meta.files.length,17);
   const held=[...new Set([...meta.files.map(row=>row.path),page,test,utility])];
   const hashes=()=>Object.fromEntries(held.map(file=>[file,sha(read(file))]));

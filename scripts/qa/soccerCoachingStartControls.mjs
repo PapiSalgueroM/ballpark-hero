@@ -72,7 +72,7 @@ function run(root,label,selected){
 save();
 try{
   const metaBody=read(ROOT,metaPath),faultBody=read(ROOT,faultsPath);
-  assert.equal(sha(metaBody),'73f0282fba85e4dd5454b5dcec01c3bfa96366f4170d898f9d82a41e2bc565da');
+  assert.equal(sha(metaBody),'82034d926ac30e7a5bdf642023c900f3635e1939c1a6d299b2765e5f6cccea2f');
   assert.equal(sha(faultBody),'030ec20aa115c1aec45485c0191fda2d81e7b59f942fa130e154d2650ad62eb2');
   const meta=JSON.parse(metaBody),faults=JSON.parse(faultBody).faults;
   assert.equal(meta.files.length,17);assert.equal(faults.length,11);

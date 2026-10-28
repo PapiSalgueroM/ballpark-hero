@@ -1,6 +1,6 @@
 {
   "schema": 1,
-  "status": "V1.4 ACTUAL OFFSCREEN CHOOSER REVEAL SUCCESSOR, RUNTIME UNRUN",
+  "status": "V1.5.1 QA-ONLY OBSERVABLE STRICTMODE QUEUED REVISION SOURCE SUCCESSOR, RUNTIME UNRUN",
   "sourceRef": "d272f1cb8197c3f5a884688fd592ecca623a076e",
   "sourceTree": "5aadc3bc091fd6afec338352ba79176e14304421",
   "integrationBaseI": "12c1b2cd001f9309a31a887e5c432ca63c373852",
@@ -125,10 +125,10 @@
     },
     {
       "path": "src/test/soccerCareerCoachingTransaction.test.tsx",
-      "localPath": "C:\\Users\\antho\\dukb-handoff\\2026-10-27\\soccer-career-coaching-start-v1\\candidate-v2\\src\\test\\soccerCareerCoachingTransaction.test.tsx",
-      "bytes": 6956,
-      "sha256": "ca8bdb561b9831d2280870af2c2e75d5e8e904f0d86a2a2e3a6425e2ca50c379",
-      "gitBlob": "1e15927962d5aa6f4a88907f9ff1023bd10ea990"
+      "localPath": "C:\\Users\\antho\\dukb-handoff\\2026-10-27\\soccer-career-coaching-start-v1\\candidate-v1.5.1\\src\\test\\soccerCareerCoachingTransaction.test.tsx",
+      "bytes": 7201,
+      "sha256": "8c167cdc087a50a22d10469e381e87ef2d0bdf6eb908b327065ca3e1480cdb08",
+      "gitBlob": "4bb8d21c57ec3ce9fa6cc36e767d9829df34b838"
     }
   ],
   "newOrChangedPaths": [
@@ -168,7 +168,7 @@
     "sourcePeer": "4d893f98a1e71dbba626c47bd9c28dcf60a0c1282270d75e0fff21c0919019fd",
     "rootMustRebind": "Selected manifest and17bodies; retain no-env builder/4cases and separate lifecycle8. No fixed runtime credit."
   },
-  "held": "Other16selected bodies byte-held fromd512. All34testbodies, globaluseRevealScroll, Engine/saves/default handlers/state/RNG logic/Back/headingfocus held. Only chooserimport/ref/mountreveal wiring changed.",
+  "held": "Other16selected bodies held73f, allproduction/newchooser967/globalhook/Engine/state/RNG codeheld. Other5transactioncasebodies/all33otherfocusedcases held; firstcaseassertions unchanged.",
   "required": "Realapp types;22new+4heldconsumer+8lifecycle cases;11physical source faults with independent case and same-copy22restore; unsafe-updater control proves extra actual StrictMode global draws; no-env/fullsuite; source/default state/raw/save/RNG holds; build/all15readers/all15unchangedcaps; actual route browser.",
   "limits": [
     "Native text/hash/inverse only, no local app/runtime/compiler/parser/tests/browser/Git.",
@@ -176,16 +176,15 @@
     "No branch/ref/CI/source adoption or main/publication action by this author."
   ],
   "successor": {
-    "fromManifestSha256": "d5122abea6ae1f52285cd2fd01bfca257808e3c1ff24f821151ddeb60c3538be",
+    "fromManifestSha256": "bc5412c7b7fd5e17804594f06a07a7b0cb8f12e6a1af882834b29d13d1e822c5",
     "changedPriorPaths": [
-      "src/components/soccer-career/CoachingStartChooser.tsx"
+      "src/test/soccerCareerCoachingTransaction.test.tsx"
     ],
     "addedPaths": [],
-    "reason": "Actualserved320ceremony newheadingy-122andBack/helpabovefold; connectunchangedsiteRevealScroll rootrefskipFirstfalse",
+    "reason": "ExposeactualHostrevisioninControls/outputdataattribute, assertcommitted1afterrealunrelatedsetStatebeforestartinsameact",
     "wholeInverses": true,
-    "globalRevealHookSourceHeld": true,
-    "defaultHandlerByteHeld": true,
-    "nativeBefore": "Run40611647219 actualfirstselectedopeningvisibilityfailure, ROOTactuallyviewednormal+failurePNGs",
-    "qualification": "Sameactualnativefirstviewguard across8journeys/16arms mustpass; no newJSDOMgeometrymirror/casecount/faultmapgrowth."
+    "allTenApplicationBodiesHeld": true,
+    "chooserSha256": "96728e690cfb11e26e27d5f708f5d0ab0b4b63c69188f4ad8bae4fcb8bb43eed",
+    "qualification": "Dedicatedproofonly, preserveallfirstcasefulltyped/raw/draw/nextassertions, physicalunsafeupdatermustactuallyfail. Full2dfexisting9755suiteappsourceparityexplicit, nochangetothatbranch."
   }
 }

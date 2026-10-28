@@ -27,14 +27,15 @@ function seeded<T>(action:()=>T){
   Math.random=()=>{const value=draw();draws.push(value);return value;};
   try{return{value:action(),draws,next:draw()};}finally{Math.random=original;}
 }
-type Controls={career:CareerState|null;pool:ClubData[];start:(quote:CoachingStartQuote)=>void;replace:Dispatch<SetStateAction<CareerState|null>>;replacePool:Dispatch<SetStateAction<ClubData[]>>};
+type Controls={revision:number;career:CareerState|null;pool:ClubData[];start:(quote:CoachingStartQuote)=>void;queueRender:()=>void;replace:Dispatch<SetStateAction<CareerState|null>>;replacePool:Dispatch<SetStateAction<ClubData[]>>};
 function scene(initial:CareerState){
   const live:{current:Controls|null}={current:null};
   function Host(){
     const [career,setCareer]=useState<CareerState|null>(initial),[pool,setPool]=useState(clubs);
+    const [revision,setRevision]=useState(0);
     const start=useSoccerCoachingStart(career,pool,setCareer);
-    useLayoutEffect(()=>{live.current={career,pool,start,replace:setCareer,replacePool:setPool};},[career,pool,start]);
-    return <output>{JSON.stringify(career)}</output>;
+    useLayoutEffect(()=>{live.current={revision,career,pool,start,queueRender:()=>setRevision(value=>value+1),replace:setCareer,replacePool:setPool};},[revision,career,pool,start]);
+    return <output data-revision={revision}>{JSON.stringify(career)}</output>;
   }
   const mounted=render(<StrictMode><Host/></StrictMode>);
   return{live,mounted};
@@ -45,7 +46,8 @@ describe('actual committed coaching transaction in StrictMode',()=>{
     const state=fixture(),before=JSON.stringify(state),{live}=scene(state);
     const quote=coachingStartChoices(state,clubs)[0],club=clubs.find(row=>row.id===quote.clubId)!;
     const expected=seeded(()=>choosePostRetirement(state,'manager',[club]));
-    const actual=seeded(()=>{act(()=>live.current!.start(quote));return live.current!.career;});
+    const actual=seeded(()=>{act(()=>{live.current!.queueRender();live.current!.start(quote);});return live.current!.career;});
+    expect(live.current!.revision).toBe(1);
     expect(actual).toStrictEqual(expected);expect(actual.draws).toHaveLength(1);
     expect(JSON.stringify(actual.value)).toBe(JSON.stringify(expected.value));expect(JSON.stringify(state)).toBe(before);
   });
