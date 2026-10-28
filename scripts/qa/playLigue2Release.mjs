@@ -75,6 +75,7 @@ try{
   const arm={id:String(profile.width),profile,status:'STARTED',checks:[],captures:[],geometry:[],errors:[],consoleErrors:[],assetErrors:[],unknown:[],fixtures:[],cosmeticFlags:[],telemetry:[]};report.cases.push(arm);flush();
   const initial=S.serializeSoccerCareerSave(fixture.value.signed),context=await browser.newContext({viewport:profile,hasTouch:profile.width<768,isMobile:profile.width<768,serviceWorkers:'block',colorScheme:'dark',storageState:{cookies:[],origins:[{origin:BASE,localStorage:[{name:KEY,value:initial},{name:'cookie-consent',value:'essential'},{name:'dukb-theme',value:'dark'},{name:'dukb-guest-handle',value:GUEST},{name:'seasonCentre:help',value:'1'}]}]}});
   let page,closing=false;
+  const raw=()=>page.evaluate(key=>localStorage.getItem(key),KEY);
   const check=(condition,label)=>{arm.checks.push({ok:!!condition,label});assert(condition,arm.id+': '+label);};
   try{
    await context.addInitScript(now=>{const Old=Date;window.Date=class extends Old{constructor(...args){super(...(args.length?args:[now]));}static now(){return now;}};},NOW);
@@ -95,7 +96,6 @@ try{
    page.on('pageerror',error=>arm.errors.push(String(error)));page.on('console',message=>{if(message.type()==='error')arm.consoleErrors.push(message.text());});
    page.on('requestfailed',request=>{if(!closing&&request.url().startsWith(BASE+'/assets/'))arm.assetErrors.push({url:request.url(),error:request.failure()?.errorText});});
    page.on('response',response=>{if(response.url().startsWith(BASE+'/assets/')&&response.status()>=400)arm.assetErrors.push({url:response.url(),status:response.status()});});
-   const raw=()=>page.evaluate(key=>localStorage.getItem(key),KEY);
    async function settle(locator,label,scroll=false){
     if(scroll)await locator.evaluate(element=>element.scrollIntoView({block:'center',behavior:'instant'}));
     const value=await locator.evaluate(async element=>{let last='',stable=0,v;const start=performance.now();do{await new Promise(requestAnimationFrame);const r=element.getBoundingClientRect(),hit=document.elementFromPoint(r.left+r.width/2,r.top+r.height/2);v={rect:{left:r.left,right:r.right,top:r.top,bottom:r.bottom,width:r.width,height:r.height},painted:!!hit&&(hit===element||element.contains(hit)),finite:document.getAnimations().filter(a=>(a.playState==='running'||a.pending)&&Number.isFinite(a.effect?.getComputedTiming().endTime)).length,fonts:document.fonts.status,inner:innerWidth,scroll:document.documentElement.scrollWidth,scale:visualViewport?.scale??1};const signature=JSON.stringify(v);stable=signature===last?stable+1:1;last=signature;if(stable>=4&&v.fonts==='loaded'&&!v.finite)break;}while(performance.now()-start<8000);return{...v,stable,elapsedMs:performance.now()-start};});
@@ -139,7 +139,7 @@ try{
    const frame={frame:await page.locator('[data-frame-line]:visible').innerText()};validateFrame(frame);
    await capture('kickoff',page.locator('[data-frame-line]:visible'));
    const help=page.getByRole('button',{name:'How the Season Centre works',exact:true});await activate(help,'season rules');
-   const sheet=page.locator('[data-season-help]');await sheet.waitFor();check((await sheet.innerText()).includes('Worked examples'),'Rules and worked examples are reachable');
+   const sheet=page.locator('[data-season-help]');await sheet.waitFor();arm.helpRenderedText=await sheet.innerText();flush();check(/worked examples/i.test(arm.helpRenderedText),'Rules and worked examples are reachable');
    await page.keyboard.press('Escape');await sheet.waitFor({state:'detached'});check(await page.locator('[data-season-centre]:visible').count()===1,'Help Escape returns to the existing season');
    validateSaved(await raw(),afterRaw);
    if(profile.width<768){

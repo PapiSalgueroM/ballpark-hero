@@ -1,20 +1,10 @@
 {
   "status": "SOURCE_READY_ALL_RUNTIME_UNRUN",
-  "parentCommit": "92f19661d534e5c3151ea2a30834c5d3b91cb2fa",
-  "parentTree": "787c56129c8098b8cf472fc778dc72bc34ca0d9e",
+  "parentCommit": "86d63ca4341c5c39a3e7233f7e4e546d656b054e",
+  "parentTree": "38953bfd4dae2f470aee63e2d0966cd3a683e48c",
   "sourceFamily": "SC419e1b plus admitted baseline954d and generatorprobe92f; no main/live adoption",
   "allowedPaths": [
-    "src/data/soccerCareerClubPool.ts",
-    "scripts/simCareerClubPool.mjs",
-    "scripts/qa/ligue2ReleaseFixed.mjs",
     "scripts/qa/playLigue2Release.mjs",
-    "scripts/qa/ligue2ReleaseQualification.mjs",
-    "qa/sc-ligue2-release-v1/PRODUCT-SOURCE-READY.json",
-    "qa/sc-ligue2-release-v1/PHYSICAL-CONTROLS.json",
-    "qa/sc-ligue2-release-v1/retained/fixtures.json",
-    "qa/sc-ligue2-release-v1/retained/old-generic.save.txt",
-    "qa/sc-ligue2-release-v1/research/VERIFIED-FACTS.json",
-    "qa/sc-ligue2-release-v1/legacy-skipped-identities.json",
     "qa/sc-ligue2-release-v1/RELEASE-SOURCE-READY.json",
     ".github/workflows/sc-ligue2-release.yml"
   ],
@@ -153,9 +143,9 @@
     },
     {
       "path": "scripts/qa/playLigue2Release.mjs",
-      "bytes": 24986,
-      "sha256": "cf98d7f26499286dc32a25b8eb2ce5d92a6e9711670f0c883f556d01ad454730",
-      "gitBlob": "888f239bdb43240133a2c39d4941bec326f01241"
+      "bytes": 25030,
+      "sha256": "b17d422e9b8b316c525ec54dc60f782f2a169541ac475c569a03214dcff26c74",
+      "gitBlob": "36d1143c7fde74ae11fe4705e9b0d9be0d669f02"
     },
     {
       "path": "scripts/qa/ligue2ReleaseQualification.mjs",
@@ -267,7 +257,8 @@
     "generatorNative": "940248b030a97b83f5486b44d59c9538a72e9f1e810015d48aff3528adec4c62",
     "consumerSource": "eaa1b0df7582e869074c365de6472d87c4382b47978d6b6809f92c823405f3ee",
     "consumerPeer": "3067bd310a6b51b0eb656d2a52e8435a3b09e218d45979678311b482e7bb2677",
-    "browserRootGO": "294480ea61bd95b27e45269638d694ce0679b8c827c546fd64a822a6cee1e123"
+    "browserRootGO": "7d5166f0c96fd713a774add8ea8094869ebd02deb994b9f9016b6e234e931c7f"
   },
-  "limits": "All fixedruntime unrun. Oldreference replaces only SC419engine+generatedpool; other bundled dependencies candidate. Moduleinitialization excluded/unmeasured. No universalCI/live/publish claim."
+  "limits": "All fixedruntime unrun. Oldreference replaces only SC419engine+generatedpool; other bundled dependencies candidate. Moduleinitialization excluded/unmeasured. No universalCI/live/publish claim.",
+  "retryScope": "QA-only actualrenderedhelptext casefold/capture-retention correction. All9product/consumer/sampler/controller/physicalcontrols unchanged; freshsamehead3jobruntime required. Prior407019buildFAIL preserved, no result transfer."
 }
