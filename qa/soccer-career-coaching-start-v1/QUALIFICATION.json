@@ -255,7 +255,23 @@
       "head": "864c3c2476b1bdddb5b3453aafc628b884b7f9d5",
       "originalFiles": 9,
       "status": "SOURCE_READY_NOT_ADOPTED_RUNTIME_UNRUN"
-    }
+    },
+    "pullRequest": "https://github.com/PapiSalgueroM/ballpark-hero/pull/418",
+    "head": "4a3f6b3f33c9f467bc093bbb48a77c42006e3134",
+    "headTree": "a85fe2b35176254f6047febf276ac5ba337a7d94",
+    "changedPaths": [
+      "docs/PROJECT-STATE.md",
+      "scripts/qa/buildSoccerCoachingStartObserver.mjs",
+      "src/components/soccer-career/CoachingStartChooser.tsx",
+      "src/hooks/useSoccerCoachingStart.ts",
+      "src/lib/soccerCareerCoachingStart.ts",
+      "src/pages/SoccerCareer.tsx",
+      "src/test/soccerCareerCoachingChooser.test.tsx",
+      "src/test/soccerCareerCoachingStart.consumer.lifecycle.test.tsx",
+      "src/test/soccerCareerCoachingStart.consumer.test.tsx",
+      "src/test/soccerCareerCoachingStart.test.ts",
+      "src/test/soccerCareerCoachingTransaction.test.tsx"
+    ]
   },
   "limits": [
     "Every original acquired once by its assigned owner; all regular ZIP/TAR bodies hashed before archived JSON admission.",
