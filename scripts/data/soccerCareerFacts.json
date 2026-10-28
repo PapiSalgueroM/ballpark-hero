@@ -3493,6 +3493,18 @@
           "url": "https://site.api.espn.com/apis/site/v2/sports/soccer/fra.2/scoreboard?dates=YYYYMMDD",
           "read": "2026-10-07",
           "says": "ESPN's scoreboard feed read for every day of the season calendar (54 dates, 2026-08-08 to 2027-05-22): 306 fixtures, 18 clubs, 34 games a club, 153 pairs meet 2 times"
+        },
+        {
+          "url": "https://www.lfp.fr/assets/26_27_Reglement_Competitions_08_09_2026_45d0881157.pdf",
+          "publisher": "LFP",
+          "read": "2026-10-28",
+          "says": "2026-27 competition regulations, articles 518 and 518 BIS, printed page 121: 18 clubs in one group, 17 outward and 17 return games; win 3, draw 1, loss 0."
+        },
+        {
+          "url": "https://www.asse.fr/fr/actualites/le-calendrier-2026-2027-devoile--ac40700",
+          "publisher": "AS Saint-Etienne",
+          "read": "2026-10-28",
+          "says": "The club's 34-row 2026-27 calendar lists 17 distinct opponents once at home and once away. Only membership and home/away format are used; the introduction's date inconsistency is excluded."
         }
       ]
     },
@@ -3607,7 +3619,7 @@
     }
   },
   "clubColours": {
-    "about": "Round 1100. Home colours for pool clubs Club Manager has no colour for (it answers its fallback grey). The fact is the colour in words, from two sources; hex is this game's rendering of that word and nothing more. scripts/lib/careerClubPool.mjs POOL_COLORS may only use a club listed here.",
+    "about": "Round 1100. Verified home-colour words and decorative game renderings for career pool clubs. The fact is the colour in words, from two sources; hex is this game's rendering of that word and nothing more. scripts/lib/careerClubPool.mjs POOL_COLORS and the added Ligue 2 Club Manager colours use only the records listed here.",
     "clubs": {
       "Macarthur FC": {
         "colour": "black, with thin white pinstripes",
@@ -3622,6 +3634,203 @@
             "url": "https://macarthurfc.com.au/news/bulls-pay-homage-to-local-region-with-striking-new-kit",
             "read": "2026-10-07",
             "says": "the club, on its 2021-22 home jersey: \"honouring the colours synonymous with the region, the classic black and white\""
+          }
+        ]
+      },
+      "Red Star FC": {
+        "colour": "green and white",
+        "hex": "#0a7040",
+        "sources": [
+          {
+            "url": "https://www.redstar.fr/2016-07-25/les-pros/les-nouveaux-maillots-du-red-star/",
+            "publisher": "Red Star FC",
+            "read": "2026-10-28",
+            "says": "Le Vert et le Blanc",
+            "access": "opened-text",
+            "published": "2016-07-25"
+          },
+          {
+            "url": "https://www.usldunkerque.com/presentation-red-star/",
+            "publisher": "USL Dunkerque, separate club publisher",
+            "read": "2026-10-28",
+            "says": "Couleurs : Vert et blanc",
+            "access": "opened-text",
+            "published": "2017-08-01"
+          }
+        ]
+      },
+      "Annecy": {
+        "colour": "red",
+        "hex": "#d02128",
+        "sources": [
+          {
+            "url": "https://www.fc-annecy.fr/news/fiche-actualite/sortie-du-maillot-domicile-2021-2022",
+            "publisher": "FC Annecy",
+            "read": "2026-10-28",
+            "says": "D’un rouge historique pour le club",
+            "access": "opened-text",
+            "published": "2021-07-29"
+          },
+          {
+            "url": "https://maligue2.fr/2024/02/06/les-secrets-des-maillots-de-ligue-2-episode-1-4/",
+            "publisher": "MaLigue2, Etienne Comte original reporting",
+            "read": "2026-10-28",
+            "says": "le FCA a toujours évolué en rouge",
+            "access": "search-returned article text; later direct open timed out",
+            "published": "2024-02-06"
+          }
+        ]
+      },
+      "Pau": {
+        "colour": "yellow and blue",
+        "hex": "#f7d417",
+        "sources": [
+          {
+            "url": "https://www.paufc.fr/club/identite",
+            "publisher": "Pau FC",
+            "read": "2026-10-28",
+            "says": "Jaune & Bleu",
+            "access": "opened-text"
+          },
+          {
+            "url": "https://www.usldunkerque.com/presentation-pau-fc/",
+            "publisher": "USL Dunkerque, separate club publisher",
+            "read": "2026-10-28",
+            "says": "Couleurs : Jaune et bleu",
+            "access": "opened-text",
+            "published": "2017-07-25"
+          }
+        ]
+      },
+      "Dunkerque": {
+        "colour": "blue and white",
+        "hex": "#1b458f",
+        "sources": [
+          {
+            "url": "https://www.usldunkerque.com/les-horaires-douverture-de-la-boutique/",
+            "publisher": "USL Dunkerque",
+            "read": "2026-10-28",
+            "says": "aux couleurs bleu et blanc",
+            "access": "opened-text",
+            "published": "2025-12-13"
+          },
+          {
+            "url": "https://www.sofoot.com/articles/dunkerque-en-ligue-2-et-a-bon-port-24-ans-plus-tard-france",
+            "publisher": "So Foot, Florent Caffery original reporting/interview",
+            "read": "2026-10-28",
+            "says": "sous le maillot bleu et blanc",
+            "access": "search-returned article text; direct open timed out",
+            "published": "2020-05-15"
+          }
+        ]
+      },
+      "Grenoble": {
+        "colour": "blue and white",
+        "hex": "#1b458f",
+        "sources": [
+          {
+            "url": "https://gf38.fr/gaetan-paquiez-quitte-le-grenoble-foot-38/",
+            "publisher": "Grenoble Foot38",
+            "read": "2026-10-28",
+            "says": "Sous le maillot bleu et blanc",
+            "access": "opened-text",
+            "published": "2026-05-27"
+          },
+          {
+            "url": "https://www.grenoblefoot.info/passion-partage-et-convivialite-retour-sur-lhistoire-dun-tifo/",
+            "publisher": "Grenoble Foot Info / Metro-Sports, original supporter interview",
+            "read": "2026-10-28",
+            "says": "bleu et blanc, les couleurs du club",
+            "access": "opened-text",
+            "published": "2017-04-25"
+          }
+        ]
+      },
+      "Rodez": {
+        "colour": "red and yellow",
+        "hex": "#d02128",
+        "sources": [
+          {
+            "url": "https://rodezaveyronfootball.com/2026/07/porte-ensemble-domicile-2026-2027/",
+            "publisher": "Rodez Aveyron Football",
+            "read": "2026-10-28",
+            "says": "le rouge et le jaune",
+            "access": "opened-text",
+            "published": "2026-07-21"
+          },
+          {
+            "url": "https://maligue2.fr/2024/05/06/les-secrets-des-maillots-de-ligue-2-episode-4-4-qrm-rodez-asse-estac-vafc/",
+            "publisher": "MaLigue2, Etienne Comte original reporting",
+            "read": "2026-10-28",
+            "says": "Le rouge et le jaune sont une évidence",
+            "access": "opened-text",
+            "published": "2024-05-06"
+          }
+        ]
+      },
+      "Clermont": {
+        "colour": "red and blue",
+        "hex": "#d02128",
+        "sources": [
+          {
+            "url": "https://www.clermontfoot.com/nouveau-maillot-domicile-2025-2026-kappa-et-les-rayures-rouge-et-bleu-signent-un-retour-iconique",
+            "publisher": "Clermont Foot63",
+            "read": "2026-10-28",
+            "says": "bleu marine et rouge profond",
+            "access": "opened-text",
+            "published": "2025-07-11"
+          },
+          {
+            "url": "https://sportune.20minutes.fr/sport-business/football/clermont-foot-devoile-les-maillots-2021-22-de-sa-1re-saison-en-ligue-1-263168",
+            "publisher": "Sportune, Thomas Filhol original unveiling report",
+            "read": "2026-10-28",
+            "says": "En rouge et bleu à domicile",
+            "access": "opened-text",
+            "published": "2021-07-10"
+          }
+        ]
+      },
+      "Boulogne": {
+        "colour": "red and black",
+        "hex": "#d02128",
+        "sources": [
+          {
+            "url": "https://www.usbco.com/actu/informations-deplacement-clermont-foot-63",
+            "publisher": "US Boulogne CO",
+            "read": "2026-10-28",
+            "says": "accompagner les Rouge et Noir",
+            "access": "opened-text",
+            "published": "2026-09-10"
+          },
+          {
+            "url": "https://le11hdf.fr/national-lus-boulogne-change-encore-son-ecusson/",
+            "publisher": "Le11HDF, Enzo Notargiacomo original report",
+            "read": "2026-10-28",
+            "says": "ses couleurs : le noir et le rouge",
+            "access": "opened-text",
+            "published": "2025-06-24"
+          }
+        ]
+      },
+      "Laval": {
+        "colour": "tango (orange) and black",
+        "hex": "#ff6600",
+        "sources": [
+          {
+            "url": "https://www.fclorient.bzh/de-lorient-a-laval-le-tango-et-noir-dans-la-peau/",
+            "publisher": "FC Lorient, separate club publisher",
+            "read": "2026-10-28",
+            "says": "le tango et noir (ou orange et noir",
+            "access": "opened-text",
+            "published": "2025-02-19"
+          },
+          {
+            "url": "https://www.sportstrategies.com/le-stade-lavallois-confie-son-logo-a-ses-fans/",
+            "publisher": "Sport Strategies, independent business publisher",
+            "read": "2026-10-28",
+            "says": "les couleurs du logo doivent être déclinables en tango et noir",
+            "access": "opened-text",
+            "published": "2015-01-29"
           }
         ]
       }

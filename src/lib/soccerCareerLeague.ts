@@ -89,6 +89,7 @@ const LEAGUE_SIZES: Record<string, SizeWindow[]> = {
   "Belgian Pro League": [{ from: 2026, size: 18 }],
   "2. Bundesliga": [{ from: 2026, size: 18 }],
   "Brasileirao": [{ from: 2026, size: 20 }],
+  "Ligue 2": [{ from: 2026, size: 18 }],
 };
 /* The dugout's alone: second flights whose clubs the career club pool does
    not carry yet (the generator holds them), so no player can sign there and
@@ -101,10 +102,6 @@ const DUGOUT_SIZES: Record<string, SizeWindow[]> = {
      "Serie B 2026-27, le squadre del prossimo campionato", 2026-06-07, read
      2026-10-06), so no size is claimed before it. */
   "Serie B": [{ from: 2026, size: 20 }],
-  /* The same for Ligue 2: 18 clubs in 2026-27 (espn.com/soccer/standings/
-     _/league/fra.2 and Saint-Étienne's own Ligue 2 BKT table, asse.fr, both
-     read 2026-10-06). */
-  "Ligue 2": [{ from: 2026, size: 18 }],
   /* And the Segunda División: 22 clubs in 2026-27 (espn.com/soccer/standings/
      _/league/esp.2 and laliga.com's LALIGA HYPERMOTION table, both read
      2026-10-06). Club Manager plays 20 of them, but the dugout's table is

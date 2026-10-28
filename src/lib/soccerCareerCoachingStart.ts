@@ -1,4 +1,4 @@
-import { choosePostRetirement } from './soccerCareerEngine';
+import { choosePostRetirement, managerEntryClubInYear } from './soccerCareerEngine';
 import type { CareerState, ClubData } from './soccerCareerEngine';
 
 export interface CoachingStartQuote {
@@ -42,12 +42,13 @@ function seal(state: CareerState, club: ClubData): string {
 /** Recorded coursework offers a destination choice, not a licence or rating bonus. */
 export function coachingStartChoices(state: CareerState, clubs: readonly ClubData[]): readonly CoachingStartQuote[] {
   if (!firstEntry(state)) return [];
+  const eligible = clubs.filter(club => managerEntryClubInYear(club, (state.seasons[state.seasons.length - 1]?.year ?? 2024) + 1));
   const ids = new Map<string, number>();
   const names = new Map<string, number>();
-  for (const club of clubs) if (club && typeof club.id === 'string') ids.set(club.id, (ids.get(club.id) ?? 0) + 1);
-  for (const club of clubs) if (club && typeof club.name === 'string') names.set(club.name, (names.get(club.name) ?? 0) + 1);
+  for (const club of eligible) if (club && typeof club.id === 'string') ids.set(club.id, (ids.get(club.id) ?? 0) + 1);
+  for (const club of eligible) if (club && typeof club.name === 'string') names.set(club.name, (names.get(club.name) ?? 0) + 1);
   const seed = context(state);
-  return clubs.filter(club => starter(club) && ids.get(club.id) === 1 && names.get(club.name) === 1)
+  return eligible.filter(club => starter(club) && ids.get(club.id) === 1 && names.get(club.name) === 1)
     .map(club => ({ club, order: rank(seed + '|' + club.id) }))
     .sort((a, b) => a.order - b.order || (a.club.id < b.club.id ? -1 : a.club.id > b.club.id ? 1 : 0))
     .slice(0, 3)
@@ -57,11 +58,12 @@ export function coachingStartChoices(state: CareerState, clubs: readonly ClubDat
 /** Resolve current records before the one existing canonical manager-entry draw. */
 export function startCoachingAppointment(state: CareerState, clubs: readonly ClubData[], request: unknown): CareerState {
   if (!record(request) || request.source !== state) return state;
-  const quote = coachingStartChoices(state, clubs).find(candidate => candidate.clubId === request.clubId
+  const eligible = clubs.filter(club => managerEntryClubInYear(club, (state.seasons[state.seasons.length - 1]?.year ?? 2024) + 1));
+  const quote = coachingStartChoices(state, eligible).find(candidate => candidate.clubId === request.clubId
     && candidate.seal === request.seal && candidate.clubName === request.clubName
     && candidate.country === request.country && candidate.level === request.level);
   if (!quote) return state;
-  const current = clubs.filter(club => club && club.id === quote.clubId);
+  const current = eligible.filter(club => club && club.id === quote.clubId);
   if (current.length !== 1 || !starter(current[0]) || seal(state, current[0]) !== quote.seal) return state;
   return choosePostRetirement(state, 'manager', [current[0]]);
 }

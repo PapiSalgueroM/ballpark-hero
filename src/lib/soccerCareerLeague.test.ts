@@ -210,11 +210,18 @@ describe("managerLeagueField (Round 1029)", () => {
        clubs are banded by their place in the league, not by tier) */
     expect(leagueSizeFor("Championship", 2030)).toBe(24);
     expect(leagueSizeFor("Championship", 2026)).toBe(24);
-    for (const [league, size] of [["Serie B", 20], ["Ligue 2", 18], ["Segunda Division", 22]] as const) {
+    for (const [league, size] of [["Serie B", 20], ["Segunda Division", 22]] as const) {
       expect(leagueSizeFor(league, 2030)).toBeNull();
       expect(leagueSizeFor(league, 2030, true)).toBe(size);
       expect(leagueSizeFor(league, 2025, true)).toBeNull();
     }
+    /* Released modern Ligue 2 is a playing size; its earlier window stays unknown. */
+    for (const year of [2026, 2030]) {
+      expect(leagueSizeFor("Ligue 2", year)).toBe(18);
+      expect(leagueSizeFor("Ligue 2", year, true)).toBe(18);
+    }
+    expect(leagueSizeFor("Ligue 2", 2025)).toBeNull();
+    expect(leagueSizeFor("Ligue 2", 2025, true)).toBeNull();
     /* the dead key Round 1100 fixed: the list spells it without the accent */
     expect(leagueSizeFor("Segunda División", 2030, true)).toBeNull();
     /* and the plain leagues it sized, from 2026 only */
