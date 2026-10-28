@@ -1,0 +1,167 @@
+name: Soccer Career pending-training baseline
+on:
+  push:
+    branches: [codex/sc-training-pending-baseline-v2-20261028]
+    paths:
+      - scripts/qa/playSoccerTrainingPending.mjs
+      - .github/workflows/soccer-training-pending-baseline.yml
+permissions:
+  contents: read
+concurrency:
+  group: sc-training-pending-baseline-${{ github.sha }}
+  cancel-in-progress: false
+defaults:
+  run:
+    shell: bash
+jobs:
+  browser:
+    runs-on: ubuntu-latest
+    timeout-minutes: 45
+    env:
+      CI: '1'
+      SIM_NETWORK: offline
+      CAREER_SEASON_LOCAL_ONLY: '1'
+      ENGINES: chromium
+      SC_TRAINING_BASELINE_OUT: ${{ github.workspace }}/training-pending-artifacts
+      SC_TRAINING_PENDING_OUT: ${{ github.workspace }}/training-pending-artifacts/browser
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.sha }}
+          fetch-depth: 0
+          persist-credentials: false
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: npm
+      - name: Exact selected source and original archive
+        run: |
+          set -euo pipefail
+          test "$GITHUB_REF_NAME" = codex/sc-training-pending-baseline-v2-20261028
+          test "$(git rev-parse HEAD)" = "$GITHUB_SHA"
+          mkdir -p "$SC_TRAINING_BASELINE_OUT"
+          git rev-parse HEAD HEAD^{tree} > "$SC_TRAINING_BASELINE_OUT/head-tree.txt"
+          git archive --format=tar HEAD > "$SC_TRAINING_BASELINE_OUT/source.tar"
+          git ls-tree -r HEAD > "$SC_TRAINING_BASELINE_OUT/source-tree.txt"
+          git ls-files -z | sort -z | xargs -0 sha256sum > "$SC_TRAINING_BASELINE_OUT/tracked-before.sha256"
+          printf '%s  %s\n' cc44fed365c909d0920312d0d079cb019340f14954dda5ec05e6287b4d130c08 scripts/qa/playSoccerTrainingPending.mjs | sha256sum --check
+          test "$(git rev-parse HEAD^)" = b20ec6664df9d4c58d63ea0596791d33b2a3b8fc
+          test "$(git rev-list --parents -n 1 HEAD | wc -w)" = 2
+          test "$(git rev-parse b20ec6664df9d4c58d63ea0596791d33b2a3b8fc^{tree})" = 51e0c6a06a6c4fb7d143b4d408eb5a9437737553
+          git diff --name-only b20ec6664df9d4c58d63ea0596791d33b2a3b8fc HEAD | sort > "$SC_TRAINING_BASELINE_OUT/changed-paths.txt"
+          printf '%s\n' .github/workflows/soccer-training-pending-baseline.yml scripts/qa/playSoccerTrainingPending.mjs | sort > "$SC_TRAINING_BASELINE_OUT/expected-paths.txt"
+          diff -u "$SC_TRAINING_BASELINE_OUT/expected-paths.txt" "$SC_TRAINING_BASELINE_OUT/changed-paths.txt"
+          node --input-type=module <<'NODE' | tee "$SC_TRAINING_BASELINE_OUT/source-pins.json"
+          import fs from 'node:fs'; import assert from 'node:assert/strict'; import {createHash} from 'node:crypto';
+          const sha=b=>createHash('sha256').update(b).digest('hex'), git=b=>createHash('sha1').update('blob '+b.length+'\0').update(b).digest('hex');
+          const pins=[
+            {path:'src/pages/SoccerCareer.tsx',bytes:271489,sha256:'2a0295cf7f76c3f37d502a53674e7da0299fddc3d56a2c7a19b225b95799d711',git:'17855634c09d3e07e7bff65a80ff28015d201d96'},
+            {path:'src/lib/soccerCareerEngine.ts',bytes:550526,sha256:'d2c4d26eb5ca12646f69e0d07cffab685f1660ff95ea33011ed97f64847bb8b1',git:'1ecd36c893395485a93d91cb1905ff78c83c7741'}
+          ];
+          for(const p of pins){const b=fs.readFileSync(p.path);assert.equal(b.length,p.bytes);assert.equal(sha(b),p.sha256);assert.equal(git(b),p.git);}
+          console.log(JSON.stringify({base:'b20ec6664df9d4c58d63ea0596791d33b2a3b8fc',pins,scope:'Actual published Page and engine source. No exact compiled-byte bridge claim.'},null,2));
+          NODE
+          node --check scripts/qa/playSoccerTrainingPending.mjs 2>&1 | tee "$SC_TRAINING_BASELINE_OUT/browser-syntax.log"
+          echo '127.0.0.1 flawuiqbvjobmkfkauhw.supabase.co' | sudo tee -a /etc/hosts
+          npm ci 2>&1 | tee "$SC_TRAINING_BASELINE_OUT/npm-ci.log"
+      - name: Real application types
+        run: |
+          set -euo pipefail
+          NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node_modules/.bin/tsc --noEmit -p tsconfig.app.json 2>&1 | tee "$SC_TRAINING_BASELINE_OUT/types.log"
+      - name: Isolated build browser tools and retained fonts
+        id: tools
+        env:
+          FREE_KICK_FONT_CACHE: ${{ github.workspace }}/training-pending-artifacts/font-cache
+        run: |
+          set -euo pipefail
+          build_root="$RUNNER_TEMP/sc-training-pending-build-$GITHUB_RUN_ID-$GITHUB_RUN_ATTEMPT"
+          git worktree add --detach "$build_root" HEAD
+          ln -s "$GITHUB_WORKSPACE/node_modules" "$build_root/node_modules"
+          echo "SC_TRAINING_BUILD_ROOT=$build_root" >> "$GITHUB_ENV"
+          browser_tools="$RUNNER_TEMP/sc-training-pending-baseline-tools-$GITHUB_RUN_ID-$GITHUB_RUN_ATTEMPT"
+          mkdir -p "$browser_tools"
+          printf '{"private":true,"dependencies":{"playwright":"1.64.0"}}\n' > "$browser_tools/package.json"
+          npm install --prefix "$browser_tools" --ignore-scripts --no-audit --no-fund 2>&1 | tee "$SC_TRAINING_BASELINE_OUT/browser-install.log"
+          test ! -e node_modules/playwright
+          test ! -e node_modules/playwright-core
+          ln -s "$browser_tools/node_modules/playwright" node_modules/playwright
+          ln -s "$browser_tools/node_modules/playwright-core" node_modules/playwright-core
+          cp "$browser_tools/package.json" "$SC_TRAINING_BASELINE_OUT/browser-package.json"
+          cp "$browser_tools/package-lock.json" "$SC_TRAINING_BASELINE_OUT/browser-package-lock.json"
+          export PLAYWRIGHT_BROWSERS_PATH="$RUNNER_TEMP/sc-training-pending-chromium-$GITHUB_RUN_ID-$GITHUB_RUN_ATTEMPT"
+          echo "PLAYWRIGHT_BROWSERS_PATH=$PLAYWRIGHT_BROWSERS_PATH" >> "$GITHUB_ENV"
+          node "$browser_tools/node_modules/playwright/cli.js" install --with-deps chromium 2>&1 | tee "$SC_TRAINING_BASELINE_OUT/chromium.log"
+          python -m pip install fonttools pillow 2>&1 | tee "$SC_TRAINING_BASELINE_OUT/python-tools.log"
+          node scripts/qa/freeKickLab1070.mjs --prefetch-fonts-only 2>&1 | tee "$SC_TRAINING_BASELINE_OUT/font-prefetch.log"
+      - name: Actual two-route SEO build in detached tree
+        id: build
+        env:
+          PRERENDER_ONLY: /soccer-career,/whats-new
+        run: |
+          set -euo pipefail
+          cd "$SC_TRAINING_BUILD_ROOT"
+          mkdir -p "$SC_TRAINING_BASELINE_OUT/generation"
+          for route in soccer-career whats-new; do cp "public/$route/index.html" "$SC_TRAINING_BASELINE_OUT/generation/$route.before.html"; done
+          cp scripts/data/lastmod.json "$SC_TRAINING_BASELINE_OUT/generation/lastmod.before.json"
+          retain_generation() {
+            git diff -- public scripts/data/lastmod.json > "$SC_TRAINING_BASELINE_OUT/generation/full.diff"
+            for route in soccer-career whats-new; do cp "public/$route/index.html" "$SC_TRAINING_BASELINE_OUT/generation/$route.after.html" || true; done
+            cp scripts/data/lastmod.json "$SC_TRAINING_BASELINE_OUT/generation/lastmod.after.json" || true
+          }
+          trap retain_generation EXIT
+          NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" npm run build:seo 2>&1 | tee "$SC_TRAINING_BASELINE_OUT/build.log"
+          find dist -type f -print0 | sort -z | xargs -0 sha256sum > "$SC_TRAINING_BASELINE_OUT/dist.sha256"
+      - name: All fifteen rebuilt-site readers
+        id: readers
+        if: ${{ !cancelled() && steps.build.outcome == 'success' }}
+        run: |
+          set -euo pipefail
+          cd "$SC_TRAINING_BUILD_ROOT"
+          ONLY=simAdsense,simBrand,simHeadTags,simHiddenPages,simHubs,simIndexNow,simIndexing,simInternalLinks,simNoRivalNames,simPrerender,simPrerenderBoot,simRetiredRoutes,simSchema,simSitemap,simSnapshotAssets NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/runAllSims.mjs --browser 2>&1 | tee "$SC_TRAINING_BASELINE_OUT/readers.log"
+          test "$(grep -c '^All 15 harnesses green\.$' "$SC_TRAINING_BASELINE_OUT/readers.log")" = 1
+      - name: All fifteen unchanged fatal download caps
+        id: caps
+        if: ${{ !cancelled() && steps.build.outcome == 'success' }}
+        run: |
+          set -euo pipefail
+          cd "$SC_TRAINING_BUILD_ROOT"
+          NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/lib/hostLikeServer.mjs dist 4173 > "$SC_TRAINING_BASELINE_OUT/weight-server.log" 2>&1 &
+          server_pid=$!
+          trap 'kill "$server_pid" 2>/dev/null || true' EXIT
+          for attempt in 1 2 3 4 5; do if curl --fail --silent http://127.0.0.1:4173/ > /dev/null; then break; fi; sleep 1; done
+          curl --fail --silent http://127.0.0.1:4173/ > /dev/null
+          BASE=http://127.0.0.1:4173 SWEEP_OFFLINE=1 NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/sweepWeight.mjs 2>&1 | tee "$SC_TRAINING_BASELINE_OUT/weights.log"
+      - name: Published-source route healthy Next, held Training chunk, missing Cancel and restored healthy outcomes
+        id: baseline
+        if: ${{ !cancelled() && steps.build.outcome == 'success' }}
+        env:
+          FREE_KICK_FONT_CACHE: ${{ github.workspace }}/training-pending-artifacts/font-cache
+        run: |
+          set -euo pipefail
+          cd "$SC_TRAINING_BUILD_ROOT"
+          NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/qa/playSoccerTrainingPending.mjs 2>&1 | tee "$SC_TRAINING_BASELINE_OUT/browser.log"
+          test "$(grep -Fxc 'TRAINING_PENDING_BASELINE: 2 cases, 2 intended MISSING_PENDING_TRAINING_CANCEL, 4 healthy advances, 8 original PNGs, 0 infrastructure errors' "$SC_TRAINING_BASELINE_OUT/browser.log")" = 1
+      - name: Exact built sources and distribution held
+        if: always()
+        run: |
+          set -euo pipefail
+          if test -n "${SC_TRAINING_BUILD_ROOT:-}"; then
+            git -C "$SC_TRAINING_BUILD_ROOT" diff --exit-code HEAD -- src scripts qa .github/workflows docs package.json package-lock.json bun.lock index.html ':!scripts/data/lastmod.json'
+            if test -f "$SC_TRAINING_BASELINE_OUT/dist.sha256"; then (cd "$SC_TRAINING_BUILD_ROOT" && sha256sum --check "$SC_TRAINING_BASELINE_OUT/dist.sha256") > "$SC_TRAINING_BASELINE_OUT/dist-held.log"; fi
+          fi
+      - name: Every tracked canonical source held
+        if: always()
+        run: |
+          set -euo pipefail
+          sha256sum --check "$SC_TRAINING_BASELINE_OUT/tracked-before.sha256" > "$SC_TRAINING_BASELINE_OUT/tracked-held.log"
+          git status --porcelain --untracked-files=no > "$SC_TRAINING_BASELINE_OUT/tracked-status.txt"
+          test ! -s "$SC_TRAINING_BASELINE_OUT/tracked-status.txt"
+          git diff --exit-code HEAD
+      - name: Retain original baseline, source, build and browser evidence including failure
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: sc-training-pending-baseline-${{ github.run_id }}-${{ github.run_attempt }}
+          path: training-pending-artifacts/
+          if-no-files-found: error
+          retention-days: 14
