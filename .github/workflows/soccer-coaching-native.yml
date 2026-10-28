@@ -65,7 +65,7 @@ jobs:
           const sha=body=>crypto.createHash('sha256').update(body).digest('hex');
           const blob=body=>crypto.createHash('sha1').update('blob '+body.length+'\0').update(body).digest('hex');
           const body=fs.readFileSync('qa/soccer-career-coaching-start-v1/SOURCE-READY.json');
-          assert.equal(sha(body),'d5122abea6ae1f52285cd2fd01bfca257808e3c1ff24f821151ddeb60c3538be');
+          assert.equal(sha(body),'73f0282fba85e4dd5454b5dcec01c3bfa96366f4170d898f9d82a41e2bc565da');
           const meta=JSON.parse(body);assert.equal(meta.files.length,17);
           const rows=meta.files.map(row=>{const bytes=fs.readFileSync(row.path);assert.equal(bytes.length,row.bytes,row.path);assert.equal(sha(bytes),row.sha256,row.path);assert.equal(blob(bytes),row.gitBlob,row.path);return{path:row.path,bytes:bytes.length,sha256:sha(bytes),gitBlob:blob(bytes)};});
           fs.writeFileSync('loyalty-artifacts/build/selected-source.json',JSON.stringify(rows,null,2));
