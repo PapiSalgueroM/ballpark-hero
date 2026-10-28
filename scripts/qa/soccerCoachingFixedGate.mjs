@@ -13,7 +13,7 @@ const pins={
   'scripts/qa/soccerCoachingStartControls.mjs':'2adc28c881990d23a5240ee72f4b8a8e8cb268cc68377181b1b46d42d1e3a259',
   'scripts/qa/buildSoccerCoachingStartObserver.mjs':'0c85bb482c920a1d745f67733165b721eb6fe3122141ef28b9bed73d0064bc16',
   'src/test/soccerCareerCoachingStart.consumer.test.tsx':'2a1d221b7640053953699c033a1db525b5f2cbe98878d4742f40ba951a978c5a',
-  'src/test/soccerCareerCoachingStart.consumer.lifecycle.test.tsx':'c2d27bc50f8c1d5aa51c1b6c17761a36a3741f5aa976e066162a49cb47a2abea',
+  'src/test/soccerCareerCoachingStart.consumer.lifecycle.test.tsx':'1557248d14394b2baefac89e5ed81ed595f267d41b52354ca8fc7cac37459c25',
 };
 const focused={
  'src/test/soccerCareerCoachingStart.test.ts':10,

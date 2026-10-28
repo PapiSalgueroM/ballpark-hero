@@ -57,7 +57,7 @@ function clubButtons() {
   return screen.getAllByRole('button').filter(button => /Club level \d+/.test(button.textContent ?? ''));
 }
 async function openReady() {
-  fireEvent.click(screen.getByRole('button', { name: 'Use coaching coursework', exact: true }));
+  fireEvent.click(screen.getByRole('button', { name: 'Use coaching coursework' }));
   const heading = await screen.findByRole('heading', { name: 'Choose your first club' }, { timeout: 10_000 });
   await waitFor(() => {
     const buttons = clubButtons();
@@ -85,11 +85,11 @@ describe('actual retirement card coaching lifecycle', () => {
         const Card = require(built.file)[spec.exportName] as Card;
         const career = retired(spec.phase), before = JSON.stringify(career), ordinary = vi.fn(), prepared = vi.fn();
         render(view(Card, career, ordinary, prepared));
-        const opener = screen.getByRole('button', { name: 'Use coaching coursework', exact: true });
+        const opener = screen.getByRole('button', { name: 'Use coaching coursework' });
         opener.focus(); fireEvent.click(opener);
         expect(screen.getByRole('status').textContent).toBe('Opening coaching options...');
-        fireEvent.click(screen.getByRole('button', { name: 'Back', exact: true }));
-        await waitFor(() => expect(document.activeElement).toBe(screen.getByRole('button', { name: 'Use coaching coursework', exact: true })));
+        fireEvent.click(screen.getByRole('button', { name: 'Back' }));
+        await waitFor(() => expect(document.activeElement).toBe(screen.getByRole('button', { name: 'Use coaching coursework' })));
         await act(async () => { await Promise.resolve(); });
         expect(screen.queryByRole('heading', { name: 'Choose your first club' })).toBeNull();
         expect(ordinary).not.toHaveBeenCalled(); expect(prepared).not.toHaveBeenCalled();
@@ -104,12 +104,12 @@ describe('actual retirement card coaching lifecycle', () => {
       await waitFor(() => expect(document.activeElement).toBe(heading));
       expect(screen.getByText(/Coursework adds no licence, money or rating bonus/)).toBeTruthy();
       expect(screen.getByText(/^Example: pick a shown club/)).toBeTruthy();
-      fireEvent.click(screen.getByRole('button', { name: 'Coaching start help', exact: true }));
+      fireEvent.click(screen.getByRole('button', { name: 'Coaching start help' }));
       expect(screen.queryByText(/^Example: pick a shown club/)).toBeNull();
-      fireEvent.click(screen.getByRole('button', { name: 'Coaching start help', exact: true }));
+      fireEvent.click(screen.getByRole('button', { name: 'Coaching start help' }));
       expect(screen.getByText(/^Example: pick a shown club/)).toBeTruthy();
-      fireEvent.click(screen.getByRole('button', { name: 'Back', exact: true }));
-      await waitFor(() => expect(document.activeElement).toBe(screen.getByRole('button', { name: 'Use coaching coursework', exact: true })));
+      fireEvent.click(screen.getByRole('button', { name: 'Back' }));
+      await waitFor(() => expect(document.activeElement).toBe(screen.getByRole('button', { name: 'Use coaching coursework' })));
       expect(ordinary).not.toHaveBeenCalled(); expect(prepared).not.toHaveBeenCalled();
       expect(JSON.stringify(career)).toBe(before);
     }, 20_000);
