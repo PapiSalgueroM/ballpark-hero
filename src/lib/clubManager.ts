@@ -5197,6 +5197,10 @@ const CLUB_COLORS: Record<string, string> = {
   'Brisbane Roar': '#f5a800', 'Central Coast Mariners': '#f5d800',
   'Wellington Phoenix': '#f5d800', 'Sydney FC': '#6cabdd', 'Melbourne City': '#6cabdd',
   'Melbourne Victory': '#1b3f94', 'Newcastle Jets': '#0057b8', 'Perth Glory': '#5c2d91',
+  // Ligue 2: decorative colour words, verified in soccerCareerFacts.json.
+  'Red Star FC': '#0a7040', 'Annecy': '#d02128', 'Pau': '#f7d417',
+  'Dunkerque': '#1b458f', 'Grenoble': '#1b458f', 'Rodez': '#d02128',
+  'Clermont': '#d02128', 'Boulogne': '#d02128', 'Laval': '#ff6600',
 };
 
 /**

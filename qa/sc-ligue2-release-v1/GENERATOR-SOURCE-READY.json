@@ -1,0 +1,128 @@
+{
+  "status": "GENERATOR_PROBE_SOURCE_READY_RUNTIME_UNRUN",
+  "parentCommit": "954d52eee7be7d4727757b3a010435c4b98b57a7",
+  "parentTree": "b29f1900e6d387fecd6702faad5cbc374bfb9fe8",
+  "sourceFamily": "Qualified SC419 e1b335 plus baseline7QA; actual baseline five owned AssertionError RED/two preservation PASS/types0",
+  "branch": "codex/sc-ligue2-generator-probe-20261028",
+  "manualSourceManifestSHA256": "0830cf10c78cdf9b224995c3d7ab08cdcb42037b69ea122645923f7a263a0d64",
+  "manualPaths": [
+    "src/lib/clubManager.ts",
+    "scripts/data/soccerCareerFacts.json",
+    "scripts/lib/careerClubPool.mjs",
+    "src/data/leagueFormat.ts",
+    "src/lib/soccerCareerLeague.ts",
+    "src/lib/soccerCareerDerby.ts",
+    "src/lib/soccerCareerEngine.ts",
+    "src/lib/soccerCareerCoachingStart.ts"
+  ],
+  "allowedPaths": [
+    "src/lib/clubManager.ts",
+    "scripts/data/soccerCareerFacts.json",
+    "scripts/lib/careerClubPool.mjs",
+    "src/data/leagueFormat.ts",
+    "src/lib/soccerCareerLeague.ts",
+    "src/lib/soccerCareerDerby.ts",
+    "src/lib/soccerCareerEngine.ts",
+    "src/lib/soccerCareerCoachingStart.ts",
+    ".github/workflows/sc-ligue2-generator-probe.yml",
+    "scripts/qa/ligue2GeneratorProbe.mjs",
+    "qa/sc-ligue2-release-v1/GENERATOR-SOURCE-READY.json"
+  ],
+  "generatedPath": "src/data/soccerCareerClubPool.ts",
+  "expectedOldGenerated": 270,
+  "expectedAdded": 17,
+  "expectedLadder": 18,
+  "expectedAddedSince2026": 17,
+  "sourcePins": [
+    {
+      "path": "scripts/data/soccerCareerFacts.json",
+      "bytes": 163464,
+      "sha256": "352d9e65f0661c2943ca1bf5b5129e7cb405c3d8c4aa6dbe3bad6dad60f1349a",
+      "gitBlob": "243991ff827226cf197ca6450cf0c9ee40fdc709"
+    },
+    {
+      "path": "scripts/lib/careerClubPool.mjs",
+      "bytes": 22388,
+      "sha256": "b2e24ba13301ec48c0119e69bf614bbc0f0e7f344103a5f1baddaffdfe325190",
+      "gitBlob": "e05c4ad14d82b3c610d403f91f11a7b2debd0a67"
+    },
+    {
+      "path": "src/data/leagueFormat.ts",
+      "bytes": 7039,
+      "sha256": "dc73e10402d270a6ed01c0fab4f8165d305f336a55a238d863c9b310f7f8ab4d",
+      "gitBlob": "ee63dcd69a02079ecb4cafdaf740ddc8a836e705"
+    },
+    {
+      "path": "src/data/soccerCareerClubPool.ts",
+      "bytes": 43978,
+      "sha256": "735d636cb22c14794692fef45e22323fe85d3c38cbbdbaa1df1ccc7aba961bd8",
+      "gitBlob": "15fe51c1cfa9ffbd43bd86576ad7bbc3bea8840c"
+    },
+    {
+      "path": "src/lib/careerEras.ts",
+      "bytes": 105789,
+      "sha256": "f3e7347f58abe993db9fd72e9896ea0767a6ca7eb3b19861b75b92b387f89c1c",
+      "gitBlob": "e037022342382b1df9c8a5ede620d2cce480bc23"
+    },
+    {
+      "path": "src/lib/clubManager.ts",
+      "bytes": 1240848,
+      "sha256": "a4c8260bced0db3582437461afe6e6616f465e0b0b1ec887ba301757364681dd",
+      "gitBlob": "be0d8b8fe962f7bff0ed36dee421939b0b728cdf"
+    },
+    {
+      "path": "src/lib/soccerCareerCoachingStart.ts",
+      "bytes": 4043,
+      "sha256": "7720957192ccb8a0de5b1fef64817e409ee30d7ce7dd035425e598d0fd903aff",
+      "gitBlob": "0733d114d66b748131ac2c623fb858c6d9c97fd2"
+    },
+    {
+      "path": "src/lib/soccerCareerDerby.ts",
+      "bytes": 23357,
+      "sha256": "c6a6859a5fd24f18d6a2e05b258ad9dddbc271a81d42c1767560d4a8cee8d906",
+      "gitBlob": "4a14cd2ad13505990122383f7595689bb1e8df6e"
+    },
+    {
+      "path": "src/lib/soccerCareerEngine.ts",
+      "bytes": 552035,
+      "sha256": "155ab5a169deefce1b65100d8022b45f41512835c15b045673f92a93f32a92de",
+      "gitBlob": "0e2a098b1792c48572be511c500bfbb4ea9d1668"
+    },
+    {
+      "path": "src/lib/soccerCareerLeague.ts",
+      "bytes": 47020,
+      "sha256": "0519defdf1ac93f69b83f14b11d36f1b9d2544f7bb6c60ba97c4539710cd9b52",
+      "gitBlob": "4289b67b17952e3210e3c7593a5f9ad0327024a3"
+    },
+    {
+      "path": "src/lib/soccerCareerLeagueWorld.ts",
+      "bytes": 15636,
+      "sha256": "360c629f5d6ecc9cd959f5aae9a3791eb99b4f5cecdca2236da563168c2bb8c6",
+      "gitBlob": "72fcabdd0c557a743aa849b01208140c3030048f"
+    },
+    {
+      "path": "src/lib/soccerCareerSave.ts",
+      "bytes": 6287,
+      "sha256": "b486dfd8c4073230b6967c674058e46c7b56a6afd2a8a165f1e215501205477a",
+      "gitBlob": "86ec011693fd5bc702b5e8ccec05d27775a72a76"
+    },
+    {
+      "path": "scripts/genCareerClubPool.mjs",
+      "bytes": 3078,
+      "sha256": "cd0194547792286b8f74f2808f5b1416e002b91b9faab06c1ee088bb5fcc595c",
+      "gitBlob": "c6bb0149ee6495ea6c443d172cb77fe45a3d9fd0"
+    },
+    {
+      "path": "scripts/simCareerClubPool.mjs",
+      "bytes": 69209,
+      "sha256": "ca1735a860f14d1a7a4f09393d89784085d674453b666bbfc62e28c714523e7a",
+      "gitBlob": "778b8bbe99930c0b1b8260a0207abf35fd09ffea"
+    }
+  ],
+  "actualOldRawSaveSHA256": "81777bcd5a7631c70edf52c626484c00e0a687ab2fd9a7fae7f3c3a2ade0da25",
+  "copiedControls": 5,
+  "sampler": "Existing unchanged scripts/simCareerClubPool.mjs default6seeds48careers. Capture actual rational/group output. Only completed old section5 rational refusal may be diagnostic. Do not claim fixed qualification.",
+  "sourceObserver": "Existing bundleCareerSources appends only CM private STRENGTH_PRIORS export. Generator uses actual stubPool:true as its unchanged production script; accounting uses actual generated pool without stub or transforms.",
+  "restore": "Only generated path may change at runtime; exact before body restored in finally, all committed sources held.",
+  "limits": "Probe output only. Freeze actual generated body and measured deliberate rational update before final tests/sims/fullsuite/build/browser."
+}

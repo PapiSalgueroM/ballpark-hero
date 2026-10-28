@@ -1,0 +1,86 @@
+name: Soccer Career Ligue 2 generated source probe
+on:
+  push:
+    branches: [codex/sc-ligue2-generator-probe-20261028]
+    paths:
+      - .github/workflows/sc-ligue2-generator-probe.yml
+      - scripts/qa/ligue2GeneratorProbe.mjs
+      - qa/sc-ligue2-release-v1/GENERATOR-SOURCE-READY.json
+      - src/lib/clubManager.ts
+      - scripts/data/soccerCareerFacts.json
+      - scripts/lib/careerClubPool.mjs
+      - src/data/leagueFormat.ts
+      - src/lib/soccerCareerLeague.ts
+      - src/lib/soccerCareerDerby.ts
+      - src/lib/soccerCareerEngine.ts
+      - src/lib/soccerCareerCoachingStart.ts
+permissions:
+  contents: read
+concurrency:
+  group: sc-ligue2-generator-probe-${{ github.sha }}
+  cancel-in-progress: false
+defaults:
+  run:
+    shell: bash
+jobs:
+  generator:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    env:
+      CI: '1'
+      SIM_NETWORK: offline
+      CAREER_SEASON_LOCAL_ONLY: '1'
+      SC_LIGUE2_GENERATOR_OUT: ${{ github.workspace }}/ligue2-generator-artifacts/probe
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.sha }}
+          fetch-depth: 2
+          persist-credentials: false
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: npm
+      - name: Exact baseline parent and selected manual inputs
+        run: |
+          set -euo pipefail
+          test "$GITHUB_REF_NAME" = codex/sc-ligue2-generator-probe-20261028
+          test "$(git rev-parse HEAD)" = "$GITHUB_SHA"
+          test "$(git rev-parse HEAD^)" = 954d52eee7be7d4727757b3a010435c4b98b57a7
+          test "$(git rev-list --parents -n 1 HEAD | wc -w)" = 2
+          mkdir -p ligue2-generator-artifacts
+          git rev-parse HEAD HEAD^{tree} > ligue2-generator-artifacts/head-tree.txt
+          git archive --format=tar HEAD > ligue2-generator-artifacts/source.tar
+          git ls-tree -r HEAD > ligue2-generator-artifacts/source-tree.txt
+          git ls-files -z | sort -z | xargs -0 sha256sum > ligue2-generator-artifacts/tracked-before.sha256
+          printf '%s  %s\n' bacca1e215980c03d8aaebfa74057a90073426ce455c2983a9b923d295e62bda qa/sc-ligue2-release-v1/GENERATOR-SOURCE-READY.json | sha256sum --check
+          printf '%s  %s\n' 618964ae27b4a8b43a50b5afb854c9ea0886cb3796cf5621eff4886a51a77d17 scripts/qa/ligue2GeneratorProbe.mjs | sha256sum --check
+          node --check scripts/qa/ligue2GeneratorProbe.mjs
+          node --check scripts/genCareerClubPool.mjs
+          node --check scripts/simCareerClubPool.mjs
+          NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/qa/ligue2GeneratorProbe.mjs source 2>&1 | tee ligue2-generator-artifacts/source-pins.log
+          git diff --name-only HEAD^ HEAD | sort > ligue2-generator-artifacts/changed-paths.txt
+          diff -u <(node -e 'const fs=require("fs");const s=JSON.parse(fs.readFileSync("qa/sc-ligue2-release-v1/GENERATOR-SOURCE-READY.json"));console.log(s.allowedPaths.sort().join("\n"))') ligue2-generator-artifacts/changed-paths.txt
+          echo '127.0.0.1 flawuiqbvjobmkfkauhw.supabase.co' | sudo tee -a /etc/hosts
+          npm ci 2>&1 | tee ligue2-generator-artifacts/npm-ci.log
+      - name: Capture actual generated body and unchanged sampler diagnostics
+        run: |
+          set -euo pipefail
+          NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/qa/ligue2GeneratorProbe.mjs run 2>&1 | tee ligue2-generator-artifacts/probe.log
+          grep -Fx 'LIGUE2_GENERATOR_PROBE: 17 added, 270 old rows held, 18-club ladder, 17 since2026, 5 COPIED guards; existing sampler diagnostic retained' ligue2-generator-artifacts/probe.log > /dev/null
+      - name: Every committed source restored, including failures
+        if: always()
+        run: |
+          set -euo pipefail
+          sha256sum --check ligue2-generator-artifacts/tracked-before.sha256 > ligue2-generator-artifacts/tracked-held.log
+          git status --porcelain --untracked-files=no > ligue2-generator-artifacts/tracked-status.txt
+          test ! -s ligue2-generator-artifacts/tracked-status.txt
+          git diff --exit-code HEAD
+      - name: Retain original generated body and diagnostic failures
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: sc-ligue2-generator-probe-${{ github.run_id }}-${{ github.run_attempt }}
+          path: ligue2-generator-artifacts/
+          if-no-files-found: error
+          retention-days: 14
