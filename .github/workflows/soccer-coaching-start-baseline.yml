@@ -1,27 +1,43 @@
-name: Soccer coaching start consumer baseline
+name: Soccer coaching start fixed qualification
 on:
   push:
     branches: [codex/sc-coaching-start-20261027]
     paths:
       - .github/workflows/soccer-coaching-start-baseline.yml
-      - scripts/qa/soccerCoachingStartConsumer.mjs
+      - src/pages/SoccerCareer.tsx
+      - src/lib/soccerCareerCoachingStart.ts
+      - src/hooks/useSoccerCoachingStart.ts
+      - src/components/soccer-career/CoachingStartChooser.tsx
+      - src/test/soccerCareerCoachingStart.test.ts
+      - src/test/soccerCareerCoachingChooser.test.tsx
+      - src/test/soccerCareerCoachingTransaction.test.tsx
       - src/test/soccerCareerCoachingStart.consumer.test.tsx
+      - src/test/soccerCareerCoachingStart.consumer.lifecycle.test.tsx
+      - scripts/qa/buildSoccerCoachingStartObserver.mjs
+      - scripts/qa/soccerCoachingStartConsumer.mjs
+      - scripts/qa/soccerCoachingStartControls.mjs
+      - scripts/qa/soccerCoachingFixedGate.mjs
+      - qa/soccer-career-coaching-start-v1/SOURCE-READY.json
+      - qa/soccer-career-coaching-start-v1/SOURCE-FAULTS.json
+  workflow_dispatch:
 permissions:
   contents: read
 concurrency:
-  group: soccer-coaching-start-baseline-${{ github.ref }}
+  group: soccer-coaching-start-fixed-${{ github.ref }}
   cancel-in-progress: false
 defaults:
   run:
     shell: bash
-env:
-  CI: '1'
-  SIM_NETWORK: offline
-  SC_COACHING_START_PHASE: baseline
 jobs:
-  consumer:
+  proof:
     runs-on: ubuntu-latest
-    timeout-minutes: 12
+    timeout-minutes: 35
+    env:
+      CI: '1'
+      SIM_NETWORK: offline
+      CAREER_SEASON_LOCAL_ONLY: '1'
+      ENGINES: chromium
+      SC_COACHING_GATE_OUT: ${{ github.workspace }}/coaching-fixed-artifacts/proof
     steps:
       - uses: actions/checkout@v4
         with:
@@ -32,37 +48,209 @@ jobs:
         with:
           node-version: 24
           cache: npm
-      - name: Retain exact source and locked dependencies
+      - name: Exact selected source and original archive
         run: |
           set -euo pipefail
-          mkdir -p coaching-start-artifacts
-          git rev-parse HEAD > coaching-start-artifacts/source-head.txt
-          git rev-parse HEAD^{tree} > coaching-start-artifacts/source-tree.txt
-          git archive --format=tar HEAD > coaching-start-artifacts/source.tar
-          git ls-files -z | sort -z | xargs -0 sha256sum > coaching-start-artifacts/source-before.sha256
-          sha256sum package.json package-lock.json > coaching-start-artifacts/dependency-source.sha256
-          npm ci
-      - name: Frozen test-first source pins and real application types
+          test "$GITHUB_REF_NAME" = codex/sc-coaching-start-20261027
+          test "$(git rev-parse HEAD)" = "$GITHUB_SHA"
+          mkdir -p "$SC_COACHING_GATE_OUT"
+          git rev-parse HEAD HEAD^{tree} > "$SC_COACHING_GATE_OUT/head-tree.txt"
+          git archive --format=tar HEAD > "$SC_COACHING_GATE_OUT/source.tar"
+          git ls-tree -r HEAD > "$SC_COACHING_GATE_OUT/source-tree.txt"
+          git ls-files -z | sort -z | xargs -0 sha256sum > "$SC_COACHING_GATE_OUT/tracked-before.sha256"
+          printf '%s  %s\n' 7141ed31cdde969f57cbb90b35e387979deedf75620e5c4cbed1b0e00a305b3b scripts/qa/soccerCoachingFixedGate.mjs | sha256sum --check
+          node scripts/qa/soccerCoachingFixedGate.mjs source 2>&1 | tee "$SC_COACHING_GATE_OUT/source-pins.log"
+          echo '127.0.0.1 flawuiqbvjobmkfkauhw.supabase.co' | sudo tee -a /etc/hosts
+          npm ci 2>&1 | tee "$SC_COACHING_GATE_OUT/npm-ci.log"
+      - name: Real application types
         run: |
           set -euo pipefail
-          echo 'b7d5cc20c3eb6e082c2a2a4fa2e60c18d96230bc13d3ccbe234eb00f369d546f  src/test/soccerCareerCoachingStart.consumer.test.tsx' | sha256sum --check
-          echo '9d487086bb2f9f61d9ec68a71e4256e3da657d1cc8bb27eb022d79f0a9a8c433  scripts/qa/soccerCoachingStartConsumer.mjs' | sha256sum --check
-          NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node node_modules/typescript/bin/tsc --noEmit -p tsconfig.app.json 2>&1 | tee coaching-start-artifacts/types.log
-      - name: Actual before consumers with cause-qualified missing chooser RED
+          NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node_modules/.bin/tsc --noEmit -p tsconfig.app.json 2>&1 | tee "$SC_COACHING_GATE_OUT/types.log"
+      - name: Actual34 no-env cases supplied consumers and11physical controls
         run: |
           set -euo pipefail
-          NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/qa/soccerCoachingStartConsumer.mjs 2>&1 | tee coaching-start-artifacts/consumer.log
-      - name: Hold all canonical tracked sources
+          NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/qa/soccerCoachingFixedGate.mjs proof 2>&1 | tee "$SC_COACHING_GATE_OUT/proof.log"
+      - name: Every tracked canonical source held
         if: always()
         run: |
           set -euo pipefail
-          sha256sum -c coaching-start-artifacts/source-before.sha256 > coaching-start-artifacts/source-held.log
+          sha256sum --check "$SC_COACHING_GATE_OUT/tracked-before.sha256" > "$SC_COACHING_GATE_OUT/tracked-held.log"
+          git status --porcelain --untracked-files=no > "$SC_COACHING_GATE_OUT/tracked-status.txt"
+          test ! -s "$SC_COACHING_GATE_OUT/tracked-status.txt"
           git diff --exit-code HEAD
-      - name: Preserve original baseline evidence
+      - name: Retain original proof evidence including failure
         if: always()
         uses: actions/upload-artifact@v4
         with:
-          name: soccer-coaching-start-baseline-${{ github.run_id }}-${{ github.run_attempt }}
-          retention-days: 7
+          name: soccer-coaching-fixed-proof-${{ github.run_id }}-${{ github.run_attempt }}
+          path: coaching-fixed-artifacts/proof/
           if-no-files-found: error
-          path: coaching-start-artifacts/
+          retention-days: 14
+  units:
+    runs-on: ubuntu-latest
+    timeout-minutes: 45
+    env:
+      CI: '1'
+      SIM_NETWORK: offline
+      CAREER_SEASON_LOCAL_ONLY: '1'
+      ENGINES: chromium
+      SC_COACHING_GATE_OUT: ${{ github.workspace }}/coaching-fixed-artifacts/units
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.sha }}
+          fetch-depth: 0
+          persist-credentials: false
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: npm
+      - name: Exact selected source and original archive
+        run: |
+          set -euo pipefail
+          test "$GITHUB_REF_NAME" = codex/sc-coaching-start-20261027
+          test "$(git rev-parse HEAD)" = "$GITHUB_SHA"
+          mkdir -p "$SC_COACHING_GATE_OUT"
+          git rev-parse HEAD HEAD^{tree} > "$SC_COACHING_GATE_OUT/head-tree.txt"
+          git archive --format=tar HEAD > "$SC_COACHING_GATE_OUT/source.tar"
+          git ls-tree -r HEAD > "$SC_COACHING_GATE_OUT/source-tree.txt"
+          git ls-files -z | sort -z | xargs -0 sha256sum > "$SC_COACHING_GATE_OUT/tracked-before.sha256"
+          printf '%s  %s\n' 7141ed31cdde969f57cbb90b35e387979deedf75620e5c4cbed1b0e00a305b3b scripts/qa/soccerCoachingFixedGate.mjs | sha256sum --check
+          node scripts/qa/soccerCoachingFixedGate.mjs source 2>&1 | tee "$SC_COACHING_GATE_OUT/source-pins.log"
+          echo '127.0.0.1 flawuiqbvjobmkfkauhw.supabase.co' | sudo tee -a /etc/hosts
+          npm ci 2>&1 | tee "$SC_COACHING_GATE_OUT/npm-ci.log"
+      - name: Complete actual application suite without observer env
+        run: |
+          set -euo pipefail
+          env -u SC_COACHING_START_OBSERVER NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node node_modules/vitest/vitest.mjs run --maxWorkers=1 --minWorkers=1 --reporter=default --reporter=json --outputFile.json="$SC_COACHING_GATE_OUT/full-units.json" 2>&1 | tee "$SC_COACHING_GATE_OUT/full-units.log"
+          NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/qa/soccerCoachingFixedGate.mjs units-admit 2>&1 | tee "$SC_COACHING_GATE_OUT/unit-admission.log"
+      - name: Every tracked canonical source held
+        if: always()
+        run: |
+          set -euo pipefail
+          sha256sum --check "$SC_COACHING_GATE_OUT/tracked-before.sha256" > "$SC_COACHING_GATE_OUT/tracked-held.log"
+          git status --porcelain --untracked-files=no > "$SC_COACHING_GATE_OUT/tracked-status.txt"
+          test ! -s "$SC_COACHING_GATE_OUT/tracked-status.txt"
+          git diff --exit-code HEAD
+      - name: Retain original units evidence including failure
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: soccer-coaching-fixed-units-${{ github.run_id }}-${{ github.run_attempt }}
+          path: coaching-fixed-artifacts/units/
+          if-no-files-found: error
+          retention-days: 14
+  build:
+    runs-on: ubuntu-latest
+    timeout-minutes: 40
+    env:
+      CI: '1'
+      SIM_NETWORK: offline
+      CAREER_SEASON_LOCAL_ONLY: '1'
+      ENGINES: chromium
+      SC_COACHING_GATE_OUT: ${{ github.workspace }}/coaching-fixed-artifacts/build
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.sha }}
+          fetch-depth: 0
+          persist-credentials: false
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: npm
+      - name: Exact selected source and original archive
+        run: |
+          set -euo pipefail
+          test "$GITHUB_REF_NAME" = codex/sc-coaching-start-20261027
+          test "$(git rev-parse HEAD)" = "$GITHUB_SHA"
+          mkdir -p "$SC_COACHING_GATE_OUT"
+          git rev-parse HEAD HEAD^{tree} > "$SC_COACHING_GATE_OUT/head-tree.txt"
+          git archive --format=tar HEAD > "$SC_COACHING_GATE_OUT/source.tar"
+          git ls-tree -r HEAD > "$SC_COACHING_GATE_OUT/source-tree.txt"
+          git ls-files -z | sort -z | xargs -0 sha256sum > "$SC_COACHING_GATE_OUT/tracked-before.sha256"
+          printf '%s  %s\n' 7141ed31cdde969f57cbb90b35e387979deedf75620e5c4cbed1b0e00a305b3b scripts/qa/soccerCoachingFixedGate.mjs | sha256sum --check
+          node scripts/qa/soccerCoachingFixedGate.mjs source 2>&1 | tee "$SC_COACHING_GATE_OUT/source-pins.log"
+          echo '127.0.0.1 flawuiqbvjobmkfkauhw.supabase.co' | sudo tee -a /etc/hosts
+          npm ci 2>&1 | tee "$SC_COACHING_GATE_OUT/npm-ci.log"
+      - name: Isolated build browser tools and retained fonts
+        env:
+          FREE_KICK_FONT_CACHE: ${{ github.workspace }}/coaching-fixed-artifacts/build/font-cache
+        run: |
+          set -euo pipefail
+          build_root="$RUNNER_TEMP/coaching-build-$GITHUB_RUN_ID-$GITHUB_RUN_ATTEMPT"
+          git worktree add --detach "$build_root" HEAD
+          ln -s "$GITHUB_WORKSPACE/node_modules" "$build_root/node_modules"
+          echo "COACHING_BUILD_ROOT=$build_root" >> "$GITHUB_ENV"
+          browser_tools="$RUNNER_TEMP/coaching-browser-tools-$GITHUB_RUN_ID-$GITHUB_RUN_ATTEMPT"
+          mkdir -p "$browser_tools"
+          printf '{"private":true,"dependencies":{"playwright":"1.64.0"}}\n' > "$browser_tools/package.json"
+          npm install --prefix "$browser_tools" --ignore-scripts --no-audit --no-fund 2>&1 | tee "$SC_COACHING_GATE_OUT/browser-install.log"
+          test ! -e node_modules/playwright
+          test ! -e node_modules/playwright-core
+          ln -s "$browser_tools/node_modules/playwright" node_modules/playwright
+          ln -s "$browser_tools/node_modules/playwright-core" node_modules/playwright-core
+          cp "$browser_tools/package.json" "$SC_COACHING_GATE_OUT/browser-package.json"
+          cp "$browser_tools/package-lock.json" "$SC_COACHING_GATE_OUT/browser-package-lock.json"
+          export PLAYWRIGHT_BROWSERS_PATH="$RUNNER_TEMP/coaching-chromium-$GITHUB_RUN_ID-$GITHUB_RUN_ATTEMPT"
+          echo "PLAYWRIGHT_BROWSERS_PATH=$PLAYWRIGHT_BROWSERS_PATH" >> "$GITHUB_ENV"
+          node "$browser_tools/node_modules/playwright/cli.js" install --with-deps chromium 2>&1 | tee "$SC_COACHING_GATE_OUT/chromium.log"
+          python -m pip install fonttools pillow 2>&1 | tee "$SC_COACHING_GATE_OUT/python-tools.log"
+          node scripts/qa/freeKickLab1070.mjs --prefetch-fonts-only 2>&1 | tee "$SC_COACHING_GATE_OUT/font-prefetch.log"
+      - name: Actual two-route SEO build in detached tree
+        env:
+          PRERENDER_ONLY: /soccer-career,/whats-new
+        run: |
+          set -euo pipefail
+          cd "$COACHING_BUILD_ROOT"
+          mkdir -p "$SC_COACHING_GATE_OUT/generation"
+          for route in soccer-career whats-new; do cp "public/$route/index.html" "$SC_COACHING_GATE_OUT/generation/$route.before.html"; done
+          cp scripts/data/lastmod.json "$SC_COACHING_GATE_OUT/generation/lastmod.before.json"
+          retain_generation() {
+            git diff -- public scripts/data/lastmod.json > "$SC_COACHING_GATE_OUT/generation/full.diff"
+            for route in soccer-career whats-new; do cp "public/$route/index.html" "$SC_COACHING_GATE_OUT/generation/$route.after.html" || true; done
+            cp scripts/data/lastmod.json "$SC_COACHING_GATE_OUT/generation/lastmod.after.json" || true
+          }
+          trap retain_generation EXIT
+          NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" npm run build:seo 2>&1 | tee "$SC_COACHING_GATE_OUT/build.log"
+          find dist -type f -print0 | sort -z | xargs -0 sha256sum > "$SC_COACHING_GATE_OUT/dist.sha256"
+      - name: All fifteen rebuilt-site readers
+        run: |
+          set -euo pipefail
+          cd "$COACHING_BUILD_ROOT"
+          ONLY=simAdsense,simBrand,simHeadTags,simHiddenPages,simHubs,simIndexNow,simIndexing,simInternalLinks,simNoRivalNames,simPrerender,simPrerenderBoot,simRetiredRoutes,simSchema,simSitemap,simSnapshotAssets NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/runAllSims.mjs --browser 2>&1 | tee "$SC_COACHING_GATE_OUT/readers.log"
+          test "$(grep -c '^All 15 harnesses green\.$' "$SC_COACHING_GATE_OUT/readers.log")" = 1
+      - name: All fifteen unchanged fatal download caps
+        run: |
+          set -euo pipefail
+          cd "$COACHING_BUILD_ROOT"
+          NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/lib/hostLikeServer.mjs dist 4173 > "$SC_COACHING_GATE_OUT/weight-server.log" 2>&1 &
+          server_pid=$!
+          trap 'kill "$server_pid" 2>/dev/null || true' EXIT
+          for attempt in 1 2 3 4 5; do if curl --fail --silent http://127.0.0.1:4173/ > /dev/null; then break; fi; sleep 1; done
+          curl --fail --silent http://127.0.0.1:4173/ > /dev/null
+          BASE=http://127.0.0.1:4173 SWEEP_OFFLINE=1 NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/sweepWeight.mjs 2>&1 | tee "$SC_COACHING_GATE_OUT/weights.log"
+      - name: Exact built sources and distribution held
+        if: always()
+        run: |
+          set -euo pipefail
+          if test -n "${COACHING_BUILD_ROOT:-}"; then
+            git -C "$COACHING_BUILD_ROOT" diff --exit-code HEAD -- src scripts qa .github/workflows docs package.json package-lock.json bun.lock index.html ':!scripts/data/lastmod.json'
+            if test -f "$SC_COACHING_GATE_OUT/dist.sha256"; then (cd "$COACHING_BUILD_ROOT" && sha256sum --check "$SC_COACHING_GATE_OUT/dist.sha256") > "$SC_COACHING_GATE_OUT/dist-held.log"; fi
+          fi
+      - name: Every tracked canonical source held
+        if: always()
+        run: |
+          set -euo pipefail
+          sha256sum --check "$SC_COACHING_GATE_OUT/tracked-before.sha256" > "$SC_COACHING_GATE_OUT/tracked-held.log"
+          git status --porcelain --untracked-files=no > "$SC_COACHING_GATE_OUT/tracked-status.txt"
+          test ! -s "$SC_COACHING_GATE_OUT/tracked-status.txt"
+          git diff --exit-code HEAD
+      - name: Retain original build evidence including failure
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: soccer-coaching-fixed-build-${{ github.run_id }}-${{ github.run_attempt }}
+          path: coaching-fixed-artifacts/build/
+          if-no-files-found: error
+          retention-days: 14

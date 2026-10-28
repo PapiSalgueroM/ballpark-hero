@@ -1,5 +1,5 @@
 import React, { type ComponentType } from 'react';
-import { afterEach, beforeAll, describe, expect, it, vi } from 'vitest';
+import { afterAll, afterEach, beforeAll, describe, expect, it, vi } from 'vitest';
 import { cleanup, fireEvent, render, screen } from '@testing-library/react';
 import { createRequire } from 'node:module';
 import { readFileSync } from 'node:fs';
@@ -15,14 +15,21 @@ type Props = {
   onChoice?: (choice: PostRetirementChoice, ownerClub?: string) => void;
 };
 let cards: Record<string, ComponentType<Props>>;
-beforeAll(() => {
-  const file = process.env.SC_COACHING_START_OBSERVER;
-  if (!file) throw new Error('Actual copied-page observer path is required');
+let disposeOwnedObserver: (() => void) | undefined;
+beforeAll(async () => {
+  let file = process.env.SC_COACHING_START_OBSERVER;
+  if (!file) {
+    const { buildSoccerCoachingStartObserver } = await import('../../scripts/qa/buildSoccerCoachingStartObserver.mjs');
+    const built = await buildSoccerCoachingStartObserver();
+    file = built.file;
+    disposeOwnedObserver = built.dispose;
+  }
   cards = createRequire(import.meta.url)(file);
   if (typeof cards.RetirementCeremonyCard !== 'function' || typeof cards.PostRetirementCard !== 'function') {
     throw new Error('Actual existing retirement card exports are required');
   }
-});
+}, 60_000);
+afterAll(() => { disposeOwnedObserver?.(); });
 afterEach(() => { cleanup(); vi.restoreAllMocks(); });
 
 const consumers = [

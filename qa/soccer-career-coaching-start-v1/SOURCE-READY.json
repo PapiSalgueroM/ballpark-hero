@@ -1,0 +1,188 @@
+{
+  "schema": 1,
+  "status": "V1.3 TEST-ONLY STATUS-ORACLE SOURCE SUCCESSOR, RUNTIME UNRUN",
+  "sourceRef": "d272f1cb8197c3f5a884688fd592ecca623a076e",
+  "sourceTree": "5aadc3bc091fd6afec338352ba79176e14304421",
+  "integrationBaseI": "12c1b2cd001f9309a31a887e5c432ca63c373852",
+  "baselineHead": "dd6548d4fc3dd58d789081c3486c345928806884",
+  "baselineRun": 40600855191,
+  "baselineReceiptSha256": "e5bd2de4b61033c350e53ea3f756075c44134e04be13cdb257b568b29531924e",
+  "owner": "I retains composition/main/live. This proposal adds an explicit optional first manager destination route only.",
+  "feature": "Exact numeric3 records reviewed coursework, not a licence. Up to3 deterministic current starter records. Chosen current record delegates to existing canonical singleton manager initialization and its one draw.",
+  "save": "No saved field or migration. Missing coursework remains neutral. Existing ManagerState and canonical save/repair persist the chosen job.",
+  "files": [
+    {
+      "path": "scripts/simSoccerCareerLoyalty.mjs",
+      "localPath": "C:\\Users\\antho\\dukb-handoff\\2026-10-27\\soccer-career-coaching-start-v1\\remote-40600855191\\source-selected\\scripts__simSoccerCareerLoyalty.mjs",
+      "bytes": 10431,
+      "sha256": "2f9879dea6342a290eff1bfacaf2a5b778c0f23e571617557f464e89246e1283",
+      "gitBlob": "c70fe3a5e5d079d502317be3ad241a4a4b9379d2"
+    },
+    {
+      "path": "src/components/soccer-career/CoachingStartChooser.tsx",
+      "localPath": "C:\\Users\\antho\\dukb-handoff\\2026-10-27\\soccer-career-coaching-start-v1\\candidate\\src\\components\\soccer-career\\CoachingStartChooser.tsx",
+      "bytes": 3550,
+      "sha256": "21aca70d4aa250f0f0aeb452367029005594d737f644afd57c7aae4014910c57",
+      "gitBlob": "033994da6accccd46c9ebd1e041383da5ca31367"
+    },
+    {
+      "path": "src/components/soccer-career/SoccerCareerProgramme.tsx",
+      "localPath": "C:\\Users\\antho\\dukb-handoff\\2026-10-27\\soccer-career-coaching-start-v1\\remote-40600855191\\source-selected\\src__components__soccer-career__SoccerCareerProgramme.tsx",
+      "bytes": 9343,
+      "sha256": "99cac99276e89a3b14ac960c1a7535d31ab211a393b6b7c3f28d0acc3d0c00a4",
+      "gitBlob": "12b1dc2e51836ddfcb65d2d8f8d0a8613661a337"
+    },
+    {
+      "path": "src/components/soccer-career/SoccerOfferReview.tsx",
+      "localPath": "C:\\Users\\antho\\dukb-handoff\\2026-10-27\\soccer-career-coaching-start-v1\\remote-40600855191\\source-selected\\src__components__soccer-career__SoccerOfferReview.tsx",
+      "bytes": 7774,
+      "sha256": "4a0f3c1ecf9b38153e4702d08cd0efb33f8f4e0096dc543a84c5b352602ed4b8",
+      "gitBlob": "91f4d8c072b316d6cd83ee3ca2959ae60c906b26"
+    },
+    {
+      "path": "src/lib/soccerCareerCoachingStart.ts",
+      "localPath": "C:\\Users\\antho\\dukb-handoff\\2026-10-27\\soccer-career-coaching-start-v1\\candidate\\src\\lib\\soccerCareerCoachingStart.ts",
+      "bytes": 3740,
+      "sha256": "816ddd0c3c0e3e5538ffe0cc08828cb60b10b70a91280fb04a917897891679fc",
+      "gitBlob": "31832575462ba134937d62384c358c2c79f51032"
+    },
+    {
+      "path": "src/lib/soccerCareerEngine.ts",
+      "localPath": "C:\\Users\\antho\\dukb-handoff\\2026-10-27\\soccer-career-coaching-start-v1\\remote-40600855191\\source-selected\\src__lib__soccerCareerEngine.ts",
+      "bytes": 551628,
+      "sha256": "d7d94a36b796af66914cdf9bd4803cf42b027f423ceb8baac9fb144677de7030",
+      "gitBlob": "8a927bd55b650feb3378b6cf3d4c9d54b1cb6199"
+    },
+    {
+      "path": "src/lib/soccerCareerLoyalty.ts",
+      "localPath": "C:\\Users\\antho\\dukb-handoff\\2026-10-27\\soccer-career-coaching-start-v1\\remote-40600855191\\source-selected\\src__lib__soccerCareerLoyalty.ts",
+      "bytes": 12855,
+      "sha256": "3296bbf33e1b148a7d69ea30c0e8e64a4eaa724e56b4c50c735089a340b79d54",
+      "gitBlob": "db056195a1dd1d5d2c2a35dc137e553663396dd2"
+    },
+    {
+      "path": "src/lib/soccerCareerProgramme.ts",
+      "localPath": "C:\\Users\\antho\\dukb-handoff\\2026-10-27\\soccer-career-coaching-start-v1\\remote-40600855191\\source-selected\\src__lib__soccerCareerProgramme.ts",
+      "bytes": 33338,
+      "sha256": "6808495106b7cd2dda2c2c4dbb493498c1b12f2cd2bd6ada7a3a3e80d8bee79b",
+      "gitBlob": "995f50a7c6c154cae497e9a2c13e10776264c6bd"
+    },
+    {
+      "path": "src/lib/soccerOfferReview.ts",
+      "localPath": "C:\\Users\\antho\\dukb-handoff\\2026-10-27\\soccer-career-coaching-start-v1\\remote-40600855191\\source-selected\\src__lib__soccerOfferReview.ts",
+      "bytes": 2154,
+      "sha256": "07967edc27eeb05edda1c2b7799320a1ba1e5d87020ac54e85782c831a57e766",
+      "gitBlob": "3b6f6c3e1edc2b002f9e675a3825887631b65830"
+    },
+    {
+      "path": "src/test/soccerCareerCoachingStart.test.ts",
+      "localPath": "C:\\Users\\antho\\dukb-handoff\\2026-10-27\\soccer-career-coaching-start-v1\\candidate\\src\\test\\soccerCareerCoachingStart.test.ts",
+      "bytes": 8355,
+      "sha256": "d0e613d57c94ce5219de0e0f27f02f60ffe8ec8ce9a781a7e3c528aa62652b42",
+      "gitBlob": "78b33a17fc911eee716bef45daee7d82c4189b9b"
+    },
+    {
+      "path": "src/test/soccerCareerLoyalty.engine.test.ts",
+      "localPath": "C:\\Users\\antho\\dukb-handoff\\2026-10-27\\soccer-career-coaching-start-v1\\remote-40600855191\\source-selected\\src__test__soccerCareerLoyalty.engine.test.ts",
+      "bytes": 12897,
+      "sha256": "f3d38b0dca7993ae5838e2f234295242e907aa7f27d4a07d7c8ff08871bd9849",
+      "gitBlob": "13dca4391ce4132315bb3cd4a6677e4711bc5133"
+    },
+    {
+      "path": "src/test/soccerCareerLoyalty.review.test.tsx",
+      "localPath": "C:\\Users\\antho\\dukb-handoff\\2026-10-27\\soccer-career-coaching-start-v1\\remote-40600855191\\source-selected\\src__test__soccerCareerLoyalty.review.test.tsx",
+      "bytes": 4803,
+      "sha256": "8f0744beb5acf20220dcdd940e56b888ec54053f9783fdb4f9ac9b2a3ec61bdb",
+      "gitBlob": "251406ab207e3a94222ed4beac888389611b9e21"
+    },
+    {
+      "path": "src/test/soccerCareerLoyalty.test.ts",
+      "localPath": "C:\\Users\\antho\\dukb-handoff\\2026-10-27\\soccer-career-coaching-start-v1\\remote-40600855191\\source-selected\\src__test__soccerCareerLoyalty.test.ts",
+      "bytes": 10018,
+      "sha256": "f0f9af05b2c125b47b2d9488f8568218c14c277c2b180503f4d6270146ffc184",
+      "gitBlob": "7f867334304de1174fcb53e20d3620ffc01f5f99"
+    },
+    {
+      "path": "src/hooks/useSoccerCoachingStart.ts",
+      "localPath": "C:\\Users\\antho\\dukb-handoff\\2026-10-27\\soccer-career-coaching-start-v1\\candidate-v2\\src\\hooks\\useSoccerCoachingStart.ts",
+      "bytes": 1046,
+      "sha256": "ffc939cb394ccdc20f388041fe89d93dddac131580ca2a50a29d6f004a714b6f",
+      "gitBlob": "baf970108738e4f3699d3d8a0efe1715fdcaeae4"
+    },
+    {
+      "path": "src/test/soccerCareerCoachingChooser.test.tsx",
+      "localPath": "C:\\Users\\antho\\dukb-handoff\\2026-10-27\\soccer-career-coaching-start-v1\\candidate-v1.3\\src\\test\\soccerCareerCoachingChooser.test.tsx",
+      "bytes": 7418,
+      "sha256": "42e8cae1287f7a0c0e5f353798d9e9aaaf549370039475c37456a80cd9b3a524",
+      "gitBlob": "f2229339889736522461ee22980c6e931a57b27d"
+    },
+    {
+      "path": "src/pages/SoccerCareer.tsx",
+      "localPath": "C:\\Users\\antho\\dukb-handoff\\2026-10-27\\soccer-career-coaching-start-v1\\candidate-v2\\src\\pages\\SoccerCareer.tsx",
+      "bytes": 277375,
+      "sha256": "a06bd76c5409ce35bd9376af22ba21293820bfa497793a57b74c832d276ea1bf",
+      "gitBlob": "d662e1a2094b7e94380d1d2b2aacd6619ea804d0"
+    },
+    {
+      "path": "src/test/soccerCareerCoachingTransaction.test.tsx",
+      "localPath": "C:\\Users\\antho\\dukb-handoff\\2026-10-27\\soccer-career-coaching-start-v1\\candidate-v2\\src\\test\\soccerCareerCoachingTransaction.test.tsx",
+      "bytes": 6956,
+      "sha256": "ca8bdb561b9831d2280870af2c2e75d5e8e904f0d86a2a2e3a6425e2ca50c379",
+      "gitBlob": "1e15927962d5aa6f4a88907f9ff1023bd10ea990"
+    }
+  ],
+  "newOrChangedPaths": [
+    "src/pages/SoccerCareer.tsx",
+    "src/lib/soccerCareerCoachingStart.ts",
+    "src/components/soccer-career/CoachingStartChooser.tsx",
+    "src/test/soccerCareerCoachingStart.test.ts",
+    "src/test/soccerCareerCoachingChooser.test.tsx",
+    "src/hooks/useSoccerCoachingStart.ts",
+    "src/test/soccerCareerCoachingTransaction.test.tsx"
+  ],
+  "pageOverlay": {
+    "path": "src/pages/SoccerCareer.tsx",
+    "baselineSha256": "c4e4df814b0532afaecdf3c686f5e00ff3490eac58c46db57b625163930da74b",
+    "baselineGitBlob": "c6b5fbf0ad000e52c3badbed480e06f389d1c076",
+    "ownedSpans": 15,
+    "literalEdits": "PAGE-EXACT-EDITS-v1.2.json",
+    "currentAndIForwardInverse": true,
+    "defaultHandlerByteHeld": true
+  },
+  "sourceFaults": {
+    "file": "SOURCE-FAULTS-v1.2.json",
+    "count": 11,
+    "nativeChangedAndInverse": true,
+    "actualOutcomes": "UNRUN"
+  },
+  "authoredCases": {
+    "pure": 10,
+    "chooser": 6,
+    "heldActualConsumers": 4,
+    "consumerRuntime": "Only original two missing-button RED plus two default preservation PASS admitted. New fixed cases unrun.",
+    "actualStrictModeTransaction": 6
+  },
+  "consumerSuccessor": {
+    "path": "qa-consumer-v2/SOURCE-READY.json",
+    "sha256": "33259901265227475a0a0f27dbb2f9a30b73739bfae358c5ae4ae07e34ce1424",
+    "sourcePeer": "4d893f98a1e71dbba626c47bd9c28dcf60a0c1282270d75e0fff21c0919019fd",
+    "rootMustRebind": "Selected manifest and17bodies; retain no-env builder/4cases and separate lifecycle8. No fixed runtime credit."
+  },
+  "held": "Other13prior selected bodies heldv1.1. Pure helper/chooser/Engine/Life/Programme/Phone/data, original normal handler and every old manager button unchanged. Only owned Page seams may compose into I.",
+  "required": "Realapp types;22new+4heldconsumer+8lifecycle cases;11physical source faults with independent case and same-copy22restore; unsafe-updater control proves extra actual StrictMode global draws; no-env/fullsuite; source/default state/raw/save/RNG holds; build/all15readers/all15unchangedcaps; actual route browser.",
+  "limits": [
+    "Native text/hash/inverse only, no local app/runtime/compiler/parser/tests/browser/Git.",
+    "No fixed runtime, cap saving, fullroute or pixel acceptance claim yet.",
+    "No branch/ref/CI/source adoption or main/publication action by this author."
+  ],
+  "successor": {
+    "fromManifestSha256": "fdeb6c3ccb644568067f2e9a711e57d2892f9a9524b071f3040a3163bd0ff1d9",
+    "changedPriorPaths": [
+      "src/test/soccerCareerCoachingChooser.test.tsx"
+    ],
+    "addedPaths": [],
+    "reason": "Test-only rawstate oracle output has implicit status role. Pre element avoids duplicate status match, allcase/assertion/actualhook/product bodies held.",
+    "wholeInverses": true,
+    "defaultHandlerByteHeld": true
+  }
+}

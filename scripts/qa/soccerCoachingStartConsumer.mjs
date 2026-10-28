@@ -3,7 +3,7 @@ import fs from 'node:fs';
 import path from 'node:path';
 import { createHash } from 'node:crypto';
 import { spawnSync } from 'node:child_process';
-import { build } from 'esbuild';
+import { buildSoccerCoachingStartObserver } from './buildSoccerCoachingStartObserver.mjs';
 
 assert.equal(process.env.CI, '1', 'Actual consumer qualification runs remotely');
 const ROOT=process.cwd(),OUT=path.resolve(process.env.SC_COACHING_START_OUT||'coaching-start-artifacts/consumer');
@@ -11,47 +11,24 @@ const phase=process.env.SC_COACHING_START_PHASE||'baseline';
 assert(['baseline','fixed'].includes(phase),'Known explicit qualification phase');
 fs.mkdirSync(OUT,{recursive:true});
 const sha=body=>createHash('sha256').update(body).digest('hex');
-const page='src/pages/SoccerCareer.tsx',test='src/test/soccerCareerCoachingStart.consumer.test.tsx';
+const page='src/pages/SoccerCareer.tsx',test='src/test/soccerCareerCoachingStart.consumer.test.tsx',utility='scripts/qa/buildSoccerCoachingStartObserver.mjs';
 const read=file=>fs.readFileSync(path.join(ROOT,file));
 const json=(name,value)=>fs.writeFileSync(path.join(OUT,name),JSON.stringify(value,null,2));
 const record={phase,status:'running',scope:'Actual two existing retirement-card consumers through one append-only page observer; no product module or full-route claim.'};
 const save=()=>json('admission.json',record);
+let observerBuild;
 save();
 try {
-  const metaBody=read('qa/soccer-career-loyalty-v2.1/SOURCE-READY.json');
-  assert.equal(sha(metaBody),'3ea2b473d7ac00ee36bfff7b5c67a7d9276d82d3abc0bae721947095f8dd88f0');
-  const meta=JSON.parse(metaBody);assert.equal(meta.files.length,11);
-  const held=[...new Set([...meta.files.map(row=>row.path),page,test])];
+  const metaBody=read('qa/soccer-career-coaching-start-v1/SOURCE-READY.json');
+  assert.equal(sha(metaBody),'d5122abea6ae1f52285cd2fd01bfca257808e3c1ff24f821151ddeb60c3538be');
+  const meta=JSON.parse(metaBody);assert.equal(meta.files.length,17);
+  const held=[...new Set([...meta.files.map(row=>row.path),page,test,utility])];
   const hashes=()=>Object.fromEntries(held.map(file=>[file,sha(read(file))]));
   record.before=hashes();
   for(const row of meta.files)assert.equal(record.before[row.path],row.sha256,row.path);
-  const source=read(page).toString('utf8');
-  assert.equal((source.match(/function RetirementCeremonyCard\(/g)||[]).length,1);
-  assert.equal((source.match(/function PostRetirementCard\(/g)||[]).length,1);
-  const appendix='\nexport { RetirementCeremonyCard, PostRetirementCard };\n';
-  assert(!source.includes(appendix),'Observer export is new');
-  const observed=source+appendix,output=path.join(OUT,'observed-page.cjs');
-  fs.writeFileSync(path.join(OUT,'observed-page.tsx'),observed);
-  record.observer={canonicalSha256:sha(source),observedSha256:sha(observed),appendix,onlyAppendedExports:true};
-  const normalized=file=>path.resolve(file).replaceAll('\\','/').toLowerCase(),target=normalized(path.join(ROOT,page));
-  let loaded=0;
-  const built=await build({
-    stdin:{contents:"export { RetirementCeremonyCard, PostRetirementCard } from './src/pages/SoccerCareer';",resolveDir:ROOT,loader:'ts'},
-    outfile:output,bundle:true,format:'cjs',platform:'node',jsx:'automatic',nodePaths:[path.join(ROOT,'node_modules')],
-    external:['react','react-dom','react-dom/client','react/jsx-runtime','react/jsx-dev-runtime'],
-    alias:{'@':path.join(ROOT,'src')},
-    define:{'import.meta.env':JSON.stringify({PROD:true,DEV:false,MODE:'test',BASE_URL:'/'})},
-    loader:{'.css':'empty','.svg':'empty','.png':'empty','.jpg':'empty','.webp':'empty'},
-    metafile:true,logLevel:'error',
-    plugins:[{name:'append-observer-exports',setup(b){b.onLoad({filter:/SoccerCareer\.tsx$/},args=>{
-      if(normalized(args.path)!==target)return;
-      loaded++;assert.equal(sha(fs.readFileSync(args.path)),sha(source),'Actual canonical page held during bundle');
-      return{contents:observed,loader:'tsx',resolveDir:path.dirname(args.path)};
-    });}}],
-  });
-  assert.equal(loaded,1,'One actual page observer load');
-  json('observed-page.metafile.json',built.metafile);
-  record.observer.compiledSha256=sha(fs.readFileSync(output));
+  observerBuild=await buildSoccerCoachingStartObserver({root:ROOT,out:OUT});
+  const output=observerBuild.file;
+  record.observer=observerBuild.observer;
   const report=path.join(OUT,'vitest.json');
   const run=spawnSync(process.execPath,[path.join(ROOT,'node_modules/vitest/vitest.mjs'),'run',test,'--maxWorkers=1','--minWorkers=1','--reporter=default','--reporter=json','--outputFile.json='+report],{
     cwd:ROOT,env:{...process.env,SC_COACHING_START_OBSERVER:output},encoding:'utf8',timeout:120000,maxBuffer:4*1024*1024,
@@ -81,10 +58,11 @@ try {
     assert.equal(run.status,0);assert(rows.every(row=>row.status==='passed'));record.status='FIXED_CONSUMERS_PASSED';
   }
   record.cases=rows.map(({title,status,failureMessages})=>({title,status,failureMessages}));
+  observerBuild.dispose();observerBuild=undefined;
   record.after=hashes();assert.deepEqual(record.after,record.before,'Canonical selected sources and test remain exact');
   record.causeQualifiedRed=phase==='baseline';save();
   console.log('Actual consumer rows:4, preservation passed:2.');
   console.log('Owned chooser rows:'+intended.map(title=>rows.find(row=>row.title===title).status).join(',')+'.');
   console.log('Infrastructure diagnostics:0; canonical source holds:'+held.length+'.');
   console.log('Coaching start phase:'+phase+', status:'+record.status+'.');
-}catch(error){record.status='METHOD_OR_UNEXPECTED_FAILURE';record.failure={name:error.name,message:error.message,stack:error.stack};save();throw error;}
+}catch(error){try{observerBuild?.dispose();}catch(cleanupError){record.cleanupFailure={name:cleanupError.name,message:cleanupError.message};}record.status='METHOD_OR_UNEXPECTED_FAILURE';record.failure={name:error.name,message:error.message,stack:error.stack};save();throw error;}

@@ -1,0 +1,162 @@
+{
+  "status": "SOURCE_ONLY_UNRUN",
+  "sourceRef": "d272f1cb8197c3f5a884688fd592ecca623a076e",
+  "IRef": "12c1b2cd001f9309a31a887e5c432ca63c373852",
+  "operationCount": 15,
+  "currentOperations": [
+    {
+      "workingOffset": 6141,
+      "before": "import { CareerMentorTile } from '@/components/soccer-career/CareerMentorTile';",
+      "after": "import { CareerMentorTile } from '@/components/soccer-career/CareerMentorTile';\nimport { coachingStartChoices, type CoachingStartQuote } from '@/lib/soccerCareerCoachingStart';\nimport { useSoccerCoachingStart } from '@/hooks/useSoccerCoachingStart';"
+    },
+    {
+      "workingOffset": 11610,
+      "before": "const OwnerPanel = lazy(() => ownerScreens().then(m => ({ default: m.OwnerPanel })).catch(() => new Promise<never>(() => undefined)));",
+      "after": "const OwnerPanel = lazy(() => ownerScreens().then(m => ({ default: m.OwnerPanel })).catch(() => new Promise<never>(() => undefined)));\nconst CoachingStartChooser = lazy(() => import('@/components/soccer-career/CoachingStartChooser').catch(() => new Promise<never>(() => undefined)));\nconst CoachingStartWait = ({ onBack }: { onBack: () => void }) => <div className=\"rounded-xl border border-border p-4 space-y-3\"><Button onClick={onBack} variant=\"outline\" className=\"h-11\">Back</Button><p role=\"status\" className=\"text-sm\">Opening coaching options...</p></div>;"
+    },
+    {
+      "workingOffset": 83120,
+      "before": "  const handleAdvanceManager = () => {",
+      "after": "  const handleCoachingStart = useSoccerCoachingStart(career, clubs, setCareer);\n\n  const handleAdvanceManager = () => {"
+    },
+    {
+      "workingOffset": 98132,
+      "before": "              onPostRetirement={handlePostRetirement}",
+      "after": "              onPostRetirement={handlePostRetirement}\n              onCoachingStart={handleCoachingStart}"
+    },
+    {
+      "workingOffset": 174752,
+      "before": "function RetirementCeremonyCard({ career, clubs, totals, onPostRetirement }: { career: CareerState; clubs: ClubData[]; totals: ReturnType<typeof getCareerTotals>; onPostRetirement: (c: PostRetirementChoice, ownerClub?: string) => void }) {",
+      "after": "function RetirementCeremonyCard({ career, clubs, totals, onPostRetirement, onCoachingStart }: { career: CareerState; clubs: ClubData[]; totals: ReturnType<typeof getCareerTotals>; onPostRetirement: (c: PostRetirementChoice, ownerClub?: string) => void; onCoachingStart?: (quote: CoachingStartQuote) => void }) {"
+    },
+    {
+      "workingOffset": 175131,
+      "before": "  const [buying, setBuying] = useState(false);\n  const legacy = career.legacy!;",
+      "after": "  const [buying, setBuying] = useState(false);\n  const [coaching, setCoaching] = useState(false);\n  const coachingButton = useRef<HTMLButtonElement>(null);\n  const backFromCoaching = () => {\n    setCoaching(false);\n    requestAnimationFrame(() => coachingButton.current?.focus({ preventScroll: true }));\n  };\n  const legacy = career.legacy!;"
+    },
+    {
+      "workingOffset": 176321,
+      "before": "  return (\n    <div className=\"relative rounded-xl border-2 border-amber-400/40 bg-gradient-to-b from-amber-500/10 to-transparent p-5 space-y-4\">",
+      "after": "  if (coaching) return <Suspense fallback={<CoachingStartWait onBack={backFromCoaching} />}><CoachingStartChooser career={career} clubs={clubs} onStart={onCoachingStart} onBack={backFromCoaching} /></Suspense>;\n  return (\n    <div className=\"relative rounded-xl border-2 border-amber-400/40 bg-gradient-to-b from-amber-500/10 to-transparent p-5 space-y-4\">"
+    },
+    {
+      "workingOffset": 180741,
+      "before": "          📋 Become a Manager\n        </Button>",
+      "after": "          📋 Become a Manager\n        </Button>\n        {coachingStartChoices(career, clubs).length > 0 && (\n          <Button ref={coachingButton} onClick={() => setCoaching(true)} variant=\"outline\" className=\"w-full min-h-11 h-auto py-3 text-sm font-bold whitespace-normal\">Use coaching coursework</Button>\n        )}"
+    },
+    {
+      "workingOffset": 181635,
+      "before": "function PostRetirementCard({ career, clubs, onChoice }: { career: CareerState; clubs: ClubData[]; onChoice: (c: PostRetirementChoice, ownerClub?: string) => void }) {",
+      "after": "function PostRetirementCard({ career, clubs, onChoice, onCoachingStart }: { career: CareerState; clubs: ClubData[]; onChoice: (c: PostRetirementChoice, ownerClub?: string) => void; onCoachingStart?: (quote: CoachingStartQuote) => void }) {"
+    },
+    {
+      "workingOffset": 181875,
+      "before": "  /* Round 1524: the club list, as on the ceremony */\n  const [buying, setBuying] = useState(false);",
+      "after": "  /* Round 1524: the club list, as on the ceremony */\n  const [buying, setBuying] = useState(false);\n  const [coaching, setCoaching] = useState(false);\n  const coachingButton = useRef<HTMLButtonElement>(null);\n  const backFromCoaching = () => {\n    setCoaching(false);\n    requestAnimationFrame(() => coachingButton.current?.focus({ preventScroll: true }));\n  };\n  if (coaching) return <Suspense fallback={<CoachingStartWait onBack={backFromCoaching} />}><CoachingStartChooser career={career} clubs={clubs} onStart={onCoachingStart} onBack={backFromCoaching} /></Suspense>;"
+    },
+    {
+      "workingOffset": 183095,
+      "before": "      <Button onClick={() => onChoice(\"manager\")} variant=\"outline\" className=\"w-full h-11 text-sm font-bold\">📋 Become a Manager</Button>",
+      "after": "      <Button onClick={() => onChoice(\"manager\")} variant=\"outline\" className=\"w-full h-11 text-sm font-bold\">📋 Become a Manager</Button>\n      {coachingStartChoices(career, clubs).length > 0 && (\n        <Button ref={coachingButton} onClick={() => setCoaching(true)} variant=\"outline\" className=\"w-full min-h-11 h-auto py-3 text-sm font-bold whitespace-normal\">Use coaching coursework</Button>\n      )}"
+    },
+    {
+      "workingOffset": 208583,
+      "before": "onManualRetire, onPostRetirement, onAdvanceManager",
+      "after": "onManualRetire, onPostRetirement, onCoachingStart, onAdvanceManager"
+    },
+    {
+      "workingOffset": 210406,
+      "before": "  onPostRetirement: (choice: PostRetirementChoice, ownerClub?: string) => void;",
+      "after": "  onPostRetirement: (choice: PostRetirementChoice, ownerClub?: string) => void;\n  onCoachingStart: (quote: CoachingStartQuote) => void;"
+    },
+    {
+      "workingOffset": 239627,
+      "before": "            <RetirementCeremonyCard career={career} clubs={clubs} totals={totals} onPostRetirement={onPostRetirement} />",
+      "after": "            <RetirementCeremonyCard career={career} clubs={clubs} totals={totals} onPostRetirement={onPostRetirement} onCoachingStart={onCoachingStart} />"
+    },
+    {
+      "workingOffset": 241789,
+      "before": "            <PostRetirementCard career={career} clubs={clubs} onChoice={onPostRetirement} />",
+      "after": "            <PostRetirementCard career={career} clubs={clubs} onChoice={onPostRetirement} onCoachingStart={onCoachingStart} />"
+    }
+  ],
+  "currentWholeInverse": true,
+  "IOperations": [
+    {
+      "workingOffset": 6103,
+      "before": "import { CareerMentorTile } from '@/components/soccer-career/CareerMentorTile';",
+      "after": "import { CareerMentorTile } from '@/components/soccer-career/CareerMentorTile';\nimport { coachingStartChoices, type CoachingStartQuote } from '@/lib/soccerCareerCoachingStart';\nimport { useSoccerCoachingStart } from '@/hooks/useSoccerCoachingStart';"
+    },
+    {
+      "workingOffset": 11498,
+      "before": "const OwnerPanel = lazy(() => ownerScreens().then(m => ({ default: m.OwnerPanel })).catch(() => new Promise<never>(() => undefined)));",
+      "after": "const OwnerPanel = lazy(() => ownerScreens().then(m => ({ default: m.OwnerPanel })).catch(() => new Promise<never>(() => undefined)));\nconst CoachingStartChooser = lazy(() => import('@/components/soccer-career/CoachingStartChooser').catch(() => new Promise<never>(() => undefined)));\nconst CoachingStartWait = ({ onBack }: { onBack: () => void }) => <div className=\"rounded-xl border border-border p-4 space-y-3\"><Button onClick={onBack} variant=\"outline\" className=\"h-11\">Back</Button><p role=\"status\" className=\"text-sm\">Opening coaching options...</p></div>;"
+    },
+    {
+      "workingOffset": 80836,
+      "before": "  const handleAdvanceManager = () => {",
+      "after": "  const handleCoachingStart = useSoccerCoachingStart(career, clubs, setCareer);\n\n  const handleAdvanceManager = () => {"
+    },
+    {
+      "workingOffset": 95848,
+      "before": "              onPostRetirement={handlePostRetirement}",
+      "after": "              onPostRetirement={handlePostRetirement}\n              onCoachingStart={handleCoachingStart}"
+    },
+    {
+      "workingOffset": 172466,
+      "before": "function RetirementCeremonyCard({ career, clubs, totals, onPostRetirement }: { career: CareerState; clubs: ClubData[]; totals: ReturnType<typeof getCareerTotals>; onPostRetirement: (c: PostRetirementChoice, ownerClub?: string) => void }) {",
+      "after": "function RetirementCeremonyCard({ career, clubs, totals, onPostRetirement, onCoachingStart }: { career: CareerState; clubs: ClubData[]; totals: ReturnType<typeof getCareerTotals>; onPostRetirement: (c: PostRetirementChoice, ownerClub?: string) => void; onCoachingStart?: (quote: CoachingStartQuote) => void }) {"
+    },
+    {
+      "workingOffset": 172845,
+      "before": "  const [buying, setBuying] = useState(false);\n  const legacy = career.legacy!;",
+      "after": "  const [buying, setBuying] = useState(false);\n  const [coaching, setCoaching] = useState(false);\n  const coachingButton = useRef<HTMLButtonElement>(null);\n  const backFromCoaching = () => {\n    setCoaching(false);\n    requestAnimationFrame(() => coachingButton.current?.focus({ preventScroll: true }));\n  };\n  const legacy = career.legacy!;"
+    },
+    {
+      "workingOffset": 174035,
+      "before": "  return (\n    <div className=\"relative rounded-xl border-2 border-amber-400/40 bg-gradient-to-b from-amber-500/10 to-transparent p-5 space-y-4\">",
+      "after": "  if (coaching) return <Suspense fallback={<CoachingStartWait onBack={backFromCoaching} />}><CoachingStartChooser career={career} clubs={clubs} onStart={onCoachingStart} onBack={backFromCoaching} /></Suspense>;\n  return (\n    <div className=\"relative rounded-xl border-2 border-amber-400/40 bg-gradient-to-b from-amber-500/10 to-transparent p-5 space-y-4\">"
+    },
+    {
+      "workingOffset": 178455,
+      "before": "          📋 Become a Manager\n        </Button>",
+      "after": "          📋 Become a Manager\n        </Button>\n        {coachingStartChoices(career, clubs).length > 0 && (\n          <Button ref={coachingButton} onClick={() => setCoaching(true)} variant=\"outline\" className=\"w-full min-h-11 h-auto py-3 text-sm font-bold whitespace-normal\">Use coaching coursework</Button>\n        )}"
+    },
+    {
+      "workingOffset": 179349,
+      "before": "function PostRetirementCard({ career, clubs, onChoice }: { career: CareerState; clubs: ClubData[]; onChoice: (c: PostRetirementChoice, ownerClub?: string) => void }) {",
+      "after": "function PostRetirementCard({ career, clubs, onChoice, onCoachingStart }: { career: CareerState; clubs: ClubData[]; onChoice: (c: PostRetirementChoice, ownerClub?: string) => void; onCoachingStart?: (quote: CoachingStartQuote) => void }) {"
+    },
+    {
+      "workingOffset": 179589,
+      "before": "  /* Round 1524: the club list, as on the ceremony */\n  const [buying, setBuying] = useState(false);",
+      "after": "  /* Round 1524: the club list, as on the ceremony */\n  const [buying, setBuying] = useState(false);\n  const [coaching, setCoaching] = useState(false);\n  const coachingButton = useRef<HTMLButtonElement>(null);\n  const backFromCoaching = () => {\n    setCoaching(false);\n    requestAnimationFrame(() => coachingButton.current?.focus({ preventScroll: true }));\n  };\n  if (coaching) return <Suspense fallback={<CoachingStartWait onBack={backFromCoaching} />}><CoachingStartChooser career={career} clubs={clubs} onStart={onCoachingStart} onBack={backFromCoaching} /></Suspense>;"
+    },
+    {
+      "workingOffset": 180809,
+      "before": "      <Button onClick={() => onChoice(\"manager\")} variant=\"outline\" className=\"w-full h-11 text-sm font-bold\">📋 Become a Manager</Button>",
+      "after": "      <Button onClick={() => onChoice(\"manager\")} variant=\"outline\" className=\"w-full h-11 text-sm font-bold\">📋 Become a Manager</Button>\n      {coachingStartChoices(career, clubs).length > 0 && (\n        <Button ref={coachingButton} onClick={() => setCoaching(true)} variant=\"outline\" className=\"w-full min-h-11 h-auto py-3 text-sm font-bold whitespace-normal\">Use coaching coursework</Button>\n      )}"
+    },
+    {
+      "workingOffset": 206297,
+      "before": "onManualRetire, onPostRetirement, onAdvanceManager",
+      "after": "onManualRetire, onPostRetirement, onCoachingStart, onAdvanceManager"
+    },
+    {
+      "workingOffset": 208120,
+      "before": "  onPostRetirement: (choice: PostRetirementChoice, ownerClub?: string) => void;",
+      "after": "  onPostRetirement: (choice: PostRetirementChoice, ownerClub?: string) => void;\n  onCoachingStart: (quote: CoachingStartQuote) => void;"
+    },
+    {
+      "workingOffset": 237341,
+      "before": "            <RetirementCeremonyCard career={career} clubs={clubs} totals={totals} onPostRetirement={onPostRetirement} />",
+      "after": "            <RetirementCeremonyCard career={career} clubs={clubs} totals={totals} onPostRetirement={onPostRetirement} onCoachingStart={onCoachingStart} />"
+    },
+    {
+      "workingOffset": 239503,
+      "before": "            <PostRetirementCard career={career} clubs={clubs} onChoice={onPostRetirement} />",
+      "after": "            <PostRetirementCard career={career} clubs={clubs} onChoice={onPostRetirement} onCoachingStart={onCoachingStart} />"
+    }
+  ],
+  "IWholeInverse": true
+}
