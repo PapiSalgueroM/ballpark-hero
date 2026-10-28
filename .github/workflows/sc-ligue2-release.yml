@@ -1,7 +1,7 @@
 name: Soccer Career Ligue 2 frozen release qualification
 on:
   push:
-    branches: [codex/sc-ligue2-release-v2-20261028]
+    branches: [codex/sc-ligue2-release-v3-20261028]
     paths:
       - .github/workflows/sc-ligue2-release.yml
       - 'src/**'
@@ -42,16 +42,16 @@ jobs:
       - name: Exact selected frozen source and original archive
         run: |
           set -euo pipefail
-          test "$GITHUB_REF_NAME" = codex/sc-ligue2-release-v2-20261028
+          test "$GITHUB_REF_NAME" = codex/sc-ligue2-release-v3-20261028
           test "$(git rev-parse HEAD)" = "$GITHUB_SHA"
-          test "$(git rev-parse HEAD^)" = 86d63ca4341c5c39a3e7233f7e4e546d656b054e
+          test "$(git rev-parse HEAD^)" = d56650a91b409828f6586434137872dd44937e35
           test "$(git rev-list --parents -n 1 HEAD | wc -w)" = 2
           mkdir -p "$SC_LIGUE2_RELEASE_OUT"
           git rev-parse HEAD HEAD^{tree} > "$SC_LIGUE2_RELEASE_OUT/head-tree.txt"
           git archive --format=tar HEAD > "$SC_LIGUE2_RELEASE_OUT/source.tar"
           git ls-tree -r HEAD > "$SC_LIGUE2_RELEASE_OUT/source-tree.txt"
           git ls-files -z | sort -z | xargs -0 sha256sum > "$SC_LIGUE2_RELEASE_OUT/tracked-before.sha256"
-          printf '%s  %s\n' fd09245e9d0e5b5aebfa2824b029e0e7e24e3f47978cad647e6577dcbb3138dc qa/sc-ligue2-release-v1/RELEASE-SOURCE-READY.json | sha256sum --check
+          printf '%s  %s\n' 276dec396dd56ea0b52eaac5b3996ef0cc3da4095a14327363567a5ab6026794 qa/sc-ligue2-release-v1/RELEASE-SOURCE-READY.json | sha256sum --check
           printf '%s  %s\n' 60e9f584a8b344461079979e665d1022d7e434ce80ca13ba9d16479204075956 scripts/qa/ligue2ReleaseQualification.mjs | sha256sum --check
           node --check scripts/qa/ligue2ReleaseQualification.mjs
           node --check scripts/qa/ligue2ReleaseFixed.mjs
@@ -69,11 +69,94 @@ jobs:
         run: |
           set -euo pipefail
           NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/qa/ligue2ReleaseQualification.mjs fixed 2>&1 | tee "$SC_LIGUE2_RELEASE_OUT/fixed-admission.log"
+      - name: Two affected unit files and their exact preserved controls
+        run: |
+          set -euo pipefail
+          compat="$SC_LIGUE2_RELEASE_OUT/unit-compatibility"
+          mkdir -p "$compat"
+          run_compat() {
+            local label="$1"
+            shift
+            set +e
+            NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node node_modules/vitest/vitest.mjs run "$@" --maxWorkers=1 --minWorkers=1 --reporter=default --reporter=json --outputFile.json="$compat/$label.json" > "$compat/$label.log" 2>&1
+            actual_exit=$?
+            set -e
+            printf '%s\n' "$actual_exit" > "$compat/$label.exit"
+            cat "$compat/$label.log"
+          }
+          run_compat healthy src/lib/soccerCareerLeague.test.ts src/test/cmWorldIdentity1052.test.ts
+          test "$(cat "$compat/healthy.exit")" = 0
+          CM_WORLD_IDENTITY_CONTROL=rating run_compat sevilla-control src/test/cmWorldIdentity1052.test.ts
+          test "$(cat "$compat/sevilla-control.exit")" = 1
+          cp src/lib/soccerCareerLeague.ts "$compat/league-before.source"
+          printf '%s  %s\n' 0519defdf1ac93f69b83f14b11d36f1b9d2544f7bb6c60ba97c4539710cd9b52 "$compat/league-before.source" | sha256sum --check
+          trap 'cp "$compat/league-before.source" src/lib/soccerCareerLeague.ts' EXIT
+          git show e1b33581532b1514e4510e9d89e633e5305fa963:src/lib/soccerCareerLeague.ts > src/lib/soccerCareerLeague.ts
+          cp src/lib/soccerCareerLeague.ts "$compat/league-changed.source"
+          printf '%s  %s\n' adb5555de0adc046bed402fd7386305baf5ce9e96aba023b6a64541f9785ca68 "$compat/league-changed.source" | sha256sum --check
+          run_compat league-size-control src/lib/soccerCareerLeague.test.ts --testNamePattern="knows the Championship's size from 2004, and the held second flights for the dugout only"
+          test "$(cat "$compat/league-size-control.exit")" = 1
+          cp "$compat/league-before.source" src/lib/soccerCareerLeague.ts
+          cp src/lib/soccerCareerLeague.ts "$compat/league-restored.source"
+          cmp "$compat/league-before.source" "$compat/league-restored.source"
+          trap - EXIT
+          run_compat restored src/lib/soccerCareerLeague.test.ts src/test/cmWorldIdentity1052.test.ts
+          test "$(cat "$compat/restored.exit")" = 0
+          node --input-type=module - "$compat" <<'NODE'
+          import fs from 'node:fs';
+          import path from 'node:path';
+          import assert from 'node:assert/strict';
+          const out=process.argv[2],read=n=>fs.readFileSync(path.join(out,n),'utf8');
+          const strip=s=>s.replace(/\x1b\[[0-?]*[ -/]*[@-~]/g,'');
+          function report(label,status) {
+            assert.equal(read(label+'.exit').trim(),String(status),'Actual Vitest exit '+label);
+            const log=strip(read(label+'.log')),j=JSON.parse(read(label+'.json'));
+            assert(!/Unhandled Errors|Unhandled Rejection|Vitest caught|Failed Suites|Errors during/.test(log),'No method/infra banner '+label);
+            assert.match(log,/JSON report written to /,'Actual JSON closing '+label);
+            assert.match(log,/Test Files\s+/,'Actual file closing '+label);
+            assert.match(log,/\bTests\s+/,'Actual test closing '+label);
+            assert(j.testResults.length>0,'Collected files '+label);
+            for (const file of j.testResults) assert.equal(file.message,'','No failed setup/suite '+label);
+            const rows=j.testResults.flatMap(f=>f.assertionResults);
+            assert(rows.length>0,'Collected cases '+label);
+            assert(rows.every(r=>['passed','failed','skipped'].includes(r.status)),'Known actual row status '+label);
+            return {j,rows,log};
+          }
+          function healthy(label) {
+            const x=report(label,0);
+            assert.equal(x.j.success,true);assert.equal(x.j.numFailedTests,0);assert.equal(x.j.numFailedTestSuites,0);
+            assert.equal(x.j.testResults.length,2);
+            assert(x.rows.every(r=>r.status==='passed'),'All affected ordinary cases passed '+label);
+            assert.equal(x.rows.filter(r=>/rejects an (?:outside-nine copied colour|inside-nine copied colour|inside-nine copied budget) change and readmits its restoration$/.test(r.fullName)).length,3,'Three copied control cases actually collected');
+            return x;
+          }
+          const h=healthy('healthy'),r=healthy('restored');
+          assert.deepEqual(h.rows.map(x=>[x.fullName,x.status]),r.rows.map(x=>[x.fullName,x.status]),'Same complete affected cases after physical restoration');
+          const sevilla=report('sevilla-control',1),sf=sevilla.rows.filter(r=>r.status==='failed');
+          assert.equal(sf.length,1);assert.equal(sevilla.rows.filter(r=>r.status==='passed').length,5);assert.equal(sevilla.rows.filter(r=>r.status==='skipped').length,3);
+          assert.match(sf[0].fullName,/keeps every one of the 438 clubs:/);
+          assert.match(sf[0].failureMessages.join('\n'),/AssertionError/);
+          assert.match(sf[0].failureMessages.join('\n'),/clubs whose digest moved: Sevilla/);
+          const league=report('league-size-control',1),lf=league.rows.filter(r=>r.status==='failed');
+          assert.equal(lf.length,1);assert.equal(league.rows.filter(r=>r.status==='passed').length,0);
+          assert(league.rows.filter(r=>r!==lf[0]).every(r=>r.status==='skipped'));
+          assert.match(lf[0].fullName,/knows the Championship's size from 2004, and the held second flights for the dugout only$/);
+          assert.match(lf[0].failureMessages.join('\n'),/AssertionError/);
+          assert.match(lf[0].failureMessages.join('\n'),/expected null to be 18/);
+          fs.writeFileSync(path.join(out,'ADMISSION.json'),JSON.stringify({status:'ACTUAL_TWO_UNIT_FILES_AND_PRESERVED_CONTROLS_PASS',healthy:h.rows.length,restored:r.rows.length,sevilla:{failed:1,passed:5,explicitCopiedSkips:3},league:{failed:1,filtered:league.rows.length-1},scope:'Actual ordinary affected files, held external Sevilla rating control, physical original-size reversion and same-copy full restoration. No borrowed full-suite denominator.'},null,2)+'\n');
+          console.log('LIGUE2_UNIT_COMPATIBILITY: actual affected files, held Sevilla control and physical size refusal/restoration passed');
+          NODE
       - name: Six unchanged focused career harnesses at ordinary defaults
         run: |
           set -euo pipefail
           ONLY=simCareerClubPool,simCareerLeagueWorld,simCareerLeagueFinish,simCareerDerbies,simCareerEras,simSoccerCareerLeagueWorld NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/runAllSims.mjs --plan-json > "$SC_LIGUE2_RELEASE_OUT/focused-sims-plan.json"
-          ONLY=simCareerClubPool,simCareerLeagueWorld,simCareerLeagueFinish,simCareerDerbies,simCareerEras,simSoccerCareerLeagueWorld SIM_FULL_OUTPUT=1 NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/runAllSims.mjs 2>&1 | tee "$SC_LIGUE2_RELEASE_OUT/focused-sims.log"
+          set +e
+          ONLY=simCareerClubPool,simCareerLeagueWorld,simCareerLeagueFinish,simCareerDerbies,simCareerEras,simSoccerCareerLeagueWorld SIM_FULL_OUTPUT=1 NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/runAllSims.mjs > "$SC_LIGUE2_RELEASE_OUT/focused-sims.log" 2>&1
+          actual_exit=$?
+          set -e
+          printf '%s\n' "$actual_exit" > "$SC_LIGUE2_RELEASE_OUT/focused-sims-exit.txt"
+          cat "$SC_LIGUE2_RELEASE_OUT/focused-sims.log"
+          test "$actual_exit" = 0
           test "$(grep -c '^All 6 harnesses green\.$' "$SC_LIGUE2_RELEASE_OUT/focused-sims.log")" = 1
       - name: Every tracked canonical source held
         if: always()
@@ -104,7 +187,7 @@ jobs:
       - uses: actions/checkout@v4
         with:
           ref: ${{ github.sha }}
-          fetch-depth: 2
+          fetch-depth: 0
           persist-credentials: false
       - uses: actions/setup-node@v4
         with:
@@ -113,16 +196,16 @@ jobs:
       - name: Exact selected frozen source and original archive
         run: |
           set -euo pipefail
-          test "$GITHUB_REF_NAME" = codex/sc-ligue2-release-v2-20261028
+          test "$GITHUB_REF_NAME" = codex/sc-ligue2-release-v3-20261028
           test "$(git rev-parse HEAD)" = "$GITHUB_SHA"
-          test "$(git rev-parse HEAD^)" = 86d63ca4341c5c39a3e7233f7e4e546d656b054e
+          test "$(git rev-parse HEAD^)" = d56650a91b409828f6586434137872dd44937e35
           test "$(git rev-list --parents -n 1 HEAD | wc -w)" = 2
           mkdir -p "$SC_LIGUE2_RELEASE_OUT"
           git rev-parse HEAD HEAD^{tree} > "$SC_LIGUE2_RELEASE_OUT/head-tree.txt"
           git archive --format=tar HEAD > "$SC_LIGUE2_RELEASE_OUT/source.tar"
           git ls-tree -r HEAD > "$SC_LIGUE2_RELEASE_OUT/source-tree.txt"
           git ls-files -z | sort -z | xargs -0 sha256sum > "$SC_LIGUE2_RELEASE_OUT/tracked-before.sha256"
-          printf '%s  %s\n' fd09245e9d0e5b5aebfa2824b029e0e7e24e3f47978cad647e6577dcbb3138dc qa/sc-ligue2-release-v1/RELEASE-SOURCE-READY.json | sha256sum --check
+          printf '%s  %s\n' 276dec396dd56ea0b52eaac5b3996ef0cc3da4095a14327363567a5ab6026794 qa/sc-ligue2-release-v1/RELEASE-SOURCE-READY.json | sha256sum --check
           printf '%s  %s\n' 60e9f584a8b344461079979e665d1022d7e434ce80ca13ba9d16479204075956 scripts/qa/ligue2ReleaseQualification.mjs | sha256sum --check
           node --check scripts/qa/ligue2ReleaseQualification.mjs
           node --check scripts/qa/ligue2ReleaseFixed.mjs
@@ -136,6 +219,33 @@ jobs:
         run: |
           set -euo pipefail
           NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node_modules/.bin/tsc --noEmit -p tsconfig.app.json 2>&1 | tee "$SC_LIGUE2_RELEASE_OUT/types.log"
+      - name: Exact physical historical inputs used by existing unit tests
+        run: |
+          set -euo pipefail
+          mkdir -p "$SC_LIGUE2_RELEASE_OUT/historical-physical-inputs"
+          specs=(
+            '2b7dda2951fb9b63e76a2af66970cb682f312105:src/lib/cageClash.ts'
+            '31a4ec01:src/lib/cageClash.ts'
+            '56356be9:src/lib/frontOffice.ts'
+            '56356be9:src/data/frontOfficePlayers.ts'
+            '56356be9:src/data/frontOfficeDepth.ts'
+            'e8b39ccc:src/lib/nbaFrontOffice.ts'
+            'e8b39ccc:src/lib/nbaSeasonStats.ts'
+            'e8b39ccc:src/lib/nbaRotation.ts'
+            'e8b39ccc:src/data/conquestDataNba.ts'
+            '6b7596d2:src/lib/nhlFrontOffice.ts'
+            '6b7596d2:src/data/nhlFoPlayers.ts'
+          )
+          : > "$SC_LIGUE2_RELEASE_OUT/historical-physical-inputs.tsv"
+          index=0
+          for spec in "${specs[@]}"; do
+            index=$((index + 1))
+            target="$SC_LIGUE2_RELEASE_OUT/historical-physical-inputs/$index.source"
+            git show "$spec" > "$target"
+            test -s "$target"
+            printf '%s\t%s\t%s\t%s\n' "$spec" "$(git rev-parse "$spec")" "$(wc -c < "$target")" "$(sha256sum "$target" | cut -d ' ' -f 1)" >> "$SC_LIGUE2_RELEASE_OUT/historical-physical-inputs.tsv"
+          done
+          test "$index" = 11
       - name: Fresh complete actual unit suite without supplied observer env
         run: |
           set -euo pipefail
@@ -185,16 +295,16 @@ jobs:
       - name: Exact selected frozen source and original archive
         run: |
           set -euo pipefail
-          test "$GITHUB_REF_NAME" = codex/sc-ligue2-release-v2-20261028
+          test "$GITHUB_REF_NAME" = codex/sc-ligue2-release-v3-20261028
           test "$(git rev-parse HEAD)" = "$GITHUB_SHA"
-          test "$(git rev-parse HEAD^)" = 86d63ca4341c5c39a3e7233f7e4e546d656b054e
+          test "$(git rev-parse HEAD^)" = d56650a91b409828f6586434137872dd44937e35
           test "$(git rev-list --parents -n 1 HEAD | wc -w)" = 2
           mkdir -p "$SC_LIGUE2_RELEASE_OUT"
           git rev-parse HEAD HEAD^{tree} > "$SC_LIGUE2_RELEASE_OUT/head-tree.txt"
           git archive --format=tar HEAD > "$SC_LIGUE2_RELEASE_OUT/source.tar"
           git ls-tree -r HEAD > "$SC_LIGUE2_RELEASE_OUT/source-tree.txt"
           git ls-files -z | sort -z | xargs -0 sha256sum > "$SC_LIGUE2_RELEASE_OUT/tracked-before.sha256"
-          printf '%s  %s\n' fd09245e9d0e5b5aebfa2824b029e0e7e24e3f47978cad647e6577dcbb3138dc qa/sc-ligue2-release-v1/RELEASE-SOURCE-READY.json | sha256sum --check
+          printf '%s  %s\n' 276dec396dd56ea0b52eaac5b3996ef0cc3da4095a14327363567a5ab6026794 qa/sc-ligue2-release-v1/RELEASE-SOURCE-READY.json | sha256sum --check
           printf '%s  %s\n' 60e9f584a8b344461079979e665d1022d7e434ce80ca13ba9d16479204075956 scripts/qa/ligue2ReleaseQualification.mjs | sha256sum --check
           node --check scripts/qa/ligue2ReleaseQualification.mjs
           node --check scripts/qa/ligue2ReleaseFixed.mjs
@@ -253,7 +363,13 @@ jobs:
         run: |
           set -euo pipefail
           cd "$LIGUE2_BUILD_ROOT"
-          ONLY=simAdsense,simBrand,simHeadTags,simHiddenPages,simHubs,simIndexNow,simIndexing,simInternalLinks,simNoRivalNames,simPrerender,simPrerenderBoot,simRetiredRoutes,simSchema,simSitemap,simSnapshotAssets NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/runAllSims.mjs --browser 2>&1 | tee "$SC_LIGUE2_RELEASE_OUT/readers.log"
+          set +e
+          ONLY=simAdsense,simBrand,simHeadTags,simHiddenPages,simHubs,simIndexNow,simIndexing,simInternalLinks,simNoRivalNames,simPrerender,simPrerenderBoot,simRetiredRoutes,simSchema,simSitemap,simSnapshotAssets NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/runAllSims.mjs --browser > "$SC_LIGUE2_RELEASE_OUT/readers.log" 2>&1
+          actual_exit=$?
+          set -e
+          printf '%s\n' "$actual_exit" > "$SC_LIGUE2_RELEASE_OUT/readers-exit.txt"
+          cat "$SC_LIGUE2_RELEASE_OUT/readers.log"
+          test "$actual_exit" = 0
           test "$(grep -c '^All 15 harnesses green\.$' "$SC_LIGUE2_RELEASE_OUT/readers.log")" = 1
       - name: All fifteen unchanged fatal download caps
         run: |
@@ -280,12 +396,12 @@ jobs:
           cd "$LIGUE2_BUILD_ROOT"
           env -u ONLY -u BROWSER NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/runAllSims.mjs --plan-json > "$SC_LIGUE2_RELEASE_OUT/full-sims-plan.json"
           set +e
-          env -u ONLY -u BROWSER SIM_FULL_OUTPUT=1 NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/runAllSims.mjs 2>&1 | tee "$SC_LIGUE2_RELEASE_OUT/full-sims.log"
-          statuses=("${PIPESTATUS[@]}")
+          env -u ONLY -u BROWSER SIM_FULL_OUTPUT=1 NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/runAllSims.mjs > "$SC_LIGUE2_RELEASE_OUT/full-sims.log" 2>&1
+          actual_exit=$?
           set -e
-          printf '%s\n' "${statuses[0]}" > "$SC_LIGUE2_RELEASE_OUT/full-sims-exit.txt"
-          test "${statuses[0]}" = 0
-          test "${statuses[1]}" = 0
+          printf '%s\n' "$actual_exit" > "$SC_LIGUE2_RELEASE_OUT/full-sims-exit.txt"
+          cat "$SC_LIGUE2_RELEASE_OUT/full-sims.log"
+          test "$actual_exit" = 0
           NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/qa/ligue2ReleaseQualification.mjs sims 2>&1 | tee "$SC_LIGUE2_RELEASE_OUT/sim-admission.log"
       - name: Exact built source and distribution held
         if: always()

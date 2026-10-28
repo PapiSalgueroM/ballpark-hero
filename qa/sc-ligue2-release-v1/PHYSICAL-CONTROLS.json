@@ -58,7 +58,7 @@
     {
       "name": "default-manager-year",
       "path": "src/lib/soccerCareerEngine.ts",
-      "sourceSHA256": "155ab5a169deefce1b65100d8022b45f41512835c15b045673f92a93f32a92de",
+      "sourceSHA256": "bc616834e0a5399fcd3ec55d519ead1b194281a9801e3da8a43bf421cd5153b2",
       "targetIndex": 3,
       "independentIndex": 5,
       "expectedFailureIndices": [

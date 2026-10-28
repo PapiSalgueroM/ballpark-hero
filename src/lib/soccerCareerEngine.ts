@@ -8798,13 +8798,13 @@ export function manualRetire(prev: CareerState): CareerState {
   return s;
 }
 
-/* ─── Post-retirement choices ─── */
 /** Only the newly listed Ligue 2 clubs wait until their verified season. */
 export function managerEntryClubInYear(club: Pick<ClubData, 'id'> | null | undefined, year: number): boolean {
   return !club || year >= 2026 || !CAREER_CLUB_POOL.some(row =>
     row.id === club.id && row.league === 'Ligue 2' && CAREER_POOL_SINCE[row.name] === 2026);
 }
 
+/* ─── Post-retirement choices ─── */
 export function choosePostRetirement(prev: CareerState, choice: PostRetirementChoice, clubs: ClubData[], ownerClub?: string): CareerState {
   const s = { ...prev };
   s.postRetirementChoice = choice;

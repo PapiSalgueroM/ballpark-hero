@@ -1,10 +1,16 @@
 {
   "status": "SOURCE_READY_ALL_RUNTIME_UNRUN",
-  "parentCommit": "86d63ca4341c5c39a3e7233f7e4e546d656b054e",
-  "parentTree": "38953bfd4dae2f470aee63e2d0966cd3a683e48c",
+  "parentCommit": "d56650a91b409828f6586434137872dd44937e35",
+  "parentTree": "10014d5ed5c866245ce84710e06d416530832f1e",
   "sourceFamily": "SC419e1b plus admitted baseline954d and generatorprobe92f; no main/live adoption",
   "allowedPaths": [
+    "src/lib/soccerCareerEngine.ts",
+    "src/lib/soccerCareerLeague.test.ts",
+    "src/test/cmWorldIdentity1052.test.ts",
+    "qa/sc-ligue2-release-v1/PRODUCT-SOURCE-READY.json",
+    "scripts/qa/ligue2ReleaseFixed.mjs",
     "scripts/qa/playLigue2Release.mjs",
+    "qa/sc-ligue2-release-v1/PHYSICAL-CONTROLS.json",
     "qa/sc-ligue2-release-v1/RELEASE-SOURCE-READY.json",
     ".github/workflows/sc-ligue2-release.yml"
   ],
@@ -54,8 +60,8 @@
     {
       "path": "src/lib/soccerCareerEngine.ts",
       "bytes": 552035,
-      "sha256": "155ab5a169deefce1b65100d8022b45f41512835c15b045673f92a93f32a92de",
-      "gitBlob": "0e2a098b1792c48572be511c500bfbb4ea9d1668"
+      "sha256": "bc616834e0a5399fcd3ec55d519ead1b194281a9801e3da8a43bf421cd5153b2",
+      "gitBlob": "d40a6e9492e5a1a7c908dc1af7382d649b2b3fe7"
     },
     {
       "path": "src/lib/soccerCareerCoachingStart.ts",
@@ -126,14 +132,14 @@
     {
       "path": "qa/sc-ligue2-release-v1/PRODUCT-SOURCE-READY.json",
       "bytes": 4550,
-      "sha256": "ca4be0b4b16d7d345603854d9294b528e82019861121a63a64e3ce7d326f10d0",
-      "gitBlob": "c18c9fa9500ae0d246ec14e4965e07985a9cae56"
+      "sha256": "02da0797213ad87d8bf9122099e2ff910aa5f5c09fcf0237736df56043392ab0",
+      "gitBlob": "bd97b374eaab784b6851c330f1cc98d057b54dd3"
     },
     {
       "path": "scripts/qa/ligue2ReleaseFixed.mjs",
       "bytes": 27087,
-      "sha256": "5aca2a3373917e5f8d7864505e0e6981777d4ddd7c5d16db2a1137dff0350d6e",
-      "gitBlob": "eae85d82824c3b07a8eb816522251ef49eb603d5"
+      "sha256": "c27dae4f6291b8256356f5ec819e0d51b32478401dd7d07d681ed43937c1fe7d",
+      "gitBlob": "76d257e6de1dc25e058ac32d7554fc20e530d701"
     },
     {
       "path": "scripts/simCareerClubPool.mjs",
@@ -144,8 +150,8 @@
     {
       "path": "scripts/qa/playLigue2Release.mjs",
       "bytes": 25030,
-      "sha256": "b17d422e9b8b316c525ec54dc60f782f2a169541ac475c569a03214dcff26c74",
-      "gitBlob": "36d1143c7fde74ae11fe4705e9b0d9be0d669f02"
+      "sha256": "480299101d195c170f69cc1a8ff292196e42d153a3ae9db2e9711666e61fe33b",
+      "gitBlob": "0e6f6fbb9a8d5ceb9a36d3093970e5e6498c5670"
     },
     {
       "path": "scripts/qa/ligue2ReleaseQualification.mjs",
@@ -156,18 +162,30 @@
     {
       "path": "qa/sc-ligue2-release-v1/PHYSICAL-CONTROLS.json",
       "bytes": 7432,
-      "sha256": "32af8f14c90353af1cc0144ea7924edcaee7a2f331fc88e7ccfa65b2422402e8",
-      "gitBlob": "4f6ef344720b778996bec29dc6f25ed32630b844"
+      "sha256": "9edf1a25e1dbb2be0553376762c87eaca4130d9679ea62dc6f80fa3d0c96da66",
+      "gitBlob": "475d9b47d3963161dd6cc1caadafd7015ff99a6b"
     },
     {
       "path": "qa/sc-ligue2-release-v1/legacy-skipped-identities.json",
       "bytes": 11072,
       "sha256": "e9665db483d02cf65aad4163cc302b5aa71be318b2a4bc73a659c62bcf0fca5d",
       "gitBlob": "3ee01ce0fa814fceace81ef81b7150a627f99ce3"
+    },
+    {
+      "path": "src/lib/soccerCareerLeague.test.ts",
+      "bytes": 28660,
+      "sha256": "2b624dc370c0ff260bd82d70cd60c0362f81e10059f76d7058554391152ebbcf",
+      "gitBlob": "7f3e378f3b1e0feed65bc8431737db382d2597fe"
+    },
+    {
+      "path": "src/test/cmWorldIdentity1052.test.ts",
+      "bytes": 13069,
+      "sha256": "fcc66d88b6a25a1150aa0809da81597003e1bae6db6bc8b311bfcdeb0d4e0c19",
+      "gitBlob": "9916376c51a7ed7159f1227de90a1b08a3bc1067"
     }
   ],
   "productManifest": "qa/sc-ligue2-release-v1/PRODUCT-SOURCE-READY.json",
-  "productManifestSHA256": "ca4be0b4b16d7d345603854d9294b528e82019861121a63a64e3ce7d326f10d0",
+  "productManifestSHA256": "02da0797213ad87d8bf9122099e2ff910aa5f5c09fcf0237736df56043392ab0",
   "fixedCases": [
     {
       "name": "complete initial-contract pool and since boundary",
@@ -260,5 +278,5 @@
     "browserRootGO": "7d5166f0c96fd713a774add8ea8094869ebd02deb994b9f9016b6e234e931c7f"
   },
   "limits": "All fixedruntime unrun. Oldreference replaces only SC419engine+generatedpool; other bundled dependencies candidate. Moduleinitialization excluded/unmeasured. No universalCI/live/publish claim.",
-  "retryScope": "QA-only actualrenderedhelptext casefold/capture-retention correction. All9product/consumer/sampler/controller/physicalcontrols unchanged; freshsamehead3jobruntime required. Prior407019buildFAIL preserved, no result transfer."
+  "retryScope": "V3: one comment-only engine relocation restores archived inverse adjacency, two exact modern-data unit expectation updates with bounded nine-colour projection, full historical checkout and raw sim log retention. All other eight product bodies and actual generated pool held. Fresh same-head full qualification required."
 }

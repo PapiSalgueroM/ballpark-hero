@@ -56,7 +56,7 @@ async function test(index,action){
 }
 try{
  const read=(file,pin)=>{const b=fs.readFileSync(path.join(ROOT,file));assert.equal(sha(b),pin,'Retained input SHA '+file);return b;};
- const product=JSON.parse(read('qa/sc-ligue2-release-v1/PRODUCT-SOURCE-READY.json','ca4be0b4b16d7d345603854d9294b528e82019861121a63a64e3ce7d326f10d0'));report.product=product;
+ const product=JSON.parse(read('qa/sc-ligue2-release-v1/PRODUCT-SOURCE-READY.json','02da0797213ad87d8bf9122099e2ff910aa5f5c09fcf0237736df56043392ab0'));report.product=product;
  const fixture=JSON.parse(read(retained+'fixtures.json','3ba6f1cbc7ddf56ec2938e3822b83b4920128cd1c8c9736eef46b0608ede4fa1'));
  const raw=read(retained+'old-generic.save.txt','81777bcd5a7631c70edf52c626484c00e0a687ab2fd9a7fae7f3c3a2ade0da25').toString('utf8');
  const ledger=JSON.parse(read(research,'24ba62d691c0cd088fa6356f58b7d9ac20fd25e998929998b689eab8247e9a5a'));

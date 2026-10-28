@@ -11,7 +11,7 @@ import pw from '../lib/playwrightLoader.mjs';
 
 assert.equal(process.env.CI,'1','Remote CI only');
 const ROOT=process.cwd(),OUT=path.resolve(process.env.SC_LIGUE2_BROWSER_OUT||'ligue2-release-artifacts/browser');
-const META='qa/sc-ligue2-release-v1/PRODUCT-SOURCE-READY.json',PRODUCT_PIN='ca4be0b4b16d7d345603854d9294b528e82019861121a63a64e3ce7d326f10d0';
+const META='qa/sc-ligue2-release-v1/PRODUCT-SOURCE-READY.json',PRODUCT_PIN='02da0797213ad87d8bf9122099e2ff910aa5f5c09fcf0237736df56043392ab0';
 const KEY='soccerCareerSave',NOW=1791586800000,LABEL='Ligue 2',GUEST='SteadyVolley-18';
 const sha=value=>createHash('sha256').update(value).digest('hex'),copy=value=>structuredClone(value);
 fs.mkdirSync(OUT,{recursive:true});
