@@ -7,10 +7,10 @@ assert.equal(process.env.CI,'1','Remote fixed qualification only');
 const ROOT=process.cwd(),OUT=path.resolve(process.env.SC_COACHING_GATE_OUT||'coaching-fixed-artifacts/proof'),mode=process.argv[2]||'source';
 const sha=body=>createHash('sha256').update(body).digest('hex'),metaPath='qa/soccer-career-coaching-start-v1/SOURCE-READY.json';
 const pins={
-  [metaPath]:'d5122abea6ae1f52285cd2fd01bfca257808e3c1ff24f821151ddeb60c3538be',
+  [metaPath]:'73f0282fba85e4dd5454b5dcec01c3bfa96366f4170d898f9d82a41e2bc565da',
   'qa/soccer-career-coaching-start-v1/SOURCE-FAULTS.json':'030ec20aa115c1aec45485c0191fda2d81e7b59f942fa130e154d2650ad62eb2',
-  'scripts/qa/soccerCoachingStartConsumer.mjs':'4be9f4bd583adadbfd9f64fd1997b81861f8d368dd3bc1b6c36204b9fb623996',
-  'scripts/qa/soccerCoachingStartControls.mjs':'c64ddeafdf6cbe6075a920365afca98fdcc72477dd2b06689273728645ae538f',
+  'scripts/qa/soccerCoachingStartConsumer.mjs':'5e90fc5df1e921538aabb950f88235fe13d6ca18d435d8d9d1b4051bb2980753',
+  'scripts/qa/soccerCoachingStartControls.mjs':'56ec1f556f21a6156d6673ef1ab1157bbc268773c10962e7812121eb58934072',
   'scripts/qa/buildSoccerCoachingStartObserver.mjs':'d4a763951584530eff61dde9b7aac8b63afc02d45471deb7d4fff483fd36975e',
   'src/test/soccerCareerCoachingStart.consumer.test.tsx':'2a1d221b7640053953699c033a1db525b5f2cbe98878d4742f40ba951a978c5a',
   'src/test/soccerCareerCoachingStart.consumer.lifecycle.test.tsx':'1557248d14394b2baefac89e5ed81ed595f267d41b52354ca8fc7cac37459c25',

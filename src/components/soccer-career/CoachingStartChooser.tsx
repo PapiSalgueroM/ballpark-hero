@@ -1,5 +1,6 @@
 import { useEffect, useMemo, useRef, useState } from 'react';
 import { Button } from '@/components/ui/button';
+import { useRevealScroll } from '@/hooks/useRevealScroll';
 import { loadManagerMarket } from '@/lib/soccerCareerEngine';
 import type { CareerState, ClubData } from '@/lib/soccerCareerEngine';
 import { coachingStartChoices, type CoachingStartQuote } from '@/lib/soccerCareerCoachingStart';
@@ -10,6 +11,7 @@ export default function CoachingStartChooser({ career, clubs, onStart, onBack }:
   onStart?: (quote: CoachingStartQuote) => void;
   onBack: () => void;
 }) {
+  const reveal = useRevealScroll('coaching-start', { skipFirst: false });
   const heading = useRef<HTMLHeadingElement>(null);
   const [ready, setReady] = useState(false);
   const [failed, setFailed] = useState(false);
@@ -25,7 +27,7 @@ export default function CoachingStartChooser({ career, clubs, onStart, onBack }:
     return () => { mounted = false; };
   }, [attempt]);
   return (
-    <div className="rounded-xl border border-border bg-card p-4 space-y-3">
+    <div ref={reveal} className="rounded-xl border border-border bg-card p-4 space-y-3">
       <div className="flex items-center justify-between gap-2">
         <Button variant="outline" className="h-11" onClick={onBack}>Back</Button>
         <Button variant="outline" className="h-11 w-11 p-0" aria-label="Coaching start help"

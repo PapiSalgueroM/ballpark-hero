@@ -65,14 +65,14 @@ function run(root,label,selected){
     assert.equal(target.status,'failed');assert.equal(independent.status,'passed');
     assert.equal(rows.filter(row=>row.status==='failed').length,1);assert.equal(rows.filter(row=>row.status==='passed').length,1);
     assert.equal(rows.filter(row=>row.status==='skipped').length,20);
-    assert(target.failureMessages.length>0&&target.failureMessages.every(message=>/AssertionError|Error: expect\(/.test(message)&&!/Cannot find module|Failed to resolve|ReferenceError|TypeError|timed out|Invalid Chai property/i.test(message)),'Intended assertion failure only');
+    assert(target.failureMessages.length>0&&target.failureMessages.every(message=>{const clean=message.replace(/\u001b\[[0-?]*[ -/]*[@-~]/g,'');return /AssertionError|Error: expect\(/.test(clean)&&!/Cannot find module|Failed to resolve|ReferenceError|TypeError|timed out|Invalid Chai property/i.test(clean);}),'Intended assertion failure only');
   }
   return{status:child.status,passed:rows.filter(row=>row.status==='passed').length,failed:rows.filter(row=>row.status==='failed').length,filtered:rows.filter(row=>row.status==='skipped').length,report:path.basename(report),log:path.basename(log)};
 }
 save();
 try{
   const metaBody=read(ROOT,metaPath),faultBody=read(ROOT,faultsPath);
-  assert.equal(sha(metaBody),'d5122abea6ae1f52285cd2fd01bfca257808e3c1ff24f821151ddeb60c3538be');
+  assert.equal(sha(metaBody),'73f0282fba85e4dd5454b5dcec01c3bfa96366f4170d898f9d82a41e2bc565da');
   assert.equal(sha(faultBody),'030ec20aa115c1aec45485c0191fda2d81e7b59f942fa130e154d2650ad62eb2');
   const meta=JSON.parse(metaBody),faults=JSON.parse(faultBody).faults;
   assert.equal(meta.files.length,17);assert.equal(faults.length,11);

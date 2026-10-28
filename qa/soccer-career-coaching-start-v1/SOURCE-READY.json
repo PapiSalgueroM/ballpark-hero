@@ -1,6 +1,6 @@
 {
   "schema": 1,
-  "status": "V1.3 TEST-ONLY STATUS-ORACLE SOURCE SUCCESSOR, RUNTIME UNRUN",
+  "status": "V1.4 ACTUAL OFFSCREEN CHOOSER REVEAL SUCCESSOR, RUNTIME UNRUN",
   "sourceRef": "d272f1cb8197c3f5a884688fd592ecca623a076e",
   "sourceTree": "5aadc3bc091fd6afec338352ba79176e14304421",
   "integrationBaseI": "12c1b2cd001f9309a31a887e5c432ca63c373852",
@@ -20,10 +20,10 @@
     },
     {
       "path": "src/components/soccer-career/CoachingStartChooser.tsx",
-      "localPath": "C:\\Users\\antho\\dukb-handoff\\2026-10-27\\soccer-career-coaching-start-v1\\candidate\\src\\components\\soccer-career\\CoachingStartChooser.tsx",
-      "bytes": 3550,
-      "sha256": "21aca70d4aa250f0f0aeb452367029005594d737f644afd57c7aae4014910c57",
-      "gitBlob": "033994da6accccd46c9ebd1e041383da5ca31367"
+      "localPath": "C:\\Users\\antho\\dukb-handoff\\2026-10-27\\soccer-career-coaching-start-v1\\candidate-v1.4\\src\\components\\soccer-career\\CoachingStartChooser.tsx",
+      "bytes": 3696,
+      "sha256": "96728e690cfb11e26e27d5f708f5d0ab0b4b63c69188f4ad8bae4fcb8bb43eed",
+      "gitBlob": "b9960b2d237a2d08adfd2277a0e9bbf998d853ad"
     },
     {
       "path": "src/components/soccer-career/SoccerCareerProgramme.tsx",
@@ -168,7 +168,7 @@
     "sourcePeer": "4d893f98a1e71dbba626c47bd9c28dcf60a0c1282270d75e0fff21c0919019fd",
     "rootMustRebind": "Selected manifest and17bodies; retain no-env builder/4cases and separate lifecycle8. No fixed runtime credit."
   },
-  "held": "Other13prior selected bodies heldv1.1. Pure helper/chooser/Engine/Life/Programme/Phone/data, original normal handler and every old manager button unchanged. Only owned Page seams may compose into I.",
+  "held": "Other16selected bodies byte-held fromd512. All34testbodies, globaluseRevealScroll, Engine/saves/default handlers/state/RNG logic/Back/headingfocus held. Only chooserimport/ref/mountreveal wiring changed.",
   "required": "Realapp types;22new+4heldconsumer+8lifecycle cases;11physical source faults with independent case and same-copy22restore; unsafe-updater control proves extra actual StrictMode global draws; no-env/fullsuite; source/default state/raw/save/RNG holds; build/all15readers/all15unchangedcaps; actual route browser.",
   "limits": [
     "Native text/hash/inverse only, no local app/runtime/compiler/parser/tests/browser/Git.",
@@ -176,13 +176,16 @@
     "No branch/ref/CI/source adoption or main/publication action by this author."
   ],
   "successor": {
-    "fromManifestSha256": "fdeb6c3ccb644568067f2e9a711e57d2892f9a9524b071f3040a3163bd0ff1d9",
+    "fromManifestSha256": "d5122abea6ae1f52285cd2fd01bfca257808e3c1ff24f821151ddeb60c3538be",
     "changedPriorPaths": [
-      "src/test/soccerCareerCoachingChooser.test.tsx"
+      "src/components/soccer-career/CoachingStartChooser.tsx"
     ],
     "addedPaths": [],
-    "reason": "Test-only rawstate oracle output has implicit status role. Pre element avoids duplicate status match, allcase/assertion/actualhook/product bodies held.",
+    "reason": "Actualserved320ceremony newheadingy-122andBack/helpabovefold; connectunchangedsiteRevealScroll rootrefskipFirstfalse",
     "wholeInverses": true,
-    "defaultHandlerByteHeld": true
+    "globalRevealHookSourceHeld": true,
+    "defaultHandlerByteHeld": true,
+    "nativeBefore": "Run40611647219 actualfirstselectedopeningvisibilityfailure, ROOTactuallyviewednormal+failurePNGs",
+    "qualification": "Sameactualnativefirstviewguard across8journeys/16arms mustpass; no newJSDOMgeometrymirror/casecount/faultmapgrowth."
   }
 }
