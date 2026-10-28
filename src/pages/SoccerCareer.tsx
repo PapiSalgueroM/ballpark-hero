@@ -89,6 +89,8 @@ import { CareerRecordsTile } from '@/components/soccer-career/CareerRecordsTile'
 import { SeasonAmbitionTile, SeasonAmbitionResult } from '@/components/soccer-career/SeasonAmbitionTile';
 import { PreseasonPlanTile, PreseasonPlanResult } from '@/components/soccer-career/PreseasonPlanTile';
 import { CareerMentorTile } from '@/components/soccer-career/CareerMentorTile';
+import { coachingStartChoices, type CoachingStartQuote } from '@/lib/soccerCareerCoachingStart';
+import { useSoccerCoachingStart } from '@/hooks/useSoccerCoachingStart';
 import PotentialProgress from '@/components/soccer-career/PotentialProgress';
 import type { MoneyAction } from "@/lib/soccerMoney";
 import { bankSummary } from "@/lib/soccerMoney";
@@ -154,6 +156,8 @@ const SoccerSeasonCentre = lazy(() => import("@/components/soccer-career/SoccerS
 const ownerScreens = () => import("@/components/soccer-career/OwnerTail").then(m => { if (!m?.OwnerPanel) throw new Error("owner screens"); return m; });
 const OwnerClubSale = lazy(() => ownerScreens().then(m => ({ default: m.OwnerClubSale })).catch(() => new Promise<never>(() => undefined)));
 const OwnerPanel = lazy(() => ownerScreens().then(m => ({ default: m.OwnerPanel })).catch(() => new Promise<never>(() => undefined)));
+const CoachingStartChooser = lazy(() => import('@/components/soccer-career/CoachingStartChooser').catch(() => new Promise<never>(() => undefined)));
+const CoachingStartWait = ({ onBack }: { onBack: () => void }) => <div className="rounded-xl border border-border p-4 space-y-3"><Button onClick={onBack} variant="outline" className="h-11">Back</Button><p role="status" className="text-sm">Opening coaching options...</p></div>;
 /* the sale list's placeholder keeps its Back where the list puts it, so a chunk that never lands cannot strand the doors */
 const OwnerSaleWait = ({ onBack }: { onBack: () => void }) => <div className="min-h-[14rem]"><Button onClick={onBack} variant="ghost" className="h-8 px-2 text-xs font-bold">Back</Button></div>;
 const OWNER_LOAD_FAILED = "The club owner side didn't load. Check your connection and try again.";
@@ -1381,6 +1385,8 @@ export default function SoccerCareer() {
     setCareer(choosePostRetirement(career, choice, clubs, ownerClub));
   };
 
+  const handleCoachingStart = useSoccerCoachingStart(career, clubs, setCareer);
+
   const handleAdvanceManager = () => {
     if (!career) return;
     setCareer(advanceManagerSeason(career, clubs));
@@ -1674,6 +1680,7 @@ export default function SoccerCareer() {
               onBdorSpeech={handleBdorSpeech}
               onManualRetire={handleManualRetire}
               onPostRetirement={handlePostRetirement}
+              onCoachingStart={handleCoachingStart}
               onAdvanceManager={handleAdvanceManager}
               onAcceptManagerOffer={handleAcceptManagerOffer}
               onEndManager={handleEndManager}
@@ -3011,9 +3018,15 @@ function BallonDorCeremonyCard({ bdor, career, onDismiss, onSpeech, onReveal }: 
 }
 
 /* ─── Retirement Ceremony Card ─── */
-function RetirementCeremonyCard({ career, clubs, totals, onPostRetirement }: { career: CareerState; clubs: ClubData[]; totals: ReturnType<typeof getCareerTotals>; onPostRetirement: (c: PostRetirementChoice, ownerClub?: string) => void }) {
+function RetirementCeremonyCard({ career, clubs, totals, onPostRetirement, onCoachingStart }: { career: CareerState; clubs: ClubData[]; totals: ReturnType<typeof getCareerTotals>; onPostRetirement: (c: PostRetirementChoice, ownerClub?: string) => void; onCoachingStart?: (quote: CoachingStartQuote) => void }) {
   /* Round 1524: the club list opens in place of the four doors */
   const [buying, setBuying] = useState(false);
+  const [coaching, setCoaching] = useState(false);
+  const coachingButton = useRef<HTMLButtonElement>(null);
+  const backFromCoaching = () => {
+    setCoaching(false);
+    requestAnimationFrame(() => coachingButton.current?.focus({ preventScroll: true }));
+  };
   const legacy = career.legacy!;
   const reason = retirementReason(career);
   const tierColors: Record<LegacyTier, string> = { "GOAT": "text-amber-400", "LEGEND": "text-purple-400", "GREAT": "text-emerald-400", "SOLID PRO": "text-blue-400", "JOURNEYMAN": "text-muted-foreground" };
@@ -3029,6 +3042,7 @@ function RetirementCeremonyCard({ career, clubs, totals, onPostRetirement }: { c
      its final from the frame it appears (Round 147). */
   const at = (i: number) => revealDelay(i);
 
+  if (coaching) return <Suspense fallback={<CoachingStartWait onBack={backFromCoaching} />}><CoachingStartChooser career={career} clubs={clubs} onStart={onCoachingStart} onBack={backFromCoaching} /></Suspense>;
   return (
     <div className="relative rounded-xl border-2 border-amber-400/40 bg-gradient-to-b from-amber-500/10 to-transparent p-5 space-y-4">
       {(legacy.tier === "GOAT" || legacy.tier === "LEGEND") && <Confetti pieces={60} gold />}
@@ -3103,6 +3117,9 @@ function RetirementCeremonyCard({ career, clubs, totals, onPostRetirement }: { c
         <Button onClick={() => onPostRetirement("manager")} variant="outline" className="w-full h-11 text-sm font-bold">
           📋 Become a Manager
         </Button>
+        {coachingStartChoices(career, clubs).length > 0 && (
+          <Button ref={coachingButton} onClick={() => setCoaching(true)} variant="outline" className="w-full min-h-11 h-auto py-3 text-sm font-bold whitespace-normal">Use coaching coursework</Button>
+        )}
         <Button onClick={() => onPostRetirement("pundit")} variant="outline" className="w-full h-11 text-sm font-bold">
           🎙️ Become a TV Pundit
         </Button>
@@ -3118,9 +3135,16 @@ function RetirementCeremonyCard({ career, clubs, totals, onPostRetirement }: { c
 }
 
 /* ─── Post-Retirement Card (unused since choices are in ceremony, but kept for direct phase) ─── */
-function PostRetirementCard({ career, clubs, onChoice }: { career: CareerState; clubs: ClubData[]; onChoice: (c: PostRetirementChoice, ownerClub?: string) => void }) {
+function PostRetirementCard({ career, clubs, onChoice, onCoachingStart }: { career: CareerState; clubs: ClubData[]; onChoice: (c: PostRetirementChoice, ownerClub?: string) => void; onCoachingStart?: (quote: CoachingStartQuote) => void }) {
   /* Round 1524: the club list, as on the ceremony */
   const [buying, setBuying] = useState(false);
+  const [coaching, setCoaching] = useState(false);
+  const coachingButton = useRef<HTMLButtonElement>(null);
+  const backFromCoaching = () => {
+    setCoaching(false);
+    requestAnimationFrame(() => coachingButton.current?.focus({ preventScroll: true }));
+  };
+  if (coaching) return <Suspense fallback={<CoachingStartWait onBack={backFromCoaching} />}><CoachingStartChooser career={career} clubs={clubs} onStart={onCoachingStart} onBack={backFromCoaching} /></Suspense>;
   if (buying) {
     return (
       <div className="rounded-xl border border-border p-5">
@@ -3133,6 +3157,9 @@ function PostRetirementCard({ career, clubs, onChoice }: { career: CareerState; 
       <h3 className="text-lg font-black">What's Next?</h3>
       <Button onClick={() => onChoice("retire")} className="w-full h-11 text-sm font-bold bg-emerald-600 hover:bg-emerald-500 text-black">🏖️ Retire and Enjoy Life</Button>
       <Button onClick={() => onChoice("manager")} variant="outline" className="w-full h-11 text-sm font-bold">📋 Become a Manager</Button>
+      {coachingStartChoices(career, clubs).length > 0 && (
+        <Button ref={coachingButton} onClick={() => setCoaching(true)} variant="outline" className="w-full min-h-11 h-auto py-3 text-sm font-bold whitespace-normal">Use coaching coursework</Button>
+      )}
       <Button onClick={() => onChoice("pundit")} variant="outline" className="w-full h-11 text-sm font-bold">🎙️ Become a TV Pundit</Button>
       {career.netWorth >= 200 && (
         <Button onClick={() => setBuying(true)} variant="outline" className="w-full h-11 text-sm font-bold">🏟️ Buy a Football Club</Button>
@@ -3605,7 +3632,7 @@ function SocialMediaActionCard({ career, onAction, onCoverAthlete, onDismiss }: 
 }
 
 /* ─── Game Screen ─── */
-function GameScreen({ career, clubs, onNextSeason, onAcceptOffer, onDismissSummary, onDismissNewspaper, onStay, onSignExtension, onRequestTransfer, onAcceptLoan, onEventChoice, onDismissDebut, onDismissWorldCup, onWorldCupSpeech, onRetireInternational, onReturnInternational, onDismissRivalryEvent, onDismissBallonDor, onBdorSpeech, onManualRetire, onPostRetirement, onAdvanceManager, onAcceptManagerOffer, onEndManager, onShare, onNewCareer, onOpenPhone, onSocialMediaAction, onCoverAthlete, onDismissSocialMedia, onMoralDilemmaChoice, onRehabChoice, onDismissMoralDilemma, onDismissAppeal, onAcceptRetirement, onDeclineRetirement, onAnnounceFarewell, onPunditAction, onEndPundit, onAdvanceOwner, onEndOwner, onCurrencyChange, onAgentChange, timelineRef, signedNote, academyReport, onAcademyFocus, onCareerPatch, arrival }: {
+function GameScreen({ career, clubs, onNextSeason, onAcceptOffer, onDismissSummary, onDismissNewspaper, onStay, onSignExtension, onRequestTransfer, onAcceptLoan, onEventChoice, onDismissDebut, onDismissWorldCup, onWorldCupSpeech, onRetireInternational, onReturnInternational, onDismissRivalryEvent, onDismissBallonDor, onBdorSpeech, onManualRetire, onPostRetirement, onCoachingStart, onAdvanceManager, onAcceptManagerOffer, onEndManager, onShare, onNewCareer, onOpenPhone, onSocialMediaAction, onCoverAthlete, onDismissSocialMedia, onMoralDilemmaChoice, onRehabChoice, onDismissMoralDilemma, onDismissAppeal, onAcceptRetirement, onDeclineRetirement, onAnnounceFarewell, onPunditAction, onEndPundit, onAdvanceOwner, onEndOwner, onCurrencyChange, onAgentChange, timelineRef, signedNote, academyReport, onAcademyFocus, onCareerPatch, arrival }: {
   /** Round 1330: set once per Begin Career ("begin-" and a count), null otherwise; the hub lands on the player card when it changes. */
   arrival?: string | null;
   career: CareerState;
@@ -3636,6 +3663,7 @@ function GameScreen({ career, clubs, onNextSeason, onAcceptOffer, onDismissSumma
   onBdorSpeech: (choice: BdorSpeechChoice) => void;
   onManualRetire: () => void;
   onPostRetirement: (choice: PostRetirementChoice, ownerClub?: string) => void;
+  onCoachingStart: (quote: CoachingStartQuote) => void;
   onAdvanceManager: () => void;
   onAcceptManagerOffer: (i: number) => void;
   onEndManager: () => void;
@@ -4116,7 +4144,7 @@ function GameScreen({ career, clubs, onNextSeason, onAcceptOffer, onDismissSumma
 
           {/* OVERLAY: Retirement Ceremony */}
           {career.phase === "retirement_ceremony" && career.legacy && (
-            <RetirementCeremonyCard career={career} clubs={clubs} totals={totals} onPostRetirement={onPostRetirement} />
+            <RetirementCeremonyCard career={career} clubs={clubs} totals={totals} onPostRetirement={onPostRetirement} onCoachingStart={onCoachingStart} />
           )}
 
           {/* OVERLAY: Retirement Suggestion */}
@@ -4147,7 +4175,7 @@ function GameScreen({ career, clubs, onNextSeason, onAcceptOffer, onDismissSumma
 
           {/* OVERLAY: Post-Retirement Choice */}
           {career.phase === "post_retirement" && (
-            <PostRetirementCard career={career} clubs={clubs} onChoice={onPostRetirement} />
+            <PostRetirementCard career={career} clubs={clubs} onChoice={onPostRetirement} onCoachingStart={onCoachingStart} />
           )}
 
           {/* OVERLAY: Manager Season */}
