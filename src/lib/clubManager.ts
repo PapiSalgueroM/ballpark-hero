@@ -5201,6 +5201,11 @@ const CLUB_COLORS: Record<string, string> = {
   'Red Star FC': '#0a7040', 'Annecy': '#d02128', 'Pau': '#f7d417',
   'Dunkerque': '#1b458f', 'Grenoble': '#1b458f', 'Rodez': '#d02128',
   'Clermont': '#d02128', 'Boulogne': '#d02128', 'Laval': '#ff6600',
+  // Serie B: decorative colour words, verified in soccerCareerFacts.json.
+  'Avellino': '#0a7040', 'Carrarese': '#f7d417', 'Catanzaro': '#d02128',
+  'Entella': '#87d8f7', 'Juve Stabia': '#f7d417', 'Mantova': '#d02128',
+  'Modena': '#f7d417', 'Padova': '#d02128', 'Südtirol': '#d02128',
+  'Vicenza': '#d02128', 'Arezzo': '#7d1c2a',
 };
 
 /**

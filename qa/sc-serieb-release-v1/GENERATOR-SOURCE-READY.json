@@ -1,0 +1,129 @@
+{
+  "status": "GENERATOR_PROBE_SOURCE_READY_RUNTIME_UNRUN",
+  "parentCommit": "a905e676527e1ec93bdf7e3f5ed1c8c33e1bf087",
+  "parentTree": "0a305a0f2612e763c6f1d53d52a59fea6844b5f1",
+  "sourceFamily": "Admitted shallow Serie B baseline a905 on source-vetted clean Draft422 a480. Ligue 2 global qualification remains pending.",
+  "branch": "codex/sc-serieb-generator-probe-20261028",
+  "manualSourceManifestSHA256": "9d3948f94bdb6980e8f9cc4f67bbb0b81fad214d2a5829757f0c3a36e6e06dcf",
+  "manualPaths": [
+    "src/lib/clubManager.ts",
+    "scripts/data/soccerCareerFacts.json",
+    "scripts/lib/careerClubPool.mjs",
+    "src/data/leagueFormat.ts",
+    "src/lib/soccerCareerLeague.ts",
+    "src/lib/soccerCareerDerby.ts",
+    "src/lib/soccerCareerEngine.ts"
+  ],
+  "allowedPaths": [
+    "src/lib/clubManager.ts",
+    "scripts/data/soccerCareerFacts.json",
+    "scripts/lib/careerClubPool.mjs",
+    "src/data/leagueFormat.ts",
+    "src/lib/soccerCareerLeague.ts",
+    "src/lib/soccerCareerDerby.ts",
+    "src/lib/soccerCareerEngine.ts",
+    ".github/workflows/sc-serieb-generator-probe.yml",
+    "scripts/qa/serieBGeneratorProbe.mjs",
+    "qa/sc-serieb-release-v1/GENERATOR-SOURCE-READY.json"
+  ],
+  "generatedPath": "src/data/soccerCareerClubPool.ts",
+  "expectedOldGenerated": 287,
+  "expectedAdded": 20,
+  "expectedLadder": 20,
+  "expectedAddedSince2026": 20,
+  "expectedOldLadders": 23,
+  "expectedHAND190Fingerprint": "e12e673153af2568",
+  "sourcePins": [
+    {
+      "path": "scripts/data/soccerCareerFacts.json",
+      "bytes": 176880,
+      "sha256": "35b8f45234d485190098746e8f04ab1d2db386bc4f44b1224c7f7e76a462fe4a",
+      "gitBlob": "6ac25dc9d27bb0295f0e268be79990cf69086f7f"
+    },
+    {
+      "path": "scripts/lib/careerClubPool.mjs",
+      "bytes": 22296,
+      "sha256": "ded92933aa4790e4c4a532647d09e5ee3c65b22dfec57432de18d25641d9dce0",
+      "gitBlob": "16ccc6137958a1adf2e40e5d26b99de466b38e24"
+    },
+    {
+      "path": "src/data/leagueFormat.ts",
+      "bytes": 7070,
+      "sha256": "915b4acd46f103d7c371d58c043c600a85e4e592ae6b59d5a8000d930e76fca5",
+      "gitBlob": "802650466c0c4439f12c741e7d1ae28957280f9b"
+    },
+    {
+      "path": "src/data/soccerCareerClubPool.ts",
+      "bytes": 46309,
+      "sha256": "4fca8dcc0d83efaa0d79d58833a03d3f2787cd44fb5ea93a90c3cf207ef5efd2",
+      "gitBlob": "9247463ff836992a4ea43fb79c5c18b19ffe673d"
+    },
+    {
+      "path": "src/lib/careerEras.ts",
+      "bytes": 105789,
+      "sha256": "f3e7347f58abe993db9fd72e9896ea0767a6ca7eb3b19861b75b92b387f89c1c",
+      "gitBlob": "e037022342382b1df9c8a5ede620d2cce480bc23"
+    },
+    {
+      "path": "src/lib/clubManager.ts",
+      "bytes": 1241181,
+      "sha256": "135929be1da2fc592d2eb40f9bfdf7a3eb6b90ba911b4f5379cf5e662987621e",
+      "gitBlob": "aff16d7d51de6da8dd1d16893c9c03acc57cb97f"
+    },
+    {
+      "path": "src/lib/soccerCareerCoachingStart.ts",
+      "bytes": 4043,
+      "sha256": "7720957192ccb8a0de5b1fef64817e409ee30d7ce7dd035425e598d0fd903aff",
+      "gitBlob": "0733d114d66b748131ac2c623fb858c6d9c97fd2"
+    },
+    {
+      "path": "src/lib/soccerCareerDerby.ts",
+      "bytes": 23401,
+      "sha256": "24b47bb4f83a37f4c43fcd5cb42be7976eac299a5bec0f7673af0621c6c804e8",
+      "gitBlob": "e25062b2b6560957feb414fd709b7bbc5b4af7ba"
+    },
+    {
+      "path": "src/lib/soccerCareerEngine.ts",
+      "bytes": 552077,
+      "sha256": "bf4beb5151213325277a44c83cef6a72528d14b612368b8db70c7b2288508708",
+      "gitBlob": "97e40cf67e30c3cbf6425eab95afa0c53a20d66b"
+    },
+    {
+      "path": "src/lib/soccerCareerLeague.ts",
+      "bytes": 47020,
+      "sha256": "fe3efae2f43e780c2cd4d13ca7fa85f023a2fefe8cf1b002866a1cf0d963268a",
+      "gitBlob": "9c05bf681f30bcd3703f55ad72c1289f4eeb9844"
+    },
+    {
+      "path": "src/lib/soccerCareerLeagueWorld.ts",
+      "bytes": 15636,
+      "sha256": "360c629f5d6ecc9cd959f5aae9a3791eb99b4f5cecdca2236da563168c2bb8c6",
+      "gitBlob": "72fcabdd0c557a743aa849b01208140c3030048f"
+    },
+    {
+      "path": "src/lib/soccerCareerSave.ts",
+      "bytes": 6287,
+      "sha256": "b486dfd8c4073230b6967c674058e46c7b56a6afd2a8a165f1e215501205477a",
+      "gitBlob": "86ec011693fd5bc702b5e8ccec05d27775a72a76"
+    },
+    {
+      "path": "scripts/genCareerClubPool.mjs",
+      "bytes": 3078,
+      "sha256": "cd0194547792286b8f74f2808f5b1416e002b91b9faab06c1ee088bb5fcc595c",
+      "gitBlob": "c6bb0149ee6495ea6c443d172cb77fe45a3d9fd0"
+    },
+    {
+      "path": "scripts/simCareerClubPool.mjs",
+      "bytes": 69556,
+      "sha256": "ede304d9b5af9be1b4904bd7e8493fe9e91ade48b8a62b8f0ceb5e89a06989d1",
+      "gitBlob": "c8480a3e1e47e689d3df6997f17aa9c3e961f4ab"
+    }
+  ],
+  "copiedControls": 5,
+  "sampler": "Unchanged current ede304d9 sampler, default six seeds and 48 careers. Capture actual accounting/output. Green or exact current-source rational refusals only; historical/grid/other failures remain fatal. No forecast constants or fixed qualification.",
+  "sourceObserver": "Existing bundleCareerSources appends only CM private STRENGTH_PRIORS export. Generator uses actual stubPool:true as its unchanged production script; accounting uses actual generated pool without stub or transforms.",
+  "restore": "Only generated path may change at runtime; exact before body restored in finally, all committed sources held.",
+  "limits": "Existing generator only. Exact output stays an uncommitted probe artifact until native admission and frozen selection. No product tests, full suite, build or browser qualification on the mutated tree.",
+  "baselineAdmissionSHA256": "02e135eeedb20d3783eeb2bb54114b0ab7269c16012e5b6b9bc9d9528f35c303",
+  "genuineFixtureAdmissionSHA256": "8866e4acb9ece45fed252884b25ecd6d0b10ffb7c75c6ca5e25b9f3e1c732c07"
+}

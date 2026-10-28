@@ -1,0 +1,85 @@
+name: Soccer Career Serie B generated source probe
+on:
+  push:
+    branches: [codex/sc-serieb-generator-probe-20261028]
+    paths:
+      - .github/workflows/sc-serieb-generator-probe.yml
+      - scripts/qa/serieBGeneratorProbe.mjs
+      - qa/sc-serieb-release-v1/GENERATOR-SOURCE-READY.json
+      - src/lib/clubManager.ts
+      - scripts/data/soccerCareerFacts.json
+      - scripts/lib/careerClubPool.mjs
+      - src/data/leagueFormat.ts
+      - src/lib/soccerCareerLeague.ts
+      - src/lib/soccerCareerDerby.ts
+      - src/lib/soccerCareerEngine.ts
+permissions:
+  contents: read
+concurrency:
+  group: sc-serieb-generator-probe-${{ github.sha }}
+  cancel-in-progress: false
+defaults:
+  run:
+    shell: bash
+jobs:
+  generator:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    env:
+      CI: '1'
+      SIM_NETWORK: offline
+      CAREER_SEASON_LOCAL_ONLY: '1'
+      SC_SERIEB_GENERATOR_OUT: ${{ github.workspace }}/serieb-generator-artifacts/probe
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.sha }}
+          fetch-depth: 2
+          persist-credentials: false
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: npm
+      - name: Exact baseline parent and selected manual inputs
+        run: |
+          set -euo pipefail
+          test "$GITHUB_REF_NAME" = codex/sc-serieb-generator-probe-20261028
+          test "$(git rev-parse HEAD)" = "$GITHUB_SHA"
+          test "$(git rev-parse HEAD^)" = a905e676527e1ec93bdf7e3f5ed1c8c33e1bf087
+          test "$(git rev-list --parents -n 1 HEAD | wc -w)" = 2
+          mkdir -p serieb-generator-artifacts
+          git rev-parse HEAD HEAD^{tree} > serieb-generator-artifacts/head-tree.txt
+          git archive --format=tar HEAD > serieb-generator-artifacts/source.tar
+          git ls-tree -r HEAD > serieb-generator-artifacts/source-tree.txt
+          git ls-files -z | sort -z | xargs -0 sha256sum > serieb-generator-artifacts/tracked-before.sha256
+          printf '%s  %s\n' 8df3d6b14de3cfe2d8cbeb6c1d82f79565a9594811a2fa45145483ac926a33b3 qa/sc-serieb-release-v1/GENERATOR-SOURCE-READY.json | sha256sum --check
+          printf '%s  %s\n' bd9e3803f7a6c4eafaee38f7c56e84e5e7296c99b75560486c99bfcf792d5341 scripts/qa/serieBGeneratorProbe.mjs | sha256sum --check
+          node --check scripts/qa/serieBGeneratorProbe.mjs
+          node --check scripts/genCareerClubPool.mjs
+          node --check scripts/simCareerClubPool.mjs
+          NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/qa/serieBGeneratorProbe.mjs source 2>&1 | tee serieb-generator-artifacts/source-pins.log
+          git diff --name-only HEAD^ HEAD | sort > serieb-generator-artifacts/changed-paths.txt
+          diff -u <(node -e 'const fs=require("fs");const s=JSON.parse(fs.readFileSync("qa/sc-serieb-release-v1/GENERATOR-SOURCE-READY.json"));console.log(s.allowedPaths.sort().join("\n"))') serieb-generator-artifacts/changed-paths.txt
+          echo '127.0.0.1 flawuiqbvjobmkfkauhw.supabase.co' | sudo tee -a /etc/hosts
+          npm ci 2>&1 | tee serieb-generator-artifacts/npm-ci.log
+      - name: Capture actual generated body and unchanged sampler diagnostics
+        run: |
+          set -euo pipefail
+          NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/qa/serieBGeneratorProbe.mjs run 2>&1 | tee serieb-generator-artifacts/probe.log
+          grep -Fx 'SERIEB_GENERATOR_PROBE: 20 added, 287 old rows held, 20-club ladder, 20 since2026, 5 COPIED guards; actual unchanged sampler outcome retained' serieb-generator-artifacts/probe.log > /dev/null
+      - name: Every committed source restored, including failures
+        if: always()
+        run: |
+          set -euo pipefail
+          sha256sum --check serieb-generator-artifacts/tracked-before.sha256 > serieb-generator-artifacts/tracked-held.log
+          git status --porcelain --untracked-files=no > serieb-generator-artifacts/tracked-status.txt
+          test ! -s serieb-generator-artifacts/tracked-status.txt
+          git diff --exit-code HEAD
+      - name: Retain original generated body and diagnostic failures
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: sc-serieb-generator-probe-${{ github.run_id }}-${{ github.run_attempt }}
+          path: serieb-generator-artifacts/
+          if-no-files-found: error
+          retention-days: 14
