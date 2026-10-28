@@ -1,4 +1,4 @@
-name: CM recruitment shortlist early fixed gate
+name: CM recruitment shortlist qualification
 on:
   push:
     branches: [codex/cm-recruitment-shortlist-fixed-20261028]
@@ -13,25 +13,30 @@ on:
       - src/test/clubManagerRecruitmentBoard.test.tsx
       - src/test/clubManagerRecruitmentHook.test.tsx
       - qa/cm-recruitment-shortlist-v1/SOURCE-READY.json
-      - scripts/qa/cmRecruitmentFocused.mjs
+      - qa/cm-recruitment-shortlist-v1/PHYSICAL-FAULTS.json
+      - qa/cm-recruitment-shortlist-v1/legacy-unit-identities.json.gz
+      - scripts/qa/cmRecruitmentQualification.mjs
+      - scripts/qa/cmRecruitmentPairs.mjs
       - .github/workflows/cm-recruitment-shortlist-fixed.yml
   workflow_dispatch:
 permissions:
   contents: read
 concurrency:
-  group: cm-recruitment-focused-${{ github.sha }}
+  group: cm-recruitment-qualification-${{ github.sha }}
   cancel-in-progress: false
 defaults:
   run:
     shell: bash
 jobs:
-  focused:
+  proof:
     runs-on: ubuntu-latest
-    timeout-minutes: 15
+    timeout-minutes: 30
     env:
       CI: '1'
       SIM_NETWORK: offline
       CAREER_SEASON_LOCAL_ONLY: '1'
+      ENGINES: chromium
+      CM_RECRUITMENT_OUT: ${{ github.workspace }}/cm-recruitment-qualification-artifacts/proof
     steps:
       - uses: actions/checkout@v4
         with:
@@ -42,35 +47,36 @@ jobs:
         with:
           node-version: 24
           cache: npm
-      - name: Exact selected source and whole tracked archive
+      - name: Exact selected source and original archive
         run: |
           set -euo pipefail
-          export CM_RECRUITMENT_OUT="$PWD/cm-recruitment-focused-artifacts"
-          mkdir -p "$CM_RECRUITMENT_OUT"
-          echo "CM_RECRUITMENT_OUT=$CM_RECRUITMENT_OUT" >> "$GITHUB_ENV"
           test "$GITHUB_REF_NAME" = codex/cm-recruitment-shortlist-fixed-20261028
           test "$(git rev-parse HEAD)" = "$GITHUB_SHA"
-          test "$(git rev-parse HEAD^)" = 14ec28b1cbc82b1abcdf14244dec7acae25d1507
+          mkdir -p "$CM_RECRUITMENT_OUT"
           git rev-parse HEAD HEAD^{tree} > "$CM_RECRUITMENT_OUT/head-tree.txt"
           git archive --format=tar HEAD > "$CM_RECRUITMENT_OUT/source.tar"
           git ls-tree -r HEAD > "$CM_RECRUITMENT_OUT/source-tree.txt"
           git ls-files -z | sort -z | xargs -0 sha256sum > "$CM_RECRUITMENT_OUT/tracked-before.sha256"
-          printf '%s  %s\n' dd1de133bfc32ecd5e1f40c4421d28d050378c31e93b6c53d20f385a5ee7bec8 scripts/qa/cmRecruitmentFocused.mjs | sha256sum --check
-          node scripts/qa/cmRecruitmentFocused.mjs source 2>&1 | tee "$CM_RECRUITMENT_OUT/source-pins.log"
+          printf '%s  %s\n' 75e41ed2c40f9c1e6072335970f04b3856268f9581065dde676ef81e3102997c scripts/qa/cmRecruitmentQualification.mjs | sha256sum --check
+          printf '%s  %s\n' 7809a1037955cc2e2cdf943eecca318b7acce2da76986b07a58cc0e68971103c qa/cm-recruitment-shortlist-v1/PHYSICAL-FAULTS.json | sha256sum --check
+          printf '%s  %s\n' 7683dcf0c68363481fce260efe3f005ef1337de74dbbf95cf5ca2851e435d0b8 qa/cm-recruitment-shortlist-v1/legacy-unit-identities.json.gz | sha256sum --check
+          printf '%s  %s\n' 415a3a37de15dce509fc0f9d96929a962d01567991656037c3c6c7f46087c22f scripts/qa/cmRecruitmentPairs.mjs | sha256sum --check
+          node scripts/qa/cmRecruitmentQualification.mjs source 2>&1 | tee "$CM_RECRUITMENT_OUT/source-pins.log"
           echo '127.0.0.1 flawuiqbvjobmkfkauhw.supabase.co' | sudo tee -a /etc/hosts
-      - name: Exact lock dependencies
-        run: |
-          set -euo pipefail
           npm ci 2>&1 | tee "$CM_RECRUITMENT_OUT/npm-ci.log"
       - name: Real application types
         run: |
           set -euo pipefail
           NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node_modules/.bin/tsc --noEmit -p tsconfig.app.json 2>&1 | tee "$CM_RECRUITMENT_OUT/types.log"
-      - name: All37 actual focused cases and strict diagnostic admission
+      - name: All37 cases and ten changed physical controls with same-copy restores
         run: |
           set -euo pipefail
-          NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/qa/cmRecruitmentFocused.mjs run 2>&1 | tee "$CM_RECRUITMENT_OUT/controller.log"
-      - name: Every tracked source remains held
+          NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/qa/cmRecruitmentQualification.mjs proof 2>&1 | tee "$CM_RECRUITMENT_OUT/controller.log"
+      - name: Twelve actual default and metadata outcome pairs
+        run: |
+          set -euo pipefail
+          NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/qa/cmRecruitmentPairs.mjs 2>&1 | tee "$CM_RECRUITMENT_OUT/pairs.log"
+      - name: Every tracked canonical source held
         if: always()
         run: |
           set -euo pipefail
@@ -78,11 +84,191 @@ jobs:
           git status --porcelain --untracked-files=no > "$CM_RECRUITMENT_OUT/tracked-status.txt"
           test ! -s "$CM_RECRUITMENT_OUT/tracked-status.txt"
           git diff --exit-code HEAD
-      - name: Retain original early gate including failure
+      - name: Retain original proof including failure
         if: always()
         uses: actions/upload-artifact@v4
         with:
-          name: cm-recruitment-focused-${{ github.run_id }}-${{ github.run_attempt }}
-          path: cm-recruitment-focused-artifacts/
+          name: cm-recruitment-proof-${{ github.run_id }}-${{ github.run_attempt }}
+          path: cm-recruitment-qualification-artifacts/proof/
+          if-no-files-found: error
+          retention-days: 14
+  units:
+    runs-on: ubuntu-latest
+    timeout-minutes: 45
+    env:
+      CI: '1'
+      SIM_NETWORK: offline
+      CAREER_SEASON_LOCAL_ONLY: '1'
+      ENGINES: chromium
+      CM_RECRUITMENT_OUT: ${{ github.workspace }}/cm-recruitment-qualification-artifacts/units
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.sha }}
+          fetch-depth: 0
+          persist-credentials: false
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: npm
+      - name: Exact selected source and original archive
+        run: |
+          set -euo pipefail
+          test "$GITHUB_REF_NAME" = codex/cm-recruitment-shortlist-fixed-20261028
+          test "$(git rev-parse HEAD)" = "$GITHUB_SHA"
+          mkdir -p "$CM_RECRUITMENT_OUT"
+          git rev-parse HEAD HEAD^{tree} > "$CM_RECRUITMENT_OUT/head-tree.txt"
+          git archive --format=tar HEAD > "$CM_RECRUITMENT_OUT/source.tar"
+          git ls-tree -r HEAD > "$CM_RECRUITMENT_OUT/source-tree.txt"
+          git ls-files -z | sort -z | xargs -0 sha256sum > "$CM_RECRUITMENT_OUT/tracked-before.sha256"
+          printf '%s  %s\n' 75e41ed2c40f9c1e6072335970f04b3856268f9581065dde676ef81e3102997c scripts/qa/cmRecruitmentQualification.mjs | sha256sum --check
+          printf '%s  %s\n' 7809a1037955cc2e2cdf943eecca318b7acce2da76986b07a58cc0e68971103c qa/cm-recruitment-shortlist-v1/PHYSICAL-FAULTS.json | sha256sum --check
+          printf '%s  %s\n' 7683dcf0c68363481fce260efe3f005ef1337de74dbbf95cf5ca2851e435d0b8 qa/cm-recruitment-shortlist-v1/legacy-unit-identities.json.gz | sha256sum --check
+          printf '%s  %s\n' 415a3a37de15dce509fc0f9d96929a962d01567991656037c3c6c7f46087c22f scripts/qa/cmRecruitmentPairs.mjs | sha256sum --check
+          node scripts/qa/cmRecruitmentQualification.mjs source 2>&1 | tee "$CM_RECRUITMENT_OUT/source-pins.log"
+          echo '127.0.0.1 flawuiqbvjobmkfkauhw.supabase.co' | sudo tee -a /etc/hosts
+          npm ci 2>&1 | tee "$CM_RECRUITMENT_OUT/npm-ci.log"
+      - name: Complete actual application suite
+        run: |
+          set -euo pipefail
+          set +e
+          env -u SC_COACHING_START_OBSERVER -u SC_MANAGER_REVIEW_OBSERVER NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node node_modules/vitest/vitest.mjs run --maxWorkers=1 --minWorkers=1 --reporter=default --reporter=json --outputFile.json="$CM_RECRUITMENT_OUT/full-units.json" > "$CM_RECRUITMENT_OUT/full-units.log" 2>&1
+          actual_status=$?
+          set -e
+          printf '{"status":%s}\n' "$actual_status" > "$CM_RECRUITMENT_OUT/process.json"
+          tail -n 30 "$CM_RECRUITMENT_OUT/full-units.log"
+          test "$actual_status" = 0
+          NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/qa/cmRecruitmentQualification.mjs units 2>&1 | tee "$CM_RECRUITMENT_OUT/unit-admission.log"
+      - name: Every tracked canonical source held
+        if: always()
+        run: |
+          set -euo pipefail
+          sha256sum --check "$CM_RECRUITMENT_OUT/tracked-before.sha256" > "$CM_RECRUITMENT_OUT/tracked-held.log"
+          git status --porcelain --untracked-files=no > "$CM_RECRUITMENT_OUT/tracked-status.txt"
+          test ! -s "$CM_RECRUITMENT_OUT/tracked-status.txt"
+          git diff --exit-code HEAD
+      - name: Retain original units including failure
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: cm-recruitment-units-${{ github.run_id }}-${{ github.run_attempt }}
+          path: cm-recruitment-qualification-artifacts/units/
+          if-no-files-found: error
+          retention-days: 14
+  build:
+    runs-on: ubuntu-latest
+    timeout-minutes: 40
+    env:
+      CI: '1'
+      SIM_NETWORK: offline
+      CAREER_SEASON_LOCAL_ONLY: '1'
+      ENGINES: chromium
+      CM_RECRUITMENT_OUT: ${{ github.workspace }}/cm-recruitment-qualification-artifacts/build
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.sha }}
+          fetch-depth: 0
+          persist-credentials: false
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: npm
+      - name: Exact selected source and original archive
+        run: |
+          set -euo pipefail
+          test "$GITHUB_REF_NAME" = codex/cm-recruitment-shortlist-fixed-20261028
+          test "$(git rev-parse HEAD)" = "$GITHUB_SHA"
+          mkdir -p "$CM_RECRUITMENT_OUT"
+          git rev-parse HEAD HEAD^{tree} > "$CM_RECRUITMENT_OUT/head-tree.txt"
+          git archive --format=tar HEAD > "$CM_RECRUITMENT_OUT/source.tar"
+          git ls-tree -r HEAD > "$CM_RECRUITMENT_OUT/source-tree.txt"
+          git ls-files -z | sort -z | xargs -0 sha256sum > "$CM_RECRUITMENT_OUT/tracked-before.sha256"
+          printf '%s  %s\n' 75e41ed2c40f9c1e6072335970f04b3856268f9581065dde676ef81e3102997c scripts/qa/cmRecruitmentQualification.mjs | sha256sum --check
+          printf '%s  %s\n' 7809a1037955cc2e2cdf943eecca318b7acce2da76986b07a58cc0e68971103c qa/cm-recruitment-shortlist-v1/PHYSICAL-FAULTS.json | sha256sum --check
+          printf '%s  %s\n' 7683dcf0c68363481fce260efe3f005ef1337de74dbbf95cf5ca2851e435d0b8 qa/cm-recruitment-shortlist-v1/legacy-unit-identities.json.gz | sha256sum --check
+          printf '%s  %s\n' 415a3a37de15dce509fc0f9d96929a962d01567991656037c3c6c7f46087c22f scripts/qa/cmRecruitmentPairs.mjs | sha256sum --check
+          node scripts/qa/cmRecruitmentQualification.mjs source 2>&1 | tee "$CM_RECRUITMENT_OUT/source-pins.log"
+          echo '127.0.0.1 flawuiqbvjobmkfkauhw.supabase.co' | sudo tee -a /etc/hosts
+          npm ci 2>&1 | tee "$CM_RECRUITMENT_OUT/npm-ci.log"
+      - name: Isolated build browser tools and retained fonts
+        env:
+          FREE_KICK_FONT_CACHE: ${{ github.workspace }}/cm-recruitment-qualification-artifacts/build/font-cache
+        run: |
+          set -euo pipefail
+          build_root="$RUNNER_TEMP/cm-recruitment-build-$GITHUB_RUN_ID-$GITHUB_RUN_ATTEMPT"
+          git worktree add --detach "$build_root" HEAD
+          ln -s "$GITHUB_WORKSPACE/node_modules" "$build_root/node_modules"
+          echo "CM_RECRUITMENT_BUILD_ROOT=$build_root" >> "$GITHUB_ENV"
+          browser_tools="$RUNNER_TEMP/cm-recruitment-browser-tools-$GITHUB_RUN_ID-$GITHUB_RUN_ATTEMPT"
+          mkdir -p "$browser_tools"
+          printf '{"private":true,"dependencies":{"playwright":"1.64.0"}}\n' > "$browser_tools/package.json"
+          npm install --prefix "$browser_tools" --ignore-scripts --no-audit --no-fund 2>&1 | tee "$CM_RECRUITMENT_OUT/browser-install.log"
+          test ! -e node_modules/playwright
+          test ! -e node_modules/playwright-core
+          ln -s "$browser_tools/node_modules/playwright" node_modules/playwright
+          ln -s "$browser_tools/node_modules/playwright-core" node_modules/playwright-core
+          cp "$browser_tools/package.json" "$CM_RECRUITMENT_OUT/browser-package.json"
+          cp "$browser_tools/package-lock.json" "$CM_RECRUITMENT_OUT/browser-package-lock.json"
+          export PLAYWRIGHT_BROWSERS_PATH="$RUNNER_TEMP/cm-recruitment-chromium-$GITHUB_RUN_ID-$GITHUB_RUN_ATTEMPT"
+          echo "PLAYWRIGHT_BROWSERS_PATH=$PLAYWRIGHT_BROWSERS_PATH" >> "$GITHUB_ENV"
+          node "$browser_tools/node_modules/playwright/cli.js" install --with-deps chromium 2>&1 | tee "$CM_RECRUITMENT_OUT/chromium.log"
+          python -m pip install fonttools pillow 2>&1 | tee "$CM_RECRUITMENT_OUT/python-tools.log"
+          node scripts/qa/freeKickLab1070.mjs --prefetch-fonts-only 2>&1 | tee "$CM_RECRUITMENT_OUT/font-prefetch.log"
+      - name: Actual two-route SEO build in detached tree
+        env:
+          PRERENDER_ONLY: /club-manager,/whats-new
+        run: |
+          set -euo pipefail
+          cd "$CM_RECRUITMENT_BUILD_ROOT"
+          mkdir -p "$CM_RECRUITMENT_OUT/generation"
+          for route in club-manager whats-new; do cp "public/$route/index.html" "$CM_RECRUITMENT_OUT/generation/$route.before.html"; done
+          cp scripts/data/lastmod.json "$CM_RECRUITMENT_OUT/generation/lastmod.before.json"
+          retain_generation() {
+            git diff -- public scripts/data/lastmod.json > "$CM_RECRUITMENT_OUT/generation/full.diff"
+            for route in club-manager whats-new; do cp "public/$route/index.html" "$CM_RECRUITMENT_OUT/generation/$route.after.html" || true; done
+            cp scripts/data/lastmod.json "$CM_RECRUITMENT_OUT/generation/lastmod.after.json" || true
+          }
+          trap retain_generation EXIT
+          NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" npm run build:seo 2>&1 | tee "$CM_RECRUITMENT_OUT/build.log"
+          find dist -type f -print0 | sort -z | xargs -0 sha256sum > "$CM_RECRUITMENT_OUT/dist.sha256"
+      - name: All fifteen rebuilt-site readers
+        run: |
+          set -euo pipefail
+          cd "$CM_RECRUITMENT_BUILD_ROOT"
+          ONLY=simAdsense,simBrand,simHeadTags,simHiddenPages,simHubs,simIndexNow,simIndexing,simInternalLinks,simNoRivalNames,simPrerender,simPrerenderBoot,simRetiredRoutes,simSchema,simSitemap,simSnapshotAssets NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/runAllSims.mjs --browser 2>&1 | tee "$CM_RECRUITMENT_OUT/readers.log"
+          test "$(grep -c '^All 15 harnesses green\.$' "$CM_RECRUITMENT_OUT/readers.log")" = 1
+      - name: All fifteen unchanged fatal download caps
+        run: |
+          set -euo pipefail
+          cd "$CM_RECRUITMENT_BUILD_ROOT"
+          NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/lib/hostLikeServer.mjs dist 4173 > "$CM_RECRUITMENT_OUT/weight-server.log" 2>&1 &
+          server_pid=$!
+          trap 'kill "$server_pid" 2>/dev/null || true' EXIT
+          for attempt in 1 2 3 4 5; do if curl --fail --silent http://127.0.0.1:4173/ > /dev/null; then break; fi; sleep 1; done
+          curl --fail --silent http://127.0.0.1:4173/ > /dev/null
+          BASE=http://127.0.0.1:4173 SWEEP_OFFLINE=1 NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/sweepWeight.mjs 2>&1 | tee "$CM_RECRUITMENT_OUT/weights.log"
+      - name: Exact built sources and distribution held
+        if: always()
+        run: |
+          set -euo pipefail
+          if test -n "${CM_RECRUITMENT_BUILD_ROOT:-}"; then
+            git -C "$CM_RECRUITMENT_BUILD_ROOT" diff --exit-code HEAD -- src scripts qa .github/workflows docs package.json package-lock.json bun.lock index.html ':!scripts/data/lastmod.json'
+            if test -f "$CM_RECRUITMENT_OUT/dist.sha256"; then (cd "$CM_RECRUITMENT_BUILD_ROOT" && sha256sum --check "$CM_RECRUITMENT_OUT/dist.sha256") > "$CM_RECRUITMENT_OUT/dist-held.log"; fi
+          fi
+      - name: Every tracked canonical source held
+        if: always()
+        run: |
+          set -euo pipefail
+          sha256sum --check "$CM_RECRUITMENT_OUT/tracked-before.sha256" > "$CM_RECRUITMENT_OUT/tracked-held.log"
+          git status --porcelain --untracked-files=no > "$CM_RECRUITMENT_OUT/tracked-status.txt"
+          test ! -s "$CM_RECRUITMENT_OUT/tracked-status.txt"
+          git diff --exit-code HEAD
+      - name: Retain original build evidence including failure
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: cm-recruitment-build-${{ github.run_id }}-${{ github.run_attempt }}
+          path: cm-recruitment-qualification-artifacts/build/
           if-no-files-found: error
           retention-days: 14

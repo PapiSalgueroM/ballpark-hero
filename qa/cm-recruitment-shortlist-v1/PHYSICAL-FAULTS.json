@@ -1,0 +1,117 @@
+{
+  "status": "SOURCE ONLY, all controls runtime UNRUN",
+  "productManifestSha": "282b5cf5bc141fc9be92ab7b6f4178f4aef6bc3d50fe7fe0653c7fb8044e590e",
+  "faults": [
+    {
+      "id": "cap",
+      "path": "src/lib/clubManagerRecruitment.ts",
+      "before": "if (targets.length >= RECRUITMENT_LIMIT) return null;",
+      "after": "if (false) return null;",
+      "test": "src/test/clubManagerRecruitment.test.ts",
+      "target": "admits12 targets in order, rejects the13th and makes a duplicate at capacity a no-op",
+      "healthyTest": "src/test/clubManagerRecruitment.test.ts",
+      "healthy": "reads absent and malformed metadata without changing a byte or consuming a draw",
+      "sourceSha256": "da6727441f25fb38cdfb9915b712c91f976614ca687b658179cdb63bad1ac8e2"
+    },
+    {
+      "id": "era-context",
+      "path": "src/lib/clubManagerRecruitment.ts",
+      "before": " || r.eraId !== context.eraId",
+      "after": "",
+      "test": "src/test/clubManagerRecruitment.test.ts",
+      "target": "rejects each changed club era start-year and seed context including same-club foreign-era data",
+      "healthyTest": "src/test/clubManagerRecruitment.test.ts",
+      "healthy": "an actual keyed target follows its exact key across a club move and reads updated facts",
+      "sourceSha256": "da6727441f25fb38cdfb9915b712c91f976614ca687b658179cdb63bad1ac8e2"
+    },
+    {
+      "id": "key-fallback",
+      "path": "src/lib/clubManagerRecruitment.ts",
+      "before": "? p.worldRosterKey === target.worldRosterKey",
+      "after": "? p.name === target.name",
+      "test": "src/test/clubManagerRecruitment.test.ts",
+      "target": "a missing stable key never falls back to a same-name same-cohort replacement",
+      "healthyTest": "src/test/clubManagerRecruitment.test.ts",
+      "healthy": "legacy matching keeps the original club and game cohort, refuses ambiguity and does not follow namesakes",
+      "sourceSha256": "da6727441f25fb38cdfb9915b712c91f976614ca687b658179cdb63bad1ac8e2"
+    },
+    {
+      "id": "legacy-club",
+      "path": "src/lib/clubManagerRecruitment.ts",
+      "before": "p.club === target.club && ",
+      "after": "",
+      "test": "src/test/clubManagerRecruitment.test.ts",
+      "target": "legacy matching keeps the original club and game cohort, refuses ambiguity and does not follow namesakes",
+      "healthyTest": "src/test/clubManagerRecruitment.test.ts",
+      "healthy": "an actual keyed target follows its exact key across a club move and reads updated facts",
+      "sourceSha256": "da6727441f25fb38cdfb9915b712c91f976614ca687b658179cdb63bad1ac8e2"
+    },
+    {
+      "id": "last-remove",
+      "path": "src/lib/clubManagerRecruitment.ts",
+      "before": "else delete next.recruitment;",
+      "after": "else next.recruitment = { ...r, targets };",
+      "test": "src/test/clubManagerRecruitment.test.ts",
+      "target": "removes an unavailable target and restores exact original bytes after the last removal",
+      "healthyTest": "src/test/clubManagerRecruitment.test.ts",
+      "healthy": "stores only current identity and context while keeping every existing field and all draws",
+      "sourceSha256": "da6727441f25fb38cdfb9915b712c91f976614ca687b658179cdb63bad1ac8e2"
+    },
+    {
+      "id": "persist-before-adopt",
+      "path": "src/hooks/useClubManager.ts",
+      "before": "if (!persist(next)) return false;\n    recruitmentCurrent.current = next;",
+      "after": "persist(next);\n    recruitmentCurrent.current = next;",
+      "test": "src/test/clubManagerRecruitmentHook.test.tsx",
+      "target": "keeps memory, disk and the unmount writer unchanged after both quota attempts refuse",
+      "healthyTest": "src/test/clubManagerRecruitment.test.ts",
+      "healthy": "reads absent and malformed metadata without changing a byte or consuming a draw",
+      "sourceSha256": "dce880b04eb80792eb3ea97354aa5f0d146f89c5280f57055c04dbb1db274b62"
+    },
+    {
+      "id": "committed-phase",
+      "path": "src/hooks/useClubManager.ts",
+      "before": "recruitmentCurrent.current = phase === 'hub' ? career : null;",
+      "after": "recruitmentCurrent.current = career;",
+      "test": "src/test/clubManagerRecruitmentHook.test.tsx",
+      "target": "refuses a retained hub callback after a phase-only move to the managers screen",
+      "healthyTest": "src/test/clubManagerRecruitment.test.ts",
+      "healthy": "reads absent and malformed metadata without changing a byte or consuming a draw",
+      "sourceSha256": "dce880b04eb80792eb3ea97354aa5f0d146f89c5280f57055c04dbb1db274b62"
+    },
+    {
+      "id": "global-draw",
+      "path": "src/hooks/useClubManager.ts",
+      "before": "const now = recruitmentCurrent.current;",
+      "after": "Math.random(); const now = recruitmentCurrent.current;",
+      "test": "src/test/clubManagerRecruitmentHook.test.tsx",
+      "target": "leaves old careers without metadata and refuses null or identity transforms without a write",
+      "healthyTest": "src/test/clubManagerRecruitment.test.ts",
+      "healthy": "reads absent and malformed metadata without changing a byte or consuming a draw",
+      "sourceSha256": "dce880b04eb80792eb3ea97354aa5f0d146f89c5280f57055c04dbb1db274b62"
+    },
+    {
+      "id": "find-write",
+      "path": "src/components/club-manager/RecruitmentBoard.tsx",
+      "before": "if (player && !closed) onFind(player);",
+      "after": "if (player && !closed) { onCommit(current => ({ ...current, budget: current.budget - 1 })); onFind(player); }",
+      "test": "src/test/clubManagerRecruitmentBoard.test.tsx",
+      "target": "Find passes only the current row and makes no write or random draw",
+      "healthyTest": "src/test/clubManagerRecruitment.test.ts",
+      "healthy": "reads absent and malformed metadata without changing a byte or consuming a draw",
+      "sourceSha256": "b07756e6f8ea795e0301f7b58272bc9f0718d1baf9869cf2fd562d069b150f45"
+    },
+    {
+      "id": "current-price",
+      "path": "src/components/club-manager/RecruitmentBoard.tsx",
+      "before": "cash(player.price)",
+      "after": "cash(player.price + 1)",
+      "test": "src/test/clubManagerRecruitmentBoard.test.tsx",
+      "target": "shows the supplied current record, existing primary-position peers and no persisted price",
+      "healthyTest": "src/test/clubManagerRecruitment.test.ts",
+      "healthy": "reads absent and malformed metadata without changing a byte or consuming a draw",
+      "sourceSha256": "b07756e6f8ea795e0301f7b58272bc9f0718d1baf9869cf2fd562d069b150f45"
+    }
+  ],
+  "required": "Physical changed copy with actual SHA/compiled/metafile/raw cause, named target assertion fails, independent healthy case passes, exact same-copy source restoration then all37 pass. Canonical bodies always held. Do not infer effectiveness from these static unique anchors."
+}
