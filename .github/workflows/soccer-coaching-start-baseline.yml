@@ -23,7 +23,7 @@ on:
 permissions:
   contents: read
 concurrency:
-  group: soccer-coaching-start-fixed-${{ github.ref }}
+  group: soccer-coaching-start-fixed-${{ github.ref }}-${{ github.sha }}
   cancel-in-progress: false
 defaults:
   run:
@@ -58,7 +58,7 @@ jobs:
           git archive --format=tar HEAD > "$SC_COACHING_GATE_OUT/source.tar"
           git ls-tree -r HEAD > "$SC_COACHING_GATE_OUT/source-tree.txt"
           git ls-files -z | sort -z | xargs -0 sha256sum > "$SC_COACHING_GATE_OUT/tracked-before.sha256"
-          printf '%s  %s\n' 0a84adfbbb1a2b61538561cbc969b8162569325b0d962601df14f1d46744a5da scripts/qa/soccerCoachingFixedGate.mjs | sha256sum --check
+          printf '%s  %s\n' e451a8bfd734cbfd4ce7ddba1890d9f50dfd6da9de14549675c965edec60569e scripts/qa/soccerCoachingFixedGate.mjs | sha256sum --check
           node scripts/qa/soccerCoachingFixedGate.mjs source 2>&1 | tee "$SC_COACHING_GATE_OUT/source-pins.log"
           echo '127.0.0.1 flawuiqbvjobmkfkauhw.supabase.co' | sudo tee -a /etc/hosts
           npm ci 2>&1 | tee "$SC_COACHING_GATE_OUT/npm-ci.log"
@@ -115,7 +115,7 @@ jobs:
           git archive --format=tar HEAD > "$SC_COACHING_GATE_OUT/source.tar"
           git ls-tree -r HEAD > "$SC_COACHING_GATE_OUT/source-tree.txt"
           git ls-files -z | sort -z | xargs -0 sha256sum > "$SC_COACHING_GATE_OUT/tracked-before.sha256"
-          printf '%s  %s\n' 0a84adfbbb1a2b61538561cbc969b8162569325b0d962601df14f1d46744a5da scripts/qa/soccerCoachingFixedGate.mjs | sha256sum --check
+          printf '%s  %s\n' e451a8bfd734cbfd4ce7ddba1890d9f50dfd6da9de14549675c965edec60569e scripts/qa/soccerCoachingFixedGate.mjs | sha256sum --check
           node scripts/qa/soccerCoachingFixedGate.mjs source 2>&1 | tee "$SC_COACHING_GATE_OUT/source-pins.log"
           echo '127.0.0.1 flawuiqbvjobmkfkauhw.supabase.co' | sudo tee -a /etc/hosts
           npm ci 2>&1 | tee "$SC_COACHING_GATE_OUT/npm-ci.log"
@@ -169,7 +169,7 @@ jobs:
           git archive --format=tar HEAD > "$SC_COACHING_GATE_OUT/source.tar"
           git ls-tree -r HEAD > "$SC_COACHING_GATE_OUT/source-tree.txt"
           git ls-files -z | sort -z | xargs -0 sha256sum > "$SC_COACHING_GATE_OUT/tracked-before.sha256"
-          printf '%s  %s\n' 0a84adfbbb1a2b61538561cbc969b8162569325b0d962601df14f1d46744a5da scripts/qa/soccerCoachingFixedGate.mjs | sha256sum --check
+          printf '%s  %s\n' e451a8bfd734cbfd4ce7ddba1890d9f50dfd6da9de14549675c965edec60569e scripts/qa/soccerCoachingFixedGate.mjs | sha256sum --check
           node scripts/qa/soccerCoachingFixedGate.mjs source 2>&1 | tee "$SC_COACHING_GATE_OUT/source-pins.log"
           echo '127.0.0.1 flawuiqbvjobmkfkauhw.supabase.co' | sudo tee -a /etc/hosts
           npm ci 2>&1 | tee "$SC_COACHING_GATE_OUT/npm-ci.log"
