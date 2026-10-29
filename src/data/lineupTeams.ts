@@ -93,6 +93,24 @@ export const CLUB_TABLE_NAMES: Record<string, string[]> = {
   'Galatasaray': ['Galatasaray'],
 };
 
+/**
+ * Release BT: clubs the Club year draft never deals, in the draw or a reroll.
+ *
+ * The stored name "Arsenal FC" also holds the men of the Argentine club
+ * Arsenal de Sarandi (offline pulls of player_market_values: 10 of 36 rows in
+ * 2010, 12 of 36 in 2011, 8 of 30 in 2015, 4 of 29 in 2016, 2 in 2020, 1 in
+ * 2021; for example Cristian Campestrini and Ivan Marcone). The Club year
+ * draft lists a club's records for a year unprompted, so it would offer them
+ * as Arsenal's squad. A nationality filter cannot split them (Emiliano
+ * Martinez is Argentine and was Arsenal's), so Arsenal stays out of the Club
+ * year draft until the table itself is split. Mixed still deals Arsenal: it
+ * lists nobody unprompted, and the shared table is a data job, not this list's.
+ */
+export const CLUB_YEAR_WITHHELD: ReadonlySet<string> = new Set(['Arsenal']);
+
+/** The clubs a Club year draft deals from. */
+export const clubYearClubs: string[] = clubs.filter((name) => !CLUB_YEAR_WITHHELD.has(name));
+
 /** The exact stored club names for a club label, for an `in` filter. */
 export function clubTableNames(clubName: string): string[] {
   return CLUB_TABLE_NAMES[clubName] ?? [clubName];
