@@ -19,6 +19,12 @@ import { build } from 'esbuild';
 
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..', '..');
 export const BASE = '1229c0190';
+/* fix-1567 (review-read-1567 minor 6): the round's new boards are the three files at the round's own data commit,
+   not at whatever head this runs on, so the next round that edits one of the files does not turn this check, the
+   rehearsal or the checksummed writer red (Round 1558's rehearsal had to be repointed for exactly that). The files
+   have not changed since this commit on the round's branch; merge the branch, never squash it, or the commit is
+   lost. A later edit of the files is that round's own migration. */
+export const ROUND_FILES = 'e61011096f352f2ba5e6c2853794a038c74e3a15';
 export const MIGRATION = 'supabase/migrations/20261029120000_round_1567_us_connections_gray.sql';
 const SEED = 'supabase/migrations/20260526000007_baseball_connections_puzzles.sql';
 export const SPORTS = { baseball: ['baseballConnectionsPuzzles', 'baseball_connections_puzzles'], nfl: ['nflConnectionsPuzzles', 'nfl_connections_puzzles'], nhl: ['nhlConnectionsPuzzles', 'nhl_connections_puzzles'] };
@@ -64,7 +70,7 @@ const lit = v => `'${JSON.stringify(v).replace(DASHES, c => `\\u${c.charCodeAt(0
 
 /** Every rewritten row: { sport: [{ id, olds: [groups], next: groups }] }. */
 export async function plan() {
-  const [base, head] = [await boardsAt(BASE), await boardsAt(null)];
+  const [base, head] = [await boardsAt(BASE), await boardsAt(ROUND_FILES)];
   const seed = seedBoards();
   const out = {};
   for (const s of Object.keys(SPORTS)) {
@@ -174,7 +180,8 @@ if (step === 'write' || step === 'check') {
     console.log(`wrote ${MIGRATION}: ${Object.entries(p).map(([s, r]) => `${s} ${r.length} boards (${r.reduce((t, x) => t + x.olds.length, 0)} old values)`).join(', ')}`);
   } else {
     const have = fs.existsSync(file) ? fs.readFileSync(file, 'utf8').replace(/\r\n/g, '\n') : '';
-    if (have !== text) { console.error(`${MIGRATION} is not what the files at ${BASE} and now give: run write`); process.exit(1); }
+    if (have !== text) { console.error(`${MIGRATION} is not what the files at ${BASE} and ${ROUND_FILES.slice(0, 9)} give: run write`); process.exit(1); }
     console.log(`${MIGRATION} matches the files`);
+    if (!same(await boardsAt(null), await boardsAt(ROUND_FILES))) console.log(`note: the three files have changed since ${ROUND_FILES.slice(0, 9)}; the migration stays the round's, and the change is a later round's to migrate`);
   }
 }

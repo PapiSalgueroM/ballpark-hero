@@ -32,7 +32,7 @@
 import fs from 'node:fs';
 import path from 'node:path';
 import { fileURLToPath, pathToFileURL } from 'node:url';
-import { plan, boardsAt, seedBoards, migrationText, same, SPORTS, MIGRATION as MIGRATION_PATH, BASE } from './usConnections1567Migration.mjs';
+import { plan, boardsAt, seedBoards, migrationText, same, SPORTS, MIGRATION as MIGRATION_PATH, BASE, ROUND_FILES } from './usConnections1567Migration.mjs';
 import { checksummedSql, payloadFrom } from './usConnections1567Checksummed.mjs';
 
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..', '..');
@@ -81,7 +81,7 @@ for (const line of MIGRATION.split('\n')) {
 }
 const ids = s => [...new Set(rows[s].map(r => r.id))];
 const p = await plan();
-const head = await boardsAt(null);
+const head = await boardsAt(ROUND_FILES); /* fix-1567: the round's boards, not whatever head this runs on */
 const base = await boardsAt(BASE);
 const seed = seedBoards();
 
