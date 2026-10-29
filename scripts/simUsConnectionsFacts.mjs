@@ -61,7 +61,8 @@
  *      the export plus recorded decisions: each board valid, its colours in the
  *      exported order, every group decided exactly once in the ledger's
  *      tableDecisions (RECORD, LIST, PERMAN or REBUILD, from the exported label
- *      to the label now), none dangling, PER MAN only for a label on one board
+ *      to the label now), none dangling, PER MAN only for a label on one board;
+ *      and (fix-1574) every row the table file decides is in TABLE_RANGE
  *  10) (Round 1574) every criterion kind on a board says how it ages
  *      (usConnectionsCheck.mjs AGES, a list its own age) and a running kind is
  *      one the sport's watch() handles (WATCHED); section 8 dates every 'move'
@@ -104,7 +105,9 @@
  *                             season makes him unknown (must raise: member-unknown, for baseball)
  *   US_CONN_CONTROL=futuredate nflconn-004's Steelers dated (as of 2030) (must raise: date-open, for it)
  *   US_CONN_CONTROL=grayonehost the first baseball gray pair keeps one host (must raise: gray-one-host, for it)
- *   Round 1574, the table rows (each puts nhl in TABLE_RANGE in memory if the file does not already):
+ *   Round 1574, the table rows (fix-1574: each refuses, exit 2, when TABLE_RANGE does not hold nhl):
+ *   US_CONN_CONTROL=rangedrop  fix-1574: nhl dropped from TABLE_RANGE in memory while its table file decides
+ *                             rows (unranged, nhl)
  *   US_CONN_CONTROL=tablemiss  the NHL table file read as empty while TABLE_RANGE holds nhl (tablemiss, nhl)
  *   US_CONN_CONTROL=ages       the AGES entry of a kind used on an NHL table board removed (ages, that kind)
  *   US_CONN_CONTROL=newrunning a running kind taught to AGES and put on an NHL table board, with no watch
@@ -135,7 +138,7 @@ import { fileURLToPath, pathToFileURL } from 'node:url';
 import { build } from 'esbuild';
 import { crossCheckBoards, findingKey } from './lib/connectionsCrossCheck.mjs';
 import { makeUsChecker, fold, AGES } from './lib/usConnectionsCheck.mjs';
-import { TABLE_RANGE, tableBoards, tableRows } from './lib/usConnectionsTables.mjs';
+import { TABLE_RANGE, tableBoards, tableRows, inRange } from './lib/usConnectionsTables.mjs';
 
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const R = ROOT.replaceAll('\\', '/');
@@ -152,10 +155,13 @@ for (const s of REPORT) if (!SPORTS.includes(s)) { console.error(`US_CONN_TABLES
 if (REPORT.size && CONTROL) { console.error('US_CONN_TABLES is a report, never a control run'); process.exit(2); }
 const STRICT = new Set((process.env.US_CONN_LIVE_STRICT ?? '').split(',').filter(Boolean));
 const DUMP = process.env.US_CONN_DUMP ?? '';
-/* the Round 1574 controls work on the NHL table rows: before a round puts nhl in TABLE_RANGE, they put it there in
-   memory for their own run */
+/* the Round 1574 controls work on the NHL table rows, which TABLE_RANGE holds since that round; fix-1574: with nhl
+   dropped from it they refuse (exit 2) rather than put it back in memory, and the plain run fails unranged */
 const TABLE_CONTROLS = ['tablemiss', 'ages', 'newrunning', 'decisionless', 'recolour', 'dangling', 'permantwice', 'listonehost', 'nofact', 'stamkos', 'watchline'];
-if (TABLE_CONTROLS.includes(CONTROL) && !TABLE_RANGE.nhl) { TABLE_RANGE.nhl = 'all'; console.log(`US_CONN_CONTROL=${CONTROL}: TABLE_RANGE holds nhl in memory for this run`); }
+if (TABLE_CONTROLS.includes(CONTROL) && !TABLE_RANGE.nhl) { console.error(`US_CONN_CONTROL=${CONTROL} ABORTED: TABLE_RANGE does not hold nhl, so the NHL table rows are checked by nothing (the plain run fails unranged); this control will not put it back in memory`); process.exit(2); }
+/* fix-1574 (review-run-1574 finding 3): US_CONN_CONTROL=rangedrop drops nhl from TABLE_RANGE in memory */
+const rangeDropped = CONTROL === 'rangedrop' && !!TABLE_RANGE.nhl;
+if (rangeDropped) { delete TABLE_RANGE.nhl; console.log('US_CONN_CONTROL=rangedrop: TABLE_RANGE loses nhl in memory for this run'); }
 /* Round 1567: a club group dated against trades ("Played for the Steelers (as of 2025)") is the same claim as the
    undated one for every man whose seasons there all came before the date, which section 4 checks against the
    record; the ledgers name such groups and facts by the undated label, and a refuted claim stays refuted dated */
@@ -374,6 +380,11 @@ if (CONTROL) {
       g.theme = 'Played in Japan before MLB';
       changed = true;
       own = { kinds: ['unjudged'], subject: 'Played in Japan before MLB' };
+    }
+  } else if (CONTROL === 'rangedrop') {
+    if (rangeDropped) {
+      changed = true;
+      own = { kinds: ['unranged'], subject: 'nhl' };
     }
   } else if (TABLE_CONTROLS.includes(CONTROL)) {
     /* Round 1574: the controls on the NHL table rows */
@@ -739,6 +750,16 @@ console.log('9) the table rows are the export plus recorded decisions');
 /* Round 1574: a table row reaches the live table only through a round's migration, written from the table file;
    so its board must be a valid board in the exported colours, and every group must say how it was decided */
 const WAYS = ['RECORD', 'LIST', 'PERMAN', 'REBUILD'];
+/* fix-1574 (review-run-1574 finding 3): a row the table file decides (a tableDecisions line, or a board that is not
+   its export) reaches the live table through a migration, so TABLE_RANGE must hold it; a sport dropped from
+   TABLE_RANGE (a Round 1580 "{ nfl: 'all' }" written over nhl, say) is a failure, never silence */
+for (const s of SPORTS) {
+  if (live.has(s)) continue;
+  const decided = new Set([...(ledgerOf(s).tableDecisions ?? []).map(d => d.id), ...tableRows(ROOT, s).filter(r => JSON.stringify(r.exported) !== JSON.stringify(r.board)).map(r => r.puzzle_id)]);
+  const out = [...decided].filter(id => !inRange(TABLE_RANGE[s], id));
+  for (const id of out) { fire('unranged', s); fail(`${s} ${id}: the table file decides this row and TABLE_RANGE does not hold it, so no section checks it before its migration`); }
+  if (decided.size) console.log(`   ${s}: ${decided.size} decided table rows, ${decided.size - out.length} of them in TABLE_RANGE`);
+}
 for (const s of SPORTS) {
   if (!tables.has(s) || live.has(s)) continue;
   const held = boards[s].filter(b => !fileIds[s].has(b.id));
