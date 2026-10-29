@@ -1,0 +1,9 @@
+control none rows served 10082 pool 500 seasonStats men 500
+tile "10+ goals in under 30 season matches" support 28 MIN_TILE_SUPPORT 8 satisfiers 28
+Cole Palmer: pool age 23 value 119000000; tile accepts = true; passing stat lines [{"goals":17,"assists":9,"matches":28,"yellowCards":3,"redCards":0}]
+Curtis Jones: pool age 24 value 38000000; tile accepts = true; passing stat lines [{"goals":17,"assists":6,"matches":29,"yellowCards":2,"redCards":0}]
+Folarin Balogun: pool age 24 value 32000000; tile accepts = true; passing stat lines [{"goals":13,"assists":3,"matches":24,"yellowCards":0,"redCards":0},{"goals":20,"assists":4,"matches":26,"yellowCards":4,"redCards":0}]
+Endrick: pool age 19 value 38000000; tile accepts = true; passing stat lines [{"goals":12,"assists":1,"matches":21,"yellowCards":3,"redCards":0}]
+Moise Kean: pool age 25 value 43000000; tile accepts = true; passing stat lines [{"goals":10,"assists":3,"matches":28,"yellowCards":7,"redCards":0}]
+Erling Haaland: pool age 25 value 216000000; tile accepts = true; passing stat lines [{"goals":29,"assists":7,"matches":27,"yellowCards":3,"redCards":0}]
+satisfiers whose only passing rows are at age 19 or under: 15 of 28

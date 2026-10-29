@@ -1,0 +1,4 @@
+head exit=0 0s | 1096-      test: (p, d) => anySeasonMatches(d, p, s => (s.goals ?? 0) >= 10 && s.matches != null && s.matches > 0 && s.matches < 30),
+probe exit=0 0s | satisfiers whose only passing rows are at age 19 or under: 15 of 28
+probe-satisfiers exit=0 0s | satisfiers whose only passing rows are at age 19 or under: 15 of 28
+control-noyouth exit=0 0s | Erling Haaland: pool age 25 value 216000000; tile accepts = false; passing stat lines []

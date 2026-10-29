@@ -1,0 +1,4 @@
+head: git log --oneline -1 && grep -n "season-goals-10-under-30-matches" -A 2 src/lib/playerBingo.ts
+probe: node .rc/x/probeBSmix2.mjs . | grep -v "^  satisfier"
+probe-satisfiers: node .rc/x/probeBSmix2.mjs . | grep "satisfier"
+control-noyouth: node .rc/x/probeBSmix2.mjs . noyouth | head -8

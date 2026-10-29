@@ -1,0 +1,4 @@
+1f45d98356 rc request vfbs-bsmix2 for fb42ded0a7eccb3efab00a961cbf366089788fa0
+1094:      id: 'season-goals-10-under-30-matches', kind: 'season-stat', group: 'season-goals',
+1095-      label: '10+ goals in under 30 season matches', icon: '🥅',
+1096-      test: (p, d) => anySeasonMatches(d, p, s => (s.goals ?? 0) >= 10 && s.matches != null && s.matches > 0 && s.matches < 30),
