@@ -1,0 +1,11 @@
+reh exit=0 16s | rehearseUsConnections1574: green. Both forms land the 16 NHL table boards in place, a drifted row is left alone or stops the step, a tampered payload is refused, the tabl
+reh-noguard exit=1 5s | rehearseUsConnections1574 control noguard: FIRED, caught by check B (2 failures; checks A, B)
+reh-drift exit=1 5s | rehearseUsConnections1574 control drift: FIRED, caught by check 0 (3 failures; checks 0, A, G)
+reh-tamper exit=1 5s | rehearseUsConnections1574 control tamper: FIRED, caught by check D (2 failures; checks D)
+reh-nohash exit=1 5s | rehearseUsConnections1574 control nohash: FIRED, caught by check E (2 failures; checks E)
+reh-dupname exit=1 5s | rehearseUsConnections1574 control dupname: FIRED, caught by check H (1 failure; checks H)
+reh1567 exit=0 17s | rehearseUsConnections1567: green. Both forms land the 39 boards in place, a drifted row is left alone or stops the step, a tampered payload is refused, and a second run i
+mut-label-60 exit=0 0s | US_CONN_CONTROL=watchline60 did NOT fire its own rule (watch-line x0 for John Tavares); the 1 other failures do not count for it (findings: watch-line 1). This control pr
+mut-label-70 exit=1 0s | US_CONN_CONTROL=watchline fired its own rule 1 time(s): watch-line x1 for Auston Matthews (all findings: watch-line 2; 2 failures in all)
+mut-staleplan exit=1 0s | supabase/migrations/20261030150000_round_1574_nhl_connections_tables.sql is not what the table file at 058ac18f7b890a1c01fdf640e60577c52af75267 gives: run write
+after exit=0 0s | simUsConnectionsFacts: green. Every Baseball, NFL and NHL Connections group is held to the record, and no board has a second right answer the record can see (other tiles 

@@ -1,0 +1,12 @@
+#!serial
+reh: npm install --prefix /tmp/pgl @electric-sql/pglite --silent --no-audit --no-fund && PGLITE_DIR=/tmp/pgl node scripts/qa/rehearseUsConnections1574.mjs
+reh-noguard: PGLITE_DIR=/tmp/pgl REHEARSE_CONTROL=noguard node scripts/qa/rehearseUsConnections1574.mjs
+reh-drift: PGLITE_DIR=/tmp/pgl REHEARSE_CONTROL=drift node scripts/qa/rehearseUsConnections1574.mjs
+reh-tamper: PGLITE_DIR=/tmp/pgl REHEARSE_CONTROL=tamper node scripts/qa/rehearseUsConnections1574.mjs
+reh-nohash: PGLITE_DIR=/tmp/pgl REHEARSE_CONTROL=nohash node scripts/qa/rehearseUsConnections1574.mjs
+reh-dupname: PGLITE_DIR=/tmp/pgl REHEARSE_CONTROL=dupname node scripts/qa/rehearseUsConnections1574.mjs
+reh1567: PGLITE_DIR=/tmp/pgl node scripts/qa/rehearseUsConnections1567.mjs
+mut-label-60: node .rc/x/mut-label.mjs && US_CONN_CONTROL=watchline60 node scripts/simUsConnectionsFacts.mjs; s=$?; git checkout -- scripts; exit $s
+mut-label-70: node .rc/x/mut-label.mjs && US_CONN_CONTROL=watchline node scripts/simUsConnectionsFacts.mjs; s=$?; git checkout -- scripts; exit $s
+mut-staleplan: R1574_ROUND_FILES=058ac18f7b890a1c01fdf640e60577c52af75267 node scripts/qa/usConnections1574Migration.mjs check
+after: node scripts/simUsConnectionsFacts.mjs
