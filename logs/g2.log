@@ -1,0 +1,22 @@
+Network mode: offline, loopback only, no production probe or database retries.
+Running 15 node harnesses
+  PASS  simCareerInbox.mjs              3.9s
+  PASS  simCareerRealism.mjs            9.0s
+  PASS  simMlbCareer.mjs               26.6s
+  PASS  simNbaAwardsSense.mjs         121.6s
+  PASS  simNbaCareer.mjs               23.1s
+  PASS  simNflCareer.mjs                2.5s
+  FAIL  simNflCoachStaffRecovery.mjs    0.8s
+  PASS  simNflTruth.mjs                63.2s
+  PASS  simNhlCareer.mjs               22.4s
+  PASS  simNoDoubleRecord.mjs          37.1s
+  PASS  simSeasonReveal.mjs             0.5s
+  PASS  simUsCareerActionConfirm.mjs    6.7s
+  PASS  simUsCareerPractice.mjs        15.7s
+  PASS  simUsCareerRecovery.mjs         3.9s
+  PASS  simUsCareerWeight.mjs           0.3s
+
+----- simNflCoachStaffRecovery.mjs (FAIL) -----
+AssertionError [ERR_ASSERTION]: Frozen whole source: src/components/us-career/UsCareerBoard.tsx
+
+1 harness not green.
