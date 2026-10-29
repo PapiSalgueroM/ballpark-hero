@@ -1,0 +1,167 @@
+chainBase: src/lib/awardDraw.ts
+chainBase: src/lib/brokenSaveRecovery.ts
+chainBase: src/lib/careerAwards.ts
+chainBase: src/lib/careerDirtyMoney.ts
+chainBase: src/lib/careerDirtyMoneyDesk.ts
+chainBase: src/lib/careerForm.ts
+chainBase: src/lib/careerPreDraft.ts
+chainBase: src/lib/cbbDynasty.ts
+chainBase: src/lib/cfbDynasty.ts
+chainBase: src/lib/cfbSeatBind.ts
+chainBase: src/lib/champOrNot.ts
+chainBase: src/lib/clearWinner.ts
+chainBase: src/lib/clubDetailFixtures.ts
+chainBase: src/lib/clubManager.ts
+chainBase: src/lib/clubManagerBoardAsks.ts
+chainBase: src/lib/clubManagerBoardVerdict.ts
+chainBase: src/lib/clubManagerCalendar.ts
+chainBase: src/lib/clubManagerCarry.ts
+chainBase: src/lib/clubManagerDifficulty.ts
+chainBase: src/lib/clubManagerEras.ts
+chainBase: src/lib/clubManagerFinances.ts
+chainBase: src/lib/clubManagerLoanDevelopment.ts
+chainBase: src/lib/clubManagerLoanPlan.ts
+chainBase: src/lib/clubManagerMadeUpNations.ts
+chainBase: src/lib/clubManagerMeters.ts
+chainBase: src/lib/clubManagerRecords.ts
+chainBase: src/lib/clubManagerRecruitment.ts
+chainBase: src/lib/clubManagerRetire.ts
+chainBase: src/lib/clubManagerSlots.ts
+chainBase: src/lib/clubManagerStart.ts
+chainBase: src/lib/clubManagerTactics.ts
+chainBase: src/lib/clubManagerTacticsCore.ts
+chainBase: src/lib/clubManagerUclGroups.ts
+chainBase: src/lib/clubManagerWorldRoster.ts
+chainBase: src/lib/clubManagerWorldView.ts
+chainBase: src/lib/cmMatchDisplay.ts
+chainBase: src/lib/cmSavePoints.ts
+chainBase: src/lib/cmSavePointsStore.ts
+chainBase: src/lib/collegeProgram.ts
+chainBase: src/lib/collegeSeat.ts
+chainBase: src/lib/conquestMarket.ts
+chainBase: src/lib/consentPreferences.ts
+chainBase: src/lib/consentedScripts.ts
+chainBase: src/lib/dateUtils.ts
+chainBase: src/lib/deadlineDay.ts
+chainBase: src/lib/euroAccess.ts
+chainBase: src/lib/faceOff.ts
+chainBase: src/lib/fightCareer.ts
+chainBase: src/lib/fightCareerLifeFlow.ts
+chainBase: src/lib/fightGym.ts
+chainBase: src/lib/fightPromoter.ts
+chainBase: src/lib/foSeasonClose.ts
+chainBase: src/lib/freeKick.ts
+chainBase: src/lib/freshBuild.ts
+chainBase: src/lib/frontOffice.ts
+chainBase: src/lib/gameLaws/nfl.ts
+chainBase: src/lib/gameLaws/nflDrives.ts
+chainBase: src/lib/gameLaws/nflGameDay.ts
+chainBase: src/lib/gmCareerFace.ts
+chainBase: src/lib/gmContractRules.ts
+chainBase: src/lib/gmContracts.ts
+chainBase: src/lib/gmContractsHostNba.ts
+chainBase: src/lib/gmDeskHost.ts
+chainBase: src/lib/gmDeskHostNfl.ts
+chainBase: src/lib/gmEarnedDraft.ts
+chainBase: src/lib/gmGameDay.ts
+chainBase: src/lib/gmGameDayView.ts
+chainBase: src/lib/gmGameLog.ts
+chainBase: src/lib/gmGameScore.ts
+chainBase: src/lib/gmInbox.ts
+chainBase: src/lib/gmSeat.ts
+chainBase: src/lib/gmSeatRecord.ts
+chainBase: src/lib/hallOfChampions.ts
+chainBase: src/lib/listQuiz.ts
+chainBase: src/lib/managerDifficulty.ts
+chainBase: src/lib/managerHotSeat.ts
+chainBase: src/lib/mlbCareerCorruption.ts
+chainBase: src/lib/mlbMyCareer.ts
+chainBase: src/lib/nbaCareerCorruption.ts
+chainBase: src/lib/nbaEarnedDraft.ts
+chainBase: src/lib/nbaFrontOffice.ts
+chainBase: src/lib/nbaGmDesk.ts
+chainBase: src/lib/nbaMyCareer.ts
+chainBase: src/lib/nbaStartingFiveScore.ts
+chainBase: src/lib/nflCareerCorruption.ts
+chainBase: src/lib/nflGmCareer.ts
+chainBase: src/lib/nflGmDesk.ts
+chainBase: src/lib/nflMyCareer.ts
+chainBase: src/lib/nflSeasonAwards.ts
+chainBase: src/lib/nflSeasonStats.ts
+chainBase: src/lib/nflSeasonView.ts
+chainBase: src/lib/nhlCareerCorruption.ts
+chainBase: src/lib/nhlMyCareer.ts
+chainBase: src/lib/orderTheList.ts
+chainBase: src/lib/pageSchema.ts
+chainBase: src/lib/playerBingo.ts
+chainBase: src/lib/records.ts
+chainBase: src/lib/saveKeeper.ts
+chainBase: src/lib/season/historicalOpponentLabels.ts
+chainBase: src/lib/season/nba.ts
+chainBase: src/lib/seasonCalendar.ts
+chainBase: src/lib/soccerCareerAppearance.ts
+chainBase: src/lib/soccerCareerCoachingStart.ts
+chainBase: src/lib/soccerCareerContracts.ts
+chainBase: src/lib/soccerCareerEngine.ts
+chainBase: src/lib/soccerCareerLeague.ts
+chainBase: src/lib/soccerCareerLife.ts
+chainBase: src/lib/soccerCareerLifeConsequences.ts
+chainBase: src/lib/soccerCareerLoyalty.ts
+chainBase: src/lib/soccerCareerManagerJobReview.ts
+chainBase: src/lib/soccerCareerOwner.ts
+chainBase: src/lib/soccerCareerProgramme.ts
+chainBase: src/lib/soccerCareerRealismA.ts
+chainBase: src/lib/soccerCareerRetirementReason.ts
+chainBase: src/lib/soccerCareerRoutineEvents.ts
+chainBase: src/lib/soccerClubSquad.ts
+chainBase: src/lib/soccerClubSquadSheet.ts
+chainBase: src/lib/soccerDeck.ts
+chainBase: src/lib/soccerDeckGate.ts
+chainBase: src/lib/soccerOfferReview.ts
+chainBase: src/lib/soccerOwnerGate.ts
+chainBase: src/lib/soccerPhone.ts
+chainBase: src/lib/soccerSeasonAwards.ts
+chainBase: src/lib/soccerWorldTruth.ts
+chainBase: src/lib/sportHub.ts
+chainBase: src/lib/stadiumTycoon.ts
+chainBase: src/lib/triviaQuestionBank.ts
+chainBase: src/lib/uclFormatHistoryEngine.ts
+chainBase: src/lib/usCareerAnnualBenefits.ts
+chainBase: src/lib/usCoachCareer.ts
+chainBase: src/lib/usCoachRetirement.ts
+chainBase: src/lib/whodTheyBeat.ts
+chainBase: src/lib/wonderkidFactory.ts
+chainBase: src/lib/worldCompetition.ts
+chainBase: src/lib/worldNights.ts
+chainBase: src/lib/worldOneOffs.ts
+chainBase: src/lib/worldXi.ts
+chainBase: 137 file(s) from HEAD into /tmp/base1
+chainBase: added data src/data/careerHistoricalOpponentDisplay.ts
+chainBase: added data src/data/cmOneOffRows.ts
+chainBase: added data src/data/collegeRivalries.ts
+chainBase: added data src/data/marketNamesakes.json
+chainBase: added data src/data/soccerDeck/index.ts
+chainBase: added data src/data/soccerDeck/starter.ts
+chainBase: added data src/data/soccerDeck/words.ts
+chainBase: 7 added data file(s) from HEAD into /tmp/base1
+tabs: two tabs on one career, and a Hot Seat handover beside one
+  B1 start: Brighton week 1, 1 meetings, last Aston Villa 2-3
+     after B played three: Brighton week 5, 4 meetings, last Coventry City 0-0
+     after A left: Brighton week 5, 4 meetings, last Coventry City 0-0 (A saw the move: true, its leave write landed: false)
+  REPLAY 0: B wrote "Brighton week 6, 5 meetings, last Arsenal 1-1", stale A played "Brighton week 6, 5 meetings, last Arsenal 1-1", on disk after A: "Brighton week 6, 5 meetings, last Arsenal 1-1" (A refused 2 times)
+  REPLAY 1: B wrote "Brighton week 7, 6 meetings, last Sunderland 2-2", stale A played "Brighton week 7, 6 meetings, last Sunderland 0-1", on disk after A: "Brighton week 7, 6 meetings, last Sunderland 2-2" (A refused 2 times)
+  REPLAY 2: B wrote "Brighton week 9, 7 meetings, last Crystal Palace 2-1", stale A played "Brighton week 9, 7 meetings, last Crystal Palace 3-0", on disk after A: "Brighton week 9, 7 meetings, last Crystal Palace 2-1" (A refused 2 times)
+  HOT SEAT: Arsenal handed over (saved): "Arsenal week 26, 26 meetings, last Hull City 2-0"; tab A saw it: true; after A left: "Arsenal week 26, 26 meetings, last Hull City 2-0"
+source: every call in src that writes the Club Manager save or the Soccer Career save is fenced or allowed
+  Soccer Career: the restoredSave initialiser starts with saveFence.adopt(SAVE_KEY);; 1 read(s) after it; 1 adopt call(s) in the page
+  97 files write storage; 6 writes of the save inside saveFence.write, 4 on the allowed list (3 entries, each still there)
+  Soccer Career: 3 writes of soccerCareerSave inside saveFence.write, 4 on the allowed list (3 entries, each still there)
+fleet: 4 careers x seeds 0,1,2,3,4 x 2 seasons, a save, a load and a save after every entry, against FENCE_BASE /tmp/base1
+  1919 saves on head, 0 of them in a state a load repair fires on; 1919 faces equal to the base commit's (both saves' bytes and the draw count)
+  squeezed career: 455 saves the engine wrote with fewer than 14 men (seed:saves 0:92 1:92 2:87 3:92 4:92)
+  negative budget: saved at -2.5, opened on head at -2.5 with 0 draws, the same JSON as the base's
+  old saves: 4 of 4 Club Manager saves the base engine wrote open to the same JSON on head and base
+  section tabs: 15 checks, 0 red
+  section source: 18 checks, 0 red
+  section fleet: 1926 checks, 0 red
+simSaveFence: all green (tabs, source, fleet)
