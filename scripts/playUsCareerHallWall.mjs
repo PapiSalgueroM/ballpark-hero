@@ -160,7 +160,12 @@ async function journeyA(browser, sport, size) {
     const retired = JSON.parse(await page.evaluate(k => localStorage.getItem(k), sport.saveKey)).c;
     const headline = M.hallHeadline(M.hallRecordFor(sport.hall, retired), sport.hall.rules);
     await page.waitForFunction(h => [...document.querySelectorAll('h3')].some(x => x.textContent === h), headline);
-    if (CONTROL) proof.nowall += await page.evaluate(() => window.__wallRefused || 0);
+    /* The wall's rules load after the retirement (the lazy fallback of r1570-s5a), so the plaque goes up a moment
+       later: wait for it (or, under the control, for its refused write) before the prompt is read. */
+    if (CONTROL) {
+      await page.waitForFunction(() => (window.__wallRefused || 0) > 0);
+      proof.nowall += await page.evaluate(() => window.__wallRefused || 0);
+    } else await page.waitForFunction(k => !!localStorage.getItem(k), M.hallWallKey(sport.slug));
     await tap(size, page.locator('[data-career-start-over] button'));
     const words = await page.getByRole('alertdialog').innerText();
     sayAt(size, words.includes('The Hall of Fame card stays on your Hall wall.'), `${id}: Start over says the card stays on the Hall wall`, true);

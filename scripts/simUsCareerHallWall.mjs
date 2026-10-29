@@ -18,7 +18,8 @@
  *      missed the Hall comes down; the oldest Hall of Famer only when all 12 up are Hall of Famers), the keyed
  *      upsert (the same plaque is the same list, a changed record replaces it where it hangs), the worst case
  *      size, a newer version left alone, a bad or foreign plaque dropped alone, every clamp above every real
- *      string, and the weight fence: the module is loaded eagerly on all four routes, so it may import no sport
+ *      string, and the weight fence: any of the four routes loads the module (and the board loads its key file,
+ *      usCareerHallWallKey.ts, on the first frame), so neither may import a sport
  *      (scripts/lib/usCareerFiles.mjs weightProblemsIn; a planted sport import must be found on every run).
  *
  * Controls (SIM_HALL_WALL_CONTROL), each must turn its own check red:
@@ -372,9 +373,10 @@ for (const k of Object.keys(longest)) {
   ok('s3.clamps', longest[k] > 0 || k === 'eraId', `${k}: no real string was seen`);
   ok('s3.clamps', longest[k] * 1.25 <= CL[k], `${k}: the longest real string ${longest[k]} has under a quarter of room below its clamp ${CL[k]}`);
 }
-// The weight fence: the board loads this module on all four routes, so it may import no sport.
+// The weight fence: any US career route may load this module and every one loads the key file, so neither may import a sport.
 {
-  const found = weightProblemsIn(MODULE, controlled, null);
+  const KEY_FILE = 'src/lib/usCareerHallWallKey.ts';
+  const found = [...weightProblemsIn(MODULE, controlled, null), ...weightProblemsIn(KEY_FILE, readFileSync(path.join(ROOT, KEY_FILE), 'utf8'), null)];
   ok('s3.weight', found.length === 0, () => found.join('; '));
   const planted = weightProblemsIn(MODULE, source.replace("import type { UsCareerCore } from '@/lib/usCareerSport';\n", `import type { UsCareerCore } from '@/lib/usCareerSport';\n${PLANT}`), null);
   ok('s3.fence', planted.length === 1 && /NBA code/.test(planted[0]), `the fence did not name a planted NBA import: ${JSON.stringify(planted)}`);

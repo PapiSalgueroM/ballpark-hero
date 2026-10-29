@@ -81,9 +81,12 @@ import { answerTalk, endsAfterSeason, manualRetire, pendingTalk, repairHallOnLoa
 import { stampOnRetirement } from '@/lib/usCareerRetirementFlow';
 import { isFarewellSeason, type RetirementChoiceId } from '@/lib/careerRetirement';
 import { hallRecordFor, type HallSpeechId } from '@/lib/careerHallOfFame';
-/* Round 1570: the Hall wall's rules load with the board (the prompt's words need them on the first frame);
-   the wall screen itself is lazy. The module imports no sport (simUsCareerHallWall section 3). */
-import { addToWall, hallWallEntry, hallWallKey, sanitizeHallWall, wallKeyOf, type HallWall } from '@/lib/usCareerHallWall';
+/* Round 1570: the Hall wall. Only its two keys load with the board; the rules (src/lib/usCareerHallWall.ts) load
+   when there is a wall to read or a retired career to put up, and the wall screen when it is opened. Loaded with
+   the board the rules cost every US career route 2.02K (r1570-s5a, one runner), over the lead's 2K line. Neither
+   file imports a sport (simUsCareerHallWall section 3). */
+import { hallWallKey, wallKeyOf } from '@/lib/usCareerHallWallKey';
+import type { HallWall } from '@/lib/usCareerHallWall';
 import { DIRTY_SENTENCE_NO_WASHERS, canDealWithDirtyMoney, washersLeft } from '@/lib/careerDirtyMoney';
 
 const UsCareerPractice = lazy(() => import('@/components/us-career/UsCareerPractice'));
@@ -343,7 +346,13 @@ export default function UsCareerBoard({ sport }: { sport: UsCareerSport }) {
     if (!sport.hall) return;
     try {
       const raw = localStorage.getItem(hallWallKey(sport.slug));
-      setWall(sanitizeHallWall(raw ? JSON.parse(raw) : null, sport.slug));
+      if (!raw) { setWall({ entries: [], writable: true }); return; }
+      const stored: unknown = JSON.parse(raw);
+      let live = true;
+      /* The keep effect's wall is newer than this read, so a read that lands after it changes nothing. */
+      import('@/lib/usCareerHallWall').then(m => { if (live) setWall(w => w ?? m.sanitizeHallWall(stored, sport.slug)); })
+        .catch(() => { /* a chunk that fails to load: the site's preloadError listener reloads once */ });
+      return () => { live = false; };
     } catch { setWall({ entries: [], writable: true }); }
   }, [sport]);
   /* Round 1570: a retired career goes up on the wall, keyed by career: when it retires in this visit (after
@@ -352,21 +361,28 @@ export default function UsCareerBoard({ sport }: { sport: UsCareerSport }) {
      disk still holds the live career, and a plaque for it would be a ghost. The same plaque again writes
      nothing, and a changed record replaces its own plaque where it hangs (never a second one). A wall of a
      version this build does not know is never written over. A refused write throws past setWall, so the
-     prompt never says the card stays when the browser did not keep it. */
+     prompt never says the card stays when the browser did not keep it; until the rules have loaded and the
+     plaque is up it says the card goes, which is then true. */
   useEffect(() => {
     if (!sport.hall || !career?.retired || saveFailure) return;
-    try {
-      const entry = hallWallEntry(sport, career);
-      if (!entry) return;
-      const key = hallWallKey(sport.slug);
-      const raw = localStorage.getItem(key);
-      let was: HallWall;
-      try { was = sanitizeHallWall(raw ? JSON.parse(raw) : null, sport.slug); } catch { was = { entries: [], writable: true }; }
-      if (!was.writable) { setWall(was); return; }
-      const next = addToWall(was.entries, entry);
-      if (next !== was.entries) localStorage.setItem(key, JSON.stringify({ v: 1, entries: next }));
-      setWall({ entries: next, writable: true });
-    } catch { /* the career is still on its save, and the prompt keeps saying the card goes */ }
+    const retired = career;
+    let live = true;
+    import('@/lib/usCareerHallWall').then(m => {
+      if (!live) return;
+      try {
+        const entry = m.hallWallEntry(sport, retired);
+        if (!entry) return;
+        const key = hallWallKey(sport.slug);
+        const raw = localStorage.getItem(key);
+        let was: HallWall;
+        try { was = m.sanitizeHallWall(raw ? JSON.parse(raw) : null, sport.slug); } catch { was = { entries: [], writable: true }; }
+        if (!was.writable) { setWall(was); return; }
+        const next = m.addToWall(was.entries, entry);
+        if (next !== was.entries) localStorage.setItem(key, JSON.stringify({ v: 1, entries: next }));
+        setWall({ entries: next, writable: true });
+      } catch { /* the career is still on its save, and the prompt keeps saying the card goes */ }
+    }).catch(() => { /* a chunk that fails to load: the site's preloadError listener reloads once */ });
+    return () => { live = false; };
   }, [career, sport, saveFailure]);
 
   useEffect(() => {

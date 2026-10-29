@@ -1,5 +1,5 @@
 import { StrictMode, type ComponentType } from 'react';
-import { act, cleanup, fireEvent, render, within } from '@testing-library/react';
+import { act, cleanup, fireEvent, render, waitFor, within } from '@testing-library/react';
 import { MemoryRouter } from 'react-router-dom';
 import { afterEach, beforeAll, beforeEach, describe, expect, it, vi } from 'vitest';
 import NflMyCareerBoard from '@/components/nfl-my-career/NflMyCareerBoard';
@@ -227,13 +227,13 @@ describe.each(SPORTS)('$label save recovery on the actual board', row => {
     check(row.label + ': restored prospect phase', again.container.querySelector('[data-prospect-phase]')?.getAttribute('data-prospect-phase'), played.state.phase);
   });
 
-  it('refused occupied reset queues removal and Retry really deletes only this sport', () => {
-    seed(row, fixture(row, true)); const view = mount(row), durable = values();
-    /* Round 1570: mounting a retired save puts it up on this sport's Hall wall, one write on the wall's own key
-       holding this career (StrictMode's second run finds it there and writes nothing). From the reset on, the
-       attempts are exactly the old single refused removal. */
-    const mounted = JSON.parse(durable[row.sport.saveKey]!) as { c: UsCareerCore };
-    expect(attempts.map(({ method, key, refused }) => ({ method, key, refused }))).toEqual([{ method: 'setItem', key: hallWallKey(row.sport.slug), refused: false }]);
+  it('refused occupied reset queues removal and Retry really deletes only this sport', async () => {
+    seed(row, fixture(row, true)); const view = mount(row);
+    /* Round 1570: mounting a retired save puts it up on this sport's Hall wall once the wall's rules have loaded,
+       one write on the wall's own key holding this career (StrictMode's second run finds it there and writes
+       nothing). From the reset on, the attempts are exactly the old single refused removal. */
+    await waitFor(() => expect(attempts.map(({ method, key, refused }) => ({ method, key, refused }))).toEqual([{ method: 'setItem', key: hallWallKey(row.sport.slug), refused: false }]));
+    const durable = values(), mounted = JSON.parse(durable[row.sport.saveKey]!) as { c: UsCareerCore };
     expect((JSON.parse(attempts[0].value!) as { entries: { key: string }[] }).entries.map(e => e.key)).toEqual([wallKeyOf(mounted.c, row.sport.hall!)]);
     attempts = []; refusing = true; reset(view);
     assertNotice(view, 'remove', row.label + ': reset refusal visible');

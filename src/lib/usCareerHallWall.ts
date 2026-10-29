@@ -7,8 +7,10 @@
  * (`{slug}-my-career-hall-v1`), so the save itself never changes. The shape mirrors Fight Career's past fighters
  * (fightCareer.ts archiveCareer): keyed, newest first, capped, each entry checked alone on the way back in.
  *
- * Pure: it imports no sport (the board loads it eagerly on all four routes), draws no random number and reads
- * no storage. The board does the one read and the one write.
+ * Pure: it imports no sport (any US career route can load it), draws no random number and reads no storage. The
+ * board does the one read and the one write, and loads this file only when there is a wall to read or a retired
+ * career to put up (a runner measured it at 2.02K on every route when it loaded with the board, over the lead's
+ * 2K; usCareerHallWallKey.ts holds the two small pieces the board needs on its first frame).
  *
  * THE CAP. A wall holds 12. The new plaque always goes up; past 12, the oldest of the 12 already up that missed
  * the Hall comes down, and only when all 12 already up are Hall of Famers does the oldest Hall of Famer come down.
@@ -25,6 +27,7 @@
  */
 import { hallRecordFor, type HallRecord, type HallSportId, type UsHallSport } from '@/lib/careerHallOfFame';
 import type { UsCareerCore } from '@/lib/usCareerSport';
+import { hallWallKey, wallKeyOf } from '@/lib/usCareerHallWallKey';
 
 export const HALL_WALL_CAP = 12;
 /** The longest key a plaque may carry. A longer one gets no plaque (never a cut key). */
@@ -65,15 +68,9 @@ export interface HallWallSport<C extends UsCareerCore> {
   honours(c: C): { label: string; n: number }[];
 }
 
-export const hallWallKey = (slug: HallSportId): string => `${slug}-my-career-hall-v1`;
-
-/** The career's identity on the wall: the ballot's own key, the salt that tells two same named careers apart,
- *  and the season and game counts that tell two old saves without a salt apart. Nothing in it changes after
- *  retirement, so a speech or a coaching career never makes a second plaque. */
-export function wallKeyOf<C extends UsCareerCore>(c: C, hall: UsHallSport<C>): string {
-  const games = c.seasons.reduce((n, s) => n + (Number.isFinite(s.games) ? s.games : 0), 0);
-  return `${hall.key(c)}|${c.summerSalt ?? ''}|${c.seasons.length}|${games}`;
-}
+/* The storage key and the career key live in usCareerHallWallKey.ts, the only part of the wall the board loads
+   on its first frame (the rest loads when there is a wall to read or a retired career to put up). */
+export { hallWallKey, wallKeyOf };
 
 const SPORTS: readonly HallSportId[] = ['nfl', 'nba', 'mlb', 'nhl'];
 const OUTCOMES = ['inducted', 'fellOff', 'waiting', 'notOnBallot'] as const;
