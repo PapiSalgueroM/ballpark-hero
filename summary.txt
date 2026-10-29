@@ -1,0 +1,1 @@
+oldsave exit=0 24s | RESULT oldsave {"snaps":120,"cashEqual":120,"cashDiff":0,"loyalQuoted":109,"loyalSigned":109,"loyalWageOk":109,"loyalRoundTrip":109,"loyalFinished":109,"reviewBlocked":0,
