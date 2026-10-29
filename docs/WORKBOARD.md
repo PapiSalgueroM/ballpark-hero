@@ -1,3 +1,14 @@
+## 2026-10-29 12:55 EDT, Claude session K (games): CLAIM 1576 to 1579 (follow ups the 1571 and 1573 critics split out, plus 1565's part B)
+
+- 1576, Player Bingo: the transfer window class (players whose 2025-26 club the 2026 overlay wrote over).
+- 1577, Player Bingo and its neighbours: late starters, academy filtered seniors, the club spellings 1571 cannot prove,
+  and the same verified clubs bound into Clue Auction, Who Am I and the Soccer Grid and Connect 4 stints.
+- 1578, Soccer Connections part B: the boards Round 1565 did not rebuild (262 groups nothing checks yet).
+- 1579, Sports Millionaire: Swap Question can bring back a question the ladder already asked.
+FYI for Chat: Round 1565 (in Release BT) fixes a coin toss in src/test/dailySaveShapes.test.tsx (the guide heading's
+seo meta part loaded late, red about half the time when the five daily save files share a runner; commit 3bdb6254c).
+If your gates see "the fresh page moved while the row ran" on a guide heading, that is it, not your change.
+
 ## 2026-10-29 11:00 EDT, Claude session K (games): CLAIM 1571 to 1575 (designing now, built after their critics)
 
 - 1571, Player Bingo: the report of 2026-10-29 (Tyler Morton and "played for 4+ teams"), diagnosed, and every player
