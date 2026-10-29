@@ -1,0 +1,7 @@
+# Release BS kit: 2 of the 42 request lines of Release BR's rc-BQc4.txt (rBRg/.tmp-fx/br), the lines of the BS areas (Soccer Career, Club Manager and the manager games on its engine, Player Bingo, Conquest, Stat and Draft Detective, the US My Career save notice, What's New, the polls, the guide intro) and the setup lines before them; 40 line(s) outside those areas left out: simCollegeSeat simDraftNight simFoHub simFrontOfficeCuts simFrontOfficeRoster simFrontOfficeSchedule simGmDesk simGmDraftOrder simGmGameDay simHomeFront simLeagueCaps simMlbDraftCapital simMlbGmDesk simMlbTradeRoster simNbaDraftCapital simNbaGmDesk simNbaRatingEvidence simNbaRotationReset simNbaRotationUi simNbaSeasonStats simNbaTipOffForecast simNflDraftCapital simNflPracticePromotion simNflRatingEvidence simNhlContributorsBoard simNhlDraftCapital simNhlGmDesk simNhlRatingEvidence simNhlRosterLimit simNhlWaiverReceipt simSessionMarks simStorageWrites vt0 vt1 vt2 vt3 simSaveFence simSaveKeeper simHarnessAnchors simNoRivalNames.
+# Release BQ, Round 1533: the front office family it ran (rc-1533.txt rc-s2c). Left out of 1533's file: rc-s3a,
+# rc-s8a and rc-s8w (rc-BQc to c3 hold their lines), rc-s7b (the fences, rc-BQz), rc-s6c base-gmpress and rc-s8w
+# weight-base and rc-s9w chunks (base 6d2d7a7d, before Release BP), rc-s6g (a --refresh line) and rc-s7a
+# (the whole runAllSims, which ran out its 4200 s on a runner).
+simCmBoardVerdict: node scripts/simCmBoardVerdict.mjs
+simCmRetire: node scripts/simCmRetire.mjs
