@@ -1,0 +1,38 @@
+old build exit=0 197 files
+PROBLEM nba-1280x900: the point (856, 70) hits BUTTON in Start over, not the Inbox tile
+{"tag":"nba-1280x900","tap":{"x":856,"y":70.25},"hit":{"el":"BUTTON","inTile":false,"inPill":true,"inBar":false},"restartDialog":true,"before":false,"after":{"tiles":true,"back":false,"title":"","rows":0,"empty":false,"inboxOpen":false}}
+PROBLEM nba-1280x900: the tap on the Inbox tile opened Start a new career?
+PROBLEM nba-1318x647: the point (875, 70) hits BUTTON in Start over, not the Inbox tile
+{"tag":"nba-1318x647","tap":{"x":875,"y":70.25},"hit":{"el":"BUTTON","inTile":false,"inPill":true,"inBar":false},"restartDialog":true,"before":false,"after":{"tiles":true,"back":false,"title":"","rows":0,"empty":false,"inboxOpen":false}}
+PROBLEM nba-1318x647: the tap on the Inbox tile opened Start a new career?
+PROBLEM nba-390x844: the point (287, 70) hits svg in Start over, not the Inbox tile
+{"tag":"nba-390x844","tap":{"x":287,"y":69.75},"hit":{"el":"svg","inTile":false,"inPill":true,"inBar":false},"restartDialog":true,"before":false,"after":{"tiles":true,"back":false,"title":"","rows":0,"empty":false,"inboxOpen":false}}
+PROBLEM nba-390x844: the tap on the Inbox tile opened Start a new career?
+PROBLEM nfl-1280x900: the point (856, 70) hits BUTTON in Start over, not the Inbox tile
+{"tag":"nfl-1280x900","tap":{"x":856,"y":70.25},"hit":{"el":"BUTTON","inTile":false,"inPill":true,"inBar":false},"restartDialog":true,"before":false,"after":{"tiles":true,"back":false,"title":"","rows":0,"empty":false,"inboxOpen":false}}
+PROBLEM nfl-1280x900: the tap on the Inbox tile opened Start a new career?
+PROBLEM nfl-1318x647: the point (875, 70) hits BUTTON in Start over, not the Inbox tile
+{"tag":"nfl-1318x647","tap":{"x":875,"y":70.25},"hit":{"el":"BUTTON","inTile":false,"inPill":true,"inBar":false},"restartDialog":true,"before":false,"after":{"tiles":true,"back":false,"title":"","rows":0,"empty":false,"inboxOpen":false}}
+PROBLEM nfl-1318x647: the tap on the Inbox tile opened Start a new career?
+PROBLEM nfl-390x844: the point (287, 70) hits svg in Start over, not the Inbox tile
+{"tag":"nfl-390x844","tap":{"x":287,"y":69.75},"hit":{"el":"svg","inTile":false,"inPill":true,"inBar":false},"restartDialog":true,"before":false,"after":{"tiles":true,"back":false,"title":"","rows":0,"empty":false,"inboxOpen":false}}
+PROBLEM nfl-390x844: the tap on the Inbox tile opened Start a new career?
+PROBLEM mlb-1280x900: the point (856, 70) hits BUTTON in Start over, not the Inbox tile
+{"tag":"mlb-1280x900","tap":{"x":856,"y":70.25},"hit":{"el":"BUTTON","inTile":false,"inPill":true,"inBar":false},"restartDialog":true,"before":false,"after":{"tiles":true,"back":false,"title":"","rows":0,"empty":false,"inboxOpen":false}}
+PROBLEM mlb-1280x900: the tap on the Inbox tile opened Start a new career?
+PROBLEM mlb-1318x647: the point (875, 70) hits BUTTON in Start over, not the Inbox tile
+{"tag":"mlb-1318x647","tap":{"x":875,"y":70.25},"hit":{"el":"BUTTON","inTile":false,"inPill":true,"inBar":false},"restartDialog":true,"before":false,"after":{"tiles":true,"back":false,"title":"","rows":0,"empty":false,"inboxOpen":false}}
+PROBLEM mlb-1318x647: the tap on the Inbox tile opened Start a new career?
+PROBLEM mlb-390x844: the point (287, 70) hits svg in Start over, not the Inbox tile
+{"tag":"mlb-390x844","tap":{"x":287,"y":69.75},"hit":{"el":"svg","inTile":false,"inPill":true,"inBar":false},"restartDialog":true,"before":false,"after":{"tiles":true,"back":false,"title":"","rows":0,"empty":false,"inboxOpen":false}}
+PROBLEM mlb-390x844: the tap on the Inbox tile opened Start a new career?
+PROBLEM nhl-1280x900: the point (856, 70) hits BUTTON in Start over, not the Inbox tile
+{"tag":"nhl-1280x900","tap":{"x":856,"y":70.25},"hit":{"el":"BUTTON","inTile":false,"inPill":true,"inBar":false},"restartDialog":true,"before":false,"after":{"tiles":true,"back":false,"title":"","rows":0,"empty":false,"inboxOpen":false}}
+PROBLEM nhl-1280x900: the tap on the Inbox tile opened Start a new career?
+PROBLEM nhl-1318x647: the point (875, 70) hits BUTTON in Start over, not the Inbox tile
+{"tag":"nhl-1318x647","tap":{"x":875,"y":70.25},"hit":{"el":"BUTTON","inTile":false,"inPill":true,"inBar":false},"restartDialog":true,"before":false,"after":{"tiles":true,"back":false,"title":"","rows":0,"empty":false,"inboxOpen":false}}
+PROBLEM nhl-1318x647: the tap on the Inbox tile opened Start a new career?
+PROBLEM nhl-390x844: the point (287, 70) hits svg in Start over, not the Inbox tile
+{"tag":"nhl-390x844","tap":{"x":287,"y":69.75},"hit":{"el":"svg","inTile":false,"inPill":true,"inBar":false},"restartDialog":true,"before":false,"after":{"tiles":true,"back":false,"title":"","rows":0,"empty":false,"inboxOpen":false}}
+PROBLEM nhl-390x844: the tap on the Inbox tile opened Start a new career?
+walkInbox FAIL: 24 problems, 0 of 12 taps opened the Inbox, base http://localhost:4175

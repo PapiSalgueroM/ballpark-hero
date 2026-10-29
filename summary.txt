@@ -1,0 +1,8 @@
+build exit=0 26s | [dukb] inlined 1 stylesheet(s) and 1 module(s) into 181 snapshots (11 left alone)
+walk-bar exit=1 82s | walkInbox FAIL: 24 problems, 0 of 12 taps opened the Inbox, CONTROL bar (tap at y 34), base http://localhost:4173
+walk exit=0 88s | walkInbox DONE: 0 problems, 12 of 12 taps opened the Inbox, base http://localhost:4173
+simNoRivalNames exit=0 11s | No rival product names found. 0 findings.
+walk-old exit=1 119s | walkInbox FAIL: 24 problems, 0 of 12 taps opened the Inbox, base http://localhost:4175
+simStorageWrites exit=0 2s | simStorageWrites: all green (owed: 12)
+tsc exit=0 54s | 
+simHarnessAnchors exit=0 38s | simHarnessAnchors: green. Every harness parses and none carries an unmatchable anchor.
