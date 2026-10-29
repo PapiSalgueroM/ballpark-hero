@@ -1,0 +1,2 @@
+rec exit=0 57s | rec1569 WROTE /home/runner/work/_temp/rc-out/files/usBoardFixture.json 2298695 bytes, vitest exit 0
+diff exit=0 1s | fixdiff: clicks moved 3, saves moved 0, coverage moved 0, screens moved 346

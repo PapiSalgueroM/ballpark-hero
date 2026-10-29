@@ -1,0 +1,3 @@
+#!serial
+rec: node .rc/x/rec1569.mjs $RC_OUT/usBoardFixture.json e208e288080872e7ad8dbdd99cbff68f50dd5771
+diff: node .rc/x/fixdiff.mjs scripts/data/usBoardFixture.json $RC_OUT/usBoardFixture.json
