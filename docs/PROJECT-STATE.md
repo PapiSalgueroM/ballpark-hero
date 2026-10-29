@@ -19743,3 +19743,24 @@ Separate World XI draft PR399 now has Expanded, Classic and2026 Nations implemen
 Transfer Path's2024-25 Carvajal intake is still unapplied. Official club and league records independently confirm Carvajal and Endrick in the Real Madrid matchday squad on20September2025, but no full2025-26 statistics row is verified or proposed. Club Manager's shirt numbers, veteran retention, national squad/tournament, world cups, budget and awards reports remain mapped for OwnerI integration, including existing draft football changes. No protected game sources or database were changed by this branch.
 
 Evidence and source-only proposal packets are retained under C:/Users/antho/dukb-handoff/2026-10-24/build-xi-wingback-*. The original main PROJECT-STATE prefix is held byte for byte by this append. Both protected indexes and prior work are preserved. The historic10 missing folders/785 entries preservation issue remains OPEN. No local application/Node/npm/compiler/parser/browser/test/Git execution, cleanup, rerun/dispatch/cancel, provider/consent/dependency/cap change or publication occurred.
+
+
+## 2026-10-26 Build Your XI: Club year draft release candidate
+
+Mixed stays the default. Club year is optional before formation: choose one recorded year from 2004 through 2026 and draw from the existing 30 clubs. Fill eleven slots from distinct clubs, reroll the current club, and keep earlier picks.
+
+Browse players and typed search use the selected club and year, with the same evidence required for admission. Browse includes lower-ranked keepers and keyboard scrolling within the list. Coverage is partial, so some players may be missing. Ratings and the fictional season use the selected rows, role fit, chemistry and balance. Missing value or age produces an unrated result. Mixed keeps its existing evaluation path. No sports data or provider was added.
+
+GENERATION: Run 40344406465 attempt 1 used source 7a037cb06a15daab7a61637cf7d98f8f8e1ad3d6, tree 58b81e25b78771b7c050078ed047cd2ed4c9627e. Root reviewed all 721 regular original bodies and 720 sealed entries. The scoped evidence has 20 normal cases passed, seven effective physical source-control triplets, 18 readers and 15 unchanged caps passed. All seven browser contexts passed: six Club year drafts made 66 picks, plus one limited Mixed pick/reroll journey. Seven copied-observation controls ran, and Root reviewed all 26 original PNGs. These were offline Chromium journeys with fictional records, not real-roster or live-provider verification. Exact gzip headroom remains unknown from rounded cap output.
+
+The five generated outputs selected for adoption are scripts/data/guideHeadingsFrozen.json, src/data/searchKeywords.json, public/build-your-xi/index.html, public/sitemap.xml and scripts/data/lastmod.json. The retained generation original is in remote-build-xi-club-year-green-40344406465-a1.
+
+CLEAN: Final clean-source validation runs on this source commit and is pending at preparation. The PR and retained receipt record its actual outcome. This note does not preclaim that result. Main integration, full-suite qualification and live publication remain pending.
+
+The branch builds on PR400's remotely qualified wingback correction: same-side LB and RB choices no longer lose fit points at LWB and RWB. Focused opposite-side, keeper and history boundaries stayed held. That earlier scope does not substitute for current clean validation.
+
+The five latest reports remain OPEN: Aussie Rules Manager team names; NBA My Career offers after twenty seasons; Messi missing in the 2008 Club Manager world; current-year national callups with playable national fixtures; and simpler browser access to live match view. The detached NBA proposal has six new real-board saved-state cases, sixteen total, all UNRUN. It proves no universal offer bug or fix. Existing Aussie labels cannot simply be renamed: saved names must match the static definitions. The separate new-career real-club-name plan and the CM Minimize-label plan are not implemented.
+
+The detached CM retention candidate is NOT_ADOPTION_READY. Its four tests and two controls are UNRUN. Retirement-only baked identities may revive the documented aging problem, so baseline age-distribution and retention comparisons are required before I integration. The affected saves remain unreproduced. Retained source-only records are in nba-season20-market-regression-proposal-v1, aussie-real-club-names-source-plan-v1 and cm-era-baked-retirement-proposal-v1.
+
+I retains protected football and career engines, saves, data integration, main and sole publication. J retains Headlines. Earlier reports remain on the board.

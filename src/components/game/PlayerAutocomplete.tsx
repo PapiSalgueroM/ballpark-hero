@@ -487,6 +487,17 @@ export function PlayerAutocomplete({
 
   const showDropdown = open && (loading || suggestions.length > 0 || enoughText);
 
+  useEffect(() => {
+    if (!showDropdown || highlightedIndex < 0) return;
+    const list = containerRef.current?.querySelector<HTMLElement>('[role="listbox"]');
+    const selected = list?.querySelector<HTMLElement>('[role="option"][aria-selected="true"]');
+    if (!list || !selected) return;
+    const box = list.getBoundingClientRect(), row = selected.getBoundingClientRect();
+    const top = box.top + list.clientTop, bottom = top + list.clientHeight;
+    if (row.top < top) list.scrollTop += row.top - top;
+    else if (row.bottom > bottom) list.scrollTop += row.bottom - bottom;
+  }, [showDropdown, highlightedIndex, suggestions]);
+
   return (
     <div
       ref={containerRef}
