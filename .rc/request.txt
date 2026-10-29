@@ -1,0 +1,3 @@
+probe: cp .rc/x/zzRvbsProbe.test.ts src/test/zzRvbsProbe.test.ts && node_modules/.bin/vitest run src/test/zzRvbsProbe.test.ts --testTimeout=600000 --hookTimeout=120000
+tsc: node_modules/.bin/tsc --noEmit -p tsconfig.app.json
+prtests: node_modules/.bin/vitest run src/test/soccerCareerCoachingChooser.test.tsx src/test/soccerCareerCoachingStart.consumer.lifecycle.test.tsx src/test/soccerCareerCoachingStart.consumer.test.tsx src/test/soccerCareerCoachingStart.test.ts src/test/soccerCareerCoachingTransaction.test.tsx src/test/soccerCareerManagerJobReview.card.test.tsx src/test/soccerCareerManagerJobReview.consumer.test.tsx src/test/soccerCareerManagerJobReview.test.ts src/test/soccerCareerManagerJobReview.transaction.test.tsx --testTimeout=300000 --hookTimeout=120000
