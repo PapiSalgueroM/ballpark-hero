@@ -1,0 +1,101 @@
+name: AFL manager copy generation
+on:
+  push:
+    branches: [codex/afl1572-copy-generate-20261029]
+permissions:
+  contents: read
+concurrency:
+  group: afl1572-copy-generation-${{ github.ref }}
+  cancel-in-progress: false
+jobs:
+  generate:
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    defaults:
+      run:
+        shell: bash
+    env:
+      TZ: UTC
+      LANG: C.UTF-8
+      EXPECTED_PARENT: eb8ae06140185296317999f8b4b2e9300a99fe11
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          persist-credentials: false
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: npm
+      - name: Retain exact immutable generation source
+        run: |
+          set -euo pipefail
+          out="$RUNNER_TEMP/afl1572-copy-generation"; test ! -e "$out"; mkdir "$out"
+          printf 'COPY_GENERATION_OUT=%s\n' "$out" >> "$GITHUB_ENV"
+          test "$GITHUB_REF" = refs/heads/codex/afl1572-copy-generate-20261029
+          git rev-parse HEAD > "$out/head.txt"; git rev-parse HEAD^{tree} > "$out/tree.txt"
+          git rev-list --parents -n 1 HEAD > "$out/parents.txt"
+          test "$(git rev-parse HEAD^)" = "$EXPECTED_PARENT"
+          test "$(git rev-list --parents -n 1 HEAD | wc -w)" -eq 2
+          git diff --name-status "$EXPECTED_PARENT" HEAD -- > "$out/proposal.paths.tsv"
+          printf 'A\t.github/workflows/afl1572-copy-generation.yml\nM\tsrc/data/gameContent/aussieRulesManagement.ts\nM\tsrc/data/gameRegistry.ts\nM\tsrc/data/homeCopy.ts\nM\tsrc/data/seoMeta.ts\nM\tsrc/pages/AussieRulesManager.tsx\n' | cmp - "$out/proposal.paths.tsv"
+          git diff --exit-code HEAD -- > "$out/clean-before.diff"
+          git ls-files -z | sort -z > "$out/source-members.before"
+          git ls-files -z | sort -z | xargs -0 sha256sum > "$out/source.before.sha256"
+          git archive --format=tar HEAD > "$out/source.tar"
+          for file in index.html src/data/searchKeywords.json src/data/seoMetaParts/seoMetaPart00.ts; do
+            mkdir -p "$out/original/$(dirname "$file")"; cp "$file" "$out/original/$file"
+          done
+          printf '{"schema":1,"scope":"GENERATION_ONLY_NO_APPLICATION_RUNTIME_QUALIFICATION","featureDependency":"df1def3980c865858a81038c3a885540b77b3ccc","copyMustNotShipAlone":true,"generatedFilesHandEdited":false,"ready":false}\n' > "$out/scope.json"
+      - name: Install the locked application packages
+        run: |
+          set -euo pipefail
+          npm ci > "$COPY_GENERATION_OUT/install.log" 2>&1
+          git diff --exit-code HEAD -- package.json package-lock.json > "$COPY_GENERATION_OUT/package-hold.diff"
+      - name: Generate the three existing outputs and prove idempotence
+        run: |
+          set -euo pipefail
+          out="$COPY_GENERATION_OUT"
+          for script in genSeoMetaParts genSearchKeywords genHomeCopy; do
+            set +e; node "scripts/$script.mjs" > "$out/$script.first.log" 2>&1; raw=$?; set -e
+            printf '%s\n' "$raw" > "$out/$script.first.raw.exit"; cat "$out/$script.first.log"; test "$raw" -eq 0
+          done
+          git diff --name-status HEAD -- > "$out/generated.paths.tsv"
+          printf 'M\tindex.html\nM\tsrc/data/searchKeywords.json\nM\tsrc/data/seoMetaParts/seoMetaPart00.ts\n' | cmp - "$out/generated.paths.tsv"
+          git diff --exit-code HEAD -- . ':!index.html' ':!src/data/searchKeywords.json' ':!src/data/seoMetaParts/seoMetaPart00.ts' > "$out/outside-generated.diff"
+          sha256sum index.html src/data/searchKeywords.json src/data/seoMetaParts/seoMetaPart00.ts > "$out/generated.first.sha256"
+          for script in genSeoMetaParts genSearchKeywords genHomeCopy; do
+            set +e; node "scripts/$script.mjs" > "$out/$script.second.log" 2>&1; raw=$?; set -e
+            printf '%s\n' "$raw" > "$out/$script.second.raw.exit"; cat "$out/$script.second.log"; test "$raw" -eq 0
+          done
+          sha256sum index.html src/data/searchKeywords.json src/data/seoMetaParts/seoMetaPart00.ts > "$out/generated.second.sha256"
+          cmp "$out/generated.first.sha256" "$out/generated.second.sha256"
+          git ls-files --others --exclude-standard > "$out/untracked-after.txt"; test ! -s "$out/untracked-after.txt"
+          for file in index.html src/data/searchKeywords.json src/data/seoMetaParts/seoMetaPart00.ts; do
+            mkdir -p "$out/generated/$(dirname "$file")"; cp "$file" "$out/generated/$file"
+          done
+          git diff --binary HEAD -- index.html src/data/searchKeywords.json src/data/seoMetaParts/seoMetaPart00.ts > "$out/generated.diff"
+          printf '0\n' > "$out/generation.exit"
+          printf 'AFL1572_COPY_GENERATION: three existing generators passed twice, exactly three outputs changed, all other tracked bodies held. Runtime qualification remains separate.\n'
+      - name: Always retain final source holds and evidence
+        if: always()
+        run: |
+          set -euo pipefail
+          out="$COPY_GENERATION_OUT"; failed=0
+          git ls-files -z | sort -z > "$out/source-members.final"
+          git ls-files -z | sort -z | xargs -0 sha256sum > "$out/source.final.sha256"
+          cmp "$out/source-members.before" "$out/source-members.final" || failed=1
+          git diff --exit-code HEAD -- . ':!index.html' ':!src/data/searchKeywords.json' ':!src/data/seoMetaParts/seoMetaPart00.ts' > "$out/outside-generated.final.diff" || failed=1
+          printf '%s\n' "$failed" > "$out/final-holds.exit"
+          find "$out" -type f -print0 | sort -z | xargs -0 sha256sum > "$RUNNER_TEMP/afl1572-copy-evidence.sha256"
+          cp "$RUNNER_TEMP/afl1572-copy-evidence.sha256" "$out/evidence.sha256"
+          exit "$failed"
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: afl1572-copy-generation-${{ github.run_id }}-${{ github.run_attempt }}
+          path: ${{ runner.temp }}/afl1572-copy-generation/
+          if-no-files-found: error
+          retention-days: 14
+          compression-level: 6
+          overwrite: false
