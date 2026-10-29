@@ -1,0 +1,1 @@
+US_CONN_CONTROL=stamkos ABORTED: TABLE_RANGE does not hold nhl, so the NHL table rows are checked by nothing (the plain run fails unranged); this control will not put it back in memory
