@@ -1,0 +1,10 @@
+probe exit=0 109s | review-oldsaves: 22736 checks, 0 failures, 54 careers, 30033 steps, 108.5 s
+probe-c1 exit=1 14s | review-oldsaves: 2829 checks, 1306 failures, 6 careers, 3805 steps, 13.7 s
+probe-c2 exit=1 14s | review-oldsaves: 2829 checks, 48 failures, 6 careers, 3805 steps, 13.6 s
+m1 exit=1 14s | simAflClubNames: 45 checks, 2 failures, sections 0,1,2a,2b,3,4,4i,5, red: 4, 13.1 s
+m2 exit=1 14s | simAflClubNames: 45 checks, 53 failures, sections 0,1,2a,2b,3,4,4i,5, red: 4,5, 13.3 s
+m3 exit=1 13s | simAflClubNames: 45 checks, 2 failures, sections 0,1,2a,2b,3,4,4i,5, red: 4,4i, 13.1 s
+m4 exit=1 12s | simAflClubNames: 45 checks, 56 failures, sections 0,1,2a,2b,3,4,4i,5, red: 2b,3,4,4i,5, 12.3 s
+m5 exit=1 13s | simAflClubNames: 45 checks, 2 failures, sections 0,1,2a,2b,3,4,4i,5, red: 4,4i, 13.0 s
+m6 exit=1 13s | simAflClubNames: 45 checks, 3 failures, sections 0,1,2a,2b,3,4,4i,5, red: 4, 13.1 s
+clean exit=0 0s | 

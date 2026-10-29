@@ -1,0 +1,44 @@
+mutation c1 applied to src/lib/aussieRulesLeague.ts
+actions used: {"prepare":548,"playMatch":478,"next":1265,"lineup":176,"play":784,"swap":443,"simWeek":79,"pick":23,"draftAuto":9}
+loads 24, switches 24, real set steps 1051, switched saves the base refuses 24
+  FAIL: career 0 seed 3440460277 club-00: createLeague differs
+  FAIL: career 0 club-00 step 0 prepare: raw differs
+  FAIL: career 0 club-00 step 3 lineup: raw differs
+  FAIL: career 0 club-00 step 6 play: raw differs
+  FAIL: career 0 club-00 step 9 playMatch: raw differs
+  FAIL: career 0 club-00 step 12 playMatch: raw differs
+  FAIL: career 0 club-00 step 15 playMatch: raw differs
+  FAIL: career 0 club-00 step 18 play: raw differs
+  FAIL: career 0 club-00 step 21 play: raw differs
+  FAIL: career 0 club-00 step 24 next: raw differs
+  FAIL: career 0 club-00 step 27 prepare: raw differs
+  FAIL: career 0 club-00 step 30 swap: raw differs
+  FAIL: career 0 club-00 step 33 play: raw differs
+  FAIL: career 0 club-00 step 36 swap: raw differs
+  FAIL: career 0 club-00 step 39 next: raw differs
+  FAIL: career 0 club-00 step 42 prepare: raw differs
+  FAIL: career 0 club-00 step 45 play: raw differs
+  FAIL: career 0 club-00 step 48 next: raw differs
+  FAIL: career 0 club-00 step 51 swap: raw differs
+  FAIL: career 0 club-00 step 54 next: raw differs
+  FAIL: career 0 club-00 step 57 next: raw differs
+  FAIL: career 0 club-00 step 60 playMatch: raw differs
+  FAIL: career 0 club-00 step 63 prepare: raw differs
+  FAIL: career 0 club-00 step 66 play: raw differs
+  FAIL: career 0 club-00 step 69 next: raw differs
+  FAIL: career 0 club-00 step 72 prepare: raw differs
+  FAIL: career 0 club-00 step 75 prepare: raw differs
+  FAIL: career 0 club-00 step 78 play: raw differs
+  FAIL: career 0 club-00 step 81 play: raw differs
+  FAIL: career 0 club-00 step 84 playMatch: raw differs
+  FAIL: career 0 club-00 step 87 play: raw differs
+  FAIL: career 0 club-00 step 90 swap: raw differs
+  FAIL: career 0 club-00 step 93 lineup: raw differs
+  FAIL: career 0 club-00 step 96 play: raw differs
+  FAIL: career 0 club-00 step 99 swap: raw differs
+  FAIL: career 0 club-00 step 102 play: raw differs
+  FAIL: career 0 club-00 step 105 swap: raw differs
+  FAIL: career 0 club-00 step 108 next: raw differs
+  FAIL: career 0 club-00 step 111 next: raw differs
+  FAIL: career 0 club-00 step 114 next: raw differs
+review-oldsaves: 2829 checks, 1306 failures, 6 careers, 3805 steps, 13.7 s

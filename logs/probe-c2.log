@@ -1,0 +1,44 @@
+mutation c2 applied to src/lib/aussieRulesLeague.ts
+actions used: {"prepare":548,"playMatch":478,"next":1265,"lineup":176,"play":784,"swap":443,"simWeek":79,"pick":23,"draftAuto":9}
+loads 24, switches 24, real set steps 1051, switched saves the base refuses 24
+  FAIL: career 0 step 199 break: switched save fails load, round trip or mask
+  FAIL: career 0 step 199: switched career drifts from base after 40 actions
+  FAIL: career 0 step 351 quarter: switched save fails load, round trip or mask
+  FAIL: career 0 step 351: switched career drifts from base after 40 actions
+  FAIL: career 0 step 360 quarter: switched save fails load, round trip or mask
+  FAIL: career 0 step 360: switched career drifts from base after 40 actions
+  FAIL: career 0 step 392 prepare: switched save fails load, round trip or mask
+  FAIL: career 0 step 392: switched career drifts from base after 40 actions
+  FAIL: career 1 step 293 report: switched save fails load, round trip or mask
+  FAIL: career 1 step 293: switched career drifts from base after 40 actions
+  FAIL: career 1 step 309 prepare: switched save fails load, round trip or mask
+  FAIL: career 1 step 309: switched career drifts from base after 40 actions
+  FAIL: career 1 step 371 quarter: switched save fails load, round trip or mask
+  FAIL: career 1 step 371: switched career drifts from base after 40 actions
+  FAIL: career 1 step 432 report: switched save fails load, round trip or mask
+  FAIL: career 1 step 432: switched career drifts from base after 40 actions
+  FAIL: career 2 step 49 report: switched save fails load, round trip or mask
+  FAIL: career 2 step 49: switched career drifts from base after 40 actions
+  FAIL: career 2 step 101 break: switched save fails load, round trip or mask
+  FAIL: career 2 step 101: switched career drifts from base after 40 actions
+  FAIL: career 2 step 289 report: switched save fails load, round trip or mask
+  FAIL: career 2 step 289: switched career drifts from base after 40 actions
+  FAIL: career 2 step 365 quarter: switched save fails load, round trip or mask
+  FAIL: career 2 step 365: switched career drifts from base after 40 actions
+  FAIL: career 3 step 51 prepare: switched save fails load, round trip or mask
+  FAIL: career 3 step 51: switched career drifts from base after 40 actions
+  FAIL: career 3 step 228 quarter: switched save fails load, round trip or mask
+  FAIL: career 3 step 228: switched career drifts from base after 40 actions
+  FAIL: career 3 step 544 break: switched save fails load, round trip or mask
+  FAIL: career 3 step 544: switched career drifts from base after 40 actions
+  FAIL: career 3 step 568 quarter: switched save fails load, round trip or mask
+  FAIL: career 3 step 568: switched career drifts from base after 40 actions
+  FAIL: career 4 step 4 prepare: switched save fails load, round trip or mask
+  FAIL: career 4 step 4: switched career drifts from base after 40 actions
+  FAIL: career 4 step 126 report: switched save fails load, round trip or mask
+  FAIL: career 4 step 126: switched career drifts from base after 40 actions
+  FAIL: career 4 step 148 draft: switched save fails load, round trip or mask
+  FAIL: career 4 step 148: switched career drifts from base after 40 actions
+  FAIL: career 4 step 188 break: switched save fails load, round trip or mask
+  FAIL: career 4 step 188: switched career drifts from base after 40 actions
+review-oldsaves: 2829 checks, 48 failures, 6 careers, 3805 steps, 13.6 s
