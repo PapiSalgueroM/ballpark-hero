@@ -344,12 +344,13 @@ export function programmeOptions(career: CareerState): ProgrammeView[] {
     choices: [
       { id: 'cash', label: 'Higher weekly pay', effect: found ? `Keep the quoted EUR ${baseWage.toLocaleString('en-US')} a week.` : 'Keep the existing cash terms.',
         tradeoff: 'No loyalty payout is attached to this choice.', eligible: !!found && !!ledger?.pending,
-        ...(!found ? { reason: 'A current permanent offer is needed.' } : {}) },
+        ...(!found ? { reason: 'A current permanent offer is needed.' } : !ledger?.pending ? { reason: 'This offer already pays cash unless you pick the loyalty payout.' } : {}) },
       { id: 'loyalty', label: 'Loyalty payout', effect: quote ? `EUR ${quote.weeklyWage.toLocaleString('en-US')} a week and EUR ${quote.bonusEuros.toLocaleString('en-US')} after ${quote.years} recorded contract seasons.` : 'A lower weekly wage with a quoted payout at completion.',
         tradeoff: 'Weekly pay falls 10%. A permanent move, early expiry or retirement forfeits the unpaid payout. A loan keeps parent-club rights.',
         eligible: !!quote, ...(!quote ? { reason } : {}) },
     ],
-    choice: ledger?.pending ? (selected ? 'loyalty' : null) : deal?.status === 'active' && !found ? 'loyalty' : 'cash',
+    /* Release BS fix: cash is the default, never a stored choice, so with nothing picked nothing is recorded */
+    choice: ledger?.pending ? (selected ? 'loyalty' : null) : deal?.status === 'active' && !found ? 'loyalty' : null,
     outcome: deal ? `${deal.club}: ${deal.status}, ${deal.completed} of ${deal.years} recorded seasons; EUR ${deal.status === 'paid' ? deal.paidEuros.toLocaleString('en-US') + ' paid' : deal.bonusEuros.toLocaleString('en-US') + (deal.status === 'forfeited' ? ' forfeited' : ' pending')}.` : null,
     canCancel: !!found && !!ledger?.pending,
   });
