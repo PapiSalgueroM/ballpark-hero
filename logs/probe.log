@@ -1,0 +1,27 @@
+
+[1m[46m RUN [49m[22m [36mv3.2.7 [39m[90m/home/runner/work/ballpark-hero/ballpark-hero[39m
+
+[90mstdout[2m | src/test/probeCm416.test.tsx[2m > [22m[2mPR 416 loan plan check-ins[2m > [22m[2mA: a planned loan is reviewed every week of a season; every saved rating change is 0, and the real growth lands only at the summer return
+[22m[39mPROBE Everton age [33m18[39m start [33m78[39m reviews [33m39[39m distinct changes [0] history rows [33m12[39m history ratings [0] rating while away at season end [33m78[39m after summer return [33m83[39m history after return [33m12[39m
+PROBE Brentford age [33m18[39m start [33m76[39m reviews [33m42[39m distinct changes [0] history rows [33m12[39m history ratings [0] rating while away at season end [33m76[39m after summer return [33m81[39m history after return [33m12[39m
+PROBE Chelsea age [33m18[39m start [33m89[39m reviews [33m34[39m distinct changes [0] history rows [33m12[39m history ratings [0] rating while away at season end [33m89[39m after summer return [33m94[39m history after return [33m12[39m
+
+[90mstdout[2m | src/test/probeCm416.test.tsx[2m > [22m[2mPR 416 loan plan check-ins[2m > [22m[2mD: a successful preview of every host draws nothing and changes nothing
+[22m[39mPROBE hosts [33m216[39m previewable [33m130[39m draws during previews [33m0[39m
+
+ [32m✓[39m src/test/probeCm416.test.tsx[2m > [22mPR 416 loan plan check-ins[2m > [22mA: a planned loan is reviewed every week of a season; every saved rating change is 0, and the real growth lands only at the summer return[33m 6928[2mms[22m[39m
+ [32m✓[39m src/test/probeCm416.test.tsx[2m > [22mPR 416 loan plan check-ins[2m > [22mD: a successful preview of every host draws nothing and changes nothing[32m 103[2mms[22m[39m
+[90mstdout[2m | src/test/probeCm416.test.tsx[2m > [22m[2mPR 420 shortlist[2m > [22m[2mB: a 13th save is refused with a message that blames the save, not the 12 limit
+[22m[39mPROBE 13th save message: Could not save this target. Check the save notice and try again.
+
+[90mstdout[2m | src/test/probeCm416.test.tsx[2m > [22m[2mPR 420 shortlist[2m > [22m[2mC: the shortlist survives a save, a load and a new season; old and sold men show as unavailable
+[22m[39mPROBE targets after new season [33m8[39m resolved [false,false,true,false,false,true,true,false] old ages [40,39,37,35]
+
+ [32m✓[39m src/test/probeCm416.test.tsx[2m > [22mPR 420 shortlist[2m > [22mB: a 13th save is refused with a message that blames the save, not the 12 limit[33m 389[2mms[22m[39m
+ [32m✓[39m src/test/probeCm416.test.tsx[2m > [22mPR 420 shortlist[2m > [22mC: the shortlist survives a save, a load and a new season; old and sold men show as unavailable[33m 1491[2mms[22m[39m
+
+[2m Test Files [22m [1m[32m1 passed[39m[22m[90m (1)[39m
+[2m      Tests [22m [1m[32m4 passed[39m[22m[90m (4)[39m
+[2m   Start at [22m 03:49:40
+[2m   Duration [22m 14.39s[2m (transform 2.81s, setup 154ms, collect 3.58s, tests 8.91s, environment 612ms, prepare 608ms)[22m
+

@@ -1,0 +1,40 @@
+
+[1m[46m RUN [49m[22m [36mv3.2.7 [39m[90m/home/runner/work/ballpark-hero/ballpark-hero[39m
+
+ [32m✓[39m src/test/clubManagerLoanDevelopment.test.ts [2m([22m[2m12 tests[22m[2m)[22m[32m 50[2mms[22m[39m
+ [32m✓[39m src/test/clubManagerLoanPlanIntegration.test.ts [2m([22m[2m7 tests[22m[2m)[22m[33m 2181[2mms[22m[39m
+   [33m[2m✓[22m[39m Loan plan authority and refusal boundaries[2m > [22mpreserves the unchanged annual loan settlement and only retains explicitly recorded recall history [33m 1450[2mms[22m[39m
+ [32m✓[39m src/test/clubManagerRecruitmentHook.test.tsx [2m([22m[2m11 tests[22m[2m)[22m[33m 2970[2mms[22m[39m
+   [33m[2m✓[22m[39m recruitment through the actual saved Club Manager hook[2m > [22mleaves old careers without metadata and refuses null or identity transforms without a write [33m 525[2mms[22m[39m
+   [33m[2m✓[22m[39m recruitment through the actual saved Club Manager hook[2m > [22mcommits once outside updater replay, persists first and preserves every old field and draw [33m 485[2mms[22m[39m
+   [33m[2m✓[22m[39m recruitment through the actual saved Club Manager hook[2m > [22mretains metadata through a genuine lean retry and actual parked-slot roundtrip [33m 418[2mms[22m[39m
+   [33m[2m✓[22m[39m recruitment through the actual saved Club Manager hook[2m > [22mdoes not overwrite the manager another slot has made active [33m 307[2mms[22m[39m
+ [32m✓[39m src/test/clubManagerRecruitment.test.ts [2m([22m[2m11 tests[22m[2m)[22m[33m 1621[2mms[22m[39m
+ [32m✓[39m src/test/clubManagerRecruitmentBoard.test.tsx [2m([22m[2m10 tests[22m[2m)[22m[33m 3444[2mms[22m[39m
+   [33m[2m✓[22m[39m actual recruitment board and ordinary Buy return[2m > [22mshows the supplied current record, existing primary-position peers and no persisted price [33m 516[2mms[22m[39m
+   [33m[2m✓[22m[39m actual recruitment board and ordinary Buy return[2m > [22mkeeps closed-window facts readable, disables Find and removes only explicit metadata [33m 303[2mms[22m[39m
+   [33m[2m✓[22m[39m actual recruitment board and ordinary Buy return[2m > [22mthe real transfer screen returns Find to ordinary Buy search without talking paying or loaning [33m 475[2mms[22m[39m
+   [33m[2m✓[22m[39m actual recruitment board and ordinary Buy return[2m > [22mshows twelve saved targets as compact View tiles and opens only one current detail before Back with no write or draw [33m 1164[2mms[22m[39m
+ [32m✓[39m src/test/clubManagerRecruitmentBaseline.test.tsx [2m([22m[2m6 tests[22m[2m)[22m[33m 1282[2mms[22m[39m
+   [33m[2m✓[22m[39m Club Manager recruitment shortlist first behavior baseline[2m > [22madds a current Buy row without starting talks or changing any old career field [33m 564[2mms[22m[39m
+ [32m✓[39m src/test/clubManagerLoanPlanMounted.test.tsx [2m([22m[2m15 tests[22m[2m)[22m[33m 15943[2mms[22m[39m
+   [33m[2m✓[22m[39m Loan plan through the actual transfer screen and saved hook[2m > [22mshows rules and a worked example before confirmation, and cancel saves nothing [33m 4058[2mms[22m[39m
+   [33m[2m✓[22m[39m Loan plan through the actual transfer screen and saved hook[2m > [22mconfirms the real standard loan terms and restores the plan after actual unmount/reload [33m 2698[2mms[22m[39m
+   [33m[2m✓[22m[39m Loan plan through the actual transfer screen and saved hook[2m > [22muses the actual existing incoming loan bid price and removes that accepted bid [33m 1290[2mms[22m[39m
+   [33m[2m✓[22m[39m Loan plan through the actual transfer screen and saved hook[2m > [22mrejects a displayed bid after the real bid has been withdrawn [33m 966[2mms[22m[39m
+   [33m[2m✓[22m[39m Loan plan through the actual transfer screen and saved hook[2m > [22mshows unknown host data honestly and refuses an opt-in record on a partial host [33m 830[2mms[22m[39m
+   [33m[2m✓[22m[39m Loan plan through the actual transfer screen and saved hook[2m > [22msaves a real weekly review without inventing host minutes or changing the player rating [33m 1142[2mms[22m[39m
+   [33m[2m✓[22m[39m Loan plan through the actual transfer screen and saved hook[2m > [22mrecalls through the existing engine, pays its fee and retains the one-loan season stamp [33m 1005[2mms[22m[39m
+   [33m[2m✓[22m[39m Loan plan through the actual transfer screen and saved hook[2m > [22mrefuses all plan mutations after another manager slot becomes active [33m 666[2mms[22m[39m
+   [33m[2m✓[22m[39m Loan plan through the actual transfer screen and saved hook[2m > [22mdoes not commit a loan in memory when actual persistence fails [33m 622[2mms[22m[39m
+   [33m[2m✓[22m[39m Loan plan through the actual transfer screen and saved hook[2m > [22mrejects a real displayed quote after the saved date advances [33m 578[2mms[22m[39m
+   [33m[2m✓[22m[39m Loan plan through the actual transfer screen and saved hook[2m > [22mrefuses confirmation after an actual window close even with its old displayed token [33m 625[2mms[22m[39m
+   [33m[2m✓[22m[39m Loan plan through the actual transfer screen and saved hook[2m > [22mkeeps an unsupported saved plan unavailable and refuses plan review or recall [33m 412[2mms[22m[39m
+   [33m[2m✓[22m[39m Loan plan through the actual transfer screen and saved hook[2m > [22mkeeps actual legacy recall available for malformed optional plan metadata [33m 377[2mms[22m[39m
+   [33m[2m✓[22m[39m Loan plan through the actual transfer screen and saved hook[2m > [22mkeeps actual legacy recall available for a schema-valid foreign loan record [33m 387[2mms[22m[39m
+
+[2m Test Files [22m [1m[32m7 passed[39m[22m[90m (7)[39m
+[2m      Tests [22m [1m[32m72 passed[39m[22m[90m (72)[39m
+[2m   Start at [22m 03:49:40
+[2m   Duration [22m 21.99s[2m (transform 3.69s, setup 727ms, collect 12.14s, tests 27.49s, environment 4.93s, prepare 2.22s)[22m
+
