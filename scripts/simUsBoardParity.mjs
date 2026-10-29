@@ -387,7 +387,22 @@
  * season's words: the curtain's new credit or tough playoff line, the News
  * tile that prints the same season's feed until the next season is played
  * (5 of its presses carry a headline count one higher in the label, the same
- * tile), and the scrum's sentence. 2,259,762 bytes.
+ * tile), and the scrum's sentence. 2,298,806 bytes.
+ * Round 1569's fix run re-recorded it on purpose the same day, by the same
+ * method, from 43f38a3a1 (rc r1569-fx-rec, extra files mutFix1569.mjs,
+ * rec1569.mjs, fixdiff.mjs). Two kinds of input moved it: the board is one
+ * element now (UsCareerBoard.tsx withSaveStatus returns a div, so the sticky
+ * Start over is held to the board), which moves the markup of every screen,
+ * and four pieces of copy: the extension card's market promise says "if your
+ * career goes on", its last season words show with an offer too, a pulled
+ * offer's note in a last season, and "the playoffs" for an NFL run that
+ * reached the Super Bowl. With those put back (mutFix1569.mjs all) the head
+ * replays the fixture before it green (proof-all), and a recording equals
+ * it in every click, save, coverage count and screen (diffB 0). With only
+ * the wrapper put back, 129 screens move (diffCopy, the extension card's
+ * screens: 128 of the excerpts read its words, one opens on a card above it);
+ * with nothing put back, 5,518 (diffAll, every screen's markup). No click,
+ * save or coverage count moved. 2,298,807 bytes.
  *
  * Controls, one per run (each is a full replay, about three minutes):
  *   US_BOARD_PARITY_CONTROL=label    one label changed in a copy of the shared
