@@ -1,0 +1,5 @@
+simSoccerCareerLoyalty: 60 actual original/candidate default career comparisons passed.
+Official saved bytes and every enumerable data field held in all 60 cases.
+Global draw counts and next draws held in all 60 cases.
+Actual paths: playing=12, banned=12, prison=12, legacy-rehab=12, legacy-conviction=12.
+Callbacks retained by location/arity; no cross-bundle closure-equivalence claim. Evidence: /home/runner/work/ballpark-hero/ballpark-hero/.sim-artifacts/soccer-loyalty-2783-1793264690691

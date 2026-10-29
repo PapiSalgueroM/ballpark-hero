@@ -1,0 +1,4 @@
+tsc exit=0 72s | 
+uncut-head exit=0 5s |    Duration  4.55s (transform 1.07s, setup 70ms, collect 1.28s, tests 2.47s, environment 313ms, prepare 147ms)
+simSoccerCareerLoyalty exit=0 1s | Callbacks retained by location/arity; no cross-bundle closure-equivalence claim. Evidence: /home/runner/work/ballpark-hero/ballpark-hero/.sim-artifacts/soccer-loyalty-278
+uncut-before exit=1 5s | ::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/test/soccerCareerLoyaltyUncut.test.ts,title=src/test/soccerCareerLoyaltyUncut.test.ts > a wage that moves u

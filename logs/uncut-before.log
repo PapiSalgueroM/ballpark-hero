@@ -1,0 +1,15 @@
+   [33m[2m✓[22m[39m a loyalty cut ends with its contract[2m > [22mthe extension quotes the uncut wage, the same as the cash run, and the payout is a real gain [33m 1418[2mms[22m[39m
+   [33m[2m✓[22m[39m a loyalty cut ends with its contract[2m > [22mthe renewal when he lets the deal run down quotes the uncut wage as well [33m 969[2mms[22m[39m
+[31m   [31m×[31m a wage that moves under the cut keeps the uncut wage in step[2m > [22mContract Breakdown, both answers that move the wage: the next contract equals the cash run[39m[32m 12[2mms[22m[39m
+[31m     → expected { Object (seed, choice, ...) } to deeply equal { Object (seed, choice, ...) }[39m
+[31m   [31m×[31m a wage that moves under the cut keeps the uncut wage in step[2m > [22ma renewal that lands on the cut wage ends the cut[39m[32m 4[2mms[22m[39m
+[31m     → expected [ 9000, 9000, 9000 ] to deeply equal [ 9000, 9000, 8100 ][39m
+[31m⎯⎯⎯⎯⎯⎯⎯[39m[1m[41m Failed Tests 2 [49m[22m[31m⎯⎯⎯⎯⎯⎯⎯[39m
+[41m[1m FAIL [22m[49m src/test/soccerCareerLoyaltyUncut.test.ts[2m > [22ma wage that moves under the cut keeps the uncut wage in step[2m > [22mContract Breakdown, both answers that move the wage: the next contract equals the cash run
+[31m[1mAssertionError[22m: expected { Object (seed, choice, ...) } to deeply equal { Object (seed, choice, ...) }[39m
+[41m[1m FAIL [22m[49m src/test/soccerCareerLoyaltyUncut.test.ts[2m > [22ma wage that moves under the cut keeps the uncut wage in step[2m > [22ma renewal that lands on the cut wage ends the cut
+[31m[1mAssertionError[22m: expected [ 9000, 9000, 9000 ] to deeply equal [ 9000, 9000, 8100 ][39m
+[2m Test Files [22m [1m[31m1 failed[39m[22m[90m (1)[39m
+[2m      Tests [22m [1m[31m2 failed[39m[22m[2m | [22m[1m[32m2 passed[39m[22m[90m (4)[39m
+::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/test/soccerCareerLoyaltyUncut.test.ts,title=src/test/soccerCareerLoyaltyUncut.test.ts > a wage that moves under the cut keeps the uncut wage in step > Contract Breakdown%2C both answers that move the wage%3A the next contract equals the cash run,line=152,column=72::AssertionError: expected { Object (seed, choice, ...) } to deeply equal { Object (seed, choice, ...) }%0A%0A- Expected%0A+ Received%0A%0A  {%0A    "choice": 0,%0A-   "ext": 9775,%0A-   "renewal": 8500,%0A+   "ext": 8798,%0A+   "renewal": 7650,%0A    "seed": 1,%0A  }%0A%0A ❯ src/test/soccerCareerLoyaltyUncut.test.ts:152:72%0A%0A
+::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/test/soccerCareerLoyaltyUncut.test.ts,title=src/test/soccerCareerLoyaltyUncut.test.ts > a wage that moves under the cut keeps the uncut wage in step > a renewal that lands on the cut wage ends the cut,line=172,column=33::AssertionError: expected [ 9000, 9000, 9000 ] to deeply equal [ 9000, 9000, 8100 ]%0A%0A- Expected%0A+ Received%0A%0A  [%0A    9000,%0A    9000,%0A-   8100,%0A+   9000,%0A  ]%0A%0A ❯ src/test/soccerCareerLoyaltyUncut.test.ts:172:33%0A%0A
