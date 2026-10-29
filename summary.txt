@@ -1,0 +1,8 @@
+build exit=0 35s | [dukb] inlined 1 stylesheet(s) and 1 module(s) into 181 snapshots (11 left alone)
+walk exit=0 62s | playFoSeasonCard: 216 checks, 0 failed
+nfl-walk exit=0 46s | playNflSeasonStats: 112 checks, 0 failed
+weight-head exit=0 6s | weightCard head: css usePracticeClock.css 0.36K gz (1.06K raw)
+base exit=0 231s | weightCard base: css usePracticeClock.css 0.36K gz (1.06K raw)
+c-nocue exit=1 98s | playFoSeasonCard: 216 checks, 6 failed (control nocue)
+c-shortbox exit=1 98s | playFoSeasonCard: 216 checks, 6 failed (control shortbox)
+c-oldbadge exit=1 100s | playFoSeasonCard: 216 checks, 6 failed (control oldbadge)
