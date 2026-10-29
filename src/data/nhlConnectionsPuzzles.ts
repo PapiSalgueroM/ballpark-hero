@@ -32,10 +32,13 @@ export interface NhlConnectionsPuzzle {
  *     have no group.
  *   - Doug Gilmour (1,414 points, 7 teams) forced Cole Caufield into the
  *     Canadiens group.
- * Margins on stat groups: nearest non-member is Brent Burns at 944 points
- * (in the same puzzle's Sharks group, 56 under the 1,000 bar, he retired
- * after 2025? NO: verify Burns before refreshing nhl_player_stats; if his
- * career total crosses 1,000 the nhlconn-004 partition breaks.)
+ * Margins on stat groups: Round 1558 read the league's own record on
+ * 2026-10-22 and found Brent Burns (948) and Erik Karlsson (947) both still
+ * playing in the Sharks group beside "1,000+ career points", each one good
+ * season from a second right answer. Marc-Edouard Vlasic and Macklin
+ * Celebrini, Sharks far from 1,000, took their places, and
+ * scripts/simUsConnectionsFacts.mjs fails any board that deals a man within
+ * a season of a milestone group beside it.
  */
 export const nhlConnectionsPuzzles: NhlConnectionsPuzzle[] = [
   {
@@ -70,7 +73,7 @@ export const nhlConnectionsPuzzles: NhlConnectionsPuzzle[] = [
     groups: [
       { theme: 'Played for the Canadiens', players: ['P.K. Subban', 'Shea Weber', 'Brendan Gallagher', 'Nick Suzuki', 'Cole Caufield'], difficulty: 'yellow' },
       { theme: 'Played for the Panthers', players: ['Matthew Tkachuk', 'Aleksander Barkov', 'Sam Reinhart', 'Carter Verhaeghe', 'Aaron Ekblad'], difficulty: 'green' },
-      { theme: 'Played for the Sharks', players: ['Brent Burns', 'Erik Karlsson', 'Evander Kane', 'Logan Couture', 'Tomáš Hertl'], difficulty: 'blue' },
+      { theme: 'Played for the Sharks', players: ['Macklin Celebrini', 'Marc-Edouard Vlasic', 'Evander Kane', 'Logan Couture', 'Tomáš Hertl'], difficulty: 'blue' },
       { theme: '1,000+ career points', players: ['Connor McDavid', 'Leon Draisaitl', 'Nikita Kucherov', 'Nathan MacKinnon', 'Steven Stamkos'], difficulty: 'purple' },
     ],
   },

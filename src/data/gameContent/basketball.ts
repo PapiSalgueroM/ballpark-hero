@@ -490,7 +490,7 @@ export const BASKETBALL_CONTENT: GameContentMap = {
       {
         heading: "Spinning the stat challenge",
         items: [
-          "Spin the stat challenge. It might be highest career PPG, lowest career fouls, most championships, tallest lineup, anything from a pool of 13 stats.",
+          "Spin the stat challenge. It might be highest career PPG, lowest career blocks per game, most threes made, anything from a pool of 7 career stats.",
         ],
       },
       {
@@ -514,7 +514,7 @@ export const BASKETBALL_CONTENT: GameContentMap = {
       {
         heading: "Submitting the lineup for a verdict",
         items: [
-          "Submit the lineup for a verdict: a rating, a headline and a short breakdown.",
+          "Submit the lineup for a score out of 100 against the best five your teams allowed.",
         ],
       },
     ],
@@ -562,7 +562,7 @@ export const BASKETBALL_CONTENT: GameContentMap = {
       {
         heading: "Two tougher franchises and a rough verdict",
         paragraphs: [
-          "Then it gets rude: PF from the Grizzlies, C from the Hornets. You dig up the best scorers you can remember, submit a total in the high 90s, and the verdict roasts your weakest link.",
+          "Then it gets rude: PF from the Grizzlies, C from the Hornets. You dig up the best scorers you can remember, submit a total in the high 90s, and the score shows how far each pick fell short of the best his team allowed.",
         ],
       },
     ],
@@ -587,9 +587,9 @@ export const BASKETBALL_CONTENT: GameContentMap = {
       },
     ],
     faqs: [
-      { q: "Do the players have to be current?", a: "No. The pool spans thousands of players across NBA history, as long as they played for the shown franchise." },
+      { q: "Do the players have to be current?", a: "No. The pool spans thousands of players across NBA history, as long as they played for the shown franchise and have a career line in our stat table, which starts with careers from 1965-66." },
       { q: "Why will the game not accept my guy at point guard?", a: "Position data is coarse: guards fit either guard slot, forwards fit either forward slot, and centers fit center. If a player is listed as a forward, he cannot fill your PG hole." },
-      { q: "How is my lineup judged?", a: "Each pick gets a value for the challenge stat, then the game writes a short verdict with a rating and headline you can share." },
+      { q: "How is my lineup judged?", a: "Each pick shows his real career number for the challenge, and your five is scored out of 100: the best five your teams allowed scores 100, the worst scores 0." },
     ],
   },
 
@@ -847,7 +847,7 @@ export const BASKETBALL_CONTENT: GameContentMap = {
       {
         heading: "Reading the two player cards",
         items: [
-          "Look at the two player cards: name, position, franchises and final season.",
+          "Look at the two player cards: name, position and franchises.",
         ],
       },
       {
@@ -931,9 +931,9 @@ export const BASKETBALL_CONTENT: GameContentMap = {
         ],
       },
       {
-        heading: "Reading the final season for career length",
+        heading: "Remembering who is still adding points",
         items: [
-          "Check the final season on the card. It quietly tells you how long the career ran.",
+          "Remember who is still playing. An active star's total keeps growing, so a ranking you learned a while ago can already be out of date.",
         ],
       },
       {
@@ -1883,7 +1883,7 @@ export const BASKETBALL_CONTENT: GameContentMap = {
       {
         heading: "Draft classes and scouting uncertainty",
         items: [
-          "Each club starts with 2 simulation picks. Trades can leave you with fewer or more choices, and each selection spends one owned pick. With none left, finish the draft and offseason. The pool has at least 24 prospects, and rivals get two batches of up to five eligible selections in this abbreviated draft. Scouting grades can miss the truth by a few points either way.",
+          "Each club starts with 2 simulation picks. Trades can leave you with fewer or more choices, and each selection spends one owned pick. With none left, finish the draft and offseason. The pool has at least 24 prospects. Draft night runs in the order your record earns: the 14 clubs that missed the playoffs go into a lottery for the top four picks, on the odds the league used for its 2019 to 2026 drafts, then every club picks in its place over two rounds, and your staff can make your picks for you. A save that never opened the GM desk keeps the old short draft, where you pick first and the rivals follow. Scouting grades can miss the truth by a few points either way.",
         ],
       },
       {

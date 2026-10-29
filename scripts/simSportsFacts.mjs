@@ -68,6 +68,23 @@
  *       the four golf lists fetched through the real fetch closures (against a
  *       stub that serves dash rows) must return no dash, and no golfer in
  *       golfLegends may be a dash.
+ *   11. F1 Higher or Lower (src/data/f1HLDrivers.ts), Round 1549: every
+ *       driver's career wins against scripts/data/sportsFactsVerified2026-10.json,
+ *       which section 1 walks by the same rules as this record. The cutoff the
+ *       card names (F1_HL_THROUGH) must be the record's latest 2026 race, every
+ *       driver racing in 2026 must show 2026 and his 2026 team, and the pool
+ *       rule (eight or more wins) must hold. THE CROSS FILE FENCE: every F1
+ *       Driver clue that counts a pool driver's wins ("13 race wins through the
+ *       2026 Azerbaijan Grand Prix", "71 race wins through the 2025 season",
+ *       "32 race wins across his career") is recomputed from the same record at
+ *       the point the clue names, so the two F1 games cannot disagree about one
+ *       man again (Hamilton was 105 in one and 106 in the other).
+ *   12. Tennis Higher or Lower (src/data/tennisHLPlayers.ts), Round 1549: every
+ *       row recounted from Round 732's two source slam record
+ *       (scripts/data/tennisSlamsVerified2026-09.json, dropped rows left out,
+ *       married names merged as scripts/data/tennisHigherLowerVerified2026-10.json
+ *       lists them): titles, first and last title year, tour, and the cutoff
+ *       the card names must be the record's latest slam.
  *   Sections 2 to 9 also refuse a duplicate: the same fighter, fight, driver,
  *   constructor, pool name, athlete (by name, whatever the id) or golfer twice.
  *   Sections 2, 3, 7, 8 and 9 also require every field the game shows to be
@@ -132,6 +149,15 @@
  *   golf           Bobby Jones goes back to 5 majors                      section 9
  *   dupgolf        Bobby Jones is listed twice                            section 9
  *   golfdash       the Masters list reads golf_majors without onlyNames   section 10
+ *   hlonesource    Norris's count in the 2026-10 record loses its second
+ *                  source, so section 1 must be walking that record too   section 1
+ *   hlstale        Norris goes back to 11 wins in F1 Higher or Lower      section 11
+ *   crossclue      Norris's F1 Driver win clue says 14, in the file and
+ *                  in the record alike, so only the cross file fence
+ *                  can see it                                              section 11
+ *   hlcutoff       the F1 card claims its counts run through the 2026
+ *                  Azerbaijan Grand Prix, two races short                  section 11
+ *   tennisstale    Sinner goes back to 4 slams                            section 12
  *
  * Run: node scripts/simSportsFacts.mjs
  */
@@ -184,6 +210,11 @@ const CONTROLS = {
   golf: { section: 9, tag: 'value' },
   dupgolf: { section: 9, tag: 'duplicate' },
   golfdash: { section: 10, tag: 'golfdash' },
+  hlonesource: { section: 1, tag: 'sources', count: 1 },
+  hlstale: { section: 11, tag: 'value', count: 1 },
+  crossclue: { section: 11, tag: 'cross', count: 1 },
+  hlcutoff: { section: 11, tag: 'cutoff', count: 1 },
+  tennisstale: { section: 12, tag: 'value', count: 2 },
 };
 if (CONTROL && !(CONTROL in CONTROLS)) {
   console.error(`SPORTS_FACTS_CONTROL=${CONTROL} is not a control this harness knows (${Object.keys(CONTROLS).join(', ')})`);
@@ -306,8 +337,19 @@ const GOLF = 'src/data/golfLegends.ts';
 const LISTQUIZ = 'src/lib/listQuiz.ts';
 const COUNTRY = 'src/components/olympics/OlympicCountry.tsx';
 const OLY_PAGE = 'src/pages/Olympics.tsx';
+const F1HL = 'src/data/f1HLDrivers.ts';
+const TENNIS_HL = 'src/data/tennisHLPlayers.ts';
 
 const BASE_RECORD = JSON.parse(fs.readFileSync(RECORD_PATH, 'utf8'));
+/* Round 1549: the Higher or Lower record of 2026-10 sits beside this one. Its
+   F1 block joins the record here, so section 1 holds its sources to exactly the
+   same rules and the controls can edit it like any other node. */
+const HL_RECORD = JSON.parse(fs.readFileSync(path.join(ROOT, 'scripts/data/sportsFactsVerified2026-10.json'), 'utf8'));
+BASE_RECORD.f1HigherLower = HL_RECORD.f1HigherLower;
+const SLAMS = JSON.parse(fs.readFileSync(path.join(ROOT, 'scripts/data/tennisSlamsVerified2026-09.json'), 'utf8'));
+const TENNIS_MERGES = Object.fromEntries(Object.entries(
+  JSON.parse(fs.readFileSync(path.join(ROOT, 'scripts/data/tennisHigherLowerVerified2026-10.json'), 'utf8')).merges,
+).map(([k, v]) => [k, v.split(' + ')]));
 
 // ---------------------------------------------------------------------------
 // The controls: one rewritten source or one edited copy of the record each.
@@ -472,6 +514,31 @@ function applyControl(name) {
     case 'golfdash':
       over[LISTQUIZ] = rewrite(src(LISTQUIZ), "fetch: () => onlyNames(col('golf_majors', 'player_name', q => q.ilike('tournament', '%masters%'))),",
         "fetch: () => col('golf_majors', 'player_name', q => q.ilike('tournament', '%masters%')),", 'the Masters list fetch');
+      break;
+    case 'hlonesource': {
+      /* Proves section 1 walks the 2026-10 record too, not only this one. */
+      const node = record.f1HigherLower?.drivers?.['Lando Norris']?.careerWins;
+      hasSrc(node, "Norris's Higher or Lower win count");
+      node.src = node.src.slice(0, 1);
+      break;
+    }
+    case 'hlstale':
+      over[F1HL] = rewrite(src(F1HL), "{ name: 'Lando Norris', careerWins: 13,", "{ name: 'Lando Norris', careerWins: 11,", "Norris's Higher or Lower row");
+      break;
+    case 'crossclue': {
+      /* The file and the record agree, so section 5 is quiet and only the
+         cross file fence can see that 14 is not his count. */
+      const clue = record.f1Drivers.norris?.clues.find(c => c.text === '13 race wins through the 2026 Azerbaijan Grand Prix');
+      must(clue, "Norris's verified win count clue");
+      clue.text = '14 race wins through the 2026 Azerbaijan Grand Prix';
+      over[F1D] = rewrite(src(F1D), "'13 race wins through the 2026 Azerbaijan Grand Prix'", "'14 race wins through the 2026 Azerbaijan Grand Prix'", "Norris's win clue");
+      break;
+    }
+    case 'hlcutoff':
+      over[F1HL] = rewrite(src(F1HL), "F1_HL_THROUGH = 'the 2026 Singapore Grand Prix'", "F1_HL_THROUGH = 'the 2026 Azerbaijan Grand Prix'", 'the F1 Higher or Lower cutoff');
+      break;
+    case 'tennisstale':
+      over[TENNIS_HL] = rewrite(src(TENNIS_HL), "{ name: 'Jannik Sinner', slams: 5, firstYear: 2024, lastYear: 2026,", "{ name: 'Jannik Sinner', slams: 4, firstYear: 2024, lastYear: 2025,", "Sinner's Higher or Lower row");
       break;
     default: refuseControl('it has no edit');
   }
@@ -664,7 +731,7 @@ async function runFence(record, over, quiet) {
       }
       for (const [k, v] of Object.entries(node)) walk(sport, `${where}.${k}`, v, null);
     };
-    const SPORT = { ufcFighters: 'ufc', ufcChain: 'ufc', fightResults: 'ufc', f1Drivers: 'f1', f1Constructors: 'f1', f1Pool: 'f1', olympics: 'olympics', golf: 'golf' };
+    const SPORT = { ufcFighters: 'ufc', ufcChain: 'ufc', fightResults: 'ufc', f1Drivers: 'f1', f1Constructors: 'f1', f1Pool: 'f1', olympics: 'olympics', golf: 'golf', f1HigherLower: 'f1' };
     for (const [key, sport] of Object.entries(SPORT)) {
       if (!record[key]) { fail('coverage', `the record has no ${key} block`); continue; }
       if (!Array.isArray(record.officialHosts?.[sport])) { fail('coverage', `the record lists no official hosts for ${sport}`); continue; }
@@ -983,6 +1050,109 @@ export const SUPABASE_PUBLISHABLE_KEY = 'stub';
     const { golfLegends } = await loadModule(GOLF, over);
     const bad = golfLegends.filter(g => !/\p{L}/u.test(g.name));
     if (bad.length) fail('golfdash', `golfLegends ships ${bad.length} placeholder golfer(s)`);
+  }
+
+  // ---------------------------------------------------------------------------
+  head(11, 'F1 Higher or Lower: every win count and the cutoff the card names, and every F1 Driver clue that counts wins, against the 2026-10 record');
+  {
+    const rec = record.f1HigherLower;
+    const hl = await loadModule(F1HL, over);
+    const pool = hl.f1HLDrivers;
+    const races = rec?.races2026?.v;
+    if (!rec || !rec.drivers || !Array.isArray(races) || !races.length) fail('coverage', 'the 2026-10 record has no F1 Higher or Lower block to judge against');
+    else {
+      const wins26 = (name, upto = Infinity) => races.filter(r => r.winner === name && r.round <= upto).length;
+      const latest = races[races.length - 1];
+      if (races.some((r, i) => r.round !== i + 1)) fail('cutoff', 'the 2026 race list skips or repeats a round');
+      if (rec.through !== `the 2026 ${latest.race}`) fail('cutoff', `the record says it runs through ${rec.through}, but its latest race is the 2026 ${latest.race}`);
+      if (hl.F1_HL_THROUGH !== rec.through) fail('cutoff', `the card says its counts run through ${hl.F1_HL_THROUGH}, the record counts through ${rec.through}`);
+      noDuplicates('F1 Higher or Lower driver', pool, d => d.name);
+      let n = 0;
+      for (const d of pool) {
+        const r = rec.drivers[d.name];
+        if (!r?.careerWins) { fail('coverage', `${d.name} ships in F1 Higher or Lower with no verified win count`); continue; }
+        n += 1;
+        if (d.careerWins !== r.careerWins.v) fail('value', `${d.name}: the game says ${d.careerWins} wins, the record ${r.careerWins.v} through ${rec.through}`);
+        if (r.team2026) {
+          if (d.lastSeason !== 2026) fail('value', `${d.name} races for ${r.team2026.v} in 2026, but his card ends in ${d.lastSeason}`);
+          if (!String(d.constructors).split(', ').includes(r.team2026.v)) fail('value', `${d.name} races for ${r.team2026.v} in 2026, a team his card does not list (${d.constructors})`);
+        } else {
+          if (d.lastSeason >= 2026) fail('value', `${d.name}'s card says he raced in 2026, and the record has no 2026 team for him`);
+          if (wins26(d.name)) fail('value', `${d.name} won a 2026 race, and the record has no 2026 team for him`);
+        }
+      }
+      for (const name of Object.keys(rec.drivers)) if (!pool.some(d => d.name === name)) fail('missing', `${name} is in the record and no longer ships in F1 Higher or Lower`);
+      /* The file's own rule: every driver with eight or more wins. */
+      for (const [name, r] of Object.entries(rec.drivers)) if (r.careerWins?.v < 8) fail('value', `${name} has ${r.careerWins.v} wins, under the pool's own rule of eight`);
+      say(`  ${n} drivers agree with the record through ${rec.through} (${races.length} races of 2026 counted); ${Object.values(rec.drivers).filter(r => r.team2026).length} of them race in 2026 and show it`);
+
+      /* The cross file fence. A clue that counts a pool driver's wins is
+         recomputed at the point it names, from the same record. */
+      /* An export renamed away leaves nothing judged, which the floor below fails. */
+      const f1Drivers = (await loadModule(F1D, over)).F1_DRIVERS ?? [];
+      const COUNT = /^(\d+) race wins?\b(.*)$/;
+      const ANY_COUNT = /\b\d+\s+(?:race\s+|grand\s+prix\s+)?(?:wins?|victories)\b/i;
+      let judged = 0;
+      for (const card of f1Drivers) {
+        const r = rec.drivers[card.driverName];
+        if (!r?.careerWins) continue;
+        const total = r.careerWins.v;
+        const before2026 = total - wins26(card.driverName);
+        /* Only a clue the F1 Driver record holds word for word is judged here.
+           A file clue that differs from its record is section 5's failure, and
+           judging it twice would make one break look like two. */
+        const verifiedClues = new Set((record.f1Drivers?.[card.id]?.clues ?? []).map(c => c.text));
+        for (const clue of card.clues) {
+          if (!verifiedClues.has(clue)) continue;
+          const m = clue.match(COUNT);
+          if (!m) {
+            if (ANY_COUNT.test(clue)) fail('cross', `${card.driverName}'s clue "${clue}" counts wins in a shape this fence cannot place`);
+            continue;
+          }
+          judged += 1;
+          const said = Number(m[1]);
+          let want = null; let at = ''; let k;
+          if ((k = m[2].match(/^ through the (\d{4}) season/)) && Number(k[1]) === 2025) { want = before2026; at = 'the end of 2025'; }
+          else if ((k = m[2].match(/^ through the 2026 (.+?) Grand Prix/))) {
+            const race = races.find(x => x.race === `${k[1]} Grand Prix`);
+            if (race) { want = before2026 + wins26(card.driverName, race.round); at = `the 2026 ${race.race}`; }
+          } else if (/^ across his career/.test(m[2])) { want = total; at = rec.through; }
+          if (want === null) { fail('cross', `${card.driverName}'s clue "${clue}" counts wins to a point the record cannot place`); continue; }
+          if (said !== want) fail('cross', `${card.driverName}'s F1 Driver clue says ${said} wins through ${at}; the record behind his Higher or Lower card makes it ${want}`);
+          if (/all of them in 2026/.test(clue) && before2026 !== 0) fail('cross', `${card.driverName}'s clue says all his wins came in 2026, the record has ${before2026} before it`);
+        }
+      }
+      if (judged < 5) fail('floor', `only ${judged} F1 Driver win count clue(s) were judged, so the parse is broken`);
+      else say(`  ${judged} F1 Driver clues that count a pool driver's wins agree with the same record at the point each names`);
+    }
+  }
+
+  // ---------------------------------------------------------------------------
+  head(12, 'Tennis Higher or Lower: every count recounted from the two source slam record, and the cutoff the card names');
+  {
+    const t = await loadModule(TENNIS_HL, over);
+    const live = SLAMS.rows.filter(r => r.status !== 'dropped' && /Singles$/.test(r.category));
+    const ORDER = ['Australian Open', 'French Open', 'Wimbledon', 'US Open'];
+    const rank = (r) => r.year * 10 + ORDER.indexOf(r.tournament);
+    const latest = live.reduce((a, r) => (rank(r) > rank(a) ? r : a));
+    const through = `the ${latest.year} ${latest.tournament}`;
+    if (t.TENNIS_HL_THROUGH !== through) fail('cutoff', `the card says its counts run through ${t.TENNIS_HL_THROUGH}, the slam record's latest slam is ${through}`);
+    noDuplicates('Tennis Higher or Lower player', t.tennisHLPlayers, p => p.name);
+    let n = 0;
+    for (const p of t.tennisHLPlayers) {
+      const names = TENNIS_MERGES[p.name] ?? [p.name];
+      const won = live.filter(r => names.includes(r.champion));
+      if (!won.length) { fail('coverage', `${p.name} ships in Tennis Higher or Lower and is champion of no singles row in the slam record`); continue; }
+      n += 1;
+      const years = won.map(r => r.year);
+      const first = Math.min(...years); const last = Math.max(...years);
+      if (p.slams !== won.length) fail('value', `${p.name}: the game says ${p.slams} slams, the record ${won.length} through ${through}`);
+      if (p.firstYear !== first || p.lastYear !== last) fail('value', `${p.name}: the card says titles from ${p.firstYear} to ${p.lastYear}, the record ${first} to ${last}`);
+      const tours = new Set(won.map(r => (r.category.startsWith('Men') ? 'M' : 'W')));
+      if (tours.size !== 1 || !tours.has(p.tour)) fail('value', `${p.name}: the card says tour ${p.tour}, the record's rows are ${[...tours].join(' and ')}`);
+    }
+    if (n < 40) fail('floor', `only ${n} tennis players recounted, so the load is broken`);
+    else say(`  ${n} players recounted from ${live.length} singles rows through ${through}, every count, year and tour as the card shows it`);
   }
 
   return failures;

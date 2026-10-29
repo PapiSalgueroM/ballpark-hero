@@ -11,31 +11,43 @@
  * "Eddie Johnson" was excluded: two different NBA Eddie Johnsons share the
  * name and their merged "career" ranked 8th all-time.
  *
+ * The ten men who played in 2025-26 carry their official regular season
+ * totals through 2025-26, read on 2026-10-22 on StatMuse and on ESPN, both
+ * recorded per player in scripts/data/nbaHigherLowerVerified2026-09.json
+ * (Round 1549: the site's own table had stopped short of the last games of
+ * that season, which left Curry 3 under Tim Duncan instead of 32 over him).
+ *
  * No nationality here (bref has none), unlike hockeyHLPlayers there is no
- * flag; the card shows position, era and teams instead.
+ * flag; the card shows position and teams instead.
  */
 export interface NbaHLPlayer {
   name: string;
   position: string;
-  /** Up to 5 franchise codes, alphabetical. */
+  /**
+   * Franchise codes, alphabetical. A career that ended before 2025-26 shows up
+   * to 5. Since Round 1549 a man who played in 2025-26 shows every franchise
+   * he played for, so his current team cannot fall off the end of the list
+   * (Durant's Houston and Harden's Cleveland had); simHigherLowerFacts
+   * section 8 holds those lists to scripts/data/nbaHigherLowerTeams2026-10.json.
+   */
   teams: string;
   careerPoints: number;
-  /** Final season, for era context on the card. */
+  /** The last season the total runs through; the card says "through" it. */
   lastSeason: string;
 }
 
 export const nbaHLPlayers: NbaHLPlayer[] = [
-  { name: 'LeBron James', position: 'SF', teams: 'CLE, LAL, MIA', careerPoints: 43394, lastSeason: '2025-26' },
+  { name: 'LeBron James', position: 'SF', teams: 'CLE, LAL, MIA', careerPoints: 43440, lastSeason: '2025-26' },
   { name: 'Kareem Abdul-Jabbar', position: 'C', teams: 'LAL, MIL', careerPoints: 38387, lastSeason: '1988-89' },
   { name: 'Karl Malone', position: 'PF', teams: 'LAL, UTA', careerPoints: 36928, lastSeason: '2003-04' },
   { name: 'Kobe Bryant', position: 'SG', teams: 'LAL', careerPoints: 33643, lastSeason: '2015-16' },
   { name: 'Michael Jordan', position: 'SG', teams: 'CHI, WAS', careerPoints: 32292, lastSeason: '2002-03' },
   { name: 'Dirk Nowitzki', position: 'PF', teams: 'DAL', careerPoints: 31560, lastSeason: '2018-19' },
   { name: 'Wilt Chamberlain', position: 'C', teams: 'LAL, PHI, PHW, SFW', careerPoints: 31419, lastSeason: '1972-73' },
-  { name: 'Kevin Durant', position: 'SF', teams: 'BRK, GSW, OKC, PHO, SEA', careerPoints: 32564, lastSeason: '2025-26' },
+  { name: 'Kevin Durant', position: 'SF', teams: 'BRK, GSW, HOU, OKC, PHO, SEA', careerPoints: 32597, lastSeason: '2025-26' },
   { name: "Shaquille O'Neal", position: 'C', teams: 'BOS, CLE, LAL, MIA, ORL', careerPoints: 28596, lastSeason: '2010-11' },
   { name: 'Carmelo Anthony', position: 'SF', teams: 'DEN, HOU, LAL, NYK, OKC', careerPoints: 28289, lastSeason: '2021-22' },
-  { name: 'James Harden', position: 'PG', teams: 'BRK, HOU, LAC, OKC, PHI', careerPoints: 29319, lastSeason: '2025-26' },
+  { name: 'James Harden', position: 'PG', teams: 'BRK, CLE, HOU, LAC, OKC, PHI', careerPoints: 29339, lastSeason: '2025-26' },
   { name: 'Moses Malone', position: 'C', teams: 'ATL, BUF, HOU, MIL, PHI', careerPoints: 27409, lastSeason: '1994-95' },
   { name: 'Elvin Hayes', position: 'PF', teams: 'BAL, CAP, HOU, SDR, WSB', careerPoints: 27313, lastSeason: '1983-84' },
   { name: 'Hakeem Olajuwon', position: 'C', teams: 'HOU, TOR', careerPoints: 26946, lastSeason: '2001-02' },
@@ -44,11 +56,11 @@ export const nbaHLPlayers: NbaHLPlayer[] = [
   { name: 'Tim Duncan', position: 'C', teams: 'SAS', careerPoints: 26496, lastSeason: '2015-16' },
   { name: 'Paul Pierce', position: 'SF', teams: 'BOS, BRK, LAC, WAS', careerPoints: 26397, lastSeason: '2016-17' },
   { name: 'John Havlicek', position: 'SF', teams: 'BOS', careerPoints: 26395, lastSeason: '1977-78' },
-  { name: 'Russell Westbrook', position: 'PG', teams: 'DEN, HOU, LAC, LAL, OKC', careerPoints: 27176, lastSeason: '2025-26' },
+  { name: 'Russell Westbrook', position: 'PG', teams: 'DEN, HOU, LAC, LAL, OKC, SAC, WAS', careerPoints: 27176, lastSeason: '2025-26' },
   { name: 'Kevin Garnett', position: 'PF', teams: 'BOS, BRK, MIN', careerPoints: 26071, lastSeason: '2015-16' },
   { name: 'Vince Carter', position: 'SG', teams: 'ATL, DAL, MEM, NJN, ORL', careerPoints: 25728, lastSeason: '2019-20' },
   { name: 'Alex English', position: 'SF', teams: 'DAL, DEN, IND, MIL', careerPoints: 25613, lastSeason: '1990-91' },
-  { name: 'Stephen Curry', position: 'PG', teams: 'GSW', careerPoints: 26493, lastSeason: '2025-26' },
+  { name: 'Stephen Curry', position: 'PG', teams: 'GSW', careerPoints: 26528, lastSeason: '2025-26' },
   { name: 'DeMar DeRozan', position: 'SG', teams: 'CHI, SAC, SAS, TOR', careerPoints: 26711, lastSeason: '2025-26' },
   { name: 'Reggie Miller', position: 'SG', teams: 'IND', careerPoints: 25279, lastSeason: '2004-05' },
   { name: 'Jerry West', position: 'PG', teams: 'LAL', careerPoints: 25192, lastSeason: '1973-74' },
@@ -60,7 +72,7 @@ export const nbaHLPlayers: NbaHLPlayer[] = [
   { name: 'Adrian Dantley', position: 'SF', teams: 'BUF, DAL, DET, IND, LAL', careerPoints: 23177, lastSeason: '1990-91' },
   { name: 'Dwyane Wade', position: 'SG', teams: 'CHI, CLE, MIA', careerPoints: 23165, lastSeason: '2018-19' },
   { name: 'Elgin Baylor', position: 'SF', teams: 'LAL, MNL', careerPoints: 23149, lastSeason: '1971-72' },
-  { name: 'Chris Paul', position: 'PG', teams: 'GSW, HOU, LAC, NOH, NOK', careerPoints: 23058, lastSeason: '2025-26' },
+  { name: 'Chris Paul', position: 'PG', teams: 'GSW, HOU, LAC, NOH, NOK, OKC, PHO, SAS', careerPoints: 23058, lastSeason: '2025-26' },
   { name: 'Damian Lillard', position: 'PG', teams: 'MIL, POR', careerPoints: 22598, lastSeason: '2024-25' },
   { name: 'Clyde Drexler', position: 'SG', teams: 'HOU, POR', careerPoints: 22195, lastSeason: '1997-98' },
   { name: 'Gary Payton', position: 'PG', teams: 'BOS, LAL, MIA, MIL, SEA', careerPoints: 21813, lastSeason: '2006-07' },
@@ -95,7 +107,7 @@ export const nbaHLPlayers: NbaHLPlayer[] = [
   { name: 'Chet Walker', position: 'SF', teams: 'CHI, PHI, SYR', careerPoints: 18831, lastSeason: '1974-75' },
   { name: 'Isiah Thomas', position: 'PG', teams: 'DET', careerPoints: 18822, lastSeason: '1993-94' },
   { name: 'Bob McAdoo', position: 'C', teams: 'BOS, BUF, DET, LAL, NJN', careerPoints: 18787, lastSeason: '1985-86' },
-  { name: 'Paul George', position: 'SF', teams: 'IND, LAC, OKC, PHI', careerPoints: 19306, lastSeason: '2025-26' },
+  { name: 'Paul George', position: 'SF', teams: 'IND, LAC, OKC, PHI', careerPoints: 19338, lastSeason: '2025-26' },
   { name: 'Zach Randolph', position: 'PF', teams: 'LAC, MEM, NYK, POR, SAC', careerPoints: 18578, lastSeason: '2017-18' },
   { name: 'Mark Aguirre', position: 'SF', teams: 'DAL, DET, LAC', careerPoints: 18458, lastSeason: '1993-94' },
   { name: 'Dolph Schayes', position: 'PF', teams: 'PHI, SYR', careerPoints: 18438, lastSeason: '1963-64' },

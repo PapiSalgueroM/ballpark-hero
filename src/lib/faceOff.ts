@@ -35,6 +35,7 @@ import { tennisHLPlayers } from '@/data/tennisHLPlayers';
 import { golfLegends } from '@/data/golfLegends';
 import { aflGoalKickers } from '@/data/aflGoalKickers';
 import { dailyPrngSeed } from '@/lib/dateUtils';
+import { MIN_RATIO, clearlyAhead } from '@/lib/clearWinner';
 
 export const SAVE_KEY = 'dukb-face-off-v1';
 export const ROUNDS = 10;
@@ -45,9 +46,10 @@ export const BASE_POINTS = 100;
 export const PER_SECOND = 10;
 /** sudden death rounds after a tie, at most */
 export const MAX_EXTRA = 3;
-/** a pair is only asked when the bigger number is at least this many times the smaller,
- *  and at most MAX_RATIO times, so there are no ties and no gimmes */
-export const MIN_RATIO = 1.04;
+/** a pair is only asked when the bigger number is at least MIN_RATIO times the smaller,
+ *  and at most MAX_RATIO times, so there are no ties and no gimmes. MIN_RATIO lives in
+ *  src/lib/clearWinner.ts since Round 1552, so Sports Millionaire asks with the same gap. */
+export { MIN_RATIO };
 export const MAX_RATIO = 4;
 
 export type Difficulty = 'rookie' | 'pro' | 'legend';
@@ -179,7 +181,9 @@ export function pickPair(cat: Category, rng: Rng, avoid: Set<string> = new Set()
     if (a.name === b.name) continue;
     if (avoid.has(a.name) || avoid.has(b.name)) continue;
     const hi = Math.max(a.value, b.value), lo = Math.min(a.value, b.value);
-    if (lo <= 0 || hi / lo < MIN_RATIO || hi / lo > MAX_RATIO) continue;
+    // the site's one no tie rule (src/lib/clearWinner.ts); the pool above is finite and above zero,
+    // so this deals exactly the pairs the inline ratio check of Round 289 dealt
+    if (!clearlyAhead(hi, lo) || hi / lo > MAX_RATIO) continue;
     return [a, b];
   }
   return null;

@@ -1,6 +1,10 @@
-import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
+import { afterEach, beforeAll, beforeEach, describe, expect, it, vi } from 'vitest';
 import { act, cleanup, fireEvent, render, screen, within } from '@testing-library/react';
 import Board from '@/components/front-office/FrontOfficeBoard';
+import { loadNflCareerKit } from '@/components/front-office/nflCareerKitLoad';
+/* Round 1550: the board fetches its career kit when a screen needs it (FrontOfficeLazyDesk.test.tsx drives that);
+   these cases drive the rules, so the kit is on the page before the board mounts. */
+beforeAll(async () => { await loadNflCareerKit(); });
 import { consumeDraftPick, draftOrder, executeTalksTrade, franchiseTagSalary, generateDraftClass, initLeague, nflAiDraftPicks, prospectToPlayer, runOffseason, runPlayoffs, type LeagueState } from '@/lib/frontOffice';
 import * as engine from '@/lib/frontOffice';
 import { leagueNames } from '@/lib/foNames';
@@ -222,7 +226,9 @@ describe('NFL draft capital outcomes', () => {
     const actualRandom = seeded(29), actualTape: number[] = [];
     vi.mocked(Math.random).mockImplementation(() => { const value = actualRandom(); actualTape.push(value); return value; });
     mount(originalSave); open(); pick(); pick(); pick();
-    const withoutIds = (value: unknown) => JSON.parse(JSON.stringify(value, (key, item) => key === 'id' ? undefined : item));
+    /* Round 1542: the board stamps each man drafted with his first year (rookieSeason), a key the original loop never
+       wrote; it moves no outcome and takes no draw, so it is set aside with the ids */
+    const withoutIds = (value: unknown) => JSON.parse(JSON.stringify(value, (key, item) => key === 'id' || key === 'rookieSeason' ? undefined : item));
     expect(withoutIds(read().league)).toEqual(withoutIds(reference)); expect(actualTape).toEqual(expectedTape);
   });
 

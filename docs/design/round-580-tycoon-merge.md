@@ -1615,3 +1615,117 @@ remote check r1532-f2a): at 60 minutes 2.57 goals a match and 82.4 percent won
 (calibration, 51 matches) and 2.24 and 68.0 (holdout, 50); at 120 minutes 2.57 and 58.9
 (180) and 2.92 and 63.8 (210). At 30 minutes pace sits on a season's final matchday,
 which never plays away.
+
+## 22. Round 1539: a night away plays right up to the final, 2026-10-22
+
+Round 1539 is parts A and C of its brief (the away clock, and the While you were away
+card walked above a pending cookie banner). Part B, the goal, win and streak badge ladder,
+is Round 1543 and writes section 23.
+
+**The clock (part A).** `AWAY_MATCHDAY_SEC` is 1680: a matchday plays for every 28
+minutes of a trip away, on the same capped clock the away pay reads (`awaySecondsOf`).
+The reason is the lead's target, not a claim that the slower clock was unfair: an 8 hour
+night (the cap without the Away Day Deal perk, which every longer trip is cut to) should
+play an 18 matchday season begun at its first matchday right up to its final, and the
+final still waits for the player. That needs floor(28800 / X) >= 17, so X <= 1694 seconds;
+28 minutes is the slowest whole minute that meets it (29 minutes gives 16, as 30 did).
+Away play is no handicap that would argue against it: the away match is the live match
+on the same rolls (simTycoonAwayMatchdays S1), and its win share sits on the watched one
+(simTycoonScorelines S3, remote checks v1532-a and r1539-s0 on this round's base: 58.9
+and 63.8 percent won from 120 minutes against the watched 60 to 120 minute window's 61.2
+and 64.0; the away samples are 180 and 210 matches, the 60 minute ones about 50, so their
+standard errors run from about 3 to 7 points). The trade, said
+plainly: a season starts at matchday 0 right after its final, which is the natural moment
+to put the game down, so this is the common overnight in divisions 6 to 9. Under 30
+minutes the returning player watched matchdays 17 and 18; under 28 away play takes 17 and
+leaves him the final alone.
+
+What it changes, floor(t / 1680) against floor(t / 1800) before the season's own hold:
+whole hour trips of 1 to 6 hours play exactly what they did (2, 4, 6, 8, 10, 12); 7 hours
+plays 15 (14); the 8 hour cap 17 (16); the perk caps of 10 and 12 hours 21 and 25 (20 and
+24), which no season can use past its hold of 17 (18 with a leftover friendly). A trip
+between whole hours can gain one, at most two (7 hours 59 minutes: 17 against 15). The
+hold binds first in every division below six (5 or 14 matchdays), so only the four ten
+club divisions feel it, and only on long trips. `awayMatchdaysPlayable` is untouched, so
+the final matchday of every season still never plays away. No save field, no gem amount,
+no cap and no away pay rate moved; away wins' gems come through the same recordFullTimes,
+so a capped night can earn about one more away win's gem where the season has room.
+
+Fenced by simTycoonAwayMatchdays S2 (0s, 29s, 1,679s, 1,680s, 1,799s, 3h, 7h, 8h play 0,
+0, 0, 1, 1, 6, 15, 17 for a division 6 club at matchday 0, and 8h plays 13 for a division
+3 club there, which tells the hold from the clock; the finale control now turns S2 red
+too, 14 against 13), tycoonAway.test 7 through the real hook (8 hours stops ON the final
+matchday unplayed), and simTycoonHelp's claim for the guide sentence, which now reads "one
+for every 28 minutes of the trip". The rules modal reads the constant and says "one every
+28 minutes" with no edit. This supersedes section 14 Round 584's "one matchday per 30
+minutes" and section 21's paragraph "Away play's pace is the next round".
+
+Owed and not written here: the hook's comment "a matchday for every half hour"
+(useStadiumTycoon.ts, Round 584's settleAway comment) is stale and left for the next
+round that edits the hook; the saved pages /stadium-tycoon and /whats-new are the
+release's build:seo.
+
+## 23. Round 1543: the goal and win badges and milestones on the new scores, 2026-10-22
+
+Part B of Round 1539's brief, its own round (brief-1543, the lead's rulings on Q2 to Q4
+and Q6). Round 1532's law made a match football: about 1.8 of our goals and 0.63 of a win
+a match from two hours on, where the base scored about 14 and won 0.83. The rungs that
+count goals, wins or a streak were sized for the base, so under the law most came one and a
+half to four times later (S8), and ag500 not inside four hours at all. This round moves their thresholds, never their ids, their count
+(47 badges, 10 milestones), ACH_BONUS (0.02) or any milestone's pay.
+
+**Ids are save keys.** No id changed and no save field was added; a threshold only ever
+went down, so every label stays true of every save that holds it. One comment line above
+ACHIEVEMENTS and one above MILESTONES say so.
+
+**The rule** (scripts/measureTycoonLadder.mjs, a tool, on the `pace` bot of
+scripts/lib/tycoonBots.mjs at the hook's cadence, 240 minutes, against the pre-law base
+record scripts/data/tycoonScorelineBaseline.json). On target means the head's median
+minute is within 25 percent of the base's or within two matches (4.2 minutes), whichever
+is wider, on calibration seeds 1 to 20 and holdout 21 to 40. A rung on target stays. An
+off target rung the base reached takes the NICE value at or below its old threshold whose
+head minute is nearest the base's (|ln|), and must then be on target on a third set (41
+to 60) too. A rung the base never reached is anchored on matches: old x head per match
+rate / base per match rate (120 to 240 minutes, calibration medians), the nearest NICE
+value, above the rung below. Fixed by the lead: five in a row stays five, and as10 stays
+ten, where streakMult and the fan pull stop rising.
+
+| Rung | Old | New | Base cal / hold | Head at old | Head at new (third) |
+|---|---|---|---|---|---|
+| win1, aw1 | 1 | 1 | 4.2 / 2.1 | 4.2 / 4.2 | unchanged |
+| win10, aw10 | 10 | 8 | 23.1 / 21 | 27.3 / 27.3 | 23.1 / 21 (21) |
+| win50, aw50 | 50 | 35 | 107.1 / 105 | 161.7 / 155.4 | 107.1 / 105 (107.1) |
+| goals25, ag25 | 25 | 10 | 9.75 / 9.61 | 22.45 / 21.35 | 9.52 / 9.33 (9.01) |
+| ag100 | 100 | 30 | 27.23 / 25.78 | 113.94 / 106.98 | 29.38 / 26.23 (28.47) |
+| ag500 | 500 | 75 | 96.11 / 94.90 | later / later | 81.74 / 79.50 (79.71) |
+| aw150 | 150 | 125 | later | later | matches: x0.766 gives 114.9 |
+| aw400 | 400 | 300 | later | later | matches: x0.766 gives 306.4 |
+| ag2000 | 2000 | 250 | later | later | matches: x0.129 gives 258.0 |
+| streak5, as5 | 5 | 5 | 12.6 / 10.5 | 12.6 / 14.7 | unchanged, fixed |
+| as10 | 10 | 10 | 23.1 / 21 | 29.4 / 31.5 | 29.4 / 29.4, fixed |
+
+Minutes, medians over 20 seeds; "head at old" is remote check r1543-s1 on the old
+ladder, "head at new" r1543-s2a after the edit (the re-measure picks the same values, so
+the lowered badges' earlier income did not move a pick). win10 moved because it was off
+target on holdout (27.3 against 21) though on target on calibration. The holdout rates
+alone would pick 100 for aw150 (107.1); the rule reads calibration and picks 125.
+
+**Old saves, said plainly (Q6).** A save already past a lowered rung gets it once: opened
+without a trip, the badge and milestone toasts land on its first live tick, each badge
++2 percent and each milestone its usual pay times the reputation multiplier; back from a
+trip, the lowered milestones' pay is counted in the card's "Milestones reached on the
+road" line, though the club reached them long ago. A silent grant would need a new rule in
+settleFirsts, a frozen body, so it is not done.
+
+**Fenced** by simTycoonScorelines S9a to S9d, outside 1532's NAMES so its seventeen
+checks and control map are unchanged: S9a finds the rungs by code, S9b pins the shape
+(every base id, the pays, at or below old, pairs, rising, as10 at streakMult's cap, labels),
+S9c pins the minutes inside 35 percent or five matches of the base (wider than the picking
+rule, set from measured headroom: one match plus two bootstrap errors for every rung) and
+the long rungs within 0.8 to 1.25 of old x this run's rate ratio, S9d keeps every badge
+through load and a tick and fires each rung exactly at its threshold. Controls newrung,
+raise, oldladder and offbyone turn S9a, S9b with S9c, S9c and S9d red. The twelve
+frozen histories were retaken by their legs (base 12 of 12, head with the old ladder 12
+of 12, the moved ladder 8 of 12 differ). simTycoonAwayMatchdays S6 still probes the streak
+rungs at five and ten. This supersedes section 21's "the lead names a badge ladder round
+after this one".

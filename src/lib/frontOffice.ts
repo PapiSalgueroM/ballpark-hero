@@ -9,6 +9,9 @@ import { NFL_SALARY_CAP_2026 } from './leagueCaps';
 import { makeIdMinter, ensureLeagueEntityIds } from './entityIds';
 /* Round 631: dead money and the no way back rule, shared by the four GM sims. */
 import { type CutLedger, type DeadCapEntry, cutPlayer, payrollWithDeadCap, rollDeadCap, signRefusal, tradeRefusal, rosterFullRefusal } from './frontOfficeCuts';
+/* Round 1542: the season's lines and awards are the board's (src/lib/nflSeasonStats.ts); the engine carries their
+   types only, so nothing of that file is evaluated here and no import cycle runs. */
+import type { NflSeasonAwards, NflSeasonStats } from './nflSeasonStats';
 
 /**
  * NFL Front Office engine (2026-08-05, the manager-for-every-sport push).
@@ -48,6 +51,11 @@ export interface GmPlayer extends FoPlayer {
   noSeason?: boolean;
   /** The original simulation estimate, retained through trades and later development. Older saves have none. */
   openingRatingEvidence?: Pick<FoOpeningRatingEvidence, 'modelVersion' | 'originKey' | 'openingOvr' | 'basis' | 'partial'>;
+  /* Round 1542. Both absent on every man of every older save. */
+  /** The season he is a first year man in: stamped by the board on every man drafted in this save, never inferred. */
+  rookieSeason?: number;
+  /** This save's sim awards, as `${season} ${label}` (src/lib/nflSeasonStats.ts). */
+  awards?: string[];
 }
 
 /** Round 723: the position groups the depth chart is drawn in. The roster
@@ -114,6 +122,11 @@ export interface LeagueState {
   champions: { season: number; team: string }[];
   /** Round 828: present on a league started with full rosters. Absent on every older save. */
   rosterDepth?: 2;
+  /* Round 1542. Both absent on every older save (src/lib/nflSeasonStats.ts). */
+  /** One season of lines, opened at the press of a season's Week 1. */
+  stats?: NflSeasonStats;
+  /** The award history, the last 40 seasons. */
+  awards?: NflSeasonAwards[];
 }
 
 /* Round 568: this counter used to live at module scope, which restarts on

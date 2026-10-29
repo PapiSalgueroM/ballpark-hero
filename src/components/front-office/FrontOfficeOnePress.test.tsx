@@ -154,10 +154,23 @@ const RECORDED: Record<string, string> = {
 
 const sha1 = (s: string) => createHash('sha1').update(s).digest('hex');
 
-/** The save with the two things this round changes set aside (see the header). */
+/** The save with the two things this round changes set aside (see the header), and, since Round 1533, the two
+    blocks the GM desk host writes at the close (gm.blocks.seat, his record, and gm.blocks.xp, his GM XP): a key
+    that did not exist on the base, as gameLog was. Every other block of the desk stays in the digest to the byte;
+    scripts/controlFrontOfficeBoard.mjs thirdkey proves a third key written at the close still turns it red. */
 function onePressDigest(raw: string): string {
   const s = JSON.parse(raw);
   delete s.gameLog;
+  if (s.gm && s.gm.blocks) { delete s.gm.blocks.seat; delete s.gm.blocks.xp; }
+  /* Round 1542, the same rule: the season's lines and award history (league.stats and league.awards) and a man's
+     sim awards and first year (awards, rookieSeason, stamped on every man the draft brings in) did not exist on the
+     base. Everything else of every man and of the league stays in the digest to the byte. */
+  if (s.league) {
+    delete s.league.stats;
+    delete s.league.awards;
+    const teams = Object.values((s.league.teams ?? {}) as Record<string, any>);
+    for (const p of [...teams.flatMap(t => [...(t.players ?? []), ...(t.practice ?? [])]), ...(s.league.freeAgents ?? [])]) { delete p.awards; delete p.rookieSeason; }
+  }
   for (const r of s.postseason?.rounds ?? []) for (const g of r.games) { g.homeScore = 0; g.awayScore = 0; }
   return sha1(JSON.stringify(s));
 }
@@ -174,6 +187,9 @@ async function freshGame() {
   const { default: Board } = (override
     ? await import(/* @vite-ignore */ override)
     : await import('@/components/front-office/FrontOfficeBoard')) as { default: ComponentType };
+  /* Round 1550: the board fetches its career kit when a screen needs it (FrontOfficeLazyDesk.test.tsx drives that);
+     these cases drive the rules, so the kit is on the page before the board mounts. */
+  await (await import('@/components/front-office/nflCareerKitLoad')).loadNflCareerKit();
   return { E, FO_DEPTH, openNflDesk, Board };
 }
 

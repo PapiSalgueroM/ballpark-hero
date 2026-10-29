@@ -27,7 +27,10 @@
  *     return (the field list, the game named for the final, the champion; for CBB the engine's myExit as a
  *     second witness), and the grade is gradeSeason's on it. Prints the grade shares per sport and ask tier,
  *     the share fired within the run by first ask tier and by starting tier, and the share of first feeds
- *     already closed by starting tier.
+ *     already closed by starting tier. Round 1554: also by starting group (league, Group of Five,
+ *     independent), with the win counts of every win total ask by group, and in CFB as built, on a fleet of
+ *     900 or more, three bands (SLATE_BANDS) on the share fired within the run: a coach who started at a
+ *     Group of Five school, one whose first ask was a rebuild, one who started at a tier 4 program.
  *  S3 TRUST. Every graded season: trust after equals trust before plus gradeSeason's move, clamped to 0..100.
  *     Seasons bucketed by shortfall (levels short for a postseason ask, wins short for a win total): each
  *     bucket's move is exactly gradeSeason's, it never rises as the shortfall grows, and it falls strictly
@@ -59,7 +62,9 @@
  * its file exactly once: see EDITS. Each must turn its own section red; the closing line says FIRED or DID NOT
  * FIRE. Variants SIM_COLLEGE_SEAT_TILT=cfb-none (no football tilt) and none (the pro ladder in both sports) are
  * not controls: they print the asks the lead ruled on (C:/Users/antho/dukb-handoff/2026-10-10/results-g/
- * step1-1320.md).
+ * step1-1320.md). Round 1554 adds the variants ease-0, ease-1 and ease-3 (COLLEGE_SLATE_EASE at 0, 1 or 3
+ * instead of 2; the bands are not applied under a variant) and the control noease (the ease at 0, run on the
+ * default seeds because the bands need the full fleet: S2 red, and S1 red too since the oracle reads the ease).
  *
  * MEASURED (GitHub runners, 300 dynasties a sport a seed, seeds 1,2,3, ten seasons, about 120 to 200 s):
  *   as built (r1320-s1b's cfb-soft run): CFB fired within ten seasons by starting tier 10.7, 17.3, 19.6, 24.9
@@ -75,6 +80,18 @@
  *   17682 times. The controls added or narrowed then, on seed 1: allowfirer (the market filter alone) S5 198,
  *   bidfirer (the bid filter alone) S5 229, placeoff S1 5714. allowfirer used to rewrite gmSeat's last program
  *   rule as well and fired only on that rule, once over three seeds.
+ *   Round 1554 (the slate; CFB only, 900 dynasties a run, runners r1554-fx-g1, r1554-fx-e1 and r1554-fx-e2):
+ *   share fired within the run for a coach who started at a Group of Five school / whose first ask was a
+ *   rebuild / who started at tier 4. The old draw (base 3ee0bf629, seeds 1,2,3): 9.0 / 21.7 / 24.9. The slate
+ *   with no ease: 70.5 / 47.0 / 42.7 (seeds 1,2,3) and 69.2 / 46.2 / 41.3 (4,5,6). Ease 1: 57.7 / 41.0 / 38.2;
+ *   ease 3: 1.3 / 14.5 / 18.7 (seeds 1,2,3). Ease 2, as built, over six seed sets (1-3, 4-6, 7-9, 10-12,
+ *   13-15, 16-18): Group of Five 17.9, 15.4, 15.4, 16.7, 17.9, 19.2 (mean 17.1, n 78 a run); rebuild 22.3,
+ *   21.6, 23.9, 21.1, 26.3, 24.8 (mean 23.3, n about 160); tier 4 24.4, 22.7, 22.7, 22.7, 26.2, 24.9 (mean
+ *   23.9, n about 225). Each band is about three binomial standard deviations around its mean (4.3, 3.3 and
+ *   2.9 points): Group of Five 5 to 30, rebuild 13 to 34, tier 4 15 to 33. Every measured run sits at least
+ *   six points inside; the slate with no ease sits 8 to 40 points outside; ease 1 is outside all three bands,
+ *   ease 3 outside the Group of Five band. The league schools did not move with the
+ *   ease (fired 13.9 percent of 804 at every ease on seeds 1,2,3).
  */
 import fs from 'node:fs';
 import os from 'node:os';
@@ -144,12 +161,24 @@ const EDITS = {
   seatleak: ['S8', 'bind', '  if (res) st.seat = res.block;', '  if (res) st.seat = res.block;\n  (st as unknown as { nil: number }).nil += 1;'],
   nextyear: ['S9', 'gm', '  const later = { ...p, seasonsOut: p.seasonsOut + 1 };', '  const later = { ...p, seasonsOut: p.seasonsOut + 2 };'],
   yearoutskip: ['SY', 'bind', '  copy.seat = collegeSitOut(st.seat, view);', '  copy.seat = st.seat;'],
+  /* Round 1554: the Group of Five's win total ask no longer eased on the slate (run on the default seeds:
+     the S2 bands need the full fleet) */
+  noease: ['S2', 'seat', 'export const COLLEGE_SLATE_EASE: Record<CollegeSeatSport, number> = { cfb: 2, cbb: 0 };',
+    'export const COLLEGE_SLATE_EASE: Record<CollegeSeatSport, number> = { cfb: 0, cbb: 0 };'],
 };
 /* The tilt table as built, and the variants measured for the lead: each rewrites COLLEGE_ASK_TILT, and the
    S1 oracle reads the same table from VARIANT_TABLE, never from the bundle. */
 const CBB_LINE = '  cbb: { respect: 1, rebuild: 1 },';
 const CFB_LINE = '  cfb: { title: -1, contend: -1, playoffs: -1 },';
 const BUILT = { cfb: { title: -1, contend: -1, playoffs: -1 }, cbb: { respect: 1, rebuild: 1 } };
+/* Round 1554: the slate ease as built (COLLEGE_SLATE_EASE), and the line the ease variants rewrite. */
+const EASE_LINE = 'export const COLLEGE_SLATE_EASE: Record<CollegeSeatSport, number> = { cfb: 2, cbb: 0 };';
+const EASE_BUILT = { cfb: 2, cbb: 0 };
+/* Round 1554: the bands on football's firing rates with the ease as built (percent, fired within the run), and
+   the fleet they need (the default three seeds of 300). Measured headroom in the header. */
+const SLATE_BANDS = { g5: [5, 30], rebuild: [13, 34], tier4: [15, 33] };
+const SLATE_BAND_MIN = 900;
+const easeVariant = n => ({ table: BUILT, ease: { cfb: n, cbb: 0 }, edits: [['seat', EASE_LINE, EASE_LINE.replace('cfb: 2', `cfb: ${n}`)]] });
 const VARIANTS = {
   /* as built: football one step softer on every postseason ask, basketball one step more of its bottom rosters */
   built: { table: BUILT, edits: [] },
@@ -157,6 +186,10 @@ const VARIANTS = {
   'cfb-none': { table: { ...BUILT, cfb: {} }, edits: [['seat', CFB_LINE, '  cfb: {},']] },
   /* the pro ladder unchanged in both sports */
   none: { table: { cfb: {}, cbb: {} }, edits: [['seat', CFB_LINE, '  cfb: {},'], ['seat', CBB_LINE, '  cbb: {},']] },
+  /* Round 1554: the Group of Five's win total ask on the slate eased by 0 (no ease), 1 or 3 wins instead of 2 */
+  'ease-0': easeVariant(0),
+  'ease-1': easeVariant(1),
+  'ease-3': easeVariant(3),
 };
 if (CONTROL && !EDITS[CONTROL]) {
   console.error(`SIM_COLLEGE_SEAT_CONTROL=${CONTROL} is not a control this harness knows (${Object.keys(EDITS).join(', ')})`);
@@ -351,6 +384,7 @@ function prestigeTiers(schools) {
   return new Map(sorted.map((s, i) => [s.id, 1 + Math.floor((i * 4) / sorted.length)]));
 }
 const VARIANT_TABLE = VARIANTS[TILT].table;
+const VARIANT_EASE = VARIANTS[TILT].ease ?? EASE_BUILT;
 function oracleAsk(sp, sportId, st, teamId, season) {
   const pack = GM_SEAT_PACKS[sportId];
   const strengths = Object.values(st.teams).map(t => [t.id, sp.E[sportId === 'cfb' ? 'cfbStrength' : 'cbbStrength'](t)]);
@@ -360,7 +394,17 @@ function oracleAsk(sp, sportId, st, teamId, season) {
   const defending = champs.some(c => c.season === season - 1 && c.team === teamId);
   const base = SEAT.seatMandate(pack, rank, strengths.length, defending, season, 0);
   const step = VARIANT_TABLE[sportId][base.tier];
-  return { ask: step ? SEAT.seatMandate(pack, rank, strengths.length, defending, season, step) : base, rank };
+  let ask = step ? SEAT.seatMandate(pack, rank, strengths.length, defending, season, step) : base;
+  /* Round 1554: a Group of Five school in a season played on its slate has a win total ask eased by
+     the ease as built, never below one win. Read here off the school's group and the slate the engine
+     built for that season, never off the binding's own flags. */
+  const ease = VARIANT_EASE[sportId];
+  const onSlate = !!st.slate && st.slate.season === season;
+  if (ease && sportId === 'cfb' && onSlate && groupOf(sp, teamId) === 'Group of Five' && (ask.tier === 'respect' || ask.tier === 'rebuild')) {
+    const winFloor = Math.max(1, ask.winFloor - ease);
+    ask = { ...ask, winFloor, text: SEAT.fillSeatWords(pack.asks[ask.tier], pack, winFloor) };
+  }
+  return { ask, rank };
 }
 function prestigeRank(schools, id) {
   const mine = schools.find(s => s.id === id).prestige;
@@ -393,7 +437,13 @@ const tallyOf = sportId => (T[sportId] ??= {
   bidsAfter: { title: 0, overachieved: 0 }, moves: { bid: 0, market: 0 }, ended: 0,
   s8Rounds: 0, s8Closes: 0, yearOuts: 0, refusals: { 'in-seat': 0, 'season-open': 0, 'market-closed': 0 }, emptyChairs: 0,
   careers: [], twice: { markets: 0, drawnFirst: 0, removed: 0, bidsDrawn: 0, bidsDropped: 0 },
+  groupGrades: {}, groupWins: {},
 });
+/* Round 1554: a school's group, which decides its slate (football's Group of Five plays mostly power schools). */
+const groupOf = (sp, id) => {
+  const c = sp.schools.find(s => s.id === id)?.conf;
+  return c === 'G5' ? 'Group of Five' : c === 'IND' ? 'independent' : 'league';
+};
 const inc = (o, k, n = 1) => { o[k] = (o[k] ?? 0) + n; };
 const without = st => { const c = { ...st }; delete c.seat; return JSON.stringify(c); };
 const TIER_WORD = ['', 'tier 1', 'tier 2', 'tier 3', 'tier 4'];
@@ -512,6 +562,9 @@ function runDynasty(sportId, seed, index, team, startTier) {
       t.graded += 1;
       t.grades[res.mandate.tier] ??= {};
       inc(t.grades[res.mandate.tier], res.grade.result);
+      const gk = `${groupOf(sp, st.myTeam)}|${res.mandate.tier}`;
+      inc(t.groupGrades[gk] ??= {}, res.grade.result);
+      inc(t.groupWins[gk] ??= {}, oracle.wins);
 
       check = 'S3';
       const want = Math.max(0, Math.min(100, before.trust + g.trustDelta));
@@ -567,6 +620,9 @@ function runDynasty(sportId, seed, index, team, startTier) {
   }
   if (firedOnce) { inc(t.firedBy.askTier, first); inc(t.firedBy.startTier, TIER_WORD[startTier]); }
   inc(t.firedBy, `n:${first}`); inc(t.firedBy, `n:${TIER_WORD[startTier]}`);
+  const g0 = groupOf(sp, team);
+  inc(t.firedBy, `gn:${g0}`); inc(t.firedBy, `an:${first}|${g0}`);
+  if (firedOnce) { inc(t.firedBy, `gf:${g0}`); inc(t.firedBy, `af:${first}|${g0}`); }
   if (st.seat) t.careers.push(st.seat.career);
 }
 
@@ -789,6 +845,39 @@ for (const [s, t] of Object.entries(T)) {
   console.log(`     fired within the run, by first ask tier: ${['title', 'contend', 'playoffs', 'respect', 'rebuild'].filter(k => fb[`n:${k}`]).map(k => `${k} ${pct(fb.askTier[k] ?? 0, fb[`n:${k}`])} of ${fb[`n:${k}`]}`).join(', ')}`);
   console.log(`     fired within the run, by starting tier: ${[1, 2, 3, 4].map(q => `${TIER_WORD[q]} ${pct(fb.startTier[TIER_WORD[q]] ?? 0, fb[`n:${TIER_WORD[q]}`])}`).join(', ')}`);
   console.log(`     first feeds already closed, by starting tier: ${[1, 2, 3, 4].map(q => `${TIER_WORD[q]} ${t.firstFeedClosed[TIER_WORD[q]] ?? 0} of ${t.firstFeedClosed[`n:${TIER_WORD[q]}`] ?? 0}`).join(', ')}`);
+  const groups = ['league', 'Group of Five', 'independent'].filter(g => fb[`gn:${g}`]);
+  if (groups.length > 1) {
+    console.log(`     fired within the run, by starting group: ${groups.map(g => `${g} ${pct(fb[`gf:${g}`] ?? 0, fb[`gn:${g}`])} of ${fb[`gn:${g}`]}`).join(', ')}`);
+    for (const k of ['respect', 'rebuild']) {
+      console.log(`     fired within the run, first ask ${k}, by group: ${groups.filter(g => fb[`an:${k}|${g}`]).map(g => `${g} ${pct(fb[`af:${k}|${g}`] ?? 0, fb[`an:${k}|${g}`])} of ${fb[`an:${k}|${g}`]}`).join(', ')}`);
+    }
+    for (const [gk, g] of Object.entries(t.groupGrades).sort()) {
+      const [grp, tier] = gk.split('|');
+      if (tier !== 'respect' && tier !== 'rebuild') continue;
+      const n = Object.values(g).reduce((a, b) => a + b, 0);
+      const w = t.groupWins[gk];
+      const hist = Object.keys(w).map(Number).sort((a, b) => a - b).map(k => `${k}:${w[k]}`).join(' ');
+      console.log(`     ${grp}, ${tier} asks ${n}: ${['overachieved', 'met', 'missed', 'badly'].map(r => `${r} ${pct(g[r] ?? 0, n)}`).join(', ')}; wins ${hist}`);
+    }
+  }
+  /* Round 1554: the athletic director against football's slate (run review MAJOR 1). Banded only as built and
+     only on a fleet of the default size or more (a smaller one is a coin toss); the bands and their measured
+     headroom are in the header, and the noease control must turn them red. */
+  if (s === 'cfb' && TILT === 'built') {
+    const share = (hit, n) => (n ? (100 * hit) / n : NaN);
+    const rows = [
+      ['starting group Group of Five', fb['gf:Group of Five'] ?? 0, fb['gn:Group of Five'] ?? 0, SLATE_BANDS.g5],
+      ['first ask rebuild', fb.askTier.rebuild ?? 0, fb['n:rebuild'] ?? 0, SLATE_BANDS.rebuild],
+      ['starting tier 4', fb.startTier['tier 4'] ?? 0, fb['n:tier 4'] ?? 0, SLATE_BANDS.tier4],
+    ];
+    const banded = t.dynasties >= SLATE_BAND_MIN;
+    if (!banded) console.log(`     the slate bands need ${SLATE_BAND_MIN} dynasties, this run has ${t.dynasties}: printed, not banded`);
+    for (const [label, hit, n, [lo, hi]] of rows) {
+      const v = share(hit, n);
+      console.log(`     slate band, fired within the run, ${label}: ${v.toFixed(1)}% (${hit} of ${n}), band ${lo} to ${hi}`);
+      if (banded) ok(v >= lo && v <= hi, `cfb: fired within the run, ${label}, ${v.toFixed(1)}% is outside the band ${lo} to ${hi}`);
+    }
+  }
   ok(t.graded > 0, `${s}: nothing was graded`);
 }
 

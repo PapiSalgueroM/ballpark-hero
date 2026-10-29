@@ -125,7 +125,7 @@
         },
         "leagueTitles": 0
       },
-      "watchedHash": "edded553a40a3ea66d3dc5ebcd15cff7a14e625fc6122f556210d9cbc4bc9e57",
+      "watchedHash": "d079422ffb06fba8587837fa46b3e7eedbcaa66cc021c0d9916430be83b58287",
       "awayHash": "e73b536dd71aea7adf84c96b534b93a0b05f57f83091a680fd318c59d47a7c57"
     },
     {
@@ -242,8 +242,8 @@
         },
         "leagueTitles": 0
       },
-      "watchedHash": "7e7bcf3d9778859824a32ac260e75eb49f8cff999bff05a805fbddc5e0f50417",
-      "awayHash": "fb7bdd9bae0006cc616540114945f754ec16264be69c2aa3cb1d48593253a092"
+      "watchedHash": "d07a7f2d93c33e731cb6887d8541e909e25bcfa69e317d042358b141d75f1bbc",
+      "awayHash": "84fc19402afae3b2296ca45652c8e25e3e7ec4432339e502a6c626fa777899b1"
     },
     {
       "seed": 181,
@@ -359,8 +359,8 @@
         },
         "leagueTitles": 0
       },
-      "watchedHash": "da133e206adba68f17f507258530c0e50775682d313f8a5496e9d923023188d7",
-      "awayHash": "dad029e212fbd05406a2d3e303f18a85d12c08e420f1463debfe71e742b16325"
+      "watchedHash": "c5443692236f8daa2a8bb0a6f27cbc476fc34ee8db780bd1fcd4648c72561c3b",
+      "awayHash": "6b830299a8f480996154c8ebb786c34175d5c8ab8801476c72e446b9280000b4"
     },
     {
       "seed": 1610,
@@ -633,7 +633,7 @@
         },
         "leagueTitles": 0
       },
-      "watchedHash": "3d1c18a34504e21369167f60e679fce667a6d3db40734a25350a65745b3ad7fa",
+      "watchedHash": "a4417cbee1b65b825010d3fdbd38ffd56244895beb5f256b3a17fd9f5dc63104",
       "awayHash": "aaee5f5b8947d82b7d3c4cf8e0ad0be0b198074c711240b2e094924bacd932f4"
     },
     {
@@ -770,8 +770,8 @@
         },
         "leagueTitles": 0
       },
-      "watchedHash": "bd5b36fdc6871641638e2f5978981fb3474df3adc7901b5b7c6cd4aea97dbdae",
-      "awayHash": "d65d102d1dd9d9a7f125369fbd387f7d854b696fb5a31a698e83732cc3cb0201"
+      "watchedHash": "d270e7d9b06de5ce954c84588c2bf2b4ab371de6e4c4f5d1f81ce1776383a892",
+      "awayHash": "e1d6c46683c1f12900969de5c4ed9c67062ca7480a4520fea8528ebe5a979ae7"
     },
     {
       "seed": 3119,
@@ -1241,8 +1241,8 @@
         },
         "leagueTitles": 0
       },
-      "watchedHash": "1df0275a282761b18c359a5c48c507733520ade5b1af67e9c7efa18417cba0de",
-      "awayHash": "6776221d574875cd47a939d1b95d6be67f608519a67b90d10a012dc91ff7cf8d"
+      "watchedHash": "3c498fe8d2043074a6fd24d49008cc9571fb5ac05ff6a42ae276a72f86274cc8",
+      "awayHash": "eda2740c99f07bd7c7e6f8b7a7dc3a639f925d33203ea05bf2f3afec8f23d89a"
     },
     {
       "seed": 4628,
@@ -1398,7 +1398,7 @@
         },
         "leagueTitles": 0
       },
-      "watchedHash": "8ca474d5b461889d2e5c1a43ade4da38cce648eee71dea59e92d466e566411f6",
+      "watchedHash": "1df84f8daeb943f62a29b8b3b67d41d18294f54a85b450269589f5d16630a2a2",
       "awayHash": "887f2fb4ca7783f83da8b046b27c1edae4babc9ec4339853c7a3f820996ac215"
     },
     {
@@ -1712,8 +1712,8 @@
         },
         "leagueTitles": 0
       },
-      "watchedHash": "9dba78ccba4df5f1788de9df88fd982fdb83e29336029a9c8daa850e6aa14a03",
-      "awayHash": "e1fd2e256f8e8378185d2b6c3ab85238487270d98b214ef0635f37f07ec3b8e2"
+      "watchedHash": "56a24ff73e5a7223c90669ca38fc66d90076cba88520f451324b2fac6aaa9f93",
+      "awayHash": "53d39b89a2c45e4f9c44e0c6d7e09f15bbef1970838283cb7cabf39bca413f33"
     }
   ],
   "policy": {
@@ -2202,5 +2202,5 @@
     ]
   }
 ,
-  "casesRetaken": "Round 1532 (base 77c00798): the shared scoring law and the bonuses in seconds of income change every match on purpose, so the twelve histories were retaken by their legs with scripts/retakeTycoonHistories.mjs; the base tree reproduced all twelve committed hashes first. Retaken again on 668bcb49 after the review fixes (remote check fx1532-r): with only src/lib/stadiumTycoon.ts and this file from 00bffb93 the old hashes replay 12 of 12, with only the old file 0 of 12, so the engine change is the one cause"
+  "casesRetaken": "Round 1543 (base bac65fb0): the goal and win badge and milestone ladder moved to lower thresholds, so badges and milestone pay land earlier in the twelve histories; retaken by its legs on remote check r1543-s2a: the base tree reproduced 12 of 12 committed hashes, and the head with only the old ladder written back reproduced 12 of 12, so the ladder is the one cause"
 }

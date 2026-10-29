@@ -17,7 +17,9 @@
  *      written down on his decision, even on a copy where the draft filled
  *      every rival roster before the summer. A first
  *      round pick drafted with the desk on comes up after exactly the rookie
- *      scale's four seasons, a second rounder after the engine's three, and
+ *      scale's four seasons, a second rounder after his first deal (the
+ *      engine's three on a draft opened the old way, NBA_SECOND_ROUND_SEASONS
+ *      on the earned night, Round 1540), and
  *      every one of them comes up restricted, with any sheet inside the
  *      league's limits (no picks, his maximum, four seasons)
  *   3  no trade lands after the deadline, and deals do land before it; the
@@ -67,6 +69,17 @@
  *   noruleblock the trade finder's accept skips the pick rules                (3)
  *   dayonestature day one hands your club the staff its size attracts         (5)
  *   sheetrepick the summer picks a let go sheet's club again, after the draft  (2)
+ *   fullbird    restricted free agency asks full Bird rights again, so the earned night's
+ *               one season second rounder comes up unrestricted (Round 1540)  (2)
+ *   dropone     the desk's summer drops the first man it lets walk, if he is the first decision (Round 1556) (2)
+ *   nohandback  the NBA host's summer never hands a waived sheet arrival back to his club     (2)
+ *   overlimit   it hands him back, but the club never makes room and ends the summer over fifteen (2)
+ *   overcut     it makes room with one man too many, so the club ends the summer at fourteen (Round 1556 review) (2)
+ *   onlyself    the room making cut spares only the arrival being handed back, so a second one can go (2)
+ *   deadoff     the arrival's own dead money survives when it is the first entry after those carried in (2)
+ *   noroll      the man waived in his place is billed without the summer's roll   (2)
+ *   poolline    the arrival's line stays in the pool while he is back on his club (2)
+ *   poolbest    the hand back also takes the pool's best man out, a man the summer's cut kept (2)
  * Recording the fixture: SIM_NBA_GM_DESK_RECORD=<git ref of the engine before
  * this round> rewrites scripts/data/nbaGmDeskFixture.json from that engine.
  *
@@ -126,6 +139,119 @@
  * in 5 (3 of 90 clubs played the same under the old anchor too), sheetrepick 34 in 2 (on the
  * walk itself, not only the full draft copies, the summer sent a let go man
  * to another club than the one written down).
+ * Round 1540, 2026-10-22: draft night with the desk on is the earned night the
+ * board now runs (earnedNight above), and restricted free agency follows the
+ * lead's ruling (gmContracts.ts nbaRestricted: his own draftee at the end of
+ * his first deal, whatever its length). Measured on runners r1540-rule-c, d, f
+ * and g (head 82b60919), sets 1..10 / 11..20 / 21..30, under this file's own
+ * name (seedRandom seeds the stream from the file name):
+ *   expiring men decided   645 / 604 / 597   (by the GM 349 / 324 / 320, by the staff's rule 296 / 280 / 277)
+ *   draftees come up       first rounders 60 / 60 / 59 after exactly four seasons, second rounders
+ *                          111 / 89 / 93 after exactly NBA_SECOND_ROUND_SEASONS (one)
+ *   restricted cases       171 / 149 / 152, sheets 26 / 18 / 17 (matched 7 / 4 / 6, gone to the
+ *                          club written down on its terms 7 / 4 / 5; full draft copies 7 / 4 / 5)
+ * Three floors in T were measured on the old desk and failed here: minSheets
+ * 34, minSheetGone 11 and minSheetFull 11 (the GM picked first in every round
+ * there, so his men drew more sheets).
+ * THE LEAD'S SECOND RULING ON ROUND 1540 (2026-10-22 10:45 EDT, item 6): those
+ * three are existence floors (the sheet machinery works), so they are re-banded
+ * from measured headroom on the earned night: half the smallest calibration
+ * set, rounded down, never below 1, and a held out set must clear every floor.
+ * Calibration sets 1..10 / 11..20 / 21..30 (runner r1540-f3-c, head 923fbfbe,
+ * this file's own name): sheets 26 / 18 / 17, gone to the club written down
+ * 7 / 4 / 5, full draft copies 7 / 4 / 5. So minSheets 8 (old desk 34),
+ * minSheetGone 2 (old desk 11), minSheetFull 2 (old desk 11); check 2 prints
+ * the old floors beside the new ones. Held out set 31..40 (same runner): 23
+ * sheets, 7 gone, 7 full draft copies, every floor cleared. Fresh streams
+ * (SIM_SEED 1..29, runners r1540-rule-g and r1540-f3-b): sheets 13 to 27, gone
+ * and full draft copies 3 to 9, every one over the floors. No other floor moved.
+ * THE VANISHING SHEET MAN (item 7), held for the lead: on 2 of those 29 fresh
+ * streams (SIM_SEED 6 seed 10 season 2, SIM_SEED 10) and on the noinjhook
+ * control's stream, check 2's own assertion fails: a man let go on a sheet "is
+ * at no rival club". Traced on runner r1540-f3-a with debug prints: the desk's
+ * summer (gmContracts.ts runDeskOffseason, Round 1018) puts him on the club
+ * written down, which the draft after the decision has taken over fifteen
+ * (every arrival logged landed on a roster of 16 or 17 with him); the engine's
+ * summer (nbaFrontOffice.ts, Round 722) waives a club above fifteen by its
+ * lowest rated man, who was he (a one season second rounder at his ceiling,
+ * 66 and 67); and the pool keeps its best 30 only (a cut older than Round 722:
+ * it has been in nbaFrontOffice.ts since the file's first commit, 7bb8c39d,
+ * 2026-08-11), so he left the league. The
+ * old desk on 30 fresh streams (531 men let go on a sheet) never lost
+ * one. The cause is older code outside this round, so it is not fixed here.
+ * ROUND 1556 FIXED IT (the lead's option (c), in the NBA host): runDeskOffseason
+ * now names every sheet arrival to the host's summer, and gmContractsHostNba.ts
+ * nbaSummerKeepingSheets runs the engine untouched, then, for an arrival its
+ * waiver took, hands him back on his sheet's terms and has the club waive its
+ * lowest rated other man instead (the club's own rule, the shared cut, his dead
+ * money rolled as the summer rolls it). Check 2 gained three things for it:
+ *   the census  the offer sheet window opens before the re-sign desk's calls
+ *               and closes after the summer; every man in the league when it
+ *               opens (every roster and the pool) must be in it when it closes,
+ *               on a club or in the pool, or have left by the summer's own two
+ *               ways (retired, named in its notes; in the pool when the summer
+ *               cut it to its best 30, seen through a sort hung on the pool, and
+ *               never a man who let a sheet stand). Run on the walk and on every
+ *               full draft and bottom copy.
+ *   the bottom  a copy of each summer where the club that tabled a sheet let
+ *               stand also carries sixteen men rated above his ceiling, so the
+ *               engine's waiver reaches him first: he must be there on its terms
+ *               and the club must end the summer at fifteen.
+ *   minBottom   an existence floor on those copies, set by the second ruling's
+ *               recipe (half the smallest calibration set, never below 1).
+ * MEASURED 2026-10-22 on runner r1556-s2d (head 5afa5a0a), sets 1..10 /
+ * 11..20 / 21..30 and the held out 31..40, under this file's own name:
+ *   the walk       byte for byte what f276b8a8 prints once the lines marked
+ *                  "(Round 1556)" are set aside (r1556-s2d walk-beq), so
+ *                  every number above still holds
+ *   census         walk and full draft copies: 107 / 104 / 105 / 107 windows,
+ *                  49482 / 47828 / 48395 / 49437 men followed, retired 1082 /
+ *                  1110 / 1153 / 1159, not kept by the pool's best 30 6378 /
+ *                  6238 / 6168 / 6190, gone 0 in every set
+ *   bottom copies  7 / 4 / 5 / 7, every one kept there with room made, none
+ *                  skipped; so minBottom 2 (half the smallest set, 4)
+ *   fresh streams  SIM_SEED 1..59: see results-g/finish-1556.md (the three
+ *                  red on f276b8a8, 6, 10 and 35, are green)
+ *   controls       dropone 20, nohandback 12, overlimit 8 failures, each red
+ *                  in check 2; sheetrepick 51 and fullbird 116 (the bottom
+ *                  copies and the census add to their old counts)
+ * A probe that made the hand back throw when it acts (runner r1556-s1c) found
+ * it never acts on this file's committed stream or on the old desk's (70593dd4,
+ * its own stream and SIM_SEED 6), and acts on SIM_SEED 10 (Cole Strother at
+ * IND) and 35 (Omari Beaudry at NYK), the two men Round 1540 measured lost.
+ * ROUND 1556 REVIEW FIX (runner r1556-run-b found four one token breaks of the
+ * hand back that left this file green). Check 2 gained:
+ *   exact fifteen  a bottom copy's club must end the summer at exactly
+ *                  fifteen (fourteen used to pass and count as kept), with no
+ *                  dead money for a man on its roster
+ *   pair copies    for every sheet let stand, a copy where a second expiring
+ *                  man of the GM's (34 or under, so he cannot retire) lets the
+ *                  same club's sheet stand on the same terms: both kept, the
+ *                  club at fifteen. Played after the single copies.
+ *   the oracle     the hand back against the engine alone on 150 fresh leagues
+ *                  (one or two arrivals at a club, sixteen men above them and
+ *                  two dead money entries carried in, in two leagues of three):
+ *                  quiet leagues byte equal to the engine's summer; otherwise
+ *                  the engine's summer plus exactly the hand back (terms, the
+ *                  club's count, one own man waived per arrival and he the
+ *                  lowest rated, his pool line, the dead money ledger by the
+ *                  shared cut and roll, nothing else moved). Played last.
+ *   the census     fails a man in two places at once, and books the pool cut
+ *                  by what the summer's slice of the sorted pool dropped, so a
+ *                  man the cut kept and something later took out is gone
+ *   and the census problems of check 7's render season, pushed after check
+ *   2's flush, used to be dropped; they fail in the last block now.
+ * MEASURED 2026-10-22 (EDT) on runner r1556-fx2 (head 168dfb38), sets 1..10 /
+ * 11..20 / 21..30 / 31..40: walk census unchanged to the man (107 / 104 /
+ * 105 / 107 windows, 0 gone); single copies 7 / 4 / 5 / 7 and pair copies
+ * 7 / 4 / 5 / 7, every one kept, none skipped, so minBottomPair 2 (half of
+ * 4); the oracle 150 leagues, 50 quiet (50 byte equal), 100 acted (120
+ * arrivals, 20 with two at one club) on every set and on SIM_SEED 10 and 35,
+ * so its floors are half of those: 25, 50, 10. Controls, each red in check 2
+ * only: overcut 216, onlyself 88, deadoff 74, noroll 100, poolline 131,
+ * poolbest 121 (its lines are the census's "the summer cut kept his line"),
+ * dropone 21 (one more than before: the render season's census now counts),
+ * nohandback 473 and overlimit 216 (the oracle adds to both).
  */
 import './lib/seedRandom.mjs';
 import fs from 'node:fs';
@@ -148,7 +274,9 @@ const CONTROLS = {
   coinflip: '2', shortscale: '2', norfa: '2', latetrade: '3', noguard: '3', droppick: '4',
   flatstaff: '5', flatgrowth: '5', nodefault: '1', pilefit: '6',
   noedgeround: '5', noedgepo: '5', noinjhook: '5', nomirror: '4', nostepien: '4', noruleblock: '3',
-  sheetrepick: '2', dayonestature: '5',
+  sheetrepick: '2', dayonestature: '5', fullbird: '2',
+  dropone: '2', nohandback: '2', overlimit: '2',
+  overcut: '2', onlyself: '2', deadoff: '2', noroll: '2', poolline: '2', poolbest: '2',
 };
 if (CONTROL && !CONTROLS[CONTROL]) {
   console.error(`SIM_NBA_GM_DESK_CONTROL=${CONTROL} is not a control this harness knows (${Object.keys(CONTROLS).join(', ')})`);
@@ -157,12 +285,16 @@ if (CONTROL && !CONTROLS[CONTROL]) {
 const SEEDS = (process.env.SIM_NBA_GM_DESK_SEEDS || '1,2,3,4,5,6,7,8,9,10').split(',').map(Number);
 const SEASONS = Number(process.env.SIM_NBA_GM_DESK_SEASONS || 10);
 
-/* Floors: the measured size of each walk, see MEASURED in the header. */
+/* Floors: the measured size of each walk, see MEASURED in the header. The three sheet floors are existence floors
+   re-banded for the earned night by the lead's second ruling on Round 1540 (half the smallest calibration set);
+   OLD_SHEET_FLOORS are the ones measured on the old desk, printed beside them. */
 const T = {
   minDecisions: 288, minGm: 160, minAuto: 126, minEarlyDeals: 163, minLateTries: 490, minPickMoves: 162,
-  minScaleUp: 42, minSecondUp: 44, minRestricted: 86, minSheets: 34, minSheetGone: 11,
-  minOldDeals: 42, minSheetFull: 11,
+  minScaleUp: 42, minSecondUp: 44, minRestricted: 86, minSheets: 8, minSheetGone: 2,
+  minOldDeals: 42, minSheetFull: 2, minBottom: 2, minBottomPair: 2,
+  minHandBackQuiet: 25, minHandBackActed: 50, minHandBackTwo: 10,
 };
+const OLD_SHEET_FLOORS = { minSheets: 34, minSheetGone: 11, minSheetFull: 11 };
 
 function modulesDir() {
   let d = ROOT;
@@ -192,6 +324,7 @@ const FILES = {
   engine: path.join(ROOT, 'src', 'lib', 'nbaFrontOffice.ts'),
   contracts: path.join(ROOT, 'src', 'lib', 'gmContracts.ts'),
   board: path.join(ROOT, 'src', 'components', 'nba-front-office', 'NbaFrontOfficeBoard.tsx'),
+  host: path.join(ROOT, 'src', 'lib', 'gmContractsHostNba.ts'),
 };
 const EDITS = {
   /* The summer goes back to the engine's own coin flip for the user's men. */
@@ -231,6 +364,29 @@ const EDITS = {
   /* Day one hands the user's club the staff its size attracts, an edge the other clubs never get. */
   dayonestature: ['desk', '  block: gmDefaultStaff(NBA_STAFF_PACK.rules, { ...nbaStaffCtx(league, team), anchor: () => 1 }),', '  block: gmDefaultStaff(NBA_STAFF_PACK.rules, nbaStaffCtx(league, team)),'],
   sheetrepick: ['contracts', '        ? (named ?? sheetClubFor(host, league, ledger.team, man.id)) : null;', '        ? sheetClubFor(host, league, ledger.team, man.id) : null;'],
+  /* nbaRestricted as it was before the lead's ruling of 2026-10-22: full Bird rights or no restricted free agency. */
+  fullbird: ['contracts', '  if (service == null) return false;', "  if (service == null || birdTier(ledger, league, man) !== 'full') return false;"],
+  /* Round 1556. The desk's summer drops one man a summer: the first decision applied, if he walks into the pool. */
+  dropone: ['contracts', '        league.freeAgents.push({ ...man, years: 1, salary: host.marketSalary(league, man) });',
+    '        if (applied.length !== 1) league.freeAgents.push({ ...man, years: 1, salary: host.marketSalary(league, man) });'],
+  /* The NBA host's summer never hands a waived sheet arrival back to his club. */
+  nohandback: ['host', '  for (const h of held) handBack(league, h, notes, kept);', '  void kept;'],
+  /* It hands him back but the club never makes room, so it ends the summer over fifteen. */
+  overlimit: ['host', '  while (club.players.length > NBA_ROSTER_MAX) {', '  while (false && club.players.length > NBA_ROSTER_MAX) {'],
+  /* Round 1556 review fix. The club makes room with one man too many, so it ends the summer at fourteen. */
+  overcut: ['host', '  while (club.players.length > NBA_ROSTER_MAX) {', '  while (club.players.length >= NBA_ROSTER_MAX) {'],
+  /* The room making cut spares only the arrival being handed back, so a second arrival at that club can be cut. */
+  onlyself: ['host', '    const worst = [...club.players].filter(p => !kept.has(p.id)).sort((a, b) => a.ovr - b.ovr)[0];',
+    '    const worst = [...club.players].filter(p => p.id !== h.man.id).sort((a, b) => a.ovr - b.ovr)[0];'],
+  /* The arrival's own dead money survives when it is the first entry after the ones carried in. */
+  deadoff: ['host', '  club.deadCap = (club.deadCap ?? []).filter((d, i) => i < carried || d.playerId !== h.man.id);',
+    '  club.deadCap = (club.deadCap ?? []).filter((d, i) => i <= carried || d.playerId !== h.man.id);'],
+  /* The man waived in his place is billed without the summer's roll. */
+  noroll: ['host', '    rollDeadCap(cut);', '    /* the cut is not rolled */'],
+  /* The arrival's line stays in the pool while he is back on his club. */
+  poolline: ['host', '  if (line >= 0) league.freeAgents.splice(line, 1);', '  if (line >= 0) void line;'],
+  /* The hand back also takes the pool's best man out: the census must see a man the summer's cut kept go missing. */
+  poolbest: ['host', '  if (line >= 0) league.freeAgents.splice(line, 1);', '  if (line >= 0) league.freeAgents.splice(line, 1);\n  league.freeAgents.splice(0, 1);'],
 };
 const overrides = new Map();
 if (CONTROL) {
@@ -260,6 +416,7 @@ const BUNDLE = `${WORK}/bundle.cjs`;
 fs.writeFileSync(ENTRY, `
 export * as E from '${ROOT_URL}/src/lib/nbaFrontOffice.ts';
 export * as D from '${ROOT_URL}/src/lib/nbaGmDesk.ts';
+export * as N from '${ROOT_URL}/src/lib/nbaEarnedDraft.ts';
 export * as C from '${ROOT_URL}/src/lib/gmContracts.ts';
 export * as P from '${ROOT_URL}/src/lib/gmPicks.ts';
 export * as S from '${ROOT_URL}/src/lib/gmStaff.ts';
@@ -267,7 +424,8 @@ export * as G from '${ROOT_URL}/src/lib/gmDesk.ts';
 export * as F from '${ROOT_URL}/src/lib/tradeFinder.ts';
 export { nbaCloseSeasonStats } from '${ROOT_URL}/src/lib/nbaSeasonStats.ts';
 export { NBA_STAFF_PACK } from '${ROOT_URL}/src/data/gmStaff/packs.ts';
-export { nbaContractHost } from '${ROOT_URL}/src/lib/gmContractsHostNba.ts';
+export { nbaContractHost, nbaSummerKeepingSheets } from '${ROOT_URL}/src/lib/gmContractsHostNba.ts';
+export { cutPlayer, rollDeadCap } from '${ROOT_URL}/src/lib/frontOfficeCuts.ts';
 export { leagueNames } from '${ROOT_URL}/src/lib/foNames.ts';
 export { NBA_OPENING_RATINGS } from '${ROOT_URL}/src/data/nbaOpeningRatings.ts';
 export { NBA_DESK_PANELS, NBA_RECAP_PANELS } from '${ROOT_URL}/src/components/nba-front-office/NbaGmDesk.tsx';
@@ -298,7 +456,8 @@ await esbuild.build({
   }
 }
 const M = createRequire(import.meta.url)(BUNDLE);
-const { E, D, C, P, S, G, F, NBA_STAFF_PACK, nbaContractHost: HOST, leagueNames, NBA_OPENING_RATINGS, nbaCloseSeasonStats } = M;
+const { E, D, N, C, P, S, G, F, NBA_STAFF_PACK, nbaContractHost: HOST, leagueNames, NBA_OPENING_RATINGS, nbaCloseSeasonStats } = M;
+const { nbaSummerKeepingSheets, cutPlayer, rollDeadCap } = M;
 
 /* ---- seeded draws and the board's own call order ---- */
 function mulberry32(seed) {
@@ -327,8 +486,41 @@ function trimForTipOff(lg, team) {
   }
 }
 
-/** Draft night as the board runs it: the user takes the best grade he sees, the CPU clubs go in batches. */
-function draftNight(lg, team, rng, desk) {
+/** Round 1540: draft night with the desk on, as the board now runs it: the earned night of nbaEarnedDraft.ts, opened
+    on the season's own playoff field, the class drawn once, Continue, then at each of his slots the best man on his
+    scout's read, to the end (the way simNbaEarnedDraft's NEW arm drives the libraries). Each of his draftees is
+    written down with the round of his slot and `earned`, so check 2 reads his first deal's length from the knobs.
+    Null when no night opens, and the old draft below runs, as on the board. */
+function earnedNight(lg, team, rng, desk, series) {
+  const opened = N.openNbaDraftNight(desk, lg, series, team);
+  if (!opened) return null;
+  desk = opened.desk;
+  const roundOf = new Map(opened.night.slots.map(s => [s.overall, s.round]));
+  let cls = E.nbaEarnedDraftClass(rng, opened.night.slots.length, leagueNames(lg));
+  let press = N.nbaDraftContinue(lg, desk, team, cls, rng);
+  for (let i = 0; i < 70 && press; i += 1) {
+    desk = press.desk;
+    cls = press.left;
+    for (const s of press.steps.filter(x => x.mine)) {
+      const man = lg.teams[team].players.find(p => p.name === s.playerName);
+      if (man) draftedIn.set(man.id, { season: lg.season, round: roundOf.get(s.overall), earned: true });
+    }
+    if (press.done) return desk;
+    const level = S.gmStaffLevel(D.nbaStaffOf(desk, lg, team).block, 'scouting');
+    const read = pr => D.nbaScoutRead(pr, team, lg.season, level);
+    const best = [...cls].sort((a, b) => read(b) - read(a) || a.id.localeCompare(b.id))[0];
+    press = best ? N.nbaDraftPick(lg, desk, team, cls, best.id, rng) : N.nbaDraftByStaff(lg, desk, team, cls, rng);
+  }
+  throw new Error('the earned night did not reach its end');
+}
+
+/** Draft night as the board runs it: the user takes the best grade he sees, the CPU clubs go in batches. With the
+    desk on and the season's series handed in, the earned night above (Round 1540). */
+function draftNight(lg, team, rng, desk, series = null) {
+  if (desk && series) {
+    const earned = earnedNight(lg, team, rng, desk, series);
+    if (earned) return earned;
+  }
   const mine = lg.teams[team];
   const capital = E.nbaDraftCapital(mine) ?? 0;
   const rivalCapital = Object.values(lg.teams).filter(t => t.abbr !== team).reduce((s, t) => s + (E.nbaDraftCapital(t) ?? 0), 0);
@@ -363,12 +555,14 @@ function draftNight(lg, team, rng, desk) {
   return desk;
 }
 
-/** The close of a season as the board runs it: the playoffs, the champion, the tax and the season's lines. */
+/** The close of a season as the board runs it: the playoffs, the champion, the tax and the season's lines. Answers
+    the playoffs' series, which the earned night opens on (Round 1540; check 1 ignores it). */
 function closeSeason(lg, rng, edges) {
   const po = E.runNbaPlayoffs(lg, rng, edges);
   lg.champions.push({ season: lg.season, team: po.champion });
   E.nbaAssessTax(lg);
   nbaCloseSeasonStats(lg);
+  return po.series;
 }
 
 /** A season with the desk off: the exact calls the board makes on a save from before the desk. */
@@ -430,6 +624,8 @@ const stats = {
   decisions: 0, gm: 0, auto: 0, earlyDeals: 0, lateTries: 0, lateDeals: 0, pickMoves: 0,
   pickChecks: 0, applyChecks: 0, buyers: 0, sellers: 0, refusalChecks: 0, oldDeals: 0, oldRefused: 0,
   scaleUp: 0, secondUp: 0, restricted: 0, sheets: 0, sheetGone: 0, sheetMatched: 0, sheetFull: 0,
+  censusWindows: 0, censusWalk: 0, censusMen: 0, censusClub: 0, censusPool: 0, censusRetired: 0, censusPoolCut: 0,
+  censusGone: 0, bottom: 0, bottomSkipped: 0, bottomWaived: 0, bottomPair: 0, bottomPairCopies: 0, bottomPairSkipped: 0,
 };
 const problems = { s2: [], s3: [], s4: [] };
 const ids = lg => Object.keys(lg.teams);
@@ -565,6 +761,290 @@ function gmDecides(lg, team, desk, where) {
 
 const STAYS = new Set(['keep', 'option', 'tender', 'qualify-accepted', 'match']);
 
+/* ---- Round 1556: the census of the offer sheet window ---- */
+/** Every man in the league by id, with his club (or the pool) and his name. */
+function everyMan(lg) {
+  const at = new Map();
+  for (const [k, t] of Object.entries(lg.teams)) for (const p of t.players) at.set(p.id, { where: k, name: p.name });
+  for (const p of lg.freeAgents) if (!at.has(p.id)) at.set(p.id, { where: 'pool', name: p.name });
+  return at;
+}
+
+/** The summer's pool cut, seen rather than guessed: the engine keeps the pool's best 30 by sorting the pool in
+    place and slicing it, so a sort hung on this pool (not enumerable, so nothing that copies or saves the league
+    sees it, and Array.prototype.sort does the sorting, so the summer is the same summer) writes down every man the
+    pool held when it was cut. */
+function watchPoolCut(lg) {
+  const seen = { ids: null, kept: null };
+  Object.defineProperty(lg.freeAgents, 'sort', {
+    value(cmp) {
+      seen.ids = new Set(this.map(p => p.id));
+      seen.kept = null;
+      const out = Array.prototype.sort.call(this, cmp);
+      /* Round 1556 review fix: the men the cut kept, read off the slice it takes of the sorted pool, so a man the
+         cut kept and something after it took out is not booked as cut by it. */
+      Object.defineProperty(this, 'slice', {
+        value(...args) { const part = Array.prototype.slice.apply(this, args); seen.kept = new Set(part.map(p => p.id)); return part; },
+        enumerable: false, configurable: true, writable: true,
+      });
+      return out;
+    },
+    enumerable: false, configurable: true, writable: true,
+  });
+  return seen;
+}
+
+/** Round 1556 review fix: every id that is in two places at once (two clubs, or a club and the pool). */
+function doubles(lg) {
+  const at = new Map();
+  for (const [k, t] of Object.entries(lg.teams)) for (const p of t.players) at.set(p.id, [...(at.get(p.id) ?? []), k]);
+  for (const p of lg.freeAgents) at.set(p.id, [...(at.get(p.id) ?? []), 'the pool']);
+  return [...at].filter(([, places]) => places.length > 1);
+}
+
+/** The count check (the lead's brief for Round 1556): every man in the league when the window opened is in it when
+    it closes, on a club or in the pool. The summer has two ways out of the league of its own, each counted: he
+    retired (the summer's note names him), or he was in the pool when the summer cut it to its best 30 and was not
+    kept. A man who let a sheet stand in the window has neither: retired or not, the pool's cut is never his way out. */
+function census(before, lg, notes, seen, sheetMen, where) {
+  stats.censusWindows++;
+  if (!seen.ids || !seen.kept) { problems.s2.push(`${where}: the census never saw the summer cut the pool`); return; }
+  const after = everyMan(lg);
+  for (const [id, places] of doubles(lg)) problems.s2.push(`${where}: ${after.get(id).name} is in two places at once after the summer: ${places.join(' and ')}`);
+  for (const [id, m] of before) {
+    stats.censusMen++;
+    const now = after.get(id);
+    if (now) { if (now.where === 'pool') stats.censusPool++; else stats.censusClub++; continue; }
+    if (notes.some(n => n.includes(`${m.name} retires`))) { stats.censusRetired++; continue; }
+    const cut = seen.ids.has(id) && !seen.kept.has(id);
+    if (cut && !sheetMen.has(id)) { stats.censusPoolCut++; continue; }
+    stats.censusGone++;
+    const why = seen.kept.has(id) ? 'the summer cut kept his line in the pool and something after it took him out'
+      : cut ? 'he let a sheet stand and the pool cut him' : 'on no club, not in the pool, not retired, and not in the pool the summer cut';
+    problems.s2.push(`${where}: ${m.name} (${m.where === 'pool' ? 'in the pool' : `at ${m.where}`} when the window opened) is gone from the league: ${why}`);
+  }
+}
+
+/**
+ * Round 1556: the worst summer for a sheet the GM let stand. On a copy, the
+ * club that tabled it also carries sixteen men rated above his ceiling, who
+ * never expire, retire or grow that summer, so the engine's own waiver (a CPU
+ * club above fifteen waives its lowest rated man) reaches him first. He must
+ * still be there on its terms, the club must end the summer at fifteen (room
+ * made by its own rule, not kept over), and the census must find nobody gone.
+ * The copies are written down during the walk and played after it: a copy's
+ * summer mints ids (the engine's minimum men), and ids feed the walk's hashed
+ * draws, so playing them in the walk would move the walk itself.
+ */
+const bottomQueue = [];
+function sheetAtTheBottom(lg, team, desk, where) {
+  if (D.nbaContractsOf(desk, lg, team).decisions.some(d => d.season === lg.season && d.kind === 'take-picks')) {
+    bottomQueue.push({ lg: J(lg), desk: J(desk), team, where });
+  }
+}
+function playBottom({ lg: lgJson, desk: deskJson, team, where }) {
+  const lg = JSON.parse(lgJson);
+  const desk = JSON.parse(deskJson);
+  const taken = D.nbaContractsOf(desk, lg, team).decisions.filter(d => d.season === lg.season && d.kind === 'take-picks');
+  for (const d of taken) {
+    const r = bottomCopy(lg, JSON.parse(J(desk)), team, [d], new Set(taken.map(x => x.id)), mulberry32(9000 + lg.season), `${where} bottom`);
+    if (!r || r.retired) continue;
+    if (r.kept) stats.bottom++;
+    stats.bottomWaived += r.left;
+  }
+}
+
+/**
+ * One bottom copy: the club that tabled the sheets in `sheets` (all from one
+ * club) also carries sixteen men rated above every one of their ceilings, so
+ * the engine's waiver reaches each of them first. Each must be there after the
+ * summer on his sheet's terms, the club must end it at exactly fifteen (room
+ * made by its own rule: never kept over, never cut below), it must carry no
+ * dead money for a man on its roster, and the census must find nobody gone.
+ * Returns null when the copy could not be played, else { kept, left }.
+ */
+function bottomCopy(lg, desk, team, sheets, sheetMen, rng, where) {
+  const c = JSON.parse(J(lg));
+  const at = sheets[0].club;
+  const club = c.teams[at];
+  const men = sheets.map(d => c.teams[team]?.players.find(p => p.id === d.id));
+  if (!club || men.some(m => !m)) { problems.s2.push(`${where}: ${sheets.map(d => d.name).join(' or ')} or ${at} is not there before the summer`); return null; }
+  const top = Math.max(...men.map(m => m.pot)) + 1;
+  if (top > 99) { stats.bottomSkipped++; return null; }
+  for (let i = 0; i < 16; i++) {
+    club.players.push({ ...club.players[0], id: `top-${at}-${i}`, name: `Topper ${at} ${i}`, age: 27, ovr: top, pot: top, years: 3, out: 0 });
+  }
+  const own = new Set(club.players.map(p => p.id));
+  const before = everyMan(c);
+  const seen = watchPoolCut(c);
+  const summer = D.nbaDeskOffseason(c, desk, team, rng);
+  if (!summer.ok) { problems.s2.push(`${where}: the desk summer refused to run`); return null; }
+  census(before, c, summer.notes, seen, sheetMen, where);
+  const after = c.teams[at];
+  const n = after.players.length;
+  let kept = n === E.NBA_ROSTER_MAX;
+  let retired = 0;
+  for (const d of sheets) {
+    if (summer.notes.some(x => x.includes(`${d.name} retires`))) { retired++; continue; }
+    const p = after.players.find(x => x.id === d.id);
+    if (!p) { kept = false; problems.s2.push(`${where}: ${d.name} let ${at}'s sheet stand, its waiver reached him first, and he is not there after the summer`); }
+    else if (p.years !== d.years || Math.abs(p.salary - d.salary) > 1e-9) { kept = false; problems.s2.push(`${where}: ${d.name} is at ${at} on ${p.years}y at ${p.salary}, the sheet said ${d.years}y at ${d.salary}`); }
+  }
+  const names = sheets.map(d => d.name).join(' and ');
+  if (n > E.NBA_ROSTER_MAX) problems.s2.push(`${where}: ${at} ends the summer with ${n}, over ${E.NBA_ROSTER_MAX}: no room was made for ${names}`);
+  if (n < E.NBA_ROSTER_MAX) problems.s2.push(`${where}: ${at} ends the summer with ${n}, under ${E.NBA_ROSTER_MAX}: it waived more of its own men than ${names} needed`);
+  const onRoster = new Set(after.players.map(p => p.id));
+  for (const e of after.deadCap ?? []) {
+    if (onRoster.has(e.playerId)) { kept = false; problems.s2.push(`${where}: ${at} carries ${e.amount} of dead money for ${e.name}, who is on its roster`); }
+  }
+  return { kept, retired, left: [...own].filter(id => !onRoster.has(id)).length };
+}
+
+/**
+ * Round 1556 review fix: two sheets let stand at one club in one summer, which
+ * the walk never deals (each bottom copy above holds one arrival). On a copy,
+ * a second of the GM's expiring men (young enough not to retire that summer)
+ * is written down as letting the same club's sheet stand on the same terms,
+ * and the club gets its sixteen men above both ceilings. The hand back must
+ * keep both, and make room for each with one of the club's own men.
+ */
+function playBottomPair({ lg: lgJson, desk: deskJson, team, where }) {
+  const lg = JSON.parse(lgJson);
+  const taken = D.nbaContractsOf(JSON.parse(deskJson), lg, team).decisions.filter(d => d.season === lg.season && d.kind === 'take-picks');
+  for (const d of taken) {
+    const desk = JSON.parse(deskJson);
+    const ledger = D.nbaContractsOf(desk, lg, team);
+    const m = C.expiringMen(HOST, lg, team).find(x => x.id !== d.id && x.age <= 34 && !taken.some(y => y.id === x.id));
+    if (!m) { stats.bottomPairSkipped++; continue; }
+    const d2 = { ...d, id: m.id, name: m.name };
+    ledger.decisions = [...ledger.decisions.filter(y => !(y.season === lg.season && y.id === m.id)), d2];
+    const paired = G.withGmBlock(desk, D.NBA_DESK_KEYS.contracts, ledger);
+    const r = bottomCopy(lg, paired, team, [d, d2], new Set([...taken.map(x => x.id), m.id]), mulberry32(9500 + lg.season), `${where} bottom pair`);
+    if (!r || r.retired) { stats.bottomPairSkipped++; continue; }
+    stats.bottomPairCopies++;
+    if (r.kept) stats.bottomPair++;
+  }
+}
+
+/**
+ * Round 1556 review fix: the hand back against the engine alone (the run
+ * reviewer's oracle, made part of check 2). Fresh leagues; a CPU club gets one
+ * or two arrivals on sheets and, in two leagues of three, sixteen men rated
+ * above every arrival's ceiling plus two dead money entries carried in (one
+ * outlives the summer's roll, one does not). Each league is copied twice and
+ * run on one seeded draw: A is the engine's summer alone, B the host's
+ * (nbaSummerKeepingSheets). Where the hand back has nothing to do, B is A
+ * byte for byte. Where it acts, B is A plus exactly the hand back: each
+ * arrival on his club on his sheet's terms and not in the pool, the club at
+ * A's count, one of its own men waived per arrival and nobody kept rated
+ * below him, that man in the pool on the summer's free agent terms, the
+ * ledger A's without the arrivals' entries plus each waived man's, cut and
+ * rolled by the shared cut, no dead money for a man on the roster, and every
+ * other club, the rest of the pool and the notes A's. Played last: it mints ids.
+ */
+const HAND_BACK_LEAGUES = 150;
+function handBackOracle() {
+  const n = { leagues: 0, quiet: 0, quietEqual: 0, acted: 0, arrivals: 0, twoActed: 0 };
+  const round1 = x => Math.round(x * 10) / 10;
+  for (let seed = 1; seed <= HAND_BACK_LEAGUES; seed++) {
+    const lg = E.initNbaLeague(mulberry32(60000 + seed), NBA_OPENING_RATINGS);
+    const ids = Object.keys(lg.teams).sort();
+    const team = ids[seed % ids.length];
+    let at = ids[(seed * 7 + 3) % ids.length];
+    if (at === team) at = ids[(seed * 7 + 4) % ids.length];
+    const club = lg.teams[at];
+    const mode = seed % 3 === 0 ? 'quiet' : seed % 5 === 0 ? 'two' : 'bottom';
+    const arrivals = [];
+    const terms = new Map();
+    for (let k = 0; k < (mode === 'two' ? 2 : 1); k++) {
+      const mine = lg.teams[team].players;
+      const src = [...mine].sort((a, b) => a.ovr - b.ovr)[0];
+      mine.splice(mine.indexOf(src), 1);
+      /* A sheet is never one season (offerSheetFor), and the summer takes one off. */
+      const years = 2 + ((seed + k) % 3);
+      const salary = round1(src.salary * 1.3 + 0.7);
+      const man = { ...src, age: 22, pot: Math.min(98, src.ovr + 6), years: years + 1, salary };
+      club.players.push(man);
+      arrivals.push({ id: man.id, club: at });
+      terms.set(man.id, { years, salary, age: 23, name: man.name });
+    }
+    if (mode !== 'quiet') {
+      const top = Math.max(...arrivals.map(a => club.players.find(p => p.id === a.id).pot)) + 1;
+      for (let i = 0; i < 16; i++) club.players.push({ ...club.players[0], id: `top-${at}-${i}`, name: `Topper ${at} ${i}`, age: 27, ovr: top, pot: top, years: 3, out: 0 });
+      club.deadCap = [...(club.deadCap ?? []), { playerId: 'old-a', name: 'Old A', amount: 4, seasonsLeft: 2 }, { playerId: 'old-b', name: 'Old B', amount: 2, seasonsLeft: 1 }];
+    }
+    n.leagues++;
+    /* The engine mints ids from a module counter, so the second summer's minimum men carry other ids: each id the
+       summer minted is named by its order of appearance before the two are compared. */
+    const known = new Set([...Object.values(lg.teams).flatMap(t => t.players.map(p => p.id)), ...lg.freeAgents.map(p => p.id)]);
+    const norm = L => {
+      let s = J(L);
+      const minted = [];
+      for (const k of Object.keys(L.teams).sort()) for (const p of L.teams[k].players) if (!known.has(p.id)) minted.push(p.id);
+      for (const p of L.freeAgents) if (!known.has(p.id) && !minted.includes(p.id)) minted.push(p.id);
+      minted.forEach((id, i) => { s = s.split(`"${id}"`).join(`"minted-${i}"`); });
+      return JSON.parse(s);
+    };
+    const A0 = JSON.parse(J(lg));
+    const B0 = JSON.parse(J(lg));
+    const nA = E.nbaOffseason(A0, mulberry32(61000 + seed), team);
+    const nB = nbaSummerKeepingSheets(B0, mulberry32(61000 + seed), team, arrivals);
+    const A = norm(A0);
+    const B = norm(B0);
+    const where = `hand back, league ${seed} ${at} (${mode})`;
+    const taken = arrivals.filter(a => !A.teams[at].players.some(p => p.id === a.id) && !nA.some(x => x.endsWith(`${terms.get(a.id).name} retires.`)));
+    if (!taken.length) {
+      n.quiet++;
+      if (J(A) === J(B) && J(nA) === J(nB)) n.quietEqual++;
+      else fail(`${where}: the hand back had nothing to do and the summer differs from the engine's`);
+      continue;
+    }
+    n.acted++;
+    n.arrivals += taken.length;
+    if (taken.length > 1) n.twoActed++;
+    const cA = A.teams[at];
+    const cB = B.teams[at];
+    const arrived = new Set(arrivals.map(a => a.id));
+    for (const a of taken) {
+      const t = terms.get(a.id);
+      const p = cB.players.find(x => x.id === a.id);
+      if (!p) fail(`${where}: ${t.name} let its sheet stand and is not on its roster after the summer`);
+      else if (p.years !== t.years || p.salary !== t.salary || p.age !== t.age) fail(`${where}: ${t.name} is on ${p.years}y at ${p.salary}, age ${p.age}; his sheet says ${t.years}y at ${t.salary}, age ${t.age}`);
+      if (B.freeAgents.some(x => x.id === a.id)) fail(`${where}: ${t.name} is on the club and in the pool at once`);
+    }
+    if (cB.players.length !== cA.players.length) fail(`${where}: the club ends the summer with ${cB.players.length}, the engine alone ended it with ${cA.players.length}`);
+    const onB = new Set(cB.players.map(p => p.id));
+    for (const e of cB.deadCap ?? []) if (onB.has(e.playerId)) fail(`${where}: dead money ${e.amount} for ${e.name}, who is on the roster`);
+    const W = cA.players.filter(p => !onB.has(p.id));
+    if (W.length !== taken.length) fail(`${where}: ${W.length} of the club's own men waived for ${taken.length} arrivals handed back`);
+    for (const w of W) {
+      const below = cB.players.filter(p => !arrived.has(p.id) && p.ovr < w.ovr);
+      if (below.length) fail(`${where}: ${w.name} (${w.ovr}) was waived while ${below[0].name} (${below[0].ovr}) stayed`);
+      const age = w.age + 1;
+      const ovr = age >= 32 ? Math.max(64, w.ovr - 1) : w.ovr;
+      const fa = B.freeAgents.find(x => x.id === w.id);
+      if (!fa) fail(`${where}: ${w.name} was waived and is not in the pool`);
+      else if (fa.years !== 1 || fa.age !== age || fa.ovr !== ovr || fa.salary !== E.nbaSalaryFor(ovr, B.cap)) {
+        fail(`${where}: ${w.name} is in the pool on ${fa.years}y, age ${fa.age}, ${fa.ovr}, ${fa.salary}; the summer's terms are 1y, age ${age}, ${ovr}, ${E.nbaSalaryFor(ovr, B.cap)}`);
+      }
+    }
+    const want = (cA.deadCap ?? []).filter(e => !taken.some(a => a.id === e.playerId));
+    for (const w of W) {
+      const cut = { players: [{ ...w }], deadCap: [], releasedThisSeason: [] };
+      cutPlayer(cut, [], w.id, 0);
+      rollDeadCap(cut);
+      want.push(...cut.deadCap);
+    }
+    const key = l => J([...l].map(e => J(e)).sort());
+    if (key(want) !== key(cB.deadCap ?? [])) fail(`${where}: the club's dead money is ${J(cB.deadCap)}, the engine's plus the rolled cut is ${J(want)}`);
+    for (const k of ids) if (k !== at && J(A.teams[k]) !== J(B.teams[k])) fail(`${where}: ${k} differs from the engine's summer`);
+    const moved = new Set([...arrived, ...W.map(w => w.id)]);
+    if (J(A.freeAgents.filter(p => !moved.has(p.id))) !== J(B.freeAgents.filter(p => !moved.has(p.id)))) fail(`${where}: the rest of the pool differs from the engine's summer`);
+    if (J(nA) !== J(nB)) fail(`${where}: the summer's notes differ from the engine's`);
+  }
+  return n;
+}
+
 /**
  * The worst draft night for a sheet the GM let stand: on a copy, every rival
  * club is filled to the limit before the summer (fillers rated 40, so the
@@ -582,8 +1062,11 @@ function sheetAfterFullDraft(lg, team, desk, where) {
         t.players.push({ ...t.players[0], id: `fill-${k}-${i}`, name: `Filler ${k} ${i}`, age: 30, ovr: 40, pot: 40, years: 3, out: 0 });
       }
     }
+    const before = everyMan(c);
+    const seen = watchPoolCut(c);
     const summer = D.nbaDeskOffseason(c, JSON.parse(J(desk)), team, mulberry32(7000 + c.season));
     if (!summer.ok) { problems.s2.push(`${where} full draft: the desk summer refused to run`); continue; }
+    census(before, c, summer.notes, seen, new Set(taken.map(x => x.id)), `${where} full draft`);
     if (summer.notes.some(n => n.includes(`${d.name} retires`))) continue;
     const p = c.teams[d.club]?.players.find(x => x.id === d.id);
     if (!p) problems.s2.push(`${where} full draft: ${d.name} let ${d.club}'s sheet stand and is not there after the summer`);
@@ -608,21 +1091,27 @@ function seasonDesk(lg, team, desk, rng, s, where) {
     if (lg.round >= E.NBA_ROUNDS) break;
     lg.round += 1;
   }
-  closeSeason(lg, rng, D.nbaDeskEdges(desk, lg, team));
+  const series = closeSeason(lg, rng, D.nbaDeskEdges(desk, lg, team));
   /* The board's order: the re-sign desk is offered in the season and on the
      recap, before draft night, and finishDraft runs the summer straight after
-     the last pick. So the GM decides first and the clubs draft after him. */
+     the last pick. So the GM decides first and the clubs draft after him.
+     Round 1556: the offer sheet window opens here, where the sheets are put on
+     the table and matched or let stand, and closes after the summer. */
+  const windowOpen = everyMan(lg);
   desk = gmDecides(lg, team, desk, where);
-  desk = draftNight(lg, team, rng, desk);
+  desk = draftNight(lg, team, rng, desk, series);
   const closed = lg.season;
   const up = C.expiringMen(HOST, lg, team).map(m => ({ id: m.id, name: m.name }));
   /* A man drafted with the desk on comes up when his first deal has run: the
-     rookie scale's four seasons in round one, the engine's three in round two. */
+     rookie scale's four seasons in round one, the engine's three in round two.
+     Round 1540: on the earned night a second rounder signs the league wide
+     knob's deal instead, NBA_SECOND_ROUND_SEASONS at the minimum (written with
+     the summer's season on top, so he comes up after exactly those seasons). */
   const upIds = new Set(up.map(m => m.id));
   const rosterNow = new Set(lg.teams[team].players.map(p => p.id));
   for (const [id, at] of [...draftedIn]) {
     const playedHere = closed - at.season;
-    const want = at.round === 1 ? 4 : 3;
+    const want = at.round === 1 ? 4 : at.earned && N.NBA_DRAFT_KNOBS.secondOnMin ? N.NBA_SECOND_ROUND_SEASONS : 3;
     if (!rosterNow.has(id)) { if (playedHere >= want) draftedIn.delete(id); continue; }
     if (upIds.has(id)) {
       if (at.round === 1) stats.scaleUp++; else stats.secondUp++;
@@ -634,10 +1123,14 @@ function seasonDesk(lg, team, desk, rng, s, where) {
     }
   }
   sheetAfterFullDraft(lg, team, desk, where);
+  sheetAtTheBottom(lg, team, desk, where);
+  const seen = watchPoolCut(lg);
   const summer = D.nbaDeskOffseason(lg, desk, team, rng);
   if (!summer.ok) { problems.s2.push(`${where}: the desk summer refused to run (${summer.lines.join(' ')})`); return desk; }
   desk = summer.desk;
   const ledger = D.nbaContractsOf(desk, lg, team);
+  stats.censusWalk++;
+  census(windowOpen, lg, summer.notes, seen, new Set(ledger.decisions.filter(x => x.season === closed && x.kind === 'take-picks').map(x => x.id)), where);
   const roster = new Set(lg.teams[team].players.map(p => p.id));
   for (const m of up) {
     stats.applyChecks++;
@@ -690,8 +1183,8 @@ for (const seed of SEEDS) {
       if (lg.round >= E.NBA_ROUNDS) break;
       lg.round += 1;
     }
-    closeSeason(lg, rng, D.nbaDeskEdges(desk, lg, TEAM));
-    desk = draftNight(lg, TEAM, rng, desk);
+    const series = closeSeason(lg, rng, D.nbaDeskEdges(desk, lg, TEAM));
+    desk = draftNight(lg, TEAM, rng, desk, series);
     const summer = D.nbaDeskOffseason(lg, desk, TEAM, rng);
     if (!summer.ok) { problems.s4.push(`${where}: the desk summer refused to run (${summer.lines.join(' ')})`); break; }
     desk = summer.desk;
@@ -701,6 +1194,8 @@ for (const seed of SEEDS) {
 
 begin('2', 'over ten seasons a seed, no expiring man of yours leaves without a recorded decision, applied as written');
 for (const p of problems.s2) fail(p);
+/* Round 1556 review fix: what check 7's render season pushes here from now on fails in the last block. */
+const s2Flushed = problems.s2.length;
 if (stats.decisions < T.minDecisions) fail(`only ${stats.decisions} decisions over the walk, floor ${T.minDecisions}`);
 if (stats.gm < T.minGm) fail(`only ${stats.gm} decisions by the GM, floor ${T.minGm}`);
 if (stats.auto < T.minAuto) fail(`only ${stats.auto} settled by the staff's rule, floor ${T.minAuto}`);
@@ -710,7 +1205,11 @@ if (stats.restricted < T.minRestricted) fail(`only ${stats.restricted} restricte
 if (stats.sheets < T.minSheets) fail(`only ${stats.sheets} offer sheets, floor ${T.minSheets}`);
 if (stats.sheetGone < T.minSheetGone) fail(`only ${stats.sheetGone} men left on a sheet and found at the rival, floor ${T.minSheetGone}`);
 if (stats.sheetFull < T.minSheetFull) fail(`only ${stats.sheetFull} sheets let stand reached their club after a draft that filled every roster, floor ${T.minSheetFull}`);
+if (stats.censusWalk < SEEDS.length * SEASONS) fail(`the census closed ${stats.censusWalk} windows on the walk, which had ${SEEDS.length * SEASONS} summers`);
 console.log(`   ${stats.sheetFull} sheets let stand still reached the club written down after a draft that filled every rival roster`);
+const censusLine = () => `${stats.censusWindows} windows (${stats.censusWalk} on the walk), ${stats.censusMen} men followed: ${stats.censusClub} on a club after it, ${stats.censusPool} in the pool, ${stats.censusRetired} retired, ${stats.censusPoolCut} not kept by the pool's best 30, ${stats.censusGone} gone`;
+console.log(`   census of the offer sheet window, the walk and its full draft copies (Round 1556): ${censusLine()}`);
+console.log(`   sheet floors on the earned night (the lead's ruling, 2026-10-22): sheets ${T.minSheets} (old desk ${OLD_SHEET_FLOORS.minSheets}), gone to the rival ${T.minSheetGone} (old desk ${OLD_SHEET_FLOORS.minSheetGone}), full draft copies ${T.minSheetFull} (old desk ${OLD_SHEET_FLOORS.minSheetFull})`);
 console.log(`   ${stats.applyChecks} expiring men: ${stats.gm} decided by the GM, ${stats.auto} by the staff's rule`);
 console.log(`   draftees up: ${stats.scaleUp} first rounders after the rookie scale, ${stats.secondUp} second rounders; ${stats.restricted} restricted cases, ${stats.sheets} sheets (${stats.sheetMatched} matched, ${stats.sheetGone} gone to the rival on its terms)`);
 
@@ -1116,6 +1615,33 @@ begin('7', 'every desk panel draws, and the re-sign desk shows a tile for every 
   const resignBox = NBA_DESK_PANELS.find(p => p.key === 'contracts').tile({ desk, facts: { ...facts, deskOn: false } });
   if (/waiting on you|Every call is made/.test(resignBox.sub)) fail(`a save without the desk says ${J(resignBox.sub)} while the summer still decides`);
   console.log(`   4 panels drawn, ${tiles} re-sign tiles for ${cases} expiring men`);
+}
+
+/* ================================================================== */
+/* Round 1556: the bottom copies written down on the walk, played last. A
+   copy's summer mints ids and ids feed hashed draws (the sheets on the walk,
+   the trainer's rolls in check 5), so played any earlier they would move what
+   the checks above print. Their failures count in check 2. */
+check = '2';
+console.log('2) continued (Round 1556): a sheet let stand at the bottom of a full club, and the census on those copies');
+{
+  const from = s2Flushed;
+  const windowsBefore = stats.censusWindows;
+  for (const q of bottomQueue) playBottom(q);
+  const singles = stats.censusWindows - windowsBefore;
+  const skippedSingles = stats.bottomSkipped;
+  for (const q of bottomQueue) playBottomPair(q);
+  for (const p of problems.s2.slice(from)) fail(p);
+  if (stats.bottom < T.minBottom) fail(`only ${stats.bottom} sheets let stand were kept at a club whose waiver reached them first, floor ${T.minBottom}`);
+  if (stats.bottomPair < T.minBottomPair) fail(`only ${stats.bottomPair} pairs of sheets let stand at one club were both kept, floor ${T.minBottomPair}`);
+  console.log(`   a sheet let stand at the bottom of a full club (Round 1556): ${stats.bottom} kept there with room made over ${singles} copies (${stats.bottomWaived} of the club's men left in the summer), ${skippedSingles} skipped (his ceiling at 99)`);
+  console.log(`   two sheets let stand at one full club (Round 1556): ${stats.bottomPair} pairs kept there, the club at ${E.NBA_ROSTER_MAX}, over ${stats.bottomPairCopies} copies, ${stats.bottomPairSkipped} skipped (no second man, or a ceiling at 99)`);
+  console.log(`   census with those copies and check 7's render season (Round 1556): ${censusLine()}`);
+  const hb = handBackOracle();
+  if (hb.quiet < T.minHandBackQuiet) fail(`the hand back had nothing to do in only ${hb.quiet} leagues, floor ${T.minHandBackQuiet}`);
+  if (hb.acted < T.minHandBackActed) fail(`the hand back acted in only ${hb.acted} leagues, floor ${T.minHandBackActed}`);
+  if (hb.twoActed < T.minHandBackTwo) fail(`the hand back took two arrivals at one club in only ${hb.twoActed} leagues, floor ${T.minHandBackTwo}`);
+  console.log(`   the hand back against the engine alone (Round 1556): ${hb.leagues} leagues, ${hb.quiet} where it had nothing to do (${hb.quietEqual} byte equal to the engine's summer), ${hb.acted} where it acted (${hb.arrivals} arrivals, ${hb.twoActed} leagues with two at one club)`);
 }
 
 /* ================================================================== */

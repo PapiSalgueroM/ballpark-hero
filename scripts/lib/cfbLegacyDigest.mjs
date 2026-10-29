@@ -34,7 +34,11 @@ export function legacyScenario(cfb) {
         if (r < cfb.CFB_ROUNDS) st.round += 1;
       }
       out.push(cfb.cfbRankings(st).map(t => [t.id, t.wins, t.losses, Math.round(cfb.cfbStrength(t) * 1000)]));
-      for (const conf of cfb.CFB_CONFS) out.push(cfb.confStandings(st, conf).map(t => t.id));
+      /* Round 1554 listed Notre Dame on its own as an independent ('IND'),
+         which a legacy season still counts in the ACC. The groups this
+         scenario read before that round are these five, so it reads them and
+         nothing else (an empty 'IND' table is no change a player can see). */
+      for (const conf of ['SEC', 'B1G', 'ACC', 'B12', 'G5']) out.push(cfb.confStandings(st, conf).map(t => t.id));
       const post = cfb.runCfbPostseason(st, rng);
       out.push(post.ccgs.map(pickGame), post.bracket.map(pickGame), post.champion, post.field);
       const race = cfb.heismanRace(st, rng);

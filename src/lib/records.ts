@@ -363,7 +363,8 @@ export const RECORD_SECTIONS: RecordSection[] = [
     /* afl_brownlow: built Round 291. 112 medals, 91 players, 1924 to 2025, two-source
        verified 2026-08-25 against afl.com.au/brownlow-medal/history and afltables.com
        (whose index had two vote counts wrong, 1935 and 1958, settled by its own detail
-       pages). simListQuizSources ratchets the table at exactly 112 rows. */
+       pages). simListQuizSources ratchets the table at exactly 113 rows since Round 1551
+       added 2026. */
     fetch: () => rows('afl_brownlow', 'year', 'winner', { club: 'club', votes: 'votes' }),
   },
   {
@@ -384,9 +385,11 @@ export const RECORD_SECTIONS: RecordSection[] = [
       { path: '/list-quiz', label: 'Name Them All' },
       { path: '/champ-or-not', label: 'Champ or Not' },
     ],
-    /* nrl_dally_m: built Round 291. 47 medals, 34 players, 1979 to 2025, two-source verified
+    /* nrl_dally_m: built Round 291 with 47 medals, 34 players, 1979 to 2025, two-source verified
        2026-08-25 against rugbyleagueproject.org and topendsports.com, which agree on every
-       year. Winners only: the club was available from one source and is not shipped on one. */
+       year. Winners only: the club was available from one source and is not shipped on one.
+       simListQuizSources ratchets the table at exactly 48 rows since Round 1551 added 2026
+       (Nathan Cleary). */
     fetch: () => rows('nrl_dally_m', 'year', 'winner', {}),
   },
   {

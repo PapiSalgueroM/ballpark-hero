@@ -37,6 +37,32 @@
  * no st.seat exists and exactly the offer to an older dynasty was removed (it
  * was offered the seat and not given it). The fixture JSON is never recorded
  * again for this.
+ *
+ * RE-RECORDED IN ROUND 1554 (the real season), on purpose and only there. The
+ * behaviour changed by design: a new dynasty plays a slate set at kickoff
+ * (no repeated opponent), Notre Dame is an independent, there is no Group of
+ * Five title game, rivalry week reads a real series first, and CBB's league
+ * table goes by league record. Measured old against new, step by step: every
+ * new dynasty step moves in both sports. The CFB plain save (a save from
+ * before the program layer) keeps its markup and its text on every step of
+ * the old season it is in; only its save hash (the ids the shared minter hands
+ * it), the running draw count and the share carried over from the first
+ * dynasty move, because the slate takes no draw from Math.random, so the
+ * first dynasty's path draws less. Its screen first changes at 'plain: class
+ * closed, layer on', the first season it plays under the real format. The CBB
+ * plain save path matches on every field through its old season.
+ *
+ * TAKEN AGAIN BY THE ROUND 1554 REVIEW FIXES (runner r1554-fx-rr, from
+ * ed51c2adb), for two intended words changes and one table rule: the Play
+ * tab intro (never the same team twice in the regular season, and what a
+ * school outside a conference chases), the Conferences note under the format
+ * (rivalry week adds a league game), and CBB's league table, where a program
+ * with no league game yet sits at .500. Proof on that runner: with only
+ * CfbDynastyBoard.tsx and cbbDynasty.ts put back as they were at 1a21a9c28,
+ * the previous recording replays green on every step of both sports; with only
+ * the board put back, CFB is green and CBB parts at its Leagues tab. Moved:
+ * 27 CFB steps and 2 CBB steps, each on the markup, the text and at most the
+ * head, never the save, the draws, the share, the completion or the reveal.
  */
 import type { ComponentType } from 'react';
 import { afterEach, describe, expect, it, vi } from 'vitest';

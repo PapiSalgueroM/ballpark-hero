@@ -10,8 +10,9 @@ import { PlayerAutocomplete } from '@/components/game/PlayerAutocomplete';
 import type { PlayerEntity } from '@/lib/playerSearch';
 import { NbaHowToPlay } from '@/components/nba/NbaHowToPlay';
 import { cn } from '@/lib/utils';
-import { RotateCcw, Send, Trophy, Loader2, AlertCircle, Shuffle, HelpCircle } from 'lucide-react';
-import ShareButtons from '@/components/game/ShareButtons';
+import { RotateCcw, Send, Loader2, AlertCircle, Shuffle, HelpCircle } from 'lucide-react';
+import { ResultScreen } from '@/components/game/ResultScreen';
+import { NBA_FIVE_HIT_SCORE as HIT_SCORE } from '@/lib/nbaStartingFiveScore';
 import AdBanner from '@/components/ads/AdBanner';
 import ReportQuestion from '@/components/game/ReportQuestion';
 import PageSeo from '@/components/seo/PageSeo';
@@ -26,7 +27,7 @@ const NbaLineup = () => {
     filledSlots,
     filledSlotsArray,
     filledCount,
-    verdict,
+    result,
     isEvaluating,
     evaluationError,
     isValidating,
@@ -49,6 +50,7 @@ const NbaLineup = () => {
     resetGame,
   } = useNbaLineup();
 
+  const fmtStat = (v: number) => (Number.isInteger(v) ? String(v) : v.toFixed(1));
   const [playerInput, setPlayerInput] = useState('');
   const [showHowToPlay, setShowHowToPlay] = useState(false);
   const [courtSelection, setCourtSelection] = useState(false);
@@ -78,7 +80,7 @@ const NbaLineup = () => {
     <>
       <PageSeo
         title="NBA Starting 5 - Basketball Lineup Builder Game | DoUKnowBall"
-        description="Spin a stat challenge, pick NBA teams, and build the ultimate starting five. AI validates your picks."
+        description="Spin a stat challenge, pick NBA teams, and build the ultimate starting five. Every pick is scored from his real career numbers."
         path="/nba-starting-5"
       />
       <GameShell
@@ -188,6 +190,7 @@ const NbaLineup = () => {
                 {!isTeamSpinning && currentTeam && (
                   <button
                     onClick={rerollTeam}
+                    disabled={isValidating}
                     className="absolute top-3 right-3 p-2 rounded-lg bg-secondary hover:bg-secondary/80 text-muted-foreground hover:text-foreground transition-all"
                     title="Reroll: get a different team"
                   >
@@ -337,7 +340,7 @@ const NbaLineup = () => {
         )}
 
         {/* Result Phase */}
-        {phase === 'result' && verdict && (
+        {phase === 'result' && result && (
           <div className="max-w-xl mx-auto space-y-6">
             {challenge && (
               <div className={cn(
@@ -350,52 +353,58 @@ const NbaLineup = () => {
               </div>
             )}
 
-            <div className="bg-card border border-border rounded-2xl p-8 text-center shadow-xl">
-              <Trophy className="w-12 h-12 text-primary mx-auto mb-3" />
-              <h2 className="text-3xl font-bold text-primary font-display mb-1">{verdict.rating}</h2>
-              <p className="text-lg font-semibold text-foreground mb-3">{verdict.headline}</p>
-              <p className="text-sm text-muted-foreground leading-relaxed whitespace-pre-line">{verdict.analysis}</p>
-            </div>
-
-            <div className="bg-card border border-border rounded-2xl p-4">
-              <p className="text-xs font-semibold text-muted-foreground uppercase tracking-wider mb-2">Your Starting 5</p>
-              <div className="space-y-1.5">
-                {filledSlotsArray.map((slot, i) => (
-                  <div key={i} className="flex items-center gap-3 bg-secondary/30 rounded-lg px-3 py-2 text-sm">
-                    <span className="text-xs font-bold text-primary w-8">{slot.label}</span>
-                    <span className="font-semibold text-foreground flex-1">{slot.playerName}</span>
-                    {slot.statValue !== undefined && slot.statValue !== null && (
-                      <span className="text-xs font-bold text-orange-400">
-                        {typeof slot.statValue === 'number'
-                          ? Number.isInteger(slot.statValue) ? slot.statValue : slot.statValue.toFixed(1)
-                          : slot.statValue} {challenge?.unit}
-                      </span>
-                    )}
-                    <span className="text-xs text-muted-foreground">🏀 {slot.assignedTeam}</span>
+            {/* Round 1555: the result is a score out of 100 from the record,
+                on the shared result screen NBA Stat Line uses. Nothing here is
+                written by a model: every name and number is a career row. */}
+            <ResultScreen
+              outcome={result.score >= HIT_SCORE ? 'win' : result.score >= 70 ? 'close' : 'loss'}
+              score={result.score}
+              scoreLabel="out of 100"
+              outcomeEmoji={result.score >= HIT_SCORE ? '🏆' : result.score >= 70 ? '📊' : '🧱'}
+              headline={
+                result.score === 100 ? 'The best five your teams allowed'
+                  : result.score >= HIT_SCORE ? 'Right up there with the best five'
+                    : result.score >= 70 ? 'Close, real close' : 'The record had a better five'
+              }
+              statLine={`Your five: ${fmtStat(result.yourTotal)} ${challenge?.unit ?? ''}. The best five your teams allowed: ${fmtStat(result.best.total)}. The worst: ${fmtStat(result.worst.total)}.`}
+              emojiGrid={result.perPick.map(p => (p.closeness >= 0.9 ? '🟩' : p.closeness >= 0.6 ? '🟨' : '⬜')).join('')}
+              share={{ score: `${result.score}/100`, gameName: 'NBA Starting 5', gamePath: '/nba-starting-5' }}
+              onPlayAgain={resetGame}
+              playAgainLabel="Play Again"
+            >
+              <div className="rounded-xl border border-border bg-surface-1 p-3 text-left space-y-3">
+                <div>
+                  <p className="text-[11px] font-semibold uppercase tracking-wider text-muted-foreground mb-1.5">Your Starting 5</p>
+                  <div className="space-y-1">
+                    {result.perPick.map(p => (
+                      <div key={p.role} className="flex items-center gap-2 text-sm tabular-nums">
+                        <span className="text-xs font-bold text-primary w-7">{p.role}</span>
+                        <span className="font-semibold text-foreground flex-1 min-w-0 truncate">{p.name}</span>
+                        <span className="font-bold text-orange-400">{fmtStat(p.value)}</span>
+                        <span className="text-[11px] text-muted-foreground w-24 text-right">best here {fmtStat(p.slotBest)}</span>
+                      </div>
+                    ))}
                   </div>
-                ))}
-              </div>
-              {totalStat !== null && challenge && (
-                <div className="mt-3 text-center text-lg font-bold text-primary">
-                  Total: {Number.isInteger(totalStat) ? totalStat : totalStat.toFixed(1)} {challenge.unit}
                 </div>
-              )}
-            </div>
-
-            <ShareButtons
-              score={verdict.rating}
-              gameName="NBA Starting 5"
-              gamePath="/nba-starting-5"
-            />
-            <div className="flex justify-center gap-3 mt-4">
-              <button
-                onClick={resetGame}
-                className="inline-flex items-center gap-2 px-6 py-3 bg-primary text-primary-foreground rounded-full font-semibold hover:opacity-90 transition-all"
-              >
-                <RotateCcw className="w-4 h-4" />
-                Play Again
-              </button>
-            </div>
+                <div>
+                  <p className="text-[11px] font-semibold uppercase tracking-wider text-muted-foreground mb-1.5">Best five your teams allowed</p>
+                  <div className="space-y-1">
+                    {[...result.best.picks].sort((a, b) => NBA_POSITIONS.findIndex(s => s.role === a.role) - NBA_POSITIONS.findIndex(s => s.role === b.role)).map(p => (
+                      <div key={p.role} className="flex items-center gap-2 text-sm tabular-nums">
+                        <span className="text-xs font-bold text-primary w-7">{p.role}</span>
+                        <span className="text-foreground flex-1 min-w-0 truncate">{p.name}</span>
+                        <span className="font-bold text-foreground">{fmtStat(p.value)}</span>
+                        {/* The nickname: every one is unique and fits the column ("Philadelphia 76ers" did not). */}
+                        <span className="text-[11px] text-muted-foreground w-24 text-right truncate" title={p.team}>{p.team.split(' ').pop()}</span>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+                <p className="text-[11px] text-muted-foreground">
+                  Career numbers from our stat table. The best and worst fives use the same players the search offered you for each team.
+                </p>
+              </div>
+            </ResultScreen>
           </div>
         )}
 
@@ -408,14 +417,20 @@ const NbaLineup = () => {
             "Spin to receive a stat challenge (highest or lowest)",
             "Pick a position and get a random NBA team assignment",
             "Name a player from that team to fill the slot",
-            "Submit your lineup for an AI evaluation and rating",
+            "Submit your lineup for a score out of 100 against the best five your teams allowed",
           ]}
           examples={[
-            "PG from Celtics = Jrue Holiday, Rajon Rondo",
-            "SG from Bulls = Michael Jordan, Zach LaVine",
-            "SF from Lakers = LeBron James, Kobe Bryant",
-            "PF from Bucks = Giannis Antetokounmpo, Bobby Portis",
-            "C from Nuggets = Nikola Jokić, Dikembe Mutombo",
+            /* The search lists each man under ONE team, so every example is a
+               whole career with that one franchise (Basketball Reference's
+               player pages for all five; second sources: nba.com's legend
+               profiles for Stockton, Miller and Bird, ESPN's July 2018 report
+               of Nowitzki's 21st season with Dallas, Sports Illustrated's 2009
+               Hall of Fame piece on Robinson's 14 years with the Spurs). */
+            "PG from Jazz = John Stockton",
+            "SG from Pacers = Reggie Miller",
+            "SF from Celtics = Larry Bird",
+            "PF from Mavericks = Dirk Nowitzki",
+            "C from Spurs = David Robinson",
             "Challenge: Build lineup with highest combined PPG"
           ]}
         />

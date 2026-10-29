@@ -29,11 +29,16 @@ export const cfbSeatBinding: CollegeSeatBinding<CfbState, { bracket: CfbPlayoffG
     myTeam: st.myTeam,
     programs: CFB_SCHOOLS.map(s => {
       const t = st.teams[s.id];
-      return { id: s.id, name: s.name, strength: t ? cfbStrength(t) : 0, prestige: s.prestige, wins: t?.wins ?? 0, losses: t?.losses ?? 0 };
+      const row = { id: s.id, name: s.name, strength: t ? cfbStrength(t) : 0, prestige: s.prestige, wins: t?.wins ?? 0, losses: t?.losses ?? 0 };
+      /* Round 1554: on the slate the Group of Five plays mostly power schools (COLLEGE_SLATE_EASE). */
+      return s.conf === 'G5' ? { ...row, hardSlate: true } : row;
     }),
     champions: st.natties,
     place: cfbRankings(st).findIndex(t => t.id === st.myTeam) + 1,
     fieldSize: CFB_SEAT_FIELD,
+    /* Round 1554: the season under way plays the slate once it has one (or is about to build it at
+       kickoff); otherwise the next season is the first, since every dynasty has the slate from then. */
+    slateFrom: st.format || (st.depth && st.round === 1) ? st.season : st.season + 1,
   }),
   bracketOf: recap => recap.bracket,
 };

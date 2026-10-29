@@ -253,7 +253,7 @@ export const FOOTBALL_CONTENT: GameContentMap = {
       {
         heading: "Trust upstairs and getting fired",
         items: [
-          "Trust upstairs runs 0 to 100. Beating the mandate raises it, missing it drops it, a championship fixes almost anything, and at zero you are fired and the save ends. A fresh GM always survives one bad year, never three.",
+          "Trust upstairs runs 0 to 100. Beating the mandate raises it, missing it drops it, a championship fixes almost anything, and at zero you are fired, though the save goes on: franchises that rate your record can call, and you can usually sit a season out. A fresh GM always survives one bad year, and only a full Ownership tree gets him through three.",
         ],
       },
     ],
@@ -298,7 +298,7 @@ export const FOOTBALL_CONTENT: GameContentMap = {
       },
       {
         q: "Can I get fired?",
-        a: "Yes. Ownership sets a mandate from your roster's honest strength, grades it every season, and tracks trust from 0 to 100. Miss badly enough for long enough and the seat goes, the save ends, and you take another front office.",
+        a: "Yes. Ownership sets a mandate from your roster's honest strength, grades it every season, and tracks trust from 0 to 100. Miss badly enough for long enough and the seat goes, but the save does not: franchises that rate your record can call, and you can usually sit a season out instead.",
       },
       {
         q: "Does my franchise save?",
@@ -866,7 +866,7 @@ export const FOOTBALL_CONTENT: GameContentMap = {
       {
         heading: "Checking each player before you tap",
         items: [
-          "Check each player's position, teams, and final season, then tap the one with the bigger career number.",
+          "Check each player's position and teams, then tap the one with the bigger career number.",
         ],
       },
       {
@@ -898,7 +898,7 @@ export const FOOTBALL_CONTENT: GameContentMap = {
       {
         heading: "Why careers start in 2000 or later",
         items: [
-          "Career numbers come from real play by play data, using careers that started in 2000 or later so every total is complete.",
+          "The pool was built from play by play data that starts in 1999, so it uses careers that started in 2000 or later, and every number is the official regular season total through the last finished season.",
         ],
         subsections: [
           {
@@ -963,7 +963,7 @@ export const FOOTBALL_CONTENT: GameContentMap = {
   '/nfl-connections': {
     intro: [
       "Twenty pro football players sit in a grid, hiding four groups of five that share something: a franchise, a college, a draft slot, a milestone. Find all four groups before four wrong guesses find you.",
-      "The cruelty is the overlap. That quarterback fits the LSU group and the number one picks group, but he only belongs to one.",
+      "The cruelty is the overlap. That quarterback looks like he fits the LSU group and the number one picks group, but only one of them is really his.",
     ],
     headings: {
       howToPlay: "How to play NFL Connections, a free online NFL grouping puzzle",
@@ -1030,7 +1030,7 @@ export const FOOTBALL_CONTENT: GameContentMap = {
       {
         heading: "Locking an easy shared team group",
         paragraphs: [
-          "You spot five players who all wore a Patriots uniform and lock the yellow group. Then an LSU group looks obvious, except six names fit, which means one of them belongs somewhere else.",
+          "You spot five players who all wore a Patriots uniform and lock the yellow group. Then an LSU group looks obvious, except six names seem to fit, which means one of them belongs somewhere else.",
         ],
       },
       {

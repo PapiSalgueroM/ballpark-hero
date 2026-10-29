@@ -386,7 +386,7 @@ if (CONTROL === 'freecard') {
 } else if (CONTROL === 'godmode') {
   rewrite('godmode',
     'const mk = (k: keyof Attrs) => clampi(base + (s[k] ?? 0) + jitter(), 15, 99);',
-    'const mk = (k: keyof Attrs) => clampi(base + (s[k] ?? 0) + jitter(), 15, 99);\n  if (tier >= 50 && tier <= 54) return { id: nextId(), name: genPersonName(rng, FIRST, LAST), style: st, attrs: { power: 99, chin: 99, speed: 99, stamina: 99, defence: 99, ringIq: 99 }, age: 21, wins: 0, losses: 0, draws: 0, kos: 0, damage: 0, rank: 99, potential: 99 };');
+    'const mk = (k: keyof Attrs) => clampi(base + (s[k] ?? 0) + jitter(), 15, 99);\n  if (tier >= 50 && tier <= 54) return { id: id ?? "godmode", name: genPersonName(rng, FIRST, LAST), style: st, attrs: { power: 99, chin: 99, speed: 99, stamina: 99, defence: 99, ringIq: 99 }, age: 21, wins: 0, losses: 0, draws: 0, kos: 0, damage: 0, rank: 99, potential: 99 };');
 } else if (CONTROL === 'driftdaily') {
   rewrite('driftdaily',
     '  const player = makeFighter(rng, 70, weight);\n  const opponent = makeFighter(rng, 70, weight);',

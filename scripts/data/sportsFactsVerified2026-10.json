@@ -1,0 +1,710 @@
+{
+ "about": "Round 1549. The F1 Higher or Lower pool (src/data/f1HLDrivers.ts) checked on 2026-10-22: every career win count through the 2026 Singapore Grand Prix, the 2026 race winners that move the counts, and the 2026 team of every driver still racing. scripts/simSportsFacts.mjs section 1 holds these nodes to the same source rules as sportsFactsVerified2026-09.json, section 11 holds the shipped file to them and every F1 Driver clue that counts wins to the same numbers, and simF1Champions section 4 holds the 1950 to 2025 part of every count to the f1_driver_standings record.",
+ "checked": "2026-10-22",
+ "officialHosts": {
+  "f1": [
+   "formula1.com",
+   "fia.com"
+  ]
+ },
+ "f1HigherLower": {
+  "through": "the 2026 Singapore Grand Prix",
+  "races2026": {
+   "v": [
+    {
+     "round": 1,
+     "race": "Australian Grand Prix",
+     "winner": "George Russell"
+    },
+    {
+     "round": 2,
+     "race": "Chinese Grand Prix",
+     "winner": "Kimi Antonelli"
+    },
+    {
+     "round": 3,
+     "race": "Japanese Grand Prix",
+     "winner": "Kimi Antonelli"
+    },
+    {
+     "round": 4,
+     "race": "Miami Grand Prix",
+     "winner": "Kimi Antonelli"
+    },
+    {
+     "round": 5,
+     "race": "Canadian Grand Prix",
+     "winner": "Kimi Antonelli"
+    },
+    {
+     "round": 6,
+     "race": "Monaco Grand Prix",
+     "winner": "Kimi Antonelli"
+    },
+    {
+     "round": 7,
+     "race": "Barcelona-Catalunya Grand Prix",
+     "winner": "Lewis Hamilton"
+    },
+    {
+     "round": 8,
+     "race": "Austrian Grand Prix",
+     "winner": "George Russell"
+    },
+    {
+     "round": 9,
+     "race": "British Grand Prix",
+     "winner": "Charles Leclerc"
+    },
+    {
+     "round": 10,
+     "race": "Belgian Grand Prix",
+     "winner": "Kimi Antonelli"
+    },
+    {
+     "round": 11,
+     "race": "Hungarian Grand Prix",
+     "winner": "Lando Norris"
+    },
+    {
+     "round": 12,
+     "race": "Dutch Grand Prix",
+     "winner": "Lando Norris"
+    },
+    {
+     "round": 13,
+     "race": "Italian Grand Prix",
+     "winner": "Kimi Antonelli"
+    },
+    {
+     "round": 14,
+     "race": "Spanish Grand Prix",
+     "winner": "Kimi Antonelli"
+    },
+    {
+     "round": 15,
+     "race": "Azerbaijan Grand Prix",
+     "winner": "George Russell"
+    },
+    {
+     "round": 16,
+     "race": "Bahrain Grand Prix",
+     "winner": "Max Verstappen"
+    },
+    {
+     "round": 17,
+     "race": "Singapore Grand Prix",
+     "winner": "Max Verstappen"
+    }
+   ],
+   "src": [
+    "https://www.formula1.com/en/results/2026/races",
+    "https://www.espn.com/f1/story/_/id/49535228/formula-1-2026-results-kimi-antonelli-lewis-hamilton-george-russell-winners-podium-final-positions-every-race"
+   ],
+   "on": "2026-10-22",
+   "note": "formula1.com lists 17 races with results for 2026, the Singapore Grand Prix (11 October) the latest; ESPN names the same 17 winners and calls round 16 the Bahrain Grand Prix in Malaysia, which formula1.com calls Bahrain. The United States, Mexico, Brazil, Las Vegas, Qatar and Abu Dhabi races had not been run."
+  },
+  "drivers": {
+   "Lewis Hamilton": {
+    "careerWins": {
+     "v": 106,
+     "src": [
+      "https://www.formula1.com/en/drivers/lewis-hamilton",
+      "https://www.crash.net/f1/news/1092987/1/all-time-f1-winners-list"
+     ],
+     "on": "2026-10-22",
+     "note": "formula1.com: highest race finish 1 (x106), 1 Grand Prix win in 2026; crash.net's all time list after the 2026 Singapore Grand Prix: 106."
+    },
+    "team2026": {
+     "v": "Ferrari",
+     "src": [
+      "https://www.formula1.com/en/drivers/lewis-hamilton",
+      "https://www.crash.net/f1/results/1107465/1/formula-1-singapore-grand-prix-full-race-results"
+     ],
+     "on": "2026-10-22",
+     "note": "formula1.com names Ferrari as his 2026 team; crash.net's 2026 Singapore Grand Prix result classifies him for Ferrari."
+    }
+   },
+   "Michael Schumacher": {
+    "careerWins": {
+     "v": 91,
+     "src": [
+      "https://www.crash.net/f1/news/1092987/1/all-time-f1-winners-list",
+      "https://beyondtheflag.com/formula-1-all-time-wins-list/"
+     ],
+     "on": "2026-10-22",
+     "noOfficial": "formula1.com publishes no career win total for a driver who no longer races, so this stands on two independent all time lists that agree",
+     "note": "crash.net (after the 2026 Singapore Grand Prix) and beyondtheflag.com (2026-07-26) both give 91."
+    }
+   },
+   "Max Verstappen": {
+    "careerWins": {
+     "v": 73,
+     "src": [
+      "https://www.formula1.com/en/drivers/max-verstappen",
+      "https://www.crash.net/f1/news/1092987/1/all-time-f1-winners-list"
+     ],
+     "on": "2026-10-22",
+     "note": "formula1.com: highest race finish 1 (x73), 2 Grand Prix wins in 2026; crash.net's all time list after the 2026 Singapore Grand Prix: 73."
+    },
+    "team2026": {
+     "v": "Red Bull",
+     "src": [
+      "https://www.formula1.com/en/drivers/max-verstappen",
+      "https://www.crash.net/f1/results/1107465/1/formula-1-singapore-grand-prix-full-race-results"
+     ],
+     "on": "2026-10-22",
+     "note": "formula1.com names Red Bull as his 2026 team; crash.net's 2026 Singapore Grand Prix result classifies him for Red Bull."
+    }
+   },
+   "Sebastian Vettel": {
+    "careerWins": {
+     "v": 53,
+     "src": [
+      "https://www.crash.net/f1/news/1092987/1/all-time-f1-winners-list",
+      "https://beyondtheflag.com/formula-1-all-time-wins-list/"
+     ],
+     "on": "2026-10-22",
+     "noOfficial": "formula1.com publishes no career win total for a driver who no longer races, so this stands on two independent all time lists that agree",
+     "note": "crash.net (after the 2026 Singapore Grand Prix) and beyondtheflag.com (2026-07-26) both give 53."
+    }
+   },
+   "Alain Prost": {
+    "careerWins": {
+     "v": 51,
+     "src": [
+      "https://www.crash.net/f1/news/1092987/1/all-time-f1-winners-list",
+      "https://beyondtheflag.com/formula-1-all-time-wins-list/"
+     ],
+     "on": "2026-10-22",
+     "noOfficial": "formula1.com publishes no career win total for a driver who no longer races, so this stands on two independent all time lists that agree",
+     "note": "crash.net (after the 2026 Singapore Grand Prix) and beyondtheflag.com (2026-07-26) both give 51."
+    }
+   },
+   "Ayrton Senna": {
+    "careerWins": {
+     "v": 41,
+     "src": [
+      "https://www.crash.net/f1/news/1092987/1/all-time-f1-winners-list",
+      "https://beyondtheflag.com/formula-1-all-time-wins-list/"
+     ],
+     "on": "2026-10-22",
+     "noOfficial": "formula1.com publishes no career win total for a driver who no longer races, so this stands on two independent all time lists that agree",
+     "note": "crash.net (after the 2026 Singapore Grand Prix) and beyondtheflag.com (2026-07-26) both give 41."
+    }
+   },
+   "Fernando Alonso": {
+    "careerWins": {
+     "v": 32,
+     "src": [
+      "https://www.formula1.com/en/drivers/fernando-alonso",
+      "https://www.crash.net/f1/news/1092987/1/all-time-f1-winners-list"
+     ],
+     "on": "2026-10-22",
+     "note": "formula1.com: highest race finish 1 (x32), 0 Grand Prix wins in 2026; crash.net's all time list after the 2026 Singapore Grand Prix: 32."
+    },
+    "team2026": {
+     "v": "Aston Martin",
+     "src": [
+      "https://www.formula1.com/en/drivers/fernando-alonso",
+      "https://www.crash.net/f1/results/1107465/1/formula-1-singapore-grand-prix-full-race-results"
+     ],
+     "on": "2026-10-22",
+     "note": "formula1.com names Aston Martin as his 2026 team; crash.net's 2026 Singapore Grand Prix result classifies him for Aston Martin."
+    }
+   },
+   "Nigel Mansell": {
+    "careerWins": {
+     "v": 31,
+     "src": [
+      "https://www.crash.net/f1/news/1092987/1/all-time-f1-winners-list",
+      "https://beyondtheflag.com/formula-1-all-time-wins-list/"
+     ],
+     "on": "2026-10-22",
+     "noOfficial": "formula1.com publishes no career win total for a driver who no longer races, so this stands on two independent all time lists that agree",
+     "note": "crash.net (after the 2026 Singapore Grand Prix) and beyondtheflag.com (2026-07-26) both give 31."
+    }
+   },
+   "Jackie Stewart": {
+    "careerWins": {
+     "v": 27,
+     "src": [
+      "https://www.crash.net/f1/news/1092987/1/all-time-f1-winners-list",
+      "https://beyondtheflag.com/formula-1-all-time-wins-list/"
+     ],
+     "on": "2026-10-22",
+     "noOfficial": "formula1.com publishes no career win total for a driver who no longer races, so this stands on two independent all time lists that agree",
+     "note": "crash.net (after the 2026 Singapore Grand Prix) and beyondtheflag.com (2026-07-26) both give 27."
+    }
+   },
+   "Niki Lauda": {
+    "careerWins": {
+     "v": 25,
+     "src": [
+      "https://www.crash.net/f1/news/1092987/1/all-time-f1-winners-list",
+      "https://beyondtheflag.com/formula-1-all-time-wins-list/"
+     ],
+     "on": "2026-10-22",
+     "noOfficial": "formula1.com publishes no career win total for a driver who no longer races, so this stands on two independent all time lists that agree",
+     "note": "crash.net (after the 2026 Singapore Grand Prix) and beyondtheflag.com (2026-07-26) both give 25."
+    }
+   },
+   "Jim Clark": {
+    "careerWins": {
+     "v": 25,
+     "src": [
+      "https://www.crash.net/f1/news/1092987/1/all-time-f1-winners-list",
+      "https://beyondtheflag.com/formula-1-all-time-wins-list/"
+     ],
+     "on": "2026-10-22",
+     "noOfficial": "formula1.com publishes no career win total for a driver who no longer races, so this stands on two independent all time lists that agree",
+     "note": "crash.net (after the 2026 Singapore Grand Prix) and beyondtheflag.com (2026-07-26) both give 25."
+    }
+   },
+   "Juan Manuel Fangio": {
+    "careerWins": {
+     "v": 24,
+     "src": [
+      "https://www.crash.net/f1/news/1092987/1/all-time-f1-winners-list",
+      "https://beyondtheflag.com/formula-1-all-time-wins-list/"
+     ],
+     "on": "2026-10-22",
+     "noOfficial": "formula1.com publishes no career win total for a driver who no longer races, so this stands on two independent all time lists that agree",
+     "note": "crash.net (after the 2026 Singapore Grand Prix) and beyondtheflag.com (2026-07-26) both give 24."
+    }
+   },
+   "Nelson Piquet": {
+    "careerWins": {
+     "v": 23,
+     "src": [
+      "https://www.crash.net/f1/news/1092987/1/all-time-f1-winners-list",
+      "https://beyondtheflag.com/formula-1-all-time-wins-list/"
+     ],
+     "on": "2026-10-22",
+     "noOfficial": "formula1.com publishes no career win total for a driver who no longer races, so this stands on two independent all time lists that agree",
+     "note": "crash.net (after the 2026 Singapore Grand Prix) and beyondtheflag.com (2026-07-26) both give 23."
+    }
+   },
+   "Nico Rosberg": {
+    "careerWins": {
+     "v": 23,
+     "src": [
+      "https://www.crash.net/f1/news/1092987/1/all-time-f1-winners-list",
+      "https://beyondtheflag.com/formula-1-all-time-wins-list/"
+     ],
+     "on": "2026-10-22",
+     "noOfficial": "formula1.com publishes no career win total for a driver who no longer races, so this stands on two independent all time lists that agree",
+     "note": "crash.net (after the 2026 Singapore Grand Prix) and beyondtheflag.com (2026-07-26) both give 23."
+    }
+   },
+   "Damon Hill": {
+    "careerWins": {
+     "v": 22,
+     "src": [
+      "https://www.crash.net/f1/news/1092987/1/all-time-f1-winners-list",
+      "https://beyondtheflag.com/formula-1-all-time-wins-list/"
+     ],
+     "on": "2026-10-22",
+     "noOfficial": "formula1.com publishes no career win total for a driver who no longer races, so this stands on two independent all time lists that agree",
+     "note": "crash.net (after the 2026 Singapore Grand Prix) and beyondtheflag.com (2026-07-26) both give 22."
+    }
+   },
+   "Kimi Räikkönen": {
+    "careerWins": {
+     "v": 21,
+     "src": [
+      "https://www.crash.net/f1/news/1092987/1/all-time-f1-winners-list",
+      "https://beyondtheflag.com/formula-1-all-time-wins-list/"
+     ],
+     "on": "2026-10-22",
+     "noOfficial": "formula1.com publishes no career win total for a driver who no longer races, so this stands on two independent all time lists that agree",
+     "note": "crash.net (after the 2026 Singapore Grand Prix) and beyondtheflag.com (2026-07-26) both give 21."
+    }
+   },
+   "Mika Häkkinen": {
+    "careerWins": {
+     "v": 20,
+     "src": [
+      "https://www.crash.net/f1/news/1092987/1/all-time-f1-winners-list",
+      "https://beyondtheflag.com/formula-1-all-time-wins-list/"
+     ],
+     "on": "2026-10-22",
+     "noOfficial": "formula1.com publishes no career win total for a driver who no longer races, so this stands on two independent all time lists that agree",
+     "note": "crash.net (after the 2026 Singapore Grand Prix) and beyondtheflag.com (2026-07-26) both give 20."
+    }
+   },
+   "Stirling Moss": {
+    "careerWins": {
+     "v": 16,
+     "src": [
+      "https://www.crash.net/f1/news/1092987/1/all-time-f1-winners-list",
+      "https://beyondtheflag.com/formula-1-all-time-wins-list/"
+     ],
+     "on": "2026-10-22",
+     "noOfficial": "formula1.com publishes no career win total for a driver who no longer races, so this stands on two independent all time lists that agree",
+     "note": "crash.net (after the 2026 Singapore Grand Prix) and beyondtheflag.com (2026-07-26) both give 16."
+    }
+   },
+   "Jenson Button": {
+    "careerWins": {
+     "v": 15,
+     "src": [
+      "https://www.crash.net/f1/news/1092987/1/all-time-f1-winners-list",
+      "https://beyondtheflag.com/formula-1-all-time-wins-list/"
+     ],
+     "on": "2026-10-22",
+     "noOfficial": "formula1.com publishes no career win total for a driver who no longer races, so this stands on two independent all time lists that agree",
+     "note": "crash.net (after the 2026 Singapore Grand Prix) and beyondtheflag.com (2026-07-26) both give 15."
+    }
+   },
+   "Emerson Fittipaldi": {
+    "careerWins": {
+     "v": 14,
+     "src": [
+      "https://www.crash.net/f1/news/1092987/1/all-time-f1-winners-list",
+      "https://beyondtheflag.com/formula-1-all-time-wins-list/"
+     ],
+     "on": "2026-10-22",
+     "noOfficial": "formula1.com publishes no career win total for a driver who no longer races, so this stands on two independent all time lists that agree",
+     "note": "crash.net (after the 2026 Singapore Grand Prix) and beyondtheflag.com (2026-07-26) both give 14."
+    }
+   },
+   "Graham Hill": {
+    "careerWins": {
+     "v": 14,
+     "src": [
+      "https://www.crash.net/f1/news/1092987/1/all-time-f1-winners-list",
+      "https://beyondtheflag.com/formula-1-all-time-wins-list/"
+     ],
+     "on": "2026-10-22",
+     "noOfficial": "formula1.com publishes no career win total for a driver who no longer races, so this stands on two independent all time lists that agree",
+     "note": "crash.net (after the 2026 Singapore Grand Prix) and beyondtheflag.com (2026-07-26) both give 14."
+    }
+   },
+   "Jack Brabham": {
+    "careerWins": {
+     "v": 14,
+     "src": [
+      "https://www.crash.net/f1/news/1092987/1/all-time-f1-winners-list",
+      "https://beyondtheflag.com/formula-1-all-time-wins-list/"
+     ],
+     "on": "2026-10-22",
+     "noOfficial": "formula1.com publishes no career win total for a driver who no longer races, so this stands on two independent all time lists that agree",
+     "note": "crash.net (after the 2026 Singapore Grand Prix) and beyondtheflag.com (2026-07-26) both give 14."
+    }
+   },
+   "Alberto Ascari": {
+    "careerWins": {
+     "v": 13,
+     "src": [
+      "https://www.crash.net/f1/news/1092987/1/all-time-f1-winners-list",
+      "https://beyondtheflag.com/formula-1-all-time-wins-list/"
+     ],
+     "on": "2026-10-22",
+     "noOfficial": "formula1.com publishes no career win total for a driver who no longer races, so this stands on two independent all time lists that agree",
+     "note": "crash.net (after the 2026 Singapore Grand Prix) and beyondtheflag.com (2026-07-26) both give 13."
+    }
+   },
+   "David Coulthard": {
+    "careerWins": {
+     "v": 13,
+     "src": [
+      "https://www.crash.net/f1/news/1092987/1/all-time-f1-winners-list",
+      "https://beyondtheflag.com/formula-1-all-time-wins-list/"
+     ],
+     "on": "2026-10-22",
+     "noOfficial": "formula1.com publishes no career win total for a driver who no longer races, so this stands on two independent all time lists that agree",
+     "note": "crash.net (after the 2026 Singapore Grand Prix) and beyondtheflag.com (2026-07-26) both give 13."
+    }
+   },
+   "Lando Norris": {
+    "careerWins": {
+     "v": 13,
+     "src": [
+      "https://www.formula1.com/en/drivers/lando-norris",
+      "https://www.crash.net/f1/news/1092987/1/all-time-f1-winners-list"
+     ],
+     "on": "2026-10-22",
+     "note": "formula1.com: highest race finish 1 (x13), 2 Grand Prix wins in 2026; crash.net's all time list after the 2026 Singapore Grand Prix: 13."
+    },
+    "team2026": {
+     "v": "McLaren",
+     "src": [
+      "https://www.formula1.com/en/drivers/lando-norris",
+      "https://www.crash.net/f1/results/1107465/1/formula-1-singapore-grand-prix-full-race-results"
+     ],
+     "on": "2026-10-22",
+     "note": "formula1.com names McLaren as his 2026 team; crash.net's 2026 Singapore Grand Prix result classifies him for McLaren."
+    }
+   },
+   "Alan Jones": {
+    "careerWins": {
+     "v": 12,
+     "src": [
+      "https://www.crash.net/f1/news/1092987/1/all-time-f1-winners-list",
+      "https://beyondtheflag.com/formula-1-all-time-wins-list/"
+     ],
+     "on": "2026-10-22",
+     "noOfficial": "formula1.com publishes no career win total for a driver who no longer races, so this stands on two independent all time lists that agree",
+     "note": "crash.net (after the 2026 Singapore Grand Prix) and beyondtheflag.com (2026-07-26) both give 12."
+    }
+   },
+   "Mario Andretti": {
+    "careerWins": {
+     "v": 12,
+     "src": [
+      "https://www.crash.net/f1/news/1092987/1/all-time-f1-winners-list",
+      "https://beyondtheflag.com/formula-1-all-time-wins-list/"
+     ],
+     "on": "2026-10-22",
+     "noOfficial": "formula1.com publishes no career win total for a driver who no longer races, so this stands on two independent all time lists that agree",
+     "note": "crash.net (after the 2026 Singapore Grand Prix) and beyondtheflag.com (2026-07-26) both give 12."
+    }
+   },
+   "Carlos Reutemann": {
+    "careerWins": {
+     "v": 12,
+     "src": [
+      "https://www.crash.net/f1/news/1092987/1/all-time-f1-winners-list",
+      "https://beyondtheflag.com/formula-1-all-time-wins-list/"
+     ],
+     "on": "2026-10-22",
+     "noOfficial": "formula1.com publishes no career win total for a driver who no longer races, so this stands on two independent all time lists that agree",
+     "note": "crash.net (after the 2026 Singapore Grand Prix) and beyondtheflag.com (2026-07-26) both give 12."
+    }
+   },
+   "Felipe Massa": {
+    "careerWins": {
+     "v": 11,
+     "src": [
+      "https://www.crash.net/f1/news/1092987/1/all-time-f1-winners-list",
+      "https://beyondtheflag.com/formula-1-all-time-wins-list/"
+     ],
+     "on": "2026-10-22",
+     "noOfficial": "formula1.com publishes no career win total for a driver who no longer races, so this stands on two independent all time lists that agree",
+     "note": "crash.net (after the 2026 Singapore Grand Prix) and beyondtheflag.com (2026-07-26) both give 11."
+    }
+   },
+   "Jacques Villeneuve": {
+    "careerWins": {
+     "v": 11,
+     "src": [
+      "https://www.crash.net/f1/news/1092987/1/all-time-f1-winners-list",
+      "https://beyondtheflag.com/formula-1-all-time-wins-list/"
+     ],
+     "on": "2026-10-22",
+     "noOfficial": "formula1.com publishes no career win total for a driver who no longer races, so this stands on two independent all time lists that agree",
+     "note": "crash.net (after the 2026 Singapore Grand Prix) and beyondtheflag.com (2026-07-26) both give 11."
+    }
+   },
+   "Rubens Barrichello": {
+    "careerWins": {
+     "v": 11,
+     "src": [
+      "https://www.crash.net/f1/news/1092987/1/all-time-f1-winners-list",
+      "https://beyondtheflag.com/formula-1-all-time-wins-list/"
+     ],
+     "on": "2026-10-22",
+     "noOfficial": "formula1.com publishes no career win total for a driver who no longer races, so this stands on two independent all time lists that agree",
+     "note": "crash.net (after the 2026 Singapore Grand Prix) and beyondtheflag.com (2026-07-26) both give 11."
+    }
+   },
+   "Gerhard Berger": {
+    "careerWins": {
+     "v": 10,
+     "src": [
+      "https://www.crash.net/f1/news/1092987/1/all-time-f1-winners-list",
+      "https://beyondtheflag.com/formula-1-all-time-wins-list/"
+     ],
+     "on": "2026-10-22",
+     "noOfficial": "formula1.com publishes no career win total for a driver who no longer races, so this stands on two independent all time lists that agree",
+     "note": "crash.net (after the 2026 Singapore Grand Prix) and beyondtheflag.com (2026-07-26) both give 10."
+    }
+   },
+   "James Hunt": {
+    "careerWins": {
+     "v": 10,
+     "src": [
+      "https://www.crash.net/f1/news/1092987/1/all-time-f1-winners-list",
+      "https://beyondtheflag.com/formula-1-all-time-wins-list/"
+     ],
+     "on": "2026-10-22",
+     "noOfficial": "formula1.com publishes no career win total for a driver who no longer races, so this stands on two independent all time lists that agree",
+     "note": "crash.net (after the 2026 Singapore Grand Prix) and beyondtheflag.com (2026-07-26) both give 10."
+    }
+   },
+   "Ronnie Peterson": {
+    "careerWins": {
+     "v": 10,
+     "src": [
+      "https://www.crash.net/f1/news/1092987/1/all-time-f1-winners-list",
+      "https://beyondtheflag.com/formula-1-all-time-wins-list/"
+     ],
+     "on": "2026-10-22",
+     "noOfficial": "formula1.com publishes no career win total for a driver who no longer races, so this stands on two independent all time lists that agree",
+     "note": "crash.net (after the 2026 Singapore Grand Prix) and beyondtheflag.com (2026-07-26) both give 10."
+    }
+   },
+   "Valtteri Bottas": {
+    "careerWins": {
+     "v": 10,
+     "src": [
+      "https://www.formula1.com/en/drivers/valtteri-bottas",
+      "https://www.crash.net/f1/news/1092987/1/all-time-f1-winners-list"
+     ],
+     "on": "2026-10-22",
+     "note": "formula1.com: highest race finish 1 (x10), 0 Grand Prix wins in 2026; crash.net's all time list after the 2026 Singapore Grand Prix: 10."
+    },
+    "team2026": {
+     "v": "Cadillac",
+     "src": [
+      "https://www.formula1.com/en/drivers/valtteri-bottas",
+      "https://www.crash.net/f1/results/1107465/1/formula-1-singapore-grand-prix-full-race-results"
+     ],
+     "on": "2026-10-22",
+     "note": "formula1.com names Cadillac as his 2026 team; crash.net's 2026 Singapore Grand Prix result classifies him for Cadillac."
+    }
+   },
+   "Jody Scheckter": {
+    "careerWins": {
+     "v": 10,
+     "src": [
+      "https://www.crash.net/f1/news/1092987/1/all-time-f1-winners-list",
+      "https://beyondtheflag.com/formula-1-all-time-wins-list/"
+     ],
+     "on": "2026-10-22",
+     "noOfficial": "formula1.com publishes no career win total for a driver who no longer races, so this stands on two independent all time lists that agree",
+     "note": "crash.net (after the 2026 Singapore Grand Prix) and beyondtheflag.com (2026-07-26) both give 10."
+    }
+   },
+   "Oscar Piastri": {
+    "careerWins": {
+     "v": 9,
+     "src": [
+      "https://www.formula1.com/en/drivers/oscar-piastri",
+      "https://www.crash.net/f1/news/1092987/1/all-time-f1-winners-list"
+     ],
+     "on": "2026-10-22",
+     "note": "formula1.com: highest race finish 1 (x9), 0 Grand Prix wins in 2026; crash.net's all time list after the 2026 Singapore Grand Prix: 9."
+    },
+    "team2026": {
+     "v": "McLaren",
+     "src": [
+      "https://www.formula1.com/en/drivers/oscar-piastri",
+      "https://www.crash.net/f1/results/1107465/1/formula-1-singapore-grand-prix-full-race-results"
+     ],
+     "on": "2026-10-22",
+     "note": "formula1.com names McLaren as his 2026 team; crash.net's 2026 Singapore Grand Prix result classifies him for McLaren."
+    }
+   },
+   "Mark Webber": {
+    "careerWins": {
+     "v": 9,
+     "src": [
+      "https://www.crash.net/f1/news/1092987/1/all-time-f1-winners-list",
+      "https://beyondtheflag.com/formula-1-all-time-wins-list/"
+     ],
+     "on": "2026-10-22",
+     "noOfficial": "formula1.com publishes no career win total for a driver who no longer races, so this stands on two independent all time lists that agree",
+     "note": "crash.net (after the 2026 Singapore Grand Prix) and beyondtheflag.com (2026-07-26) both give 9."
+    }
+   },
+   "Charles Leclerc": {
+    "careerWins": {
+     "v": 9,
+     "src": [
+      "https://www.formula1.com/en/drivers/charles-leclerc",
+      "https://www.crash.net/f1/news/1092987/1/all-time-f1-winners-list"
+     ],
+     "on": "2026-10-22",
+     "note": "formula1.com: highest race finish 1 (x9), 1 Grand Prix win in 2026; crash.net's all time list after the 2026 Singapore Grand Prix: 9."
+    },
+    "team2026": {
+     "v": "Ferrari",
+     "src": [
+      "https://www.formula1.com/en/drivers/charles-leclerc",
+      "https://www.crash.net/f1/results/1107465/1/formula-1-singapore-grand-prix-full-race-results"
+     ],
+     "on": "2026-10-22",
+     "note": "formula1.com names Ferrari as his 2026 team; crash.net's 2026 Singapore Grand Prix result classifies him for Ferrari."
+    }
+   },
+   "Denny Hulme": {
+    "careerWins": {
+     "v": 8,
+     "src": [
+      "https://www.crash.net/f1/news/1092987/1/all-time-f1-winners-list",
+      "https://beyondtheflag.com/formula-1-all-time-wins-list/"
+     ],
+     "on": "2026-10-22",
+     "noOfficial": "formula1.com publishes no career win total for a driver who no longer races, so this stands on two independent all time lists that agree",
+     "note": "crash.net (after the 2026 Singapore Grand Prix) and beyondtheflag.com (2026-07-26) both give 8."
+    }
+   },
+   "Jacky Ickx": {
+    "careerWins": {
+     "v": 8,
+     "src": [
+      "https://www.crash.net/f1/news/1092987/1/all-time-f1-winners-list",
+      "https://beyondtheflag.com/formula-1-all-time-wins-list/"
+     ],
+     "on": "2026-10-22",
+     "noOfficial": "formula1.com publishes no career win total for a driver who no longer races, so this stands on two independent all time lists that agree",
+     "note": "crash.net (after the 2026 Singapore Grand Prix) and beyondtheflag.com (2026-07-26) both give 8."
+    }
+   },
+   "Daniel Ricciardo": {
+    "careerWins": {
+     "v": 8,
+     "src": [
+      "https://www.crash.net/f1/news/1092987/1/all-time-f1-winners-list",
+      "https://beyondtheflag.com/formula-1-all-time-wins-list/"
+     ],
+     "on": "2026-10-22",
+     "noOfficial": "formula1.com publishes no career win total for a driver who no longer races, so this stands on two independent all time lists that agree",
+     "note": "crash.net (after the 2026 Singapore Grand Prix) and beyondtheflag.com (2026-07-26) both give 8."
+    }
+   },
+   "George Russell": {
+    "careerWins": {
+     "v": 8,
+     "src": [
+      "https://www.formula1.com/en/drivers/george-russell",
+      "https://www.crash.net/f1/news/1092987/1/all-time-f1-winners-list"
+     ],
+     "on": "2026-10-22",
+     "note": "formula1.com: highest race finish 1 (x8), 3 Grand Prix wins in 2026; crash.net's all time list after the 2026 Singapore Grand Prix: 8."
+    },
+    "team2026": {
+     "v": "Mercedes",
+     "src": [
+      "https://www.formula1.com/en/drivers/george-russell",
+      "https://www.crash.net/f1/results/1107465/1/formula-1-singapore-grand-prix-full-race-results"
+     ],
+     "on": "2026-10-22",
+     "note": "formula1.com names Mercedes as his 2026 team; crash.net's 2026 Singapore Grand Prix result classifies him for Mercedes."
+    }
+   },
+   "Kimi Antonelli": {
+    "careerWins": {
+     "v": 8,
+     "src": [
+      "https://www.formula1.com/en/drivers/kimi-antonelli",
+      "https://www.crash.net/f1/news/1092987/1/all-time-f1-winners-list"
+     ],
+     "on": "2026-10-22",
+     "note": "formula1.com: highest race finish 1 (x8), 8 Grand Prix wins in 2026; crash.net's all time list after the 2026 Singapore Grand Prix: 8."
+    },
+    "team2026": {
+     "v": "Mercedes",
+     "src": [
+      "https://www.formula1.com/en/drivers/kimi-antonelli",
+      "https://www.crash.net/f1/results/1107465/1/formula-1-singapore-grand-prix-full-race-results"
+     ],
+     "on": "2026-10-22",
+     "note": "formula1.com names Mercedes as his 2026 team; crash.net's 2026 Singapore Grand Prix result classifies him for Mercedes."
+    }
+   }
+  }
+ }
+}

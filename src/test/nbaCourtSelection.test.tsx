@@ -32,7 +32,7 @@ beforeEach(() => {
   const slots = filled();
   fixture.state = {
     phase: 'building', challenge: { stat: 'points', direction: 'highest', unit: 'PPG', emoji: '🏀' }, currentTeam: { name: 'Simulated City' },
-    filledSlots: slots, filledSlotsArray: [...slots.values()], filledCount: slots.size, verdict: { rating: 'Fixture', headline: 'Fixture result', analysis: 'Fixture only' },
+    filledSlots: slots, filledSlotsArray: [...slots.values()], filledCount: slots.size, result: { score: 64, yourTotal: 24.74, best: { total: 30, picks: [] }, worst: { total: 1, picks: [] }, perPick: [{ team: 'Simulated City', role: 'PG', name: 'Simulated Guard', value: 24.74, slotBest: 30, slotWorst: 1, closeness: 0.8 }] },
     isEvaluating: false, evaluationError: null, isValidating: false, validationError: null, isStatSpinning: false, isTeamSpinning: false,
     teamAssignments: [], totalStat: 24.74, currentTeamSource: { fixture: true }, filledNormalizedNames: new Set(),
     startGame: vi.fn(), finishStatSpin: vi.fn(), beginBuilding: vi.fn(), finishTeamSpin: vi.fn(), rerollTeam: vi.fn(), submitPlayer: vi.fn(), evaluateTeam: vi.fn(), resetGame: vi.fn(),

@@ -147,6 +147,7 @@ const MOUNT_ALLOW = [
   'src/data/gmDraftOrder/rules.ts',
   'src/components/front-office-shared/GmLotteryCard.tsx', 'src/components/front-office-shared/GmLotteryCard.test.tsx',
   'src/lib/gmEarnedDraft.ts', 'src/lib/nbaEarnedDraft.ts',
+  'src/components/front-office-shared/GmEarnedDraftScreen.tsx', 'src/components/front-office-shared/GmEarnedDraftScreen.test.tsx',
 ];
 
 /* control -> { swaps (keyed like the harness lib's FILES), expect: the sections that must go red } */

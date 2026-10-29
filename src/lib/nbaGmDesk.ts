@@ -36,7 +36,7 @@ import {
   type GmContractHost, type GmContractLedger, type GmDecision, autoDecide, expiringMen, isValidLedger, noteArrival,
   openLedger, runDeskOffseason, undecided,
 } from './gmContracts';
-import { nbaContractHost } from './gmContractsHostNba';
+import { nbaContractHost, nbaSummerKeepingSheets } from './gmContractsHostNba';
 import {
   type GmPickLedger, type GmPickRules, NBA_PICK_RULES, findPick, migrateLegacyPicks, movePicks, pickKey,
   pickSwapRefusal, picksHeldBy, rollLedger, validateLedger,
@@ -58,7 +58,7 @@ import { NBA_STAFF_PACK, type NbaStaffPost } from '@/data/gmStaff/packs';
 import { nbaReconcileRotation } from './nbaRotation';
 import {
   EAST, NBA_ROSTER_MAX, NBA_ROSTER_MIN, NBA_ROUNDS, type NbaGmPlayer, type NbaLeague, type NbaProspect,
-  type NbaRoundOptions, nbaCapRoom, nbaCapUsed, nbaFirstApron, nbaOffseason, nbaStrength, nbaTradeValue,
+  type NbaRoundOptions, nbaCapRoom, nbaCapUsed, nbaFirstApron, nbaStrength, nbaTradeValue,
 } from './nbaFrontOffice';
 
 /* ------------------------------------------------------------------ */
@@ -72,13 +72,19 @@ export const NBA_DESK_KEYS = { contracts: 'contracts', picks: 'picks', staff: 's
  * 2026-10-02), two rounds as the league has, with what draft night here does
  * differently said out loud. A function, not a constant, so nothing imported
  * is read at module scope.
+ *
+ * Round 1540: draft night with the desk on is the earned night
+ * (nbaEarnedDraft.ts), so the partial list keeps the table's line and drops
+ * the pick rules' second one (round two there is every club by record, not the
+ * clubs that missed the playoffs first), and the old short draft's line is
+ * replaced by the one that is true now.
  */
 export function nbaGamePickRules(): GmPickRules {
   return {
     ...NBA_PICK_RULES,
     partial: [
-      ...NBA_PICK_RULES.partial,
-      'The lottery is in the rules, but draft night here is the game\'s own short draft: you pick first in each batch, then the other clubs go in reverse standings.',
+      NBA_PICK_RULES.partial[0],
+      'Draft night here runs in the order your record earns, on the lottery the league used for its 2019 to 2026 drafts.',
     ],
   };
 }
@@ -433,7 +439,10 @@ export function nbaProposePackage(league: NbaLeague, desk: GmDesk, team: string,
  * right after draft night takes off before he has played a game (the
  * engine's offseason runs after the draft and takes a season off every
  * deal), so he plays four seasons before he comes up on the re-sign desk. A
- * second round pick is not on the scale and keeps the engine's own deal.
+ * second round pick is not on the scale and this function leaves his deal
+ * alone: on the earned draft night (nbaEarnedDraft.ts, every club's man) he
+ * signs NBA_SECOND_ROUND_SEASONS at the league minimum, and only a draft
+ * opened the old way keeps the engine's own figure for him (Round 1540).
  * With the desk off the engine's figure stands, so an old save plays as it did.
  */
 export function nbaSignDraftee(p: NbaGmPlayer, round: number): void {
@@ -476,7 +485,8 @@ export function nbaDeskAfterRound(desk: GmDesk, league: NbaLeague, team: string)
 export function nbaDeskHost(block: GmStaffBlock<NbaStaffPost>, team: string, season: number): GmContractHost<NbaLeague, string[]> {
   return {
     ...nbaContractHost,
-    runOffseason: (league, rng, my) => nbaOffseason(league, rng, my, {
+    /* Round 1556: through the host's summer, so a man who let a sheet stand stays at the club that tabled it. */
+    runOffseason: (league, rng, my, arrivals) => nbaSummerKeepingSheets(league, rng, my, arrivals, {
       growth: (abbr, p, step) => (abbr === team ? nbaGrowthStep(block, team, season, p.id, step) : step),
     }),
   };

@@ -1,0 +1,463 @@
+{
+ "base": "7a8750ba",
+ "seeds": 30,
+ "note": "Round 1540 decision 10 (c): the old paths played through the base board. Never record again on a builder's own say.",
+ "cases": {
+  "deskOffRecap": {
+   "1": {
+    "hash": "8cbbbc404ad1f359d90af3f20a3dc6de280fd6d2c6f1127b130b97e12253b72b",
+    "calls": 784,
+    "picks": 2
+   },
+   "2": {
+    "hash": "a7e03bc72ebe55ea8ade218d4c9b45d3f8615a69eef8019ee77fbd7f29745174",
+    "calls": 796,
+    "picks": 2
+   },
+   "3": {
+    "hash": "39865a3496fd84959baf27fecd73d28b345a707a04d34b035092ddb2056fecc8",
+    "calls": 797,
+    "picks": 2
+   },
+   "4": {
+    "hash": "935c9bc6cb90279ede4aac51024c9c61181ccd8d99dceae1cb0cd688526a7363",
+    "calls": 800,
+    "picks": 2
+   },
+   "5": {
+    "hash": "7d5cd11475bfd38038d251b35bb04d35b7a323e8a1254ca94b2211f8bd31a431",
+    "calls": 781,
+    "picks": 2
+   },
+   "6": {
+    "hash": "58daa90e131cd71872185cbb1fa03b6a16a773a3bb8886bc8837c167a3dde426",
+    "calls": 782,
+    "picks": 2
+   },
+   "7": {
+    "hash": "67040a9be36e4ad2d98c060cc8289f0dc17ba287bfe698f776bfa9cb41e6ffea",
+    "calls": 770,
+    "picks": 2
+   },
+   "8": {
+    "hash": "69c45986b6d44b89fa74ce7b1fd827fd55edcab20d02bb9107913d3268ce0460",
+    "calls": 773,
+    "picks": 2
+   },
+   "9": {
+    "hash": "be3598ac7e6a7aeb912ff1d779de9b8d5b3bed89a5479c849b4a881f02d3fbb9",
+    "calls": 778,
+    "picks": 2
+   },
+   "10": {
+    "hash": "93689ecc8c03b22735c4af2a87212e733cca4baa06b1ddd86fa3672decfcff0b",
+    "calls": 770,
+    "picks": 2
+   },
+   "11": {
+    "hash": "91cb1da7dd3e6b699b26aad5c1bca37445f08a82c25529daf5d829c09b32e67a",
+    "calls": 822,
+    "picks": 2
+   },
+   "12": {
+    "hash": "3f9d89590c7bec47afdfab0635e98aead326e0751669d4677bcca50b563c2d31",
+    "calls": 784,
+    "picks": 2
+   },
+   "13": {
+    "hash": "cd83b4aeb8adfa372fe7f67a4e106791326ddb5f975cdd2d66509b934ca04518",
+    "calls": 793,
+    "picks": 2
+   },
+   "14": {
+    "hash": "5a245bda6919b0373ab9a64b5c56a5645d01876b77f1a5bec2f066400f94d908",
+    "calls": 811,
+    "picks": 2
+   },
+   "15": {
+    "hash": "1a39bb76b5928f316c3dce4bdbf2718ac2c605c136970e4a612bc50d42496b25",
+    "calls": 805,
+    "picks": 2
+   },
+   "16": {
+    "hash": "03ff573725930ceec06b9f4b2a5ee235181aeb853f8c7cb018e64978a421d9a0",
+    "calls": 777,
+    "picks": 2
+   },
+   "17": {
+    "hash": "1cb69b7b172ceafaa3bf5b3275e415770f735f2ea84aa6a88284bf1a21e601e1",
+    "calls": 788,
+    "picks": 2
+   },
+   "18": {
+    "hash": "baf5d2aa3f63e288ae52cdcfcd25e4a75b1002bbaa7e30d5fc766e3c779c43fb",
+    "calls": 801,
+    "picks": 2
+   },
+   "19": {
+    "hash": "ea1e4239eacd2cffb135a84c9d549786222c086b6ecde7a67b734a5214d852ab",
+    "calls": 765,
+    "picks": 2
+   },
+   "20": {
+    "hash": "32e3fcade89be59032ea29aa1f2a70bbdb2b0b7efb916d3fc8d851598e0882fa",
+    "calls": 801,
+    "picks": 2
+   },
+   "21": {
+    "hash": "7599164010c64906bca991713ab09bbf2dfff3204534284ff495329e4c721601",
+    "calls": 801,
+    "picks": 2
+   },
+   "22": {
+    "hash": "88012dcb906ce96c7d9f099610bc7ccb3fc21807b2edfb534700b7614e7fc814",
+    "calls": 804,
+    "picks": 2
+   },
+   "23": {
+    "hash": "29ee1562be9c98f6e96e673a10cd722d7cff925cce019c72799a4c34a7e35806",
+    "calls": 800,
+    "picks": 2
+   },
+   "24": {
+    "hash": "08e57f2729b4020ddaf277d976865ab22a3f126216ebb27bd0cda5581e2d33f9",
+    "calls": 802,
+    "picks": 2
+   },
+   "25": {
+    "hash": "01926ae9b2ec5e943e2532d48e89ef197a13ae4a8c556a41e8847b98746b0780",
+    "calls": 784,
+    "picks": 2
+   },
+   "26": {
+    "hash": "d4bc9824640f581c0d92efe4b02326a72796462f35b72731c17a2a30e34715f0",
+    "calls": 786,
+    "picks": 2
+   },
+   "27": {
+    "hash": "d0dfd6fcded25ea08352891d62e62d734ea5cd779b4e6a48ac076ff33f5f74dd",
+    "calls": 806,
+    "picks": 2
+   },
+   "28": {
+    "hash": "6a29b59d6bd929a560725100240564f4caa9149ab24c986da20adb34900f2a4c",
+    "calls": 777,
+    "picks": 2
+   },
+   "29": {
+    "hash": "d4764dafa31815fad2568974f577844c7dd17e9866f697c3b7a4bf545d40ba32",
+    "calls": 807,
+    "picks": 2
+   },
+   "30": {
+    "hash": "4080e2d57ea5f31c46cd73f230cb43547fed9bec3afecbd3906dff3d54bfffbc",
+    "calls": 788,
+    "picks": 2
+   }
+  },
+  "deskOnOpen": {
+   "1": {
+    "hash": "c888c6c32a1eaea074c42a7fe723daea6934b44157c8d54c531b5c39ce243bcd",
+    "calls": 648,
+    "picks": 2
+   },
+   "2": {
+    "hash": "b7449985235ab38dd6d8421ff60f34e5a730246e238c2c70aeaf5b5acb4e5a0c",
+    "calls": 652,
+    "picks": 2
+   },
+   "3": {
+    "hash": "e40861fd8a93335400e199843a8d6e9bad6c254df6f5a70c9f09e5ca6009e6f6",
+    "calls": 653,
+    "picks": 2
+   },
+   "4": {
+    "hash": "e9979a789bf4ab9ab55d25c40e82cb83c56b7bc73e70a53415eea0ffe2055045",
+    "calls": 658,
+    "picks": 2
+   },
+   "5": {
+    "hash": "d398e4186cc6ff364a23896ccdae021c9e0304fbfce8ef5efc1aef55043f7190",
+    "calls": 617,
+    "picks": 2
+   },
+   "6": {
+    "hash": "b75a14fc97dfd95135f06ab3580c71be959ec42c849dbafcd709af01d1682225",
+    "calls": 634,
+    "picks": 2
+   },
+   "7": {
+    "hash": "69d31d7ed3aa582df11849521287bf857444369b35af58ea39719cb860d20f7f",
+    "calls": 636,
+    "picks": 2
+   },
+   "8": {
+    "hash": "957d89bb1de93abfa75b1fceebf279e1db2aacda1b094ac31d83f702a80cf1f4",
+    "calls": 631,
+    "picks": 2
+   },
+   "9": {
+    "hash": "1e3d83ef3c9ce208779edc0ac77817e5828ac62b6450566e06481ea87d50bdbd",
+    "calls": 636,
+    "picks": 2
+   },
+   "10": {
+    "hash": "ca8a14a6c8cab61046ec419bdaf81bb0caf76c3e8f3d416515007a579ecc65a3",
+    "calls": 626,
+    "picks": 2
+   },
+   "11": {
+    "hash": "41bf7b27911e7eba92a2423f54c8cdd78a17d540cb759affa5249264125aa4a3",
+    "calls": 664,
+    "picks": 2
+   },
+   "12": {
+    "hash": "90164a026181d0998108f7e041534a996302358878c4b5c44b58940e2437c0db",
+    "calls": 644,
+    "picks": 2
+   },
+   "13": {
+    "hash": "95ae1a5b1151b5dbffae14d03ff304ec1add7e943366eac4e319ff3df59acfbf",
+    "calls": 645,
+    "picks": 2
+   },
+   "14": {
+    "hash": "0a98791f1e8fbef1b373e364ddb6253c4479e1bc186cb646e6227c5e7dcad724",
+    "calls": 649,
+    "picks": 2
+   },
+   "15": {
+    "hash": "f23bd6b3a4bd92a4bfbbe14e0d721c02aeacc4adeec69fb483ca9c7393d9ccd2",
+    "calls": 661,
+    "picks": 2
+   },
+   "16": {
+    "hash": "8836d7e0ba0d00c64b7ce0cd3c36b90fc41634f8da09093c0afc6bffbf52edb7",
+    "calls": 641,
+    "picks": 2
+   },
+   "17": {
+    "hash": "42ecb7febd37f7a0eee88ac11f37c57fa8e14b8b7fd7d79db3210d07449728c2",
+    "calls": 638,
+    "picks": 2
+   },
+   "18": {
+    "hash": "8d12ef2d48b203576ec0afec13cb5df36248318613f27a126fd2416592f34e0d",
+    "calls": 647,
+    "picks": 2
+   },
+   "19": {
+    "hash": "77b35e60ae14152a14d22fd0f5871178fc018777d20ab1b83dd93da9a66717d2",
+    "calls": 631,
+    "picks": 2
+   },
+   "20": {
+    "hash": "677b96ec692d3a5605cd0dc6984709cc62894577e16d9c17c78378ba33456b56",
+    "calls": 633,
+    "picks": 2
+   },
+   "21": {
+    "hash": "abf347d7eccdb793ad093a9b26a963bbfb963bb90b94c7125bab0c64f626bf6c",
+    "calls": 669,
+    "picks": 2
+   },
+   "22": {
+    "hash": "bdaae9d4019fec2fcfa3382bccd7fb2808e27fafd0dc4c04e7cd7782a26101bf",
+    "calls": 652,
+    "picks": 2
+   },
+   "23": {
+    "hash": "eab325940959f7a744f9a936315ed4e549ed242bdcdb8e2977ceb7028f69be91",
+    "calls": 650,
+    "picks": 2
+   },
+   "24": {
+    "hash": "8b0825cab6ea72229dfac0d5b0379fae570f3c6de48f7e307c0e4ed729204564",
+    "calls": 648,
+    "picks": 2
+   },
+   "25": {
+    "hash": "f7554ec85e078e20d3280851fff5bfef7489339567b0dbeb6cca7fca06f2363a",
+    "calls": 652,
+    "picks": 2
+   },
+   "26": {
+    "hash": "0dd378548cdffd0249edb1e9323a5e35846c54dfc620ca0f51776f58052edc1d",
+    "calls": 654,
+    "picks": 2
+   },
+   "27": {
+    "hash": "2f2cc406448b7af19a4b7a31ff54aa57f5db0a2bc17f517020b64b9b44a5cc36",
+    "calls": 658,
+    "picks": 2
+   },
+   "28": {
+    "hash": "981cc2fafe25667c15866a508e6a4ba3d9b05bc39710ab87e7748d4d56426b38",
+    "calls": 637,
+    "picks": 2
+   },
+   "29": {
+    "hash": "e7fb9a4bfb38cd20200ad5346ab17dc1462b01f3bd15a29a8cbfd14598238a45",
+    "calls": 663,
+    "picks": 2
+   },
+   "30": {
+    "hash": "62e478ad3ff5b4d221f214f1d9280bf9fdc97685419d84a4000dd260a6894426",
+    "calls": 638,
+    "picks": 2
+   }
+  },
+  "preRecap": {
+   "1": {
+    "hash": "e17ed16c0a55b6aae95fe9e6877aee586b311f4b722bdd7d2b6b2f6c04e40bfd",
+    "calls": 804,
+    "picks": 2
+   },
+   "2": {
+    "hash": "98600391295284536aa2ae1ea3eb15c3ab8e6795bb73ab6d4a9969f8948b02c7",
+    "calls": 802,
+    "picks": 2
+   },
+   "3": {
+    "hash": "ce323c36005b2fe5d0b95881a9acd0ee3b94a50e07d6c46229b6248f363ecb9c",
+    "calls": 789,
+    "picks": 2
+   },
+   "4": {
+    "hash": "cf8c68ef9de00a7006ae565ffa3da7745eb0196e8b409cc3e6101a437ec51416",
+    "calls": 808,
+    "picks": 2
+   },
+   "5": {
+    "hash": "95bf8153894ae32e0a0e69936d3ee06068f405c34883cd1fa08eaf30b85ba760",
+    "calls": 773,
+    "picks": 2
+   },
+   "6": {
+    "hash": "da4add713bc2b03ad6fea8967c31737f6d6f440aa1c8bd108b199f1b5a70f87d",
+    "calls": 782,
+    "picks": 2
+   },
+   "7": {
+    "hash": "05dcf5572440a6727dc5f02276821dfd140728ab97d36f0a4dbc60c76334f008",
+    "calls": 780,
+    "picks": 2
+   },
+   "8": {
+    "hash": "08cab4b602b6644c03a6d4431c656c8de6e20e76f7b8427f03d0e9439b425cca",
+    "calls": 771,
+    "picks": 2
+   },
+   "9": {
+    "hash": "3afee9fe970a95afd16f2c48e00ec9c2ba27e12626e0e2c2374852e753c6c380",
+    "calls": 772,
+    "picks": 2
+   },
+   "10": {
+    "hash": "1999e369f1fd0eed7b820f8c9a2b46a28a25b60291adade8776a953ee7be5358",
+    "calls": 774,
+    "picks": 2
+   },
+   "11": {
+    "hash": "191ec075a5a8967c3e6e69a8795debda2dcea256d3beb53541200f68b32df0cf",
+    "calls": 824,
+    "picks": 2
+   },
+   "12": {
+    "hash": "6cdec6413c2f3942f2c6a9133d0ee2a68ac2b050dcfd0a3b0a6073ad8527ad85",
+    "calls": 786,
+    "picks": 2
+   },
+   "13": {
+    "hash": "7ef08a6d4ef68c396713d07704df7e71b69118fa46f9d137dc02da3e317a3bc5",
+    "calls": 795,
+    "picks": 2
+   },
+   "14": {
+    "hash": "fdbb577553674d70ba32162825b46b73c78210ddffb17b1a50160c8172838b51",
+    "calls": 811,
+    "picks": 2
+   },
+   "15": {
+    "hash": "3fe456e529799eaa9eaf64752f2dae4387ed14713c67db9354f4c3cdc607d450",
+    "calls": 799,
+    "picks": 2
+   },
+   "16": {
+    "hash": "2db2f962c517815968b772b5b7fcbf3a69a58da3064929a253f5e82b20728c95",
+    "calls": 783,
+    "picks": 2
+   },
+   "17": {
+    "hash": "5bdb245404004d6426b541d810f02c113e1619ba1eacde49a3038b5b0467e81e",
+    "calls": 794,
+    "picks": 2
+   },
+   "18": {
+    "hash": "9c27ffdb32b3283443869d126c88b7da220e3cae3fb1535b5d15db1323793dbb",
+    "calls": 781,
+    "picks": 2
+   },
+   "19": {
+    "hash": "04a951b69d3ee87ba552178f3562414a242ff3546babeeee66437a537029e918",
+    "calls": 789,
+    "picks": 2
+   },
+   "20": {
+    "hash": "5efee488114b41576a1541fac05f4f940e08ddd0c120d856f76f29017f773e10",
+    "calls": 785,
+    "picks": 2
+   },
+   "21": {
+    "hash": "cbd4b89fff266c231264431059c4eed5f1e3505ae9ae50f05b05eb6f380444d6",
+    "calls": 797,
+    "picks": 2
+   },
+   "22": {
+    "hash": "169c7729961dcc13420139951cfc3ca74aeb7a6bcc2a04a41e073aba21c5213c",
+    "calls": 788,
+    "picks": 2
+   },
+   "23": {
+    "hash": "2d7b99709ea956b3ccbfcee2cf841a3ad6d2ef3b497ca6e9df23f45952ae5cae",
+    "calls": 808,
+    "picks": 2
+   },
+   "24": {
+    "hash": "c80146006a9c6eb03bbd08a18c716d23fb53183c22f7b51ff7ee7f14ef8e4613",
+    "calls": 806,
+    "picks": 2
+   },
+   "25": {
+    "hash": "59cbfeac698fb5e58a14e85c829de70c2cedcbaa54f4a2e49efef12eeec80fe9",
+    "calls": 786,
+    "picks": 2
+   },
+   "26": {
+    "hash": "14b5ead5947be9bb222bb884f1cc65be9028939a7af6e367bd78892fc074b3af",
+    "calls": 782,
+    "picks": 2
+   },
+   "27": {
+    "hash": "bded806e5cb19dd5a61447ca18b323da7713d0ea80ff05bf91b72be27e7adc01",
+    "calls": 790,
+    "picks": 2
+   },
+   "28": {
+    "hash": "c7dda6ce4cf3c1c3b5ebe7c57d547b349410198b7a7f6ef18abba3253674003d",
+    "calls": 781,
+    "picks": 2
+   },
+   "29": {
+    "hash": "863e0933c2af6fc539a3ae13189633e55f4863821133d3ec6bf95b97a177c91e",
+    "calls": 781,
+    "picks": 2
+   },
+   "30": {
+    "hash": "5143965a29420533d10525b07d1a6f7fe2f94d99d456cdb7d2a90c400c2e72f4",
+    "calls": 778,
+    "picks": 2
+   }
+  }
+ }
+}

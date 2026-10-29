@@ -98,7 +98,7 @@ export function useSilverwareSort() {
     (async () => {
       try {
         const entries = await Promise.all(
-          COMPETITIONS.map(async c => [c.key, aggregateCounts(await fetchCompetitionRows(c).catch(() => []))] as const),
+          COMPETITIONS.map(async c => [c.key, aggregateCounts(await fetchCompetitionRows(c, today).catch(() => []))] as const),
         );
         if (!alive) return;
         const m = new Map(entries.map(([k, v]) => [k, v]));

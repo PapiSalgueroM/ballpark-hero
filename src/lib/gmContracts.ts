@@ -73,6 +73,9 @@ export interface GmContractLeague<P extends GmMan = GmMan> {
   freeAgents: P[];
 }
 
+/** Round 1556: a man who let a rival's offer sheet stand, and the club that tabled it, where the desk has put him. */
+export interface GmSheetArrival { id: string; club: string }
+
 /** The three things the desk cannot know without asking the engine. */
 export interface GmContractHost<L extends GmContractLeague = GmContractLeague, R = unknown> {
   sport: GmSportKey;
@@ -80,8 +83,11 @@ export interface GmContractHost<L extends GmContractLeague = GmContractLeague, R
   marketSalary(league: L, man: GmMan): number;
   /** The cap his new deal will be priced against. */
   nextCap(league: L): number;
-  /** The engine's own offseason, untouched. Whatever it returns is handed back as it is: the desk never reads it. */
-  runOffseason(league: L, rng: () => number, team: string): R;
+  /** The engine's own offseason, untouched. Whatever it returns is handed back as it is: the desk never reads it.
+      Round 1556: `arrivals` names every man the desk has just put on a rival club because he let its offer sheet
+      stand, so a host whose summer waives a club down to its limit can keep him there (the NBA's does). A host
+      that ignores it runs exactly as before. */
+  runOffseason(league: L, rng: () => number, team: string, arrivals?: readonly GmSheetArrival[]): R;
   /** True when the engine already holds him for next season (the NFL tag). */
   held?(league: L, man: GmMan): boolean;
   /** The lowest salary the engine signs anybody for. Defaults to 0.5. */
@@ -289,16 +295,31 @@ export function birdTier(ledger: GmContractLedger, league: GmContractLeague, man
  * Round 1018: an NBA man who can be a restricted free agent this winter. Only
  * a man this GM drafted, at the end of his first deal (the only service time
  * the save knows): a first round pick finishing his rookie scale deal, or a
- * man with three seasons or fewer in the league (gmContractRules). Every man
- * it lets in has played three seasons here or more, so he holds full Bird
- * rights, and a matched sheet is always a deal his rights allow; the tier
- * check says so in code rather than leaving it to the deal lengths.
+ * man with three seasons or fewer in the league (gmContractRules).
+ *
+ * Round 1540, the lead's ruling: whatever the length of that first deal, and
+ * whatever Bird tier it earned him. On the earned draft night a second round
+ * pick signs one season at the minimum, so he comes up with Non-Bird rights
+ * only; until this round the rule also asked for full Bird rights and he came
+ * up unrestricted, against the rules card. Every man the old draft brought up
+ * had played three seasons here or more (four in round one, three in round
+ * two), so the old draft's cases do not move. Read 2026-10-22, two non wiki
+ * sources: nba.com/news/free-agency-explained ("for all veteran free agents
+ * who have been in the NBA for three seasons or less", after his club makes
+ * the qualifying offer) and hoopsrumors.com's key dates for restricted free
+ * agents, 2026 ("former second-round pick or undrafted free agent who has
+ * been in the NBA for no more than three years"). In the league a sheet for a
+ * man with one or two seasons starts no higher than the mid level exception,
+ * so his club can match it without full Bird rights (the Arenas provision,
+ * hoopsrumors.com glossary); the game holds a sheet to his maximum and four
+ * seasons only, so a sheet matched here can pay him more than his own rights
+ * would on a new deal.
  */
 export function nbaRestricted(ledger: GmContractLedger, league: GmContractLeague, man: GmMan): boolean {
   const rec = ledger.men[man.id];
   if (rec?.how !== 'draft' || rec.firstDealDone) return false;
   const service = seasonsHere(ledger, league, man);
-  if (service == null || birdTier(ledger, league, man) !== 'full') return false;
+  if (service == null) return false;
   return rec.round === NBA_ROOKIE_SCALE_ROUND || service <= NBA_RFA_MAX_SERVICE;
 }
 
@@ -878,6 +899,7 @@ export function runDeskOffseason<L extends GmContractLeague, R>(
   const applied: GmDecision[] = [];
   const owed: number[] = [];
   const sheets: { id: string; club: string; picks: number[] }[] = [];
+  const arrivals: GmSheetArrival[] = [];
   /* MLB: a pick waiting on a man who turned down the qualifying offer is paid
      once he has turned up at another club, and dropped if he came back here. */
   if (ledger.qoOwed?.length) {
@@ -915,6 +937,7 @@ export function runDeskOffseason<L extends GmContractLeague, R>(
       if (sheetClub) {
         /* He signed the rival's sheet, so he goes to that club on its terms. */
         league.teams[sheetClub].players.push({ ...man, years: (d.years ?? 1) + 1, salary: d.salary ?? man.salary });
+        arrivals.push({ id: man.id, club: sheetClub });
         /* The ladder pays only when he has really gone to the club that tabled it. */
         if (d.picks) { owed.push(...d.picks); sheets.push({ id: man.id, club: sheetClub, picks: [...d.picks] }); }
       } else {
@@ -928,7 +951,7 @@ export function runDeskOffseason<L extends GmContractLeague, R>(
     }
   }
 
-  const engine = host.runOffseason(league, rng, ledger.team);
+  const engine = host.runOffseason(league, rng, ledger.team, arrivals);
 
   /* Every engine resets a club's picks inside its offseason, so picks owed to
      the club go on afterwards or they would be wiped. */

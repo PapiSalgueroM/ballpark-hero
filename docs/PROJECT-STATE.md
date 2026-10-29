@@ -1,3 +1,68 @@
+## Release BR LIVE, 2026-10-24 01:17 EDT: the games lane's eight rounds after BQ (NBA draft night and offer sheets, NFL Front Office who scored, NBA Starting 5 from the record, CFB Dynasty real season, Higher or Lower truth, Sports Millionaire one answer, Stadium Tycoon badges, Baseball, NFL and NHL Connections truth)
+
+Claude lane (session J published for session I). main 37663106f, deployment 802f185f-cc2a-488b-8b6a-18a7d03021e3, entry index-DP6DMEMm.js.
+Proof: x-deployment-id carries 802f185f from 01:17:49; /, /whats-new, /front-office, /nba-front-office, /nba-starting-5, /cfb-dynasty, /sports-millionaire, /baseball-connections, /nfl-connections, /nhl-connections, /nba-higher-lower, /stadium-tycoon, /records, /club-manager and /soccer-career answer 200; the saved /records page carries the 2026 Record Books rows (Nick Daicos, Nathan Cleary); the live seasonCalendar chunk holds the 2026-11-01 guard and the Sports Millionaire chunk the 2026-10-25 switch; /whats-new carries "Baseball,
+NFL and NHL Connections: the boards we fixed now have one right answer.", "NFL Front Office: who scored, season
+leaders and awards.", "NBA Starting 5: scored from the real numbers.", "CFB Dynasty plays a real season.", "Sports
+Millionaire: one right answer a question.", "NBA Front Office: your record finally earns your draft spot.".
+
+What a player gets:
+- NBA Front Office: the draft order is earned from your record on a lottery night you watch, and a restricted free
+  agent's offer sheet can be matched or let go; a man let go on a sheet always lands at that club (1540, 1556).
+- NFL Front Office: every touchdown named on the Game Day tile, a season of lines for every man, leaders, an MVP and
+  both rookie awards at the close (1542); the season card readable on a phone, 12 px text, 44 px tabs, names whole
+  (1562, NFL and NBA).
+- NBA Starting 5 judged from the record, not by a model, with namesakes held (1555).
+- CFB Dynasty plays a real season: real rivalries, a real slate (1554).
+- Higher or Lower (NFL, NBA, F1, tennis): every card true through the last finished season (1549).
+- Sports Millionaire asks questions with one right answer from 2026-10-25, and leaves out 548 names two players share
+  (1552, the live namesake read checked against Postgres's own md5).
+- Stadium Tycoon: badges with targets that suit the new scores (1543).
+- Baseball, NFL and NHL Connections: false groups and second answers fixed on the boards the round covers (1558).
+
+PRODUCTION (session J as lead, 2026-10-23): Round 1558 applied (17 of its 35 baseball rows had been edited in the table
+apart from the file, so a second guarded migration was written; both went in as one checksummed all or nothing step:
+37 of 37 verified, 0 other rows, pools unchanged); Round 1551's 2026 AFL and NRL rows (applied at BQ) baked into the
+Record Books; the live pass (simNbaChainNames green, 1555's census 66, holds 0). Records:
+docs/audits/ROUND-1558-AND-1551-APPLY-2026-10-23.md.
+
+GATE ON GITHUB RUNNERS on ca0648c96, 151 lanes all returned; triage (triage-BR.md): 544 lines, 407 controls fired or by
+design, 105 known, 4 timing green alone, 8 BR harness and kit bindings fixed, 13 main reds new since BQ's gate.
+build:seo redrew 17 pages, the sitemap and lastmod. rBR-pub 20 of 20.
+
+Found on main and owed: the other lane's site menu (Rounds 1451 to 1453) covers game controls on the live site (live
+match Back and score, Club Manager's live match help button at 390, Soccer Career's record sheet scroll lock and toasts
+over the menu button, Draft Detective below the fold, Conquest's timeline drag); board note 3ac9d8ea8. Known main reds:
+simClubManagerBudget section 4, simCmVar, hubgrid1089. Owed by this lane: the US Connections table only boards (110
+findings past bconn-060, nflconn-004, nhlconn-004), Sports Millionaire's 1 in 45,000 unlimited ladder one question
+short.
+
+### For Codex
+1. Release BR is on main at 37663106f. Please fix the site chrome so it never sits over a game's controls (board note
+   3ac9d8ea8 lists the lines), or tell this lane which games should make room.
+
+## Current shared-site state, 2026-10-23 UTC: tested menu Escape fix merged
+
+PR376 merged at ee8f7d8024b61db31a2296f96bcdb54d404b6096, tree09719df307aecf66e7fc32cf7770836a0692dd19. Escape now closes the menu's loading or failed-import fallback and returns focus to Menu. The loaded Sheet, Cancel, delayed-release safety and explicit reload recovery remain covered. Exact remote comparison against qualified cb1f579fa382690fc819d7f839b1840c2d6edba1 finds only11 added WORKBOARD lines, with no application difference.
+
+Ordinary push run39959578741 attempt1/job120433882660 qualified source cb1f579fa382690fc819d7f839b1840c2d6edba1. Actual app types passed;19 normal Menu/Search cases passed; the seven original copied-source faults each failed for their owned outcome, with8 healthy adapter and8 restored passes. The two new Escape cases passed on a healthy whole launcher copy, failed at both owned trigger assertions on the exact old launcher, and passed again on actual restored source. Built proof completed14 contexts,11 effective changed-record controls and31 screenshot calls, including all six trusted keyboard Escape actions from trigger, Search Games and Cancel across pending and failed imports. HomeFold, all18 built-site readers and all15 unchanged fatal page caps passed.
+
+Recovery PR377 merged at958cbdb86600d06259dfa481406d11b1b15ff59a. Its complete application and saved-output tree equals qualified b56e0798dd60f041b6965024d2b9e22bd10ebc3d; only11 WORKBOARD lines from the current game lane differ. The stale automated merge and its typing work remain preserved in history and codex/preserve-preview-typing-9c95. No reset or force update was used.
+
+The restored release is not an all-game green result: the finite restore snapshot was7 passes,5 failures,8 cancellations and2 active runs. Their scoped triage and the failed first fixed attempt are retained in docs/ROUND1453-MENU-ESCAPE.md. Root viewed the two final fallback PNGs; the independent audit rehashed31 screenshot references without claiming to view them. Artifact12503469037 has ZIP SHA256 c6c5fd111e1d6de3032f618416e0053b8a132327b957f5e766dfadf57ce5e019; native audit SHA256 6a1b9729d347027c4539de61f0513224fce6d776c2439d99b71579081ec3adff.
+
+I keeps Club Manager/Soccer Career integration and sole publication; J keeps the other game lanes. Root has not published this menu correction and claims no new live deployment. Football animations, free kicks, ratings/potential, national management, missing stars, squad numbers, traits/tactics, valuation and free positioning remain intake/design work, not implemented features. No local app execution, cleanup, data/provider/account/dependency change, old-checkout reset or protected game adoption occurred. Historic785/1441 preservation gaps remain unwaived.
+
+## Release BQ LIVE, 2026-10-23 07:18 EDT: Club Manager matchplay, Soccer Career awards against a field, Soccer Connections facts fixed live, and session J's US career, Front Office, Stadium Tycoon, fight and truth rounds
+
+Claude lane (sessions I and J). main 45670f4a, deployment 09450f51-4637-4201-817e-2252ea0ba827. Proof: x-deployment-id carries 09450f51 from 07:18:45; /, /club-manager, /soccer-career, /soccer-connections, /front-office, /fight-career, /stadium-tycoon and /whats-new answer 200; /whats-new carries "Club Manager: a live match that looks more like football", "Soccer Career: season awards you have to beat somebody for" and the Connections line.
+
+What a player gets: Club Manager's live match with a ball that flies, fouls on the grass and attacks that build (1521); Soccer Career's eight season awards won against a field and only in their real years (1525); session J's 1533 and 1550 (NFL Front Office: fired is a chapter, lazily loaded), 1534 and 1538 (the US My Career shop pays what it prints, banked money reaches the bank, the Skill card stops at the ceiling), 1539 (Stadium Tycoon after the new law), 1546 (fighters keep their identity, an exit that retires), 1547 (Conquest tells the truth about real people), 1548 (Hall of Champions), 1553 (Soccer Connections: puzzle-136's false Champions League claim and 56 more boards fixed in the live table: 57 of 57 applied by session J in one checksummed step, verified), 1551 (2026 AFL and NRL rows, gated on 2026-11-01).
+
+GATE ON GITHUB RUNNERS on 3cca8400 (122 requests, 70 resent after a silent sender stop); triage (triage-BQ.md): no BQ product defect, harness seams b72026d8, 9c762657, 0610a851 accepted; merged main to 0ca8c1fc (the other lane's 1451 site menu) at 45670f4a; tsc 0, vitest-all 636 files, rBQ-pub3 22 of 22. The Lovable editor pushed a wrong project types.ts to main at 03:34; reverted 570bb87a1 before the release.
+
+Owed: Round 1551's migration before 2026-11-01 ET (APPLY-1551.md, B2 to B7); Club Manager budget balance after the other lane's 1443 (a spending manager sacked about twice as fast).
+
 ## Release BP LIVE, 2026-10-22 17:53 EDT: the owner's 2026-10-21 reports answered (Soccer Career retirement at 26, Club Manager nationalities and tactics), Soccer Career morale and a real owner tail, and session J's eight rounds
 
 Claude lane (sessions I and J). main 5ba8a1c6, deployment e12d7e79-2485-4228-a591-8f9d3df6d32c, entry index-Ci0coPfK.js.
@@ -19096,3 +19161,58 @@ This child adopts exactly two reviewed generated outputs, the Home template and 
 Application source3d081ad2e465c7d98ecb23ad8fb3bfe0526d1384 is qualified by final39846253883 attempt1 and compositec489523352e4b9cae40607a991dd10c93801ea1390acf91cb27858d4ed3dc835. All six CI jobs and seven native components pass. The three generated delta files are present0B, both nonempty-output and both inventory controls pass, and complete source/output/transport holds are admitted. The unchanged header checker passes20/20 authenticated normal cases.
 
 Final picture coverage uses18 freshly viewed changed images and50 exact PNG transfers from prior actual views, not68 new views. Normal header results, Range-only observations and separate text arms stay distinct. This child only appends qualification notes; Root still owns native docs-only commit verification. I retains sole publication and live verification. Unsupported contrast, provider/legal/sports-rights and old preservation limits remain unwaived. No published or live result is claimed.
+
+
+## Root Round1451 candidate: top-left site menu, 2026-10-23 UTC
+
+Root's shared-site lane is implementing Anthony's request for a top-left menu on codex/site-menu-navigation, based on main46f7f3f660545d508a6348e8a92b80e02556c6b9. The four production paths are App, Header and the new SiteMenu launcher/panel. Seventeen existing site and sports links use the real Sheet, route selection, keyboard dismissal and focus return. The panel loads on first open. The existing cookie-choice host belongs inside its focus scope. Game engines, saves, data, auth, provider settings, dependencies and all15 current page-weight limits are held.
+
+Eight focused unit cases, seven intentional source faults/restoration, a completed app build, required saved-output readers, actual phone/desktop/keyboard/consent/chunk journeys and the unchanged page-weight sweep are pending on ordinary push-triggered remote CI. No local application runtime is permitted. Old physical drafts are retained; two new components change only their final CRLF to canonical LF on adoption. Current source review is not runtime qualification or publication.
+
+The earlier Root-authored menu handoff requested another integration approval. That was an unnecessary extra gate: Anthony's standing shared-site authorization already covers isolated implementation and ordinary verification. I retains sole publication and protected game integration. Root uses purpose-built GitHub tree/commit/branch operations, leaving primary and all old checkout/index bytes and mtimes unchanged. No workflow dispatch/rerun/cancel, main push, cleanup or protected game adoption is included. Existing preservation gaps remain unwaived.
+
+
+## Root Round1451 qualified delivery: top-left site menu, 2026-10-23 UTC
+
+Shared-site delivery is tracked in PR373: https://github.com/PapiSalgueroM/ballpark-hero/pull/373. Application source d43b0b9b5c42f60aa720dead9ab5dabc9fd555b5 was qualified by ordinary push run39934133696/attempt1/job120349383409. The 44px top-left Menu stays available while scrolling. Its lazy drawer reaches seventeen existing game, sports and site links, returns keyboard focus, respects reduced motion and includes pending cookie choices in the same focus scope. Production changes remain App, Header, SiteMenu and SiteMenuPanel only.
+
+Actual remote results: correct app type command; eight normal menu cases, eight healthy adapter cases, seven independently owned copied-source failures and eight restored cases; completed production build; fourteen completed browser contexts, eleven changed-record negative controls and thirty-one screenshot calls; unchanged HomeFold; all eighteen saved-site readers; all fifteen current fatal page caps. All required source, dependency, browser-tool, font-cache and dist inventories and final hashes held. Transport receipts remained empty. These are guest Home/Search/Accessibility and representative viewport/keyboard/consent/cold-chunk checks, not an all-game, account, live backend or live-site audit. The 200% reflow case uses640 CSS pixels and2x density, not an operated browser UI zoom.
+
+Root downloaded artifact12493227254 and fully rehashed260 indexed bodies. ZIP SHA256 eea804248e53fecb4954c2548c95ca0a476912502f949e24b963166164c89adc. The archive is retained at C:/Users/antho/dukb-handoff/2026-10-23/top-left-menu/remote-run-39934133696-a1/artifact.zip. Root viewed all eighteen changed PNG bodies from this final run; thirteen screenshot calls transfer exact previously reviewed PNG bytes by SHA256. The thirty-one calls contain twenty-nine unique PNG bodies. Both final messages start at text y130 below actual Header bottom101, with their full text and Search/Cancel visible. Peer source and archive review are separate from that visual review. The green predecessor run39931314492 exposed a real fallback message occlusion during Root's pixel review. The final source moves that panel below the Home Header and records actual Header-separated text bounds plus text-line center hit tests, with paint and Header-overlap controls. Earlier failed runs and drafts remain diagnostic history and were not overwritten.
+
+Publication remains with I. A merge or green preview is not proof that douknowball.com was published. Analytics remains paused. Game engines, saves, sports data, auth, provider settings, dependencies and size limits were not changed. Protected Fight Career, Club Manager and Soccer proposals remain with their assigned lanes. The initial Root-authored extra integration approval request was unnecessary and stays corrected by the earlier append; no new user approval is required for Root's ordinary shared-site PR integration.
+
+The primary application sources and all old checkouts were preserved. Primary WORKBOARD and the continuation checkpoint receive only the exact final note through the reviewed append helper, with full actual-prefix backups/readback and protected index checks before and finally. Existing old preservation gaps remain unwaived. No cleanup or local application execution occurred. This final docs-only continuation preserves all prior document bytes and changes no qualified application or verification members.
+
+
+## Root Round1452 claim: search navigation resets, 2026-10-23 UTC
+
+Root is continuing Anthony's shared-site improvement request from main 0ca8c1fc065f1ca282c9454683dca31911852638, after menu PR373 merged. Lovable preview metadata reports that exact commit and ready status. This does not establish production publication. I remains the sole publisher; protected game lanes stay assigned to their existing owners.
+
+The next bounded shared-site fix is src/pages/Search.tsx. Source review found that its URL reader watches only search parameters and skips a value equal to its last write. A same-path Search Games navigation while the 250ms query write is pending can leave the draft and timer alive. This is a source hypothesis until the actual Router regression reproduces it remotely. Search ranking, registry, game picks, saved games and all other application paths remain held.
+
+Plan: first push an isolated actual Search/Router test and ordinary-push baseline workflow on codex/search-navigation. Require the primary pending-query reset case to fail for its owned behavior assertion with clean type, import, process, transport and source/dependency holds. No production change is authored before that baseline is admitted. Then make the smallest navigation-identity and timer-cancellation correction, keeping the existing 250ms replace behavior and unrelated URL parameters. Verify all focused outcomes, an effective old-source control, real built phone/desktop Search and Menu navigation, standard build/readers/HomeFold and every unchanged page-size cap.
+
+Private packet: C:/Users/antho/dukb-handoff/2026-10-23/search-navigation. Only native text, JSON, hash and archive work runs locally; all application parsing, imports, compilation, tests, build and browser execution stays in ordinary remote Actions. Purpose-built GitHub APIs preserve the primary and old Git/index/source state. No workflow dispatch, rerun, cancellation, provider or account change, dependency or cap increase, cleanup, or real sports data edit is authorized by this round. Small new leaves use CreateNew with a fresh64MiB floor. Old preservation gaps remain unwaived. No new Anthony approval or other-chat message is required or implied.
+
+
+## Root Round1452 main integration, 2026-10-23 UTC
+
+Main advanced to Release BQ d3a334f6feeead4da1845736cb73df1d0b0bea06 while the Search correction was qualifying. Earlier source b39017f905d1a0fba921474aa5831c5a3f7c23a7 passed ordinary push run39946752172 attempt1, but that run qualifies only its earlier tree. Root now carries all of current main and its current fifteen cap rows unchanged, with the same focused Search correction, final nine cases and browser proof. The workflow base is updated to actual main; its old Search blob check remains0c79c181d9637c2cadd374d61c00a782163b2f50. Fresh complete qualification is required before PR374 integrates. Actual prior main document bodies and both Git histories are retained. I keeps publication. No live Search fix or new approval gate is claimed.
+
+
+## Root Round1452 qualified delivery: Search navigation, 2026-10-23 UTC
+
+PR374 is merged: https://github.com/PapiSalgueroM/ballpark-hero/pull/374. The tested integrated source is4010c55c15b30fa0dabdac84fbb61aa4b69948d8, tree05054bd6eb71a745d3323be9c443bc01b5f3a0b7. Merge b3a2e0c9f05200f769d67212d57146a12f9c7063 has exactly that tested tree. It carries Release BQ main d3a334f6feeead4da1845736cb73df1d0b0bea06 and all its game, data, saved-output and current cap bodies unchanged outside Root's four scoped paths. Search.tsx is the only production file changed. Reopening Search from the menu, external navigation and Back/Forward now cancel a pending edit and adopt the destination URL. An exact own-write token preserves newer typing during Search's own250ms replacement. Search results, repeated unrelated URL parameters and saved picks are preserved.
+
+Ordinary push qualification39948359764 attempt1/job120396458574 passed correct app types,17 normal Search/menu cases,9 healthy whole-copy cases, exactly1 owned old-Search assertion failure with8 unrun,9 restored cases, a production build,2 completed browser contexts and8 journeys,8 effective changed-record controls, HomeFold, all18 built-site readers and all15 current fatal page caps. Existing saved-picks PR check39948363970 attempt1/job120396472826 also passed. Final docs-only closure preserves every non-doc member of the tested tree.
+
+Root and the independent peer fully rehashed artifact12499985559:9,915,919 bytes, ZIP SHA256032dcf45b7d12a5291f990299f5cd47c44c12de7790f8b8f0ce690f83fd02f4c,157 indexed bodies/158 files. Native peer audit checked all816 dist Tar bodies,18 served assets and the nested25-body browser manifest. Fresh end holds are5313 source rows,24466 dependencies,176 browser-tool rows,10 font-cache rows and816 dist rows, with all five member inventories equal and all30 transport receipts present0B. The15 cap rows are whole-body equal to actual Release BQ main (sweepWeight Gitblob4383acaa3703eaef1b1ab504064a152e4eb26d35, SHA2569cd525863b4ad836e258343b0947f01d19092a825c850be2e2a2733523af1a01). Root raised no cap. Current critical measurements are244.3/245KiB Home,635.2/636 Club Manager and839.1/840 Soccer Career.
+
+Root actually viewed all8 unique final PNG bodies, with no prior-view transfers: reduced-motion dark328x515 and light1280x900. The input stays visible, all captured document widths equal their viewport widths, Clear retains focus, and the actual input/document identity survives navigation. Trusted menu activation occurred79.8ms and110.5ms after pending input, before the250ms write. These are guest Search checks, not all-game, all-account, touch-keyboard, browser UI zoom, live-backend or WCAG qualification. Absent raw Vitest runtime/unhandled counter fields remain unknown, not zero.
+
+The two initial fixture failures39940913787 and39943246891 remain separate from admitted owned baseline39944268201. The latter used test2a99c0f0 and failed at the actual clear assertion after real navigation/identity guards. The final c5fcbc9b test independently reproduces the same owned failure against the exact old whole Search source. Foundation39946432430 failed before application stages because its same-step output path was not exported; no qualification is credited. Earlier green39946752172 qualifies only its pre-Release-BQ tree. Every draft and downloaded diagnostic archive remains preserved.
+
+Evidence packet: C:/Users/antho/dukb-handoff/2026-10-23/search-navigation. Root qualification c565e4bb892d6f5392e942e329af0b1661faba1e626bddb051ab76276d2e88b5; Root pixels743d12524f3b65bf0752151b2cfdbb7c3866377866360b6f66c60a4875cfdb26; independent integrated audit4e7ff7ad3b766d00b3f7f5ac280ed0b9d67fd91e8a27416cd182579a76da9dac. The normal saved-picks archive is also retained as2ca41f45c885f8066326880fe73480b83b0ee3ae7a3c4b08503c94fc74fa3e98.
+
+I retains sole publication. Root did not publish this Search correction and makes no new live-site claim. Analytics remains paused. No local application execution, cleanup, old checkout reset, data/provider/account change or protected game adoption occurred. Primary WORKBOARD and the continuation checkpoint receive only this exact note through the reviewed exclusive-lock append helper, with actual full-prefix backups/readback and both protected indexes checked before and finally. Earlier preservation gaps remain unwaived.

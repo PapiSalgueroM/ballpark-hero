@@ -17,8 +17,11 @@
    will not tell has no line score, no sentence and no plays: the tile then
    shows the final alone. Mark, never fill.
 
-   TEAM LEVEL. A line names a club and a kind of score. No man is credited
-   and nobody speaks: the engine does not decide who scored.
+   TEAM LEVEL. A line of the story names a club and a kind of score, and
+   nobody speaks. Since Round 1542 a board may hand in who scored (the NFL's
+   press credits every touchdown, src/lib/nflSeasonStats.ts): the names go
+   in a list of their own (`scorers`), paired with the story's own plays,
+   and a list that does not match the plays is shown with no names at all.
 
    NOT THE SEASON'S RECORD. A log can begin in the middle of a season (a
    save from before the log existed), so nothing here counts the chips or
@@ -59,19 +62,33 @@ export interface GameDayView {
   deciding: GameDayPlay[];
   /** What a match clock is handed; null when the story is refused (nothing to watch). */
   game: DerivedGame | null;
+  /** Round 1542: who scored, every play of the law's credited kind of both sides in minute order, the club's word
+   *  and the law's credit words ("BUF Josh Allen to Khalil Shakir"); empty with no credits, or when they do not match. */
+  scorers: GameDayPlay[];
+  /** Round 1542: the board keeps credits but has none that match this game's plays (a game played before it kept
+   *  them, or a list that does not number the plays). Absent otherwise. */
+  creditsMissing?: true;
+  /** Round 1542 fix: credits were kept for this game but do not number its plays (a touchdown nobody on the field
+   *  could take is the one way the board makes that). `creditsMissing` is set as well, so no name is guessed at. */
+  creditsShort?: true;
 }
+
+/** Round 1542: who scored in one game, each side's [passer or null, scorer] in the order the board credited them. */
+export type GameDayCredits = { home: readonly (readonly [string | null, string])[]; away: readonly (readonly [string | null, string])[] };
 
 const pointsOf = (e: SeasonEvent) => (typeof e.pts === 'number' && e.pts > 0 ? e.pts : 0);
 
-/** One saved game as the tile prints it, from `club`'s side. `name` gives a club the word a sentence uses. */
-export function gameDayView(law: GameDayLaw, last: GmLastGame, club: string, name: (id: string) => string): GameDayView {
+/** One saved game as the tile prints it, from `club`'s side. `name` gives a club the word a sentence uses.
+ *  `credits` (Round 1542): absent, the tile as it was; null, the board kept none for this game; else who scored. */
+export function gameDayView(law: GameDayLaw, last: GmLastGame, club: string, name: (id: string) => string, credits?: GameDayCredits | null): GameDayView {
   const home = last.home === club;
   const us = home ? last.home : last.away;
   const them = home ? last.away : last.home;
   const final = { us: home ? last.homeScore : last.awayScore, them: home ? last.awayScore : last.homeScore };
   const base = { where: last.where, us, them, home, final, won: last.winner === club };
   const story = gameStory(law, last, home ? 'home' : 'away');
-  if (!story) return { ...base, line: null, shape: null, deciding: [], game: null };
+  const missing = credits === null || (credits !== undefined && !story) ? { creditsMissing: true as const } : {};
+  if (!story) return { ...base, line: null, shape: null, deciding: [], game: null, scorers: [], ...missing };
   /* the periods this game had: the extra ones belong to a game past regulation */
   const count = last.beyond === true ? law.periods.count : law.periods.regulation ?? law.periods.count;
   const names = Array.from({ length: count }, (_, i) => law.periods.name(i));
@@ -89,12 +106,36 @@ export function gameDayView(law: GameDayLaw, last: GmLastGame, club: string, nam
     after: running.get(e) ?? '',
     decided: e === story.goAhead,
   }));
+  /* who scored: each side's credited plays by minute, paired one for one with that side's credits in order. A side
+     whose credits do not number its plays is never guessed at: the whole list goes, and the card says so */
+  let scorers: GameDayPlay[] = [];
+  let unmatched = credits === null;
+  let short = false;
+  if (credits && law.credited && law.creditWords) {
+    const mine = home ? credits.home : credits.away;
+    const theirs = home ? credits.away : credits.home;
+    const plays = story.game.events.filter(e => e.kind === law.credited);
+    const ours = plays.filter(e => e.side === 'us');
+    const others = plays.filter(e => e.side === 'them');
+    if (ours.length !== mine.length || others.length !== theirs.length) { unmatched = true; short = true; }
+    else {
+      scorers = plays.map(e => {
+        const list = e.side === 'us' ? mine : theirs;
+        const at = (e.side === 'us' ? ours : others).indexOf(e);
+        const [passer, scorer] = list[at];
+        return { clock: law.story.clock.label(e.min), text: `${e.side === 'us' ? us : them} ${law.creditWords!(passer, scorer)}`, after: running.get(e) ?? '', decided: false };
+      });
+    }
+  }
   return {
     ...base,
     line: { names, us: story.periods.us.slice(0, count), them: story.periods.them.slice(0, count) },
     shape: law.shape.say(story.shape, name(winner), name(loser)),
     deciding,
     game: story.game,
+    scorers,
+    ...(unmatched ? { creditsMissing: true as const } : {}),
+    ...(short ? { creditsShort: true as const } : {}),
   };
 }
 

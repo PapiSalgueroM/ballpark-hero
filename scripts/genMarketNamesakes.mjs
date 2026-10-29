@@ -1,0 +1,116 @@
+/**
+ * Round 1552: the display names in the 2026 market values that belong to more than one player.
+ *
+ * Sports Millionaire asks about player_market_values_dedup, which keeps ONE row per name and year.
+ * The 2026 slice was also cut to one row per name in place (migration 20260526000008, the highest
+ * value kept). So when two different footballers share a display name, the 2026 row is one of them
+ * and the question cannot say which: "Which club was Danilo at?" has an answer for each Danilo.
+ *
+ * The saved raw rows show which names those are. scripts/data/stockMarketPools.json holds, for the
+ * seasons 2014 to 2022, every raw row of player_market_values whose name is still in the 2026 slice
+ * (the player_market_tracked view, pulled 2026-09-05), with position and age. A name is a namesake
+ * when either:
+ *   A. one season carries two rows under it whose ages differ by 2 or more (one man is not two ages
+ *      apart from himself in one season's snapshot), or
+ *   B. its rows across seasons imply birth years (season minus age) 3 or more apart (one man's implied
+ *      birth year moves by at most 1 between snapshots), or
+ *   C. one season carries two rows under it that differ in position or in age. The pull holds one row
+ *      per player per season (some rows come twice, exactly the same, which is one man's row repeated):
+ *      measured 2026-10-22, no name in it has two different rows in one season that agree on both
+ *      position and age. So two rows of one season that disagree are two men, even the same age:
+ *      Vitinha in 2022 is a Centre-Forward of 21 and a Defensive Midfield of 21, Alisson in 2015 a
+ *      Goalkeeper of 22 and a Central Midfield of 21. A and B missed those (Round 1552 review); C added
+ *      8 names, 54 to 62.
+ * Only names in the 2026 slice (scripts/data/alphabetSprintPool.json, pulled 2026-09-05) are kept,
+ * because only those are ever asked.
+ *
+ * WHAT THIS CANNOT SEE: a pair of namesakes that never both appear in 2014 to 2022 (two men who are
+ * both newer than that, or one retired before 2014). 2,315 of the 5,496 names of 2026 have a row in
+ * those seasons. The rest need one read only query on the live table, which only the lead runs (the
+ * production rule of 2026-10-02); its answer goes in scripts/data/marketNamesakesLive.json as
+ * { "readAt": "YYYY-MM-DD", "query": "...", "names": [...] } and this script merges it. The query
+ * asks all three rules plus a nationality split (Aaron Ramsey: the 2026 row is the English one, the
+ * saved rows hold only the Welsh one), one read only statement:
+ *   with s as (select distinct player_name from public.player_market_values where year = 2026)
+ *   select player_name from public.player_market_values join s using (player_name)
+ *   group by player_name
+ *   having max(year - age) - min(year - age) >= 3 or count(distinct nationality) > 1
+ *   union
+ *   select player_name from public.player_market_values join s using (player_name)
+ *   group by player_name, year
+ *   having count(distinct coalesce(position, '') || ' ' || coalesce(age::text, '')) > 1;
+ * (Rule A is inside the second half: two ages in one season are two shapes.)
+ *
+ * The list is only ever used to LEAVE A QUESTION OUT. It states nothing about anybody on screen.
+ *
+ * Nothing here reaches the network. Run: node scripts/genMarketNamesakes.mjs  (writes
+ * src/data/marketNamesakes.json; --check exits 1 when the committed file differs, for a harness).
+ */
+import fs from 'node:fs';
+import path from 'node:path';
+import { fileURLToPath } from 'node:url';
+
+const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
+const read = p => JSON.parse(fs.readFileSync(path.join(ROOT, p), 'utf8'));
+const OUT = 'src/data/marketNamesakes.json';
+const LIVE = 'scripts/data/marketNamesakesLive.json';
+
+export function deriveNamesakes(stock, slice2026) {
+  const inSlice = new Set(slice2026.map(r => r.player_name));
+  const byName = new Map();
+  for (const [season, rows] of Object.entries(stock.pools)) {
+    for (const [name, position, age] of rows) {
+      if (!byName.has(name)) byName.set(name, []);
+      byName.get(name).push({ season: Number(season), position, age });
+    }
+  }
+  const evidence = new Map();
+  for (const [name, rows] of byName) {
+    if (!inSlice.has(name)) continue;
+    const aged = rows.filter(r => Number.isFinite(r.age));
+    const seasons = new Map();
+    for (const r of aged) { if (!seasons.has(r.season)) seasons.set(r.season, []); seasons.get(r.season).push(r.age); }
+    for (const [season, ages] of seasons) {
+      if (Math.max(...ages) - Math.min(...ages) >= 2) { evidence.set(name, `A ${season}: ages ${Math.min(...ages)} and ${Math.max(...ages)}`); break; }
+    }
+    if (evidence.has(name)) continue;
+    const shapes = new Map();
+    for (const r of rows) { if (!shapes.has(r.season)) shapes.set(r.season, new Set()); shapes.get(r.season).add(`${r.position} ${r.age}`); }
+    for (const [season, seen] of shapes) {
+      if (seen.size >= 2) { evidence.set(name, `C ${season}: ${[...seen].join(' and ')}`); break; }
+    }
+    if (evidence.has(name) || aged.length < 2) continue;
+    const births = aged.map(r => r.season - r.age);
+    if (Math.max(...births) - Math.min(...births) >= 3) evidence.set(name, `B: born ${Math.min(...births)} and ${Math.max(...births)}`);
+  }
+  return evidence;
+}
+
+const isMain = process.argv[1] && path.resolve(process.argv[1]) === fileURLToPath(import.meta.url);
+if (isMain) {
+  const stock = read('scripts/data/stockMarketPools.json');
+  const slice = read('scripts/data/alphabetSprintPool.json');
+  const evidence = deriveNamesakes(stock, slice.rows);
+  const live = fs.existsSync(path.join(ROOT, LIVE)) ? read(LIVE) : null;
+  const names = new Set(evidence.keys());
+  for (const n of live?.names ?? []) names.add(n);
+  const out = {
+    about: 'Display names in the 2026 market values that belong to more than one player. Sports Millionaire leaves them out of its questions. Made by scripts/genMarketNamesakes.mjs; do not edit by hand.',
+    sources: [
+      `scripts/data/stockMarketPools.json (raw rows 2014 to 2022, pulled ${String(stock.fetchedAt).slice(0, 10)})`,
+      `scripts/data/alphabetSprintPool.json (the 2026 slice, pulled ${slice.fetched})`,
+      ...(live ? [`${LIVE} (read only query, ${live.readAt})`] : []),
+    ],
+    names: [...names].sort((a, b) => (a < b ? -1 : a > b ? 1 : 0)),
+  };
+  const text = JSON.stringify(out, null, 2) + '\n';
+  if (process.argv.includes('--check')) {
+    const now = fs.existsSync(path.join(ROOT, OUT)) ? fs.readFileSync(path.join(ROOT, OUT), 'utf8').replace(/\r\n/g, '\n') : '';
+    if (now !== text) { console.error(`${OUT} is stale: run node scripts/genMarketNamesakes.mjs`); process.exit(1); }
+    console.log(`${OUT} is current: ${out.names.length} names`);
+  } else {
+    fs.writeFileSync(path.join(ROOT, OUT), text);
+    console.log(`wrote ${OUT}: ${out.names.length} names (${evidence.size} from the saved rows${live ? `, ${live.names.length} from the live query` : ''})`);
+    if (process.argv.includes('--evidence')) for (const [n, e] of [...evidence].sort()) console.log(`  ${n}: ${e}`);
+  }
+}

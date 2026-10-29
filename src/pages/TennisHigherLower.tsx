@@ -2,6 +2,8 @@ import { useTennisHL } from '@/hooks/useTennisHL';
 import { GameNav } from '@/components/game/GameNav';
 import { GameShell } from '@/components/game/GameShell';
 import { ResultScreen } from '@/components/game/ResultScreen';
+import { HigherLowerThrough } from '@/components/game/HigherLowerThrough';
+import { TENNIS_HL_THROUGH } from '@/data/tennisHLPlayers';
 import PostGameStats from '@/components/game/PostGameStats';
 import { HIGHER_LOWER_SCORE_BUCKETS } from '@/lib/higherLowerScore';
 import AdBanner from '@/components/ads/AdBanner';
@@ -104,8 +106,11 @@ const TennisHigherLower = () => {
                   </span>
 
                   {showingResult ? (
-                    <span className="text-2xl font-bold text-gold animate-cell-reveal">
-                      {player.slams} Slams
+                    <span className="flex flex-col items-center animate-cell-reveal">
+                      <span className="text-2xl font-bold text-gold">
+                        {player.slams} Slams
+                      </span>
+                      <HigherLowerThrough through={TENNIS_HL_THROUGH} />
                     </span>
                   ) : (
                     <span className="flex items-center gap-1 text-sm font-semibold text-primary">

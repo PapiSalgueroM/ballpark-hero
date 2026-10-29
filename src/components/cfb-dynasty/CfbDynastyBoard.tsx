@@ -14,7 +14,7 @@ import {
   initCfb, simCfbRound, cfbRankings, confStandings, runCfbPostseason,
   heismanRace, cfbRecruitClass, cfbPortalPool, signRecruit, cfbOffseason,
   cfbStrength, cfbEnableDepth, cfbOpenOffseason, cfbHireCoordinator, cfbFireCoordinator,
-  cfbPayroll, cfbUnits, cfbSosTable, cfbRivalOf,
+  cfbPayroll, cfbUnits, cfbSosTable, cfbRivalOf, cfbFixtures, ensureCfbSlate, CFB_LEAGUES,
   type CfbState, type CfbTeam, type CfbGame, type CfbPlayoffGame, type CfbRecruit, type HeismanFinalist,
   ensureCfbIds,
 } from '@/lib/cfbDynasty';
@@ -24,7 +24,8 @@ import { cfbSeatBinding } from '@/lib/cfbSeatBind';
 
 const SAVE_KEY = 'cfb-dynasty-save-v1';
 
-type Postseason = { ccgs: CfbPlayoffGame[]; bracket: CfbPlayoffGame[]; champion: string; heisman: HeismanFinalist[] };
+/* Round 1554: `fifth` is the Group of Five school that took the fifth automatic spot. Absent on older saves. */
+type Postseason = { ccgs: CfbPlayoffGame[]; bracket: CfbPlayoffGame[]; champion: string; heisman: HeismanFinalist[]; fifth?: string };
 
 interface SaveShape {
   st: CfbState; phase: CollegePhase;
@@ -44,6 +45,7 @@ function PlayoffRecap({ st, my, recap: postseason, isChamp, label }: CollegeReca
   const title = postseason.bracket[postseason.bracket.length - 1];
   const ledger = [
     ...postseason.ccgs.map(g => `${g.name}: ${label(g.winner)} ${Math.max(g.hs, g.as)}-${Math.min(g.hs, g.as)}`),
+    ...(postseason.fifth ? [`Group of Five spot: ${label(postseason.fifth)}, the best ranked of the four`] : []),
     ...postseason.bracket.slice(0, -1).map(g => `${g.name}: ${label(g.winner)} beat ${label(g.winner === g.home ? g.away : g.home)} ${Math.max(g.hs, g.as)}-${Math.min(g.hs, g.as)}`),
   ];
   return (
@@ -72,7 +74,17 @@ function PlayoffRecap({ st, my, recap: postseason, isChamp, label }: CollegeReca
 }
 
 const signed = (n: number) => `${n > 0 ? '+' : ''}${n.toFixed(1)}`;
-const confName = (conf: string) => conf === 'B1G' ? 'Big Ten' : conf === 'B12' ? 'Big 12' : conf === 'G5' ? 'Group of Five' : conf;
+const confName = (conf: string) => conf === 'B1G' ? 'Big Ten' : conf === 'B12' ? 'Big 12' : conf === 'G5' ? 'Group of Five' : conf === 'IND' ? 'Independent' : conf;
+/* Round 1554: the groups that play a conference schedule and a title game. */
+const LEAGUES: ReadonlySet<string> = new Set(CFB_LEAGUES);
+/** What a program plays for, in the welcome line. */
+const chase = (id: string) => {
+  const conf = CFB_SCHOOL_MAP.get(id)?.conf ?? '';
+  if (LEAGUES.has(conf)) return 'a conference title to defend';
+  return conf === 'IND'
+    ? 'no conference to win (Notre Dame is independent: finish top 12 and you are in the Playoff)'
+    : 'the Group of Five\'s automatic Playoff spot to chase';
+};
 const rivalryLine = (note: string) => `🔥 Week ${CFB_RIVALRY_ROUND} is rivalry week: ${note}.`;
 
 const CFB_WORDS: CollegeSport<CfbTeam, CfbState, CfbGame, CfbRecruit, Postseason>['words'] = {
@@ -80,7 +92,7 @@ const CFB_WORDS: CollegeSport<CfbTeam, CfbState, CfbGame, CfbRecruit, Postseason
   welcome: (st, id, { label, rivalry }) => {
     const staff = st.teams[id].staff;
     return [
-      `Welcome to ${label(id)}. The ${st.season} season kicks off with a 12-game slate, a conference title to defend, and a 12-team Playoff waiting in December.`,
+      `Welcome to ${label(id)}. The ${st.season} season kicks off with a 12-game slate, ${chase(id)}, and a 12-team Playoff waiting in December.`,
       ...(staff?.OC && staff.DC ? [`📋 Your staff: ${staff.OC.name} runs the offense (${staff.OC.rating}), ${staff.DC.name} the defense (${staff.DC.rating}).`] : []),
       rivalryLine(rivalry(id)),
     ];
@@ -106,17 +118,28 @@ const CFB_WORDS: CollegeSport<CfbTeam, CfbState, CfbGame, CfbRecruit, Postseason
   portalDetail: r => `${r.pos} · ${r.stars}⭐ · rated ${r.grade} · asks ${r.nilAsk} NIL`,
   seasonLabel: season => `${season}`,
   roundWord: 'Week',
-  recordExtra: t => ` (${t.confWins}-${t.confLosses})`,
+  /* Round 1554: a school outside every league has no conference record to show. */
+  recordExtra: t => (LEAGUES.has(CFB_SCHOOL_MAP.get(t.id)?.conf ?? '') || t.confWins + t.confLosses > 0 ? ` (${t.confWins}-${t.confLosses})` : ''),
   standingsTab: 'Conferences',
   depthChart: 'two-deep',
   unitCoach: (role, c) => (c ? `${role} ${c.name}, ${c.rating}` : `${role} chair empty`),
   noStaffYet: 'Coordinators arrive when this season\'s offseason closes.',
-  playIntro: depth => (depth
-    ? 'Weeks 1-4 are the non-conference gauntlet, 5-11 decide the conference race, and week 12 is rivalry week.'
-    : 'Weeks 1-4 are the non-conference gauntlet, 5-12 decide the conference race.'),
+  playIntro: (depth, st) => (st.format
+    ? `All 12 games are set before kickoff and nobody plays the same team twice in the regular season. ${
+      CFB_SCHOOL_MAP.get(st.myTeam)?.conf === 'IND'
+        ? 'Notre Dame is in no conference, so every game is non-conference and the chase is a top 12 ranking for the Playoff'
+        : CFB_SCHOOL_MAP.get(st.myTeam)?.conf === 'G5'
+          ? 'You are in no conference here, so every game is non-conference and the chase is the Group of Five\'s automatic Playoff spot'
+          : 'Weeks 1-4 are out of conference, weeks 5-11 are the conference race with a non-conference date or two mixed in'
+    }, and week 12 is rivalry week.`
+    : depth
+      ? 'Weeks 1-4 are the non-conference gauntlet, 5-11 decide the conference race, and week 12 is rivalry week.'
+      : 'Weeks 1-4 are the non-conference gauntlet, 5-12 decide the conference race.'),
   rivalryNow: now => (now ? 'This is rivalry week' : `Week ${CFB_RIVALRY_ROUND} is rivalry week`),
   playButton: (round, final) => (final ? 'Final week + the Playoff' : `Play Week ${round}`),
-  playFootnote: 'Five conference champs auto-qualify; twelve teams, straight seeding, byes for the top four.',
+  playFootnote: st => (st.format
+    ? 'Four conference champs and the best ranked Group of Five school get automatic spots, and Notre Dame is in if it ranks top 12. Twelve teams, straight seeding, byes for the top four.'
+    : 'Five conference champs auto-qualify; twelve teams, straight seeding, byes for the top four.'),
   sosPending: 'shows up after week 1',
   slateTag: 'W',
   nonConf: ' (non-conf)',
@@ -132,7 +155,7 @@ const CFB_WORDS: CollegeSport<CfbTeam, CfbState, CfbGame, CfbRecruit, Postseason
   rankingsNote: () => '• the twelve in the Playoff picture right now',
   standingsCut: 2,
   standingsMark: ' (CCG)',
-  standingsNote: depth => `${depth ? 'Ranked by conference win percentage, since rivalry week takes a league game off some teams. ' : ''}Top two in each conference meet in the championship game; the winner books a Playoff spot.`,
+  standingsNote: (depth, st) => `${depth ? `Ranked by conference win percentage, since rivalry week ${st.format ? 'adds a league game for' : 'takes a league game off'} some teams. ` : ''}Top two in each conference meet in the championship game; the winner books a Playoff spot.${st.format ? ' The four Group of Five schools here are not one conference, so they play no title game: the best ranked of them takes the fifth automatic spot. Notre Dame is independent and gets in if it ranks in the top 12.' : ''}`,
 };
 
 /* Built on first use rather than at import, so nothing imported is read
@@ -159,7 +182,9 @@ function cfbSport(): CollegeSport<CfbTeam, CfbState, CfbGame, CfbRecruit, Postse
     positions: ['QB', 'RB', 'WR', 'TE', 'OL', 'DL', 'LB', 'DB', 'K'],
 
     init: (id, rng, opts) => initCfb(id, rng, opts),
-    ensureIds: (st, recruits, portal) => { ensureCfbIds(st, recruits, portal); },
+    /* Round 1554: a save loaded before its season's first kickoff gets its slate here, so the Schedule tab shows it. */
+    ensureIds: (st, recruits, portal) => { ensureCfbIds(st, recruits, portal); ensureCfbSlate(st); },
+    fixtures: st => cfbFixtures(st),
     playRound: (state, rng, { label }) => {
       const { games, myGame } = simCfbRound(state, rng);
       const lines: string[] = [];
@@ -196,7 +221,9 @@ function cfbSport(): CollegeSport<CfbTeam, CfbState, CfbGame, CfbRecruit, Postse
         state.heismanWinners = [...(state.heismanWinners ?? []), heismanWinner.name];
       }
       state.natties.push({ season: state.season, team: post.champion });
-      return { ccgs: post.ccgs, bracket: post.bracket, champion: post.champion, heisman };
+      return post.fifth
+        ? { ccgs: post.ccgs, bracket: post.bracket, champion: post.champion, heisman, fifth: post.fifth }
+        : { ccgs: post.ccgs, bracket: post.bracket, champion: post.champion, heisman };
     },
     openOffseason: (st, rng) => cfbOpenOffseason(st, rng),
     recruitClass: rng => cfbRecruitClass(rng),
@@ -211,7 +238,10 @@ function cfbSport(): CollegeSport<CfbTeam, CfbState, CfbGame, CfbRecruit, Postse
     units: t => cfbUnits(t),
     rankings: st => cfbRankings(st),
     sosTable: st => cfbSosTable(st),
-    standings: (st, conf) => confStandings(st, conf).map(t => ({ id: t.id, record: `${t.confWins}-${t.confLosses}` })),
+    /* Round 1554: the Group of Five and Notre Dame play no conference games, so their rows show the overall record and no title game mark. */
+    standings: (st, conf) => confStandings(st, conf).map((t, i) => (!st.format || LEAGUES.has(conf)
+      ? { id: t.id, record: `${t.confWins}-${t.confLosses}` }
+      : { id: t.id, record: `${t.wins}-${t.losses}`, mark: conf === 'G5' && i === 0 ? ' (auto spot)' : '' })),
 
     RecapBody: PlayoffRecap,
     recapTitles: 'Natties',

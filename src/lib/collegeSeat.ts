@@ -59,6 +59,9 @@ export interface CollegeProgramView {
   prestige: number;
   wins: number;
   losses: number;
+  /** Round 1554: this program's schedule is far harder than the ladder assumes, so a win total ask
+      is eased (COLLEGE_SLATE_EASE) in every season from the view's slateFrom on. */
+  hardSlate?: boolean;
 }
 
 /** What the seat reads of a league. Each sport's binding builds it from its state. */
@@ -76,6 +79,9 @@ export interface CollegeLeagueView {
   place: number;
   /** How many make the postseason field: CFB 12, CBB 32. */
   fieldSize: number;
+  /** Round 1554: the first season played on the fixed slate (the season under way if it is,
+      else the next one). Absent in a sport without one. */
+  slateFrom?: number;
 }
 
 /** The seat's save block, kept inside st as st.seat. Fired and the last graded
@@ -133,9 +139,24 @@ export const COLLEGE_ASK_TILT: Record<CollegeSeatSport, Partial<Record<FoTier, -
   cbb: { respect: 1, rebuild: 1 },
 };
 
+/**
+ * Round 1554: wins taken off a win total ask ('respect' or 'rebuild', never below one) at a program
+ * whose binding marks its schedule hardSlate, in a season played on the fixed slate. In CFB that is
+ * the Group of Five: on the slate it plays mostly power schools (before, the four of them drew each
+ * other most weeks), and the ladder's win totals were set on the old draw. Measured over 900 ten
+ * season dynasties a run (simCollegeSeat, CFB, seeds 1,2,3): a coach who started at a Group of Five
+ * school was let go within the run 9.0 percent of the time on the old draw, 70.5 on the slate with no
+ * ease, 57.7 with one win off, 17.9 with two and 1.3 with three; a coach whose first ask was a rebuild
+ * 21.7 on the old draw, 47.0, 41.0, 22.3 and 14.5 (runners r1554-fx-g1 and r1554-fx-e1). Two is the
+ * ease that puts the bottom of the country back where the old draw had it. The bands that hold it are
+ * in scripts/simCollegeSeat.mjs.
+ */
+export const COLLEGE_SLATE_EASE: Record<CollegeSeatSport, number> = { cfb: 2, cbb: 0 };
+
 /** The ask a program's roster earns for a season: gmSeat.seatMandate over its
-    roster rank, the defending champion's floor from the season before, and
-    COLLEGE_ASK_TILT. No press tilt: college has no podium. */
+    roster rank, the defending champion's floor from the season before,
+    COLLEGE_ASK_TILT, and COLLEGE_SLATE_EASE on a hard slate. No press tilt:
+    college has no podium. */
 export function collegeAskFor(view: CollegeLeagueView, teamId: string, season: number): OwnerMandate {
   const pack = collegePack(view.sport);
   const rank = rosterRank(view, teamId);
@@ -143,7 +164,13 @@ export function collegeAskFor(view: CollegeLeagueView, teamId: string, season: n
   const defending = championOf(view, season - 1) === teamId;
   const base = seatMandate(pack, rank, n, defending, season, 0);
   const step = COLLEGE_ASK_TILT[view.sport][base.tier];
-  return step ? seatMandate(pack, rank, n, defending, season, step) : base;
+  const asked = step ? seatMandate(pack, rank, n, defending, season, step) : base;
+  const ease = COLLEGE_SLATE_EASE[view.sport];
+  const hard = view.programs.find(p => p.id === teamId)?.hardSlate;
+  if (!ease || !hard || view.slateFrom === undefined || season < view.slateFrom) return asked;
+  if (asked.tier !== 'respect' && asked.tier !== 'rebuild') return asked;
+  const winFloor = Math.max(1, asked.winFloor - ease);
+  return { ...asked, winFloor, text: fillSeatWords(pack.asks[asked.tier], pack, winFloor) };
 }
 
 /** His ask for a season. */
@@ -523,12 +550,17 @@ export function collegeSeatRules(view: CollegeLeagueView): { rules: string[]; ex
   const far = move({});
   const sgn = (n: number) => (n > 0 ? `+${n}` : `${n}`);
   const tilted = Object.entries(COLLEGE_ASK_TILT[view.sport]);
+  /* Round 1554: only CFB's binding marks a hard slate (its Group of Five), so this line speaks football. */
+  const ease = COLLEGE_SLATE_EASE[view.sport];
+  const hard = view.slateFrom === undefined ? [] : view.programs.filter(p => p.hardSlate).map(p => p.name).sort();
+  const hardList = hard.length > 1 ? `${hard.slice(0, -1).join(', ')} and ${hard[hard.length - 1]}` : hard.join('');
   const rules = [
     tilted.some(([, s]) => s === -1)
       ? "Before every season the athletic director names an ask, read off where your roster ranks in the country, not off the program's name."
       : `Before every season the athletic director names an ask, read off where your roster ranks in the country, not off the program's name: the best rosters are asked for ${pack.words.title}, the next ones to win ${pack.words.round}, then to make ${pack.words.playoffs}, and the rest for a win total.`,
     ...(tilted.some(([, s]) => s === 1) ? [`In this game the athletic director asks one step more of a roster that would only be asked for a win total, because ${view.fieldSize} of ${view.programs.length} programs make ${pack.words.playoffs}.`] : []),
     ...(tilted.some(([, s]) => s === -1) ? [`In this game the athletic director asks one step less of every roster that would be asked for a postseason result, because only ${view.fieldSize} of ${view.programs.length} programs make ${pack.words.playoffs} and one loss ends a run there: the best rosters are asked to make ${pack.words.playoffs} and win ${pack.words.round}, the next ones to make it, and nobody is asked for ${pack.words.title} outright.`] : []),
+    ...(ease && hard.length ? [`${hardList} play a slate of mostly power conference schools here, so at ${hard.length > 1 ? 'those schools' : 'that school'} a win total ask is ${ease} ${ease === 1 ? 'win' : 'wins'} lower.`] : []),
     `Trust starts at ${FO_TRUST_START} of 100. At the end of every season it moves by the grade: ${sgn(title)} for ${pack.words.title}, ${sgn(beat)} for beating the ask, ${sgn(met)} for meeting it, ${sgn(short)} for falling short and ${sgn(far)} for missing it by a mile.`,
     'Trust at zero and you are let go. The dynasty can go on from there: the phone rings with the jobs you have earned, or nobody calls and you can sit a year out while the country plays on. If the phone stops for good, a new dynasty is the way back in.',
     `Let go straight after a season nowhere near the ask and no program above the ${['', 'top', 'second', 'third', 'bottom'][BADLY_FIRED_CEILING]} tier will call. A program that let you go never calls again. Those are this game's rules.`,

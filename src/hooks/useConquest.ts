@@ -2,14 +2,15 @@ import { useState, useRef, useCallback, useEffect } from 'react';
 import {
   NFL_TEAMS, TEAM_MAP, INITIAL_TERRITORIES, STATE_POSITIONS,
   DIRECTIONS, DIR_ANGLES, DIR_LABELS, STATE_GEO_COORDS,
-  CONQUEST_FREE_AGENCY_POOL, ConquestFreeAgentCandidate,
+  ConquestFreeAgentCandidate,
 } from '@/data/conquestData';
 import { NFL_STATES } from '@/data/usStatesPaths';
 import { TERRITORY_ADJACENCY } from '@/lib/conquestMapGeometry';
 import {
   PowerupId, PowerupDef, POWERUPS, getRandomPowerup,
-  FREE_AGENTS, TEAM_LEGENDS, FreeAgent,
+  RETIRED_GREATS_NFL, TEAM_LEGENDS, FreeAgent,
 } from '@/data/conquestPowerups';
+import { fallenTeamMarket, retiredNames, signingList } from '@/lib/conquestMarket';
 import { simulateDetailedBattle, BattleSimulation, PlayEvent, BoxScore, TeamStatLine, TeamRatingOverride } from '@/lib/conquestBattle';
 
 export type Phase =
@@ -63,7 +64,7 @@ export interface PowerRankEntry {
 
 // Re-export for consumers
 export type { PowerupId, PowerupDef, FreeAgent, BattleSimulation, PlayEvent, BoxScore, TeamStatLine, TeamRatingOverride, ConquestFreeAgentCandidate };
-export { POWERUPS, FREE_AGENTS, TEAM_LEGENDS, CONQUEST_FREE_AGENCY_POOL };
+export { POWERUPS, RETIRED_GREATS_NFL, TEAM_LEGENDS };
 
 // Power rankings tuning (item 86): a win/loss nudges a team's O/D a small
 // amount so the ranked list reflects in-run form, and, critically, the
@@ -132,23 +133,31 @@ function buildInitialRosters(): Record<string, string[]> {
 
 // Global name -> position/overall lookup so players keep their real card no
 // matter how they travel between rosters (steals, signings, eliminations).
-// First listing wins: team tables, then power-up FREE_AGENTS, then the Free
-// Agency tab pool, then franchise legends.
+// First listing wins: team tables, then the power up's retired greats, then
+// franchise legends.
 const PLAYER_INFO = new Map<string, { position: string; overall: number }>();
 NFL_TEAMS.forEach(t => (t.players || []).forEach(p => {
   if (!PLAYER_INFO.has(p.name)) PLAYER_INFO.set(p.name, { position: p.position, overall: p.overall });
 }));
-FREE_AGENTS.forEach(fa => {
-  if (!PLAYER_INFO.has(fa.name)) PLAYER_INFO.set(fa.name, { position: fa.position, overall: fa.overall });
-});
-CONQUEST_FREE_AGENCY_POOL.forEach(c => {
-  if (!PLAYER_INFO.has(c.name)) PLAYER_INFO.set(c.name, { position: c.position, overall: c.overall });
+RETIRED_GREATS_NFL.forEach(g => {
+  if (!PLAYER_INFO.has(g.name)) PLAYER_INFO.set(g.name, { position: g.position, overall: g.overall });
 });
 Object.values(TEAM_LEGENDS).forEach(l => {
   if (!PLAYER_INFO.has(l.name)) PLAYER_INFO.set(l.name, { position: l.position, overall: l.overall });
 });
 function lookupPlayerInfo(name: string): { position: string; overall: number } {
   return PLAYER_INFO.get(name) || { position: '?', overall: 75 };
+}
+
+// Franchise legends and retired greats: they can join a roster in a run but
+// never hit the market (src/lib/conquestMarket.ts). Built on first use.
+let neverOnMarketNfl: Set<string> | null = null;
+function nflNeverOnMarket(): Set<string> {
+  if (!neverOnMarketNfl) {
+    const onTable = new Set(NFL_TEAMS.flatMap(t => (t.players || []).map(p => p.name)));
+    neverOnMarketNfl = retiredNames(TEAM_LEGENDS, RETIRED_GREATS_NFL, n => onTable.has(n));
+  }
+  return neverOnMarketNfl;
 }
 
 // Get team's geographic center using real lat/lon coordinates
@@ -348,7 +357,7 @@ export function useConquest() {
   const [powerRankDrift, setPowerRankDrift] = useState<Record<string, number>>(() => buildInitialPowerRankDrift());
   const [powerRankRecord, setPowerRankRecord] = useState<Record<string, { wins: number; losses: number }>>({});
 
-  // Free Agency tab (item 87): a docked panel of notable unattached players.
+  // Free Agency tab (item 87): a docked panel of the players fallen teams left behind.
   // `favoriteTeam` is user-selected (defaults to null until chosen, so the
   // panel can prompt for a pick); `conquestsSinceSign` counts resolved
   // battles since the last sign and gates the once-per-3 cadence;
@@ -406,59 +415,20 @@ export function useConquest() {
     [territories],
   );
 
-  // Build the free agent list: base free agents + eliminated team players not on active rosters
-  const buildFreeAgentList = useCallback(() => {
-    const activeRosterNames = new Set<string>();
-    const alive = getAliveTeamsFrom(territories);
-    for (const tid of alive) {
-      for (const name of (rosters[tid] || [])) activeRosterNames.add(name);
-    }
+  // Round 1547: both lists come from src/lib/conquestMarket.ts, the one rule
+  // NFL and NBA Conquest share. The power up deals the retired greats plus
+  // every fallen team's final roster (a player stolen in battle re-enters if
+  // the team that stole him later falls); the docked Free Agency tab is that
+  // market alone. Neither makes a claim about anyone's real status today.
+  const buildFreeAgentList = useCallback((): FreeAgent[] => signingList(
+    { rosters, alive: getAliveTeamsFrom(territories), eliminated, cardOf: lookupPlayerInfo, neverOnMarket: nflNeverOnMarket() },
+    RETIRED_GREATS_NFL,
+  ), [territories, rosters, eliminated]);
 
-    const agents: FreeAgent[] = FREE_AGENTS.filter(fa => !activeRosterNames.has(fa.name));
-    const seen = new Set(agents.map(x => x.name));
-
-    // Add eliminated teams' players from their FINAL roster (not the static
-    // team table), so stolen or signed players whose new team later fell
-    // re-enter the pool and become signable again.
-    for (const elimId of eliminated) {
-      for (const name of (rosters[elimId] || [])) {
-        if (activeRosterNames.has(name) || seen.has(name)) continue;
-        seen.add(name);
-        const info = lookupPlayerInfo(name);
-        agents.push({ name, position: info.position, overall: info.overall });
-      }
-    }
-
-    return agents.sort((a, b) => b.overall - a.overall).slice(0, 30);
-  }, [territories, rosters, eliminated]);
-
-  // Live pool for the docked Free Agency tab: the curated veteran pool plus
-  // every eliminated team's final-roster players, minus anyone currently on
-  // an alive roster. Eliminated-team players carry their real card via
-  // lookupPlayerInfo, so a player stolen in battle re-enters free agency if
-  // the team that stole them later falls.
-  const freeAgencyPool = useCallback((): ConquestFreeAgentCandidate[] => {
-    const activeRosterNames = new Set<string>();
-    const alive = getAliveTeamsFrom(territories);
-    for (const tid of alive) {
-      for (const name of (rosters[tid] || [])) activeRosterNames.add(name);
-    }
-
-    const pool: ConquestFreeAgentCandidate[] = CONQUEST_FREE_AGENCY_POOL.filter(c => !activeRosterNames.has(c.name));
-    const seen = new Set(pool.map(x => x.name));
-
-    for (const elimId of eliminated) {
-      const teamName = TEAM_MAP.get(elimId)?.name || elimId;
-      for (const name of (rosters[elimId] || [])) {
-        if (activeRosterNames.has(name) || seen.has(name)) continue;
-        seen.add(name);
-        const info = lookupPlayerInfo(name);
-        pool.push({ name, position: info.position, overall: info.overall, blurb: `Hit the market when the ${teamName} fell` });
-      }
-    }
-
-    return pool.sort((a, b) => b.overall - a.overall);
-  }, [territories, rosters, eliminated]);
+  const freeAgencyPool = useCallback((): ConquestFreeAgentCandidate[] => fallenTeamMarket(
+    { rosters, alive: getAliveTeamsFrom(territories), eliminated, cardOf: lookupPlayerInfo, neverOnMarket: nflNeverOnMarket() },
+    id => TEAM_MAP.get(id)?.name || id,
+  ), [territories, rosters, eliminated]);
 
   // Execute a powerup immediately
   const executePowerup = useCallback((teamId: string, puId: PowerupId) => {

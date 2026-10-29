@@ -31,7 +31,7 @@ import type { DraftNight } from '@/lib/draftNight';
  * being fixed. That is the mistake Round 423's note in Celebration.tsx warns
  * about, and this card is written to its rule.
  */
-export function DraftNightCard({ night, onContinue }: { night: DraftNight; onContinue?: () => void }) {
+export function DraftNightCard({ night, onContinue, headline }: { night: DraftNight; onContinue?: () => void; headline?: string }) {
   if (!night || night.picks.length === 0) return null;
   const mine = night.picks.find(p => p.mine);
   /* When the last row lands, plus the step the run leaves after it: the same
@@ -46,7 +46,7 @@ export function DraftNightCard({ night, onContinue }: { night: DraftNight; onCon
 
       <div className="relative">
         <p className="text-[10px] uppercase tracking-wider text-muted-foreground">On the clock</p>
-        <p className="fo-draft-head text-sm font-bold text-foreground">{draftNightHeadline(night)}</p>
+        <p className="fo-draft-head text-sm font-bold text-foreground">{headline ?? draftNightHeadline(night)}</p>
 
         <ol className="mt-2 space-y-1">
           {night.picks.map((p, i) => (

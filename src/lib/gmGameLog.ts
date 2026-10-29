@@ -105,6 +105,8 @@ export interface GmGameDayMount {
   standing: { table: string; seed: number | null; seeds: number } | null;
   /** Where the "?" sheet is put: an empty element inside a board's week box (the box must be `relative`, the element must take no spacing), so the sheet lies over the whole box; null: not there yet. */
   helpHost: HTMLElement | null;
+  /** Round 1542: who scored in a game of his, by its key: each side's touchdowns as [passer or null, scorer] names, in the order the board credited them. Null: none kept for that game (one played before the board kept them). Absent: the tile is the tile it was, with no list. */
+  credits?: (key: string) => { home: readonly (readonly [string | null, string])[]; away: readonly (readonly [string | null, string])[] } | null;
 }
 
 /** His last told game, or null when the log holds none. */
