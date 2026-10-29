@@ -1,0 +1,7 @@
+nations: 62 in the committed rows, 32 reachable (>= 4 of 8), 30 walked apart
+ok   320: Inter true, 8px, room 48 of tile 54.4, tallest tile 76, board splits [], library labels split 0 | unreachable nations split ["From Bosnia-Herzegovina (2 of 600)","From Mozambique (1 of 600)"]
+ok   360: Inter true, 9px, room 55 of tile 60.8, tallest tile 80.625, board splits [], library labels split 0 | unreachable nations split ["From Bosnia-Herzegovina (2 of 600)","From Mozambique (1 of 600)"]
+ok   375: Inter true, 9px, room 58 of tile 63.8, tallest tile 80.625, board splits [], library labels split 0 | unreachable nations split []
+ok   390: Inter true, 9px, room 61 of tile 66.8, tallest tile 76, board splits [], library labels split 0 | unreachable nations split []
+ok   412: Inter true, 9px, room 65 of tile 71.2, tallest tile 76, board splits [], library labels split 0 | unreachable nations split []
+walkBingoWords head: green, every word of all 112 labels whole at 320, 360, 375, 390 and 412
