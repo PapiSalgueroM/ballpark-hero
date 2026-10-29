@@ -4576,7 +4576,14 @@ function GameScreen({ career, clubs, onNextSeason, onAcceptOffer, onDismissSumma
         </div>
       )}
       {storyOpen && <Suspense fallback={null}><CareerStory career={visibleCareer} onClose={() => setStoryOpen(false)} /></Suspense>}
-      {trophyCategory && <CentreMountBoundary what="trophy cabinet" onClose={() => setTrophyCategory(null)}><Suspense fallback={<div className="fixed inset-0 z-50 flex items-center justify-center bg-background/80" data-trophy-loading><div className="rounded-2xl border border-border bg-card px-5 py-4 text-sm">Opening your trophies...</div></div>}><TrophyCabinet career={visibleCareer} category={trophyCategory} onClose={() => setTrophyCategory(null)} /></Suspense></CentreMountBoundary>}
+      {trophyCategory && <CentreMountBoundary what="trophy cabinet" onClose={() => setTrophyCategory(null)}><Suspense fallback={
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-background/80 p-4" data-trophy-loading>
+          <div role="dialog" aria-modal="true" aria-label="Opening your trophies" tabIndex={-1} ref={focusDialogOnMount} onKeyDown={escapeCloses(() => setTrophyCategory(null))} className="w-full max-w-sm rounded-2xl border border-border bg-card px-5 py-4 text-sm">
+            <p>Opening your trophies...</p>
+            <Button onClick={() => setTrophyCategory(null)} variant="outline" className="mt-4 h-11 w-full font-bold">Back to career</Button>
+          </div>
+        </div>
+      }><TrophyCabinet career={visibleCareer} category={trophyCategory} onClose={() => setTrophyCategory(null)} /></Suspense></CentreMountBoundary>}
       {ratingsOpen && <CentreMountBoundary what="season ratings" onClose={() => setRatingsOpen(false)}><Suspense fallback={null}><SeasonRatings career={visibleCareer} onClose={() => setRatingsOpen(false)} /></Suspense></CentreMountBoundary>}
       {derbyHistoryOpen && <CentreMountBoundary what="derby history" onClose={() => setDerbyHistoryOpen(false)}><Suspense fallback={null}><SoccerDerbyHistory seasons={visibleCareer.seasons} onClose={() => setDerbyHistoryOpen(false)} /></Suspense></CentreMountBoundary>}
       {(() => {
@@ -4589,7 +4596,14 @@ function GameScreen({ career, clubs, onNextSeason, onAcceptOffer, onDismissSumma
         return (
           <div data-no-prerender>
             <CentreMountBoundary onClose={closeCentre}>
-              <Suspense fallback={<div className="fixed inset-0 z-50 flex items-center justify-center bg-background/80" data-season-centre-loading><div className="rounded-2xl border border-border bg-card px-5 py-4 text-sm">📺 Getting your season ready...</div></div>}>
+              <Suspense fallback={
+                <div className="fixed inset-0 z-50 flex items-center justify-center bg-background/80 p-4" data-season-centre-loading>
+                  <div role="dialog" aria-modal="true" aria-label="Getting your season ready" tabIndex={-1} ref={focusDialogOnMount} onKeyDown={escapeCloses(closeCentre)} className="w-full max-w-sm rounded-2xl border border-border bg-card px-5 py-4 text-sm">
+                    <p>📺 Getting your season ready...</p>
+                    <Button onClick={closeCentre} variant="outline" className="mt-4 h-11 w-full font-bold">Back to career</Button>
+                  </div>
+                </div>
+              }>
                 <SoccerSeasonCentre career={career} clubs={clubs} row={row} mode={watchRow || replaysOpen ? "watch" : "live"} onClose={closeCentre} onCareer={onCareerPatch} offer={offer} />
               </Suspense>
             </CentreMountBoundary>

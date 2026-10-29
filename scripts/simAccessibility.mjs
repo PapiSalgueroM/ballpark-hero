@@ -128,8 +128,9 @@ console.log('7) the hand rolled dialogs behave, the banner takes focus, the tick
     ['src/components/nascar-driver/NascarDriverHowToPlay.tsx', 1],
     ['src/pages/StadiumTycoon.tsx', 2],
     /* Round 1045: two confirms and the Season Centre's mount boundary; PR 421: the training
-       ground's loading layer; PR 415: the career phone's loading layer */
-    ['src/pages/SoccerCareer.tsx', 5],
+       ground's loading layer; PR 415: the career phone's loading layer; Release BS fix: the Season
+       Centre's and the trophy cabinet's loading layers */
+    ['src/pages/SoccerCareer.tsx', 7],
     /* Round 1045: the Season Centre overlay, its entry's plain tile and the "?" sheet */
     ['src/components/season-centre/SeasonCentre.tsx', 1],
     ['src/components/soccer-career/SoccerSeasonCentre.tsx', 1],
