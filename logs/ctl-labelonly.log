@@ -1,0 +1,56 @@
+MUTATED 1
+
+[1m[46m RUN [49m[22m [36mv3.2.7 [39m[90m/home/runner/work/ballpark-hero/ballpark-hero[39m
+
+ [31m❯[39m src/hooks/useConnectionsRelabel.test.ts [2m([22m[2m8 tests[22m[2m | [22m[31m4 failed[39m[2m)[22m[32m 131[2mms[22m[39m
+[31m   [31m×[31m NHL Connections: a save from before a relabel[2m > [22mlost: the relabelled group is shown once, every name once[39m[32m 52[2mms[22m[39m
+[31m     → expected 5 to be 4 // Object.is equality[39m
+   [32m✓[39m NHL Connections: a save from before a relabel[2m > [22mplaying: the other three groups still win the board[32m 12[2mms[22m[39m
+[31m   [31m×[31m NBA Connections: a save from before a relabel[2m > [22mlost: the relabelled group is shown once, every name once[39m[32m 15[2mms[22m[39m
+[31m     → expected 5 to be 4 // Object.is equality[39m
+   [32m✓[39m NBA Connections: a save from before a relabel[2m > [22mplaying: the other three groups still win the board[32m 10[2mms[22m[39m
+[31m   [31m×[31m NFL Connections: a save from before a relabel[2m > [22mlost: the relabelled group is shown once, every name once[39m[32m 11[2mms[22m[39m
+[31m     → expected 5 to be 4 // Object.is equality[39m
+   [32m✓[39m NFL Connections: a save from before a relabel[2m > [22mplaying: the other three groups still win the board[32m 7[2mms[22m[39m
+[31m   [31m×[31m Baseball Connections: a save from before a relabel[2m > [22mlost: the relabelled group is shown once, every name once[39m[32m 14[2mms[22m[39m
+[31m     → expected 5 to be 4 // Object.is equality[39m
+   [32m✓[39m Baseball Connections: a save from before a relabel[2m > [22mplaying: the other three groups still win the board[32m 6[2mms[22m[39m
+
+[31m⎯⎯⎯⎯⎯⎯⎯[39m[1m[41m Failed Tests 4 [49m[22m[31m⎯⎯⎯⎯⎯⎯⎯[39m
+
+[41m[1m FAIL [22m[49m src/hooks/useConnectionsRelabel.test.ts[2m > [22mNHL Connections: a save from before a relabel[2m > [22mlost: the relabelled group is shown once, every name once
+[41m[1m FAIL [22m[49m src/hooks/useConnectionsRelabel.test.ts[2m > [22mNBA Connections: a save from before a relabel[2m > [22mlost: the relabelled group is shown once, every name once
+[41m[1m FAIL [22m[49m src/hooks/useConnectionsRelabel.test.ts[2m > [22mNFL Connections: a save from before a relabel[2m > [22mlost: the relabelled group is shown once, every name once
+[41m[1m FAIL [22m[49m src/hooks/useConnectionsRelabel.test.ts[2m > [22mBaseball Connections: a save from before a relabel[2m > [22mlost: the relabelled group is shown once, every name once
+[31m[1mAssertionError[22m: expected 5 to be 4 // Object.is equality[39m
+
+[32m- Expected[39m
+[31m+ Received[39m
+
+[32m- 4[39m
+[31m+ 5[39m
+
+[36m [2m❯[22m src/hooks/useConnectionsRelabel.test.ts:[2m98:27[22m[39m
+    [90m 96| [39m    [35mconst[39m groups [33m=[39m second[33m.[39mresult[33m.[39mcurrent[33m.[39msolvedGroups[33m;[39m
+    [90m 97| [39m    expect(groups.some((g: any) => g.theme === oldLabel(solved.theme))…
+    [90m 98| [39m    [34mexpect[39m(groups[33m.[39mlength)[33m.[39m[34mtoBe[39m([34m4[39m)[33m;[39m
+    [90m   | [39m                          [31m^[39m
+    [90m 99| [39m    [35mconst[39m names [33m=[39m groups[33m.[39m[34mflatMap[39m((g[33m:[39m any) [33m=>[39m g[33m.[39mplayers)[33m;[39m
+    [90m100| [39m    [34mexpect[39m([35mnew[39m [33mSet[39m(names)[33m.[39msize)[33m.[39m[34mtoBe[39m(names[33m.[39mlength)[33m;[39m
+
+[31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/4]⎯[22m[39m
+
+
+[2m Test Files [22m [1m[31m1 failed[39m[22m[90m (1)[39m
+[2m      Tests [22m [1m[31m4 failed[39m[22m[2m | [22m[1m[32m4 passed[39m[22m[90m (8)[39m
+[2m   Start at [22m 18:25:35
+[2m   Duration [22m 1.21s[2m (transform 176ms, setup 68ms, collect 276ms, tests 131ms, environment 310ms, prepare 70ms)[22m
+
+
+::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/hooks/useConnectionsRelabel.test.ts,title=src/hooks/useConnectionsRelabel.test.ts > NHL Connections%3A a save from before a relabel > lost%3A the relabelled group is shown once%2C every name once,line=98,column=27::AssertionError: expected 5 to be 4 // Object.is equality%0A%0A- Expected%0A+ Received%0A%0A- 4%0A+ 5%0A%0A ❯ src/hooks/useConnectionsRelabel.test.ts:98:27%0A%0A
+
+::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/hooks/useConnectionsRelabel.test.ts,title=src/hooks/useConnectionsRelabel.test.ts > NBA Connections%3A a save from before a relabel > lost%3A the relabelled group is shown once%2C every name once,line=98,column=27::AssertionError: expected 5 to be 4 // Object.is equality%0A%0A- Expected%0A+ Received%0A%0A- 4%0A+ 5%0A%0A ❯ src/hooks/useConnectionsRelabel.test.ts:98:27%0A%0A
+
+::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/hooks/useConnectionsRelabel.test.ts,title=src/hooks/useConnectionsRelabel.test.ts > NFL Connections%3A a save from before a relabel > lost%3A the relabelled group is shown once%2C every name once,line=98,column=27::AssertionError: expected 5 to be 4 // Object.is equality%0A%0A- Expected%0A+ Received%0A%0A- 4%0A+ 5%0A%0A ❯ src/hooks/useConnectionsRelabel.test.ts:98:27%0A%0A
+
+::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/hooks/useConnectionsRelabel.test.ts,title=src/hooks/useConnectionsRelabel.test.ts > Baseball Connections%3A a save from before a relabel > lost%3A the relabelled group is shown once%2C every name once,line=98,column=27::AssertionError: expected 5 to be 4 // Object.is equality%0A%0A- Expected%0A+ Received%0A%0A- 4%0A+ 5%0A%0A ❯ src/hooks/useConnectionsRelabel.test.ts:98:27%0A%0A
