@@ -1051,6 +1051,12 @@ export default function UsCareerBoard({ sport }: { sport: UsCareerSport }) {
     setRivalryOutcome(null);
     setPanel('none');
     setRetiredReview(false);
+    /* Since Round 1569 Start over is drawn on every screen, so two transient
+       screens that render after the create check can be on screen here: the
+       season curtain and the national team result. Leaving either set opened
+       the NEXT career on the old career's screen (Release BT review). */
+    setReveal(null);
+    setIntlResult(null);
     reviewReturn.current = null;
     coachRef.current = null;
     setCoach(null);
