@@ -99,6 +99,19 @@
  *   nameinline 128 failures. notrim did not fire on the roster limit alone (the old club never passed 53), so
  *   section 6 replays every away summer against the engine's offseason with no user club, which it must equal.
  *
+ * ROUND 1559 (the dark half of the GM career on the other boards): the DRIVE
+ * table gains the 'nhl' row (SIM_GM_CAREER_SPORT=nhl), its section 1 recorded
+ * from 115c68092 (digest 838cdddf); sections 2 to 8 read every sport's name
+ * through the row; 2t holds the guide's rule of thumb (Round 1533's finding 8);
+ * 9 holds the bands seed by seed (S9_BANDS, calibrated beside them) and 10 the
+ * lift (the shared bind, season counted rule and retained step equal the NFL
+ * copies they came from). The nhl row reads forty leagues in 4, 5, 9 and 10
+ * (measureSeeds). Controls added: contribstays (5), awaycontrib, retainedrolled
+ * (6), thumbfalse (2t), firenever, nooffers, xpflat, nevershut (9), legacyleak,
+ * retainedlift (10); the NFL's own (staffrides ... noawaydraft) are re-aimed at
+ * the nhl row's own lines. The fired counts of every control on both rows are
+ * in Round 1559's report (results-g/finish-1559.md) and docs/audits.
+ *
  * Recording: SIM_GM_CAREER_RECORD=<sha of the base> writes the fixture
  * (scripts/data/gmCareerFixture.json, or SIM_GM_CAREER_OUT) and stops.
  * Recorded twice in two processes on a runner; both printed one digest.
@@ -615,6 +628,10 @@ const DRIVE = {
        against the NFL's 0.061 (r1559-s2a), so twenty leagues held 278 first feeds, under section 4's floor of 300.
        More careers, never a lower floor. Section 9's bands are for sets of this many seeds. */
     measureSeeds: 40,
+    /* Section 5's floor on the takes whose old club had a lineup planted: an NHL roster at the close (12 to 15 men,
+       some out hurt) has no spare healthy man at any position on about one take in six: 491 of 584 planted (0.84,
+       r1559-s2c) against the NFL's QBs, always two. The floor sits near 90 percent of the measured share. */
+    plantShare: 0.75,
     words: NHL_WORDS,
     xpLive: () => DN.NHL_XP_LIVE,
     xpSources: () => DN.NHL_XP_SOURCES,
@@ -1306,7 +1323,7 @@ if (runs('4') || runs('5') || runs('9') || runs('10')) {
   if (runs('5')) {
     check = '5';
     console.log(`5) taking a seat: ${S5.takes} offers taken (${S5.planted} with a planted depth chart), ${S5.follows} followed through the draft and the summer, ${S5.refused} refused`);
-    ok(S5.takes >= 400 && S5.follows >= 300 && S5.planted >= 0.9 * S5.takes, `too few seats taken (${S5.takes}, ${S5.follows} followed, ${S5.planted} planted)`);
+    ok(S5.takes >= 400 && S5.follows >= 300 && S5.planted >= (d.plantShare ?? 0.9) * S5.takes, `too few seats taken (${S5.takes}, ${S5.follows} followed, ${S5.planted} planted, floor ${d.plantShare ?? 0.9} of the takes)`);
   }
 }
 
@@ -1327,8 +1344,13 @@ const S6_YEARS = 3;
    asserted club by club. */
 const S6_BANDS = {
   nfl: { draft: [0.95, 1.01] },
-  /* Round 1559: the NHL row, measured on runners (see the NHL block of the header) */
-  nhl: null,
+  /* Round 1559: the NHL row, measured on runners, three years out a seed, three sets of twenty and a held out set:
+       seeds  1-20 ratio 0.987 (r1559-s2a and r1559-s2c, section 6 alone; 0.993 in a whole run, the id counter moves
+       with the sections before it), 21-40 0.993, 41-60 0.990 (r1559-s2a), held out 61-80 0.997 (r1559-s2c).
+     The idle GM's rivals take exactly 600 (ten a season over sixty summers), a ceiling the away path cannot pass. The
+     NFL's band for the same check, its top that ceiling and its floor well under the lowest set; R5's own recipe on
+     the three sets would give [0.982, 1.002], inside it. noawaydraft on this row skips the away draft. */
+  nhl: { draft: [0.95, 1.01] },
 };
 const S6_BAND = S6_BANDS[SPORT_OF_RUN] ?? null;
 const S6 = {
@@ -1612,12 +1634,41 @@ if (runs('7')) {
    hired invariant), xpflat (a season's XP never reaches the block), nevershut (next year is never shut: the closed
    share). The four sports sit side by side once MLB (Part B) and NBA (Part C) add their rows; until
    then nfl and nhl. */
+/* CALIBRATED 2026-10-29 on GitHub runners (r1559-s2c, head 5ce4d870c; the numbers recomputed from the logs by the
+   R5 recipe): each statistic is the mean over a set's seeds of the per seed value; three calibration sets, then a
+   held out fourth. Band = [lowest set mean - w, highest + w], w = the larger of half the three sets' spread and three
+   times the largest per seed standard error of the three (the seed is the unit, never a club season).
+     nfl, sets of 20 (seeds 1-20 / 21-40 / 41-60, held out 61-80):
+       fireRate   .0618 / .0600 / .0581, held .0613; w .0057 (3 se)      -> [.0524, .0675]
+       twoPlus    .0366 / .0361 / .0464, held .0488; w .0303 (3 se)      -> [.0058, .0767]
+       meanOffers 1.0366 / 1.0361 / 1.0464, held 1.0488; w .0303         -> [1.0058, 1.0767]
+       closedNext .5082 / .5504 / .5404, held .5297; w .0753             -> [.4329, .6257]
+       xpMean     111.81 / 112.02 / 112.23, held 112.37; w 1.12          -> [110.69, 113.35]
+     nhl, sets of 40 (seeds 1-40 / 41-80 / 81-120, held out 121-160):
+       fireRate   .0366 / .0355 / .0351, held .0364; w .0030             -> [.0321, .0396]
+       twoPlus    .0488 / .0568 / .0475, held .0441; w .0300             -> [.0175, .0868]
+       meanOffers 1.0503 / 1.0568 / 1.0516, held 1.0441; w .0327         -> [1.0176, 1.0895]
+       closedNext .4993 / .5523 / .4943, held .5300; w .0702             -> [.4241, .6225]
+       xpMean     121.73 / 121.55 / 121.56, held 121.87; w .56           -> [120.98, 122.29]
+     hired3 is 1 on every seed of every set of both rows: the host's first call means every first feed offers, so
+     a man who wants a seat has one at once. An invariant, asserted on every seed, with nooffers as its control.
+     THE PACE, one band for every sport because the copy is one sentence: the median XP of a graded club season over
+     the .500 season that meets the ask (110 XP), sets nfl .864 / .864 / .918 and nhl .945 / .945 / .945, held out
+     .864 and .945; widened by half the spread of the six -> [.824, .985]. simGmDeskHost measures 95 to 106 XP
+     (.864 to .964) on the four adapters with its own driver, inside it, so MLB (Part B) and NBA (Part C) should
+     join without moving it; this measures the pace in each board's own call order through the bind. */
 const S9_SET = d.measureSeeds ?? 20;
 const S9_BANDS = {
-  nfl: null,
-  nhl: null,
+  nfl: {
+    fireRate: [0.0524, 0.0675], twoPlus: [0.0058, 0.0767], meanOffers: [1.0058, 1.0767], closedNext: [0.4329, 0.6257],
+    xpMean: [110.69, 113.35], invariants: { hired3: 1 },
+  },
+  nhl: {
+    fireRate: [0.0321, 0.0396], twoPlus: [0.0175, 0.0868], meanOffers: [1.0176, 1.0895], closedNext: [0.4241, 0.6225],
+    xpMean: [120.98, 122.29], invariants: { hired3: 1 },
+  },
 };
-const S9_PACE = null;
+const S9_PACE = [0.824, 0.985];
 if (runs('9')) {
   begin('9', 'the bands: the firing rate, the offers, re hiring, the closed share and the XP pace, seed by seed against the calibrated bands');
   const rows = S9.seeds;

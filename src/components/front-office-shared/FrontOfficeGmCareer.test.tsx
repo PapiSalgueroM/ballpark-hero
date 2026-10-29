@@ -536,6 +536,96 @@ for (const row of BOARDS) {
   });
 }
 
+/* Round 1559 (Round 1533's finding 12, its critic 21): the title WATCHED at the club he took. The NFL board alone
+   holds the room while a playoff game runs on the clock (roomHeld: useGameCompletion reads the finish as it stood
+   before the press until full time); the other boards record on the plain path, which the take case above walks.
+   He is fired, takes the first offer, meets the room and runs the new club's draft; the new club plays its season
+   as 99s and its bracket up to the title game, which is then played at the club's own ratings (a blowout has no
+   clock, so its watch would end at once and prove nothing), stream by stream until a final he WINS ON THE CLOCK.
+   While he watches nothing is recorded; full time records exactly one finish, at the career's score. */
+describe('nfl board: a title watched at the club he took', () => {
+  it('the title game watched to full time records one finish, at the career score, and none before it', async () => {
+    const row = BOARDS.find(b => b.sport === 'nfl')!;
+    const { Board } = await freshBoard(row, 12);
+    const GB = await import('@/lib/gmBracket');
+    const PS = await import('@/lib/frontOfficePostseason');
+    completion.calls.length = 0;
+    let view = await doomedSave(row, Board);
+    const old = readSave(row).myTeam;
+    fireEvent.click(buttonNamed('See who is calling')!);
+    view.unmount();
+    view = render(<Board />);
+    await openCareerBox('Job market');
+    const target = offerIds()[0]!;
+    expect(target, 'somebody calls, and not the club that let him go').toBeTruthy();
+    expect(target).not.toBe(old);
+    fireEvent.click(document.querySelector(`[data-gm-offer="${target}"]`)!);
+    const take = () => document.querySelector('[data-gm-take]') as HTMLButtonElement;
+    fireEvent.click(take());
+    fireEvent.click(take());
+    expect(readSave(row).myTeam, 'the seat is taken').toBe(target);
+    answerPresser();
+    fireEvent.click(buttonNamed(/Go to the draft/)!);
+    runDraft(row);
+    expect(readSave(row).phase).toBe('hub');
+    view.unmount();
+    /* the new club's season as 99s, a week a press, then its bracket a round a press up to the title game */
+    const s0 = readSave(row);
+    const own = new Map<string, number>(s0.league.teams[target].players.map((p: any) => [p.id, p.ovr]));
+    for (const p of s0.league.teams[target].players) p.ovr = 99;
+    localStorage.setItem(row.saveKey, JSON.stringify(s0));
+    view = render(<Board />);
+    cutToLimit();
+    openTile('This week');
+    for (let g = 0; g < 30 && !readSave(row).playoffs; g += 1) {
+      const press = buttonNamed(`Play Week ${readSave(row).league.week}`);
+      if (!press) throw new Error(`no Play Week ${readSave(row).league.week} button on the week box`);
+      fireEvent.click(press);
+    }
+    expect(readSave(row).playoffs, 'Week 17 opened the bracket').toBeTruthy();
+    const finalNext = () => {
+      const s = readSave(row);
+      const f = PS.NFL_POSTSEASON.formatFor(s.league.season);
+      const w = f && s.playoffs ? GB.bracketWeek(f, s.playoffs) : null;
+      const pairs = f && w !== null ? GB.bracketPairings(f, s.playoffs, w) : null;
+      return pairs && pairs.length === 1 ? pairs[0] : null;
+    };
+    for (let r = 0; r < 6 && !finalNext(); r += 1) fireEvent.click(document.querySelector('[data-press="round"]')!);
+    const fin = finalNext();
+    expect(fin && [fin.homeId, fin.awayId], 'a club of 99s is in the title game').toContain(target);
+    expect(completion.calls, 'nothing is recorded from the firing to the title game').toHaveLength(0);
+    view.unmount();
+    /* the title game at the club's own ratings, watched, stream by stream */
+    const pre = readSave(row);
+    for (const p of pre.league.teams[target].players) if (own.has(p.id)) p.ovr = own.get(p.id);
+    const start = JSON.stringify(pre);
+    let won = false;
+    for (let k = 1; k <= 40 && !won; k += 1) {
+      cleanup();
+      localStorage.setItem(row.saveKey, start);
+      completion.calls.length = 0;
+      Math.random = lehmer(k * 104729);
+      render(<Board />);
+      openTile('This week');
+      const watch = document.querySelector('[data-watch-round]') as HTMLButtonElement | null;
+      expect(watch, 'his title game can be watched').not.toBeNull();
+      fireEvent.click(watch!);
+      const clocked = await waitFor(() => expect(document.querySelector('[data-match-clock]')).not.toBeNull()).then(() => true, () => false);
+      const s = readSave(row);
+      if (!clocked || s.postseason?.champion !== target) continue;
+      won = true;
+      expect([s.phase, s.myTeam], 'the press closed the season at the club he took').toEqual(['recap', target]);
+      expect(completion.calls, 'nothing is recorded while he watches').toHaveLength(0);
+      fireEvent.click(document.querySelector('[data-gameday-speed="Results"]')!);
+      await waitFor(() => expect(document.querySelector('[data-verdict-reveal]')).not.toBeNull());
+      await waitFor(() => expect(completion.calls.length).toBeGreaterThan(0));
+      console.log(`FO_GM_CAREER|watched title|stream ${k}|titles ${s.titles}|seasons ${s.seasonsPlayed}|calls ${JSON.stringify(completion.calls)}`);
+      expect(completion.calls, 'full time records the title once, at the career score').toEqual([{ path: '/front-office', score: s.titles * 100 + s.seasonsPlayed * 5 }]);
+    }
+    expect(won, 'a title game won on the clock, in forty streams').toBe(true);
+  });
+});
+
 /** A career box (by its title, in any desk row on screen) opened, its lazy panel landed, and the bar's Hub tapped. */
 async function lookAt(title: string, landed: string) {
   const box = Array.from(document.querySelectorAll('[data-gm-desk="tiles"] button'))
