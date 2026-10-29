@@ -112,6 +112,12 @@
  * the nhl row's own lines. The fired counts of every control on both rows are
  * in Round 1559's report (results-g/finish-1559.md) and docs/audits.
  *
+ * ROUND 1559 FIX PASS (the two adversarial reviews, results-g/review-run-1559.md and review-read-1559.md):
+ *   section 6 on the nhl row plants the old club over the roster limit before every summer out (the row's
+ *   plantOverLimit) and asserts the trim reaches it; control namedsummer (the summer names the old club, so the
+ *   engine skips it) must fire there. Before this the nhl row's check held vacuously for the old club: it never
+ *   stood over 15 at the trim in 360 years out (r1559-run-b, r1559-run-d2).
+ *
  * Recording: SIM_GM_CAREER_RECORD=<sha of the base> writes the fixture
  * (scripts/data/gmCareerFixture.json, or SIM_GM_CAREER_OUT) and stops.
  * Recorded twice in two processes on a runner; both printed one digest.
@@ -145,6 +151,8 @@ const CONTROLS = {
   /* Round 1559 */
   contribstays: '5', awaycontrib: '6', retainedrolled: '6', thumbfalse: '2t',
   firenever: '9', nooffers: '9', xpflat: '9', nevershut: '9', legacyleak: '10', retainedlift: '10',
+  /* Round 1559 fix pass (the adversarial reviews) */
+  namedsummer: '6',
 };
 if (CONTROL && !CONTROLS[CONTROL]) {
   console.error(`SIM_GM_CAREER_CONTROL=${CONTROL} is not a control this harness knows (${Object.keys(CONTROLS).join(', ')})`);
@@ -262,6 +270,9 @@ const EDITS_BY_SPORT = {
     halfseason: ['nhlCareer', '    periods: () => NHL_FO_ROUNDS,', '    periods: () => NHL_FO_ROUNDS - 1,'],
     /* the summer run with nobody named and no option: the engine trims nobody */
     notrim: ['nhlCareer', '      nhlOffseason(league, rng, undefined, { noUserClub: true });', '      nhlOffseason(league, rng, undefined);'],
+    /* Round 1559 fix pass (review MAJOR 1): the summer names the old club as its user club, the NFL's notrim edit:
+       every other club is trimmed, the old one is skipped (the half of noUserClub naming no club cannot give) */
+    namedsummer: ['nhlCareer', '      nhlOffseason(league, rng, undefined, { noUserClub: true });', '      nhlOffseason(league, rng, oldTeam);'],
     noawaydraft: ['nhlCareer', '        cls = nhlAiDraftPicks(league, cls, order, rng).remaining;', '        /* the draft skipped */'],
     /* a year out leaves the old club's contributors as he chose them */
     awaycontrib: ['nhlCareer', '      const old = league.teams[oldTeam];\n      if (old) nhlResetContributors(old);', '      const old = league.teams[oldTeam];'],
@@ -676,6 +687,23 @@ const DRIVE = {
       const t = lg.teams[club];
       t.deadCap = [...(t.deadCap ?? []), { playerId: 'retained-1559', name: 'Retained fixture', amount: 2.4, seasonsLeft: 3 }];
       return G.withGmBlock(desk, DN.NHL_DESK_KEYS.retained, [{ club, playerId: 'retained-1559', name: 'Retained fixture', share: 0.5, kept: 2.4 }]);
+    },
+    /* Round 1559 fix pass (review MAJOR 1): the old club planted over the roster limit before a summer out, so the
+       half of noUserClub that naming no club cannot give (none skipped, the old club trimmed too) is seen reaching
+       it. Low rated men on long deals: they outlive the summer's ageing and contract steps (years 3, age 27) and are
+       the trim's first releases (rated 40, under anyone the summer keeps); enough of them that the club stands over
+       the limit at the trim whoever else leaves (every man who could retire or reach the end of his deal counted
+       out). Returns the planted ids. */
+    plantOverLimit(lg, team, tag) {
+      const t = lg.teams[team], max = GM_SPORTS.nhl.roster.max;
+      const stays = t.players.filter(p => p.years >= 2 && p.age < 37).length;
+      const ids = [];
+      for (let i = 0; i < Math.max(1, max + 1 - stays); i++) {
+        const id = `over-1559-${tag}-${i}`;
+        t.players.push({ id, name: `Planted ${tag} ${i}`, pos: 'W', age: 27, ovr: 40, salary: EN.nhlSalaryFor(40, lg.ratingModelVersion), years: 3, out: 0, pot: 40 });
+        ids.push(id);
+      }
+      return ids;
     },
     overLimit: t => t.players.length > EN.NHL_ROSTER_MAX,
   },
@@ -1359,6 +1387,8 @@ const S6 = {
   away: { drafted: 0, rosters: 0, clubSummers: 0 }, base: { drafted: 0, rosters: 0, clubSummers: 0 },
   /* Round 1559: the retained salary rows a desk keeps over a summer out, and the old club's own lineup */
   retained: { rows: 0, kept: 0, dropped: 0 }, lineupFree: 0, lineupPlanted: 0,
+  /* Round 1559 fix pass: summers the old club went into planted over the roster limit, and came out trimmed to it */
+  oldPlanted: 0, oldTrimmed: 0,
 };
 const rosterIds = (lg, skip) => new Set(Object.entries(lg.teams).filter(([a]) => a !== skip).flatMap(([, t]) => [...t.players, ...(t.practice ?? [])].map(p => p.id)));
 const everyId = lg => { const s = rosterIds(lg, null); for (const p of lg.freeAgents) s.add(p.id); return s; };
@@ -1434,8 +1464,11 @@ if (runs('6')) {
         awayDraft(lg, r, dk) { const b = rosterIds(lg, null); const out = away.awayDraft(lg, r, dk); for (const id of rosterIds(lg, null)) if (!b.has(id)) drafted.add(id); return out; },
         awaySummer(lg, r, dk) {
           /* The summer with nobody in the chair is the engine's offseason with NO user club, then the ledger rolled:
-             replayed on a copy with the same draws, it must be the league the away host left (control notrim: the
-             old club named as the user club, so the CPU neither cuts nor tags it). */
+             replayed on a copy with the same draws, it must be the league the away host left (the old club named as
+             the user club, so the CPU neither cuts nor tags it: control notrim on the NFL row, namedsummer on the
+             NHL row; the NHL's notrim runs the summer with no club trimmed at all). Round 1559 fix pass: where the
+             row can, the old club is planted over the roster limit first, so naming it shows (MAJOR 1). */
+          const plantedOver = d.plantOverLimit ? d.plantOverLimit(lg, team, `${seed}-${y}`) : null;
           const shadow = clone(lg), draws = [];
           const before = d.picksOf(dk, shadow), closed = shadow.season, ids = Object.keys(shadow.teams);
           const out = away.awaySummer(lg, () => { const x = r(); draws.push(x); return x; }, dk);
@@ -1450,6 +1483,12 @@ if (runs('6')) {
           for (const [abbr, t] of Object.entries(lg.teams)) {
             if (d.overLimit(t)) { S6.over++; fail(`${at}: ${abbr} is over the roster limit after the summer`); }
             if (abbr !== team) { S6.away.rosters += t.players.length; S6.away.clubSummers++; }
+          }
+          if (plantedOver) {
+            S6.oldPlanted++;
+            const oldT = lg.teams[team], left = oldT.players.filter(p => plantedOver.includes(p.id)).length;
+            if (left < plantedOver.length && !d.overLimit(oldT)) S6.oldTrimmed++;
+            else fail(`${at}: the old club, planted over the roster limit, was not trimmed by the summer (${oldT.players.length} men, ${left} of ${plantedOver.length} planted still on it)`);
           }
           return out;
         },
@@ -1510,6 +1549,10 @@ if (runs('6')) {
   if (S6.retained.rows > 0 || d.afterSummer) {
     console.log(`   retained rows planted ${S6.retained.rows}: ${S6.retained.kept} summers kept at the figure the club kept, ${S6.retained.dropped} dropped when the entry ran out; the old club's contributors back to automatic after ${S6.lineupFree} of ${S6.years} years`);
     ok(S6.retained.kept >= S6_SEEDS.length, `only ${S6.retained.kept} retained rows carried over a summer`);
+  }
+  if (d.plantOverLimit) {
+    console.log(`   the old club planted over the roster limit before ${S6.oldPlanted} summers out: trimmed to it after ${S6.oldTrimmed}`);
+    ok(S6.oldPlanted === S6.shadows && S6.oldTrimmed === S6.oldPlanted, `the old club went into ${S6.oldPlanted} of ${S6.shadows} summers out planted over the limit and came out trimmed after ${S6.oldTrimmed}`);
   }
 }
 
