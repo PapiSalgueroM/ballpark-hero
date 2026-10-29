@@ -1,0 +1,11 @@
+ok   base bundle is the base 
+ok   the NBA plant is a base save of named rows round 18
+ok   the NFL plant is a base save 
+ok   nba-390-rm: the base save plays to the close and draws the season card 
+ok   nba-390-rm: the save after the close keeps the shared shape season,lines,clubs
+  (printed) nba-390-rm Your lines: {"men":10,"shown":10,"ruled":9,"boxH":374,"fullH":374,"overflowX":0}
+FAIL the walk broke: ReferenceError: size is not defined
+    at nbaPlayAndCard (file:///home/runner/work/ballpark-hero/ballpark-hero/.rc/x/walk1566.mjs:176:3)
+    at async nbaWalk (file:///home/runner/work/ballpark-hero/ballpark-hero/.rc/x/walk1566.mjs:127:3)
+    at async file:///home/runner/work/ballpark-hero/ballpark-hero/.rc/x/walk1566.mjs:225:7
+walk1566: 5 checks, 1 failed
