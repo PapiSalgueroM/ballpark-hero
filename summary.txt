@@ -1,0 +1,15 @@
+simAccessibility exit=0 0s | simAccessibility: all green
+simAccessibility-dialog exit=0 0s | control run: 1 failure(s) fired as expected
+simCareerNoDeadEnd exit=0 0s | simCareerNoDeadEnd: green. A convicted career is still a career, and a stranded save comes back.
+deadend-pundit exit=0 0s | NEGATIVE CONTROL pundit was on; 1 finding(s). A control run is expected to be red.
+deadend-strand exit=0 0s | NEGATIVE CONTROL strand was on; 2 finding(s). A control run is expected to be red.
+deadend-noheal exit=0 0s | NEGATIVE CONTROL noheal was on; 1 finding(s). A control run is expected to be red.
+shoot exit=0 19s | shootout probe: green
+simPlayerBingoRodriHonour exit=0 10s | simPlayerBingoRodriHonour: fixed proof passed; complete raw reports and changed-copy receipts retained. Offline only.
+simPlayerBingoWorldCupAlias exit=0 1s | Source bytes held; raw unit/output/control receipts retained when OUT is set. Offline proof only.
+vitest-fix exit=0 17s |  Test Files  11 passed (11)
+simSoccerContractMoves exit=0 2s | simSoccerContractMoves: all full-save contract and club-move checks passed
+simCareerAwardsNight exit=0 67s | simCareerAwardsNight: ALL 179 CHECKS PASSED
+simCareerLeagueFinish exit=0 15s | simCareerLeagueFinish: green. 756 careers, 6048 seasons, 4815 in a verified league; finish and title agree, the ladder holds, the historical stream holds after documented
+simCareerLeagueSeasons exit=0 18s | simCareerLeagueSeasons: all sections green
+simCareerSocialBrands exit=0 26s | ALL SOCIAL AND BRAND CHECKS PASSED

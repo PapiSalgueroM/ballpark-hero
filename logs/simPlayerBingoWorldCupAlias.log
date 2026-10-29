@@ -1,0 +1,6 @@
+Player Bingo World Cup proof: fixed/normal, one physical file and nine actual cases.
+Identity outcome: all nine outcomes passed.
+Preservation: 9 passed; no pending, file, setup or unhandled errors.
+Transport: actual paged query predicates, failure cancellation and abandoned caller are held.
+Source control: actual unmutated loader used.
+Source bytes held; raw unit/output/control receipts retained when OUT is set. Offline proof only.
