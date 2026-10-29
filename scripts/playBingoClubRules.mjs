@@ -42,6 +42,7 @@ const SECTION = [
   'Club squares',
   'Played for (a club), One-club man and Played for 4+ clubs count senior first teams only, and loans count. A club counts once however many times he went back. Youth, academy and B teams do not count.',
   'Example: Tyler Morton came through Liverpool, went on loan to Blackburn Rovers and then Hull City, and joined Lyon. That is four clubs, so he fits Played for 4+ clubs, and he is not a One-club man.',
+  "Some players' early clubs and loans are still missing from our lists, so now and then the board can say no to a club he really played for. If it does, use Report a problem.",
 ];
 let failures = 0;
 const fail = m => { failures += 1; console.error('  FAIL: ' + m); };
@@ -131,7 +132,7 @@ try {
         const overflow = await page.evaluate(() => document.documentElement.scrollWidth - window.innerWidth);
         if (overflow > 0) fail(`the page scrolls sideways by ${overflow} px with the ? open`);
         const box = await play.boundingBox();
-        console.log(`   ? open: Club squares ${texts.length === 3 ? 'present' : 'MISSING'}, sideways overflow ${overflow} px, Let's Play button ${Math.round(box?.height ?? 0)} px tall`);
+        console.log(`   ? open: Club squares ${texts.length === SECTION.length ? 'present' : 'MISSING'}, sideways overflow ${overflow} px, Let's Play button ${Math.round(box?.height ?? 0)} px tall`);
         await section.scrollIntoViewIfNeeded();
         await page.screenshot({ path: path.join(out, `club-squares-${width}.png`) });
       }

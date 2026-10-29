@@ -322,6 +322,10 @@ const PlayerBingo = () => {
                   City, and joined Lyon. That is four clubs, so he fits Played for 4+ clubs, and he is not a
                   One-club man.
                 </p>
+                <p className="text-muted-foreground mt-2">
+                  Some players' early clubs and loans are still missing from our lists, so now and then the
+                  board can say no to a club he really played for. If it does, use Report a problem.
+                </p>
               </section>
               <section>
                 <h3 className="font-bold text-foreground mb-2">Skipping</h3>
