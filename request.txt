@@ -1,0 +1,2 @@
+repro777: SIM_SEED=777 TRIVIA_UNLIMITED=3000 node scripts/simTriviaBank.mjs
+basedefault: node scripts/simTriviaBank.mjs

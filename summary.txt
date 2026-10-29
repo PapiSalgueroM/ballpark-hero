@@ -1,0 +1,2 @@
+basedefault exit=0 47s | simTriviaBank: all checks passed
+repro777 exit=1 61s | simTriviaBank: 1 failure(s)
