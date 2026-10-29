@@ -1,0 +1,8 @@
+Network mode: offline, loopback only, no production probe or database retries.
+Running 1 node harness
+  FAIL  simSoccerGridSearchDiscovery.mjs    0.2s
+
+----- simSoccerGridSearchDiscovery.mjs (FAIL) -----
+AssertionError [ERR_ASSERTION]: Only exact prefix precedes complete unchanged old entry: scripts/simSoccerGridBlurOwnership.mjs
+
+1 harness not green.

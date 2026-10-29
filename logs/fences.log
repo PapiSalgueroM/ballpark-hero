@@ -1,0 +1,69 @@
+Network mode: offline, loopback only, no production probe or database retries.
+Running 22 node harnesses
+  PASS  simCompletionOnce.mjs           6.8s
+  FAIL  simCompletionSlugs.mjs          2.2s
+        it reported success after an offline transport block; checks needing live data did not run
+  PASS  simDailyPuzzleContract.mjs      0.5s
+  PASS  simDailySaveHardening.mjs     103.5s
+  PASS  simFetchRetry.mjs               4.2s
+  PASS  simGoogleOnlyReturn.mjs       104.6s
+  PASS  simGuideHeadings.mjs            1.5s
+  PASS  simHarnessAnchors.mjs          98.1s
+  PASS  simInventedNames.mjs           10.9s
+  FAIL  simLeaderboardCaps.mjs          1.6s
+  PASS  simLegalPages.mjs               0.3s
+  PASS  simLiveScores.mjs               0.4s
+  PASS  simNavbarStatsReads.mjs         1.2s
+  PASS  simNoDoubleRecord.mjs          29.4s
+  PASS  simNoInventedConduct.mjs        0.9s
+  PASS  simNoInventedQuotes.mjs        22.0s
+  PASS  simNoRivalNames.mjs            15.7s
+  FAIL  simReportRelay.mjs              0.2s
+        it reported success after an offline transport block; checks needing live data did not run
+  SKIP  simSchemaNames.mjs              1.0s
+        it reached no database and said so, and the database is unreachable here (offline mode blocks production; no database probe was sent)
+  PASS  simScoringCoverage.mjs          0.4s
+  PASS  simSingleFooter.mjs             0.3s
+  PASS  simSiteSearch.mjs               1.5s
+
+Skipping 2 browser harnesses (simResultMoment, simWritesAreSent). Pass --browser to include them.
+
+1 harness SKIPPED, not run and not counted: simSchemaNames.
+Each one reached no database and said so, and the database is unreachable here: offline mode blocks production; no database probe was sent.
+Run SIM_NETWORK=live only after production traffic is cleared. DB_PROBE changes classification in live mode, not transport permission.
+----- simCompletionSlugs.mjs (FAIL) -----
+1) every slug the source writes names a routed game
+   98 slugs written by source, 11 for games withdrawn from the registry on purpose, 0 that name no game
+2) every slug in the live table resolves, or is a declared retirement
+[SIM_OFFLINE_BLOCK] database fetch https://flawuiqbvjobmkfkauhw.supabase.co
+[SIM_OFFLINE_BLOCK] database fetch https://flawuiqbvjobmkfkauhw.supabase.co
+[SIM_OFFLINE_BLOCK] database fetch https://flawuiqbvjobmkfkauhw.supabase.co
+   the database did not answer, skipped (section 1 still holds the source side)
+3) the map has no dead rows
+   7 mapped slugs, 0 pointing nowhere
+4) the round trip closes for every game that records
+   87 games checked both ways, 0 that do not round trip
+
+simCompletionSlugs: green. Every recorded slug names a game the site can find.
+
+
+----- simLeaderboardCaps.mjs (FAIL) -----
+the database refused game_score_caps?select=game,max_score&limit=2000: Error: Offline harness blocked fetch to https://flawuiqbvjobmkfkauhw.supabase.co
+
+----- simReportRelay.mjs (FAIL) -----
+4) the live table carries the column
+[SIM_OFFLINE_BLOCK] database fetch https://flawuiqbvjobmkfkauhw.supabase.co
+   SKIPPED: the table could not be reached (Offline harness blocked fetch to https://flawuiqbvjobmkfkauhw.supabase.co), so the live column check did not run.
+5) the triage workflow, run: the spec statuses, every status move, the counts on every chip
+   7 statuses and 4 priorities, the same as spec section 123
+   all 49 status moves keep resolved and resolved_at true, with and without the new columns
+   every status offered reads back as itself after a save (7 with the columns, 2 before the migration)
+   36 chip counts (9 filters by 4 game choices) match the cards and the hand count
+6) the migration and the module agree, and the public insert path can only take the defaults
+   the insert policy keeps all 4 committed clauses and pins 6 admin columns to their defaults; no other policy is touched
+   7 statuses, 4 priorities and both length caps match the module; the backfill is there; no grant, trigger or function
+
+simReportRelay: green. Both buttons ask the same questions, every report records whether it reached him, and the queue has a real workflow.
+
+
+3 harnesses not green.

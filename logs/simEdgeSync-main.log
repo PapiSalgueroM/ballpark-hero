@@ -1,0 +1,2 @@
+  FAIL: validate-player has changed since it was deployed on 2026-10-01 (version 12). Redeploy it and update the ledger, or the live site is not running this code.
+simEdgeSync: 1 finding(s).
