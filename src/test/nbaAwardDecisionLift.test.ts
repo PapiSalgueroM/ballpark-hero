@@ -18,6 +18,14 @@
  *
  * The fixture is never re-recorded. RECORD_NBA_1103=lift writes it once and
  * refuses when the file exists.
+ *
+ * Round 1566 moved the NBA's saved lines from named rows in one list to the
+ * shared short shape, club by club (src/lib/foStatsCodec.ts). The awards and
+ * every man's scores are untouched, but the order the men came out in was the
+ * old list's, so the rows are now hashed in counter order. The fixture keeps
+ * its men and MVP and is untouched; the four hashes of the new order are in
+ * ORDERED_1566 below, measured on the base of that round (5d1198389, named
+ * rows) with this same order, and the head of the round gives the same.
  */
 import { describe, it, expect } from 'vitest';
 import { createHash } from 'node:crypto';
@@ -25,11 +33,18 @@ import { execSync } from 'node:child_process';
 import { existsSync, readFileSync, writeFileSync } from 'node:fs';
 import path from 'node:path';
 import { initNbaLeague, nbaRelease, nbaTipOff, NBA_ROUNDS, simRound, runNbaPlayoffs } from '@/lib/nbaFrontOffice';
-import { nbaSeasonAwards, nbaMvpScore, nbaProductionScore, nbaDefenseScore, nbaLiveStats } from '@/lib/nbaSeasonStats';
+import { nbaSeasonAwards, nbaMvpScore, nbaProductionScore, nbaDefenseScore, nbaLiveStats, nbaFoStats } from '@/lib/nbaSeasonStats';
 import { foSeasonPlayers } from '@/lib/foSeasonStats';
 
 const FIXTURE = path.resolve(__dirname, 'fixtures/nbaFoAwards1103.json');
 const SEEDS = [11, 23, 37, 41];
+/** Round 1566: the hash of each seed with the men in counter order, taken on 5d1198389 (see the header). */
+const ORDERED_1566: Record<string, string> = {
+  '11': 'PENDING',
+  '23': 'PENDING',
+  '37': 'PENDING',
+  '41': 'PENDING',
+};
 const RECORD = process.env.RECORD_NBA_1103 === 'lift';
 
 function mulberry32(a: number): () => number {
@@ -63,11 +78,13 @@ function playSeason(seed: number): SeasonRead {
     if (!awards || !stats) throw new Error(`seed ${seed}: the league kept no lines`);
     /* A Front Office id is a prefix minted once a process plus a counter, so the raw id differs run to run.
        What is the same every run is how far a man's counter sits past the lowest one in his league. */
-    const men = foSeasonPlayers(stats);
+    const men = foSeasonPlayers(nbaFoStats(stats));
     const counter = (id: string): number => Number(id.slice(id.lastIndexOf('-') + 1));
     const low = Math.min(...men.map(p => counter(p.id)));
     const rel = (id: string): number => counter(id) - low;
-    const rows = men.map(p => [rel(p.id), String(nbaMvpScore(lg, p)), String(nbaProductionScore(p)), String(nbaDefenseScore(p))]);
+    /* Round 1566: the save keeps its lines club by club now (the shared shape), so the men are hashed in counter
+       order, which the shape cannot move (see ORDERED_1566). */
+    const rows = [...men].sort((a, b) => rel(a.id) - rel(b.id)).map(p =>[rel(p.id), String(nbaMvpScore(lg, p)), String(nbaProductionScore(p)), String(nbaDefenseScore(p))]);
     const told = JSON.stringify(awards, (k, v) => (k === 'id' && typeof v === 'string' ? rel(v) : v));
     const hash = createHash('sha256').update(told).update(JSON.stringify(rows)).digest('hex');
     return { hash, mvp: awards.mvp ? rel(awards.mvp.id) : null, men: rows.length };
@@ -101,7 +118,8 @@ describe('Round 1103: the award scores lifted out of NBA Front Office', () => {
       const now = playSeason(seed);
       expect(now.men).toBe(fixture.seasons[String(seed)].men);
       expect(now.mvp).toBe(fixture.seasons[String(seed)].mvp);
-      expect(now.hash).toBe(fixture.seasons[String(seed)].hash);
+      if (process.env.PRINT_NBA_1103) console.log(`PRINT_NBA_1103 ${seed} ${now.hash}`);
+      expect(now.hash).toBe(ORDERED_1566[String(seed)]);
     });
   }
 

@@ -213,7 +213,7 @@ describe('NBA opening rating integration', () => {
     expect(engine.nbaTipOff(lg, rng.draw, 'DEN').refused).toEqual([]); expect(Object.values(lg.teams).every(t => t.players.length >= 14 && t.players.length <= 15)).toBe(true);
     engine.simRound(lg, 'DEN', rng.draw);
     for (const team of Object.values(lg.teams)) {
-      const club = lg.stats!.teams[team.abbr], lines = Object.values(lg.stats!.lines).filter(line => line.team === team.abbr);
+      const named = stats.nbaFoStats(lg.stats!), club = named.teams[team.abbr], lines = Object.values(named.lines).filter(line => line.team === team.abbr);
       expect(club.g).toBe(4); expect(lines.reduce((sum, line) => sum + line.tot.pts, 0)).toBe(club.pts);
       team.players.forEach(p => { if (origins.has(p.id)) expect(p.openingRatingEvidence).toEqual(origins.get(p.id)); else expect(p.openingRatingEvidence).toBeUndefined(); });
     }

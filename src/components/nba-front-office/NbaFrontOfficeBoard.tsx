@@ -22,7 +22,7 @@ import {
 import { FoCapPanel } from '@/components/front-office-shared/FoCapPanel';
 /* Round 824: the season's lines and awards, engine in nbaSeasonStats.ts, box shared. */
 import {
-  nbaCloseSeasonStats, nbaLeaders, nbaTeamLines, NBA_AWARD_LABEL, NBA_AWARD_RULE,
+  nbaCleanStats, nbaCloseSeasonStats, nbaLeaders, nbaTeamLines, NBA_AWARD_LABEL, NBA_AWARD_RULE,
   type NbaAwardKey, type NbaAwardPick, type NbaSeasonAwards,
 } from '@/lib/nbaSeasonStats';
 import { FoSeasonStatsCard, type FoStatsAward } from '@/components/front-office-shared/FoSeasonStatsCard';
@@ -269,6 +269,9 @@ export default function NbaFrontOfficeBoard() {
          id fix can hold two men under one. The draft class is passed too: it
          is minted from the same counter, so it shares the id space. */
       ensureNbaLeagueIds(s.league, s.draftClass);
+      /* Round 1566: the season's lines in the shared save shape; a save of named rows is turned into it here, before
+         anything reads the league, so its next save writes the new shape. */
+      nbaCleanStats(s.league);
       setLeague(s.league); setMyTeam(s.myTeam);
       setTitles(s.titles ?? 0); setSeasonsPlayed(s.seasonsPlayed ?? 0);
       setDraftClass(s.draftClass ?? null); setPicksLeft(s.picksLeft ?? 0);

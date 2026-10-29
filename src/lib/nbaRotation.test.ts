@@ -4,7 +4,7 @@ import * as engine from '@/lib/nbaFrontOffice';
 import * as stats from '@/lib/nbaSeasonStats';
 import { NBA_ROTATION_MINUTES, nbaRotation, nbaRotationSlots, nbaRotationPreferences, nbaSetRotationSlot, nbaAutoRotation, nbaReconcileRotation } from '@/lib/nbaRotation';
 import { leagueNames } from '@/lib/foNames';
-import { foNewSeasonStats } from '@/lib/foSeasonStats';
+import { foNewSaved } from '@/lib/foStatsCodec';
 import type { NbaGmPlayer, NbaGmTeam, NbaLeague } from '@/lib/nbaFrontOffice';
 
 const clone = <T,>(value: T): T => JSON.parse(JSON.stringify(value)) as T;
@@ -26,7 +26,7 @@ export function fixtureLeague(): NbaLeague {
     if (abbr !== 'BOS') t.players.forEach(p => { p.ovr = 80; p.pot = 80; });
     return [abbr, t];
   }));
-  return { season: 2026, cap: engine.NBA_CAP_BASE, teams, freeAgents: [], round: 1, champions: [], stats: foNewSeasonStats(2026) };
+  return { season: 2026, cap: engine.NBA_CAP_BASE, teams, freeAgents: [], round: 1, champions: [], stats: foNewSaved(2026) };
 }
 const weighted = (slots: (NbaGmPlayer | undefined)[]) => {
   const avg = (group: (NbaGmPlayer | undefined)[]) => {

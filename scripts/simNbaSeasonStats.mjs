@@ -77,6 +77,20 @@
         13, so the band of 1.5 has room on every set. The first draft promised
         17 off the bench, which the engine cannot produce, since the GM does
         not pick starters and a bench man is rated under all five of them.
+     9) one save shape (Round 1566). Every season block of the fleet is the
+        shared short shape (src/lib/foStatsCodec.ts, NBA_CODEC), with a line
+        for every man who played; an old save of named rows planted from every
+        close converts on load (nbaCleanStats) to the saved block byte for
+        byte; a block already in the shape is kept, one that reads as neither
+        is dropped and never thrown on. In the source, both sports bind the
+        codec, write through its writer and read through its one expand, the
+        NBA writes no named row, and the codec names no sport. With
+        NBA_STATS_BASE set to a checkout of the commit before the round (its
+        engine keeps named rows), three seeded seasons are played on both
+        engines: the base's old block converts to exactly the block the head
+        writes from the same games, expands back to the base's rows (nothing
+        lost), and the leaders, every club's lines and the awards read off it
+        by the head are what the base read off its own.
 
    Controls, through NBA_STATS_CONTROL. None touches src: the rewritten source
    is served to the bundler from memory, and each refuses to run if its anchor
@@ -103,8 +117,12 @@
    (A first draft carried "noreset", the summer keeping last season's lines;
    it turned every section but the copy red, since nothing after the first
    season had lines, so it proved nothing about any one check.)
+   Added by Round 1566:
+     named          the NBA keeps named rows, recorder and readers    -> 9
+                    (every other section reads the same lines either way)
 
    Run: node scripts/simNbaSeasonStats.mjs
+   The base comparison (9d): NBA_STATS_BASE=<checkout of the commit before Round 1566> node scripts/simNbaSeasonStats.mjs
    Measure on other seeds: NBA_STATS_SEED_BASE=10 node scripts/simNbaSeasonStats.mjs
 */
 import fs from 'node:fs';
@@ -140,6 +158,7 @@ const EXPECT = {
   rookieany: [3],
   draftlate: [3],
   bench17: [8],
+  named: [9],
 };
 if (CONTROL && !EXPECT[CONTROL]) {
   console.error(`NBA_STATS_CONTROL=${CONTROL} is not a control this harness knows (${Object.keys(EXPECT).join(', ')})`);
@@ -154,6 +173,7 @@ const SECTION_NAMES = {
   6: 'the close happens once and is kept',
   7: 'an old save',
   8: 'the copy says what the engine does',
+  9: 'one save shape',
 };
 
 /* ---- the rules, typed here on purpose, not read from the engine ---------- */
@@ -234,9 +254,42 @@ const CONTROL_FILE_SWAPS = {
   noqualify: { 'nbaSeasonStats.ts': [['export const NBA_AWARD_GAMES_SHARE = 0.8;', 'export const NBA_AWARD_GAMES_SHARE = 0;']] },
   sixthstarters: { 'nbaSeasonStats.ts': [['qualified.filter(p => p.gs * 2 < p.g)', 'qualified.filter(p => p.g > 0)']] },
   doubleclose: { 'nbaSeasonStats.ts': [['  if (done) return done;', '  void done;']] },
-  oldnever: { 'nbaFrontOffice.ts': [['  league.stats = foNewSeasonStats(league.season);', '  if (league.stats) league.stats = foNewSeasonStats(league.season);']] },
+  oldnever: { 'nbaFrontOffice.ts': [['  league.stats = foNewSaved(league.season);', '  if (league.stats) league.stats = foNewSaved(league.season);']] },
   rookieany: { 'nbaSeasonStats.ts': [['rookie: p.rookieSeason === season,', 'rookie: p.rookieSeason !== undefined,']] },
   draftlate: { 'nbaFrontOffice.ts': [['  return { cap: nbaNextCap(league.cap), season: league.season + 1 };', '  return { cap: nbaNextCap(league.cap), season: league.season + 2 };']] },
+  /* Round 1566: the NBA kept on named rows (the recorder and the blocks before the round), its readers taking them as
+     they are, so every other section reads the same lines and only the one shape check can tell */
+  named: {
+    'nbaSeasonStats.ts': [
+      ['  return foExpand(NBA_CODEC, s);', '  return (s.clubs ? foExpand(NBA_CODEC, s) : s);'],
+      [[
+        '    foClubGame(NBA_CODEC, stats, side.team, side.pts, other.pts);',
+        '    for (const m of side.men) {',
+        '      const line = foOpenLine(NBA_CODEC, stats, side.team, m.id, m.name, m.pos, m.rookie);',
+        '      foLineGame(NBA_CODEC, line, m.starter);',
+        '      for (const c of NBA_STAT_COLS) foLineAdd(NBA_CODEC, line, c, m[c]);',
+        '    }',
+      ].join('\n'), [
+        '    const club = stats.teams[side.team] ?? { g: 0, w: 0, pts: 0, opp: 0 };',
+        '    club.g += 1; club.pts += side.pts; club.opp += other.pts;',
+        '    if (side.pts > other.pts) club.w += 1;',
+        '    stats.teams[side.team] = club;',
+        '    for (const m of side.men) {',
+        '      const key = `${side.team}|${m.id}`;',
+        '      const line = stats.lines[key] ?? { id: m.id, name: m.name, team: side.team, pos: m.pos, g: 0, gs: 0, tot: { pts: 0, reb: 0, ast: 0, stl: 0, blk: 0 }, ...(m.rookie ? { rookie: true } : {}) };',
+        '      line.g += 1;',
+        '      if (m.starter) line.gs += 1;',
+        '      for (const c of NBA_STAT_COLS) line.tot[c] = (line.tot[c] ?? 0) + m[c];',
+        '      line.name = m.name;',
+        '      stats.lines[key] = line;',
+        '    }',
+      ].join('\n')],
+    ],
+    'nbaFrontOffice.ts': [
+      ['    stats: foNewSaved(2026),', '    stats: { season: 2026, lines: {}, teams: {} },'],
+      ['  league.stats = foNewSaved(league.season);', '  league.stats = { season: league.season, lines: {}, teams: {} };'],
+    ],
+  },
 };
 /* Copy controls rewrite what section 8 reads, in memory, never the file. */
 const CONTROL_COPY_SWAPS = {
@@ -253,11 +306,15 @@ const NOTE = {
   rookieany: 'every man ever drafted in the league counts as a rookie, whatever season he debuted',
   draftlate: 'a draft class is marked as debuting two seasons after its close, not one',
   bench17: "the page's worked example promises a 17 a game sixth man (the claim the review found)",
+  named: 'the NBA keeps its lines as named rows, the shape before Round 1566',
 }[CONTROL];
 if (NOTE) console.log(`   control ${CONTROL}: ${NOTE}`);
 
 const BUNDLE_DIR = fs.mkdtempSync(path.join(os.tmpdir(), 'dukb-nbastats-'));
 let E = null;
+/* Round 1566: a checkout of the commit before the round (its root), for section 9d's base comparison */
+const BASE_ROOT = process.env.NBA_STATS_BASE ? path.resolve(process.env.NBA_STATS_BASE) : '';
+let BASE_E = null;
 try {
   const fileTexts = {};
   for (const [base, swaps] of Object.entries(CONTROL_FILE_SWAPS[CONTROL] ?? {})) {
@@ -268,7 +325,7 @@ try {
   const plugin = {
     name: 'dukb-nbastats',
     setup(b) {
-      b.onLoad({ filter: /(nbaFrontOffice|nbaSeasonStats|foSeasonStats)\.ts$/ }, args => {
+      b.onLoad({ filter: /(nbaFrontOffice|nbaSeasonStats|foSeasonStats|foStatsCodec)\.ts$/ }, args => {
         const own = fileTexts[path.basename(args.path)];
         return own === undefined ? undefined : { contents: own, loader: 'ts', resolveDir: path.dirname(args.path) };
       });
@@ -279,6 +336,7 @@ try {
     `export * as nba from ${fwd(path.join(LIB, 'nbaFrontOffice.ts'))};`,
     `export * as st from ${fwd(path.join(LIB, 'nbaSeasonStats.ts'))};`,
     `export * as fo from ${fwd(path.join(LIB, 'foSeasonStats.ts'))};`,
+    `export * as codec from ${fwd(path.join(LIB, 'foStatsCodec.ts'))};`,
   ].join('\n') + '\n');
   const out = path.join(BUNDLE_DIR, 'bundle.mjs');
   await esbuild.build({
@@ -286,6 +344,21 @@ try {
     alias: { '@': path.join(ROOT, 'src') }, plugins: [plugin], outfile: out, logLevel: 'error',
   });
   E = await import(pathToFileURL(out).href);
+  /* Round 1566, section 9d: the base tree's engine as it is (no control), when NBA_STATS_BASE names one */
+  if (BASE_ROOT) {
+    const baseEntry = path.join(BUNDLE_DIR, 'base-entry.mjs');
+    const baseLib = path.join(BASE_ROOT, 'src', 'lib');
+    fs.writeFileSync(baseEntry, [
+      `export * as nba from ${fwd(path.join(baseLib, 'nbaFrontOffice.ts'))};`,
+      `export * as st from ${fwd(path.join(baseLib, 'nbaSeasonStats.ts'))};`,
+    ].join('\n') + '\n');
+    const baseOut = path.join(BUNDLE_DIR, 'base-bundle.mjs');
+    await esbuild.build({
+      entryPoints: [baseEntry], bundle: true, format: 'esm', platform: 'node',
+      alias: { '@': path.join(BASE_ROOT, 'src') }, outfile: baseOut, logLevel: 'error',
+    });
+    BASE_E = await import(pathToFileURL(baseOut).href);
+  }
 } catch (e) {
   console.error(`FAIL: the engine could not be bundled and run: ${String(e && e.message ? e.message : e).slice(0, 260)}`);
   fs.rmSync(BUNDLE_DIR, { recursive: true, force: true });
@@ -293,7 +366,7 @@ try {
 } finally {
   fs.rmSync(BUNDLE_DIR, { recursive: true, force: true });
 }
-const { nba, st, fo } = E;
+const { nba, st, fo, codec } = E;
 for (const fn of ['initNbaLeague', 'simRound', 'runNbaPlayoffs', 'nbaOffseason', 'nbaDraftClass', 'nbaProspectToPlayer', 'nbaDraftSigning', 'nbaStandings', 'nbaTipOff', 'nbaRelease', 'nbaAssessTax', 'nbaWinProb', 'nbaStrength']) {
   if (typeof nba[fn] !== 'function') { console.error(`FAIL: nbaFrontOffice.ts does not export ${fn}`); process.exit(1); }
 }
@@ -366,7 +439,7 @@ for (const seed of SEEDS) {
       });
     });
     draftedFor.set(d.debut, new Set(d.drafted));
-    histories.push({ seed, after: s + 1, history: (lg.awards ?? []).map(a => a.season), statsSeason: lg.stats ? lg.stats.season : null, lines: lg.stats ? Object.keys(lg.stats.lines).length : -1, leagueSeason: lg.season });
+    histories.push({ seed, after: s + 1, history: (lg.awards ?? []).map(a => a.season), statsSeason: lg.stats ? lg.stats.season : null, lines: lg.stats ? Object.keys(st.nbaFoStats(lg.stats).lines).length : -1, leagueSeason: lg.season });
   }
 }
 
@@ -414,7 +487,7 @@ console.log('1) Every game adds up: 2400 box scores, then every club\'s season')
   let clubSeasons = 0;
   const seasonBad = [];
   for (const c of closes) {
-    const stats = c.league.stats;
+    const stats = st.nbaFoStats(c.league.stats);
     for (const [abbr, t] of Object.entries(c.league.teams)) {
       clubSeasons += 1;
       const club = stats.teams[abbr];
@@ -481,7 +554,7 @@ console.log('3) The award rules pick who the lines say: fixtures, then every sim
    read first year men from it, not from the line's own rookie mark, so a mark
    that flags the wrong men cannot agree with itself here. */
 const typedAwards = (league, rookies) => {
-  const stats = league.stats;
+  const stats = st.nbaFoStats(league.stats);
   const clubs = Object.values(stats.teams);
   const minGames = Math.max(1, Math.ceil(clubs.reduce((s, t) => s + t.g, 0) / clubs.length * SHARE));
   const byId = new Map();
@@ -552,7 +625,7 @@ const typedAwards = (league, rookies) => {
       CCC: { g: 80, w: 40, pts: 80 * 112, opp: 80 * 112 },
     },
   };
-  const league = { season: 2030, stats, teams: { AAA: { wins: 60, losses: 20 }, BBB: { wins: 20, losses: 60 }, CCC: { wins: 40, losses: 40 } } };
+  const league = { season: 2030, stats: codec.foPack(st.NBA_CODEC, stats), teams: { AAA: { wins: 60, losses: 20 }, BBB: { wins: 20, losses: 60 }, CCC: { wins: 40, losses: 40 } } };
   const A = st.nbaSeasonAwards(league);
   ok(3, 'the fixture needs 64 games (four in five of 80)', A && A.minGames === 64, A && String(A.minGames));
   ok(3, 'MVP: the smaller line on the 60 win club beats the bigger line on the 20 win club', A && A.mvp && A.mvp.id === 'good_star', A && A.mvp && A.mvp.id);
@@ -572,10 +645,10 @@ const typedAwards = (league, rookies) => {
     },
     teams: { AAA: { g: 80, w: 40, pts: 80 * 110, opp: 80 * 110 } },
   };
-  const T = st.nbaSeasonAwards({ season: 2031, stats: tie, teams: { AAA: { wins: 40, losses: 40 } } });
+  const T = st.nbaSeasonAwards({ season: 2031, stats: codec.foPack(st.NBA_CODEC, tie), teams: { AAA: { wins: 40, losses: 40 } } });
   ok(3, 'a tie on score goes to the man with more games', T && T.mvp && T.mvp.id === 'tie_more', T && T.mvp && T.mvp.id);
   ok(3, 'no qualified rookie, no Rookie of the Year', T && T.roy === null, JSON.stringify(T && T.roy));
-  ok(3, 'a season the league is not keeping lines for names nothing', st.nbaSeasonAwards({ season: 2032, stats, teams: league.teams }) === null);
+  ok(3, 'a season the league is not keeping lines for names nothing', st.nbaSeasonAwards({ season: 2032, stats: codec.foPack(st.NBA_CODEC, stats), teams: league.teams }) === null);
   /* every simulated season against the typed rules */
   let agree = 0;
   const off = [];
@@ -600,7 +673,7 @@ const typedAwards = (league, rookies) => {
   let marked = 0, debutsPlayed = 0;
   const debutsBySeason = new Map();
   for (const c of closes) {
-    for (const l of Object.values(c.league.stats.lines)) {
+    for (const l of Object.values(st.nbaFoStats(c.league.stats).lines)) {
       const drafted = c.rookies.has(l.id);
       if (l.rookie) marked += 1;
       if (drafted && l.g > 0) { debutsPlayed += 1; debutsBySeason.set(`${c.seed}|${c.season}`, (debutsBySeason.get(`${c.seed}|${c.season}`) ?? 0) + 1); }
@@ -620,7 +693,7 @@ console.log('4) The leaders tables are a recount');
   let same = 0;
   const off = [];
   for (const c of closes) {
-    const stats = c.league.stats;
+    const stats = st.nbaFoStats(c.league.stats);
     const clubs = Object.values(stats.teams);
     const minGames = Math.max(1, Math.ceil(clubs.reduce((s, t) => s + t.g, 0) / clubs.length * SHARE));
     const tally = new Map();
@@ -656,7 +729,7 @@ function pearson(xs, ys) {
   const ppgs = [], tenth = [], rankCor = [], diffCor = [];
   const byPos = { G: { reb: [], ast: [] }, F: { reb: [], ast: [] }, C: { reb: [], ast: [] } };
   for (const c of closes) {
-    const stats = c.league.stats;
+    const stats = st.nbaFoStats(c.league.stats);
     const clubs = Object.entries(stats.teams);
     ppgs.push(clubs.reduce((s, [, t]) => s + t.pts / t.g, 0) / clubs.length);
     const minGames = Math.max(1, Math.ceil(clubs.reduce((s, [, t]) => s + t.g, 0) / clubs.length * SHARE));
@@ -704,7 +777,7 @@ console.log('6) The close happens once and is kept');
   const grew = histories.every(h => h.history.length === h.after && h.history.every((s, i) => s === 2026 + i));
   ok(6, 'the history grows by one a season, oldest first, and survives the summer', grew, JSON.stringify(histories.find(h => h.history.length !== h.after)));
   ok(6, 'the summer starts a clean sheet for the new season', histories.every(h => h.statsSeason === h.leagueSeason && h.lines === 0), JSON.stringify(histories.find(h => !(h.statsSeason === h.leagueSeason && h.lines === 0))));
-  ok(6, 'and the season after it keeps lines again', closes.filter(c => c.season > 2026).every(c => c.closed !== null && Object.keys(c.league.stats.lines).length > 200));
+  ok(6, 'and the season after it keeps lines again', closes.filter(c => c.season > 2026).every(c => c.closed !== null && Object.keys(st.nbaFoStats(c.league.stats).lines).length > 200));
 }
 
 /* ---- 7. an old save -------------------------------------------------------- */
@@ -781,6 +854,92 @@ console.log('8) The copy says what the engine does');
   ok(8, 'the page has a Sixth Man worked example that names a points a game figure', sixthLine.length > 0 && Number.isFinite(promised), sixthLine.trim().slice(0, 120) || 'no Sixth Man example on the page');
   ok(8, `the page's Sixth Man example promises what the sim's winners score: within ${BAND.sixthPromise} of the median winner's points a game`, Number.isFinite(promised) && Number.isFinite(med) && Math.abs(promised - med) <= BAND.sixthPromise, `page ${promised}, median winner ${med} (10th to 90th percentile ${q(0.1)} to ${q(0.9)} over ${winners.length} seasons)`);
   console.log(`   Sixth Man winners, points a game over ${winners.length} seasons: 10th percentile ${q(0.1)}, median ${med}, 90th ${q(0.9)}; the page promises ${promised}`);
+}
+
+/* ---- 9. one save shape (Round 1566) ------------------------------------------ */
+console.log('9) One save shape: the NBA keeps the shared short lines, reads them through the one expand, and an old save of named rows converts byte for byte');
+{
+  /* 9a. what the save holds, every close of the fleet */
+  const shapeBad = closes.filter(c => !codec.foReadSaved(st.NBA_CODEC, c.league.stats) || 'teams' in c.league.stats);
+  ok(9, `every saved season block of the fleet (${closes.length}) is the shared shape: lines nested by club of short arrays, clubs of counts, no named rows`, closes.length > 0 && shapeBad.length === 0, shapeBad.slice(0, 2).map(c => `seed ${c.seed} ${c.season}: ${JSON.stringify(c.league.stats).slice(0, 120)}`).join(' | '));
+  const lineCount = c => Object.values(c.league.stats.lines ?? {}).reduce((n, men) => n + (Array.isArray(men) ? 0 : Object.keys(men).length), 0);
+  ok(9, 'and a full season keeps a line for every man who played (over 200 a season)', closes.every(c => lineCount(c) > 200), closes.map(lineCount).slice(0, 4).join(','));
+  /* 9b. a planted old save: the named rows the expand spells out, converted on load, are the saved block again, byte for byte */
+  let planted = 0, plantBad = [];
+  for (const c of closes) {
+    const saved = JSON.stringify(c.league.stats);
+    const old = { stats: clone(st.nbaFoStats(c.league.stats)) };
+    const did = st.nbaCleanStats(old);
+    planted += 1;
+    if (did !== 'converted' || JSON.stringify(old.stats) !== saved) plantBad.push(`seed ${c.seed} ${c.season}: ${did}`);
+  }
+  ok(9, `an old save of named rows (${planted} planted, one a close) converts on load to the saved block byte for byte`, planted > 0 && plantBad.length === 0, plantBad.slice(0, 3).join(' | '));
+  const keep = { stats: clone(closes[0].league.stats) };
+  ok(9, 'a save already in the shared shape is kept as it is', st.nbaCleanStats(keep) === 'kept' && JSON.stringify(keep.stats) === JSON.stringify(closes[0].league.stats));
+  const brokenNamed = clone(st.nbaFoStats(closes[0].league.stats));
+  Object.values(brokenNamed.lines)[0].g = -1;
+  const brokenSaved = clone(closes[0].league.stats);
+  Object.values(Object.values(brokenSaved.lines)[0])[0][2] = 'x';
+  const drops = [{ stats: brokenNamed }, { stats: brokenSaved }, { stats: 5 }, { stats: { season: 2026, lines: 5, clubs: {} } }].map(o => [st.nbaCleanStats(o), 'stats' in o]);
+  ok(9, 'a block that reads as neither shape is dropped on load, never thrown on', drops.every(([d, has]) => d === 'dropped' && !has), JSON.stringify(drops));
+  ok(9, 'a league with no block is left alone', st.nbaCleanStats({}) === 'none');
+  /* 9c. the source: both sports bind the shared shape, write through its writer and read through its one expand */
+  const read = rel => normaliseEol(fs.readFileSync(path.join(ROOT, ...rel.split('/')), 'utf8'));
+  const stripComments = t => t.replace(/\/\*[\s\S]*?\*\//g, '').replace(/^\s*\/\/.*$/gm, '').replace(/\{\s*\}/g, '');
+  /* the file the engine was bundled from: under a control, its rewrite */
+  const swapped = base => { const swaps = (CONTROL_FILE_SWAPS[CONTROL] ?? {})[base]; const text = read(`src/lib/${base}`); return swaps ? rewrite(base, text, swaps) : text; };
+  const nbaSrc = stripComments(swapped('nbaSeasonStats.ts'));
+  const nflSrc = stripComments(read('src/lib/nflSeasonStats.ts'));
+  const codecSrc = stripComments(read('src/lib/foStatsCodec.ts'));
+  for (const [sport, src, codecName] of [['NBA', nbaSrc, 'NBA_CODEC'], ['NFL', nflSrc, 'NFL_CODEC']]) {
+    ok(9, `the ${sport} binds the shared codec and writes its lines through the shared writer`, src.includes("from './foStatsCodec'") && src.includes(`${codecName}: FoStatsCodec =`) && src.includes(`foOpenLine(${codecName},`) && src.includes(`foExpand(${codecName},`), sport);
+  }
+  ok(9, 'the NBA writes no named row (no line keyed team and id, no tot written)', !/stats\.lines\[[^\]]*\]\s*=/.test(nbaSrc) && !/\.tot\[[^\]]+\]\s*=/.test(nbaSrc) && !/stats\.teams\[[^\]]+\]\s*=/.test(nbaSrc));
+  ok(9, 'the shared codec names no sport (no if on a sport)', !/\b(nba|nfl|mlb|nhl|sport)\b/i.test(codecSrc));
+  /* 9d. against the base tree (NBA_STATS_BASE: the src parent of a checkout of the commit before Round 1566, whose
+     engine still keeps named rows): the same seeds, played on both engines, and the old block converted on the head */
+  if (BASE_E) {
+    /* Each bundle mints its own ids (its own epoch, and the head's counter has run through the whole fleet), so ids are
+       compared as their place past the league's lowest: the same men in the same order on both engines. */
+    const epochOf = lg => {
+      const ids = [...Object.values(lg.teams).flatMap(t => t.players), ...lg.freeAgents].map(p => p.id);
+      const ep = ids[0].slice(1, ids[0].lastIndexOf('-'));
+      return { ep, low: Math.min(...ids.map(id => Number(id.slice(id.lastIndexOf('-') + 1)))) };
+    };
+    const norm = (json, { ep, low }) => json.replace(new RegExp('n' + ep + '-(\\d+)', 'g'), (_, k) => `#${Number(k) - low}`);
+    let pairs = 0;
+    const baseBad = [];
+    for (const seed of SEEDS.slice(0, 3)) {
+      /* one regular season, the board's order, on either engine from the same draws */
+      const play = (N, lg) => {
+        const rng = lcg(seed * 104729 + 3);
+        const me = Object.keys(lg.teams)[seed % 30];
+        while (lg.teams[me].players.length > 15) {
+          const worst = [...lg.teams[me].players].sort((a, b) => a.ovr - b.ovr)[0];
+          if (!N.nbaRelease(lg.teams[me], lg.freeAgents, worst.id)) break;
+        }
+        N.nbaTipOff(lg, rng, me);
+        for (let r = 1; r < N.NBA_ROUNDS; r += 1) { N.simRound(lg, me, rng); lg.round += 1; }
+        N.simRound(lg, me, rng);
+        return lg;
+      };
+      const H = play(nba, nba.initNbaLeague(lcg(seed * 104729 + 1)));
+      const B = play(BASE_E.nba, BASE_E.nba.initNbaLeague(lcg(seed * 104729 + 1)));
+      const old = { stats: clone(B.stats) };
+      const did = st.nbaCleanStats(old);
+      pairs += 1;
+      const same = norm(JSON.stringify(old.stats), epochOf(B)) === norm(JSON.stringify(H.stats), epochOf(H));
+      const canon = s => JSON.stringify({ ...s, lines: Object.fromEntries(Object.entries(s.lines).sort(([a], [b]) => (a < b ? -1 : a > b ? 1 : 0))) });
+      const lossless = norm(canon(st.nbaFoStats(old.stats)), epochOf(B)) === norm(canon(B.stats), epochOf(B));
+      const reads = L => JSON.stringify([st.nbaLeaders(L), Object.keys(L.teams).map(t => st.nbaTeamLines(L, t)), st.nbaSeasonAwards(L)]);
+      const baseReads = L => JSON.stringify([BASE_E.st.nbaLeaders(L), Object.keys(L.teams).map(t => BASE_E.st.nbaTeamLines(L, t)), BASE_E.st.nbaSeasonAwards(L)]);
+      const sameReads = norm(reads({ ...B, stats: old.stats }), epochOf(B)) === norm(baseReads(B), epochOf(B));
+      if (did !== 'converted' || !same || !lossless || !sameReads) baseBad.push(`seed ${seed}: ${did}, bytes ${same}, lossless ${lossless}, reads ${sameReads}`);
+    }
+    ok(9, `the base engine's old block (${pairs} seeded seasons) converts to exactly the block the head writes from the same games, loses nothing, and every reader says what the base said`, pairs === 3 && baseBad.length === 0, baseBad.join(' | '));
+  } else {
+    console.log('   9d skipped: NBA_STATS_BASE is not set (the base comparison is the round\'s receipt, run on a runner)');
+  }
 }
 
 /* ---- report ---------------------------------------------------------------- */

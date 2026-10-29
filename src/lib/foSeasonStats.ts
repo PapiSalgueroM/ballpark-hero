@@ -35,15 +35,12 @@ export interface FoStatLine {
 /** A club's games, the ones its box score won, and its points for and against. */
 export interface FoTeamTotals { g: number; w: number; pts: number; opp: number }
 
-/** A season's lines, keyed `${team}|${id}`, and its club totals. */
+/** A season's lines, keyed `${team}|${id}`, and its club totals. Round 1566: what readers read, never what a save
+ *  keeps; every sport saves the shared short shape (src/lib/foStatsCodec.ts) and spells it out with foExpand. */
 export interface FoSeasonStats {
   season: number;
   lines: Record<string, FoStatLine>;
   teams: Record<string, FoTeamTotals>;
-}
-
-export function foNewSeasonStats(season: number): FoSeasonStats {
-  return { season, lines: {}, teams: {} };
 }
 
 /** Totals over games, to one decimal. Zero for a man with no games. */
