@@ -1,0 +1,12 @@
+#!serve
+#!playwright
+#!serial
+# Release BT kit: 4 of the 10 request lines of Release BS's rc-BPh-b.txt (rBSg/.tmp-fx/bs), the lines of the BT areas (the US My Careers, the Front Offices, Soccer Connections and the daily save shape, Build Your XI and the player search box, What's New, the guides and search index, the weight rows) and the setup lines before them; 6 line(s) outside those areas left out: playCareerProgramme playSoccerSeasonCalendar playCareerTransferBrief playSoccerAgentReview cmtactics cmtactics-ctl-none.
+# Release BS kit: 10 of the 21 request lines of Release BR's rc-BPh-b.txt (rBRg/.tmp-fx/br), the lines of the BS areas (Soccer Career, Club Manager and the manager games on its engine, Player Bingo, Conquest, Stat and Draft Detective, the US My Career save notice, What's New, the polls, the guide intro) and the setup lines before them; 11 line(s) outside those areas left out: playSoccerCareer playTranslatedPage playStorageBlocked playStorageBlocked-open sweepPhone sweepContrast sweepSaves simSoccerVeteranTalks playSoccerVeteranTalks oneoff-walk oneoff-ctl-none.
+# Release BP part two (Round BPH, finish-BPH.md). ROUND 1535, part B: the B and C walks, plus the two walks this release moved onto the
+# helper at m7b (playOneOffCups, playCmTactics) and their ANSWER_CONSENT_CONTROL=none lines (each must exit non zero).
+# Proven on adeba447 as rBPh-m7b and on the final head.
+playUsCareerSaveSeam: node scripts/playUsCareerSaveSeam.mjs
+fonts: mkdir -p .tmp-fx/font-cache && FREE_KICK_FONT_CACHE="$PWD/.tmp-fx/font-cache" node scripts/qa/freeKickLab1070.mjs --prefetch-fonts-only
+simCareerProgramme-forwalk: NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/simCareerProgramme.mjs
+simCareerTransferBrief-forwalk: NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/simCareerTransferBrief.mjs
