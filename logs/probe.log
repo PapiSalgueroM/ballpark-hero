@@ -1,0 +1,28 @@
+Real Madrid: assigned penalty taker Kylian Mbappé (ST 94); default list on the starting eleven: 1. Dean Huijsen (CB 88), 2. Ibrahima Konaté (CB 86), 3. Éder Militão (CB 82), 4. Álvaro Carreras (LB 87), 5. Jude Bellingham (CAM 92), 6. Federico Valverde (CM 91), 7. Arda Güler (CAM 90), 8. Rodrygo (RW 86), 9. Kylian Mbappé (ST 94), 10. Vinicius Junior (LW 92), 11. Thibaut Courtois (GK 80)
+  seed 449595 7-6 head, my first five: Trent Alexander-Arnold (RB 88), Ibrahima Konaté (CB 86), Éder Militão (CB 82), Álvaro Carreras (LB 87), Jude Bellingham (CAM 92); Kylian Mbappé at my kick none of 7; their first: Nico Williams
+    fixed, same seed 7-6: Kylian Mbappé (ST 94), Jude Bellingham (CAM 92), Arda Güler (CAM 90), Yan Diomande (LW 89), Trent Alexander-Arnold (RB 88)
+  seed 457514 3-2 head, my first five: Dean Huijsen (CB 88), Ibrahima Konaté (CB 86), Éder Militão (CB 82), Raúl Asencio (CB 82); Kylian Mbappé at my kick none of 4; their first: Nico Williams
+    fixed, same seed 3-2: Kylian Mbappé (ST 94), Jude Bellingham (CAM 92), Arda Güler (CAM 90), Yan Diomande (LW 89)
+  Real Madrid: 69 pens of 300 seeds, taker kicked in 4
+Manchester City: assigned penalty taker Erling Haaland (ST 94); default list on the starting eleven: 1. Josko Gvardiol (CB 88), 2. Marc Guéhi (CB 88), 3. Rúben Dias (CB 87), 4. Nico O'Reilly (LB 86), 5. Enzo Fernández (CM 90), 6. Phil Foden (CAM 89), 7. Rayan Cherki (CAM 88), 8. Antoine Semenyo (RW 89), 9. Erling Haaland (ST 94), 10. Jérémy Doku (LW 88), 11. Gianluigi Donnarumma (GK 86)
+  state diff seed 417919 decidedBy regular: .press.pending.id: "pq-1-9-3" vs "pq-1-9-1"
+  state diff seed 425838 decidedBy regular: .press.pending.id: "pq-1-9-4" vs "pq-1-9-2"
+  state diff seed 433757 decidedBy regular: .press.pending.id: "pq-1-9-5" vs "pq-1-9-3"
+  seed 449595 6-7 head, my first five: Rico Lewis (RB 84), Vitor Reis (CB 83), Rúben Dias (CB 87), Nico O'Reilly (LB 86), Mateo Kovacic (CM 78); Erling Haaland at my kick none of 7; their first: Gustavo Hamer
+    fixed, same seed 6-7: Erling Haaland (ST 94), Phil Foden (CAM 89), Rayan Cherki (CAM 88), Jérémy Doku (LW 88), Rúben Dias (CB 87)
+  seed 473352 7-6 head, my first five: Josko Gvardiol (CB 88), Vitor Reis (CB 83), Rúben Dias (CB 87), Nico O'Reilly (LB 86), Mateo Kovacic (CM 78); Erling Haaland at my kick none of 8; their first: Milan van Ewijk
+    fixed, same seed 7-6: Erling Haaland (ST 94), Phil Foden (CAM 89), Josko Gvardiol (CB 88), Jérémy Doku (LW 88), Rúben Dias (CB 87)
+  Manchester City: 74 pens of 300 seeds, taker kicked in 6
+Bayern Munich: assigned penalty taker Harry Kane (ST 88); default list on the starting eleven: 1. Dayot Upamecano (CB 88), 2. Jonathan Tah (CB 83), 3. Min-jae Kim (CB 82), 4. Alphonso Davies (LB 86), 5. Jamal Musiala (CAM 91), 6. Aleksandar Pavlovic (CDM 90), 7. Michael Olise (RW 92), 8. Luis Díaz (LW 88), 9. Harry Kane (ST 88), 10. Nathaniel Brown (LB 84), 11. Jonas Urbig (GK 79)
+  seed 655489 3-0 head, my first five: Dayot Upamecano (CB 88), Jonathan Tah (CB 83), Min-jae Kim (CB 82); Harry Kane at my kick none of 3; their first: Francis Onyeka
+    fixed, same seed 5-4: Harry Kane (ST 88), Jamal Musiala (CAM 91), Aleksandar Pavlovic (CDM 90), Dayot Upamecano (CB 88), Luis Díaz (LW 88)
+  seed 663408 7-6 head, my first five: Dayot Upamecano (CB 88), Jonathan Tah (CB 83), Min-jae Kim (CB 82), Alphonso Davies (LB 86), Jamal Musiala (CAM 91); Harry Kane at my kick none of 8; their first: Francis Onyeka
+    fixed, same seed 7-6: Harry Kane (ST 88), Jamal Musiala (CAM 91), Aleksandar Pavlovic (CDM 90), Dayot Upamecano (CB 88), Luis Díaz (LW 88)
+  Bayern Munich: 45 pens of 300 seeds, taker kicked in 4
+CONTROL head vs identical copy bundle: saved state differs 296 of 900
+state diff paths head vs fix: [[".press.pending.id",296]]
+FIX vs identical fresh copy bundle (counters in lockstep): saved state, draws or winner differ 0 of 900
+HEAD: 188 default shootouts, 188 with kicks; assigned taker on at the whistle in 181, kicked at all in 14, in my first five in 0, first kick in 0; my first-five kicks by group {"DEF":744,"MID":146}
+FIX: 188 shootouts with kicks; taker on and kicking first in 181 of 181; first-five by group {"ATT":351,"MID":315,"DEF":223}
+FIX vs HEAD over 900 plays: winner or decider differs 0, draw count differs 0, saved state differs 296; fixed shown score disagrees with winner 0
+PROBE VFBS DONE
