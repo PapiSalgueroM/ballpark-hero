@@ -403,6 +403,20 @@
  * screens: 128 of the excerpts read its words, one opens on a card above it);
  * with nothing put back, 5,518 (diffAll, every screen's markup). No click,
  * save or coverage count moved. 2,298,807 bytes.
+ * Round 1569's third fix run (the lead's rulings R1 to R3) re-recorded it
+ * once more, by the same method, from 335c4b1b8 (rc r1569-f3-rec, extra
+ * files mutR2.mjs, rec1569.mjs, fixdiff3.mjs). One input moved it: the fans
+ * (src/lib/careerSocial.ts) read the conduct lines only with a cause on the
+ * save, so a low fanbase with nothing on the record reads "Quiet year. We
+ * know you have more in you" where the fixture read "Talented but man the
+ * attitude...". The start and restart reveal (a ref) and the Hall sentence
+ * of the restart prompt (only drawn while the prompt is open) are not seen
+ * by the replay. With the gate taken out (mutR2.mjs) the head replays the
+ * fixture before it green (proof-gate) and a recording equals it in every
+ * click, save, coverage count and screen (diffB 0); with nothing taken out,
+ * 47 screens move (diffAll), every one a SocialGram screen now reading the
+ * new line, in all four sports. No click, save or coverage count moved.
+ * 2,298,804 bytes.
  *
  * Controls, one per run (each is a full replay, about three minutes):
  *   US_BOARD_PARITY_CONTROL=label    one label changed in a copy of the shared
