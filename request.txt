@@ -1,0 +1,3 @@
+#!build
+#!playwright
+saveRecovery: node scripts/qa/usCareerSaveRecovery1084.mjs --prefetch-fonts-only && node scripts/qa/usCareerSaveRecovery1084.mjs
