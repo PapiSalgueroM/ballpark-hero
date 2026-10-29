@@ -1,0 +1,22 @@
+mut strictby: src/lib/clubCareerAdditions.ts edited
+ src/lib/clubCareerAdditions.ts | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+--- harness FAIL lines (112):
+grep: write error: Broken pipe
+  FAIL: Moisés Caicedo: club history [brighton & hove albion, chelsea fc, independiente del valle] is not BASE's plus his record additions under the count rule [beerschot va, brighton & hove albion, chelsea fc, independiente del valle]
+  FAIL: Yan Diomande: club history [cd leganes, real madrid] is not BASE's plus his record additions under the count rule [cd leganes, rb leipzig, real madrid]
+  FAIL: Adam Wharton: club history [crystal palace] is not BASE's plus his record additions under the count rule [blackburn rovers, crystal palace]
+  FAIL: Dean Huijsen: club history [afc bournemouth, as roma, real madrid] is not BASE's plus his record additions under the count rule [afc bournemouth, as roma, juventus fc, real madrid]
+  FAIL: Nico Paz: club history [como 1907] is not BASE's plus his record additions under the count rule [como 1907, real madrid]
+  FAIL: Nick Woltemade: club history [juventus fc, sv werder bremen, vfb stuttgart] is not BASE's plus his record additions under the count rule [juventus fc, newcastle united, sv 07 elversberg, sv werder bremen, vfb stuttgart]
+simBingoClubCounts: RED, 112 failures (section 2: 37, section 3: 75)
+--- vitest:
+[31m⎯⎯⎯⎯⎯⎯⎯[39m[1m[41m Failed Tests 9 [49m[22m[31m⎯⎯⎯⎯⎯⎯⎯[39m
+[41m[1m FAIL [22m[49m src/test/clubCareerAdditions.test.ts[2m > [22mmatchesAddition, the identity and role guard[2m > [22maccepts both listed age conventions and nothing outside them
+[41m[1m FAIL [22m[49m src/test/clubCareerAdditions.test.ts[2m > [22mmatchesAddition, the identity and role guard[2m > [22mfolds accents and case in the name, and refuses another name
+[41m[1m FAIL [22m[49m src/test/clubCareerAdditions.test.ts[2m > [22mmatchesAddition, the identity and role guard[2m > [22mrefuses a namesake of another nationality and reads only the primary o
+[41m[1m FAIL [22m[49m src/test/clubCareerAdditions.test.ts[2m > [22mmatchesAddition, the identity and role guard[2m > [22mrefuses a namesake in another role (the two Vitinhas share name, natio
+[41m[1m FAIL [22m[49m src/test/clubCareerAdditions.test.ts[2m > [22mapplyClubAdditions[2m > [22madds the clubs to the one man it matches and reports each one
+[41m[1m FAIL [22m[49m src/test/clubCareerAdditions.test.ts[2m > [22mapplyClubAdditions[2m > [22mis idempotent and reports a club already present
+[41m[1m FAIL [22m[49m src/test/clubCareerAdditions.test.ts[2m > [22mapplyClubAdditions[2m > [22mcreates the set for a man with no history yet
+MUT strictby: CAUGHT harness=1 vitest=1

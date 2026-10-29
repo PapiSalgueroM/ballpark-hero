@@ -1,0 +1,11 @@
+mut noalias: src/lib/clubCareerAdditions.ts edited
+ src/lib/clubCareerAdditions.ts | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+--- harness FAIL lines (1):
+  FAIL: Matthijs de Ligt: club history [ajax amsterdam, bayern munich, juventus, manchester united] is not BASE's plus his record additions under the count rule [ajax amsterdam, bayern munich, juventus fc, manchester united]
+simBingoClubCounts: RED, 1 failures (section 2: 1)
+--- vitest:
+[31m⎯⎯⎯⎯⎯⎯⎯[39m[1m[41m Failed Tests 1 [49m[22m[31m⎯⎯⎯⎯⎯⎯⎯[39m
+[41m[1m FAIL [22m[49m src/test/clubCareerAdditions.test.ts[2m > [22mcareerClubs, the count[2m > [22mmaps two spellings of one club onto one key and drops reserve sides
+[2m      Tests [22m [1m[31m1 failed[39m[22m[2m | [22m[1m[32m17 passed[39m[22m[90m (18)[39m
+MUT noalias: CAUGHT harness=1 vitest=1

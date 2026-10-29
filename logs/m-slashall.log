@@ -1,0 +1,12 @@
+mut slashall: src/lib/clubCareerAdditions.ts edited
+ src/lib/clubCareerAdditions.ts | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+--- harness FAIL lines (2):
+  FAIL: Victor Boniface: club history [bayer 04 leverkusen, fk bodo, glimt, union saint-gilloise] is not BASE's plus his record additions under the count rule [bayer 04 leverkusen, fk bodo/glimt, union saint-gilloise]
+  FAIL: journeyman-4-clubs: Victor Boniface moved but is not judged in the record (additions or agrees)
+simBingoClubCounts: RED, 2 failures (section 2: 2)
+--- vitest:
+[31m⎯⎯⎯⎯⎯⎯⎯[39m[1m[41m Failed Tests 1 [49m[22m[31m⎯⎯⎯⎯⎯⎯⎯[39m
+[41m[1m FAIL [22m[49m src/test/clubCareerAdditions.test.ts[2m > [22mcareerClubs, the count[2m > [22mkeeps a club whose own name holds a slash without spaces
+[2m      Tests [22m [1m[31m1 failed[39m[22m[2m | [22m[1m[32m17 passed[39m[22m[90m (18)[39m
+MUT slashall: CAUGHT harness=1 vitest=1

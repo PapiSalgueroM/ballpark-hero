@@ -1,0 +1,4 @@
+m-strictby exit=1 5s | MUT strictby: CAUGHT harness=1 vitest=1
+m-norole exit=1 4s | MUT norole: CAUGHT harness=0 vitest=1
+m-slashall exit=1 4s | MUT slashall: CAUGHT harness=1 vitest=1
+m-noalias exit=1 3s | MUT noalias: CAUGHT harness=1 vitest=1

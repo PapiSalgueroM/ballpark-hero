@@ -1,0 +1,5 @@
+#!serial
+m-strictby: bash .rc/x/mrun.sh strictby
+m-norole: bash .rc/x/mrun.sh norole
+m-slashall: bash .rc/x/mrun.sh slashall
+m-noalias: bash .rc/x/mrun.sh noalias

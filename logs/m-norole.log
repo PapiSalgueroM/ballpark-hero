@@ -1,0 +1,12 @@
+mut norole: src/lib/clubCareerAdditions.ts edited
+ src/lib/clubCareerAdditions.ts | 1 -
+ 1 file changed, 1 deletion(-)
+--- harness FAIL lines (0):
+simBingoClubCounts: GREEN, every section held
+--- vitest:
+[31m⎯⎯⎯⎯⎯⎯⎯[39m[1m[41m Failed Tests 3 [49m[22m[31m⎯⎯⎯⎯⎯⎯⎯[39m
+[41m[1m FAIL [22m[49m src/test/clubCareerAdditions.test.ts[2m > [22mmatchesAddition, the identity and role guard[2m > [22mrefuses a namesake in another role (the two Vitinhas share name, natio
+[41m[1m FAIL [22m[49m src/test/clubCareerAdditions.test.ts[2m > [22mapplyClubAdditions[2m > [22mapplies an addition that matches nobody to nobody
+[41m[1m FAIL [22m[49m src/test/playerBingoClubCounts.test.ts[2m > [22mPlayer Bingo club additions, through fetchBingoData[2m > [22mnever gives his clubs to a namesake in another role or of ano
+[2m      Tests [22m [1m[31m3 failed[39m[22m[2m | [22m[1m[32m15 passed[39m[22m[90m (18)[39m
+MUT norole: CAUGHT harness=0 vitest=1
