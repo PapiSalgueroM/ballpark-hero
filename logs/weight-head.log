@@ -1,0 +1,53 @@
+pass 1 /nba-my-career 581.58K files=49
+   AppearanceBuilder-DbBp9pCs.js 15.20K
+   NbaMyCareer-BWj4elJR.js 85.90K
+   PlayerAvatar-BN4uPouT.js 4.34K
+   ShareButtons-nVKJj9wh.js 4.43K
+   basketball-BLCVyeYu.js 28.73K
+   conquestDataNba-C-3ztOpY.js 7.82K
+   index-BU6CY81M.js 238.20K
+   usCareerFreeAgency-ViodNrE8.js 1.87K
+   usCareerReveal-BW47Ke0-.js 0.57K
+   usCareerSeasonReview-JxKx6cKv.js 155.36K
+   usStatesPaths-DfX_GtuE.js 5.22K
+pass 1 /nfl-my-career 495.93K files=48
+   AppearanceBuilder-DbBp9pCs.js 15.20K
+   NflMyCareer-Ds_VhRYN.js 6.80K
+   PlayerAvatar-BN4uPouT.js 4.34K
+   ShareButtons-nVKJj9wh.js 4.43K
+   conquestDataNba-C-3ztOpY.js 7.82K
+   football-CAKGzx0j.js 22.40K
+   index-BU6CY81M.js 238.20K
+   usCareerFreeAgency-ViodNrE8.js 1.87K
+   usCareerReveal-BW47Ke0-.js 0.57K
+   usCareerSeasonReview-JxKx6cKv.js 155.36K
+   usStatesPaths-DfX_GtuE.js 5.22K
+pass 1 /mlb-my-career 569.58K files=49
+   AppearanceBuilder-DbBp9pCs.js 15.20K
+   MlbMyCareer-Dn5TEHjF.js 80.60K
+   PlayerAvatar-BN4uPouT.js 4.34K
+   ShareButtons-nVKJj9wh.js 4.43K
+   baseball-BY3wd-W6.js 19.01K
+   conquestDataNba-C-3ztOpY.js 7.82K
+   index-BU6CY81M.js 238.20K
+   usCareerFreeAgency-ViodNrE8.js 1.87K
+   usCareerReveal-BW47Ke0-.js 0.57K
+   usCareerSeasonReview-JxKx6cKv.js 155.36K
+   usStatesPaths-DfX_GtuE.js 5.22K
+pass 1 /nhl-my-career 572.15K files=49
+   AppearanceBuilder-DbBp9pCs.js 15.20K
+   NhlMyCareer-l2rSZFYZ.js 81.10K
+   PlayerAvatar-BN4uPouT.js 4.34K
+   ShareButtons-nVKJj9wh.js 4.43K
+   conquestDataNba-C-3ztOpY.js 7.82K
+   hockey-5-gkbPOX.js 21.05K
+   index-BU6CY81M.js 238.20K
+   usCareerFreeAgency-ViodNrE8.js 1.87K
+   usCareerReveal-BW47Ke0-.js 0.57K
+   usCareerSeasonReview-JxKx6cKv.js 155.36K
+   usStatesPaths-DfX_GtuE.js 5.22K
+pass 2 /nba-my-career 581.58K files=49
+pass 2 /nfl-my-career 495.93K files=48
+pass 2 /mlb-my-career 569.58K files=49
+pass 2 /nhl-my-career 572.15K files=49
+weight4 done

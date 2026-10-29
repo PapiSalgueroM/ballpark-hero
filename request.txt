@@ -1,0 +1,14 @@
+#!serve
+#!playwright
+#!serial
+weight-base: git worktree add /tmp/wbase 493926a4f >/dev/null 2>&1 && cd /tmp/wbase && ln -s "$OLDPWD/node_modules" node_modules && node_modules/.bin/vite build >/dev/null 2>&1 && (node scripts/lib/hostLikeServer.mjs dist 4181 >/dev/null 2>&1 &) && sleep 4 && BASE=http://localhost:4181 node "$OLDPWD/.rc/x/weight4.mjs"
+weight-head: BASE=http://localhost:4173 node .rc/x/weight4.mjs
+sweepWeight: SWEEP_OFFLINE=1 node scripts/sweepWeight.mjs
+walk: node scripts/playUsCareerHallWall.mjs
+walk-nowall: PLAY_CONTROL=nowall node scripts/playUsCareerHallWall.mjs
+careerHub: node scripts/playCareerHub.mjs
+saveSeam: node scripts/playUsCareerSaveSeam.mjs
+corrupt: ONLY=/nfl-my-career,/nba-my-career,/mlb-my-career,/nhl-my-career node scripts/playCorruptSaves.mjs
+storageBlocked: ONLY=/nfl-my-career,/nba-my-career,/mlb-my-career,/nhl-my-career node scripts/playStorageBlocked.mjs
+hallLine: node scripts/playCareerHallLine.mjs
+saveRecovery: node scripts/qa/usCareerSaveRecovery1084.mjs

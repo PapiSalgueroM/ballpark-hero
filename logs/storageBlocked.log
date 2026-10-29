@@ -1,0 +1,141 @@
+playStorageBlocked against http://localhost:4173, arms blocked and full
+
+/nba-my-career on a phone
+  PASS  /nba-my-career phone OPEN: baseline mounted, 40 buttons and 28 links in #root
+  PASS  /nba-my-career phone OPEN: no storage notice with ordinary storage
+  PASS  /nba-my-career phone OPEN: window.localStorage is the browser's own ([object Storage])
+  PASS  /nba-my-career phone OPEN: no storage error with ordinary storage
+  PASS  /nba-my-career phone BLOCKED: mounted, 40 buttons and 28 links (untouched 40 and 28, floor 65)
+  PASS  /nba-my-career phone BLOCKED: no "This page broke" screen
+  PASS  /nba-my-career phone BLOCKED: no error naming storage
+  PASS  /nba-my-career phone BLOCKED: 0 uncaught errors (untouched 0)
+  PASS  /nba-my-career phone BLOCKED: 0 analytics or ad requests without Accept
+  PASS  /nba-my-career phone BLOCKED: 4 presses went through, 3 changed the page, 2 of them after the first (untouched 4, 3 and 2; floors 1 and 1): Let's Play! > The Pest Picks pockets, gets under skin > Play your road to the draft > Start over
+  PASS  /nba-my-career phone BLOCKED: the notice is on the page ("Storage is blocked, so progress won't save.")
+  PASS  /nba-my-career phone BLOCKED: the notice is one line tall, 28px (ceiling 30)
+  PASS  /nba-my-career phone BLOCKED: the game sits 28px lower than untouched (ceiling 30)
+  PASS  /nba-my-career phone FULL: mounted, 40 buttons and 28 links (untouched 40 and 28, floor 65)
+  PASS  /nba-my-career phone FULL: no "This page broke" screen
+  PASS  /nba-my-career phone FULL: no error naming storage
+  PASS  /nba-my-career phone FULL: 0 uncaught errors (untouched 0)
+  PASS  /nba-my-career phone FULL: 0 analytics or ad requests without Accept
+  PASS  /nba-my-career phone FULL: 4 presses went through, 3 changed the page, 2 of them after the first (untouched 4, 3 and 2; floors 1 and 1): Let's Play! > The Pest Picks pockets, gets under skin > Play your road to the draft > Start over
+  PASS  /nba-my-career phone FULL: the notice is on the page ("Storage is full, so progress won't save.")
+  PASS  /nba-my-career phone FULL: the notice is one line tall, 28px (ceiling 30)
+  PASS  /nba-my-career phone FULL: the game sits 28px lower than untouched (ceiling 30)
+
+/nba-my-career on a desktop
+  PASS  /nba-my-career desktop OPEN: baseline mounted, 40 buttons and 28 links in #root
+  PASS  /nba-my-career desktop OPEN: no storage notice with ordinary storage
+  PASS  /nba-my-career desktop OPEN: window.localStorage is the browser's own ([object Storage])
+  PASS  /nba-my-career desktop OPEN: no storage error with ordinary storage
+  PASS  /nba-my-career desktop BLOCKED: mounted, 40 buttons and 28 links (untouched 40 and 28, floor 65)
+  PASS  /nba-my-career desktop BLOCKED: no "This page broke" screen
+  PASS  /nba-my-career desktop BLOCKED: no error naming storage
+  PASS  /nba-my-career desktop BLOCKED: 0 uncaught errors (untouched 0)
+  PASS  /nba-my-career desktop BLOCKED: 0 analytics or ad requests without Accept
+  PASS  /nba-my-career desktop BLOCKED: 4 presses went through, 3 changed the page, 2 of them after the first (untouched 4, 3 and 2; floors 1 and 1): Let's Play! > The Pest Picks pockets, gets under skin > Play your road to the draft > Start over
+  PASS  /nba-my-career desktop BLOCKED: the notice is on the page ("This browser blocks storage, so progress won't be saved. You can still play everything.")
+  PASS  /nba-my-career desktop FULL: mounted, 40 buttons and 28 links (untouched 40 and 28, floor 65)
+  PASS  /nba-my-career desktop FULL: no "This page broke" screen
+  PASS  /nba-my-career desktop FULL: no error naming storage
+  PASS  /nba-my-career desktop FULL: 0 uncaught errors (untouched 0)
+  PASS  /nba-my-career desktop FULL: 0 analytics or ad requests without Accept
+  PASS  /nba-my-career desktop FULL: 4 presses went through, 3 changed the page, 2 of them after the first (untouched 4, 3 and 2; floors 1 and 1): Let's Play! > The Pest Picks pockets, gets under skin > Play your road to the draft > Start over
+  PASS  /nba-my-career desktop FULL: the notice is on the page ("This browser's storage is full, so progress won't be saved. You can still play everything.")
+
+/nfl-my-career on a phone
+  PASS  /nfl-my-career phone OPEN: baseline mounted, 43 buttons and 28 links in #root
+  PASS  /nfl-my-career phone OPEN: no storage notice with ordinary storage
+  PASS  /nfl-my-career phone OPEN: window.localStorage is the browser's own ([object Storage])
+  PASS  /nfl-my-career phone OPEN: no storage error with ordinary storage
+  PASS  /nfl-my-career phone BLOCKED: mounted, 43 buttons and 28 links (untouched 43 and 28, floor 68)
+  PASS  /nfl-my-career phone BLOCKED: no "This page broke" screen
+  PASS  /nfl-my-career phone BLOCKED: no error naming storage
+  PASS  /nfl-my-career phone BLOCKED: 0 uncaught errors (untouched 0)
+  PASS  /nfl-my-career phone BLOCKED: 0 analytics or ad requests without Accept
+  PASS  /nfl-my-career phone BLOCKED: 4 presses went through, 4 changed the page, 3 of them after the first (untouched 4, 4 and 3; floors 2 and 1): Let's Play! > Play your road to the draft > Start over > Start new career
+  PASS  /nfl-my-career phone BLOCKED: the notice is on the page ("Storage is blocked, so progress won't save.")
+  PASS  /nfl-my-career phone BLOCKED: the notice is one line tall, 28px (ceiling 30)
+  PASS  /nfl-my-career phone BLOCKED: the game sits 28px lower than untouched (ceiling 30)
+  PASS  /nfl-my-career phone FULL: mounted, 43 buttons and 28 links (untouched 43 and 28, floor 68)
+  PASS  /nfl-my-career phone FULL: no "This page broke" screen
+  PASS  /nfl-my-career phone FULL: no error naming storage
+  PASS  /nfl-my-career phone FULL: 0 uncaught errors (untouched 0)
+  PASS  /nfl-my-career phone FULL: 0 analytics or ad requests without Accept
+  PASS  /nfl-my-career phone FULL: 4 presses went through, 4 changed the page, 3 of them after the first (untouched 4, 4 and 3; floors 2 and 1): Let's Play! > Play your road to the draft > Start over > Start new career
+  PASS  /nfl-my-career phone FULL: the notice is on the page ("Storage is full, so progress won't save.")
+  PASS  /nfl-my-career phone FULL: the notice is one line tall, 28px (ceiling 30)
+  PASS  /nfl-my-career phone FULL: the game sits 28px lower than untouched (ceiling 30)
+
+/nfl-my-career on a desktop
+  PASS  /nfl-my-career desktop OPEN: baseline mounted, 43 buttons and 28 links in #root
+  PASS  /nfl-my-career desktop OPEN: no storage notice with ordinary storage
+  PASS  /nfl-my-career desktop OPEN: window.localStorage is the browser's own ([object Storage])
+  PASS  /nfl-my-career desktop OPEN: no storage error with ordinary storage
+  PASS  /nfl-my-career desktop BLOCKED: mounted, 43 buttons and 28 links (untouched 43 and 28, floor 68)
+  PASS  /nfl-my-career desktop BLOCKED: no "This page broke" screen
+  PASS  /nfl-my-career desktop BLOCKED: no error naming storage
+  PASS  /nfl-my-career desktop BLOCKED: 0 uncaught errors (untouched 0)
+  PASS  /nfl-my-career desktop BLOCKED: 0 analytics or ad requests without Accept
+  PASS  /nfl-my-career desktop BLOCKED: 4 presses went through, 4 changed the page, 3 of them after the first (untouched 4, 4 and 3; floors 2 and 1): Let's Play! > Play your road to the draft > Start over > Start new career
+  PASS  /nfl-my-career desktop BLOCKED: the notice is on the page ("This browser blocks storage, so progress won't be saved. You can still play everything.")
+  PASS  /nfl-my-career desktop FULL: mounted, 43 buttons and 28 links (untouched 43 and 28, floor 68)
+  PASS  /nfl-my-career desktop FULL: no "This page broke" screen
+  PASS  /nfl-my-career desktop FULL: no error naming storage
+  PASS  /nfl-my-career desktop FULL: 0 uncaught errors (untouched 0)
+  PASS  /nfl-my-career desktop FULL: 0 analytics or ad requests without Accept
+  PASS  /nfl-my-career desktop FULL: 4 presses went through, 4 changed the page, 3 of them after the first (untouched 4, 4 and 3; floors 2 and 1): Let's Play! > Play your road to the draft > Start over > Start new career
+  PASS  /nfl-my-career desktop FULL: the notice is on the page ("This browser's storage is full, so progress won't be saved. You can still play everything.")
+
+the cookie banner
+  PASS  cookie banner BLOCKED "reject": the banner is up on a first visit
+  PASS  cookie banner BLOCKED "reject": 0 analytics or ad requests before any choice
+  PASS  cookie banner BLOCKED "reject": the banner left
+  PASS  cookie banner BLOCKED "reject": still gone on the next page of the visit, and that page drew (/whats-new, "What's New" in 142 ms)
+  PASS  cookie banner BLOCKED "reject": on to /footle inside the same page load, drawn ("FOOTLE"), banner still gone
+  PASS  cookie banner BLOCKED "reject": the answer held, no ad slot (false) and 0 requests for the ad script on /footle
+  PASS  cookie banner BLOCKED "reject": 0 analytics or ad requests after Essential only
+  PASS  cookie banner BLOCKED "reject": no uncaught error
+  PASS  cookie banner BLOCKED "accept": the banner is up on a first visit
+  PASS  cookie banner BLOCKED "accept": 0 analytics or ad requests before any choice
+  PASS  cookie banner BLOCKED "accept": the banner left
+  PASS  cookie banner BLOCKED "accept": still gone on the next page of the visit, and that page drew (/whats-new, "What's New" in 134 ms)
+  PASS  cookie banner BLOCKED "accept": on to /footle inside the same page load, drawn ("FOOTLE"), banner still gone
+  PASS  cookie banner BLOCKED "accept": the answer held, /footle mounted its ad slot (true) and asked for the ad script 1 time(s)
+  PASS  cookie banner BLOCKED "accept": 1 analytics or ad requests after Accept
+  PASS  cookie banner BLOCKED "accept": no uncaught error
+  PASS  cookie banner FULL "reject": the banner is up on a first visit
+  PASS  cookie banner FULL "reject": 0 analytics or ad requests before any choice
+  PASS  cookie banner FULL "reject": the banner left
+  PASS  cookie banner FULL "reject": still gone on the next page of the visit, and that page drew (/whats-new, "What's New" in 129 ms)
+  PASS  cookie banner FULL "reject": on to /footle inside the same page load, drawn ("FOOTLE"), banner still gone
+  PASS  cookie banner FULL "reject": the answer held, no ad slot (false) and 0 requests for the ad script on /footle
+  PASS  cookie banner FULL "reject": 0 analytics or ad requests after Essential only
+  PASS  cookie banner FULL "reject": no uncaught error
+  PASS  cookie banner FULL "accept": the banner is up on a first visit
+  PASS  cookie banner FULL "accept": 0 analytics or ad requests before any choice
+  PASS  cookie banner FULL "accept": the banner left
+  PASS  cookie banner FULL "accept": still gone on the next page of the visit, and that page drew (/whats-new, "What's New" in 137 ms)
+  PASS  cookie banner FULL "accept": on to /footle inside the same page load, drawn ("FOOTLE"), banner still gone
+  PASS  cookie banner FULL "accept": the answer held, /footle mounted its ad slot (true) and asked for the ad script 1 time(s)
+  PASS  cookie banner FULL "accept": 1 analytics or ad requests after Accept
+  PASS  cookie banner FULL "accept": no uncaught error
+
+leaving a page through a link
+  PASS  /nba-my-career phone OPEN leaving: baseline, "What's New" drew in 152 ms
+  PASS  /nba-my-career phone BLOCKED leaving: the link was pressed, "What's New" drew in 157 ms (untouched 152 ms)
+  PASS  /nba-my-career phone FULL leaving: the link was pressed, "What's New" drew in 165 ms (untouched 152 ms)
+  PASS  /nba-my-career phone FULL leaving: 0 writes refused in one idle second (ceiling 50)
+  PASS  /nfl-my-career phone OPEN leaving: baseline, "What's New" drew in 155 ms
+  PASS  /nfl-my-career phone BLOCKED leaving: the link was pressed, "What's New" drew in 153 ms (untouched 155 ms)
+  PASS  /nfl-my-career phone FULL leaving: the link was pressed, "What's New" drew in 154 ms (untouched 155 ms)
+  PASS  /nfl-my-career phone FULL leaving: 0 writes refused in one idle second (ceiling 50)
+
+NATIVE: a real Chromium profile with the cookie setting on block
+  NOT MEASURED HERE: the simulated BLOCKED arm above is all this run has. Set PLAY_STORAGE_NATIVE=require where the full Chromium build is installed.
+
+the browser's own localStorage accessor: own property of window true, configurable true
+measurements written to /home/runner/work/_temp/rc-out/files/playStorageBlocked-main.json
+
+playStorageBlocked: 120 checks, 0 failed

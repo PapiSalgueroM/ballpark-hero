@@ -1,0 +1,12 @@
+build exit=0 38s | [dukb] inlined 1 stylesheet(s) and 1 module(s) into 181 snapshots (11 left alone)
+weight-base exit=0 55s | weight4 done
+weight-head exit=0 15s | weight4 done
+sweepWeight exit=1 29s | sweepWeight: 1 failure
+walk exit=0 117s | screenshots in /home/runner/work/_temp/rc-out/files
+walk-nowall exit=0 25s | playUsCareerHallWall control nowall: all 16 guarded checks fired (mutations landed: {"nowall":12})
+careerHub exit=0 47s | playCareerHub: green. Four career games on live boxes, and every award on the screen has a year on it.
+saveSeam exit=0 33s | playUsCareerSaveSeam: 15 journeys, 67 checks, 0 failed
+corrupt exit=0 60s | playCorruptSaves: green. No broken save traps a long game.
+storageBlocked exit=0 83s | playStorageBlocked: 120 checks, 0 failed
+hallLine exit=0 99s | playCareerHallLine: 4 routes, 36 walks, 380 checks, all checks passed
+saveRecovery exit=1 0s | Node.js v24.22.1
