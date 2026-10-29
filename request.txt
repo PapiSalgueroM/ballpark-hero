@@ -1,0 +1,30 @@
+tsc: node_modules/.bin/tsc --noEmit -p tsconfig.app.json
+vitest: node_modules/.bin/vitest run src/test/sportsMillionaireSwap.test.tsx --testTimeout=300000 --hookTimeout=120000
+dr: ONLY=sports-millionaire node scripts/simDailyReload.mjs
+simLiveScores: node scripts/simLiveScores.mjs
+simNoRivalNames: node scripts/simNoRivalNames.mjs
+simInventedNames: node scripts/simInventedNames.mjs
+simHarnessAnchors: node scripts/simHarnessAnchors.mjs
+simNoInventedQuotes: node scripts/simNoInventedQuotes.mjs
+simNoInventedConduct: node scripts/simNoInventedConduct.mjs
+simLegalPages: node scripts/simLegalPages.mjs
+simSingleFooter: node scripts/simSingleFooter.mjs
+simCompletionSlugs: node scripts/simCompletionSlugs.mjs
+simCompletionOnce: node scripts/simCompletionOnce.mjs
+simNoDoubleRecord: node scripts/simNoDoubleRecord.mjs
+simDailyPuzzleContract: node scripts/simDailyPuzzleContract.mjs
+simDailySaveHardening: node scripts/simDailySaveHardening.mjs
+simFetchRetry: node scripts/simFetchRetry.mjs
+simReportRelay: node scripts/simReportRelay.mjs
+simNavbarStatsReads: node scripts/simNavbarStatsReads.mjs
+simScoringCoverage: node scripts/simScoringCoverage.mjs
+simSiteSearch: node scripts/simSiteSearch.mjs
+simGuideHeadings: node scripts/simGuideHeadings.mjs
+simAccessibility: node scripts/simAccessibility.mjs
+simCfbSlate: node scripts/simCfbSlate.mjs
+simCmLeagueFixtures: node scripts/simCmLeagueFixtures.mjs
+simMissingElevenSources: node scripts/simMissingElevenSources.mjs
+simNbaLuxuryTax: node scripts/simNbaLuxuryTax.mjs
+simNbaSeasonStats: node scripts/simNbaSeasonStats.mjs
+simPerfectSeasonOdds: node scripts/simPerfectSeasonOdds.mjs
+simTrustCopy: node scripts/simTrustCopy.mjs
