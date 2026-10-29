@@ -1,0 +1,15 @@
+#!serve
+#!playwright
+#!serial
+vt-wall: node_modules/.bin/vitest run src/test/usCareerHallWall.test.tsx --testTimeout=300000 --hookTimeout=120000
+simWall: node scripts/simUsCareerHallWall.mjs
+c-nokeep: SIM_HALL_WALL_CONTROL=nokeep node scripts/simUsCareerHallWall.mjs
+c-loadonly: SIM_HALL_WALL_CONTROL=loadonly node scripts/simUsCareerHallWall.mjs
+c-kept: SIM_HALL_WALL_CONTROL=kept node scripts/simUsCareerHallWall.mjs
+c-nogate: SIM_HALL_WALL_CONTROL=nogate node scripts/simUsCareerHallWall.mjs
+c-stalesave: SIM_HALL_WALL_CONTROL=stalesave node scripts/simUsCareerHallWall.mjs
+c-boarddraw: SIM_HALL_WALL_CONTROL=boarddraw node scripts/simUsCareerHallWall.mjs
+weight4: node .rc/x/weight4.mjs
+sweepWeight: SWEEP_OFFLINE=1 node scripts/sweepWeight.mjs
+walk: node scripts/playUsCareerHallWall.mjs
+walk-nowall: PLAY_CONTROL=nowall node scripts/playUsCareerHallWall.mjs

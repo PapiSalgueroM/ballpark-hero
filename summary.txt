@@ -1,0 +1,13 @@
+build exit=0 23s | [dukb] inlined 1 stylesheet(s) and 1 module(s) into 181 snapshots (11 left alone)
+vt-wall exit=0 38s |    Duration  37.90s (transform 972ms, setup 37ms, collect 1.36s, tests 36.07s, environment 165ms, prepare 67ms)
+simWall exit=0 39s | simUsCareerHallWall: ok, 53 check ids, 7846 checks, 200 careers a sport, 152 old saves
+c-nokeep exit=1 44s | simUsCareerHallWall CONTROL nokeep: FIRED, C1, C3, C5, C6, C8, C9, C10b red in all four sports and C4, C7, C10a, C10c, J green
+c-loadonly exit=1 49s | simUsCareerHallWall CONTROL loadonly: FIRED, C3, C6, C10b red in all four sports and C1, C4, C5, C7, C8, C9, C10a, C10c, J green
+c-kept exit=1 39s | simUsCareerHallWall CONTROL kept: FIRED, C4, C6, C10c red in all four sports and C1, C3, C5, C7, C8, C9, C10a, C10b, J green
+c-nogate exit=1 39s | simUsCareerHallWall CONTROL nogate: FIRED, C7 red in all four sports and C1, C3, C4, C5, C6, C8, C9, C10a, C10b, C10c, J green
+c-stalesave exit=1 39s | simUsCareerHallWall CONTROL stalesave: FIRED, C9 red in all four sports and C1, C3, C4, C5, C6, C7, C8, C10a, C10b, C10c, J green
+c-boarddraw exit=1 23s | simUsCareerHallWall CONTROL boarddraw: FIRED, C8 red in all four sports and C1, C3, C4, C5, C6, C7, C9, C10a, C10b, C10c, J green
+weight4 exit=0 15s | weight4 done
+sweepWeight exit=1 27s | sweepWeight: 1 failure
+walk exit=0 106s | screenshots in /home/runner/work/_temp/rc-out/files
+walk-nowall exit=0 19s | playUsCareerHallWall control nowall: all 16 guarded checks fired (mutations landed: {"nowall":12})

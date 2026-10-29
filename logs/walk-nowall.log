@@ -1,0 +1,63 @@
+nba-my-career at 390 by 844
+  CAUGHT  A nba 390: Start over says the card stays on the Hall wall
+  PASS  A nba 390: the create screen's top is in view after the restart (258 of 844)
+  CAUGHT  A nba 390: the create screen offers the wall below Enter the draft, missing
+  PASS  A nba 390: no page error 
+nba-my-career at 1280 by 900
+  CAUGHT  A nba 1280: Start over says the card stays on the Hall wall
+  PASS  A nba 1280: the create screen's top is in view after the restart (206 of 900)
+  CAUGHT  A nba 1280: the create screen offers the wall below Enter the draft, missing
+  PASS  A nba 1280: no page error 
+nba-my-career at 320 by 640
+  MEASURED  A nba 320: Start over says the card stays on the Hall wall: does not hold
+  MEASURED  A nba 320: the create screen's top is in view after the restart (258 of 640): holds
+  MEASURED  A nba 320: the create screen offers the wall below Enter the draft, missing: does not hold
+  MEASURED  A nba 320: no page error : holds
+nfl-my-career at 390 by 844
+  CAUGHT  A nfl 390: Start over says the card stays on the Hall wall
+  PASS  A nfl 390: the create screen's top is in view after the restart (258 of 844)
+  CAUGHT  A nfl 390: the create screen offers the wall below Enter the draft, missing
+  PASS  A nfl 390: no page error 
+nfl-my-career at 1280 by 900
+  CAUGHT  A nfl 1280: Start over says the card stays on the Hall wall
+  PASS  A nfl 1280: the create screen's top is in view after the restart (206 of 900)
+  CAUGHT  A nfl 1280: the create screen offers the wall below Enter the draft, missing
+  PASS  A nfl 1280: no page error 
+nfl-my-career at 320 by 640
+  MEASURED  A nfl 320: Start over says the card stays on the Hall wall: does not hold
+  MEASURED  A nfl 320: the create screen's top is in view after the restart (258 of 640): holds
+  MEASURED  A nfl 320: the create screen offers the wall below Enter the draft, missing: does not hold
+  MEASURED  A nfl 320: no page error : holds
+mlb-my-career at 390 by 844
+  CAUGHT  A mlb 390: Start over says the card stays on the Hall wall
+  PASS  A mlb 390: the create screen's top is in view after the restart (258 of 844)
+  CAUGHT  A mlb 390: the create screen offers the wall below Enter the draft, missing
+  PASS  A mlb 390: no page error 
+mlb-my-career at 1280 by 900
+  CAUGHT  A mlb 1280: Start over says the card stays on the Hall wall
+  PASS  A mlb 1280: the create screen's top is in view after the restart (206 of 900)
+  CAUGHT  A mlb 1280: the create screen offers the wall below Enter the draft, missing
+  PASS  A mlb 1280: no page error 
+mlb-my-career at 320 by 640
+  MEASURED  A mlb 320: Start over says the card stays on the Hall wall: does not hold
+  MEASURED  A mlb 320: the create screen's top is in view after the restart (258 of 640): holds
+  MEASURED  A mlb 320: the create screen offers the wall below Enter the draft, missing: does not hold
+  MEASURED  A mlb 320: no page error : holds
+nhl-my-career at 390 by 844
+  CAUGHT  A nhl 390: Start over says the card stays on the Hall wall
+  PASS  A nhl 390: the create screen's top is in view after the restart (258 of 844)
+  CAUGHT  A nhl 390: the create screen offers the wall below Enter the draft, missing
+  PASS  A nhl 390: no page error 
+nhl-my-career at 1280 by 900
+  CAUGHT  A nhl 1280: Start over says the card stays on the Hall wall
+  PASS  A nhl 1280: the create screen's top is in view after the restart (206 of 900)
+  CAUGHT  A nhl 1280: the create screen offers the wall below Enter the draft, missing
+  PASS  A nhl 1280: no page error 
+nhl-my-career at 320 by 640
+  MEASURED  A nhl 320: Start over says the card stays on the Hall wall: does not hold
+  MEASURED  A nhl 320: the create screen's top is in view after the restart (258 of 640): holds
+  MEASURED  A nhl 320: the create screen offers the wall below Enter the draft, missing: does not hold
+  MEASURED  A nhl 320: no page error : holds
+screenshots in /home/runner/work/_temp/rc-out/files
+
+playUsCareerHallWall control nowall: all 16 guarded checks fired (mutations landed: {"nowall":12})
