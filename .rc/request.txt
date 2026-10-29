@@ -1,0 +1,7 @@
+#!serve
+#!playwright
+#!serial
+# Release BT kit: 1 of the 1 request lines of Release BS's rc-BKc-d.txt (rBSg/.tmp-fx/bs), the lines of the BT areas (the US My Careers, the Front Offices, Soccer Connections and the daily save shape, Build Your XI and the player search box, What's New, the guides and search index, the weight rows) and the setup lines before them; 0 line(s) outside those areas left out.
+# Release BS kit: 1 of the 6 request lines of Release BR's rc-BKc-d.txt (rBRg/.tmp-fx/br), the lines of the BS areas (Soccer Career, Club Manager and the manager games on its engine, Player Bingo, Conquest, Stat and Draft Detective, the US My Career save notice, What's New, the polls, the guide intro) and the setup lines before them; 5 line(s) outside those areas left out: walk walk-notile walk-swap worldWalk walkBoard.
+# Release BK final gate, part d (served): Round 1510 walk and its notile and swap controls (each must exit 1 and FIRE), playWorldUcl, Round 1509 board walk (walkBoard.mjs as extra file), sweepWeight (the three engine rows are the lead to raise). Runner rBKc-d on 696b697b.
+sweepWeight: SWEEP_OFFLINE=1 NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/sweepWeight.mjs > /tmp/sw.log 2>&1; s=$?; cp /tmp/sw.log $RC_OUT/sweepWeight.log; grep -E "FAIL|club-manager|manager-hot-seat|deadline-day|soccer-career |/soccer-grid|/build-your-xi|/nba-my-career|sweepWeight:" /tmp/sw.log | head -20 | cut -c1-200; exit $s
