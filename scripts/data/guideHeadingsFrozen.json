@@ -167,6 +167,7 @@
         "Chemistry: two players standing next to each other on the pitch who are at the same club on our data add +0.6 to the side, from the same country +0.2, up to +2 in all.",
         "Mixed uses its offline backup if the AI cannot respond. Club year draft uses the selected records instead.",
         "Role fit: a player in a slot his recorded positions cover plays at full value. Next door, like a right back at left back, costs 2 rating points on him, averaged over the eleven. The slot check never lets anyone further out of position than that.",
+        "A full back at wing back on his own side, a left back at LWB or a right back at RWB, plays at full value too.",
         "Balance: no defensive midfielder in a CM or CDM slot costs the side 1, and a wide slot held by someone who is not a wide player, like a centre back at full back, costs 0.5 for that flank.",
         "The season report says what role fit, chemistry and balance were each worth in league points, by replaying the same season without each one."
       ],
@@ -176,6 +177,7 @@
       ],
       "tips": [
         "Reroll thin assignments before typing, knowing the spin can land somewhere worse.",
+        "Small club on the wheel? Goalkeepers are easy to name, elite wingers are not.",
         "Two players from the same club or country only link when they stand next to each other, so use your slot choice to put them side by side.",
         "If a right sounding name is rejected, let the search autocomplete the spelling for you."
       ]
