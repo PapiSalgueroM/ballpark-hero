@@ -1,0 +1,14 @@
+plain exit=0 0s | simUsConnectionsFacts: green. Every Baseball, NFL, NHL and NBA Connections group is held to the record, and no board has a second right answer the record can see (other t
+othersbytes exit=0 2s | baseball, nfl and nhl verdicts byte equal to the base (6720 lines; nba adds 320)
+othersfiles exit=0 0s | no baseball, NFL or NHL board, record, ledger or table file changed
+simFairPuzzles exit=0 0s | simFairPuzzles: green. No board has a new second right answer; only the soccer findings the ledger owes to part B remain.
+simNbaPlanningBench exit=0 5s | simNbaPlanningBench normal: exact expected assertions and independent Daily restore passed.
+simConnectionsFacts exit=0 0s | simConnectionsFacts: green. Every claim this round checked stands on two hosts and no rebuilt board has a second answer.
+simNoRivalNames exit=0 13s | No rival product names found. 0 findings.
+vitest exit=0 27s |    Duration  26.52s (transform 5.01s, setup 778ms, collect 6.53s, tests 29.64s, environment 3.07s, prepare 810ms)
+simInventedNames exit=0 9s | simInventedNames: green. Every invented man on this site is invented all the way down.
+simStorageWrites exit=0 3s | simStorageWrites: all green (owed: 12)
+simNoInventedQuotes exit=0 27s | simNoInventedQuotes: green. No real player is quoted or accused anywhere.
+simDaily exit=0 1s | simDaily: green. Every daily game is a different game tomorrow.
+tsc exit=0 68s | 
+simHarnessAnchors exit=0 41s | simHarnessAnchors: green. Every harness parses and none carries an unmatchable anchor.
