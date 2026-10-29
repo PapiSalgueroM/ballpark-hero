@@ -18,18 +18,13 @@
  * a save older than the record draws its boxes from the save alone (hostBoxLegacy). The board's kitNeeded says
  * the same in code, and scripts/simFoLazyDesk.mjs, FrontOfficeLazyDesk.test.tsx and playGmCareer.mjs (Walk E)
  * hold it. Nothing here is evaluated at module scope: it only re-exports.
+ *
+ * Round 1559: what every sport's kit carries (the host's names, the tier reader, the out of work screen, the Phone
+ * icon) is gmCareerKitCore.ts, re-exported whole; the NFL's own lines follow it.
  */
-export {
-  hostArrivalLine, hostArriving, hostAwayRefusalLine, hostEarnsLine, hostMarket, hostNewSeat, hostOutOfWorkCard,
-  hostPressOption, hostSeasonAway, hostSeasonVerdict, hostSeatTeams, hostSpendPoint,
-  hostXpEffects, hostXpRecapLine,
-} from '@/lib/gmDeskHost';
-export { leagueTiers } from '@/lib/gmSeat';
+export * from '@/components/front-office-shared/gmCareerKitCore';
 export { nflDeskHost } from '@/lib/gmDeskHostNfl';
 export { nflAwayHost, nflLegacy, nflOutcome, nflTakeSeat } from '@/lib/nflGmCareer';
-export { GmOutOfWork } from '@/components/front-office-shared/GmOutOfWork';
 /* Round 1542: the season's awards, named in closeSeason beside the verdict (the same press, which waits for this
    kit), so the close and the shared ranking it calls are not in the page */
 export { nflCloseSeasonStats } from '@/lib/nflSeasonAwards';
-/* the recap's See who is calling button, the one place the board draws it */
-export { Phone } from 'lucide-react';

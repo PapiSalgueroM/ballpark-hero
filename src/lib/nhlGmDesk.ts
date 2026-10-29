@@ -38,7 +38,7 @@ import {
 } from './gmDeadline';
 import {
   NHL_TRADE_RULES, type PackageContext, type PackageVerdict, type PickValueCurve, type TradeAsset, type TradePackage,
-  evaluatePackage, pickValueAt, proposePackage, splitRetained,
+  evaluatePackage, keepRetainedOverSummer, pickValueAt, proposePackage, splitRetained,
 } from './gmTradePackage';
 import {
   type GmStaffBlock, type GmStaffCtx, gmDefaultStaff, gmHashFloat, gmInjuryWeeks, gmIsValidStaff, gmRolloverStaff,
@@ -505,12 +505,8 @@ export function nhlDeskOffseason(league: NhlLeague, desk: GmDesk, team: string, 
   }
   syncNhlPicks(league, picks);
 
-  const retained = retainedBefore.filter(r => {
-    const entry = league.teams[r.club]?.deadCap?.find(d => d.playerId === r.playerId);
-    if (!entry) return false;
-    entry.amount = r.kept;
-    return true;
-  });
+  /* Round 1559: the shared retained salary step (gmTradePackage.ts), the same four lines this summer held. */
+  const retained = keepRetainedOverSummer(league.teams, retainedBefore);
 
   const walk = gmSummerWalk(NHL_STAFF_PACK.rules, staffBefore.block);
   const staff: NhlStaffState = {

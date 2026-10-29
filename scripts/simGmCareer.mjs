@@ -166,6 +166,8 @@ const FILES = {
   desk: path.join(ROOT, 'src', 'lib', 'nflGmDesk.ts'),
   /* Round 1550: nflTakeSeat and nflLegacy moved here word for word (the board fetches them with the career kit) */
   career: path.join(ROOT, 'src', 'lib', 'nflGmCareer.ts'),
+  /* Round 1559: the take and the legacy read are every sport's, the NFL's facts handed in through nflCareer() */
+  bind: path.join(ROOT, 'src', 'lib', 'gmCareerBind.ts'),
   seat: path.join(ROOT, 'src', 'lib', 'gmSeat.ts'),
   board: path.join(ROOT, 'src', 'components', 'front-office', 'FrontOfficeBoard.tsx'),
 };
@@ -189,9 +191,11 @@ const EDITS = {
      the old club keeps the depth chart he saved; the summer builds the ask again. */
   staffrides: ['career', "    { key: NFL_DESK_KEYS.staff, owner: 'club', fresh: (league, team) => freshStaff(league, team) },", "    { key: NFL_DESK_KEYS.staff, owner: 'gm' },"],
   ledgerrides: ['career', "    { key: NFL_DESK_KEYS.contracts, owner: 'club', fresh: (league, team) => openLedger(league, team) },", "    { key: NFL_DESK_KEYS.contracts, owner: 'gm' },"],
-  rostermove: ['career', '  const old = league.teams[legacy.team];\n  if (old) for (const pos of DEPTH_GROUPS) resetDepth(old, pos);',
-    '  const old = league.teams[legacy.team];\n  if (old) for (const pos of DEPTH_GROUPS) resetDepth(old, pos);\n  if (old && league.teams[teamId]) league.teams[teamId].players.push(old.players.pop()!);'],
-  depthstays: ['career', '  const old = league.teams[legacy.team];\n  if (old) for (const pos of DEPTH_GROUPS) resetDepth(old, pos);', '  const old = league.teams[legacy.team];'],
+  /* Round 1559 (critic 3): both anchored where the lift put them, rostermove in the shared take after the move is
+     made, depthstays in the NFL spec's releaseOldClub. */
+  rostermove: ['bind', '  s.releaseOldClub(league, legacy.team);\n  return { ...r, opened };',
+    '  s.releaseOldClub(league, legacy.team);\n  { const lt = (league as any).teams; if (lt[legacy.team] && lt[teamId]) lt[teamId].players.push(lt[legacy.team].players.pop()); }\n  return { ...r, opened };'],
+  depthstays: ['career', '      const old = league.teams[team];\n      if (old) for (const pos of DEPTH_GROUPS) resetDepth(old, pos);', '      const old = league.teams[team];'],
   askrebuilt: ['face', '  return stored && stored.season === season ? stored : built;', '  return built;'],
   /* Section 6: the year out. The last week skipped; the old club named as the summer's user club, so it is not cut;
      his XP not put back; the last call refusal removed; the away draft skipped. */
@@ -204,7 +208,8 @@ const EDITS = {
   overlap: ['host', '  const career = startSeatStint(seat.career, offer, market.season);', '  const career = startSeatStint(seat.career, offer, market.season - 1);'],
   firedlost: ['host', "  if (f.fired) career = endSeatStint(career, 'fired');", '  /* the firing not recorded */'],
   /* Section 7, Round 1533's fix pass: the hub reads the league's season as already on his record. */
-  hubcounted: ['desk', "  if (phase === 'hub' || phase === 'pick') return false;", "  if (phase === 'pick') return false;"],
+  /* Round 1559 (finding 11): the rule is every sport's now, hostSeasonCounted in the face, the NFL's name a re-export. */
+  hubcounted: ['face', "  if (phase === 'hub' || phase === 'pick') return false;", "  if (phase === 'pick') return false;"],
   /* Section 8: a player's name put into the arrival line. */
   nameinline: ['host', 'return `You take over the ${nameOf(s.team)}. They finished ${row.record}, ${ordinal(row.place)} in the league.`;',
     'return `You take over the ${nameOf(s.team)}. They finished ${row.record}, ${ordinal(row.place)} in the league. ${(league as any).teams?.[s.team]?.players?.[0]?.name ?? \'\'}`;'],

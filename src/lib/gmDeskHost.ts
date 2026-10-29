@@ -137,6 +137,8 @@ export {
   HOST_TILE_VALUE_MAX, HOST_TILE_SUB_MAX, hostMarketTile, hostCareerTile, hostCanSpend, hostXpTile, hostXpHelp,
   HOST_BLOCK_RULES, hostSummerMandate, type HostBlockOwner, type HostBlockRule,
   type SeatBefore, type GmSeatBlock, type HostLegacy,
+  /* Round 1559: the season counted rule and the page's career rules, every sport's */
+  hostSeasonCounted, hostCareerRules,
 } from './gmCareerFace';
 
 /** The desk as it stands at the club he joins. The desk handed in is not changed. */
@@ -1053,6 +1055,27 @@ export function hostSitArmLine(market: Pick<HostMarket, 'nextYear' | 'offers'>, 
     : market.nextYear === 'climb' ? ' Next year the phone rings only if your old club has climbed the league by then.'
     : ' As things stand the phone can still ring next year.';
   return `Tap again to stay out.${pass} The league plays a whole season without you and it cannot be undone.${next}${deskOn ? '' : ' It also opens your GM desk for good.'}`;
+}
+
+/*
+ * Round 1559: the board's feed lines after a take and a year out, written once for the four boards. They are the
+ * three lines the NFL board prints (FrontOfficeBoard.tsx takeSeat and sitOut, Round 1533), word for word, and
+ * src/lib/gmCareerRules.test.ts reads that board and holds the two equal until it calls these itself.
+ */
+
+/** A take refused: the offer left the feed between the screen and the tap. Nothing changed. */
+export function hostOfferGoneLine(): string {
+  return 'That offer is not on the table any more.';
+}
+
+/** A take made: the club he now runs and the ask he will be graded on. */
+export function hostTakeoverLine(nameOf: (id: string) => string, offer: Pick<SeatOffer, 'teamId' | 'ask'>): string {
+  return `You take over the ${nameOf(offer.teamId)}. The ${offer.ask.season} ask: ${offer.ask.text}`;
+}
+
+/** A year out played: the season he sat out and who won it. */
+export function hostSatOutLine(report: Pick<HostAwayReport, 'season' | 'champion'>, nameOf: (id: string) => string): string {
+  return `You sat out ${report.season}. The ${nameOf(report.champion)} won it.`;
 }
 
 /** How a stint ended, for the Career box. An open one says he is still there. */

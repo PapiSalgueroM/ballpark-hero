@@ -183,6 +183,8 @@ const KIT_ONLY = [
   'src/lib/gmDeskHostNfl.ts', 'src/lib/nflGmCareer.ts', 'src/components/front-office/nflCareerKit.ts',
   'src/components/front-office-shared/GmOutOfWork.tsx', 'src/components/front-office-shared/GmJobMarketPanel.tsx',
   'src/components/front-office-shared/GmCareerPanel.tsx', 'src/components/front-office-shared/GmXpDeskPanel.tsx',
+  /* Round 1559: the shared bind and the core every sport's kit carries */
+  'src/lib/gmCareerBind.ts', 'src/components/front-office-shared/gmCareerKitCore.ts',
 ];
 /* Round 1542: the season's awards and the shared ranking ride in the kit (the close is in the press that waits for
    it), the season card, its words and the shared card in the card's own chunk: the page carries none of them. */
@@ -195,6 +197,8 @@ const PAGE_MUST = [
   'src/components/front-office/FrontOfficeBoard.tsx', 'src/lib/gmCareerFace.ts', 'src/lib/gmSeatRecord.ts',
   'src/components/front-office/nflCareerKitLoad.ts', 'src/components/front-office-shared/gmCareerDesk.tsx', 'src/lib/nflGmDesk.ts',
   'src/lib/nflSeasonStats.ts',
+  /* Round 1559: the loader's shared fetch once rule, a leaf the page carries */
+  'src/components/front-office-shared/careerKitLoader.ts',
 ];
 
 begin('1', 'the page carries the boxes and the loader, and not one module of the career kit');

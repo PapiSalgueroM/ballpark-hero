@@ -39,7 +39,7 @@ import {
 import { MLB_DEADLINE, type DeadlineStance, deadlineStances, stanceValue, tradeWindow, type TradeWindow } from './gmDeadline';
 import {
   MLB_CASH_RETENTION, MLB_TRADE_RULES, type GmTradeRules, type PackageContext, type PackageVerdict, type PickValueCurve,
-  type TradeAsset, type TradePackage, evaluatePackage, pickValueAt, proposePackage, splitRetained,
+  type TradeAsset, type TradePackage, evaluatePackage, keepRetainedOverSummer, pickValueAt, proposePackage, splitRetained,
 } from './gmTradePackage';
 import {
   type GmStaffBlock, type GmStaffCtx, gmDefaultStaff, gmHashFloat, gmInjuryWeeks, gmIsValidStaff, gmRolloverStaff,
@@ -497,12 +497,8 @@ export function mlbDeskOffseason(league: MlbLeague, desk: GmDesk, team: string, 
   for (const round of compPicks) picks = awardPick(picks, league.season, round, team, 'comp');
   syncMlbPicks(league, picks);
 
-  const retained = retainedBefore.filter(r => {
-    const entry = league.teams[r.club]?.deadCap?.find(d => d.playerId === r.playerId);
-    if (!entry) return false;
-    entry.amount = r.kept;
-    return true;
-  });
+  /* Round 1559: the shared retained salary step (gmTradePackage.ts), the same four lines this summer held. */
+  const retained = keepRetainedOverSummer(league.teams, retainedBefore);
 
   const walk = gmSummerWalk(MLB_STAFF_PACK.rules, staffBefore.block);
   const staff: MlbStaffState = {
