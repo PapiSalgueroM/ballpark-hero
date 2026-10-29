@@ -1,0 +1,91 @@
+all 8 bundled files are 65b3e291a's text
+fleet seed 1 club-00: 3 checkpoints, 477 actions
+fleet seed 1 club-06: 3 checkpoints, 464 actions
+fleet seed 1 club-17: 3 checkpoints, 480 actions
+fleet seed 2 club-00: 3 checkpoints, 471 actions
+fleet seed 2 club-06: 3 checkpoints, 508 actions
+fleet seed 2 club-17: 3 checkpoints, 464 actions
+fleet seed 3 club-00: 3 checkpoints, 516 actions
+fleet seed 3 club-06: 3 checkpoints, 470 actions
+fleet seed 3 club-17: 3 checkpoints, 471 actions
+fleet seed 4 club-00: 3 checkpoints, 508 actions
+fleet seed 4 club-06: 3 checkpoints, 478 actions
+fleet seed 4 club-17: 3 checkpoints, 463 actions
+fleet seed 5 club-00: 3 checkpoints, 508 actions
+fleet seed 5 club-06: 3 checkpoints, 463 actions
+fleet seed 5 club-17: 3 checkpoints, 463 actions
+fleet seed 6 club-00: 3 checkpoints, 493 actions
+fleet seed 6 club-06: 3 checkpoints, 485 actions
+fleet seed 6 club-17: 3 checkpoints, 472 actions
+fleet seed 7 club-00: 3 checkpoints, 492 actions
+fleet seed 7 club-06: 3 checkpoints, 509 actions
+fleet seed 7 club-17: 3 checkpoints, 464 actions
+fleet seed 8 club-00: 3 checkpoints, 501 actions
+fleet seed 8 club-06: 3 checkpoints, 472 actions
+fleet seed 8 club-17: 3 checkpoints, 464 actions
+fleet seed 9 club-00: 3 checkpoints, 524 actions
+fleet seed 9 club-06: 3 checkpoints, 486 actions
+fleet seed 9 club-17: 3 checkpoints, 464 actions
+fleet seed 10 club-00: 3 checkpoints, 508 actions
+fleet seed 10 club-06: 3 checkpoints, 463 actions
+fleet seed 10 club-17: 3 checkpoints, 463 actions
+fleet seed 11 club-00: 3 checkpoints, 477 actions
+fleet seed 11 club-06: 3 checkpoints, 471 actions
+fleet seed 11 club-17: 3 checkpoints, 463 actions
+fleet seed 12 club-00: 3 checkpoints, 471 actions
+fleet seed 12 club-06: 3 checkpoints, 463 actions
+fleet seed 12 club-17: 3 checkpoints, 485 actions
+fleet seed 13 club-00: 3 checkpoints, 491 actions
+fleet seed 13 club-06: 3 checkpoints, 487 actions
+fleet seed 13 club-17: 3 checkpoints, 464 actions
+fleet seed 14 club-00: 3 checkpoints, 508 actions
+fleet seed 14 club-06: 3 checkpoints, 508 actions
+fleet seed 14 club-17: 3 checkpoints, 464 actions
+fleet seed 15 club-00: 3 checkpoints, 487 actions
+fleet seed 15 club-06: 3 checkpoints, 464 actions
+fleet seed 15 club-17: 3 checkpoints, 464 actions
+fleet seed 16 club-00: 3 checkpoints, 493 actions
+fleet seed 16 club-06: 3 checkpoints, 464 actions
+fleet seed 16 club-17: 3 checkpoints, 464 actions
+fleet seed 17 club-00: 3 checkpoints, 508 actions
+fleet seed 17 club-06: 3 checkpoints, 479 actions
+fleet seed 17 club-17: 3 checkpoints, 464 actions
+fleet seed 18 club-00: 3 checkpoints, 494 actions
+fleet seed 18 club-06: 3 checkpoints, 463 actions
+fleet seed 18 club-17: 3 checkpoints, 471 actions
+fleet seed 19 club-00: 3 checkpoints, 485 actions
+fleet seed 19 club-06: 3 checkpoints, 485 actions
+fleet seed 19 club-17: 3 checkpoints, 471 actions
+fleet seed 20 club-00: 3 checkpoints, 501 actions
+fleet seed 20 club-06: 3 checkpoints, 486 actions
+fleet seed 20 club-17: 3 checkpoints, 464 actions
+fleet seed 21 club-00: 3 checkpoints, 477 actions
+fleet seed 21 club-06: 3 checkpoints, 464 actions
+fleet seed 21 club-17: 3 checkpoints, 472 actions
+fleet seed 22 club-00: 3 checkpoints, 509 actions
+fleet seed 22 club-06: 3 checkpoints, 487 actions
+fleet seed 22 club-17: 3 checkpoints, 464 actions
+fleet seed 23 club-00: 3 checkpoints, 501 actions
+fleet seed 23 club-06: 3 checkpoints, 493 actions
+fleet seed 23 club-17: 3 checkpoints, 463 actions
+fleet seed 24 club-00: 3 checkpoints, 464 actions
+fleet seed 24 club-06: 3 checkpoints, 493 actions
+fleet seed 24 club-17: 3 checkpoints, 463 actions
+recipe breakAfterSwap: seed 7 club-06 at 12 actions (break/homeAway, season 1, 92401 chars)
+recipe prepare: seed 7 club-06 at 19 actions (prepare/homeAway, season 1, 94331 chars)
+recipe quarter: seed 7 club-06 at 20 actions (quarter/homeAway, season 1, 94554 chars)
+recipe report: seed 7 club-06 at 46 actions (report/homeAway, season 1, 105294 chars)
+recipe lastHomeAway: seed 7 club-06 at 209 actions (prepare/homeAway, season 1, 133099 chars)
+recipe finalsPrepare: seed 7 club-06 at 218 actions (prepare/finals, season 1, 134627 chars)
+recipe finalsReport: seed 7 club-06 at 219 actions (report/finals, season 1, 134848 chars)
+recipe seasonOver: seed 7 club-06 at 258 actions (seasonOver/finals, season 1, 134113 chars)
+recipe summer: seed 7 club-06 at 259 actions (summer/finals, season 1, 133024 chars)
+recipe draftPart: seed 7 club-06 at 260 actions (draft/finals, season 1, 138245 chars)
+recipe season2Prepare: seed 7 club-06 at 271 actions (prepare/homeAway, season 2, 92198 chars)
+recipe season3Break: seed 7 club-06 at 511 actions (break/homeAway, season 3, 86541 chars)
+recipe tier1MidMatch: seed 11 club-00 at 61 actions (break/homeAway, season 1, 105717 chars)
+recipe tier2FinalsNoGame: seed 12 club-02 at 218 actions (prepare/finals, season 1, 135181 chars)
+recipe tier4Break: seed 13 club-03 at 82 actions (break/homeAway, season 1, 111249 chars)
+recipe tier5Season2Report: seed 14 club-05 at 240 actions (report/homeAway, season 2, 97335 chars)
+wrote /home/runner/work/ballpark-hero/ballpark-hero/scripts/data/aussieV2SaveFixture1572.json: 72 careers, 16 recipes, 8 files, 24.2 s
+RECORD-IDENTICAL

@@ -1,0 +1,4 @@
+#!serial
+record-check: node scripts/recordAussieV2SaveFixture1572.mjs --base 65b3e291a --force && git diff --exit-code --stat scripts/data/aussieV2SaveFixture1572.json && echo RECORD-IDENTICAL
+simAflClubNames: node scripts/simAflClubNames.mjs
+simAflClubNames-long: AFL_NAMES_LONG=1 node scripts/simAflClubNames.mjs

@@ -1,0 +1,15 @@
+
+2. identity: a career with no club set is the base record, checkpoint for checkpoint
+  ok: the record holds 72 fleet careers (72 expected)
+  ok: (a) 72 careers, 216 checkpoints played with no set (LONG, the whole fleet) in 23.6 s
+  ok: (a) 216 of 216 checkpoints equal the base's raw and masked hashes
+
+3. old saves: every base save loads, round trips, opens the league and plays on to the base
+  ok: the record holds 16 save recipes (16 expected)
+  ok: 16 of 16 recipes replay to the base's raw save string
+  ok: 16 of 16 load and 16 round trip byte for byte
+  ok: 16 of 16 open the league board
+  ok: 16 of 16 play 60 more bot actions to the base's raw and masked hash
+  ok: 16 of 16 never carry a clubSet key
+
+simAflClubNames: 9 checks, 0 failures, sections 2,3, 24.6 s
