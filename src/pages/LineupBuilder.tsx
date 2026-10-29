@@ -279,7 +279,9 @@ const LineupBuilder = () => {
       <GameShell
         width="wide"
         title="BUILD YOUR XI"
-        subtitle="Pick a formation, fill each position with a player from the given club or nation"
+        subtitle={isClubYear && phase !== 'formation'
+          ? `Fill each position with a ${recordedYear} record from the club you are given`
+          : 'Pick a formation, fill each position with a player from the given club or nation'}
         headerExtra={
           <div className="flex justify-center">
             <button
