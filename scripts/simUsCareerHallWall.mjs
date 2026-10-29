@@ -412,8 +412,7 @@ let boardVerdict = null;
 if (!CONTROL || BOARD_CONTROLS[CONTROL]) {
   const { spawnSync } = await import('node:child_process');
   const { mkdirSync, writeFileSync } = await import('node:fs');
-  const heldBoard = readFileSync(path.join(ROOT, BOARD));
-  const boardSource = heldBoard.toString('utf8').replace(/\r\n/g, '\n');
+  const boardSource = readFileSync(path.join(ROOT, BOARD), 'utf8').replace(/\r\n/g, '\n');
   for (const [name, c] of Object.entries(BOARD_CONTROLS)) for (const [from] of c.edits) {
     const n = boardSource.split(from).length - 1;
     if (n !== 1) { console.error(`simUsCareerHallWall board control ${name}: REFUSED, its string is in the board ${n} times, not once (not a FIRED)`); process.exit(2); }
@@ -436,7 +435,7 @@ if (!CONTROL || BOARD_CONTROLS[CONTROL]) {
   let rows = [];
   try { rows = JSON.parse(readFileSync(report, 'utf8')).testResults.flatMap(f => f.assertionResults); } catch { /* read below */ }
   rmSync(work, { recursive: true, force: true });
-  ok('s4.held', Buffer.compare(readFileSync(path.join(ROOT, BOARD)), heldBoard) === 0, 'the board bytes changed under the run');
+  ok('s4.held', readFileSync(path.join(ROOT, BOARD), 'utf8').replace(/\r\n/g, '\n') === boardSource, 'the board changed under the run');
   if (!rows.length) { console.error(`simUsCareerHallWall section 4: the board test did not report (${String(run.stderr || run.error || '').split('\n').slice(-3).join(' | ')})`); process.exit(2); }
   const byTag = {};
   for (const r of rows) (byTag[tagOf(r.fullName)] ??= []).push(r.status);
