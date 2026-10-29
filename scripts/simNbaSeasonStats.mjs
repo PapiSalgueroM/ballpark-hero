@@ -943,6 +943,50 @@ console.log('9) One save shape: the NBA keeps the shared short lines, reads them
   } else {
     console.log('   9d skipped: NBA_STATS_BASE is not set (the base comparison is the round\'s receipt, run on a runner)');
   }
+  /* 9e. PRINTED, not held (brief 1566 decision 2): the league's size in the save at the deepest point of a season (its
+     regular season played, before the summer clears the lines), every seed, with the ids as a fresh page load at the
+     longest epoch writes them (14 characters, the counter from the league's lowest id). The epoch (entityIds.ts, 2 to
+     14 characters a page load, on every id) is what moved the same head's size between runs; pinned, the size is byte
+     stable for one seed, and that IS held: each seed played twice gives the same characters. The base too when
+     NBA_STATS_BASE is set. */
+  {
+    const LONG = 'z'.repeat(14);
+    const pinned = lg => {
+      const ids = [...Object.values(lg.teams).flatMap(t => t.players), ...lg.freeAgents].map(p => p.id);
+      const ep = ids[0].slice(1, ids[0].lastIndexOf('-'));
+      const low = Math.min(...ids.map(id => Number(id.slice(id.lastIndexOf('-') + 1))));
+      const re = new RegExp('n' + ep + '-(\\d+)', 'g');
+      return v => JSON.stringify(v).replace(re, (_, k) => `n${LONG}-${Number(k) - low + 1}`);
+    };
+    const regular = (N, seed) => {
+      const lg = N.initNbaLeague(lcg(seed * 104729 + 1));
+      const rng = lcg(seed * 104729 + 3);
+      const me = Object.keys(lg.teams)[seed % 30];
+      while (lg.teams[me].players.length > 15) {
+        const worst = [...lg.teams[me].players].sort((a, b) => a.ovr - b.ovr)[0];
+        if (!N.nbaRelease(lg.teams[me], lg.freeAgents, worst.id)) break;
+      }
+      N.nbaTipOff(lg, rng, me);
+      for (let r = 1; r < N.NBA_ROUNDS; r += 1) { N.simRound(lg, me, rng); lg.round += 1; }
+      N.simRound(lg, me, rng);
+      return lg;
+    };
+    const med = a => { const s = [...a].sort((x, y) => x - y); return s.length % 2 ? s[(s.length - 1) / 2] : (s[s.length / 2 - 1] + s[s.length / 2]) / 2; };
+    const fleet = N => SEEDS.map(seed => {
+      const lg = regular(N, seed);
+      const fix = pinned(lg), text = fix(lg);
+      return { seed, league: text.length, block: fix(lg.stats).length, text };
+    });
+    const head = fleet(nba), again = fleet(nba);
+    const unstable = head.filter((h, i) => h.text !== again[i].text).map(h => h.seed);
+    ok(9, `the league's size in the save is byte stable for one seed with the epoch pinned (${SEEDS.length} seeds, each played twice)`, unstable.length === 0, `seeds ${unstable.join(', ')}`);
+    const say = (tag, f) => {
+      const big = Math.max(...f.map(x => x.league));
+      console.log(`   9e ${tag}: the league in the save after the regular season, ${f.length} seeds: median ${med(f.map(x => x.league))}, largest ${big} characters (its lines block: median ${med(f.map(x => x.block))}, largest ${Math.max(...f.map(x => x.block))}); headroom to 700K (716800) ${716800 - big}`);
+    };
+    say('head', head);
+    if (BASE_E) say('base', fleet(BASE_E.nba));
+  }
 }
 
 /* ---- report ---------------------------------------------------------------- */

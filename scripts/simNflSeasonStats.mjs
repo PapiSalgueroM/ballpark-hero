@@ -170,6 +170,7 @@ const HEAD_ENTRY = [
   "export * as view from './src/lib/nflSeasonView.ts';",
   "export * as fo from './src/lib/foSeasonStats.ts';",
   "export { leagueNames } from './src/lib/foNames.ts';",
+  "export { makeIdMinter } from './src/lib/entityIds.ts';",
 ];
 
 const t0 = Date.now();
@@ -370,6 +371,12 @@ const measured4 = [];
 /* section 7: the saves and blocks the fleet writes, and whether every line is a man who was in his club's pool */
 const sizes = { saves: [], bases: [], blocks: [], lines: [], statLines: [], pool: null };
 if (SECTIONS.includes(7)) sizes.pool = tally();
+/* Round 1566 (brief decision 2): the id epoch (src/lib/entityIds.ts) is drawn once a page load, 2 to 14 characters,
+   and every minted id carries it, so a size measured with the run's own epoch moved between runs of one head. Section
+   7 measures every save and block with the epoch pinned at its longest (14 characters), the most the ids can cost, so
+   the same run measures the same characters every time. The probe minter has its own counter: it moves no id. */
+const RUN_EPOCH = (() => { const id = M.makeIdMinter('q')(); return id.slice(1, id.lastIndexOf('-')); })();
+const pinEpoch = text => text.replace(new RegExp(`(["|])([a-z]{1,2})${RUN_EPOCH}-(\\d+)`, 'g'), `$1$2${'z'.repeat(14)}-$3`);
 let seasonPools = {};
 if (SECTIONS.some(s => s === 2 || s === 3 || s === 4 || s === 7)) {
   const E = M.engine, S = M.stats;
@@ -459,13 +466,13 @@ if (SECTIONS.some(s => s === 2 || s === 3 || s === 4 || s === 7)) {
         }
         if (SECTIONS.includes(7)) {
           /* the board's save: the league (block and history in it), his club and the season's log of his games */
-          sizes.saves.push(JSON.stringify({ league: A.lg, myTeam: A.user, phase: 'recap', gameLog: { v: 1, season: A.lg.season, team: A.user, games: his } }).length);
-          sizes.blocks.push(JSON.stringify(A.lg.stats).length);
+          sizes.saves.push(pinEpoch(JSON.stringify({ league: A.lg, myTeam: A.user, phase: 'recap', gameLog: { v: 1, season: A.lg.season, team: A.user, games: his } })).length);
+          sizes.blocks.push(pinEpoch(JSON.stringify(A.lg.stats)).length);
           const bare = JSON.parse(JSON.stringify(A.lg));
           delete bare.stats;
           delete bare.awards;
           for (const p of S.nflEveryMan(bare).flat()) { delete p.awards; delete p.rookieSeason; }
-          sizes.bases.push(JSON.stringify({ league: bare, myTeam: A.user, phase: 'recap', gameLog: { v: 1, season: A.lg.season, team: A.user, games: his } }).length);
+          sizes.bases.push(pinEpoch(JSON.stringify({ league: bare, myTeam: A.user, phase: 'recap', gameLog: { v: 1, season: A.lg.season, team: A.user, games: his } })).length);
           const ls = Object.values(M.stats.nflFoStats(A.lg.stats).lines);
           sizes.lines.push(ls.length);
           sizes.statLines.push(ls.filter(l => Object.values(l.tot).some(v => v > 0)).length);
@@ -552,7 +559,7 @@ if (SECTIONS.includes(7)) {
   const med = xs => sorted(xs)[Math.floor(xs.length / 2)];
   const k = n => `${(n / 1024).toFixed(1)}K`;
   const maxSave = Math.max(...sizes.saves);
-  console.log(`  over ${sizes.saves.length} seasons: the biggest save ${k(maxSave)}, the block median ${k(med(sizes.blocks))} and largest ${k(Math.max(...sizes.blocks))}`);
+  console.log(`  over ${sizes.saves.length} seasons, ids at the longest epoch: the save median ${k(med(sizes.saves))} (${med(sizes.saves)} characters), the biggest ${k(maxSave)} (${maxSave}), the block median ${k(med(sizes.blocks))} and largest ${k(Math.max(...sizes.blocks))}`);
   console.log(`  lines a season: the pool's ${Math.min(...sizes.lines)} to ${Math.max(...sizes.lines)} (median ${med(sizes.lines)}); men with a stat only ${Math.min(...sizes.statLines)} to ${Math.max(...sizes.statLines)} (median ${med(sizes.statLines)})`);
   check(7, `the biggest save with lines, ${k(maxSave)}, is inside the NFL save budget of ${k(budget)}`, sizes.saves.length > 0 && maxSave <= budget);
   /* THE BRIEF'S STOP LINE (600K) WAS PASSED BEFORE THIS ROUND: a deep league opens at about 620K of its own (every
