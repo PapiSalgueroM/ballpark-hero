@@ -1,0 +1,10 @@
+base-earned exit=0 17s | simNbaEarnedDraft: green.
+base-board exit=0 120s | simNbaDraftBoard: green.
+base-desk exit=0 25s | simNbaGmDesk: all seven checks passed (10 seeds x 10 seasons)
+base-gmcal exit=1 1s | simGmCalendar: 6 failure(s)
+rec-earned exit=0 2s | wrote scripts/data/nbaEarnedDraftFixture.json from 5d1198389: 30 seasons to the draft, desk on
+rec-board exit=0 59s | simNbaDraftBoard: recorded.
+rec-desk exit=0 1s | wrote scripts/data/nbaGmDeskFixture.json from 5d1198389: 3 seeds x 3 seasons
+head-earned exit=0 16s | simNbaEarnedDraft: green.
+head-board exit=0 122s | simNbaDraftBoard: green.
+head-desk exit=0 23s | simNbaGmDesk: all seven checks passed (10 seeds x 10 seasons)

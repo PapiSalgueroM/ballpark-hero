@@ -1,0 +1,185 @@
+{
+  "recordedFrom": "5d1198389",
+  "seeds": {
+    "1": {
+      "team": "ATL",
+      "league": "5e064dd1566b9dab5774c56bcdb9afef75646fc9",
+      "desk": "8db8b5338c84bd3ce1d114614e38f8c0e9b835ea",
+      "calls": 10509
+    },
+    "2": {
+      "team": "BKN",
+      "league": "a52d8cf07c3c0e11fd11f87d46eeb16f6d6dccaa",
+      "desk": "5e518fe8a26ad1fb0e23fae3689bf671481ea1e4",
+      "calls": 10543
+    },
+    "3": {
+      "team": "BOS",
+      "league": "c4bee99991314a7b584eb2404ddb97689c630084",
+      "desk": "b3b709c6de7bdb42efd66736bec4cf5dcff24947",
+      "calls": 10480
+    },
+    "4": {
+      "team": "CHA",
+      "league": "ed86f49b2878f0d8b009585ab71d8d7ccefac8ae",
+      "desk": "018965ee0f18f2c94a8c504254853403665f0e8d",
+      "calls": 10490
+    },
+    "5": {
+      "team": "CHI",
+      "league": "db90fe661ddaafe2ba02c0add8a85e7cc182ff4f",
+      "desk": "ae31e598fc22f0bef71fe3fbd5282953e826558a",
+      "calls": 10511
+    },
+    "6": {
+      "team": "CLE",
+      "league": "d05bf590b714b24707b23076785ed47c2454ef29",
+      "desk": "504cb9e1bab3283475449e2a5abf8786c2658c5f",
+      "calls": 10530
+    },
+    "7": {
+      "team": "DAL",
+      "league": "30ee33beb7f13491419f340e2ea86a06282e805c",
+      "desk": "460ff0108b07d6c5c7366dfd4865958d5df6a3f1",
+      "calls": 10497
+    },
+    "8": {
+      "team": "DEN",
+      "league": "477999a5bc8da51ece301183de5bb53fb399e05b",
+      "desk": "632e1003060aee3b0869635ec3015e14f902e392",
+      "calls": 10511
+    },
+    "9": {
+      "team": "DET",
+      "league": "207db2596ffacfdc4c8f6f611bd2b37df5cb1b66",
+      "desk": "6c3527233d8f60020d5039666ac34243b36bca23",
+      "calls": 10506
+    },
+    "10": {
+      "team": "GSW",
+      "league": "1d04257fd5f1d44e8770764c1f4cd4208e416ce2",
+      "desk": "379d1d821e2c9408dfe3a0d90b4192fb9d8dde73",
+      "calls": 10502
+    },
+    "11": {
+      "team": "HOU",
+      "league": "3abf6633080ecece82d9238ec7e6df55e426ec42",
+      "desk": "3f4840f2ce633924e7792be2677f2f10974122de",
+      "calls": 10514
+    },
+    "12": {
+      "team": "IND",
+      "league": "f3c3a056eeb44590f2a2f96857a99b9875b535e0",
+      "desk": "59cbd137c2ee950fbe3fd215ed50d6ab6a7a1f21",
+      "calls": 10560
+    },
+    "13": {
+      "team": "LAC",
+      "league": "28455ad479e16232b5284afda4d59dabf9513288",
+      "desk": "36c2d3b43152a697e0cd2b6d5da88abf2400dfd4",
+      "calls": 10514
+    },
+    "14": {
+      "team": "LAL",
+      "league": "3265df48005c324eb94aa654fb3bf87432a6d551",
+      "desk": "66f1526342724a6ed7d8de772376238a842b4480",
+      "calls": 10500
+    },
+    "15": {
+      "team": "MEM",
+      "league": "c56b9df77392c032cf5bad8a27fce53d56bf2143",
+      "desk": "c334e73414cbc6649c93db38d6d1b656aeb59b14",
+      "calls": 10548
+    },
+    "16": {
+      "team": "MIA",
+      "league": "9d448af270d53cce22839425db7ed925340d637f",
+      "desk": "28ae5e7497cb5157ab3570efb4290f1df9d26844",
+      "calls": 10503
+    },
+    "17": {
+      "team": "MIL",
+      "league": "1112c1295a2f77ef96f48958ee7ee6ec37242963",
+      "desk": "5c0168c3e4ad0e7dc0084a6acfb5310f897ba73a",
+      "calls": 10536
+    },
+    "18": {
+      "team": "MIN",
+      "league": "d3bf96555a51af947e82362d030503a3626df00e",
+      "desk": "8755e8a4381996dea9abdd021b55cc45b435d408",
+      "calls": 10494
+    },
+    "19": {
+      "team": "NOP",
+      "league": "ed60aa6c42be1e753de1daee1be7e036d34a6d41",
+      "desk": "24704b7ffdf0b2f5bdd4e48727428f1da961622d",
+      "calls": 10542
+    },
+    "20": {
+      "team": "NYK",
+      "league": "13c98aa5d06f37a54b5d7d543b2a1d52384b8a4a",
+      "desk": "3e26805bdf0b4b5791ffc5f52fc0e76906ad768d",
+      "calls": 10544
+    },
+    "21": {
+      "team": "OKC",
+      "league": "c45da992e427fb195cbb8d98f9e7e7de164fb032",
+      "desk": "c6e29c18edd9ce0323b9b8142701e630a34b1270",
+      "calls": 10524
+    },
+    "22": {
+      "team": "ORL",
+      "league": "93ce4e13bf24fe97b0d80b3c99216da839af3adb",
+      "desk": "4628fb239907e175af486abe63fe8cc57f974139",
+      "calls": 10521
+    },
+    "23": {
+      "team": "PHI",
+      "league": "1c06c6c894c13b656fda6222f62f3993e4f91056",
+      "desk": "d489296f008290addb4eff356fd34cf92c7d4f1e",
+      "calls": 10524
+    },
+    "24": {
+      "team": "PHX",
+      "league": "15fee71bb4336f173cf7991c860518437a7e016f",
+      "desk": "77cff3e6ec3532acc9b855797a41e710a72eebea",
+      "calls": 10505
+    },
+    "25": {
+      "team": "POR",
+      "league": "8c025f7654d46afc57808d880303b90d6f44d04d",
+      "desk": "c12527830be4270c2784b9d7945c2ba6606ec40e",
+      "calls": 10529
+    },
+    "26": {
+      "team": "SAC",
+      "league": "0c58847eac17fdbaeca2e88b9ee16f591f584b2c",
+      "desk": "8285430007fb20e01312b0267316eef43a68ee05",
+      "calls": 10520
+    },
+    "27": {
+      "team": "SAS",
+      "league": "59d42cd4bd9ec34d342c3ad3a5ac4761c28450b4",
+      "desk": "5bf344fd0e4a6437a3410765295bce70b631b016",
+      "calls": 10519
+    },
+    "28": {
+      "team": "TOR",
+      "league": "b0a31825d0b81b0fe8df4e7e202e225c1463fcfa",
+      "desk": "3267682c7c299496a401d4133e07a03dd5aff122",
+      "calls": 10500
+    },
+    "29": {
+      "team": "UTA",
+      "league": "90a38d9b8e57cfd48fd11b02dd5f853736dcfc84",
+      "desk": "7c9c94687738895bb423dcf2a703eddca0e774f2",
+      "calls": 10526
+    },
+    "30": {
+      "team": "WAS",
+      "league": "657f508ea789f47aea35ef9d07e420bd9c826dc8",
+      "desk": "fe1917fd37f76fffd57f6ded4212ebf3ebcbe862",
+      "calls": 10514
+    }
+  }
+}
