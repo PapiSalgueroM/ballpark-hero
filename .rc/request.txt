@@ -1,0 +1,6 @@
+#!serial
+head: git log --oneline -1 && git diff --quiet 006e40559 HEAD -- src && echo "src unchanged since 006e40559"
+tsc: node_modules/.bin/tsc --noEmit -p tsconfig.app.json
+vitest: node_modules/.bin/vitest run src/hooks/useConnectionsRelabel.test.ts src/hooks/useConnectionsLoss.test.ts --testTimeout=300000 --hookTimeout=120000
+ctl-labelonly: sed -i 's/if (solved.theme === board.theme) return true;/return solved.theme === board.theme;/' src/lib/connectionsSolvedMatch.ts && echo "MUTATED $(grep -c 'return solved.theme === board.theme;' src/lib/connectionsSolvedMatch.ts)" && node_modules/.bin/vitest run src/hooks/useConnectionsRelabel.test.ts --testTimeout=300000; s=$?; git checkout -- src; exit $s
+clean: git status --short | wc -l
