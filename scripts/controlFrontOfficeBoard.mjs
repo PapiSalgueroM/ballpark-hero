@@ -143,14 +143,17 @@ const T = {
   /* Round 1533: the one press digests with the desk on and off (the digest sets aside the host's two blocks only) */
   opDeskOn: [OP, 'GM desk on: one press of the final week ordinary'],
   opDeskOff: [OP, 'GM desk off: one press of the final week ordinary'],
-  caFired: [CA, 'fired: the recap offers who is calling and keeps the save'],
-  caTake: [CA, 'taking an offer takes two taps'],
+  /* Round 1559 (critic 2 of its brief): the career file holds a row per board, so each of its titles is matched with
+     its block's name in front ("nfl board: ..."), never by the words alone, which a second board's copy of the same
+     test (green under an NFL board copy) would also match and so stop the control from firing. */
+  caFired: [CA, 'nfl board: the career fired: the recap offers who is calling and keeps the save'],
+  caTake: [CA, 'nfl board: the career taking an offer takes two taps'],
   /* Round 1533's fix pass */
-  caLookHub: [CA, 'looking at Career and GM level on the hub'],
-  caLookOut: [CA, 'looking at all three boxes out of work'],
-  caTick: [CA, 'a staff approach that runs out in the final week'],
+  caLookHub: [CA, 'nfl board: the career looking at Career and GM level on the hub'],
+  caLookOut: [CA, 'nfl board: the career looking at all three boxes out of work'],
+  caTick: [CA, 'nfl board: the career a staff approach that runs out in the final week'],
   /* Round 1559 (1533's finding 12): the title watched at the club he took */
-  caWatched: [CA, 'the title game watched to full time records one finish'],
+  caWatched: [CA, 'nfl board: a title watched at the club he took the title game watched to full time records one finish'],
   /* Round 1550 */
   lzSeason: [LZ, 'a season being played never asks for it'],
   lzBox: [LZ, 'a career box opened asks for it'],
