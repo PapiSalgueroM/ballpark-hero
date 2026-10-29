@@ -1,0 +1,14 @@
+build exit=0 27s | [dukb] inlined 1 stylesheet(s) and 1 module(s) into 181 snapshots (11 left alone)
+simClubManagerALeague exit=0 9s | simClubManagerALeague: all checks passed
+simClubManagerMeters exit=0 26s | simClubManagerMeters: PASS. The board meter is the sack race, the fans move with results, and every table prints its goals pair.
+simCmLeagueFixtures exit=0 10s | simCmLeagueFixtures: OK, sections A to J green: 10 ledger(s), 10 frozen, 0 pending, 10 bound, 0 unbound, 3528 fixtures, 268 of 268 controls fired
+simCmVarLedger exit=0 1s | simCmVarLedger: all 691 checks passed.
+unitset exit=0 8s |    Duration  7.46s (transform 2.68s, setup 863ms, collect 8.05s, tests 7.54s, environment 2.19s, prepare 568ms)
+simClubManagerScore exit=0 90s | ALL SEASON SCORE CHECKS PASSED
+walk exit=0 82s | playCmBoardVerdict GREEN: 48 of 48 checks green
+simClubManagerBudget exit=1 164s | simClubManagerBudget: 1 FAILURE(S)
+walk-noconfirm exit=1 100s | control noconfirm FIRED: 3 checks red, 3 cases
+simCmApplications exit=0 60s | simCmApplications: green. The answer is earned, the limits hold, a summer move fires once, joining now moves the manager that week, and old saves load.
+walk-rise exit=1 113s | control rise FIRED: 3 checks red, 3 cases
+walk-nofate exit=1 157s | control nofate FIRED: 3 checks red, 3 cases
+worldbrowser-head exit=0 47s | simManagerWorldBrowser all: 13 outcomes and 16 effective copied faults passed.
