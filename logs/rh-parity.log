@@ -1,0 +1,14 @@
+A) the detection SQL and its JS twin return the same rows
+  ok: 1714 fixture rows loaded
+  FAIL: the SQL returns 21 rows and the JS 22; 0 only in the SQL, 1 only in the JS: {"signal":"S2","club":"Arsenal FC","year":2010,"n":36,"size_rank":1,"nat":"Argentina","k":10,"bloc_max":4000000,"bloc_med":1000000,"rest_q1":5000000,"rest_med":
+  ok: the JS twin returns the fixture's committed expected list
+B) the cache purge removes exactly the stale Arsenal yeses, all or nothing
+  ok: the generator lists the 2 stale yeses and holds the surname only key
+  ok: the form ran and removed exactly the 2 stale yeses
+  ok: every row left in the table is byte for byte as it was
+  ok: every removed row still matched the hash Q6 read
+  ok: all or nothing: 2 of 2
+  ok: a second run raises (0 of 2 still match) and changes nothing
+
+control parity FIRED: parity: Franco Jara (id 129803) raised from 4000000 to 6000000 in PGlite only, above the rest's quartile 5000000
+rehearseClubNamesakes1584: 1 finding(s).

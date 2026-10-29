@@ -1,0 +1,40 @@
+ok   Artem Dzyuba (Tula, complete career) [Played for Arsenal x Forward (FWD)]
+       base: valid=true reason="Verified from career records." model=0 cacheWrite=1
+       head: valid=false reason="Artem Dzyuba does not satisfy "Played for Arsenal"." model=0 cacheWrite=1   want valid=false model=0
+ok   Artem Dzyuba, label as the column [Forward (FWD) x Played for Arsenal]
+       base: valid=true reason="Verified from career records." model=0 cacheWrite=1
+       head: valid=false reason="Artem Dzyuba does not satisfy "Played for Arsenal"." model=0 cacheWrite=1   want valid=false model=0
+ok   Valeriy Klimov (Tula, residual), model yes [Played for Arsenal x Forward (FWD)]
+       base: valid=true reason="Verified from career records." model=0 cacheWrite=1
+       head: valid=true reason="model says yes" model=1 cacheWrite=1   want valid=true model=1
+ok   Valeriy Klimov (Tula, residual), model no [Played for Arsenal x Forward (FWD)]
+       base: valid=true reason="Verified from career records." model=0 cacheWrite=1
+       head: valid=false reason="model says no" model=1 cacheWrite=1   want valid=false model=1
+ok   Oleg Pestryakov (Kyiv, residual), model no [Played for Arsenal x Midfielder (MID)]
+       base: valid=true reason="Verified from career records." model=0 cacheWrite=1
+       head: valid=false reason="model says no" model=1 cacheWrite=1   want valid=false model=1
+ok   Test Ghanaian (Berekum Arsenal, complete) [Played for Arsenal x Forward (FWD)]
+       base: valid=true reason="Verified from career records." model=0 cacheWrite=1
+       head: valid=false reason="Test Ghanaian does not satisfy "Played for Arsenal"." model=0 cacheWrite=1   want valid=false model=0
+ok   Test Argentine (Arsenal de Sarandi string, complete) [Played for Arsenal x Forward (FWD)]
+       base: valid=true reason="Verified from career records." model=0 cacheWrite=1
+       head: valid=false reason="Test Argentine does not satisfy "Played for Arsenal"." model=0 cacheWrite=1   want valid=false model=0
+ok   Bukayo Saka (London) [Played for Arsenal x Forward (FWD)]
+       base: valid=true reason="Verified from career records." model=0 cacheWrite=1
+       head: valid=true reason="Verified from career records." model=0 cacheWrite=1   want valid=true model=0
+ok   Arsenal FC U21 man [Played for Arsenal x Forward (FWD)]
+       base: valid=true reason="Verified from career records." model=0 cacheWrite=1
+       head: valid=true reason="Verified from career records." model=0 cacheWrite=1   want valid=true model=0
+ok   split season Arsenal FC / Nottingham Forest [Played for Arsenal x Forward (FWD)]
+       base: valid=true reason="Verified from career records." model=0 cacheWrite=1
+       head: valid=true reason="Verified from career records." model=0 cacheWrite=1   want valid=true model=0
+ok   a name with London and Tula rows of two nationalities [Played for Arsenal x Forward (FWD)]
+       base: valid=true reason="Verified from career records." model=0 cacheWrite=1
+       head: valid=true reason="Verified from career records." model=0 cacheWrite=1   want valid=true model=0
+ok   Dzyuba with a cached yes (served first: the purge covers these) [Played for Arsenal x Forward (FWD)]
+       base: valid=true reason="Stored acceptance." model=0 cacheWrite=0
+       head: valid=true reason="Stored acceptance." model=0 cacheWrite=0   want valid=true model=0
+ok   Dzyuba for Zenit (another label unchanged) [Played for Zenit x Forward (FWD)]
+       base: valid=true reason="Verified from career records." model=0 cacheWrite=1
+       head: valid=true reason="Verified from career records." model=0 cacheWrite=1   want valid=true model=0
+playGrid: green, 13 cases played on base eb8ae0614 and head
