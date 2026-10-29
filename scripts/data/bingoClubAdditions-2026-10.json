@@ -151,8 +151,8 @@
       "clubs": [
         {
           "club": "Energetik-BGU",
-          "fromSeason": "2022 to 2023",
-          "toSeason": "2022 to 2023",
+          "fromSeason": "2022",
+          "toSeason": "2023",
           "loan": false,
           "sources": [
             {
@@ -228,8 +228,8 @@
       "clubs": [
         {
           "club": "Blackburn Rovers",
-          "fromSeason": "2021-22 to 2023-24",
-          "toSeason": "2021-22 to 2023-24",
+          "fromSeason": "2021-22",
+          "toSeason": "2023-24",
           "loan": false,
           "sources": [
             {
@@ -434,8 +434,8 @@
       "clubs": [
         {
           "club": "Everton FC",
-          "fromSeason": "2022-23 to 2023-24",
-          "toSeason": "2022-23 to 2023-24",
+          "fromSeason": "2022-23",
+          "toSeason": "2023-24",
           "loan": false,
           "sources": [
             {
@@ -643,8 +643,8 @@
       "clubs": [
         {
           "club": "ASEC Mimosas",
-          "fromSeason": "2022-23 to 2023-24",
-          "toSeason": "2022-23 to 2023-24",
+          "fromSeason": "2022-23",
+          "toSeason": "2023-24",
           "loan": false,
           "sources": [
             {
@@ -719,8 +719,8 @@
       "clubs": [
         {
           "club": "LOSC Lille",
-          "fromSeason": "2021-22 to 2022-23",
-          "toSeason": "2021-22 to 2022-23",
+          "fromSeason": "2021-22",
+          "toSeason": "2022-23",
           "loan": false,
           "sources": [
             {
@@ -737,8 +737,8 @@
         },
         {
           "club": "Brighton & Hove Albion",
-          "fromSeason": "2023-24 to 2025-26",
-          "toSeason": "2023-24 to 2025-26",
+          "fromSeason": "2023-24",
+          "toSeason": "2025-26",
           "loan": false,
           "sources": [
             {
@@ -1021,8 +1021,8 @@
       "clubs": [
         {
           "club": "FC Girondins Bordeaux",
-          "fromSeason": "2020-21 to 2022-23",
-          "toSeason": "2020-21 to 2022-23",
+          "fromSeason": "2020-21",
+          "toSeason": "2022-23",
           "loan": false,
           "sources": [
             {
@@ -1621,8 +1621,8 @@
       "clubs": [
         {
           "club": "TSG 1899 Hoffenheim",
-          "fromSeason": "2016-17 to 2018-19",
-          "toSeason": "2016-17 to 2018-19",
+          "fromSeason": "2016-17",
+          "toSeason": "2018-19",
           "loan": false,
           "sources": [
             {
@@ -1697,8 +1697,8 @@
       "clubs": [
         {
           "club": "Middlesbrough FC",
-          "fromSeason": "2020-21 to 2025-26",
-          "toSeason": "2020-21 to 2025-26",
+          "fromSeason": "2020-21",
+          "toSeason": "2025-26",
           "loan": false,
           "sources": [
             {
@@ -1922,8 +1922,8 @@
       "clubs": [
         {
           "club": "Deportivo Alavés",
-          "fromSeason": null,
-          "toSeason": null,
+          "fromSeason": "2022-23",
+          "toSeason": "2024-25",
           "loan": false,
           "sources": [
             {
@@ -2185,8 +2185,8 @@
         },
         {
           "club": "Bayern Munich",
-          "fromSeason": null,
-          "toSeason": null,
+          "fromSeason": "2022-23",
+          "toSeason": "2022-23",
           "loan": true,
           "sources": [
             {
@@ -2279,8 +2279,8 @@
       "clubs": [
         {
           "club": "Clermont Foot 63",
-          "fromSeason": "2023-24 to 2024-25",
-          "toSeason": "2023-24 to 2024-25",
+          "fromSeason": "2023-24",
+          "toSeason": "2024-25",
           "loan": true,
           "sources": [
             {
@@ -2355,8 +2355,8 @@
       "clubs": [
         {
           "club": "FC Machida Zelvia",
-          "fromSeason": "2019 to 2022",
-          "toSeason": "2019 to 2022",
+          "fromSeason": "2019",
+          "toSeason": "2022",
           "loan": false,
           "sources": [
             {
@@ -2373,8 +2373,8 @@
         },
         {
           "club": "Kashima Antlers",
-          "fromSeason": "2023 to 2024",
-          "toSeason": "2023 to 2024",
+          "fromSeason": "2023",
+          "toSeason": "2024",
           "loan": false,
           "sources": [
             {
@@ -2449,8 +2449,8 @@
       "clubs": [
         {
           "club": "FC Basel 1893",
-          "fromSeason": "2022-23 to 2024-25",
-          "toSeason": "2022-23 to 2024-25",
+          "fromSeason": "2022-23",
+          "toSeason": "2024-25",
           "loan": false,
           "sources": [
             {
@@ -2918,8 +2918,8 @@
       "clubs": [
         {
           "club": "Sporting CP",
-          "fromSeason": "2022-23 to 2023-24",
-          "toSeason": "2022-23 to 2023-24",
+          "fromSeason": "2022-23",
+          "toSeason": "2023-24",
           "loan": false,
           "sources": [
             {
@@ -3143,8 +3143,8 @@
       "clubs": [
         {
           "club": "FC Admira Wacker",
-          "fromSeason": "2018-19 to 2020-21",
-          "toSeason": "2018-19 to 2020-21",
+          "fromSeason": "2018-19",
+          "toSeason": "2020-21",
           "loan": false,
           "sources": [
             {
@@ -3161,8 +3161,8 @@
         },
         {
           "club": "Sporting CP",
-          "fromSeason": "2023-24 to 2025-26",
-          "toSeason": "2023-24 to 2025-26",
+          "fromSeason": "2023-24",
+          "toSeason": "2025-26",
           "loan": false,
           "sources": [
             {
@@ -3671,8 +3671,8 @@
       "clubs": [
         {
           "club": "Bayern Munich",
-          "fromSeason": "2022-23 to 2023-24",
-          "toSeason": "2022-23 to 2023-24",
+          "fromSeason": "2022-23",
+          "toSeason": "2023-24",
           "loan": false,
           "sources": [
             {
@@ -3783,8 +3783,8 @@
       "clubs": [
         {
           "club": "Newcastle United",
-          "fromSeason": "2023-24 to 2025-26",
-          "toSeason": "2023-24 to 2025-26",
+          "fromSeason": "2023-24",
+          "toSeason": "2025-26",
           "loan": false,
           "sources": [
             {
@@ -3878,8 +3878,8 @@
       "clubs": [
         {
           "club": "Club Brugge KV",
-          "fromSeason": "2019-20 to 2022-23",
-          "toSeason": "2019-20 to 2022-23",
+          "fromSeason": "2019-20",
+          "toSeason": "2022-23",
           "loan": false,
           "sources": [
             {

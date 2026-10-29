@@ -46,7 +46,8 @@
         (PENDING_MAX below is lowered by every batch that judges men).
      5. sources: every added club and every agrees verdict carries two or more
         sources on different hosts, none crowd edited, each with a url, the
-        date read (not after today, not before the fixture) and a quoted line.
+        date read (not after today, not before the fixture) and a quoted line;
+        and every added club has one fromSeason and one toSeason, in order.
      6. derived: every judged man's typed tableClubs (the generator's refusal
         input) is BASE's club history for him on the fixture;
         src/data/bingoClubAdditions.json is the generator's output byte for
@@ -94,6 +95,8 @@
                                    Munich beside bayern munich): section 6 red.
      BINGO_CLUBS_CONTROL=tableclubs one judged man's typed tableClubs loses a
                                    club in memory: section 6 red.
+     BINGO_CLUBS_CONTROL=noseason  one added club loses its toSeason in
+                                   memory: section 5 red.
      FIXTURE_CONTROL=cap           the stub drops the range and the 1,000 row
                                    cap: at least one man's history changes.
    Exit 0 green, 1 red (or a control that fired), 2 could not run, 3 a control
@@ -509,6 +512,27 @@ for (const s of sourced) {
   if (hosts.size < 2) fail(`${s.what}: ${hosts.size} host(s), two different hosts are required`);
 }
 console.log(`   ${sourced.length} sourced facts checked`);
+/* Every added club carries the stint shape a later stints migration can write (critic advice 13):
+   fromSeason and toSeason each ONE season ("2022-23", or "2022" where the league runs by calendar
+   year), a split season's second year the first plus one, and from no later than to. */
+const seasonRows = record.additions.flatMap(e => (e.clubs ?? []).map(c => ({ what: `${e.name}: ${c.club}`, from: c.fromSeason, to: c.toSeason })));
+if (CONTROL === 'noseason' && seasonRows[0]?.to) {
+  seasonRows[0].to = null;
+  changed(`${seasonRows[0].what} loses its toSeason`);
+}
+const seasonStart = s => {
+  const m = /^([0-9]{4})(?:-([0-9]{2}))?$/.exec(s ?? '');
+  return m && (m[2] === undefined || Number(m[2]) === (Number(m[1]) + 1) % 100) ? Number(m[1]) : null;
+};
+let seasonsOk = 0;
+for (const r of seasonRows) {
+  const from = seasonStart(r.from);
+  const to = seasonStart(r.to);
+  if (from === null || to === null) fail(`${r.what}: fromSeason "${r.from}" and toSeason "${r.to}" must each be one season`);
+  else if (from > to) fail(`${r.what}: fromSeason ${r.from} is after toSeason ${r.to}`);
+  else seasonsOk += 1;
+}
+console.log(`   ${seasonsOk} of ${seasonRows.length} added clubs carry one fromSeason and one toSeason`);
 
 /* ---------------------------------------------------------------- 6 */
 section = '6';
