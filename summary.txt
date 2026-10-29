@@ -1,0 +1,6 @@
+probe exit=0 1s | probe-lift: green. The lifted lib writes 1567's guarded and checksummed SQL byte for byte and classifies as 1567 does.
+report exit=0 1s | REPORT ONLY
+plain exit=0 1s | simUsConnectionsFacts: green. Every Baseball, NFL and NHL Connections group is held to the record, and no board has a second right answer the record can see (other tiles 
+drift exit=0 1s | usConnectionsTableImport drift: green. Every live row past the files holds its table file board or its exported board.
+probeflip exit=1 1s | probe-lift: 1 failure(s)
+norival exit=0 16s | No rival product names found. 0 findings.

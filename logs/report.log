@@ -1,0 +1,119 @@
+US_CONN_TABLES (report): nfl holds 16 table rows beside the file's 4 boards
+US_CONN_TABLES (report): nhl holds 16 table rows beside the file's 4 boards
+1) no group claims the present, and every recent year label is one the record judges
+   baseball: 0 present tense or unheld recent year labels
+   nfl: 0 present tense or unheld recent year labels
+  FAIL: nhl nhlconn-020: "Won the 2024 Cup with the Panthers" names a year from 2020 on and nothing holds the group to it
+  FAIL: nhl nhlconn-020: "Canada's 2025 4 Nations team" names a year from 2020 on and nothing holds the group to it
+  FAIL: nhl nhlconn-020: "Goalies who started a 2020s Cup Final game" names a year from 2020 on and nothing holds the group to it
+   nhl: 3 present tense or unheld recent year labels
+2) no refuted claim is on a board
+   baseball: 32 refuted claims held off every board, 0 found
+   baseball: 57 gray pairs the round took off their boards, 0 back
+   nfl: 0 refuted claims held off every board, 0 found
+   nhl: 0 refuted claims held off every board, 0 found
+3) the ledger stands on two hosts
+   baseball: 659 facts, 0 on one host; 115 flagged groups, 575 members held; 131 fixed findings
+   nfl: 12 facts, 0 on one host; 2 flagged groups, 10 members held; 1 fixed findings
+   nhl: 12 facts, 0 on one host; 2 flagged groups, 10 members held; 2 fixed findings
+4) one right answer: the shared cross check over every board
+   baseball: 60 boards, 240 of 240 groups judged; members 1200 judged (0 unknown), other tiles 3600 judged (0 unknown); 0 findings
+  FAIL: nfl nflconn-007 | second-fit | Tua Tagovailoa | Played for the Falcons | listed under Played for the Dolphins, so the board has two right answers
+  FAIL: nfl nflconn-015 | not-a-member | Jalen Hurts | Played college ball at Alabama
+  FAIL: nfl nflconn-017 | second-fit | Drew Brees | Played for the Chargers | listed under Threw 500 career touchdown passes, so the board has two right answers
+   nfl: 6 MEN ON THE TABLE ROWS ARE NOT IN THE RECORD, SO THEIR GROUPS ARE NOT FULLY CHECKED. Extend the record with NAMES_FROM=<export> (scripts/usConnections/fetch*Record.mjs) and run again. First of them: Chad Johnson, Paul Hornung, Robert Griffin III, Sammy Baugh, Bob Waterfield, Lou Groza
+   nfl: 20 boards, 28 of 80 groups judged; members 134 judged (6 unknown), other tiles 294 judged (126 unknown); 3 findings
+  FAIL: nhl nhlconn-005 | not-a-member | Joe Sakic | Played for the Avalanche or Nordiques
+  FAIL: nhl nhlconn-005 | not-a-member | Peter Forsberg | Played for the Avalanche or Nordiques
+  FAIL: nhl nhlconn-005 | not-a-member | Nathan MacKinnon | Played for the Avalanche or Nordiques
+  FAIL: nhl nhlconn-016 | second-fit | Steven Stamkos | Played for the Predators | listed under Won the Rocket Richard Trophy, so the board has two right answers
+   nhl: 156 MEN ON THE TABLE ROWS ARE NOT IN THE RECORD, SO THEIR GROUPS ARE NOT FULLY CHECKED. Extend the record with NAMES_FROM=<export> (scripts/usConnections/fetch*Record.mjs) and run again. First of them: Stan Mikita, Denis Savard, Jeremy Roenick, Milan Hejduk, Adam Foote, Mike Bossy, Denis Potvin, Bryan Trottier
+   nhl: 20 boards, 38 of 80 groups judged; members 108 judged (82 unknown), other tiles 321 judged (249 unknown); 4 findings
+5) no man is a season from joining a group beside him
+   baseball: 0 watched men beside a group they may join
+   nfl: 0 watched men beside a group they may join
+   nhl: 0 watched men beside a group they may join
+6) no man is dealt twice on one board
+   baseball: 0 men dealt twice
+   nfl: 0 men dealt twice
+   nhl: 0 men dealt twice
+7) what the record cannot judge may only get fewer
+   baseball: 0 groups nothing judges (ceiling 0), 0 members the record cannot place (ceiling 0), 0 other tiles it cannot judge (ceiling 0)
+  FAIL: nfl: 52 groups nothing judges, the ledger's uncheckedCeiling says 0: one came back
+  FAIL: nfl: 6 members the record cannot place, the ledger's memberUnknownCeiling says 0: one came back
+  FAIL: nfl: 126 other tiles the record cannot judge against a group beside them, the ledger's otherUnknownCeiling says 0: one came back, and it may be a second right answer
+   nfl: 52 groups nothing judges (ceiling 0), 6 members the record cannot place (ceiling 0), 126 other tiles it cannot judge (ceiling 0): nflconn-005 "Played for the Dallas Cowboys", nflconn-005 "Played for the Green Bay Packers", nflconn-005 "Played for the Seattle Seahawks", nflconn-005 "Played for the Miami Dolphins", nflconn-006 "Played for the Pittsburgh Steelers", nflconn-006 "Played for the Denver Broncos", nflconn-006 "Played for the San Francisco 49ers", nflconn-006 "Played for the Cleveland Browns", nflconn-009 "Won a Super Bowl MVP", nflconn-009 "Won the Heisman Trophy", nflconn-009 "Retired, then came back", nflconn-009 "Competed on Dancing with the Stars", nflconn-010 "Kickers", nflconn-010 "Went undrafted", nflconn-010 "Wore number 12", nflconn-010 "Caught passes from Peyton Manning", nflconn-011 "Returned a kick for a Super Bowl touchdown", nflconn-011 "Made an iconic Super Bowl catch", nflconn-011 "Had a 22-sack season", nflconn-011 "Has a brother who played in the NFL", nflconn-012 "Drafted number 1 overall", nflconn-012 "Ran for 2,000 yards in a season", nflconn-012 "Threw for 5,000 yards in a season", nflconn-012 "Walked away in their prime", nflconn-013 "Hall of Famers who played for the Jets", nflconn-013 "Won Super Bowl MVP on defense", nflconn-013 "Played 16 or more seasons for one franchise", nflconn-013 "Threw a Super Bowl touchdown pass but is not a QB", nflconn-014 "Recorded 100 career sacks", nflconn-014 "Returned a kick or punt for a Super Bowl touchdown", nflconn-014 "Undrafted but made a Pro Bowl", nflconn-014 "Also played professional baseball", nflconn-015 "Won the MVP award more than once", nflconn-015 "Tight ends with 10,000 receiving yards", nflconn-015 "1972 undefeated Dolphins", nflconn-016 "Won the Heisman and an NFL MVP", nflconn-016 "Offensive Rookie of the Year at QB", nflconn-016 "First overall picks who never made a Pro Bowl", nflconn-016 "Quarterbacks who also punted in the NFL", nflconn-017 "Threw 500 career touchdown passes", nflconn-017 "Caught 100 career touchdown passes", nflconn-017 "Won Defensive Player of the Year more than once", nflconn-018 "Played QB for the Bears", nflconn-018 "Hall of Fame middle linebackers", nflconn-018 "Wore number 80", nflconn-018 "Kicked a 63-yard field goal or longer", nflconn-019 "Won Offensive Rookie of the Year at RB", nflconn-019 "Rushed for 150 yards in a Super Bowl", nflconn-019 "Had a pick-six in a Super Bowl", nflconn-020 "Played QB for the Lions", nflconn-020 "2007 16-0 regular season Patriots", nflconn-020 "Kickers and punters in the Hall of Fame"
+  FAIL: nhl: 42 groups nothing judges, the ledger's uncheckedCeiling says 0: one came back
+  FAIL: nhl: 82 members the record cannot place, the ledger's memberUnknownCeiling says 0: one came back
+  FAIL: nhl: 249 other tiles the record cannot judge against a group beside them, the ledger's otherUnknownCeiling says 0: one came back, and it may be a second right answer
+   nhl: 42 groups nothing judges (ceiling 0), 82 members the record cannot place (ceiling 0), 249 other tiles it cannot judge (ceiling 0): nhlconn-009 "Scored 60 goals in a season", nhlconn-009 "Won the Vezina Trophy", nhlconn-009 "Captained a Stanley Cup winner", nhlconn-009 "Played 1,700 or more NHL games", nhlconn-010 "Goaltenders", nhlconn-010 "Scored 60 goals in a season", nhlconn-010 "Captained a Stanley Cup winner", nhlconn-010 "Played 1,650 or more NHL games", nhlconn-011 "Won the Norris Trophy", nhlconn-011 "Scored a Stanley Cup winning goal", nhlconn-011 "Scored 50 goals in 50 games", nhlconn-012 "Won the Vezina Trophy", nhlconn-012 "Scored 70 goals in a season", nhlconn-012 "Defensemen who captained a Cup winner", nhlconn-013 "1980s Islanders dynasty", nhlconn-013 "European-born 500 goal scorers", nhlconn-013 "Won the Conn Smythe in a losing cause", nhlconn-013 "Played NHL games in four different decades", nhlconn-014 "Won the Calder Trophy", nhlconn-014 "Played 1,500 NHL games", nhlconn-014 "Goalies credited with scoring a goal", nhlconn-014 "Won the Cup with three different franchises", nhlconn-015 "Drafted first overall", nhlconn-015 "Won the Art Ross Trophy", nhlconn-015 "Scored 500 career goals", nhlconn-015 "Goalies who won the Hart Trophy", nhlconn-016 "Won the Rocket Richard Trophy", nhlconn-016 "Won the Conn Smythe Trophy", nhlconn-017 "Goalies with 400 career wins", nhlconn-017 "Scored 500 goals for one franchise", nhlconn-017 "Triple Gold Club members", nhlconn-018 "Played for Utah after the move from Arizona", nhlconn-018 "Drafted by the Sabres", nhlconn-018 "Won the Hart Trophy", nhlconn-018 "Won the Vezina Trophy", nhlconn-019 "Scored 700 career goals", nhlconn-019 "1970s Canadiens dynasty", nhlconn-019 "Hall of Famers who played for the Whalers", nhlconn-020 "Won the 2024 Cup with the Panthers", nhlconn-020 "Canada's 2025 4 Nations team", nhlconn-020 "Drafted second overall", nhlconn-020 "Goalies who started a 2020s Cup Final game"
+8) no active man is one move from a second answer
+   baseball: 15 dated club groups, 0 undated, 0 active men one move from a club group beside them
+  FAIL: nfl nflconn-007: Justin Jefferson ("Played for the Vikings") is still playing and one move from "Played for the Dolphins": date the group or rebuild the board
+  FAIL: nfl nflconn-007: Joe Burrow ("Played for the Bengals") is still playing and one move from "Played for the Dolphins": date the group or rebuild the board
+  FAIL: nfl nflconn-007: Ja'Marr Chase ("Played for the Bengals") is still playing and one move from "Played for the Dolphins": date the group or rebuild the board
+  FAIL: nfl nflconn-007: Tee Higgins ("Played for the Bengals") is still playing and one move from "Played for the Dolphins": date the group or rebuild the board
+  FAIL: nfl nflconn-007: Tua Tagovailoa ("Played for the Dolphins") is still playing and one move from "Played for the Vikings": date the group or rebuild the board
+  FAIL: nfl nflconn-007: Joe Burrow ("Played for the Bengals") is still playing and one move from "Played for the Vikings": date the group or rebuild the board
+  FAIL: nfl nflconn-007: Ja'Marr Chase ("Played for the Bengals") is still playing and one move from "Played for the Vikings": date the group or rebuild the board
+  FAIL: nfl nflconn-007: Tee Higgins ("Played for the Bengals") is still playing and one move from "Played for the Vikings": date the group or rebuild the board
+  FAIL: nfl nflconn-007: Tua Tagovailoa ("Played for the Dolphins") is still playing and one move from "Played for the Bengals": date the group or rebuild the board
+  FAIL: nfl nflconn-007: Justin Jefferson ("Played for the Vikings") is still playing and one move from "Played for the Bengals": date the group or rebuild the board
+  FAIL: nfl nflconn-007: Justin Jefferson ("Played for the Vikings") is still playing and one move from "Played for the Falcons": date the group or rebuild the board
+  FAIL: nfl nflconn-007: Joe Burrow ("Played for the Bengals") is still playing and one move from "Played for the Falcons": date the group or rebuild the board
+  FAIL: nfl nflconn-007: Ja'Marr Chase ("Played for the Bengals") is still playing and one move from "Played for the Falcons": date the group or rebuild the board
+  FAIL: nfl nflconn-007: Tee Higgins ("Played for the Bengals") is still playing and one move from "Played for the Falcons": date the group or rebuild the board
+  FAIL: nfl nflconn-008: Marshon Lattimore ("Played for the Saints") is still playing and one move from "Played for the Steelers": date the group or rebuild the board
+  FAIL: nfl nflconn-008: T.J. Watt ("Played for the Steelers") is still playing and one move from "Played for the Giants": date the group or rebuild the board
+  FAIL: nfl nflconn-008: Marshon Lattimore ("Played for the Saints") is still playing and one move from "Played for the Giants": date the group or rebuild the board
+  FAIL: nfl nflconn-008: T.J. Watt ("Played for the Steelers") is still playing and one move from "Played for the Saints": date the group or rebuild the board
+  FAIL: nfl nflconn-008: T.J. Watt ("Played for the Steelers") is still playing and one move from "Played for the Titans": date the group or rebuild the board
+  FAIL: nfl nflconn-008: Marshon Lattimore ("Played for the Saints") is still playing and one move from "Played for the Titans": date the group or rebuild the board
+  FAIL: nfl nflconn-020: Matthew Stafford ("Played QB for the Lions") is still playing and one move from "Played for the Bills": date the group or rebuild the board
+   nfl: 8 dated club groups, 11 undated, 21 active men one move from a club group beside them
+  FAIL: nhl nhlconn-005: Nathan MacKinnon ("Played for the Avalanche or Nordiques") is still playing and one move from "Played for the Chicago Blackhawks": date the group or rebuild the board
+  FAIL: nhl nhlconn-005: John Tavares ("Played for the New York Islanders") is still playing and one move from "Played for the Chicago Blackhawks": date the group or rebuild the board
+  FAIL: nhl nhlconn-005: Patrick Kane ("Played for the Chicago Blackhawks") is still playing and one move from "Played for the Avalanche or Nordiques": date the group or rebuild the board
+  FAIL: nhl nhlconn-005: John Tavares ("Played for the New York Islanders") is still playing and one move from "Played for the Avalanche or Nordiques": date the group or rebuild the board
+  FAIL: nhl nhlconn-005: Patrick Kane ("Played for the Chicago Blackhawks") is still playing and one move from "Played for the New York Islanders": date the group or rebuild the board
+  FAIL: nhl nhlconn-005: Nathan MacKinnon ("Played for the Avalanche or Nordiques") is still playing and one move from "Played for the New York Islanders": date the group or rebuild the board
+  FAIL: nhl nhlconn-005: Patrick Kane ("Played for the Chicago Blackhawks") is still playing and one move from "Played for the Winnipeg Jets (either era)": date the group or rebuild the board
+  FAIL: nhl nhlconn-005: Nathan MacKinnon ("Played for the Avalanche or Nordiques") is still playing and one move from "Played for the Winnipeg Jets (either era)": date the group or rebuild the board
+  FAIL: nhl nhlconn-005: John Tavares ("Played for the New York Islanders") is still playing and one move from "Played for the Winnipeg Jets (either era)": date the group or rebuild the board
+  FAIL: nhl nhlconn-006: Brad Marchand ("Played for the Boston Bruins") is still playing and one move from "Played for the Edmonton Oilers": date the group or rebuild the board
+  FAIL: nhl nhlconn-006: Connor McDavid ("Played for the Edmonton Oilers") is still playing and one move from "Played for the Montreal Canadiens": date the group or rebuild the board
+  FAIL: nhl nhlconn-006: Leon Draisaitl ("Played for the Edmonton Oilers") is still playing and one move from "Played for the Montreal Canadiens": date the group or rebuild the board
+  FAIL: nhl nhlconn-006: Brad Marchand ("Played for the Boston Bruins") is still playing and one move from "Played for the Montreal Canadiens": date the group or rebuild the board
+  FAIL: nhl nhlconn-006: Connor McDavid ("Played for the Edmonton Oilers") is still playing and one move from "Played for the Boston Bruins": date the group or rebuild the board
+  FAIL: nhl nhlconn-006: Leon Draisaitl ("Played for the Edmonton Oilers") is still playing and one move from "Played for the Boston Bruins": date the group or rebuild the board
+  FAIL: nhl nhlconn-006: Connor McDavid ("Played for the Edmonton Oilers") is still playing and one move from "Played for the Detroit Red Wings": date the group or rebuild the board
+  FAIL: nhl nhlconn-006: Leon Draisaitl ("Played for the Edmonton Oilers") is still playing and one move from "Played for the Detroit Red Wings": date the group or rebuild the board
+  FAIL: nhl nhlconn-006: Brad Marchand ("Played for the Boston Bruins") is still playing and one move from "Played for the Detroit Red Wings": date the group or rebuild the board
+  FAIL: nhl nhlconn-007: Alex Pietrangelo ("Played for the Blues") is still playing and one move from "Played for the Capitals": date the group or rebuild the board
+  FAIL: nhl nhlconn-007: Alex Pietrangelo ("Played for the Blues") is still playing and one move from "Played for the Flyers": date the group or rebuild the board
+  FAIL: nhl nhlconn-007: Alex Pietrangelo ("Played for the Blues") is still playing and one move from "Played for the Rangers": date the group or rebuild the board
+  FAIL: nhl nhlconn-008: Brent Burns ("Played for the Sharks") is still playing and one move from "Played for the Stars": date the group or rebuild the board
+  FAIL: nhl nhlconn-008: Erik Karlsson ("Played for the Sharks") is still playing and one move from "Played for the Stars": date the group or rebuild the board
+  FAIL: nhl nhlconn-008: Logan Couture ("Played for the Sharks") is still playing and one move from "Played for the Stars": date the group or rebuild the board
+  FAIL: nhl nhlconn-008: John Tavares ("Played for the Islanders") is still playing and one move from "Played for the Stars": date the group or rebuild the board
+  FAIL: nhl nhlconn-008: John Tavares ("Played for the Islanders") is still playing and one move from "Played for the Sharks": date the group or rebuild the board
+  FAIL: nhl nhlconn-008: Brent Burns ("Played for the Sharks") is still playing and one move from "Played for the Islanders": date the group or rebuild the board
+  FAIL: nhl nhlconn-008: Erik Karlsson ("Played for the Sharks") is still playing and one move from "Played for the Islanders": date the group or rebuild the board
+  FAIL: nhl nhlconn-008: Logan Couture ("Played for the Sharks") is still playing and one move from "Played for the Islanders": date the group or rebuild the board
+  FAIL: nhl nhlconn-008: Brent Burns ("Played for the Sharks") is still playing and one move from "Played for the Sabres": date the group or rebuild the board
+  FAIL: nhl nhlconn-008: Erik Karlsson ("Played for the Sharks") is still playing and one move from "Played for the Sabres": date the group or rebuild the board
+  FAIL: nhl nhlconn-008: Logan Couture ("Played for the Sharks") is still playing and one move from "Played for the Sabres": date the group or rebuild the board
+  FAIL: nhl nhlconn-008: John Tavares ("Played for the Islanders") is still playing and one move from "Played for the Sabres": date the group or rebuild the board
+  FAIL: nhl nhlconn-011: Cale Makar ("Won the Norris Trophy") is still playing and one move from "Played for the Maple Leafs": date the group or rebuild the board
+  FAIL: nhl nhlconn-011: Erik Karlsson ("Won the Norris Trophy") is still playing and one move from "Played for the Maple Leafs": date the group or rebuild the board
+  FAIL: nhl nhlconn-011: Patrick Kane ("Scored a Stanley Cup winning goal") is still playing and one move from "Played for the Maple Leafs": date the group or rebuild the board
+  FAIL: nhl nhlconn-016: Auston Matthews ("Won the Rocket Richard Trophy") is still playing and one move from "Played for the Predators": date the group or rebuild the board
+  FAIL: nhl nhlconn-016: David Pastrnak ("Won the Rocket Richard Trophy") is still playing and one move from "Played for the Predators": date the group or rebuild the board
+  FAIL: nhl nhlconn-016: Steven Stamkos ("Won the Rocket Richard Trophy") is still playing and one move from "Played for the Canucks": date the group or rebuild the board
+  FAIL: nhl nhlconn-016: Auston Matthews ("Won the Rocket Richard Trophy") is still playing and one move from "Played for the Canucks": date the group or rebuild the board
+  FAIL: nhl nhlconn-016: David Pastrnak ("Won the Rocket Richard Trophy") is still playing and one move from "Played for the Canucks": date the group or rebuild the board
+  FAIL: nhl nhlconn-017: Sidney Crosby ("Triple Gold Club members") is still playing and one move from "Played for the Senators": date the group or rebuild the board
+   nhl: 15 dated club groups, 22 undated, 42 active men one move from a club group beside them
+
+report: 79 failure lines over the files and the table rows of nfl, nhl; findings by rule: second-fit 3, not-a-member 4, trade 63
+REPORT ONLY
