@@ -1,0 +1,19 @@
+{"name":"nba-1280x900-B","y":360,"where":{"pill":[849,48,960,92],"parent":"MAIN.container max-w-2xl mx-auto px-4 py-6 pb-20","parentBottom":7468,"mainBottom":7468}}
+{"name":"nba-1280x900-B","y":720,"where":{"pill":[849,48,960,92],"parent":"MAIN.container max-w-2xl mx-auto px-4 py-6 pb-20","parentBottom":7108,"mainBottom":7108}}
+{"name":"nba-1280x900-B","y":1014,"where":{"pill":[849,48,960,92],"parent":"MAIN.container max-w-2xl mx-auto px-4 py-6 pb-20","parentBottom":6814,"mainBottom":6814}}
+{"name":"nba-1280x900-B","y":1352,"where":{"pill":[849,48,960,92],"parent":"MAIN.container max-w-2xl mx-auto px-4 py-6 pb-20","parentBottom":6476,"mainBottom":6476}}
+{"name":"nba-1280x900-B","y":2028,"where":{"pill":[849,48,960,92],"parent":"MAIN.container max-w-2xl mx-auto px-4 py-6 pb-20","parentBottom":5800,"mainBottom":5800}}
+{"tag":"nba-1280x900","tapInboxCentre":{"x":856,"y":86.25},"restartDialog":true,"inboxOpen":false}
+PROBLEM nba-1280x900: a tap on the Inbox tile centre at scroll 720 opened Start a new career?
+{"name":"nba-390x844-B","y":360,"where":{"pill":[263,48,374,92],"parent":"MAIN.container max-w-2xl mx-auto px-4 py-6 pb-20","parentBottom":11559,"mainBottom":11559}}
+{"name":"nba-390x844-B","y":720,"where":{"pill":[263,48,374,92],"parent":"MAIN.container max-w-2xl mx-auto px-4 py-6 pb-20","parentBottom":11199,"mainBottom":11199}}
+{"name":"nba-390x844-B","y":1014,"where":{"pill":[263,48,374,92],"parent":"MAIN.container max-w-2xl mx-auto px-4 py-6 pb-20","parentBottom":10905,"mainBottom":10905}}
+{"name":"nba-390x844-B","y":1352,"where":{"pill":[263,48,374,92],"parent":"MAIN.container max-w-2xl mx-auto px-4 py-6 pb-20","parentBottom":10567,"mainBottom":10567}}
+{"name":"nba-390x844-B","y":2028,"where":{"pill":[263,48,374,92],"parent":"MAIN.container max-w-2xl mx-auto px-4 py-6 pb-20","parentBottom":9891,"mainBottom":9891}}
+{"tag":"nba-390x844","tapInboxCentre":{"x":286.5,"y":324.75},"restartDialog":false,"inboxOpen":false}
+{"name":"nba-390x844-FA","y":676,"where":{"pill":[263,48,374,92],"parent":"MAIN.container max-w-2xl mx-auto px-4 py-6 pb-20","parentBottom":11610,"mainBottom":11610}}
+{"name":"nba-390x844-FA","y":1014,"where":{"pill":[263,48,374,92],"parent":"MAIN.container max-w-2xl mx-auto px-4 py-6 pb-20","parentBottom":11272,"mainBottom":11272}}
+{"name":"nba-390x844-FA","y":1352,"where":{"pill":[263,48,374,92],"parent":"MAIN.container max-w-2xl mx-auto px-4 py-6 pb-20","parentBottom":10934,"mainBottom":10934}}
+{"name":"nba-390x844-FA","y":3000,"where":{"pill":[263,48,374,92],"parent":"MAIN.container max-w-2xl mx-auto px-4 py-6 pb-20","parentBottom":9286,"mainBottom":9286}}
+{"name":"nba-390x844-FA","y":6000,"where":{"pill":[263,48,374,92],"parent":"MAIN.container max-w-2xl mx-auto px-4 py-6 pb-20","parentBottom":6286,"mainBottom":6286}}
+walkR3 FAIL: 1 problems
