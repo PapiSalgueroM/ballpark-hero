@@ -1,0 +1,4 @@
+0) every useDailyPuzzle consumer is mounted by one of the two tests
+   39 consumers: 36 routes in the shapes test, 3 unrouted (useFootballDraft.ts, useGuessTransferValue.ts, useWorldCup.ts) in the hardening test; 19 hand in their own check
+R848 metaheld control: 35 rows red, exactly the 35 game rows, each on the named assertion; 1 row(s) that are not a game page green
+simDailySaveHardening: control metaheld fired as designed
