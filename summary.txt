@@ -1,0 +1,4 @@
+build exit=0 25s | [dukb] inlined 1 stylesheet(s) and 1 module(s) into 181 snapshots (11 left alone)
+dr exit=0 11s | simDailyReload: all green (1 row(s), both controls fired)
+ndr exit=0 26s | simNoDoubleRecord: all green (67 rows and checks, each recorded once across the finish, the toggles, the coaching, the reveals and the reloads; 115 recorders read)
+play exit=0 44s | Played 1 games. 0 findings, 0 the harness could not drive.
