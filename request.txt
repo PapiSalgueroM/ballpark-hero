@@ -1,0 +1,1 @@
+probe4: cp .rc/x/probeCm416size15.test.tsx src/test/probeCm416size15.test.tsx && node_modules/.bin/vitest run src/test/probeCm416size15.test.tsx --testTimeout=1500000 --hookTimeout=120000 --reporter=verbose

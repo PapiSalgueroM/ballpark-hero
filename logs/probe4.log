@@ -1,0 +1,15 @@
+
+[1m[46m RUN [49m[22m [36mv3.2.7 [39m[90m/home/runner/work/ballpark-hero/ballpark-hero[39m
+
+[90mstdout[2m | src/test/probeCm416size15.test.tsx[2m > [22m[2msave bytes at season 15[2m > [22m[2mReal Madrid, Everton, Lincoln City
+[22m[39mPROBE4 Real Madrid season [33m15[39m week [33m15[39m plain at season 15 start [33m129008[39m planned [33m3[39m history rows [33m12[39m save with features [33m171386[39m same save without them [33m160229[39m added [33m11157[39m over 214000 by [33m-42614[39m
+PROBE4 Everton season [33m15[39m week [33m14[39m plain at season 15 start [33m131321[39m planned [33m3[39m history rows [33m12[39m save with features [33m172520[39m same save without them [33m161411[39m added [33m11109[39m over 214000 by [33m-41480[39m
+PROBE4 Lincoln City season [33m15[39m week [33m14[39m plain at season 15 start [33m132318[39m planned [33m3[39m history rows [33m12[39m save with features [33m173629[39m same save without them [33m162340[39m added [33m11289[39m over 214000 by [33m-40371[39m
+
+ [32m✓[39m src/test/probeCm416size15.test.tsx[2m > [22msave bytes at season 15[2m > [22mReal Madrid, Everton, Lincoln City[33m 32684[2mms[22m[39m
+
+[2m Test Files [22m [1m[32m1 passed[39m[22m[90m (1)[39m
+[2m      Tests [22m [1m[32m1 passed[39m[22m[90m (1)[39m
+[2m   Start at [22m 04:12:53
+[2m   Duration [22m 34.23s[2m (transform 830ms, setup 35ms, collect 1.01s, tests 32.69s, environment 161ms, prepare 67ms)[22m
+
