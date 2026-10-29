@@ -1,0 +1,7 @@
+build exit=0 28s | [dukb] inlined 1 stylesheet(s) and 1 module(s) into 181 snapshots (11 left alone)
+anchors exit=0 47s | simHarnessAnchors: green. Every harness parses and none carries an unmatchable anchor.
+simWall exit=0 52s | simUsCareerHallWall: ok, 53 check ids, 7846 checks, 200 careers a sport, 152 old saves
+c-nogate exit=1 52s | simUsCareerHallWall CONTROL nogate: FIRED, C7 red in all four sports and C1, C3, C4, C5, C6, C8, C9, C10a, C10b, C10c, J green
+writes-head exit=1 14s | simWritesAreSent: 2 failures
+c-boarddraw exit=1 27s | simUsCareerHallWall CONTROL boarddraw: FIRED, C8 red in all four sports and C1, C3, C4, C5, C6, C7, C9, C10a, C10b, C10c, J green
+writes-base exit=1 44s | simWritesAreSent: 2 failures
