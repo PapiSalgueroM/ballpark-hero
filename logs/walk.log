@@ -1,0 +1,59 @@
+{"tag":"nba-1280x900","at":"hub from the top","top":{"pill":[992,48,1103,92],"parent":"DIV","parentIsMain":false,"position":"sticky","boardBottom":105,"colRight":960,"vh":900}}
+PROBLEM nba-1280x900-B: the pill top -277 sits under the bar ending 0
+PROBLEM nba-1280x900-B: the pill top -637 sits under the bar ending 0
+PROBLEM nba-1280x900-B: the pill top -997 sits under the bar ending 0
+PROBLEM nba-1280x900-B: the pill top -1357 sits under the bar ending 0
+PROBLEM nba-1280x900-B: the pill top -1717 sits under the bar ending 0
+PROBLEM nba-1280x900-B: the pill top -2077 sits under the bar ending 0
+PROBLEM nba-1280x900-B: the pill top -2437 sits under the bar ending 0
+PROBLEM nba-1280x900-B: the pill top -2797 sits under the bar ending 0
+PROBLEM nba-1280x900-B: the pill top -3157 sits under the bar ending 0
+PROBLEM nba-1280x900-B: the pill top -3517 sits under the bar ending 0
+PROBLEM nba-1280x900-B: the pill top -3877 sits under the bar ending 0
+{"tag":"nba-1280x900-B","covers":[]}
+{"tag":"nba-1280x900","y":360,"w":{"pill":[992,48,1103,92],"parent":"DIV","parentIsMain":false,"position":"sticky","boardBottom":443,"colRight":960,"vh":900}}
+{"tag":"nba-1280x900","y":720,"w":{"pill":[992,48,1103,92],"parent":"DIV","parentIsMain":false,"position":"sticky","boardBottom":83,"colRight":960,"vh":900}}
+{"tag":"nba-1280x900","y":1352,"w":{"pill":[992,-549,1103,-505],"parent":"DIV","parentIsMain":false,"position":"sticky","boardBottom":-549,"colRight":960,"vh":900}}
+PROBLEM nba-1280x900: at scroll 1352 the pill is at 992,-549,1103,-505
+{"tag":"nba-1280x900","tapInboxCentre":{"x":856,"y":34.25},"restartDialog":false}
+{"tag":"nba-1280x900","at":"guide 6000","g":{"pill":[992,-5197,1103,-5153],"parent":"DIV","parentIsMain":false,"position":"sticky","boardBottom":-5197,"colRight":960,"vh":900}}
+{"tag":"nba-1318x647","at":"hub from the top","top":{"pill":[1011,-21,1122,23],"parent":"DIV","parentIsMain":false,"position":"sticky","boardBottom":-21,"colRight":979,"vh":647}}
+PROBLEM nba-1318x647: the pill is not on screen from the top (1011,-21,1122,23)
+PROBLEM nba-1318x647-B: the pill top -233 sits under the bar ending 0
+PROBLEM nba-1318x647-B: the pill top -492 sits under the bar ending 0
+PROBLEM nba-1318x647-B: the pill top -751 sits under the bar ending 0
+PROBLEM nba-1318x647-B: the pill top -1010 sits under the bar ending 0
+PROBLEM nba-1318x647-B: the pill top -1269 sits under the bar ending 0
+PROBLEM nba-1318x647-B: the pill top -1528 sits under the bar ending 0
+PROBLEM nba-1318x647-B: the pill top -1787 sits under the bar ending 0
+PROBLEM nba-1318x647-B: the pill top -2046 sits under the bar ending 0
+PROBLEM nba-1318x647-B: the pill top -2305 sits under the bar ending 0
+PROBLEM nba-1318x647-B: the pill top -2564 sits under the bar ending 0
+{"tag":"nba-1318x647-B","covers":[]}
+{"tag":"nba-1318x647","y":360,"w":{"pill":[1011,48,1122,92],"parent":"DIV","parentIsMain":false,"position":"sticky","boardBottom":443,"colRight":979,"vh":647}}
+{"tag":"nba-1318x647","y":720,"w":{"pill":[1011,48,1122,92],"parent":"DIV","parentIsMain":false,"position":"sticky","boardBottom":83,"colRight":979,"vh":647}}
+{"tag":"nba-1318x647","y":1352,"w":{"pill":[1011,-549,1122,-505],"parent":"DIV","parentIsMain":false,"position":"sticky","boardBottom":-549,"colRight":979,"vh":647}}
+PROBLEM nba-1318x647: at scroll 1352 the pill is at 1011,-549,1122,-505
+{"tag":"nba-1318x647","tapInboxCentre":{"x":875,"y":34.25},"restartDialog":false}
+{"tag":"nba-1318x647","at":"guide 6000","g":{"pill":[1011,-5197,1122,-5153],"parent":"DIV","parentIsMain":false,"position":"sticky","boardBottom":-5197,"colRight":979,"vh":647}}
+{"tag":"nba-390x844","at":"hub from the top","top":{"pill":[263,-969,374,-925],"parent":"DIV","parentIsMain":false,"position":"static","boardBottom":205,"colRight":374,"vh":844}}
+PROBLEM nba-390x844: the pill is not on screen from the top (263,-969,374,-925)
+{"tag":"nba-390x844-B","covers":[]}
+{"tag":"nba-390x844","y":360,"w":{"pill":[263,-119,374,-75],"parent":"DIV","parentIsMain":false,"position":"static","boardBottom":733,"colRight":374,"vh":844}}
+{"tag":"nba-390x844","y":720,"w":{"pill":[263,-479,374,-435],"parent":"DIV","parentIsMain":false,"position":"static","boardBottom":373,"colRight":374,"vh":844}}
+{"tag":"nba-390x844","y":1352,"w":{"pill":[263,-1111,374,-1067],"parent":"DIV","parentIsMain":false,"position":"static","boardBottom":-259,"colRight":374,"vh":844}}
+{"tag":"nba-390x844","tapInboxCentre":{"x":286.5,"y":324.75},"restartDialog":false}
+{"tag":"nba-390x844","at":"guide 6000","g":{"pill":[263,-5759,374,-5715],"parent":"DIV","parentIsMain":false,"position":"static","boardBottom":-5554,"colRight":374,"vh":844}}
+{"tag":"nba-390x844-FA","covers":[]}
+PROBLEM nba-1280x900-FA: the pill top -148 sits under the bar ending 0
+PROBLEM nba-1280x900-FA: the pill top -508 sits under the bar ending 0
+PROBLEM nba-1280x900-FA: the pill top -868 sits under the bar ending 0
+PROBLEM nba-1280x900-FA: the pill top -1228 sits under the bar ending 0
+PROBLEM nba-1280x900-FA: the pill top -1588 sits under the bar ending 0
+PROBLEM nba-1280x900-FA: the pill top -1948 sits under the bar ending 0
+PROBLEM nba-1280x900-FA: the pill top -2308 sits under the bar ending 0
+PROBLEM nba-1280x900-FA: the pill top -2668 sits under the bar ending 0
+PROBLEM nba-1280x900-FA: the pill top -3028 sits under the bar ending 0
+PROBLEM nba-1280x900-FA: the pill top -3388 sits under the bar ending 0
+{"tag":"nba-1280x900-FA","covers":[]}
+walkFix FAIL: 35 problems
