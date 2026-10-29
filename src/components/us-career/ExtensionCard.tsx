@@ -78,7 +78,10 @@ export default function ExtensionCard({ talk, seasonWord, onPush, onSign, onDecl
              that ends the career, so the market never came. With an offer
              (a kicker a year under his age limit can still draw one) the
              promise was just as false, so the same words, and the choice
-             the card actually gives. */
+             the card actually gives. The other words say "if your career
+             goes on": the last season call is sure only of the age and
+             length limits, and a rating that falls through the year can
+             still end a career the card did not call. */
           <p className="mt-1 text-xs text-muted-foreground">
             This is the last {seasonWord} on your deal, and it will be the last {seasonWord} of your
             career whatever happens, so no market opens after it. {o ? 'Sign it or play it out.' : 'Play it out or retire now.'}
@@ -88,7 +91,7 @@ export default function ExtensionCard({ talk, seasonWord, onPush, onSign, onDecl
           <p className="mt-1 text-xs text-muted-foreground">
             This is the last {seasonWord} on your deal. Sign the extension and you are set,
             usually a little under what the open market pays. Turn it down and you play the
-            year out and reach free agency, where everybody bids and nothing is promised.
+            year out and, if your career goes on, reach free agency, where everybody bids and nothing is promised.
             {onWheelContinue && <> This talk and your one push survive reload. A wheel reveals the already saved result. For example, 30% fills 30 of 100 equal parts; spinning changes no terms.</>}
           </p>
         )}

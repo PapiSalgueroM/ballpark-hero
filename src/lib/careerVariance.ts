@@ -138,6 +138,10 @@ export const JANUARY_POOR = 70;
 const POSTSEASON_WORD: Record<'mlb' | 'nba' | 'nfl' | 'nhl', string> = {
   mlb: 'October', nba: 'the playoffs', nfl: 'January', nhl: 'the playoffs',
 };
+/* A run that reached the Super Bowl (depth 3) went past January: every
+   Super Bowl since XXXVIII (2004) has been played in February. */
+const postseasonWord = (sport: 'mlb' | 'nba' | 'nfl' | 'nhl', depth: number) =>
+  sport === 'nfl' && depth >= 3 ? 'the playoffs' : POSTSEASON_WORD[sport];
 
 /** A line for the season notes when the postseason was the story. `level` is
  *  the form his playoff line was drawn from; `depth` 4 is the title. */
@@ -150,11 +154,11 @@ export function clutchNote(swing: number, depth: number, sport: 'mlb' | 'nba' | 
       : '🧊 Playoff performer. Sixteen wins is a different sport and you were built for it.';
   }
   if (depth < 4 && level >= JANUARY_STRONG) {
-    const when = POSTSEASON_WORD[sport];
+    const when = postseasonWord(sport, depth);
     return `💪 You held up your end in ${when}. The run just ended short of the title.`;
   }
   if (swing <= -7 && level < JANUARY_POOR) {
-    const when = POSTSEASON_WORD[sport];
+    const when = postseasonWord(sport, depth);
     return `🎞️ A tough ${when === 'the playoffs' ? 'playoff run' : when}. Your numbers came in well under your usual level.`;
   }
   return null;
