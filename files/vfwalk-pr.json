@@ -1,0 +1,393 @@
+{
+ "sum": {
+  "C pr 390": {
+   "advanced": true,
+   "phaseUnder": "newspaper",
+   "inLayer": 0,
+   "reach": 0,
+   "contOnTop": false,
+   "menuOnTop": false,
+   "escUp": 1,
+   "lateUp": 1,
+   "releaseClears": true
+  },
+  "C pr 320": {
+   "advanced": true,
+   "phaseUnder": "newspaper",
+   "inLayer": 0,
+   "reach": 0,
+   "contOnTop": false,
+   "menuOnTop": false,
+   "escUp": 1,
+   "lateUp": 1,
+   "releaseClears": true
+  },
+  "K pr 390": {
+   "layerGone": true,
+   "dialogs": 2
+  },
+  "T pr 390": {
+   "inLayer": 0,
+   "reach": 0,
+   "escUp": 1,
+   "lateUp": 1,
+   "releaseClears": true
+  }
+ },
+ "log": [
+  {
+   "k": "C pr 390 reached playing",
+   "v": {
+    "ok": true,
+    "s": {
+     "phase": "playing",
+     "age": 17,
+     "seasons": 2
+    },
+    "trail": [
+     "youth@16:Next Year",
+     "contract_offer@17:Review contract",
+     "contract_offer@17:Sign contract"
+    ]
+   }
+  },
+  {
+   "k": "C pr 390 week by week",
+   "v": {
+    "found": true,
+    "label": "📺Week by weekNEW",
+    "x": 316,
+    "y": 802,
+    "onTop": true,
+    "coveredBy": null
+   }
+  },
+  {
+   "k": "C pr 390 layer shown",
+   "v": true
+  },
+  {
+   "k": "C pr 390 held chunk requests",
+   "v": 1
+  },
+  {
+   "k": "C pr 390 save before / after the press",
+   "v": {
+    "before": {
+     "phase": "playing",
+     "age": 17,
+     "seasons": 2
+    },
+    "after": {
+     "phase": "newspaper",
+     "age": 18,
+     "seasons": 3
+    }
+   }
+  },
+  {
+   "k": "C pr 390 controls or dialog inside the layer",
+   "v": 0
+  },
+  {
+   "k": "C pr 390 controls a tap can reach",
+   "v": []
+  },
+  {
+   "k": "C pr 390 Continue to Season Summary",
+   "v": {
+    "found": true,
+    "label": "Continue to Season Summary →",
+    "x": 195,
+    "y": 422,
+    "onTop": false,
+    "coveredBy": "fixed inset-0 z-50 flex items-center justify-center bg-background/80"
+   }
+  },
+  {
+   "k": "C pr 390 after a real tap on Continue: save, layer",
+   "v": {
+    "save": {
+     "phase": "newspaper",
+     "age": 18,
+     "seasons": 3
+    },
+    "layer": 1
+   }
+  },
+  {
+   "k": "C pr 390 site menu button",
+   "v": {
+    "found": true,
+    "label": "Menu",
+    "x": 43,
+    "y": 22,
+    "onTop": false,
+    "coveredBy": "LI"
+   }
+  },
+  {
+   "k": "C pr 390 after a real tap on the site menu: dialogs or menus before, after, layer",
+   "v": [
+    0,
+    0,
+    1
+   ]
+  },
+  {
+   "k": "C pr 390 layer still up after Escape",
+   "v": 1
+  },
+  {
+   "k": "C pr 390 layer still up 20 s later, held",
+   "v": [
+    1,
+    1
+   ]
+  },
+  {
+   "k": "C pr 390 Tab presses to reach Continue",
+   "v": {
+    "reached": true,
+    "presses": 11,
+    "first": [
+     "A Skip to main content",
+     "BUTTON Open site menu",
+     "A DoUKnowBall",
+     "BUTTON Go back"
+    ]
+   }
+  },
+  {
+   "k": "C pr 390 after Enter on focused Continue: save, layer",
+   "v": {
+    "save": {
+     "phase": "season_summary",
+     "age": 18,
+     "seasons": 3
+    },
+    "layer": 1
+   }
+  },
+  {
+   "k": "C pr 390 CONTROL layer gone after release, dialogs now",
+   "v": [
+    true,
+    2
+   ]
+  },
+  {
+   "k": "C pr 390 page errors",
+   "v": []
+  },
+  {
+   "k": "C pr 320 reached playing",
+   "v": {
+    "ok": true,
+    "s": {
+     "phase": "playing",
+     "age": 17,
+     "seasons": 2
+    },
+    "trail": [
+     "youth@16:Next Year",
+     "contract_offer@17:Review contract",
+     "contract_offer@17:Sign contract"
+    ]
+   }
+  },
+  {
+   "k": "C pr 320 week by week",
+   "v": {
+    "found": true,
+    "label": "📺Week by weekNEW",
+    "x": 246,
+    "y": 526,
+    "onTop": true,
+    "coveredBy": null
+   }
+  },
+  {
+   "k": "C pr 320 layer shown",
+   "v": true
+  },
+  {
+   "k": "C pr 320 held chunk requests",
+   "v": 1
+  },
+  {
+   "k": "C pr 320 save before / after the press",
+   "v": {
+    "before": {
+     "phase": "playing",
+     "age": 17,
+     "seasons": 2
+    },
+    "after": {
+     "phase": "newspaper",
+     "age": 18,
+     "seasons": 3
+    }
+   }
+  },
+  {
+   "k": "C pr 320 controls or dialog inside the layer",
+   "v": 0
+  },
+  {
+   "k": "C pr 320 controls a tap can reach",
+   "v": []
+  },
+  {
+   "k": "C pr 320 Continue to Season Summary",
+   "v": {
+    "found": true,
+    "label": "Continue to Season Summary →",
+    "x": 160,
+    "y": 284,
+    "onTop": false,
+    "coveredBy": "fixed inset-0 z-50 flex items-center justify-center bg-background/80"
+   }
+  },
+  {
+   "k": "C pr 320 after a real tap on Continue: save, layer",
+   "v": {
+    "save": {
+     "phase": "newspaper",
+     "age": 18,
+     "seasons": 3
+    },
+    "layer": 1
+   }
+  },
+  {
+   "k": "C pr 320 site menu button",
+   "v": {
+    "found": true,
+    "label": "Menu",
+    "x": 43,
+    "y": 22,
+    "onTop": false,
+    "coveredBy": "LI"
+   }
+  },
+  {
+   "k": "C pr 320 after a real tap on the site menu: dialogs or menus before, after, layer",
+   "v": [
+    0,
+    0,
+    1
+   ]
+  },
+  {
+   "k": "C pr 320 layer still up after Escape",
+   "v": 1
+  },
+  {
+   "k": "C pr 320 layer still up 20 s later, held",
+   "v": [
+    1,
+    1
+   ]
+  },
+  {
+   "k": "C pr 320 Tab presses to reach Continue",
+   "v": {
+    "reached": true,
+    "presses": 11,
+    "first": [
+     "A Skip to main content",
+     "BUTTON Open site menu",
+     "A DoUKnowBall",
+     "BUTTON Go back"
+    ]
+   }
+  },
+  {
+   "k": "C pr 320 after Enter on focused Continue: save, layer",
+   "v": {
+    "save": {
+     "phase": "season_summary",
+     "age": 18,
+     "seasons": 3
+    },
+    "layer": 1
+   }
+  },
+  {
+   "k": "C pr 320 CONTROL layer gone after release, dialogs now",
+   "v": [
+    true,
+    2
+   ]
+  },
+  {
+   "k": "C pr 320 page errors",
+   "v": []
+  },
+  {
+   "k": "K pr 390 healthy: layer gone, dialogs, save",
+   "v": [
+    true,
+    2,
+    {
+     "phase": "newspaper",
+     "age": 18,
+     "seasons": 3
+    }
+   ]
+  },
+  {
+   "k": "K pr 390 page errors",
+   "v": []
+  },
+  {
+   "k": "T pr 390 trophy tile, save",
+   "v": [
+    {
+     "found": true,
+     "label": "🏆0Leagues",
+     "x": 82,
+     "y": 422,
+     "onTop": true,
+     "coveredBy": null
+    },
+    {
+     "phase": "youth",
+     "age": 16,
+     "seasons": 1
+    }
+   ]
+  },
+  {
+   "k": "T pr 390 layer shown, held",
+   "v": [
+    true,
+    1
+   ]
+  },
+  {
+   "k": "T pr 390 controls inside, reachable, up after Escape",
+   "v": [
+    0,
+    [],
+    1
+   ]
+  },
+  {
+   "k": "T pr 390 up 10 s later; CONTROL gone after release",
+   "v": [
+    1,
+    true
+   ]
+  },
+  {
+   "k": "T pr 390 save unchanged",
+   "v": true
+  },
+  {
+   "k": "T pr 390 page errors",
+   "v": []
+  }
+ ]
+}

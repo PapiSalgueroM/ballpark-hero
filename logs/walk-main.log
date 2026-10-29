@@ -1,0 +1,52 @@
+base head: b20ec6664df9d4c58d63ea0596791d33b2a3b8fc
+Back to career lines on base: 0
+season centre loading lines on base: 1
+[dukb] inlined 1 stylesheet(s) and 1 module(s) into 181 snapshots (11 left alone)
+
+C main 390
+  C main 390 reached playing: {"ok":true,"s":{"phase":"playing","age":17,"seasons":2},"trail":["youth@16:Next Year","contract_offer@17:Review contract","contract_offer@17:Sign contract"]}
+  C main 390 week by week: {"found":true,"label":"📺Week by weekNEW","x":316,"y":802,"onTop":true,"coveredBy":null}
+  C main 390 layer shown: true
+  C main 390 held chunk requests: 1
+  C main 390 save before / after the press: {"before":{"phase":"playing","age":17,"seasons":2},"after":{"phase":"newspaper","age":18,"seasons":3}}
+  C main 390 controls or dialog inside the layer: 0
+  C main 390 controls a tap can reach: []
+  C main 390 Continue to Season Summary: {"found":true,"label":"Continue to Season Summary →","x":195,"y":422,"onTop":false,"coveredBy":"fixed inset-0 z-50 flex items-center justify-center bg-background/80"}
+  C main 390 after a real tap on Continue: save, layer: {"save":{"phase":"newspaper","age":18,"seasons":3},"layer":1}
+  C main 390 site menu button: {"found":true,"label":"Menu","x":43,"y":22,"onTop":false,"coveredBy":"LI"}
+  C main 390 after a real tap on the site menu: dialogs or menus before, after, layer: [0,0,1]
+  C main 390 layer still up after Escape: 1
+  C main 390 layer still up 20 s later, held: [1,1]
+  C main 390 Tab presses to reach Continue: {"reached":true,"presses":11,"first":["A Skip to main content","BUTTON Open site menu","A DoUKnowBall","BUTTON Go back"]}
+  C main 390 after Enter on focused Continue: save, layer: {"save":{"phase":"season_summary","age":18,"seasons":3},"layer":1}
+  C main 390 CONTROL layer gone after release, dialogs now: [true,2]
+  C main 390 page errors: []
+
+C main 320
+  C main 320 reached playing: {"ok":true,"s":{"phase":"playing","age":17,"seasons":2},"trail":["youth@16:Next Year","contract_offer@17:Review contract","contract_offer@17:Sign contract"]}
+  C main 320 week by week: {"found":true,"label":"📺Week by weekNEW","x":246,"y":526,"onTop":true,"coveredBy":null}
+  C main 320 layer shown: true
+  C main 320 held chunk requests: 1
+  C main 320 save before / after the press: {"before":{"phase":"playing","age":17,"seasons":2},"after":{"phase":"newspaper","age":18,"seasons":3}}
+  C main 320 controls or dialog inside the layer: 0
+  C main 320 controls a tap can reach: []
+  C main 320 Continue to Season Summary: {"found":true,"label":"Continue to Season Summary →","x":160,"y":284,"onTop":false,"coveredBy":"fixed inset-0 z-50 flex items-center justify-center bg-background/80"}
+  C main 320 after a real tap on Continue: save, layer: {"save":{"phase":"newspaper","age":18,"seasons":3},"layer":1}
+  C main 320 site menu button: {"found":true,"label":"Menu","x":43,"y":22,"onTop":false,"coveredBy":"LI"}
+  C main 320 after a real tap on the site menu: dialogs or menus before, after, layer: [0,0,1]
+  C main 320 layer still up after Escape: 1
+  C main 320 layer still up 20 s later, held: [1,1]
+  C main 320 Tab presses to reach Continue: {"reached":true,"presses":11,"first":["A Skip to main content","BUTTON Open site menu","A DoUKnowBall","BUTTON Go back"]}
+  C main 320 after Enter on focused Continue: save, layer: {"save":{"phase":"season_summary","age":18,"seasons":3},"layer":1}
+  C main 320 CONTROL layer gone after release, dialogs now: [true,2]
+  C main 320 page errors: []
+
+T main 390
+  T main 390 trophy tile, save: [{"found":true,"label":"🏆0Leagues","x":82,"y":422,"onTop":true,"coveredBy":null},{"phase":"youth","age":16,"seasons":1}]
+  T main 390 layer shown, held: [true,1]
+  T main 390 controls inside, reachable, up after Escape: [0,[],1]
+  T main 390 up 10 s later; CONTROL gone after release: [1,true]
+  T main 390 save unchanged: true
+  T main 390 page errors: []
+SUMMARY {"C main 390":{"advanced":true,"phaseUnder":"newspaper","inLayer":0,"reach":0,"contOnTop":false,"menuOnTop":false,"escUp":1,"lateUp":1,"releaseClears":true},"C main 320":{"advanced":true,"phaseUnder":"newspaper","inLayer":0,"reach":0,"contOnTop":false,"menuOnTop":false,"escUp":1,"lateUp":1,"releaseClears":true},"T main 390":{"inLayer":0,"reach":0,"escUp":1,"lateUp":1,"releaseClears":true}}
+vfwalk main: probe completed
