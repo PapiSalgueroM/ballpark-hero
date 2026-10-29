@@ -1,0 +1,4 @@
+rec-named exit=0 21s | simNbaSeasonStats: 86 checks passed over 10 seeded franchises and 3 seasons each. Every game adds up, the box takes nothing from the league, the awards follow their rules
+nfl-plain exit=0 75s | simNflSeasonStats: 119 checks, 0 failed; section 1 skipped: LIFT_BASE is not set
+nfl-c-kickswap exit=1 76s | simNflSeasonStats: 119 checks, 5 failed (control kickswap); section 1 skipped: LIFT_BASE is not set
+tsc exit=0 90s | 
