@@ -1,0 +1,26 @@
+Back to career lines: 0
+1568 toast lines: 0
+[dukb] inlined 1 stylesheet(s) and 1 module(s) into 181 snapshots (11 left alone)
+
+C base 390x844
+  C base 390x844 reached playing: {"ok":true,"age":17,"trail":["youth@16:Next Year","contract_offer@17:Review contract","contract_offer@17:Sign contract"]}
+  C base 390x844 week by week button: {"found":true,"x":294,"y":778,"w":44,"h":48,"inView":true,"onTop":true,"cover":null}
+  C base 390x844 chunks asked for: ["soccerMoments-DWnXiQhk.js","SoccerSeasonCentre-WQbZNtew.js","SeasonCentre-ZVSuMrj8.js","SeasonCentreHelp-BG76KjR9.js"]
+  C base 390x844 held requests: 1
+  C base 390x844 Season Centre loading layer shown: true
+  C base 390x844 save phase under the layer: newspaper age 18
+  C base 390x844 FINDING controls inside the layer: 0
+  C base 390x844 FINDING layer still up after Escape: 1
+  C base 390x844 FINDING controls a tap can reach: []
+  C base 390x844 FINDING layer still up 20 s later: 1
+  C base 390x844 page errors: []
+
+D base 390x844
+  D base 390x844 reached playing: {"ok":true,"age":17}
+  D base 390x844 reached pundit_season: {"ok":true,"phase":"pundit_season","trail":["retirement_ceremony@17:🎙️ Become a TV Pundit"]}
+  D base 390x844 bar Next Season button: {"found":true,"x":8,"y":778,"w":330,"h":48,"inView":true,"onTop":true,"cover":null}
+  D base 390x844 FINDING three presses of Next Season changed the save: false
+  D base 390x844 FINDING pundit season before and after: {"before":0,"after":0,"phase":"pundit_season"}
+  D base 390x844 pundit action advances the season: {"season":1,"phase":"pundit_season"}
+  D base 390x844 page errors: []
+walk421 base: all checks passed

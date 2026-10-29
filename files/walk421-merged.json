@@ -1,0 +1,195 @@
+[
+ {
+  "k": "A merged 320x568 focus on open",
+  "v": "DIV Opening the training ground"
+ },
+ {
+  "k": "A merged 320x568 Back button",
+  "v": {
+   "found": true,
+   "x": 37,
+   "y": 280,
+   "w": 246,
+   "h": 44,
+   "inView": true,
+   "onTop": true,
+   "cover": null
+  }
+ },
+ {
+  "k": "A merged 320x568 Next button under the layer",
+  "v": {
+   "found": true,
+   "x": 8,
+   "y": 502,
+   "w": 258,
+   "h": 48,
+   "inView": true,
+   "onTop": false,
+   "cover": "<div class=\"fixed inset-0 z-50 flex items-center justify-center bg-black/70 p-4\" data-trai"
+  }
+ },
+ {
+  "k": "A merged 320x568 site menu under the layer",
+  "v": {
+   "found": true,
+   "x": 0,
+   "y": 0,
+   "w": 85,
+   "h": 44,
+   "inView": true,
+   "onTop": false,
+   "cover": "<div class=\"fixed inset-0 z-50 flex items-center justify-center bg-black/70 p-4\" data-trai"
+  }
+ },
+ {
+  "k": "A merged 320x568 Tab x3 from the layer",
+  "v": [
+   "BUTTON Back to career",
+   "BUTTON Report a problem",
+   "A 🧑‍💼Fantasy DraftDraft your u"
+  ]
+ },
+ {
+  "k": "A merged 320x568 focus after Escape",
+  "v": "BUTTON Open the training ground"
+ },
+ {
+  "k": "A merged 320x568 layer after backdrop click then Escape (count)",
+  "v": 1
+ },
+ {
+  "k": "A merged 320x568 focus after Back",
+  "v": "BUTTON Open the training ground"
+ },
+ {
+  "k": "A merged 390x844 focus on open",
+  "v": "DIV Opening the training ground"
+ },
+ {
+  "k": "A merged 390x844 Back button",
+  "v": {
+   "found": true,
+   "x": 37,
+   "y": 418,
+   "w": 316,
+   "h": 44,
+   "inView": true,
+   "onTop": true,
+   "cover": null
+  }
+ },
+ {
+  "k": "A merged 390x844 Next button under the layer",
+  "v": {
+   "found": true,
+   "x": 8,
+   "y": 778,
+   "w": 328,
+   "h": 48,
+   "inView": true,
+   "onTop": false,
+   "cover": "<div class=\"fixed inset-0 z-50 flex items-center justify-center bg-black/70 p-4\" data-trai"
+  }
+ },
+ {
+  "k": "A merged 390x844 site menu under the layer",
+  "v": {
+   "found": true,
+   "x": 0,
+   "y": 0,
+   "w": 85,
+   "h": 44,
+   "inView": true,
+   "onTop": false,
+   "cover": "<div class=\"fixed inset-0 z-50 flex items-center justify-center bg-black/70 p-4\" data-trai"
+  }
+ },
+ {
+  "k": "A merged 390x844 Tab x3 from the layer",
+  "v": [
+   "BUTTON Back to career",
+   "BUTTON Report a problem",
+   "A 🧑‍💼Fantasy DraftDraft your u"
+  ]
+ },
+ {
+  "k": "A merged 390x844 focus after Escape",
+  "v": "BUTTON Open the training ground"
+ },
+ {
+  "k": "A merged 390x844 layer after backdrop click then Escape (count)",
+  "v": 1
+ },
+ {
+  "k": "A merged 390x844 focus after Back",
+  "v": "BUTTON Open the training ground"
+ },
+ {
+  "k": "A merged 1280x800 focus on open",
+  "v": "DIV Opening the training ground"
+ },
+ {
+  "k": "A merged 1280x800 Back button",
+  "v": {
+   "found": true,
+   "x": 469,
+   "y": 396,
+   "w": 342,
+   "h": 44,
+   "inView": true,
+   "onTop": true,
+   "cover": null
+  }
+ },
+ {
+  "k": "A merged 1280x800 Next button under the layer",
+  "v": {
+   "found": true,
+   "x": 144,
+   "y": 734,
+   "w": 926,
+   "h": 48,
+   "inView": true,
+   "onTop": false,
+   "cover": "<div class=\"fixed inset-0 z-50 flex items-center justify-center bg-black/70 p-4\" data-trai"
+  }
+ },
+ {
+  "k": "A merged 1280x800 site menu under the layer",
+  "v": {
+   "found": true,
+   "x": 0,
+   "y": 0,
+   "w": 85,
+   "h": 44,
+   "inView": true,
+   "onTop": false,
+   "cover": "<div class=\"fixed inset-0 z-50 flex items-center justify-center bg-black/70 p-4\" data-trai"
+  }
+ },
+ {
+  "k": "A merged 1280x800 Tab x3 from the layer",
+  "v": [
+   "BUTTON Back to career",
+   "BUTTON Report a problem",
+   "A 🧑‍💼Fantasy DraftDraft your u"
+  ]
+ },
+ {
+  "k": "A merged 1280x800 focus after Escape",
+  "v": "BUTTON Open the training ground"
+ },
+ {
+  "k": "A merged 1280x800 layer after backdrop click then Escape (count)",
+  "v": 1
+ },
+ {
+  "k": "A merged 1280x800 focus after Back",
+  "v": "BUTTON Open the training ground"
+ },
+ {
+  "k": "B merged 320x568 consent pending after reload",
+  "v": false
+ }
+]

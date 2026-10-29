@@ -1,0 +1,121 @@
+[
+ {
+  "k": "C base 390x844 reached playing",
+  "v": {
+   "ok": true,
+   "age": 17,
+   "trail": [
+    "youth@16:Next Year",
+    "contract_offer@17:Review contract",
+    "contract_offer@17:Sign contract"
+   ]
+  }
+ },
+ {
+  "k": "C base 390x844 week by week button",
+  "v": {
+   "found": true,
+   "x": 294,
+   "y": 778,
+   "w": 44,
+   "h": 48,
+   "inView": true,
+   "onTop": true,
+   "cover": null
+  }
+ },
+ {
+  "k": "C base 390x844 chunks asked for",
+  "v": [
+   "soccerMoments-DWnXiQhk.js",
+   "SoccerSeasonCentre-WQbZNtew.js",
+   "SeasonCentre-ZVSuMrj8.js",
+   "SeasonCentreHelp-BG76KjR9.js"
+  ]
+ },
+ {
+  "k": "C base 390x844 held requests",
+  "v": 1
+ },
+ {
+  "k": "C base 390x844 Season Centre loading layer shown",
+  "v": true
+ },
+ {
+  "k": "C base 390x844 save phase under the layer",
+  "v": "newspaper age 18"
+ },
+ {
+  "k": "C base 390x844 FINDING controls inside the layer",
+  "v": 0
+ },
+ {
+  "k": "C base 390x844 FINDING layer still up after Escape",
+  "v": 1
+ },
+ {
+  "k": "C base 390x844 FINDING controls a tap can reach",
+  "v": []
+ },
+ {
+  "k": "C base 390x844 FINDING layer still up 20 s later",
+  "v": 1
+ },
+ {
+  "k": "C base 390x844 page errors",
+  "v": []
+ },
+ {
+  "k": "D base 390x844 reached playing",
+  "v": {
+   "ok": true,
+   "age": 17
+  }
+ },
+ {
+  "k": "D base 390x844 reached pundit_season",
+  "v": {
+   "ok": true,
+   "phase": "pundit_season",
+   "trail": [
+    "retirement_ceremony@17:🎙️ Become a TV Pundit"
+   ]
+  }
+ },
+ {
+  "k": "D base 390x844 bar Next Season button",
+  "v": {
+   "found": true,
+   "x": 8,
+   "y": 778,
+   "w": 330,
+   "h": 48,
+   "inView": true,
+   "onTop": true,
+   "cover": null
+  }
+ },
+ {
+  "k": "D base 390x844 FINDING three presses of Next Season changed the save",
+  "v": false
+ },
+ {
+  "k": "D base 390x844 FINDING pundit season before and after",
+  "v": {
+   "before": 0,
+   "after": 0,
+   "phase": "pundit_season"
+  }
+ },
+ {
+  "k": "D base 390x844 pundit action advances the season",
+  "v": {
+   "season": 1,
+   "phase": "pundit_season"
+  }
+ },
+ {
+  "k": "D base 390x844 page errors",
+  "v": []
+ }
+]

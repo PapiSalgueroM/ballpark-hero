@@ -1,0 +1,76 @@
+Auto-merging src/pages/SoccerCareer.tsx
+merged tree: c84a70dfad64dc7910bcfa9f7a5620e062559cdb
+Back to career lines: 1
+1568 toast lines: 1
+[dukb] inlined 1 stylesheet(s) and 1 module(s) into 181 snapshots (11 left alone)
+
+A merged 320x568
+  PASS  A merged 320x568 career created: "youth"
+  PASS  A merged 320x568 stalled chunk shows the loading layer: {"held":1}
+  A merged 320x568 focus on open: DIV Opening the training ground
+  A merged 320x568 Back button: {"found":true,"x":37,"y":280,"w":246,"h":44,"inView":true,"onTop":true,"cover":null}
+  PASS  A merged 320x568 Back is on top, in view, 44 px tall: {"found":true,"x":37,"y":280,"w":246,"h":44,"inView":true,"onTop":true,"cover":null}
+  A merged 320x568 Next button under the layer: {"found":true,"x":8,"y":502,"w":258,"h":48,"inView":true,"onTop":false,"cover":"<div class=\"fixed inset-0 z-50 flex items-center justify-center bg-black/70 p-4\" data-trai"}
+  A merged 320x568 site menu under the layer: {"found":true,"x":0,"y":0,"w":85,"h":44,"inView":true,"onTop":false,"cover":"<div class=\"fixed inset-0 z-50 flex items-center justify-center bg-black/70 p-4\" data-trai"}
+  A merged 320x568 Tab x3 from the layer: ["BUTTON Back to career","BUTTON Report a problem","A 🧑‍💼Fantasy DraftDraft your u"]
+  PASS  A merged 320x568 Escape closes the layer
+  A merged 320x568 focus after Escape: BUTTON Open the training ground
+  PASS  A merged 320x568 save unchanged by Escape
+  A merged 320x568 layer after backdrop click then Escape (count): 1
+  PASS  A merged 320x568 Back closes the layer
+  A merged 320x568 focus after Back: BUTTON Open the training ground
+  PASS  A merged 320x568 Next is on top after Back: {"found":true,"x":8,"y":502,"w":258,"h":48,"inView":true,"onTop":true,"cover":null}
+  PASS  A merged 320x568 Next advances after Back: {"from":16,"to":17,"phase":"contract_offer"}
+  PASS  A merged 320x568 late arrival opens nothing
+  PASS  A merged 320x568 late arrival leaves the save alone
+  PASS  A merged 320x568 reopen after arrival opens the training ground
+  PASS  A merged 320x568 no page errors: []
+
+A merged 390x844
+  PASS  A merged 390x844 career created: "youth"
+  PASS  A merged 390x844 stalled chunk shows the loading layer: {"held":1}
+  A merged 390x844 focus on open: DIV Opening the training ground
+  A merged 390x844 Back button: {"found":true,"x":37,"y":418,"w":316,"h":44,"inView":true,"onTop":true,"cover":null}
+  PASS  A merged 390x844 Back is on top, in view, 44 px tall: {"found":true,"x":37,"y":418,"w":316,"h":44,"inView":true,"onTop":true,"cover":null}
+  A merged 390x844 Next button under the layer: {"found":true,"x":8,"y":778,"w":328,"h":48,"inView":true,"onTop":false,"cover":"<div class=\"fixed inset-0 z-50 flex items-center justify-center bg-black/70 p-4\" data-trai"}
+  A merged 390x844 site menu under the layer: {"found":true,"x":0,"y":0,"w":85,"h":44,"inView":true,"onTop":false,"cover":"<div class=\"fixed inset-0 z-50 flex items-center justify-center bg-black/70 p-4\" data-trai"}
+  A merged 390x844 Tab x3 from the layer: ["BUTTON Back to career","BUTTON Report a problem","A 🧑‍💼Fantasy DraftDraft your u"]
+  PASS  A merged 390x844 Escape closes the layer
+  A merged 390x844 focus after Escape: BUTTON Open the training ground
+  PASS  A merged 390x844 save unchanged by Escape
+  A merged 390x844 layer after backdrop click then Escape (count): 1
+  PASS  A merged 390x844 Back closes the layer
+  A merged 390x844 focus after Back: BUTTON Open the training ground
+  PASS  A merged 390x844 Next is on top after Back: {"found":true,"x":8,"y":778,"w":328,"h":48,"inView":true,"onTop":true,"cover":null}
+  PASS  A merged 390x844 Next advances after Back: {"from":16,"to":17,"phase":"contract_offer"}
+  PASS  A merged 390x844 late arrival opens nothing
+  PASS  A merged 390x844 late arrival leaves the save alone
+  PASS  A merged 390x844 reopen after arrival opens the training ground
+  PASS  A merged 390x844 no page errors: []
+
+A merged 1280x800
+  PASS  A merged 1280x800 career created: "youth"
+  PASS  A merged 1280x800 stalled chunk shows the loading layer: {"held":1}
+  A merged 1280x800 focus on open: DIV Opening the training ground
+  A merged 1280x800 Back button: {"found":true,"x":469,"y":396,"w":342,"h":44,"inView":true,"onTop":true,"cover":null}
+  PASS  A merged 1280x800 Back is on top, in view, 44 px tall: {"found":true,"x":469,"y":396,"w":342,"h":44,"inView":true,"onTop":true,"cover":null}
+  A merged 1280x800 Next button under the layer: {"found":true,"x":144,"y":734,"w":926,"h":48,"inView":true,"onTop":false,"cover":"<div class=\"fixed inset-0 z-50 flex items-center justify-center bg-black/70 p-4\" data-trai"}
+  A merged 1280x800 site menu under the layer: {"found":true,"x":0,"y":0,"w":85,"h":44,"inView":true,"onTop":false,"cover":"<div class=\"fixed inset-0 z-50 flex items-center justify-center bg-black/70 p-4\" data-trai"}
+  A merged 1280x800 Tab x3 from the layer: ["BUTTON Back to career","BUTTON Report a problem","A 🧑‍💼Fantasy DraftDraft your u"]
+  PASS  A merged 1280x800 Escape closes the layer
+  A merged 1280x800 focus after Escape: BUTTON Open the training ground
+  PASS  A merged 1280x800 save unchanged by Escape
+  A merged 1280x800 layer after backdrop click then Escape (count): 1
+  PASS  A merged 1280x800 Back closes the layer
+  A merged 1280x800 focus after Back: BUTTON Open the training ground
+  PASS  A merged 1280x800 Next is on top after Back: {"found":true,"x":144,"y":684,"w":926,"h":48,"inView":true,"onTop":true,"cover":null}
+  PASS  A merged 1280x800 Next advances after Back: {"from":16,"to":17,"phase":"contract_offer"}
+  PASS  A merged 1280x800 late arrival opens nothing
+  PASS  A merged 1280x800 late arrival leaves the save alone
+  PASS  A merged 1280x800 reopen after arrival opens the training ground
+  PASS  A merged 1280x800 no page errors: []
+
+B merged 320x568
+  B merged 320x568 consent pending after reload: false
+  PASS  B merged 320x568 Back on top with the banner up: {"found":true,"x":37,"y":280,"w":246,"h":44,"inView":true,"onTop":true,"cover":null}
+walk421 merged: all checks passed
