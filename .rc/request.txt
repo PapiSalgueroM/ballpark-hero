@@ -1,0 +1,21 @@
+#!serve
+#!playwright
+# Release BS kit: 3 of the 18 request lines of Release BR's rc-BPg.txt (rBRg/.tmp-fx/br), the lines of the BS areas (Soccer Career, Club Manager and the manager games on its engine, Player Bingo, Conquest, Stat and Draft Detective, the US My Career save notice, What's New, the polls, the guide intro) and the setup lines before them; 15 line(s) outside those areas left out: chain-1524 units-1524 owner-1524 ctl-1524 scoreshown-1524 moneyafter-1524 nodeadend-1524 awardsnight-1524 leaguefinish-1524 socialbrands-1524 trophyruns-1524 walkOwner-1524 walkRun-1524 probe-1524 flagship-1524.
+# REBOUND AT RELEASE BQ (triage-BQ.md): Round 1525 moves 15 of the owner tail's 16 careers against e4464a1e on purpose,
+# and main now holds 1524, so the walk's merge base has the owner tail. B1524 defaults to THIS TREE WITH ROUND 1524 TAKEN
+# OUT of the two files the harness and the walk read from their base (filesWithoutMerge.mjs 86b94e557 e4464a1e0 HEAD
+# soccerCareerEngine.ts soccerCareerLeague.ts: BP m6b and its first parent; the whole tree form refuses on two src files
+# neither reads). walkFix1524.mjs takes it as WALK_BASE. chain-1524 runs check-chain-bq.mjs (as chain-1523).
+# Release BP part two (Round BPH): ROUND 1524's own proof lines (Soccer Career: the owner tail, a club for sale, the
+# real table, one budget call a season), from finish-1524.md, fix-1524.md, fix2-1524.md and verify2-1524.md as the
+# round's runners ran them (r1524-fa, fb, fc, fw, f2final, vf2-s, vf2-w), proven on the release head by rBPh-m6ba and
+# rBPh-m6bb (merge m6b) and again on the final head. Extras on its send line: check-chain-bph.mjs, walkOwner.mjs (the
+# builder's walk, r1524-tools), walkFix1524.mjs (the run reviewer's walk the fixer kept), probeOwnerPanelFail.mjs.
+# BINDING. B1524 is the head of release-bp-gate before the merge m6b brought 1524 in, its first parent: e4464a1e (the
+# release after Rounds 1519 and 1523). simSoccerOwnerTail sections 5 and 6 hold old owner saves and every career that
+# never buys a club to SIM_OWNER_BASE; left alone it takes git merge-base HEAD origin/main, which on this branch is a
+# main WITHOUT 1519 and 1523 (both move a career on purpose, 1523 on every default path), so the line pins it.
+# CONTROLS. ctl-1524 exits 0 only when each of the sixteen named controls exits 1 (counts on rBPh-m6ba in finish-BPH.md).
+managercareer-1524: node scripts/simManagerCareer.mjs
+programme-1524: node scripts/simCareerProgramme.mjs
+landing-bar-1524: SOCCER_LANDING_HEAD_ONLY=1 SECTIONS=bar node scripts/playSoccerLanding.mjs 2>&1 | tail -3; exit ${PIPESTATUS[0]}
