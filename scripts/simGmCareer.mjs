@@ -156,7 +156,7 @@ const CONTROLS = {
   contribstays: '5', awaycontrib: '6', retainedrolled: '6', thumbfalse: '2t',
   firenever: '9', nooffers: '9', xpflat: '9', nevershut: '9', legacyleak: '10', retainedlift: '10',
   /* Round 1559 fix pass (the adversarial reviews) */
-  namedsummer: '6', awaymoves: '6', oldskip: '6', retainedclub: '5',
+  namedsummer: '6', awaymoves: '6', oldskip: '6', retainedclub: '5', syncalways: '10', refusedrelease: '10',
 };
 if (CONTROL && !CONTROLS[CONTROL]) {
   console.error(`SIM_GM_CAREER_CONTROL=${CONTROL} is not a control this harness knows (${Object.keys(CONTROLS).join(', ')})`);
@@ -267,6 +267,10 @@ const EDITS = {
   /* Round 1559 fix pass (review minor 7): the old club left out of the year out's draft (named as the user club). */
   oldskip: ['career', "      for (let i = 0; i < batches; i++) cls = nflAiDraftPicks(league, cls, '', rng).remaining;",
     '      for (let i = 0; i < batches; i++) cls = nflAiDraftPicks(league, cls, oldTeam, rng).remaining;'],
+  /* Round 1559 fix pass (review minor 6): the shared take syncs the picks on every take, not only on a desk it just
+     opened; a refused take hands the old club its lineup back anyway (section 10's bind cases). */
+  syncalways: ['bind', '  if (opened) s.syncOpened(league, r.desk);', '  s.syncOpened(league, r.desk);'],
+  refusedrelease: ['bind', '  if (!r) return null;', '  if (!r) { s.releaseOldClub(league, legacy.team); return null; }'],
 };
 /* Round 1559: the controls anchored in a sport's own file, re-aimed at the NHL row's own lines. A control in
    NFL_ONLY with no NHL line (the board's press, the depth chart) is not a control of the nhl row and says so. */
