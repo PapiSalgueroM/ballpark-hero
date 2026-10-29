@@ -1,0 +1,18 @@
+tsc: node_modules/.bin/tsc --noEmit -p tsconfig.app.json
+facts: node scripts/simUsConnectionsFacts.mjs
+ctl-arod: US_CONN_CONTROL=arod node scripts/simUsConnectionsFacts.mjs
+ctl-bell: US_CONN_CONTROL=bell node scripts/simUsConnectionsFacts.mjs
+ctl-karlsson: US_CONN_CONTROL=karlsson node scripts/simUsConnectionsFacts.mjs
+ctl-twice: US_CONN_CONTROL=twice node scripts/simUsConnectionsFacts.mjs
+ctl-onehost: US_CONN_CONTROL=onehost node scripts/simUsConnectionsFacts.mjs
+ctl-unjudged: US_CONN_CONTROL=unjudged node scripts/simUsConnectionsFacts.mjs
+ctl-fingers: US_CONN_CONTROL=fingers node scripts/simUsConnectionsFacts.mjs
+ctl-ohtani: US_CONN_CONTROL=ohtani node scripts/simUsConnectionsFacts.mjs
+ctl-frobinson: US_CONN_CONTROL=frobinson node scripts/simUsConnectionsFacts.mjs
+ctl-undate: US_CONN_CONTROL=undate node scripts/simUsConnectionsFacts.mjs
+migcheck: node scripts/qa/usConnections1567Migration.mjs check
+dealt: node scripts/qa/connectionsDealtDay1567.mjs file 2026-10-29 +45
+conn1553: node scripts/simConnectionsFacts.mjs
+fair: node scripts/simFairPuzzles.mjs
+nhlBench: node scripts/simNhlPlanningBench.mjs
+vitest: node_modules/.bin/vitest run src/test/dailySaveParity.test.tsx src/test/dailySaveShapes.test.tsx src/test/dailySaveHardening.test.tsx src/test/nhlPlanningBench.test.tsx --testTimeout=300000 --hookTimeout=120000
