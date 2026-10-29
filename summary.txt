@@ -1,0 +1,4 @@
+apply372 exit=0 1s | ?? src/test/pollDayEt.test.ts
+tsc exit=0 73s | 
+vitestTZ exit=0 50s |       Tests  23 passed (23)
+probeTZ exit=0 9s | b20ec6664 node v24.22.1 wrong 125

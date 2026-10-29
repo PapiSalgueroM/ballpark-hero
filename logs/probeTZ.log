@@ -1,0 +1,12 @@
+TZ=UTC
+9a0af4d65 node v24.22.1 wrong 0
+TZ=Asia/Tokyo
+9a0af4d65 node v24.22.1 wrong 0
+TZ=Pacific/Kiritimati
+9a0af4d65 node v24.22.1 wrong 0
+TZ=America/Los_Angeles
+9a0af4d65 node v24.22.1 wrong 0
+TZ=America/New_York
+9a0af4d65 node v24.22.1 wrong 0
+main
+b20ec6664 node v24.22.1 wrong 125

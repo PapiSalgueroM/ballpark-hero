@@ -1,0 +1,5 @@
+#!serial
+apply372: git diff 89765449d 9a0af4d65f44660c205efd033fb50d68d55a30ca -- src/lib/dateUtils.ts src/test/pollDayEt.test.ts | git apply && git status --short -- src | head -5
+tsc: node_modules/.bin/tsc --noEmit -p tsconfig.app.json
+vitestTZ: for tz in America/New_York UTC Pacific/Auckland America/Los_Angeles Asia/Kolkata; do echo "TZ=$tz"; TZ=$tz node_modules/.bin/vitest run src/test/pollDayEt.test.ts src/test/gamePicks.test.tsx --testTimeout=300000 --hookTimeout=120000 2>&1 | grep -E "Tests|Test Files|FAIL" ; [ ${PIPESTATUS[0]} -eq 0 ] || exit 1; done
+probeTZ: for tz in UTC Asia/Tokyo Pacific/Kiritimati America/Los_Angeles America/New_York; do echo "TZ=$tz"; TZ=$tz node .rc/x/pollday.mjs "$PWD" 9a0af4d65f44660c205efd033fb50d68d55a30ca | grep -E "WRONG|wrong" ; done; echo main; node .rc/x/pollday.mjs "$PWD" b20ec6664 | tail -1
