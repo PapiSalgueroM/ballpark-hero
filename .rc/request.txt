@@ -1,0 +1,5 @@
+tsc: node_modules/.bin/tsc --noEmit -p tsconfig.app.json
+units: node_modules/.bin/vitest run src/test/soccerCareerLoyalty.engine.test.ts src/test/soccerCareerLoyalty.test.ts src/test/soccerCareerLoyalty.review.test.tsx src/lib/soccerCareerProgramme.test.ts --testTimeout=300000 --hookTimeout=120000
+mechfix: cp .rc/x/vfLoyaltyAnchor.test.ts src/test/vfM.test.ts && node_modules/.bin/vitest run src/test/vfM.test.ts -t mechanism --testTimeout=300000
+careersA: cp .rc/x/vfLoyaltyAnchor.test.ts src/test/vfA.test.ts && VF_SEED0=0 VF_N=150 node_modules/.bin/vitest run src/test/vfA.test.ts -t "whole careers" --testTimeout=900000
+careersB: cp .rc/x/vfLoyaltyAnchor.test.ts src/test/vfB.test.ts && VF_SEED0=150 VF_N=150 node_modules/.bin/vitest run src/test/vfB.test.ts -t "whole careers" --testTimeout=900000
