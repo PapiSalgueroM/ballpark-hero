@@ -1,4 +1,6 @@
-import { useEffect, useLayoutEffect, useMemo, useRef, useState } from 'react';
+import { lazy, Suspense, useEffect, useLayoutEffect, useMemo, useRef, useState } from 'react';
+import { loanPlanRecordOf } from '@/lib/clubManagerLoanPlan';
+import type { RecruitmentCommit, RecruitmentPick } from '@/lib/clubManagerRecruitment';
 import { cn } from '@/lib/utils';
 import { bannerClearance } from '@/components/club-manager/deskCue';
 /* Round 194: the nationality filter, CM-7's last open line. Per-world maps
@@ -24,6 +26,9 @@ import type { Position } from '@/types/game';
 import { ratingTint, MadeUpTag } from '@/components/club-manager/SquadScreen';
 /* Round 927: the deal moment borrows the shared celebration kit. */
 import { CelebrationStyles, revealDelay } from '@/components/club-manager/Celebration';
+
+const LoanPlanCard = lazy(() => import('@/components/club-manager/LoanPlanCard').then(m => ({ default: m.LoanPlanCard })));
+const RecruitmentBoard = lazy(() => import('@/components/club-manager/RecruitmentBoard').then(m => ({ default: m.RecruitmentBoard })));
 
 type PosFilter = 'ALL' | 'GK' | 'DEF' | 'MID' | 'ATT';
 
@@ -69,6 +74,8 @@ interface TransferScreenProps {
   /* Round 94: the transfer-status controls. */
   onSetStatus: (playerId: string, status: TransferStatus | null) => void;
   onLoanOut: (playerId: string) => void;
+  onCommitLoanPlan?: (make: (c: CareerState) => CareerState | null) => boolean;
+  onCommitRecruitment?: RecruitmentCommit;
   /* Round 506: the personal terms table, and the two loan figures. */
   onProposeTerms: (terms: PersonalTerms) => void;
   onBuyLoanee: (playerId: string) => void;
@@ -105,7 +112,7 @@ export function TransferScreen({
   onNegotiate, onOffer, onWalk, onDismissNegotiation, onClause, onLoan,
   onAcceptBid, onRejectBid, onSetStatus, onLoanOut,
   onProposeTerms, onBuyLoanee, onEndLoanEarly, onRecallLoanee,
-  deskNote, onClearNote,
+  deskNote, onClearNote, onCommitLoanPlan, onCommitRecruitment,
 }: TransferScreenProps) {
   /* Round 514: the money symbol follows the start option. Shadowing the
      import here is one line instead of a career argument on every call. */
@@ -113,6 +120,12 @@ export function TransferScreen({
   const [filter, setFilter] = useState<PosFilter>('ALL');
   const [query, setQuery] = useState('');
   const [mode, setMode] = useState<'buy' | 'sell' | 'news'>('buy');
+  const [shortlist, setShortlist] = useState<RecruitmentPick | null | false>(false);
+  const shortlistOpener = useRef<HTMLButtonElement | null>(null);
+  /* Release BS fix: a row's Save opens the board in place of the market list, so Back puts the
+     list back where it was and focus on that row's Save. */
+  const marketList = useRef<HTMLDivElement | null>(null);
+  const marketPlace = useRef<{ top: number; name: string } | null>(null);
   const [newsSort, setNewsSort] = useState<'recent' | 'fee'>('recent');
   const [newsClub, setNewsClub] = useState<'all' | 'mine'>('all');
   const [newsPage, setNewsPage] = useState(0);
@@ -354,6 +367,26 @@ export function TransferScreen({
       .slice(0, 10),
     [career],
   );
+
+  if (shortlist !== false && onCommitRecruitment) {
+    const close = () => {
+      setShortlist(false);
+      requestAnimationFrame(() => {
+        const place = marketPlace.current, list = marketList.current;
+        marketPlace.current = null;
+        if (place && list) list.scrollTop = place.top;
+        const rowSave = place && list ? [...list.querySelectorAll<HTMLButtonElement>('button[aria-label]')].find(b => b.getAttribute('aria-label') === `Save ${place.name}`) : undefined;
+        (rowSave ?? (shortlistOpener.current?.isConnected ? shortlistOpener.current : document.querySelector<HTMLButtonElement>('[data-cm-shortlist-open]')))?.focus({ preventScroll: true });
+      });
+    };
+    return <Suspense fallback={<div className="space-y-2"><p role="status">Opening shortlist...</p><button className="min-h-11 min-w-11 px-3 rounded-lg border" onClick={close}>Back</button></div>}>
+      <RecruitmentBoard career={career} market={market} initial={shortlist || undefined} onCommit={onCommitRecruitment} onBack={close} onFind={player => {
+        setMode('buy'); setFilter('ALL'); setPosExact('any'); setAgeBand('any'); setPriceBand('any'); setLeaguePick('any'); setNatPick('any'); setQuery(player.name);
+        marketPlace.current = null;
+        close();
+      }} />
+    </Suspense>;
+  }
 
   return (
     <div className="space-y-4">
@@ -768,6 +801,8 @@ export function TransferScreen({
         </div>
       )}
 
+      {onCommitRecruitment && <button data-cm-shortlist-open className="min-h-11 min-w-11 w-full rounded-lg border border-border px-3 text-sm font-bold" onClick={e => { shortlistOpener.current = e.currentTarget; marketPlace.current = null; setShortlist(null); }}>Shortlist</button>}
+
       {/* Mode toggle */}
       <div className="grid grid-cols-3 gap-1.5">
         <button
@@ -880,7 +915,7 @@ export function TransferScreen({
             aria-label="Search player or club"
             className="bg-card border-border text-sm"
           />
-          <div className="bg-card border border-border rounded-xl p-2 max-h-96 overflow-y-auto">
+          <div ref={marketList} className="bg-card border border-border rounded-xl p-2 max-h-96 overflow-y-auto">
             {filtered.map(m => {
               const clause = releaseClauseOf(m, career.season);
               const canLoan = loanEligible(career, m) && loansUsed < 2;
@@ -907,6 +942,9 @@ export function TransferScreen({
                       {m.club} · {m.age}y{m.value !== undefined ? <> · {valuationLine(career, m)}</> : null}
                     </div>
                   </div>
+                  {/* Release BS fix: Save sits at row level, a 44 px target whose negative margin
+                      fits the row's own padding, so a row is no taller than before it came */}
+                  {onCommitRecruitment && <button className="shrink-0 min-h-11 min-w-11 -my-1.5 rounded-lg border border-border px-2 text-xs font-bold" aria-label={`Save ${m.name}`} onClick={e => { shortlistOpener.current = e.currentTarget; marketPlace.current = { top: marketList.current?.scrollTop ?? 0, name: m.name }; setShortlist({ career, player: m }); }}>Save</button>}
                   <span className={cn('text-sm font-bold font-display', ratingTint(m.rating))}>{m.rating}</span>
                   <div className="shrink-0 flex flex-col gap-1 items-stretch">
                     <button
@@ -960,6 +998,11 @@ export function TransferScreen({
 
       {mode === 'sell' && (
         <div className="space-y-2">
+          {onCommitLoanPlan && (
+            <Suspense fallback={<p className="text-xs text-muted-foreground">Opening loan plans...</p>}>
+              <LoanPlanCard career={career} onCommit={onCommitLoanPlan} />
+            </Suspense>
+          )}
           {/* Round 71: incoming bids for my players */}
           {windowOpen && bids.length > 0 && (
             <div className="bg-card border border-gold/40 rounded-xl p-3 space-y-2">
@@ -1038,7 +1081,7 @@ export function TransferScreen({
                           {l.club} can buy him for {money(l.optionFee)}
                         </span>
                       )}
-                      {l.recallFee !== undefined && (
+                      {l.recallFee !== undefined && !(loanPlanRecordOf(career, l) && onCommitLoanPlan) && (
                         <button
                           onClick={() => onRecallLoanee(l.player.id)}
                           disabled={!windowOpen || l.recallFee > career.budget || career.squad.length >= 30}

@@ -1,16 +1,18 @@
 /** Restore only the engine behavior changed by contracts and club moves.
  * The bundle asserts every source needle exists and was applied. Full save
  * comparisons must keep every field, including wages, events and fees.
+ * Release BS fix: the two quotes now read loyaltyUncutWage(s), which is s.weeklyWage on any career
+ * without a loyalty cut, so the needles follow the new lines and the baselines stay the same.
  */
 export const SOCCER_CONTRACT_1177_BASELINE_PATCHES = [
   {
     file: 'src/lib/soccerCareerEngine.ts',
-    from: "    const quote = soccerExtensionQuote(s, 'renewal');\n    s.contractYearsLeft = quote.contractYears ?? rand(2, 4);\n    s.weeklyWage = quote.weeklyWage;",
+    from: "    const quote = soccerExtensionQuote({ ...s, weeklyWage: loyaltyUncutWage(s) }, 'renewal');\n    s.contractYearsLeft = quote.contractYears ?? rand(2, 4);\n    s.weeklyWage = quote.weeklyWage;",
     to: '    s.contractYearsLeft = rand(2, 4);',
   },
   {
     file: 'src/lib/soccerCareerEngine.ts',
-    from: '  const quote = soccerExtensionQuote(s);\n  const extraYears = quote.contractYears ?? rand(2, 4);\n  s.contractYearsLeft = extraYears;\n  s.weeklyWage = quote.weeklyWage;',
+    from: '  const quote = soccerExtensionQuote({ ...s, weeklyWage: loyaltyUncutWage(s) });\n  const extraYears = quote.contractYears ?? rand(2, 4);\n  s.contractYearsLeft = extraYears;\n  s.weeklyWage = quote.weeklyWage;',
     to: '  const extraYears = rand(2, 4);\n  s.contractYearsLeft = extraYears;\n  s.weeklyWage = Math.round(s.weeklyWage * 1.15);',
   },
   {
