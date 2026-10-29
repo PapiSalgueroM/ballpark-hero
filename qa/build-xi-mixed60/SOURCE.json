@@ -1,0 +1,198 @@
+{
+  "schema": 1,
+  "bound": true,
+  "phase": "owned-red",
+  "branch": "codex/build-xi-mixed60-baseline-post-bs-20261029",
+  "parent": "601435944bef57aa0557884bbe16fde55e64107c",
+  "parentTree": "d88b925148444ce88b63557472334dbd486e1b16",
+  "parentBodies": 5452,
+  "sourceBodies": 5456,
+  "pins": [
+    {
+      "path": "package-lock.json",
+      "git": "97d6f12a052f25f400462938c241789a083f0bfe",
+      "bytes": 309049,
+      "mode": "100644"
+    },
+    {
+      "path": "package.json",
+      "git": "2ff64986fb76ebc51b706f2fd24765768874008a",
+      "bytes": 3495,
+      "mode": "100644"
+    },
+    {
+      "path": "scripts/lib/offlineTransport.cjs",
+      "git": "0fda542a2649fe5da937c6976fd0f5b6073e74b6",
+      "bytes": 10660,
+      "mode": "100644"
+    },
+    {
+      "path": "src/components/lineup/TeamSpinner.tsx",
+      "git": "e8149bf242ee85a8dd2b3c6860f3d8c08a950e6a",
+      "bytes": 4535,
+      "mode": "100644"
+    },
+    {
+      "path": "src/data/lineupTeams.ts",
+      "git": "cf7cd045678992998f826fab7c4cb65e36151124",
+      "bytes": 7325,
+      "mode": "100644"
+    },
+    {
+      "path": "src/hooks/useLineupBuilder.ts",
+      "git": "369487db56b37c031257b97e89e4303b0228c640",
+      "bytes": 20244,
+      "mode": "100644"
+    },
+    {
+      "path": "src/lib/positionFit.ts",
+      "git": "868a0f0f92fedfde8f09d8fe31a4495f4965272e",
+      "bytes": 10271,
+      "mode": "100644"
+    },
+    {
+      "path": "src/lib/validatorClient.ts",
+      "git": "8a0dad494b1ef8ca60838b918d7e011831203ec7",
+      "bytes": 4916,
+      "mode": "100644"
+    },
+    {
+      "path": "src/pages/LineupBuilder.tsx",
+      "git": "6560dfa0caeb8fb776017478a9ab173bffb0f4e2",
+      "bytes": 28209,
+      "mode": "100644"
+    },
+    {
+      "path": "src/test/setup.ts",
+      "git": "df00cdf5c54e8c8efc71e46d7585ae76acb4fc8d",
+      "bytes": 847,
+      "mode": "100644"
+    },
+    {
+      "path": "src/types/lineupBuilder.ts",
+      "git": "4fd4b014374ec316497b59fbd1c17cfda9007b35",
+      "bytes": 4306,
+      "mode": "100644"
+    },
+    {
+      "path": "supabase/functions/validate-player/index.ts",
+      "git": "c4d631cf324a35eeb7100ba07c5673dde2980564",
+      "bytes": 22561,
+      "mode": "100644"
+    },
+    {
+      "path": "tsconfig.app.json",
+      "git": "51f581dd91641b4c1f1219f646788e73cf6bf00c",
+      "bytes": 680,
+      "mode": "100644"
+    },
+    {
+      "path": "vitest.config.ts",
+      "git": "ed2a9dc677f77dfe95c061064eeff5782b856864",
+      "bytes": 5364,
+      "mode": "100644"
+    },
+    {
+      "path": "scripts/qa/buildXiMixed60.mjs",
+      "git": "d1739de7158435b420dc6c4e83fb69ea063ac895",
+      "bytes": 11535,
+      "mode": "100644",
+      "sha256": "eda9775ebd482e23bc0c418cd0e515ea28226e3dc4116de6ac7ca5e91b39450a"
+    },
+    {
+      "path": "src/test/lineupMixedClubs.test.tsx",
+      "git": "f4c1923b76a442accf03504fe7e8772db1d7ff47",
+      "bytes": 10808,
+      "mode": "100644",
+      "sha256": "6e211eef7f6bb696a8683be022c344be1c16991b9f1d2f8f5128f60d4c165f64"
+    }
+  ],
+  "tests": [
+    "src/test/lineupMixedClubs.test.tsx"
+  ],
+  "cases": [
+    {
+      "file": "src/test/lineupMixedClubs.test.tsx",
+      "title": "deals sixty clubs and the unchanged twenty five nations through the public helper",
+      "fullName": "Build Your XI expanded Mixed club catalogue deals sixty clubs and the unchanged twenty five nations through the public helper",
+      "ancestors": [
+        "Build Your XI expanded Mixed club catalogue"
+      ],
+      "owned": true,
+      "marker": "MISSING_MIXED_CLUB_CATALOGUE",
+      "causePattern": "expected .* to have a length of 60 but got 30"
+    },
+    {
+      "file": "src/test/lineupMixedClubs.test.tsx",
+      "title": "rerolls the real Mixed hook into an added club",
+      "fullName": "Build Your XI expanded Mixed club catalogue rerolls the real Mixed hook into an added club",
+      "ancestors": [
+        "Build Your XI expanded Mixed club catalogue"
+      ],
+      "owned": true,
+      "marker": "MISSING_MIXED_REROLL_CLUB",
+      "causePattern": "expected ['\"]Brazil['\"] to be ['\"]Borussia Mönchengladbach['\"]"
+    },
+    {
+      "file": "src/test/lineupMixedClubs.test.tsx",
+      "title": "plays an added club goalkeeper through the actual Page and local record path",
+      "fullName": "Build Your XI expanded Mixed club catalogue plays an added club goalkeeper through the actual Page and local record path",
+      "ancestors": [
+        "Build Your XI expanded Mixed club catalogue"
+      ],
+      "owned": true,
+      "marker": "MISSING_NEW_CLUB_RECORD_PATH",
+      "causePattern": "expected ['\"]Brazil['\"] to be ['\"]Borussia Mönchengladbach['\"]"
+    },
+    {
+      "file": "src/test/lineupMixedClubs.test.tsx",
+      "title": "preserves the original thirty clubs twenty five nations and every legacy alias",
+      "fullName": "Build Your XI expanded Mixed club catalogue preserves the original thirty clubs twenty five nations and every legacy alias",
+      "ancestors": [
+        "Build Your XI expanded Mixed club catalogue"
+      ],
+      "owned": false
+    },
+    {
+      "file": "src/test/lineupMixedClubs.test.tsx",
+      "title": "keeps goalkeeper and unverified answer refusals from filling a slot",
+      "fullName": "Build Your XI expanded Mixed club catalogue keeps goalkeeper and unverified answer refusals from filling a slot",
+      "ancestors": [
+        "Build Your XI expanded Mixed club catalogue"
+      ],
+      "owned": false
+    }
+  ],
+  "directPaths": [
+    "A\t.github/workflows/build-xi-mixed60.yml",
+    "A\tqa/build-xi-mixed60/SOURCE.json",
+    "A\tscripts/qa/buildXiMixed60.mjs",
+    "A\tsrc/test/lineupMixedClubs.test.tsx"
+  ],
+  "expected": {
+    "cases": 5,
+    "failed": 3,
+    "passed": 2,
+    "pending": 0,
+    "todo": 0,
+    "fileObjects": 1,
+    "aggregateSuiteUnits": 2,
+    "rawExit": 1,
+    "types": 0,
+    "copiedControls": 3
+  },
+  "testSourceReference": {
+    "sha256": "60e3589994eecb38ad87ff43f0593e228719478141b0b5055d9d7ca37e0b6577",
+    "path": "C:/Users/antho/dukb-handoff/2026-10-29/build-your-xi-club-coverage-v1/test-first-v1/SOURCE-READY.json",
+    "meaning": "Outside immutable provenance reference only, never read as a physical CI dependency."
+  },
+  "scope": "Offline exact public API test baseline only. C0 first30vs60; C1actualHookBrazil vs added club; C2actualPage same precondition, not independent alias fault proof. Later C0aliases/85total and C2local record path unrun at baseline. No build/browser/DB/liveEdge/fullsuite/main/live claim.",
+  "sourceFamily": "Fresh actual post-BS main601435; all14parent critical tuples rederived from actual5452tree. Old1229/7apackets remainunlaunched.",
+  "freshTreeReference": {
+    "path": "C:\\Users\\antho\\dukb-handoff\\2026-10-29\\build-xi-more-clubs-v1\\POST-BS-CURRENT-TREE.json",
+    "sha256": "52e049dfe4151b85b965571d4e726672598cc7381c0add0851df9f2dfe50a36e",
+    "tree": "d88b925148444ce88b63557472334dbd486e1b16",
+    "bodies": 5452,
+    "meaning": "Outside source-provenance reference only, no physical CI read."
+  }
+}
