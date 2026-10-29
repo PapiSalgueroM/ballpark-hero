@@ -133,6 +133,8 @@
      grouped        the load time conversion keeps only each club's
                     last run of old rows (works on rows grouped by
                     club, as 9b's plant is; breaks on a real save)    -> 9 (9f alone)
+     carried        the league carries a count across plays in one
+                    process                                          -> 9 (9e alone)
 
    Run: node scripts/simNbaSeasonStats.mjs
    The base comparison (9d): NBA_STATS_BASE=<checkout of the commit before Round 1566> node scripts/simNbaSeasonStats.mjs
@@ -172,8 +174,9 @@ const EXPECT = {
   draftlate: [3],
   bench17: [8],
   named: [9],
-  /* added by Round 1566's fix pass: 9f (a real old save) gets a control */
+  /* added by Round 1566's fix pass: 9f (a real old save) and 9e (byte stable for one seed) each get a control */
   grouped: [9],
+  carried: [9],
 };
 if (CONTROL && !EXPECT[CONTROL]) {
   console.error(`NBA_STATS_CONTROL=${CONTROL} is not a control this harness knows (${Object.keys(EXPECT).join(', ')})`);
@@ -307,9 +310,13 @@ const CONTROL_FILE_SWAPS = {
     ],
   },
   /* Round 1566's fix pass. grouped: a conversion that only works on rows grouped by club, which 9b's plant (made by the
-     expand) always is and a real old save (rows in game order) is not, so only 9f can see it. */
+     expand) always is and a real old save (rows in game order) is not, so only 9f can see it. carried: the league
+     carries state from one play to the next in the same process, which only 9e's two plays of one seed can see. */
   grouped: {
     'foStatsCodec.ts': [['  if (foReadNamed(c, v)) return foPack(c, v);', '  if (foReadNamed(c, v)) { const p = foPack(c, v); const runs: Record<string, Record<string, FoSavedLine>> = {}; let prev = \'\'; for (const l of Object.values(v.lines)) { if (l.team !== prev) runs[l.team] = {}; runs[l.team][l.id] = p.lines[l.team][l.id]; prev = l.team; } return { ...p, lines: runs }; }']],
+  },
+  carried: {
+    'nbaFrontOffice.ts': [['    stats: foNewSaved(2026),', '    stats: foNewSaved(2026), made: ((globalThis as Record<string, number>).dukbMade = ((globalThis as Record<string, number>).dukbMade ?? 0) + 1),']],
   },
 };
 /* Copy controls rewrite what section 8 reads, in memory, never the file. */
@@ -329,6 +336,7 @@ const NOTE = {
   bench17: "the page's worked example promises a 17 a game sixth man (the claim the review found)",
   named: 'the NBA keeps its lines as named rows, the shape before Round 1566',
   grouped: "the load time conversion takes the old rows as grouped by club, the way the expand lists them, and keeps only each club's last run of rows",
+  carried: 'the league carries a count that runs on across plays in one process (a clock or an unseeded draw would do the same)',
 }[CONTROL];
 if (NOTE) console.log(`   control ${CONTROL}: ${NOTE}`);
 
