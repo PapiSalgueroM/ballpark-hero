@@ -1,0 +1,3 @@
+probe-walk-helper exit=0 3s | probeWalkNote: green, the walk helper counts the call and the curtain line
+lowcall-notes exit=1 11s |       Tests  2 failed | 155 passed (157)
+notes-tests exit=0 15s |       Tests  203 passed (203)
