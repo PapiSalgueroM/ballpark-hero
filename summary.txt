@@ -1,0 +1,4 @@
+typo exit=1 4s | simAflClubNames control typo: target section 0 RED, independent section 3 green, 4.0 s. RED as intended
+onesource exit=1 4s | simAflClubNames control onesource: target section 0 RED, independent section 3 green, 3.2 s. RED as intended
+simAflClubNames exit=0 10s | simAflClubNames: 20 checks, 0 failures, sections 0,2,3, 9.7 s
+tsc exit=0 71s | 

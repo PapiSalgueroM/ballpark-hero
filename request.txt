@@ -1,0 +1,4 @@
+tsc: node_modules/.bin/tsc --noEmit -p tsconfig.app.json
+simAflClubNames: node scripts/simAflClubNames.mjs
+typo: AFL_NAMES_CONTROL=typo node scripts/simAflClubNames.mjs
+onesource: AFL_NAMES_CONTROL=onesource node scripts/simAflClubNames.mjs
