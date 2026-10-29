@@ -1,0 +1,7 @@
+#!serve
+#!playwright
+#!serial
+walk: mkdir -p .rc/ob && (test -d .rc/ob/src || git archive 5d1198389 src | tar -x -C .rc/ob) && node .rc/x/walk1566.mjs
+card: ENGINES=chromium node scripts/playFoSeasonCard.mjs
+nflwalk: ENGINES=chromium node scripts/playNflSeasonStats.mjs
+kick-walk: node .rc/x/mut1566.mjs kickswap && npx vite build --outDir /tmp/dist-k --logLevel error && (node scripts/lib/hostLikeServer.mjs /tmp/dist-k 4190 > /dev/null 2>&1 &) && sleep 3 && BASE=http://localhost:4190 SWEEP_BASE=http://localhost:4190 ENGINES=chromium node scripts/playNflSeasonStats.mjs; s=$?; git checkout -- src scripts; echo "MUT kickswap playNfl=$s"; exit $s

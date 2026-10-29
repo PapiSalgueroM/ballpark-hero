@@ -1,0 +1,5 @@
+build exit=0 35s | [dukb] inlined 1 stylesheet(s) and 1 module(s) into 181 snapshots (11 left alone)
+walk exit=1 1376s | walk1566: 29 checks, 4 failed
+card exit=0 65s | playFoSeasonCard: 216 checks, 0 failed
+nflwalk exit=0 44s | playNflSeasonStats: 112 checks, 0 failed
+kick-walk exit=0 81s | MUT kickswap playNfl=0
