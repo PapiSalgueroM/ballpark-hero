@@ -1,0 +1,20 @@
+tsc: node_modules/.bin/tsc --noEmit -p tsconfig.app.json
+intl-default: node scripts/simCareerIntl.mjs
+ctl-tilenomedal: INTL_CONTROL=tilenomedal INTL_SECTIONS=9 node scripts/simCareerIntl.mjs
+ctl-deadmedal: INTL_CONTROL=deadmedal INTL_SECTIONS=10 node scripts/simCareerIntl.mjs
+ctl-realname: INTL_CONTROL=realname INTL_SECTIONS=11 node scripts/simCareerIntl.mjs
+ctl-norepair: INTL_CONTROL=norepair INTL_SECTIONS=8 node scripts/simCareerIntl.mjs
+intl-8: INTL_SECTIONS=8 node scripts/simCareerIntl.mjs
+ctl-staticledger: INTL_CONTROL=staticledger INTL_SECTIONS=12 node scripts/simCareerIntl.mjs
+simCareerParity: node scripts/simCareerParity.mjs
+ctl-deadbadge: PARITY_CONTROL=deadbadge node scripts/simCareerParity.mjs
+simNbaAwardsSense: node scripts/simNbaAwardsSense.mjs
+vitest-case: node_modules/.bin/vitest run src/test/nbaTrophyTile.test.ts src/test/usCareerIntlBoard.test.tsx src/test/usTrophyTile.test.ts src/test/nbaIntlResultLines.test.tsx --testTimeout=300000 --hookTimeout=120000
+simUsBoardParity: node scripts/simUsBoardParity.mjs
+simUsCareerWeight: node scripts/simUsCareerWeight.mjs
+simHarnessAnchors: node scripts/simHarnessAnchors.mjs
+simNoRivalNames: node scripts/simNoRivalNames.mjs
+simGuideHeadings: node scripts/simGuideHeadings.mjs
+simSiteSearch: node scripts/simSiteSearch.mjs
+simInventedNames: node scripts/simInventedNames.mjs
+simNoInventedQuotes: node scripts/simNoInventedQuotes.mjs
