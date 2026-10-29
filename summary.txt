@@ -1,0 +1,8 @@
+proof-all exit=0 53s | simUsBoardParity: green. Four sports replayed click for click, save for save and screen for screen with the proved historical main775 coaching Panel.
+proof-head exit=1 54s | simUsBoardParity: 3 failures
+recA exit=0 54s | rec1569 WROTE /home/runner/work/_temp/rc-out/files/fixA.json 2298807 bytes, vitest exit 0
+recB exit=0 53s | rec1569 WROTE /home/runner/work/_temp/rc-out/files/fixB.json 2298708 bytes, vitest exit 0
+recW exit=0 53s | rec1569 WROTE /home/runner/work/_temp/rc-out/files/fixW.json 2298712 bytes, vitest exit 0
+diffB exit=0 0s | fixdiff: clicks moved 0, saves moved 0, coverage moved 0, screens moved 0
+diffCopy exit=0 0s | fixdiff: clicks moved 0, saves moved 0, coverage moved 0, screens moved 129
+diffAll exit=0 0s | fixdiff: clicks moved 0, saves moved 0, coverage moved 0, screens moved 5518
