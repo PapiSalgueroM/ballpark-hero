@@ -11,7 +11,7 @@
      from public.ai_validation_cache
      where game in ('soccer-grid', 'football-connect4', 'build-your-xi') and cache_key ilike '%arsenal%'
      order by game, cache_key;
-   saved as a JSON array of those four columns.
+   (the text of scripts/qa/clubNamesakes1584CacheRead.sql) saved as a JSON array of those four columns.
 
    Who: a folded name all of whose Q3c stints the OLD rule (CLUB_NAMESAKES emptied) reads as Arsenal on at least one
    and the CURRENT rule on none, with no verified 2026 move to an Arsenal club in TRANSFER_OVERLAY_2026. Both rules are
