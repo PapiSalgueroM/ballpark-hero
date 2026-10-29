@@ -268,7 +268,18 @@ describe('the board fixture\'s fixed NBA saves with the bind mounted', () => {
       localStorage.setItem(sport.saveKey, raw);
       vi.spyOn(Math, 'random').mockImplementation(mulberry32(7));
       const v = render(<MemoryRouter><UsCareerBoard sport={s} /></MemoryRouter>);
-      await new Promise(r => setTimeout(r, 0));
+      /* Round 1557: settle before the photograph. Under a loaded runner one mount could still show a lazy part's
+         holding line ("Counting the Hall votes...") where the other showed the part (r1557-s2b and s8, the
+         retired save): a race of the chunk, not of the bind. Both mounts wait the same way, up to 100 turns,
+         until no holding line is up and the board stands still for a turn; the comparison itself is unchanged. */
+      const HOLDING = /Counting the Hall votes|Loading\.\.\.|Loading season review|Opening practice|data-intl-holding/;
+      let last = '';
+      for (let turn = 0; turn < 100; turn += 1) {
+        await new Promise(r => setTimeout(r, 0));
+        const now = v.container.innerHTML;
+        if (now === last && !HOLDING.test(now)) break;
+        last = now;
+      }
       /* React numbers useId's ids from one counter for every client root, so two mounts of the same board
          differ only there: the ids are read as one placeholder. */
       const out = { html: v.container.innerHTML.replace(/:r[0-9a-z]+:/g, ':r:'), bytes: localStorage.getItem(sport.saveKey) };
