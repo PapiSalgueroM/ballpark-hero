@@ -1,0 +1,9 @@
+nhl7-only exit=0 3s | simGmCareer: all checks passed (nhl, sections 7)
+nfl7-only exit=0 19s | simGmCareer: all checks passed (nfl, sections 7)
+nhlfull exit=0 28s | simGmCareer: all checks passed (nhl)
+nhl-overlap exit=1 28s | CONTROL overlap: 1 rewrite(s) applied, 163 failure(s) in section 7 (FIRED)
+nhl-firedlost exit=1 34s | CONTROL firedlost: 1 rewrite(s) applied, 30 failure(s) in section 7 (FIRED)
+nhl-hubcounted exit=1 34s | CONTROL hubcounted: 1 rewrite(s) applied, 2 failure(s) in section 7 (FIRED)
+simStorageWrites exit=0 3s | simStorageWrites: all green (owed: 12)
+simNoRivalNames exit=0 14s | No rival product names found. 0 findings.
+simHarnessAnchors exit=0 65s | simHarnessAnchors: green. Every harness parses and none carries an unmatchable anchor.
