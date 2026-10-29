@@ -1,0 +1,14 @@
+#!serial
+# Release BS kit: 3 of the 3 request lines of Release BR's rc-BIh2.txt (rBRg/.tmp-fx/br), the lines of the BS areas (Soccer Career, Club Manager and the manager games on its engine, Player Bingo, Conquest, Stat and Draft Detective, the US My Career save notice, What's New, the polls, the guide intro) and the setup lines before them; 0 line(s) outside those areas left out.
+# Release BI, Round 1344, the serial half (rc-BIh.txt has the rest and the header). Send with
+# x/managerTransferEdgeCasesCarried.test.ts and x/applyCtl1344.mjs. Serial because edge-carried and pr269-head copy an
+# observer unit file into src/test (and remove it), section 12 and simCmLedgerBound are timings (a timing red is rerun
+# alone once before it is called red), and rules-bridged writes digests in /tmp copies.
+# edge-carried: PR295's job cases adapted by the round's fixer (the unmodified file cannot pick a fixture on the fixed
+# engine, verify-1344.md), 8 of 8. pr269-head: PR269's unit test (blob 1923d291), 8 of 8. c-slow must exit 1 FIRED.
+# rules-bridged: the digest simCmLeagueRules writes on the tree WITHOUT 1344 is green on the head with 1344's bridge
+# (x/applyCtl1344.mjs bridge), so the recording is the only cause of 1344's digest move on the joined tree.
+# Round BIK (part five): the base lines call x/minus1344.sh (send it too), see rc-BIh.txt.
+edge-carried: cp .rc/x/managerTransferEdgeCasesCarried.test.ts src/test/managerTransferEdgeCases.test.ts && node_modules/.bin/vitest run src/test/managerTransferEdgeCases.test.ts --reporter=verbose --testTimeout=900000 --hookTimeout=900000; s=$?; rm -f src/test/managerTransferEdgeCases.test.ts; exit $s
+pr269-head: git show 1923d291:src/test/managerAiOwnership.test.ts > src/test/managerAiOwnership.test.ts && node_modules/.bin/vitest run src/test/managerAiOwnership.test.ts --reporter=verbose --testTimeout=300000 --hookTimeout=300000; s=$?; rm -f src/test/managerAiOwnership.test.ts; exit $s
+ledgerbound: node scripts/simCmLedgerBound.mjs
