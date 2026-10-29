@@ -1,0 +1,317 @@
+ok   320-modern-europe: Independent unchanged Chromium loader matches every first-load field and key
+ok   320-modern-europe: canonical-second-load: reload keeps every complete raw save byte
+ok   320-modern-europe: Opening the real cabinet locks body scrolling
+ok   320-modern-europe: Actual category lists exactly the saved 12 winning rows
+ok   320-modern-europe: Short phone actually scrolls the winning-season list
+ok   320-modern-europe: Selected winning season places focus on its heading
+ok   320-modern-europe: Every actual first-stage game and knockout leg shows its exact saved opponent, score, venue, player goals and settlement facts
+ok   320-modern-europe: campaign-top: painted and stable for four frames without overflow or finite animation
+ok   320-modern-europe: campaign-top: every visible cabinet button has a 44 pixel target
+ok   320-modern-europe: campaign-last-game: painted and stable for four frames without overflow or finite animation
+ok   320-modern-europe: campaign-last-game: every visible cabinet button has a 44 pixel target
+ok   320-modern-europe: selected-campaign: every complete saved byte is held
+ok   320-modern-europe: selected-campaign: reading draws no global random values
+ok   320-modern-europe: All wins restores exact selected tile focus, list offset, body lock and page position
+ok   320-modern-europe: Reopenable cabinet help explains saved simulated campaigns and settlement facts
+ok   320-modern-europe: rules: painted and stable for four frames without overflow or finite animation
+ok   320-modern-europe: rules: every visible cabinet button has a 44 pixel target
+ok   320-modern-europe: Help also restores the winning list offset
+ok   320-modern-europe: Tab: focus stays in the cabinet
+ok   320-modern-europe: Tab: focus stays in the cabinet
+ok   320-modern-europe: Shift+Tab: focus stays in the cabinet
+ok   320-modern-europe: Shift+Tab: focus stays in the cabinet
+FAIL 320-modern-europe: Back restores exact page position, body styles and the actual category opener
+FAIL 320-modern-europe: AssertionError [ERR_ASSERTION]: 320-modern-europe: Back restores exact page position, body styles and the actual category opener
+    at check (file:///home/runner/work/ballpark-hero/ballpark-hero/scripts/playCareerTrophyRuns.mjs:45:173)
+    at file:///home/runner/work/ballpark-hero/ballpark-hero/scripts/playCareerTrophyRuns.mjs:101:214
+ok   320-historical-europe: Independent unchanged Chromium loader matches every first-load field and key
+ok   320-historical-europe: canonical-second-load: reload keeps every complete raw save byte
+ok   320-historical-europe: Opening the real cabinet locks body scrolling
+ok   320-historical-europe: Actual category lists exactly the saved 12 winning rows
+ok   320-historical-europe: Short phone actually scrolls the winning-season list
+ok   320-historical-europe: Selected winning season places focus on its heading
+ok   320-historical-europe: Every actual first-stage game and knockout leg shows its exact saved opponent, score, venue, player goals and settlement facts
+ok   320-historical-europe: campaign-top: painted and stable for four frames without overflow or finite animation
+ok   320-historical-europe: campaign-top: every visible cabinet button has a 44 pixel target
+ok   320-historical-europe: campaign-last-game: painted and stable for four frames without overflow or finite animation
+ok   320-historical-europe: campaign-last-game: every visible cabinet button has a 44 pixel target
+ok   320-historical-europe: selected-campaign: every complete saved byte is held
+ok   320-historical-europe: selected-campaign: reading draws no global random values
+ok   320-historical-europe: All wins restores exact selected tile focus, list offset, body lock and page position
+ok   320-historical-europe: Reopenable cabinet help explains saved simulated campaigns and settlement facts
+ok   320-historical-europe: rules: painted and stable for four frames without overflow or finite animation
+ok   320-historical-europe: rules: every visible cabinet button has a 44 pixel target
+ok   320-historical-europe: Help also restores the winning list offset
+ok   320-historical-europe: Tab: focus stays in the cabinet
+ok   320-historical-europe: Tab: focus stays in the cabinet
+ok   320-historical-europe: Shift+Tab: focus stays in the cabinet
+ok   320-historical-europe: Shift+Tab: focus stays in the cabinet
+FAIL 320-historical-europe: Back restores exact page position, body styles and the actual category opener
+FAIL 320-historical-europe: AssertionError [ERR_ASSERTION]: 320-historical-europe: Back restores exact page position, body styles and the actual category opener
+    at check (file:///home/runner/work/ballpark-hero/ballpark-hero/scripts/playCareerTrophyRuns.mjs:45:173)
+    at file:///home/runner/work/ballpark-hero/ballpark-hero/scripts/playCareerTrophyRuns.mjs:101:214
+ok   320-caf: Independent unchanged Chromium loader matches every first-load field and key
+ok   320-caf: canonical-second-load: reload keeps every complete raw save byte
+ok   320-caf: Opening the real cabinet locks body scrolling
+ok   320-caf: Actual category lists exactly the saved 12 winning rows
+ok   320-caf: Short phone actually scrolls the winning-season list
+ok   320-caf: Selected winning season places focus on its heading
+ok   320-caf: Every actual first-stage game and knockout leg shows its exact saved opponent, score, venue, player goals and settlement facts
+ok   320-caf: campaign-top: painted and stable for four frames without overflow or finite animation
+ok   320-caf: campaign-top: every visible cabinet button has a 44 pixel target
+ok   320-caf: campaign-last-game: painted and stable for four frames without overflow or finite animation
+ok   320-caf: campaign-last-game: every visible cabinet button has a 44 pixel target
+ok   320-caf: selected-campaign: every complete saved byte is held
+ok   320-caf: selected-campaign: reading draws no global random values
+ok   320-caf: All wins restores exact selected tile focus, list offset, body lock and page position
+ok   320-caf: Reopenable cabinet help explains saved simulated campaigns and settlement facts
+ok   320-caf: rules: painted and stable for four frames without overflow or finite animation
+ok   320-caf: rules: every visible cabinet button has a 44 pixel target
+ok   320-caf: Help also restores the winning list offset
+ok   320-caf: Tab: focus stays in the cabinet
+ok   320-caf: Tab: focus stays in the cabinet
+ok   320-caf: Shift+Tab: focus stays in the cabinet
+ok   320-caf: Shift+Tab: focus stays in the cabinet
+FAIL 320-caf: Back restores exact page position, body styles and the actual category opener
+FAIL 320-caf: AssertionError [ERR_ASSERTION]: 320-caf: Back restores exact page position, body styles and the actual category opener
+    at check (file:///home/runner/work/ballpark-hero/ballpark-hero/scripts/playCareerTrophyRuns.mjs:45:173)
+    at file:///home/runner/work/ballpark-hero/ballpark-hero/scripts/playCareerTrophyRuns.mjs:101:214
+ok   320-older-missing: Independent unchanged Chromium loader matches every first-load field and key
+ok   320-older-missing: canonical-second-load: reload keeps every complete raw save byte
+ok   320-older-missing: Opening the real cabinet locks body scrolling
+ok   320-older-missing: Actual category lists exactly the saved 12 winning rows
+ok   320-older-missing: Short phone actually scrolls the winning-season list
+ok   320-older-missing: Selected winning season places focus on its heading
+ok   320-older-missing: Older trophy save independently shows missing details, no games and no borrowed campaign goals
+ok   320-older-missing: campaign-top: painted and stable for four frames without overflow or finite animation
+ok   320-older-missing: campaign-top: every visible cabinet button has a 44 pixel target
+ok   320-older-missing: selected-campaign: every complete saved byte is held
+ok   320-older-missing: selected-campaign: reading draws no global random values
+ok   320-older-missing: All wins restores exact selected tile focus, list offset, body lock and page position
+ok   320-older-missing: Reopenable cabinet help explains saved simulated campaigns and settlement facts
+ok   320-older-missing: rules: painted and stable for four frames without overflow or finite animation
+ok   320-older-missing: rules: every visible cabinet button has a 44 pixel target
+ok   320-older-missing: Help also restores the winning list offset
+ok   320-older-missing: Tab: focus stays in the cabinet
+ok   320-older-missing: Tab: focus stays in the cabinet
+ok   320-older-missing: Shift+Tab: focus stays in the cabinet
+ok   320-older-missing: Shift+Tab: focus stays in the cabinet
+FAIL 320-older-missing: Back restores exact page position, body styles and the actual category opener
+FAIL 320-older-missing: AssertionError [ERR_ASSERTION]: 320-older-missing: Back restores exact page position, body styles and the actual category opener
+    at check (file:///home/runner/work/ballpark-hero/ballpark-hero/scripts/playCareerTrophyRuns.mjs:45:173)
+    at file:///home/runner/work/ballpark-hero/ballpark-hero/scripts/playCareerTrophyRuns.mjs:101:214
+ok   390-modern-europe: Independent unchanged Chromium loader matches every first-load field and key
+ok   390-modern-europe: canonical-second-load: reload keeps every complete raw save byte
+ok   390-modern-europe: Opening the real cabinet locks body scrolling
+ok   390-modern-europe: Actual category lists exactly the saved 12 winning rows
+ok   390-modern-europe: Selected winning season places focus on its heading
+ok   390-modern-europe: Every actual first-stage game and knockout leg shows its exact saved opponent, score, venue, player goals and settlement facts
+ok   390-modern-europe: campaign-top: painted and stable for four frames without overflow or finite animation
+ok   390-modern-europe: campaign-top: every visible cabinet button has a 44 pixel target
+ok   390-modern-europe: campaign-last-game: painted and stable for four frames without overflow or finite animation
+ok   390-modern-europe: campaign-last-game: every visible cabinet button has a 44 pixel target
+ok   390-modern-europe: selected-campaign: every complete saved byte is held
+ok   390-modern-europe: selected-campaign: reading draws no global random values
+ok   390-modern-europe: All wins restores exact selected tile focus, list offset, body lock and page position
+ok   390-modern-europe: Reopenable cabinet help explains saved simulated campaigns and settlement facts
+ok   390-modern-europe: rules: painted and stable for four frames without overflow or finite animation
+ok   390-modern-europe: rules: every visible cabinet button has a 44 pixel target
+ok   390-modern-europe: Help also restores the winning list offset
+ok   390-modern-europe: Tab: focus stays in the cabinet
+ok   390-modern-europe: Tab: focus stays in the cabinet
+ok   390-modern-europe: Shift+Tab: focus stays in the cabinet
+ok   390-modern-europe: Shift+Tab: focus stays in the cabinet
+FAIL 390-modern-europe: Back restores exact page position, body styles and the actual category opener
+FAIL 390-modern-europe: AssertionError [ERR_ASSERTION]: 390-modern-europe: Back restores exact page position, body styles and the actual category opener
+    at check (file:///home/runner/work/ballpark-hero/ballpark-hero/scripts/playCareerTrophyRuns.mjs:45:173)
+    at file:///home/runner/work/ballpark-hero/ballpark-hero/scripts/playCareerTrophyRuns.mjs:101:214
+ok   390-historical-europe: Independent unchanged Chromium loader matches every first-load field and key
+ok   390-historical-europe: canonical-second-load: reload keeps every complete raw save byte
+ok   390-historical-europe: Opening the real cabinet locks body scrolling
+ok   390-historical-europe: Actual category lists exactly the saved 12 winning rows
+ok   390-historical-europe: Selected winning season places focus on its heading
+ok   390-historical-europe: Every actual first-stage game and knockout leg shows its exact saved opponent, score, venue, player goals and settlement facts
+ok   390-historical-europe: campaign-top: painted and stable for four frames without overflow or finite animation
+ok   390-historical-europe: campaign-top: every visible cabinet button has a 44 pixel target
+ok   390-historical-europe: campaign-last-game: painted and stable for four frames without overflow or finite animation
+ok   390-historical-europe: campaign-last-game: every visible cabinet button has a 44 pixel target
+ok   390-historical-europe: selected-campaign: every complete saved byte is held
+ok   390-historical-europe: selected-campaign: reading draws no global random values
+ok   390-historical-europe: All wins restores exact selected tile focus, list offset, body lock and page position
+ok   390-historical-europe: Reopenable cabinet help explains saved simulated campaigns and settlement facts
+ok   390-historical-europe: rules: painted and stable for four frames without overflow or finite animation
+ok   390-historical-europe: rules: every visible cabinet button has a 44 pixel target
+ok   390-historical-europe: Help also restores the winning list offset
+ok   390-historical-europe: Tab: focus stays in the cabinet
+ok   390-historical-europe: Tab: focus stays in the cabinet
+ok   390-historical-europe: Shift+Tab: focus stays in the cabinet
+ok   390-historical-europe: Shift+Tab: focus stays in the cabinet
+FAIL 390-historical-europe: Back restores exact page position, body styles and the actual category opener
+FAIL 390-historical-europe: AssertionError [ERR_ASSERTION]: 390-historical-europe: Back restores exact page position, body styles and the actual category opener
+    at check (file:///home/runner/work/ballpark-hero/ballpark-hero/scripts/playCareerTrophyRuns.mjs:45:173)
+    at file:///home/runner/work/ballpark-hero/ballpark-hero/scripts/playCareerTrophyRuns.mjs:101:214
+ok   390-caf: Independent unchanged Chromium loader matches every first-load field and key
+ok   390-caf: canonical-second-load: reload keeps every complete raw save byte
+ok   390-caf: Opening the real cabinet locks body scrolling
+ok   390-caf: Actual category lists exactly the saved 12 winning rows
+ok   390-caf: Selected winning season places focus on its heading
+ok   390-caf: Every actual first-stage game and knockout leg shows its exact saved opponent, score, venue, player goals and settlement facts
+ok   390-caf: campaign-top: painted and stable for four frames without overflow or finite animation
+ok   390-caf: campaign-top: every visible cabinet button has a 44 pixel target
+ok   390-caf: campaign-last-game: painted and stable for four frames without overflow or finite animation
+ok   390-caf: campaign-last-game: every visible cabinet button has a 44 pixel target
+ok   390-caf: selected-campaign: every complete saved byte is held
+ok   390-caf: selected-campaign: reading draws no global random values
+ok   390-caf: All wins restores exact selected tile focus, list offset, body lock and page position
+ok   390-caf: Reopenable cabinet help explains saved simulated campaigns and settlement facts
+ok   390-caf: rules: painted and stable for four frames without overflow or finite animation
+ok   390-caf: rules: every visible cabinet button has a 44 pixel target
+ok   390-caf: Help also restores the winning list offset
+ok   390-caf: Tab: focus stays in the cabinet
+ok   390-caf: Tab: focus stays in the cabinet
+ok   390-caf: Shift+Tab: focus stays in the cabinet
+ok   390-caf: Shift+Tab: focus stays in the cabinet
+FAIL 390-caf: Back restores exact page position, body styles and the actual category opener
+FAIL 390-caf: AssertionError [ERR_ASSERTION]: 390-caf: Back restores exact page position, body styles and the actual category opener
+    at check (file:///home/runner/work/ballpark-hero/ballpark-hero/scripts/playCareerTrophyRuns.mjs:45:173)
+    at file:///home/runner/work/ballpark-hero/ballpark-hero/scripts/playCareerTrophyRuns.mjs:101:214
+ok   390-older-missing: Independent unchanged Chromium loader matches every first-load field and key
+ok   390-older-missing: canonical-second-load: reload keeps every complete raw save byte
+ok   390-older-missing: Opening the real cabinet locks body scrolling
+ok   390-older-missing: Actual category lists exactly the saved 12 winning rows
+ok   390-older-missing: Selected winning season places focus on its heading
+ok   390-older-missing: Older trophy save independently shows missing details, no games and no borrowed campaign goals
+ok   390-older-missing: campaign-top: painted and stable for four frames without overflow or finite animation
+ok   390-older-missing: campaign-top: every visible cabinet button has a 44 pixel target
+ok   390-older-missing: selected-campaign: every complete saved byte is held
+ok   390-older-missing: selected-campaign: reading draws no global random values
+ok   390-older-missing: All wins restores exact selected tile focus, list offset, body lock and page position
+ok   390-older-missing: Reopenable cabinet help explains saved simulated campaigns and settlement facts
+ok   390-older-missing: rules: painted and stable for four frames without overflow or finite animation
+ok   390-older-missing: rules: every visible cabinet button has a 44 pixel target
+ok   390-older-missing: Help also restores the winning list offset
+ok   390-older-missing: Tab: focus stays in the cabinet
+ok   390-older-missing: Tab: focus stays in the cabinet
+ok   390-older-missing: Shift+Tab: focus stays in the cabinet
+ok   390-older-missing: Shift+Tab: focus stays in the cabinet
+FAIL 390-older-missing: Back restores exact page position, body styles and the actual category opener
+FAIL 390-older-missing: AssertionError [ERR_ASSERTION]: 390-older-missing: Back restores exact page position, body styles and the actual category opener
+    at check (file:///home/runner/work/ballpark-hero/ballpark-hero/scripts/playCareerTrophyRuns.mjs:45:173)
+    at file:///home/runner/work/ballpark-hero/ballpark-hero/scripts/playCareerTrophyRuns.mjs:101:214
+ok   1280-modern-europe: Independent unchanged Chromium loader matches every first-load field and key
+ok   1280-modern-europe: canonical-second-load: reload keeps every complete raw save byte
+ok   1280-modern-europe: Opening the real cabinet locks body scrolling
+ok   1280-modern-europe: Actual category lists exactly the saved 12 winning rows
+ok   1280-modern-europe: Selected winning season places focus on its heading
+ok   1280-modern-europe: Every actual first-stage game and knockout leg shows its exact saved opponent, score, venue, player goals and settlement facts
+ok   1280-modern-europe: campaign-top: painted and stable for four frames without overflow or finite animation
+ok   1280-modern-europe: campaign-top: every visible cabinet button has a 44 pixel target
+ok   1280-modern-europe: campaign-last-game: painted and stable for four frames without overflow or finite animation
+ok   1280-modern-europe: campaign-last-game: every visible cabinet button has a 44 pixel target
+ok   1280-modern-europe: selected-campaign: every complete saved byte is held
+ok   1280-modern-europe: selected-campaign: reading draws no global random values
+ok   1280-modern-europe: All wins restores exact selected tile focus, list offset, body lock and page position
+ok   1280-modern-europe: Reopenable cabinet help explains saved simulated campaigns and settlement facts
+ok   1280-modern-europe: rules: painted and stable for four frames without overflow or finite animation
+ok   1280-modern-europe: rules: every visible cabinet button has a 44 pixel target
+ok   1280-modern-europe: Help also restores the winning list offset
+ok   1280-modern-europe: Tab: focus stays in the cabinet
+ok   1280-modern-europe: Tab: focus stays in the cabinet
+ok   1280-modern-europe: Shift+Tab: focus stays in the cabinet
+ok   1280-modern-europe: Shift+Tab: focus stays in the cabinet
+FAIL 1280-modern-europe: Back restores exact page position, body styles and the actual category opener
+FAIL 1280-modern-europe: AssertionError [ERR_ASSERTION]: 1280-modern-europe: Back restores exact page position, body styles and the actual category opener
+    at check (file:///home/runner/work/ballpark-hero/ballpark-hero/scripts/playCareerTrophyRuns.mjs:45:173)
+    at file:///home/runner/work/ballpark-hero/ballpark-hero/scripts/playCareerTrophyRuns.mjs:101:214
+ok   1280-historical-europe: Independent unchanged Chromium loader matches every first-load field and key
+ok   1280-historical-europe: canonical-second-load: reload keeps every complete raw save byte
+ok   1280-historical-europe: Opening the real cabinet locks body scrolling
+ok   1280-historical-europe: Actual category lists exactly the saved 12 winning rows
+ok   1280-historical-europe: Selected winning season places focus on its heading
+ok   1280-historical-europe: Every actual first-stage game and knockout leg shows its exact saved opponent, score, venue, player goals and settlement facts
+ok   1280-historical-europe: campaign-top: painted and stable for four frames without overflow or finite animation
+ok   1280-historical-europe: campaign-top: every visible cabinet button has a 44 pixel target
+ok   1280-historical-europe: campaign-last-game: painted and stable for four frames without overflow or finite animation
+ok   1280-historical-europe: campaign-last-game: every visible cabinet button has a 44 pixel target
+ok   1280-historical-europe: selected-campaign: every complete saved byte is held
+ok   1280-historical-europe: selected-campaign: reading draws no global random values
+ok   1280-historical-europe: All wins restores exact selected tile focus, list offset, body lock and page position
+ok   1280-historical-europe: Reopenable cabinet help explains saved simulated campaigns and settlement facts
+ok   1280-historical-europe: rules: painted and stable for four frames without overflow or finite animation
+ok   1280-historical-europe: rules: every visible cabinet button has a 44 pixel target
+ok   1280-historical-europe: Help also restores the winning list offset
+ok   1280-historical-europe: Tab: focus stays in the cabinet
+ok   1280-historical-europe: Tab: focus stays in the cabinet
+ok   1280-historical-europe: Shift+Tab: focus stays in the cabinet
+ok   1280-historical-europe: Shift+Tab: focus stays in the cabinet
+FAIL 1280-historical-europe: Back restores exact page position, body styles and the actual category opener
+FAIL 1280-historical-europe: AssertionError [ERR_ASSERTION]: 1280-historical-europe: Back restores exact page position, body styles and the actual category opener
+    at check (file:///home/runner/work/ballpark-hero/ballpark-hero/scripts/playCareerTrophyRuns.mjs:45:173)
+    at file:///home/runner/work/ballpark-hero/ballpark-hero/scripts/playCareerTrophyRuns.mjs:101:214
+ok   1280-caf: Independent unchanged Chromium loader matches every first-load field and key
+ok   1280-caf: canonical-second-load: reload keeps every complete raw save byte
+ok   1280-caf: Opening the real cabinet locks body scrolling
+ok   1280-caf: Actual category lists exactly the saved 12 winning rows
+ok   1280-caf: Selected winning season places focus on its heading
+ok   1280-caf: Every actual first-stage game and knockout leg shows its exact saved opponent, score, venue, player goals and settlement facts
+ok   1280-caf: campaign-top: painted and stable for four frames without overflow or finite animation
+ok   1280-caf: campaign-top: every visible cabinet button has a 44 pixel target
+ok   1280-caf: campaign-last-game: painted and stable for four frames without overflow or finite animation
+ok   1280-caf: campaign-last-game: every visible cabinet button has a 44 pixel target
+ok   1280-caf: selected-campaign: every complete saved byte is held
+ok   1280-caf: selected-campaign: reading draws no global random values
+ok   1280-caf: All wins restores exact selected tile focus, list offset, body lock and page position
+ok   1280-caf: Reopenable cabinet help explains saved simulated campaigns and settlement facts
+ok   1280-caf: rules: painted and stable for four frames without overflow or finite animation
+ok   1280-caf: rules: every visible cabinet button has a 44 pixel target
+ok   1280-caf: Help also restores the winning list offset
+ok   1280-caf: Tab: focus stays in the cabinet
+ok   1280-caf: Tab: focus stays in the cabinet
+ok   1280-caf: Shift+Tab: focus stays in the cabinet
+ok   1280-caf: Shift+Tab: focus stays in the cabinet
+FAIL 1280-caf: Back restores exact page position, body styles and the actual category opener
+FAIL 1280-caf: AssertionError [ERR_ASSERTION]: 1280-caf: Back restores exact page position, body styles and the actual category opener
+    at check (file:///home/runner/work/ballpark-hero/ballpark-hero/scripts/playCareerTrophyRuns.mjs:45:173)
+    at file:///home/runner/work/ballpark-hero/ballpark-hero/scripts/playCareerTrophyRuns.mjs:101:214
+ok   1280-older-missing: Independent unchanged Chromium loader matches every first-load field and key
+ok   1280-older-missing: canonical-second-load: reload keeps every complete raw save byte
+ok   1280-older-missing: Opening the real cabinet locks body scrolling
+ok   1280-older-missing: Actual category lists exactly the saved 12 winning rows
+ok   1280-older-missing: Selected winning season places focus on its heading
+ok   1280-older-missing: Older trophy save independently shows missing details, no games and no borrowed campaign goals
+ok   1280-older-missing: campaign-top: painted and stable for four frames without overflow or finite animation
+ok   1280-older-missing: campaign-top: every visible cabinet button has a 44 pixel target
+ok   1280-older-missing: selected-campaign: every complete saved byte is held
+ok   1280-older-missing: selected-campaign: reading draws no global random values
+ok   1280-older-missing: All wins restores exact selected tile focus, list offset, body lock and page position
+ok   1280-older-missing: Reopenable cabinet help explains saved simulated campaigns and settlement facts
+ok   1280-older-missing: rules: painted and stable for four frames without overflow or finite animation
+ok   1280-older-missing: rules: every visible cabinet button has a 44 pixel target
+ok   1280-older-missing: Help also restores the winning list offset
+ok   1280-older-missing: Tab: focus stays in the cabinet
+ok   1280-older-missing: Tab: focus stays in the cabinet
+ok   1280-older-missing: Shift+Tab: focus stays in the cabinet
+ok   1280-older-missing: Shift+Tab: focus stays in the cabinet
+FAIL 1280-older-missing: Back restores exact page position, body styles and the actual category opener
+FAIL 1280-older-missing: AssertionError [ERR_ASSERTION]: 1280-older-missing: Back restores exact page position, body styles and the actual category opener
+    at check (file:///home/runner/work/ballpark-hero/ballpark-hero/scripts/playCareerTrophyRuns.mjs:45:173)
+    at file:///home/runner/work/ballpark-hero/ballpark-hero/scripts/playCareerTrophyRuns.mjs:101:214
+Trophy Cabinet native: 262 checks,24 failed,0/12 journeys,0 copied detector controls; artifacts /home/runner/work/ballpark-hero/ballpark-hero/.tmp-fx/career-trophy-runs/native
+node:internal/modules/run_main:107
+    triggerUncaughtException(
+    ^
+
+AssertionError [ERR_ASSERTION]: Expected values to be strictly equal:
+
+0 !== 3
+
+    at file:///home/runner/work/ballpark-hero/ballpark-hero/scripts/playCareerTrophyRuns.mjs:120:46 {
+  generatedMessage: true,
+  code: 'ERR_ASSERTION',
+  actual: 0,
+  expected: 3,
+  operator: 'strictEqual',
+  diff: 'simple'
+}
+
+Node.js v24.22.1
