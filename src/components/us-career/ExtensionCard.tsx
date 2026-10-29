@@ -18,7 +18,7 @@
    The numbers are printed final from frame one (Round 147). Reduced motion
    lands everything on its final frame through CelebrationStyles. */
 
-import { useLayoutEffect, useRef } from 'react';
+import { useLayoutEffect, useRef, type ReactNode } from 'react';
 import { PenLine, TrendingUp } from 'lucide-react';
 import { CelebrationStyles } from '@/components/club-manager/Celebration';
 import { extensionHeadline } from '@/lib/usCareerExtension';
@@ -38,9 +38,17 @@ interface Props {
   wheel?: MarketWheel;
   onWheelContinue?: () => void;
   odds?: Record<MarketResult, number>;
+  /** Round 1569: with no offer, why not, in plain words (age, rating, the market). */
+  why?: string | null;
+  /** Round 1569: the season ahead ends the career whatever happens (the
+   *  engine's own age or length limit), so no market opens after it. */
+  lastSeason?: boolean;
+  /** Round 1569: with no offer, the way to retire now, already wrapped in its
+   *  confirmation by the board. */
+  retire?: ReactNode;
 }
 
-export default function ExtensionCard({ talk, seasonWord, onPush, onSign, onDecline, wheel, onWheelContinue, odds }: Props) {
+export default function ExtensionCard({ talk, seasonWord, onPush, onSign, onDecline, wheel, onWheelContinue, odds, why, lastSeason, retire }: Props) {
   const root = useRef<HTMLDivElement>(null);
   const returnFromWheel = useRef(false);
   useLayoutEffect(() => {
@@ -63,14 +71,28 @@ export default function ExtensionCard({ talk, seasonWord, onPush, onSign, onDecl
         <p className="font-display text-lg font-bold text-foreground">
           <PenLine className="mr-1 inline h-4 w-4 text-gold" /> The final year
         </p>
-        <p className="mt-1 text-xs text-muted-foreground">
-          This is the last {seasonWord} on your deal. Sign the extension and you are set,
-          usually a little under what the open market pays. Turn it down and you play the
-          year out and reach free agency, where everybody bids and nothing is promised.
-          {onWheelContinue && <> This talk and your one push survive reload. A wheel reveals the already saved result. For example, 30% fills 30 of 100 equal parts; spinning changes no terms.</>}
-        </p>
-        <p key={talk.note} data-extension-reply={talk.pushed ? 'resolved' : 'opening'} className={cn('mt-1 text-[11px] font-semibold text-gold', talk.pushed && motion.reply)}>{talk.note}</p>
+        {!o && lastSeason ? (
+          /* Round 1569: the old words promised free agency after a season
+             that ends the career, so the market never came. */
+          <p className="mt-1 text-xs text-muted-foreground">
+            This is the last {seasonWord} on your deal, and it will be the last {seasonWord} of your
+            career whatever happens, so no market opens after it. Play it out or retire now.
+          </p>
+        ) : (
+          <p className="mt-1 text-xs text-muted-foreground">
+            This is the last {seasonWord} on your deal. Sign the extension and you are set,
+            usually a little under what the open market pays. Turn it down and you play the
+            year out and reach free agency, where everybody bids and nothing is promised.
+            {onWheelContinue && <> This talk and your one push survive reload. A wheel reveals the already saved result. For example, 30% fills 30 of 100 equal parts; spinning changes no terms.</>}
+          </p>
+        )}
+        <p key={talk.note} data-extension-reply={talk.pushed ? 'resolved' : 'opening'} className={cn('mt-1 text-[11px] font-semibold text-gold', talk.pushed && motion.reply)}>{!o && lastSeason && !talk.pulled ? `${talk.label} are letting your deal run out.` : talk.note}</p>
       </div>
+      {!o && why && (
+        <p data-extension-why="" className="cm-rise rounded-2xl border border-border bg-card px-4 py-3 text-xs text-muted-foreground" style={{ animationDelay: '0.1s' }}>
+          {why}
+        </p>
+      )}
 
       {o ? (
         <div className={cn('cm-rise rounded-2xl border bg-card p-3', talk.pushed ? 'border-border' : 'border-primary/50')} style={{ animationDelay: '0.2s' }}>
@@ -133,6 +155,7 @@ export default function ExtensionCard({ talk, seasonWord, onPush, onSign, onDecl
       >
         {o ? 'Turn it down and play the year out' : 'Play the year out'}
       </button>
+      {!o && retire}
     </div>
   );
 }

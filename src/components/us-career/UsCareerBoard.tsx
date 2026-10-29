@@ -32,6 +32,8 @@ import { holdPendingSave } from '@/lib/safeStorage';
    celebration kit the season curtain uses. */
 import DraftDayCard, { type DraftDayFacts } from '@/components/us-career/DraftDayCard';
 import USCareerActionConfirm from '@/components/us-career/USCareerActionConfirm';
+import UsCareerStartOver from '@/components/us-career/UsCareerStartOver';
+import { noOfferWhy, seasonAheadIsLast } from '@/lib/usCareerNoOffer';
 import UsCareerSaveNotice from '@/components/us-career/UsCareerSaveNotice';
 import { CelebrationStyles, revealDelay } from '@/components/club-manager/Celebration';
 import { type PlayerAppearance, defaultAppearance } from '@/lib/soccerCareerAppearance';
@@ -918,6 +920,19 @@ export default function UsCareerBoard({ sport }: { sport: UsCareerSport }) {
     persist(c, 'retired', teamQuality);
   };
 
+  /* Round 1569: the market and the extension talk with no offer are never a
+     dead end. A veteran (the six seasons Hang them up now waits for) can
+     retire from either, through the same confirmation, and the retirement
+     is the full one: the card, the Hall ballot and the coaching start. The
+     talk is dropped first so the save carries no market for a retired man. */
+  const retireFromMarket = (label: string): ReactNode => (!career || career.seasons.length < 6) ? null : (
+    <div data-career-market-retire="" className="mt-2 flex justify-center">
+      <USCareerActionConfirm action="retire" sport={sport.label} onConfirm={() => { setMarketTalk(null); extDeclinedRef.current = false; retireNow(); }}>
+        <button type="button" className="min-h-11 min-w-11 rounded-full px-4 text-xs font-semibold text-muted-foreground hover:text-destructive">{label}</button>
+      </USCareerActionConfirm>
+    </div>
+  );
+
   const reset = () => {
     setMarketTalk(null);
     extDeclinedRef.current = false;
@@ -984,8 +999,13 @@ export default function UsCareerBoard({ sport }: { sport: UsCareerSport }) {
      TD" in all four places this prints. The line lives in usCareerStatLine.ts
      now, one branch per position the career deals. */
   const statLine: (s: SeasonLine, p: string) => string = sport.statLine;
+  /* Round 1569: every screen after the create screen opens with Start over
+     (src/components/us-career/UsCareerStartOver.tsx says why), the prospect's
+     road to the draft and the coaching career included. */
+  const startOver = phase !== 'create' && (!!career || (phase === 'prospect' && !!prospect));
   const withSaveStatus = (content: ReactNode) => <>
     {saveFailure && <UsCareerSaveNotice operation={saveFailure} onRetry={retrySave} />}
+    {startOver && <UsCareerStartOver sport={sport.label} onConfirm={reset} />}
     {content}
   </>;
 
@@ -1530,11 +1550,15 @@ export default function UsCareerBoard({ sport }: { sport: UsCareerSport }) {
 
       {phase === 'extension' && extTalk ? (
         <div ref={revealRef}>
-          <ExtensionCard talk={extTalk} seasonWord={sport.seasonWord} onPush={pushExt} onSign={signExt} onDecline={declineExt} wheel={marketTalk?.wheel} onWheelContinue={acknowledgeMarket} odds={extensionMarketProbabilities(sport.extPushArgs(career, Math.random))} />
+          <ExtensionCard talk={extTalk} seasonWord={sport.seasonWord} onPush={pushExt} onSign={signExt} onDecline={declineExt} wheel={marketTalk?.wheel} onWheelContinue={acknowledgeMarket} odds={extensionMarketProbabilities(sport.extPushArgs(career, Math.random))}
+            why={extTalk.offer ? null : noOfferWhy({ age: career.age, ovr: career.ovr, pos: career.pos, cliffAge: sport.extPushArgs(career, Math.random).cliffAge, market: extTalk.market })}
+            lastSeason={!extTalk.offer && seasonAheadIsLast(career, sport.shouldRetire)}
+            retire={retireFromMarket('Retire now')} />
         </div>
       ) : phase === 'freeagency' && faWindow ? (
         <div ref={revealRef}>
           <FreeAgencyPanel window={faWindow} sportNoun={sport.faSportNoun} talkLine={talkLine} onPush={pushFa} onSign={signFa} wheel={marketTalk?.wheel} onWheelContinue={acknowledgeMarket} compare odds={faWindow.offers.map((_, index) => freeAgencyMarketProbabilities(faWindow, index, sport.faPushArgs(career, Math.random)))} />
+          {!(marketTalk?.wheel && !marketTalk.wheel.seen) && retireFromMarket('Retire instead')}
         </div>
       ) : phase === 'event' && pendingEvent ? (
         <div ref={revealRef} data-career-event={pendingEvent.id} data-career-decision-event={pendingEvent.id} className={career.summer ? 'cm-rise rounded-2xl border border-gold/40 bg-card p-4' : 'rounded-2xl border border-gold/40 bg-card p-4'}>
