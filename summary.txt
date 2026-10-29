@@ -1,0 +1,2 @@
+simCmRetire exit=0 31s | simCmRetire: all 18 checks passed (record, oldsave, pens, base, retire, dashes)
+simCmBoardVerdict exit=0 670s | simCmBoardVerdict GREEN: 0 of 0 checks green (parts measure, 669 s)
