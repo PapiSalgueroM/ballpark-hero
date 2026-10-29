@@ -1,0 +1,5 @@
+#!serve
+#!playwright
+#!serial
+walk-pr: TAG=pr ONLY=CKT node .rc/x/vfwalk.mjs
+walk-main: ONLY=CT bash .rc/x/vfbase.sh
