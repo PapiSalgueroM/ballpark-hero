@@ -1,0 +1,32 @@
+sim exit=0 6s | simBingoClubCounts: GREEN, every section held
+honours exit=0 19s | simPlayerBingoHonours PASS
+c-slashdup exit=1 2s | simBingoClubCounts: CONTROL=slashdup FIRED (1 failures; section 6: 1)
+vitest exit=0 30s |    Duration  28.83s (transform 10.30s, setup 2.35s, collect 13.97s, tests 30.43s, environment 8.09s, prepare 1.99s)
+c-aliasdup exit=1 2s | simBingoClubCounts: CONTROL=aliasdup FIRED (1 failures; section 6: 1)
+c-tableclubs exit=1 3s | simBingoClubCounts: CONTROL=tableclubs FIRED (1 failures; section 6: 1)
+c-noseason exit=1 3s | simBingoClubCounts: CONTROL=noseason FIRED (1 failures; section 5: 1)
+c-rule exit=1 3s | simBingoClubCounts: CONTROL=rule FIRED (20 failures; section 1: 3, section 4: 17)
+c-onesource exit=1 3s | simBingoClubCounts: CONTROL=onesource FIRED (1 failures; section 5: 1)
+c-pending exit=1 3s | simBingoClubCounts: CONTROL=pending FIRED (2 failures; section 4: 2)
+c-leak exit=1 3s | simBingoClubCounts: CONTROL=leak FIRED (2 failures; section 2: 2)
+c-nomorton exit=1 3s | simBingoClubCounts: CONTROL=nomorton FIRED (4 failures; section 2: 1, section 3: 3)
+c-noapply exit=1 3s | simBingoClubCounts: CONTROL=noapply FIRED (121 failures; section 2: 40, section 3: 81)
+c-noreserve exit=1 3s | simBingoClubCounts: CONTROL=noreserve FIRED (74 failures; section 2: 32, section 3: 42)
+c-nosplit exit=1 3s | simBingoClubCounts: CONTROL=nosplit FIRED (14 failures; section 2: 8, section 3: 6)
+c-drift exit=1 3s | simBingoClubCounts: CONTROL=drift FIRED (1 failures; section 7: 1)
+c-handedit exit=1 3s | simBingoClubCounts: CONTROL=handedit FIRED (1 failures; section 6: 1)
+c-cap exit=3 0s |    FIXTURE_CONTROL=cap did not fire: no history page reached the 1,000 row cap (largest 781), so nobody exceeds a page and paging is not exercised by this fixture
+gen exit=0 1s | gen: derived file unchanged by a fresh generator run
+c-bogus exit=3 3s | simBingoClubCounts: CONTROL=bogus DID NOT FIRE (it changed nothing)
+rivals exit=0 28s | No rival product names found. 0 findings.
+storage exit=0 4s | simStorageWrites: all green (owed: 12)
+tsc exit=0 119s | 
+anchors exit=0 75s | simHarnessAnchors: green. Every harness parses and none carries an unmatchable anchor.
+cats exit=0 47s | simPlayerBingoCategories: fixed proof passed; raw reports and changed-copy receipts retained.
+wcalias exit=0 2s | Source bytes held; raw unit/output/control receipts retained when OUT is set. Offline proof only.
+rodri exit=0 16s | simPlayerBingoRodriHonour: fixed proof passed; complete raw reports and changed-copy receipts retained. Offline only.
+trust exit=0 1s | simTrustCopy: green. One disclaimer under every page and one count of the games, the registry's own.
+bingoload exit=0 5s | simPlayerBingoLoad: CRLF bindings proved, raw source bytes held, owned copies cleaned; fictional transport only, no browser or live calls.
+yearscope exit=0 0s | simMarketYearScope: all green
+linefb exit=0 6s | simPlayerBingoLineFeedback: CRLF bindings proved, original bytes held and owned copies cleaned; fictional fixtures, no browser or backend calls.
+quotes exit=0 23s | simNoInventedQuotes: green. No real player is quoted or accused anywhere.
