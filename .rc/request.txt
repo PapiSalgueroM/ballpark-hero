@@ -1,0 +1,38 @@
+simFoLazyDesk: node scripts/simFoLazyDesk.mjs
+lz-eager: SIM_FO_LAZY_DESK_CONTROL=eager node scripts/simFoLazyDesk.mjs
+lz-hostimport: SIM_FO_LAZY_DESK_CONTROL=hostimport node scripts/simFoLazyDesk.mjs
+lz-tiertile: SIM_FO_LAZY_DESK_CONTROL=tiertile node scripts/simFoLazyDesk.mjs
+lz-boxseasons: SIM_FO_LAZY_DESK_CONTROL=boxseasons node scripts/simFoLazyDesk.mjs
+vitest-lift: node_modules/.bin/vitest run src/lib/gmCareerRules.test.ts src/lib/gmDeskHost.test.ts src/lib/gmXp.test.ts src/lib/gmSeat.test.ts src/components/front-office-shared/GmCareerDesk.test.tsx --testTimeout=300000 --hookTimeout=120000
+vitest-fo: node_modules/.bin/vitest run src/components/front-office/FrontOfficeLazyDesk.test.tsx src/components/front-office/FrontOfficeOnePress.test.tsx src/test/frontOfficeSaveRecovery.test.tsx --testTimeout=300000 --hookTimeout=120000
+simGmSeat: node scripts/simGmSeat.mjs
+simGmXp: node scripts/simGmXp.mjs
+simCollegeSeat: node scripts/simCollegeSeat.mjs
+simSessionMarks: node scripts/simSessionMarks.mjs
+simStorageWrites: node scripts/simStorageWrites.mjs
+simGmStaff: node scripts/simGmStaff.mjs
+simLiveScores: node scripts/simLiveScores.mjs
+simNoRivalNames: node scripts/simNoRivalNames.mjs
+simInventedNames: node scripts/simInventedNames.mjs
+simHarnessAnchors: node scripts/simHarnessAnchors.mjs
+simNoInventedQuotes: node scripts/simNoInventedQuotes.mjs
+simNoInventedConduct: node scripts/simNoInventedConduct.mjs
+simLegalPages: node scripts/simLegalPages.mjs
+simSingleFooter: node scripts/simSingleFooter.mjs
+simCompletionSlugs: node scripts/simCompletionSlugs.mjs
+simCompletionOnce: node scripts/simCompletionOnce.mjs
+simNoDoubleRecord: node scripts/simNoDoubleRecord.mjs
+simDailyPuzzleContract: node scripts/simDailyPuzzleContract.mjs
+simDailySaveHardening: node scripts/simDailySaveHardening.mjs
+simWritesAreSent: node scripts/simWritesAreSent.mjs
+simSchemaNames: node scripts/simSchemaNames.mjs
+simFetchRetry: node scripts/simFetchRetry.mjs
+simGoogleOnlyReturn: node scripts/simGoogleOnlyReturn.mjs
+simReportRelay: node scripts/simReportRelay.mjs
+simNavbarStatsReads: node scripts/simNavbarStatsReads.mjs
+simLeaderboardCaps: node scripts/simLeaderboardCaps.mjs
+simScoringCoverage: node scripts/simScoringCoverage.mjs
+simSiteSearch: node scripts/simSiteSearch.mjs
+simResultMoment: node scripts/simResultMoment.mjs
+simGuideHeadings: node scripts/simGuideHeadings.mjs
+base-three: git worktree add -f /tmp/bs 115c68092 >/dev/null 2>&1; ln -sfn "$PWD/node_modules" /tmp/bs/node_modules; cd /tmp/bs && { node scripts/simGmStaff.mjs 2>&1 | grep -m3 FAIL; node scripts/simGmStaff.mjs > /tmp/gs.log 2>&1; echo "BASE simGmStaff exit=$? | $(tail -1 /tmp/gs.log)"; SIM_GM_CAREER_CONTROL=unkeyed SIM_GM_CAREER_ONLY=4 node scripts/simGmCareer.mjs > /tmp/uk.log 2>&1; echo "BASE unkeyed exit=$? | $(tail -1 /tmp/uk.log)"; SIM_GM_CAREER_CONTROL=ledgerrides SIM_GM_CAREER_ONLY=5 node scripts/simGmCareer.mjs > /tmp/lr.log 2>&1; echo "BASE ledgerrides exit=$? | $(tail -1 /tmp/lr.log)"; }
