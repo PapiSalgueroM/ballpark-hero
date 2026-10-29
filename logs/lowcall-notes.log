@@ -1,0 +1,5 @@
+MUT lowcall applied to src/lib/nbaCareerIntlGate.ts
+[2m      Tests [22m [1m[32m121 passed[39m[22m[90m (121)[39m
+[2m   Start at [22m 13:21:17
+[2m   Duration [22m 6.15s[2m (transform 2.44s, setup 181ms, collect 6.30s, tests 2.49s, environment 874ms, prepare 260ms)[22m
+
