@@ -1,0 +1,2 @@
+mut-readdraw exit=1 24s | ::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/test/usCareerHallWall.test.tsx,title=src/test/usCareerHallWall.test.tsx > C8b%3A the wall's read draws noth
+clean exit=0 0s | 
