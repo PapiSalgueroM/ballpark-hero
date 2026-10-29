@@ -54,8 +54,9 @@
  * Measured 2026-10-29 (seeds 1 to 200 a sport, this tree): plaque bytes median and p90 nfl 993 and 1068, nba 730
  * and 1083, mlb 585 and 1034, nhl 800 and 1042; Hall of Famers 18, 15, 16 and 26 of 200. Old saves: 16 retired
  * parity saves, 86 V1 rows, 50 retired 1301 rows. The worst case plaque is 2,251 characters, a full wall of them
- * 27,043. Longest real strings against their clamps: name 12/40 (the input caps a name at 24), pos 4/6, eraId
- * 5/16, team 3/8, verdict 54/160, hallName 41/80, teamName 21/60, weighs 187/320, honours label 22/48. Every
+ * 27,043. Longest real strings against their clamps (fixed sources, r1570-fix2): name 24/40 (the input's cap;
+ * the fleet's longest is 12), pos 4/6, eraId 5/16, team 3/8, verdict 54/160, hallName 41/80, teamName 22/60,
+ * weighs 187/320 (the fleet's 175), honours label 22/48. Every
  * control fired on 5 careers a sport. Fleet sizes are printed, never asserted; the clamp fence asks for a quarter
  * of room above the longest real string. Since the review fixes the fence reads fixed, finite sources only (the
  * old saves, the tables, the bindings' lists and labels, the name input's cap) and prints the fleet's longest
