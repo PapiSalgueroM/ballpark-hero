@@ -11,17 +11,28 @@
      C2  every postseason lost on a level of 76 or more, without the riser line, carries the credit note;
      C3  every critical note sits on a level under 70 and a clutch drop of 7 or more, and criticism still exists:
          at least CRIT_FLOOR a sport (measured below);
-     C4  none of the four old lines can appear, and no note says "everyone saw it", "disappeared", "talk shows".
+     C4  none of the four old lines can appear, and no note says "everyone saw it", "disappeared", "talk shows";
+     C5  (fix run, review minor 4) the credit note is never on a title win and never on a level under 76: C2 held
+         it only where it must appear, so two breaks of the rule (credit at depth 4, credit from 70) passed here.
    Report B (NBA, "20 szn no offer"). The market is never empty (the incumbent always offers and never walks);
    the empty screen was the extension talk with no offer. This harness holds:
      B1  the market: every window a late career opens has at least one live offer;
      B2  seasonAheadIsLast (src/lib/usCareerNoOffer.ts) is sound: every talk it calls the last is followed by
          the end of the career after that season, in every sport;
-     B3  noOfferWhy names a reason and the market price for every talk with no offer, with no dash in it.
+     B3  noOfferWhy names a reason and the market price for every talk with no offer, with no dash in it;
+     B4  (fix run, review major 2) the season caps, report B's own "20 szn" path, which the natural fleet almost
+         never reaches (400 careers a sport made no NBA or MLB last call at all): LATE careers a sport are held at
+         age 30 and rating 80 before every season, so only the sport's season count can end them, and
+         seasonAheadIsLast must call exactly the season after which the career ends, once in every career.
    Controls (each must turn the run red, and each checks the source it changes exists first):
      SIM_REPORTS_CONTROL=blind     criticism on the clutch roll alone again (the old rule)      -> C1
      SIM_REPORTS_CONTROL=nocredit  the credit branch taken out                                   -> C2
      SIM_REPORTS_CONTROL=alwayslast seasonAheadIsLast answers true for every talk                -> B2
+     SIM_REPORTS_CONTROL=noseason  seasonAheadIsLast forgets the season about to be played       -> B4
+     SIM_REPORTS_CONTROL=titlecredit the credit note also on a title (depth 4)                   -> C5
+     SIM_REPORTS_CONTROL=creditlow the credit note from a level of 70, not 76                     -> C5
+   The fleet size is an argument, but the one band (CRIT_FLOOR) was measured at 150 careers a sport, so the
+   run refuses fewer (a 60 career run sat exactly on the floor in one sport): more careers, never a wider bound.
    Measured on a GitHub runner (rc r1569-s2, head e208e288, seeds 1569, 1, 2, 3 at 150 careers a sport, so
    16 counts): critical notes 37 to 60 a sport (NFL 44 to 51, NBA 37 to 45, MLB 49 to 60, NHL 39 to 49);
    credit notes on every one of 380 to 938 strong losses a sport; last season calls 0 to 4 a sport, every one
@@ -38,8 +49,11 @@ import { pathToFileURL } from 'node:url';
 
 const ROOT = process.cwd();
 const CONTROL = process.env.SIM_REPORTS_CONTROL || '';
-if (!['', 'blind', 'nocredit', 'alwayslast'].includes(CONTROL)) { console.error(`unknown SIM_REPORTS_CONTROL ${CONTROL}`); process.exit(2); }
+if (!['', 'blind', 'nocredit', 'alwayslast', 'noseason', 'titlecredit', 'creditlow'].includes(CONTROL)) { console.error(`unknown SIM_REPORTS_CONTROL ${CONTROL}`); process.exit(2); }
 const CAREERS = Number(process.argv[2] || 150);
+if (!(CAREERS >= 150)) { console.log(`ABORT: ${process.argv[2]} careers a sport; CRIT_FLOOR was measured at 150, so run 150 or more`); process.exit(2); }
+/* B4's late fleet: every one of them must reach its sport's season cap, so the count is exact, not a band. */
+const LATE = 40;
 const SEED = Number(process.env.SIM_SEED || 1569);
 /* The smallest critical count a sport may show: about half the smallest of 16 measured counts (37). */
 const CRIT_FLOOR = 18;
@@ -54,6 +68,9 @@ const SWAPS = {
   blind: ['careerVariance.ts', 'if (swing <= -7 && level < JANUARY_POOR) {', 'if (swing <= -7) {'],
   nocredit: ['careerVariance.ts', 'if (depth < 4 && level >= JANUARY_STRONG) {', 'if (false) {'],
   alwayslast: ['usCareerNoOffer.ts', 'return shouldRetire(ahead);', 'return true || shouldRetire(ahead);'],
+  noseason: ['usCareerNoOffer.ts', 'seasons: [...c.seasons, last ?? c.seasons[0]]', 'seasons: [...c.seasons]'],
+  titlecredit: ['careerVariance.ts', 'if (depth < 4 && level >= JANUARY_STRONG) {', 'if (depth <= 4 && level >= JANUARY_STRONG) {'],
+  creditlow: ['careerVariance.ts', 'if (depth < 4 && level >= JANUARY_STRONG) {', 'if (depth < 4 && level >= JANUARY_POOR) {'],
 };
 const fired = new Set();
 const plugin = {
@@ -121,7 +138,7 @@ for (const slug of SPORTS) {
         if (!talk.offer) {
           t.noOffer++;
           calledLast = M.seasonAheadIsLast(c, S.shouldRetire);
-          const why = M.noOfferWhy({ age: c.age, ovr: c.ovr, pos: c.pos, cliffAge: S.extPushArgs(c, () => 0).cliffAge, market: talk.market });
+          const why = M.noOfferWhy({ age: c.age, ovr: c.ovr, cliffAge: S.extPushArgs(c, () => 0).cliffAge, market: talk.market });
           if (!/^No offer, and here is why: .+\. The open market prices you around \$[\d.]+M a year\.$/.test(why) || DASH.test(why)) fail('B3', `${slug}: "${why}"`);
         } else { c.contractYears = 1 + talk.offer.years; c.salary = talk.offer.salary; }
       } else if (c.contractYears <= 0) {
@@ -148,6 +165,7 @@ for (const slug of SPORTS) {
         if (lost) t.lost++;
         if (crit) { t.crit++; if (po.level >= 70) fail('C1', `${slug} ${pos}: criticism on a January level of ${po.level.toFixed(1)}`); if (po.level >= 70 || po.clutch > -7) fail('C3', `${slug}: criticism at level ${po.level.toFixed(1)}, clutch ${po.clutch.toFixed(1)}`); }
         if (lost && po.level >= 76 && !riser) { t.strongLost++; if (credit) t.credit++; else fail('C2', `${slug} ${pos}: lost on a January level of ${po.level.toFixed(1)} with no credit`); }
+        if (credit && (!lost || po.level < 76)) fail('C5', `${slug} ${pos}: the credit note on ${lost ? `a January level of ${po.level.toFixed(1)}` : 'a title win'}`);
         const kind = crit ? 'crit' : credit ? 'credit' : 'none';
         if (lost && po.clutch <= -7 && !table.some(r => r.slug === slug && r.kind === kind)) {
           const old = slug === 'nfl' ? 'You were not the same player in January and everyone saw it.' : slug === 'nba' ? 'You disappeared when it mattered. The talk shows had a field day.' : slug === 'mlb' ? 'You could not buy a hit in October. It will follow you all winter.' : 'You went quiet in the playoffs. The room noticed.';
@@ -159,11 +177,30 @@ for (const slug of SPORTS) {
     }
   }
   if (t.crit < CRIT_FLOOR) fail('C3', `${slug}: only ${t.crit} critical notes, the floor is ${CRIT_FLOOR}`);
+  /* B4: the late fleet, held so that only the season count can end it (age 30, rating 80 before every season). */
+  t.capCalls = 0; t.capSeasons = [];
+  for (let k = 0; k < LATE; k++) {
+    const rng = mulberry32(SEED * 7000 + k + slug.length * 104729);
+    const pos = S.create.positions[k % S.create.positions.length];
+    const c = S.startCareer('Report Late', pos, S.create.archetypes[pos][0], rng, null, 'now');
+    let tq = S.rollTeamQuality(null, rng); S.assignRole(c, tq, rng);
+    let ended = false;
+    for (let guard = 0; guard < 40 && !ended; guard++) {
+      c.age = 30; c.ovr = 80; c.contractYears = 3;
+      const called = M.seasonAheadIsLast(c, S.shouldRetire);
+      S.campBattle(c, tq, rng); S.simSeason(c, tq, rng); S.progress(c, rng);
+      ended = S.shouldRetire(c);
+      if (called !== ended) fail('B4', `${slug} late career ${k}: ${called ? 'called the last season and the career went on' : 'the season cap ended the career and the season was not called the last'} (${c.seasons.length} seasons)`);
+      if (called && ended) { t.capCalls++; if (!t.capSeasons.includes(c.seasons.length)) t.capSeasons.push(c.seasons.length); }
+      tq = S.rollTeamQuality(tq, rng);
+    }
+  }
+  if (t.capCalls !== LATE) fail('B4', `${slug}: ${t.capCalls} of ${LATE} late careers were called last at the season cap`);
   console.log(`${slug}: ${JSON.stringify(t)}`);
 }
 console.log('Before and after, fixed seeded postseasons (the same games; before is the old rule\'s line):');
 for (const r of table) console.log(`  ${r.slug} ${r.pos} career ${r.k} | ${r.result} | level ${r.level}, clutch ${r.clutch} | before: ${r.before} | after: ${r.after}`);
-const sections = ['B1', 'B2', 'B3', 'C1', 'C2', 'C3', 'C4'];
+const sections = ['B1', 'B2', 'B3', 'B4', 'C1', 'C2', 'C3', 'C4', 'C5'];
 console.log(sections.map(s => `${s} ${fails.some(f => f.startsWith(s)) ? 'FAIL' : 'ok'}`).join(', '));
 console.log(`simUsCareerReports ${fails.length ? 'FAIL' : 'PASS'}: ${fails.length} findings, ${CAREERS} careers a sport, seed ${SEED}${CONTROL ? `, CONTROL ${CONTROL}` : ''}`);
 process.exit(fails.length ? 1 : 0);
