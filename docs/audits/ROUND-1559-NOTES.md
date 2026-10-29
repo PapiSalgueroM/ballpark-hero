@@ -164,3 +164,15 @@ not added). sweepWeight.mjs is not edited; the NHL and MLB rows are the lead's (
   sweepGames 0 findings (it ignores ONLY: 184 routes x 3 viewports, 552 checks). playGmPress 1, two failures, "the
   offseason set a new mandate" and "the feed credits the press answer for the softer bar", the pair finish-1550.md
   records red; BASE measured in r1559-f5.
+- r1559-f5: BASE 115c68092 built and served on a second port: playGmPress exit 1 with the same two lines.
+- r1559-f2: the 24 rule fences: 0 each (simHarnessAnchors 0 after 3cff6f38a, simNoRivalNames 0 findings,
+  simResultMoment 0, simGuideHeadings 0 over 131 guides) but simSchemaNames and simLeaderboardCaps (no database on the
+  runner) and simWritesAreSent ("no dist to serve"; served in f6). controlFrontOfficeBoard check 0 (every string of the
+  50 controls once) and all 0: 49 of 49 FIRED (1444 s), so the finding 12 test disarmed none of the NFL's controls.
+- r1559-f6 (served, dcd1272f7: src and scripts equal to 59a6f90db): controlFrontOfficeBoard blank exit 1, NOT FIRED,
+  as it must; simWritesAreSent exit 1, 2 failures, first "the harness could not drive Guess the Nation to a finish"
+  (finish-1533.md item 5 records the pair red on its base; this round touches no Guess the Nation file). BASE in
+  r1559-f7.
+
+The lead's checklist, the NOT RUN list and what Round 1561 must know are in
+C:/Users/antho/dukb-handoff/2026-10-10/results-g/finish-1559.md.
