@@ -4639,10 +4639,12 @@ function GameScreen({ career, clubs, onNextSeason, onAcceptOffer, onDismissSumma
           and its IntersectionObserver are gone with it. The measurements are in
           the long note above actionBarFloats, and the lift itself is in
           useFooterLift near the top of this file, shared with the training and
-          phone buttons because they were parked on the footer too. */}
+          phone buttons because they were parked on the footer too.
+          Release BS fix: while the cookie choices are unanswered the floating bar sits on top of them
+          (the banner sets data-consent-pending and its height on the body), so Next is never hidden. */}
       <div
         data-career-action-bar={actionBarFloats ? 'floating' : 'inline'}
-        className={`flex items-center gap-3 max-[399px]:gap-2 ${actionBarFloats ? 'fixed bottom-0 left-0 right-0 z-40 bg-background/95 backdrop-blur border-t border-border px-3 max-[399px]:px-2 sm:px-4 py-3 max-w-5xl mx-auto' : ''}`}
+        className={`flex items-center gap-3 max-[399px]:gap-2 ${actionBarFloats ? 'fixed bottom-0 left-0 right-0 z-40 bg-background/95 backdrop-blur border-t border-border px-3 max-[399px]:px-2 sm:px-4 py-3 max-w-5xl mx-auto [body[data-consent-pending]_&]:bottom-[var(--dukb-consent-height,230px)]' : ''}`}
         style={actionBarFloats && footerLift ? { transform: `translateY(-${footerLift}px)` } : undefined}
       >
         {career.phase === "retired" ? (
