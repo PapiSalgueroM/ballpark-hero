@@ -352,7 +352,7 @@ const hof = (n, tag) => Array.from({ length: n }, (_, i) => plaque(`${tag}${i}`,
 // Every clamp sits above every real string with room: the fleet and the old saves, every verdict in the four
 // legacy tables, and every weighs line the four sports' words can build.
 for (const slug of SPORTS) {
-  const src = readFileSync(path.join(ROOT, `src/lib/${ENGINE[slug].file}.ts`), 'utf8');
+  const src = readFileSync(path.join(ROOT, `src/lib/${ENGINE[slug].file}.ts`), 'utf8').replace(/\r\n/g, '\n');
   const at = src.indexOf('const verdict = score >=');
   ok('s3.tables', at >= 0, `${slug}: no verdict table found`);
   const table = at >= 0 ? src.slice(at, src.indexOf(';', at)) : '';
@@ -376,7 +376,7 @@ for (const k of Object.keys(longest)) {
 // The weight fence: any US career route may load this module and every one loads the key file, so neither may import a sport.
 {
   const KEY_FILE = 'src/lib/usCareerHallWallKey.ts';
-  const found = [...weightProblemsIn(MODULE, controlled, null), ...weightProblemsIn(KEY_FILE, readFileSync(path.join(ROOT, KEY_FILE), 'utf8'), null)];
+  const found = [...weightProblemsIn(MODULE, controlled, null), ...weightProblemsIn(KEY_FILE, readFileSync(path.join(ROOT, KEY_FILE), 'utf8').replace(/\r\n/g, '\n'), null)];
   ok('s3.weight', found.length === 0, () => found.join('; '));
   const planted = weightProblemsIn(MODULE, source.replace("import type { UsCareerCore } from '@/lib/usCareerSport';\n", `import type { UsCareerCore } from '@/lib/usCareerSport';\n${PLANT}`), null);
   ok('s3.fence', planted.length === 1 && /NBA code/.test(planted[0]), `the fence did not name a planted NBA import: ${JSON.stringify(planted)}`);
