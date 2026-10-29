@@ -1,0 +1,8 @@
+#!serial
+identity: node_modules/.bin/vitest run src/hooks/useDailyPuzzleIdentity.test.ts --testTimeout=120000
+identity-oldhook: git show 5d1198389:src/hooks/useDailyPuzzle.ts > src/hooks/useDailyPuzzle.ts && node_modules/.bin/vitest run src/hooks/useDailyPuzzleIdentity.test.ts --testTimeout=120000; s=$?; git checkout -- src; exit $s
+save-head: cp .rc/x/rvConnSave.test.tsx src/test/rvConnSave.test.tsx && RV_EXPORT=$PWD/.rc/x/post-apply.json RV_DAY=2026-11-01 RV_ID=crafted-1028 RV_INDEX=0 node_modules/.bin/vitest run src/test/rvConnSave.test.tsx --testTimeout=120000; s=$?; rm -f src/test/rvConnSave.test.tsx; exit $s
+save-head-headindex: cp .rc/x/rvConnSave.test.tsx src/test/rvConnSave.test.tsx && RV_EXPORT=$PWD/.rc/x/post-apply.json RV_DAY=2026-11-01 RV_ID=crafted-1028 RV_INDEX=277 node_modules/.bin/vitest run src/test/rvConnSave.test.tsx --testTimeout=120000; s=$?; rm -f src/test/rvConnSave.test.tsx; exit $s
+vitest-daily: node_modules/.bin/vitest run src/test/dailySaveParity.test.tsx src/test/dailySaveShapes.test.tsx src/test/dailySaveHardening.test.tsx src/test/dailyReload.test.tsx src/test/dailyMenuResume.test.tsx --testTimeout=300000 --hookTimeout=120000
+simDailySaveHardening: node scripts/simDailySaveHardening.mjs
+simDailyPuzzleContract: node scripts/simDailyPuzzleContract.mjs

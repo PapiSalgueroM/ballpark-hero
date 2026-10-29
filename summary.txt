@@ -1,0 +1,7 @@
+identity exit=0 2s |    Duration  1.15s (transform 85ms, setup 78ms, collect 179ms, tests 51ms, environment 331ms, prepare 204ms)
+identity-oldhook exit=1 2s | ::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/hooks/useDailyPuzzleIdentity.test.ts,title=src/hooks/useDailyPuzzleIdentity.test.ts > useDailyPuzzle%3A the
+save-head exit=0 3s |    Duration  1.88s (transform 268ms, setup 71ms, collect 371ms, tests 749ms, environment 301ms, prepare 123ms)
+save-head-headindex exit=0 3s |    Duration  1.91s (transform 272ms, setup 69ms, collect 368ms, tests 749ms, environment 298ms, prepare 70ms)
+vitest-daily exit=0 25s |    Duration  24.23s (transform 7.30s, setup 449ms, collect 10.85s, tests 32.70s, environment 2.28s, prepare 457ms)
+simDailySaveHardening exit=0 63s | simDailySaveHardening: part all green
+simDailyPuzzleContract exit=0 0s | simDailyPuzzleContract: green. Every caller honours the contract the selection memo depends on.
