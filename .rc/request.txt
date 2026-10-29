@@ -1,0 +1,4 @@
+#!playwright
+record: node scripts/recordUsBoardFixture.mjs "$RC_OUT/usBoardFixture.json" && node .rc/x/fxdiff.mjs scripts/data/usBoardFixture.json "$RC_OUT/usBoardFixture.json"
+simResultMoment: node scripts/simResultMoment.mjs
+simUsBoardParity: node scripts/simUsBoardParity.mjs
