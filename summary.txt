@@ -1,0 +1,14 @@
+tsc exit=0 70s | 
+alone-c8 exit=0 27s |       Tests  4 passed | 52 skipped (56)
+alone-c8b exit=0 11s |       Tests  4 passed | 52 skipped (56)
+mut-alone-c8 exit=0 28s |       Tests  4 passed | 52 skipped (56)
+mut-alone-c8b exit=1 5s |     414|       expect(stored.draws, `seed ${seed}: draws, a full wall`).toBe(un…
+vt-wall exit=0 58s |    Duration  57.44s (transform 2.17s, setup 141ms, collect 3.63s, tests 54.89s, environment 652ms, prepare 143ms)
+simWall exit=0 60s | simUsCareerHallWall: ok, 53 check ids, 7847 checks, 200 careers a sport, 152 old saves
+c-readdraw exit=1 54s | simUsCareerHallWall CONTROL readdraw: FIRED, C8b red in all four sports and C1, C3, C4, C4b, C5, C6, C7, C8, C9, C10a, C10b, C10c, J green
+c-boarddraw exit=1 41s | simUsCareerHallWall CONTROL boarddraw: FIRED, C8 red in all four sports and C1, C3, C4, C4b, C5, C6, C7, C8b, C9, C10a, C10b, C10c, J green
+c-nokeep exit=1 115s | simUsCareerHallWall CONTROL nokeep: FIRED, C1, C3, C4b, C5, C6, C8, C9, C10b, C10c red in all four sports and C4, C7, C8b, C10a, J green
+storage exit=0 2s | simStorageWrites: all green (owed: 12)
+anchors exit=0 49s | simHarnessAnchors: green. Every harness parses and none carries an unmatchable anchor.
+rival exit=0 15s | No rival product names found. 0 findings.
+clean exit=0 0s | 

@@ -1,0 +1,35 @@
+
+[1m[46m RUN [49m[22m [36mv3.2.7 [39m[90m/home/runner/work/ballpark-hero/ballpark-hero[39m
+
+Browserslist: browsers data (caniuse-lite) is 16 months old. Please run:
+  npx update-browserslist-db@latest
+  Why you should do it regularly: https://github.com/browserslist/update-db#readme
+ [32m✓[39m src/lib/usCareerHallWall.test.ts [2m([22m[2m18 tests[22m[2m)[22m[32m 133[2mms[22m[39m
+ [32m✓[39m src/test/usCareerHallWall.test.tsx [2m([22m[2m56 tests[22m[2m)[22m[33m 54755[2mms[22m[39m
+   [33m[2m✓[22m[39m 'NFL': the Hall wall on the board[2m > [22mC1 and C2: a career retired through the board goes up on the wall, and a restart keeps it there [33m 431[2mms[22m[39m
+   [33m[2m✓[22m[39m 'NFL': old saves and broken walls[2m > [22mC3: an old retired save of every class goes up as its card told him, and its save is never written [33m 711[2mms[22m[39m
+   [33m[2m✓[22m[39m 'NBA': old saves and broken walls[2m > [22mC3: an old retired save of every class goes up as its card told him, and its save is never written [33m 689[2mms[22m[39m
+   [33m[2m✓[22m[39m 'MLB': old saves and broken walls[2m > [22mC3: an old retired save of every class goes up as its card told him, and its save is never written [33m 701[2mms[22m[39m
+   [33m[2m✓[22m[39m 'NHL': old saves and broken walls[2m > [22mC3: an old retired save of every class goes up as its card told him, and its save is never written [33m 689[2mms[22m[39m
+   [33m[2m✓[22m[39m C8: the wall draws nothing and moves no save byte[2m > [22m'NFL': five seeds, the wall written, refused and absent, press for press [33m 5967[2mms[22m[39m
+   [33m[2m✓[22m[39m C8: the wall draws nothing and moves no save byte[2m > [22m'NBA': five seeds, the wall written, refused and absent, press for press [33m 5919[2mms[22m[39m
+   [33m[2m✓[22m[39m C8: the wall draws nothing and moves no save byte[2m > [22m'MLB': five seeds, the wall written, refused and absent, press for press [33m 5937[2mms[22m[39m
+   [33m[2m✓[22m[39m C8: the wall draws nothing and moves no save byte[2m > [22m'NHL': five seeds, the wall written, refused and absent, press for press [33m 5820[2mms[22m[39m
+   [33m[2m✓[22m[39m C8b: the wall's read draws nothing and moves no save byte[2m > [22m'NFL': five seeds, no Hall bound, a bound Hall with no wall and with a full wall [33m 1827[2mms[22m[39m
+   [33m[2m✓[22m[39m C8b: the wall's read draws nothing and moves no save byte[2m > [22m'NBA': five seeds, no Hall bound, a bound Hall with no wall and with a full wall [33m 1792[2mms[22m[39m
+   [33m[2m✓[22m[39m C8b: the wall's read draws nothing and moves no save byte[2m > [22m'MLB': five seeds, no Hall bound, a bound Hall with no wall and with a full wall [33m 1818[2mms[22m[39m
+   [33m[2m✓[22m[39m C8b: the wall's read draws nothing and moves no save byte[2m > [22m'NHL': five seeds, no Hall bound, a bound Hall with no wall and with a full wall [33m 1791[2mms[22m[39m
+   [33m[2m✓[22m[39m 'NFL': the wall screen[2m > [22mC10: from the retirement screen the opener waits for the card, Back focuses it, and Start over on the wall lands on create [33m 1066[2mms[22m[39m
+   [33m[2m✓[22m[39m 'NFL': the wall screen[2m > [22mC10: the wall says when this player is not on it, and when a newer version saved it [33m 3165[2mms[22m[39m
+   [33m[2m✓[22m[39m 'NBA': the wall screen[2m > [22mC10: from the retirement screen the opener waits for the card, Back focuses it, and Start over on the wall lands on create [33m 1056[2mms[22m[39m
+   [33m[2m✓[22m[39m 'NBA': the wall screen[2m > [22mC10: the wall says when this player is not on it, and when a newer version saved it [33m 3160[2mms[22m[39m
+   [33m[2m✓[22m[39m 'MLB': the wall screen[2m > [22mC10: from the retirement screen the opener waits for the card, Back focuses it, and Start over on the wall lands on create [33m 1062[2mms[22m[39m
+   [33m[2m✓[22m[39m 'MLB': the wall screen[2m > [22mC10: the wall says when this player is not on it, and when a newer version saved it [33m 3164[2mms[22m[39m
+   [33m[2m✓[22m[39m 'NHL': the wall screen[2m > [22mC10: from the retirement screen the opener waits for the card, Back focuses it, and Start over on the wall lands on create [33m 1056[2mms[22m[39m
+   [33m[2m✓[22m[39m 'NHL': the wall screen[2m > [22mC10: the wall says when this player is not on it, and when a newer version saved it [33m 3154[2mms[22m[39m
+
+[2m Test Files [22m [1m[32m2 passed[39m[22m[90m (2)[39m
+[2m      Tests [22m [1m[32m74 passed[39m[22m[90m (74)[39m
+[2m   Start at [22m 18:23:41
+[2m   Duration [22m 57.44s[2m (transform 2.17s, setup 141ms, collect 3.63s, tests 54.89s, environment 652ms, prepare 143ms)[22m
+
