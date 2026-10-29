@@ -1,0 +1,20 @@
+simNhlCpuRosters exit=0 1s | simNhlCpuRosters passed: /home/runner/work/_temp/t-simNhlCpuRosters/dukb-nhl969-proof-tLklkH
+simEngineIds exit=0 1s | simEngineIds: an id minted in one page load cannot collide with one minted in another, in all six engines.
+simNhlCpuRosters-all exit=1 3s | Node.js v24.22.1
+simFrontOfficeCuts exit=0 8s | simFrontOfficeCuts: 1187 checks passed over 4 sims and 4 seeded leagues each. A cut costs dead money, the man waits a season by any door, the hub and the boards say so, a
+simGmContracts exit=0 1s | simGmContracts: PASS, 4 engines, 20 runs of 10 seasons, nobody left on a flip
+simFrontOfficeSchedule exit=0 9s | simFrontOfficeSchedule: GREEN, NBA, MLB and NHL seasons booked and played exactly over 20 seeds
+simBooks exit=0 12s | simBooks: green. Every number these games show agrees with every other number they show.
+simHomeFront exit=0 1s | simHomeFront: green. The home front shows real games, real saves and a sport you can tell apart without colour.
+simLeagueCaps exit=0 1s | simLeagueCaps: green. Four caps, two sources each, read on one day, and every screen says which day.
+simGmLineup exit=0 3s | simGmLineup: 22635 checks, all green
+simNhlContributors exit=0 2s | simNhlContributors: no Git history/network dependency; only owned source copies are written and removed.
+simNhlContributorsBoard exit=0 5s | simNhlContributorsBoard: stable nodes, finite cue binding and focus are unit checked; native pixel/reduced-motion and full-season engine acceptance are separate.
+simNhlOpeningRatings exit=0 3s | NHL opening:effective CRLF-safe bindings/raw holds/owned-copy cleanup passed. Offline proof does not establish historical membership or ability, native UI, remote saves o
+simNhlRatingEvidence exit=0 4s | NHL rating evidence: CRLF-safe executable bindings, raw-byte holds and owned-copy cleanup verified. No native or live claims.
+simTradeTalks exit=0 1s | simTradeTalks: green. The other GM negotiates like a person, and the deal that closes is the deal that was agreed.
+simGmFarm exit=0 14s | simGmFarm: 49 checks, 0 failures, 13.3 s
+simTradeFinder exit=0 5s | ALL TRADE FINDER CHECKS PASSED
+base-two exit=0 4s | BASE simNhlCpuRosters exit=0 | simNhlCpuRosters passed: /home/runner/work/_temp/t-base-two/dukb-nhl969-proof-YpkLL5
+vitest-more exit=0 9s |    Duration  7.73s (transform 2.77s, setup 615ms, collect 5.02s, tests 5.55s, environment 2.13s, prepare 823ms)
+simHarnessAnchors exit=1 38s | simHarnessAnchors: 1 failure(s)

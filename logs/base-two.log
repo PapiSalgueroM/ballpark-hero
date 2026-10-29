@@ -1,0 +1,2 @@
+BASE simGmCalendar exit=1 | simGmCalendar: 6 failure(s) | first   FAIL: Everton seasonDays: hash 158dee139333cccc41abdbfc != recorded 4f6e77bb426d72edb25d0123; first lines now ["{\"wor
+BASE simNhlCpuRosters exit=0 | simNhlCpuRosters passed: /home/runner/work/_temp/t-base-two/dukb-nhl969-proof-YpkLL5

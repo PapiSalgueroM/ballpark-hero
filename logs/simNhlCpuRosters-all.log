@@ -1,0 +1,85 @@
+simNhlCpuRosters normal: PASS: keeps omitted invalid and inherited owners on the exact two-argument outcome and tape
+simNhlCpuRosters normal: PASS: holds the ordinary owner-enabled offseason when nobody needs a cut
+simNhlCpuRosters normal: PASS: repairs the retained real seed17 NYR16 opening through one actual surplus waiver
+simNhlCpuRosters normal: PASS: cuts two fictional CPU overages to15 and protects lower-rated valid preferences
+simNhlCpuRosters normal: PASS: holds actual fees quotes IDs no-return and30-place pool without double-aging new waivers
+simNhlCpuRosters normal: PASS: keeps the actual trade-and-four-selection human17 exact
+simNhlCpuRosters normal: PASS: rolls CPU charges through the next actual offseason and preserves saved ownership
+simNhlCpuRosters normal: PASS: preserves the existing expiring-copy age path in both arms
+simNhlCpuRosters normal:8 outcomes, 0 exact assertion rejects, 8 held.
+simNhlCpuRosters omit: PASS: keeps omitted invalid and inherited owners on the exact two-argument outcome and tape
+simNhlCpuRosters omit: PASS: holds the ordinary owner-enabled offseason when nobody needs a cut
+simNhlCpuRosters omit: FAIL: repairs the retained real seed17 NYR16 opening through one actual surplus waiver
+simNhlCpuRosters omit: FAIL: cuts two fictional CPU overages to15 and protects lower-rated valid preferences
+simNhlCpuRosters omit: FAIL: holds actual fees quotes IDs no-return and30-place pool without double-aging new waivers
+simNhlCpuRosters omit: PASS: keeps the actual trade-and-four-selection human17 exact
+simNhlCpuRosters omit: FAIL: rolls CPU charges through the next actual offseason and preserves saved ownership
+simNhlCpuRosters omit: PASS: preserves the existing expiring-copy age path in both arms
+simNhlCpuRosters omit:8 outcomes, 4 exact assertion rejects, 4 held.
+simNhlCpuRosters human: PASS: keeps omitted invalid and inherited owners on the exact two-argument outcome and tape
+simNhlCpuRosters human: PASS: holds the ordinary owner-enabled offseason when nobody needs a cut
+simNhlCpuRosters human: PASS: repairs the retained real seed17 NYR16 opening through one actual surplus waiver
+simNhlCpuRosters human: PASS: cuts two fictional CPU overages to15 and protects lower-rated valid preferences
+simNhlCpuRosters human: PASS: holds actual fees quotes IDs no-return and30-place pool without double-aging new waivers
+simNhlCpuRosters human: FAIL: keeps the actual trade-and-four-selection human17 exact
+simNhlCpuRosters human: PASS: rolls CPU charges through the next actual offseason and preserves saved ownership
+simNhlCpuRosters human: PASS: preserves the existing expiring-copy age path in both arms
+simNhlCpuRosters human:8 outcomes, 1 exact assertion rejects, 7 held.
+simNhlCpuRosters preferences: PASS: keeps omitted invalid and inherited owners on the exact two-argument outcome and tape
+simNhlCpuRosters preferences: PASS: holds the ordinary owner-enabled offseason when nobody needs a cut
+simNhlCpuRosters preferences: PASS: repairs the retained real seed17 NYR16 opening through one actual surplus waiver
+simNhlCpuRosters preferences: FAIL: cuts two fictional CPU overages to15 and protects lower-rated valid preferences
+simNhlCpuRosters preferences: FAIL: holds actual fees quotes IDs no-return and30-place pool without double-aging new waivers
+simNhlCpuRosters preferences: PASS: keeps the actual trade-and-four-selection human17 exact
+simNhlCpuRosters preferences: FAIL: rolls CPU charges through the next actual offseason and preserves saved ownership
+simNhlCpuRosters preferences: PASS: preserves the existing expiring-copy age path in both arms
+simNhlCpuRosters preferences:8 outcomes, 3 exact assertion rejects, 5 held.
+simNhlCpuRosters waiver: PASS: keeps omitted invalid and inherited owners on the exact two-argument outcome and tape
+simNhlCpuRosters waiver: PASS: holds the ordinary owner-enabled offseason when nobody needs a cut
+simNhlCpuRosters waiver: FAIL: repairs the retained real seed17 NYR16 opening through one actual surplus waiver
+simNhlCpuRosters waiver: FAIL: cuts two fictional CPU overages to15 and protects lower-rated valid preferences
+simNhlCpuRosters waiver: FAIL: holds actual fees quotes IDs no-return and30-place pool without double-aging new waivers
+simNhlCpuRosters waiver: PASS: keeps the actual trade-and-four-selection human17 exact
+simNhlCpuRosters waiver: FAIL: rolls CPU charges through the next actual offseason and preserves saved ownership
+simNhlCpuRosters waiver: PASS: preserves the existing expiring-copy age path in both arms
+simNhlCpuRosters waiver:8 outcomes, 4 exact assertion rejects, 4 held.
+simNhlCpuRosters earlyRoll: PASS: keeps omitted invalid and inherited owners on the exact two-argument outcome and tape
+simNhlCpuRosters earlyRoll: PASS: holds the ordinary owner-enabled offseason when nobody needs a cut
+simNhlCpuRosters earlyRoll: FAIL: repairs the retained real seed17 NYR16 opening through one actual surplus waiver
+simNhlCpuRosters earlyRoll: FAIL: cuts two fictional CPU overages to15 and protects lower-rated valid preferences
+simNhlCpuRosters earlyRoll: FAIL: holds actual fees quotes IDs no-return and30-place pool without double-aging new waivers
+simNhlCpuRosters earlyRoll: PASS: keeps the actual trade-and-four-selection human17 exact
+simNhlCpuRosters earlyRoll: FAIL: rolls CPU charges through the next actual offseason and preserves saved ownership
+simNhlCpuRosters earlyRoll: PASS: preserves the existing expiring-copy age path in both arms
+simNhlCpuRosters earlyRoll:8 outcomes, 4 exact assertion rejects, 4 held.
+node:internal/modules/run_main:107
+    triggerUncaughtException(
+    ^
+
+AssertionError [ERR_ASSERTION]: Exact observed meaningful control map
++ actual - expected
+
+  [
++   0,
++   1,
++   2,
+    3,
+    4,
++   5,
++   6,
++   7
+  ]
+
+    at file:///home/runner/work/ballpark-hero/ballpark-hero/scripts/simNhlCpuRosters.mjs:76:12 {
+  generatedMessage: false,
+  code: 'ERR_ASSERTION',
+  actual: [
+    0, 1, 2, 3,
+    4, 5, 6, 7
+  ],
+  expected: [ 3, 4 ],
+  operator: 'deepStrictEqual',
+  diff: 'simple'
+}
+
+Node.js v24.22.1

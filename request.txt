@@ -1,0 +1,20 @@
+simNhlCpuRosters: node scripts/simNhlCpuRosters.mjs
+simNhlCpuRosters-all: NHL_CPU_ROSTERS_CONTROL=all node scripts/simNhlCpuRosters.mjs
+simBooks: node scripts/simBooks.mjs
+simEngineIds: node scripts/simEngineIds.mjs
+simFrontOfficeCuts: node scripts/simFrontOfficeCuts.mjs
+simFrontOfficeSchedule: node scripts/simFrontOfficeSchedule.mjs
+simGmContracts: node scripts/simGmContracts.mjs
+simGmFarm: node scripts/simGmFarm.mjs
+simGmLineup: node scripts/simGmLineup.mjs
+simHomeFront: node scripts/simHomeFront.mjs
+simLeagueCaps: node scripts/simLeagueCaps.mjs
+simNhlContributors: node scripts/simNhlContributors.mjs
+simNhlContributorsBoard: node scripts/simNhlContributorsBoard.mjs
+simNhlOpeningRatings: node scripts/simNhlOpeningRatings.mjs
+simNhlRatingEvidence: node scripts/simNhlRatingEvidence.mjs
+simTradeFinder: node scripts/simTradeFinder.mjs
+simTradeTalks: node scripts/simTradeTalks.mjs
+simHarnessAnchors: node scripts/simHarnessAnchors.mjs
+vitest-more: node_modules/.bin/vitest run src/components/front-office/FrontOfficeCuts.test.tsx src/lib/gmLineup.test.ts src/lib/gmPicks.test.ts src/test/nhlContributorsBoard.test.tsx --testTimeout=300000 --hookTimeout=120000
+base-two: git worktree add -f /tmp/bc 115c68092 >/dev/null 2>&1; ln -sfn "$PWD/node_modules" /tmp/bc/node_modules; cd /tmp/bc && { node scripts/simGmCalendar.mjs > /tmp/gc.log 2>&1; echo "BASE simGmCalendar exit=$? | $(tail -1 /tmp/gc.log) | first $(grep -m1 FAIL /tmp/gc.log | cut -c1-120)"; node scripts/simNhlCpuRosters.mjs > /tmp/cr.log 2>&1; echo "BASE simNhlCpuRosters exit=$? | $(tail -1 /tmp/cr.log)"; }
