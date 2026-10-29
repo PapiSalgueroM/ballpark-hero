@@ -1,0 +1,17 @@
+tsc: node_modules/.bin/tsc --noEmit -p tsconfig.app.json
+nhlfull: SIM_GM_CAREER_SPORT=nhl node scripts/simGmCareer.mjs
+nflfull: node scripts/simGmCareer.mjs
+nhl-s6-seeds21to120: SIM_GM_CAREER_SPORT=nhl SIM_GM_CAREER_ONLY=6 SIM_GM_CAREER_AWAY_SEEDS=21,22,23,24,25,26,27,28,29,30,31,32,33,34,35,36,37,38,39,40,41,42,43,44,45,46,47,48,49,50,51,52,53,54,55,56,57,58,59,60,61,62,63,64,65,66,67,68,69,70,71,72,73,74,75,76,77,78,79,80,81,82,83,84,85,86,87,88,89,90,91,92,93,94,95,96,97,98,99,100,101,102,103,104,105,106,107,108,109,110,111,112,113,114,115,116,117,118,119,120 node scripts/simGmCareer.mjs
+nhl-namedsummer: SIM_GM_CAREER_SPORT=nhl SIM_GM_CAREER_ONLY=6 SIM_GM_CAREER_CONTROL=namedsummer node scripts/simGmCareer.mjs
+nhl-notrim: SIM_GM_CAREER_SPORT=nhl SIM_GM_CAREER_ONLY=6 SIM_GM_CAREER_CONTROL=notrim node scripts/simGmCareer.mjs
+nhl-awaymoves: SIM_GM_CAREER_SPORT=nhl SIM_GM_CAREER_ONLY=6 SIM_GM_CAREER_CONTROL=awaymoves node scripts/simGmCareer.mjs
+nhl-oldskip: SIM_GM_CAREER_SPORT=nhl SIM_GM_CAREER_ONLY=6 SIM_GM_CAREER_CONTROL=oldskip node scripts/simGmCareer.mjs
+nhl-retainedclub: SIM_GM_CAREER_SPORT=nhl SIM_GM_CAREER_ONLY=5 SIM_GM_CAREER_CONTROL=retainedclub node scripts/simGmCareer.mjs
+nhl-syncalways: SIM_GM_CAREER_SPORT=nhl SIM_GM_CAREER_ONLY=10 SIM_GM_CAREER_CONTROL=syncalways node scripts/simGmCareer.mjs
+nhl-refusedrelease: SIM_GM_CAREER_SPORT=nhl SIM_GM_CAREER_ONLY=10 SIM_GM_CAREER_CONTROL=refusedrelease node scripts/simGmCareer.mjs
+nfl-awaymoves: SIM_GM_CAREER_ONLY=6 SIM_GM_CAREER_CONTROL=awaymoves node scripts/simGmCareer.mjs
+nfl-oldskip: SIM_GM_CAREER_ONLY=6 SIM_GM_CAREER_CONTROL=oldskip node scripts/simGmCareer.mjs
+nfl-syncalways: SIM_GM_CAREER_ONLY=10 SIM_GM_CAREER_CONTROL=syncalways node scripts/simGmCareer.mjs
+nfl-refusedrelease: SIM_GM_CAREER_ONLY=10 SIM_GM_CAREER_CONTROL=refusedrelease node scripts/simGmCareer.mjs
+nfl-namedsummer-refuses: SIM_GM_CAREER_CONTROL=namedsummer node scripts/simGmCareer.mjs
+simHarnessAnchors: node scripts/simHarnessAnchors.mjs
