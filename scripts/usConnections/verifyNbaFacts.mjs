@@ -33,6 +33,7 @@ import { fold, NBA_COUNTRY_CODES } from '../lib/usConnectionsCheck.mjs';
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..', '..');
 const RECORD = path.join(ROOT, 'scripts', 'data', 'nbaConnectionsRecord-2026-10.json');
 const SECOND = path.join(ROOT, 'scripts', 'data', 'nbaConnectionsSecondHost-2026-10.json');
+const LEDGER = path.join(ROOT, 'scripts', 'data', 'nbaConnectionsVerified-2026-10.json');
 const plain = s => String(s).normalize('NFD').replace(/\p{M}/gu, '');
 
 /* tile name -> basketball-reference id where the rule does not reach the page */
@@ -135,8 +136,85 @@ if (process.argv[1] && fileURLToPath(import.meta.url) === path.resolve(process.a
       console.log(`second: ${Object.keys(out).length} men written, ${pending} not read yet, ${problems.length} problems`);
       for (const p of problems) console.log('  PROBLEM ' + p);
     }
+  } else if (step === 'facts') {
+    const { written, problems } = await writeFacts();
+    console.log(`facts: ${written} facts written into ${path.relative(ROOT, LEDGER)}, each a verdict both hosts give; ${problems.length} problems`);
+    for (const p of problems) console.log('  PROBLEM ' + p);
+    if (problems.length) process.exit(1);
   } else {
-    console.error('usage: pages <work> | second <work>');
+    console.error('usage: pages <work> | second <work> | facts');
     process.exit(2);
   }
+}
+
+/*
+ * facts: the ledger's facts, from the two committed host files (no network). One fact for every member of every
+ * flagged group on the file boards (holds true) and for every line of the ledger's needs (a man moved off a group,
+ * or a watched man: holds as written). A fact is written only when both hosts give its verdict, through the checker
+ * itself (makeNbaChecker's both()); where the ledger's overlay set the field a verdict reads, the overlay's own
+ * sources (two hosts or more, neither a wiki) stand for it in place of the record's. Label: the undated one.
+ *   node scripts/usConnections/verifyNbaFacts.mjs facts
+ */
+async function writeFacts() {
+  const os = await import('node:os');
+  const { build } = await import('esbuild');
+  const { pathToFileURL } = await import('node:url');
+  const { makeUsChecker } = await import('../lib/usConnectionsCheck.mjs');
+  const tmp = fs.mkdtempSync(path.join(os.tmpdir(), 'nbafacts-'));
+  const R = ROOT.split(path.sep).join('/');
+  fs.writeFileSync(path.join(tmp, 'e.mjs'), `export { nbaConnectionsPuzzles as b } from '${R}/src/data/nbaConnectionsPuzzles.ts';`);
+  await build({ entryPoints: [path.join(tmp, 'e.mjs')], bundle: true, format: 'esm', platform: 'node', outfile: path.join(tmp, 'o.mjs'), logLevel: 'error' });
+  const { b: boards } = await import(pathToFileURL(path.join(tmp, 'o.mjs')).href);
+  const { ledger, record, second, checker } = makeUsChecker(ROOT, 'nba');
+  const undated = l => String(l).replace(/ \(as of [^)]+\)$/, '');
+  const asked = [];
+  for (const [id, label] of ledger.flaggedGroups ?? []) {
+    const g = boards.find(x => x.id === id)?.groups.find(x => undated(x.theme) === undated(label));
+    if (!g) { asked.push({ id, label, problem: 'no such group on the board' }); continue; }
+    for (const name of g.players) asked.push({ id, theme: g.theme, label: undated(g.theme), name, holds: true, why: 'member' });
+  }
+  for (const n of ledger.needs ?? []) {
+    const g = boards.find(x => x.id === n.id)?.groups.find(x => undated(x.theme) === undated(n.label));
+    asked.push({ ...n, theme: g?.theme ?? n.label, label: undated(n.label) });
+  }
+  const facts = [];
+  const problems = [];
+  const covers = (o, c) => !!o && (c.kind === 'club' ? !!o.set?.seasons : c.kind === 'career' ? o.set?.career?.[c.stat] !== undefined : c.kind === 'born' || c.kind === 'continent' ? !!o.set?.born : c.kind === 'draft' ? !!o.set?.draft : false);
+  for (const a of asked) {
+    if (a.problem) { problems.push(`${a.id} "${a.label}": ${a.problem}`); continue; }
+    const c = checker.criterion(a.theme);
+    if (!c) { problems.push(`${a.id} "${a.theme}": no criterion`); continue; }
+    const [v1, v2] = checker.both(a.name, c);
+    if (v1 !== a.holds || v2 !== a.holds) { problems.push(`${a.id} ${a.name} "${a.theme}" should be ${a.holds}: record ${v1}, second host ${v2}`); continue; }
+    const m = record.men[a.name];
+    const s = second.men[a.name];
+    const o = ledger.overlay?.[a.name];
+    let sources;
+    if (covers(o, c)) sources = o.sources;
+    else {
+      const espnUrl = `https://site.web.api.espn.com/apis/common/v3/sports/basketball/nba/athletes/${m.espn}`;
+      const upTo = s2 => c.asOf === undefined || Number(s2.slice(0, 4)) <= c.asOf;
+      const say1 = {
+        club: () => { const hit = Object.entries(m.seasons ?? {}).filter(([y, t]) => upTo(y) && t.some(x => c.names.includes(x))).map(([y]) => y); return hit.length ? `${c.names.join(' or ')} rows: ${hit.join(', ')}` : `no ${c.names.join(' or ')} row${c.asOf !== undefined ? ` up to ${c.asOf}-${String(c.asOf + 1).slice(2)}` : ''} (clubs: ${[...new Set(Object.values(m.seasons ?? {}).flat())].join(', ')})`; },
+        career: () => `career regular season ${c.stat} ${m.career?.[c.stat]}`,
+        born: () => `displayBirthPlace "${m.bornText}"`,
+        continent: () => `displayBirthPlace "${m.bornText}"`,
+        draft: () => (m.draft ? `DRAFT_YEAR ${m.draft[0]}, DRAFT_ROUND ${m.draft[1]}, DRAFT_NUMBER ${m.draft[2]}` : 'undrafted'),
+      }[c.kind]();
+      const say2 = {
+        club: () => { const hit = Object.entries(s.seasons ?? {}).filter(([y, t]) => upTo(y) && t.some(x => c.codes.includes(x))).map(([y]) => y); return hit.length ? `${c.codes.join(' or ')} rows in the Totals table: ${hit.join(', ')}` : `no ${c.codes.join(' or ')} row in the Totals table${c.asOf !== undefined ? ` up to ${c.asOf}-${String(c.asOf + 1).slice(2)}` : ''} (teams: ${[...new Set(Object.values(s.seasons ?? {}).flat())].join(', ')}${Object.keys(s.aba ?? {}).length ? `; ABA: ${[...new Set(Object.values(s.aba).flat())].join(', ')}` : ''})`; },
+        career: () => `NBA regular season ${c.stat} summed over the Totals rows: ${s.career?.[c.stat]}`,
+        born: () => `Born ... in ${s.bornText}`,
+        continent: () => `Born ... in ${s.bornText}`,
+        draft: () => (s.draft ? `Draft: ${s.draft[3]}, round ${s.draft[1]}, ${s.draft[2]} overall, ${s.draft[0]}` : 'no Draft line (undrafted)'),
+      }[c.kind]();
+      const host1 = c.kind === 'draft' ? { host: 'nba.com', url: `https://www.nba.com/player/${m.nba}` } : { host: 'site.web.api.espn.com', url: c.kind === 'club' || c.kind === 'career' ? `${espnUrl}/stats` : espnUrl };
+      sources = [{ ...host1, says: say1 }, { host: 'basketball-reference.com', url: s.url, says: say2 }];
+    }
+    facts.push({ id: a.id, label: a.label, name: a.name, holds: a.holds, why: a.why, sources });
+  }
+  const L = JSON.parse(fs.readFileSync(LEDGER, 'utf8'));
+  L.facts = facts;
+  fs.writeFileSync(LEDGER, JSON.stringify(L, null, 1) + '\n');
+  return { written: facts.length, problems };
 }

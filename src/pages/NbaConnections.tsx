@@ -12,6 +12,7 @@ import { HelpCircle } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { NbaConnectionsHowToPlay } from '@/components/nba-connections/NbaConnectionsHowToPlay';
 import { Skeleton } from '@/components/ui/skeleton';
+import { ConnectionsGroupLabel } from '@/components/game/ConnectionsGroupLabel';
 
 /**
  * NBA Connections, direct port of BaseballConnections.tsx (task #26) on the
@@ -237,7 +238,7 @@ const NbaConnections = () => {
 
         {!isLoading && solvedGroups.length > 0 && <div className="mt-4 space-y-2" aria-label="Revealed groups">
           {solvedGroups.map(group => <details key={group.theme} className={cn('rounded-xl border px-3', DIFFICULTY_COLORS[group.difficulty])}>
-            <summary className="min-h-[44px] cursor-pointer py-3 text-sm font-bold">{group.theme}</summary>
+            <summary className="min-h-[44px] cursor-pointer py-3 text-sm font-bold"><ConnectionsGroupLabel theme={group.theme} /></summary>
             <p className="pb-3 text-sm">{group.players.join(', ')}</p>
           </details>)}
         </div>}

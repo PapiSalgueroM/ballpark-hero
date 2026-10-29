@@ -54,7 +54,7 @@ export function NbaConnectionsHowToPlay({ open, onOpenChange }: Props) {
           </div>
           <div className="space-y-2">
             <p className="font-semibold text-primary">Connections can include</p>
-            <p className="text-muted-foreground">Same franchise, same draft class, same country, career milestones, same era, and more.</p>
+            <p className="text-muted-foreground">Same franchise, same draft class, same country, career milestones, same era, and more. A team group marked "as of 2025-26" only counts seasons up to then, so a trade later on can't change the answer.</p>
           </div>
         </div>
       </DialogContent>

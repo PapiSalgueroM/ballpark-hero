@@ -859,8 +859,11 @@ export function nbaBirthCountry(text) {
  * Round 1583: every NBA franchise with every name it has played under, as each host writes it: basketball-reference's
  * team codes (read from its 30 franchise pages, /teams/<code>/, on 2026-10-29) and the display names ESPN gives
  * those seasons (the names ESPN printed on the 2026-10-29 read, plus the franchise pages' names). A club name or code
- * no franchise here holds is unmapped, and a man with a season under one is unknown for every club group: it could be
- * an old name of the club beside him, so it is never read as a no.
+ * no franchise here holds is unmapped. ESPN's names are not a closed list (it spells some of its own), so a man with
+ * a season under an unmapped ESPN name is unknown for every club group: it could be an old name of the club beside
+ * him, so it is never read as a no. basketball-reference's codes are closed: the 30 franchise pages list every code
+ * each franchise has played under, so a code none of them holds (an ABA club that folded, as the Utah Stars) belongs
+ * to no NBA club.
  */
 const NBA_FRANCHISES = {
   ATL: { codes: ['ATL', 'STL', 'MLH', 'TRI'], names: ['Atlanta Hawks', 'St. Louis Hawks', 'Milwaukee Hawks', 'Tri-Cities Blackhawks'] },
@@ -939,15 +942,17 @@ const NBA_IN_PLAY = '2026-27';
 
 /* one host's verdict on a club label: true when a season up to the date is with the club under a name the label
    covers; null when none is but one is with the same franchise under another name, or under a name no franchise
-   holds; else false */
-function nbaClubVerdict(seasons, cover, frOf, c) {
+   holds; null too when the host keeps no season at all for him (ESPN for Larry Bird), which is no evidence of a
+   no; else false */
+function nbaClubVerdict(seasons, cover, frOf, c, closed = false) {
+  if (!Object.keys(seasons ?? {}).length) return null;
   let hit = false;
   let kin = false;
   for (const [s, teams] of Object.entries(seasons ?? {})) {
     if (c.asOf !== undefined && Number(s.slice(0, 4)) > c.asOf) continue;
     for (const t of teams) {
       if (cover.includes(t)) hit = true;
-      else if (!frOf.has(t) || frOf.get(t) === c.franchise) kin = true;
+      else if ((!frOf.has(t) && !closed) || frOf.get(t) === c.franchise) kin = true;
     }
   }
   return hit ? true : kin ? null : false;
@@ -998,9 +1003,9 @@ export function makeNbaChecker({ record, second, ledger = {} }) {
   function hosts(m, b, c) {
     switch (c.kind) {
       case 'club': {
-        const v2 = nbaClubVerdict(b.seasons, c.codes, NBA_CODE_FR, c);
+        const v2 = nbaClubVerdict(b.seasons, c.codes, NBA_CODE_FR, c, true);
         /* a club group counts NBA seasons only: ABA seasons with the franchise make a man unknown beside it */
-        const aba = v2 !== true && Object.entries(b.aba ?? {}).some(([s, ts]) => (c.asOf === undefined || Number(s.slice(0, 4)) <= c.asOf) && ts.some(t => NBA_CODE_FR.get(t) === c.franchise || !NBA_CODE_FR.has(t)));
+        const aba = v2 !== true && Object.entries(b.aba ?? {}).some(([s, ts]) => (c.asOf === undefined || Number(s.slice(0, 4)) <= c.asOf) && ts.some(t => NBA_CODE_FR.get(t) === c.franchise));
         return [nbaClubVerdict(m.seasons, c.names, NBA_NAME_FR, c), aba ? null : v2];
       }
       case 'career': {

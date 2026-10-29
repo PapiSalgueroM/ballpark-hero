@@ -12,10 +12,14 @@ export interface NbaConnectionsPuzzle {
 /**
  * NBA Connections puzzles (task #26, Connections port to NBA).
  *
- * EVERY fact below was verified against Supabase on 2026-07-21:
- *   - points / assists / rebounds / threes / teams: nba_player_stats
- *   - countries + draft slots: nba_players_extended_v2
- *   - #1-overall confirmations (incl. Yao 2002): nba_draft_picks
+ * Round 1583 held every tile to two hosts (the record, ESPN's athlete service
+ * and nba.com's player page, and basketball-reference.com as the second):
+ * scripts/data/nbaConnectionsVerified-2026-10.json, checked by
+ * scripts/simUsConnectionsFacts.mjs. Before it, the boards were checked only
+ * against the site's own tables (2026-07-21), one source, and one tile was
+ * false: Tony Parker sat in "Born in France" (he was born in Bruges, Belgium).
+ * Every team group names the season it counts up to ("as of 2025-26"), so a
+ * trade later on cannot give a board a second right answer.
  *
  * AUTHORING RULE (the thing that makes a Connections puzzle valid): within
  * a puzzle, NO player may satisfy another group's criterion, the partition
@@ -37,7 +41,7 @@ export const nbaConnectionsPuzzles: NbaConnectionsPuzzle[] = [
     id: 'nbaconn-001',
     groups: [
       { theme: '28,000+ career points', players: ['Karl Malone', 'Kobe Bryant', 'Michael Jordan', 'Dirk Nowitzki', 'Carmelo Anthony'], difficulty: 'yellow' },
-      { theme: 'Played for the Miami Heat', players: ['Dwyane Wade', 'Alonzo Mourning', 'Chris Bosh', 'Udonis Haslem', 'Tim Hardaway'], difficulty: 'green' },
+      { theme: 'Played for the Miami Heat (as of 2025-26)', players: ['Dwyane Wade', 'Alonzo Mourning', 'Chris Bosh', 'Udonis Haslem', 'Tim Hardaway'], difficulty: 'green' },
       { theme: '10,000+ career assists', players: ['John Stockton', 'Jason Kidd', 'Steve Nash', 'Mark Jackson', 'Chris Paul'], difficulty: 'blue' },
       { theme: 'Drafted #1 overall', players: ['Allen Iverson', 'Yao Ming', 'Dwight Howard', 'John Wall', 'Zion Williamson'], difficulty: 'purple' },
     ],
@@ -45,17 +49,17 @@ export const nbaConnectionsPuzzles: NbaConnectionsPuzzle[] = [
   {
     id: 'nbaconn-002',
     groups: [
-      { theme: 'Played for the Chicago Bulls', players: ['Derrick Rose', 'Joakim Noah', 'Jimmy Butler', 'Luol Deng', 'Scottie Pippen'], difficulty: 'yellow' },
+      { theme: 'Played for the Chicago Bulls (as of 2025-26)', players: ['Derrick Rose', 'Joakim Noah', 'Jimmy Butler', 'Luol Deng', 'Scottie Pippen'], difficulty: 'yellow' },
       { theme: '2,000+ career three-pointers', players: ['Stephen Curry', 'Ray Allen', 'Reggie Miller', 'James Harden', 'Klay Thompson'], difficulty: 'green' },
-      { theme: 'Born in France', players: ['Tony Parker', 'Rudy Gobert', 'Nicolas Batum', 'Boris Diaw', 'Evan Fournier'], difficulty: 'blue' },
+      { theme: 'Born in France', players: ['Victor Wembanyama', 'Rudy Gobert', 'Ian Mahinmi', 'Boris Diaw', 'Evan Fournier'], difficulty: 'blue' },
       { theme: '14,000+ career rebounds', players: ['Kareem Abdul-Jabbar', 'Elvin Hayes', 'Moses Malone', 'Tim Duncan', 'Kevin Garnett'], difficulty: 'purple' },
     ],
   },
   {
     id: 'nbaconn-003',
     groups: [
-      { theme: 'Played for the Golden State Warriors', players: ['Stephen Curry', 'Draymond Green', 'Chris Mullin', 'Andre Iguodala', 'Monta Ellis'], difficulty: 'yellow' },
-      { theme: 'Played for the New York Knicks', players: ['Patrick Ewing', 'Allan Houston', "Amar'e Stoudemire", 'Julius Randle', 'Derek Harper'], difficulty: 'green' },
+      { theme: 'Played for the Golden State Warriors (as of 2025-26)', players: ['Stephen Curry', 'Draymond Green', 'Chris Mullin', 'Andre Iguodala', 'Monta Ellis'], difficulty: 'yellow' },
+      { theme: 'Played for the New York Knicks (as of 2025-26)', players: ['Patrick Ewing', 'Allan Houston', "Amar'e Stoudemire", 'Julius Randle', 'Derek Harper'], difficulty: 'green' },
       { theme: 'Born in Canada', players: ['Jamal Murray', 'Shai Gilgeous-Alexander', 'Tristan Thompson', 'Dillon Brooks', 'Bennedict Mathurin'], difficulty: 'blue' },
       { theme: 'Drafted #2 overall', players: ['Ja Morant', 'Brandon Ingram', 'Victor Oladipo', 'Jalen Green', 'Marvin Bagley III'], difficulty: 'purple' },
     ],
@@ -63,10 +67,10 @@ export const nbaConnectionsPuzzles: NbaConnectionsPuzzle[] = [
   {
     id: 'nbaconn-004',
     groups: [
-      { theme: 'Played for the Boston Celtics', players: ['Larry Bird', 'Kevin McHale', 'Paul Pierce', 'Jayson Tatum', 'Jaylen Brown'], difficulty: 'yellow' },
-      { theme: 'Played for the Los Angeles Lakers', players: ['James Worthy', 'Pau Gasol', 'Anthony Davis', 'Byron Scott', 'Lamar Odom'], difficulty: 'green' },
+      { theme: 'Played for the Boston Celtics (as of 2025-26)', players: ['Larry Bird', 'Kevin McHale', 'Paul Pierce', 'Jayson Tatum', 'Jaylen Brown'], difficulty: 'yellow' },
+      { theme: 'Played for the Los Angeles Lakers (as of 2025-26)', players: ['James Worthy', 'Pau Gasol', 'Anthony Davis', 'Byron Scott', 'Lamar Odom'], difficulty: 'green' },
       { theme: 'Born in Africa', players: ['Joel Embiid', 'Hakeem Olajuwon', 'Dikembe Mutombo', 'Serge Ibaka', 'Pascal Siakam'], difficulty: 'blue' },
-      { theme: 'Played for the Sacramento Kings', players: ['Chris Webber', 'Peja Stojaković', 'Mike Bibby', 'DeMarcus Cousins', 'Jason Williams'], difficulty: 'purple' },
+      { theme: 'Played for the Sacramento Kings (as of 2025-26)', players: ['Chris Webber', 'Peja Stojaković', 'Mike Bibby', "De'Aaron Fox", 'Jason Williams'], difficulty: 'purple' },
     ],
   },
 ];
