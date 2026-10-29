@@ -1,0 +1,2 @@
+fences3-main: git worktree add -q /tmp/basef bd0c07bf7 && ln -s "$PWD/node_modules" /tmp/basef/node_modules && cd /tmp/basef && ONLY=simCompletionSlugs,simLeaderboardCaps,simReportRelay node scripts/runAllSims.mjs
+fences3-head: ONLY=simCompletionSlugs,simLeaderboardCaps,simReportRelay node scripts/runAllSims.mjs
