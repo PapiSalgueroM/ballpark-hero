@@ -1,0 +1,11 @@
+#!serve
+#!playwright
+# Release BT kit: 4 of the 6 request lines of Release BS's rc-BPk.txt (rBSg/.tmp-fx/bs), the lines of the BT areas (the US My Careers, the Front Offices, Soccer Connections and the daily save shape, Build Your XI and the player search box, What's New, the guides and search index, the weight rows) and the setup lines before them; 2 line(s) outside those areas left out: ratchet abort.
+# Release BS kit: 6 of the 19 request lines of Release BR's rc-BPk.txt (rBRg/.tmp-fx/br), the lines of the BS areas (Soccer Career, Club Manager and the manager games on its engine, Player Bingo, Conquest, Stat and Draft Detective, the US My Career save notice, What's New, the polls, the guide intro) and the setup lines before them; 13 line(s) outside those areas left out: tsc pf1 pf2 pf3 cover howto simAccessibility simTycoonHelp simIdleArena simTycoonPacks simNoRivalNames simTrustCopy vitest.
+# Release BP part two (Round BPH, finish-BPH.md). ROUND 1536 (first visit dialogs over the cookie banner): results-g/rc-1536.txt as is. Expected:
+# pf1 to pf3 0, cover and ratchet 1 "FIRED", abort 2 "ABORTED", expected, edge, lift and nobanner 1 "FIRED".
+# Proven on the merge m10 (e2e84aed) as rBPh-m10 and on the final head.
+expected: ONLY=/stadium-tycoon,/idle-arena,/wonderkid-factory,/build-your-xi,/soccer-conquest,/career-ladder,/football-grid,/club-manager PLAYFIRST_CONTROL=expected node scripts/playFirstVisitDialogs.mjs
+edge: ONLY=/stadium-tycoon,/idle-arena,/wonderkid-factory,/build-your-xi,/soccer-conquest,/career-ladder,/football-grid,/club-manager PLAYFIRST_CONTROL=edge node scripts/playFirstVisitDialogs.mjs
+lift: ONLY=/stadium-tycoon,/idle-arena,/wonderkid-factory,/build-your-xi,/soccer-conquest,/career-ladder,/football-grid,/club-manager PLAYFIRST_CONTROL=lift node scripts/playFirstVisitDialogs.mjs
+nobanner: ONLY=/stadium-tycoon,/idle-arena,/wonderkid-factory,/build-your-xi,/soccer-conquest,/career-ladder,/football-grid,/club-manager PLAYFIRST_CONTROL=nobanner node scripts/playFirstVisitDialogs.mjs
