@@ -1,6 +1,6 @@
 import { useRef, useState } from 'react';
 import { useGameCompletion } from '@/hooks/useGameCompletion';
-import { createLeague, LEGACY_SAVE_KEY, readLeagueSave, reduceLeague, SAVE_KEY, SLUG, type LeagueAction, type LeagueState } from '@/lib/aussieRulesLeague';
+import { createLeague, CURRENT_CLUB_SET, LEGACY_SAVE_KEY, readLeagueSave, reduceLeague, SAVE_KEY, SLUG, type LeagueAction, type LeagueState } from '@/lib/aussieRulesLeague';
 
 /** Round 1014: the full season's state lives in memory and the whole of it is the save. */
 function load(): { loaded: LeagueState | null; notice: string | null } {
@@ -24,7 +24,8 @@ export function useAussieRulesLeague() {
     catch { setStorageNotice('Your season is running here, but this browser could not save it.'); }
   };
   const start = (seed: number, clubId: string): boolean => {
-    const next = createLeague(seed, clubId);
+    // Round 1572: a new career runs the real AFL clubs; a saved career keeps the set it was started with.
+    const next = createLeague(seed, clubId, CURRENT_CLUB_SET);
     if (!next) return false;
     stateRef.current = next; setState(next); write(next);
     try { localStorage.removeItem(LEGACY_SAVE_KEY); } catch { /* the legacy save stays; the league save wins on the next visit */ }

@@ -8,7 +8,7 @@ import { buildDraftNight } from '@/lib/draftNight';
 import { PREPARATIONS, ROLE_LABELS, ROLES, TACTICS, type Score, type Tactic } from '@/lib/aussieRulesManager';
 import { EXIT_LABELS } from '@/lib/aussieRulesFormat';
 import {
-  CLUBS, clubFull, clubOf, clubShort, draftPool, hubTiles, lastWeek, leagueLadder, leaguePlayer, myFinalsTie, opponentPlays, ordinal, pickRefusal, picksLeft, retirees,
+  CLUBS, clubFull, clubIdentities, clubOf, clubShort, CURRENT_CLUB_SET, draftPool, hubTiles, lastWeek, leagueLadder, leaguePlayer, myFinalsTie, opponentPlays, ordinal, pickRefusal, picksLeft, retirees,
   ROUNDS, scoutedPotential, tieName, type LeagueAction, type LeagueState,
 } from '@/lib/aussieRulesLeague';
 import styles from './AussieRulesManagerBoard.module.css';
@@ -16,18 +16,29 @@ import own from './AussieRulesLeagueBoard.module.css';
 
 type Panel = 'match' | 'ladder' | 'squad' | 'finals' | 'club' | 'draft';
 const score = (value: Score) => `${value.goals}.${value.behinds} (${value.total})`;
-const TIER_NAMES: Record<number, string> = { 1: 'Contenders', 2: 'Finals hopefuls', 3: 'Middle of the pack', 4: 'Rebuilding', 5: 'Battlers' };
 /** The seed is drawn when you pick a club, never at render, so the menu itself is the same on every visit. */
 const newSeed = () => Math.floor(Math.random() * 4294967295) + 1;
+/** Round 1572: the menu's groups are the 2026 ladder bands, read off the tier sizes (never "Battlers" on a real club). */
+function bands(): { tier: number; heading: string }[] {
+  const out: { tier: number; heading: string }[] = [];
+  for (let tier = 1, low = 0; low < CLUBS.length; tier += 1) {
+    const size = CLUBS.filter(club => club.tier === tier).length;
+    if (!size) break;
+    out.push({ tier, heading: `Finished ${ordinal(low + 1)} to ${ordinal(low + size)} in 2026` });
+    low += size;
+  }
+  return out;
+}
 
 function Menu({ onPick, notice }: { onPick: (clubId: string) => void; notice: string | null }) {
+  const clubs = clubIdentities(CURRENT_CLUB_SET);
   return <section className={styles.board} data-arl-phase="menu">
     <h2>Choose your club</h2>
-    <p className={styles.muted}>Eighteen fictional clubs and generated players. 23 rounds, then the finals: a wildcard week for 7th to 10th, then the final eight, a Grand Final, and a draft into next season.</p>
-    {[1, 2, 3, 4, 5].map(tier => <div key={tier} className={own.tierGroup}>
-      <h3>{TIER_NAMES[tier]}</h3>
-      <div className={styles.clubs}>{CLUBS.filter(club => club.tier === tier).map(club => <button key={club.id} className={styles.tile} data-arl-club={club.id} onClick={() => onPick(club.id)}>
-        <strong>{club.place} {club.nickname}</strong><span>{TACTICS.find(value => value.id === club.style)!.label} style · 36 players</span>
+    <p className={styles.muted}>The 18 AFL clubs of 2026, by name. Every player, rating and result is made up by this game. 23 rounds, then the finals: a wildcard week for 7th to 10th, then the final eight, a Grand Final, and a draft into next season.</p>
+    {bands().map(band => <div key={band.tier} className={own.tierGroup}>
+      <h3>{band.heading}</h3>
+      <div className={styles.clubs}>{clubs.filter(club => club.tier === band.tier).map(club => <button key={club.id} className={styles.tile} data-arl-club={club.id} onClick={() => onPick(club.id)}>
+        <strong>{club.full}</strong><span>{TACTICS.find(value => value.id === club.style)!.label} style in this game · 36 players</span>
       </button>)}</div>
     </div>)}
     {notice && <p role="status" className={styles.muted}>{notice}</p>}
@@ -136,7 +147,7 @@ function ClubPanel({ state }: { state: LeagueState }) {
   const rows = [...state.history].reverse();
   return <div className={styles.card}><h3>Honour board</h3>
     {rows.length ? <ul className={own.list}>{rows.map(row => <li key={row.season} data-arl-history={row.season}>
-      <strong>Season {row.season}</strong>: {ordinal(row.place)} on the ladder ({row.w}-{row.d}-{row.l}), {EXIT_LABELS[row.exit].toLowerCase()}. Premiers: {clubFull(state, row.premier)}, beating {clubShort(state, row.runnerUp)} {score(row.gf.home === row.premier ? row.gf.homeScore : row.gf.awayScore)} to {score(row.gf.home === row.premier ? row.gf.awayScore : row.gf.homeScore)}. Most goals: {row.leadingGoalkicker.name} ({clubShort(state, row.leadingGoalkicker.club)}), {row.leadingGoalkicker.goals}.
+      <strong>Season {row.season}</strong>: {ordinal(row.place)} on the ladder ({row.w}-{row.d}-{row.l}), {EXIT_LABELS[row.exit].toLowerCase()}. Premiers: {clubShort(state, row.premier)}, beating {clubShort(state, row.runnerUp)} {score(row.gf.home === row.premier ? row.gf.homeScore : row.gf.awayScore)} to {score(row.gf.home === row.premier ? row.gf.awayScore : row.gf.homeScore)}. Most goals: {row.leadingGoalkicker.name} ({clubShort(state, row.leadingGoalkicker.club)}), {row.leadingGoalkicker.goals}.
     </li>)}</ul> : <p className={styles.muted}>Your first season is under way. Every season you finish goes up here.</p>}
   </div>;
 }
@@ -180,7 +191,7 @@ function StatusCard({ state, act }: { state: LeagueState; act: (action: LeagueAc
     const gf = `${score(last.gf.home === last.premier ? last.gf.homeScore : last.gf.awayScore)} to ${score(last.gf.home === last.premier ? last.gf.awayScore : last.gf.homeScore)}`;
     return <div className={styles.card} data-arl-seasonover>
       {won ? <VictoryMoment><p data-arl-premiers><strong>Premiers!</strong> {state.clubName} win the Grand Final, {gf}.</p></VictoryMoment>
-        : <p data-arl-premier>{clubFull(state, last.premier)} are the premiers, beating {clubShort(state, last.runnerUp)} {gf}.</p>}
+        : <p data-arl-premier>{clubShort(state, last.premier)} are the premiers, beating {clubShort(state, last.runnerUp)} {gf}.</p>}
       <p className={styles.muted}>You finished {ordinal(last.place)} ({last.w}-{last.d}-{last.l}). {EXIT_LABELS[last.exit]}. Most goals this season: {last.leadingGoalkicker.name}, {last.leadingGoalkicker.goals}.</p>
       <button className={styles.action} data-arl-next onClick={() => act({ type: 'next' })}>Into the summer</button></div>;
   }

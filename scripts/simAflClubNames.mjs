@@ -31,6 +31,17 @@
  *     and masks to the same game, and four wrong ways to write a set are refused.
  *     Controls oldsave (the validator demands the field) and mixed (clubShort
  *     reads the real set whatever the save says).
+ *   4 screens: runs src/test/aussieRulesClubNames.test.tsx through vitest (found
+ *     by walk up, so it runs from a worktree): (i) the menu's 18 names under the
+ *     five 2026 band headings (reported as 4i); (ii) a real career at prepare,
+ *     after a match, finals week 1, season over and the draft after one pick, every
+ *     club string pulled from where it sits (header, hub, score card, scoring
+ *     events, results, ladder, finals, honour board, premiers line, draft card) is
+ *     on the two sourced list, full form on the header and score card, short form
+ *     elsewhere, and no panel's text holds an invented place; (iii) the same for a
+ *     career with no set, the other way round. Control screen (a vitest swap
+ *     through NO_DOUBLE_SWAP: the ladder row prints the raw id): (ii) fails on an
+ *     assertion while (i) passes.
  *
  * Every section prints its counts, so a pass on empty input cannot happen. The
  * run ends on one summary line and exits 1 on any failure.
@@ -45,16 +56,17 @@
  * seeds 1, 12 and 24 by the three clubs, critic advice 10).
  */
 import fs from 'node:fs';
+import { spawnSync } from 'node:child_process';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
-import { bundle, fleetCareer, FLEET_CLUBS, FLEET_SEEDS, maskedHash, MORE, play, rawHash, SHORT_SEEDS, sha } from './lib/aflClubNames1572.mjs';
+import { bundle, fleetCareer, FLEET_CLUBS, FLEET_SEEDS, lf, maskedHash, MORE, play, rawHash, SHORT_SEEDS, sha } from './lib/aflClubNames1572.mjs';
 
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const CONTROL = process.env.AFL_NAMES_CONTROL || '';
 const LONG = process.env.AFL_NAMES_LONG === '1';
 const started = Date.now();
 
-const LEAGUE = 'src/lib/aussieRulesLeague.ts', DATA = 'src/data/aflClubs2026.ts';
+const LEAGUE = 'src/lib/aussieRulesLeague.ts', DATA = 'src/data/aflClubs2026.ts', BOARD = 'src/components/aussie-rules-manager/AussieRulesLeagueBoard.tsx';
 /* [file, anchor, replacement, target section, independent section] */
 const CONTROLS = {
   /* Critic corrections 3 and 4: anchors that occur once, and section 3 as the independent section. */
@@ -68,14 +80,16 @@ const CONTROLS = {
   oldsave: [LEAGUE, 'const keys = !named ? TOP_KEYS :', 'const keys = false ? TOP_KEYS :', '3', '0'],
   /* Critic correction 2: clubShort reads the real set whatever the save says; section 3 reads clubShort over 18 ids and the hub's Next match sub. */
   mixed: [LEAGUE, 'identityIn(setOf(state), id)?.short', "identityIn('afl2026', id)?.short", '3', '0'],
+  /* A vitest control (sixth field): the board's ladder row prints the raw id. Test (ii) must fail on an assertion, test (i) pass. */
+  screen: [BOARD, '{index + 1}. {clubShort(state, row.clubId)}', '{index + 1}. {row.clubId}', '4', '4i', 'vitest'],
 };
 if (CONTROL && !CONTROLS[CONTROL]) { console.error(`unknown control ${CONTROL}`); process.exit(2); }
-const SECTIONS = ['0', '1', '2a', '2b', '3'];
+const SECTIONS = ['0', '1', '2a', '2b', '3', '4', '4i'];
 const RUN = CONTROL ? new Set([CONTROLS[CONTROL][3], CONTROLS[CONTROL][4]]) : new Set(SECTIONS);
 
 const { L } = await bundle(ROOT, {
   entries: ["export * from './src/lib/aussieRulesLeague.ts';", "export * as AFL from './src/data/aflClubs2026.ts';"],
-  patch: CONTROL ? CONTROLS[CONTROL].slice(0, 3) : null,
+  patch: CONTROL && !CONTROLS[CONTROL][5] ? CONTROLS[CONTROL].slice(0, 3) : null,
 });
 const RECORD = JSON.parse(fs.readFileSync(path.join(ROOT, 'scripts/data/aussieV2SaveFixture1572.json'), 'utf8'));
 const LEDGER = JSON.parse(fs.readFileSync(path.join(ROOT, 'scripts/data/aflClubNames2026.json'), 'utf8'));
@@ -270,6 +284,61 @@ if (RUN.has('3')) guard('3', () => {
   check(hubbed >= 8 && hubOk === hubbed, `${hubOk} of ${hubbed} saves with a match show "v <invented place>" on the hub's Next match`);
   check(twins === n, `${twins} of ${n} real twins (the same save under the real names, built by this harness) load, round trip and mask to the same game`);
   check(refused === n * 4, `${refused} of ${n * 4} wrong ways to write a set are refused (clubSet fictional, afl2026 over invented names, one club renamed, an invented clubName)`);
+});
+
+/* ---------- 4. screens (vitest) ---------- */
+/* Runs src/test/aussieRulesClubNames.test.tsx the simAussieRulesLeagueBoard way. Test (i) reports under 4i, every other test under 4. */
+const TEST_FILE = 'src/test/aussieRulesClubNames.test.tsx';
+const TESTS = {
+  menu: '(i) a new career picks from the 18 AFL clubs by name, under the five 2026 ladder bands',
+  real: '(ii) a real club career prints only two sourced club names on every panel',
+  fake: '(iii) a career with no club set prints only its own invented names',
+};
+if (RUN.has('4') || RUN.has('4i')) guard('4', () => {
+  head('4', `screens: ${TEST_FILE} through vitest${CONTROL ? ` (control ${CONTROL})` : ''}`);
+  failures.set('4i', failures.get('4i') || 0);
+  const failIn = (sec, m) => { failures.set(sec, (failures.get(sec) || 0) + 1); console.error(`  FAIL [${sec}]: ${m}`); };
+  const vitestBin = [ROOT, path.resolve(ROOT, '../../..')].map(dir => path.join(dir, 'node_modules/vitest/vitest.mjs')).find(file => fs.existsSync(file));
+  if (!vitestBin) { fail('vitest is not installed'); return; }
+  const env = { ...process.env, NO_COLOR: '1', FORCE_COLOR: '0', DEBUG_PRINT_LIMIT: '1200' };
+  delete env.NO_DOUBLE_SWAP;
+  const args = [vitestBin, 'run', TEST_FILE, '--reporter=verbose', '--testTimeout=300000', '--hookTimeout=120000'];
+  let folder = null;
+  const spec = CONTROL ? CONTROLS[CONTROL] : null;
+  if (spec) {
+    const source = lf(fs.readFileSync(path.join(ROOT, spec[0]), 'utf8'));
+    const count = source.split(spec[1]).length - 1;
+    if (count !== 1) { console.error(`control ${CONTROL} cannot run: its anchor occurs ${count} times in ${spec[0]}`); process.exit(2); }
+    const changed = source.replace(spec[1], spec[2])
+      .replace("'./AussieRulesManagerBoard.module.css'", "'@/components/aussie-rules-manager/AussieRulesManagerBoard.module.css'")
+      .replace("'./AussieRulesLeagueBoard.module.css'", "'@/components/aussie-rules-manager/AussieRulesLeagueBoard.module.css'");
+    if (source.replace(spec[1], spec[2]) === source) { console.error(`control ${CONTROL} changed nothing`); process.exit(2); }
+    fs.mkdirSync(path.join(ROOT, '.sim-control'), { recursive: true });
+    folder = fs.mkdtempSync(path.join(ROOT, '.sim-control/afl-club-names-'));
+    const copy = path.join(folder, path.basename(spec[0]));
+    fs.writeFileSync(copy, changed);
+    env.NO_DOUBLE_SWAP = JSON.stringify({ ['@/' + spec[0].replace(/^src\//, '').replace(/\.tsx?$/, '')]: copy });
+    args.push('-t', `${TESTS.real.replace(/[()]/g, '.')}|${TESTS.menu.replace(/[()]/g, '.')}`);
+  }
+  const t0 = Date.now();
+  const run = spawnSync(process.execPath, args, { cwd: ROOT, env, encoding: 'utf8', timeout: 1200000 });
+  if (folder) fs.rmSync(folder, { recursive: true, force: true });
+  const output = `${run.stdout || ''}\n${run.stderr || ''}`;
+  const lines = output.split('\n');
+  for (const line of lines.filter(l => /set pulled:/.test(l))) console.log(`  ${line.trim()}`);
+  if (run.error || !output.includes('aussieRulesClubNames.test.tsx') || /Failed to resolve|Cannot find module|Unhandled Errors/.test(output)) { fail(`vitest did not run cleanly: ${String(run.error || '')} ${output.slice(-1500)}`); return; }
+  const failed = name => lines.some(l => (l.includes('FAIL ') || l.includes('×')) && l.includes(name));
+  const passed = name => !failed(name) && lines.some(l => l.includes('✓') && l.includes(name));
+  console.log(`  vitest exit ${run.status} in ${((Date.now() - t0) / 1000).toFixed(1)} s`);
+  if (spec) {
+    if (failed(TESTS.real) && /AssertionError|expect\(/.test(output)) failIn('4', `${TESTS.real} failed on an assertion`); else console.log(`  ok: (control) ${TESTS.real} did not fail`);
+    if (passed(TESTS.menu)) console.log(`  ok: ${TESTS.menu} passed`); else failIn('4i', `${TESTS.menu} did not pass`);
+    return;
+  }
+  const names = Object.values(TESTS);
+  check(run.status === 0 && new RegExp(`Tests\\s+${names.length} passed`).test(output), `all ${names.length} screen tests passed (vitest exit ${run.status})`);
+  for (const [key, name] of Object.entries(TESTS)) { if (passed(name)) console.log(`  ok: ${name}`); else { if (key === 'menu') failIn('4i', `${name} failed`); else fail(`${name} failed`); } }
+  if (run.status !== 0) console.error(output.slice(-3000));
 });
 
 /* ---------- summary ---------- */

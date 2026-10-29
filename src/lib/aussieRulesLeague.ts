@@ -1,5 +1,5 @@
 /**
- * Round 1014: Aussie Rules Manager, the full season. Eighteen fictional clubs,
+ * Round 1014: Aussie Rules Manager, the full season. Eighteen clubs (the real AFL ones since Round 1572),
  * 23 home and away rounds, the finals (the 2026 wildcard week, then the final
  * eight), a Grand Final, and a summer of ageing, retirements and a national
  * draft into season two and beyond.
