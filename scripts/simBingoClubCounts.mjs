@@ -27,6 +27,14 @@
         write and existingChecked lists. The record's committed `candidates`
         must equal what the rule yields. Printed, not asserted: the classes
         this round does not judge (owed by number in the record).
+     2. identity, BASE against the tree: the pool, seasonStats and clubYears
+        (the honour tiles' input) byte equal; every man's club history is
+        BASE's plus his record additions and nothing else; every criterion's
+        support is equal except the club squares, where every man who moves
+        is in the record (each move printed, before and after).
+     3. verdicts: Morton counts exactly 4 on the tree, fits 4+ and is not a
+        One-club man; every recorded man's count, 4+ and One-club verdicts on
+        BASE and on the tree are the record's before and after.
      4. completeness, a ratchet: every candidate in exactly one of additions,
         agrees, partial and pending; no name twice; pending may only shrink
         (PENDING_MAX below is lowered by every batch that judges men).
@@ -44,6 +52,12 @@
      BINGO_CLUBS_CONTROL=onesource one sourced entry loses a source: red.
      BINGO_CLUBS_CONTROL=pending   one judged man put back in pending, so
                                    pending grows past PENDING_MAX: red.
+     BINGO_CLUBS_CONTROL=leak      one club added in memory to a man who is
+                                   not in the record: red.
+     BINGO_CLUBS_CONTROL=nomorton  Morton dropped from the derived file fed
+                                   to the tree's lib: red.
+     BINGO_CLUBS_CONTROL=noapply   the apply call line patched out of a copy
+                                   of the tree's playerBingo.ts: red.
      BINGO_CLUBS_CONTROL=handedit  one byte of the derived file changed: red.
      FIXTURE_CONTROL=cap           the stub drops the range and the 1,000 row
                                    cap: at least one man's history changes.
@@ -228,6 +242,95 @@ if (WRITE) {
   fs.writeFileSync(path.join(ROOT, RECORD), JSON.stringify(record, null, 2) + '\n');
 }
 if (JSON.stringify(record.owed) !== JSON.stringify(owedNow)) fail('the record\'s owed lists differ from what the fixture yields (rerun with --write-candidates and commit)');
+
+/* ---------------------------------------------------------------- 2 */
+section = '2';
+console.log('2) Identity, BASE against the tree');
+const APPLY_ANCHOR = '    applyClubAdditions(clubHistory, pool, clubAdditions.add as ClubAddition[],';
+let headSource = read('src/lib/playerBingo.ts');
+const headExtra = {};
+if (CONTROL === 'noapply') {
+  const lines = headSource.split('\n');
+  const at = lines.findIndex(l => l.startsWith(APPLY_ANCHOR));
+  if (at < 0) abort('=noapply: the apply call line is not in src/lib/playerBingo.ts');
+  lines.splice(at, 1);
+  headSource = lines.join('\n');
+  changed('the apply call patched out of a copy of playerBingo.ts');
+}
+if (CONTROL === 'nomorton') {
+  const json = JSON.parse(read('src/data/bingoClubAdditions.json'));
+  const kept = json.add.filter(a => a.n !== 'Tyler Morton');
+  if (kept.length === json.add.length) abort('=nomorton: Tyler Morton is not in src/data/bingoClubAdditions.json');
+  headExtra['@/data/bingoClubAdditions.json'] = JSON.stringify({ ...json, add: kept });
+  changed('Tyler Morton removed from the derived file');
+}
+const head = await loadBingoLib({ root: ROOT, libSource: headSource, label: 'head', tmp, extraSources: headExtra });
+const headData = (await load(head)).data;
+const derivedNow = JSON.parse(read('src/data/bingoClubAdditions.json'));
+const addedBy = new Map(derivedNow.add.map(a => [a.n, a.clubs.map(c => base.clubKey(c))]));
+if (CONTROL === 'leak') {
+  const victim = headData.pool.find(p => !addedBy.has(p.name));
+  headData.clubHistory.get(victim.name)?.add('qzx leaked club');
+  changed(`one added club applied to ${victim.name}, who is not in the record`);
+}
+const asJson = map => JSON.stringify([...map.entries()].map(([k, v]) => [k, v instanceof Set ? [...v].sort() : v]).sort());
+if (JSON.stringify(headData.pool) !== JSON.stringify(baseData.pool)) fail('the pool differs from BASE (every field, in order)');
+if (asJson(headData.seasonStats) !== asJson(baseData.seasonStats)) fail('seasonStats differ from BASE');
+if (asJson(headData.clubYears) !== asJson(baseData.clubYears)) fail('clubYears (the honour tiles\' input) differ from BASE');
+let movedHistories = 0;
+for (const p of baseData.pool) {
+  const want = new Set(baseData.clubHistory.get(p.name) ?? []);
+  for (const k of addedBy.get(p.name) ?? []) want.add(k);
+  const got = [...(headData.clubHistory.get(p.name) ?? [])].sort();
+  if (JSON.stringify(got) !== JSON.stringify([...want].sort())) fail(`${p.name}: club history [${got.join(', ')}] is not BASE's plus his record additions [${[...want].sort().join(', ')}]`);
+  if (got.length !== (baseData.clubHistory.get(p.name)?.size ?? 0)) movedHistories += 1;
+}
+const CLUB_SQUARES = id => id === 'one-club-man' || id === 'journeyman-4-clubs' || id.startsWith('club-');
+const baseCriteria = base.buildCriteria(baseData);
+const headCriteria = head.buildCriteria(headData);
+const verdictMoves = [];
+if (JSON.stringify(baseCriteria.map(c => c.id)) !== JSON.stringify(headCriteria.map(c => c.id))) fail('the criterion list differs from BASE');
+for (const hc of headCriteria) {
+  const bc = baseCriteria.find(c => c.id === hc.id);
+  if (!bc) continue;
+  const gained = hc.support.filter(n => !bc.support.includes(n));
+  const lost = bc.support.filter(n => !hc.support.includes(n));
+  if (!gained.length && !lost.length) continue;
+  if (!CLUB_SQUARES(hc.id)) fail(`${hc.id} support moved though it is not a club square (gained ${gained.join(', ')}; lost ${lost.join(', ')})`);
+  for (const n of [...gained, ...lost]) {
+    if (!addedBy.has(n)) fail(`${hc.id}: ${n} moved but is not in the record`);
+    verdictMoves.push(`${n} ${gained.includes(n) ? 'now fits' : 'no longer fits'} ${hc.label} (support ${bc.support.length} -> ${hc.support.length})`);
+  }
+}
+console.log(`   pool, seasonStats and clubYears equal to BASE; ${movedHistories} club histories grew; ${verdictMoves.length} club square verdicts moved`);
+for (const m of verdictMoves) console.log('     ' + m);
+const support = (criteria, id) => criteria.find(c => c.id === id)?.support.length;
+console.log(`   support on the fixture: One-club man ${support(baseCriteria, 'one-club-man')} -> ${support(headCriteria, 'one-club-man')}, Played for 4+ clubs ${support(baseCriteria, 'journeyman-4-clubs')} -> ${support(headCriteria, 'journeyman-4-clubs')}`);
+
+/* ---------------------------------------------------------------- 3 */
+section = '3';
+console.log('3) Verdicts');
+const verdictOf = (lib, data, name) => {
+  const p = data.pool.find(x => x.name === name);
+  if (!p) return null;
+  const criteria = lib.buildCriteria(data);
+  return {
+    count: data.clubHistory.get(name)?.size ?? 0,
+    fourPlus: criteria.find(c => c.id === 'journeyman-4-clubs').test(p, data),
+    oneClub: criteria.find(c => c.id === 'one-club-man').test(p, data),
+  };
+};
+const mortonHead = verdictOf(head, headData, 'Tyler Morton');
+console.log(`   tree Tyler Morton: [${[...(headData.clubHistory.get('Tyler Morton') ?? [])].join(', ')}], count ${mortonHead?.count}, 4+ ${mortonHead?.fourPlus}, one club ${mortonHead?.oneClub}`);
+if (!mortonHead || mortonHead.count !== 4 || !mortonHead.fourPlus || mortonHead.oneClub) fail('Tyler Morton must count exactly 4 clubs on the tree, fit Played for 4+ clubs and not be a One-club man');
+for (const e of [...record.additions, ...record.agrees]) {
+  if (!e.verdict) { fail(`${e.name} has no verdict in the record`); continue; }
+  const b = verdictOf(base, baseData, e.name);
+  const h = verdictOf(head, headData, e.name);
+  if (JSON.stringify(b) !== JSON.stringify(e.verdict.before)) fail(`${e.name}: BASE gives ${JSON.stringify(b)}, the record's before says ${JSON.stringify(e.verdict.before)}`);
+  if (JSON.stringify(h) !== JSON.stringify(e.verdict.after)) fail(`${e.name}: the tree gives ${JSON.stringify(h)}, the record's after says ${JSON.stringify(e.verdict.after)}`);
+}
+console.log(`   ${record.additions.length + record.agrees.length} recorded verdicts checked against BASE and the tree`);
 
 /* ---------------------------------------------------------------- 4 */
 section = '4';

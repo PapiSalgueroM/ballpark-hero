@@ -29,7 +29,9 @@ const source = heldLib.toString('utf8').replaceAll('\r\n', '\n');
    Personal honours, identity rules and all existing executable controls are held. */
 /* Release BS fix BS-mix-1 and BS-mix-2: pin retaken once more for the birth year age tiles and the removed
    goals in under 30 matches tile; honours, identity rules and the executable controls are held. */
-assert.equal(hash(Buffer.from(source)), '032C39B452AEC76DA883E8531457601644DDDFDD438197D10D1461922D2BB224');
+/* Round 1571: pin retaken for the club additions bind (clubHistory only, never clubYears); honours,
+   identity rules and the executable controls are held. */
+assert.equal(hash(Buffer.from(source)), 'F2669695C92B174046ED3417017454E940DAE16874186345884077BF483B2546');
 assert.equal(hash(heldTest), '0AE18AE01A012509200926DB6F66BA115C81AF718FD07B308299DFE21EB4EB72');
 writeFileSync(path.join(out, 'source.raw.ts'), heldLib);
 writeFileSync(path.join(out, 'source.LF.ts'), source);
