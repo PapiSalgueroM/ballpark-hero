@@ -1,0 +1,13 @@
+A) the detection SQL and its JS twin return the same rows
+  ok: 1714 fixture rows loaded
+  ok: the SQL and the JS twin agree on all 22 rows (20 S2, 2 S1)
+  ok: the JS twin returns the fixture's committed expected list
+B) the cache purge removes exactly the stale Arsenal yeses, all or nothing
+  ok: the generator lists the 2 stale yeses and holds the surname only key
+  FAIL: the form raised (Round 1584 purge: the payload checksum does not match, nothing removed) and removed 0 rows: none
+  ok: every row left in the table is byte for byte as it was
+  ok: every removed row still matched the hash Q6 read
+  ok: all or nothing: 0 of 2
+
+control tamper FIRED: tamper: one payload character changed after its checksum
+rehearseClubNamesakes1584: 1 finding(s).

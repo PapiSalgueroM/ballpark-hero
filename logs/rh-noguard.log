@@ -1,0 +1,14 @@
+A) the detection SQL and its JS twin return the same rows
+  ok: 1714 fixture rows loaded
+  ok: the SQL and the JS twin agree on all 22 rows (20 S2, 2 S1)
+  ok: the JS twin returns the fixture's committed expected list
+B) the cache purge removes exactly the stale Arsenal yeses, all or nothing
+  ok: the generator lists the 2 stale yeses and holds the surname only key
+  ok: the form ran and removed exactly the 2 stale yeses
+  ok: every row left in the table is byte for byte as it was
+  FAIL: removed although it no longer matched its read: soccer-grid|aleksandr filtsov|played for arsenal|russia
+  ok: all or nothing: 2 of 2
+  ok: a second run raises (0 of 2 still match) and changes nothing
+
+control noguard FIRED: noguard: aleksandr filtsov|played for arsenal|russia edited after the Q6 read; noguard: the per row hash guard stripped from the form
+rehearseClubNamesakes1584: 1 finding(s).

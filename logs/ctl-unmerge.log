@@ -1,0 +1,19 @@
+D) the detection finds the merged club on the fixture
+  FAIL: the mirror returns 16 rows, the committed list holds 22
+  FAIL: Arsenal FC is not flagged at S2 Arsenal FC 2010 Argentina, S2 Arsenal FC 2011 Argentina, S2 Arsenal FC 2015 Argentina, S2 Arsenal FC 2016 Argentina, S1 Arsenal FC 2010, S1 Arsenal FC 2011
+  FAIL: S1 flags nothing
+  ok: the quartile interpolates as percentile_cont does (1, 2, 3, 4 gives 1.75)
+G) the grid rule changes only the (Arsenal, namesake) cells
+  ok: the function excludes exactly the 7 strings gridNamesakes.json sources
+  ok: 100 club labels by 342 stint club strings; the Arsenal label reads "Played for Arsenal"
+  ok: 7 cells changed, every one ("Arsenal", a club with an excluded part)
+  ok: each of the 7 excluded strings no longer satisfies the Arsenal label
+  ok: no cell went from no to yes (the map only removes)
+  ok: London stays matched: Arsenal FC, U21, U18 and a split season
+  ok: no label lost its last matching club
+  ok: the mirror agrees with the function on all 34200 cells
+N) every excluded string stands on two hosts
+  ok: 7 strings, each on two registrable hosts, no wiki, at most one Transfermarkt, url, date and summary
+
+control unmerge FIRED: unmerge: 33 Arsenal FC rows of named candidates removed by id, Arsenal FC left the list
+simClubNamesakes: 3 finding(s).
