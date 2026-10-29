@@ -1,0 +1,6 @@
+tsc: node_modules/.bin/tsc --noEmit -p tsconfig.app.json
+vitest-loyalty: node_modules/.bin/vitest run src/test/soccerCareerLoyaltyUncut.test.ts src/test/soccerCareerLoyalty.test.ts src/test/soccerCareerLoyalty.engine.test.ts src/test/soccerCareerLoyaltyView.test.ts src/test/soccerCareerContracts.test.ts src/test/eventChoiceAfterReload.test.ts --testTimeout=300000 --hookTimeout=120000
+simSoccerCareerLoyalty: node scripts/simSoccerCareerLoyalty.mjs
+simCareerProgramme: node scripts/simCareerProgramme.mjs
+simSoccerContractMoves: node scripts/simSoccerContractMoves.mjs
+simSoccerVeteranTalks: node scripts/simSoccerVeteranTalks.mjs
