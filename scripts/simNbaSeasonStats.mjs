@@ -134,7 +134,10 @@
                     last run of old rows (works on rows grouped by
                     club, as 9b's plant is; breaks on a real save)    -> 9 (9f alone)
      carried        the league carries a count across plays in one
-                    process                                          -> 9 (9e alone)
+                    process                                          -> 2 and 9 (9e alone in 9)
+                    (section 2 holds the same kind of thing on the
+                    league without its block and awards, so it goes
+                    red too; 9e is the one that holds them with it)
 
    Run: node scripts/simNbaSeasonStats.mjs
    The base comparison (9d): NBA_STATS_BASE=<checkout of the commit before Round 1566> node scripts/simNbaSeasonStats.mjs
@@ -176,7 +179,7 @@ const EXPECT = {
   named: [9],
   /* added by Round 1566's fix pass: 9f (a real old save) and 9e (byte stable for one seed) each get a control */
   grouped: [9],
-  carried: [9],
+  carried: [2, 9],
 };
 if (CONTROL && !EXPECT[CONTROL]) {
   console.error(`NBA_STATS_CONTROL=${CONTROL} is not a control this harness knows (${Object.keys(EXPECT).join(', ')})`);
@@ -311,7 +314,8 @@ const CONTROL_FILE_SWAPS = {
   },
   /* Round 1566's fix pass. grouped: a conversion that only works on rows grouped by club, which 9b's plant (made by the
      expand) always is and a real old save (rows in game order) is not, so only 9f can see it. carried: the league
-     carries state from one play to the next in the same process, which only 9e's two plays of one seed can see. */
+     carries state from one play to the next in the same process, which 9e sees on the league with its block and its
+     awards, and section 2 on the league without them. */
   grouped: {
     'foStatsCodec.ts': [['  if (foReadNamed(c, v)) return foPack(c, v);', '  if (foReadNamed(c, v)) { const p = foPack(c, v); const runs: Record<string, Record<string, FoSavedLine>> = {}; let prev = \'\'; for (const l of Object.values(v.lines)) { if (l.team !== prev) runs[l.team] = {}; runs[l.team][l.id] = p.lines[l.team][l.id]; prev = l.team; } return { ...p, lines: runs }; }']],
   },
@@ -1084,7 +1088,13 @@ for (const [n, s] of [...bySection.entries()].sort((a, b) => a[0] - b[0])) {
 if (CONTROL) {
   const red = [...bySection.entries()].filter(([, s]) => s.bad > 0).map(([n]) => n).sort((a, b) => a - b);
   const want = EXPECT[CONTROL];
-  for (const f of fails.slice(0, 6)) console.log('   red: ' + f);
+  /* the first three reds of each section, so a control's red in a later section is named, not cut off */
+  const shown = new Map();
+  for (const f of fails) {
+    const k = f.slice(0, f.indexOf(']') + 1);
+    if ((shown.get(k) ?? 0) < 3) console.log('   red: ' + f);
+    shown.set(k, (shown.get(k) ?? 0) + 1);
+  }
   if (red.join(',') === want.join(',')) {
     console.log(`control "${CONTROL}": section${want.length === 1 ? '' : 's'} ${want.join(' and ')} went red as expected (${fails.length} failures) and nothing else moved, the check works. Exiting non zero because the checks did fail.`);
     process.exit(1);
