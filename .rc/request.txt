@@ -1,0 +1,14 @@
+#!serve
+#!playwright
+#!serial
+weight: SWEEP_OFFLINE=1 ENGINES=chromium node scripts/sweepWeight.mjs > /tmp/w.txt 2>&1; s=$?; grep -E "front-office" /tmp/w.txt | head -6; tail -4 /tmp/w.txt; exit $s
+card: ENGINES=chromium node scripts/playFoSeasonCard.mjs
+nflwalk: ENGINES=chromium node scripts/playNflSeasonStats.mjs
+named-again: mkdir -p .rc/nbb9 && git archive 5d1198389 src | tar -x -C .rc/nbb9 && NBA_STATS_BASE=.rc/nbb9 NBA_STATS_BASE_LABEL=5d1198389 NBA_STATS_RECORD_NAMED=scripts/data/nbaNamedBlockFixture.json node scripts/simNbaSeasonStats.mjs; a=$?; git diff --stat --exit-code scripts/data/nbaNamedBlockFixture.json; b=$?; git checkout -- scripts/data; echo "REREC named record=$a diff=$b"; exit $((a|b))
+named-headonly: cp scripts/data/nbaNamedBlockFixture.json /tmp/nf.json && node -e "const f=JSON.parse(require('fs').readFileSync('/tmp/nf.json','utf8')); f.block=f.packed; require('fs').writeFileSync('scripts/data/nbaNamedBlockFixture.json', JSON.stringify(f))" && node scripts/simNbaSeasonStats.mjs; a=$?; git checkout -- scripts/data; echo "FIXTURE packed-as-block nba=$a (expect 1)"; exit $a
+m-namedstrict: mkdir -p .rc/ob && (test -d .rc/ob/src || git archive 5d1198389 src | tar -x -C .rc/ob) && node .rc/x/mut1566.mjs namedstrict && NBA_STATS_BASE=.rc/ob node scripts/simNbaSeasonStats.mjs; a=$?; git checkout -- src scripts; echo "MUT namedstrict nba=$a"; exit $a
+m-kickswap-nfl: node .rc/x/mut1566.mjs kickswap && node scripts/simNflSeasonStats.mjs; a=$?; git checkout -- src scripts; echo "MUT kickswap nfl=$a (expect 1)"; exit $a
+earned-rerecord: SIM_NBA_EARNED_DRAFT_RECORD=5d1198389 node scripts/simNbaEarnedDraft.mjs; a=$?; git diff --stat --exit-code scripts/data/nbaEarnedDraftFixture.json; b=$?; git checkout -- scripts/data; echo "REREC earned record=$a diff=$b"; exit $((a|b))
+earned-oldfixture: git show 5d1198389:scripts/data/nbaEarnedDraftFixture.json > scripts/data/nbaEarnedDraftFixture.json && node scripts/simNbaEarnedDraft.mjs; a=$?; git checkout -- scripts/data; echo "OLDFIX earned head=$a (expect 1)"; exit $a
+rot-base: git worktree add -f .rc/rb 5d1198389 > /dev/null 2>&1 && cp src/lib/nbaRotation.test.ts src/lib/foStatsCodec.ts .rc/rb/src/lib/ && cd .rc/rb && PRINT_NBA_ROTATION=1 ../../node_modules/.bin/vitest run src/lib/nbaRotation.test.ts --testTimeout=300000 --hookTimeout=120000 > /tmp/rot.txt 2>&1; s=$?; grep -c "holds physical original automatic campaigns" /tmp/rot.txt; grep -E "NBA_ROTATION_PRINT|FAIL" /tmp/rot.txt | head -30; tail -6 /tmp/rot.txt; exit $s
+award1103-base: git worktree add -f .rc/b1103 5d1198389 > /dev/null 2>&1 && cp .rc/x/probe1103b.test.ts .rc/b1103/src/test/ && cd .rc/b1103 && ../../node_modules/.bin/vitest run src/test/probe1103b.test.ts --testTimeout=300000 > /tmp/p1103.txt 2>&1; s=$?; grep PROBE1103 /tmp/p1103.txt; tail -3 /tmp/p1103.txt; exit $s
