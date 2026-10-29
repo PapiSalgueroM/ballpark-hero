@@ -1,0 +1,6 @@
+#!serve
+#!playwright
+walk: mkdir -p /tmp/wob && git archive 2413427460 | tar -x -C /tmp/wob && ln -s "$PWD/node_modules" /tmp/wob/node_modules && OLD_TREE=/tmp/wob node .rc/x/walk1557.mjs
+walk-round: ENGINES=chromium RC_OUT="$RC_OUT/round" node scripts/playNbaIntl.mjs
+nocurtain: mkdir -p /tmp/nc && git archive HEAD | tar -x -C /tmp/nc && ln -s "$PWD/node_modules" /tmp/nc/node_modules && node .rc/x/mut.mjs /tmp/nc nocurtain && (cd /tmp/nc && node_modules/.bin/vite build > /tmp/nc-build.log 2>&1) && PLAY_INTL_DIST=/tmp/nc/dist RC_OUT="$RC_OUT/nocurtain" ENGINES=chromium node scripts/playNbaIntl.mjs
+noclose: mkdir -p /tmp/ncl && git archive HEAD | tar -x -C /tmp/ncl && ln -s "$PWD/node_modules" /tmp/ncl/node_modules && node .rc/x/mut.mjs /tmp/ncl noclose && (cd /tmp/ncl && node_modules/.bin/vite build > /tmp/ncl-build.log 2>&1) && (node scripts/lib/hostLikeServer.mjs /tmp/ncl/dist 4181 > /tmp/ncl-srv.log 2>&1 &) && sleep 4 && BASE=http://localhost:4181 WALK_ONLY=leave RC_OUT="$RC_OUT/noclose" node .rc/x/walk1557.mjs
