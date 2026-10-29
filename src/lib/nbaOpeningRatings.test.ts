@@ -26,7 +26,7 @@ const people = (league: engine.NbaLeague) => [...Object.values(league.teams).fla
    records through today's nbaSeasonStats.ts too, so both leagues' blocks are compared as the rows they stand for,
    through the one expand (its club columns aside), which is what this test compared before the round. */
 const asNamed = (league: engine.NbaLeague) => {
-  if (!league.stats) return league;
+  if (!league.stats || !('clubs' in league.stats)) return league;
   const rows: Partial<ReturnType<typeof stats.nbaFoStats>> = { ...stats.nbaFoStats(league.stats) };
   delete rows.club;
   return { ...league, stats: rows };
@@ -88,7 +88,11 @@ function season(api: typeof engine, box: typeof stats, lg: engine.NbaLeague, rng
   for (let round = 1; round <= api.NBA_ROUNDS; round++) { lg.round = round; api.simRound(lg, 'DEN', rng); }
   const postseason = api.runNbaPlayoffs(lg, rng);
   lg.champions.push({ season: lg.season, team: postseason.champion });
-  api.nbaAssessTax(lg); box.nbaCloseSeasonStats(lg);
+  api.nbaAssessTax(lg);
+  /* Round 1566: the pinned e8b39ccc reader reads named rows, while its engine records through today's
+     nbaSeasonStats.ts in the shared shape, so it closes the season on the rows that block stands for. */
+  if (box !== stats && lg.stats && 'clubs' in lg.stats) lg.stats = asNamed(lg).stats as unknown as engine.NbaLeague['stats'];
+  box.nbaCloseSeasonStats(lg);
   return postseason;
 }
 const terms = (p: engine.NbaGmPlayer) => { const { id, ovr, salary, pot, openingRatingEvidence, ...held } = p; return held; };
