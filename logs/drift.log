@@ -1,0 +1,3 @@
+nhl: 0 current; 16 old (nhlconn-005, nhlconn-006, nhlconn-007, nhlconn-008, nhlconn-009, nhlconn-010, nhlconn-011, nhlconn-012, nhlconn-013, nhlconn-014, nhlconn-015, nhlconn-016, nhlconn-017, nhlconn-018, nhlconn-019, nhlconn-020); 0 drifted; 0 missing; 0 extra
+nfl: 16 current (nflconn-005, nflconn-006, nflconn-007, nflconn-008, nflconn-009, nflconn-010, nflconn-011, nflconn-012, nflconn-013, nflconn-014, nflconn-015, nflconn-016, nflconn-017, nflconn-018, nflconn-019, nflconn-020); 0 old; 0 drifted; 0 missing; 0 extra
+usConnectionsTableImport drift: green. Every live row past the files holds its table file board or its exported board.

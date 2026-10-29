@@ -1,0 +1,7 @@
+guarded: 1567 85739 bytes, lib 85739 bytes, IDENTICAL
+checksummed: 39 rows, 1567 29303 bytes, lib 29303 bytes, IDENTICAL
+classify rows: 1567 36, lib 36, IDENTICAL
+classify already: 1567 1, lib 1, IDENTICAL
+classify drifted: 1567 1, lib 1, IDENTICAL
+classify missing: 1567 1, lib 1, IDENTICAL
+probe-lift: green. The lifted lib writes 1567's guarded and checksummed SQL byte for byte and classifies as 1567 does.
