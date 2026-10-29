@@ -253,7 +253,7 @@ export const FOOTBALL_CONTENT: GameContentMap = {
       {
         heading: "Trust upstairs and getting fired",
         items: [
-          "Trust upstairs runs 0 to 100. Beating the mandate raises it, missing it drops it, a championship fixes almost anything, and at zero you are fired, though the save goes on: franchises that rate your record can call, and you can usually sit a season out. A fresh GM always survives one bad year, and only a full Ownership tree gets him through three.",
+          "Trust upstairs runs 0 to 100. Beating the mandate raises it, missing it drops it, a championship fixes almost anything, and at zero you are fired, though the save goes on: franchises that rate your record can call, and you can usually sit a season out. A fresh GM always survives one bad year, and on the grades alone only a full Ownership tree gets him through three.",
         ],
       },
     ],
