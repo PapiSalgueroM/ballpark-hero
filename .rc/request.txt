@@ -1,0 +1,3 @@
+#!serve
+#!playwright
+walk: STAGE=proof SPORTS=nba,nfl,mlb,nhl node .rc/x/walk1569.mjs
