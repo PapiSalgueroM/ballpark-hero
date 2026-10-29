@@ -1,0 +1,7 @@
+#!serial
+#!playwright
+vt-base: git show 5f9303bf8:src/lib/sportsMillionaire.ts > src/lib/sportsMillionaire.ts && git show 5f9303bf8:src/pages/SportsMillionaire.tsx > src/pages/SportsMillionaire.tsx && git diff --stat -- src && node_modules/.bin/vitest run src/test/sportsMillionaireSwap.test.tsx --testTimeout=300000 --hookTimeout=120000; s=$?; git checkout -- src; exit $s
+vt-page: sed -i 's/swapQuestion(pool, question, ladder)/swapQuestion(pool, question, [question])/' src/pages/SportsMillionaire.tsx && grep -c 'swapQuestion(pool, question, \[question\])' src/pages/SportsMillionaire.tsx && node_modules/.bin/vitest run src/test/sportsMillionaireSwap.test.tsx --testTimeout=300000 --hookTimeout=120000; s=$?; git checkout -- src; exit $s
+simGoogleOnlyReturn: git status --short | head -5; node scripts/simGoogleOnlyReturn.mjs
+simResultMoment: node scripts/simResultMoment.mjs
+simWritesAreSent: node scripts/simWritesAreSent.mjs
