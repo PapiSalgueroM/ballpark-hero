@@ -1,0 +1,4 @@
+#!build
+#!serial
+simSiteSearch: node scripts/simSiteSearch.mjs
+simSeoDiscovery1444: node scripts/simSeoDiscovery1444.mjs
