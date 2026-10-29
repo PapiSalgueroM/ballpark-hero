@@ -26,7 +26,7 @@ import path from 'node:path';
 vi.mock('@/lib/completions', () => ({ recordCompletion: vi.fn(), recordActivity: vi.fn(), getCurrentPlayerName: () => 'Tester' }));
 vi.mock('@/lib/badges', () => ({ getNewlyEarnedBadges: () => Promise.resolve([]) }));
 vi.mock('@/contexts/AuthContext', () => ({ useAuth: () => ({ user: null, profile: null, refreshProfile: () => undefined }) }));
-vi.mock('sonner', () => ({ toast: { success: () => undefined, error: () => undefined } }));
+vi.mock('sonner', () => ({ toast: Object.assign(() => undefined, { success: () => undefined, error: () => undefined, info: () => undefined, message: () => undefined, dismiss: () => undefined }) }));
 /* C8's comparison arm has no wall code at all: with the switch on, hallWallEntry gives null, so the keep
    effect stops before it reads, builds, writes or could draw anything. Off, the module is the real one. */
 const wallSwitch = vi.hoisted(() => ({ inert: false }));
