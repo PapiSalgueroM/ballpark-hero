@@ -1,0 +1,320 @@
+TABLE_RANGE: nhl holds 16 table rows beside the file's 4 boards
+US_CONN_LIVE: nhl checks 20 rows of the live table export, not the shipped file
+1) no group claims the present, and every recent year label is one the record judges
+   baseball: 0 present tense or unheld recent year labels
+   nfl: 0 present tense or unheld recent year labels
+  FAIL: nhl nhlconn-020: "Canada's 2025 4 Nations team" names a year from 2020 on and nothing holds the group to it
+  FAIL: nhl nhlconn-020: "Goalies who started a 2020s Cup Final game" names a year from 2020 on and nothing holds the group to it
+   nhl: 2 present tense or unheld recent year labels
+2) no refuted claim is on a board
+   baseball: 32 refuted claims held off every board, 0 found
+   baseball: 57 gray pairs the round took off their boards, 0 back
+   nfl: 0 refuted claims held off every board, 0 found
+   nhl: 0 refuted claims held off every board, 0 found
+3) the ledger stands on two hosts
+   baseball: 659 facts, 0 on one host; 115 flagged groups, 575 members held; 131 fixed findings
+   nfl: 12 facts, 0 on one host; 2 flagged groups, 10 members held; 1 fixed findings
+   nhl: 339 facts (the flagged groups are the file's, not checked against a live export)
+4) one right answer: the shared cross check over every board
+   baseball: 60 boards, 240 of 240 groups judged; members 1200 judged (0 unknown), other tiles 3600 judged (0 unknown); 0 findings
+   nfl: 4 boards, 16 of 16 groups judged; members 80 judged (0 unknown), other tiles 240 judged (0 unknown); 0 findings
+  FAIL: nhl nhlconn-009 | second-fit | Steve Yzerman | Scored 60 goals in a season | listed under Captained a Stanley Cup winner, so the board has two right answers
+  FAIL: nhl nhlconn-009 | second-fit | Jaromir Jagr | Scored 60 goals in a season | listed under Played 1,700 or more NHL games, so the board has two right answers
+  FAIL: nhl nhlconn-009 | second-fit | Mark Messier | Played 1,700 or more NHL games | listed under Captained a Stanley Cup winner, so the board has two right answers
+  FAIL: nhl nhlconn-010 | second-fit | Steve Yzerman | Scored 60 goals in a season | listed under Captained a Stanley Cup winner, so the board has two right answers
+  FAIL: nhl nhlconn-010 | second-fit | Jaromir Jagr | Scored 60 goals in a season | listed under Played 1,650 or more NHL games, so the board has two right answers
+  FAIL: nhl nhlconn-010 | second-fit | Mark Messier | Played 1,650 or more NHL games | listed under Captained a Stanley Cup winner, so the board has two right answers
+  FAIL: nhl nhlconn-011 | second-fit | Bobby Orr | Won the Norris Trophy | listed under Scored a Stanley Cup winning goal, so the board has two right answers
+  FAIL: nhl nhlconn-012 | second-fit | Bernie Nicholls | Played for the Oilers | listed under Scored 70 goals in a season, so the board has two right answers
+  FAIL: nhl nhlconn-012 | second-fit | Jari Kurri | Played for the Oilers | listed under Scored 70 goals in a season, so the board has two right answers
+  FAIL: nhl nhlconn-014 | second-fit | Martin Brodeur | Won the Calder Trophy | listed under Goalies credited with scoring a goal, so the board has two right answers
+  FAIL: nhl nhlconn-014 | second-fit | Evgeni Nabokov | Won the Calder Trophy | listed under Goalies credited with scoring a goal, so the board has two right answers
+  FAIL: nhl nhlconn-014 | second-fit | Joe Nieuwendyk | Won the Calder Trophy | listed under Won the Cup with three different franchises, so the board has two right answers
+  FAIL: nhl nhlconn-014 | second-fit | Mark Recchi | Won the Cup with three different franchises | listed under Played 1,500 NHL games, so the board has two right answers
+  FAIL: nhl nhlconn-015 | second-fit | Jarome Iginla | Scored 500 career goals | listed under Won the Art Ross Trophy, so the board has two right answers
+  FAIL: nhl nhlconn-016 | second-fit | Steven Stamkos | Played for the Predators | listed under Won the Rocket Richard Trophy, so the board has two right answers
+  FAIL: nhl nhlconn-016 | second-fit | Pavel Bure | Played for the Canucks | listed under Won the Rocket Richard Trophy, so the board has two right answers
+  FAIL: nhl nhlconn-016 | second-fit | Alex Ovechkin | Won the Conn Smythe Trophy | listed under Won the Rocket Richard Trophy, so the board has two right answers
+  FAIL: nhl nhlconn-017 | second-fit | Sidney Crosby | Scored 500 goals for one franchise | listed under Triple Gold Club members, so the board has two right answers
+  FAIL: nhl nhlconn-018 | second-fit | Linus Ullmark | Drafted by the Sabres | listed under Won the Vezina Trophy, so the board has two right answers
+  FAIL: nhl nhlconn-018 | second-fit | Connor Hellebuyck | Won the Hart Trophy | listed under Won the Vezina Trophy, so the board has two right answers
+  FAIL: nhl nhlconn-019 | second-fit | Jaromir Jagr | Played for the Devils | listed under Scored 700 career goals, so the board has two right answers
+  FAIL: nhl nhlconn-019 | second-fit | Gordie Howe | Hall of Famers who played for the Whalers | listed under Scored 700 career goals, so the board has two right answers
+  FAIL: nhl nhlconn-020 | second-fit | Sam Reinhart | Won the 2024 Cup with the Panthers | listed under Drafted second overall, so the board has two right answers
+   nhl: every man on the live rows is in the record
+   nhl: 20 boards, 62 of 80 groups judged; members 309 judged (1 unknown), other tiles 930 judged (0 unknown); 23 findings
+5) no man is a season from joining a group beside him
+   baseball: 0 watched men beside a group they may join
+   nfl: 0 watched men beside a group they may join
+  FAIL: nhl nhlconn-010: Alex Ovechkin ("Scored 60 goals in a season") may join "Played 1,650 or more NHL games": active with 1584, within a season of 1650
+  FAIL: nhl nhlconn-013: Alex Ovechkin ("European-born 500 goal scorers") may join "Won the Conn Smythe in a losing cause": active; the 2026-27 Conn Smythe is still to be won
+  FAIL: nhl nhlconn-015: Alexis Lafreniere ("Drafted first overall") may join "Won the Art Ross Trophy": active and eligible; the 2026-27 Art Ross Trophy is still to be won
+  FAIL: nhl nhlconn-015: Taylor Hall ("Drafted first overall") may join "Won the Art Ross Trophy": active and eligible; the 2026-27 Art Ross Trophy is still to be won
+  FAIL: nhl nhlconn-015: Owen Power ("Drafted first overall") may join "Won the Art Ross Trophy": active and eligible; the 2026-27 Art Ross Trophy is still to be won
+  FAIL: nhl nhlconn-015: Juraj Slafkovsky ("Drafted first overall") may join "Won the Art Ross Trophy": active and eligible; the 2026-27 Art Ross Trophy is still to be won
+  FAIL: nhl nhlconn-016: Roman Josi ("Played for the Predators") may join "Won the Rocket Richard Trophy": active and eligible; the 2026-27 Maurice “Rocket” Richard Trophy is still to be won
+  FAIL: nhl nhlconn-016: Filip Forsberg ("Played for the Predators") may join "Won the Rocket Richard Trophy": active and eligible; the 2026-27 Maurice “Rocket” Richard Trophy is still to be won
+  FAIL: nhl nhlconn-016: Ryan Ellis ("Played for the Predators") may join "Won the Rocket Richard Trophy": active and eligible; the 2026-27 Maurice “Rocket” Richard Trophy is still to be won
+  FAIL: nhl nhlconn-016: Quinn Hughes ("Played for the Canucks") may join "Won the Rocket Richard Trophy": active and eligible; the 2026-27 Maurice “Rocket” Richard Trophy is still to be won
+  FAIL: nhl nhlconn-016: Roman Josi ("Played for the Predators") may join "Won the Conn Smythe Trophy": active and eligible; the 2026-27 Conn Smythe Trophy is still to be won
+  FAIL: nhl nhlconn-016: Filip Forsberg ("Played for the Predators") may join "Won the Conn Smythe Trophy": active and eligible; the 2026-27 Conn Smythe Trophy is still to be won
+  FAIL: nhl nhlconn-016: Ryan Ellis ("Played for the Predators") may join "Won the Conn Smythe Trophy": active and eligible; the 2026-27 Conn Smythe Trophy is still to be won
+  FAIL: nhl nhlconn-016: Quinn Hughes ("Played for the Canucks") may join "Won the Conn Smythe Trophy": active and eligible; the 2026-27 Conn Smythe Trophy is still to be won
+  FAIL: nhl nhlconn-016: Steven Stamkos ("Won the Rocket Richard Trophy") may join "Won the Conn Smythe Trophy": active and eligible; the 2026-27 Conn Smythe Trophy is still to be won
+  FAIL: nhl nhlconn-016: Auston Matthews ("Won the Rocket Richard Trophy") may join "Won the Conn Smythe Trophy": active and eligible; the 2026-27 Conn Smythe Trophy is still to be won
+  FAIL: nhl nhlconn-016: David Pastrnak ("Won the Rocket Richard Trophy") may join "Won the Conn Smythe Trophy": active and eligible; the 2026-27 Conn Smythe Trophy is still to be won
+  FAIL: nhl nhlconn-018: Clayton Keller ("Played for Utah after the move from Arizona") may join "Won the Hart Trophy": active and eligible; the 2026-27 Hart Memorial Trophy is still to be won
+  FAIL: nhl nhlconn-018: Logan Cooley ("Played for Utah after the move from Arizona") may join "Won the Hart Trophy": active and eligible; the 2026-27 Hart Memorial Trophy is still to be won
+  FAIL: nhl nhlconn-018: Dylan Guenther ("Played for Utah after the move from Arizona") may join "Won the Hart Trophy": active and eligible; the 2026-27 Hart Memorial Trophy is still to be won
+  FAIL: nhl nhlconn-018: Mikhail Sergachev ("Played for Utah after the move from Arizona") may join "Won the Hart Trophy": active and eligible; the 2026-27 Hart Memorial Trophy is still to be won
+  FAIL: nhl nhlconn-018: Karel Vejmelka ("Played for Utah after the move from Arizona") may join "Won the Hart Trophy": active and eligible; the 2026-27 Hart Memorial Trophy is still to be won
+  FAIL: nhl nhlconn-018: Jack Eichel ("Drafted by the Sabres") may join "Won the Hart Trophy": active and eligible; the 2026-27 Hart Memorial Trophy is still to be won
+  FAIL: nhl nhlconn-018: Rasmus Dahlin ("Drafted by the Sabres") may join "Won the Hart Trophy": active and eligible; the 2026-27 Hart Memorial Trophy is still to be won
+  FAIL: nhl nhlconn-018: Sam Reinhart ("Drafted by the Sabres") may join "Won the Hart Trophy": active and eligible; the 2026-27 Hart Memorial Trophy is still to be won
+  FAIL: nhl nhlconn-018: Dylan Cozens ("Drafted by the Sabres") may join "Won the Hart Trophy": active and eligible; the 2026-27 Hart Memorial Trophy is still to be won
+  FAIL: nhl nhlconn-018: Casey Mittelstadt ("Drafted by the Sabres") may join "Won the Hart Trophy": active and eligible; the 2026-27 Hart Memorial Trophy is still to be won
+  FAIL: nhl nhlconn-018: Andrei Vasilevskiy ("Won the Vezina Trophy") may join "Won the Hart Trophy": active and eligible; the 2026-27 Hart Memorial Trophy is still to be won
+  FAIL: nhl nhlconn-018: Igor Shesterkin ("Won the Vezina Trophy") may join "Won the Hart Trophy": active and eligible; the 2026-27 Hart Memorial Trophy is still to be won
+  FAIL: nhl nhlconn-018: Linus Ullmark ("Won the Vezina Trophy") may join "Won the Hart Trophy": active and eligible; the 2026-27 Hart Memorial Trophy is still to be won
+  FAIL: nhl nhlconn-018: Sergei Bobrovsky ("Won the Vezina Trophy") may join "Won the Hart Trophy": active and eligible; the 2026-27 Hart Memorial Trophy is still to be won
+  FAIL: nhl nhlconn-018: Karel Vejmelka ("Played for Utah after the move from Arizona") may join "Won the Vezina Trophy": active and eligible; the 2026-27 Vezina Trophy is still to be won
+   nhl: 32 watched men beside a group they may join
+6) no man is dealt twice on one board
+   baseball: 0 men dealt twice
+   nfl: 0 men dealt twice
+   nhl: 0 men dealt twice
+7) what the record cannot judge may only get fewer
+   baseball: 0 groups nothing judges (ceiling 0), 0 members the record cannot place (ceiling 0), 0 other tiles it cannot judge (ceiling 0)
+   nfl: 0 groups nothing judges (ceiling 0), 0 members the record cannot place (ceiling 0), 0 other tiles it cannot judge (ceiling 0)
+  FAIL: nhl: 18 live groups nothing judges, over the ceiling of 0 (US_CONN_LIVE_STRICT)
+  FAIL: nhl: 1 live members the record cannot place, over the ceiling of 0 (US_CONN_LIVE_STRICT)
+   nhl: 18 groups nothing judges (ceiling 0), 1 members the record cannot place (ceiling 0), 0 other tiles it cannot judge (ceiling 0): nhlconn-005 "Played for the Chicago Blackhawks", nhlconn-005 "Played for the New York Islanders", nhlconn-006 "Played for the Edmonton Oilers", nhlconn-006 "Played for the Montreal Canadiens", nhlconn-006 "Played for the Boston Bruins", nhlconn-006 "Played for the Detroit Red Wings", nhlconn-009 "Captained a Stanley Cup winner", nhlconn-010 "Captained a Stanley Cup winner", nhlconn-011 "Scored a Stanley Cup winning goal", nhlconn-011 "Scored 50 goals in 50 games", nhlconn-012 "Defensemen who captained a Cup winner", nhlconn-013 "1980s Islanders dynasty", nhlconn-013 "Played NHL games in four different decades", nhlconn-017 "Triple Gold Club members", nhlconn-018 "Played for Utah after the move from Arizona", nhlconn-019 "1970s Canadiens dynasty", nhlconn-020 "Canada's 2025 4 Nations team", nhlconn-020 "Goalies who started a 2020s Cup Final game"
+8) no active man is one move from a second answer
+   baseball: 15 dated club groups, 0 undated, 0 active men one move from a club group beside them
+   nfl: 8 dated club groups, 0 undated, 0 active men one move from a club group beside them
+  FAIL: nhl nhlconn-001: Auston Matthews ("Played for the Maple Leafs") is still playing and one move from "Played for the Penguins": date the group or rebuild the board
+  FAIL: nhl nhlconn-001: Mitch Marner ("Played for the Maple Leafs") is still playing and one move from "Played for the Penguins": date the group or rebuild the board
+  FAIL: nhl nhlconn-001: John Tavares ("Played for the Maple Leafs") is still playing and one move from "Played for the Penguins": date the group or rebuild the board
+  FAIL: nhl nhlconn-001: Nathan MacKinnon ("Played for the Avalanche") is still playing and one move from "Played for the Penguins": date the group or rebuild the board
+  FAIL: nhl nhlconn-001: Cale Makar ("Played for the Avalanche") is still playing and one move from "Played for the Penguins": date the group or rebuild the board
+  FAIL: nhl nhlconn-001: Gabriel Landeskog ("Played for the Avalanche") is still playing and one move from "Played for the Penguins": date the group or rebuild the board
+  FAIL: nhl nhlconn-001: Dylan Larkin ("Played for the Red Wings") is still playing and one move from "Played for the Penguins": date the group or rebuild the board
+  FAIL: nhl nhlconn-001: Sidney Crosby ("Played for the Penguins") is still playing and one move from "Played for the Maple Leafs": date the group or rebuild the board
+  FAIL: nhl nhlconn-001: Evgeni Malkin ("Played for the Penguins") is still playing and one move from "Played for the Maple Leafs": date the group or rebuild the board
+  FAIL: nhl nhlconn-001: Kris Letang ("Played for the Penguins") is still playing and one move from "Played for the Maple Leafs": date the group or rebuild the board
+  FAIL: nhl nhlconn-001: Jake Guentzel ("Played for the Penguins") is still playing and one move from "Played for the Maple Leafs": date the group or rebuild the board
+  FAIL: nhl nhlconn-001: Nathan MacKinnon ("Played for the Avalanche") is still playing and one move from "Played for the Maple Leafs": date the group or rebuild the board
+  FAIL: nhl nhlconn-001: Cale Makar ("Played for the Avalanche") is still playing and one move from "Played for the Maple Leafs": date the group or rebuild the board
+  FAIL: nhl nhlconn-001: Gabriel Landeskog ("Played for the Avalanche") is still playing and one move from "Played for the Maple Leafs": date the group or rebuild the board
+  FAIL: nhl nhlconn-001: Dylan Larkin ("Played for the Red Wings") is still playing and one move from "Played for the Maple Leafs": date the group or rebuild the board
+  FAIL: nhl nhlconn-001: Sidney Crosby ("Played for the Penguins") is still playing and one move from "Played for the Avalanche": date the group or rebuild the board
+  FAIL: nhl nhlconn-001: Evgeni Malkin ("Played for the Penguins") is still playing and one move from "Played for the Avalanche": date the group or rebuild the board
+  FAIL: nhl nhlconn-001: Kris Letang ("Played for the Penguins") is still playing and one move from "Played for the Avalanche": date the group or rebuild the board
+  FAIL: nhl nhlconn-001: Jake Guentzel ("Played for the Penguins") is still playing and one move from "Played for the Avalanche": date the group or rebuild the board
+  FAIL: nhl nhlconn-001: Auston Matthews ("Played for the Maple Leafs") is still playing and one move from "Played for the Avalanche": date the group or rebuild the board
+  FAIL: nhl nhlconn-001: Mitch Marner ("Played for the Maple Leafs") is still playing and one move from "Played for the Avalanche": date the group or rebuild the board
+  FAIL: nhl nhlconn-001: John Tavares ("Played for the Maple Leafs") is still playing and one move from "Played for the Avalanche": date the group or rebuild the board
+  FAIL: nhl nhlconn-001: Dylan Larkin ("Played for the Red Wings") is still playing and one move from "Played for the Avalanche": date the group or rebuild the board
+  FAIL: nhl nhlconn-001: Sidney Crosby ("Played for the Penguins") is still playing and one move from "Played for the Red Wings": date the group or rebuild the board
+  FAIL: nhl nhlconn-001: Evgeni Malkin ("Played for the Penguins") is still playing and one move from "Played for the Red Wings": date the group or rebuild the board
+  FAIL: nhl nhlconn-001: Kris Letang ("Played for the Penguins") is still playing and one move from "Played for the Red Wings": date the group or rebuild the board
+  FAIL: nhl nhlconn-001: Jake Guentzel ("Played for the Penguins") is still playing and one move from "Played for the Red Wings": date the group or rebuild the board
+  FAIL: nhl nhlconn-001: Auston Matthews ("Played for the Maple Leafs") is still playing and one move from "Played for the Red Wings": date the group or rebuild the board
+  FAIL: nhl nhlconn-001: Mitch Marner ("Played for the Maple Leafs") is still playing and one move from "Played for the Red Wings": date the group or rebuild the board
+  FAIL: nhl nhlconn-001: John Tavares ("Played for the Maple Leafs") is still playing and one move from "Played for the Red Wings": date the group or rebuild the board
+  FAIL: nhl nhlconn-001: Nathan MacKinnon ("Played for the Avalanche") is still playing and one move from "Played for the Red Wings": date the group or rebuild the board
+  FAIL: nhl nhlconn-001: Cale Makar ("Played for the Avalanche") is still playing and one move from "Played for the Red Wings": date the group or rebuild the board
+  FAIL: nhl nhlconn-001: Gabriel Landeskog ("Played for the Avalanche") is still playing and one move from "Played for the Red Wings": date the group or rebuild the board
+  FAIL: nhl nhlconn-002: Drew Doughty ("Played for the Kings") is still playing and one move from "Played for the Blackhawks": date the group or rebuild the board
+  FAIL: nhl nhlconn-002: Steven Stamkos ("Played for the Lightning") is still playing and one move from "Played for the Blackhawks": date the group or rebuild the board
+  FAIL: nhl nhlconn-002: Nikita Kucherov ("Played for the Lightning") is still playing and one move from "Played for the Blackhawks": date the group or rebuild the board
+  FAIL: nhl nhlconn-002: Victor Hedman ("Played for the Lightning") is still playing and one move from "Played for the Blackhawks": date the group or rebuild the board
+  FAIL: nhl nhlconn-002: Brayden Point ("Played for the Lightning") is still playing and one move from "Played for the Blackhawks": date the group or rebuild the board
+  FAIL: nhl nhlconn-002: Cam Fowler ("Played for the Ducks") is still playing and one move from "Played for the Blackhawks": date the group or rebuild the board
+  FAIL: nhl nhlconn-002: Rickard Rakell ("Played for the Ducks") is still playing and one move from "Played for the Blackhawks": date the group or rebuild the board
+  FAIL: nhl nhlconn-002: Patrick Kane ("Played for the Blackhawks") is still playing and one move from "Played for the Kings": date the group or rebuild the board
+  FAIL: nhl nhlconn-002: Steven Stamkos ("Played for the Lightning") is still playing and one move from "Played for the Kings": date the group or rebuild the board
+  FAIL: nhl nhlconn-002: Nikita Kucherov ("Played for the Lightning") is still playing and one move from "Played for the Kings": date the group or rebuild the board
+  FAIL: nhl nhlconn-002: Victor Hedman ("Played for the Lightning") is still playing and one move from "Played for the Kings": date the group or rebuild the board
+  FAIL: nhl nhlconn-002: Brayden Point ("Played for the Lightning") is still playing and one move from "Played for the Kings": date the group or rebuild the board
+  FAIL: nhl nhlconn-002: Cam Fowler ("Played for the Ducks") is still playing and one move from "Played for the Kings": date the group or rebuild the board
+  FAIL: nhl nhlconn-002: Rickard Rakell ("Played for the Ducks") is still playing and one move from "Played for the Kings": date the group or rebuild the board
+  FAIL: nhl nhlconn-002: Patrick Kane ("Played for the Blackhawks") is still playing and one move from "Played for the Lightning": date the group or rebuild the board
+  FAIL: nhl nhlconn-002: Drew Doughty ("Played for the Kings") is still playing and one move from "Played for the Lightning": date the group or rebuild the board
+  FAIL: nhl nhlconn-002: Cam Fowler ("Played for the Ducks") is still playing and one move from "Played for the Lightning": date the group or rebuild the board
+  FAIL: nhl nhlconn-002: Rickard Rakell ("Played for the Ducks") is still playing and one move from "Played for the Lightning": date the group or rebuild the board
+  FAIL: nhl nhlconn-002: Patrick Kane ("Played for the Blackhawks") is still playing and one move from "Played for the Ducks": date the group or rebuild the board
+  FAIL: nhl nhlconn-002: Drew Doughty ("Played for the Kings") is still playing and one move from "Played for the Ducks": date the group or rebuild the board
+  FAIL: nhl nhlconn-002: Steven Stamkos ("Played for the Lightning") is still playing and one move from "Played for the Ducks": date the group or rebuild the board
+  FAIL: nhl nhlconn-002: Nikita Kucherov ("Played for the Lightning") is still playing and one move from "Played for the Ducks": date the group or rebuild the board
+  FAIL: nhl nhlconn-002: Victor Hedman ("Played for the Lightning") is still playing and one move from "Played for the Ducks": date the group or rebuild the board
+  FAIL: nhl nhlconn-002: Brayden Point ("Played for the Lightning") is still playing and one move from "Played for the Ducks": date the group or rebuild the board
+  FAIL: nhl nhlconn-003: Connor McDavid ("Played for the Oilers") is still playing and one move from "Played for the Bruins": date the group or rebuild the board
+  FAIL: nhl nhlconn-003: Leon Draisaitl ("Played for the Oilers") is still playing and one move from "Played for the Bruins": date the group or rebuild the board
+  FAIL: nhl nhlconn-003: Ryan Nugent-Hopkins ("Played for the Oilers") is still playing and one move from "Played for the Bruins": date the group or rebuild the board
+  FAIL: nhl nhlconn-003: Zach Hyman ("Played for the Oilers") is still playing and one move from "Played for the Bruins": date the group or rebuild the board
+  FAIL: nhl nhlconn-003: Mark Stone ("Played for the Golden Knights") is still playing and one move from "Played for the Bruins": date the group or rebuild the board
+  FAIL: nhl nhlconn-003: Jack Eichel ("Played for the Golden Knights") is still playing and one move from "Played for the Bruins": date the group or rebuild the board
+  FAIL: nhl nhlconn-003: William Karlsson ("Played for the Golden Knights") is still playing and one move from "Played for the Bruins": date the group or rebuild the board
+  FAIL: nhl nhlconn-003: Alex Pietrangelo ("Played for the Golden Knights") is still playing and one move from "Played for the Bruins": date the group or rebuild the board
+  FAIL: nhl nhlconn-003: Jonathan Marchessault ("Played for the Golden Knights") is still playing and one move from "Played for the Bruins": date the group or rebuild the board
+  FAIL: nhl nhlconn-003: Sebastian Aho ("Played for the Hurricanes") is still playing and one move from "Played for the Bruins": date the group or rebuild the board
+  FAIL: nhl nhlconn-003: Andrei Svechnikov ("Played for the Hurricanes") is still playing and one move from "Played for the Bruins": date the group or rebuild the board
+  FAIL: nhl nhlconn-003: Jaccob Slavin ("Played for the Hurricanes") is still playing and one move from "Played for the Bruins": date the group or rebuild the board
+  FAIL: nhl nhlconn-003: Jordan Staal ("Played for the Hurricanes") is still playing and one move from "Played for the Bruins": date the group or rebuild the board
+  FAIL: nhl nhlconn-003: Brent Burns ("Played for the Hurricanes") is still playing and one move from "Played for the Bruins": date the group or rebuild the board
+  FAIL: nhl nhlconn-003: Brad Marchand ("Played for the Bruins") is still playing and one move from "Played for the Oilers": date the group or rebuild the board
+  FAIL: nhl nhlconn-003: David Pastrňák ("Played for the Bruins") is still playing and one move from "Played for the Oilers": date the group or rebuild the board
+  FAIL: nhl nhlconn-003: Mark Stone ("Played for the Golden Knights") is still playing and one move from "Played for the Oilers": date the group or rebuild the board
+  FAIL: nhl nhlconn-003: Jack Eichel ("Played for the Golden Knights") is still playing and one move from "Played for the Oilers": date the group or rebuild the board
+  FAIL: nhl nhlconn-003: William Karlsson ("Played for the Golden Knights") is still playing and one move from "Played for the Oilers": date the group or rebuild the board
+  FAIL: nhl nhlconn-003: Alex Pietrangelo ("Played for the Golden Knights") is still playing and one move from "Played for the Oilers": date the group or rebuild the board
+  FAIL: nhl nhlconn-003: Jonathan Marchessault ("Played for the Golden Knights") is still playing and one move from "Played for the Oilers": date the group or rebuild the board
+  FAIL: nhl nhlconn-003: Sebastian Aho ("Played for the Hurricanes") is still playing and one move from "Played for the Oilers": date the group or rebuild the board
+  FAIL: nhl nhlconn-003: Andrei Svechnikov ("Played for the Hurricanes") is still playing and one move from "Played for the Oilers": date the group or rebuild the board
+  FAIL: nhl nhlconn-003: Jaccob Slavin ("Played for the Hurricanes") is still playing and one move from "Played for the Oilers": date the group or rebuild the board
+  FAIL: nhl nhlconn-003: Jordan Staal ("Played for the Hurricanes") is still playing and one move from "Played for the Oilers": date the group or rebuild the board
+  FAIL: nhl nhlconn-003: Brent Burns ("Played for the Hurricanes") is still playing and one move from "Played for the Oilers": date the group or rebuild the board
+  FAIL: nhl nhlconn-003: Brad Marchand ("Played for the Bruins") is still playing and one move from "Played for the Golden Knights": date the group or rebuild the board
+  FAIL: nhl nhlconn-003: David Pastrňák ("Played for the Bruins") is still playing and one move from "Played for the Golden Knights": date the group or rebuild the board
+  FAIL: nhl nhlconn-003: Connor McDavid ("Played for the Oilers") is still playing and one move from "Played for the Golden Knights": date the group or rebuild the board
+  FAIL: nhl nhlconn-003: Leon Draisaitl ("Played for the Oilers") is still playing and one move from "Played for the Golden Knights": date the group or rebuild the board
+  FAIL: nhl nhlconn-003: Ryan Nugent-Hopkins ("Played for the Oilers") is still playing and one move from "Played for the Golden Knights": date the group or rebuild the board
+  FAIL: nhl nhlconn-003: Zach Hyman ("Played for the Oilers") is still playing and one move from "Played for the Golden Knights": date the group or rebuild the board
+  FAIL: nhl nhlconn-003: Sebastian Aho ("Played for the Hurricanes") is still playing and one move from "Played for the Golden Knights": date the group or rebuild the board
+  FAIL: nhl nhlconn-003: Andrei Svechnikov ("Played for the Hurricanes") is still playing and one move from "Played for the Golden Knights": date the group or rebuild the board
+  FAIL: nhl nhlconn-003: Jaccob Slavin ("Played for the Hurricanes") is still playing and one move from "Played for the Golden Knights": date the group or rebuild the board
+  FAIL: nhl nhlconn-003: Jordan Staal ("Played for the Hurricanes") is still playing and one move from "Played for the Golden Knights": date the group or rebuild the board
+  FAIL: nhl nhlconn-003: Brent Burns ("Played for the Hurricanes") is still playing and one move from "Played for the Golden Knights": date the group or rebuild the board
+  FAIL: nhl nhlconn-003: Brad Marchand ("Played for the Bruins") is still playing and one move from "Played for the Hurricanes": date the group or rebuild the board
+  FAIL: nhl nhlconn-003: David Pastrňák ("Played for the Bruins") is still playing and one move from "Played for the Hurricanes": date the group or rebuild the board
+  FAIL: nhl nhlconn-003: Connor McDavid ("Played for the Oilers") is still playing and one move from "Played for the Hurricanes": date the group or rebuild the board
+  FAIL: nhl nhlconn-003: Leon Draisaitl ("Played for the Oilers") is still playing and one move from "Played for the Hurricanes": date the group or rebuild the board
+  FAIL: nhl nhlconn-003: Ryan Nugent-Hopkins ("Played for the Oilers") is still playing and one move from "Played for the Hurricanes": date the group or rebuild the board
+  FAIL: nhl nhlconn-003: Zach Hyman ("Played for the Oilers") is still playing and one move from "Played for the Hurricanes": date the group or rebuild the board
+  FAIL: nhl nhlconn-003: Mark Stone ("Played for the Golden Knights") is still playing and one move from "Played for the Hurricanes": date the group or rebuild the board
+  FAIL: nhl nhlconn-003: Jack Eichel ("Played for the Golden Knights") is still playing and one move from "Played for the Hurricanes": date the group or rebuild the board
+  FAIL: nhl nhlconn-003: William Karlsson ("Played for the Golden Knights") is still playing and one move from "Played for the Hurricanes": date the group or rebuild the board
+  FAIL: nhl nhlconn-003: Alex Pietrangelo ("Played for the Golden Knights") is still playing and one move from "Played for the Hurricanes": date the group or rebuild the board
+  FAIL: nhl nhlconn-003: Jonathan Marchessault ("Played for the Golden Knights") is still playing and one move from "Played for the Hurricanes": date the group or rebuild the board
+  FAIL: nhl nhlconn-004: Matthew Tkachuk ("Played for the Panthers") is still playing and one move from "Played for the Canadiens": date the group or rebuild the board
+  FAIL: nhl nhlconn-004: Aleksander Barkov ("Played for the Panthers") is still playing and one move from "Played for the Canadiens": date the group or rebuild the board
+  FAIL: nhl nhlconn-004: Sam Reinhart ("Played for the Panthers") is still playing and one move from "Played for the Canadiens": date the group or rebuild the board
+  FAIL: nhl nhlconn-004: Carter Verhaeghe ("Played for the Panthers") is still playing and one move from "Played for the Canadiens": date the group or rebuild the board
+  FAIL: nhl nhlconn-004: Aaron Ekblad ("Played for the Panthers") is still playing and one move from "Played for the Canadiens": date the group or rebuild the board
+  FAIL: nhl nhlconn-004: Macklin Celebrini ("Played for the Sharks") is still playing and one move from "Played for the Canadiens": date the group or rebuild the board
+  FAIL: nhl nhlconn-004: Logan Couture ("Played for the Sharks") is still playing and one move from "Played for the Canadiens": date the group or rebuild the board
+  FAIL: nhl nhlconn-004: Tomáš Hertl ("Played for the Sharks") is still playing and one move from "Played for the Canadiens": date the group or rebuild the board
+  FAIL: nhl nhlconn-004: Connor McDavid ("1,000+ career points") is still playing and one move from "Played for the Canadiens": date the group or rebuild the board
+  FAIL: nhl nhlconn-004: Leon Draisaitl ("1,000+ career points") is still playing and one move from "Played for the Canadiens": date the group or rebuild the board
+  FAIL: nhl nhlconn-004: Nikita Kucherov ("1,000+ career points") is still playing and one move from "Played for the Canadiens": date the group or rebuild the board
+  FAIL: nhl nhlconn-004: Nathan MacKinnon ("1,000+ career points") is still playing and one move from "Played for the Canadiens": date the group or rebuild the board
+  FAIL: nhl nhlconn-004: Steven Stamkos ("1,000+ career points") is still playing and one move from "Played for the Canadiens": date the group or rebuild the board
+  FAIL: nhl nhlconn-004: Brendan Gallagher ("Played for the Canadiens") is still playing and one move from "Played for the Panthers": date the group or rebuild the board
+  FAIL: nhl nhlconn-004: Nick Suzuki ("Played for the Canadiens") is still playing and one move from "Played for the Panthers": date the group or rebuild the board
+  FAIL: nhl nhlconn-004: Cole Caufield ("Played for the Canadiens") is still playing and one move from "Played for the Panthers": date the group or rebuild the board
+  FAIL: nhl nhlconn-004: Macklin Celebrini ("Played for the Sharks") is still playing and one move from "Played for the Panthers": date the group or rebuild the board
+  FAIL: nhl nhlconn-004: Logan Couture ("Played for the Sharks") is still playing and one move from "Played for the Panthers": date the group or rebuild the board
+  FAIL: nhl nhlconn-004: Tomáš Hertl ("Played for the Sharks") is still playing and one move from "Played for the Panthers": date the group or rebuild the board
+  FAIL: nhl nhlconn-004: Connor McDavid ("1,000+ career points") is still playing and one move from "Played for the Panthers": date the group or rebuild the board
+  FAIL: nhl nhlconn-004: Leon Draisaitl ("1,000+ career points") is still playing and one move from "Played for the Panthers": date the group or rebuild the board
+  FAIL: nhl nhlconn-004: Nikita Kucherov ("1,000+ career points") is still playing and one move from "Played for the Panthers": date the group or rebuild the board
+  FAIL: nhl nhlconn-004: Nathan MacKinnon ("1,000+ career points") is still playing and one move from "Played for the Panthers": date the group or rebuild the board
+  FAIL: nhl nhlconn-004: Steven Stamkos ("1,000+ career points") is still playing and one move from "Played for the Panthers": date the group or rebuild the board
+  FAIL: nhl nhlconn-004: Brendan Gallagher ("Played for the Canadiens") is still playing and one move from "Played for the Sharks": date the group or rebuild the board
+  FAIL: nhl nhlconn-004: Nick Suzuki ("Played for the Canadiens") is still playing and one move from "Played for the Sharks": date the group or rebuild the board
+  FAIL: nhl nhlconn-004: Cole Caufield ("Played for the Canadiens") is still playing and one move from "Played for the Sharks": date the group or rebuild the board
+  FAIL: nhl nhlconn-004: Matthew Tkachuk ("Played for the Panthers") is still playing and one move from "Played for the Sharks": date the group or rebuild the board
+  FAIL: nhl nhlconn-004: Aleksander Barkov ("Played for the Panthers") is still playing and one move from "Played for the Sharks": date the group or rebuild the board
+  FAIL: nhl nhlconn-004: Sam Reinhart ("Played for the Panthers") is still playing and one move from "Played for the Sharks": date the group or rebuild the board
+  FAIL: nhl nhlconn-004: Carter Verhaeghe ("Played for the Panthers") is still playing and one move from "Played for the Sharks": date the group or rebuild the board
+  FAIL: nhl nhlconn-004: Aaron Ekblad ("Played for the Panthers") is still playing and one move from "Played for the Sharks": date the group or rebuild the board
+  FAIL: nhl nhlconn-004: Connor McDavid ("1,000+ career points") is still playing and one move from "Played for the Sharks": date the group or rebuild the board
+  FAIL: nhl nhlconn-004: Leon Draisaitl ("1,000+ career points") is still playing and one move from "Played for the Sharks": date the group or rebuild the board
+  FAIL: nhl nhlconn-004: Nikita Kucherov ("1,000+ career points") is still playing and one move from "Played for the Sharks": date the group or rebuild the board
+  FAIL: nhl nhlconn-004: Nathan MacKinnon ("1,000+ career points") is still playing and one move from "Played for the Sharks": date the group or rebuild the board
+  FAIL: nhl nhlconn-004: Steven Stamkos ("1,000+ career points") is still playing and one move from "Played for the Sharks": date the group or rebuild the board
+  FAIL: nhl nhlconn-005: Patrick Kane ("Played for the Chicago Blackhawks") is still playing and one move from "Played for the Avalanche or Nordiques": date the group or rebuild the board
+  FAIL: nhl nhlconn-005: John Tavares ("Played for the New York Islanders") is still playing and one move from "Played for the Avalanche or Nordiques": date the group or rebuild the board
+  FAIL: nhl nhlconn-005: Mark Scheifele ("Played for the Winnipeg Jets (either era)") is still playing and one move from "Played for the Avalanche or Nordiques": date the group or rebuild the board
+  FAIL: nhl nhlconn-005: Kyle Connor ("Played for the Winnipeg Jets (either era)") is still playing and one move from "Played for the Avalanche or Nordiques": date the group or rebuild the board
+  FAIL: nhl nhlconn-005: Patrick Kane ("Played for the Chicago Blackhawks") is still playing and one move from "Played for the Winnipeg Jets (either era)": date the group or rebuild the board
+  FAIL: nhl nhlconn-005: Nathan MacKinnon ("Played for the Avalanche or Nordiques") is still playing and one move from "Played for the Winnipeg Jets (either era)": date the group or rebuild the board
+  FAIL: nhl nhlconn-005: John Tavares ("Played for the New York Islanders") is still playing and one move from "Played for the Winnipeg Jets (either era)": date the group or rebuild the board
+  FAIL: nhl nhlconn-007: Claude Giroux ("Played for the Flyers") is still playing and one move from "Played for the Capitals": date the group or rebuild the board
+  FAIL: nhl nhlconn-007: Sean Couturier ("Played for the Flyers") is still playing and one move from "Played for the Capitals": date the group or rebuild the board
+  FAIL: nhl nhlconn-007: Adam Fox ("Played for the Rangers") is still playing and one move from "Played for the Capitals": date the group or rebuild the board
+  FAIL: nhl nhlconn-007: Chris Kreider ("Played for the Rangers") is still playing and one move from "Played for the Capitals": date the group or rebuild the board
+  FAIL: nhl nhlconn-007: Mika Zibanejad ("Played for the Rangers") is still playing and one move from "Played for the Capitals": date the group or rebuild the board
+  FAIL: nhl nhlconn-007: Artemi Panarin ("Played for the Rangers") is still playing and one move from "Played for the Capitals": date the group or rebuild the board
+  FAIL: nhl nhlconn-007: Alex Pietrangelo ("Played for the Blues") is still playing and one move from "Played for the Capitals": date the group or rebuild the board
+  FAIL: nhl nhlconn-007: Alex Ovechkin ("Played for the Capitals") is still playing and one move from "Played for the Flyers": date the group or rebuild the board
+  FAIL: nhl nhlconn-007: Tom Wilson ("Played for the Capitals") is still playing and one move from "Played for the Flyers": date the group or rebuild the board
+  FAIL: nhl nhlconn-007: John Carlson ("Played for the Capitals") is still playing and one move from "Played for the Flyers": date the group or rebuild the board
+  FAIL: nhl nhlconn-007: Adam Fox ("Played for the Rangers") is still playing and one move from "Played for the Flyers": date the group or rebuild the board
+  FAIL: nhl nhlconn-007: Chris Kreider ("Played for the Rangers") is still playing and one move from "Played for the Flyers": date the group or rebuild the board
+  FAIL: nhl nhlconn-007: Mika Zibanejad ("Played for the Rangers") is still playing and one move from "Played for the Flyers": date the group or rebuild the board
+  FAIL: nhl nhlconn-007: Artemi Panarin ("Played for the Rangers") is still playing and one move from "Played for the Flyers": date the group or rebuild the board
+  FAIL: nhl nhlconn-007: Alex Pietrangelo ("Played for the Blues") is still playing and one move from "Played for the Flyers": date the group or rebuild the board
+  FAIL: nhl nhlconn-007: Alex Ovechkin ("Played for the Capitals") is still playing and one move from "Played for the Rangers": date the group or rebuild the board
+  FAIL: nhl nhlconn-007: Tom Wilson ("Played for the Capitals") is still playing and one move from "Played for the Rangers": date the group or rebuild the board
+  FAIL: nhl nhlconn-007: John Carlson ("Played for the Capitals") is still playing and one move from "Played for the Rangers": date the group or rebuild the board
+  FAIL: nhl nhlconn-007: Claude Giroux ("Played for the Flyers") is still playing and one move from "Played for the Rangers": date the group or rebuild the board
+  FAIL: nhl nhlconn-007: Sean Couturier ("Played for the Flyers") is still playing and one move from "Played for the Rangers": date the group or rebuild the board
+  FAIL: nhl nhlconn-007: Alex Pietrangelo ("Played for the Blues") is still playing and one move from "Played for the Rangers": date the group or rebuild the board
+  FAIL: nhl nhlconn-007: Alex Ovechkin ("Played for the Capitals") is still playing and one move from "Played for the Blues": date the group or rebuild the board
+  FAIL: nhl nhlconn-007: Tom Wilson ("Played for the Capitals") is still playing and one move from "Played for the Blues": date the group or rebuild the board
+  FAIL: nhl nhlconn-007: John Carlson ("Played for the Capitals") is still playing and one move from "Played for the Blues": date the group or rebuild the board
+  FAIL: nhl nhlconn-007: Claude Giroux ("Played for the Flyers") is still playing and one move from "Played for the Blues": date the group or rebuild the board
+  FAIL: nhl nhlconn-007: Sean Couturier ("Played for the Flyers") is still playing and one move from "Played for the Blues": date the group or rebuild the board
+  FAIL: nhl nhlconn-007: Adam Fox ("Played for the Rangers") is still playing and one move from "Played for the Blues": date the group or rebuild the board
+  FAIL: nhl nhlconn-007: Chris Kreider ("Played for the Rangers") is still playing and one move from "Played for the Blues": date the group or rebuild the board
+  FAIL: nhl nhlconn-007: Mika Zibanejad ("Played for the Rangers") is still playing and one move from "Played for the Blues": date the group or rebuild the board
+  FAIL: nhl nhlconn-007: Artemi Panarin ("Played for the Rangers") is still playing and one move from "Played for the Blues": date the group or rebuild the board
+  FAIL: nhl nhlconn-008: Brent Burns ("Played for the Sharks") is still playing and one move from "Played for the Stars": date the group or rebuild the board
+  FAIL: nhl nhlconn-008: Erik Karlsson ("Played for the Sharks") is still playing and one move from "Played for the Stars": date the group or rebuild the board
+  FAIL: nhl nhlconn-008: Logan Couture ("Played for the Sharks") is still playing and one move from "Played for the Stars": date the group or rebuild the board
+  FAIL: nhl nhlconn-008: John Tavares ("Played for the Islanders") is still playing and one move from "Played for the Stars": date the group or rebuild the board
+  FAIL: nhl nhlconn-008: Ryan O'Reilly ("Played for the Sabres") is still playing and one move from "Played for the Stars": date the group or rebuild the board
+  FAIL: nhl nhlconn-008: Jamie Benn ("Played for the Stars") is still playing and one move from "Played for the Sharks": date the group or rebuild the board
+  FAIL: nhl nhlconn-008: Tyler Seguin ("Played for the Stars") is still playing and one move from "Played for the Sharks": date the group or rebuild the board
+  FAIL: nhl nhlconn-008: John Tavares ("Played for the Islanders") is still playing and one move from "Played for the Sharks": date the group or rebuild the board
+  FAIL: nhl nhlconn-008: Ryan O'Reilly ("Played for the Sabres") is still playing and one move from "Played for the Sharks": date the group or rebuild the board
+  FAIL: nhl nhlconn-008: Jamie Benn ("Played for the Stars") is still playing and one move from "Played for the Islanders": date the group or rebuild the board
+  FAIL: nhl nhlconn-008: Tyler Seguin ("Played for the Stars") is still playing and one move from "Played for the Islanders": date the group or rebuild the board
+  FAIL: nhl nhlconn-008: Brent Burns ("Played for the Sharks") is still playing and one move from "Played for the Islanders": date the group or rebuild the board
+  FAIL: nhl nhlconn-008: Erik Karlsson ("Played for the Sharks") is still playing and one move from "Played for the Islanders": date the group or rebuild the board
+  FAIL: nhl nhlconn-008: Logan Couture ("Played for the Sharks") is still playing and one move from "Played for the Islanders": date the group or rebuild the board
+  FAIL: nhl nhlconn-008: Ryan O'Reilly ("Played for the Sabres") is still playing and one move from "Played for the Islanders": date the group or rebuild the board
+  FAIL: nhl nhlconn-008: Jamie Benn ("Played for the Stars") is still playing and one move from "Played for the Sabres": date the group or rebuild the board
+  FAIL: nhl nhlconn-008: Tyler Seguin ("Played for the Stars") is still playing and one move from "Played for the Sabres": date the group or rebuild the board
+  FAIL: nhl nhlconn-008: Brent Burns ("Played for the Sharks") is still playing and one move from "Played for the Sabres": date the group or rebuild the board
+  FAIL: nhl nhlconn-008: Erik Karlsson ("Played for the Sharks") is still playing and one move from "Played for the Sabres": date the group or rebuild the board
+  FAIL: nhl nhlconn-008: Logan Couture ("Played for the Sharks") is still playing and one move from "Played for the Sabres": date the group or rebuild the board
+  FAIL: nhl nhlconn-008: John Tavares ("Played for the Islanders") is still playing and one move from "Played for the Sabres": date the group or rebuild the board
+  FAIL: nhl nhlconn-011: Cale Makar ("Won the Norris Trophy") is still playing and one move from "Played for the Maple Leafs": date the group or rebuild the board
+  FAIL: nhl nhlconn-011: Erik Karlsson ("Won the Norris Trophy") is still playing and one move from "Played for the Maple Leafs": date the group or rebuild the board
+  FAIL: nhl nhlconn-011: Patrick Kane ("Scored a Stanley Cup winning goal") is still playing and one move from "Played for the Maple Leafs": date the group or rebuild the board
+  FAIL: nhl nhlconn-012: Andrei Vasilevskiy ("Won the Vezina Trophy") is still playing and one move from "Played for the Oilers": date the group or rebuild the board
+  FAIL: nhl nhlconn-016: Quinn Hughes ("Played for the Canucks") is still playing and one move from "Played for the Predators": date the group or rebuild the board
+  FAIL: nhl nhlconn-016: Alex Ovechkin ("Won the Rocket Richard Trophy") is still playing and one move from "Played for the Predators": date the group or rebuild the board
+  FAIL: nhl nhlconn-016: Auston Matthews ("Won the Rocket Richard Trophy") is still playing and one move from "Played for the Predators": date the group or rebuild the board
+  FAIL: nhl nhlconn-016: David Pastrnak ("Won the Rocket Richard Trophy") is still playing and one move from "Played for the Predators": date the group or rebuild the board
+  FAIL: nhl nhlconn-016: Roman Josi ("Played for the Predators") is still playing and one move from "Played for the Canucks": date the group or rebuild the board
+  FAIL: nhl nhlconn-016: Filip Forsberg ("Played for the Predators") is still playing and one move from "Played for the Canucks": date the group or rebuild the board
+  FAIL: nhl nhlconn-016: Ryan Ellis ("Played for the Predators") is still playing and one move from "Played for the Canucks": date the group or rebuild the board
+  FAIL: nhl nhlconn-016: Alex Ovechkin ("Won the Rocket Richard Trophy") is still playing and one move from "Played for the Canucks": date the group or rebuild the board
+  FAIL: nhl nhlconn-016: Steven Stamkos ("Won the Rocket Richard Trophy") is still playing and one move from "Played for the Canucks": date the group or rebuild the board
+  FAIL: nhl nhlconn-016: Auston Matthews ("Won the Rocket Richard Trophy") is still playing and one move from "Played for the Canucks": date the group or rebuild the board
+  FAIL: nhl nhlconn-016: David Pastrnak ("Won the Rocket Richard Trophy") is still playing and one move from "Played for the Canucks": date the group or rebuild the board
+  FAIL: nhl nhlconn-017: Alex Ovechkin ("Scored 500 goals for one franchise") is still playing and one move from "Played for the Senators": date the group or rebuild the board
+  FAIL: nhl nhlconn-017: Sidney Crosby ("Triple Gold Club members") is still playing and one move from "Played for the Senators": date the group or rebuild the board
+  FAIL: nhl nhlconn-019: Alex Ovechkin ("Scored 700 career goals") is still playing and one move from "Played for the Devils": date the group or rebuild the board
+   nhl: 0 dated club groups, 31 undated, 218 active men one move from a club group beside them
+9) the table rows are the export plus recorded decisions
+10) every criterion kind says how it ages, and every running kind is watched
+   baseball: kinds award 6, club 43, career 6, born 91, firstPick 1, season 5, bats 2, recordList 7, awardAt 23, avg300 1, wsWith 1, undrafted 1, mvpRun 1, hofPos 38, starter 1, posEra 1, wsClubs 1, hofPitcher 11; 0 problems; running and not watched, owed to the baseball table rounds: recordList, avg300, undrafted, hofPos, starter, posEra, wsClubs, hofPitcher
+   nfl: kinds club 8, firstPick 1, yards 3, college 4; 0 problems
+   nhl: kinds club 31, career 7, season 3, award 10, pos 1, smytheLost 1, goalieGoal 1, cupClubs 1, draft 2, wins 1, clubGoals 1, draftBy 1, hofClub 1, cupWith 1; 0 problems
+
+simUsConnectionsFacts: 277 failures

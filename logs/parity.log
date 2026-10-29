@@ -1,0 +1,7 @@
+baseball: 60 file boards, 4800 (group, tile) verdicts compared; record 449 base men, 7184 base fields; ledger 659 base facts (0 not verbatim), head 659
+nfl: 4 file boards, 320 (group, tile) verdicts compared; record 80 base men, 480 base fields; ledger 12 base facts (0 not verbatim), head 12
+nhl: 4 file boards, 320 (group, tile) verdicts compared; record 75 base men, 600 base fields; ledger 12 base facts (0 not verbatim), head 339
+rvparity: green, 5440 file board verdicts, watches and active flags identical; every base record field and ledger fact kept
+rvparity: 1 differences between base and head (RV_MUT=verdict)
+rvparity: 1 differences between base and head (RV_MUT=record)
+PARITY plain=0 verdictctl=1 recordctl=1
