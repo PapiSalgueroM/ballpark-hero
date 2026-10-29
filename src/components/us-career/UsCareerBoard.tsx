@@ -98,6 +98,9 @@ const DirtyMoneyDesk = lazy(() => import('@/components/us-career/DirtyMoneyDesk'
    the moment they belong to, as the sport's whole intl face does. */
 const IntlCallUpCard = lazy(() => import('@/components/us-career/IntlCallUpCard'));
 const IntlSummerResult = lazy(() => import('@/components/us-career/IntlSummerResult'));
+/* Round 1557: the International view behind the Trophy Case's tile, a named export of the result's own module,
+   so the two share one lazy chunk. */
+const IntlSummersView = lazy(() => import('@/components/us-career/IntlSummerResult').then(m => ({ default: m.IntlSummersView })));
 
 /** Round 1544: holds the place of the national team's screens while their chunk
  *  or the sport's face is on its way, at about the call card's height, so the
@@ -224,6 +227,8 @@ export default function UsCareerBoard({ sport }: { sport: UsCareerSport }) {
   const [intlFace, setIntlFace] = useState<{ of: UsCareerSport; face: UsIntlSport<CareerState> } | null>(null);
   const [intlResult, setIntlResult] = useState<{ row: Extract<IntlSummerEntry, { went: true }>; tournament: IntlTournament | null; notes: IntlSummerNotes } | null>(null);
   const intlAnswered = useRef<string | null>(null);
+  /* Round 1557: the Trophy Case's International view is open (a state of the trophies panel, with its own Back). */
+  const [intlOpen, setIntlOpen] = useState(false);
   const consumedEvent = useRef<CareerEvent | null>(null);
   /* Round 1038: the summer slot ('year:at') the last answer spent, so a
      double tap can never apply two cards of one summer. */
@@ -315,8 +320,11 @@ export default function UsCareerBoard({ sport }: { sport: UsCareerSport }) {
   }, [sport, intl, intlCallYear]);
   /* A new call (or none) frees the double tap guard of answerIntlCall. */
   useEffect(() => { intlAnswered.current = null; }, [intlCallYear]);
+  /* Round 1557 (1544's review, minor 6): the curtain closing is a screen change of its own, so whatever comes after
+     it (the national team's call, the summer's card) arrives in view the way every other step does. Before this
+     term the press changed the key once, for the curtain, and its Continue changed nothing. */
   const revealRef = useRevealScroll<HTMLDivElement>(
-    `${phase}:${pendingEvent?.id ?? ''}:${career?.seasons.length ?? 0}:${pushesMade}:${intlCallYear ?? ''}:${intlResult ? 'intl' : ''}`,
+    `${phase}:${pendingEvent?.id ?? ''}:${career?.seasons.length ?? 0}:${pushesMade}:${intlCallYear ?? ''}:${intlResult ? 'intl' : ''}:${reveal ? 'curtain' : ''}`,
   );
 
   /* Round 470: opening a hub box is a new screen, so it obeys the owner's no
@@ -325,7 +333,9 @@ export default function UsCareerBoard({ sport }: { sport: UsCareerSport }) {
      at scrollY 443 with the panel's own back button 246px above the fold, so
      the player landed underneath the screen he had just opened. The hook does
      nothing when the top of the panel is already readable. */
-  const panelRef = useRevealScroll<HTMLDivElement>(`${panel}:${newsTab}`);
+  const panelRef = useRevealScroll<HTMLDivElement>(`${panel}:${newsTab}:${intlOpen ? 'intl' : ''}`);
+  /* Round 1557: leaving the trophies panel any way at all closes the International view, so the case opens on itself. */
+  useEffect(() => { if (panel !== 'trophies') setIntlOpen(false); }, [panel]);
 
   /* Round 1569 (the lead's ruling R1, report A's own screen). A start or a
      restart swaps the whole board: Enter the draft swaps the tall create
@@ -1490,9 +1500,26 @@ export default function UsCareerBoard({ sport }: { sport: UsCareerSport }) {
             </div>
           </div>
         )}
-        {panel === 'trophies' && (
+        {/* Round 1557: the medals of the summers with the national team sit on the shelf as rows of their own
+            (the sport's face, loaded with the save that carries a summer), and the International tile opens every
+            summer he was called, one tile each, in its own view with Back: never a list above the badges. */}
+        {panel === 'trophies' && intlOpen && intl ? (
+          <Suspense fallback={<IntlHolding />}>
+            <IntlSummersView
+              summers={intl.summersOf(career)} editionLabel={intl.editionLabel}
+              resultOf={row => ({ tournament: intl.tournamentOf(career, row.year), notes: intl.summerNotes(row.edition, row.age) })}
+              onBack={() => setIntlOpen(false)}
+            />
+          </Suspense>
+        ) : panel === 'trophies' && (
           <div className="space-y-3">
-            <TrophyCase seasons={career.seasons} rings={sport.ringsOf(career)} ringWord={sport.ringWord} />
+            <TrophyCase
+              seasons={career.seasons} rings={sport.ringsOf(career)} ringWord={sport.ringWord}
+              extra={intl?.trophyRows(career)}
+              intlTile={intl && intl.summersOf(career).length > 0
+                ? { sub: `Called up by the national team ${intl.summersOf(career).length === 1 ? 'once' : `${intl.summersOf(career).length} times`}`, onOpen: () => setIntlOpen(true) }
+                : undefined}
+            />
             {/* Round 469: the peaks between the trophies. Evaluated on every
                 render off the save, so a badge can never be stale. */}
             <BadgeGrid defs={sport.badges} earned={sport.earnedBadges(career)} />

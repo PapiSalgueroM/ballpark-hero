@@ -188,6 +188,7 @@ export const nflLoop = await import('${R}/src/lib/nflCareerLoop.ts');
 export const nba = await import('${R}/src/lib/nbaMyCareer.ts');
 export const nbaMoney = await import('${R}/src/lib/nbaCareerMoney.ts');
 export const nbaLoop = await import('${R}/src/lib/nbaCareerLoop.ts');
+export const nbaIntl = await import('${R}/src/lib/nbaCareerIntl.ts');
 export const mlb = await import('${R}/src/lib/mlbMyCareer.ts');
 export const mlbMoney = await import('${R}/src/lib/mlbCareerMoney.ts');
 export const mlbLoop = await import('${R}/src/lib/mlbCareerLoop.ts');
@@ -390,6 +391,9 @@ function usSport(cfg) {
       }
       cfg.prog(c, run.rng);
       if (cfg.retire(c)) c.retired = true;
+      /* Round 1557: what a sport does between seasons (the NBA answers the national team's call). Optional;
+         the NFL, MLB and NHL set none, so their careers play exactly as before. */
+      else if (cfg.between) cfg.between(c);
     },
     done: run => run.c.retired,
     act(run, action) {
@@ -482,6 +486,9 @@ const SPORTS = {
     money: { act: B.nbaMoney.nbaMoneyAct, bank: B.nbaMoney.nbaBankSummary, ensure: B.nbaMoney.ensureNbaMoney, status: B.nbaMoney.nbaCardStatus, cap: B.nbaMoney.nbaCardCap },
     headlines: B.nbaLoop.nbaHeadlinesFor, fans: B.nbaLoop.nbaFanComments,
     earnedBadges: B.nbaLoop.nbaEarnedBadges, badgeDefs: badges.NBA_BADGES,
+    /* Round 1557: go to every summer the national team calls (the board's beat after the curtain), so the
+       three medal badges are reachable here; this driver plays the 'now' era, so its first call is 2027. */
+    between: c => { if (B.nbaIntl.NBA_CAREER_INTL.pending(c)) B.nbaIntl.NBA_CAREER_INTL.answer(c, 'go'); },
   }),
   mlb: usSport({
     label: 'mlb', arch: B.mlb.MLB_ARCHETYPES,

@@ -3,6 +3,7 @@ import { Button } from '@/components/ui/button';
 import { FlagImg } from '@/components/FlagImg';
 import { useRevealScroll } from '@/hooks/useRevealScroll';
 import type { IntlGame, IntlGameRound, IntlPlace, IntlSummerEntry, IntlTournament } from '@/lib/careerIntl';
+import type { IntlSummerNotes } from '@/lib/usCareerSport';
 
 /* ─── Round 1544: what a summer with the national team came to ───
    Props only (no sport import: simUsCareerWeight section 2); it loads in its
@@ -75,12 +76,15 @@ function GameLine({ g, us, line, statWords, bare }: { g: IntlGame; us: string; l
   const mine = g.a === us || g.b === us;
   const other = g.a === us ? g.b : g.a;
   const [own, theirs] = g.a === us ? [g.sa, g.sb] : [g.sb, g.sa];
-  const head = mine
+  /* Round 1557 (1544's review, minor 8): in a group's or a round's list (bare) his game reads like its
+     neighbours, both nations named and the score between them, in bold; W or L against a lone name is for
+     his own lists only. */
+  const head = mine && !bare
     ? <>{g.winner === us ? 'W' : 'L'} {own}-{theirs} v <FlagImg name={other} size={16} showLabel /></>
     : <><FlagImg name={g.a} size={16} showLabel /> {g.sa}-{g.sb} <FlagImg name={g.b} size={16} showLabel /></>;
   const label = g.round === 'group' && g.group !== undefined ? groupName(g.group) : ROUND_WORDS[g.round];
   return (
-    <li className="rounded-md border border-border/60 px-2 py-1.5 text-xs">
+    <li className={`rounded-md border border-border/60 px-2 py-1.5 text-xs${mine && bare ? ' font-bold' : ''}`} data-intl-mine={mine ? '' : undefined}>
       {!bare && <span className="font-semibold">{label}: </span>}
       <span>{head}{g.ot ? ` (${g.ot === 1 ? 'OT' : `${g.ot} OT`})` : ''}</span>
       {line && <span className="block text-muted-foreground">You: {statWords.map(([k, w]) => count(line[k] ?? 0, w)).join(', ')}</span>}
@@ -190,6 +194,82 @@ export default function IntlSummerResult(p: IntlSummerResultProps) {
   return (
     <div ref={ref} data-intl-result data-intl-view={viewKey} className="rounded-xl border-2 border-sky-500/40 bg-gradient-to-b from-sky-500/10 to-transparent p-4 space-y-3">
       {body}
+    </div>
+  );
+}
+
+/* ─── Round 1557: the International view, behind the Trophy Case's tile ───
+   Every summer the national team called him, oldest first, one small tile
+   each; a summer he went to opens its result (Round 1544's IntlSummerResult,
+   played again from the save) with Back to this list, and this list's own
+   Back goes to the case. A summer he rested is a tile with no press. Props
+   only (no sport import: simUsCareerWeight section 2), a named export of this
+   module, so it loads in this lazy chunk (simCareerIntl section 12).
+   Every change of view is a new screen and obeys the no scroll rule. */
+type Went = Extract<IntlSummerEntry, { went: true }>;
+
+export interface IntlSummersViewProps {
+  summers: IntlSummerEntry[];
+  /** "the 2004 Olympics in Athens" */
+  editionLabel: (id: string) => string;
+  /** the tournament played again from the save, and the words for that summer */
+  resultOf: (row: Went) => { tournament: IntlTournament | null; notes: IntlSummerNotes };
+  onBack: () => void;
+}
+
+const cap = (s: string) => s.replace(/^the /, 'The ');
+
+export function IntlSummersView(p: IntlSummersViewProps) {
+  const [open, setOpen] = useState<number | null>(null);
+  const ref = useRevealScroll<HTMLDivElement>(`intl-summers:${open ?? 'list'}`);
+  const row = open === null ? null : (p.summers.find(s => s.year === open && s.went) as Went | undefined) ?? null;
+  if (row) {
+    const r = p.resultOf(row);
+    const n = r.notes;
+    return (
+      <div ref={ref} data-intl-summers-view={row.year}>
+        <IntlSummerResult
+          editionLabel={n.label} row={row} tournament={r.tournament} nation={n.nation}
+          happened={n.happened} fieldNote={n.fieldNote} playedAsNote={n.playedAsNote} statWords={n.statWords}
+          hurtCost={n.hurtCost} continueLabel="Back" onContinue={() => setOpen(null)}
+        />
+      </div>
+    );
+  }
+  const went = p.summers.filter((s): s is Went => s.went);
+  const medals = went.filter(s => s.place === 'gold' || s.place === 'silver' || s.place === 'bronze').length;
+  const sorted = [...p.summers].sort((a, b) => a.year - b.year);
+  return (
+    <div ref={ref} data-intl-summers-view="list" className="space-y-3 rounded-xl border-2 border-sky-500/40 bg-gradient-to-b from-sky-500/10 to-transparent p-4">
+      <div className="space-y-1 text-center">
+        <h3 className="text-lg font-black tracking-tight">🌍 International</h3>
+        <p className="text-sm text-muted-foreground" data-intl-summers-count>
+          {/* Round 1557's fix (review-run-1557, minor 4): a career that rested every call reads "never went", not "went 0 times, 0 medals". */}
+          Called up {p.summers.length === 1 ? 'once' : `${p.summers.length} times`}, {went.length === 0 ? 'never went' : `went ${went.length === 1 ? 'once' : `${went.length} times`}, ${medals === 0 ? 'no medal' : medals === 1 ? '1 medal' : `${medals} medals`}`}.
+        </p>
+      </div>
+      <div className="grid grid-cols-1 gap-2 sm:grid-cols-2">
+        {sorted.map(s => (s.went ? (
+          <button
+            key={s.year}
+            type="button"
+            data-intl-summer={s.year}
+            onClick={() => setOpen(s.year)}
+            className="min-h-[44px] w-full rounded-lg border border-border bg-card px-3 py-2 text-left hover:bg-secondary/60"
+          >
+            <span className="block text-sm font-bold">{cap(p.editionLabel(s.edition))}</span>
+            <span className="block text-xs text-muted-foreground">{PLACE_WORDS[s.place]}, {s.wins}-{s.games - s.wins}</span>
+          </button>
+        ) : (
+          <div key={s.year} data-intl-summer-rest={s.year} className="min-h-[44px] w-full rounded-lg border border-border/60 px-3 py-2 text-left">
+            <span className="block text-sm font-bold text-muted-foreground">{cap(p.editionLabel(s.edition))}</span>
+            <span className="block text-xs text-muted-foreground">You rested that summer.</span>
+          </div>
+        )))}
+      </div>
+      <Button data-intl-summers-back onClick={p.onBack} variant="secondary" className="min-h-[44px] w-full text-sm">
+        Back
+      </Button>
     </div>
   );
 }

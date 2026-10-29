@@ -104,6 +104,7 @@ try {
     "export * as base from './base.ts';",
     `export * as nfl from '${lib('nflMyCareer.ts')}';`,
     `export * as nba from '${lib('nbaMyCareer.ts')}';`,
+    `export * as nbaGate from '${lib('nbaCareerIntlGate.ts')}';`,
     `export * as mlb from '${lib('mlbMyCareer.ts')}';`,
     `export * as nhl from '${lib('nhlMyCareer.ts')}';`,
   ].join('\n'));
@@ -127,18 +128,24 @@ const PLAYERS = {
   mlb: { pos: ['SP', 'RP', 'C', '1B', '2B', '3B', 'SS', 'LF', 'CF', 'RF', 'DH'], arch: e => e.MLB_ARCHETYPES, start: e => e.startMlbCareer, roll: e => e.mlbRollTeamQuality, season: e => e.simMlbSeason, progress: e => e.mlbProgress, done: e => e.mlbShouldRetire },
   nhl: { pos: ['C', 'LW', 'RW', 'D', 'G'], arch: e => e.NHL_ARCHETYPES, start: e => e.startNhlCareer, roll: e => e.nhlRollTeamQuality, season: e => e.simNhlSeason, progress: e => e.nhlProgress, done: e => e.nhlShouldRetire },
 };
+/* Round 1557 (critic-1541 correction 9): the NBA playing careers say whether they meet the national team's call. The
+   loop below is the engine's season loop, which has no call beat, so a call changes nothing this harness checks; the
+   gate is pure, so reading it draws nothing from the stream. */
+const intlMet = { careers: 0, met: 0, seasons: 0, metSeasons: 0 };
 function playCareer(sport) {
   const e = E[sport], P = PLAYERS[sport];
   const pos = P.pos[Math.floor(Math.random() * P.pos.length)];
   const list = P.arch(e)[pos];
   const c = P.start(e)('Sim', pos, list[Math.floor(Math.random() * list.length)], Math.random, null);
-  let tq = null, guard = 0;
+  let tq = null, guard = 0, called = false;
   while (!c.retired && guard++ < 30) {
     tq = P.roll(e)(tq, Math.random);
     P.season(e)(c, tq, Math.random);
     P.progress(e)(c, Math.random);
+    if (sport === 'nba') { intlMet.seasons += 1; if (E.nbaGate.nbaIntlCallSummer(c) !== null) { intlMet.metSeasons += 1; called = true; } }
     if (P.done(e)(c)) c.retired = true;
   }
+  if (sport === 'nba') { intlMet.careers += 1; if (called) intlMet.met += 1; }
   c.retired = true;
   return c;
 }
@@ -293,5 +300,6 @@ if (control) {
     : `CONTROL ${control} DID NOT FIRE: section ${target} stayed green`);
   process.exit(fired ? 1 : 2);
 }
+console.log(`  note simUsCoachRetirement: ${intlMet.careers} NBA playing careers, ${intlMet.met} of them meeting the national team's call (${intlMet.metSeasons} of ${intlMet.seasons} seasons)`);
 console.log(failures === 0 ? 'PASS: ALL US COACHING RETIREMENT CHECKS PASSED' : `${failures} FAILURES`);
 process.exit(failures === 0 ? 0 : 1);

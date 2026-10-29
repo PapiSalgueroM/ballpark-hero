@@ -17,6 +17,11 @@ import { preDraftPlaySeason, preDraftStart } from '@/lib/careerPreDraft';
 import { answerSummerCard, dealSummer, newSummerSalt, seekSummerCard, summerOn } from '@/lib/usCareerSummer';
 import { talkDeckFilter } from '@/lib/usCareerRetirementFlow';
 import type { UsCareerCore, UsCareerSport } from '@/lib/usCareerSport';
+import { noteIntlCalls } from '@/test/helpers/intlCallNote';
+
+/* Round 1557 (critic-1541 correction 9): the file prints whether its NBA saves meet the national team's call
+   (simUsCareerSaveRetry passes the line on). */
+noteIntlCalls('usCareerSaveRetry');
 
 const spies = vi.hoisted(() => ({ error: vi.fn(), completion: vi.fn(), activity: vi.fn() }));
 vi.mock('@/lib/completions', () => ({ recordCompletion: spies.completion, recordActivity: spies.activity, getCurrentPlayerName: () => 'Save fixture' }));

@@ -110,6 +110,9 @@ resolve: { alias: ${JSON.stringify({ ...aliases, '@': unix(path.join(root, 'src'
   assert(raw.testResults.every(file => !file.testExecError), `${name}: suite execution error`);
   const records = (child.stdout || '').split(/\r?\n/).filter(line => line.includes('US_SAVE_RECORD|')).map(line => JSON.parse(line.slice(line.indexOf('US_SAVE_RECORD|') + 15)));
   save(path.join(dir, 'records.json'), records);
+  /* Round 1557 (critic-1541 correction 9): the normal run passes on the test's note of whether its NBA saves meet the
+     national team's call (src/test/helpers/intlCallNote.ts prints it). */
+  if (name === 'normal') for (const line of (child.stdout || '').split('\n').map(l => l.trimEnd()).filter(l => l.startsWith('note usCareerSaveRetry'))) console.log(`  ${line}`);
   assert.equal(tests.length, COUNT, `${name}: test inventory changed`);
   const baseline = records.find(record => record.id === BASELINE);
   assert(baseline, `${name}: complete independent baseline missing`);

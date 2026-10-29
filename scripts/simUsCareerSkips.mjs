@@ -48,6 +48,7 @@ import path from 'node:path';
 import { spawnSync } from 'node:child_process';
 import { fileURLToPath, pathToFileURL } from 'node:url';
 import * as esbuild from 'esbuild';
+import { noteNoIntlCareer } from './lib/intlCallNote.mjs';
 
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const ENGINE = 'src/lib/careerPreDraft.ts';
@@ -247,5 +248,7 @@ if (control) {
   console.log(fired ? `CONTROL ${control} FIRED: section 1 red on ${red[1].size} states` : `CONTROL ${control} DID NOT FIRE: section 1 stayed green`);
   process.exit(fired ? 1 : 2);
 }
+/* Round 1557 (critic-1541 correction 9): every harness naming the NBA career says whether it meets the national team's call. */
+noteNoIntlCareer('simUsCareerSkips', 'its NBA saves are prospects on the road to the draft, before any season, and the call comes between seasons');
 console.log(failures === 0 ? 'PASS: ALL US CAREER SKIP CHECKS PASSED' : `${failures} FAILURES`);
 process.exit(failures === 0 ? 0 : 1);

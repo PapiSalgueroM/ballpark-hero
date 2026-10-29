@@ -2004,7 +2004,7 @@ export const BASKETBALL_CONTENT: GameContentMap = {
           {
             heading: "Collecting badges in the Trophy Case",
             items: [
-              "Collect badges in the Trophy Case: 23 of them, from a first ring and Rookie of the Year to an All-Star nod, 30,000 career points, a triple double season and $100M to your name, each lit the moment the facts of your career say so.",
+              "Collect badges in the Trophy Case: 26 of them, from a first ring and Rookie of the Year to an All-Star nod, 30,000 career points, a triple double season and $100M to your name, each lit the moment the facts of your career say so.",
             ],
           },
           {
@@ -2173,7 +2173,7 @@ export const BASKETBALL_CONTENT: GameContentMap = {
       { q: "What does the legacy score reward most?", a: "MVPs and rings move it hardest, then Finals MVPs and All-NBA nods, plus longevity and points. The top verdict is the GOAT conversation, and it takes a stacked case." },
       { q: "What is in the Bank?", a: "Four tabs. Account holds your cash, a savings account that pays 2.5% a season, and a statement of your last 12 moves. Market is five prices that move every season, each with its own risk word and a read on whether it is cheap or dear against what it usually goes for. Cards is the card school on the team plane, one sitting a season, on odds the screen prints before you play. Shop is the 7 aisles. It is the same engine Soccer Career's phone runs on, in dollars." },
       { q: "Who is my rival?", a: "A generated player drafted the same year at your position. He plays his own seasons on the same scale you do, can win a ring before you and retire before you, and the head to head is kept for good. He is fictional, like your own player, so no real player's career is being simulated." },
-      { q: "How do I earn badges?", a: "By doing the thing. Each of the 23 badges is a test on the facts of your career, checked every time you open the case: a ring, an MVP, an All-Star nod, twenty thousand points, five seasons with all 82 games played, a million dollars to your name. The 30 point season badge sits a long way under the single season scoring record, Wilt Chamberlain's 50.4 a game in 1961-62, which is where it belongs." },
+      { q: "How do I earn badges?", a: "By doing the thing. Each of the 26 badges is a test on the facts of your career, checked every time you open the case: a ring, an MVP, an All-Star nod, twenty thousand points, five seasons with all 82 games played, a million dollars to your name. The 30 point season badge sits a long way under the single season scoring record, Wilt Chamberlain's 50.4 a game in 1961-62, which is where it belongs." },
       { q: "Is my career saved?", a: "Yes, progress auto saves in your browser. One career at a time, and starting fresh means retiring first." },
     ],
   },

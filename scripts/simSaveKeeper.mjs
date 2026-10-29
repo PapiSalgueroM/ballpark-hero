@@ -176,6 +176,7 @@ import { pathToFileURL, fileURLToPath } from 'node:url';
 import { build } from 'esbuild';
 import ts from 'typescript';
 import { buildRealSaves, WRITERS, PURE_LOADERS } from './lib/realSaves.mjs';
+import { noteNbaSaves } from './lib/intlCallNote.mjs';
 
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const CONTROL = process.env.SIM_SAVE_KEEPER_CONTROL || '';
@@ -259,6 +260,8 @@ try {
   process.exit(2);
 }
 const fleet = real.fleet;
+/* Round 1557 (critic-1541 correction 9): the NBA saves say whether they meet the national team's call. */
+await noteNbaSaves('simSaveKeeper', ROOT, fleet['/nba-my-career'] ?? []);
 const noWindow = fn => { const w = globalThis.window; delete globalThis.window; try { return fn(); } finally { globalThis.window = w; } };
 const accepts = Object.fromEntries(Object.entries(real.accepts).map(([r, f]) => [r, raw => noWindow(() => f(raw))]));
 /* Control dropkey: one fixture loses a top level key its writer always writes.

@@ -105,6 +105,48 @@ function closingBadges<F extends CareerPeakFacts>(ironBlurb: string, hofBlurb: s
   ];
 }
 
+/* ─── Round 1557: the medal badges, for any sport with international summers ──
+   Read off the summer rows the save carries (src/lib/careerIntl.ts writes
+   them), with no ledger and no bracket runner: this file sits in the page's
+   static graph, and the international code loads only when a career meets a
+   call (Round 1544's lazy split; simCareerIntl section 12 holds it). An
+   edition id is "<competition>-<year>", so the competition is the part before
+   the dash. A medal is a team's, so these sit apart from the season awards. */
+export interface IntlBadgeFacts {
+  /** gold, silver and bronze together */
+  medals: number;
+  /** golds by competition ('oly', 'wc') */
+  golds: Record<string, number>;
+}
+const INTL_MEDAL_PLACES = ['gold', 'silver', 'bronze'];
+/** The medal facts of a career's summers (career.intl.summers), or undefined
+ *  for a career never called. Read every render, before the load repair has
+ *  run on a hand edited save, so a row it cannot read counts for nothing. */
+export function intlBadgeFactsOf(summers: unknown): IntlBadgeFacts | undefined {
+  if (!Array.isArray(summers)) return undefined;
+  const f: IntlBadgeFacts = { medals: 0, golds: {} };
+  for (const s of summers as { went?: unknown; edition?: unknown; place?: unknown }[]) {
+    if (!s || s.went !== true || typeof s.edition !== 'string' || !INTL_MEDAL_PLACES.includes(s.place as string)) continue;
+    f.medals += 1;
+    if (s.place === 'gold') {
+      const comp = s.edition.split('-')[0];
+      f.golds[comp] = (f.golds[comp] ?? 0) + 1;
+    }
+  }
+  return f;
+}
+/** Three badges: any medal, Olympic gold ('oly' editions) and gold at the sport's world competition ('wc'
+ *  editions). The words are the sport's. Strings in, a literal out, like closingBadges: a helper that reads
+ *  properties off its argument or maps over it is a call the bundler cannot prove pure, and that alone split
+ *  this file into a chunk of its own (+0.8K on /nba-my-career, measured on a runner, r1557-s6 and s6b). */
+function intlBadges<F extends { intl?: IntlBadgeFacts }>(medalBlurb: string, olympicBlurb: string, worldLabel: string, worldBlurb: string): BadgeDef<F>[] {
+  return [
+    { id: 'intl_medal', emoji: '🎖️', label: 'Medal for your country', blurb: medalBlurb, test: f => (f.intl?.medals ?? 0) >= 1 },
+    { id: 'olympic_gold', emoji: '🥇', label: 'Olympic gold', blurb: olympicBlurb, test: f => (f.intl?.golds.oly ?? 0) >= 1 },
+    { id: 'world_cup_gold', emoji: '🌍', label: worldLabel, blurb: worldBlurb, test: f => (f.intl?.golds.wc ?? 0) >= 1 },
+  ];
+}
+
 /* ─── NFL ────────────────────────────────────────────────────────────────── */
 
 /** Only what the tests read. Built by nflBadgeFacts from a CareerState. */
@@ -165,6 +207,8 @@ export interface NbaBadgeFacts extends CareerPeakFacts {
   finalsMvps: number;
   allNbas: number;
   totals: { pts: number; reb: number; ast: number };
+  /** Round 1557: the summers with the national team. Optional: a career never called has none. */
+  intl?: IntlBadgeFacts;
 }
 
 export const NBA_BADGES: BadgeDef<NbaBadgeFacts>[] = [
@@ -186,6 +230,11 @@ export const NBA_BADGES: BadgeDef<NbaBadgeFacts>[] = [
   { id: 'reb_10k', emoji: '🧲', label: '10,000 rebounds', blurb: 'Ten thousand career rebounds.', test: f => f.totals.reb >= 10000 },
   { id: 'ast_10k', emoji: '🤝', label: '10,000 assists', blurb: 'Ten thousand career assists.', test: f => f.totals.ast >= 10000 },
   { id: 'decade', emoji: '📅', label: 'A decade in the league', blurb: 'Ten seasons played.', test: f => f.seasons.length >= 10 },
+  ...intlBadges<NbaBadgeFacts>(
+    'A medal with the national team, at an Olympics or a World Cup.',
+    'Gold with the national team at the Olympics.',
+    'World Cup gold', 'Gold at the World Cup, or the World Championship as it used to be called.',
+  ),
   ...closingBadges<NbaBadgeFacts>('Five seasons with all 82 games played.', 'The legacy verdict says Springfield.'),
 ];
 
