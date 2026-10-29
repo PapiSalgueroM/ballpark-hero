@@ -1,0 +1,12 @@
+tsc: node_modules/.bin/tsc --noEmit -p tsconfig.app.json
+m-accept: node .rc/x/mutbank1573.mjs accept && TRIVIA_BANK_FILE=/tmp/mut-accept.ts node scripts/simTriviaBank.mjs
+m-shared: node .rc/x/mutbank1573.mjs shared && TRIVIA_BANK_FILE=/tmp/mut-shared.ts node scripts/simTriviaBank.mjs
+m-literal: node .rc/x/mutbank1573.mjs literal && TRIVIA_BANK_FILE=/tmp/mut-literal.ts node scripts/simTriviaBank.mjs
+m-cap12: node .rc/x/mutbank1573.mjs cap12 && TRIVIA_BANK_FILE=/tmp/mut-cap12.ts node scripts/simTriviaBank.mjs
+m-cap16: node .rc/x/mutbank1573.mjs cap16 && TRIVIA_BANK_FILE=/tmp/mut-cap16.ts node scripts/simTriviaBank.mjs
+armbase: git show 692590145:src/lib/triviaQuestionBank.ts > /tmp/basebank.ts && git diff --name-only 692590145 HEAD -- src/data/marketNamesakes.json src/lib/clearWinner.ts src/lib/dateUtils.ts src/lib/dealPlayers.ts && TRIVIA_ARM_FILE=/tmp/basebank.ts node scripts/simTriviaBank.mjs
+big-new: git show 692590145:src/lib/triviaQuestionBank.ts > /tmp/basebank2.ts && TRIVIA_ARM_FILE=/tmp/basebank2.ts TRIVIA_BIG=unlimited:240001-270000 node scripts/simTriviaBank.mjs
+rival: node scripts/simNoRivalNames.mjs
+access: node scripts/simAccessibility.mjs
+anchors: node scripts/simHarnessAnchors.mjs
+guideh: node scripts/simGuideHeadings.mjs
