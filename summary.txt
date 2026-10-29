@@ -1,0 +1,9 @@
+build exit=0 35s | [dukb] inlined 1 stylesheet(s) and 1 module(s) into 181 snapshots (11 left alone)
+fonts exit=0 1s | Prepared 9 declared font dependencies for local fulfillment.
+simPlayerBingoCategories exit=0 50s | simPlayerBingoCategories: fixed proof passed; raw reports and changed-copy receipts retained.
+playPlayerBingoCategories exit=0 11s | playPlayerBingoCategories: actual offline built-page proof passed; raw geometry, requests and screenshots retained.
+align-capture exit=0 21s | CM shootout alignment fixed: full unchanged checks plus exact real-fixture capture passed; source held.
+playCmShootoutAlignment exit=0 3s | CM shootout alignment pixels: 2 actual reports, 3 viewports, 6 effective original-class controls, source held.
+intro-fixed exit=0 1s | Soccer Career intro render fixed: 7 passed, 0 failed, actual unannotated guides 132
+intro-href-control exit=1 1s | Soccer Career intro render href-control: 6 passed, 1 failed, actual unannotated guides 132
+playSoccerCareerIntroLinks exit=0 57s | Soccer Career intro browser: 12 raw/client cases, 2 real targets, 7 effective controls, source held; no external forwarding.
