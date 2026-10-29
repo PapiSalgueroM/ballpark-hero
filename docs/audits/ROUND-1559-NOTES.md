@@ -126,10 +126,13 @@ not added). sweepWeight.mjs is not edited; the NHL and MLB rows are the lead's (
 - To Round 1561 (R1): the NHL board (3.5's step 4 and 5 rows), useGmCareerKit, GmCareerKitHolding, careerBinding born
   with the NHL board as consumer, finding 9's floors, the lazy kit on /nhl-front-office, the walks (playGmCareer's NHL
   row with its four controls, playFoHub's NHL list), What's New, the weight of the bind, and the hockey guide lines.
-- FrontOfficeGmCareer.test's NHL row (the default path desk on and off, the three planted saves) is RECORDED in 1561,
-  from 1559's closing head: the NHL board and every NHL save are BASE's to the byte here (simGmCareer section 1 nhl
-  holds the engine). In the same commit 1561 scopes controlFrontOfficeBoard's T entries by board (critic 2) and uses a
-  sibling NhlLazyDesk.test.tsx.
+- FrontOfficeGmCareer.test's NHL row is DONE in 1559 (the closing fix pass, 2026-10-29): the default path (seeds 1 to
+  3, desk on and off, 13 to 16 checkpoints a case) and the three saves the base board wrote (fired desk on, fired desk
+  off, the hub after round 9 desk on) were RECORDED from 115c68092 on runner request r1559-cf1 and replayed green on
+  115c68092 and on the head in that request. The row runs the default path and the saves block only (BoardRow.career
+  false); 1561 turns its career on with the bind, adds where each planted save lands (the out of work screen for the
+  fired two), and uses a sibling NhlLazyDesk.test.tsx. controlFrontOfficeBoard's career titles are already scoped by
+  the "nfl board:" prefix (critic 2); 1561 gives its NHL controls the "nhl board:" prefix.
 - Guide sentences (R4: they turn false only when the NHL board ships the career, so they go with 1561):
   hockey.ts 1144 "... and at zero you are fired and the save ends." and 1213 "... at zero the save ends and you take
   another chair."; Part B baseball.ts 1168 and 1217; Part C basketball.ts 1898 and 1947. Each needs
