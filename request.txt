@@ -1,0 +1,2 @@
+stayloyalfix2-a: FIXANCHOR2=1 DUMP=1 node .rc/x/probe-econ.mjs . head stayloyal 2000 300
+stayloyalfix2-b: FIXANCHOR2=1 DUMP=1 node .rc/x/probe-econ.mjs . head stayloyal 900001 300
