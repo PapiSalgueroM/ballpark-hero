@@ -1,0 +1,7 @@
+# Release BT kit: 2 of the 2 request lines of Release BS's rc-BQj.txt (rBSg/.tmp-fx/bs), the lines of the BT areas (the US My Careers, the Front Offices, Soccer Connections and the daily save shape, Build Your XI and the player search box, What's New, the guides and search index, the weight rows) and the setup lines before them; 0 line(s) outside those areas left out.
+# Release BS kit: 2 of the 13 request lines of Release BR's rc-BQj.txt (rBRg/.tmp-fx/br), the lines of the BS areas (Soccer Career, Club Manager and the manager games on its engine, Player Bingo, Conquest, Stat and Draft Detective, the US My Career save notice, What's New, the polls, the guide intro) and the setup lines before them; 11 line(s) outside those areas left out: tsc shop shop-basecheck shop-earnround shop-clampdown shop-nobank shop-pp1 shop-ppall anchors rival storage.
+# Release BQ, Round 1538 (US My Career paid lines, closing head 32e8f7da): fix-1538.md's r1538x-fina (rc-fin-a.txt).
+# The shop- controls (earnround, clampdown, nobank, pp1, ppall) must exit 1 with a FIRED line; the rest exit 0.
+# shop-basecheck forms: the four US engines and simUsShopPromises.mjs on this head are 1538's blobs byte for byte.
+deckc: node scripts/simUsCareerDeckC.mjs
+board: node scripts/simUsBoardParity.mjs
