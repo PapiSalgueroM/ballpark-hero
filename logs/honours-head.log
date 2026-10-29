@@ -1,0 +1,12 @@
+    at ModuleJob.run (node:internal/modules/esm/module_job:561:25)
+    at async node:internal/modules/esm/loader:647:26
+    at async asyncRunEntryPointWithESMLoader (node:internal/modules/run_main:101:5) {
+  generatedMessage: true,
+  code: 'ERR_ASSERTION',
+  actual: '2AB9C85E99ED843E9C986CFA1997A04A0DA475F1FFC4668EF4B6A2C18712B58B',
+  expected: 'E77BB4BB84F3E90494A9577715CCCCC736E2A2454E57BBB24C4A0D863B221DD8',
+  operator: 'strictEqual',
+  diff: 'simple'
+}
+
+Node.js v24.22.1

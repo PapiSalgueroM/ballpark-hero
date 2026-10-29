@@ -1,0 +1,4 @@
+#!serial
+honours-head: node scripts/simPlayerBingoHonours.mjs 2>&1 | tail -12; exit ${PIPESTATUS[0]}
+honours-oldlib: git show b76de84c2:src/lib/playerBingo.ts > src/lib/playerBingo.ts && node scripts/simPlayerBingoHonours.mjs 2>&1 | tail -12; s=${PIPESTATUS[0]}; git checkout -- src; exit $s
+pin-head: node -e "const c=require('crypto'),f=require('fs');const s=f.readFileSync('src/lib/playerBingo.ts','utf8').replaceAll('\r\n','\n');console.log('head lib LF sha256 '+c.createHash('sha256').update(Buffer.from(s)).digest('hex').toUpperCase())"
