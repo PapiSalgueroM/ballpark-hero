@@ -1,0 +1,7 @@
+build exit=0 35s | [dukb] inlined 1 stylesheet(s) and 1 module(s) into 181 snapshots (11 left alone)
+abort exit=2 8s | playFirstVisitDialogs control ABORTED: no route in this run opened a dialog with a button, so the cover had nothing to cover
+ratchet exit=1 35s | playFirstVisitDialogs: PLAYFIRST_CONTROL=ratchet FIRED. 15 green or dialog free route widths listed as expected reds each failed the walk
+expected exit=1 56s | playFirstVisitDialogs: PLAYFIRST_CONTROL=expected FIRED. 24 of 24 covered route widths listed in EXPECTED_SITE_RED printed EXPECTED and none failed the walk
+edge exit=1 58s | playFirstVisitDialogs: PLAYFIRST_CONTROL=edge FIRED. 21 of 21 moved dialogs read red for the check it targets
+lift exit=1 59s | playFirstVisitDialogs: PLAYFIRST_CONTROL=lift FIRED. 24 of 24 moved dialogs read red for the check it targets
+nobanner exit=1 192s | playFirstVisitDialogs: PLAYFIRST_CONTROL=nobanner FIRED. 27 of 27 route widths with the banner hidden were refused as measuring nothing
