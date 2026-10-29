@@ -1,0 +1,4 @@
+#!playwright
+#!serial
+intro-fixed: mkdir -p .tmp-fx/si/original && git show b20ec6664:src/components/seo/GameSeoContent.tsx > .tmp-fx/si/original/GameSeoContent.tsx && CI=1 SEO_INTRO_ARTIFACTS="$PWD/.tmp-fx/si" SEO_INTRO_ORIGINAL_COMPONENT="$PWD/.tmp-fx/si/original/GameSeoContent.tsx" SEO_INTRO_RENDER_MODE=fixed node scripts/qa/simSoccerCareerIntroLinks.mjs
+intro-href-control: CI=1 SEO_INTRO_ARTIFACTS="$PWD/.tmp-fx/si" SEO_INTRO_ORIGINAL_COMPONENT="$PWD/.tmp-fx/si/original/GameSeoContent.tsx" SEO_INTRO_RENDER_MODE=href-control node scripts/qa/simSoccerCareerIntroLinks.mjs; s=$?; node -e "const r=require(process.cwd()+'/.tmp-fx/si/render-href-control/report.json');console.log('href-control failed cases: '+r.cases.filter(c=>c.status==='failed').map(c=>c.name).join(' '))"; exit $s
