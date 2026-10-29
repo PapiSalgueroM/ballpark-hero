@@ -1,0 +1,11 @@
+bingo-alias exit=0 2s | Source bytes held; raw unit/output/control receipts retained when OUT is set. Offline proof only.
+bingo-alias-ctl-alias exit=0 2s | FIRED-OK
+bingo-alias-ctl-country exit=0 2s | FIRED-OK
+gatewords-ctl-substring exit=0 4s | FIRED-OK
+deadline exit=0 8s | simClubManagerDecisionDeadline normal: green.
+simPlayerBingoHonours exit=0 10s | simPlayerBingoHonours PASS
+deadline-ctl-late exit=0 8s | FIRED-OK
+customPromotion exit=0 7s | PASS all five actual save/load summers: identical outcomes and RNG draws; source bytes held
+notes exit=0 12s | Phase fixed: three text-only snapshot observations; 3 effective copied old-caption controls; no gameplay, core or schema change.
+decisions-ctls exit=0 69s | presscohort FIRED
+worldBrowser-ctl-all exit=0 62s | simManagerWorldBrowser all: 13 outcomes and 16 effective copied faults passed.
