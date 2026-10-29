@@ -1,5 +1,5 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
-import { act, cleanup, fireEvent, render, screen } from '@testing-library/react';
+import { act, cleanup, fireEvent, render, screen, waitFor } from '@testing-library/react';
 import { MemoryRouter } from 'react-router-dom';
 import type { ComponentType } from 'react';
 
@@ -19,6 +19,7 @@ import { answerSummerCard, summerCardAt } from '@/lib/usCareerSummer';
 import { makeReviewCareer, reviewFixtures, reviewSave, reviewSports } from '@/test/fixtures/careerSeasonReview1008';
 import type { ReviewFixture } from '@/test/fixtures/careerSeasonReview1008';
 import type { UsCareerCore } from '@/lib/usCareerSport';
+import { hallWallKey, wallKeyOf } from '@/lib/usCareerHallWall';
 
 const boards: Record<string, ComponentType> = { nba: NbaMyCareerBoard, nfl: NflMyCareerBoard, mlb: MlbMyCareerBoard, nhl: NhlMyCareerBoard };
 const field = (name: string) => document.querySelector(`[data-season-${name}]`)?.textContent;
@@ -506,7 +507,11 @@ describe('saved career season review', () => {
         for (const bullet of legacy.bullets) expect(document.body.textContent).toContain(bullet);
         expect(document.body.textContent).toContain(`Legacy ${legacy.score}`);
         expect(localStorage.getItem(sport.saveKey)).toBe(bytes);
-        expect(writes).not.toHaveBeenCalled();
+        /* Round 1570: the first open puts this career up on its Hall wall, one write on the wall's own key and
+           none on the save's; the second open finds the plaque there and writes nothing at all. */
+        await waitFor(() => expect(writes.mock.calls.map(([key]) => key)).toEqual([hallWallKey(sport.slug)]));
+        expect((JSON.parse(String(writes.mock.calls[0][1])) as { entries: { key: string }[] }).entries.map(e => e.key))
+          .toEqual([wallKeyOf(career, sport.hall!)]);
         expect(recordCompletion).not.toHaveBeenCalled();
         unmount();
       }

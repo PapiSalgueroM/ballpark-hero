@@ -81,6 +81,9 @@ import { answerTalk, endsAfterSeason, manualRetire, pendingTalk, repairHallOnLoa
 import { stampOnRetirement } from '@/lib/usCareerRetirementFlow';
 import { isFarewellSeason, type RetirementChoiceId } from '@/lib/careerRetirement';
 import { hallRecordFor, type HallSpeechId } from '@/lib/careerHallOfFame';
+/* Round 1570: the Hall wall's rules load with the board (the prompt's words need them on the first frame);
+   the wall screen itself is lazy. The module imports no sport (simUsCareerHallWall section 3). */
+import { addToWall, hallWallEntry, hallWallKey, sanitizeHallWall, wallKeyOf, type HallWall } from '@/lib/usCareerHallWall';
 import { DIRTY_SENTENCE_NO_WASHERS, canDealWithDirtyMoney, washersLeft } from '@/lib/careerDirtyMoney';
 
 const UsCareerPractice = lazy(() => import('@/components/us-career/UsCareerPractice'));
@@ -162,6 +165,8 @@ export default function UsCareerBoard({ sport }: { sport: UsCareerSport }) {
   const reviewHubIndex = useRef(0);
   const hubButtons = useRef<HTMLDivElement>(null);
   const retiredReviewButton = useRef<HTMLButtonElement>(null);
+  /* Round 1570: the Hall wall as this browser holds it (null until read, and always with no Hall bound). */
+  const [wall, setWall] = useState<HallWall | null>(null);
   useEffect(() => {
     if (!reviewReturn.current) return;
     const target = reviewReturn.current === 'retired' ? retiredReviewButton.current
@@ -319,6 +324,39 @@ export default function UsCareerBoard({ sport }: { sport: UsCareerSport }) {
   const [hallLanded, setHallLanded] = useState(false);
   const [hallFolded, setHallFolded] = useState(false);
   useEffect(() => { setHallLanded(false); setHallFolded(false); }, [sport, career?.name, career?.retired]);
+
+  /* Round 1570: the Hall wall, read after mount and never during render, so the saved page (drawn with empty
+     storage) and the first paint agree. A bound Hall gates every piece of the wall: the parity replay binds
+     none, and sees no read, no write and no element. Junk reads as an empty wall the next plaque replaces. */
+  useEffect(() => {
+    if (!sport.hall) return;
+    try {
+      const raw = localStorage.getItem(hallWallKey(sport.slug));
+      setWall(sanitizeHallWall(raw ? JSON.parse(raw) : null, sport.slug));
+    } catch { setWall({ entries: [], writable: true }); }
+  }, [sport]);
+  /* Round 1570: a retired career goes up on the wall, keyed by career: when it retires in this visit (after
+     persist has stamped its calibration) and on the first load of a retired save from before this round,
+     whose save is never written. It waits while a save write is refused: a refused retirement means the
+     disk still holds the live career, and a plaque for it would be a ghost. The same plaque again writes
+     nothing, and a changed record replaces its own plaque where it hangs (never a second one). A wall of a
+     version this build does not know is never written over. A refused write throws past setWall, so the
+     prompt never says the card stays when the browser did not keep it. */
+  useEffect(() => {
+    if (!sport.hall || !career?.retired || saveFailure) return;
+    try {
+      const entry = hallWallEntry(sport, career);
+      if (!entry) return;
+      const key = hallWallKey(sport.slug);
+      const raw = localStorage.getItem(key);
+      let was: HallWall;
+      try { was = sanitizeHallWall(raw ? JSON.parse(raw) : null, sport.slug); } catch { was = { entries: [], writable: true }; }
+      if (!was.writable) { setWall(was); return; }
+      const next = addToWall(was.entries, entry);
+      if (next !== was.entries) localStorage.setItem(key, JSON.stringify({ v: 1, entries: next }));
+      setWall({ entries: next, writable: true });
+    } catch { /* the career is still on its save, and the prompt keeps saying the card goes */ }
+  }, [career, sport, saveFailure]);
 
   useEffect(() => {
     pendingSave.current = null;
@@ -1024,11 +1062,14 @@ export default function UsCareerBoard({ sport }: { sport: UsCareerSport }) {
      the sticky parent). */
   const startOver = phase !== 'create' && (!!career || (phase === 'prospect' && !!prospect));
   /* Round 1569 (the lead's ruling R3): a retired career's Hall card is drawn from this one save, so both
-     restart prompts say it goes too (the coaching career after retirement included). */
+     restart prompts say what happens to it (the coaching career after retirement included). Round 1570: it
+     stays when its plaque is up on the Hall wall, and goes when this browser did not keep the plaque. */
   const hallOnRestart = !!career?.retired && !!sport.hall;
+  const hallWallKeyNow = career?.retired && sport.hall ? wallKeyOf(career, sport.hall) : null;
+  const hallKept = hallWallKeyNow !== null && !!wall?.entries.some(e => e.key === hallWallKeyNow);
   const withSaveStatus = (content: ReactNode) => <div ref={boardTop}>
     {saveFailure && <UsCareerSaveNotice operation={saveFailure} onRetry={retrySave} />}
-    {startOver && <UsCareerStartOver sport={sport.label} onConfirm={reset} hallCard={hallOnRestart} />}
+    {startOver && <UsCareerStartOver sport={sport.label} onConfirm={reset} hallCard={hallOnRestart} hallKept={hallKept} />}
     {content}
   </div>;
 
@@ -1278,7 +1319,7 @@ export default function UsCareerBoard({ sport }: { sport: UsCareerSport }) {
             )}
           </div>
           <div className="mt-4 flex flex-col items-center gap-3 sm:flex-row sm:justify-center">
-            <USCareerActionConfirm action="restart" sport={sport.label} onConfirm={reset} hallCard={hallOnRestart}>
+            <USCareerActionConfirm action="restart" sport={sport.label} onConfirm={reset} hallCard={hallOnRestart} hallKept={hallKept}>
               <button className="inline-flex min-h-11 min-w-11 items-center gap-2 rounded-full border border-border px-6 py-2.5 text-sm font-semibold text-foreground">
                 <RotateCcw className="h-4 w-4" /> New career
               </button>

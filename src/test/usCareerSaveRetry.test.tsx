@@ -17,6 +17,7 @@ import { preDraftPlaySeason, preDraftStart } from '@/lib/careerPreDraft';
 import { answerSummerCard, dealSummer, newSummerSalt, seekSummerCard, summerOn } from '@/lib/usCareerSummer';
 import { talkDeckFilter } from '@/lib/usCareerRetirementFlow';
 import type { UsCareerCore, UsCareerSport } from '@/lib/usCareerSport';
+import { hallWallKey, wallKeyOf } from '@/lib/usCareerHallWall';
 
 const spies = vi.hoisted(() => ({ error: vi.fn(), completion: vi.fn(), activity: vi.fn() }));
 vi.mock('@/lib/completions', () => ({ recordCompletion: spies.completion, recordActivity: spies.activity, getCurrentPlayerName: () => 'Save fixture' }));
@@ -227,7 +228,14 @@ describe.each(SPORTS)('$label save recovery on the actual board', row => {
   });
 
   it('refused occupied reset queues removal and Retry really deletes only this sport', () => {
-    seed(row, fixture(row, true)); const view = mount(row), durable = values(); refusing = true; reset(view);
+    seed(row, fixture(row, true)); const view = mount(row), durable = values();
+    /* Round 1570: mounting a retired save puts it up on this sport's Hall wall, one write on the wall's own key
+       holding this career (StrictMode's second run finds it there and writes nothing). From the reset on, the
+       attempts are exactly the old single refused removal. */
+    const mounted = JSON.parse(durable[row.sport.saveKey]!) as { c: UsCareerCore };
+    expect(attempts.map(({ method, key, refused }) => ({ method, key, refused }))).toEqual([{ method: 'setItem', key: hallWallKey(row.sport.slug), refused: false }]);
+    expect((JSON.parse(attempts[0].value!) as { entries: { key: string }[] }).entries.map(e => e.key)).toEqual([wallKeyOf(mounted.c, row.sport.hall!)]);
+    attempts = []; refusing = true; reset(view);
     assertNotice(view, 'remove', row.label + ': reset refusal visible');
     check(row.label + ': reset remains local', { values: values(), create: !!view.queryByRole('button', { name: 'Enter the draft' }), attempts }, { values: durable, create: true, attempts: [{ method: 'removeItem', key: row.sport.saveKey, value: null, refused: true }] });
     retry(view, row, null, row.label + ': refused reset Retry');
