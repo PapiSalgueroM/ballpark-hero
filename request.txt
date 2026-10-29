@@ -1,0 +1,4 @@
+#!build
+#!serial
+prerender-head: node scripts/simPrerender.mjs 2>&1 | grep -v "^   ok" | tail -40; exit ${PIPESTATUS[0]}
+prerender-basewn: git show 692590145:src/pages/WhatsNew.tsx > src/pages/WhatsNew.tsx && node scripts/simPrerender.mjs 2>&1 | grep -v "^   ok" | tail -40; s=${PIPESTATUS[0]}; git checkout -- src; exit $s
