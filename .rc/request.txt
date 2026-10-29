@@ -1,0 +1,9 @@
+#!serial
+rehearse: npm install --prefix /tmp/pgl @electric-sql/pglite >/dev/null 2>&1 && PGLITE_DIR=/tmp/pgl node scripts/qa/rehearseUsConnections1567.mjs
+rh-noguard: REHEARSE_CONTROL=noguard PGLITE_DIR=/tmp/pgl node scripts/qa/rehearseUsConnections1567.mjs
+rh-drift: REHEARSE_CONTROL=drift PGLITE_DIR=/tmp/pgl node scripts/qa/rehearseUsConnections1567.mjs
+rh-tamper: REHEARSE_CONTROL=tamper PGLITE_DIR=/tmp/pgl node scripts/qa/rehearseUsConnections1567.mjs
+rh-nohash: REHEARSE_CONTROL=nohash PGLITE_DIR=/tmp/pgl node scripts/qa/rehearseUsConnections1567.mjs
+rehearse1558: PGLITE_DIR=/tmp/pgl node scripts/qa/rehearseUsConnections1558.mjs
+storage: node scripts/simStorageWrites.mjs
+norival: node scripts/simNoRivalNames.mjs
