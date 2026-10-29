@@ -343,7 +343,7 @@ const SportsMillionaire = () => {
               ))}
             </div>
             {playMode === 'daily' && (
-              <p className="text-xs text-muted-foreground mt-3">Today's ladder, {getTodayET()}. Same 15 questions for everyone.</p>
+              <p className="text-xs text-muted-foreground mt-3">Today's ladder, {todayStr}. Same 15 questions for everyone.</p>
             )}
           </>
         }
