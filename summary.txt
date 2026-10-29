@@ -1,0 +1,5 @@
+tsc exit=0 57s | 
+rec-base exit=0 4s |    Duration  3.63s (transform 546ms, setup 56ms, collect 159ms, tests 2.85s, environment 239ms, prepare 77ms)
+replay-base exit=0 4s |    Duration  3.66s (transform 556ms, setup 53ms, collect 153ms, tests 2.91s, environment 222ms, prepare 65ms)
+replay-head exit=0 4s |    Duration  3.70s (transform 564ms, setup 51ms, collect 157ms, tests 2.92s, environment 220ms, prepare 48ms)
+nfl-default exit=0 11s |    Duration  11.31s (transform 1.07s, setup 51ms, collect 155ms, tests 10.54s, environment 227ms, prepare 77ms)

@@ -1,0 +1,43 @@
+115c680921 Round 1566: merge origin/main at 601435944 (board claims only; docs/WORKBOARD.md is main's text)
+
+[1m[46m RUN [49m[22m [36mv3.2.7 [39m[90m/tmp/base1559[39m
+
+Browserslist: browsers data (caniuse-lite) is 16 months old. Please run:
+  npx update-browserslist-db@latest
+  Why you should do it regularly: https://github.com/browserslist/update-db#readme
+[90mstdout[2m | src/components/front-office-shared/FrontOfficeGmCareer.test.tsx[2m > [22m[2mnhl board: the default path[2m > [22m[2mseed 1|desk on: every checkpoint of two seasons is the base's
+[22m[39mFO_GM_CAREER|nhl|seed 1|desk on|16 checkpoints|start,presser,cut,sign,round 1,round 9,recap,answered,draft,summer,round 1,round 9,recap,answered,draft,summer
+
+[90mstdout[2m | src/components/front-office-shared/FrontOfficeGmCareer.test.tsx[2m > [22m[2mnhl board: the default path[2m > [22m[2mseed 1|desk off: every checkpoint of two seasons is the base's
+[22m[39mFO_GM_CAREER|nhl|seed 1|desk off|15 checkpoints|start,cut,sign,round 1,round 9,recap,answered,draft,summer,round 1,round 9,recap,answered,draft,summer
+
+[90mstdout[2m | src/components/front-office-shared/FrontOfficeGmCareer.test.tsx[2m > [22m[2mnhl board: the default path[2m > [22m[2mseed 2|desk on: every checkpoint of two seasons is the base's
+[22m[39mFO_GM_CAREER|nhl|seed 2|desk on|15 checkpoints|start,presser,cut,sign,round 1,round 9,recap,draft,summer,round 1,round 9,recap,answered,draft,summer
+
+[90mstdout[2m | src/components/front-office-shared/FrontOfficeGmCareer.test.tsx[2m > [22m[2mnhl board: the default path[2m > [22m[2mseed 2|desk off: every checkpoint of two seasons is the base's
+[22m[39mFO_GM_CAREER|nhl|seed 2|desk off|14 checkpoints|start,cut,sign,round 1,round 9,recap,draft,summer,round 1,round 9,recap,answered,draft,summer
+
+[90mstdout[2m | src/components/front-office-shared/FrontOfficeGmCareer.test.tsx[2m > [22m[2mnhl board: the default path[2m > [22m[2mseed 3|desk on: every checkpoint of two seasons is the base's
+[22m[39mFO_GM_CAREER|nhl|seed 3|desk on|14 checkpoints|start,presser,cut,sign,round 1,round 9,recap,draft,summer,round 1,round 9,recap,draft,summer
+
+[90mstdout[2m | src/components/front-office-shared/FrontOfficeGmCareer.test.tsx[2m > [22m[2mnhl board: the default path[2m > [22m[2mseed 3|desk off: every checkpoint of two seasons is the base's
+[22m[39mFO_GM_CAREER|nhl|seed 3|desk off|13 checkpoints|start,cut,sign,round 1,round 9,recap,draft,summer,round 1,round 9,recap,draft,summer
+
+[90mstdout[2m | src/components/front-office-shared/FrontOfficeGmCareer.test.tsx[2m > [22m[2mnhl board: the default path[2m > [22m[2mthe record is written once, from the base
+[22m[39mFO_GM_CAREER_RECORD nhl 6 cases -> /home/runner/work/_temp/rc-out/files/fixture.json
+
+[90mstdout[2m | src/components/front-office-shared/FrontOfficeGmCareer.test.tsx[2m > [22m[2mnhl board: the saves the base wrote[2m > [22m[2mthree saves written by the base board are recorded beside its default path
+[22m[39mFO_GM_CAREER_PLANTED fired desk on|155246 chars|phase fired
+FO_GM_CAREER_PLANTED fired desk off|143760 chars|phase fired
+FO_GM_CAREER_PLANTED hub desk on|153777 chars|phase hub
+
+ [32m✓[39m src/components/front-office-shared/FrontOfficeGmCareer.test.tsx [2m([22m[2m24 tests[22m[2m | [22m[33m16 skipped[39m[2m)[22m[33m 2855[2mms[22m[39m
+   [33m[2m✓[22m[39m nhl board: the default path[2m > [22mseed 1|desk on: every checkpoint of two seasons is the base's [33m 1118[2mms[22m[39m
+   [33m[2m✓[22m[39m nhl board: the default path[2m > [22mseed 1|desk off: every checkpoint of two seasons is the base's [33m 344[2mms[22m[39m
+   [33m[2m✓[22m[39m nhl board: the default path[2m > [22mseed 2|desk on: every checkpoint of two seasons is the base's [33m 317[2mms[22m[39m
+
+[2m Test Files [22m [1m[32m1 passed[39m[22m[90m (1)[39m
+[2m      Tests [22m [1m[32m8 passed[39m[22m[2m | [22m[33m16 skipped[39m[90m (24)[39m
+[2m   Start at [22m 23:06:35
+[2m   Duration [22m 3.63s[2m (transform 546ms, setup 56ms, collect 159ms, tests 2.85s, environment 239ms, prepare 77ms)[22m
+
