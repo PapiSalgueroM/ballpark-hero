@@ -289,6 +289,19 @@ export default function UsCareerBoard({ sport }: { sport: UsCareerSport }) {
      nothing when the top of the panel is already readable. */
   const panelRef = useRevealScroll<HTMLDivElement>(`${panel}:${newsTab}`);
 
+  /* Round 1569 (the lead's ruling R1, report A's own screen). A start or a
+     restart swaps the whole board: Enter the draft swaps the tall create
+     screen for the shorter hub, the road to the draft and its draft day do the
+     same, and a confirmed Start over or New career swaps a hub or the retired
+     card for the create screen. The page kept the old screen's scroll, so at
+     1318 x 647 the hub's top sat above the viewport and the window was left on
+     the guide below the board: the player saw no game. The count rises on
+     those presses and at no other time (never on a load, a reload or a hub
+     tile), and the board's own wrapper pulls its top in under the menu bar.
+     Like every reveal it does nothing when that top is already readable. */
+  const [careerStart, setCareerStart] = useState(0);
+  const boardTop = useRevealScroll<HTMLDivElement>(careerStart);
+
   /* Round 643: the coaching career comes after retirement, so it is still a
      finished playing career. With done on the retired screen alone, every
      Resume coaching then Back went false then true and paid the whole legacy
@@ -450,6 +463,7 @@ export default function UsCareerBoard({ sport }: { sport: UsCareerSport }) {
   };
   const beginProspect = () => {
     if (prospectRef.current) return;
+    setCareerStart(n => n + 1);
     saveProspect(createUsCareerProspect(sport, {
       name: nameInput.trim() || sport.create.defaultName, pos, archetypeId, eraId, appearance,
       seed: `${sport.slug}:${Math.floor(Math.random() * 0x100000000).toString(36)}`,
@@ -485,6 +499,7 @@ export default function UsCareerBoard({ sport }: { sport: UsCareerSport }) {
     setTeamQuality(tq);
     setDraftDay(null);
     focusCareerEntry.current = true;
+    setCareerStart(n => n + 1);
     setPhase('season');
     persist(c, 'season', tq);
   };
@@ -511,6 +526,7 @@ export default function UsCareerBoard({ sport }: { sport: UsCareerSport }) {
     ]);
     /* Round 530: the same facts, given a moment. */
     setDraftDay({ pick: c.draftPick, teamLabel: sport.teamLabelOf(c.team), playerName: c.name, lines: [pressureLine, roleNote], firstRoundEnd: sport.firstRoundEnd });
+    setCareerStart(n => n + 1);
     setPhase('season');
     persist(c, 'season', tq);
   };
@@ -941,6 +957,7 @@ export default function UsCareerBoard({ sport }: { sport: UsCareerSport }) {
     prospectRef.current = null;
     setProspect(null);
     setProspectNotice('');
+    setCareerStart(n => n + 1);
     setPhase('create');
     setFeed([]);
     setLastLine(null);
@@ -1006,7 +1023,7 @@ export default function UsCareerBoard({ sport }: { sport: UsCareerSport }) {
      floats over the guide below it (it was a fragment, and the page's main was
      the sticky parent). */
   const startOver = phase !== 'create' && (!!career || (phase === 'prospect' && !!prospect));
-  const withSaveStatus = (content: ReactNode) => <div>
+  const withSaveStatus = (content: ReactNode) => <div ref={boardTop}>
     {saveFailure && <UsCareerSaveNotice operation={saveFailure} onRetry={retrySave} />}
     {startOver && <UsCareerStartOver sport={sport.label} onConfirm={reset} />}
     {content}
