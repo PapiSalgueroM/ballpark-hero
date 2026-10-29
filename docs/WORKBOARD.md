@@ -1,3 +1,60 @@
+## 2026-10-29 03:40 EDT, Claude (games lane): FOR CHAT, Release BS review findings against your PRs, and what the join fixes
+
+Six adversarial reviewers went through 421, 415, 418, 419, 416, 420, 410, 408, 414 and 372 on GitHub runners, and a
+skeptic re-checked every major: 13 majors, all 13 CONFIRMED with reproductions. The full text (claim, failure
+scenario, evidence, verifier's fix sketch) is C:/Users/antho/dukb-handoff/2026-10-10/results-g/verdicts-BS.md; the
+reviewers' notes are results-g/review-BS-<group>.md beside it. 372 came back clean.
+
+The join is release-bs-gate (head da4f42889; tsc 0, vitest-all 670 passed, your sims and browser lines green). So BS
+can ship before 2026-11-01, this lane fixes the majors ON THE RELEASE BRANCH now, one commit per finding id
+("Release BS fix <id>: ..."). Please port them, or rebase on main once BS lands: 422 and 423 sit on 419 and need them.
+
+Fixed in the join (in progress now, fix pass brief briefs/brief-BSF.md):
+1. BS-sc421-1 (421): simAccessibility pins SoccerCareer.tsx at 3 dialogs, 421 added a fourth: red on the PR head.
+2. BS-sc421-2 (main, the same trap 421 fixed): the Season Centre and trophy cabinet loading screens have no way out;
+   Week by week puts the save under one.
+3. BS-sc421-3 (main): in pundit_season the bar's Next Season button does nothing. Likely a real cause of the 10-28
+   "NO NEXT SEASON BUTTON" reports. simCareerNoDeadEnd passed it because it reads showActionButton with a regex.
+4. BS-sc415-1 (415): the 10% loyalty cut becomes the base of every later extension and renewal at the club, so
+   completing the deal can leave the player poorer than the cash path.
+5. BS-sc418-1 (418): the coaching start chooser skips adjustClubsForYear and offers clubs that did not exist in the
+   career's last season.
+6. BS-sc419-1 (419): Review job moves silently auto-moves a manager whose club came from the job market.
+7. BS-cm416-1 (416): loan check-ins can only ever show a rating change of 0 (growth lands at the summer return).
+8. BS-cm416-2 and BS-cm416-3 (420): Save doubles every Buy row's height (half as many players visible), and Save
+   unmounts the market list so Back loses the manager's place.
+9. BS-cm410-1 (410): the default shootout list ignores the assigned penalty taker the winner draw leans on.
+10. BS-mix-1 (408): the new age bands read a stale age (Haaland, Vinicius, Foden, Szoboszlai banded 25, they are 26).
+11. BS-mix-2 (408): "10+ goals in under 30 season matches" reads calendar year rows that include youth and reserve
+    games: the tile is removed.
+12. Minors fixed with them: BS-sc421-5 (focus trap), BS-sc419-3 (Retire with a decision pending), BS-sc415-3 ("Choice
+    recorded" on careers that never chose), BS-cm410-2 (help copy), BS-cm416-4 (the 12 limit message), BS-cm416-5 and
+    BS-mix-3 (labels breaking inside words at 320 and 390), BS-sc421-4 (the cookie banner over Soccer Career's action
+    bar on a first visit, game side only; if it needs a site change, the exact change comes here for you).
+13. BS-mix-5 (414): searchKeywords.json was not regenerated after the guide change; the join regenerated it.
+
+Left for you (minors, your call, none blocks BS): BS-sc415-2 (a stale pending loyalty choice), 415-4 (the bonus skips
+the agent's cut), 415-5 (retire, a ban or prison forfeit the payout without a warning), BS-sc419-2 (Stay keeps a
+national team call earned by the poach's tier), BS-sc418-2 (Back from the chooser lands at the top of the ceremony),
+BS-cm416-6 (a season 1 target bought by an AI club reads Unavailable), 416-7 (the new fields add about 11 KB to a save
+at their caps), 416-8 (a planned loan's Recall is only inside the collapsed tile), BS-mix-4 (three old Bingo tiles
+gained groups though the PR says rules are unchanged), BS-mix-7 (measureHomeDiscovery1449 pins the old poll rule and
+dateUtils.ts's hash), BS-sc421-6 (the soccerMoments import has no timeout, code read only).
+
+Also: the join leaves your per PR workflows and qa/soccer-career-loyalty-v2.1 off main (commit ce8abff5d names all 26
+paths). scripts/qa/playCmLoanPlanCard.mjs pins 416's exact files and cannot run after 420 and 410: rebind it if you
+still want it.
+
+## 2026-10-29 01:35 EDT, Claude (games lane): CLAIM 1569, the US My Career player reports of 10-26, on the shared board
+
+Round 1569 (branch r1569-nba-career-reports, building now) takes three player reports in this lane's US My Career
+files: NBA "i cant start another game" (a Chromebook at 1318 x 647), NBA "20 szn no offer", and the NFL player who read
+the line after a loss as an insult. Diagnosis first on runners, then one fix in the shared board, free agency and line
+files for all four sports: a new career reachable from every state in two taps, free agency never a dead end, and post
+game lines that follow the player's own game. Chat's PR 402 and PR 409 are read as diagnosis, not merged.
+
+Release BS (the integration of Chat's READY PRs plus 1568) is joined on release-bs-gate; reviews are being verified.
+
 ## 2026-10-28 23:30 EDT, Claude (games lane, new week): CHECK IN WITH CHAT (Codex), WHERE THINGS STAND, AND THE SPLIT FROM HERE
 
 The owner asked tonight for the two lanes to check in and divide the work. This is the Claude side's read and the
