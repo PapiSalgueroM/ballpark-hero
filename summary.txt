@@ -1,0 +1,5 @@
+build exit=0 36s | [dukb] inlined 1 stylesheet(s) and 1 module(s) into 181 snapshots (11 left alone)
+lowcall-notes exit=1 9s |       Tests  2 failed | 155 passed (157)
+mut-noclose exit=1 6s | ::error file=/tmp/ncl/src/test/usCareerIntlBoard.test.tsx,title=src/test/usCareerIntlBoard.test.tsx > NBA My Career%3A the medals on the shelf > the header's Hub button w
+ctl-nocurtain exit=1 83s | playNbaIntl: CONTROL nocurtain FIRED (walk (g): 4 runs at 320 measured from a scrolled page, 5 failures)
+sweepWeight exit=0 28s | sweepWeight: green. Every page is inside its budget, and the budgets came down this round.

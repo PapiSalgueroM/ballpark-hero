@@ -1,0 +1,8 @@
+#!serve
+#!playwright
+#!serial
+# Release BT triage rerun (the lead, 2026-10-29): the three Team USA mutation controls that aborted with MUT unknown in the gate (the BT fixer's mutFix.mjs overwrote mutfix.mjs on the case insensitive Windows disk; the original helper is recovered from rc/rBTg-kB as mutfixB.mjs), and sweepWeight after the triage raise 86eab80a3.
+lowcall-notes: git worktree add -q /tmp/lc HEAD && ln -s "$PWD/node_modules" /tmp/lc/node_modules && node .rc/x/mutfixB.mjs /tmp/lc lowcall && cd /tmp/lc && (FORCE_COLOR=0 NO_COLOR=1 node_modules/.bin/vitest run src/test/myCareerRestore.test.tsx src/test/rivalryChoiceBoard.test.tsx src/test/usCareerActionConfirm.test.tsx src/test/usCareerReveals.test.tsx src/test/usCareerStatLines.test.tsx --testTimeout=300000 --hookTimeout=120000 > /tmp/lc.log 2>&1; s=$?; grep -a "note " /tmp/lc.log | cut -c1-260; grep -a "Tests  \|Test Files" /tmp/lc.log; exit $s)
+mut-noclose: git worktree add -q /tmp/ncl HEAD && ln -s "$PWD/node_modules" /tmp/ncl/node_modules && node .rc/x/mutfixB.mjs /tmp/ncl noclose && cd /tmp/ncl && node_modules/.bin/vitest run src/test/usCareerIntlBoard.test.tsx --testTimeout=300000 --hookTimeout=120000
+ctl-nocurtain: git worktree add -q /tmp/nc HEAD && ln -s "$PWD/node_modules" /tmp/nc/node_modules && node .rc/x/mutfixB.mjs /tmp/nc nocurtain && (cd /tmp/nc && node_modules/.bin/vite build > /tmp/nc-build.log 2>&1) && PLAY_INTL_CONTROL=nocurtain PLAY_INTL_DIST=/tmp/nc/dist ENGINES=chromium node scripts/playNbaIntl.mjs
+sweepWeight: SWEEP_OFFLINE=1 NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/sweepWeight.mjs > /tmp/sw.log 2>&1; s=$?; grep -E "FAIL|manager-hot-seat|deadline-day|transfer-path|nfl-my-career" /tmp/sw.log | head -12; tail -3 /tmp/sw.log; exit $s
