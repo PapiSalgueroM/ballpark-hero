@@ -1,0 +1,2 @@
+sim exit=0 1s | simUsCareerReports PASS: 0 findings, 150 careers a sport, seed 1569
+pressmarket exit=0 5s | Press/Market:6 outcomes,27 full original state/RNG pairs,6 effective copied source controls,18 native fixture branches.
