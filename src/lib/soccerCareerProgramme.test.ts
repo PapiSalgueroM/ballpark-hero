@@ -201,7 +201,7 @@ describe('Soccer career programme outcomes', () => {
   });
   it('reading absent old saves preserves every field and consumes no random draws', () => {
     const state = career(); const bytes = JSON.stringify(state); const random = vi.spyOn(Math, 'random').mockImplementation(() => { throw new Error('Unexpected draw'); });
-    try { expect(programmeEffects(state)).toEqual(neutral); expect(programmeOptions(state)).toHaveLength(10); prepareSoccerProgramme(state); const season = row({ year: 2027 }); settleSoccerProgramme(state, season); expect(season.programme).toBeUndefined(); expect(JSON.stringify(state)).toBe(bytes); expect(random).not.toHaveBeenCalled(); } finally { random.mockRestore(); }
+    try { expect(programmeEffects(state)).toEqual(neutral); expect(programmeOptions(state).map(view => view.id)).toEqual(['tactics', 'position', 'set_pieces', 'promise', 'negotiation', 'bonuses', 'adaptation', 'fitness', 'captain', 'loan', 'loyalty']); prepareSoccerProgramme(state); const season = row({ year: 2027 }); settleSoccerProgramme(state, season); expect(season.programme).toBeUndefined(); expect(JSON.stringify(state)).toBe(bytes); expect(random).not.toHaveBeenCalled(); } finally { random.mockRestore(); }
   });
   it('invalid programme and year data are neutral', () => {
     for (const programme of [{ version: 2, receipts: [] }, { version: 1, receipts: null }, { version: 1, receipts: [null] }, { version: 1, receipts: [], negotiated: 'bad' }, { version: 1, receipts: [], plan: { year: NaN, club: club.name, choices: {} } }, { version: 1, receipts: [], plan: { year: 2027, club: club.name, choices: { tactics: 'invented' } } }]) {
@@ -231,7 +231,7 @@ describe('Soccer career programme outcomes', () => {
     for (const patch of [{ club: 'Wrong Club' }, { type: 'youth' as const }, { apps: -1 }, { goals: NaN }]) settleSoccerProgramme(state, row({ year: 2027, ...patch })); expect(state).toEqual(before);
   });
   it('reading never accesses hidden awards or changes the saved primary season identity', () => {
-    const state = chooseProgramme(career(), 'tactics', 'creator'); Object.defineProperty(state, 'awards', { get() { throw new Error('Award read'); }, configurable: true }); Object.defineProperty(state, 'pendingBallonDor', { get() { throw new Error('Award read'); }, configurable: true }); expect(programmeOptions(state)).toHaveLength(10); expect(programmeEffects(state).assistMult).toBe(1.12);
+    const state = chooseProgramme(career(), 'tactics', 'creator'); Object.defineProperty(state, 'awards', { get() { throw new Error('Award read'); }, configurable: true }); Object.defineProperty(state, 'pendingBallonDor', { get() { throw new Error('Award read'); }, configurable: true }); expect(programmeOptions(state).map(view => view.id)).toEqual(['tactics', 'position', 'set_pieces', 'promise', 'negotiation', 'bonuses', 'adaptation', 'fitness', 'captain', 'loan', 'loyalty']); expect(programmeEffects(state).assistMult).toBe(1.12);
   });
 });
 

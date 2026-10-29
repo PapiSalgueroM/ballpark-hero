@@ -213,11 +213,14 @@ export function CalendarScreen({ career, onSimTo, onSetTraining }: CalendarScree
     );
   };
 
+  /* Round 1568: scroll-mt-14 (56 px) on the sources note and its links keeps them below the site's 44 px bar when the
+     browser brings them into view. Tabbing back up to a source link, or bringing the note into view, parked it at the
+     very top edge of a 390 phone, under the bar (scripts/playCmRealFixtures.mjs, calendar-sources, at -0.5 to 81.5). */
   return (
     <div className="space-y-3">
-      {fixtureCoverage && <p data-cm-fixture-coverage={fixtureCoverage.key} className="rounded-lg border border-border bg-card px-3 py-2 text-xs text-muted-foreground">
+      {fixtureCoverage && <p data-cm-fixture-coverage={fixtureCoverage.key} className="scroll-mt-14 rounded-lg border border-border bg-card px-3 py-2 text-xs text-muted-foreground">
         {fixtureCoverage.label}{' '}
-        {fixtureCoverage.sources.map((source, i) => <span key={source.url}>{i > 0 ? ' / ' : 'Sources: '}<a href={source.url} target="_blank" rel="noopener noreferrer" className="underline">{source.label}</a></span>)}
+        {fixtureCoverage.sources.map((source, i) => <span key={source.url}>{i > 0 ? ' / ' : 'Sources: '}<a href={source.url} target="_blank" rel="noopener noreferrer" className="underline scroll-mt-14">{source.label}</a></span>)}
       </p>}
       {/* Month header and grid */}
       <div className="bg-card border border-border rounded-xl p-3">

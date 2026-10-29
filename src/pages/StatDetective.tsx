@@ -218,9 +218,13 @@ const StatDetective = () => {
         description="A real NBA season with the name removed: era, position and per 36 numbers. Crack the case in eight guesses with feedback clues after every miss. Free, no sign-up."
         path="/stat-detective"
       />
-      <div className="max-w-2xl mx-auto px-4 py-6 md:py-10">
+      {/* Round 1568: since Round 1451 a 44 px site bar sits over the top of every phone screen (before it the ticker
+          was hidden on phones), and Deep Cuts ended at 879 of a 390 by 844 phone. On a phone the title is one line
+          (text-3xl, it wrapped to two at text-4xl) and the top padding is 16 px, so both buttons are back on the
+          first screen. Wider screens are unchanged. */}
+      <div className="max-w-2xl mx-auto px-4 pt-4 pb-6 sm:pt-6 md:py-10">
         <header className="text-center mb-6">
-          <h1 className="text-4xl md:text-5xl font-bold tracking-[0.08em] text-primary font-display mb-1">
+          <h1 className="text-3xl sm:text-4xl md:text-5xl font-bold tracking-[0.08em] text-primary font-display mb-1">
             STAT DETECTIVE
           </h1>
           <p className="text-muted-foreground text-sm md:text-base">

@@ -26,6 +26,9 @@
  *           for a write, in view and with nothing over it, there is exactly
  *           one toast, the two notices do not overlap, and nothing reached
  *           the store
+ *  stuck    (Round 1568 closing check) scrolled down past it, the Retry
+ *           notice sticks just under the site's sticky bar and the middle of
+ *           its first line is the notice, not the bar
  *  retry    the browser takes writes again: Retry save puts the prospect on
  *           the store and the notice goes
  *  toast    and the toast that said the save had failed is gone with it
@@ -109,6 +112,9 @@
  *   quotafree (Round 1144 review) the real quota journeys run on
  *             a store that was seeded and never filled, so
  *             nothing is refused and no line is owed            -> quota, kept
+ *   nostick   (Round 1568 closing check) the served notice loses
+ *             the class that sticks it under the site's bar, so
+ *             it sticks at top 0 under the bar again            -> stuck
  *
  * Run: npm run build, then
  *   MSYS_NO_PATHCONV=1 node scripts/playUsCareerSaveSeam.mjs
@@ -129,7 +135,7 @@ const PORT = Number(process.env.PORT ?? 4398);
 const BASE = `http://localhost:${PORT}`;
 const SHOTS = process.env.SHOTS ? path.resolve(ROOT, process.env.SHOTS) : '';
 const CONTROL = process.env.US_SAVE_SEAM_CONTROL ?? '';
-const NAMED = { hidden: ['full'], keeptoast: ['toast'], raw: ['blocked'], open: ['blocked', 'full'], stale: ['line'], sitover: ['banner'], quotafree: ['quota', 'kept'] };
+const NAMED = { hidden: ['full'], keeptoast: ['toast'], raw: ['blocked'], open: ['blocked', 'full'], stale: ['line'], sitover: ['banner'], quotafree: ['quota', 'kept'], nostick: ['stuck'] };
 /* the seam's own probe key (src/lib/safeStorage.ts), which the stale control keeps refusing */
 const PROBE_KEY = '__dukb_storage_probe__';
 if (CONTROL && !(CONTROL in NAMED)) { console.error(`unknown US_SAVE_SEAM_CONTROL ${CONTROL}`); process.exit(2); }
@@ -157,13 +163,25 @@ const textOf = f => fs.readFileSync(path.join(DIST, 'assets', f), 'utf8');
 const served = new Map();
 const refuse = why => { console.error(`control ${CONTROL} refused: ${why}`); process.exit(2); };
 if (CONTROL === 'hidden') {
-  const BOX = '"sticky top-0 z-40 mb-3 rounded-xl border border-destructive/50 bg-card p-3 text-xs leading-relaxed"';
+  /* Round 1568 (closing check): the notice's classes carry its place under the site's sticky bar now */
+  const BOX = '"sticky top-0 [body:has([data-site-chrome].sticky)_&]:top-11 z-40 mb-3 rounded-xl border border-destructive/50 bg-card p-3 text-xs leading-relaxed"';
   const where = assets.filter(f => textOf(f).includes('data-us-career-save-error'));
   if (where.length !== 1) refuse(`the notice's marker is in ${where.length} chunks, expected one`);
   const t = textOf(where[0]);
   if (t.split(BOX).length - 1 !== 1) refuse(`the notice's classes appear ${t.split(BOX).length - 1} times in ${where[0]}, expected once`);
   served.set(where[0], t.replace(BOX, '"hidden"'));
   console.log(`CONTROL hidden: the served notice is display none (${where[0]})`);
+}
+if (CONTROL === 'nostick') {
+  /* Round 1568 (closing check): the class that sticks the notice under the site's bar is taken out, so it sticks
+     at top 0 again, under the bar, as it did from Round 1451 to this round */
+  const STICK = ' [body:has([data-site-chrome].sticky)_&]:top-11 ';
+  const where = assets.filter(f => textOf(f).includes('data-us-career-save-error'));
+  if (where.length !== 1) refuse(`the notice's marker is in ${where.length} chunks, expected one`);
+  const t = textOf(where[0]);
+  if (t.split(STICK).length - 1 !== 1) refuse(`the notice's place under the bar appears ${t.split(STICK).length - 1} times in ${where[0]}, expected once`);
+  served.set(where[0], t.replace(STICK, ' '));
+  console.log(`CONTROL nostick: the served notice sticks at top 0, under the site's bar (${where[0]})`);
 }
 if (CONTROL === 'keeptoast') {
   /* the effect's cleanup, found by the words of the toast it follows: the dismiss call is taken out */
@@ -276,6 +294,28 @@ const read = (page, key) => page.evaluate(([k, words]) => {
     sideways: document.documentElement.scrollWidth > window.innerWidth,
   };
 }, [key, TOAST_WORDS]);
+/* Round 1568 (closing check): the page scrolled 300 px past where the Retry notice starts (or as far as it goes),
+   two frames to settle, then the notice's top, the site's sticky bar's bottom (0 when no bar sticks at the top) and
+   what is on top at the middle of the notice's first line (12 px text on a 19.5 px line, so 9 px under its top).
+   The page goes back to the top before anything else is read. ok needs a scroll that took the notice past the top
+   of the window, so a page too short to scroll can never pass it by not trying. */
+const stuckNotice = page => page.evaluate(async () => {
+  const notice = document.querySelector('[data-us-career-save-error]');
+  const first = notice ? notice.querySelector('p') : null;
+  if (!notice || !first) return { ok: false, scrolled: 0, natural: null, top: null, barBottom: null, at: 'no notice' };
+  const natural = Math.round(notice.getBoundingClientRect().top + window.scrollY);
+  window.scrollTo(0, natural + 300);
+  await new Promise(r => requestAnimationFrame(() => requestAnimationFrame(r)));
+  const q = notice.getBoundingClientRect();
+  const bar = [...document.querySelectorAll('[data-site-chrome]')].find(b => getComputedStyle(b).position === 'sticky' && Math.round(b.getBoundingClientRect().top) === 0);
+  const barBottom = bar ? Math.round(bar.getBoundingClientRect().bottom) : 0;
+  const hit = document.elementFromPoint(q.left + q.width / 2, first.getBoundingClientRect().top + 9);
+  const at = !hit ? 'nothing' : notice.contains(hit) ? 'the notice' : hit.closest('[data-site-chrome]') ? 'THE SITE BAR' : `a ${hit.tagName.toLowerCase()} of the page`;
+  const scrolled = Math.round(window.scrollY);
+  window.scrollTo(0, 0);
+  await new Promise(r => requestAnimationFrame(() => requestAnimationFrame(r)));
+  return { ok: scrolled > natural && Math.round(q.top) >= barBottom && notice.contains(hit), scrolled, natural, top: Math.round(q.top), barBottom, at };
+});
 const clickButton = (page, source) => page.evaluate(src => {
   const rx = new RegExp(src, 'i');
   const b = [...document.querySelectorAll('button')].find(x => !x.disabled && rx.test((x.textContent ?? '').trim()));
@@ -328,6 +368,10 @@ async function journey(sport, arm) {
     } else {
       check('full', pressed && s.line?.trouble === 'full' && s.notice?.op === 'write' && s.refused > 0 && s.phase === null, `${tag}: the line says full, the Retry notice is up for a write and nothing reached the store (${say(s)})`);
       check('full', !!s.notice?.seen, `${tag}: the Retry notice is in view on the first screen with nothing over it (${say(s)})`);
+      /* Round 1568 (closing check): scrolled down past it, the notice sticks under the site's bar and the middle of
+         its first line is still the notice; stuck at top 0 the bar (44 px at layer 50 since Round 1451) covered it */
+      const st = await stuckNotice(page);
+      check('stuck', st.ok, `${tag}: scrolled to ${st.scrolled} (the notice starts at ${st.natural}), the Retry notice sticks at ${st.top} under the site's bar (bottom ${st.barBottom}) and its first line is on top (${st.at})`);
       check('full', s.saveToasts === 1, `${tag}: the refused save is said in exactly one toast (${s.saveToasts} of ${s.toasts} on screen)`);
       check('full', !!s.notice && !!s.line && (s.notice.box.t >= s.line.box.b || s.line.box.t >= s.notice.box.b), `${tag}: the line and the Retry notice do not overlap (${say(s)})`);
       /* Round 1144: a first visit, so the cookie banner is up under the toast */

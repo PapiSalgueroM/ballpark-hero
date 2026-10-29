@@ -75,7 +75,19 @@ describe("Soccer career programme UI", () => {
     expect(document.querySelector("[data-programme-list]")).not.toBeInTheDocument();
     expect(screen.getByText(/Opening, reading or closing this screen does not change/)).toBeInTheDocument();
     await press(screen.getByRole("button", { name: "See my plans" }));
-    expect(document.querySelectorAll("[data-programme-tile]")).toHaveLength(10);
+    const expected = [
+      ["tactics", "Tactical role"], ["position", "Second position"],
+      ["set_pieces", "Set piece duty"], ["promise", "Manager promise"],
+      ["negotiation", "Contract counteroffer"], ["bonuses", "Performance bonus"],
+      ["adaptation", "New club adaptation"], ["fitness", "Return to fitness"],
+      ["captain", "Captain duties"], ["loan", "Loan option to stay"],
+      ["loyalty", "Loyalty contract"],
+    ] as const;
+    const tiles = screen.getAllByRole("button").filter(button => button.hasAttribute("data-programme-tile"));
+    expect(tiles.map(button => button.getAttribute("data-programme-tile"))).toEqual(expected.map(([id]) => id));
+    expected.forEach(([, label], index) => {
+      expect(tiles[index]).toHaveAccessibleName(new RegExp("^" + label + "(?:\\s|$)"));
+    });
     await press(screen.getByRole("button", { name: "Career programme help" }));
     expect(screen.getByRole("heading", { name: "Example" })).toBeInTheDocument();
     await press(screen.getByRole("button", { name: "Back" }));

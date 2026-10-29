@@ -10,8 +10,8 @@
  * dismissSummary nulls at the end of the previous season. dismissNewspaper then
  * moved unconditionally to "season_summary". SoccerCareer.tsx renders that
  * phase only under `career.phase === "season_summary" && career.pendingSummary`,
- * and showActionButton lists youth, playing, manager_season, pundit_season and
- * owner_season, so there was no board, no Next Season and no Retire. The state
+ * and showActionButton lists youth, playing, manager_season and owner_season
+ * (pundit_season too until Release BS), so there was no board, no Next Season and no Retire. The state
  * is written to localStorage on every change and the loader never touched
  * phase, so reloading restored the same dead screen. The only escape was New
  * Career, which DELETES the save.
@@ -39,6 +39,15 @@
  *     red.
  *   CAREER_DEADEND_CONTROL=noheal skips the repair, so section 2 goes red with
  *     the stranded save still stranded.
+ *   CAREER_DEADEND_CONTROL=pundit puts pundit_season back into the page's
+ *     showActionButton, the shape that shipped until Release BS, so section 4
+ *     goes red on the dead Next Season.
+ *
+ * 4. (Release BS, BS-sc421-3) A phase in showActionButton was read as "has a
+ *    way forward", and a pundit season sat in that list for seven months with
+ *    a green Next Season that did nothing. Section 4 runs the button's real
+ *    handler, lifted out of the page and compiled, on a real career in every
+ *    phase whose bar falls through to that button, and needs the save to move.
  *
  * Run: node scripts/simCareerNoDeadEnd.mjs
  */
@@ -46,12 +55,12 @@ import fs from 'node:fs';
 import os from 'node:os';
 import path from 'node:path';
 import { fileURLToPath, pathToFileURL } from 'node:url';
-import { build } from 'esbuild';
+import { build, transform } from 'esbuild';
 
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const CONTROL = process.env.CAREER_DEADEND_CONTROL || '';
-if (CONTROL && !['strand', 'noheal'].includes(CONTROL)) {
-  console.error(`CAREER_DEADEND_CONTROL=${CONTROL} is not a control this harness knows (strand, noheal)`);
+if (CONTROL && !['strand', 'noheal', 'pundit'].includes(CONTROL)) {
+  console.error(`CAREER_DEADEND_CONTROL=${CONTROL} is not a control this harness knows (strand, noheal, pundit)`);
   process.exit(1);
 }
 
@@ -101,7 +110,8 @@ if (CONTROL === 'noheal') {
    src/lib so the module graph is the real one. */
 const ENTRY = path.join(tmp, 'entry.ts');
 const ENGINE_POSIX = ENGINE.split(path.sep).join('/');
-fs.writeFileSync(ENTRY, `export * from '${ENGINE_POSIX}';`);
+const FAREWELL_POSIX = path.join(ROOT, 'src', 'lib', 'soccerCareerFarewell.ts').split(path.sep).join('/');
+fs.writeFileSync(ENTRY, `export * from '${ENGINE_POSIX}';\nexport { readSoccerFarewell } from '${FAREWELL_POSIX}';`);
 const BUNDLE = path.join(tmp, 'bundle.mjs');
 await build({
   entryPoints: [ENTRY], bundle: true, format: 'esm', platform: 'node',
@@ -120,7 +130,15 @@ await build({
 const E = await import(pathToFileURL(BUNDLE).href);
 
 /* what the PAGE can actually draw */
-const pageSrc = fs.readFileSync(path.join(ROOT, 'src', 'pages', 'SoccerCareer.tsx'), 'utf8');
+let pageSrc = fs.readFileSync(path.join(ROOT, 'src', 'pages', 'SoccerCareer.tsx'), 'utf8');
+if (CONTROL === 'pundit') {
+  const needle = 'career.phase === "manager_season" || career.phase === "owner_season";';
+  if (!pageSrc.includes(needle)) {
+    console.error('CONTROL pundit cannot run: the showActionButton line it puts pundit_season back into is not there');
+    process.exit(1);
+  }
+  pageSrc = pageSrc.replace(needle, 'career.phase === "manager_season" || career.phase === "pundit_season" || career.phase === "owner_season";');
+}
 const rendered = new Set([...pageSrc.matchAll(/career\.phase === "([a-z_]+)"/g)].map(m => m[1]));
 const actionLine = pageSrc.match(/const showActionButton = ([^;]+);/);
 const withButton = new Set(actionLine ? [...actionLine[1].matchAll(/"([a-z_]+)"/g)].map(m => m[1]) : []);
@@ -230,6 +248,97 @@ console.log('3) every phase the engine can assign is a phase the page can draw')
   const orphans = [...assigned].filter(p => !rendered.has(p));
   orphans.forEach(p => fail(`the engine can put a career in phase "${p}" and SoccerCareer.tsx has no branch that draws it`));
   console.log(`   ${assigned.size - orphans.length}/${assigned.size} assignable phases are drawable, ${orphans.length} orphaned`);
+}
+
+console.log('4) every phase whose bar shows the Next button gets a handler that moves the career');
+{
+  /* The bar is a chain: retired, then the phases with a branch of their own,
+     then showActionButton's generic Next button. A phase in showActionButton
+     with no branch of its own gets the generic button, so those are the
+     phases whose button has to work through the generic handler. */
+  const barAt = pageSrc.indexOf('data-career-action-bar=');
+  const genericAt = barAt < 0 ? -1 : pageSrc.indexOf(') : showActionButton ? (', barAt);
+  const genericBtn = genericAt < 0 ? '' : pageSrc.slice(genericAt, pageSrc.indexOf('</Button>', genericAt));
+  const prop = genericBtn.match(/<Button onClick=\{(\w+)\}/)?.[1];
+  const handlerName = prop ? pageSrc.match(new RegExp(`${prop}=\\{(\\w+)\\}`))?.[1] : undefined;
+  if (genericAt < 0 || !prop || !handlerName) {
+    console.error('could not find the action bar, its generic Next button or the handler wired to it; refusing to run rather than pass on nothing');
+    process.exit(1);
+  }
+  const own = new Set([...pageSrc.slice(barAt, genericAt).matchAll(/career\.phase === "([a-z_]+)" \?/g)].map(m => m[1]));
+  const generic = [...withButton].filter(p => !own.has(p));
+  /* The handler's own text, from its arrow to its closing brace, with
+     comments and strings skipped so an apostrophe in a comment cannot
+     unbalance the count. */
+  const declAt = pageSrc.indexOf(`const ${handlerName} = `);
+  const arrowAt = declAt < 0 ? -1 : pageSrc.indexOf('=>', declAt);
+  const openAt = arrowAt < 0 ? -1 : pageSrc.indexOf('{', arrowAt);
+  let depth = 0, end = -1;
+  for (let i = openAt; openAt >= 0 && i < pageSrc.length; i += 1) {
+    const c = pageSrc[i], d = pageSrc[i + 1];
+    if (c === '/' && d === '*') { i = pageSrc.indexOf('*/', i + 2) + 1; continue; }
+    if (c === '/' && d === '/') { i = pageSrc.indexOf('\n', i); continue; }
+    if (c === '"' || c === "'" || c === '`') {
+      let j = i + 1;
+      while (j < pageSrc.length && pageSrc[j] !== c) j += pageSrc[j] === '\\' ? 2 : 1;
+      i = j; continue;
+    }
+    if (c === '{') depth += 1;
+    if (c === '}') { depth -= 1; if (depth === 0) { end = i; break; } }
+  }
+  if (end < 0) { console.error(`could not lift ${handlerName} out of the page; refusing to run`); process.exit(1); }
+  const fnText = pageSrc.slice(pageSrc.indexOf('(', declAt), end + 1);
+  const js = (await transform(`const __h = ${fnText};`, { loader: 'ts' })).code;
+  const compile = new Function('scope', `with (scope) { ${js} return __h; }`);
+  const clubs = E.FALLBACK_CLUBS ?? [];
+  const stubbed = new Set();
+  /* Runs the real handler on a career. The page's own state setters write
+     the result; every other name the handler reaches is the real engine
+     export when there is one, and a no op otherwise (refs, toasts, the
+     activity ping), each listed in the output. */
+  const press = career => {
+    let saved = null;
+    const known = {
+      career, clubs,
+      setCareer: v => { saved = typeof v === 'function' ? v(career) : v; },
+      stepWithMomentsBanked: step => { saved = step(career); },
+    };
+    const scope = new Proxy({}, {
+      has: (_, k) => typeof k === 'string' && k !== '__h' && (k in known || k in E || !(k in globalThis)),
+      get: (_, k) => {
+        if (k === Symbol.unscopables) return undefined;
+        if (k in known) return known[k];
+        if (k in E) return E[k];
+        stubbed.add(String(k));
+        return () => undefined;
+      },
+    });
+    compile(scope)();
+    return saved;
+  };
+  const stats = { pace: 70, shooting: 70, passing: 70, dribbling: 70, defending: 60, physical: 70, reflexes: 50 };
+  const youth = () => E.initCareer('Next Press', 'England', 'ST', '2020s', stats, 70, 2020, clubs, null);
+  const playing = () => {
+    let s = youth();
+    for (let i = 0; i < 8 && s.phase === 'youth'; i += 1) s = E.advanceYouthYear(s, clubs);
+    if (s.phase === 'contract_offer' && (s.pendingOffers ?? []).length > 0) s = E.acceptOffer(s, s.pendingOffers[0], clubs);
+    return s.phase === 'playing' ? s : null;
+  };
+  const after = choice => () => { const s = playing(); return s ? E.choosePostRetirement(E.manualRetire(s), choice, clubs) : null; };
+  const MAKE = { youth, playing, pundit_season: after('pundit'), manager_season: after('manager') };
+  console.log(`   the bar's generic button runs ${handlerName}; phases that reach it: ${generic.join(', ')}; own branches: ${[...own].join(', ')}`);
+  if (!generic.includes('youth') || !generic.includes('playing')) {
+    fail(`youth and playing no longer reach ${handlerName}, so this section is not looking at the button it was written for`);
+  }
+  for (const phase of generic) {
+    const s = MAKE[phase]?.();
+    if (!s || s.phase !== phase) { fail(`no real career in phase "${phase}" could be built to press its Next button; add a way to build one here`); continue; }
+    const saved = press(s);
+    const moved = saved !== null && JSON.stringify(saved) !== JSON.stringify(s);
+    console.log(`   ${phase}: Next pressed, the career ${moved ? `moved (now ${saved.phase}, age ${saved.age})` : 'did not move'}`);
+    if (!moved) fail(`the bar shows its Next button in "${phase}" and pressing it runs ${handlerName}, which left the career exactly as it was: a dead button`);
+  }
+  console.log(`   names the handler reached that were stubbed: ${[...stubbed].sort().join(', ') || 'none'}`);
 }
 
 try { fs.rmSync(tmp, { recursive: true, force: true }); } catch { /* non-fatal */ }
