@@ -13,8 +13,8 @@
     "rebuilt: boards this round rebuilt whole; every group on them is checked and no finding on them may be owed.",
     "squads.json beside this file: the season squads a stamped group is held to.",
     "Round 1565 (2026-10-29): every live board. The game deals from the connections_puzzles table and the file is its copy (src/data/connectionsPuzzles.ts, scripts/data/connectionsLiveSnapshot.json, simConnectionsFacts section 6). The groups the cross check found false or with a second answer on the live boards are rebuilt here (round 1565), each member on two hosts; where a claim could not be held twice the group was replaced by one two lists hold.",
-    "Round 1565: adjudicated holds the findings that are gaps in the site's career tables (the man did play there, two hosts) or a namesake; owed is empty because every one of its findings is fixed or adjudicated. uncheckedCeiling moved once, from 302 to 349: the file took in the live boards it never had (the 76 table only boards and the 60 boards edited in the table alone), and the boards rebuilt whole replaced every group nothing checked; on the live table the count fell, from 427 to 349.",
-    "Round 1565, after review: rebuilt now holds the 38 boards the round rewrote, each rebuilt whole: every group is a list the checker holds (an award list, a verified 2025-26 squad, a club or a nation the career tables confirm) or a group this ledger writes out member by member. The datedOwed groups those boards held are gone with them."
+    "Round 1565: adjudicated holds the findings that are gaps in the site's career tables (the man did play there, two hosts) or a namesake; owed is empty because every one of its findings is fixed or adjudicated. uncheckedCeiling moved once, from 302 to 262: the file took in the live boards it never had (the 76 table only boards and the 60 boards edited in the table alone), and the boards rebuilt whole replaced every group nothing checked; on the live table the count fell, from 427 to 262.",
+    "Round 1565, after review: rebuilt now holds the 38 boards the round rewrote and the 27 more the reviewers found false or with a second answer (65 in all), each rebuilt whole: every group is a list the checker holds (an award list, a verified 2025-26 squad, a club or a nation the career tables confirm) or a group this ledger writes out member by member. The datedOwed groups those boards held are gone with them."
   ],
   "read": "2026-10-22",
   "lists": {
@@ -3591,25 +3591,6 @@
       ]
     },
     {
-      "key": "puzzle-74 | not-a-member | Robin van Persie | Played for Feyenoord",
-      "round": 1565,
-      "why": "he played for Feyenoord; the site's career tables miss that club",
-      "sources": [
-        {
-          "host": "goal.com",
-          "url": "https://www.goal.com/en-om/news/golden-boy-robin-van-persie-returns-home-to-feyenoord/x7m8855lgtet1u7ryn0w58joi",
-          "read": "2026-10-29",
-          "says": "golden boy Robin van Persie returns home to Feyenoord in the January transfer window"
-        },
-        {
-          "host": "skysports.com",
-          "url": "https://www.skysports.com/football/news/2376750/robin-van-persie-profile",
-          "read": "2026-10-29",
-          "says": "Robin van Persie profile: rose through Feyenoord's youth system and broke into the first team in their UEFA Cup winning season, then joined Arsenal in 2004"
-        }
-      ]
-    },
-    {
       "key": "puzzle-76 | not-a-member | Andrea Pirlo | Played for both Juventus and Inter Milan",
       "round": 1565,
       "why": "he played for Inter Milan; the site's career tables miss that club",
@@ -3934,30 +3915,11 @@
           "says": "player page: Ajax 2001 to 2004"
         }
       ]
-    },
-    {
-      "key": "cx-20260710-03 | not-a-member | Didier Drogba | Played for Galatasaray",
-      "round": 1565,
-      "why": "he played for Galatasaray; the site's career tables miss that club",
-      "sources": [
-        {
-          "host": "english.ahram.org.eg",
-          "url": "https://english.ahram.org.eg/News/63537.aspx",
-          "read": "2026-10-29",
-          "says": "Official: Ivory Coast's Drogba joins Turkish club Galatasaray (January 2013)"
-        },
-        {
-          "host": "iol.co.za",
-          "url": "https://iol.co.za/sport/soccer/2013-02-13-drogba-deal-gets-green-light/",
-          "read": "2026-10-29",
-          "says": "Drogba deal gets green light: cleared to play for Galatasaray (13 February 2013)"
-        }
-      ]
     }
   ],
   "owed": [],
-  "uncheckedCeiling": 349,
-  "rebuilt": ["puzzle-1", "puzzle-3", "puzzle-4", "puzzle-5", "puzzle-6", "puzzle-10", "puzzle-11", "puzzle-12", "puzzle-151", "puzzle-2", "puzzle-8", "puzzle-13", "puzzle-16", "puzzle-18", "puzzle-26", "puzzle-28", "puzzle-38", "puzzle-43", "puzzle-46", "puzzle-55", "puzzle-59", "puzzle-64", "puzzle-65", "puzzle-68", "puzzle-70", "puzzle-81", "puzzle-90", "puzzle-92", "puzzle-97", "puzzle-103", "puzzle-109", "puzzle-113", "puzzle-123", "puzzle-131", "puzzle-138", "puzzle-149", "crafted-1005", "crafted-1007", "crafted-1008", "crafted-1009", "crafted-1011", "crafted-1012", "crafted-1020", "cx-20260710-05", "cx-20260710-09", "cx-20260710-11", "cx-20260710-12"],
+  "uncheckedCeiling": 262,
+  "rebuilt": ["puzzle-1", "puzzle-3", "puzzle-4", "puzzle-5", "puzzle-6", "puzzle-10", "puzzle-11", "puzzle-12", "puzzle-151", "puzzle-2", "puzzle-8", "puzzle-13", "puzzle-16", "puzzle-18", "puzzle-26", "puzzle-28", "puzzle-38", "puzzle-43", "puzzle-46", "puzzle-55", "puzzle-59", "puzzle-64", "puzzle-65", "puzzle-68", "puzzle-70", "puzzle-81", "puzzle-90", "puzzle-92", "puzzle-97", "puzzle-103", "puzzle-109", "puzzle-113", "puzzle-123", "puzzle-131", "puzzle-138", "puzzle-149", "crafted-1005", "crafted-1007", "crafted-1008", "crafted-1009", "crafted-1011", "crafted-1012", "crafted-1020", "cx-20260710-05", "cx-20260710-09", "cx-20260710-11", "cx-20260710-12", "puzzle-134", "puzzle-74", "cx-20260710-04", "cx-20260805-1", "cx-20260805-2", "cx-20260805-5", "cx-20260805-6", "cx-20260805-7", "cx-20260710-10", "cx-20260710-01", "cx-20260710-02", "cx-20260710-03", "cx-20260710-07", "cx-20260710-08", "cx-20260805-4", "crafted-1006", "crafted-1003", "cx-20260709-02", "puzzle-99", "puzzle-89", "puzzle-20", "puzzle-22", "puzzle-63", "puzzle-119", "puzzle-120", "puzzle-132", "crafted-1002"],
   "players": {
     "Fabinho": {
       "clubs": ["AS Monaco", "Liverpool"],
@@ -4016,5 +3978,5 @@
       ]
     }
   },
-  "datedOwed": ["puzzle-89 | Played for AC Milan (2020s)", "puzzle-91 | Played in the 2022 World Cup Final", "puzzle-95 | Played for Napoli (2020s)", "puzzle-99 | Played for Juventus (2020s)", "puzzle-108 | Won the Carabao Cup (2020s)", "puzzle-119 | Played for PSG (2020s)", "puzzle-127 | Premier League Golden Boot (2020s)", "puzzle-141 | Won 2024 Euros with Spain"]
+  "datedOwed": ["puzzle-91 | Played in the 2022 World Cup Final", "puzzle-95 | Played for Napoli (2020s)", "puzzle-108 | Won the Carabao Cup (2020s)", "puzzle-127 | Premier League Golden Boot (2020s)", "puzzle-141 | Won 2024 Euros with Spain"]
 }
