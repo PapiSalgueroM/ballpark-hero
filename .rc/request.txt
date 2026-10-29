@@ -1,0 +1,4 @@
+tsc: node_modules/.bin/tsc --noEmit -p tsconfig.app.json
+vnew: node_modules/.bin/vitest run src/test/usCareerReports1569.test.tsx src/test/usSeasonCentreEntry.test.tsx src/test/usCareerActionConfirm.test.tsx --testTimeout=300000 --hookTimeout=120000
+sim: node scripts/simUsCareerReports.mjs
+parity: node scripts/simUsBoardParity.mjs
