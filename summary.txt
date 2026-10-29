@@ -1,0 +1,15 @@
+daily5-2 exit=0 48s |    Duration  47.01s (transform 16.23s, setup 842ms, collect 23.82s, tests 67.09s, environment 4.78s, prepare 1.68s)
+daily5-1 exit=0 48s |    Duration  47.31s (transform 14.96s, setup 965ms, collect 25.06s, tests 66.67s, environment 4.68s, prepare 1.30s)
+daily5-4 exit=0 45s |    Duration  44.35s (transform 16.17s, setup 1.01s, collect 22.00s, tests 63.94s, environment 4.10s, prepare 1.58s)
+daily5-3 exit=0 46s |    Duration  45.48s (transform 14.78s, setup 877ms, collect 21.27s, tests 64.68s, environment 4.74s, prepare 1.73s)
+daily5-5 exit=0 47s |    Duration  45.72s (transform 15.91s, setup 607ms, collect 22.32s, tests 67.83s, environment 3.31s, prepare 733ms)
+daily5-6 exit=0 47s |    Duration  45.40s (transform 17.52s, setup 912ms, collect 23.60s, tests 65.98s, environment 3.77s, prepare 1.07s)
+tsc exit=0 155s | 
+daily5-7 exit=0 46s |    Duration  45.71s (transform 15.63s, setup 520ms, collect 23.29s, tests 66.34s, environment 3.33s, prepare 952ms)
+daily5-8 exit=0 44s |    Duration  43.84s (transform 16.20s, setup 806ms, collect 22.64s, tests 64.90s, environment 3.36s, prepare 1.04s)
+shapes-1 exit=0 41s |    Duration  39.46s (transform 5.39s, setup 204ms, collect 812ms, tests 36.03s, environment 1.09s, prepare 477ms)
+shapes-3 exit=0 34s |    Duration  32.82s (transform 4.40s, setup 122ms, collect 490ms, tests 30.86s, environment 454ms, prepare 296ms)
+shapes-2 exit=0 34s |    Duration  32.85s (transform 4.08s, setup 126ms, collect 528ms, tests 30.92s, environment 447ms, prepare 206ms)
+ctl-metaheld exit=0 22s | simDailySaveHardening: control metaheld fired as designed
+ctl-metalate exit=0 27s | simDailySaveHardening: control metalate fired as designed
+simDailySaveHardening exit=0 74s | simDailySaveHardening: part all green
