@@ -16,6 +16,18 @@
  *       chunk is held back 900 ms so the box is really seen). A screenshot of each screen goes to $RC_OUT (or
  *       .tmp-fx/play-nba-intl) to LOOK at.
  *
+ *   (f) Round 1557, the medal on the shelf, at the three sizes: a throwback save that went to Athens and came
+ *       home with a medal (the first seed from 1544 up, answered Go in Node through the real face; it prints
+ *       which) and rested in 2006. The hub tile counts the medal once; the case shows its row with 2004 and the
+ *       International tile; the view lists the summers with the case and the badges gone; the 2004 summer opens
+ *       its result (Your games there, so it played again) and its Back is the list, the list's Back the case;
+ *       the screens obey (e), except that the case's own row markup (10 and 11 px since Round 208) is exempt
+ *       from the 12 px rule by name (critic correction 8) and only the International tile is held to it; the
+ *       save is not written.
+ *   (g) Round 1557 (1544's review, minor 6), at 320 and 390: a save one season before the 2006 World
+ *       Championship at 95, Play, Continue through the curtain: the next screen (the call, or the summer's
+ *       card) arrives with its top in view. It prints where.
+ *
  * Saves are built in Node by the real NBA engine. The live database host is aborted; anything else off the
  * served origin gets an empty answer.
  *
@@ -51,6 +63,7 @@ await build({
     export { NBA_CAREER_SPORT } from '@/lib/nbaCareerSport';
     export { startSummer } from '@/lib/usCareerSummer';
     export { defaultAppearance } from '@/lib/soccerCareerAppearance';
+    export { NBA_CAREER_INTL } from '@/lib/nbaCareerIntl';
   `, resolveDir: ROOT, sourcefile: 'play-nba-intl-engine.ts', loader: 'ts' },
   outfile: bundle, bundle: true, platform: 'node', format: 'cjs', logLevel: 'silent', alias: { '@': path.join(ROOT, 'src') },
 });
@@ -85,6 +98,40 @@ function career(era, seasons, ovr, deal) {
   if (deal && M.startSummer(c, sport, rng, null)) phase = 'event';
   return { save: JSON.stringify({ c, phase, teamQuality: tq, coach: null }), c, phase, last: line.year, pending: sport.intl.pendingYear(c) };
 }
+/* Round 1557: a career that went to Athens and came home with a medal (the first seed from 1544 up whose 2004
+   summer, answered Go in Node through the real face, gives one), then two more seasons and the 2006 call
+   rested if it came, so the case has a medal row, the hub tile counts it, and the International view holds a
+   summer to open (its tournament plays again from the save) beside a rested one or alone. */
+function medalCareer() {
+  const F = M.NBA_CAREER_INTL;
+  for (let seed = 1544; seed < 1644; seed += 1) {
+    const rng = mulberry32(seed);
+    const c = sport.startCareer('Intl Walker', 'SF', sport.create.archetypes.SF[0], rng, M.defaultAppearance(), 'y2004');
+    let tq = sport.rollTeamQuality(null, rng);
+    sport.assignRole(c, tq, rng);
+    sport.campBattle(c, tq, rng); sport.simSeason(c, tq, rng); sport.progress(c, rng); tq = sport.rollTeamQuality(tq, rng);
+    const first = c.seasons[c.seasons.length - 1];
+    first.ovr = 92;
+    if (first.teamResult === 'SUSPENDED') first.teamResult = 'Missed the playoffs';
+    Object.assign(c, { ovr: 92, age: 24, health: 90, retired: false, suspendedSeasons: 0, contractYears: 3, pendingRivalryEvent: null, pendingRivalryChoice: null });
+    if (!F.pending(c)) continue;
+    const went = F.answer(c, 'go');
+    if (!went || !['gold', 'silver', 'bronze'].includes(went.row.place)) continue;
+    for (let y = 0; y < 2; y += 1) { sport.campBattle(c, tq, rng); sport.simSeason(c, tq, rng); sport.progress(c, rng); tq = sport.rollTeamQuality(tq, rng); }
+    const line = c.seasons[c.seasons.length - 1];
+    if (line.teamResult === 'SUSPENDED') line.teamResult = 'Missed the playoffs';
+    Object.assign(c, { retired: false, suspendedSeasons: 0, contractYears: 3, pendingRivalryEvent: null, pendingRivalryChoice: null, health: Math.max(c.health, 60) });
+    if (F.pending(c)) F.answer(c, 'rest');
+    if (F.pending(c) || sport.intl.pendingYear(c) !== null) continue;
+    const replays = !!F.tournamentOf(c, 2004);
+    const awards = c.seasons.reduce((n, s) => n + (s.awards?.length ?? 0), 0);
+    return { save: JSON.stringify({ c, phase: 'season', teamQuality: tq, coach: null }), c, seed, place: went.row.place, rows: c.intl.summers.length, replays, tile: sport.ringsOf(c) + awards + 1 };
+  }
+  return null;
+}
+const E = medalCareer();
+if (!E || !E.replays) { console.error(`No seed from 1544 to 1643 gave a medal in 2004 whose tournament plays again (${E ? 'it does not replay' : 'none found'}). Refusing to run.`); process.exit(2); }
+console.log(`save E: seed ${E.seed}, ${E.place} in 2004, ${E.rows} summer rows, the tile should read ${E.tile} honours`);
 const A = career('y2004', 1, 90, true);
 const B = career('y2004', 1, 90, false);
 const C = career('now', 1, 90, false);
@@ -147,8 +194,11 @@ async function open(browser, size, saveValue) {
 
 const SCREEN = '[data-intl-call], [data-intl-result], [data-intl-holding]';
 /** (e) on the screen now up: sideways scroll, control heights, text sizes, nothing cut, the top in view. */
-async function look(id, size, page, errors, name, arrival = true) {
-  const m = await page.evaluate(sel => {
+/* Round 1557: sel names the screen (the case and the International view are not national team screens), and
+   smallSel, when set, scopes the 12 px rule to the new text in it: the case's medal rows draw in the case's own
+   row markup (10 and 11 px since Round 208), exempt by name under critic correction 8. */
+async function look(id, size, page, errors, name, arrival = true, sel = SCREEN, smallSel = null) {
+  const m = await page.evaluate(({ sel, smallSel }) => {
     const box = document.querySelector(sel);
     const r = box?.getBoundingClientRect();
     const small = [];
@@ -157,14 +207,14 @@ async function look(id, size, page, errors, name, arrival = true) {
     for (const el of box ? [box, ...box.querySelectorAll('*')] : []) {
       const own = [...el.childNodes].some(n => n.nodeType === 3 && n.textContent.trim());
       const fs = parseFloat(getComputedStyle(el).fontSize);
-      if (own && fs < 12) small.push(`${el.tagName.toLowerCase()} ${fs}px "${el.textContent.trim().slice(0, 30)}"`);
+      if (own && fs < 12 && (!smallSel || el.closest(smallSel))) small.push(`${el.tagName.toLowerCase()} ${fs}px "${el.textContent.trim().slice(0, 30)}"`);
       const er = el.getBoundingClientRect();
       if (er.width > 0 && (er.left < -1 || er.right > innerWidth + 1)) cut.push(`${el.tagName.toLowerCase()} ${Math.round(er.left)} to ${Math.round(er.right)}`);
       if (el.tagName === 'BUTTON' && er.height > 0 && er.height < 44) lowButtons.push(`"${el.textContent.trim().slice(0, 24)}" ${Math.round(er.height)}px`);
     }
     return { sw: document.documentElement.scrollWidth, iw: innerWidth, ih: innerHeight, sy: scrollY, top: r ? r.top : null, small, cut, lowButtons };
-  }, SCREEN);
-  if (m.top === null) { fail(id, `${name}: no national team screen is up`); return m; }
+  }, { sel, smallSel });
+  if (m.top === null) { fail(id, `${name}: no screen ${sel} is up`); return m; }
   if (m.sw > m.iw) fail(id, `${name}: the page scrolls sideways (${m.sw} wide in ${m.iw})`);
   if (m.lowButtons.length) fail(id, `${name}: controls under 44 px: ${m.lowButtons.join(', ')}`);
   if (m.small.length) fail(id, `${name}: text under 12 px: ${m.small.slice(0, 4).join(', ')}`);
@@ -302,6 +352,86 @@ async function walkD(browser, size, s, name) {
   } catch (e) { fail(id, `the walk stopped: ${String(e).split('\n')[0].slice(0, 160)}`); } finally { await context.close(); }
 }
 
+/** (f) Round 1557: the medal on the shelf. The hub tile counts it once; the case shows its row and the
+ *  International tile; the view lists the summers (the case and the badges are gone, never stacked under it);
+ *  the 2004 summer opens its result with Back to the list; the list's Back is the case again. */
+async function walkCase(browser, size) {
+  const id = `f-${size.width}`;
+  const { context, page, errors } = await open(browser, size, E.save);
+  try {
+    await page.waitForSelector('button:has-text("Play the")', { timeout: 15000 });
+    await page.waitForTimeout(1200);
+    const loaded = JSON.stringify(await readSave(page));
+    const want = `${E.tile} ${E.tile === 1 ? 'honour' : 'honours'}`;
+    const tile = page.locator('button:has(div.uppercase)').filter({ hasText: /Trophy Case/i }).first();
+    const tileText = (await tile.innerText()).replace(/\s+/g, ' ');
+    if (!tileText.includes(want)) fail(id, `the hub tile reads "${tileText}", not ${want}`);
+    await tap(size, tile);
+    await page.waitForSelector('[data-trophy-case]');
+    await settle(page);
+    const caseText = await page.locator('[data-trophy-case]').innerText();
+    const medalWord = `Olympic ${E.place}`;
+    if (!caseText.includes(medalWord) || !caseText.includes('2004')) fail(id, `the case has no "${medalWord}" row with 2004`);
+    if (await page.locator('[data-intl-open]').count() !== 1) fail(id, 'the case has no International tile');
+    await look(id, size, page, errors, '1-case', true, '[data-trophy-case]', '[data-intl-open]');
+    await tap(size, page.locator('[data-intl-open]'));
+    await page.waitForSelector('[data-intl-summers-view="list"]');
+    await settle(page);
+    if (await page.locator('[data-trophy-case], [data-career-badge]').count()) fail(id, 'the International view stacks over the case or the badges');
+    if (await page.locator('[data-intl-summer="2004"]').count() !== 1) fail(id, 'the list has no 2004 summer to open');
+    await look(id, size, page, errors, '2-international', true, '[data-intl-summers-view]');
+    await tap(size, page.locator('[data-intl-summer="2004"]'));
+    await page.waitForSelector('[data-intl-result]');
+    await settle(page);
+    if (await page.locator(`[data-intl-place="${E.place}"]`).count() !== 1) fail(id, `the 2004 result does not say ${E.place}`);
+    if (await page.locator('[data-intl-tile="games"]').count() !== 1) fail(id, 'the 2004 result offers no Your games: its tournament did not play again');
+    await look(id, size, page, errors, '3-summer-2004');
+    const backLabel = (await page.locator('[data-intl-continue]').innerText()).trim();
+    if (backLabel !== 'Back') fail(id, `the result's button reads "${backLabel}", not Back`);
+    await tap(size, page.locator('[data-intl-continue]'));
+    await page.waitForSelector('[data-intl-summers-view="list"]');
+    await settle(page);
+    await look(id, size, page, errors, '4-back-to-list', true, '[data-intl-summers-view]');
+    await tap(size, page.locator('[data-intl-summers-back]'));
+    await page.waitForSelector('[data-trophy-case]');
+    await settle(page);
+    if (await page.locator('[data-intl-summers-view]').count()) fail(id, 'Back left the International view up');
+    await look(id, size, page, errors, '5-back-to-case', true, '[data-trophy-case]', '[data-intl-open]');
+    const t = await text(page);
+    if (/Team USA|USA Basketball|Dream Team/.test(t)) fail(id, 'a word the round bans is on screen');
+    if (JSON.stringify(await readSave(page)) !== loaded) fail(id, 'looking at the shelf wrote the save');
+  } catch (e) { fail(id, `the walk stopped: ${String(e).split('\n')[0].slice(0, 160)}`); } finally { await context.close(); }
+}
+
+/** (g) Round 1557 (1544's review, minor 6): the curtain closing is a screen change of its own. A save one season
+ *  before the 2006 World Championship at 95: press Play, Continue through the curtain and whatever beats follow,
+ *  and the next screen (the call, or the summer's card when the season fell short) arrives with its top in view. */
+async function walkCurtain(browser, size) {
+  const id = `g-${size.width}`;
+  const { context, page, errors } = await open(browser, size, D2.save);
+  try {
+    await tap(size, page.locator('button:has-text("Play the")').first());
+    await page.waitForSelector('[data-season-reveal]', { timeout: 15000 });
+    await settle(page);
+    let arrived = null;
+    for (let i = 0; i < 5 && !arrived; i += 1) {
+      const cont = page.locator('button:has-text("Continue")').first();
+      if (!(await cont.count())) break;
+      await tap(size, cont);
+      await page.waitForTimeout(1500);
+      for (const sel of ['[data-intl-call]', '[data-intl-holding]', '[data-career-event]']) if (!arrived && await page.locator(sel).count()) arrived = sel;
+    }
+    if (!arrived) { console.log(`  ${id}: no call or summer card after the curtain on this run (the season decided), arrival not measured`); return; }
+    if (arrived === '[data-intl-holding]') { await page.waitForSelector('[data-intl-call]', { timeout: 12000 }); arrived = '[data-intl-call]'; await settle(page); }
+    const m = await page.evaluate(sel => { const r = document.querySelector(sel).getBoundingClientRect(); return { top: Math.round(r.top), ih: innerHeight, sy: Math.round(scrollY) }; }, arrived);
+    console.log(`  ${id}: after the curtain ${arrived} arrived with its top at ${m.top} in a ${m.ih} high view (scrollY ${m.sy})`);
+    if (m.top < -1 || m.top > m.ih * 0.6) fail(id, `after the curtain ${arrived} arrived with its top at ${m.top} in a ${m.ih} high view`);
+    if (errors.length) fail(id, `page errors ${errors.slice(0, 2).join(' | ')}`);
+    await page.screenshot({ path: path.join(OUT, `${id}-after-curtain.png`) });
+    shots.push(`${id}-after-curtain.png`);
+  } catch (e) { fail(id, `the walk stopped: ${String(e).split('\n')[0].slice(0, 160)}`); } finally { await context.close(); }
+}
+
 const browser = await chromium.launch();
 let exit = 0;
 try {
@@ -319,6 +449,8 @@ try {
     await walkC(browser, SIZES[0]);
     await walkD(browser, SIZES[1], D1, 'rated80');
     await walkD(browser, SIZES[1], D2, 'summer2005');
+    for (const size of SIZES) await walkCase(browser, size);
+    for (const size of SIZES.slice(0, 2)) await walkCurtain(browser, size);
     console.log(`  screenshots in ${OUT}: ${shots.join(' ')}`);
     console.log(failures ? `playNbaIntl: RED, ${failures} failures` : `playNbaIntl: green. The call, Go and its result's views, Rest, a reload mid beat, the 2027 World Cup's lines and no call at 80 or in 2005, at 320, 390 and 1280; ${shots.length} screenshots to look at.`);
     exit = failures ? 1 : 0;
