@@ -1,0 +1,206 @@
+{
+  "schema": 1,
+  "status": "SOURCE_ONLY_ACTUAL_FOUR_CASE_BASELINE_PROPOSAL_RUNTIME_UNRUN",
+  "parentCommit": "47dc71eafa15870935718f032ff545fb07de0110",
+  "parentTree": "33d045e5772867c42167818caf1fe63dc94fb8cf",
+  "sourceFamily": "Unmerged source-vetted Draft423, global qualification pending",
+  "branch": "codex/sc-manager-focus-baseline-v2-20261028",
+  "allowedPaths": [
+    ".github/workflows/sc-manager-focus-baseline.yml",
+    "qa/sc-manager-season-focus-v1/BASELINE-SOURCE.json",
+    "qa/sc-manager-season-focus-v1/original/soccerCareerEngine.ts",
+    "scripts/qa/buildSoccerManagerFocusObserver.mjs",
+    "scripts/qa/soccerManagerFocusBaseline.mjs",
+    "src/test/soccerCareerManagerFocus.baseline.test.tsx"
+  ],
+  "files": [
+    {
+      "path": "src/pages/SoccerCareer.tsx",
+      "bytes": 279960,
+      "sha256": "9c1a815ace46874dd596c101bc40d92eef7d154303fba5ea9f47b56b3d12810e",
+      "gitBlob": "6f580f65289a7ba6c1813fb8099b97f40ec245a3"
+    },
+    {
+      "path": "src/hooks/useSoccerManagerJobReview.ts",
+      "bytes": 1630,
+      "sha256": "e36b4ad3e7230ed6a22a552c046f056056190263e685fb8fd2f584afd03df3bf",
+      "gitBlob": "b344961c16e30cb55fcd90b5d9b70ee1a44c93f1"
+    },
+    {
+      "path": "src/lib/soccerCareerEngine.ts",
+      "bytes": 552077,
+      "sha256": "bf4beb5151213325277a44c83cef6a72528d14b612368b8db70c7b2288508708",
+      "gitBlob": "97e40cf67e30c3cbf6425eab95afa0c53a20d66b"
+    },
+    {
+      "path": "src/lib/soccerCareerCoachingStart.ts",
+      "bytes": 4043,
+      "sha256": "7720957192ccb8a0de5b1fef64817e409ee30d7ce7dd035425e598d0fd903aff",
+      "gitBlob": "0733d114d66b748131ac2c623fb858c6d9c97fd2"
+    },
+    {
+      "path": "src/lib/soccerCareerManagerJobReview.ts",
+      "bytes": 9544,
+      "sha256": "f689d2fb791aef673ce112703f44b04e8a61b382ac4a657475f7dc7a79b9f1b6",
+      "gitBlob": "c91f8fc1a3cfd8b2b74289de501d4964a5d06921"
+    },
+    {
+      "path": "src/lib/soccerCareerSave.ts",
+      "bytes": 6287,
+      "sha256": "b486dfd8c4073230b6967c674058e46c7b56a6afd2a8a165f1e215501205477a",
+      "gitBlob": "86ec011693fd5bc702b5e8ccec05d27775a72a76"
+    },
+    {
+      "path": "src/lib/soccerCareerLeague.ts",
+      "bytes": 47020,
+      "sha256": "fe3efae2f43e780c2cd4d13ca7fa85f023a2fefe8cf1b002866a1cf0d963268a",
+      "gitBlob": "9c05bf681f30bcd3703f55ad72c1289f4eeb9844"
+    },
+    {
+      "path": "src/lib/soccerCareerLeagueWorld.ts",
+      "bytes": 15636,
+      "sha256": "360c629f5d6ecc9cd959f5aae9a3791eb99b4f5cecdca2236da563168c2bb8c6",
+      "gitBlob": "72fcabdd0c557a743aa849b01208140c3030048f"
+    },
+    {
+      "path": "src/lib/careerEras.ts",
+      "bytes": 105789,
+      "sha256": "f3e7347f58abe993db9fd72e9896ea0767a6ca7eb3b19861b75b92b387f89c1c",
+      "gitBlob": "e037022342382b1df9c8a5ede620d2cce480bc23"
+    },
+    {
+      "path": "src/lib/soccerCareerLife.ts",
+      "bytes": 105609,
+      "sha256": "1ba72d3a9b0f1fd30fe45eab2d5e34a955369effa6b224e02a9db3e3db92befc",
+      "gitBlob": "592170d7967162d9967e3cf13e22333afb840732"
+    },
+    {
+      "path": "src/lib/managerJobMarket.ts",
+      "bytes": 3955,
+      "sha256": "2df0a3fed4336c23c0bcaa7868a06d63a4cbaa417b3e0e8880e17d8bc879774d",
+      "gitBlob": "82e11ce8c1c76b780059969674a26ad368bd4db4"
+    },
+    {
+      "path": "src/lib/managerOffers.ts",
+      "bytes": 12319,
+      "sha256": "c445ec9427502ff797348527077034d76b9c668b3a4980c8387aaba4ab75e24d",
+      "gitBlob": "b251b339a7ff0b6d1f8d2e9692adef8229ebedd5"
+    },
+    {
+      "path": "src/data/soccerCareerClubPool.ts",
+      "bytes": 49030,
+      "sha256": "5e565223239c8bb5ea8f5be3d2ecfb5c72ed026d3598031fcb5221f265e01d58",
+      "gitBlob": "83e9df78441c0d16509f80b8ec0bfbadb0f08f26"
+    },
+    {
+      "path": "scripts/lib/careerStep.mjs",
+      "bytes": 2741,
+      "sha256": "3a5a141ff77d2487f030a47ebbdbab88fc2c567e6a5f56ece8c37711961e8432",
+      "gitBlob": "b88a67dda20846669d6cf5404faee226fe493c0e"
+    },
+    {
+      "path": "scripts/lib/offlineTransport.cjs",
+      "bytes": 10660,
+      "sha256": "e60ff1534307e449ccef598e3b7470dcba58681b82cea4005cec7319f14f9221",
+      "gitBlob": "0fda542a2649fe5da937c6976fd0f5b6073e74b6"
+    },
+    {
+      "path": "src/test/setup.ts",
+      "bytes": 847,
+      "sha256": "0175cc334b44d9874ff4bd8274a8cc165e9e84cd3738a4298f934db353887289",
+      "gitBlob": "df00cdf5c54e8c8efc71e46d7585ae76acb4fc8d"
+    },
+    {
+      "path": "tsconfig.app.json",
+      "bytes": 680,
+      "sha256": "b12030bfe21ea5be66670842c71d66d194d1771f93f0b8c076e97c867b4b0552",
+      "gitBlob": "51f581dd91641b4c1f1219f646788e73cf6bf00c"
+    },
+    {
+      "path": "vitest.config.ts",
+      "bytes": 5364,
+      "sha256": "6a68dd2f214dab4a3013eb41bad38eea65d703d61440002710ec246495e1c58a",
+      "gitBlob": "ed2a9dc677f77dfe95c061064eeff5782b856864"
+    },
+    {
+      "path": "package.json",
+      "bytes": 3495,
+      "sha256": "acfe14626dea53cf5f9c5e0286b766a22237656b52aac4c888b080873ac90e31",
+      "gitBlob": "2ff64986fb76ebc51b706f2fd24765768874008a"
+    },
+    {
+      "path": "package-lock.json",
+      "bytes": 309049,
+      "sha256": "c7e3867eabf0bfa03a8aa6a5e601b0050b937ed210d48c6bbd241019e3c9ea76",
+      "gitBlob": "97d6f12a052f25f400462938c241789a083f0bfe"
+    },
+    {
+      "path": "qa/sc-manager-season-focus-v1/original/soccerCareerEngine.ts",
+      "bytes": 552077,
+      "sha256": "bf4beb5151213325277a44c83cef6a72528d14b612368b8db70c7b2288508708",
+      "gitBlob": "97e40cf67e30c3cbf6425eab95afa0c53a20d66b"
+    },
+    {
+      "path": "scripts/qa/buildSoccerManagerFocusObserver.mjs",
+      "bytes": 7168,
+      "sha256": "ec2b09bed6f623b31130c5981347b19e468fa63698d1e3d6f5e55288e35011b6",
+      "gitBlob": "ad4ac0c2b7fe24614a91d5d7b3ccdec7e0d935b7"
+    },
+    {
+      "path": "scripts/qa/soccerManagerFocusBaseline.mjs",
+      "bytes": 12284,
+      "sha256": "7a0e91cd20c20880a85f10ae42fb1c9d1fdc8401be7ee0ba650e50510a198693",
+      "gitBlob": "5d8c8ed209d9ebff035707bc1b709ea8eeb70c55"
+    },
+    {
+      "path": "src/test/soccerCareerManagerFocus.baseline.test.tsx",
+      "bytes": 17782,
+      "sha256": "ff3edd10884cd32c14efa48e75106f5832c3117d5bcc469e5dd7bf410cf1eb99",
+      "gitBlob": "1af784145858aa9d69104f4aec7423e19f11aa32"
+    }
+  ],
+  "criticalSourceCount": 20,
+  "testPath": "src/test/soccerCareerManagerFocus.baseline.test.tsx",
+  "cases": [
+    {
+      "title": "employed manager can open season focus and reopen its help",
+      "status": "failed",
+      "marker": "MISSING_MANAGER_SEASON_FOCUS_CONTROL"
+    },
+    {
+      "title": "selected focus changes actual league and cup outcomes with the declared tradeoff",
+      "status": "failed",
+      "marker": "MISSING_MANAGER_SEASON_FOCUS_TRADEOFF"
+    },
+    {
+      "title": "canonical default manager seasons preserve complete state save and random stream",
+      "status": "passed"
+    },
+    {
+      "title": "existing unemployed job acceptance preserves complete state save and zero draws",
+      "status": "passed"
+    }
+  ],
+  "acquisitionPolicy": {
+    "constructorSeedStart": 610000,
+    "constructors": 128,
+    "youthSteps": 12,
+    "managerSeedStart": 910000,
+    "managerSteps": 64,
+    "outcomeSeedStart": 730000,
+    "outcomeSeeds": 128
+  },
+  "actualRetirementEligibility": "Must actually render Retire then Retire? / Confirm Retirement on acquired playing state, then Become a Manager on actual ceremony+legacy. Source gate has no age threshold.",
+  "coursework": "Not used or bypassed. Any future use requires actual rendered choices and genuine recorded three badges, never badge injection.",
+  "transientStates": "Canonical direct action flow; current careerStep only after youth/contract_offer whitelist and nonempty actual offer guard. Unknown/empty fabricated fallbacks refused. Clone only complete final serializable states.",
+  "reference": "Separate frozen Enginebf4 namespace with all other dependencies current. Both bundle metafiles require one canonical Engine input each. Module initialization excluded and unmeasured.",
+  "defaultPairs": 64,
+  "actualOutcomeTriples": 256,
+  "copiedDiagnosticControls": 8,
+  "retainedSourceInventorySHA256": "14c218c4b273f3c7c74972102a7ad48a2ff7b1c775e123bbedfe73c714f6528f",
+  "sourceMapTreeSHA256": "3c70a582649575b644617c02e29760fae7f3457127ccdeb31a5c6c32cca69e52",
+  "continuationDecisionSHA256": "74f7c0954f6037d64cbd90086ecc9ff199d43ac22d3382c65ac17f41b65d4e55",
+  "designPlanSHA256": "7263a6587e4c62ed63e75d538d673455567ad4be2e51878d0749ff65368c0f1e",
+  "futureFixedRequirement": "Exercise actual Page.handleAdvanceManager after focus adoption with job review disabled; current wrapper bypasses hook, so hook-only stale-callback tests are insufficient. Central ref remains sole authority, no second ref/bypass.",
+  "limits": "Source-only test-first proposal. No product edits, actual RED, actor acquisition, local execution or branch launch. C0 help assertions beyond first missing entry are not baseline credit. Future worked-example assertions must scope actual help surface."
+}

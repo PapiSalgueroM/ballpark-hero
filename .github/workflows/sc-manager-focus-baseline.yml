@@ -1,0 +1,88 @@
+name: Soccer Career manager season focus baseline
+on:
+  push:
+    branches: [codex/sc-manager-focus-baseline-v2-20261028]
+    paths:
+      - .github/workflows/sc-manager-focus-baseline.yml
+      - scripts/qa/buildSoccerManagerFocusObserver.mjs
+      - scripts/qa/soccerManagerFocusBaseline.mjs
+      - src/test/soccerCareerManagerFocus.baseline.test.tsx
+      - 'qa/sc-manager-season-focus-v1/**'
+permissions:
+  contents: read
+concurrency:
+  group: sc-manager-focus-baseline-${{ github.sha }}
+  cancel-in-progress: false
+defaults:
+  run:
+    shell: bash
+jobs:
+  baseline:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    env:
+      CI: '1'
+      SIM_NETWORK: offline
+      CAREER_SEASON_LOCAL_ONLY: '1'
+      SC_MANAGER_FOCUS_OUT: ${{ github.workspace }}/manager-focus-artifacts
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.sha }}
+          fetch-depth: 2
+          persist-credentials: false
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: npm
+      - name: Exact source-vetted parent and six QA additions
+        run: |
+          set -euo pipefail
+          test "$GITHUB_REF_NAME" = codex/sc-manager-focus-baseline-v2-20261028
+          test "$(git rev-parse HEAD)" = "$GITHUB_SHA"
+          test "$(git rev-list --parents -n 1 HEAD | wc -w)" = 2
+          test "$(git rev-parse HEAD^)" = 47dc71eafa15870935718f032ff545fb07de0110
+          test "$(git rev-parse HEAD^^{tree})" = 33d045e5772867c42167818caf1fe63dc94fb8cf
+          mkdir -p "$SC_MANAGER_FOCUS_OUT"
+          git rev-parse HEAD HEAD^{tree} > "$SC_MANAGER_FOCUS_OUT/head-tree.txt"
+          git archive --format=tar HEAD > "$SC_MANAGER_FOCUS_OUT/source.tar"
+          git ls-tree -r HEAD > "$SC_MANAGER_FOCUS_OUT/source-tree.txt"
+          git ls-files -z | sort -z | xargs -0 sha256sum > "$SC_MANAGER_FOCUS_OUT/tracked-before.sha256"
+          printf '%s  %s\n' 75312d927f2987f0bf16601d77dc2b731e3e0ea6287ee0187d4d8152be8f78fb qa/sc-manager-season-focus-v1/BASELINE-SOURCE.json | sha256sum --check
+          printf '%s  %s\n' 7a0e91cd20c20880a85f10ae42fb1c9d1fdc8401be7ee0ba650e50510a198693 scripts/qa/soccerManagerFocusBaseline.mjs | sha256sum --check
+          node --check scripts/qa/buildSoccerManagerFocusObserver.mjs
+          node --check scripts/qa/soccerManagerFocusBaseline.mjs
+          node scripts/qa/soccerManagerFocusBaseline.mjs source 2>&1 | tee "$SC_MANAGER_FOCUS_OUT/source-pins.log"
+          git diff --name-only HEAD^ HEAD | sort > "$SC_MANAGER_FOCUS_OUT/changed-paths.txt"
+          diff -u <(node -e 'const fs=require("fs");console.log(JSON.parse(fs.readFileSync("qa/sc-manager-season-focus-v1/BASELINE-SOURCE.json")).allowedPaths.sort().join("\n"))') "$SC_MANAGER_FOCUS_OUT/changed-paths.txt"
+          test "$(git diff --name-status HEAD^ HEAD | grep -c '^A')" = 6
+          test "$(git ls-files | wc -l)" = 5434
+      - name: Install locked dependencies
+        run: |
+          set -euo pipefail
+          echo '127.0.0.1 flawuiqbvjobmkfkauhw.supabase.co' | sudo tee -a /etc/hosts
+          npm ci 2>&1 | tee "$SC_MANAGER_FOCUS_OUT/npm-ci.log"
+      - name: Real application types
+        run: |
+          set -euo pipefail
+          NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node_modules/.bin/tsc --noEmit -p tsconfig.app.json 2>&1 | tee "$SC_MANAGER_FOCUS_OUT/types.log"
+      - name: Actual four cases, precise owned assertions and preservation
+        run: |
+          set -euo pipefail
+          NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/qa/soccerManagerFocusBaseline.mjs 2>&1 | tee "$SC_MANAGER_FOCUS_OUT/baseline-admission.log"
+      - name: Every tracked canonical and QA source held
+        if: always()
+        run: |
+          set -euo pipefail
+          sha256sum --check "$SC_MANAGER_FOCUS_OUT/tracked-before.sha256" > "$SC_MANAGER_FOCUS_OUT/tracked-held.log"
+          git status --porcelain --untracked-files=no > "$SC_MANAGER_FOCUS_OUT/tracked-status.txt"
+          test ! -s "$SC_MANAGER_FOCUS_OUT/tracked-status.txt"
+          git diff --exit-code HEAD
+      - name: Retain original evidence including failure
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: sc-manager-focus-baseline-${{ github.run_id }}-${{ github.run_attempt }}
+          path: manager-focus-artifacts/
+          if-no-files-found: error
+          retention-days: 14
