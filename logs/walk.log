@@ -1,0 +1,64 @@
+ok   base bundle is the base 
+ok   the NBA plant is a base save of named rows round 18
+ok   the NFL plant is a base save 
+ok   nba-390-rm: the base save plays to the close and draws the season card 
+ok   nba-390-rm: the save after the close keeps the shared shape season,lines,clubs
+  (printed) nba-390-rm Your lines: {"men":10,"shown":10,"ruled":9,"boxH":374,"fullH":374,"overflowX":0}
+ok   nba-390-rm: every stacked man after the first has a rule over him {"men":10,"shown":10,"ruled":9,"boxH":374,"fullH":374,"overflowX":0}
+ok   nba-390-rm: no horizontal page scroll {"men":10,"shown":10,"ruled":9,"boxH":374,"fullH":374,"overflowX":0}
+ok   nba-390-rm: Your lines say what the save holds (10 men) {"name":"Kevin Durant","values":["80","26.7","7.6","4.7"]} vs {"name":"Kevin Durant","values":["80","26.7","7.6","4.7"]}
+ok   nba-390-rm: a reload on the recap draws the same Awards tab 1224 vs 1224
+ok   nba-390-rm: no page error 
+ok   nba-390-rm: roster badge 12 px, whole, newest first {"text":"🏅 Sim 2025 Sixth Man of the Year, Sim 2025 Defensive Player of the Year +1 more","px":12,"cut":false,"lines":3}
+ok   nba-390-rm: no page error on the roster 
+ok   nfl-390-rm: a base NFL save plays its last week and the close on the head and draws the card 
+ok   nfl-390-rm: Your lines say what the save holds (13 men) {"name":"Caleb Williams","values":["17","28","0","0","0"]} vs {"name":"Caleb Williams","values":["17","28","0","0","0"]}
+  (printed) nfl-390-rm Your lines: {"men":13,"shown":11,"ruled":12,"boxH":430,"fullH":473,"overflowX":0}
+ok   nfl-390-rm: every stacked man after the first has a rule over him {"men":13,"shown":11,"ruled":12,"boxH":430,"fullH":473,"overflowX":0}
+ok   nfl-390-rm: the card's field goals and safeties are the saved club's [17,9,338,322,35,31,0] | kicked 31 field goals and scored 0 safeties.
+ok   nfl-390-rm: no page error 
+ok   nba-390-mo: the base save plays to the close and draws the season card 
+ok   nba-390-mo: the save after the close keeps the shared shape season,lines,clubs
+  (printed) nba-390-mo Your lines: {"men":10,"shown":10,"ruled":9,"boxH":374,"fullH":374,"overflowX":0}
+ok   nba-390-mo: every stacked man after the first has a rule over him {"men":10,"shown":10,"ruled":9,"boxH":374,"fullH":374,"overflowX":0}
+ok   nba-390-mo: no horizontal page scroll {"men":10,"shown":10,"ruled":9,"boxH":374,"fullH":374,"overflowX":0}
+ok   nba-390-mo: Your lines say what the save holds (10 men) {"name":"Kevin Durant","values":["80","26.7","7.6","4.7"]} vs {"name":"Kevin Durant","values":["80","26.7","7.6","4.7"]}
+ok   nba-390-mo: a reload on the recap draws the same Awards tab 1224 vs 1224
+ok   nba-390-mo: no page error 
+ok   nba-390-mo: roster badge 12 px, whole, newest first {"text":"🏅 Sim 2025 Sixth Man of the Year, Sim 2025 Defensive Player of the Year +1 more","px":12,"cut":false,"lines":3}
+ok   nba-390-mo: no page error on the roster 
+ok   nfl-390-mo: a base NFL save plays its last week and the close on the head and draws the card 
+ok   nfl-390-mo: Your lines say what the save holds (13 men) {"name":"Caleb Williams","values":["17","28","0","0","0"]} vs {"name":"Caleb Williams","values":["17","28","0","0","0"]}
+  (printed) nfl-390-mo Your lines: {"men":13,"shown":11,"ruled":12,"boxH":430,"fullH":473,"overflowX":0}
+ok   nfl-390-mo: every stacked man after the first has a rule over him {"men":13,"shown":11,"ruled":12,"boxH":430,"fullH":473,"overflowX":0}
+ok   nfl-390-mo: the card's field goals and safeties are the saved club's [17,9,338,322,35,31,0] | kicked 31 field goals and scored 0 safeties.
+ok   nfl-390-mo: no page error 
+ok   nba-1280-rm: the base save plays to the close and draws the season card 
+ok   nba-1280-rm: the save after the close keeps the shared shape season,lines,clubs
+  (printed) nba-1280-rm Your lines: {"men":10,"shown":10,"ruled":0,"boxH":188,"fullH":188,"overflowX":0}
+ok   nba-1280-rm: no horizontal page scroll {"men":10,"shown":10,"ruled":0,"boxH":188,"fullH":188,"overflowX":0}
+ok   nba-1280-rm: Your lines say what the save holds (10 men) {"name":"Kevin Durant","values":["80","26.7","7.6","4.7"]} vs {"name":"Kevin Durant","values":["80","26.7","7.6","4.7"]}
+ok   nba-1280-rm: a reload on the recap draws the same Awards tab 1224 vs 1224
+ok   nba-1280-rm: no page error 
+ok   nba-1280-rm: roster badge 12 px, whole, newest first {"text":"🏅 Sim 2025 Sixth Man of the Year, Sim 2025 Defensive Player of the Year +1 more","px":12,"cut":false,"lines":4}
+ok   nba-1280-rm: no page error on the roster 
+ok   nfl-1280-rm: a base NFL save plays its last week and the close on the head and draws the card 
+ok   nfl-1280-rm: Your lines say what the save holds (13 men) {"name":"Caleb Williams","values":["17","28","0","0","0"]} vs {"name":"Caleb Williams","values":["17","28","0","0","0"]}
+  (printed) nfl-1280-rm Your lines: {"men":13,"shown":12,"ruled":0,"boxH":222,"fullH":236,"overflowX":0}
+ok   nfl-1280-rm: the card's field goals and safeties are the saved club's [17,9,338,322,35,31,0] | kicked 31 field goals and scored 0 safeties.
+ok   nfl-1280-rm: no page error 
+ok   nba-1280-mo: the base save plays to the close and draws the season card 
+ok   nba-1280-mo: the save after the close keeps the shared shape season,lines,clubs
+  (printed) nba-1280-mo Your lines: {"men":10,"shown":10,"ruled":0,"boxH":188,"fullH":188,"overflowX":0}
+ok   nba-1280-mo: no horizontal page scroll {"men":10,"shown":10,"ruled":0,"boxH":188,"fullH":188,"overflowX":0}
+ok   nba-1280-mo: Your lines say what the save holds (10 men) {"name":"Kevin Durant","values":["80","26.7","7.6","4.7"]} vs {"name":"Kevin Durant","values":["80","26.7","7.6","4.7"]}
+ok   nba-1280-mo: a reload on the recap draws the same Awards tab 1224 vs 1224
+ok   nba-1280-mo: no page error 
+ok   nba-1280-mo: roster badge 12 px, whole, newest first {"text":"🏅 Sim 2025 Sixth Man of the Year, Sim 2025 Defensive Player of the Year +1 more","px":12,"cut":false,"lines":4}
+ok   nba-1280-mo: no page error on the roster 
+ok   nfl-1280-mo: a base NFL save plays its last week and the close on the head and draws the card 
+ok   nfl-1280-mo: Your lines say what the save holds (13 men) {"name":"Caleb Williams","values":["17","28","0","0","0"]} vs {"name":"Caleb Williams","values":["17","28","0","0","0"]}
+  (printed) nfl-1280-mo Your lines: {"men":13,"shown":12,"ruled":0,"boxH":222,"fullH":236,"overflowX":0}
+ok   nfl-1280-mo: the card's field goals and safeties are the saved club's [17,9,338,322,35,31,0] | kicked 31 field goals and scored 0 safeties.
+ok   nfl-1280-mo: no page error 
+walk1566: 55 checks, 0 failed
