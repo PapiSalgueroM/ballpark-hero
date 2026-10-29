@@ -591,6 +591,9 @@ const NOTHING_HELD = [
     why: 'the sale was refused (doPrestige answered false): the notice says so and the ground is as it was' },
   { file: 'src/hooks/useWonderkidFactory.ts', keys: ['state:academySaveBlocked', 'state:packSaveBlocked', 'state:gearSaveBlocked', 'keeps:commitAcademy', 'keeps:deliverWaiting'],
     why: 'a move only reaches the screen after the whole academy is saved (commitAcademy, deliverWaiting, doDismissPack): refused, the move does not happen' },
+  /* Round 1570: a Hall wall plaque is derived from the retired career's own save, never progress of its own */
+  { file: 'src/components/us-career/UsCareerBoard.tsx', keys: ['state:wallRefused'],
+    why: 'the Hall wall plaque the browser refused: it is built from the retired career, which is still on its own save, so the next load puts it up again; the state only lets the wall say this player was not kept' },
   /* "the save on disk was bad", which is not a refused write */
   { file: 'src/pages/SoccerCareer.tsx', keys: ['state:saveError'],
     why: 'true when the stored save could not be opened (restoredSave.invalid), not when a write was refused' },
