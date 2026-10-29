@@ -22,6 +22,7 @@ import fs from 'node:fs';
 import path from 'node:path';
 import { fileURLToPath, pathToFileURL } from 'node:url';
 import { page, rows, text, meta } from './sportsRef.mjs';
+import { SHARE_FITS, SHARE_OUT } from '../lib/usConnectionsCheck.mjs';
 
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..', '..');
 const [, , step, workArg, needsArg, outArg] = process.argv;
@@ -93,6 +94,9 @@ if (step === 'refetch') {
 if (step === 'pages') {
   const needs = JSON.parse(fs.readFileSync(needsArg, 'utf8')).needs;
   const want = pagesFor(needs);
+  /* PLAYERS_ONLY=1 (Round 1567): only the men's own pages, for needs whose kinds read nothing else (a position
+     share, seasons with a club, a birthplace), so a run does not spend two minutes on 24 list pages it never reads */
+  if (process.env.PLAYERS_ONLY) for (const k of [...want.keys()]) if (!k.startsWith('p_')) want.delete(k);
   let n = 0;
   let missing = 0;
   for (const [k, u] of want) {
@@ -348,7 +352,7 @@ function host2(work, n, m, P) {
     case 'bats': {
       const side = P.bats === 'Both' ? 'S' : P.bats === 'Left' ? 'L' : 'R';
       const shp = c.pos ? shareBR(P, c.pos) : 1;
-      const posOk = !c.pos || (shp !== null && shp >= 0.3);
+      const posOk = !c.pos || (shp !== null && shp >= SHARE_FITS);
       return need(side === c.side && posOk, `Bats: ${P.bats}; Positions: ${P.positions}`);
     }
     case 'starter': {
@@ -367,10 +371,10 @@ function host2(work, n, m, P) {
       return need(v, am.length ? `Draft: ${am.map(d => `${d.year} round ${d.round}, ${d.team}`).join('; ')}` : `no amateur draft line${c.allStar ? `; ${/All-Star/.test(P.bling) ? 'an All-Star' : 'never an All-Star'}` : ''}`);
     }
     case 'hofPos': {
-      /* the share rule on the second host's own games by position (the appearances table): 30 percent of his
-         games there fits, under a tenth does not, between is unknown, as the record judges it */
+      /* the share rule on the second host's own games by position (the appearances table): 35 percent of his
+         games there fits (30 before Round 1567), under a tenth does not, between is unknown, as the record judges it */
       const sh = shareBR(P, c.pos);
-      const v = !P.hof ? false : sh === null ? null : sh >= 0.3 ? true : sh < 0.1 ? false : null;
+      const v = !P.hof ? false : sh === null ? null : sh >= SHARE_FITS ? true : sh < SHARE_OUT ? false : null;
       return need(v, `${P.hof ? `Hall of Fame ${P.hof}` : 'not in the Hall of Fame'}; Positions: ${P.positions}; share of games at ${c.pos.join('/')}: ${sh === null ? 'unknown' : sh.toFixed(2)}`);
     }
     case 'hofPitcher': {
@@ -385,7 +389,7 @@ function host2(work, n, m, P) {
     case 'posEra': {
       const last = P.last ? Number(P.last) : 9999;
       const sh = shareBR(P, c.pos);
-      const v = last < c.since || /^Pitcher/.test(P.positions ?? '') ? false : sh === null ? null : sh >= 0.3 ? true : sh < 0.1 ? false : null;
+      const v = last < c.since || /^Pitcher/.test(P.positions ?? '') ? false : sh === null ? null : sh >= SHARE_FITS ? true : sh < SHARE_OUT ? false : null;
       return need(v, `Positions: ${P.positions}; share of games at ${c.pos.join('/')}: ${sh === null ? 'unknown' : sh.toFixed(2)}; last game ${P.last ?? 'still playing'}`);
     }
     default: return null;
@@ -424,6 +428,36 @@ if (step === 'facts') {
   }
   fs.writeFileSync(outArg, JSON.stringify(facts, null, 1));
   console.log(`facts: ${facts.length} agreed on two hosts, ${problems.length} not`);
+  for (const p of problems) console.log('  ' + p);
+}
+
+/*
+ * Round 1567: the pairs the record could not judge (a man between the share lines beside a position group, one to
+ * four seasons beside a legends group), read on both hosts and written as they stand, agreed or not. A pair that
+ * either host leaves between its lines, or that the two decide apart, is a coin toss on the record: the round took
+ * the man off that board, and the ledger keeps both readings under grayPairs.
+ *   node scripts/usConnections/verifyMlbFacts.mjs gray <work> <needs.json> <out.json>
+ */
+if (step === 'gray') {
+  const us = await import(pathToFileURL(path.join(ROOT, 'scripts/lib/usConnectionsCheck.mjs')).href);
+  const { checker } = us.makeUsChecker(ROOT, 'baseball');
+  const needs = JSON.parse(fs.readFileSync(needsArg, 'utf8')).needs;
+  const out = [];
+  const problems = [];
+  for (const n of needs) {
+    const m = manOf(n.name);
+    const f = m?.bbref ? path.join(WORK, `p_${m.bbref}.html`) : null;
+    const P = f && fs.existsSync(f) ? parsePlayerPage(fs.readFileSync(f, 'utf8')) : null;
+    const e2 = host2(WORK, n, m, P);
+    if (!m || !e2) { problems.push(`${n.id} ${n.name} "${n.label}": ${m ? 'no second host page' : 'no record'}`); continue; }
+    const v1 = checker.fits(n.name, n.crit);
+    out.push({ id: n.id, label: n.label, name: n.name, listedUnder: n.listedUnder, sources: [
+      { host: 'statsapi.mlb.com', url: `https://statsapi.mlb.com/api/v1/people/${m.id}`, says: says1(n, m), verdict: v1 ?? null },
+      { host: hostOf(e2.url), url: e2.url, says: e2.says, verdict: e2.v ?? null },
+    ] });
+  }
+  fs.writeFileSync(outArg, JSON.stringify(out, null, 1));
+  console.log(`gray: ${out.length} pairs read on both hosts, ${problems.length} not`);
   for (const p of problems) console.log('  ' + p);
 }
 

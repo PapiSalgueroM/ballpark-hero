@@ -233,10 +233,51 @@
      "says": "Baltimore Ravens: 2021 (5 games)"
     }
    ]
+  },
+  {
+   "id": "nflconn-004",
+   "label": "Played college ball at Clemson",
+   "name": "Ed Reed",
+   "holds": false,
+   "why": "gray-decided",
+   "round": 1567,
+   "sources": [
+    {
+     "host": "sports.core.api.espn.com",
+     "url": "https://sports.core.api.espn.com/v2/sports/football/leagues/nfl/athletes/3552",
+     "says": "college: $ref colleges/2390, which reads name Miami, mascot Hurricanes (https://sports.core.api.espn.com/v2/colleges/2390)"
+    },
+    {
+     "host": "nfl.com",
+     "url": "https://www.nfl.com/players/ed-reed/",
+     "says": "Player Info: College Miami (alumniOf Miami (Fla.))"
+    }
+   ]
   }
  ],
  "uncheckedCeiling": 0,
  "memberUnknownCeiling": 0,
- "otherUnknownCeiling": 1,
- "otherUnknownNote": "Other tiles the record cannot judge against a group beside them, 1 pair on the head: Ed Reed against \"Played college ball at Clemson\" on nflconn-004 (the record lacks his college; he played at Miami, so it is not a second answer). The count may only fall."
+ "otherUnknownCeiling": 0,
+ "otherUnknownNote": "Round 1567 took this to 0. The one tile the record could not judge was Ed Reed beside nflconn-004's \"Played college ball at Clemson\": both records leave his college empty. ESPN and nfl.com both say Miami, so the overlay holds it and the checker decides he does not fit.",
+ "overlay": {
+  "Ed Reed": {
+   "set": {
+    "college": "Miami"
+   },
+   "round": 1567,
+   "why": "the record (ESPN site athlete service) and the NFL Grid table both leave his college empty, so the checker could not judge him against nflconn-004's Clemson group",
+   "sources": [
+    {
+     "host": "sports.core.api.espn.com",
+     "url": "https://sports.core.api.espn.com/v2/sports/football/leagues/nfl/athletes/3552",
+     "says": "college: $ref colleges/2390, which reads name Miami, mascot Hurricanes (https://sports.core.api.espn.com/v2/colleges/2390)"
+    },
+    {
+     "host": "nfl.com",
+     "url": "https://www.nfl.com/players/ed-reed/",
+     "says": "Player Info: College Miami (alumniOf Miami (Fla.))"
+    }
+   ]
+  }
+ }
 }

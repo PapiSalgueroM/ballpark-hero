@@ -15,7 +15,10 @@
  *      is one the checker judges (a moving claim nothing holds fails)
  *   2) no refuted claim is on a board: the false members this round took out
  *      (Alex Rodriguez in "Won MVP in both leagues" and the rest), each shown
- *      false on two hosts in the ledger, matched by the claim, not the spelling
+ *      false on two hosts in the ledger, matched by the claim, not the spelling; and
+ *      (Round 1567) no gray pair is back: a man the record could not judge
+ *      against a group beside him, read on both hosts (grayPairs), left that
+ *      board and stays off it
  *   3) the ledger stands on two hosts: every fact two different hosts, none a
  *      wiki; every member of a group the round flagged has a fact holding him
  *      to it; every finding the round fixed has its fact
@@ -56,6 +59,11 @@
  *   US_CONN_CONTROL=unjudged  "Played in Japan before MLB" back on bconn-002 (must raise: unjudged, for it)
  *   US_CONN_CONTROL=fingers   Rollie Fingers back among bconn-029's A's legends, beside the Brewers who
  *                             retired his 34 (must raise: other-unknown, for baseball's ceiling)
+ *   US_CONN_CONTROL=ohtani    Round 1567: Shohei Ohtani (14 starts in 2026) back on bconn-002 beside
+ *                             "Won Cy Young Award" (must raise: watch, for him; the watch skipped two
+ *                             way men before this round)
+ *   US_CONN_CONTROL=frobinson Round 1567: Frank Robinson back among bconn-057's right fielders, beside its
+ *                             left fielders (29.4 percent of his games there: must raise gray-back, for him)
  * A control is red only when the rule it names fires for the man or group it
  * moved. Any other failure in a control run (a moved man has no two host fact
  * in section 3, say) is printed but never turns the run red on its own, so
@@ -171,6 +179,24 @@ if (CONTROL) {
       changed = true;
       own = { kinds: ['other-unknown'], subject: 'baseball' };
     }
+  } else if (CONTROL === 'ohtani') {
+    /* Round 1567: Shohei Ohtani (14 starts in 2026, a two way man) back beside "Won Cy Young Award" on bconn-002 */
+    const b = boardOf('baseball', 'bconn-002');
+    const g = b?.groups.find(x => x.theme === 'Born in Japan');
+    if (g && b.groups.some(x => x.theme === 'Won Cy Young Award') && g.players.includes('Hisashi Iwakuma')) {
+      g.players[g.players.indexOf('Hisashi Iwakuma')] = 'Shohei Ohtani';
+      changed = true;
+      own = { kinds: ['watch'], subject: 'Shohei Ohtani' };
+    }
+  } else if (CONTROL === 'frobinson') {
+    /* Round 1567: Frank Robinson (29.4 percent of his games in left field) back among bconn-057's right fielders */
+    const b = boardOf('baseball', 'bconn-057');
+    const g = b?.groups.find(x => x.theme === 'Hall of Fame right fielders');
+    if (g && b.groups.some(x => x.theme === 'Hall of Fame left fielders') && g.players.includes('Larry Walker')) {
+      g.players[g.players.indexOf('Larry Walker')] = 'Frank Robinson';
+      changed = true;
+      own = { kinds: ['gray-back'], subject: 'Frank Robinson' };
+    }
   } else if (CONTROL === 'unjudged') {
     const b = boardOf('baseball', 'bconn-002');
     const g = b?.groups.find(x => x.theme === 'Born in Japan');
@@ -221,6 +247,21 @@ for (const s of SPORTS) {
     }
   }
   console.log(`   ${s}: ${refuted.length} refuted claims held off every board, ${n} found`);
+  /* Round 1567: a pair the record could not judge (a man between the share lines beside a position group, one to
+     four seasons beside a legends group) is read on both hosts in the ledger's grayPairs and, a coin toss, its man
+     left that board; he must not come back beside that group there */
+  let back = 0;
+  for (const gp of ledgerOf(s).grayPairs ?? []) {
+    if (!hostsOk(gp.sources)) fail(`${s}: the gray pair ${gp.name} beside "${gp.label}" on ${gp.id} is not read on two hosts`);
+    const b = boardOf(s, gp.id);
+    if (!b || !b.groups.some(g => fold(g.theme) === fold(gp.label))) continue;
+    if (b.groups.some(g => g.players.some(p => fold(p) === fold(gp.name)))) {
+      back += 1;
+      fire('gray-back', gp.name);
+      fail(`${s} ${gp.id}: ${gp.name} is back beside "${gp.label}", a pair neither host decides (${gp.sources.map(x => x.says).join(' / ')})`);
+    }
+  }
+  if ((ledgerOf(s).grayPairs ?? []).length) console.log(`   ${s}: ${(ledgerOf(s).grayPairs ?? []).length} gray pairs the round took off their boards, ${back} back`);
 }
 
 console.log('3) the ledger stands on two hosts');

@@ -368,7 +368,10 @@ export function makeBaseballChecker({ record, ledger = {} }) {
         return awardSeasons(m, ['ALMVP', 'NLMVP']).includes(2025) ? 'won the 2025 MVP and played in 2026' : null;
       case 'award':
         if (c.to !== undefined && c.to < 2026) return null;
-        if (c.codes.includes('ALCY') && !isPitcher(m)) return null;
+        /* a two way man is on the Cy Young ballot whenever he pitched that season, whatever his career share of
+           games on the mound (Round 1567: Shohei Ohtani, 14 starts in 2026, sat beside "Won Cy Young Award" on
+           bconn-002 unwatched, because 114 of his 1286 games are pitching) */
+        if (c.codes.includes('ALCY') && !isPitcher(m) && !((m.ss['2026'][5] ?? 0) > 0)) return null;
         if (c.codes.includes('ALROY') && m.debut && Number(m.debut.slice(0, 4)) < 2025) return null;
         if (c.codes.includes('ASMVP')) return null;
         /* the 2026 World Series MVP comes from one of its two clubs (the ledger names them on two hosts);
