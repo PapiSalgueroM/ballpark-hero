@@ -32,14 +32,15 @@
  *   clamp      the verdict clamp off                                         section 3 worst case size
  *   version    any version accepted                                          section 3 newer version left alone
  *   sportimport  an NBA import planted in the module                         section 3 weight fence
- *   nokeep     the board's keep effect returns at once                       section 4: C1 C3 C5 C6 C8 C9 C10b
- *   loadonly   the keep effect only for a career that was live in this visit section 4: C3 C6 C10b
- *   kept       hallKept forced true                                          section 4: C4 C6 C10c
+ *   nokeep     the board's keep effect returns at once                       section 4: C1 C3 C4b C5 C6 C8 C9 C10b
+ *   loadonly   the keep effect only for a career that was live in this visit section 4: C3 C4b C6 C10b
+ *   kept       hallKept forced true                                          section 4: C4 C4b C6 C10c
+ *   anyplaque  hallKept true when ANY plaque is up, not this career's        section 4: C4b
  *   nogate     the bound Hall gate taken out of both effects and the opener  section 4: C7
  *   stalesave  the keep effect no longer waits for a refused save            section 4: C9
  *   boarddraw  one Math.random planted in the keep effect                    section 4: C8
  *
- *   4. THE BOARD (normal run and the six board controls only). src/test/usCareerHallWall.test.tsx run by vitest
+ *   4. THE BOARD (normal run and the board controls only). src/test/usCareerHallWall.test.tsx run by vitest
  *      on the board, or on a copy of it under .sim-control with the control's edits swapped in for it
  *      (NO_DOUBLE_SWAP, the simUsCareerActionConfirm way). A board control is FIRED only when its cases are red
  *      in all four sports and the cases it names as untouched stay green in all four; one of those red is a
@@ -81,7 +82,7 @@ const SOURCE_CONTROLS = {
   version: { from: 'if (raw.v !== 1) return', to: 'if (false) return' },
   sportimport: { from: "import type { UsCareerCore } from '@/lib/usCareerSport';\n", to: `import type { UsCareerCore } from '@/lib/usCareerSport';\n${PLANT}` },
 };
-const HARNESS_CONTROLS = ['unstamped', 'calnow', 'nokeep', 'loadonly', 'kept', 'nogate', 'stalesave', 'boarddraw'];
+const HARNESS_CONTROLS = ['unstamped', 'calnow', 'nokeep', 'loadonly', 'kept', 'anyplaque', 'nogate', 'stalesave', 'boarddraw'];
 if (CONTROL && !SOURCE_CONTROLS[CONTROL] && !HARNESS_CONTROLS.includes(CONTROL)) {
   console.error(`simUsCareerHallWall: SIM_HALL_WALL_CONTROL=${CONTROL} is not a control this harness knows`);
   process.exit(2);
@@ -390,24 +391,28 @@ for (const k of Object.keys(longest)) {
    cases (create screen, retirement screen, the honest lines), J the jersey words. */
 const BOARD = 'src/components/us-career/UsCareerBoard.tsx';
 const BOARD_TEST = 'src/test/usCareerHallWall.test.tsx';
-const BOARD_CASES = 48;
+const BOARD_CASES = 52;
 const KEEP = 'if (!sport.hall || !career?.retired || saveFailure) return;';
+const KEPT_LINE = 'const hallKept = hallWallKeyNow !== null && !!wall?.entries.some(e => e.key === hallWallKeyNow);';
 const READ = 'if (!sport.hall) return;\n    try {\n      const raw = localStorage.getItem(hallWallKey(sport.slug));';
 const BOARD_CONTROLS = {
-  nokeep: { edits: [[KEEP, 'if (true) return;']], fail: ['C1', 'C3', 'C5', 'C6', 'C8', 'C9', 'C10b'], hold: ['C4', 'C7', 'C10a', 'C10c', 'J'] },
+  nokeep: { edits: [[KEEP, 'if (true) return;']], fail: ['C1', 'C3', 'C4b', 'C5', 'C6', 'C8', 'C9', 'C10b'], hold: ['C4', 'C7', 'C10a', 'C10c', 'J'] },
   loadonly: { edits: [['const [wall, setWall] = useState<HallWall | null>(null);', 'const [wall, setWall] = useState<HallWall | null>(null); const wallSawLive = useRef(false);'],
     [KEEP, 'if (career && !career.retired) wallSawLive.current = true; if (!sport.hall || !career?.retired || saveFailure || !wallSawLive.current) return;']],
-    fail: ['C3', 'C6', 'C10b'], hold: ['C1', 'C4', 'C5', 'C7', 'C8', 'C9', 'C10a', 'C10c', 'J'] },
-  kept: { edits: [['const hallKept = hallWallKeyNow !== null && !!wall?.entries.some(e => e.key === hallWallKeyNow);', 'const hallKept = hallWallKeyNow !== null;']],
-    fail: ['C4', 'C6', 'C10c'], hold: ['C1', 'C3', 'C5', 'C7', 'C8', 'C9', 'C10a', 'C10b', 'J'] },
+    fail: ['C3', 'C4b', 'C6', 'C10b'], hold: ['C1', 'C4', 'C5', 'C7', 'C8', 'C9', 'C10a', 'C10c', 'J'] },
+  kept: { edits: [[KEPT_LINE, 'const hallKept = hallWallKeyNow !== null;']],
+    fail: ['C4', 'C4b', 'C6', 'C10c'], hold: ['C1', 'C3', 'C5', 'C7', 'C8', 'C9', 'C10a', 'C10b', 'J'] },
+  /* The reviewers' run lens (r1570-run-mut): "the card stays" read off ANY plaque up, not this career's. */
+  anyplaque: { edits: [[KEPT_LINE, 'const hallKept = hallWallKeyNow !== null && !!wall?.entries.length;']],
+    fail: ['C4b'], hold: ['C1', 'C3', 'C4', 'C5', 'C6', 'C7', 'C8', 'C9', 'C10a', 'C10b', 'C10c', 'J'] },
   nogate: { edits: [[READ, READ.replace('if (!sport.hall) return;\n    ', '')], [KEEP, 'if (!career?.retired || saveFailure) return;'],
     ['{sport.hall && wall && wall.entries.length > 0 && (', '{wall && wall.entries.length > 0 && (']],
-    fail: ['C7'], hold: ['C1', 'C3', 'C4', 'C5', 'C6', 'C8', 'C9', 'C10a', 'C10b', 'C10c', 'J'] },
-  stalesave: { edits: [[KEEP, 'if (!sport.hall || !career?.retired) return;']], fail: ['C9'], hold: ['C1', 'C3', 'C4', 'C5', 'C6', 'C7', 'C8', 'C10a', 'C10b', 'C10c', 'J'] },
-  boarddraw: { edits: [['if (!entry) return;', 'if (!entry) return; Math.random();']], fail: ['C8'], hold: ['C1', 'C3', 'C4', 'C5', 'C6', 'C7', 'C9', 'C10a', 'C10b', 'C10c', 'J'] },
+    fail: ['C7'], hold: ['C1', 'C3', 'C4', 'C4b', 'C5', 'C6', 'C8', 'C9', 'C10a', 'C10b', 'C10c', 'J'] },
+  stalesave: { edits: [[KEEP, 'if (!sport.hall || !career?.retired) return;']], fail: ['C9'], hold: ['C1', 'C3', 'C4', 'C4b', 'C5', 'C6', 'C7', 'C8', 'C10a', 'C10b', 'C10c', 'J'] },
+  boarddraw: { edits: [['if (!entry) return;', 'if (!entry) return; Math.random();']], fail: ['C8'], hold: ['C1', 'C3', 'C4', 'C4b', 'C5', 'C6', 'C7', 'C9', 'C10a', 'C10b', 'C10c', 'J'] },
 };
 const tagOf = name => (name.includes('C1 and C2') ? 'C1' : name.includes('C10: focus') ? 'C10a' : name.includes('C10: from the retirement') ? 'C10b'
-  : name.includes('C10: the wall says') ? 'C10c' : name.includes('jersey') ? 'J' : (name.match(/\bC(\d+):/) ?? [])[1] ? `C${name.match(/\bC(\d+):/)[1]}` : '?');
+  : name.includes('C10: the wall says') ? 'C10c' : name.includes('jersey') ? 'J' : (name.match(/\bC(\d+b?):/) ?? [])[1] ? `C${name.match(/\bC(\d+b?):/)[1]}` : '?');
 let boardVerdict = null;
 if (!CONTROL || BOARD_CONTROLS[CONTROL]) {
   const { spawnSync } = await import('node:child_process');

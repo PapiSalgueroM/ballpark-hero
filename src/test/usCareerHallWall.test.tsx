@@ -8,6 +8,7 @@
  *   C3  an old retired save of every class (the parity fixture's, a V1 recording, a 1301 recording), mounted
  *       cold: its save is never written, its plaque is what its card told him, a second visit writes nothing.
  *   C4  a refused wall write: nothing breaks, the prompt keeps 1569's "goes too", which is then true.
+ *   C4b the same with another plaque already up: "the card stays" follows this career's plaque, never any plaque.
  *   C6  a corrupt wall: junk is replaced by the next plaque, a newer version is never written over, a bad
  *       plaque is dropped alone.
  *   C7  with no Hall bound (the parity replay's knob) the wall is never read, never written, never drawn.
@@ -176,6 +177,28 @@ describe.each(ROWS)('$label: the Hall wall on the board', ({ label, sport }) => 
     await restart('New career');
     expect(localStorage.getItem(sport.saveKey)).toBeNull();
     expect(document.querySelector('[data-career-hall-wall-opener]')).toBeNull();
+  }, 30000);
+
+  /* The same refusal with another plaque already up (the reviewers' run lens, r1570-run-mut): "the card stays"
+     must follow THIS career's plaque, never any plaque on the wall. */
+  it('C4b: a refused wall write with another plaque already up: the prompt says the card goes, the opener reads 1', async () => {
+    const other = hallWallEntry(sport, retiredCareer(sport, 1700))!;
+    localStorage.setItem(wallKey(sport), JSON.stringify({ v: 1, entries: [{ ...other, key: 'stored-other', name: 'Stored Other' }] }));
+    save(sport, retiredCareer(sport, 1571), null, 'retired');
+    const real = Storage.prototype.setItem;
+    let refused = 0;
+    vi.spyOn(Storage.prototype, 'setItem').mockImplementation(function (this: Storage, key: string, value: string) {
+      if (key.endsWith('-my-career-hall-v1')) { refused += 1; throw new DOMException('Controlled quota refusal', 'QuotaExceededError'); }
+      real.call(this, key, value);
+    });
+    mountBoard(sport);
+    await waitFor(() => expect(refused, 'the keep effect tried its write').toBeGreaterThan(0), { timeout: 15000 });
+    await settle();
+    await promptSays(label, 'New career', GONE);
+    await promptSays(label, 'Start over', GONE);
+    expect(readWall(sport).entries.map(e => e.key)).toEqual(['stored-other']);
+    await restart('New career');
+    await waitFor(() => expect(q('[data-career-hall-wall-opener="create"]')?.textContent).toBe('🏛️ Hall wall (1)'), { timeout: 15000 });
   }, 30000);
 
   it('C7: with no Hall bound (the parity replay) the wall is never read, written or drawn', async () => {
