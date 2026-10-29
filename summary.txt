@@ -1,0 +1,4 @@
+build exit=0 35s | [dukb] inlined 1 stylesheet(s) and 1 module(s) into 181 snapshots (11 left alone)
+usSeam exit=0 33s | playUsCareerSaveSeam: 15 journeys, 71 checks, 0 failed
+usSeam-nostick exit=1 10s | playUsCareerSaveSeam: 4 journeys, 40 checks, 4 failed (control nostick)
+usSeam-hidden exit=1 10s | playUsCareerSaveSeam: 4 journeys, 40 checks, 8 failed (control hidden)
