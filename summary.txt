@@ -1,0 +1,6 @@
+nhl6-s21 exit=1 5s | simGmCareer: 15 failure(s) in 6
+nhl6 exit=1 5s | simGmCareer: 15 failure(s) in 6
+nhl6-namedsummer exit=1 5s | CONTROL namedsummer: 1 rewrite(s) applied, 181 failure(s) in section 6 (FIRED)
+nhl6-s61 exit=1 4s | simGmCareer: 16 failure(s) in 6
+nhl6-s41 exit=1 5s | simGmCareer: 17 failure(s) in 6
+nhl6-notrim exit=1 5s | CONTROL notrim: 1 rewrite(s) applied, 241 failure(s) in section 6 (FIRED)

@@ -1,0 +1,16 @@
+NEGATIVE CONTROL ON: notrim; section 6 must go red
+6) a season out: the league plays a whole season without him, his record gains a year out and nothing else, and refusals touch nothing
+  FAIL [6]: seed 1 year out 1: the away summer is not the engine's offseason with no user club (295 of 295 draws replayed)
+  FAIL [6]: seed 1 year out 1: NSH is over the roster limit after the summer
+  FAIL [6]: seed 1 year out 1: TOR is over the roster limit after the summer
+  FAIL [6]: seed 1 year out 1: the old club, planted over the roster limit, was not trimmed by the summer (16 men, 4 of 4 planted still on it)
+  FAIL [6]: seed 1 year out 2: the away summer is not the engine's offseason with no user club (420 of 420 draws replayed)
+  FAIL [6]: seed 1 year out 2: TOR is over the roster limit after the summer
+  FAIL [6]: seed 1 year out 2: VAN is over the roster limit after the summer
+  FAIL [6]: seed 1 year out 2: the old club, planted over the roster limit, was not trimmed by the summer (23 men, 9 of 9 planted still on it)
+  FAIL [6]: (further failures in this check not printed)
+   60 years out over 20 seeds (0 stopped early); refusals: 20 in a seat, 20 closed, 20 last calls
+   drafted men on the other clubs' rosters after the years out: away 590, idle GM 600 (ratio 0.983); mean roster after a summer: away 12.71, idle GM 12.65
+   retained rows planted 20: 40 summers kept at the figure the club kept, 20 dropped when the entry ran out; the old club's contributors back to automatic after 60 of 60 years
+   the old club planted over the roster limit before 60 summers out: trimmed to it after 0
+CONTROL notrim: 1 rewrite(s) applied, 241 failure(s) in section 6 (FIRED)

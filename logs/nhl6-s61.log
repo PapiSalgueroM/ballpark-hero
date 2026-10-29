@@ -1,0 +1,15 @@
+6) a season out: the league plays a whole season without him, his record gains a year out and nothing else, and refusals touch nothing
+  FAIL [6]: seed 61 year out 3: the old club, planted over the roster limit, was not trimmed by the summer (15 men, 5 of 5 planted still on it)
+  FAIL [6]: seed 62 year out 3: the old club, planted over the roster limit, was not trimmed by the summer (15 men, 4 of 4 planted still on it)
+  FAIL [6]: seed 63 year out 3: the old club, planted over the roster limit, was not trimmed by the summer (15 men, 3 of 3 planted still on it)
+  FAIL [6]: seed 64 year out 3: the old club, planted over the roster limit, was not trimmed by the summer (15 men, 4 of 4 planted still on it)
+  FAIL [6]: seed 65 year out 3: the old club, planted over the roster limit, was not trimmed by the summer (15 men, 5 of 5 planted still on it)
+  FAIL [6]: seed 66 year out 3: the old club, planted over the roster limit, was not trimmed by the summer (15 men, 5 of 5 planted still on it)
+  FAIL [6]: seed 67 year out 3: the old club, planted over the roster limit, was not trimmed by the summer (15 men, 4 of 4 planted still on it)
+  FAIL [6]: seed 68 year out 3: the old club, planted over the roster limit, was not trimmed by the summer (15 men, 3 of 3 planted still on it)
+  FAIL [6]: (further failures in this check not printed)
+   60 years out over 20 seeds (0 stopped early); refusals: 20 in a seat, 20 closed, 20 last calls
+   drafted men on the other clubs' rosters after the years out: away 588, idle GM 600 (ratio 0.980); mean roster after a summer: away 12.65, idle GM 12.63
+   retained rows planted 20: 40 summers kept at the figure the club kept, 20 dropped when the entry ran out; the old club's contributors back to automatic after 60 of 60 years
+   the old club planted over the roster limit before 60 summers out: trimmed to it after 45
+simGmCareer: 16 failure(s) in 6
