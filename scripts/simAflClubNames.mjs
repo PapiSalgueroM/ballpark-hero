@@ -3,6 +3,13 @@
  * and a career already under way keeps its own clubs.
  *
  * Sections (each added in the step that builds what it checks):
+ *   0 sources: src/data/aflClubs2026.ts holds 18 clubs in 2026 ladder order, every
+ *     full and short form distinct, every printed string and every ladder place
+ *     from two distinct non wiki publishers (AFL.com.au and the club sites are one,
+ *     the AFL), and it equals its receipts in scripts/data/aflClubNames2026.json
+ *     string for string and source for source, each receipt line printing its
+ *     string. Controls typo ('Gold Coast Suns' loses its s) and onesource (Sydney
+ *     Swans keeps one source); independent section 3 (critic corrections 3, 4).
  *   2 identity: (a) a career started with no club set is byte for byte the base
  *     record (scripts/data/aussieV2SaveFixture1572.json, taken on the untouched
  *     engine by scripts/recordAussieV2SaveFixture1572.mjs) at every checkpoint.
@@ -32,16 +39,23 @@ const CONTROL = process.env.AFL_NAMES_CONTROL || '';
 const LONG = process.env.AFL_NAMES_LONG === '1';
 const started = Date.now();
 
-const LEAGUE = 'src/lib/aussieRulesLeague.ts';
+const LEAGUE = 'src/lib/aussieRulesLeague.ts', DATA = 'src/data/aflClubs2026.ts';
 /* [file, anchor, replacement, target section, independent section] */
 const CONTROLS = {
+  /* Critic corrections 3 and 4: anchors that occur once, and section 3 as the independent section. */
+  typo: [DATA, "'Gold Coast Suns'", "'Gold Coast Sun'", 0, 3],
+  onesource: [DATA, "full: 'Sydney Swans', short: 'Sydney', ladder2026: 2, fullSources: ['afl', 'austadiums']", "full: 'Sydney Swans', short: 'Sydney', ladder2026: 2, fullSources: ['afl']", 0, 3],
 };
 if (CONTROL && !CONTROLS[CONTROL]) { console.error(`unknown control ${CONTROL}`); process.exit(2); }
-const SECTIONS = [2, 3];
+const SECTIONS = [0, 2, 3];
 const RUN = CONTROL ? new Set([CONTROLS[CONTROL][3], CONTROLS[CONTROL][4]]) : new Set(SECTIONS);
 
-const { L } = await bundle(ROOT, { patch: CONTROL ? CONTROLS[CONTROL].slice(0, 3) : null });
+const { L } = await bundle(ROOT, {
+  entries: ["export * from './src/lib/aussieRulesLeague.ts';", "export * as AFL from './src/data/aflClubs2026.ts';"],
+  patch: CONTROL ? CONTROLS[CONTROL].slice(0, 3) : null,
+});
 const RECORD = JSON.parse(fs.readFileSync(path.join(ROOT, 'scripts/data/aussieV2SaveFixture1572.json'), 'utf8'));
+const LEDGER = JSON.parse(fs.readFileSync(path.join(ROOT, 'scripts/data/aflClubNames2026.json'), 'utf8'));
 
 const failures = new Map();
 let section = -1, checks = 0;
@@ -49,6 +63,47 @@ const fail = m => { failures.set(section, (failures.get(section) || 0) + 1); con
 const check = (cond, m) => { checks += 1; if (cond) console.log(`  ok: ${m}`); else fail(m); };
 const head = (n, title) => { section = n; failures.set(n, failures.get(n) || 0); console.log(`\n${n}. ${title}`); };
 const guard = (n, fn) => { try { fn(); } catch (e) { fail(`threw: ${String(e && e.stack || e).split('\n').slice(0, 3).join(' | ')}`); } };
+
+/* ---------- 0. sources ---------- */
+const DASHES = [String.fromCharCode(0x2013), String.fromCharCode(0x2014)];
+const same = (a, b) => JSON.stringify(a) === JSON.stringify(b);
+if (RUN.has(0)) guard(0, () => {
+  head(0, 'sources: 18 clubs, every printed string from two independent non wiki publishers, the data file equals its receipts');
+  const rows = L.AFL.AFL_CLUBS_2026, sources = L.AFL.AFL_CLUB_SOURCES;
+  const publisher = new Map(sources.map(s => [s.id, s.publisher]));
+  check(rows.length === 18 && LEDGER.clubs.length === 18, `${rows.length} clubs in the data file, ${LEDGER.clubs.length} in the ledger (18 expected)`);
+  check(same(rows.map(r => r.ladder2026), Array.from({ length: 18 }, (_, i) => i + 1)), 'ladder places are 1 to 18 once each, in ladder order');
+  const strings = rows.flatMap((r, i) => [[r.full, i], [r.short, i]]);
+  const clash = strings.filter(([s, i]) => strings.some(([t, j]) => j !== i && s.toLowerCase() === t.toLowerCase()));
+  check(clash.length === 0, `no club's full or short form equals another club's (${strings.length} strings${clash.length ? `, clash: ${clash.map(c => c[0]).join(', ')}` : ''})`);
+  const badStrings = strings.filter(([s]) => !s || s !== s.trim() || DASHES.some(d => s.includes(d)) || /\s{2}/.test(s));
+  check(badStrings.length === 0, `every string is trimmed, single spaced and dash free (${badStrings.length} bad)`);
+  const thin = [];
+  for (const r of rows) for (const [what, ids] of [['full', r.fullSources], ['short', r.shortSources], ['ladder', r.ladderSources]]) {
+    const pubs = new Set(ids.map(id => publisher.get(id)));
+    if (ids.some(id => !publisher.has(id)) || pubs.size < 2) thin.push(`${r.full} ${what} (${ids.join(', ')})`);
+  }
+  check(thin.length === 0, `every full form, short form and ladder place has two or more distinct publishers (${rows.length * 3} checked${thin.length ? `; thin: ${thin.join('; ')}` : ''})`);
+  const wiki = [...sources.map(s => s.publisher), ...LEDGER.sources.flatMap(s => [s.publisher, s.url])].filter(text => /wiki/i.test(text));
+  check(wiki.length === 0, `no publisher or address is a wiki (${sources.length + LEDGER.sources.length} read)`);
+  const aflHosts = LEDGER.sources.filter(s => /(^|\.)afl\.com\.au$/.test(new URL(s.url).hostname) || /club site/i.test(s.publisher));
+  check(aflHosts.length > 0 && aflHosts.every(s => publisher.get(s.id) === 'AFL'), `AFL.com.au and the club sites count as the one publisher AFL (${aflHosts.length} such source)`);
+  const date = L.AFL.AFL_CLUBS_VERIFIED_ON;
+  check(/^\d{4}-\d{2}-\d{2}$/.test(date) && !Number.isNaN(Date.parse(date)) && date === LEDGER.verifiedOn && LEDGER.sources.every(s => s.readOn === date), `the read date ${date} is a date and matches the ledger and every source's read date`);
+  check(same(sources.map(s => [s.id, s.publisher]), LEDGER.sources.map(s => [s.id, s.publisher.startsWith('AFL (') ? 'AFL' : s.publisher])), `the data file's ${sources.length} sources are the ledger's, id for id and publisher for publisher`);
+  let agree = 0, lines = 0, lineBad = [];
+  rows.forEach((r, i) => {
+    const l = LEDGER.clubs[i];
+    if (l && l.full === r.full && l.short === r.short && l.ladder2026 === r.ladder2026 && same(l.fullSources, r.fullSources) && same(l.shortSources, r.shortSources) && same(l.ladderSources, r.ladderSources)
+      && same(l.receipts.full.map(x => x.source), r.fullSources) && same(l.receipts.short.map(x => x.source), r.shortSources) && same(l.receipts.ladder.map(x => x.source), r.ladderSources)) agree += 1;
+    else fail(`row ${i + 1} (${r.full}) differs from its receipts in the ledger`);
+    if (!l) return;
+    for (const [what, text] of [['full', r.full], ['short', r.short]]) for (const x of l.receipts[what]) { lines += 1; if (!x.line.toLowerCase().includes(text.toLowerCase())) lineBad.push(`${r.full} ${what} ${x.source}`); }
+    for (const x of l.receipts.ladder) { lines += 1; if (!x.line.startsWith(`${r.ladder2026} `)) lineBad.push(`${r.full} ladder ${x.source}`); }
+  });
+  check(agree === 18, `${agree} of 18 rows equal the ledger string for string and source for source`);
+  check(lines >= 108 && lineBad.length === 0, `every one of ${lines} receipt lines prints its string (or starts with its ladder place)${lineBad.length ? `; not: ${lineBad.join('; ')}` : ''}`);
+});
 
 /* ---------- 2. identity ---------- */
 if (RUN.has(2)) guard(2, () => {
