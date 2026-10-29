@@ -144,7 +144,14 @@ const SPORTS = ['baseball', 'nfl', 'nhl'];
    finds, "REPORT ONLY" on its last line: the true count of a sport's table rows before and while a round decides
    them. Never a gate. */
 const REPORT = new Set((process.env.US_CONN_TABLES ?? '').split(',').filter(Boolean));
-for (const s of REPORT) if (!SPORTS.includes(s)) { console.error(`US_CONN_TABLES names ${s}, not a sport here`); process.exit(2); }
+/* Round 1583 (critic-1583 advice 10, the one rule this round changes in a 1574 file): report mode may also name a
+   sport the plain run does not hold yet, when a checker knows it, so a round can count a new sport's boards before it
+   decides them; a sport no checker knows still exits 2. A plain run is unchanged by this. */
+for (const s of REPORT) {
+  if (SPORTS.includes(s)) continue;
+  try { makeUsChecker(ROOT, s); } catch { console.error(`US_CONN_TABLES names ${s}, not a sport here`); process.exit(2); }
+  SPORTS.push(s);
+}
 if (REPORT.size && CONTROL) { console.error('US_CONN_TABLES is a report, never a control run'); process.exit(2); }
 const STRICT = new Set((process.env.US_CONN_LIVE_STRICT ?? '').split(',').filter(Boolean));
 const DUMP = process.env.US_CONN_DUMP ?? '';
@@ -169,6 +176,7 @@ fs.writeFileSync(path.join(TMP, 'entry.mjs'), `
 export const baseball = (await import('${R}/src/data/baseballConnectionsPuzzles.ts')).baseballConnectionsPuzzles;
 export const nfl = (await import('${R}/src/data/nflConnectionsPuzzles.ts')).nflConnectionsPuzzles;
 export const nhl = (await import('${R}/src/data/nhlConnectionsPuzzles.ts')).nhlConnectionsPuzzles;
+export const nba = (await import('${R}/src/data/nbaConnectionsPuzzles.ts')).nbaConnectionsPuzzles;
 `);
 await build({ entryPoints: [path.join(TMP, 'entry.mjs')], bundle: true, format: 'esm', platform: 'node', outfile: path.join(TMP, 'bundle.mjs'), logLevel: 'error', alias: { '@': path.join(ROOT, 'src') } });
 const data = await import(pathToFileURL(path.join(TMP, 'bundle.mjs')).href);
@@ -674,9 +682,10 @@ console.log('8) no active man is one move from a second answer');
    the seasons up to that one; a legends group needs five seasons, so one move cannot do it.
    fix-1567 (review-read-1567 minor 7): a date only protects when no season after it is still being played, so it
    may not pass the sport's last finished season on the 2026-10 records: MLB 2026 (the regular season is over), the
-   NFL 2025 (2026 is under way) and the NHL 2025-26 (start year 2025; 2026-27 is under way). A group dated past it
+   NFL 2025 (2026 is under way) and the NHL 2025-26 (start year 2025; 2026-27 is under way); Round 1583: the NBA 2025-26 (start
+   year 2025; ESPN already carries 2026-27 rows). A group dated past it
    ("(as of 2030)") is as open as an undated one and is checked as one. Move these when the records are read again */
-const LAST_FINISHED = { baseball: 2026, nfl: 2025, nhl: 2025 };
+const LAST_FINISHED = { baseball: 2026, nfl: 2025, nhl: 2025, nba: 2025 };
 for (const s of SPORTS) {
   let n = 0, dated = 0, open = 0;
   for (const b of boards[s]) for (const g of b.groups) {
