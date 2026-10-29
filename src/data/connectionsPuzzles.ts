@@ -1208,7 +1208,7 @@ export const connectionsPuzzles: ConnectionsPuzzle[] = [
       { category: 'Played for Arsenal in 2025-26', players: ['William Saliba', 'Gabriel Magalhães', 'Ben White', 'Riccardo Calafiori'], difficulty: 'easy' },
       { category: 'From Portugal', players: ['Bruno Fernandes', 'Bernardo Silva', 'Rúben Dias', 'João Cancelo'], difficulty: 'medium' },
       { category: 'Played for both AC Milan and Juventus', players: ['Andrea Pirlo', 'Gonzalo Higuaín', 'Leonardo Bonucci', 'Zlatan Ibrahimović'], difficulty: 'hard' },
-      { category: 'Won the Ballon d\'Or as a midfielder', players: ['Luka Modrić', 'Zinedine Zidane', 'Michael Ballack', 'Luis Figo'], difficulty: 'insane' },
+      { category: 'Won the Ballon d\'Or as a midfielder', players: ['Luka Modrić', 'Zinedine Zidane', 'Pavel Nedvěd', 'Kaká'], difficulty: 'insane' },
     ],
   },
   {

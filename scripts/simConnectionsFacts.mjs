@@ -33,6 +33,13 @@
  *      round did not rebuild carry theirs in "owed", a list that may only
  *      shrink (Part B of the round empties it); anything else fails
  *   5) the count of groups nothing checks yet, a ceiling that may only fall
+ *   6) Round 1565: the shipped file is the copy of the live table. The lead's
+ *      read of the table (scripts/data/connectionsLiveSnapshot.json: puzzle_id,
+ *      sort_order and md5(groups_json::text), written by
+ *      scripts/qa/connectionsLiveSnapshot.mjs at each release's live pass)
+ *      and the file must hold the same ids, in the same order, board for
+ *      board. Round 1553 found 136 of 326 live boards edited or added in the
+ *      table alone, where no fix to the file could reach them
  *
  * Live rows: the boards players are dealt come from the connections_puzzles
  * table. This harness never reads it. The lead exports the table once with
@@ -57,6 +64,8 @@
  *                         (section 3, the ledger's watch on the award list)
  *   CONN_CONTROL=bareyear writes "Won the 2026 Champions League" back over
  *                         puzzle-136's Barcelona men (section 1)
+ *   CONN_CONTROL=snapshot changes puzzle-136's hash in the live snapshot, in
+ *                         memory: the table moved and the file did not (section 6)
  *
  * Run: node scripts/simConnectionsFacts.mjs
  */
@@ -67,6 +76,7 @@ import { fileURLToPath, pathToFileURL } from 'node:url';
 import { build } from 'esbuild';
 import { crossCheckBoards, findingKey } from './lib/connectionsCrossCheck.mjs';
 import { makeSoccerChecker, fold, keysOf, loadConnectionsRecord } from './lib/soccerConnectionsCheck.mjs';
+import { boardMd5 } from './lib/pgJsonbText.mjs';
 
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const R = ROOT.replaceAll('\\', '/');
@@ -96,6 +106,8 @@ await build({
 });
 const data = await import(pathToFileURL(OUT).href);
 const { ledger, awardLists } = loadConnectionsRecord(ROOT);
+/* Round 1565: the lead's read of the live table, one md5 a board (section 6) */
+const snapshot = JSON.parse(fs.readFileSync(path.join(ROOT, 'scripts/data/connectionsLiveSnapshot.json'), 'utf8'));
 
 /* The boards under test: the shipped file, or the lead's export of the live table. */
 let boards = data.boards.map(b => ({ id: b.id, groups: b.groups.map(g => ({ ...g, players: [...g.players] })) }));
@@ -165,6 +177,10 @@ if (CONTROL) {
     const b = boardById('puzzle-136');
     const g = b?.groups.find(x => x.category === 'Played for Barcelona in 2025-26');
     if (g) { g.category = 'Won the 2026 Champions League'; changed = true; }
+  } else if (CONTROL === 'snapshot') {
+    /* one board of the live table moves and the file does not follow: section 6 must see it */
+    const row = snapshot.rows.find(r => r.puzzle_id === 'puzzle-136');
+    if (row && /^[0-9a-f]{32}$/.test(row.md5)) { row.md5 = (row.md5[0] === '0' ? '1' : '0') + row.md5.slice(1); changed = true; }
   } else {
     console.error(`unknown CONN_CONTROL=${CONTROL}`);
     process.exit(2);
@@ -349,6 +365,32 @@ console.log('5) the groups nothing checks yet may only get fewer');
     else if (n < ceiling) fail(`${n} groups nothing checks, under the ceiling of ${ceiling}: lower uncheckedCeiling to ${n} so they cannot come back`);
   }
   console.log(`   ${n} groups nothing checks yet (ceiling ${ceiling}); part B ledgers them`);
+}
+
+console.log('6) the shipped file is the copy of the live table (scripts/data/connectionsLiveSnapshot.json)');
+{
+  /* Round 1565: the game deals from the table and falls back to the file. Round 1553 found 136 of 326 live
+     boards the file did not hold, edited or added in the table alone, so a fix to the file never reached
+     them. The file must hold every live board, the same board, in the table's order. */
+  const live = [...snapshot.rows].sort((a, b) => a.sort_order - b.sort_order);
+  const file = data.boards;
+  const liveIds = new Set(live.map(r => r.puzzle_id));
+  const fileIds = new Set(file.map(b => b.id));
+  for (const b of file) if (!liveIds.has(b.id)) fail(`${b.id} is in the file and not in the live table`);
+  for (const r of live) if (!fileIds.has(r.puzzle_id)) fail(`${r.puzzle_id} is live and not in the file`);
+  const order = (ids, keep) => ids.filter(id => keep.has(id));
+  const a = order(file.map(b => b.id), liveIds), c = order(live.map(r => r.puzzle_id), fileIds);
+  const at = a.findIndex((id, i) => id !== c[i]);
+  if (at >= 0) fail(`the file's board order leaves the table's at position ${at} (${a[at]} in the file, ${c[at]} live): the fallback would deal another board than the table on the same day`);
+  const md5Of = new Map(live.map(r => [r.puzzle_id, r.md5]));
+  let differ = 0;
+  for (const b of file) {
+    const want = md5Of.get(b.id);
+    if (want && boardMd5(b.groups) !== want) { differ += 1; fail(`${b.id}: the file's board is not the live board (md5 ${boardMd5(b.groups)}, live ${want})`); }
+  }
+  let liveDiffer = 0;
+  if (process.env.CONN_LIVE) for (const b of boards) if (md5Of.has(b.id) && boardMd5(b.groups) !== md5Of.get(b.id)) liveDiffer += 1;
+  console.log(`   ${file.length} file boards, ${live.length} live rows (${snapshot.takenAt.slice(0, 60)}...), ${differ} boards differ${process.env.CONN_LIVE ? `; the export under test differs from the snapshot on ${liveDiffer}` : ''}`);
 }
 
 console.log('');
