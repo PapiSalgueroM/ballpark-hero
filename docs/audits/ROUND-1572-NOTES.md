@@ -61,6 +61,25 @@ club-04 Geelong Cats, club-09 Adelaide Crows, club-13 Melbourne (tier 2); club-0
 Collingwood, club-11 Carlton, club-15 St Kilda (tier 3); club-03 GWS Giants, club-08 Gold Coast Suns, club-12 North
 Melbourne, club-16 Port Adelaide (tier 4); club-05 West Coast Eagles, club-10 Richmond, club-17 Essendon (tier 5).
 
+## The proof (closing runs on 3250c0f28; every line is in dukb-handoff/2026-10-10/results-g/rc-1572.txt)
+
+- scripts/simAflClubNames.mjs, sections 0, 1, 2a, 2b, 3, 4 (with 4i), 5: "45 checks, 0 failures", 32.1 s (r1572-final).
+- The whole fleet, AFL_NAMES_LONG=1 (critic advice 10, R6), run after step 3 (r1572-s3, 123.2 s) and in the closing
+  proof (r1572-final, 137.9 s): "(a) no set: 72 careers, 216 checkpoints (LONG, the whole fleet of 72) in 59.5 s",
+  "216 of 216 checkpoints equal the base's raw and masked hashes"; "(b) real set: 72 careers, 216 checkpoints in
+  65.6 s", "216 of 216 checkpoints equal the base's MASKED hash (the same game with other names on it)".
+- Strings pulled from the screens, the same count in both sets: header 5, hub 3, premier 2, score 6, events 87,
+  results 22, ladder 90, finals 4, history 6, draft 9.
+- Controls, each with the line that fired it: typo and onesource ("target section 0 RED, independent section 2a
+  green"), ladder (1 red, 2a green), simdrift (2b red, 2a green), oldsave and mixed (3 red, 0 green), screen (4 red,
+  4i green), switchlost (5 red, 3 green), all "RED as intended"; the walk's bundlename ("2 scripts rewritten, (a)
+  RED ... RED as intended").
+- Unedited and green: simAussieRulesSeason (52.3 s) and all 31 of its controls; simAussieRulesLeagueBoard (15 tests)
+  and its 4 controls; simAussieRulesManager; simAussieRulesManagerBoard and its 10 controls (after the one line of
+  critic correction 1); simInventedNames; simHomeFront; simResultMoment; simTrustCopy; simAccessibility;
+  simNoRivalNames (0 findings); the type gate; the build.
+- The walk at 390 and 1280: "36 checks, 0 failures (a 0, b 0, c 0), 2 viewports, 4 routes walked".
+
 ## Rollback note (critic advice 18)
 
 A real club save carries a top level key (`clubSet`) that the validator of every release before this one refuses.
