@@ -1,0 +1,15 @@
+{
+  "expected": {
+    "top": 35,
+    "inline": "hidden",
+    "computed": "hidden",
+    "y": 1967
+  },
+  "actual": {
+    "top": 35,
+    "inline": "hidden",
+    "computed": "hidden",
+    "y": 1967,
+    "focus": true
+  }
+}
