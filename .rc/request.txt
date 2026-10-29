@@ -1,0 +1,8 @@
+#!serial
+head: git log -1 --format='%H %s' | cut -c1-120; git diff --stat 88ee84a3c HEAD -- src scripts supabase | tail -3; test -z "$(git diff 88ee84a3c HEAD -- src)"
+tsc: node_modules/.bin/tsc --noEmit -p tsconfig.app.json
+facts: node scripts/simUsConnectionsFacts.mjs > /tmp/facts.log 2>&1; s=$?; grep -E "^ *(baseball|nfl|nhl):|section|gray|dated" /tmp/facts.log | head -40; tail -1 /tmp/facts.log; exit $s
+migcheck: node scripts/qa/usConnections1567Migration.mjs check
+mut-strip: node .rc/x/mutNear.mjs strip && node scripts/simUsConnectionsFacts.mjs > /tmp/mut-strip.log 2>&1; s=$?; git checkout -- scripts/data; grep -c "Honus Wagner in \"Hall of Fame first basemen\" (does not fit) does not stand on two hosts" /tmp/mut-strip.log; tail -1 /tmp/mut-strip.log; exit $s
+mut-nohof: node .rc/x/mutNear.mjs nohof && node scripts/simUsConnectionsFacts.mjs > /tmp/mut-nohof.log 2>&1; s=$?; git checkout -- scripts/data; tail -1 /tmp/mut-nohof.log | cut -c1-120; exit $s
+clean: git status --short scripts src | head -5; test -z "$(git status --short scripts src)"
