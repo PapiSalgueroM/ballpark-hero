@@ -1,0 +1,15 @@
+1) No player belongs to two groups of the same board
+   398 puzzles, 1592 groups, 6656 tiles, 0 shared between groups
+   soccer against the record: 1028 groups judged, 0 findings owed or adjudicated in the ledger, 0 new
+2) The pools are deep enough that a daily is not a weekly
+   pools: baseball 60, nba 4, nfl 4, nhl 4, soccer 326
+   THIN, repeats inside a week: nba 4, nfl 4, nhl 4. Round 213's shuffled walk covers
+   the whole pool before repeating any of it, which is the most that can be done
+   with four boards. These need writing, and they cannot be generated: a group is
+   a claim about the world and this site does not ship claims it cannot check.
+3) A ranking round has one right order
+   14 ranking rounds, no ties, no repeats
+4) A team sheet can actually be solved
+   317 team sheets, every blank on its own sheet and every slot filled
+
+simFairPuzzles: green. No board has a new second right answer; only the soccer findings the ledger owes to part B remain.

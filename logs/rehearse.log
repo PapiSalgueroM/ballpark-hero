@@ -1,0 +1,5 @@
+export: 326 rows; migration rewrites 65; control none
+1) md5(groups_json::text) equals boardMd5 on 326 exported and 326 file boards: yes
+2) migration: 326 of 326 rows at the file's board, 0 moved, valid pool 326 unchanged, second run a no-op
+3) production form: landed; table changed
+rehearseConnections1565: green. 65 rows land at the shipped file's boards in place, both forms, and a second run is a no-op.

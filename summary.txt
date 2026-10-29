@@ -1,0 +1,14 @@
+live-pre exit=1 1s | simConnectionsFacts: 385 failures
+simConnectionsFacts exit=0 1s | simConnectionsFacts: green. Every claim this round checked stands on two hosts and no rebuilt board has a second answer.
+simFairPuzzles exit=0 0s | simFairPuzzles: green. No board has a new second right answer; only the soccer findings the ledger owes to part B remain.
+live-post exit=1 1s | simConnectionsFacts: 5 failures
+fair-secondfit exit=1 0s | simFairPuzzles: 2 failures
+rehearse-tamper exit=1 9s | rehearseConnections1565: 1 failure (control tamper fired)
+rehearse-drift exit=1 11s | rehearseConnections1565: 2 failures (control drift fired)
+rehearse-noguard exit=1 8s | rehearseConnections1565: 2 failures (control noguard fired)
+rehearse exit=0 33s | rehearseConnections1565: green. 65 rows land at the shipped file's boards in place, both forms, and a second run is a no-op.
+rehearse1553-noguard exit=1 7s | rehearseConnections1553: 10 failures
+dealt exit=1 0s | 2026-11-30: puzzle-217 of 326 boards, not touched: clear to apply
+rehearse1553 exit=0 17s | rehearseConnections1553: green. The rows land in place, a drifted row is left alone, and a second run is a no-op.
+vitest-save exit=0 26s |    Duration  25.04s (transform 5.28s, setup 454ms, collect 6.09s, tests 25.34s, environment 2.17s, prepare 566ms)
+tsc exit=0 94s | 
