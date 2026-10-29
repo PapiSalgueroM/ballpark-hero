@@ -1,0 +1,66 @@
+ok   390-rm /front-office: a How to play button
+ok   390-rm /front-office "?": the trust sentence says "on the grades alone" (1)
+ok   390-rm /front-office "?": the sentence sits inside the dialog and the screen ({"x":25,"y":342.3046875,"width":340,"height":160} in {"x":0,"y":63.3046875,"width":390,"height":717.390625})
+ok   390-rm /front-office "?": the sentence is 14px
+ok   390-rm /front-office "?": no en or em dash in the dialog
+ok   390-rm /front-office: no horizontal overflow
+ok   390-rm /front-office: no page error ()
+FAIL 390-rm /nhl-front-office: Play Round is reachable
+FAIL 390-rm /nhl-front-office: one round played ({"round":1,"phase":"hub","gm":true,"keys":["contracts","picks","staff","retained"]})
+ok   390-rm /nhl-front-office: the save gains no seat or xp block
+ok   390-rm /nhl-front-office: no career kit chunk fetched ()
+ok   390-rm /nhl-front-office: no horizontal overflow
+ok   390-rm /nhl-front-office: no page error ()
+   assets on /nhl-front-office: 43
+FAIL 390-rm /front-office: the NFL career kit is not fetched on the pick screen or the first hub (nflCareerKit-C2txq9e8.js)
+ok   390-rm /front-office hub: no horizontal overflow
+ok   390-rm /front-office hub: no page error ()
+ok   390-m /front-office: a How to play button
+ok   390-m /front-office "?": the trust sentence says "on the grades alone" (1)
+ok   390-m /front-office "?": the sentence sits inside the dialog and the screen ({"x":25,"y":342.3046875,"width":340,"height":160} in {"x":0,"y":63.3046875,"width":390,"height":717.390625})
+ok   390-m /front-office "?": the sentence is 14px
+ok   390-m /front-office "?": no en or em dash in the dialog
+ok   390-m /front-office: no horizontal overflow
+ok   390-m /front-office: no page error ()
+FAIL 390-m /nhl-front-office: Play Round is reachable
+FAIL 390-m /nhl-front-office: one round played ({"round":1,"phase":"hub","gm":true,"keys":["contracts","picks","staff","retained"]})
+ok   390-m /nhl-front-office: the save gains no seat or xp block
+ok   390-m /nhl-front-office: no career kit chunk fetched ()
+ok   390-m /nhl-front-office: no horizontal overflow
+ok   390-m /nhl-front-office: no page error ()
+FAIL 390-m /front-office: the NFL career kit is not fetched on the pick screen or the first hub (nflCareerKit-C2txq9e8.js)
+ok   390-m /front-office hub: no horizontal overflow
+ok   390-m /front-office hub: no page error ()
+ok   1280-rm /front-office: a How to play button
+ok   1280-rm /front-office "?": the trust sentence says "on the grades alone" (1)
+ok   1280-rm /front-office "?": the sentence sits inside the dialog and the screen ({"x":441,"y":379.5,"width":398,"height":140} in {"x":416,"y":67.5,"width":448,"height":765})
+ok   1280-rm /front-office "?": the sentence is 14px
+ok   1280-rm /front-office "?": no en or em dash in the dialog
+ok   1280-rm /front-office: no horizontal overflow
+ok   1280-rm /front-office: no page error ()
+FAIL 1280-rm /nhl-front-office: Play Round is reachable
+FAIL 1280-rm /nhl-front-office: one round played ({"round":1,"phase":"hub","gm":true,"keys":["contracts","picks","staff","retained"]})
+ok   1280-rm /nhl-front-office: the save gains no seat or xp block
+ok   1280-rm /nhl-front-office: no career kit chunk fetched ()
+ok   1280-rm /nhl-front-office: no horizontal overflow
+ok   1280-rm /nhl-front-office: no page error ()
+FAIL 1280-rm /front-office: the NFL career kit is not fetched on the pick screen or the first hub (nflCareerKit-C2txq9e8.js)
+ok   1280-rm /front-office hub: no horizontal overflow
+ok   1280-rm /front-office hub: no page error ()
+ok   1280-m /front-office: a How to play button
+ok   1280-m /front-office "?": the trust sentence says "on the grades alone" (1)
+ok   1280-m /front-office "?": the sentence sits inside the dialog and the screen ({"x":441,"y":379.5,"width":398,"height":140} in {"x":416,"y":67.5,"width":448,"height":765})
+ok   1280-m /front-office "?": the sentence is 14px
+ok   1280-m /front-office "?": no en or em dash in the dialog
+ok   1280-m /front-office: no horizontal overflow
+ok   1280-m /front-office: no page error ()
+FAIL 1280-m /nhl-front-office: Play Round is reachable
+FAIL 1280-m /nhl-front-office: one round played ({"round":1,"phase":"hub","gm":true,"keys":["contracts","picks","staff","retained"]})
+ok   1280-m /nhl-front-office: the save gains no seat or xp block
+ok   1280-m /nhl-front-office: no career kit chunk fetched ()
+ok   1280-m /nhl-front-office: no horizontal overflow
+ok   1280-m /nhl-front-office: no page error ()
+FAIL 1280-m /front-office: the NFL career kit is not fetched on the pick screen or the first hub (nflCareerKit-C2txq9e8.js)
+ok   1280-m /front-office hub: no horizontal overflow
+ok   1280-m /front-office hub: no page error ()
+rvWalk: 12 check(s) red
