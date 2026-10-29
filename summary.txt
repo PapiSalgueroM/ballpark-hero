@@ -1,0 +1,3 @@
+build exit=0 36s | [dukb] inlined 1 stylesheet(s) and 1 module(s) into 181 snapshots (11 left alone)
+walk390 exit=0 17s | punditbar 390x844: REPRODUCED, the bar Next Season is dead in pundit_season while both controls moved
+walk320 exit=0 17s | punditbar 320x568: REPRODUCED, the bar Next Season is dead in pundit_season while both controls moved

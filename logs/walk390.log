@@ -1,0 +1,8 @@
+  career created: {"phase":"youth","age":16}
+  CONTROL playing: one bar Next Season press: {"savedChanged":true,"seasonsBefore":2,"seasonsAfter":3,"phaseAfter":"newspaper"}
+  reached pundit season: {"phase":"pundit_season","isPundit":true,"retired":true,"punditState":{"season":0,"predictions":[],"controversies":0,"legacyBonus":0,"followerGains":0}}
+  FINDING bar Next Season in pundit_season: {"found":true,"label":"Next Season","disabled":false,"y":778,"h":48,"onTop":true,"cls":"green primary"}
+  FINDING four real clicks on the bar Next Season: {"clicksThatLanded":4,"saveChanged":false,"changedKeys":[],"punditSeasonBefore":0,"punditSeasonAfter":0,"panelBefore":0,"panelAfter":0,"phaseAfter":"pundit_season"}
+  CONTROL pundit panel Praise a Rising Star: {"punditSeason":1,"panel":1,"phase":"pundit_season"}
+  page errors: []
+punditbar 390x844: REPRODUCED, the bar Next Season is dead in pundit_season while both controls moved
