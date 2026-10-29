@@ -1,0 +1,4 @@
+build exit=0 29s | [dukb] inlined 1 stylesheet(s) and 1 module(s) into 181 snapshots (11 left alone)
+words-head exit=0 4s | walkBingoWords head: green, every word of all 112 labels whole at 320, 360, 375, 390 and 412
+playPlayerBingoCategories exit=0 8s | playPlayerBingoCategories: actual offline built-page proof passed; raw geometry, requests and screenshots retained.
+weight-head exit=0 29s | sweepWeight: green. Every page is inside its budget, and the budgets came down this round.

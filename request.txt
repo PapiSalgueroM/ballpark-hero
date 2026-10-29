@@ -1,0 +1,6 @@
+#!serve
+#!playwright
+#!serial
+words-head: node .rc/x/walkBingoWords.mjs dist head
+playPlayerBingoCategories: CI=1 PLAYER_BINGO_BROWSER_OUT="$PWD/.tmp-fx/pbb" NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/playPlayerBingoCategories.mjs
+weight-head: SWEEP_OFFLINE=1 node scripts/sweepWeight.mjs
