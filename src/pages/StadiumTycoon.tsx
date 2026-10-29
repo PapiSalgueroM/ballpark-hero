@@ -42,7 +42,7 @@ import {
   ACHIEVEMENTS, ACH_BONUS, achMult, goldenActive, GOLDEN_INFO,
   LEGACY_PERKS, perkLevelOf, perkCostOf, canBuyPerk, legacyPointsOf,
   totalPerkLevels, pointsForSale, HYPE_MULT, AWAY_MATCHDAY_SEC, SET_PIECE_WINDOW_SEC, type TycoonLeague,
-  GOAL_BONUS_SEC, WIN_BONUS_SEC, PROMOTION_BONUS_SEC, scoringFacts,
+  GOAL_BONUS_SEC, WIN_BONUS_SEC, PROMOTION_BONUS_SEC, scoringFacts, matchPlanFor, canSetMatchPlan,
 } from '@/lib/stadiumTycoon';
 import { useStadiumTycoon } from '@/hooks/useStadiumTycoon';
 import type { LastSeason } from '@/hooks/useStadiumTycoon';
@@ -389,6 +389,13 @@ function LeagueRoom({ g, visible }: { g: ReturnType<typeof useStadiumTycoon>; vi
    timers until you are looking again. Its hooks keep running either way. */
 function StadiumRoom({ g, visible, onNeedsYou }: { g: ReturnType<typeof useStadiumTycoon>; visible: boolean; onNeedsYou: (v: boolean) => void }) {
   const s = g.state;
+  const plan = matchPlanFor(s);
+  const planOpen = canSetMatchPlan(s);
+  const planNames = { protect: 'Protect the lead', balanced: 'Balanced', chase: 'Chase a goal' };
+  const planStatus = g.matchPlanError ?? (plan
+    ? `${planNames[plan.choice]} locked until full time.`
+    : planOpen ? 'Choose once. Balanced keeps the regular match.'
+    : "Balanced by default. Choices open from 60'.");
   const kickClosed = !g.activeSetPiece || s.rep !== g.activeSetPiece.rep || (s.totalMatches ?? 0) !== g.activeSetPiece.match || s.minute >= 90;
   /* Round 585: the gems this club's results have earned. */
   const gems = balance(useTycoonRewards());
@@ -708,6 +715,23 @@ function StadiumRoom({ g, visible, onNeedsYou }: { g: ReturnType<typeof useStadi
           </TycoonPitch>
         </div>
 
+        <div role="group" aria-label="Late-match plan" className="mb-3 rounded-xl border border-border bg-card p-3">
+          <div className="text-xs font-bold text-foreground">Late-match plan</div>
+          <p role={g.matchPlanError ? 'alert' : 'status'} className="mt-1 min-h-8 text-xs leading-4 text-muted-foreground">{planStatus}</p>
+          <div className="mt-2 grid grid-cols-3 gap-2">
+            {(['protect', 'balanced', 'chase'] as const).map(choice => (
+              <button key={choice} type="button" aria-label={planNames[choice]}
+                aria-pressed={(plan?.choice ?? 'balanced') === choice} disabled={!planOpen}
+                onClick={() => g.doSetMatchPlan(choice)}
+                className={cn('min-h-11 min-w-0 rounded-lg border px-1 text-xs font-bold leading-4 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary disabled:cursor-not-allowed',
+                  (plan?.choice ?? 'balanced') === choice ? 'border-primary bg-primary text-primary-foreground' : 'border-border bg-background text-foreground hover:border-primary')}>
+                {planNames[choice]}
+              </button>
+            ))}
+          </div>
+          <p className="mt-2 min-h-8 text-[11px] leading-4 text-muted-foreground">Protect lowers chances for both sides. Chase raises both.</p>
+        </div>
+
         {/* Prestige bar */}
         <div className="mb-3">
           {canPrestige(s) ? (
@@ -981,6 +1005,7 @@ function StadiumRoom({ g, visible, onNeedsYou }: { g: ReturnType<typeof useStadi
             <div data-tycoon-rules className="text-sm text-muted-foreground space-y-2">
               <p>You run a tiny club's matchday money machine. Fans show up if there are seats and things to spend on; every fan pays you every second.</p>
               <p>The match on screen is real and plays like football: your Squad against today's rival decides who is favourite, but favourites drop points and plenty of matches end level. Against a rival as strong as you, you expect about {h.evenFor} goals to their {h.evenAgainst}, and each Squad level adds about {h.levelGoals} of a goal a match to your side and takes up to as much off theirs. A goal pays {h.goalSec} seconds of your income, a win {h.winSec} seconds and going up a division {h.promotionMin} minutes, and wins extend a streak that multiplies everything and pulls in new fans. Every division up sends stronger rivals, and they stay that strong until you win the league.</p>
+              <p>From the 60th minute, choose one late-match plan. Protect the lead lowers chances for both sides. Chase a goal raises both, so your rival gets more chances too. Balanced keeps the regular match. Your choice lasts until full time, including after a reload, and the next match starts Balanced. Doing nothing keeps Balanced. Example: leading 1-0 at 60 minutes, Protect can help hold the lead, but you get fewer chances to make it 2-0 and a clean sheet is never guaranteed.</p>
               <p>Tap the stadium for instant cash (Megaphone makes taps stronger). Buy Stands when the ground is full, spending tracks when it is not.</p>
               <p>The Ticket offer tile sets your matchday price, and switching is free at any time. Standard is the regular game. Community takes {h.ticketCommunityCut}% off the gate money each fan pays and your supporters grow {h.ticketCommunityGrowth}% faster. Premium adds {h.ticketPremiumGate}% to the gate money each fan pays, but only {h.ticketPremiumDemand}% of your supporters turn up and they grow {h.ticketPremiumGrowth}% slower. Only the ticket price moves: snacks, the shop, parking and the payroll keep their own rates. Example: a new {h.freshSeats} seat ground with {h.freshFans} supporters draws {h.freshPremiumCrowd} on Premium, so Premium pays less there, and it pays more once {h.ticketPremiumDemand}% of your supporters still fill the ground. Selling up puts the offer back to Standard.</p>
               <p>Matchday Hype charges over {h.chargeMin} minutes of play (Stadium Voltage in the boardroom trims that to {h.voltage1}, then {h.voltage2}). Press it and your income pays double for {h.hypeSec} seconds, and your taps rise with it; goal and win bonuses are not doubled. It does not charge or burn while you are away.</p>

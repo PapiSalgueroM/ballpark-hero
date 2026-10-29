@@ -464,6 +464,13 @@ export function startingMoneyOf(s: TycoonState): number {
   return 40 + (ROLLING_SEED[perkLevelOf(s, 'rolling')] ?? 0);
 }
 
+export type MatchPlanChoice = 'protect' | 'balanced' | 'chase';
+export interface TycoonMatchPlan {
+  readonly rep: number;
+  readonly match: number;
+  readonly choice: MatchPlanChoice;
+}
+
 export interface TycoonState {
   v: number;
   /** Absence is the original Standard offer. A new ground starts Standard. */
@@ -521,6 +528,7 @@ export interface TycoonState {
   goldenCaught?: number;
   boostsUsed?: number;
   totalMatches?: number;
+  matchPlan?: TycoonMatchPlan;
   /** Round 587: opening consumes this career match's one set-piece attempt. */
   setPieceAttemptedMatch?: number;
   /** Round 587: the career match whose set-piece goal was paid. */
@@ -1025,6 +1033,34 @@ export function setTicketPolicy(s: TycoonState, policy: TicketPolicy): TycoonSta
   return next;
 }
 
+/* Late-match plans use the shared law without changing its limits. */
+const MATCH_PLAN_POINTS = 0;
+
+function validMatchPlanState(s: TycoonState): boolean {
+  const match = s.totalMatches === undefined ? 0 : s.totalMatches;
+  const plan = s.matchPlan;
+  return Number.isSafeInteger(s.rep) && s.rep >= 0 && Number.isSafeInteger(match) && match >= 0
+    && Number.isInteger(s.minute) && s.minute >= 0 && s.minute <= 90
+    && (plan === undefined || (plan !== null && typeof plan === 'object' && !Array.isArray(plan)
+      && Number.isSafeInteger(plan.rep) && plan.rep >= 0 && Number.isSafeInteger(plan.match) && plan.match >= 0
+      && (plan.choice === 'protect' || plan.choice === 'balanced' || plan.choice === 'chase')));
+}
+
+export function matchPlanFor(s: TycoonState): Readonly<TycoonMatchPlan> | null {
+  const plan = s.matchPlan;
+  return validMatchPlanState(s) && s.minute >= 60 && plan && plan.rep === s.rep
+    && plan.match === (s.totalMatches === undefined ? 0 : s.totalMatches) ? plan : null;
+}
+
+export function canSetMatchPlan(s: TycoonState): boolean {
+  return validMatchPlanState(s) && s.minute >= 60 && s.minute < 90 && !matchPlanFor(s);
+}
+
+export function setMatchPlan(s: TycoonState, choice: MatchPlanChoice): TycoonState {
+  if ((choice !== 'protect' && choice !== 'balanced' && choice !== 'chase') || !canSetMatchPlan(s)) return s;
+  return { ...s, matchPlan: { rep: s.rep, match: s.totalMatches === undefined ? 0 : s.totalMatches, choice } };
+}
+
 /** Willing supporters, capped by seats. No offer creates extra supporters. */
 export function attendance(s: TycoonState): number {
   return Math.min(capacity(s), Math.floor(s.fanbase * ticketTerms(s).demand));
@@ -1127,7 +1163,9 @@ export function ticketEconomy(s: TycoonState) {
  *  expected goals for you at your ground (every watched match is at home,
  *  contract section 8), over ninety one roll minutes. */
 export function goalChancePerMin(s: TycoonState): number {
-  return goalLambda(matchGap(s), LAW.home) / 90;
+  const plan = matchPlanFor(s)?.choice;
+  const shift = plan === 'protect' ? -MATCH_PLAN_POINTS : plan === 'chase' ? MATCH_PLAN_POINTS : 0;
+  return goalLambda(matchGap(s) + shift, LAW.home) / 90;
 }
 
 /** Chance the opponent scores in one minute. Round 1532: the law's expected
@@ -1137,7 +1175,9 @@ export function oppChancePerMin(s: TycoonState, edge = 0): number {
   // Round 586: the first team's edge takes exactly its share off the rival's
   // expected goals, with no floor after it, so every step of it counts.
   const defence = Number.isFinite(edge) ? Math.max(0, Math.min(0.40, edge)) : 0;
-  return goalLambda(-matchGap(s), LAW.away) * (1 - defence) / 90;
+  const plan = matchPlanFor(s)?.choice;
+  const shift = plan === 'protect' ? -MATCH_PLAN_POINTS : plan === 'chase' ? MATCH_PLAN_POINTS : 0;
+  return goalLambda(-matchGap(s) + shift, LAW.away) * (1 - defence) / 90;
 }
 
 /** Round 1532: the law's numbers the rules quote, so the page never imports the
@@ -1688,6 +1728,10 @@ export function deserializeTycoon(raw: string | null, now: number): TycoonState 
     for (const k of ['groundWins', 'bestDivision', 'goldenCaught', 'boostsUsed', 'totalMatches'] as const) {
       if (!Number.isFinite(s[k]) || (s[k] as number) < 0) s[k] = 0;
     }
+    if (p.matchPlan === undefined) delete s.matchPlan;
+    else if (!validMatchPlanState(p) || p.minute > 89 || p.rep !== s.rep
+      || (p.totalMatches === undefined ? 0 : p.totalMatches) !== s.totalMatches
+      || (p.matchPlan.rep === p.rep && p.matchPlan.match === (p.totalMatches === undefined ? 0 : p.totalMatches) && p.minute < 60)) delete s.matchPlan;
     // Round 587: absence keeps old saves unchanged. A malformed latch consumes
     // the current attempt instead of silently reopening it after a reload.
     for (const key of ['setPieceAttemptedMatch', 'setPieceUsedMatch'] as const) {
