@@ -12,7 +12,7 @@ export async function buildSoccerManagerJobReviewObserver({root=process.cwd(),ou
   root=path.resolve(root);
   const page=path.join(root,'src/pages/SoccerCareer.tsx'),raw=fs.readFileSync(page),source=raw.toString('utf8');
   assert.equal((source.match(/function ManagerPanel\(/g)||[]).length,1);
-  const appendix='\nexport { ManagerPanel, advanceManagerSeason, loadManagerMarket };\n';
+  const appendix='\nexport { ManagerPanel, loadManagerMarket };\n';
   assert(!source.includes(appendix),'Observer export is new');
   const owned=out===undefined;
   let cacheRoot;
@@ -55,7 +55,7 @@ export async function buildSoccerManagerJobReviewObserver({root=process.cwd(),ou
     const normalized=file=>path.resolve(file).replaceAll('\\','/').toLowerCase(),target=normalized(page);
     let loaded=0;
     const built=await build({
-      stdin:{contents:"export { ManagerPanel, advanceManagerSeason, loadManagerMarket } from './src/pages/SoccerCareer';",resolveDir:root,loader:'ts'},
+      stdin:{contents:"export { ManagerPanel, loadManagerMarket } from './src/pages/SoccerCareer';export { advanceManagerSeason } from './src/lib/soccerCareerEngine';",resolveDir:root,loader:'ts'},
       outfile:file,bundle:true,format:'cjs',platform:'node',jsx:'automatic',nodePaths:[path.join(root,'node_modules')],
       external:react,alias:{'@':path.join(root,'src')},
       define:{'import.meta.env':JSON.stringify({PROD:true,DEV:false,MODE:'test',BASE_URL:'/'})},
