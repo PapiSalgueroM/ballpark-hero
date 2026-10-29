@@ -1,0 +1,6 @@
+#!serve
+#!playwright
+tsc: node_modules/.bin/tsc --noEmit -p tsconfig.app.json
+walk: ENGINES=chromium node scripts/playNbaIntl.mjs
+ctl-nocurtain: git worktree add -q /tmp/nc HEAD && ln -s "$PWD/node_modules" /tmp/nc/node_modules && node .rc/x/mutfix.mjs /tmp/nc nocurtain && (cd /tmp/nc && node_modules/.bin/vite build > /tmp/nc-build.log 2>&1) && PLAY_INTL_CONTROL=nocurtain PLAY_INTL_DIST=/tmp/nc/dist ENGINES=chromium node scripts/playNbaIntl.mjs
+notes-tests: FORCE_COLOR=0 NO_COLOR=1 node_modules/.bin/vitest run src/test/myCareerRestore.test.tsx src/test/rivalryChoiceBoard.test.tsx src/test/usCareerActionConfirm.test.tsx src/test/usCareerReveals.test.tsx src/test/usCareerStatLines.test.tsx src/test/careerEntryGuide.test.tsx src/test/usCareerHelpRules1104.test.tsx src/test/usCareerSaveRetry.test.tsx --testTimeout=300000 --hookTimeout=120000 > /tmp/v.log 2>&1; s=$?; grep -a "note " /tmp/v.log | cut -c1-260; grep -a "Tests  \|Test Files" /tmp/v.log; exit $s
