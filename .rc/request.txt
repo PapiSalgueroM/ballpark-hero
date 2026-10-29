@@ -1,0 +1,11 @@
+#!serial
+probe: git worktree add /tmp/base 65b3e291a >/dev/null 2>&1; git -C /tmp/base log --oneline -1; node .rc/x/review-oldsaves.mjs
+probe-c1: node .rc/x/review-mut.mjs c1 && REVIEW_CAREERS=6 node .rc/x/review-oldsaves.mjs; s=$?; git checkout -- src scripts; exit $s
+probe-c2: node .rc/x/review-mut.mjs c2 && REVIEW_CAREERS=6 node .rc/x/review-oldsaves.mjs; s=$?; git checkout -- src scripts; exit $s
+m1: node .rc/x/review-mut.mjs m1 && node scripts/simAflClubNames.mjs; s=$?; git checkout -- src scripts; exit $s
+m2: node .rc/x/review-mut.mjs m2 && node scripts/simAflClubNames.mjs; s=$?; git checkout -- src scripts; exit $s
+m3: node .rc/x/review-mut.mjs m3 && node scripts/simAflClubNames.mjs; s=$?; git checkout -- src scripts; exit $s
+m4: node .rc/x/review-mut.mjs m4 && node scripts/simAflClubNames.mjs; s=$?; git checkout -- src scripts; exit $s
+m5: node .rc/x/review-mut.mjs m5 && node scripts/simAflClubNames.mjs; s=$?; git checkout -- src scripts; exit $s
+m6: node .rc/x/review-mut.mjs m6 && node scripts/simAflClubNames.mjs; s=$?; git checkout -- src scripts; exit $s
+clean: git status --short | head -5; git diff --stat | tail -2
