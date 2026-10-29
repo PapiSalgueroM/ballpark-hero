@@ -1,0 +1,126 @@
+CONN_LIVE: checking 326 rows of the live table export, not the shipped file
+1) no group claims the present
+  FAIL: puzzle-89: "Played for AC Milan (2020s)" names a year from 2020 on and nothing holds the group to it: stamp a season the checker holds, write the group out in the ledger on two hosts, or retire it
+  FAIL: puzzle-91: "Played in the 2022 World Cup Final" names a year from 2020 on and nothing holds the group to it: stamp a season the checker holds, write the group out in the ledger on two hosts, or retire it
+  FAIL: puzzle-95: "Played for Napoli (2020s)" names a year from 2020 on and nothing holds the group to it: stamp a season the checker holds, write the group out in the ledger on two hosts, or retire it
+  FAIL: puzzle-97: "Played for Borussia Dortmund (2020s)" names a year from 2020 on and nothing holds the group to it: stamp a season the checker holds, write the group out in the ledger on two hosts, or retire it
+  FAIL: puzzle-99: "Played for Juventus (2020s)" names a year from 2020 on and nothing holds the group to it: stamp a season the checker holds, write the group out in the ledger on two hosts, or retire it
+  FAIL: puzzle-108: "Won the Carabao Cup (2020s)" names a year from 2020 on and nothing holds the group to it: stamp a season the checker holds, write the group out in the ledger on two hosts, or retire it
+  FAIL: puzzle-113: "Won the Scudetto with AC Milan (2020s)" names a year from 2020 on and nothing holds the group to it: stamp a season the checker holds, write the group out in the ledger on two hosts, or retire it
+  FAIL: puzzle-119: "Played for PSG (2020s)" names a year from 2020 on and nothing holds the group to it: stamp a season the checker holds, write the group out in the ledger on two hosts, or retire it
+  FAIL: puzzle-127: "Premier League Golden Boot (2020s)" names a year from 2020 on and nothing holds the group to it: stamp a season the checker holds, write the group out in the ledger on two hosts, or retire it
+  FAIL: puzzle-141: "Won 2024 Euros with Spain" names a year from 2020 on and nothing holds the group to it: stamp a season the checker holds, write the group out in the ledger on two hosts, or retire it
+  FAIL: puzzle-149: "Won the 2022 World Cup with Argentina" names a year from 2020 on and nothing holds the group to it: stamp a season the checker holds, write the group out in the ledger on two hosts, or retire it
+   11 present tense, unstamped season or unheld recent year labels; 0 recent year groups owed to part B
+2) no refuted claim is on a board
+   5 refuted claims held off every board, 0 found
+3) every group this round wrote stands on two hosts
+   2 watches over 31 men about to join a list
+  FAIL: puzzle-2: "From Brazil" on the board is not the group the ledger checked
+  FAIL: puzzle-8: "Played for both Manchester clubs" on the board is not the group the ledger checked
+  FAIL: puzzle-13: the ledger holds "From Belgium" and the board has no such group
+  FAIL: puzzle-16: "Played their entire career at one club" on the board is not the group the ledger checked
+  FAIL: puzzle-18: "From Uruguay" on the board is not the group the ledger checked
+  FAIL: puzzle-26: the ledger holds "Played for both Barcelona and Real Madrid" and the board has no such group
+  FAIL: puzzle-28: "Played for Sevilla" on the board is not the group the ledger checked
+  FAIL: puzzle-28: the ledger holds "Won the 2002 World Cup with Brazil" and the board has no such group
+  FAIL: puzzle-38: "Played for Villarreal" on the board is not the group the ledger checked
+  FAIL: puzzle-43: the ledger holds "Won the 2002 World Cup with Brazil" and the board has no such group
+  FAIL: puzzle-46: "From Jamaica" on the board is not the group the ledger checked
+  FAIL: puzzle-55: the ledger holds "Played for both Manchester clubs" and the board has no such group
+  FAIL: puzzle-59: "Won the MLS Cup" on the board is not the group the ledger checked
+  FAIL: puzzle-64: "Won the Ballon d'Or in the 2000s" on the board is not the group the ledger checked
+  FAIL: puzzle-65: "From Côte d'Ivoire" on the board is not the group the ledger checked
+  FAIL: puzzle-68: "From Mali" on the board is not the group the ledger checked
+  FAIL: puzzle-70: "From Georgia" on the board is not the group the ledger checked
+  FAIL: puzzle-81: "From Nigeria" on the board is not the group the ledger checked
+  FAIL: puzzle-81: the ledger holds "Played for both Real Madrid and Atlético Madrid" and the board has no such group
+  FAIL: puzzle-90: "Won the Ballon d'Or as a midfielder" on the board is not the group the ledger checked
+  FAIL: puzzle-92: the ledger holds "From Egypt" and the board has no such group
+  FAIL: puzzle-92: "Played for both Barcelona and Atlético Madrid" on the board is not the group the ledger checked
+  FAIL: puzzle-97: "From Georgia" on the board is not the group the ledger checked
+  FAIL: puzzle-103: "Played for both Lyon and PSG" on the board is not the group the ledger checked
+  FAIL: puzzle-109: the ledger holds "Played for both Real Madrid and Atlético Madrid" and the board has no such group
+  FAIL: puzzle-113: "Played for both Tottenham and Real Madrid" on the board is not the group the ledger checked
+  FAIL: puzzle-123: "Played for PSG and Chelsea" on the board is not the group the ledger checked
+  FAIL: puzzle-131: "Played for PSG and Manchester City" on the board is not the group the ledger checked
+  FAIL: puzzle-138: "From Guinea" on the board is not the group the ledger checked
+  FAIL: puzzle-138: "Played for Manchester City and Barcelona" on the board is not the group the ledger checked
+  FAIL: puzzle-149: the ledger holds "Played for both Barcelona and Real Madrid" and the board has no such group
+  FAIL: crafted-1005: the ledger holds "Played for Liverpool" and the board has no such group
+  FAIL: crafted-1005: "Won Olympic gold in football" on the board is not the group the ledger checked
+  FAIL: crafted-1007: "Played for Juventus" on the board is not the group the ledger checked
+  FAIL: crafted-1007: "Won the Copa America with Chile" on the board is not the group the ledger checked
+  FAIL: crafted-1008: "Played for Sevilla" on the board is not the group the ledger checked
+  FAIL: crafted-1009: "African Player of the Year winners" on the board is not the group the ledger checked
+  FAIL: crafted-1009: "Sons of professional footballers" on the board is not the group the ledger checked
+  FAIL: crafted-1011: "Played for LA Galaxy" on the board is not the group the ledger checked
+  FAIL: crafted-1012: "Egyptian internationals" on the board is not the group the ledger checked
+  FAIL: crafted-1020: "From Portugal" on the board is not the group the ledger checked
+  FAIL: cx-20260710-05: the ledger holds "Played for both Lyon and PSG" and the board has no such group
+  FAIL: cx-20260710-09: "Played for Boca Juniors" on the board is not the group the ledger checked
+  FAIL: cx-20260710-11: the ledger holds "Played for both Barcelona and Real Madrid" and the board has no such group
+  FAIL: cx-20260710-12: "Played in the 2010 World Cup final for the Netherlands" on the board is not the group the ledger checked
+   26 squads, 1 lists, 49 ledgered groups, 69 stamped groups, 344 members confirmed, 9 rebuilt boards
+4) one right answer: the cross check over every board
+  FAIL: puzzle-2 | second-fit | Ronaldinho Gaúcho | Played for AC Milan | listed under From Brazil, so the board has two right answers
+  FAIL: puzzle-2 | second-fit | Rivaldo Vítor | Played for AC Milan | listed under From Brazil, so the board has two right answers
+  FAIL: puzzle-2 | second-fit | Ricardo Kaká | Played for AC Milan | listed under From Brazil, so the board has two right answers
+  FAIL: puzzle-8 | second-fit | Carlos Tévez | Played for Juventus | listed under Played for both Manchester clubs, so the board has two right answers
+  FAIL: puzzle-13 | second-fit | Luis Suárez | Played for Atlético Madrid | listed under Won the PFA Player of the Year, so the board has two right answers
+  FAIL: puzzle-16 | second-fit | Francesco Totti | Played for AS Roma | listed under Played their entire career at one club, so the board has two right answers
+  FAIL: puzzle-18 | second-fit | Luis Suárez | Played for Ajax | listed under From Uruguay, so the board has two right answers
+  FAIL: puzzle-26 | second-fit | Robbie Keane | Played for Aston Villa | listed under Became their country's all-time top scorer, so the board has two right answers
+  FAIL: puzzle-28 | not-a-member | Diego Forlán | Played for Sevilla
+  FAIL: puzzle-28 | second-fit | Kevin-Prince Boateng | From Ghana | listed under Played in both Serie A and Bundesliga, so the board has two right answers
+  FAIL: puzzle-38 | second-fit | Diego Forlán | Won the European Golden Shoe | listed under Played for Villarreal, so the board has two right answers
+  FAIL: puzzle-43 | second-fit | James Morrison | From Scotland | listed under Played for West Brom, so the board has two right answers
+  FAIL: puzzle-46 | not-a-member | Raheem Sterling | From Jamaica
+  FAIL: puzzle-55 | second-fit | Ismaïla Sarr | From Senegal | listed under Played for Watford, so the board has two right answers
+  FAIL: puzzle-59 | second-fit | Robbie Keane | Played for Wolverhampton Wanderers | listed under Won the MLS Cup, so the board has two right answers
+  FAIL: puzzle-64 | second-fit | Ronaldinho Gaúcho | Played for AC Milan | listed under Won the Ballon d'Or in the 2000s, so the board has two right answers
+  FAIL: puzzle-64 | second-fit | Kaká | Played for AC Milan | listed under Won the Ballon d'Or in the 2000s, so the board has two right answers
+  FAIL: puzzle-65 | second-fit | Didier Drogba | Played for Chelsea | listed under From Côte d'Ivoire, so the board has two right answers
+  FAIL: puzzle-68 | not-a-member | Moussa Sissoko | From Mali
+  FAIL: puzzle-70 | not-a-member | Willy Sagnol | From Georgia
+  FAIL: puzzle-81 | not-a-member | Ángel Di María | Played for Porto and Benfica
+  FAIL: puzzle-90 | second-fit | Luis Figo | From Portugal | listed under Won the Ballon d'Or as a midfielder, so the board has two right answers
+  FAIL: puzzle-92 | second-fit | Mauro Icardi | From Argentina | listed under Galatasaray stars (past & present), so the board has two right answers
+  FAIL: puzzle-92 | not-a-member | Fernando Torres | Played for both Barcelona and Atlético Madrid
+  FAIL: puzzle-97 | not-a-member | Willy Sagnol | From Georgia
+  FAIL: puzzle-103 | not-a-member | Nabil Fekir | Played for both Lyon and PSG
+  FAIL: puzzle-103 | not-a-member | Memphis Depay | Played for both Lyon and PSG
+  FAIL: puzzle-109 | not-a-member | James Rodríguez | Played for both Benfica and Porto
+  FAIL: puzzle-109 | not-a-member | Deco | Played for both Benfica and Porto
+  FAIL: puzzle-113 | not-a-member | Robbie Keane | Played for both Tottenham and Real Madrid
+  FAIL: puzzle-123 | not-a-member | Edinson Cavani | Played for PSG and Chelsea
+  FAIL: puzzle-123 | not-a-member | Mauro Icardi | Played for PSG and Chelsea
+  FAIL: puzzle-131 | not-a-member | Carlos Tévez | Played for PSG and Manchester City
+  FAIL: puzzle-138 | not-a-member | Mamadou Diallo | From Guinea
+  FAIL: puzzle-149 | not-a-member | Ronaldinho Gaúcho | Played for PSG, Barcelona AND Real Madrid
+  FAIL: puzzle-149 | not-a-member | Neymar Jr | Played for PSG, Barcelona AND Real Madrid
+  FAIL: puzzle-149 | not-a-member | Luis Figo | Played for PSG, Barcelona AND Real Madrid
+  FAIL: crafted-1005 | second-fit | Ousmane Dembele | Played for PSG | listed under Played in the Bundesliga, so the board has two right answers
+  FAIL: crafted-1005 | second-fit | Lionel Messi | Played for PSG | listed under Won Olympic gold in football, so the board has two right answers
+  FAIL: crafted-1005 | second-fit | Neymar Jr | Played for PSG | listed under Won Olympic gold in football, so the board has two right answers
+  FAIL: crafted-1007 | second-fit | Arturo Vidal | Played for Juventus | listed under Won the Copa America with Chile, so the board has two right answers
+  FAIL: crafted-1008 | second-fit | Ivan Rakitic | From Croatia | listed under Played for Sevilla, so the board has two right answers
+  FAIL: crafted-1009 | second-fit | Erling Haaland | Played for Borussia Dortmund | listed under Sons of professional footballers, so the board has two right answers
+  FAIL: crafted-1009 | second-fit | Yaya Toure | Played for Monaco | listed under African Player of the Year winners, so the board has two right answers
+  FAIL: crafted-1011 | second-fit | Robbie Keane | Played for Tottenham | listed under Played for LA Galaxy, so the board has two right answers
+  FAIL: crafted-1012 | second-fit | Mohamed Salah | Played for Roma | listed under Egyptian internationals, so the board has two right answers
+  FAIL: crafted-1020 | second-fit | Cristiano Ronaldo | Won the Ballon d'Or | listed under From Portugal, so the board has two right answers
+  FAIL: cx-20260710-05 | second-fit | Zlatan Ibrahimović | Played for both AC Milan and Inter Milan | listed under Played under José Mourinho at two different clubs, so the board has two right answers
+  FAIL: cx-20260710-09 | second-fit | Gabriel Batistuta | Played for River Plate | listed under Played for Boca Juniors, so the board has two right answers
+  FAIL: cx-20260710-09 | second-fit | Diego Maradona | Played for Newell's Old Boys | listed under Played for Boca Juniors, so the board has two right answers
+  FAIL: cx-20260710-09 | second-fit | Gabriel Batistuta | Played for Newell's Old Boys | listed under Played for Boca Juniors, so the board has two right answers
+  FAIL: cx-20260710-11 | not-a-member | Zinedine Zidane | Played for and later managed Real Madrid
+  FAIL: cx-20260710-12 | second-fit | Arjen Robben | Played for Bayern Munich | listed under Played in the 2010 World Cup final for the Netherlands, so the board has two right answers
+   876 of 1304 groups judged; members 2839 judged (665 unknown), other tiles 8710 judged (1802 unknown)
+   78 findings: 25 adjudicated, 0 owed to part B on boards not yet rebuilt
+5) the groups nothing checks yet may only get fewer
+   415 groups nothing checks yet (ceiling 409); part B ledgers them
+6) the shipped file is the copy of the live table (scripts/data/connectionsLiveSnapshot.json)
+   326 file boards, 326 live rows (expected after supabase/migrations/20261029120000_round_1565...), 0 boards differ; the export under test differs from the snapshot on 38
+
+simConnectionsFacts: 109 failures

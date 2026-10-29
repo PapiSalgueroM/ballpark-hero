@@ -1,0 +1,7 @@
+   puzzle-81: rebuilt again by Round 1565, held to that migration
+   puzzle-90: rebuilt again by Round 1565, held to that migration
+   puzzle-109: rebuilt again by Round 1565, held to that migration
+   file: 54 of 57 new boards in the migration equal the shipped file's boards
+   seed: 155 rows, 129 valid before and 129 after; 50 rewritten in place; puzzle-151 drifted on purpose and left alone; 6 seeded rows already differ from the pre-round file and were left alone: puzzle-4 puzzle-10 puzzle-12 puzzle-75 puzzle-104 puzzle-112
+   file: 155 rows, 135 valid before and 135 after; 56 rewritten in place; puzzle-151 drifted on purpose and left alone; 0 seeded rows already differ from the pre-round file and were left alone
+rehearseConnections1553: green. The rows land in place, a drifted row is left alone, and a second run is a no-op.

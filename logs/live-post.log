@@ -1,0 +1,28 @@
+CONN_LIVE: checking 326 rows of the live table export, not the shipped file
+1) no group claims the present
+  FAIL: puzzle-89: "Played for AC Milan (2020s)" names a year from 2020 on and nothing holds the group to it: stamp a season the checker holds, write the group out in the ledger on two hosts, or retire it
+  FAIL: puzzle-91: "Played in the 2022 World Cup Final" names a year from 2020 on and nothing holds the group to it: stamp a season the checker holds, write the group out in the ledger on two hosts, or retire it
+  FAIL: puzzle-95: "Played for Napoli (2020s)" names a year from 2020 on and nothing holds the group to it: stamp a season the checker holds, write the group out in the ledger on two hosts, or retire it
+  FAIL: puzzle-97: "Played for Borussia Dortmund (2020s)" names a year from 2020 on and nothing holds the group to it: stamp a season the checker holds, write the group out in the ledger on two hosts, or retire it
+  FAIL: puzzle-99: "Played for Juventus (2020s)" names a year from 2020 on and nothing holds the group to it: stamp a season the checker holds, write the group out in the ledger on two hosts, or retire it
+  FAIL: puzzle-108: "Won the Carabao Cup (2020s)" names a year from 2020 on and nothing holds the group to it: stamp a season the checker holds, write the group out in the ledger on two hosts, or retire it
+  FAIL: puzzle-113: "Won the Scudetto with AC Milan (2020s)" names a year from 2020 on and nothing holds the group to it: stamp a season the checker holds, write the group out in the ledger on two hosts, or retire it
+  FAIL: puzzle-119: "Played for PSG (2020s)" names a year from 2020 on and nothing holds the group to it: stamp a season the checker holds, write the group out in the ledger on two hosts, or retire it
+  FAIL: puzzle-127: "Premier League Golden Boot (2020s)" names a year from 2020 on and nothing holds the group to it: stamp a season the checker holds, write the group out in the ledger on two hosts, or retire it
+  FAIL: puzzle-141: "Won 2024 Euros with Spain" names a year from 2020 on and nothing holds the group to it: stamp a season the checker holds, write the group out in the ledger on two hosts, or retire it
+  FAIL: puzzle-149: "Won the 2022 World Cup with Argentina" names a year from 2020 on and nothing holds the group to it: stamp a season the checker holds, write the group out in the ledger on two hosts, or retire it
+   11 present tense, unstamped season or unheld recent year labels; 0 recent year groups owed to part B
+2) no refuted claim is on a board
+   5 refuted claims held off every board, 0 found
+3) every group this round wrote stands on two hosts
+   2 watches over 31 men about to join a list
+   26 squads, 1 lists, 49 ledgered groups, 69 stamped groups, 344 members confirmed, 9 rebuilt boards
+4) one right answer: the cross check over every board
+   880 of 1304 groups judged; members 2839 judged (681 unknown), other tiles 8708 judged (1852 unknown)
+   26 findings: 26 adjudicated, 0 owed to part B on boards not yet rebuilt
+5) the groups nothing checks yet may only get fewer
+   409 groups nothing checks yet (ceiling 409); part B ledgers them
+6) the shipped file is the copy of the live table (scripts/data/connectionsLiveSnapshot.json)
+   326 file boards, 326 live rows (expected after supabase/migrations/20261029120000_round_1565...), 0 boards differ; the export under test differs from the snapshot on 0
+
+simConnectionsFacts: 11 failures
