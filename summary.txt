@@ -1,0 +1,4 @@
+pin-clearwinner exit=1 98s | simTriviaBank: 1 failure(s)
+pin-dateutils exit=1 96s | simTriviaBank: 1 failure(s)
+pin-dealplayers exit=1 91s | simTriviaBank: 1 failure(s)
+pin-comment exit=0 92s | simTriviaBank: all checks passed
