@@ -1,0 +1,1 @@
+simDateDraws exit=0 61s | simDateDraws: green. Every date-seeded draw reaches its whole pool or is fenced where measured.
