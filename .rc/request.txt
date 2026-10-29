@@ -1,0 +1,28 @@
+tsc: node_modules/.bin/tsc --noEmit -p tsconfig.app.json
+vnew: node_modules/.bin/vitest run src/test/usCareerReports1569.test.tsx --testTimeout=300000 --hookTimeout=120000
+vboard1: node_modules/.bin/vitest run src/test/careerDecisionOutcome.test.tsx src/test/careerHallV1Replay.test.ts src/test/careerSeasonReview.test.tsx src/test/extensionResponseMotion.test.tsx src/test/myCareerRestore.test.tsx src/test/noDoubleRecord.test.tsx src/test/rivalryChoiceBoard.test.tsx src/test/usCareerActionConfirm.test.tsx src/test/usCareerDirtyMoney.test.tsx src/test/usCareerDraftNightBoard.test.tsx src/test/usCareerHallBoard.test.tsx --testTimeout=300000 --hookTimeout=120000
+vboard2: node_modules/.bin/vitest run src/test/usCareerMarketBoard.test.tsx src/test/usCareerMarketSecondTab.test.tsx src/test/usCareerMarketUi.test.tsx src/test/usCareerPractice.test.tsx src/test/usCareerProspect.test.tsx src/test/usCareerReports1346.test.tsx src/test/usCareerReveals.test.tsx src/test/usCareerSaveRetry.test.tsx src/test/usCareerStatLines.test.tsx src/test/usCareerSummer.test.tsx src/test/usSeasonCentreEntry.test.tsx --testTimeout=300000 --hookTimeout=120000
+parity: node scripts/simUsBoardParity.mjs
+parity-label: US_BOARD_PARITY_CONTROL=label node scripts/simUsBoardParity.mjs
+sim: node scripts/simUsCareerReports.mjs
+ctl-noseason: SIM_REPORTS_CONTROL=noseason node scripts/simUsCareerReports.mjs
+ctl-titlecredit: SIM_REPORTS_CONTROL=titlecredit node scripts/simUsCareerReports.mjs
+ctl-creditlow: SIM_REPORTS_CONTROL=creditlow node scripts/simUsCareerReports.mjs
+simNoRivalNames: node scripts/simNoRivalNames.mjs
+simHarnessAnchors: node scripts/simHarnessAnchors.mjs
+simStorageWrites: node scripts/simStorageWrites.mjs
+simCareerPressMarket: node scripts/simCareerPressMarket.mjs
+simCareerPress: node scripts/simCareerPress.mjs
+simExtension: node scripts/simExtension.mjs
+simExtensionResponseMotion: node scripts/simExtensionResponseMotion.mjs
+simUsPostseason: node scripts/simUsPostseason.mjs
+simNflCareer: node scripts/simNflCareer.mjs
+simNbaCareer: node scripts/simNbaCareer.mjs
+simMlbCareer: node scripts/simMlbCareer.mjs
+simNhlCareer: node scripts/simNhlCareer.mjs
+simUsCareerActionConfirm: node scripts/simUsCareerActionConfirm.mjs
+simUsCareerProspect: node scripts/simUsCareerProspect.mjs
+simUsCareerPractice: node scripts/simUsCareerPractice.mjs
+simUsCareerSkips: node scripts/simUsCareerSkips.mjs
+simUsSeasonCentre: node scripts/simUsSeasonCentre.mjs
+simUsCareerSaveRetry: node scripts/simUsCareerSaveRetry.mjs
