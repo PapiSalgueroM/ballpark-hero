@@ -1,0 +1,6 @@
+#!serve
+#!playwright
+walk: ENGINES=chromium node scripts/playNbaIntl.mjs
+ctl-nocurtain: git worktree add -q /tmp/nc HEAD && ln -s "$PWD/node_modules" /tmp/nc/node_modules && node .rc/x/mutfix.mjs /tmp/nc nocurtain && (cd /tmp/nc && node_modules/.bin/vite build > /tmp/nc-build.log 2>&1) && PLAY_INTL_CONTROL=nocurtain PLAY_INTL_DIST=/tmp/nc/dist ENGINES=chromium node scripts/playNbaIntl.mjs
+vitest-board: node_modules/.bin/vitest run src/test/usCareerIntlBoard.test.tsx --testTimeout=300000 --hookTimeout=120000
+mut-noclose: git worktree add -q /tmp/ncl HEAD && ln -s "$PWD/node_modules" /tmp/ncl/node_modules && node .rc/x/mutfix.mjs /tmp/ncl noclose && cd /tmp/ncl && node_modules/.bin/vitest run src/test/usCareerIntlBoard.test.tsx --testTimeout=300000 --hookTimeout=120000

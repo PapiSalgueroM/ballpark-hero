@@ -1,0 +1,5 @@
+build exit=0 32s | [dukb] inlined 1 stylesheet(s) and 1 module(s) into 181 snapshots (11 left alone)
+vitest-board exit=0 4s |    Duration  4.15s (transform 1.45s, setup 100ms, collect 1.98s, tests 1.26s, environment 370ms, prepare 129ms)
+mut-noclose exit=1 5s | ::error file=/tmp/ncl/src/test/usCareerIntlBoard.test.tsx,title=src/test/usCareerIntlBoard.test.tsx > NBA My Career%3A the medals on the shelf > the header's Hub button w
+ctl-nocurtain exit=1 80s | playNbaIntl: CONTROL nocurtain FIRED (walk (g): 4 runs at 320 measured from a scrolled page, 6 failures)
+walk exit=0 105s | playNbaIntl: green. The call, Go and its result's views, Rest, a reload mid beat, the 2027 World Cup's lines and no call at 80 or in 2005, at 320, 390 and 1280; 47 screen
