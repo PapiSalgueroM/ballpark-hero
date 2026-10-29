@@ -1,0 +1,37 @@
+PROBLEM nba-1280x900: the point (856, 34) hits DIV, not the Inbox tile
+{"tag":"nba-1280x900","tap":{"x":856,"y":34.25},"hit":{"el":"DIV","inTile":false,"inPill":false,"inBar":false},"restartDialog":false,"before":false,"after":{"tiles":true,"back":false,"title":"","rows":0,"empty":false,"inboxOpen":false}}
+PROBLEM nba-1280x900: the tap did not open the Inbox ({"tiles":true,"back":false,"title":"","rows":0,"empty":false,"inboxOpen":false})
+PROBLEM nba-1318x647: the point (875, 34) hits DIV, not the Inbox tile
+{"tag":"nba-1318x647","tap":{"x":875,"y":34.25},"hit":{"el":"DIV","inTile":false,"inPill":false,"inBar":false},"restartDialog":false,"before":false,"after":{"tiles":true,"back":false,"title":"","rows":0,"empty":false,"inboxOpen":false}}
+PROBLEM nba-1318x647: the tap did not open the Inbox ({"tiles":true,"back":false,"title":"","rows":0,"empty":false,"inboxOpen":false})
+PROBLEM nba-390x844: the point (287, 34) hits DIV, not the Inbox tile
+{"tag":"nba-390x844","tap":{"x":287,"y":33.75},"hit":{"el":"DIV","inTile":false,"inPill":false,"inBar":false},"restartDialog":false,"before":false,"after":{"tiles":true,"back":false,"title":"","rows":0,"empty":false,"inboxOpen":false}}
+PROBLEM nba-390x844: the tap did not open the Inbox ({"tiles":true,"back":false,"title":"","rows":0,"empty":false,"inboxOpen":false})
+PROBLEM nfl-1280x900: the point (856, 34) hits DIV, not the Inbox tile
+{"tag":"nfl-1280x900","tap":{"x":856,"y":34.25},"hit":{"el":"DIV","inTile":false,"inPill":false,"inBar":false},"restartDialog":false,"before":false,"after":{"tiles":true,"back":false,"title":"","rows":0,"empty":false,"inboxOpen":false}}
+PROBLEM nfl-1280x900: the tap did not open the Inbox ({"tiles":true,"back":false,"title":"","rows":0,"empty":false,"inboxOpen":false})
+PROBLEM nfl-1318x647: the point (875, 34) hits DIV, not the Inbox tile
+{"tag":"nfl-1318x647","tap":{"x":875,"y":34.25},"hit":{"el":"DIV","inTile":false,"inPill":false,"inBar":false},"restartDialog":false,"before":false,"after":{"tiles":true,"back":false,"title":"","rows":0,"empty":false,"inboxOpen":false}}
+PROBLEM nfl-1318x647: the tap did not open the Inbox ({"tiles":true,"back":false,"title":"","rows":0,"empty":false,"inboxOpen":false})
+PROBLEM nfl-390x844: the point (287, 34) hits DIV, not the Inbox tile
+{"tag":"nfl-390x844","tap":{"x":287,"y":33.75},"hit":{"el":"DIV","inTile":false,"inPill":false,"inBar":false},"restartDialog":false,"before":false,"after":{"tiles":true,"back":false,"title":"","rows":0,"empty":false,"inboxOpen":false}}
+PROBLEM nfl-390x844: the tap did not open the Inbox ({"tiles":true,"back":false,"title":"","rows":0,"empty":false,"inboxOpen":false})
+PROBLEM mlb-1280x900: the point (856, 34) hits DIV, not the Inbox tile
+{"tag":"mlb-1280x900","tap":{"x":856,"y":34.25},"hit":{"el":"DIV","inTile":false,"inPill":false,"inBar":false},"restartDialog":false,"before":false,"after":{"tiles":true,"back":false,"title":"","rows":0,"empty":false,"inboxOpen":false}}
+PROBLEM mlb-1280x900: the tap did not open the Inbox ({"tiles":true,"back":false,"title":"","rows":0,"empty":false,"inboxOpen":false})
+PROBLEM mlb-1318x647: the point (875, 34) hits DIV, not the Inbox tile
+{"tag":"mlb-1318x647","tap":{"x":875,"y":34.25},"hit":{"el":"DIV","inTile":false,"inPill":false,"inBar":false},"restartDialog":false,"before":false,"after":{"tiles":true,"back":false,"title":"","rows":0,"empty":false,"inboxOpen":false}}
+PROBLEM mlb-1318x647: the tap did not open the Inbox ({"tiles":true,"back":false,"title":"","rows":0,"empty":false,"inboxOpen":false})
+PROBLEM mlb-390x844: the point (287, 34) hits DIV, not the Inbox tile
+{"tag":"mlb-390x844","tap":{"x":287,"y":33.75},"hit":{"el":"DIV","inTile":false,"inPill":false,"inBar":false},"restartDialog":false,"before":false,"after":{"tiles":true,"back":false,"title":"","rows":0,"empty":false,"inboxOpen":false}}
+PROBLEM mlb-390x844: the tap did not open the Inbox ({"tiles":true,"back":false,"title":"","rows":0,"empty":false,"inboxOpen":false})
+PROBLEM nhl-1280x900: the point (856, 34) hits DIV, not the Inbox tile
+{"tag":"nhl-1280x900","tap":{"x":856,"y":34.25},"hit":{"el":"DIV","inTile":false,"inPill":false,"inBar":false},"restartDialog":false,"before":false,"after":{"tiles":true,"back":false,"title":"","rows":0,"empty":false,"inboxOpen":false}}
+PROBLEM nhl-1280x900: the tap did not open the Inbox ({"tiles":true,"back":false,"title":"","rows":0,"empty":false,"inboxOpen":false})
+PROBLEM nhl-1318x647: the point (875, 34) hits DIV, not the Inbox tile
+{"tag":"nhl-1318x647","tap":{"x":875,"y":34.25},"hit":{"el":"DIV","inTile":false,"inPill":false,"inBar":false},"restartDialog":false,"before":false,"after":{"tiles":true,"back":false,"title":"","rows":0,"empty":false,"inboxOpen":false}}
+PROBLEM nhl-1318x647: the tap did not open the Inbox ({"tiles":true,"back":false,"title":"","rows":0,"empty":false,"inboxOpen":false})
+PROBLEM nhl-390x844: the point (287, 34) hits DIV, not the Inbox tile
+{"tag":"nhl-390x844","tap":{"x":287,"y":33.75},"hit":{"el":"DIV","inTile":false,"inPill":false,"inBar":false},"restartDialog":false,"before":false,"after":{"tiles":true,"back":false,"title":"","rows":0,"empty":false,"inboxOpen":false}}
+PROBLEM nhl-390x844: the tap did not open the Inbox ({"tiles":true,"back":false,"title":"","rows":0,"empty":false,"inboxOpen":false})
+walkInbox FAIL: 24 problems, 0 of 12 taps opened the Inbox, CONTROL bar (tap at y 34), base http://localhost:4173
