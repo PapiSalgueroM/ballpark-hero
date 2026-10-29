@@ -649,14 +649,26 @@ export function makeNhlChecker({ record, ledger = {} }) {
     if (f === 'goalieswhowontheharttrophy') return { kind: 'award', trophy: NHL_TROPHIES.harttrophy, pos: 'G' };
     if (f === 'wontheconnsmytheinalosingcause') return { kind: 'smytheLost' };
     if ((m = label.match(/^Won the Cup with (two|three|four) different franchises$/))) return { kind: 'cupClubs', min: COUNT[m[1]] };
+    /* a Cup in a finished season ("Won the 2024 Cup with the Panthers") or a finished run of them ("Won the Cup with
+       the Islanders, 1980 to 1983"; years are the spring the Cup was won) */
+    const season = y => `${y - 1}-${String(y).slice(2)}`;
     if ((m = label.match(/^Won the (\d{4}) Cup with the (.+)$/))) {
       const names = NHL_CLUBS[fold(m[2])];
-      const y = Number(m[1]);
-      return names ? { kind: 'cupWith', season: `${y - 1}-${String(y).slice(2)}`, names } : null;
+      return names ? { kind: 'cupWith', seasons: [season(Number(m[1]))], names } : null;
+    }
+    if ((m = label.match(/^Won the Cup with the (.+), (\d{4}) to (\d{4})$/))) {
+      const names = NHL_CLUBS[fold(m[1])];
+      const [a, b] = [Number(m[2]), Number(m[3])];
+      return names && a <= b ? { kind: 'cupWith', seasons: Array.from({ length: b - a + 1 }, (_, i) => season(a + i)), names } : null;
     }
     if ((m = label.match(/^Hall of Famers who played for the (.+)$/))) {
       const names = NHL_CLUBS[fold(m[1])];
       return names ? { kind: 'hofClub', names } : null;
+    }
+    /* an award in a closed past range ("Won the Conn Smythe Trophy before 2000": a season ending before that year) */
+    if ((m = label.match(/^Won the (.+?) before (\d{4})$/))) {
+      const trophy = NHL_TROPHIES[fold(m[1])] ?? NHL_TROPHIES[fold(m[1]) + 'trophy'];
+      return trophy ? { kind: 'award', trophy, before: Number(m[2]) } : null;
     }
     if ((m = label.match(/^Won the (.+)$/))) {
       const trophy = NHL_TROPHIES[fold(m[1])] ?? NHL_TROPHIES[fold(m[1]) + 'trophy'];
@@ -670,15 +682,17 @@ export function makeNhlChecker({ record, ledger = {} }) {
     return null;
   }
 
-  /* the franchises a man won the Cup with: null when a Cup season has no playoff club on the record */
+  /* the franchises a man won the Cup with, as far as the record knows: a Cup season with no playoff club on the
+     record (he won it without playing a playoff game) is counted in unknown */
   const cupFranchises = m => {
-    const out = new Set();
+    const known = new Set();
+    let unknown = 0;
     for (const y of m.aw?.['Stanley Cup'] ?? []) {
       const clubs = m.pc?.[y];
-      if (!clubs?.length) return null;
-      for (const t of clubs) out.add(franchise(t));
+      if (!clubs?.length) { unknown += 1; continue; }
+      for (const t of clubs) known.add(franchise(t));
     }
-    return out;
+    return { known, unknown };
   };
   const clubGoalsBest = m => {
     const by = {};
@@ -714,7 +728,8 @@ export function makeNhlChecker({ record, ledger = {} }) {
       case 'award':
         if (!m.aw) return null;
         if (c.pos && m.pos !== c.pos) return false;
-        return (m.aw[c.trophy] ?? []).length > 0;
+        /* "before 2000": a season ending before that year ("1998-99" ends in 1999) */
+        return (m.aw[c.trophy] ?? []).some(y => c.before === undefined || Number(y.slice(0, 4)) + 1 < c.before);
       case 'smytheLost': {
         if (!m.aw) return null;
         const cups = new Set(m.aw['Stanley Cup'] ?? []);
@@ -723,10 +738,16 @@ export function makeNhlChecker({ record, ledger = {} }) {
       case 'cupClubs': {
         if (!m.aw) return null;
         const f = cupFranchises(m);
-        if (f === null) return null;
-        return f.size >= c.min;
+        if (f.known.size >= c.min) return true;
+        return f.unknown ? null : false;
       }
-      case 'cupWith': return m.aw ? (m.aw['Stanley Cup'] ?? []).includes(c.season) && (m.pc?.[c.season] ?? []).some(t => c.names.includes(t)) : null;
+      case 'cupWith': {
+        if (!m.aw) return null;
+        const cups = (m.aw['Stanley Cup'] ?? []).filter(y => c.seasons.includes(y));
+        if (cups.some(y => (m.pc?.[y] ?? []).some(t => c.names.includes(t)))) return true;
+        /* a Cup in the range won without a playoff game on the record: the club cannot be read */
+        return cups.some(y => !(m.pc?.[y] ?? []).length) ? null : false;
+      }
       case 'hofClub':
         if (m.hhof === undefined) return null;
         return m.hhof === 1 && Object.values(m.seasons ?? {}).flat().some(t => c.names.includes(t));
@@ -769,6 +790,8 @@ export function makeNhlChecker({ record, ledger = {} }) {
       case 'goalieGoal': return m.pos === 'G' ? 'an active goalie, who may yet be credited with a goal' : null;
       case 'award': {
         const t = c.trophy;
+        /* a closed past range ("before 2000") no season in play can add to */
+        if (c.before !== undefined) return null;
         if (c.pos && m.pos !== c.pos) return null;
         if (t === NHL_TROPHIES.vezinatrophy && m.pos !== 'G') return null;
         if (t === NHL_TROPHIES.norristrophy && m.pos !== 'D') return null;
@@ -779,7 +802,7 @@ export function makeNhlChecker({ record, ledger = {} }) {
       case 'smytheLost': return `active; the ${NHL_IN_PLAY} Conn Smythe is still to be won`;
       case 'cupClubs': {
         const f = cupFranchises(m);
-        return f && f.size === c.min - 1 ? `active with Cups for ${f.size} franchises, one Cup from ${c.min}` : null;
+        return f.known.size + f.unknown >= c.min - 1 ? `active with Cups for ${f.known.size} franchises${f.unknown ? ` (and ${f.unknown} Cup the record cannot place)` : ''}, one Cup from ${c.min}` : null;
       }
       default: return null;
     }

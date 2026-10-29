@@ -34,7 +34,9 @@ export const EXTRA = [
   'Erik Karlsson',
 ];
 /* Round 1574: men a rebuilt NHL table group deals in (read on two hosts before any is used) */
-export const EXTRA_1574 = [];
+export const EXTRA_1574 = [
+  'Nick Schmaltz', // nhlconn-018's Utah group, in place of Karel Vejmelka (an active goalie beside the Vezina)
+];
 /* tile name -> NHL player id where the search finds a namesake first */
 export const PICK = {
   /* the search does not match the tile spelling */

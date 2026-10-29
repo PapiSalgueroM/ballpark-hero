@@ -259,5 +259,771 @@
  "uncheckedCeiling": 0,
  "memberUnknownCeiling": 0,
  "otherUnknownCeiling": 0,
- "otherUnknownNote": "Other tiles the record cannot judge against a group beside them: none on the head. The count may only fall."
+ "otherUnknownNote": "Other tiles the record cannot judge against a group beside them: none on the head. The count may only fall.",
+ "tableDecisions": [
+  {
+   "id": "nhlconn-005",
+   "group": 0,
+   "way": "RECORD",
+   "from": "Played for the Chicago Blackhawks",
+   "to": "Played for the Blackhawks (as of 2025-26)",
+   "why": "club seasons on the record, dated"
+  },
+  {
+   "id": "nhlconn-005",
+   "group": 1,
+   "way": "RECORD",
+   "from": "Played for the Avalanche or Nordiques",
+   "to": "Played for the Avalanche or Nordiques (as of 2025-26)",
+   "why": "one franchise under two names, both counted; dated"
+  },
+  {
+   "id": "nhlconn-005",
+   "group": 2,
+   "way": "RECORD",
+   "from": "Played for the New York Islanders",
+   "to": "Played for the Islanders (as of 2025-26)",
+   "why": "club seasons, dated"
+  },
+  {
+   "id": "nhlconn-005",
+   "group": 3,
+   "way": "RECORD",
+   "from": "Played for the Winnipeg Jets (either era)",
+   "to": "Played for the Winnipeg Jets, either era (as of 2025-26)",
+   "why": "both Winnipeg clubs (1979 to 1996 and 2011 on) counted, the Atlanta Thrashers not; dated"
+  },
+  {
+   "id": "nhlconn-006",
+   "group": 0,
+   "way": "RECORD",
+   "from": "Played for the Edmonton Oilers",
+   "to": "Played for the Oilers (as of 2025-26)",
+   "why": "club seasons, dated"
+  },
+  {
+   "id": "nhlconn-006",
+   "group": 1,
+   "way": "RECORD",
+   "from": "Played for the Montreal Canadiens",
+   "to": "Played for the Canadiens (as of 2025-26)",
+   "why": "club seasons, dated"
+  },
+  {
+   "id": "nhlconn-006",
+   "group": 2,
+   "way": "RECORD",
+   "from": "Played for the Boston Bruins",
+   "to": "Played for the Bruins (as of 2025-26)",
+   "why": "club seasons, dated"
+  },
+  {
+   "id": "nhlconn-006",
+   "group": 3,
+   "way": "RECORD",
+   "from": "Played for the Detroit Red Wings",
+   "to": "Played for the Red Wings (as of 2025-26)",
+   "why": "club seasons, dated"
+  },
+  {
+   "id": "nhlconn-007",
+   "group": 0,
+   "way": "RECORD",
+   "from": "Played for the Capitals",
+   "to": "Played for the Capitals (as of 2025-26)",
+   "why": "club seasons, dated"
+  },
+  {
+   "id": "nhlconn-007",
+   "group": 1,
+   "way": "RECORD",
+   "from": "Played for the Flyers",
+   "to": "Played for the Flyers (as of 2025-26)",
+   "why": "club seasons, dated"
+  },
+  {
+   "id": "nhlconn-007",
+   "group": 2,
+   "way": "RECORD",
+   "from": "Played for the Rangers",
+   "to": "Played for the Rangers (as of 2025-26)",
+   "why": "club seasons, dated"
+  },
+  {
+   "id": "nhlconn-007",
+   "group": 3,
+   "way": "RECORD",
+   "from": "Played for the Blues",
+   "to": "Played for the Blues (as of 2025-26)",
+   "why": "club seasons, dated"
+  },
+  {
+   "id": "nhlconn-008",
+   "group": 0,
+   "way": "RECORD",
+   "from": "Played for the Stars",
+   "to": "Played for the Stars (as of 2025-26)",
+   "why": "the Dallas Stars only (the Minnesota North Stars are not counted, and no man on the board played for them); dated"
+  },
+  {
+   "id": "nhlconn-008",
+   "group": 1,
+   "way": "RECORD",
+   "from": "Played for the Sharks",
+   "to": "Played for the Sharks (as of 2025-26)",
+   "why": "club seasons, dated"
+  },
+  {
+   "id": "nhlconn-008",
+   "group": 2,
+   "way": "RECORD",
+   "from": "Played for the Islanders",
+   "to": "Played for the Islanders (as of 2025-26)",
+   "why": "club seasons, dated"
+  },
+  {
+   "id": "nhlconn-008",
+   "group": 3,
+   "way": "RECORD",
+   "from": "Played for the Sabres",
+   "to": "Played for the Sabres (as of 2025-26)",
+   "why": "club seasons, dated"
+  },
+  {
+   "id": "nhlconn-009",
+   "group": 0,
+   "way": "RECORD",
+   "from": "Scored 60 goals in a season",
+   "to": "Scored 60 goals in a season",
+   "why": "NHL regular season goals by season"
+  },
+  {
+   "id": "nhlconn-009",
+   "group": 1,
+   "way": "RECORD",
+   "from": "Won the Vezina Trophy",
+   "to": "Won the Vezina Trophy",
+   "why": "the league's award rows"
+  },
+  {
+   "id": "nhlconn-009",
+   "group": 2,
+   "way": "REBUILD",
+   "from": "Captained a Stanley Cup winner",
+   "to": "Won the Norris Trophy",
+   "why": "captaincy is on no record and the list keeps growing (an active captain can win a Cup); Steve Yzerman (65 goals in 1988-89) and Mark Messier (1,756 games) were second answers; rebuilt as a Norris group no other man on the board fits, and no active defenceman sits beside it"
+  },
+  {
+   "id": "nhlconn-009",
+   "group": 3,
+   "way": "RECORD",
+   "from": "Played 1,700 or more NHL games",
+   "to": "Played 1,700 or more NHL games",
+   "why": "career regular season games; Jaromir Jagr (62 goals in 1995-96) was a second answer for the 60 goal group, so he leaves and Mark Messier (1,756 games) comes in from the rebuilt group"
+  },
+  {
+   "id": "nhlconn-010",
+   "group": 0,
+   "way": "RECORD",
+   "from": "Goaltenders",
+   "to": "Goaltenders",
+   "why": "the position on the record"
+  },
+  {
+   "id": "nhlconn-010",
+   "group": 1,
+   "way": "RECORD",
+   "from": "Scored 60 goals in a season",
+   "to": "Scored 60 goals in a season",
+   "why": "season goals; Alex Ovechkin (1,584 games, active) was one season from the 1,650 game group, so he leaves and Teemu Selanne (76 goals in 1992-93) comes in"
+  },
+  {
+   "id": "nhlconn-010",
+   "group": 2,
+   "way": "REBUILD",
+   "from": "Captained a Stanley Cup winner",
+   "to": "Played for the Islanders (as of 2025-26)",
+   "why": "captaincy is on no record and the list keeps growing; Steve Yzerman and Mark Messier were second answers; rebuilt as a dated club group no other man on the board played for"
+  },
+  {
+   "id": "nhlconn-010",
+   "group": 3,
+   "way": "RECORD",
+   "from": "Played 1,650 or more NHL games",
+   "to": "Played 1,650 or more NHL games",
+   "why": "career games; Jaromir Jagr (62 goals in a season) was a second answer for the 60 goal group, so Joe Thornton (1,714 games) takes his place"
+  },
+  {
+   "id": "nhlconn-011",
+   "group": 0,
+   "way": "RECORD",
+   "from": "Played for the Maple Leafs",
+   "to": "Played for the Maple Leafs (as of 2025-26)",
+   "why": "club seasons, dated"
+  },
+  {
+   "id": "nhlconn-011",
+   "group": 1,
+   "way": "RECORD",
+   "from": "Won the Norris Trophy",
+   "to": "Won the Norris Trophy",
+   "why": "the league's award rows; no active defenceman who has not won it sits on the board"
+  },
+  {
+   "id": "nhlconn-011",
+   "group": 2,
+   "way": "REBUILD",
+   "from": "Scored a Stanley Cup winning goal",
+   "to": "Goalies with 400 career wins",
+   "why": "a Cup winning goal is on no record and the list keeps growing (any man still playing can score one); Bobby Orr won the Norris, a second answer; rebuilt as a career wins group of retired goalies, none of whom played for the Maple Leafs"
+  },
+  {
+   "id": "nhlconn-011",
+   "group": 3,
+   "way": "REBUILD",
+   "from": "Scored 50 goals in 50 games",
+   "to": "Scored 70 goals in a season",
+   "why": "50 goals in 50 games is on no record and could still happen; rebuilt as a season goals group (Alexander Mogilny is left out: he played for the Maple Leafs)"
+  },
+  {
+   "id": "nhlconn-012",
+   "group": 0,
+   "way": "RECORD",
+   "from": "Played for the Oilers",
+   "to": "Played for the Oilers (as of 2025-26)",
+   "why": "club seasons, dated; Leon Draisaitl (52 goals in 2024-25) sat a hair under the watch line of the 70 goal group, so Taylor Hall (Oilers 2010-11 to 2015-16) takes his place"
+  },
+  {
+   "id": "nhlconn-012",
+   "group": 1,
+   "way": "RECORD",
+   "from": "Won the Vezina Trophy",
+   "to": "Won the Vezina Trophy",
+   "why": "the league's award rows"
+  },
+  {
+   "id": "nhlconn-012",
+   "group": 2,
+   "way": "RECORD",
+   "from": "Scored 70 goals in a season",
+   "to": "Scored 70 goals in a season",
+   "why": "season goals; Bernie Nicholls and Jari Kurri played for the Oilers (second answers), so Mario Lemieux and Brett Hull take their places"
+  },
+  {
+   "id": "nhlconn-012",
+   "group": 3,
+   "way": "REBUILD",
+   "from": "Defensemen who captained a Cup winner",
+   "to": "Drafted second overall",
+   "why": "captaincy is on no record and the list keeps growing; rebuilt as a draft group no other man on the board fits"
+  },
+  {
+   "id": "nhlconn-013",
+   "group": 0,
+   "way": "RECORD",
+   "from": "1980s Islanders dynasty",
+   "to": "Won the Cup with the Islanders, 1980 to 1983",
+   "why": "the dynasty named by its four Cups (springs 1980 to 1983), read from the Cup rows and the playoff club of each season"
+  },
+  {
+   "id": "nhlconn-013",
+   "group": 1,
+   "way": "RECORD",
+   "from": "European-born 500 goal scorers",
+   "to": "European-born 500 goal scorers",
+   "why": "birth country and career goals; Alex Ovechkin (active) could still win a Conn Smythe in a losing cause, and Jaromir Jagr (1,733 games) fits the rebuilt games group, so Jari Kurri (601 goals, born in Finland) and Teemu Selanne (684, Finland) take their places"
+  },
+  {
+   "id": "nhlconn-013",
+   "group": 2,
+   "way": "RECORD",
+   "from": "Won the Conn Smythe in a losing cause",
+   "to": "Won the Conn Smythe in a losing cause",
+   "why": "a Conn Smythe in a season his club did not win the Cup; no active man is left on the board"
+  },
+  {
+   "id": "nhlconn-013",
+   "group": 3,
+   "way": "REBUILD",
+   "from": "Played NHL games in four different decades",
+   "to": "Played 1,650 or more NHL games",
+   "why": "four decades cannot be read from season rows (a season like 1979-80 straddles two); the same five men, each with 1,650 or more games, under a claim the record holds"
+  },
+  {
+   "id": "nhlconn-014",
+   "group": 0,
+   "way": "RECORD",
+   "from": "Won the Calder Trophy",
+   "to": "Won the Calder Trophy",
+   "why": "the league's award rows; no rookie eligible man is on the board"
+  },
+  {
+   "id": "nhlconn-014",
+   "group": 1,
+   "way": "REBUILD",
+   "from": "Played 1,500 NHL games",
+   "to": "Played 1,700 or more NHL games",
+   "why": "Mark Recchi (1,652 games) won the Cup with three franchises, and no other three franchise man on the record is free of the board, so the games group moves above his total: 1,700 or more"
+  },
+  {
+   "id": "nhlconn-014",
+   "group": 2,
+   "way": "RECORD",
+   "from": "Goalies credited with scoring a goal",
+   "to": "Goalies credited with scoring a goal",
+   "why": "a goalie with a regular season goal on the record; Martin Brodeur and Evgeni Nabokov won the Calder (second answers), so Billy Smith and Ron Hextall take their places"
+  },
+  {
+   "id": "nhlconn-014",
+   "group": 3,
+   "way": "RECORD",
+   "from": "Won the Cup with three different franchises",
+   "to": "Won the Cup with three different franchises",
+   "why": "the franchises of the Cup rows (the 1954 Cup of Al Arbour with Detroit, won without a playoff game, adjudicated in the overlay on two hosts); Joe Nieuwendyk won the Calder (a second answer), so Mark Recchi takes his place"
+  },
+  {
+   "id": "nhlconn-015",
+   "group": 0,
+   "way": "RECORD",
+   "from": "Drafted first overall",
+   "to": "Drafted first overall",
+   "why": "the draft line"
+  },
+  {
+   "id": "nhlconn-015",
+   "group": 1,
+   "way": "REBUILD",
+   "from": "Won the Art Ross Trophy",
+   "to": "Won the Calder Trophy",
+   "why": "the Art Ross is still to be won by any skater playing, and four of the first overall picks are active; Jarome Iginla (525 goals) was a second answer; rebuilt as a Calder group, which no man on the board can still win"
+  },
+  {
+   "id": "nhlconn-015",
+   "group": 2,
+   "way": "RECORD",
+   "from": "Scored 500 career goals",
+   "to": "Scored 500 career goals",
+   "why": "career goals; Luc Robitaille won the Calder (a second answer for the rebuilt group), so Jarome Iginla takes his place"
+  },
+  {
+   "id": "nhlconn-015",
+   "group": 3,
+   "way": "RECORD",
+   "from": "Goalies who won the Hart Trophy",
+   "to": "Goalies who won the Hart Trophy",
+   "why": "the league's award rows and the position"
+  },
+  {
+   "id": "nhlconn-016",
+   "group": 0,
+   "way": "RECORD",
+   "from": "Played for the Predators",
+   "to": "Played for the Predators (as of 2025-26)",
+   "why": "club seasons, dated"
+  },
+  {
+   "id": "nhlconn-016",
+   "group": 1,
+   "way": "RECORD",
+   "from": "Played for the Canucks",
+   "to": "Played for the Canucks (as of 2025-26)",
+   "why": "club seasons, dated"
+  },
+  {
+   "id": "nhlconn-016",
+   "group": 2,
+   "way": "REBUILD",
+   "from": "Won the Rocket Richard Trophy",
+   "to": "Drafted first overall",
+   "why": "the Rocket Richard is still to be won by every skater playing (four on the board); Steven Stamkos (a Predator since 2024-25) and Pavel Bure (a Canuck) were second answers; rebuilt as a draft group around the two winners who stay"
+  },
+  {
+   "id": "nhlconn-016",
+   "group": 3,
+   "way": "RECORD",
+   "from": "Won the Conn Smythe Trophy",
+   "to": "Won the Conn Smythe Trophy before 2000",
+   "why": "the Conn Smythe is still to be won by any man playing, so the group is the winners of springs before 2000, which no season in play can add to; Alex Ovechkin (2018) no longer fits it, and Mario Lemieux (drafted first overall) gives way to Bobby Orr (1970 and 1972)"
+  },
+  {
+   "id": "nhlconn-017",
+   "group": 0,
+   "way": "RECORD",
+   "from": "Played for the Senators",
+   "to": "Played for the Senators (as of 2025-26)",
+   "why": "club seasons, dated; Jason Spezza (drafted second overall) would be a second answer for the rebuilt group, so Marian Hossa (Senators 1997-98 to 2003-04) takes his place"
+  },
+  {
+   "id": "nhlconn-017",
+   "group": 1,
+   "way": "RECORD",
+   "from": "Goalies with 400 career wins",
+   "to": "Goalies with 400 career wins",
+   "why": "a goalie's career wins"
+  },
+  {
+   "id": "nhlconn-017",
+   "group": 2,
+   "way": "RECORD",
+   "from": "Scored 500 goals for one franchise",
+   "to": "Scored 500 goals for one franchise",
+   "why": "goals by club, a franchise's names summed"
+  },
+  {
+   "id": "nhlconn-017",
+   "group": 3,
+   "way": "REBUILD",
+   "from": "Triple Gold Club members",
+   "to": "Drafted second overall",
+   "why": "the Triple Gold Club is on no record and keeps growing; Sidney Crosby (500 goals for Pittsburgh) was a second answer; rebuilt as a draft group (Evgeni Malkin is left out: 538 goals, all for Pittsburgh)"
+  },
+  {
+   "id": "nhlconn-018",
+   "group": 0,
+   "way": "RECORD",
+   "from": "Played for Utah after the move from Arizona",
+   "to": "Played for Utah (as of 2025-26)",
+   "why": "the club in Salt Lake City under both its names (Utah Hockey Club, Utah Mammoth), the Arizona Coyotes not counted; dated; Karel Vejmelka (an active goalie) could still win the Vezina, so Nick Schmaltz takes his place"
+  },
+  {
+   "id": "nhlconn-018",
+   "group": 1,
+   "way": "RECORD",
+   "from": "Drafted by the Sabres",
+   "to": "Drafted by the Sabres",
+   "why": "the draft line; Rasmus Dahlin was drafted first overall (a second answer for the rebuilt group), so Alexander Mogilny (Buffalo, 1988) takes his place"
+  },
+  {
+   "id": "nhlconn-018",
+   "group": 2,
+   "way": "REBUILD",
+   "from": "Won the Hart Trophy",
+   "to": "Drafted first overall",
+   "why": "the Hart is still to be won by any man playing, and every man on the board is; Connor Hellebuyck (Hart 2024-25) was a second answer; rebuilt as a draft group around four of the five"
+  },
+  {
+   "id": "nhlconn-018",
+   "group": 3,
+   "way": "RECORD",
+   "from": "Won the Vezina Trophy",
+   "to": "Won the Vezina Trophy",
+   "why": "the league's award rows; Linus Ullmark was drafted by the Sabres (a second answer), so Carey Price takes his place"
+  },
+  {
+   "id": "nhlconn-019",
+   "group": 0,
+   "way": "RECORD",
+   "from": "Scored 700 career goals",
+   "to": "Scored 700 career goals",
+   "why": "career goals; Jaromir Jagr played for the Devils and Gordie Howe is a Hall of Famer who played for the Whalers (second answers), so Mike Gartner and Phil Esposito take their places"
+  },
+  {
+   "id": "nhlconn-019",
+   "group": 1,
+   "way": "RECORD",
+   "from": "1970s Canadiens dynasty",
+   "to": "Won the Cup with the Canadiens, 1976 to 1979",
+   "why": "the dynasty named by its four Cups (springs 1976 to 1979), read from the Cup rows and the playoff club of each season"
+  },
+  {
+   "id": "nhlconn-019",
+   "group": 2,
+   "way": "RECORD",
+   "from": "Played for the Devils",
+   "to": "Played for the Devils (as of 2025-26)",
+   "why": "club seasons, dated"
+  },
+  {
+   "id": "nhlconn-019",
+   "group": 3,
+   "way": "RECORD",
+   "from": "Hall of Famers who played for the Whalers",
+   "to": "Hall of Famers who played for the Whalers",
+   "why": "the Hall of Fame flag and club seasons"
+  },
+  {
+   "id": "nhlconn-020",
+   "group": 0,
+   "way": "RECORD",
+   "from": "Won the 2024 Cup with the Panthers",
+   "to": "Won the 2024 Cup with the Panthers",
+   "why": "the Cup rows of 2023-24 and the playoff club that spring"
+  },
+  {
+   "id": "nhlconn-020",
+   "group": 1,
+   "way": "REBUILD",
+   "from": "Canada's 2025 4 Nations team",
+   "to": "Drafted first overall",
+   "why": "a national team roster is on no league record, and both hosts read show it only by script; Sam Bennett, Sam Reinhart and Adin Hill were on it too (second answers); rebuilt as a draft group around three of its five"
+  },
+  {
+   "id": "nhlconn-020",
+   "group": 2,
+   "way": "RECORD",
+   "from": "Drafted second overall",
+   "to": "Drafted second overall",
+   "why": "the draft line; Sam Reinhart won the 2024 Cup with the Panthers (a second answer), so Jack Eichel takes his place"
+  },
+  {
+   "id": "nhlconn-020",
+   "group": 3,
+   "way": "REBUILD",
+   "from": "Goalies who started a 2020s Cup Final game",
+   "to": "Goalies with 300 career wins",
+   "why": "starts in a Cup Final are on no record and the decade is open; rebuilt as a career wins group around Andrei Vasilevskiy"
+  }
+ ],
+ "tableMoves": [
+  {
+   "id": "nhlconn-009",
+   "name": "Steve Yzerman",
+   "label": "Scored 60 goals in a season",
+   "holds": true,
+   "why": "second-fit"
+  },
+  {
+   "id": "nhlconn-009",
+   "name": "Jaromir Jagr",
+   "label": "Scored 60 goals in a season",
+   "holds": true,
+   "why": "second-fit"
+  },
+  {
+   "id": "nhlconn-010",
+   "name": "Jaromir Jagr",
+   "label": "Scored 60 goals in a season",
+   "holds": true,
+   "why": "second-fit"
+  },
+  {
+   "id": "nhlconn-010",
+   "name": "Steve Yzerman",
+   "label": "Scored 60 goals in a season",
+   "holds": true,
+   "why": "second-fit"
+  },
+  {
+   "id": "nhlconn-010",
+   "name": "Alex Ovechkin",
+   "label": "Played 1,650 or more NHL games",
+   "holds": false,
+   "why": "watch"
+  },
+  {
+   "id": "nhlconn-011",
+   "name": "Bobby Orr",
+   "label": "Won the Norris Trophy",
+   "holds": true,
+   "why": "second-fit"
+  },
+  {
+   "id": "nhlconn-012",
+   "name": "Bernie Nicholls",
+   "label": "Played for the Oilers (as of 2025-26)",
+   "holds": true,
+   "why": "second-fit"
+  },
+  {
+   "id": "nhlconn-012",
+   "name": "Jari Kurri",
+   "label": "Played for the Oilers (as of 2025-26)",
+   "holds": true,
+   "why": "second-fit"
+  },
+  {
+   "id": "nhlconn-012",
+   "name": "Leon Draisaitl",
+   "label": "Scored 70 goals in a season",
+   "holds": false,
+   "why": "watch-line"
+  },
+  {
+   "id": "nhlconn-013",
+   "name": "Alex Ovechkin",
+   "label": "Won the Conn Smythe in a losing cause",
+   "holds": false,
+   "why": "watch"
+  },
+  {
+   "id": "nhlconn-013",
+   "name": "Jaromir Jagr",
+   "label": "Played 1,650 or more NHL games",
+   "holds": true,
+   "why": "second-fit"
+  },
+  {
+   "id": "nhlconn-014",
+   "name": "Martin Brodeur",
+   "label": "Won the Calder Trophy",
+   "holds": true,
+   "why": "second-fit"
+  },
+  {
+   "id": "nhlconn-014",
+   "name": "Evgeni Nabokov",
+   "label": "Won the Calder Trophy",
+   "holds": true,
+   "why": "second-fit"
+  },
+  {
+   "id": "nhlconn-014",
+   "name": "Joe Nieuwendyk",
+   "label": "Won the Calder Trophy",
+   "holds": true,
+   "why": "second-fit"
+  },
+  {
+   "id": "nhlconn-015",
+   "name": "Luc Robitaille",
+   "label": "Won the Calder Trophy",
+   "holds": true,
+   "why": "second-fit"
+  },
+  {
+   "id": "nhlconn-016",
+   "name": "Steven Stamkos",
+   "label": "Played for the Predators (as of 2025-26)",
+   "holds": true,
+   "why": "second-fit"
+  },
+  {
+   "id": "nhlconn-016",
+   "name": "Pavel Bure",
+   "label": "Played for the Canucks (as of 2025-26)",
+   "holds": true,
+   "why": "second-fit"
+  },
+  {
+   "id": "nhlconn-016",
+   "name": "Mario Lemieux",
+   "label": "Drafted first overall",
+   "holds": true,
+   "why": "second-fit"
+  },
+  {
+   "id": "nhlconn-017",
+   "name": "Sidney Crosby",
+   "label": "Scored 500 goals for one franchise",
+   "holds": true,
+   "why": "second-fit"
+  },
+  {
+   "id": "nhlconn-017",
+   "name": "Jason Spezza",
+   "label": "Drafted second overall",
+   "holds": true,
+   "why": "second-fit"
+  },
+  {
+   "id": "nhlconn-018",
+   "name": "Karel Vejmelka",
+   "label": "Won the Vezina Trophy",
+   "holds": false,
+   "why": "watch"
+  },
+  {
+   "id": "nhlconn-018",
+   "name": "Rasmus Dahlin",
+   "label": "Drafted first overall",
+   "holds": true,
+   "why": "second-fit"
+  },
+  {
+   "id": "nhlconn-018",
+   "name": "Linus Ullmark",
+   "label": "Drafted by the Sabres",
+   "holds": true,
+   "why": "second-fit"
+  },
+  {
+   "id": "nhlconn-019",
+   "name": "Jaromir Jagr",
+   "label": "Played for the Devils (as of 2025-26)",
+   "holds": true,
+   "why": "second-fit"
+  },
+  {
+   "id": "nhlconn-019",
+   "name": "Gordie Howe",
+   "label": "Hall of Famers who played for the Whalers",
+   "holds": true,
+   "why": "second-fit"
+  },
+  {
+   "id": "nhlconn-020",
+   "name": "Sam Reinhart",
+   "label": "Won the 2024 Cup with the Panthers",
+   "holds": true,
+   "why": "second-fit"
+  }
+ ],
+ "clubLabels": {
+  "Played for the Blackhawks": [
+   "Chicago Blackhawks"
+  ],
+  "Played for the Avalanche or Nordiques": [
+   "Colorado Avalanche",
+   "Quebec Nordiques"
+  ],
+  "Played for the Islanders": [
+   "New York Islanders"
+  ],
+  "Played for the Winnipeg Jets, either era": [
+   "Winnipeg Jets",
+   "Winnipeg Jets (1979)"
+  ],
+  "Played for the Oilers": [
+   "Edmonton Oilers"
+  ],
+  "Played for the Canadiens": [
+   "Montréal Canadiens"
+  ],
+  "Played for the Bruins": [
+   "Boston Bruins"
+  ],
+  "Played for the Red Wings": [
+   "Detroit Red Wings"
+  ],
+  "Played for the Capitals": [
+   "Washington Capitals"
+  ],
+  "Played for the Flyers": [
+   "Philadelphia Flyers"
+  ],
+  "Played for the Rangers": [
+   "New York Rangers"
+  ],
+  "Played for the Blues": [
+   "St. Louis Blues"
+  ],
+  "Played for the Stars": [
+   "Dallas Stars"
+  ],
+  "Played for the Sharks": [
+   "San Jose Sharks"
+  ],
+  "Played for the Sabres": [
+   "Buffalo Sabres"
+  ],
+  "Played for the Maple Leafs": [
+   "Toronto Maple Leafs"
+  ],
+  "Played for the Predators": [
+   "Nashville Predators"
+  ],
+  "Played for the Canucks": [
+   "Vancouver Canucks"
+  ],
+  "Played for the Senators": [
+   "Ottawa Senators"
+  ],
+  "Played for Utah": [
+   "Utah Hockey Club",
+   "Utah Mammoth"
+  ],
+  "Played for the Devils": [
+   "New Jersey Devils"
+  ]
+ }
 }
