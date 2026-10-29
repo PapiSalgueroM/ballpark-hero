@@ -1,0 +1,375 @@
+{
+  "schema": 1,
+  "status": "PHYSICAL_DESCRIPTORS_SOURCE_ONLY_EXACT_MAPS_UNRUN",
+  "appSourceSHA256": "26381b5484bda046c9e3034436890f64e10cfb9ed5dbead828ccc28a9959cc7a",
+  "persistentTestSourceSHA256": "2c78e7425870f939e0acb13503e713dfa9f5250e16ed29276bd98f5baeb02ec6",
+  "fixedObserverConsumerSHA256": "7119c59178f3a7afecff5db0cf73465909455d687265094c1d1a2a44dbdfd7c2",
+  "controlCount": 8,
+  "controls": [
+    {
+      "id": "league-edge-neutralized",
+      "scope": "PHYSICAL_SOURCE_COPY_ONLY_NOT_CANONICAL",
+      "path": "src/lib/soccerCareerEngine.ts",
+      "beforePin": {
+        "bytes": 552601,
+        "sha256": "479369c8de4d117bfa2f90ad50b15f9f3b7ff7d4cfc4423b857dec2ce97977bf",
+        "gitBlob": "bffa371aab07c961afe094aeaef934c341105b37"
+      },
+      "changedPin": {
+        "bytes": 552554,
+        "sha256": "a199e310976b9d50bb5d585149c3b8282f16c765b72e58a2eabb7c3d53c19dba",
+        "gitBlob": "e4f25fc98aef7a958bd56476822e2f526ef32fcc"
+      },
+      "spans": [
+        {
+          "characterOffset": 536651,
+          "before": "  const leagueEdge = focus ? edge + (focus === 'league' ? 1 : -1) : edge;",
+          "after": "  const leagueEdge = edge;"
+        }
+      ],
+      "expectedFailures": [
+        {
+          "file": "src/test/soccerCareerManagerFocus.test.tsx",
+          "title": "shows both preparation benefits and costs in matched actual league and cup outcomes",
+          "fullName": "manager season focus authority and persistence shows both preparation benefits and costs in matched actual league and cup outcomes"
+        },
+        {
+          "file": "src/test/soccerCareerManagerFocus.fixed.consumer.test.tsx",
+          "title": "selected focus changes actual league and cup outcomes with the declared tradeoff",
+          "fullName": "manager season focus fixed consumer selected focus changes actual league and cup outcomes with the declared tradeoff"
+        }
+      ],
+      "independentPass": {
+        "file": "src/test/soccerCareerManagerFocus.test.tsx",
+        "title": "matches captured pre-product default save outputs and every action draw and next draw",
+        "fullName": "manager season focus authority and persistence matches captured pre-product default save outputs and every action draw and next draw"
+      },
+      "ownedCause": "Matched actual table-point gains and costs disappear. Existing default preservation remains independent.",
+      "nativeUniqueSpansAndWholeInverse": true,
+      "execution": "UNRUN_EXPECTED_FAILURE_MAP_REQUIRES_ACTUAL_REMOTE_CONFIRMATION",
+      "restore": "Restore the exact original bytes in this SAME physical copy, verify all selected source pins, then require all19 persistent and all4 fixed cases PASS."
+    },
+    {
+      "id": "cup-edge-neutralized",
+      "scope": "PHYSICAL_SOURCE_COPY_ONLY_NOT_CANONICAL",
+      "path": "src/lib/soccerCareerEngine.ts",
+      "beforePin": {
+        "bytes": 552601,
+        "sha256": "479369c8de4d117bfa2f90ad50b15f9f3b7ff7d4cfc4423b857dec2ce97977bf",
+        "gitBlob": "bffa371aab07c961afe094aeaef934c341105b37"
+      },
+      "changedPin": {
+        "bytes": 552557,
+        "sha256": "9b6321d28b17b8d4334ad87a3c143a020eea3c3a6e96bece9713bbdb7949dd33",
+        "gitBlob": "57c858109118b77c5a388f2e6ce67d782915918e"
+      },
+      "spans": [
+        {
+          "characterOffset": 536725,
+          "before": "  const cupEdge = focus ? edge + (focus === 'cup' ? 1 : -1) : edge;",
+          "after": "  const cupEdge = edge;"
+        }
+      ],
+      "expectedFailures": [
+        {
+          "file": "src/test/soccerCareerManagerFocus.test.tsx",
+          "title": "shows both preparation benefits and costs in matched actual league and cup outcomes",
+          "fullName": "manager season focus authority and persistence shows both preparation benefits and costs in matched actual league and cup outcomes"
+        },
+        {
+          "file": "src/test/soccerCareerManagerFocus.fixed.consumer.test.tsx",
+          "title": "selected focus changes actual league and cup outcomes with the declared tradeoff",
+          "fullName": "manager season focus fixed consumer selected focus changes actual league and cup outcomes with the declared tradeoff"
+        }
+      ],
+      "independentPass": {
+        "file": "src/test/soccerCareerManagerFocus.test.tsx",
+        "title": "matches captured pre-product default save outputs and every action draw and next draw",
+        "fullName": "manager season focus authority and persistence matches captured pre-product default save outputs and every action draw and next draw"
+      },
+      "ownedCause": "Matched actual cup-stage gains and costs disappear. Existing default preservation remains independent.",
+      "nativeUniqueSpansAndWholeInverse": true,
+      "execution": "UNRUN_EXPECTED_FAILURE_MAP_REQUIRES_ACTUAL_REMOTE_CONFIRMATION",
+      "restore": "Restore the exact original bytes in this SAME physical copy, verify all selected source pins, then require all19 persistent and all4 fixed cases PASS."
+    },
+    {
+      "id": "selected-focus-not-consumed",
+      "scope": "PHYSICAL_SOURCE_COPY_ONLY_NOT_CANONICAL",
+      "path": "src/lib/soccerCareerEngine.ts",
+      "beforePin": {
+        "bytes": 552601,
+        "sha256": "479369c8de4d117bfa2f90ad50b15f9f3b7ff7d4cfc4423b857dec2ce97977bf",
+        "gitBlob": "bffa371aab07c961afe094aeaef934c341105b37"
+      },
+      "changedPin": {
+        "bytes": 552529,
+        "sha256": "a884bf364f0797e941183c303c6ac7da638d76e8f75da826697ff977e6036dc2",
+        "gitBlob": "4708b02192292a8d1804995e8e7ed2c68fb1ff6f"
+      },
+      "spans": [
+        {
+          "characterOffset": 532562,
+          "before": "  if (focus) delete (s as ManagerSeasonFocusCareer).managerSeasonFocus;\n",
+          "after": ""
+        }
+      ],
+      "expectedFailures": [
+        {
+          "file": "src/test/soccerCareerManagerFocus.test.tsx",
+          "title": "consumes one valid focus on the actual played row and returns the next season to Balanced",
+          "fullName": "manager season focus authority and persistence consumes one valid focus on the actual played row and returns the next season to Balanced"
+        },
+        {
+          "file": "src/test/soccerCareerManagerFocus.test.tsx",
+          "title": "guards actual disabled-review Page callbacks across focus adoption and duplicate advance",
+          "fullName": "actual Page manager focus transaction guards actual disabled-review Page callbacks across focus adoption and duplicate advance"
+        },
+        {
+          "file": "src/test/soccerCareerManagerFocus.fixed.consumer.test.tsx",
+          "title": "selected focus changes actual league and cup outcomes with the declared tradeoff",
+          "fullName": "manager season focus fixed consumer selected focus changes actual league and cup outcomes with the declared tradeoff"
+        }
+      ],
+      "independentPass": {
+        "file": "src/test/soccerCareerManagerFocus.test.tsx",
+        "title": "matches captured pre-product default save outputs and every action draw and next draw",
+        "fullName": "manager season focus authority and persistence matches captured pre-product default save outputs and every action draw and next draw"
+      },
+      "ownedCause": "Valid selected metadata remains owned on the played result instead of being consumed once.",
+      "nativeUniqueSpansAndWholeInverse": true,
+      "execution": "UNRUN_EXPECTED_FAILURE_MAP_REQUIRES_ACTUAL_REMOTE_CONFIRMATION",
+      "restore": "Restore the exact original bytes in this SAME physical copy, verify all selected source pins, then require all19 persistent and all4 fixed cases PASS."
+    },
+    {
+      "id": "played-row-focus-omitted",
+      "scope": "PHYSICAL_SOURCE_COPY_ONLY_NOT_CANONICAL",
+      "path": "src/lib/soccerCareerEngine.ts",
+      "beforePin": {
+        "bytes": 552601,
+        "sha256": "479369c8de4d117bfa2f90ad50b15f9f3b7ff7d4cfc4423b857dec2ce97977bf",
+        "gitBlob": "bffa371aab07c961afe094aeaef934c341105b37"
+      },
+      "changedPin": {
+        "bytes": 552568,
+        "sha256": "867e0a08a031d6d4de3c5d640fb89c316b112b791ceae478f33188c784458e85",
+        "gitBlob": "436f4ef9b4358d78705031fbfa08dab3b7243959"
+      },
+      "spans": [
+        {
+          "characterOffset": 543097,
+          "before": "    ...(focus ? { focus } : {}),\n",
+          "after": ""
+        }
+      ],
+      "expectedFailures": [
+        {
+          "file": "src/test/soccerCareerManagerFocus.test.tsx",
+          "title": "consumes one valid focus on the actual played row and returns the next season to Balanced",
+          "fullName": "manager season focus authority and persistence consumes one valid focus on the actual played row and returns the next season to Balanced"
+        },
+        {
+          "file": "src/test/soccerCareerManagerFocus.test.tsx",
+          "title": "keeps the existing club-season path when genuine national-call flags are already present",
+          "fullName": "manager season focus authority and persistence keeps the existing club-season path when genuine national-call flags are already present"
+        },
+        {
+          "file": "src/test/soccerCareerManagerFocus.test.tsx",
+          "title": "guards actual disabled-review Page callbacks across focus adoption and duplicate advance",
+          "fullName": "actual Page manager focus transaction guards actual disabled-review Page callbacks across focus adoption and duplicate advance"
+        },
+        {
+          "file": "src/test/soccerCareerManagerFocus.fixed.consumer.test.tsx",
+          "title": "selected focus changes actual league and cup outcomes with the declared tradeoff",
+          "fullName": "manager season focus fixed consumer selected focus changes actual league and cup outcomes with the declared tradeoff"
+        }
+      ],
+      "independentPass": {
+        "file": "src/test/soccerCareerManagerFocus.test.tsx",
+        "title": "matches captured pre-product default save outputs and every action draw and next draw",
+        "fullName": "manager season focus authority and persistence matches captured pre-product default save outputs and every action draw and next draw"
+      },
+      "ownedCause": "An actually played focus is missing from the actual club season row.",
+      "nativeUniqueSpansAndWholeInverse": true,
+      "execution": "UNRUN_EXPECTED_FAILURE_MAP_REQUIRES_ACTUAL_REMOTE_CONFIRMATION",
+      "restore": "Restore the exact original bytes in this SAME physical copy, verify all selected source pins, then require all19 persistent and all4 fixed cases PASS."
+    },
+    {
+      "id": "old-overrestrictive-availability",
+      "scope": "PHYSICAL_SOURCE_COPY_ONLY_NOT_CANONICAL",
+      "path": "src/lib/soccerCareerManagerFocus.ts",
+      "beforePin": {
+        "bytes": 2697,
+        "sha256": "597174857adbed8e8d314b9c5e372a120e124d880b9a601022a7fbdd2230b4a3",
+        "gitBlob": "0e948cb6368ffa80809e656fd18393796bd57491"
+      },
+      "changedPin": {
+        "bytes": 2813,
+        "sha256": "315bb8b069b78f99d647c028df5d3c22e0c4cbb2695dbad6854db6e278d6c805",
+        "gitBlob": "827e9019d4b0c336961fc87210a886c396d14502"
+      },
+      "spans": [
+        {
+          "characterOffset": 1819,
+          "before": "  return !!employed(state);",
+          "after": "  return !!employed(state) && ((state as ManagerSeasonFocusCareer).managerSeasonFocus === undefined || readManagerSeasonFocus(state) !== null);"
+        }
+      ],
+      "expectedFailures": [
+        {
+          "file": "src/test/soccerCareerManagerFocus.test.tsx",
+          "title": "reads ignored optional records without writes and permits explicit recovery",
+          "fullName": "manager season focus authority and persistence reads ignored optional records without writes and permits explicit recovery"
+        },
+        {
+          "file": "src/test/soccerCareerManagerFocus.test.tsx",
+          "title": "keeps all choices enabled for explicit recovery of an ignored old record",
+          "fullName": "manager focus compact card keeps all choices enabled for explicit recovery of an ignored old record"
+        }
+      ],
+      "independentPass": {
+        "file": "src/test/soccerCareerManagerFocus.test.tsx",
+        "title": "matches captured pre-product default save outputs and every action draw and next draw",
+        "fullName": "manager season focus authority and persistence matches captured pre-product default save outputs and every action draw and next draw"
+      },
+      "ownedCause": "Actual explicit helper recovery is denied and all three actual UI choices are disabled for ignored optional metadata. Both actions are attempted before assertions.",
+      "nativeUniqueSpansAndWholeInverse": true,
+      "execution": "UNRUN_EXPECTED_FAILURE_MAP_REQUIRES_ACTUAL_REMOTE_CONFIRMATION",
+      "restore": "Restore the exact original bytes in this SAME physical copy, verify all selected source pins, then require all19 persistent and all4 fixed cases PASS."
+    },
+    {
+      "id": "central-reservation-omitted",
+      "scope": "PHYSICAL_SOURCE_COPY_ONLY_NOT_CANONICAL",
+      "path": "src/hooks/useSoccerManagerJobReview.ts",
+      "beforePin": {
+        "bytes": 1896,
+        "sha256": "09977cb473d582faad39865cd35b1a938a7a1beac193297fcf6d185365604aa7",
+        "gitBlob": "e65b0bd1dbbe4c8e1ad573d75d2e9eef933165eb"
+      },
+      "changedPin": {
+        "bytes": 1835,
+        "sha256": "a86b46f8e4caeb08ab54f836e2cc3693891e1b3d3c336fe8c136fed71330b49a",
+        "gitBlob": "74736a98bcf051a9999ed3347f10c5c079d8bed5"
+      },
+      "spans": [
+        {
+          "characterOffset": 1144,
+          "before": "    committed.current = { career: next, clubs: live.clubs };\n",
+          "after": ""
+        }
+      ],
+      "expectedFailures": [
+        {
+          "file": "src/test/soccerCareerManagerFocus.test.tsx",
+          "title": "reserves focus before same-render stale callbacks and commits one later season only",
+          "fullName": "manager focus committed authority reserves focus before same-render stale callbacks and commits one later season only"
+        },
+        {
+          "file": "src/test/soccerCareerManagerFocus.test.tsx",
+          "title": "guards actual disabled-review Page callbacks across focus adoption and duplicate advance",
+          "fullName": "actual Page manager focus transaction guards actual disabled-review Page callbacks across focus adoption and duplicate advance"
+        }
+      ],
+      "independentPass": {
+        "file": "src/test/soccerCareerManagerFocus.test.tsx",
+        "title": "matches captured pre-product default save outputs and every action draw and next draw",
+        "fullName": "manager season focus authority and persistence matches captured pre-product default save outputs and every action draw and next draw"
+      },
+      "ownedCause": "Same-render stale source callbacks can play a season before the new focus has committed. Both actual hook and actual Page handlers detect draws.",
+      "nativeUniqueSpansAndWholeInverse": true,
+      "execution": "UNRUN_EXPECTED_FAILURE_MAP_REQUIRES_ACTUAL_REMOTE_CONFIRMATION",
+      "restore": "Restore the exact original bytes in this SAME physical copy, verify all selected source pins, then require all19 persistent and all4 fixed cases PASS."
+    },
+    {
+      "id": "old-page-disabled-review-bypass",
+      "scope": "PHYSICAL_SOURCE_COPY_ONLY_NOT_CANONICAL",
+      "path": "src/pages/SoccerCareer.tsx",
+      "beforePin": {
+        "bytes": 281708,
+        "sha256": "f22a1e472aa7f3c6a540b03ae9b46e1050b9c8d48aa2a3544ade0a4166475da3",
+        "gitBlob": "23f7ba63b2b8b535417eefc030f2db5a7ac9dc90"
+      },
+      "changedPin": {
+        "bytes": 281869,
+        "sha256": "d28b2ddece46d17b95e6ccaca826335d2621a423d016235add85f8c4ea1f94c0",
+        "gitBlob": "d6e4f9dc9ba2d7cedaae1b417c8475feb87a7c4b"
+      },
+      "spans": [
+        {
+          "characterOffset": 2781,
+          "before": "manualRetire, choosePostRetirement, acceptManagerOffer",
+          "after": "manualRetire, choosePostRetirement, advanceManagerSeason, acceptManagerOffer"
+        },
+        {
+          "characterOffset": 83845,
+          "before": "  const handleAdvanceManager = () => {\n    managerJobReview.advance();\n  };",
+          "after": "  const handleAdvanceManager = () => {\n    if (!career) return;\n    if (readManagerJobReview(career, clubs)?.enabled) { managerJobReview.advance(); return; }\n    setCareer(advanceManagerSeason(career, clubs));\n  };"
+        }
+      ],
+      "expectedFailures": [
+        {
+          "file": "src/test/soccerCareerManagerFocus.test.tsx",
+          "title": "guards actual disabled-review Page callbacks across focus adoption and duplicate advance",
+          "fullName": "actual Page manager focus transaction guards actual disabled-review Page callbacks across focus adoption and duplicate advance"
+        }
+      ],
+      "independentPass": {
+        "file": "src/test/soccerCareerManagerFocus.test.tsx",
+        "title": "matches captured pre-product default save outputs and every action draw and next draw",
+        "fullName": "manager season focus authority and persistence matches captured pre-product default save outputs and every action draw and next draw"
+      },
+      "ownedCause": "The actual disabled-review Page retained handler bypasses central committed state. Restoring its old import keeps this physical control executable.",
+      "nativeUniqueSpansAndWholeInverse": true,
+      "execution": "UNRUN_EXPECTED_FAILURE_MAP_REQUIRES_ACTUAL_REMOTE_CONFIRMATION",
+      "restore": "Restore the exact original bytes in this SAME physical copy, verify all selected source pins, then require all19 persistent and all4 fixed cases PASS."
+    },
+    {
+      "id": "pending-decision-choice-guard-omitted",
+      "scope": "PHYSICAL_SOURCE_COPY_ONLY_NOT_CANONICAL",
+      "path": "src/lib/soccerCareerManagerJobReview.ts",
+      "beforePin": {
+        "bytes": 9889,
+        "sha256": "cea147457b7623667e6eec105c7f09013f16f0c38b75cfdc6f59af626540a042",
+        "gitBlob": "b604dc9e3de5589d537287c8898d4a6d815748ec"
+      },
+      "changedPin": {
+        "bytes": 9824,
+        "sha256": "2fe030cff9226551cf1924b04155ee1d8cca091eba726fd4443eaca1bfa383e2",
+        "gitBlob": "d3eefa721d45081f8173a86f83417b06d7a3b16e"
+      },
+      "spans": [
+        {
+          "characterOffset": 5962,
+          "before": "export function setManagerSeasonFocus(state: CareerState, clubs: ClubData[], choice: ManagerSeasonFocusChoice): CareerState {\n  if (readManagerJobReview(state, clubs)?.pending) return state;",
+          "after": "export function setManagerSeasonFocus(state: CareerState, clubs: ClubData[], choice: ManagerSeasonFocusChoice): CareerState {"
+        }
+      ],
+      "expectedFailures": [
+        {
+          "file": "src/test/soccerCareerManagerFocus.test.tsx",
+          "title": "refuses selection and advance while an actual earned job decision is pending",
+          "fullName": "manager season focus authority and persistence refuses selection and advance while an actual earned job decision is pending"
+        }
+      ],
+      "independentPass": {
+        "file": "src/test/soccerCareerManagerFocus.test.tsx",
+        "title": "matches captured pre-product default save outputs and every action draw and next draw",
+        "fullName": "manager season focus authority and persistence matches captured pre-product default save outputs and every action draw and next draw"
+      },
+      "ownedCause": "An actually earned pending job decision no longer refuses deliberate focus selection before simulation or persistence.",
+      "nativeUniqueSpansAndWholeInverse": true,
+      "execution": "UNRUN_EXPECTED_FAILURE_MAP_REQUIRES_ACTUAL_REMOTE_CONFIRMATION",
+      "restore": "Restore the exact original bytes in this SAME physical copy, verify all selected source pins, then require all19 persistent and all4 fixed cases PASS."
+    }
+  ],
+  "requirements": [
+    "Healthy preflight verifies ALL selected app/test/reference/fixture bytes, SHA and Git pins.",
+    "A physical copy may differ only by the exact declared source spans and changed body pin.",
+    "Immutable fixture/reference/selectors remain pinned, with no general allow-drift flag.",
+    "Each failed case must be an owned assertion with the exact declared title; all undeclared cases must PASS, with zero skips or suite errors.",
+    "Retain actual before/changed/restored body hashes and logs/results; require independent captured-default preservation on every mutant.",
+    "Restoration is the SAME physical copy and all23 healthy cases rerun.",
+    "No expected value is generated from a mutant.",
+    "Module initialization is excluded and unmeasured."
+  ],
+  "runtime": "UNRUN"
+}

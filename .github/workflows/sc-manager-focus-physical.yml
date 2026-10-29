@@ -1,0 +1,119 @@
+name: Soccer Career manager focus finite physical controls
+on:
+  push:
+    branches: [codex/sc-manager-focus-physical-20261029]
+    paths:
+      - .github/workflows/sc-manager-focus-physical.yml
+      - scripts/qa/soccerManagerFocusPhysical.mjs
+      - 'qa/sc-manager-season-focus-v1/**'
+permissions:
+  contents: read
+concurrency:
+  group: sc-manager-focus-physical-${{ github.ref }}
+  cancel-in-progress: false
+jobs:
+  physical:
+    runs-on: ubuntu-latest
+    timeout-minutes: 90
+    strategy:
+      fail-fast: false
+      max-parallel: 2
+      matrix:
+        id:
+          - league-edge-neutralized
+          - cup-edge-neutralized
+          - selected-focus-not-consumed
+          - played-row-focus-omitted
+          - old-overrestrictive-availability
+          - central-reservation-omitted
+          - old-page-disabled-review-bypass
+          - pending-decision-choice-guard-omitted
+    env:
+      CI: '1'
+      SIM_NETWORK: offline
+      CAREER_SEASON_LOCAL_ONLY: '1'
+      SC_MANAGER_FOCUS_PHYSICAL_OUT: ${{ github.workspace }}/manager-focus-physical-artifacts/${{ matrix.id }}
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.sha }}
+          fetch-depth: 2
+          persist-credentials: false
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: npm
+      - name: Exact source family and finite inputs
+        run: |
+          set -euo pipefail
+          mkdir -p "$SC_MANAGER_FOCUS_PHYSICAL_OUT"
+          git rev-parse HEAD > "$SC_MANAGER_FOCUS_PHYSICAL_OUT/head.txt"
+          git rev-parse HEAD^{tree} > "$SC_MANAGER_FOCUS_PHYSICAL_OUT/tree.txt"
+          test "$(git rev-parse HEAD^)" = 097589b9a7ef3d5ad10d55e6e463f6031eba391a
+          test "$(git rev-parse HEAD^^{tree})" = 6e70e9cc58ad8a72a6e88de7f1b0b2bbb5cf3b2f
+          test "$(git rev-list --parents -n 1 HEAD | awk '{print NF}')" = 2
+          git ls-remote origin refs/heads/main | cut -f1 > "$SC_MANAGER_FOCUS_PHYSICAL_OUT/main-at-start.txt"
+          test "$(cat "$SC_MANAGER_FOCUS_PHYSICAL_OUT/main-at-start.txt")" = 5d1198389d436ddb615c816a1330d57296a6d9d2
+          node --input-type=module <<'NODE'
+          import fs from 'node:fs';import assert from 'node:assert/strict';import {createHash} from 'node:crypto';
+          const sha=b=>createHash('sha256').update(b).digest('hex');
+          const selector='qa/sc-manager-season-focus-v1/PHYSICAL-SOURCE.json',wrapper='scripts/qa/soccerManagerFocusPhysical.mjs';
+          assert.equal(sha(fs.readFileSync(selector)),'2a410ee67250aaea7e94b77bc952f671ed38d30dfc70cde4aed29d8d7123ce30');
+          assert.equal(sha(fs.readFileSync(wrapper)),'cde1667d8581cfc690c9bed0f678bd00f31227d9ac532d477781d0c2be16ea35');
+          const source=JSON.parse(fs.readFileSync(selector,'utf8'));
+          assert.equal(source.requiredMain,'5d1198389d436ddb615c816a1330d57296a6d9d2');
+          for(const pin of source.files){const b=fs.readFileSync(pin.path);assert.equal(b.length,pin.bytes);assert.equal(sha(b),pin.sha256);assert.equal(createHash('sha1').update(Buffer.from('blob '+b.length+'\0')).update(b).digest('hex'),pin.gitBlob);}
+          NODE
+          node --check scripts/qa/soccerManagerFocusPhysical.mjs
+          git diff --name-only HEAD^ HEAD | sort > "$SC_MANAGER_FOCUS_PHYSICAL_OUT/changed-paths.txt"
+          node -e 'const fs=require("fs");console.log(JSON.parse(fs.readFileSync("qa/sc-manager-season-focus-v1/PHYSICAL-SOURCE.json")).allowedPaths.sort().join("\n"))' > "$SC_MANAGER_FOCUS_PHYSICAL_OUT/expected-paths.txt"
+          diff -u "$SC_MANAGER_FOCUS_PHYSICAL_OUT/expected-paths.txt" "$SC_MANAGER_FOCUS_PHYSICAL_OUT/changed-paths.txt"
+          git diff --name-status HEAD^ HEAD > "$SC_MANAGER_FOCUS_PHYSICAL_OUT/changed-status.txt"
+          test "$(grep -c '^M' "$SC_MANAGER_FOCUS_PHYSICAL_OUT/changed-status.txt")" = 5
+          test "$(grep -c '^A' "$SC_MANAGER_FOCUS_PHYSICAL_OUT/changed-status.txt")" = 15
+          test "$(git ls-files | wc -l)" = 5443
+          git ls-files -z | sort -z | xargs -0 sha256sum > "$SC_MANAGER_FOCUS_PHYSICAL_OUT/tracked-before.sha256"
+          git ls-tree -r HEAD > "$SC_MANAGER_FOCUS_PHYSICAL_OUT/source-tree.txt"
+          git archive --format=tar HEAD > "$SC_MANAGER_FOCUS_PHYSICAL_OUT/workflow-source.tar"
+      - name: Install exact locked dependencies
+        run: |
+          set -euo pipefail
+          echo '127.0.0.1 flawuiqbvjobmkfkauhw.supabase.co' | sudo tee -a /etc/hosts
+          npm ci > "$SC_MANAGER_FOCUS_PHYSICAL_OUT/npm-ci.log" 2>&1
+          cat "$SC_MANAGER_FOCUS_PHYSICAL_OUT/npm-ci.log"
+      - name: Real application types
+        run: |
+          set -euo pipefail
+          NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node_modules/.bin/tsc --noEmit -p tsconfig.app.json > "$SC_MANAGER_FOCUS_PHYSICAL_OUT/types.log" 2>&1
+          cat "$SC_MANAGER_FOCUS_PHYSICAL_OUT/types.log"
+      - name: One finite physical source variant with same-copy restoration
+        env:
+          FINITE_ID: ${{ matrix.id }}
+        run: |
+          set -euo pipefail
+          set +e
+          NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/qa/soccerManagerFocusPhysical.mjs physical "$FINITE_ID" > "$SC_MANAGER_FOCUS_PHYSICAL_OUT/physical.log" 2>&1
+          raw=$?
+          set -e
+          printf '%s\n' "$raw" > "$SC_MANAGER_FOCUS_PHYSICAL_OUT/physical.exit"
+          cat "$SC_MANAGER_FOCUS_PHYSICAL_OUT/physical.log"
+          test "$raw" = 0
+          grep -Fx "MANAGER_FOCUS_PHYSICAL: $FINITE_ID PASS, 23 healthy and 4 no-env before and after, declared owned failures, 2 COPIED guards, source held; PRE-BS only" "$SC_MANAGER_FOCUS_PHYSICAL_OUT/physical.log"
+      - name: Canonical full source and immutable inputs held
+        if: always()
+        run: |
+          set -euo pipefail
+          git ls-files -z | sort -z | xargs -0 sha256sum > "$SC_MANAGER_FOCUS_PHYSICAL_OUT/tracked-final.sha256"
+          diff -u "$SC_MANAGER_FOCUS_PHYSICAL_OUT/tracked-before.sha256" "$SC_MANAGER_FOCUS_PHYSICAL_OUT/tracked-final.sha256"
+          sha256sum --check "$SC_MANAGER_FOCUS_PHYSICAL_OUT/tracked-before.sha256" > "$SC_MANAGER_FOCUS_PHYSICAL_OUT/tracked-held.log"
+          git status --porcelain --untracked-files=no > "$SC_MANAGER_FOCUS_PHYSICAL_OUT/tracked-status.txt"
+          test ! -s "$SC_MANAGER_FOCUS_PHYSICAL_OUT/tracked-status.txt"
+          git diff --exit-code HEAD
+      - name: Retain original source, reports, process records and failures
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: sc-manager-focus-physical-${{ matrix.id }}-${{ github.run_id }}-${{ github.run_attempt }}
+          path: manager-focus-physical-artifacts/
+          if-no-files-found: error
+          retention-days: 14
