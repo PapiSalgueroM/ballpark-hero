@@ -1,0 +1,140 @@
+name: Club Manager shootout alignment
+# Browser fixture uses Buffer response bytes and retains request diagnostics.
+on:
+  push:
+    branches: [codex/cm-shootout-alignment-20261027]
+    paths: [.github/workflows/cm-shootout-alignment.yml]
+permissions:
+  contents: read
+concurrency:
+  group: cm-shootout-alignment-${{ github.ref }}
+  cancel-in-progress: false
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    timeout-minutes: 60
+    defaults:
+      run:
+        shell: bash
+    env:
+      CI: '1'
+      SIM_NETWORK: offline
+      ENGINES: chromium
+      PRERENDER_ONLY: /club-manager
+      CM_ALIGNMENT_ARTIFACTS: ${{ github.workspace }}/cm-shootout-alignment-artifacts
+      FREE_KICK_FONT_CACHE: ${{ github.workspace }}/cm-shootout-alignment-artifacts/font-cache
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.sha }}
+          fetch-depth: 0
+          persist-credentials: false
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: npm
+      - name: Retain exact source and install locked dependencies
+        run: |
+          set -euo pipefail
+          mkdir -p "$CM_ALIGNMENT_ARTIFACTS"
+          git rev-parse HEAD > "$CM_ALIGNMENT_ARTIFACTS/source-head.txt"
+          git rev-parse HEAD^{tree} > "$CM_ALIGNMENT_ARTIFACTS/source-tree.txt"
+          git archive --format=tar HEAD > "$CM_ALIGNMENT_ARTIFACTS/source.tar"
+          git ls-files -z src scripts .github/workflows package.json package-lock.json | sort -z | xargs -0 sha256sum > "$CM_ALIGNMENT_ARTIFACTS/source-before.sha256"
+          npm ci
+      - name: Actual app types and focused shootout cases
+        run: |
+          set -euo pipefail
+          export NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs"
+          node_modules/.bin/tsc --noEmit -p tsconfig.app.json 2>&1 | tee "$CM_ALIGNMENT_ARTIFACTS/types.log"
+          npm run test -- --run src/test/clubManagerShootoutResults.test.ts src/test/clubManagerShootoutDisplay.test.tsx src/test/clubManagerShootoutTile.test.tsx --maxWorkers=1 --no-file-parallelism 2>&1 | tee "$CM_ALIGNMENT_ARTIFACTS/unit.log"
+      - name: Original fixed inverse and immutable engine render arms
+        run: |
+          set -euo pipefail
+          export NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs"
+          component=src/components/club-manager/ShootoutKicks.tsx
+          cp "$component" "$CM_ALIGNMENT_ARTIFACTS/fixed-component.tsx"
+          trap 'cp "$CM_ALIGNMENT_ARTIFACTS/fixed-component.tsx" "$component"' EXIT
+          git show 616df9261cc0ce7ad9213f4690dedb1e557410aa:"$component" > "$CM_ALIGNMENT_ARTIFACTS/original-component.tsx"
+          git show b20ec6664df9d4c58d63ea0596791d33b2a3b8fc:src/lib/clubManager.ts > "$CM_ALIGNMENT_ARTIFACTS/b20.engine.ts"
+          cp "$CM_ALIGNMENT_ARTIFACTS/original-component.tsx" "$component"
+          CM_ALIGNMENT_PHASE=baseline node scripts/qa/captureCmShootoutAlignment.mjs 2>&1 | tee "$CM_ALIGNMENT_ARTIFACTS/baseline.log"
+          set +e
+          LIVE_MATCH_CONTROL=nooppsubs node scripts/simLiveMatch.mjs > "$CM_ALIGNMENT_ARTIFACTS/nooppsubs-baseline.log" 2>&1
+          old_status=$?
+          set -e
+          test "$old_status" -eq 1
+          grep -F "control cannot run: the count line in drawOppSubs is not in the shape LIVE_MATCH_CONTROL=nooppsubs rewrites" "$CM_ALIGNMENT_ARTIFACTS/nooppsubs-baseline.log"
+          cp "$CM_ALIGNMENT_ARTIFACTS/fixed-component.tsx" "$component"
+          CM_ALIGNMENT_PHASE=fixed node scripts/qa/captureCmShootoutAlignment.mjs 2>&1 | tee "$CM_ALIGNMENT_ARTIFACTS/fixed.log"
+          cp "$CM_ALIGNMENT_ARTIFACTS/original-component.tsx" "$component"
+          CM_ALIGNMENT_PHASE=inverse node scripts/qa/captureCmShootoutAlignment.mjs 2>&1 | tee "$CM_ALIGNMENT_ARTIFACTS/inverse.log"
+          cp "$CM_ALIGNMENT_ARTIFACTS/fixed-component.tsx" "$component"
+          CM_ALIGNMENT_PHASE=b20 CM_ALIGNMENT_BASELINE_ENGINE="$CM_ALIGNMENT_ARTIFACTS/b20.engine.ts" node scripts/qa/captureCmShootoutAlignment.mjs 2>&1 | tee "$CM_ALIGNMENT_ARTIFACTS/b20.log"
+          set +e
+          LIVE_MATCH_CONTROL=nooppsubs node scripts/simLiveMatch.mjs > "$CM_ALIGNMENT_ARTIFACTS/nooppsubs-fixed.log" 2>&1
+          fixed_status=$?
+          set -e
+          test "$fixed_status" -eq 1
+          cmp "$CM_ALIGNMENT_ARTIFACTS/nooppsubs-baseline.log" "$CM_ALIGNMENT_ARTIFACTS/nooppsubs-fixed.log"
+      - name: Preserve effective screen and live controls
+        run: |
+          set -euo pipefail
+          export NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs"
+          for control in noclock flatboard bareposs them ragged flat twoengines; do
+            MATCH_SCREEN_CONTROL="$control" ONLY=simMatchScreen node scripts/runAllSims.mjs 2>&1 | tee "$CM_ALIGNMENT_ARTIFACTS/screen-$control.log"
+          done
+          for control in noplay nocut rekick statsroll doubleman; do
+            LIVE_MATCH_CONTROL="$control" ONLY=simLiveMatch node scripts/runAllSims.mjs 2>&1 | tee "$CM_ALIGNMENT_ARTIFACTS/live-$control.log"
+          done
+      - name: Isolated browser and logo build tools
+        run: |
+          set -euo pipefail
+          npm install --prefix "$RUNNER_TEMP/alignment-browser" --no-save --package-lock=false playwright@1.64.0
+          ln -s "$RUNNER_TEMP/alignment-browser/node_modules/playwright" node_modules/playwright
+          ln -s "$RUNNER_TEMP/alignment-browser/node_modules/playwright-core" node_modules/playwright-core
+          node "$RUNNER_TEMP/alignment-browser/node_modules/playwright/cli.js" install --with-deps chromium
+          python -m pip install fonttools pillow
+          node scripts/qa/freeKickLab1070.mjs --prefetch-fonts-only > "$CM_ALIGNMENT_ARTIFACTS/fonts.log" 2>&1
+      - name: Production build and Manager snapshot
+        run: |
+          set -euo pipefail
+          NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" npm run build:seo 2>&1 | tee "$CM_ALIGNMENT_ARTIFACTS/build.log"
+          git diff --binary HEAD -- public scripts/data/lastmod.json > "$CM_ALIGNMENT_ARTIFACTS/generated.patch"
+      - name: Actual client component pixels and reversible class controls
+        run: |
+          set -euo pipefail
+          node scripts/playCmShootoutAlignment.mjs 2>&1 | tee "$CM_ALIGNMENT_ARTIFACTS/browser.log"
+      - name: Every rebuilt-site reader
+        run: |
+          set -euo pipefail
+          failed=0
+          for harness in simAdsense simBrand simHeadTags simHiddenPages simHubs simIndexNow simIndexing simInternalLinks simNoRivalNames simPrerender simPrerenderBoot simRetiredRoutes simSchema simSitemap simSnapshotAssets; do
+            ONLY="$harness" node scripts/runAllSims.mjs --browser 2>&1 | tee "$CM_ALIGNMENT_ARTIFACTS/$harness.log" || failed=1
+            if grep -E '(^|[[:space:]])(SKIP|EMPTY)([[:space:]]|$)' "$CM_ALIGNMENT_ARTIFACTS/$harness.log"; then failed=1; fi
+          done
+          exit "$failed"
+      - name: All unchanged route download limits
+        run: |
+          set -euo pipefail
+          node scripts/lib/hostLikeServer.mjs dist 4173 > "$CM_ALIGNMENT_ARTIFACTS/host.log" 2>&1 &
+          host_pid=$!
+          trap 'kill "$host_pid" 2>/dev/null || true' EXIT
+          for attempt in 1 2 3 4 5; do
+            if curl --fail --silent http://127.0.0.1:4173/ > /dev/null; then break; fi
+            sleep 1
+          done
+          BASE=http://127.0.0.1:4173 SWEEP_OFFLINE=1 NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/sweepWeight.mjs 2>&1 | tee "$CM_ALIGNMENT_ARTIFACTS/weights.log"
+      - name: Tracked product and harness holds
+        if: always()
+        run: |
+          set -euo pipefail
+          sha256sum -c "$CM_ALIGNMENT_ARTIFACTS/source-before.sha256" > "$CM_ALIGNMENT_ARTIFACTS/source-held.log"
+          git diff --exit-code HEAD -- src scripts .github/workflows package.json package-lock.json
+      - name: Preserve exact observations
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: cm-shootout-alignment-${{ github.run_id }}-${{ github.run_attempt }}
+          retention-days: 7
+          path: cm-shootout-alignment-artifacts/

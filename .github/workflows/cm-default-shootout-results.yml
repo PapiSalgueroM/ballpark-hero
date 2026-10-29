@@ -1,0 +1,233 @@
+name: Club Manager default shootout results
+on:
+  push:
+    branches: [codex/cm-default-shootout-results-20261026]
+    paths: [.github/workflows/cm-default-shootout-results.yml]
+permissions:
+  contents: read
+concurrency:
+  group: cm-shootout-results-${{ github.ref }}
+  cancel-in-progress: false
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    timeout-minutes: 60
+    env:
+      CI: '1'
+      SIM_NETWORK: offline
+      CM_SHOOTOUT_RESULTS_PHASE: fixed
+      PRERENDER_ONLY: /club-manager
+      ENGINES: chromium
+      FREE_KICK_FONT_CACHE: ${{ github.workspace }}/shootout-results-artifacts/font-cache
+      CM_SHOOTOUT_RESULTS_BASELINE: ${{ github.workspace }}/shootout-results-artifacts/clubManager.original.ts
+      CM_SHOOTOUT_RESULTS_OUT: ${{ github.workspace }}/shootout-results-artifacts/cohort
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          persist-credentials: false
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: npm
+      - name: Record exact source and block production transport
+        run: |
+          mkdir -p shootout-results-artifacts
+          git rev-parse HEAD > shootout-results-artifacts/head.txt
+          git show b20ec6664df9d4c58d63ea0596791d33b2a3b8fc:src/lib/clubManager.ts > "$CM_SHOOTOUT_RESULTS_BASELINE"
+          git diff --stat b20ec6664df9d4c58d63ea0596791d33b2a3b8fc > shootout-results-artifacts/change-stat.txt
+          sha256sum package.json package-lock.json bun.lock > shootout-results-artifacts/packages.sha256
+          echo '127.0.0.1 flawuiqbvjobmkfkauhw.supabase.co' | sudo tee -a /etc/hosts
+      - name: Install locked packages
+        run: npm ci
+      - name: Application types
+        run: |
+          set -o pipefail
+          NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node_modules/.bin/tsc --noEmit -p tsconfig.app.json 2>&1 | tee shootout-results-artifacts/types.log
+      - name: Actual match state and random stream comparison
+        run: |
+          set +e
+          NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/simCmShootoutResults.mjs 2>&1 | tee shootout-results-artifacts/cohort.log
+          status=${PIPESTATUS[0]}
+          set -e
+          if test "$status" -gt 1; then exit "$status"; fi
+          export SHOOTOUT_SIM_EXIT="$status"
+          node <<'NODE'
+          const fs = require('node:fs');
+          const assert = require('node:assert/strict');
+          const result = JSON.parse(fs.readFileSync(process.env.CM_SHOOTOUT_RESULTS_OUT + '/summary.json'));
+          const baseline = process.env.CM_SHOOTOUT_RESULTS_PHASE === 'baseline';
+          assert.equal(Number(process.env.SHOOTOUT_SIM_EXIT), baseline ? 1 : 0);
+          assert.equal(result.cases.length, 159);
+          assert.equal(result.controls.length, 10);
+          assert.equal(result.preservationPassed, true);
+          if (baseline) {
+            assert.equal(result.expectedBaselineRed, true);
+            assert.equal(result.status, 'assertion-failure');
+            assert(result.failures.length > 0);
+            assert(result.failures.every(f => f.label === 'new-detail'));
+          } else {
+            assert.equal(result.status, 'passed');
+            assert.equal(result.failures.length, 0);
+          }
+          console.log(baseline ? 'Qualified actual-engine missing-detail baseline.' : 'Actual-engine shootout results and preservation passed.');
+          NODE
+      - name: Focused shootout unit outcomes
+        run: |
+          set +e
+          NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" npm test -- src/test/clubManagerShootoutResults.test.ts --maxWorkers=1 --no-file-parallelism --reporter=default --reporter=json --outputFile.json=shootout-results-artifacts/unit.json 2>&1 | tee shootout-results-artifacts/unit.log
+          status=${PIPESTATUS[0]}
+          set -e
+          export SHOOTOUT_UNIT_EXIT="$status"
+          node <<'NODE'
+          const fs = require('node:fs');
+          const assert = require('node:assert/strict');
+          const report = JSON.parse(fs.readFileSync('shootout-results-artifacts/unit.json'));
+          const baseline = process.env.CM_SHOOTOUT_RESULTS_PHASE === 'baseline';
+          const failed = [
+            'uses an injected stream without touching the global match stream',
+            'keeps the existing 50-round fallback inside the injected stream too',
+            ...['absent', 'empty', 'departed'].map(mode => 'records real simulated kicks with an ' + mode + ' order'),
+            'exhausts 128 detached attempts without inventing an unrecorded deciding kick',
+          ];
+          const rows = report.testResults.flatMap(file => file.assertionResults);
+          assert.equal(report.testResults.length, 1);
+          assert.equal(report.testResults[0].message || '', '');
+          assert.equal(report.numTotalTests, 7);
+          assert.equal(rows.length, 7);
+          assert.equal(report.numPendingTests, 0);
+          assert.equal(report.numTodoTests, 0);
+          assert.equal(Number(report.numUnhandledErrors || 0), 0);
+          assert.equal(Number(process.env.SHOOTOUT_UNIT_EXIT), baseline ? 1 : 0);
+          assert.equal(report.numFailedTests, baseline ? 6 : 0);
+          assert.equal(report.numPassedTests, baseline ? 1 : 7);
+          assert.deepEqual(rows.filter(row => row.status === 'failed').map(row => row.title).sort(), baseline ? failed.sort() : []);
+          console.log(baseline ? 'Exactly six intended shootout unit failures and one preserved behavior.' : 'All seven shootout unit outcomes passed.');
+          NODE
+      - name: Actual score and named-result component
+        run: |
+          set -o pipefail
+          NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" npm test -- src/test/clubManagerShootoutDisplay.test.tsx --maxWorkers=1 --no-file-parallelism 2>&1 | tee shootout-results-artifacts/display.log
+      - name: Four effective changed-engine controls
+        run: |
+          set -o pipefail
+          CM_SHOOTOUT_CONTROLS_OUT="$GITHUB_WORKSPACE/shootout-results-artifacts/source-controls" NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/qa/cmShootoutResultsControls.mjs 2>&1 | tee shootout-results-artifacts/source-controls.log
+      - name: Ordinary harness invocation without special parameters
+        run: |
+          set -o pipefail
+          env -u CM_SHOOTOUT_RESULTS_PHASE -u CM_SHOOTOUT_RESULTS_BASELINE -u CM_SHOOTOUT_RESULTS_OUT NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/simCmShootoutResults.mjs 2>&1 | tee shootout-results-artifacts/ordinary.log
+      - name: Existing order guards, twelve source faults and baseline-adapter control
+        run: |
+          set -o pipefail
+          export NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs"
+          export CM_SHOOTOUT_ARTIFACTS="$GITHUB_WORKSPACE/shootout-results-artifacts/legacy"
+          node scripts/simCmShootoutOrder.mjs 2>&1 | tee shootout-results-artifacts/legacy-normal.log
+          for control in ignoreorder noskip nocap unsetpath ownkeeper wrongkeeper nooppkeeper oppworst thinside nomakeup keeperonfull keepleague tie-record; do
+            set +e
+            CM_SHOOTOUT_CONTROL="$control" node scripts/simCmShootoutOrder.mjs > "shootout-results-artifacts/legacy-$control.log" 2>&1
+            status=$?
+            set -e
+            export LEGACY_CONTROL="$control" LEGACY_EXIT="$status"
+            node <<'NODE'
+          const fs = require('node:fs');
+          const assert = require('node:assert/strict');
+          const id = process.env.LEGACY_CONTROL;
+          const report = JSON.parse(fs.readFileSync(process.env.CM_SHOOTOUT_ARTIFACTS + '/' + id + '-baseline.json'));
+          assert.equal(Number(process.env.LEGACY_EXIT), 1);
+          assert.equal(report.runtimeErrors.length, 0);
+          assert(report.sources.every(row => row.held));
+          const failures = Object.values(report.failedSections).flat();
+          assert(failures.length > 0);
+          if (id === 'keepleague') {
+            const healthy = JSON.parse(fs.readFileSync(process.env.CM_SHOOTOUT_ARTIFACTS + '/normal-baseline.json'));
+            assert.equal(report.mutation, null);
+            assert(healthy.executedSources.some(row => row.role === 'leagueout1052'));
+            assert(report.executedSources.every(row => row.role !== 'leagueout1052'));
+            assert.deepEqual(Object.keys(report.failedSections).sort(), ['4', '5']);
+            assert(report.summary.paired < healthy.summary.paired);
+            assert.equal(healthy.oldLoad.paired, true);
+            assert.equal(report.oldLoad.paired, false);
+            console.log(id + ': actual baseline-adapter omission rejected; this is not a source mutation.');
+          } else {
+            assert.equal(report.mutation.control, id);
+            assert.equal(report.mutation.hits, 1);
+            assert.equal(report.mutation.changed, true);
+            assert.notEqual(report.mutation.beforeHash, report.mutation.afterHash);
+            if (id === 'tie-record') assert(failures.some(text => text.includes('incomplete or contradictory')));
+            console.log(id + ': effective source fault rejected with original source and runtime held.');
+          }
+          NODE
+          done
+      - name: Isolated browser and logo build tools
+        run: |
+          npm install --prefix "$RUNNER_TEMP/shootout-browser" --no-save --package-lock=false playwright@1.64.0
+          ln -s "$RUNNER_TEMP/shootout-browser/node_modules/playwright" node_modules/playwright
+          ln -s "$RUNNER_TEMP/shootout-browser/node_modules/playwright-core" node_modules/playwright-core
+          node "$RUNNER_TEMP/shootout-browser/node_modules/playwright/cli.js" install --with-deps chromium
+          python -m pip install fonttools pillow
+          node scripts/qa/freeKickLab1070.mjs --prefetch-fonts-only > shootout-results-artifacts/fonts.log 2>&1
+      - name: Production build and Manager snapshot
+        run: |
+          set -o pipefail
+          NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" npm run build:seo 2>&1 | tee shootout-results-artifacts/build.log
+          git diff --binary -- public scripts/data/lastmod.json > shootout-results-artifacts/generated.patch
+      - name: Every rebuilt-site reader
+        run: |
+          set -o pipefail
+          failed=0
+          for harness in simAdsense simBrand simHeadTags simHiddenPages simHubs simIndexNow simIndexing simInternalLinks simNoRivalNames simPrerender simPrerenderBoot simRetiredRoutes simSchema simSitemap simSnapshotAssets; do
+            ONLY="$harness" node scripts/runAllSims.mjs --browser 2>&1 | tee "shootout-results-artifacts/$harness.log" || failed=1
+            if grep -E '(^|[[:space:]])(SKIP|EMPTY)([[:space:]]|$)' "shootout-results-artifacts/$harness.log"; then failed=1; fi
+          done
+          exit "$failed"
+      - name: All unchanged route download limits
+        run: |
+          set -o pipefail
+          node scripts/lib/hostLikeServer.mjs dist 4173 > shootout-results-artifacts/host.log 2>&1 &
+          host_pid=$!
+          trap 'kill "$host_pid" 2>/dev/null || true' EXIT
+          for attempt in 1 2 3 4 5; do
+            if curl --fail --silent http://127.0.0.1:4173/ > /dev/null; then break; fi
+            sleep 1
+          done
+          BASE=http://127.0.0.1:4173 SWEEP_OFFLINE=1 NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/sweepWeight.mjs 2>&1 | tee shootout-results-artifacts/weights.log
+      - name: Preserve package inputs
+        if: always()
+        run: sha256sum -c shootout-results-artifacts/packages.sha256
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: shootout-results-${{ github.run_id }}
+          path: |
+            shootout-results-artifacts/
+            .sim-artifacts/
+          include-hidden-files: true
+          retention-days: 14
+  application-units:
+    runs-on: ubuntu-latest
+    timeout-minutes: 40
+    env:
+      CI: '1'
+      SIM_NETWORK: offline
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          persist-credentials: false
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: npm
+      - run: npm ci
+      - name: Complete application unit suite
+        run: |
+          set -o pipefail
+          mkdir -p shootout-unit-artifacts
+          git rev-parse HEAD > shootout-unit-artifacts/head.txt
+          NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" npm test -- --maxWorkers=2 --reporter=default --reporter=json --outputFile.json=shootout-unit-artifacts/full-units.json 2>&1 | tee shootout-unit-artifacts/full-units.log
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: shootout-full-units-${{ github.run_id }}
+          path: shootout-unit-artifacts/
+          retention-days: 14
