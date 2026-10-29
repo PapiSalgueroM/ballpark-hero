@@ -92,7 +92,9 @@
         lost), and the leaders, every club's lines and the awards read off it
         by the head are what the base read off its own. 9e prints the league's
         size after a regular season (ids pinned at the longest epoch) and holds
-        it byte stable for one seed played twice in one process. 9f, on every
+        it byte stable for one seed played twice in one process, and between
+        two fresh loads of the engine (two page loads), the same characters
+        but for the id epoch, whose cost it prints. 9f, on every
         run: a real old block the base engine wrote (committed in
         scripts/data/nbaNamedBlockFixture.json with the block the recorder
         wrote from the same games) converts on load to that block byte for
@@ -138,6 +140,9 @@
                     (section 2 holds the same kind of thing on the
                     league without its block and awards, so it goes
                     red too; 9e is the one that holds them with it)
+   Added by Round 1566's closing check:
+     perload        each page load draws a value of its own at
+                    module scope that the league keeps in the save   -> 9 (9e between two loads)
 
    Run: node scripts/simNbaSeasonStats.mjs
    The base comparison (9d): NBA_STATS_BASE=<checkout of the commit before Round 1566> node scripts/simNbaSeasonStats.mjs
@@ -180,6 +185,8 @@ const EXPECT = {
   /* added by Round 1566's fix pass: 9f (a real old save) and 9e (byte stable for one seed) each get a control */
   grouped: [9],
   carried: [2, 9],
+  /* added by Round 1566's closing check: 9e between two page loads */
+  perload: [9],
 };
 if (CONTROL && !EXPECT[CONTROL]) {
   console.error(`NBA_STATS_CONTROL=${CONTROL} is not a control this harness knows (${Object.keys(EXPECT).join(', ')})`);
@@ -322,6 +329,14 @@ const CONTROL_FILE_SWAPS = {
   carried: {
     'nbaFrontOffice.ts': [['    stats: foNewSaved(2026),', '    stats: foNewSaved(2026), made: ((globalThis as Record<string, number>).dukbMade = ((globalThis as Record<string, number>).dukbMade ?? 0) + 1),']],
   },
+  /* Round 1566's closing check. perload: a value drawn once a page load (at module scope, as the id epoch is) that the
+     league keeps in the save. Every play inside one load agrees on it, so only 9e's check between two loads can see it. */
+  perload: {
+    'nbaFrontOffice.ts': [
+      ['export function initNbaLeague(', 'const DUKB_LOAD = Math.floor(Math.random() * 1e9);\nexport function initNbaLeague('],
+      ['    stats: foNewSaved(2026),', '    stats: foNewSaved(2026), loaded: DUKB_LOAD,'],
+    ],
+  },
 };
 /* Copy controls rewrite what section 8 reads, in memory, never the file. */
 const CONTROL_COPY_SWAPS = {
@@ -341,11 +356,14 @@ const NOTE = {
   named: 'the NBA keeps its lines as named rows, the shape before Round 1566',
   grouped: "the load time conversion takes the old rows as grouped by club, the way the expand lists them, and keeps only each club's last run of rows",
   carried: 'the league carries a count that runs on across plays in one process (a clock or an unseeded draw would do the same)',
+  perload: 'every page load draws a value of its own at module scope and the league keeps it in the save (the id epoch is the one such draw, and 9e swaps it out)',
 }[CONTROL];
 if (NOTE) console.log(`   control ${CONTROL}: ${NOTE}`);
 
 const BUNDLE_DIR = fs.mkdtempSync(path.join(os.tmpdir(), 'dukb-nbastats-'));
 let E = null;
+/* Round 1566's closing check: two more loads of the same bundle for 9e, each a fresh page load (see the import) */
+let LOADS = [];
 /* Round 1566: a checkout of the commit before the round (its root), for section 9d's base comparison */
 const BASE_ROOT = process.env.NBA_STATS_BASE ? path.resolve(process.env.NBA_STATS_BASE) : '';
 let BASE_E = null;
@@ -378,6 +396,11 @@ try {
     alias: { '@': path.join(ROOT, 'src') }, plugins: [plugin], outfile: out, logLevel: 'error',
   });
   E = await import(pathToFileURL(out).href);
+  /* Round 1566's closing check (finding 6, the product half): the same bundle loaded twice more under its own URL, so
+     each copy is a module instance of its own, the way a page load is: its own id epoch drawn at module scope, its own
+     counters from one, anything else drawn at load its own too. 9e plays its fleet in both and holds what moves between
+     page loads, where playing twice in this copy can only see what moves inside one. */
+  LOADS = [await import(`${pathToFileURL(out).href}?load=2`), await import(`${pathToFileURL(out).href}?load=3`)];
   /* Round 1566, section 9d: the base tree's engine as it is (no control), when NBA_STATS_BASE names one */
   if (BASE_ROOT) {
     const baseEntry = path.join(BUNDLE_DIR, 'base-entry.mjs');
@@ -989,12 +1012,22 @@ console.log('9) One save shape: the NBA keeps the shared short lines, reads them
      longest epoch writes them (14 characters, the counter from the league's lowest id). The epoch (entityIds.ts, 2 to
      14 characters a page load, on every id) is what moved the same head's size between runs; pinned, the size is byte
      stable for one seed, and that IS held: each seed played twice gives the same characters. The base too when
-     NBA_STATS_BASE is set. */
+     NBA_STATS_BASE is set.
+     BETWEEN PAGE LOADS (Round 1566's closing check, finding 6): playing twice in one load cannot see a value drawn
+     once a load, the epoch's own kind of drift. So the fleet is played again in two fresh loads of the bundle (LOADS),
+     and that is held too: the two loads' leagues are the same characters once each load's epoch is swapped for one
+     token (no counter set right, both count from one), and the same as this load's with the epoch pinned. What is left
+     between two page loads is then the epoch alone, and the line printed after says what it costs: two to fourteen
+     characters on every id. Fixing its length changes every id minted on the site (entityIds.ts), the lead's call. */
   {
     const LONG = 'z'.repeat(14);
+    const epochIn = lg => {
+      const id = [...Object.values(lg.teams).flatMap(t => t.players), ...lg.freeAgents][0].id;
+      return id.slice(1, id.lastIndexOf('-'));
+    };
     const pinned = lg => {
       const ids = [...Object.values(lg.teams).flatMap(t => t.players), ...lg.freeAgents].map(p => p.id);
-      const ep = ids[0].slice(1, ids[0].lastIndexOf('-'));
+      const ep = epochIn(lg);
       const low = Math.min(...ids.map(id => Number(id.slice(id.lastIndexOf('-') + 1))));
       const re = new RegExp('n' + ep + '-(\\d+)', 'g');
       return v => JSON.stringify(v).replace(re, (_, k) => `n${LONG}-${Number(k) - low + 1}`);
@@ -1016,11 +1049,22 @@ console.log('9) One save shape: the NBA keeps the shared short lines, reads them
     const fleet = N => SEEDS.map(seed => {
       const lg = regular(N, seed);
       const fix = pinned(lg), text = fix(lg);
-      return { seed, league: text.length, block: fix(lg.stats).length, text };
+      return { seed, league: text.length, block: fix(lg.stats).length, text, raw: JSON.stringify(lg), ep: epochIn(lg) };
     });
     const head = fleet(nba), again = fleet(nba);
     const unstable = head.filter((h, i) => h.text !== again[i].text).map(h => h.seed);
     ok(9, `the league's size in the save is byte stable for one seed with the epoch pinned (${SEEDS.length} seeds, each played twice)`, unstable.length === 0, `seeds ${unstable.join(', ')}`);
+    const [loadB, loadC] = LOADS.map(L => fleet(L.nba));
+    const TOKEN = '~'.repeat(14);
+    const oneEpoch = x => x.raw.split(`${x.ep}-`).join(`${TOKEN}-`);
+    const between = loadB.filter((x, i) => oneEpoch(x) !== oneEpoch(loadC[i]) || x.text !== head[i].text).map(x => x.seed);
+    ok(9, `between two page loads (two fresh loads of the engine, each its own epoch) the league in the save is the same characters but for the epoch, and the same as this load's pinned (${SEEDS.length} seeds)`, between.length === 0, `seeds ${between.join(', ')}`);
+    {
+      const raw = f => f.map(x => x.raw.length);
+      const big = loadB.reduce((a, x) => (x.raw.length > a.raw.length ? x : a));
+      const ids = big.raw.split(`${big.ep}-`).length - 1;
+      console.log(`   9e two page loads, ids as minted: epochs of ${loadB[0].ep.length} and ${loadC[0].ep.length} characters, the league median ${med(raw(loadB))} and ${med(raw(loadC))}, largest ${Math.max(...raw(loadB))} and ${Math.max(...raw(loadC))}; the largest carries ${ids} ids, so each character of epoch (2 to 14 a load) moves it by ${ids}`);
+    }
     const say = (tag, f) => {
       const big = Math.max(...f.map(x => x.league));
       console.log(`   9e ${tag}: the league in the save after the regular season, ${f.length} seeds: median ${med(f.map(x => x.league))}, largest ${big} characters (its lines block: median ${med(f.map(x => x.block))}, largest ${Math.max(...f.map(x => x.block))}); headroom to 700K (716800) ${716800 - big}`);
