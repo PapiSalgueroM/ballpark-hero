@@ -28,9 +28,10 @@
  *      still to be named (the World Series MVP from its two clubs, Gold Gloves,
  *      Silver Sluggers, the MVP and the rest in November) or a running total
  *      one season from a milestone (Erik Karlsson at 947 points beside
- *      "1,000+ career points"); and (fix-1574) beside the season mark the
- *      ledger's watchLine names, every man still playing read by his career
- *      best on both hosts, none at or over its line
+ *      "1,000+ career points"); and (fix-1574, one rule since fix2) beside
+ *      every single season mark (a kind AGES calls 'season', whatever its
+ *      label), every man still playing read by his career best on the
+ *      record and both hosts, none at or over three quarters of the mark
  *   6) no man is dealt twice on one board under two names (bconn-049 held
  *      "Goose Gossage" and "Rich Gossage", and the game's own check compares
  *      spellings)
@@ -65,7 +66,9 @@
  *      and (fix-1574) every row the table file decides is in TABLE_RANGE
  *  10) (Round 1574) every criterion kind on a board says how it ages
  *      (usConnectionsCheck.mjs AGES, a list its own age) and a running kind is
- *      one the sport's watch() handles (WATCHED); section 8 dates every 'move'
+ *      one the sport's watch() handles (WATCHED); (fix2-1574) a kind aged
+ *      'season' is exactly one the checker reads by season best (seasonBest);
+ *      section 8 dates every 'move'
  *      kind. Section 3 also holds every member of every table group to a fact
  *      and every ledger list to two hosts, closed, with an age.
  * US_CONN_DUMP=<file> writes every (sport, board, group, man, verdict) line,
@@ -137,7 +140,7 @@ import path from 'node:path';
 import { fileURLToPath, pathToFileURL } from 'node:url';
 import { build } from 'esbuild';
 import { crossCheckBoards, findingKey } from './lib/connectionsCrossCheck.mjs';
-import { makeUsChecker, fold, AGES } from './lib/usConnectionsCheck.mjs';
+import { makeUsChecker, fold, AGES, SEASON_LINE } from './lib/usConnectionsCheck.mjs';
 import { TABLE_RANGE, tableBoards, tableRows, inRange } from './lib/usConnectionsTables.mjs';
 
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
@@ -647,30 +650,50 @@ for (const s of SPORTS) {
   }
   console.log(`   ${s}: ${n} watched men beside a group they may join`);
 }
-/* fix-1574 (review-read-1574 finding 1): the watch reads a season mark on the seasons since 2024-25 only, so the
-   ledger's watchLine reads every man still playing beside its label by his career best, on both hosts (a fact each),
-   and moves those at or over its line. A man still playing beside it whom the line has not read, one it moved, or
-   one kept at or over the line fails */
+/* fix-1574 (review-read-1574 finding 1), made one rule by fix2-1574 (the lead's ruling): watch() reads a season mark
+   on the seasons since 2024-25 only, so beside EVERY single season mark (every group whose kind AGES calls 'season',
+   whatever its label) every man still playing is read by his career best: the record's (the checker's seasonBest,
+   which the ledger's watchLine entry must equal) and both hosts' in his two host fact, each under SEASON_LINE of the
+   mark, or the watch line moved him off the board. One the line has not read, one it moved, one at or over the line
+   on either host, and a kept entry beside no season mark any more all fail */
+const seasonNum = says => Number((String(says).match(/in a season (\d+)/) ?? [])[1]);
 for (const s of SPORTS) {
-  const wl = live.has(s) ? null : ledgerOf(s).watchLine;
-  if (!wl) continue;
-  const facts = new Set((ledgerOf(s).facts ?? []).filter(f => f.holds === false && hostsOk(f.sources)).map(f => `${fold(f.label)}|${fold(f.name)}`));
-  let n = 0, read = 0;
-  for (const b of boards[s]) {
-    const g = b.groups.find(x => x.theme === wl.label);
-    if (!g) continue;
+  if (live.has(s)) continue;
+  const wl = ledgerOf(s).watchLine;
+  const facts = new Map((ledgerOf(s).facts ?? []).filter(f => f.holds === false && hostsOk(f.sources)).map(f => [`${fold(f.label)}|${fold(f.name)}`, f]));
+  const per = new Map();
+  const seen = new Set();
+  let n = 0;
+  const bad = (subject, m) => { n += 1; fire('watch-line', subject); fail(m); };
+  if (wl && wl.fraction !== SEASON_LINE) bad(s, `${s}: the watchLine's fraction ${wl.fraction} is not the checker's SEASON_LINE ${SEASON_LINE}`);
+  for (const b of boards[s]) for (const g of b.groups) {
+    const c = sports[s].checker.criterion(g.theme);
+    if (!c || AGES[s][c.kind] !== 'season') continue;
+    const line = SEASON_LINE * c.min;
+    if (!per.has(g.theme)) per.set(g.theme, { line, min: c.min, boards: 0, read: 0 });
+    const row = per.get(g.theme);
+    row.boards += 1;
+    if (!wl) { bad(g.theme, `${s} ${b.id}: "${g.theme}" is a single season mark and the ${s} ledger has no watchLine`); continue; }
     for (const o of b.groups) if (o !== g) for (const p of o.players) {
       if (sports[s].checker.active?.(p) !== true) continue;
-      const e = (wl.men ?? []).find(m => m.id === b.id && fold(m.name) === fold(p));
+      seen.add(`${b.id}|${fold(g.theme)}|${fold(p)}`);
+      const e = (wl.men ?? []).find(m => m.id === b.id && fold(m.label) === fold(g.theme) && fold(m.name) === fold(p));
+      const rb = sports[s].checker.seasonBest?.(p, c);
+      const f = facts.get(`${fold(g.theme)}|${fold(p)}`);
+      const nums = (f?.sources ?? []).map(x => seasonNum(x.says));
       const why = !e ? 'the watch line has not read his career best' : e.moved ? 'the watch line moved him off this board'
-        : !(e.best < wl.line) ? `his career best ${e.best} is at or over the line ${wl.line}` : !facts.has(`${fold(wl.label)}|${fold(p)}`) ? 'his career best has no two host fact' : '';
-      if (!why) { read += 1; continue; }
-      n += 1;
-      fire('watch-line', p);
-      fail(`${s} ${b.id}: ${p} ("${o.theme}") is still playing beside "${wl.label}": ${why}`);
+        : !rb ? 'the record has no season by season goals for him'
+        : e.best !== rb.best ? `the watchLine says ${e.best}, the record's career best is ${rb.best} (${rb.season})`
+        : !(rb.best < line) ? `his career best ${rb.best} is at or over the line ${line}`
+        : !f ? 'his career best has no two host fact'
+        : nums.length < 2 || nums.some(x => !(x < line)) ? `his two host fact does not read a career best under ${line} on both hosts (${f.sources.map(x => x.says).join('; ')})` : '';
+      if (!why) { row.read += 1; continue; }
+      bad(p, `${s} ${b.id}: ${p} ("${o.theme}") is still playing beside "${g.theme}": ${why}`);
     }
   }
-  console.log(`   ${s}: the watch line of "${wl.label}" (${wl.line}, on the career best) read ${read} men still playing beside it; ${n} problems`);
+  for (const e of wl?.men ?? []) if (!e.moved && !seen.has(`${e.id}|${fold(e.label)}|${fold(e.name)}`)) bad(e.name, `${s} ${e.id}: the watchLine keeps ${e.name} beside "${e.label}", and he is not still playing beside that season mark there`);
+  for (const [label, r] of per) console.log(`   ${s}: the watch line of "${label}" (${r.line} of ${r.min}, on the career best) on ${r.boards} boards read ${r.read} men still playing beside it`);
+  if (per.size || wl) console.log(`   ${s}: ${per.size} single season marks on the boards; ${n} watch line problems`);
 }
 
 console.log('6) no man is dealt twice on one board');
@@ -816,7 +839,16 @@ for (const s of SPORTS) {
     const age = c.kind === 'list' ? lists.get(c.key)?.age : AGES[s][c.kind];
     kinds.set(c.kind, (kinds.get(c.kind) ?? 0) + 1);
     if (!age) { n += 1; fire('ages', c.kind); fail(`${s} ${b.id}: "${g.theme}" is kind ${c.kind}, which says nowhere how it ages`); continue; }
-    if (age !== 'running' || sports[s].checker.watched?.has(c.kind)) continue;
+    /* fix2-1574: a kind the checker reads by season best is a single season mark, aged 'season' (section 5's watch
+       line reads the men beside it), and a kind aged 'season' is one it reads that way */
+    const sb = c.kind === 'list' ? undefined : sports[s].checker.seasonBest?.(g.players[0], c);
+    if ((age === 'season') !== (sb !== undefined)) {
+      n += 1;
+      fire('season-age', c.kind);
+      fail(`${s} ${b.id}: "${g.theme}" is kind ${c.kind}, aged ${age}, and the ${s} checker ${sb !== undefined ? 'reads it by season best, so it is a single season mark and its age must be season' : 'does not read it by season best (seasonBest), so the watch line could not read the men beside it'}`);
+      continue;
+    }
+    if ((age !== 'running' && age !== 'season') || sports[s].checker.watched?.has(c.kind)) continue;
     if ((OWED_UNWATCHED[s] ?? []).includes(c.kind)) { owed.add(c.kind); continue; }
     n += 1;
     fire('unwatched', c.kind);
