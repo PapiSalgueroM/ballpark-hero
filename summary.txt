@@ -1,0 +1,4 @@
+recA exit=0 52s | rec1569 WROTE /home/runner/work/_temp/rc-out/files/fixA.json 2298695 bytes, vitest exit 0
+recB exit=0 53s | rec1569 WROTE /home/runner/work/_temp/rc-out/files/fixB.json 2298714 bytes, vitest exit 0
+diffB exit=0 0s | fixdiff: clicks moved 0, saves moved 0, coverage moved 0, screens moved 0
+diffAB exit=0 0s | fixdiff: clicks moved 0, saves moved 0, coverage moved 0, screens moved 397
