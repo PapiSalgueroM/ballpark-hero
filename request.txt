@@ -1,0 +1,7 @@
+#!serial
+pgl: npm install --prefix /tmp/pgl @electric-sql/pglite >/dev/null 2>&1 && ls /tmp/pgl/node_modules/@electric-sql
+reh1567: PGLITE_DIR=/tmp/pgl node scripts/qa/rehearseUsConnections1567.mjs
+r58head: PGLITE_DIR=/tmp/pgl node scripts/qa/rehearseUsConnections1558.mjs
+mut-strip: node .rc/x/mutNear.mjs strip && node scripts/simUsConnectionsFacts.mjs > /tmp/mut-strip.log 2>&1; s=$?; git checkout -- scripts/data; grep -c "Honus Wagner in \"Hall of Fame first basemen\" (does not fit) does not stand on two hosts" /tmp/mut-strip.log; tail -1 /tmp/mut-strip.log; exit $s
+mut-nohof: node .rc/x/mutNear.mjs nohof && node scripts/simUsConnectionsFacts.mjs > /tmp/mut-nohof.log 2>&1; s=$?; git checkout -- scripts/data; tail -1 /tmp/mut-nohof.log | cut -c1-120; exit $s
+clean: git status --short scripts src | head -5; test -z "$(git status --short scripts src)"

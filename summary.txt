@@ -1,0 +1,6 @@
+pgl exit=0 1s | pglite
+reh1567 exit=0 21s | rehearseUsConnections1567: green. Both forms land the 39 boards in place, a drifted row is left alone or stops the step, a tampered payload is refused, and a second run i
+r58head exit=0 20s | rehearseUsConnections1558: green. The rows land in place, a drifted row is left alone, and a second run is a no-op.
+mut-strip exit=1 1s | simUsConnectionsFacts: 1 failure
+mut-nohof exit=0 0s | simUsConnectionsFacts: green. Every Baseball, NFL and NHL Connections group is held to the record, and no board has a se
+clean exit=0 0s | 
