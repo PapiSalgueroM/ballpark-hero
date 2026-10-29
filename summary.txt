@@ -1,0 +1,4 @@
+earned-rerecord exit=0 2s | REREC earned record=0 diff=0
+earned-oldfixture exit=1 12s | OLDFIX earned head=1 (expect 1)
+rot-base exit=1 2s | ::error file=/home/runner/work/ballpark-hero/ballpark-hero/.rc/rb/src/lib/nbaSeasonStats.ts,title=src/lib/nbaRotation.test.ts > NBA manual rotation engine outcomes > meas
+award1103-base exit=0 2s |    Duration  884ms (transform 120ms, setup 51ms, collect 124ms, tests 200ms, environment 221ms, prepare 103ms)

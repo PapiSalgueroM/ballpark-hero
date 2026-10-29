@@ -1,0 +1,77 @@
+
+[1m[46m RUN [49m[22m [36mv3.2.7 [39m[90m/home/runner/work/ballpark-hero/ballpark-hero/.rc/rb[39m
+
+[90mstdout[2m | src/lib/nbaRotation.test.ts[2m > [22m[2mNBA manual rotation engine outcomes[2m > [22m[2mholds physical original automatic campaigns and RNG fingerprints as an independent baseline
+[22m[39mNBA_ORIGINAL 117 ccf6088208b43998f04015fdbe44d4c9c1dc0dc1be19d745bd787e6f48a1728b 12648
+NBA_ORIGINAL 431 05a1352ceec4de67d22fd319b8560b927f435d70070d367ad6dff019897bf6d7 12619
+NBA_ORIGINAL 907 b56c4d1df8d71e9709ba6da003698117f318ca09b371e8acbce022f0b7d6e6f7 12685
+NBA_ORIGINAL 117 f25f738705ea2c8bb338d4d55e680dd50cff00e0dbdadfbbf721a864722475ed 17256
+NBA_ORIGINAL 431 26048e582b52b90f13be0ca2d41dbe0e3328a7a9e2e92d0932a039cfbce7debc 17207
+NBA_ORIGINAL 907 d83f6c619d8fd673f3d4b8c00009a65883ac96e79512ca4580103be8bdb5d8cb 17317
+
+ [31m❯[39m src/lib/nbaRotation.test.ts [2m([22m[2m16 tests[22m[2m | [22m[31m2 failed[39m[2m)[22m[33m 393[2mms[22m[39m
+   [33m[2m✓[22m[39m NBA manual rotation engine outcomes[2m > [22mholds physical original automatic campaigns and RNG fingerprints as an independent baseline [33m 371[2mms[22m[39m
+   [32m✓[39m NBA manual rotation engine outcomes[2m > [22mkeeps automatic tie order, empty fallback and fixed minutes as an independent baseline[32m 1[2mms[22m[39m
+   [32m✓[39m NBA manual rotation engine outcomes[2m > [22mchanges starter and bench strength only after a deliberate owned slot swap[32m 1[2mms[22m[39m
+   [32m✓[39m NBA manual rotation engine outcomes[2m > [22mputs a chosen bench prospect on the real box and keeps the original five starters[32m 1[2mms[22m[39m
+   [32m✓[39m NBA manual rotation engine outcomes[2m > [22mcovers only the injured preferred hole and restores it without rewriting preferences[32m 1[2mms[22m[39m
+   [32m✓[39m NBA manual rotation engine outcomes[2m > [22mkeeps uncovered manual starter holes from stealing bench minutes and starter status[32m 1[2mms[22m[39m
+   [32m✓[39m NBA manual rotation engine outcomes[2m > [22mretains the original all-injured emergency box and points identity for manual and automatic teams[32m 1[2mms[22m[39m
+   [32m✓[39m NBA manual rotation engine outcomes[2m > [22mrefuses invalid, foreign, injured and identical choices without changing raw team state[32m 1[2mms[22m[39m
+   [32m✓[39m NBA manual rotation engine outcomes[2m > [22mreads malformed or duplicate saved preferences safely and repairs them only explicitly[32m 1[2mms[22m[39m
+   [32m✓[39m NBA manual rotation engine outcomes[2m > [22mrepairs successful releases and signs while failed moves stay byte-identical[32m 1[2mms[22m[39m
+   [32m✓[39m NBA manual rotation engine outcomes[2m > [22mreconciles both clubs after an accepted trade while refusals mutate neither[32m 1[2mms[22m[39m
+   [32m✓[39m NBA manual rotation engine outcomes[2m > [22mreconciles both clubs after an accepted talks while refusals mutate neither[32m 0[2mms[22m[39m
+   [32m✓[39m NBA manual rotation engine outcomes[2m > [22mreconciles restored identity repair while preserving the original repaired-ID count[32m 1[2mms[22m[39m
+   [32m✓[39m NBA manual rotation engine outcomes[2m > [22mreconciles real offseason retirement and expiring contracts before the next tip-off[32m 2[2mms[22m[39m
+[31m   [31m×[31m NBA manual rotation engine outcomes[2m > [22mkeeps a manual prospect playing through season, postseason, summer and a resumed next season[39m[32m 7[2mms[22m[39m
+[31m     → Cannot read properties of undefined (reading 'LAC')[39m
+[31m   [31m×[31m NBA manual rotation engine outcomes[2m > [22mmeasures a paired complete-regular-season effect for weaker starters with identical draw counts[39m[32m 2[2mms[22m[39m
+[31m     → Cannot read properties of undefined (reading 'MIL')[39m
+
+[31m⎯⎯⎯⎯⎯⎯⎯[39m[1m[41m Failed Tests 2 [49m[22m[31m⎯⎯⎯⎯⎯⎯⎯[39m
+
+[41m[1m FAIL [22m[49m src/lib/nbaRotation.test.ts[2m > [22mNBA manual rotation engine outcomes[2m > [22mkeeps a manual prospect playing through season, postseason, summer and a resumed next season
+[31m[1mTypeError[22m: Cannot read properties of undefined (reading 'LAC')[39m
+[36m [2m❯[22m Module.nbaRecordBox src/lib/nbaSeasonStats.ts:[2m137:29[22m[39m
+    [90m135| [39m[35mexport[39m [35mfunction[39m [34mnbaRecordBox[39m(stats[33m:[39m [33mFoSeasonStats[39m[33m,[39m box[33m:[39m [33mNbaBox[39m)[33m:[39m [35mvoid[39m {
+    [90m136| [39m  for (const [side, other] of [[box.home, box.away], [box.away, box.ho…
+    [90m137| [39m    const club = stats.teams[side.team] ?? { g: 0, w: 0, pts: 0, opp: …
+    [90m   | [39m                            [31m^[39m
+    [90m138| [39m    club[33m.[39mg [33m+=[39m [34m1[39m[33m;[39m club[33m.[39mpts [33m+=[39m side[33m.[39mpts[33m;[39m club[33m.[39mopp [33m+=[39m other[33m.[39mpts[33m;[39m
+    [90m139| [39m    [35mif[39m (side[33m.[39mpts [33m>[39m other[33m.[39mpts) club[33m.[39mw [33m+=[39m [34m1[39m[33m;[39m
+[90m [2m❯[22m play src/lib/nbaFrontOffice.ts:[2m415:16[22m[39m
+[90m [2m❯[22m forEach src/lib/foSchedule.ts:[2m131:67[22m[39m
+[90m [2m❯[22m Module.foPlayRound src/lib/foSchedule.ts:[2m131:12[22m[39m
+[90m [2m❯[22m Module.simRound src/lib/nbaFrontOffice.ts:[2m405:3[22m[39m
+[90m [2m❯[22m src/lib/nbaRotation.test.ts:[2m291:74[22m[39m
+
+[31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/2]⎯[22m[39m
+
+[41m[1m FAIL [22m[49m src/lib/nbaRotation.test.ts[2m > [22mNBA manual rotation engine outcomes[2m > [22mmeasures a paired complete-regular-season effect for weaker starters with identical draw counts
+[31m[1mTypeError[22m: Cannot read properties of undefined (reading 'MIL')[39m
+[36m [2m❯[22m Module.nbaRecordBox src/lib/nbaSeasonStats.ts:[2m137:29[22m[39m
+    [90m135| [39m[35mexport[39m [35mfunction[39m [34mnbaRecordBox[39m(stats[33m:[39m [33mFoSeasonStats[39m[33m,[39m box[33m:[39m [33mNbaBox[39m)[33m:[39m [35mvoid[39m {
+    [90m136| [39m  for (const [side, other] of [[box.home, box.away], [box.away, box.ho…
+    [90m137| [39m    const club = stats.teams[side.team] ?? { g: 0, w: 0, pts: 0, opp: …
+    [90m   | [39m                            [31m^[39m
+    [90m138| [39m    club[33m.[39mg [33m+=[39m [34m1[39m[33m;[39m club[33m.[39mpts [33m+=[39m side[33m.[39mpts[33m;[39m club[33m.[39mopp [33m+=[39m other[33m.[39mpts[33m;[39m
+    [90m139| [39m    [35mif[39m (side[33m.[39mpts [33m>[39m other[33m.[39mpts) club[33m.[39mw [33m+=[39m [34m1[39m[33m;[39m
+[90m [2m❯[22m play src/lib/nbaFrontOffice.ts:[2m415:16[22m[39m
+[90m [2m❯[22m forEach src/lib/foSchedule.ts:[2m131:67[22m[39m
+[90m [2m❯[22m Module.foPlayRound src/lib/foSchedule.ts:[2m131:12[22m[39m
+[90m [2m❯[22m Module.simRound src/lib/nbaFrontOffice.ts:[2m405:3[22m[39m
+[90m [2m❯[22m src/lib/nbaRotation.test.ts:[2m316:16[22m[39m
+
+[31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[2/2]⎯[22m[39m
+
+
+[2m Test Files [22m [1m[31m1 failed[39m[22m[90m (1)[39m
+[2m      Tests [22m [1m[31m2 failed[39m[22m[2m | [22m[1m[32m14 passed[39m[22m[90m (16)[39m
+[2m   Start at [22m 12:54:37
+[2m   Duration [22m 1.13s[2m (transform 134ms, setup 54ms, collect 141ms, tests 393ms, environment 234ms, prepare 109ms)[22m
+
+
+::error file=/home/runner/work/ballpark-hero/ballpark-hero/.rc/rb/src/lib/nbaSeasonStats.ts,title=src/lib/nbaRotation.test.ts > NBA manual rotation engine outcomes > keeps a manual prospect playing through season%2C postseason%2C summer and a resumed next season,line=137,column=29::TypeError: Cannot read properties of undefined (reading 'LAC')%0A ❯ Module.nbaRecordBox src/lib/nbaSeasonStats.ts:137:29%0A ❯ play src/lib/nbaFrontOffice.ts:415:16%0A ❯ forEach src/lib/foSchedule.ts:131:67%0A ❯ Module.foPlayRound src/lib/foSchedule.ts:131:12%0A ❯ Module.simRound src/lib/nbaFrontOffice.ts:405:3%0A ❯ src/lib/nbaRotation.test.ts:291:74%0A%0A
+
+::error file=/home/runner/work/ballpark-hero/ballpark-hero/.rc/rb/src/lib/nbaSeasonStats.ts,title=src/lib/nbaRotation.test.ts > NBA manual rotation engine outcomes > measures a paired complete-regular-season effect for weaker starters with identical draw counts,line=137,column=29::TypeError: Cannot read properties of undefined (reading 'MIL')%0A ❯ Module.nbaRecordBox src/lib/nbaSeasonStats.ts:137:29%0A ❯ play src/lib/nbaFrontOffice.ts:415:16%0A ❯ forEach src/lib/foSchedule.ts:131:67%0A ❯ Module.foPlayRound src/lib/foSchedule.ts:131:12%0A ❯ Module.simRound src/lib/nbaFrontOffice.ts:405:3%0A ❯ src/lib/nbaRotation.test.ts:316:16%0A%0A
