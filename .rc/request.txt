@@ -1,0 +1,9 @@
+#!serve
+#!playwright
+playGmCareer: node scripts/playGmCareer.mjs
+playGmCareer-eagerkit: PLAY_GM_CAREER_CONTROL=eagerkit node scripts/playGmCareer.mjs
+playFoHub: node scripts/playFoHub.mjs
+playOwnerMandate: node scripts/playOwnerMandate.mjs
+playDraftNight: node scripts/playDraftNight.mjs
+playGmPress: node scripts/playGmPress.mjs
+sweepNhl: MSYS_NO_PATHCONV=1 ONLY=/nhl-front-office ENGINES=chromium node scripts/sweepGames.mjs
