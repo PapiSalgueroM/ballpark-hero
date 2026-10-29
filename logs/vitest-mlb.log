@@ -1,0 +1,16 @@
+
+[1m[46m RUN [49m[22m [36mv3.2.7 [39m[90m/home/runner/work/ballpark-hero/ballpark-hero[39m
+
+Browserslist: browsers data (caniuse-lite) is 16 months old. Please run:
+  npx update-browserslist-db@latest
+  Why you should do it regularly: https://github.com/browserslist/update-db#readme
+ [32m✓[39m src/components/mlb-front-office/MlbGmDesk.test.tsx [2m([22m[2m4 tests[22m[2m)[22m[33m 846[2mms[22m[39m
+   [33m[2m✓[22m[39m 1020 MLB GM desk on the board[2m > [22ma desk save plays October with the staff edge and takes its winter through the re-sign desk [33m 379[2mms[22m[39m
+ [32m✓[39m src/components/mlb-front-office/MlbDraftCapital.test.tsx [2m([22m[2m18 tests[22m[2m)[22m[33m 1596[2mms[22m[39m
+   [33m[2m✓[22m[39m 966 MLB real draft-capital consequences[2m > [22mordinary two choices keep the original two five-rival batches full offseason salaries and RNG [33m 403[2mms[22m[39m
+
+[2m Test Files [22m [1m[32m2 passed[39m[22m[90m (2)[39m
+[2m      Tests [22m [1m[32m22 passed[39m[22m[90m (22)[39m
+[2m   Start at [22m 18:34:01
+[2m   Duration [22m 3.42s[2m (transform 927ms, setup 151ms, collect 1.91s, tests 2.44s, environment 707ms, prepare 190ms)[22m
+
