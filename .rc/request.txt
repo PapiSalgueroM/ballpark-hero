@@ -1,0 +1,2 @@
+#!serial
+rebuilt38: node .rc/x/mut2.mjs && node scripts/simConnectionsFacts.mjs; s=$?; git checkout -- scripts; exit $s
