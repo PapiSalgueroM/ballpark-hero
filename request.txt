@@ -1,0 +1,11 @@
+#!serve
+#!playwright
+#!serial
+# Release BS kit: 6 of the 6 request lines of Release BR's rc-BJb2.txt (rBRg/.tmp-fx/br), the lines of the BS areas (Soccer Career, Club Manager and the manager games on its engine, Player Bingo, Conquest, Stat and Draft Detective, the US My Career save notice, What's New, the polls, the guide intro) and the setup lines before them; 0 line(s) outside those areas left out.
+# Release BJ, Round 1340's walks on the final tree. playLiveMatchFit's two controls share a fixed port: serial.
+md-walk: node scripts/playCmMatchDay.mjs
+md-walk-ctl: ok=0; r=""; for k in swap cut jump fullname; do PLAY_MATCHDAY_CONTROL=$k node scripts/playCmMatchDay.mjs > /tmp/pmd-$k.log 2>&1; e=$?; r="$r $k=$e"; [ $e = 1 ] || ok=1; echo "$k: last: $(tail -1 /tmp/pmd-$k.log | cut -c1-200)"; done; echo "controls (each must be 1):$r"; exit $ok
+livefit: node scripts/playLiveMatchFit.mjs
+livefit-ctl: ok=0; r=""; for k in widelabels digits; do LIVE_FIT_CONTROL=$k node scripts/playLiveMatchFit.mjs > /tmp/lf-$k.log 2>&1; e=$?; r="$r $k=$e"; [ $e = 1 ] || ok=1; echo "$k: last: $(tail -1 /tmp/lf-$k.log | cut -c1-200)"; done; echo "controls (each must be 1):$r"; exit $ok
+hub: node scripts/playCmHubLanding.mjs
+fixtures: node scripts/playCmLeagueFixtures.mjs

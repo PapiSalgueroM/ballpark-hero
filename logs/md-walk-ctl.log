@@ -1,0 +1,5 @@
+swap: last: playCmMatchDay: CONTROL swap FIRED
+cut: last: playCmMatchDay: CONTROL cut FIRED
+jump: last: playCmMatchDay: CONTROL jump FIRED
+fullname: last: playCmMatchDay: CONTROL fullname FIRED
+controls (each must be 1): swap=1 cut=1 jump=1 fullname=1
