@@ -1,0 +1,3 @@
+w-inline exit=0 71s |   AppearanceBuilder:15.2 Celebration:0.8 CelebrationStyles:0.7 Confetti:0.6 GameHelp:0.8 GameNav:1.7 GameNavbar:3.7 GameReportContext:3.0 GameSeoContent:2.4 HowToPlayPopo
+w-cbonly exit=0 71s |   AppearanceBuilder:11.4 Celebration:0.8 CelebrationStyles:0.7 Confetti:0.6 GameHelp:0.8 GameNav:1.7 GameNavbar:3.7 GameReportContext:3.0 GameSeoContent:2.4 HowToPlayPopo
+w-norows exit=0 74s |   AppearanceBuilder:15.2 Celebration:0.8 CelebrationStyles:0.7 Confetti:0.6 GameHelp:0.8 GameNav:1.7 GameNavbar:3.7 GameReportContext:3.0 GameSeoContent:2.4 HowToPlayPopo
