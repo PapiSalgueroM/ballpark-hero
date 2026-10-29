@@ -1,0 +1,6 @@
+MUT clubasof applied to scripts/lib/usConnectionsCheck.mjs
+yearnhl=0
+US_CONN_CONTROL=yearnhl did NOT fire its own rule (second-fit x0 for Mitch Marner); the 1 other failures do not count for it (findings: not-a-member 1). This control proves nothing as the code stands.
+afternhl=1
+US_CONN_CONTROL=afternhl fired its own rule 1 time(s): not-a-member x1 for Mitch Marner (all findings: not-a-member 1; 1 failures in all)
+MUT clubasof2 applied=0 (yearnhl and afternhl codes above)
