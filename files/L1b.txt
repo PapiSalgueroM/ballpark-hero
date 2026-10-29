@@ -1,0 +1,7 @@
+L1b lastSeasonYear=2007 firstJobYear=2008 setsWithHandRowHeldOut=16/400 handRowsOffered=16 names=Mumbai Cityx4, Al Duhailx4, Auckland FCx4, Atlanta Unitedx4
+L1b lastSeasonYear=2012 firstJobYear=2013 setsWithHandRowHeldOut=11/400 handRowsOffered=11 names=Mumbai Cityx4, Auckland FCx5, Atlanta Unitedx2
+L1b lastSeasonYear=2017 firstJobYear=2018 setsWithHandRowHeldOut=1/400 handRowsOffered=1 names=Auckland FCx1
+L1b lastSeasonYear=2022 firstJobYear=2023 setsWithHandRowHeldOut=2/400 handRowsOffered=2 names=Auckland FCx2
+WALK ceremony save choices: Nice | Mumbai City(held out) | Flora Tallinn
+WALK pending save: from=Malmo FF t3 to=Man City t1
+L4 endWhilePending phase=retired eventsWithPending=1 rowsWithPending=1 line="📋 Manager Season 3: Finished in the top half. 👀 Scouts from Man City watching. Job approach from Man City. Decision pending."

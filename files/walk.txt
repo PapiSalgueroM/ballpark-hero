@@ -1,0 +1,27 @@
+ceremony w=320 ceremony {"sx":320,"iw":320,"y":692}
+ceremony w=320 chooser {"sx":320,"iw":320,"y":0}
+ceremony w=320 shown=Nice France Club level 3 | Mumbai City India Club level 4 | Flora Tallinn Estonia Club level 4
+ceremony w=320 overflowingButtons=[]
+ceremony w=320 afterBack {"sx":320,"iw":320,"y":0}
+ceremony w=320 picked=Nice afterReload="Managing Nice (Tier 3) · Season 0" ok=true
+pending w=320 pending {"sx":320,"iw":320,"y":466}
+pending w=320 nextDisabled=true accept=[42,253,236,44] stay=[42,305,236,44]
+pending w=320 afterStayReload stayed=true stillPending=false approach=false
+ceremony w=390 ceremony {"sx":390,"iw":390,"y":692}
+ceremony w=390 chooser {"sx":390,"iw":390,"y":0}
+ceremony w=390 shown=Nice France Club level 3 | Mumbai City India Club level 4 | Flora Tallinn Estonia Club level 4
+ceremony w=390 overflowingButtons=[]
+ceremony w=390 afterBack {"sx":390,"iw":390,"y":0}
+ceremony w=390 picked=Nice afterReload="Managing Nice (Tier 3) · Season 0" ok=true
+pending w=390 pending {"sx":390,"iw":390,"y":466}
+pending w=390 nextDisabled=true accept=[42,221,149,44] stay=[199,221,149,44]
+pending w=390 afterStayReload stayed=true stillPending=false approach=false
+ceremony w=1280 ceremony {"sx":1280,"iw":1280,"y":519}
+ceremony w=1280 chooser {"sx":1280,"iw":1280,"y":0}
+ceremony w=1280 shown=Nice France Club level 3 | Mumbai City India Club level 4 | Flora Tallinn Estonia Club level 4
+ceremony w=1280 overflowingButtons=[]
+ceremony w=1280 afterBack {"sx":1280,"iw":1280,"y":0}
+ceremony w=1280 picked=Nice afterReload="Managing Nice (Tier 3) · Season 0" ok=true
+pending w=1280 pending {"sx":1280,"iw":1280,"y":0}
+pending w=1280 nextDisabled=true accept=[446,467,326,44] stay=[780,467,326,44]
+pending w=1280 afterStayReload stayed=true stillPending=false approach=false

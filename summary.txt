@@ -1,0 +1,3 @@
+build exit=0 28s | [dukb] inlined 1 stylesheet(s) and 1 module(s) into 181 snapshots (11 left alone)
+probe2 exit=0 2s |    Duration  2.01s (transform 895ms, setup 55ms, collect 1.07s, tests 358ms, environment 236ms, prepare 79ms)
+walk exit=0 20s | WALK SUMMARY fails=0
