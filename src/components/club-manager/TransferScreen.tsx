@@ -122,6 +122,10 @@ export function TransferScreen({
   const [mode, setMode] = useState<'buy' | 'sell' | 'news'>('buy');
   const [shortlist, setShortlist] = useState<RecruitmentPick | null | false>(false);
   const shortlistOpener = useRef<HTMLButtonElement | null>(null);
+  /* Release BS fix: a row's Save opens the board in place of the market list, so Back puts the
+     list back where it was and focus on that row's Save. */
+  const marketList = useRef<HTMLDivElement | null>(null);
+  const marketPlace = useRef<{ top: number; name: string } | null>(null);
   const [newsSort, setNewsSort] = useState<'recent' | 'fee'>('recent');
   const [newsClub, setNewsClub] = useState<'all' | 'mine'>('all');
   const [newsPage, setNewsPage] = useState(0);
@@ -367,11 +371,18 @@ export function TransferScreen({
   if (shortlist !== false && onCommitRecruitment) {
     const close = () => {
       setShortlist(false);
-      requestAnimationFrame(() => (shortlistOpener.current?.isConnected ? shortlistOpener.current : document.querySelector<HTMLButtonElement>('[data-cm-shortlist-open]'))?.focus({ preventScroll: true }));
+      requestAnimationFrame(() => {
+        const place = marketPlace.current, list = marketList.current;
+        marketPlace.current = null;
+        if (place && list) list.scrollTop = place.top;
+        const rowSave = place && list ? [...list.querySelectorAll<HTMLButtonElement>('button[aria-label]')].find(b => b.getAttribute('aria-label') === `Save ${place.name}`) : undefined;
+        (rowSave ?? (shortlistOpener.current?.isConnected ? shortlistOpener.current : document.querySelector<HTMLButtonElement>('[data-cm-shortlist-open]')))?.focus({ preventScroll: true });
+      });
     };
     return <Suspense fallback={<div className="space-y-2"><p role="status">Opening shortlist...</p><button className="min-h-11 min-w-11 px-3 rounded-lg border" onClick={close}>Back</button></div>}>
       <RecruitmentBoard career={career} market={market} initial={shortlist || undefined} onCommit={onCommitRecruitment} onBack={close} onFind={player => {
         setMode('buy'); setFilter('ALL'); setPosExact('any'); setAgeBand('any'); setPriceBand('any'); setLeaguePick('any'); setNatPick('any'); setQuery(player.name);
+        marketPlace.current = null;
         close();
       }} />
     </Suspense>;
@@ -790,7 +801,7 @@ export function TransferScreen({
         </div>
       )}
 
-      {onCommitRecruitment && <button data-cm-shortlist-open className="min-h-11 min-w-11 w-full rounded-lg border border-border px-3 text-sm font-bold" onClick={e => { shortlistOpener.current = e.currentTarget; setShortlist(null); }}>Shortlist</button>}
+      {onCommitRecruitment && <button data-cm-shortlist-open className="min-h-11 min-w-11 w-full rounded-lg border border-border px-3 text-sm font-bold" onClick={e => { shortlistOpener.current = e.currentTarget; marketPlace.current = null; setShortlist(null); }}>Shortlist</button>}
 
       {/* Mode toggle */}
       <div className="grid grid-cols-3 gap-1.5">
@@ -904,7 +915,7 @@ export function TransferScreen({
             aria-label="Search player or club"
             className="bg-card border-border text-sm"
           />
-          <div className="bg-card border border-border rounded-xl p-2 max-h-96 overflow-y-auto">
+          <div ref={marketList} className="bg-card border border-border rounded-xl p-2 max-h-96 overflow-y-auto">
             {filtered.map(m => {
               const clause = releaseClauseOf(m, career.season);
               const canLoan = loanEligible(career, m) && loansUsed < 2;
@@ -933,7 +944,7 @@ export function TransferScreen({
                   </div>
                   {/* Release BS fix: Save sits at row level, a 44 px target whose negative margin
                       fits the row's own padding, so a row is no taller than before it came */}
-                  {onCommitRecruitment && <button className="shrink-0 min-h-11 min-w-11 -my-1.5 rounded-lg border border-border px-2 text-xs font-bold" aria-label={`Save ${m.name}`} onClick={e => { shortlistOpener.current = e.currentTarget; setShortlist({ career, player: m }); }}>Save</button>}
+                  {onCommitRecruitment && <button className="shrink-0 min-h-11 min-w-11 -my-1.5 rounded-lg border border-border px-2 text-xs font-bold" aria-label={`Save ${m.name}`} onClick={e => { shortlistOpener.current = e.currentTarget; marketPlace.current = { top: marketList.current?.scrollTop ?? 0, name: m.name }; setShortlist({ career, player: m }); }}>Save</button>}
                   <span className={cn('text-sm font-bold font-display', ratingTint(m.rating))}>{m.rating}</span>
                   <div className="shrink-0 flex flex-col gap-1 items-stretch">
                     <button
