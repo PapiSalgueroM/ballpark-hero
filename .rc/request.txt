@@ -1,0 +1,14 @@
+tsc: node_modules/.bin/tsc --noEmit -p tsconfig.app.json
+intl-default: node scripts/simCareerIntl.mjs
+ctl-tilenomedal: INTL_CONTROL=tilenomedal INTL_SECTIONS=9 node scripts/simCareerIntl.mjs
+ctl-deadmedal: INTL_CONTROL=deadmedal INTL_SECTIONS=10 node scripts/simCareerIntl.mjs
+ctl-realname: INTL_CONTROL=realname INTL_SECTIONS=11 node scripts/simCareerIntl.mjs
+intl-8: INTL_SECTIONS=8 node scripts/simCareerIntl.mjs
+ctl-norepair: INTL_CONTROL=norepair INTL_SECTIONS=8 node scripts/simCareerIntl.mjs
+simCareerParity: node scripts/simCareerParity.mjs
+ctl-deadbadge: PARITY_CONTROL=deadbadge node scripts/simCareerParity.mjs
+parity-base: git worktree add -q /tmp/pbase 2413427460 && ln -s "$PWD/node_modules" /tmp/pbase/node_modules && node /tmp/pbase/scripts/simCareerParity.mjs > /tmp/pb.txt; node scripts/simCareerParity.mjs > /tmp/ph.txt; for f in /tmp/pb.txt /tmp/ph.txt; do { grep -E '^   (nfl|mlb|nhl):' $f; grep -oE '\b(nfl|mlb|nhl) [0-9]+ ' $f; } > $f.3; done; wc -l /tmp/pb.txt.3; sha256sum /tmp/pb.txt.3 /tmp/ph.txt.3; grep -E '^   nba:' /tmp/pb.txt /tmp/ph.txt | cut -c1-160; diff /tmp/pb.txt.3 /tmp/ph.txt.3 && echo "parity-base: the NFL, MLB and NHL lines are identical to 2413427460"
+vitest-us: node_modules/.bin/vitest run src/test/usCareer src/test/usBoardFixture.test.tsx src/test/myCareerRestore.test.tsx src/test/rivalryChoiceBoard.test.tsx src/test/careerEntryGuide.test.tsx src/test/nbaTrophyTile.test.ts src/test/nbaCareerIntl.test.ts src/test/nbaIntlResultLines.test.tsx src/lib/careerIntl.test.ts --testTimeout=300000 --hookTimeout=120000
+simGuideHeadings: node scripts/simGuideHeadings.mjs
+simNoRivalNames: node scripts/simNoRivalNames.mjs
+simHarnessAnchors: node scripts/simHarnessAnchors.mjs
