@@ -88,6 +88,647 @@
   ],
   "additions": [
     {
+      "name": "Adam Wharton",
+      "nationality": "England",
+      "birthYear": 2004,
+      "position": "Defensive Midfield",
+      "class": "hole",
+      "identity": {
+        "born": "2004-02-06",
+        "sources": [
+          {
+            "url": "https://www.fotmob.com/players/1296650",
+            "read": "2026-10-29",
+            "quote": "birthDate 2004-02-06"
+          },
+          {
+            "url": "https://www.transfermarkt.com/adam-wharton/transfers/spieler/744149",
+            "read": "2026-10-29",
+            "quote": "Date of birth/Age: 06/02/2004 (22)"
+          }
+        ]
+      },
+      "tableClubs": [
+        "crystal palace"
+      ],
+      "career": [
+        {
+          "club": "Crystal Palace",
+          "seasons": null,
+          "loan": false,
+          "sources": [
+            {
+              "url": "https://www.transfermarkt.com/ceapi/transferHistory/list/744149",
+              "read": "2026-10-29",
+              "quote": "23/24 01/02/2024 Blackburn -> Crystal Palace (€21M)"
+            },
+            {
+              "url": "https://www.fotmob.com/players/1296650",
+              "read": "2026-10-29",
+              "quote": "Crystal Palace 2024-02-01 to now, 109 apps"
+            }
+          ]
+        }
+      ],
+      "clubs": [
+        {
+          "club": "Blackburn Rovers",
+          "fromSeason": "2021-22 to 2023-24",
+          "toSeason": "2021-22 to 2023-24",
+          "loan": false,
+          "sources": [
+            {
+              "url": "https://www.transfermarkt.com/ceapi/transferHistory/list/744149",
+              "read": "2026-10-29",
+              "quote": "23/24 01/02/2024 Blackburn -> Crystal Palace (€21M); 22/23 01/07/2022 Blackburn U21 -> Blackburn (-); 21/22 01/01/2022 Blackburn U18 -> Blackburn U23 (-); 20/21 01/07/2020 Blackburn Acad. -> Blackburn U18 (-)"
+            },
+            {
+              "url": "https://www.fotmob.com/players/1296650",
+              "read": "2026-10-29",
+              "quote": "Blackburn Rovers 2022-01-07 to 2024-02-01, 51 apps"
+            }
+          ]
+        }
+      ],
+      "verdict": {
+        "before": {
+          "count": 1,
+          "fourPlus": false,
+          "oneClub": true
+        },
+        "after": {
+          "count": 2,
+          "fourPlus": false,
+          "oneClub": false
+        }
+      }
+    },
+    {
+      "name": "Aleksandar Stanković",
+      "nationality": "Serbia",
+      "birthYear": 2005,
+      "position": "Defensive Midfield",
+      "class": "hole",
+      "identity": {
+        "born": "2005-08-03",
+        "sources": [
+          {
+            "url": "https://www.fotmob.com/players/1410437",
+            "read": "2026-10-29",
+            "quote": "birthDate 2005-08-03"
+          },
+          {
+            "url": "https://www.transfermarkt.com/aleksandar-stankovic/transfers/spieler/780136",
+            "read": "2026-10-29",
+            "quote": "Date of birth/Age: 03/08/2005 (21)"
+          }
+        ]
+      },
+      "tableClubs": [
+        "inter milan"
+      ],
+      "career": [
+        {
+          "club": "Inter Milan",
+          "seasons": null,
+          "loan": false,
+          "sources": [
+            {
+              "url": "https://www.transfermarkt.com/ceapi/transferHistory/list/780136",
+              "read": "2026-10-29",
+              "quote": "26/27 29/06/2026 Club Brugge -> Inter (€23M); 25/26 24/07/2025 Inter -> Club Brugge (€9.5M); 24/25 30/06/2025 FC Luzern -> Inter (End of loan€3.2M); 24/25 03/07/2024 Inter -> FC Luzern (Loan fee:€1.6M); 24/25 01/07/2024 Inter U20 -> Inter (-)"
+            },
+            {
+              "url": "https://www.fotmob.com/players/1410437",
+              "read": "2026-10-29",
+              "quote": "Inter 2026-07-01 to now, 5 apps; Inter 2022-09-30 to 2024-07-03, ? apps"
+            }
+          ]
+        }
+      ],
+      "clubs": [
+        {
+          "club": "FC Luzern",
+          "fromSeason": "2024-25",
+          "toSeason": "2024-25",
+          "loan": true,
+          "sources": [
+            {
+              "url": "https://www.transfermarkt.com/ceapi/transferHistory/list/780136",
+              "read": "2026-10-29",
+              "quote": "24/25 30/06/2025 FC Luzern -> Inter (End of loan€3.2M); 24/25 03/07/2024 Inter -> FC Luzern (Loan fee:€1.6M)"
+            },
+            {
+              "url": "https://www.fotmob.com/players/1410437",
+              "read": "2026-10-29",
+              "quote": "Luzern (on loan) 2024-07-03 to 2025-06-30, 39 apps"
+            }
+          ]
+        },
+        {
+          "club": "Club Brugge KV",
+          "fromSeason": "2025-26",
+          "toSeason": "2025-26",
+          "loan": false,
+          "sources": [
+            {
+              "url": "https://www.transfermarkt.com/ceapi/transferHistory/list/780136",
+              "read": "2026-10-29",
+              "quote": "26/27 29/06/2026 Club Brugge -> Inter (€23M); 25/26 24/07/2025 Inter -> Club Brugge (€9.5M)"
+            },
+            {
+              "url": "https://www.fotmob.com/players/1410437",
+              "read": "2026-10-29",
+              "quote": "Club Brugge 2025-07-24 to 2026-07-01, 55 apps"
+            }
+          ]
+        }
+      ],
+      "verdict": {
+        "before": {
+          "count": 1,
+          "fourPlus": false,
+          "oneClub": true
+        },
+        "after": {
+          "count": 3,
+          "fourPlus": false,
+          "oneClub": false
+        }
+      }
+    },
+    {
+      "name": "Amadou Onana",
+      "nationality": "Belgium",
+      "birthYear": 2001,
+      "position": "Defensive Midfield",
+      "class": "hole",
+      "identity": {
+        "born": "2001-08-16",
+        "sources": [
+          {
+            "url": "https://www.fotmob.com/players/1185748",
+            "read": "2026-10-29",
+            "quote": "birthDate 2001-08-16"
+          },
+          {
+            "url": "https://www.transfermarkt.com/amadou-onana/transfers/spieler/485706",
+            "read": "2026-10-29",
+            "quote": "Date of birth/Age: 16/08/2001 (25)"
+          }
+        ]
+      },
+      "tableClubs": [
+        "aston villa",
+        "hamburger sv",
+        "losc lille"
+      ],
+      "career": [
+        {
+          "club": "Hamburger SV",
+          "seasons": null,
+          "loan": false,
+          "sources": [
+            {
+              "url": "https://www.transfermarkt.com/ceapi/transferHistory/list/485706",
+              "read": "2026-10-29",
+              "quote": "21/22 05/08/2021 Hamburg -> Lille (€14M); 20/21 01/07/2020 Hoffenheim U19 -> Hamburg (free transfer)"
+            },
+            {
+              "url": "https://www.fotmob.com/players/1185748",
+              "read": "2026-10-29",
+              "quote": "Hamburger SV 2020-07-01 to 2021-08-05, 26 apps"
+            }
+          ]
+        },
+        {
+          "club": "LOSC Lille",
+          "seasons": null,
+          "loan": false,
+          "sources": [
+            {
+              "url": "https://www.transfermarkt.com/ceapi/transferHistory/list/485706",
+              "read": "2026-10-29",
+              "quote": "22/23 09/08/2022 Lille -> Everton (€40M); 21/22 05/08/2021 Hamburg -> Lille (€14M)"
+            },
+            {
+              "url": "https://www.fotmob.com/players/1185748",
+              "read": "2026-10-29",
+              "quote": "Lille 2021-08-05 to 2022-08-09, 43 apps"
+            }
+          ]
+        },
+        {
+          "club": "Aston Villa",
+          "seasons": null,
+          "loan": false,
+          "sources": [
+            {
+              "url": "https://www.transfermarkt.com/ceapi/transferHistory/list/485706",
+              "read": "2026-10-29",
+              "quote": "24/25 22/07/2024 Everton -> Aston Villa (€59M)"
+            },
+            {
+              "url": "https://www.fotmob.com/players/1185748",
+              "read": "2026-10-29",
+              "quote": "Aston Villa 2024-07-22 to now, 72 apps"
+            }
+          ]
+        }
+      ],
+      "clubs": [
+        {
+          "club": "Everton FC",
+          "fromSeason": "2022-23 to 2023-24",
+          "toSeason": "2022-23 to 2023-24",
+          "loan": false,
+          "sources": [
+            {
+              "url": "https://www.transfermarkt.com/ceapi/transferHistory/list/485706",
+              "read": "2026-10-29",
+              "quote": "24/25 22/07/2024 Everton -> Aston Villa (€59M); 22/23 09/08/2022 Lille -> Everton (€40M)"
+            },
+            {
+              "url": "https://www.fotmob.com/players/1185748",
+              "read": "2026-10-29",
+              "quote": "Everton 2022-08-09 to 2024-07-22, 72 apps"
+            }
+          ]
+        }
+      ],
+      "notes": "Hoffenheim II (one appearance, 2019) is a reserve side and does not count.",
+      "verdict": {
+        "before": {
+          "count": 3,
+          "fourPlus": false,
+          "oneClub": false
+        },
+        "after": {
+          "count": 4,
+          "fourPlus": true,
+          "oneClub": false
+        }
+      }
+    },
+    {
+      "name": "Angelo Stiller",
+      "nationality": "Germany",
+      "birthYear": 2001,
+      "position": "Defensive Midfield",
+      "class": "hole",
+      "identity": {
+        "born": "2001-04-04",
+        "sources": [
+          {
+            "url": "https://www.fotmob.com/players/1071186",
+            "read": "2026-10-29",
+            "quote": "birthDate 2001-04-04"
+          },
+          {
+            "url": "https://www.transfermarkt.com/angelo-stiller/transfers/spieler/443710",
+            "read": "2026-10-29",
+            "quote": "Date of birth/Age: 04/04/2001 (25)"
+          }
+        ]
+      },
+      "tableClubs": [
+        "fc bayern munich ii",
+        "tsg 1899 hoffenheim",
+        "vfb stuttgart"
+      ],
+      "career": [
+        {
+          "club": "TSG 1899 Hoffenheim",
+          "seasons": null,
+          "loan": false,
+          "sources": [
+            {
+              "url": "https://www.transfermarkt.com/ceapi/transferHistory/list/443710",
+              "read": "2026-10-29",
+              "quote": "23/24 25/08/2023 Hoffenheim -> Stuttgart (€5.5M); 21/22 01/07/2021 FC Bayern II -> Hoffenheim (free transfer)"
+            },
+            {
+              "url": "https://www.fotmob.com/players/1071186",
+              "read": "2026-10-29",
+              "quote": "Hoffenheim (free transfer) 2021-07-01 to 2023-08-25, 52 apps"
+            }
+          ]
+        },
+        {
+          "club": "VfB Stuttgart",
+          "seasons": null,
+          "loan": false,
+          "sources": [
+            {
+              "url": "https://www.transfermarkt.com/ceapi/transferHistory/list/443710",
+              "read": "2026-10-29",
+              "quote": "23/24 25/08/2023 Hoffenheim -> Stuttgart (€5.5M)"
+            },
+            {
+              "url": "https://www.fotmob.com/players/1071186",
+              "read": "2026-10-29",
+              "quote": "VfB Stuttgart 2023-08-25 to now, 145 apps"
+            }
+          ]
+        }
+      ],
+      "clubs": [
+        {
+          "club": "Bayern Munich",
+          "fromSeason": "2020-21",
+          "toSeason": "2020-21",
+          "loan": false,
+          "sources": [
+            {
+              "url": "https://www.fotmob.com/players/1071186",
+              "read": "2026-10-29",
+              "quote": "Bayern München 2019-07-17 to 2021-06-30, 3 apps"
+            },
+            {
+              "url": "https://www.bundesliga.com/en/bundesliga/news/who-is-angelo-stiller-bayern-munich-stuttgart-midfielder-germany-11003",
+              "read": "2026-10-29",
+              "quote": "he made three substitute appearances for the Bayern first team in the DFB Cup and Champions League in 2020/21"
+            }
+          ]
+        }
+      ],
+      "notes": "Transfermarkt files him at FC Bayern II until he left (FC Bayern II -> Hoffenheim); the Bayern first team appearances come from FotMob and bundesliga.com.",
+      "verdict": {
+        "before": {
+          "count": 3,
+          "fourPlus": false,
+          "oneClub": false
+        },
+        "after": {
+          "count": 3,
+          "fourPlus": false,
+          "oneClub": false
+        }
+      }
+    },
+    {
+      "name": "Carlos Baleba",
+      "nationality": "Cameroon",
+      "birthYear": 2004,
+      "position": "Defensive Midfield",
+      "class": "hole",
+      "identity": {
+        "born": "2004-01-03",
+        "sources": [
+          {
+            "url": "https://www.fotmob.com/players/1352713",
+            "read": "2026-10-29",
+            "quote": "birthDate 2004-01-03"
+          },
+          {
+            "url": "https://www.transfermarkt.com/carlos-baleba/transfers/spieler/973085",
+            "read": "2026-10-29",
+            "quote": "Date of birth/Age: 03/01/2004 (22)"
+          }
+        ]
+      },
+      "tableClubs": [
+        "manchester united"
+      ],
+      "career": [
+        {
+          "club": "Manchester United",
+          "seasons": null,
+          "loan": false,
+          "sources": [
+            {
+              "url": "https://www.transfermarkt.com/ceapi/transferHistory/list/973085",
+              "read": "2026-10-29",
+              "quote": "26/27 25/08/2026 Brighton -> Man Utd (€76M)"
+            },
+            {
+              "url": "https://www.fotmob.com/players/1352713",
+              "read": "2026-10-29",
+              "quote": "Manchester United 2026-08-25 to now, 5 apps"
+            }
+          ]
+        }
+      ],
+      "clubs": [
+        {
+          "club": "LOSC Lille",
+          "fromSeason": "2021-22 to 2022-23",
+          "toSeason": "2021-22 to 2022-23",
+          "loan": false,
+          "sources": [
+            {
+              "url": "https://www.transfermarkt.com/ceapi/transferHistory/list/973085",
+              "read": "2026-10-29",
+              "quote": "23/24 29/08/2023 Lille -> Brighton (€27M); 22/23 01/07/2022 LOSC Lille B -> Lille (-)"
+            },
+            {
+              "url": "https://www.fotmob.com/players/1352713",
+              "read": "2026-10-29",
+              "quote": "Lille 2022-04-01 to 2023-08-29, 23 apps"
+            }
+          ]
+        },
+        {
+          "club": "Brighton & Hove Albion",
+          "fromSeason": "2023-24 to 2025-26",
+          "toSeason": "2023-24 to 2025-26",
+          "loan": false,
+          "sources": [
+            {
+              "url": "https://www.transfermarkt.com/ceapi/transferHistory/list/973085",
+              "read": "2026-10-29",
+              "quote": "26/27 25/08/2026 Brighton -> Man Utd (€76M); 23/24 29/08/2023 Lille -> Brighton (€27M)"
+            },
+            {
+              "url": "https://www.fotmob.com/players/1352713",
+              "read": "2026-10-29",
+              "quote": "Brighton & Hove Albion 2023-08-29 to 2026-08-25, 112 apps"
+            }
+          ]
+        }
+      ],
+      "notes": "Brasseries (Cameroon, before Lille B) is named by Transfermarkt only, and FotMob lists no senior spell there, so it is not counted.",
+      "verdict": {
+        "before": {
+          "count": 1,
+          "fourPlus": false,
+          "oneClub": true
+        },
+        "after": {
+          "count": 3,
+          "fourPlus": false,
+          "oneClub": false
+        }
+      }
+    },
+    {
+      "name": "Ethan Ampadu",
+      "nationality": "Wales",
+      "birthYear": 2000,
+      "position": "Defensive Midfield",
+      "class": "hole",
+      "identity": {
+        "born": "2000-09-14",
+        "sources": [
+          {
+            "url": "https://www.fotmob.com/players/780432",
+            "read": "2026-10-29",
+            "quote": "birthDate 2000-09-14"
+          },
+          {
+            "url": "https://www.transfermarkt.com/ethan-ampadu/transfers/spieler/392771",
+            "read": "2026-10-29",
+            "quote": "Date of birth/Age: 14/09/2000 (26)"
+          }
+        ]
+      },
+      "tableClubs": [
+        "chelsea fc",
+        "chelsea fc u21",
+        "leeds united",
+        "rb leipzig",
+        "sheffield united",
+        "venezia fc"
+      ],
+      "career": [
+        {
+          "club": "Chelsea FC",
+          "seasons": null,
+          "loan": false,
+          "sources": [
+            {
+              "url": "https://www.transfermarkt.com/ceapi/transferHistory/list/392771",
+              "read": "2026-10-29",
+              "quote": "17/18 01/07/2017 Exeter City -> Chelsea (€2.8M)"
+            },
+            {
+              "url": "https://www.fotmob.com/players/780432",
+              "read": "2026-10-29",
+              "quote": "Chelsea 2017-07-01 to 2019-07-22, 12 apps"
+            }
+          ]
+        },
+        {
+          "club": "RB Leipzig",
+          "seasons": null,
+          "loan": true,
+          "sources": [
+            {
+              "url": "https://www.transfermarkt.com/ceapi/transferHistory/list/392771",
+              "read": "2026-10-29",
+              "quote": "19/20 30/06/2020 Leipzig -> Chelsea (End of loan); 19/20 22/07/2019 Chelsea -> Leipzig (Loan fee:€650K)"
+            },
+            {
+              "url": "https://www.fotmob.com/players/780432",
+              "read": "2026-10-29",
+              "quote": "RB Leipzig (on loan) 2019-07-22 to 2020-07-31, 7 apps"
+            }
+          ]
+        },
+        {
+          "club": "Sheffield United",
+          "seasons": null,
+          "loan": true,
+          "sources": [
+            {
+              "url": "https://www.transfermarkt.com/ceapi/transferHistory/list/392771",
+              "read": "2026-10-29",
+              "quote": "20/21 31/05/2021 Sheff Utd -> Chelsea (End of loan); 20/21 07/09/2020 Chelsea -> Sheff Utd (loan transfer)"
+            },
+            {
+              "url": "https://www.fotmob.com/players/780432",
+              "read": "2026-10-29",
+              "quote": "Sheffield United (on loan) 2020-09-07 to 2021-06-30, 29 apps"
+            }
+          ]
+        },
+        {
+          "club": "Venezia FC",
+          "seasons": null,
+          "loan": true,
+          "sources": [
+            {
+              "url": "https://www.transfermarkt.com/ceapi/transferHistory/list/392771",
+              "read": "2026-10-29",
+              "quote": "21/22 30/06/2022 Venezia -> Chelsea (End of loan); 21/22 31/08/2021 Chelsea -> Venezia (loan transfer)"
+            },
+            {
+              "url": "https://www.fotmob.com/players/780432",
+              "read": "2026-10-29",
+              "quote": "Venezia (on loan) 2021-08-31 to 2022-06-30, 30 apps"
+            }
+          ]
+        },
+        {
+          "club": "Leeds United",
+          "seasons": null,
+          "loan": false,
+          "sources": [
+            {
+              "url": "https://www.transfermarkt.com/ceapi/transferHistory/list/392771",
+              "read": "2026-10-29",
+              "quote": "23/24 19/07/2023 Chelsea -> Leeds (€8.1M)"
+            },
+            {
+              "url": "https://www.fotmob.com/players/780432",
+              "read": "2026-10-29",
+              "quote": "Leeds United 2023-07-19 to now, 136 apps"
+            }
+          ]
+        }
+      ],
+      "clubs": [
+        {
+          "club": "Exeter City",
+          "fromSeason": "2016-17",
+          "toSeason": "2016-17",
+          "loan": false,
+          "sources": [
+            {
+              "url": "https://www.transfermarkt.com/ceapi/transferHistory/list/392771",
+              "read": "2026-10-29",
+              "quote": "17/18 01/07/2017 Exeter City -> Chelsea (€2.8M); 16/17 01/07/2016 Exeter U18 -> Exeter City (-); 15/16 01/07/2015 Exeter Jugend -> Exeter U18 (-)"
+            },
+            {
+              "url": "https://www.fotmob.com/players/780432",
+              "read": "2026-10-29",
+              "quote": "Exeter City 2016-08-01 to 2017-06-30, 13 apps"
+            }
+          ]
+        },
+        {
+          "club": "Spezia Calcio",
+          "fromSeason": "2022-23",
+          "toSeason": "2022-23",
+          "loan": true,
+          "sources": [
+            {
+              "url": "https://www.transfermarkt.com/ceapi/transferHistory/list/392771",
+              "read": "2026-10-29",
+              "quote": "22/23 30/06/2023 Spezia Calcio -> Chelsea (End of loan); 22/23 01/09/2022 Chelsea -> Spezia Calcio (loan transfer)"
+            },
+            {
+              "url": "https://www.fotmob.com/players/780432",
+              "read": "2026-10-29",
+              "quote": "Spezia (on loan) 2022-09-01 to 2023-06-30, 34 apps"
+            }
+          ]
+        }
+      ],
+      "verdict": {
+        "before": {
+          "count": 6,
+          "fourPlus": true,
+          "oneClub": false
+        },
+        "after": {
+          "count": 7,
+          "fourPlus": true,
+          "oneClub": false
+        }
+      }
+    },
+    {
       "name": "Evanilson",
       "nationality": "Brazil",
       "birthYear": 1999,
@@ -613,6 +1254,271 @@
       }
     },
     {
+      "name": "Kaishu Sano",
+      "nationality": "Japan",
+      "birthYear": 2000,
+      "position": "Defensive Midfield",
+      "class": "hole",
+      "identity": {
+        "born": "2000-12-30",
+        "sources": [
+          {
+            "url": "https://www.fotmob.com/players/1033111",
+            "read": "2026-10-29",
+            "quote": "birthDate 2000-12-30"
+          },
+          {
+            "url": "https://www.transfermarkt.com/kaishu-sano/transfers/spieler/643574",
+            "read": "2026-10-29",
+            "quote": "Date of birth/Age: 30/12/2000 (25)"
+          }
+        ]
+      },
+      "tableClubs": [
+        "1.fsv mainz 05"
+      ],
+      "career": [
+        {
+          "club": "1.FSV Mainz 05",
+          "seasons": null,
+          "loan": false,
+          "sources": [
+            {
+              "url": "https://www.transfermarkt.com/ceapi/transferHistory/list/643574",
+              "read": "2026-10-29",
+              "quote": "24/25 03/07/2024 Kashima Antlers -> Mainz (€2.5M)"
+            },
+            {
+              "url": "https://www.fotmob.com/players/1033111",
+              "read": "2026-10-29",
+              "quote": "Mainz 05 2024-07-03 to now, 93 apps"
+            }
+          ]
+        }
+      ],
+      "clubs": [
+        {
+          "club": "FC Machida Zelvia",
+          "fromSeason": "2019 to 2022",
+          "toSeason": "2019 to 2022",
+          "loan": false,
+          "sources": [
+            {
+              "url": "https://www.transfermarkt.com/ceapi/transferHistory/list/643574",
+              "read": "2026-10-29",
+              "quote": "22/23 09/01/2023 Machida Zelvia -> Kashima Antlers (?); 18/19 01/02/2019 Yonago Kita HS -> Machida Zelvia (free transfer)"
+            },
+            {
+              "url": "https://www.fotmob.com/players/1033111",
+              "read": "2026-10-29",
+              "quote": "Machida Zelvia 2019-01-05 to 2022-12-21, 118 apps"
+            }
+          ]
+        },
+        {
+          "club": "Kashima Antlers",
+          "fromSeason": "2023 to 2024",
+          "toSeason": "2023 to 2024",
+          "loan": false,
+          "sources": [
+            {
+              "url": "https://www.transfermarkt.com/ceapi/transferHistory/list/643574",
+              "read": "2026-10-29",
+              "quote": "24/25 03/07/2024 Kashima Antlers -> Mainz (€2.5M); 22/23 09/01/2023 Machida Zelvia -> Kashima Antlers (?)"
+            },
+            {
+              "url": "https://www.fotmob.com/players/1033111",
+              "read": "2026-10-29",
+              "quote": "Kashima Antlers 2023-01-09 to 2024-07-03, 58 apps"
+            }
+          ]
+        }
+      ],
+      "verdict": {
+        "before": {
+          "count": 1,
+          "fourPlus": false,
+          "oneClub": true
+        },
+        "after": {
+          "count": 3,
+          "fourPlus": false,
+          "oneClub": false
+        }
+      }
+    },
+    {
+      "name": "Leon Avdullahu",
+      "nationality": "Kosovo",
+      "birthYear": 2004,
+      "position": "Defensive Midfield",
+      "class": "hole",
+      "identity": {
+        "born": "2004-02-23",
+        "sources": [
+          {
+            "url": "https://www.fotmob.com/players/1478148",
+            "read": "2026-10-29",
+            "quote": "birthDate 2004-02-23"
+          },
+          {
+            "url": "https://www.transfermarkt.com/leon-avdullahu/transfers/spieler/667457",
+            "read": "2026-10-29",
+            "quote": "Date of birth/Age: 23/02/2004 (22)"
+          }
+        ]
+      },
+      "tableClubs": [
+        "tsg 1899 hoffenheim"
+      ],
+      "career": [
+        {
+          "club": "TSG 1899 Hoffenheim",
+          "seasons": null,
+          "loan": false,
+          "sources": [
+            {
+              "url": "https://www.transfermarkt.com/ceapi/transferHistory/list/667457",
+              "read": "2026-10-29",
+              "quote": "25/26 01/07/2025 Basel -> Hoffenheim (€8.0M)"
+            },
+            {
+              "url": "https://www.fotmob.com/players/1478148",
+              "read": "2026-10-29",
+              "quote": "Hoffenheim 2025-07-01 to now, 47 apps"
+            }
+          ]
+        }
+      ],
+      "clubs": [
+        {
+          "club": "FC Basel 1893",
+          "fromSeason": "2022-23 to 2024-25",
+          "toSeason": "2022-23 to 2024-25",
+          "loan": false,
+          "sources": [
+            {
+              "url": "https://www.transfermarkt.com/ceapi/transferHistory/list/667457",
+              "read": "2026-10-29",
+              "quote": "25/26 01/07/2025 Basel -> Hoffenheim (€8.0M); 23/24 21/07/2023 FC Basel U21 -> Basel (-); 22/23 01/07/2022 FC Basel U18 -> FC Basel U21 (-); 20/21 01/07/2020 FC Basel U16 -> FC Basel U18 (-); 19/20 01/07/2019 FC Basel Yth. -> FC Basel U16 (-)"
+            },
+            {
+              "url": "https://www.fotmob.com/players/1478148",
+              "read": "2026-10-29",
+              "quote": "Basel 2023-05-01 to 2025-07-01, 70 apps"
+            }
+          ]
+        }
+      ],
+      "verdict": {
+        "before": {
+          "count": 1,
+          "fourPlus": false,
+          "oneClub": true
+        },
+        "after": {
+          "count": 2,
+          "fourPlus": false,
+          "oneClub": false
+        }
+      }
+    },
+    {
+      "name": "Mario Gila",
+      "nationality": "Spain",
+      "birthYear": 2000,
+      "position": "Centre-Back",
+      "class": "hole",
+      "identity": {
+        "born": "2000-08-29",
+        "sources": [
+          {
+            "url": "https://www.fotmob.com/players/1106074",
+            "read": "2026-10-29",
+            "quote": "birthDate 2000-08-29"
+          },
+          {
+            "url": "https://www.transfermarkt.com/mario-gila/transfers/spieler/618341",
+            "read": "2026-10-29",
+            "quote": "Date of birth/Age: 29/08/2000 (26)"
+          }
+        ]
+      },
+      "tableClubs": [
+        "ac milan",
+        "ss lazio"
+      ],
+      "career": [
+        {
+          "club": "SS Lazio",
+          "seasons": null,
+          "loan": false,
+          "sources": [
+            {
+              "url": "https://www.transfermarkt.com/ceapi/transferHistory/list/618341",
+              "read": "2026-10-29",
+              "quote": "26/27 10/07/2026 Lazio -> AC Milan (€30M); 22/23 12/07/2022 RM Castilla -> Lazio (€21M)"
+            },
+            {
+              "url": "https://www.fotmob.com/players/1106074",
+              "read": "2026-10-29",
+              "quote": "Lazio 2022-07-12 to 2026-07-10, 120 apps"
+            }
+          ]
+        },
+        {
+          "club": "AC Milan",
+          "seasons": null,
+          "loan": false,
+          "sources": [
+            {
+              "url": "https://www.transfermarkt.com/ceapi/transferHistory/list/618341",
+              "read": "2026-10-29",
+              "quote": "26/27 10/07/2026 Lazio -> AC Milan (€30M)"
+            },
+            {
+              "url": "https://www.fotmob.com/players/1106074",
+              "read": "2026-10-29",
+              "quote": "Milan 2026-07-10 to now, 8 apps"
+            }
+          ]
+        }
+      ],
+      "clubs": [
+        {
+          "club": "Real Madrid",
+          "fromSeason": "2021-22",
+          "toSeason": "2021-22",
+          "loan": false,
+          "sources": [
+            {
+              "url": "https://www.fotmob.com/players/1106074",
+              "read": "2026-10-29",
+              "quote": "Real Madrid 2022-01-19 to 2022-07-12, 2 apps"
+            },
+            {
+              "url": "https://es.soccerway.com/noticias/futbol-laliga-ea-sports-mario-gila-el-tapado-que-destaca-para-volver-al-real-madrid-en-invierno/6Nss8hy9",
+              "read": "2026-10-29",
+              "quote": "'Carletto' le hizo debutar con el primer equipo en abril de 2022"
+            }
+          ]
+        }
+      ],
+      "notes": "Transfermarkt files him at Real Madrid Castilla until he left (RM Castilla -> Lazio); the first team appearances come from FotMob (2 apps) and Soccerway (debut with the first team in April 2022).",
+      "verdict": {
+        "before": {
+          "count": 2,
+          "fourPlus": false,
+          "oneClub": false
+        },
+        "after": {
+          "count": 3,
+          "fourPlus": false,
+          "oneClub": false
+        }
+      }
+    },
+    {
       "name": "Moisés Caicedo",
       "nationality": "Ecuador",
       "birthYear": 2001,
@@ -716,6 +1622,231 @@
         "before": {
           "count": 4,
           "fourPlus": true,
+          "oneClub": false
+        },
+        "after": {
+          "count": 4,
+          "fourPlus": true,
+          "oneClub": false
+        }
+      }
+    },
+    {
+      "name": "Morten Hjulmand",
+      "nationality": "Denmark",
+      "birthYear": 1999,
+      "position": "Defensive Midfield",
+      "class": "hole",
+      "identity": {
+        "born": "1999-06-25",
+        "sources": [
+          {
+            "url": "https://www.fotmob.com/players/950199",
+            "read": "2026-10-29",
+            "quote": "birthDate 1999-06-25"
+          },
+          {
+            "url": "https://www.transfermarkt.com/morten-hjulmand/transfers/spieler/461496",
+            "read": "2026-10-29",
+            "quote": "Date of birth/Age: 25/06/1999 (27)"
+          }
+        ]
+      },
+      "tableClubs": [
+        "atletico de madrid",
+        "us lecce"
+      ],
+      "career": [
+        {
+          "club": "US Lecce",
+          "seasons": null,
+          "loan": false,
+          "sources": [
+            {
+              "url": "https://www.transfermarkt.com/ceapi/transferHistory/list/461496",
+              "read": "2026-10-29",
+              "quote": "23/24 13/08/2023 Lecce -> Sporting (€20M); 20/21 16/01/2021 Admira Wacker -> Lecce (€2.5M)"
+            },
+            {
+              "url": "https://www.fotmob.com/players/950199",
+              "read": "2026-10-29",
+              "quote": "Lecce 2021-01-18 to 2023-08-13, 95 apps"
+            }
+          ]
+        },
+        {
+          "club": "Atlético de Madrid",
+          "seasons": null,
+          "loan": false,
+          "sources": [
+            {
+              "url": "https://www.transfermarkt.com/ceapi/transferHistory/list/461496",
+              "read": "2026-10-29",
+              "quote": "26/27 11/07/2026 Sporting -> Atlético (€40M)"
+            },
+            {
+              "url": "https://www.fotmob.com/players/950199",
+              "read": "2026-10-29",
+              "quote": "Atlético Madrid 2026-07-11 to now, 12 apps"
+            }
+          ]
+        }
+      ],
+      "clubs": [
+        {
+          "club": "FC Admira Wacker",
+          "fromSeason": "2018-19 to 2020-21",
+          "toSeason": "2018-19 to 2020-21",
+          "loan": false,
+          "sources": [
+            {
+              "url": "https://www.transfermarkt.com/ceapi/transferHistory/list/461496",
+              "read": "2026-10-29",
+              "quote": "20/21 16/01/2021 Admira Wacker -> Lecce (€2.5M); 18/19 01/07/2018 Copenhagen U19 -> Admira Wacker (?)"
+            },
+            {
+              "url": "https://www.fotmob.com/players/950199",
+              "read": "2026-10-29",
+              "quote": "Admira Wacker 2018-06-09 to 2021-01-18, 74 apps"
+            }
+          ]
+        },
+        {
+          "club": "Sporting CP",
+          "fromSeason": "2023-24 to 2025-26",
+          "toSeason": "2023-24 to 2025-26",
+          "loan": false,
+          "sources": [
+            {
+              "url": "https://www.transfermarkt.com/ceapi/transferHistory/list/461496",
+              "read": "2026-10-29",
+              "quote": "26/27 11/07/2026 Sporting -> Atlético (€40M); 23/24 13/08/2023 Lecce -> Sporting (€20M)"
+            },
+            {
+              "url": "https://www.fotmob.com/players/950199",
+              "read": "2026-10-29",
+              "quote": "Sporting CP 2023-08-13 to 2026-07-11, 141 apps"
+            }
+          ]
+        }
+      ],
+      "notes": "FC Copenhagen (FotMob: one day in June 2018, no appearances) was his youth club (Transfermarkt: Copenhagen U19 -> Admira Wacker), so it is not counted.",
+      "verdict": {
+        "before": {
+          "count": 2,
+          "fourPlus": false,
+          "oneClub": false
+        },
+        "after": {
+          "count": 4,
+          "fourPlus": true,
+          "oneClub": false
+        }
+      }
+    },
+    {
+      "name": "Máximo Perrone",
+      "nationality": "Argentina",
+      "birthYear": 2003,
+      "position": "Defensive Midfield",
+      "class": "hole",
+      "identity": {
+        "born": "2003-01-07",
+        "sources": [
+          {
+            "url": "https://www.fotmob.com/players/1336582",
+            "read": "2026-10-29",
+            "quote": "birthDate 2003-01-07"
+          },
+          {
+            "url": "https://www.transfermarkt.com/maximo-perrone/transfers/spieler/668547",
+            "read": "2026-10-29",
+            "quote": "Date of birth/Age: 07/01/2003 (23)"
+          }
+        ]
+      },
+      "tableClubs": [
+        "ca velez sarsfield",
+        "como 1907"
+      ],
+      "career": [
+        {
+          "club": "CA Vélez Sarsfield",
+          "seasons": null,
+          "loan": false,
+          "sources": [
+            {
+              "url": "https://www.transfermarkt.com/ceapi/transferHistory/list/668547",
+              "read": "2026-10-29",
+              "quote": "22/23 23/01/2023 Vélez Sarsfield -> Man City (€11M); 21/22 01/01/2022 Vélez II -> Vélez Sarsfield (-)"
+            },
+            {
+              "url": "https://www.fotmob.com/players/1336582",
+              "read": "2026-10-29",
+              "quote": "Vélez Sarsfield 2020-08-01 to 2023-01-23, 33 apps"
+            }
+          ]
+        },
+        {
+          "club": "Como 1907",
+          "seasons": null,
+          "loan": false,
+          "sources": [
+            {
+              "url": "https://www.transfermarkt.com/ceapi/transferHistory/list/668547",
+              "read": "2026-10-29",
+              "quote": "25/26 18/07/2025 Man City -> Como (€13M); 24/25 30/06/2025 Como -> Man City (End of loan); 24/25 25/08/2024 Man City -> Como (loan transfer)"
+            },
+            {
+              "url": "https://www.fotmob.com/players/1336582",
+              "read": "2026-10-29",
+              "quote": "Como 2025-07-17 to now, 53 apps; Como (on loan) 2024-08-25 to 2025-06-30, 26 apps"
+            }
+          ]
+        }
+      ],
+      "clubs": [
+        {
+          "club": "Manchester City",
+          "fromSeason": "2022-23",
+          "toSeason": "2022-23",
+          "loan": false,
+          "sources": [
+            {
+              "url": "https://www.transfermarkt.com/ceapi/transferHistory/list/668547",
+              "read": "2026-10-29",
+              "quote": "25/26 18/07/2025 Man City -> Como (€13M); 24/25 30/06/2025 Como -> Man City (End of loan); 24/25 25/08/2024 Man City -> Como (loan transfer); 23/24 30/06/2024 UD Las Palmas -> Man City (End of loan); 23/24 23/08/2023 Man City -> UD Las Palmas (loan transfer); 22/23 23/01/2023 Vélez Sarsfield -> Man City (€11M)"
+            },
+            {
+              "url": "https://www.fotmob.com/players/1336582",
+              "read": "2026-10-29",
+              "quote": "Manchester City 2023-01-23 to 2023-08-23, 2 apps"
+            }
+          ]
+        },
+        {
+          "club": "UD Las Palmas",
+          "fromSeason": "2023-24",
+          "toSeason": "2023-24",
+          "loan": true,
+          "sources": [
+            {
+              "url": "https://www.transfermarkt.com/ceapi/transferHistory/list/668547",
+              "read": "2026-10-29",
+              "quote": "23/24 30/06/2024 UD Las Palmas -> Man City (End of loan); 23/24 23/08/2023 Man City -> UD Las Palmas (loan transfer)"
+            },
+            {
+              "url": "https://www.fotmob.com/players/1336582",
+              "read": "2026-10-29",
+              "quote": "Las Palmas (on loan) 2023-08-23 to 2024-06-30, 31 apps"
+            }
+          ]
+        }
+      ],
+      "verdict": {
+        "before": {
+          "count": 2,
+          "fourPlus": false,
           "oneClub": false
         },
         "after": {
@@ -899,6 +2030,118 @@
       }
     },
     {
+      "name": "Sandro Tonali",
+      "nationality": "Italy",
+      "birthYear": 2000,
+      "position": "Defensive Midfield",
+      "class": "hole",
+      "identity": {
+        "born": "2000-05-08",
+        "sources": [
+          {
+            "url": "https://www.fotmob.com/players/867414",
+            "read": "2026-10-29",
+            "quote": "birthDate 2000-05-08"
+          },
+          {
+            "url": "https://www.transfermarkt.com/sandro-tonali/transfers/spieler/397033",
+            "read": "2026-10-29",
+            "quote": "Date of birth/Age: 08/05/2000 (26)"
+          }
+        ]
+      },
+      "tableClubs": [
+        "ac milan",
+        "brescia calcio",
+        "tottenham hotspur"
+      ],
+      "career": [
+        {
+          "club": "Brescia Calcio",
+          "seasons": null,
+          "loan": false,
+          "sources": [
+            {
+              "url": "https://www.transfermarkt.com/ceapi/transferHistory/list/397033",
+              "read": "2026-10-29",
+              "quote": "21/22 08/07/2021 Brescia -> AC Milan (€14M); 20/21 30/06/2021 AC Milan -> Brescia (End of loan); 20/21 09/09/2020 Brescia -> AC Milan (Loan fee:€5.0M); 17/18 01/01/2018 Brescia U19 -> Brescia (-); 17/18 01/07/2017 Brescia U17 -> Brescia U19 (-); 15/16 01/07/2015 Brescia Youth -> Brescia U17 (-); 12/13 01/07/2012 Piacenza Youth -> Brescia Youth (free transfer)"
+            },
+            {
+              "url": "https://www.fotmob.com/players/867414",
+              "read": "2026-10-29",
+              "quote": "Brescia (back from loan) 2021-07-01 to 2021-07-07, ? apps; Brescia 2017-07-01 to 2020-09-09, 89 apps"
+            }
+          ]
+        },
+        {
+          "club": "AC Milan",
+          "seasons": null,
+          "loan": false,
+          "sources": [
+            {
+              "url": "https://www.transfermarkt.com/ceapi/transferHistory/list/397033",
+              "read": "2026-10-29",
+              "quote": "23/24 03/07/2023 AC Milan -> Newcastle (€67M); 21/22 08/07/2021 Brescia -> AC Milan (€14M); 20/21 30/06/2021 AC Milan -> Brescia (End of loan); 20/21 09/09/2020 Brescia -> AC Milan (Loan fee:€5.0M)"
+            },
+            {
+              "url": "https://www.fotmob.com/players/867414",
+              "read": "2026-10-29",
+              "quote": "Milan 2021-07-08 to 2023-07-03, 93 apps; Milan (on loan) 2020-09-09 to 2021-06-30, 37 apps"
+            }
+          ]
+        },
+        {
+          "club": "Tottenham Hotspur",
+          "seasons": null,
+          "loan": false,
+          "sources": [
+            {
+              "url": "https://www.transfermarkt.com/ceapi/transferHistory/list/397033",
+              "read": "2026-10-29",
+              "quote": "26/27 06/07/2026 Newcastle -> Tottenham (€108M)"
+            },
+            {
+              "url": "https://www.fotmob.com/players/867414",
+              "read": "2026-10-29",
+              "quote": "Tottenham Hotspur 2026-07-06 to now, 8 apps"
+            }
+          ]
+        }
+      ],
+      "clubs": [
+        {
+          "club": "Newcastle United",
+          "fromSeason": "2023-24 to 2025-26",
+          "toSeason": "2023-24 to 2025-26",
+          "loan": false,
+          "sources": [
+            {
+              "url": "https://www.transfermarkt.com/ceapi/transferHistory/list/397033",
+              "read": "2026-10-29",
+              "quote": "26/27 06/07/2026 Newcastle -> Tottenham (€108M); 23/24 03/07/2023 AC Milan -> Newcastle (€67M)"
+            },
+            {
+              "url": "https://www.fotmob.com/players/867414",
+              "read": "2026-10-29",
+              "quote": "Newcastle United 2023-07-03 to 2026-07-06, 110 apps"
+            }
+          ]
+        }
+      ],
+      "verdict": {
+        "before": {
+          "count": 3,
+          "fourPlus": false,
+          "oneClub": false
+        },
+        "after": {
+          "count": 4,
+          "fourPlus": true,
+          "oneClub": false
+        }
+      }
+    },
+    {
       "name": "Tyler Morton",
       "nationality": "England",
       "birthYear": 2002,
@@ -1017,6 +2260,80 @@
   ],
   "agrees": [
     {
+      "name": "Alan Varela",
+      "nationality": "Argentina",
+      "birthYear": 2001,
+      "position": "Defensive Midfield",
+      "class": "hole",
+      "identity": {
+        "born": "2001-07-04",
+        "sources": [
+          {
+            "url": "https://www.fotmob.com/players/1186684",
+            "read": "2026-10-29",
+            "quote": "birthDate 2001-07-04"
+          },
+          {
+            "url": "https://www.transfermarkt.com/alan-varela/transfers/spieler/756990",
+            "read": "2026-10-29",
+            "quote": "Date of birth/Age: 04/07/2001 (25)"
+          }
+        ]
+      },
+      "tableClubs": [
+        "ca boca juniors",
+        "fc porto"
+      ],
+      "career": [
+        {
+          "club": "CA Boca Juniors",
+          "seasons": null,
+          "loan": false,
+          "sources": [
+            {
+              "url": "https://www.transfermarkt.com/ceapi/transferHistory/list/756990",
+              "read": "2026-10-29",
+              "quote": "23/24 16/08/2023 Boca Juniors -> Porto (€8.0M); 20/21 01/01/2021 Boca Juniors II -> Boca Juniors (-)"
+            },
+            {
+              "url": "https://www.fotmob.com/players/1186684",
+              "read": "2026-10-29",
+              "quote": "Boca Juniors 2020-07-01 to 2023-08-14, 111 apps"
+            }
+          ]
+        },
+        {
+          "club": "FC Porto",
+          "seasons": null,
+          "loan": false,
+          "sources": [
+            {
+              "url": "https://www.transfermarkt.com/ceapi/transferHistory/list/756990",
+              "read": "2026-10-29",
+              "quote": "23/24 16/08/2023 Boca Juniors -> Porto (€8.0M)"
+            },
+            {
+              "url": "https://www.fotmob.com/players/1186684",
+              "read": "2026-10-29",
+              "quote": "FC Porto 2023-08-16 to now, 145 apps"
+            }
+          ]
+        }
+      ],
+      "verdict": {
+        "before": {
+          "count": 2,
+          "fourPlus": false,
+          "oneClub": false
+        },
+        "after": {
+          "count": 2,
+          "fourPlus": false,
+          "oneClub": false
+        }
+      }
+    },
+    {
       "name": "Alejandro Balde",
       "nationality": "Spain",
       "birthYear": 2003,
@@ -1070,6 +2387,228 @@
           "count": 1,
           "fourPlus": false,
           "oneClub": true
+        }
+      }
+    },
+    {
+      "name": "Aleksandar Pavlovic",
+      "nationality": "Germany",
+      "birthYear": 2004,
+      "position": "Defensive Midfield",
+      "class": "hole",
+      "identity": {
+        "born": "2004-05-03",
+        "sources": [
+          {
+            "url": "https://www.fotmob.com/players/1473580",
+            "read": "2026-10-29",
+            "quote": "birthDate 2004-05-03"
+          },
+          {
+            "url": "https://www.transfermarkt.com/aleksandar-pavlovic/transfers/spieler/792380",
+            "read": "2026-10-29",
+            "quote": "Date of birth/Age: 03/05/2004 (22)"
+          }
+        ]
+      },
+      "tableClubs": [
+        "bayern munich"
+      ],
+      "career": [
+        {
+          "club": "Bayern Munich",
+          "seasons": null,
+          "loan": false,
+          "sources": [
+            {
+              "url": "https://www.transfermarkt.com/ceapi/transferHistory/list/792380",
+              "read": "2026-10-29",
+              "quote": "23/24 01/11/2023 FC Bayern II -> Bayern Munich (-)"
+            },
+            {
+              "url": "https://www.fotmob.com/players/1473580",
+              "read": "2026-10-29",
+              "quote": "Bayern München 2023-05-05 to now, 110 apps"
+            }
+          ]
+        }
+      ],
+      "verdict": {
+        "before": {
+          "count": 1,
+          "fourPlus": false,
+          "oneClub": true
+        },
+        "after": {
+          "count": 1,
+          "fourPlus": false,
+          "oneClub": true
+        }
+      }
+    },
+    {
+      "name": "Aurélien Tchouaméni",
+      "nationality": "France",
+      "birthYear": 2000,
+      "position": "Defensive Midfield",
+      "class": "hole",
+      "identity": {
+        "born": "2000-01-27",
+        "sources": [
+          {
+            "url": "https://www.fotmob.com/players/914458",
+            "read": "2026-10-29",
+            "quote": "birthDate 2000-01-27"
+          },
+          {
+            "url": "https://www.transfermarkt.com/aurelien-tchouameni/transfers/spieler/413112",
+            "read": "2026-10-29",
+            "quote": "Date of birth/Age: 27/01/2000 (26)"
+          }
+        ]
+      },
+      "tableClubs": [
+        "as monaco",
+        "fc girondins bordeaux",
+        "real madrid"
+      ],
+      "career": [
+        {
+          "club": "FC Girondins Bordeaux",
+          "seasons": null,
+          "loan": false,
+          "sources": [
+            {
+              "url": "https://www.transfermarkt.com/ceapi/transferHistory/list/413112",
+              "read": "2026-10-29",
+              "quote": "19/20 29/01/2020 G. Bordeaux -> Monaco (€18M); 18/19 01/07/2018 G. Bordeaux B -> G. Bordeaux (-)"
+            },
+            {
+              "url": "https://www.fotmob.com/players/914458",
+              "read": "2026-10-29",
+              "quote": "Bordeaux 2017-11-26 to 2020-01-29, 37 apps"
+            }
+          ]
+        },
+        {
+          "club": "AS Monaco",
+          "seasons": null,
+          "loan": false,
+          "sources": [
+            {
+              "url": "https://www.transfermarkt.com/ceapi/transferHistory/list/413112",
+              "read": "2026-10-29",
+              "quote": "22/23 01/07/2022 Monaco -> Real Madrid (€80M); 19/20 29/01/2020 G. Bordeaux -> Monaco (€18M)"
+            },
+            {
+              "url": "https://www.fotmob.com/players/914458",
+              "read": "2026-10-29",
+              "quote": "Monaco 2020-01-29 to 2022-06-30, 95 apps"
+            }
+          ]
+        },
+        {
+          "club": "Real Madrid",
+          "seasons": null,
+          "loan": false,
+          "sources": [
+            {
+              "url": "https://www.transfermarkt.com/ceapi/transferHistory/list/413112",
+              "read": "2026-10-29",
+              "quote": "22/23 01/07/2022 Monaco -> Real Madrid (€80M)"
+            },
+            {
+              "url": "https://www.fotmob.com/players/914458",
+              "read": "2026-10-29",
+              "quote": "Real Madrid 2022-07-01 to now, 203 apps"
+            }
+          ]
+        }
+      ],
+      "verdict": {
+        "before": {
+          "count": 3,
+          "fourPlus": false,
+          "oneClub": false
+        },
+        "after": {
+          "count": 3,
+          "fourPlus": false,
+          "oneClub": false
+        }
+      }
+    },
+    {
+      "name": "Boubacar Kamara",
+      "nationality": "France",
+      "birthYear": 1999,
+      "position": "Defensive Midfield",
+      "class": "hole",
+      "identity": {
+        "born": "1999-11-23",
+        "sources": [
+          {
+            "url": "https://www.fotmob.com/players/816325",
+            "read": "2026-10-29",
+            "quote": "birthDate 1999-11-23"
+          },
+          {
+            "url": "https://www.transfermarkt.com/boubacar-kamara/transfers/spieler/394327",
+            "read": "2026-10-29",
+            "quote": "Date of birth/Age: 23/11/1999 (26)"
+          }
+        ]
+      },
+      "tableClubs": [
+        "aston villa",
+        "olympique marseille"
+      ],
+      "career": [
+        {
+          "club": "Olympique Marseille",
+          "seasons": null,
+          "loan": false,
+          "sources": [
+            {
+              "url": "https://www.transfermarkt.com/ceapi/transferHistory/list/394327",
+              "read": "2026-10-29",
+              "quote": "22/23 01/07/2022 Marseille -> Aston Villa (free transfer); 17/18 01/07/2017 Marseille B -> Marseille (-)"
+            },
+            {
+              "url": "https://www.fotmob.com/players/816325",
+              "read": "2026-10-29",
+              "quote": "Marseille 2016-12-01 to 2022-06-10, 170 apps"
+            }
+          ]
+        },
+        {
+          "club": "Aston Villa",
+          "seasons": null,
+          "loan": false,
+          "sources": [
+            {
+              "url": "https://www.transfermarkt.com/ceapi/transferHistory/list/394327",
+              "read": "2026-10-29",
+              "quote": "22/23 01/07/2022 Marseille -> Aston Villa (free transfer)"
+            },
+            {
+              "url": "https://www.fotmob.com/players/816325",
+              "read": "2026-10-29",
+              "quote": "Aston Villa (free transfer) 2022-06-10 to now, 136 apps"
+            }
+          ]
+        }
+      ],
+      "verdict": {
+        "before": {
+          "count": 2,
+          "fourPlus": false,
+          "oneClub": false
+        },
+        "after": {
+          "count": 2,
+          "fourPlus": false,
+          "oneClub": false
         }
       }
     },
@@ -1281,6 +2820,81 @@
       }
     },
     {
+      "name": "Joshua Kimmich",
+      "nationality": "Germany",
+      "birthYear": 1995,
+      "position": "Defensive Midfield",
+      "class": "hole",
+      "identity": {
+        "born": "1995-02-08",
+        "sources": [
+          {
+            "url": "https://www.fotmob.com/players/460632",
+            "read": "2026-10-29",
+            "quote": "birthDate 1995-02-08"
+          },
+          {
+            "url": "https://www.transfermarkt.com/joshua-kimmich/transfers/spieler/161056",
+            "read": "2026-10-29",
+            "quote": "Date of birth/Age: 08/02/1995 (31)"
+          }
+        ]
+      },
+      "tableClubs": [
+        "bayern munich",
+        "rb leipzig"
+      ],
+      "career": [
+        {
+          "club": "RB Leipzig",
+          "seasons": null,
+          "loan": false,
+          "sources": [
+            {
+              "url": "https://www.transfermarkt.com/ceapi/transferHistory/list/161056",
+              "read": "2026-10-29",
+              "quote": "15/16 01/07/2015 Leipzig -> Stuttgart (€1.5M); 13/14 05/07/2013 Stuttgart U19 -> Leipzig (€500K)"
+            },
+            {
+              "url": "https://www.fotmob.com/players/460632",
+              "read": "2026-10-29",
+              "quote": "RB Leipzig 2013-07-05 to 2015-05-31, 55 apps"
+            }
+          ]
+        },
+        {
+          "club": "Bayern Munich",
+          "seasons": null,
+          "loan": false,
+          "sources": [
+            {
+              "url": "https://www.transfermarkt.com/ceapi/transferHistory/list/161056",
+              "read": "2026-10-29",
+              "quote": "15/16 02/07/2015 Stuttgart -> Bayern Munich (€9.5M)"
+            },
+            {
+              "url": "https://www.fotmob.com/players/460632",
+              "read": "2026-10-29",
+              "quote": "Bayern München 2015-07-02 to now, 504 apps"
+            }
+          ]
+        }
+      ],
+      "notes": "VfB Stuttgart held his registration for days in 2013 and 2015 (a buy back between Leipzig and Bayern; FotMob shows both spells with no appearances). He was never on its senior squad, so Stuttgart is not counted.",
+      "verdict": {
+        "before": {
+          "count": 2,
+          "fourPlus": false,
+          "oneClub": false
+        },
+        "after": {
+          "count": 2,
+          "fourPlus": false,
+          "oneClub": false
+        }
+      }
+    },
+    {
       "name": "Jules Koundé",
       "nationality": "France",
       "birthYear": 1998,
@@ -1462,6 +3076,80 @@
         },
         "after": {
           "count": 3,
+          "fourPlus": false,
+          "oneClub": false
+        }
+      }
+    },
+    {
+      "name": "Martín Zubimendi",
+      "nationality": "Spain",
+      "birthYear": 1999,
+      "position": "Defensive Midfield",
+      "class": "hole",
+      "identity": {
+        "born": "1999-02-02",
+        "sources": [
+          {
+            "url": "https://www.fotmob.com/players/1031325",
+            "read": "2026-10-29",
+            "quote": "birthDate 1999-02-02"
+          },
+          {
+            "url": "https://www.transfermarkt.com/martin-zubimendi/transfers/spieler/423440",
+            "read": "2026-10-29",
+            "quote": "Date of birth/Age: 02/02/1999 (27)"
+          }
+        ]
+      },
+      "tableClubs": [
+        "arsenal fc",
+        "real sociedad"
+      ],
+      "career": [
+        {
+          "club": "Real Sociedad",
+          "seasons": null,
+          "loan": false,
+          "sources": [
+            {
+              "url": "https://www.transfermarkt.com/ceapi/transferHistory/list/423440",
+              "read": "2026-10-29",
+              "quote": "25/26 06/07/2025 Real Sociedad -> Arsenal (€70M); 20/21 10/09/2020 Real Sociedad B -> Real Sociedad (-)"
+            },
+            {
+              "url": "https://www.fotmob.com/players/1031325",
+              "read": "2026-10-29",
+              "quote": "Real Sociedad 2019-03-29 to 2025-07-06, 236 apps"
+            }
+          ]
+        },
+        {
+          "club": "Arsenal FC",
+          "seasons": null,
+          "loan": false,
+          "sources": [
+            {
+              "url": "https://www.transfermarkt.com/ceapi/transferHistory/list/423440",
+              "read": "2026-10-29",
+              "quote": "25/26 06/07/2025 Real Sociedad -> Arsenal (€70M)"
+            },
+            {
+              "url": "https://www.fotmob.com/players/1031325",
+              "read": "2026-10-29",
+              "quote": "Arsenal 2025-07-06 to now, 67 apps"
+            }
+          ]
+        }
+      ],
+      "verdict": {
+        "before": {
+          "count": 2,
+          "fourPlus": false,
+          "oneClub": false
+        },
+        "after": {
+          "count": 2,
           "fourPlus": false,
           "oneClub": false
         }
@@ -1770,6 +3458,116 @@
       }
     },
     {
+      "name": "Rodri",
+      "nationality": "Spain",
+      "birthYear": 1996,
+      "position": "Defensive Midfield",
+      "class": "hole",
+      "identity": {
+        "born": "1996-06-22",
+        "sources": [
+          {
+            "url": "https://www.fotmob.com/players/675088",
+            "read": "2026-10-29",
+            "quote": "birthDate 1996-06-22"
+          },
+          {
+            "url": "https://www.transfermarkt.com/rodri/transfers/spieler/357565",
+            "read": "2026-10-29",
+            "quote": "Date of birth/Age: 22/06/1996 (30)"
+          }
+        ]
+      },
+      "tableClubs": [
+        "atletico de madrid",
+        "fc barcelona",
+        "manchester city",
+        "villarreal cf"
+      ],
+      "career": [
+        {
+          "club": "Villarreal CF",
+          "seasons": null,
+          "loan": false,
+          "sources": [
+            {
+              "url": "https://www.transfermarkt.com/ceapi/transferHistory/list/357565",
+              "read": "2026-10-29",
+              "quote": "18/19 01/07/2018 Villarreal -> Atlético (€20M); 16/17 01/07/2016 Villarreal CF B -> Villarreal (-)"
+            },
+            {
+              "url": "https://www.fotmob.com/players/675088",
+              "read": "2026-10-29",
+              "quote": "Villarreal 2015-12-01 to 2018-07-01, 84 apps"
+            }
+          ]
+        },
+        {
+          "club": "Atlético de Madrid",
+          "seasons": null,
+          "loan": false,
+          "sources": [
+            {
+              "url": "https://www.transfermarkt.com/ceapi/transferHistory/list/357565",
+              "read": "2026-10-29",
+              "quote": "19/20 04/07/2019 Atlético -> Man City (€70M); 18/19 01/07/2018 Villarreal -> Atlético (€20M); 12/13 01/07/2012 Atlético Yth. -> Atl. Madrid U17 (-); 07/08 01/07/2007 Majad. Youth -> Atlético Yth. (€1.5M)"
+            },
+            {
+              "url": "https://www.fotmob.com/players/675088",
+              "read": "2026-10-29",
+              "quote": "Atlético Madrid 2018-07-02 to 2019-06-30, 47 apps"
+            }
+          ]
+        },
+        {
+          "club": "Manchester City",
+          "seasons": null,
+          "loan": false,
+          "sources": [
+            {
+              "url": "https://www.transfermarkt.com/ceapi/transferHistory/list/357565",
+              "read": "2026-10-29",
+              "quote": "26/27 18/08/2026 Man City -> Barcelona (€60M); 19/20 04/07/2019 Atlético -> Man City (€70M)"
+            },
+            {
+              "url": "https://www.fotmob.com/players/675088",
+              "read": "2026-10-29",
+              "quote": "Manchester City 2019-07-04 to 2026-08-18, 298 apps"
+            }
+          ]
+        },
+        {
+          "club": "FC Barcelona",
+          "seasons": null,
+          "loan": false,
+          "sources": [
+            {
+              "url": "https://www.transfermarkt.com/ceapi/transferHistory/list/357565",
+              "read": "2026-10-29",
+              "quote": "26/27 18/08/2026 Man City -> Barcelona (€60M)"
+            },
+            {
+              "url": "https://www.fotmob.com/players/675088",
+              "read": "2026-10-29",
+              "quote": "Barcelona 2026-08-18 to now, 12 apps"
+            }
+          ]
+        }
+      ],
+      "verdict": {
+        "before": {
+          "count": 4,
+          "fourPlus": true,
+          "oneClub": false
+        },
+        "after": {
+          "count": 4,
+          "fourPlus": true,
+          "oneClub": false
+        }
+      }
+    },
+    {
       "name": "Unai Simón",
       "nationality": "Spain",
       "birthYear": 1997,
@@ -1826,27 +3624,109 @@
           "oneClub": true
         }
       }
+    },
+    {
+      "name": "Vitinha",
+      "nationality": "Portugal",
+      "birthYear": 2000,
+      "position": "Defensive Midfield",
+      "class": "hole",
+      "identity": {
+        "born": "2000-02-13",
+        "sources": [
+          {
+            "url": "https://www.fotmob.com/players/1061249",
+            "read": "2026-10-29",
+            "quote": "birthDate 2000-02-13"
+          },
+          {
+            "url": "https://www.transfermarkt.com/vitinha/transfers/spieler/487469",
+            "read": "2026-10-29",
+            "quote": "Date of birth/Age: 13/02/2000 (26)"
+          }
+        ]
+      },
+      "tableClubs": [
+        "fc porto",
+        "paris saint-germain",
+        "wolverhampton wanderers"
+      ],
+      "career": [
+        {
+          "club": "FC Porto",
+          "seasons": null,
+          "loan": false,
+          "sources": [
+            {
+              "url": "https://www.transfermarkt.com/ceapi/transferHistory/list/487469",
+              "read": "2026-10-29",
+              "quote": "22/23 01/07/2022 Porto -> PSG (€42M); 20/21 30/06/2021 Wolves -> Porto (End of loan); 20/21 10/09/2020 Porto -> Wolves (loan transfer); 19/20 09/01/2020 FC Porto B -> Porto (-)"
+            },
+            {
+              "url": "https://www.fotmob.com/players/1061249",
+              "read": "2026-10-29",
+              "quote": "FC Porto (back from loan) 2021-07-01 to 2022-06-30, 47 apps; FC Porto 2020-01-13 to 2020-09-09, 12 apps"
+            }
+          ]
+        },
+        {
+          "club": "Wolverhampton Wanderers",
+          "seasons": null,
+          "loan": true,
+          "sources": [
+            {
+              "url": "https://www.transfermarkt.com/ceapi/transferHistory/list/487469",
+              "read": "2026-10-29",
+              "quote": "20/21 30/06/2021 Wolves -> Porto (End of loan); 20/21 10/09/2020 Porto -> Wolves (loan transfer)"
+            },
+            {
+              "url": "https://www.fotmob.com/players/1061249",
+              "read": "2026-10-29",
+              "quote": "Wolverhampton Wanderers (on loan) 2020-09-09 to 2021-06-30, 22 apps"
+            }
+          ]
+        },
+        {
+          "club": "Paris Saint-Germain",
+          "seasons": null,
+          "loan": false,
+          "sources": [
+            {
+              "url": "https://www.transfermarkt.com/ceapi/transferHistory/list/487469",
+              "read": "2026-10-29",
+              "quote": "22/23 01/07/2022 Porto -> PSG (€42M)"
+            },
+            {
+              "url": "https://www.fotmob.com/players/1061249",
+              "read": "2026-10-29",
+              "quote": "Paris Saint-Germain 2022-07-01 to now, 216 apps"
+            }
+          ]
+        }
+      ],
+      "verdict": {
+        "before": {
+          "count": 3,
+          "fourPlus": false,
+          "oneClub": false
+        },
+        "after": {
+          "count": 3,
+          "fourPlus": false,
+          "oneClub": false
+        }
+      }
     }
   ],
   "partial": [],
   "pending": [
     "Abdukodir Khusanov",
-    "Adam Wharton",
-    "Alan Varela",
-    "Aleksandar Pavlovic",
-    "Aleksandar Stanković",
-    "Amadou Onana",
-    "Angelo Stiller",
-    "Aurélien Tchouaméni",
     "Bazoumana Touré",
-    "Boubacar Kamara",
-    "Carlos Baleba",
     "Christian Kofane",
     "Conor Bradley",
     "Dean Huijsen",
     "Dilane Bakwa",
     "Estêvão",
-    "Ethan Ampadu",
     "Finn Jeltsch",
     "Fisnik Asllani",
     "Franco Mastantuono",
@@ -1861,37 +3741,27 @@
     "Joaquín Panichelli",
     "Joel Ordóñez",
     "Johan Manzambi",
-    "Joshua Kimmich",
     "Jérémy Jacquet",
-    "Kaishu Sano",
     "Konstantinos Karetsas",
     "Lennart Karl",
-    "Leon Avdullahu",
     "Mamadou Sangaré",
     "Marco Palestra",
-    "Mario Gila",
-    "Martín Zubimendi",
     "Mateus Fernandes",
     "Matias Fernandez-Pardo",
     "Mikel Jauregizar",
-    "Morten Hjulmand",
     "Myles Lewis-Skelly",
-    "Máximo Perrone",
     "Nick Woltemade",
     "Nico O'Reilly",
     "Pau Cubarsí",
     "Petar Sučić",
     "Rayan",
-    "Rodri",
     "Rômulo",
     "Said El Mala",
-    "Sandro Tonali",
     "Senne Lammens",
     "Senny Mayulu",
     "Thierno Barry",
     "Tyler Dibling",
     "Victor Froholdt",
-    "Vitinha",
     "Vitor Reis",
     "Yan Diomande"
   ],

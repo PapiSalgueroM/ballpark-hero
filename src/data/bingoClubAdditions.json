@@ -30,6 +30,63 @@
   },
   "add": [
     {
+      "n": "Adam Wharton",
+      "nat": "England",
+      "by": 2004,
+      "pos": "Defensive Midfield",
+      "clubs": [
+        "Blackburn Rovers"
+      ]
+    },
+    {
+      "n": "Aleksandar Stanković",
+      "nat": "Serbia",
+      "by": 2005,
+      "pos": "Defensive Midfield",
+      "clubs": [
+        "FC Luzern",
+        "Club Brugge KV"
+      ]
+    },
+    {
+      "n": "Amadou Onana",
+      "nat": "Belgium",
+      "by": 2001,
+      "pos": "Defensive Midfield",
+      "clubs": [
+        "Everton FC"
+      ]
+    },
+    {
+      "n": "Angelo Stiller",
+      "nat": "Germany",
+      "by": 2001,
+      "pos": "Defensive Midfield",
+      "clubs": [
+        "Bayern Munich"
+      ]
+    },
+    {
+      "n": "Carlos Baleba",
+      "nat": "Cameroon",
+      "by": 2004,
+      "pos": "Defensive Midfield",
+      "clubs": [
+        "LOSC Lille",
+        "Brighton & Hove Albion"
+      ]
+    },
+    {
+      "n": "Ethan Ampadu",
+      "nat": "Wales",
+      "by": 2000,
+      "pos": "Defensive Midfield",
+      "clubs": [
+        "Exeter City",
+        "Spezia Calcio"
+      ]
+    },
+    {
       "n": "Evanilson",
       "nat": "Brazil",
       "by": 1999,
@@ -67,12 +124,60 @@
       ]
     },
     {
+      "n": "Kaishu Sano",
+      "nat": "Japan",
+      "by": 2000,
+      "pos": "Defensive Midfield",
+      "clubs": [
+        "FC Machida Zelvia",
+        "Kashima Antlers"
+      ]
+    },
+    {
+      "n": "Leon Avdullahu",
+      "nat": "Kosovo",
+      "by": 2004,
+      "pos": "Defensive Midfield",
+      "clubs": [
+        "FC Basel 1893"
+      ]
+    },
+    {
+      "n": "Mario Gila",
+      "nat": "Spain",
+      "by": 2000,
+      "pos": "Centre-Back",
+      "clubs": [
+        "Real Madrid"
+      ]
+    },
+    {
       "n": "Moisés Caicedo",
       "nat": "Ecuador",
       "by": 2001,
       "pos": "Defensive Midfield",
       "clubs": [
         "Beerschot VA"
+      ]
+    },
+    {
+      "n": "Morten Hjulmand",
+      "nat": "Denmark",
+      "by": 1999,
+      "pos": "Defensive Midfield",
+      "clubs": [
+        "FC Admira Wacker",
+        "Sporting CP"
+      ]
+    },
+    {
+      "n": "Máximo Perrone",
+      "nat": "Argentina",
+      "by": 2003,
+      "pos": "Defensive Midfield",
+      "clubs": [
+        "Manchester City",
+        "UD Las Palmas"
       ]
     },
     {
@@ -91,6 +196,15 @@
       "pos": "Defensive Midfield",
       "clubs": [
         "Bayern Munich"
+      ]
+    },
+    {
+      "n": "Sandro Tonali",
+      "nat": "Italy",
+      "by": 2000,
+      "pos": "Defensive Midfield",
+      "clubs": [
+        "Newcastle United"
       ]
     },
     {
