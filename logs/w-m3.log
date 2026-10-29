@@ -1,0 +1,27 @@
+  FAIL: /nfl-my-career: 497K of gzipped JavaScript against a budget of 495K
+sweepWeight: 1 failure
+   /                   245K gz over   3 files (budget 245K, 244.6K to the tenth)
+   /club-manager       636K gz over  43 files (budget 636K, 636.1K to the tenth)
+   /soccer-career      831K gz over  50 files (budget 840K, 831.4K to the tenth)
+   /stadium-tycoon     305K gz over  25 files (budget 305K, 304.7K to the tenth)
+   /wonderkid-factory  278K gz over  21 files (budget 278K, 277.7K to the tenth)
+   /minefield          295K gz over  21 files (budget 295K, 295.3K to the tenth)
+   /footle             354K gz over  39 files (budget 354K, 353.9K to the tenth)
+   /nfl-my-career      497K gz over  49 files (budget 495K, 497.3K to the tenth)
+   /front-office       387K gz over  42 files (budget 387K, 386.7K to the tenth)
+   /soccer-grid        320K gz over  36 files (budget 320K, 319.6K to the tenth)
+   /leaderboard        253K gz over   9 files (budget 266K, 252.6K to the tenth)
+   /manager-hot-seat   650K gz over  45 files (budget 650K, 650.2K to the tenth)
+   /deadline-day       660K gz over  48 files (budget 660K, 660.1K to the tenth)
+   /transfer-path      379K gz over  39 files (budget 379K, 379.5K to the tenth)
+   /nba-front-office   395K gz over  43 files (budget 396K, 395.2K to the tenth)
+m3 /nba-my-career: 584.8K over 50 files
+m3 /nfl-my-career: 497.3K over 49 files
+m3 /mlb-my-career: 570.9K over 50 files
+m3 /nhl-my-career: 573.5K over 50 files
+m3 /front-office: 386.7K over 42 files
+m3 /nba-front-office: 395.2K over 43 files
+m3 /connections: 337.4K over 33 files
+m3 /build-your-xi: 347.7K over 42 files
+m3 /whats-new: 370.0K over 3 files
+weighBT m3: done, 9 routes
