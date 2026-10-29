@@ -1,0 +1,5 @@
+#!serve
+#!playwright
+pbcr: CI=1 SIM_NETWORK=offline node scripts/playBingoClubRules.mjs
+walk: node .rc/x/walk.mjs
+pbcr-wrongtile: CI=1 SIM_NETWORK=offline PLAY_BINGO_PORT=4199 PLAY_BINGO_CLUBS_CONTROL=wrongtile node scripts/playBingoClubRules.mjs
