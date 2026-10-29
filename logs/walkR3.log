@@ -1,0 +1,18 @@
+{"name":"nba-1280x900-B","y":360,"where":{"pill":[992,48,1103,92],"parent":"DIV.","parentBottom":443,"mainBottom":7416}}
+{"name":"nba-1280x900-B","y":720,"where":{"pill":[992,48,1103,92],"parent":"DIV.","parentBottom":83,"mainBottom":7056}}
+{"name":"nba-1280x900-B","y":1014,"where":{"pill":[992,-211,1103,-167],"parent":"DIV.","parentBottom":-211,"mainBottom":6762}}
+{"name":"nba-1280x900-B","y":1352,"where":{"pill":[992,-549,1103,-505],"parent":"DIV.","parentBottom":-549,"mainBottom":6424}}
+{"name":"nba-1280x900-B","y":2028,"where":{"pill":[992,-1225,1103,-1181],"parent":"DIV.","parentBottom":-1225,"mainBottom":5748}}
+{"tag":"nba-1280x900","tapInboxCentre":{"x":856,"y":34.25},"restartDialog":false,"inboxOpen":false}
+{"name":"nba-390x844-B","y":360,"where":{"pill":[263,-119,374,-75],"parent":"DIV.","parentBottom":733,"mainBottom":11559}}
+{"name":"nba-390x844-B","y":720,"where":{"pill":[263,-479,374,-435],"parent":"DIV.","parentBottom":373,"mainBottom":11199}}
+{"name":"nba-390x844-B","y":1014,"where":{"pill":[263,-773,374,-729],"parent":"DIV.","parentBottom":79,"mainBottom":10905}}
+{"name":"nba-390x844-B","y":1352,"where":{"pill":[263,-1111,374,-1067],"parent":"DIV.","parentBottom":-259,"mainBottom":10567}}
+{"name":"nba-390x844-B","y":2028,"where":{"pill":[263,-1787,374,-1743],"parent":"DIV.","parentBottom":-935,"mainBottom":9891}}
+{"tag":"nba-390x844","tapInboxCentre":{"x":286.5,"y":324.75},"restartDialog":false,"inboxOpen":false}
+{"name":"nba-390x844-FA","y":676,"where":{"pill":[263,-435,374,-391],"parent":"DIV.","parentBottom":784,"mainBottom":11610}}
+{"name":"nba-390x844-FA","y":1014,"where":{"pill":[263,-773,374,-729],"parent":"DIV.","parentBottom":446,"mainBottom":11272}}
+{"name":"nba-390x844-FA","y":1352,"where":{"pill":[263,-1111,374,-1067],"parent":"DIV.","parentBottom":108,"mainBottom":10934}}
+{"name":"nba-390x844-FA","y":3000,"where":{"pill":[263,-2759,374,-2715],"parent":"DIV.","parentBottom":-1540,"mainBottom":9286}}
+{"name":"nba-390x844-FA","y":6000,"where":{"pill":[263,-5759,374,-5715],"parent":"DIV.","parentBottom":-4540,"mainBottom":6286}}
+walkR3 DONE: 0 problems
