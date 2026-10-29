@@ -1,0 +1,9 @@
+#!serial
+proof-all: node .rc/x/mutFix1569.mjs all && node scripts/simUsBoardParity.mjs; s=$?; git checkout -- src scripts; exit $s
+proof-head: node scripts/simUsBoardParity.mjs
+recA: node .rc/x/rec1569.mjs $RC_OUT/fixA.json "43f38a3a1add29b39db3f0e7597bfd1a85a99332 (Round 1569 fix run, recorded on a GitHub runner with the Round 1424 historical coaching panel the replay uses)"
+recB: node .rc/x/mutFix1569.mjs all && node .rc/x/rec1569.mjs $RC_OUT/fixB.json 43f38a3a1add29b39db3f0e7597bfd1a85a99332-all-put-back; s=$?; git checkout -- src scripts; exit $s
+recW: node .rc/x/mutFix1569.mjs wrapper && node .rc/x/rec1569.mjs $RC_OUT/fixW.json 43f38a3a1add29b39db3f0e7597bfd1a85a99332-wrapper-put-back; s=$?; git checkout -- src scripts; exit $s
+diffB: node .rc/x/fixdiff.mjs scripts/data/usBoardFixture.json $RC_OUT/fixB.json
+diffCopy: node .rc/x/fixdiff.mjs $RC_OUT/fixB.json $RC_OUT/fixW.json
+diffAll: node .rc/x/fixdiff.mjs $RC_OUT/fixB.json $RC_OUT/fixA.json
