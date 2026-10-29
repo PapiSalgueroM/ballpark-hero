@@ -1,0 +1,25 @@
+vt-wall: node_modules/.bin/vitest run src/test/usCareerHallWall.test.tsx --testTimeout=300000 --hookTimeout=120000
+seasonReview-base: git worktree add /tmp/base-sr 493926a4f >/dev/null 2>&1 && cd /tmp/base-sr && ln -s "$OLDPWD/node_modules" node_modules && CAREER_SEASON_REVIEW_CONTROL=all node scripts/simCareerSeasonReview.mjs 2>&1 | grep -E "^(PASS|FAIL)|binds exactly" ; exit ${PIPESTATUS[0]}
+confirm-retireWiring: US_CAREER_ACTION_CONTROL=retireWiring node scripts/simUsCareerActionConfirm.mjs
+confirm-legacy: US_CAREER_ACTION_CONTROL=legacy node scripts/simUsCareerActionConfirm.mjs
+hub: node scripts/simCareerHub.mjs
+decision: node scripts/simCareerDecisionOutcome.mjs
+entryGuide: node scripts/simCareerEntryGuide.mjs
+inbox: node scripts/simCareerInbox.mjs
+inboxBeats: node scripts/simCareerInboxBeats.mjs
+parityCareer: node scripts/simCareerParity.mjs
+pressMarket: node scripts/simCareerPressMarket.mjs
+rivalry: node scripts/simCareerRivalryEvents.mjs
+extension: node scripts/simExtension.mjs
+noDouble: node scripts/simNoDoubleRecord.mjs
+reveal: node scripts/simRevealMoments.mjs
+sessionMarks: node scripts/simSessionMarks.mjs
+practice: node scripts/simUsCareerPractice.mjs
+prospect: node scripts/simUsCareerProspect.mjs
+summer: node scripts/simUsCareerSummer.mjs
+coach: node scripts/simUsCoachCareer.mjs
+dirty: node scripts/simUsDirtyMoney.mjs
+seasonCentre: node scripts/simUsSeasonCentre.mjs
+nflStaff: node scripts/simNflCoachStaffRecovery.mjs
+reports: node scripts/simUsCareerReports.mjs
+saveRecovery: node scripts/qa/usCareerSaveRecovery1084.mjs
