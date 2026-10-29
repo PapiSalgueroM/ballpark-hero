@@ -1,0 +1,35 @@
+0) The fixture
+   BASE 692590145: pool 474 from 483 names and 3692 rows, 21 requests, largest response 1000 rows, largest history page 781 rows
+1) The diagnosis receipt and the candidate rule
+   BASE Tyler Morton (Olympique Lyon, 2026, Defensive Midfield): clubs [liverpool fc, olympique lyon], count 2, 4+ false, one club false
+   hole class: 69 candidates (24 on Round 669's lists, 45 more whose counted rows begin at or after 2023 with a hole year missing)
+   owed to Round 1576, C2: pool men on the hand overlay (no from, each needs a lookup): 98; generated overlay rows whose from club is in none of his counted rows: 1: James Ward-Prowse (Burnley FC)
+   owed, C1 outside the hole (a 2023 to 2025 year missing after his first counted row, not a candidate): 6: Álvaro Carreras, Mason Greenwood, Amad Diallo, Jamie Leweling, Ian Maatsen, Emile Smith Rowe
+   owed, academy filtered rows at a club he has no counted row at (critic advice 10): 28
+     Morgan Rogers (manchester city, west bromwich albion, afc bournemouth, lincoln city); Antoine Semenyo (sunderland afc); Eberechi Eze (wycombe wanderers); Nicolò Barella (como 1907); Federico Dimarco (fc empoli); Gianluigi Donnarumma (ac milan primavera)
+     Ademola Lookman (charlton athletic); Serhou Guirassy (aj auxerre); Brennan Johnson (lincoln city); Conor Gallagher (charlton athletic); Dominic Solanke (vitesse arnhem); Dan Ndoye (fc lausanne-sport)
+     Rico Lewis (manchester city u21); Antonio Nusa (stabaek fotball); Ferdi Kadıoğlu (nec nijmegen); Crysencio Summerville (ado den haag, leeds united u21); Evann Guessand (fc lausanne-sport); James Maddison (coventry city)
+     Simon Adingra (fc nordsjaelland u19); Alejandro Grimaldo (fc barcelona); Kingsley Coman (paris saint-germain); Jan Oblak (ud leiria); Nathan Aké (chelsea fc); Nahuel Molina (defensa y justicia)
+     Pervis Estupiñán (ud almeria); André Onana (ajax amsterdam u21); Oleksandr Zinchenko (fc ufa); João Cancelo (sl benfica, sl benfica b)
+   owed, C3 late starters outside the hole (first counted row at a listed age of 22 or more): 23
+     Viktor Gyökeres (2022, 23); Tijjani Reijnders (2022, 23); Yann Bisseck (2023, 22); Mateo Retegui (2022, 22); David Raya (2019, 23); Kiernan Dewsbury-Hall (2022, 23); Ollie Watkins (2018, 22); Yoane Wissa (2020, 23)
+     Mohamed Amoura (2023, 22); Min-jae Kim (2021, 24); Kaoru Mitoma (2021, 23); Robin Le Normand (2019, 22); Mats Wieffer (2023, 23); Guglielmo Vicario (2019, 22); Randal Kolo Muani (2021, 22); Isak Hien (2023, 23)
+     Ivan Toney (2020, 23); Nayef Aguerd (2019, 22); Hiroki Ito (2022, 22); Samuel Lino (2022, 22); Maximilian Kilman (2020, 22); Artem Dovbyk (2021, 23); John McGinn (2018, 23)
+2) Identity, BASE against the tree
+   control changed: Tyler Morton removed from the derived file
+  FAIL: Tyler Morton: club history [liverpool fc, olympique lyon] is not BASE's plus his record additions [blackburn rovers, hull city, liverpool fc, olympique lyon]
+   pool, seasonStats and clubYears equal to BASE; 0 club histories grew; 0 club square verdicts moved
+   support on the fixture: One-club man 31 -> 31, Played for 4+ clubs 149 -> 149
+3) Verdicts
+   tree Tyler Morton: [liverpool fc, olympique lyon], count 2, 4+ false, one club false
+  FAIL: Tyler Morton must count exactly 4 clubs on the tree, fit Played for 4+ clubs and not be a One-club man
+  FAIL: Tyler Morton: the tree gives {"count":2,"fourPlus":false,"oneClub":false}, the record's after says {"count":4,"fourPlus":true,"oneClub":false}
+   1 recorded verdicts checked against BASE and the tree
+4) Completeness, a ratchet
+   69 candidates: 1 additions, 0 agrees, 0 partial, 68 pending (ratchet 68)
+   pending: Abdukodir Khusanov, Adam Wharton, Alan Varela, Aleksandar Pavlovic, Aleksandar Stanković, Amadou Onana, Angelo Stiller, Aurélien Tchouaméni, Bazoumana Touré, Boubacar Kamara, Carlos Baleba, Christian Kofane, Conor Bradley, Dean Huijsen, Dilane Bakwa, Estêvão, Ethan Ampadu, Finn Jeltsch, Fisnik Asllani, Franco Mastantuono, Geovany Quenda, Giuliano Simeone, Gonzalo García, Hayden Hackney, Ibrahim Maza, Ibrahim Mbaye, James Garner, Jesús Rodríguez, Joan García, Joaquín Panichelli, Joel Ordóñez, Johan Manzambi, Joshua Kimmich, Jérémy Jacquet, Kaishu Sano, Konstantinos Karetsas, Lennart Karl, Leon Avdullahu, Mamadou Sangaré, Marco Palestra, Mario Gila, Martín Zubimendi, Mateus Fernandes, Matias Fernandez-Pardo, Mikel Jauregizar, Moisés Caicedo, Morten Hjulmand, Myles Lewis-Skelly, Máximo Perrone, Nick Woltemade, Nico O'Reilly, Pau Cubarsí, Petar Sučić, Rayan, Raúl Asencio, Rodri, Ryan Gravenberch, Rômulo, Said El Mala, Sandro Tonali, Senne Lammens, Senny Mayulu, Thierno Barry, Tyler Dibling, Victor Froholdt, Vitinha, Vitor Reis, Yan Diomande
+5) Sources
+   4 sourced facts checked
+6) The derived file
+   1 men, 2 added clubs; clubs the fixture never spells (new keys, printed): 0
+simBingoClubCounts: CONTROL=nomorton FIRED (3 failures; section 2: 1, section 3: 2)
