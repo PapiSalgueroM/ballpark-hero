@@ -1,0 +1,3 @@
+simGoogleOnlyReturn exit=0 85s |    8 of 8 rendered checks pass, no dash in the round's files, and all 11 controls turned exactly their own checks red.
+writes-head-alone exit=1 52s | simWritesAreSent: 2 failures
+writes-main-65b3e291a exit=1 52s | simWritesAreSent: 2 failures

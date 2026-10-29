@@ -1,0 +1,5 @@
+#!playwright
+#!serial
+simGoogleOnlyReturn: node scripts/simGoogleOnlyReturn.mjs
+writes-head-alone: npm run build > /tmp/hb.log 2>&1 && node scripts/simWritesAreSent.mjs
+writes-main-65b3e291a: git worktree add /tmp/m 65b3e291a > /dev/null 2>&1 && ln -s "$PWD/node_modules" /tmp/m/node_modules && cd /tmp/m && node_modules/.bin/vite build > /tmp/mb.log 2>&1 && node scripts/simWritesAreSent.mjs
