@@ -74,11 +74,13 @@ export default function UsCareerHallWall({ sport, wall, from, plaque, missing, o
   const backLabel = open ? 'Back to the wall' : from === 'retired' ? 'Back to retirement' : 'Back';
   return (
     <section data-career-hall-wall="" aria-labelledby={`${helpId}-title`} className="space-y-3">
-      <div className="flex items-center gap-2">
+      {/* Under sm the title takes a row of its own below Back and the "?": at 320 a long Back label left it
+          three letters wide (seen on the walk's 320 picture of r1570-s4). */}
+      <div className="flex flex-wrap items-center justify-between gap-2">
         <button type="button" onClick={back} className="inline-flex min-h-11 min-w-11 items-center gap-1 rounded-lg border border-border bg-card px-3 text-xs font-semibold text-foreground">
           <ArrowLeft className="h-4 w-4" aria-hidden="true" /> {backLabel}
         </button>
-        <h2 id={`${helpId}-title`} ref={heading} tabIndex={-1} className="min-w-0 flex-1 truncate text-center text-base font-black text-foreground outline-none">
+        <h2 id={`${helpId}-title`} ref={heading} tabIndex={-1} className="order-last w-full break-words text-center text-base font-black text-foreground outline-none sm:order-none sm:w-auto sm:min-w-0 sm:flex-1 sm:truncate">
           {open ? open.name : `Your ${label} Hall wall`}
         </h2>
         <button type="button" onClick={() => setHelp(h => !h)} aria-expanded={help} aria-controls={`${helpId}-help`} aria-label="How the Hall wall works"
