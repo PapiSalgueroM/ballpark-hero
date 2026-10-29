@@ -592,8 +592,11 @@ for (const { formationName, slots, b } of seen) {
       return;
     }
     const held = s.man.position ? [s.man.position, ...(s.man.played ?? [])] : null;
-    const g = held ? gradeFit(held, s.allowed) : 'natural';
-    if (b.roleFit.grades[i] !== g) fail(`${formationName}: slot ${i} graded ${b.roleFit.grades[i]}, the shared rule says ${g}`);
+    // Build Your XI keeps same-side primary fullbacks at full value at wingback.
+    const sameSideWingback = (s.role === 'LWB' && s.man.position === 'LB')
+      || (s.role === 'RWB' && s.man.position === 'RB');
+    const g = sameSideWingback ? 'natural' : held ? gradeFit(held, s.allowed) : 'natural';
+    if (b.roleFit.grades[i] !== g) fail(`${formationName}: slot ${i} graded ${b.roleFit.grades[i]}, the Build Your XI rule says ${g}`);
     const p = b.roleFit.perMan[i];
     if (!PENALTIES.has(p) || p !== FIT_PENALTY[g]) fail(`${formationName}: slot ${i} pays ${p}, the table says ${FIT_PENALTY[g]}`);
     sum += p ?? 0;
