@@ -1,0 +1,11 @@
+#!serial
+base-earned: git worktree add -f .rc/b1 5d1198389 && cd .rc/b1 && node scripts/simNbaEarnedDraft.mjs
+base-board: cd .rc/b1 && node scripts/simNbaDraftBoard.mjs
+base-desk: cd .rc/b1 && node scripts/simNbaGmDesk.mjs
+base-gmcal: cd .rc/b1 && node scripts/simGmCalendar.mjs
+rec-earned: SIM_NBA_EARNED_DRAFT_RECORD=5d1198389 node scripts/simNbaEarnedDraft.mjs && mkdir -p "$RC_OUT" && cp scripts/data/nbaEarnedDraftFixture.json "$RC_OUT/nbaEarnedDraftFixture.json"
+rec-board: SIM_NBA_DRAFT_BOARD_RECORD=5d1198389 node scripts/simNbaDraftBoard.mjs && mkdir -p "$RC_OUT" && cp scripts/data/nbaDraftBoardFixture.json "$RC_OUT/nbaDraftBoardFixture.json"
+rec-desk: cp scripts/simNbaGmDesk.mjs .rc/b1/scripts/simNbaGmDesk.mjs && cd .rc/b1 && SIM_NBA_GM_DESK_RECORD=5d1198389 node scripts/simNbaGmDesk.mjs && mkdir -p "$RC_OUT" && cp scripts/data/nbaGmDeskFixture.json "$RC_OUT/nbaGmDeskFixture.json"
+head-earned: node scripts/simNbaEarnedDraft.mjs
+head-board: node scripts/simNbaDraftBoard.mjs
+head-desk: cp .rc/b1/scripts/data/nbaGmDeskFixture.json scripts/data/nbaGmDeskFixture.json && node scripts/simNbaGmDesk.mjs
