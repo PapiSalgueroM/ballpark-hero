@@ -1,0 +1,5 @@
+#!serial
+tsc: node_modules/.bin/tsc --noEmit -p tsconfig.app.json
+uncut-head: node_modules/.bin/vitest run src/test/soccerCareerLoyaltyUncut.test.ts --testTimeout=300000 --hookTimeout=120000
+simSoccerCareerLoyalty: node scripts/simSoccerCareerLoyalty.mjs
+uncut-before: git checkout 1d0d79ba009a4d0eaabec18f8a1bde83fd87ff8d -- src/lib/soccerCareerLoyalty.ts src/lib/soccerCareerEngine.ts && node_modules/.bin/vitest run src/test/soccerCareerLoyaltyUncut.test.ts --testTimeout=300000 --hookTimeout=120000 2>&1 | grep -E "✓|×|FAIL|AssertionError|expected|Tests |Test Files" | head -40; s=${PIPESTATUS[0]}; git checkout HEAD -- src; exit $s
