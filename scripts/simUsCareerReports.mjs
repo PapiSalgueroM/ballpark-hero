@@ -44,16 +44,42 @@
    400): B4 called 40 of 40 late careers a sport last, each exactly at its cap (NFL 19, NBA 21, MLB 21, NHL 22
    seasons); C5 0 findings; controls noseason 164 findings (B4 only), titlecredit 223 and creditlow 1,086 (C5
    only), and the three old controls unchanged (blind 266, nocredit 2,643; alwayslast 4,128 now, B2 and B4).
+   Report C's spirit, the fans (the lead's ruling R2, fix pass of 2026-10-29). src/lib/careerSocial.ts tiered the
+   gram's comments by the fanbase meter alone, so a bench season (a backup role costs 2 a season) or an MLB
+   rookie start of 30 read "Talented but man the attitude...", "Talent wasted on a villain" and "The boos ...
+   Deserved." with no villain act behind it. The two low tiers' conduct lines now need a cause the save records
+   (conductOnRecord: heat at or past 65, a suspension waiting, a season served banned, dirty money); the US
+   bindings pass it as FanFacts.conduct, and Soccer Career passes nothing. Every fan view after a season's
+   progress, read through the real binding (sport.fanComments), is held to:
+     F1  no conduct line without a cause on the record, in any view, and a low meter with nothing on the record
+         reads the fans who want more; such views must exist (at least FANS_CLEAN_FLOOR a sport);
+     F2  a low meter WITH a cause still reads the conduct lines. CONDUCT careers a sport put a cause on the record
+         through the engine's own corruption meter before one season's progress (a ban, money nobody can
+         explain, or a file opened) and play on in the board's order, a ban served as the board serves it; such
+         views must exist (at least FANS_CAUSE_FLOOR a sport);
+     F3  with no conduct field every ladder reads exactly as before the gate: the digest of all five sports'
+         comments over every standing and position (and soccer's derbies) is LADDER_SHA, recorded on 2ee79c595,
+         and Soccer Career's call in PhonePanel.tsx passes no conduct field.
+   Controls for F (each swaps the one gate line in careerSocial.ts, which must be there first):
+     SIM_REPORTS_CONTROL=fangate   the gate taken out, conduct lines for a bench season again  -> F1
+     SIM_REPORTS_CONTROL=fanforget the gate ignores the cause, no conduct line after a ban      -> F2
+     SIM_REPORTS_CONTROL=fansoccer no field reads as no cause, so soccer's ladder moves        -> F3
+   Measured (seeds 1569, 1, 2, 3 at 150 careers a sport, 16 counts each): low views with nothing on the record
+   1,408 to 2,666 a sport (NFL 1,408 to 1,611, NBA 2,132 to 2,288, MLB 2,540 to 2,648, NHL 2,377 to 2,666), every
+   one of which the old ladder called a villain or an attitude; low views with a cause 298 to 387 a sport. The
+   floors are about half the smallest (700 and 150). Controls on seed 1569: fangate 18,080 findings (F1 only),
+   fanforget 1,363 (F2 only), fansoccer 1 (F3 only, digest 4c93c68795d34a36).
    Run: node scripts/simUsCareerReports.mjs [careers per sport] (SIM_SEED picks the fleet). */
 import os from 'node:os';
 import path from 'node:path';
 import { build } from 'esbuild';
 import { readFileSync, unlinkSync } from 'node:fs';
+import { createHash } from 'node:crypto';
 import { pathToFileURL } from 'node:url';
 
 const ROOT = process.cwd();
 const CONTROL = process.env.SIM_REPORTS_CONTROL || '';
-if (!['', 'blind', 'nocredit', 'alwayslast', 'noseason', 'titlecredit', 'creditlow'].includes(CONTROL)) { console.error(`unknown SIM_REPORTS_CONTROL ${CONTROL}`); process.exit(2); }
+if (!['', 'blind', 'nocredit', 'alwayslast', 'noseason', 'titlecredit', 'creditlow', 'fangate', 'fanforget', 'fansoccer'].includes(CONTROL)) { console.error(`unknown SIM_REPORTS_CONTROL ${CONTROL}`); process.exit(2); }
 const CAREERS = Number(process.argv[2] || 150);
 if (!(CAREERS >= 150)) { console.log(`ABORT: ${process.argv[2]} careers a sport; CRIT_FLOOR was measured at 150, so run 150 or more`); process.exit(2); }
 /* B4's late fleet: every one of them must reach its sport's season cap, so the count is exact, not a band. */
@@ -61,6 +87,12 @@ const LATE = 40;
 const SEED = Number(process.env.SIM_SEED || 1569);
 /* The smallest critical count a sport may show: about half the smallest of 16 measured counts (37). */
 const CRIT_FLOOR = 18;
+/* F2's conduct fleet a sport, and the two F floors (about half the smallest measured count, see the header). */
+const CONDUCT = 60;
+const FANS_CLEAN_FLOOR = 700;
+const FANS_CAUSE_FLOOR = 150;
+/* F3: every ladder with no conduct field, as it read on 2ee79c595 before the gate (10,504 ladders). */
+const LADDER_SHA = 'd05e19fba5eb25c8';
 const SPORTS = ['nfl', 'nba', 'mlb', 'nhl'];
 const CALLS = {
   'nflMyCareer.ts': ["clutchNote(clutch, depth, 'nfl', pf)", 'pf'],
@@ -75,11 +107,14 @@ const SWAPS = {
   noseason: ['usCareerNoOffer.ts', 'seasons: [...c.seasons, last ?? c.seasons[0]]', 'seasons: [...c.seasons]'],
   titlecredit: ['careerVariance.ts', 'if (depth < 4 && level >= JANUARY_STRONG) {', 'if (depth <= 4 && level >= JANUARY_STRONG) {'],
   creditlow: ['careerVariance.ts', 'if (depth < 4 && level >= JANUARY_STRONG) {', 'if (depth < 4 && level >= JANUARY_POOR) {'],
+  fangate: ['careerSocial.ts', 'if (f.conduct === false) {', 'if (false) {'],
+  fanforget: ['careerSocial.ts', 'if (f.conduct === false) {', 'if (f.conduct !== undefined) {'],
+  fansoccer: ['careerSocial.ts', 'if (f.conduct === false) {', 'if (f.conduct !== true) {'],
 };
 const fired = new Set();
 const plugin = {
   name: 'reports1569', setup(b) {
-    b.onLoad({ filter: /(MyCareer|careerVariance|usCareerNoOffer)\.ts$/ }, args => {
+    b.onLoad({ filter: /(MyCareer|careerVariance|usCareerNoOffer|careerSocial)\.ts$/ }, args => {
       let src = readFileSync(args.path, 'utf8');
       const base = path.basename(args.path);
       if (CALLS[base]) {
@@ -103,7 +138,8 @@ await build({
   stdin: {
     contents: SPORTS.map(s => `export { ${s.toUpperCase()}_CAREER_SPORT } from './src/lib/${s}CareerSport.ts';`).join('\n')
       + "\nexport { applyFaSigning } from './src/lib/usCareerFreeAgency.ts';\nexport { extensionDue } from './src/lib/usCareerExtension.ts';"
-      + "\nexport { seasonAheadIsLast, noOfferWhy } from './src/lib/usCareerNoOffer.ts';\n",
+      + "\nexport { seasonAheadIsLast, noOfferWhy } from './src/lib/usCareerNoOffer.ts';"
+      + "\nexport { fanComments } from './src/lib/careerSocial.ts';\n",
     resolveDir: ROOT, loader: 'ts',
   },
   bundle: true, format: 'esm', platform: 'node', outfile: OUT, absWorkingDir: ROOT, logLevel: 'error',
@@ -126,9 +162,28 @@ const CRIT = '\u{1F39E}️', CREDIT = '\u{1F4AA}', RISER = '\u{1F9CA}';
 const fails = [];
 const fail = (section, msg) => { if (fails.filter(f => f.startsWith(section)).length < 4) console.log(`  FAIL ${section}: ${msg}`); fails.push(`${section}: ${msg}`); };
 const table = [];
+/* F: one fan view, read through the sport's own binding after a season's progress, the cause read off the save
+   here (not through the product's helper), and the old ladder (no conduct field) kept as the before line. */
+const CONDUCT_RE = /attitude|villain|Deserved|Rooting for the old you|Can't support this guy|Focus on \w+ maybe/;
+const CONDUCT_FIRST = ['Talented but man the attitude...', "Can't support this guy anymore"];
+const WANT_FIRST = ['Quiet year. We know you have more in you', 'Rough stretch. It happens'];
+const causeOf = c => (c.heat ?? 0) >= 65 || (c.suspendedSeasons ?? 0) > 0 || (c.dirtyMoney ?? 0) > 0 || c.seasons.some(s => s.teamResult === 'SUSPENDED');
+const fanTable = [];
+function fanView(slug, S, c, t, where) {
+  const lines = S.fanComments(c), cause = causeOf(c), low = c.fanbase < 50, said = lines.join(' | ');
+  if (DASH.test(said)) fail('F1', `${slug}: a dash in the fans' lines "${said}"`);
+  if (!cause && CONDUCT_RE.test(said)) fail('F1', `${slug} ${where}: a conduct line with nothing on the record at fanbase ${c.fanbase}: "${said}"`);
+  if (low && !cause) { t.fansClean++; if (!WANT_FIRST.includes(lines[0])) fail('F1', `${slug} ${where}: fanbase ${c.fanbase} with nothing on the record reads "${lines[0]}"`); }
+  if (low && cause) { t.fansCause++; if (!CONDUCT_FIRST.includes(lines[0])) fail('F2', `${slug} ${where}: fanbase ${c.fanbase} with a cause on the record reads "${lines[0]}"`); }
+  const tier = c.fanbase >= 30 ? 'low' : 'lowest';
+  if (low && !fanTable.some(r => r.slug === slug && r.cause === cause && r.tier === tier)) {
+    const before = M.fanComments(slug, { pos: c.pos, standing: c.fanbase, followers: '1.2M' }).join(' | ');
+    fanTable.push({ slug, cause, tier, fanbase: c.fanbase, where, before, after: said });
+  }
+}
 for (const slug of SPORTS) {
   const S = M[`${slug.toUpperCase()}_CAREER_SPORT`];
-  const t = { playoffs: 0, lost: 0, strongLost: 0, credit: 0, crit: 0, lastCalls: 0, lastSound: 0, noOffer: 0, windows: 0 };
+  const t = { playoffs: 0, lost: 0, strongLost: 0, credit: 0, crit: 0, lastCalls: 0, lastSound: 0, noOffer: 0, windows: 0, fansClean: 0, fansCause: 0 };
   for (let k = 0; k < CAREERS; k++) {
     const rng = mulberry32(SEED * 1000 + k + slug.length * 7919);
     const pos = S.create.positions[k % S.create.positions.length];
@@ -156,6 +211,7 @@ for (const slug of SPORTS) {
       const { line, notes } = S.simSeason(c, tq, rng);
       const po = globalThis.__po;
       S.progress(c, rng);
+      fanView(slug, S, c, t, `career ${k} season ${c.seasons.length} (${c.role ?? 'no role'})`);
       const ended = S.shouldRetire(c);
       if (calledLast) { t.lastCalls++; if (ended) t.lastSound++; else fail('B2', `${slug} career ${k}: called the last season at age ${c.age - 1}, and the career went on`); }
       for (const n of notes) {
@@ -200,11 +256,60 @@ for (const slug of SPORTS) {
     }
   }
   if (t.capCalls !== LATE) fail('B4', `${slug}: ${t.capCalls} of ${LATE} late careers were called last at the season cap`);
+  /* F2: the conduct fleet. Before one season's progress the engine's own corruption meter gets a cause: a ban
+     (heat 88 and 2M nobody can explain, so the season's drift crosses 90 and the engine suspends him, takes 30
+     off the fanbase and wipes the money), money alone, or a file (heat 80, so it is still 71 after the season's
+     cooling). Then the career plays on in the board's order, a ban served the way the board serves it. */
+  for (let k = 0; k < CONDUCT; k++) {
+    const rng = mulberry32(SEED * 9000 + k + slug.length * 15485863);
+    const pos = S.create.positions[k % S.create.positions.length];
+    const c = S.startCareer('Report Conduct', pos, S.create.archetypes[pos][0], rng, null, 'now');
+    let tq = S.rollTeamQuality(null, rng); S.assignRole(c, tq, rng);
+    const at = 1 + (k % 4), kind = k % 3;
+    for (let guard = 0; guard < 12; guard++) {
+      c.contractYears = 3;
+      if ((c.suspendedSeasons ?? 0) > 0) {
+        c.suspendedSeasons -= 1;
+        c.seasons.push(S.suspendedLine(c));
+        S.progress(c, rng);
+      } else {
+        S.campBattle(c, tq, rng); S.simSeason(c, tq, rng);
+        if (guard === at) { if (kind === 0) { c.heat = 88; c.dirtyMoney = 2; } else if (kind === 1) c.dirtyMoney = 1.5; else c.heat = 80; }
+        S.progress(c, rng);
+      }
+      fanView(slug, S, c, t, `conduct career ${k} season ${c.seasons.length} (${['ban', 'money', 'file'][kind]})`);
+      if (S.shouldRetire(c)) break;
+      tq = S.rollTeamQuality(tq, rng);
+    }
+  }
+  if (t.fansClean < FANS_CLEAN_FLOOR) fail('F1', `${slug}: only ${t.fansClean} low fan views with nothing on the record, the floor is ${FANS_CLEAN_FLOOR}`);
+  if (t.fansCause < FANS_CAUSE_FLOOR) fail('F2', `${slug}: only ${t.fansCause} low fan views with a cause on the record, the floor is ${FANS_CAUSE_FLOOR}`);
   console.log(`${slug}: ${JSON.stringify(t)}`);
 }
+/* F3: with no conduct field (Soccer Career passes none) every ladder reads as it did before the gate. */
+{
+  const SOCCER_POS = ['GK', 'CB', 'LB', 'RB', 'LWB', 'RWB', 'CDM', 'CM', 'CAM', 'LM', 'RM', 'LW', 'RW', 'CF', 'ST'];
+  const DERBIES = [null, { won: 1, lost: 0 }, { won: 0, lost: 1 }, { won: 1, lost: 1 }, { won: 0, lost: 0 }];
+  const out = [];
+  for (const sport of ['soccer', ...SPORTS]) {
+    const positions = sport === 'soccer' ? SOCCER_POS : M[`${sport.toUpperCase()}_CAREER_SPORT`].create.positions;
+    for (const pos of positions) for (let standing = 0; standing <= 100; standing++) for (const d of sport === 'soccer' ? DERBIES : [null]) {
+      out.push(M.fanComments(sport, d ? { pos, standing, followers: '1.2M', derby: { ...d, rival: 'Rivals FC' } } : { pos, standing, followers: '1.2M' }).join('|'));
+    }
+  }
+  const sha = createHash('sha1').update(out.join('\n')).digest('hex').slice(0, 16);
+  if (sha !== LADDER_SHA) fail('F3', `the ladders with no conduct field read ${sha} over ${out.length}, not ${LADDER_SHA} as before the gate`);
+  const phone = readFileSync(path.join(ROOT, 'src/components/soccer-career/PhonePanel.tsx'), 'utf8');
+  const call = /fanCommentsFor\("soccer", \{[\s\S]*?\}\);/.exec(phone);
+  if (!call) fail('F3', 'could not read the soccer fan call out of PhonePanel.tsx, so this check proves nothing');
+  else if (/conduct/.test(call[0])) fail('F3', 'Soccer Career passes the conduct field');
+  console.log(`F3: ${out.length} ladders with no conduct field, digest ${sha}`);
+}
+console.log('The fans, before and after, fixed seeded careers (before is the ladder with no conduct field):');
+for (const r of fanTable) console.log(`  ${r.slug} ${r.where} | fanbase ${r.fanbase}, ${r.cause ? 'a cause on the record' : 'nothing on the record'} | before: ${r.before} | after: ${r.after}`);
 console.log('Before and after, fixed seeded postseasons (the same games; before is the old rule\'s line):');
 for (const r of table) console.log(`  ${r.slug} ${r.pos} career ${r.k} | ${r.result} | level ${r.level}, clutch ${r.clutch} | before: ${r.before} | after: ${r.after}`);
-const sections = ['B1', 'B2', 'B3', 'B4', 'C1', 'C2', 'C3', 'C4', 'C5'];
+const sections = ['B1', 'B2', 'B3', 'B4', 'C1', 'C2', 'C3', 'C4', 'C5', 'F1', 'F2', 'F3'];
 console.log(sections.map(s => `${s} ${fails.some(f => f.startsWith(s)) ? 'FAIL' : 'ok'}`).join(', '));
 console.log(`simUsCareerReports ${fails.length ? 'FAIL' : 'PASS'}: ${fails.length} findings, ${CAREERS} careers a sport, seed ${SEED}${CONTROL ? `, CONTROL ${CONTROL}` : ''}`);
 process.exit(fails.length ? 1 : 0);
