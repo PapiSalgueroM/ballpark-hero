@@ -65,6 +65,7 @@ import { loadOwnerTail } from "@/lib/soccerOwnerGate";
 import { careerBeforeBallonDorReveal, revealBallonDorResult, ballonDorAwaitingReveal } from "@/lib/soccerAwardReveal";
 import { readLeagueWorldSeason } from "@/lib/soccerCareerLeagueWorld";
 import { soccerExtensionQuote } from "@/lib/soccerCareerContracts";
+import { loyaltyUncutWage } from "@/lib/soccerCareerLoyalty";
 import { farewellEligibility, readSoccerFarewell } from "@/lib/soccerCareerFarewell";
 import { retirementReason } from "@/lib/soccerCareerRetirementReason";
 import { FarewellSeasonCard } from "@/components/soccer-career/FarewellSeasonCard";
@@ -2185,7 +2186,9 @@ function TransferWindowCard({ situation, career, clubs, onCareer, onAcceptOffer,
      the season simulation rolls from, so this line can never overpromise. */
   const seasonsHere = career.seasons.filter(ss => ss.club === career.currentClub && ss.type === "playing").length;
   const projHere = projectLeagueApps(career.overall, career.currentClubTier, career.currentClub, seasonsHere);
-  const extension = soccerExtensionQuote(career);
+  /* Release BS fix: quoted on the wage before a loyalty cut, as signExtension signs it */
+  const uncutWage = loyaltyUncutWage(career);
+  const extension = soccerExtensionQuote({ ...career, weeklyWage: uncutWage });
   const briefResult = transferBriefResult(career, projectLeagueApps);
   if (situation.type === "club_move") return <div data-club-move data-club-move-mode={situation.mode} className="space-y-3 rounded-xl border border-border bg-card p-4">
     <h3 className="text-lg font-black">{situation.mode === "loan" ? "🛫 Your club arranged a loan" : "📤 Your club sold you"}</h3>
@@ -2437,7 +2440,7 @@ function TransferWindowCard({ situation, career, clubs, onCareer, onAcceptOffer,
           </div>
           <div className="rounded-xl border border-border bg-muted/20 p-3 text-sm">
             <p data-contract-extension-wage className="font-bold">Your club offers {formatWage(extension.weeklyWage)}{extension.contractYears !== null ? ` for ${extension.contractYears} year${extension.contractYears === 1 ? "" : "s"}` : ""}.</p>
-            <p className="mt-1 text-xs text-muted-foreground">{extension.rationale}</p>
+            <p className="mt-1 text-xs text-muted-foreground">{extension.rationale}{uncutWage !== career.weeklyWage ? " Quoted on your full wage, without the 10% loyalty cut." : ""}</p>
           </div>
           <Button onClick={onSignExtension} className="w-full h-9 text-sm font-bold bg-emerald-600 hover:bg-emerald-500 text-black">
             Sign Extension with {career.currentClub} 📝
