@@ -1,0 +1,27 @@
+head: git rev-parse HEAD && git diff --stat 5f9303bf8 HEAD -- src scripts | tail -3
+tsc: node_modules/.bin/tsc --noEmit -p tsconfig.app.json
+default: node scripts/simTriviaBank.mjs
+vitest: node_modules/.bin/vitest run src/test/sportsMillionaireSwap.test.tsx --testTimeout=300000 --hookTimeout=120000
+dr: ONLY=sports-millionaire node scripts/simDailyReload.mjs
+tie-base: git show 5f9303bf8:src/lib/sportsMillionaire.ts > "$TMPDIR/base-sm.ts" && TRIVIA_SWAP_ARM_FILE="$TMPDIR/base-sm.ts" node scripts/simTriviaBank.mjs
+tie-head: TRIVIA_SWAP_ARM_FILE=src/lib/sportsMillionaire.ts node scripts/simTriviaBank.mjs
+c-swaprepeat: TRIVIA_CONTROL=swaprepeat node scripts/simTriviaBank.mjs
+c-swapfive: TRIVIA_CONTROL=swapfive node scripts/simTriviaBank.mjs
+c-swapmove: TRIVIA_CONTROL=swapmove node scripts/simTriviaBank.mjs
+c-swapeasy: TRIVIA_CONTROL=swapeasy node scripts/simTriviaBank.mjs
+c-shared: TRIVIA_CONTROL=shared node scripts/simTriviaBank.mjs
+c-short: TRIVIA_CONTROL=short node scripts/simTriviaBank.mjs
+c-redeal: TRIVIA_CONTROL=redeal node scripts/simTriviaBank.mjs
+c-dupe: TRIVIA_CONTROL=dupe node scripts/simTriviaBank.mjs
+c-ties: TRIVIA_CONTROL=ties node scripts/simTriviaBank.mjs
+c-namesake: TRIVIA_CONTROL=namesake node scripts/simTriviaBank.mjs
+c-tense: TRIVIA_CONTROL=tense node scripts/simTriviaBank.mjs
+c-postense: TRIVIA_CONTROL=postense node scripts/simTriviaBank.mjs
+c-family: TRIVIA_CONTROL=family node scripts/simTriviaBank.mjs
+c-legacy: TRIVIA_CONTROL=legacy node scripts/simTriviaBank.mjs
+c-rulec: TRIVIA_CONTROL=rulec node scripts/simTriviaBank.mjs
+simHarnessAnchors: node scripts/simHarnessAnchors.mjs
+simNoRivalNames: node scripts/simNoRivalNames.mjs
+simDailyPuzzleContract: node scripts/simDailyPuzzleContract.mjs
+simTrustCopy: node scripts/simTrustCopy.mjs
+simAccessibility: node scripts/simAccessibility.mjs
