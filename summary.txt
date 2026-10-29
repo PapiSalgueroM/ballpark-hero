@@ -1,0 +1,5 @@
+build exit=0 36s | [dukb] inlined 1 stylesheet(s) and 1 module(s) into 181 snapshots (11 left alone)
+walk exit=0 68s | walk1557: ran 8 flows, 0 stopped; screenshots and walk1557.json in /home/runner/work/_temp/rc-out/files
+walk-round exit=0 74s | playNbaIntl: green. The call, Go and its result's views, Rest, a reload mid beat, the 2027 World Cup's lines and no call at 80 or in 2005, at 320, 390 and 1280; 41 screen
+nocurtain exit=0 116s | playNbaIntl: green. The call, Go and its result's views, Rest, a reload mid beat, the 2027 World Cup's lines and no call at 80 or in 2005, at 320, 390 and 1280; 41 screen
+noclose exit=0 51s | walk1557: ran 1 flows, 0 stopped; screenshots and walk1557.json in /home/runner/work/_temp/rc-out/files/noclose
