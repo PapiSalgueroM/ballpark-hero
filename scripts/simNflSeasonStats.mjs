@@ -34,7 +34,11 @@
  *    draw count after Week 17 and after the postseason and close, the winners, injuries, computer moves, records,
  *    bracket and champion are the same, and the league is the same once the new keys are taken out (ids named by
  *    first appearance: the engine's minter counts on across two runs of one process). Weeks 1 and 9 recorded again
- *    on a copy through JSON give the board's block.
+ *    on a copy through JSON give the board's block. Round 1566's closing check: all of that is one process, so it
+ *    cannot see a value drawn once a page load; a deep season of every set is played the board's way in two fresh
+ *    loads of the engine too (each its own module instance, its own id epoch and counters), and the two leagues are
+ *    the same characters once each load's epoch is swapped for one token. The epoch is what is left between page
+ *    loads, and its cost is printed (fixing its length changes every id minted on the site, the lead's call).
  *  4 THE RATING EFFECT, the strongest signal: for each club game the WR1 (the first healthy receiver on the chart)
  *    and his LIFT, his touchdown catches over what a credit blind to rating and slot gives him in the same games
  *    (one in k of the pool's receivers; 1 is no effect), in two bands of his rating. Asserted: the lift of the band
@@ -73,6 +77,7 @@
  *   kickswap     nflClubKicks reads the safeties as the field goals and back     -> section 2, red on every set
  *   extradraw    a Math.random() in nflCreditGame                                -> section 3, red on every set
  *   unkeyed      the credit stream keyed to a counter at module scope            -> section 3, red on every set
+ *   perload      a value drawn once a page load kept in the block                -> section 3, red on every set
  *   randomcredit every credit uniform over the eligible men, ratings ignored     -> section 4, red on every set
  *   passflip     a touchdown is a pass when the draw is ABOVE the QB1's chance   -> section 4, red on every set
  *   sackswap     nflSackChance called with the block first and the rush second  -> section 4, red on every set
@@ -118,6 +123,12 @@ const CONTROLS = {
   kickswap: { section: 2, labels: ["the card's kicks reader gives the touchdowns, field goals and safeties the games told"], everySet: true, needs: [2], patches: [{ file: VIEW, from: 'return c ? { td: c[0], fg: c[1], sf: c[2] } : null;', to: 'return c ? { td: c[0], fg: c[2], sf: c[1] } : null;' }] },
   extradraw: { section: 3, labels: ['the same generator state and draw count after Week 17'], everySet: true, needs: [3], patches: [{ file: STATS, from: '  const rng = keyedRng(`${told.key}|credit`);', to: '  const rng = keyedRng(`${told.key}|credit`); Math.random();' }] },
   unkeyed: { section: 3, labels: ['the same week recorded twice gives the same block'], everySet: true, needs: [3], patches: [{ file: STATS, from: '  const rng = keyedRng(`${told.key}|credit`);', to: '  const rng = keyedRng(`${told.key}|credit|${(globalThis.__nflCreditCalls = (globalThis.__nflCreditCalls ?? 0) + 1)}`);' }] },
+  /* Round 1566's closing check: a value drawn at module scope (once a page load, as the id epoch is) kept in the block.
+     Every play inside one load agrees on it, so only section 3's check between two fresh loads can see it. */
+  perload: { section: 3, labels: ['between two page loads'], everySet: true, needs: [3], patches: [
+    { file: STATS, from: 'export function nflRecordWeek(lg: LeagueState, told: readonly NflToldGame[], my: string): number {', to: 'const DUKB_LOAD = Math.floor(Math.random() * 1e9);\nexport function nflRecordWeek(lg: LeagueState, told: readonly NflToldGame[], my: string): number {' },
+    { file: STATS, from: '  if (!nflLiveStats(lg)) return 0;', to: '  if (!nflLiveStats(lg)) return 0;\n  (lg.stats as unknown as Record<string, number>).loaded = DUKB_LOAD;' },
+  ] },
   randomcredit: { section: 4, labels: ["lift over a rating blind credit climbs with his rating"], everySet: true, needs: [4], patches: [{ file: STATS, from: '  const ws = men.map(m => Math.max(0, weight(m)));', to: '  const ws = men.map(m => (weight(m) > 0 ? 1 : 0));' }] },
   passflip: { section: 4, labels: ['the pass share climbs with the QB1'], everySet: true, needs: [4], patches: [{ file: STATS, from: 'const catcher = s.pool.qb && kind < nflPassChance(s.pool.qb.ovr) ?', to: 'const catcher = s.pool.qb && kind > nflPassChance(s.pool.qb.ovr) ?' }] },
   sackswap: { section: 4, labels: ['the sacks climb with the rush against the block'], everySet: true, needs: [4], patches: [{ file: STATS, from: 'const chance = nflSackChance(rush, mean(line.map(m => m.ovr), NFL_BLOCK_FLOOR));', to: 'const chance = nflSackChance(mean(line.map(m => m.ovr), NFL_BLOCK_FLOOR), rush);' }] },
@@ -182,12 +193,21 @@ const t0 = Date.now();
 let M;
 let fired;
 let B = null;
+/* Round 1566's closing check: two more bundles of the same tree for section 3, each a fresh page load (a module
+   instance of its own: its own id epoch drawn at module scope, its own counters from one) */
+const LOADS = [];
 try {
   ({ M, fired } = await bundle(HEAD_ENTRY, PATCHES, 'head'));
   /* the awards and the close live in src/lib/nflSeasonAwards.ts (they ride in the career kit, not the page): the
      harness reads them beside the lines, as one lib */
   if (!M.awards || typeof M.awards.nflCloseSeasonStats !== 'function') throw new Error('src/lib/nflSeasonAwards.ts does not export nflCloseSeasonStats');
   M = { ...M, stats: { ...M.stats, ...M.awards } };
+  if (SECTIONS.includes(3)) {
+    for (const tag of ['load2', 'load3']) {
+      const { M: L } = await bundle(HEAD_ENTRY, PATCHES, tag);
+      LOADS.push({ ...L, stats: { ...L.stats, ...L.awards } });
+    }
+  }
   if (SECTIONS.includes(1) && LIFT_BASE) {
     if (!fs.existsSync(path.join(LIFT_BASE, DRIVES)) && !fs.existsSync(path.join(LIFT_BASE, 'src/lib/gameLaws/nfl.ts'))) throw new Error(`LIFT_BASE ${LIFT_BASE} holds no NFL story law`);
     B = await bundleAt(LIFT_BASE, STORY_ENTRY, 'base');
@@ -524,6 +544,22 @@ if (SECTIONS.some(s => s === 2 || s === 3 || s === 4 || s === 7)) {
       settle(3, `set ${set}: the same winners, injuries, computer moves, records, bracket and champion`, t3.results);
       settle(3, `set ${set}: the same league once the new keys are taken out`, t3.league);
       settle(3, `set ${set}: the same week recorded twice gives the same block, once through JSON`, t3.twice);
+      /* Round 1566's closing check: the same deep season played the board's way in two fresh loads (LOADS), the
+         helpers reading the load's engine for the length of the play */
+      const inLoad = (L, fn) => { const keep = M; M = L; try { return fn(); } finally { M = keep; } };
+      const TOKEN = '~'.repeat(14);
+      const [x, y] = LOADS.map(L => inLoad(L, () => {
+        const q = L.makeIdMinter('q')();
+        const ep = q.slice(1, q.lastIndexOf('-'));
+        const s = openFleetSeason(set, 'deep', 0);
+        boardSeason(s, true);
+        const raw = JSON.stringify(s.lg);
+        return { ep, raw: raw.length, text: raw.split(`${ep}-`).join(`${TOKEN}-`), ids: raw.split(`${ep}-`).length - 1 };
+      }));
+      const tl = tally();
+      count(tl, x.text === y.text, () => `${seasonId(set, 'deep', 0)}: ${x.text.length} and ${y.text.length} characters with the epoch swapped`);
+      settle(3, `set ${set}: between two page loads (two fresh loads of the engine, each its own id epoch) a deep season played the board's way is the same league but for the epoch`, tl);
+      console.log(`  set ${set}: two page loads, ids as minted: epochs of ${x.ep.length} and ${y.ep.length} characters, the league ${x.raw} and ${y.raw} characters; ${x.ids} ids in it, so each character of epoch (2 to 14 a load) moves it by ${x.ids}`);
     }
     if (SECTIONS.includes(4)) {
       const share = b => (b.pass ? b.wr1 / b.pass : 0);
