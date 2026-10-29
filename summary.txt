@@ -1,0 +1,6 @@
+staycash-a exit=1 44s | Node.js v24.22.1
+stayloyal-a exit=0 50s | EXT n=117 sample=[{"age":22,"base":3404,"cut":3524,"ext":4053,"years":4},{"age":21,"base":3256,"cut":3773,"ext":4339,"years":4},{"age":22,"base":2190,"cut":1971,"ext":226
+cash-a exit=1 57s | Node.js v24.22.1
+loyal-a exit=0 53s | EXT n=151 sample=[{"age":29,"base":38556,"cut":34700,"ext":39905,"years":2},{"age":21,"base":3256,"cut":3773,"ext":4339,"years":4},{"age":28,"base":12804,"cut":13253,"ext
+staycash-b exit=1 47s | Node.js v24.22.1
+stayloyal-b exit=0 48s | EXT n=119 sample=[{"age":20,"base":1941,"cut":2009,"ext":2310,"years":2},{"age":21,"base":1111,"cut":1150,"ext":1323,"years":4},{"age":21,"base":2417,"cut":2175,"ext":250

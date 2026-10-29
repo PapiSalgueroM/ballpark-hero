@@ -1,0 +1,6 @@
+staycash-a: DUMP=1 node .rc/x/probe-econ.mjs . head staycash 2000 300
+stayloyal-a: DUMP=1 node .rc/x/probe-econ.mjs . head stayloyal 2000 300
+cash-a: DUMP=1 node .rc/x/probe-econ.mjs . head cash 2000 300
+loyal-a: DUMP=1 node .rc/x/probe-econ.mjs . head loyal 2000 300
+staycash-b: DUMP=1 node .rc/x/probe-econ.mjs . head staycash 900001 300
+stayloyal-b: DUMP=1 node .rc/x/probe-econ.mjs . head stayloyal 900001 300
