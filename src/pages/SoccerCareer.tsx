@@ -3778,7 +3778,10 @@ function GameScreen({ career, clubs, onNextSeason, onAcceptOffer, onDismissSumma
   }, [centreFor, career.seasons.length, career.phase]);
   // Round 131: the whole attribute tree on its own screen with a back button
   const [attrsOpen, setAttrsOpen] = useState(false);
-  const showActionButton = career.phase === "youth" || career.phase === "playing" || career.phase === "manager_season" || career.phase === "pundit_season" || career.phase === "owner_season";
+  /* Release BS fix: no pundit_season here. The bar's Next Season runs handleNextSeason, which plays
+     only youth and playing years, so in a pundit season it was a green button that did nothing (the
+     10-28 reports). The three pundit actions in the panel are what move his year on. */
+  const showActionButton = career.phase === "youth" || career.phase === "playing" || career.phase === "manager_season" || career.phase === "owner_season";
   /* ─── Round 129: the controls that walked off when he scrolled ───
 
      His report: "if I'm just on my screen and don't touch anything then I can
@@ -4240,6 +4243,7 @@ function GameScreen({ career, clubs, onNextSeason, onAcceptOffer, onDismissSumma
                 </div>
               </div>
               <div className="text-xs text-center text-muted-foreground font-bold uppercase mt-2">Choose your action this season</div>
+              <p className="text-xs text-center text-muted-foreground" data-pundit-next>Pick one to play out this season on TV and move on to the next.</p>
               <div className="space-y-2">
                 <Button onClick={() => onPunditAction("praise_player")} variant="outline" className="w-full h-10 text-sm font-bold">⭐ Praise a Rising Star</Button>
                 <Button onClick={() => onPunditAction("criticise_manager")} variant="outline" className="w-full h-10 text-sm font-bold">🔥 Criticise a Manager</Button>
