@@ -1,0 +1,5 @@
+#!serial
+recA: node .rc/x/rec1569.mjs $RC_OUT/fixA.json dc0eed050a663221bc923a6dccda01718ab32e1a
+recB: node .rc/x/mut1569.mjs && node .rc/x/rec1569.mjs $RC_OUT/fixB.json dc0eed050a663221bc923a6dccda01718ab32e1a-with-main-copy; s=$?; git checkout -- src; exit $s
+diffB: node .rc/x/fixdiff.mjs scripts/data/usBoardFixture.json $RC_OUT/fixB.json
+diffAB: node .rc/x/fixdiff.mjs $RC_OUT/fixB.json $RC_OUT/fixA.json
