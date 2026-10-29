@@ -1,0 +1,11 @@
+viewport 390x844
+   ? open: Club squares present, sideways overflow 0 px, Let's Play button 44 px tall
+   seed 4: Morton dealt after 336 skips; tapped From France; strikes 0 of 3 strikes used -> 1 of 3 strikes used; tile reads "From France"; scrollY 0 -> 0; height 5694 -> 5694
+  FAIL: the tap on From France cost a strike at 390
+  FAIL: From France did not lock with Tyler Morton at 390
+viewport 1280x900
+   ? open: Club squares present, sideways overflow 0 px, Let's Play button 44 px tall
+   seed 4: Morton dealt after 336 skips; tapped From France; strikes 0 of 3 strikes used -> 1 of 3 strikes used; tile reads "From France"; scrollY 0 -> 0; height 4192 -> 4192
+  FAIL: the tap on From France cost a strike at 1280
+  FAIL: From France did not lock with Tyler Morton at 1280
+playBingoClubRules: CONTROL=wrongtile FIRED (tapped From France for Morton; 4 failures)

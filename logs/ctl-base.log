@@ -1,0 +1,11 @@
+[32m✓ built in 34.55s[39m
+[dukb] inlined 1 stylesheet(s) and 1 module(s) into 181 snapshots (11 left alone)
+viewport 390x844
+   seed 4: Morton dealt after 421 skips; tapped Played for 4+ clubs; strikes 0 of 3 strikes used -> 1 of 3 strikes used; tile reads "🧳Played for 4+ clubs"; scrollY 0 -> 0; height 5694 -> 5694
+  FAIL: the tap on Played for 4+ clubs cost a strike at 390
+  FAIL: Played for 4+ clubs did not lock with Tyler Morton at 390
+viewport 1280x900
+   seed 4: Morton dealt after 421 skips; tapped Played for 4+ clubs; strikes 0 of 3 strikes used -> 1 of 3 strikes used; tile reads "🧳Played for 4+ clubs"; scrollY 0 -> 0; height 4192 -> 4192
+  FAIL: the tap on Played for 4+ clubs cost a strike at 1280
+  FAIL: Played for 4+ clubs did not lock with Tyler Morton at 1280
+playBingoClubRules: CONTROL=base FIRED (the walk ran on a dist built from BASE; 4 failures)

@@ -1,0 +1,10 @@
+build exit=0 36s | [dukb] inlined 1 stylesheet(s) and 1 module(s) into 181 snapshots (11 left alone)
+tsc exit=0 74s | 
+vitest exit=0 17s |    Duration  16.95s (transform 4.93s, setup 614ms, collect 6.83s, tests 17.67s, environment 3.04s, prepare 958ms)
+simBingoClubCounts exit=0 2s | simBingoClubCounts: GREEN, every section held
+ctl-drift exit=1 2s | simBingoClubCounts: CONTROL=drift FIRED (1 failures; section 7: 1)
+playBingoClubRules exit=0 29s | playBingoClubRules: GREEN, both viewports held
+ctl-wrongtile exit=1 29s | playBingoClubRules: CONTROL=wrongtile FIRED (tapped From France for Morton; 4 failures)
+ctl-base exit=1 71s | playBingoClubRules: CONTROL=base FIRED (the walk ran on a dist built from BASE; 4 failures)
+simTrustCopy exit=0 1s | simTrustCopy: green. One disclaimer under every page and one count of the games, the registry's own.
+simNoRivalNames exit=0 16s | No rival product names found. 0 findings.
