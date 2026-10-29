@@ -6,7 +6,8 @@
  * the AFL's. The receipts live in docs/audits/AUSSIE-RULES-FORMAT-SOURCES-2026-10.md.
  *
  * Players stay generated; a new career's club names are the real 2026 clubs
- * (Round 1572, see the header of aussieRulesLeague.ts). The format is real.
+ * (Round 1572, see the header of aussieRulesLeague.ts). Each part of the
+ * competition's shape below is either sourced or flagged as this game's rule.
  */
 import type { FinalsTie } from '@/lib/finalsBracket';
 
