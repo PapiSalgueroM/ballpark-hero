@@ -1,4 +1,4 @@
-import { useRef, useState } from 'react';
+import { lazy, Suspense, useRef, useState } from 'react';
 import { cn } from '@/lib/utils';
 import { Dumbbell, GraduationCap } from 'lucide-react';
 import {
@@ -13,9 +13,12 @@ import type { Position } from '@/types/game';
 import { useRevealScroll } from '@/hooks/useRevealScroll';
 import { SecondPositionChips } from '@/components/club-manager/SquadScreen';
 
+const IndividualLightSeason = lazy(() => import('./IndividualLightSeason'));
+
 interface TrainingScreenProps {
   career: CareerState;
   onSetPlan: (plan: TrainingPlan) => void;
+  onCommit?: (make: (current: CareerState) => CareerState | null) => boolean;
   /** Round 505: put a man to work on a second position, and call it off. */
   onRetrain: (playerId: string, to: Position) => void;
   onStopRetrain: (playerId: string) => void;
@@ -181,12 +184,18 @@ function RetrainCard({ career, onRetrain, onStopRetrain }: { career: CareerState
  * on Saturday, and how often somebody pulls up in a session.
  * Round 505: and the third card, a second position learned over weeks.
  */
-export function TrainingScreen({ career, onSetPlan, onRetrain, onStopRetrain }: TrainingScreenProps) {
+export function TrainingScreen({ career, onSetPlan, onRetrain, onStopRetrain, onCommit }: TrainingScreenProps) {
+  const [lightOpen, setLightOpen] = useState(false);
+  const lightTrigger = useRef<HTMLButtonElement>(null);
+  const back = () => { setLightOpen(false); requestAnimationFrame(() => lightTrigger.current?.focus({ preventScroll: true })); };
   const plan = career.training ?? { intensity: 'normal' as TrainingIntensity, focus: 'balanced' as TrainingFocus };
   const growing = developingPlayers(career).slice(0, 10);
 
+  if (lightOpen) return <Suspense fallback={<div className="space-y-2"><p role="status">Opening Light season...</p><button type="button" className="min-h-11 px-3 border rounded-lg" onClick={back}>Back</button></div>}><IndividualLightSeason career={career} onCommit={onCommit} onBack={back} /></Suspense>;
+
   return (
     <div className="space-y-2" style={{ overflowAnchor: 'none' }}>
+      <button ref={lightTrigger} type="button" className="min-h-11 w-full border border-border rounded-xl px-3 text-left text-xs font-bold" onClick={() => setLightOpen(true)}>Light season <span className="font-normal text-muted-foreground">One player's recovery and development</span></button>
       <div className="bg-card border border-border rounded-xl p-3">
         <div className="text-[10px] text-muted-foreground uppercase tracking-wider mb-1.5 flex items-center gap-1">
           <Dumbbell className="w-3 h-3" /> How hard you work them

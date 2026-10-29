@@ -1500,7 +1500,7 @@ const ClubManager = () => {
               )}
 
               {hubPanel === 'training' && (
-                <ScreenLoading><TrainingScreen career={c} onSetPlan={g.setTraining} onRetrain={g.retrain} onStopRetrain={g.stopRetrain} /></ScreenLoading>
+                <ScreenLoading><TrainingScreen career={c} onSetPlan={g.setTraining} onRetrain={g.retrain} onStopRetrain={g.stopRetrain} onCommit={g.commitRecruitment} /></ScreenLoading>
               )}
 
               {hubPanel === 'roles' && <ScreenLoading><RolesScreen career={c} onSetRole={g.setRole} /></ScreenLoading>}
