@@ -1,0 +1,5 @@
+#!build
+#!playwright
+weight-head: (node scripts/lib/hostLikeServer.mjs dist 4180 > /tmp/wh.log 2>&1 &) && sleep 4 && node .rc/x/weightNba.mjs http://localhost:4180 dist head
+weight-merge: git worktree add -q /tmp/wm 60199687a && ln -s "$PWD/node_modules" /tmp/wm/node_modules && (cd /tmp/wm && node_modules/.bin/vite build > /tmp/wm-build.log 2>&1) && (node scripts/lib/hostLikeServer.mjs /tmp/wm/dist 4177 > /tmp/wm-server.log 2>&1 &) && sleep 4 && node .rc/x/weightNba.mjs http://localhost:4177 /tmp/wm/dist merge
+weight-main: git worktree add -q /tmp/wmain 5d1198389 && ln -s "$PWD/node_modules" /tmp/wmain/node_modules && (cd /tmp/wmain && node_modules/.bin/vite build > /tmp/wmain-build.log 2>&1) && (node scripts/lib/hostLikeServer.mjs /tmp/wmain/dist 4178 > /tmp/wmain-server.log 2>&1 &) && sleep 4 && node .rc/x/weightNba.mjs http://localhost:4178 /tmp/wmain/dist main
