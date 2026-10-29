@@ -1,0 +1,5 @@
+NEGATIVE CONTROL onesource: one calendar fact of oly-2008 keeps one read (section 1 must fail)
+section 1: the ledger
+  FAIL [1] partial list oly-2028 oly-2032 wc-2027 wc-2031 vs editions with a short fact oly-2008 oly-2028 oly-2032 wc-2027 wc-2031
+  69 facts, 163 reads, partial: oly-2028 oly-2032 wc-2027 wc-2031
+simCareerIntl: control onesource FIRED (section 1, 1 failures)

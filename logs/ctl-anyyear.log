@@ -1,0 +1,33 @@
+NEGATIVE CONTROL anyyear: every summer answers an edition (section 4 must fail)
+sections 2b and 4: the call, 400 careers an era through the real NBA engine
+  FAIL [4] now 0 summer 2034: the gate says 2034, the oracle says false
+  FAIL [4] now 0 summer 2034: the curtain line and the oracle disagree
+  FAIL [4] now 0 summer 2034: ovr 87 age 28 health 100 edition none, called true, the oracle says false
+  FAIL [2] now 0: the season labelled 2033 is called to oly-2034, the summer after it is 2034 (none)
+  FAIL [4] now 0 summer 2037: the gate says 2037, the oracle says false
+  FAIL [4] now 0 summer 2037: the curtain line and the oracle disagree
+  FAIL [4] now 0 summer 2037: ovr 89 age 31 health 96 edition none, called true, the oracle says false
+  FAIL [2] now 0: the season labelled 2036 is called to oly-2037, the summer after it is 2037 (none)
+  FAIL [4] now 0 summer 2038: the gate says 2038, the oracle says false
+  FAIL [4] now 0 summer 2038: the curtain line and the oracle disagree
+  FAIL [4] now 0 summer 2038: ovr 91 age 32 health 97 edition none, called true, the oracle says false
+  FAIL [2] now 0: the season labelled 2037 is called to oly-2038, the summer after it is 2038 (none)
+  FAIL [4] now 0 summer 2041: the gate says 2041, the oracle says false
+  FAIL [4] now 0 summer 2041: the curtain line and the oracle disagree
+  FAIL [4] now 0 summer 2041: ovr 89 age 35 health 94 edition none, called true, the oracle says false
+  FAIL [2] now 0: the season labelled 2040 is called to oly-2041, the summer after it is 2041 (none)
+  FAIL [2] now 0: the season labelled 2041 is called to oly-2042, the summer after it is 2042 (none)
+  FAIL [2] now 1: the season labelled 2036 is called to oly-2037, the summer after it is 2037 (none)
+  FAIL [2] now 1: the season labelled 2037 is called to oly-2038, the summer after it is 2038 (none)
+  FAIL [2] now 2: the season labelled 2036 is called to oly-2037, the summer after it is 2037 (none)
+  FAIL [2] now 2: the season labelled 2037 is called to oly-2038, the summer after it is 2038 (none)
+  FAIL [2] now 2: the season labelled 2040 is called to oly-2041, the summer after it is 2041 (none)
+  FAIL [2] now 3: the season labelled 2036 is called to oly-2037, the summer after it is 2037 (none)
+  FAIL [2] now 3: the season labelled 2037 is called to oly-2038, the summer after it is 2038 (none)
+  now: 400 careers, 7340 summers, first summer 2027; called at least once 198 (49.5 percent), 1303 calls (3.26 a career, 6.58 a called career)
+  now: share of careers ever called if the bar were 84 to 92: 84 75.5, 85 66.3, 86 57.5, 87 48.8, 88 37.3, 89 27.0, 90 19.0, 91 11.0, 92 4.8
+  now: 655 edition summers rated 87 or more; held back by health under 50: 3 (0.5 percent), by age over 36: 4; by a career ending with that season: 4
+  y2004: 400 careers, 7324 summers, first summer 2004; called at least once 194 (48.5 percent), 1327 calls (3.32 a career, 6.84 a called career)
+  y2004: share of careers ever called if the bar were 84 to 92: 84 82.0, 85 70.3, 86 59.8, 87 47.3, 88 37.3, 89 29.0, 90 18.8, 91 12.3, 92 4.5
+  y2004: 616 edition summers rated 87 or more; held back by health under 50: 1 (0.2 percent), by age over 36: 3; by a career ending with that season: 4
+simCareerIntl: control anyyear FIRED (section 4, 4134 failures)
