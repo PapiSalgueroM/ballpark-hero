@@ -37,7 +37,7 @@ export function FavouriteSport({ sports, value, onPick }: {
                   onClick={() => onPick(on ? null : sport)}
                   style={sportStyle(sport)}
                   className={cn(
-                    'inline-flex h-9 items-center gap-1.5 whitespace-nowrap rounded-full border px-3 text-xs font-semibold transition-colors',
+                    'inline-flex h-11 items-center gap-1.5 whitespace-nowrap rounded-full border px-3 text-xs font-semibold transition-colors',
                     on
                       ? 'border-tile bg-tile/15 text-foreground'
                       : 'border-border/80 bg-surface-1 text-muted-foreground hover:border-tile/50 hover:text-foreground',
