@@ -1,0 +1,12 @@
+build exit=0 32s | [dukb] inlined 1 stylesheet(s) and 1 module(s) into 181 snapshots (11 left alone)
+fonts exit=0 1s | Prepared 9 declared font dependencies for local fulfillment.
+simCareerTransferBrief-forwalk exit=0 6s | Transfer Brief:9 healthy outcome groups,60 full original state/RNG pairs,8 effective copied source controls,9 prepared native branches.
+playCareerTransferBrief exit=1 76s | Node.js v24.22.1
+simSoccerAgentReview-forwalk exit=0 8s | PASS agent review product and proof source bytes held.
+playSoccerAgentReview exit=0 455s | Soccer agent review native 1976 checks,12 journeys,3 copied observation controls,0 failures.
+simSoccerOpponentLabels-forwalk exit=0 21s | PASS simSoccerOpponentLabels: complete original/current careers, display controls and whole undo
+hub-walk-noD exit=0 89s | playCmHubLanding: green (A 8 pass 0 fail, B 65 pass 0 fail, C 112 pass 0 fail, E 65 pass 0 fail, F 9 pass 0 fail); the hub lands on the club on its first frame
+ctl-hub-tilectl exit=0 56s | playCmHubLanding: 3 failure(s) (C 109 pass 3 fail)
+land-main exit=1 328s | playSoccerLanding: RED, 5 finding(s)
+land-toasts exit=0 412s | playSoccerLanding: green at 320x640, 390x844, 1280x900 (also no extra sizes; toasts, bytes), every marked section red on the base
+ctl-land-seed exit=0 163s | CONTROL FIRED: SOCCER_LANDING_CONTROL=seed played head on seed 1987332286 and the byte check went red, and the old save comparison went red on 8 save(s) given the next se
