@@ -1,0 +1,15 @@
+#!serial
+reh: npm install --prefix /tmp/pgl @electric-sql/pglite --silent --no-audit --no-fund && PGLITE_DIR=/tmp/pgl node scripts/qa/rehearseUsConnections1574.mjs
+reh-noguard: PGLITE_DIR=/tmp/pgl REHEARSE_CONTROL=noguard node scripts/qa/rehearseUsConnections1574.mjs
+reh-drift: PGLITE_DIR=/tmp/pgl REHEARSE_CONTROL=drift node scripts/qa/rehearseUsConnections1574.mjs
+reh-tamper: PGLITE_DIR=/tmp/pgl REHEARSE_CONTROL=tamper node scripts/qa/rehearseUsConnections1574.mjs
+reh-nohash: PGLITE_DIR=/tmp/pgl REHEARSE_CONTROL=nohash node scripts/qa/rehearseUsConnections1574.mjs
+reh-dupname: PGLITE_DIR=/tmp/pgl REHEARSE_CONTROL=dupname node scripts/qa/rehearseUsConnections1574.mjs
+reh1567: PGLITE_DIR=/tmp/pgl node scripts/qa/rehearseUsConnections1567.mjs
+reh1558: PGLITE_DIR=/tmp/pgl node scripts/qa/rehearseUsConnections1558.mjs
+mig1574: node scripts/qa/usConnections1574Migration.mjs check
+mig1567: node scripts/qa/usConnections1567Migration.mjs check
+ck: node scripts/qa/usConnections1574Checksummed.mjs nhl=.rc/x/nhl-2026-10-29.json /tmp/ck1574.sql
+dealt: node scripts/qa/connectionsDealtDay1574.mjs nhl=.rc/x/nhl-2026-10-29.json 2026-10-31 +40
+dealt-reshaped: DEALT_CONTROL=reshaped node scripts/qa/connectionsDealtDay1574.mjs nhl=.rc/x/nhl-2026-10-29.json 2026-10-31 +40
+plain: node scripts/simUsConnectionsFacts.mjs
