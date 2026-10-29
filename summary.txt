@@ -1,0 +1,11 @@
+nhlrec1 exit=0 1s | RECORDED nhl from 115c68092: 10 seeds, 48 seasons, fired at ["3:5","5:3"], digest 838cdddf98d5a02586935329fa780473f44782d1 -> ../../_temp/rc-out/files/nhl-rec1.json
+nhlrec2 exit=0 1s | RECORDED nhl from 115c68092: 10 seeds, 48 seasons, fired at ["3:5","5:3"], digest 838cdddf98d5a02586935329fa780473f44782d1 -> ../../_temp/rc-out/files/nhl-rec2.json
+simGmDeskHost123 exit=0 71s | simGmDeskHost: all 10 checks passed on seeds 1,2,3 (4 engines, 3 seasons a seed)
+tsc exit=0 100s | 
+simNhlGmDesk exit=0 5s | simNhlGmDesk: all seven checks passed (10 seeds x 10 seasons)
+simFoLazyDesk exit=0 39s | simFoLazyDesk: all checks passed
+simMlbGmDesk exit=0 7s | simMlbGmDesk: all seven checks passed (10 seeds x 10 seasons)
+simGmReload exit=0 12s | simGmReload: all green. Four front offices keep a finished season through a reload, and none of them can play a closed one again.
+simGmStaff exit=1 5s | GM STAFF: 40 failure(s)
+vitestfo exit=0 28s |    Duration  26.90s (transform 4.78s, setup 566ms, collect 4.47s, tests 34.67s, environment 2.11s, prepare 610ms)
+nflfull exit=0 205s | simGmCareer: all checks passed (nfl)
