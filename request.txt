@@ -1,0 +1,5 @@
+#!serve
+#!playwright
+#!serial
+weight-head: SWEEP_OFFLINE=1 ENGINES=chromium node scripts/sweepWeight.mjs > /tmp/w.txt 2>&1; s=$?; grep -E "front-office" /tmp/w.txt | head -6; tail -3 /tmp/w.txt; exit $s
+weight-head2: SWEEP_OFFLINE=1 ENGINES=chromium node scripts/sweepWeight.mjs > /tmp/w2.txt 2>&1; s=$?; grep -E "front-office" /tmp/w2.txt | head -6; tail -3 /tmp/w2.txt; exit $s
