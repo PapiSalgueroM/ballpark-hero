@@ -1,0 +1,9 @@
+m-draw exit=1 3s | simUsCareerHallWall CONTROL draw: FIRED, s1.nodraw red 800 times
+m-calnow exit=1 3s | simUsCareerHallWall CONTROL calnow: FIRED, s2.v1.record red 86 times
+m-unstamped exit=1 3s | simUsCareerHallWall CONTROL unstamped: FIRED, s1.record red 800 times
+m-dupe exit=1 3s | simUsCareerHallWall CONTROL dupe: FIRED, s3.idem red 1 times
+m-evict exit=1 3s | simUsCareerHallWall CONTROL evict: FIRED, s3.hofkept red 1 times
+m-newcomer exit=1 2s | simUsCareerHallWall CONTROL newcomer: FIRED, s3.newcomer red 2 times
+m-sportimport exit=1 3s | simUsCareerHallWall CONTROL sportimport: FIRED, s3.weight red 1 times
+m-version exit=1 3s | simUsCareerHallWall CONTROL version: FIRED, s3.version red 1 times
+m-clamp exit=1 3s | simUsCareerHallWall CONTROL clamp: FIRED, s3.bytes red 1 times
