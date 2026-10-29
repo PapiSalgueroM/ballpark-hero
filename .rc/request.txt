@@ -1,0 +1,3 @@
+refresh: node scripts/simGuideHeadings.mjs --refresh /front-office && cp scripts/data/guideHeadingsFrozen.json "$RC_OUT/guideHeadingsFrozen.json" && node scripts/simGuideHeadings.mjs
+guidebase: node scripts/simGuideHeadings.mjs
+simSiteSearch: node scripts/simSiteSearch.mjs
