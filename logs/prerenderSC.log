@@ -1,0 +1,9 @@
+  plus 10 noindexed routes that are not submitted: /football-timeline, /search, /admin/login, /admin/reports, /profile, /reset-password, /guess-nfl-team, /shirt-number, /higher-lower-transfers, /pack-battle
+prerendering 1 routes from the sitemap
+prerendered 1 routes, 0 failed
+clock samples at 0, 5, 11 days: 0 route(s) carried date dependent blocks, 0 removed by the second sample, 0 more by the third
+ public/soccer-career/index.html | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
+dist/soccer-career/index.html:<p>Every soccer career simulator promises the same fantasy: start as a nobody, retire as a legend. This one makes the middle the good part. You begin at 16 in a youth academy and live season by season through contracts, transfers, injuries, feuds, trophies, and increasingly questionable purchases, until the game hands down a legacy verdict. For scouting and development, try <a href="/wonderkid-factory">Wonderkid Factory</a>.</p>
+public/soccer-career/index.html:<p>Every soccer career simulator promises the same fantasy: start as a nobody, retire as a legend. This one makes the middle the good part. You begin at 16 in a youth academy and live season by season through contracts, transfers, injuries, feuds, trophies, and increasingly questionable purchases, until the game hands down a legacy verdict. For scouting and development, try <a href="/wonderkid-factory">Wonderkid Factory</a>.</p>
+<a href="/contract-chaos">Contract Chaos</a>.

@@ -1,0 +1,10 @@
+build exit=0 33s | [dukb] inlined 1 stylesheet(s) and 1 module(s) into 181 snapshots (11 left alone)
+tsc exit=0 67s | 
+vitest-intro exit=0 5s |    Duration  5.03s (transform 2.62s, setup 211ms, collect 4.35s, tests 2.03s, environment 1.23s, prepare 436ms)
+simSiteSearch exit=1 1s | simSiteSearch: 1 failure
+simGuideHeadings exit=0 1s | simGuideHeadings: green. 131 guides carry keyword h2s over h3 and h4 sections with every original sentence intact, and all 133 blocks render a clean outline.
+simSeoDiscovery1444 exit=1 0s | SEO_DISCOVERY_RESULT {"status":"failed","foundations":1,"outcomes":0,"failed":0,"errors":1,"sourceUnchanged":true,"networkAttempts":0,"control":null,"detected":false}
+simTrustCopy exit=0 0s | simTrustCopy: green. One disclaimer under every page and one count of the games, the registry's own.
+simInternalLinks exit=0 0s | simInternalLinks: green. Every page can be reached, and every page leads somewhere.
+simNoRivalNames exit=0 15s | No rival product names found. 0 findings.
+prerenderSC exit=0 12s | <a href="/contract-chaos">Contract Chaos</a>.
