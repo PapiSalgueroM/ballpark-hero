@@ -13,7 +13,9 @@
        a fresh export against the table file, row by row, with the classification the checksummed writers use
        (scripts/lib/connectionsMigration.mjs classify): current (the row holds the file's board), old (it holds the
        exported board, a round's change not applied yet), drifted (neither), missing (in the file, not the export),
-       extra (in the export past the shipped file, not in the table file). Exit 1 on drifted, missing or extra.
+       extra (in the export past the shipped file, not in the table file); and (fix-1574) moved, a row whose
+       sort_order is not the table file's, which changes what dailyIndex deals. Exit 1 on drifted, missing, extra
+       or moved. TABLE_DRIFT_CONTROL=sortorder swaps two rows' sort_order in memory and must end red on moved.
        The lead runs it at each release's live pass on that pass's export: no extra database read.
 
    Reads the exports and the repo; never the network. */
@@ -59,6 +61,8 @@ export async function driftOf(sport, rows) {
     drifted: strip(c.drifted),
     missing: strip(c.missing),
     extra: rows.map(r => r.puzzle_id).filter(id => !known.has(id) && !ids.has(id)),
+    /* fix-1574: a row whose sort_order is not the table file's changes what dailyIndex deals on every day */
+    moved: doc.rows.filter(r => { const x = rows.find(y => y.puzzle_id === r.puzzle_id); return x && Number(x.sort_order) !== r.sort_order; }).map(r => r.puzzle_id),
   };
 }
 
@@ -91,14 +95,37 @@ if (process.argv[1] && fileURLToPath(import.meta.url) === path.resolve(process.a
     writeTableDoc(ROOT, sport, doc);
     console.log(`wrote ${path.relative(ROOT, tableFile(ROOT, sport))}: ${past.length} of ${rows.length} rows (${rows.length - past.length} are the shipped file's), fingerprint ${fp}`);
   } else if (step === 'drift') {
+    /* TABLE_DRIFT_CONTROL=sortorder (fix-1574): the first two table file rows found in the first export swap their
+       sort_order in memory; the run must end red on moved for both, never green */
+    const CONTROL = process.env.TABLE_DRIFT_CONTROL ?? '';
+    if (CONTROL && CONTROL !== 'sortorder') { console.error(`unknown TABLE_DRIFT_CONTROL=${CONTROL}`); process.exit(2); }
     let bad = 0;
+    let swapped = null;
+    let fired = 0;
     for (const [sport, file] of parts(process.argv[3])) {
-      const d = await driftOf(sport, JSON.parse(fs.readFileSync(file, 'utf8')));
+      const rows = JSON.parse(fs.readFileSync(file, 'utf8'));
+      if (CONTROL === 'sortorder' && !swapped) {
+        const ids = (tableDoc(ROOT, sport)?.rows ?? []).map(r => r.puzzle_id);
+        const [a, b] = ids.map(id => rows.find(r => r.puzzle_id === id)).filter(Boolean);
+        if (a && b && a.sort_order !== b.sort_order) {
+          [a.sort_order, b.sort_order] = [b.sort_order, a.sort_order];
+          swapped = [a.puzzle_id, b.puzzle_id];
+          console.log(`TABLE_DRIFT_CONTROL=sortorder: ${sport} ${swapped.join(' and ')} swap their sort_order in the export; this run must end red`);
+        }
+      }
+      const d = await driftOf(sport, rows);
       const say = (k, xs) => `${xs.length} ${k}${xs.length ? ` (${xs.join(', ')})` : ''}`;
-      console.log(`${sport}: ${say('current', d.current)}; ${say('old', d.old)}; ${say('drifted', d.drifted)}; ${say('missing', d.missing)}; ${say('extra', d.extra)}`);
-      bad += d.drifted.length + d.missing.length + d.extra.length;
+      console.log(`${sport}: ${say('current', d.current)}; ${say('old', d.old)}; ${say('drifted', d.drifted)}; ${say('missing', d.missing)}; ${say('extra', d.extra)}; ${say('moved (sort_order)', d.moved)}`);
+      bad += d.drifted.length + d.missing.length + d.extra.length + d.moved.length;
+      if (swapped) fired += d.moved.filter(id => swapped.includes(id)).length;
     }
-    if (bad) { console.error(`usConnectionsTableImport drift: ${bad} row(s) drifted, missing or extra: the live table and the repo disagree; read them before any apply`); process.exit(1); }
+    if (CONTROL) {
+      if (!swapped) { console.error('TABLE_DRIFT_CONTROL=sortorder ABORTED: no two table rows with different sort_orders in the export, so a red run would prove nothing'); process.exit(2); }
+      if (fired === 2) { console.error(`TABLE_DRIFT_CONTROL=sortorder fired its own rule: moved x2 for ${swapped.join(' and ')}`); process.exit(1); }
+      console.log(`TABLE_DRIFT_CONTROL=sortorder did NOT fire its own rule (moved x${fired}); this control proves nothing as the code stands`);
+      process.exit(0);
+    }
+    if (bad) { console.error(`usConnectionsTableImport drift: ${bad} row(s) drifted, missing, extra or moved in sort_order: the live table and the repo disagree; read them before any apply`); process.exit(1); }
     console.log('usConnectionsTableImport drift: green. Every live row past the files holds its table file board or its exported board.');
   } else {
     console.error('usage: init <sport>=<export.json> "<exportedAt>" | drift <sport>=<export.json>[,...]');
