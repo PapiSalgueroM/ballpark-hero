@@ -1,0 +1,59 @@
+Preparing worktree (detached HEAD 5d1198389d)
+HEAD is now at 5d1198389d Board: for Chat, every Release BS finding is fixed on release-bs-gate and the gate is out
+
+[1m[46m RUN [49m[22m [36mv3.2.7 [39m[90m/home/runner/work/ballpark-hero/ballpark-hero/.rc/brot[39m
+
+[90mstdout[2m | src/lib/nbaRotation.test.ts[2m > [22m[2mNBA manual rotation engine outcomes[2m > [22m[2mholds physical original automatic campaigns and RNG fingerprints as an independent baseline
+[22m[39mNBA_ROTATION_PRINT 117 false ccf6088208b43998f04015fdbe44d4c9c1dc0dc1be19d745bd787e6f48a1728b 12648
+NBA_ROTATION_PRINT 431 false 05a1352ceec4de67d22fd319b8560b927f435d70070d367ad6dff019897bf6d7 12619
+NBA_ROTATION_PRINT 907 false b56c4d1df8d71e9709ba6da003698117f318ca09b371e8acbce022f0b7d6e6f7 12685
+NBA_ROTATION_PRINT 117 true f25f738705ea2c8bb338d4d55e680dd50cff00e0dbdadfbbf721a864722475ed 17256
+NBA_ROTATION_PRINT 431 true 26048e582b52b90f13be0ca2d41dbe0e3328a7a9e2e92d0932a039cfbce7debc 17207
+NBA_ROTATION_PRINT 907 true d83f6c619d8fd673f3d4b8c00009a65883ac96e79512ca4580103be8bdb5d8cb 17317
+
+ [31m❯[39m src/lib/nbaRotation.test.ts [2m([22m[2m16 tests[22m[2m | [22m[31m1 failed[39m[2m | [22m[33m15 skipped[39m[2m)[22m[33m 897[2mms[22m[39m
+[31m   [31m×[31m NBA manual rotation engine outcomes[2m > [22mholds physical original automatic campaigns and RNG fingerprints as an independent baseline[39m[33m 895[2mms[22m[39m
+[31m     → expected 'ccf6088208b43998f04015fdbe44d4c9c1dc0…' to be '32a869d8c5d69f54ebc81a9fe96c3bc62e758…' // Object.is equality[39m
+   [2m[90m↓[39m[22m NBA manual rotation engine outcomes[2m > [22mkeeps automatic tie order, empty fallback and fixed minutes as an independent baseline
+   [2m[90m↓[39m[22m NBA manual rotation engine outcomes[2m > [22mchanges starter and bench strength only after a deliberate owned slot swap
+   [2m[90m↓[39m[22m NBA manual rotation engine outcomes[2m > [22mputs a chosen bench prospect on the real box and keeps the original five starters
+   [2m[90m↓[39m[22m NBA manual rotation engine outcomes[2m > [22mcovers only the injured preferred hole and restores it without rewriting preferences
+   [2m[90m↓[39m[22m NBA manual rotation engine outcomes[2m > [22mkeeps uncovered manual starter holes from stealing bench minutes and starter status
+   [2m[90m↓[39m[22m NBA manual rotation engine outcomes[2m > [22mretains the original all-injured emergency box and points identity for manual and automatic teams
+   [2m[90m↓[39m[22m NBA manual rotation engine outcomes[2m > [22mrefuses invalid, foreign, injured and identical choices without changing raw team state
+   [2m[90m↓[39m[22m NBA manual rotation engine outcomes[2m > [22mreads malformed or duplicate saved preferences safely and repairs them only explicitly
+   [2m[90m↓[39m[22m NBA manual rotation engine outcomes[2m > [22mrepairs successful releases and signs while failed moves stay byte-identical
+   [2m[90m↓[39m[22m NBA manual rotation engine outcomes[2m > [22mreconciles both clubs after an accepted trade while refusals mutate neither
+   [2m[90m↓[39m[22m NBA manual rotation engine outcomes[2m > [22mreconciles both clubs after an accepted talks while refusals mutate neither
+   [2m[90m↓[39m[22m NBA manual rotation engine outcomes[2m > [22mreconciles restored identity repair while preserving the original repaired-ID count
+   [2m[90m↓[39m[22m NBA manual rotation engine outcomes[2m > [22mreconciles real offseason retirement and expiring contracts before the next tip-off
+   [2m[90m↓[39m[22m NBA manual rotation engine outcomes[2m > [22mkeeps a manual prospect playing through season, postseason, summer and a resumed next season
+   [2m[90m↓[39m[22m NBA manual rotation engine outcomes[2m > [22mmeasures a paired complete-regular-season effect for weaker starters with identical draw counts
+
+[31m⎯⎯⎯⎯⎯⎯⎯[39m[1m[41m Failed Tests 1 [49m[22m[31m⎯⎯⎯⎯⎯⎯⎯[39m
+
+[41m[1m FAIL [22m[49m src/lib/nbaRotation.test.ts[2m > [22mNBA manual rotation engine outcomes[2m > [22mholds physical original automatic campaigns and RNG fingerprints as an independent baseline
+[31m[1mAssertionError[22m: expected 'ccf6088208b43998f04015fdbe44d4c9c1dc0…' to be '32a869d8c5d69f54ebc81a9fe96c3bc62e758…' // Object.is equality[39m
+
+Expected: [32m"32a869d8c5d69f54ebc81a9fe96c3bc62e758729357156b13c2bcc666eb4b79d"[39m
+Received: [31m"ccf6088208b43998f04015fdbe44d4c9c1dc0dc1be19d745bd787e6f48a1728b"[39m
+
+[36m [2m❯[22m src/lib/nbaRotation.test.ts:[2m156:29[22m[39m
+    [90m154| [39m    if (process.env.PRINT_NBA_ROTATION) for (const { reference, result…
+    [90m155| [39m    [35mfor[39m ([35mconst[39m { reference[33m,[39m result } [35mof[39m runs) {
+    [90m156| [39m      expect(result.digest).toBe(reference.digest); expect(result.draw…
+    [90m   | [39m                            [31m^[39m
+    [90m157| [39m      [34mexpect[39m(result[33m.[39mbooked)[33m.[39m[34mtoBe[39m([33m![39mreference[33m.[39mlegacy)[33m;[39m
+    [90m158| [39m      if (!reference.legacy) expect(result.games).toEqual(Array(30).fi…
+
+[31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/1]⎯[22m[39m
+
+
+[2m Test Files [22m [1m[31m1 failed[39m[22m[90m (1)[39m
+[2m      Tests [22m [1m[31m1 failed[39m[22m[2m | [22m[33m15 skipped[39m[90m (16)[39m
+[2m   Start at [22m 10:32:30
+[2m   Duration [22m 1.90s[2m (transform 267ms, setup 74ms, collect 312ms, tests 897ms, environment 236ms, prepare 132ms)[22m
+
+
+::error file=/home/runner/work/ballpark-hero/ballpark-hero/.rc/brot/src/lib/nbaRotation.test.ts,title=src/lib/nbaRotation.test.ts > NBA manual rotation engine outcomes > holds physical original automatic campaigns and RNG fingerprints as an independent baseline,line=156,column=29::AssertionError: expected 'ccf6088208b43998f04015fdbe44d4c9c1dc0…' to be '32a869d8c5d69f54ebc81a9fe96c3bc62e758…' // Object.is equality%0A%0AExpected: "32a869d8c5d69f54ebc81a9fe96c3bc62e758729357156b13c2bcc666eb4b79d"%0AReceived: "ccf6088208b43998f04015fdbe44d4c9c1dc0dc1be19d745bd787e6f48a1728b"%0A%0A ❯ src/lib/nbaRotation.test.ts:156:29%0A%0A
+1

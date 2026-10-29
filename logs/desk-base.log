@@ -1,0 +1,32 @@
+Preparing worktree (detached HEAD 5d1198389d)
+Updating files:  84% (4552/5378)Updating files:  85% (4572/5378)Updating files:  86% (4626/5378)Updating files:  87% (4679/5378)Updating files:  88% (4733/5378)Updating files:  89% (4787/5378)Updating files:  90% (4841/5378)Updating files:  91% (4894/5378)Updating files:  92% (4948/5378)Updating files:  93% (5002/5378)Updating files:  94% (5056/5378)Updating files:  95% (5110/5378)Updating files:  96% (5163/5378)Updating files:  97% (5217/5378)Updating files:  98% (5271/5378)Updating files:  99% (5325/5378)Updating files: 100% (5378/5378)Updating files: 100% (5378/5378), done.
+HEAD is now at 5d1198389d Board: for Chat, every Release BS finding is fixed on release-bs-gate and the gate is out
+fatal: invalid object name '5d1198389 (the commit before Round 1566), season blocks read shape free'.
+node:internal/errors:986
+  const err = new Error(message);
+              ^
+
+Error: Command failed: git show 5d1198389 (the commit before Round 1566), season blocks read shape free:src/lib/nbaFrontOffice.ts
+fatal: invalid object name '5d1198389 (the commit before Round 1566), season blocks read shape free'.
+
+    at genericNodeError (node:internal/errors:986:15)
+    at wrappedFn (node:internal/errors:540:14)
+    at checkExecSyncError (node:child_process:943:11)
+    at execFileSync (node:child_process:979:15)
+    at file:///home/runner/work/ballpark-hero/ballpark-hero/.rc/bdesk/scripts/simNbaGmDesk.mjs:406:15
+    at ModuleJob.run (node:internal/modules/esm/module_job:561:25)
+    at async node:internal/modules/esm/loader:647:26
+    at async asyncRunEntryPointWithESMLoader (node:internal/modules/run_main:101:5) {
+  status: 128,
+  signal: null,
+  output: [
+    null,
+    '',
+    "fatal: invalid object name '5d1198389 (the commit before Round 1566), season blocks read shape free'.\n"
+  ],
+  pid: 2384,
+  stdout: '',
+  stderr: "fatal: invalid object name '5d1198389 (the commit before Round 1566), season blocks read shape free'.\n"
+}
+
+Node.js v24.22.1
