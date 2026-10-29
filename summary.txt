@@ -1,0 +1,20 @@
+nba-plain exit=0 15s | simNbaSeasonStats: 85 checks passed over 10 seeded franchises and 3 seasons each. Every game adds up, the box takes nothing from the league, the awards follow their rules
+nba-base exit=0 17s | simNbaSeasonStats: 86 checks passed over 10 seeded franchises and 3 seasons each. Every game adds up, the box takes nothing from the league, the awards follow their rules
+nba-c-grouped exit=1 3s | control "grouped": section 9 went red as expected (1 failures) and nothing else moved, the check works. Exiting non zero because the checks did fail.
+nba-c-carried exit=1 3s | control "carried": sections 2 and 9 went red as expected (16 failures) and nothing else moved, the check works. Exiting non zero because the checks did fail.
+nba-c-named exit=1 4s | control "named": section 9 went red as expected (5 failures) and nothing else moved, the check works. Exiting non zero because the checks did fail.
+named-again exit=0 15s | REREC named run=0 compare=0
+nba-c-nosplit exit=1 3s | control "nosplit": section 1 went red as expected (2 failures) and nothing else moved, the check works. Exiting non zero because the checks did fail.
+nba-c-extradraw exit=1 3s | control "extradraw": section 2 went red as expected (15 failures) and nothing else moved, the check works. Exiting non zero because the checks did fail.
+nba-c-noqualify exit=1 3s | control "noqualify": sections 3 and 4 went red as expected (7 failures) and nothing else moved, the check works. Exiting non zero because the checks did fail.
+nba-c-mvpnowin exit=1 3s | control "mvpnowin": section 3 went red as expected (3 failures) and nothing else moved, the check works. Exiting non zero because the checks did fail.
+nba-c-sixthstarters exit=1 3s | control "sixthstarters": sections 3 and 8 went red as expected (3 failures) and nothing else moved, the check works. Exiting non zero because the checks did fail.
+nba-c-doubleclose exit=1 3s | control "doubleclose": section 6 went red as expected (3 failures) and nothing else moved, the check works. Exiting non zero because the checks did fail.
+nba-c-oldnever exit=1 3s | control "oldnever": sections 2 and 7 went red as expected (13 failures) and nothing else moved, the check works. Exiting non zero because the checks did fail.
+nba-c-rookieany exit=1 4s | control "rookieany": section 3 went red as expected (2 failures) and nothing else moved, the check works. Exiting non zero because the checks did fail.
+nba-c-draftlate exit=1 4s | control "draftlate": section 3 went red as expected (2 failures) and nothing else moved, the check works. Exiting non zero because the checks did fail.
+nba-c-bench17 exit=1 3s | control "bench17": section 8 went red as expected (1 failures) and nothing else moved, the check works. Exiting non zero because the checks did fail.
+simStorageWrites exit=0 5s | simStorageWrites: all green (owed: 12)
+simNoRivalNames exit=0 17s | No rival product names found. 0 findings.
+tsc exit=0 86s | 
+simHarnessAnchors exit=0 51s | simHarnessAnchors: green. Every harness parses and none carries an unmatchable anchor.

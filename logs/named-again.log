@@ -1,0 +1,8 @@
+   9. one save shape: 14 checks
+simNbaSeasonStats: 86 checks passed over 10 seeded franchises and 3 seasons each. Every game adds up, the box takes nothing from the league, the awards follow their rules, and the season closes once.
+committed: from 5d1198389, seed 1, epoch 1tmqc4v1t69230, low 5539; again: from 5d1198389, seed 1, epoch 1wnjwsjus0c85, low 5539
+block by place: 41204 and 41204 characters, the same
+packed: 15760 and 15760 characters, the same
+every id in the committed block was renamed by place: true
+CMP_NAMED: the recording reproduces from 5d1198389, ids aside
+REREC named run=0 compare=0
