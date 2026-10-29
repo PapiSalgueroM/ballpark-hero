@@ -1,0 +1,9 @@
+tsc: node_modules/.bin/tsc --noEmit -p tsconfig.app.json
+simEdgeSync: node scripts/simEdgeSync.mjs
+simEdgeSync-base: git worktree add -q /tmp/base eb8ae0614 && cd /tmp/base && ln -s "$OLDPWD/node_modules" node_modules && node scripts/simEdgeSync.mjs
+simQuotaHonesty: node scripts/simQuotaHonesty.mjs
+simTeammatesRecord: node scripts/simTeammatesRecord.mjs
+simValidatorRefusalHold: node scripts/simValidatorRefusalHold.mjs
+simSoccerGridSearchDiscovery: node scripts/simSoccerGridSearchDiscovery.mjs
+simNoRivalNames: node scripts/simNoRivalNames.mjs
+simHarnessAnchors: node scripts/simHarnessAnchors.mjs

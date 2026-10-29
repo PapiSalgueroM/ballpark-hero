@@ -1,0 +1,9 @@
+simEdgeSync exit=1 0s | simEdgeSync: 2 finding(s).
+simEdgeSync-base exit=1 1s | simEdgeSync: 1 finding(s).
+simQuotaHonesty exit=0 0s | simQuotaHonesty: green. When the allowance is gone, Soccer Grid says so and stops asking for retries; Build Your XI blocks the one pick, keeps the search box and never sa
+simTeammatesRecord exit=0 1s | simTeammatesRecord: all 141 rows match the record, 126 answers stand on two hosts or a two host adjudication, every funFact claim holds, 15 legacy soccer rows await verif
+simSoccerGridSearchDiscovery exit=1 1s | Node.js v24.22.1
+simValidatorRefusalHold exit=0 1s | simValidatorRefusalHold: green. 9 validators run: a stored refusal waits for the records, and every failure mode fails closed.
+simNoRivalNames exit=0 19s | No rival product names found. 0 findings.
+simHarnessAnchors exit=0 52s | simHarnessAnchors: green. Every harness parses and none carries an unmatchable anchor.
+tsc exit=0 61s | 

@@ -1,0 +1,16 @@
+node:internal/modules/run_main:107
+    triggerUncaughtException(
+    ^
+
+AssertionError [ERR_ASSERTION]: Ordinary offline preload must be active before historical dispatch
+    at Module.dispatchHistorical1432 (file:///home/runner/work/ballpark-hero/ballpark-hero/scripts/qa/gridSearchCompatibility1432.mjs:81:3)
+    at file:///home/runner/work/ballpark-hero/ballpark-hero/scripts/simSoccerGridSearchDiscovery.mjs:2:66 {
+  generatedMessage: false,
+  code: 'ERR_ASSERTION',
+  actual: undefined,
+  expected: true,
+  operator: '==',
+  diff: 'simple'
+}
+
+Node.js v24.22.1

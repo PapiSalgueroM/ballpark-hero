@@ -1,0 +1,34 @@
+Parsed 141 pairs from src/data/teammatesPairs.ts (141 row objects in the file)
+
+--- 1. a pair is two different people, with a real sport and difficulty ---
+  141 pairs checked
+
+--- 2. no pairing appears twice, in either order ---
+  141 distinct pairings
+
+--- 3. the shipped file says exactly what scripts/data/teammatesVerified2026-10.json says ---
+  141 of 141 rows match their record word for word
+
+--- 4. every verified player and every adjudicated fact stands on two hosts ---
+  130 players and 3 adjudications checked; 15 legacy soccer rows (ceiling 15)
+
+--- 5. the answer is derived from the two hosts, never typed ---
+  123 answers derived from both hosts, 3 settled by adjudication
+
+--- 6. every claim a funFact rests on holds on both hosts ---
+  287 claims checked on both hosts
+
+--- 7. every year, count and team in a funFact is one a claim declares ---
+  126 funFacts linted: 177 club nicknames and 1 titles or scores each traced to a claim or an adjudication
+
+--- 8. the deal: how much of one run the next run repeats ---
+  per seed: 7.6 8.5 8.0 8.1 8.3 7.5 7.3 7.1 7.8 8.0 7.8 8.2 percent; mean 7.8 (ceiling 14.0)
+  every one of 9600 runs dealt 10 distinct pairs as 3+3+4: yes; tapping YES every time scores 6.87 of 10 on average
+  bank by sport: NBA 36, NFL 31, NHL 31, Soccer 16, MLB 27
+
+--- 10. the reveal a player sees says what the record checked ---
+  0 unscoped denial(s) on the page; the NO reveal names the league: yes
+
+--- 9. live soccer table check: skipped (reads production; TEAMMATES_LIVE=1, lead only, once a release). 16 soccer rows would be asked. ---
+
+simTeammatesRecord: all 141 rows match the record, 126 answers stand on two hosts or a two host adjudication, every funFact claim holds, 15 legacy soccer rows await verification.
