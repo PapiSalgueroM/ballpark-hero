@@ -1,0 +1,3 @@
+vt-wall exit=0 56s |    Duration  55.08s (transform 4.08s, setup 289ms, collect 7.99s, tests 49.58s, environment 1.39s, prepare 570ms)
+c-anyplaque exit=1 57s | simUsCareerHallWall CONTROL anyplaque: FIRED, C4b red in all four sports and C1, C3, C4, C5, C6, C7, C8, C9, C10a, C10b, C10c, J green
+tsc exit=0 79s | 
