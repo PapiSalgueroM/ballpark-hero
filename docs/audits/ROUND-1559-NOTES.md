@@ -171,8 +171,8 @@ not added). sweepWeight.mjs is not edited; the NHL and MLB rows are the lead's (
   50 controls once) and all 0: 49 of 49 FIRED (1444 s), so the finding 12 test disarmed none of the NFL's controls.
 - r1559-f6 (served, dcd1272f7: src and scripts equal to 59a6f90db): controlFrontOfficeBoard blank exit 1, NOT FIRED,
   as it must; simWritesAreSent exit 1, 2 failures, first "the harness could not drive Guess the Nation to a finish"
-  (finish-1533.md item 5 records the pair red on its base; this round touches no Guess the Nation file). BASE in
-  r1559-f7.
+  (finish-1533.md item 5 records the pair red on its base; this round touches no Guess the Nation file). BASE
+  115c68092 built on the runner (r1559-f7): the same two failures, the same first line.
 
 The lead's checklist, the NOT RUN list and what Round 1561 must know are in
 C:/Users/antho/dukb-handoff/2026-10-10/results-g/finish-1559.md.
