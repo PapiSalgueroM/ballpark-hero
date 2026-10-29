@@ -1,0 +1,4 @@
+build exit=0 31s | [dukb] inlined 1 stylesheet(s) and 1 module(s) into 181 snapshots (11 left alone)
+weight-head exit=0 8s |   AppearanceBuilder:11.4 Celebration:0.8 CelebrationStyles:0.7 Confetti:0.6 GameHelp:0.8 GameNav:1.7 GameNavbar:3.7 GameReportContext:3.0 GameSeoContent:2.4 HowToPlayPopo
+weight-main exit=0 45s |   AppearanceBuilder:15.0 Celebration:0.8 CelebrationStyles:0.7 Confetti:0.6 GameHelp:0.8 GameNav:1.7 GameNavbar:3.7 GameReportContext:3.0 GameSeoContent:2.4 HowToPlayPopo
+weight-merge exit=0 46s |   AppearanceBuilder:15.0 Celebration:0.8 CelebrationStyles:0.7 Confetti:0.6 GameHelp:0.8 GameNav:1.7 GameNavbar:3.7 GameReportContext:3.0 GameSeoContent:2.4 HowToPlayPopo
