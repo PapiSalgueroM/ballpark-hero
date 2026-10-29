@@ -1,0 +1,10 @@
+tsc: node_modules/.bin/tsc --noEmit -p tsconfig.app.json
+default: node scripts/simTriviaBank.mjs
+swaprepeat: TRIVIA_CONTROL=swaprepeat node scripts/simTriviaBank.mjs
+swapfive: TRIVIA_CONTROL=swapfive node scripts/simTriviaBank.mjs
+swapmove: TRIVIA_CONTROL=swapmove node scripts/simTriviaBank.mjs
+swapeasy: TRIVIA_CONTROL=swapeasy node scripts/simTriviaBank.mjs
+tie-base: echo "imports differing from 5f9303bf8: [$(git diff --name-only 5f9303bf8 -- src/lib/dateUtils.ts src/lib/dailyRecord.ts)]; bank code lines changed: $(git diff -U0 5f9303bf8 -- src/lib/triviaQuestionBank.ts | grep -E '^[-+]' | grep -v -E '^(\+\+\+|---)' | grep -v -E '^[-+] \*' | wc -l)" && git show 5f9303bf8:src/lib/sportsMillionaire.ts > "$TMPDIR/base-sm.ts" && TRIVIA_SWAP_ARM_FILE="$TMPDIR/base-sm.ts" node scripts/simTriviaBank.mjs
+tie-head: TRIVIA_SWAP_ARM_FILE=src/lib/sportsMillionaire.ts node scripts/simTriviaBank.mjs
+ctl-short: TRIVIA_CONTROL=short node scripts/simTriviaBank.mjs
+dr: ONLY=sports-millionaire node scripts/simDailyReload.mjs
