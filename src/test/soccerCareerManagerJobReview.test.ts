@@ -93,14 +93,21 @@ describe('manager job review authority', () => {
     expect(actual.value.events[actual.value.events.length - 1]).toBe('Test-only simulated phone transaction');
     expect(money(actual.value)).toStrictEqual(money(current)); expect(actual.draws).toHaveLength(0);
   });
-  it('same-name ambiguous missing and changed pools keep the actual canonical season without guessing', () => {
+  it('same-name ambiguous and changed pools keep the actual canonical season without guessing, and a missing source still asks', () => {
     const input = setManagerJobReview(manager(), clubs, true);
     const canonical = seeded(22, () => E.advanceManagerSeason(structuredClone(input), clubs)).value;
     const target = clubs.find(row => row.name === canonical.managerState!.club)!;
-    for (const pool of [[...clubs, { ...target }], clubs.filter(row => row.name !== input.managerState!.club)]) {
+    for (const pool of [[...clubs, { ...target }]]) {
       equalRun(seeded(22, () => advanceReviewedManagerSeason(structuredClone(input), pool)),
         seeded(22, () => E.advanceManagerSeason(structuredClone(input), pool)));
     }
+    /* Release BS fix BS-sc419-1: a source club the pool does not hold (a job taken off the market) is
+       still asked about, because Stay restores the stored from tuple; only the destination needs the pool. */
+    const missing = clubs.filter(row => row.name !== input.managerState!.club);
+    const canonicalMissing = seeded(22, () => E.advanceManagerSeason(structuredClone(input), missing)).value;
+    const reviewedMissing = seeded(22, () => advanceReviewedManagerSeason(structuredClone(input), missing)).value;
+    expect(readManagerJobReview(reviewedMissing, missing)?.pending?.to.club).toBe(canonicalMissing.managerState!.club);
+    expect(reviewedMissing.managerState!.club).toBe(input.managerState!.club);
     const state = pending(), ambiguous = [...clubs, { ...target }];
     expect(readManagerJobReview(state, ambiguous)).toBeNull();
     expect(quoteManagerJob(state, ambiguous)).toBeNull();

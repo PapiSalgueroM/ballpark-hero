@@ -28,7 +28,8 @@ function marketManager(): CareerState {
 }
 
 describe('review job moves holds for a club taken off the market', () => {
-  it('stages the earned move, and Stay keeps the market club', () => {
+  it('stages the earned move, and Stay keeps the market club', async () => {
+    await E.loadManagerMarket();
     const market = marketManager();
     const held = market.managerState!;
     expect(held.unemployed).toBeFalsy();
