@@ -1,0 +1,3 @@
+build exit=0 34s | [dukb] inlined 1 stylesheet(s) and 1 module(s) into 181 snapshots (11 left alone)
+arrive2-head exit=1 50s | arrive2 head: 9 of 10 first screens after the curtain off screen
+arrive2-nocurtain exit=1 90s | arrive2 nocurtain: 7 of 10 first screens after the curtain off screen

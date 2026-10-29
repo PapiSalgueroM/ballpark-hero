@@ -1,0 +1,4 @@
+#!serve
+#!playwright
+arrive2-head: LABEL=head RC_OUT="$RC_OUT/head" node .rc/x/arrive2.mjs
+arrive2-nocurtain: mkdir -p /tmp/nc && git archive HEAD | tar -x -C /tmp/nc && ln -s "$PWD/node_modules" /tmp/nc/node_modules && node .rc/x/mut.mjs /tmp/nc nocurtain && (cd /tmp/nc && node_modules/.bin/vite build > /tmp/nc-build.log 2>&1) && (node scripts/lib/hostLikeServer.mjs /tmp/nc/dist 4182 > /tmp/nc-srv.log 2>&1 &) && sleep 4 && BASE=http://localhost:4182 LABEL=nocurtain RC_OUT="$RC_OUT/nocurtain" node .rc/x/arrive2.mjs

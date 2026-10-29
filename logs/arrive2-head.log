@@ -1,0 +1,11 @@
+head-390-mo-0: curtain Continue tapped at scrollY 0; then scrollY 0 (doc 12424); next screen not the call: button "Continue", card top 542 h 40 in 844  OFF SCREEN; "Continue"
+head-390-mo-1: curtain Continue tapped at scrollY 0; then scrollY 0 (doc 12443); next screen not the call: button "Continue", card top 561 h 40 in 844  OFF SCREEN; "Continue"
+head-390-mo-2: curtain Continue tapped at scrollY 0; then scrollY 0 (doc 12443); next screen not the call: button "Continue", card top 561 h 40 in 844  OFF SCREEN; "Continue"
+head-390-mo-3: curtain Continue tapped at scrollY 0; then scrollY 0 (doc 12568); next screen not the call: button "null", card top null h null in 844  OFF SCREEN; "null"
+head-320-mo-0: curtain Continue tapped at scrollY 351; then scrollY 185 (doc 15260); next screen not the call: button "Continue", card top 376 h 40 in 640; "Continue"
+head-320-mo-1: curtain Continue tapped at scrollY 427; then scrollY 185 (doc 15280); next screen not the call: button "Continue", card top 395 h 40 in 640  OFF SCREEN; "Continue"
+head-320-mo-2: curtain Continue tapped at scrollY 465; then scrollY 185 (doc 15280); next screen not the call: button "Continue", card top 395 h 40 in 640  OFF SCREEN; "Continue"
+head-320-mo-3: curtain Continue tapped at scrollY 432; then scrollY 185 (doc 15404); next screen not the call: button "null", card top null h null in 640  OFF SCREEN; "null"
+head-390-rm-0: curtain Continue tapped at scrollY 0; then scrollY 0 (doc 12424); next screen not the call: button "Continue", card top 541 h 40 in 844  OFF SCREEN; "Continue"
+head-390-rm-1: curtain Continue tapped at scrollY 0; then scrollY 0 (doc 12443); next screen not the call: button "Continue", card top 560 h 40 in 844  OFF SCREEN; "Continue"
+arrive2 head: 9 of 10 first screens after the curtain off screen
