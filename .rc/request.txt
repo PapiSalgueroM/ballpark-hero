@@ -1,0 +1,11 @@
+#!serve
+#!playwright
+#!serial
+# Release BT lane c2: Round 1566's browser lines on the served build (supabase.co blocked by each walk): playFoSeasonCard and playNflSeasonStats as its last fix run had them (r1566/.tmp-fx/rc-fx3c.txt card and nflwalk), then the card's three controls (rc-ctl.txt: mutCard.mjs edits the runner's checkout, builds it, walks it, and puts src back in the same line, so this lane is serial). c-nocue, c-shortbox and c-oldbadge must exit 1 with their control line. Extra: mutCard.mjs (r1566).
+# Left out: rc-fx3c's weight (the join weighed every route on rBTg-w), its re-record and base lines (named-again, named-headonly, earned-rerecord, earned-oldfixture, rot-base, award1103-base: the round's own recording proofs against 5d1198389) and its mutation lines (m-namedstrict, m-kickswap-nfl: rc-fy2's controls in lane c cover both harnesses).
+# Release BT fixer (review rBTG-mix M2): each card control writes its pictures under $RC_OUT/ctl-<name>, so the files/fsc-*.png at the top level are the head card only.
+card: ENGINES=chromium node scripts/playFoSeasonCard.mjs
+nflwalk: ENGINES=chromium node scripts/playNflSeasonStats.mjs
+c-nocue: node .rc/x/mutCard.mjs nocue && npx vite build --outDir /tmp/dist-nocue --logLevel error && (node scripts/lib/hostLikeServer.mjs /tmp/dist-nocue 4185 > /dev/null 2>&1 &) && sleep 3 && BASE=http://localhost:4185 PLAY_FO_CARD_CONTROL=nocue RC_OUT=$RC_OUT/ctl-nocue ENGINES=chromium node scripts/playFoSeasonCard.mjs; s=$?; git checkout -- src; exit $s
+c-shortbox: node .rc/x/mutCard.mjs shortbox && npx vite build --outDir /tmp/dist-short --logLevel error && (node scripts/lib/hostLikeServer.mjs /tmp/dist-short 4186 > /dev/null 2>&1 &) && sleep 3 && BASE=http://localhost:4186 PLAY_FO_CARD_CONTROL=shortbox RC_OUT=$RC_OUT/ctl-shortbox ENGINES=chromium node scripts/playFoSeasonCard.mjs; s=$?; git checkout -- src; exit $s
+c-oldbadge: node .rc/x/mutCard.mjs oldbadge && npx vite build --outDir /tmp/dist-badge --logLevel error && (node scripts/lib/hostLikeServer.mjs /tmp/dist-badge 4187 > /dev/null 2>&1 &) && sleep 3 && BASE=http://localhost:4187 PLAY_FO_CARD_CONTROL=oldbadge RC_OUT=$RC_OUT/ctl-oldbadge ENGINES=chromium node scripts/playFoSeasonCard.mjs; s=$?; git checkout -- src; exit $s
