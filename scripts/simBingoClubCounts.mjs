@@ -47,9 +47,11 @@
      5. sources: every added club and every agrees verdict carries two or more
         sources on different hosts, none crowd edited, each with a url, the
         date read (not after today, not before the fixture) and a quoted line.
-     6. derived: src/data/bingoClubAdditions.json is the generator's output
-        byte for byte, the generator refuses nothing (no club he already has
-        under another spelling or slash part), and every added club uses the
+     6. derived: every judged man's typed tableClubs (the generator's refusal
+        input) is BASE's club history for him on the fixture;
+        src/data/bingoClubAdditions.json is the generator's output byte for
+        byte, the generator refuses nothing (no club he already has under
+        another spelling or slash part), and every added club uses the
         table's own spelling where the table spells it at all.
      7. the fleet: 200 seeds of a seeded Math.random through generateBoard
         and buildDeck on BASE and on the tree. Every criterion's eligibility
@@ -75,15 +77,41 @@
                                    file fed to the tree's lib: red.
      BINGO_CLUBS_CONTROL=nosplit   the mid season split patched out of a copy
                                    of clubCareerAdditions.ts: red.
-     (No control for the aliases: no fixture man holds two spellings of one
-     club, so an alias moves nobody; the unit test covers the mapping.)
+     (No control for the aliases in the count: no fixture man holds two
+     spellings of one club, so an alias moves nobody; the unit test covers
+     the mapping. The generator's alias refusal has aliasdup below.)
      BINGO_CLUBS_CONTROL=drift     one extra draw before the tree's boards:
                                    section 7 red.
      BINGO_CLUBS_CONTROL=handedit  one byte of the derived file changed: red.
+     BINGO_CLUBS_CONTROL=slashdup  critic correction 6: an addition of a club
+                                   he holds only inside a spaced slash row
+                                   (Pedro Porro: Girona FC, inside "Girona FC
+                                   / Real Valladolid CF") planted in a copy of
+                                   the record fed to the generator: section 6
+                                   red ("the generator refuses").
+     BINGO_CLUBS_CONTROL=aliasdup  the same with a declared alias spelling of
+                                   a club he holds (Joshua Kimmich: FC Bayern
+                                   Munich beside bayern munich): section 6 red.
+     BINGO_CLUBS_CONTROL=tableclubs one judged man's typed tableClubs loses a
+                                   club in memory: section 6 red.
      FIXTURE_CONTROL=cap           the stub drops the range and the 1,000 row
                                    cap: at least one man's history changes.
    Exit 0 green, 1 red (or a control that fired), 2 could not run, 3 a control
    that changed nothing.
+
+   Two things a later round must know:
+     BASE is pinned to 692590145 for good. Section 2 fails on ANY later change
+     to the pool, seasonStats, clubYears or a non club tile's support, by
+     design. The next round that edits src/lib/playerBingo.ts (the other
+     lane's BS-mix-4, Rounds 1576 and 1577) must move BASE to its own base
+     commit, or move section 2, in that round, and say so.
+     The identity guards of the bind (role, nationality, birth year window,
+     an ambiguous match refused) are caught only by the two unit files
+     src/test/clubCareerAdditions.test.ts and
+     src/test/playerBingoClubCounts.test.ts: the fixture holds no namesake
+     near an addition, so this harness cannot see a guard deleted (review
+     2026-10-29, mutations norole, nonat, loosenby, firstmatch). Keep both
+     files in every gate beside this harness.
 
    Run: node scripts/simBingoClubCounts.mjs
         node scripts/simBingoClubCounts.mjs --write-candidates   (rewrites the
@@ -486,7 +514,40 @@ console.log(`   ${sourced.length} sourced facts checked`);
 section = '6';
 console.log('6) The derived file');
 const { buildDerived, DERIVED } = await import(new URL('./genBingoClubAdditions.mjs', import.meta.url).href);
-const built = buildDerived(record);
+/* The generator's refusal reads each entry's typed tableClubs, so they must be the clubs BASE
+   counts for him on the fixture, or it guards the wrong set (review 2026-10-29). */
+const tableOf = new Map([...record.additions, ...record.agrees].map(e => [e.name, [...(e.tableClubs ?? [])]]));
+if (CONTROL === 'tableclubs') {
+  const victim = tableOf.get('Tyler Morton');
+  if (victim?.includes('olympique lyon')) {
+    victim.splice(victim.indexOf('olympique lyon'), 1);
+    changed('Tyler Morton\'s typed tableClubs lose olympique lyon');
+  }
+}
+let tableChecked = 0;
+for (const [name, typed] of tableOf) {
+  const want = [...(baseData.clubHistory.get(name) ?? [])].sort();
+  const have = [...typed].sort();
+  if (JSON.stringify(want) !== JSON.stringify(have)) fail(`${name}: the record's tableClubs [${have.join(', ')}] are not BASE's club history on the fixture [${want.join(', ')}]`);
+  else tableChecked += 1;
+}
+console.log(`   tableClubs equal to BASE's club history for ${tableChecked} of ${tableOf.size} judged men`);
+/* slashdup and aliasdup (critic correction 6): plant, in a copy of the record fed to the
+   generator, one addition of a club the man already holds under a spaced slash part or a declared
+   alias spelling. Each plant first proves it is that case and nothing simpler (the club is not one
+   of his whole keys), so only the slash split or the alias map can refuse it. */
+let genRecord = record;
+const plant = (name, club, why) => {
+  const p = baseData.pool.find(x => x.name === name);
+  const held = [...(baseData.clubHistory.get(name) ?? [])];
+  if (!p || !why(held) || held.includes(base.clubKey(club))) return;
+  genRecord = structuredClone(record);
+  genRecord.additions.push({ name, nationality: p.nationality, birthYear: null, position: p.position, tableClubs: held, clubs: [{ club, fromSeason: null, toSeason: null, loan: false, sources: [] }] });
+  changed(`${name} gains "${club}" in a copy of the record (his table keys: ${held.join(', ')})`);
+};
+if (CONTROL === 'slashdup') plant('Pedro Porro', 'Girona FC', held => held.includes('girona fc / real valladolid cf'));
+if (CONTROL === 'aliasdup') plant('Joshua Kimmich', 'FC Bayern Munich', held => held.includes('bayern munich') && (record.counting?.aliases ?? []).some(a => a.from === 'fc bayern munich' && a.to === 'bayern munich'));
+const built = buildDerived(genRecord);
 for (const r of built.refusals) fail(`the generator refuses: ${r}`);
 let shipped = read(DERIVED).replaceAll('\r\n', '\n');
 if (CONTROL === 'handedit') {
