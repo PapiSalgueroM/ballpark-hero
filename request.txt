@@ -1,0 +1,5 @@
+#!serve
+#!playwright
+walk: git worktree add /tmp/wb 65b3e291a > /dev/null 2>&1 && ln -s "$PWD/node_modules" /tmp/wb/node_modules && (cd /tmp/wb && node_modules/.bin/vite build --outDir /tmp/wb-dist --emptyOutDir > /tmp/wb-build.log 2>&1) && echo "base chunks: $(grep -E 'SportsMillionaire|triviaQuestionBank' /tmp/wb-build.log | tr -s ' ' | head -4 | tr '\n' ';')" && PLAY_BASE_DIST=/tmp/wb-dist PLAY_SHORT_DATE=2026-11-04 PLAY_GOOD_DATE=2026-11-02 node .rc/x/walk1573.mjs
+simWritesAreSent: node scripts/simWritesAreSent.mjs
+simResultMoment: node scripts/simResultMoment.mjs

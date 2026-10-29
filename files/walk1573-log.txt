@@ -1,0 +1,14 @@
+(a) base-a-390 on 2026-11-04: {"state":"error","dailyMode":true,"modes":2,"dailyDisabled":true,"unlDisabled":true,"scrollY":0,"sideways":false}
+(a) base-a-390 after Try again: error, the same card (the reload dealt the same short ladder)
+(a) head-a-390 on 2026-11-04: {"state":"playing","dailyMode":true,"modes":2,"dailyDisabled":false,"unlDisabled":false,"scrollY":0,"sideways":false}
+(a) base-a-1280 on 2026-11-04: {"state":"error","dailyMode":true,"modes":2,"dailyDisabled":true,"unlDisabled":true,"scrollY":0,"sideways":false}
+(a) base-a-1280 after Try again: error, the same card (the reload dealt the same short ladder)
+(a) head-a-1280 on 2026-11-04: {"state":"playing","dailyMode":true,"modes":2,"dailyDisabled":false,"unlDisabled":false,"scrollY":0,"sideways":false}
+(b) base-b-390 on 2026-11-02: {"deals":320,"errorCards":8,"notUnlimited":0,"stuck":0,"jumps":0,"sideways":0}
+(b) head-b-390 on 2026-11-02: {"deals":320,"errorCards":0,"notUnlimited":0,"stuck":0,"jumps":0,"sideways":0}
+(b) base-b-1280 on 2026-11-02: {"deals":320,"errorCards":7,"notUnlimited":0,"stuck":0,"jumps":0,"sideways":0}
+(b) head-b-1280 on 2026-11-02: {"deals":320,"errorCards":0,"notUnlimited":0,"stuck":0,"jumps":0,"sideways":0}
+
+ISSUES:
+
+CONTROL MISSED:
