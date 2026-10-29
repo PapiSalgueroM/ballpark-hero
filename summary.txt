@@ -1,0 +1,8 @@
+vitest exit=0 2s |    Duration  1.56s (transform 302ms, setup 253ms, collect 688ms, tests 244ms, environment 1.52s, prepare 602ms)
+sim exit=0 3s | simBingoClubCounts: GREEN, every section held
+c-slashdup exit=1 2s | simBingoClubCounts: CONTROL=slashdup FIRED (1 failures; section 6: 1)
+c-aliasdup exit=1 3s | simBingoClubCounts: CONTROL=aliasdup FIRED (1 failures; section 6: 1)
+c-tableclubs exit=1 3s | simBingoClubCounts: CONTROL=tableclubs FIRED (1 failures; section 6: 1)
+honours exit=0 9s | simPlayerBingoHonours PASS
+rivals exit=0 12s | No rival product names found. 0 findings.
+tsc exit=0 46s | 
