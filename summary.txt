@@ -1,0 +1,5 @@
+base-c8-a exit=1 19s | ::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/test/usCareerHallWall.test.tsx,title=src/test/usCareerHallWall.test.tsx > C8%3A the wall draws nothing and 
+base-c8-b exit=1 19s | ::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/test/usCareerHallWall.test.tsx,title=src/test/usCareerHallWall.test.tsx > C8%3A the wall draws nothing and 
+mut-c8 exit=1 19s | ::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/test/usCareerHallWall.test.tsx,title=src/test/usCareerHallWall.test.tsx > C8%3A the wall draws nothing and 
+mut-c8-again exit=1 19s | ::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/test/usCareerHallWall.test.tsx,title=src/test/usCareerHallWall.test.tsx > C8%3A the wall draws nothing and 
+clean exit=0 0s | 
