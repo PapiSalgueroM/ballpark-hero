@@ -22,8 +22,14 @@
      SIM_REPORTS_CONTROL=blind     criticism on the clutch roll alone again (the old rule)      -> C1
      SIM_REPORTS_CONTROL=nocredit  the credit branch taken out                                   -> C2
      SIM_REPORTS_CONTROL=alwayslast seasonAheadIsLast answers true for every talk                -> B2
-   Measured on a runner (seeds 1569, 1, 2, 3 at 150 careers a sport) before the bands were written: see
-   CRIT_FLOOR. Run: node scripts/simUsCareerReports.mjs [careers per sport] (SIM_SEED picks the fleet). */
+   Measured on a GitHub runner (rc r1569-s2, head e208e288, seeds 1569, 1, 2, 3 at 150 careers a sport, so
+   16 counts): critical notes 37 to 60 a sport (NFL 44 to 51, NBA 37 to 45, MLB 49 to 60, NHL 39 to 49);
+   credit notes on every one of 380 to 938 strong losses a sport; last season calls 0 to 4 a sport, every one
+   followed by the end of the career; no offer talks 196 to 279 a sport; market windows 510 to 664 a sport,
+   none empty. Controls on seed 1569: blind 266 findings, nocredit 2,643, alwayslast 968. The rules C1, C2,
+   C3 (the level part) and B1 to B3 are exact, so they carry no band; the one band is CRIT_FLOOR, about half
+   the smallest measured count, so the gate cannot pass by deleting criticism. Each seed runs in 2 to 3 s.
+   Run: node scripts/simUsCareerReports.mjs [careers per sport] (SIM_SEED picks the fleet). */
 import os from 'node:os';
 import path from 'node:path';
 import { build } from 'esbuild';
@@ -35,8 +41,8 @@ const CONTROL = process.env.SIM_REPORTS_CONTROL || '';
 if (!['', 'blind', 'nocredit', 'alwayslast'].includes(CONTROL)) { console.error(`unknown SIM_REPORTS_CONTROL ${CONTROL}`); process.exit(2); }
 const CAREERS = Number(process.argv[2] || 150);
 const SEED = Number(process.env.SIM_SEED || 1569);
-/* The smallest critical count a sport may show. Set from measured headroom: see the header and the run log. */
-const CRIT_FLOOR = 10;
+/* The smallest critical count a sport may show: about half the smallest of 16 measured counts (37). */
+const CRIT_FLOOR = 18;
 const SPORTS = ['nfl', 'nba', 'mlb', 'nhl'];
 const CALLS = {
   'nflMyCareer.ts': ["clutchNote(clutch, depth, 'nfl', pf)", 'pf'],

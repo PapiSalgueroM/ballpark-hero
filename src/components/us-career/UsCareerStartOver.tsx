@@ -14,6 +14,13 @@
    reset it calls is the board's own: it removes this sport's save key and
    nothing else, so the record books and the other careers stay.
 
+   It sticks just under the site's 44px menu bar (top-12 is 48px) while the
+   board is on screen. Measured on the built site before this round: the
+   board's own reveal scroll puts a new screen's top right under that bar, so
+   a control drawn in the flow above it would be hidden under the bar on the
+   very screens a player wants out of. The row lets taps through; only the
+   pill takes them.
+
    data-career-start-over lets the board's parity replay leave it out
    (src/test/usBoardFixture.test.tsx), the way it leaves out every additive
    control since Round 992. */
@@ -27,9 +34,9 @@ interface Props {
 
 export default function UsCareerStartOver({ sport, onConfirm }: Props) {
   return (
-    <div data-career-start-over="" className="mb-2 flex justify-end">
+    <div data-career-start-over="" className="pointer-events-none sticky top-12 z-20 mb-2 flex justify-end">
       <USCareerActionConfirm action="restart" sport={sport} onConfirm={onConfirm}>
-        <button type="button" className="inline-flex min-h-11 items-center gap-1.5 rounded-full border border-border bg-card px-4 text-xs font-semibold text-muted-foreground hover:text-foreground">
+        <button type="button" className="pointer-events-auto inline-flex min-h-11 items-center gap-1.5 rounded-full border border-border bg-card px-4 text-xs font-semibold text-muted-foreground shadow-sm hover:text-foreground">
           <RotateCcw className="h-3.5 w-3.5" aria-hidden="true" /> Start over
         </button>
       </USCareerActionConfirm>
