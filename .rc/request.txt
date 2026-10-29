@@ -1,0 +1,8 @@
+#!serve
+#!playwright
+#!serial
+sclayers-head: TAG=head node .rc/x/walkSoccerCareerLayers.mjs
+cmwalk-head: TAG=head node .rc/x/walkCmShortlist.mjs
+basebuild: git worktree add /tmp/base da4f42889 >/dev/null 2>&1 && ln -s "$PWD/node_modules" /tmp/base/node_modules && (cd /tmp/base && node_modules/.bin/vite build > /tmp/base-build.log 2>&1) && (node scripts/lib/hostLikeServer.mjs /tmp/base/dist 4174 > /tmp/base-server.log 2>&1 &) && sleep 4 && curl -s -o /dev/null -w "base served %{http_code}\n" http://localhost:4174/soccer-career
+sclayers-base: SWEEP_BASE=http://localhost:4174 BASE=http://localhost:4174 TAG=base node .rc/x/walkSoccerCareerLayers.mjs
+cmwalk-base: BASE=http://localhost:4174 TAG=base node .rc/x/walkCmShortlist.mjs
