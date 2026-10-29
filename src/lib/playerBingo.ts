@@ -52,8 +52,9 @@ export { isSameMan };
  *     (Round 1571, re-measured on the 2026-10-29 fixture of the page's own
  *     reads, scripts/data/bingoPoolHistory-2026-10-29.json, 474 pool men,
  *     with the verified club additions and the count rule bound (a "Club A /
- *     Club B" row is two clubs, reserve sides are none): One-club man 37,
- *     Played for 4+ clubs 144. scripts/simBingoClubCounts.mjs prints both.)
+ *     Club B" row is two clubs, reserve sides are none): One-club man 29,
+ *     Played for 4+ clubs 155, from 31 and 149 without them.
+ *     scripts/simBingoClubCounts.mjs prints both.)
  *   Existing (unchanged) support: nationalities/clubs/positions/value/age
  *     bands as documented below, World Cup appearance 115, Ballon d'Or 2
  *     (stays dormant, same MIN_TILE_SUPPORT gate as before).
@@ -293,10 +294,13 @@ function matchesBingoHistory(ref: BingoPlayer, row: HistoryRow): boolean {
  * (that helper is module-private there): names are chunked into .in() filters
  * and each chunk is paged in blocks of 1000 rows to respect the PostgREST cap.
  *
- * clubHistory keeps its original whole-string clubKey behaviour (the club
- * tiles' documented support counts were measured that way). clubYears, used
- * by the Messi/UCL tiles, splits mid-season "Club A / Club B" values so a
- * winter mover is credited at both clubs for that season.
+ * clubHistory is gathered with whole-string clubKeys, then (Round 1571) the
+ * verified club additions are applied and every set goes through
+ * careerClubs: a mid-season "Club A / Club B" value is both clubs, the
+ * declared alias spellings are one club, and reserve sides are none.
+ * clubYears, used by the Messi/UCL tiles, is untouched by both: it splits
+ * mid-season values on its own so a winter mover is credited at both clubs
+ * for that season.
  */
 async function fetchClubHistoryAndStats(
   pool: BingoPlayer[],
