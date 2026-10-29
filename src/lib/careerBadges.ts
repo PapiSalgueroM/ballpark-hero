@@ -135,14 +135,15 @@ export function intlBadgeFactsOf(summers: unknown): IntlBadgeFacts | undefined {
   }
   return f;
 }
-/** Three badges: any medal, and gold at each of two competitions. The words are the sport's. */
-function intlBadges<F extends { intl?: IntlBadgeFacts }>(w: {
-  medalBlurb: string;
-  golds: [{ comp: string; id: string; label: string; blurb: string }, { comp: string; id: string; label: string; blurb: string }];
-}): BadgeDef<F>[] {
+/** Three badges: any medal, Olympic gold ('oly' editions) and gold at the sport's world competition ('wc'
+ *  editions). The words are the sport's. Strings in, a literal out, like closingBadges: a helper that reads
+ *  properties off its argument or maps over it is a call the bundler cannot prove pure, and that alone split
+ *  this file into a chunk of its own (+0.8K on /nba-my-career, measured on a runner, r1557-s6 and s6b). */
+function intlBadges<F extends { intl?: IntlBadgeFacts }>(medalBlurb: string, olympicBlurb: string, worldLabel: string, worldBlurb: string): BadgeDef<F>[] {
   return [
-    { id: 'intl_medal', emoji: '🎖️', label: 'Medal for your country', blurb: w.medalBlurb, test: f => (f.intl?.medals ?? 0) >= 1 },
-    ...w.golds.map((g, i): BadgeDef<F> => ({ id: g.id, emoji: i === 0 ? '🥇' : '🌍', label: g.label, blurb: g.blurb, test: f => (f.intl?.golds[g.comp] ?? 0) >= 1 })),
+    { id: 'intl_medal', emoji: '🎖️', label: 'Medal for your country', blurb: medalBlurb, test: f => (f.intl?.medals ?? 0) >= 1 },
+    { id: 'olympic_gold', emoji: '🥇', label: 'Olympic gold', blurb: olympicBlurb, test: f => (f.intl?.golds.oly ?? 0) >= 1 },
+    { id: 'world_cup_gold', emoji: '🌍', label: worldLabel, blurb: worldBlurb, test: f => (f.intl?.golds.wc ?? 0) >= 1 },
   ];
 }
 
@@ -229,13 +230,11 @@ export const NBA_BADGES: BadgeDef<NbaBadgeFacts>[] = [
   { id: 'reb_10k', emoji: '🧲', label: '10,000 rebounds', blurb: 'Ten thousand career rebounds.', test: f => f.totals.reb >= 10000 },
   { id: 'ast_10k', emoji: '🤝', label: '10,000 assists', blurb: 'Ten thousand career assists.', test: f => f.totals.ast >= 10000 },
   { id: 'decade', emoji: '📅', label: 'A decade in the league', blurb: 'Ten seasons played.', test: f => f.seasons.length >= 10 },
-  ...intlBadges<NbaBadgeFacts>({
-    medalBlurb: 'A medal with the national team, at an Olympics or a World Cup.',
-    golds: [
-      { comp: 'oly', id: 'olympic_gold', label: 'Olympic gold', blurb: 'Gold with the national team at the Olympics.' },
-      { comp: 'wc', id: 'world_cup_gold', label: 'World Cup gold', blurb: 'Gold at the World Cup, or the World Championship as it used to be called.' },
-    ],
-  }),
+  ...intlBadges<NbaBadgeFacts>(
+    'A medal with the national team, at an Olympics or a World Cup.',
+    'Gold with the national team at the Olympics.',
+    'World Cup gold', 'Gold at the World Cup, or the World Championship as it used to be called.',
+  ),
   ...closingBadges<NbaBadgeFacts>('Five seasons with all 82 games played.', 'The legacy verdict says Springfield.'),
 ];
 

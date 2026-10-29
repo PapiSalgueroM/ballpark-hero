@@ -102,7 +102,7 @@
      gateyear     the gate's 2004 moved to 2005                          (2 red)
      staticledger the NBA binding imports the ledger statically         (12 red)
      tilenomedal  the honours lose the medal row                         (9 red)
-     deadmedal    a gold badge asks for a hundred golds                  (10 red)
+     deadmedal    the Olympic gold badge asks for a hundred golds        (10 red)
      realname     a real NBA player's name planted in a copy of the
                   International view                                    (11 red)
    (Round 1544: seasonyear, anyyear, endcall, lowbar and knockage edit the
@@ -153,7 +153,7 @@ const CONTROLS = {
   gateyear: { section: '2', note: "the gate's first edition summer moved from 2004 to 2005", edits: [{ file: GATE, from: '[2004, 2006, 2008,', to: '[2005, 2006, 2008,' }] },
   staticledger: { section: '12', note: 'the NBA binding imports the ledger statically', edits: [{ file: SPORT, from: "import { NBA_CAREER_INTL_LAZY } from '@/lib/nbaCareerIntlGate';", to: "import { NBA_CAREER_INTL_LAZY } from '@/lib/nbaCareerIntlGate';\nimport { BASKETBALL_INTL_EDITIONS } from '@/data/basketballIntl';" }, { file: SPORT, from: '  intl: NBA_CAREER_INTL_LAZY,', to: '  intl: { ...NBA_CAREER_INTL_LAZY, ledgerRows: BASKETBALL_INTL_EDITIONS.length },' }] },
   tilenomedal: { section: '9', note: 'the honours lose the medal row, so the tile forgets the medals', edits: [{ file: SPORT, from: "...(medals > 0 ? [{ label: medals === 1 ? 'international medal' : 'international medals', n: medals }] : []),", to: '' }] },
-  deadmedal: { section: '10', note: 'a gold badge asks for a hundred golds, so nobody can earn it', edits: [{ file: 'src/lib/careerBadges.ts', from: 'test: f => (f.intl?.golds[g.comp] ?? 0) >= 1', to: 'test: f => (f.intl?.golds[g.comp] ?? 0) >= 100' }] },
+  deadmedal: { section: '10', note: 'the Olympic gold badge asks for a hundred golds, so nobody can earn it', edits: [{ file: 'src/lib/careerBadges.ts', from: 'test: f => (f.intl?.golds.oly ?? 0) >= 1', to: 'test: f => (f.intl?.golds.oly ?? 0) >= 100' }] },
   realname: { section: '11', note: "a real NBA player's name planted in a copy of the International view" },
 };
 if (CONTROL && !CONTROLS[CONTROL]) { console.error(`unknown control "${CONTROL}": use ${Object.keys(CONTROLS).join(', ')}`); process.exit(2); }
@@ -1010,7 +1010,7 @@ const WORD_FILES = [
 /* The new words of shared files: the region between the two anchors, both required. */
 const WORD_REGIONS = [
   ['src/lib/careerBadges.ts', '/* ─── Round 1557: the medal badges', '/* ─── NFL'],
-  ['src/lib/careerBadges.ts', '...intlBadges<NbaBadgeFacts>({', '...closingBadges<NbaBadgeFacts>('],
+  ['src/lib/careerBadges.ts', '...intlBadges<NbaBadgeFacts>(', '...closingBadges<NbaBadgeFacts>('],
   ['src/components/us-career/UsCareerBoard.tsx', '{panel === \'trophies\' && intlOpen && intl ? (', '{/* Round 469: the peaks between the trophies.'],
   ['src/lib/nbaCareerSport.ts', '/* Round 1557: and the medals', 'roleBadge:'],
 ];
