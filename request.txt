@@ -1,0 +1,4 @@
+#!serve
+#!playwright
+simWritesAreSent: node scripts/simWritesAreSent.mjs
+fob-blank: node scripts/controlFrontOfficeBoard.mjs blank
