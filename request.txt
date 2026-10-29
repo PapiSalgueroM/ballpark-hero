@@ -1,0 +1,2 @@
+#!playwright
+base-writes: git worktree add -f /tmp/bw 115c68092 >/dev/null 2>&1; ln -sfn "$PWD/node_modules" /tmp/bw/node_modules; cd /tmp/bw && node_modules/.bin/vite build > /tmp/bwb.log 2>&1 && { node scripts/simWritesAreSent.mjs > /tmp/bww.log 2>&1; e=$?; grep -m2 FAIL /tmp/bww.log; echo "BASE simWritesAreSent exit=$e | $(tail -1 /tmp/bww.log)"; }
