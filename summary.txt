@@ -1,0 +1,5 @@
+build exit=0 36s | [dukb] inlined 1 stylesheet(s) and 1 module(s) into 181 snapshots (11 left alone)
+writes exit=1 14s | simWritesAreSent: 2 failures
+play exit=0 15s | playAflClubNames: 36 checks, 0 failures (a 0, b 0, c 0), 2 viewports, 4 routes walked, 14.5 s
+play-ctl exit=1 43s | playAflClubNames control bundlename: 2 scripts rewritten, (a) RED, 2 routes walked, 42.5 s. RED as intended
+walk exit=0 78s | review-walk: 132 checks, 0 failures, shots in /home/runner/work/_temp/rc-out/files

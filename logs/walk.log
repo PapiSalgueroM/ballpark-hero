@@ -1,0 +1,166 @@
+
+== 390-mo
+  PASS 390-mo rules carry the club example
+  PASS 390-mo menu drew 18 real names
+  PASS 390-mo band headings: Finished 1st to 3rd in 2026 | Finished 4th to 7th in 2026 | Finished 8th to 11th in 2026 | Finished 12th to 15th in 2026 | Finished 16th to 18th in 2026
+  PASS 390-mo menu: no sideways scroll
+  PASS 390-mo menu: nothing clipped 
+  PASS 390-mo header after pick: Fremantle · Season 1
+  PASS 390-mo score card: Essendon v Fremantle
+  PASS 390-mo match: no sideways scroll
+  PASS 390-mo match: nothing clipped 
+  info 390-mo running animations after the match: 0
+  PASS 390-mo ladder: 18 real short names
+  PASS 390-mo a real career is not offered the switch
+  PASS 390-mo new career: no page errors 
+  PASS 390-mo r4 old career opens under its own name: Caldermere Comets · Season 1
+  PASS 390-mo r4 hub shows no real name before the switch ()
+  PASS 390-mo r4 offer: Play on with the real AFL club names? Caldermere Comets become Fremantle. Players, results and your history stay exactly as they are.
+  PASS 390-mo r4 club panel: no sideways scroll
+  PASS 390-mo r4 keep leaves the save as the base wrote it
+  info 390-mo r4 scrollY before ask 0, after confirm 0
+  PASS 390-mo r4 the stored save is switchClubSet of the base save and loads
+  PASS 390-mo r4 header after switch: Fremantle · Season 1
+  PASS 390-mo r4 club panel after switch shows no invented place ()
+  PASS 390-mo r4 ladder order and numbers unchanged by the switch
+  PASS 390-mo r4 after reload: Fremantle · Season 1
+  info 390-mo r4 home Continue strip: 🏉Aussie Rules ManagerFremantle, season 1 | 🏉Aussie Rules ManagerRun one of 18 fictional clubs through 23 rounds, the finals and a draft into next season | 🏉Aussie Rules ManagerRun one of 18 fictional clubs through 23 rounds, the finals and a draft into next season
+  PASS 390-mo r4 no page errors 
+  PASS 390-mo over old career opens under its own name: Brindlefern Currawongs · Season 1
+  PASS 390-mo over hub shows no real name before the switch ()
+  info 390-mo premiers line: Caldermere are the premiers, beating Fallmere 11.10 (76) to 7.9 (51).
+  PASS 390-mo over offer: Play on with the real AFL club names? Brindlefern Currawongs become Collingwood. Players, results and your history stay exactly as they are.
+  PASS 390-mo over club panel: no sideways scroll
+  PASS 390-mo over keep leaves the save as the base wrote it
+  info 390-mo over scrollY before ask 0, after confirm 0
+  PASS 390-mo over the stored save is switchClubSet of the base save and loads
+  PASS 390-mo over header after switch: Collingwood · Season 1
+  PASS 390-mo over club panel after switch shows no invented place ()
+  PASS 390-mo over after reload: Collingwood · Season 1
+  info 390-mo premiers line after switch: Fremantle are the premiers, beating Adelaide 11.10 (76) to 7.9 (51).
+  info 390-mo over home Continue strip: 🏉Aussie Rules ManagerCollingwood, season 1 | 🏉Aussie Rules ManagerRun one of 18 fictional clubs through 23 rounds, the finals and a draft into next season | 🏉Aussie Rules ManagerRun one of 18 fictional clubs through 23 rounds, the finals and a draft into next season
+  PASS 390-mo over no page errors 
+
+== 390-rm
+  PASS 390-rm rules carry the club example
+  PASS 390-rm menu drew 18 real names
+  PASS 390-rm band headings: Finished 1st to 3rd in 2026 | Finished 4th to 7th in 2026 | Finished 8th to 11th in 2026 | Finished 12th to 15th in 2026 | Finished 16th to 18th in 2026
+  PASS 390-rm menu: no sideways scroll
+  PASS 390-rm menu: nothing clipped 
+  PASS 390-rm header after pick: Fremantle · Season 1
+  PASS 390-rm score card: Fremantle v Hawthorn
+  PASS 390-rm match: no sideways scroll
+  PASS 390-rm match: nothing clipped 
+  info 390-rm running animations after the match: 0
+  PASS 390-rm ladder: 18 real short names
+  PASS 390-rm a real career is not offered the switch
+  PASS 390-rm new career: no page errors 
+  PASS 390-rm r4 old career opens under its own name: Caldermere Comets · Season 1
+  PASS 390-rm r4 hub shows no real name before the switch ()
+  PASS 390-rm r4 offer: Play on with the real AFL club names? Caldermere Comets become Fremantle. Players, results and your history stay exactly as they are.
+  PASS 390-rm r4 club panel: no sideways scroll
+  PASS 390-rm r4 keep leaves the save as the base wrote it
+  info 390-rm r4 scrollY before ask 0, after confirm 0
+  PASS 390-rm r4 the stored save is switchClubSet of the base save and loads
+  PASS 390-rm r4 header after switch: Fremantle · Season 1
+  PASS 390-rm r4 club panel after switch shows no invented place ()
+  PASS 390-rm r4 ladder order and numbers unchanged by the switch
+  PASS 390-rm r4 after reload: Fremantle · Season 1
+  PASS 390-rm r4 no page errors 
+  PASS 390-rm over old career opens under its own name: Brindlefern Currawongs · Season 1
+  PASS 390-rm over hub shows no real name before the switch ()
+  info 390-rm premiers line: Caldermere are the premiers, beating Fallmere 11.10 (76) to 7.9 (51).
+  PASS 390-rm over offer: Play on with the real AFL club names? Brindlefern Currawongs become Collingwood. Players, results and your history stay exactly as they are.
+  PASS 390-rm over club panel: no sideways scroll
+  PASS 390-rm over keep leaves the save as the base wrote it
+  info 390-rm over scrollY before ask 0, after confirm 0
+  PASS 390-rm over the stored save is switchClubSet of the base save and loads
+  PASS 390-rm over header after switch: Collingwood · Season 1
+  PASS 390-rm over club panel after switch shows no invented place ()
+  PASS 390-rm over after reload: Collingwood · Season 1
+  info 390-rm premiers line after switch: Fremantle are the premiers, beating Adelaide 11.10 (76) to 7.9 (51).
+  PASS 390-rm over no page errors 
+
+== 1280-mo
+  PASS 1280-mo rules carry the club example
+  PASS 1280-mo menu drew 18 real names
+  PASS 1280-mo band headings: Finished 1st to 3rd in 2026 | Finished 4th to 7th in 2026 | Finished 8th to 11th in 2026 | Finished 12th to 15th in 2026 | Finished 16th to 18th in 2026
+  PASS 1280-mo menu: no sideways scroll
+  PASS 1280-mo menu: nothing clipped 
+  PASS 1280-mo header after pick: Fremantle · Season 1
+  PASS 1280-mo score card: Melbourne v Fremantle
+  PASS 1280-mo match: no sideways scroll
+  PASS 1280-mo match: nothing clipped 
+  info 1280-mo running animations after the match: 0
+  PASS 1280-mo ladder: 18 real short names
+  PASS 1280-mo a real career is not offered the switch
+  PASS 1280-mo new career: no page errors 
+  PASS 1280-mo r4 old career opens under its own name: Caldermere Comets · Season 1
+  PASS 1280-mo r4 hub shows no real name before the switch ()
+  PASS 1280-mo r4 offer: Play on with the real AFL club names? Caldermere Comets become Fremantle. Players, results and your history stay exactly as they are.
+  PASS 1280-mo r4 club panel: no sideways scroll
+  PASS 1280-mo r4 keep leaves the save as the base wrote it
+  info 1280-mo r4 scrollY before ask 0, after confirm 0
+  PASS 1280-mo r4 the stored save is switchClubSet of the base save and loads
+  PASS 1280-mo r4 header after switch: Fremantle · Season 1
+  PASS 1280-mo r4 club panel after switch shows no invented place ()
+  PASS 1280-mo r4 ladder order and numbers unchanged by the switch
+  PASS 1280-mo r4 after reload: Fremantle · Season 1
+  info 1280-mo r4 home Continue strip: 🏉Aussie Rules ManagerFremantle, season 1 | 🏉Aussie Rules ManagerRun one of 18 fictional clubs through 23 rounds, the finals and a draft into next season | 🏉Aussie Rules ManagerRun one of 18 fictional clubs through 23 rounds, the finals and a draft into next season
+  PASS 1280-mo r4 no page errors 
+  PASS 1280-mo over old career opens under its own name: Brindlefern Currawongs · Season 1
+  PASS 1280-mo over hub shows no real name before the switch ()
+  info 1280-mo premiers line: Caldermere are the premiers, beating Fallmere 11.10 (76) to 7.9 (51).
+  PASS 1280-mo over offer: Play on with the real AFL club names? Brindlefern Currawongs become Collingwood. Players, results and your history stay exactly as they are.
+  PASS 1280-mo over club panel: no sideways scroll
+  PASS 1280-mo over keep leaves the save as the base wrote it
+  info 1280-mo over scrollY before ask 0, after confirm 0
+  PASS 1280-mo over the stored save is switchClubSet of the base save and loads
+  PASS 1280-mo over header after switch: Collingwood · Season 1
+  PASS 1280-mo over club panel after switch shows no invented place ()
+  PASS 1280-mo over after reload: Collingwood · Season 1
+  info 1280-mo premiers line after switch: Fremantle are the premiers, beating Adelaide 11.10 (76) to 7.9 (51).
+  info 1280-mo over home Continue strip: 🏉Aussie Rules ManagerCollingwood, season 1 | 🏉Aussie Rules ManagerRun one of 18 fictional clubs through 23 rounds, the finals and a draft into next season | 🏉Aussie Rules ManagerRun one of 18 fictional clubs through 23 rounds, the finals and a draft into next season
+  PASS 1280-mo over no page errors 
+
+== 1280-rm
+  PASS 1280-rm rules carry the club example
+  PASS 1280-rm menu drew 18 real names
+  PASS 1280-rm band headings: Finished 1st to 3rd in 2026 | Finished 4th to 7th in 2026 | Finished 8th to 11th in 2026 | Finished 12th to 15th in 2026 | Finished 16th to 18th in 2026
+  PASS 1280-rm menu: no sideways scroll
+  PASS 1280-rm menu: nothing clipped 
+  PASS 1280-rm header after pick: Fremantle · Season 1
+  PASS 1280-rm score card: Fremantle v Geelong Cats
+  PASS 1280-rm match: no sideways scroll
+  PASS 1280-rm match: nothing clipped 
+  info 1280-rm running animations after the match: 0
+  PASS 1280-rm ladder: 18 real short names
+  PASS 1280-rm a real career is not offered the switch
+  PASS 1280-rm new career: no page errors 
+  PASS 1280-rm r4 old career opens under its own name: Caldermere Comets · Season 1
+  PASS 1280-rm r4 hub shows no real name before the switch ()
+  PASS 1280-rm r4 offer: Play on with the real AFL club names? Caldermere Comets become Fremantle. Players, results and your history stay exactly as they are.
+  PASS 1280-rm r4 club panel: no sideways scroll
+  PASS 1280-rm r4 keep leaves the save as the base wrote it
+  info 1280-rm r4 scrollY before ask 0, after confirm 0
+  PASS 1280-rm r4 the stored save is switchClubSet of the base save and loads
+  PASS 1280-rm r4 header after switch: Fremantle · Season 1
+  PASS 1280-rm r4 club panel after switch shows no invented place ()
+  PASS 1280-rm r4 ladder order and numbers unchanged by the switch
+  PASS 1280-rm r4 after reload: Fremantle · Season 1
+  PASS 1280-rm r4 no page errors 
+  PASS 1280-rm over old career opens under its own name: Brindlefern Currawongs · Season 1
+  PASS 1280-rm over hub shows no real name before the switch ()
+  info 1280-rm premiers line: Caldermere are the premiers, beating Fallmere 11.10 (76) to 7.9 (51).
+  PASS 1280-rm over offer: Play on with the real AFL club names? Brindlefern Currawongs become Collingwood. Players, results and your history stay exactly as they are.
+  PASS 1280-rm over club panel: no sideways scroll
+  PASS 1280-rm over keep leaves the save as the base wrote it
+  info 1280-rm over scrollY before ask 0, after confirm 0
+  PASS 1280-rm over the stored save is switchClubSet of the base save and loads
+  PASS 1280-rm over header after switch: Collingwood · Season 1
+  PASS 1280-rm over club panel after switch shows no invented place ()
+  PASS 1280-rm over after reload: Collingwood · Season 1
+  info 1280-rm premiers line after switch: Fremantle are the premiers, beating Adelaide 11.10 (76) to 7.9 (51).
+  PASS 1280-rm over no page errors 
+
+review-walk: 132 checks, 0 failures, shots in /home/runner/work/_temp/rc-out/files
