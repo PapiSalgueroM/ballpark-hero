@@ -1,0 +1,3 @@
+edge-carried exit=0 5s |    Duration  4.10s (transform 1.38s, setup 77ms, collect 47ms, tests 3.25s, environment 319ms, prepare 115ms)
+pr269-head exit=0 14s |    Duration  11.71s (transform 1.39s, setup 68ms, collect 29ms, tests 8.18s, environment 298ms, prepare 79ms)
+ledgerbound exit=0 341s | simCmLedgerBound: green, all four sections held
