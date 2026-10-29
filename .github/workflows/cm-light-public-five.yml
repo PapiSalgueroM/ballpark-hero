@@ -1,0 +1,129 @@
+name: Club Manager Light season public five first positive
+on:
+  push:
+    branches: [codex/cm-light-public-five-20261029]
+    paths:
+      - .github/workflows/cm-light-public-five.yml
+      - qa/cm-light-season-public-v1/SOURCE.json
+      - src/test/clubManagerIndividualLightSeason.test.ts
+permissions:
+  contents: read
+concurrency:
+  group: cm-light-public-five-${{ github.sha }}
+  cancel-in-progress: false
+defaults:
+  run:
+    shell: bash
+jobs:
+  public-five:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    env:
+      CI: '1'
+      SIM_NETWORK: offline
+      CAREER_SEASON_LOCAL_ONLY: '1'
+      CM_LIGHT_PUBLIC_OUT: ${{ github.workspace }}/cm-light-public-five-artifacts
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.sha }}
+          fetch-depth: 2
+          persist-credentials: false
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: npm
+      - name: Exact clean PR420 family and finite current app bridge
+        run: |
+          set -euo pipefail
+          test "$GITHUB_REF_NAME" = codex/cm-light-public-five-20261029
+          test "$(git rev-parse HEAD)" = "$GITHUB_SHA"
+          test "$(git rev-list --parents -n 1 HEAD | wc -w)" = 2
+          test "$(git rev-parse HEAD^)" = 11aa2a6ef34c3cda3d2d88d95b2fd7d41fbbcd9e
+          test "$(git rev-parse HEAD^^{tree})" = bf5e6d0a486f81f3310af7932111bae57b241008
+          mkdir -p "$CM_LIGHT_PUBLIC_OUT"
+          git rev-parse HEAD HEAD^{tree} > "$CM_LIGHT_PUBLIC_OUT/head-tree.txt"
+          git archive --format=tar HEAD > "$CM_LIGHT_PUBLIC_OUT/source.tar"
+          git ls-tree -rl HEAD > "$CM_LIGHT_PUBLIC_OUT/source-tree.txt"
+          git ls-files -z | sort -z | xargs -0 sha256sum > "$CM_LIGHT_PUBLIC_OUT/tracked-before.sha256"
+          git ls-remote origin refs/heads/main refs/heads/release-bs-gate > "$CM_LIGHT_PUBLIC_OUT/main-release-at-start.txt"
+          test "$(awk '$2=="refs/heads/main" {print $1}' "$CM_LIGHT_PUBLIC_OUT/main-release-at-start.txt")" = 5d1198389d436ddb615c816a1330d57296a6d9d2
+          printf '%s  %s\n' d4f463fde3fdcee336b35bb52a063e7e99a5f68075e5ef715b7f995e4759ec3d qa/cm-light-season-public-v1/SOURCE.json | sha256sum --check
+          set +e
+          node --input-type=module - <<'NODE' > "$CM_LIGHT_PUBLIC_OUT/tree-source-admission.json" 2> "$CM_LIGHT_PUBLIC_OUT/tree-source-admission.err"
+          import fs from 'node:fs';import assert from 'node:assert/strict';import{createHash}from'node:crypto';import{execFileSync}from'node:child_process';
+          const m=JSON.parse(fs.readFileSync('qa/cm-light-season-public-v1/SOURCE.json','utf8')),sha=b=>createHash('sha256').update(b).digest('hex'),git=b=>createHash('sha1').update(Buffer.from('blob '+b.length+'\0')).update(b).digest('hex');
+          assert.equal(m.files.length,13);assert.equal(new Set(m.files.map(f=>f.path)).size,13);for(const f of m.files){const b=fs.readFileSync(f.path);assert.equal(b.length,f.bytes,f.path);assert.equal(sha(b),f.sha256,f.path);assert.equal(git(b),f.gitBlob,f.path);}
+          const config=JSON.parse(fs.readFileSync('tsconfig.app.json','utf8'));assert.deepEqual(config.include,['src']);assert.equal(config.exclude,undefined,'Selected public test is included in the app type gate');
+          const tree=ref=>new Map(execFileSync('git',['ls-tree','-rlz',ref],{encoding:'utf8'}).split('\0').filter(Boolean).map(row=>{const x=row.match(/^(\d+) (\w+) ([a-f0-9]+)\s+(\d+)\t([\s\S]+)$/);assert(x);return[x[5],{mode:x[1],type:x[2],gitBlob:x[3],bytes:Number(x[4])}];}));const old=tree('HEAD^'),current=tree('HEAD'),delta=[];let held=0;assert.equal(old.size,5396);assert.equal(current.size,5400);for(const[p,v]of old){assert(current.has(p));if(JSON.stringify(v)===JSON.stringify(current.get(p)))held++;else delta.push('M\t'+p);}for(const p of current.keys())if(!old.has(p))delta.push('A\t'+p);assert.deepEqual(delta.sort(),[...m.allowedDelta].sort());assert.equal(held,5393);assert(delta.every(x=>current.get(x.slice(2)).mode==='100644'));assert.equal(m.appBridge.files.length,4);for(const f of m.appBridge.files)assert.deepEqual(m.files.find(p=>p.path===f.path),f);
+          console.log(JSON.stringify({status:'SOURCE13_TREE7_APP4_BRIDGE_HELD',files:m.files,delta,heldParentBodies:held,appBridge:m.appBridge,scope:m.scope},null,2));
+          NODE
+          raw=$?
+          set -e
+          printf '%s\n' "$raw" > "$CM_LIGHT_PUBLIC_OUT/tree-source-admission.exit"
+          cat "$CM_LIGHT_PUBLIC_OUT/tree-source-admission.err"
+          test "$raw" = 0
+      - name: Locked dependencies
+        run: |
+          set -euo pipefail
+          echo '127.0.0.1 flawuiqbvjobmkfkauhw.supabase.co' | sudo tee -a /etc/hosts
+          set +e
+          npm ci > "$CM_LIGHT_PUBLIC_OUT/npm-ci.log" 2>&1
+          raw=$?
+          set -e
+          printf '%s\n' "$raw" > "$CM_LIGHT_PUBLIC_OUT/npm-ci.exit"
+          cat "$CM_LIGHT_PUBLIC_OUT/npm-ci.log"
+          test "$raw" = 0
+      - name: Real application types including the selected public test
+        run: |
+          set -euo pipefail
+          set +e
+          NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node_modules/.bin/tsc --noEmit -p tsconfig.app.json > "$CM_LIGHT_PUBLIC_OUT/types.log" 2>&1
+          raw=$?
+          set -e
+          printf '%s\n' "$raw" > "$CM_LIGHT_PUBLIC_OUT/types.exit"
+          cat "$CM_LIGHT_PUBLIC_OUT/types.log"
+          test "$raw" = 0
+      - name: Five actual public Engine cases
+        run: |
+          set -euo pipefail
+          start_ms=$(date +%s%3N)
+          set +e
+          NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node node_modules/vitest/vitest.mjs run src/test/clubManagerIndividualLightSeason.test.ts --maxWorkers=1 --minWorkers=1 --reporter=default --reporter=json --outputFile="$CM_LIGHT_PUBLIC_OUT/vitest.json" > "$CM_LIGHT_PUBLIC_OUT/vitest.log" 2>&1
+          raw=$?
+          set -e
+          end_ms=$(date +%s%3N)
+          printf '%s\n' "$raw" > "$CM_LIGHT_PUBLIC_OUT/vitest.exit"
+          printf '{"startMs":%s,"endMs":%s,"elapsedMs":%s}\n' "$start_ms" "$end_ms" "$((end_ms-start_ms))" > "$CM_LIGHT_PUBLIC_OUT/process-timing.json"
+          cat "$CM_LIGHT_PUBLIC_OUT/vitest.log"
+          set +e
+          node --input-type=module - <<'NODE' > "$CM_LIGHT_PUBLIC_OUT/public-five-admission.json" 2> "$CM_LIGHT_PUBLIC_OUT/public-five-admission.err"
+          import fs from 'node:fs';import path from 'node:path';import assert from 'node:assert/strict';import{createHash}from'node:crypto';
+          const out=process.env.CM_LIGHT_PUBLIC_OUT,m=JSON.parse(fs.readFileSync('qa/cm-light-season-public-v1/SOURCE.json','utf8')),reportPath=path.join(out,'vitest.json'),original=JSON.parse(fs.readFileSync(reportPath,'utf8')),log=fs.readFileSync(path.join(out,'vitest.log'),'utf8').replace(/\x1b\[[0-?]*[ -/]*[@-~]/g,''),exit=fs.readFileSync(path.join(out,'vitest.exit'),'utf8').trim(),sha=x=>createHash('sha256').update(x).digest('hex');
+          function admit(r,text,status){assert.equal(status,'0','PUBLIC5_PROCESS');assert(!/Unhandled (?:Error|Rejection)|Vitest caught|onTaskUpdate|RPC.*Timeout|No test files found|Failed Suites|DataCloneError|SyntaxError|ReferenceError/.test(text),'PUBLIC5_INFRA');assert.equal(r.success,true);for(const[k,v]of Object.entries({numTotalTests:5,numPassedTests:5,numFailedTests:0,numPendingTests:0,numTodoTests:0,numFailedTestSuites:0,numPendingTestSuites:0}))assert.equal(r[k],v,k);assert(Number.isInteger(r.numTotalTestSuites)&&r.numTotalTestSuites>0);assert.equal(r.numPassedTestSuites,r.numTotalTestSuites);assert.equal(r.testResults.length,1,'PUBLIC5_FILE_COUNT');const f=r.testResults[0];assert.equal(path.resolve(f.name),path.resolve(m.test.path),'PUBLIC5_FILE_ID');assert.equal(f.status,'passed');assert.equal(f.message,'','PUBLIC5_METHOD');assert.equal(f.assertionResults.length,5);assert.deepEqual(f.assertionResults.map(x=>x.title).sort(),[...m.test.titles].sort());for(const x of f.assertionResults){assert.deepEqual(x.ancestorTitles,[m.test.prefix]);assert.equal(x.fullName,m.test.prefix+' '+x.title);assert.equal(x.status,'passed');assert.deepEqual(x.failureMessages,[]);assert(Number.isFinite(x.duration)&&x.duration>=0);}assert(Number.isFinite(f.startTime)&&Number.isFinite(f.endTime)&&f.endTime>=f.startTime);assert.equal((text.match(/^\s*Test Files\s+1 passed \(1\)\s*$/gm)||[]).length,1,'PUBLIC5_FILES_CLOSING');assert.equal((text.match(/^\s*Tests\s+5 passed \(5\)\s*$/gm)||[]).length,1,'PUBLIC5_TESTS_CLOSING');assert.equal(text.split('\n').filter(x=>x.trim()==='JSON report written to '+reportPath).length,1,'PUBLIC5_JSON_CLOSING');}
+          admit(original,log,exit);const controls=[];for(const[cause,change]of[['PUBLIC5_PROCESS',x=>{x.exit='1';}],['PUBLIC5_INFRA',x=>{x.log+='\nUnhandled Error: COPIED diagnostic only\n';}]]){const value={report:structuredClone(original),log,exit},before=JSON.stringify(value);change(value);const changed=JSON.stringify(value);assert.notEqual(changed,before);let refusal;try{admit(value.report,value.log,value.exit);}catch(e){refusal={name:e.name,code:e.code,message:e.message};}assert(refusal&&refusal.name==='AssertionError'&&refusal.code==='ERR_ASSERTION'&&refusal.message.includes(cause));Object.assign(value,JSON.parse(before));assert.equal(JSON.stringify(value),before);admit(value.report,value.log,value.exit);controls.push({cause,scope:'COPIED admission observation only, no app/source fault',changed:true,beforeSHA256:sha(before),changedSHA256:sha(changed),restoredSHA256:sha(JSON.stringify(value)),sameCopyRestored:true,refusal});}
+          const timing=JSON.parse(fs.readFileSync(path.join(out,'process-timing.json'),'utf8'));assert(Number.isFinite(timing.elapsedMs)&&timing.elapsedMs>=0&&timing.endMs>=timing.startMs);console.log(JSON.stringify({status:'ACTUAL_PUBLIC_FIVE_PASS_FIRST_POSITIVE_ONLY',reportSHA256:sha(fs.readFileSync(reportPath)),logSHA256:sha(log),rawExit:exit,fileCount:1,testCount:5,nestedSuiteCount:original.numTotalTestSuites,rows:original.testResults[0].assertionResults,timing,controls,scope:m.scope},null,2));
+          NODE
+          admission_exit=$?
+          set -e
+          printf '%s\n' "$admission_exit" > "$CM_LIGHT_PUBLIC_OUT/public-five-admission.exit"
+          cat "$CM_LIGHT_PUBLIC_OUT/public-five-admission.err"
+          test "$admission_exit" = 0
+      - name: Every canonical tracked body held including failure
+        if: always()
+        run: |
+          set -euo pipefail
+          git ls-files -z | sort -z | xargs -0 sha256sum > "$CM_LIGHT_PUBLIC_OUT/tracked-final.sha256"
+          diff -u "$CM_LIGHT_PUBLIC_OUT/tracked-before.sha256" "$CM_LIGHT_PUBLIC_OUT/tracked-final.sha256"
+          sha256sum --check "$CM_LIGHT_PUBLIC_OUT/tracked-before.sha256" > "$CM_LIGHT_PUBLIC_OUT/tracked-held.log"
+          git status --porcelain --untracked-files=no > "$CM_LIGHT_PUBLIC_OUT/tracked-status.txt"
+          test ! -s "$CM_LIGHT_PUBLIC_OUT/tracked-status.txt"
+          git diff --exit-code HEAD
+      - name: Retain original five-case outputs including refusal
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: cm-light-public-five-${{ github.run_id }}-${{ github.run_attempt }}
+          path: cm-light-public-five-artifacts/
+          if-no-files-found: error
+          retention-days: 14
