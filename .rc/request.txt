@@ -1,0 +1,7 @@
+#!build
+#!playwright
+#!serial
+words-head: node .rc/x/walkBingoWords.mjs dist head
+simPlayerBingoCategories: CI=1 PLAYER_BINGO_CATEGORIES_OUT="$PWD/.tmp-fx/pbc" NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/simPlayerBingoCategories.mjs
+playPlayerBingoCategories: CI=1 PLAYER_BINGO_BROWSER_OUT="$PWD/.tmp-fx/pbb" NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/playPlayerBingoCategories.mjs
+words-base: git checkout 5c2b863441d15898345b800dfc6a84affff18b47 -- src/pages/PlayerBingo.tsx && node_modules/.bin/vite build --outDir dist-base > /tmp/base-build.log 2>&1; b=$?; git checkout HEAD -- src; [ $b -eq 0 ] || { tail -20 /tmp/base-build.log; exit 2; }; node .rc/x/walkBingoWords.mjs dist-base base
