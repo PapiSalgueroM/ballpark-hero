@@ -75,6 +75,16 @@ const CLUBS = {
   olympiquedemarseille: 'marseille', westhamunited: 'westham', fcporto: 'porto',
   sportinglisbon: 'sportingcp', bayernmunchen: 'bayernmunich', fcbarcelona: 'barcelona',
   atleticodemadrid: 'atleticomadrid', leicester: 'leicestercity',
+  /* Round 1565: the club's own name today; the career tables write Athletic Bilbao */
+  athleticclub: 'athleticbilbao',
+};
+
+/* Round 1565: a board's word for a pair of city rivals, the two clubs it means. Before this the
+   checker read "Played for both Milan clubs" as one club called "milanclubs" and called every
+   man on it false, Seedorf and Ronaldo included. */
+const PAIRS = {
+  manchesterclubs: ['manchesterunited', 'manchestercity'],
+  milanclubs: ['acmilan', 'intermilan'],
 };
 export const club = s => { const k = fold(s); return CLUBS[k] ?? k; };
 
@@ -141,7 +151,7 @@ export function makeSoccerChecker({ careerPlayers, clubSeasonsOf, nationalityMap
     m = t.match(/^Played for (?:both )?(.+)$/);
     if (m) {
       if (/[()0-9+]/.test(m[1])) return null;
-      const clubs = m[1].split(/,| AND | and /).map(s => s.trim()).filter(Boolean).map(club);
+      const clubs = m[1].split(/,| AND | and /).map(s => s.trim()).filter(Boolean).map(club).flatMap(c => PAIRS[c] ?? [c]);
       return { kind: 'club', clubs };
     }
     return null;

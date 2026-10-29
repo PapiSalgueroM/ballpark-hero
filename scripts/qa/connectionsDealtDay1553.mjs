@@ -29,13 +29,17 @@ const valid = g => { const all = g.flatMap(x => x.players ?? []); return g.lengt
 const pool = JSON.parse(fs.readFileSync(exportPath, 'utf8'))
   .sort((a, b) => a.sort_order - b.sort_order)
   .filter(r => valid(groupsOf(r.groups_json)));
-const migration = fs.readFileSync(path.join(ROOT, 'supabase/migrations/20261022130000_round_1553_connections_truth.sql'), 'utf8');
-const touched = new Set([...migration.matchAll(/^\s*\('(puzzle-[0-9]+)', /gm)].map(m => m[1]));
+/* Round 1565: CONN_MIGRATION=<path> asks the same of another migration, such as
+   supabase/migrations/20261029120000_round_1565_connections_live.sql, whose rows include crafted-* and cx-* boards */
+const MIGRATION = process.env.CONN_MIGRATION ?? 'supabase/migrations/20261022130000_round_1553_connections_truth.sql';
+const migration = fs.readFileSync(path.resolve(ROOT, MIGRATION), 'utf8');
+const touched = new Set([...migration.matchAll(/^\s*\('([a-z]+-[0-9][0-9-]*)', /gm)].map(m => m[1]));
+if (!touched.size) { console.error(`${MIGRATION} names no rows`); process.exit(2); }
 let clash = 0;
 for (const d of dates) {
   const id = pool[dailyIndex(d, pool.length)]?.puzzle_id;
   const hit = touched.has(id);
   if (hit) clash += 1;
-  console.log(`${d}: ${id} of ${pool.length} boards, ${hit ? 'REWRITTEN by the 1553 migration: do not apply that day' : 'not touched: clear to apply'}`);
+  console.log(`${d}: ${id} of ${pool.length} boards, ${hit ? `REWRITTEN by ${path.basename(MIGRATION)}: do not apply that day` : 'not touched: clear to apply'}`);
 }
 process.exit(clash ? 1 : 0);
