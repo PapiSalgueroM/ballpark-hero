@@ -20,7 +20,7 @@ import { REGULAR_WEEKS } from './frontOffice';
 import { GM_SPORTS, GM_SPORT_KEYS } from './gmSport';
 
 const read = (rel: string) =>
-  fs.readFileSync(path.join(process.cwd(), rel), 'utf8').replaceAll('\r\n', '\n')
+  fs.readFileSync(path.join(process.cwd(), rel), 'utf8').split('\r\n').join('\n')
     .replace(/\/\*[\s\S]*?\*\//g, '').replace(/^\s*\/\/.*$/gm, '');
 
 const between = (src: string, start: string, end: string): string => {
