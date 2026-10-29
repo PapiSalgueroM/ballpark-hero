@@ -6845,6 +6845,44 @@
      "says": "no NHL season with UTA/UTA up to 2025-26 (clubs: EDM, NJD, ARI, BUF, BOS, CHI, CAR)"
     }
    ]
+  },
+  {
+   "id": "nhlconn-010",
+   "label": "Played for the Islanders (as of 2025-26)",
+   "name": "John Tonelli",
+   "holds": true,
+   "why": "member",
+   "sources": [
+    {
+     "host": "api-web.nhle.com",
+     "url": "https://api-web.nhle.com/v1/player/8451917/landing",
+     "says": "NHL clubs to 2025-26: New York Islanders, Calgary Flames, Los Angeles Kings, Chicago Blackhawks, Quebec Nordiques"
+    },
+    {
+     "host": "hockey-reference.com",
+     "url": "https://www.hockey-reference.com/players/t/toneljo01.html",
+     "says": "NHL seasons with NYI: 1978-79 to 1985-86 (8)"
+    }
+   ]
+  },
+  {
+   "id": "nhlconn-010",
+   "label": "Scored 60 goals in a season",
+   "name": "John Tavares",
+   "holds": false,
+   "why": "watch-line",
+   "sources": [
+    {
+     "host": "api-web.nhle.com",
+     "url": "https://api-web.nhle.com/v1/player/8475166/landing",
+     "says": "most regular season goals in a season 47 (2018-19)"
+    },
+    {
+     "host": "hockey-reference.com",
+     "url": "https://www.hockey-reference.com/players/t/tavarjo01.html",
+     "says": "most NHL goals in a season 47 (2018-19)"
+    }
+   ]
   }
  ],
  "uncheckedCeiling": 0,
@@ -7034,7 +7072,7 @@
    "way": "REBUILD",
    "from": "Captained a Stanley Cup winner",
    "to": "Played for the Islanders (as of 2025-26)",
-   "why": "captaincy is on no record and the list keeps growing; Steve Yzerman and Mark Messier were second answers; rebuilt as a dated club group no other man on the board played for"
+   "why": "captaincy is on no record and the list keeps growing; Steve Yzerman and Mark Messier were second answers; rebuilt as a dated club group no other man on the board played for; fix2-1574: John Tavares (47 goals in 2018-19, his career best on both hosts), still playing, sat over the watch line of the 60 goal group beside it (45, three quarters of 60), so John Tonelli (Islanders 1978-79 to 1985-86) takes his place"
   },
   {
    "id": "nhlconn-010",
@@ -7400,6 +7438,13 @@
    "label": "Played 1,650 or more NHL games",
    "holds": false,
    "why": "watch"
+  },
+  {
+   "id": "nhlconn-010",
+   "name": "John Tavares",
+   "label": "Scored 60 goals in a season",
+   "holds": false,
+   "why": "watch-line"
   },
   {
    "id": "nhlconn-011",

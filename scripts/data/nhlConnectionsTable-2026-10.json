@@ -68,7 +68,7 @@
   "board":[
    {"theme":"Goaltenders","players":["Patrick Roy","Martin Brodeur","Dominik Hasek","Carey Price","Ken Dryden"],"difficulty":"yellow"},
    {"theme":"Scored 60 goals in a season","players":["Teemu Selanne","Wayne Gretzky","Mario Lemieux","Auston Matthews","Brett Hull"],"difficulty":"green"},
-   {"theme":"Played for the Islanders (as of 2025-26)","players":["Bryan Trottier","Denis Potvin","Clark Gillies","John Tavares","Bobby Nystrom"],"difficulty":"blue"},
+   {"theme":"Played for the Islanders (as of 2025-26)","players":["Bryan Trottier","Denis Potvin","Clark Gillies","John Tonelli","Bobby Nystrom"],"difficulty":"blue"},
    {"theme":"Played 1,650 or more NHL games","players":["Gordie Howe","Patrick Marleau","Ron Francis","Mark Recchi","Joe Thornton"],"difficulty":"purple"}]},
 {"puzzle_id":"nhlconn-011","sort_order":11,"exportedH":"08666d55c024e88eba457bb3af5a542b",
   "exported":[
