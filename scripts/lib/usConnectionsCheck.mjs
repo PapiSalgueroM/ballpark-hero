@@ -109,6 +109,7 @@ function posShare(m, set) {
  * (Harmon Killebrew at first base, bconn-035), none between. Musial, Thome and Paul Molitor (29.7 at third)
  * fell under it and left those groups, and every other tile the record could not judge (53 pairs, a man with
  * 10 to 30 percent of his games beside a position group) left its board, so no tile sits between the lines.
+ * After the round the closest member is Frank Thomas, 42.6 percent at first base (bconn-022, 028, 045).
  * The 10 line has no gap to move into (the other tiles under it run evenly from 0 to 9.9: Honus Wagner,
  * 9.9 at first base, bconn-053), so it stays; a tile under it is not called a fit by anyone who knows him.
  * Section 7 of simUsConnectionsFacts holds both unknown counts at 0, so a pair between the lines that comes
