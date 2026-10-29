@@ -409,6 +409,8 @@ describe.each(ROWS)('$label: the wall screen', ({ label, sport }) => {
     const tiles = [...document.querySelectorAll<HTMLButtonElement>('[data-career-hall-wall-tile]')];
     expect(tiles.map(t => t.textContent)).toEqual([expect.stringContaining('In the Hall'), expect.stringContaining('Never on the ballot')]);
     for (const el of [opener, help, ...tiles, button('Back')!]) expect(el.className).toMatch(/min-h-11/);
+    // Opened from create, no career is missing from it: the retirement screen's honest line never shows here.
+    expect(document.body.textContent).not.toContain('This browser did not keep the wall');
     fireEvent.click(tiles[1]);
     await appear('[data-career-hall-wall-plaque]');
     fireEvent.click(button('Back to the wall')!);
@@ -448,6 +450,22 @@ describe.each(ROWS)('$label: the wall screen', ({ label, sport }) => {
     await waitFor(() => expect(document.body.textContent).toContain('This browser did not keep the wall, so this player is not on it.'));
     expect(document.body.textContent).toContain('Nobody on the wall yet. Every player you retire goes up here.');
     cleanup(); refuse.mockRestore(); localStorage.clear();
+    /* Nothing refused, and this player still not on the wall (his plaque never built, as for a key past the
+       bound, or not built yet): the honest line is about a refusal, so it does not show. */
+    wallSwitch.inert = true;
+    try {
+      save(sport, retiredCareer(sport, 1579), null, 'retired');
+      mountBoard(sport);
+      const quiet = await appear<HTMLButtonElement>('[data-career-hall-wall-opener="retired"]');
+      await waitFor(() => expect(quiet).toBeEnabled(), { timeout: 15000 });
+      await settle();
+      fireEvent.click(quiet);
+      await appear('[data-career-hall-wall]');
+      await settle();
+      expect(document.body.textContent).not.toContain('This browser did not keep the wall');
+      expect(localStorage.getItem(wallKey(sport))).toBeNull();
+    } finally { wallSwitch.inert = false; }
+    cleanup(); localStorage.clear();
     localStorage.setItem(wallKey(sport), JSON.stringify({ v: 2, entries: [] }));
     save(sport, retiredCareer(sport, 1579), null, 'retired');
     mountBoard(sport);

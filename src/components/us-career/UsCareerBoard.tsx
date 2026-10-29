@@ -176,6 +176,9 @@ export default function UsCareerBoard({ sport }: { sport: UsCareerSport }) {
      wall's top in under the menu bar. All above the focus effect and every early return. */
   const [wall, setWall] = useState<HallWall | null>(null);
   const [wallView, setWallView] = useState<{ from: 'create' | 'retired'; plaque: string | null } | null>(null);
+  /* The career whose plaque this browser refused (by its wall key), so the wall's honest line shows only after a
+     real refusal, never while the rules are still on their way. */
+  const [wallRefused, setWallRefused] = useState<string | null>(null);
   const createWallButton = useRef<HTMLButtonElement>(null);
   const retiredWallButton = useRef<HTMLButtonElement>(null);
   const wallTop = useRevealScroll<HTMLDivElement>(wallView ? (wallView.plaque === null ? 'grid' : `plaque:${wallView.plaque}`) : 'closed');
@@ -365,7 +368,7 @@ export default function UsCareerBoard({ sport }: { sport: UsCareerSport }) {
      plaque is up it says the card goes, which is then true. */
   useEffect(() => {
     if (!sport.hall || !career?.retired || saveFailure) return;
-    const retired = career;
+    const retired = career, mine = wallKeyOf(career, sport.hall);
     let live = true;
     import('@/lib/usCareerHallWall').then(m => {
       if (!live) return;
@@ -380,7 +383,7 @@ export default function UsCareerBoard({ sport }: { sport: UsCareerSport }) {
         const next = m.addToWall(was.entries, entry);
         if (next !== was.entries) localStorage.setItem(key, JSON.stringify({ v: 1, entries: next }));
         setWall({ entries: next, writable: true });
-      } catch { /* the career is still on its save, and the prompt keeps saying the card goes */ }
+      } catch { setWallRefused(mine); /* the career is still on its save, and the prompt keeps saying the card goes */ }
     }).catch(() => { /* a chunk that fails to load: the site's preloadError listener reloads once */ });
     return () => { live = false; };
   }, [career, sport, saveFailure]);
@@ -1095,6 +1098,9 @@ export default function UsCareerBoard({ sport }: { sport: UsCareerSport }) {
   const hallOnRestart = !!career?.retired && !!sport.hall;
   const hallWallKeyNow = career?.retired && sport.hall ? wallKeyOf(career, sport.hall) : null;
   const hallKept = hallWallKeyNow !== null && !!wall?.entries.some(e => e.key === hallWallKeyNow);
+  /* The wall's "did not keep" line: this career's write was refused (or its save was, which holds the plaque
+     back). Not while the rules load, and not for a plaque never built (a key past the bound refuses nothing). */
+  const hallRefused = hallWallKeyNow !== null && !hallKept && (wallRefused === hallWallKeyNow || !!saveFailure);
   const withSaveStatus = (content: ReactNode) => <div ref={boardTop}>
     {saveFailure && <UsCareerSaveNotice operation={saveFailure} onRetry={retrySave} />}
     {startOver && <UsCareerStartOver sport={sport.label} onConfirm={reset} hallCard={hallOnRestart} hallKept={hallKept} />}
@@ -1120,7 +1126,7 @@ export default function UsCareerBoard({ sport }: { sport: UsCareerSport }) {
     return withSaveStatus(
       <div ref={wallTop}>
         <Suspense fallback={<div role="status" style={{ minHeight: 300 }} className="text-center text-xs text-muted-foreground">Loading the Hall wall...</div>}>
-          <UsCareerHallWall sport={sport} wall={wall} from={view.from} plaque={view.plaque} missing={view.from === 'retired' && !hallKept}
+          <UsCareerHallWall sport={sport} wall={wall} from={view.from} plaque={view.plaque} missing={view.from === 'retired' && hallRefused}
             onOpen={key => setWallView({ from: view.from, plaque: key })}
             onClosePlaque={() => setWallView({ from: view.from, plaque: null })}
             onBack={() => { reviewReturn.current = view.from === 'create' ? 'wallCreate' : 'wallRetired'; setWallView(null); }} />
