@@ -1,0 +1,11 @@
+build exit=0 25s | [dukb] inlined 1 stylesheet(s) and 1 module(s) into 181 snapshots (11 left alone)
+walk exit=0 58s | walk1557: ran 8 flows, 0 stopped; screenshots and walk1557.json in /home/runner/work/_temp/rc-out/files
+arrive-head exit=1 61s | review-run-arrive head: 1 of 8 arrivals off screen
+attr-guide-pos exit=0 2s | simGuideHeadings: green. 131 guides carry keyword h2s over h3 and h4 sections with every original sentence intact, and all 133 blocks render a clean outline.
+attr-guide-neg exit=1 2s | simGuideHeadings: RED, 2 failures in section 1
+attr-search-neg exit=1 2s | simSiteSearch: 1 failure
+attr-search-pos exit=0 2s | simSiteSearch: green. Every game is findable by name, typos included, and the ranking can explain itself.
+weight-head exit=0 8s |   AppearanceBuilder:15.4 Celebration:0.8 CelebrationStyles:0.7 Confetti:0.6 GameHelp:0.8 GameNav:1.7 GameNavbar:3.7 GameReportContext:3.0 GameSeoContent:2.4 HowToPlayPopo
+arrive-nocurtain exit=1 95s | review-run-arrive nocurtain: 1 of 8 arrivals off screen
+attr-board exit=0 41s | simUsBoardParity: green. Four sports replayed click for click, save for save and screen for screen with the proved historical main775 coaching Panel.
+weight-merge exit=0 37s |   AppearanceBuilder:15.0 Celebration:0.8 CelebrationStyles:0.7 Confetti:0.6 GameHelp:0.8 GameNav:1.7 GameNavbar:3.7 GameReportContext:3.0 GameSeoContent:2.4 HowToPlayPopo
