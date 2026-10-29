@@ -1,0 +1,6 @@
+L1 retireYear=2007 sets=400 setsWithNonexistentClub=368 offered=1200 nonexistent=820 eraTierDiffers=3 randomPathPoolNonexistent=224/403 e.g. Atletico San Luis | Necaxa | Central Coast Mariners | OFI | Kortrijk
+L1 retireYear=2012 sets=400 setsWithNonexistentClub=356 offered=1200 nonexistent=755 eraTierDiffers=4 randomPathPoolNonexistent=221/403 e.g. Brisbane Roar | Mumbai City | Al Faisaly | Basaksehir | La Louviere
+L1 retireYear=2017 sets=400 setsWithNonexistentClub=364 offered=1200 nonexistent=801 eraTierDiffers=3 randomPathPoolNonexistent=219/403 e.g. Beveren | Houston Dynamo | Holstein Kiel | Ried
+L1 retireYear=2022 sets=400 setsWithNonexistentClub=366 offered=1200 nonexistent=765 eraTierDiffers=0 randomPathPoolNonexistent=216/403 e.g. Istra 1961 | Al Faisaly | Hannover 96 | Leon | Al Taawoun | Eyupspor
+L1 retireYear=2025 sets=400 setsWithNonexistentClub=0 offered=1200 nonexistent=0 eraTierDiffers=0 randomPathPoolNonexistent=0/403 e.g. 
+L1 retireYear=2030 sets=400 setsWithNonexistentClub=0 offered=1200 nonexistent=0 eraTierDiffers=0 randomPathPoolNonexistent=0/403 e.g. 

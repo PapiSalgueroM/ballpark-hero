@@ -1,0 +1,27 @@
+
+[1m[46m RUN [49m[22m [36mv3.2.7 [39m[90m/home/runner/work/ballpark-hero/ballpark-hero[39m
+
+[90mstdout[2m | src/test/zzRvbsProbe.test.ts[2m > [22m[2mL1 chooser offers clubs the era table says did not exist
+[22m[39mL1 retireYear=2007 sets=400 setsWithNonexistentClub=368 offered=1200 nonexistent=820 eraTierDiffers=3 randomPathPoolNonexistent=224/403 e.g. Atletico San Luis | Necaxa | Central Coast Mariners | OFI | Kortrijk
+L1 retireYear=2012 sets=400 setsWithNonexistentClub=356 offered=1200 nonexistent=755 eraTierDiffers=4 randomPathPoolNonexistent=221/403 e.g. Brisbane Roar | Mumbai City | Al Faisaly | Basaksehir | La Louviere
+L1 retireYear=2017 sets=400 setsWithNonexistentClub=364 offered=1200 nonexistent=801 eraTierDiffers=3 randomPathPoolNonexistent=219/403 e.g. Beveren | Houston Dynamo | Holstein Kiel | Ried
+L1 retireYear=2022 sets=400 setsWithNonexistentClub=366 offered=1200 nonexistent=765 eraTierDiffers=0 randomPathPoolNonexistent=216/403 e.g. Istra 1961 | Al Faisaly | Hannover 96 | Leon | Al Taawoun | Eyupspor
+L1 retireYear=2025 sets=400 setsWithNonexistentClub=0 offered=1200 nonexistent=0 eraTierDiffers=0 randomPathPoolNonexistent=0/403 e.g. 
+L1 retireYear=2030 sets=400 setsWithNonexistentClub=0 offered=1200 nonexistent=0 eraTierDiffers=0 randomPathPoolNonexistent=0/403 e.g. 
+
+[90mstdout[2m | src/test/zzRvbsProbe.test.ts[2m > [22m[2mL2 review bypass: market and duplicate names
+[22m[39mL2 marketClubsTier2plus=446 notUniqueInCareerList=136 e.g. Manchester United t2 | Atlético Madrid t2 | Athletic Club t3 | Deportivo La Coruña t4 | Alavés t4 | Málaga t4 | Borussia Dortmund t2 | RB Leipzig t2
+L2 careerDestTier1or2DupNames=0 
+L2 careerSrcTier2plusDupNames=0 
+L2 sim careers=600 employedAdvances=16296 intercepted=127 bypassedWhileReviewOn=6 bypassSourceNotUnique=6 e.g. Metz(t2,inList=0)->Real Madrid | Cádiz(t3,inList=0)->Sao Paulo | Al-Ahli(t2,inList=0)->PSG | Atlético Madrid(t2,inList=0)->Man City | Annecy(t2,inList=0)->Juventus | Beşiktaş(t2,inList=0)->Real Madrid
+L3 natCallsOnInterceptedSeasons=12 fromTier3or4=9
+
+ [32m✓[39m src/test/zzRvbsProbe.test.ts [2m([22m[2m2 tests[22m[2m)[22m[33m 7691[2mms[22m[39m
+   [33m[2m✓[22m[39m L1 chooser offers clubs the era table says did not exist [33m 1970[2mms[22m[39m
+   [33m[2m✓[22m[39m L2 review bypass: market and duplicate names [33m 5719[2mms[22m[39m
+
+[2m Test Files [22m [1m[32m1 passed[39m[22m[90m (1)[39m
+[2m      Tests [22m [1m[32m2 passed[39m[22m[90m (2)[39m
+[2m   Start at [22m 03:49:05
+[2m   Duration [22m 16.81s[2m (transform 5.84s, setup 131ms, collect 7.34s, tests 7.69s, environment 620ms, prepare 356ms)[22m
+

@@ -1,0 +1,32 @@
+
+[1m[46m RUN [49m[22m [36mv3.2.7 [39m[90m/home/runner/work/ballpark-hero/ballpark-hero[39m
+
+ [32m✓[39m src/test/soccerCareerManagerJobReview.consumer.test.tsx [2m([22m[2m4 tests[22m[2m)[22m[33m 6797[2mms[22m[39m
+   [33m[2m✓[22m[39m actual existing Soccer Career manager consumers[2m > [22memployed manager can opt into reviewing earned job moves [33m 343[2mms[22m[39m
+   [33m[2m✓[22m[39m actual existing Soccer Career manager consumers[2m > [22mcanonical default manager seasons preserve complete state save and random stream [33m 575[2mms[22m[39m
+ [32m✓[39m src/test/soccerCareerManagerJobReview.test.ts [2m([22m[2m14 tests[22m[2m)[22m[33m 6758[2mms[22m[39m
+   [33m[2m✓[22m[39m manager job review authority[2m > [22mold poached departure without a fresh club change never manufactures a pending approach [33m 782[2mms[22m[39m
+   [33m[2m✓[22m[39m manager job review authority[2m > [22mnon-poach seasons retain full canonical results and random stream across actual outcomes [33m 516[2mms[22m[39m
+   [33m[2m✓[22m[39m manager job review authority[2m > [22man opted-in unemployed season remains the canonical market money and random outcome [33m 3966[2mms[22m[39m
+   [33m[2m✓[22m[39m manager job review authority[2m > [22mofficial save parse repair retains pending and resolved choices in small and packed histories [33m 1118[2mms[22m[39m
+ [32m✓[39m src/test/soccerCareerCoachingStart.consumer.lifecycle.test.tsx [2m([22m[2m8 tests[22m[2m)[22m[33m 8386[2mms[22m[39m
+   [33m[2m✓[22m[39m actual retirement card coaching lifecycle[2m > [22mceremony cold pending Back restores its actual opener without a late reopen [33m 1894[2mms[22m[39m
+   [33m[2m✓[22m[39m actual retirement card coaching lifecycle[2m > [22mceremony loaded chooser keeps help and Back focus without committing [33m 662[2mms[22m[39m
+   [33m[2m✓[22m[39m actual retirement card coaching lifecycle[2m > [22mceremony selected displayed club uses the actual canonical one-draw appointment [33m 382[2mms[22m[39m
+   [33m[2m✓[22m[39m actual retirement card coaching lifecycle[2m > [22mceremony rejects a captured old quote after replacement and rebinds current choices [33m 395[2mms[22m[39m
+   [33m[2m✓[22m[39m actual retirement card coaching lifecycle[2m > [22mdirect retirement cold pending Back restores its actual opener without a late reopen [33m 1712[2mms[22m[39m
+   [33m[2m✓[22m[39m actual retirement card coaching lifecycle[2m > [22mdirect retirement loaded chooser keeps help and Back focus without committing [33m 622[2mms[22m[39m
+   [33m[2m✓[22m[39m actual retirement card coaching lifecycle[2m > [22mdirect retirement rejects a captured old quote after replacement and rebinds current choices [33m 518[2mms[22m[39m
+ [32m✓[39m src/test/soccerCareerCoachingStart.test.ts [2m([22m[2m10 tests[22m[2m)[22m[32m 127[2mms[22m[39m
+ [32m✓[39m src/test/soccerCareerCoachingChooser.test.tsx [2m([22m[2m6 tests[22m[2m)[22m[33m 1115[2mms[22m[39m
+   [33m[2m✓[22m[39m prepared manager chooser loading and current-save safety[2m > [22mkeeps all destinations disabled and the complete career untouched while loading [33m 493[2mms[22m[39m
+ [32m✓[39m src/test/soccerCareerManagerJobReview.transaction.test.tsx [2m([22m[2m6 tests[22m[2m)[22m[32m 192[2mms[22m[39m
+ [32m✓[39m src/test/soccerCareerCoachingTransaction.test.tsx [2m([22m[2m6 tests[22m[2m)[22m[32m 189[2mms[22m[39m
+ [32m✓[39m src/test/soccerCareerManagerJobReview.card.test.tsx [2m([22m[2m4 tests[22m[2m)[22m[33m 333[2mms[22m[39m
+ [32m✓[39m src/test/soccerCareerCoachingStart.consumer.test.tsx [2m([22m[2m4 tests[22m[2m)[22m[33m 1690[2mms[22m[39m
+
+[2m Test Files [22m [1m[32m9 passed[39m[22m[90m (9)[39m
+[2m      Tests [22m [1m[32m62 passed[39m[22m[90m (62)[39m
+[2m   Start at [22m 03:49:05
+[2m   Duration [22m 17.59s[2m (transform 5.42s, setup 875ms, collect 11.47s, tests 25.59s, environment 6.29s, prepare 1.55s)[22m
+

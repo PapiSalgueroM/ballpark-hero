@@ -1,0 +1,5 @@
+L2 marketClubsTier2plus=446 notUniqueInCareerList=136 e.g. Manchester United t2 | Atlético Madrid t2 | Athletic Club t3 | Deportivo La Coruña t4 | Alavés t4 | Málaga t4 | Borussia Dortmund t2 | RB Leipzig t2
+L2 careerDestTier1or2DupNames=0 
+L2 careerSrcTier2plusDupNames=0 
+L2 sim careers=600 employedAdvances=16296 intercepted=127 bypassedWhileReviewOn=6 bypassSourceNotUnique=6 e.g. Metz(t2,inList=0)->Real Madrid | Cádiz(t3,inList=0)->Sao Paulo | Al-Ahli(t2,inList=0)->PSG | Atlético Madrid(t2,inList=0)->Man City | Annecy(t2,inList=0)->Juventus | Beşiktaş(t2,inList=0)->Real Madrid
+L3 natCallsOnInterceptedSeasons=12 fromTier3or4=9
