@@ -1,0 +1,4 @@
+fair-secondfit exit=1 0s | simFairPuzzles: 2 failures
+simFairPuzzles exit=0 0s | simFairPuzzles: green. No board has a new second right answer; only the soccer findings the ledger owes to part B remain.
+rehearse1553-noguard exit=1 4s | rehearseConnections1553: 10 failures
+rehearse1553 exit=0 14s | rehearseConnections1553: green. The rows land in place, a drifted row is left alone, and a second run is a no-op.
