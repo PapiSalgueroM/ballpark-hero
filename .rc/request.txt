@@ -1,0 +1,8 @@
+#!build
+#!playwright
+anchors: node scripts/simHarnessAnchors.mjs
+simWall: node scripts/simUsCareerHallWall.mjs
+c-nogate: SIM_HALL_WALL_CONTROL=nogate node scripts/simUsCareerHallWall.mjs
+c-boarddraw: SIM_HALL_WALL_CONTROL=boarddraw node scripts/simUsCareerHallWall.mjs
+writes-head: node scripts/simWritesAreSent.mjs
+writes-base: git worktree add /tmp/wsbase 493926a4f >/dev/null 2>&1 && cd /tmp/wsbase && ln -s "$OLDPWD/node_modules" node_modules && node_modules/.bin/vite build >/dev/null 2>&1 && node scripts/simWritesAreSent.mjs
