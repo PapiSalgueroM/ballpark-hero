@@ -34,7 +34,7 @@ const held = await Promise.all(files.map(async file => [file, await readFile(pat
 const hash = bytes => createHash('sha256').update(bytes).digest('hex').toUpperCase();
 const receipts = () => held.map(([file, bytes]) => ({ file, bytes: bytes.length, sha256: hash(bytes) }));
 const source = held[0][1].toString('utf8').replaceAll('\r\n', '\n');
-assert.equal(hash(held[1][1]), '98BDF62464755465B7EEE93705DE4C854838A896341FDF7DE1693CB9A9560D4F', 'Frozen test-first suite');
+assert.equal(hash(held[1][1]), 'B25AFA96604DA343B36D407C99390DBC0F3493ABD5C4BAE02C990B76CBE5D14B', 'Frozen test-first suite'); // Release BS fix BS-mix-1: birth year bands
 const originalHash = 'B446D6FEBC197D9210A01624BD41F71A31CD65EFAD5FF566FDF64DB0EBF792AC';
 const out = path.resolve(process.env.PLAYER_BINGO_CATEGORIES_OUT || path.join(root, '.sim-artifacts/player-bingo-categories'));
 assert.ok(out.startsWith(root + path.sep));
@@ -131,8 +131,8 @@ try {
       ['winger', "test: p => ['left winger', 'right winger'].includes(normalizeName(p.position)),", titles[2]],
       ['value30', 'test: p => p.value >= 30_000_000 && p.value < 50_000_000,', titles[3]],
       ['value50', 'test: p => p.value >= 50_000_000 && p.value < 100_000_000,', titles[3]],
-      ['age22', 'test: p => p.age >= 22 && p.age <= 25,', titles[4]],
-      ['age26', 'test: p => p.age >= 26 && p.age <= 28,', titles[4]],
+      ['born2000', 'test: p => bornYear(p) >= 2000 && bornYear(p) <= 2003,', titles[4]],
+      ['born1997', 'test: p => bornYear(p) >= 1997 && bornYear(p) <= 1999,', titles[4]],
       ['double10', 'test: (p, d) => anySeasonMatches(d, p, s => (s.goals ?? 0) >= 10 && (s.assists ?? 0) >= 10),', titles[5]],
       ['contributions30', 'test: (p, d) => anySeasonMatches(d, p, s => (s.goals ?? 0) + (s.assists ?? 0) >= 30),', titles[5]],
       ['matches50', 'test: (p, d) => anySeasonMatches(d, p, s => (s.matches ?? 0) >= 50),', titles[6]],

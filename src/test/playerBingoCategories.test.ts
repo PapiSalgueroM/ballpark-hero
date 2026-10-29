@@ -11,7 +11,7 @@ vi.mock('@/integrations/supabase/client', () => ({
 
 const addedIds = [
   'pos-full-back', 'pos-winger', 'value-30m-under-50m', 'value-50m-under-100m',
-  'age-22-to-25', 'age-26-to-28', 'season-goals-assists-10', 'season-contributions-30',
+  'born-2000-to-2003', 'born-1997-to-1999', 'season-goals-assists-10', 'season-contributions-30',
   'season-matches-50', 'season-goals-10-under-30-matches',
   'season-matches-40-no-red', 'season-yellows-10-red',
 ];
@@ -164,11 +164,15 @@ describe('Player Bingo categories', () => {
   });
 
   it('fills the two middle age bands without borrowing younger or older players', () => {
-    for (const [id, low, high] of [['age-22-to-25', 22, 25], ['age-26-to-28', 26, 28]] as const) {
+    /* Release BS fix: bands on birth year (row year minus age minus 1), so on 2026 rows the edges
+       are ages 22 and 25, 26 and 28, and a 2025 row of the same age is a year older */
+    for (const [id, low, high] of [['born-2000-to-2003', 22, 25], ['born-1997-to-1999', 26, 28]] as const) {
       const c = criterion(id);
       for (const age of [low, high]) expect(c.test(player({ age }), emptyData())).toBe(true);
       for (const age of [0, low - 1, high + 1, NaN]) expect(c.test(player({ age }), emptyData())).toBe(false);
     }
+    expect(criterion('born-2000-to-2003').test(player({ age: 25, year: 2025 }), emptyData())).toBe(false);
+    expect(criterion('born-1997-to-1999').test(player({ age: 25, year: 2025 }), emptyData())).toBe(true);
   });
 
   it('requires attacking combinations in one season and does not invent missing contributions', () => {

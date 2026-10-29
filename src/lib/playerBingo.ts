@@ -722,6 +722,12 @@ function withSupport(data: BingoData, raw: RawCriterion): BingoCriterion {
 }
 
 /** True if any season row for this player satisfies the given stat predicate. */
+/* Release BS fix: the table's age is his age on 1 January of the row's year and is never moved on,
+   so an age band goes stale as birthdays pass (Haaland read 25 in October 2026). The age tiles band
+   on birth year instead, the 1 January rule the UCL check uses: born in year - age - 1. */
+function bornYear(p: BingoPlayer): number {
+  return p.age > 0 && p.year > 0 ? p.year - p.age - 1 : NaN;
+}
 function anySeasonMatches(data: BingoData, p: BingoPlayer, pred: (s: SeasonStat) => boolean): boolean {
   const stats = data.seasonStats.get(p.name);
   if (!stats) return false;
@@ -840,18 +846,18 @@ export function buildCriteria(data: BingoData): BingoCriterion[] {
     withSupport(data, {
       id: 'age-29-plus',
       kind: 'age',
-      label: 'Aged 29 or older',
+      label: 'Born 1996 or earlier',
       icon: '🎂',
-      test: p => p.age >= 29,
+      test: p => bornYear(p) <= 1996,
     }),
   );
   out.push(
     withSupport(data, {
       id: 'age-21-under',
       kind: 'age',
-      label: 'Aged 21 or younger',
+      label: 'Born 2004 or later',
       icon: '🌱',
-      test: p => p.age > 0 && p.age <= 21,
+      test: p => bornYear(p) >= 2004,
     }),
   );
 
@@ -1068,12 +1074,12 @@ export function buildCriteria(data: BingoData): BingoCriterion[] {
       test: p => p.value >= 50_000_000 && p.value < 100_000_000,
     },
     {
-      id: 'age-22-to-25', kind: 'age', label: 'Aged 22 to 25', icon: '🌱',
-      test: p => p.age >= 22 && p.age <= 25,
+      id: 'born-2000-to-2003', kind: 'age', label: 'Born 2000 to 2003', icon: '🌱',
+      test: p => bornYear(p) >= 2000 && bornYear(p) <= 2003,
     },
     {
-      id: 'age-26-to-28', kind: 'age', label: 'Aged 26 to 28', icon: '🎂',
-      test: p => p.age >= 26 && p.age <= 28,
+      id: 'born-1997-to-1999', kind: 'age', label: 'Born 1997 to 1999', icon: '🎂',
+      test: p => bornYear(p) >= 1997 && bornYear(p) <= 1999,
     },
     {
       id: 'season-goals-assists-10', kind: 'season-stat', group: 'season-attack',
