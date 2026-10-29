@@ -1,0 +1,9 @@
+base-cash: git worktree add /tmp/base 12c1b2cd001f9309a31a887e5c432ca63c373852 >/dev/null 2>&1; ln -sf "$PWD/node_modules" /tmp/base/node_modules; node .rc/x/probe-econ.mjs /tmp/base base cash 1000 150
+head-cash: node .rc/x/probe-econ.mjs . head cash 1000 150
+head-loyal: node .rc/x/probe-econ.mjs . head loyal 1000 150
+head-staycash: node .rc/x/probe-econ.mjs . head staycash 1000 150
+head-stayloyal: node .rc/x/probe-econ.mjs . head stayloyal 1000 150
+head-tease: node .rc/x/probe-econ.mjs . head tease 1000 150
+head-shady: node .rc/x/probe-econ.mjs . head shady 1000 150
+base-staycash: git worktree add /tmp/base2 12c1b2cd001f9309a31a887e5c432ca63c373852 >/dev/null 2>&1; ln -sf "$PWD/node_modules" /tmp/base2/node_modules; node .rc/x/probe-econ.mjs /tmp/base2 base staycash 1000 150
+stack: for b in codex/sc-training-pending-escape-20261028 codex/cm-loan-plan-20261027 codex/cm-recruitment-shortlist-20261028 codex/soccer-career-internal-links-20261027; do git fetch -q origin "$b"; echo "== $b"; git merge-tree --write-tree --name-only d272f1cb8197c3f5a884688fd592ecca623a076e FETCH_HEAD | head -12; done; true
