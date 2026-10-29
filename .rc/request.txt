@@ -1,0 +1,6 @@
+#!serve
+#!playwright
+walk-nba: WALK_SPORTS=nba node .rc/x/walkStart2.mjs
+walk-nfl: WALK_SPORTS=nfl node .rc/x/walkStart2.mjs
+walk-mlb: WALK_SPORTS=mlb node .rc/x/walkStart2.mjs
+walk-nhl: WALK_SPORTS=nhl node .rc/x/walkStart2.mjs
