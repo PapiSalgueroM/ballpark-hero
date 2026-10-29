@@ -1,0 +1,6 @@
+6) a season out: the league plays a whole season without him, his record gains a year out and nothing else, and refusals touch nothing
+   60 years out over 20 seeds (0 stopped early); refusals: 20 in a seat, 20 closed, 20 last calls
+   drafted men on the other clubs' rosters after the years out: away 596, idle GM 600 (ratio 0.993); mean roster after a summer: away 12.66, idle GM 12.70
+  FAIL [6]: no measured draft band for the nhl row (S6_BANDS): ratio 0.993
+   retained rows planted 20: 40 summers kept at the figure the club kept, 20 dropped when the entry ran out; the old club's contributors back to automatic after 60 of 60 years
+simGmCareer: 1 failure(s) in 6

@@ -1,0 +1,17 @@
+4) the market after real firings: every club graded as a GM's club, the first out of work screen and the next two
+   MEASURE 20 seeds x 12 seasons: 471 firings
+   first screen with the host's rule: offers 471 (100.0%), quiet 0 (0.0%), closed 0 (0.0%); first calls 278
+   first screen on the raw feed:      offers 193 (41.0%), quiet 224 (47.6%), closed 54 (11.5%)
+   of the screens with offers, last calls: host 83 of 471 (17.6%), raw 29 of 193 (15.0%)
+   re hired within three feeds (firings with two seasons left to read, 374): host 374 (100.0%), raw 217 (58.0%); 228 later feeds read
+9) the bands: the firing rate, the offers, re hiring, the closed share and the XP pace, seed by seed against the calibrated bands
+   S9 nfl seeds 61-80: fireRate mean 0.0613 sd 0.0080 se 0.0018 min 0.0495 max 0.0755 over 20 seeds
+   S9 nfl seeds 61-80: twoPlus mean 0.0488 sd 0.0418 se 0.0094 min 0.0000 max 0.1364 over 20 seeds
+   S9 nfl seeds 61-80: meanOffers mean 1.0488 sd 0.0418 se 0.0094 min 1.0000 max 1.1364 over 20 seeds
+   S9 nfl seeds 61-80: hired3 mean 1.0000 sd 0.0000 se 0.0000 min 1.0000 max 1.0000 over 20 seeds
+   S9 nfl seeds 61-80: closedNext mean 0.0000 sd 0.0000 se 0.0000 min Infinity max -Infinity over 0 seeds
+   S9 nfl seeds 61-80: xpMean mean 112.3721 sd 1.3964 se 0.3122 min 109.6719 max 114.2396 over 20 seeds
+   S9 nfl seeds 61-80: xpMedian 95 over 7680 graded club seasons; hostXpHelp's .500 season that meets the ask pays 110 (ratio 0.864)
+  FAIL [9]: no calibrated bands for the nfl row (S9_BANDS)
+  FAIL [9]: no measured pace band (S9_PACE)
+simGmCareer: 2 failure(s) in 9
