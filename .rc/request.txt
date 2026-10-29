@@ -1,0 +1,4 @@
+#!serve
+#!playwright
+probe: node .rc/x/probe1569.mjs 150
+walk: node .rc/x/walk1569.mjs
