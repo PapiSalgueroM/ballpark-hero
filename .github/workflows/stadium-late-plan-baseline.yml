@@ -1,0 +1,259 @@
+name: Stadium late-plan owned baseline
+on:
+  push:
+    branches: [codex/stadium-late-plan-baseline-20261029]
+permissions:
+  contents: read
+jobs:
+  baseline:
+    runs-on: ubuntu-latest
+    timeout-minutes: 35
+    env:
+      CI: 'true'
+      ENGINES: chromium
+      SIM_NETWORK: offline
+      TZ: UTC
+      EXPECTED_PARENT: bd0c07bf72dc0214842202fe2f931b14c65d82dc
+      EXPECTED_MAIN: bd0c07bf72dc0214842202fe2f931b14c65d82dc
+      EXPECTED_TREE: 81621012a7c51f78a2b4a124de846c72515ee2d2
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          persist-credentials: false
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '24'
+          cache: npm
+      - name: Bind current app source and board-only main compatibility
+        run: |
+          set -euo pipefail
+          out="$RUNNER_TEMP/stadium-late-plan-baseline"; fonts="$RUNNER_TEMP/stadium-late-plan-fonts"
+          test ! -e "$out"; test ! -e "$fonts"; mkdir -p "$out"
+          echo "PLACEMENT_OUT=$out" >> "$GITHUB_ENV"; echo "FREE_KICK_FONT_CACHE=$fonts" >> "$GITHUB_ENV"; echo "STADIUM_BASELINE_OUT=$out/browser" >> "$GITHUB_ENV"
+          test "$GITHUB_REF_NAME" = codex/stadium-late-plan-baseline-20261029
+          test "$(git rev-parse HEAD)" = "$GITHUB_SHA"
+          test "$(git rev-list --parents -n1 HEAD)" = "$GITHUB_SHA $EXPECTED_PARENT"
+          test "$(git rev-parse "$EXPECTED_PARENT^{tree}")" = "$EXPECTED_TREE"
+          test "$(git ls-files | wc -l)" -eq 5454
+          git diff --name-status "$EXPECTED_PARENT" HEAD > "$out/proof-diff.txt"
+          printf 'A\t.github/workflows/stadium-late-plan-baseline.yml\nA\tscripts/qa/playStadiumLatePlanBaseline.mjs\n' > "$out/expected-proof-diff.txt"
+          cmp "$out/proof-diff.txt" "$out/expected-proof-diff.txt"
+          test "$(git rev-parse HEAD:src/lib/stadiumTycoon.ts)" = 6a1fb1c55c7367c729a401c43c2e4092c9c2d829
+          printf '%s\n' "$EXPECTED_MAIN" > "$out/main-at-plan.txt"
+          private_index="$out/main-bridge.private.index";test ! -e "$private_index"
+          default_index=$(git rev-parse --git-path index)
+          sha256sum "$default_index" > "$out/default-index.before.sha256"
+          git for-each-ref --format='%(refname) %(objectname)' > "$out/refs.before.txt"
+          git fetch --no-tags --refmap='' origin refs/heads/main > "$out/main-fetch.stdout.log" 2> "$out/main-fetch.stderr.log"
+          actual_main=$(git rev-parse --verify 'FETCH_HEAD^{commit}')
+          [[ "$actual_main" =~ ^[a-f0-9]{40}$ ]]
+          printf '%s\n' "$actual_main" > "$out/main-at-start.txt"
+          echo "ACTUAL_MAIN_AT_START=$actual_main" >> "$GITHUB_ENV"
+          GIT_INDEX_FILE="$private_index" git read-tree "$EXPECTED_MAIN^{tree}"
+          base_tree=$(GIT_INDEX_FILE="$private_index" git write-tree)
+          cp "$private_index" "$out/main-bridge.private.index.before"
+          before_index_sha=$(sha256sum "$private_index" | cut -d ' ' -f1)
+          inspect_main_trees() {
+            local base="$1" candidate="$2" prefix="$3" full_raw outside_raw paths_raw base_board candidate_board
+            if GIT_INDEX_FILE="$private_index" git diff --name-status "$base" "$candidate" -- > "$prefix.paths.tsv" 2> "$prefix.paths.stderr.log";then paths_raw=0;else paths_raw=$?;fi
+            if GIT_INDEX_FILE="$private_index" git diff --exit-code "$base" "$candidate" -- > "$prefix.full.diff" 2> "$prefix.full.stderr.log";then full_raw=0;else full_raw=$?;fi
+            if GIT_INDEX_FILE="$private_index" git diff --exit-code "$base" "$candidate" -- . ':!docs/WORKBOARD.md' > "$prefix.nonboard.diff" 2> "$prefix.nonboard.stderr.log";then outside_raw=0;else outside_raw=$?;fi
+            printf '%s\n' "$paths_raw" > "$prefix.paths.raw.exit";printf '%s\n' "$full_raw" > "$prefix.full.raw.exit";printf '%s\n' "$outside_raw" > "$prefix.nonboard.raw.exit"
+            test "$paths_raw" -eq 0 || return 2
+            [[ "$full_raw" =~ ^[01]$ && "$outside_raw" =~ ^[01]$ ]] || return 2
+            GIT_INDEX_FILE="$private_index" git ls-tree "$base" -- docs/WORKBOARD.md > "$prefix.base-board.tsv" || return 2
+            GIT_INDEX_FILE="$private_index" git ls-tree "$candidate" -- docs/WORKBOARD.md > "$prefix.candidate-board.tsv" || return 2
+            base_board=$(cat "$prefix.base-board.tsv");candidate_board=$(cat "$prefix.candidate-board.tsv")
+            [[ "$base_board" =~ ^100644\ blob\ [a-f0-9]{40}$'\t'docs/WORKBOARD.md$ && "$candidate_board" =~ ^100644\ blob\ [a-f0-9]{40}$'\t'docs/WORKBOARD.md$ ]] || { printf 'MENU_MAIN_BOARD_REGULAR_MODE\n' > "$prefix.refusal.txt";return 1; }
+            if test "$outside_raw" -ne 0;then printf 'MENU_MAIN_NONBOARD_PATH\n' > "$prefix.refusal.txt";return 1;fi
+            if test "$full_raw" -eq 0;then
+              test ! -s "$prefix.paths.tsv" || return 2
+              printf 'SAME\n' > "$prefix.outcome.txt";return 0
+            fi
+            if ! printf 'M\tdocs/WORKBOARD.md\n' | cmp - "$prefix.paths.tsv";then printf 'MENU_MAIN_OWNED_BOARD_PATH_ONLY\n' > "$prefix.refusal.txt";return 1;fi
+            printf 'BOARD_ONLY\n' > "$prefix.outcome.txt"
+          }
+          inspect_main_trees "$EXPECTED_MAIN" "$actual_main" "$out/main-actual"
+          actual_kind=$(cat "$out/main-actual.outcome.txt")
+          for control in board app;do
+            if test "$control" = board;then target=docs/WORKBOARD.md;else target=src/App.tsx;fi
+            cmp "$private_index" "$out/main-bridge.private.index.before"
+            test "$(GIT_INDEX_FILE="$private_index" git write-tree)" = "$base_tree"
+            cmp "$private_index" "$out/main-bridge.private.index.before"
+            GIT_INDEX_FILE="$private_index" git cat-file blob "$EXPECTED_MAIN:$target" > "$out/control-$control.original.body"
+            cp "$out/control-$control.original.body" "$out/control-$control.changed.body"
+            printf '\n// QA-only private Git-tree %s control.\n' "$control" >> "$out/control-$control.changed.body"
+            original_body_sha=$(sha256sum "$out/control-$control.original.body" | cut -d ' ' -f1)
+            changed_body_sha=$(sha256sum "$out/control-$control.changed.body" | cut -d ' ' -f1)
+            test "$original_body_sha" != "$changed_body_sha"
+            original_blob=$(GIT_INDEX_FILE="$private_index" git rev-parse "$EXPECTED_MAIN:$target")
+            changed_blob=$(GIT_INDEX_FILE="$private_index" git hash-object -w "$out/control-$control.changed.body")
+            test "$changed_blob" != "$original_blob"
+            GIT_INDEX_FILE="$private_index" git update-index --cacheinfo 100644 "$changed_blob" "$target"
+            changed_tree=$(GIT_INDEX_FILE="$private_index" git write-tree);test "$changed_tree" != "$base_tree"
+            changed_index_sha=$(sha256sum "$private_index" | cut -d ' ' -f1);test "$changed_index_sha" != "$before_index_sha"
+            cp "$private_index" "$out/control-$control.changed.index"
+            if inspect_main_trees "$base_tree" "$changed_tree" "$out/control-$control";then control_raw=0;else control_raw=$?;fi
+            printf '%s\n' "$control_raw" > "$out/control-$control.classifier.raw.exit"
+            test "$(cat "$out/control-$control.full.raw.exit")" = 1
+            printf 'M\t%s\n' "$target" | cmp - "$out/control-$control.paths.tsv"
+            if test "$control" = board;then
+              test "$control_raw" = 0;test "$(cat "$out/control-board.nonboard.raw.exit")" = 0;test "$(cat "$out/control-board.outcome.txt")" = BOARD_ONLY
+            else
+              test "$control_raw" = 1;test "$(cat "$out/control-app.nonboard.raw.exit")" = 1;test "$(cat "$out/control-app.refusal.txt")" = MENU_MAIN_NONBOARD_PATH
+            fi
+            cp "$out/main-bridge.private.index.before" "$private_index"
+            cmp "$private_index" "$out/main-bridge.private.index.before"
+            restored_tree=$(GIT_INDEX_FILE="$private_index" git write-tree);test "$restored_tree" = "$base_tree"
+            cmp "$private_index" "$out/main-bridge.private.index.before"
+            restored_index_sha=$(sha256sum "$private_index" | cut -d ' ' -f1);test "$restored_index_sha" = "$before_index_sha"
+            cp "$private_index" "$out/control-$control.restored.index"
+            inspect_main_trees "$base_tree" "$restored_tree" "$out/control-$control-restored"
+            test "$(cat "$out/control-$control-restored.full.raw.exit")" = 0;test "$(cat "$out/control-$control-restored.nonboard.raw.exit")" = 0;test "$(cat "$out/control-$control-restored.outcome.txt")" = SAME
+            printf '{"id":"%s","scope":"REMOTE_PRIVATE_GIT_INDEX_TREE_ONLY","target":"%s","classifierRaw":%s,"fullDiffRaw":1,"outsideBoardDiffRaw":%s,"originalBodySHA256":"%s","changedBodySHA256":"%s","originalBlob":"%s","changedBlob":"%s","beforeTree":"%s","changedTree":"%s","restoredTree":"%s","beforeIndexSHA256":"%s","changedIndexSHA256":"%s","restoredIndexSHA256":"%s","samePrivateIndexBytesAndTreeRestored":true,"workingSourceChanged":false,"refWritten":false}\n' "$control" "$target" "$control_raw" "$(cat "$out/control-$control.nonboard.raw.exit")" "$original_body_sha" "$changed_body_sha" "$original_blob" "$changed_blob" "$base_tree" "$changed_tree" "$restored_tree" "$before_index_sha" "$changed_index_sha" "$restored_index_sha" >> "$out/main-bridge-controls.jsonl"
+          done
+          GIT_OPTIONAL_LOCKS=0 git diff --exit-code HEAD;test -z "$(GIT_OPTIONAL_LOCKS=0 git status --porcelain --untracked-files=no)"
+          sha256sum -c "$out/default-index.before.sha256" > "$out/default-index-held.log"
+          git for-each-ref --format='%(refname) %(objectname)' > "$out/refs.after.txt";cmp "$out/refs.before.txt" "$out/refs.after.txt"
+          printf '{"schema":1,"status":"ACTUAL_MAIN_SAME_OR_REGULAR_WORKBOARD_ONLY_WITH_PHYSICAL_PRIVATE_TREE_CONTROLS","source":"%s","productParent":"%s","mainAtPlan":"%s","mainAtStart":"%s","compatibility":"%s","nonBoardDiffRaw":0,"positiveBoardControl":true,"negativeAppControl":true,"samePrivateIndexBytesAndTreeRestored":true,"defaultIndexAndRefsHeld":true,"sourceOrRefMutation":false}\n' "$GITHUB_SHA" "$EXPECTED_PARENT" "$EXPECTED_MAIN" "$actual_main" "$actual_kind" > "$out/MAIN-BOARD-COMPATIBILITY-ADMISSION.json"
+          git ls-files -z | sort -z > "$out/source-members.initial"
+          xargs -0 sha256sum < "$out/source-members.initial" > "$out/source.initial.sha256"
+          git ls-files --others --exclude-standard -z | sort -z > "$out/untracked.initial"
+          git archive --format=tar HEAD > "$out/source.tar"
+          printf '{"scope":"CURRENT_STADIUM_MISSING_DECISION_BASELINE_ONLY","plannedMain":"%s","observedMain":"%s","appSourceChanged":false,"productRegularFiles":5452,"proofRegularFiles":5454,"qaAdditions":2,"fullSEO":"UNRUN","routeCaps":"UNRUN","fullDefaultVitest":"UNRUN","fullRunAllSims":"UNRUN","productFeatureReady":false}\n' "$EXPECTED_MAIN" "$actual_main" > "$out/SCOPE.json"
+      - name: Locked application dependencies
+        run: npm ci > "$PLACEMENT_OUT/npm-ci.stdout.log" 2> "$PLACEMENT_OUT/npm-ci.stderr.log"
+      - name: Isolated browser tooling and actual prepared fonts
+        run: |
+          set -euo pipefail
+          out="$PLACEMENT_OUT"; tools="$RUNNER_TEMP/menu-placement-browser-tools"; test ! -e "$tools"
+          npm install --prefix "$tools" --no-save --package-lock=false playwright@1.64.0 > "$out/browser-install.log" 2>&1
+          test ! -e node_modules/playwright; test ! -e node_modules/playwright-core
+          ln -s "$tools/node_modules/playwright" node_modules/playwright; ln -s "$tools/node_modules/playwright-core" node_modules/playwright-core
+          export PLAYWRIGHT_BROWSERS_PATH="$tools/browsers"; echo "PLAYWRIGHT_BROWSERS_PATH=$PLAYWRIGHT_BROWSERS_PATH" >> "$GITHUB_ENV"; echo "PLACEMENT_TOOLS=$tools" >> "$GITHUB_ENV"
+          executable=$(node -e 'const a=require("node:assert/strict");a.equal(require("playwright/package.json").version,"1.64.0");a.equal(require("playwright-core/package.json").version,"1.64.0");process.stdout.write(require("playwright").chromium.executablePath())')
+          if test ! -f "$executable";then node "$tools/node_modules/playwright/cli.js" install --with-deps chromium > "$out/chromium-install.log" 2>&1;fi
+          node scripts/qa/freeKickLab1070.mjs --prefetch-fonts-only > "$out/font-prefetch.log" 2>&1
+          sha=$(sha256sum "$FREE_KICK_FONT_CACHE/manifest.json" | cut -d ' ' -f1); echo "FONT_CACHE_MANIFEST_SHA256=$sha" >> "$GITHUB_ENV"
+      - name: Real type and manifest build gates
+        run: |
+          set -euo pipefail
+          out="$PLACEMENT_OUT"; mkdir -p "$out/gates"
+          cat > "$out/run.sh" <<'GATE'
+          run() {
+            local id="$1" want="$2"; shift 2
+            local dir="$PLACEMENT_OUT/gates/$id"; test ! -e "$dir"; mkdir -p "$dir"
+            printf '%q ' "$@" > "$dir/command.txt"; printf '\n' >> "$dir/command.txt"
+            : > "$dir/transport.jsonl"
+            local raw=0
+            SIM_OFFLINE_RECEIPT="$dir/transport.jsonl" NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" FORCE_COLOR=0 env -u NO_COLOR timeout --signal=TERM --kill-after=15s 10m "$@" > "$dir/stdout.log" 2> "$dir/stderr.log" || raw=$?
+            printf '%s\n' "$raw" > "$dir/raw.exit"; printf 'gate=%s raw=%s expected=%s\n' "$id" "$raw" "$want"
+            test "$raw" -eq "$want"; test ! -s "$dir/transport.jsonl"
+          }
+          GATE
+          sha256sum "$out/run.sh" > "$out/run.initial.sha256"
+          source "$out/run.sh"
+          run types 0 node_modules/.bin/tsc --noEmit -p tsconfig.app.json
+          test ! -s "$out/gates/types/stdout.log"; test ! -s "$out/gates/types/stderr.log"
+          run stadium-original 0 node scripts/simStadiumTycoon.mjs
+          test "$(grep -Fc 'simStadiumTycoon: green. The turnstiles spin and the math holds.' "$out/gates/stadium-original/stdout.log")" -eq 1
+          run build 0 npm run build -- --manifest
+          grep -Eq 'built in .+' "$out/gates/build/stdout.log"
+      - name: Freeze source, dependency, font and completed-dist inventories
+        run: |
+          set -euo pipefail
+          out="$PLACEMENT_OUT"
+          for pair in "deps:node_modules" "browser:$PLACEMENT_TOOLS" "fonts:$FREE_KICK_FONT_CACHE" "dist:dist"; do
+            label="${pair%%:*}"; dir="${pair#*:}"
+            find "$dir" -type f -print0 | sort -z > "$out/$label.members"
+            xargs -0 sha256sum < "$out/$label.members" > "$out/$label.sha256"
+          done
+          find node_modules -type l -printf '%p -> %l\n' | sort > "$out/dependency-links.before"
+          tar -cf "$out/dist.tar" -C dist .
+          tar -cf "$out/font-cache.tar" -C "$FREE_KICK_FONT_CACHE" .
+      - name: Actual minute65 real-page owned missing-decision baseline
+        run: |
+          set -euo pipefail
+          out="$PLACEMENT_OUT"; source "$out/run.sh"; : > "$out/server.transport"
+          SIM_OFFLINE_RECEIPT="$out/server.transport" NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/lib/hostLikeServer.mjs dist 4173 > "$out/server.log" 2>&1 & server=$!
+          trap 'kill "$server" 2>/dev/null || true; wait "$server" 2>/dev/null || true' EXIT
+          for attempt in $(seq 1 60); do if curl --fail --silent http://127.0.0.1:4173/ > /dev/null; then break; fi; sleep 1; done
+          curl --fail --silent http://127.0.0.1:4173/ > /dev/null
+          run browser-owned-red 1 node scripts/qa/playStadiumLatePlanBaseline.mjs
+          grep -Eq '^STADIUM_NEUTRAL_BASELINE: actual engine seed [1-9][0-9]*, live65 caller rolls130, full90 caller rolls180, repeated outputs exact and frozen input held\.$' "$out/gates/browser-owned-red/stdout.log"
+          test "$(wc -l < "$out/gates/browser-owned-red/stdout.log")" -eq 1
+          printf '%s\n' 'OWNED_MISSING_FEATURE: actual healthy Stadium minute65 1-0 has no accessible Late-match plan or its three controls.' > "$out/expected-owned-stderr.txt"
+          cmp "$out/expected-owned-stderr.txt" "$out/gates/browser-owned-red/stderr.log"
+          test ! -s "$out/server.transport"
+          node <<'ADMIT'
+          const fs=require('node:fs'),a=require('node:assert/strict'),path=require('node:path'),{createHash}=require('node:crypto'),out=process.env.PLACEMENT_OUT,dir=process.env.STADIUM_BASELINE_OUT,sha=body=>createHash('sha256').update(body).digest('hex');
+          const read=name=>JSON.parse(fs.readFileSync(path.join(dir,name),'utf8')),actual={report:read('report.json'),fixture:read('fixture65.json'),full:read('neutral-full90.json')};
+          function judge({report:r,fixture:f,full}) {
+            a.equal(r.source,process.env.GITHUB_SHA);a.equal(r.parent,process.env.EXPECTED_PARENT);a.equal(r.status,'EXPECTED_OWNED_MISSING_FEATURE');a.equal(r.healthyFoundation,true);a.equal(r.methodFailure,null);
+            a.equal(f.state.minute,65,'STADIUM_BASELINE_FIXTURE65');a.equal(f.origin,'ACTUAL_NEW_TYCOON_AND_65_PLAY_MINUTE_CALLS');a.equal(f.state.goalsFor,1);a.equal(f.state.goalsAgainst,0);a.equal(f.state.totalGoals,1);a.equal(f.callerRolls,130);a.equal(f.full90CallerRolls,180);a.equal(full.calls,180);a.equal(full.state.totalMatches,1);
+            a.equal(r.ownedFailure.marker,'OWNED_MISSING_FEATURE');a.equal(r.ownedFailure.accessibleName,'Late-match plan');a.equal(r.ownedFailure.expectedControls,3);a.equal(r.ownedFailure.actual.groupCount,0);
+            a.deepEqual(r.ownedFailure.actual.buttons,[{name:'Protect the lead',count:0},{name:'Balanced',count:0},{name:'Chase a goal',count:0}],'STADIUM_BASELINE_MISSING_CONTROLS');
+            a.equal(r.clock.explicitRenderMilliseconds,64);a.equal(r.clock.fixedDateNow,f.fixtureTime);a.equal(r.images.length,1);
+            for(const image of r.images){a.equal(image.normal,true);a.equal(path.basename(image.file),image.file);const body=fs.readFileSync(path.join(dir,image.file));a.equal(body.length,image.bytes);a.equal(sha(body),image.sha256);a.equal(body.subarray(0,8).toString('hex'),'89504e470d0a1a0a');a.equal(body.readUInt32BE(16),390);a.equal(body.readUInt32BE(20),844);}
+          }
+          a.equal(fs.readFileSync(out+'/gates/browser-owned-red/raw.exit','utf8').trim(),'1');judge(actual);
+          const controls=path.join(out,'admission-controls');fs.mkdirSync(controls);const working=path.join(controls,'working-foundation.json'),original=Buffer.from(JSON.stringify(actual,null,2)+'\n');fs.writeFileSync(working,original,{flag:'wx'});
+          const rows=[];
+          for(const spec of [
+            {id:'wrong-live-minute',marker:'STADIUM_BASELINE_FIXTURE65',change:value=>{value.fixture.state.minute=66;}},
+            {id:'not-actually-absent',marker:'STADIUM_BASELINE_MISSING_CONTROLS',change:value=>{value.report.ownedFailure.actual.buttons[0].count=1;}}
+          ]) {
+            a.deepEqual(fs.readFileSync(working),original);judge(JSON.parse(fs.readFileSync(working,'utf8')));
+            fs.writeFileSync(path.join(controls,spec.id+'.before.json'),fs.readFileSync(working));
+            const changed=JSON.parse(fs.readFileSync(working,'utf8'));spec.change(changed);const changedBytes=Buffer.from(JSON.stringify(changed,null,2)+'\n');a.notDeepEqual(changedBytes,original);
+            let refusal=null,restoreFailure=null;
+            try {
+              fs.writeFileSync(working,changedBytes);a.deepEqual(fs.readFileSync(working),changedBytes);fs.writeFileSync(path.join(controls,spec.id+'.changed.json'),fs.readFileSync(working));
+              try {judge(JSON.parse(fs.readFileSync(working,'utf8')));} catch(error) {refusal=String(error.message);}
+              a.ok(refusal && refusal.includes(spec.marker),'CONTROL_OWNED_REFUSAL:'+spec.id);
+            } finally {
+              try {fs.writeFileSync(working,original);a.deepEqual(fs.readFileSync(working),original);judge(JSON.parse(fs.readFileSync(working,'utf8')));fs.writeFileSync(path.join(controls,spec.id+'.restored.json'),fs.readFileSync(working));}
+              catch(error) {restoreFailure=String(error.stack||error);}
+              rows.push({id:spec.id,marker:spec.marker,originalSHA256:sha(original),changedSHA256:sha(changedBytes),restoredSHA256:sha(fs.readFileSync(working)),refusal,restoreFailure,changedBytes:!changedBytes.equals(original),sameWorkingCopy:working,expectedRedFoundationRestored:!restoreFailure,featureGreenCredit:false});
+              fs.writeFileSync(path.join(controls,'controls.json'),JSON.stringify(rows,null,2)+'\n');
+              a.equal(restoreFailure,null);
+            }
+          }
+          a.equal(rows.length,2);for(const row of rows){a.ok(row.refusal.includes(row.marker));a.notEqual(row.changedSHA256,row.originalSHA256);a.equal(row.restoredSHA256,row.originalSHA256);}
+          fs.writeFileSync(out+'/OWNED-BASELINE-ADMISSION.json',JSON.stringify({status:'CURRENT_STADIUM_OWNED_MISSING_DECISION_BASELINE_COMPLETED',source:process.env.GITHUB_SHA,parent:process.env.EXPECTED_PARENT,mainAtPlan:process.env.EXPECTED_MAIN,mainAtStart:process.env.ACTUAL_MAIN_AT_START,rawBrowserExit:1,healthyFoundation:true,ownedMarker:'OWNED_MISSING_FEATURE',actualMissingControls:3,neutralFull90CallerRolls:180,normalImages:1,copiedAdmissionControls:rows,productFeatureReady:false,fullSEO:'UNRUN',fullDefaultVitest:'UNRUN',fullRunAllSims:'UNRUN'},null,2)+'\n',{flag:'wx'});
+          console.log('STADIUM_OWNED_BASELINE_COMPLETED: actual healthy minute65 missing decision retained as raw1; no product feature pass.');
+          ADMIT
+      - name: Always retain final original-source and completed-output holds
+        if: ${{ always() }}
+        run: |
+          set -euo pipefail
+          out="${PLACEMENT_OUT:-$RUNNER_TEMP/stadium-late-plan-baseline}"; mkdir -p "$out"; failed=0
+          git ls-files -z | sort -z > "$out/source-members.final"
+          xargs -0 sha256sum < "$out/source-members.final" > "$out/source.final.sha256"
+          cmp "$out/source-members.initial" "$out/source-members.final" || failed=1
+          cmp "$out/source.initial.sha256" "$out/source.final.sha256" || failed=1
+          git ls-files --others --exclude-standard -z | sort -z > "$out/untracked.final"
+          cmp "$out/untracked.initial" "$out/untracked.final" || failed=1
+          if test -f "$out/dist.sha256"; then
+            for pair in "deps:node_modules" "browser:$PLACEMENT_TOOLS" "fonts:$FREE_KICK_FONT_CACHE" "dist:dist"; do
+              label="${pair%%:*}"; dir="${pair#*:}"
+              find "$dir" -type f -print0 | sort -z > "$out/$label.members.final"
+              cmp "$out/$label.members" "$out/$label.members.final" || failed=1
+              sha256sum -c "$out/$label.sha256" > "$out/$label-held.log" 2>&1 || failed=1
+            done
+            find node_modules -type l -printf '%p -> %l\n' | sort > "$out/dependency-links.final"
+            cmp "$out/dependency-links.before" "$out/dependency-links.final" || failed=1
+          else printf 'UNRUN: completed dist/font archives unavailable\n' > "$out/BUILD-ARCHIVES-UNRUN.txt"; fi
+          if test -f "$out/run.initial.sha256"; then sha256sum -c "$out/run.initial.sha256" > "$out/run-held.log" 2>&1 || failed=1; else failed=1; fi
+          printf '%s\n' "$failed" > "$out/final-holds.exit"
+          find "$out" -type f -print0 | sort -z | xargs -0 sha256sum > "$RUNNER_TEMP/stadium-baseline-evidence.sha256"
+          cp "$RUNNER_TEMP/stadium-baseline-evidence.sha256" "$out/evidence.sha256"
+          exit "$failed"
+      - uses: actions/upload-artifact@v4
+        if: ${{ always() }}
+        with:
+          name: stadium-late-plan-baseline-${{ github.run_id }}-a${{ github.run_attempt }}
+          path: ${{ runner.temp }}/stadium-late-plan-baseline
+          if-no-files-found: error
+          retention-days: 14
