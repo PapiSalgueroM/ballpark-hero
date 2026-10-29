@@ -1,0 +1,48 @@
+MUT noyear applied to src/hooks/useLineupBuilder.ts
+
+[1m[46m RUN [49m[22m [36mv3.2.7 [39m[90m/home/runner/work/ballpark-hero/ballpark-hero[39m
+
+ [32m✓[39m src/test/buildXiClubYearSetup.test.tsx [2m([22m[2m2 tests[22m[2m)[22m[33m 497[2mms[22m[39m
+   [33m[2m✓[22m[39m Build Your XI club year setup[2m > [22mkeeps the mixed draft and six formations available [33m 338[2mms[22m[39m
+ [31m❯[39m src/test/buildXiClubYear.test.tsx [2m([22m[2m10 tests[22m[2m | [22m[31m1 failed[39m[2m)[22m[33m 8320[2mms[22m[39m
+   [32m✓[39m Build Your XI recorded year admissions[2m > [22mkeeps club-only assignments and rerolls on the chosen recorded year[32m 14[2mms[22m[39m
+[31m   [31m×[31m Build Your XI recorded year admissions[2m > [22mrefuses nonmatching year club and position evidence before any provider or history request[39m[32m 10[2mms[22m[39m
+[31m     → XI_CLUB_YEAR_REFUSE: missing year: expected 1 to be +0 // Object.is equality[39m
+   [32m✓[39m Build Your XI recorded year admissions[2m > [22mretains exact chosen metadata while preserving position and duplicate guards[32m 7[2mms[22m[39m
+   [32m✓[39m Build Your XI recorded year admissions[2m > [22mcompletes an exact eleven-record draft without either all-time evaluator[32m 7[2mms[22m[39m
+   [32m✓[39m Build Your XI recorded year admissions[2m > [22mignores a late history response after reset into another recorded year[32m 5[2mms[22m[39m
+   [33m[2m✓[22m[39m Build Your XI Club year Browse on the real page[2m > [22mbrowses past eight records and reopens after Escape and outside focus [33m 671[2mms[22m[39m
+   [33m[2m✓[22m[39m Build Your XI Club year Browse on the real page[2m > [22mkeeps typed search at eight and admits the keyboard-selected matching keeper once [33m 336[2mms[22m[39m
+   [32m✓[39m Build Your XI Club year Browse on the real page[2m > [22mdistinguishes an empty matching record list from a failed read[32m 295[2mms[22m[39m
+   [33m[2m✓[22m[39m Build Your XI Club year Browse on the real page[2m > [22muses the selected-row report once through review result and replay without a pundit call [33m 1854[2mms[22m[39m
+   [33m[2m✓[22m[39m Build Your XI Club year Browse on the real page[2m > [22mshows an unrated completed draft when the selected rows lack numeric inputs [33m 5120[2mms[22m[39m
+
+[31m⎯⎯⎯⎯⎯⎯⎯[39m[1m[41m Failed Tests 1 [49m[22m[31m⎯⎯⎯⎯⎯⎯⎯[39m
+
+[41m[1m FAIL [22m[49m src/test/buildXiClubYear.test.tsx[2m > [22mBuild Your XI recorded year admissions[2m > [22mrefuses nonmatching year club and position evidence before any provider or history request
+[31m[1mAssertionError[22m: XI_CLUB_YEAR_REFUSE: missing year: expected 1 to be +0 // Object.is equality[39m
+
+[32m- Expected[39m
+[31m+ Received[39m
+
+[32m- 0[39m
+[31m+ 1[39m
+
+[36m [2m❯[22m src/test/buildXiClubYear.test.tsx:[2m242:70[22m[39m
+    [90m240| [39m      [34mact[39m(() [33m=>[39m [34mapi[39m(view)[33m.[39m[34mselectPosition[39m([34m0[39m))[33m;[39m
+    [90m241| [39m      await act(async () => { await api(view).submitPlayer('Fixture Ba…
+    [90m242| [39m      expect(api(view).filledCount, 'XI_CLUB_YEAR_REFUSE: ' + label).t…
+    [90m   | [39m                                                                     [31m^[39m
+    [90m243| [39m      expect(api(view).validationError, 'XI_CLUB_YEAR_REFUSE: visible …
+    [90m244| [39m      expect(io.fetches, 'XI_CLUB_YEAR_REFUSE: no history or all-time …
+
+[31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/1]⎯[22m[39m
+
+
+[2m Test Files [22m [1m[31m1 failed[39m[22m[2m | [22m[1m[32m1 passed[39m[22m[90m (2)[39m
+[2m      Tests [22m [1m[31m1 failed[39m[22m[2m | [22m[1m[32m11 passed[39m[22m[90m (12)[39m
+[2m   Start at [22m 18:27:36
+[2m   Duration [22m 9.39s[2m (transform 427ms, setup 80ms, collect 1.14s, tests 8.82s, environment 390ms, prepare 145ms)[22m
+
+
+::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/test/buildXiClubYear.test.tsx,title=src/test/buildXiClubYear.test.tsx > Build Your XI recorded year admissions > refuses nonmatching year club and position evidence before any provider or history request,line=242,column=70::AssertionError: XI_CLUB_YEAR_REFUSE: missing year: expected 1 to be +0 // Object.is equality%0A%0A- Expected%0A+ Received%0A%0A- 0%0A+ 1%0A%0A ❯ src/test/buildXiClubYear.test.tsx:242:70%0A%0A

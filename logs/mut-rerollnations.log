@@ -1,0 +1,48 @@
+MUT rerollnations applied to src/hooks/useLineupBuilder.ts
+
+[1m[46m RUN [49m[22m [36mv3.2.7 [39m[90m/home/runner/work/ballpark-hero/ballpark-hero[39m
+
+ [32m✓[39m src/test/buildXiClubYearSetup.test.tsx [2m([22m[2m2 tests[22m[2m)[22m[33m 465[2mms[22m[39m
+   [33m[2m✓[22m[39m Build Your XI club year setup[2m > [22mkeeps the mixed draft and six formations available [33m 316[2mms[22m[39m
+ [31m❯[39m src/test/buildXiClubYear.test.tsx [2m([22m[2m10 tests[22m[2m | [22m[31m1 failed[39m[2m)[22m[33m 8189[2mms[22m[39m
+[31m   [31m×[31m Build Your XI recorded year admissions[2m > [22mkeeps club-only assignments and rerolls on the chosen recorded year[39m[32m 16[2mms[22m[39m
+[31m     → expected false to be true // Object.is equality[39m
+   [32m✓[39m Build Your XI recorded year admissions[2m > [22mrefuses nonmatching year club and position evidence before any provider or history request[32m 5[2mms[22m[39m
+   [32m✓[39m Build Your XI recorded year admissions[2m > [22mretains exact chosen metadata while preserving position and duplicate guards[32m 4[2mms[22m[39m
+   [32m✓[39m Build Your XI recorded year admissions[2m > [22mcompletes an exact eleven-record draft without either all-time evaluator[32m 5[2mms[22m[39m
+   [32m✓[39m Build Your XI recorded year admissions[2m > [22mignores a late history response after reset into another recorded year[32m 3[2mms[22m[39m
+   [33m[2m✓[22m[39m Build Your XI Club year Browse on the real page[2m > [22mbrowses past eight records and reopens after Escape and outside focus [33m 623[2mms[22m[39m
+   [32m✓[39m Build Your XI Club year Browse on the real page[2m > [22mkeeps typed search at eight and admits the keyboard-selected matching keeper once[32m 263[2mms[22m[39m
+   [32m✓[39m Build Your XI Club year Browse on the real page[2m > [22mdistinguishes an empty matching record list from a failed read[32m 271[2mms[22m[39m
+   [33m[2m✓[22m[39m Build Your XI Club year Browse on the real page[2m > [22muses the selected-row report once through review result and replay without a pundit call [33m 1858[2mms[22m[39m
+   [33m[2m✓[22m[39m Build Your XI Club year Browse on the real page[2m > [22mshows an unrated completed draft when the selected rows lack numeric inputs [33m 5140[2mms[22m[39m
+
+[31m⎯⎯⎯⎯⎯⎯⎯[39m[1m[41m Failed Tests 1 [49m[22m[31m⎯⎯⎯⎯⎯⎯⎯[39m
+
+[41m[1m FAIL [22m[49m src/test/buildXiClubYear.test.tsx[2m > [22mBuild Your XI recorded year admissions[2m > [22mkeeps club-only assignments and rerolls on the chosen recorded year
+[31m[1mAssertionError[22m: expected false to be true // Object.is equality[39m
+
+[32m- Expected[39m
+[31m+ Received[39m
+
+[32m- true[39m
+[31m+ false[39m
+
+[36m [2m❯[22m src/test/buildXiClubYear.test.tsx:[2m222:98[22m[39m
+    [90m220| [39m    [34mact[39m(() [33m=>[39m [34mapi[39m(view)[33m.[39m[34mrerollTeam[39m())[33m;[39m
+    [90m221| [39m    expect(api(view).draftChoice).toEqual({ mode: 'club-year', year: 2…
+    [90m222| [39m    expect(api(view).teamAssignments.every(team => !team.isNation && c…
+    [90m   | [39m                                                                                                 [31m^[39m
+    [90m223| [39m    expect(new Set(api(view).teamAssignments.map(team => team.name)).s…
+    [90m224| [39m    [34mexpect[39m([34mapi[39m(view)[33m.[39mcurrentTeam[33m?.[39mname)[33m.[39mnot[33m.[39m[34mtoBe[39m(before)[33m;[39m
+
+[31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/1]⎯[22m[39m
+
+
+[2m Test Files [22m [1m[31m1 failed[39m[22m[2m | [22m[1m[32m1 passed[39m[22m[90m (2)[39m
+[2m      Tests [22m [1m[31m1 failed[39m[22m[2m | [22m[1m[32m11 passed[39m[22m[90m (12)[39m
+[2m   Start at [22m 18:28:00
+[2m   Duration [22m 9.21s[2m (transform 349ms, setup 75ms, collect 986ms, tests 8.65s, environment 360ms, prepare 82ms)[22m
+
+
+::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/test/buildXiClubYear.test.tsx,title=src/test/buildXiClubYear.test.tsx > Build Your XI recorded year admissions > keeps club-only assignments and rerolls on the chosen recorded year,line=222,column=98::AssertionError: expected false to be true // Object.is equality%0A%0A- Expected%0A+ Received%0A%0A- true%0A+ false%0A%0A ❯ src/test/buildXiClubYear.test.tsx:222:98%0A%0A

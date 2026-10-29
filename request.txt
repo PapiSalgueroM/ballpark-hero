@@ -1,0 +1,16 @@
+#!serial
+vitest-xi: node_modules/.bin/vitest run src/test/buildXiClubYear.test.tsx src/test/buildXiClubYearSetup.test.tsx src/test/playerAutocompleteHighlightScroll.test.tsx src/test/lineupBuilderHistoryRead.test.tsx src/test/lineupValidatorClient.test.tsx src/test/xiQueryOwnership.test.tsx src/test/xiSelectionHistoryRace.test.tsx src/test/xiWingbackFit.test.ts --testTimeout=300000 --hookTimeout=120000
+simLineupPositions: node scripts/simLineupPositions.mjs
+simWorldXiSeasonReport: node scripts/simWorldXiSeasonReport.mjs
+simLineupValidatorClient: node scripts/simLineupValidatorClient.mjs
+simPlayerAutocompleteTouchScroll: node scripts/simPlayerAutocompleteTouchScroll.mjs
+simQuotaHonesty: node scripts/simQuotaHonesty.mjs
+simBuildYourXiFit: node scripts/simBuildYourXiFit.mjs
+mut-noyear: node .rc/x/mut401.mjs noyear && node_modules/.bin/vitest run src/test/buildXiClubYear.test.tsx src/test/buildXiClubYearSetup.test.tsx --testTimeout=300000 --hookTimeout=120000; s=$?; git checkout -- src scripts; exit $s
+mut-nofilter: node .rc/x/mut401.mjs nofilter && node_modules/.bin/vitest run src/test/buildXiClubYear.test.tsx src/test/buildXiClubYearSetup.test.tsx --testTimeout=300000 --hookTimeout=120000; s=$?; git checkout -- src scripts; exit $s
+mut-nations: node .rc/x/mut401.mjs nations && node_modules/.bin/vitest run src/test/buildXiClubYear.test.tsx src/test/buildXiClubYearSetup.test.tsx --testTimeout=300000 --hookTimeout=120000; s=$?; git checkout -- src scripts; exit $s
+mut-rerollnations: node .rc/x/mut401.mjs rerollnations && node_modules/.bin/vitest run src/test/buildXiClubYear.test.tsx src/test/buildXiClubYearSetup.test.tsx --testTimeout=300000 --hookTimeout=120000; s=$?; git checkout -- src scripts; exit $s
+mut-age27: node .rc/x/mut401.mjs age27 && node_modules/.bin/vitest run src/test/buildXiClubYear.test.tsx src/test/buildXiClubYearSetup.test.tsx --testTimeout=300000 --hookTimeout=120000; s=$?; git checkout -- src scripts; exit $s
+mut-defaultclub: node .rc/x/mut401.mjs defaultclub && node_modules/.bin/vitest run src/test/buildXiClubYear.test.tsx src/test/buildXiClubYearSetup.test.tsx --testTimeout=300000 --hookTimeout=120000; s=$?; git checkout -- src scripts; exit $s
+mut-noclubcheck: node .rc/x/mut401.mjs noclubcheck && node_modules/.bin/vitest run src/test/buildXiClubYear.test.tsx src/test/buildXiClubYearSetup.test.tsx --testTimeout=300000 --hookTimeout=120000; s=$?; git checkout -- src scripts; exit $s
+mut-rerollsame: node .rc/x/mut401.mjs rerollsame && node_modules/.bin/vitest run src/test/buildXiClubYear.test.tsx src/test/buildXiClubYearSetup.test.tsx --testTimeout=300000 --hookTimeout=120000; s=$?; git checkout -- src scripts; exit $s

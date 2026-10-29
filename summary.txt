@@ -1,0 +1,15 @@
+vitest-xi exit=0 11s |    Duration  11.26s (transform 636ms, setup 327ms, collect 2.37s, tests 15.21s, environment 2.03s, prepare 565ms)
+simLineupPositions exit=1 0s | simLineupPositions: the pool for Real Madrid did not load, which is itself worth investigating
+simWorldXiSeasonReport exit=0 1s | simWorldXiSeasonReport: green. The report says a great deal more, every number adds up and comes off who played, and nobody real says a word.
+simLineupValidatorClient exit=0 1s | simLineupValidatorClient: 55 checks passed. Only the boolean true on an ok response reads as valid; an allowance answer, a failed status, a body that is not a verdict, a 
+simPlayerAutocompleteTouchScroll exit=1 0s | Node.js v24.22.1
+simQuotaHonesty exit=0 0s | simQuotaHonesty: green. When the allowance is gone, Soccer Grid says so and stops asking for retries; Build Your XI blocks the one pick, keeps the search box and never sa
+simBuildYourXiFit exit=0 1s | simBuildYourXiFit: all checks green
+mut-noyear exit=1 10s | ::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/test/buildXiClubYear.test.tsx,title=src/test/buildXiClubYear.test.tsx > Build Your XI recorded year admissi
+mut-nofilter exit=1 2s | ::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/test/buildXiClubYear.test.tsx,title=src/test/buildXiClubYear.test.tsx > Build Your XI Club year Browse on t
+mut-nations exit=0 9s |    Duration  9.06s (transform 394ms, setup 81ms, collect 1.08s, tests 8.50s, environment 372ms, prepare 85ms)
+mut-rerollnations exit=1 9s | ::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/test/buildXiClubYear.test.tsx,title=src/test/buildXiClubYear.test.tsx > Build Your XI recorded year admissi
+mut-age27 exit=1 6s | ::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/test/buildXiClubYear.test.tsx,title=src/test/buildXiClubYear.test.tsx > Build Your XI Club year Browse on t
+mut-defaultclub exit=0 10s |    Duration  9.40s (transform 475ms, setup 82ms, collect 1.25s, tests 8.74s, environment 400ms, prepare 91ms)
+mut-noclubcheck exit=1 9s | ::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/test/buildXiClubYear.test.tsx,title=src/test/buildXiClubYear.test.tsx > Build Your XI recorded year admissi
+mut-rerollsame exit=0 9s |    Duration  9.26s (transform 362ms, setup 80ms, collect 998ms, tests 8.71s, environment 359ms, prepare 84ms)

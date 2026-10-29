@@ -1,0 +1,255 @@
+MUT age27 applied to src/pages/LineupBuilder.tsx
+
+[1m[46m RUN [49m[22m [36mv3.2.7 [39m[90m/home/runner/work/ballpark-hero/ballpark-hero[39m
+
+ [32m✓[39m src/test/buildXiClubYearSetup.test.tsx [2m([22m[2m2 tests[22m[2m)[22m[33m 463[2mms[22m[39m
+   [33m[2m✓[22m[39m Build Your XI club year setup[2m > [22mkeeps the mixed draft and six formations available [33m 317[2mms[22m[39m
+ [31m❯[39m src/test/buildXiClubYear.test.tsx [2m([22m[2m10 tests[22m[2m | [22m[31m1 failed[39m[2m)[22m[33m 4905[2mms[22m[39m
+   [32m✓[39m Build Your XI recorded year admissions[2m > [22mkeeps club-only assignments and rerolls on the chosen recorded year[32m 12[2mms[22m[39m
+   [32m✓[39m Build Your XI recorded year admissions[2m > [22mrefuses nonmatching year club and position evidence before any provider or history request[32m 6[2mms[22m[39m
+   [32m✓[39m Build Your XI recorded year admissions[2m > [22mretains exact chosen metadata while preserving position and duplicate guards[32m 5[2mms[22m[39m
+   [32m✓[39m Build Your XI recorded year admissions[2m > [22mcompletes an exact eleven-record draft without either all-time evaluator[32m 6[2mms[22m[39m
+   [32m✓[39m Build Your XI recorded year admissions[2m > [22mignores a late history response after reset into another recorded year[32m 5[2mms[22m[39m
+   [33m[2m✓[22m[39m Build Your XI Club year Browse on the real page[2m > [22mbrowses past eight records and reopens after Escape and outside focus [33m 643[2mms[22m[39m
+   [32m✓[39m Build Your XI Club year Browse on the real page[2m > [22mkeeps typed search at eight and admits the keyboard-selected matching keeper once[32m 281[2mms[22m[39m
+   [32m✓[39m Build Your XI Club year Browse on the real page[2m > [22mdistinguishes an empty matching record list from a failed read[32m 295[2mms[22m[39m
+   [33m[2m✓[22m[39m Build Your XI Club year Browse on the real page[2m > [22muses the selected-row report once through review result and replay without a pundit call [33m 1895[2mms[22m[39m
+[31m   [31m×[31m Build Your XI Club year Browse on the real page[2m > [22mshows an unrated completed draft when the selected rows lack numeric inputs[39m[33m 1757[2mms[22m[39m
+[31m     → XI_CLUB_YEAR_UNRATED: missing age cannot earn invented ratings: expected "spy" to not be called at all, but actually been called 1 times[90m
+
+Received: 
+
+[1m  1st spy call:
+
+[22m    Array [
+      Array [
+        Object {
+          "age": undefined,
+          "club": "Real Madrid",
+          "country": "Fixture Nation",
+          "name": "Fixture Real Madrid 2026 Pick 00",
+          "position": "GK",
+          "value": 2000000,
+        },
+        Object {
+          "age": undefined,
+          "club": "FC Barcelona",
+          "country": "Fixture Nation",
+          "name": "Fixture FC Barcelona 2026 Pick 01",
+          "position": "LB",
+          "value": 2100000,
+        },
+        Object {
+          "age": undefined,
+          "club": "Manchester City",
+          "country": "Fixture Nation",
+          "name": "Fixture Manchester City 2026 Pick 02",
+          "position": "CB",
+          "value": 2200000,
+        },
+        Object {
+          "age": undefined,
+          "club": "Liverpool FC",
+          "country": "Fixture Nation",
+          "name": "Fixture Liverpool FC 2026 Pick 03",
+          "position": "CB",
+          "value": 2300000,
+        },
+        Object {
+          "age": undefined,
+          "club": "Bayern Munich",
+          "country": "Fixture Nation",
+          "name": "Fixture Bayern Munich 2026 Pick 04",
+          "position": "RB",
+          "value": 2400000,
+        },
+        Object {
+          "age": undefined,
+          "club": "Paris Saint-Germain",
+          "country": "Fixture Nation",
+          "name": "Fixture Paris Saint-Germain 2026 Pick 05",
+          "position": "LM",
+          "value": 2500000,
+        },
+        Object {
+          "age": undefined,
+          "club": "Chelsea FC",
+          "country": "Fixture Nation",
+          "name": "Fixture Chelsea FC 2026 Pick 06",
+          "position": "CM",
+          "value": 2600000,
+        },
+        Object {
+          "age": undefined,
+          "club": "Arsenal FC",
+          "country": "Fixture Nation",
+          "name": "Fixture Arsenal FC 2026 Pick 07",
+          "position": "CM",
+          "value": 2700000,
+        },
+        Object {
+          "age": undefined,
+          "club": "Manchester United",
+          "country": "Fixture Nation",
+          "name": "Fixture Manchester United 2026 Pick 08",
+          "position": "RM",
+          "value": 2800000,
+        },
+        Object {
+          "age": undefined,
+          "club": "Juventus FC",
+          "country": "Fixture Nation",
+          "name": "Fixture Juventus FC 2026 Pick 09",
+          "position": "CF",
+          "value": 2900000,
+        },
+        Object {
+          "age": undefined,
+          "club": "AC Milan",
+          "country": "Fixture Nation",
+          "name": "Fixture AC Milan 2026 Pick 10",
+          "position": "CF",
+          "value": 3000000,
+        },
+      ],
+      "4-4-2",
+      Object {
+        "balance": -1,
+        "chemistry": 2,
+        "roleFit": 0,
+      },
+    ]
+[31m[90m
+
+Number of calls: [1m1[22m
+[31m[39m
+
+[31m⎯⎯⎯⎯⎯⎯⎯[39m[1m[41m Failed Tests 1 [49m[22m[31m⎯⎯⎯⎯⎯⎯⎯[39m
+
+[41m[1m FAIL [22m[49m src/test/buildXiClubYear.test.tsx[2m > [22mBuild Your XI Club year Browse on the real page[2m > [22mshows an unrated completed draft when the selected rows lack numeric inputs
+[31m[1mAssertionError[22m: XI_CLUB_YEAR_UNRATED: missing age cannot earn invented ratings: expected "spy" to not be called at all, but actually been called 1 times[90m
+
+Received: 
+
+[1m  1st spy call:
+
+[22m    Array [
+      Array [
+        Object {
+          "age": undefined,
+          "club": "Real Madrid",
+          "country": "Fixture Nation",
+          "name": "Fixture Real Madrid 2026 Pick 00",
+          "position": "GK",
+          "value": 2000000,
+        },
+        Object {
+          "age": undefined,
+          "club": "FC Barcelona",
+          "country": "Fixture Nation",
+          "name": "Fixture FC Barcelona 2026 Pick 01",
+          "position": "LB",
+          "value": 2100000,
+        },
+        Object {
+          "age": undefined,
+          "club": "Manchester City",
+          "country": "Fixture Nation",
+          "name": "Fixture Manchester City 2026 Pick 02",
+          "position": "CB",
+          "value": 2200000,
+        },
+        Object {
+          "age": undefined,
+          "club": "Liverpool FC",
+          "country": "Fixture Nation",
+          "name": "Fixture Liverpool FC 2026 Pick 03",
+          "position": "CB",
+          "value": 2300000,
+        },
+        Object {
+          "age": undefined,
+          "club": "Bayern Munich",
+          "country": "Fixture Nation",
+          "name": "Fixture Bayern Munich 2026 Pick 04",
+          "position": "RB",
+          "value": 2400000,
+        },
+        Object {
+          "age": undefined,
+          "club": "Paris Saint-Germain",
+          "country": "Fixture Nation",
+          "name": "Fixture Paris Saint-Germain 2026 Pick 05",
+          "position": "LM",
+          "value": 2500000,
+        },
+        Object {
+          "age": undefined,
+          "club": "Chelsea FC",
+          "country": "Fixture Nation",
+          "name": "Fixture Chelsea FC 2026 Pick 06",
+          "position": "CM",
+          "value": 2600000,
+        },
+        Object {
+          "age": undefined,
+          "club": "Arsenal FC",
+          "country": "Fixture Nation",
+          "name": "Fixture Arsenal FC 2026 Pick 07",
+          "position": "CM",
+          "value": 2700000,
+        },
+        Object {
+          "age": undefined,
+          "club": "Manchester United",
+          "country": "Fixture Nation",
+          "name": "Fixture Manchester United 2026 Pick 08",
+          "position": "RM",
+          "value": 2800000,
+        },
+        Object {
+          "age": undefined,
+          "club": "Juventus FC",
+          "country": "Fixture Nation",
+          "name": "Fixture Juventus FC 2026 Pick 09",
+          "position": "CF",
+          "value": 2900000,
+        },
+        Object {
+          "age": undefined,
+          "club": "AC Milan",
+          "country": "Fixture Nation",
+          "name": "Fixture AC Milan 2026 Pick 10",
+          "position": "CF",
+          "value": 3000000,
+        },
+      ],
+      "4-4-2",
+      Object {
+        "balance": -1,
+        "chemistry": 2,
+        "roleFit": 0,
+      },
+    ]
+[31m[90m
+
+Number of calls: [1m1[22m
+[31m[39m
+[36m [2m❯[22m src/test/buildXiClubYear.test.tsx:[2m372:109[22m[39m
+    [90m370| [39m        : typeof row.market_value_usd === 'number' && row.market_value…
+    [90m371| [39m      [35mawait[39m [34mopenPage[39m([34m2026[39m)[33m;[39m [35mawait[39m [34mfillPage[39m()[33m;[39m
+    [90m372| [39m      expect(io.simulate, 'XI_CLUB_YEAR_UNRATED: missing ' + missing +…
+    [90m   | [39m                                                                                                            [31m^[39m
+    [90m373| [39m      fireEvent.click(screen.getByRole('button', { name: 'Submit Team'…
+    [90m374| [39m      expect(screen.getByRole('button', { name: /Play Again/i })).toBe…
+
+[31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/1]⎯[22m[39m
+
+
+[2m Test Files [22m [1m[31m1 failed[39m[22m[2m | [22m[1m[32m1 passed[39m[22m[90m (2)[39m
+[2m      Tests [22m [1m[31m1 failed[39m[22m[2m | [22m[1m[32m11 passed[39m[22m[90m (12)[39m
+[2m   Start at [22m 18:28:10
+[2m   Duration [22m 5.91s[2m (transform 365ms, setup 70ms, collect 1.04s, tests 5.37s, environment 360ms, prepare 91ms)[22m
+
+
+::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/test/buildXiClubYear.test.tsx,title=src/test/buildXiClubYear.test.tsx > Build Your XI Club year Browse on the real page > shows an unrated completed draft when the selected rows lack numeric inputs,line=372,column=109::AssertionError: XI_CLUB_YEAR_UNRATED: missing age cannot earn invented ratings: expected "spy" to not be called at all, but actually been called 1 times%0A%0AReceived: %0A%0A  1st spy call:%0A%0A    Array [%0A      Array [%0A        Object {%0A          "age": undefined,%0A          "club": "Real Madrid",%0A          "country": "Fixture Nation",%0A          "name": "Fixture Real Madrid 2026 Pick 00",%0A          "position": "GK",%0A          "value": 2000000,%0A        },%0A        Object {%0A          "age": undefined,%0A          "club": "FC Barcelona",%0A          "country": "Fixture Nation",%0A          "name": "Fixture FC Barcelona 2026 Pick 01",%0A          "position": "LB",%0A          "value": 2100000,%0A        },%0A        Object {%0A          "age": undefined,%0A          "club": "Manchester City",%0A          "country": "Fixture Nation",%0A          "name": "Fixture Manchester City 2026 Pick 02",%0A          "position": "CB",%0A          "value": 2200000,%0A        },%0A        Object {%0A          "age": undefined,%0A          "club": "Liverpool FC",%0A          "country": "Fixture Nation",%0A          "name": "Fixture Liverpool FC 2026 Pick 03",%0A          "position": "CB",%0A          "value": 2300000,%0A        },%0A        Object {%0A          "age": undefined,%0A          "club": "Bayern Munich",%0A          "country": "Fixture Nation",%0A          "name": "Fixture Bayern Munich 2026 Pick 04",%0A          "position": "RB",%0A          "value": 2400000,%0A        },%0A        Object {%0A          "age": undefined,%0A          "club": "Paris Saint-Germain",%0A          "country": "Fixture Nation",%0A          "name": "Fixture Paris Saint-Germain 2026 Pick 05",%0A          "position": "LM",%0A          "value": 2500000,%0A        },%0A        Object {%0A          "age": undefined,%0A          "club": "Chelsea FC",%0A          "country": "Fixture Nation",%0A          "name": "Fixture Chelsea FC 2026 Pick 06",%0A          "position": "CM",%0A          "value": 2600000,%0A        },%0A        Object {%0A          "age": undefined,%0A          "club": "Arsenal FC",%0A          "country": "Fixture Nation",%0A          "name": "Fixture Arsenal FC 2026 Pick 07",%0A          "position": "CM",%0A          "value": 2700000,%0A        },%0A        Object {%0A          "age": undefined,%0A          "club": "Manchester United",%0A          "country": "Fixture Nation",%0A          "name": "Fixture Manchester United 2026 Pick 08",%0A          "position": "RM",%0A          "value": 2800000,%0A        },%0A        Object {%0A          "age": undefined,%0A          "club": "Juventus FC",%0A          "country": "Fixture Nation",%0A          "name": "Fixture Juventus FC 2026 Pick 09",%0A          "position": "CF",%0A          "value": 2900000,%0A        },%0A        Object {%0A          "age": undefined,%0A          "club": "AC Milan",%0A          "country": "Fixture Nation",%0A          "name": "Fixture AC Milan 2026 Pick 10",%0A          "position": "CF",%0A          "value": 3000000,%0A        },%0A      ],%0A      "4-4-2",%0A      Object {%0A        "balance": -1,%0A        "chemistry": 2,%0A        "roleFit": 0,%0A      },%0A    ]%0A%0A%0ANumber of calls: 1%0A%0A ❯ src/test/buildXiClubYear.test.tsx:372:109%0A%0A
