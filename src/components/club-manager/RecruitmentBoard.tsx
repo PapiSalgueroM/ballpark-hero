@@ -35,8 +35,10 @@ export function RecruitmentBoard({ career, market, initial, onCommit, onBack, on
   useEffect(() => {
     if (!initial || attempted.current === initial) return;
     attempted.current = initial;
+    /* Release BS fix: a full list refuses the save, and the board says so rather than blaming the save */
+    const full = (recruitmentOf(initial.career)?.targets.length ?? 0) >= RECRUITMENT_LIMIT;
     const ok = onCommit(current => current === initial.career ? addRecruitment(current, initial.player) : null);
-    setMessage(ok ? 'Target saved.' : 'Could not save this target. Check the save notice and try again.');
+    setMessage(ok ? 'Target saved.' : full ? `Your shortlist is full: ${RECRUITMENT_LIMIT} of ${RECRUITMENT_LIMIT}. Remove a target to save another.` : 'Could not save this target. Check the save notice and try again.');
   }, [initial, onCommit]);
   const remove = (target: RecruitmentTarget) => {
     const ok = onCommit(current => current === career ? removeRecruitment(current, target) : null);

@@ -109,6 +109,18 @@ describe('actual recruitment board and ordinary Buy return', () => {
     expect(screen.getByText(/Could not save this target/)).toBeVisible();
     expect(app.writes).toHaveLength(0); expect(JSON.stringify(app.latest())).toBe(before);
   });
+  it('a 13th Save says the shortlist is full instead of blaming the save (Release BS fix BS-cm416-4)', () => {
+    const career = startCareer('Brentford'), market = marketForScreen(career);
+    expect(market.length).toBeGreaterThan(12);
+    let full = career;
+    for (const p of market.slice(0, 12)) full = addRecruitment(full, p)!;
+    expect(recruitmentOf(full)!.targets).toHaveLength(12);
+    const before = JSON.stringify(full);
+    const app = mount(full, market, { pick: { career: full, player: market[12] } });
+    expect(screen.getByText('Your shortlist is full: 12 of 12. Remove a target to save another.')).toBeVisible();
+    expect(screen.queryByText(/Could not save this target/)).toBeNull();
+    expect(app.writes).toHaveLength(0); expect(JSON.stringify(app.latest())).toBe(before);
+  });
   it('help and its Back preserve the list and return focus to the actual help opener', async () => {
     const { saved, player } = fixture(), before = JSON.stringify(saved);
     const app = mount(saved, [player]);
