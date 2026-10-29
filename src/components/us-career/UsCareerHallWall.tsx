@@ -45,6 +45,15 @@ export function wallJerseyLine(j: NonNullable<HallWallEntry['hall']['jersey']>):
   return `👕 ${j.teamName ?? j.team} retired your number after ${j.seasons} ${j.seasons === 1 ? 'season' : 'seasons'} there.`;
 }
 
+/** A count in a sentence. The bindings' labels are plurals made to sit under a number box ("rings", "Cups",
+ *  "MVPs", "All-Star nods", "Norris Trophies"), so one of them reads singular: "1 ring", "1 Conn Smythe". A label
+ *  that is a phrase rather than a noun ("in other awards") reads the same either way. */
+export function wallCount(n: number, label: string): string {
+  if (n !== 1 || label.startsWith('in ')) return `${n} ${label}`;
+  if (label.endsWith('ies')) return `1 ${label.slice(0, -3)}y`;
+  return `1 ${label.endsWith('s') ? label.slice(0, -1) : label}`;
+}
+
 const years = (e: HallWallEntry) => (e.from === e.to ? `${e.from}` : `${e.from} to ${e.to}`);
 const gold = (e: HallWallEntry) => (e.hall.outcome === 'inducted' ? 'border-gold/60' : 'border-border');
 
@@ -96,7 +105,8 @@ export default function UsCareerHallWall({ sport, wall, from, plaque, missing, o
           <p>Example: your wall holds 9 Hall of Famers and 3 who missed. Your next player retires and misses too. He goes up, and the oldest of the 3 who missed comes down.</p>
         </div>
       )}
-      {open ? <Plaque sport={sport} e={open} /> : <Grid wall={wall} missing={missing} tiles={tiles.current} onOpen={onOpen} />}
+      {/* A tap on a tile asks for the plaque, so the rules fold away rather than push it down the screen. */}
+      {open ? <Plaque sport={sport} e={open} /> : <Grid wall={wall} missing={missing} tiles={tiles.current} onOpen={key => { setHelp(false); onOpen(key); }} />}
     </section>
   );
 }
@@ -114,9 +124,10 @@ function Grid({ wall, missing, tiles, onOpen }: { wall: HallWall; missing: boole
               <li key={e.key} className="min-w-0">
                 <button type="button" data-career-hall-wall-tile="" ref={el => { if (el) tiles.set(e.key, el); else tiles.delete(e.key); }} onClick={() => onOpen(e.key)}
                   className={`block min-h-11 w-full min-w-0 rounded-xl border-2 ${gold(e)} bg-card px-2 py-1.5 text-left`}>
-                  <span className="block truncate text-xs font-bold text-foreground">{e.name}</span>
-                  <span className="block truncate text-[11px] text-muted-foreground">{e.pos}, {years(e)}</span>
-                  <span className="block truncate text-[11px] font-semibold text-foreground">{wallHallLine(e)}</span>
+                  {/* Every line wraps, never cut: a name runs to 24 letters, and the Hall line is the fact the tile is for. */}
+                  <span className="block break-words text-xs font-bold text-foreground">{e.name}</span>
+                  <span className="block break-words text-[11px] text-muted-foreground">{e.pos}, {years(e)}</span>
+                  <span className="block break-words text-[11px] font-semibold text-foreground">{wallHallLine(e)}</span>
                 </button>
               </li>
             ))}
@@ -136,10 +147,10 @@ function Plaque({ sport, e }: { sport: UsCareerSport; e: HallWallEntry }) {
       <div className="space-y-1 text-center">
         <p className="text-xs text-muted-foreground">{e.pos}, {e.seasons} {e.seasons === 1 ? 'season' : 'seasons'}, {years(e)}</p>
         <p className="text-xs text-foreground">{clubs}</p>
-        <p className="text-xs text-foreground">{e.rings} {sport.ringsLabel}</p>
+        <p className="text-xs text-foreground">{wallCount(e.rings, sport.ringsLabel)}</p>
         {e.honours.length > 0 && (
           <ul className="flex flex-wrap justify-center gap-1.5">
-            {e.honours.map(h => <li key={h.label} className="rounded-full border border-border px-2 py-0.5 text-[11px] text-muted-foreground">{h.n} {h.label}</li>)}
+            {e.honours.map(h => <li key={h.label} className="rounded-full border border-border px-2 py-0.5 text-[11px] text-muted-foreground">{wallCount(h.n, h.label)}</li>)}
           </ul>
         )}
         <p className="text-sm font-bold text-foreground">Legacy {e.legacy}</p>

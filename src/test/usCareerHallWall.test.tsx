@@ -45,7 +45,7 @@ import { defaultAppearance } from '@/lib/soccerCareerAppearance';
 import { pendingTalk } from '@/lib/usCareerRetirementFlow';
 import { hallRecordFor, type HallRecord } from '@/lib/careerHallOfFame';
 import { HallOfFameCard, hallHeadline } from '@/components/career/HallOfFameCard';
-import { wallJerseyLine } from '@/components/us-career/UsCareerHallWall';
+import UsCareerHallWall, { wallCount, wallJerseyLine } from '@/components/us-career/UsCareerHallWall';
 import { hallWallEntry, hallWallKey, wallKeyOf, type HallWallEntry } from '@/lib/usCareerHallWall';
 import type { UsCareerCore, UsCareerSport } from '@/lib/usCareerSport';
 
@@ -411,8 +411,13 @@ describe.each(ROWS)('$label: the wall screen', ({ label, sport }) => {
     for (const el of [opener, help, ...tiles, button('Back')!]) expect(el.className).toMatch(/min-h-11/);
     // Opened from create, no career is missing from it: the retirement screen's honest line never shows here.
     expect(document.body.textContent).not.toContain('This browser did not keep the wall');
+    // A tile's name and its Hall line wrap rather than cut (a name may run to 24 letters).
+    for (const t of tiles) for (const line of t.querySelectorAll('span')) expect(line).not.toHaveClass('truncate');
     fireEvent.click(tiles[1]);
     await appear('[data-career-hall-wall-plaque]');
+    // The tap asked for the plaque, so the rules fold away above it.
+    expect(document.querySelector('[data-career-hall-wall-help]')).toBeNull();
+    expect(help).toHaveAttribute('aria-expanded', 'false');
     fireEvent.click(button('Back to the wall')!);
     await waitFor(() => expect(document.activeElement?.textContent).toContain('Stored 1'));
     fireEvent.click(button('Back')!);
@@ -476,8 +481,29 @@ describe.each(ROWS)('$label: the wall screen', ({ label, sport }) => {
   }, 40000);
 });
 
-describe('Round 1570: the plaque says the jersey in the card\'s own words', () => {
+/* Every honours label the four bindings give, as one of it reads on a plaque. A label not in this table fails
+   below, so a new label is a decision, never a silent "1 Somethings". */
+const ONE: Record<string, string> = {
+  rings: '1 ring', Cups: '1 Cup', MVPs: '1 MVP', DPOYs: '1 DPOY', 'All-Pros': '1 All-Pro', 'in other awards': '1 in other awards',
+  'All-NBA nods': '1 All-NBA nod', 'All-Star nods': '1 All-Star nod', 'MVP or Cy Young awards': '1 MVP or Cy Young award',
+  'Major awards': '1 Major award', 'Conn Smythes': '1 Conn Smythe',
+};
+describe('Round 1570: the plaque says the jersey and its counts in the card\'s own words', () => {
   it.each(ROWS)('$label', ({ sport }) => {
+    // The counts: one ring or Cup and one of each honour read singular on the plaque, two read plural.
+    const c = retiredCareer(sport, 1595), base = hallWallEntry(sport, c)!;
+    const labels = [sport.ringsLabel, ...sport.honours(c).map(h => h.label)];
+    for (const l of labels) expect(Object.keys(ONE), `${sport.label}: a label with no singular stated`).toContain(l);
+    for (const n of [1, 2]) {
+      const e: HallWallEntry = { ...clone(base), rings: n, honours: sport.honours(c).map(h => ({ label: h.label, n })) };
+      render(<UsCareerHallWall sport={sport} wall={{ entries: [e], writable: true }} from="create" plaque={e.key} missing={false}
+        onOpen={() => undefined} onClosePlaque={() => undefined} onBack={() => undefined} />);
+      // Whole lines, not substrings: "1 ring" is inside "1 rings".
+      const lines = new Set([...document.querySelectorAll('[data-career-hall-wall-plaque] p, [data-career-hall-wall-plaque] li')].map(el => el.textContent));
+      for (const l of labels) expect([...lines], `${sport.label} ${n} ${l}`).toContain(n === 1 ? ONE[l] : `2 ${l}`);
+      expect(wallCount(n, sport.ringsLabel)).toBe(n === 1 ? ONE[sport.ringsLabel] : `2 ${sport.ringsLabel}`);
+      cleanup();
+    }
     const rec: HallRecord = { ...hallRecordFor(sport.hall!, retiredCareer(sport, 1595)), jersey: { team: 'XYZ', seasons: 7, teamName: 'Fixture Club' } };
     const one: HallRecord = { ...rec, jersey: { team: 'XYZ', seasons: 1 } };
     for (const r of [rec, one]) {
