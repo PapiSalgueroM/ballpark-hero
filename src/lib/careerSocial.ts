@@ -179,6 +179,33 @@ export interface FanFacts {
   /** Round 1012: the latest season's derby you played, when there was one.
       Only Soccer Career passes it, so every other career reads as before. */
   derby?: { won: number; lost: number; rival: string };
+  /** Round 1569 (the lead's ruling R2): whether the save records a real
+      conduct cause (conductOnRecord below). Only the American careers pass
+      it, because their standing is a fanbase meter a bench role or a rookie
+      start can lower with nothing done wrong. Soccer Career's standing is
+      karma, earned by its own choices, and it passes nothing, so it reads
+      exactly as before. */
+  conduct?: boolean;
+}
+
+/**
+ * Round 1569: what the American careers record that the fans could hold
+ * against you. All four engines store the same fields with the same meaning:
+ * corruption heat at or past 65, where league security opens a file; a
+ * suspension waiting to be served; a season served on the banned list; and
+ * money nobody can explain. And the one trade demand the fans heard about:
+ * the public request, which the NBA and NFL storylines record as 1 on their
+ * own flag (a private one can stay private, and staying is 3). Nothing else
+ * counts: a demand the save does not record is not on the record.
+ */
+const PUBLIC_TRADE_REQUEST = ['nb_tradeReq', 'b_traderq'];
+export function conductOnRecord(c: {
+  heat?: number; dirtyMoney?: number; suspendedSeasons?: number; seasons: { teamResult: string }[];
+  lifeFlags?: Record<string, number>;
+}): boolean {
+  return (c.heat ?? 0) >= 65 || (c.suspendedSeasons ?? 0) > 0 || (c.dirtyMoney ?? 0) > 0
+    || c.seasons.some(s => s.teamResult === 'SUSPENDED')
+    || PUBLIC_TRADE_REQUEST.some(k => c.lifeFlags?.[k] === 1);
 }
 
 /** Round 1012: the anonymous fans on a derby. No line for a run of draws. */
@@ -206,6 +233,12 @@ function fanLadder(sport: SocialSport, f: FanFacts): string[] {
   const v = VOICE[sport];
   if (f.standing >= 70) return [v.best, v.keepsake, `${f.followers} followers and still humble. Rare.`];
   if (f.standing >= 50) return ['Decent season tbh', 'We rate you around here', askForMore(sport, f.pos)];
+  /* Round 1569: a low meter with nothing on the record is fans who want
+     more, not fans calling you a villain. */
+  if (f.conduct === false) {
+    if (f.standing >= 30) return ['Quiet year. We know you have more in you', 'Still in your corner', askForMore(sport, f.pos)];
+    return ['Rough stretch. It happens', 'Still believing in you over here', askForMore(sport, f.pos)];
+  }
   if (f.standing >= 30) return ['Talented but man the attitude...', 'Rooting for the old you', v.focus];
   return ["Can't support this guy anymore", 'Talent wasted on a villain', v.boos];
 }

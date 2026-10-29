@@ -604,7 +604,7 @@ export function simSeason(
         : `${countOf(tk, 'tackle', 'tackles')}, ${countOf(sk, 'sack', 'sacks')}`;
     }
     notes.push(`📊 Playoffs: ${poG} game${poG === 1 ? '' : 's'}, ${line.poLine}.`);
-    const cn = clutchNote(clutch, depth, 'nfl');
+    const cn = clutchNote(clutch, depth, 'nfl', pf);
     if (cn) notes.push(cn);
   }
 

@@ -103,7 +103,11 @@ export function buildPressMoment(sport: UsSport, f: PressFacts, rng: () => numbe
     return {
       id: 'pressDisaster', big: true,
       title: 'The accountability scrum',
-      body: `No ${w.playoffs}, thin crowds, and a front row of reporters who counted every miss. Somebody has to answer for the season, and the cameras picked you.`,
+      /* Round 1569: the scrum asks about the team's season. It used to say
+         the front row "counted every miss", blame for his own play that the
+         press cannot see from here (it reads the playoffs and the fanbase,
+         never his line), so a strong season was scolded with the rest. */
+      body: `No ${w.playoffs}, thin crowds, and a front row of reporters with hard questions about the season. Somebody has to answer them, and the cameras picked you.`,
       options: [
         { label: 'Say the right, empty things', effectLine: 'Nobody remembers it tomorrow', effect: { morale: 2, fanbase: 0 } },
         { label: 'Own every bit of it yourself', effectLine: 'Costs you, buys respect', effect: { morale: -3, fanbase: 6 } },

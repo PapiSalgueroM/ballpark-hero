@@ -117,8 +117,35 @@ export function clutchSwing(rng: () => number): number {
   return Math.max(-13, Math.min(13, swing));
 }
 
-/** A line for the season notes when the postseason was the story. */
-export function clutchNote(swing: number, depth: number, sport: 'mlb' | 'nba' | 'nfl' | 'nhl'): string | null {
+/* Round 1569: the tone follows his own postseason line. A player report of
+   2026-10-26 answered an NFL note after a playoff loss with "my team and i
+   played great it was just a hard game": the old note judged the clutch roll
+   alone, so a man whose January line was still a good starter's was told he
+   "was not the same player and everyone saw it" (measured on 150 seeded
+   careers a sport, 11 to 29 such notes a sport landed on a strong line).
+   The note now reads the January level, the number every stat of the
+   playoff line is drawn from, against the shared market's own rating bands
+   (usCareerFreeAgency.ts buildFaWindow): 76 and up is a player the market
+   calls with real interest, under 70 is the one-year prove-it deal.
+     - a loss on a strong line gets credit, never blame;
+     - criticism only follows a genuinely poor line (under 70) AND a real
+       drop from his own level (the old -7 roll), and it states the numbers
+       plainly, without mocking him or speaking for anyone;
+     - everything else says nothing. */
+export const JANUARY_STRONG = 76;
+export const JANUARY_POOR = 70;
+
+const POSTSEASON_WORD: Record<'mlb' | 'nba' | 'nfl' | 'nhl', string> = {
+  mlb: 'October', nba: 'the playoffs', nfl: 'January', nhl: 'the playoffs',
+};
+/* A run that reached the Super Bowl (depth 3) went past January: every
+   Super Bowl since XXXVIII (2004) has been played in February. */
+const postseasonWord = (sport: 'mlb' | 'nba' | 'nfl' | 'nhl', depth: number) =>
+  sport === 'nfl' && depth >= 3 ? 'the playoffs' : POSTSEASON_WORD[sport];
+
+/** A line for the season notes when the postseason was the story. `level` is
+ *  the form his playoff line was drawn from; `depth` 4 is the title. */
+export function clutchNote(swing: number, depth: number, sport: 'mlb' | 'nba' | 'nfl' | 'nhl', level: number): string | null {
   if (depth < 0) return null;
   if (swing >= 7) {
     return sport === 'mlb' ? '🧊 Ice in October. You were a different hitter once the lights came on.'
@@ -126,11 +153,13 @@ export function clutchNote(swing: number, depth: number, sport: 'mlb' | 'nba' | 
       : sport === 'nfl' ? '🧊 January football suited you. You were the best player on the field.'
       : '🧊 Playoff performer. Sixteen wins is a different sport and you were built for it.';
   }
-  if (swing <= -7) {
-    return sport === 'mlb' ? '😬 You could not buy a hit in October. It will follow you all winter.'
-      : sport === 'nba' ? '😬 You disappeared when it mattered. The talk shows had a field day.'
-      : sport === 'nfl' ? '😬 You were not the same player in January and everyone saw it.'
-      : '😬 You went quiet in the playoffs. The room noticed.';
+  if (depth < 4 && level >= JANUARY_STRONG) {
+    const when = postseasonWord(sport, depth);
+    return `💪 You held up your end in ${when}. The run just ended short of the title.`;
+  }
+  if (swing <= -7 && level < JANUARY_POOR) {
+    const when = postseasonWord(sport, depth);
+    return `🎞️ A tough ${when === 'the playoffs' ? 'playoff run' : when}. Your numbers came in well under your usual level.`;
   }
   return null;
 }

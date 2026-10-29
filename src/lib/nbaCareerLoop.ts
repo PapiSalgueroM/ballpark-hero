@@ -10,7 +10,7 @@ import type { NbaCareerState, NbaSeasonLine } from './nbaMyCareer';
 import { nbaCareerTotals, nbaLegacyOf, nbaTeamLabelOf } from './nbaMyCareer';
 import { NBA_BADGES, earnedBadges } from './careerBadges';
 import type { BadgeDef, NbaBadgeFacts } from './careerBadges';
-import { fanComments, followersFromFanbase, fmtFollowers, nbaSeasonHeadlines } from './careerSocial';
+import { conductOnRecord, fanComments, followersFromFanbase, fmtFollowers, nbaSeasonHeadlines } from './careerSocial';
 import { nbaMoneyWealth } from './nbaCareerMoney';
 
 /** A season nobody missed: the sim deals 78 to 82 games when the body holds
@@ -58,6 +58,7 @@ export function nbaFanComments(c: NbaCareerState): string[] {
     pos: c.pos,
     standing: c.fanbase,
     followers: fmtFollowers(nbaFollowers(c)),
+    conduct: conductOnRecord(c),
   });
 }
 
