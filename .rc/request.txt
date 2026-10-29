@@ -1,0 +1,13 @@
+tsc: node_modules/.bin/tsc --noEmit -p tsconfig.app.json
+vnew: node_modules/.bin/vitest run src/test/usCareerReports1569.test.tsx --testTimeout=300000 --hookTimeout=120000
+parity: node scripts/simUsBoardParity.mjs
+sim: node scripts/simUsCareerReports.mjs
+sim-s9: SIM_SEED=9 node scripts/simUsCareerReports.mjs
+sim-400: node scripts/simUsCareerReports.mjs 400
+sim-60: node scripts/simUsCareerReports.mjs 60
+ctl-noseason: SIM_REPORTS_CONTROL=noseason node scripts/simUsCareerReports.mjs
+ctl-titlecredit: SIM_REPORTS_CONTROL=titlecredit node scripts/simUsCareerReports.mjs
+ctl-creditlow: SIM_REPORTS_CONTROL=creditlow node scripts/simUsCareerReports.mjs
+ctl-blind: SIM_REPORTS_CONTROL=blind node scripts/simUsCareerReports.mjs
+ctl-nocredit: SIM_REPORTS_CONTROL=nocredit node scripts/simUsCareerReports.mjs
+ctl-alwayslast: SIM_REPORTS_CONTROL=alwayslast node scripts/simUsCareerReports.mjs
