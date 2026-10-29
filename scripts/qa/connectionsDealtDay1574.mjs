@@ -15,9 +15,10 @@
 
    Boards 005 to 008 change only club labels ("Played for the Oilers (as of 2025-26)"): those are safe only once the
    release carrying Round 1567's matcher (6acba2488, src/lib/connectionsSolvedMatch.ts: a saved group matched by its
-   label or its five names) is live, which APPLY-1574 proves first by a grep of the live chunk. Until then run it
-   with DEALT_LABELS_ONLY_SAFE=0, which counts a relabel as a rewrite. Exit 1 when any date deals a rewritten board.
-   Reads only the export and the repo. */
+   label or its five names) is live, which APPLY-1574 proves first by a grep of the live chunk. So the safe default
+   counts a relabel as a rewrite (DEALT_LABELS_ONLY_SAFE unset or anything but 1, fix-1574: a forgotten variable no
+   longer calls a relabelled board's day clear); only after that grep does the lead run it with
+   DEALT_LABELS_ONLY_SAFE=1. Exit 1 when any date deals a rewritten board. Reads only the export and the repo. */
 import fs from 'node:fs';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
@@ -44,5 +45,9 @@ if (read.size !== want.length || want.some(id => !read.has(id))) {
 }
 console.log(`the migration's ${read.size} rows read, as the plan has them`);
 process.env.DEALT_MIGRATION = mig;
-if (process.env.DEALT_LABELS_ONLY_SAFE !== '0') process.env.DEALT_LABELS_ONLY_SAFE = '1';
+/* fails closed: a relabel is a rewrite unless the lead says 1, after the live chunk grep proves 1567's matcher live */
+process.env.DEALT_LABELS_ONLY_SAFE = process.env.DEALT_LABELS_ONLY_SAFE === '1' ? '1' : '0';
+console.log(process.env.DEALT_LABELS_ONLY_SAFE === '1'
+  ? 'DEALT_LABELS_ONLY_SAFE=1: a relabel only board counts as safe (only once the live chunk grep proved Round 1567\'s matcher live)'
+  : 'labels only boards count as rewritten (the safe default; DEALT_LABELS_ONLY_SAFE=1 only once the live chunk grep proved Round 1567\'s matcher live)');
 await import('./connectionsDealtDay1558.mjs');
