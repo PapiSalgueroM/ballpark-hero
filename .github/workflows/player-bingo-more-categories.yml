@@ -1,0 +1,115 @@
+name: Player Bingo additional categories
+on:
+  push:
+    branches: [codex/player-bingo-more-categories-20261026]
+    paths: [.github/workflows/player-bingo-more-categories.yml]
+permissions:
+  contents: read
+concurrency:
+  group: bingo-categories-${{ github.ref }}
+  cancel-in-progress: false
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    timeout-minutes: 40
+    env:
+      CI: '1'
+      SIM_NETWORK: offline
+      PLAYER_BINGO_CATEGORIES_PHASE: fixed
+      PLAYER_BINGO_BROWSER_OUT: ${{ github.workspace }}/bingo-category-artifacts/browser
+      PRERENDER_ONLY: /player-bingo
+      ENGINES: chromium
+      FREE_KICK_FONT_CACHE: ${{ github.workspace }}/bingo-category-artifacts/font-cache
+      PLAYER_BINGO_CATEGORIES_OUT: ${{ github.workspace }}/bingo-category-artifacts
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          persist-credentials: false
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: npm
+      - name: Record source and block production transport
+        run: |
+          mkdir -p "$PLAYER_BINGO_CATEGORIES_OUT"
+          git rev-parse HEAD > "$PLAYER_BINGO_CATEGORIES_OUT/head.txt"
+          git diff --stat b20ec6664df9d4c58d63ea0596791d33b2a3b8fc > "$PLAYER_BINGO_CATEGORIES_OUT/change-stat.txt"
+          echo '127.0.0.1 flawuiqbvjobmkfkauhw.supabase.co' | sudo tee -a /etc/hosts
+          sha256sum package.json package-lock.json bun.lock > "$PLAYER_BINGO_CATEGORIES_OUT/packages.sha256"
+      - name: Install locked packages
+        run: npm ci
+      - name: Application types
+        run: |
+          set -o pipefail
+          NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node_modules/.bin/tsc --noEmit -p tsconfig.app.json 2>&1 | tee "$PLAYER_BINGO_CATEGORIES_OUT/types.log"
+      - name: Category outcomes and effective controls
+        run: |
+          set -o pipefail
+          NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/simPlayerBingoCategories.mjs 2>&1 | tee "$PLAYER_BINGO_CATEGORIES_OUT/categories.log"
+      - name: Existing Bingo regression suites and controls
+        run: |
+          set -o pipefail
+          export NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs"
+          for harness in simPlayerBingoLoad simPlayerBingoLineFeedback simPlayerBingoHonours; do
+            node "scripts/$harness.mjs" 2>&1 | tee "$PLAYER_BINGO_CATEGORIES_OUT/$harness.log"
+          done
+          PLAYER_BINGO_WC_PHASE=fixed node scripts/simPlayerBingoWorldCupAlias.mjs 2>&1 | tee "$PLAYER_BINGO_CATEGORIES_OUT/world-cup.log"
+          for control in alias country; do
+            PLAYER_BINGO_WC_CONTROL="$control" PLAYER_BINGO_WC_PHASE=fixed node scripts/simPlayerBingoWorldCupAlias.mjs 2>&1 | tee "$PLAYER_BINGO_CATEGORIES_OUT/world-cup-$control.log"
+          done
+          PLAYER_BINGO_RODRI_PHASE=fixed node scripts/simPlayerBingoRodriHonour.mjs 2>&1 | tee "$PLAYER_BINGO_CATEGORIES_OUT/rodri.log"
+      - name: Bingo units after the isolated label wrapping change
+        run: |
+          set -o pipefail
+          NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" npm test -- playerBingo --maxWorkers=2 2>&1 | tee "$PLAYER_BINGO_CATEGORIES_OUT/bingo-units.log"
+      - name: Isolated browser and logo build tools
+        run: |
+          npm install --prefix "$RUNNER_TEMP/bingo-category-browser" --no-save --package-lock=false playwright@1.64.0
+          ln -s "$RUNNER_TEMP/bingo-category-browser/node_modules/playwright" node_modules/playwright
+          ln -s "$RUNNER_TEMP/bingo-category-browser/node_modules/playwright-core" node_modules/playwright-core
+          node "$RUNNER_TEMP/bingo-category-browser/node_modules/playwright/cli.js" install --with-deps chromium
+          python -m pip install fonttools pillow
+          node scripts/qa/freeKickLab1070.mjs --prefetch-fonts-only 2>&1 | tee "$PLAYER_BINGO_CATEGORIES_OUT/fonts.log"
+          sha256sum -c "$PLAYER_BINGO_CATEGORIES_OUT/packages.sha256"
+      - name: Build and refresh only the Bingo snapshot
+        run: |
+          set -o pipefail
+          NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" npm run build:seo 2>&1 | tee "$PLAYER_BINGO_CATEGORIES_OUT/build.log"
+          git diff --binary -- public scripts/data/lastmod.json > "$PLAYER_BINGO_CATEGORIES_OUT/generated.patch"
+      - name: Every rebuilt-site reader
+        run: |
+          set -o pipefail
+          failed=0
+          for harness in simAdsense simBrand simHeadTags simHiddenPages simHubs simIndexNow simIndexing simInternalLinks simNoRivalNames simPrerender simPrerenderBoot simRetiredRoutes simSchema simSitemap simSnapshotAssets; do
+            ONLY="$harness" node scripts/runAllSims.mjs --browser 2>&1 | tee "$PLAYER_BINGO_CATEGORIES_OUT/$harness.log" || failed=1
+            if grep -E '(^|[[:space:]])(SKIP|EMPTY)([[:space:]]|$)' "$PLAYER_BINGO_CATEGORIES_OUT/$harness.log"; then failed=1; fi
+          done
+          exit "$failed"
+      - name: All existing route download caps
+        run: |
+          set -o pipefail
+          node scripts/lib/hostLikeServer.mjs dist 4173 > "$PLAYER_BINGO_CATEGORIES_OUT/host.log" 2>&1 &
+          host_pid=$!
+          trap 'kill "$host_pid" 2>/dev/null || true' EXIT
+          for attempt in 1 2 3 4 5; do
+            if curl --fail --silent http://127.0.0.1:4173/ > /dev/null; then break; fi
+            sleep 1
+          done
+          BASE=http://127.0.0.1:4173 SWEEP_OFFLINE=1 NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/sweepWeight.mjs 2>&1 | tee "$PLAYER_BINGO_CATEGORIES_OUT/weights.log"
+      - name: Actual Bingo category boards on phone and desktop
+        run: |
+          set -o pipefail
+          NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/playPlayerBingoCategories.mjs 2>&1 | tee "$PLAYER_BINGO_CATEGORIES_OUT/browser.log"
+      - name: Preserve package inputs
+        if: always()
+        run: sha256sum -c "$PLAYER_BINGO_CATEGORIES_OUT/packages.sha256"
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: bingo-categories-${{ github.run_id }}
+          path: |
+            bingo-category-artifacts/
+            .sim-artifacts/
+          include-hidden-files: true
+          retention-days: 14

@@ -999,6 +999,7 @@ export function buildCriteria(data: BingoData): BingoCriterion[] {
     withSupport(data, {
       id: 'season-red-card',
       kind: 'season-stat',
+      group: 'season-discipline',
       label: 'Sent off in a season',
       icon: '🟥',
       test: (p, d) => anySeasonMatches(d, p, s => (s.redCards ?? 0) >= 1),
@@ -1008,6 +1009,7 @@ export function buildCriteria(data: BingoData): BingoCriterion[] {
     withSupport(data, {
       id: 'season-yellows-10',
       kind: 'season-stat',
+      group: 'season-discipline',
       label: '10+ yellow cards in a season',
       icon: '🟨',
       test: (p, d) => anySeasonMatches(d, p, s => (s.yellowCards ?? 0) >= 10),
@@ -1017,6 +1019,7 @@ export function buildCriteria(data: BingoData): BingoCriterion[] {
     withSupport(data, {
       id: 'season-matches-40',
       kind: 'season-stat',
+      group: 'season-matches',
       label: 'Played 40+ matches in a season',
       icon: '📅',
       test: (p, d) => anySeasonMatches(d, p, s => (s.matches ?? 0) >= 40),
@@ -1044,6 +1047,66 @@ export function buildCriteria(data: BingoData): BingoCriterion[] {
       test: (p, d) => (d.clubHistory.get(p.name)?.size ?? 0) >= 4,
     }),
   );
+
+  // More choices from the metadata already loaded for every pool player.
+  const extraTiles: RawCriterion[] = [
+    {
+      id: 'pos-full-back', kind: 'position', label: 'Full-back', icon: '🛡️',
+      test: p => ['left-back', 'right-back'].includes(normalizeName(p.position)),
+    },
+    {
+      id: 'pos-winger', kind: 'position', label: 'Winger', icon: '⚽',
+      test: p => ['left winger', 'right winger'].includes(normalizeName(p.position)),
+    },
+    {
+      id: 'value-30m-under-50m', kind: 'value', label: 'Valued $30M to under $50M', icon: '🪙',
+      test: p => p.value >= 30_000_000 && p.value < 50_000_000,
+    },
+    {
+      id: 'value-50m-under-100m', kind: 'value', group: 'value-up',
+      label: 'Valued $50M to under $100M', icon: '💰',
+      test: p => p.value >= 50_000_000 && p.value < 100_000_000,
+    },
+    {
+      id: 'age-22-to-25', kind: 'age', label: 'Aged 22 to 25', icon: '🌱',
+      test: p => p.age >= 22 && p.age <= 25,
+    },
+    {
+      id: 'age-26-to-28', kind: 'age', label: 'Aged 26 to 28', icon: '🎂',
+      test: p => p.age >= 26 && p.age <= 28,
+    },
+    {
+      id: 'season-goals-assists-10', kind: 'season-stat', group: 'season-attack',
+      label: '10+ goals and 10+ assists in a season', icon: '🎯',
+      test: (p, d) => anySeasonMatches(d, p, s => (s.goals ?? 0) >= 10 && (s.assists ?? 0) >= 10),
+    },
+    {
+      id: 'season-contributions-30', kind: 'season-stat', group: 'season-attack',
+      label: '30+ goals + assists in a season', icon: '🥅',
+      test: (p, d) => anySeasonMatches(d, p, s => (s.goals ?? 0) + (s.assists ?? 0) >= 30),
+    },
+    {
+      id: 'season-matches-50', kind: 'season-stat', group: 'season-matches',
+      label: '50+ matches in a season', icon: '📅',
+      test: (p, d) => anySeasonMatches(d, p, s => (s.matches ?? 0) >= 50),
+    },
+    {
+      id: 'season-goals-10-under-30-matches', kind: 'season-stat', group: 'season-goals',
+      label: '10+ goals in under 30 season matches', icon: '🥅',
+      test: (p, d) => anySeasonMatches(d, p, s => (s.goals ?? 0) >= 10 && s.matches != null && s.matches > 0 && s.matches < 30),
+    },
+    {
+      id: 'season-matches-40-no-red', kind: 'season-stat', group: 'season-matches',
+      label: '40+ matches, no reds in a season', icon: '📅',
+      test: (p, d) => anySeasonMatches(d, p, s => (s.matches ?? 0) >= 40 && s.redCards === 0),
+    },
+    {
+      id: 'season-yellows-10-red', kind: 'season-stat', group: 'season-discipline',
+      label: '10+ yellows and a red in a season', icon: '🟨',
+      test: (p, d) => anySeasonMatches(d, p, s => (s.yellowCards ?? 0) >= 10 && (s.redCards ?? 0) >= 1),
+    },
+  ];
+  for (const tile of extraTiles) out.push(withSupport(data, tile));
 
   return out;
 }
