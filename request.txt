@@ -1,0 +1,7 @@
+#!serial
+proof-head: node scripts/simUsBoardParity.mjs
+proof-attr: node .rc/x/mutfix.mjs . no3badges && node scripts/simUsBoardParity.mjs; s=$?; git checkout -- src scripts; exit $s
+recA: node .rc/x/rec1569.mjs $RC_OUT/fixA.json "6d109b351feb41032e56807e681ceb81af5e70ce (Release BT join, recorded on a GitHub runner with the Round 1424 historical coaching panel the replay uses)"
+recB: node .rc/x/mutfix.mjs . no3badges && node .rc/x/rec1569.mjs $RC_OUT/fixB.json 6d109b351feb41032e56807e681ceb81af5e70ce-three-badges-taken-out; s=$?; git checkout -- src scripts; exit $s
+diffB: node .rc/x/fixdiff3.mjs scripts/data/usBoardFixture.json $RC_OUT/fixB.json
+diffAll: node .rc/x/fixdiff3.mjs $RC_OUT/fixB.json $RC_OUT/fixA.json
