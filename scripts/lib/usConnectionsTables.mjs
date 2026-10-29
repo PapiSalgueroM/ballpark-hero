@@ -21,7 +21,7 @@ import fs from 'node:fs';
 import path from 'node:path';
 import { escapeDashes } from './connectionsMigration.mjs';
 
-export const TABLE_RANGE = {};
+export const TABLE_RANGE = { nhl: 'all' };
 export const TABLE_SPORTS = { baseball: 'baseball_connections_puzzles', nfl: 'nfl_connections_puzzles', nhl: 'nhl_connections_puzzles' };
 
 export const tableFile = (root, sport) => path.join(root, 'scripts', 'data', `${sport}ConnectionsTable-2026-10.json`);

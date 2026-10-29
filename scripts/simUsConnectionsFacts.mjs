@@ -426,7 +426,10 @@ if (CONTROL) {
         own = { kinds: ['perman-twice'], subject: d.to };
       }
     } else if (CONTROL === 'listonehost') {
-      const [k, l] = Object.entries(ledgerOf('nhl').lists ?? {}).find(([, x]) => x.sources?.length >= 2) ?? [];
+      /* Round 1574 decided no NHL group by a list; until a round does, the control adds one, read on two hosts, in memory */
+      const lists = (ledgerOf('nhl').lists ??= {});
+      if (!Object.keys(lists).length) lists.control = { label: 'A control list', closed: true, age: 'fixed', members: ['Wayne Gretzky'], sources: [{ host: 'api-web.nhle.com', url: 'https://api-web.nhle.com/', says: 'control' }, { host: 'hockey-reference.com', url: 'https://www.hockey-reference.com/', says: 'control' }] };
+      const [k, l] = Object.entries(lists).find(([, x]) => x.sources?.length >= 2) ?? [];
       if (l) {
         console.log(`US_CONN_CONTROL=listonehost: the list "${l.label ?? k}" keeps only ${l.sources[0].host}`);
         l.sources = [l.sources[0]];
@@ -444,12 +447,12 @@ if (CONTROL) {
         own = { kinds: ['no-fact'], subject: p };
       }
     } else if (CONTROL === 'stamkos') {
-      /* the board's own second answer: Steven Stamkos (a Predator since 2024-25) back among nhlconn-016's Rocket Richard
-         winners, beside its dated Predators group */
+      /* the board's own second answer at the export: Steven Stamkos (a Predator since 2024-25) back on nhlconn-016,
+         in its rebuilt first overall group (he was drafted first in 2008), beside its dated Predators group */
       const b = boardOf('nhl', 'nhlconn-016');
       const pred = b?.groups.find(x => undated(x.theme) === 'Played for the Predators');
-      const g = b?.groups.find(x => x.theme === 'Won the Rocket Richard Trophy');
-      if (pred && g && !b.groups.some(x => x.players.includes('Steven Stamkos')) && g.players.includes('Pavel Bure') === false) {
+      const g = b?.groups.find(x => x.theme === 'Drafted first overall');
+      if (pred && g && !b.groups.some(x => x.players.includes('Steven Stamkos'))) {
         g.players[g.players.length - 1] = 'Steven Stamkos';
         changed = true;
         own = { kinds: ['second-fit'], subject: 'Steven Stamkos' };

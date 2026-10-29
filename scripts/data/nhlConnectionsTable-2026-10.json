@@ -113,7 +113,7 @@
    {"theme":"Won the Calder Trophy","players":["Auston Matthews","Kirill Kaprizov","Nathan MacKinnon","Connor Bedard","Teemu Selanne"],"difficulty":"yellow"},
    {"theme":"Played 1,700 or more NHL games","players":["Patrick Marleau","Ron Francis","Jaromir Jagr","Joe Thornton","Gordie Howe"],"difficulty":"green"},
    {"theme":"Goalies credited with scoring a goal","players":["Chris Osgood","Damian Rhodes","Pekka Rinne","Billy Smith","Ron Hextall"],"difficulty":"blue"},
-   {"theme":"Won the Cup with three different franchises","players":["Claude Lemieux","Mike Keane","Larry Hillman","Mark Recchi","Al Arbour"],"difficulty":"purple"}]},
+   {"theme":"Won the Cup with three different franchises","players":["Claude Lemieux","Mike Keane","Larry Hillman","Mark Recchi","Gord Pettinger"],"difficulty":"purple"}]},
 {"puzzle_id":"nhlconn-015","sort_order":15,"exportedH":"4e3f2828ff3823cc7d615c077102ce3a",
   "exported":[
    {"theme":"Drafted first overall","players":["Alexis Lafreniere","Nail Yakupov","Taylor Hall","Owen Power","Juraj Slafkovsky"],"difficulty":"yellow"},
