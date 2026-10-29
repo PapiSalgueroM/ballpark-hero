@@ -1,0 +1,1 @@
+order exit=0 19s | ORDER410: 256 default shootouts; assigned penalty taker on at the whistle in 253, kicked in 22, in the first five in 0; my first-five kicks by group {"DEF":1010,"MID":190

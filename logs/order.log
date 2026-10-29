@@ -1,0 +1,22 @@
+Real Madrid: assigned penalty taker Kylian Mbappé (ST 94)
+Manchester City: assigned penalty taker Erling Haaland (ST 94)
+Bayern Munich: assigned penalty taker Harry Kane (ST 88)
+{
+ "pens": 256,
+ "assigned": 253,
+ "assignedKicked": 22,
+ "assignedFirst5": 0,
+ "firstFiveMine": {
+  "DEF": 1010,
+  "MID": 190
+ },
+ "myTop5InFirst5": 1069,
+ "myFirst5": 1200,
+ "examples": [
+  "Real Madrid seed 1 2-4: Daniel Carvajal (RB 74), Ibrahima Konaté (CB 86), Éder Militão (CB 82), Raúl Asencio (CB 82)",
+  "Real Madrid seed 4 4-5: Dean Huijsen (CB 88), Ibrahima Konaté (CB 86), Éder Militão (CB 82), Raúl Asencio (CB 82), Jude Bellingham (CAM 92)",
+  "Real Madrid seed 5 3-5: Trent Alexander-Arnold (RB 88), Ibrahima Konaté (CB 86), Éder Militão (CB 82), Álvaro Carreras (LB 87)",
+  "Real Madrid seed 8 4-5: Dean Huijsen (CB 88), Ibrahima Konaté (CB 86), Éder Militão (CB 82), Raúl Asencio (CB 82), Jude Bellingham (CAM 92)"
+ ]
+}
+ORDER410: 256 default shootouts; assigned penalty taker on at the whistle in 253, kicked in 22, in the first five in 0; my first-five kicks by group {"DEF":1010,"MID":190}; first-five kicks by a top-five rated taker 1069/1200
