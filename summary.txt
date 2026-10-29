@@ -1,0 +1,12 @@
+tsc exit=0 111s | 
+m-shared exit=1 143s | simTriviaBank: 1 failure(s)
+m-accept exit=1 186s | simTriviaBank: 9 failure(s)
+m-literal exit=1 200s | simTriviaBank: 3 failure(s)
+m-cap12 exit=1 179s | simTriviaBank: 3 failure(s)
+m-cap16 exit=1 192s | simTriviaBank: 1 failure(s)
+rival exit=0 21s | No rival product names found. 0 findings.
+access exit=0 0s | simAccessibility: all green
+anchors exit=0 71s | simHarnessAnchors: green. Every harness parses and none carries an unmatchable anchor.
+guideh exit=0 1s | simGuideHeadings: green. 131 guides carry keyword h2s over h3 and h4 sections with every original sentence intact, and all 133 blocks render a clean outline.
+armbase exit=0 182s | simTriviaBank: all checks passed
+big-new exit=0 338s | simTriviaBank big fleet: 30000 ladders, arm short 2, head short 0, identical 29998
