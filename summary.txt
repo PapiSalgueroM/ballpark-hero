@@ -1,0 +1,3 @@
+unkeyed-head-seeded exit=1 83s | CONTROL unkeyed: 1 rewrite(s) applied, 615 failure(s) in section 4 (FIRED)
+unkeyed-mut-seeded exit=1 94s | CONTROL unkeyed: 1 rewrite(s) applied, 580 failure(s) in section 4 (FIRED)
+base-unkeyed-seeded exit=0 97s | BASE unkeyed seeded exit=1 | CONTROL unkeyed: 1 rewrite(s) applied, 580 failure(s) in section 4 (FIRED)
