@@ -1,0 +1,235 @@
+{
+  "schema": 1,
+  "status": "V2.4 ENGINE REPAIR PLACEMENT SOURCE SUCCESSOR, RUNTIME UNRUN",
+  "sourceRef": "12c1b2cd001f9309a31a887e5c432ca63c373852",
+  "sourceTree": "74358aec6fc334a3507aa202a2a86cad4142f6a7",
+  "sourceParent": "c4a7d2efb4d9edac23e7a98901a4f09677adb652",
+  "sourceIdentity": "Fresh immutable GitHub Git commit read; no claim about a moving I branch.",
+  "owner": "I owns protected composition/current-target gates/main/publication. J owns Headlines.",
+  "fieldClaim": "CareerState.loyaltyContracts?:SoccerLoyaltyState, version1 bounded60deal records plus optional current quote. No other root field.",
+  "choice": "Existing cash wage versus10% lower rounded final weekly wage and15% of original quoted full-term wage paid only after2-5actual recorded contract seasons. Full-term total must be greater and weekly wage lower.",
+  "malformedPolicy": "Invalid optional data applies no loyalty effect and permits cash signing. Only the invalid field is dropped on signing/repair; core money and earned balances are preserved. Valid stale chosen quotes still refuse.",
+  "files": [
+    {
+      "path": "scripts/simSoccerCareerLoyalty.mjs",
+      "bytes": 10431,
+      "sha256": "2f9879dea6342a290eff1bfacaf2a5b778c0f23e571617557f464e89246e1283",
+      "gitBlob": "c70fe3a5e5d079d502317be3ad241a4a4b9379d2"
+    },
+    {
+      "path": "src/components/soccer-career/SoccerCareerProgramme.tsx",
+      "bytes": 9343,
+      "sha256": "99cac99276e89a3b14ac960c1a7535d31ab211a393b6b7c3f28d0acc3d0c00a4",
+      "gitBlob": "12b1dc2e51836ddfcb65d2d8f8d0a8613661a337"
+    },
+    {
+      "path": "src/components/soccer-career/SoccerOfferReview.tsx",
+      "bytes": 7774,
+      "sha256": "4a0f3c1ecf9b38153e4702d08cd0efb33f8f4e0096dc543a84c5b352602ed4b8",
+      "gitBlob": "91f4d8c072b316d6cd83ee3ca2959ae60c906b26"
+    },
+    {
+      "path": "src/lib/soccerCareerEngine.ts",
+      "bytes": 551628,
+      "sha256": "d7d94a36b796af66914cdf9bd4803cf42b027f423ceb8baac9fb144677de7030",
+      "gitBlob": "8a927bd55b650feb3378b6cf3d4c9d54b1cb6199"
+    },
+    {
+      "path": "src/lib/soccerCareerLoyalty.ts",
+      "bytes": 12855,
+      "sha256": "3296bbf33e1b148a7d69ea30c0e8e64a4eaa724e56b4c50c735089a340b79d54",
+      "gitBlob": "db056195a1dd1d5d2c2a35dc137e553663396dd2"
+    },
+    {
+      "path": "src/lib/soccerCareerProgramme.ts",
+      "bytes": 33338,
+      "sha256": "6808495106b7cd2dda2c2c4dbb493498c1b12f2cd2bd6ada7a3a3e80d8bee79b",
+      "gitBlob": "995f50a7c6c154cae497e9a2c13e10776264c6bd"
+    },
+    {
+      "path": "src/lib/soccerOfferReview.ts",
+      "bytes": 2154,
+      "sha256": "07967edc27eeb05edda1c2b7799320a1ba1e5d87020ac54e85782c831a57e766",
+      "gitBlob": "3b6f6c3e1edc2b002f9e675a3825887631b65830"
+    },
+    {
+      "path": "src/pages/SoccerCareer.tsx",
+      "bytes": 274876,
+      "sha256": "c4e4df814b0532afaecdf3c686f5e00ff3490eac58c46db57b625163930da74b",
+      "gitBlob": "c6b5fbf0ad000e52c3badbed480e06f389d1c076"
+    },
+    {
+      "path": "src/test/soccerCareerLoyalty.engine.test.ts",
+      "bytes": 12897,
+      "sha256": "f3d38b0dca7993ae5838e2f234295242e907aa7f27d4a07d7c8ff08871bd9849",
+      "gitBlob": "13dca4391ce4132315bb3cd4a6677e4711bc5133"
+    },
+    {
+      "path": "src/test/soccerCareerLoyalty.review.test.tsx",
+      "bytes": 4803,
+      "sha256": "8f0744beb5acf20220dcdd940e56b888ec54053f9783fdb4f9ac9b2a3ec61bdb",
+      "gitBlob": "251406ab207e3a94222ed4beac888389611b9e21"
+    },
+    {
+      "path": "src/test/soccerCareerLoyalty.test.ts",
+      "bytes": 10018,
+      "sha256": "f0f9af05b2c125b47b2d9488f8568218c14c277c2b180503f4d6270146ffc184",
+      "gitBlob": "7f867334304de1174fcb53e20d3620ffc01f5f99"
+    }
+  ],
+  "overlays": [
+    {
+      "path": "src/components/soccer-career/SoccerCareerProgramme.tsx",
+      "originalGitBlob": "7bbce13b45a4c6adbfc212c7f0e67153f0ab7d4c",
+      "originalSha256": "8c5e304d52baa4ea9ad9984873e256fd2c753c077c370c482e9f457cea21d385",
+      "candidateBytes": 9343,
+      "candidateSha256": "99cac99276e89a3b14ac960c1a7535d31ab211a393b6b7c3f28d0acc3d0c00a4",
+      "ownedSpans": 1,
+      "wholeInverse": true
+    },
+    {
+      "path": "src/components/soccer-career/SoccerOfferReview.tsx",
+      "originalGitBlob": "1ab4d6cf4359f162b602e1a35554c8ea32af3030",
+      "originalSha256": "f23c377a68dcca896fb5918481621f02132b454008390bb372e0fd7ebad1709f",
+      "candidateBytes": 7774,
+      "candidateSha256": "4a0f3c1ecf9b38153e4702d08cd0efb33f8f4e0096dc543a84c5b352602ed4b8",
+      "ownedSpans": 2,
+      "wholeInverse": true
+    },
+    {
+      "path": "src/lib/soccerCareerEngine.ts",
+      "originalGitBlob": "1ecd36c893395485a93d91cb1905ff78c83c7741",
+      "originalSha256": "d2c4d26eb5ca12646f69e0d07cffab685f1660ff95ea33011ed97f64847bb8b1",
+      "candidateBytes": 551628,
+      "candidateSha256": "d7d94a36b796af66914cdf9bd4803cf42b027f423ceb8baac9fb144677de7030",
+      "ownedSpans": 15,
+      "wholeInverse": true
+    },
+    {
+      "path": "src/lib/soccerCareerProgramme.ts",
+      "originalGitBlob": "0cfa74e1b12ee264db8b9e9cdb97c70167a62eb2",
+      "originalSha256": "eeec8ca94c9552970f6ce61bdcab2b8f92b64b9f085198f084df7245ae5b2f48",
+      "candidateBytes": 33338,
+      "candidateSha256": "6808495106b7cd2dda2c2c4dbb493498c1b12f2cd2bd6ada7a3a3e80d8bee79b",
+      "ownedSpans": 7,
+      "wholeInverse": true
+    },
+    {
+      "path": "src/lib/soccerOfferReview.ts",
+      "originalGitBlob": "89cbf24631547bde8e1f314f6e9ffa167951e8ea",
+      "originalSha256": "eae164d0c2a2401a6548f2669106b5526ece1594ed02980ccd1476e347df2745",
+      "candidateBytes": 2154,
+      "candidateSha256": "07967edc27eeb05edda1c2b7799320a1ba1e5d87020ac54e85782c831a57e766",
+      "ownedSpans": 3,
+      "wholeInverse": true
+    },
+    {
+      "path": "src/pages/SoccerCareer.tsx",
+      "originalGitBlob": "e623a581819e30aef3f126af82430030f54412cd",
+      "originalSha256": "574a5bf3335a6869235b9eb634ee86d95616e4696cf32370b5de73fc95b0b9c4",
+      "candidateBytes": 274876,
+      "candidateSha256": "c4e4df814b0532afaecdf3c686f5e00ff3490eac58c46db57b625163930da74b",
+      "ownedSpans": 8,
+      "wholeInverse": true
+    }
+  ],
+  "ownedSpans": 36,
+  "allWholeInversesVerified": true,
+  "cases": {
+    "pure": 17,
+    "actualEngine": 17,
+    "actualReview": 5,
+    "total": 39,
+    "baselineExpectedPureAndHealthyReviewPass": 18,
+    "baselineExpectedOwnedIntegrationOrReviewFailures": 21,
+    "runtimeCredit": "NONE. Actual outputs must confirm counts and causes."
+  },
+  "controls": {
+    "planned": 10,
+    "allAnchorsStaticallyUnique": true,
+    "manifest": "SOURCE-FAULTS.json",
+    "actualCredit": "NONE"
+  },
+  "preservation": {
+    "script": "scripts/simSoccerCareerLoyalty.mjs",
+    "comparisons": 60,
+    "checkpoints": [
+      "ere",
+      "cha",
+      "sco"
+    ],
+    "seeds": [
+      782601,
+      782602,
+      782603,
+      782604
+    ],
+    "paths": [
+      "playing",
+      "banned",
+      "prison",
+      "legacy-rehab",
+      "legacy-conviction"
+    ],
+    "signals": [
+      "official save bytes",
+      "complete enumerable data including undefined",
+      "callback locations and arities",
+      "initialization draw count and next draw",
+      "global draw count and next draw"
+    ],
+    "baselineRef": "b20ec6664df9d4c58d63ea0596791d33b2a3b8fc",
+    "baselineEngineBlob": "1ecd36c893395485a93d91cb1905ff78c83c7741",
+    "baselineProgrammeBlob": "0cfa74e1b12ee264db8b9e9cdb97c70167a62eb2",
+    "baselineBodiesEqualSelectedI": true,
+    "scopeLimit": "All three checkpoints are age19 CM. Function closure semantics and broad career/era coverage are not claimed.",
+    "ordinaryNoSpecialEnvDefault": true,
+    "actualCredit": "NONE"
+  },
+  "budget": {
+    "priorGzipKB": 839.3,
+    "unchangedCapKB": 840,
+    "headroomApproxKB": 0.7,
+    "weightStatus": "UNMEASURED. No budget change. Optimize only actual measured excess."
+  },
+  "receipts": {
+    "specSha256": "1860bd26bb6670260a0b957e1d481b27ce326203aeb1110ba3711442fa5b57ec",
+    "overlayReceiptSha256": "4eada943e7b2d0f5ac01f231588807fa99d2c97574136cf88a614caee174437a",
+    "faultManifestSha256": "a2e17d57772a269c755ccab7c17bd463dca0282a9bc09276b50c94f7cdeb6c55",
+    "qualificationSha256": "e434d108a2e38bbbd9a7349f925a32915a282806e71e6953aad7c457b252e200",
+    "v2ReceiptSha256": "1a959cd555b081072ed63da07df4444edfaac2f6a7cf592bf5b06f06833353d8"
+  },
+  "delivery": "Existing files are delivered as literal positioned overlay hunks with full inverses. Full candidate bodies exist only for detached qualification, never whole-page/engine replacement.",
+  "localActions": "Native text/file/hash/JSON work and immutable source reads only. No app, Node, compiler, tests, browser, Git commands or remote mutations executed.",
+  "gatesOwed": [
+    "cause-qualified integration baseline RED",
+    "app types",
+    "39new cases",
+    "60actual default comparisons",
+    "10effective physical source controls and restoration",
+    "existing programme/review/save/mentor/loan regressions",
+    "complete application units",
+    "build:seo",
+    "all15rebuilt-site readers",
+    "all15unchangedcaps",
+    "native320/390/1280 choice/payment/forfeiture/officialreload/focus/scroll outcomes"
+  ],
+  "notes": "V2-SPEC.md and QUALIFICATION.md carry corrections and exact remote plan. Frozen v1 remains held. No product adoption, runtime qualification or publication.",
+  "successorOf": "../soccer-career-loyalty-v2.3/SOURCE-READY.json",
+  "v2ProductDelta": "Only3positioned spans in new pure module; six existing application overlays held exactly.",
+  "recordedServicePolicy": "Only appended row.onLoanFrom or row.club. Non-service labels and foreign employers close fixed-term promise with gap, no accrual, payment or deadline extension.",
+  "sameClubRevisionPolicy": "Same selected employer requires current matching quote key; refresh or cash recovers; other current employer remains cash eligible.",
+  "originalProposal": "../soccer-career-loyalty-v1/SOURCE-READY.json",
+  "compatibilityDelta": "TEST-V2-TO-V2.1-DELTA.json only changes new engine tests for ES2020 and old CareerState typing. Product and other10candidate bodies held.",
+  "successor": {
+    "previous": "V2.3 preserved",
+    "changedBodies": [
+      "src/lib/soccerCareerEngine.ts"
+    ],
+    "engineChange": "Move only the existing optional repairLoyalty block below the complete existing primeType default if. Original retirement/prime anchor restored.",
+    "held": "Other10selected bodies and all14other engine Iops; all6overlay files/36span total remain, only one repair op location changes. No old kit,guard,rule or coefficient changes.",
+    "basis": "Actual PR415 four legacy inverse refusals before outcomes, caused by split Round1334 engine-3 anchor.",
+    "scopeLimit": "Missing primeType and events together can change insertion order; no universal typed/raw byte claim. Required corpus will compare actual legacy/no-ledger and opt-in repair values/draws/serialization.",
+    "qa": "Root/Bingo own remote proof plus full existing qualification and application units before any new acceptance."
+  }
+}

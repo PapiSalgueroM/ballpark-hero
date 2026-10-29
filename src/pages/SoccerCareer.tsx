@@ -1,6 +1,6 @@
 import { acknowledgeChanceWheel, validChanceWheel } from '@/lib/careerChanceWheel';
 import { soccerEventChoiceConsequence } from '@/lib/soccerCareerContracts';
-import { Component, Fragment, lazy, Suspense, useState, useCallback, useRef, useEffect, useMemo, type ComponentType, type ReactNode, type CSSProperties } from "react";
+import { Component, Fragment, lazy, Suspense, useState, useCallback, useRef, useEffect, useLayoutEffect, useMemo, type ComponentType, type ComponentProps, type ReactNode, type CSSProperties } from "react";
 import { formatNumber } from '@/lib/formatNumber';
 import { focusDialogOnMount, escapeCloses } from '@/lib/dialogA11y';
 import { useGameCompletion } from "@/hooks/useGameCompletion";
@@ -92,7 +92,7 @@ import { CareerMentorTile } from '@/components/soccer-career/CareerMentorTile';
 import PotentialProgress from '@/components/soccer-career/PotentialProgress';
 import type { MoneyAction } from "@/lib/soccerMoney";
 import { bankSummary } from "@/lib/soccerMoney";
-import PhonePanel from "@/components/soccer-career/PhonePanel";
+const PhonePanel = lazy(() => import("@/components/soccer-career/PhonePanel"));
 const CareerStory = lazy(() => import("@/components/soccer-career/CareerStory").catch(() => new Promise<never>(() => undefined)));
 import { BAND_CLASS } from "@/lib/careerRatingBand";
 import { soccerRatingRows, readMatchRating, readOvr, ratingBand } from "@/lib/careerSeasonRatings";
@@ -124,7 +124,7 @@ import { AwardsNightCard, SpeechChoices, SpokenSpeech } from "@/components/caree
 import { availableSpeeches, givenSpeechOf } from "@/lib/careerAwardsNight";
 import { CelebrationStyles, revealDelay } from "@/components/club-manager/Celebration";
 import { SignedSlip } from "@/components/soccer-career/SignedSlip";
-import { SoccerOfferReview } from "@/components/soccer-career/SoccerOfferReview";
+const SoccerOfferReview = lazy(() => import("@/components/soccer-career/SoccerOfferReview").then(m => ({ default: m.SoccerOfferReview })));
 import { buildSoccerOfferReview } from "@/lib/soccerOfferReview";
 import type { SignedNote } from "@/components/soccer-career/SignedSlip";
 import { AcademyFocusPicker, AcademyReportCard } from "@/components/soccer-career/AcademyReportCard";
@@ -220,6 +220,30 @@ class CentreMountBoundary extends Component<{ onClose: () => void; what?: string
 /* ─── Constants ─── */
 // Round 76: 131 nations (was 49), every one with a real flag in FlagImg,
 // sorted alphabetically so yours is findable in the scroll.
+function PhoneSurface(props: ComponentProps<typeof PhonePanel>) {
+  const opener = useRef(document.activeElement instanceof HTMLElement ? document.activeElement : null);
+  useLayoutEffect(() => () => queueMicrotask(() => {
+    if (opener.current?.isConnected) opener.current.focus({ preventScroll: true });
+  }), []);
+  return (
+    <CentreMountBoundary what="phone" onClose={props.onClose}>
+      <Suspense fallback={
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/70 p-3" data-phone-loading>
+          <div role="dialog" aria-modal="true" aria-label="Opening your phone" tabIndex={-1} ref={focusDialogOnMount}
+            onKeyDown={event => {
+              if (event.key === "Tab") { event.preventDefault(); event.stopPropagation(); event.currentTarget.querySelector<HTMLButtonElement>("button")?.focus({ preventScroll: true }); }
+              else escapeCloses(props.onClose)(event);
+            }} className="w-full max-w-sm rounded-2xl border border-border bg-card p-4 text-center outline-none">
+            <p role="status" className="text-sm">Opening your phone...</p>
+            <button type="button" onClick={props.onClose} className="mt-3 min-h-11 min-w-11 rounded-lg border border-border px-4 text-sm font-bold">Close</button>
+          </div>
+        </div>
+      }>
+        <PhonePanel {...props} />
+      </Suspense>
+    </CentreMountBoundary>
+  );
+}
 const NATIONALITIES = [
   "Albania","Algeria","Angola","Argentina","Armenia","Australia","Austria","Azerbaijan",
   "Bahrain","Belarus","Belgium","Benin","Bolivia","Bosnia & Herzegovina","Brazil","Bulgaria",
@@ -610,8 +634,12 @@ function OfferCard({ offer, onAccept, career }: { offer: ContractOffer; onAccept
         <span className="text-[10px] px-1.5 py-0.5 rounded bg-muted/40">Tier {offer.club.tier}</span>
       </div>
       {review.wageDelta !== null && review.wageDelta < 0 && <div className="text-xs text-amber-400">Lower weekly wage than your current deal</div>}
+      {review.loyaltyQuote && <p data-loyalty-offer className="text-xs text-emerald-400">Loyalty deal: {moneyLine('€' + review.loyaltyQuote.bonusEuros.toLocaleString('en-US'))} after {review.loyaltyQuote.years} recorded contract seasons. Leaving early forfeits it.</p>}
+      {review.loyaltyForfeitEuros && <p data-loyalty-forfeit className="text-xs text-amber-400">A permanent move here forfeits {moneyLine('€' + review.loyaltyForfeitEuros.toLocaleString('en-US'))} of unpaid loyalty pay.</p>}
       {career && <OfferFitLine offer={offer} career={career} />}
-      <SoccerOfferReview club={offer.club.name} review={review} onAccept={onAccept} />
+      <Suspense fallback={<div role="status" data-offer-review-loading className="flex h-11 items-center justify-center rounded-lg border border-border text-sm text-muted-foreground">Opening contract review...</div>}>
+        <SoccerOfferReview club={offer.club.name} review={review} onAccept={onAccept} />
+      </Suspense>
     </div>
   );
 }
@@ -1157,6 +1185,7 @@ export default function SoccerCareer() {
   const handleAcceptOffer = (offer: ContractOffer) => {
     if (!career) return;
     const next = acceptOffer(career, offer);
+    if (next === career) return;
     setCareer(next);
     // Round 530: the slip prints the engine's wage, after the agent's cut, never the offer's.
     setSignedNote({ kind: "transfer", club: next.currentClub, years: next.contractYearsLeft, wage: next.weeklyWage, forCareer: next });
@@ -1674,7 +1703,7 @@ export default function SoccerCareer() {
         {career && (
           <>
             {phoneOpen && (
-              <PhonePanel
+              <PhoneSurface
                 career={career}
                 onAnswer={handlePhoneAnswer}
                 onMoney={handleMoney}

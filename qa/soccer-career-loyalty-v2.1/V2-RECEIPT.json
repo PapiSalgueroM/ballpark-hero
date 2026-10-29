@@ -1,0 +1,225 @@
+{
+  "schema": 1,
+  "v1ManifestSha256": "c16544e16ee463dc062708dfbce8a0c29e3c75375c4829ccfaf7c51c7117a55b",
+  "productChangedPaths": [
+    "src/lib/soccerCareerLoyalty.ts"
+  ],
+  "productChangedSpans": 3,
+  "wholeProductInverse": true,
+  "wholeTestInverses": true,
+  "existingApplicationBodiesHeld": [
+    {
+      "path": "src/components/soccer-career/SoccerCareerProgramme.tsx",
+      "bytes": 9343,
+      "sha256": "99cac99276e89a3b14ac960c1a7535d31ab211a393b6b7c3f28d0acc3d0c00a4",
+      "exactByteEquality": true
+    },
+    {
+      "path": "src/components/soccer-career/SoccerOfferReview.tsx",
+      "bytes": 7774,
+      "sha256": "4a0f3c1ecf9b38153e4702d08cd0efb33f8f4e0096dc543a84c5b352602ed4b8",
+      "exactByteEquality": true
+    },
+    {
+      "path": "src/lib/soccerCareerEngine.ts",
+      "bytes": 551628,
+      "sha256": "1e028bbd16a0305bd95eb0d16e86c9d4587dc3ade721ff75761797e47f5b9ae4",
+      "exactByteEquality": true
+    },
+    {
+      "path": "src/lib/soccerCareerProgramme.ts",
+      "bytes": 33338,
+      "sha256": "6808495106b7cd2dda2c2c4dbb493498c1b12f2cd2bd6ada7a3a3e80d8bee79b",
+      "exactByteEquality": true
+    },
+    {
+      "path": "src/lib/soccerOfferReview.ts",
+      "bytes": 2154,
+      "sha256": "07967edc27eeb05edda1c2b7799320a1ba1e5d87020ac54e85782c831a57e766",
+      "exactByteEquality": true
+    },
+    {
+      "path": "src/pages/SoccerCareer.tsx",
+      "bytes": 273118,
+      "sha256": "8a461535647c764f498bce3efb7aa66be333a71504c8239be8741cd3143ebbfd",
+      "exactByteEquality": true
+    }
+  ],
+  "existingOverlayPlansHeld": 6,
+  "existingOverlaySpansHeld": 30,
+  "defaultHarnessHeld": true,
+  "testFirstBodiesExact": true,
+  "casePlan": {
+    "total": 39,
+    "review": 5,
+    "engine": 17,
+    "engineParameterRows": 4,
+    "pure": 17
+  },
+  "sourceControls": [
+    {
+      "name": "free_pay",
+      "count": 1,
+      "beforeSha256": "3296bbf33e1b148a7d69ea30c0e8e64a4eaa724e56b4c50c735089a340b79d54",
+      "copiedFaultSha256": "dbd25fc6c799aaf891d2eeae6e23a115ee15f5daf330f249cb9704943fedde62",
+      "runtimeCredit": "NONE"
+    },
+    {
+      "name": "duplicate_pay",
+      "count": 1,
+      "beforeSha256": "3296bbf33e1b148a7d69ea30c0e8e64a4eaa724e56b4c50c735089a340b79d54",
+      "copiedFaultSha256": "2c6ec31ecadccf9e63829d1b6530ef705b39d120d58b2f95e99b2c30f4eebde5",
+      "runtimeCredit": "NONE"
+    },
+    {
+      "name": "no_forfeit",
+      "count": 1,
+      "beforeSha256": "3296bbf33e1b148a7d69ea30c0e8e64a4eaa724e56b4c50c735089a340b79d54",
+      "copiedFaultSha256": "2dca468e7b76c34317f516cde5f408dd3e8c52c705c272a2ccdc3118f60627ea",
+      "runtimeCredit": "NONE"
+    },
+    {
+      "name": "loan_rights",
+      "count": 1,
+      "beforeSha256": "3296bbf33e1b148a7d69ea30c0e8e64a4eaa724e56b4c50c735089a340b79d54",
+      "copiedFaultSha256": "f9fd5f3466657b7558e9a63661209163bd0b704a712c819de508b4491cd11ba1",
+      "runtimeCredit": "NONE"
+    },
+    {
+      "name": "stale_accept",
+      "count": 1,
+      "beforeSha256": "1e028bbd16a0305bd95eb0d16e86c9d4587dc3ade721ff75761797e47f5b9ae4",
+      "copiedFaultSha256": "0c7e68159f1c5da1db3d15c040de032c051f96ae7ba5b632f4eaf62dfe37d511",
+      "runtimeCredit": "NONE"
+    },
+    {
+      "name": "malformed_blocks_cash",
+      "count": 1,
+      "beforeSha256": "3296bbf33e1b148a7d69ea30c0e8e64a4eaa724e56b4c50c735089a340b79d54",
+      "copiedFaultSha256": "dec31cb7bdaba878a6112c85b25fc9bf5bf1d91ef909f80c38df71f5ab741a4e",
+      "runtimeCredit": "NONE"
+    },
+    {
+      "name": "global_draw",
+      "count": 1,
+      "beforeSha256": "1e028bbd16a0305bd95eb0d16e86c9d4587dc3ade721ff75761797e47f5b9ae4",
+      "copiedFaultSha256": "6fce55f72f3c9595fdb5b267606d4f006793693f21928f1bc66595c9457dacd2",
+      "runtimeCredit": "NONE"
+    },
+    {
+      "name": "no_warning",
+      "count": 1,
+      "beforeSha256": "4a0f3c1ecf9b38153e4702d08cd0efb33f8f4e0096dc543a84c5b352602ed4b8",
+      "copiedFaultSha256": "7cfabf0577f27d7eaeed34818b4f99e0dcab7efe98e0ddec52c15dd3bc2d6c18",
+      "runtimeCredit": "NONE"
+    },
+    {
+      "name": "unserved_service",
+      "count": 1,
+      "beforeSha256": "3296bbf33e1b148a7d69ea30c0e8e64a4eaa724e56b4c50c735089a340b79d54",
+      "copiedFaultSha256": "0b1b20815cbf36ce23247ae287a5d59a4b106ea486950179026f97d789230cfa",
+      "runtimeCredit": "NONE"
+    },
+    {
+      "name": "stale_terms",
+      "count": 1,
+      "beforeSha256": "3296bbf33e1b148a7d69ea30c0e8e64a4eaa724e56b4c50c735089a340b79d54",
+      "copiedFaultSha256": "bec86c1d2ff70f9cb7e7824f5ecc9bfd262f8169f31418360d83aebff3cc3798",
+      "runtimeCredit": "NONE"
+    }
+  ],
+  "immutableSaveContext": {
+    "path": "src/lib/soccerCareerSave.ts",
+    "sourceRef": "12c1b2cd001f9309a31a887e5c432ca63c373852",
+    "url": "https://github.com/PapiSalgueroM/ballpark-hero/blob/12c1b2cd001f9309a31a887e5c432ca63c373852/src/lib/soccerCareerSave.ts",
+    "bytes": 6287,
+    "gitBlob": "86ec011693fd5bc702b5e8ccec05d27775a72a76",
+    "sha256": "b486dfd8c4073230b6967c674058e46c7b56a6afd2a8a165f1e215501205477a"
+  },
+  "runtimeCredit": "NONE. Native source/text/hash/JSON checks only.",
+  "nativeMethodCorrection": "Initial PowerShell ByRef Span comparison was unsupported. Repeated every6body comparison with exact Base64 byte equality under terminating errors before issuing this final receipt.",
+  "engineTestCompatibilityCorrection": "New tests use ES2020 array indexing and cast the optional ledger deletion, retaining import/type validity on the original I CareerState. Test-first and candidate bodies exact; inverse reverified.",
+  "nativeCandidateGitBlobs": [
+    {
+      "path": "scripts/simSoccerCareerLoyalty.mjs",
+      "bytes": 10431,
+      "gitBlob": "c70fe3a5e5d079d502317be3ad241a4a4b9379d2",
+      "sha256": "2f9879dea6342a290eff1bfacaf2a5b778c0f23e571617557f464e89246e1283"
+    },
+    {
+      "path": "src/components/soccer-career/SoccerCareerProgramme.tsx",
+      "bytes": 9343,
+      "gitBlob": "12b1dc2e51836ddfcb65d2d8f8d0a8613661a337",
+      "sha256": "99cac99276e89a3b14ac960c1a7535d31ab211a393b6b7c3f28d0acc3d0c00a4"
+    },
+    {
+      "path": "src/components/soccer-career/SoccerOfferReview.tsx",
+      "bytes": 7774,
+      "gitBlob": "91f4d8c072b316d6cd83ee3ca2959ae60c906b26",
+      "sha256": "4a0f3c1ecf9b38153e4702d08cd0efb33f8f4e0096dc543a84c5b352602ed4b8"
+    },
+    {
+      "path": "src/lib/soccerCareerEngine.ts",
+      "bytes": 551628,
+      "gitBlob": "40f28d557c18be92c6cd027f5057c9d457775c80",
+      "sha256": "1e028bbd16a0305bd95eb0d16e86c9d4587dc3ade721ff75761797e47f5b9ae4"
+    },
+    {
+      "path": "src/lib/soccerCareerLoyalty.ts",
+      "bytes": 12855,
+      "gitBlob": "db056195a1dd1d5d2c2a35dc137e553663396dd2",
+      "sha256": "3296bbf33e1b148a7d69ea30c0e8e64a4eaa724e56b4c50c735089a340b79d54"
+    },
+    {
+      "path": "src/lib/soccerCareerProgramme.ts",
+      "bytes": 33338,
+      "gitBlob": "995f50a7c6c154cae497e9a2c13e10776264c6bd",
+      "sha256": "6808495106b7cd2dda2c2c4dbb493498c1b12f2cd2bd6ada7a3a3e80d8bee79b"
+    },
+    {
+      "path": "src/lib/soccerOfferReview.ts",
+      "bytes": 2154,
+      "gitBlob": "3b6f6c3e1edc2b002f9e675a3825887631b65830",
+      "sha256": "07967edc27eeb05edda1c2b7799320a1ba1e5d87020ac54e85782c831a57e766"
+    },
+    {
+      "path": "src/pages/SoccerCareer.tsx",
+      "bytes": 273118,
+      "gitBlob": "535e5baf6e6db03a34b5771ecb5c32d0495f6ab4",
+      "sha256": "8a461535647c764f498bce3efb7aa66be333a71504c8239be8741cd3143ebbfd"
+    },
+    {
+      "path": "src/test/soccerCareerLoyalty.engine.test.ts",
+      "bytes": 12897,
+      "gitBlob": "13dca4391ce4132315bb3cd4a6677e4711bc5133",
+      "sha256": "f3d38b0dca7993ae5838e2f234295242e907aa7f27d4a07d7c8ff08871bd9849"
+    },
+    {
+      "path": "src/test/soccerCareerLoyalty.review.test.tsx",
+      "bytes": 4803,
+      "gitBlob": "251406ab207e3a94222ed4beac888389611b9e21",
+      "sha256": "8f0744beb5acf20220dcdd940e56b888ec54053f9783fdb4f9ac9b2a3ec61bdb"
+    },
+    {
+      "path": "src/test/soccerCareerLoyalty.test.ts",
+      "bytes": 10018,
+      "gitBlob": "7f867334304de1174fcb53e20d3620ffc01f5f99",
+      "sha256": "f0f9af05b2c125b47b2d9488f8568218c14c277c2b180503f4d6270146ffc184"
+    }
+  ],
+  "v2FrozenManifestSha256": "e873abc744446f12a3af83b83b7d6365d9104f86b12ca24cf212a9613a26ef61",
+  "v2FrozenReceiptSha256": "b9e14f698347fd0c6247426c3f75d17a4b2e23daa61fa22118f675f4e730fe59",
+  "successorOther10CandidateBodiesHeld": [
+    "scripts/simSoccerCareerLoyalty.mjs",
+    "src/components/soccer-career/SoccerCareerProgramme.tsx",
+    "src/components/soccer-career/SoccerOfferReview.tsx",
+    "src/lib/soccerCareerEngine.ts",
+    "src/lib/soccerCareerLoyalty.ts",
+    "src/lib/soccerCareerProgramme.ts",
+    "src/lib/soccerOfferReview.ts",
+    "src/pages/SoccerCareer.tsx",
+    "src/test/soccerCareerLoyalty.review.test.tsx",
+    "src/test/soccerCareerLoyalty.test.ts"
+  ],
+  "v2TestWholeInverse": true
+}

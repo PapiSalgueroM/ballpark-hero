@@ -1,0 +1,238 @@
+name: Soccer Career loyalty qualification
+on:
+  push:
+    branches: [codex/soccer-career-loyalty-20261027]
+    paths:
+      - .github/workflows/soccer-career-loyalty.yml
+      - scripts/qa/soccerCareerLoyalty*
+      - qa/soccer-career-loyalty-v2.1/**
+permissions:
+  contents: read
+concurrency:
+  group: soccer-career-loyalty-${{ github.ref }}
+  cancel-in-progress: false
+defaults:
+  run:
+    shell: bash
+env:
+  CI: '1'
+  SIM_NETWORK: offline
+jobs:
+  proof:
+    runs-on: ubuntu-latest
+    timeout-minutes: 40
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.sha }}
+          fetch-depth: 0
+          persist-credentials: false
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: npm
+      - name: Retain immutable source and install locked dependencies
+        run: |
+          set -euo pipefail
+          mkdir -p loyalty-artifacts/proof
+          git rev-parse HEAD > loyalty-artifacts/source-head.txt
+          git rev-parse HEAD^{tree} > loyalty-artifacts/source-tree.txt
+          git archive --format=tar HEAD > loyalty-artifacts/source.tar
+          git ls-files -z | sort -z | xargs -0 sha256sum > loyalty-artifacts/source-before.sha256
+          sha256sum package.json package-lock.json > loyalty-artifacts/dependency-source.sha256
+          npm ci
+          npm ls --all --json > loyalty-artifacts/dependencies.json
+      - name: Actual old versus relocated repair corpus and effective physical controls
+        run: |
+          set -euo pipefail
+          echo '657878ba90773c9bced6400153a4c5f927a4111810b91d00375f19add04cb534  scripts/qa/soccerLoyaltyRepairRelocation.mjs' | sha256sum --check
+          LOYALTY_REPAIR_OUT="$GITHUB_WORKSPACE/loyalty-artifacts/repair-relocation" NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/qa/soccerLoyaltyRepairRelocation.mjs 2>&1 | tee loyalty-artifacts/proof/repair-relocation.log
+      - name: Unchanged destination inverse and outcome controls
+        run: |
+          set -euo pipefail
+          mkdir -p career-transfer-brief-artifacts
+          trap 'cp -a career-transfer-brief-artifacts "$GITHUB_WORKSPACE/loyalty-artifacts/destination-compatibility"' EXIT
+          NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/simCareerTransferBrief.mjs 2>&1 | tee loyalty-artifacts/proof/destination-compatibility.log
+          node scripts/qa/checkCareerTransferBrief.mjs outcomes 2>&1 | tee loyalty-artifacts/proof/destination-checker.log
+      - name: Actual old app RED, fixed39, all10physical faults and career preservation
+        run: |
+          set -euo pipefail
+          node scripts/qa/soccerCareerLoyaltyQualification.mjs 2>&1 | tee loyalty-artifacts/proof/controller.log
+      - name: Hold canonical sources
+        if: always()
+        run: |
+          set -euo pipefail
+          sha256sum -c loyalty-artifacts/source-before.sha256 > loyalty-artifacts/source-held.log
+          git diff --exit-code HEAD
+      - name: Preserve proof evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: soccer-loyalty-proof-${{ github.run_id }}-${{ github.run_attempt }}
+          retention-days: 7
+          path: loyalty-artifacts/
+  units:
+    runs-on: ubuntu-latest
+    timeout-minutes: 45
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.sha }}
+          fetch-depth: 0
+          persist-credentials: false
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: npm
+      - name: Retain exact source and dependencies
+        run: |
+          set -euo pipefail
+          mkdir -p loyalty-artifacts/units
+          git rev-parse HEAD > loyalty-artifacts/source-head.txt
+          git rev-parse HEAD^{tree} > loyalty-artifacts/source-tree.txt
+          git archive --format=tar HEAD > loyalty-artifacts/source.tar
+          git ls-files -z | sort -z | xargs -0 sha256sum > loyalty-artifacts/source-before.sha256
+          npm ci
+      - name: Select the same application and unchanged corrected test sources
+        run: |
+          set -euo pipefail
+          node - <<'NODE' | tee loyalty-artifacts/units/selected-source.log
+          const fs=require('node:fs'),crypto=require('node:crypto'),assert=require('node:assert/strict');
+          const hash=body=>crypto.createHash('sha256').update(body).digest('hex');
+          const body=fs.readFileSync('qa/soccer-career-loyalty-v2.1/SOURCE-READY.json');
+          assert.equal(hash(body),'3ea2b473d7ac00ee36bfff7b5c67a7d9276d82d3abc0bae721947095f8dd88f0');
+          const meta=JSON.parse(body);assert.equal(meta.files.length,11);
+          for(const row of meta.files)assert.equal(hash(fs.readFileSync(row.path)),row.sha256,row.path);
+          for(const [file,sha]of [['src/lib/soccerCareerProgramme.test.ts','0aa83c6371c847812662c61551a9e9365f65f6aed174c6333713cff1b9e50cef'],['src/test/soccerCareerProgrammeUi.test.tsx','844de8eefb431ab62123f7db1557df4a7019f0d4d2d0d744d0463716a26b5037']])assert.equal(hash(fs.readFileSync(file)),sha,file);
+          console.log('All 11 selected bodies and both corrected test files match. Proof, build and units remain independently required.');
+          NODE
+      - name: Complete actual application suite
+        run: |
+          set -euo pipefail
+          NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node node_modules/vitest/vitest.mjs run --maxWorkers=2 --no-file-parallelism --reporter=verbose --reporter=json --outputFile.json=loyalty-artifacts/units/report.json 2>&1 | tee loyalty-artifacts/units/outcomes.log
+      - name: Hold canonical sources
+        if: always()
+        run: |
+          set -euo pipefail
+          sha256sum -c loyalty-artifacts/source-before.sha256 > loyalty-artifacts/source-held.log
+          git diff --exit-code HEAD
+      - name: Preserve full-suite evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: soccer-loyalty-units-${{ github.run_id }}-${{ github.run_attempt }}
+          retention-days: 7
+          path: loyalty-artifacts/
+  build:
+    runs-on: ubuntu-latest
+    timeout-minutes: 40
+    env:
+      ENGINES: chromium
+      SWEEP_OFFLINE: '1'
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.sha }}
+          fetch-depth: 0
+          persist-credentials: false
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: npm
+      - name: Retain source and prepare isolated presentation dependencies
+        run: |
+          set -euo pipefail
+          export PLAYWRIGHT_BROWSERS_PATH="$RUNNER_TEMP/soccer-loyalty-browsers"
+          echo "PLAYWRIGHT_BROWSERS_PATH=$PLAYWRIGHT_BROWSERS_PATH" >> "$GITHUB_ENV"
+          mkdir -p loyalty-artifacts/build
+          git rev-parse HEAD > loyalty-artifacts/source-head.txt
+          git rev-parse HEAD^{tree} > loyalty-artifacts/source-tree.txt
+          git archive --format=tar HEAD > loyalty-artifacts/source.tar
+          git ls-files -z | sort -z | xargs -0 sha256sum > loyalty-artifacts/source-before.sha256
+          npm ci
+          npm install --prefix "$RUNNER_TEMP/soccer-loyalty-pw" --ignore-scripts --no-audit --no-fund playwright@1.64.0
+          ln -s "$RUNNER_TEMP/soccer-loyalty-pw/node_modules/playwright" node_modules/playwright
+          ln -s "$RUNNER_TEMP/soccer-loyalty-pw/node_modules/playwright-core" node_modules/playwright-core
+          node "$RUNNER_TEMP/soccer-loyalty-pw/node_modules/playwright/cli.js" install --with-deps chromium
+          cp "$RUNNER_TEMP/soccer-loyalty-pw/package-lock.json" loyalty-artifacts/playwright-lock.json
+          python -m pip install fonttools pillow
+          python -m pip freeze > loyalty-artifacts/python-dependencies.txt
+          node scripts/qa/soccerCareerLoyaltyPresentation.cjs --prefetch-loyalty-fonts
+          git worktree add --detach "$RUNNER_TEMP/soccer-loyalty-build" HEAD
+          ln -s "$PWD/node_modules" "$RUNNER_TEMP/soccer-loyalty-build/node_modules"
+          echo "BUILD_ROOT=$RUNNER_TEMP/soccer-loyalty-build" >> "$GITHUB_ENV"
+          echo "SC_LOYALTY_FONT_MANIFEST=$PWD/loyalty-artifacts/font-cache/manifest.json" >> "$GITHUB_ENV"
+      - name: Scoped Soccer Career production build
+        run: |
+          set -euo pipefail
+          export NODE_OPTIONS="--require=$GITHUB_WORKSPACE/scripts/lib/offlineTransport.cjs --require=$GITHUB_WORKSPACE/scripts/qa/soccerCareerLoyaltyPresentation.cjs"
+          cd "$BUILD_ROOT"
+          PRERENDER_ONLY=/soccer-career,/whats-new npm run build:seo 2>&1 | tee "$GITHUB_WORKSPACE/loyalty-artifacts/build/outcomes.log"
+          find dist -type f -print0 | sort -z | xargs -0 sha256sum > "$GITHUB_WORKSPACE/loyalty-artifacts/build/dist-sha256.txt"
+          find public -type f -print0 | sort -z | xargs -0 sha256sum > "$GITHUB_WORKSPACE/loyalty-artifacts/build/public-after-sha256.txt"
+          mkdir -p "$GITHUB_WORKSPACE/loyalty-artifacts/build/generated"
+          cp public/soccer-career/index.html "$GITHUB_WORKSPACE/loyalty-artifacts/build/generated/soccer-career.html"
+          cp public/whats-new/index.html "$GITHUB_WORKSPACE/loyalty-artifacts/build/generated/whats-new.html"
+          git show HEAD:scripts/data/lastmod.json > "$GITHUB_WORKSPACE/loyalty-artifacts/build/generated/lastmod-before.json"
+          cp scripts/data/lastmod.json "$GITHUB_WORKSPACE/loyalty-artifacts/build/generated/lastmod-after.json"
+          git diff --binary HEAD -- public/soccer-career/index.html public/whats-new/index.html scripts/data/lastmod.json public/sitemap.xml > "$GITHUB_WORKSPACE/loyalty-artifacts/build/generated/targeted-generated.patch"
+      - name: All15 rebuilt-site readers
+        run: |
+          set -euo pipefail
+          export NODE_OPTIONS="--require=$GITHUB_WORKSPACE/scripts/lib/offlineTransport.cjs --require=$GITHUB_WORKSPACE/scripts/qa/soccerCareerLoyaltyPresentation.cjs"
+          cd "$BUILD_ROOT"
+          export ONLY=simAdsense,simBrand,simHeadTags,simHiddenPages,simHubs,simIndexNow,simIndexing,simInternalLinks,simNoRivalNames,simPrerender,simPrerenderBoot,simRetiredRoutes,simSchema,simSitemap,simSnapshotAssets
+          node scripts/runAllSims.mjs --browser --plan-json > "$GITHUB_WORKSPACE/loyalty-artifacts/build/readers-plan.json"
+          node scripts/runAllSims.mjs --browser 2>&1 | tee "$GITHUB_WORKSPACE/loyalty-artifacts/build/readers.log"
+          node scripts/qa/soccerCareerLoyaltyAdmission.mjs readers "$GITHUB_WORKSPACE/loyalty-artifacts/build/readers-plan.json" "$GITHUB_WORKSPACE/loyalty-artifacts/build/readers.log"
+      - name: All15 unchanged fatal route caps
+        run: |
+          set -euo pipefail
+          export NODE_OPTIONS="--require=$GITHUB_WORKSPACE/scripts/lib/offlineTransport.cjs --require=$GITHUB_WORKSPACE/scripts/qa/soccerCareerLoyaltyPresentation.cjs"
+          cd "$BUILD_ROOT"
+          node scripts/lib/hostLikeServer.mjs dist 4173 > "$GITHUB_WORKSPACE/loyalty-artifacts/build/preview.log" 2>&1 &
+          server=$!
+          trap 'kill "$server" 2>/dev/null || true' EXIT
+          ready=0
+          for i in $(seq 1 30); do if curl -fsS http://127.0.0.1:4173/ >/dev/null; then ready=1; break; fi; sleep 1; done
+          test "$ready" -eq 1
+          BASE=http://127.0.0.1:4173 SWEEP_BASE=http://127.0.0.1:4173 SWEEP_OFFLINE=1 node scripts/sweepWeight.mjs 2>&1 | tee "$GITHUB_WORKSPACE/loyalty-artifacts/build/weight.log"
+          node scripts/qa/soccerCareerLoyaltyAdmission.mjs caps "$GITHUB_WORKSPACE/loyalty-artifacts/build/weight.log"
+      - name: Actual mounted new UI at320,390,1280
+        run: |
+          set -euo pipefail
+          export NODE_OPTIONS="--require=$GITHUB_WORKSPACE/scripts/lib/offlineTransport.cjs --require=$GITHUB_WORKSPACE/scripts/qa/soccerCareerLoyaltyPresentation.cjs"
+          cd "$BUILD_ROOT"
+          SC_LOYALTY_BROWSER_OUT="$GITHUB_WORKSPACE/loyalty-artifacts/browser" node scripts/qa/soccerCareerLoyaltyBrowser.mjs 2>&1 | tee "$GITHUB_WORKSPACE/loyalty-artifacts/build/browser.log"
+      - name: Actual copied-page contract review loading
+        run: |
+          set -euo pipefail
+          export NODE_OPTIONS="--require=$GITHUB_WORKSPACE/scripts/lib/offlineTransport.cjs --require=$GITHUB_WORKSPACE/scripts/qa/soccerCareerLoyaltyPresentation.cjs"
+          cd "$BUILD_ROOT"
+          SC_LOYALTY_LOADING_MANIFEST="$BUILD_ROOT/qa/soccer-career-loyalty-v2.1/SOURCE-READY.json" SC_LOYALTY_LOADING_OUT="$GITHUB_WORKSPACE/loyalty-artifacts/review-loading" node scripts/qa/playSoccerLoyaltyLoading.mjs 2>&1 | tee "$GITHUB_WORKSPACE/loyalty-artifacts/build/review-loading.log"
+      - name: Actual copied-page phone cold and cached loading
+        run: |
+          set -euo pipefail
+          export NODE_OPTIONS="--require=$GITHUB_WORKSPACE/scripts/lib/offlineTransport.cjs --require=$GITHUB_WORKSPACE/scripts/qa/soccerCareerLoyaltyPresentation.cjs"
+          cd "$BUILD_ROOT"
+          SC_PHONE_LOADING_MANIFEST="$BUILD_ROOT/qa/soccer-career-loyalty-v2.1/SOURCE-READY.json" SC_PHONE_LOADING_OUT="$GITHUB_WORKSPACE/loyalty-artifacts/phone-loading" node scripts/qa/playSoccerPhoneLoading.mjs 2>&1 | tee "$GITHUB_WORKSPACE/loyalty-artifacts/build/phone-loading.log"
+      - name: Existing real career route utilities and saved-byte regression
+        run: |
+          set -euo pipefail
+          export NODE_OPTIONS="--require=$GITHUB_WORKSPACE/scripts/lib/offlineTransport.cjs --require=$GITHUB_WORKSPACE/scripts/qa/soccerCareerLoyaltyPresentation.cjs"
+          cd "$BUILD_ROOT"
+          FREE_KICK_FONT_CACHE="$GITHUB_WORKSPACE/loyalty-artifacts/font-cache" SHOTS="$GITHUB_WORKSPACE/loyalty-artifacts/utilities" node scripts/playCareerStoryRole.mjs 2>&1 | tee "$GITHUB_WORKSPACE/loyalty-artifacts/build/utilities.log"
+      - name: Hold canonical source and cap policy
+        if: always()
+        run: |
+          set -euo pipefail
+          sha256sum -c loyalty-artifacts/source-before.sha256 > loyalty-artifacts/source-held.log
+          git diff --exit-code HEAD
+          if [ -n "${BUILD_ROOT:-}" ]; then git -C "$BUILD_ROOT" diff --exit-code HEAD -- scripts/sweepWeight.mjs; git -C "$BUILD_ROOT" diff --binary > loyalty-artifacts/build/generated.patch; fi
+      - name: Preserve build and reader evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: soccer-loyalty-build-${{ github.run_id }}-${{ github.run_attempt }}
+          retention-days: 7
+          path: loyalty-artifacts/

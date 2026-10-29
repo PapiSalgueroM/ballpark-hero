@@ -1,6 +1,8 @@
 import type { CareerState, SeasonRecord, ClubData, ContractOffer } from './soccerCareerEngine';
+import { agentWageMult } from './soccerCareerLife';
+import { chooseLoyalty, quoteLoyalty, readLoyalty, closeLoyaltyForEmployer, loyaltyForfeitEuros } from './soccerCareerLoyalty';
 
-export type ProgrammeId = 'tactics' | 'position' | 'set_pieces' | 'promise' | 'negotiation' | 'bonuses' | 'adaptation' | 'fitness' | 'captain' | 'loan';
+export type ProgrammeId = 'tactics' | 'position' | 'set_pieces' | 'promise' | 'negotiation' | 'bonuses' | 'adaptation' | 'fitness' | 'captain' | 'loan' | 'loyalty';
 export interface SoccerProgrammeReceipt {
   year: number;
   club: string;
@@ -161,6 +163,11 @@ export function programmeEffects(career: CareerState): ProgrammeEffects {
 }
 
 export function chooseProgramme(prev: CareerState, id: ProgrammeId, choice: string): CareerState {
+  if (id === 'loyalty') {
+    const found = actualOffer(prev);
+    return found && validOffer(found.offer) && (choice === 'cash' || choice === 'loyalty')
+      ? chooseLoyalty(prev, found.offer, Math.round(found.offer.wage * agentWageMult(prev.agentId)), choice) : prev;
+  }
   if (allowed(prev, id, choice)) return prev;
   const year = nextProgrammeYear(prev)!;
   const current = stateOf(prev);
@@ -185,6 +192,7 @@ export function chooseProgramme(prev: CareerState, id: ProgrammeId, choice: stri
   return state;
 }
 export function cancelProgramme(prev: CareerState, id: ProgrammeId): CareerState {
+  if (id === 'loyalty') return chooseProgramme(prev, id, 'cash');
   const old = planOf(prev);
   if (prev.phase !== 'playing' || !old || !old.choices[id]) return prev;
   const choices = { ...old.choices };
@@ -285,6 +293,7 @@ export function completeProgrammeLoanBuy(career: CareerState, club: ClubData): b
   career.currentLeague = club.league;
   career.currentClubColor = club.color;
   career.contractYearsLeft = 2;
+  Object.assign(career, closeLoyaltyForEmployer(career, club.name));
   delete state.loanBuy;
   const receipt = [...state.receipts].reverse().find(row => row.year === buy.year && row.club === buy.club);
   if (receipt) receipt.outcomes.loan = `The loan became a permanent two-year contract at ${club.name}, keeping EUR ${career.weeklyWage.toLocaleString('en-US')} a week.`;
@@ -312,13 +321,37 @@ export function programmeOptions(career: CareerState): ProgrammeView[] {
   const plan = planOf(career);
   const latest = stateOf(career)?.receipts.slice(-1)[0];
   const year = nextProgrammeYear(career);
-  return DEFINITIONS.map(definition => {
+  const views: ProgrammeView[] = DEFINITIONS.map(definition => {
     const choices = definition.id === 'position' ? (GROUPS.find(group => group.includes(career.position)) ?? []).filter(position => position !== career.position).map(position => [position, `Train ${position}`, 'After two consecutive played training seasons, future planned appearances rise 3% at this club.', 'During training, planned appearances and expected goals fall 3%. Primary position stays unchanged.'] as [string, string, string, string]) : definition.choices;
     const offeredClub = definition.id === 'negotiation' ? actualOffer(career)?.offer.club?.name : null;
     const negotiated = definition.id === 'negotiation' ? stateOf(career)?.negotiated?.slice().reverse().find(row => row.year === year && row.club === offeredClub) : null;
     const outcome = latest?.outcomes[definition.id];
     const negotiationOutcome = negotiated ? `${negotiated.year} offer at ${negotiated.club}: ${negotiated.accepted ? 'Counteroffer accepted. The displayed offer contains the new terms.' : 'Wage counteroffer rejected by the simulation rule. The original offer is unchanged.'}` : null;
     const context = `${year ?? 'Unknown year'} at ${offeredClub || career.currentClub || 'unknown club'}. Simulation choices; final injuries, bans and selection still apply.${definition.id === 'position' && !choices.length ? ' No compatible second position is available for this position.' : ''}`;
-    return { id: definition.id, title: definition.title, description: definition.description, context, choices: choices.map(([id, label, effect, tradeoff]) => { const reason = allowed(career, definition.id, id); return { id, label, effect, tradeoff, eligible: !reason, ...(reason ? { reason } : {}) }; }), choice: plan?.choices[definition.id] ?? (negotiated?.mode ?? null), outcome: negotiationOutcome ?? (outcome && latest ? `${latest.year} at ${latest.club}: ${outcome}` : null), canCancel: career.phase === 'playing' && !!plan?.choices[definition.id] };
+    return { id: definition.id, title: definition.title, description: definition.description, context, choices: choices.map(([id, label, effect, tradeoff]) => { const reason = allowed(career, definition.id, id); const loss = definition.id === 'loan' && career.loan ? loyaltyForfeitEuros(career, career.currentClub) : 0; return { id, label, effect, tradeoff: loss > 0 ? tradeoff + ' Any loyalty pay still unpaid at the permanent signing is forfeited; EUR ' + loss.toLocaleString('en-US') + ' is currently pending at the parent club.' : tradeoff, eligible: !reason, ...(reason ? { reason } : {}) }; }), choice: plan?.choices[definition.id] ?? (negotiated?.mode ?? null), outcome: negotiationOutcome ?? (outcome && latest ? `${latest.year} at ${latest.club}: ${outcome}` : null), canCancel: career.phase === 'playing' && !!plan?.choices[definition.id] };
   });
+  const candidate = actualOffer(career);
+  const found = candidate && validOffer(candidate.offer) ? candidate : null;
+  const baseWage = found ? Math.round(found.offer.wage * agentWageMult(career.agentId)) : 0;
+  const quote = found ? quoteLoyalty(career, found.offer, baseWage) : null;
+  const ledger = readLoyalty(career), deal = ledger?.deals[ledger.deals.length - 1];
+  const selected = quote && ledger?.pending?.key === quote.key;
+  const reason = 'A current permanent offer of two to five years is needed, with no active loyalty deal at that employer.';
+  views.push({
+    id: 'loyalty', title: 'Loyalty contract', description: 'Compare current pay with a fixed payout for finishing this contract.',
+    context: found ? `First permanent offer: ${found.offer.club.name}, ${found.offer.contractYears} years. This choice applies to that offer; other offers keep their cash terms.`
+      : 'Open a contract window to compare an actual offer. Existing loyalty records remain below.',
+    choices: [
+      { id: 'cash', label: 'Higher weekly pay', effect: found ? `Keep the quoted EUR ${baseWage.toLocaleString('en-US')} a week.` : 'Keep the existing cash terms.',
+        tradeoff: 'No loyalty payout is attached to this choice.', eligible: !!found && !!ledger?.pending,
+        ...(!found ? { reason: 'A current permanent offer is needed.' } : {}) },
+      { id: 'loyalty', label: 'Loyalty payout', effect: quote ? `EUR ${quote.weeklyWage.toLocaleString('en-US')} a week and EUR ${quote.bonusEuros.toLocaleString('en-US')} after ${quote.years} recorded contract seasons.` : 'A lower weekly wage with a quoted payout at completion.',
+        tradeoff: 'Weekly pay falls 10%. A permanent move, early expiry or retirement forfeits the unpaid payout. A loan keeps parent-club rights.',
+        eligible: !!quote, ...(!quote ? { reason } : {}) },
+    ],
+    choice: ledger?.pending ? (selected ? 'loyalty' : null) : deal?.status === 'active' && !found ? 'loyalty' : 'cash',
+    outcome: deal ? `${deal.club}: ${deal.status}, ${deal.completed} of ${deal.years} recorded seasons; EUR ${deal.status === 'paid' ? deal.paidEuros.toLocaleString('en-US') + ' paid' : deal.bonusEuros.toLocaleString('en-US') + (deal.status === 'forfeited' ? ' forfeited' : ' pending')}.` : null,
+    canCancel: !!found && !!ledger?.pending,
+  });
+  return views;
 }
