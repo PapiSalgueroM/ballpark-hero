@@ -1,0 +1,7 @@
+trust exit=0 0s | simTrustCopy: green. One disclaimer under every page and one count of the games, the registry's own.
+nbaBench exit=0 3s | simNbaPlanningBench normal: exact expected assertions and independent Daily restore passed.
+nhlBench exit=0 3s | simNhlPlanningBench normal: exact expected assertions and independent Daily restore passed.
+pso exit=0 3s | simPerfectSeasonOdds: green. In all four sports the odds on the card are the odds in the sim, the copy agrees with both, and the best record keeps.
+m11 exit=0 0s | simMissingElevenSources: green. 40 sheets, 39 of them row for row against the record.
+vbench exit=0 2s |    Duration  2.24s (transform 225ms, setup 41ms, collect 411ms, tests 1.28s, environment 179ms, prepare 50ms)
+cfb exit=0 3s | simCfbSlate: all green
