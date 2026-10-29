@@ -1,0 +1,5 @@
+r1569-curtain exit=1 8s | ::error file=/tmp/r69/src/test/probeUsStale.test.tsx,title=src/test/probeUsStale.test.tsx > Start over leaves no screen of the old career behind > leak-curtain%3A Start o
+probe-head exit=1 9s | ::error file=/tmp/ph/src/test/probeUsStale.test.tsx,title=src/test/probeUsStale.test.tsx > Start over leaves no screen of the old career behind > leak-curtain%3A Start ov
+fix-probe exit=0 29s |    Duration  27.44s (transform 3.86s, setup 452ms, collect 10.87s, tests 25.99s, environment 1.88s, prepare 976ms)
+fix-parity exit=0 70s | simUsBoardParity: green. Four sports replayed click for click, save for save and screen for screen with the proved historical main775 coaching Panel.
+fix-tsc exit=0 85s | MUT reset applied: reset() now also clears reveal and intlResult

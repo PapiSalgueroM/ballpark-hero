@@ -1,0 +1,90 @@
+MUT reset applied: reset() now also clears reveal and intlResult
+
+ RUN  v3.2.7 /tmp/fx
+
+Browserslist: browsers data (caniuse-lite) is 16 months old. Please run:
+  npx update-browserslist-db@latest
+  Why you should do it regularly: https://github.com/browserslist/update-db#readme
+stdout | src/test/probeUsStale.test.tsx > Start over leaves no screen of the old career behind > leak-intl: Start over on the national team result, then Enter the draft
+PROBE leak-intl new career on the save: Trey Buckets, age 19, year 2026, 0 seasons, intl null; the screen reads:  Start overTrey Buckets · PGAtlanta Hawks2026 · age 19OVR 69$2.5M x4🪑 Second unit @keyframes cmRise { 0% { opacity: 0; transform: translateY(7px); } 100% { opacity: 1; transform: translateY(0); } } .cm-rise { opacity: 0; animation: cmRise 0.45s ease-out forwards; } @keyframes cmSlam { 0% { opacity: 0; transform: scale(1.6); } 60% { opacity: 1; transform: scale(0.94); } 100% { opacity: 1; transfor
+
+stdout | src/test/probeUsStale.test.tsx > Start over leaves no screen of the old career behind > leak-curtain: Start over on the season curtain, then Enter the draft
+PROBE curtain before Start over:  Start over @keyframes cmRise { 0% { opacity: 0; transform: translateY(7px); } 100% { opacity: 1; transform: translateY(0); } } .cm-rise { opacity: 0; animation: cmRise 0.45s ease-out forwards; } @keyframes cmSlam { 0% { opacity: 0; transform: scale(1.6); } 60% { opacity: 1; transform: scale(0.94); } 100% { opacity: 1; transform: scale(1); } } .cm-slam { opacity: 0; animation: cmSlam 0.4s cubic-be
+
+stdout | src/test/probeUsStale.test.tsx > Start over leaves no screen of the old career behind > leak-curtain: Start over on the season curtain, then Enter the draft
+PROBE leak-curtain new career on the save: Trey Buckets, age 19, 0 seasons; the screen's curtain reads: (none)
+
+ ✓ src/test/probeUsStale.test.tsx (4 tests) 1758ms
+   ✓ Start over leaves no screen of the old career behind > leak-intl: Start over on the national team result, then Enter the draft  1069ms
+stderr | src/test/usCareerIntlBoard.test.tsx > the board fixture's fixed NBA saves with the bind mounted > draw the board they drew without it where no call is met, and a raised save meets the beat
+Warning: A suspended resource finished loading inside a test, but the event was not wrapped in act(...).
+
+When testing, code that resolves suspended data should be wrapped into act(...):
+
+act(() => {
+  /* finish loading suspended data */
+});
+/* assert on the output */
+
+This ensures that you're testing the behavior the user would see in the browser. Learn more at https://reactjs.org/link/wrap-tests-with-act
+
+stdout | src/test/usCareerIntlBoard.test.tsx > the board fixture's fixed NBA saves with the bind mounted > draw the board they drew without it where no call is met, and a raised save meets the beat
+usCareerIntlBoard: 19 fixed NBA fixture saves meet no call and draw the same board; 0 meet one
+
+stderr | src/test/usCareerIntlBoard.test.tsx > the board fixture's fixed NBA saves with the bind mounted > draw the board they drew without it where no call is met, and a raised save meets the beat
+Warning: An update to UsCareerBoard inside a test was not wrapped in act(...).
+
+When testing, code that causes React state updates should be wrapped into act(...):
+
+act(() => {
+  /* fire events that update state */
+});
+/* assert on the output */
+
+This ensures that you're testing the behavior the user would see in the browser. Learn more at https://reactjs.org/link/wrap-tests-with-act
+    at UsCareerBoard (/tmp/fx/src/components/us-career/UsCareerBoard.tsx:166:26)
+    at Router (file:///home/runner/work/ballpark-hero/ballpark-hero/node_modules/react-router/dist/development/chunk-BV7QT456.mjs:7134:13)
+    at MemoryRouter (file:///home/runner/work/ballpark-hero/ballpark-hero/node_modules/react-router/dist/development/chunk-BV7QT456.mjs:7044:3)
+
+ ✓ src/test/usCareerIntlBoard.test.tsx (8 tests) 3332ms
+   ✓ NBA My Career: the national team on the board > a 2003-04 season at 90 meets the 2004 call: the holding box, then the card in place; Go, the result, a reload  854ms
+   ✓ the board fixture's fixed NBA saves with the bind mounted > draw the board they drew without it where no call is met, and a raised save meets the beat  1573ms
+ ✓ src/test/usCareerReports1569.test.tsx (52 tests) 20901ms
+   ✓ Round 1569 report A: Start over from every screen > 'NFL' starts over from the hub of a two season career  814ms
+   ✓ Round 1569 report A: Start over from every screen > 'NBA' starts over from the hub of a two season career  548ms
+   ✓ Round 1569 report A: Start over from every screen > 'MLB' starts over from the hub of a two season career  421ms
+   ✓ Round 1569 report A: Start over from every screen > 'NHL' starts over from the hub of a two season career  382ms
+   ✓ Round 1569 report A: Start over from every screen > 'NFL' starts over from the free agency window  447ms
+   ✓ Round 1569 report A: Start over from every screen > 'NBA' starts over from the free agency window  903ms
+   ✓ Round 1569 report A: Start over from every screen > 'MLB' starts over from the free agency window  569ms
+   ✓ Round 1569 report A: Start over from every screen > 'NHL' starts over from the free agency window  669ms
+   ✓ Round 1569 report A: Start over from every screen > 'NFL' starts over from the extension talk  531ms
+   ✓ Round 1569 report A: Start over from every screen > 'NBA' starts over from the extension talk  492ms
+   ✓ Round 1569 report A: Start over from every screen > 'MLB' starts over from the extension talk  479ms
+   ✓ Round 1569 report A: Start over from every screen > 'NHL' starts over from the extension talk  522ms
+   ✓ Round 1569 report A: Start over from every screen > 'NFL' starts over from the retired card and from the coaching career  450ms
+   ✓ Round 1569 report A: Start over from every screen > 'NBA' starts over from the retired card and from the coaching career  458ms
+   ✓ Round 1569 report A: Start over from every screen > 'MLB' starts over from the retired card and from the coaching career  379ms
+   ✓ Round 1569 report A: Start over from every screen > 'NHL' starts over from the retired card and from the coaching career  413ms
+   ✓ Round 1569 report A: Start over from every screen > 'NFL' starts over from the road to the draft  342ms
+   ✓ Round 1569 report A: Start over from every screen > 'NBA' starts over from the road to the draft  323ms
+   ✓ Round 1569 report A: Start over from every screen > 'MLB' starts over from the road to the draft  656ms
+   ✓ Round 1569 report A: Start over from every screen > 'NHL' starts over from the road to the draft  499ms
+   ✓ Round 1569 ruling R3: a restart says the Hall card goes too > 'NFL' names the Hall card on every restart prompt of a retired career and not on a live one  549ms
+   ✓ Round 1569 ruling R3: a restart says the Hall card goes too > 'NBA' names the Hall card on every restart prompt of a retired career and not on a live one  505ms
+   ✓ Round 1569 ruling R3: a restart says the Hall card goes too > 'MLB' names the Hall card on every restart prompt of a retired career and not on a live one  555ms
+   ✓ Round 1569 ruling R3: a restart says the Hall card goes too > 'NHL' names the Hall card on every restart prompt of a retired career and not on a live one  569ms
+   ✓ Round 1569 report B: no offer is never a dead end > 'NFL': a no offer talk in the last season says why, says it is the last, and retires in full  454ms
+   ✓ Round 1569 report B: no offer is never a dead end > 'NBA': a no offer talk in the last season says why, says it is the last, and retires in full  424ms
+   ✓ Round 1569 report B: no offer is never a dead end > 'MLB': a no offer talk in the last season says why, says it is the last, and retires in full  389ms
+   ✓ Round 1569 report B: no offer is never a dead end > 'NHL': a no offer talk in the last season says why, says it is the last, and retires in full  376ms
+   ✓ Round 1569 report B: no offer is never a dead end > 'NFL': free agency offers a veteran Retire instead, and a two season player none  830ms
+   ✓ Round 1569 report B: no offer is never a dead end > 'NBA': free agency offers a veteran Retire instead, and a two season player none  877ms
+   ✓ Round 1569 report B: no offer is never a dead end > 'MLB': free agency offers a veteran Retire instead, and a two season player none  880ms
+   ✓ Round 1569 report B: no offer is never a dead end > 'NHL': free agency offers a veteran Retire instead, and a two season player none  673ms
+
+ Test Files  3 passed (3)
+      Tests  64 passed (64)
+   Start at  19:38:53
+   Duration  27.44s (transform 3.86s, setup 452ms, collect 10.87s, tests 25.99s, environment 1.88s, prepare 976ms)
+
