@@ -1,0 +1,8 @@
+armfile exit=0 159s | simTriviaBank: all checks passed
+default exit=0 210s | simTriviaBank: all checks passed
+repro777head exit=0 237s | simTriviaBank: all checks passed
+anchors exit=0 74s | simHarnessAnchors: green. Every harness parses and none carries an unmatchable anchor.
+ctl-short exit=1 161s | simTriviaBank: 6 failure(s) (NEGATIVE CONTROL short ON)
+bigU2 exit=0 333s | simTriviaBank big fleet: 30000 ladders, arm short 0, head short 0, identical 30000
+bigU1 exit=0 412s | simTriviaBank big fleet: 30000 ladders, arm short 0, head short 0, identical 30000
+bigU3 exit=0 391s | simTriviaBank big fleet: 30000 ladders, arm short 0, head short 0, identical 30000
