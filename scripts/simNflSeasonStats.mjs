@@ -28,6 +28,8 @@
  *    by the harness's own copy of the rule; every credited man is a healthy starter of his club (the engine's own
  *    starterIds, never a lineman). Per club and season: thrown equals caught; run and caught plus unclaimed equal the
  *    club line's touchdowns; the told points sit between 6 and 8 a touchdown plus the kicks. Unclaimed is zero.
+ *    Round 1566's fix pass: the card's kicks reader (nflClubKicks, the sentence "<club> kicked N field goals and scored
+ *    M safeties") gives each club's touchdowns, field goals and safeties as the harness summed them from the games.
  *  3 DETERMINISM: each season played twice in the seeded Math.random, recording and not: the generator's state and
  *    draw count after Week 17 and after the postseason and close, the winners, injuries, computer moves, records,
  *    bracket and champion are the same, and the league is the same once the new keys are taken out (ids named by
@@ -68,6 +70,7 @@
  *   nocatch      a pass credits the thrower only                                 -> section 2, red on every set
  *   injured      the pool keeps injured skill men                                -> section 2, red on every set
  *   swapsides    the press splits the final with the away score first           -> section 2, red on every set
+ *   kickswap     nflClubKicks reads the safeties as the field goals and back     -> section 2, red on every set
  *   extradraw    a Math.random() in nflCreditGame                                -> section 3, red on every set
  *   unkeyed      the credit stream keyed to a counter at module scope            -> section 3, red on every set
  *   randomcredit every credit uniform over the eligible men, ratings ignored     -> section 4, red on every set
@@ -101,6 +104,7 @@ const STATS = 'src/lib/nflSeasonStats.ts';
 const FO_STATS = 'src/lib/foSeasonStats.ts';
 const AWARDS = 'src/lib/nflSeasonAwards.ts';
 const CLOSE = 'src/lib/foSeasonClose.ts';
+const VIEW = 'src/lib/nflSeasonView.ts';
 
 /* `labels`: pieces of check labels that must ALL be among the reds of the control's section. `everySet`: the
    control must turn the section's check red on every seed set run. `needs`: the sections it cannot fire without. */
@@ -111,6 +115,7 @@ const CONTROLS = {
   nocatch: { section: 2, labels: ['thrown equals caught'], everySet: true, needs: [2], patches: [{ file: STATS, from: "        if (cr.passer) { bump(men[cr.passer.id], 'ptd'); bump(men[cr.scorer.id], 'ctd'); }", to: "        if (cr.passer) { bump(men[cr.passer.id], 'ptd'); }" }] },
   injured: { section: 2, labels: ['healthy starter of his club'], everySet: true, needs: [2], patches: [{ file: STATS, from: 'skill: unitStarters(team, SKILL_POS, SKILL_SLOTS),', to: 'skill: unitStarters({ ...team, players: team.players.map(p => ({ ...p, out: 0 })) }, SKILL_POS, SKILL_SLOTS),' }] },
   swapsides: { section: 2, labels: ["credited and unclaimed touchdowns are the story's"], everySet: true, needs: [2], patches: [{ file: STATS, from: 'nflDrivePair(told.homeScore, told.awayScore, keyedRng(gmStoryKey(told)))', to: 'nflDrivePair(told.awayScore, told.homeScore, keyedRng(gmStoryKey(told)))' }] },
+  kickswap: { section: 2, labels: ["the card's kicks reader gives the touchdowns, field goals and safeties the games told"], everySet: true, needs: [2], patches: [{ file: VIEW, from: 'return c ? { td: c[0], fg: c[1], sf: c[2] } : null;', to: 'return c ? { td: c[0], fg: c[2], sf: c[1] } : null;' }] },
   extradraw: { section: 3, labels: ['the same generator state and draw count after Week 17'], everySet: true, needs: [3], patches: [{ file: STATS, from: '  const rng = keyedRng(`${told.key}|credit`);', to: '  const rng = keyedRng(`${told.key}|credit`); Math.random();' }] },
   unkeyed: { section: 3, labels: ['the same week recorded twice gives the same block'], everySet: true, needs: [3], patches: [{ file: STATS, from: '  const rng = keyedRng(`${told.key}|credit`);', to: '  const rng = keyedRng(`${told.key}|credit|${(globalThis.__nflCreditCalls = (globalThis.__nflCreditCalls ?? 0) + 1)}`);' }] },
   randomcredit: { section: 4, labels: ["lift over a rating blind credit climbs with his rating"], everySet: true, needs: [4], patches: [{ file: STATS, from: '  const ws = men.map(m => Math.max(0, weight(m)));', to: '  const ws = men.map(m => (weight(m) > 0 ? 1 : 0));' }] },
@@ -378,10 +383,11 @@ if (SECTIONS.includes(7)) sizes.pool = tally();
 const RUN_EPOCH = (() => { const id = M.makeIdMinter('q')(); return id.slice(1, id.lastIndexOf('-')); })();
 const pinEpoch = text => text.replace(new RegExp(`(["|])([a-z]{1,2})${RUN_EPOCH}-(\\d+)`, 'g'), `$1$2${'z'.repeat(14)}-$3`);
 let seasonPools = {};
+let seasonKicks = {};
 if (SECTIONS.some(s => s === 2 || s === 3 || s === 4 || s === 7)) {
   const E = M.engine, S = M.stats;
   for (const set of SEEDSETS) {
-    const t2 = { td: tally(), kicks: tally(), cheap: tally(), pool: tally(), thrown: tally(), club: tally(), bounds: tally() };
+    const t2 = { td: tally(), kicks: tally(), cheap: tally(), pool: tally(), thrown: tally(), club: tally(), bounds: tally(), view: tally() };
     const t3 = { w17: tally(), after: tally(), results: tally(), league: tally(), twice: tally() };
     const r4 = { hi: { games: 0, pass: 0, wr1: 0, blind: 0 }, lo: { games: 0, pass: 0, wr1: 0, blind: 0 }, qb: {}, sack: {}, dist: {}, passFit: newFit(), sackFit: newFit() };
     let unclaimed = 0;
@@ -407,6 +413,9 @@ if (SECTIONS.some(s => s === 2 || s === 3 || s === 4 || s === 7)) {
         unclaimed += sd.unclaimed;
         if (!regular) continue;
         unclaimedBy[sd.team] = (unclaimedBy[sd.team] ?? 0) + sd.unclaimed;
+        /* the club's regular season as the games told it, for the card's kicks reader (section 2, control kickswap) */
+        const told = (seasonKicks[sd.team] ??= { td: 0, fg: 0, sf: 0 });
+        told.td += sd.tds; told.fg += sd.fgs; told.sf += sd.safeties;
         /* section 4: the WR1 of the club at this game, the first healthy receiver on its chart */
         const wr1 = E.depthOrder(team, 'WR').find(p => p.out === 0);
         const passes = sd.credits.filter(cr => cr.passer);
@@ -437,6 +446,7 @@ if (SECTIONS.some(s => s === 2 || s === 3 || s === 4 || s === 7)) {
         const unclaimedBy = {};
         let pending = null;
         seasonPools = {};
+        seasonKicks = {};
         const his = [];
         const a = boardSeason(A, true, {
           onWeek: (lg, told, week) => {
@@ -462,6 +472,10 @@ if (SECTIONS.some(s => s === 2 || s === 3 || s === 4 || s === 7)) {
             count(t2.club, sum('rtd') + sum('ctd') + (unclaimedBy[team] ?? 0) === td, () => `${seasonId(set, kind, i)} ${team}`);
             const pts = st.teams[team].pts;
             count(t2.bounds, 6 * td + 3 * fg + 2 * sf <= pts && pts <= 8 * td + 3 * fg + 2 * sf && st.teams[team].g === E.REGULAR_WEEKS, () => `${seasonId(set, kind, i)} ${team}`);
+            /* the card's sentence reads nflClubKicks: its three counts must be the ones the games told, not the block's */
+            const read = M.view.nflClubKicks(A.lg, team);
+            const told = seasonKicks[team];
+            count(t2.view, !!read && !!told && read.td === told.td && read.fg === told.fg && read.sf === told.sf, () => `${seasonId(set, kind, i)} ${team}: the card read ${JSON.stringify(read)}, the games told ${JSON.stringify(told)}`);
           }
         }
         if (SECTIONS.includes(7)) {
@@ -499,6 +513,7 @@ if (SECTIONS.some(s => s === 2 || s === 3 || s === 4 || s === 7)) {
       settle(2, `set ${set}: per club and season, thrown equals caught`, t2.thrown);
       settle(2, `set ${set}: per club and season, run and caught touchdowns plus unclaimed are the club line's`, t2.club);
       settle(2, `set ${set}: per club and season, the told points sit between six and eight a touchdown plus the kicks, over 17 games`, t2.bounds);
+      settle(2, `set ${set}: per club and season, the card's kicks reader gives the touchdowns, field goals and safeties the games told`, t2.view);
       check(2, `set ${set}: no touchdown went unclaimed on the fleet (${unclaimed})`, unclaimed === 0);
     }
     if (SECTIONS.includes(3)) {
