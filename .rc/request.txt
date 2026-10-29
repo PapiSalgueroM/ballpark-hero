@@ -1,0 +1,33 @@
+rot-base: git worktree add -f .rc/brot 5d1198389 && cp src/lib/nbaRotation.test.ts .rc/brot/src/lib/nbaRotation.test.ts && sed -i "s#import { foNewSaved } from '@/lib/foStatsCodec';#import { foNewSeasonStats as foNewSaved } from '@/lib/foSeasonStats';#" .rc/brot/src/lib/nbaRotation.test.ts && cd .rc/brot && PRINT_NBA_ROTATION=1 ../../node_modules/.bin/vitest run src/lib/nbaRotation.test.ts -t "holds physical original" --testTimeout=300000; grep -c foNewSeasonStats src/lib/nbaRotation.test.ts
+desk-base: git worktree add -f .rc/bdesk 5d1198389 && cp scripts/simNbaGmDesk.mjs .rc/bdesk/scripts/simNbaGmDesk.mjs && cd .rc/bdesk && SIM_NBA_GM_DESK_RECORD="5d1198389 (the commit before Round 1566), season blocks read shape free" node scripts/simNbaGmDesk.mjs && cat scripts/data/nbaGmDeskFixture.json && mkdir -p "$RC_OUT" && cp scripts/data/nbaGmDeskFixture.json "$RC_OUT/nbaGmDeskFixture.json"
+vitest-nba: PRINT_NBA_ROTATION=1 node_modules/.bin/vitest run src/components/nba-front-office src/lib/nbaEarnedDraft.test.ts src/lib/nbaOpeningRatings.test.ts src/lib/nbaRotation.test.ts src/test/nbaAwardDecisionLift.test.ts src/components/front-office-shared src/components/front-office/FrontOfficeCuts.test.tsx --testTimeout=300000 --hookTimeout=120000
+nba-base: git worktree add -f .rc/nbabase 5d1198389 && NBA_STATS_BASE=.rc/nbabase node scripts/simNbaSeasonStats.mjs
+nba-named: NBA_STATS_CONTROL=named node scripts/simNbaSeasonStats.mjs
+simNbaDraftCapital: node scripts/simNbaDraftCapital.mjs
+simFrontOfficeCuts: node scripts/simFrontOfficeCuts.mjs
+simGmXp: node scripts/simGmXp.mjs
+simNbaEarnedDraft: node scripts/simNbaEarnedDraft.mjs
+simGmCalendar: node scripts/simGmCalendar.mjs
+simNbaDraftBoard: node scripts/simNbaDraftBoard.mjs
+simOwnerMandate: node scripts/simOwnerMandate.mjs
+simHomeFront: node scripts/simHomeFront.mjs
+simNbaTipOffForecast: node scripts/simNbaTipOffForecast.mjs
+simNbaRatingEvidence: node scripts/simNbaRatingEvidence.mjs
+simNbaRotationUi: node scripts/simNbaRotationUi.mjs
+simNbaRotationReset: node scripts/simNbaRotationReset.mjs
+simFrontOfficeSchedule: node scripts/simFrontOfficeSchedule.mjs
+simBooks: node scripts/simBooks.mjs
+simNbaRotation: node scripts/simNbaRotation.mjs
+simNbaOpeningRatings: node scripts/simNbaOpeningRatings.mjs
+simNbaLuxuryTax: node scripts/simNbaLuxuryTax.mjs
+simLeagueCaps: node scripts/simLeagueCaps.mjs
+simTradeTalks: node scripts/simTradeTalks.mjs
+simTradeFinder: node scripts/simTradeFinder.mjs
+simEngineIds: node scripts/simEngineIds.mjs
+simGmBooks: node scripts/simGmBooks.mjs
+simGmContracts: node scripts/simGmContracts.mjs
+simGmDesk: node scripts/simGmDesk.mjs
+simGmFarm: node scripts/simGmFarm.mjs
+simInventedNames: node scripts/simInventedNames.mjs
+simHarnessAnchors: node scripts/simHarnessAnchors.mjs
+simNoRivalNames: node scripts/simNoRivalNames.mjs
