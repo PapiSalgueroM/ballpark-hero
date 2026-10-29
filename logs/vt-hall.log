@@ -1,0 +1,54 @@
+
+[1m[46m RUN [49m[22m [36mv3.2.7 [39m[90m/home/runner/work/ballpark-hero/ballpark-hero[39m
+
+Browserslist: browsers data (caniuse-lite) is 16 months old. Please run:
+  npx update-browserslist-db@latest
+  Why you should do it regularly: https://github.com/browserslist/update-db#readme
+[90mstdout[2m | src/test/careerHallSaves1301.test.ts[2m > [22m[2mRound 1301: a career the old code retired keeps the calibration and the ballot it was told[2m > [22m[2mthe stamp is what keeps them: read on calibration 3 instead, NHL careers of the set score lower and Hall of Famers fall out
+[22m[39mcareerHallSaves1301 main: of 16 retired NHL saves, on calibration 3 11 would score lower, 0 higher, 2 Hall of Famers would fall out, 0 would come in; of 4 open careers 4 are scored lower on 3 than the old code would have
+careerHallSaves1301 r1226: of 16 retired NHL saves, on calibration 3 10 would score lower, 1 higher, 3 Hall of Famers would fall out, 0 would come in; of 4 open careers 3 are scored lower on 3 than the old code would have
+
+ [32m✓[39m src/test/careerHallSaves1301.test.ts [2m([22m[2m19 tests[22m[2m)[22m[32m 85[2mms[22m[39m
+[90mstderr[2m | src/test/usCareerHallBoard.test.tsx[2m > [22m[2mnfl: the retirement talk on the board[2m > [22m[2mRetire now ends the career on the last season played
+[22m[39mWarning: A suspended resource finished loading inside a test, but the event was not wrapped in act(...).
+
+When testing, code that resolves suspended data should be wrapped into act(...):
+
+act(() => {
+  /* finish loading suspended data */
+});
+/* assert on the output */
+
+This ensures that you're testing the behavior the user would see in the browser. Learn more at https://reactjs.org/link/wrap-tests-with-act
+Warning: A suspended resource finished loading inside a test, but the event was not wrapped in act(...).
+
+When testing, code that resolves suspended data should be wrapped into act(...):
+
+act(() => {
+  /* finish loading suspended data */
+});
+/* assert on the output */
+
+This ensures that you're testing the behavior the user would see in the browser. Learn more at https://reactjs.org/link/wrap-tests-with-act
+
+ [32m✓[39m src/test/usCareerActionConfirm.test.tsx [2m([22m[2m19 tests[22m[2m)[22m[33m 3827[2mms[22m[39m
+   [33m[2m✓[22m[39m US career destructive action confirmation[2m > [22m'NFL' preserves live restore and engine state as an independent baseline [33m 430[2mms[22m[39m
+   [33m[2m✓[22m[39m US career destructive action confirmation[2m > [22m'NBA' preserves live restore and engine state as an independent baseline [33m 304[2mms[22m[39m
+   [33m[2m✓[22m[39m US career destructive action confirmation[2m > [22m'NFL' keeps retirement pending until explicit acceptance and records its real legacy once [33m 486[2mms[22m[39m
+   [33m[2m✓[22m[39m US career destructive action confirmation[2m > [22m'NBA' keeps retirement pending until explicit acceptance and records its real legacy once [33m 396[2mms[22m[39m
+ [32m✓[39m src/test/careerHallV1Replay.test.ts [2m([22m[2m13 tests[22m[2m)[22m[33m 3289[2mms[22m[39m
+   [33m[2m✓[22m[39m Round 1051: the recorded saves through the real board[2m > [22mnfl: the board shows each save the verdict, the legacy and the ballot it was told, and writes nothing [33m 1295[2mms[22m[39m
+   [33m[2m✓[22m[39m Round 1051: the recorded saves through the real board[2m > [22mnba: the board shows each save the verdict, the legacy and the ballot it was told, and writes nothing [33m 662[2mms[22m[39m
+   [33m[2m✓[22m[39m Round 1051: the recorded saves through the real board[2m > [22mmlb: the board shows each save the verdict, the legacy and the ballot it was told, and writes nothing [33m 711[2mms[22m[39m
+   [33m[2m✓[22m[39m Round 1051: the recorded saves through the real board[2m > [22mnhl: the board shows each save the verdict, the legacy and the ballot it was told, and writes nothing [33m 476[2mms[22m[39m
+ [32m✓[39m src/test/usCareerHallBoard.test.tsx [2m([22m[2m95 tests[22m[2m)[22m[33m 14400[2mms[22m[39m
+   [33m[2m✓[22m[39m nfl: the Hall of Fame on the retirement screen[2m > [22man old retired save with no blocks shows the Hall card, and the Hall pill waits for the ballot [33m 6030[2mms[22m[39m
+   [33m[2m✓[22m[39m nba: the Hall of Fame on the retirement screen[2m > [22man old retired save with no blocks shows the Hall card, and the Hall pill waits for the ballot [33m 1015[2mms[22m[39m
+   [33m[2m✓[22m[39m mlb: the Hall of Fame on the retirement screen[2m > [22man old retired save with no blocks shows the Hall card, and the Hall pill waits for the ballot [33m 1520[2mms[22m[39m
+   [33m[2m✓[22m[39m nhl: the Hall of Fame on the retirement screen[2m > [22man old retired save with no blocks shows the Hall card, and the Hall pill waits for the ballot [33m 1019[2mms[22m[39m
+
+[2m Test Files [22m [1m[32m4 passed[39m[22m[90m (4)[39m
+[2m      Tests [22m [1m[32m146 passed[39m[22m[90m (146)[39m
+[2m   Start at [22m 12:56:46
+[2m   Duration [22m 17.49s[2m (transform 2.42s, setup 247ms, collect 7.14s, tests 21.60s, environment 1.47s, prepare 519ms)[22m
+

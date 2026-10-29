@@ -1,0 +1,173 @@
+PASS career season review normal
+simCareerSeasonReview normal: intended assertions and independent retirement baseline passed.
+PASS career season review highsNba
+simCareerSeasonReview highsNba: intended assertions and independent retirement baseline passed.
+PASS career season review highsNfl
+simCareerSeasonReview highsNfl: intended assertions and independent retirement baseline passed.
+PASS career season review highsMlb
+simCareerSeasonReview highsMlb: intended assertions and independent retirement baseline passed.
+PASS career season review highsNhl
+simCareerSeasonReview highsNhl: intended assertions and independent retirement baseline passed.
+PASS career season review highsMaximum
+simCareerSeasonReview highsMaximum: intended assertions and independent retirement baseline passed.
+PASS career season review highsRaw
+simCareerSeasonReview highsRaw: intended assertions and independent retirement baseline passed.
+PASS career season review highsTies
+simCareerSeasonReview highsTies: intended assertions and independent retirement baseline passed.
+PASS career season review highsOrder
+simCareerSeasonReview highsOrder: intended assertions and independent retirement baseline passed.
+PASS career season review highsIndices
+simCareerSeasonReview highsIndices: intended assertions and independent retirement baseline passed.
+PASS career season review highsZero
+simCareerSeasonReview highsZero: intended assertions and independent retirement baseline passed.
+PASS career season review highsFinite
+simCareerSeasonReview highsFinite: intended assertions and independent retirement baseline passed.
+PASS career season review highsMissing
+simCareerSeasonReview highsMissing: intended assertions and independent retirement baseline passed.
+PASS career season review highsSuspended
+simCareerSeasonReview highsSuspended: intended assertions and independent retirement baseline passed.
+PASS career season review highsOpen
+simCareerSeasonReview highsOpen: intended assertions and independent retirement baseline passed.
+PASS career season review highsFocus
+simCareerSeasonReview highsFocus: intended assertions and independent retirement baseline passed.
+PASS career season review highsWrite
+simCareerSeasonReview highsWrite: intended assertions and independent retirement baseline passed.
+PASS career season review highsRandom
+simCareerSeasonReview highsRandom: intended assertions and independent retirement baseline passed.
+PASS career season review compareIndices
+simCareerSeasonReview compareIndices: intended assertions and independent retirement baseline passed.
+PASS career season review compareDelta
+simCareerSeasonReview compareDelta: intended assertions and independent retirement baseline passed.
+PASS career season review compareRaw
+simCareerSeasonReview compareRaw: intended assertions and independent retirement baseline passed.
+PASS career season review compareMissing
+simCareerSeasonReview compareMissing: intended assertions and independent retirement baseline passed.
+PASS career season review compareSuspended
+simCareerSeasonReview compareSuspended: intended assertions and independent retirement baseline passed.
+PASS career season review compareFocus
+simCareerSeasonReview compareFocus: intended assertions and independent retirement baseline passed.
+PASS career season review compareWrite
+simCareerSeasonReview compareWrite: intended assertions and independent retirement baseline passed.
+PASS career season review compareRandom
+simCareerSeasonReview compareRandom: intended assertions and independent retirement baseline passed.
+PASS career season review nbaRegular
+simCareerSeasonReview nbaRegular: intended assertions and independent retirement baseline passed.
+PASS career season review nbaPostseason
+simCareerSeasonReview nbaPostseason: intended assertions and independent retirement baseline passed.
+PASS career season review nflPassing
+simCareerSeasonReview nflPassing: intended assertions and independent retirement baseline passed.
+PASS career season review nflDefense
+simCareerSeasonReview nflDefense: intended assertions and independent retirement baseline passed.
+PASS career season review mlbStarter
+simCareerSeasonReview mlbStarter: intended assertions and independent retirement baseline passed.
+PASS career season review mlbReliever
+simCareerSeasonReview mlbReliever: intended assertions and independent retirement baseline passed.
+PASS career season review mlbUnits
+simCareerSeasonReview mlbUnits: intended assertions and independent retirement baseline passed.
+PASS career season review nhlGoalie
+simCareerSeasonReview nhlGoalie: intended assertions and independent retirement baseline passed.
+PASS career season review nhlPostseason
+simCareerSeasonReview nhlPostseason: intended assertions and independent retirement baseline passed.
+PASS career season review savedOvr
+simCareerSeasonReview savedOvr: intended assertions and independent retirement baseline passed.
+FAIL career season review savedGames
+
+node:internal/modules/run_main:107
+    triggerUncaughtException(
+    ^
+
+AssertionError [ERR_ASSERTION]: savedGames binds exactly one executable anchor
+
+0 !== 1
+
+    at file:///home/runner/work/ballpark-hero/ballpark-hero/scripts/simCareerSeasonReview.mjs:126:14 {
+  generatedMessage: false,
+  code: 'ERR_ASSERTION',
+  actual: 0,
+  expected: 1,
+  operator: 'strictEqual',
+  diff: 'simple'
+}
+
+Node.js v24.22.1
+PASS career season review previous
+simCareerSeasonReview previous: intended assertions and independent retirement baseline passed.
+PASS career season review age
+simCareerSeasonReview age: intended assertions and independent retirement baseline passed.
+FAIL career season review pay
+
+node:internal/modules/run_main:107
+    triggerUncaughtException(
+    ^
+
+AssertionError [ERR_ASSERTION]: pay binds exactly one executable anchor
+
+0 !== 1
+
+    at file:///home/runner/work/ballpark-hero/ballpark-hero/scripts/simCareerSeasonReview.mjs:126:14 {
+  generatedMessage: false,
+  code: 'ERR_ASSERTION',
+  actual: 0,
+  expected: 1,
+  operator: 'strictEqual',
+  diff: 'simple'
+}
+
+Node.js v24.22.1
+PASS career season review result
+simCareerSeasonReview result: intended assertions and independent retirement baseline passed.
+PASS career season review awards
+simCareerSeasonReview awards: intended assertions and independent retirement baseline passed.
+PASS career season review focus
+simCareerSeasonReview focus: intended assertions and independent retirement baseline passed.
+PASS career season review tabReset
+simCareerSeasonReview tabReset: intended assertions and independent retirement baseline passed.
+FAIL career season review legacy
+
+node:internal/modules/run_main:107
+    triggerUncaughtException(
+    ^
+
+AssertionError [ERR_ASSERTION]: legacy binds exactly one executable anchor
+
+0 !== 1
+
+    at file:///home/runner/work/ballpark-hero/ballpark-hero/scripts/simCareerSeasonReview.mjs:126:14 {
+  generatedMessage: false,
+  code: 'ERR_ASSERTION',
+  actual: 0,
+  expected: 1,
+  operator: 'strictEqual',
+  diff: 'simple'
+}
+
+Node.js v24.22.1
+PASS career season review suspended
+simCareerSeasonReview suspended: intended assertions and independent retirement baseline passed.
+PASS career season review write
+simCareerSeasonReview write: intended assertions and independent retirement baseline passed.
+PASS career season review random
+simCareerSeasonReview random: intended assertions and independent retirement baseline passed.
+PASS career season review completion
+simCareerSeasonReview completion: intended assertions and independent retirement baseline passed.
+PASS career season review returnFocus
+simCareerSeasonReview returnFocus: intended assertions and independent retirement baseline passed.
+PASS career season review pendingEvent
+simCareerSeasonReview pendingEvent: intended assertions and independent retirement baseline passed.
+PASS career season review retiredBack
+simCareerSeasonReview retiredBack: intended assertions and independent retirement baseline passed.
+node:internal/modules/run_main:107
+    triggerUncaughtException(
+    ^
+
+AssertionError [ERR_ASSERTION]: Every normal and control outcome passed; all modes were attempted
+    at file:///home/runner/work/ballpark-hero/ballpark-hero/scripts/simCareerSeasonReview.mjs:108:3 {
+  generatedMessage: false,
+  code: 'ERR_ASSERTION',
+  actual: false,
+  expected: true,
+  operator: '==',
+  diff: 'simple'
+}
+
+Node.js v24.22.1

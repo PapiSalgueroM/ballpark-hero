@@ -1,0 +1,205 @@
+
+[1m[46m RUN [49m[22m [36mv3.2.7 [39m[90m/home/runner/work/ballpark-hero/ballpark-hero[39m
+
+Browserslist: browsers data (caniuse-lite) is 16 months old. Please run:
+  npx update-browserslist-db@latest
+  Why you should do it regularly: https://github.com/browserslist/update-db#readme
+ [32m✓[39m src/lib/usCareerHallWall.test.ts [2m([22m[2m18 tests[22m[2m)[22m[32m 147[2mms[22m[39m
+[90mstderr[2m | src/test/usCareerHallWall.test.tsx[2m > [22m[2m'NFL': old saves and broken walls[2m > [22m[2mC9: a refused retirement save holds the plaque back until the save's own Retry lands
+[22m[39mError: Uncaught [TypeError: __vite_ssr_import_2__.toast.error is not a function]
+    at reportException (/home/runner/work/ballpark-hero/ballpark-hero/node_modules/jsdom/lib/jsdom/living/helpers/runtime-script-errors.js:66:24)
+    at innerInvokeEventListeners (/home/runner/work/ballpark-hero/ballpark-hero/node_modules/jsdom/lib/jsdom/living/events/EventTarget-impl.js:353:9)
+    at invokeEventListeners (/home/runner/work/ballpark-hero/ballpark-hero/node_modules/jsdom/lib/jsdom/living/events/EventTarget-impl.js:286:3)
+    at HTMLUnknownElementImpl._dispatch (/home/runner/work/ballpark-hero/ballpark-hero/node_modules/jsdom/lib/jsdom/living/events/EventTarget-impl.js:233:9)
+    at HTMLUnknownElementImpl.dispatchEvent (/home/runner/work/ballpark-hero/ballpark-hero/node_modules/jsdom/lib/jsdom/living/events/EventTarget-impl.js:104:17)
+    at HTMLUnknownElement.dispatchEvent (/home/runner/work/ballpark-hero/ballpark-hero/node_modules/jsdom/lib/jsdom/living/generated/EventTarget.js:241:34)
+    at Object.invokeGuardedCallbackDev (/home/runner/work/ballpark-hero/ballpark-hero/node_modules/react-dom/cjs/react-dom.development.js:4213:16)
+    at invokeGuardedCallback (/home/runner/work/ballpark-hero/ballpark-hero/node_modules/react-dom/cjs/react-dom.development.js:4277:31)
+    at reportUncaughtErrorInDEV (/home/runner/work/ballpark-hero/ballpark-hero/node_modules/react-dom/cjs/react-dom.development.js:22877:5)
+    at captureCommitPhaseError (/home/runner/work/ballpark-hero/ballpark-hero/node_modules/react-dom/cjs/react-dom.development.js:27165:5) TypeError: __vite_ssr_import_2__.toast.error is not a function
+    at [90m/home/runner/work/ballpark-hero/ballpark-hero/[39msrc/components/us-career/UsCareerBoard.tsx:140:24
+    at commitHookEffectListMount [90m(/home/runner/work/ballpark-hero/ballpark-hero/[39mnode_modules/[4mreact-dom[24m/cjs/react-dom.development.js:23189:26[90m)[39m
+    at commitPassiveMountOnFiber [90m(/home/runner/work/ballpark-hero/ballpark-hero/[39mnode_modules/[4mreact-dom[24m/cjs/react-dom.development.js:24970:11[90m)[39m
+    at commitPassiveMountEffects_complete [90m(/home/runner/work/ballpark-hero/ballpark-hero/[39mnode_modules/[4mreact-dom[24m/cjs/react-dom.development.js:24930:9[90m)[39m
+    at commitPassiveMountEffects_begin [90m(/home/runner/work/ballpark-hero/ballpark-hero/[39mnode_modules/[4mreact-dom[24m/cjs/react-dom.development.js:24917:7[90m)[39m
+    at commitPassiveMountEffects [90m(/home/runner/work/ballpark-hero/ballpark-hero/[39mnode_modules/[4mreact-dom[24m/cjs/react-dom.development.js:24905:3[90m)[39m
+    at flushPassiveEffectsImpl [90m(/home/runner/work/ballpark-hero/ballpark-hero/[39mnode_modules/[4mreact-dom[24m/cjs/react-dom.development.js:27078:3[90m)[39m
+    at flushPassiveEffects [90m(/home/runner/work/ballpark-hero/ballpark-hero/[39mnode_modules/[4mreact-dom[24m/cjs/react-dom.development.js:27023:14[90m)[39m
+    at commitRootImpl [90m(/home/runner/work/ballpark-hero/ballpark-hero/[39mnode_modules/[4mreact-dom[24m/cjs/react-dom.development.js:26974:5[90m)[39m
+    at commitRoot [90m(/home/runner/work/ballpark-hero/ballpark-hero/[39mnode_modules/[4mreact-dom[24m/cjs/react-dom.development.js:26721:5[90m)[39m
+The above error occurred in the <UsCareerBoard> component:
+
+    at UsCareerBoard (/home/runner/work/ballpark-hero/ballpark-hero/src/components/us-career/UsCareerBoard.tsx:145:26)
+    at Router (file:///home/runner/work/ballpark-hero/ballpark-hero/node_modules/react-router/dist/development/chunk-BV7QT456.mjs:7134:13)
+    at MemoryRouter (file:///home/runner/work/ballpark-hero/ballpark-hero/node_modules/react-router/dist/development/chunk-BV7QT456.mjs:7044:3)
+
+Consider adding an error boundary to your tree to customize error handling behavior.
+Visit https://reactjs.org/link/error-boundaries to learn more about error boundaries.
+
+[90mstderr[2m | src/test/usCareerHallWall.test.tsx[2m > [22m[2m'NBA': old saves and broken walls[2m > [22m[2mC9: a refused retirement save holds the plaque back until the save's own Retry lands
+[22m[39mError: Uncaught [TypeError: __vite_ssr_import_2__.toast.error is not a function]
+    at reportException (/home/runner/work/ballpark-hero/ballpark-hero/node_modules/jsdom/lib/jsdom/living/helpers/runtime-script-errors.js:66:24)
+    at innerInvokeEventListeners (/home/runner/work/ballpark-hero/ballpark-hero/node_modules/jsdom/lib/jsdom/living/events/EventTarget-impl.js:353:9)
+    at invokeEventListeners (/home/runner/work/ballpark-hero/ballpark-hero/node_modules/jsdom/lib/jsdom/living/events/EventTarget-impl.js:286:3)
+    at HTMLUnknownElementImpl._dispatch (/home/runner/work/ballpark-hero/ballpark-hero/node_modules/jsdom/lib/jsdom/living/events/EventTarget-impl.js:233:9)
+    at HTMLUnknownElementImpl.dispatchEvent (/home/runner/work/ballpark-hero/ballpark-hero/node_modules/jsdom/lib/jsdom/living/events/EventTarget-impl.js:104:17)
+    at HTMLUnknownElement.dispatchEvent (/home/runner/work/ballpark-hero/ballpark-hero/node_modules/jsdom/lib/jsdom/living/generated/EventTarget.js:241:34)
+    at Object.invokeGuardedCallbackDev (/home/runner/work/ballpark-hero/ballpark-hero/node_modules/react-dom/cjs/react-dom.development.js:4213:16)
+    at invokeGuardedCallback (/home/runner/work/ballpark-hero/ballpark-hero/node_modules/react-dom/cjs/react-dom.development.js:4277:31)
+    at reportUncaughtErrorInDEV (/home/runner/work/ballpark-hero/ballpark-hero/node_modules/react-dom/cjs/react-dom.development.js:22877:5)
+    at captureCommitPhaseError (/home/runner/work/ballpark-hero/ballpark-hero/node_modules/react-dom/cjs/react-dom.development.js:27165:5) TypeError: __vite_ssr_import_2__.toast.error is not a function
+    at [90m/home/runner/work/ballpark-hero/ballpark-hero/[39msrc/components/us-career/UsCareerBoard.tsx:140:24
+    at commitHookEffectListMount [90m(/home/runner/work/ballpark-hero/ballpark-hero/[39mnode_modules/[4mreact-dom[24m/cjs/react-dom.development.js:23189:26[90m)[39m
+    at commitPassiveMountOnFiber [90m(/home/runner/work/ballpark-hero/ballpark-hero/[39mnode_modules/[4mreact-dom[24m/cjs/react-dom.development.js:24970:11[90m)[39m
+    at commitPassiveMountEffects_complete [90m(/home/runner/work/ballpark-hero/ballpark-hero/[39mnode_modules/[4mreact-dom[24m/cjs/react-dom.development.js:24930:9[90m)[39m
+    at commitPassiveMountEffects_begin [90m(/home/runner/work/ballpark-hero/ballpark-hero/[39mnode_modules/[4mreact-dom[24m/cjs/react-dom.development.js:24917:7[90m)[39m
+    at commitPassiveMountEffects [90m(/home/runner/work/ballpark-hero/ballpark-hero/[39mnode_modules/[4mreact-dom[24m/cjs/react-dom.development.js:24905:3[90m)[39m
+    at flushPassiveEffectsImpl [90m(/home/runner/work/ballpark-hero/ballpark-hero/[39mnode_modules/[4mreact-dom[24m/cjs/react-dom.development.js:27078:3[90m)[39m
+    at flushPassiveEffects [90m(/home/runner/work/ballpark-hero/ballpark-hero/[39mnode_modules/[4mreact-dom[24m/cjs/react-dom.development.js:27023:14[90m)[39m
+    at commitRootImpl [90m(/home/runner/work/ballpark-hero/ballpark-hero/[39mnode_modules/[4mreact-dom[24m/cjs/react-dom.development.js:26974:5[90m)[39m
+    at commitRoot [90m(/home/runner/work/ballpark-hero/ballpark-hero/[39mnode_modules/[4mreact-dom[24m/cjs/react-dom.development.js:26721:5[90m)[39m
+The above error occurred in the <UsCareerBoard> component:
+
+    at UsCareerBoard (/home/runner/work/ballpark-hero/ballpark-hero/src/components/us-career/UsCareerBoard.tsx:145:26)
+    at Router (file:///home/runner/work/ballpark-hero/ballpark-hero/node_modules/react-router/dist/development/chunk-BV7QT456.mjs:7134:13)
+    at MemoryRouter (file:///home/runner/work/ballpark-hero/ballpark-hero/node_modules/react-router/dist/development/chunk-BV7QT456.mjs:7044:3)
+
+Consider adding an error boundary to your tree to customize error handling behavior.
+Visit https://reactjs.org/link/error-boundaries to learn more about error boundaries.
+
+[90mstderr[2m | src/test/usCareerHallWall.test.tsx[2m > [22m[2m'MLB': old saves and broken walls[2m > [22m[2mC9: a refused retirement save holds the plaque back until the save's own Retry lands
+[22m[39mError: Uncaught [TypeError: __vite_ssr_import_2__.toast.error is not a function]
+    at reportException (/home/runner/work/ballpark-hero/ballpark-hero/node_modules/jsdom/lib/jsdom/living/helpers/runtime-script-errors.js:66:24)
+    at innerInvokeEventListeners (/home/runner/work/ballpark-hero/ballpark-hero/node_modules/jsdom/lib/jsdom/living/events/EventTarget-impl.js:353:9)
+    at invokeEventListeners (/home/runner/work/ballpark-hero/ballpark-hero/node_modules/jsdom/lib/jsdom/living/events/EventTarget-impl.js:286:3)
+    at HTMLUnknownElementImpl._dispatch (/home/runner/work/ballpark-hero/ballpark-hero/node_modules/jsdom/lib/jsdom/living/events/EventTarget-impl.js:233:9)
+    at HTMLUnknownElementImpl.dispatchEvent (/home/runner/work/ballpark-hero/ballpark-hero/node_modules/jsdom/lib/jsdom/living/events/EventTarget-impl.js:104:17)
+    at HTMLUnknownElement.dispatchEvent (/home/runner/work/ballpark-hero/ballpark-hero/node_modules/jsdom/lib/jsdom/living/generated/EventTarget.js:241:34)
+    at Object.invokeGuardedCallbackDev (/home/runner/work/ballpark-hero/ballpark-hero/node_modules/react-dom/cjs/react-dom.development.js:4213:16)
+    at invokeGuardedCallback (/home/runner/work/ballpark-hero/ballpark-hero/node_modules/react-dom/cjs/react-dom.development.js:4277:31)
+    at reportUncaughtErrorInDEV (/home/runner/work/ballpark-hero/ballpark-hero/node_modules/react-dom/cjs/react-dom.development.js:22877:5)
+    at captureCommitPhaseError (/home/runner/work/ballpark-hero/ballpark-hero/node_modules/react-dom/cjs/react-dom.development.js:27165:5) TypeError: __vite_ssr_import_2__.toast.error is not a function
+    at [90m/home/runner/work/ballpark-hero/ballpark-hero/[39msrc/components/us-career/UsCareerBoard.tsx:140:24
+    at commitHookEffectListMount [90m(/home/runner/work/ballpark-hero/ballpark-hero/[39mnode_modules/[4mreact-dom[24m/cjs/react-dom.development.js:23189:26[90m)[39m
+    at commitPassiveMountOnFiber [90m(/home/runner/work/ballpark-hero/ballpark-hero/[39mnode_modules/[4mreact-dom[24m/cjs/react-dom.development.js:24970:11[90m)[39m
+    at commitPassiveMountEffects_complete [90m(/home/runner/work/ballpark-hero/ballpark-hero/[39mnode_modules/[4mreact-dom[24m/cjs/react-dom.development.js:24930:9[90m)[39m
+    at commitPassiveMountEffects_begin [90m(/home/runner/work/ballpark-hero/ballpark-hero/[39mnode_modules/[4mreact-dom[24m/cjs/react-dom.development.js:24917:7[90m)[39m
+    at commitPassiveMountEffects [90m(/home/runner/work/ballpark-hero/ballpark-hero/[39mnode_modules/[4mreact-dom[24m/cjs/react-dom.development.js:24905:3[90m)[39m
+    at flushPassiveEffectsImpl [90m(/home/runner/work/ballpark-hero/ballpark-hero/[39mnode_modules/[4mreact-dom[24m/cjs/react-dom.development.js:27078:3[90m)[39m
+    at flushPassiveEffects [90m(/home/runner/work/ballpark-hero/ballpark-hero/[39mnode_modules/[4mreact-dom[24m/cjs/react-dom.development.js:27023:14[90m)[39m
+    at commitRootImpl [90m(/home/runner/work/ballpark-hero/ballpark-hero/[39mnode_modules/[4mreact-dom[24m/cjs/react-dom.development.js:26974:5[90m)[39m
+    at commitRoot [90m(/home/runner/work/ballpark-hero/ballpark-hero/[39mnode_modules/[4mreact-dom[24m/cjs/react-dom.development.js:26721:5[90m)[39m
+The above error occurred in the <UsCareerBoard> component:
+
+    at UsCareerBoard (/home/runner/work/ballpark-hero/ballpark-hero/src/components/us-career/UsCareerBoard.tsx:145:26)
+    at Router (file:///home/runner/work/ballpark-hero/ballpark-hero/node_modules/react-router/dist/development/chunk-BV7QT456.mjs:7134:13)
+    at MemoryRouter (file:///home/runner/work/ballpark-hero/ballpark-hero/node_modules/react-router/dist/development/chunk-BV7QT456.mjs:7044:3)
+
+Consider adding an error boundary to your tree to customize error handling behavior.
+Visit https://reactjs.org/link/error-boundaries to learn more about error boundaries.
+
+[90mstderr[2m | src/test/usCareerHallWall.test.tsx[2m > [22m[2m'NHL': old saves and broken walls[2m > [22m[2mC9: a refused retirement save holds the plaque back until the save's own Retry lands
+[22m[39mError: Uncaught [TypeError: __vite_ssr_import_2__.toast.error is not a function]
+    at reportException (/home/runner/work/ballpark-hero/ballpark-hero/node_modules/jsdom/lib/jsdom/living/helpers/runtime-script-errors.js:66:24)
+    at innerInvokeEventListeners (/home/runner/work/ballpark-hero/ballpark-hero/node_modules/jsdom/lib/jsdom/living/events/EventTarget-impl.js:353:9)
+    at invokeEventListeners (/home/runner/work/ballpark-hero/ballpark-hero/node_modules/jsdom/lib/jsdom/living/events/EventTarget-impl.js:286:3)
+    at HTMLUnknownElementImpl._dispatch (/home/runner/work/ballpark-hero/ballpark-hero/node_modules/jsdom/lib/jsdom/living/events/EventTarget-impl.js:233:9)
+    at HTMLUnknownElementImpl.dispatchEvent (/home/runner/work/ballpark-hero/ballpark-hero/node_modules/jsdom/lib/jsdom/living/events/EventTarget-impl.js:104:17)
+    at HTMLUnknownElement.dispatchEvent (/home/runner/work/ballpark-hero/ballpark-hero/node_modules/jsdom/lib/jsdom/living/generated/EventTarget.js:241:34)
+    at Object.invokeGuardedCallbackDev (/home/runner/work/ballpark-hero/ballpark-hero/node_modules/react-dom/cjs/react-dom.development.js:4213:16)
+    at invokeGuardedCallback (/home/runner/work/ballpark-hero/ballpark-hero/node_modules/react-dom/cjs/react-dom.development.js:4277:31)
+    at reportUncaughtErrorInDEV (/home/runner/work/ballpark-hero/ballpark-hero/node_modules/react-dom/cjs/react-dom.development.js:22877:5)
+    at captureCommitPhaseError (/home/runner/work/ballpark-hero/ballpark-hero/node_modules/react-dom/cjs/react-dom.development.js:27165:5) TypeError: __vite_ssr_import_2__.toast.error is not a function
+    at [90m/home/runner/work/ballpark-hero/ballpark-hero/[39msrc/components/us-career/UsCareerBoard.tsx:140:24
+    at commitHookEffectListMount [90m(/home/runner/work/ballpark-hero/ballpark-hero/[39mnode_modules/[4mreact-dom[24m/cjs/react-dom.development.js:23189:26[90m)[39m
+    at commitPassiveMountOnFiber [90m(/home/runner/work/ballpark-hero/ballpark-hero/[39mnode_modules/[4mreact-dom[24m/cjs/react-dom.development.js:24970:11[90m)[39m
+    at commitPassiveMountEffects_complete [90m(/home/runner/work/ballpark-hero/ballpark-hero/[39mnode_modules/[4mreact-dom[24m/cjs/react-dom.development.js:24930:9[90m)[39m
+    at commitPassiveMountEffects_begin [90m(/home/runner/work/ballpark-hero/ballpark-hero/[39mnode_modules/[4mreact-dom[24m/cjs/react-dom.development.js:24917:7[90m)[39m
+    at commitPassiveMountEffects [90m(/home/runner/work/ballpark-hero/ballpark-hero/[39mnode_modules/[4mreact-dom[24m/cjs/react-dom.development.js:24905:3[90m)[39m
+    at flushPassiveEffectsImpl [90m(/home/runner/work/ballpark-hero/ballpark-hero/[39mnode_modules/[4mreact-dom[24m/cjs/react-dom.development.js:27078:3[90m)[39m
+    at flushPassiveEffects [90m(/home/runner/work/ballpark-hero/ballpark-hero/[39mnode_modules/[4mreact-dom[24m/cjs/react-dom.development.js:27023:14[90m)[39m
+    at commitRootImpl [90m(/home/runner/work/ballpark-hero/ballpark-hero/[39mnode_modules/[4mreact-dom[24m/cjs/react-dom.development.js:26974:5[90m)[39m
+    at commitRoot [90m(/home/runner/work/ballpark-hero/ballpark-hero/[39mnode_modules/[4mreact-dom[24m/cjs/react-dom.development.js:26721:5[90m)[39m
+The above error occurred in the <UsCareerBoard> component:
+
+    at UsCareerBoard (/home/runner/work/ballpark-hero/ballpark-hero/src/components/us-career/UsCareerBoard.tsx:145:26)
+    at Router (file:///home/runner/work/ballpark-hero/ballpark-hero/node_modules/react-router/dist/development/chunk-BV7QT456.mjs:7134:13)
+    at MemoryRouter (file:///home/runner/work/ballpark-hero/ballpark-hero/node_modules/react-router/dist/development/chunk-BV7QT456.mjs:7044:3)
+
+Consider adding an error boundary to your tree to customize error handling behavior.
+Visit https://reactjs.org/link/error-boundaries to learn more about error boundaries.
+
+ [31m❯[39m src/test/usCareerHallWall.test.tsx [2m([22m[2m28 tests[22m[2m | [22m[31m4 failed[39m[2m)[22m[33m 31133[2mms[22m[39m
+   [33m[2m✓[22m[39m 'NFL': the Hall wall on the board[2m > [22mC1 and C2: a career retired through the board goes up on the wall, and a restart keeps it there [33m 565[2mms[22m[39m
+   [32m✓[39m 'NFL': the Hall wall on the board[2m > [22mC4: a refused wall write breaks nothing, and the prompt keeps saying the card goes[32m 180[2mms[22m[39m
+   [32m✓[39m 'NFL': the Hall wall on the board[2m > [22mC7: with no Hall bound (the parity replay) the wall is never read, written or drawn[32m 133[2mms[22m[39m
+   [33m[2m✓[22m[39m 'NBA': the Hall wall on the board[2m > [22mC1 and C2: a career retired through the board goes up on the wall, and a restart keeps it there [33m 329[2mms[22m[39m
+   [32m✓[39m 'NBA': the Hall wall on the board[2m > [22mC4: a refused wall write breaks nothing, and the prompt keeps saying the card goes[32m 268[2mms[22m[39m
+   [32m✓[39m 'NBA': the Hall wall on the board[2m > [22mC7: with no Hall bound (the parity replay) the wall is never read, written or drawn[32m 229[2mms[22m[39m
+   [33m[2m✓[22m[39m 'MLB': the Hall wall on the board[2m > [22mC1 and C2: a career retired through the board goes up on the wall, and a restart keeps it there [33m 318[2mms[22m[39m
+   [32m✓[39m 'MLB': the Hall wall on the board[2m > [22mC4: a refused wall write breaks nothing, and the prompt keeps saying the card goes[32m 236[2mms[22m[39m
+   [32m✓[39m 'MLB': the Hall wall on the board[2m > [22mC7: with no Hall bound (the parity replay) the wall is never read, written or drawn[32m 132[2mms[22m[39m
+   [32m✓[39m 'NHL': the Hall wall on the board[2m > [22mC1 and C2: a career retired through the board goes up on the wall, and a restart keeps it there[32m 282[2mms[22m[39m
+   [32m✓[39m 'NHL': the Hall wall on the board[2m > [22mC4: a refused wall write breaks nothing, and the prompt keeps saying the card goes[32m 217[2mms[22m[39m
+   [32m✓[39m 'NHL': the Hall wall on the board[2m > [22mC7: with no Hall bound (the parity replay) the wall is never read, written or drawn[32m 161[2mms[22m[39m
+   [33m[2m✓[22m[39m 'NFL': old saves and broken walls[2m > [22mC3: an old retired save of every class goes up as its card told him, and its save is never written [33m 613[2mms[22m[39m
+   [33m[2m✓[22m[39m 'NFL': old saves and broken walls[2m > [22mC6: junk is replaced, a newer version is never written over, a bad plaque is dropped alone [33m 314[2mms[22m[39m
+[31m   [31m×[31m 'NFL': old saves and broken walls[2m > [22mC9: a refused retirement save holds the plaque back until the save's own Retry lands[39m[32m 103[2mms[22m[39m
+[31m     → toast.error is not a function[39m
+   [33m[2m✓[22m[39m 'NBA': old saves and broken walls[2m > [22mC3: an old retired save of every class goes up as its card told him, and its save is never written [33m 521[2mms[22m[39m
+   [32m✓[39m 'NBA': old saves and broken walls[2m > [22mC6: junk is replaced, a newer version is never written over, a bad plaque is dropped alone[32m 258[2mms[22m[39m
+[31m   [31m×[31m 'NBA': old saves and broken walls[2m > [22mC9: a refused retirement save holds the plaque back until the save's own Retry lands[39m[32m 83[2mms[22m[39m
+[31m     → toast.error is not a function[39m
+   [33m[2m✓[22m[39m 'MLB': old saves and broken walls[2m > [22mC3: an old retired save of every class goes up as its card told him, and its save is never written [33m 519[2mms[22m[39m
+   [32m✓[39m 'MLB': old saves and broken walls[2m > [22mC6: junk is replaced, a newer version is never written over, a bad plaque is dropped alone[32m 256[2mms[22m[39m
+[31m   [31m×[31m 'MLB': old saves and broken walls[2m > [22mC9: a refused retirement save holds the plaque back until the save's own Retry lands[39m[32m 94[2mms[22m[39m
+[31m     → toast.error is not a function[39m
+   [33m[2m✓[22m[39m 'NHL': old saves and broken walls[2m > [22mC3: an old retired save of every class goes up as its card told him, and its save is never written [33m 539[2mms[22m[39m
+   [32m✓[39m 'NHL': old saves and broken walls[2m > [22mC6: junk is replaced, a newer version is never written over, a bad plaque is dropped alone[32m 227[2mms[22m[39m
+[31m   [31m×[31m 'NHL': old saves and broken walls[2m > [22mC9: a refused retirement save holds the plaque back until the save's own Retry lands[39m[32m 65[2mms[22m[39m
+[31m     → toast.error is not a function[39m
+   [33m[2m✓[22m[39m C8: the wall draws nothing and moves no save byte[2m > [22m'NFL': five seeds, the wall written, refused and absent, press for press [33m 6525[2mms[22m[39m
+   [33m[2m✓[22m[39m C8: the wall draws nothing and moves no save byte[2m > [22m'NBA': five seeds, the wall written, refused and absent, press for press [33m 5922[2mms[22m[39m
+   [33m[2m✓[22m[39m C8: the wall draws nothing and moves no save byte[2m > [22m'MLB': five seeds, the wall written, refused and absent, press for press [33m 6608[2mms[22m[39m
+   [33m[2m✓[22m[39m C8: the wall draws nothing and moves no save byte[2m > [22m'NHL': five seeds, the wall written, refused and absent, press for press [33m 5430[2mms[22m[39m
+
+[31m⎯⎯⎯⎯⎯⎯⎯[39m[1m[41m Failed Tests 4 [49m[22m[31m⎯⎯⎯⎯⎯⎯⎯[39m
+
+[41m[1m FAIL [22m[49m src/test/usCareerHallWall.test.tsx[2m > [22m'NFL': old saves and broken walls[2m > [22mC9: a refused retirement save holds the plaque back until the save's own Retry lands
+[41m[1m FAIL [22m[49m src/test/usCareerHallWall.test.tsx[2m > [22m'NBA': old saves and broken walls[2m > [22mC9: a refused retirement save holds the plaque back until the save's own Retry lands
+[41m[1m FAIL [22m[49m src/test/usCareerHallWall.test.tsx[2m > [22m'MLB': old saves and broken walls[2m > [22mC9: a refused retirement save holds the plaque back until the save's own Retry lands
+[41m[1m FAIL [22m[49m src/test/usCareerHallWall.test.tsx[2m > [22m'NHL': old saves and broken walls[2m > [22mC9: a refused retirement save holds the plaque back until the save's own Retry lands
+[31m[1mTypeError[22m: toast.error is not a function[39m
+[36m [2m❯[22m src/components/us-career/UsCareerBoard.tsx:[2m140:24[22m[39m
+    [90m138| [39m       Round 1084 reads it), so the second line is what makes the word…
+    [90m139| [39m       the button they sit next to. */[39m
+    [90m140| [39m    const said = toast.error('Your latest changes could not be saved. …
+    [90m   | [39m                       [31m^[39m
+    [90m141| [39m      description[33m:[39m [32m'Retry here does the same thing.'[39m[33m,[39m
+    [90m142| [39m      duration[33m:[39m [33mSAVE_TOAST_MS[39m[33m,[39m
+[90m [2m❯[22m commitHookEffectListMount node_modules/react-dom/cjs/react-dom.development.js:[2m23189:26[22m[39m
+[90m [2m❯[22m commitPassiveMountOnFiber node_modules/react-dom/cjs/react-dom.development.js:[2m24970:11[22m[39m
+[90m [2m❯[22m commitPassiveMountEffects_complete node_modules/react-dom/cjs/react-dom.development.js:[2m24930:9[22m[39m
+[90m [2m❯[22m commitPassiveMountEffects_begin node_modules/react-dom/cjs/react-dom.development.js:[2m24917:7[22m[39m
+[90m [2m❯[22m commitPassiveMountEffects node_modules/react-dom/cjs/react-dom.development.js:[2m24905:3[22m[39m
+[90m [2m❯[22m flushPassiveEffectsImpl node_modules/react-dom/cjs/react-dom.development.js:[2m27078:3[22m[39m
+[90m [2m❯[22m flushPassiveEffects node_modules/react-dom/cjs/react-dom.development.js:[2m27023:14[22m[39m
+[90m [2m❯[22m commitRootImpl node_modules/react-dom/cjs/react-dom.development.js:[2m26974:5[22m[39m
+[90m [2m❯[22m commitRoot node_modules/react-dom/cjs/react-dom.development.js:[2m26721:5[22m[39m
+
+[31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/4]⎯[22m[39m
+
+
+[2m Test Files [22m [1m[31m1 failed[39m[22m[2m | [22m[1m[32m1 passed[39m[22m[90m (2)[39m
+[2m      Tests [22m [1m[31m4 failed[39m[22m[2m | [22m[1m[32m42 passed[39m[22m[90m (46)[39m
+[2m   Start at [22m 12:56:25
+[2m   Duration [22m 35.62s[2m (transform 2.97s, setup 209ms, collect 5.62s, tests 31.28s, environment 1.33s, prepare 685ms)[22m
+
+
+::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/components/us-career/UsCareerBoard.tsx,title=src/test/usCareerHallWall.test.tsx > 'NFL'%3A old saves and broken walls > C9%3A a refused retirement save holds the plaque back until the save's own Retry lands,line=140,column=24::TypeError: toast.error is not a function%0A ❯ src/components/us-career/UsCareerBoard.tsx:140:24%0A ❯ commitHookEffectListMount node_modules/react-dom/cjs/react-dom.development.js:23189:26%0A ❯ commitPassiveMountOnFiber node_modules/react-dom/cjs/react-dom.development.js:24970:11%0A ❯ commitPassiveMountEffects_complete node_modules/react-dom/cjs/react-dom.development.js:24930:9%0A ❯ commitPassiveMountEffects_begin node_modules/react-dom/cjs/react-dom.development.js:24917:7%0A ❯ commitPassiveMountEffects node_modules/react-dom/cjs/react-dom.development.js:24905:3%0A ❯ flushPassiveEffectsImpl node_modules/react-dom/cjs/react-dom.development.js:27078:3%0A ❯ flushPassiveEffects node_modules/react-dom/cjs/react-dom.development.js:27023:14%0A ❯ commitRootImpl node_modules/react-dom/cjs/react-dom.development.js:26974:5%0A ❯ commitRoot node_modules/react-dom/cjs/react-dom.development.js:26721:5%0A%0A
+
+::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/components/us-career/UsCareerBoard.tsx,title=src/test/usCareerHallWall.test.tsx > 'NBA'%3A old saves and broken walls > C9%3A a refused retirement save holds the plaque back until the save's own Retry lands,line=140,column=24::TypeError: toast.error is not a function%0A ❯ src/components/us-career/UsCareerBoard.tsx:140:24%0A ❯ commitHookEffectListMount node_modules/react-dom/cjs/react-dom.development.js:23189:26%0A ❯ commitPassiveMountOnFiber node_modules/react-dom/cjs/react-dom.development.js:24970:11%0A ❯ commitPassiveMountEffects_complete node_modules/react-dom/cjs/react-dom.development.js:24930:9%0A ❯ commitPassiveMountEffects_begin node_modules/react-dom/cjs/react-dom.development.js:24917:7%0A ❯ commitPassiveMountEffects node_modules/react-dom/cjs/react-dom.development.js:24905:3%0A ❯ flushPassiveEffectsImpl node_modules/react-dom/cjs/react-dom.development.js:27078:3%0A ❯ flushPassiveEffects node_modules/react-dom/cjs/react-dom.development.js:27023:14%0A ❯ commitRootImpl node_modules/react-dom/cjs/react-dom.development.js:26974:5%0A ❯ commitRoot node_modules/react-dom/cjs/react-dom.development.js:26721:5%0A%0A
+
+::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/components/us-career/UsCareerBoard.tsx,title=src/test/usCareerHallWall.test.tsx > 'MLB'%3A old saves and broken walls > C9%3A a refused retirement save holds the plaque back until the save's own Retry lands,line=140,column=24::TypeError: toast.error is not a function%0A ❯ src/components/us-career/UsCareerBoard.tsx:140:24%0A ❯ commitHookEffectListMount node_modules/react-dom/cjs/react-dom.development.js:23189:26%0A ❯ commitPassiveMountOnFiber node_modules/react-dom/cjs/react-dom.development.js:24970:11%0A ❯ commitPassiveMountEffects_complete node_modules/react-dom/cjs/react-dom.development.js:24930:9%0A ❯ commitPassiveMountEffects_begin node_modules/react-dom/cjs/react-dom.development.js:24917:7%0A ❯ commitPassiveMountEffects node_modules/react-dom/cjs/react-dom.development.js:24905:3%0A ❯ flushPassiveEffectsImpl node_modules/react-dom/cjs/react-dom.development.js:27078:3%0A ❯ flushPassiveEffects node_modules/react-dom/cjs/react-dom.development.js:27023:14%0A ❯ commitRootImpl node_modules/react-dom/cjs/react-dom.development.js:26974:5%0A ❯ commitRoot node_modules/react-dom/cjs/react-dom.development.js:26721:5%0A%0A
+
+::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/components/us-career/UsCareerBoard.tsx,title=src/test/usCareerHallWall.test.tsx > 'NHL'%3A old saves and broken walls > C9%3A a refused retirement save holds the plaque back until the save's own Retry lands,line=140,column=24::TypeError: toast.error is not a function%0A ❯ src/components/us-career/UsCareerBoard.tsx:140:24%0A ❯ commitHookEffectListMount node_modules/react-dom/cjs/react-dom.development.js:23189:26%0A ❯ commitPassiveMountOnFiber node_modules/react-dom/cjs/react-dom.development.js:24970:11%0A ❯ commitPassiveMountEffects_complete node_modules/react-dom/cjs/react-dom.development.js:24930:9%0A ❯ commitPassiveMountEffects_begin node_modules/react-dom/cjs/react-dom.development.js:24917:7%0A ❯ commitPassiveMountEffects node_modules/react-dom/cjs/react-dom.development.js:24905:3%0A ❯ flushPassiveEffectsImpl node_modules/react-dom/cjs/react-dom.development.js:27078:3%0A ❯ flushPassiveEffects node_modules/react-dom/cjs/react-dom.development.js:27023:14%0A ❯ commitRootImpl node_modules/react-dom/cjs/react-dom.development.js:26974:5%0A ❯ commitRoot node_modules/react-dom/cjs/react-dom.development.js:26721:5%0A%0A

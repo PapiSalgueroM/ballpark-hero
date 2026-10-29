@@ -1,0 +1,16 @@
+tsc: node_modules/.bin/tsc --noEmit -p tsconfig.app.json
+vt-wall: node_modules/.bin/vitest run src/test/usCareerHallWall.test.tsx src/lib/usCareerHallWall.test.ts --testTimeout=300000 --hookTimeout=120000
+vt-moved: node_modules/.bin/vitest run src/test/careerSeasonReview.test.tsx src/test/usCareerSaveRetry.test.tsx src/test/usCareerReports1569.test.tsx --testTimeout=300000 --hookTimeout=120000
+vt-hall: node_modules/.bin/vitest run src/test/usCareerHallBoard.test.tsx src/test/careerHallV1Replay.test.ts src/test/careerHallSaves1301.test.ts src/test/usCareerActionConfirm.test.tsx --testTimeout=300000 --hookTimeout=120000
+vt-board: node_modules/.bin/vitest run src/test/myCareerRestore.test.tsx src/test/usCareerStatLines.test.tsx src/test/usCareerPractice.test.tsx src/test/usCoachRetirement.test.tsx src/test/nflCoachStaffRecovery.test.tsx src/test/storageNoticeFollows.test.tsx src/test/usSeasonCentreEntry.test.tsx --testTimeout=300000 --hookTimeout=120000
+parity: node scripts/simUsBoardParity.mjs && git diff --quiet 493926a4f -- scripts/data/usBoardFixture.json && echo "fixture byte identical to base"
+confirm: node scripts/simUsCareerActionConfirm.mjs
+confirm-restartWiring: US_CAREER_ACTION_CONTROL=restartWiring node scripts/simUsCareerActionConfirm.mjs
+confirm-ownKey: US_CAREER_ACTION_CONTROL=ownKey node scripts/simUsCareerActionConfirm.mjs
+saveRetry: node scripts/simUsCareerSaveRetry.mjs
+seasonReview: CAREER_SEASON_REVIEW_CONTROL=all node scripts/simCareerSeasonReview.mjs
+storageWrites: node scripts/simStorageWrites.mjs
+storageWrites-base: git worktree add /tmp/base 493926a4f >/dev/null 2>&1 && cd /tmp/base && ln -s "$OLDPWD/node_modules" node_modules && node scripts/simStorageWrites.mjs
+homeFront: node scripts/simHomeFront.mjs
+weight: node scripts/simUsCareerWeight.mjs
+rival: node scripts/simNoRivalNames.mjs
