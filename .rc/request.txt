@@ -1,0 +1,6 @@
+tsc: node_modules/.bin/tsc --noEmit -p tsconfig.app.json
+vt-sc: node_modules/.bin/vitest run src/test/soccerCareerLoyaltyUncut.test.ts src/test/soccerCareerCoachingStartEra.test.ts src/test/soccerCareerCoachingChooser.test.tsx src/test/soccerCareerCoachingStart.consumer.lifecycle.test.tsx src/test/soccerCareerCoachingStart.consumer.test.tsx src/test/soccerCareerCoachingStart.test.ts src/test/soccerCareerCoachingTransaction.test.tsx src/test/soccerCareerContracts.test.ts src/test/soccerCareerLoyalty.engine.test.ts src/test/soccerCareerLoyalty.review.test.tsx src/test/soccerCareerLoyalty.test.ts src/test/soccerCareerProgrammeUi.test.tsx src/lib/soccerCareerProgramme.test.ts --testTimeout=300000 --hookTimeout=120000 > /tmp/vs.log 2>&1; s=$?; grep -E "FAIL|Test Files|Tests  |loyalty uncut|coaching era|AssertionError|Expected|Received" /tmp/vs.log | head -40 | cut -c1-250; exit $s
+simAccessibility: node scripts/simAccessibility.mjs
+simCareerNoDeadEnd: node scripts/simCareerNoDeadEnd.mjs
+deadend-pundit: CAREER_DEADEND_CONTROL=pundit node scripts/simCareerNoDeadEnd.mjs
+deadend-strand: CAREER_DEADEND_CONTROL=strand node scripts/simCareerNoDeadEnd.mjs
