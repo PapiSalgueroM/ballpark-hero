@@ -1,0 +1,3 @@
+#!serve
+#!playwright
+clubrules: CI=1 SIM_NETWORK=offline node scripts/playBingoClubRules.mjs
