@@ -141,6 +141,9 @@ export function foPack(c: FoStatsCodec, named: FoSeasonStats): FoSavedStats {
 /* ------------------------------------------------------------------ readers */
 
 const isObj = (v: unknown): v is Record<string, unknown> => typeof v === 'object' && v !== null && !Array.isArray(v);
+/** Every column of a line and a club is a count: a whole number, zero or more. A column that can go below zero or
+ *  hold a fraction (a plus/minus, an average) does not fit this shape as written: its bind must widen these readers
+ *  for that column first, or foReadSaved refuses every block that holds one. */
 const isCount = (v: unknown): v is number => typeof v === 'number' && Number.isInteger(v) && v >= 0;
 const isText = (v: unknown): v is string => typeof v === 'string' && v !== '';
 
