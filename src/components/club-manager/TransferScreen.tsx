@@ -931,9 +931,11 @@ export function TransferScreen({
                       {m.club} · {m.age}y{m.value !== undefined ? <> · {valuationLine(career, m)}</> : null}
                     </div>
                   </div>
+                  {/* Release BS fix: Save sits at row level, a 44 px target whose negative margin
+                      fits the row's own padding, so a row is no taller than before it came */}
+                  {onCommitRecruitment && <button className="shrink-0 min-h-11 min-w-11 -my-1.5 rounded-lg border border-border px-2 text-xs font-bold" aria-label={`Save ${m.name}`} onClick={e => { shortlistOpener.current = e.currentTarget; setShortlist({ career, player: m }); }}>Save</button>}
                   <span className={cn('text-sm font-bold font-display', ratingTint(m.rating))}>{m.rating}</span>
                   <div className="shrink-0 flex flex-col gap-1 items-stretch">
-                    {onCommitRecruitment && <button className="min-h-11 min-w-11 rounded-lg border border-border px-2 text-xs font-bold" aria-label={`Save ${m.name}`} onClick={e => { shortlistOpener.current = e.currentTarget; setShortlist({ career, player: m }); }}>Save</button>}
                     <button
                       onClick={() => onNegotiate(m)}
                       disabled={negBusy || cold}
