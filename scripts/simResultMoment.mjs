@@ -386,7 +386,9 @@ async function open(viewport, reducedMotion = 'no-preference') {
      localStorage on import and about:blank refuses it. Nothing leaves the
      page: every request is answered here. */
   const html = `<!doctype html><html><head><meta charset="utf-8"><style>${css.css}</style></head><body class="bg-background text-foreground"><div id="root"></div></body></html>`;
-  await page.route('**/*', route => route.fulfill({ status: 200, contentType: 'text/html', body: html }));
+  await page.route('**/*', route => route.request().method() === 'GET' && route.request().url() === 'http://127.0.0.1:4173/sport-glyphs.svg'
+    ? route.fulfill({ status: 200, contentType: 'image/svg+xml', body: fs.readFileSync(path.join(root, 'public/sport-glyphs.svg')) })
+    : route.fulfill({ status: 200, contentType: 'text/html', body: html }));
   await page.goto('http://127.0.0.1:4173/result-moment-fixture');
   await page.addScriptTag({ content: bundle.outputFiles[0].text });
   return page;
