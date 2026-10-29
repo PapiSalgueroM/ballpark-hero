@@ -1,0 +1,11 @@
+nhlrec1: SIM_GM_CAREER_SPORT=nhl SIM_GM_CAREER_RECORD=115c68092 SIM_GM_CAREER_OUT=$RC_OUT/nhl-rec1.json node scripts/simGmCareer.mjs
+nhlrec2: SIM_GM_CAREER_SPORT=nhl SIM_GM_CAREER_RECORD=115c68092 SIM_GM_CAREER_OUT=$RC_OUT/nhl-rec2.json node scripts/simGmCareer.mjs
+nflfull: node scripts/simGmCareer.mjs
+tsc: node_modules/.bin/tsc --noEmit -p tsconfig.app.json
+simGmDeskHost123: node scripts/simGmDeskHost.mjs
+simFoLazyDesk: node scripts/simFoLazyDesk.mjs
+simNhlGmDesk: node scripts/simNhlGmDesk.mjs
+simMlbGmDesk: node scripts/simMlbGmDesk.mjs
+simGmReload: node scripts/simGmReload.mjs
+vitestfo: node_modules/.bin/vitest run src/components/front-office-shared/FrontOfficeSeasonClose.test.tsx src/components/front-office-shared/FrontOfficeGmCareer.test.tsx src/components/front-office/FrontOfficeLazyDesk.test.tsx --testTimeout=600000 --hookTimeout=120000
+simGmStaff: node scripts/simGmStaff.mjs
