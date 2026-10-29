@@ -1,0 +1,16 @@
+tsc: node_modules/.bin/tsc --noEmit -p tsconfig.app.json
+vt-wall: node_modules/.bin/vitest run src/test/usCareerHallWall.test.tsx src/lib/usCareerHallWall.test.ts --testTimeout=300000 --hookTimeout=120000
+vt-moved: node_modules/.bin/vitest run src/test/careerSeasonReview.test.tsx src/test/usCareerSaveRetry.test.tsx src/test/usCareerReports1569.test.tsx src/test/usCareerHallBoard.test.tsx src/test/usCareerActionConfirm.test.tsx src/test/careerHallV1Replay.test.ts --testTimeout=300000 --hookTimeout=120000
+simWall: node scripts/simUsCareerHallWall.mjs
+c-nokeep: SIM_HALL_WALL_CONTROL=nokeep node scripts/simUsCareerHallWall.mjs
+c-loadonly: SIM_HALL_WALL_CONTROL=loadonly node scripts/simUsCareerHallWall.mjs
+c-kept: SIM_HALL_WALL_CONTROL=kept node scripts/simUsCareerHallWall.mjs
+c-nogate: SIM_HALL_WALL_CONTROL=nogate node scripts/simUsCareerHallWall.mjs
+c-stalesave: SIM_HALL_WALL_CONTROL=stalesave node scripts/simUsCareerHallWall.mjs
+c-boarddraw: SIM_HALL_WALL_CONTROL=boarddraw node scripts/simUsCareerHallWall.mjs
+parity: node scripts/simUsBoardParity.mjs && git diff --quiet 493926a4f -- scripts/data/usBoardFixture.json && echo "fixture byte identical to base"
+confirm: node scripts/simUsCareerActionConfirm.mjs
+saveRetry: node scripts/simUsCareerSaveRetry.mjs
+weight: node scripts/simUsCareerWeight.mjs
+storageWrites: node scripts/simStorageWrites.mjs
+rival: node scripts/simNoRivalNames.mjs
