@@ -19,8 +19,9 @@ import { guardedBlockSql, same } from '../lib/connectionsMigration.mjs';
 
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..', '..');
 /* the round's data commit: the table file has not changed since it on the round's branch. Merge the branch, never
-   squash it, or the commit is lost. A later edit of the NHL table file is that round's own migration. */
-export const ROUND_FILES = process.env.R1574_ROUND_FILES ?? '202ea80f9a601388db08172acfa706ff826805c0';
+   squash it, or the commit is lost. A later edit of the NHL table file is that round's own migration. fix-1574 moved
+   it from 202ea80f9 to the review fix's last board commit (Matthews, McDavid and Taylor Hall off 011, 012 and 018). */
+export const ROUND_FILES = process.env.R1574_ROUND_FILES ?? '058ac18f7b890a1c01fdf640e60577c52af75267';
 export const MIGRATION = 'supabase/migrations/20261030150000_round_1574_nhl_connections_tables.sql';
 export const TABLE = 'nhl_connections_puzzles';
 const TABLE_FILE = 'scripts/data/nhlConnectionsTable-2026-10.json';
