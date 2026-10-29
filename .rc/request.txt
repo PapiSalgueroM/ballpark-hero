@@ -1,0 +1,14 @@
+tsc: node_modules/.bin/tsc --noEmit -p tsconfig.app.json
+vnew: node_modules/.bin/vitest run src/test/usCareerReports1569.test.tsx --testTimeout=300000 --hookTimeout=120000
+vconfirm: node_modules/.bin/vitest run src/test/usCareerActionConfirm.test.tsx --testTimeout=300000 --hookTimeout=120000
+simUsCareerActionConfirm: node scripts/simUsCareerActionConfirm.mjs
+uca-restartWiring: US_CAREER_ACTION_CONTROL=restartWiring node scripts/simUsCareerActionConfirm.mjs
+uca-direct: US_CAREER_ACTION_CONTROL=direct node scripts/simUsCareerActionConfirm.mjs
+r3-base: git worktree add /tmp/b3 2ee79c595 >/dev/null 2>&1; ln -s "$PWD/node_modules" /tmp/b3/node_modules; cp src/test/usCareerReports1569.test.tsx /tmp/b3/src/test/; cd /tmp/b3 && node_modules/.bin/vitest run src/test/usCareerReports1569.test.tsx --testTimeout=300000 --hookTimeout=120000
+simUsCareerSaveRetry: node scripts/simUsCareerSaveRetry.mjs
+simUsCareerSkips: node scripts/simUsCareerSkips.mjs
+simUsSeasonCentre: node scripts/simUsSeasonCentre.mjs
+simHarnessAnchors: node scripts/simHarnessAnchors.mjs
+simNoRivalNames: node scripts/simNoRivalNames.mjs
+simStorageWrites: node scripts/simStorageWrites.mjs
+dash: node .rc/x/dashscan.mjs f957b34ea
