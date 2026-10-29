@@ -1,0 +1,23 @@
+vitest-intl-alone: node_modules/.bin/vitest run src/test/usCareerIntlBoard.test.tsx --testTimeout=300000 --hookTimeout=120000
+vitest-us: node_modules/.bin/vitest run src/test/usCareer src/test/usBoardFixture.test.tsx src/test/myCareerRestore.test.tsx src/test/rivalryChoiceBoard.test.tsx src/test/careerEntryGuide.test.tsx src/test/nbaTrophyTile.test.ts src/test/nbaCareerIntl.test.ts src/test/nbaIntlResultLines.test.tsx src/lib/careerIntl.test.ts --testTimeout=300000 --hookTimeout=120000
+simUsBoardParity: node scripts/simUsBoardParity.mjs
+simLiveScores: node scripts/simLiveScores.mjs
+simInventedNames: node scripts/simInventedNames.mjs
+simNoInventedQuotes: node scripts/simNoInventedQuotes.mjs
+simNoInventedConduct: node scripts/simNoInventedConduct.mjs
+simLegalPages: node scripts/simLegalPages.mjs
+simSingleFooter: node scripts/simSingleFooter.mjs
+simCompletionSlugs: node scripts/simCompletionSlugs.mjs
+simCompletionOnce: node scripts/simCompletionOnce.mjs
+simNoDoubleRecord: node scripts/simNoDoubleRecord.mjs
+simDailyPuzzleContract: node scripts/simDailyPuzzleContract.mjs
+simDailySaveHardening: node scripts/simDailySaveHardening.mjs
+simSchemaNames: node scripts/simSchemaNames.mjs
+simFetchRetry: node scripts/simFetchRetry.mjs
+simGoogleOnlyReturn: node scripts/simGoogleOnlyReturn.mjs
+simReportRelay: node scripts/simReportRelay.mjs
+simNavbarStatsReads: node scripts/simNavbarStatsReads.mjs
+simLeaderboardCaps: node scripts/simLeaderboardCaps.mjs
+simScoringCoverage: node scripts/simScoringCoverage.mjs
+simSiteSearch: node scripts/simSiteSearch.mjs
+simResultMoment: node scripts/simResultMoment.mjs
