@@ -1,0 +1,1022 @@
+[
+ {
+  "puzzle_id": "nhlconn-001",
+  "sort_order": 1,
+  "groups_json": [
+   {
+    "theme": "Played for the Penguins",
+    "players": [
+     "Sidney Crosby",
+     "Mario Lemieux",
+     "Evgeni Malkin",
+     "Kris Letang",
+     "Jake Guentzel"
+    ],
+    "difficulty": "yellow"
+   },
+   {
+    "theme": "Played for the Maple Leafs",
+    "players": [
+     "Mats Sundin",
+     "Auston Matthews",
+     "Mitch Marner",
+     "John Tavares",
+     "Doug Gilmour"
+    ],
+    "difficulty": "green"
+   },
+   {
+    "theme": "Played for the Avalanche",
+    "players": [
+     "Joe Sakic",
+     "Peter Forsberg",
+     "Nathan MacKinnon",
+     "Cale Makar",
+     "Gabriel Landeskog"
+    ],
+    "difficulty": "blue"
+   },
+   {
+    "theme": "Played for the Red Wings",
+    "players": [
+     "Nicklas Lidström",
+     "Pavel Datsyuk",
+     "Henrik Zetterberg",
+     "Sergei Fedorov",
+     "Dylan Larkin"
+    ],
+    "difficulty": "purple"
+   }
+  ],
+  "h": "8622fe6e9bb3a2ff9df2c5e7ceb132da"
+ },
+ {
+  "puzzle_id": "nhlconn-002",
+  "sort_order": 2,
+  "groups_json": [
+   {
+    "theme": "Played for the Blackhawks",
+    "players": [
+     "Patrick Kane",
+     "Jonathan Toews",
+     "Marián Hossa",
+     "Patrick Sharp",
+     "Duncan Keith"
+    ],
+    "difficulty": "yellow"
+   },
+   {
+    "theme": "Played for the Kings",
+    "players": [
+     "Anže Kopitar",
+     "Drew Doughty",
+     "Dustin Brown",
+     "Luc Robitaille",
+     "Marcel Dionne"
+    ],
+    "difficulty": "green"
+   },
+   {
+    "theme": "Played for the Lightning",
+    "players": [
+     "Steven Stamkos",
+     "Nikita Kucherov",
+     "Victor Hedman",
+     "Brayden Point",
+     "Martin St. Louis"
+    ],
+    "difficulty": "blue"
+   },
+   {
+    "theme": "Played for the Ducks",
+    "players": [
+     "Teemu Selänne",
+     "Ryan Getzlaf",
+     "Paul Kariya",
+     "Cam Fowler",
+     "Rickard Rakell"
+    ],
+    "difficulty": "purple"
+   }
+  ],
+  "h": "0942298106f2c7f800afcce19d91b648"
+ },
+ {
+  "puzzle_id": "nhlconn-003",
+  "sort_order": 3,
+  "groups_json": [
+   {
+    "theme": "Played for the Bruins",
+    "players": [
+     "Patrice Bergeron",
+     "Brad Marchand",
+     "David Pastrňák",
+     "Zdeno Chára",
+     "Ray Bourque"
+    ],
+    "difficulty": "yellow"
+   },
+   {
+    "theme": "Played for the Oilers",
+    "players": [
+     "Connor McDavid",
+     "Leon Draisaitl",
+     "Ryan Nugent-Hopkins",
+     "Zach Hyman",
+     "Evander Kane"
+    ],
+    "difficulty": "green"
+   },
+   {
+    "theme": "Played for the Golden Knights",
+    "players": [
+     "Mark Stone",
+     "Jack Eichel",
+     "William Karlsson",
+     "Alex Pietrangelo",
+     "Jonathan Marchessault"
+    ],
+    "difficulty": "blue"
+   },
+   {
+    "theme": "Played for the Hurricanes",
+    "players": [
+     "Sebastian Aho",
+     "Andrei Svechnikov",
+     "Jaccob Slavin",
+     "Jordan Staal",
+     "Brent Burns"
+    ],
+    "difficulty": "purple"
+   }
+  ],
+  "h": "aa7e43cba8613055d31d573ecfef84ac"
+ },
+ {
+  "puzzle_id": "nhlconn-004",
+  "sort_order": 4,
+  "groups_json": [
+   {
+    "theme": "Played for the Canadiens",
+    "players": [
+     "P.K. Subban",
+     "Shea Weber",
+     "Brendan Gallagher",
+     "Nick Suzuki",
+     "Cole Caufield"
+    ],
+    "difficulty": "yellow"
+   },
+   {
+    "theme": "Played for the Panthers",
+    "players": [
+     "Matthew Tkachuk",
+     "Aleksander Barkov",
+     "Sam Reinhart",
+     "Carter Verhaeghe",
+     "Aaron Ekblad"
+    ],
+    "difficulty": "green"
+   },
+   {
+    "theme": "Played for the Sharks",
+    "players": [
+     "Macklin Celebrini",
+     "Marc-Edouard Vlasic",
+     "Evander Kane",
+     "Logan Couture",
+     "Tomáš Hertl"
+    ],
+    "difficulty": "blue"
+   },
+   {
+    "theme": "1,000+ career points",
+    "players": [
+     "Connor McDavid",
+     "Leon Draisaitl",
+     "Nikita Kucherov",
+     "Nathan MacKinnon",
+     "Steven Stamkos"
+    ],
+    "difficulty": "purple"
+   }
+  ],
+  "h": "73cea9cdd16a1ca2a7a614b2b91965d2"
+ },
+ {
+  "puzzle_id": "nhlconn-005",
+  "sort_order": 5,
+  "groups_json": [
+   {
+    "theme": "Played for the Chicago Blackhawks",
+    "players": [
+     "Stan Mikita",
+     "Patrick Kane",
+     "Denis Savard",
+     "Duncan Keith",
+     "Jeremy Roenick"
+    ],
+    "difficulty": "yellow"
+   },
+   {
+    "theme": "Played for the Avalanche or Nordiques",
+    "players": [
+     "Joe Sakic",
+     "Peter Forsberg",
+     "Milan Hejduk",
+     "Nathan MacKinnon",
+     "Adam Foote"
+    ],
+    "difficulty": "green"
+   },
+   {
+    "theme": "Played for the New York Islanders",
+    "players": [
+     "Mike Bossy",
+     "Denis Potvin",
+     "Bryan Trottier",
+     "John Tavares",
+     "Clark Gillies"
+    ],
+    "difficulty": "blue"
+   },
+   {
+    "theme": "Played for the Winnipeg Jets (either era)",
+    "players": [
+     "Dale Hawerchuk",
+     "Blake Wheeler",
+     "Mark Scheifele",
+     "Kyle Connor",
+     "Shane Doan"
+    ],
+    "difficulty": "purple"
+   }
+  ],
+  "h": "47071efcb6668176ea045d96eb2966ad"
+ },
+ {
+  "puzzle_id": "nhlconn-006",
+  "sort_order": 6,
+  "groups_json": [
+   {
+    "theme": "Played for the Edmonton Oilers",
+    "players": [
+     "Wayne Gretzky",
+     "Mark Messier",
+     "Connor McDavid",
+     "Leon Draisaitl",
+     "Jari Kurri"
+    ],
+    "difficulty": "yellow"
+   },
+   {
+    "theme": "Played for the Montreal Canadiens",
+    "players": [
+     "Henri Richard",
+     "Guy Lafleur",
+     "Larry Robinson",
+     "Steve Shutt",
+     "Bob Gainey"
+    ],
+    "difficulty": "green"
+   },
+   {
+    "theme": "Played for the Boston Bruins",
+    "players": [
+     "Bobby Orr",
+     "Ray Bourque",
+     "Phil Esposito",
+     "Brad Marchand",
+     "Patrice Bergeron"
+    ],
+    "difficulty": "blue"
+   },
+   {
+    "theme": "Played for the Detroit Red Wings",
+    "players": [
+     "Gordie Howe",
+     "Steve Yzerman",
+     "Sergei Fedorov",
+     "Pavel Datsyuk",
+     "Henrik Zetterberg"
+    ],
+    "difficulty": "purple"
+   }
+  ],
+  "h": "816a316b767191ec543a1efc2d212382"
+ },
+ {
+  "puzzle_id": "nhlconn-007",
+  "sort_order": 7,
+  "groups_json": [
+   {
+    "theme": "Played for the Capitals",
+    "players": [
+     "Alex Ovechkin",
+     "Nicklas Bäckström",
+     "Tom Wilson",
+     "John Carlson",
+     "Peter Bondra"
+    ],
+    "difficulty": "yellow"
+   },
+   {
+    "theme": "Played for the Flyers",
+    "players": [
+     "Bobby Clarke",
+     "Claude Giroux",
+     "Sean Couturier",
+     "Jakub Voráček",
+     "Brian Propp"
+    ],
+    "difficulty": "green"
+   },
+   {
+    "theme": "Played for the Rangers",
+    "players": [
+     "Mark Messier",
+     "Adam Fox",
+     "Chris Kreider",
+     "Mika Zibanejad",
+     "Artemi Panarin"
+    ],
+    "difficulty": "blue"
+   },
+   {
+    "theme": "Played for the Blues",
+    "players": [
+     "Brett Hull",
+     "Al MacInnis",
+     "Bernie Federko",
+     "Keith Tkachuk",
+     "Alex Pietrangelo"
+    ],
+    "difficulty": "purple"
+   }
+  ],
+  "h": "3067ece6a69e47a9e1a4b0b0f0753267"
+ },
+ {
+  "puzzle_id": "nhlconn-008",
+  "sort_order": 8,
+  "groups_json": [
+   {
+    "theme": "Played for the Stars",
+    "players": [
+     "Mike Modano",
+     "Jamie Benn",
+     "Joe Nieuwendyk",
+     "Jason Spezza",
+     "Tyler Seguin"
+    ],
+    "difficulty": "yellow"
+   },
+   {
+    "theme": "Played for the Sharks",
+    "players": [
+     "Joe Thornton",
+     "Patrick Marleau",
+     "Brent Burns",
+     "Erik Karlsson",
+     "Logan Couture"
+    ],
+    "difficulty": "green"
+   },
+   {
+    "theme": "Played for the Islanders",
+    "players": [
+     "Bryan Trottier",
+     "Mike Bossy",
+     "Denis Potvin",
+     "John Tavares",
+     "Zach Parise"
+    ],
+    "difficulty": "blue"
+   },
+   {
+    "theme": "Played for the Sabres",
+    "players": [
+     "Gilbert Perreault",
+     "Dave Andreychuk",
+     "Alexander Mogilny",
+     "Phil Housley",
+     "Ryan O'Reilly"
+    ],
+    "difficulty": "purple"
+   }
+  ],
+  "h": "7ed0503660d785a6e6155e42a861a45a"
+ },
+ {
+  "puzzle_id": "nhlconn-009",
+  "sort_order": 9,
+  "groups_json": [
+   {
+    "theme": "Scored 60 goals in a season",
+    "players": [
+     "Wayne Gretzky",
+     "Mario Lemieux",
+     "Brett Hull",
+     "Alex Ovechkin",
+     "Auston Matthews"
+    ],
+    "difficulty": "yellow"
+   },
+   {
+    "theme": "Won the Vezina Trophy",
+    "players": [
+     "Dominik Hasek",
+     "Martin Brodeur",
+     "Patrick Roy",
+     "Carey Price",
+     "Andrei Vasilevskiy"
+    ],
+    "difficulty": "green"
+   },
+   {
+    "theme": "Captained a Stanley Cup winner",
+    "players": [
+     "Sidney Crosby",
+     "Jonathan Toews",
+     "Mark Messier",
+     "Steve Yzerman",
+     "Joe Sakic"
+    ],
+    "difficulty": "blue"
+   },
+   {
+    "theme": "Played 1,700 or more NHL games",
+    "players": [
+     "Gordie Howe",
+     "Jaromir Jagr",
+     "Patrick Marleau",
+     "Ron Francis",
+     "Joe Thornton"
+    ],
+    "difficulty": "purple"
+   }
+  ],
+  "h": "3430974731fab455509eef21f6f6bd5e"
+ },
+ {
+  "puzzle_id": "nhlconn-010",
+  "sort_order": 10,
+  "groups_json": [
+   {
+    "theme": "Goaltenders",
+    "players": [
+     "Patrick Roy",
+     "Martin Brodeur",
+     "Dominik Hasek",
+     "Carey Price",
+     "Ken Dryden"
+    ],
+    "difficulty": "yellow"
+   },
+   {
+    "theme": "Scored 60 goals in a season",
+    "players": [
+     "Alex Ovechkin",
+     "Wayne Gretzky",
+     "Mario Lemieux",
+     "Auston Matthews",
+     "Brett Hull"
+    ],
+    "difficulty": "green"
+   },
+   {
+    "theme": "Captained a Stanley Cup winner",
+    "players": [
+     "Sidney Crosby",
+     "Steve Yzerman",
+     "Mark Messier",
+     "Jonathan Toews",
+     "Jean Beliveau"
+    ],
+    "difficulty": "blue"
+   },
+   {
+    "theme": "Played 1,650 or more NHL games",
+    "players": [
+     "Gordie Howe",
+     "Jaromir Jagr",
+     "Patrick Marleau",
+     "Ron Francis",
+     "Mark Recchi"
+    ],
+    "difficulty": "purple"
+   }
+  ],
+  "h": "f819a2c04e429761528da75aec4b85fb"
+ },
+ {
+  "puzzle_id": "nhlconn-011",
+  "sort_order": 11,
+  "groups_json": [
+   {
+    "theme": "Played for the Maple Leafs",
+    "players": [
+     "Mats Sundin",
+     "Mitch Marner",
+     "Doug Gilmour",
+     "Wendel Clark",
+     "Auston Matthews"
+    ],
+    "difficulty": "yellow"
+   },
+   {
+    "theme": "Won the Norris Trophy",
+    "players": [
+     "Ray Bourque",
+     "Nicklas Lidstrom",
+     "Cale Makar",
+     "Erik Karlsson",
+     "Denis Potvin"
+    ],
+    "difficulty": "green"
+   },
+   {
+    "theme": "Scored a Stanley Cup winning goal",
+    "players": [
+     "Patrick Kane",
+     "Bobby Orr",
+     "Alec Martinez",
+     "Uwe Krupp",
+     "Bobby Nystrom"
+    ],
+    "difficulty": "blue"
+   },
+   {
+    "theme": "Scored 50 goals in 50 games",
+    "players": [
+     "Maurice Richard",
+     "Mike Bossy",
+     "Wayne Gretzky",
+     "Mario Lemieux",
+     "Brett Hull"
+    ],
+    "difficulty": "purple"
+   }
+  ],
+  "h": "08666d55c024e88eba457bb3af5a542b"
+ },
+ {
+  "puzzle_id": "nhlconn-012",
+  "sort_order": 12,
+  "groups_json": [
+   {
+    "theme": "Played for the Oilers",
+    "players": [
+     "Ryan Nugent-Hopkins",
+     "Mark Messier",
+     "Connor McDavid",
+     "Leon Draisaitl",
+     "Paul Coffey"
+    ],
+    "difficulty": "yellow"
+   },
+   {
+    "theme": "Won the Vezina Trophy",
+    "players": [
+     "Dominik Hasek",
+     "Patrick Roy",
+     "Carey Price",
+     "Martin Brodeur",
+     "Andrei Vasilevskiy"
+    ],
+    "difficulty": "green"
+   },
+   {
+    "theme": "Scored 70 goals in a season",
+    "players": [
+     "Phil Esposito",
+     "Teemu Selanne",
+     "Alexander Mogilny",
+     "Bernie Nicholls",
+     "Jari Kurri"
+    ],
+    "difficulty": "blue"
+   },
+   {
+    "theme": "Defensemen who captained a Cup winner",
+    "players": [
+     "Nicklas Lidstrom",
+     "Scott Stevens",
+     "Zdeno Chara",
+     "Denis Potvin",
+     "Derian Hatcher"
+    ],
+    "difficulty": "purple"
+   }
+  ],
+  "h": "15e8fb804e9a1f2f573a1d684878ab40"
+ },
+ {
+  "puzzle_id": "nhlconn-013",
+  "sort_order": 13,
+  "groups_json": [
+   {
+    "theme": "1980s Islanders dynasty",
+    "players": [
+     "Bryan Trottier",
+     "Billy Smith",
+     "Clark Gillies",
+     "John Tonelli",
+     "Mike Bossy"
+    ],
+    "difficulty": "yellow"
+   },
+   {
+    "theme": "European-born 500 goal scorers",
+    "players": [
+     "Jaromir Jagr",
+     "Alex Ovechkin",
+     "Marian Hossa",
+     "Mats Sundin",
+     "Stan Mikita"
+    ],
+    "difficulty": "green"
+   },
+   {
+    "theme": "Won the Conn Smythe in a losing cause",
+    "players": [
+     "Reggie Leach",
+     "Ron Hextall",
+     "Glenn Hall",
+     "Jean-Sebastien Giguere",
+     "Roger Crozier"
+    ],
+    "difficulty": "blue"
+   },
+   {
+    "theme": "Played NHL games in four different decades",
+    "players": [
+     "Gordie Howe",
+     "Chris Chelios",
+     "Mark Messier",
+     "Joe Thornton",
+     "Zdeno Chara"
+    ],
+    "difficulty": "purple"
+   }
+  ],
+  "h": "00cf19b81c9a96d225e4e16ce1542c00"
+ },
+ {
+  "puzzle_id": "nhlconn-014",
+  "sort_order": 14,
+  "groups_json": [
+   {
+    "theme": "Won the Calder Trophy",
+    "players": [
+     "Auston Matthews",
+     "Kirill Kaprizov",
+     "Nathan MacKinnon",
+     "Connor Bedard",
+     "Teemu Selanne"
+    ],
+    "difficulty": "yellow"
+   },
+   {
+    "theme": "Played 1,500 NHL games",
+    "players": [
+     "Patrick Marleau",
+     "Ron Francis",
+     "Mark Recchi",
+     "Shane Doan",
+     "Dave Andreychuk"
+    ],
+    "difficulty": "green"
+   },
+   {
+    "theme": "Goalies credited with scoring a goal",
+    "players": [
+     "Martin Brodeur",
+     "Chris Osgood",
+     "Evgeni Nabokov",
+     "Damian Rhodes",
+     "Pekka Rinne"
+    ],
+    "difficulty": "blue"
+   },
+   {
+    "theme": "Won the Cup with three different franchises",
+    "players": [
+     "Claude Lemieux",
+     "Mike Keane",
+     "Larry Hillman",
+     "Al Arbour",
+     "Joe Nieuwendyk"
+    ],
+    "difficulty": "purple"
+   }
+  ],
+  "h": "38816f4112e0e74bc8a485f5abf1f532"
+ },
+ {
+  "puzzle_id": "nhlconn-015",
+  "sort_order": 15,
+  "groups_json": [
+   {
+    "theme": "Drafted first overall",
+    "players": [
+     "Alexis Lafreniere",
+     "Nail Yakupov",
+     "Taylor Hall",
+     "Owen Power",
+     "Juraj Slafkovsky"
+    ],
+    "difficulty": "yellow"
+   },
+   {
+    "theme": "Won the Art Ross Trophy",
+    "players": [
+     "Jamie Benn",
+     "Martin St. Louis",
+     "Henrik Sedin",
+     "Jarome Iginla",
+     "Bobby Orr"
+    ],
+    "difficulty": "green"
+   },
+   {
+    "theme": "Scored 500 career goals",
+    "players": [
+     "Mike Gartner",
+     "Dave Andreychuk",
+     "Luc Robitaille",
+     "Johnny Bucyk",
+     "Brendan Shanahan"
+    ],
+    "difficulty": "blue"
+   },
+   {
+    "theme": "Goalies who won the Hart Trophy",
+    "players": [
+     "Dominik Hasek",
+     "Carey Price",
+     "Jose Theodore",
+     "Al Rollins",
+     "Jacques Plante"
+    ],
+    "difficulty": "purple"
+   }
+  ],
+  "h": "4e3f2828ff3823cc7d615c077102ce3a"
+ },
+ {
+  "puzzle_id": "nhlconn-016",
+  "sort_order": 16,
+  "groups_json": [
+   {
+    "theme": "Played for the Predators",
+    "players": [
+     "Roman Josi",
+     "Pekka Rinne",
+     "Shea Weber",
+     "Filip Forsberg",
+     "Ryan Ellis"
+    ],
+    "difficulty": "yellow"
+   },
+   {
+    "theme": "Played for the Canucks",
+    "players": [
+     "Daniel Sedin",
+     "Roberto Luongo",
+     "Markus Naslund",
+     "Trevor Linden",
+     "Quinn Hughes"
+    ],
+    "difficulty": "green"
+   },
+   {
+    "theme": "Won the Rocket Richard Trophy",
+    "players": [
+     "Alex Ovechkin",
+     "Steven Stamkos",
+     "Auston Matthews",
+     "David Pastrnak",
+     "Pavel Bure"
+    ],
+    "difficulty": "blue"
+   },
+   {
+    "theme": "Won the Conn Smythe Trophy",
+    "players": [
+     "Patrick Roy",
+     "Wayne Gretzky",
+     "Mario Lemieux",
+     "Jean Beliveau",
+     "Bernie Parent"
+    ],
+    "difficulty": "purple"
+   }
+  ],
+  "h": "5d069caf38617c3eb20732f28433a5a2"
+ },
+ {
+  "puzzle_id": "nhlconn-017",
+  "sort_order": 17,
+  "groups_json": [
+   {
+    "theme": "Played for the Senators",
+    "players": [
+     "Daniel Alfredsson",
+     "Erik Karlsson",
+     "Jason Spezza",
+     "Brady Tkachuk",
+     "Tim Stutzle"
+    ],
+    "difficulty": "yellow"
+   },
+   {
+    "theme": "Goalies with 400 career wins",
+    "players": [
+     "Martin Brodeur",
+     "Patrick Roy",
+     "Marc-Andre Fleury",
+     "Ed Belfour",
+     "Curtis Joseph"
+    ],
+    "difficulty": "green"
+   },
+   {
+    "theme": "Scored 500 goals for one franchise",
+    "players": [
+     "Alex Ovechkin",
+     "Steve Yzerman",
+     "Mario Lemieux",
+     "Bobby Hull",
+     "Gilbert Perreault"
+    ],
+    "difficulty": "blue"
+   },
+   {
+    "theme": "Triple Gold Club members",
+    "players": [
+     "Peter Forsberg",
+     "Nicklas Lidstrom",
+     "Sidney Crosby",
+     "Jonathan Toews",
+     "Pavel Datsyuk"
+    ],
+    "difficulty": "purple"
+   }
+  ],
+  "h": "e01983fcaa884706214c2af7c12e3e93"
+ },
+ {
+  "puzzle_id": "nhlconn-018",
+  "sort_order": 18,
+  "groups_json": [
+   {
+    "theme": "Played for Utah after the move from Arizona",
+    "players": [
+     "Clayton Keller",
+     "Logan Cooley",
+     "Dylan Guenther",
+     "Mikhail Sergachev",
+     "Karel Vejmelka"
+    ],
+    "difficulty": "yellow"
+   },
+   {
+    "theme": "Drafted by the Sabres",
+    "players": [
+     "Jack Eichel",
+     "Rasmus Dahlin",
+     "Sam Reinhart",
+     "Dylan Cozens",
+     "Casey Mittelstadt"
+    ],
+    "difficulty": "green"
+   },
+   {
+    "theme": "Won the Hart Trophy",
+    "players": [
+     "Connor McDavid",
+     "Leon Draisaitl",
+     "Auston Matthews",
+     "Nathan MacKinnon",
+     "Taylor Hall"
+    ],
+    "difficulty": "blue"
+   },
+   {
+    "theme": "Won the Vezina Trophy",
+    "players": [
+     "Connor Hellebuyck",
+     "Andrei Vasilevskiy",
+     "Igor Shesterkin",
+     "Linus Ullmark",
+     "Sergei Bobrovsky"
+    ],
+    "difficulty": "purple"
+   }
+  ],
+  "h": "3d2a9471fc15afa6afd98fd752de5f6e"
+ },
+ {
+  "puzzle_id": "nhlconn-019",
+  "sort_order": 19,
+  "groups_json": [
+   {
+    "theme": "Scored 700 career goals",
+    "players": [
+     "Wayne Gretzky",
+     "Alex Ovechkin",
+     "Gordie Howe",
+     "Jaromir Jagr",
+     "Brett Hull"
+    ],
+    "difficulty": "yellow"
+   },
+   {
+    "theme": "1970s Canadiens dynasty",
+    "players": [
+     "Ken Dryden",
+     "Guy Lafleur",
+     "Serge Savard",
+     "Yvan Cournoyer",
+     "Larry Robinson"
+    ],
+    "difficulty": "green"
+   },
+   {
+    "theme": "Played for the Devils",
+    "players": [
+     "Martin Brodeur",
+     "Scott Stevens",
+     "Scott Niedermayer",
+     "Patrik Elias",
+     "Kirk Muller"
+    ],
+    "difficulty": "blue"
+   },
+   {
+    "theme": "Hall of Famers who played for the Whalers",
+    "players": [
+     "Ron Francis",
+     "Dave Keon",
+     "Bobby Hull",
+     "Mark Howe",
+     "Paul Coffey"
+    ],
+    "difficulty": "purple"
+   }
+  ],
+  "h": "8b7b7794f89fb8f99f1d3b569856da28"
+ },
+ {
+  "puzzle_id": "nhlconn-020",
+  "sort_order": 20,
+  "groups_json": [
+   {
+    "theme": "Won the 2024 Cup with the Panthers",
+    "players": [
+     "Sam Bennett",
+     "Gustav Forsling",
+     "Anton Lundell",
+     "Evan Rodrigues",
+     "Niko Mikkola"
+    ],
+    "difficulty": "yellow"
+   },
+   {
+    "theme": "Canada's 2025 4 Nations team",
+    "players": [
+     "Connor McDavid",
+     "Sidney Crosby",
+     "Nathan MacKinnon",
+     "Cale Makar",
+     "Brad Marchand"
+    ],
+    "difficulty": "green"
+   },
+   {
+    "theme": "Drafted second overall",
+    "players": [
+     "Patrik Laine",
+     "Kaapo Kakko",
+     "Sam Reinhart",
+     "Nolan Patrick",
+     "Simon Nemec"
+    ],
+    "difficulty": "blue"
+   },
+   {
+    "theme": "Goalies who started a 2020s Cup Final game",
+    "players": [
+     "Andrei Vasilevskiy",
+     "Darcy Kuemper",
+     "Adin Hill",
+     "Anton Khudobin",
+     "Stuart Skinner"
+    ],
+    "difficulty": "purple"
+   }
+  ],
+  "h": "63a0b74f01cd73ffcb307cd9fc7b3c07"
+ }
+]
