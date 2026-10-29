@@ -1,0 +1,152 @@
+{
+  "schema": 1,
+  "status": "SOURCE_ONLY_FIVE_CASE_BASELINE_RUNTIME_UNRUN",
+  "parentCommit": "11aa2a6ef34c3cda3d2d88d95b2fd7d41fbbcd9e",
+  "parentTree": "bf5e6d0a486f81f3310af7932111bae57b241008",
+  "sourceFamily": "Exact clean PR420 source, not current main or SC/SerieB family",
+  "branch": "codex/cm-light-season-baseline-20261028",
+  "allowedPaths": [
+    ".github/workflows/cm-light-season-baseline.yml",
+    "qa/cm-light-season-v1/BASELINE-SOURCE.json",
+    "qa/cm-light-season-v1/original/clubManager.ts",
+    "scripts/qa/buildCmLightSeasonObserver.mjs",
+    "scripts/qa/cmLightSeasonBaseline.mjs",
+    "src/test/clubManagerLightSeason.baseline.test.tsx"
+  ],
+  "files": [
+    {
+      "path": "src/lib/clubManager.ts",
+      "bytes": 1240569,
+      "sha256": "05de3cfca8d978e6117979fb29b82b2ece7b9fb6ee1f2ce3c051e379e36de86e",
+      "gitBlob": "a505743537b383bc7885bb81f5a72c11e154b566"
+    },
+    {
+      "path": "src/components/club-manager/TrainingScreen.tsx",
+      "bytes": 12645,
+      "sha256": "b2b0fbed0cfe38c4a75581ef6eb1888cc4ff020654443733c6a97e03c7a267b3",
+      "gitBlob": "e374e452b8a5eee52a56149da2fa1dc66ed65587"
+    },
+    {
+      "path": "src/hooks/useClubManager.ts",
+      "bytes": 70744,
+      "sha256": "dce880b04eb80792eb3ea97354aa5f0d146f89c5280f57055c04dbb1db274b62",
+      "gitBlob": "7297073ea60b93501df48ea9b7dfc74edd2217de"
+    },
+    {
+      "path": "src/pages/ClubManager.tsx",
+      "bytes": 104290,
+      "sha256": "d58544fbbd346a26dc79741c4bcd2bedf7f8ee2a4c24adf57ba2329c5eb8feb3",
+      "gitBlob": "e011dd037f611721fac7649128c23e6d9af355c9"
+    },
+    {
+      "path": "scripts/simAcademy.mjs",
+      "bytes": 29056,
+      "sha256": "0af666a9f5d3bcdef7923a06eab971c01504c0f63ff557078a746c6411587965",
+      "gitBlob": "4cf364759fff1a0a41aa7b8aaff62cc31bfe5b44"
+    },
+    {
+      "path": "src/test/setup.ts",
+      "bytes": 847,
+      "sha256": "0175cc334b44d9874ff4bd8274a8cc165e9e84cd3738a4298f934db353887289",
+      "gitBlob": "df00cdf5c54e8c8efc71e46d7585ae76acb4fc8d"
+    },
+    {
+      "path": "scripts/lib/offlineTransport.cjs",
+      "bytes": 10660,
+      "sha256": "e60ff1534307e449ccef598e3b7470dcba58681b82cea4005cec7319f14f9221",
+      "gitBlob": "0fda542a2649fe5da937c6976fd0f5b6073e74b6"
+    },
+    {
+      "path": "tsconfig.app.json",
+      "bytes": 680,
+      "sha256": "b12030bfe21ea5be66670842c71d66d194d1771f93f0b8c076e97c867b4b0552",
+      "gitBlob": "51f581dd91641b4c1f1219f646788e73cf6bf00c"
+    },
+    {
+      "path": "vitest.config.ts",
+      "bytes": 5364,
+      "sha256": "6a68dd2f214dab4a3013eb41bad38eea65d703d61440002710ec246495e1c58a",
+      "gitBlob": "ed2a9dc677f77dfe95c061064eeff5782b856864"
+    },
+    {
+      "path": "package.json",
+      "bytes": 3495,
+      "sha256": "acfe14626dea53cf5f9c5e0286b766a22237656b52aac4c888b080873ac90e31",
+      "gitBlob": "2ff64986fb76ebc51b706f2fd24765768874008a"
+    },
+    {
+      "path": "package-lock.json",
+      "bytes": 309049,
+      "sha256": "c7e3867eabf0bfa03a8aa6a5e601b0050b937ed210d48c6bbd241019e3c9ea76",
+      "gitBlob": "97d6f12a052f25f400462938c241789a083f0bfe"
+    },
+    {
+      "path": "qa/cm-light-season-v1/original/clubManager.ts",
+      "bytes": 1240569,
+      "sha256": "05de3cfca8d978e6117979fb29b82b2ece7b9fb6ee1f2ce3c051e379e36de86e",
+      "gitBlob": "a505743537b383bc7885bb81f5a72c11e154b566"
+    },
+    {
+      "path": "scripts/qa/buildCmLightSeasonObserver.mjs",
+      "bytes": 7532,
+      "sha256": "5b62616cd02f32ac3b60f91c85977cdf61dc6593fbd2e0319107968fd2743f72",
+      "gitBlob": "86a053c05ca549a49644ed6b073a8d6ebd394bac"
+    },
+    {
+      "path": "scripts/qa/cmLightSeasonBaseline.mjs",
+      "bytes": 11646,
+      "sha256": "88d4b7f5ebe122db0ff6fa8a2349a8faf26cd35ea642e70a2885c1b197e62166",
+      "gitBlob": "6cb1387ffbe738e7e4cb668ce9048e0fb5aa936f"
+    },
+    {
+      "path": "src/test/clubManagerLightSeason.baseline.test.tsx",
+      "bytes": 18014,
+      "sha256": "485881087c1baf04e3684e10d737a94ec030113c459d7676bf0d3bb6487577b2",
+      "gitBlob": "65b1b2de4d750a2a6a33adde0eb14ec35a21bfef"
+    }
+  ],
+  "criticalSourceCount": 11,
+  "testPath": "src/test/clubManagerLightSeason.baseline.test.tsx",
+  "cases": [
+    {
+      "title": "offers the season-long individual choice in the actual TrainingScreen",
+      "status": "failed",
+      "marker": "MISSING_CM_LIGHT_SEASON_CONTROL"
+    },
+    {
+      "title": "uses existing Light recovery for the committed owned player",
+      "status": "failed",
+      "marker": "MISSING_CM_LIGHT_SEASON_RECOVERY"
+    },
+    {
+      "title": "retains the actual Light growth cost after a late team-plan change",
+      "status": "failed",
+      "marker": "MISSING_CM_LIGHT_SEASON_GROWTH"
+    },
+    {
+      "title": "preserves untouched global plans and full state save and random receipts",
+      "status": "passed",
+      "marker": null
+    },
+    {
+      "title": "preserves invalid optional metadata and the existing negative age drift",
+      "status": "passed",
+      "marker": null
+    }
+  ],
+  "naturalReplays": 29,
+  "defaultFullPairs": 6,
+  "invalidFullPairs": 4,
+  "copiedDiagnosticControls": 7,
+  "retainedSourceInventorySHA256": "286d4ca9397ef1dfc3d2c197c745de9a004eada23b5db43869df3005e4512eae",
+  "actor": "Genuine public constructor/calendar/finishSeason actors,24 constructors/64 annual search bound. Every action pair fresh-replays public acquisition history, exact pre-action state/raw and draw-prefix verified; no private counter patch.",
+  "prospectiveInput": "Optional individualLightSeason version1 record with captured clubName,season,playerId,sameManKey and optional actual worldRosterKey. This is an explicit prospective feature input, not a claim of existing earned choice.",
+  "limits": [
+    "Module initialization is excluded and unmeasured.",
+    "Actual Hook and Page source is pinned but not exercised by this observer.",
+    "Private night tick is an isolated observation on a genuine tired actor, not a fabricated played European fixture.",
+    "No missing new module import is used. Individual clear setter and real Hook guard tests belong to fixed product phase.",
+    "Separate old engine reference uses exact PR420 Engine and current held other dependencies, not a universal old-world comparison.",
+    "No app source, ref, local app runtime or parser was executed."
+  ]
+}

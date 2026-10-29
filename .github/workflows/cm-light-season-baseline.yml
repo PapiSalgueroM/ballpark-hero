@@ -1,0 +1,88 @@
+name: Club Manager Light season baseline
+on:
+  push:
+    branches: [codex/cm-light-season-baseline-20261028]
+    paths:
+      - .github/workflows/cm-light-season-baseline.yml
+      - scripts/qa/buildCmLightSeasonObserver.mjs
+      - scripts/qa/cmLightSeasonBaseline.mjs
+      - src/test/clubManagerLightSeason.baseline.test.tsx
+      - 'qa/cm-light-season-v1/**'
+permissions:
+  contents: read
+concurrency:
+  group: cm-light-season-baseline-${{ github.sha }}
+  cancel-in-progress: false
+defaults:
+  run:
+    shell: bash
+jobs:
+  baseline:
+    runs-on: ubuntu-latest
+    timeout-minutes: 45
+    env:
+      CI: '1'
+      SIM_NETWORK: offline
+      CAREER_SEASON_LOCAL_ONLY: '1'
+      CM_LIGHT_SEASON_OUT: ${{ github.workspace }}/cm-light-season-artifacts
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.sha }}
+          fetch-depth: 2
+          persist-credentials: false
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: npm
+      - name: Exact PR420 parent and six QA additions
+        run: |
+          set -euo pipefail
+          test "$GITHUB_REF_NAME" = codex/cm-light-season-baseline-20261028
+          test "$(git rev-parse HEAD)" = "$GITHUB_SHA"
+          test "$(git rev-list --parents -n 1 HEAD | wc -w)" = 2
+          test "$(git rev-parse HEAD^)" = 11aa2a6ef34c3cda3d2d88d95b2fd7d41fbbcd9e
+          test "$(git rev-parse HEAD^^{tree})" = bf5e6d0a486f81f3310af7932111bae57b241008
+          mkdir -p "$CM_LIGHT_SEASON_OUT"
+          git rev-parse HEAD HEAD^{tree} > "$CM_LIGHT_SEASON_OUT/head-tree.txt"
+          git archive --format=tar HEAD > "$CM_LIGHT_SEASON_OUT/source.tar"
+          git ls-tree -r HEAD > "$CM_LIGHT_SEASON_OUT/source-tree.txt"
+          git ls-files -z | sort -z | xargs -0 sha256sum > "$CM_LIGHT_SEASON_OUT/tracked-before.sha256"
+          printf '%s  %s\n' b0f05706378f29be9450bf6ad959ac8b7c7dc5cbd8183462a38dff1f972725ce qa/cm-light-season-v1/BASELINE-SOURCE.json | sha256sum --check
+          printf '%s  %s\n' 88d4b7f5ebe122db0ff6fa8a2349a8faf26cd35ea642e70a2885c1b197e62166 scripts/qa/cmLightSeasonBaseline.mjs | sha256sum --check
+          node --check scripts/qa/buildCmLightSeasonObserver.mjs
+          node --check scripts/qa/cmLightSeasonBaseline.mjs
+          node scripts/qa/cmLightSeasonBaseline.mjs source 2>&1 | tee "$CM_LIGHT_SEASON_OUT/source-pins.log"
+          git diff --name-only HEAD^ HEAD | sort > "$CM_LIGHT_SEASON_OUT/changed-paths.txt"
+          diff -u <(node -e 'const fs=require("fs");console.log(JSON.parse(fs.readFileSync("qa/cm-light-season-v1/BASELINE-SOURCE.json")).allowedPaths.sort().join("\n"))') "$CM_LIGHT_SEASON_OUT/changed-paths.txt"
+          test "$(git diff --name-status HEAD^ HEAD | grep -c '^A')" = 6
+          test "$(git ls-files | wc -l)" = "$(( $(git ls-tree -r --name-only HEAD^ | wc -l) + 6 ))"
+      - name: Install locked dependencies
+        run: |
+          set -euo pipefail
+          echo '127.0.0.1 flawuiqbvjobmkfkauhw.supabase.co' | sudo tee -a /etc/hosts
+          npm ci 2>&1 | tee "$CM_LIGHT_SEASON_OUT/npm-ci.log"
+      - name: Real application types
+        run: |
+          set -euo pipefail
+          NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node_modules/.bin/tsc --noEmit -p tsconfig.app.json 2>&1 | tee "$CM_LIGHT_SEASON_OUT/types.log"
+      - name: Actual five cases with owned causes and preservation
+        run: |
+          set -euo pipefail
+          NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/qa/cmLightSeasonBaseline.mjs 2>&1 | tee "$CM_LIGHT_SEASON_OUT/baseline-admission.log"
+      - name: Every tracked canonical and QA body held
+        if: always()
+        run: |
+          set -euo pipefail
+          sha256sum --check "$CM_LIGHT_SEASON_OUT/tracked-before.sha256" > "$CM_LIGHT_SEASON_OUT/tracked-held.log"
+          git status --porcelain --untracked-files=no > "$CM_LIGHT_SEASON_OUT/tracked-status.txt"
+          test ! -s "$CM_LIGHT_SEASON_OUT/tracked-status.txt"
+          git diff --exit-code HEAD
+      - name: Retain original evidence including failure
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: cm-light-season-baseline-${{ github.run_id }}-${{ github.run_attempt }}
+          path: cm-light-season-artifacts/
+          if-no-files-found: error
+          retention-days: 14
