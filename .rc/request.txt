@@ -1,0 +1,4 @@
+#!serial
+c4b-real: node .rc/x/review-run-c4b.mjs && { node_modules/.bin/vitest run src/test/usCareerHallWall.test.tsx -t "C4b" --testTimeout=300000 --hookTimeout=120000; s=$?; }; git checkout -- src scripts; exit ${s:-7}
+c4b-mutAny: node .rc/x/review-run-c4b.mjs && node .rc/x/review-run-mut.mjs hallKeptAny && { node_modules/.bin/vitest run src/test/usCareerHallWall.test.tsx -t "C4b" --testTimeout=300000 --hookTimeout=120000; s=$?; }; git checkout -- src scripts; exit ${s:-7}
+clean: git status --short; echo CLEAN-CHECK-DONE
