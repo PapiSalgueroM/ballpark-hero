@@ -1,0 +1,10 @@
+tsc exit=0 106s | 
+swaprepeat exit=1 212s | simTriviaBank: 4 failure(s) (NEGATIVE CONTROL swaprepeat ON)
+default exit=0 226s | simTriviaBank: all checks passed
+swapfive exit=1 221s | simTriviaBank: 4 failure(s) (NEGATIVE CONTROL swapfive ON)
+swapmove exit=1 219s | simTriviaBank: 4 failure(s) (NEGATIVE CONTROL swapmove ON)
+swapeasy exit=1 216s | simTriviaBank: 8 failure(s) (NEGATIVE CONTROL swapeasy ON)
+tie-base exit=0 210s | simTriviaBank: all checks passed
+dr exit=0 19s | simDailyReload: all green (1 row(s), both controls fired)
+tie-head exit=1 191s | simTriviaBank: 4 failure(s)
+ctl-short exit=1 196s | simTriviaBank: 7 failure(s) (NEGATIVE CONTROL short ON)
