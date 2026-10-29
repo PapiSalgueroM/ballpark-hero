@@ -1,0 +1,201 @@
+{
+  "schema": 1,
+  "status": "SOURCE_ONLY_CURRENT_APP3_BROWSER_REQUIRED_UNRUN",
+  "sourceFamilyBase": "11aa2a6ef34c3cda3d2d88d95b2fd7d41fbbcd9e",
+  "sourceFamilyTree": "bf5e6d0a486f81f3310af7932111bae57b241008",
+  "appSourceReadySHA256": "053b631579ca23bc1ecfe4da57a856cae759ad5a66963a239b1e1fd35b023beb",
+  "productManifestPath": "qa/cm-light-season-v1/PRODUCT-SOURCE-READY.json",
+  "productManifestSHA256": "887f8a0f4db3f01f0fb185cf8b60d0c9a8c14f57bb3e5abe8f2bc3b385199680",
+  "files": [
+    {
+      "path": "src/lib/clubManager.ts",
+      "bytes": 1243602,
+      "sha256": "4c3863cfd5a676bdbf4415fef337886b9324a2ae255a4389f12a8269eaa7735d",
+      "gitBlob": "9b6d84fe39b0ec55e35ca0a77603f5b69199300d"
+    },
+    {
+      "path": "src/components/club-manager/TrainingScreen.tsx",
+      "bytes": 13666,
+      "sha256": "ac9fbad9de7b0d9c33cedc32d45723361a36454f9759522aa203d964da6124a2",
+      "gitBlob": "9164f39611e0a5d8e12e7e37fe503d706ea46ed7"
+    },
+    {
+      "path": "src/pages/ClubManager.tsx",
+      "bytes": 104321,
+      "sha256": "22020e1efc2b71069afb3d8c6cb2ba5fc00cc0a7abf3aa306fd7964d379d308c",
+      "gitBlob": "3c26297f95077eabc2843afa69746531f5966af5"
+    },
+    {
+      "path": "src/components/club-manager/IndividualLightSeason.tsx",
+      "bytes": 5427,
+      "sha256": "5dd992d1a55a7b4a0657cc6b5500150ced0bbbb61d85e6898441861d0ba85a63",
+      "gitBlob": "c263e6552d41586c825c8744308a9d50c8d2d102"
+    },
+    {
+      "path": "src/hooks/useClubManager.ts",
+      "bytes": 70744,
+      "sha256": "dce880b04eb80792eb3ea97354aa5f0d146f89c5280f57055c04dbb1db274b62",
+      "gitBlob": "7297073ea60b93501df48ea9b7dfc74edd2217de"
+    },
+    {
+      "path": "src/hooks/useRevealScroll.ts",
+      "bytes": 12565,
+      "sha256": "42ee464df372437ff934b2f6a2b4acafc25493eb4062e0602166bfdd2e7479cd",
+      "gitBlob": "0cd106080bfb4e0461d9b86f0a973689f717d502"
+    },
+    {
+      "path": "src/lib/clubManagerSlots.ts",
+      "bytes": 9763,
+      "sha256": "7b0ec76d80544272a6f823834fb157e55970610b0bd4bf6217266ff780cab8ac",
+      "gitBlob": "cd1a683637ce1fa0444b86b1cff46821aa75127d"
+    },
+    {
+      "path": "src/lib/saveFence.ts",
+      "bytes": 6552,
+      "sha256": "75ac3c8cf136acdb2dae50938cac5ffe522e2db7827f59c453b98b67519d6216",
+      "gitBlob": "1de45b573fd866433eb0982495af927a5427e8f4"
+    },
+    {
+      "path": "src/components/club-manager/ManagerSlotsScreen.tsx",
+      "bytes": 7590,
+      "sha256": "f47001c235c6842236703c77493dc4748ac8a8e53d182d16f36732e5bd7e8b07",
+      "gitBlob": "5031ca1dbb585ea7b7810749fdf9c4136291fd4d"
+    },
+    {
+      "path": "scripts/lib/offlineTransport.cjs",
+      "bytes": 10660,
+      "sha256": "e60ff1534307e449ccef598e3b7470dcba58681b82cea4005cec7319f14f9221",
+      "gitBlob": "0fda542a2649fe5da937c6976fd0f5b6073e74b6"
+    },
+    {
+      "path": "scripts/lib/playwrightLoader.mjs",
+      "bytes": 2777,
+      "sha256": "94a07179be7ca6b9562d118b52c2d5d0dff0b6b2e29e49e4fea16fa2defb5a93",
+      "gitBlob": "4f7739e217e0a47ee82e6bfc8be1c04bed17454a"
+    },
+    {
+      "path": "scripts/lib/hostLikeServer.mjs",
+      "bytes": 2690,
+      "sha256": "3958c9a3b4d9e49bb60a3b7dd72d81a997bd1caed56e82e4c3bae07e1a918ef0",
+      "gitBlob": "21059d5e8114669df61106c125d5272d357b6236"
+    },
+    {
+      "path": "package.json",
+      "bytes": 3495,
+      "sha256": "acfe14626dea53cf5f9c5e0286b766a22237656b52aac4c888b080873ac90e31",
+      "gitBlob": "2ff64986fb76ebc51b706f2fd24765768874008a"
+    },
+    {
+      "path": "package-lock.json",
+      "bytes": 309049,
+      "sha256": "c7e3867eabf0bfa03a8aa6a5e601b0050b937ed210d48c6bbd241019e3c9ea76",
+      "gitBlob": "97d6f12a052f25f400462938c241789a083f0bfe"
+    },
+    {
+      "path": "qa/cm-light-season-v1/PRODUCT-SOURCE-READY.json",
+      "bytes": 1549,
+      "sha256": "887f8a0f4db3f01f0fb185cf8b60d0c9a8c14f57bb3e5abe8f2bc3b385199680",
+      "gitBlob": "4cd5cfe47ceefefb06f2eb9ec3d0cd7461135ac7"
+    },
+    {
+      "path": "qa/cm-light-season-v1/browser-earned-raw.txt",
+      "bytes": 76776,
+      "sha256": "26a2d39175ef1b5d6559a8fe9ca63f7aad7a216f6c80173ff744126c87a33984",
+      "gitBlob": "176585de638d7fa2aa116c6dcd26bdac9288d929"
+    }
+  ],
+  "fixture": {
+    "path": "qa/cm-light-season-v1/browser-earned-raw.txt",
+    "bytes": 76776,
+    "sha256": "26a2d39175ef1b5d6559a8fe9ca63f7aad7a216f6c80173ff744126c87a33984",
+    "club": "Brentford",
+    "season": 1,
+    "week": 1,
+    "playerId": "p-el-hadji-malick-diouf",
+    "admittedSeed": 2,
+    "sourceRun": 40819799175,
+    "sourceHead": "551d2ecf2e5895b039a1f13d6b02ded613baa500",
+    "admissionSHA256": "04b484ac2c2e3fda4a0950b593d96f4433cb74cb2fe12bc6816eacd5bad74350",
+    "sourceWrapperMember": "cases/default.json",
+    "sourceWrapperBytes": 11065959,
+    "sourceWrapperSHA256": "ebd3cc2684766c0761c1c1077c83a3ff7a974b97c1fe379f6e5c9e2e8aaa36b2",
+    "sourceField": "saved.value.raw",
+    "originalZIPBytes": 205987151,
+    "originalZIPSHA256": "fa802e4d93dc4f618e5168eb599b0956290edd5ddbaa68857345b134b2a9fce1",
+    "origin": "Actual public constructor/calendar replay and actual official save/load in admitted old-Engine baseline, not synthetic roster/core state."
+  },
+  "profiles": [
+    {
+      "width": 320,
+      "height": 568
+    },
+    {
+      "width": 390,
+      "height": 844
+    },
+    {
+      "width": 1280,
+      "height": 900
+    }
+  ],
+  "plannedNormalPNGs": 12,
+  "plannedCopiedControls": [
+    {
+      "field": "viewport",
+      "mutation": "first measured innerWidth +5",
+      "cause": "VIEWPORT"
+    },
+    {
+      "field": "fonts",
+      "mutation": "first measured fonts loaded -> loading",
+      "cause": "FONTS"
+    },
+    {
+      "field": "visible",
+      "mutation": "first measured painted -> false",
+      "cause": "VISIBLE"
+    },
+    {
+      "field": "target44",
+      "mutation": "first measured button height ->1",
+      "cause": "TARGET_44"
+    },
+    {
+      "field": "focus",
+      "mutation": "first measured focus ->false",
+      "cause": "FOCUS"
+    },
+    {
+      "field": "rules",
+      "mutation": "replace actual rendered rules text",
+      "cause": "RULES"
+    },
+    {
+      "field": "position",
+      "mutation": "actual first return y +8",
+      "cause": "WINDOW_POSITION"
+    },
+    {
+      "field": "raw",
+      "mutation": "append one space to actual official raw",
+      "cause": "OFFICIAL_RAW"
+    },
+    {
+      "field": "transition",
+      "mutation": "append second initial-to-expected raw write observation",
+      "cause": "ONE_COMMIT_TRANSITION"
+    }
+  ],
+  "launchPrerequisite": "Current App3 real types plus all22 actual cases,method3 and copied3 must pass in this same ordinary workflow BEFORE build/readers/caps/browser. Prior5bb is historical App2 only.",
+  "limits": [
+    "Old PR420 pre-BS source only. Main port and new source qualification required separately.",
+    "Actual Page and Hook served through the real route; same-source Engine reference is not an independent implementation.",
+    "No forced stalled lazy import, replaced-save, second-tab or post-departure browser context. Actual mounted12 owns those scoped transaction/departure tests.",
+    "One accepted commitment means one distinct raw transition. Identical physical autosaves are retained and reported separately.",
+    "Native select uses the real select DOM control and its normal change events; buttons use actual touch/mouse input.",
+    "Cosmetic flag fixtures are not verified flag-pixel coverage.",
+    "Nine COPIED measured-observation controls are proposed, no physical source/DOM fault or fault-PNG claim.",
+    "No actual browser result, image review, cap outcome or main/live claim.",
+    "Future caller must retain and compare every built-dist body, the font manifest and all cached font bodies before and after the helper. The helper does not currently perform these complete holds."
+  ]
+}

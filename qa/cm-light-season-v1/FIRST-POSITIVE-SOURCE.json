@@ -1,0 +1,389 @@
+{
+  "schema": 1,
+  "status": "SOURCE_ONLY_CURRENT_APP3_HEALTHY_RERUN_REQUIRED",
+  "parentCommit": "11aa2a6ef34c3cda3d2d88d95b2fd7d41fbbcd9e",
+  "parentTree": "bf5e6d0a486f81f3310af7932111bae57b241008",
+  "branch": "codex/cm-light-season-browser-v2-20261029",
+  "sourceFamily": "Old clean PR420 only. Not current-main, post-BS, live or final qualification.",
+  "appSourceReadySHA256": "053b631579ca23bc1ecfe4da57a856cae759ad5a66963a239b1e1fd35b023beb",
+  "testSourceReadySHA256": "ea96692a3774b6a44aaa66949045b29cb8e76dec55080c24d12cbc2c0288e84e",
+  "productManifestPath": "qa/cm-light-season-v1/PRODUCT-SOURCE-READY.json",
+  "productManifestSHA256": "887f8a0f4db3f01f0fb185cf8b60d0c9a8c14f57bb3e5abe8f2bc3b385199680",
+  "files": [
+    {
+      "path": "src/lib/clubManager.ts",
+      "bytes": 1243602,
+      "sha256": "4c3863cfd5a676bdbf4415fef337886b9324a2ae255a4389f12a8269eaa7735d",
+      "gitBlob": "9b6d84fe39b0ec55e35ca0a77603f5b69199300d"
+    },
+    {
+      "path": "src/components/club-manager/TrainingScreen.tsx",
+      "bytes": 13666,
+      "sha256": "ac9fbad9de7b0d9c33cedc32d45723361a36454f9759522aa203d964da6124a2",
+      "gitBlob": "9164f39611e0a5d8e12e7e37fe503d706ea46ed7"
+    },
+    {
+      "path": "src/pages/ClubManager.tsx",
+      "bytes": 104321,
+      "sha256": "22020e1efc2b71069afb3d8c6cb2ba5fc00cc0a7abf3aa306fd7964d379d308c",
+      "gitBlob": "3c26297f95077eabc2843afa69746531f5966af5"
+    },
+    {
+      "path": "src/components/club-manager/IndividualLightSeason.tsx",
+      "bytes": 5427,
+      "sha256": "5dd992d1a55a7b4a0657cc6b5500150ced0bbbb61d85e6898441861d0ba85a63",
+      "gitBlob": "c263e6552d41586c825c8744308a9d50c8d2d102"
+    },
+    {
+      "path": "src/test/clubManagerLightSeason.test.tsx",
+      "bytes": 35539,
+      "sha256": "f98942892ba17b726f8fae46650ceb13f2ad8f612f5baa4e7aac2b7cb7cca1f3",
+      "gitBlob": "7e6614cae83a0b52459404c49c651645c491667b"
+    },
+    {
+      "path": "scripts/qa/buildCmLightSeasonFixedObserver.mjs",
+      "bytes": 7758,
+      "sha256": "b1a2ef112374614192b6b277595f713b81530f3b2b8f3b1da95d1ac07106647e",
+      "gitBlob": "53756791073869c7237dd8a819d81db0295491e4"
+    },
+    {
+      "path": "qa/cm-light-season-v1/original/clubManager.ts",
+      "bytes": 1240569,
+      "sha256": "05de3cfca8d978e6117979fb29b82b2ece7b9fb6ee1f2ce3c051e379e36de86e",
+      "gitBlob": "a505743537b383bc7885bb81f5a72c11e154b566"
+    },
+    {
+      "path": "src/test/clubManagerLightSeasonMounted.test.tsx",
+      "bytes": 17320,
+      "sha256": "feec077e6bdf5aceb21e19220e81a3bf4901fbebca5e0dfb7dc4dd58b4d68712",
+      "gitBlob": "b97828b6fb0d99ae62c51075b22de694a26bc7c7"
+    },
+    {
+      "path": "scripts/qa/cmLightSeasonFirstPositive.mjs",
+      "bytes": 19292,
+      "sha256": "8e18128a51c483165ca42d7b3ff654bd534c12051ba4975647001e707162f7c0",
+      "gitBlob": "9bcead758857ecd3fa4f9b4963429803e30aeded"
+    },
+    {
+      "path": "qa/cm-light-season-v1/PRODUCT-SOURCE-READY.json",
+      "bytes": 1549,
+      "sha256": "887f8a0f4db3f01f0fb185cf8b60d0c9a8c14f57bb3e5abe8f2bc3b385199680",
+      "gitBlob": "4cd5cfe47ceefefb06f2eb9ec3d0cd7461135ac7"
+    },
+    {
+      "path": "src/hooks/useClubManager.ts",
+      "bytes": 70744,
+      "sha256": "dce880b04eb80792eb3ea97354aa5f0d146f89c5280f57055c04dbb1db274b62",
+      "gitBlob": "7297073ea60b93501df48ea9b7dfc74edd2217de"
+    },
+    {
+      "path": "scripts/simAcademy.mjs",
+      "bytes": 29056,
+      "sha256": "0af666a9f5d3bcdef7923a06eab971c01504c0f63ff557078a746c6411587965",
+      "gitBlob": "4cf364759fff1a0a41aa7b8aaff62cc31bfe5b44"
+    },
+    {
+      "path": "src/test/setup.ts",
+      "bytes": 847,
+      "sha256": "0175cc334b44d9874ff4bd8274a8cc165e9e84cd3738a4298f934db353887289",
+      "gitBlob": "df00cdf5c54e8c8efc71e46d7585ae76acb4fc8d"
+    },
+    {
+      "path": "scripts/lib/offlineTransport.cjs",
+      "bytes": 10660,
+      "sha256": "e60ff1534307e449ccef598e3b7470dcba58681b82cea4005cec7319f14f9221",
+      "gitBlob": "0fda542a2649fe5da937c6976fd0f5b6073e74b6"
+    },
+    {
+      "path": "tsconfig.app.json",
+      "bytes": 680,
+      "sha256": "b12030bfe21ea5be66670842c71d66d194d1771f93f0b8c076e97c867b4b0552",
+      "gitBlob": "51f581dd91641b4c1f1219f646788e73cf6bf00c"
+    },
+    {
+      "path": "vitest.config.ts",
+      "bytes": 5364,
+      "sha256": "6a68dd2f214dab4a3013eb41bad38eea65d703d61440002710ec246495e1c58a",
+      "gitBlob": "ed2a9dc677f77dfe95c061064eeff5782b856864"
+    },
+    {
+      "path": "package.json",
+      "bytes": 3495,
+      "sha256": "acfe14626dea53cf5f9c5e0286b766a22237656b52aac4c888b080873ac90e31",
+      "gitBlob": "2ff64986fb76ebc51b706f2fd24765768874008a"
+    },
+    {
+      "path": "package-lock.json",
+      "bytes": 309049,
+      "sha256": "c7e3867eabf0bfa03a8aa6a5e601b0050b937ed210d48c6bbd241019e3c9ea76",
+      "gitBlob": "97d6f12a052f25f400462938c241789a083f0bfe"
+    },
+    {
+      "path": "src/hooks/useRevealScroll.ts",
+      "bytes": 12565,
+      "sha256": "42ee464df372437ff934b2f6a2b4acafc25493eb4062e0602166bfdd2e7479cd",
+      "gitBlob": "0cd106080bfb4e0461d9b86f0a973689f717d502"
+    },
+    {
+      "path": "src/lib/clubManagerSlots.ts",
+      "bytes": 9763,
+      "sha256": "7b0ec76d80544272a6f823834fb157e55970610b0bd4bf6217266ff780cab8ac",
+      "gitBlob": "cd1a683637ce1fa0444b86b1cff46821aa75127d"
+    },
+    {
+      "path": "src/lib/saveFence.ts",
+      "bytes": 6552,
+      "sha256": "75ac3c8cf136acdb2dae50938cac5ffe522e2db7827f59c453b98b67519d6216",
+      "gitBlob": "1de45b573fd866433eb0982495af927a5427e8f4"
+    },
+    {
+      "path": "scripts/runAllSims.mjs",
+      "bytes": 22720,
+      "sha256": "aea1ca2262f57a5cea27142b0a3576a63bac6120a61ee85bcff09a9a982eb493",
+      "gitBlob": "a7d56d224a472b8eacfe1c4fd2f672f962259d28"
+    },
+    {
+      "path": "scripts/sweepWeight.mjs",
+      "bytes": 97218,
+      "sha256": "4e6e69a1cd9b58f585890c82cd698e598f8c112f88de4c0c9d10fc0f56feb81b",
+      "gitBlob": "10fa2bd492f37a59f77af9356691d7b1248141de"
+    },
+    {
+      "path": "scripts/lib/hostLikeServer.mjs",
+      "bytes": 2690,
+      "sha256": "3958c9a3b4d9e49bb60a3b7dd72d81a997bd1caed56e82e4c3bae07e1a918ef0",
+      "gitBlob": "21059d5e8114669df61106c125d5272d357b6236"
+    },
+    {
+      "path": "scripts/qa/freeKickLab1070.mjs",
+      "bytes": 27126,
+      "sha256": "6279c8f608e56439e73f0bbcda73f9ed69e15d48e9b13119de4d6a7f05fb46b7",
+      "gitBlob": "1cf030d9182fd4fd68fca39f32e757c69bf9e58a"
+    },
+    {
+      "path": "scripts/prerender.mjs",
+      "bytes": 50126,
+      "sha256": "9eb04f0d5fa75aa2f073475f4b5e3c8243326bd148bc7cc5049a7ba5c1ddc80f",
+      "gitBlob": "3d4fb1e595413c48c7bd65b927730d25cc3a2e18"
+    },
+    {
+      "path": "scripts/genSitemap.mjs",
+      "bytes": 21388,
+      "sha256": "f3e6d4dc051ca484d39f36386381c5211e4847bc203e1e223dc5f54f6105fafc",
+      "gitBlob": "08344dfc84be3ca24533c8d56e0f229b02b93c0a"
+    },
+    {
+      "path": "scripts/simAdsense.mjs",
+      "bytes": 29408,
+      "sha256": "4b59a16cb1f9ad9fdbc61d48929a6ee1039eb82601c7745c1c4711aefebe40d3",
+      "gitBlob": "767fd4119f1f24c5dda295834abad29887edc71f"
+    },
+    {
+      "path": "scripts/simBrand.mjs",
+      "bytes": 15815,
+      "sha256": "68d70a75423a5b016ea16d3273c7fe4b1b3df631cfeaf03a23f0b02dc0895391",
+      "gitBlob": "c17f21d76cecce77f0ccbae7986e79f88ee121f5"
+    },
+    {
+      "path": "scripts/simHeadTags.mjs",
+      "bytes": 9031,
+      "sha256": "e5f5430f845399ca4f4b9e495f9701bac98c546915a0ffa0d35e71548b19e7b8",
+      "gitBlob": "a2d1cd4548e5f06a72960b2a9393eee741b1abb6"
+    },
+    {
+      "path": "scripts/simHiddenPages.mjs",
+      "bytes": 5262,
+      "sha256": "9b814aa337e45f6378fe8118d7beddfc10a4f5597b119edf95ab33c48a396cff",
+      "gitBlob": "f5951796f3d1c8f535cfcaf3198f0806c7fa57d2"
+    },
+    {
+      "path": "scripts/simHubs.mjs",
+      "bytes": 19480,
+      "sha256": "34544d701b5efe92389ddda30541e2f7608104a04076f1504c7aab590212a1e4",
+      "gitBlob": "ef8c89f4ed25d000cb4d4796f515b6660c6c5d3e"
+    },
+    {
+      "path": "scripts/simIndexNow.mjs",
+      "bytes": 5747,
+      "sha256": "7713c136f132acbee99fb9c7540346298739e75c2a915d20b32d7e760f2bfdeb",
+      "gitBlob": "970df1757c5cf8ad7c68d5e96e3e4432678a5e3c"
+    },
+    {
+      "path": "scripts/simIndexing.mjs",
+      "bytes": 17439,
+      "sha256": "e34f8f0cbc2d1611b2506c27f9be3ac99a61b2a1b2c84c2ad70a3887f3b808da",
+      "gitBlob": "ded7b515505b7d7dc3e94e0d33a25db69fd2f695"
+    },
+    {
+      "path": "scripts/simInternalLinks.mjs",
+      "bytes": 10063,
+      "sha256": "77694c675c5a813a31d60c9cb114f2574075383c8b432887ec25c10ae7c9f7aa",
+      "gitBlob": "4963212706d2df4d802f0a584a6a0b825bc64dac"
+    },
+    {
+      "path": "scripts/simNoRivalNames.mjs",
+      "bytes": 20911,
+      "sha256": "eb779b90da75b3433ef7cdf88b753c7c33722d8d4d1f59fd37bcb4fe6d4a0c4a",
+      "gitBlob": "0cc180c43c692ed65fb067e7f187826806845798"
+    },
+    {
+      "path": "scripts/simPrerender.mjs",
+      "bytes": 57615,
+      "sha256": "fc74c7a19531ab7a3e6f72e7630fdbc05cf4d4df62fd747deffa098ad2283a48",
+      "gitBlob": "69b86c4732c86e3852d30a2abf3343f655ea728d"
+    },
+    {
+      "path": "scripts/simPrerenderBoot.mjs",
+      "bytes": 14435,
+      "sha256": "d9e6372062a669c51c3f36d2f034f0f1c261f6906725b82893642c404b72bd1c",
+      "gitBlob": "5ded1f8ccc2e65766d15cb0d59957754180ff4f5"
+    },
+    {
+      "path": "scripts/simRetiredRoutes.mjs",
+      "bytes": 7219,
+      "sha256": "74a961483d97fe48519745a36c91fa504b59e067b2453a9708ab1755f7a7a59e",
+      "gitBlob": "e88b9715bb5409c88b5a6059e422ccd872edc272"
+    },
+    {
+      "path": "scripts/simSchema.mjs",
+      "bytes": 15368,
+      "sha256": "fc97df743c48145c91b43b4a3357cd6ea421e9210f496aa7965664b2d61b4636",
+      "gitBlob": "793c7b1e646dafcf3d664263a94144af18e24ee6"
+    },
+    {
+      "path": "scripts/simSitemap.mjs",
+      "bytes": 10368,
+      "sha256": "c0d0c63af03f9dd54d2633c549ea2d1588214df61f2b5d1e90bfafbccc621edf",
+      "gitBlob": "517bac00ae17c029d57c7bfa5bbc55ec78eb9d15"
+    },
+    {
+      "path": "scripts/simSnapshotAssets.mjs",
+      "bytes": 11524,
+      "sha256": "929040c81c7ae027972b35f4ea629ae69d39e3cbc4797bdf8e2df3d25d204317",
+      "gitBlob": "66eaed1457e5ac3087b62d7e46328951f49618c9"
+    }
+  ],
+  "allowedDelta": [
+    "M\tsrc/lib/clubManager.ts",
+    "M\tsrc/pages/ClubManager.tsx",
+    "M\tsrc/components/club-manager/TrainingScreen.tsx",
+    "A\tsrc/components/club-manager/IndividualLightSeason.tsx",
+    "A\tsrc/test/clubManagerLightSeason.test.tsx",
+    "A\tsrc/test/clubManagerLightSeasonMounted.test.tsx",
+    "A\tscripts/qa/buildCmLightSeasonFixedObserver.mjs",
+    "A\tqa/cm-light-season-v1/original/clubManager.ts",
+    "A\tscripts/qa/cmLightSeasonFirstPositive.mjs",
+    "A\tqa/cm-light-season-v1/PRODUCT-SOURCE-READY.json",
+    "A\tqa/cm-light-season-v1/FIRST-POSITIVE-SOURCE.json",
+    "A\t.github/workflows/cm-light-season-first-positive.yml",
+    "A\tscripts/qa/playCmLightSeason.mjs",
+    "A\tqa/cm-light-season-v1/BROWSER-SOURCE.json",
+    "A\tqa/cm-light-season-v1/browser-earned-raw.txt",
+    "A\tqa/cm-light-season-v1/BUILD-SOURCE.json",
+    "A\t.github/workflows/cm-light-season-browser.yml"
+  ],
+  "expectedParentBlobs": 5396,
+  "expectedFinalBlobs": 5410,
+  "suites": [
+    {
+      "path": "src/test/clubManagerLightSeason.test.tsx",
+      "prefix": "Club Manager Light season actual-source fixed",
+      "titles": [
+        "offers the season-long individual choice in the actual TrainingScreen",
+        "uses existing Light recovery for the committed owned player",
+        "retains the actual Light growth cost after a late team-plan change",
+        "preserves untouched global plans and full state save and random receipts",
+        "preserves invalid optional metadata and the existing negative age drift",
+        "validates the actual owned request and refuses clearing replacing stale players and malformed contexts with zero draws",
+        "preserves actual double-training knock draws while week and night use Light recovery only for the selected player",
+        "keeps an earned commitment through a late team toggle and expires it only after actual annual growth",
+        "charges normal annual Light development to an actual returning owned loanee and holds the old separate loan boost and buy option",
+        "refuses a genuine incoming loan without changing its state save or random stream"
+      ]
+    },
+    {
+      "path": "src/test/clubManagerLightSeasonMounted.test.tsx",
+      "prefix": "Light season through the real Club Manager Page and Hook",
+      "titles": [
+        "can Back out during the actual first cold lazy tick without a write or later reopening",
+        "commits the actual Page choice once through the real writer and official reload",
+        "keeps help and unconfirmed Back read-only and returns focus to the real help button",
+        "reserves before render so the same captured Light request cannot publish twice",
+        "retains memory and disk after both actual save attempts refuse",
+        "denies a stale career and an equal cloned player through the actual writer",
+        "refuses a captured callback after an actual phase-only move out of the hub",
+        "does not overwrite the career made active by another slot",
+        "denies an identical replaced save after the actual hook leaves and reloads its slot",
+        "refuses a genuine newer same-slot fence before the Light transform runs",
+        "invalidates the real commit callback on unmount",
+        "keeps one season reserved after actual loan-out or termination and shows no replacement picker"
+      ]
+    }
+  ],
+  "healthyCases": 22,
+  "readers": [
+    "simAdsense.mjs",
+    "simBrand.mjs",
+    "simHeadTags.mjs",
+    "simHiddenPages.mjs",
+    "simHubs.mjs",
+    "simIndexNow.mjs",
+    "simIndexing.mjs",
+    "simInternalLinks.mjs",
+    "simNoRivalNames.mjs",
+    "simPrerender.mjs",
+    "simPrerenderBoot.mjs",
+    "simRetiredRoutes.mjs",
+    "simSchema.mjs",
+    "simSitemap.mjs",
+    "simSnapshotAssets.mjs"
+  ],
+  "caps": {
+    "/": 245,
+    "/club-manager": 636,
+    "/soccer-career": 840,
+    "/stadium-tycoon": 305,
+    "/wonderkid-factory": 278,
+    "/minefield": 295,
+    "/footle": 354,
+    "/nfl-my-career": 494,
+    "/front-office": 387,
+    "/soccer-grid": 319,
+    "/leaderboard": 266,
+    "/manager-hot-seat": 650,
+    "/deadline-day": 660,
+    "/transfer-path": 379,
+    "/nba-front-office": 396
+  },
+  "retainedSourceInventorySHA256": "286d4ca9397ef1dfc3d2c197c745de9a004eada23b5db43869df3005e4512eae",
+  "guardOrder": [
+    "Exact parent and all declared source pins plus full source archive/ledger",
+    "Real tsconfig.app types",
+    "22 healthy cases with actual Node child and retained causal evidence, then3 strict method witnesses plus3 specific changed COPIED same-copy restores",
+    "Detached two-route build",
+    "All15 unchanged readers",
+    "All15 unchanged rounded fatal caps",
+    "Canonical/built source and dist holds plus always upload"
+  ],
+  "limits": [
+    "No new physical faults, feature browser, full suite or global819 workload.",
+    "BeforeAll copied strict-history control remains part of frozen healthy tests, not a physical app fault.",
+    "No actual fixed result or size credit before remote output.",
+    "Observer/reference module initialization is excluded and unmeasured. Exact old Engine with current held other dependencies is not a universal old-world comparison."
+  ],
+  "methodWitnesses": {
+    "react": "Exact18.3.1 source/version, one first enqueueTask stack/draw and zero second initialization draws",
+    "incoming": "Retained public legal-loan census and genuine accepted incoming state, same32 action bound",
+    "yield": "Nonempty realNode setImmediate progress matching the retained owned-return witness, outside unchanged action tapes",
+    "copiedControls": [
+      "METHOD_REACT_SCHEDULER_CAUSE",
+      "METHOD_INCOMING_LOAN_ACQUIRED",
+      "METHOD_REAL_YIELD_PROGRESS"
+    ],
+    "actualFailedPredecessorRun": 40832410758,
+    "actualFailureDiagnosisSHA256": "fcc581ee7ac0234f84ab1682803b7bf32ae2dd6ab0e8eb5c67b5a183d4ec445b",
+    "testRootSourceGOSHA256": "f78f2f71c90d3e9faa3b0edf878374a1323c89e08a40d6bdc3910f61355489c9",
+    "testPeerSourceGOSHA256": "c7a6e67d0c2dba908df0783147966a925ba53e45abb81226c0db8ec2675671d6",
+    "testHandoffSourceGOSHA256": "c6291bcd90533c79ba1fa08d0ca75fe0ccb52425d06e793501d49caeb405008e"
+  }
+}

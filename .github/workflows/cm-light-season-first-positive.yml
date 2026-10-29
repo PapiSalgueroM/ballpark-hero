@@ -1,0 +1,184 @@
+name: Club Manager Light season first positive
+on:
+  push:
+    branches: [codex/cm-light-season-first-positive-v2-20261029]
+    paths:
+      - .github/workflows/cm-light-season-first-positive.yml
+      - src/lib/clubManager.ts
+      - src/pages/ClubManager.tsx
+      - src/components/club-manager/TrainingScreen.tsx
+      - src/components/club-manager/IndividualLightSeason.tsx
+      - src/test/clubManagerLightSeason.test.tsx
+      - src/test/clubManagerLightSeasonMounted.test.tsx
+      - scripts/qa/buildCmLightSeasonFixedObserver.mjs
+      - scripts/qa/cmLightSeasonFirstPositive.mjs
+      - 'qa/cm-light-season-v1/**'
+permissions:
+  contents: read
+concurrency:
+  group: cm-light-first-positive-${{ github.sha }}
+  cancel-in-progress: false
+defaults:
+  run:
+    shell: bash
+jobs:
+  first-positive:
+    runs-on: ubuntu-latest
+    timeout-minutes: 70
+    env:
+      CI: '1'
+      SIM_NETWORK: offline
+      CAREER_SEASON_LOCAL_ONLY: '1'
+      CM_LIGHT_FIRST_POSITIVE_OUT: ${{ github.workspace }}/cm-light-first-positive-artifacts
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.sha }}
+          fetch-depth: 2
+          persist-credentials: false
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: npm
+      - name: Exact old PR420 family and reviewed source only
+        run: |
+          set -euo pipefail
+          test "$GITHUB_REF_NAME" = codex/cm-light-season-first-positive-v2-20261029
+          test "$(git rev-parse HEAD)" = "$GITHUB_SHA"
+          test "$(git rev-list --parents -n 1 HEAD | wc -w)" = 2
+          test "$(git rev-parse HEAD^)" = 11aa2a6ef34c3cda3d2d88d95b2fd7d41fbbcd9e
+          test "$(git rev-parse HEAD^^{tree})" = bf5e6d0a486f81f3310af7932111bae57b241008
+          mkdir -p "$CM_LIGHT_FIRST_POSITIVE_OUT/build"
+          git rev-parse HEAD HEAD^{tree} > "$CM_LIGHT_FIRST_POSITIVE_OUT/head-tree.txt"
+          git archive --format=tar HEAD > "$CM_LIGHT_FIRST_POSITIVE_OUT/source.tar"
+          git ls-tree -r HEAD > "$CM_LIGHT_FIRST_POSITIVE_OUT/source-tree.txt"
+          git ls-files -z | sort -z | xargs -0 sha256sum > "$CM_LIGHT_FIRST_POSITIVE_OUT/tracked-before.sha256"
+          printf '%s  %s\n' eea7d16862930dfd54acce7b85b3a5ca102c22912375f5b3ac88f983fb86dede qa/cm-light-season-v1/FIRST-POSITIVE-SOURCE.json | sha256sum --check
+          printf '%s  %s\n' 8e18128a51c483165ca42d7b3ff654bd534c12051ba4975647001e707162f7c0 scripts/qa/cmLightSeasonFirstPositive.mjs | sha256sum --check
+          node --check scripts/qa/buildCmLightSeasonFixedObserver.mjs
+          node --check scripts/qa/cmLightSeasonFirstPositive.mjs
+          node scripts/qa/cmLightSeasonFirstPositive.mjs source 2>&1 | tee "$CM_LIGHT_FIRST_POSITIVE_OUT/source-pins.log"
+          git diff --name-status HEAD^ HEAD | sort > "$CM_LIGHT_FIRST_POSITIVE_OUT/changed-paths.txt"
+          diff -u <(node -e 'const fs=require("fs");console.log(JSON.parse(fs.readFileSync("qa/cm-light-season-v1/FIRST-POSITIVE-SOURCE.json")).allowedDelta.sort().join("\n"))') "$CM_LIGHT_FIRST_POSITIVE_OUT/changed-paths.txt"
+          test "$(git ls-files | wc -l)" = 5405
+      - name: Install locked dependencies
+        run: |
+          set -euo pipefail
+          echo '127.0.0.1 flawuiqbvjobmkfkauhw.supabase.co' | sudo tee -a /etc/hosts
+          npm ci 2>&1 | tee "$CM_LIGHT_FIRST_POSITIVE_OUT/npm-ci.log"
+      - name: Real app types before healthy tests
+        run: |
+          set -euo pipefail
+          set +e
+          NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node_modules/.bin/tsc --noEmit -p tsconfig.app.json > "$CM_LIGHT_FIRST_POSITIVE_OUT/types.log" 2>&1
+          actual_exit=$?
+          set -e
+          printf '%s\n' "$actual_exit" > "$CM_LIGHT_FIRST_POSITIVE_OUT/types.exit"
+          cat "$CM_LIGHT_FIRST_POSITIVE_OUT/types.log"
+          test "$actual_exit" = 0
+      - name: Exactly twenty-two healthy actual-source cases
+        run: |
+          set -euo pipefail
+          NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/qa/cmLightSeasonFirstPositive.mjs healthy 2>&1 | tee "$CM_LIGHT_FIRST_POSITIVE_OUT/healthy-admission.log"
+          grep -Fx 'CM_LIGHT_FIRST_POSITIVE healthy: HEALTHY_22_PASS_FIRST_POSITIVE_ONLY' "$CM_LIGHT_FIRST_POSITIVE_OUT/healthy-admission.log" > /dev/null
+          grep -Fx 'CM_LIGHT_METHOD_WITNESSES:3 actual witnesses;3 changed COPIED method observations refused and same-copy readmitted.' "$CM_LIGHT_FIRST_POSITIVE_OUT/healthy-admission.log" > /dev/null
+      - name: Detached build tools and compatible retained fonts
+        env:
+          FREE_KICK_FONT_CACHE: ${{ github.workspace }}/cm-light-first-positive-artifacts/build/font-cache
+        run: |
+          set -euo pipefail
+          build_root="$RUNNER_TEMP/cm-light-first-positive-build-$GITHUB_RUN_ID-$GITHUB_RUN_ATTEMPT"
+          git worktree add --detach "$build_root" HEAD
+          ln -s "$GITHUB_WORKSPACE/node_modules" "$build_root/node_modules"
+          echo "CM_LIGHT_BUILD_ROOT=$build_root" >> "$GITHUB_ENV"
+          browser_tools="$RUNNER_TEMP/cm-light-first-positive-tools-$GITHUB_RUN_ID-$GITHUB_RUN_ATTEMPT"
+          mkdir -p "$browser_tools"
+          printf '{"private":true,"dependencies":{"playwright":"1.64.0"}}\n' > "$browser_tools/package.json"
+          npm install --prefix "$browser_tools" --ignore-scripts --no-audit --no-fund 2>&1 | tee "$CM_LIGHT_FIRST_POSITIVE_OUT/build/browser-install.log"
+          test ! -e node_modules/playwright
+          test ! -e node_modules/playwright-core
+          ln -s "$browser_tools/node_modules/playwright" node_modules/playwright
+          ln -s "$browser_tools/node_modules/playwright-core" node_modules/playwright-core
+          cp "$browser_tools/package.json" "$CM_LIGHT_FIRST_POSITIVE_OUT/build/browser-package.json"
+          cp "$browser_tools/package-lock.json" "$CM_LIGHT_FIRST_POSITIVE_OUT/build/browser-package-lock.json"
+          export PLAYWRIGHT_BROWSERS_PATH="$RUNNER_TEMP/cm-light-first-positive-chromium-$GITHUB_RUN_ID-$GITHUB_RUN_ATTEMPT"
+          echo "PLAYWRIGHT_BROWSERS_PATH=$PLAYWRIGHT_BROWSERS_PATH" >> "$GITHUB_ENV"
+          node "$browser_tools/node_modules/playwright/cli.js" install --with-deps chromium 2>&1 | tee "$CM_LIGHT_FIRST_POSITIVE_OUT/build/chromium.log"
+          python -m pip install fonttools pillow 2>&1 | tee "$CM_LIGHT_FIRST_POSITIVE_OUT/build/python-tools.log"
+          node scripts/qa/freeKickLab1070.mjs --prefetch-fonts-only 2>&1 | tee "$CM_LIGHT_FIRST_POSITIVE_OUT/build/font-prefetch.log"
+      - name: Actual two-route SEO build after healthy tests
+        env:
+          PRERENDER_ONLY: /club-manager,/whats-new
+        run: |
+          set -euo pipefail
+          cd "$CM_LIGHT_BUILD_ROOT"
+          mkdir -p "$CM_LIGHT_FIRST_POSITIVE_OUT/build/generation"
+          git ls-files -z | sort -z | xargs -0 sha256sum > "$CM_LIGHT_FIRST_POSITIVE_OUT/build/tracked-before.sha256"
+          for route in club-manager whats-new; do cp "public/$route/index.html" "$CM_LIGHT_FIRST_POSITIVE_OUT/build/generation/$route.before.html"; done
+          cp scripts/data/lastmod.json "$CM_LIGHT_FIRST_POSITIVE_OUT/build/generation/lastmod.before.json"
+          retain_generation() {
+            git diff -- public scripts/data/lastmod.json > "$CM_LIGHT_FIRST_POSITIVE_OUT/build/generation/full.diff"
+            for route in club-manager whats-new; do cp "public/$route/index.html" "$CM_LIGHT_FIRST_POSITIVE_OUT/build/generation/$route.after.html" || true; done
+            cp scripts/data/lastmod.json "$CM_LIGHT_FIRST_POSITIVE_OUT/build/generation/lastmod.after.json" || true
+          }
+          trap retain_generation EXIT
+          set +e
+          NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" npm run build:seo > "$CM_LIGHT_FIRST_POSITIVE_OUT/build/build.log" 2>&1
+          actual_exit=$?
+          set -e
+          printf '%s\n' "$actual_exit" > "$CM_LIGHT_FIRST_POSITIVE_OUT/build/build.exit"
+          cat "$CM_LIGHT_FIRST_POSITIVE_OUT/build/build.log"
+          test "$actual_exit" = 0
+          find dist -type f -print0 | sort -z | xargs -0 sha256sum > "$CM_LIGHT_FIRST_POSITIVE_OUT/build/dist.sha256"
+      - name: All fifteen unchanged rebuilt-site readers
+        run: |
+          set -euo pipefail
+          cd "$CM_LIGHT_BUILD_ROOT"
+          set +e
+          ONLY=simAdsense,simBrand,simHeadTags,simHiddenPages,simHubs,simIndexNow,simIndexing,simInternalLinks,simNoRivalNames,simPrerender,simPrerenderBoot,simRetiredRoutes,simSchema,simSitemap,simSnapshotAssets NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/runAllSims.mjs --browser > "$CM_LIGHT_FIRST_POSITIVE_OUT/build/readers.log" 2>&1
+          actual_exit=$?
+          set -e
+          printf '%s\n' "$actual_exit" > "$CM_LIGHT_FIRST_POSITIVE_OUT/build/readers.exit"
+          cat "$CM_LIGHT_FIRST_POSITIVE_OUT/build/readers.log"
+          node "$GITHUB_WORKSPACE/scripts/qa/cmLightSeasonFirstPositive.mjs" readers 2>&1 | tee "$CM_LIGHT_FIRST_POSITIVE_OUT/build/readers-admission.log"
+      - name: All fifteen unchanged rounded fatal caps
+        run: |
+          set -euo pipefail
+          cd "$CM_LIGHT_BUILD_ROOT"
+          NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/lib/hostLikeServer.mjs dist 4173 > "$CM_LIGHT_FIRST_POSITIVE_OUT/build/weight-server.log" 2>&1 &
+          server_pid=$!
+          trap 'kill "$server_pid" 2>/dev/null || true' EXIT
+          for attempt in 1 2 3 4 5; do if curl --fail --silent http://127.0.0.1:4173/ > /dev/null; then break; fi; sleep 1; done
+          curl --fail --silent http://127.0.0.1:4173/ > /dev/null
+          set +e
+          BASE=http://127.0.0.1:4173 SWEEP_OFFLINE=1 NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/sweepWeight.mjs > "$CM_LIGHT_FIRST_POSITIVE_OUT/build/weights.log" 2>&1
+          actual_exit=$?
+          set -e
+          printf '%s\n' "$actual_exit" > "$CM_LIGHT_FIRST_POSITIVE_OUT/build/weights.exit"
+          cat "$CM_LIGHT_FIRST_POSITIVE_OUT/build/weights.log"
+          node "$GITHUB_WORKSPACE/scripts/qa/cmLightSeasonFirstPositive.mjs" caps 2>&1 | tee "$CM_LIGHT_FIRST_POSITIVE_OUT/build/caps-admission.log"
+      - name: Exact built source and distribution held
+        if: always()
+        run: |
+          set -euo pipefail
+          if test -n "${CM_LIGHT_BUILD_ROOT:-}"; then
+            git -C "$CM_LIGHT_BUILD_ROOT" diff --exit-code HEAD -- src scripts qa .github/workflows docs package.json package-lock.json bun.lock index.html ':!scripts/data/lastmod.json'
+            git -C "$CM_LIGHT_BUILD_ROOT" diff --name-only HEAD > "$CM_LIGHT_FIRST_POSITIVE_OUT/build/changed-generated-paths.txt"
+            if test -f "$CM_LIGHT_FIRST_POSITIVE_OUT/build/dist.sha256"; then (cd "$CM_LIGHT_BUILD_ROOT" && sha256sum --check "$CM_LIGHT_FIRST_POSITIVE_OUT/build/dist.sha256") > "$CM_LIGHT_FIRST_POSITIVE_OUT/build/dist-held.log"; fi
+          fi
+      - name: All canonical tracked sources held
+        if: always()
+        run: |
+          set -euo pipefail
+          sha256sum --check "$CM_LIGHT_FIRST_POSITIVE_OUT/tracked-before.sha256" > "$CM_LIGHT_FIRST_POSITIVE_OUT/tracked-held.log"
+          git status --porcelain --untracked-files=no > "$CM_LIGHT_FIRST_POSITIVE_OUT/tracked-status.txt"
+          test ! -s "$CM_LIGHT_FIRST_POSITIVE_OUT/tracked-status.txt"
+          git diff --exit-code HEAD
+      - name: Retain original evidence including refusals
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: cm-light-first-positive-${{ github.run_id }}-${{ github.run_attempt }}
+          path: cm-light-first-positive-artifacts/
+          if-no-files-found: error
+          retention-days: 14
