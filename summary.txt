@@ -1,0 +1,13 @@
+default exit=0 174s | simTriviaBank: all checks passed
+armfile exit=0 185s | simTriviaBank: all checks passed
+repro777head exit=0 225s | simTriviaBank: all checks passed
+ctl-short exit=1 190s | simTriviaBank: 6 failure(s) (NEGATIVE CONTROL short ON)
+ctl-redeal exit=1 198s | simTriviaBank: 17 failure(s) (NEGATIVE CONTROL redeal ON)
+ctl-dupe exit=1 160s | simTriviaBank: 26 failure(s) (NEGATIVE CONTROL dupe ON)
+ctl-tense exit=1 160s | simTriviaBank: 8 failure(s) (NEGATIVE CONTROL tense ON)
+ctl-namesake exit=1 178s | simTriviaBank: 8 failure(s) (NEGATIVE CONTROL namesake ON)
+ctl-ties exit=1 204s | simTriviaBank: 8 failure(s) (NEGATIVE CONTROL ties ON)
+ctl-postense exit=1 167s | simTriviaBank: 8 failure(s) (NEGATIVE CONTROL postense ON)
+ctl-family exit=1 164s | simTriviaBank: 8 failure(s) (NEGATIVE CONTROL family ON)
+ctl-legacy exit=1 192s | simTriviaBank: 5 failure(s) (NEGATIVE CONTROL legacy ON)
+ctl-rulec exit=1 143s | simTriviaBank: 8 failure(s) (NEGATIVE CONTROL rulec ON)
