@@ -1,0 +1,4 @@
+0) every useDailyPuzzle consumer is mounted by one of the two tests
+   39 consumers: 36 routes in the shapes test, 3 unrouted (useFootballDraft.ts, useGuessTransferValue.ts, useWorldCup.ts) in the hardening test; 19 hand in their own check
+R848 guidelate control: 9 rows red, exactly the first row of each of the 9 guide files (/afl-higher-lower, /baseball-career, /career, /cfb-higher-lower, /football-grid, /hockey-career, /nba-career, /olympics, /career-ladder), 27 green; every failure a page difference
+simDailySaveHardening: control guidelate fired as designed
