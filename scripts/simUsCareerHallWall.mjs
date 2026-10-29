@@ -86,8 +86,8 @@ if (CONTROL && !SOURCE_CONTROLS[CONTROL] && !HARNESS_CONTROLS.includes(CONTROL))
   console.error(`simUsCareerHallWall: SIM_HALL_WALL_CONTROL=${CONTROL} is not a control this harness knows`);
   process.exit(2);
 }
-const rawSource = readFileSync(path.join(ROOT, MODULE), 'utf8');
-const source = rawSource.replace(/\r\n/g, '\n');
+/* Normalised on the read itself, so a multi line control string matches on a CRLF checkout (simHarnessAnchors). */
+const source = readFileSync(path.join(ROOT, MODULE), 'utf8').replace(/\r\n/g, '\n');
 let controlled = source;
 if (SOURCE_CONTROLS[CONTROL]) {
   const { from, to } = SOURCE_CONTROLS[CONTROL];
