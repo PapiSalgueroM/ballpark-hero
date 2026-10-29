@@ -1,0 +1,38 @@
+tsc: node_modules/.bin/tsc --noEmit -p tsconfig.app.json
+vitest: node_modules/.bin/vitest run src/components/nba-front-office src/components/front-office src/components/front-office-shared src/lib/nflSeasonStats.test.ts src/lib/nbaEarnedDraft.test.ts src/lib/nbaOpeningRatings.test.ts src/lib/nbaRotation.test.ts src/test/nbaAwardDecisionLift.test.ts --testTimeout=300000 --hookTimeout=120000
+nba-plain: node scripts/simNbaSeasonStats.mjs
+nba-base: mkdir -p .rc/nbb1 && git archive 5d1198389 src | tar -x -C .rc/nbb1 && NBA_STATS_BASE=.rc/nbb1 node scripts/simNbaSeasonStats.mjs
+nba-base-s500: mkdir -p .rc/nbb2 && git archive 5d1198389 src | tar -x -C .rc/nbb2 && NBA_STATS_SEED_BASE=500 NBA_STATS_BASE=.rc/nbb2 node scripts/simNbaSeasonStats.mjs
+nba-named-base: mkdir -p .rc/nbb3 && git archive 5d1198389 src | tar -x -C .rc/nbb3 && NBA_STATS_CONTROL=named NBA_STATS_BASE=.rc/nbb3 node scripts/simNbaSeasonStats.mjs
+nba-c-named: NBA_STATS_CONTROL=named node scripts/simNbaSeasonStats.mjs
+nba-c-nosplit: NBA_STATS_CONTROL=nosplit node scripts/simNbaSeasonStats.mjs
+nba-c-extradraw: NBA_STATS_CONTROL=extradraw node scripts/simNbaSeasonStats.mjs
+nba-c-mvpnowin: NBA_STATS_CONTROL=mvpnowin node scripts/simNbaSeasonStats.mjs
+nba-c-noqualify: NBA_STATS_CONTROL=noqualify node scripts/simNbaSeasonStats.mjs
+nba-c-sixthstarters: NBA_STATS_CONTROL=sixthstarters node scripts/simNbaSeasonStats.mjs
+nba-c-doubleclose: NBA_STATS_CONTROL=doubleclose node scripts/simNbaSeasonStats.mjs
+nba-c-oldnever: NBA_STATS_CONTROL=oldnever node scripts/simNbaSeasonStats.mjs
+nba-c-rookieany: NBA_STATS_CONTROL=rookieany node scripts/simNbaSeasonStats.mjs
+nba-c-draftlate: NBA_STATS_CONTROL=draftlate node scripts/simNbaSeasonStats.mjs
+nba-c-bench17: NBA_STATS_CONTROL=bench17 node scripts/simNbaSeasonStats.mjs
+nfl-plain: node scripts/simNflSeasonStats.mjs
+nfl-c-dropone: NFL_STATS_CONTROL=dropone node scripts/simNflSeasonStats.mjs
+nfl-c-nocatch: NFL_STATS_CONTROL=nocatch node scripts/simNflSeasonStats.mjs
+nfl-c-injured: NFL_STATS_CONTROL=injured node scripts/simNflSeasonStats.mjs
+nfl-c-swapsides: NFL_STATS_CONTROL=swapsides node scripts/simNflSeasonStats.mjs
+nfl-c-extradraw: NFL_STATS_CONTROL=extradraw node scripts/simNflSeasonStats.mjs
+nfl-c-unkeyed: NFL_STATS_CONTROL=unkeyed node scripts/simNflSeasonStats.mjs
+nfl-c-randomcredit: NFL_STATS_CONTROL=randomcredit node scripts/simNflSeasonStats.mjs
+nfl-c-passflip: NFL_STATS_CONTROL=passflip node scripts/simNflSeasonStats.mjs
+nfl-c-sackswap: NFL_STATS_CONTROL=sackswap node scripts/simNflSeasonStats.mjs
+nfl-c-tiebreak: NFL_STATS_CONTROL=tiebreak node scripts/simNflSeasonStats.mjs
+nfl-c-rookieall: NFL_STATS_CONTROL=rookieall node scripts/simNflSeasonStats.mjs
+nfl-c-closetwice: NFL_STATS_CONTROL=closetwice node scripts/simNflSeasonStats.mjs
+nfl-c-oldopen: NFL_STATS_CONTROL=oldopen node scripts/simNflSeasonStats.mjs
+nfl-c-wholeroster: NFL_STATS_CONTROL=wholeroster node scripts/simNflSeasonStats.mjs
+nfl-c-quote: NFL_STATS_CONTROL=quote node scripts/simNflSeasonStats.mjs
+simHarnessAnchors: node scripts/simHarnessAnchors.mjs
+simSaveKeeper: node scripts/simSaveKeeper.mjs
+simFrontOfficeSchedule: node scripts/simFrontOfficeSchedule.mjs
+simGmDesk: node scripts/simGmDesk.mjs
+simNoRivalNames: node scripts/simNoRivalNames.mjs
