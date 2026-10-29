@@ -1,0 +1,16 @@
+vt-moved exit=0 42s |    Duration  41.14s (transform 4.44s, setup 972ms, collect 17.05s, tests 78.74s, environment 4.89s, prepare 1.43s)
+vt-wall exit=1 57s | ::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/components/us-career/UsCareerBoard.tsx,title=src/test/usCareerHallWall.test.tsx > 'NHL'%3A old saves and br
+simWall exit=1 48s | simUsCareerHallWall: RED, 1 check ids failed of 53 (7846 checks)
+tsc exit=0 97s | 
+c-nokeep exit=1 47s | simUsCareerHallWall CONTROL nokeep: FIRED, C1, C3, C5, C6, C8, C9, C10b red in all four sports and C4, C7, C10a, C10c, J green
+c-kept exit=2 45s | simUsCareerHallWall CONTROL kept: REFUSED, a case it must leave green went red (C1, C3, C5, C7, C8, C9, C10a, C10b, J); not a FIRED
+c-loadonly exit=2 57s | simUsCareerHallWall CONTROL loadonly: REFUSED, a case it must leave green went red (C1, C4, C5, C7, C8, C9, C10a, C10c, J); not a FIRED
+c-nogate exit=2 45s | simUsCareerHallWall CONTROL nogate: REFUSED, a case it must leave green went red (C1, C3, C4, C5, C6, C8, C9, C10a, C10b, C10c, J); not a FIRED
+c-boarddraw exit=2 29s | simUsCareerHallWall CONTROL boarddraw: REFUSED, a case it must leave green went red (C1, C3, C4, C5, C6, C7, C9, C10a, C10b, C10c, J); not a FIRED
+confirm exit=0 7s | Career confirmation: CRLF controls bind, raw bytes held and owned copies cleaned. Simulated states/explicit events do not prove full-season gameplay or native Enter, view
+c-stalesave exit=1 48s | simUsCareerHallWall CONTROL stalesave: FIRED, C9 red in all four sports and C1, C3, C4, C5, C6, C7, C8, C10a, C10b, C10c, J green
+weight exit=0 0s | simUsCareerWeight: green. 31 checks: the four wrappers hand the board their own binding, no shared file or binding imports another sport, and every control fired.
+storageWrites exit=0 4s | simStorageWrites: all green (owed: 12)
+rival exit=0 22s | No rival product names found. 0 findings.
+parity exit=0 73s | fixture byte identical to base
+saveRetry exit=0 113s | US career save retry: passed. Evidence at /home/runner/work/ballpark-hero/ballpark-hero/us-career-save-recovery-artifacts/outcomes
