@@ -117,8 +117,25 @@ try {
       await page.getByRole('button', { name: "Let's Play!", exact: true }).click();
       const grid = page.locator('div.grid-cols-5').filter({ has: page.locator('button[title]') });
       const tiles = grid.locator(':scope > button[title]');
-      const inspect = () => grid.evaluate(element => {
+      /* Release BS fix BS-mix-3: from 390 no label word may break across two lines. This harness blocks
+         Google Fonts, so it reads the fallback font, which is wider than the site's Inter; 320 fits whole
+         words only in Inter (47 px Manchester at 8 px in a 48 px room) and is proven by the kit walk with
+         the font loaded. Here 320 keeps the containment checks, and a split word there stays in its tile. */
+      const splitsChecked = width >= 390;
+      const inspect = () => grid.evaluate((element, splitsChecked) => {
         const issues = [];
+        const splitWords = label => {
+          const text = label?.firstChild;
+          if (!splitsChecked || !text || text.nodeType !== 3) return [];
+          const words = [], pattern = /[^\s-]+-?/g;
+          for (let match; (match = pattern.exec(text.textContent));) {
+            const first = document.createRange(), last = document.createRange();
+            first.setStart(text, match.index); first.setEnd(text, match.index + 1);
+            last.setStart(text, match.index + match[0].length - 1); last.setEnd(text, match.index + match[0].length);
+            if (Math.abs(first.getBoundingClientRect().top - last.getBoundingClientRect().top) > 2) words.push(match[0]);
+          }
+          return words;
+        };
         const cells = [...element.querySelectorAll(':scope > button[title]')].map(button => {
           const label = button.querySelector(':scope > span:nth-of-type(2)');
           const title = button.getAttribute('title');
@@ -128,12 +145,28 @@ try {
           if (!label || label.textContent.trim() !== title) issues.push({ kind: 'label-text', title });
           if (!visible) issues.push({ kind: 'label-hidden', title });
           else if (l.left < b.left - 1 || l.right > b.right + 1 || l.top < b.top - 1 || l.bottom > b.bottom + 1 || label.scrollWidth > label.clientWidth + 1) issues.push({ kind: 'label-overflow', title });
+          else if (splitWords(label).length) issues.push({ kind: 'label-word-split', title, words: splitWords(label) });
           return { title, visible: Boolean(visible), button: { x: b.x, y: b.y, width: b.width, height: b.height }, label: l && { x: l.x, y: l.y, width: l.width, height: l.height } };
         });
         const overflow = document.documentElement.scrollWidth - document.documentElement.clientWidth;
         if (overflow > 1) issues.push({ kind: 'page-overflow', pixels: overflow });
         return { cells, issues, overflow };
-      });
+      }, splitsChecked);
+      /* Release BS fix BS-mix-3: the grid gap and the tile padding are part of the room a label has, so the
+         controls swap them with the label class. Each swap reports how many elements it changed. */
+      const swapLayout = (gridClass, tileFrom, tileTo) => grid.evaluate((element, [gridClass, tileFrom, tileTo]) => {
+        const before = element.className;
+        if (gridClass !== null) element.className = gridClass;
+        let tilesChanged = 0;
+        for (const button of element.querySelectorAll(':scope > button[title]')) {
+          const was = button.className;
+          button.className = was.replace(tileFrom, tileTo);
+          tilesChanged += Number(was !== button.className);
+        }
+        return { gridChanged: before !== element.className, gridBefore: before, tilesChanged };
+      }, [gridClass, tileFrom, tileTo]);
+      const fixedGrid = 'grid grid-cols-5 gap-1 min-[360px]:gap-1.5 md:gap-2 mb-5', originalGrid = 'grid grid-cols-5 gap-1.5 md:gap-2 mb-5';
+      const fixedTile = ' px-0.5 py-1.5 sm:px-1.5 ', originalTile = ' p-1.5 ';
       const seen = new Set();
       for (let seed = 1; seed <= 128; seed++) {
         await tiles.first().waitFor({ state: 'visible', timeout: 30000 });
@@ -153,7 +186,7 @@ try {
           await grid.screenshot({ path: path.join(out, 'board-' + width + '.png') });
           if (width === 320) {
             const originalClass = 'text-[9px] md:text-[10px] font-semibold leading-tight text-foreground';
-            const fixedClass = 'w-full min-w-0 break-words ' + originalClass;
+            const fixedClass = 'w-full min-w-0 break-words text-[8px] min-[360px]:text-[9px] md:text-[10px] font-semibold leading-tight text-foreground';
             const heldClasses = await tiles.evaluateAll(buttons => buttons.map(button => button.querySelector(':scope > span:nth-of-type(2)').className));
             assert.equal(heldClasses.length, 24);
             assert.ok(heldClasses.every(value => value === fixedClass), 'All actual labels carry the responsive width and word wrapping');
@@ -164,10 +197,14 @@ try {
             row.wrapControl = { changed, originalClass, heldClasses, raw: null, restored: null };
             assert.equal(changed, 24, 'The complete original class replaces exactly 24 actual label classes');
             try {
+              row.wrapControl.layout = await swapLayout(originalGrid, fixedTile, originalTile);
+              assert.deepEqual([row.wrapControl.layout.gridChanged, row.wrapControl.layout.gridBefore, row.wrapControl.layout.tilesChanged],
+                [true, fixedGrid, 24], 'The control also puts back the original grid gap and all 24 original tile paddings');
               row.wrapControl.raw = await inspect();
               await grid.screenshot({ path: path.join(out, 'original-class-control-320.png') });
             } finally {
               await tiles.evaluateAll((buttons, classes) => buttons.forEach((button, index) => { button.querySelector(':scope > span:nth-of-type(2)').className = classes[index]; }), heldClasses);
+              await swapLayout(fixedGrid, originalTile, fixedTile);
               row.wrapControl.restored = await inspect(); save();
             }
             /* Release BS fix BS-mix-1 and BS-mix-2: the deal changed with the tiles, so the same three defects
@@ -180,6 +217,27 @@ try {
             ].sort(byTitle), 'The complete old class reproduces the three retained 320px overflow defects');
             assert.deepEqual(row.wrapControl.restored.issues, [], 'Restoring the complete responsive class restores clean label geometry');
             row.wrapControl.passed = true; save();
+          }
+          if (width === 390) {
+            /* Release BS fix BS-mix-3 control: PR 408's tile padding gives the label 53 px at 390, and the
+               same board breaks the same three long words the review saw. */
+            row.splitControl = { layout: await swapLayout(originalGrid, fixedTile, originalTile), raw: null, restored: null };
+            try {
+              assert.deepEqual([row.splitControl.layout.gridChanged, row.splitControl.layout.tilesChanged], [true, 24], 'The split control puts back the original gap and all 24 original tile paddings');
+              row.splitControl.raw = await inspect();
+              await grid.screenshot({ path: path.join(out, 'split-control-390.png') });
+            } finally {
+              await swapLayout(fixedGrid, originalTile, fixedTile);
+              row.splitControl.restored = await inspect(); save();
+            }
+            const byTitle = (a, b) => a.title.localeCompare(b.title);
+            assert.deepEqual(row.splitControl.raw.issues.map(issue => ({ kind: issue.kind, title: issue.title })).sort(byTitle), [
+              { kind: 'label-word-split', title: 'Played for Manchester United' },
+              { kind: 'label-word-split', title: 'Champions League winner' },
+              { kind: 'label-word-split', title: 'Goalkeeper' },
+            ].sort(byTitle), 'The original tile padding breaks the three long words at 390');
+            assert.deepEqual(row.splitControl.restored.issues, [], 'The fixed tile padding keeps every word whole at 390');
+            row.splitControl.passed = true; save();
           }
           const victim = tiles.first().locator(':scope > span:nth-of-type(2)');
           const target = await tiles.first().getAttribute('title');

@@ -396,7 +396,10 @@ const PlayerBingo = () => {
               </div>
             )}
 
-            <div className="grid grid-cols-5 gap-1.5 md:gap-2 mb-5">
+            {/* Release BS fix BS-mix-3: on phones a tile gives its label the room its side padding held,
+                and under 360 px the gap and the type step down, so every word of every label fits whole
+                (measured in Inter: Manchester is the widest word, 52 px at 9 px and 47 px at 8 px). */}
+            <div className="grid grid-cols-5 gap-1 min-[360px]:gap-1.5 md:gap-2 mb-5">
               {cells.map((cell, i) => {
                 if (cell === null) {
                   return (
@@ -417,7 +420,7 @@ const PlayerBingo = () => {
                     disabled={phase !== 'playing' || !!lockedBy || choice}
                     title={cell.label}
                     className={cn(
-                      'rounded-xl border p-1.5 min-h-[76px] md:min-h-[92px] flex flex-col items-center justify-center text-center transition-colors',
+                      'rounded-xl border px-0.5 py-1.5 sm:px-1.5 min-h-[76px] md:min-h-[92px] flex flex-col items-center justify-center text-center transition-colors',
                       lockedBy ? 'bg-primary/10 border-primary' : 'bg-card border-border',
                       phase === 'playing' && !lockedBy && 'hover:border-primary/50',
                       shakeId === cell.id && 'border-destructive',
@@ -425,7 +428,7 @@ const PlayerBingo = () => {
                     style={shakeId === cell.id ? { animation: 'pb-shake 0.4s' } : undefined}
                   >
                     <span className="text-base md:text-lg leading-none mb-1"><FlagFromEmoji emoji={cell.icon} size={18} /></span>
-                    <span className="w-full min-w-0 break-words text-[9px] md:text-[10px] font-semibold leading-tight text-foreground">
+                    <span className="w-full min-w-0 break-words text-[8px] min-[360px]:text-[9px] md:text-[10px] font-semibold leading-tight text-foreground">
                       {cell.label}
                     </span>
                     {lockedBy && (
