@@ -48,7 +48,8 @@ export function RecruitmentBoard({ career, market, initial, onCommit, onBack, on
   return (
     <section ref={root} aria-labelledby="cm-recruitment-title" className="min-w-0 space-y-3">
       <div className="flex items-start justify-between gap-2">
-        <button className={button} onClick={() => {
+        {/* Release BS fix: the header buttons keep their own width, so Back never breaks inside the word */}
+        <button className={button + " shrink-0"} onClick={() => {
           if (help) { setHelp(false); requestAnimationFrame(() => helpButton.current?.focus({ preventScroll: true })); }
           else if (selectedTarget && targets.length > 1) {
             const key = recruitmentKey(selectedTarget);
@@ -60,7 +61,7 @@ export function RecruitmentBoard({ career, market, initial, onCommit, onBack, on
           <h3 ref={heading} tabIndex={-1} id="cm-recruitment-title" className="text-lg font-black break-words">Recruitment shortlist</h3>
           <p className="text-xs text-muted-foreground">{targets.length}/{RECRUITMENT_LIMIT} saved for this club</p>
         </div>
-        <button ref={helpButton} className={button} aria-label="Recruitment shortlist help" aria-expanded={help} onClick={() => setHelp(v => !v)}>?</button>
+        <button ref={helpButton} className={button + " shrink-0"} aria-label="Recruitment shortlist help" aria-expanded={help} onClick={() => setHelp(v => !v)}>?</button>
       </div>
       <p className="text-sm text-muted-foreground">Current asking prices and game ratings. Saving a target spends nothing and makes no approach.</p>
       {help ? (
