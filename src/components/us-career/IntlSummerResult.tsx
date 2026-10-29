@@ -244,7 +244,8 @@ export function IntlSummersView(p: IntlSummersViewProps) {
       <div className="space-y-1 text-center">
         <h3 className="text-lg font-black tracking-tight">🌍 International</h3>
         <p className="text-sm text-muted-foreground" data-intl-summers-count>
-          Called up {p.summers.length === 1 ? 'once' : `${p.summers.length} times`}, went {went.length === 1 ? 'once' : `${went.length} times`}, {medals} {medals === 1 ? 'medal' : 'medals'}.
+          {/* Round 1557's fix (review-run-1557, minor 4): a career that rested every call reads "never went", not "went 0 times, 0 medals". */}
+          Called up {p.summers.length === 1 ? 'once' : `${p.summers.length} times`}, {went.length === 0 ? 'never went' : `went ${went.length === 1 ? 'once' : `${went.length} times`}, ${medals === 0 ? 'no medal' : medals === 1 ? '1 medal' : `${medals} medals`}`}.
         </p>
       </div>
       <div className="grid grid-cols-1 gap-2 sm:grid-cols-2">
