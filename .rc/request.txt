@@ -1,0 +1,4 @@
+#!build
+#!playwright
+#!serial
+walk408: node scripts/qa/freeKickLab1070.mjs --prefetch-fonts-only > /dev/null 2>&1; CI=1 SIM_NETWORK=offline NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" PLAYER_BINGO_BROWSER_OUT="$PWD/.sim-artifacts/pbwalk" node scripts/playPlayerBingoCategories.mjs; s=$?; mkdir -p "$RC_OUT/pbwalk"; find .sim-artifacts/pbwalk -name '*.png' | head -12 | xargs -I{} cp {} "$RC_OUT/pbwalk/"; find .sim-artifacts/pbwalk -name '*.json' | head -5 | xargs -I{} cp {} "$RC_OUT/pbwalk/"; exit $s
