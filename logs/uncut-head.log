@@ -1,0 +1,21 @@
+
+[1m[46m RUN [49m[22m [36mv3.2.7 [39m[90m/home/runner/work/ballpark-hero/ballpark-hero[39m
+
+[90mstdout[2m | src/test/soccerCareerLoyaltyUncut.test.ts[2m > [22m[2ma loyalty cut ends with its contract[2m > [22m[2mthe extension quotes the uncut wage, the same as the cash run, and the payout is a real gain
+[22m[39mloyalty uncut: 24 extension pairs in step, 15 payout pairs
+
+[90mstdout[2m | src/test/soccerCareerLoyaltyUncut.test.ts[2m > [22m[2ma loyalty cut ends with its contract[2m > [22m[2mthe renewal when he lets the deal run down quotes the uncut wage as well
+[22m[39mloyalty uncut: 13 renewal pairs in step
+
+[90mstdout[2m | src/test/soccerCareerLoyaltyUncut.test.ts[2m > [22m[2ma wage that moves under the cut keeps the uncut wage in step[2m > [22m[2mContract Breakdown, both answers that move the wage: the next contract equals the cash run
+[22m[39mloyalty uncut: 16 Contract Breakdown pairs with a moved wage
+
+ [32m✓[39m src/test/soccerCareerLoyaltyUncut.test.ts [2m([22m[2m4 tests[22m[2m)[22m[33m 2419[2mms[22m[39m
+   [33m[2m✓[22m[39m a loyalty cut ends with its contract[2m > [22mthe extension quotes the uncut wage, the same as the cash run, and the payout is a real gain [33m 1384[2mms[22m[39m
+   [33m[2m✓[22m[39m a loyalty cut ends with its contract[2m > [22mthe renewal when he lets the deal run down quotes the uncut wage as well [33m 960[2mms[22m[39m
+
+[2m Test Files [22m [1m[32m1 passed[39m[22m[90m (1)[39m
+[2m      Tests [22m [1m[32m4 passed[39m[22m[90m (4)[39m
+[2m   Start at [22m 07:50:38
+[2m   Duration [22m 4.47s[2m (transform 1.08s, setup 65ms, collect 1.28s, tests 2.42s, environment 298ms, prepare 135ms)[22m
+

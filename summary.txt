@@ -1,0 +1,2 @@
+uncut-before exit=1 5s | ::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/test/soccerCareerLoyaltyUncut.test.ts,title=src/test/soccerCareerLoyaltyUncut.test.ts > a wage that moves u
+uncut-head exit=0 5s |    Duration  4.47s (transform 1.08s, setup 65ms, collect 1.28s, tests 2.42s, environment 298ms, prepare 135ms)
