@@ -1,0 +1,8 @@
+build exit=0 27s | [dukb] inlined 1 stylesheet(s) and 1 module(s) into 181 snapshots (11 left alone)
+weight-head exit=0 12s |   AppearanceBuilder:11.4 Celebration:0.8 CelebrationStyles:0.7 Confetti:0.6 GameHelp:0.8 GameNav:1.7 GameNavbar:3.7 GameReportContext:3.0 GameSeoContent:2.4 HowToPlayPopo
+weight-base exit=0 39s |   AppearanceBuilder:14.9 Celebration:0.8 CelebrationStyles:0.7 Confetti:0.6 GameHelp:0.8 GameNav:1.7 GameNavbar:3.7 GameReportContext:3.0 GameSeoContent:2.4 HowToPlayPopo
+vitest-case exit=0 5s |    Duration  4.47s (transform 2.81s, setup 312ms, collect 5.24s, tests 3.10s, environment 1.59s, prepare 460ms)
+intl-12 exit=0 1s | simCareerIntl: GREEN, 13 checks over sections 12
+simUsCareerWeight exit=0 0s | simUsCareerWeight: green. 31 checks: the four wrappers hand the board their own binding, no shared file or binding imports another sport, and every control fired.
+walk exit=0 67s | playNbaIntl: green. The call, Go and its result's views, Rest, a reload mid beat, the 2027 World Cup's lines and no call at 80 or in 2005, at 320, 390 and 1280; 41 screen
+tsc exit=0 61s | 
