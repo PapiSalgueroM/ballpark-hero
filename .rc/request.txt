@@ -1,0 +1,4 @@
+sim: node scripts/simBingoClubCounts.mjs
+c-slashdup: BINGO_CLUBS_CONTROL=slashdup node scripts/simBingoClubCounts.mjs
+c-aliasdup: BINGO_CLUBS_CONTROL=aliasdup node scripts/simBingoClubCounts.mjs
+c-tableclubs: BINGO_CLUBS_CONTROL=tableclubs node scripts/simBingoClubCounts.mjs
