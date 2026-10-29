@@ -1001,13 +1001,16 @@ export default function UsCareerBoard({ sport }: { sport: UsCareerSport }) {
   const statLine: (s: SeasonLine, p: string) => string = sport.statLine;
   /* Round 1569: every screen after the create screen opens with Start over
      (src/components/us-career/UsCareerStartOver.tsx says why), the prospect's
-     road to the draft and the coaching career included. */
+     road to the draft and the coaching career included. The board is one
+     element so that a sticky control inside it is held to the board and never
+     floats over the guide below it (it was a fragment, and the page's main was
+     the sticky parent). */
   const startOver = phase !== 'create' && (!!career || (phase === 'prospect' && !!prospect));
-  const withSaveStatus = (content: ReactNode) => <>
+  const withSaveStatus = (content: ReactNode) => <div>
     {saveFailure && <UsCareerSaveNotice operation={saveFailure} onRetry={retrySave} />}
     {startOver && <UsCareerStartOver sport={sport.label} onConfirm={reset} />}
     {content}
-  </>;
+  </div>;
 
   if (phase === 'prospect' && prospect) {
     return withSaveStatus(<ProspectJourney sport={sport} prospect={prospect} onChange={advanceProspect} onJoin={joinCareer} onBack={() => {
