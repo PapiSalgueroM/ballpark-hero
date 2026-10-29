@@ -19,7 +19,11 @@
  *      by a reload, by closing the page, and by the tab going hidden.
  *   6. BACK. The stage's Back button folds the match to a small card in the page and pauses it (the
  *      clock is read again 2.6 seconds later), the page is free to scroll again, and the card's one
- *      button puts the stage back with the clock running.
+ *      button puts the stage back with the clock running. Since Round 1568 (closing check) it first presses
+ *      Tab and Shift+Tab from Back, each two more times than the stage has controls: the focus goes round
+ *      the stage and back to Back and never lands on the page under it. NEGATIVE CONTROL: LIVE_FIT_CONTROL=tabout
+ *      swallows every Tab in a listener ahead of the stage's; that line must go red and nothing else (exit 1 when
+ *      it does, 3 when not).
  *   7. A WIDE SCREEN. At 1280 by 900, where the match is listed line by line beside the pitch, a goal is
  *      watched again: the list says GOAL! only once the ball is in (never on a plant or flight frame),
  *      and neither does the line under the pitch, at any size. Sections 1 and 7 leave two screenshots each
@@ -113,6 +117,7 @@
  *   LIVE_FIT_CONTROL=nocard node scripts/playLiveMatchFit.mjs
  *   LIVE_FIT_CONTROL=widelabels node scripts/playLiveMatchFit.mjs
  *   LIVE_FIT_CONTROL=digits node scripts/playLiveMatchFit.mjs
+ *   LIVE_FIT_CONTROL=tabout node scripts/playLiveMatchFit.mjs
  *
  * THE NAME LABELS (Round 1340b, section 3). The pitch wears surnames and, in a crowd, initials; it shows no number.
  *   At every size and every frame measured no label begins with a digit. At 320 by 568 the mean overlapping label
@@ -152,7 +157,7 @@ const KEY = 'dukb-club-manager-save';
 const REPORT = process.env.LIVE_FIT_REPORT === '1';
 const REPLAY = process.env.LIVE_FIT_REPLAY === '1';
 const CONTROL = process.env.LIVE_FIT_CONTROL || '';
-if (CONTROL && !['bar', 'silentlist', 'earlyscore', 'nocard', 'noseed', 'ogbefore', 'widelabels', 'digits'].includes(CONTROL)) { console.error(`unknown LIVE_FIT_CONTROL ${CONTROL}`); process.exit(2); }
+if (CONTROL && !['bar', 'silentlist', 'earlyscore', 'nocard', 'noseed', 'ogbefore', 'widelabels', 'digits', 'tabout'].includes(CONTROL)) { console.error(`unknown LIVE_FIT_CONTROL ${CONTROL}`); process.exit(2); }
 /* Round 1216: LIVE_FIT_OWN=1 runs section 9 (an own goal) alone. Its control, ogbefore, is for a build that
    still draws the picture from before Round 1216 and nothing else. */
 const OWN_ONLY = process.env.LIVE_FIT_OWN === '1';
@@ -856,6 +861,53 @@ async function withRoom(page, need) {
   return false;
 }
 
+/** Section 6, Round 1568 (closing check): with the stage up, Tab and Shift+Tab from Back go round the stage's own
+ *  controls and never put the focus on the page under it (two Shift+Tab presses used to reach the page's sign up
+ *  button, and Enter opened a dialog under the stage). Each way it presses two more times than there are controls
+ *  in the stage, so a round that works comes back to Back; focus on the body (a control that went away under
+ *  it) is not counted against it. Under LIVE_FIT_CONTROL=tabout a listener ahead of the stage's swallows every Tab,
+ *  so the browser moves the focus by itself: this line must go red and nothing else. */
+let tabEscapes = 0;
+let tabSwallowed = 0;
+async function judgeTabRound(page) {
+  if (!(await withRoom(page, 5))) { fail('no running match to press Tab on'); return; }
+  const back = page.getByRole('button', { name: 'Back to the club page' }).first();
+  if (!(await back.count().catch(() => 0))) { fail('there is no Back button on the stage'); return; }
+  if (CONTROL === 'tabout') {
+    await page.evaluate(() => window.addEventListener('keydown', e => { if (e.key === 'Tab') { window.__tabSwallowed = (window.__tabSwallowed || 0) + 1; e.stopImmediatePropagation(); } }, true));
+    console.log('  Negative control: every Tab is swallowed before the stage hears it.');
+  }
+  const stops = await page.evaluate(() => {
+    const box = document.querySelector('[data-cm-live-stagebox]');
+    if (!box) return 0;
+    return [...box.querySelectorAll('a[href],button,input,select,textarea,[tabindex]')].filter(el => el.tabIndex >= 0 && !el.disabled && el.getClientRects().length > 0 && getComputedStyle(el).visibility !== 'hidden').length;
+  });
+  const where = () => page.evaluate(() => {
+    const a = document.activeElement;
+    if (!a || a === document.body) return { at: 'body' };
+    const label = (a.getAttribute('aria-label') || a.textContent || '').replace(/\s+/g, ' ').trim().slice(0, 30);
+    if (a.closest('[data-cm-live-stagebox]')) return { at: 'stage', back: a.getAttribute('aria-label') === 'Back to the club page', label };
+    return { at: 'under', label: `${a.tagName.toLowerCase()} "${label}"${a.closest('[data-site-chrome]') ? ' in the site bar' : ''}` };
+  });
+  const presses = stops + 2;
+  const run = {};
+  for (const key of ['Shift+Tab', 'Tab']) {
+    await back.focus();
+    const seen = [];
+    for (let i = 0; i < presses; i++) { await page.keyboard.press(key); seen.push(await where()); }
+    run[key] = seen;
+  }
+  if (CONTROL === 'tabout') tabSwallowed = await page.evaluate(() => window.__tabSwallowed || 0);
+  const under = Object.entries(run).flatMap(([key, seen]) => seen.map((s, i) => (s.at === 'under' ? `${key} ${i + 1}: ${s.label}` : null)).filter(Boolean));
+  const roundOf = key => run[key].some(s => s.back);
+  console.log(`  [tab] ${stops} controls in the stage, ${presses} presses each way; Shift+Tab: ${run['Shift+Tab'].map(s => s.at === 'stage' ? (s.back ? 'BACK' : 's') : s.at).join(' ')}; Tab: ${run.Tab.map(s => s.at === 'stage' ? (s.back ? 'BACK' : 's') : s.at).join(' ')}`);
+  if (!stops) fail('no control in the stage to press Tab between');
+  else if (under.length) { tabEscapes = under.length; fail(`Tab took the focus to the page under the stage ${under.length} time${under.length === 1 ? '' : 's'}: ${under.slice(0, 3).join('; ')}`); }
+  else if (!roundOf('Shift+Tab') || !roundOf('Tab')) fail(`the focus stayed on the stage but never came round to Back again (Shift+Tab ${roundOf('Shift+Tab')}, Tab ${roundOf('Tab')})`);
+  else ok(`Tab and Shift+Tab go round the stage's ${stops} controls and back to Back, never to the page under it`);
+  await back.focus();
+}
+
 /** Section 6: Back folds the match away to a card in the page and pauses it; the card's button puts it back. */
 async function judgeBack(page) {
   /* With at least seven minutes of the period left, so the clock has room to be seen running on. */
@@ -1226,7 +1278,7 @@ try {
   section = 6;
   console.log('6) Back folds the match away');
   if (REPORT) console.log('  (not in the measuring pass: the build before match mode has no Back)');
-  else await judgeBack(page);
+  else { await judgeTabRound(page); await judgeBack(page); }
 
   section = 5;
   console.log('5) The reload');
@@ -1429,6 +1481,13 @@ if (CONTROL === 'bar') {
   console.log(asItMust
     ? 'playLiveMatchFit: control bar turned section 3 red and left sections 1, 2 and 4 green, as it must.'
     : `playLiveMatchFit: control bar did NOT behave: red sections ${[...failed].sort().join(', ') || 'none'}.`);
+  process.exit(asItMust ? 1 : 3);
+}
+if (CONTROL === 'tabout') {
+  const asItMust = tabEscapes > 0 && tabSwallowed > 0 && failed.has(6) && failed.size === 1 && failures === 1;
+  console.log(asItMust
+    ? `playLiveMatchFit: control tabout turned section 6 red on the line it must (with every Tab swallowed before the stage heard it, the focus reached the page under the stage ${tabEscapes} times) and left the rest green.`
+    : `playLiveMatchFit: control tabout did NOT behave: ${failures} failures, red sections ${[...failed].sort().join(', ') || 'none'}, ${tabEscapes} escapes, ${tabSwallowed} Tabs swallowed.`);
   process.exit(asItMust ? 1 : 3);
 }
 if (CONTROL === 'silentlist') {

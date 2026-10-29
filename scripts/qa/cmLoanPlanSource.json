@@ -1,0 +1,451 @@
+{
+  "status": "SOURCE ONLY ALL RUNTIME UNRUN, bounded explicit-action scope",
+  "foundation": "12c1b2cd001f9309a31a887e5c432ca63c373852",
+  "selected": "candidate-rescope-v4",
+  "fixed": [
+    {
+      "path": "scripts/qa/cmLoanPlanParity.mjs",
+      "bytes": 8824,
+      "sha256": "dbd7905fb864cc7cb11ea69348618c7c663aaaeeb81db97199f259ea621c5fb6",
+      "gitBlob": "5d8d5fa878dd6b07a85a3cf10d69cae8a4aa6e43",
+      "originalBlob": null
+    },
+    {
+      "path": "src/components/club-manager/LoanPlanCard.tsx",
+      "bytes": 10083,
+      "sha256": "83b8cb6ad10b0a093a4196c11ae5fdaca03c170623bd5f5df8dca2b2d222be14",
+      "gitBlob": "b7b713399752fd97a5b27174108f2488d85bd037",
+      "originalBlob": null
+    },
+    {
+      "path": "src/components/club-manager/TransferScreen.tsx",
+      "bytes": 75047,
+      "sha256": "7cd681e03fa12808ae120654c46df3145a6760e48e59434f33390886e6a816c9",
+      "gitBlob": "298bdd722e4baa0bf5c4a52d611570d0ac066534",
+      "originalBlob": "ad8bbb8d4c6c89220e50780b34d113385b84ba45"
+    },
+    {
+      "path": "src/hooks/useClubManager.ts",
+      "bytes": 69938,
+      "sha256": "ce02ed481962fcaa775c75cf10fb64da33199fd68efe5c8df76d23ac989c8b03",
+      "gitBlob": "82f4f4fe9044901c968a796b728068b0191f8fdf",
+      "originalBlob": "65bc9bbb622c67fbbcb25c949038571bbdc8600a"
+    },
+    {
+      "path": "src/lib/clubManager.ts",
+      "bytes": 1240569,
+      "sha256": "05de3cfca8d978e6117979fb29b82b2ece7b9fb6ee1f2ce3c051e379e36de86e",
+      "gitBlob": "a505743537b383bc7885bb81f5a72c11e154b566",
+      "originalBlob": "a505743537b383bc7885bb81f5a72c11e154b566"
+    },
+    {
+      "path": "src/lib/clubManagerLoanDevelopment.ts",
+      "bytes": 14696,
+      "sha256": "78031cb13d92669c011e6052fac21ae47ffa7f42d710b8fe6a454988e125d231",
+      "gitBlob": "98265b3e10752b671127c1b23d6725d83d28e47b",
+      "originalBlob": null
+    },
+    {
+      "path": "src/lib/clubManagerLoanPlan.ts",
+      "bytes": 9103,
+      "sha256": "8684291e7b743b1ab555a3a48dce9da2c4043dc51585b46c78b468450deaab4f",
+      "gitBlob": "419b68389dad53c297d1a225611a653c0ed83b30",
+      "originalBlob": null
+    },
+    {
+      "path": "src/pages/ClubManager.tsx",
+      "bytes": 104236,
+      "sha256": "df36f3e6026b4c2a6c0b2df45be07932c9612dab3ac34c6b0dea59212813d3f6",
+      "gitBlob": "0ac89439990e4c028860aa61965d93d40c308f75",
+      "originalBlob": "d035272db71ac98569544cae36817833bf9c56a4"
+    },
+    {
+      "path": "src/test/clubManagerLoanDevelopment.test.ts",
+      "bytes": 13689,
+      "sha256": "1ab3514c3887fa76db8a1f2d03b775f8d61b0a85ad7d236288b786c02a241097",
+      "gitBlob": "94a9eee5ea4db22676e21be51aafce48422a020f",
+      "originalBlob": null
+    },
+    {
+      "path": "src/test/clubManagerLoanPlanIntegration.test.ts",
+      "bytes": 11250,
+      "sha256": "ec1674758be6a0ae3294222398f6167e851d049051e6478a99cc6eb848fe9087",
+      "gitBlob": "b8746b4b10a054f96d142917ab7bcf5477f2a2f6",
+      "originalBlob": null
+    },
+    {
+      "path": "src/test/clubManagerLoanPlanMounted.test.tsx",
+      "bytes": 19193,
+      "sha256": "dcadaa5fa5137b3c622d375b7b909abf96a02d98abb045f1e7c07d7b05b3d5cc",
+      "gitBlob": "d3edc3e4ef989255ae25deb6a13a2d78f5497422",
+      "originalBlob": null
+    }
+  ],
+  "originals": [
+    {
+      "path": "src/components/club-manager/ClubManagerHelp.tsx",
+      "bytes": 78750,
+      "sha256": "12e44784f2e283c8c132146e89b265a2aa1a5899a3bed4ee76bd25d77b66de6c",
+      "gitBlob": "43ec938619f0ee75a7dfe4f3b00a033277bc3c93"
+    },
+    {
+      "path": "src/components/club-manager/TransferScreen.tsx",
+      "bytes": 74442,
+      "sha256": "b975b43db7d7881a06de39e7de791fcf790aaa896c03ff5b822878ddae9c4211",
+      "gitBlob": "ad8bbb8d4c6c89220e50780b34d113385b84ba45"
+    },
+    {
+      "path": "src/hooks/useClubManager.ts",
+      "bytes": 69415,
+      "sha256": "5eeafbeaf296adce0343d101d4c5213d12d6550e181a9af55a5dbd154452632c",
+      "gitBlob": "65bc9bbb622c67fbbcb25c949038571bbdc8600a"
+    },
+    {
+      "path": "src/lib/clubManager.ts",
+      "bytes": 1240569,
+      "sha256": "05de3cfca8d978e6117979fb29b82b2ece7b9fb6ee1f2ce3c051e379e36de86e",
+      "gitBlob": "a505743537b383bc7885bb81f5a72c11e154b566"
+    },
+    {
+      "path": "src/lib/clubManagerCalendar.ts",
+      "bytes": 56974,
+      "sha256": "ee7a0ad2086ea52d10ef30f3fc02a4479132899eb30cbab815753cad3b4d6f6b",
+      "gitBlob": "3653027149d6a1bef4194e0bece4fb5783c1c1e2"
+    },
+    {
+      "path": "src/lib/clubManagerDeals.ts",
+      "bytes": 21329,
+      "sha256": "963aeb25192aa16c3b38bdbf2a2e12c31f06c835720db20e8c9471955a86b20f",
+      "gitBlob": "6e62966e4950ac6e2fa0577f45d21527b9266ce6"
+    },
+    {
+      "path": "src/lib/clubManagerWorldRoster.ts",
+      "bytes": 21152,
+      "sha256": "f6adb423530a29fc75fcc6e759bb746e6885b2b718ef4dc12033304e8669e4b4",
+      "gitBlob": "8fc15c82723512dd36482747bf9d06f8c731fa01"
+    },
+    {
+      "path": "src/pages/ClubManager.tsx",
+      "bytes": 104188,
+      "sha256": "a3f985c484f379211381f62e69392481bc54132a88884a66d78588545a33f5e2",
+      "gitBlob": "d035272db71ac98569544cae36817833bf9c56a4"
+    }
+  ],
+  "tests": [
+    {
+      "path": "src/test/clubManagerLoanDevelopment.test.ts",
+      "sourceCaseCount": 12,
+      "sourceCaseNames": [
+        "reports a roster comparison, with no invented appearance or growth values",
+        "distinguishes competition and binds exact fees without creating an auction",
+        "fails closed on partial, stale, wrong-era, wrong-position and malformed host facts",
+        "keeps old loans neutral and refuses invalid persisted versions or fields",
+        "requires the current window, legal player and unused season stamp",
+        "rejects stale displayed quotes and mismatched actual loan receipts",
+        "saves an actual review once, retains it after JSON reload and never changes the loan",
+        "records an unavailable current estimate honestly and refuses wrong loan/date identity",
+        "projects only the existing open-window, fee and squad-room recall constraints",
+        "records only explicit check-ins and recalls from matching current loan facts",
+        "bounds recorded log and makes duplicate check-ins exact no-ops",
+        "is deterministic and reads no wall clock or global random source"
+      ],
+      "runtime": "UNRUN"
+    },
+    {
+      "path": "src/test/clubManagerLoanPlanIntegration.test.ts",
+      "sourceCaseCount": 7,
+      "sourceCaseNames": [
+        "refuses partial and unknown previews without a global draw or input-state materialization",
+        "creates only the matching successful actual loan and leaves all other authority fields equal",
+        "refuses a stale same-week fee and keeps a declined action byte-neutral",
+        "records a partial review honestly without drawing globally or changing the actual loan player",
+        "preserves the unchanged annual loan settlement and only retains explicitly recorded recall history",
+        "keeps ordinary recall and its exact limit as authority for a planned loan",
+        "recalls the actual legacy loanee when another squad member holds his old ID"
+      ],
+      "runtime": "UNRUN"
+    },
+    {
+      "path": "src/test/clubManagerLoanPlanMounted.test.tsx",
+      "sourceCaseCount": 15,
+      "sourceCaseNames": [
+        "keeps a default explicit-host loan free of plan metadata and additional random draws",
+        "shows rules and a worked example before confirmation, and cancel saves nothing",
+        "confirms the real standard loan terms and restores the plan after actual unmount/reload",
+        "uses the actual existing incoming loan bid price and removes that accepted bid",
+        "rejects a displayed bid after the real bid has been withdrawn",
+        "shows unknown host data honestly and refuses an opt-in record on a partial host",
+        "saves a real weekly review without inventing host minutes or changing the player rating",
+        "recalls through the existing engine, pays its fee and retains the one-loan season stamp",
+        "refuses all plan mutations after another manager slot becomes active",
+        "does not commit a loan in memory when actual persistence fails",
+        "rejects a real displayed quote after the saved date advances",
+        "refuses confirmation after an actual window close even with its old displayed token",
+        "keeps an unsupported saved plan unavailable and refuses plan review or recall",
+        "keeps actual legacy recall available for malformed optional plan metadata",
+        "keeps actual legacy recall available for a schema-valid foreign loan record"
+      ],
+      "runtime": "UNRUN"
+    }
+  ],
+  "baseline": [
+    {
+      "path": "src/test/clubManagerLoanPlanMounted.test.tsx",
+      "title": "keeps a default explicit-host loan free of plan metadata and additional random draws",
+      "status": "passed",
+      "cause": "preservation"
+    },
+    {
+      "path": "src/test/clubManagerLoanPlanMounted.test.tsx",
+      "title": "shows rules and a worked example before confirmation, and cancel saves nothing",
+      "status": "failed",
+      "cause": "missing Loan plan tile"
+    },
+    {
+      "path": "src/test/clubManagerLoanPlanMounted.test.tsx",
+      "title": "confirms the real standard loan terms and restores the plan after actual unmount/reload",
+      "status": "failed",
+      "cause": "missing Loan plan tile"
+    },
+    {
+      "path": "src/test/clubManagerLoanPlanMounted.test.tsx",
+      "title": "uses the actual existing incoming loan bid price and removes that accepted bid",
+      "status": "failed",
+      "cause": "missing Loan plan tile"
+    },
+    {
+      "path": "src/test/clubManagerLoanPlanMounted.test.tsx",
+      "title": "rejects a displayed bid after the real bid has been withdrawn",
+      "status": "failed",
+      "cause": "missing Loan plan tile"
+    },
+    {
+      "path": "src/test/clubManagerLoanPlanMounted.test.tsx",
+      "title": "shows unknown host data honestly and refuses an opt-in record on a partial host",
+      "status": "failed",
+      "cause": "missing Loan plan tile"
+    },
+    {
+      "path": "src/test/clubManagerLoanPlanMounted.test.tsx",
+      "title": "saves a real weekly review without inventing host minutes or changing the player rating",
+      "status": "failed",
+      "cause": "missing Loan plan tile"
+    },
+    {
+      "path": "src/test/clubManagerLoanPlanMounted.test.tsx",
+      "title": "recalls through the existing engine, pays its fee and retains the one-loan season stamp",
+      "status": "failed",
+      "cause": "missing Loan plan tile"
+    },
+    {
+      "path": "src/test/clubManagerLoanPlanMounted.test.tsx",
+      "title": "refuses all plan mutations after another manager slot becomes active",
+      "status": "failed",
+      "cause": "missing Loan plan tile"
+    },
+    {
+      "path": "src/test/clubManagerLoanPlanMounted.test.tsx",
+      "title": "does not commit a loan in memory when actual persistence fails",
+      "status": "failed",
+      "cause": "missing Loan plan tile"
+    },
+    {
+      "path": "src/test/clubManagerLoanPlanMounted.test.tsx",
+      "title": "rejects a real displayed quote after the saved date advances",
+      "status": "failed",
+      "cause": "missing Loan plan tile"
+    },
+    {
+      "path": "src/test/clubManagerLoanPlanMounted.test.tsx",
+      "title": "refuses confirmation after an actual window close even with its old displayed token",
+      "status": "failed",
+      "cause": "missing Loan plan tile"
+    },
+    {
+      "path": "src/test/clubManagerLoanPlanMounted.test.tsx",
+      "title": "keeps an unsupported saved plan unavailable and refuses plan review or recall",
+      "status": "failed",
+      "cause": "missing Loan plan tile"
+    },
+    {
+      "path": "src/test/clubManagerLoanPlanMounted.test.tsx",
+      "title": "keeps actual legacy recall available for malformed optional plan metadata",
+      "status": "passed",
+      "cause": "preservation"
+    },
+    {
+      "path": "src/test/clubManagerLoanPlanIntegration.test.ts",
+      "title": "refuses partial and unknown previews without a global draw or input-state materialization",
+      "status": "passed",
+      "cause": "preservation with common helper observer"
+    },
+    {
+      "path": "src/test/clubManagerLoanPlanIntegration.test.ts",
+      "title": "creates only the matching successful actual loan and leaves all other authority fields equal",
+      "status": "passed",
+      "cause": "preservation with common helper observer"
+    },
+    {
+      "path": "src/test/clubManagerLoanPlanIntegration.test.ts",
+      "title": "refuses a stale same-week fee and keeps a declined action byte-neutral",
+      "status": "passed",
+      "cause": "preservation with common helper observer"
+    },
+    {
+      "path": "src/test/clubManagerLoanPlanIntegration.test.ts",
+      "title": "records a partial review honestly without drawing globally or changing the actual loan player",
+      "status": "passed",
+      "cause": "preservation with common helper observer"
+    },
+    {
+      "path": "src/test/clubManagerLoanPlanIntegration.test.ts",
+      "title": "preserves the unchanged annual loan settlement and only retains explicitly recorded recall history",
+      "status": "passed",
+      "cause": "preservation with common helper observer, no automatic return log"
+    },
+    {
+      "path": "src/test/clubManagerLoanPlanIntegration.test.ts",
+      "title": "keeps ordinary recall and its exact limit as authority for a planned loan",
+      "status": "passed",
+      "cause": "preservation with common helper observer"
+    },
+    {
+      "path": "src/test/clubManagerLoanPlanMounted.test.tsx",
+      "title": "keeps actual legacy recall available for a schema-valid foreign loan record",
+      "status": "passed",
+      "cause": "preservation"
+    },
+    {
+      "path": "src/test/clubManagerLoanPlanIntegration.test.ts",
+      "title": "recalls the actual legacy loanee when another squad member holds his old ID",
+      "status": "passed",
+      "cause": "preservation with common helper observer, exact-I legacy recall authority"
+    }
+  ],
+  "baselineCounts": {
+    "failed": 12,
+    "selected": 22,
+    "passed": 10
+  },
+  "fixedCount": 34,
+  "controls": [
+    {
+      "name": "partial",
+      "target": "fails closed on partial, stale, wrong-era, wrong-position and malformed host facts",
+      "to": "",
+      "from": " || host.partial !== false",
+      "file": "src/lib/clubManagerLoanDevelopment.ts"
+    },
+    {
+      "name": "fee",
+      "target": "creates only the matching successful actual loan and leaves all other authority fields equal",
+      "to": "  return { ...next, budget: next.budget + 1, loanedOut: loans.map(l => l === loan ? { ...l, development: record } : l) };",
+      "from": "  return { ...next, loanedOut: loans.map(l => l === loan ? { ...l, development: record } : l) };",
+      "file": "src/lib/clubManagerLoanPlan.ts"
+    },
+    {
+      "name": "stale",
+      "target": "refuses a stale same-week fee and keeps a declined action byte-neutral",
+      "to": "  if (!preview) return null;",
+      "from": "  if (!preview || preview.token !== request.token) return null;",
+      "file": "src/lib/clubManagerLoanPlan.ts"
+    },
+    {
+      "name": "persistence",
+      "target": "confirms the real standard loan terms and restores the plan after actual unmount/reload",
+      "to": "    const ok = true;",
+      "from": "    const ok = saveCareer(c);",
+      "file": "src/hooks/useClubManager.ts"
+    },
+    {
+      "name": "review",
+      "target": "saves a real weekly review without inventing host minutes or changing the player rating",
+      "to": "  return c;",
+      "from": "  return withLog(next, recordLoanDevelopmentLog(reviewed, clock, actual, 'check-in', loan.player.rating));",
+      "file": "src/lib/clubManagerLoanPlan.ts"
+    },
+    {
+      "name": "recall",
+      "target": "recalls through the existing engine, pays its fee and retains the one-loan season stamp",
+      "to": "  const next = c;",
+      "from": "  const next = recallLoanedPlayer(plainCopy(c), playerId);",
+      "file": "src/lib/clubManagerLoanPlan.ts"
+    },
+    {
+      "name": "growth",
+      "target": "creates only the matching successful actual loan and leaves all other authority fields equal",
+      "to": "  return { ...next, loanedOut: loans.map(l => l === loan ? { ...l, player: { ...l.player, rating: l.player.rating + 1 }, development: record } : l) };",
+      "from": "  return { ...next, loanedOut: loans.map(l => l === loan ? { ...l, development: record } : l) };",
+      "file": "src/lib/clubManagerLoanPlan.ts"
+    },
+    {
+      "name": "history",
+      "target": "bounds recorded log and makes duplicate check-ins exact no-ops",
+      "to": "  if (existing) return [...(history ?? []), entry];",
+      "from": "  if (existing) return logToken(existing) === logToken(entry) ? history! : null;",
+      "file": "src/lib/clubManagerLoanDevelopment.ts"
+    },
+    {
+      "name": "foreign-record",
+      "file": "src/lib/clubManagerLoanPlan.ts",
+      "from": "return loanDevelopmentMatches(record, context(c, loan.player), fact(c, loan)) ? record : null;",
+      "to": "return loanDevelopmentOf(record) ?? null;",
+      "target": "keeps actual legacy recall available for a schema-valid foreign loan record"
+    },
+    {
+      "name": "log-date",
+      "target": "records a partial review honestly without drawing globally or changing the actual loan player",
+      "file": "src/lib/clubManagerLoanPlan.ts",
+      "from": "    || row.observedYear === year && row.observedSeason === c.season && row.observedWeek > c.week",
+      "to": ""
+    },
+    {
+      "name": "recall-id-collision",
+      "target": "recalls the actual legacy loanee when another squad member holds his old ID",
+      "file": "src/lib/clubManagerLoanPlan.ts",
+      "from": "  const returned = next.squad.filter(player => !beforeIds.has(player.id));",
+      "to": "  const returned = next.squad.filter(player => playerKey(player) === record.playerKey);"
+    }
+  ],
+  "independent": "keeps a default explicit-host loan free of plan metadata and additional random draws",
+  "regressionUnits": [
+    "src/lib/clubManagerWorldRoster.test.ts",
+    "src/test/clubManagerShootoutOrder.test.ts",
+    "src/test/cmMadeUpNations.test.ts",
+    "src/test/facilitiesPreview.test.tsx",
+    "src/test/staffScreen.test.tsx",
+    "src/test/clubManagerSave.test.tsx",
+    "src/test/clubManagerSaveSize.test.tsx",
+    "src/test/clubManagerSlots.test.tsx",
+    "src/test/managerMatchPlans.test.tsx"
+  ],
+  "regressionHarnesses": [
+    "simTransfers",
+    "simClubManagerDeals",
+    "simAcademy",
+    "simClubManagerSave",
+    "simClubManagerSaveSize",
+    "simClubManagerSlots"
+  ],
+  "readers": [
+    "simAdsense",
+    "simBrand",
+    "simHeadTags",
+    "simHiddenPages",
+    "simHubs",
+    "simIndexNow",
+    "simIndexing",
+    "simInternalLinks",
+    "simNoRivalNames",
+    "simPrerender",
+    "simPrerenderBoot",
+    "simRetiredRoutes",
+    "simSchema",
+    "simSitemap",
+    "simSnapshotAssets"
+  ],
+  "browser": "Separate native actual-card captures remain owed; this workflow makes no new pixel/full-route claim",
+  "scope": "Projected host choice, unchanged actual terms and authority, explicit saved check-ins and recall log only. No automatic annual, bought or returned closeout. Engine exact I, lazy client supplies synchronous live-state transform after existing hook guards, persistence before adoption. Current-season log also binds observedWeek to the current saved week. Recall logs identify the unique actual newly appended squad member even when exact-I authority rekeys a legacy loanee ID. One contextual type annotation fixes the actual remote entry.kind TS2322; no value or branch change.",
+  "omittedPriorPath": "src/lib/clubManagerLoanSettlement.ts: delete from prior proposal branch; absent in I and this selected proposal",
+  "mandatoryHostPoolOracle": "Separate same-engine observer of original private buyerPool against actual projected eligible hosts across real, partial and historical fixtures; runtime unrun"
+}

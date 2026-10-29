@@ -80,6 +80,9 @@ export function SoccerOfferReview({ club, review, onAccept }: {
               {review.wageDelta !== null && <p data-offer-wage-delta={review.wageDelta} className="font-semibold">
                 {review.wageDelta === 0 ? 'Same weekly wage as your current deal.' : `${wage(Math.abs(review.wageDelta))} ${review.wageDelta > 0 ? 'more' : 'less'} than your current deal.`}
               </p>}
+              {review.loyaltyBlocked && <p data-loyalty-stale className="rounded-lg bg-amber-500/10 p-3">The offer or loyalty choice has changed. Reopen career plans before signing.</p>}
+              {review.loyaltyQuote && <p data-loyalty-offer className="rounded-lg bg-emerald-500/10 p-3">Loyalty payout: {money('€' + formatNumber(review.loyaltyQuote.bonusEuros))} after {review.loyaltyQuote.years} recorded contract seasons. The weekly wage above includes the 10% reduction.</p>}
+              {review.loyaltyForfeitEuros && <p data-loyalty-forfeit className="rounded-lg bg-amber-500/10 p-3">Signing permanently here forfeits {money('€' + formatNumber(review.loyaltyForfeitEuros))} of unpaid loyalty pay.</p>}
               <div data-offer-depth={review.depth ? 'available' : 'unavailable'} className="rounded-lg bg-muted/40 p-3">
                 {review.depth ? <>
                   <p className="font-semibold">Recorded {review.season}/{String(review.season + 1).slice(-2)} squad fit</p>
@@ -94,7 +97,7 @@ export function SoccerOfferReview({ club, review, onAccept }: {
         <div className="flex shrink-0 gap-2">
           <Button variant="outline" className="h-11 flex-1 px-3 text-xs" onClick={() => help ? setHelp(false) : changeOpen(false)}>{help ? 'Back to review' : 'Back'}</Button>
           <Button variant="outline" className="h-11 w-11 shrink-0 p-0" aria-label={help ? 'Close contract review help' : 'Contract review help'} aria-expanded={help} onClick={() => setHelp(value => !value)}>?</Button>
-          {!help && <Button className="h-11 flex-1 px-3 text-xs" onClick={sign}>Sign contract</Button>}
+          {!help && <Button className="h-11 flex-1 px-3 text-xs" disabled={!!review.loyaltyBlocked} onClick={sign}>Sign contract</Button>}
         </div>
       </DialogContent>
     </Dialog>

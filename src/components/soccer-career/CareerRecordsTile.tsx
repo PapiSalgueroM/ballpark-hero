@@ -33,8 +33,12 @@ export function CareerRecordsTile({ career }: { career: CareerState }) {
   if (!book.rows.length) return null;
   const close = () => { setOpen(false); trigger.current?.focus({ preventScroll: true }); };
   const restoreFocus = () => { if (!openRef.current) trigger.current?.focus({ preventScroll: true }); };
+  /* Round 1568: the scroll margins keep the tile clear of the site's 44 px bar above and the career's floating
+     action bar below (about 73 px) whenever the browser brings it into view, Tab included. On a 390 by 844 phone
+     the site bar moved it to 757 to 839 at the top of the page, so a Tab onto it left all but 14 px of the focused
+     tile behind the action bar and a tap had to scroll the page first. Nothing moves on screen. */
   return <>
-    <button ref={trigger} type="button" aria-haspopup="dialog" data-career-records-tile onClick={() => setOpen(true)} className="w-full min-h-[64px] rounded-xl border border-border bg-card p-3 text-left">
+    <button ref={trigger} type="button" aria-haspopup="dialog" data-career-records-tile onClick={() => setOpen(true)} className="w-full min-h-[64px] scroll-mt-14 scroll-mb-24 rounded-xl border border-border bg-card p-3 text-left">
       <span className="block text-sm font-semibold">📖 Record book</span>
       <span className="block text-xs text-muted-foreground">Your best seasons and every club spell</span>
       <span className="block text-xs font-bold mt-1">{book.totals.apps} senior appearances · {book.stints.length} club {book.stints.length === 1 ? 'spell' : 'spells'}</span>

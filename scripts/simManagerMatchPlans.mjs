@@ -34,7 +34,7 @@ const controls = {
   random: { file: helper, from: 'const label = name.trim().replace', to: 'Math.random();\n  const label = name.trim().replace', test: cases.capture },
   hookSave: { file: hook, from: 'setCareer(prev => prev ? savePlan(prev, slot, name) : prev);', to: 'setCareer(prev => prev);', test: cases.mounted },
   hookApply: { file: hook, from: 'setCareer(prev => prev ? applyPlan(prev, slot) : prev);', to: 'setCareer(prev => prev);', test: cases.mounted },
-  persistence: { file: hook, from: 'note(saveCareer(career));', to: 'note(true);', test: cases.mounted },
+  persistence: { file: hook, from: 'const ok = saveCareer(c);', to: 'const ok = true;', test: cases.mounted },
   applyFormation: { file: helper, from: '...career, formationIndex: plan.formationIndex, mentality: plan.mentality,', to: '...career, formationIndex: career.formationIndex, mentality: plan.mentality,', test: cases.mounted },
   applyMentality: { file: helper, from: '...career, formationIndex: plan.formationIndex, mentality: plan.mentality,', to: '...career, formationIndex: plan.formationIndex, mentality: career.mentality,', test: cases.mounted },
   replacements: { file: helper, from: 'player: kickoff?.p ?? null, duty:', to: 'player: picked, duty:', test: cases.preview },

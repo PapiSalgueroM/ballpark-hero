@@ -1,9 +1,15 @@
 import { nextSeasonYear, type CareerState, type ContractOffer } from '@/lib/soccerCareerEngine';
 import { agentWageMult } from '@/lib/soccerCareerLife';
 import { depthChart, GROUP_LABEL } from '@/lib/soccerClubSquad';
+import { quoteLoyalty, readLoyalty, loyaltyForfeitEuros, canAcceptLoyaltyOffer } from '@/lib/soccerCareerLoyalty';
 
 export function buildSoccerOfferReview(career: CareerState, offer: ContractOffer) {
-  const signedWage = Math.round(offer.wage * agentWageMult(career.agentId));
+  const baseWage = Math.round(offer.wage * agentWageMult(career.agentId));
+  const quote = quoteLoyalty(career, offer, baseWage);
+  const loyaltyQuote = quote && readLoyalty(career)?.pending?.key === quote.key ? quote : null;
+  const signedWage = loyaltyQuote?.weeklyWage ?? baseWage;
+  const forfeiture = offer.isLoan ? 0 : loyaltyForfeitEuros(career, offer.club.name);
+  const loyaltyBlocked = !offer.isLoan && !canAcceptLoyaltyOffer(career, offer, baseWage);
   const firstContract = career.phase === 'contract_offer';
   const released = career.transferSituation?.type === 'frozen_out' && career.transferSituation.mode === 'released';
   const currentReason = firstContract ? 'First senior contract. No current senior deal to compare.'
@@ -18,6 +24,9 @@ export function buildSoccerOfferReview(career: CareerState, offer: ContractOffer
   const chart = depthChart(offer.club.name, season, career.position, career.overall, career.playerName);
   return {
     signedWage, current, currentReason,
+    ...(loyaltyQuote ? { loyaltyQuote } : {}),
+    ...(loyaltyBlocked ? { loyaltyBlocked: true } : {}),
+    ...(forfeiture > 0 ? { loyaltyForfeitEuros: forfeiture } : {}),
     wageDelta: current ? signedWage - current.wage : null,
     years: offer.contractYears,
     season,
