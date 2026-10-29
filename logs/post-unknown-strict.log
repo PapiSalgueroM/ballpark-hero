@@ -1,0 +1,6 @@
+post rows 20; replaced 16; unknown copy: nhlconn-009 "Scored 60 goals in a season" Wayne Gretzky -> Zed Nobodyson
+strict lines 3
+   nhl: 1 MEN ON THE LIVE ROWS ARE NOT IN THE RECORD, SO THEIR GROUPS ARE NOT FULLY CHECKED. Extend the record with NAMES_FROM=<export> (scripts/usConnections/fetch*Record.mjs) and run again. First of them: Zed Nobodyson
+  FAIL: nhl: Zed Nobodyson is on the live rows and not in the record (US_CONN_LIVE_STRICT)
+
+simUsConnectionsFacts: 145 failures

@@ -1,0 +1,5 @@
+pre-nonstrict exit=1 0s | simUsConnectionsFacts: 275 failures
+pre-strict exit=1 0s | simUsConnectionsFacts: 277 failures
+post-strict exit=1 0s | simUsConnectionsFacts: 142 failures
+post-unknown-strict exit=1 0s | simUsConnectionsFacts: 145 failures
+post-unknown-nonstrict exit=1 0s | simUsConnectionsFacts: 142 failures

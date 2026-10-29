@@ -1,0 +1,5 @@
+post rows 20; replaced 16; unknown copy: nhlconn-009 "Scored 60 goals in a season" Wayne Gretzky -> Zed Nobodyson
+strict lines 0
+   nhl: kinds club 39, career 8, season 4, award 9, pos 1, wins 3, draft 7, cupWith 3, smytheLost 1, goalieGoal 1, cupClubs 1, clubGoals 1, draftBy 1, hofClub 1; 0 problems
+
+simUsConnectionsFacts: 142 failures

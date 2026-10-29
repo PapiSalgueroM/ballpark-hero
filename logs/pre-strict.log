@@ -1,0 +1,5 @@
+strict lines 2
+  FAIL: nhl: 18 live groups nothing judges, over the ceiling of 0 (US_CONN_LIVE_STRICT)
+  FAIL: nhl: 1 live members the record cannot place, over the ceiling of 0 (US_CONN_LIVE_STRICT)
+
+simUsConnectionsFacts: 277 failures
