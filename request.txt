@@ -1,0 +1,5 @@
+tsc: node_modules/.bin/tsc --noEmit -p tsconfig.app.json
+default: node scripts/simTriviaBank.mjs
+ctl-short: TRIVIA_CONTROL=short node scripts/simTriviaBank.mjs
+ctl-redeal: TRIVIA_CONTROL=redeal node scripts/simTriviaBank.mjs
+ctl-dupe: TRIVIA_CONTROL=dupe node scripts/simTriviaBank.mjs

@@ -1,0 +1,5 @@
+tsc exit=0 105s | 
+default exit=0 183s | simTriviaBank: all checks passed
+ctl-short exit=1 186s | simTriviaBank: 5 failure(s) (NEGATIVE CONTROL short ON)
+ctl-redeal exit=1 185s | simTriviaBank: 16 failure(s) (NEGATIVE CONTROL redeal ON)
+ctl-dupe exit=1 122s | simTriviaBank: 24 failure(s) (NEGATIVE CONTROL dupe ON)
