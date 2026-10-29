@@ -1,0 +1,60 @@
+1
+
+[1m[46m RUN [49m[22m [36mv3.2.7 [39m[90m/home/runner/work/ballpark-hero/ballpark-hero[39m
+
+[90mstdout[2m | src/test/sportsMillionaireSwap.test.tsx[2m > [22m[2mSports Millionaire, Swap Question on the page (Round 1579)[2m > [22m[2mthe fixture ladder is whole and the three streams exist
+[22m[39msportsMillionaireSwap streams: REPEAT_1 1, FRESH_1 2, REPEAT_3 42
+
+[90mstderr[2m | src/test/sportsMillionaireSwap.test.tsx[2m > [22m[2mSports Millionaire, Swap Question on the page (Round 1579)[2m > [22m[2mA: on a stream where the old swap dealt a later rung, the swap at question 1 deals a question not on the ladder
+[22m[39mWarning: Missing `Description` or `aria-describedby={undefined}` for {DialogContent}.
+
+[90mstderr[2m | src/test/sportsMillionaireSwap.test.tsx[2m > [22m[2mSports Millionaire, Swap Question on the page (Round 1579)[2m > [22m[2mB: on a stream where the old swap was fresh, the page deals exactly what it dealt before
+[22m[39mWarning: Missing `Description` or `aria-describedby={undefined}` for {DialogContent}.
+
+[90mstderr[2m | src/test/sportsMillionaireSwap.test.tsx[2m > [22m[2mSports Millionaire, Swap Question on the page (Round 1579)[2m > [22m[2mC: after two right answers, the swap at question 3 never brings back question 1 or 2
+[22m[39mWarning: Missing `Description` or `aria-describedby={undefined}` for {DialogContent}.
+
+ [31m❯[39m src/test/sportsMillionaireSwap.test.tsx [2m([22m[2m4 tests[22m[2m | [22m[31m2 failed[39m[2m)[22m[33m 423[2mms[22m[39m
+   [32m✓[39m Sports Millionaire, Swap Question on the page (Round 1579)[2m > [22mthe fixture ladder is whole and the three streams exist[32m 2[2mms[22m[39m
+[31m   [31m×[31m Sports Millionaire, Swap Question on the page (Round 1579)[2m > [22mA: on a stream where the old swap dealt a later rung, the swap at question 1 deals a question not on the ladder[39m[32m 213[2mms[22m[39m
+[31m     → the swap dealt a question already on the ladder: Who was worth the most in the 2026 market values?: expected [ …(15) ] to not include 'Who was worth the most in the 2026 ma…'[39m
+   [32m✓[39m Sports Millionaire, Swap Question on the page (Round 1579)[2m > [22mB: on a stream where the old swap was fresh, the page deals exactly what it dealt before[32m 87[2mms[22m[39m
+[31m   [31m×[31m Sports Millionaire, Swap Question on the page (Round 1579)[2m > [22mC: after two right answers, the swap at question 3 never brings back question 1 or 2[39m[32m 118[2mms[22m[39m
+[31m     → the swap dealt a question already on the ladder: What nationality is Fixture Probe 16?: expected [ …(15) ] to not include 'What nationality is Fixture Probe 16?'[39m
+
+[31m⎯⎯⎯⎯⎯⎯⎯[39m[1m[41m Failed Tests 2 [49m[22m[31m⎯⎯⎯⎯⎯⎯⎯[39m
+
+[41m[1m FAIL [22m[49m src/test/sportsMillionaireSwap.test.tsx[2m > [22mSports Millionaire, Swap Question on the page (Round 1579)[2m > [22mA: on a stream where the old swap dealt a later rung, the swap at question 1 deals a question not on the ladder
+[31m[1mAssertionError[22m: the swap dealt a question already on the ladder: Who was worth the most in the 2026 market values?: expected [ …(15) ] to not include 'Who was worth the most in the 2026 ma…'[39m
+[36m [2m❯[22m src/test/sportsMillionaireSwap.test.tsx:[2m146:92[22m[39m
+    [90m144| [39m      [35mconst[39m shown [33m=[39m [34mboard[39m(m)[33m;[39m
+    [90m145| [39m      [34mexpect[39m(shown[33m?.[39mrung)[33m.[39m[34mtoMatch[39m([36m/^Question 1 of 15/[39m)[33m;[39m
+    [90m146| [39m      expect(TEXTS, `the swap dealt a question already on the ladder: …
+    [90m   | [39m                                                                                           [31m^[39m
+    [90m147| [39m      [34mexpect[39m([34mfindButton[39m(m[33m.[39mcontainer[33m,[39m [36m/^Swap$/[39m)[33m?.[39mdisabled)[33m.[39m[34mtoBe[39m([35mtrue[39m)[33m;[39m
+    [90m148| [39m    } [35mfinally[39m {
+
+[31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/2]⎯[22m[39m
+
+[41m[1m FAIL [22m[49m src/test/sportsMillionaireSwap.test.tsx[2m > [22mSports Millionaire, Swap Question on the page (Round 1579)[2m > [22mC: after two right answers, the swap at question 3 never brings back question 1 or 2
+[31m[1mAssertionError[22m: the swap dealt a question already on the ladder: What nationality is Fixture Probe 16?: expected [ …(15) ] to not include 'What nationality is Fixture Probe 16?'[39m
+[36m [2m❯[22m src/test/sportsMillionaireSwap.test.tsx:[2m176:92[22m[39m
+    [90m174| [39m      [35mawait[39m [34mswapOn[39m(m[33m,[39m [33mREPEAT_3[39m)[33m;[39m
+    [90m175| [39m      [35mconst[39m shown [33m=[39m [34mboard[39m(m)[33m;[39m
+    [90m176| [39m      expect(TEXTS, `the swap dealt a question already on the ladder: …
+    [90m   | [39m                                                                                           [31m^[39m
+    [90m177| [39m    } [35mfinally[39m {
+    [90m178| [39m      m[33m.[39m[34munmount[39m()[33m;[39m
+
+[31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[2/2]⎯[22m[39m
+
+
+[2m Test Files [22m [1m[31m1 failed[39m[22m[90m (1)[39m
+[2m      Tests [22m [1m[31m2 failed[39m[22m[2m | [22m[1m[32m2 passed[39m[22m[90m (4)[39m
+[2m   Start at [22m 22:03:40
+[2m   Duration [22m 1.87s[2m (transform 376ms, setup 65ms, collect 650ms, tests 423ms, environment 292ms, prepare 66ms)[22m
+
+
+::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/test/sportsMillionaireSwap.test.tsx,title=src/test/sportsMillionaireSwap.test.tsx > Sports Millionaire%2C Swap Question on the page (Round 1579) > A%3A on a stream where the old swap dealt a later rung%2C the swap at question 1 deals a question not on the ladder,line=146,column=92::AssertionError: the swap dealt a question already on the ladder: Who was worth the most in the 2026 market values?: expected [ …(15) ] to not include 'Who was worth the most in the 2026 ma…'%0A ❯ src/test/sportsMillionaireSwap.test.tsx:146:92%0A%0A
+
+::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/test/sportsMillionaireSwap.test.tsx,title=src/test/sportsMillionaireSwap.test.tsx > Sports Millionaire%2C Swap Question on the page (Round 1579) > C%3A after two right answers%2C the swap at question 3 never brings back question 1 or 2,line=176,column=92::AssertionError: the swap dealt a question already on the ladder: What nationality is Fixture Probe 16?: expected [ …(15) ] to not include 'What nationality is Fixture Probe 16?'%0A ❯ src/test/sportsMillionaireSwap.test.tsx:176:92%0A%0A

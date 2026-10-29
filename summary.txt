@@ -1,0 +1,3 @@
+vitest exit=0 3s |    Duration  1.89s (transform 400ms, setup 72ms, collect 676ms, tests 422ms, environment 316ms, prepare 122ms)
+vt-base exit=1 3s | ::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/test/sportsMillionaireSwap.test.tsx,title=src/test/sportsMillionaireSwap.test.tsx > Sports Millionaire%2C S
+vt-page exit=1 3s | ::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/test/sportsMillionaireSwap.test.tsx,title=src/test/sportsMillionaireSwap.test.tsx > Sports Millionaire%2C S
