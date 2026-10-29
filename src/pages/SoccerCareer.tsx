@@ -1684,7 +1684,14 @@ export default function SoccerCareer() {
             )}
             {trainingOpen && (
               <CentreMountBoundary what="training ground" onClose={closeTraining}>
-                <Suspense fallback={<div className="fixed inset-0 z-50 flex items-center justify-center bg-black/70" data-training-loading><div className="rounded-2xl border border-border bg-card px-5 py-4 text-sm">🏋️ Opening the training ground...</div></div>}>
+                <Suspense fallback={
+                  <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/70 p-4" data-training-loading>
+                    <div role="dialog" aria-modal="true" aria-label="Opening the training ground" tabIndex={-1} ref={focusDialogOnMount} onKeyDown={escapeCloses(closeTraining)} className="w-full max-w-sm rounded-2xl border border-border bg-card px-5 py-4 text-sm">
+                      <p>🏋️ Opening the training ground...</p>
+                      <Button onClick={closeTraining} variant="outline" className="mt-4 h-11 w-full font-bold">Back to career</Button>
+                    </div>
+                  </div>
+                }>
                   <TrainingPanel
                     career={career}
                     available={trainingAvailable(career)}
