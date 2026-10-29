@@ -1,0 +1,28 @@
+#!serial
+# Release BS kit: 2 of the 11 request lines of Release BR's rc-BKb.txt (rBRg/.tmp-fx/br), the lines of the BS areas (Soccer Career, Club Manager and the manager games on its engine, Player Bingo, Conquest, Stat and Draft Detective, the US My Career save notice, What's New, the polls, the guide intro) and the setup lines before them; 9 line(s) outside those areas left out: p1407 p1412 p1413 p1411 p1415 p333 p334 p335 p336.
+# Release BK (Round BKG, finish-BKG.md section 3): the other lane's packets, each proven by ITS OWN prover
+# (scripts/qa/prove*.mjs, the core of its own workflow: fixed arm, original source control with its exact named faults,
+# removal controls, restored arm, raw pins) on the joined tree, at its own merge commit, with the prover's pinned base
+# bound to the tree before that merge. One line per round of every packet (PR331 carries Round 1400 under 1414, PR329
+# carries 1407 under 1412, PR332 carries 1411 under 1415). Send with:
+#   bash rc.sh <name> rc-BKb.txt minusRange.sh bindAt.sh runProver.sh withFiles.sh
+# How a line binds (all three helpers fail closed, fixed author and date, so the same input gives the same sha):
+#   minusRange.sh <at> <from> <to>: <at> with the non docs diff <from>..<to> reversed (a round taken back out).
+#   bindAt.sh <head> <old40>=<ref>,...: <head> with the prover's pinned sha replaced by <ref>, <ref> made a parent.
+#   runProver.sh <commit> <label> <OUT var> [K=V]... -- cmd: the prover in a fresh worktree /tmp/rp-wt-<label> with the
+#   workflow's env (CI=1, SIM_NETWORK=offline, TZ=UTC, GITHUB_SHA, the offline preload) and OUT outside it.
+# Merge commits: m3 5ada8244 (PR331, before 9a705e19), m4 4d7797c0 (PR310, before 5ada8244), m5 c1c99347 (PR329, before
+# 4d7797c0), m6 1e479534 (PR330, before c1c99347), m7 52419816 (PR332, before 1e479534), 99154ea3 (PR333, before
+# 52419816), 406c3c0a (PR334), 561ab227 (PR335), 22695d7a (PR336). No packet file moved after its merge on this branch
+# except src/hooks/useSoccerGrid.ts, moved by PR330 (1413) on top of PR329 (1412), as built.
+# TWO RAW PINS ARE REBOUND, each attributed in finish-BKG.md section 3:
+#   p310: the packet's baseline raw c0b46dd0 holds a whole engine career (careerBefore/careerAfter) from its old base
+#     6465d9ae; on the joined tree that JSON differs only there (boardConfidence 60 to 69, worldComps, worldRoster:
+#     main's engine since 6465d9ae plus 1509 and 1510), so the line binds the joined tree's own original raw 1aff5e67
+#     (no path in it, stable); every case assertion and the 2 named faults are the packet's.
+#   p1411: the raw holds console stack traces with the ABSOLUTE checkout path, so it depends on where it runs; at
+#     /tmp/rp-wt-p1411 on the joined tree it is 87378295 (rBKb4 and rBKb6). Keep the label p1411.
+# p1414 runs on a proof tree with PR331's own saved /club-manager page (withFiles.sh): with main's stale saved page only
+# simGuideHeadings section 4 is red (Round 1400's "How do I retire?" h3), which the release build redraws.
+p1414: M=$(bash .rc/x/minusRange.sh 5ada8244 e32dd9facafcf43f4a4ddbafeae1a8baa6732aff fcaeee96ea8c0b70b06597fa469e283b3b8f359e) && C=$(bash .rc/x/bindAt.sh 5ada8244 e32dd9facafcf43f4a4ddbafeae1a8baa6732aff=$M scripts/qa/proveCareerReleaseGuides.mjs) && C2=$(bash .rc/x/withFiles.sh $C fcaeee96ea8c0b70b06597fa469e283b3b8f359e public/club-manager/index.html) && bash .rc/x/runProver.sh $C2 p1414 CAREER_RELEASE_GUIDES_OUT -- node scripts/qa/proveCareerReleaseGuides.mjs
+p310: BL=$(bash .rc/x/minusRange.sh 4d7797c0 5eb5e035832d81a84c2dc02727fdd096de44952d 0186218ef64743446d32ca8aa839507e8e4e44a4) && C=$(bash .rc/x/bindAt.sh 4d7797c0 5eb5e035832d81a84c2dc02727fdd096de44952d=$BL,6465d9aeac1bc10f37d08fcb1a41b7521a886a1a=5ada8244 scripts/qa/proveManagerSavedDealsPagingFixed.mjs) && bash .rc/x/runProver.sh $C p310 MSDL_OUT MSDL_BASELINE_RAW_SHA256=1aff5e675804ce64a10e20c7c6374256797aaa7b4f4b9f1fb59d8c2996f71789 -- node scripts/qa/proveManagerSavedDealsPagingFixed.mjs
