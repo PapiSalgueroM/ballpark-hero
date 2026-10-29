@@ -1,0 +1,25 @@
+#!serial
+pgl: npm install --prefix /tmp/pgl @electric-sql/pglite >/dev/null 2>&1 && ls /tmp/pgl/node_modules/@electric-sql
+rehearse: PGLITE_DIR=/tmp/pgl node scripts/qa/rehearseUsConnections1567.mjs
+reh-noguard: REHEARSE_CONTROL=noguard PGLITE_DIR=/tmp/pgl node scripts/qa/rehearseUsConnections1567.mjs
+reh-drift: REHEARSE_CONTROL=drift PGLITE_DIR=/tmp/pgl node scripts/qa/rehearseUsConnections1567.mjs
+reh-tamper: REHEARSE_CONTROL=tamper PGLITE_DIR=/tmp/pgl node scripts/qa/rehearseUsConnections1567.mjs
+reh-nohash: REHEARSE_CONTROL=nohash PGLITE_DIR=/tmp/pgl node scripts/qa/rehearseUsConnections1567.mjs
+reh1558: PGLITE_DIR=/tmp/pgl node scripts/qa/rehearseUsConnections1558.mjs
+mut-cyrevert-plain: node .rc/x/rvmut.mjs cyrevert && node scripts/simUsConnectionsFacts.mjs; s=$?; git checkout -- src scripts; exit $s
+mut-cyrevert-ohtani: node .rc/x/rvmut.mjs cyrevert && US_CONN_CONTROL=ohtani node scripts/simUsConnectionsFacts.mjs; s=$?; git checkout -- src scripts; exit $s
+mut-mlbasofdrop: node .rc/x/rvmut.mjs mlbasofdrop && node scripts/simUsConnectionsFacts.mjs; s=$?; git checkout -- src scripts; exit $s
+mut-mlbasofline: node .rc/x/rvmut.mjs mlbasofline && node scripts/simUsConnectionsFacts.mjs; s=$?; git checkout -- src scripts; exit $s
+mut-nfllt: node .rc/x/rvmut.mjs nfllt && node scripts/simUsConnectionsFacts.mjs; s=$?; git checkout -- src scripts; exit $s
+mut-nflignore: node .rc/x/rvmut.mjs nflignore && node scripts/simUsConnectionsFacts.mjs; s=$?; git checkout -- src scripts; exit $s
+mut-nhlignore: node .rc/x/rvmut.mjs nhlignore && node scripts/simUsConnectionsFacts.mjs; s=$?; git checkout -- src scripts; exit $s
+mut-nhllt: node .rc/x/rvmut.mjs nhllt && node scripts/simUsConnectionsFacts.mjs; s=$?; git checkout -- src scripts; exit $s
+mut-share30: node .rc/x/rvmut.mjs share30 && node scripts/simUsConnectionsFacts.mjs; s=$?; git checkout -- src scripts; exit $s
+mut-share42: node .rc/x/rvmut.mjs share42 && node scripts/simUsConnectionsFacts.mjs; s=$?; git checkout -- src scripts; exit $s
+mut-share43: node .rc/x/rvmut.mjs share43 && node scripts/simUsConnectionsFacts.mjs; s=$?; git checkout -- src scripts; exit $s
+mut-out099: node .rc/x/rvmut.mjs out099 && node scripts/simUsConnectionsFacts.mjs; s=$?; git checkout -- src scripts; exit $s
+mut-undatemlb: node .rc/x/rvmut.mjs undatemlb && node scripts/simUsConnectionsFacts.mjs; s=$?; git checkout -- src scripts; exit $s
+mut-undatenhl: node .rc/x/rvmut.mjs undatenhl && node scripts/simUsConnectionsFacts.mjs; s=$?; git checkout -- src scripts; exit $s
+mut-undatenfl: node .rc/x/rvmut.mjs undatenfl && node scripts/simUsConnectionsFacts.mjs; s=$?; git checkout -- src scripts; exit $s
+mut-ripken: node .rc/x/rvmut.mjs ripken && { node scripts/qa/usConnections1567Migration.mjs check; echo MIGCHECK_EXIT=$?; node scripts/simUsConnectionsFacts.mjs; }; s=$?; git checkout -- src scripts; exit $s
+clean: git status --short | head -5; echo CLEAN_CHECK_DONE

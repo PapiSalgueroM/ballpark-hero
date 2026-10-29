@@ -1,0 +1,24 @@
+pgl exit=0 1s | pglite
+rehearse exit=0 22s | rehearseUsConnections1567: green. Both forms land the 39 boards in place, a drifted row is left alone or stops the step, a tampered payload is refused, and a second run i
+reh-noguard exit=1 12s | rehearseUsConnections1567 control noguard: FIRED, caught by check C (6 failures; checks A, C)
+reh-drift exit=1 12s | rehearseUsConnections1567 control drift: FIRED, caught by check 0 (3 failures; checks 0, A)
+reh-tamper exit=1 12s | rehearseUsConnections1567 control tamper: FIRED, caught by check E (2 failures; checks E)
+reh-nohash exit=1 12s | rehearseUsConnections1567 control nohash: FIRED, caught by check F (2 failures; checks F)
+reh1558 exit=0 20s | rehearseUsConnections1558: green. The rows land in place, a drifted row is left alone, and a second run is a no-op.
+mut-cyrevert-plain exit=0 0s | simUsConnectionsFacts: green. Every Baseball, NFL and NHL Connections group is held to the record, and no board has a second right answer the record can see (other tiles 
+mut-cyrevert-ohtani exit=0 0s | US_CONN_CONTROL=ohtani did NOT fire its own rule (watch x0 for Shohei Ohtani); the 0 other failures do not count for it (findings: nothing). This control proves nothing a
+mut-mlbasofdrop exit=1 0s | simUsConnectionsFacts: 83 failures
+mut-mlbasofline exit=0 0s | simUsConnectionsFacts: green. Every Baseball, NFL and NHL Connections group is held to the record, and no board has a second right answer the record can see (other tiles 
+mut-nfllt exit=0 0s | simUsConnectionsFacts: green. Every Baseball, NFL and NHL Connections group is held to the record, and no board has a second right answer the record can see (other tiles 
+mut-nflignore exit=0 0s | simUsConnectionsFacts: green. Every Baseball, NFL and NHL Connections group is held to the record, and no board has a second right answer the record can see (other tiles 
+mut-nhlignore exit=0 0s | simUsConnectionsFacts: green. Every Baseball, NFL and NHL Connections group is held to the record, and no board has a second right answer the record can see (other tiles 
+mut-nhllt exit=0 0s | simUsConnectionsFacts: green. Every Baseball, NFL and NHL Connections group is held to the record, and no board has a second right answer the record can see (other tiles 
+mut-share30 exit=0 0s | simUsConnectionsFacts: green. Every Baseball, NFL and NHL Connections group is held to the record, and no board has a second right answer the record can see (other tiles 
+mut-share42 exit=0 0s | simUsConnectionsFacts: green. Every Baseball, NFL and NHL Connections group is held to the record, and no board has a second right answer the record can see (other tiles 
+mut-share43 exit=1 0s | simUsConnectionsFacts: 1 failure
+mut-out099 exit=0 0s | simUsConnectionsFacts: green. Every Baseball, NFL and NHL Connections group is held to the record, and no board has a second right answer the record can see (other tiles 
+mut-undatemlb exit=1 0s | simUsConnectionsFacts: 83 failures
+mut-undatenhl exit=1 0s | simUsConnectionsFacts: 142 failures
+mut-undatenfl exit=1 0s | simUsConnectionsFacts: 61 failures
+mut-ripken exit=1 0s | simUsConnectionsFacts: 2 failures
+clean exit=0 0s | CLEAN_CHECK_DONE

@@ -1,0 +1,36 @@
+rvmut share30: scripts/lib/usConnectionsCheck.mjs changed (1 place)
+1) no group claims the present, and every recent year label is one the record judges
+   baseball: 0 present tense or unheld recent year labels
+   nfl: 0 present tense or unheld recent year labels
+   nhl: 0 present tense or unheld recent year labels
+2) no refuted claim is on a board
+   baseball: 32 refuted claims held off every board, 0 found
+   baseball: 57 gray pairs the round took off their boards, 0 back
+   nfl: 0 refuted claims held off every board, 0 found
+   nhl: 0 refuted claims held off every board, 0 found
+3) the ledger stands on two hosts
+   baseball: 653 facts, 0 on one host; 115 flagged groups, 575 members held; 131 fixed findings
+   nfl: 12 facts, 0 on one host; 2 flagged groups, 10 members held; 1 fixed findings
+   nhl: 12 facts, 0 on one host; 2 flagged groups, 10 members held; 2 fixed findings
+4) one right answer: the shared cross check over every board
+   baseball: 60 boards, 240 of 240 groups judged; members 1200 judged (0 unknown), other tiles 3600 judged (0 unknown); 0 findings
+   nfl: 4 boards, 16 of 16 groups judged; members 80 judged (0 unknown), other tiles 240 judged (0 unknown); 0 findings
+   nhl: 4 boards, 16 of 16 groups judged; members 80 judged (0 unknown), other tiles 240 judged (0 unknown); 0 findings
+5) no man is a season from joining a group beside him
+   baseball: 0 watched men beside a group they may join
+   nfl: 0 watched men beside a group they may join
+   nhl: 0 watched men beside a group they may join
+6) no man is dealt twice on one board
+   baseball: 0 men dealt twice
+   nfl: 0 men dealt twice
+   nhl: 0 men dealt twice
+7) what the record cannot judge may only get fewer
+   baseball: 0 groups nothing judges (ceiling 0), 0 members the record cannot place (ceiling 0), 0 other tiles it cannot judge (ceiling 0)
+   nfl: 0 groups nothing judges (ceiling 0), 0 members the record cannot place (ceiling 0), 0 other tiles it cannot judge (ceiling 0)
+   nhl: 0 groups nothing judges (ceiling 0), 0 members the record cannot place (ceiling 0), 0 other tiles it cannot judge (ceiling 0)
+8) no active man is one move from a second answer
+   baseball: 15 dated club groups, 0 undated, 0 active men one move from a club group beside them
+   nfl: 8 dated club groups, 0 undated, 0 active men one move from a club group beside them
+   nhl: 15 dated club groups, 0 undated, 0 active men one move from a club group beside them
+
+simUsConnectionsFacts: green. Every Baseball, NFL and NHL Connections group is held to the record, and no board has a second right answer the record can see (other tiles it cannot judge, each at its ceiling: 0 baseball, 0 nfl, 0 nhl).
