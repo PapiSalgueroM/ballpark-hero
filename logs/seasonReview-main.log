@@ -1,0 +1,7 @@
+FAIL career season review savedGames
+AssertionError [ERR_ASSERTION]: savedGames binds exactly one executable anchor
+FAIL career season review pay
+AssertionError [ERR_ASSERTION]: pay binds exactly one executable anchor
+FAIL career season review legacy
+AssertionError [ERR_ASSERTION]: legacy binds exactly one executable anchor
+AssertionError [ERR_ASSERTION]: Every normal and control outcome passed; all modes were attempted

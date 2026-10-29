@@ -1,0 +1,12 @@
+build exit=0 34s | [dukb] inlined 1 stylesheet(s) and 1 module(s) into 181 snapshots (11 left alone)
+storage exit=0 3s | simStorageWrites: all green (owed: 12)
+anchors exit=0 50s | simHarnessAnchors: green. Every harness parses and none carries an unmatchable anchor.
+rival exit=0 15s | No rival product names found. 0 findings.
+walk exit=0 131s | screenshots in /home/runner/work/_temp/rc-out/files
+walk-nowall exit=0 24s | playUsCareerHallWall control nowall: all 16 guarded checks fired (mutations landed: {"nowall":12})
+weight-head exit=0 14s | weight4 done
+sweepWeight exit=1 30s | sweepWeight: 1 failure
+real-csr exit=0 4s |    Duration  3.39s (transform 1.61s, setup 70ms, collect 2.24s, tests 379ms, environment 309ms, prepare 127ms)
+mut-csr exit=1 5s | ::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/test/careerSeasonReview.test.tsx,title=src/test/careerSeasonReview.test.tsx > saved career season review > 
+clean exit=0 0s | CLEAN-CHECK-DONE
+seasonReview-main exit=1 194s | AssertionError [ERR_ASSERTION]: Every normal and control outcome passed; all modes were attempted
