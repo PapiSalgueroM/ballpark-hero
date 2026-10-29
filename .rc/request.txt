@@ -1,0 +1,8 @@
+armfile: echo "imports equal to main: [$(git diff --name-only 692590145 -- src/data/marketNamesakes.json src/lib/clearWinner.ts src/lib/dateUtils.ts src/lib/dealPlayers.ts)]" && git show 692590145:src/lib/triviaQuestionBank.ts > "$TMPDIR/base-bank.ts" && TRIVIA_ARM_FILE="$TMPDIR/base-bank.ts" node scripts/simTriviaBank.mjs
+repro777head: SIM_SEED=777 TRIVIA_UNLIMITED=3000 node scripts/simTriviaBank.mjs
+default: node scripts/simTriviaBank.mjs
+ctl-short: TRIVIA_CONTROL=short node scripts/simTriviaBank.mjs
+anchors: node scripts/simHarnessAnchors.mjs
+bigU1: git show 692590145:src/lib/triviaQuestionBank.ts > "$TMPDIR/base-bank.ts" && TRIVIA_ARM_FILE="$TMPDIR/base-bank.ts" TRIVIA_BIG=unlimited:1-30000 node scripts/simTriviaBank.mjs
+bigU2: git show 692590145:src/lib/triviaQuestionBank.ts > "$TMPDIR/base-bank.ts" && TRIVIA_ARM_FILE="$TMPDIR/base-bank.ts" TRIVIA_BIG=unlimited:30001-60000 node scripts/simTriviaBank.mjs
+bigU3: git show 692590145:src/lib/triviaQuestionBank.ts > "$TMPDIR/base-bank.ts" && TRIVIA_ARM_FILE="$TMPDIR/base-bank.ts" TRIVIA_BIG=unlimited:60001-90000 node scripts/simTriviaBank.mjs
