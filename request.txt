@@ -1,0 +1,14 @@
+#!serial
+m-titlecredit-sim: node .rc/x/mutR.mjs titlecredit && node scripts/simUsCareerReports.mjs; s=$?; git checkout -- src scripts; exit $s
+m-titlecredit-parity: node .rc/x/mutR.mjs titlecredit && node scripts/simUsBoardParity.mjs; s=$?; git checkout -- src scripts; exit $s
+m-lastearly-sim: node .rc/x/mutR.mjs lastearly && node scripts/simUsCareerReports.mjs; s=$?; git checkout -- src scripts; exit $s
+m-lastnoseason-sim: node .rc/x/mutR.mjs lastnoseason && node scripts/simUsCareerReports.mjs; s=$?; git checkout -- src scripts; exit $s
+m-lastnoseason-vnew: node .rc/x/mutR.mjs lastnoseason && node_modules/.bin/vitest run src/test/usCareerReports1569.test.tsx --testTimeout=300000 --hookTimeout=120000; s=$?; git checkout -- src scripts; exit $s
+m-creditlow-sim: node .rc/x/mutR.mjs creditlow && node scripts/simUsCareerReports.mjs; s=$?; git checkout -- src scripts; exit $s
+m-rookieretire-vnew: node .rc/x/mutR.mjs rookieretire && node_modules/.bin/vitest run src/test/usCareerReports1569.test.tsx --testTimeout=300000 --hookTimeout=120000; s=$?; git checkout -- src scripts; exit $s
+m-startprospect-vnew: node .rc/x/mutR.mjs startprospect && node_modules/.bin/vitest run src/test/usCareerReports1569.test.tsx --testTimeout=300000 --hookTimeout=120000; s=$?; git checkout -- src scripts; exit $s
+m-whyage-vnew: node .rc/x/mutR.mjs whyage && node_modules/.bin/vitest run src/test/usCareerReports1569.test.tsx --testTimeout=300000 --hookTimeout=120000; s=$?; git checkout -- src scripts; exit $s
+ctl-nobar: node .rc/x/ctl1569.mjs nobar && node_modules/.bin/vitest run src/test/usCareerReports1569.test.tsx --testTimeout=300000 --hookTimeout=120000; s=$?; git checkout -- src; exit $s
+ctl-noretire: node .rc/x/ctl1569.mjs noretire && node_modules/.bin/vitest run src/test/usCareerReports1569.test.tsx --testTimeout=300000 --hookTimeout=120000; s=$?; git checkout -- src; exit $s
+ctl-nowhy: node .rc/x/ctl1569.mjs nowhy && node_modules/.bin/vitest run src/test/usCareerReports1569.test.tsx --testTimeout=300000 --hookTimeout=120000; s=$?; git checkout -- src; exit $s
+m-creditlow-parity: node .rc/x/mutR.mjs creditlow && node scripts/simUsBoardParity.mjs; s=$?; git checkout -- src scripts; exit $s

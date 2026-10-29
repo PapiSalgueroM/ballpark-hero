@@ -1,0 +1,92 @@
+mutR applied rookieretire in src/components/us-career/UsCareerBoard.tsx
+
+[1m[46m RUN [49m[22m [36mv3.2.7 [39m[90m/home/runner/work/ballpark-hero/ballpark-hero[39m
+
+Browserslist: browsers data (caniuse-lite) is 16 months old. Please run:
+  npx update-browserslist-db@latest
+  Why you should do it regularly: https://github.com/browserslist/update-db#readme
+ [31m❯[39m src/test/usCareerReports1569.test.tsx [2m([22m[2m32 tests[22m[2m | [22m[31m4 failed[39m[2m)[22m[33m 4802[2mms[22m[39m
+   [32m✓[39m Round 1569 report A: Start over from every screen[2m > [22m'NFL' starts over from the hub of a two season career[32m 241[2mms[22m[39m
+   [32m✓[39m Round 1569 report A: Start over from every screen[2m > [22m'NBA' starts over from the hub of a two season career[32m 140[2mms[22m[39m
+   [32m✓[39m Round 1569 report A: Start over from every screen[2m > [22m'MLB' starts over from the hub of a two season career[32m 120[2mms[22m[39m
+   [32m✓[39m Round 1569 report A: Start over from every screen[2m > [22m'NHL' starts over from the hub of a two season career[32m 129[2mms[22m[39m
+   [32m✓[39m Round 1569 report A: Start over from every screen[2m > [22m'NFL' starts over from the free agency window[32m 202[2mms[22m[39m
+   [32m✓[39m Round 1569 report A: Start over from every screen[2m > [22m'NBA' starts over from the free agency window[32m 186[2mms[22m[39m
+   [32m✓[39m Round 1569 report A: Start over from every screen[2m > [22m'MLB' starts over from the free agency window[32m 179[2mms[22m[39m
+   [32m✓[39m Round 1569 report A: Start over from every screen[2m > [22m'NHL' starts over from the free agency window[32m 186[2mms[22m[39m
+   [32m✓[39m Round 1569 report A: Start over from every screen[2m > [22m'NFL' starts over from the extension talk[32m 158[2mms[22m[39m
+   [32m✓[39m Round 1569 report A: Start over from every screen[2m > [22m'NBA' starts over from the extension talk[32m 157[2mms[22m[39m
+   [32m✓[39m Round 1569 report A: Start over from every screen[2m > [22m'MLB' starts over from the extension talk[32m 156[2mms[22m[39m
+   [32m✓[39m Round 1569 report A: Start over from every screen[2m > [22m'NHL' starts over from the extension talk[32m 152[2mms[22m[39m
+   [32m✓[39m Round 1569 report A: Start over from every screen[2m > [22m'NFL' starts over from the retired card and from the coaching career[32m 142[2mms[22m[39m
+   [32m✓[39m Round 1569 report A: Start over from every screen[2m > [22m'NBA' starts over from the retired card and from the coaching career[32m 127[2mms[22m[39m
+   [32m✓[39m Round 1569 report A: Start over from every screen[2m > [22m'MLB' starts over from the retired card and from the coaching career[32m 137[2mms[22m[39m
+   [32m✓[39m Round 1569 report A: Start over from every screen[2m > [22m'NHL' starts over from the retired card and from the coaching career[32m 123[2mms[22m[39m
+   [32m✓[39m Round 1569 report A: Start over from every screen[2m > [22m'NFL' starts over from the road to the draft[32m 114[2mms[22m[39m
+   [32m✓[39m Round 1569 report A: Start over from every screen[2m > [22m'NBA' starts over from the road to the draft[32m 108[2mms[22m[39m
+   [32m✓[39m Round 1569 report A: Start over from every screen[2m > [22m'MLB' starts over from the road to the draft[32m 120[2mms[22m[39m
+   [32m✓[39m Round 1569 report A: Start over from every screen[2m > [22m'NHL' starts over from the road to the draft[32m 119[2mms[22m[39m
+   [32m✓[39m Round 1569 report B: no offer is never a dead end[2m > [22m'NFL': a no offer talk in the last season says why, says it is the last, and retires in full[32m 133[2mms[22m[39m
+   [32m✓[39m Round 1569 report B: no offer is never a dead end[2m > [22m'NBA': a no offer talk in the last season says why, says it is the last, and retires in full[32m 120[2mms[22m[39m
+   [32m✓[39m Round 1569 report B: no offer is never a dead end[2m > [22m'MLB': a no offer talk in the last season says why, says it is the last, and retires in full[32m 123[2mms[22m[39m
+   [32m✓[39m Round 1569 report B: no offer is never a dead end[2m > [22m'NHL': a no offer talk in the last season says why, says it is the last, and retires in full[32m 123[2mms[22m[39m
+   [32m✓[39m Round 1569 report B: no offer is never a dead end[2m > [22m'NFL': a no offer talk with seasons left keeps the market promise and still offers retirement[32m 71[2mms[22m[39m
+   [32m✓[39m Round 1569 report B: no offer is never a dead end[2m > [22m'NBA': a no offer talk with seasons left keeps the market promise and still offers retirement[32m 74[2mms[22m[39m
+   [32m✓[39m Round 1569 report B: no offer is never a dead end[2m > [22m'MLB': a no offer talk with seasons left keeps the market promise and still offers retirement[32m 74[2mms[22m[39m
+   [32m✓[39m Round 1569 report B: no offer is never a dead end[2m > [22m'NHL': a no offer talk with seasons left keeps the market promise and still offers retirement[32m 83[2mms[22m[39m
+[31m   [31m×[31m Round 1569 report B: no offer is never a dead end[2m > [22m'NFL': free agency offers a veteran Retire instead, and a two season player none[39m[32m 252[2mms[22m[39m
+[31m     → expected <button type="button" …(5)></button> to be null[39m
+[31m   [31m×[31m Round 1569 report B: no offer is never a dead end[2m > [22m'NBA': free agency offers a veteran Retire instead, and a two season player none[39m[32m 248[2mms[22m[39m
+[31m     → expected <button type="button" …(5)></button> to be null[39m
+[31m   [31m×[31m Round 1569 report B: no offer is never a dead end[2m > [22m'MLB': free agency offers a veteran Retire instead, and a two season player none[39m[32m 242[2mms[22m[39m
+[31m     → expected <button type="button" …(5)></button> to be null[39m
+[31m   [31m×[31m Round 1569 report B: no offer is never a dead end[2m > [22m'NHL': free agency offers a veteran Retire instead, and a two season player none[39m[32m 261[2mms[22m[39m
+[31m     → expected <button type="button" …(5)></button> to be null[39m
+
+[31m⎯⎯⎯⎯⎯⎯⎯[39m[1m[41m Failed Tests 4 [49m[22m[31m⎯⎯⎯⎯⎯⎯⎯[39m
+
+[41m[1m FAIL [22m[49m src/test/usCareerReports1569.test.tsx[2m > [22mRound 1569 report B: no offer is never a dead end[2m > [22m'NFL': free agency offers a veteran Retire instead, and a two season player none
+[41m[1m FAIL [22m[49m src/test/usCareerReports1569.test.tsx[2m > [22mRound 1569 report B: no offer is never a dead end[2m > [22m'NBA': free agency offers a veteran Retire instead, and a two season player none
+[41m[1m FAIL [22m[49m src/test/usCareerReports1569.test.tsx[2m > [22mRound 1569 report B: no offer is never a dead end[2m > [22m'MLB': free agency offers a veteran Retire instead, and a two season player none
+[41m[1m FAIL [22m[49m src/test/usCareerReports1569.test.tsx[2m > [22mRound 1569 report B: no offer is never a dead end[2m > [22m'NHL': free agency offers a veteran Retire instead, and a two season player none
+[31m[1mAssertionError[22m: expected <button type="button" …(5)></button> to be null[39m
+
+[32m- Expected:[39m 
+null
+
+[31m+ Received:[39m 
+<button
+  aria-controls="radix-:r8q:"
+  aria-expanded="false"
+  aria-haspopup="dialog"
+  class="min-h-11 min-w-11 rounded-full px-4 text-xs font-semibold text-muted-foreground hover:text-destructive"
+  data-state="closed"
+  type="button"
+>
+  Retire instead
+</button>
+
+[36m [2m❯[22m src/test/usCareerReports1569.test.tsx:[2m148:69[22m[39m
+    [90m146| [39m    seed(row, 2, c => { c.contractYears = 0; }); const young = render(…
+    [90m147| [39m    await play(young); expect(document.querySelector('[data-fa-window]…
+    [90m148| [39m    expect(young.queryByRole('button', { name: 'Retire instead' })).to…
+    [90m   | [39m                                                                    [31m^[39m
+    [90m149| [39m  })[33m;[39m
+    [90m150| [39m})[33m;[39m
+
+[31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/4]⎯[22m[39m
+
+
+[2m Test Files [22m [1m[31m1 failed[39m[22m[90m (1)[39m
+[2m      Tests [22m [1m[31m4 failed[39m[22m[2m | [22m[1m[32m28 passed[39m[22m[90m (32)[39m
+[2m   Start at [22m 07:13:23
+[2m   Duration [22m 6.84s[2m (transform 1.09s, setup 43ms, collect 1.49s, tests 4.80s, environment 215ms, prepare 47ms)[22m
+
+
+::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/test/usCareerReports1569.test.tsx,title=src/test/usCareerReports1569.test.tsx > Round 1569 report B%3A no offer is never a dead end > 'NFL'%3A free agency offers a veteran Retire instead%2C and a two season player none,line=148,column=69::AssertionError: expected <button type="button" …(5)></button> to be null%0A%0A- Expected: %0Anull%0A%0A+ Received: %0A<button%0A  aria-controls="radix-:r8q:"%0A  aria-expanded="false"%0A  aria-haspopup="dialog"%0A  class="min-h-11 min-w-11 rounded-full px-4 text-xs font-semibold text-muted-foreground hover:text-destructive"%0A  data-state="closed"%0A  type="button"%0A>%0A  Retire instead%0A</button>%0A%0A ❯ src/test/usCareerReports1569.test.tsx:148:69%0A%0A
+
+::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/test/usCareerReports1569.test.tsx,title=src/test/usCareerReports1569.test.tsx > Round 1569 report B%3A no offer is never a dead end > 'NBA'%3A free agency offers a veteran Retire instead%2C and a two season player none,line=148,column=69::AssertionError: expected <button type="button" …(5)></button> to be null%0A%0A- Expected: %0Anull%0A%0A+ Received: %0A<button%0A  aria-controls="radix-:r9f:"%0A  aria-expanded="false"%0A  aria-haspopup="dialog"%0A  class="min-h-11 min-w-11 rounded-full px-4 text-xs font-semibold text-muted-foreground hover:text-destructive"%0A  data-state="closed"%0A  type="button"%0A>%0A  Retire instead%0A</button>%0A%0A ❯ src/test/usCareerReports1569.test.tsx:148:69%0A%0A
+
+::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/test/usCareerReports1569.test.tsx,title=src/test/usCareerReports1569.test.tsx > Round 1569 report B%3A no offer is never a dead end > 'MLB'%3A free agency offers a veteran Retire instead%2C and a two season player none,line=148,column=69::AssertionError: expected <button type="button" …(5)></button> to be null%0A%0A- Expected: %0Anull%0A%0A+ Received: %0A<button%0A  aria-controls="radix-:ra4:"%0A  aria-expanded="false"%0A  aria-haspopup="dialog"%0A  class="min-h-11 min-w-11 rounded-full px-4 text-xs font-semibold text-muted-foreground hover:text-destructive"%0A  data-state="closed"%0A  type="button"%0A>%0A  Retire instead%0A</button>%0A%0A ❯ src/test/usCareerReports1569.test.tsx:148:69%0A%0A
+
+::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/test/usCareerReports1569.test.tsx,title=src/test/usCareerReports1569.test.tsx > Round 1569 report B%3A no offer is never a dead end > 'NHL'%3A free agency offers a veteran Retire instead%2C and a two season player none,line=148,column=69::AssertionError: expected <button type="button" …(5)></button> to be null%0A%0A- Expected: %0Anull%0A%0A+ Received: %0A<button%0A  aria-controls="radix-:rap:"%0A  aria-expanded="false"%0A  aria-haspopup="dialog"%0A  class="min-h-11 min-w-11 rounded-full px-4 text-xs font-semibold text-muted-foreground hover:text-destructive"%0A  data-state="closed"%0A  type="button"%0A>%0A  Retire instead%0A</button>%0A%0A ❯ src/test/usCareerReports1569.test.tsx:148:69%0A%0A

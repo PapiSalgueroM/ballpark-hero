@@ -1,0 +1,31 @@
+mutR applied creditlow in src/lib/careerVariance.ts
+Round1424 historical presentation: proved main775 coaching Panel SHA9390fab969844b20ca4f7adbc097664191d3f5ea082090553f479305fe85d321, current engine and unchanged fixture. This replay gives no current-Panel visual parity credit.
+Historical installed aliases: [{"id":"react/jsx-dev-runtime","file":"/home/runner/work/ballpark-hero/ballpark-hero/node_modules/react/jsx-dev-runtime.js","sha256":"25a7dbfdb2ae574b67fcdd2aab811080b415edd1c8043ead46866a533e99320e"},{"id":"react/jsx-runtime","file":"/home/runner/work/ballpark-hero/ballpark-hero/node_modules/react/jsx-runtime.js","sha256":"28170e60f2ff0bc045bc7d175f5849e86f68dd02d76d7255369420718b30295a"},{"id":"react","file":"/home/runner/work/ballpark-hero/ballpark-hero/node_modules/react/index.js","sha256":"a216c390bf956cbb906c66d29fdb2e2ad6999464a5ca83e476533a6f25ad0ef3"},{"id":"lucide-react","file":"/home/runner/work/ballpark-hero/ballpark-hero/node_modules/lucide-react/dist/cjs/lucide-react.js","sha256":"9590413b4a39d32a36ea229b3a06a597a012702546e23f6b6cca998e8de411ea"}]
+A) the fixture is whole
+   recorded from dc0eed050a663221bc923a6dccda01718ab32e1a (Round 1569 branch, recorded on a GitHub runner with the Round 1424 historical coaching panel the replay uses)
+   nfl: 475 clicks, 24 seasons, 19 fixed saves, 928 screen steps; 16 wheel steps, 13 steps saved in an extension talk, 27 in free agency
+   nba: 521 clicks, 24 seasons, 19 fixed saves, 932 screen steps; 14 wheel steps, 13 steps saved in an extension talk, 20 in free agency
+   mlb: 455 clicks, 24 seasons, 19 fixed saves, 886 screen steps; 6 wheel steps, 5 steps saved in an extension talk, 13 in free agency
+   nhl: 421 clicks, 24 seasons, 19 fixed saves, 900 screen steps; 6 wheel steps, 11 steps saved in an extension talk, 6 in free agency
+B) the replay: every click, every save, every screen
+   Vitest exit 1, passed [], failed [nfl, nba, mlb, nhl]
+   nfl click path step 10 (after "hub: Play the 2026 season"): the markup differs under the same words ("The 2026 seasonNew York Jets · age 22 · WRLost in the Wild C")
+   nfl click path step 12 (after "rival beat: Continue"): the markup differs under the same words ("Ryder Blaze · WRNew York Jets2027 · age 23OVR 72$3.1M x3⭐ St")
+   nfl click path step 13 (after "event: Study alone and ace itRating +1, morale -3"): the markup differs under the same words ("Ryder Blaze · WRNew York Jets2027 · age 23OVR 73$3.1M x3⭐ St")
+   nba click path step 357 (after "hub: Play the 2004 season"): the markup differs under the same words ("The 2004 seasonLA Clippers · age 21 · PGLost in the conferen")
+   nba click path step 359 (after "rival beat: Continue"): the markup differs under the same words ("Trey Buckets · PGLA Clippers2005 · age 22OVR 75$0.8M x2⭐ Sta")
+   nba click path step 360 (after "event: Take the challenger money and the controlBig bag, unknown sh"): the markup differs under the same words ("Trey Buckets · PGLA Clippers2005 · age 22OVR 75$0.8M x2⭐ Sta")
+   mlb save "beat" step 12 (after "hub: Play the 2030 season"): the screen reads "The 2030 seasonCincinnati Reds · age 25 · CFLost the Championship Series.270, 15 HR, 69 RBI📊 Postseason: 13 games, 13 for 52 (.250), 1 HR.�", fixture "The 2030 seasonCincinnati Reds · age 25 · CFLost the Championship Series.270, 15 HR, 69 RBI📊 Postseason: 13 games, 13 for 52 (.250), 1 HR.�"
+   mlb save "beat" step 14 (after "rival beat: Continue"): the markup differs under the same words ("Ace Diamond · CFCincinnati Reds2031 · age 26OVR 77$0.8M x1⭐ ")
+   mlb save "beat" step 15 (after "event: Play all three daysCameras and consequences"): the markup differs under the same words ("Ace Diamond · CFCincinnati Reds2031 · age 26OVR 77$0.8M x1⭐ ")
+   nhl click path step 16 (after "hub: Play the 2027 season"): the markup differs under the same words ("The 2027 seasonCarolina Hurricanes · age 20 · DLost the Cup ")
+   nhl click path step 19 (after "rival outcome: Continue"): the markup differs under the same words ("Gordie Blaze · DCarolina Hurricanes2028 · age 21OVR 73$0.9M ")
+   nhl click path step 258 (after "hub: Play the 2006 season"): the markup differs under the same words ("The 2006 seasonSan Jose Sharks · age 18 · LWLost in Round 21")
+  FAIL: the replay exited 1
+  FAIL: the replay passed [], not all four sports
+  FAIL: 29 steps differ from the fixture
+
+  If your round meant to change what a US career does, re-record from your tree
+  (node scripts/recordUsBoardFixture.mjs), commit the fixture with the change and say so in the
+  commit. If it did not, the red is a real change: read the first differing step above.
+simUsBoardParity: 3 failures

@@ -1,0 +1,13 @@
+m-titlecredit-sim exit=0 1s | simUsCareerReports PASS: 0 findings, 150 careers a sport, seed 1569
+m-titlecredit-parity exit=1 37s | simUsBoardParity: 3 failures
+m-lastearly-sim exit=1 1s | simUsCareerReports FAIL: 1 findings, 150 careers a sport, seed 1569
+m-lastnoseason-sim exit=0 1s | simUsCareerReports PASS: 0 findings, 150 careers a sport, seed 1569
+m-lastnoseason-vnew exit=0 8s |    Duration  6.88s (transform 1.13s, setup 42ms, collect 1.56s, tests 4.82s, environment 169ms, prepare 43ms)
+m-creditlow-sim exit=0 0s | simUsCareerReports PASS: 0 findings, 150 careers a sport, seed 1569
+m-rookieretire-vnew exit=1 7s | ::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/test/usCareerReports1569.test.tsx,title=src/test/usCareerReports1569.test.tsx > Round 1569 report B%3A no o
+m-startprospect-vnew exit=1 7s | ::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/test/usCareerReports1569.test.tsx,title=src/test/usCareerReports1569.test.tsx > Round 1569 report A%3A Star
+m-whyage-vnew exit=0 7s |    Duration  7.00s (transform 1.10s, setup 39ms, collect 1.51s, tests 5.02s, environment 161ms, prepare 70ms)
+ctl-nobar exit=1 9s | ::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/test/usCareerReports1569.test.tsx,title=src/test/usCareerReports1569.test.tsx > Round 1569 report A%3A Star
+ctl-noretire exit=1 7s | ::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/test/usCareerReports1569.test.tsx,title=src/test/usCareerReports1569.test.tsx > Round 1569 report B%3A no o
+ctl-nowhy exit=1 6s | ::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/test/usCareerReports1569.test.tsx,title=src/test/usCareerReports1569.test.tsx > Round 1569 report B%3A no o
+m-creditlow-parity exit=1 36s | simUsBoardParity: 3 failures

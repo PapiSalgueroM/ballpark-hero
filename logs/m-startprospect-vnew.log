@@ -1,0 +1,3735 @@
+mutR applied startprospect in src/components/us-career/UsCareerBoard.tsx
+
+[1m[46m RUN [49m[22m [36mv3.2.7 [39m[90m/home/runner/work/ballpark-hero/ballpark-hero[39m
+
+Browserslist: browsers data (caniuse-lite) is 16 months old. Please run:
+  npx update-browserslist-db@latest
+  Why you should do it regularly: https://github.com/browserslist/update-db#readme
+ [31m❯[39m src/test/usCareerReports1569.test.tsx [2m([22m[2m32 tests[22m[2m | [22m[31m4 failed[39m[2m)[22m[33m 5327[2mms[22m[39m
+   [32m✓[39m Round 1569 report A: Start over from every screen[2m > [22m'NFL' starts over from the hub of a two season career[32m 247[2mms[22m[39m
+   [32m✓[39m Round 1569 report A: Start over from every screen[2m > [22m'NBA' starts over from the hub of a two season career[32m 144[2mms[22m[39m
+   [32m✓[39m Round 1569 report A: Start over from every screen[2m > [22m'MLB' starts over from the hub of a two season career[32m 119[2mms[22m[39m
+   [32m✓[39m Round 1569 report A: Start over from every screen[2m > [22m'NHL' starts over from the hub of a two season career[32m 125[2mms[22m[39m
+   [32m✓[39m Round 1569 report A: Start over from every screen[2m > [22m'NFL' starts over from the free agency window[32m 204[2mms[22m[39m
+   [32m✓[39m Round 1569 report A: Start over from every screen[2m > [22m'NBA' starts over from the free agency window[32m 185[2mms[22m[39m
+   [32m✓[39m Round 1569 report A: Start over from every screen[2m > [22m'MLB' starts over from the free agency window[32m 182[2mms[22m[39m
+   [32m✓[39m Round 1569 report A: Start over from every screen[2m > [22m'NHL' starts over from the free agency window[32m 187[2mms[22m[39m
+   [32m✓[39m Round 1569 report A: Start over from every screen[2m > [22m'NFL' starts over from the extension talk[32m 160[2mms[22m[39m
+   [32m✓[39m Round 1569 report A: Start over from every screen[2m > [22m'NBA' starts over from the extension talk[32m 182[2mms[22m[39m
+   [32m✓[39m Round 1569 report A: Start over from every screen[2m > [22m'MLB' starts over from the extension talk[32m 155[2mms[22m[39m
+   [32m✓[39m Round 1569 report A: Start over from every screen[2m > [22m'NHL' starts over from the extension talk[32m 156[2mms[22m[39m
+   [32m✓[39m Round 1569 report A: Start over from every screen[2m > [22m'NFL' starts over from the retired card and from the coaching career[32m 151[2mms[22m[39m
+   [32m✓[39m Round 1569 report A: Start over from every screen[2m > [22m'NBA' starts over from the retired card and from the coaching career[32m 127[2mms[22m[39m
+   [32m✓[39m Round 1569 report A: Start over from every screen[2m > [22m'MLB' starts over from the retired card and from the coaching career[32m 130[2mms[22m[39m
+   [32m✓[39m Round 1569 report A: Start over from every screen[2m > [22m'NHL' starts over from the retired card and from the coaching career[32m 140[2mms[22m[39m
+[31m   [31m×[31m Round 1569 report A: Start over from every screen[2m > [22m'NFL' starts over from the road to the draft[39m[32m 227[2mms[22m[39m
+[31m     → Unable to find an accessible element with the role "button" and name "Start over"
+
+Here are the accessible roles:
+
+  button:
+
+  Name "Back to player":
+  [36m<button />[31m
+
+  Name "Road to the draft help":
+  [36m<button[31m
+    [33maria-controls[31m=[32m"prospect-help"[31m
+    [33maria-expanded[31m=[32m"true"[31m
+    [33maria-label[31m=[32m"Road to the draft help"[31m
+  [36m/>[31m
+
+  Name "Got it":
+  [36m<button[31m
+    [33mclass[31m=[32m"_helpClose_6a09aa"[31m
+  [36m/>[31m
+
+  Name "3 seasons Big college program Every game on TV and scouts at every practice. Three seasons before you can declare. Start at age 18 · Draft at 21":
+  [36m<button[31m
+    [33mclass[31m=[32m"_route_6a09aa"[31m
+  [36m/>[31m
+
+  Name "3 seasons Small school Fewer eyes on you, so the scouts have to come looking. Three seasons before you can declare. Start at age 18 · Draft at 21":
+  [36m<button[31m
+    [33mclass[31m=[32m"_route_6a09aa"[31m
+  [36m/>[31m
+
+  --------------------------------------------------
+  list:
+
+  Name "Your road to the draft":
+  [36m<ol[31m
+    [33maria-label[31m=[32m"Your road to the draft"[31m
+    [33mclass[31m=[32m"_acts_6a09aa"[31m
+  [36m/>[31m
+
+  --------------------------------------------------
+  listitem:
+
+  Name "":
+  [36m<li[31m
+    [33maria-current[31m=[32m"step"[31m
+  [36m/>[31m
+
+  Name "":
+  [36m<li />[31m
+
+  Name "":
+  [36m<li />[31m
+
+  --------------------------------------------------
+  paragraph:
+
+  Name "":
+  [36m<p[31m
+    [33mclass[31m=[32m"_chapter_6a09aa"[31m
+  [36m/>[31m
+
+  Name "":
+  [36m<p />[31m
+
+  Name "":
+  [36m<p />[31m
+
+  Name "":
+  [36m<p />[31m
+
+  Name "":
+  [36m<p />[31m
+
+  Name "":
+  [36m<p />[31m
+
+  Name "":
+  [36m<p />[31m
+
+  --------------------------------------------------
+  heading:
+
+  Name "Your career starts here.":
+  [36m<h2[31m
+    [33mtabindex[31m=[32m"-1"[31m
+  [36m/>[31m
+
+  Name "Make the league on your terms":
+  [36m<h3 />[31m
+
+  Name "Your career starts here.":
+  [36m<h3[31m
+    [33mclass[31m=[32m"sr-only"[31m
+    [33mtabindex[31m=[32m"-1"[31m
+  [36m/>[31m
+
+  --------------------------------------------------
+  strong:
+
+  Name "":
+  [36m<strong />[31m
+
+  Name "":
+  [36m<strong />[31m
+
+  Name "":
+  [36m<strong />[31m
+
+  Name "":
+  [36m<strong />[31m
+
+  Name "":
+  [36m<strong />[31m
+
+  --------------------------------------------------
+  term:
+
+  Name "":
+  [36m<dt />[31m
+
+  Name "":
+  [36m<dt />[31m
+
+  Name "":
+  [36m<dt />[31m
+
+  --------------------------------------------------
+  definition:
+
+  Name "":
+  [36m<dd />[31m
+
+  Name "":
+  [36m<dd />[31m
+
+  Name "":
+  [36m<dd />[31m
+
+  --------------------------------------------------
+
+Ignored nodes: comments, script, style
+[36m<body[31m
+  [33mstyle[31m=[32m""[31m
+[36m>[31m
+  [36m<div>[31m
+    [36m<section[31m
+      [33mclass[31m=[32m"_journey_6a09aa"[31m
+      [33mdata-prospect-journey[31m=[32m"nfl"[31m
+      [33mdata-prospect-phase[31m=[32m"routes"[31m
+    [36m>[31m
+      [36m<div[31m
+        [33mclass[31m=[32m"_toolbar_6a09aa"[31m
+      [36m>[31m
+        [36m<button>[31m
+          [36m<svg[31m
+            [33mclass[31m=[32m"lucide lucide-arrow-left"[31m
+            [33mfill[31m=[32m"none"[31m
+            [33mheight[31m=[32m"16"[31m
+            [33mstroke[31m=[32m"currentColor"[31m
+            [33mstroke-linecap[31m=[32m"round"[31m
+            [33mstroke-linejoin[31m=[32m"round"[31m
+            [33mstroke-width[31m=[32m"2"[31m
+            [33mviewBox[31m=[32m"0 0 24 24"[31m
+            [33mwidth[31m=[32m"16"[31m
+            [33mxmlns[31m=[32m"http://www.w3.org/2000/svg"[31m
+          [36m>[31m
+            [36m<path[31m
+              [33md[31m=[32m"m12 19-7-7 7-7"[31m
+            [36m/>[31m
+            [36m<path[31m
+              [33md[31m=[32m"M19 12H5"[31m
+            [36m/>[31m
+          [36m</svg>[31m
+          [0m Back to player[0m
+        [36m</button>[31m
+        [36m<button[31m
+          [33maria-controls[31m=[32m"prospect-help"[31m
+          [33maria-expanded[31m=[32m"true"[31m
+          [33maria-label[31m=[32m"Road to the draft help"[31m
+        [36m>[31m
+          [36m<svg[31m
+            [33mclass[31m=[32m"lucide lucide-circle-help"[31m
+            [33mfill[31m=[32m"none"[31m
+            [33mheight[31m=[32m"19"[31m
+            [33mstroke[31m=[32m"currentColor"[31m
+            [33mstroke-linecap[31m=[32m"round"[31m
+            [33mstroke-linejoin[31m=[32m"round"[31m
+            [33mstroke-width[31m=[32m"2"[31m
+            [33mviewBox[31m=[32m"0 0 24 24"[31m
+            [33mwidth[31m=[32m"19"[31m
+            [33mxmlns[31m=[32m"http://www.w3.org/2000/svg"[31m
+          [36m>[31m
+            [36m<circle[31m
+              [33mcx[31m=[32m"12"[31m
+              [33mcy[31m=[32m"12"[31m
+              [33mr[31m=[32m"10"[31m
+            [36m/>[31m
+            [36m<path[31m
+              [33md[31m=[32m"M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"[31m
+            [36m/>[31m
+            [36m<path[31m
+              [33md[31m=[32m"M12 17h.01"[31m
+            [36m/>[31m
+          [36m</svg>[31m
+        [36m</button>[31m
+      [36m</div>[31m
+      [36m<ol[31m
+        [33maria-label[31m=[32m"Your road to the draft"[31m
+        [33mclass[31m=[32m"_acts_6a09aa"[31m
+      [36m>[31m
+        [36m<li[31m
+          [33maria-current[31m=[32m"step"[31m
+        [36m>[31m
+          [36m<span>[31m
+            [0m1[0m
+          [36m</span>[31m
+          [0mPick your path[0m
+        [36m</li>[31m
+        [36m<li>[31m
+          [36m<span>[31m
+            [0m2[0m
+          [36m</span>[31m
+          [0mEarn your place[0m
+        [36m</li>[31m
+        [36m<li>[31m
+          [36m<span>[31m
+            [0m3[0m
+          [36m</span>[31m
+          [0mDraft day[0m
+        [36m</li>[31m
+      [36m</ol>[31m
+      [36m<div[31m
+        [33mclass[31m=[32m"_stage_6a09aa"[31m
+      [36m>[31m
+        [36m<div[31m
+          [33maria-hidden[31m=[32m"true"[31m
+          [33mclass[31m=[32m"_stadium_6a09aa"[31m
+        [36m>[31m
+          [36m<i />[31m
+          [36m<i />[31m
+          [36m<i />[31m
+          [36m<i />[31m
+          [36m<i />[31m
+        [36m</div>[31m
+        [36m<div[31m
+          [33mclass[31m=[32m"_stageCopy_6a09aa"[31m
+        [36m>[31m
+          [36m<p[31m
+            [33mclass[31m=[32m"_chapter_6a09aa"[31m
+          [36m>[31m
+            [0mNFL[0m
+            [0m Road to the Draft[0m
+          [36m</p>[31m
+          [36m<h2[31m
+            [33mtabindex[31m=[32m"-1"[31m
+          [36m>[31m
+            [0mYour career starts here.[0m
+          [36m</h2>[31m
+          [36m<p>[31m
+            [0mChoose the road. Build your stock. Find your team.[0m
+          [36m</p>[31m
+        [36m</div>[31m
+        [36m<div[31m
+          [33maria-hidden[31m=[32m"true"[31m
+          [33mclass[31m=[32m"_portrait_6a09aa"[31m
+        [36m>[31m
+          [36m<svg[31m
+            [33maria-label[31m=[32m"Player avatar"[31m
+            [33mclass[31m=[32m" "[31m
+            [33mheight[31m=[32m"130"[31m
+            [33mrole[31m=[32m"img"[31m
+            [33mviewBox[31m=[32m"0 0 100 100"[31m
+            [33mwidth[31m=[32m"130"[31m
+          [36m>[31m
+            [36m<path[31m
+              [33md[31m=[32m"M 14 100 Q 16 78 34 74 L 44 71 L 56 71 L 66 74 Q 84 78 86 100 Z"[31m
+              [33mfill[31m=[32m"#10B981"[31m
+            [36m/>[31m
+            [36m<path[31m
+              [33md[31m=[32m"M 14 100 Q 16 78 34 74 L 38 73 Q 30 82 28 100 Z M 86 100 Q 84 78 66 74 L 62 73 Q 70 82 72 100 Z"[31m
+              [33mfill[31m=[32m"#009159"[31m
+              [33mopacity[31m=[32m"0.5"[31m
+            [36m/>[31m
+            [36m<path[31m
+              [33md[31m=[32m"M 44 71 L 50 78 L 56 71 L 53 70 L 50 74 L 47 70 Z"[31m
+              [33mfill[31m=[32m"#FFFFFF"[31m
+              [33mopacity[31m=[32m"0.9"[31m
+            [36m/>[31m
+            [36m<rect[31m
+              [33mfill[31m=[32m"#BA885B"[31m
+              [33mheight[31m=[32m"14"[31m
+              [33mrx[31m=[32m"5"[31m
+              [33mwidth[31m=[32m"14"[31m
+              [33mx[31m=[32m"43"[31m
+              [33my[31m=[32m"60"[31m
+            [36m/>[31m
+            [36m<path[31m
+              [33md[31m=[32m"M 32 40 Q 32 18 50 18 Q 68 18 68 40 L 68 48 Q 68 66 50 68 Q 32 66 32 48 Z"[31m
+              [33mfill[31m=[32m"#D19E6F"[31m
+            [36m/>[31m
+            [36m<ellipse[31m
+              [33mcx[31m=[32m"31.5"[31m
+              [33mcy[31m=[32m"46"[31m
+              [33mfill[31m=[32m"#D19E6F"[31m
+              [33mrx[31m=[32m"3.4"[31m
+              [33mry[31m=[32m"5"[31m
+            [36m/>[31m
+            [36m<ellipse[31m
+              [33mcx[31m=[32m"68.5"[31m
+              [33mcy[31m=[32m"46"[31m
+              [33mfill[31m=[32m"#BA885B"[31m
+              [33mopacity[31m=[32m"0.9"[31m
+              [33mrx[31m=[32m"3.4"[31m
+              [33mry[31m=[32m"5"[31m
+            [36m/>[31m
+            [36m<path[31m
+              [33md[31m=[32m"M 62 24 Q 68 30 68 40 L 68 48 Q 68 64 52 68 Q 64 62 64 46 Q 64 30 58 24 Z"[31m
+              [33mfill[31m=[32m"#BA885B"[31m
+              [33mopacity[31m=[32m"0.35"[31m
+            [36m/>[31m
+            [36m<ellipse[31m
+              [33mcx[31m=[32m"42.5"[31m
+              [33mcy[31m=[32m"45"[31m
+              [33mfill[31m=[32m"#2A2118"[31m
+              [33mrx[31m=[32m"2.6"[31m
+              [33mry[31m=[32m"3"[31m
+            [36m/>[31m
+            [36m<ellipse[31m
+              [33mcx[31m=[32m"57.5"[31m
+              [33mcy[31m=[32m"45"[31m
+              [33mfill[31m=[32m"#2A2118"[31m
+              [33mrx[31m=[32m"2.6"[31m
+              [33mry[31m=[32m"3"[31m
+            [36m/>[31m
+            [36m<circle[31m
+              [33mcx[31m=[32m"43.3"[31m
+              [33mcy[31m=[32m"44"[31m
+              [33mfill[31m=[32m"#FFFFFF"[31m
+              [33mopacity[31m=[32m"0.85"[31m
+              [33mr[31m=[32m"0.8"[31m
+            [36m/>[31m
+            [36m<circle[31m
+              [33mcx[31m=[32m"58.3"[31m
+              [33mcy[31m=[32m"44"[31m
+              [33mfill[31m=[32m"#FFFFFF"[31m
+              [33mopacity[31m=[32m"0.85"[31m
+              [33mr[31m=[32m"0.8"[31m
+            [36m/>[31m
+            [36m<path[31m
+              [33md[31m=[32m"M 38 39.5 Q 42.5 37.5 47 39.5"[31m
+              [33mfill[31m=[32m"none"[31m
+              [33mstroke[31m=[32m"#1D1A17"[31m
+              [33mstroke-linecap[31m=[32m"round"[31m
+              [33mstroke-width[31m=[32m"2"[31m
+            [36m/>[31m
+            [36m<path[31m
+              [33md[31m=[32m"M 53 39.5 Q 57.5 37.5 62 39.5"[31m
+              [33mfill[31m=[32m"none"[31m
+              [33mstroke[31m=[32m"#1D1A17"[31m
+              [33mstroke-linecap[31m=[32m"round"[31m
+              [33mstroke-width[31m=[32m"2"[31m
+            [36m/>[31m
+            [36m<path[31m
+              [33md[31m=[32m"M 50 47 L 48.4 54 Q 50 55.4 51.6 54 Z"[31m
+              [33mfill[31m=[32m"#BA885B"[31m
+            [36m/>[31m
+            [36m<path[31m
+              [33md[31m=[32m"M 44.5 59.5 Q 50 62.5 55.5 59.5"[31m
+              [33mfill[31m=[32m"none"[31m
+              [33mstroke[31m=[32m"#7A4A3A"[31m
+              [33mstroke-linecap[31m=[32m"round"[31m
+              [33mstroke-width[31m=[32m"2"[31m
+            [36m/>[31m
+            [36m<path[31m
+              [33md[31m=[32m"M 29 36 Q 29 15 50 15 Q 71 15 71 36 L 71 40 Q 62 30 50 30 Q 38 30 29 40 Z"[31m
+              [33mfill[31m=[32m"#1D1A17"[31m
+            [36m/>[31m
+            [36m<path[31m
+              [33md[31m=[32m"M 29 36 L 29 44 Q 31 38 34 35 Z M 71 36 L 71 44 Q 69 38 66 35 Z"[31m
+              [33mfill[31m=[32m"#1D1A17"[31m
+              [33mopacity[31m=[32m"0.35"[31m
+            [36m/>[31m
+          [36m</svg>[31m
+        [36m</div>[31m
+      [36m</div>[31m
+      [36m<div[31m
+        [33mclass[31m=[32m"_file_6a09aa"[31m
+        [33mdata-prospect-file[31m=[32m"true"[31m
+      [36m>[31m
+        [36m<div[31m
+          [33mclass[31m=[32m"_identity_6a09aa"[31m
+        [36m>[31m
+          [36m<strong>[31m
+            [0mRyder Blaze[0m
+          [36m</strong>[31m
+          [36m<span>[31m
+            [0mQB[0m
+          [36m</span>[31m
+        [36m</div>[31m
+        [36m<dl[31m
+          [33mclass[31m=[32m"_meters_6a09aa"[31m
+        [36m>[31m
+          [36m<div>[31m
+            [36m<dt>[31m
+              [0mRating[0m
+            [36m</dt>[31m
+            [36m<dd>[31m
+              [0m72[0m
+            [36m</dd>[31m
+          [36m</div>[31m
+          [36m<div>[31m
+            [36m<dt>[31m
+              [0mPotential[0m
+            [36m</dt>[31m
+            [36m<dd>[31m
+              [0m95[0m
+            [36m</dd>[31m
+          [36m</div>[31m
+          [36m<div>[31m
+            [36m<dt>[31m
+              [0mHealth[0m
+            [36m</dt>[31m
+            [36m<dd>[31m
+              [0m100[0m
+            [36m</dd>[31m
+          [36m</div>[31m
+        [36m</dl>[31m
+      [36m</div>[31m
+      [36m<div[31m
+        [33mclass[31m=[32m"_help_6a09aa"[31m
+        [33mid[31m=[32m"prospect-help"[31m
+      [36m>[31m
+        [36m<h3>[31m
+          [0mMake the league on your terms[0m
+        [36m</h3>[31m
+        [36m<p>[31m
+          [0mPick a route, play its seasons, then decide how to handle scouts, training and health. Your rating and health shape your performances. Draft stock shapes how early a team takes you.[0m
+        [36m</p>[31m
+        [36m<p>[31m
+          [36m<strong>[31m
+            [0mFor example:[0m
+          [36m</strong>[31m
+          [0m playing through a knock can raise your stock but cost health. The button shows the exact change before you choose. The showcase lets you push hard, play safe or skip; each option lists its possible stock changes. Its grade is simulated from your rating, health and saved career seed.[0m
+        [36m</p>[31m
+        [36m<p>[31m
+          [0mPressed Skip it by mistake? Undo it any time before you press Draft day. For example: skip at a draft stock of 50 and you drop to 48; Undo skip puts you back at 50 with all three options open again.[0m
+        [36m</p>[31m
+        [36m<p>[31m
+          [36m<strong>[31m
+            [0mDraft night:[0m
+          [36m</strong>[31m
+          [0m before the draft the scouts quote a range for you, and the night always ends inside it. At a draft stock of 60, for example: [0m
+          [0mThe scouts have you between pick 49 and pick 82 of 224.[0m
+          [0m Then you watch the picks ahead of yours come off the board in the order the game already set, until your name is called or the last pick goes by without it. Nothing is drawn while you watch, no other prospect is ever named, and you can skip to the end at any time. Once it is over, Watch it again plays the same night from the start, unless your device is set to reduce motion.[0m
+        [36m</p>[31m
+        [36m<p>[31m
+          [0mAll prospects and results are fictional. The era sets the available teams and routes. The draft uses a simplified order without traded or extra picks; baseball and hockey lotteries are not modeled. Money in your career is a simulation, not a real contract quote. Going undrafted still leads to a camp signing.[0m
+        [36m</p>[31m
+        [36m<button[31m
+          [33mclass[31m=[32m"_helpClose_6a09aa"[31m
+        [36m>[31m
+          [0mGot it[0m
+        [36m</button>[31m
+      [36m</div>[31m
+      [36m<div[31m
+        [33mclass[31m=[32m"_playArea_6a09aa"[31m
+      [36m>[31m
+        [36m<h3[31m
+          [33mclass[31m=[32m"sr-only"[31m
+          [33mtabindex[31m=[32m"-1"[31m
+        [36m>[31m
+          [0mYour career starts here.[0m
+        [36m</h3>[31m
+        [36m<div[31m
+          [33mclass[31m=[32m"_routes_6a09aa"[31m
+        [36m>[31m
+          [36m<button[31m
+            [33mclass[31m=[32m"_route_6a09aa"[31m
+          [36m>[31m
+            [36m<span[31m
+              [33mclass[31m=[32m"_routeTop_6a09aa"[31m
+            [36m>[31m
+              [36m<span>[31m
+                [0m3[0m
+                [0m [0m
+                [0mseasons[0m
+              [36m</span>[31m
+              [36m<svg[31m
+                [33mclass[31m=[32m"lucide lucide-arrow-right"[31m
+                [33mfill[31m=[32m"none"[31m
+                [33mheight[31m=[32m"19"[31m
+                [33mstroke[31m=[32m"currentColor"[31m
+                [33mstroke-linecap[31m=[32m"round"[31m
+                [33mstroke-linejoin[31m=[32m"round"[31m
+                [33mstroke-width[31m=[32m"2"[31m
+                [33mviewBox[31m=[32m"0 0 24 24"[31m
+                [33mwidth[31m=[32m"19"[31m
+                [33mxmlns[31m=[32m"http://www.w3.org/2000/svg"[31m
+              [36m>[31m
+                [36m<path[31m
+                  [33md[31m=[32m"M5 12h14"[31m
+                [36m/>[31m
+                [36m<path[31m
+                  [33md[31m=[32m"m12 5 7 7-7 7"[31m
+                [36m/>[31m
+              [36m</svg>[31m
+            [36m</span>[31m
+            [36m<strong>[31m
+              [0mBig college program[0m
+            [36m</strong>[31m
+            [36m<span>[31m
+              [0mEvery game on TV and scouts at every practice. Three seasons before you can declare.[0m
+            [36m</span>[31m
+            [36m<small>[31m
+              [0mStart at age [0m
+              [0m18[0m
+              [0m · Draft at [0m
+              [0m21[0m
+            [36m</small>[31m
+          [36m</button>[31m
+          [36m<button[31m
+            [33mclass[31m=[32m"_route_6a09aa"[31m
+          [36m>[31m
+            [36m<span[31m
+              [33mclass[31m=[32m"_routeTop_6a09aa"[31m
+            [36m>[31m
+              [36m<span>[31m
+                [0m3[0m
+                [0m [0m
+                [0mseasons[0m
+              [36m</span>[31m
+              [36m<svg[31m
+                [33mclass[31m=[32m"lucide lucide-arrow-right"[31m
+                [33mfill[31m=[32m"none"[31m
+                [33mheight[31m=[32m"19"[31m
+                [33mstroke[31m=[32m"currentColor"[31m
+                [33mstroke-linecap[31m=[32m"round"[31m
+                [33mstroke-linejoin[31m=[32m"round"[31m
+                [33mstroke-width[31m=[32m"2"[31m
+                [33mviewBox[31m=[32m"0 0 24 24"[31m
+                [33mwidth[31m=[32m"19"[31m
+                [33mxmlns[31m=[32m"http://www.w3.org/2000/svg"[31m
+              [36m>[31m
+                [36m<path[31m
+                  [33md[31m=[32m"M5 12h14"[31m
+                [36m/>[31m
+                [36m<path[31m
+                  [33md[31m=[32m"m12 5 7 7-7 7"[31m
+                [36m/>[31m
+              [36m</svg>[31m
+            [36m</span>[31m
+            [36m<strong>[31m
+              [0mSmall school[0m
+            [36m</strong>[31m
+            [36m<span>[31m
+              [0mFewer eyes on you, so the scouts have to come looking. Three seasons before you can declare.[0m
+            [36m</span>[31m
+            [36m<small>[31m
+              [0mStart at age [0m
+              [0m18[0m
+              [0m · Draft at [0m
+              [0m21[0m
+            [36m</small>[31m
+          [36m</button>[31m
+        [36m</div>[31m
+      [36m</div>[31m
+    [36m</section>[31m
+  [36m</div>[31m
+[36m</body>[31m[39m
+[31m   [31m×[31m Round 1569 report A: Start over from every screen[2m > [22m'NBA' starts over from the road to the draft[39m[32m 215[2mms[22m[39m
+[31m     → Unable to find an accessible element with the role "button" and name "Start over"
+
+Here are the accessible roles:
+
+  button:
+
+  Name "Back to player":
+  [36m<button />[31m
+
+  Name "Road to the draft help":
+  [36m<button[31m
+    [33maria-controls[31m=[32m"prospect-help"[31m
+    [33maria-expanded[31m=[32m"true"[31m
+    [33maria-label[31m=[32m"Road to the draft help"[31m
+  [36m/>[31m
+
+  Name "Got it":
+  [36m<button[31m
+    [33mclass[31m=[32m"_helpClose_6a09aa"[31m
+  [36m/>[31m
+
+  Name "1 season One year of college One season on campus, then you declare. Start at age 18 · Draft at 19":
+  [36m<button[31m
+    [33mclass[31m=[32m"_route_6a09aa"[31m
+  [36m/>[31m
+
+  Name "3 seasons Three years of college Three seasons to grow into it. Less hype, more polish. Start at age 18 · Draft at 21":
+  [36m<button[31m
+    [33mclass[31m=[32m"_route_6a09aa"[31m
+  [36m/>[31m
+
+  --------------------------------------------------
+  list:
+
+  Name "Your road to the draft":
+  [36m<ol[31m
+    [33maria-label[31m=[32m"Your road to the draft"[31m
+    [33mclass[31m=[32m"_acts_6a09aa"[31m
+  [36m/>[31m
+
+  --------------------------------------------------
+  listitem:
+
+  Name "":
+  [36m<li[31m
+    [33maria-current[31m=[32m"step"[31m
+  [36m/>[31m
+
+  Name "":
+  [36m<li />[31m
+
+  Name "":
+  [36m<li />[31m
+
+  --------------------------------------------------
+  paragraph:
+
+  Name "":
+  [36m<p[31m
+    [33mclass[31m=[32m"_chapter_6a09aa"[31m
+  [36m/>[31m
+
+  Name "":
+  [36m<p />[31m
+
+  Name "":
+  [36m<p />[31m
+
+  Name "":
+  [36m<p />[31m
+
+  Name "":
+  [36m<p />[31m
+
+  Name "":
+  [36m<p />[31m
+
+  Name "":
+  [36m<p />[31m
+
+  --------------------------------------------------
+  heading:
+
+  Name "Your career starts here.":
+  [36m<h2[31m
+    [33mtabindex[31m=[32m"-1"[31m
+  [36m/>[31m
+
+  Name "Make the league on your terms":
+  [36m<h3 />[31m
+
+  Name "Your career starts here.":
+  [36m<h3[31m
+    [33mclass[31m=[32m"sr-only"[31m
+    [33mtabindex[31m=[32m"-1"[31m
+  [36m/>[31m
+
+  --------------------------------------------------
+  strong:
+
+  Name "":
+  [36m<strong />[31m
+
+  Name "":
+  [36m<strong />[31m
+
+  Name "":
+  [36m<strong />[31m
+
+  Name "":
+  [36m<strong />[31m
+
+  Name "":
+  [36m<strong />[31m
+
+  --------------------------------------------------
+  term:
+
+  Name "":
+  [36m<dt />[31m
+
+  Name "":
+  [36m<dt />[31m
+
+  Name "":
+  [36m<dt />[31m
+
+  --------------------------------------------------
+  definition:
+
+  Name "":
+  [36m<dd />[31m
+
+  Name "":
+  [36m<dd />[31m
+
+  Name "":
+  [36m<dd />[31m
+
+  --------------------------------------------------
+
+Ignored nodes: comments, script, style
+[36m<body[31m
+  [33mstyle[31m=[32m""[31m
+[36m>[31m
+  [36m<div>[31m
+    [36m<section[31m
+      [33mclass[31m=[32m"_journey_6a09aa"[31m
+      [33mdata-prospect-journey[31m=[32m"nba"[31m
+      [33mdata-prospect-phase[31m=[32m"routes"[31m
+    [36m>[31m
+      [36m<div[31m
+        [33mclass[31m=[32m"_toolbar_6a09aa"[31m
+      [36m>[31m
+        [36m<button>[31m
+          [36m<svg[31m
+            [33mclass[31m=[32m"lucide lucide-arrow-left"[31m
+            [33mfill[31m=[32m"none"[31m
+            [33mheight[31m=[32m"16"[31m
+            [33mstroke[31m=[32m"currentColor"[31m
+            [33mstroke-linecap[31m=[32m"round"[31m
+            [33mstroke-linejoin[31m=[32m"round"[31m
+            [33mstroke-width[31m=[32m"2"[31m
+            [33mviewBox[31m=[32m"0 0 24 24"[31m
+            [33mwidth[31m=[32m"16"[31m
+            [33mxmlns[31m=[32m"http://www.w3.org/2000/svg"[31m
+          [36m>[31m
+            [36m<path[31m
+              [33md[31m=[32m"m12 19-7-7 7-7"[31m
+            [36m/>[31m
+            [36m<path[31m
+              [33md[31m=[32m"M19 12H5"[31m
+            [36m/>[31m
+          [36m</svg>[31m
+          [0m Back to player[0m
+        [36m</button>[31m
+        [36m<button[31m
+          [33maria-controls[31m=[32m"prospect-help"[31m
+          [33maria-expanded[31m=[32m"true"[31m
+          [33maria-label[31m=[32m"Road to the draft help"[31m
+        [36m>[31m
+          [36m<svg[31m
+            [33mclass[31m=[32m"lucide lucide-circle-help"[31m
+            [33mfill[31m=[32m"none"[31m
+            [33mheight[31m=[32m"19"[31m
+            [33mstroke[31m=[32m"currentColor"[31m
+            [33mstroke-linecap[31m=[32m"round"[31m
+            [33mstroke-linejoin[31m=[32m"round"[31m
+            [33mstroke-width[31m=[32m"2"[31m
+            [33mviewBox[31m=[32m"0 0 24 24"[31m
+            [33mwidth[31m=[32m"19"[31m
+            [33mxmlns[31m=[32m"http://www.w3.org/2000/svg"[31m
+          [36m>[31m
+            [36m<circle[31m
+              [33mcx[31m=[32m"12"[31m
+              [33mcy[31m=[32m"12"[31m
+              [33mr[31m=[32m"10"[31m
+            [36m/>[31m
+            [36m<path[31m
+              [33md[31m=[32m"M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"[31m
+            [36m/>[31m
+            [36m<path[31m
+              [33md[31m=[32m"M12 17h.01"[31m
+            [36m/>[31m
+          [36m</svg>[31m
+        [36m</button>[31m
+      [36m</div>[31m
+      [36m<ol[31m
+        [33maria-label[31m=[32m"Your road to the draft"[31m
+        [33mclass[31m=[32m"_acts_6a09aa"[31m
+      [36m>[31m
+        [36m<li[31m
+          [33maria-current[31m=[32m"step"[31m
+        [36m>[31m
+          [36m<span>[31m
+            [0m1[0m
+          [36m</span>[31m
+          [0mPick your path[0m
+        [36m</li>[31m
+        [36m<li>[31m
+          [36m<span>[31m
+            [0m2[0m
+          [36m</span>[31m
+          [0mEarn your place[0m
+        [36m</li>[31m
+        [36m<li>[31m
+          [36m<span>[31m
+            [0m3[0m
+          [36m</span>[31m
+          [0mDraft day[0m
+        [36m</li>[31m
+      [36m</ol>[31m
+      [36m<div[31m
+        [33mclass[31m=[32m"_stage_6a09aa"[31m
+      [36m>[31m
+        [36m<div[31m
+          [33maria-hidden[31m=[32m"true"[31m
+          [33mclass[31m=[32m"_stadium_6a09aa"[31m
+        [36m>[31m
+          [36m<i />[31m
+          [36m<i />[31m
+          [36m<i />[31m
+          [36m<i />[31m
+          [36m<i />[31m
+        [36m</div>[31m
+        [36m<div[31m
+          [33mclass[31m=[32m"_stageCopy_6a09aa"[31m
+        [36m>[31m
+          [36m<p[31m
+            [33mclass[31m=[32m"_chapter_6a09aa"[31m
+          [36m>[31m
+            [0mNBA[0m
+            [0m Road to the Draft[0m
+          [36m</p>[31m
+          [36m<h2[31m
+            [33mtabindex[31m=[32m"-1"[31m
+          [36m>[31m
+            [0mYour career starts here.[0m
+          [36m</h2>[31m
+          [36m<p>[31m
+            [0mChoose the road. Build your stock. Find your team.[0m
+          [36m</p>[31m
+        [36m</div>[31m
+        [36m<div[31m
+          [33maria-hidden[31m=[32m"true"[31m
+          [33mclass[31m=[32m"_portrait_6a09aa"[31m
+        [36m>[31m
+          [36m<svg[31m
+            [33maria-label[31m=[32m"Player avatar"[31m
+            [33mclass[31m=[32m" "[31m
+            [33mheight[31m=[32m"130"[31m
+            [33mrole[31m=[32m"img"[31m
+            [33mviewBox[31m=[32m"0 0 100 100"[31m
+            [33mwidth[31m=[32m"130"[31m
+          [36m>[31m
+            [36m<path[31m
+              [33md[31m=[32m"M 14 100 Q 16 78 34 74 L 44 71 L 56 71 L 66 74 Q 84 78 86 100 Z"[31m
+              [33mfill[31m=[32m"#F97316"[31m
+            [36m/>[31m
+            [36m<path[31m
+              [33md[31m=[32m"M 14 100 Q 16 78 34 74 L 38 73 Q 30 82 28 100 Z M 86 100 Q 84 78 66 74 L 62 73 Q 70 82 72 100 Z"[31m
+              [33mfill[31m=[32m"#d14b00"[31m
+              [33mopacity[31m=[32m"0.5"[31m
+            [36m/>[31m
+            [36m<path[31m
+              [33md[31m=[32m"M 44 71 L 50 78 L 56 71 L 53 70 L 50 74 L 47 70 Z"[31m
+              [33mfill[31m=[32m"#FFFFFF"[31m
+              [33mopacity[31m=[32m"0.9"[31m
+            [36m/>[31m
+            [36m<rect[31m
+              [33mfill[31m=[32m"#BA885B"[31m
+              [33mheight[31m=[32m"14"[31m
+              [33mrx[31m=[32m"5"[31m
+              [33mwidth[31m=[32m"14"[31m
+              [33mx[31m=[32m"43"[31m
+              [33my[31m=[32m"60"[31m
+            [36m/>[31m
+            [36m<path[31m
+              [33md[31m=[32m"M 32 40 Q 32 18 50 18 Q 68 18 68 40 L 68 48 Q 68 66 50 68 Q 32 66 32 48 Z"[31m
+              [33mfill[31m=[32m"#D19E6F"[31m
+            [36m/>[31m
+            [36m<ellipse[31m
+              [33mcx[31m=[32m"31.5"[31m
+              [33mcy[31m=[32m"46"[31m
+              [33mfill[31m=[32m"#D19E6F"[31m
+              [33mrx[31m=[32m"3.4"[31m
+              [33mry[31m=[32m"5"[31m
+            [36m/>[31m
+            [36m<ellipse[31m
+              [33mcx[31m=[32m"68.5"[31m
+              [33mcy[31m=[32m"46"[31m
+              [33mfill[31m=[32m"#BA885B"[31m
+              [33mopacity[31m=[32m"0.9"[31m
+              [33mrx[31m=[32m"3.4"[31m
+              [33mry[31m=[32m"5"[31m
+            [36m/>[31m
+            [36m<path[31m
+              [33md[31m=[32m"M 62 24 Q 68 30 68 40 L 68 48 Q 68 64 52 68 Q 64 62 64 46 Q 64 30 58 24 Z"[31m
+              [33mfill[31m=[32m"#BA885B"[31m
+              [33mopacity[31m=[32m"0.35"[31m
+            [36m/>[31m
+            [36m<ellipse[31m
+              [33mcx[31m=[32m"42.5"[31m
+              [33mcy[31m=[32m"45"[31m
+              [33mfill[31m=[32m"#2A2118"[31m
+              [33mrx[31m=[32m"2.6"[31m
+              [33mry[31m=[32m"3"[31m
+            [36m/>[31m
+            [36m<ellipse[31m
+              [33mcx[31m=[32m"57.5"[31m
+              [33mcy[31m=[32m"45"[31m
+              [33mfill[31m=[32m"#2A2118"[31m
+              [33mrx[31m=[32m"2.6"[31m
+              [33mry[31m=[32m"3"[31m
+            [36m/>[31m
+            [36m<circle[31m
+              [33mcx[31m=[32m"43.3"[31m
+              [33mcy[31m=[32m"44"[31m
+              [33mfill[31m=[32m"#FFFFFF"[31m
+              [33mopacity[31m=[32m"0.85"[31m
+              [33mr[31m=[32m"0.8"[31m
+            [36m/>[31m
+            [36m<circle[31m
+              [33mcx[31m=[32m"58.3"[31m
+              [33mcy[31m=[32m"44"[31m
+              [33mfill[31m=[32m"#FFFFFF"[31m
+              [33mopacity[31m=[32m"0.85"[31m
+              [33mr[31m=[32m"0.8"[31m
+            [36m/>[31m
+            [36m<path[31m
+              [33md[31m=[32m"M 38 39.5 Q 42.5 37.5 47 39.5"[31m
+              [33mfill[31m=[32m"none"[31m
+              [33mstroke[31m=[32m"#1D1A17"[31m
+              [33mstroke-linecap[31m=[32m"round"[31m
+              [33mstroke-width[31m=[32m"2"[31m
+            [36m/>[31m
+            [36m<path[31m
+              [33md[31m=[32m"M 53 39.5 Q 57.5 37.5 62 39.5"[31m
+              [33mfill[31m=[32m"none"[31m
+              [33mstroke[31m=[32m"#1D1A17"[31m
+              [33mstroke-linecap[31m=[32m"round"[31m
+              [33mstroke-width[31m=[32m"2"[31m
+            [36m/>[31m
+            [36m<path[31m
+              [33md[31m=[32m"M 50 47 L 48.4 54 Q 50 55.4 51.6 54 Z"[31m
+              [33mfill[31m=[32m"#BA885B"[31m
+            [36m/>[31m
+            [36m<path[31m
+              [33md[31m=[32m"M 44.5 59.5 Q 50 62.5 55.5 59.5"[31m
+              [33mfill[31m=[32m"none"[31m
+              [33mstroke[31m=[32m"#7A4A3A"[31m
+              [33mstroke-linecap[31m=[32m"round"[31m
+              [33mstroke-width[31m=[32m"2"[31m
+            [36m/>[31m
+            [36m<path[31m
+              [33md[31m=[32m"M 29 36 Q 29 15 50 15 Q 71 15 71 36 L 71 40 Q 62 30 50 30 Q 38 30 29 40 Z"[31m
+              [33mfill[31m=[32m"#1D1A17"[31m
+            [36m/>[31m
+            [36m<path[31m
+              [33md[31m=[32m"M 29 36 L 29 44 Q 31 38 34 35 Z M 71 36 L 71 44 Q 69 38 66 35 Z"[31m
+              [33mfill[31m=[32m"#1D1A17"[31m
+              [33mopacity[31m=[32m"0.35"[31m
+            [36m/>[31m
+          [36m</svg>[31m
+        [36m</div>[31m
+      [36m</div>[31m
+      [36m<div[31m
+        [33mclass[31m=[32m"_file_6a09aa"[31m
+        [33mdata-prospect-file[31m=[32m"true"[31m
+      [36m>[31m
+        [36m<div[31m
+          [33mclass[31m=[32m"_identity_6a09aa"[31m
+        [36m>[31m
+          [36m<strong>[31m
+            [0mTrey Buckets[0m
+          [36m</strong>[31m
+          [36m<span>[31m
+            [0mPG[0m
+          [36m</span>[31m
+        [36m</div>[31m
+        [36m<dl[31m
+          [33mclass[31m=[32m"_meters_6a09aa"[31m
+        [36m>[31m
+          [36m<div>[31m
+            [36m<dt>[31m
+              [0mRating[0m
+            [36m</dt>[31m
+            [36m<dd>[31m
+              [0m72[0m
+            [36m</dd>[31m
+          [36m</div>[31m
+          [36m<div>[31m
+            [36m<dt>[31m
+              [0mPotential[0m
+            [36m</dt>[31m
+            [36m<dd>[31m
+              [0m95[0m
+            [36m</dd>[31m
+          [36m</div>[31m
+          [36m<div>[31m
+            [36m<dt>[31m
+              [0mHealth[0m
+            [36m</dt>[31m
+            [36m<dd>[31m
+              [0m100[0m
+            [36m</dd>[31m
+          [36m</div>[31m
+        [36m</dl>[31m
+      [36m</div>[31m
+      [36m<div[31m
+        [33mclass[31m=[32m"_help_6a09aa"[31m
+        [33mid[31m=[32m"prospect-help"[31m
+      [36m>[31m
+        [36m<h3>[31m
+          [0mMake the league on your terms[0m
+        [36m</h3>[31m
+        [36m<p>[31m
+          [0mPick a route, play its seasons, then decide how to handle scouts, training and health. Your rating and health shape your performances. Draft stock shapes how early a team takes you.[0m
+        [36m</p>[31m
+        [36m<p>[31m
+          [36m<strong>[31m
+            [0mFor example:[0m
+          [36m</strong>[31m
+          [0m playing through a knock can raise your stock but cost health. The button shows the exact change before you choose. The showcase lets you push hard, play safe or skip; each option lists its possible stock changes. Its grade is simulated from your rating, health and saved career seed.[0m
+        [36m</p>[31m
+        [36m<p>[31m
+          [0mPressed Skip it by mistake? Undo it any time before you press Draft day. For example: skip at a draft stock of 50 and you drop to 48; Undo skip puts you back at 50 with all three options open again.[0m
+        [36m</p>[31m
+        [36m<p>[31m
+          [36m<strong>[31m
+            [0mDraft night:[0m
+          [36m</strong>[31m
+          [0m before the draft the scouts quote a range for you, and the night always ends inside it. At a draft stock of 60, for example: [0m
+          [0mThe scouts have you between pick 14 and pick 23 of 60.[0m
+          [0m Then you watch the picks ahead of yours come off the board in the order the game already set, until your name is called or the last pick goes by without it. Nothing is drawn while you watch, no other prospect is ever named, and you can skip to the end at any time. Once it is over, Watch it again plays the same night from the start, unless your device is set to reduce motion.[0m
+          [0m The lottery tile shows which club won each drawn pick. Seed 1 is the worst record.[0m
+        [36m</p>[31m
+        [36m<p>[31m
+          [0mAll prospects and results are fictional. The era sets the available teams and routes. The draft uses a simplified order without traded or extra picks; baseball and hockey lotteries are not modeled. Money in your career is a simulation, not a real contract quote. Going undrafted still leads to a camp signing.[0m
+        [36m</p>[31m
+        [36m<button[31m
+          [33mclass[31m=[32m"_helpClose_6a09aa"[31m
+        [36m>[31m
+          [0mGot it[0m
+        [36m</button>[31m
+      [36m</div>[31m
+      [36m<div[31m
+        [33mclass[31m=[32m"_playArea_6a09aa"[31m
+      [36m>[31m
+        [36m<h3[31m
+          [33mclass[31m=[32m"sr-only"[31m
+          [33mtabindex[31m=[32m"-1"[31m
+        [36m>[31m
+          [0mYour career starts here.[0m
+        [36m</h3>[31m
+        [36m<div[31m
+          [33mclass[31m=[32m"_routes_6a09aa"[31m
+        [36m>[31m
+          [36m<button[31m
+            [33mclass[31m=[32m"_route_6a09aa"[31m
+          [36m>[31m
+            [36m<span[31m
+              [33mclass[31m=[32m"_routeTop_6a09aa"[31m
+            [36m>[31m
+              [36m<span>[31m
+                [0m1[0m
+                [0m [0m
+                [0mseason[0m
+              [36m</span>[31m
+              [36m<svg[31m
+                [33mclass[31m=[32m"lucide lucide-arrow-right"[31m
+                [33mfill[31m=[32m"none"[31m
+                [33mheight[31m=[32m"19"[31m
+                [33mstroke[31m=[32m"currentColor"[31m
+                [33mstroke-linecap[31m=[32m"round"[31m
+                [33mstroke-linejoin[31m=[32m"round"[31m
+                [33mstroke-width[31m=[32m"2"[31m
+                [33mviewBox[31m=[32m"0 0 24 24"[31m
+                [33mwidth[31m=[32m"19"[31m
+                [33mxmlns[31m=[32m"http://www.w3.org/2000/svg"[31m
+              [36m>[31m
+                [36m<path[31m
+                  [33md[31m=[32m"M5 12h14"[31m
+                [36m/>[31m
+                [36m<path[31m
+                  [33md[31m=[32m"m12 5 7 7-7 7"[31m
+                [36m/>[31m
+              [36m</svg>[31m
+            [36m</span>[31m
+            [36m<strong>[31m
+              [0mOne year of college[0m
+            [36m</strong>[31m
+            [36m<span>[31m
+              [0mOne season on campus, then you declare.[0m
+            [36m</span>[31m
+            [36m<small>[31m
+              [0mStart at age [0m
+              [0m18[0m
+              [0m · Draft at [0m
+              [0m19[0m
+            [36m</small>[31m
+          [36m</button>[31m
+          [36m<button[31m
+            [33mclass[31m=[32m"_route_6a09aa"[31m
+          [36m>[31m
+            [36m<span[31m
+              [33mclass[31m=[32m"_routeTop_6a09aa"[31m
+            [36m>[31m
+              [36m<span>[31m
+                [0m3[0m
+                [0m [0m
+                [0mseasons[0m
+              [36m</span>[31m
+              [36m<svg[31m
+                [33mclass[31m=[32m"lucide lucide-arrow-right"[31m
+                [33mfill[31m=[32m"none"[31m
+                [33mheight[31m=[32m"19"[31m
+                [33mstroke[31m=[32m"currentColor"[31m
+                [33mstroke-linecap[31m=[32m"round"[31m
+                [33mstroke-linejoin[31m=[32m"round"[31m
+                [33mstroke-width[31m=[32m"2"[31m
+                [33mviewBox[31m=[32m"0 0 24 24"[31m
+                [33mwidth[31m=[32m"19"[31m
+                [33mxmlns[31m=[32m"http://www.w3.org/2000/svg"[31m
+              [36m>[31m
+                [36m<path[31m
+                  [33md[31m=[32m"M5 12h14"[31m
+                [36m/>[31m
+                [36m<path[31m
+                  [33md[31m=[32m"m12 5 7 7-7 7"[31m
+                [36m/>[31m
+              [36m</svg>[31m
+            [36m</span>[31m
+            [36m<strong>[31m
+              [0mThree years of college[0m
+            [36m</strong>[31m
+            [36m<span>[31m
+              [0mThree seasons to grow into it. Less hype, more polish.[0m
+            [36m</span>[31m
+            [36m<small>[31m
+              [0mStart at age [0m
+              [0m18[0m
+              [0m · Draft at [0m
+              [0m21[0m
+            [36m</small>[31m
+          [36m</button>[31m
+        [36m</div>[31m
+      [36m</div>[31m
+    [36m</section>[31m
+  [36m</div>[31m
+[36m</body>[31m[39m
+[31m   [31m×[31m Round 1569 report A: Start over from every screen[2m > [22m'MLB' starts over from the road to the draft[39m[32m 241[2mms[22m[39m
+[31m     → Unable to find an accessible element with the role "button" and name "Start over"
+
+Here are the accessible roles:
+
+  button:
+
+  Name "Back to player":
+  [36m<button />[31m
+
+  Name "Road to the draft help":
+  [36m<button[31m
+    [33maria-controls[31m=[32m"prospect-help"[31m
+    [33maria-expanded[31m=[32m"true"[31m
+    [33maria-label[31m=[32m"Road to the draft help"[31m
+  [36m/>[31m
+
+  Name "Got it":
+  [36m<button[31m
+    [33mclass[31m=[32m"_helpClose_6a09aa"[31m
+  [36m/>[31m
+
+  Name "1 season High school senior Eligible the day you graduate. The rawest road, and one season to show it. Start at age 17 · Draft at 18":
+  [36m<button[31m
+    [33mclass[31m=[32m"_route_6a09aa"[31m
+  [36m/>[31m
+
+  Name "2 seasons Junior college Eligible after any year. Two seasons of reps against grown men. Start at age 18 · Draft at 20":
+  [36m<button[31m
+    [33mclass[31m=[32m"_route_6a09aa"[31m
+  [36m/>[31m
+
+  Name "3 seasons Four year college Eligible after your junior year. Three seasons, and the scouts know exactly what you are. Start at age 18 · Draft at 21":
+  [36m<button[31m
+    [33mclass[31m=[32m"_route_6a09aa"[31m
+  [36m/>[31m
+
+  --------------------------------------------------
+  list:
+
+  Name "Your road to the draft":
+  [36m<ol[31m
+    [33maria-label[31m=[32m"Your road to the draft"[31m
+    [33mclass[31m=[32m"_acts_6a09aa"[31m
+  [36m/>[31m
+
+  --------------------------------------------------
+  listitem:
+
+  Name "":
+  [36m<li[31m
+    [33maria-current[31m=[32m"step"[31m
+  [36m/>[31m
+
+  Name "":
+  [36m<li />[31m
+
+  Name "":
+  [36m<li />[31m
+
+  --------------------------------------------------
+  paragraph:
+
+  Name "":
+  [36m<p[31m
+    [33mclass[31m=[32m"_chapter_6a09aa"[31m
+  [36m/>[31m
+
+  Name "":
+  [36m<p />[31m
+
+  Name "":
+  [36m<p />[31m
+
+  Name "":
+  [36m<p />[31m
+
+  Name "":
+  [36m<p />[31m
+
+  Name "":
+  [36m<p />[31m
+
+  Name "":
+  [36m<p />[31m
+
+  --------------------------------------------------
+  heading:
+
+  Name "Your career starts here.":
+  [36m<h2[31m
+    [33mtabindex[31m=[32m"-1"[31m
+  [36m/>[31m
+
+  Name "Make the league on your terms":
+  [36m<h3 />[31m
+
+  Name "Your career starts here.":
+  [36m<h3[31m
+    [33mclass[31m=[32m"sr-only"[31m
+    [33mtabindex[31m=[32m"-1"[31m
+  [36m/>[31m
+
+  --------------------------------------------------
+  strong:
+
+  Name "":
+  [36m<strong />[31m
+
+  Name "":
+  [36m<strong />[31m
+
+  Name "":
+  [36m<strong />[31m
+
+  Name "":
+  [36m<strong />[31m
+
+  Name "":
+  [36m<strong />[31m
+
+  Name "":
+  [36m<strong />[31m
+
+  --------------------------------------------------
+  term:
+
+  Name "":
+  [36m<dt />[31m
+
+  Name "":
+  [36m<dt />[31m
+
+  Name "":
+  [36m<dt />[31m
+
+  --------------------------------------------------
+  definition:
+
+  Name "":
+  [36m<dd />[31m
+
+  Name "":
+  [36m<dd />[31m
+
+  Name "":
+  [36m<dd />[31m
+
+  --------------------------------------------------
+
+Ignored nodes: comments, script, style
+[36m<body[31m
+  [33mstyle[31m=[32m""[31m
+[36m>[31m
+  [36m<div>[31m
+    [36m<section[31m
+      [33mclass[31m=[32m"_journey_6a09aa"[31m
+      [33mdata-prospect-journey[31m=[32m"mlb"[31m
+      [33mdata-prospect-phase[31m=[32m"routes"[31m
+    [36m>[31m
+      [36m<div[31m
+        [33mclass[31m=[32m"_toolbar_6a09aa"[31m
+      [36m>[31m
+        [36m<button>[31m
+          [36m<svg[31m
+            [33mclass[31m=[32m"lucide lucide-arrow-left"[31m
+            [33mfill[31m=[32m"none"[31m
+            [33mheight[31m=[32m"16"[31m
+            [33mstroke[31m=[32m"currentColor"[31m
+            [33mstroke-linecap[31m=[32m"round"[31m
+            [33mstroke-linejoin[31m=[32m"round"[31m
+            [33mstroke-width[31m=[32m"2"[31m
+            [33mviewBox[31m=[32m"0 0 24 24"[31m
+            [33mwidth[31m=[32m"16"[31m
+            [33mxmlns[31m=[32m"http://www.w3.org/2000/svg"[31m
+          [36m>[31m
+            [36m<path[31m
+              [33md[31m=[32m"m12 19-7-7 7-7"[31m
+            [36m/>[31m
+            [36m<path[31m
+              [33md[31m=[32m"M19 12H5"[31m
+            [36m/>[31m
+          [36m</svg>[31m
+          [0m Back to player[0m
+        [36m</button>[31m
+        [36m<button[31m
+          [33maria-controls[31m=[32m"prospect-help"[31m
+          [33maria-expanded[31m=[32m"true"[31m
+          [33maria-label[31m=[32m"Road to the draft help"[31m
+        [36m>[31m
+          [36m<svg[31m
+            [33mclass[31m=[32m"lucide lucide-circle-help"[31m
+            [33mfill[31m=[32m"none"[31m
+            [33mheight[31m=[32m"19"[31m
+            [33mstroke[31m=[32m"currentColor"[31m
+            [33mstroke-linecap[31m=[32m"round"[31m
+            [33mstroke-linejoin[31m=[32m"round"[31m
+            [33mstroke-width[31m=[32m"2"[31m
+            [33mviewBox[31m=[32m"0 0 24 24"[31m
+            [33mwidth[31m=[32m"19"[31m
+            [33mxmlns[31m=[32m"http://www.w3.org/2000/svg"[31m
+          [36m>[31m
+            [36m<circle[31m
+              [33mcx[31m=[32m"12"[31m
+              [33mcy[31m=[32m"12"[31m
+              [33mr[31m=[32m"10"[31m
+            [36m/>[31m
+            [36m<path[31m
+              [33md[31m=[32m"M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"[31m
+            [36m/>[31m
+            [36m<path[31m
+              [33md[31m=[32m"M12 17h.01"[31m
+            [36m/>[31m
+          [36m</svg>[31m
+        [36m</button>[31m
+      [36m</div>[31m
+      [36m<ol[31m
+        [33maria-label[31m=[32m"Your road to the draft"[31m
+        [33mclass[31m=[32m"_acts_6a09aa"[31m
+      [36m>[31m
+        [36m<li[31m
+          [33maria-current[31m=[32m"step"[31m
+        [36m>[31m
+          [36m<span>[31m
+            [0m1[0m
+          [36m</span>[31m
+          [0mPick your path[0m
+        [36m</li>[31m
+        [36m<li>[31m
+          [36m<span>[31m
+            [0m2[0m
+          [36m</span>[31m
+          [0mEarn your place[0m
+        [36m</li>[31m
+        [36m<li>[31m
+          [36m<span>[31m
+            [0m3[0m
+          [36m</span>[31m
+          [0mDraft day[0m
+        [36m</li>[31m
+      [36m</ol>[31m
+      [36m<div[31m
+        [33mclass[31m=[32m"_stage_6a09aa"[31m
+      [36m>[31m
+        [36m<div[31m
+          [33maria-hidden[31m=[32m"true"[31m
+          [33mclass[31m=[32m"_stadium_6a09aa"[31m
+        [36m>[31m
+          [36m<i />[31m
+          [36m<i />[31m
+          [36m<i />[31m
+          [36m<i />[31m
+          [36m<i />[31m
+        [36m</div>[31m
+        [36m<div[31m
+          [33mclass[31m=[32m"_stageCopy_6a09aa"[31m
+        [36m>[31m
+          [36m<p[31m
+            [33mclass[31m=[32m"_chapter_6a09aa"[31m
+          [36m>[31m
+            [0mMLB[0m
+            [0m Road to the Draft[0m
+          [36m</p>[31m
+          [36m<h2[31m
+            [33mtabindex[31m=[32m"-1"[31m
+          [36m>[31m
+            [0mYour career starts here.[0m
+          [36m</h2>[31m
+          [36m<p>[31m
+            [0mChoose the road. Build your stock. Find your team.[0m
+          [36m</p>[31m
+        [36m</div>[31m
+        [36m<div[31m
+          [33maria-hidden[31m=[32m"true"[31m
+          [33mclass[31m=[32m"_portrait_6a09aa"[31m
+        [36m>[31m
+          [36m<svg[31m
+            [33maria-label[31m=[32m"Player avatar"[31m
+            [33mclass[31m=[32m" "[31m
+            [33mheight[31m=[32m"130"[31m
+            [33mrole[31m=[32m"img"[31m
+            [33mviewBox[31m=[32m"0 0 100 100"[31m
+            [33mwidth[31m=[32m"130"[31m
+          [36m>[31m
+            [36m<path[31m
+              [33md[31m=[32m"M 14 100 Q 16 78 34 74 L 44 71 L 56 71 L 66 74 Q 84 78 86 100 Z"[31m
+              [33mfill[31m=[32m"#DC2626"[31m
+            [36m/>[31m
+            [36m<path[31m
+              [33md[31m=[32m"M 14 100 Q 16 78 34 74 L 38 73 Q 30 82 28 100 Z M 86 100 Q 84 78 66 74 L 62 73 Q 70 82 72 100 Z"[31m
+              [33mfill[31m=[32m"#b40000"[31m
+              [33mopacity[31m=[32m"0.5"[31m
+            [36m/>[31m
+            [36m<path[31m
+              [33md[31m=[32m"M 44 71 L 50 78 L 56 71 L 53 70 L 50 74 L 47 70 Z"[31m
+              [33mfill[31m=[32m"#FFFFFF"[31m
+              [33mopacity[31m=[32m"0.9"[31m
+            [36m/>[31m
+            [36m<rect[31m
+              [33mfill[31m=[32m"#BA885B"[31m
+              [33mheight[31m=[32m"14"[31m
+              [33mrx[31m=[32m"5"[31m
+              [33mwidth[31m=[32m"14"[31m
+              [33mx[31m=[32m"43"[31m
+              [33my[31m=[32m"60"[31m
+            [36m/>[31m
+            [36m<path[31m
+              [33md[31m=[32m"M 32 40 Q 32 18 50 18 Q 68 18 68 40 L 68 48 Q 68 66 50 68 Q 32 66 32 48 Z"[31m
+              [33mfill[31m=[32m"#D19E6F"[31m
+            [36m/>[31m
+            [36m<ellipse[31m
+              [33mcx[31m=[32m"31.5"[31m
+              [33mcy[31m=[32m"46"[31m
+              [33mfill[31m=[32m"#D19E6F"[31m
+              [33mrx[31m=[32m"3.4"[31m
+              [33mry[31m=[32m"5"[31m
+            [36m/>[31m
+            [36m<ellipse[31m
+              [33mcx[31m=[32m"68.5"[31m
+              [33mcy[31m=[32m"46"[31m
+              [33mfill[31m=[32m"#BA885B"[31m
+              [33mopacity[31m=[32m"0.9"[31m
+              [33mrx[31m=[32m"3.4"[31m
+              [33mry[31m=[32m"5"[31m
+            [36m/>[31m
+            [36m<path[31m
+              [33md[31m=[32m"M 62 24 Q 68 30 68 40 L 68 48 Q 68 64 52 68 Q 64 62 64 46 Q 64 30 58 24 Z"[31m
+              [33mfill[31m=[32m"#BA885B"[31m
+              [33mopacity[31m=[32m"0.35"[31m
+            [36m/>[31m
+            [36m<ellipse[31m
+              [33mcx[31m=[32m"42.5"[31m
+              [33mcy[31m=[32m"45"[31m
+              [33mfill[31m=[32m"#2A...[39m
+[31m   [31m×[31m Round 1569 report A: Start over from every screen[2m > [22m'NHL' starts over from the road to the draft[39m[32m 232[2mms[22m[39m
+[31m     → Unable to find an accessible element with the role "button" and name "Start over"
+
+Here are the accessible roles:
+
+  button:
+
+  Name "Back to player":
+  [36m<button />[31m
+
+  Name "Road to the draft help":
+  [36m<button[31m
+    [33maria-controls[31m=[32m"prospect-help"[31m
+    [33maria-expanded[31m=[32m"true"[31m
+    [33maria-label[31m=[32m"Road to the draft help"[31m
+  [36m/>[31m
+
+  Name "Got it":
+  [36m<button[31m
+    [33mclass[31m=[32m"_helpClose_6a09aa"[31m
+  [36m/>[31m
+
+  Name "2 seasons Major junior Long season, long bus rides, scouts in every rink. Enter the draft at 18. Start at age 16 · Draft at 18":
+  [36m<button[31m
+    [33mclass[31m=[32m"_route_6a09aa"[31m
+  [36m/>[31m
+
+  Name "2 seasons US junior, then college Two seasons of US junior, enter the draft at 18, then take your college place. Start at age 16 · Draft at 18":
+  [36m<button[31m
+    [33mclass[31m=[32m"_route_6a09aa"[31m
+  [36m/>[31m
+
+  Name "2 seasons Europe Two seasons in a European junior league, enter the draft at 18, then develop at home. Start at age 16 · Draft at 18":
+  [36m<button[31m
+    [33mclass[31m=[32m"_route_6a09aa"[31m
+  [36m/>[31m
+
+  --------------------------------------------------
+  list:
+
+  Name "Your road to the draft":
+  [36m<ol[31m
+    [33maria-label[31m=[32m"Your road to the draft"[31m
+    [33mclass[31m=[32m"_acts_6a09aa"[31m
+  [36m/>[31m
+
+  --------------------------------------------------
+  listitem:
+
+  Name "":
+  [36m<li[31m
+    [33maria-current[31m=[32m"step"[31m
+  [36m/>[31m
+
+  Name "":
+  [36m<li />[31m
+
+  Name "":
+  [36m<li />[31m
+
+  --------------------------------------------------
+  paragraph:
+
+  Name "":
+  [36m<p[31m
+    [33mclass[31m=[32m"_chapter_6a09aa"[31m
+  [36m/>[31m
+
+  Name "":
+  [36m<p />[31m
+
+  Name "":
+  [36m<p />[31m
+
+  Name "":
+  [36m<p />[31m
+
+  Name "":
+  [36m<p />[31m
+
+  Name "":
+  [36m<p />[31m
+
+  Name "":
+  [36m<p />[31m
+
+  --------------------------------------------------
+  heading:
+
+  Name "Your career starts here.":
+  [36m<h2[31m
+    [33mtabindex[31m=[32m"-1"[31m
+  [36m/>[31m
+
+  Name "Make the league on your terms":
+  [36m<h3 />[31m
+
+  Name "Your career starts here.":
+  [36m<h3[31m
+    [33mclass[31m=[32m"sr-only"[31m
+    [33mtabindex[31m=[32m"-1"[31m
+  [36m/>[31m
+
+  --------------------------------------------------
+  strong:
+
+  Name "":
+  [36m<strong />[31m
+
+  Name "":
+  [36m<strong />[31m
+
+  Name "":
+  [36m<strong />[31m
+
+  Name "":
+  [36m<strong />[31m
+
+  Name "":
+  [36m<strong />[31m
+
+  Name "":
+  [36m<strong />[31m
+
+  --------------------------------------------------
+  term:
+
+  Name "":
+  [36m<dt />[31m
+
+  Name "":
+  [36m<dt />[31m
+
+  Name "":
+  [36m<dt />[31m
+
+  --------------------------------------------------
+  definition:
+
+  Name "":
+  [36m<dd />[31m
+
+  Name "":
+  [36m<dd />[31m
+
+  Name "":
+  [36m<dd />[31m
+
+  --------------------------------------------------
+
+Ignored nodes: comments, script, style
+[36m<body[31m
+  [33mstyle[31m=[32m""[31m
+[36m>[31m
+  [36m<div>[31m
+    [36m<section[31m
+      [33mclass[31m=[32m"_journey_6a09aa"[31m
+      [33mdata-prospect-journey[31m=[32m"nhl"[31m
+      [33mdata-prospect-phase[31m=[32m"routes"[31m
+    [36m>[31m
+      [36m<div[31m
+        [33mclass[31m=[32m"_toolbar_6a09aa"[31m
+      [36m>[31m
+        [36m<button>[31m
+          [36m<svg[31m
+            [33mclass[31m=[32m"lucide lucide-arrow-left"[31m
+            [33mfill[31m=[32m"none"[31m
+            [33mheight[31m=[32m"16"[31m
+            [33mstroke[31m=[32m"currentColor"[31m
+            [33mstroke-linecap[31m=[32m"round"[31m
+            [33mstroke-linejoin[31m=[32m"round"[31m
+            [33mstroke-width[31m=[32m"2"[31m
+            [33mviewBox[31m=[32m"0 0 24 24"[31m
+            [33mwidth[31m=[32m"16"[31m
+            [33mxmlns[31m=[32m"http://www.w3.org/2000/svg"[31m
+          [36m>[31m
+            [36m<path[31m
+              [33md[31m=[32m"m12 19-7-7 7-7"[31m
+            [36m/>[31m
+            [36m<path[31m
+              [33md[31m=[32m"M19 12H5"[31m
+            [36m/>[31m
+          [36m</svg>[31m
+          [0m Back to player[0m
+        [36m</button>[31m
+        [36m<button[31m
+          [33maria-controls[31m=[32m"prospect-help"[31m
+          [33maria-expanded[31m=[32m"true"[31m
+          [33maria-label[31m=[32m"Road to the draft help"[31m
+        [36m>[31m
+          [36m<svg[31m
+            [33mclass[31m=[32m"lucide lucide-circle-help"[31m
+            [33mfill[31m=[32m"none"[31m
+            [33mheight[31m=[32m"19"[31m
+            [33mstroke[31m=[32m"currentColor"[31m
+            [33mstroke-linecap[31m=[32m"round"[31m
+            [33mstroke-linejoin[31m=[32m"round"[31m
+            [33mstroke-width[31m=[32m"2"[31m
+            [33mviewBox[31m=[32m"0 0 24 24"[31m
+            [33mwidth[31m=[32m"19"[31m
+            [33mxmlns[31m=[32m"http://www.w3.org/2000/svg"[31m
+          [36m>[31m
+            [36m<circle[31m
+              [33mcx[31m=[32m"12"[31m
+              [33mcy[31m=[32m"12"[31m
+              [33mr[31m=[32m"10"[31m
+            [36m/>[31m
+            [36m<path[31m
+              [33md[31m=[32m"M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"[31m
+            [36m/>[31m
+            [36m<path[31m
+              [33md[31m=[32m"M12 17h.01"[31m
+            [36m/>[31m
+          [36m</svg>[31m
+        [36m</button>[31m
+      [36m</div>[31m
+      [36m<ol[31m
+        [33maria-label[31m=[32m"Your road to the draft"[31m
+        [33mclass[31m=[32m"_acts_6a09aa"[31m
+      [36m>[31m
+        [36m<li[31m
+          [33maria-current[31m=[32m"step"[31m
+        [36m>[31m
+          [36m<span>[31m
+            [0m1[0m
+          [36m</span>[31m
+          [0mPick your path[0m
+        [36m</li>[31m
+        [36m<li>[31m
+          [36m<span>[31m
+            [0m2[0m
+          [36m</span>[31m
+          [0mEarn your place[0m
+        [36m</li>[31m
+        [36m<li>[31m
+          [36m<span>[31m
+            [0m3[0m
+          [36m</span>[31m
+          [0mDraft day[0m
+        [36m</li>[31m
+      [36m</ol>[31m
+      [36m<div[31m
+        [33mclass[31m=[32m"_stage_6a09aa"[31m
+      [36m>[31m
+        [36m<div[31m
+          [33maria-hidden[31m=[32m"true"[31m
+          [33mclass[31m=[32m"_stadium_6a09aa"[31m
+        [36m>[31m
+          [36m<i />[31m
+          [36m<i />[31m
+          [36m<i />[31m
+          [36m<i />[31m
+          [36m<i />[31m
+        [36m</div>[31m
+        [36m<div[31m
+          [33mclass[31m=[32m"_stageCopy_6a09aa"[31m
+        [36m>[31m
+          [36m<p[31m
+            [33mclass[31m=[32m"_chapter_6a09aa"[31m
+          [36m>[31m
+            [0mNHL[0m
+            [0m Road to the Draft[0m
+          [36m</p>[31m
+          [36m<h2[31m
+            [33mtabindex[31m=[32m"-1"[31m
+          [36m>[31m
+            [0mYour career starts here.[0m
+          [36m</h2>[31m
+          [36m<p>[31m
+            [0mChoose the road. Build your stock. Find your team.[0m
+          [36m</p>[31m
+        [36m</div>[31m
+        [36m<div[31m
+          [33maria-hidden[31m=[32m"true"[31m
+          [33mclass[31m=[32m"_portrait_6a09aa"[31m
+        [36m>[31m
+          [36m<svg[31m
+            [33maria-label[31m=[32m"Player avatar"[31m
+            [33mclass[31m=[32m" "[31m
+            [33mheight[31m=[32m"130"[31m
+            [33mrole[31m=[32m"img"[31m
+            [33mviewBox[31m=[32m"0 0 100 100"[31m
+            [33mwidth[31m=[32m"130"[31m
+          [36m>[31m
+            [36m<path[31m
+              [33md[31m=[32m"M 14 100 Q 16 78 34 74 L 44 71 L 56 71 L 66 74 Q 84 78 86 100 Z"[31m
+              [33mfill[31m=[32m"#0EA5E9"[31m
+            [36m/>[31m
+            [36m<path[31m
+              [33md[31m=[32m"M 14 100 Q 16 78 34 74 L 38 73 Q 30 82 28 100 Z M 86 100 Q 84 78 66 74 L 62 73 Q 70 82 72 100 Z"[31m
+              [33mfill[31m=[32m"#007dc1"[31m
+              [33mopacity[31m=[32m"0.5"[31m
+            [36m/>[31m
+            [36m<path[31m
+              [33md[31m=[32m"M 44 71 L 50 78 L 56 71 L 53 70 L 50 74 L 47 70 Z"[31m
+              [33mfill[31m=[32m"#FFFFFF"[31m
+              [33mopacity[31m=[32m"0.9"[31m
+            [36m/>[31m
+            [36m<rect[31m
+              [33mfill[31m=[32m"#BA885B"[31m
+              [33mheight[31m=[32m"14"[31m
+              [33mrx[31m=[32m"5"[31m
+              [33mwidth[31m=[32m"14"[31m
+              [33mx[31m=[32m"43"[31m
+              [33my[31m=[32m"60"[31m
+            [36m/>[31m
+            [36m<path[31m
+              [33md[31m=[32m"M 32 40 Q 32 18 50 18 Q 68 18 68 40 L 68 48 Q 68 66 50 68 Q 32 66 32 48 Z"[31m
+              [33mfill[31m=[32m"#D19E6F"[31m
+            [36m/>[31m
+            [36m<ellipse[31m
+              [33mcx[31m=[32m"31.5"[31m
+              [33mcy[31m=[32m"46"[31m
+              [33mfill[31m=[32m"#D19E6F"[31m
+              [33mrx[31m=[32m"3.4"[31m
+              [33mry[31m=[32m"5"[31m
+            [36m/>[31m
+            [36m<ellipse[31m
+              [33mcx[31m=[32m"68.5"[31m
+              [33mcy[31m=[32m"46"[31m
+              [33mfill[31m=[32m"#BA885B"[31m
+              [33mopacity[31m=[32m"0.9"[31m
+              [33mrx[31m=[32m"3.4"[31m
+              [33mry[31m=[32m"5"[31m
+            [36m/>[31m
+            [36m<path[31m
+              [33md[31m=[32m"M 62 24 Q 68 30 68 40 L 68 48 Q 68 64 52 68 Q 64 62 64 46 Q 64 30 58 24 Z"[31m
+              [33mfill[31m=[32m"#BA885B"[31m
+              [33mopacity[31m=[32m"0.35"[31m
+            [36m/>[31m
+            [36m<ellipse[31m
+              [33mcx[31m=[32m"42.5"[31m
+              [33mcy[31m=[32m"45"[31m
+              [33mfill[31m=[32m"#2A...[39m
+   [32m✓[39m Round 1569 report B: no offer is never a dead end[2m > [22m'NFL': a no offer talk in the last season says why, says it is the last, and retires in full[32m 138[2mms[22m[39m
+   [32m✓[39m Round 1569 report B: no offer is never a dead end[2m > [22m'NBA': a no offer talk in the last season says why, says it is the last, and retires in full[32m 127[2mms[22m[39m
+   [32m✓[39m Round 1569 report B: no offer is never a dead end[2m > [22m'MLB': a no offer talk in the last season says why, says it is the last, and retires in full[32m 132[2mms[22m[39m
+   [32m✓[39m Round 1569 report B: no offer is never a dead end[2m > [22m'NHL': a no offer talk in the last season says why, says it is the last, and retires in full[32m 127[2mms[22m[39m
+   [32m✓[39m Round 1569 report B: no offer is never a dead end[2m > [22m'NFL': a no offer talk with seasons left keeps the market promise and still offers retirement[32m 71[2mms[22m[39m
+   [32m✓[39m Round 1569 report B: no offer is never a dead end[2m > [22m'NBA': a no offer talk with seasons left keeps the market promise and still offers retirement[32m 76[2mms[22m[39m
+   [32m✓[39m Round 1569 report B: no offer is never a dead end[2m > [22m'MLB': a no offer talk with seasons left keeps the market promise and still offers retirement[32m 99[2mms[22m[39m
+   [32m✓[39m Round 1569 report B: no offer is never a dead end[2m > [22m'NHL': a no offer talk with seasons left keeps the market promise and still offers retirement[32m 75[2mms[22m[39m
+   [32m✓[39m Round 1569 report B: no offer is never a dead end[2m > [22m'NFL': free agency offers a veteran Retire instead, and a two season player none[32m 244[2mms[22m[39m
+   [32m✓[39m Round 1569 report B: no offer is never a dead end[2m > [22m'NBA': free agency offers a veteran Retire instead, and a two season player none[32m 245[2mms[22m[39m
+   [32m✓[39m Round 1569 report B: no offer is never a dead end[2m > [22m'MLB': free agency offers a veteran Retire instead, and a two season player none[32m 240[2mms[22m[39m
+   [32m✓[39m Round 1569 report B: no offer is never a dead end[2m > [22m'NHL': free agency offers a veteran Retire instead, and a two season player none[32m 241[2mms[22m[39m
+
+[31m⎯⎯⎯⎯⎯⎯⎯[39m[1m[41m Failed Tests 4 [49m[22m[31m⎯⎯⎯⎯⎯⎯⎯[39m
+
+[41m[1m FAIL [22m[49m src/test/usCareerReports1569.test.tsx[2m > [22mRound 1569 report A: Start over from every screen[2m > [22m'NFL' starts over from the road to the draft
+[31m[1mTestingLibraryElementError[22m[39m: Unable to find an accessible element with the role "button" and name "Start over"
+
+Here are the accessible roles:
+
+  button:
+
+  Name "Back to player":
+  [36m<button />[39m
+
+  Name "Road to the draft help":
+  [36m<button[39m
+    [33maria-controls[39m=[32m"prospect-help"[39m
+    [33maria-expanded[39m=[32m"true"[39m
+    [33maria-label[39m=[32m"Road to the draft help"[39m
+  [36m/>[39m
+
+  Name "Got it":
+  [36m<button[39m
+    [33mclass[39m=[32m"_helpClose_6a09aa"[39m
+  [36m/>[39m
+
+  Name "3 seasons Big college program Every game on TV and scouts at every practice. Three seasons before you can declare. Start at age 18 · Draft at 21":
+  [36m<button[39m
+    [33mclass[39m=[32m"_route_6a09aa"[39m
+  [36m/>[39m
+
+  Name "3 seasons Small school Fewer eyes on you, so the scouts have to come looking. Three seasons before you can declare. Start at age 18 · Draft at 21":
+  [36m<button[39m
+    [33mclass[39m=[32m"_route_6a09aa"[39m
+  [36m/>[39m
+
+  --------------------------------------------------
+  list:
+
+  Name "Your road to the draft":
+  [36m<ol[39m
+    [33maria-label[39m=[32m"Your road to the draft"[39m
+    [33mclass[39m=[32m"_acts_6a09aa"[39m
+  [36m/>[39m
+
+  --------------------------------------------------
+  listitem:
+
+  Name "":
+  [36m<li[39m
+    [33maria-current[39m=[32m"step"[39m
+  [36m/>[39m
+
+  Name "":
+  [36m<li />[39m
+
+  Name "":
+  [36m<li />[39m
+
+  --------------------------------------------------
+  paragraph:
+
+  Name "":
+  [36m<p[39m
+    [33mclass[39m=[32m"_chapter_6a09aa"[39m
+  [36m/>[39m
+
+  Name "":
+  [36m<p />[39m
+
+  Name "":
+  [36m<p />[39m
+
+  Name "":
+  [36m<p />[39m
+
+  Name "":
+  [36m<p />[39m
+
+  Name "":
+  [36m<p />[39m
+
+  Name "":
+  [36m<p />[39m
+
+  --------------------------------------------------
+  heading:
+
+  Name "Your career starts here.":
+  [36m<h2[39m
+    [33mtabindex[39m=[32m"-1"[39m
+  [36m/>[39m
+
+  Name "Make the league on your terms":
+  [36m<h3 />[39m
+
+  Name "Your career starts here.":
+  [36m<h3[39m
+    [33mclass[39m=[32m"sr-only"[39m
+    [33mtabindex[39m=[32m"-1"[39m
+  [36m/>[39m
+
+  --------------------------------------------------
+  strong:
+
+  Name "":
+  [36m<strong />[39m
+
+  Name "":
+  [36m<strong />[39m
+
+  Name "":
+  [36m<strong />[39m
+
+  Name "":
+  [36m<strong />[39m
+
+  Name "":
+  [36m<strong />[39m
+
+  --------------------------------------------------
+  term:
+
+  Name "":
+  [36m<dt />[39m
+
+  Name "":
+  [36m<dt />[39m
+
+  Name "":
+  [36m<dt />[39m
+
+  --------------------------------------------------
+  definition:
+
+  Name "":
+  [36m<dd />[39m
+
+  Name "":
+  [36m<dd />[39m
+
+  Name "":
+  [36m<dd />[39m
+
+  --------------------------------------------------
+
+Ignored nodes: comments, script, style
+[36m<body[39m
+  [33mstyle[39m=[32m""[39m
+[36m>[39m
+  [36m<div>[39m
+    [36m<section[39m
+      [33mclass[39m=[32m"_journey_6a09aa"[39m
+      [33mdata-prospect-journey[39m=[32m"nfl"[39m
+      [33mdata-prospect-phase[39m=[32m"routes"[39m
+    [36m>[39m
+      [36m<div[39m
+        [33mclass[39m=[32m"_toolbar_6a09aa"[39m
+      [36m>[39m
+        [36m<button>[39m
+          [36m<svg[39m
+            [33mclass[39m=[32m"lucide lucide-arrow-left"[39m
+            [33mfill[39m=[32m"none"[39m
+            [33mheight[39m=[32m"16"[39m
+            [33mstroke[39m=[32m"currentColor"[39m
+            [33mstroke-linecap[39m=[32m"round"[39m
+            [33mstroke-linejoin[39m=[32m"round"[39m
+            [33mstroke-width[39m=[32m"2"[39m
+            [33mviewBox[39m=[32m"0 0 24 24"[39m
+            [33mwidth[39m=[32m"16"[39m
+            [33mxmlns[39m=[32m"http://www.w3.org/2000/svg"[39m
+          [36m>[39m
+            [36m<path[39m
+              [33md[39m=[32m"m12 19-7-7 7-7"[39m
+            [36m/>[39m
+            [36m<path[39m
+              [33md[39m=[32m"M19 12H5"[39m
+            [36m/>[39m
+          [36m</svg>[39m
+          [0m Back to player[0m
+        [36m</button>[39m
+        [36m<button[39m
+          [33maria-controls[39m=[32m"prospect-help"[39m
+          [33maria-expanded[39m=[32m"true"[39m
+          [33maria-label[39m=[32m"Road to the draft help"[39m
+        [36m>[39m
+          [36m<svg[39m
+            [33mclass[39m=[32m"lucide lucide-circle-help"[39m
+            [33mfill[39m=[32m"none"[39m
+            [33mheight[39m=[32m"19"[39m
+            [33mstroke[39m=[32m"currentColor"[39m
+            [33mstroke-linecap[39m=[32m"round"[39m
+            [33mstroke-linejoin[39m=[32m"round"[39m
+            [33mstroke-width[39m=[32m"2"[39m
+            [33mviewBox[39m=[32m"0 0 24 24"[39m
+            [33mwidth[39m=[32m"19"[39m
+            [33mxmlns[39m=[32m"http://www.w3.org/2000/svg"[39m
+          [36m>[39m
+            [36m<circle[39m
+              [33mcx[39m=[32m"12"[39m
+              [33mcy[39m=[32m"12"[39m
+              [33mr[39m=[32m"10"[39m
+            [36m/>[39m
+            [36m<path[39m
+              [33md[39m=[32m"M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"[39m
+            [36m/>[39m
+            [36m<path[39m
+              [33md[39m=[32m"M12 17h.01"[39m
+            [36m/>[39m
+          [36m</svg>[39m
+        [36m</button>[39m
+      [36m</div>[39m
+      [36m<ol[39m
+        [33maria-label[39m=[32m"Your road to the draft"[39m
+        [33mclass[39m=[32m"_acts_6a09aa"[39m
+      [36m>[39m
+        [36m<li[39m
+          [33maria-current[39m=[32m"step"[39m
+        [36m>[39m
+          [36m<span>[39m
+            [0m1[0m
+          [36m</span>[39m
+          [0mPick your path[0m
+        [36m</li>[39m
+        [36m<li>[39m
+          [36m<span>[39m
+            [0m2[0m
+          [36m</span>[39m
+          [0mEarn your place[0m
+        [36m</li>[39m
+        [36m<li>[39m
+          [36m<span>[39m
+            [0m3[0m
+          [36m</span>[39m
+          [0mDraft day[0m
+        [36m</li>[39m
+      [36m</ol>[39m
+      [36m<div[39m
+        [33mclass[39m=[32m"_stage_6a09aa"[39m
+      [36m>[39m
+        [36m<div[39m
+          [33maria-hidden[39m=[32m"true"[39m
+          [33mclass[39m=[32m"_stadium_6a09aa"[39m
+        [36m>[39m
+          [36m<i />[39m
+          [36m<i />[39m
+          [36m<i />[39m
+          [36m<i />[39m
+          [36m<i />[39m
+        [36m</div>[39m
+        [36m<div[39m
+          [33mclass[39m=[32m"_stageCopy_6a09aa"[39m
+        [36m>[39m
+          [36m<p[39m
+            [33mclass[39m=[32m"_chapter_6a09aa"[39m
+          [36m>[39m
+            [0mNFL[0m
+            [0m Road to the Draft[0m
+          [36m</p>[39m
+          [36m<h2[39m
+            [33mtabindex[39m=[32m"-1"[39m
+          [36m>[39m
+            [0mYour career starts here.[0m
+          [36m</h2>[39m
+          [36m<p>[39m
+            [0mChoose the road. Build your stock. Find your team.[0m
+          [36m</p>[39m
+        [36m</div>[39m
+        [36m<div[39m
+          [33maria-hidden[39m=[32m"true"[39m
+          [33mclass[39m=[32m"_portrait_6a09aa"[39m
+        [36m>[39m
+          [36m<svg[39m
+            [33maria-label[39m=[32m"Player avatar"[39m
+            [33mclass[39m=[32m" "[39m
+            [33mheight[39m=[32m"130"[39m
+            [33mrole[39m=[32m"img"[39m
+            [33mviewBox[39m=[32m"0 0 100 100"[39m
+            [33mwidth[39m=[32m"130"[39m
+          [36m>[39m
+            [36m<path[39m
+              [33md[39m=[32m"M 14 100 Q 16 78 34 74 L 44 71 L 56 71 L 66 74 Q 84 78 86 100 Z"[39m
+              [33mfill[39m=[32m"#10B981"[39m
+            [36m/>[39m
+            [36m<path[39m
+              [33md[39m=[32m"M 14 100 Q 16 78 34 74 L 38 73 Q 30 82 28 100 Z M 86 100 Q 84 78 66 74 L 62 73 Q 70 82 72 100 Z"[39m
+              [33mfill[39m=[32m"#009159"[39m
+              [33mopacity[39m=[32m"0.5"[39m
+            [36m/>[39m
+            [36m<path[39m
+              [33md[39m=[32m"M 44 71 L 50 78 L 56 71 L 53 70 L 50 74 L 47 70 Z"[39m
+              [33mfill[39m=[32m"#FFFFFF"[39m
+              [33mopacity[39m=[32m"0.9"[39m
+            [36m/>[39m
+            [36m<rect[39m
+              [33mfill[39m=[32m"#BA885B"[39m
+              [33mheight[39m=[32m"14"[39m
+              [33mrx[39m=[32m"5"[39m
+              [33mwidth[39m=[32m"14"[39m
+              [33mx[39m=[32m"43"[39m
+              [33my[39m=[32m"60"[39m
+            [36m/>[39m
+            [36m<path[39m
+              [33md[39m=[32m"M 32 40 Q 32 18 50 18 Q 68 18 68 40 L 68 48 Q 68 66 50 68 Q 32 66 32 48 Z"[39m
+              [33mfill[39m=[32m"#D19E6F"[39m
+            [36m/>[39m
+            [36m<ellipse[39m
+              [33mcx[39m=[32m"31.5"[39m
+              [33mcy[39m=[32m"46"[39m
+              [33mfill[39m=[32m"#D19E6F"[39m
+              [33mrx[39m=[32m"3.4"[39m
+              [33mry[39m=[32m"5"[39m
+            [36m/>[39m
+            [36m<ellipse[39m
+              [33mcx[39m=[32m"68.5"[39m
+              [33mcy[39m=[32m"46"[39m
+              [33mfill[39m=[32m"#BA885B"[39m
+              [33mopacity[39m=[32m"0.9"[39m
+              [33mrx[39m=[32m"3.4"[39m
+              [33mry[39m=[32m"5"[39m
+            [36m/>[39m
+            [36m<path[39m
+              [33md[39m=[32m"M 62 24 Q 68 30 68 40 L 68 48 Q 68 64 52 68 Q 64 62 64 46 Q 64 30 58 24 Z"[39m
+              [33mfill[39m=[32m"#BA885B"[39m
+              [33mopacity[39m=[32m"0.35"[39m
+            [36m/>[39m
+            [36m<ellipse[39m
+              [33mcx[39m=[32m"42.5"[39m
+              [33mcy[39m=[32m"45"[39m
+              [33mfill[39m=[32m"#2A2118"[39m
+              [33mrx[39m=[32m"2.6"[39m
+              [33mry[39m=[32m"3"[39m
+            [36m/>[39m
+            [36m<ellipse[39m
+              [33mcx[39m=[32m"57.5"[39m
+              [33mcy[39m=[32m"45"[39m
+              [33mfill[39m=[32m"#2A2118"[39m
+              [33mrx[39m=[32m"2.6"[39m
+              [33mry[39m=[32m"3"[39m
+            [36m/>[39m
+            [36m<circle[39m
+              [33mcx[39m=[32m"43.3"[39m
+              [33mcy[39m=[32m"44"[39m
+              [33mfill[39m=[32m"#FFFFFF"[39m
+              [33mopacity[39m=[32m"0.85"[39m
+              [33mr[39m=[32m"0.8"[39m
+            [36m/>[39m
+            [36m<circle[39m
+              [33mcx[39m=[32m"58.3"[39m
+              [33mcy[39m=[32m"44"[39m
+              [33mfill[39m=[32m"#FFFFFF"[39m
+              [33mopacity[39m=[32m"0.85"[39m
+              [33mr[39m=[32m"0.8"[39m
+            [36m/>[39m
+            [36m<path[39m
+              [33md[39m=[32m"M 38 39.5 Q 42.5 37.5 47 39.5"[39m
+              [33mfill[39m=[32m"none"[39m
+              [33mstroke[39m=[32m"#1D1A17"[39m
+              [33mstroke-linecap[39m=[32m"round"[39m
+              [33mstroke-width[39m=[32m"2"[39m
+            [36m/>[39m
+            [36m<path[39m
+              [33md[39m=[32m"M 53 39.5 Q 57.5 37.5 62 39.5"[39m
+              [33mfill[39m=[32m"none"[39m
+              [33mstroke[39m=[32m"#1D1A17"[39m
+              [33mstroke-linecap[39m=[32m"round"[39m
+              [33mstroke-width[39m=[32m"2"[39m
+            [36m/>[39m
+            [36m<path[39m
+              [33md[39m=[32m"M 50 47 L 48.4 54 Q 50 55.4 51.6 54 Z"[39m
+              [33mfill[39m=[32m"#BA885B"[39m
+            [36m/>[39m
+            [36m<path[39m
+              [33md[39m=[32m"M 44.5 59.5 Q 50 62.5 55.5 59.5"[39m
+              [33mfill[39m=[32m"none"[39m
+              [33mstroke[39m=[32m"#7A4A3A"[39m
+              [33mstroke-linecap[39m=[32m"round"[39m
+              [33mstroke-width[39m=[32m"2"[39m
+            [36m/>[39m
+            [36m<path[39m
+              [33md[39m=[32m"M 29 36 Q 29 15 50 15 Q 71 15 71 36 L 71 40 Q 62 30 50 30 Q 38 30 29 40 Z"[39m
+              [33mfill[39m=[32m"#1D1A17"[39m
+            [36m/>[39m
+            [36m<path[39m
+              [33md[39m=[32m"M 29 36 L 29 44 Q 31 38 34 35 Z M 71 36 L 71 44 Q 69 38 66 35 Z"[39m
+              [33mfill[39m=[32m"#1D1A17"[39m
+              [33mopacity[39m=[32m"0.35"[39m
+            [36m/>[39m
+          [36m</svg>[39m
+        [36m</div>[39m
+      [36m</div>[39m
+      [36m<div[39m
+        [33mclass[39m=[32m"_file_6a09aa"[39m
+        [33mdata-prospect-file[39m=[32m"true"[39m
+      [36m>[39m
+        [36m<div[39m
+          [33mclass[39m=[32m"_identity_6a09aa"[39m
+        [36m>[39m
+          [36m<strong>[39m
+            [0mRyder Blaze[0m
+          [36m</strong>[39m
+          [36m<span>[39m
+            [0mQB[0m
+          [36m</span>[39m
+        [36m</div>[39m
+        [36m<dl[39m
+          [33mclass[39m=[32m"_meters_6a09aa"[39m
+        [36m>[39m
+          [36m<div>[39m
+            [36m<dt>[39m
+              [0mRating[0m
+            [36m</dt>[39m
+            [36m<dd>[39m
+              [0m72[0m
+            [36m</dd>[39m
+          [36m</div>[39m
+          [36m<div>[39m
+            [36m<dt>[39m
+              [0mPotential[0m
+            [36m</dt>[39m
+            [36m<dd>[39m
+              [0m95[0m
+            [36m</dd>[39m
+          [36m</div>[39m
+          [36m<div>[39m
+            [36m<dt>[39m
+              [0mHealth[0m
+            [36m</dt>[39m
+            [36m<dd>[39m
+              [0m100[0m
+            [36m</dd>[39m
+          [36m</div>[39m
+        [36m</dl>[39m
+      [36m</div>[39m
+      [36m<div[39m
+        [33mclass[39m=[32m"_help_6a09aa"[39m
+        [33mid[39m=[32m"prospect-help"[39m
+      [36m>[39m
+        [36m<h3>[39m
+          [0mMake the league on your terms[0m
+        [36m</h3>[39m
+        [36m<p>[39m
+          [0mPick a route, play its seasons, then decide how to handle scouts, training and health. Your rating and health shape your performances. Draft stock shapes how early a team takes you.[0m
+        [36m</p>[39m
+        [36m<p>[39m
+          [36m<strong>[39m
+            [0mFor example:[0m
+          [36m</strong>[39m
+          [0m playing through a knock can raise your stock but cost health. The button shows the exact change before you choose. The showcase lets you push hard, play safe or skip; each option lists its possible stock changes. Its grade is simulated from your rating, health and saved career seed.[0m
+        [36m</p>[39m
+        [36m<p>[39m
+          [0mPressed Skip it by mistake? Undo it any time before you press Draft day. For example: skip at a draft stock of 50 and you drop to 48; Undo skip puts you back at 50 with all three options open again.[0m
+        [36m</p>[39m
+        [36m<p>[39m
+          [36m<strong>[39m
+            [0mDraft night:[0m
+          [36m</strong>[39m
+          [0m before the draft the scouts quote a range for you, and the night always ends inside it. At a draft stock of 60, for example: [0m
+          [0mThe scouts have you between pick 49 and pick 82 of 224.[0m
+          [0m Then you watch the picks ahead of yours come off the board in the order the game already set, until your name is called or the last pick goes by without it. Nothing is drawn while you watch, no other prospect is ever named, and you can skip to the end at any time. Once it is over, Watch it again plays the same night from the start, unless your device is set to reduce motion.[0m
+        [36m</p>[39m
+        [36m<p>[39m
+          [0mAll prospects and results are fictional. The era sets the available teams and routes. The draft uses a simplified order without traded or extra picks; baseball and hockey lotteries are not modeled. Money in your career is a simulation, not a real contract quote. Going undrafted still leads to a camp signing.[0m
+        [36m</p>[39m
+        [36m<button[39m
+          [33mclass[39m=[32m"_helpClose_6a09aa"[39m
+        [36m>[39m
+          [0mGot it[0m
+        [36m</button>[39m
+      [36m</div>[39m
+      [36m<div[39m
+        [33mclass[39m=[32m"_playArea_6a09aa"[39m
+      [36m>[39m
+        [36m<h3[39m
+          [33mclass[39m=[32m"sr-only"[39m
+          [33mtabindex[39m=[32m"-1"[39m
+        [36m>[39m
+          [0mYour career starts here.[0m
+        [36m</h3>[39m
+        [36m<div[39m
+          [33mclass[39m=[32m"_routes_6a09aa"[39m
+        [36m>[39m
+          [36m<button[39m
+            [33mclass[39m=[32m"_route_6a09aa"[39m
+          [36m>[39m
+            [36m<span[39m
+              [33mclass[39m=[32m"_routeTop_6a09aa"[39m
+            [36m>[39m
+              [36m<span>[39m
+                [0m3[0m
+                [0m [0m
+                [0mseasons[0m
+              [36m</span>[39m
+              [36m<svg[39m
+                [33mclass[39m=[32m"lucide lucide-arrow-right"[39m
+                [33mfill[39m=[32m"none"[39m
+                [33mheight[39m=[32m"19"[39m
+                [33mstroke[39m=[32m"currentColor"[39m
+                [33mstroke-linecap[39m=[32m"round"[39m
+                [33mstroke-linejoin[39m=[32m"round"[39m
+                [33mstroke-width[39m=[32m"2"[39m
+                [33mviewBox[39m=[32m"0 0 24 24"[39m
+                [33mwidth[39m=[32m"19"[39m
+                [33mxmlns[39m=[32m"http://www.w3.org/2000/svg"[39m
+              [36m>[39m
+                [36m<path[39m
+                  [33md[39m=[32m"M5 12h14"[39m
+                [36m/>[39m
+                [36m<path[39m
+                  [33md[39m=[32m"m12 5 7 7-7 7"[39m
+                [36m/>[39m
+              [36m</svg>[39m
+            [36m</span>[39m
+            [36m<strong>[39m
+              [0mBig college program[0m
+            [36m</strong>[39m
+            [36m<span>[39m
+              [0mEvery game on TV and scouts at every practice. Three seasons before you can declare.[0m
+            [36m</span>[39m
+            [36m<small>[39m
+              [0mStart at age [0m
+              [0m18[0m
+              [0m · Draft at [0m
+              [0m21[0m
+            [36m</small>[39m
+          [36m</button>[39m
+          [36m<button[39m
+            [33mclass[39m=[32m"_route_6a09aa"[39m
+          [36m>[39m
+            [36m<span[39m
+              [33mclass[39m=[32m"_routeTop_6a09aa"[39m
+            [36m>[39m
+              [36m<span>[39m
+                [0m3[0m
+                [0m [0m
+                [0mseasons[0m
+              [36m</span>[39m
+              [36m<svg[39m
+                [33mclass[39m=[32m"lucide lucide-arrow-right"[39m
+                [33mfill[39m=[32m"none"[39m
+                [33mheight[39m=[32m"19"[39m
+                [33mstroke[39m=[32m"currentColor"[39m
+                [33mstroke-linecap[39m=[32m"round"[39m
+                [33mstroke-linejoin[39m=[32m"round"[39m
+                [33mstroke-width[39m=[32m"2"[39m
+                [33mviewBox[39m=[32m"0 0 24 24"[39m
+                [33mwidth[39m=[32m"19"[39m
+                [33mxmlns[39m=[32m"http://www.w3.org/2000/svg"[39m
+              [36m>[39m
+                [36m<path[39m
+                  [33md[39m=[32m"M5 12h14"[39m
+                [36m/>[39m
+                [36m<path[39m
+                  [33md[39m=[32m"m12 5 7 7-7 7"[39m
+                [36m/>[39m
+              [36m</svg>[39m
+            [36m</span>[39m
+            [36m<strong>[39m
+              [0mSmall school[0m
+            [36m</strong>[39m
+            [36m<span>[39m
+              [0mFewer eyes on you, so the scouts have to come looking. Three seasons before you can declare.[0m
+            [36m</span>[39m
+            [36m<small>[39m
+              [0mStart at age [0m
+              [0m18[0m
+              [0m · Draft at [0m
+              [0m21[0m
+            [36m</small>[39m
+          [36m</button>[39m
+        [36m</div>[39m
+      [36m</div>[39m
+    [36m</section>[39m
+  [36m</div>[39m
+[36m</body>[39m
+[90m [2m❯[22m Object.getElementError node_modules/@testing-library/dom/dist/config.js:[2m37:19[22m[39m
+[90m [2m❯[22m node_modules/@testing-library/dom/dist/query-helpers.js:[2m76:38[22m[39m
+[90m [2m❯[22m node_modules/@testing-library/dom/dist/query-helpers.js:[2m52:17[22m[39m
+[90m [2m❯[22m getByRole node_modules/@testing-library/dom/dist/query-helpers.js:[2m95:19[22m[39m
+[36m [2m❯[22m startOver src/test/usCareerReports1569.test.tsx:[2m68:20[22m[39m
+    [90m 66| [39m/** The whole of A's rule: one tap opens the confirmation, the second …
+    [90m 67| [39m[35masync[39m [35mfunction[39m [34mstartOver[39m(view[33m:[39m [33mRenderResult[39m[33m,[39m row[33m:[39m [33mRow[39m) {
+    [90m 68| [39m  [35mawait[39m [34mclick[39m(view[33m.[39m[34mgetByRole[39m([32m'button'[39m[33m,[39m { name[33m:[39m [32m'Start over'[39m }))[33m;[39m
+    [90m   | [39m                   [31m^[39m
+    [90m 69| [39m  const dialog = within(document.body).getByRole('alertdialog', { name…
+    [90m 70| [39m  await click(within(dialog).getByRole('button', { name: 'Start new ca…
+[90m [2m❯[22m src/test/usCareerReports1569.test.tsx:[2m114:11[22m[39m
+
+[31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/4]⎯[22m[39m
+
+[41m[1m FAIL [22m[49m src/test/usCareerReports1569.test.tsx[2m > [22mRound 1569 report A: Start over from every screen[2m > [22m'NBA' starts over from the road to the draft
+[31m[1mTestingLibraryElementError[22m[39m: Unable to find an accessible element with the role "button" and name "Start over"
+
+Here are the accessible roles:
+
+  button:
+
+  Name "Back to player":
+  [36m<button />[39m
+
+  Name "Road to the draft help":
+  [36m<button[39m
+    [33maria-controls[39m=[32m"prospect-help"[39m
+    [33maria-expanded[39m=[32m"true"[39m
+    [33maria-label[39m=[32m"Road to the draft help"[39m
+  [36m/>[39m
+
+  Name "Got it":
+  [36m<button[39m
+    [33mclass[39m=[32m"_helpClose_6a09aa"[39m
+  [36m/>[39m
+
+  Name "1 season One year of college One season on campus, then you declare. Start at age 18 · Draft at 19":
+  [36m<button[39m
+    [33mclass[39m=[32m"_route_6a09aa"[39m
+  [36m/>[39m
+
+  Name "3 seasons Three years of college Three seasons to grow into it. Less hype, more polish. Start at age 18 · Draft at 21":
+  [36m<button[39m
+    [33mclass[39m=[32m"_route_6a09aa"[39m
+  [36m/>[39m
+
+  --------------------------------------------------
+  list:
+
+  Name "Your road to the draft":
+  [36m<ol[39m
+    [33maria-label[39m=[32m"Your road to the draft"[39m
+    [33mclass[39m=[32m"_acts_6a09aa"[39m
+  [36m/>[39m
+
+  --------------------------------------------------
+  listitem:
+
+  Name "":
+  [36m<li[39m
+    [33maria-current[39m=[32m"step"[39m
+  [36m/>[39m
+
+  Name "":
+  [36m<li />[39m
+
+  Name "":
+  [36m<li />[39m
+
+  --------------------------------------------------
+  paragraph:
+
+  Name "":
+  [36m<p[39m
+    [33mclass[39m=[32m"_chapter_6a09aa"[39m
+  [36m/>[39m
+
+  Name "":
+  [36m<p />[39m
+
+  Name "":
+  [36m<p />[39m
+
+  Name "":
+  [36m<p />[39m
+
+  Name "":
+  [36m<p />[39m
+
+  Name "":
+  [36m<p />[39m
+
+  Name "":
+  [36m<p />[39m
+
+  --------------------------------------------------
+  heading:
+
+  Name "Your career starts here.":
+  [36m<h2[39m
+    [33mtabindex[39m=[32m"-1"[39m
+  [36m/>[39m
+
+  Name "Make the league on your terms":
+  [36m<h3 />[39m
+
+  Name "Your career starts here.":
+  [36m<h3[39m
+    [33mclass[39m=[32m"sr-only"[39m
+    [33mtabindex[39m=[32m"-1"[39m
+  [36m/>[39m
+
+  --------------------------------------------------
+  strong:
+
+  Name "":
+  [36m<strong />[39m
+
+  Name "":
+  [36m<strong />[39m
+
+  Name "":
+  [36m<strong />[39m
+
+  Name "":
+  [36m<strong />[39m
+
+  Name "":
+  [36m<strong />[39m
+
+  --------------------------------------------------
+  term:
+
+  Name "":
+  [36m<dt />[39m
+
+  Name "":
+  [36m<dt />[39m
+
+  Name "":
+  [36m<dt />[39m
+
+  --------------------------------------------------
+  definition:
+
+  Name "":
+  [36m<dd />[39m
+
+  Name "":
+  [36m<dd />[39m
+
+  Name "":
+  [36m<dd />[39m
+
+  --------------------------------------------------
+
+Ignored nodes: comments, script, style
+[36m<body[39m
+  [33mstyle[39m=[32m""[39m
+[36m>[39m
+  [36m<div>[39m
+    [36m<section[39m
+      [33mclass[39m=[32m"_journey_6a09aa"[39m
+      [33mdata-prospect-journey[39m=[32m"nba"[39m
+      [33mdata-prospect-phase[39m=[32m"routes"[39m
+    [36m>[39m
+      [36m<div[39m
+        [33mclass[39m=[32m"_toolbar_6a09aa"[39m
+      [36m>[39m
+        [36m<button>[39m
+          [36m<svg[39m
+            [33mclass[39m=[32m"lucide lucide-arrow-left"[39m
+            [33mfill[39m=[32m"none"[39m
+            [33mheight[39m=[32m"16"[39m
+            [33mstroke[39m=[32m"currentColor"[39m
+            [33mstroke-linecap[39m=[32m"round"[39m
+            [33mstroke-linejoin[39m=[32m"round"[39m
+            [33mstroke-width[39m=[32m"2"[39m
+            [33mviewBox[39m=[32m"0 0 24 24"[39m
+            [33mwidth[39m=[32m"16"[39m
+            [33mxmlns[39m=[32m"http://www.w3.org/2000/svg"[39m
+          [36m>[39m
+            [36m<path[39m
+              [33md[39m=[32m"m12 19-7-7 7-7"[39m
+            [36m/>[39m
+            [36m<path[39m
+              [33md[39m=[32m"M19 12H5"[39m
+            [36m/>[39m
+          [36m</svg>[39m
+          [0m Back to player[0m
+        [36m</button>[39m
+        [36m<button[39m
+          [33maria-controls[39m=[32m"prospect-help"[39m
+          [33maria-expanded[39m=[32m"true"[39m
+          [33maria-label[39m=[32m"Road to the draft help"[39m
+        [36m>[39m
+          [36m<svg[39m
+            [33mclass[39m=[32m"lucide lucide-circle-help"[39m
+            [33mfill[39m=[32m"none"[39m
+            [33mheight[39m=[32m"19"[39m
+            [33mstroke[39m=[32m"currentColor"[39m
+            [33mstroke-linecap[39m=[32m"round"[39m
+            [33mstroke-linejoin[39m=[32m"round"[39m
+            [33mstroke-width[39m=[32m"2"[39m
+            [33mviewBox[39m=[32m"0 0 24 24"[39m
+            [33mwidth[39m=[32m"19"[39m
+            [33mxmlns[39m=[32m"http://www.w3.org/2000/svg"[39m
+          [36m>[39m
+            [36m<circle[39m
+              [33mcx[39m=[32m"12"[39m
+              [33mcy[39m=[32m"12"[39m
+              [33mr[39m=[32m"10"[39m
+            [36m/>[39m
+            [36m<path[39m
+              [33md[39m=[32m"M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"[39m
+            [36m/>[39m
+            [36m<path[39m
+              [33md[39m=[32m"M12 17h.01"[39m
+            [36m/>[39m
+          [36m</svg>[39m
+        [36m</button>[39m
+      [36m</div>[39m
+      [36m<ol[39m
+        [33maria-label[39m=[32m"Your road to the draft"[39m
+        [33mclass[39m=[32m"_acts_6a09aa"[39m
+      [36m>[39m
+        [36m<li[39m
+          [33maria-current[39m=[32m"step"[39m
+        [36m>[39m
+          [36m<span>[39m
+            [0m1[0m
+          [36m</span>[39m
+          [0mPick your path[0m
+        [36m</li>[39m
+        [36m<li>[39m
+          [36m<span>[39m
+            [0m2[0m
+          [36m</span>[39m
+          [0mEarn your place[0m
+        [36m</li>[39m
+        [36m<li>[39m
+          [36m<span>[39m
+            [0m3[0m
+          [36m</span>[39m
+          [0mDraft day[0m
+        [36m</li>[39m
+      [36m</ol>[39m
+      [36m<div[39m
+        [33mclass[39m=[32m"_stage_6a09aa"[39m
+      [36m>[39m
+        [36m<div[39m
+          [33maria-hidden[39m=[32m"true"[39m
+          [33mclass[39m=[32m"_stadium_6a09aa"[39m
+        [36m>[39m
+          [36m<i />[39m
+          [36m<i />[39m
+          [36m<i />[39m
+          [36m<i />[39m
+          [36m<i />[39m
+        [36m</div>[39m
+        [36m<div[39m
+          [33mclass[39m=[32m"_stageCopy_6a09aa"[39m
+        [36m>[39m
+          [36m<p[39m
+            [33mclass[39m=[32m"_chapter_6a09aa"[39m
+          [36m>[39m
+            [0mNBA[0m
+            [0m Road to the Draft[0m
+          [36m</p>[39m
+          [36m<h2[39m
+            [33mtabindex[39m=[32m"-1"[39m
+          [36m>[39m
+            [0mYour career starts here.[0m
+          [36m</h2>[39m
+          [36m<p>[39m
+            [0mChoose the road. Build your stock. Find your team.[0m
+          [36m</p>[39m
+        [36m</div>[39m
+        [36m<div[39m
+          [33maria-hidden[39m=[32m"true"[39m
+          [33mclass[39m=[32m"_portrait_6a09aa"[39m
+        [36m>[39m
+          [36m<svg[39m
+            [33maria-label[39m=[32m"Player avatar"[39m
+            [33mclass[39m=[32m" "[39m
+            [33mheight[39m=[32m"130"[39m
+            [33mrole[39m=[32m"img"[39m
+            [33mviewBox[39m=[32m"0 0 100 100"[39m
+            [33mwidth[39m=[32m"130"[39m
+          [36m>[39m
+            [36m<path[39m
+              [33md[39m=[32m"M 14 100 Q 16 78 34 74 L 44 71 L 56 71 L 66 74 Q 84 78 86 100 Z"[39m
+              [33mfill[39m=[32m"#F97316"[39m
+            [36m/>[39m
+            [36m<path[39m
+              [33md[39m=[32m"M 14 100 Q 16 78 34 74 L 38 73 Q 30 82 28 100 Z M 86 100 Q 84 78 66 74 L 62 73 Q 70 82 72 100 Z"[39m
+              [33mfill[39m=[32m"#d14b00"[39m
+              [33mopacity[39m=[32m"0.5"[39m
+            [36m/>[39m
+            [36m<path[39m
+              [33md[39m=[32m"M 44 71 L 50 78 L 56 71 L 53 70 L 50 74 L 47 70 Z"[39m
+              [33mfill[39m=[32m"#FFFFFF"[39m
+              [33mopacity[39m=[32m"0.9"[39m
+            [36m/>[39m
+            [36m<rect[39m
+              [33mfill[39m=[32m"#BA885B"[39m
+              [33mheight[39m=[32m"14"[39m
+              [33mrx[39m=[32m"5"[39m
+              [33mwidth[39m=[32m"14"[39m
+              [33mx[39m=[32m"43"[39m
+              [33my[39m=[32m"60"[39m
+            [36m/>[39m
+            [36m<path[39m
+              [33md[39m=[32m"M 32 40 Q 32 18 50 18 Q 68 18 68 40 L 68 48 Q 68 66 50 68 Q 32 66 32 48 Z"[39m
+              [33mfill[39m=[32m"#D19E6F"[39m
+            [36m/>[39m
+            [36m<ellipse[39m
+              [33mcx[39m=[32m"31.5"[39m
+              [33mcy[39m=[32m"46"[39m
+              [33mfill[39m=[32m"#D19E6F"[39m
+              [33mrx[39m=[32m"3.4"[39m
+              [33mry[39m=[32m"5"[39m
+            [36m/>[39m
+            [36m<ellipse[39m
+              [33mcx[39m=[32m"68.5"[39m
+              [33mcy[39m=[32m"46"[39m
+              [33mfill[39m=[32m"#BA885B"[39m
+              [33mopacity[39m=[32m"0.9"[39m
+              [33mrx[39m=[32m"3.4"[39m
+              [33mry[39m=[32m"5"[39m
+            [36m/>[39m
+            [36m<path[39m
+              [33md[39m=[32m"M 62 24 Q 68 30 68 40 L 68 48 Q 68 64 52 68 Q 64 62 64 46 Q 64 30 58 24 Z"[39m
+              [33mfill[39m=[32m"#BA885B"[39m
+              [33mopacity[39m=[32m"0.35"[39m
+            [36m/>[39m
+            [36m<ellipse[39m
+              [33mcx[39m=[32m"42.5"[39m
+              [33mcy[39m=[32m"45"[39m
+              [33mfill[39m=[32m"#2A2118"[39m
+              [33mrx[39m=[32m"2.6"[39m
+              [33mry[39m=[32m"3"[39m
+            [36m/>[39m
+            [36m<ellipse[39m
+              [33mcx[39m=[32m"57.5"[39m
+              [33mcy[39m=[32m"45"[39m
+              [33mfill[39m=[32m"#2A2118"[39m
+              [33mrx[39m=[32m"2.6"[39m
+              [33mry[39m=[32m"3"[39m
+            [36m/>[39m
+            [36m<circle[39m
+              [33mcx[39m=[32m"43.3"[39m
+              [33mcy[39m=[32m"44"[39m
+              [33mfill[39m=[32m"#FFFFFF"[39m
+              [33mopacity[39m=[32m"0.85"[39m
+              [33mr[39m=[32m"0.8"[39m
+            [36m/>[39m
+            [36m<circle[39m
+              [33mcx[39m=[32m"58.3"[39m
+              [33mcy[39m=[32m"44"[39m
+              [33mfill[39m=[32m"#FFFFFF"[39m
+              [33mopacity[39m=[32m"0.85"[39m
+              [33mr[39m=[32m"0.8"[39m
+            [36m/>[39m
+            [36m<path[39m
+              [33md[39m=[32m"M 38 39.5 Q 42.5 37.5 47 39.5"[39m
+              [33mfill[39m=[32m"none"[39m
+              [33mstroke[39m=[32m"#1D1A17"[39m
+              [33mstroke-linecap[39m=[32m"round"[39m
+              [33mstroke-width[39m=[32m"2"[39m
+            [36m/>[39m
+            [36m<path[39m
+              [33md[39m=[32m"M 53 39.5 Q 57.5 37.5 62 39.5"[39m
+              [33mfill[39m=[32m"none"[39m
+              [33mstroke[39m=[32m"#1D1A17"[39m
+              [33mstroke-linecap[39m=[32m"round"[39m
+              [33mstroke-width[39m=[32m"2"[39m
+            [36m/>[39m
+            [36m<path[39m
+              [33md[39m=[32m"M 50 47 L 48.4 54 Q 50 55.4 51.6 54 Z"[39m
+              [33mfill[39m=[32m"#BA885B"[39m
+            [36m/>[39m
+            [36m<path[39m
+              [33md[39m=[32m"M 44.5 59.5 Q 50 62.5 55.5 59.5"[39m
+              [33mfill[39m=[32m"none"[39m
+              [33mstroke[39m=[32m"#7A4A3A"[39m
+              [33mstroke-linecap[39m=[32m"round"[39m
+              [33mstroke-width[39m=[32m"2"[39m
+            [36m/>[39m
+            [36m<path[39m
+              [33md[39m=[32m"M 29 36 Q 29 15 50 15 Q 71 15 71 36 L 71 40 Q 62 30 50 30 Q 38 30 29 40 Z"[39m
+              [33mfill[39m=[32m"#1D1A17"[39m
+            [36m/>[39m
+            [36m<path[39m
+              [33md[39m=[32m"M 29 36 L 29 44 Q 31 38 34 35 Z M 71 36 L 71 44 Q 69 38 66 35 Z"[39m
+              [33mfill[39m=[32m"#1D1A17"[39m
+              [33mopacity[39m=[32m"0.35"[39m
+            [36m/>[39m
+          [36m</svg>[39m
+        [36m</div>[39m
+      [36m</div>[39m
+      [36m<div[39m
+        [33mclass[39m=[32m"_file_6a09aa"[39m
+        [33mdata-prospect-file[39m=[32m"true"[39m
+      [36m>[39m
+        [36m<div[39m
+          [33mclass[39m=[32m"_identity_6a09aa"[39m
+        [36m>[39m
+          [36m<strong>[39m
+            [0mTrey Buckets[0m
+          [36m</strong>[39m
+          [36m<span>[39m
+            [0mPG[0m
+          [36m</span>[39m
+        [36m</div>[39m
+        [36m<dl[39m
+          [33mclass[39m=[32m"_meters_6a09aa"[39m
+        [36m>[39m
+          [36m<div>[39m
+            [36m<dt>[39m
+              [0mRating[0m
+            [36m</dt>[39m
+            [36m<dd>[39m
+              [0m72[0m
+            [36m</dd>[39m
+          [36m</div>[39m
+          [36m<div>[39m
+            [36m<dt>[39m
+              [0mPotential[0m
+            [36m</dt>[39m
+            [36m<dd>[39m
+              [0m95[0m
+            [36m</dd>[39m
+          [36m</div>[39m
+          [36m<div>[39m
+            [36m<dt>[39m
+              [0mHealth[0m
+            [36m</dt>[39m
+            [36m<dd>[39m
+              [0m100[0m
+            [36m</dd>[39m
+          [36m</div>[39m
+        [36m</dl>[39m
+      [36m</div>[39m
+      [36m<div[39m
+        [33mclass[39m=[32m"_help_6a09aa"[39m
+        [33mid[39m=[32m"prospect-help"[39m
+      [36m>[39m
+        [36m<h3>[39m
+          [0mMake the league on your terms[0m
+        [36m</h3>[39m
+        [36m<p>[39m
+          [0mPick a route, play its seasons, then decide how to handle scouts, training and health. Your rating and health shape your performances. Draft stock shapes how early a team takes you.[0m
+        [36m</p>[39m
+        [36m<p>[39m
+          [36m<strong>[39m
+            [0mFor example:[0m
+          [36m</strong>[39m
+          [0m playing through a knock can raise your stock but cost health. The button shows the exact change before you choose. The showcase lets you push hard, play safe or skip; each option lists its possible stock changes. Its grade is simulated from your rating, health and saved career seed.[0m
+        [36m</p>[39m
+        [36m<p>[39m
+          [0mPressed Skip it by mistake? Undo it any time before you press Draft day. For example: skip at a draft stock of 50 and you drop to 48; Undo skip puts you back at 50 with all three options open again.[0m
+        [36m</p>[39m
+        [36m<p>[39m
+          [36m<strong>[39m
+            [0mDraft night:[0m
+          [36m</strong>[39m
+          [0m before the draft the scouts quote a range for you, and the night always ends inside it. At a draft stock of 60, for example: [0m
+          [0mThe scouts have you between pick 14 and pick 23 of 60.[0m
+          [0m Then you watch the picks ahead of yours come off the board in the order the game already set, until your name is called or the last pick goes by without it. Nothing is drawn while you watch, no other prospect is ever named, and you can skip to the end at any time. Once it is over, Watch it again plays the same night from the start, unless your device is set to reduce motion.[0m
+          [0m The lottery tile shows which club won each drawn pick. Seed 1 is the worst record.[0m
+        [36m</p>[39m
+        [36m<p>[39m
+          [0mAll prospects and results are fictional. The era sets the available teams and routes. The draft uses a simplified order without traded or extra picks; baseball and hockey lotteries are not modeled. Money in your career is a simulation, not a real contract quote. Going undrafted still leads to a camp signing.[0m
+        [36m</p>[39m
+        [36m<button[39m
+          [33mclass[39m=[32m"_helpClose_6a09aa"[39m
+        [36m>[39m
+          [0mGot it[0m
+        [36m</button>[39m
+      [36m</div>[39m
+      [36m<div[39m
+        [33mclass[39m=[32m"_playArea_6a09aa"[39m
+      [36m>[39m
+        [36m<h3[39m
+          [33mclass[39m=[32m"sr-only"[39m
+          [33mtabindex[39m=[32m"-1"[39m
+        [36m>[39m
+          [0mYour career starts here.[0m
+        [36m</h3>[39m
+        [36m<div[39m
+          [33mclass[39m=[32m"_routes_6a09aa"[39m
+        [36m>[39m
+          [36m<button[39m
+            [33mclass[39m=[32m"_route_6a09aa"[39m
+          [36m>[39m
+            [36m<span[39m
+              [33mclass[39m=[32m"_routeTop_6a09aa"[39m
+            [36m>[39m
+              [36m<span>[39m
+                [0m1[0m
+                [0m [0m
+                [0mseason[0m
+              [36m</span>[39m
+              [36m<svg[39m
+                [33mclass[39m=[32m"lucide lucide-arrow-right"[39m
+                [33mfill[39m=[32m"none"[39m
+                [33mheight[39m=[32m"19"[39m
+                [33mstroke[39m=[32m"currentColor"[39m
+                [33mstroke-linecap[39m=[32m"round"[39m
+                [33mstroke-linejoin[39m=[32m"round"[39m
+                [33mstroke-width[39m=[32m"2"[39m
+                [33mviewBox[39m=[32m"0 0 24 24"[39m
+                [33mwidth[39m=[32m"19"[39m
+                [33mxmlns[39m=[32m"http://www.w3.org/2000/svg"[39m
+              [36m>[39m
+                [36m<path[39m
+                  [33md[39m=[32m"M5 12h14"[39m
+                [36m/>[39m
+                [36m<path[39m
+                  [33md[39m=[32m"m12 5 7 7-7 7"[39m
+                [36m/>[39m
+              [36m</svg>[39m
+            [36m</span>[39m
+            [36m<strong>[39m
+              [0mOne year of college[0m
+            [36m</strong>[39m
+            [36m<span>[39m
+              [0mOne season on campus, then you declare.[0m
+            [36m</span>[39m
+            [36m<small>[39m
+              [0mStart at age [0m
+              [0m18[0m
+              [0m · Draft at [0m
+              [0m19[0m
+            [36m</small>[39m
+          [36m</button>[39m
+          [36m<button[39m
+            [33mclass[39m=[32m"_route_6a09aa"[39m
+          [36m>[39m
+            [36m<span[39m
+              [33mclass[39m=[32m"_routeTop_6a09aa"[39m
+            [36m>[39m
+              [36m<span>[39m
+                [0m3[0m
+                [0m [0m
+                [0mseasons[0m
+              [36m</span>[39m
+              [36m<svg[39m
+                [33mclass[39m=[32m"lucide lucide-arrow-right"[39m
+                [33mfill[39m=[32m"none"[39m
+                [33mheight[39m=[32m"19"[39m
+                [33mstroke[39m=[32m"currentColor"[39m
+                [33mstroke-linecap[39m=[32m"round"[39m
+                [33mstroke-linejoin[39m=[32m"round"[39m
+                [33mstroke-width[39m=[32m"2"[39m
+                [33mviewBox[39m=[32m"0 0 24 24"[39m
+                [33mwidth[39m=[32m"19"[39m
+                [33mxmlns[39m=[32m"http://www.w3.org/2000/svg"[39m
+              [36m>[39m
+                [36m<path[39m
+                  [33md[39m=[32m"M5 12h14"[39m
+                [36m/>[39m
+                [36m<path[39m
+                  [33md[39m=[32m"m12 5 7 7-7 7"[39m
+                [36m/>[39m
+              [36m</svg>[39m
+            [36m</span>[39m
+            [36m<strong>[39m
+              [0mThree years of college[0m
+            [36m</strong>[39m
+            [36m<span>[39m
+              [0mThree seasons to grow into it. Less hype, more polish.[0m
+            [36m</span>[39m
+            [36m<small>[39m
+              [0mStart at age [0m
+              [0m18[0m
+              [0m · Draft at [0m
+              [0m21[0m
+            [36m</small>[39m
+          [36m</button>[39m
+        [36m</div>[39m
+      [36m</div>[39m
+    [36m</section>[39m
+  [36m</div>[39m
+[36m</body>[39m
+[90m [2m❯[22m Object.getElementError node_modules/@testing-library/dom/dist/config.js:[2m37:19[22m[39m
+[90m [2m❯[22m node_modules/@testing-library/dom/dist/query-helpers.js:[2m76:38[22m[39m
+[90m [2m❯[22m node_modules/@testing-library/dom/dist/query-helpers.js:[2m52:17[22m[39m
+[90m [2m❯[22m getByRole node_modules/@testing-library/dom/dist/query-helpers.js:[2m95:19[22m[39m
+[36m [2m❯[22m startOver src/test/usCareerReports1569.test.tsx:[2m68:20[22m[39m
+    [90m 66| [39m/** The whole of A's rule: one tap opens the confirmation, the second …
+    [90m 67| [39m[35masync[39m [35mfunction[39m [34mstartOver[39m(view[33m:[39m [33mRenderResult[39m[33m,[39m row[33m:[39m [33mRow[39m) {
+    [90m 68| [39m  [35mawait[39m [34mclick[39m(view[33m.[39m[34mgetByRole[39m([32m'button'[39m[33m,[39m { name[33m:[39m [32m'Start over'[39m }))[33m;[39m
+    [90m   | [39m                   [31m^[39m
+    [90m 69| [39m  const dialog = within(document.body).getByRole('alertdialog', { name…
+    [90m 70| [39m  await click(within(dialog).getByRole('button', { name: 'Start new ca…
+[90m [2m❯[22m src/test/usCareerReports1569.test.tsx:[2m114:11[22m[39m
+
+[31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[2/4]⎯[22m[39m
+
+[41m[1m FAIL [22m[49m src/test/usCareerReports1569.test.tsx[2m > [22mRound 1569 report A: Start over from every screen[2m > [22m'MLB' starts over from the road to the draft
+[31m[1mTestingLibraryElementError[22m[39m: Unable to find an accessible element with the role "button" and name "Start over"
+
+Here are the accessible roles:
+
+  button:
+
+  Name "Back to player":
+  [36m<button />[39m
+
+  Name "Road to the draft help":
+  [36m<button[39m
+    [33maria-controls[39m=[32m"prospect-help"[39m
+    [33maria-expanded[39m=[32m"true"[39m
+    [33maria-label[39m=[32m"Road to the draft help"[39m
+  [36m/>[39m
+
+  Name "Got it":
+  [36m<button[39m
+    [33mclass[39m=[32m"_helpClose_6a09aa"[39m
+  [36m/>[39m
+
+  Name "1 season High school senior Eligible the day you graduate. The rawest road, and one season to show it. Start at age 17 · Draft at 18":
+  [36m<button[39m
+    [33mclass[39m=[32m"_route_6a09aa"[39m
+  [36m/>[39m
+
+  Name "2 seasons Junior college Eligible after any year. Two seasons of reps against grown men. Start at age 18 · Draft at 20":
+  [36m<button[39m
+    [33mclass[39m=[32m"_route_6a09aa"[39m
+  [36m/>[39m
+
+  Name "3 seasons Four year college Eligible after your junior year. Three seasons, and the scouts know exactly what you are. Start at age 18 · Draft at 21":
+  [36m<button[39m
+    [33mclass[39m=[32m"_route_6a09aa"[39m
+  [36m/>[39m
+
+  --------------------------------------------------
+  list:
+
+  Name "Your road to the draft":
+  [36m<ol[39m
+    [33maria-label[39m=[32m"Your road to the draft"[39m
+    [33mclass[39m=[32m"_acts_6a09aa"[39m
+  [36m/>[39m
+
+  --------------------------------------------------
+  listitem:
+
+  Name "":
+  [36m<li[39m
+    [33maria-current[39m=[32m"step"[39m
+  [36m/>[39m
+
+  Name "":
+  [36m<li />[39m
+
+  Name "":
+  [36m<li />[39m
+
+  --------------------------------------------------
+  paragraph:
+
+  Name "":
+  [36m<p[39m
+    [33mclass[39m=[32m"_chapter_6a09aa"[39m
+  [36m/>[39m
+
+  Name "":
+  [36m<p />[39m
+
+  Name "":
+  [36m<p />[39m
+
+  Name "":
+  [36m<p />[39m
+
+  Name "":
+  [36m<p />[39m
+
+  Name "":
+  [36m<p />[39m
+
+  Name "":
+  [36m<p />[39m
+
+  --------------------------------------------------
+  heading:
+
+  Name "Your career starts here.":
+  [36m<h2[39m
+    [33mtabindex[39m=[32m"-1"[39m
+  [36m/>[39m
+
+  Name "Make the league on your terms":
+  [36m<h3 />[39m
+
+  Name "Your career starts here.":
+  [36m<h3[39m
+    [33mclass[39m=[32m"sr-only"[39m
+    [33mtabindex[39m=[32m"-1"[39m
+  [36m/>[39m
+
+  --------------------------------------------------
+  strong:
+
+  Name "":
+  [36m<strong />[39m
+
+  Name "":
+  [36m<strong />[39m
+
+  Name "":
+  [36m<strong />[39m
+
+  Name "":
+  [36m<strong />[39m
+
+  Name "":
+  [36m<strong />[39m
+
+  Name "":
+  [36m<strong />[39m
+
+  --------------------------------------------------
+  term:
+
+  Name "":
+  [36m<dt />[39m
+
+  Name "":
+  [36m<dt />[39m
+
+  Name "":
+  [36m<dt />[39m
+
+  --------------------------------------------------
+  definition:
+
+  Name "":
+  [36m<dd />[39m
+
+  Name "":
+  [36m<dd />[39m
+
+  Name "":
+  [36m<dd />[39m
+
+  --------------------------------------------------
+
+Ignored nodes: comments, script, style
+[36m<body[39m
+  [33mstyle[39m=[32m""[39m
+[36m>[39m
+  [36m<div>[39m
+    [36m<section[39m
+      [33mclass[39m=[32m"_journey_6a09aa"[39m
+      [33mdata-prospect-journey[39m=[32m"mlb"[39m
+      [33mdata-prospect-phase[39m=[32m"routes"[39m
+    [36m>[39m
+      [36m<div[39m
+        [33mclass[39m=[32m"_toolbar_6a09aa"[39m
+      [36m>[39m
+        [36m<button>[39m
+          [36m<svg[39m
+            [33mclass[39m=[32m"lucide lucide-arrow-left"[39m
+            [33mfill[39m=[32m"none"[39m
+            [33mheight[39m=[32m"16"[39m
+            [33mstroke[39m=[32m"currentColor"[39m
+            [33mstroke-linecap[39m=[32m"round"[39m
+            [33mstroke-linejoin[39m=[32m"round"[39m
+            [33mstroke-width[39m=[32m"2"[39m
+            [33mviewBox[39m=[32m"0 0 24 24"[39m
+            [33mwidth[39m=[32m"16"[39m
+            [33mxmlns[39m=[32m"http://www.w3.org/2000/svg"[39m
+          [36m>[39m
+            [36m<path[39m
+              [33md[39m=[32m"m12 19-7-7 7-7"[39m
+            [36m/>[39m
+            [36m<path[39m
+              [33md[39m=[32m"M19 12H5"[39m
+            [36m/>[39m
+          [36m</svg>[39m
+          [0m Back to player[0m
+        [36m</button>[39m
+        [36m<button[39m
+          [33maria-controls[39m=[32m"prospect-help"[39m
+          [33maria-expanded[39m=[32m"true"[39m
+          [33maria-label[39m=[32m"Road to the draft help"[39m
+        [36m>[39m
+          [36m<svg[39m
+            [33mclass[39m=[32m"lucide lucide-circle-help"[39m
+            [33mfill[39m=[32m"none"[39m
+            [33mheight[39m=[32m"19"[39m
+            [33mstroke[39m=[32m"currentColor"[39m
+            [33mstroke-linecap[39m=[32m"round"[39m
+            [33mstroke-linejoin[39m=[32m"round"[39m
+            [33mstroke-width[39m=[32m"2"[39m
+            [33mviewBox[39m=[32m"0 0 24 24"[39m
+            [33mwidth[39m=[32m"19"[39m
+            [33mxmlns[39m=[32m"http://www.w3.org/2000/svg"[39m
+          [36m>[39m
+            [36m<circle[39m
+              [33mcx[39m=[32m"12"[39m
+              [33mcy[39m=[32m"12"[39m
+              [33mr[39m=[32m"10"[39m
+            [36m/>[39m
+            [36m<path[39m
+              [33md[39m=[32m"M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"[39m
+            [36m/>[39m
+            [36m<path[39m
+              [33md[39m=[32m"M12 17h.01"[39m
+            [36m/>[39m
+          [36m</svg>[39m
+        [36m</button>[39m
+      [36m</div>[39m
+      [36m<ol[39m
+        [33maria-label[39m=[32m"Your road to the draft"[39m
+        [33mclass[39m=[32m"_acts_6a09aa"[39m
+      [36m>[39m
+        [36m<li[39m
+          [33maria-current[39m=[32m"step"[39m
+        [36m>[39m
+          [36m<span>[39m
+            [0m1[0m
+          [36m</span>[39m
+          [0mPick your path[0m
+        [36m</li>[39m
+        [36m<li>[39m
+          [36m<span>[39m
+            [0m2[0m
+          [36m</span>[39m
+          [0mEarn your place[0m
+        [36m</li>[39m
+        [36m<li>[39m
+          [36m<span>[39m
+            [0m3[0m
+          [36m</span>[39m
+          [0mDraft day[0m
+        [36m</li>[39m
+      [36m</ol>[39m
+      [36m<div[39m
+        [33mclass[39m=[32m"_stage_6a09aa"[39m
+      [36m>[39m
+        [36m<div[39m
+          [33maria-hidden[39m=[32m"true"[39m
+          [33mclass[39m=[32m"_stadium_6a09aa"[39m
+        [36m>[39m
+          [36m<i />[39m
+          [36m<i />[39m
+          [36m<i />[39m
+          [36m<i />[39m
+          [36m<i />[39m
+        [36m</div>[39m
+        [36m<div[39m
+          [33mclass[39m=[32m"_stageCopy_6a09aa"[39m
+        [36m>[39m
+          [36m<p[39m
+            [33mclass[39m=[32m"_chapter_6a09aa"[39m
+          [36m>[39m
+            [0mMLB[0m
+            [0m Road to the Draft[0m
+          [36m</p>[39m
+          [36m<h2[39m
+            [33mtabindex[39m=[32m"-1"[39m
+          [36m>[39m
+            [0mYour career starts here.[0m
+          [36m</h2>[39m
+          [36m<p>[39m
+            [0mChoose the road. Build your stock. Find your team.[0m
+          [36m</p>[39m
+        [36m</div>[39m
+        [36m<div[39m
+          [33maria-hidden[39m=[32m"true"[39m
+          [33mclass[39m=[32m"_portrait_6a09aa"[39m
+        [36m>[39m
+          [36m<svg[39m
+            [33maria-label[39m=[32m"Player avatar"[39m
+            [33mclass[39m=[32m" "[39m
+            [33mheight[39m=[32m"130"[39m
+            [33mrole[39m=[32m"img"[39m
+            [33mviewBox[39m=[32m"0 0 100 100"[39m
+            [33mwidth[39m=[32m"130"[39m
+          [36m>[39m
+            [36m<path[39m
+              [33md[39m=[32m"M 14 100 Q 16 78 34 74 L 44 71 L 56 71 L 66 74 Q 84 78 86 100 Z"[39m
+              [33mfill[39m=[32m"#DC2626"[39m
+            [36m/>[39m
+            [36m<path[39m
+              [33md[39m=[32m"M 14 100 Q 16 78 34 74 L 38 73 Q 30 82 28 100 Z M 86 100 Q 84 78 66 74 L 62 73 Q 70 82 72 100 Z"[39m
+              [33mfill[39m=[32m"#b40000"[39m
+              [33mopacity[39m=[32m"0.5"[39m
+            [36m/>[39m
+            [36m<path[39m
+              [33md[39m=[32m"M 44 71 L 50 78 L 56 71 L 53 70 L 50 74 L 47 70 Z"[39m
+              [33mfill[39m=[32m"#FFFFFF"[39m
+              [33mopacity[39m=[32m"0.9"[39m
+            [36m/>[39m
+            [36m<rect[39m
+              [33mfill[39m=[32m"#BA885B"[39m
+              [33mheight[39m=[32m"14"[39m
+              [33mrx[39m=[32m"5"[39m
+              [33mwidth[39m=[32m"14"[39m
+              [33mx[39m=[32m"43"[39m
+              [33my[39m=[32m"60"[39m
+            [36m/>[39m
+            [36m<path[39m
+              [33md[39m=[32m"M 32 40 Q 32 18 50 18 Q 68 18 68 40 L 68 48 Q 68 66 50 68 Q 32 66 32 48 Z"[39m
+              [33mfill[39m=[32m"#D19E6F"[39m
+            [36m/>[39m
+            [36m<ellipse[39m
+              [33mcx[39m=[32m"31.5"[39m
+              [33mcy[39m=[32m"46"[39m
+              [33mfill[39m=[32m"#D19E6F"[39m
+              [33mrx[39m=[32m"3.4"[39m
+              [33mry[39m=[32m"5"[39m
+            [36m/>[39m
+            [36m<ellipse[39m
+              [33mcx[39m=[32m"68.5"[39m
+              [33mcy[39m=[32m"46"[39m
+              [33mfill[39m=[32m"#BA885B"[39m
+              [33mopacity[39m=[32m"0.9"[39m
+              [33mrx[39m=[32m"3.4"[39m
+              [33mry[39m=[32m"5"[39m
+            [36m/>[39m
+            [36m<path[39m
+              [33md[39m=[32m"M 62 24 Q 68 30 68 40 L 68 48 Q 68 64 52 68 Q 64 62 64 46 Q 64 30 58 24 Z"[39m
+              [33mfill[39m=[32m"#BA885B"[39m
+              [33mopacity[39m=[32m"0.35"[39m
+            [36m/>[39m
+            [36m<ellipse[39m
+              [33mcx[39m=[32m"42.5"[39m
+              [33mcy[39m=[32m"45"[39m
+              [33mfill[39m=[32m"#2A...
+[90m [2m❯[22m Object.getElementError node_modules/@testing-library/dom/dist/config.js:[2m37:19[22m[39m
+[90m [2m❯[22m node_modules/@testing-library/dom/dist/query-helpers.js:[2m76:38[22m[39m
+[90m [2m❯[22m node_modules/@testing-library/dom/dist/query-helpers.js:[2m52:17[22m[39m
+[90m [2m❯[22m getByRole node_modules/@testing-library/dom/dist/query-helpers.js:[2m95:19[22m[39m
+[36m [2m❯[22m startOver src/test/usCareerReports1569.test.tsx:[2m68:20[22m[39m
+    [90m 66| [39m/** The whole of A's rule: one tap opens the confirmation, the second …
+    [90m 67| [39m[35masync[39m [35mfunction[39m [34mstartOver[39m(view[33m:[39m [33mRenderResult[39m[33m,[39m row[33m:[39m [33mRow[39m) {
+    [90m 68| [39m  [35mawait[39m [34mclick[39m(view[33m.[39m[34mgetByRole[39m([32m'button'[39m[33m,[39m { name[33m:[39m [32m'Start over'[39m }))[33m;[39m
+    [90m   | [39m                   [31m^[39m
+    [90m 69| [39m  const dialog = within(document.body).getByRole('alertdialog', { name…
+    [90m 70| [39m  await click(within(dialog).getByRole('button', { name: 'Start new ca…
+[90m [2m❯[22m src/test/usCareerReports1569.test.tsx:[2m114:11[22m[39m
+
+[31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[3/4]⎯[22m[39m
+
+[41m[1m FAIL [22m[49m src/test/usCareerReports1569.test.tsx[2m > [22mRound 1569 report A: Start over from every screen[2m > [22m'NHL' starts over from the road to the draft
+[31m[1mTestingLibraryElementError[22m[39m: Unable to find an accessible element with the role "button" and name "Start over"
+
+Here are the accessible roles:
+
+  button:
+
+  Name "Back to player":
+  [36m<button />[39m
+
+  Name "Road to the draft help":
+  [36m<button[39m
+    [33maria-controls[39m=[32m"prospect-help"[39m
+    [33maria-expanded[39m=[32m"true"[39m
+    [33maria-label[39m=[32m"Road to the draft help"[39m
+  [36m/>[39m
+
+  Name "Got it":
+  [36m<button[39m
+    [33mclass[39m=[32m"_helpClose_6a09aa"[39m
+  [36m/>[39m
+
+  Name "2 seasons Major junior Long season, long bus rides, scouts in every rink. Enter the draft at 18. Start at age 16 · Draft at 18":
+  [36m<button[39m
+    [33mclass[39m=[32m"_route_6a09aa"[39m
+  [36m/>[39m
+
+  Name "2 seasons US junior, then college Two seasons of US junior, enter the draft at 18, then take your college place. Start at age 16 · Draft at 18":
+  [36m<button[39m
+    [33mclass[39m=[32m"_route_6a09aa"[39m
+  [36m/>[39m
+
+  Name "2 seasons Europe Two seasons in a European junior league, enter the draft at 18, then develop at home. Start at age 16 · Draft at 18":
+  [36m<button[39m
+    [33mclass[39m=[32m"_route_6a09aa"[39m
+  [36m/>[39m
+
+  --------------------------------------------------
+  list:
+
+  Name "Your road to the draft":
+  [36m<ol[39m
+    [33maria-label[39m=[32m"Your road to the draft"[39m
+    [33mclass[39m=[32m"_acts_6a09aa"[39m
+  [36m/>[39m
+
+  --------------------------------------------------
+  listitem:
+
+  Name "":
+  [36m<li[39m
+    [33maria-current[39m=[32m"step"[39m
+  [36m/>[39m
+
+  Name "":
+  [36m<li />[39m
+
+  Name "":
+  [36m<li />[39m
+
+  --------------------------------------------------
+  paragraph:
+
+  Name "":
+  [36m<p[39m
+    [33mclass[39m=[32m"_chapter_6a09aa"[39m
+  [36m/>[39m
+
+  Name "":
+  [36m<p />[39m
+
+  Name "":
+  [36m<p />[39m
+
+  Name "":
+  [36m<p />[39m
+
+  Name "":
+  [36m<p />[39m
+
+  Name "":
+  [36m<p />[39m
+
+  Name "":
+  [36m<p />[39m
+
+  --------------------------------------------------
+  heading:
+
+  Name "Your career starts here.":
+  [36m<h2[39m
+    [33mtabindex[39m=[32m"-1"[39m
+  [36m/>[39m
+
+  Name "Make the league on your terms":
+  [36m<h3 />[39m
+
+  Name "Your career starts here.":
+  [36m<h3[39m
+    [33mclass[39m=[32m"sr-only"[39m
+    [33mtabindex[39m=[32m"-1"[39m
+  [36m/>[39m
+
+  --------------------------------------------------
+  strong:
+
+  Name "":
+  [36m<strong />[39m
+
+  Name "":
+  [36m<strong />[39m
+
+  Name "":
+  [36m<strong />[39m
+
+  Name "":
+  [36m<strong />[39m
+
+  Name "":
+  [36m<strong />[39m
+
+  Name "":
+  [36m<strong />[39m
+
+  --------------------------------------------------
+  term:
+
+  Name "":
+  [36m<dt />[39m
+
+  Name "":
+  [36m<dt />[39m
+
+  Name "":
+  [36m<dt />[39m
+
+  --------------------------------------------------
+  definition:
+
+  Name "":
+  [36m<dd />[39m
+
+  Name "":
+  [36m<dd />[39m
+
+  Name "":
+  [36m<dd />[39m
+
+  --------------------------------------------------
+
+Ignored nodes: comments, script, style
+[36m<body[39m
+  [33mstyle[39m=[32m""[39m
+[36m>[39m
+  [36m<div>[39m
+    [36m<section[39m
+      [33mclass[39m=[32m"_journey_6a09aa"[39m
+      [33mdata-prospect-journey[39m=[32m"nhl"[39m
+      [33mdata-prospect-phase[39m=[32m"routes"[39m
+    [36m>[39m
+      [36m<div[39m
+        [33mclass[39m=[32m"_toolbar_6a09aa"[39m
+      [36m>[39m
+        [36m<button>[39m
+          [36m<svg[39m
+            [33mclass[39m=[32m"lucide lucide-arrow-left"[39m
+            [33mfill[39m=[32m"none"[39m
+            [33mheight[39m=[32m"16"[39m
+            [33mstroke[39m=[32m"currentColor"[39m
+            [33mstroke-linecap[39m=[32m"round"[39m
+            [33mstroke-linejoin[39m=[32m"round"[39m
+            [33mstroke-width[39m=[32m"2"[39m
+            [33mviewBox[39m=[32m"0 0 24 24"[39m
+            [33mwidth[39m=[32m"16"[39m
+            [33mxmlns[39m=[32m"http://www.w3.org/2000/svg"[39m
+          [36m>[39m
+            [36m<path[39m
+              [33md[39m=[32m"m12 19-7-7 7-7"[39m
+            [36m/>[39m
+            [36m<path[39m
+              [33md[39m=[32m"M19 12H5"[39m
+            [36m/>[39m
+          [36m</svg>[39m
+          [0m Back to player[0m
+        [36m</button>[39m
+        [36m<button[39m
+          [33maria-controls[39m=[32m"prospect-help"[39m
+          [33maria-expanded[39m=[32m"true"[39m
+          [33maria-label[39m=[32m"Road to the draft help"[39m
+        [36m>[39m
+          [36m<svg[39m
+            [33mclass[39m=[32m"lucide lucide-circle-help"[39m
+            [33mfill[39m=[32m"none"[39m
+            [33mheight[39m=[32m"19"[39m
+            [33mstroke[39m=[32m"currentColor"[39m
+            [33mstroke-linecap[39m=[32m"round"[39m
+            [33mstroke-linejoin[39m=[32m"round"[39m
+            [33mstroke-width[39m=[32m"2"[39m
+            [33mviewBox[39m=[32m"0 0 24 24"[39m
+            [33mwidth[39m=[32m"19"[39m
+            [33mxmlns[39m=[32m"http://www.w3.org/2000/svg"[39m
+          [36m>[39m
+            [36m<circle[39m
+              [33mcx[39m=[32m"12"[39m
+              [33mcy[39m=[32m"12"[39m
+              [33mr[39m=[32m"10"[39m
+            [36m/>[39m
+            [36m<path[39m
+              [33md[39m=[32m"M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"[39m
+            [36m/>[39m
+            [36m<path[39m
+              [33md[39m=[32m"M12 17h.01"[39m
+            [36m/>[39m
+          [36m</svg>[39m
+        [36m</button>[39m
+      [36m</div>[39m
+      [36m<ol[39m
+        [33maria-label[39m=[32m"Your road to the draft"[39m
+        [33mclass[39m=[32m"_acts_6a09aa"[39m
+      [36m>[39m
+        [36m<li[39m
+          [33maria-current[39m=[32m"step"[39m
+        [36m>[39m
+          [36m<span>[39m
+            [0m1[0m
+          [36m</span>[39m
+          [0mPick your path[0m
+        [36m</li>[39m
+        [36m<li>[39m
+          [36m<span>[39m
+            [0m2[0m
+          [36m</span>[39m
+          [0mEarn your place[0m
+        [36m</li>[39m
+        [36m<li>[39m
+          [36m<span>[39m
+            [0m3[0m
+          [36m</span>[39m
+          [0mDraft day[0m
+        [36m</li>[39m
+      [36m</ol>[39m
+      [36m<div[39m
+        [33mclass[39m=[32m"_stage_6a09aa"[39m
+      [36m>[39m
+        [36m<div[39m
+          [33maria-hidden[39m=[32m"true"[39m
+          [33mclass[39m=[32m"_stadium_6a09aa"[39m
+        [36m>[39m
+          [36m<i />[39m
+          [36m<i />[39m
+          [36m<i />[39m
+          [36m<i />[39m
+          [36m<i />[39m
+        [36m</div>[39m
+        [36m<div[39m
+          [33mclass[39m=[32m"_stageCopy_6a09aa"[39m
+        [36m>[39m
+          [36m<p[39m
+            [33mclass[39m=[32m"_chapter_6a09aa"[39m
+          [36m>[39m
+            [0mNHL[0m
+            [0m Road to the Draft[0m
+          [36m</p>[39m
+          [36m<h2[39m
+            [33mtabindex[39m=[32m"-1"[39m
+          [36m>[39m
+            [0mYour career starts here.[0m
+          [36m</h2>[39m
+          [36m<p>[39m
+            [0mChoose the road. Build your stock. Find your team.[0m
+          [36m</p>[39m
+        [36m</div>[39m
+        [36m<div[39m
+          [33maria-hidden[39m=[32m"true"[39m
+          [33mclass[39m=[32m"_portrait_6a09aa"[39m
+        [36m>[39m
+          [36m<svg[39m
+            [33maria-label[39m=[32m"Player avatar"[39m
+            [33mclass[39m=[32m" "[39m
+            [33mheight[39m=[32m"130"[39m
+            [33mrole[39m=[32m"img"[39m
+            [33mviewBox[39m=[32m"0 0 100 100"[39m
+            [33mwidth[39m=[32m"130"[39m
+          [36m>[39m
+            [36m<path[39m
+              [33md[39m=[32m"M 14 100 Q 16 78 34 74 L 44 71 L 56 71 L 66 74 Q 84 78 86 100 Z"[39m
+              [33mfill[39m=[32m"#0EA5E9"[39m
+            [36m/>[39m
+            [36m<path[39m
+              [33md[39m=[32m"M 14 100 Q 16 78 34 74 L 38 73 Q 30 82 28 100 Z M 86 100 Q 84 78 66 74 L 62 73 Q 70 82 72 100 Z"[39m
+              [33mfill[39m=[32m"#007dc1"[39m
+              [33mopacity[39m=[32m"0.5"[39m
+            [36m/>[39m
+            [36m<path[39m
+              [33md[39m=[32m"M 44 71 L 50 78 L 56 71 L 53 70 L 50 74 L 47 70 Z"[39m
+              [33mfill[39m=[32m"#FFFFFF"[39m
+              [33mopacity[39m=[32m"0.9"[39m
+            [36m/>[39m
+            [36m<rect[39m
+              [33mfill[39m=[32m"#BA885B"[39m
+              [33mheight[39m=[32m"14"[39m
+              [33mrx[39m=[32m"5"[39m
+              [33mwidth[39m=[32m"14"[39m
+              [33mx[39m=[32m"43"[39m
+              [33my[39m=[32m"60"[39m
+            [36m/>[39m
+            [36m<path[39m
+              [33md[39m=[32m"M 32 40 Q 32 18 50 18 Q 68 18 68 40 L 68 48 Q 68 66 50 68 Q 32 66 32 48 Z"[39m
+              [33mfill[39m=[32m"#D19E6F"[39m
+            [36m/>[39m
+            [36m<ellipse[39m
+              [33mcx[39m=[32m"31.5"[39m
+              [33mcy[39m=[32m"46"[39m
+              [33mfill[39m=[32m"#D19E6F"[39m
+              [33mrx[39m=[32m"3.4"[39m
+              [33mry[39m=[32m"5"[39m
+            [36m/>[39m
+            [36m<ellipse[39m
+              [33mcx[39m=[32m"68.5"[39m
+              [33mcy[39m=[32m"46"[39m
+              [33mfill[39m=[32m"#BA885B"[39m
+              [33mopacity[39m=[32m"0.9"[39m
+              [33mrx[39m=[32m"3.4"[39m
+              [33mry[39m=[32m"5"[39m
+            [36m/>[39m
+            [36m<path[39m
+              [33md[39m=[32m"M 62 24 Q 68 30 68 40 L 68 48 Q 68 64 52 68 Q 64 62 64 46 Q 64 30 58 24 Z"[39m
+              [33mfill[39m=[32m"#BA885B"[39m
+              [33mopacity[39m=[32m"0.35"[39m
+            [36m/>[39m
+            [36m<ellipse[39m
+              [33mcx[39m=[32m"42.5"[39m
+              [33mcy[39m=[32m"45"[39m
+              [33mfill[39m=[32m"#2A...
+[90m [2m❯[22m Object.getElementError node_modules/@testing-library/dom/dist/config.js:[2m37:19[22m[39m
+[90m [2m❯[22m node_modules/@testing-library/dom/dist/query-helpers.js:[2m76:38[22m[39m
+[90m [2m❯[22m node_modules/@testing-library/dom/dist/query-helpers.js:[2m52:17[22m[39m
+[90m [2m❯[22m getByRole node_modules/@testing-library/dom/dist/query-helpers.js:[2m95:19[22m[39m
+[36m [2m❯[22m startOver src/test/usCareerReports1569.test.tsx:[2m68:20[22m[39m
+    [90m 66| [39m/** The whole of A's rule: one tap opens the confirmation, the second …
+    [90m 67| [39m[35masync[39m [35mfunction[39m [34mstartOver[39m(view[33m:[39m [33mRenderResult[39m[33m,[39m row[33m:[39m [33mRow[39m) {
+    [90m 68| [39m  [35mawait[39m [34mclick[39m(view[33m.[39m[34mgetByRole[39m([32m'button'[39m[33m,[39m { name[33m:[39m [32m'Start over'[39m }))[33m;[39m
+    [90m   | [39m                   [31m^[39m
+    [90m 69| [39m  const dialog = within(document.body).getByRole('alertdialog', { name…
+    [90m 70| [39m  await click(within(dialog).getByRole('button', { name: 'Start new ca…
+[90m [2m❯[22m src/test/usCareerReports1569.test.tsx:[2m114:11[22m[39m
+
+[31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[4/4]⎯[22m[39m
+
+
+[2m Test Files [22m [1m[31m1 failed[39m[22m[90m (1)[39m
+[2m      Tests [22m [1m[31m4 failed[39m[22m[2m | [22m[1m[32m28 passed[39m[22m[90m (32)[39m
+[2m   Start at [22m 07:13:31
+[2m   Duration [22m 7.32s[2m (transform 1.08s, setup 38ms, collect 1.49s, tests 5.33s, environment 171ms, prepare 41ms)[22m
+
+
+::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/test/usCareerReports1569.test.tsx,title=src/test/usCareerReports1569.test.tsx > Round 1569 report A%3A Start over from every screen > 'NFL' starts over from the road to the draft,line=68,column=20::TestingLibraryElementError: Unable to find an accessible element with the role "button" and name "Start over"%0A%0AHere are the accessible roles:%0A%0A  button:%0A%0A  Name "Back to player":%0A  <button />%0A%0A  Name "Road to the draft help":%0A  <button%0A    aria-controls="prospect-help"%0A    aria-expanded="true"%0A    aria-label="Road to the draft help"%0A  />%0A%0A  Name "Got it":%0A  <button%0A    class="_helpClose_6a09aa"%0A  />%0A%0A  Name "3 seasons Big college program Every game on TV and scouts at every practice. Three seasons before you can declare. Start at age 18 · Draft at 21":%0A  <button%0A    class="_route_6a09aa"%0A  />%0A%0A  Name "3 seasons Small school Fewer eyes on you, so the scouts have to come looking. Three seasons before you can declare. Start at age 18 · Draft at 21":%0A  <button%0A    class="_route_6a09aa"%0A  />%0A%0A  --------------------------------------------------%0A  list:%0A%0A  Name "Your road to the draft":%0A  <ol%0A    aria-label="Your road to the draft"%0A    class="_acts_6a09aa"%0A  />%0A%0A  --------------------------------------------------%0A  listitem:%0A%0A  Name "":%0A  <li%0A    aria-current="step"%0A  />%0A%0A  Name "":%0A  <li />%0A%0A  Name "":%0A  <li />%0A%0A  --------------------------------------------------%0A  paragraph:%0A%0A  Name "":%0A  <p%0A    class="_chapter_6a09aa"%0A  />%0A%0A  Name "":%0A  <p />%0A%0A  Name "":%0A  <p />%0A%0A  Name "":%0A  <p />%0A%0A  Name "":%0A  <p />%0A%0A  Name "":%0A  <p />%0A%0A  Name "":%0A  <p />%0A%0A  --------------------------------------------------%0A  heading:%0A%0A  Name "Your career starts here.":%0A  <h2%0A    tabindex="-1"%0A  />%0A%0A  Name "Make the league on your terms":%0A  <h3 />%0A%0A  Name "Your career starts here.":%0A  <h3%0A    class="sr-only"%0A    tabindex="-1"%0A  />%0A%0A  --------------------------------------------------%0A  strong:%0A%0A  Name "":%0A  <strong />%0A%0A  Name "":%0A  <strong />%0A%0A  Name "":%0A  <strong />%0A%0A  Name "":%0A  <strong />%0A%0A  Name "":%0A  <strong />%0A%0A  --------------------------------------------------%0A  term:%0A%0A  Name "":%0A  <dt />%0A%0A  Name "":%0A  <dt />%0A%0A  Name "":%0A  <dt />%0A%0A  --------------------------------------------------%0A  definition:%0A%0A  Name "":%0A  <dd />%0A%0A  Name "":%0A  <dd />%0A%0A  Name "":%0A  <dd />%0A%0A  --------------------------------------------------%0A%0AIgnored nodes: comments, script, style%0A<body%0A  style=""%0A>%0A  <div>%0A    <section%0A      class="_journey_6a09aa"%0A      data-prospect-journey="nfl"%0A      data-prospect-phase="routes"%0A    >%0A      <div%0A        class="_toolbar_6a09aa"%0A      >%0A        <button>%0A          <svg%0A            class="lucide lucide-arrow-left"%0A            fill="none"%0A            height="16"%0A            stroke="currentColor"%0A            stroke-linecap="round"%0A            stroke-linejoin="round"%0A            stroke-width="2"%0A            viewBox="0 0 24 24"%0A            width="16"%0A            xmlns="http://www.w3.org/2000/svg"%0A          >%0A            <path%0A              d="m12 19-7-7 7-7"%0A            />%0A            <path%0A              d="M19 12H5"%0A            />%0A          </svg>%0A           Back to player%0A        </button>%0A        <button%0A          aria-controls="prospect-help"%0A          aria-expanded="true"%0A          aria-label="Road to the draft help"%0A        >%0A          <svg%0A            class="lucide lucide-circle-help"%0A            fill="none"%0A            height="19"%0A            stroke="currentColor"%0A            stroke-linecap="round"%0A            stroke-linejoin="round"%0A            stroke-width="2"%0A            viewBox="0 0 24 24"%0A            width="19"%0A            xmlns="http://www.w3.org/2000/svg"%0A          >%0A            <circle%0A              cx="12"%0A              cy="12"%0A              r="10"%0A            />%0A            <path%0A              d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"%0A            />%0A            <path%0A              d="M12 17h.01"%0A            />%0A          </svg>%0A        </button>%0A      </div>%0A      <ol%0A        aria-label="Your road to the draft"%0A        class="_acts_6a09aa"%0A      >%0A        <li%0A          aria-current="step"%0A        >%0A          <span>%0A            1%0A          </span>%0A          Pick your path%0A        </li>%0A        <li>%0A          <span>%0A            2%0A          </span>%0A          Earn your place%0A        </li>%0A        <li>%0A          <span>%0A            3%0A          </span>%0A          Draft day%0A        </li>%0A      </ol>%0A      <div%0A        class="_stage_6a09aa"%0A      >%0A        <div%0A          aria-hidden="true"%0A          class="_stadium_6a09aa"%0A        >%0A          <i />%0A          <i />%0A          <i />%0A          <i />%0A          <i />%0A        </div>%0A        <div%0A          class="_stageCopy_6a09aa"%0A        >%0A          <p%0A            class="_chapter_6a09aa"%0A          >%0A            NFL%0A             Road to the Draft%0A          </p>%0A          <h2%0A            tabindex="-1"%0A          >%0A            Your career starts here.%0A          </h2>%0A          <p>%0A            Choose the road. Build your stock. Find your team.%0A          </p>%0A        </div>%0A        <div%0A          aria-hidden="true"%0A          class="_portrait_6a09aa"%0A        >%0A          <svg%0A            aria-label="Player avatar"%0A            class=" "%0A            height="130"%0A            role="img"%0A            viewBox="0 0 100 100"%0A            width="130"%0A          >%0A            <path%0A              d="M 14 100 Q 16 78 34 74 L 44 71 L 56 71 L 66 74 Q 84 78 86 100 Z"%0A              fill="#10B981"%0A            />%0A            <path%0A              d="M 14 100 Q 16 78 34 74 L 38 73 Q 30 82 28 100 Z M 86 100 Q 84 78 66 74 L 62 73 Q 70 82 72 100 Z"%0A              fill="#009159"%0A              opacity="0.5"%0A            />%0A            <path%0A              d="M 44 71 L 50 78 L 56 71 L 53 70 L 50 74 L 47 70 Z"%0A              fill="#FFFFFF"%0A              opacity="0.9"%0A            />%0A            <rect%0A              fill="#BA885B"%0A              height="14"%0A              rx="5"%0A              width="14"%0A              x="43"%0A              y="60"%0A            />%0A            <path%0A              d="M 32 40 Q 32 18 50 18 Q 68 18 68 40 L 68 48 Q 68 66 50 68 Q 32 66 32 48 Z"%0A              fill="#D19E6F"%0A            />%0A            <ellipse%0A              cx="31.5"%0A              cy="46"%0A              fill="#D19E6F"%0A              rx="3.4"%0A              ry="5"%0A            />%0A            <ellipse%0A              cx="68.5"%0A              cy="46"%0A              fill="#BA885B"%0A              opacity="0.9"%0A              rx="3.4"%0A              ry="5"%0A            />%0A            <path%0A              d="M 62 24 Q 68 30 68 40 L 68 48 Q 68 64 52 68 Q 64 62 64 46 Q 64 30 58 24 Z"%0A              fill="#BA885B"%0A              opacity="0.35"%0A            />%0A            <ellipse%0A              cx="42.5"%0A              cy="45"%0A              fill="#2A2118"%0A              rx="2.6"%0A              ry="3"%0A            />%0A            <ellipse%0A              cx="57.5"%0A              cy="45"%0A              fill="#2A2118"%0A              rx="2.6"%0A              ry="3"%0A            />%0A            <circle%0A              cx="43.3"%0A              cy="44"%0A              fill="#FFFFFF"%0A              opacity="0.85"%0A              r="0.8"%0A            />%0A            <circle%0A              cx="58.3"%0A              cy="44"%0A              fill="#FFFFFF"%0A              opacity="0.85"%0A              r="0.8"%0A            />%0A            <path%0A              d="M 38 39.5 Q 42.5 37.5 47 39.5"%0A              fill="none"%0A              stroke="#1D1A17"%0A              stroke-linecap="round"%0A              stroke-width="2"%0A            />%0A            <path%0A              d="M 53 39.5 Q 57.5 37.5 62 39.5"%0A              fill="none"%0A              stroke="#1D1A17"%0A              stroke-linecap="round"%0A              stroke-width="2"%0A            />%0A            <path%0A              d="M 50 47 L 48.4 54 Q 50 55.4 51.6 54 Z"%0A              fill="#BA885B"%0A            />%0A            <path%0A              d="M 44.5 59.5 Q 50 62.5 55.5 59.5"%0A              fill="none"%0A              stroke="#7A4A3A"%0A              stroke-linecap="round"%0A              stroke-width="2"%0A            />%0A            <path%0A              d="M 29 36 Q 29 15 50 15 Q 71 15 71 36 L 71 40 Q 62 30 50 30 Q 38 30 29 40 Z"%0A              fill="#1D1A17"%0A            />%0A            <path%0A              d="M 29 36 L 29 44 Q 31 38 34 35 Z M 71 36 L 71 44 Q 69 38 66 35 Z"%0A              fill="#1D1A17"%0A              opacity="0.35"%0A            />%0A          </svg>%0A        </div>%0A      </div>%0A      <div%0A        class="_file_6a09aa"%0A        data-prospect-file="true"%0A      >%0A        <div%0A          class="_identity_6a09aa"%0A        >%0A          <strong>%0A            Ryder Blaze%0A          </strong>%0A          <span>%0A            QB%0A          </span>%0A        </div>%0A        <dl%0A          class="_meters_6a09aa"%0A        >%0A          <div>%0A            <dt>%0A              Rating%0A            </dt>%0A            <dd>%0A              72%0A            </dd>%0A          </div>%0A          <div>%0A            <dt>%0A              Potential%0A            </dt>%0A            <dd>%0A              95%0A            </dd>%0A          </div>%0A          <div>%0A            <dt>%0A              Health%0A            </dt>%0A            <dd>%0A              100%0A            </dd>%0A          </div>%0A        </dl>%0A      </div>%0A      <div%0A        class="_help_6a09aa"%0A        id="prospect-help"%0A      >%0A        <h3>%0A          Make the league on your terms%0A        </h3>%0A        <p>%0A          Pick a route, play its seasons, then decide how to handle scouts, training and health. Your rating and health shape your performances. Draft stock shapes how early a team takes you.%0A        </p>%0A        <p>%0A          <strong>%0A            For example:%0A          </strong>%0A           playing through a knock can raise your stock but cost health. The button shows the exact change before you choose. The showcase lets you push hard, play safe or skip; each option lists its possible stock changes. Its grade is simulated from your rating, health and saved career seed.%0A        </p>%0A        <p>%0A          Pressed Skip it by mistake? Undo it any time before you press Draft day. For example: skip at a draft stock of 50 and you drop to 48; Undo skip puts you back at 50 with all three options open again.%0A        </p>%0A        <p>%0A          <strong>%0A            Draft night:%0A          </strong>%0A           before the draft the scouts quote a range for you, and the night always ends inside it. At a draft stock of 60, for example: %0A          The scouts have you between pick 49 and pick 82 of 224.%0A           Then you watch the picks ahead of yours come off the board in the order the game already set, until your name is called or the last pick goes by without it. Nothing is drawn while you watch, no other prospect is ever named, and you can skip to the end at any time. Once it is over, Watch it again plays the same night from the start, unless your device is set to reduce motion.%0A        </p>%0A        <p>%0A          All prospects and results are fictional. The era sets the available teams and routes. The draft uses a simplified order without traded or extra picks; baseball and hockey lotteries are not modeled. Money in your career is a simulation, not a real contract quote. Going undrafted still leads to a camp signing.%0A        </p>%0A        <button%0A          class="_helpClose_6a09aa"%0A        >%0A          Got it%0A        </button>%0A      </div>%0A      <div%0A        class="_playArea_6a09aa"%0A      >%0A        <h3%0A          class="sr-only"%0A          tabindex="-1"%0A        >%0A          Your career starts here.%0A        </h3>%0A        <div%0A          class="_routes_6a09aa"%0A        >%0A          <button%0A            class="_route_6a09aa"%0A          >%0A            <span%0A              class="_routeTop_6a09aa"%0A            >%0A              <span>%0A                3%0A                 %0A                seasons%0A              </span>%0A              <svg%0A                class="lucide lucide-arrow-right"%0A                fill="none"%0A                height="19"%0A                stroke="currentColor"%0A                stroke-linecap="round"%0A                stroke-linejoin="round"%0A                stroke-width="2"%0A                viewBox="0 0 24 24"%0A                width="19"%0A                xmlns="http://www.w3.org/2000/svg"%0A              >%0A                <path%0A                  d="M5 12h14"%0A                />%0A                <path%0A                  d="m12 5 7 7-7 7"%0A                />%0A              </svg>%0A            </span>%0A            <strong>%0A              Big college program%0A            </strong>%0A            <span>%0A              Every game on TV and scouts at every practice. Three seasons before you can declare.%0A            </span>%0A            <small>%0A              Start at age %0A              18%0A               · Draft at %0A              21%0A            </small>%0A          </button>%0A          <button%0A            class="_route_6a09aa"%0A          >%0A            <span%0A              class="_routeTop_6a09aa"%0A            >%0A              <span>%0A                3%0A                 %0A                seasons%0A              </span>%0A              <svg%0A                class="lucide lucide-arrow-right"%0A                fill="none"%0A                height="19"%0A                stroke="currentColor"%0A                stroke-linecap="round"%0A                stroke-linejoin="round"%0A                stroke-width="2"%0A                viewBox="0 0 24 24"%0A                width="19"%0A                xmlns="http://www.w3.org/2000/svg"%0A              >%0A                <path%0A                  d="M5 12h14"%0A                />%0A                <path%0A                  d="m12 5 7 7-7 7"%0A                />%0A              </svg>%0A            </span>%0A            <strong>%0A              Small school%0A            </strong>%0A            <span>%0A              Fewer eyes on you, so the scouts have to come looking. Three seasons before you can declare.%0A            </span>%0A            <small>%0A              Start at age %0A              18%0A               · Draft at %0A              21%0A            </small>%0A          </button>%0A        </div>%0A      </div>%0A    </section>%0A  </div>%0A</body>%0A ❯ Object.getElementError node_modules/@testing-library/dom/dist/config.js:37:19%0A ❯ node_modules/@testing-library/dom/dist/query-helpers.js:76:38%0A ❯ node_modules/@testing-library/dom/dist/query-helpers.js:52:17%0A ❯ getByRole node_modules/@testing-library/dom/dist/query-helpers.js:95:19%0A ❯ startOver src/test/usCareerReports1569.test.tsx:68:20%0A ❯ src/test/usCareerReports1569.test.tsx:114:11%0A%0A
+
+::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/test/usCareerReports1569.test.tsx,title=src/test/usCareerReports1569.test.tsx > Round 1569 report A%3A Start over from every screen > 'NBA' starts over from the road to the draft,line=68,column=20::TestingLibraryElementError: Unable to find an accessible element with the role "button" and name "Start over"%0A%0AHere are the accessible roles:%0A%0A  button:%0A%0A  Name "Back to player":%0A  <button />%0A%0A  Name "Road to the draft help":%0A  <button%0A    aria-controls="prospect-help"%0A    aria-expanded="true"%0A    aria-label="Road to the draft help"%0A  />%0A%0A  Name "Got it":%0A  <button%0A    class="_helpClose_6a09aa"%0A  />%0A%0A  Name "1 season One year of college One season on campus, then you declare. Start at age 18 · Draft at 19":%0A  <button%0A    class="_route_6a09aa"%0A  />%0A%0A  Name "3 seasons Three years of college Three seasons to grow into it. Less hype, more polish. Start at age 18 · Draft at 21":%0A  <button%0A    class="_route_6a09aa"%0A  />%0A%0A  --------------------------------------------------%0A  list:%0A%0A  Name "Your road to the draft":%0A  <ol%0A    aria-label="Your road to the draft"%0A    class="_acts_6a09aa"%0A  />%0A%0A  --------------------------------------------------%0A  listitem:%0A%0A  Name "":%0A  <li%0A    aria-current="step"%0A  />%0A%0A  Name "":%0A  <li />%0A%0A  Name "":%0A  <li />%0A%0A  --------------------------------------------------%0A  paragraph:%0A%0A  Name "":%0A  <p%0A    class="_chapter_6a09aa"%0A  />%0A%0A  Name "":%0A  <p />%0A%0A  Name "":%0A  <p />%0A%0A  Name "":%0A  <p />%0A%0A  Name "":%0A  <p />%0A%0A  Name "":%0A  <p />%0A%0A  Name "":%0A  <p />%0A%0A  --------------------------------------------------%0A  heading:%0A%0A  Name "Your career starts here.":%0A  <h2%0A    tabindex="-1"%0A  />%0A%0A  Name "Make the league on your terms":%0A  <h3 />%0A%0A  Name "Your career starts here.":%0A  <h3%0A    class="sr-only"%0A    tabindex="-1"%0A  />%0A%0A  --------------------------------------------------%0A  strong:%0A%0A  Name "":%0A  <strong />%0A%0A  Name "":%0A  <strong />%0A%0A  Name "":%0A  <strong />%0A%0A  Name "":%0A  <strong />%0A%0A  Name "":%0A  <strong />%0A%0A  --------------------------------------------------%0A  term:%0A%0A  Name "":%0A  <dt />%0A%0A  Name "":%0A  <dt />%0A%0A  Name "":%0A  <dt />%0A%0A  --------------------------------------------------%0A  definition:%0A%0A  Name "":%0A  <dd />%0A%0A  Name "":%0A  <dd />%0A%0A  Name "":%0A  <dd />%0A%0A  --------------------------------------------------%0A%0AIgnored nodes: comments, script, style%0A<body%0A  style=""%0A>%0A  <div>%0A    <section%0A      class="_journey_6a09aa"%0A      data-prospect-journey="nba"%0A      data-prospect-phase="routes"%0A    >%0A      <div%0A        class="_toolbar_6a09aa"%0A      >%0A        <button>%0A          <svg%0A            class="lucide lucide-arrow-left"%0A            fill="none"%0A            height="16"%0A            stroke="currentColor"%0A            stroke-linecap="round"%0A            stroke-linejoin="round"%0A            stroke-width="2"%0A            viewBox="0 0 24 24"%0A            width="16"%0A            xmlns="http://www.w3.org/2000/svg"%0A          >%0A            <path%0A              d="m12 19-7-7 7-7"%0A            />%0A            <path%0A              d="M19 12H5"%0A            />%0A          </svg>%0A           Back to player%0A        </button>%0A        <button%0A          aria-controls="prospect-help"%0A          aria-expanded="true"%0A          aria-label="Road to the draft help"%0A        >%0A          <svg%0A            class="lucide lucide-circle-help"%0A            fill="none"%0A            height="19"%0A            stroke="currentColor"%0A            stroke-linecap="round"%0A            stroke-linejoin="round"%0A            stroke-width="2"%0A            viewBox="0 0 24 24"%0A            width="19"%0A            xmlns="http://www.w3.org/2000/svg"%0A          >%0A            <circle%0A              cx="12"%0A              cy="12"%0A              r="10"%0A            />%0A            <path%0A              d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"%0A            />%0A            <path%0A              d="M12 17h.01"%0A            />%0A          </svg>%0A        </button>%0A      </div>%0A      <ol%0A        aria-label="Your road to the draft"%0A        class="_acts_6a09aa"%0A      >%0A        <li%0A          aria-current="step"%0A        >%0A          <span>%0A            1%0A          </span>%0A          Pick your path%0A        </li>%0A        <li>%0A          <span>%0A            2%0A          </span>%0A          Earn your place%0A        </li>%0A        <li>%0A          <span>%0A            3%0A          </span>%0A          Draft day%0A        </li>%0A      </ol>%0A      <div%0A        class="_stage_6a09aa"%0A      >%0A        <div%0A          aria-hidden="true"%0A          class="_stadium_6a09aa"%0A        >%0A          <i />%0A          <i />%0A          <i />%0A          <i />%0A          <i />%0A        </div>%0A        <div%0A          class="_stageCopy_6a09aa"%0A        >%0A          <p%0A            class="_chapter_6a09aa"%0A          >%0A            NBA%0A             Road to the Draft%0A          </p>%0A          <h2%0A            tabindex="-1"%0A          >%0A            Your career starts here.%0A          </h2>%0A          <p>%0A            Choose the road. Build your stock. Find your team.%0A          </p>%0A        </div>%0A        <div%0A          aria-hidden="true"%0A          class="_portrait_6a09aa"%0A        >%0A          <svg%0A            aria-label="Player avatar"%0A            class=" "%0A            height="130"%0A            role="img"%0A            viewBox="0 0 100 100"%0A            width="130"%0A          >%0A            <path%0A              d="M 14 100 Q 16 78 34 74 L 44 71 L 56 71 L 66 74 Q 84 78 86 100 Z"%0A              fill="#F97316"%0A            />%0A            <path%0A              d="M 14 100 Q 16 78 34 74 L 38 73 Q 30 82 28 100 Z M 86 100 Q 84 78 66 74 L 62 73 Q 70 82 72 100 Z"%0A              fill="#d14b00"%0A              opacity="0.5"%0A            />%0A            <path%0A              d="M 44 71 L 50 78 L 56 71 L 53 70 L 50 74 L 47 70 Z"%0A              fill="#FFFFFF"%0A              opacity="0.9"%0A            />%0A            <rect%0A              fill="#BA885B"%0A              height="14"%0A              rx="5"%0A              width="14"%0A              x="43"%0A              y="60"%0A            />%0A            <path%0A              d="M 32 40 Q 32 18 50 18 Q 68 18 68 40 L 68 48 Q 68 66 50 68 Q 32 66 32 48 Z"%0A              fill="#D19E6F"%0A            />%0A            <ellipse%0A              cx="31.5"%0A              cy="46"%0A              fill="#D19E6F"%0A              rx="3.4"%0A              ry="5"%0A            />%0A            <ellipse%0A              cx="68.5"%0A              cy="46"%0A              fill="#BA885B"%0A              opacity="0.9"%0A              rx="3.4"%0A              ry="5"%0A            />%0A            <path%0A              d="M 62 24 Q 68 30 68 40 L 68 48 Q 68 64 52 68 Q 64 62 64 46 Q 64 30 58 24 Z"%0A              fill="#BA885B"%0A              opacity="0.35"%0A            />%0A            <ellipse%0A              cx="42.5"%0A              cy="45"%0A              fill="#2A2118"%0A              rx="2.6"%0A              ry="3"%0A            />%0A            <ellipse%0A              cx="57.5"%0A              cy="45"%0A              fill="#2A2118"%0A              rx="2.6"%0A              ry="3"%0A            />%0A            <circle%0A              cx="43.3"%0A              cy="44"%0A              fill="#FFFFFF"%0A              opacity="0.85"%0A              r="0.8"%0A            />%0A            <circle%0A              cx="58.3"%0A              cy="44"%0A              fill="#FFFFFF"%0A              opacity="0.85"%0A              r="0.8"%0A            />%0A            <path%0A              d="M 38 39.5 Q 42.5 37.5 47 39.5"%0A              fill="none"%0A              stroke="#1D1A17"%0A              stroke-linecap="round"%0A              stroke-width="2"%0A            />%0A            <path%0A              d="M 53 39.5 Q 57.5 37.5 62 39.5"%0A              fill="none"%0A              stroke="#1D1A17"%0A              stroke-linecap="round"%0A              stroke-width="2"%0A            />%0A            <path%0A              d="M 50 47 L 48.4 54 Q 50 55.4 51.6 54 Z"%0A              fill="#BA885B"%0A            />%0A            <path%0A              d="M 44.5 59.5 Q 50 62.5 55.5 59.5"%0A              fill="none"%0A              stroke="#7A4A3A"%0A              stroke-linecap="round"%0A              stroke-width="2"%0A            />%0A            <path%0A              d="M 29 36 Q 29 15 50 15 Q 71 15 71 36 L 71 40 Q 62 30 50 30 Q 38 30 29 40 Z"%0A              fill="#1D1A17"%0A            />%0A            <path%0A              d="M 29 36 L 29 44 Q 31 38 34 35 Z M 71 36 L 71 44 Q 69 38 66 35 Z"%0A              fill="#1D1A17"%0A              opacity="0.35"%0A            />%0A          </svg>%0A        </div>%0A      </div>%0A      <div%0A        class="_file_6a09aa"%0A        data-prospect-file="true"%0A      >%0A        <div%0A          class="_identity_6a09aa"%0A        >%0A          <strong>%0A            Trey Buckets%0A          </strong>%0A          <span>%0A            PG%0A          </span>%0A        </div>%0A        <dl%0A          class="_meters_6a09aa"%0A        >%0A          <div>%0A            <dt>%0A              Rating%0A            </dt>%0A            <dd>%0A              72%0A            </dd>%0A          </div>%0A          <div>%0A            <dt>%0A              Potential%0A            </dt>%0A            <dd>%0A              95%0A            </dd>%0A          </div>%0A          <div>%0A            <dt>%0A              Health%0A            </dt>%0A            <dd>%0A              100%0A            </dd>%0A          </div>%0A        </dl>%0A      </div>%0A      <div%0A        class="_help_6a09aa"%0A        id="prospect-help"%0A      >%0A        <h3>%0A          Make the league on your terms%0A        </h3>%0A        <p>%0A          Pick a route, play its seasons, then decide how to handle scouts, training and health. Your rating and health shape your performances. Draft stock shapes how early a team takes you.%0A        </p>%0A        <p>%0A          <strong>%0A            For example:%0A          </strong>%0A           playing through a knock can raise your stock but cost health. The button shows the exact change before you choose. The showcase lets you push hard, play safe or skip; each option lists its possible stock changes. Its grade is simulated from your rating, health and saved career seed.%0A        </p>%0A        <p>%0A          Pressed Skip it by mistake? Undo it any time before you press Draft day. For example: skip at a draft stock of 50 and you drop to 48; Undo skip puts you back at 50 with all three options open again.%0A        </p>%0A        <p>%0A          <strong>%0A            Draft night:%0A          </strong>%0A           before the draft the scouts quote a range for you, and the night always ends inside it. At a draft stock of 60, for example: %0A          The scouts have you between pick 14 and pick 23 of 60.%0A           Then you watch the picks ahead of yours come off the board in the order the game already set, until your name is called or the last pick goes by without it. Nothing is drawn while you watch, no other prospect is ever named, and you can skip to the end at any time. Once it is over, Watch it again plays the same night from the start, unless your device is set to reduce motion.%0A           The lottery tile shows which club won each drawn pick. Seed 1 is the worst record.%0A        </p>%0A        <p>%0A          All prospects and results are fictional. The era sets the available teams and routes. The draft uses a simplified order without traded or extra picks; baseball and hockey lotteries are not modeled. Money in your career is a simulation, not a real contract quote. Going undrafted still leads to a camp signing.%0A        </p>%0A        <button%0A          class="_helpClose_6a09aa"%0A        >%0A          Got it%0A        </button>%0A      </div>%0A      <div%0A        class="_playArea_6a09aa"%0A      >%0A        <h3%0A          class="sr-only"%0A          tabindex="-1"%0A        >%0A          Your career starts here.%0A        </h3>%0A        <div%0A          class="_routes_6a09aa"%0A        >%0A          <button%0A            class="_route_6a09aa"%0A          >%0A            <span%0A              class="_routeTop_6a09aa"%0A            >%0A              <span>%0A                1%0A                 %0A                season%0A              </span>%0A              <svg%0A                class="lucide lucide-arrow-right"%0A                fill="none"%0A                height="19"%0A                stroke="currentColor"%0A                stroke-linecap="round"%0A                stroke-linejoin="round"%0A                stroke-width="2"%0A                viewBox="0 0 24 24"%0A                width="19"%0A                xmlns="http://www.w3.org/2000/svg"%0A              >%0A                <path%0A                  d="M5 12h14"%0A                />%0A                <path%0A                  d="m12 5 7 7-7 7"%0A                />%0A              </svg>%0A            </span>%0A            <strong>%0A              One year of college%0A            </strong>%0A            <span>%0A              One season on campus, then you declare.%0A            </span>%0A            <small>%0A              Start at age %0A              18%0A               · Draft at %0A              19%0A            </small>%0A          </button>%0A          <button%0A            class="_route_6a09aa"%0A          >%0A            <span%0A              class="_routeTop_6a09aa"%0A            >%0A              <span>%0A                3%0A                 %0A                seasons%0A              </span>%0A              <svg%0A                class="lucide lucide-arrow-right"%0A                fill="none"%0A                height="19"%0A                stroke="currentColor"%0A                stroke-linecap="round"%0A                stroke-linejoin="round"%0A                stroke-width="2"%0A                viewBox="0 0 24 24"%0A                width="19"%0A                xmlns="http://www.w3.org/2000/svg"%0A              >%0A                <path%0A                  d="M5 12h14"%0A                />%0A                <path%0A                  d="m12 5 7 7-7 7"%0A                />%0A              </svg>%0A            </span>%0A            <strong>%0A              Three years of college%0A            </strong>%0A            <span>%0A              Three seasons to grow into it. Less hype, more polish.%0A            </span>%0A            <small>%0A              Start at age %0A              18%0A               · Draft at %0A              21%0A            </small>%0A          </button>%0A        </div>%0A      </div>%0A    </section>%0A  </div>%0A</body>%0A ❯ Object.getElementError node_modules/@testing-library/dom/dist/config.js:37:19%0A ❯ node_modules/@testing-library/dom/dist/query-helpers.js:76:38%0A ❯ node_modules/@testing-library/dom/dist/query-helpers.js:52:17%0A ❯ getByRole node_modules/@testing-library/dom/dist/query-helpers.js:95:19%0A ❯ startOver src/test/usCareerReports1569.test.tsx:68:20%0A ❯ src/test/usCareerReports1569.test.tsx:114:11%0A%0A
+
+::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/test/usCareerReports1569.test.tsx,title=src/test/usCareerReports1569.test.tsx > Round 1569 report A%3A Start over from every screen > 'MLB' starts over from the road to the draft,line=68,column=20::TestingLibraryElementError: Unable to find an accessible element with the role "button" and name "Start over"%0A%0AHere are the accessible roles:%0A%0A  button:%0A%0A  Name "Back to player":%0A  <button />%0A%0A  Name "Road to the draft help":%0A  <button%0A    aria-controls="prospect-help"%0A    aria-expanded="true"%0A    aria-label="Road to the draft help"%0A  />%0A%0A  Name "Got it":%0A  <button%0A    class="_helpClose_6a09aa"%0A  />%0A%0A  Name "1 season High school senior Eligible the day you graduate. The rawest road, and one season to show it. Start at age 17 · Draft at 18":%0A  <button%0A    class="_route_6a09aa"%0A  />%0A%0A  Name "2 seasons Junior college Eligible after any year. Two seasons of reps against grown men. Start at age 18 · Draft at 20":%0A  <button%0A    class="_route_6a09aa"%0A  />%0A%0A  Name "3 seasons Four year college Eligible after your junior year. Three seasons, and the scouts know exactly what you are. Start at age 18 · Draft at 21":%0A  <button%0A    class="_route_6a09aa"%0A  />%0A%0A  --------------------------------------------------%0A  list:%0A%0A  Name "Your road to the draft":%0A  <ol%0A    aria-label="Your road to the draft"%0A    class="_acts_6a09aa"%0A  />%0A%0A  --------------------------------------------------%0A  listitem:%0A%0A  Name "":%0A  <li%0A    aria-current="step"%0A  />%0A%0A  Name "":%0A  <li />%0A%0A  Name "":%0A  <li />%0A%0A  --------------------------------------------------%0A  paragraph:%0A%0A  Name "":%0A  <p%0A    class="_chapter_6a09aa"%0A  />%0A%0A  Name "":%0A  <p />%0A%0A  Name "":%0A  <p />%0A%0A  Name "":%0A  <p />%0A%0A  Name "":%0A  <p />%0A%0A  Name "":%0A  <p />%0A%0A  Name "":%0A  <p />%0A%0A  --------------------------------------------------%0A  heading:%0A%0A  Name "Your career starts here.":%0A  <h2%0A    tabindex="-1"%0A  />%0A%0A  Name "Make the league on your terms":%0A  <h3 />%0A%0A  Name "Your career starts here.":%0A  <h3%0A    class="sr-only"%0A    tabindex="-1"%0A  />%0A%0A  --------------------------------------------------%0A  strong:%0A%0A  Name "":%0A  <strong />%0A%0A  Name "":%0A  <strong />%0A%0A  Name "":%0A  <strong />%0A%0A  Name "":%0A  <strong />%0A%0A  Name "":%0A  <strong />%0A%0A  Name "":%0A  <strong />%0A%0A  --------------------------------------------------%0A  term:%0A%0A  Name "":%0A  <dt />%0A%0A  Name "":%0A  <dt />%0A%0A  Name "":%0A  <dt />%0A%0A  --------------------------------------------------%0A  definition:%0A%0A  Name "":%0A  <dd />%0A%0A  Name "":%0A  <dd />%0A%0A  Name "":%0A  <dd />%0A%0A  --------------------------------------------------%0A%0AIgnored nodes: comments, script, style%0A<body%0A  style=""%0A>%0A  <div>%0A    <section%0A      class="_journey_6a09aa"%0A      data-prospect-journey="mlb"%0A      data-prospect-phase="routes"%0A    >%0A      <div%0A        class="_toolbar_6a09aa"%0A      >%0A        <button>%0A          <svg%0A            class="lucide lucide-arrow-left"%0A            fill="none"%0A            height="16"%0A            stroke="currentColor"%0A            stroke-linecap="round"%0A            stroke-linejoin="round"%0A            stroke-width="2"%0A            viewBox="0 0 24 24"%0A            width="16"%0A            xmlns="http://www.w3.org/2000/svg"%0A          >%0A            <path%0A              d="m12 19-7-7 7-7"%0A            />%0A            <path%0A              d="M19 12H5"%0A            />%0A          </svg>%0A           Back to player%0A        </button>%0A        <button%0A          aria-controls="prospect-help"%0A          aria-expanded="true"%0A          aria-label="Road to the draft help"%0A        >%0A          <svg%0A            class="lucide lucide-circle-help"%0A            fill="none"%0A            height="19"%0A            stroke="currentColor"%0A            stroke-linecap="round"%0A            stroke-linejoin="round"%0A            stroke-width="2"%0A            viewBox="0 0 24 24"%0A            width="19"%0A            xmlns="http://www.w3.org/2000/svg"%0A          >%0A            <circle%0A              cx="12"%0A              cy="12"%0A              r="10"%0A            />%0A            <path%0A              d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"%0A            />%0A            <path%0A              d="M12 17h.01"%0A            />%0A          </svg>%0A        </button>%0A      </div>%0A      <ol%0A        aria-label="Your road to the draft"%0A        class="_acts_6a09aa"%0A      >%0A        <li%0A          aria-current="step"%0A        >%0A          <span>%0A            1%0A          </span>%0A          Pick your path%0A        </li>%0A        <li>%0A          <span>%0A            2%0A          </span>%0A          Earn your place%0A        </li>%0A        <li>%0A          <span>%0A            3%0A          </span>%0A          Draft day%0A        </li>%0A      </ol>%0A      <div%0A        class="_stage_6a09aa"%0A      >%0A        <div%0A          aria-hidden="true"%0A          class="_stadium_6a09aa"%0A        >%0A          <i />%0A          <i />%0A          <i />%0A          <i />%0A          <i />%0A        </div>%0A        <div%0A          class="_stageCopy_6a09aa"%0A        >%0A          <p%0A            class="_chapter_6a09aa"%0A          >%0A            MLB%0A             Road to the Draft%0A          </p>%0A          <h2%0A            tabindex="-1"%0A          >%0A            Your career starts here.%0A          </h2>%0A          <p>%0A            Choose the road. Build your stock. Find your team.%0A          </p>%0A        </div>%0A        <div%0A          aria-hidden="true"%0A          class="_portrait_6a09aa"%0A        >%0A          <svg%0A            aria-label="Player avatar"%0A            class=" "%0A            height="130"%0A            role="img"%0A            viewBox="0 0 100 100"%0A            width="130"%0A          >%0A            <path%0A              d="M 14 100 Q 16 78 34 74 L 44 71 L 56 71 L 66 74 Q 84 78 86 100 Z"%0A              fill="#DC2626"%0A            />%0A            <path%0A              d="M 14 100 Q 16 78 34 74 L 38 73 Q 30 82 28 100 Z M 86 100 Q 84 78 66 74 L 62 73 Q 70 82 72 100 Z"%0A              fill="#b40000"%0A              opacity="0.5"%0A            />%0A            <path%0A              d="M 44 71 L 50 78 L 56 71 L 53 70 L 50 74 L 47 70 Z"%0A              fill="#FFFFFF"%0A              opacity="0.9"%0A            />%0A            <rect%0A              fill="#BA885B"%0A              height="14"%0A              rx="5"%0A              width="14"%0A              x="43"%0A              y="60"%0A            />%0A            <path%0A              d="M 32 40 Q 32 18 50 18 Q 68 18 68 40 L 68 48 Q 68 66 50 68 Q 32 66 32 48 Z"%0A              fill="#D19E6F"%0A            />%0A            <ellipse%0A              cx="31.5"%0A              cy="46"%0A              fill="#D19E6F"%0A              rx="3.4"%0A              ry="5"%0A            />%0A            <ellipse%0A              cx="68.5"%0A              cy="46"%0A              fill="#BA885B"%0A              opacity="0.9"%0A              rx="3.4"%0A              ry="5"%0A            />%0A            <path%0A              d="M 62 24 Q 68 30 68 40 L 68 48 Q 68 64 52 68 Q 64 62 64 46 Q 64 30 58 24 Z"%0A              fill="#BA885B"%0A              opacity="0.35"%0A            />%0A            <ellipse%0A              cx="42.5"%0A              cy="45"%0A              fill="#2A...%0A ❯ Object.getElementError node_modules/@testing-library/dom/dist/config.js:37:19%0A ❯ node_modules/@testing-library/dom/dist/query-helpers.js:76:38%0A ❯ node_modules/@testing-library/dom/dist/query-helpers.js:52:17%0A ❯ getByRole node_modules/@testing-library/dom/dist/query-helpers.js:95:19%0A ❯ startOver src/test/usCareerReports1569.test.tsx:68:20%0A ❯ src/test/usCareerReports1569.test.tsx:114:11%0A%0A
+
+::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/test/usCareerReports1569.test.tsx,title=src/test/usCareerReports1569.test.tsx > Round 1569 report A%3A Start over from every screen > 'NHL' starts over from the road to the draft,line=68,column=20::TestingLibraryElementError: Unable to find an accessible element with the role "button" and name "Start over"%0A%0AHere are the accessible roles:%0A%0A  button:%0A%0A  Name "Back to player":%0A  <button />%0A%0A  Name "Road to the draft help":%0A  <button%0A    aria-controls="prospect-help"%0A    aria-expanded="true"%0A    aria-label="Road to the draft help"%0A  />%0A%0A  Name "Got it":%0A  <button%0A    class="_helpClose_6a09aa"%0A  />%0A%0A  Name "2 seasons Major junior Long season, long bus rides, scouts in every rink. Enter the draft at 18. Start at age 16 · Draft at 18":%0A  <button%0A    class="_route_6a09aa"%0A  />%0A%0A  Name "2 seasons US junior, then college Two seasons of US junior, enter the draft at 18, then take your college place. Start at age 16 · Draft at 18":%0A  <button%0A    class="_route_6a09aa"%0A  />%0A%0A  Name "2 seasons Europe Two seasons in a European junior league, enter the draft at 18, then develop at home. Start at age 16 · Draft at 18":%0A  <button%0A    class="_route_6a09aa"%0A  />%0A%0A  --------------------------------------------------%0A  list:%0A%0A  Name "Your road to the draft":%0A  <ol%0A    aria-label="Your road to the draft"%0A    class="_acts_6a09aa"%0A  />%0A%0A  --------------------------------------------------%0A  listitem:%0A%0A  Name "":%0A  <li%0A    aria-current="step"%0A  />%0A%0A  Name "":%0A  <li />%0A%0A  Name "":%0A  <li />%0A%0A  --------------------------------------------------%0A  paragraph:%0A%0A  Name "":%0A  <p%0A    class="_chapter_6a09aa"%0A  />%0A%0A  Name "":%0A  <p />%0A%0A  Name "":%0A  <p />%0A%0A  Name "":%0A  <p />%0A%0A  Name "":%0A  <p />%0A%0A  Name "":%0A  <p />%0A%0A  Name "":%0A  <p />%0A%0A  --------------------------------------------------%0A  heading:%0A%0A  Name "Your career starts here.":%0A  <h2%0A    tabindex="-1"%0A  />%0A%0A  Name "Make the league on your terms":%0A  <h3 />%0A%0A  Name "Your career starts here.":%0A  <h3%0A    class="sr-only"%0A    tabindex="-1"%0A  />%0A%0A  --------------------------------------------------%0A  strong:%0A%0A  Name "":%0A  <strong />%0A%0A  Name "":%0A  <strong />%0A%0A  Name "":%0A  <strong />%0A%0A  Name "":%0A  <strong />%0A%0A  Name "":%0A  <strong />%0A%0A  Name "":%0A  <strong />%0A%0A  --------------------------------------------------%0A  term:%0A%0A  Name "":%0A  <dt />%0A%0A  Name "":%0A  <dt />%0A%0A  Name "":%0A  <dt />%0A%0A  --------------------------------------------------%0A  definition:%0A%0A  Name "":%0A  <dd />%0A%0A  Name "":%0A  <dd />%0A%0A  Name "":%0A  <dd />%0A%0A  --------------------------------------------------%0A%0AIgnored nodes: comments, script, style%0A<body%0A  style=""%0A>%0A  <div>%0A    <section%0A      class="_journey_6a09aa"%0A      data-prospect-journey="nhl"%0A      data-prospect-phase="routes"%0A    >%0A      <div%0A        class="_toolbar_6a09aa"%0A      >%0A        <button>%0A          <svg%0A            class="lucide lucide-arrow-left"%0A            fill="none"%0A            height="16"%0A            stroke="currentColor"%0A            stroke-linecap="round"%0A            stroke-linejoin="round"%0A            stroke-width="2"%0A            viewBox="0 0 24 24"%0A            width="16"%0A            xmlns="http://www.w3.org/2000/svg"%0A          >%0A            <path%0A              d="m12 19-7-7 7-7"%0A            />%0A            <path%0A              d="M19 12H5"%0A            />%0A          </svg>%0A           Back to player%0A        </button>%0A        <button%0A          aria-controls="prospect-help"%0A          aria-expanded="true"%0A          aria-label="Road to the draft help"%0A        >%0A          <svg%0A            class="lucide lucide-circle-help"%0A            fill="none"%0A            height="19"%0A            stroke="currentColor"%0A            stroke-linecap="round"%0A            stroke-linejoin="round"%0A            stroke-width="2"%0A            viewBox="0 0 24 24"%0A            width="19"%0A            xmlns="http://www.w3.org/2000/svg"%0A          >%0A            <circle%0A              cx="12"%0A              cy="12"%0A              r="10"%0A            />%0A            <path%0A              d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"%0A            />%0A            <path%0A              d="M12 17h.01"%0A            />%0A          </svg>%0A        </button>%0A      </div>%0A      <ol%0A        aria-label="Your road to the draft"%0A        class="_acts_6a09aa"%0A      >%0A        <li%0A          aria-current="step"%0A        >%0A          <span>%0A            1%0A          </span>%0A          Pick your path%0A        </li>%0A        <li>%0A          <span>%0A            2%0A          </span>%0A          Earn your place%0A        </li>%0A        <li>%0A          <span>%0A            3%0A          </span>%0A          Draft day%0A        </li>%0A      </ol>%0A      <div%0A        class="_stage_6a09aa"%0A      >%0A        <div%0A          aria-hidden="true"%0A          class="_stadium_6a09aa"%0A        >%0A          <i />%0A          <i />%0A          <i />%0A          <i />%0A          <i />%0A        </div>%0A        <div%0A          class="_stageCopy_6a09aa"%0A        >%0A          <p%0A            class="_chapter_6a09aa"%0A          >%0A            NHL%0A             Road to the Draft%0A          </p>%0A          <h2%0A            tabindex="-1"%0A          >%0A            Your career starts here.%0A          </h2>%0A          <p>%0A            Choose the road. Build your stock. Find your team.%0A          </p>%0A        </div>%0A        <div%0A          aria-hidden="true"%0A          class="_portrait_6a09aa"%0A        >%0A          <svg%0A            aria-label="Player avatar"%0A            class=" "%0A            height="130"%0A            role="img"%0A            viewBox="0 0 100 100"%0A            width="130"%0A          >%0A            <path%0A              d="M 14 100 Q 16 78 34 74 L 44 71 L 56 71 L 66 74 Q 84 78 86 100 Z"%0A              fill="#0EA5E9"%0A            />%0A            <path%0A              d="M 14 100 Q 16 78 34 74 L 38 73 Q 30 82 28 100 Z M 86 100 Q 84 78 66 74 L 62 73 Q 70 82 72 100 Z"%0A              fill="#007dc1"%0A              opacity="0.5"%0A            />%0A            <path%0A              d="M 44 71 L 50 78 L 56 71 L 53 70 L 50 74 L 47 70 Z"%0A              fill="#FFFFFF"%0A              opacity="0.9"%0A            />%0A            <rect%0A              fill="#BA885B"%0A              height="14"%0A              rx="5"%0A              width="14"%0A              x="43"%0A              y="60"%0A            />%0A            <path%0A              d="M 32 40 Q 32 18 50 18 Q 68 18 68 40 L 68 48 Q 68 66 50 68 Q 32 66 32 48 Z"%0A              fill="#D19E6F"%0A            />%0A            <ellipse%0A              cx="31.5"%0A              cy="46"%0A              fill="#D19E6F"%0A              rx="3.4"%0A              ry="5"%0A            />%0A            <ellipse%0A              cx="68.5"%0A              cy="46"%0A              fill="#BA885B"%0A              opacity="0.9"%0A              rx="3.4"%0A              ry="5"%0A            />%0A            <path%0A              d="M 62 24 Q 68 30 68 40 L 68 48 Q 68 64 52 68 Q 64 62 64 46 Q 64 30 58 24 Z"%0A              fill="#BA885B"%0A              opacity="0.35"%0A            />%0A            <ellipse%0A              cx="42.5"%0A              cy="45"%0A              fill="#2A...%0A ❯ Object.getElementError node_modules/@testing-library/dom/dist/config.js:37:19%0A ❯ node_modules/@testing-library/dom/dist/query-helpers.js:76:38%0A ❯ node_modules/@testing-library/dom/dist/query-helpers.js:52:17%0A ❯ getByRole node_modules/@testing-library/dom/dist/query-helpers.js:95:19%0A ❯ startOver src/test/usCareerReports1569.test.tsx:68:20%0A ❯ src/test/usCareerReports1569.test.tsx:114:11%0A%0A
