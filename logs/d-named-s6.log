@@ -1,0 +1,19 @@
+MUTATION namedsummer applied to src/lib/nhlGmCareer.ts
+6) a season out: the league plays a whole season without him, his record gains a year out and nothing else, and refusals touch nothing
+  FAIL [6]: seed 21 year out 1: the old club, planted over the roster limit (17 men going in), was not trimmed by the summer (16 men, 4 of 4 planted still on it)
+  FAIL [6]: seed 21 year out 2: the old club, planted over the roster limit (25 men going in), was not trimmed by the summer (24 men, 13 of 13 planted still on it)
+  FAIL [6]: seed 21 year out 3: the old club, planted over the roster limit (20 men going in), was not trimmed by the summer (19 men, 10 of 10 planted still on it)
+  FAIL [6]: seed 22 year out 1: the old club, planted over the roster limit (17 men going in), was not trimmed by the summer (16 men, 4 of 4 planted still on it)
+  FAIL [6]: seed 22 year out 2: the old club, planted over the roster limit (25 men going in), was not trimmed by the summer (23 men, 13 of 13 planted still on it)
+  FAIL [6]: seed 22 year out 3: the old club, planted over the roster limit (21 men going in), was not trimmed by the summer (18 men, 10 of 10 planted still on it)
+  FAIL [6]: seed 23 year out 1: the old club, planted over the roster limit (17 men going in), was not trimmed by the summer (16 men, 4 of 4 planted still on it)
+  FAIL [6]: seed 23 year out 2: the old club, planted over the roster limit (25 men going in), was not trimmed by the summer (24 men, 13 of 13 planted still on it)
+  FAIL [6]: (further failures in this check not printed)
+   300 years out over 100 seeds (0 stopped early); refusals: 100 in a seat, 100 closed, 100 last calls
+   drafted men on the other clubs' rosters after the years out: away 2978, idle GM 3000 (ratio 0.993); mean roster after a summer: away 12.67, idle GM 12.68
+   retained rows planted 100: 200 summers kept at the figure the club kept, 100 dropped when the entry ran out; the old club's contributors back to automatic after 300 of 300 years
+   the old club drafted 22 men in its 300 years out (printed, not asserted: 2, 0, 6 and 4 on the NHL's four seed sets, r1559-fx2)
+   drafts out replayed against the board's draft with nobody in the chair: 300, 0 differed
+   rounds out replayed against the board's round with no user club: 6000, 0 differed
+   the old club planted over the roster limit before 300 summers out: trimmed to it after 0
+simGmCareer: 301 failure(s) in 6

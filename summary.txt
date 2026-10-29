@@ -1,0 +1,5 @@
+mut-namedsummer exit=1 26s | simGmCareer: 61 failure(s) in 6
+d-named-s6 exit=1 27s | simGmCareer: 301 failure(s) in 6
+mut-dropaimoves exit=1 24s | simGmCareer: 1201 failure(s) in 6
+mut-retainedclub exit=1 26s | simGmCareer: 584 failure(s) in 5
+after-restore exit=0 6s | simGmCareer: all checks passed (nhl, sections 6)
