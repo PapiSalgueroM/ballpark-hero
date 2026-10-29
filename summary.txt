@@ -1,0 +1,6 @@
+simAccessibility exit=0 0s | simAccessibility: all green
+simCareerNoDeadEnd exit=0 1s | simCareerNoDeadEnd: green. A convicted career is still a career, and a stranded save comes back.
+deadend-pundit exit=0 1s | NEGATIVE CONTROL pundit was on; 1 finding(s). A control run is expected to be red.
+deadend-strand exit=0 1s | NEGATIVE CONTROL strand was on; 2 finding(s). A control run is expected to be red.
+vt-sc exit=0 19s |  Test Files  13 passed (13)
+tsc exit=0 81s | 
