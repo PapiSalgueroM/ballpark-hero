@@ -946,9 +946,19 @@ try {
   await browser.close();
   for (const s of spawned) s.kill();
 }
+/* Release BS (fix BS-sc421-3, cc0d5f466): a pundit season's bar lost its Next Season on purpose. That button ran
+   handleNextSeason, which plays only youth and playing years, so it did nothing (the 10-28 reports); the panel's
+   three pundit actions move the year on. So for these saves the head must read the value here, not the base's. */
+const FIRST_CHANGED = { pundit: { base: 'Next Season', head: null, why: 'Release BS fix BS-sc421-3 took the dead Next Season off a pundit season' } };
 if (ARMS.includes('head') && ARMS.includes('base') && SECTIONS.includes('bar')) {
   for (const [k, b] of Object.entries(firstNames.base)) {
-    if (firstNames.head[k] !== b) rec('head', 'bar', k.split(' ')[1], `${k.split(' ')[0]}: the first button reads "${firstNames.head[k]}" on head and "${b}" on the base`);
+    const [kind, size] = k.split(' ');
+    const changed = FIRST_CHANGED[kind];
+    if (changed && b === changed.base) {
+      if (firstNames.head[k] !== changed.head) rec('head', 'bar', size, `${kind}: the first button reads "${firstNames.head[k]}" on head where it must read "${changed.head}" (${changed.why}; "${b}" on the base)`);
+      continue;
+    }
+    if (firstNames.head[k] !== b) rec('head', 'bar', size, `${kind}: the first button reads "${firstNames.head[k]}" on head and "${b}" on the base`);
   }
 }
 if (CONTROL === 'seed') {
