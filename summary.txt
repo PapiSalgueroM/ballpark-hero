@@ -1,0 +1,3 @@
+d-named-s6 exit=0 14s | simGmCareer: all checks passed (nhl, sections 6)
+d-head-s6 exit=0 15s | simGmCareer: all checks passed (nhl, sections 6)
+d-aimoves-s6 exit=0 16s | simGmCareer: all checks passed (nhl, sections 6)
