@@ -87,7 +87,7 @@ describe('Round 1570: the plaque for a retired career', () => {
     expect(hallWallKey(S.slug)).toBe(`${S.slug}-my-career-hall-v1`);
   });
   it('the career key tells careers apart by salt, seasons and games, and never reads NaN', () => {
-    const S = NBA_CAREER_SPORT, c = retired(S, 'PG', 11), k = wallKeyOf(c, S.hall!);
+    const S: UsCareerSport = NBA_CAREER_SPORT, c = retired(S, 'PG', 11), k = wallKeyOf(c, S.hall!);
     expect(wallKeyOf(JSON.parse(JSON.stringify(c)), S.hall!)).toBe(k);
     expect(wallKeyOf({ ...c, summerSalt: 'other' }, S.hall!)).not.toBe(k);
     expect(wallKeyOf({ ...c, seasons: c.seasons.slice(0, -1) }, S.hall!)).not.toBe(k);
@@ -96,7 +96,7 @@ describe('Round 1570: the plaque for a retired career', () => {
     expect(wallKeyOf(old, S.hall!)).toMatch(/\|\|\d+\|0$/);
   });
   it('more than eight clubs keeps the first eight and counts the rest', () => {
-    const S = MLB_CAREER_SPORT, c = retired(S, 'CF', 3);
+    const S: UsCareerSport = MLB_CAREER_SPORT, c = retired(S, 'CF', 3);
     c.seasons = Array.from({ length: 11 }, (_, i) => ({ ...c.seasons[0], year: 2030 + i, team: `T${i}` }));
     const e = hallWallEntry(S, c)!;
     expect([e.teams, e.moreTeams]).toEqual([['T0', 'T1', 'T2', 'T3', 'T4', 'T5', 'T6', 'T7'], 3]);
