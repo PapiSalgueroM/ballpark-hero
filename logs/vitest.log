@@ -1,0 +1,14 @@
+
+[1m[46m RUN [49m[22m [36mv3.2.7 [39m[90m/home/runner/work/ballpark-hero/ballpark-hero[39m
+
+ [32m✓[39m src/test/clubManagerShootoutOrder.test.ts [2m([22m[2m11 tests[22m[2m)[22m[32m 52[2mms[22m[39m
+ [32m✓[39m src/test/clubManagerShootoutTile.test.tsx [2m([22m[2m4 tests[22m[2m)[22m[33m 837[2mms[22m[39m
+   [33m[2m✓[22m[39m the shootout order tile[2m > [22mopens on request, adds on tap, removes on a second tap, and backs out [33m 481[2mms[22m[39m
+ [32m✓[39m src/test/clubManagerShootoutResults.test.ts [2m([22m[2m7 tests[22m[2m)[22m[33m 1823[2mms[22m[39m
+ [32m✓[39m src/test/clubManagerShootoutDisplay.test.tsx [2m([22m[2m1 test[22m[2m)[22m[32m 72[2mms[22m[39m
+
+[2m Test Files [22m [1m[32m4 passed[39m[22m[90m (4)[39m
+[2m      Tests [22m [1m[32m23 passed[39m[22m[90m (23)[39m
+[2m   Start at [22m 03:45:20
+[2m   Duration [22m 8.31s[2m (transform 3.85s, setup 487ms, collect 13.50s, tests 2.78s, environment 3.20s, prepare 1.16s)[22m
+

@@ -1,0 +1,4 @@
+{"perClub":["Real Madrid: pens 20","Osasuna: pens 11","Athletic Club: pens 9","Manchester City: pens 19","Arsenal: pens 15","Bayern Munich: pens 28"],"plays":2783,"stateDiff":0,"drawDiff":0,"reportDiff":0,"pens":102,"pensDetail":102,"pensNoDetail":0,"ordered":16,"orderedSame":16,"sudden":39,"maxKicks":30,"bad":0,"ucl2":11,"firstFails":[]}
+scores {"3-0":1,"5-4":18,"6-5":5,"4-5":11,"3-2":3,"8-7":3,"1-3":1,"12-11":1,"10-9":2,"3-4":7,"2-4":6,"7-6":4,"5-6":3,"4-2":7,"6-7":2,"1-4":1,"3-5":7,"10-11":1,"4-3":7,"5-3":4,"7-8":2,"13-14":1,"9-8":1,"3-1":1,"9-10":1,"8-9":1,"0-3":1}
+worst case underdog match rate 0.1278, exhaustion probability 2.51e-8
+PROBE410 GREEN: 2783 plays, 102 shootouts

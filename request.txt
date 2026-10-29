@@ -1,0 +1,7 @@
+tsc: node_modules/.bin/tsc --noEmit -p tsconfig.app.json
+vitest: node_modules/.bin/vitest run src/test/clubManagerShootoutDisplay.test.tsx src/test/clubManagerShootoutOrder.test.ts src/test/clubManagerShootoutResults.test.ts src/test/clubManagerShootoutTile.test.tsx --testTimeout=300000 --hookTimeout=120000
+probe: git worktree add /tmp/b20 b20ec6664 >/dev/null 2>&1; BASE_ROOT=/tmp/b20 SEASONS=2 EXTRA=12 node .rc/x/probe410.mjs
+simCmShootoutResults: node scripts/simCmShootoutResults.mjs
+simCmShootoutOrder: node scripts/simCmShootoutOrder.mjs
+simMatchScreen: node scripts/simMatchScreen.mjs
+simManagerMatchPlans: node scripts/simManagerMatchPlans.mjs
