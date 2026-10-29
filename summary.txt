@@ -1,0 +1,6 @@
+build exit=0 37s | [dukb] inlined 1 stylesheet(s) and 1 module(s) into 181 snapshots (11 left alone)
+m-sportimport exit=1 4s | simUsCareerHallWall CONTROL sportimport: FIRED, s3.weight red 1 times
+m-clamp exit=1 4s | simUsCareerHallWall CONTROL clamp: FIRED, s3.bytes red 1 times
+fence-simWritesAreSent exit=1 15s | simWritesAreSent: 2 failures
+simWall exit=0 57s | simUsCareerHallWall: ok, 53 check ids, 7846 checks, 200 careers a sport, 152 old saves
+anchors exit=1 58s | simHarnessAnchors: 1 failure(s)

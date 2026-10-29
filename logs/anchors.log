@@ -1,0 +1,8 @@
+1) every harness parses
+   ok   1016 harnesses pass node --check
+2) no harness carries an anchor it can never match
+   1016 harnesses, 279 carry a multi line anchor into src, 360 normalised reads guard one
+   ok   279 harnesses are in scope, so the check is looking at something
+   FAIL simUsCareerHallWall.mjs reads src/components/us-career/UsCareerBoard.tsx raw at line 415 and searches it with a multi line anchor (line 395), so on a CRLF checkout it matches nothing (2 raw reads in all)
+
+simHarnessAnchors: 1 failure(s)
