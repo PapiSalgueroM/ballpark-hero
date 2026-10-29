@@ -1,0 +1,5 @@
+rival exit=0 22s | No rival product names found. 0 findings.
+cafile exit=0 47s |    Duration  46.08s (transform 4.16s, setup 113ms, collect 320ms, tests 44.32s, environment 593ms, prepare 225ms)
+storage exit=0 5s | simStorageWrites: all green (owed: 12)
+anchors exit=0 61s | simHarnessAnchors: green. Every harness parses and none carries an unmatchable anchor.
+tsc exit=0 97s | 
