@@ -8,7 +8,7 @@ import { buildDraftNight } from '@/lib/draftNight';
 import { PREPARATIONS, ROLE_LABELS, ROLES, TACTICS, type Score, type Tactic } from '@/lib/aussieRulesManager';
 import { EXIT_LABELS } from '@/lib/aussieRulesFormat';
 import {
-  CLUBS, clubLabel, clubOf, draftPool, hubTiles, lastWeek, leagueLadder, leaguePlayer, myFinalsTie, opponentPlays, ordinal, pickRefusal, picksLeft, placeOf, retirees,
+  CLUBS, clubFull, clubOf, clubShort, draftPool, hubTiles, lastWeek, leagueLadder, leaguePlayer, myFinalsTie, opponentPlays, ordinal, pickRefusal, picksLeft, retirees,
   ROUNDS, scoutedPotential, tieName, type LeagueAction, type LeagueState,
 } from '@/lib/aussieRulesLeague';
 import styles from './AussieRulesManagerBoard.module.css';
@@ -38,11 +38,11 @@ function Results({ state }: { state: LeagueState }) {
   if (state.stage === 'finals') {
     const ties = state.finals?.ties.filter(tie => tie.week === state.week) ?? [];
     return <ul className={own.list}>{ties.map(tie => <li key={tie.id} data-arl-tie={tie.id}>
-      <strong>{tieName(tie.id)}</strong>: {placeOf(tie.homeId)} {tie.result ? score(tie.result.home) : ''} v {placeOf(tie.awayId)} {tie.result ? score(tie.result.away) : ''}{tie.result?.extraTime ? ' (after extra time)' : ''}
+      <strong>{tieName(tie.id)}</strong>: {clubShort(state, tie.homeId)} {tie.result ? score(tie.result.home) : ''} v {clubShort(state, tie.awayId)} {tie.result ? score(tie.result.away) : ''}{tie.result?.extraTime ? ' (after extra time)' : ''}
     </li>)}</ul>;
   }
   const games = state.results.slice(state.round * 9, state.round * 9 + 9);
-  return <ul className={own.list}>{games.map(game => <li key={`${game.homeId}-${game.awayId}`}>{placeOf(game.homeId)} {score(game.homeScore)} v {placeOf(game.awayId)} {score(game.awayScore)}</li>)}</ul>;
+  return <ul className={own.list}>{games.map(game => <li key={`${game.homeId}-${game.awayId}`}>{clubShort(state, game.homeId)} {score(game.homeScore)} v {clubShort(state, game.awayId)} {score(game.awayScore)}</li>)}</ul>;
 }
 
 function MatchPanel({ state, act }: { state: LeagueState; act: (action: LeagueAction) => void }) {
@@ -59,7 +59,7 @@ function MatchPanel({ state, act }: { state: LeagueState; act: (action: LeagueAc
   const selectedIn = eligible.some(player => player.id === inId) ? inId : eligible[0]?.id ?? '';
   const nextLabel = state.stage === 'homeAway' ? (state.round === ROUNDS - 1 ? 'On to the finals' : 'Next round') : state.week === lastWeek(state.format) ? 'Wrap up the season' : 'Next finals week';
   return <div className={styles.card} data-arl-match>
-    {match && <div className={styles.score} data-arl-score><div><strong>{clubLabel(match.homeId)}</strong><span>{score(match.homeScore)}</span></div><div><strong>{clubLabel(match.awayId)}</strong><span>{score(match.awayScore)}</span></div></div>}
+    {match && <div className={styles.score} data-arl-score><div><strong>{clubFull(state, match.homeId)}</strong><span>{score(match.homeScore)}</span></div><div><strong>{clubFull(state, match.awayId)}</strong><span>{score(match.awayScore)}</span></div></div>}
     {!match && state.phase === 'prepare' && <><h3>You are not playing this week</h3><p className={styles.muted}>Here is the week's draw. Play it out to see who goes through.</p><Results state={state} />
       <button className={styles.action} data-arl-simweek onClick={() => act({ type: 'simWeek' })}>Play the week</button></>}
     {match && state.phase === 'prepare' && <><h3>Prepare your matchday 23</h3><p className={styles.muted}>Your list manager picked the best 23 on current form: skill, less fatigue. Change it in Squad, then choose this week's preparation.</p>
@@ -81,7 +81,7 @@ function MatchPanel({ state, act }: { state: LeagueState; act: (action: LeagueAc
       {match && match.homeScore.total === match.awayScore.total && <p data-arl-result>A draw: two ladder points each.</p>}
       <Results state={state} />
       <button className={styles.action} data-arl-next onClick={() => act({ type: 'next' })}>{nextLabel}</button></>}
-    {match && match.events.length > 0 && <details className={styles.events}><summary>Scoring events ({match.events.length})</summary><ol>{match.events.map(event => <li key={event.id}>{event.quarter > 4 ? 'Extra time' : `Q${event.quarter}`}, {event.minute} min: {leaguePlayer(state, event.playerId)?.name}, {placeOf(event.clubId)}, {event.kind} ({event.points} {event.points === 1 ? 'point' : 'points'}).</li>)}</ol></details>}
+    {match && match.events.length > 0 && <details className={styles.events}><summary>Scoring events ({match.events.length})</summary><ol>{match.events.map(event => <li key={event.id}>{event.quarter > 4 ? 'Extra time' : `Q${event.quarter}`}, {event.minute} min: {leaguePlayer(state, event.playerId)?.name}, {clubShort(state, event.clubId)}, {event.kind} ({event.points} {event.points === 1 ? 'point' : 'points'}).</li>)}</ol></details>}
   </div>;
 }
 
@@ -119,7 +119,7 @@ function LadderPanel({ state }: { state: LeagueState }) {
   return <div className={styles.card}><h3>Ladder</h3><p className={styles.muted}>Win: four points. Draw: two. Then percentage: points for divided by points against, times 100. The top ten play the finals.</p>
     <div className={styles.table}><table><thead><tr><th scope="col">Club</th><th scope="col">P</th><th scope="col">W</th><th scope="col">D</th><th scope="col">L</th><th scope="col">Pts</th><th scope="col">%</th></tr></thead>
       <tbody>{ladder.map((row, index) => <tr key={row.clubId} className={`${row.clubId === state.myClub ? own.mine : ''} ${index === 9 ? own.cut : ''}`} data-arl-ladder={row.clubId}>
-        <th scope="row">{index + 1}. {placeOf(row.clubId)}</th><td>{row.played}</td><td>{row.wins}</td><td>{row.draws}</td><td>{row.losses}</td><td>{row.points}</td><td>{row.percentage.toFixed(1)}</td></tr>)}</tbody></table></div></div>;
+        <th scope="row">{index + 1}. {clubShort(state, row.clubId)}</th><td>{row.played}</td><td>{row.wins}</td><td>{row.draws}</td><td>{row.losses}</td><td>{row.points}</td><td>{row.percentage.toFixed(1)}</td></tr>)}</tbody></table></div></div>;
 }
 
 function FinalsPanel({ state }: { state: LeagueState }) {
@@ -127,7 +127,7 @@ function FinalsPanel({ state }: { state: LeagueState }) {
   return <div className={styles.card}><h3>Finals</h3><p className={styles.muted}>7th plays 10th and 8th plays 9th in the wildcard week. Then 1st v 4th and 2nd v 3rd, where the winners rest a week and the losers get a second chance, while 5th and 6th meet the wildcard winners and the losers go out.</p>
     {weeks.map(week => { const ties = state.finals?.ties.filter(tie => tie.week === week) ?? [];
       return <div key={week} className={own.week}><h3>Week {week + 1}</h3>{ties.length ? <ul className={own.list}>{ties.map(tie => <li key={tie.id} data-arl-final={tie.id} className={tie.homeId === state.myClub || tie.awayId === state.myClub ? own.mine : ''}>
-        <strong>{tieName(tie.id)}</strong>: {placeOf(tie.homeId)} {tie.result ? score(tie.result.home) : ''} v {placeOf(tie.awayId)} {tie.result ? score(tie.result.away) : ''}{tie.result?.extraTime ? ' (after extra time)' : ''}</li>)}</ul>
+        <strong>{tieName(tie.id)}</strong>: {clubShort(state, tie.homeId)} {tie.result ? score(tie.result.home) : ''} v {clubShort(state, tie.awayId)} {tie.result ? score(tie.result.away) : ''}{tie.result?.extraTime ? ' (after extra time)' : ''}</li>)}</ul>
         : <p className={styles.muted}>To be decided.</p>}</div>; })}
   </div>;
 }
@@ -136,7 +136,7 @@ function ClubPanel({ state }: { state: LeagueState }) {
   const rows = [...state.history].reverse();
   return <div className={styles.card}><h3>Honour board</h3>
     {rows.length ? <ul className={own.list}>{rows.map(row => <li key={row.season} data-arl-history={row.season}>
-      <strong>Season {row.season}</strong>: {ordinal(row.place)} on the ladder ({row.w}-{row.d}-{row.l}), {EXIT_LABELS[row.exit].toLowerCase()}. Premiers: {clubLabel(row.premier)}, beating {placeOf(row.runnerUp)} {score(row.gf.home === row.premier ? row.gf.homeScore : row.gf.awayScore)} to {score(row.gf.home === row.premier ? row.gf.awayScore : row.gf.homeScore)}. Most goals: {row.leadingGoalkicker.name} ({placeOf(row.leadingGoalkicker.club)}), {row.leadingGoalkicker.goals}.
+      <strong>Season {row.season}</strong>: {ordinal(row.place)} on the ladder ({row.w}-{row.d}-{row.l}), {EXIT_LABELS[row.exit].toLowerCase()}. Premiers: {clubFull(state, row.premier)}, beating {clubShort(state, row.runnerUp)} {score(row.gf.home === row.premier ? row.gf.homeScore : row.gf.awayScore)} to {score(row.gf.home === row.premier ? row.gf.awayScore : row.gf.homeScore)}. Most goals: {row.leadingGoalkicker.name} ({clubShort(state, row.leadingGoalkicker.club)}), {row.leadingGoalkicker.goals}.
     </li>)}</ul> : <p className={styles.muted}>Your first season is under way. Every season you finish goes up here.</p>}
   </div>;
 }
@@ -150,7 +150,7 @@ function DraftPanel({ state, act }: { state: LeagueState; act: (action: LeagueAc
   const mineLeft = picksLeft(state, state.myClub);
   const myTurn = draft.at < draft.order.length && draft.order[draft.at] === state.myClub;
   const prospect = (id: string) => draft.pool.find(value => value.id === id)!;
-  const raw = (index: number) => { const pick = draft.made[index], p = prospect(pick.prospectId); return { team: placeOf(pick.clubId), playerName: p.name, pos: ROLE_LABELS[p.role], grade: scoutedPotential(state, p).mid }; };
+  const raw = (index: number) => { const pick = draft.made[index], p = prospect(pick.prospectId); return { team: clubShort(state, pick.clubId), playerName: p.name, pos: ROLE_LABELS[p.role], grade: scoutedPotential(state, p).mid }; };
   const rivals: ReturnType<typeof raw>[] = [];
   if (nightFrom !== null) for (let i = nightFrom + 1; i < draft.made.length && draft.made[i].clubId !== state.myClub; i += 1) rivals.push(raw(i));
   const night = nightFrom !== null && draft.made[nightFrom] ? buildDraftNight(raw(nightFrom), rivals) : null;
@@ -180,7 +180,7 @@ function StatusCard({ state, act }: { state: LeagueState; act: (action: LeagueAc
     const gf = `${score(last.gf.home === last.premier ? last.gf.homeScore : last.gf.awayScore)} to ${score(last.gf.home === last.premier ? last.gf.awayScore : last.gf.homeScore)}`;
     return <div className={styles.card} data-arl-seasonover>
       {won ? <VictoryMoment><p data-arl-premiers><strong>Premiers!</strong> {state.clubName} win the Grand Final, {gf}.</p></VictoryMoment>
-        : <p data-arl-premier>{clubLabel(last.premier)} are the premiers, beating {placeOf(last.runnerUp)} {gf}.</p>}
+        : <p data-arl-premier>{clubFull(state, last.premier)} are the premiers, beating {clubShort(state, last.runnerUp)} {gf}.</p>}
       <p className={styles.muted}>You finished {ordinal(last.place)} ({last.w}-{last.d}-{last.l}). {EXIT_LABELS[last.exit]}. Most goals this season: {last.leadingGoalkicker.name}, {last.leadingGoalkicker.goals}.</p>
       <button className={styles.action} data-arl-next onClick={() => act({ type: 'next' })}>Into the summer</button></div>;
   }
