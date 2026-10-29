@@ -1,0 +1,19 @@
+vnew exit=0 28s |    Duration  26.53s (transform 2.96s, setup 149ms, collect 4.29s, tests 20.57s, environment 668ms, prepare 351ms)
+r3-base exit=1 28s | ::error file=/tmp/b3/src/test/usCareerReports1569.test.tsx,title=src/test/usCareerReports1569.test.tsx > Round 1569 ruling R3%3A a restart says the Hall card goes too > '
+sim-seed2 exit=0 3s | simUsCareerReports PASS: 0 findings, 150 careers a sport, seed 2
+sim exit=0 3s | simUsCareerReports PASS: 0 findings, 150 careers a sport, seed 1569
+ctl-fanforget exit=1 3s | simUsCareerReports FAIL: 1365 findings, 150 careers a sport, seed 1569, CONTROL fanforget
+ctl-fansoccer exit=1 3s | simUsCareerReports FAIL: 1 findings, 150 careers a sport, seed 1569, CONTROL fansoccer
+ctl-fangate exit=1 7s | simUsCareerReports FAIL: 18088 findings, 150 careers a sport, seed 1569, CONTROL fangate
+r2-base exit=1 14s | simUsCareerReports FAIL: 18088 findings, 150 careers a sport, seed 1569
+tsc exit=0 106s | 
+simUsCareerActionConfirm exit=0 9s | Career confirmation: CRLF controls bind, raw bytes held and owned copies cleaned. Simulated states/explicit events do not prove full-season gameplay or native Enter, view
+uca-restartWiring exit=0 8s | Career confirmation: CRLF controls bind, raw bytes held and owned copies cleaned. Simulated states/explicit events do not prove full-season gameplay or native Enter, view
+ladder-base exit=0 0s | ladderSha d05e19fba5eb25c8 over 10504 ladders from /tmp/careerSocial.base.ts
+ladder-head exit=0 0s | ladderSha d05e19fba5eb25c8 over 10504 ladders from /home/runner/work/ballpark-hero/ballpark-hero/src/lib/careerSocial.ts
+parity exit=0 91s | simUsBoardParity: green. Four sports replayed click for click, save for save and screen for screen with the proved historical main775 coaching Panel.
+parity-label exit=0 91s | simUsBoardParity control label: green. The control turned its own sports red for its own reason.
+simCareerParity exit=0 14s | simCareerParity: green. One money app, one fan rule, one rival shape, one badge case, in all five careers.
+dash exit=0 0s | dashscan PASS: 0 of 6504 added lines since f957b34ea carry a dash
+simNoRivalNames exit=0 16s | No rival product names found. 0 findings.
+simCareerDerbies exit=0 52s | simCareerDerbies: all 8 sections green
