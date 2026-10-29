@@ -1,0 +1,11 @@
+simNoRivalNames exit=0 21s | No rival product names found. 0 findings.
+simSiteSearch exit=0 4s | simSiteSearch: green. Every game is findable by name, typos included, and the ranking can explain itself.
+simGuideHeadings exit=0 2s | simGuideHeadings: green. 131 guides carry keyword h2s over h3 and h4 sections with every original sentence intact, and all 133 blocks render a clean outline.
+kw-fresh exit=0 1s | keyword index current
+tsc exit=0 129s | 
+simUsCareerReports exit=0 2s | simUsCareerReports PASS: 0 findings, 150 careers a sport, seed 1569
+simBuildYourXiFit exit=0 3s | simBuildYourXiFit: all checks green
+dash-diff exit=0 0s | git diff 601435944 HEAD: 0 added lines with an en or em dash 
+dash-log exit=0 0s | commit messages 601435944..HEAD: 0 lines with an en or em dash
+simUsBoardParity exit=1 119s | simUsBoardParity: 3 failures
+vitest-all exit=0 749s |  Test Files  686 passed | 2 skipped (688)
