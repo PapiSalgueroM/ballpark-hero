@@ -1,0 +1,41 @@
+# Release BT lane d: Round 1565's closing lines (Soccer Connections, 65 boards rebuilt in place; the daily save shape race), unserved, from its fix run on de0a18dde's parent line (r1565/.tmp-fx/fx/rc-fx-b.txt and rc-fx-c.txt) and its fix2 run (fx2/rc-fx2-a.txt: simDailySaveHardening and its eight controls); results-g/rc-1565.txt. Extras: post-apply.json (the read only export of 2026-10-23, results-g/apply-1553b/post-apply.json, 326 rows) and final-export.json (that export with the 65 rows applied, r1565/.tmp-fx/vf). No line reads the live database: the rehearse lines run the migration in PGlite on the export.
+# Expected: ctl-snapshot exit 1 (the brief: CONN_CONTROL=snapshot), every ctl- line exit 1 FIRED, fair-secondfit, rehearse-tamper, rehearse-drift, rehearse-noguard and rehearse1553-noguard exit 1 with their control line; dailySaveShapes runs on a line of its own (the race fix, 3bdb6254c). Left out: tsc, simNoRivalNames, simHarnessAnchors, simStorageWrites, simSiteSearch, simInventedNames, simDailyPuzzleContract (lane g and the fences); fx-c's simDailySaveHardening (fx2's copy kept with its controls); fx2's repeats shapes-2 to shapes-4 and daily5-2 to daily5-6 (repeats of one run against a race; the kit runs each once).
+simConnectionsFacts: node scripts/simConnectionsFacts.mjs
+live-pre: CONN_LIVE=.rc/x/post-apply.json node scripts/simConnectionsFacts.mjs
+live-post: CONN_LIVE=.rc/x/final-export.json node scripts/simConnectionsFacts.mjs
+simFairPuzzles: node scripts/simFairPuzzles.mjs
+fair-secondfit: FAIR_CONTROL=secondfit node scripts/simFairPuzzles.mjs
+rehearse: npm install --prefix /tmp/pgl1 @electric-sql/pglite >/dev/null 2>&1 && PGLITE_DIR=/tmp/pgl1 node scripts/qa/rehearseConnections1565.mjs .rc/x/post-apply.json
+rehearse-tamper: npm install --prefix /tmp/pgl2 @electric-sql/pglite >/dev/null 2>&1 && REHEARSE_CONTROL=tamper PGLITE_DIR=/tmp/pgl2 node scripts/qa/rehearseConnections1565.mjs .rc/x/post-apply.json
+rehearse-drift: npm install --prefix /tmp/pgl3 @electric-sql/pglite >/dev/null 2>&1 && REHEARSE_CONTROL=drift PGLITE_DIR=/tmp/pgl3 node scripts/qa/rehearseConnections1565.mjs .rc/x/post-apply.json
+rehearse-noguard: npm install --prefix /tmp/pgl4 @electric-sql/pglite >/dev/null 2>&1 && REHEARSE_CONTROL=noguard PGLITE_DIR=/tmp/pgl4 node scripts/qa/rehearseConnections1565.mjs .rc/x/post-apply.json
+rehearse1553: npm install --prefix /tmp/pgl5 @electric-sql/pglite >/dev/null 2>&1 && PGLITE_DIR=/tmp/pgl5 node scripts/qa/rehearseConnections1553.mjs
+rehearse1553-noguard: npm install --prefix /tmp/pgl6 @electric-sql/pglite >/dev/null 2>&1 && REHEARSE_CONTROL=noguard PGLITE_DIR=/tmp/pgl6 node scripts/qa/rehearseConnections1553.mjs
+dealt: CONN_MIGRATION=supabase/migrations/20261029120000_round_1565_connections_live.sql node scripts/qa/connectionsDealtDay1553.mjs .rc/x/post-apply.json 2026-10-29 2026-10-30 2026-10-31 2026-11-01 2026-11-02 2026-11-03 2026-11-04 2026-11-05 2026-11-06 2026-11-07 2026-11-08 2026-11-09 2026-11-10 2026-11-11 2026-11-12 2026-11-13 2026-11-14 2026-11-15 2026-11-16 2026-11-17 2026-11-18 2026-11-19 2026-11-20 2026-11-21 2026-11-22 2026-11-23 2026-11-24 2026-11-25 2026-11-26 2026-11-27 2026-11-28 2026-11-29 2026-11-30
+vitest-save: node_modules/.bin/vitest run src/hooks/useDailyPuzzleIdentity.test.ts src/test/dailySaveParity.test.tsx src/test/dailySaveShapes.test.tsx src/test/dailySaveHardening.test.tsx --testTimeout=300000 --hookTimeout=120000
+ctl-rooney: CONN_CONTROL=rooney node scripts/simConnectionsFacts.mjs
+ctl-zidane: CONN_CONTROL=zidane node scripts/simConnectionsFacts.mjs
+ctl-current: CONN_CONTROL=current node scripts/simConnectionsFacts.mjs
+ctl-treblecase: CONN_CONTROL=treblecase node scripts/simConnectionsFacts.mjs
+ctl-onehost: CONN_CONTROL=onehost node scripts/simConnectionsFacts.mjs
+ctl-nominee: CONN_CONTROL=nominee node scripts/simConnectionsFacts.mjs
+ctl-bareyear: CONN_CONTROL=bareyear node scripts/simConnectionsFacts.mjs
+ctl-snapshot: CONN_CONTROL=snapshot node scripts/simConnectionsFacts.mjs
+ctl-snapshotorder: CONN_CONTROL=snapshotorder node scripts/simConnectionsFacts.mjs
+ctl-snapshotids: CONN_CONTROL=snapshotids node scripts/simConnectionsFacts.mjs
+ctl-unknownman: CONN_CONTROL=unknownman node scripts/simConnectionsFacts.mjs
+simConnectionsLoss: node scripts/simConnectionsLoss.mjs
+simConnectionsShake: node scripts/simConnectionsShake.mjs
+simUsConnectionsFacts: node scripts/simUsConnectionsFacts.mjs
+c65-simTrustCopy: node scripts/simTrustCopy.mjs
+dailySaveShapes: node_modules/.bin/vitest run src/test/dailySaveShapes.test.tsx --testTimeout=300000 --hookTimeout=120000
+daily5: node_modules/.bin/vitest run src/test/dailySaveParity.test.tsx src/test/dailySaveShapes.test.tsx src/test/dailySaveHardening.test.tsx src/test/dailyReload.test.tsx src/test/dailyMenuResume.test.tsx --testTimeout=300000 --hookTimeout=120000
+simDailySaveHardening: node scripts/simDailySaveHardening.mjs
+ctl-metaslow: R848_CONTROL=metaslow node scripts/simDailySaveHardening.mjs
+ctl-metalate: R848_CONTROL=metalate node scripts/simDailySaveHardening.mjs
+ctl-metaheld: R848_CONTROL=metaheld node scripts/simDailySaveHardening.mjs
+ctl-guideslow: R848_CONTROL=guideslow node scripts/simDailySaveHardening.mjs
+ctl-guidelate: R848_CONTROL=guidelate node scripts/simDailySaveHardening.mjs
+ctl-guideheld: R848_CONTROL=guideheld node scripts/simDailySaveHardening.mjs
+ctl-guidepart: R848_CONTROL=guidepart node scripts/simDailySaveHardening.mjs
+ctl-shape: R848_CONTROL=shape node scripts/simDailySaveHardening.mjs
