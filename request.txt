@@ -1,0 +1,65 @@
+tsc: node_modules/.bin/tsc --noEmit -p tsconfig.app.json
+vt-wall: node_modules/.bin/vitest run src/test/usCareerHallWall.test.tsx src/lib/usCareerHallWall.test.ts --testTimeout=300000 --hookTimeout=120000
+vt-moved: node_modules/.bin/vitest run src/test/careerSeasonReview.test.tsx src/test/usCareerSaveRetry.test.tsx src/test/usCareerReports1569.test.tsx --testTimeout=300000 --hookTimeout=120000
+vt-hall: node_modules/.bin/vitest run src/test/usCareerHallBoard.test.tsx src/test/careerHallV1Replay.test.ts src/test/careerHallSaves1301.test.ts src/test/usCareerActionConfirm.test.tsx src/test/careerHall.test.tsx --testTimeout=300000 --hookTimeout=120000
+vt-board: node_modules/.bin/vitest run src/test/myCareerRestore.test.tsx src/test/usCareerStatLines.test.tsx src/test/usCareerPractice.test.tsx src/test/usCoachRetirement.test.tsx src/test/nflCoachStaffRecovery.test.tsx src/test/storageNoticeFollows.test.tsx src/test/usSeasonCentreEntry.test.tsx src/test/usBoardFixture.test.tsx --testTimeout=300000 --hookTimeout=120000
+simWall: node scripts/simUsCareerHallWall.mjs
+c-nokeep: SIM_HALL_WALL_CONTROL=nokeep node scripts/simUsCareerHallWall.mjs
+c-loadonly: SIM_HALL_WALL_CONTROL=loadonly node scripts/simUsCareerHallWall.mjs
+c-kept: SIM_HALL_WALL_CONTROL=kept node scripts/simUsCareerHallWall.mjs
+c-nogate: SIM_HALL_WALL_CONTROL=nogate node scripts/simUsCareerHallWall.mjs
+c-stalesave: SIM_HALL_WALL_CONTROL=stalesave node scripts/simUsCareerHallWall.mjs
+c-boarddraw: SIM_HALL_WALL_CONTROL=boarddraw node scripts/simUsCareerHallWall.mjs
+parity: node scripts/simUsBoardParity.mjs && git diff --quiet 493926a4f -- scripts/data/usBoardFixture.json && echo "fixture byte identical to base"
+confirm: node scripts/simUsCareerActionConfirm.mjs
+confirm-restartWiring: US_CAREER_ACTION_CONTROL=restartWiring node scripts/simUsCareerActionConfirm.mjs
+confirm-ownKey: US_CAREER_ACTION_CONTROL=ownKey node scripts/simUsCareerActionConfirm.mjs
+saveRetry: node scripts/simUsCareerSaveRetry.mjs
+seasonReview: CAREER_SEASON_REVIEW_CONTROL=all node scripts/simCareerSeasonReview.mjs 2>&1 | grep -E "^(PASS|FAIL)|binds exactly|passed; all modes" ; exit ${PIPESTATUS[0]}
+storageWrites: node scripts/simStorageWrites.mjs
+homeFront: node scripts/simHomeFront.mjs
+weight: node scripts/simUsCareerWeight.mjs
+careerHall: node scripts/simCareerHall.mjs
+hub: node scripts/simCareerHub.mjs
+decision: node scripts/simCareerDecisionOutcome.mjs
+entryGuide: node scripts/simCareerEntryGuide.mjs
+inbox: node scripts/simCareerInbox.mjs
+inboxBeats: node scripts/simCareerInboxBeats.mjs
+parityCareer: node scripts/simCareerParity.mjs
+pressMarket: node scripts/simCareerPressMarket.mjs
+rivalry: node scripts/simCareerRivalryEvents.mjs
+extension: node scripts/simExtension.mjs
+noDouble: node scripts/simNoDoubleRecord.mjs
+reveal: node scripts/simRevealMoments.mjs
+sessionMarks: node scripts/simSessionMarks.mjs
+practice: node scripts/simUsCareerPractice.mjs
+prospect: node scripts/simUsCareerProspect.mjs
+coach: node scripts/simUsCoachCareer.mjs
+dirty: node scripts/simUsDirtyMoney.mjs
+seasonCentre: node scripts/simUsSeasonCentre.mjs
+reports: node scripts/simUsCareerReports.mjs
+fence-simLiveScores: node scripts/simLiveScores.mjs
+fence-simNoRivalNames: node scripts/simNoRivalNames.mjs
+fence-simInventedNames: node scripts/simInventedNames.mjs
+fence-simHarnessAnchors: node scripts/simHarnessAnchors.mjs
+fence-simNoInventedQuotes: node scripts/simNoInventedQuotes.mjs
+fence-simNoInventedConduct: node scripts/simNoInventedConduct.mjs
+fence-simLegalPages: node scripts/simLegalPages.mjs
+fence-simSingleFooter: node scripts/simSingleFooter.mjs
+fence-simCompletionSlugs: node scripts/simCompletionSlugs.mjs
+fence-simCompletionOnce: node scripts/simCompletionOnce.mjs
+fence-simDailyPuzzleContract: node scripts/simDailyPuzzleContract.mjs
+fence-simDailySaveHardening: node scripts/simDailySaveHardening.mjs
+fence-simWritesAreSent: node scripts/simWritesAreSent.mjs
+fence-simSchemaNames: node scripts/simSchemaNames.mjs
+fence-simFetchRetry: node scripts/simFetchRetry.mjs
+fence-simGoogleOnlyReturn: node scripts/simGoogleOnlyReturn.mjs
+fence-simReportRelay: node scripts/simReportRelay.mjs
+fence-simNavbarStatsReads: node scripts/simNavbarStatsReads.mjs
+fence-simLeaderboardCaps: node scripts/simLeaderboardCaps.mjs
+fence-simScoringCoverage: node scripts/simScoringCoverage.mjs
+fence-simSiteSearch: node scripts/simSiteSearch.mjs
+fence-simResultMoment: node scripts/simResultMoment.mjs
+fence-simGuideHeadings: node scripts/simGuideHeadings.mjs
+nflStaff: CI=1 SIM_NETWORK=offline NODE_OPTIONS="--require $PWD/scripts/lib/offlineTransport.cjs" node scripts/simNflCoachStaffRecovery.mjs
+summer: SIM_SECTIONS=1,2,3,3b,4,5,7,8,9,10,11,12 node scripts/simUsCareerSummer.mjs

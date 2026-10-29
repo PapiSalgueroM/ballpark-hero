@@ -1,0 +1,344 @@
+node:internal/modules/run_main:107
+    triggerUncaughtException(
+    ^
+
+AssertionError [ERR_ASSERTION]: Frozen whole source: src/components/us-career/UsCareerBoard.tsx
++ actual - expected
+... Skipped lines
+
+  "import { lazy, Suspense, useCallback, useEffect, useMemo, useRef, useState } from 'react';\n" +
+    "import type { ReactNode } from 'react';\n" +
+    "import { toast } from 'sonner';\n" +
+    "import { Crown, Dumbbell, RotateCcw, Sparkles } from 'lucide-react';\n" +
+    "import ShareButtons from '@/components/game/ShareButtons';\n" +
+...
+    "import USCareerActionConfirm from '@/components/us-career/USCareerActionConfirm';\n" +
++   "import UsCareerStartOver from '@/components/us-career/UsCareerStartOver';\n" +
++   "import { noOfferWhy, seasonAheadIsLast } from '@/lib/usCareerNoOffer';\n" +
+    "import UsCareerSaveNotice from '@/components/us-career/UsCareerSaveNotice';\n" +
+    "import { CelebrationStyles, revealDelay } from '@/components/club-manager/Celebration';\n" +
+    "import { type PlayerAppearance, defaultAppearance } from '@/lib/soccerCareerAppearance';\n" +
+    "import PlayerAvatar from '@/components/soccer-career/PlayerAvatar';\n" +
+    "import AppearanceBuilder from '@/components/soccer-career/AppearanceBuilder';\n" +
+...
+    "import { hallRecordFor, type HallSpeechId } from '@/lib/careerHallOfFame';\n" +
++   '/* Round 1570: the Hall wall. Only its two keys load with the board; the rules (src/lib/usCareerHallWall.ts) load\n' +
++   '   when there is a wall to read or a retired career to put up, and the wall screen when it is opened. Loaded with\n' +
++   "   the board the rules cost every US career route 2.02K (r1570-s5a, one runner), over the lead's 2K line. Neither\n" +
++   '   file imports a sport (simUsCareerHallWall section 3). */\n' +
++   "import { hallWallKey, wallKeyOf } from '@/lib/usCareerHallWallKey';\n" +
++   "import type { HallWall } from '@/lib/usCareerHallWall';\n" +
+    "import { DIRTY_SENTENCE_NO_WASHERS, canDealWithDirtyMoney, washersLeft } from '@/lib/careerDirtyMoney';\n" +
+    '\n' +
+    "const UsCareerPractice = lazy(() => import('@/components/us-career/UsCareerPractice'));\n" +
+    "const CareerSeasonReview = lazy(() => import('@/components/us-career/CareerSeasonReview'));\n" +
+    '/* Round 1039: the retirement talk, the farewell banner and the Hall card load\n' +
+...
+    "const HallOfFameCard = lazy(() => import('@/components/career/HallOfFameCard').then(m => ({ default: m.HallOfFameCard })));\n" +
++   "/* Round 1570: the Hall wall's screen loads when it is opened. */\n" +
++   "const UsCareerHallWall = lazy(() => import('@/components/us-career/UsCareerHallWall'));\n" +
+    '/* Round 1500: the dirty money desk loads when "Deal with it" is pressed. */\n' +
+    "const DirtyMoneyDesk = lazy(() => import('@/components/us-career/DirtyMoneyDesk'));\n" +
+    '\n' +
+    "/* Round 126: 'coach' is new. Retirement used to be the last screen in the\n" +
+    '   game. Now it hands you to a job board and the save keeps going.\n' +
+...
+    '    /* Round 1144: the toast carries a Retry of its own. With the Week by week\n' +
++   '       viewer op'... 94437 more characters
+-   "       viewer open the notice that holds Retry save is under the viewer's\n" +
+-   '       cover, and the toast was telling the player to use a button he could\n' +
+-   '       not reach until he closed the viewer. It says Retry, not Retry save, so\n' +
+-   '       the page never has two buttons of one name. The press keeps the toast\n' +
+-   '       (the cleanup below takes it back the moment the save goes through), and\n' +
+-   '       ten seconds instead of four gives him time to read it and press.\n' +
+-   "       The first sentence is kept word for word (the other lane's driver for\n" +
+-   '       Round 1084 reads it), so the second line is what makes the words match\n' +
+-   '       the button they sit next to. */\n' +
+-   "    const said = toast.error('Your latest changes could not be saved. Stay on this page and use Retry save.', {\n" +
+-   "      description: 'Retry here does the same thing.',\n" +
+-   '      duration: SAVE_TOA'... 83542 more characters
+
+    at file:///home/runner/work/ballpark-hero/ballpark-hero/scripts/simNflCoachStaffRecovery.mjs:130:300
+    at ModuleJob.run (node:internal/modules/esm/module_job:561:25)
+    at async node:internal/modules/esm/loader:647:26
+    at async asyncRunEntryPointWithESMLoader (node:internal/modules/run_main:101:5) {
+  generatedMessage: false,
+  code: 'ERR_ASSERTION',
+  actual: "import { lazy, Suspense, useCallback, useEffect, useMemo, useRef, useState } from 'react';\n" +
+    "import type { ReactNode } from 'react';\n" +
+    "import { toast } from 'sonner';\n" +
+    "import { Crown, Dumbbell, RotateCcw, Sparkles } from 'lucide-react';\n" +
+    "import ShareButtons from '@/components/game/ShareButtons';\n" +
+    '/* Round 900: the one board. The NFL, NBA, MLB and NHL careers were four copies\n' +
+    '   of this file; what they really differed in is the `sport` this board is\n' +
+    '   handed (src/lib/usCareerSport.ts), bound per sport in nflCareerSport.ts and\n' +
+    '   its three siblings. This file imports no sport directly, and\n' +
+    '   scripts/simUsCareerWeight.mjs holds it to that. It is not yet true that a\n' +
+    '   route loads no other sport: the coach career (usCoachCareer.ts through\n' +
+    '   usCareerToCoach.ts) still pulls in the NFL engine and the NBA, MLB and NHL\n' +
+    '   conquest data on all four routes, as it did before this round.\n' +
+    '   Wire a new screen here, once. */\n' +
+    "import type { UsCareerCore, UsCareerEvent, UsCareerSeason, UsCareerSport, UsShopItem } from '@/lib/usCareerSport';\n" +
+    "import UsCareerProgramme from '@/components/us-career/UsCareerProgramme';\n" +
+    "import { expireUsCareerProgramme, prepareUsCareerProgramme, restoreUsCareerProgramme, settleUsCareerProgramme, type ProgrammeCareer } from '@/lib/usCareerProgramme';\n" +
+    '// Round 179: real free agency, shared engine and shared screen.\n' +
+    "import { applyFaSigning, oneYearWindow } from '@/lib/usCareerFreeAgency';\n" +
+    "import type { FaWindow } from '@/lib/usCareerFreeAgency';\n" +
+    "import FreeAgencyPanel from '@/components/us-career/FreeAgencyPanel';\n" +
+    '/* Round 207: the extension talk, shared engine and shared card. */\n' +
+    "import { extensionDue, type ExtensionTalk } from '@/lib/usCareerExtension';\n" +
+    "import { acknowledgeMarketWheel, declineMarketExtension, extensionMarketProbabilities, freeAgencyMarketProbabilities, openMarketExtension, openMarketFreeAgency, pushMarketExtension, pushMarketFreeAgency, restoreMarketTalk, type UsCareerMarketTalk } from '@/lib/usCareerMarket';\n" +
+    "import ExtensionCard from '@/components/us-career/ExtensionCard';\n" +
+    '// Round 186: the season curtain, shared engine and shared card.\n' +
+    "import { buildSeasonReveal, draftPressureLine, type SeasonReveal } from '@/lib/usCareerReveal';\n" +
+    "import { SeasonRevealCard } from '@/components/us-career/SeasonRevealCard';\n" +
+    "import { UsSeasonCentreEntry } from '@/components/us-career/season/UsSeasonCentreEntry';\n" +
+    "import { holdPendingSave } from '@/lib/safeStorage';\n" +
+    '/* Round 530: draft day as a moment, and the retirement card on the same\n' +
+    '   celebration kit the season curtain uses. */\n' +
+    "import DraftDayCard, { type DraftDayFacts } from '@/components/us-career/DraftDayCard';\n" +
+    "import USCareerActionConfirm from '@/components/us-career/USCareerActionConfirm';\n" +
+    "import UsCareerStartOver from '@/components/us-career/UsCareerStartOver';\n" +
+    "import { noOfferWhy, seasonAheadIsLast } from '@/lib/usCareerNoOffer';\n" +
+    "import UsCareerSaveNotice from '@/components/us-career/UsCareerSaveNotice';\n" +
+    "import { CelebrationStyles, revealDelay } from '@/components/club-manager/Celebration';\n" +
+    "import { type PlayerAppearance, defaultAppearance } from '@/lib/soccerCareerAppearance';\n" +
+    "import PlayerAvatar from '@/components/soccer-career/PlayerAvatar';\n" +
+    "import AppearanceBuilder from '@/components/soccer-career/AppearanceBuilder';\n" +
+    "import { Confetti } from '@/components/soccer-career/CareerFx';\n" +
+    "import { useGameCompletion } from '@/hooks/useGameCompletion';\n" +
+    "import { markRestoredFinish } from '@/lib/restoredFinish';\n" +
+    "import { recordActivity } from '@/lib/completions';\n" +
+    "import { useRevealScroll } from '@/hooks/useRevealScroll';\n" +
+    "import CoachCareerPanel, { CoachStartCard } from '@/components/us-career/CoachCareerPanel';\n" +
+    "import { startCoachCareer, ensureCoachCareer } from '@/lib/usCoachCareer';\n" +
+    "import type { CoachCareerState } from '@/lib/usCoachCareer';\n" +
+    '/* Round 208: the hub boxes, shared with the front offices and Club\n' +
+    '   Manager, and the trophy case they now open onto. */\n' +
+    "import { careerHubTiles } from '@/lib/careerHub';\n" +
+    "import { HubTiles, HubPanelHeader } from '@/components/hub/HubTiles';\n" +
+    "import type { HubTile } from '@/components/hub/HubTiles';\n" +
+    "import TrophyCase from '@/components/us-career/TrophyCase';\n" +
+    '/* Round 469: the money app, the gram, the rival card and the badges, on the\n' +
+    '   same engines Soccer Career runs (careerMoney, careerSocial, careerBadges),\n' +
+    '   bound per sport (nflCareerMoney.ts, nflCareerLoop.ts and their siblings). */\n' +
+    "import MoneyApp from '@/components/us-career/MoneyApp';\n" +
+    "import { SocialGram, RivalCard, BadgeGrid } from '@/components/us-career/SocialPanel';\n" +
+    "import type { MoneyAction } from '@/lib/careerMoney';\n" +
+    "import { fmtFollowers, pushHeadlines } from '@/lib/careerSocial';\n" +
+    '/* Round 521: the inbox and the rivalry events, the same engines the\n' +
+    '   flagship runs (careerInbox.ts, careerRivalryEvents.ts), bound per\n' +
+    '   sport (nflCareerInbox.ts, nflCareerRivalryEvents.ts and their siblings). */\n' +
+    "import { InboxPanel } from '@/components/us-career/InboxPanel';\n" +
+    "import { RivalryEventCard } from '@/components/us-career/RivalryEventCard';\n" +
+    "/* Round 796: the rival choice card, and the inbox on the sport's own calendar. */\n" +
+    "import { RivalryChoiceCard } from '@/components/us-career/RivalryChoiceCard';\n" +
+    "import type { RivalryChoiceCard as RivalryChoice } from '@/lib/careerRivalryChoices';\n" +
+    "import { cn } from '@/lib/utils';\n" +
+    "import ProspectJourney, { ProspectRecord } from '@/components/us-career/ProspectJourney';\n" +
+    "import { createUsCareerProspect, loadUsCareerProspect, type UsCareerProspect } from '@/lib/usCareerProspect';\n" +
+    "import { loadPreDraft, type PreDraftState } from '@/lib/careerPreDraft';\n" +
+    "import { keyedRng } from '@/lib/keyedRng';\n" +
+    "import { bankTrainingRating, trainingBankNote, trainingScore, trainingSessionOpen } from '@/lib/careerTraining';\n" +
+    "import { buildCareerDecisionOutcome, type CareerDecisionOutcomeData } from '@/lib/usCareerDecisionOutcome';\n" +
+    "import CareerDecisionOutcome from '@/components/us-career/CareerDecisionOutcome';\n" +
+    "import { answerSummerCard, newSummerSalt, repairSummerOnLoad, seekSummerCard, startSummer, summerOn, summerPlace } from '@/lib/usCareerSummer';\n" +
+    "import { answerTalk, endsAfterSeason, manualRetire, pendingTalk, repairHallOnLoad, talkDeckFilter } from '@/lib/usCareerRetirementFlow';\n" +
+    "import { stampOnRetirement } from '@/lib/usCareerRetirementFlow';\n" +
+    "import { isFarewellSeason, type RetirementChoiceId } from '@/lib/careerRetirement';\n" +
+    "import { hallRecordFor, type HallSpeechId } from '@/lib/careerHallOfFame';\n" +
+    '/* Round 1570: the Hall wall. Only its two keys load with the board; the rules (src/lib/usCareerHallWall.ts) load\n' +
+    '   when there is a wall to read or a retired career to put up, and the wall screen when it is opened. Loaded with\n' +
+    "   the board the rules cost every US career route 2.02K (r1570-s5a, one runner), over the lead's 2K line. Neither\n" +
+    '   file imports a sport (simUsCareerHallWall section 3). */\n' +
+    "import { hallWallKey, wallKeyOf } from '@/lib/usCareerHallWallKey';\n" +
+    "import type { HallWall } from '@/lib/usCareerHallWall';\n" +
+    "import { DIRTY_SENTENCE_NO_WASHERS, canDealWithDirtyMoney, washersLeft } from '@/lib/careerDirtyMoney';\n" +
+    '\n' +
+    "const UsCareerPractice = lazy(() => import('@/components/us-career/UsCareerPractice'));\n" +
+    "const CareerSeasonReview = lazy(() => import('@/components/us-career/CareerSeasonReview'));\n" +
+    '/* Round 1039: the retirement talk, the farewell banner and the Hall card load\n' +
+    '   with the moment they belong to; the speech (careerAwardsNight) rides only\n' +
+    '   with the Hall card. */\n' +
+    "const FarewellCard = lazy(() => import('@/components/career/FarewellCard').then(m => ({ default: m.FarewellCard })));\n" +
+    "const FarewellSeasonBanner = lazy(() => import('@/components/career/FarewellCard').then(m => ({ default: m.FarewellSeasonBanner })));\n" +
+    "const HallOfFameCard = lazy(() => import('@/components/career/HallOfFameCard').then(m => ({ default: m.HallOfFameCard })));\n" +
+    "/* Round 1570: the Hall wall's screen loads when it is opened. */\n" +
+    "const UsCareerHallWall = lazy(() => import('@/components/us-career/UsCareerHallWall'));\n" +
+    '/* Round 1500: the dirty money desk loads when "Deal with it" is pressed. */\n' +
+    "const DirtyMoneyDesk = lazy(() => import('@/components/us-career/DirtyMoneyDesk'));\n" +
+    '\n' +
+    "/* Round 126: 'coach' is new. Retirement used to be the last screen in the\n" +
+    '   game. Now it hands you to a job board and the save keeps going.\n' +
+    "   Round 179: 'freeagency' is new. An expired deal now opens a real market\n" +
+    '   window before the next season instead of a two-button card that the event\n' +
+    '   deck might never draw. */\n' +
+    "/* Round 207: 'extension' is new. The final year of a deal now opens a\n" +
+    '   real fork: sign on, or play it out and reach free agency. */\n' +
+    "type Phase = 'create' | 'prospect' | 'season' | 'event' | 'extension' | 'freeagency' | 'retired' | 'coach';\n" +
+    '\n' +
+    "/* The board holds a career as the part every sport keeps. Each sport's own\n" +
+    '   fields (its stats, its awards) ride along untouched and are read only by\n' +
+    "   the sport's own functions. */\n" +
+    'type CareerState = ProgrammeCareer;\n' +
+    'type SeasonLine = UsCareerSeason;\n' +
+    'type CareerEvent = UsCareerEvent<UsCareerCore>;\n' +
+    '\n' +
+    'interface SaveShape { c: CareerState | null; phase: Phase; teamQuality: number | null; coach?: CoachCareerState | null; prospect?: UsCareerProspect; contractTalk?: UsCareerMarketTalk }\n' +
+    '\n' +
+    '/** Round 1144: how long the toast that says a save was refused stays, with its Retry on it. */\n' +
+    'const SAVE_TOAST_MS = 10_000;\n' +
+    "/** A toast's button is 24 px tall as it comes (measured: 48 by 24). This one is the way to save a\n" +
+    " *  career from a phone, so it gets a thumb's room, the same 44 px the notice's Retry save has. */\n" +
+    'const SAVE_TOAST_BUTTON = { height: 44, minWidth: 64, paddingLeft: 14, paddingRight: 14, fontSize: 13 } as const;\n' +
+    '\n' +
+    'export default function UsCareerBoard({ sport }: { sport: UsCareerSport }) {\n' +
+    '  const pendingSave = useRef<{ key: string; value: string | null } | null>(null);\n' +
+    "  const [saveFailure, setSaveFailure] = useState<'write' | 'remove' | null>(null);\n" +
+    '  const saveFailed = saveFailure !== null;\n' +
+    '  useEffect(() => {\n' +
+    '    if (!saveFailed) return;\n' +
+    '    /* Round 1144: the toast carries a Retry of its own. With the Week by week\n' +
+    '       viewer op'... 94437 more characters,
+  expected: "import { lazy, Suspense, useCallback, useEffect, useMemo, useRef, useState } from 'react';\n" +
+    "import type { ReactNode } from 'react';\n" +
+    "import { toast } from 'sonner';\n" +
+    "import { Crown, Dumbbell, RotateCcw, Sparkles } from 'lucide-react';\n" +
+    "import ShareButtons from '@/components/game/ShareButtons';\n" +
+    '/* Round 900: the one board. The NFL, NBA, MLB and NHL careers were four copies\n' +
+    '   of this file; what they really differed in is the `sport` this board is\n' +
+    '   handed (src/lib/usCareerSport.ts), bound per sport in nflCareerSport.ts and\n' +
+    '   its three siblings. This file imports no sport directly, and\n' +
+    '   scripts/simUsCareerWeight.mjs holds it to that. It is not yet true that a\n' +
+    '   route loads no other sport: the coach career (usCoachCareer.ts through\n' +
+    '   usCareerToCoach.ts) still pulls in the NFL engine and the NBA, MLB and NHL\n' +
+    '   conquest data on all four routes, as it did before this round.\n' +
+    '   Wire a new screen here, once. */\n' +
+    "import type { UsCareerCore, UsCareerEvent, UsCareerSeason, UsCareerSport, UsShopItem } from '@/lib/usCareerSport';\n" +
+    "import UsCareerProgramme from '@/components/us-career/UsCareerProgramme';\n" +
+    "import { expireUsCareerProgramme, prepareUsCareerProgramme, restoreUsCareerProgramme, settleUsCareerProgramme, type ProgrammeCareer } from '@/lib/usCareerProgramme';\n" +
+    '// Round 179: real free agency, shared engine and shared screen.\n' +
+    "import { applyFaSigning, oneYearWindow } from '@/lib/usCareerFreeAgency';\n" +
+    "import type { FaWindow } from '@/lib/usCareerFreeAgency';\n" +
+    "import FreeAgencyPanel from '@/components/us-career/FreeAgencyPanel';\n" +
+    '/* Round 207: the extension talk, shared engine and shared card. */\n' +
+    "import { extensionDue, type ExtensionTalk } from '@/lib/usCareerExtension';\n" +
+    "import { acknowledgeMarketWheel, declineMarketExtension, extensionMarketProbabilities, freeAgencyMarketProbabilities, openMarketExtension, openMarketFreeAgency, pushMarketExtension, pushMarketFreeAgency, restoreMarketTalk, type UsCareerMarketTalk } from '@/lib/usCareerMarket';\n" +
+    "import ExtensionCard from '@/components/us-career/ExtensionCard';\n" +
+    '// Round 186: the season curtain, shared engine and shared card.\n' +
+    "import { buildSeasonReveal, draftPressureLine, type SeasonReveal } from '@/lib/usCareerReveal';\n" +
+    "import { SeasonRevealCard } from '@/components/us-career/SeasonRevealCard';\n" +
+    "import { UsSeasonCentreEntry } from '@/components/us-career/season/UsSeasonCentreEntry';\n" +
+    "import { holdPendingSave } from '@/lib/safeStorage';\n" +
+    '/* Round 530: draft day as a moment, and the retirement card on the same\n' +
+    '   celebration kit the season curtain uses. */\n' +
+    "import DraftDayCard, { type DraftDayFacts } from '@/components/us-career/DraftDayCard';\n" +
+    "import USCareerActionConfirm from '@/components/us-career/USCareerActionConfirm';\n" +
+    "import UsCareerSaveNotice from '@/components/us-career/UsCareerSaveNotice';\n" +
+    "import { CelebrationStyles, revealDelay } from '@/components/club-manager/Celebration';\n" +
+    "import { type PlayerAppearance, defaultAppearance } from '@/lib/soccerCareerAppearance';\n" +
+    "import PlayerAvatar from '@/components/soccer-career/PlayerAvatar';\n" +
+    "import AppearanceBuilder from '@/components/soccer-career/AppearanceBuilder';\n" +
+    "import { Confetti } from '@/components/soccer-career/CareerFx';\n" +
+    "import { useGameCompletion } from '@/hooks/useGameCompletion';\n" +
+    "import { markRestoredFinish } from '@/lib/restoredFinish';\n" +
+    "import { recordActivity } from '@/lib/completions';\n" +
+    "import { useRevealScroll } from '@/hooks/useRevealScroll';\n" +
+    "import CoachCareerPanel, { CoachStartCard } from '@/components/us-career/CoachCareerPanel';\n" +
+    "import { startCoachCareer, ensureCoachCareer } from '@/lib/usCoachCareer';\n" +
+    "import type { CoachCareerState } from '@/lib/usCoachCareer';\n" +
+    '/* Round 208: the hub boxes, shared with the front offices and Club\n' +
+    '   Manager, and the trophy case they now open onto. */\n' +
+    "import { careerHubTiles } from '@/lib/careerHub';\n" +
+    "import { HubTiles, HubPanelHeader } from '@/components/hub/HubTiles';\n" +
+    "import type { HubTile } from '@/components/hub/HubTiles';\n" +
+    "import TrophyCase from '@/components/us-career/TrophyCase';\n" +
+    '/* Round 469: the money app, the gram, the rival card and the badges, on the\n' +
+    '   same engines Soccer Career runs (careerMoney, careerSocial, careerBadges),\n' +
+    '   bound per sport (nflCareerMoney.ts, nflCareerLoop.ts and their siblings). */\n' +
+    "import MoneyApp from '@/components/us-career/MoneyApp';\n" +
+    "import { SocialGram, RivalCard, BadgeGrid } from '@/components/us-career/SocialPanel';\n" +
+    "import type { MoneyAction } from '@/lib/careerMoney';\n" +
+    "import { fmtFollowers, pushHeadlines } from '@/lib/careerSocial';\n" +
+    '/* Round 521: the inbox and the rivalry events, the same engines the\n' +
+    '   flagship runs (careerInbox.ts, careerRivalryEvents.ts), bound per\n' +
+    '   sport (nflCareerInbox.ts, nflCareerRivalryEvents.ts and their siblings). */\n' +
+    "import { InboxPanel } from '@/components/us-career/InboxPanel';\n" +
+    "import { RivalryEventCard } from '@/components/us-career/RivalryEventCard';\n" +
+    "/* Round 796: the rival choice card, and the inbox on the sport's own calendar. */\n" +
+    "import { RivalryChoiceCard } from '@/components/us-career/RivalryChoiceCard';\n" +
+    "import type { RivalryChoiceCard as RivalryChoice } from '@/lib/careerRivalryChoices';\n" +
+    "import { cn } from '@/lib/utils';\n" +
+    "import ProspectJourney, { ProspectRecord } from '@/components/us-career/ProspectJourney';\n" +
+    "import { createUsCareerProspect, loadUsCareerProspect, type UsCareerProspect } from '@/lib/usCareerProspect';\n" +
+    "import { loadPreDraft, type PreDraftState } from '@/lib/careerPreDraft';\n" +
+    "import { keyedRng } from '@/lib/keyedRng';\n" +
+    "import { bankTrainingRating, trainingBankNote, trainingScore, trainingSessionOpen } from '@/lib/careerTraining';\n" +
+    "import { buildCareerDecisionOutcome, type CareerDecisionOutcomeData } from '@/lib/usCareerDecisionOutcome';\n" +
+    "import CareerDecisionOutcome from '@/components/us-career/CareerDecisionOutcome';\n" +
+    "import { answerSummerCard, newSummerSalt, repairSummerOnLoad, seekSummerCard, startSummer, summerOn, summerPlace } from '@/lib/usCareerSummer';\n" +
+    "import { answerTalk, endsAfterSeason, manualRetire, pendingTalk, repairHallOnLoad, talkDeckFilter } from '@/lib/usCareerRetirementFlow';\n" +
+    "import { stampOnRetirement } from '@/lib/usCareerRetirementFlow';\n" +
+    "import { isFarewellSeason, type RetirementChoiceId } from '@/lib/careerRetirement';\n" +
+    "import { hallRecordFor, type HallSpeechId } from '@/lib/careerHallOfFame';\n" +
+    "import { DIRTY_SENTENCE_NO_WASHERS, canDealWithDirtyMoney, washersLeft } from '@/lib/careerDirtyMoney';\n" +
+    '\n' +
+    "const UsCareerPractice = lazy(() => import('@/components/us-career/UsCareerPractice'));\n" +
+    "const CareerSeasonReview = lazy(() => import('@/components/us-career/CareerSeasonReview'));\n" +
+    '/* Round 1039: the retirement talk, the farewell banner and the Hall card load\n' +
+    '   with the moment they belong to; the speech (careerAwardsNight) rides only\n' +
+    '   with the Hall card. */\n' +
+    "const FarewellCard = lazy(() => import('@/components/career/FarewellCard').then(m => ({ default: m.FarewellCard })));\n" +
+    "const FarewellSeasonBanner = lazy(() => import('@/components/career/FarewellCard').then(m => ({ default: m.FarewellSeasonBanner })));\n" +
+    "const HallOfFameCard = lazy(() => import('@/components/career/HallOfFameCard').then(m => ({ default: m.HallOfFameCard })));\n" +
+    '/* Round 1500: the dirty money desk loads when "Deal with it" is pressed. */\n' +
+    "const DirtyMoneyDesk = lazy(() => import('@/components/us-career/DirtyMoneyDesk'));\n" +
+    '\n' +
+    "/* Round 126: 'coach' is new. Retirement used to be the last screen in the\n" +
+    '   game. Now it hands you to a job board and the save keeps going.\n' +
+    "   Round 179: 'freeagency' is new. An expired deal now opens a real market\n" +
+    '   window before the next season instead of a two-button card that the event\n' +
+    '   deck might never draw. */\n' +
+    "/* Round 207: 'extension' is new. The final year of a deal now opens a\n" +
+    '   real fork: sign on, or play it out and reach free agency. */\n' +
+    "type Phase = 'create' | 'prospect' | 'season' | 'event' | 'extension' | 'freeagency' | 'retired' | 'coach';\n" +
+    '\n' +
+    "/* The board holds a career as the part every sport keeps. Each sport's own\n" +
+    '   fields (its stats, its awards) ride along untouched and are read only by\n' +
+    "   the sport's own functions. */\n" +
+    'type CareerState = ProgrammeCareer;\n' +
+    'type SeasonLine = UsCareerSeason;\n' +
+    'type CareerEvent = UsCareerEvent<UsCareerCore>;\n' +
+    '\n' +
+    'interface SaveShape { c: CareerState | null; phase: Phase; teamQuality: number | null; coach?: CoachCareerState | null; prospect?: UsCareerProspect; contractTalk?: UsCareerMarketTalk }\n' +
+    '\n' +
+    '/** Round 1144: how long the toast that says a save was refused stays, with its Retry on it. */\n' +
+    'const SAVE_TOAST_MS = 10_000;\n' +
+    "/** A toast's button is 24 px tall as it comes (measured: 48 by 24). This one is the way to save a\n" +
+    " *  career from a phone, so it gets a thumb's room, the same 44 px the notice's Retry save has. */\n" +
+    'const SAVE_TOAST_BUTTON = { height: 44, minWidth: 64, paddingLeft: 14, paddingRight: 14, fontSize: 13 } as const;\n' +
+    '\n' +
+    'export default function UsCareerBoard({ sport }: { sport: UsCareerSport }) {\n' +
+    '  const pendingSave = useRef<{ key: string; value: string | null } | null>(null);\n' +
+    "  const [saveFailure, setSaveFailure] = useState<'write' | 'remove' | null>(null);\n" +
+    '  const saveFailed = saveFailure !== null;\n' +
+    '  useEffect(() => {\n' +
+    '    if (!saveFailed) return;\n' +
+    '    /* Round 1144: the toast carries a Retry of its own. With the Week by week\n' +
+    "       viewer open the notice that holds Retry save is under the viewer's\n" +
+    '       cover, and the toast was telling the player to use a button he could\n' +
+    '       not reach until he closed the viewer. It says Retry, not Retry save, so\n' +
+    '       the page never has two buttons of one name. The press keeps the toast\n' +
+    '       (the cleanup below takes it back the moment the save goes through), and\n' +
+    '       ten seconds instead of four gives him time to read it and press.\n' +
+    "       The first sentence is kept word for word (the other lane's driver for\n" +
+    '       Round 1084 reads it), so the second line is what makes the words match\n' +
+    '       the button they sit next to. */\n' +
+    "    const said = toast.error('Your latest changes could not be saved. Stay on this page and use Retry save.', {\n" +
+    "      description: 'Retry here does the same thing.',\n" +
+    '      duration: SAVE_TOA'... 83542 more characters,
+  operator: 'strictEqual',
+  diff: 'simple'
+}
+
+Node.js v24.22.1

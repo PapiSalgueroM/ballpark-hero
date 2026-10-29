@@ -1,0 +1,43 @@
+
+[1m[46m RUN [49m[22m [36mv3.2.7 [39m[90m/home/runner/work/ballpark-hero/ballpark-hero[39m
+
+Browserslist: browsers data (caniuse-lite) is 16 months old. Please run:
+  npx update-browserslist-db@latest
+  Why you should do it regularly: https://github.com/browserslist/update-db#readme
+ [32m✓[39m src/lib/usCareerHallWall.test.ts [2m([22m[2m18 tests[22m[2m)[22m[32m 243[2mms[22m[39m
+ [32m✓[39m src/test/usCareerHallWall.test.tsx [2m([22m[2m48 tests[22m[2m)[22m[33m 52165[2mms[22m[39m
+   [33m[2m✓[22m[39m 'NFL': the Hall wall on the board[2m > [22mC1 and C2: a career retired through the board goes up on the wall, and a restart keeps it there [33m 854[2mms[22m[39m
+   [33m[2m✓[22m[39m 'NFL': the Hall wall on the board[2m > [22mC4: a refused wall write breaks nothing, and the prompt keeps saying the card goes [33m 504[2mms[22m[39m
+   [33m[2m✓[22m[39m 'NFL': the Hall wall on the board[2m > [22mC7: with no Hall bound (the parity replay) the wall is never read, written or drawn [33m 301[2mms[22m[39m
+   [33m[2m✓[22m[39m 'NBA': the Hall wall on the board[2m > [22mC1 and C2: a career retired through the board goes up on the wall, and a restart keeps it there [33m 482[2mms[22m[39m
+   [33m[2m✓[22m[39m 'NBA': the Hall wall on the board[2m > [22mC4: a refused wall write breaks nothing, and the prompt keeps saying the card goes [33m 352[2mms[22m[39m
+   [33m[2m✓[22m[39m 'MLB': the Hall wall on the board[2m > [22mC1 and C2: a career retired through the board goes up on the wall, and a restart keeps it there [33m 469[2mms[22m[39m
+   [33m[2m✓[22m[39m 'MLB': the Hall wall on the board[2m > [22mC4: a refused wall write breaks nothing, and the prompt keeps saying the card goes [33m 318[2mms[22m[39m
+   [33m[2m✓[22m[39m 'NHL': the Hall wall on the board[2m > [22mC1 and C2: a career retired through the board goes up on the wall, and a restart keeps it there [33m 431[2mms[22m[39m
+   [33m[2m✓[22m[39m 'NHL': the Hall wall on the board[2m > [22mC4: a refused wall write breaks nothing, and the prompt keeps saying the card goes [33m 348[2mms[22m[39m
+   [33m[2m✓[22m[39m 'NFL': old saves and broken walls[2m > [22mC3: an old retired save of every class goes up as its card told him, and its save is never written [33m 776[2mms[22m[39m
+   [33m[2m✓[22m[39m 'NFL': old saves and broken walls[2m > [22mC6: junk is replaced, a newer version is never written over, a bad plaque is dropped alone [33m 474[2mms[22m[39m
+   [33m[2m✓[22m[39m 'NBA': old saves and broken walls[2m > [22mC3: an old retired save of every class goes up as its card told him, and its save is never written [33m 787[2mms[22m[39m
+   [33m[2m✓[22m[39m 'NBA': old saves and broken walls[2m > [22mC6: junk is replaced, a newer version is never written over, a bad plaque is dropped alone [33m 354[2mms[22m[39m
+   [33m[2m✓[22m[39m 'MLB': old saves and broken walls[2m > [22mC3: an old retired save of every class goes up as its card told him, and its save is never written [33m 837[2mms[22m[39m
+   [33m[2m✓[22m[39m 'MLB': old saves and broken walls[2m > [22mC6: junk is replaced, a newer version is never written over, a bad plaque is dropped alone [33m 439[2mms[22m[39m
+   [33m[2m✓[22m[39m 'NHL': old saves and broken walls[2m > [22mC3: an old retired save of every class goes up as its card told him, and its save is never written [33m 841[2mms[22m[39m
+   [33m[2m✓[22m[39m 'NHL': old saves and broken walls[2m > [22mC6: junk is replaced, a newer version is never written over, a bad plaque is dropped alone [33m 423[2mms[22m[39m
+   [33m[2m✓[22m[39m C8: the wall draws nothing and moves no save byte[2m > [22m'NFL': five seeds, the wall written, refused and absent, press for press [33m 7527[2mms[22m[39m
+   [33m[2m✓[22m[39m C8: the wall draws nothing and moves no save byte[2m > [22m'NBA': five seeds, the wall written, refused and absent, press for press [33m 6435[2mms[22m[39m
+   [33m[2m✓[22m[39m C8: the wall draws nothing and moves no save byte[2m > [22m'MLB': five seeds, the wall written, refused and absent, press for press [33m 6927[2mms[22m[39m
+   [33m[2m✓[22m[39m C8: the wall draws nothing and moves no save byte[2m > [22m'NHL': five seeds, the wall written, refused and absent, press for press [33m 7323[2mms[22m[39m
+   [33m[2m✓[22m[39m 'NFL': the wall screen[2m > [22mC10: from the retirement screen the opener waits for the card, Back focuses it, and Start over on the wall lands on create [33m 1116[2mms[22m[39m
+   [33m[2m✓[22m[39m 'NFL': the wall screen[2m > [22mC10: the wall says when this player is not on it, and when a newer version saved it [33m 2062[2mms[22m[39m
+   [33m[2m✓[22m[39m 'NBA': the wall screen[2m > [22mC10: from the retirement screen the opener waits for the card, Back focuses it, and Start over on the wall lands on create [33m 1060[2mms[22m[39m
+   [33m[2m✓[22m[39m 'NBA': the wall screen[2m > [22mC10: the wall says when this player is not on it, and when a newer version saved it [33m 2061[2mms[22m[39m
+   [33m[2m✓[22m[39m 'MLB': the wall screen[2m > [22mC10: from the retirement screen the opener waits for the card, Back focuses it, and Start over on the wall lands on create [33m 1072[2mms[22m[39m
+   [33m[2m✓[22m[39m 'MLB': the wall screen[2m > [22mC10: the wall says when this player is not on it, and when a newer version saved it [33m 2124[2mms[22m[39m
+   [33m[2m✓[22m[39m 'NHL': the wall screen[2m > [22mC10: from the retirement screen the opener waits for the card, Back focuses it, and Start over on the wall lands on create [33m 1087[2mms[22m[39m
+   [33m[2m✓[22m[39m 'NHL': the wall screen[2m > [22mC10: the wall says when this player is not on it, and when a newer version saved it [33m 2070[2mms[22m[39m
+
+[2m Test Files [22m [1m[32m2 passed[39m[22m[90m (2)[39m
+[2m      Tests [22m [1m[32m66 passed[39m[22m[90m (66)[39m
+[2m   Start at [22m 14:32:15
+[2m   Duration [22m 59.37s[2m (transform 4.80s, setup 258ms, collect 9.58s, tests 52.41s, environment 1.86s, prepare 907ms)[22m
+
