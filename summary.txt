@@ -1,0 +1,6 @@
+dash-diff exit=0 0s | git diff f957b34ea HEAD: 0 added lines with an en or em dash 
+dash-log exit=0 0s | commit messages f957b34ea..HEAD: 0 lines with an en or em dash
+simSiteSearch exit=0 2s | simSiteSearch: green. Every game is findable by name, typos included, and the ranking can explain itself.
+simGuideHeadings exit=0 1s | simGuideHeadings: green. 131 guides carry keyword h2s over h3 and h4 sections with every original sentence intact, and all 133 blocks render a clean outline.
+simNoRivalNames exit=0 14s | No rival product names found. 0 findings.
+tsc exit=0 58s | 

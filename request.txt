@@ -1,0 +1,6 @@
+tsc: node_modules/.bin/tsc --noEmit -p tsconfig.app.json
+simNoRivalNames: node scripts/simNoRivalNames.mjs
+dash-diff: node .rc/x/dashScan.mjs diff f957b34ea
+dash-log: node .rc/x/dashScan.mjs log f957b34ea
+simSiteSearch: node scripts/simSiteSearch.mjs
+simGuideHeadings: node scripts/simGuideHeadings.mjs
