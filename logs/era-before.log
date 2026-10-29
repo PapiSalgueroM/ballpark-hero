@@ -1,0 +1,4 @@
+[31m     → expected 'Santa Clara is not a club in 2008' to be 'Santa Clara tier 4' // Object.is equality[39m
+[31m[1mAssertionError[22m: expected 'Santa Clara is not a club in 2008' to be 'Santa Clara tier 4' // Object.is equality[39m
+Received: [31m"Santa Clara [7mis not a club in 2008[27m"[39m
+[2m Test Files [22m [1m[31m1 failed[39m[22m[90m (1)[39m

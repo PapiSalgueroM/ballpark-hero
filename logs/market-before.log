@@ -1,0 +1,6 @@
+[32m-   "pending": true,[39m
+[31m+   "pending": false,[39m
+    [90m 47| [39m      expect({ seed, from: held.club, to: plain.club, pending: !!readM…
+    [90m 48| [39m        .toEqual({ seed, from: held.club, to: plain.club, pending: tru…
+[2m Test Files [22m [1m[31m1 failed[39m[22m[90m (1)[39m
+::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/test/soccerCareerManagerJobReviewMarket.test.ts,title=src/test/soccerCareerManagerJobReviewMarket.test.ts > review job moves holds for a 

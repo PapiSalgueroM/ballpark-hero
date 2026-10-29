@@ -1,0 +1,4 @@
+[31m   [31m×[31m the loyalty plan records only real choices[2m > [22mno ledger and nothing picked: no recorded choice, in play and at an offer[39m[32m 10[2mms[22m[39m
+[31m     → expected { phase: 'playing', choice: 'cash' } to deeply equal { phase: 'playing', choice: null }[39m
+   [32m✓[39m the loyalty plan records only real choices[2m > [22ma picked loyalty payout is still the recorded choice[32m 10[2mms[22m[39m
+[41m[1m FAIL [22m[49m src/test/soccerCareerLoyaltyView.test.ts[2m > [22mthe loyalty plan records only real choices[2m > [22mno ledger and nothing picked: no recorded choice, in play and at an 

@@ -1,0 +1,12 @@
+acc-before exit=1 1s | simAccessibility: 1 failure(s)
+deadend-before exit=1 1s | simCareerNoDeadEnd: 1 finding(s).
+uncut-before exit=1 2s |     124|       expect({ seed, renewal: loyal.ext }).toEqual({ seed, renewal: ca…
+era-before exit=1 2s |  Test Files  1 failed (1)
+market-before exit=1 3s | ::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/test/soccerCareerManagerJobReviewMarket.test.ts,title=src/test/soccerCareerManagerJobReviewMarket.test.ts >
+loan-before exit=1 8s | ::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/test/clubManagerLoanPlanMounted.test.tsx,title=src/test/clubManagerLoanPlanMounted.test.tsx > Loan plan thr
+bingo1-before exit=1 1s |      29| const shown = (p: BingoPlayer) => BANDS.filter(([id]) => tile(id).test…
+bingo2-before exit=1 1s |  Test Files  1 failed (1)
+retire-before exit=1 3s | ::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/test/soccerCareerManagerPendingRetire.test.tsx,title=src/test/soccerCareerManagerPendingRetire.test.tsx > R
+view-before exit=1 1s |  FAIL  src/test/soccerCareerLoyaltyView.test.ts > the loyalty plan records only real choices > no ledger and nothing picked: no recorded choice, in play and at an 
+copy-before exit=1 3s |  Test Files  1 failed (1)
+full-before exit=1 3s |  Test Files  1 failed (1)

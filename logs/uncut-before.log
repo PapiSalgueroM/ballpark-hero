@@ -1,0 +1,8 @@
+[31m     → expected { seed: 1, ext: 10350 } to deeply equal { seed: 1, ext: 11500 }[39m
+[31m[1mAssertionError[22m: expected { seed: 1, ext: 10350 } to deeply equal { seed: 1, ext: 11500 }[39m
+[32m- Expected[39m
+[31m+ Received[39m
+    [90m108| [39m      expect({ seed, ext: loyal.ext }).toEqual({ seed, ext: cash.ext }…
+[32m- Expected[39m
+[31m+ Received[39m
+    [90m124| [39m      expect({ seed, renewal: loyal.ext }).toEqual({ seed, renewal: ca…

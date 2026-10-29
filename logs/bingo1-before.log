@@ -1,0 +1,4 @@
+[31m     → no tile born-2000-to-2003[39m
+[31m     → no tile born-2000-to-2003[39m
+[31m[1mError[22m: no tile born-2000-to-2003[39m
+    [90m 29| [39mconst shown = (p: BingoPlayer) => BANDS.filter(([id]) => tile(id).test…

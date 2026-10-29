@@ -1,0 +1,4 @@
+[41m[1m FAIL [22m[49m src/test/playerBingoCategories.test.ts[2m > [22mPlayer Bingo categories[2m > [22mpreserves all 52 original fixed IDs and the board and support rules
+[41m[1m FAIL [22m[49m src/test/playerBingoCategories.test.ts[2m > [22mPlayer Bingo categories[2m > [22madds exactly 11 distinct fixed categories without replacing an old ID
+[41m[1m FAIL [22m[49m src/test/playerBingoCategories.test.ts[2m > [22mPlayer Bingo categories[2m > [22mchecks appearance boundaries on a single known season
+[2m Test Files [22m [1m[31m1 failed[39m[22m[90m (1)[39m
