@@ -1,0 +1,15 @@
+simBingoClubCounts exit=0 2s | simBingoClubCounts: GREEN, every section held
+ctl-rule exit=1 2s | simBingoClubCounts: CONTROL=rule FIRED (7 failures; section 1: 3, section 4: 4)
+ctl-onesource exit=1 2s | simBingoClubCounts: CONTROL=onesource FIRED (1 failures; section 5: 1)
+ctl-pending exit=1 3s | simBingoClubCounts: CONTROL=pending FIRED (2 failures; section 4: 2)
+ctl-handedit exit=1 3s | simBingoClubCounts: CONTROL=handedit FIRED (1 failures; section 6: 1)
+ctl-leak exit=1 2s | simBingoClubCounts: CONTROL=leak FIRED (2 failures; section 2: 2)
+ctl-nomorton exit=1 2s | simBingoClubCounts: CONTROL=nomorton FIRED (4 failures; section 2: 1, section 3: 3)
+ctl-noapply exit=1 1s | simBingoClubCounts: CONTROL=noapply FIRED (25 failures; section 2: 8, section 3: 17)
+ctl-noreserve exit=1 1s | simBingoClubCounts: CONTROL=noreserve FIRED (64 failures; section 2: 32, section 3: 32)
+ctl-nosplit exit=1 0s | simBingoClubCounts: CONTROL=nosplit FIRED (14 failures; section 2: 8, section 3: 6)
+vitest exit=0 26s |    Duration  24.73s (transform 8.48s, setup 1.64s, collect 12.29s, tests 25.42s, environment 7.77s, prepare 2.45s)
+simPlayerBingoHonours exit=0 13s | simPlayerBingoHonours PASS
+simNoRivalNames exit=0 22s | No rival product names found. 0 findings.
+simPlayerBingoCategories exit=0 42s | simPlayerBingoCategories: fixed proof passed; raw reports and changed-copy receipts retained.
+tsc exit=0 97s | 
