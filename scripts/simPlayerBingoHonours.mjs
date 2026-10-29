@@ -27,7 +27,9 @@ const source = heldLib.toString('utf8').replaceAll('\r\n', '\n');
    Existing title predicates, Vitinha rows and all four executable controls remain held. */
 /* Category expansion: pin retaken for twelve derived tiles and their groups.
    Personal honours, identity rules and all existing executable controls are held. */
-assert.equal(hash(Buffer.from(source)), '8207B3A625C9E0B7929C154F3F72C367F69D3588364B90CA34EEA196DC19FBB1');
+/* Release BS fix BS-mix-1 and BS-mix-2: pin retaken once more for the birth year age tiles and the removed
+   goals in under 30 matches tile; honours, identity rules and the executable controls are held. */
+assert.equal(hash(Buffer.from(source)), '032C39B452AEC76DA883E8531457601644DDDFDD438197D10D1461922D2BB224');
 assert.equal(hash(heldTest), '0AE18AE01A012509200926DB6F66BA115C81AF718FD07B308299DFE21EB4EB72');
 writeFileSync(path.join(out, 'source.raw.ts'), heldLib);
 writeFileSync(path.join(out, 'source.LF.ts'), source);
