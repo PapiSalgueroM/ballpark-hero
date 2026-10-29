@@ -1,0 +1,6 @@
+#!serve
+#!playwright
+walk: git worktree add /tmp/base 65b3e291a >/dev/null 2>&1; node .rc/x/review-walk.mjs
+writes: node scripts/simWritesAreSent.mjs
+play: node scripts/playAflClubNames.mjs
+play-ctl: PLAY_AFL_NAMES_CONTROL=bundlename node scripts/playAflClubNames.mjs
