@@ -170,11 +170,14 @@ try {
               await tiles.evaluateAll((buttons, classes) => buttons.forEach((button, index) => { button.querySelector(':scope > span:nth-of-type(2)').className = classes[index]; }), heldClasses);
               row.wrapControl.restored = await inspect(); save();
             }
-            assert.deepEqual(row.wrapControl.raw.issues, [
+            /* Release BS fix BS-mix-1 and BS-mix-2: the deal changed with the tiles, so the same three defects
+               are read in the order the new board lays them out */
+            const byTitle = (a, b) => a.title.localeCompare(b.title);
+            assert.deepEqual([...row.wrapControl.raw.issues].sort(byTitle), [
               { kind: 'label-overflow', title: 'Played for Manchester United' },
               { kind: 'label-overflow', title: 'Champions League winner' },
               { kind: 'label-overflow', title: 'Goalkeeper' },
-            ], 'The complete old class reproduces the three retained 320px overflow defects');
+            ].sort(byTitle), 'The complete old class reproduces the three retained 320px overflow defects');
             assert.deepEqual(row.wrapControl.restored.issues, [], 'Restoring the complete responsive class restores clean label geometry');
             row.wrapControl.passed = true; save();
           }
