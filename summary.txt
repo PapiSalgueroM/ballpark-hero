@@ -1,0 +1,20 @@
+simNoRivalNames exit=0 34s | No rival product names found. 0 findings.
+simHarnessAnchors exit=0 103s | simHarnessAnchors: green. Every harness parses and none carries an unmatchable anchor.
+simStorageWrites exit=0 7s | simStorageWrites: all green (owed: 12)
+simSiteSearch exit=0 5s | simSiteSearch: green. Every game is findable by name, typos included, and the ranking can explain itself.
+simGuideHeadings exit=0 2s | simGuideHeadings: green. 131 guides carry keyword h2s over h3 and h4 sections with every original sentence intact, and all 133 blocks render a clean outline.
+kw-fresh exit=0 1s | keyword index current
+dash-diff exit=0 1s | git diff 601435944 HEAD: 0 added lines with an en or em dash 
+dash-log exit=0 0s | commit messages 601435944..HEAD: 0 lines with an en or em dash
+tsc exit=0 174s | 
+byxi exit=0 5s | simBuildYourXiFit: all checks green
+byxi-s3 exit=0 5s | simBuildYourXiFit: all checks green
+byxi-nowingback exit=0 4s | CONTROL FIRED: BYXI_CONTROL=nowingback turned section 3 red and nothing else
+byxi-nofit exit=0 4s | CONTROL FIRED: BYXI_CONTROL=nofit turned section 1 and 3 red and nothing else
+byxi-nowingback-base exit=0 5s | CONTROL FIRED: BYXI_CONTROL=nowingback turned section 3 red and nothing else
+simWorldXiSeasonReport exit=0 6s | simWorldXiSeasonReport: green. The report says a great deal more, every number adds up and comes off who played, and nobody real says a word.
+simLineupValidatorClient exit=0 4s | simLineupValidatorClient: 55 checks passed. Only the boolean true on an ok response reads as valid; an allowance answer, a failed status, a body that is not a verdict, a 
+simQuotaHonesty exit=0 0s | simQuotaHonesty: green. When the allowance is gone, Soccer Grid says so and stops asking for retries; Build Your XI blocks the one pick, keeps the search box and never sa
+simPlayerAutocompleteInteraction exit=0 10s | simPlayerAutocompleteInteraction: eight actual-component pointer, keyboard, disabled, free-text, identity and filter checks passed; fifteen stale list checks passed (a bo
+parity exit=0 135s | simUsBoardParity: green. Four sports replayed click for click, save for save and screen for screen with the proved historical main775 coaching Panel.
+vitest-all exit=0 986s |  Test Files  687 passed | 2 skipped (689)

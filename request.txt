@@ -1,0 +1,20 @@
+tsc: node_modules/.bin/tsc --noEmit -p tsconfig.app.json
+vitest-all: node_modules/.bin/vitest run --testTimeout=300000 --hookTimeout=120000 > /tmp/va.log 2>&1; s=$?; grep -E "FAIL|Test Files|Tests  " /tmp/va.log | head -40 | cut -c1-250; exit $s
+simNoRivalNames: node scripts/simNoRivalNames.mjs
+simHarnessAnchors: node scripts/simHarnessAnchors.mjs
+simStorageWrites: node scripts/simStorageWrites.mjs
+simSiteSearch: node scripts/simSiteSearch.mjs
+simGuideHeadings: node scripts/simGuideHeadings.mjs
+kw-fresh: node scripts/genSearchKeywords.mjs && git diff --exit-code --stat src/data/searchKeywords.json && echo "keyword index current"
+dash-diff: node .rc/x/dashScan.mjs diff 601435944
+dash-log: node .rc/x/dashScan.mjs log 601435944
+parity: node scripts/simUsBoardParity.mjs
+byxi: node scripts/simBuildYourXiFit.mjs
+byxi-s3: BYXI_SEED=3 node scripts/simBuildYourXiFit.mjs
+byxi-nowingback: BYXI_CONTROL=nowingback node scripts/simBuildYourXiFit.mjs
+byxi-nofit: BYXI_CONTROL=nofit node scripts/simBuildYourXiFit.mjs
+byxi-nowingback-base: git worktree add -q /tmp/b400 5572def49 && ln -s "$PWD/node_modules" /tmp/b400/node_modules && cp scripts/simBuildYourXiFit.mjs /tmp/b400/scripts/ && cd /tmp/b400 && BYXI_CONTROL=nowingback node scripts/simBuildYourXiFit.mjs
+simWorldXiSeasonReport: node scripts/simWorldXiSeasonReport.mjs
+simLineupValidatorClient: node scripts/simLineupValidatorClient.mjs
+simQuotaHonesty: node scripts/simQuotaHonesty.mjs
+simPlayerAutocompleteInteraction: node scripts/simPlayerAutocompleteInteraction.mjs
