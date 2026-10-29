@@ -1,0 +1,13 @@
+default: node scripts/simTriviaBank.mjs
+armfile: echo "imports equal to main: [$(git diff --name-only 65b3e291a -- src/data/marketNamesakes.json src/lib/clearWinner.ts src/lib/dateUtils.ts src/lib/dealPlayers.ts)]" && git show 65b3e291a:src/lib/triviaQuestionBank.ts > "$TMPDIR/base-bank.ts" && TRIVIA_ARM_FILE="$TMPDIR/base-bank.ts" node scripts/simTriviaBank.mjs
+repro777head: SIM_SEED=777 TRIVIA_UNLIMITED=3000 node scripts/simTriviaBank.mjs
+ctl-short: TRIVIA_CONTROL=short node scripts/simTriviaBank.mjs
+ctl-redeal: TRIVIA_CONTROL=redeal node scripts/simTriviaBank.mjs
+ctl-dupe: TRIVIA_CONTROL=dupe node scripts/simTriviaBank.mjs
+ctl-ties: TRIVIA_CONTROL=ties node scripts/simTriviaBank.mjs
+ctl-namesake: TRIVIA_CONTROL=namesake node scripts/simTriviaBank.mjs
+ctl-tense: TRIVIA_CONTROL=tense node scripts/simTriviaBank.mjs
+ctl-postense: TRIVIA_CONTROL=postense node scripts/simTriviaBank.mjs
+ctl-family: TRIVIA_CONTROL=family node scripts/simTriviaBank.mjs
+ctl-legacy: TRIVIA_CONTROL=legacy node scripts/simTriviaBank.mjs
+ctl-rulec: TRIVIA_CONTROL=rulec node scripts/simTriviaBank.mjs
