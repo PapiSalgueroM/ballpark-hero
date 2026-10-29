@@ -121,6 +121,18 @@
  *   of the board's round with nobody in the chair (awayRound), as the summer was already replayed; control
  *   awaymoves (the rivals' in season moves dropped) must fire there. Before this nothing held those moves: the
  *   mean roster moved (12.52 against 12.66) and is printed, not asserted (review minor 2).
+ *   section 6 on both rows replays every draft out the same way (awayDraftReplay, ids aside); control oldskip (the
+ *   old club left out of the draft) must fire there. The draft ratio reads the other clubs only, so it could not
+ *   see that; the old club's own draftees are printed, not asserted: on the NHL 2, 0, 6 and 4 over the four seed
+ *   sets of sixty years out, too few to hold a floor that is not a coin toss (r1559-fx2; the NFL 11, 15, 21).
+ *   section 5 on the nhl row plants a retained salary row on the desk before every take and asserts the rows stay
+ *   the league's; control retainedclub (the rows made the club's) must fire (review minor 3).
+ *   section 10's bind cases gain controls syncalways and refusedrelease in gmCareerBind.ts (review minor 6).
+ *
+ * CONTROL COUNTS ARE NOT FIXTURES (review minor 4). The green run is deterministic to the digit, but a control's
+ * failure count is not: nhl notrim failed 105 times in r1559-f1 and 110 in r1559-run-a on the same src. Read a
+ * control by its exit code and its "(FIRED)" line, never by matching a count; the counts in the header and the
+ * audit notes are what one run printed.
  *
  * Recording: SIM_GM_CAREER_RECORD=<sha of the base> writes the fixture
  * (scripts/data/gmCareerFixture.json, or SIM_GM_CAREER_OUT) and stops.
@@ -595,6 +607,16 @@ const DRIVE = {
     engineSummer: (lg, rng) => E.runOffseason(lg, rng),
     /* Round 1559 fix pass: playWeek's order with nobody in the chair (injuries, the rivals' moves, every game, the week
        moved on below the last), for the year out's round replay (section 6, control awaymoves). */
+    /* Round 1559 fix pass: the board's draft with nobody in the chair (the old club's depth chart back to automatic,
+       openDraft's class size rule with no picks of his, draftWithoutPicks's three batches with nobody left out), for
+       the year out's draft replay (section 6, control oldskip). */
+    awayDraftReplay(lg, rng, oldTeam) {
+      const old = lg.teams[oldTeam];
+      if (old) for (const pos of E.DEPTH_GROUPS) E.resetDepth(old, pos);
+      const capital = Object.values(lg.teams).reduce((sum, t) => sum + t.picks.length, 0);
+      let cls = E.generateDraftClass(rng, Math.max(40, Math.min(capital, 18)), leagueNames(lg));
+      for (let i = 0; i < 3; i++) cls = E.nflAiDraftPicks(lg, cls, '', rng).remaining;
+    },
     awayRound(lg, rng) {
       E.injuryPass(lg.teams, rng);
       E.aiWeeklyMoves(lg, '', rng);
@@ -707,6 +729,15 @@ const DRIVE = {
     engineSummer: (lg, rng) => EN.nhlOffseason(lg, rng, undefined, { noUserClub: true }),
     /* Round 1559 fix pass: playRound's order with nobody in the chair (the round, the rivals' moves, the round moved
        on below the last), for the year out's round replay (section 6, control awaymoves). */
+    /* Round 1559 fix pass: the board's draft with nobody in the chair (the old club's contributors back to automatic,
+       openDraft's class of 24, draftWithoutPicks's two batches over the standings reversed, read again before each,
+       nobody filtered out), for the year out's draft replay (section 6, control oldskip). */
+    awayDraftReplay(lg, rng, oldTeam) {
+      const old = lg.teams[oldTeam];
+      if (old) EN.nhlResetContributors(old);
+      let cls = EN.nhlDraftClass(rng, 24, leagueNames(lg));
+      for (let b = 0; b < 2; b++) cls = EN.nhlAiDraftPicks(lg, cls, EN.nhlFoStandings(lg).map(t => t.abbr).reverse(), rng).remaining;
+    },
     awayRound(lg, rng) {
       EN.simNhlRound(lg, '', rng);
       EN.nhlAiMoves(lg, '', rng);
@@ -1433,9 +1464,11 @@ const S6 = {
   oldPlanted: 0, oldTrimmed: 0,
   /* Round 1559 fix pass: rounds out replayed against the row's own round, and how many differed */
   roundShadows: 0, roundsOff: 0,
-  /* Round 1559 fix pass: men the old club drafted in its years out */
-  oldDrafted: 0,
+  /* Round 1559 fix pass: men the old club drafted in its years out; drafts out replayed, and how many differed */
+  oldDrafted: 0, draftShadows: 0, draftsOff: 0,
 };
+/* Round 1559 fix pass: a league's JSON with every id taken out (a replay on a copy mints its own) */
+const noIdsJ = v => JSON.stringify(v, (key, x) => (key === 'id' ? undefined : x));
 const rosterIds = (lg, skip) => new Set(Object.entries(lg.teams).filter(([a]) => a !== skip).flatMap(([, t]) => [...t.players, ...(t.practice ?? [])].map(p => p.id)));
 const everyId = lg => { const s = rosterIds(lg, null); for (const p of lg.freeAgents) s.add(p.id); return s; };
 const firedSeatFor = (team, tier, season, grades, out = 0) => {
@@ -1508,12 +1541,22 @@ if (runs('6')) {
       const noneMinted = (step, b, lg) => { for (const id of everyId(lg)) if (!b.has(id)) { S6.minted++; fail(`${at}: ${step} minted a player`); break; } };
       const wrapped = {
         awayDraft(lg, r, dk) {
-          const b = rosterIds(lg, null); const out = away.awayDraft(lg, r, dk);
+          const b = rosterIds(lg, null);
+          /* Round 1559 fix pass (review minor 7): the draft replayed on a copy with the same draws against the row's
+             own statement of the board's draft with nobody in the chair; it must be the league the away host left,
+             ids aside (the copy mints its own). The ratio below reads the other clubs only, so a draft that leaves
+             the old club out was green before this (control oldskip); its own draftees are counted and printed. */
+          const shadow = d.awayDraftReplay ? clone(lg) : null, draws = [];
+          const out = away.awayDraft(lg, shadow ? () => { const x = r(); draws.push(x); return x; } : r, dk);
           for (const id of rosterIds(lg, null)) if (!b.has(id)) drafted.add(id);
-          /* Round 1559 fix pass (review minor 7): the old club drafts in a year out too (nobody filtered out of the
-             order); the ratio above reads the other clubs only, so its own draftees are counted here (control oldskip). */
           const oldNow = lg.teams[team];
           if (oldNow) for (const p of [...oldNow.players, ...(oldNow.practice ?? [])]) if (!b.has(p.id)) S6.oldDrafted++;
+          if (shadow) {
+            let i = 0, threw = false;
+            try { d.awayDraftReplay(shadow, () => { if (i >= draws.length) throw new Error('out of draws'); return draws[i++]; }, team); } catch { threw = true; }
+            S6.draftShadows++;
+            if (threw || i !== draws.length || noIdsJ(shadow) !== noIdsJ(lg)) { S6.draftsOff++; fail(`${at}: the draft out is not the board's draft with nobody in the chair (${i} of ${draws.length} draws replayed${threw ? ', the replay ran out' : ''})`); }
+          }
           return out;
         },
         awaySummer(lg, r, dk) {
@@ -1626,7 +1669,11 @@ if (runs('6')) {
     console.log(`   retained rows planted ${S6.retained.rows}: ${S6.retained.kept} summers kept at the figure the club kept, ${S6.retained.dropped} dropped when the entry ran out; the old club's contributors back to automatic after ${S6.lineupFree} of ${S6.years} years`);
     ok(S6.retained.kept >= S6_SEEDS.length, `only ${S6.retained.kept} retained rows carried over a summer`);
   }
-  console.log(`   the old club drafted ${S6.oldDrafted} men in its ${S6.years} years out`);
+  console.log(`   the old club drafted ${S6.oldDrafted} men in its ${S6.years} years out (printed, not asserted: 2, 0, 6 and 4 on the NHL's four seed sets, r1559-fx2)`);
+  if (d.awayDraftReplay) {
+    console.log(`   drafts out replayed against the board's draft with nobody in the chair: ${S6.draftShadows}, ${S6.draftsOff} differed`);
+    ok(S6.draftShadows === S6.years && S6.draftsOff === 0, `only ${S6.draftShadows} drafts out replayed for ${S6.years} years out, ${S6.draftsOff} differed`);
+  }
   if (d.awayRound) {
     console.log(`   rounds out replayed against the board's round with no user club: ${S6.roundShadows}, ${S6.roundsOff} differed`);
     ok(S6.roundShadows >= S6.years * d.periods() && S6.roundsOff === 0, `only ${S6.roundShadows} rounds out replayed for ${S6.years} years out of ${d.periods()} rounds, ${S6.roundsOff} differed`);
