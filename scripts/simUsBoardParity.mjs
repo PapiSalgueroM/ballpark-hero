@@ -370,6 +370,24 @@
  * Continue" at age 31 (its markup: the training card on screen, where the
  * button is the maintenance one). No save, text excerpt, length or coverage
  * count moved. 2,298,769 bytes.
+ * Round 1569 (the player reports of 2026-10-26) re-recorded it on purpose on
+ * 2026-10-29, by the same method, on a runner from its branch at dc0eed05
+ * with the proved historical Panel aliased in (rc r1569-fx2, extra files
+ * rec1569.mjs, mut1569.mjs, fixdiff.mjs). The round adds three ways out
+ * that this replay leaves out by their data attributes, as it does every
+ * additive control (Start over, data-career-start-over; the market's retire
+ * choice, data-career-market-retire; the no offer reason,
+ * data-extension-why), and it changes three pieces of copy: the playoff note
+ * (careerVariance.ts clutchNote reads the January level), the press scrum's
+ * sentence, and the extension card's words in a season that ends the career.
+ * With those three copy changes put back to main's words (recB) the
+ * recording equals the fixture before it in every click, save, coverage
+ * count and screen of all four sports. As shipped (recA) no click, save,
+ * coverage count or fixed save moved; 397 screens moved, every one a
+ * season's words: the curtain's new credit or tough playoff line, the News
+ * tile that prints the same season's feed until the next season is played
+ * (5 of its presses carry a headline count one higher in the label, the same
+ * tile), and the scrum's sentence. 2,259,762 bytes.
  *
  * Controls, one per run (each is a full replay, about three minutes):
  *   US_BOARD_PARITY_CONTROL=label    one label changed in a copy of the shared
