@@ -96,7 +96,10 @@ if (ids('baseball').length !== 35 || ids('nfl').length !== 1 || ids('nhl').lengt
 const files = {};
 {
   /* Round 1567 rewrote 39 of these boards after this migration was applied (2026-10-23), so the files this one is
-     held to are the ones Round 1558 left on main (1229c0190, read from git), not today's */
+     held to are the ones Round 1558 left on main (1229c0190, read from git), not today's. Re-record attribution
+     (runner r1567-fx-rr on 2a30833e7): the script as it was at 1229c0190, run on this round's tree, exits 1 with
+     29 failures, each "the migration's new board is not the file's board"; the same script with only the three
+     data files put back to 1229c0190 exits 0 green; this version on the round's head exits 0 green */
   const { boardsAt } = await import('./usConnections1567Migration.mjs');
   const b = await boardsAt('1229c0190');
   files.baseball = b.baseball; files.nfl = b.nfl; files.nhl = b.nhl;
