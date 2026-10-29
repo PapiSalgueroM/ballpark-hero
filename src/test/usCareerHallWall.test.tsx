@@ -242,6 +242,10 @@ describe.each(ROWS)('$label: old saves and broken walls', ({ label, sport }) => 
       cleanup(); localStorage.clear();
       localStorage.setItem(sport.saveKey, k.raw);
       const writes = vi.spyOn(Storage.prototype, 'setItem');
+      /* The keep effect is the one reader of the wall after mount (the read effect reads while the mount's act
+         runs), so a wall read after mountBoard returns is the positive sign that the keep effect ran. */
+      const reads = vi.spyOn(Storage.prototype, 'getItem');
+      const wallReads = () => reads.mock.calls.filter(([key]) => key === wallKey(sport)).length;
       mountBoard(sport);
       await waitFor(() => expect(localStorage.getItem(wallKey(sport)), k.name).not.toBeNull());
       await settle();
@@ -253,10 +257,12 @@ describe.each(ROWS)('$label: old saves and broken walls', ({ label, sport }) => 
       k.told(wall.entries[0].hall, c);
       cleanup(); writes.mockClear();
       mountBoard(sport);
+      const mounted = wallReads();
+      await waitFor(() => expect(wallReads(), `${k.name}: the second visit's keep effect read the wall`).toBeGreaterThan(mounted));
       await settle();
       expect(writes.mock.calls, `${k.name}: a second visit writes nothing`).toEqual([]);
       expect(readWall(sport).entries.length).toBe(1);
-      writes.mockRestore();
+      writes.mockRestore(); reads.mockRestore();
     }
   }, 60000);
 

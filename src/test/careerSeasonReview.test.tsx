@@ -500,9 +500,15 @@ describe('saved career season review', () => {
       const career: UsCareerCore = makeReviewCareer(fixture, true), bytes = reviewSave(career), legacy = sport.legacyOf(career);
       localStorage.setItem(sport.saveKey, bytes);
       const writes = vi.spyOn(Storage.prototype, 'setItem');
+      /* The keep effect is the one reader of the wall after mount, so a wall read after render returns says it
+         ran (on the second open the cumulative write list already holds the first open's write). */
+      const reads = vi.spyOn(Storage.prototype, 'getItem');
+      const wallReads = () => reads.mock.calls.filter(([key]) => key === hallWallKey(sport.slug)).length;
       for (let open = 0; open < 2; open++) {
         const { unmount } = render(<MemoryRouter><Board /></MemoryRouter>);
+        const mounted = wallReads();
         await screen.findByText(`${career.name} retires`, undefined, { timeout: 20000 });
+        await waitFor(() => expect(wallReads(), `open ${open + 1}: the keep effect read the wall`).toBeGreaterThan(mounted), { timeout: 20000 });
         expect(screen.queryByText(legacy.verdict)).not.toBeNull();
         for (const bullet of legacy.bullets) expect(document.body.textContent).toContain(bullet);
         expect(document.body.textContent).toContain(`Legacy ${legacy.score}`);
@@ -515,7 +521,7 @@ describe('saved career season review', () => {
         expect(recordCompletion).not.toHaveBeenCalled();
         unmount();
       }
-      writes.mockRestore();
+      writes.mockRestore(); reads.mockRestore();
     }
   }, 60000);
 });

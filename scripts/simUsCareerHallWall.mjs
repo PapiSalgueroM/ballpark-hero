@@ -36,6 +36,7 @@
  *   loadonly   the keep effect only for a career that was live in this visit section 4: C3 C4b C6 C10b C10c
  *   kept       hallKept forced true                                          section 4: C4 C4b C6 C10c
  *   anyplaque  hallKept true when ANY plaque is up, not this career's        section 4: C4b
+ *   rewrite    the keep effect writes the same plaque again                  section 4: C3
  *   oldline    the "did not keep" line for any missing plaque, not a refusal  section 4: C10c
  *   createline the "did not keep" line from the create screen as well        section 4: C10a C10c
  *   nogate     the bound Hall gate taken out of both effects and the opener  section 4: C7
@@ -84,7 +85,7 @@ const SOURCE_CONTROLS = {
   version: { from: 'if (raw.v !== 1) return', to: 'if (false) return' },
   sportimport: { from: "import type { UsCareerCore } from '@/lib/usCareerSport';\n", to: `import type { UsCareerCore } from '@/lib/usCareerSport';\n${PLANT}` },
 };
-const HARNESS_CONTROLS = ['unstamped', 'calnow', 'nokeep', 'loadonly', 'kept', 'anyplaque', 'oldline', 'createline', 'nogate', 'stalesave', 'boarddraw'];
+const HARNESS_CONTROLS = ['unstamped', 'calnow', 'nokeep', 'loadonly', 'kept', 'anyplaque', 'rewrite', 'oldline', 'createline', 'nogate', 'stalesave', 'boarddraw'];
 if (CONTROL && !SOURCE_CONTROLS[CONTROL] && !HARNESS_CONTROLS.includes(CONTROL)) {
   console.error(`simUsCareerHallWall: SIM_HALL_WALL_CONTROL=${CONTROL} is not a control this harness knows`);
   process.exit(2);
@@ -410,6 +411,10 @@ const BOARD_CONTROLS = {
   /* The reviewers' run lens (r1570-run-mut): "the card stays" read off ANY plaque up, not this career's. */
   anyplaque: { edits: [[KEPT_LINE, 'const hallKept = hallWallKeyNow !== null && !!wall?.entries.length;']],
     fail: ['C4b'], hold: ['C1', 'C3', 'C4', 'C5', 'C6', 'C7', 'C8', 'C9', 'C10a', 'C10b', 'C10c', 'J'] },
+  /* The keep effect writes the same plaque again on every load (the read lens: no control proved C3's "a second
+     visit writes nothing" could fail). */
+  rewrite: { edits: [['if (next !== was.entries) localStorage.setItem(', 'if (true) localStorage.setItem(']],
+    fail: ['C3'], hold: ['C1', 'C4', 'C4b', 'C5', 'C6', 'C7', 'C8', 'C9', 'C10a', 'C10b', 'C10c', 'J'] },
   /* The wall's "did not keep" line: shown for any missing plaque, refused or not (oldline), and shown from the
      create screen as well (createline). */
   oldline: { edits: [[MISSING, "missing={view.from === 'retired' && !hallKept}"]],
