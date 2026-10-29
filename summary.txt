@@ -1,0 +1,6 @@
+simPlayerBingoHonours exit=1 0s | Node.js v24.22.1
+simPlayerBingoLineFeedback exit=0 10s | simPlayerBingoLineFeedback: CRLF bindings proved, original bytes held and owned copies cleaned; fictional fixtures, no browser or backend calls.
+simPlayerBingoLoad exit=0 5s | simPlayerBingoLoad: CRLF bindings proved, raw source bytes held, owned copies cleaned; fictional transport only, no browser or live calls.
+simSportsBingo exit=0 0s | simSportsBingo: green. Every card can be finished, and the packs play fair.
+vt-review-bingo exit=0 23s |  Test Files  5 passed (5)
+tsc exit=0 81s | 

@@ -1,0 +1,6 @@
+tsc: node_modules/.bin/tsc --noEmit -p tsconfig.app.json
+vt-review-bingo: node_modules/.bin/vitest run src/test/soccerCareerManagerJobReviewMarket.test.ts src/test/soccerCareerManagerJobReview.test.ts src/test/playerBingoBirthYear.test.ts src/test/playerBingoCategories.test.ts src/test/clubManagerLoanPlanMounted.test.tsx --testTimeout=300000 --hookTimeout=120000 > /tmp/vr.log 2>&1; s=$?; grep -E "FAIL|Test Files|Tests  |market job review|bingo birth|Error|Expected|Received|^\s+[-+] " /tmp/vr.log | head -60 | cut -c1-250; exit $s
+simPlayerBingoHonours: node scripts/simPlayerBingoHonours.mjs
+simPlayerBingoLineFeedback: node scripts/simPlayerBingoLineFeedback.mjs
+simPlayerBingoLoad: node scripts/simPlayerBingoLoad.mjs
+simSportsBingo: node scripts/simSportsBingo.mjs
