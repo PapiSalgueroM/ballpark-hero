@@ -1,0 +1,7 @@
+diff-leak exit=0 162s | leak FIRED as it must
+diff-base exit=0 223s | simCmDifficulty: all green (sections 1,2,3,6,7)
+nosack exit=0 156s | simCmNoSack: PASS (sections 1, 2, 3, 4, 5, 6, 7)
+vitest-1501 exit=0 13s |    Duration  11.97s (transform 3.71s, setup 585ms, collect 10.65s, tests 14.32s, environment 2.80s, prepare 866ms)
+meters exit=0 32s | simClubManagerMeters: PASS. The board meter is the sack race, the fans move with results, and every table prints its goals pair.
+sec2-fleet exit=0 458s | simCmDifficulty: all green (sections 2)
+diff-ctl exit=0 324s | controls (each must be 1): nojoin=1 helpdrift=1 cheque=1 wages=1 alloffleak=1

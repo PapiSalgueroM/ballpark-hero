@@ -1,0 +1,4 @@
+   red per daily: Hot Seat 3 of 3, Deadline Day 0 of 3; deadlineDay.ts calls none of the match, summer, market or setup entry points
+CONTROL leak FIRED: 170 failures
+simCmDifficulty: 170 FAILURES (sections 2,6)
+leak FIRED as it must
