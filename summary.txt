@@ -1,0 +1,8 @@
+c-kept exit=1 54s | simUsCareerHallWall CONTROL kept: FIRED, C4, C4b, C6, C10c red in all four sports and C1, C3, C5, C7, C8, C8b, C9, C10a, C10b, J green
+c-anyplaque exit=1 59s | simUsCareerHallWall CONTROL anyplaque: FIRED, C4b red in all four sports and C1, C3, C4, C5, C6, C7, C8, C8b, C9, C10a, C10b, C10c, J green
+c-rewrite exit=1 56s | simUsCareerHallWall CONTROL rewrite: FIRED, C3 red in all four sports and C1, C4, C4b, C5, C6, C7, C8, C8b, C9, C10a, C10b, C10c, J green
+c-oldline exit=1 53s | simUsCareerHallWall CONTROL oldline: FIRED, C10c red in all four sports and C1, C3, C4, C4b, C5, C6, C7, C8, C8b, C9, C10a, C10b, J green
+c-loadonly exit=1 123s | simUsCareerHallWall CONTROL loadonly: FIRED, C3, C4b, C6, C10b, C10c red in all four sports and C1, C4, C5, C7, C8, C8b, C9, C10a, J green
+c-createline exit=1 54s | simUsCareerHallWall CONTROL createline: FIRED, C10a, C10c red in all four sports and C1, C3, C4, C4b, C5, C6, C7, C8, C8b, C9, C10b, J green
+c-nogate exit=1 57s | simUsCareerHallWall CONTROL nogate: FIRED, C7 red in all four sports and C1, C3, C4, C4b, C5, C6, C8, C8b, C9, C10a, C10b, C10c, J green
+c-stalesave exit=1 57s | simUsCareerHallWall CONTROL stalesave: FIRED, C9 red in all four sports and C1, C3, C4, C4b, C5, C6, C7, C8, C8b, C10a, C10b, C10c, J green
