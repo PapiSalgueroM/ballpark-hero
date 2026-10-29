@@ -1,0 +1,9 @@
+#!serve
+#!playwright
+weight-head: (node scripts/lib/hostLikeServer.mjs dist 4180 > /tmp/wh.log 2>&1 &) && sleep 4 && node .rc/x/weightNba.mjs http://localhost:4180 dist head && node .rc/x/weightNba.mjs http://localhost:4180 dist head2
+weight-base: git worktree add -q /tmp/wb 2413427460 && ln -s "$PWD/node_modules" /tmp/wb/node_modules && (cd /tmp/wb && node_modules/.bin/vite build > /tmp/wb-build.log 2>&1) && (node scripts/lib/hostLikeServer.mjs /tmp/wb/dist 4176 > /tmp/wb-server.log 2>&1 &) && sleep 4 && node .rc/x/weightNba.mjs http://localhost:4176 /tmp/wb/dist base
+walk: ENGINES=chromium node scripts/playNbaIntl.mjs
+tsc: node_modules/.bin/tsc --noEmit -p tsconfig.app.json
+vitest-case: node_modules/.bin/vitest run src/test/usCareerIntlBoard.test.tsx src/test/nbaTrophyTile.test.ts src/test/nbaCareerIntl.test.ts src/lib/careerIntl.test.ts src/test/nbaIntlResultLines.test.tsx --testTimeout=300000 --hookTimeout=120000
+intl-12: INTL_SECTIONS=12 node scripts/simCareerIntl.mjs
+simUsCareerWeight: node scripts/simUsCareerWeight.mjs
