@@ -31,7 +31,7 @@ export const connectionsPuzzles: ConnectionsPuzzle[] = [
     groups: [
       {
         category: 'From Brazil',
-        players: ['Neymar Jr', 'Ronaldinho Gaúcho', 'Rivaldo Vítor', 'Ricardo Kaká'],
+        players: ['Roberto Carlos', 'Gilberto Silva', 'Edmílson', 'Denílson'],
         difficulty: 'easy',
       },
       {
@@ -171,7 +171,7 @@ export const connectionsPuzzles: ConnectionsPuzzle[] = [
       },
       {
         category: 'Scored a hat-trick on their league debut',
-        players: ['Erling Haaland', 'Yakubu Aiyegbeni', 'Sadio Mané', 'Demba Ba'],
+        players: ['Erling Haaland', 'Fabrizio Ravanelli', 'Jimmy Greaves', 'Tony Cottee'],
         difficulty: 'insane',
       },
     ],
@@ -196,7 +196,7 @@ export const connectionsPuzzles: ConnectionsPuzzle[] = [
       },
       {
         category: 'Played for both Manchester clubs',
-        players: ['Carlos Tévez', 'Peter Schmeichel', 'Owen Hargreaves', 'Denis Law'],
+        players: ['Andy Cole', 'Peter Schmeichel', 'Owen Hargreaves', 'Denis Law'],
         difficulty: 'insane',
       },
     ],
@@ -216,7 +216,7 @@ export const connectionsPuzzles: ConnectionsPuzzle[] = [
       },
       {
         category: 'Scored 100+ international goals',
-        players: ['Cristiano Ronaldo', 'Ali Daei', 'Lionel Messi', 'Mokhtar Dahari'],
+        players: ['Cristiano Ronaldo', 'Ali Daei', 'Lionel Messi', 'Christine Sinclair'],
         difficulty: 'hard',
       },
       {
@@ -315,12 +315,12 @@ export const connectionsPuzzles: ConnectionsPuzzle[] = [
         difficulty: 'medium',
       },
       {
-        category: 'Won the PFA Player of the Year',
-        players: ['Eden Hazard', 'Gareth Bale', 'Luis Suárez', 'Kevin De Bruyne'],
+        category: 'From Belgium',
+        players: ['Eden Hazard', 'Kevin De Bruyne', 'Romelu Lukaku', 'Vincent Kompany'],
         difficulty: 'hard',
       },
       {
-        category: 'Scored on every day of the week',
+        category: 'Scored 170+ Premier League goals',
         players: ['Wayne Rooney', 'Frank Lampard', 'Thierry Henry', 'Alan Shearer'],
         difficulty: 'insane',
       },
@@ -396,7 +396,7 @@ export const connectionsPuzzles: ConnectionsPuzzle[] = [
       },
       {
         category: 'Played their entire career at one club',
-        players: ['Francesco Totti', 'Paolo Maldini', 'Ryan Giggs', 'Carles Puyol'],
+        players: ['Franco Baresi', 'Paolo Maldini', 'Ryan Giggs', 'Carles Puyol'],
         difficulty: 'insane',
       },
     ],
@@ -420,7 +420,7 @@ export const connectionsPuzzles: ConnectionsPuzzle[] = [
         difficulty: 'hard',
       },
       {
-        category: 'Scored a Panenka penalty in a final',
+        category: 'Scored a Panenka at a World Cup or European Championship',
         players: ['Zinedine Zidane', 'Andrea Pirlo', 'Antonín Panenka', 'Sergio Ramos'],
         difficulty: 'insane',
       },
@@ -431,7 +431,7 @@ export const connectionsPuzzles: ConnectionsPuzzle[] = [
     groups: [
       {
         category: 'From Uruguay',
-        players: ['Luis Suárez', 'Edinson Cavani', 'Diego Forlán', 'Diego Godín'],
+        players: ['Diego Lugano', 'Edinson Cavani', 'Diego Forlán', 'Diego Godín'],
         difficulty: 'easy',
       },
       {
@@ -440,7 +440,7 @@ export const connectionsPuzzles: ConnectionsPuzzle[] = [
         difficulty: 'medium',
       },
       {
-        category: 'Scored a hat-trick in the Champions League final',
+        category: 'Scored in 2+ European Cup or Champions League finals',
         players: ['Alfredo Di Stéfano', 'Ferenc Puskás', 'Gareth Bale', 'Cristiano Ronaldo'],
         difficulty: 'hard',
       },
@@ -465,8 +465,8 @@ export const connectionsPuzzles: ConnectionsPuzzle[] = [
         difficulty: 'medium',
       },
       {
-        category: 'Scored in their first El Clásico',
-        players: ['Alexia Putellas', 'Vinicius Jr', 'Luis Figo', 'Ronaldo Nazário'],
+        category: 'Played for both Barcelona and Real Madrid',
+        players: ['Luis Figo', 'Ronaldo Nazário', 'Michael Laudrup', 'Luis Enrique'],
         difficulty: 'hard',
       },
       {
@@ -491,7 +491,7 @@ export const connectionsPuzzles: ConnectionsPuzzle[] = [
       },
       {
         category: 'All-time top scorer for their country',
-        players: ['Cristiano Ronaldo', 'Ali Daei', 'Miroslav Klose', 'Wayne Rooney'],
+        players: ['Cristiano Ronaldo', 'Ali Daei', 'Miroslav Klose', 'Harry Kane'],
         difficulty: 'hard',
       },
       {
@@ -541,12 +541,12 @@ export const connectionsPuzzles: ConnectionsPuzzle[] = [
       },
       {
         category: 'Won the UEFA Cup / Europa League',
-        players: ['Radamel Falcao', 'Diego Forlán', 'Jürgen Klinsmann', 'Didier Drogba'],
+        players: ['Radamel Falcao', 'Diego Forlán', 'Jürgen Klinsmann', 'Antoine Griezmann'],
         difficulty: 'hard',
       },
       {
         category: 'Scored directly from a corner kick',
-        players: ['Thierry Henry', 'Liam Brady', 'Megan Rapinoe', 'Olof Mellberg'],
+        players: ['Thierry Henry', 'Megan Rapinoe', 'David Beckham', 'Marcos Coll'],
         difficulty: 'insane',
       },
     ],
@@ -591,12 +591,12 @@ export const connectionsPuzzles: ConnectionsPuzzle[] = [
       },
       {
         category: 'Won the Serie A title with a non-Big 3 club',
-        players: ['Diego Maradona', 'Sven-Göran Eriksson', 'Dejan Stanković', 'Hernán Crespo'],
+        players: ['Diego Maradona', 'Sven-Göran Eriksson', 'Dejan Stanković', 'Victor Osimhen'],
         difficulty: 'hard',
       },
       {
         category: 'Famous for a long throw-in',
-        players: ['Rory Delap', 'Dave Challinor', 'Aron Gunnarsson', 'Julian Dicks'],
+        players: ['Rory Delap', 'Dave Challinor', 'Aron Gunnarsson', 'Ian Hutchinson'],
         difficulty: 'insane',
       },
     ],
@@ -615,8 +615,8 @@ export const connectionsPuzzles: ConnectionsPuzzle[] = [
         difficulty: 'medium',
       },
       {
-        category: 'Scored a last-minute title-winning goal',
-        players: ['Sergio Agüero', 'Michael Thomas', 'Troy Deeney', 'Ole Gunnar Solskjær'],
+        category: 'Scored a late title-winning goal',
+        players: ['Sergio Agüero', 'Michael Thomas', 'Arjen Robben', 'Ole Gunnar Solskjær'],
         difficulty: 'hard',
       },
       {
@@ -632,7 +632,7 @@ export const connectionsPuzzles: ConnectionsPuzzle[] = [
       { category: 'Played for Aston Villa', players: ['Jack Grealish', 'Dwight Yorke', 'Paul McGrath', 'Ollie Watkins'], difficulty: 'easy' },
       { category: 'From Japan', players: ['Hidetoshi Nakata', 'Shinji Kagawa', 'Keisuke Honda', 'Takumi Minamino'], difficulty: 'medium' },
       { category: 'Won the FA Cup 3+ times', players: ['Ashley Cole', 'Patrick Vieira', 'Frank Lampard', 'Ray Parlour'], difficulty: 'hard' },
-      { category: 'Scored on all 6 continents', players: ['Zlatan Ibrahimović', 'David Beckham', 'Thierry Henry', 'Robbie Keane'], difficulty: 'insane' },
+      { category: 'Became their country\'s all-time top scorer', players: ['Zlatan Ibrahimović', 'Thierry Henry', 'Robert Lewandowski', 'Miroslav Klose'], difficulty: 'insane' },
     ],
   },
   {
@@ -640,17 +640,17 @@ export const connectionsPuzzles: ConnectionsPuzzle[] = [
     groups: [
       { category: 'Played for Benfica', players: ['Eusébio', 'Rui Costa', 'Ángel Di María', 'Jan Oblak'], difficulty: 'easy' },
       { category: 'From Belgium', players: ['Kevin De Bruyne', 'Eden Hazard', 'Romelu Lukaku', 'Vincent Kompany'], difficulty: 'medium' },
-      { category: 'Won the Community Shield 5+ times', players: ['Ryan Giggs', 'David Beckham', 'Wayne Rooney', 'Gary Neville'], difficulty: 'hard' },
+      { category: 'Won the Community Shield 5+ times', players: ['Ryan Giggs', 'Paul Scholes', 'Wayne Rooney', 'Gary Neville'], difficulty: 'hard' },
       { category: 'Played in 3+ World Cups for their country', players: ['Gianluigi Buffon', 'Lothar Matthäus', 'Rafael Márquez', 'Antonio Carbajal'], difficulty: 'insane' },
     ],
   },
   {
     id: 'puzzle-28',
     groups: [
-      { category: 'Played for Sevilla', players: ['Dani Alves', 'Jesús Navas', 'Ivan Rakitić', 'Diego Forlán'], difficulty: 'easy' },
+      { category: 'Played for Sevilla', players: ['Dani Alves', 'Jesús Navas', 'Ivan Rakitić', 'Frédéric Kanouté'], difficulty: 'easy' },
       { category: 'From Ghana', players: ['Michael Essien', 'Asamoah Gyan', 'Abedi Pelé', 'Sulley Muntari'], difficulty: 'medium' },
-      { category: 'Scored 200+ Premier League goals', players: ['Alan Shearer', 'Wayne Rooney', 'Andrew Cole', 'Sergio Agüero'], difficulty: 'hard' },
-      { category: 'Played in both Serie A and Bundesliga', players: ['Arturo Vidal', 'Douglas Costa', 'Mats Hummels', 'Kevin-Prince Boateng'], difficulty: 'insane' },
+      { category: 'Scored 180+ Premier League goals', players: ['Alan Shearer', 'Wayne Rooney', 'Andrew Cole', 'Sergio Agüero'], difficulty: 'hard' },
+      { category: 'Played in both Serie A and Bundesliga', players: ['Arturo Vidal', 'Douglas Costa', 'Mats Hummels', 'Luca Toni'], difficulty: 'insane' },
     ],
   },
   {
@@ -658,7 +658,7 @@ export const connectionsPuzzles: ConnectionsPuzzle[] = [
     groups: [
       { category: 'Played for Sporting CP', players: ['Cristiano Ronaldo', 'Luís Figo', 'Ricardo Quaresma', 'Nani'], difficulty: 'easy' },
       { category: 'From Mexico', players: ['Hugo Sánchez', 'Rafael Márquez', 'Javier Hernández', 'Hirving Lozano'], difficulty: 'medium' },
-      { category: 'Won the League Cup 4+ times', players: ['John Terry', 'Frank Lampard', 'Steven Gerrard', 'Ryan Giggs'], difficulty: 'hard' },
+      { category: 'Won the League Cup 4+ times', players: ['Ryan Giggs', 'Ian Rush', 'Sergio Agüero', 'Fernandinho'], difficulty: 'hard' },
       { category: 'Scored a goal from the halfway line', players: ['David Beckham', 'Xabi Alonso', 'Charlie Adam', 'Nayim'], difficulty: 'insane' },
     ],
   },
@@ -668,7 +668,7 @@ export const connectionsPuzzles: ConnectionsPuzzle[] = [
       { category: 'Played for Fiorentina', players: ['Gabriel Batistuta', 'Rui Costa', 'Roberto Baggio', 'Adrian Mutu'], difficulty: 'easy' },
       { category: 'From Nigeria', players: ['Jay-Jay Okocha', 'Nwankwo Kanu', 'Yakubu Aiyegbeni', 'John Obi Mikel'], difficulty: 'medium' },
       { category: 'Scored in an FA Cup Final', players: ['Steven Gerrard', 'Didier Drogba', 'Alexis Sánchez', 'Jesse Lingard'], difficulty: 'hard' },
-      { category: 'Had a famous on-pitch altercation with a teammate', players: ['Lee Bowyer', 'Kieron Dyer', 'Patrick Vieira', 'Emmanuel Adebayor'], difficulty: 'insane' },
+      { category: 'Had a famous on-pitch altercation with a teammate', players: ['Lee Bowyer', 'Kieron Dyer', 'Graeme Le Saux', 'Emmanuel Adebayor'], difficulty: 'insane' },
     ],
   },
   {
@@ -677,7 +677,7 @@ export const connectionsPuzzles: ConnectionsPuzzle[] = [
       { category: 'Played for Celtic', players: ['Henrik Larsson', 'Shunsuke Nakamura', 'Virgil van Dijk', 'Moussa Dembélé'], difficulty: 'easy' },
       { category: 'From Denmark', players: ['Peter Schmeichel', 'Michael Laudrup', 'Brian Laudrup', 'Christian Eriksen'], difficulty: 'medium' },
       { category: 'Scored 4+ goals in a single Premier League game', players: ['Dimitar Berbatov', 'Jermain Defoe', 'Andy Cole', 'Alan Shearer'], difficulty: 'hard' },
-      { category: 'Won the Confederations Cup', players: ['Ronaldinho Gaúcho', 'Thierry Henry', 'Fernando Torres', 'Adriano Leite'], difficulty: 'insane' },
+      { category: 'Won the Confederations Cup', players: ['Ronaldinho Gaúcho', 'Thierry Henry', 'Thiago Silva', 'Adriano Leite'], difficulty: 'insane' },
     ],
   },
   {
@@ -694,7 +694,7 @@ export const connectionsPuzzles: ConnectionsPuzzle[] = [
     groups: [
       { category: 'Played for Porto', players: ['Deco', 'Radamel Falcao', 'James Rodríguez', 'Hulk'], difficulty: 'easy' },
       { category: 'From Serbia', players: ['Nemanja Vidić', 'Dejan Stanković', 'Aleksandar Mitrović', 'Branislav Ivanović'], difficulty: 'medium' },
-      { category: 'Won the Champions League with an English club', players: ['John Terry', 'Steven Gerrard', 'Wayne Rooney', 'Sergio Agüero'], difficulty: 'hard' },
+      { category: 'Won the Champions League with an English club', players: ['John Terry', 'Steven Gerrard', 'Wayne Rooney', 'Jordan Henderson'], difficulty: 'hard' },
       { category: 'Known for their heading ability', players: ['Tim Cahill', 'Cristiano Ronaldo', 'Miroslav Klose', 'Jan Koller'], difficulty: 'insane' },
     ],
   },
@@ -704,7 +704,7 @@ export const connectionsPuzzles: ConnectionsPuzzle[] = [
       { category: 'Played for Galatasaray', players: ['Gheorghe Hagi', 'Didier Drogba', 'Wesley Sneijder', 'Radamel Falcao'], difficulty: 'easy' },
       { category: 'From Czech Republic', players: ['Pavel Nedvěd', 'Petr Čech', 'Patrik Berger', 'Tomáš Rosický'], difficulty: 'medium' },
       { category: 'Won the Olympic Gold in football', players: ['Neymar Jr', 'Lionel Messi', 'Carlos Tévez', 'Samuel Eto\'o'], difficulty: 'hard' },
-      { category: 'Had a famous goal celebration banned', players: ['Robbie Fowler', 'Emmanuel Adebayor', 'Mario Balotelli', 'Paul Gascoigne'], difficulty: 'insane' },
+      { category: 'Had a famous goal celebration banned', players: ['Robbie Fowler', 'Emmanuel Adebayor', 'Mario Balotelli', 'Nicolas Anelka'], difficulty: 'insane' },
     ],
   },
   {
@@ -713,7 +713,7 @@ export const connectionsPuzzles: ConnectionsPuzzle[] = [
       { category: 'Played for Wolverhampton', players: ['Raúl Jiménez', 'Adama Traoré', 'Matt Doherty', 'Rúben Neves'], difficulty: 'easy' },
       { category: 'From South Korea', players: ['Son Heung-min', 'Park Ji-sung', 'Lee Chung-yong', 'Cha Bum-kun'], difficulty: 'medium' },
       { category: 'Won the Eredivisie Golden Boot', players: ['Luis Suárez', 'Ruud van Nistelrooy', 'Romário', 'Mateja Kežman'], difficulty: 'hard' },
-      { category: 'Scored a late winner in a derby', players: ['Wayne Rooney', 'Steven Gerrard', 'Sergio Agüero', 'Cristiano Ronaldo'], difficulty: 'insane' },
+      { category: 'Scored a late winner in a derby', players: ['Michael Owen', 'Divock Origi', 'Sergio Agüero', 'Cristiano Ronaldo'], difficulty: 'insane' },
     ],
   },
   {
@@ -722,7 +722,7 @@ export const connectionsPuzzles: ConnectionsPuzzle[] = [
       { category: 'Played for Newcastle', players: ['Alan Shearer', 'Faustino Asprilla', 'David Ginola', 'Laurent Robert'], difficulty: 'easy' },
       { category: 'From Peru', players: ['Paolo Guerrero', 'Claudio Pizarro', 'Teófilo Cubillas', 'Jefferson Farfán'], difficulty: 'medium' },
       { category: 'Won the Carabao Cup with Manchester City', players: ['Sergio Agüero', 'Raheem Sterling', 'Ilkay Gündoğan', 'Riyad Mahrez'], difficulty: 'hard' },
-      { category: 'Scored a backheel goal in a top league', players: ['Olivier Giroud', 'Neymar Jr', 'Dennis Bergkamp', 'Zlatan Ibrahimović'], difficulty: 'insane' },
+      { category: 'Scored a backheel goal in a top league', players: ['Olivier Giroud', 'Thierry Henry', 'Roberto Mancini', 'Zlatan Ibrahimović'], difficulty: 'insane' },
     ],
   },
   {
@@ -737,7 +737,7 @@ export const connectionsPuzzles: ConnectionsPuzzle[] = [
   {
     id: 'puzzle-38',
     groups: [
-      { category: 'Played for Villarreal', players: ['Diego Forlán', 'Juan Román Riquelme', 'Santi Cazorla', 'Giuseppe Rossi'], difficulty: 'easy' },
+      { category: 'Played for Villarreal', players: ['Marcos Senna', 'Juan Román Riquelme', 'Santi Cazorla', 'Giuseppe Rossi'], difficulty: 'easy' },
       { category: 'From Romania', players: ['Gheorghe Hagi', 'Adrian Mutu', 'Cristian Chivu', 'Nicolae Dobrin'], difficulty: 'medium' },
       { category: 'Won the European Golden Shoe', players: ['Cristiano Ronaldo', 'Lionel Messi', 'Luis Suárez', 'Thierry Henry'], difficulty: 'hard' },
       { category: 'Famous for their rabona', players: ['Erik Lamela', 'Ángel Di María', 'Ricardo Quaresma', 'Jay-Jay Okocha'], difficulty: 'insane' },
@@ -749,7 +749,7 @@ export const connectionsPuzzles: ConnectionsPuzzle[] = [
       { category: 'Played for Southampton', players: ['Gareth Bale', 'Virgil van Dijk', 'Sadio Mané', 'Matt Le Tissier'], difficulty: 'easy' },
       { category: 'From Paraguay', players: ['José Luis Chilavert', 'Roque Santa Cruz', 'Nelson Valdez', 'Óscar Cardozo'], difficulty: 'medium' },
       { category: 'Won the Supercopa de España', players: ['Sergio Ramos', 'Lionel Messi', 'Xavi Hernández', 'Andrés Iniesta'], difficulty: 'hard' },
-      { category: 'Scored with a scorpion kick', players: ['René Higuita', 'Olivier Giroud', 'Henrikh Mkhitaryan', 'Zlatan Ibrahimović'], difficulty: 'insane' },
+      { category: 'Famous for a scorpion kick', players: ['René Higuita', 'Olivier Giroud', 'Henrikh Mkhitaryan', 'Zlatan Ibrahimović'], difficulty: 'insane' },
     ],
   },
   {
@@ -766,7 +766,7 @@ export const connectionsPuzzles: ConnectionsPuzzle[] = [
     groups: [
       { category: 'Played for Sunderland', players: ['Niall Quinn', 'Kevin Phillips', 'Jermain Defoe', 'Darren Bent'], difficulty: 'easy' },
       { category: 'From Wales', players: ['Gareth Bale', 'Ryan Giggs', 'Aaron Ramsey', 'John Charles'], difficulty: 'medium' },
-      { category: 'Won both La Liga and Premier League', players: ['Cristiano Ronaldo', 'Cesc Fàbregas', 'Michael Owen', 'Samuel Eto\'o'], difficulty: 'hard' },
+      { category: 'Won both La Liga and Premier League', players: ['Cristiano Ronaldo', 'Cesc Fàbregas', 'Diego Costa', 'Thibaut Courtois'], difficulty: 'hard' },
       { category: 'Scored a goal of the season in England', players: ['Dennis Bergkamp', 'Wayne Rooney', 'Jack Wilshere', 'Matt Le Tissier'], difficulty: 'insane' },
     ],
   },
@@ -782,9 +782,9 @@ export const connectionsPuzzles: ConnectionsPuzzle[] = [
   {
     id: 'puzzle-43',
     groups: [
-      { category: 'Played for West Brom', players: ['Peter Odemwingie', 'Saido Berahino', 'Jay Rodriguez', 'James Morrison'], difficulty: 'easy' },
+      { category: 'Played for West Brom', players: ['Peter Odemwingie', 'Saido Berahino', 'Jay Rodriguez', 'Chris Brunt'], difficulty: 'easy' },
       { category: 'From Scotland', players: ['Kenny Dalglish', 'Denis Law', 'Ally McCoist', 'Graeme Souness'], difficulty: 'medium' },
-      { category: 'Won the Copa del Rey 5+ times', players: ['Lionel Messi', 'Xavi Hernández', 'Andrés Iniesta', 'Gerard Piqué'], difficulty: 'hard' },
+      { category: 'Won the Copa del Rey 5+ times', players: ['Lionel Messi', 'Sergio Busquets', 'Andrés Iniesta', 'Gerard Piqué'], difficulty: 'hard' },
       { category: 'Had a famous moment at the World Cup', players: ['Diego Maradona', 'Zinedine Zidane', 'Dennis Bergkamp', 'Gordon Banks'], difficulty: 'insane' },
     ],
   },
@@ -802,7 +802,7 @@ export const connectionsPuzzles: ConnectionsPuzzle[] = [
     groups: [
       { category: 'Played for Olympiacos', players: ['Rivaldo Vítor', 'Yaya Touré', 'Saviola', 'Kostas Fortounis'], difficulty: 'easy' },
       { category: 'From Bosnia', players: ['Edin Džeko', 'Miralem Pjanić', 'Asmir Begović', 'Vedad Ibišević'], difficulty: 'medium' },
-      { category: 'Won the Coppa Italia 3+ times', players: ['Gianluigi Buffon', 'Alessandro Del Piero', 'Javier Zanetti', 'Francesco Totti'], difficulty: 'hard' },
+      { category: 'Won the Coppa Italia 3+ times', players: ['Gianluigi Buffon', 'Roberto Mancini', 'Javier Zanetti', 'Gianluca Vialli'], difficulty: 'hard' },
       { category: 'Famous for a memorable interview moment', players: ['Paul Gascoigne', 'Mario Balotelli', 'Zlatan Ibrahimović', 'Ian Holloway'], difficulty: 'insane' },
     ],
   },
@@ -810,7 +810,7 @@ export const connectionsPuzzles: ConnectionsPuzzle[] = [
     id: 'puzzle-46',
     groups: [
       { category: 'Played for Bayer Leverkusen', players: ['Michael Ballack', 'Kai Havertz', 'Son Heung-min', 'Dimitar Berbatov'], difficulty: 'easy' },
-      { category: 'From Jamaica', players: ['Raheem Sterling', 'Leon Bailey', 'Ricardo Fuller', 'Luton Shelton'], difficulty: 'medium' },
+      { category: 'From Jamaica', players: ['Wes Morgan', 'Michail Antonio', 'Ricardo Fuller', 'Luton Shelton'], difficulty: 'medium' },
       { category: 'Won the Ligue 1 title 3+ times', players: ['Kylian Mbappé', 'Zlatan Ibrahimović', 'Thiago Silva', 'Marco Verratti'], difficulty: 'hard' },
       { category: 'Had an iconic kit number', players: ['Paolo Maldini', 'Zinedine Zidane', 'David Beckham', 'Roberto Carlos'], difficulty: 'insane' },
     ],
@@ -838,7 +838,7 @@ export const connectionsPuzzles: ConnectionsPuzzle[] = [
     groups: [
       { category: 'Played for Fulham', players: ['Louis Saha', 'Dimitar Berbatov', 'Clint Dempsey', 'Bobby Zamora'], difficulty: 'easy' },
       { category: 'From Ukraine', players: ['Andriy Shevchenko', 'Oleksandr Zinchenko', 'Anatoliy Tymoshchuk', 'Serhiy Rebrov'], difficulty: 'medium' },
-      { category: 'Won the Bundesliga Golden Boot', players: ['Robert Lewandowski', 'Pierre-Emerick Aubameyang', 'Gerd Müller', 'Erling Haaland'], difficulty: 'hard' },
+      { category: 'Won the Bundesliga Golden Boot', players: ['Robert Lewandowski', 'Pierre-Emerick Aubameyang', 'Gerd Müller', 'Miroslav Klose'], difficulty: 'hard' },
       { category: 'Famous for their goalkeeping saves', players: ['Gordon Banks', 'Peter Schmeichel', 'Gianluigi Buffon', 'Iker Casillas'], difficulty: 'insane' },
     ],
   },
@@ -856,8 +856,8 @@ export const connectionsPuzzles: ConnectionsPuzzle[] = [
     groups: [
       { category: 'Played for Crystal Palace', players: ['Wilfried Zaha', 'Ian Wright', 'Andrew Johnson', 'Mile Jedinak'], difficulty: 'easy' },
       { category: 'From Venezuela', players: ['Juan Arango', 'Salomón Rondón', 'Josef Martínez', 'Tomás Rincón'], difficulty: 'medium' },
-      { category: 'Won the Scottish Premiership 5+ times', players: ['Henrik Larsson', 'Scott Brown', 'Ally McCoist', 'Paul Gascoigne'], difficulty: 'hard' },
-      { category: 'Scored a penalty with no run-up', players: ['Jorginho', 'Rickie Lambert', 'Matthew Le Tissier', 'Yaya Touré'], difficulty: 'insane' },
+      { category: 'Won the Scottish Premiership 5+ times', players: ['Callum McGregor', 'Scott Brown', 'Ally McCoist', 'Barry Ferguson'], difficulty: 'hard' },
+      { category: 'Scored a famous Panenka penalty', players: ['Antonín Panenka', 'Zinedine Zidane', 'Francesco Totti', 'Andrea Pirlo'], difficulty: 'insane' },
     ],
   },
   {
@@ -865,7 +865,7 @@ export const connectionsPuzzles: ConnectionsPuzzle[] = [
     groups: [
       { category: 'Played for RB Leipzig', players: ['Timo Werner', 'Naby Keïta', 'Dayot Upamecano', 'Yussuf Poulsen'], difficulty: 'easy' },
       { category: 'From Austria', players: ['David Alaba', 'Marko Arnautović', 'Marcel Sabitzer', 'Hans Krankl'], difficulty: 'medium' },
-      { category: 'Won the Copa Libertadores', players: ['Carlos Tévez', 'Ronaldinho Gaúcho', 'Diego Maradona', 'Neymar Jr'], difficulty: 'hard' },
+      { category: 'Won the Copa Libertadores', players: ['Carlos Tévez', 'Ronaldinho Gaúcho', 'Juan Román Riquelme', 'Neymar Jr'], difficulty: 'hard' },
       { category: 'Famous for their volleyed goals', players: ['Marco van Basten', 'Zinedine Zidane', 'Steven Gerrard', 'Wayne Rooney'], difficulty: 'insane' },
     ],
   },
@@ -875,7 +875,7 @@ export const connectionsPuzzles: ConnectionsPuzzle[] = [
       { category: 'Played for Bolton Wanderers', players: ['Jay-Jay Okocha', 'Youri Djorkaeff', 'Kevin Davies', 'Ivan Campo'], difficulty: 'easy' },
       { category: 'From Switzerland', players: ['Xherdan Shaqiri', 'Granit Xhaka', 'Stéphane Chapuisat', 'Alexander Frei'], difficulty: 'medium' },
       { category: 'Won the Champions League 3+ times', players: ['Cristiano Ronaldo', 'Sergio Ramos', 'Lionel Messi', 'Karim Benzema'], difficulty: 'hard' },
-      { category: 'Had a famous handshake controversy', players: ['John Terry', 'Luis Suárez', 'Nicolas Anelka', 'William Gallas'], difficulty: 'insane' },
+      { category: 'Had a famous handshake controversy', players: ['John Terry', 'Luis Suárez', 'Wayne Bridge', 'Patrice Evra'], difficulty: 'insane' },
     ],
   },
   {
@@ -890,10 +890,10 @@ export const connectionsPuzzles: ConnectionsPuzzle[] = [
   {
     id: 'puzzle-55',
     groups: [
-      { category: 'Played for Watford', players: ['Troy Deeney', 'Ismaïla Sarr', 'Elton John', 'John Barnes'], difficulty: 'easy' },
+      { category: 'Played for Watford', players: ['Troy Deeney', 'Heurelho Gomes', 'Luther Blissett', 'John Barnes'], difficulty: 'easy' },
       { category: 'From Senegal', players: ['El Hadji Diouf', 'Sadio Mané', 'Papiss Cissé', 'Habib Bèye'], difficulty: 'medium' },
-      { category: 'Won the Asian Cup', players: ['Ali Daei', 'Keisuke Honda', 'Tim Cahill', 'Son Heung-min'], difficulty: 'hard' },
-      { category: 'Scored directly from a throw-in', players: ['Rory Delap', 'Rodrigo Moreno', 'Ian Callaghan', 'Danny Rose'], difficulty: 'insane' },
+      { category: 'Won the Asian Cup', players: ['Shunsuke Nakamura', 'Keisuke Honda', 'Tim Cahill', 'Mile Jedinak'], difficulty: 'hard' },
+      { category: 'Famous for their long throw-ins', players: ['Rory Delap', 'Dave Challinor', 'Andy Legg', 'Ian Hutchinson'], difficulty: 'insane' },
     ],
   },
   {
@@ -901,8 +901,8 @@ export const connectionsPuzzles: ConnectionsPuzzle[] = [
     groups: [
       { category: 'Played for Burnley', players: ['Jay Rodriguez', 'Michael Keane', 'Andre Gray', 'Danny Ings'], difficulty: 'easy' },
       { category: 'From Iceland', players: ['Gylfi Sigurðsson', 'Aron Gunnarsson', 'Eiður Guðjohnsen', 'Kolbeinn Sigþórsson'], difficulty: 'medium' },
-      { category: 'Won the World Cup as manager and player', players: ['Franz Beckenbauer', 'Didier Deschamps', 'Mario Zagallo', 'Zinedine Zidane'], difficulty: 'hard' },
-      { category: 'Famous for playing barefoot or in unusual boots', players: ['Pelé', 'Jim Baxter', 'Rabah Madjer', 'Eusébio'], difficulty: 'insane' },
+      { category: 'Won the World Cup as a manager', players: ['Franz Beckenbauer', 'Didier Deschamps', 'Mario Zagallo', 'Vicente del Bosque'], difficulty: 'hard' },
+      { category: 'Scored a famous backheel goal', players: ['Rabah Madjer', 'Thierry Henry', 'Zlatan Ibrahimović', 'Roberto Mancini'], difficulty: 'insane' },
     ],
   },
   {
@@ -911,7 +911,7 @@ export const connectionsPuzzles: ConnectionsPuzzle[] = [
       { category: 'Played for Brighton', players: ['Alexis Mac Allister', 'Kaoru Mitoma', 'Moises Caicedo', 'Lewis Dunk'], difficulty: 'easy' },
       { category: 'From North Macedonia', players: ['Goran Pandev', 'Eljif Elmas', 'Ezgjan Alioski', 'Arijan Ademi'], difficulty: 'medium' },
       { category: 'Won the Premier League with Arsenal (Invincibles)', players: ['Thierry Henry', 'Patrick Vieira', 'Robert Pirès', 'Dennis Bergkamp'], difficulty: 'hard' },
-      { category: 'Scored a goal while injured', players: ['Bert Trautmann', 'Terry Butcher', 'Bryan Robson', 'Paul Ince'], difficulty: 'insane' },
+      { category: 'Famously played on through injury', players: ['Bert Trautmann', 'Terry Butcher', 'Bryan Robson', 'Paul Ince'], difficulty: 'insane' },
     ],
   },
   {
@@ -919,8 +919,8 @@ export const connectionsPuzzles: ConnectionsPuzzle[] = [
     groups: [
       { category: 'Played for Brentford', players: ['Ivan Toney', 'Bryan Mbeumo', 'Ollie Watkins', 'Saïd Benrahma'], difficulty: 'easy' },
       { category: 'From Hungary', players: ['Ferenc Puskás', 'Dominik Szoboszlai', 'Zoltán Gera', 'Ádám Szalai'], difficulty: 'medium' },
-      { category: 'Won the Ballon d\'Or as a defender', players: ['Fabio Cannavaro', 'Franz Beckenbauer', 'Matthias Sammer', 'Bobby Moore'], difficulty: 'hard' },
-      { category: 'Had a famous goal disallowed', players: ['Frank Lampard', 'Geoff Hurst', 'Luis Garcia', 'Neymar Jr'], difficulty: 'insane' },
+      { category: 'Defenders who finished in the Ballon d\'Or top three', players: ['Fabio Cannavaro', 'Franz Beckenbauer', 'Matthias Sammer', 'Bobby Moore'], difficulty: 'hard' },
+      { category: 'Involved in a famous goal-line controversy', players: ['Frank Lampard', 'Geoff Hurst', 'Luis Garcia', 'Pedro Mendes'], difficulty: 'insane' },
     ],
   },
   {
@@ -928,8 +928,8 @@ export const connectionsPuzzles: ConnectionsPuzzle[] = [
     groups: [
       { category: 'Played for Wolverhampton Wanderers', players: ['Diogo Jota', 'Rúben Neves', 'Matt Doherty', 'Pedro Neto'], difficulty: 'easy' },
       { category: 'From Greece', players: ['Angelos Charisteas', 'Giorgos Karagounis', 'Sotirios Kyrgiakos', 'Kostas Manolas'], difficulty: 'medium' },
-      { category: 'Won the MLS Cup', players: ['David Beckham', 'Thierry Henry', 'Robbie Keane', 'Landon Donovan'], difficulty: 'hard' },
-      { category: 'Played a match in a mask', players: ['Petr Čech', 'Son Heung-min', 'Fernando Torres', 'Cesc Fàbregas'], difficulty: 'insane' },
+      { category: 'Won the MLS Cup', players: ['David Beckham', 'Sebastian Giovinco', 'Josef Martínez', 'Landon Donovan'], difficulty: 'hard' },
+      { category: 'Played a match in a mask', players: ['Victor Osimhen', 'Son Heung-min', 'Josko Gvardiol', 'Karim Benzema'], difficulty: 'insane' },
     ],
   },
   {
@@ -946,7 +946,7 @@ export const connectionsPuzzles: ConnectionsPuzzle[] = [
     groups: [
       { category: 'Played for Sheffield Wednesday', players: ['Paolo Di Canio', 'Chris Waddle', 'Benito Carbone', 'Des Walker'], difficulty: 'easy' },
       { category: 'From Norway', players: ['Erling Haaland', 'Ole Gunnar Solskjær', 'John Arne Riise', 'Martin Ødegaard'], difficulty: 'medium' },
-      { category: 'Won both the Champions League and World Cup', players: ['Zinedine Zidane', 'Roberto Carlos', 'Karim Benzema', 'Didier Deschamps'], difficulty: 'hard' },
+      { category: 'Won both the Champions League and World Cup', players: ['Zinedine Zidane', 'Roberto Carlos', 'Raphaël Varane', 'Didier Deschamps'], difficulty: 'hard' },
       { category: 'Known for their loyalty to one club', players: ['Francesco Totti', 'Steven Gerrard', 'Matt Le Tissier', 'Tony Adams'], difficulty: 'insane' },
     ],
   },
@@ -964,7 +964,7 @@ export const connectionsPuzzles: ConnectionsPuzzle[] = [
     groups: [
       { category: 'Played for Stoke City', players: ['Peter Crouch', 'Bojan Krkić', 'Marko Arnautović', 'Xherdan Shaqiri'], difficulty: 'easy' },
       { category: 'From Republic of Ireland', players: ['Robbie Keane', 'Roy Keane', 'Damien Duff', 'Shay Given'], difficulty: 'medium' },
-      { category: 'Won the Club World Cup as captain', players: ['Sergio Ramos', 'Lionel Messi', 'Paolo Maldini', 'Iker Casillas'], difficulty: 'hard' },
+      { category: 'Won the Club World Cup as captain', players: ['Sergio Ramos', 'Carles Puyol', 'Paolo Maldini', 'Iker Casillas'], difficulty: 'hard' },
       { category: 'Had a famous touchline celebration', players: ['José Mourinho', 'Alex Ferguson', 'Jürgen Klopp', 'Arsène Wenger'], difficulty: 'insane' },
     ],
   },
@@ -973,7 +973,7 @@ export const connectionsPuzzles: ConnectionsPuzzle[] = [
     groups: [
       { category: 'Played for AC Milan', players: ['Paolo Maldini', 'Clarence Seedorf', 'Filippo Inzaghi', 'Cafu'], difficulty: 'easy' },
       { category: 'From Canada', players: ['Alphonso Davies', 'Jonathan David', 'Atiba Hutchinson', 'Dwayne De Rosario'], difficulty: 'medium' },
-      { category: 'Won the Ballon d\'Or in the 2000s', players: ['Ronaldinho Gaúcho', 'Fabio Cannavaro', 'Kaká', 'Cristiano Ronaldo'], difficulty: 'hard' },
+      { category: 'Won the Ballon d\'Or in the 2000s', players: ['Luís Figo', 'Michael Owen', 'Pavel Nedvěd', 'Cristiano Ronaldo'], difficulty: 'hard' },
       { category: 'Played in the 2006 World Cup Final', players: ['Marco Materazzi', 'Zinedine Zidane', 'Gianluigi Buffon', 'Thierry Henry'], difficulty: 'insane' },
     ],
   },
@@ -981,9 +981,9 @@ export const connectionsPuzzles: ConnectionsPuzzle[] = [
     id: 'puzzle-65',
     groups: [
       { category: 'Played for Chelsea', players: ['Gianfranco Zola', 'Claude Makélélé', 'Michael Essien', 'Arjen Robben'], difficulty: 'easy' },
-      { category: 'From Côte d\'Ivoire', players: ['Didier Drogba', 'Yaya Touré', 'Gervinho', 'Wilfried Bony'], difficulty: 'medium' },
-      { category: 'Scored a World Cup-winning goal', players: ['Mario Götze', 'Andrés Iniesta', 'Geoff Hurst', 'Pelé'], difficulty: 'hard' },
-      { category: 'Had their shirt number retired', players: ['Paolo Maldini', 'Diego Maradona', 'Bobby Moore', 'Gianluigi Buffon'], difficulty: 'insane' },
+      { category: 'From Côte d\'Ivoire', players: ['Kolo Touré', 'Yaya Touré', 'Gervinho', 'Wilfried Bony'], difficulty: 'medium' },
+      { category: 'Scored a World Cup-winning goal', players: ['Mario Götze', 'Andrés Iniesta', 'Geoff Hurst', 'Andreas Brehme'], difficulty: 'hard' },
+      { category: 'Had their shirt number retired', players: ['Paolo Maldini', 'Diego Maradona', 'Bobby Moore', 'Franco Baresi'], difficulty: 'insane' },
     ],
   },
   {
@@ -992,7 +992,7 @@ export const connectionsPuzzles: ConnectionsPuzzle[] = [
       { category: 'Played for Tottenham Hotspur', players: ['Dimitar Berbatov', 'Rafael van der Vaart', 'Jermain Defoe', 'Robbie Keane'], difficulty: 'easy' },
       { category: 'From Colombia', players: ['Carlos Valderrama', 'Freddy Rincón', 'Juan Cuadrado', 'Luis Díaz'], difficulty: 'medium' },
       { category: 'Won the Premier League Player of the Season', players: ['Cristiano Ronaldo', 'Mohamed Salah', 'Kevin De Bruyne', 'Erling Haaland'], difficulty: 'hard' },
-      { category: 'Scored in a penalty shootout at a World Cup Final', players: ['Andrea Pirlo', 'Zinedine Zidane', 'Kylian Mbappé', 'Lionel Messi'], difficulty: 'insane' },
+      { category: 'Scored in a penalty shootout at a World Cup Final', players: ['Andrea Pirlo', 'Alessandro Del Piero', 'Kylian Mbappé', 'Lionel Messi'], difficulty: 'insane' },
     ],
   },
   {
@@ -1001,16 +1001,16 @@ export const connectionsPuzzles: ConnectionsPuzzle[] = [
       { category: 'Played for Real Sociedad', players: ['Antoine Griezmann', 'Martin Ødegaard', 'David Silva', 'Xabi Alonso'], difficulty: 'easy' },
       { category: 'From DR Congo', players: ['Yannick Bolasie', 'Cédric Bakambu', 'Dieumerci Mbokani', 'Hérita Ilunga'], difficulty: 'medium' },
       { category: 'Won the Champions League with Real Madrid 3 times in a row', players: ['Cristiano Ronaldo', 'Toni Kroos', 'Luka Modrić', 'Karim Benzema'], difficulty: 'hard' },
-      { category: 'Scored a header in a Champions League Final', players: ['Sergio Ramos', 'Gareth Bale', 'Didier Drogba', 'Samuel Eto\'o'], difficulty: 'insane' },
+      { category: 'Scored a header in a Champions League Final', players: ['Sergio Ramos', 'Gareth Bale', 'Didier Drogba', 'Kingsley Coman'], difficulty: 'insane' },
     ],
   },
   {
     id: 'puzzle-68',
     groups: [
       { category: 'Played for Athletic Bilbao', players: ['Fernando Llorente', 'Iker Muniain', 'Aritz Aduriz', 'Andoni Zubizarreta'], difficulty: 'easy' },
-      { category: 'From Mali', players: ['Frédéric Kanouté', 'Seydou Keita', 'Yves Bissouma', 'Moussa Sissoko'], difficulty: 'medium' },
+      { category: 'From Mali', players: ['Frédéric Kanouté', 'Seydou Keita', 'Yves Bissouma', 'Mahamadou Diarra'], difficulty: 'medium' },
       { category: 'Scored 30+ goals in a single Premier League season', players: ['Mohamed Salah', 'Alan Shearer', 'Erling Haaland', 'Robin van Persie'], difficulty: 'hard' },
-      { category: 'Played in 4+ different top-5 European leagues', players: ['Zlatan Ibrahimović', 'David Beckham', 'Kevin-Prince Boateng', 'Michael Owen'], difficulty: 'insane' },
+      { category: 'Played in 4+ different top-5 European leagues', players: ['Zlatan Ibrahimović', 'David Beckham', 'Kevin-Prince Boateng', 'Stevan Jovetić'], difficulty: 'insane' },
     ],
   },
   {
@@ -1019,14 +1019,14 @@ export const connectionsPuzzles: ConnectionsPuzzle[] = [
       { category: 'Played for Borussia Mönchengladbach', players: ['Marco Reus', 'Granit Xhaka', 'Juan Arango', 'Denis Zakaria'], difficulty: 'easy' },
       { category: 'From Zambia', players: ['Patson Daka', 'Christopher Katongo', 'Kalusha Bwalya', 'Emmanuel Mayuka'], difficulty: 'medium' },
       { category: 'Won the Capocannoniere (Serie A top scorer)', players: ['Gonzalo Higuaín', 'Ciro Immobile', 'Luca Toni', 'Francesco Totti'], difficulty: 'hard' },
-      { category: 'Scored on their Premier League debut', players: ['Sergio Agüero', 'Marcus Rashford', 'Álvaro Morata', 'Romelu Lukaku'], difficulty: 'insane' },
+      { category: 'Scored on their Premier League debut', players: ['Sergio Agüero', 'Marcus Rashford', 'Álvaro Morata', 'Diego Costa'], difficulty: 'insane' },
     ],
   },
   {
     id: 'puzzle-70',
     groups: [
       { category: 'Played for Atalanta', players: ['Gian Piero Gasperini', 'Ademola Lookman', 'Luis Muriel', 'Duván Zapata'], difficulty: 'easy' },
-      { category: 'From Georgia', players: ['Khvicha Kvaratskhelia', 'Giorgi Mamardashvili', 'Willy Sagnol', 'Levan Kobiashvili'], difficulty: 'medium' },
+      { category: 'From Georgia', players: ['Khvicha Kvaratskhelia', 'Giorgi Mamardashvili', 'Kakha Kaladze', 'Levan Kobiashvili'], difficulty: 'medium' },
       { category: 'Won the Premier League with Manchester United in the Fergie era', players: ['Ryan Giggs', 'Paul Scholes', 'Wayne Rooney', 'Nemanja Vidić'], difficulty: 'hard' },
       { category: 'Had a famous goal against Brazil', players: ['Zinedine Zidane', 'Miroslav Klose', 'James Rodríguez', 'Toni Kroos'], difficulty: 'insane' },
     ],
@@ -1037,7 +1037,7 @@ export const connectionsPuzzles: ConnectionsPuzzle[] = [
       { category: 'Played for Eintracht Frankfurt', players: ['Kevin Trapp', 'Luka Jović', 'Sébastien Haller', 'Martin Hinteregger'], difficulty: 'easy' },
       { category: 'From Guinea', players: ['Naby Keïta', 'Florentin Pogba', 'Titi Camara', 'Pascal Feindouno'], difficulty: 'medium' },
       { category: 'Won the Champions League unbeaten', players: ['Lionel Messi', 'Samuel Eto\'o', 'Andrés Iniesta', 'Xavi Hernández'], difficulty: 'hard' },
-      { category: 'Scored directly from the restart after conceding', players: ['Charlie Adam', 'Fabrizio Ravanelli', 'Obafemi Martins', 'Djibril Cissé'], difficulty: 'insane' },
+      { category: 'Scored from inside their own half', players: ['Charlie Adam', 'Xabi Alonso', 'Asmir Begović', 'Maynor Figueroa'], difficulty: 'insane' },
     ],
   },
   {
@@ -1063,8 +1063,8 @@ export const connectionsPuzzles: ConnectionsPuzzle[] = [
     groups: [
       { category: 'Played for Feyenoord', players: ['Giovanni van Bronckhorst', 'Robin van Persie', 'Pierre van Hooijdonk', 'Arne Slot'], difficulty: 'easy' },
       { category: 'From Serbia', players: ['Dušan Tadić', 'Aleksandar Mitrović', 'Dušan Vlahović', 'Lazar Marković'], difficulty: 'medium' },
-      { category: 'Won the Premier League and La Liga in their career', players: ['Michael Owen', 'Gareth Bale', 'Emmanuel Petit', 'Nicolas Anelka'], difficulty: 'hard' },
-      { category: 'Scored an injury-time equaliser in a final', players: ['Sergio Ramos', 'Rodri', 'Teddy Sheringham', 'Steven Gerrard'], difficulty: 'insane' },
+      { category: 'Won the Premier League and La Liga in their career', players: ['David Beckham', 'Cesc Fàbregas', 'Pedro Rodríguez', 'Diego Costa'], difficulty: 'hard' },
+      { category: 'Scored an injury-time equaliser in a final', players: ['Sergio Ramos', 'Sylvain Wiltord', 'Teddy Sheringham', 'Steven Gerrard'], difficulty: 'insane' },
     ],
   },
   {
@@ -1125,8 +1125,8 @@ export const connectionsPuzzles: ConnectionsPuzzle[] = [
     id: 'puzzle-81',
     groups: [
       { category: 'Played for Barcelona in 2025-26', players: ['Lamine Yamal', 'Pedri', 'Gavi', 'Raphinha'], difficulty: 'easy' },
-      { category: 'From Nigeria', players: ['Victor Osimhen', 'Jay-Jay Okocha', 'Nwankwo Kanu', 'Austin Jay-Jay'], difficulty: 'medium' },
-      { category: 'Played for Porto and Benfica', players: ['Simão Sabrosa', 'Lisandro López', 'Ángel Di María', 'Enzo Pérez'], difficulty: 'hard' },
+      { category: 'From Nigeria', players: ['Victor Osimhen', 'Jay-Jay Okocha', 'Nwankwo Kanu', 'John Obi Mikel'], difficulty: 'medium' },
+      { category: 'Played for Porto and Benfica', players: ['Nicolás Otamendi', 'Maniche', 'Paulo Futre', 'Rui Águas'], difficulty: 'hard' },
       { category: 'Won consecutive league titles in different countries', players: ['Zlatan Ibrahimović', 'Cristiano Ronaldo', 'David Beckham', 'Thierry Henry'], difficulty: 'insane' },
     ],
   },
@@ -1199,7 +1199,7 @@ export const connectionsPuzzles: ConnectionsPuzzle[] = [
       { category: 'Played for AC Milan (2020s)', players: ['Rafael Leão', 'Olivier Giroud', 'Theo Hernández', 'Mike Maignan'], difficulty: 'easy' },
       { category: 'From Colombia', players: ['Luis Díaz', 'Juan Cuadrado', 'James Rodríguez', 'Radamel Falcao'], difficulty: 'medium' },
       { category: 'Won the DFB-Pokal and Bundesliga double', players: ['Franck Ribéry', 'Arjen Robben', 'Joshua Kimmich', 'Thomas Müller'], difficulty: 'hard' },
-      { category: 'Captained their national team at age 21 or younger', players: ['Michael Owen', 'Cesc Fàbregas', 'Gianluigi Buffon', 'Bobby Moore'], difficulty: 'insane' },
+      { category: 'Captained their club at age 21 or younger', players: ['Cesc Fàbregas', 'Fernando Torres', 'Tony Adams', 'Rúben Neves'], difficulty: 'insane' },
     ],
   },
   {
@@ -1223,10 +1223,10 @@ export const connectionsPuzzles: ConnectionsPuzzle[] = [
   {
     id: 'puzzle-92',
     groups: [
-      { category: 'Galatasaray stars (past & present)', players: ['Mauro Icardi', 'Leroy Sané', 'Dries Mertens', 'Wilfried Zaha'], difficulty: 'easy' },
+      { category: 'Played for Galatasaray', players: ['Fernando Muslera', 'Leroy Sané', 'Dries Mertens', 'Wilfried Zaha'], difficulty: 'easy' },
       { category: 'From Argentina', players: ['Paulo Dybala', 'Ángel Di María', 'Gonzalo Higuaín', 'Javier Mascherano'], difficulty: 'medium' },
       { category: 'Won the World Cup with France (2018)', players: ['Kylian Mbappé', 'N\'Golo Kanté', 'Paul Pogba', 'Hugo Lloris'], difficulty: 'hard' },
-      { category: 'Played for both Barcelona and Atlético Madrid', players: ['Luis Suárez', 'David Villa', 'Antoine Griezmann', 'Fernando Torres'], difficulty: 'insane' },
+      { category: 'Played for both Barcelona and Atlético Madrid', players: ['Luis Suárez', 'David Villa', 'Antoine Griezmann', 'Arda Turan'], difficulty: 'insane' },
     ],
   },
   {
@@ -1269,9 +1269,9 @@ export const connectionsPuzzles: ConnectionsPuzzle[] = [
     id: 'puzzle-97',
     groups: [
       { category: 'Played for Borussia Dortmund (2020s)', players: ['Jude Bellingham', 'Erling Haaland', 'Jadon Sancho', 'Giovanni Reyna'], difficulty: 'easy' },
-      { category: 'From Georgia', players: ['Khvicha Kvaratskhelia', 'Giorgi Mamardashvili', 'Willy Sagnol', 'Zurab Khizanishvili'], difficulty: 'medium' },
+      { category: 'From Georgia', players: ['Khvicha Kvaratskhelia', 'Giorgi Mamardashvili', 'Kakha Kaladze', 'Zurab Khizanishvili'], difficulty: 'medium' },
       { category: 'Won the Coppa Italia with Inter Milan', players: ['Lautaro Martínez', 'Nicolò Barella', 'Hakan Çalhanoğlu', 'Romelu Lukaku'], difficulty: 'hard' },
-      { category: 'Famous for their trivela technique', players: ['Ricardo Quaresma', 'Luka Modrić', 'João Cancelo', 'Riyad Mahrez'], difficulty: 'insane' },
+      { category: 'Famous for their trivela technique', players: ['Ricardo Quaresma', 'Luka Modrić', 'João Cancelo', 'Kevin De Bruyne'], difficulty: 'insane' },
     ],
   },
   {
@@ -1289,7 +1289,7 @@ export const connectionsPuzzles: ConnectionsPuzzle[] = [
       { category: 'Played for Juventus (2020s)', players: ['Paulo Dybala', 'Federico Chiesa', 'Dušan Vlahović', 'Manuel Locatelli'], difficulty: 'easy' },
       { category: 'From Poland', players: ['Robert Lewandowski', 'Wojciech Szczęsny', 'Arkadiusz Milik', 'Piotr Zieliński'], difficulty: 'medium' },
       { category: 'Won the FA Cup with Arsenal', players: ['Pierre-Emerick Aubameyang', 'Alexis Sánchez', 'Aaron Ramsey', 'Mesut Özil'], difficulty: 'hard' },
-      { category: 'Scored on their international debut as a teenager', players: ['Wayne Rooney', 'Kylian Mbappé', 'Michael Owen', 'Pelé'], difficulty: 'insane' },
+      { category: 'Scored at a major international tournament as a teenager', players: ['Wayne Rooney', 'Kylian Mbappé', 'Michael Owen', 'Pelé'], difficulty: 'insane' },
     ],
   },
   {
@@ -1322,9 +1322,9 @@ export const connectionsPuzzles: ConnectionsPuzzle[] = [
   {
     id: 'puzzle-103',
     groups: [
-      { category: 'Premier League Young Player of Year winners', players: ['Phil Foden', 'Bukayo Saka', 'Trent Alexander-Arnold', 'Marcus Rashford'], difficulty: 'easy' },
+      { category: 'Premier League Young Player of Year winners', players: ['Phil Foden', 'Trent Alexander-Arnold', 'Erling Haaland', 'Cole Palmer'], difficulty: 'easy' },
       { category: 'From Australia', players: ['Aaron Mooy', 'Jackson Irvine', 'Mathew Ryan', 'Riley McGree'], difficulty: 'medium' },
-      { category: 'Played for both Lyon and PSG', players: ['Alexandre Lacazette', 'Nabil Fekir', 'Memphis Depay', 'Houssem Aouar'], difficulty: 'hard' },
+      { category: 'Played for both Lyon and PSG', players: ['Hatem Ben Arfa', 'Grégory Coupet', 'Mathieu Bodmer', 'Bradley Barcola'], difficulty: 'hard' },
       { category: 'Won the Champions League with Barcelona', players: ['Xavi Hernández', 'Andrés Iniesta', 'Carles Puyol', 'Samuel Eto\'o'], difficulty: 'insane' },
     ],
   },
@@ -1370,7 +1370,7 @@ export const connectionsPuzzles: ConnectionsPuzzle[] = [
       { category: 'Played for Flamengo', players: ['Zico', 'Vinícius Júnior', 'Adriano Leite', 'Gabriel Barbosa'], difficulty: 'easy' },
       { category: 'From Wales', players: ['Gareth Bale', 'Aaron Ramsey', 'Joe Allen', 'Ben Davies'], difficulty: 'medium' },
       { category: 'Won the Carabao Cup (2020s)', players: ['Virgil van Dijk', 'Mohamed Salah', 'Pep Guardiola', 'Erik ten Hag'], difficulty: 'hard' },
-      { category: 'Scored directly from a kickoff', players: ['Charlie Adam', 'Xabi Alonso', 'Ledley King', 'Shane Long'], difficulty: 'insane' },
+      { category: 'Scored from inside their own half in the Premier League', players: ['Charlie Adam', 'Xabi Alonso', 'Wayne Rooney', 'David Beckham'], difficulty: 'insane' },
     ],
   },
   {
@@ -1378,7 +1378,7 @@ export const connectionsPuzzles: ConnectionsPuzzle[] = [
     groups: [
       { category: 'Played for Wolves in 2025-26', players: ['José Sá', 'João Gomes', 'Hwang Hee-chan', 'Toti Gomes'], difficulty: 'easy' },
       { category: 'From Republic of Ireland', players: ['Evan Ferguson', 'Seamus Coleman', 'Robbie Brady', 'Jeff Hendrick'], difficulty: 'medium' },
-      { category: 'Played for both Benfica and Porto', players: ['James Rodríguez', 'Lisandro López', 'Ricardo Quaresma', 'Deco'], difficulty: 'hard' },
+      { category: 'Played for both Benfica and Porto', players: ['Maniche', 'Nicolás Otamendi', 'Rui Águas', 'Paulo Futre'], difficulty: 'hard' },
       { category: 'Scored a bicycle kick in the Champions League', players: ['Cristiano Ronaldo', 'Gareth Bale', 'Wayne Rooney', 'Zlatan Ibrahimović'], difficulty: 'insane' },
     ],
   },
@@ -1397,7 +1397,7 @@ export const connectionsPuzzles: ConnectionsPuzzle[] = [
       { category: 'Played for River Plate', players: ['Enzo Fernández', 'Julián Álvarez', 'Gonzalo Higuaín', 'Marcelo Gallardo'], difficulty: 'easy' },
       { category: 'From Paraguay', players: ['Miguel Almirón', 'Óscar Cardozo', 'Roque Santa Cruz', 'Nelson Valdez'], difficulty: 'medium' },
       { category: 'Won the UEFA Nations League', players: ['Cristiano Ronaldo', 'Bernardo Silva', 'Antoine Griezmann', 'Kylian Mbappé'], difficulty: 'hard' },
-      { category: 'Famous for their cruyff turn', players: ['Johan Cruyff', 'Dennis Bergkamp', 'Zinedine Zidane', 'Michael Laudrup'], difficulty: 'insane' },
+      { category: 'Gave their name to a football move or role', players: ['Johan Cruyff', 'Zinedine Zidane', 'Antonín Panenka', 'Claude Makélélé'], difficulty: 'insane' },
     ],
   },
   {
@@ -1415,7 +1415,7 @@ export const connectionsPuzzles: ConnectionsPuzzle[] = [
       { category: 'Played for Boca Juniors', players: ['Diego Maradona', 'Carlos Tévez', 'Juan Román Riquelme', 'Edinson Cavani'], difficulty: 'easy' },
       { category: 'From Iceland', players: ['Gylfi Sigurðsson', 'Eiður Guðjohnsen', 'Aron Gunnarsson', 'Birkir Bjarnason'], difficulty: 'medium' },
       { category: 'Won the Scudetto with AC Milan (2020s)', players: ['Rafael Leão', 'Olivier Giroud', 'Sandro Tonali', 'Theo Hernández'], difficulty: 'hard' },
-      { category: 'Played for both Tottenham and Real Madrid', players: ['Gareth Bale', 'Luka Modrić', 'Rafael van der Vaart', 'Robbie Keane'], difficulty: 'insane' },
+      { category: 'Played for both Tottenham and Real Madrid', players: ['Gareth Bale', 'Luka Modrić', 'Rafael van der Vaart', 'Sergio Reguilón'], difficulty: 'insane' },
     ],
   },
   {
@@ -1451,7 +1451,7 @@ export const connectionsPuzzles: ConnectionsPuzzle[] = [
       { category: 'Won the World Cup with Brazil', players: ['Cafu', 'Roberto Carlos', 'Rivaldo Vítor', 'Ronaldinho Gaúcho'], difficulty: 'easy' },
       { category: 'Played in MLS', players: ['Carlos Vela', 'Zlatan Ibrahimović', 'Andrea Pirlo', 'Bastian Schweinsteiger'], difficulty: 'medium' },
       { category: 'African Footballers of the Year', players: ['George Weah', 'Samuel Eto\'o', 'El Hadji Diouf', 'Yaya Touré'], difficulty: 'hard' },
-      { category: 'One club legends (15+ years)', players: ['Francesco Totti', 'Paolo Maldini', 'Ryan Giggs', 'Sergio Busquets'], difficulty: 'insane' },
+      { category: 'One club legends (15+ years)', players: ['Francesco Totti', 'Paolo Maldini', 'Ryan Giggs', 'Carles Puyol'], difficulty: 'insane' },
     ],
   },
   {
@@ -1467,9 +1467,9 @@ export const connectionsPuzzles: ConnectionsPuzzle[] = [
     id: 'puzzle-119',
     groups: [
       { category: 'Played for PSG (2020s)', players: ['Lionel Messi', 'Neymar Jr', 'Sergio Ramos', 'Gianluigi Donnarumma'], difficulty: 'easy' },
-      { category: 'Premier League Golden Boot (2010s)', players: ['Sergio Agüero', 'Pierre-Emerick Aubameyang', 'Sadio Mané', 'Riyad Mahrez'], difficulty: 'medium' },
+      { category: 'Premier League Golden Boot (2010s)', players: ['Sergio Agüero', 'Pierre-Emerick Aubameyang', 'Sadio Mané', 'Luis Suárez'], difficulty: 'medium' },
       { category: 'Won the World Cup with Spain', players: ['Xavi Hernández', 'Andrés Iniesta', 'David Villa', 'Iker Casillas'], difficulty: 'hard' },
-      { category: 'One club legends (never transferred)', players: ['Matt Le Tissier', 'Tony Adams', 'Carles Puyol', 'Alessandro Del Piero'], difficulty: 'insane' },
+      { category: 'One club legends (never transferred)', players: ['Matt Le Tissier', 'Tony Adams', 'Carles Puyol', 'Ryan Giggs'], difficulty: 'insane' },
     ],
   },
   {
@@ -1477,7 +1477,7 @@ export const connectionsPuzzles: ConnectionsPuzzle[] = [
     groups: [
       { category: 'Brazilian legends of the 1990s-2000s', players: ['Cafu', 'Ricardo Kaká', 'Roberto Carlos', 'Adriano Leite'], difficulty: 'easy' },
       { category: 'Played in MLS after European career', players: ['Thierry Henry', 'David Villa', 'Frank Lampard', 'Steven Gerrard'], difficulty: 'medium' },
-      { category: 'African Champions League winners', players: ['Mohamed Aboutrika', 'Achraf Hakimi', 'Youssef En-Nesyri', 'Percy Tau'], difficulty: 'hard' },
+      { category: 'Won the CAF Champions League', players: ['Mohamed Aboutrika', 'Percy Tau', 'Essam El-Hadary', 'Ali Maâloul'], difficulty: 'hard' },
       { category: 'Players who wore number 10 at Barcelona', players: ['Lionel Messi', 'Ronaldinho Gaúcho', 'Rivaldo Vítor', 'Maradona'], difficulty: 'insane' },
     ],
   },
@@ -1502,7 +1502,7 @@ export const connectionsPuzzles: ConnectionsPuzzle[] = [
   {
     id: 'puzzle-123',
     groups: [
-      { category: 'Played for PSG and Chelsea', players: ['Thiago Silva', 'David Luiz', 'Edinson Cavani', 'Mauro Icardi'], difficulty: 'easy' },
+      { category: 'Played for PSG and Chelsea', players: ['Thiago Silva', 'David Luiz', 'Claude Makélélé', 'Lassana Diarra'], difficulty: 'easy' },
       { category: 'Premier League Golden Boot (pre-2010)', players: ['Thierry Henry', 'Didier Drogba', 'Cristiano Ronaldo', 'Ruud van Nistelrooy'], difficulty: 'medium' },
       { category: 'Brazilian legends of the 1950s-70s', players: ['Pelé', 'Garrincha', 'Jairzinho', 'Tostão'], difficulty: 'hard' },
       { category: 'One club legends of Serie A', players: ['Francesco Totti', 'Alessandro Del Piero', 'Javier Zanetti', 'Giuseppe Bergomi'], difficulty: 'insane' },
@@ -1540,7 +1540,7 @@ export const connectionsPuzzles: ConnectionsPuzzle[] = [
     groups: [
       { category: 'Played for PSG and Juventus', players: ['Gianluigi Buffon', 'Blaise Matuidi', 'Moise Kean', 'Adrien Rabiot'], difficulty: 'easy' },
       { category: 'From DR Congo', players: ['Yannick Bolasie', 'Cédric Bakambu', 'Chancel Mbemba', 'Dieumerci Mbokani'], difficulty: 'medium' },
-      { category: 'Premier League Golden Boot (2020s)', players: ['Erling Haaland', 'Mohamed Salah', 'Son Heung-min', 'Ivan Toney'], difficulty: 'hard' },
+      { category: 'Premier League Golden Boot (2020s)', players: ['Erling Haaland', 'Mohamed Salah', 'Son Heung-min', 'Harry Kane'], difficulty: 'hard' },
       { category: 'Managed after retiring (La Liga managers)', players: ['Diego Simeone', 'Luis Enrique', 'Xavi Hernández', 'Michel'], difficulty: 'insane' },
     ],
   },
@@ -1574,10 +1574,10 @@ export const connectionsPuzzles: ConnectionsPuzzle[] = [
   {
     id: 'puzzle-131',
     groups: [
-      { category: 'Played for PSG and Manchester City', players: ['Carlos Tévez', 'Nicolas Anelka', 'Fabian Delph', 'Georginio Wijnaldum'], difficulty: 'easy' },
-      { category: 'Premier League Golden Boot shared winners', players: ['Luis Suárez', 'Daniel Sturridge', 'Sadio Mané', 'Pierre-Emerick Aubameyang'], difficulty: 'medium' },
+      { category: 'Played for PSG and Manchester City', players: ['Nicolas Anelka', 'Sylvain Distin', 'Ali Benarbia', 'Gianluigi Donnarumma'], difficulty: 'easy' },
+      { category: 'Premier League Golden Boot shared winners', players: ['Mohamed Salah', 'Heung-min Son', 'Sadio Mané', 'Pierre-Emerick Aubameyang'], difficulty: 'medium' },
       { category: 'Brazilian legends at Inter Milan', players: ['Ronaldo Nazário', 'Adriano Leite', 'Maicon', 'Julio César'], difficulty: 'hard' },
-      { category: 'Champions League winners as a substitute in the final', players: ['Ole Gunnar Solskjær', 'Divock Origi', 'Teddy Sheringham', 'Naby Keïta'], difficulty: 'insane' },
+      { category: 'Champions League winners as a substitute in the final', players: ['Ole Gunnar Solskjær', 'Divock Origi', 'Teddy Sheringham', 'Juliano Belletti'], difficulty: 'insane' },
     ],
   },
   {
@@ -1585,7 +1585,7 @@ export const connectionsPuzzles: ConnectionsPuzzle[] = [
     groups: [
       { category: 'Won the World Cup with France (2018)', players: ['Hugo Lloris', 'Raphaël Varane', 'Benjamin Pavard', 'Olivier Giroud'], difficulty: 'easy' },
       { category: 'African midfield legends', players: ['Jay-Jay Okocha', 'Abedi Pelé', 'Geremi Njitap', 'George Weah'], difficulty: 'medium' },
-      { category: 'Played in MLS and Bundesliga', players: ['Bastian Schweinsteiger', 'Jürgen Klinsmann', 'Lothar Matthäus', 'Marco Reus'], difficulty: 'hard' },
+      { category: 'Played in MLS and Bundesliga', players: ['Bastian Schweinsteiger', 'Jermaine Jones', 'Lothar Matthäus', 'Marco Reus'], difficulty: 'hard' },
       { category: 'One club legends of Bundesliga', players: ['Gerd Müller', 'Philipp Lahm', 'Thomas Müller', 'Sepp Maier'], difficulty: 'insane' },
     ],
   },
@@ -1604,14 +1604,14 @@ export const connectionsPuzzles: ConnectionsPuzzle[] = [
       { category: 'Played for PSG and Tottenham', players: ['Lucas Moura', 'Serge Aurier', 'Giovani Lo Celso', 'Erik Lamela'], difficulty: 'easy' },
       { category: 'Won the World Cup twice', players: ['Pelé', 'Cafu', 'Ronaldo Nazário', 'Didier Deschamps'], difficulty: 'medium' },
       { category: 'African players at Liverpool', players: ['Mohamed Salah', 'Sadio Mané', 'Naby Keïta', 'Joel Matip'], difficulty: 'hard' },
-      { category: 'One club legends who became club ambassadors', players: ['Paolo Maldini', 'Ryan Giggs', 'Steven Gerrard', 'Alessandro Del Piero'], difficulty: 'insane' },
+      { category: 'One club legends', players: ['Paolo Maldini', 'Ryan Giggs', 'Francesco Totti', 'Carles Puyol'], difficulty: 'insane' },
     ],
   },
   {
     id: 'puzzle-135',
     groups: [
       { category: 'Players who wore number 10 at Liverpool', players: ['Michael Owen', 'Philippe Coutinho', 'Sadio Mané', 'John Barnes'], difficulty: 'easy' },
-      { category: 'Played in MLS and Ligue 1', players: ['Thierry Henry', 'Blaise Matuidi', 'Gonzalo Higuaín', 'Jozy Altidore'], difficulty: 'medium' },
+      { category: 'Played in MLS and Ligue 1', players: ['Thierry Henry', 'Blaise Matuidi', 'Zlatan Ibrahimović', 'Youri Djorkaeff'], difficulty: 'medium' },
       { category: 'Champions League winners with AC Milan (2007)', players: ['Kaká', 'Andrea Pirlo', 'Filippo Inzaghi', 'Paolo Maldini'], difficulty: 'hard' },
       { category: 'Brazilian legends at PSG', players: ['Neymar Jr', 'Ronaldinho Gaúcho', 'Marquinhos', 'Thiago Silva'], difficulty: 'insane' },
     ],
@@ -1637,10 +1637,10 @@ export const connectionsPuzzles: ConnectionsPuzzle[] = [
   {
     id: 'puzzle-138',
     groups: [
-      { category: 'Won the Ballon d\'Or in the 2010s', players: ['Lionel Messi', 'Cristiano Ronaldo', 'Luka Modrić', 'Karim Benzema'], difficulty: 'easy' },
-      { category: 'From Guinea', players: ['Naby Keïta', 'Florentin Pogba', 'Mamadou Diallo', 'Ibrahima Conté'], difficulty: 'medium' },
-      { category: 'Played for Manchester City and Barcelona', players: ['Fabian Delph', 'Patrick Kluivert', 'Sylvinho', 'Emmanuel Petit'], difficulty: 'hard' },
-      { category: 'Named in the FIFA FIFPro World XI 10+ times', players: ['Dani Alves', 'Iker Casillas', 'Sergio Ramos', 'Marcelo'], difficulty: 'insane' },
+      { category: 'Won the Ballon d\'Or with a La Liga club', players: ['Lionel Messi', 'Cristiano Ronaldo', 'Luka Modrić', 'Karim Benzema'], difficulty: 'easy' },
+      { category: 'From Guinea', players: ['Naby Keïta', 'Florentin Pogba', 'Serhou Guirassy', 'Ibrahima Conté'], difficulty: 'medium' },
+      { category: 'Played for Manchester City and Barcelona', players: ['Sylvinho', 'Yaya Touré', 'Claudio Bravo', 'Ferran Torres'], difficulty: 'hard' },
+      { category: 'Lifted the Champions League trophy as club captain', players: ['Iker Casillas', 'Sergio Ramos', 'Marcelo', 'Manuel Neuer'], difficulty: 'insane' },
     ],
   },
   {
@@ -1667,7 +1667,7 @@ export const connectionsPuzzles: ConnectionsPuzzle[] = [
       { category: 'Won 2024 Euros with Spain', players: ['Lamine Yamal', 'Nico Williams', 'Dani Carvajal', 'Álvaro Morata'], difficulty: 'easy' },
       { category: 'From Austria', players: ['David Alaba', 'Marko Arnautović', 'Marcel Sabitzer', 'Konrad Laimer'], difficulty: 'medium' },
       { category: 'Played for Real Madrid and PSG', players: ['Kylian Mbappé', 'David Beckham', 'Ángel Di María', 'Sergio Ramos'], difficulty: 'hard' },
-      { category: 'Scored in back-to-back Champions League Finals', players: ['Cristiano Ronaldo', 'Lionel Messi', 'Diego Milito', 'Samuel Eto\'o'], difficulty: 'insane' },
+      { category: 'Forwards who scored in more than one Champions League final', players: ['Cristiano Ronaldo', 'Lionel Messi', 'Samuel Eto\'o', 'Gareth Bale'], difficulty: 'insane' },
     ],
   },
   {
@@ -1729,8 +1729,8 @@ export const connectionsPuzzles: ConnectionsPuzzle[] = [
     groups: [
       { category: 'Icons who played for LA Galaxy', players: ['David Beckham', 'Zlatan Ibrahimović', 'Robbie Keane', 'Landon Donovan'], difficulty: 'easy' },
       { category: 'From Finland', players: ['Jari Litmanen', 'Teemu Pukki', 'Sami Hyypiä', 'Glen Kamara'], difficulty: 'medium' },
-      { category: 'Won Champions League AND World Cup in same year', players: ['Zinedine Zidane', 'Roberto Carlos', 'Didier Deschamps', 'Raphaël Varane'], difficulty: 'hard' },
-      { category: 'Scored in the first AND last minute of a CL match', players: ['Filippo Inzaghi', 'Raúl González', 'Andriy Shevchenko', 'Hernán Crespo'], difficulty: 'insane' },
+      { category: 'Won Champions League AND World Cup in same year', players: ['Roberto Carlos', 'Raphaël Varane', 'Sami Khedira', 'Christian Karembeu'], difficulty: 'hard' },
+      { category: 'Scored in a Champions League final in the 2000s', players: ['Filippo Inzaghi', 'Raúl González', 'Hernán Crespo', 'Fernando Morientes'], difficulty: 'insane' },
     ],
   },
   {
@@ -1738,8 +1738,8 @@ export const connectionsPuzzles: ConnectionsPuzzle[] = [
     groups: [
       { category: 'Won the 2022 World Cup with Argentina', players: ['Lionel Messi', 'Julián Álvarez', 'Ángel Di María', 'Rodrigo De Paul'], difficulty: 'easy' },
       { category: 'From DR Congo', players: ['Yannick Bolasie', 'Cédric Bakambu', 'Chancel Mbemba', 'Dieumerci Mbokani'], difficulty: 'medium' },
-      { category: 'Played for PSG, Barcelona AND Real Madrid', players: ['Ronaldinho Gaúcho', 'Neymar Jr', 'Luis Figo', 'Javier Saviola'], difficulty: 'hard' },
-      { category: 'Won 5+ different domestic league titles', players: ['Zlatan Ibrahimović', 'Samuel Eto\'o', 'Nicolas Anelka', 'Maxwell'], difficulty: 'insane' },
+      { category: 'Played for both Barcelona and Real Madrid', players: ['Luís Figo', 'Ronaldo Nazário', 'Michael Laudrup', 'Javier Saviola'], difficulty: 'hard' },
+      { category: 'Won league titles in four different countries', players: ['Zlatan Ibrahimović', 'Maxwell', 'David Beckham', 'Arturo Vidal'], difficulty: 'insane' },
     ],
   },
   {
@@ -3849,6 +3849,690 @@ export const connectionsPuzzles: ConnectionsPuzzle[] = [
         players: ['Ilkay Gundogan', 'Joshua Kimmich', 'Leroy Sane', 'Kai Havertz'],
         difficulty: 'insane',
       },
+    ],
+  },
+  {
+    id: 'crafted-1001',
+    groups: [
+      { category: 'One-club legends', players: ['Francesco Totti', 'Paolo Maldini', 'Ryan Giggs', 'Carles Puyol'], difficulty: 'easy' },
+      { category: 'Played for both Milan clubs', players: ['Zlatan Ibrahimovic', 'Andrea Pirlo', 'Clarence Seedorf', 'Ronaldo Nazario'], difficulty: 'medium' },
+      { category: 'Won the Africa Cup of Nations', players: ['Samuel Eto\'o', 'Yaya Toure', 'Mohamed Aboutrika', 'Riyad Mahrez'], difficulty: 'hard' },
+      { category: 'Wore the number 10 for Brazil', players: ['Pele', 'Rivaldo', 'Neymar Jr', 'Ricardo Kaka'], difficulty: 'insane' },
+    ],
+  },
+  {
+    id: 'crafted-1002',
+    groups: [
+      { category: 'Premier League Golden Boot winners', players: ['Thierry Henry', 'Alan Shearer', 'Harry Kane', 'Mohamed Salah'], difficulty: 'easy' },
+      { category: 'Goalkeepers', players: ['Iker Casillas', 'Manuel Neuer', 'Peter Schmeichel', 'Dida'], difficulty: 'medium' },
+      { category: 'Played for Ajax', players: ['Frank Rijkaard', 'Wesley Sneijder', 'Luis Suarez', 'Matthijs de Ligt'], difficulty: 'hard' },
+      { category: 'Played in MLS', players: ['David Beckham', 'Wayne Rooney', 'Andrea Pirlo', 'Bastian Schweinsteiger'], difficulty: 'insane' },
+    ],
+  },
+  {
+    id: 'crafted-1003',
+    groups: [
+      { category: 'Won the Premier League with Leicester City', players: ['Jamie Vardy', 'Kasper Schmeichel', 'N\'Golo Kante', 'Wes Morgan'], difficulty: 'easy' },
+      { category: 'Won Euro 2016 with Portugal', players: ['Pepe', 'Nani', 'Rui Patricio', 'Eder'], difficulty: 'medium' },
+      { category: 'Played for both Real Madrid and Barcelona', players: ['Luis Figo', 'Ronaldo Nazario', 'Michael Laudrup', 'Javier Saviola'], difficulty: 'hard' },
+      { category: 'Later managed a club they played for', players: ['Zinedine Zidane', 'Pep Guardiola', 'Frank Lampard', 'Mikel Arteta'], difficulty: 'insane' },
+    ],
+  },
+  {
+    id: 'crafted-1004',
+    groups: [
+      { category: 'Famous number 7s', players: ['Cristiano Ronaldo', 'David Beckham', 'Eric Cantona', 'Luis Figo'], difficulty: 'easy' },
+      { category: 'Famous number 9s', players: ['Ronaldo Nazario', 'Alan Shearer', 'Robert Lewandowski', 'Erling Haaland'], difficulty: 'medium' },
+      { category: 'Wore the number 14', players: ['Johan Cruyff', 'Thierry Henry', 'Xabi Alonso', 'Javier Mascherano'], difficulty: 'hard' },
+      { category: 'Goalkeepers who scored career goals', players: ['Rogerio Ceni', 'Jose Luis Chilavert', 'Rene Higuita', 'Alisson Becker'], difficulty: 'insane' },
+    ],
+  },
+  {
+    id: 'crafted-1005',
+    groups: [
+      { category: 'Played for PSG', players: ['Zlatan Ibrahimovic', 'Edinson Cavani', 'Marco Verratti', 'Kylian Mbappe'], difficulty: 'easy' },
+      { category: 'World Cup Golden Boot winners', players: ['Harry Kane', 'Thomas Muller', 'James Rodriguez', 'Davor Suker'], difficulty: 'medium' },
+      { category: 'Played for Liverpool', players: ['Mohamed Salah', 'Virgil van Dijk', 'Naby Keita', 'Sadio Mane'], difficulty: 'hard' },
+      { category: 'Won Olympic gold in football', players: ['Carlos Tevez', 'Sergio Aguero', 'Samuel Eto\'o', 'Juan Roman Riquelme'], difficulty: 'insane' },
+    ],
+  },
+  {
+    id: 'crafted-1006',
+    groups: [
+      { category: 'Arsenal Invincibles 2003-04', players: ['Thierry Henry', 'Dennis Bergkamp', 'Patrick Vieira', 'Sol Campbell'], difficulty: 'easy' },
+      { category: 'Lifted the World Cup as captain', players: ['Diego Maradona', 'Lothar Matthaus', 'Didier Deschamps', 'Iker Casillas'], difficulty: 'medium' },
+      { category: 'Scored 100+ Premier League goals', players: ['Sergio Aguero', 'Frank Lampard', 'Romelu Lukaku', 'Robbie Fowler'], difficulty: 'hard' },
+      { category: 'Played for Marseille', players: ['Didier Drogba', 'Franck Ribery', 'Samir Nasri', 'Dimitri Payet'], difficulty: 'insane' },
+    ],
+  },
+  {
+    id: 'crafted-1007',
+    groups: [
+      { category: 'Played for Juventus', players: ['Alessandro Del Piero', 'Gianluigi Buffon', 'Paul Pogba', 'Pavel Nedved'], difficulty: 'easy' },
+      { category: 'Won the Copa America with Chile', players: ['Alexis Sanchez', 'Eduardo Vargas', 'Claudio Bravo', 'Gary Medel'], difficulty: 'medium' },
+      { category: 'Scored at four different World Cups', players: ['Pele', 'Uwe Seeler', 'Miroslav Klose', 'Lionel Messi'], difficulty: 'hard' },
+      { category: 'Moved to the Saudi Pro League', players: ['Karim Benzema', 'N\'Golo Kante', 'Riyad Mahrez', 'Sadio Mane'], difficulty: 'insane' },
+    ],
+  },
+  {
+    id: 'crafted-1008',
+    groups: [
+      { category: 'English strikers', players: ['Michael Owen', 'Gary Lineker', 'Jermain Defoe', 'Andy Cole'], difficulty: 'easy' },
+      { category: 'Won La Liga with Atletico Madrid', players: ['Luis Suarez', 'Diego Godin', 'Koke', 'Jan Oblak'], difficulty: 'medium' },
+      { category: 'Played for Sevilla', players: ['Frederic Kanoute', 'Dani Alves', 'Jesus Navas', 'Sergio Ramos'], difficulty: 'hard' },
+      { category: 'From Croatia', players: ['Luka Modric', 'Ivan Perisic', 'Mario Mandzukic', 'Josko Gvardiol'], difficulty: 'insane' },
+    ],
+  },
+  {
+    id: 'crafted-1009',
+    groups: [
+      { category: 'Played for Borussia Dortmund', players: ['Marco Reus', 'Robert Lewandowski', 'Ilkay Gundogan', 'Jadon Sancho'], difficulty: 'easy' },
+      { category: 'African Player of the Year winners', players: ['Samuel Eto\'o', 'Didier Drogba', 'Mohamed Salah', 'Sadio Mane'], difficulty: 'medium' },
+      { category: 'Played for Monaco', players: ['Kylian Mbappe', 'Radamel Falcao', 'Thierry Henry', 'Bernardo Silva'], difficulty: 'hard' },
+      { category: 'Sons of professional footballers', players: ['Daley Blind', 'Kasper Schmeichel', 'Justin Kluivert', 'Marcus Thuram'], difficulty: 'insane' },
+    ],
+  },
+  {
+    id: 'crafted-1010',
+    groups: [
+      { category: 'Played for Bayern Munich', players: ['Arjen Robben', 'Franck Ribery', 'Manuel Neuer', 'Thomas Muller'], difficulty: 'easy' },
+      { category: 'Mexican internationals', players: ['Hugo Sanchez', 'Rafael Marquez', 'Javier Hernandez', 'Hirving Lozano'], difficulty: 'medium' },
+      { category: 'Won the 2004 Champions League with Porto', players: ['Deco', 'Ricardo Carvalho', 'Paulo Ferreira', 'Vitor Baia'], difficulty: 'hard' },
+      { category: 'Played in the J-League', players: ['Andres Iniesta', 'Fernando Torres', 'Lukas Podolski', 'David Villa'], difficulty: 'insane' },
+    ],
+  },
+  {
+    id: 'crafted-1011',
+    groups: [
+      { category: 'Won the 2010 World Cup with Spain', players: ['Xavi Hernandez', 'Andres Iniesta', 'David Villa', 'Carles Puyol'], difficulty: 'easy' },
+      { category: 'Played for Tottenham', players: ['Gareth Bale', 'Luka Modric', 'Son Heung-min', 'Harry Kane'], difficulty: 'medium' },
+      { category: 'Won the Golden Boy award', players: ['Lionel Messi', 'Wayne Rooney', 'Kylian Mbappe', 'Erling Haaland'], difficulty: 'hard' },
+      { category: 'Played for LA Galaxy', players: ['David Beckham', 'Zlatan Ibrahimovic', 'Steven Gerrard', 'Landon Donovan'], difficulty: 'insane' },
+    ],
+  },
+  {
+    id: 'crafted-1012',
+    groups: [
+      { category: 'Egyptian internationals', players: ['Mohamed Aboutrika', 'Mohamed Elneny', 'Ahmed Hegazi', 'Omar Marmoush'], difficulty: 'easy' },
+      { category: 'Won the Premier League with Manchester City', players: ['Kevin De Bruyne', 'Bernardo Silva', 'Riyad Mahrez', 'Ederson'], difficulty: 'medium' },
+      { category: 'Played for Roma', players: ['Francesco Totti', 'Daniele De Rossi', 'Edin Dzeko', 'Radja Nainggolan'], difficulty: 'hard' },
+      { category: 'Won the Scudetto with Napoli', players: ['Diego Maradona', 'Careca', 'Khvicha Kvaratskhelia', 'Victor Osimhen'], difficulty: 'insane' },
+    ],
+  },
+  {
+    id: 'crafted-1013',
+    groups: [
+      { category: 'From Argentina', players: ['Ángel Di María', 'Sergio Agüero', 'Gabriel Batistuta', 'Juan Román Riquelme'], difficulty: 'easy' },
+      { category: 'Played for Liverpool', players: ['Steven Gerrard', 'Jamie Carragher', 'Fernando Torres', 'Robbie Fowler'], difficulty: 'medium' },
+      { category: 'Won the Ballon d\'Or', players: ['Kaká', 'Luís Figo', 'George Weah', 'Ronaldinho'], difficulty: 'hard' },
+      { category: 'Goalkeepers who captained their country', players: ['Iker Casillas', 'Gianluigi Buffon', 'Manuel Neuer', 'Hugo Lloris'], difficulty: 'insane' },
+    ],
+  },
+  {
+    id: 'crafted-1014',
+    groups: [
+      { category: 'From Portugal', players: ['Rui Costa', 'Eusébio', 'Pauleta', 'Nuno Gomes'], difficulty: 'easy' },
+      { category: 'Played for Juventus', players: ['Alessandro Del Piero', 'Pavel Nedvěd', 'Gianluigi Buffon', 'Giorgio Chiellini'], difficulty: 'medium' },
+      { category: 'African Footballer of the Year', players: ['Samuel Eto\'o', 'Yaya Touré', 'Didier Drogba', 'Nwankwo Kanu'], difficulty: 'hard' },
+      { category: 'France World Cup winners', players: ['Kylian Mbappé', 'Antoine Griezmann', 'Emmanuel Petit', 'Marcel Desailly'], difficulty: 'insane' },
+    ],
+  },
+  {
+    id: 'crafted-1015',
+    groups: [
+      { category: 'From Brazil', players: ['Cafu', 'Roberto Carlos', 'Rivaldo', 'Romário'], difficulty: 'easy' },
+      { category: 'Played for Manchester United', players: ['Paul Scholes', 'Gary Neville', 'Ryan Giggs', 'Nemanja Vidić'], difficulty: 'medium' },
+      { category: 'From the Netherlands', players: ['Johan Cruyff', 'Marco van Basten', 'Ruud Gullit', 'Dennis Bergkamp'], difficulty: 'hard' },
+      { category: 'Legendary goalkeepers', players: ['Petr Čech', 'Oliver Kahn', 'Dino Zoff', 'José Luis Chilavert'], difficulty: 'insane' },
+    ],
+  },
+  {
+    id: 'crafted-1016',
+    groups: [
+      { category: 'From Spain', players: ['Xavi', 'Andrés Iniesta', 'Sergio Ramos', 'David Villa'], difficulty: 'easy' },
+      { category: 'Played for Bayern Munich', players: ['Philipp Lahm', 'Bastian Schweinsteiger', 'Thomas Müller', 'Franck Ribéry'], difficulty: 'medium' },
+      { category: 'African national-team stars', players: ['Mohamed Salah', 'Kalidou Koulibaly', 'Riyad Mahrez', 'Yaya Touré'], difficulty: 'hard' },
+      { category: 'From Italy', players: ['Fabio Cannavaro', 'Alessandro Nesta', 'Franco Baresi', 'Gianluca Zambrotta'], difficulty: 'insane' },
+    ],
+  },
+  {
+    id: 'crafted-1017',
+    groups: [
+      { category: 'From England', players: ['Wayne Rooney', 'Frank Lampard', 'David Beckham', 'Alan Shearer'], difficulty: 'easy' },
+      { category: 'Played for Barcelona', players: ['Carles Puyol', 'Sergio Busquets', 'Gerard Piqué', 'Pedri'], difficulty: 'medium' },
+      { category: 'Won the Ballon d\'Or', players: ['Luka Modrić', 'Roberto Baggio', 'Matthias Sammer', 'Pavel Nedvěd'], difficulty: 'hard' },
+      { category: 'Goalkeepers', players: ['Edwin van der Sar', 'Peter Schmeichel', 'Gianluigi Donnarumma', 'Thibaut Courtois'], difficulty: 'insane' },
+    ],
+  },
+  {
+    id: 'crafted-1018',
+    groups: [
+      { category: 'From Germany', players: ['Michael Ballack', 'Miroslav Klose', 'Lukas Podolski', 'Lothar Matthäus'], difficulty: 'easy' },
+      { category: 'Played for Real Madrid', players: ['Raúl', 'Guti', 'Fernando Hierro', 'Emilio Butragueño'], difficulty: 'medium' },
+      { category: 'From Uruguay', players: ['Diego Forlán', 'Edinson Cavani', 'Diego Godín', 'Enzo Francescoli'], difficulty: 'hard' },
+      { category: 'From Colombia', players: ['Radamel Falcao', 'Carlos Valderrama', 'René Higuita', 'Juan Cuadrado'], difficulty: 'insane' },
+    ],
+  },
+  {
+    id: 'crafted-1019',
+    groups: [
+      { category: 'From France', players: ['Zinedine Zidane', 'Michel Platini', 'Jean-Pierre Papin', 'David Trezeguet'], difficulty: 'easy' },
+      { category: 'Played for Inter Milan', players: ['Javier Zanetti', 'Esteban Cambiasso', 'Marco Materazzi', 'Diego Milito'], difficulty: 'medium' },
+      { category: 'Won the Champions League with Barcelona', players: ['Lionel Messi', 'Andrés Iniesta', 'Carles Puyol', 'Víctor Valdés'], difficulty: 'hard' },
+      { category: 'From Croatia', players: ['Luka Modrić', 'Mario Mandžukić', 'Davor Šuker', 'Zvonimir Boban'], difficulty: 'insane' },
+    ],
+  },
+  {
+    id: 'crafted-1020',
+    groups: [
+      { category: 'From Portugal', players: ['João Moutinho', 'Pepe', 'Ricardo Carvalho', 'Nani'], difficulty: 'easy' },
+      { category: 'Played for AC Milan', players: ['Paolo Maldini', 'Gennaro Gattuso', 'Clarence Seedorf', 'Filippo Inzaghi'], difficulty: 'medium' },
+      { category: 'Won the Ballon d\'Or', players: ['Michael Owen', 'Fabio Cannavaro', 'Matthias Sammer', 'Luka Modrić'], difficulty: 'hard' },
+      { category: 'World Cup-winning goalkeepers', players: ['Fabien Barthez', 'Iker Casillas', 'Gianluigi Buffon', 'Claudio Taffarel'], difficulty: 'insane' },
+    ],
+  },
+  {
+    id: 'crafted-1021',
+    groups: [
+      { category: 'From Brazil', players: ['Ronaldo Nazário', 'Adriano', 'Roberto Firmino', 'Neymar'], difficulty: 'easy' },
+      { category: 'Played for Chelsea', players: ['John Terry', 'Eden Hazard', 'Ashley Cole', 'Gianfranco Zola'], difficulty: 'medium' },
+      { category: 'African Footballer of the Year', players: ['Sadio Mané', 'Riyad Mahrez', 'Victor Osimhen', 'Yaya Touré'], difficulty: 'hard' },
+      { category: 'From Argentina', players: ['Ángel Di María', 'Paulo Dybala', 'Lautaro Martínez', 'Giovani Lo Celso'], difficulty: 'insane' },
+    ],
+  },
+  {
+    id: 'crafted-1022',
+    groups: [
+      { category: 'From Spain', players: ['David Silva', 'Xabi Alonso', 'David Villa', 'Juan Mata'], difficulty: 'easy' },
+      { category: 'Played for Arsenal', players: ['Thierry Henry', 'Robert Pirès', 'Patrick Vieira', 'Freddie Ljungberg'], difficulty: 'medium' },
+      { category: 'Italy\'s 2006 World Cup winners', players: ['Andrea Pirlo', 'Francesco Totti', 'Alessandro Del Piero', 'Marco Materazzi'], difficulty: 'hard' },
+      { category: 'From the Netherlands', players: ['Arjen Robben', 'Wesley Sneijder', 'Rafael van der Vaart', 'Edgar Davids'], difficulty: 'insane' },
+    ],
+  },
+  {
+    id: 'crafted-1023',
+    groups: [
+      { category: 'From Uruguay', players: ['Federico Valverde', 'José María Giménez', 'Ronald Araújo', 'Rodrigo Bentancur'], difficulty: 'easy' },
+      { category: 'Played for Ajax', players: ['Frenkie de Jong', 'Matthijs de Ligt', 'Christian Eriksen', 'Zlatan Ibrahimović'], difficulty: 'medium' },
+      { category: 'Won the Ballon d\'Or', players: ['Ronaldo Nazário', 'Rivaldo', 'George Weah', 'Hristo Stoichkov'], difficulty: 'hard' },
+      { category: 'Goalkeepers', players: ['Keylor Navas', 'Ederson', 'Alisson', 'Jan Oblak'], difficulty: 'insane' },
+    ],
+  },
+  {
+    id: 'crafted-1024',
+    groups: [
+      { category: 'From Brazil', players: ['Dani Alves', 'Marcelo', 'Casemiro', 'Vinícius Júnior'], difficulty: 'easy' },
+      { category: 'From Germany', players: ['Toni Kroos', 'Manuel Neuer', 'Joshua Kimmich', 'Leon Goretzka'], difficulty: 'medium' },
+      { category: 'From Argentina', players: ['Emiliano Martínez', 'Rodrigo De Paul', 'Julián Álvarez', 'Enzo Fernández'], difficulty: 'hard' },
+      { category: 'From Croatia', players: ['Mateo Kovačić', 'Marcelo Brozović', 'Ivan Perišić', 'Andrej Kramarić'], difficulty: 'insane' },
+    ],
+  },
+  {
+    id: 'crafted-1025',
+    groups: [
+      { category: 'From England', players: ['Harry Kane', 'Jude Bellingham', 'Bukayo Saka', 'Declan Rice'], difficulty: 'easy' },
+      { category: 'From France', players: ['Kylian Mbappé', 'Aurélien Tchouaméni', 'Ousmane Dembélé', 'William Saliba'], difficulty: 'medium' },
+      { category: 'From Portugal', players: ['Bruno Fernandes', 'Bernardo Silva', 'Rúben Dias', 'João Félix'], difficulty: 'hard' },
+      { category: 'From the Netherlands', players: ['Virgil van Dijk', 'Cody Gakpo', 'Denzel Dumfries', 'Nathan Aké'], difficulty: 'insane' },
+    ],
+  },
+  {
+    id: 'crafted-1026',
+    groups: [
+      { category: 'From Belgium', players: ['Kevin De Bruyne', 'Romelu Lukaku', 'Youri Tielemans', 'Jérémy Doku'], difficulty: 'easy' },
+      { category: 'From Spain', players: ['Rodri', 'Pedri', 'Álvaro Morata', 'Mikel Oyarzabal'], difficulty: 'medium' },
+      { category: 'From Italy', players: ['Federico Chiesa', 'Nicolò Barella', 'Gianluigi Donnarumma', 'Sandro Tonali'], difficulty: 'hard' },
+      { category: 'From Nigeria', players: ['Victor Osimhen', 'Ademola Lookman', 'Alex Iwobi', 'Wilfred Ndidi'], difficulty: 'insane' },
+    ],
+  },
+  {
+    id: 'crafted-1027',
+    groups: [
+      { category: 'From Colombia', players: ['Luis Díaz', 'James Rodríguez', 'Dávinson Sánchez', 'Jefferson Lerma'], difficulty: 'easy' },
+      { category: 'From Mexico', players: ['Hirving Lozano', 'Raúl Jiménez', 'Edson Álvarez', 'Guillermo Ochoa'], difficulty: 'medium' },
+      { category: 'From the United States', players: ['Christian Pulisic', 'Weston McKennie', 'Tyler Adams', 'Gio Reyna'], difficulty: 'hard' },
+      { category: 'From Japan', players: ['Takefusa Kubo', 'Wataru Endo', 'Kaoru Mitoma', 'Daichi Kamada'], difficulty: 'insane' },
+    ],
+  },
+  {
+    id: 'crafted-1028',
+    groups: [
+      { category: 'From Poland', players: ['Robert Lewandowski', 'Piotr Zieliński', 'Wojciech Szczęsny', 'Nicola Zalewski'], difficulty: 'easy' },
+      { category: 'From Sweden', players: ['Zlatan Ibrahimović', 'Emil Forsberg', 'Dejan Kulusevski', 'Alexander Isak'], difficulty: 'medium' },
+      { category: 'From Denmark', players: ['Christian Eriksen', 'Pierre-Emile Højbjerg', 'Rasmus Højlund', 'Kasper Schmeichel'], difficulty: 'hard' },
+      { category: 'From Norway', players: ['Erling Haaland', 'Martin Ødegaard', 'Alexander Sørloth', 'Sander Berge'], difficulty: 'insane' },
+    ],
+  },
+  {
+    id: 'crafted-1029',
+    groups: [
+      { category: 'From Serbia', players: ['Dušan Vlahović', 'Sergej Milinković-Savić', 'Aleksandar Mitrović', 'Filip Kostić'], difficulty: 'easy' },
+      { category: 'From Austria', players: ['David Alaba', 'Marko Arnautović', 'Konrad Laimer', 'Christoph Baumgartner'], difficulty: 'medium' },
+      { category: 'From Switzerland', players: ['Granit Xhaka', 'Xherdan Shaqiri', 'Manuel Akanji', 'Yann Sommer'], difficulty: 'hard' },
+      { category: 'From Senegal', players: ['Sadio Mané', 'Kalidou Koulibaly', 'Édouard Mendy', 'Nicolas Jackson'], difficulty: 'insane' },
+    ],
+  },
+  {
+    id: 'crafted-1030',
+    groups: [
+      { category: 'From the Ivory Coast', players: ['Wilfried Zaha', 'Franck Kessié', 'Sébastien Haller', 'Nicolas Pépé'], difficulty: 'easy' },
+      { category: 'From Ghana', players: ['Thomas Partey', 'Mohammed Kudus', 'Iñaki Williams', 'Jordan Ayew'], difficulty: 'medium' },
+      { category: 'From Morocco', players: ['Achraf Hakimi', 'Hakim Ziyech', 'Youssef En-Nesyri', 'Sofyan Amrabat'], difficulty: 'hard' },
+      { category: 'From Egypt', players: ['Mohamed Salah', 'Mohamed Elneny', 'Trézéguet', 'Omar Marmoush'], difficulty: 'insane' },
+    ],
+  },
+  {
+    id: 'crafted-1031',
+    groups: [
+      { category: 'From Brazil', players: ['Rodrygo', 'Raphinha', 'Bruno Guimarães', 'Gabriel Martinelli'], difficulty: 'easy' },
+      { category: 'From Argentina', players: ['Julián Álvarez', 'Alexis Mac Allister', 'Cristian Romero', 'Nicolás Otamendi'], difficulty: 'medium' },
+      { category: 'From Uruguay', players: ['Federico Valverde', 'Darwin Núñez', 'Ronald Araújo', 'Rodrigo Bentancur'], difficulty: 'hard' },
+      { category: 'From Colombia', players: ['Luis Díaz', 'Jhon Durán', 'Dávinson Sánchez', 'Richard Ríos'], difficulty: 'insane' },
+    ],
+  },
+  {
+    id: 'crafted-1032',
+    groups: [
+      { category: 'From England', players: ['Jude Bellingham', 'Bukayo Saka', 'Phil Foden', 'Cole Palmer'], difficulty: 'easy' },
+      { category: 'From France', players: ['Kylian Mbappé', 'Ousmane Dembélé', 'Aurélien Tchouaméni', 'Michael Olise'], difficulty: 'medium' },
+      { category: 'From Germany', players: ['Jamal Musiala', 'Florian Wirtz', 'Kai Havertz', 'Joshua Kimmich'], difficulty: 'hard' },
+      { category: 'From Spain', players: ['Lamine Yamal', 'Pedri', 'Rodri', 'Nico Williams'], difficulty: 'insane' },
+    ],
+  },
+  {
+    id: 'crafted-1033',
+    groups: [
+      { category: 'From Portugal', players: ['Bruno Fernandes', 'Rúben Dias', 'Vitinha', 'Rafael Leão'], difficulty: 'easy' },
+      { category: 'From the Netherlands', players: ['Virgil van Dijk', 'Frenkie de Jong', 'Cody Gakpo', 'Xavi Simons'], difficulty: 'medium' },
+      { category: 'From Belgium', players: ['Kevin De Bruyne', 'Jérémy Doku', 'Youri Tielemans', 'Leandro Trossard'], difficulty: 'hard' },
+      { category: 'From Italy', players: ['Federico Chiesa', 'Nicolò Barella', 'Gianluigi Donnarumma', 'Sandro Tonali'], difficulty: 'insane' },
+    ],
+  },
+  {
+    id: 'crafted-1034',
+    groups: [
+      { category: 'From Nigeria', players: ['Victor Osimhen', 'Ademola Lookman', 'Alex Iwobi', 'Samuel Chukwueze'], difficulty: 'easy' },
+      { category: 'From Senegal', players: ['Sadio Mané', 'Nicolas Jackson', 'Kalidou Koulibaly', 'Ismaïla Sarr'], difficulty: 'medium' },
+      { category: 'From the Ivory Coast', players: ['Sébastien Haller', 'Franck Kessié', 'Simon Adingra', 'Amad Diallo'], difficulty: 'hard' },
+      { category: 'From Morocco', players: ['Achraf Hakimi', 'Hakim Ziyech', 'Youssef En-Nesyri', 'Noussair Mazraoui'], difficulty: 'insane' },
+    ],
+  },
+  {
+    id: 'crafted-1035',
+    groups: [
+      { category: 'From Croatia', players: ['Luka Modrić', 'Joško Gvardiol', 'Mateo Kovačić', 'Marcelo Brozović'], difficulty: 'easy' },
+      { category: 'From Serbia', players: ['Dušan Vlahović', 'Sergej Milinković-Savić', 'Aleksandar Mitrović', 'Dušan Tadić'], difficulty: 'medium' },
+      { category: 'From Poland', players: ['Robert Lewandowski', 'Piotr Zieliński', 'Nicola Zalewski', 'Jakub Kiwior'], difficulty: 'hard' },
+      { category: 'From Norway', players: ['Erling Haaland', 'Martin Ødegaard', 'Alexander Sørloth', 'Antonio Nusa'], difficulty: 'insane' },
+    ],
+  },
+  {
+    id: 'crafted-1036',
+    groups: [
+      { category: 'From the United States', players: ['Christian Pulisic', 'Weston McKennie', 'Tyler Adams', 'Gio Reyna'], difficulty: 'easy' },
+      { category: 'From Mexico', players: ['Hirving Lozano', 'Raúl Jiménez', 'Edson Álvarez', 'César Montes'], difficulty: 'medium' },
+      { category: 'From Japan', players: ['Takefusa Kubo', 'Kaoru Mitoma', 'Wataru Endo', 'Daichi Kamada'], difficulty: 'hard' },
+      { category: 'From South Korea', players: ['Son Heung-min', 'Kim Min-jae', 'Lee Kang-in', 'Hwang Hee-chan'], difficulty: 'insane' },
+    ],
+  },
+  {
+    id: 'cx-20260709-01',
+    groups: [
+      { category: 'From Portugal', players: ['Nani', 'Ricardo Carvalho', 'Pepe', 'João Moutinho'], difficulty: 'easy' },
+      { category: 'Played for Ajax', players: ['Dennis Bergkamp', 'Edwin van der Sar', 'Patrick Kluivert', 'Frank Rijkaard'], difficulty: 'medium' },
+      { category: 'Won the Ballon d\'Or', players: ['George Weah', 'Michael Owen', 'Pavel Nedvěd', 'Fabio Cannavaro'], difficulty: 'hard' },
+      { category: 'Scored in a World Cup Final', players: ['Pelé', 'Geoff Hurst', 'Mario Götze', 'Andrés Iniesta'], difficulty: 'insane' },
+    ],
+  },
+  {
+    id: 'cx-20260709-02',
+    groups: [
+      { category: 'Italy internationals', players: ['Alessandro Del Piero', 'Francesco Totti', 'Gianluigi Buffon', 'Andrea Pirlo'], difficulty: 'easy' },
+      { category: 'Played for Borussia Dortmund', players: ['Robert Lewandowski', 'Mats Hummels', 'Marco Reus', 'Shinji Kagawa'], difficulty: 'medium' },
+      { category: 'France internationals', players: ['Thierry Henry', 'Patrick Vieira', 'Robert Pirès', 'David Trezeguet'], difficulty: 'hard' },
+      { category: 'Scored in a Champions League Final', players: ['Steven Gerrard', 'Sergio Ramos', 'Gareth Bale', 'Didier Drogba'], difficulty: 'insane' },
+    ],
+  },
+  {
+    id: 'cx-20260709-03',
+    groups: [
+      { category: 'From England', players: ['Alan Shearer', 'Wayne Rooney', 'Frank Lampard', 'Rio Ferdinand'], difficulty: 'easy' },
+      { category: 'Played for Inter Milan', players: ['Javier Zanetti', 'Esteban Cambiasso', 'Iván Córdoba', 'Diego Milito'], difficulty: 'medium' },
+      { category: 'Won the World Cup', players: ['Ronaldinho Gaúcho', 'Miroslav Klose', 'Xavi Hernández', 'Philipp Lahm'], difficulty: 'hard' },
+      { category: 'African internationals', players: ['Yaya Touré', 'Sadio Mané', 'Riyad Mahrez', 'Michael Essien'], difficulty: 'insane' },
+    ],
+  },
+  {
+    id: 'cx-20260709-04',
+    groups: [
+      { category: 'From Spain', players: ['Sergio Busquets', 'David Silva', 'Santi Cazorla', 'Juan Mata'], difficulty: 'easy' },
+      { category: 'From Germany', players: ['Bastian Schweinsteiger', 'Thomas Müller', 'Manuel Neuer', 'Toni Kroos'], difficulty: 'medium' },
+      { category: 'From Croatia', players: ['Luka Modrić', 'Ivan Rakitić', 'Mario Mandžukić', 'Ivan Perišić'], difficulty: 'hard' },
+      { category: 'From Uruguay', players: ['Luis Suárez', 'Edinson Cavani', 'Diego Forlán', 'Diego Godín'], difficulty: 'insane' },
+    ],
+  },
+  {
+    id: 'cx-20260709-05',
+    groups: [
+      { category: 'Played for Manchester City', players: ['Sergio Agüero', 'David Silva', 'Vincent Kompany', 'Fernandinho'], difficulty: 'easy' },
+      { category: 'Played for Chelsea', players: ['John Terry', 'Petr Čech', 'Ashley Cole', 'Branislav Ivanović'], difficulty: 'medium' },
+      { category: 'Played for Juventus', players: ['Alessandro Del Piero', 'Gianluigi Buffon', 'Pavel Nedvěd', 'Claudio Marchisio'], difficulty: 'hard' },
+      { category: 'Played for Bayern Munich', players: ['Philipp Lahm', 'Bastian Schweinsteiger', 'Oliver Kahn', 'Franck Ribéry'], difficulty: 'insane' },
+    ],
+  },
+  {
+    id: 'cx-20260709-06',
+    groups: [
+      { category: 'Won the World Cup as captain', players: ['Diego Maradona', 'Iker Casillas', 'Didier Deschamps', 'Bobby Moore'], difficulty: 'easy' },
+      { category: 'From the Netherlands', players: ['Dennis Bergkamp', 'Ruud van Nistelrooy', 'Robin van Persie', 'Arjen Robben'], difficulty: 'medium' },
+      { category: 'Won the Ballon d\'Or', players: ['Ronaldinho Gaúcho', 'Ricardo Kaká', 'Luís Figo', 'Michael Owen'], difficulty: 'hard' },
+      { category: 'Scored in a World Cup Final', players: ['Pelé', 'Paul Breitner', 'Mario Götze', 'Andrés Iniesta'], difficulty: 'insane' },
+    ],
+  },
+  {
+    id: 'cx-20260709-07',
+    groups: [
+      { category: 'From Brazil', players: ['Roberto Carlos', 'Cafu', 'Dida', 'Lúcio'], difficulty: 'easy' },
+      { category: 'From Argentina', players: ['Juan Román Riquelme', 'Hernán Crespo', 'Javier Mascherano', 'Gabriel Heinze'], difficulty: 'medium' },
+      { category: 'From Colombia', players: ['Carlos Valderrama', 'Radamel Falcao', 'James Rodríguez', 'Mario Yepes'], difficulty: 'hard' },
+      { category: 'From Nigeria', players: ['Jay-Jay Okocha', 'Nwankwo Kanu', 'John Obi Mikel', 'Vincent Enyeama'], difficulty: 'insane' },
+    ],
+  },
+  {
+    id: 'cx-20260709-08',
+    groups: [
+      { category: 'From France', players: ['Zinedine Zidane', 'Thierry Henry', 'Franck Ribéry', 'Karim Benzema'], difficulty: 'easy' },
+      { category: 'From Germany', players: ['Michael Ballack', 'Miroslav Klose', 'Philipp Lahm', 'Mesut Özil'], difficulty: 'medium' },
+      { category: 'From Belgium', players: ['Eden Hazard', 'Kevin De Bruyne', 'Vincent Kompany', 'Romelu Lukaku'], difficulty: 'hard' },
+      { category: 'From the Ivory Coast', players: ['Didier Drogba', 'Yaya Touré', 'Kolo Touré', 'Gervinho'], difficulty: 'insane' },
+    ],
+  },
+  {
+    id: 'cx-20260709-09',
+    groups: [
+      { category: 'From England', players: ['David Beckham', 'Steven Gerrard', 'Rio Ferdinand', 'Ashley Cole'], difficulty: 'easy' },
+      { category: 'From Spain', players: ['Xavi Hernández', 'Andrés Iniesta', 'Sergio Ramos', 'Fernando Torres'], difficulty: 'medium' },
+      { category: 'From Portugal', players: ['Luís Figo', 'Rui Costa', 'Fernando Couto', 'Ricardo Carvalho'], difficulty: 'hard' },
+      { category: 'From Mexico', players: ['Rafael Márquez', 'Hugo Sánchez', 'Javier Hernández', 'Guillermo Ochoa'], difficulty: 'insane' },
+    ],
+  },
+  {
+    id: 'cx-20260709-10',
+    groups: [
+      { category: 'From Brazil', players: ['Ronaldo Nazário', 'Rivaldo', 'Ronaldinho Gaúcho', 'Ricardo Kaká'], difficulty: 'easy' },
+      { category: 'From Italy', players: ['Alessandro Del Piero', 'Andrea Pirlo', 'Paolo Maldini', 'Fabio Cannavaro'], difficulty: 'medium' },
+      { category: 'From the Netherlands', players: ['Marco van Basten', 'Ruud Gullit', 'Frank Rijkaard', 'Dennis Bergkamp'], difficulty: 'hard' },
+      { category: 'From Denmark', players: ['Peter Schmeichel', 'Michael Laudrup', 'Brian Laudrup', 'Christian Eriksen'], difficulty: 'insane' },
+    ],
+  },
+  {
+    id: 'cx-20260709-11',
+    groups: [
+      { category: 'From Brazil', players: ['Neymar Jr', 'Thiago Silva', 'Marcelo', 'Casemiro'], difficulty: 'easy' },
+      { category: 'From Portugal', players: ['Cristiano Ronaldo', 'Bernardo Silva', 'Bruno Fernandes', 'Rúben Dias'], difficulty: 'medium' },
+      { category: 'From Argentina', players: ['Lionel Messi', 'Ángel Di María', 'Sergio Agüero', 'Paulo Dybala'], difficulty: 'hard' },
+      { category: 'From Wales', players: ['Gareth Bale', 'Aaron Ramsey', 'Joe Allen', 'Ben Davies'], difficulty: 'insane' },
+    ],
+  },
+  {
+    id: 'cx-20260709-12',
+    groups: [
+      { category: 'From England', players: ['Harry Kane', 'Raheem Sterling', 'Jordan Henderson', 'Kyle Walker'], difficulty: 'easy' },
+      { category: 'From Italy', players: ['Gianluigi Donnarumma', 'Leonardo Bonucci', 'Giorgio Chiellini', 'Marco Verratti'], difficulty: 'medium' },
+      { category: 'From Poland', players: ['Robert Lewandowski', 'Wojciech Szczęsny', 'Piotr Zieliński', 'Kamil Glik'], difficulty: 'hard' },
+      { category: 'From Egypt', players: ['Mohamed Salah', 'Mohamed Elneny', 'Ahmed Hegazi', 'Essam El-Hadary'], difficulty: 'insane' },
+    ],
+  },
+  {
+    id: 'cx-20260709-13',
+    groups: [
+      { category: 'Played for Liverpool', players: ['Steven Gerrard', 'Jamie Carragher', 'Sadio Mané', 'Roberto Firmino'], difficulty: 'easy' },
+      { category: 'Played for Manchester United', players: ['Paul Scholes', 'Ryan Giggs', 'Nemanja Vidić', 'Wayne Rooney'], difficulty: 'medium' },
+      { category: 'Played for Arsenal', players: ['Tony Adams', 'Robert Pirès', 'Freddie Ljungberg', 'Cesc Fàbregas'], difficulty: 'hard' },
+      { category: 'Played for Tottenham', players: ['Ledley King', 'Luka Modrić', 'Gareth Bale', 'Rafael van der Vaart'], difficulty: 'insane' },
+    ],
+  },
+  {
+    id: 'cx-20260709-14',
+    groups: [
+      { category: 'From Spain', players: ['Iker Casillas', 'Carles Puyol', 'David Villa', 'Xabi Alonso'], difficulty: 'easy' },
+      { category: 'From Germany', players: ['Oliver Kahn', 'Michael Ballack', 'Lukas Podolski', 'Marco Reus'], difficulty: 'medium' },
+      { category: 'From France', players: ['Patrick Vieira', 'Marcel Desailly', 'Lilian Thuram', 'Fabien Barthez'], difficulty: 'hard' },
+      { category: 'From Cameroon', players: ['Samuel Eto\'o', 'Roger Milla', 'Rigobert Song', 'Alexandre Song'], difficulty: 'insane' },
+    ],
+  },
+  {
+    id: 'cx-20260709-15',
+    groups: [
+      { category: 'Premier League Golden Boot winners', players: ['Alan Shearer', 'Thierry Henry', 'Harry Kane', 'Robin van Persie'], difficulty: 'easy' },
+      { category: 'From Sweden', players: ['Zlatan Ibrahimović', 'Henrik Larsson', 'Freddie Ljungberg', 'Andreas Isaksson'], difficulty: 'medium' },
+      { category: 'From Ghana', players: ['Michael Essien', 'Asamoah Gyan', 'Sulley Muntari', 'Abedi Pele'], difficulty: 'hard' },
+      { category: 'From Croatia', players: ['Davor Šuker', 'Zvonimir Boban', 'Robert Prosinečki', 'Dario Šimić'], difficulty: 'insane' },
+    ],
+  },
+  {
+    id: 'cx-20260709-16',
+    groups: [
+      { category: 'From Belgium', players: ['Thibaut Courtois', 'Jan Vertonghen', 'Toby Alderweireld', 'Dries Mertens'], difficulty: 'easy' },
+      { category: 'From the Netherlands', players: ['Virgil van Dijk', 'Georginio Wijnaldum', 'Memphis Depay', 'Frenkie de Jong'], difficulty: 'medium' },
+      { category: 'From Serbia', players: ['Nemanja Vidić', 'Branislav Ivanović', 'Dušan Tadić', 'Aleksandar Mitrović'], difficulty: 'hard' },
+      { category: 'From Greece', players: ['Giorgos Karagounis', 'Theofanis Gekas', 'Kostas Manolas', 'Sokratis Papastathopoulos'], difficulty: 'insane' },
+    ],
+  },
+  {
+    id: 'cx-20260709-17',
+    groups: [
+      { category: 'Played for Real Madrid', players: ['Raúl González', 'Guti', 'Iker Casillas', 'Sergio Ramos'], difficulty: 'easy' },
+      { category: 'Played for Barcelona', players: ['Carles Puyol', 'Xavi Hernández', 'Andrés Iniesta', 'Víctor Valdés'], difficulty: 'medium' },
+      { category: 'Played for Atlético Madrid', players: ['Fernando Torres', 'Diego Godín', 'Koke', 'Gabi'], difficulty: 'hard' },
+      { category: 'Played for Valencia', players: ['David Silva', 'Juan Mata', 'Pablo Aimar', 'David Albelda'], difficulty: 'insane' },
+    ],
+  },
+  {
+    id: 'cx-20260709-18',
+    groups: [
+      { category: 'From Argentina', players: ['Gabriel Batistuta', 'Diego Simeone', 'Juan Sebastián Verón', 'Walter Samuel'], difficulty: 'easy' },
+      { category: 'From Uruguay', players: ['Enzo Francescoli', 'Álvaro Recoba', 'Paolo Montero', 'Diego Lugano'], difficulty: 'medium' },
+      { category: 'From Chile', players: ['Alexis Sánchez', 'Arturo Vidal', 'Claudio Bravo', 'Gary Medel'], difficulty: 'hard' },
+      { category: 'From Paraguay', players: ['José Luis Chilavert', 'Roque Santa Cruz', 'Justo Villar', 'Paulo da Silva'], difficulty: 'insane' },
+    ],
+  },
+  {
+    id: 'cx-20260709-19',
+    groups: [
+      { category: 'From England', players: ['Paul Gascoigne', 'Michael Owen', 'David Platt', 'Teddy Sheringham'], difficulty: 'easy' },
+      { category: 'From France', players: ['Emmanuel Petit', 'Youri Djorkaeff', 'Christophe Dugarry', 'Bixente Lizarazu'], difficulty: 'medium' },
+      { category: 'From Germany', players: ['Jürgen Klinsmann', 'Lothar Matthäus', 'Andreas Brehme', 'Rudi Völler'], difficulty: 'hard' },
+      { category: 'From Bulgaria', players: ['Hristo Stoichkov', 'Dimitar Berbatov', 'Krasimir Balakov', 'Yordan Letchkov'], difficulty: 'insane' },
+    ],
+  },
+  {
+    id: 'cx-20260709-20',
+    groups: [
+      { category: 'Won the Champions League with Real Madrid', players: ['Sergio Ramos', 'Karim Benzema', 'Luka Modrić', 'Marcelo'], difficulty: 'easy' },
+      { category: 'Won the Premier League with Manchester United', players: ['Paul Scholes', 'Ryan Giggs', 'Nemanja Vidić', 'Rio Ferdinand'], difficulty: 'medium' },
+      { category: 'Won the 2006 World Cup with Italy', players: ['Fabio Cannavaro', 'Andrea Pirlo', 'Gianluigi Buffon', 'Francesco Totti'], difficulty: 'hard' },
+      { category: 'Won Euro 2016 with Portugal', players: ['Rui Patrício', 'Ricardo Quaresma', 'Éder', 'João Mário'], difficulty: 'insane' },
+    ],
+  },
+  {
+    id: 'cx-20260710-01',
+    groups: [
+      { category: 'Wore the No. 7 shirt at Manchester United', players: ['David Beckham', 'Eric Cantona', 'Bryan Robson', 'Antonio Valencia'], difficulty: 'easy' },
+      { category: 'Ballon d\'Or winners', players: ['Cristiano Ronaldo', 'Ronaldinho', 'Kaká', 'George Weah'], difficulty: 'medium' },
+      { category: 'Scored in a World Cup final', players: ['Zinedine Zidane', 'Mario Götze', 'Kylian Mbappé', 'Marco Materazzi'], difficulty: 'hard' },
+      { category: 'Played for both Real Madrid and Barcelona', players: ['Luís Figo', 'Michael Laudrup', 'Javier Saviola', 'Luis Enrique'], difficulty: 'insane' },
+    ],
+  },
+  {
+    id: 'cx-20260710-02',
+    groups: [
+      { category: 'Goalkeepers who won the World Cup', players: ['Iker Casillas', 'Gianluigi Buffon', 'Fabien Barthez', 'Sepp Maier'], difficulty: 'easy' },
+      { category: 'One-club players', players: ['Paolo Maldini', 'Francesco Totti', 'Ryan Giggs', 'Carles Puyol'], difficulty: 'medium' },
+      { category: 'Goalkeepers famous for scoring goals', players: ['José Luis Chilavert', 'Rogério Ceni', 'René Higuita', 'Jorge Campos'], difficulty: 'hard' },
+      { category: 'Captained their country to a World Cup title', players: ['Cafu', 'Fabio Cannavaro', 'Philipp Lahm', 'Diego Maradona'], difficulty: 'insane' },
+    ],
+  },
+  {
+    id: 'cx-20260710-03',
+    groups: [
+      { category: 'Won the 2002 World Cup with Brazil', players: ['Ronaldo', 'Rivaldo', 'Roberto Carlos', 'Kaká'], difficulty: 'easy' },
+      { category: 'Played for Galatasaray', players: ['Didier Drogba', 'Wesley Sneijder', 'Radamel Falcao', 'Fernando Muslera'], difficulty: 'medium' },
+      { category: 'Won the Copa Libertadores', players: ['Carlos Tevez', 'Juan Román Riquelme', 'Neymar', 'Danilo'], difficulty: 'hard' },
+      { category: 'Played in Major League Soccer', players: ['David Beckham', 'Thierry Henry', 'Zlatan Ibrahimović', 'Wayne Rooney'], difficulty: 'insane' },
+    ],
+  },
+  {
+    id: 'cx-20260710-04',
+    groups: [
+      { category: 'Scored 100+ Premier League goals', players: ['Alan Shearer', 'Andy Cole', 'Robbie Fowler', 'Michael Owen'], difficulty: 'easy' },
+      { category: 'World Cup Golden Boot winners', players: ['Gary Lineker', 'Davor Šuker', 'Salvatore Schillaci', 'James Rodríguez'], difficulty: 'medium' },
+      { category: 'Scored in a Champions League final', players: ['Didier Drogba', 'Samuel Eto\'o', 'Mohamed Salah', 'Sadio Mané'], difficulty: 'hard' },
+      { category: 'African Footballer of the Year winners', players: ['George Weah', 'Yaya Touré', 'Abedi Pelé', 'Nwankwo Kanu'], difficulty: 'insane' },
+    ],
+  },
+  {
+    id: 'cx-20260710-05',
+    groups: [
+      { category: 'Won the 2018 World Cup with France', players: ['Antoine Griezmann', 'Paul Pogba', 'N\'Golo Kanté', 'Raphaël Varane'], difficulty: 'easy' },
+      { category: 'Scored 50+ goals in a calendar year', players: ['Lionel Messi', 'Cristiano Ronaldo', 'Robert Lewandowski', 'Gerd Müller'], difficulty: 'medium' },
+      { category: 'Played for both AC Milan and Inter Milan', players: ['Andrea Pirlo', 'Clarence Seedorf', 'Hakan Çalhanoğlu', 'Christian Vieri'], difficulty: 'hard' },
+      { category: 'Played under José Mourinho at two different clubs', players: ['Michael Essien', 'Nemanja Matić', 'Ricardo Carvalho', 'Paulo Ferreira'], difficulty: 'insane' },
+    ],
+  },
+  {
+    id: 'cx-20260710-06',
+    groups: [
+      { category: 'Won Copa América 2021 with Argentina', players: ['Lionel Messi', 'Ángel Di María', 'Emiliano Martínez', 'Lautaro Martínez'], difficulty: 'easy' },
+      { category: 'Won Euro 2008 with Spain', players: ['Xavi', 'David Silva', 'Marcos Senna', 'Cesc Fàbregas'], difficulty: 'medium' },
+      { category: 'Won the Africa Cup of Nations with Egypt', players: ['Mohamed Aboutrika', 'Essam El-Hadary', 'Ahmed Hassan', 'Wael Gomaa'], difficulty: 'hard' },
+      { category: 'Played in Japan\'s J.League', players: ['Zico', 'Gary Lineker', 'Hulk', 'Andrés Iniesta'], difficulty: 'insane' },
+    ],
+  },
+  {
+    id: 'cx-20260710-07',
+    groups: [
+      { category: 'Played for both Barcelona and PSG', players: ['Neymar', 'Lionel Messi', 'Dani Alves', 'Ronaldinho'], difficulty: 'easy' },
+      { category: 'Won the 2014 World Cup with Germany', players: ['Thomas Müller', 'Toni Kroos', 'Mats Hummels', 'Bastian Schweinsteiger'], difficulty: 'medium' },
+      { category: 'Goalkeepers with 100+ international caps', players: ['Gianluigi Buffon', 'Iker Casillas', 'Petr Čech', 'Manuel Neuer'], difficulty: 'hard' },
+      { category: 'Won the Ballon d\'Or while at a German club', players: ['Franz Beckenbauer', 'Gerd Müller', 'Karl-Heinz Rummenigge', 'Matthias Sammer'], difficulty: 'insane' },
+    ],
+  },
+  {
+    id: 'cx-20260710-08',
+    groups: [
+      { category: 'Played under Pep Guardiola at Manchester City', players: ['Kevin De Bruyne', 'Erling Haaland', 'Bernardo Silva', 'İlkay Gündoğan'], difficulty: 'easy' },
+      { category: 'Won the Premier League with two different clubs', players: ['Ashley Cole', 'Carlos Tevez', 'N\'Golo Kanté', 'Riyad Mahrez'], difficulty: 'medium' },
+      { category: 'English players who played in Serie A', players: ['Paul Ince', 'David Platt', 'Des Walker', 'David Beckham'], difficulty: 'hard' },
+      { category: 'Played for Rangers', players: ['Paul Gascoigne', 'Terry Butcher', 'Trevor Steven', 'Mark Hateley'], difficulty: 'insane' },
+    ],
+  },
+  {
+    id: 'cx-20260710-09',
+    groups: [
+      { category: 'Played for Boca Juniors', players: ['Martín Palermo', 'Juan Román Riquelme', 'Carlos Tevez', 'Guillermo Barros Schelotto'], difficulty: 'easy' },
+      { category: 'Played for River Plate', players: ['Alfredo Di Stéfano', 'Hernán Crespo', 'Javier Mascherano', 'Radamel Falcao'], difficulty: 'medium' },
+      { category: 'Won both the Copa Libertadores and the Champions League', players: ['Dida', 'Cafu', 'Roque Júnior', 'Ronaldinho'], difficulty: 'hard' },
+      { category: 'Played for Newell\'s Old Boys', players: ['Mauricio Pochettino', 'Gerardo Martino', 'Maxi Rodríguez', 'Gabriel Heinze'], difficulty: 'insane' },
+    ],
+  },
+  {
+    id: 'cx-20260710-10',
+    groups: [
+      { category: 'Their country\'s all-time leading goalscorer', players: ['Romelu Lukaku', 'Miroslav Klose', 'Edin Džeko', 'Neymar'], difficulty: 'easy' },
+      { category: 'European Golden Shoe winners', players: ['Luis Suárez', 'Francesco Totti', 'Mário Jardel', 'Kevin Phillips'], difficulty: 'medium' },
+      { category: 'Scored at three or more European Championships', players: ['Cristiano Ronaldo', 'Álvaro Morata', 'Zlatan Ibrahimović', 'Wayne Rooney'], difficulty: 'hard' },
+      { category: 'World Cup Golden Ball winners', players: ['Romário', 'Oliver Kahn', 'Luka Modrić', 'Zinedine Zidane'], difficulty: 'insane' },
+    ],
+  },
+  {
+    id: 'cx-20260710-11',
+    groups: [
+      { category: 'Arsenal Invincibles (unbeaten 2003-04 season)', players: ['Thierry Henry', 'Dennis Bergkamp', 'Patrick Vieira', 'Robert Pirès'], difficulty: 'easy' },
+      { category: 'Won the 1998 World Cup with France', players: ['Didier Deschamps', 'Lilian Thuram', 'Marcel Desailly', 'Emmanuel Petit'], difficulty: 'medium' },
+      { category: 'Won both the Premier League and La Liga', players: ['Cesc Fàbregas', 'David Beckham', 'Gabriel Heinze', 'Diego Costa'], difficulty: 'hard' },
+      { category: 'Played for and later managed Real Madrid', players: ['Zinedine Zidane', 'Santiago Solari', 'Bernd Schuster', 'Miguel Muñoz'], difficulty: 'insane' },
+    ],
+  },
+  {
+    id: 'cx-20260710-12',
+    groups: [
+      { category: 'Played for Bayern Munich', players: ['Robert Lewandowski', 'Franck Ribéry', 'Manuel Neuer', 'Mario Gómez'], difficulty: 'easy' },
+      { category: 'Played in the 2010 World Cup final for the Netherlands', players: ['Dirk Kuyt', 'Wesley Sneijder', 'Robin van Persie', 'Nigel de Jong'], difficulty: 'medium' },
+      { category: 'Won a treble (league, cup & Champions League) in one season', players: ['Gary Neville', 'Xavi', 'Samuel Eto\'o', 'Javier Zanetti'], difficulty: 'hard' },
+      { category: 'One-club players', players: ['Matt Le Tissier', 'Jamie Carragher', 'Tony Adams', 'Ledley King'], difficulty: 'insane' },
+    ],
+  },
+  {
+    id: 'cx-20260805-1',
+    groups: [
+      { category: 'Brazilians who played for Barcelona', players: ['Ronaldinho', 'Rivaldo', 'Romário', 'Neymar'], difficulty: 'easy' },
+      { category: 'Won the 2002 World Cup', players: ['Ronaldo Nazário', 'Cafu', 'Roberto Carlos', 'Gilberto Silva'], difficulty: 'medium' },
+      { category: 'Scored in two different World Cup finals', players: ['Pelé', 'Vavá', 'Zinedine Zidane', 'Kylian Mbappé'], difficulty: 'hard' },
+      { category: 'Won the Ballon d\'Or while playing in Serie A', players: ['Marco van Basten', 'Roberto Baggio', 'Andriy Shevchenko', 'Kaká'], difficulty: 'insane' },
+    ],
+  },
+  {
+    id: 'cx-20260805-2',
+    groups: [
+      { category: 'Scored 100+ Premier League goals', players: ['Alan Shearer', 'Wayne Rooney', 'Frank Lampard', 'Sergio Agüero'], difficulty: 'easy' },
+      { category: 'Scored in a Champions League final their team won', players: ['Arjen Robben', 'Divock Origi', 'David Villa', 'Zinedine Zidane'], difficulty: 'medium' },
+      { category: 'Played for both Real Madrid and Liverpool', players: ['Michael Owen', 'Steve McManaman', 'Xabi Alonso', 'Fernando Morientes'], difficulty: 'hard' },
+      { category: 'Top scorer at a European Championship', players: ['Michel Platini', 'Fernando Torres', 'Cristiano Ronaldo', 'Antoine Griezmann'], difficulty: 'insane' },
+    ],
+  },
+  {
+    id: 'cx-20260805-3',
+    groups: [
+      { category: 'Legendary goalkeepers', players: ['Gianluigi Buffon', 'Iker Casillas', 'Petr Čech', 'Edwin van der Sar'], difficulty: 'easy' },
+      { category: 'Saved a penalty at a World Cup', players: ['Emiliano Martínez', 'Guillermo Ochoa', 'Tim Krul', 'Ricardo'], difficulty: 'medium' },
+      { category: 'Goalkeepers who scored a professional goal', players: ['René Higuita', 'Rogério Ceni', 'José Luis Chilavert', 'Alisson'], difficulty: 'hard' },
+      { category: 'Outfield players who went in goal mid-match', players: ['John Terry', 'Harry Kane', 'Niall Quinn', 'Jan Koller'], difficulty: 'insane' },
+    ],
+  },
+  {
+    id: 'cx-20260805-4',
+    groups: [
+      { category: 'Cost more than 100 million euros', players: ['Neymar', 'Kylian Mbappé', 'Philippe Coutinho', 'Ousmane Dembélé'], difficulty: 'easy' },
+      { category: 'Joined a new club on a free transfer', players: ['Robert Lewandowski', 'Sergio Ramos', 'Lionel Messi', 'Andrea Pirlo'], difficulty: 'medium' },
+      { category: 'Re-signed for a club they had left', players: ['Paul Pogba', 'Zlatan Ibrahimović', 'Wayne Rooney', 'Fernando Torres'], difficulty: 'hard' },
+      { category: 'Their transfer broke the world record at the time', players: ['Luís Figo', 'Zinedine Zidane', 'Cristiano Ronaldo', 'Gareth Bale'], difficulty: 'insane' },
+    ],
+  },
+  {
+    id: 'cx-20260805-5',
+    groups: [
+      { category: 'African players who played for Chelsea', players: ['Didier Drogba', 'Michael Essien', 'John Obi Mikel', 'Mohamed Salah'], difficulty: 'easy' },
+      { category: 'Won the Africa Cup of Nations', players: ['Sadio Mané', 'Riyad Mahrez', 'Samuel Eto\'o', 'Yaya Touré'], difficulty: 'medium' },
+      { category: 'African players who won the Premier League', players: ['Lauren', 'Kolo Touré', 'Geremi', 'Salomon Kalou'], difficulty: 'hard' },
+      { category: 'Played in a World Cup semi-final for Morocco', players: ['Achraf Hakimi', 'Hakim Ziyech', 'Yassine Bounou', 'Azzedine Ounahi'], difficulty: 'insane' },
+    ],
+  },
+  {
+    id: 'cx-20260805-6',
+    groups: [
+      { category: 'Managed a Premier League club after playing', players: ['Mikel Arteta', 'Frank Lampard', 'Steven Gerrard', 'Vincent Kompany'], difficulty: 'easy' },
+      { category: 'Won the World Cup as a player, later managed their country', players: ['Didier Deschamps', 'Dunga', 'Diego Maradona', 'Rudi Völler'], difficulty: 'medium' },
+      { category: 'Were player-managers at an English club', players: ['Gianluca Vialli', 'Ruud Gullit', 'Kenny Dalglish', 'Bryan Robson'], difficulty: 'hard' },
+      { category: 'Won a league title with the same club as player and manager', players: ['Pep Guardiola', 'Zinedine Zidane', 'Carlo Ancelotti', 'Diego Simeone'], difficulty: 'insane' },
+    ],
+  },
+  {
+    id: 'cx-20260805-7',
+    groups: [
+      { category: 'Won the World Cup Golden Boot', players: ['Ronaldo Nazário', 'Kylian Mbappé', 'James Rodríguez', 'Thomas Müller'], difficulty: 'easy' },
+      { category: 'Sent off in a World Cup knockout game', players: ['Zinedine Zidane', 'Wayne Rooney', 'David Beckham', 'Luis Suárez'], difficulty: 'medium' },
+      { category: 'Missed a penalty at a World Cup', players: ['Roberto Baggio', 'David Trezeguet', 'Harry Kane', 'Asamoah Gyan'], difficulty: 'hard' },
+      { category: 'Went to five World Cups', players: ['Rafael Márquez', 'Gianluigi Buffon', 'Lionel Messi', 'Cristiano Ronaldo'], difficulty: 'insane' },
+    ],
+  },
+  {
+    id: 'cx-20260805-8',
+    groups: [
+      { category: 'Played for Real Sociedad', players: ['Antoine Griezmann', 'Xabi Alonso', 'Mikel Oyarzabal', 'Martin Ødegaard'], difficulty: 'easy' },
+      { category: 'La Masia graduates', players: ['Lionel Messi', 'Xavi', 'Andrés Iniesta', 'Sergio Busquets'], difficulty: 'medium' },
+      { category: 'Played for Athletic Club', players: ['Iñaki Williams', 'Nico Williams', 'Iker Muniain', 'Fernando Llorente'], difficulty: 'hard' },
+      { category: 'One-club legends who never left', players: ['Francesco Totti', 'Carles Puyol', 'Paolo Maldini', 'Ryan Giggs'], difficulty: 'insane' },
     ],
   },
 ];
