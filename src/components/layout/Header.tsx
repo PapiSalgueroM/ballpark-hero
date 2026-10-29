@@ -97,7 +97,7 @@ export function Header() {
             <Link to="/" className="flex min-w-0 items-center gap-2 py-1.5">
               <LogoMark size={28} className="shrink-0 hidden min-[360px]:block sm:hidden" />
               <LogoMark size={32} className="shrink-0 hidden sm:block" />
-              <span className="font-display font-black text-lg min-[480px]:text-2xl sm:text-3xl tracking-normal min-[480px]:tracking-wide text-primary truncate">DoUKnowBall</span>
+              <span className="font-display font-black text-lg min-[480px]:text-2xl sm:text-3xl sm:leading-10 tracking-normal min-[480px]:tracking-wide text-primary truncate">DoUKnowBall</span>
             </Link>
           </div>
 
