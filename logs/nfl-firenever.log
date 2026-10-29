@@ -1,0 +1,74 @@
+NEGATIVE CONTROL ON: firenever; section 9 must go red
+1) the default path: a desk on save graded through the host is the base's, season for season, and gains only seat and xp
+  FAIL [1]: seed 7: 10 checkpoints played, the base played 5
+  FAIL [1]: seed 7 checkpoint 5 (close): not the base's
+  FAIL [1]: seed 8 checkpoint 1 (close): not the base's
+  FAIL [1]: seed 9 checkpoint 1 (close): not the base's
+  FAIL [1]: seed 10 checkpoint 1 (close): not the base's
+   68 checkpoints over 50 seasons against 6d2d7a7d (4 moved); fired at []; digest af360930ed9eaba41f5cecc2a06c1cac273a9c62
+2) the verdict on every club's real season: desk off it is today's two calls, desk on it records once and pays once
+  FAIL [2]: seed 1 season 1 BUF trust 12: desk off reads 0/false, today's two calls 0/true
+  FAIL [2]: seed 1 season 1 CLE trust 12: desk off reads 0/false, today's two calls 0/true
+  FAIL [2]: seed 1 season 1 DAL trust 12: desk off reads 0/false, today's two calls 0/true
+  FAIL [2]: seed 1 season 1 DET trust 12: desk off reads 0/false, today's two calls 0/true
+  FAIL [2]: seed 1 season 1 GB trust 12: desk off reads 0/false, today's two calls 0/true
+  FAIL [2]: seed 1 season 1 HOU trust 12: desk off reads 0/false, today's two calls 0/true
+  FAIL [2]: seed 1 season 1 JAX trust 12: desk off reads 0/false, today's two calls 0/true
+  FAIL [2]: seed 1 season 1 LA trust 12: desk off reads 0/false, today's two calls 0/true
+  FAIL [2]: (further failures in this check not printed)
+   1152 desk off closes equal today's two calls; 384 desk on closes recorded once (42599 XP paid, the median club 111 a season), 384 reloads paid nothing, 384 older saves started on time
+   OWNERSHIP: 211 losing and 173 winning club seasons walked at levels 0 to 5; from trust 60 a season costs badly 28, 26, 24, 22, 20, 18; missed 16, 15, 14, 13, 12, 10; trust 16, missed: level 0 fired (0), level 1 keeps the job on 1
+2t) the rule of thumb: three bad years from trust 60 fire Ownership levels 0 to 4 on the grades alone and not 5, and the press can change that
+  FAIL [2t]: level 0 on the grades alone: kept (60 > 32 > 4 > 0), the rule says fired
+  FAIL [2t]: level 1 on the grades alone: kept (60 > 34 > 8 > 0), the rule says fired
+  FAIL [2t]: level 2 on the grades alone: kept (60 > 36 > 12 > 0), the rule says fired
+  FAIL [2t]: level 3 on the grades alone: kept (60 > 38 > 16 > 0), the rule says fired
+  FAIL [2t]: level 4 on the grades alone: kept (60 > 40 > 20 > 0), the rule says fired
+   from trust 60, three badly seasons of BUF: level 0 kept, level 1 kept, level 2 kept, level 3 kept, level 4 kept, level 5 kept; with "Say the right, empty things" after each: kept at levels 0, 1, 2, 3, 4 (level 4: 60 > 40 > 41 > 21 > 22 > 2 > 3)
+3) Media: every gamble lands exactly one step more often a level, the safe answers and the tilt never move, one draw an answer
+   4 pressers, 6 gambles and 6 safe answers at levels 0 to 5; landed of 1000: Intro 700/730/760/790/820/850; Intro 500/530/560/590/620/650; Podium 600/630/660/690/720/750; Scrum 450/480/510/540/570/600; Trade 700/730/760/790/820/850; Trade 550/580/610/640/670/700
+8) the words: never empty, no dash, no quote, no placeholder, no player's name, a closed line never says sit, every box fits
+   24106 strings and 3976 boxes read over 4 leagues, every roster name checked
+4) the market after real firings: every club graded as a GM's club, the first out of work screen and the next two
+   MEASURE 20 seeds x 12 seasons: 0 firings
+   first screen with the host's rule: offers 0 (n/a), quiet 0 (n/a), closed 0 (n/a); first calls 0
+   first screen on the raw feed:      offers 0 (n/a), quiet 0 (n/a), closed 0 (n/a)
+   of the screens with offers, last calls: host 0 of 0 (n/a), raw 0 of 0 (n/a)
+   re hired within three feeds (firings with two seasons left to read, 0): host 0 (n/a), raw 0 (n/a); 0 later feeds read
+  FAIL [4]: no club was fired in the measuring run, so it measured nothing
+   ASSERTED on 0 first feeds (0 straight after a badly season): never the club that fired him, no top tier after badly, every ask for next season, keyed
+  FAIL [4]: only 0 feeds (0 after badly) asserted, too few to hold the rules
+5) taking a seat: 0 offers taken (0 with a planted depth chart), 0 followed through the draft and the summer, 0 refused
+  FAIL [5]: too few seats taken (0, 0 followed, 0 planted, floor 0.9 of the takes)
+6) a season out: the league plays a whole season without him, his record gains a year out and nothing else, and refusals touch nothing
+   60 years out over 20 seeds (0 stopped early); refusals: 20 in a seat, 20 closed, 20 last calls
+   drafted men on the other clubs' rosters after the years out: away 1065, idle GM 1080 (ratio 0.986); mean roster after a summer: away 52.27, idle GM 52.25
+7) whole careers: the save, the record and the counters agree at every step across firings, takes and years out
+  FAIL [7]: seed 1 close (2028): the record does not fit the save
+  FAIL [7]: seed 1 summer (2029): the record does not fit the save
+  FAIL [7]: seed 1 close (2031): the record does not fit the save
+  FAIL [7]: seed 1 summer (2032): the record does not fit the save
+  FAIL [7]: seed 1 close (2032): the record does not fit the save
+  FAIL [7]: seed 1 summer (2033): the record does not fit the save
+  FAIL [7]: seed 1 close (2033): the record does not fit the save
+  FAIL [7]: seed 1 summer (2034): the record does not fit the save
+  FAIL [7]: (further failures in this check not printed)
+   10 careers, 120 seasons run: 40 sackings forced, 0 firings, 0 seats taken, 0 years out, 0 closed for good; 260 checkpoints
+9) the bands: the firing rate, the offers, re hiring, the closed share and the XP pace, seed by seed against the calibrated bands
+   S9 nfl seeds 1-20: fireRate mean 0.0000 sd 0.0000 se 0.0000 min 0.0000 max 0.0000 over 20 seeds
+   S9 nfl seeds 1-20: twoPlus mean 0.0000 sd 0.0000 se 0.0000 min Infinity max -Infinity over 0 seeds
+   S9 nfl seeds 1-20: meanOffers mean 0.0000 sd 0.0000 se 0.0000 min Infinity max -Infinity over 0 seeds
+   S9 nfl seeds 1-20: hired3 mean 0.0000 sd 0.0000 se 0.0000 min Infinity max -Infinity over 0 seeds
+   S9 nfl seeds 1-20: closedNext mean 0.0000 sd 0.0000 se 0.0000 min Infinity max -Infinity over 0 seeds
+   S9 nfl seeds 1-20: xpMean mean 111.8107 sd 1.6678 se 0.3729 min 107.5130 max 114.3620 over 20 seeds
+   S9 nfl seeds 1-20: xpMedian 95 over 7680 graded club seasons; hostXpHelp's .500 season that meets the ask pays 110 (ratio 0.864)
+  FAIL [9]: fireRate: the set mean 0.0000 is outside the band [0.0524,0.0675]
+  FAIL [9]: twoPlus: the set mean 0.0000 is outside the band [0.0058,0.0767]
+  FAIL [9]: meanOffers: the set mean 0.0000 is outside the band [1.0058,1.0767]
+  FAIL [9]: hired3: an invariant at 1 on every seed, read 0 seeds off it of 0 (mean 0.0000)
+  FAIL [9]: closedNext: the set mean 0.0000 is outside the band [0.4329,0.6257]
+   nfl bands held on 20 seeds: fireRate 0.0000 in [0.0524,0.0675]; twoPlus 0.0000 in [0.0058,0.0767]; meanOffers 0.0000 in [1.0058,1.0767]; closedNext 0.0000 in [0.4329,0.6257]; xpMean 111.8107 in [110.69,113.35]
+10) the lift: the shared legacy read, season counted rule, retained step and take equal what the NFL wrote inline
+   1536 legacy reads equal the old body and the nfl wrapper; 15 season counted rows; 108 retained rows through both summers' old step; the take: 0 moves (0 desk off), 0 refusals
+  FAIL [10]: too few takes counted (0 moves, 0 desk off, 0 refusals)
+CONTROL firenever: 1 rewrite(s) applied, 5 failure(s) in section 9 (FIRED)

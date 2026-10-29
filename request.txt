@@ -1,0 +1,55 @@
+tsc: node_modules/.bin/tsc --noEmit -p tsconfig.app.json
+nhlfull: SIM_GM_CAREER_SPORT=nhl node scripts/simGmCareer.mjs
+nflfull: node scripts/simGmCareer.mjs
+nhl-epoch: SIM_GM_CAREER_SPORT=nhl SIM_GM_CAREER_CONTROL=epoch node scripts/simGmCareer.mjs
+nhl-addkey: SIM_GM_CAREER_SPORT=nhl SIM_GM_CAREER_CONTROL=addkey node scripts/simGmCareer.mjs
+nhl-deskoffblock: SIM_GM_CAREER_SPORT=nhl SIM_GM_CAREER_CONTROL=deskoffblock node scripts/simGmCareer.mjs
+nhl-paytwice: SIM_GM_CAREER_SPORT=nhl SIM_GM_CAREER_CONTROL=paytwice node scripts/simGmCareer.mjs
+nhl-lateseat: SIM_GM_CAREER_SPORT=nhl SIM_GM_CAREER_CONTROL=lateseat node scripts/simGmCareer.mjs
+nhl-flatowner: SIM_GM_CAREER_SPORT=nhl SIM_GM_CAREER_CONTROL=flatowner node scripts/simGmCareer.mjs
+nhl-thumbfalse: SIM_GM_CAREER_SPORT=nhl SIM_GM_CAREER_CONTROL=thumbfalse node scripts/simGmCareer.mjs
+nhl-flatmedia: SIM_GM_CAREER_SPORT=nhl SIM_GM_CAREER_CONTROL=flatmedia node scripts/simGmCareer.mjs
+nhl-extradraw: SIM_GM_CAREER_SPORT=nhl SIM_GM_CAREER_CONTROL=extradraw node scripts/simGmCareer.mjs
+nhl-unkeyed: SIM_GM_CAREER_SPORT=nhl SIM_GM_CAREER_CONTROL=unkeyed node scripts/simGmCareer.mjs
+nhl-firedclub: SIM_GM_CAREER_SPORT=nhl SIM_GM_CAREER_CONTROL=firedclub node scripts/simGmCareer.mjs
+nhl-ledgerrides: SIM_GM_CAREER_SPORT=nhl SIM_GM_CAREER_CONTROL=ledgerrides node scripts/simGmCareer.mjs
+nhl-staffrides: SIM_GM_CAREER_SPORT=nhl SIM_GM_CAREER_CONTROL=staffrides node scripts/simGmCareer.mjs
+nhl-rostermove: SIM_GM_CAREER_SPORT=nhl SIM_GM_CAREER_CONTROL=rostermove node scripts/simGmCareer.mjs
+nhl-depthstays: SIM_GM_CAREER_SPORT=nhl SIM_GM_CAREER_CONTROL=depthstays node scripts/simGmCareer.mjs
+nhl-contribstays: SIM_GM_CAREER_SPORT=nhl SIM_GM_CAREER_CONTROL=contribstays node scripts/simGmCareer.mjs
+nhl-askrebuilt: SIM_GM_CAREER_SPORT=nhl SIM_GM_CAREER_CONTROL=askrebuilt node scripts/simGmCareer.mjs
+nhl-halfseason: SIM_GM_CAREER_SPORT=nhl SIM_GM_CAREER_CONTROL=halfseason node scripts/simGmCareer.mjs
+nhl-notrim: SIM_GM_CAREER_SPORT=nhl SIM_GM_CAREER_CONTROL=notrim node scripts/simGmCareer.mjs
+nhl-awayxp: SIM_GM_CAREER_SPORT=nhl SIM_GM_CAREER_CONTROL=awayxp node scripts/simGmCareer.mjs
+nhl-lastcall: SIM_GM_CAREER_SPORT=nhl SIM_GM_CAREER_CONTROL=lastcall node scripts/simGmCareer.mjs
+nhl-noawaydraft: SIM_GM_CAREER_SPORT=nhl SIM_GM_CAREER_CONTROL=noawaydraft node scripts/simGmCareer.mjs
+nhl-retainedrolled: SIM_GM_CAREER_SPORT=nhl SIM_GM_CAREER_CONTROL=retainedrolled node scripts/simGmCareer.mjs
+nhl-awaycontrib: SIM_GM_CAREER_SPORT=nhl SIM_GM_CAREER_CONTROL=awaycontrib node scripts/simGmCareer.mjs
+nhl-overlap: SIM_GM_CAREER_SPORT=nhl SIM_GM_CAREER_CONTROL=overlap node scripts/simGmCareer.mjs
+nhl-firedlost: SIM_GM_CAREER_SPORT=nhl SIM_GM_CAREER_CONTROL=firedlost node scripts/simGmCareer.mjs
+nhl-hubcounted: SIM_GM_CAREER_SPORT=nhl SIM_GM_CAREER_CONTROL=hubcounted node scripts/simGmCareer.mjs
+nhl-emptytile: SIM_GM_CAREER_SPORT=nhl SIM_GM_CAREER_CONTROL=emptytile node scripts/simGmCareer.mjs
+nhl-nameinline: SIM_GM_CAREER_SPORT=nhl SIM_GM_CAREER_CONTROL=nameinline node scripts/simGmCareer.mjs
+nhl-firenever: SIM_GM_CAREER_SPORT=nhl SIM_GM_CAREER_CONTROL=firenever node scripts/simGmCareer.mjs
+nhl-nooffers: SIM_GM_CAREER_SPORT=nhl SIM_GM_CAREER_CONTROL=nooffers node scripts/simGmCareer.mjs
+nhl-xpflat: SIM_GM_CAREER_SPORT=nhl SIM_GM_CAREER_CONTROL=xpflat node scripts/simGmCareer.mjs
+nhl-nevershut: SIM_GM_CAREER_SPORT=nhl SIM_GM_CAREER_CONTROL=nevershut node scripts/simGmCareer.mjs
+nhl-legacyleak: SIM_GM_CAREER_SPORT=nhl SIM_GM_CAREER_CONTROL=legacyleak node scripts/simGmCareer.mjs
+nhl-retainedlift: SIM_GM_CAREER_SPORT=nhl SIM_GM_CAREER_CONTROL=retainedlift node scripts/simGmCareer.mjs
+nfl-thumbfalse: SIM_GM_CAREER_CONTROL=thumbfalse node scripts/simGmCareer.mjs
+nfl-firenever: SIM_GM_CAREER_CONTROL=firenever node scripts/simGmCareer.mjs
+nfl-nooffers: SIM_GM_CAREER_CONTROL=nooffers node scripts/simGmCareer.mjs
+nfl-xpflat: SIM_GM_CAREER_CONTROL=xpflat node scripts/simGmCareer.mjs
+nfl-nevershut: SIM_GM_CAREER_CONTROL=nevershut node scripts/simGmCareer.mjs
+nfl-legacyleak: SIM_GM_CAREER_CONTROL=legacyleak node scripts/simGmCareer.mjs
+nfl-retainedlift: SIM_GM_CAREER_CONTROL=retainedlift node scripts/simGmCareer.mjs
+nfl-hubcounted: SIM_GM_CAREER_CONTROL=hubcounted node scripts/simGmCareer.mjs
+nfl-rostermove: SIM_GM_CAREER_CONTROL=rostermove node scripts/simGmCareer.mjs
+nfl-depthstays: SIM_GM_CAREER_CONTROL=depthstays node scripts/simGmCareer.mjs
+nfl-contribstays: SIM_GM_CAREER_CONTROL=contribstays node scripts/simGmCareer.mjs
+vitest-lift: node_modules/.bin/vitest run src/lib/gmCareerRules.test.ts src/components/front-office-shared/FrontOfficeGmCareer.test.tsx --testTimeout=300000 --hookTimeout=120000
+cfb-donenow: node scripts/controlFrontOfficeBoard.mjs donenow
+simHarnessAnchors: node scripts/simHarnessAnchors.mjs
+simFoLazyDesk: node scripts/simFoLazyDesk.mjs
+simGmDeskHost-emptyfeed: SIM_GM_DESK_HOST_CONTROL=emptyfeed node scripts/simGmDeskHost.mjs
+simNhlCpuRosters-all: NHL_CPU_ROSTERS_CONTROL=all node scripts/simNhlCpuRosters.mjs
