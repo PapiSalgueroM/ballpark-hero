@@ -1,0 +1,7 @@
+#!playwright
+anchors: node scripts/simHarnessAnchors.mjs
+simWall: node scripts/simUsCareerHallWall.mjs
+m-sportimport: SIM_HALL_WALL_CONTROL=sportimport node scripts/simUsCareerHallWall.mjs
+fence-simWritesAreSent: node scripts/simWritesAreSent.mjs
+fence-simResultMoment: node scripts/simResultMoment.mjs
+nflStaff-base: git worktree add /tmp/nbase 493926a4f >/dev/null 2>&1 && cd /tmp/nbase && ln -s "$OLDPWD/node_modules" node_modules && CI=1 SIM_NETWORK=offline NODE_OPTIONS="--require /tmp/nbase/scripts/lib/offlineTransport.cjs" node scripts/simNflCoachStaffRecovery.mjs 2>&1 | grep -E "Frozen whole source|AssertionError" | head -3; exit ${PIPESTATUS[0]}
