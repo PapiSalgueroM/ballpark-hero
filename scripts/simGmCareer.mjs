@@ -688,6 +688,8 @@ const DRIVE = {
        against the NFL's 0.061 (r1559-s2a), so twenty leagues held 278 first feeds, under section 4's floor of 300.
        More careers, never a lower floor. Section 9's bands are for sets of this many seeds. */
     measureSeeds: 40,
+    /* Section 7 walks twenty careers on this row (its comment says why). */
+    careerSeeds: 20,
     /* Section 5's floor on the takes whose old club had a lineup planted: an NHL roster at the close (12 to 15 men,
        some out hurt) has no spare healthy man at any position on about one take in six: 491 of 584 planted (0.84,
        r1559-s2c) against the NFL's QBs, always two. The floor sits near 90 percent of the measured share. */
@@ -1690,7 +1692,11 @@ if (runs('6')) {
 /* ================================================================== */
 /* 7. Whole careers: fired every third season, then a take or a year out */
 /* ================================================================== */
-const S7_SEEDS = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
+/* Round 1559 fix pass: the nhl row walks twenty careers, not ten. Section 7's counts move with the id counter the
+   sections before it advance, and the fix pass's replays in section 6 moved the nhl row's ten careers from 13 years
+   out to 10, on the floor of 10 (r1559-fx3a; 18, 10, 13 in r1559-f1; the nfl row 20, 11, 22 against 21, 14, 15).
+   More careers, never a lower floor. */
+const S7_SEEDS = Array.from({ length: d.careerSeeds ?? 10 }, (_, i) => i + 1);
 const S7_SEASONS = 12;
 const TITLE_ASK = season => ({ tier: 'title', text: `Win ${d.words.title}. Anything less is a failed season upstairs.`, winFloor: 0, reqLevel: 4, season });
 if (runs('7')) {
