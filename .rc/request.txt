@@ -1,0 +1,13 @@
+tsc: node_modules/.bin/tsc --noEmit -p tsconfig.app.json
+vnew: node_modules/.bin/vitest run src/test/usCareerReports1569.test.tsx --testTimeout=300000 --hookTimeout=120000
+vrel1: node_modules/.bin/vitest run src/test/usCareerActionConfirm.test.tsx src/test/usCareerMarketBoard.test.tsx src/test/usCareerMarketUi.test.tsx src/test/extensionResponseMotion.test.tsx src/test/freeAgencyFeedback.test.tsx src/test/usCareerHallBoard.test.tsx src/test/usCareerProspect.test.tsx src/test/usCareerSaveRetry.test.tsx src/test/usCareerMarketSecondTab.test.tsx src/test/myCareerRestore.test.tsx src/test/usCareerReveals.test.tsx src/test/usSeasonCentreEntry.test.tsx --testTimeout=300000 --hookTimeout=120000
+vrel2: node_modules/.bin/vitest run src/test/careerDecisionOutcome.test.tsx src/test/careerHallV1Replay.test.ts src/test/careerSeasonReview.test.tsx src/test/noDoubleRecord.test.tsx src/test/rivalryChoiceBoard.test.tsx src/test/usCareerDirtyMoney.test.tsx src/test/usCareerDraftNightBoard.test.tsx src/test/usCareerPractice.test.tsx src/test/usCareerReports1346.test.tsx src/test/usCareerStatLines.test.tsx src/test/usCareerSummer.test.tsx --testTimeout=300000 --hookTimeout=120000
+sim: node scripts/simUsCareerReports.mjs
+sim-s1: SIM_SEED=1 node scripts/simUsCareerReports.mjs
+sim-s2: SIM_SEED=2 node scripts/simUsCareerReports.mjs
+sim-s3: SIM_SEED=3 node scripts/simUsCareerReports.mjs
+ctl-blind: SIM_REPORTS_CONTROL=blind node scripts/simUsCareerReports.mjs
+ctl-nocredit: SIM_REPORTS_CONTROL=nocredit node scripts/simUsCareerReports.mjs
+ctl-alwayslast: SIM_REPORTS_CONTROL=alwayslast node scripts/simUsCareerReports.mjs
+confirm: node scripts/simUsCareerActionConfirm.mjs
+rival: node scripts/simNoRivalNames.mjs
