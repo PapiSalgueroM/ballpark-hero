@@ -1,0 +1,130 @@
+name: Build Your XI Mixed60 owned baseline
+on:
+  push:
+    branches: [codex/build-xi-mixed60-baseline-v2-post-bs-20261029]
+permissions:
+  contents: read
+concurrency:
+  group: build-xi-mixed60-${{ github.ref }}
+  cancel-in-progress: false
+jobs:
+  proof:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    env:
+      CI: true
+      SIM_NETWORK: offline
+      EXPECTED_MAIN: 601435944bef57aa0557884bbe16fde55e64107c
+      XI_MIXED_SELECTOR_SHA: 8a8d34c684a1a26047abb778d32eeca01f34bb3f496d6ac67e7134d1312d7b83
+    defaults:
+      run:
+        shell: bash
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 2
+          persist-credentials: false
+          ref: ${{ github.sha }}
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: npm
+      - name: Bind exact test-only source
+        id: foundation
+        timeout-minutes: 5
+        run: |
+          set -euo pipefail
+          out="$RUNNER_TEMP/build-xi-mixed60"
+          test ! -e "$out";test ! -L "$out";mkdir "$out"
+          echo "XI_MIXED_OUT=$out" >> "$GITHUB_ENV"
+          export XI_MIXED_OUT="$out"
+          test "$GITHUB_REPOSITORY" = PapiSalgueroM/ballpark-hero
+          test "$GITHUB_REPOSITORY_ID" = 1195729679
+          test "$GITHUB_REF" = refs/heads/codex/build-xi-mixed60-baseline-v2-post-bs-20261029
+          test "$(git rev-parse HEAD)" = "$GITHUB_SHA"
+          for name in NODE_OPTIONS NODE_PATH SIM_SEED BYXI_CONTROL BYXI_SEED BYXI_PRINT_DIGEST VITEST ONLY;do test ! -v "$name";done
+          timeout 30s git ls-remote origin refs/heads/main > "$out/main-ref.txt"
+          test "$(cut -f1 "$out/main-ref.txt")" = "$EXPECTED_MAIN"
+          printf '%s  qa/build-xi-mixed60/SOURCE.json\n' "$XI_MIXED_SELECTOR_SHA" | sha256sum -c - > "$out/selector-pin.log"
+          node --input-type=module <<'BIND'
+          import fs from 'node:fs';import path from 'node:path';import cp from 'node:child_process';import assert from 'node:assert/strict';import{createHash}from'node:crypto';
+          const root=process.cwd(),out=process.env.XI_MIXED_OUT,s=JSON.parse(fs.readFileSync('qa/build-xi-mixed60/SOURCE.json'));
+          assert.equal(s.bound,true,'MIXED_UNBOUND_SOURCE');assert.equal(s.phase,'owned-red');assert.equal(s.branch,'codex/build-xi-mixed60-baseline-v2-post-bs-20261029');
+          const git=a=>cp.execFileSync('git',a,{encoding:'utf8'}).trim();
+          assert.equal(git(['show','-s','--format=%P','HEAD']),s.parent);assert.equal(s.parent,process.env.EXPECTED_MAIN);assert.equal(git(['rev-parse',s.parent+'^{tree}']),s.parentTree);
+          const actual=git(['diff','--name-status',s.parent,'HEAD']).split('\n');assert.deepEqual(actual,s.directPaths,'MIXED_EXACT_PATHS');
+          assert(s.directPaths.every(x=>x.startsWith('A\t')),'MIXED_BASELINE_NO_PRODUCT');
+          const held=git(['diff','--name-status',s.parent,'HEAD','--','.',...s.directPaths.map(x=>':!'+x.slice(2))]);assert.equal(held,'');
+          const parent=git(['ls-tree','-r','--name-only',s.parent]).split('\n');assert.equal(parent.length,s.parentBodies);
+          const blob=b=>createHash('sha1').update(Buffer.concat([Buffer.from('blob '+b.length+'\0'),b])).digest('hex');
+          for(const p of s.pins){const stat=fs.lstatSync(p.path);assert(stat.isFile()&&!stat.isSymbolicLink());const b=fs.readFileSync(p.path);assert.equal(blob(b),p.git,'MIXED_SOURCE_PIN:'+p.path);assert.equal(b.length,p.bytes);assert.equal(git(['ls-tree','HEAD','--',p.path]).split(' ')[0],p.mode);}
+          fs.writeFileSync(path.join(out,'source-binding.json'),JSON.stringify({head:process.env.GITHUB_SHA,parent:s.parent,parentTree:s.parentTree,tree:git(['rev-parse','HEAD^{tree}']),paths:actual,parentBodies:parent.length,pins:s.pins},null,2)+'\n',{flag:'wx'});
+          BIND
+          git ls-tree -r HEAD > "$out/source-tree.txt"
+          git ls-files -z | sort -z > "$out/source-members.before"
+          git ls-files -z | sort -z | xargs -0 sha256sum > "$out/source.sha256"
+          git diff --exit-code HEAD > "$out/source-clean-before.log"
+          git status --porcelain --untracked-files=all > "$out/status-before.txt";test ! -s "$out/status-before.txt"
+          git archive --format=tar HEAD > "$out/source.tar"
+      - name: Install locked dependencies and retain full inventory
+        id: install
+        timeout-minutes: 10
+        run: |
+          set -euo pipefail
+          out="$XI_MIXED_OUT";status=0
+          npm ci > "$out/npm-ci.stdout" 2> "$out/npm-ci.stderr" &
+          pid=$!;printf '%s\n' "$pid" > "$out/npm-ci.pid"
+          wait "$pid" || status=$?
+          printf '%s\n' "$status" > "$out/npm-ci.exit";test "$status" -eq 0
+          find node_modules -type f -print0 | sort -z > "$out/dependency-members.before"
+          find node_modules -type f -print0 | sort -z | xargs -0 sha256sum > "$out/dependencies.sha256"
+          find node_modules -type l -printf '%p\t%l\0' | sort -z > "$out/dependency-links.before"
+          find node_modules ! -type d ! -type f ! -type l -print > "$out/dependency-nonregular.before"
+          test ! -s "$out/dependency-nonregular.before"
+      - name: Real app types and frozen public API baseline
+        id: proof
+        timeout-minutes: 10
+        run: |
+          set -euo pipefail
+          out="$XI_MIXED_OUT";status=0
+          : > "$out/controller.transport"
+          NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" SIM_OFFLINE_RECEIPT="$out/controller.transport" node scripts/qa/buildXiMixed60.mjs > "$out/controller.stdout" 2> "$out/controller.stderr" || status=$?
+          printf '%s\n' "$status" > "$out/controller.exit"
+          test "$status" -eq 0;test ! -s "$out/controller.transport"
+      - name: Hold all source and installed dependency bytes
+        id: holds
+        if: ${{ always() && steps.install.outcome == 'success' }}
+        timeout-minutes: 5
+        run: |
+          set -euo pipefail
+          out="$XI_MIXED_OUT";failed=0
+          sha256sum -c "$out/source.sha256" > "$out/source-hold.log" 2>&1 || failed=1
+          sha256sum -c "$out/dependencies.sha256" > "$out/dependency-hold.log" 2>&1 || failed=1
+          git ls-files -z | sort -z > "$out/source-members.after"
+          cmp "$out/source-members.before" "$out/source-members.after" > "$out/source-members-held.log" 2>&1 || failed=1
+          find node_modules -type f -print0 | sort -z > "$out/dependency-members.after"
+          cmp "$out/dependency-members.before" "$out/dependency-members.after" > "$out/dependency-members-held.log" 2>&1 || failed=1
+          find node_modules -type l -printf '%p\t%l\0' | sort -z > "$out/dependency-links.after"
+          cmp "$out/dependency-links.before" "$out/dependency-links.after" > "$out/dependency-links-held.log" 2>&1 || failed=1
+          find node_modules ! -type d ! -type f ! -type l -print > "$out/dependency-nonregular.after"
+          test ! -s "$out/dependency-nonregular.after" || failed=1
+          git diff --exit-code HEAD > "$out/source-clean-after.log" 2>&1 || failed=1
+          git status --porcelain --untracked-files=all > "$out/status-after.txt"
+          test ! -s "$out/status-after.txt" || failed=1
+          printf '%s\n' "$failed" > "$out/holds.exit";exit "$failed"
+      - name: Seal complete or partial evidence
+        if: ${{ always() && env.XI_MIXED_OUT != '' }}
+        run: |
+          set -euo pipefail
+          cd "$XI_MIXED_OUT"
+          find . ! -type d ! -type f -print > nonregular.txt
+          test ! -s nonregular.txt
+          find . -type f ! -name evidence.sha256 -print0 | sort -z | xargs -0 sha256sum > evidence.sha256
+      - uses: actions/upload-artifact@v4
+        if: ${{ always() && env.XI_MIXED_OUT != '' }}
+        with:
+          name: build-xi-mixed60-owned-red-${{ github.run_id }}-a${{ github.run_attempt }}
+          path: ${{ env.XI_MIXED_OUT }}
+          include-hidden-files: true
+          if-no-files-found: error
+
