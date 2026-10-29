@@ -1,0 +1,3 @@
+#!build
+#!playwright
+simWritesAreSent: ls dist/index.html && node scripts/simWritesAreSent.mjs
