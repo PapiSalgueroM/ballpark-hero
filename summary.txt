@@ -1,0 +1,2 @@
+dash-log exit=0 0s | commit messages f957b34ea..HEAD: 0 lines with an en or em dash
+dash-diff exit=0 0s | git diff f957b34ea HEAD: 0 added lines with an en or em dash 
