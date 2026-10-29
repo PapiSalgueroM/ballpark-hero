@@ -1,0 +1,14 @@
+build exit=0 37s | [dukb] inlined 1 stylesheet(s) and 1 module(s) into 181 snapshots (11 left alone)
+playLiveMatchFit exit=0 144s | playLiveMatchFit: all green. The goal in order, reduced motion, the fit at five sizes, nothing moves the page, the reload, Back, a wide screen, an own goal drawn as one.
+livefit-bar exit=1 59s | playLiveMatchFit: control bar turned section 3 red and left sections 1, 2 and 4 green, as it must.
+livefit-silentlist exit=1 71s | playLiveMatchFit: control silentlist turned section 7 red on the line it must (the list never said this goal, 2 GOAL! rewritten) and left the rest green.
+livefit-earlyscore exit=1 71s | playLiveMatchFit: control earlyscore turned section 7 red on the line it must (the score changed before the ball was in, 1 node touched) and left the rest green.
+livefit-nocard exit=1 72s | playLiveMatchFit: control nocard turned section 7 red on the line it must (no scorer card was ever on screen, 1 node touched) and left the rest green.
+playLiveMatchFit-fresh exit=0 137s | playLiveMatchFit: all green. The goal in order, reduced motion, the fit at five sizes, nothing moves the page, the reload, Back, a wide screen, an own goal drawn as one.
+sweepWeight exit=1 29s | sweepWeight: 2 failures
+lmf-tabout exit=1 71s | playLiveMatchFit: control tabout turned section 6 red on the line it must (with every Tab swallowed before the stage heard it, the focus reached the page under the stage 
+fonts exit=0 0s | Prepared 9 declared font dependencies for local fulfillment.
+simCmRealFixtures-forwalk exit=0 4s | simCmRealFixtures normal premier: 10 outcome groups passed on 20 clubs, 38 matchdays and 380 fixtures, BASE GROUPS NOT RUN.
+playCmRealFixtures exit=0 25s | playCmRealFixtures: 2 viewports, 6 real/legacy/later-season calendar and actual Quick Sim journeys, 18 neutral real-opening results, 2 effective controls; full saved stat
+playCmVar exit=0 612s | playCmVar: green. Every review a player can meet was shown whole, at its minute, over nothing else, and every match settled as the engine settles it.
+walk1521 exit=1 696s | walkrun: RED, 1 failures
