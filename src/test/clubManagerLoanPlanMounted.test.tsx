@@ -188,6 +188,12 @@ describe('Loan plan through the actual transfer screen and saved hook', () => {
     expect(history[0]).toMatchObject({ kind: 'check-in', observedWeek: api.career!.week, rating, ratingChange: 0 });
     expect(screen.getByTestId('loan-plan-history')).toHaveTextContent('Recorded check-ins and recalls');
     expect(screen.getByTestId('loan-plan-history')).toHaveTextContent('A normal loan return adds no entry');
+    /* Release BS fix BS-cm416-1: ratings only move in the summer, so an in season check-in can
+       only ever see 0. The card says when his loan growth lands instead of a column of zeros. */
+    expect(screen.getByTestId('loan-plan-active')).toHaveTextContent(`Rated ${rating} while away; any growth from the loan is added when he comes home in the summer.`);
+    expect(screen.getByTestId('loan-plan-active')).not.toHaveTextContent('Rating change');
+    expect(screen.getByTestId('loan-plan-history')).toHaveTextContent(`Rated ${rating}, recorded in`);
+    expect(screen.getByTestId('loan-plan-history')).not.toHaveTextContent(`Rating ${rating} to ${rating}`);
     const sameWeek = api.career, disk = localStorage.getItem(SAVE_KEY);
     fireEvent.click(screen.getByRole('button', { name: 'Review loan plan' }));
     expect(api.career).toBe(sameWeek); expect(localStorage.getItem(SAVE_KEY)).toBe(disk);

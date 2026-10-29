@@ -52,7 +52,7 @@ export function LoanPlanCard({ career, onCommit }: LoanPlanCardProps) {
         Opportunity compares named players at the same recorded primary position. It is an estimate, not promised starts or minutes, and does not add a growth bonus.
         For example, two higher-rated players at his position means competition for a place, even if the fee looks good.
         Standard terms use the normal loan fee; a current offer keeps its actual price. Confirm sends the player out and banks that fee.
-        Reviews save his actual rating change, not invented host stats. A recall still needs an open window, its agreed fee and squad room. One loan out per player per season.
+        Reviews save his actual rating and where he stands at the host, not invented host stats. Ratings move in the summer, so any growth from the loan is added when he comes home. A recall still needs an open window, its agreed fee and squad room. One loan out per player per season.
       </p>}
       <label className="block">Player
         <select aria-label="Loan plan player" value={playerId} onChange={event => { setPlayerId(event.target.value); reset(); }}
@@ -102,7 +102,7 @@ export function LoanPlanCard({ career, onCommit }: LoanPlanCardProps) {
             && loan.recallFee <= career.budget && career.squad.length < 30;
           return <div key={record.id} className="rounded-lg border p-3 space-y-2">
             <p className="font-semibold">{loan.player.name} at {loan.club}</p>
-            <p>Agreed fee {money(record.fee)}. Rating change {record.review ? (record.review.ratingChange > 0 ? '+' : '') + record.review.ratingChange : 'not reviewed yet'}.</p>
+            <p>Agreed fee {money(record.fee)}. Rated {loan.player.rating} while away; any growth from the loan is added when he comes home in the summer.</p>
             <p>{current.partial === false
               ? 'Projected opportunity: ' + ROLE[current.estimatedRole] + '. ' + current.higherRated + ' higher-rated players at this primary position.'
               : 'Current roster coverage is thin, so no opportunity estimate is available.'}</p>
@@ -119,7 +119,7 @@ export function LoanPlanCard({ career, onCommit }: LoanPlanCardProps) {
         <p className="text-muted-foreground">This log only records your check-ins and recalls. A normal loan return adds no entry.</p>
         {[...history].reverse().map(row => <p key={row.key}>
           {row.playerName} at {row.hostClub}: {row.kind === 'check-in' ? 'check-in' : 'recall'}.
-          {' '}Rating {row.ratingAtStart} to {row.rating}, recorded in {row.observedYear}, week {row.observedWeek}.
+          {' '}Rated {row.rating}, recorded in {row.observedYear}, week {row.observedWeek}.
         </p>)}
       </div>}
     </section>}
