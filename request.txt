@@ -1,0 +1,7 @@
+#!serial
+head: git log --oneline -1 && grep -c 'role="dialog"' src/pages/SoccerCareer.tsx && node scripts/simAccessibility.mjs
+base: git worktree add /tmp/base b20ec6664 >/dev/null 2>&1 && cd /tmp/base && git log --oneline -1 && grep -c 'role="dialog"' src/pages/SoccerCareer.tsx && node scripts/simAccessibility.mjs
+pin4: grep -c "\['src/pages/SoccerCareer.tsx', 3\]" scripts/simAccessibility.mjs && sed -i "s#\['src/pages/SoccerCareer.tsx', 3\]#['src/pages/SoccerCareer.tsx', 4]#" scripts/simAccessibility.mjs && grep -c "\['src/pages/SoccerCareer.tsx', 4\]" scripts/simAccessibility.mjs && git diff --stat && node scripts/simAccessibility.mjs; s=$?; git checkout -- scripts; exit $s
+pin4-control: sed -i "s#\['src/pages/SoccerCareer.tsx', 3\]#['src/pages/SoccerCareer.tsx', 4]#" scripts/simAccessibility.mjs && grep -c "\['src/pages/SoccerCareer.tsx', 4\]" scripts/simAccessibility.mjs && SIM_A11Y_CONTROL=dialog node scripts/simAccessibility.mjs; s=$?; git checkout -- scripts; exit $s
+pin4-strip-control: sed -i "s#\['src/pages/SoccerCareer.tsx', 3\]#['src/pages/SoccerCareer.tsx', 4]#" scripts/simAccessibility.mjs && grep -c "\['src/pages/SoccerCareer.tsx', 4\]" scripts/simAccessibility.mjs && SIM_A11Y_CONTROL=strip node scripts/simAccessibility.mjs; s=$?; git checkout -- scripts; exit $s
+runall-filter: grep -n "sim\*\|startsWith('sim')\|/\^sim/" scripts/runAllSims.mjs | head -5

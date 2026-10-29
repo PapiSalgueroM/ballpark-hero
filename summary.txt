@@ -1,0 +1,6 @@
+head exit=1 0s | simAccessibility: 1 failure(s)
+base exit=0 1s | simAccessibility: all green
+pin4 exit=0 1s | simAccessibility: all green
+pin4-control exit=0 0s | control run: 1 failure(s) fired as expected
+pin4-strip-control exit=0 0s | control run: 1 failure(s) fired as expected
+runall-filter exit=0 0s | 
