@@ -1,0 +1,5 @@
+#!build
+#!playwright
+#!serial
+head-writes: node scripts/simWritesAreSent.mjs
+base-writes: git worktree add -f .rc/bw 5d1198389 && cd .rc/bw && ../../node_modules/.bin/vite build --logLevel error && node scripts/simWritesAreSent.mjs
