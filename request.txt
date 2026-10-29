@@ -1,0 +1,7 @@
+#!serial
+tsc: node_modules/.bin/tsc --noEmit -p tsconfig.app.json
+vt-cm: node_modules/.bin/vitest run src/test/soccerCareerManagerJobReviewMarket.test.ts src/test/soccerCareerManagerJobReview.test.ts src/test/soccerCareerManagerJobReview.card.test.tsx src/test/soccerCareerManagerJobReview.consumer.test.tsx src/test/soccerCareerManagerJobReview.transaction.test.tsx src/test/clubManagerLoanPlanMounted.test.tsx src/test/clubManagerLoanDevelopment.test.ts src/test/clubManagerRecruitmentBoard.test.tsx src/test/clubManagerRecruitmentHook.test.tsx src/test/clubManagerShootoutResults.test.ts src/test/clubManagerShootoutDisplay.test.tsx --testTimeout=300000 --hookTimeout=120000 > /tmp/vc.log 2>&1; s=$?; grep -E "FAIL|Test Files|Tests  |market job review|AssertionError|Expected|Received" /tmp/vc.log | head -40 | cut -c1-250; exit $s
+shoot: git show da4f42889:src/lib/clubManager.ts > src/lib/clubManager.base410.ts && node .rc/x/probeShootout.mjs; s=$?; rm -f src/lib/clubManager.base410.ts; exit $s
+shoot-before: git show da4f42889:src/lib/clubManager.ts > src/lib/clubManager.base410.ts && SHOOT_HEAD=src/lib/clubManager.base410.ts node .rc/x/probeShootout.mjs; s=$?; rm -f src/lib/clubManager.base410.ts; exit $s
+simCmShootoutResults: NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/simCmShootoutResults.mjs
+simCmShootoutOrder: node scripts/simCmShootoutOrder.mjs

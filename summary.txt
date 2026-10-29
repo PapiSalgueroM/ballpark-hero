@@ -1,0 +1,6 @@
+tsc exit=0 66s | 
+vt-cm exit=1 15s | ::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/test/soccerCareerManagerJobReview.test.ts,title=src/test/soccerCareerManagerJobReview.test.ts > manager job
+shoot exit=0 18s | shootout probe: green
+shoot-before exit=1 18s | shootout probe: RED
+simCmShootoutResults exit=0 8s | ALL SHOOTOUT RESULTS CHECKS PASSED
+simCmShootoutOrder exit=0 26s | simCmShootoutOrder: all sections passed

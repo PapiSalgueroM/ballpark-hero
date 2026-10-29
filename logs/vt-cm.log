@@ -1,0 +1,7 @@
+[41m[1m FAIL [22m[49m src/test/soccerCareerManagerJobReview.test.ts[2m > [22mmanager job review authority[2m > [22msame-name ambiguous missing and changed pools keep the actual canonical season without guessing
+[31m[1mAssertionError[22m: expected { playerName: 'World ere', …(118) } to strictly equal { playerName: 'World ere', …(118) }[39m
+[32m- Expected[39m
+[31m+ Received[39m
+[41m[1m FAIL [22m[49m src/test/soccerCareerManagerJobReviewMarket.test.ts[2m > [22mreview job moves holds for a club taken off the market[2m > [22mstages the earned move, and Stay keeps the market club
+[2m Test Files [22m [1m[31m2 failed[39m[22m[2m | [22m[1m[32m9 passed[39m[22m[90m (11)[39m
+::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/test/soccerCareerManagerJobReview.test.ts,title=src/test/soccerCareerManagerJobReview.test.ts > manager job review authority > same-name ambiguous missing and changed pools keep the actua
