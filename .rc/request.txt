@@ -1,0 +1,5 @@
+#!serve
+#!playwright
+#!serial
+walk390: VW=390 VH=844 node .rc/x/punditbar.mjs
+walk320: VW=320 VH=568 node .rc/x/punditbar.mjs
