@@ -1,0 +1,5 @@
+#!serial
+pgl: npm install --prefix /tmp/pgl @electric-sql/pglite >/dev/null 2>&1 && ls /tmp/pgl/node_modules/@electric-sql
+r58base-headdata: git show 1229c0190:scripts/qa/rehearseUsConnections1558.mjs > scripts/qa/zzrv1558.mjs && PGLITE_DIR=/tmp/pgl node scripts/qa/zzrv1558.mjs; s=$?; rm -f scripts/qa/zzrv1558.mjs; exit $s
+r58base-basedata: git show 1229c0190:scripts/qa/rehearseUsConnections1558.mjs > scripts/qa/zzrv1558.mjs && git checkout 1229c0190 -- src/data/baseballConnectionsPuzzles.ts src/data/nflConnectionsPuzzles.ts src/data/nhlConnectionsPuzzles.ts && PGLITE_DIR=/tmp/pgl node scripts/qa/zzrv1558.mjs; s=$?; rm -f scripts/qa/zzrv1558.mjs; git checkout HEAD -- src scripts; exit $s
+clean: git status --short | head -5; echo CLEAN_DONE

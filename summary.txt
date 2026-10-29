@@ -1,0 +1,4 @@
+pgl exit=0 1s | pglite
+r58base-headdata exit=1 10s | rehearseUsConnections1558: 29 failures
+r58base-basedata exit=0 20s | rehearseUsConnections1558: green. The rows land in place, a drifted row is left alone, and a second run is a no-op.
+clean exit=0 0s | CLEAN_DONE
