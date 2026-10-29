@@ -1,0 +1,2 @@
+walk-410 exit=0 41s | WALK410 GREEN: 6 frames measured
+walk-1568 exit=0 41s | WALK410 GREEN: 6 frames measured
