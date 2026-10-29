@@ -1,0 +1,8 @@
+simConnectionsFacts exit=0 0s | simConnectionsFacts: green. Every claim this round checked stands on two hosts and no rebuilt board has a second answer.
+live-post exit=1 0s | simConnectionsFacts: 5 failures
+fair-secondfit exit=1 0s | simFairPuzzles: 2 failures
+simFairPuzzles exit=0 0s | simFairPuzzles: green. No board has a new second right answer; only the soccer findings the ledger owes to part B remain.
+ctl-unknownman exit=1 0s | simConnectionsFacts: 1 failure
+dealt exit=1 0s | 2026-11-30: puzzle-217 of 326 boards, not touched: clear to apply
+rehearse exit=0 16s | rehearseConnections1565: green. 65 rows land at the shipped file's boards in place, both forms, and a second run is a no-op.
+tsc exit=0 57s | 
