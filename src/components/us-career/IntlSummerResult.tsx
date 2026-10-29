@@ -34,7 +34,8 @@ export interface IntlSummerResultProps {
   onContinue: () => void;
 }
 
-const PLACE_WORDS: Record<IntlPlace, string> = {
+/** Round 1557: shared with the International view (IntlSummersView), which loads in this chunk's company. */
+export const PLACE_WORDS: Record<IntlPlace, string> = {
   gold: '🥇 Gold', silver: '🥈 Silver', bronze: '🥉 Bronze', fourth: 'Fourth place',
   semi: 'Out in the semi-finals', quarter: 'Out in the quarter-finals', r16: 'Out in the round of 16', group: 'Out in the group stage',
 };
@@ -75,12 +76,15 @@ function GameLine({ g, us, line, statWords, bare }: { g: IntlGame; us: string; l
   const mine = g.a === us || g.b === us;
   const other = g.a === us ? g.b : g.a;
   const [own, theirs] = g.a === us ? [g.sa, g.sb] : [g.sb, g.sa];
-  const head = mine
+  /* Round 1557 (1544's review, minor 8): in a group's or a round's list (bare) his game reads like its
+     neighbours, both nations named and the score between them, in bold; W or L against a lone name is for
+     his own lists only. */
+  const head = mine && !bare
     ? <>{g.winner === us ? 'W' : 'L'} {own}-{theirs} v <FlagImg name={other} size={16} showLabel /></>
     : <><FlagImg name={g.a} size={16} showLabel /> {g.sa}-{g.sb} <FlagImg name={g.b} size={16} showLabel /></>;
   const label = g.round === 'group' && g.group !== undefined ? groupName(g.group) : ROUND_WORDS[g.round];
   return (
-    <li className="rounded-md border border-border/60 px-2 py-1.5 text-xs">
+    <li className={`rounded-md border border-border/60 px-2 py-1.5 text-xs${mine && bare ? ' font-bold' : ''}`} data-intl-mine={mine ? '' : undefined}>
       {!bare && <span className="font-semibold">{label}: </span>}
       <span>{head}{g.ot ? ` (${g.ot === 1 ? 'OT' : `${g.ot} OT`})` : ''}</span>
       {line && <span className="block text-muted-foreground">You: {statWords.map(([k, w]) => count(line[k] ?? 0, w)).join(', ')}</span>}

@@ -11,7 +11,7 @@
      new   A fresh career, three seasons. Every season's card and the hub's "Last season" line print the three
            averages to one decimal, the card says the minutes, steals and blocks in its own note, the Career Log
            tile's second line is not cut off, and nothing scrolls sideways.
-     case  The Trophy Case holds 23 badges with "All-Star" and "Ten time All-Star" among them, and the "?" opens
+     case  The Trophy Case holds the badges the page says (26 since Round 1557) with "All-Star" and "Ten time All-Star" among them, and the "?" opens
            with the games rule and the worked MVP example in it.
    Everywhere: no page error, and no request to the live database finished.
 
@@ -202,7 +202,10 @@ if (STRETCH === 'all' || STRETCH === 'new' || STRETCH === 'case') {
       await tile.click(); await page.waitForTimeout(600);
       const badges = page.locator('[data-career-badge]');
       const labels = await badges.evaluateAll(els => els.map(e => e.textContent ?? ''));
-      say(labels.length === 23, `${what}: the Trophy Case holds 23 badges (${labels.length} drawn)`);
+      /* Round 1557: the count the page's own help states, never a second literal here (simNbaAwardsSense holds
+         that number to NBA_BADGES.length, so the medal badges cannot make this walk and the page disagree). */
+      const pageSays = Number(/The Trophy Case holds ([0-9]+) badges/.exec(readFileSync(new URL('../src/pages/NbaMyCareer.tsx', import.meta.url), 'utf8').replace(/\/\*[\s\S]*?\*\//g, ''))?.[1]);
+      say(pageSays > 0 && labels.length === pageSays, `${what}: the Trophy Case holds the ${pageSays} badges the page says (${labels.length} drawn)`);
       say(labels.some(t => /Ten time All-Star/.test(t)) && labels.filter(t => /All-Star/.test(t)).length === 2, `${what}: "All-Star" and "Ten time All-Star" are among them`);
       await page.locator('button', { hasText: /^\s*Hub\s*$/ }).first().click(); await page.waitForTimeout(400);
       await page.locator('button[aria-label="How to play"]').first().click(); await page.waitForTimeout(700);

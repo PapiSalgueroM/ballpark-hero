@@ -184,6 +184,74 @@ describe('NBA My Career: the national team on the board', () => {
   });
 });
 
+/* Round 1557: the medals on the shelf. A save carrying a gold from 2004 and a rest in 2006 loads the face (the
+   load hunk), and the Trophy Case shows the medal as a row of its own, outside the individual honours count; the
+   hub tile adds it once; the International tile opens every summer called, the summer he went to opens its result
+   with Back to the list, the rested one is a tile with no press, and the list's Back is the case again. Nothing of
+   it writes the save. */
+describe('NBA My Career: the medals on the shelf', () => {
+  const gold = { year: 2004, edition: 'oly-2004', went: true, age: 24, place: 'gold', games: 8, wins: 8, avg: { pts: 21.5, reb: 5.1, ast: 4.2 }, hurt: false };
+  const rest = { year: 2006, edition: 'wc-2006', went: false };
+  const openCase = async () => {
+    const tile = [...document.querySelectorAll('button')].find(b => /Trophy Case/.test(b.textContent ?? ''));
+    expect(tile, 'the hub has a Trophy Case tile').toBeTruthy();
+    fireEvent.click(tile!);
+    await waitFor(() => expect(q('[data-trophy-case]')).toBeTruthy());
+  };
+
+  it('the medal row, the honours line, the tile count, the International view and its Backs', async () => {
+    const { c, tq } = throwback(3, 80);
+    c.intl = { v: 1, summers: [gold, rest] } as unknown as UsCareerCore['intl'];
+    save(c, tq);
+    const bytes = localStorage.getItem(sport.saveKey);
+    mount();
+    await waitFor(() => expect(button(`Play the ${c.year} season`)).toBeTruthy());
+    const awards = c.seasons.reduce((n, s) => n + (s.awards?.length ?? 0), 0);
+    const tile = sport.ringsOf(c as never) + awards + 1;
+    await waitFor(() => expect([...document.querySelectorAll('button')].find(b => /Trophy Case/.test(b.textContent ?? ''))?.textContent, 'the hub tile counts the medal once')
+      .toContain(`${tile} ${tile === 1 ? 'honour' : 'honours'}`));
+    await openCase();
+    /* the badge grid names "Olympic gold" whether it is earned or not, so the row is read inside the case */
+    await waitFor(() => expect(q('[data-trophy-case]')!.textContent).toContain('Olympic gold'));
+    const caseText = q('[data-trophy-case]')!.textContent ?? '';
+    expect(caseText).toContain('2004');
+    if (awards > 0) expect(caseText).toContain(`${awards} individual`);
+    else expect(caseText).toContain('No individual honour yet');
+    expect(q('[data-intl-open]'), 'the International tile sits in the case').toBeTruthy();
+    expect(document.querySelectorAll('[data-career-badge]').length).toBe(sport.badges.length);
+    fireEvent.click(q('[data-intl-open]')!);
+    await waitFor(() => expect(q('[data-intl-summers-view="list"]')).toBeTruthy());
+    expect(q('[data-trophy-case]'), 'the view replaces the case, never stacks above the badges').toBeNull();
+    expect(q('[data-career-badge]')).toBeNull();
+    expect(q('[data-intl-summer="2004"]')).toBeTruthy();
+    expect(q('[data-intl-summer-rest="2006"]')).toBeTruthy();
+    expect(q('[data-intl-summer="2006"]'), 'a rested summer has nothing to open').toBeNull();
+    expect(document.body.textContent).toContain('The 2006 World Championship in Japan');
+    fireEvent.click(q('[data-intl-summer="2004"]')!);
+    await waitFor(() => expect(q('[data-intl-result]')).toBeTruthy());
+    expect(q('[data-intl-place="gold"]')).toBeTruthy();
+    expect(q('[data-intl-continue]')!.textContent).toContain('Back');
+    fireEvent.click(q('[data-intl-continue]')!);
+    await waitFor(() => expect(q('[data-intl-summers-view="list"]')).toBeTruthy());
+    fireEvent.click(q('[data-intl-summers-back]')!);
+    await waitFor(() => expect(q('[data-trophy-case]')).toBeTruthy());
+    expect(q('[data-intl-summers-view]')).toBeNull();
+    expect(document.body.textContent).not.toMatch(/Team USA|USA Basketball|Dream Team/);
+    expect(localStorage.getItem(sport.saveKey), 'looking at the shelf writes nothing').toBe(bytes);
+  });
+
+  it('a save with no summer shows no medal row and no International tile, and the badges it always had', async () => {
+    const { c, tq } = throwback(3, 80);
+    save(c, tq);
+    mount();
+    await waitFor(() => expect(button(`Play the ${c.year} season`)).toBeTruthy());
+    await openCase();
+    expect(q('[data-intl-open]')).toBeNull();
+    expect(q('[data-trophy-case]')!.textContent).not.toMatch(/Olympic|World Cup|International/);
+    expect(document.querySelectorAll('[data-career-badge]').length).toBe(sport.badges.length);
+  });
+});
+
 /* Critic advice 18, the second arm. usBoardFixture.test.tsx bridges the call off on its SHARED knob (all four
    sports; only the NBA binds one). Here the fixture's fixed NBA saves are mounted with the bind and without it:
    every save that meets no call must draw the same board and keep the same bytes. Measured on 2026-10-22: the

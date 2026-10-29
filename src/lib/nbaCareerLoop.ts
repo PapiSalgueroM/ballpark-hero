@@ -8,7 +8,7 @@
 
 import type { NbaCareerState, NbaSeasonLine } from './nbaMyCareer';
 import { nbaCareerTotals, nbaLegacyOf, nbaTeamLabelOf } from './nbaMyCareer';
-import { NBA_BADGES, earnedBadges } from './careerBadges';
+import { NBA_BADGES, earnedBadges, intlBadgeFactsOf } from './careerBadges';
 import type { BadgeDef, NbaBadgeFacts } from './careerBadges';
 import { fanComments, followersFromFanbase, fmtFollowers, nbaSeasonHeadlines } from './careerSocial';
 import { nbaMoneyWealth } from './nbaCareerMoney';
@@ -35,6 +35,8 @@ export function nbaBadgeFacts(c: NbaCareerState): NbaBadgeFacts {
     retired: c.retired,
     hof: c.retired && nbaLegacyOf(c).hof,
     rival: c.rival ? { retired: c.rival.retired, myYears: c.rival.myYears, hisYears: c.rival.hisYears } : null,
+    /* Round 1557: the medals, read off the summer rows on the save (no ledger: the international code loads lazily). */
+    intl: intlBadgeFactsOf((c as { intl?: { summers?: unknown } }).intl?.summers),
   };
 }
 

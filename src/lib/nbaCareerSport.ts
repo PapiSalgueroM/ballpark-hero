@@ -21,7 +21,7 @@ import { otherAwardsRow } from '@/lib/careerHub';
 import { nbaHeatLabel } from '@/lib/nbaCareerCorruption';
 import { NBA_MONEY, nbaMoneyAct, nbaMoneyWealth } from '@/lib/nbaCareerMoney';
 import { nbaEarnedBadges, nbaFanComments, nbaFollowers, nbaHeadlinesFor } from '@/lib/nbaCareerLoop';
-import { NBA_BADGES } from '@/lib/careerBadges';
+import { NBA_BADGES, intlBadgeFactsOf } from '@/lib/careerBadges';
 import { nbaUnreadInboxCount, answerNbaInboxMessage, nbaDraftNightInbox, NBA_CALENDAR } from '@/lib/nbaCareerInbox';
 import { dismissNbaRivalryEvent, resolveNbaRivalryChoice } from '@/lib/nbaCareerRivalryEvents';
 import type { UsCareerSport } from '@/lib/usCareerSport';
@@ -133,10 +133,17 @@ export const NBA_CAREER_SPORT: UsCareerSport<NbaCareerState, NbaSeasonLine> = wi
      the Year, Most Improved, Sixth Man, Defensive Player, the stat titles, Finals MVP). A career whose only
      awards were those read "Empty" on the tile over a case that listed them. Counted off the seasons, the way
      the case itself reads them. */
-  honours: c => [
-    { label: 'MVPs', n: c.mvps }, { label: 'All-NBA nods', n: c.allNbas }, { label: 'All-Star nods', n: c.allStars ?? 0 },
-    otherAwardsRow(c.seasons, NBA_TILE_NAMED),
-  ],
+  /* Round 1557: and the medals from the summers with the national team, a row ONLY when there is one, so every
+     save without a medal draws the tile it always drew (tile = rings plus the case plus the medals). Read off the
+     summer rows on the save: the international code loads lazily. */
+  honours: c => {
+    const medals = intlBadgeFactsOf((c as { intl?: { summers?: unknown } }).intl?.summers)?.medals ?? 0;
+    return [
+      { label: 'MVPs', n: c.mvps }, { label: 'All-NBA nods', n: c.allNbas }, { label: 'All-Star nods', n: c.allStars ?? 0 },
+      otherAwardsRow(c.seasons, NBA_TILE_NAMED),
+      ...(medals > 0 ? [{ label: medals === 1 ? 'international medal' : 'international medals', n: medals }] : []),
+    ];
+  },
   roleBadge: c => (c.role === 'backup' ? '🪑 Second unit' : '⭐ Starting five'),
   careerSoFar: c =>
     `${countOf(c.rings, 'ring', 'rings')} · ${countOf(c.mvps, 'MVP', 'MVPs')} · ${c.allNbas} All-NBA · ${nbaCareerTotals(c).pts.toLocaleString()} career points`,
