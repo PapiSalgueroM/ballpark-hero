@@ -48,8 +48,9 @@ Every printed string has two independent non wiki publishers; AFL.com.au and the
   2026 (P 23, points, for, against, percentage, for example "1 - FREMANTLE FRE 23 19 4 0 2 76 2286 1666 137.2"); the
   "2027" text on the page is next season's fixture.
 - ABC News: the score centre page titled "GWS Giants v Geelong Cats - Round 20, 2026 - AFL Score Centre - Live AFL
-  Scores - ABC News", and the article of 2026-05-25 ("Callum Brown was one of eight multiple goalkickers for GWS as
-  the Giants thrashed two-time reigning premiers Brisbane").
+  Scores - ABC News", and the headline (the page's h1) of the article of 2026-05-25 ("How GWS exposed the back half
+  problem threatening Brisbane's AFL flag hopes", re-read 2026-10-29 by the fixer; the earlier receipt here quoted a
+  photo caption from the page's data, not the article body).
 - Fox Sports Australia: https://www.foxsports.com.au/afl/ladder, its ladder data (`"name":"Geelong Cats"`, played 23,
   points 60, position 5) and its AFL teams menu (`{"label":"GWS Giants","url":"/afl/teams/greater-western-sydney-giants"}`).
 Results: "Geelong Cats" ships (Austadiums, ABC, Fox Sports); "GWS" alone ships as the short form (Zero Hanger, ABC).

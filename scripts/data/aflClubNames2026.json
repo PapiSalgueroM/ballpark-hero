@@ -47,7 +47,7 @@
    "id": "abc-article",
    "publisher": "ABC News",
    "url": "https://www.abc.net.au/news/2026-05-25/did-the-giants-just-end-the-lions-afl-2026-premiership-hopes/106717710",
-   "where": "the article body of 2026-05-25",
+   "where": "the headline (the page's h1) of the article of 2026-05-25",
    "readOn": "2026-10-29",
    "how": "raw page (curl)"
   },
@@ -784,7 +784,7 @@
      },
      {
       "source": "abc-article",
-      "line": "Callum Brown was one of eight multiple goalkickers for GWS as the Giants thrashed two-time reigning premiers Brisbane"
+      "line": "How GWS exposed the back half problem threatening Brisbane's AFL flag hopes"
      }
     ],
     "ladder": [
