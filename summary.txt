@@ -1,0 +1,17 @@
+nhlfull exit=0 38s | simGmCareer: all checks passed (nhl)
+simHarnessAnchors exit=0 75s | simHarnessAnchors: green. Every harness parses and none carries an unmatchable anchor.
+tsc exit=0 114s | 
+simStorageWrites exit=0 3s | simStorageWrites: all green (owed: 12)
+simNoRivalNames exit=0 17s | No rival product names found. 0 findings.
+nfl-awaymoves exit=1 41s | CONTROL awaymoves: 1 rewrite(s) applied, 1021 failure(s) in section 6 (FIRED)
+nfl-oldskip exit=1 41s | CONTROL oldskip: 1 rewrite(s) applied, 6 failure(s) in section 6 (FIRED)
+nfl-notrim exit=1 43s | CONTROL notrim: 1 rewrite(s) applied, 15 failure(s) in section 6 (FIRED)
+nfl-noawaydraft exit=1 41s | CONTROL noawaydraft: 1 rewrite(s) applied, 62 failure(s) in section 6 (FIRED)
+nfl-halfseason exit=1 40s | CONTROL halfseason: 1 rewrite(s) applied, 61 failure(s) in section 6 (FIRED)
+nfl-awayxp exit=1 45s | CONTROL awayxp: 1 rewrite(s) applied, 60 failure(s) in section 6 (FIRED)
+nfl-lastcall exit=1 43s | CONTROL lastcall: 1 rewrite(s) applied, 20 failure(s) in section 6 (FIRED)
+nflfull exit=0 307s | simGmCareer: all checks passed (nfl)
+nfl-retainedclub-refuses exit=2 1s | SIM_GM_CAREER_CONTROL=retainedclub is not a control of the nfl row (it rewrites another sport's own file)
+nfl-namedsummer-refuses exit=2 1s | SIM_GM_CAREER_CONTROL=namedsummer is not a control of the nfl row (it rewrites another sport's own file)
+nfl-syncalways exit=1 144s | CONTROL syncalways: 1 rewrite(s) applied, 475 failure(s) in section 10 (FIRED)
+nfl-refusedrelease exit=1 139s | CONTROL refusedrelease: 1 rewrite(s) applied, 950 failure(s) in section 10 (FIRED)

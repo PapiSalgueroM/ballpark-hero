@@ -1,0 +1,14 @@
+NEGATIVE CONTROL ON: oldskip; section 6 must go red
+6) a season out: the league plays a whole season without him, his record gains a year out and nothing else, and refusals touch nothing
+  FAIL [6]: seed 3 year out 2: the draft out is not the board's draft with nobody in the chair (270 of 270 draws replayed)
+  FAIL [6]: seed 6 year out 2: the draft out is not the board's draft with nobody in the chair (268 of 268 draws replayed)
+  FAIL [6]: seed 11 year out 2: the draft out is not the board's draft with nobody in the chair (268 of 268 draws replayed)
+  FAIL [6]: seed 15 year out 2: the draft out is not the board's draft with nobody in the chair (264 of 264 draws replayed)
+  FAIL [6]: seed 16 year out 1: the draft out is not the board's draft with nobody in the chair (260 of 260 draws replayed)
+   60 years out over 20 seeds (0 stopped early); refusals: 20 in a seat, 20 closed, 20 last calls
+   drafted men on the other clubs' rosters after the years out: away 1080, idle GM 1080 (ratio 1.000); mean roster after a summer: away 52.26, idle GM 52.25
+   the old club drafted 0 men in its 60 years out (printed, not asserted: 2, 0, 6 and 4 on the NHL's four seed sets, r1559-fx2)
+   drafts out replayed against the board's draft with nobody in the chair: 60, 5 differed
+  FAIL [6]: only 60 drafts out replayed for 60 years out, 5 differed
+   rounds out replayed against the board's round with no user club: 1020, 0 differed
+CONTROL oldskip: 1 rewrite(s) applied, 6 failure(s) in section 6 (FIRED)
