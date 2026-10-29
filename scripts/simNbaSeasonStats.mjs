@@ -1060,7 +1060,9 @@ console.log('9) One save shape: the NBA keeps the shared short lines, reads them
     }
     let F = null;
     try { F = JSON.parse(fs.readFileSync(FIXTURE, 'utf8')); } catch { F = null; }
-    const real = !!F && codec.foReadNamed(st.NBA_CODEC, F.block) && !!F.packed && typeof F.ep === 'string' && Number.isInteger(F.low);
+    /* the fixture's own shape, read by the harness and not by the codec under test, so a reader that refuses the old
+       rows shows up as a conversion that dropped them, below, not as a missing fixture */
+    const real = !!F && !!F.block && typeof F.block.lines === 'object' && typeof F.block.teams === 'object' && !!F.packed && typeof F.ep === 'string' && Number.isInteger(F.low);
     ok(9, 'the real old block fixture is there: named rows from the base engine and the block the recorder wrote (scripts/data/nbaNamedBlockFixture.json)', real, F ? `recorded from ${F.recordedFrom}` : 'no fixture');
     if (real) {
       const c = converted(F.block);
