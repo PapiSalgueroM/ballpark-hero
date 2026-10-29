@@ -1,0 +1,8 @@
+#!serve
+#!playwright
+#!serial
+sclayers: TAG=head node .rc/x/walkSoccerCareerLayers.mjs
+cmwalk: TAG=head node .rc/x/walkCmShortlist.mjs
+simPlayerBingoCategories: CI=1 PLAYER_BINGO_CATEGORIES_OUT="$PWD/.tmp-fx/pbc" NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/simPlayerBingoCategories.mjs
+playPlayerBingoCategories: CI=1 PLAYER_BINGO_BROWSER_OUT="$PWD/.tmp-fx/pbb" NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/playPlayerBingoCategories.mjs
+weight-head: SWEEP_OFFLINE=1 node scripts/sweepWeight.mjs
