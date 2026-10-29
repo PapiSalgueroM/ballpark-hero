@@ -1,0 +1,16 @@
+# Release BS kit: 10 of the 24 request lines of Release BR's rc-BQa.txt (rBRg/.tmp-fx/br), the lines of the BS areas (Soccer Career, Club Manager and the manager games on its engine, Player Bingo, Conquest, Stat and Draft Detective, the US My Career save notice, What's New, the polls, the guide intro) and the setup lines before them; 14 line(s) outside those areas left out: tsc restartvitest extratime flagship matchscreen owngoal reveal seasoncentre anchors rival storage invented quotes fleet.
+# Release BQ, Round 1521 (Club Manager matchplay look, closing head 9576d035), its closing gates: fix2-1521.md's
+# r1521-f2A request (rc-gates.txt) as it ran on 111558ed. Rebound: diff2 (simCmDifficulty section 2) and the
+# result fleet compared with ${B1521:-212b9069}, the merge's first parent (BP_FINAL), not 1521's own base 30b4b3ca:
+# on this release Round 1520's made up nations and Release BP move Club Manager past 30b4b3ca, so that base cannot
+# form here; against BP_FINAL only 1521 (no engine file) and the later BQ rounds (none in Club Manager) differ.
+motionfull: node scripts/simLiveSimMotion.mjs
+siblings: node_modules/.bin/vitest run src/test/pitchOwnGoal.test.tsx src/test/clubManagerVarScreen.test.tsx src/test/miniPitchScene.test.ts src/test/seasonCentreOwnGoals.test.tsx src/test/tycoonPitch.test.tsx --testTimeout=300000 --hookTimeout=120000
+cmmatchday: node scripts/simCmMatchDay.mjs
+diff2: git worktree add .rc-base ${B1521:-212b9069} >/dev/null 2>&1 && BASE_ROOT=.rc-base SECTION=2 node scripts/simCmDifficulty.mjs
+livematch: node scripts/simLiveMatch.mjs
+livesim: node scripts/simLiveSim.mjs
+celebration: node scripts/simLiveSimCelebration.mjs
+matchcentre: node scripts/simCmMatchCentre.mjs
+stoppage: node scripts/simCmStoppageTime.mjs
+varledger: node scripts/simCmVarLedger.mjs
