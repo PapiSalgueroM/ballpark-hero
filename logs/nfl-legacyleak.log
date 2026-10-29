@@ -1,0 +1,19 @@
+NEGATIVE CONTROL ON: legacyleak; section 10 must go red
+4) the market after real firings: every club graded as a GM's club, the first out of work screen and the next two
+   MEASURE 20 seeds x 12 seasons: 475 firings
+   first screen with the host's rule: offers 475 (100.0%), quiet 0 (0.0%), closed 0 (0.0%); first calls 283
+   first screen on the raw feed:      offers 192 (40.4%), quiet 228 (48.0%), closed 55 (11.6%)
+   of the screens with offers, last calls: host 87 of 475 (18.3%), raw 32 of 192 (16.7%)
+   re hired within three feeds (firings with two seasons left to read, 377): host 377 (100.0%), raw 209 (55.4%); 249 later feeds read
+10) the lift: the shared legacy read, season counted rule, retained step and take equal what the NFL wrote inline
+  FAIL [10]: seed 1 ARI counted false fired true: the shared legacy read is not the old body
+  FAIL [10]: seed 1 ARI counted false fired false: the shared legacy read is not the old body
+  FAIL [10]: seed 1 ATL counted false fired true: the shared legacy read is not the old body
+  FAIL [10]: seed 1 ATL counted false fired false: the shared legacy read is not the old body
+  FAIL [10]: seed 1 BAL counted false fired true: the shared legacy read is not the old body
+  FAIL [10]: seed 1 BAL counted false fired false: the shared legacy read is not the old body
+  FAIL [10]: seed 1 BUF counted false fired true: the shared legacy read is not the old body
+  FAIL [10]: seed 1 BUF counted false fired false: the shared legacy read is not the old body
+  FAIL [10]: (further failures in this check not printed)
+   1536 legacy reads equal the old body and the nfl wrapper; 15 season counted rows; 108 retained rows through both summers' old step; the take: 950 moves (475 desk off), 475 refusals
+CONTROL legacyleak: 1 rewrite(s) applied, 768 failure(s) in section 10 (FIRED)

@@ -1,0 +1,17 @@
+NEGATIVE CONTROL ON: thumbfalse; section 2t must go red
+2) the verdict on every club's real season: desk off it is today's two calls, desk on it records once and pays once
+   1152 desk off closes equal today's two calls; 384 desk on closes recorded once (42599 XP paid, the median club 111 a season), 384 reloads paid nothing, 384 older saves started on time
+  FAIL [2]: BUF badly trust 60 level 4: the verdict reads 42/false, the cushion 40/false
+  FAIL [2]: BUF badly: level 5 costs 18, level 4 cost 18: not gentler
+  FAIL [2]: CLE badly trust 60 level 4: the verdict reads 42/false, the cushion 40/false
+  FAIL [2]: CLE badly: level 5 costs 18, level 4 cost 18: not gentler
+  FAIL [2]: DAL missed trust 60 level 4: the verdict reads 50/false, the cushion 48/false
+  FAIL [2]: DAL missed: level 5 costs 10, level 4 cost 10: not gentler
+  FAIL [2]: DAL missed trust 16 level 4: the verdict reads 6/false, the cushion 4/false
+  FAIL [2]: DET badly trust 60 level 4: the verdict reads 42/false, the cushion 40/false
+  FAIL [2]: (further failures in this check not printed)
+   OWNERSHIP: 211 losing and 173 winning club seasons walked at levels 0 to 5; from trust 60 a season costs badly 28, 26, 24, 22, 18, 18; missed 16, 15, 14, 13, 10, 10; trust 16, missed: level 0 fired (0), level 1 keeps the job on 1
+2t) the rule of thumb: three bad years from trust 60 fire Ownership levels 0 to 4 on the grades alone and not 5, and the press can change that
+  FAIL [2t]: level 4 on the grades alone: kept (60 > 42 > 24 > 6), the rule says fired
+   from trust 60, three badly seasons of BUF: level 0 fired after 3, level 1 fired after 3, level 2 fired after 3, level 3 fired after 3, level 4 kept, level 5 kept; with "Say the right, empty things" after each: kept at levels 4 (level 4: 60 > 42 > 43 > 25 > 26 > 8 > 9)
+CONTROL thumbfalse: 1 rewrite(s) applied, 1 failure(s) in section 2t (FIRED)

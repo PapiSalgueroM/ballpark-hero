@@ -1,0 +1,19 @@
+NEGATIVE CONTROL ON: xpflat; section 9 must go red
+4) the market after real firings: every club graded as a GM's club, the first out of work screen and the next two
+   MEASURE 20 seeds x 12 seasons: 475 firings
+   first screen with the host's rule: offers 475 (100.0%), quiet 0 (0.0%), closed 0 (0.0%); first calls 283
+   first screen on the raw feed:      offers 192 (40.4%), quiet 228 (48.0%), closed 55 (11.6%)
+   of the screens with offers, last calls: host 87 of 475 (18.3%), raw 32 of 192 (16.7%)
+   re hired within three feeds (firings with two seasons left to read, 377): host 377 (100.0%), raw 209 (55.4%); 249 later feeds read
+9) the bands: the firing rate, the offers, re hiring, the closed share and the XP pace, seed by seed against the calibrated bands
+   S9 nfl seeds 1-20: fireRate mean 0.0618 sd 0.0084 se 0.0019 min 0.0469 max 0.0755 over 20 seeds
+   S9 nfl seeds 1-20: twoPlus mean 0.0366 sd 0.0453 se 0.0101 min 0.0000 max 0.1667 over 20 seeds
+   S9 nfl seeds 1-20: meanOffers mean 1.0366 sd 0.0453 se 0.0101 min 1.0000 max 1.1667 over 20 seeds
+   S9 nfl seeds 1-20: hired3 mean 1.0000 sd 0.0000 se 0.0000 min 1.0000 max 1.0000 over 20 seeds
+   S9 nfl seeds 1-20: closedNext mean 0.5082 sd 0.0977 se 0.0218 min 0.3043 max 0.6957 over 20 seeds
+   S9 nfl seeds 1-20: xpMean mean 0.0000 sd 0.0000 se 0.0000 min 0.0000 max 0.0000 over 20 seeds
+   S9 nfl seeds 1-20: xpMedian 0 over 7680 graded club seasons; hostXpHelp's .500 season that meets the ask pays 110 (ratio 0.000)
+  FAIL [9]: xpMean: the set mean 0.0000 is outside the band [110.69,113.35]
+   nfl bands held on 20 seeds: fireRate 0.0618 in [0.0524,0.0675]; twoPlus 0.0366 in [0.0058,0.0767]; meanOffers 1.0366 in [1.0058,1.0767]; closedNext 0.5082 in [0.4329,0.6257]; xpMean 0.0000 in [110.69,113.35]
+  FAIL [9]: the median club earns 0 XP a graded season, 0.000 of the 110 hostXpHelp says, outside [0.824,0.985]
+CONTROL xpflat: 1 rewrite(s) applied, 2 failure(s) in section 9 (FIRED)
