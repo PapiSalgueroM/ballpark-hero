@@ -1,0 +1,8 @@
+rehearse exit=0 20s | rehearseUsConnections1567: green. Both forms land the 39 boards in place, a drifted row is left alone or stops the step, a tampered payload is refused, and a second run i
+rh-noguard exit=1 9s | rehearseUsConnections1567 control noguard: FIRED, caught by check C (6 failures; checks A, C)
+rh-drift exit=1 9s | rehearseUsConnections1567 control drift: FIRED, caught by check 0 (3 failures; checks 0, A)
+rh-tamper exit=1 9s | rehearseUsConnections1567 control tamper: FIRED, caught by check E (2 failures; checks E)
+rh-nohash exit=1 9s | rehearseUsConnections1567 control nohash: FIRED, caught by check F (2 failures; checks F)
+rehearse1558 exit=0 18s | rehearseUsConnections1558: green. The rows land in place, a drifted row is left alone, and a second run is a no-op.
+storage exit=0 2s | simStorageWrites: all green (owed: 12)
+norival exit=0 13s | No rival product names found. 0 findings.
