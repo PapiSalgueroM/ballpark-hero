@@ -314,8 +314,9 @@ const SportsMillionaire = () => {
                 <h3 className="font-bold text-foreground mb-2">🧰 Lifelines</h3>
                 <p className="text-muted-foreground">
                   50:50 removes two wrong answers. Ask the Crowd shows a poll of how others answered.
-                  Swap Question trades your current question for a new one at the same difficulty. Each
-                  lifeline can be used once per game.
+                  Swap Question trades your current question for a new one at the same difficulty. It never
+                  deals a question that's already on your ladder: swap on question 12 and you get another
+                  hard one you haven't seen and won't see later. Each lifeline can be used once per game.
                 </p>
               </section>
               <section>
