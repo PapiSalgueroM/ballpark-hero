@@ -1,0 +1,4 @@
+#!serial
+fobcheck: node scripts/controlFrontOfficeBoard.mjs check
+fob-blank: node scripts/controlFrontOfficeBoard.mjs blank
+fob-all: node scripts/controlFrontOfficeBoard.mjs all
