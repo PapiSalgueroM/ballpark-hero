@@ -1538,6 +1538,13 @@ export interface TrainingPlan {
   focus: TrainingFocus;
 }
 
+export interface IndividualLightSeason {
+  version: 1; clubName: string; season: number; playerId: string; manKey: string; worldRosterKey?: string;
+}
+export interface IndividualLightSeasonRequest {
+  source: CareerState; player: CMPlayer; data: IndividualLightSeason;
+}
+
 /** Round 70: one board demand for the season. Round 140: more of them.
  *  Round 474: and the five specific asks, which are built and graded in
  *  src/lib/clubManagerBoardAsks.ts. Their extra fields are optional because
@@ -3022,6 +3029,7 @@ export interface CareerState {
   academy?: Academy;
   /** Round 116: how the squad is being worked this week. */
   training?: TrainingPlan;
+  individualLightSeason?: IndividualLightSeason;
   /** Round 116: how many of your own kids you have promoted, all time. */
   academyGraduates?: number;
   /**
@@ -17536,8 +17544,8 @@ export const MATCH_FITNESS_COST = 20;
 export const MATCH_FITNESS_SPREAD = 8;
 
 /** Round 116's week of recovery by the training plan, read by tickWeek and by a night (Round 1510). */
-function weekRecoveryOf(state: CareerState): { recoveryMod: number; flat: number } {
-  const plan = state.training ?? DEFAULT_TRAINING;
+function weekRecoveryOf(state: CareerState, light = false): { recoveryMod: number; flat: number } {
+  const plan = light ? { intensity: 'light' } : state.training ?? DEFAULT_TRAINING;
   return {
     recoveryMod: plan.intensity === 'double' ? 0.78 : plan.intensity === 'light' ? 1.18 : 1,
     flat: plan.intensity === 'light' ? 6 : plan.intensity === 'double' ? 3 : 4,
@@ -17559,7 +17567,8 @@ function fitnessAfterWeek(fitness: number, played: boolean, recoveryMod: number,
  */
 function nightSquadTick(state: CareerState, playedIds: Set<string>): void {
   const { recoveryMod, flat } = weekRecoveryOf(state);
-  state.squad = state.squad.map(p => ({ ...p, fitness: fitnessAfterWeek(p.fitness, playedIds.has(p.id), recoveryMod, flat) }));
+  const light = lightSeasonPlayer(state), recovery = light ? weekRecoveryOf(state, true) : null;
+  state.squad = state.squad.map(p => ({ ...p, fitness: fitnessAfterWeek(p.fitness, playedIds.has(p.id), p === light ? recovery!.recoveryMod : recoveryMod, p === light ? recovery!.flat : flat) }));
 }
 
 function tickWeek(state: CareerState, playedIds: Set<string> | null): void {
@@ -17585,11 +17594,12 @@ function tickWeek(state: CareerState, playedIds: Set<string> | null): void {
   const plan = state.training ?? DEFAULT_TRAINING;
   const { recoveryMod, flat } = weekRecoveryOf(state);
   const knockRisk = plan.intensity === 'double' ? 0.005 : 0;
+  const light = lightSeasonPlayer(state), recovery = light ? weekRecoveryOf(state, true) : null;
   /* Round 505: anyone who finished learning a second position this week. */
   const learned: string[] = [];
   state.squad = state.squad.map(p => {
     const played = playedIds ? playedIds.has(p.id) : false;
-    const fitness = fitnessAfterWeek(p.fitness, played, recoveryMod, flat);
+    const fitness = fitnessAfterWeek(p.fitness, played, p === light ? recovery!.recoveryMod : recoveryMod, p === light ? recovery!.flat : flat);
     let injuryWeeks = Math.max(0, p.injuryWeeks - 1);
     if (knockRisk > 0 && injuryWeeks === 0 && Math.random() < knockRisk) injuryWeeks = injurySpell(state, ri(1, 3));
     const out: CMPlayer = { ...p, fitness, injuryWeeks };
@@ -19547,8 +19557,34 @@ export function setTrainingPlan(career: CareerState, plan: TrainingPlan): Career
   return { ...career, training: { ...plan } };
 }
 
+/** One owned player's commitment, read without repairing old or malformed saves. */
+export function lightSeasonReservation(career: CareerState): IndividualLightSeason | null {
+  const r = career.individualLightSeason;
+  if (!r || typeof r !== 'object' || Array.isArray(r) || r.version !== 1 || r.clubName !== career.clubName || r.season !== career.season || !Number.isInteger(r.season) || typeof r.playerId !== 'string' || !r.playerId || typeof r.manKey !== 'string' || !r.manKey || r.worldRosterKey !== undefined && (typeof r.worldRosterKey !== 'string' || !r.worldRosterKey)) return null;
+  return r;
+}
+
+export function lightSeasonPlayer(career: CareerState, includeLoans = false): CMPlayer | null {
+  const r = lightSeasonReservation(career);
+  if (!r || career.loanedOut !== undefined && !Array.isArray(career.loanedOut)) return null;
+  const loans = (career.loanedOut ?? []).map(l => l?.player).filter((p): p is CMPlayer => !!p);
+  const owned = includeLoans ? [...career.squad, ...loans] : career.squad;
+  const matches = owned.filter(p => p.id === r.playerId);
+  if (matches.length !== 1) return null;
+  const p = matches[0], key = sameManKey(p);
+  if (p.onLoan || key !== r.manKey || r.worldRosterKey !== p.worldRosterKey || owned.filter(q => sameManKey(q) === key || p.worldRosterKey !== undefined && q.worldRosterKey === p.worldRosterKey).length !== 1) return null;
+  if (!includeLoans && loans.some(q => q.id === p.id || sameManKey(q) === key || p.worldRosterKey !== undefined && q.worldRosterKey === p.worldRosterKey)) return null;
+  return p;
+}
+
+export function setIndividualLightSeason(career: CareerState, request: IndividualLightSeasonRequest | null): CareerState | null {
+  if (!request || !request.player || !request.data || request.source !== career || career.live || career.sacked || career.retired || career.pendingSummary || lightSeasonReservation(career)) return null;
+  if (lightSeasonPlayer({ ...career, individualLightSeason: request.data }) !== request.player) return null;
+  return { ...career, individualLightSeason: { ...request.data } };
+}
+
 export const INTENSITY_INFO: Record<TrainingIntensity, { label: string; desc: string; emoji: string }> = {
-  light: { label: 'Light', desc: 'Fresh legs on match day, but nobody gets any better.', emoji: '\u{1F6CC}' },
+  light: { label: 'Light', desc: 'Fresh legs on match day, with slower positive development.', emoji: '\u{1F6CC}' },
   normal: { label: 'Normal', desc: 'The safe middle. Steady development, normal fatigue.', emoji: '\u{2699}\uFE0F' },
   double: { label: 'Double', desc: 'They improve fastest and they pay for it in tired legs and knocks.', emoji: '\u{1F525}' },
 };
@@ -19583,7 +19619,8 @@ export function developmentRate(p: CMPlayer, career: CareerState): number {
   const apps = p.apps ?? 0;
   const minutes = apps >= REGULAR_APPS ? 1.3 : apps >= 18 ? 1.12 : apps >= 8 ? 0.85 : apps >= 1 ? 0.6 : 0.4;
   const plan = career.training ?? DEFAULT_TRAINING;
-  const intensity = plan.intensity === 'double' ? 1.28 : plan.intensity === 'light' ? 0.78 : 1;
+  const light = lightSeasonPlayer(career, true);
+  const intensity = light && light.id === p.id && sameManKey(light) === sameManKey(p) && light.worldRosterKey === p.worldRosterKey ? 0.78 : plan.intensity === 'double' ? 1.28 : plan.intensity === 'light' ? 0.78 : 1;
   const focus =
     plan.focus === 'youth'
       ? (p.age <= 21 ? 1.3 : p.age >= 27 ? 0.82 : 0.95)
@@ -22443,6 +22480,7 @@ export function startNextSeason(career: CareerState, acceptOfferClub?: string): 
     // was registered above, so a reload registers the same world back.
     leagueOverrides: pr.overrides ?? undefined,
   };
+  if (!moving && lightSeasonReservation(career)) delete state.individualLightSeason;
   delete state.realLeagueFixtures;
   if (worldRosterView(rosterCareer)) state.worldRoster = plainCopy(rosterCareer.worldRoster);
   /* Round 154: the deep copy above carried the old spec either way, so make
