@@ -1,0 +1,25 @@
+Back to career lines: 0
+1568 toast lines: 0
+[dukb] inlined 1 stylesheet(s) and 1 module(s) into 181 snapshots (11 left alone)
+
+E base 320x568
+  E base 320x568 consent answered: Next: {"found":true,"x":8,"y":502,"w":258,"h":48,"inView":true,"onTop":true,"cover":null}
+  E base 320x568 consent pending: true
+  E base 320x568 FINDING banner up, page top: Next: {"found":true,"x":8,"y":502,"w":258,"h":48,"inView":true,"onTop":false,"cover":"<div role=\"region\" aria-label=\"Cookie choices\" tabindex=\"-1\" data-site-chrome=\"\" class=\"fi"}
+  E base 320x568 banner rect: {"y":263,"h":305}
+  E base 320x568 FINDING banner up, page foot: Next: {"found":true,"x":8,"y":161,"w":258,"h":48,"inView":true,"onTop":true,"cover":null}
+
+E base 390x844
+  E base 390x844 consent answered: Next: {"found":true,"x":8,"y":778,"w":328,"h":48,"inView":true,"onTop":true,"cover":null}
+  E base 390x844 consent pending: true
+  E base 390x844 FINDING banner up, page top: Next: {"found":true,"x":8,"y":778,"w":328,"h":48,"inView":true,"onTop":false,"cover":"<div role=\"region\" aria-label=\"Cookie choices\" tabindex=\"-1\" data-site-chrome=\"\" class=\"fi"}
+  E base 390x844 banner rect: {"y":611,"h":233}
+  E base 390x844 FINDING banner up, page foot: Next: {"found":true,"x":8,"y":403,"w":328,"h":48,"inView":true,"onTop":true,"cover":null}
+
+E base 1280x800
+  E base 1280x800 consent answered: Next: {"found":true,"x":144,"y":734,"w":926,"h":48,"inView":true,"onTop":true,"cover":null}
+  E base 1280x800 consent pending: true
+  E base 1280x800 FINDING banner up, page top: Next: {"found":true,"x":144,"y":734,"w":926,"h":48,"inView":true,"onTop":false,"cover":"<div role=\"region\" aria-label=\"Cookie choices\" tabindex=\"-1\" data-site-chrome=\"\" class=\"fi"}
+  E base 1280x800 banner rect: {"y":635,"h":165}
+  E base 1280x800 FINDING banner up, page foot: Next: {"found":true,"x":144,"y":469,"w":926,"h":48,"inView":true,"onTop":true,"cover":null}
+walk421 base: all checks passed

@@ -1,0 +1,152 @@
+[
+ {
+  "k": "E base 320x568 consent answered: Next",
+  "v": {
+   "found": true,
+   "x": 8,
+   "y": 502,
+   "w": 258,
+   "h": 48,
+   "inView": true,
+   "onTop": true,
+   "cover": null
+  }
+ },
+ {
+  "k": "E base 320x568 consent pending",
+  "v": true
+ },
+ {
+  "k": "E base 320x568 FINDING banner up, page top: Next",
+  "v": {
+   "found": true,
+   "x": 8,
+   "y": 502,
+   "w": 258,
+   "h": 48,
+   "inView": true,
+   "onTop": false,
+   "cover": "<div role=\"region\" aria-label=\"Cookie choices\" tabindex=\"-1\" data-site-chrome=\"\" class=\"fi"
+  }
+ },
+ {
+  "k": "E base 320x568 banner rect",
+  "v": {
+   "y": 263,
+   "h": 305
+  }
+ },
+ {
+  "k": "E base 320x568 FINDING banner up, page foot: Next",
+  "v": {
+   "found": true,
+   "x": 8,
+   "y": 161,
+   "w": 258,
+   "h": 48,
+   "inView": true,
+   "onTop": true,
+   "cover": null
+  }
+ },
+ {
+  "k": "E base 390x844 consent answered: Next",
+  "v": {
+   "found": true,
+   "x": 8,
+   "y": 778,
+   "w": 328,
+   "h": 48,
+   "inView": true,
+   "onTop": true,
+   "cover": null
+  }
+ },
+ {
+  "k": "E base 390x844 consent pending",
+  "v": true
+ },
+ {
+  "k": "E base 390x844 FINDING banner up, page top: Next",
+  "v": {
+   "found": true,
+   "x": 8,
+   "y": 778,
+   "w": 328,
+   "h": 48,
+   "inView": true,
+   "onTop": false,
+   "cover": "<div role=\"region\" aria-label=\"Cookie choices\" tabindex=\"-1\" data-site-chrome=\"\" class=\"fi"
+  }
+ },
+ {
+  "k": "E base 390x844 banner rect",
+  "v": {
+   "y": 611,
+   "h": 233
+  }
+ },
+ {
+  "k": "E base 390x844 FINDING banner up, page foot: Next",
+  "v": {
+   "found": true,
+   "x": 8,
+   "y": 403,
+   "w": 328,
+   "h": 48,
+   "inView": true,
+   "onTop": true,
+   "cover": null
+  }
+ },
+ {
+  "k": "E base 1280x800 consent answered: Next",
+  "v": {
+   "found": true,
+   "x": 144,
+   "y": 734,
+   "w": 926,
+   "h": 48,
+   "inView": true,
+   "onTop": true,
+   "cover": null
+  }
+ },
+ {
+  "k": "E base 1280x800 consent pending",
+  "v": true
+ },
+ {
+  "k": "E base 1280x800 FINDING banner up, page top: Next",
+  "v": {
+   "found": true,
+   "x": 144,
+   "y": 734,
+   "w": 926,
+   "h": 48,
+   "inView": true,
+   "onTop": false,
+   "cover": "<div role=\"region\" aria-label=\"Cookie choices\" tabindex=\"-1\" data-site-chrome=\"\" class=\"fi"
+  }
+ },
+ {
+  "k": "E base 1280x800 banner rect",
+  "v": {
+   "y": 635,
+   "h": 165
+  }
+ },
+ {
+  "k": "E base 1280x800 FINDING banner up, page foot: Next",
+  "v": {
+   "found": true,
+   "x": 144,
+   "y": 469,
+   "w": 926,
+   "h": 48,
+   "inView": true,
+   "onTop": true,
+   "cover": null
+  }
+ }
+]

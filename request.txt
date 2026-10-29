@@ -1,0 +1,11 @@
+#!serve
+#!playwright
+#!serial
+walk-pr-BE: TAG=pr ONLY=BE node .rc/x/walk421.mjs
+walk-base-E: bash .rc/x/altbuild.sh /tmp/rvb b20ec6664df9d4c58d63ea0596791d33b2a3b8fc - 4175 base E
+walk-merged-B: bash .rc/x/altbuild.sh /tmp/rvm 12c1b2cd001f9309a31a887e5c432ca63c373852 89dec7530d5e0e60ef3ad6737ada2cfcdbed602c 4174 merged B
+vitest-training: node_modules/.bin/vitest run src/test/careerTrainingGround.test.tsx src/test/keeperTrainingPanel.test.tsx --testTimeout=300000 --hookTimeout=120000
+simFlagshipWeight: node scripts/simFlagshipWeight.mjs
+simAccessibility: node scripts/simAccessibility.mjs
+simCareerNoDeadEnd: node scripts/simCareerNoDeadEnd.mjs
+simNoRivalNames: node scripts/simNoRivalNames.mjs

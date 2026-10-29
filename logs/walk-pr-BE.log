@@ -1,0 +1,26 @@
+
+B pr 320x568
+  B pr 320x568 consent pending after reload: true
+  PASS  B pr 320x568 Back on top with the banner up: {"found":true,"x":37,"y":128,"w":246,"h":44,"inView":true,"onTop":true,"cover":null}
+
+E pr 320x568
+  E pr 320x568 consent answered: Next: {"found":true,"x":8,"y":502,"w":258,"h":48,"inView":true,"onTop":true,"cover":null}
+  E pr 320x568 consent pending: true
+  E pr 320x568 FINDING banner up, page top: Next: {"found":true,"x":8,"y":502,"w":258,"h":48,"inView":true,"onTop":false,"cover":"<div role=\"region\" aria-label=\"Cookie choices\" tabindex=\"-1\" data-site-chrome=\"\" class=\"fi"}
+  E pr 320x568 banner rect: {"y":263,"h":305}
+  E pr 320x568 FINDING banner up, page foot: Next: {"found":true,"x":8,"y":161,"w":258,"h":48,"inView":true,"onTop":true,"cover":null}
+
+E pr 390x844
+  E pr 390x844 consent answered: Next: {"found":true,"x":8,"y":778,"w":328,"h":48,"inView":true,"onTop":true,"cover":null}
+  E pr 390x844 consent pending: true
+  E pr 390x844 FINDING banner up, page top: Next: {"found":true,"x":8,"y":778,"w":328,"h":48,"inView":true,"onTop":false,"cover":"<div role=\"region\" aria-label=\"Cookie choices\" tabindex=\"-1\" data-site-chrome=\"\" class=\"fi"}
+  E pr 390x844 banner rect: {"y":611,"h":233}
+  E pr 390x844 FINDING banner up, page foot: Next: {"found":true,"x":8,"y":403,"w":328,"h":48,"inView":true,"onTop":true,"cover":null}
+
+E pr 1280x800
+  E pr 1280x800 consent answered: Next: {"found":true,"x":144,"y":734,"w":926,"h":48,"inView":true,"onTop":true,"cover":null}
+  E pr 1280x800 consent pending: true
+  E pr 1280x800 FINDING banner up, page top: Next: {"found":true,"x":144,"y":734,"w":926,"h":48,"inView":true,"onTop":false,"cover":"<div role=\"region\" aria-label=\"Cookie choices\" tabindex=\"-1\" data-site-chrome=\"\" class=\"fi"}
+  E pr 1280x800 banner rect: {"y":635,"h":165}
+  E pr 1280x800 FINDING banner up, page foot: Next: {"found":true,"x":144,"y":469,"w":926,"h":48,"inView":true,"onTop":true,"cover":null}
+walk421 pr: all checks passed

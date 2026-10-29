@@ -1,0 +1,10 @@
+Auto-merging src/pages/SoccerCareer.tsx
+merged tree: c84a70dfad64dc7910bcfa9f7a5620e062559cdb
+Back to career lines: 1
+1568 toast lines: 1
+[dukb] inlined 1 stylesheet(s) and 1 module(s) into 181 snapshots (11 left alone)
+
+B merged 320x568
+  B merged 320x568 consent pending after reload: true
+  PASS  B merged 320x568 Back on top with the banner up: {"found":true,"x":37,"y":128,"w":246,"h":44,"inView":true,"onTop":true,"cover":null}
+walk421 merged: all checks passed
