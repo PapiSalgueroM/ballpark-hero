@@ -1,0 +1,11 @@
+tsc: node_modules/.bin/tsc --noEmit -p tsconfig.app.json
+vitest-touched: node_modules/.bin/vitest run src/test/soccerCareerLoyaltyUncut.test.ts src/test/soccerCareerLoyalty.test.ts src/test/soccerCareerLoyalty.engine.test.ts src/test/soccerCareerLoyalty.review.test.tsx src/test/soccerCareerLoyaltyView.test.ts src/test/soccerCareerContracts.test.ts src/test/eventChoiceAfterReload.test.ts src/test/playerBingoBirthYear.test.ts src/test/playerBingoCategories.test.ts src/test/playerBingoLoad.test.tsx src/test/playerBingoLineFeedback.test.tsx --testTimeout=300000 --hookTimeout=120000
+simSoccerCareerLoyalty: node scripts/simSoccerCareerLoyalty.mjs
+simSoccerContractMoves: node scripts/simSoccerContractMoves.mjs
+simCareerAwardsNight: node scripts/simCareerAwardsNight.mjs
+simPlayerBingoCategories: CI=1 PLAYER_BINGO_CATEGORIES_OUT="$PWD/.tmp-fx/pbc" NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/simPlayerBingoCategories.mjs
+simPlayerBingoPool: NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/simPlayerBingoPool.mjs
+simPlayerBingoLoad: NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/simPlayerBingoLoad.mjs
+simNoRivalNames: node scripts/simNoRivalNames.mjs
+simHarnessAnchors: node scripts/simHarnessAnchors.mjs
+simStorageWrites: node scripts/simStorageWrites.mjs
