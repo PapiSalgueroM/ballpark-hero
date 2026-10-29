@@ -1,0 +1,7 @@
+plain exit=0 0s | simUsConnectionsFacts: green. Every Baseball, NFL and NHL Connections group is held to the record, and no board has a second right answer the record can see (other tiles 
+reportnba exit=0 0s | REPORT ONLY
+plainbytes exit=0 1s | plain output byte equal to the base (43 lines)
+dumpbytes exit=0 1s | dump byte equal to the base (6720 verdicts)
+reportnone exit=2 0s | US_CONN_TABLES names mls, not a sport here
+mig1574 exit=0 0s | supabase/migrations/20261030150000_round_1574_nhl_connections_tables.sql matches the table file at 202ea80f9a601388db08172acfa706ff826805c0 (16 boards)
+mig1567 exit=0 0s | supabase/migrations/20261029120000_round_1567_us_connections_gray.sql matches the files
