@@ -69,6 +69,9 @@ import './lib/seedRandom.mjs';
    Unlimited ladders (seeds 1 to 240,000; none below 120,000, 9 above) and on none of 36,525 dailies
    (2026-10-25 to 2126-10-24); the head dropped none and dealt the other 276,516 JSON identical. The 9 seeds
    are pinned in KNOWN_SHORT, so the real pool's rescue is proved on every run.
+   Round 1579 took the 1573 review's minors: (ii) has a floor and (vi) a ceiling, so an arm that drops every
+   ladder is its own red (TRIVIA_CONTROL=shared), and the pin signature also hashes the code of the bank's other
+   imports (clearWinner.ts, dateUtils.ts, dealPlayers.ts), so an edit there reads as stale, not as a moved pin.
    Knobs: TRIVIA_ARM_FILE=<path> makes the arm that file as it is, the tie to origin/main's own bank (git show
      origin/main:src/lib/triviaQuestionBank.ts > base-bank.ts). Its imports resolve to this tree, so the tie
      holds while src/data/marketNamesakes.json and src/lib/clearWinner.ts, dateUtils.ts and dealPlayers.ts
@@ -90,6 +93,7 @@ import './lib/seedRandom.mjs';
      TRIVIA_CONTROL=short     a step gives up after eight draws again                 (section 9, check i)
      TRIVIA_CONTROL=redeal    a step draws from five types, every ladder dealt anew   (sections 4 and 9, ii and iii)
      TRIVIA_CONTROL=dupe      a step keeps a question the ladder already holds        (sections 4 and 9, iv and ii)
+     TRIVIA_CONTROL=shared    a step's draw counter is shared by the whole ladder     (section 9, the ii floor and vi ceiling)
    Under the first seven the arm is the controlled bank with a cap of 8, so section 9 adds only its (v) lines
    (4 each for ties, namesake, tense and postense, 3 for family, none for legacy and rulec), plus a
    "KNOWN_SHORT stale" line wherever the control edits the bank.
@@ -103,7 +107,7 @@ import path from 'node:path';
 import { fileURLToPath, pathToFileURL } from 'node:url';
 
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
-const CONTROLS = ['ties', 'namesake', 'tense', 'postense', 'family', 'legacy', 'rulec', 'short', 'redeal', 'dupe'];
+const CONTROLS = ['ties', 'namesake', 'tense', 'postense', 'family', 'legacy', 'rulec', 'short', 'redeal', 'dupe', 'shared'];
 const CONTROL = process.env.TRIVIA_CONTROL || '';
 if (CONTROL && !CONTROLS.includes(CONTROL)) { console.error(`TRIVIA_CONTROL=${CONTROL} is not a control this harness knows`); process.exit(1); }
 const PRINT_LEGACY = process.argv.includes('--print-legacy');
@@ -161,7 +165,12 @@ const SWAPS = {
   short: ['export const LADDER_ATTEMPTS = 64;', 'export const LADDER_ATTEMPTS = 8;', 'a step gives up after eight draws again'],
   redeal: ['q = generateQuestion(pool, i, rng, [], rules);', "q = generateQuestion(pool, i, rng, ['ballon-dor'], rules);", 'every step draws from five types, so a ladder that was whole is dealt anew'],
   dupe: ['if (q && !seenQuestions.has(q.question)) break;', 'if (q) break;', 'a step keeps a question the ladder already holds'],
+  /* Round 1579 (the 1573 review's F1): the draw counter is declared once for the whole ladder, so the eight draw arm
+     runs out of draws on every ladder while the head's 64 still deal it whole; the (ii) floor and (vi) ceiling see it */
+  shared: ['    let attempts = 0;', '    var attempts = attempts ?? 0;', "a step's draw counter is shared by the whole ladder"],
 };
+/* the controls whose anchor must be in the bank exactly once */
+const ANCHOR_ONCE = ['short', 'redeal', 'dupe', 'shared'];
 /* the three controls of section 9 change the cap or the loop, so the eight draw arm is built from the bank as it was
    before the swap; under every other control the arm is the controlled bank with a cap of 8, so head and arm differ
    by the cap alone */
@@ -176,7 +185,7 @@ const pristineSource = bankSource;
 if (SWAPS[CONTROL]) {
   const [from, to, what] = SWAPS[CONTROL];
   if (!bankSource.includes(from)) { console.error(`control cannot run: the bank does not contain ${JSON.stringify(from.trim())}`); process.exit(1); }
-  if (ARM_FROM_PRISTINE.includes(CONTROL) && bankSource.split(from).length !== 2) { console.error(`control cannot run: the bank holds ${JSON.stringify(from)} more than once`); process.exit(1); }
+  if (ANCHOR_ONCE.includes(CONTROL) && bankSource.split(from).length !== 2) { console.error(`control cannot run: the bank holds ${JSON.stringify(from)} more than once`); process.exit(1); }
   bankSource = bankSource.replace(from, to);
   console.log(`NEGATIVE CONTROL ON: ${what}`);
 }
@@ -326,12 +335,14 @@ const addDays = (d, k) => new Date(Date.parse(`${d}T12:00:00Z`) + k * 86400000).
    The cap is LADDER_ATTEMPTS now. Section 9 deals every fleet twice with the same seed or date, through the head
    and through the eight draw arm (the same bank with a cap of 8, or TRIVIA_ARM_FILE as it is), and holds:
      (i)   every head ladder is 15 long;
-     (ii)  where the arm is 15 long, the head is JSON identical to it (a ladder that was whole is dealt as before);
+     (ii)  where the arm is 15 long, the head is JSON identical to it (a ladder that was whole is dealt as before),
+           and the arm is 15 long on at least half of every fleet, so the comparison is never empty;
      (iii) where the arm is short, the head equals it up to the first dropped step (the rescue starts there);
      (iv)  every head ladder holds 15 distinct question texts;
      (v)   the questions are sound: the full one right answer checks on the real and degraded pools under the new
            rules, the structural part (four distinct options, the right one in range, a known template) elsewhere;
-     (vi)  the baseline sees the defect: the arm drops steps on the planted fleets, and at every KNOWN_SHORT pin. */
+     (vi)  the baseline sees the defect: the arm drops steps on the planted fleets (between a floor and a ceiling, so
+           a broken arm is not read as the defect), and at every KNOWN_SHORT pin. */
 const CAP_LINE = 'export const LADDER_ATTEMPTS = 64;';
 async function buildArm() {
   let src;
@@ -373,10 +384,14 @@ const DRIVER = {
 };
 const DRIVER_FROM = '2026-09-25';
 /* what a KNOWN_SHORT pin depends on: the arm's code with its comments and its cap taken out (so the head's arm and
-   origin/main's own bank read the same), the four fixture files, the namesake list and the driver pool */
+   origin/main's own bank read the same), the code of the bank's three other imports (Round 1579, the 1573 review's
+   F2: an edit there that moves a pin names itself as stale), the four fixture files, the namesake list and the driver pool */
 const capFree = s => stripComments(s).replace(/^[ \t]*export const LADDER_ATTEMPTS = \d+;[ \t]*$/m, '').replace(/attempts < LADDER_ATTEMPTS/g, 'attempts < 8').split('\n').map(l => l.trimEnd()).filter(Boolean).join('\n');
+const codeOnly = s => stripComments(s).split('\n').map(l => l.trimEnd()).filter(Boolean).join('\n');
+const PIN_IMPORTS = ['src/lib/clearWinner.ts', 'src/lib/dateUtils.ts', 'src/lib/dealPlayers.ts'];
 function pinSignature(armSrc) {
   const h = crypto.createHash('sha256').update(capFree(armSrc));
+  for (const f of PIN_IMPORTS) h.update(codeOnly(read(f)));
   for (const f of ['scripts/data/alphabetSprintPool.json', 'scripts/data/auctionMarketRows.json', 'scripts/data/stockMarketPools.json', 'scripts/data/ballonDorVerified2026-09.json', 'src/data/marketNamesakes.json']) h.update(read(f));
   return h.update(JSON.stringify(DRIVER)).digest('hex').slice(0, 16);
 }
@@ -582,8 +597,10 @@ if (plantedTally.built < CALLS) fail(`the new rules built ${plantedTally.built} 
 /* every ladder the eight draw arm is known to drop a step on outside the default fleets, as [pool, fleet, seed or
    date, the step it drops], measured on the pin signature below (a pin on any other signature is stale) */
 const KNOWN_SHORT = {
-  signature: 'a49cdf0d3c20de20',
+  signature: 'd25ca436638e4830',
   measured: '2026-10-29: the driver date on runner r1573-s1 at da635feb5 (inside the default driver fleet too); the real pool seeds by the big fleet, TRIVIA_BIG=unlimited:1-240000 with TRIVIA_ARM_FILE set to 692590145\'s bank, runners r1573-s3a and r1573-s3b at a64581b66',
+  /* Round 1579 re-keyed the signature from a49cdf0d3c20de20 to take in PIN_IMPORTS; no pin was re-measured, because
+     clearWinner.ts, dateUtils.ts and dealPlayers.ts are the same at 692590145, a64581b66 and 5f9303bf8 */
   pins: [
     ['driver', 'daily', '2035-10-26', 15],
     ['real', 'unlimited', 135581, 9], ['real', 'unlimited', 143133, 13], ['real', 'unlimited', 159321, 12],
@@ -593,6 +610,12 @@ const KNOWN_SHORT = {
 };
 /* (vi) the planted fleets must show the defect on the arm: 31 and 37 of 1,000 measured, see the header */
 const PLANTED_FLOOR = 10;
+/* Round 1579 (the 1573 review's F1): an arm that drops a step on every ladder leaves (ii) comparing nothing while
+   green. (vi) has a ceiling on the planted fleets, about three times the 31 and 37 measured (the ten old controls
+   give 20 to 37, runner r1573-fa), and (ii) a floor: the arm deals whole at least half of every fleet's ladders
+   (measured 963 of 1,000 at the lowest, planted daily). TRIVIA_CONTROL=shared drops every ladder and fires both. */
+const PLANTED_CEILING = 100;
+const COMPARED_SHARE = 0.5;
 section('9. every ladder is fifteen long: each fleet through the head and through the eight draw arm, same seed or date');
 const arm = await buildArm();
 if (arm.error) fail(`section 9 cannot run: ${arm.error}`);
@@ -632,6 +655,10 @@ else {
   }
   if (KNOWN_SHORT.pins.length) settle(known, Infinity);
   for (const name of ['planted unlimited', 'planted daily']) if (fleets[name].armShort < PLANTED_FLOOR) fail(`(vi) the eight draw arm dropped a step on ${fleets[name].armShort} ${name} ladders, under the floor of ${PLANTED_FLOOR}, so section 9 may be blind to the defect`);
+  const paired = [...Object.values(fleets), legacy];
+  console.log(`   (ii) compared, where the arm dealt whole: ${paired.map(f => `${f.name} ${f.ladders - f.armShort} of ${f.ladders}`).join(', ')}`);
+  for (const f of paired) if (f.ladders - f.armShort < Math.ceil(f.ladders * COMPARED_SHARE)) fail(`(ii) compared only ${f.ladders - f.armShort} of ${f.ladders} ${f.name} ladders, under the floor of ${COMPARED_SHARE * 100}%, so the eight draw arm is broken and the identity proof is empty`);
+  for (const name of ['planted unlimited', 'planted daily']) if (fleets[name].armShort > PLANTED_CEILING) fail(`(vi) the eight draw arm dropped a step on ${fleets[name].armShort} ${name} ladders, over the ceiling of ${PLANTED_CEILING}, so the arm is broken rather than showing the defect`);
 }
 
 console.log(`\nsimTriviaBank: ${failures === 0 ? 'all checks passed' : `${failures} failure(s)`}${CONTROL ? ` (NEGATIVE CONTROL ${CONTROL} ON)` : ''}`);
