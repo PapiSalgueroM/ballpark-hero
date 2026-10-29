@@ -1,0 +1,12 @@
+#!serve
+#!playwright
+walk: ENGINES=chromium node scripts/playNbaIntl.mjs
+ctl-nocurtain: git worktree add -q /tmp/nc HEAD && ln -s "$PWD/node_modules" /tmp/nc/node_modules && node .rc/x/mutfix.mjs /tmp/nc nocurtain && (cd /tmp/nc && node_modules/.bin/vite build > /tmp/nc-build.log 2>&1) && PLAY_INTL_CONTROL=nocurtain PLAY_INTL_DIST=/tmp/nc/dist ENGINES=chromium node scripts/playNbaIntl.mjs
+playDepthChart: ENGINES=chromium node scripts/playDepthChart.mjs
+playCareerHub: ENGINES=chromium node scripts/playCareerHub.mjs
+playExtension: ENGINES=chromium node scripts/playExtension.mjs
+playUsCareerSaveSeam: ENGINES=chromium node scripts/playUsCareerSaveSeam.mjs
+playUsMarketTalk: ENGINES=chromium node scripts/playUsMarketTalk.mjs
+playTranslatedPage-nba: ONLY=/nba-my-career ENGINES=chromium node scripts/playTranslatedPage.mjs
+qa1085: node scripts/qa/numberFormatting1085.mjs --prefetch-fonts-only && node scripts/qa/numberFormatting1085.mjs
+qa1079: node scripts/qa/managerMatchPlans1079.mjs --prefetch-fonts-only && node scripts/qa/managerMatchPlans1079.mjs

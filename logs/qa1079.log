@@ -1,0 +1,14 @@
+Prepared 29 match plan font and flag dependencies.
+Browserslist: browsers data (caniuse-lite) is 16 months old. Please run:
+  npx update-browserslist-db@latest
+  Why you should do it regularly: https://github.com/browserslist/update-db#readme
+
+[1m[33mwarn[39m[22m - The class `duration-[800ms]` is ambiguous and matches multiple utilities.
+[1m[33mwarn[39m[22m - If this is content and not a class, replace it with `duration-&lsqb;800ms&rsqb;` to silence this warning.
+[1m[33m[plugin:vite:reporter][39m[22m [33m[plugin vite:reporter] 
+(!) /home/runner/work/ballpark-hero/ballpark-hero/src/lib/clubManagerTactics.ts is dynamically imported by /home/runner/work/ballpark-hero/ballpark-hero/src/hooks/useClubManager.ts but also statically imported by /home/runner/work/ballpark-hero/ballpark-hero/src/components/club-manager/InstructionsPicker.tsx, /home/runner/work/ballpark-hero/ballpark-hero/src/components/club-manager/TacticsScreen.tsx, dynamic import will not move module into another chunk.
+[39m
+[dukb] preload wrapper: a cancelled chunk error waits for the reload (vite 5.4.21)
+[dukb] inlined 1 stylesheet(s) and 1 module(s) into 0 snapshots (0 left alone)
+  note managerMatchPlans1079: national team calls met 0 (its NBA save is a protected string kept byte for byte, never a career, so no bar reaches it)
+PASS manager match plans native: 3 actual hook journeys, 12 effective restored DOM faults, independent engine previews and kickoff, reload and club isolation.
