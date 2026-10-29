@@ -1,0 +1,9 @@
+simSoccerCareerLoyalty exit=0 3s | Callbacks retained by location/arity; no cross-bundle closure-equivalence claim. Evidence: /home/runner/work/ballpark-hero/ballpark-hero/.sim-artifacts/soccer-loyalty-224
+simCmShootoutResults exit=0 10s | ALL SHOOTOUT RESULTS CHECKS PASSED
+simManagerMatchPlans exit=0 6s | simManagerMatchPlans: 13 actual outcomes passed.
+simPlayerBingoCategories exit=1 0s | Node.js v24.22.1
+simPlayerBingoHonours exit=0 9s | simPlayerBingoHonours PASS
+intro-fixed exit=1 0s | Node.js v24.22.1
+simCmShootoutOrder exit=0 31s | simCmShootoutOrder: all sections passed
+vitest-new exit=0 26s |  Test Files  26 passed (26)
+simCareerProgramme exit=0 71s | Career programme:50 original/compatibility/full product season pairs with exact RNG,240 opted gameplay seasons,21 effective loaded faults,163 unchanged chance outcomes an
