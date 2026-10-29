@@ -814,6 +814,47 @@ export function makeNhlChecker({ record, ledger = {} }) {
   return { criterion, fits, watch, identity, active, watched: WATCHED.nhl, has: name => byName.has(fold(name)) };
 }
 
+/* ------------------------------------------------------------------ */
+/* NBA                                                                 */
+/* ------------------------------------------------------------------ */
+
+/*
+ * Round 1583: a birthplace as the hosts print it -> a country. ESPN's displayBirthPlace ends in a US state or a
+ * Canadian province code for a man born in North America ("Akron, OH", "Kitchener, ON") and in a country name
+ * otherwise ("Belgium", "Paris, France"); basketball-reference links the country as a two letter code
+ * (birthplaces.fcgi?country=BE). Both are mapped here by explicit lists; a suffix or a code no list holds is null
+ * (unknown), never a guess. A birth group reads the birthplace, never a citizenship or nba.com's COUNTRY (Tony
+ * Parker: citizenship France, born in Bruges, Belgium).
+ */
+const US_STATES = new Set(['AL', 'AK', 'AZ', 'AR', 'CA', 'CO', 'CT', 'DE', 'FL', 'GA', 'HI', 'ID', 'IL', 'IN', 'IA', 'KS', 'KY', 'LA', 'ME', 'MD', 'MA', 'MI', 'MN', 'MS', 'MO', 'MT', 'NE', 'NV', 'NH', 'NJ', 'NM', 'NY', 'NC', 'ND', 'OH', 'OK', 'OR', 'PA', 'RI', 'SC', 'SD', 'TN', 'TX', 'UT', 'VT', 'VA', 'WA', 'WV', 'WI', 'WY', 'DC']);
+/* PQ: the old code for Quebec, which ESPN still prints ("Montreal, PQ") */
+const CA_PROVINCES = new Set(['AB', 'BC', 'MB', 'NB', 'NL', 'NS', 'NT', 'NU', 'ON', 'PE', 'PQ', 'QC', 'SK', 'YT']);
+/* country names as ESPN prints them -> the country (each one seen on the 2026-10-29 read) */
+const NBA_COUNTRY_NAMES = {
+  France: 'France', Belgium: 'Belgium', 'West Germany': 'West Germany', Lithuania: 'Lithuania', Nigeria: 'Nigeria',
+  Cameroon: 'Cameroon', Sudan: 'Sudan', Jamaica: 'Jamaica', Spain: 'Spain', Yugoslavia: 'Yugoslavia',
+  /* ESPN prints "Congo" for Brazzaville (the Republic of the Congo); both Congos are in Africa */
+  Congo: 'Congo', 'South Africa': 'South Africa', 'Virgin Islands': 'US Virgin Islands', China: 'China',
+};
+/* basketball-reference's two letter country codes (birthplaces.fcgi?country=) -> the country */
+export const NBA_COUNTRY_CODES = {
+  US: 'USA', CA: 'Canada', FR: 'France', BE: 'Belgium', DE: 'Germany', LT: 'Lithuania', NG: 'Nigeria', CM: 'Cameroon',
+  SD: 'Sudan', SS: 'South Sudan', JM: 'Jamaica', ES: 'Spain', RS: 'Serbia', HR: 'Croatia', CG: 'Republic of the Congo',
+  CD: 'DR Congo', ZA: 'South Africa', VI: 'US Virgin Islands', CN: 'China',
+};
+/* "Born in Africa" and "Born in Europe": every country either host prints, old names and new, sorted into a
+   continent; a country in neither set is unknown for a continent group, never a no */
+const NBA_AFRICA = new Set(['Nigeria', 'Cameroon', 'Sudan', 'South Sudan', 'Congo', 'Republic of the Congo', 'DR Congo', 'South Africa']);
+const NBA_NOT_AFRICA = new Set(['USA', 'Canada', 'France', 'Belgium', 'Germany', 'West Germany', 'Lithuania', 'Jamaica', 'Spain', 'Serbia', 'Croatia', 'Yugoslavia', 'US Virgin Islands', 'China']);
+/** ESPN's displayBirthPlace -> a country, or null when its last part is in no list. */
+export function nbaBirthCountry(text) {
+  if (!text) return null;
+  const last = String(text).split(',').pop().trim();
+  if (US_STATES.has(last)) return 'USA';
+  if (CA_PROVINCES.has(last)) return 'Canada';
+  return NBA_COUNTRY_NAMES[last] ?? null;
+}
+
 /*
  * Round 1574: how each criterion kind ages, for simUsConnectionsFacts section 10. 'fixed': nothing a season in play
  * can change (a birth country, a draft, a closed past range); 'running': a total, a count or an award the season
