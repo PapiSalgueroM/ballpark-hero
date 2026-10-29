@@ -1,0 +1,16 @@
+facts exit=0 1s | simUsConnectionsFacts: green. Every Baseball, NFL and NHL Connections group is held to the record, and no board has a second right answer the record can see (other tiles 
+ctl-all exit=0 12s | CTL bogus exit=2 | unknown US_CONN_CONTROL=nosuchcontrol
+conn1553 exit=0 1s | simConnectionsFacts: green. Every claim this round checked stands on two hosts and no rebuilt board has a second answer.
+fair exit=0 0s | simFairPuzzles: green. No board has a new second right answer; only the soccer findings the ledger owes to part B remain.
+norival exit=0 20s | No rival product names found. 0 findings.
+vitest exit=0 44s |    Duration  42.21s (transform 8.23s, setup 953ms, collect 11.56s, tests 53.22s, environment 5.39s, prepare 1.76s)
+storage exit=0 6s | simStorageWrites: all green (owed: 12)
+trustcopy exit=0 1s | simTrustCopy: green. One disclaimer under every page and one count of the games, the registry's own.
+connloss exit=0 3s | simConnectionsLoss: all green
+connshake exit=0 2s | simConnectionsShake: all green
+nhlbench exit=0 6s | simNhlPlanningBench normal: exact expected assertions and independent Daily restore passed.
+nbabench exit=0 5s | simNbaPlanningBench normal: exact expected assertions and independent Daily restore passed.
+dealt1567 exit=0 0s | 2026-12-12: baseball bconn-007 of 60 RELABELLED; nfl nflconn-004 of 4 RELABELLED; nhl nhlconn-004 of 4 RELABELLED: clear
+migcheck exit=0 0s | supabase/migrations/20261029120000_round_1567_us_connections_gray.sql matches the files
+tsc exit=0 106s | 
+anchors exit=0 70s | simHarnessAnchors: green. Every harness parses and none carries an unmatchable anchor.

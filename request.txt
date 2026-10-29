@@ -1,0 +1,16 @@
+tsc: node_modules/.bin/tsc --noEmit -p tsconfig.app.json
+vitest: node_modules/.bin/vitest run src/hooks/useConnectionsRelabel.test.ts src/hooks/useConnectionsLoss.test.ts src/hooks/useConnectionsShake.test.ts src/test/dailySaveParity.test.tsx src/test/dailySaveShapes.test.tsx src/test/dailySaveHardening.test.tsx src/test/nhlPlanningBench.test.tsx src/test/nbaPlanningBench.test.tsx --testTimeout=300000 --hookTimeout=120000
+facts: node scripts/simUsConnectionsFacts.mjs
+ctl-all: for c in arod bell karlsson twice onehost fingers ohtani frobinson undate unjudged yearnfl yearnhl afternfl afternhl aftermlb futuredate grayonehost; do US_CONN_CONTROL=$c node scripts/simUsConnectionsFacts.mjs > /tmp/ctl-$c.log 2>&1; e=$?; echo "CTL $c exit=$e | $(tail -1 /tmp/ctl-$c.log | cut -c1-170)"; done; US_CONN_CONTROL=nosuchcontrol node scripts/simUsConnectionsFacts.mjs > /tmp/ctl-bogus.log 2>&1; echo "CTL bogus exit=$? | $(tail -1 /tmp/ctl-bogus.log)"; exit 0
+conn1553: node scripts/simConnectionsFacts.mjs
+fair: node scripts/simFairPuzzles.mjs
+norival: node scripts/simNoRivalNames.mjs
+anchors: node scripts/simHarnessAnchors.mjs
+storage: node scripts/simStorageWrites.mjs
+trustcopy: node scripts/simTrustCopy.mjs
+connloss: node scripts/simConnectionsLoss.mjs
+connshake: node scripts/simConnectionsShake.mjs
+nhlbench: node scripts/simNhlPlanningBench.mjs
+nbabench: node scripts/simNbaPlanningBench.mjs
+dealt1567: node scripts/qa/connectionsDealtDay1567.mjs file 2026-10-29 +45 | tail -4; exit 0
+migcheck: node scripts/qa/usConnections1567Migration.mjs check
