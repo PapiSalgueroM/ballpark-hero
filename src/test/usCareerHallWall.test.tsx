@@ -14,6 +14,8 @@
  *   C7  with no Hall bound (the parity replay's knob) the wall is never read, never written, never drawn.
  *   C8  no draw: the save's bytes and Math.random's count are the same press for press with the wall written,
  *       with the wall refused, and with no wall code at all (the module mocked inert).
+ *   C8b the read draws nothing: a live career mounted with no Hall bound, with a bound Hall and no wall, and with
+ *       a bound Hall and a full wall stored draws as often and leaves the same save bytes.
  *   C9  a refused retirement SAVE holds the plaque back until the save's own Retry lands.
  * Mounted in StrictMode under a MemoryRouter, as usCareerSaveRetry.test.tsx mounts the board.
  */
@@ -366,6 +368,46 @@ describe('C8: the wall draws nothing and moves no save byte', () => {
       expect(absent.counts, `seed ${seed}: draws, absent`).toEqual(written.counts);
     }
   }, 180000);
+});
+
+/* C8b: the wall's read draws nothing either. All three of C8's arms bind the Hall, so the board's read effect runs
+   in each of them and a draw planted there would be equal in all three (the closing check's residual). Here the
+   baseline binds no Hall (C7's knob), which a mount on a live season can compare against: before a career retires
+   nothing else the Hall gates runs on the hub. Three mounts of the same live career, five seeds a sport: no Hall
+   bound, a bound Hall with no wall stored, and a bound Hall with a full wall stored (the read then loads the rules
+   and sanitizes it). Math.random's count and the save's bytes must agree, and both bound arms must have read. */
+type ReadArm = 'unbound' | 'empty' | 'stored';
+async function mountOnly(sport: UsCareerSport, seed: number, arm: ReadArm) {
+  cleanup(); localStorage.clear(); vi.restoreAllMocks();
+  const board: UsCareerSport = arm === 'unbound' ? { ...sport, hall: undefined } : sport;
+  const { c, tq } = activeCareer(sport, 1580 + seed * 11);
+  save(board, c, tq, 'season');
+  if (arm === 'stored') storeWall(sport, plaques(sport, Array(12).fill('inducted'), 1590 + seed));
+  let draws = 0;
+  const rng = mulberry32(9100 + seed);
+  vi.spyOn(Math, 'random').mockImplementation(() => { draws += 1; return rng(); });
+  const reads = vi.spyOn(Storage.prototype, 'getItem');
+  mountBoard(board);
+  await waitFor(() => expect(button('Hang them up now'), 'the hub is up').toBeTruthy());
+  await settle(); await settle();
+  const wallReads = reads.mock.calls.filter(([key]) => String(key).endsWith('-my-career-hall-v1')).length;
+  const out = { draws, bytes: localStorage.getItem(sport.saveKey), wallReads };
+  cleanup();
+  return out;
+}
+describe('C8b: the wall\'s read draws nothing and moves no save byte', () => {
+  it.each(ROWS)('$label: five seeds, no Hall bound, a bound Hall with no wall and with a full wall', async ({ sport }) => {
+    for (let seed = 0; seed < 5; seed += 1) {
+      const unbound = await mountOnly(sport, seed, 'unbound');
+      const empty = await mountOnly(sport, seed, 'empty');
+      const stored = await mountOnly(sport, seed, 'stored');
+      expect([empty.wallReads > 0, stored.wallReads > 0], `seed ${seed}: both bound arms read the wall`).toEqual([true, true]);
+      expect(empty.bytes, `seed ${seed}: save bytes, no wall`).toBe(unbound.bytes);
+      expect(stored.bytes, `seed ${seed}: save bytes, a full wall`).toBe(unbound.bytes);
+      expect(empty.draws, `seed ${seed}: draws, no wall`).toBe(unbound.draws);
+      expect(stored.draws, `seed ${seed}: draws, a full wall`).toBe(unbound.draws);
+    }
+  }, 120000);
 });
 
 /** Plaques for a stored wall: one engine career's plaque, copied under new keys and names with the given outcomes. */

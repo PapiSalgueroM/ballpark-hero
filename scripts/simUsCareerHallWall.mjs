@@ -42,6 +42,7 @@
  *   nogate     the bound Hall gate taken out of both effects and the opener  section 4: C7
  *   stalesave  the keep effect no longer waits for a refused save            section 4: C9
  *   boarddraw  one Math.random planted in the keep effect                    section 4: C8
+ *   readdraw   one Math.random planted in the read effect                    section 4: C8b (C8 stays green)
  *
  *   4. THE BOARD (normal run and the board controls only). src/test/usCareerHallWall.test.tsx run by vitest
  *      on the board, or on a copy of it under .sim-control with the control's edits swapped in for it
@@ -88,7 +89,7 @@ const SOURCE_CONTROLS = {
   version: { from: 'if (raw.v !== 1) return', to: 'if (false) return' },
   sportimport: { from: "import type { UsCareerCore } from '@/lib/usCareerSport';\n", to: `import type { UsCareerCore } from '@/lib/usCareerSport';\n${PLANT}` },
 };
-const HARNESS_CONTROLS = ['unstamped', 'calnow', 'nokeep', 'loadonly', 'kept', 'anyplaque', 'rewrite', 'oldline', 'createline', 'nogate', 'stalesave', 'boarddraw'];
+const HARNESS_CONTROLS = ['unstamped', 'calnow', 'nokeep', 'loadonly', 'kept', 'anyplaque', 'rewrite', 'oldline', 'createline', 'nogate', 'stalesave', 'boarddraw', 'readdraw'];
 if (CONTROL && !SOURCE_CONTROLS[CONTROL] && !HARNESS_CONTROLS.includes(CONTROL)) {
   console.error(`simUsCareerHallWall: SIM_HALL_WALL_CONTROL=${CONTROL} is not a control this harness knows`);
   process.exit(2);
@@ -416,7 +417,7 @@ for (const k of Object.keys(longest)) {
    cases (create screen, retirement screen, the honest lines), J the jersey words. */
 const BOARD = 'src/components/us-career/UsCareerBoard.tsx';
 const BOARD_TEST = 'src/test/usCareerHallWall.test.tsx';
-const BOARD_CASES = 52;
+const BOARD_CASES = 56;
 const KEEP = 'if (!sport.hall || !career?.retired || saveFailure) return;';
 const MISSING = "missing={view.from === 'retired' && hallRefused}";
 const KEPT_LINE ='const hallKept = hallWallKeyNow !== null && !!wall?.entries.some(e => e.key === hallWallKeyNow);';
@@ -424,30 +425,34 @@ const READ = 'if (!sport.hall) return;\n    try {\n      const raw = localStorag
 const BOARD_CONTROLS = {
   /* nokeep and loadonly also turn C10c red: with no keep effect no write is ever refused, and the wall's honest
      line shows only after a refusal. */
-  nokeep: { edits: [[KEEP, 'if (true) return;']], fail: ['C1', 'C3', 'C4b', 'C5', 'C6', 'C8', 'C9', 'C10b', 'C10c'], hold: ['C4', 'C7', 'C10a', 'J'] },
+  nokeep: { edits: [[KEEP, 'if (true) return;']], fail: ['C1', 'C3', 'C4b', 'C5', 'C6', 'C8', 'C9', 'C10b', 'C10c'], hold: ['C4', 'C7', 'C8b', 'C10a', 'J'] },
   loadonly: { edits: [['const [wall, setWall] = useState<HallWall | null>(null);', 'const [wall, setWall] = useState<HallWall | null>(null); const wallSawLive = useRef(false);'],
     [KEEP, 'if (career && !career.retired) wallSawLive.current = true; if (!sport.hall || !career?.retired || saveFailure || !wallSawLive.current) return;']],
-    fail: ['C3', 'C4b', 'C6', 'C10b', 'C10c'], hold: ['C1', 'C4', 'C5', 'C7', 'C8', 'C9', 'C10a', 'J'] },
+    fail: ['C3', 'C4b', 'C6', 'C10b', 'C10c'], hold: ['C1', 'C4', 'C5', 'C7', 'C8', 'C8b', 'C9', 'C10a', 'J'] },
   kept: { edits: [[KEPT_LINE, 'const hallKept = hallWallKeyNow !== null;']],
-    fail: ['C4', 'C4b', 'C6', 'C10c'], hold: ['C1', 'C3', 'C5', 'C7', 'C8', 'C9', 'C10a', 'C10b', 'J'] },
+    fail: ['C4', 'C4b', 'C6', 'C10c'], hold: ['C1', 'C3', 'C5', 'C7', 'C8', 'C8b', 'C9', 'C10a', 'C10b', 'J'] },
   /* The reviewers' run lens (r1570-run-mut): "the card stays" read off ANY plaque up, not this career's. */
   anyplaque: { edits: [[KEPT_LINE, 'const hallKept = hallWallKeyNow !== null && !!wall?.entries.length;']],
-    fail: ['C4b'], hold: ['C1', 'C3', 'C4', 'C5', 'C6', 'C7', 'C8', 'C9', 'C10a', 'C10b', 'C10c', 'J'] },
+    fail: ['C4b'], hold: ['C1', 'C3', 'C4', 'C5', 'C6', 'C7', 'C8', 'C8b', 'C9', 'C10a', 'C10b', 'C10c', 'J'] },
   /* The keep effect writes the same plaque again on every load (the read lens: no control proved C3's "a second
      visit writes nothing" could fail). */
   rewrite: { edits: [['if (next !== was.entries) localStorage.setItem(', 'if (true) localStorage.setItem(']],
-    fail: ['C3'], hold: ['C1', 'C4', 'C4b', 'C5', 'C6', 'C7', 'C8', 'C9', 'C10a', 'C10b', 'C10c', 'J'] },
+    fail: ['C3'], hold: ['C1', 'C4', 'C4b', 'C5', 'C6', 'C7', 'C8', 'C8b', 'C9', 'C10a', 'C10b', 'C10c', 'J'] },
   /* The wall's "did not keep" line: shown for any missing plaque, refused or not (oldline), and shown from the
      create screen as well (createline). */
   oldline: { edits: [[MISSING, "missing={view.from === 'retired' && !hallKept}"]],
-    fail: ['C10c'], hold: ['C1', 'C3', 'C4', 'C4b', 'C5', 'C6', 'C7', 'C8', 'C9', 'C10a', 'C10b', 'J'] },
+    fail: ['C10c'], hold: ['C1', 'C3', 'C4', 'C4b', 'C5', 'C6', 'C7', 'C8', 'C8b', 'C9', 'C10a', 'C10b', 'J'] },
   createline: { edits: [[MISSING, 'missing={!hallKept}']],
-    fail: ['C10a', 'C10c'], hold: ['C1', 'C3', 'C4', 'C4b', 'C5', 'C6', 'C7', 'C8', 'C9', 'C10b', 'J'] },
+    fail: ['C10a', 'C10c'], hold: ['C1', 'C3', 'C4', 'C4b', 'C5', 'C6', 'C7', 'C8', 'C8b', 'C9', 'C10b', 'J'] },
   nogate: { edits: [[READ, READ.replace('if (!sport.hall) return;\n    ', '')], [KEEP, 'if (!career?.retired || saveFailure) return;'],
     ['{sport.hall && wall && wall.entries.length > 0 && (', '{wall && wall.entries.length > 0 && (']],
-    fail: ['C7'], hold: ['C1', 'C3', 'C4', 'C4b', 'C5', 'C6', 'C8', 'C9', 'C10a', 'C10b', 'C10c', 'J'] },
-  stalesave: { edits: [[KEEP, 'if (!sport.hall || !career?.retired) return;']], fail: ['C9'], hold: ['C1', 'C3', 'C4', 'C4b', 'C5', 'C6', 'C7', 'C8', 'C10a', 'C10b', 'C10c', 'J'] },
-  boarddraw: { edits: [['if (!entry) return;', 'if (!entry) return; Math.random();']], fail: ['C8'], hold: ['C1', 'C3', 'C4', 'C4b', 'C5', 'C6', 'C7', 'C9', 'C10a', 'C10b', 'C10c', 'J'] },
+    fail: ['C7'], hold: ['C1', 'C3', 'C4', 'C4b', 'C5', 'C6', 'C8', 'C8b', 'C9', 'C10a', 'C10b', 'C10c', 'J'] },
+  stalesave: { edits: [[KEEP, 'if (!sport.hall || !career?.retired) return;']], fail: ['C9'], hold: ['C1', 'C3', 'C4', 'C4b', 'C5', 'C6', 'C7', 'C8', 'C8b', 'C10a', 'C10b', 'C10c', 'J'] },
+  boarddraw: { edits: [['if (!entry) return;', 'if (!entry) return; Math.random();']], fail: ['C8'], hold: ['C1', 'C3', 'C4', 'C4b', 'C5', 'C6', 'C7', 'C8b', 'C9', 'C10a', 'C10b', 'C10c', 'J'] },
+  /* The closing check's residual: a draw planted in the read effect is equal in all three of C8's arms (each binds
+     the Hall), so C8 stays green and C8b, whose baseline binds none, must go red. */
+  readdraw: { edits: [[READ, READ.replace('if (!sport.hall) return;', 'if (!sport.hall) return; Math.random();')]],
+    fail: ['C8b'], hold: ['C1', 'C3', 'C4', 'C4b', 'C5', 'C6', 'C7', 'C8', 'C9', 'C10a', 'C10b', 'C10c', 'J'] },
 };
 const tagOf = name => (name.includes('C1 and C2') ? 'C1' : name.includes('C10: focus') ? 'C10a' : name.includes('C10: from the retirement') ? 'C10b'
   : name.includes('C10: the wall says') ? 'C10c' : name.includes('jersey') ? 'J' : (name.match(/\bC(\d+b?):/) ?? [])[1] ? `C${name.match(/\bC(\d+b?):/)[1]}` : '?');
