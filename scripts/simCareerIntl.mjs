@@ -54,7 +54,7 @@
      12. the weight (Round 1544): src/pages/NbaMyCareer.tsx bundled with
         splitting; the page's static closure, read off the metafile, holds the
         gate and none of the ledger, careerIntl.ts or nbaCareerIntl.ts, which
-        sit in lazy chunks; Round 1557 adds IntlSummersView.tsx to the lazy list.
+        sit in lazy chunks; Round 1557's International view is a named export of IntlSummerResult.tsx.
      9. the case (Round 1557), INTL_CASE_FLEET careers an era (default 200),
         always go and always rest: the hub's tile is the rings plus the case
         plus the medals (counted by the module, not the tile's reader); the
@@ -919,7 +919,7 @@ if (SECTIONS.has('12')) {
   const statics = inputsOf([...seen]);
   const lazies = inputsOf(Object.keys(outs).filter(k => !seen.has(k)));
   const has = (set, f) => [...set].some(x => x.endsWith(f));
-  for (const f of ['src/data/basketballIntl.ts', 'src/lib/careerIntl.ts', 'src/lib/nbaCareerIntl.ts', 'src/components/us-career/IntlCallUpCard.tsx', 'src/components/us-career/IntlSummerResult.tsx', 'src/components/us-career/IntlSummersView.tsx']) {
+  for (const f of ['src/data/basketballIntl.ts', 'src/lib/careerIntl.ts', 'src/lib/nbaCareerIntl.ts', 'src/components/us-career/IntlCallUpCard.tsx', 'src/components/us-career/IntlSummerResult.tsx']) {
     check('12', !has(statics, f), `${f} is in the static graph of /nba-my-career`);
     check('12', has(lazies, f), `${f} is in no lazy chunk, so the page cannot load it`);
   }
@@ -1004,7 +1004,7 @@ if (SECTIONS.has('9') || SECTIONS.has('10')) {
    stripped first: a guard reads the code, not the prose about it. */
 const WORD_FILES = [
   'src/components/us-career/IntlCallUpCard.tsx', 'src/components/us-career/IntlSummerResult.tsx',
-  'src/components/us-career/IntlSummersView.tsx', 'src/components/us-career/TrophyCase.tsx',
+  'src/components/us-career/TrophyCase.tsx',
   'src/lib/nbaCareerIntlGate.ts', 'src/lib/nbaCareerIntl.ts',
 ];
 /* The new words of shared files: the region between the two anchors, both required. */
@@ -1083,9 +1083,9 @@ if (SECTIONS.has('11')) {
     if (a >= 0 && b > a) sources.push([`${f} (Round 1557's region)`, s.slice(a, b)]);
   }
   if (CONTROL === 'realname') {
-    const k = sources.findIndex(([f]) => f.endsWith('IntlSummersView.tsx'));
+    const k = sources.findIndex(([f]) => f.endsWith('IntlSummerResult.tsx'));
     const anchor = '<h3 className="text-lg font-black tracking-tight">🌍 International</h3>';
-    if (k < 0 || sources[k][1].split(anchor).length !== 2) { console.error('control realname cannot run: the International heading is not in IntlSummersView.tsx once'); process.exit(2); }
+    if (k < 0 || sources[k][1].split(anchor).length !== 2) { console.error('control realname cannot run: the International heading is not in IntlSummerResult.tsx once'); process.exit(2); }
     const before = sources[k][1];
     sources[k][1] = before.replace(anchor, `${anchor}\n<p>Kevin Durant welcomes you to the national team.</p>`);
     mustChange('the view', before, sources[k][1]);

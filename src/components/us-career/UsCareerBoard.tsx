@@ -96,8 +96,9 @@ const DirtyMoneyDesk = lazy(() => import('@/components/us-career/DirtyMoneyDesk'
    the moment they belong to, as the sport's whole intl face does. */
 const IntlCallUpCard = lazy(() => import('@/components/us-career/IntlCallUpCard'));
 const IntlSummerResult = lazy(() => import('@/components/us-career/IntlSummerResult'));
-/* Round 1557: the International view behind the Trophy Case's tile, in its own chunk too. */
-const IntlSummersView = lazy(() => import('@/components/us-career/IntlSummersView'));
+/* Round 1557: the International view behind the Trophy Case's tile, a named export of the result's own module
+   (a new module of its own was a new dynamic entry that regrouped the page's static chunks: +1.8K measured). */
+const IntlSummersView = lazy(() => import('@/components/us-career/IntlSummerResult').then(m => ({ default: m.IntlSummersView })));
 
 /** Round 1544: holds the place of the national team's screens while their chunk
  *  or the sport's face is on its way, at about the call card's height, so the
