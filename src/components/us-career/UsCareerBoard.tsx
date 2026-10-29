@@ -96,8 +96,8 @@ const DirtyMoneyDesk = lazy(() => import('@/components/us-career/DirtyMoneyDesk'
    the moment they belong to, as the sport's whole intl face does. */
 const IntlCallUpCard = lazy(() => import('@/components/us-career/IntlCallUpCard'));
 const IntlSummerResult = lazy(() => import('@/components/us-career/IntlSummerResult'));
-/* Round 1557: the International view behind the Trophy Case's tile, a named export of the result's own module
-   (a new module of its own was a new dynamic entry that regrouped the page's static chunks: +1.8K measured). */
+/* Round 1557: the International view behind the Trophy Case's tile, a named export of the result's own module,
+   so the two share one lazy chunk. */
 const IntlSummersView = lazy(() => import('@/components/us-career/IntlSummerResult').then(m => ({ default: m.IntlSummersView })));
 
 /** Round 1544: holds the place of the national team's screens while their chunk

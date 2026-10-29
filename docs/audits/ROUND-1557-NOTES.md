@@ -32,8 +32,9 @@ this file keeps what the code will not say by itself.
   cannot read as nothing, because it runs every render, before the load repair has run on a hand edited save.
 - The case rows come from the sport's face (trophyRows), which the board already holds for any save that
   carries a summer (Round 1544's load hunk). The International view, IntlSummersView, is a named export of
-  src/components/us-career/IntlSummerResult.tsx (props only), so it loads in that lazy chunk: a module of its own
-  was a new dynamic entry, and the page's static chunks regrouped around it (+1.8K measured on a runner).
+  src/components/us-career/IntlSummerResult.tsx (props only), so it loads in that lazy chunk with the result.
+- The weight is in finish-1557.md: measured against the merge commit 60199687a (1544's head plus main), not
+  against 2413427460 alone, because main's own changes since 1544's base move the page's chunks by themselves.
 
 ## The board (src/components/us-career/UsCareerBoard.tsx)
 

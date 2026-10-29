@@ -203,8 +203,8 @@ export default function IntlSummerResult(p: IntlSummerResultProps) {
    each; a summer he went to opens its result (Round 1544's IntlSummerResult,
    played again from the save) with Back to this list, and this list's own
    Back goes to the case. A summer he rested is a tile with no press. Props
-   only (no sport import: simUsCareerWeight section 2), in this chunk (a named
-   export, so no new chunk regroups the static ones: simCareerIntl section 12).
+   only (no sport import: simUsCareerWeight section 2), a named export of this
+   module, so it loads in this lazy chunk (simCareerIntl section 12).
    Every change of view is a new screen and obeys the no scroll rule. */
 type Went = Extract<IntlSummerEntry, { went: true }>;
 
