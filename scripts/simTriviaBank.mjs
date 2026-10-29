@@ -71,12 +71,18 @@ import path from 'node:path';
 import { fileURLToPath, pathToFileURL } from 'node:url';
 
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
-const CONTROLS = ['ties', 'namesake', 'tense', 'postense', 'family', 'legacy', 'rulec'];
+const CONTROLS = ['ties', 'namesake', 'tense', 'postense', 'family', 'legacy', 'rulec', 'short', 'redeal', 'dupe'];
 const CONTROL = process.env.TRIVIA_CONTROL || '';
 if (CONTROL && !CONTROLS.includes(CONTROL)) { console.error(`TRIVIA_CONTROL=${CONTROL} is not a control this harness knows`); process.exit(1); }
 const PRINT_LEGACY = process.argv.includes('--print-legacy');
 const LADDERS = Number(process.env.TRIVIA_LADDERS || 5000);
 const UNLIMITED = Number(process.env.TRIVIA_UNLIMITED || 1000);
+/* Round 1573: the eight draw arm of section 9 from a file as it is (the one time tie to origin/main's own bank),
+   and the big fleet mode (TRIVIA_BIG=unlimited:<from>-<to> or daily:<fromOffset>-<toOffset>) */
+const ARM_FILE = process.env.TRIVIA_ARM_FILE ? path.resolve(process.env.TRIVIA_ARM_FILE) : '';
+const BIG = process.env.TRIVIA_BIG || '';
+const BIG_RANGE = /^(unlimited|daily):(\d+)-(\d+)$/.exec(BIG);
+if (BIG && !BIG_RANGE) { console.error(`TRIVIA_BIG=${BIG} is not unlimited:<from>-<to> or daily:<fromOffset>-<toOffset>`); process.exit(1); }
 let failures = 0;
 const fail = m => { failures += 1; console.error('  FAIL: ' + m); };
 const T0 = Date.now();
@@ -119,16 +125,26 @@ const SWAPS = {
   family: ['  const family = rules.oneAnswer ? clubFamily(correct.club as string) : null;\n', '  const family = null;\n', 'a reserve side and its first team can be offered together again'],
   postense: ['? `Who was listed at ${correct.position} in the ${CURRENT_YEAR} market values?`', '? `Which of these players plays ${correct.position}?`', 'the position question says "plays" again'],
   legacy: ['return dateStr < ONE_ANSWER_FROM ? LEGACY : ONE_ANSWER;', 'return ONE_ANSWER;', 'dates before ONE_ANSWER_FROM get the new rules'],
+  /* Round 1573, section 9 */
+  short: ['export const LADDER_ATTEMPTS = 64;', 'export const LADDER_ATTEMPTS = 8;', 'a step gives up after eight draws again'],
+  redeal: ['q = generateQuestion(pool, i, rng, [], rules);', "q = generateQuestion(pool, i, rng, ['ballon-dor'], rules);", 'every step draws from five types, so a ladder that was whole is dealt anew'],
+  dupe: ['if (q && !seenQuestions.has(q.question)) break;', 'if (q) break;', 'a step keeps a question the ladder already holds'],
 };
+/* the three controls of section 9 change the cap or the loop, so the eight draw arm is built from the bank as it was
+   before the swap; under every other control the arm is the controlled bank with a cap of 8, so head and arm differ
+   by the cap alone */
+const ARM_FROM_PRISTINE = ['short', 'redeal', 'dupe'];
 /* a control on the namesake generator edits a copy of it, which section 6 then derives the list from */
 const GEN_SWAPS = {
   rulec: ['if (seen.size >= 2) {', 'if (false) {', "the generator's rule C (two different rows in one season are two men) is gone"],
 };
 const tmp = fs.mkdtempSync(path.join(os.tmpdir(), 'dukb-trivia-'));
 let bankSource = fs.readFileSync(BANK_FILE, 'utf8').replace(/\r\n/g, '\n');
+const pristineSource = bankSource;
 if (SWAPS[CONTROL]) {
   const [from, to, what] = SWAPS[CONTROL];
   if (!bankSource.includes(from)) { console.error(`control cannot run: the bank does not contain ${JSON.stringify(from.trim())}`); process.exit(1); }
+  if (ARM_FROM_PRISTINE.includes(CONTROL) && bankSource.split(from).length !== 2) { console.error(`control cannot run: the bank holds ${JSON.stringify(from)} more than once`); process.exit(1); }
   bankSource = bankSource.replace(from, to);
   console.log(`NEGATIVE CONTROL ON: ${what}`);
 }
@@ -272,6 +288,126 @@ function mulberry32(seed) {
 const dateSeed = d => parseInt(d.replace(/-/g, ''), 10);
 const addDays = (d, k) => new Date(Date.parse(`${d}T12:00:00Z`) + k * 86400000).toISOString().slice(0, 10);
 
+/* ---------------- 9, the tools: the eight draw arm, the stress pools and the per ladder checks ---------------- */
+/* Round 1573. A step of generateQuestionLadder throws back a question whose text the ladder already holds, and it
+   used to give up after eight draws, so once in a long while a ladder came back 14 long: the page's error screen.
+   The cap is LADDER_ATTEMPTS now. Section 9 deals every fleet twice with the same seed or date, through the head
+   and through the eight draw arm (the same bank with a cap of 8, or TRIVIA_ARM_FILE as it is), and holds:
+     (i)   every head ladder is 15 long;
+     (ii)  where the arm is 15 long, the head is JSON identical to it (a ladder that was whole is dealt as before);
+     (iii) where the arm is short, the head equals it up to the first dropped step (the rescue starts there);
+     (iv)  every head ladder holds 15 distinct question texts;
+     (v)   the questions are sound: the full one right answer checks on the real and degraded pools under the new
+           rules, the structural part (four distinct options, the right one in range, a known template) elsewhere;
+     (vi)  the baseline sees the defect: the arm drops steps on the planted fleets, and at every KNOWN_SHORT pin. */
+const CAP_LINE = 'export const LADDER_ATTEMPTS = 64;';
+async function buildArm() {
+  let src;
+  let what;
+  if (ARM_FILE) {
+    src = fs.readFileSync(ARM_FILE, 'utf8').replace(/\r\n/g, '\n');
+    what = `${fwd(ARM_FILE)} as it is`;
+  } else {
+    const fromText = ARM_FROM_PRISTINE.includes(CONTROL) ? pristineSource : bankSource;
+    if (fromText.split(CAP_LINE).length !== 2) return { error: `the bank does not hold ${JSON.stringify(CAP_LINE)} once, so the eight draw arm cannot be built from it` };
+    src = fromText.replace(CAP_LINE, 'export const LADDER_ATTEMPTS = 8;');
+    what = `the ${ARM_FROM_PRISTINE.includes(CONTROL) ? 'bank as it was before the control' : CONTROL ? 'controlled bank' : 'head bank'} with a cap of 8`;
+  }
+  if (/from '\.\.?\//.test(src)) return { error: 'the arm imports by relative path, so a copy of it cannot be bundled' };
+  const dir = fs.mkdtempSync(path.join(tmp, 'arm-'));
+  fs.writeFileSync(path.join(dir, 'triviaQuestionBank.ts'), src);
+  fs.writeFileSync(path.join(dir, 'entry.ts'), `export * from '${fwd(path.join(dir, 'triviaQuestionBank.ts'))}';\n`);
+  await build({ entryPoints: [path.join(dir, 'entry.ts')], bundle: true, format: 'esm', platform: 'node', outfile: path.join(dir, 'bundle.mjs'), logLevel: 'error', absWorkingDir: ROOT,
+    alias: { '@/integrations/supabase/client': STUB, '@': path.join(ROOT, 'src') } });
+  return { A: await import(pathToFileURL(path.join(dir, 'bundle.mjs')).href), src, what };
+}
+/* the stress pools: fixtures, never shipped */
+/* degraded: what loadTriviaPool hands the page when the ballon_dor and shirt_number_puzzles reads fail (both fetchers
+   return [] on an error and isTriviaPoolPlayable asks only for market rows), so it is reachable in production */
+const DEGRADED = { market, ballonDor: [], shirtNumbers: [] };
+/* planted: degraded with two position labels only, alternating by index in fetchMarketPool's order (with one label
+   the position question never builds, since its wrong options come from other positions). Three types then have
+   few texts, so the eight draw arm drops a step often. Altered rows, never shipped. */
+const PLANTED = { market: market.map((r, i) => ({ ...r, position: i % 2 === 0 ? 'Central Midfield' : 'Centre-Back' })), ballonDor: [], shirtNumbers: [] };
+/* driver: the synthetic pool of src/test/dailyReload/sports-millionaire.driver.tsx (lines 30 to 59 at 692590145),
+   copied, because that test deals it on the real clock and throws on a 14 question ladder */
+const D_CLUBS = ['Fixture Athletic', 'Probe United', 'Harness Town', 'Driver City', 'Mock Rovers'];
+const D_NATIONS = ['Fixtureland', 'Probia', 'Harnessia', 'Drivonia', 'Mockstan'];
+const D_POSITIONS = ['GK', 'CB', 'CM', 'ST'];
+const DRIVER = {
+  market: Array.from({ length: 320 }, (_, i) => ({ player_name: `Fixture Probe ${i + 1}`, position: D_POSITIONS[i % D_POSITIONS.length], nationality: D_NATIONS[i % D_NATIONS.length], club: D_CLUBS[i % D_CLUBS.length], market_value_usd: 200_000_000 - i * 500_000 })),
+  ballonDor: Array.from({ length: 30 }, (_, i) => ({ year: 1996 + i, rank: 1, player_name: `Fixture Laureate ${i + 1}`, nationality: D_NATIONS[i % D_NATIONS.length], club: D_CLUBS[i % D_CLUBS.length], award_type: 'Men' })),
+  shirtNumbers: Array.from({ length: 40 }, (_, i) => ({ player_name: `Fixture Shirt ${i + 1}`, club: D_CLUBS[i % D_CLUBS.length], league: 'Fixture League', nationality: D_NATIONS[i % D_NATIONS.length], kit_number: i + 1 })),
+};
+const DRIVER_FROM = '2026-09-25';
+/* what a KNOWN_SHORT pin depends on: the arm's code with its comments and its cap taken out (so the head's arm and
+   origin/main's own bank read the same), the four fixture files, the namesake list and the driver pool */
+const capFree = s => stripComments(s).replace(/^[ \t]*export const LADDER_ATTEMPTS = \d+;[ \t]*$/m, '').replace(/attempts < LADDER_ATTEMPTS/g, 'attempts < 8').split('\n').map(l => l.trimEnd()).filter(Boolean).join('\n');
+function pinSignature(armSrc) {
+  const h = crypto.createHash('sha256').update(capFree(armSrc));
+  for (const f of ['scripts/data/alphabetSprintPool.json', 'scripts/data/auctionMarketRows.json', 'scripts/data/stockMarketPools.json', 'scripts/data/ballonDorVerified2026-09.json', 'src/data/marketNamesakes.json']) h.update(read(f));
+  return h.update(JSON.stringify(DRIVER)).digest('hex').slice(0, 16);
+}
+const isType = (q, want) => TEMPLATES.some(([type, re]) => type === want && re.test(q.question));
+function newFleet(name, truth) {
+  return { name, truth, ladders: 0, armShort: 0, headShort: 0, identical: 0, rescued: 0, dropped: { easy: 0, medium: 0, hard: 0 }, worthBefore: 0, positionsBefore: 0, shortKeys: [], fails: {}, tally: newTally() };
+}
+function flunk(f, check, key) { const b = (f.fails[check] ??= { n: 0, keys: [] }); b.n += 1; if (b.keys.length < 3 && !b.keys.includes(key)) b.keys.push(key); }
+/* the first index where the arm's ladder is missing a step, or holds a later step than its place */
+const firstDrop = ladder => { let k = 0; while (k < ladder.length && ladder[k].difficulty === k + 1) k += 1; return k; };
+function deal(f, key, head, arm) {
+  f.ladders += 1;
+  if (head.length !== 15) { f.headShort += 1; flunk(f, '(i) the head ladder is short of 15', key); }
+  if (new Set(head.map(q => q.question)).size !== head.length) flunk(f, '(iv) the head ladder repeats a question text', key);
+  if (arm.length === 15) {
+    if (JSON.stringify(head) === JSON.stringify(arm)) f.identical += 1;
+    else flunk(f, '(ii) the head moved a ladder the eight draw arm deals whole', key);
+  } else {
+    /* a 15 long head is built at difficulty i on rung i, so the weight of (iii) is the prefix */
+    const k = firstDrop(arm);
+    const before = arm.slice(0, k);
+    f.armShort += 1;
+    f.shortKeys.push(`${key} step ${k + 1}`);
+    f.dropped[bandOfDifficulty(k + 1)] += 1;
+    if (before.some(q => isType(q, 'worth'))) f.worthBefore += 1;
+    f.positionsBefore += before.filter(q => isType(q, 'position')).length;
+    if (JSON.stringify(head.slice(0, k)) !== JSON.stringify(before)) flunk(f, '(iii) the head differs from the arm before the first dropped step', key);
+    else if (head.length === 15) f.rescued += 1;
+  }
+  for (const q of head) {
+    if (f.truth === 'full') { checkQuestion(q, f.tally); continue; }
+    if (q.options.length !== 4 || new Set(q.options).size !== 4 || !(q.correctIndex >= 0 && q.correctIndex < 4)) flunk(f, '(v) broken options', key);
+    if (!TEMPLATES.some(([, re]) => re.test(q.question))) flunk(f, '(v) unknown template', key);
+  }
+}
+function settle(f, listShorts) {
+  const why = f.armShort ? `; of the arm's short ladders ${f.worthBefore} held a worth the most question before the drop, with ${(f.positionsBefore / f.armShort).toFixed(1)} position questions on average` : '';
+  console.log(`   ${f.name}: ${f.ladders} ladders, arm short ${f.armShort} (dropped step easy ${f.dropped.easy}, medium ${f.dropped.medium}, hard ${f.dropped.hard}), head short ${f.headShort}, identical ${f.identical}, rescued ${f.rescued}${why} [${((Date.now() - T0) / 1000).toFixed(1)}s]`);
+  if (f.armShort && listShorts) console.log(`      arm short at: ${f.shortKeys.slice(0, listShorts).join(', ')}${f.shortKeys.length > listShorts ? ', ...' : ''}`);
+  for (const [check, b] of Object.entries(f.fails)) fail(`9 ${f.name}: ${b.n} x ${check} (first: ${b.keys.join(', ')})`);
+  if (f.truth === 'full') {
+    mustBeClean(`9 ${f.name}`, f.tally);
+    for (const [k, v] of Object.entries(f.tally.examples)) console.log(`      e.g. ${k}: ${v}`);
+  }
+}
+
+/* ---------------- 9, the big fleet: TRIVIA_BIG deals one range of the real pool and stops (sections 2 to 9 skipped) ---------------- */
+if (BIG_RANGE) {
+  const [, kind, from, to] = BIG_RANGE;
+  const arm = await buildArm();
+  if (arm.error) { console.error(`cannot run the big fleet: ${arm.error}`); process.exit(1); }
+  section(`9, big fleet: the real pool, ${kind} ${from} to ${to}, the head against ${arm.what}`);
+  const f = newFleet(`real ${kind} ${from} to ${to}`, 'full');
+  for (let k = Number(from); k <= Number(to); k++) {
+    if (kind === 'unlimited') deal(f, `seed ${k}`, T.generateQuestionLadder(POOL, 15, mulberry32(k)), arm.A.generateQuestionLadder(POOL, 15, mulberry32(k)));
+    else { const d = addDays(T.ONE_ANSWER_FROM, k); deal(f, d, T.generateDailyLadder(POOL, d, 15), arm.A.generateDailyLadder(POOL, d, 15)); }
+    if ((k - Number(from) + 1) % 5000 === 0) section(`   ${k - Number(from) + 1} dealt, arm short so far ${f.armShort}`);
+  }
+  settle(f, Infinity);
+  console.log(`\nsimTriviaBank big fleet: ${f.ladders} ladders, arm short ${f.armShort}, head short ${f.headShort}, identical ${f.identical}${failures ? `, ${failures} failure(s)` : ''}`);
+  process.exit(failures === 0 ? 0 : 1);
+}
+
 /* ---------------- 2. the daily, from the first date dealt under the new rules ---------------- */
 section(`2. ${LADDERS} daily ladders from ${T.ONE_ANSWER_FROM}, and the same dates under the old rules as the baseline`);
 const daily = newTally(), before = newTally();
@@ -407,6 +543,55 @@ console.log(`   ${CALLS} club questions each: old rules offered the partner club
 if (plantedTally.old === 0) fail('the old rules never offered a partner club in the planted pool, so section 8 cannot see one');
 if (plantedTally.now > 0) fail(`the new rules offered a reserve side beside its first team ${plantedTally.now} times`);
 if (plantedTally.built < CALLS) fail(`the new rules built ${plantedTally.built} of ${CALLS} club questions in the planted pool`);
+
+/* ---------------- 9. every ladder is fifteen long, and a ladder that was whole is dealt exactly as before ---------------- */
+/* the tools and the pools are above section 2; this section names its seeds and never draws Math.random, and it runs
+   after section 3, whose unlimited fleet does */
+/* every ladder the eight draw arm is known to drop a step on outside the default fleets, as [pool, fleet, seed or
+   date, the step it drops], measured on the pin signature below (a pin on any other signature is stale) */
+const KNOWN_SHORT = { signature: '', measured: '', pins: [] };
+/* (vi) the planted fleets must show the defect on the arm: floor from the measured counts, see the header */
+const PLANTED_FLOOR = 5;
+section('9. every ladder is fifteen long: each fleet through the head and through the eight draw arm, same seed or date');
+const arm = await buildArm();
+if (arm.error) fail(`section 9 cannot run: ${arm.error}`);
+else {
+  const signature = pinSignature(arm.src);
+  console.log(`   the arm: ${arm.what}; pin signature ${signature}`);
+  const POOLS = { real: POOL, degraded: DEGRADED, planted: PLANTED, driver: DRIVER };
+  const dealUnlimited = (P, seed) => [T.generateQuestionLadder(P, 15, mulberry32(seed)), arm.A.generateQuestionLadder(P, 15, mulberry32(seed))];
+  const dealDaily = (P, d) => [T.generateDailyLadder(P, d, 15), arm.A.generateDailyLadder(P, d, 15)];
+  /* [pool, fleet, ladders, which checks of (v)] */
+  const FLEETS = [
+    ['planted', 'unlimited', 1000, 'structural'], ['planted', 'daily', 1000, 'structural'],
+    ['degraded', 'unlimited', 1000, 'full'], ['degraded', 'daily', 500, 'full'],
+    ['real', 'unlimited', 500, 'full'], ['real', 'daily', 500, 'full'],
+    ['driver', 'daily', 3700, 'structural'],
+  ];
+  const fleets = {};
+  for (const [pool, kind, n, truth] of FLEETS) {
+    const f = (fleets[`${pool} ${kind}`] = newFleet(`${pool} ${kind}`, truth));
+    const from = pool === 'driver' ? DRIVER_FROM : T.ONE_ANSWER_FROM;
+    for (let k = 0; k < n; k++) {
+      if (kind === 'unlimited') deal(f, `seed ${k + 1}`, ...dealUnlimited(POOLS[pool], k + 1));
+      else { const d = addDays(from, k); deal(f, d, ...dealDaily(POOLS[pool], d)); }
+    }
+    settle(f, pool === 'planted' ? 6 : Infinity);
+  }
+  /* the old rules path too: the dates before ONE_ANSWER_FROM, structural checks only (LEGACY deals present tense by design) */
+  const legacy = newFleet('real legacy daily', 'structural');
+  for (let d = DRIVER_FROM; d < T.ONE_ANSWER_FROM; d = addDays(d, 1)) deal(legacy, d, ...dealDaily(POOL, d));
+  settle(legacy, Infinity);
+  const known = newFleet('KNOWN_SHORT pins', 'structural');
+  if (KNOWN_SHORT.pins.length && signature !== KNOWN_SHORT.signature) fail(`KNOWN_SHORT stale: re-measure with TRIVIA_BIG (the pins were measured on ${KNOWN_SHORT.signature}, this tree reads ${signature})`);
+  for (const [pool, kind, key, step] of KNOWN_SHORT.pins) {
+    const [head, armLadder] = kind === 'unlimited' ? dealUnlimited(POOLS[pool], key) : dealDaily(POOLS[pool], key);
+    deal(known, `${pool} ${kind} ${key}`, head, armLadder);
+    if (signature === KNOWN_SHORT.signature && (armLadder.length === 15 || firstDrop(armLadder) + 1 !== step)) fail(`(vi) the eight draw arm no longer drops step ${step} at the pin ${pool} ${kind} ${key}, so section 9 cannot see the defect there`);
+  }
+  if (KNOWN_SHORT.pins.length) settle(known, Infinity);
+  for (const name of ['planted unlimited', 'planted daily']) if (fleets[name].armShort < PLANTED_FLOOR) fail(`(vi) the eight draw arm dropped a step on ${fleets[name].armShort} ${name} ladders, under the floor of ${PLANTED_FLOOR}, so section 9 may be blind to the defect`);
+}
 
 console.log(`\nsimTriviaBank: ${failures === 0 ? 'all checks passed' : `${failures} failure(s)`}${CONTROL ? ` (NEGATIVE CONTROL ${CONTROL} ON)` : ''}`);
 process.exit(failures === 0 ? 0 : 1);
