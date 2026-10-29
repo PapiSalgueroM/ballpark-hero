@@ -1,0 +1,20 @@
+ctl-arod exit=1 1s | US_CONN_CONTROL=arod fired its own rule 2 time(s): refuted x1, not-a-member x1 for Alex Rodriguez (all findings: refuted 1, no-fact 1, not-a-member 6, second-fit 1, watch
+facts exit=0 1s | simUsConnectionsFacts: green. Every Baseball, NFL and NHL Connections group is held to the record, and no board has a second right answer the record can see (other tiles 
+ctl-bell exit=1 1s | US_CONN_CONTROL=bell fired its own rule 1 time(s): second-fit x1 for Le'Veon Bell (all findings: no-fact 1, second-fit 1; 2 failures in all)
+ctl-karlsson exit=1 1s | US_CONN_CONTROL=karlsson fired its own rule 1 time(s): watch x1 for Erik Karlsson (all findings: no-fact 1, watch 1; 2 failures in all)
+ctl-twice exit=1 1s | US_CONN_CONTROL=twice fired its own rule 1 time(s): twice x1 for Rich Gossage (all findings: no-fact 1, twice 1; 2 failures in all)
+ctl-onehost exit=1 1s | US_CONN_CONTROL=onehost fired its own rule 1 time(s): one-host x1 for Derek Jeter | Won Rookie of the Year (all findings: one-host 1; 1 failures in all)
+ctl-fingers exit=1 1s | US_CONN_CONTROL=fingers fired its own rule 1 time(s): other-unknown x1 for baseball (all findings: no-fact 1, other-unknown 1; 2 failures in all)
+ctl-ohtani exit=1 1s | US_CONN_CONTROL=ohtani fired its own rule 1 time(s): watch x1 for Shohei Ohtani (all findings: watch 1; 1 failures in all)
+ctl-undate exit=1 1s | US_CONN_CONTROL=undate fired its own rule 1 time(s): trade x1 for Lamar Jackson (all findings: trade 7; 7 failures in all)
+ctl-frobinson exit=1 1s | US_CONN_CONTROL=frobinson fired its own rule 1 time(s): gray-back x1 for Frank Robinson (all findings: gray-back 1, other-unknown 1; 2 failures in all)
+ctl-bogus exit=2 1s | unknown US_CONN_CONTROL=nosuchcontrol
+ctl-unjudged exit=1 1s | US_CONN_CONTROL=unjudged fired its own rule 1 time(s): unjudged x1 for Played in Japan before MLB (all findings: unjudged 1; 2 failures in all)
+dealt1567 exit=0 0s | 2026-12-12: baseball bconn-007 of 60 RELABELLED; nfl nflconn-004 of 4 RELABELLED; nhl nhlconn-004 of 4 RELABELLED: clear
+migcheck exit=0 1s | supabase/migrations/20261029120000_round_1567_us_connections_gray.sql matches the files
+conn1553 exit=0 1s | simConnectionsFacts: green. Every claim this round checked stands on two hosts and no rebuilt board has a second answer.
+fair exit=0 1s | simFairPuzzles: green. No board has a new second right answer; only the soccer findings the ledger owes to part B remain.
+dealfleet exit=0 2s | 2026-12-06: baseball bconn-041 of 60; nfl nflconn-003 of 4; nhl nhlconn-003 of 4: clear
+norival exit=0 14s | No rival product names found. 0 findings.
+vitest exit=0 23s |    Duration  22.36s (transform 4.32s, setup 376ms, collect 5.64s, tests 22.30s, environment 1.24s, prepare 376ms)
+tsc exit=0 55s | 

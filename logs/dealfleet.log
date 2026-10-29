@@ -1,0 +1,8 @@
+base exit 1 lines 400; head exit 1 lines 400
+2026-10-29 bconn-011 of 60 nflconn-004 of 4 nhlconn-004 of 4
+2026-10-30 bconn-051 of 60 nflconn-001 of 4 nhlconn-001 of 4
+2026-10-31 bconn-054 of 60 nflconn-004 of 4 nhlconn-004 of 4
+DEAL_SAME over 400 days
+DEFAULT_SAME e1=1 e2=1 lines 45
+2026-12-05: baseball bconn-033 of 60; nfl nflconn-001 of 4; nhl nhlconn-001 of 4: clear
+2026-12-06: baseball bconn-041 of 60; nfl nflconn-003 of 4; nhl nhlconn-003 of 4: clear
