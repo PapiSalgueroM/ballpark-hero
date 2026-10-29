@@ -123,7 +123,7 @@ const flat = (s: string) => dbFold(s).replace(/[^a-z0-9]+/g, " ").replace(/\s+/g
    equality finds nobody, so the indexed lookup still serves almost everyone. */
 const likePattern = (s: string) => flat(s).replace(/ /g, "_");
 
-/** The thirty clubs the game offers, against the exact strings the table uses. */
+/** Both club catalogues, against the exact strings the table uses. */
 const CLUB_STRINGS: Record<string, string[]> = {
   "real madrid": ["Real Madrid"],
   "barcelona": ["FC Barcelona"],
@@ -155,6 +155,36 @@ const CLUB_STRINGS: Record<string, string[]> = {
   "lyon": ["Olympique Lyon"],
   "celtic": ["Celtic FC"],
   "galatasaray": ["Galatasaray"],
+  "brighton hove albion": ["Brighton & Hove Albion"],
+  "afc bournemouth": ["AFC Bournemouth"],
+  "brentford fc": ["Brentford FC"],
+  "crystal palace": ["Crystal Palace"],
+  "everton fc": ["Everton FC"],
+  "fulham fc": ["Fulham FC"],
+  "leeds united": ["Leeds United"],
+  "nottingham forest": ["Nottingham Forest"],
+  "real betis balompie": ["Real Betis Balompié"],
+  "villarreal cf": ["Villarreal CF"],
+  "real sociedad": ["Real Sociedad"],
+  "celta de vigo": ["Celta de Vigo"],
+  "ss lazio": ["SS Lazio"],
+  "acf fiorentina": ["ACF Fiorentina"],
+  "bologna fc 1909": ["Bologna FC 1909"],
+  "udinese calcio": ["Udinese Calcio"],
+  "vfb stuttgart": ["VfB Stuttgart"],
+  "borussia monchengladbach": ["Borussia Mönchengladbach"],
+  "sc freiburg": ["SC Freiburg"],
+  "losc lille": ["LOSC Lille"],
+  "stade rennais fc": ["Stade Rennais FC"],
+  "ogc nice": ["OGC Nice"],
+  "feyenoord rotterdam": ["Feyenoord Rotterdam"],
+  "az alkmaar": ["AZ Alkmaar"],
+  "rangers fc": ["Rangers FC"],
+  "fenerbahce": ["Fenerbahce"],
+  "besiktas jk": ["Besiktas JK"],
+  "cr flamengo": ["CR Flamengo"],
+  "sociedade esportiva palmeiras": ["Sociedade Esportiva Palmeiras"],
+  "cf america": ["CF América"],
 };
 
 /* The only nation the squad table spells differently to the game's flag strip.

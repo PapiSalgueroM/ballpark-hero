@@ -1,0 +1,417 @@
+{
+  "schema": 1,
+  "bound": true,
+  "phase": "all-pass",
+  "branch": "codex/build-xi-mixed60-positive-v2-post-bs-20261029",
+  "parent": "601435944bef57aa0557884bbe16fde55e64107c",
+  "parentTree": "d88b925148444ce88b63557472334dbd486e1b16",
+  "parentBodies": 5452,
+  "sourceBodies": 5458,
+  "pins": [
+    {
+      "path": "package-lock.json",
+      "git": "97d6f12a052f25f400462938c241789a083f0bfe",
+      "bytes": 309049,
+      "sha256": "c7e3867eabf0bfa03a8aa6a5e601b0050b937ed210d48c6bbd241019e3c9ea76",
+      "mode": "100644"
+    },
+    {
+      "path": "package.json",
+      "git": "2ff64986fb76ebc51b706f2fd24765768874008a",
+      "bytes": 3495,
+      "sha256": "acfe14626dea53cf5f9c5e0286b766a22237656b52aac4c888b080873ac90e31",
+      "mode": "100644"
+    },
+    {
+      "path": "scripts/lib/offlineTransport.cjs",
+      "git": "0fda542a2649fe5da937c6976fd0f5b6073e74b6",
+      "bytes": 10660,
+      "sha256": "e60ff1534307e449ccef598e3b7470dcba58681b82cea4005cec7319f14f9221",
+      "mode": "100644"
+    },
+    {
+      "path": "src/components/lineup/TeamSpinner.tsx",
+      "git": "5c38f95f4c4b2ab2901439b7a271fd3100f04a4d",
+      "bytes": 4268,
+      "sha256": "fb71882f54118c26299ce7f62ace03d3c058d943c3521231bb850b9c928270bd",
+      "mode": "100644"
+    },
+    {
+      "path": "src/data/lineupTeams.ts",
+      "git": "da5cc8938eadd71b9996341ed75bf8df943827dd",
+      "bytes": 9241,
+      "sha256": "414cca7a491b5c4a1ebcddec0cf58f9fac697e796b513ab394217412c41f7806",
+      "mode": "100644"
+    },
+    {
+      "path": "src/hooks/useLineupBuilder.ts",
+      "git": "4d1ed92f469b5161aab44875d98f3a096a828c8a",
+      "bytes": 20253,
+      "sha256": "31d665d7319852cdd7a49c0f238730e615a93bf1a9eab2a6ef75bdad1457bd88",
+      "mode": "100644"
+    },
+    {
+      "path": "src/lib/positionFit.ts",
+      "git": "868a0f0f92fedfde8f09d8fe31a4495f4965272e",
+      "bytes": 10271,
+      "sha256": "5da6886100bc49248424a8aebab205f656091d4d7894909e07654c0259d37e22",
+      "mode": "100644"
+    },
+    {
+      "path": "src/lib/validatorClient.ts",
+      "git": "8a0dad494b1ef8ca60838b918d7e011831203ec7",
+      "bytes": 4916,
+      "sha256": "75af0951f5a87c5fd7da80f557547f5b35e04c3fccc19d6811de9b87c96b471b",
+      "mode": "100644"
+    },
+    {
+      "path": "src/pages/LineupBuilder.tsx",
+      "git": "6560dfa0caeb8fb776017478a9ab173bffb0f4e2",
+      "bytes": 28209,
+      "sha256": "df29411dae406d4d4349beb363ac1baa48fdbf4cc6eb36ac56f83ef6d12a27b0",
+      "mode": "100644"
+    },
+    {
+      "path": "src/test/setup.ts",
+      "git": "df00cdf5c54e8c8efc71e46d7585ae76acb4fc8d",
+      "bytes": 847,
+      "mode": "100644"
+    },
+    {
+      "path": "src/types/lineupBuilder.ts",
+      "git": "4fd4b014374ec316497b59fbd1c17cfda9007b35",
+      "bytes": 4306,
+      "sha256": "1c1ff7bef638b7ef39ed8cbb590774bbc8714b40cb2c9cdaf8bdb85790c8fa2d",
+      "mode": "100644"
+    },
+    {
+      "path": "supabase/functions/validate-player/index.ts",
+      "git": "ec5289e0e750a14db48c57900367a6b8e86b0003",
+      "bytes": 23734,
+      "sha256": "da610b1902f828deac432fbf4c4318708830247c9cccaee3bdc3584fc2190d01",
+      "mode": "100644"
+    },
+    {
+      "path": "tsconfig.app.json",
+      "git": "51f581dd91641b4c1f1219f646788e73cf6bf00c",
+      "bytes": 680,
+      "mode": "100644"
+    },
+    {
+      "path": "vitest.config.ts",
+      "git": "ed2a9dc677f77dfe95c061064eeff5782b856864",
+      "bytes": 5364,
+      "mode": "100644"
+    },
+    {
+      "path": "scripts/qa/buildXiMixed60.mjs",
+      "git": "d1739de7158435b420dc6c4e83fb69ea063ac895",
+      "bytes": 11535,
+      "sha256": "eda9775ebd482e23bc0c418cd0e515ea28226e3dc4116de6ac7ca5e91b39450a",
+      "mode": "100644"
+    },
+    {
+      "path": "src/test/lineupMixedClubs.test.tsx",
+      "git": "9fd2701c96fbc2a4bbb35894f839c5f3b8bcca32",
+      "bytes": 11826,
+      "sha256": "4df963ed6f4bcd3209edf1d9af8c6a01f4a8927c28734eb15648e117c59bb4df",
+      "mode": "100644"
+    },
+    {
+      "path": "src/components/game/PlayerAutocomplete.tsx",
+      "git": "1ba70bc2e8134f1f3c196ab37d5b7b2eafd61d29",
+      "bytes": 27664,
+      "sha256": "7c11c31109912ccb50b23817b53c6c1e0c2ac809d6d7f9ce525fed2c36ffbe82",
+      "mode": "100644"
+    },
+    {
+      "path": "src/components/lineup/FormationPitch.tsx",
+      "git": "fa1efde4299bc63e12f3a07866f0ceec817b3678",
+      "bytes": 3151,
+      "sha256": "aec666b483c94b6b9d1211c4cd063beef997c4e2ac4156d409976c8821c2f9b6",
+      "mode": "100644"
+    },
+    {
+      "path": "src/components/lineup/LineupHowToPlay.tsx",
+      "git": "d59b8988df15a5ed1efd1d7cf2f931962c57263d",
+      "bytes": 6848,
+      "sha256": "faba8963f12aa806d5b988d000717ce7ccb24cdf4556e7c53c6bb1459a58c7a7",
+      "mode": "100644"
+    },
+    {
+      "path": "src/lib/playerSearch.ts",
+      "git": "0d19f2c23735eb30512dc7fc3a447eacef5e128f",
+      "bytes": 40727,
+      "sha256": "f9727a18b786a23e5d9e1849abff8a676dcd6aec10058ccd2e857473bb5fdbcd",
+      "mode": "100644"
+    },
+    {
+      "path": "src/integrations/supabase/client.ts",
+      "git": "d055e064f5c1c0c90230ca562966ee04dfdcd3ce",
+      "bytes": 1247,
+      "sha256": "c8bd6d5ebf2610a34eda085224ae087293162b1fda6d4b7d03ae51d77e369684",
+      "mode": "100644"
+    },
+    {
+      "path": "src/lib/worldXi.ts",
+      "git": "d30a6de90d868e789a76d21cf8b87696786f89d2",
+      "bytes": 67740,
+      "sha256": "2f8d2bce7ca13ff998217005066e3c68e6c4bf7bf24e63da750378badba2fd23",
+      "mode": "100644"
+    },
+    {
+      "path": "src/components/seo/GameSeoContent.tsx",
+      "git": "99641cb799293a9c782307b058910d918db857b1",
+      "bytes": 20254,
+      "sha256": "23230e28533360d9b0661a6e47c88e63639fed624727ad87e3d5f34210d84212",
+      "mode": "100644"
+    },
+    {
+      "path": "src/components/game/GameShell.tsx",
+      "git": "fead16a74355c3e553a936c98f587da126d60f1c",
+      "bytes": 6391,
+      "sha256": "cf0204bfcae8c5ecd300780fcff7fbefe4f03552db65a3d5bf5b16d3ec09d18f",
+      "mode": "100644"
+    },
+    {
+      "path": "src/lib/safeStorage.ts",
+      "git": "43ab9a6ed454594bf4e0e2a4a20edc5e45cf7683",
+      "bytes": 19906,
+      "sha256": "3be2f5e5de4da6f6137e5aad30482da3313965f71169fb965765e37c3206225a",
+      "mode": "100644"
+    },
+    {
+      "path": "src/App.tsx",
+      "git": "b988c18c60d3fd7e1a010cb277a39736d07135e8",
+      "bytes": 35893,
+      "sha256": "d62d475ea574aed94597614342540ea7940d2bbe1f2821b286c471ccee75e2a4",
+      "mode": "100644"
+    },
+    {
+      "path": "src/index.css",
+      "git": "775df500bd7c9730e5b04aedd3d6b2a1564d49b4",
+      "bytes": 18051,
+      "sha256": "ada9cc819db63d0e2eb013bd3c29eec16877e2a30166c390b81901142369fef3",
+      "mode": "100644"
+    },
+    {
+      "path": "scripts/lib/playwrightLoader.mjs",
+      "git": "4f7739e217e0a47ee82e6bfc8be1c04bed17454a",
+      "bytes": 2777,
+      "sha256": "94a07179be7ca6b9562d118b52c2d5d0dff0b6b2e29e49e4fea16fa2defb5a93",
+      "mode": "100644"
+    },
+    {
+      "path": "scripts/simValidatePlayerRecords.mjs",
+      "git": "56a809d47318ae2d206128f4f4d114f0be6121e1",
+      "bytes": 24573,
+      "sha256": "f3123e1b8e081347dedc7e9d069b7a38fb4d94567837a3710cc8df677741debb",
+      "mode": "100644"
+    },
+    {
+      "path": "scripts/qa/buildXiMixed60Stages.mjs",
+      "git": "4935e29b631a9d9181431bc15b43ccd4c0e81619",
+      "bytes": 5302,
+      "sha256": "38e607189883d274acf7398d6b96bd042782585db94e8a8c052e4db22938319b",
+      "mode": "100644"
+    },
+    {
+      "path": "scripts/qa/playBuildXiMixed60.mjs",
+      "git": "e7d17d27cb7f99568f29344e31966e1bc61c211b",
+      "bytes": 20555,
+      "sha256": "05f1ec26590e110b583a82235465922ef43ec1d726fb2a2431f2fec79b9c3cdc",
+      "mode": "100644"
+    },
+    {
+      "path": "scripts/runAllSims.mjs",
+      "git": "a7d56d224a472b8eacfe1c4fd2f672f962259d28",
+      "bytes": 22720,
+      "mode": "100644"
+    },
+    {
+      "path": "scripts/sweepWeight.mjs",
+      "git": "084cce2062686259437cd2a334093a561c819c36",
+      "bytes": 97747,
+      "mode": "100644"
+    },
+    {
+      "path": "scripts/lib/hostLikeServer.mjs",
+      "git": "21059d5e8114669df61106c125d5272d357b6236",
+      "bytes": 2690,
+      "mode": "100644"
+    },
+    {
+      "path": "scripts/qa/freeKickLab1070.mjs",
+      "git": "1cf030d9182fd4fd68fca39f32e757c69bf9e58a",
+      "bytes": 27126,
+      "mode": "100644"
+    }
+  ],
+  "tests": [
+    "src/test/lineupMixedClubs.test.tsx"
+  ],
+  "cases": [
+    {
+      "file": "src/test/lineupMixedClubs.test.tsx",
+      "title": "deals sixty clubs and the unchanged twenty five nations through the public helper",
+      "fullName": "Build Your XI expanded Mixed club catalogue deals sixty clubs and the unchanged twenty five nations through the public helper",
+      "ancestors": [
+        "Build Your XI expanded Mixed club catalogue"
+      ],
+      "owned": true,
+      "marker": "MISSING_MIXED_CLUB_CATALOGUE",
+      "causePattern": "expected .* to have a length of 60 but got 30"
+    },
+    {
+      "file": "src/test/lineupMixedClubs.test.tsx",
+      "title": "rerolls the real Mixed hook into an added club",
+      "fullName": "Build Your XI expanded Mixed club catalogue rerolls the real Mixed hook into an added club",
+      "ancestors": [
+        "Build Your XI expanded Mixed club catalogue"
+      ],
+      "owned": true,
+      "marker": "MISSING_MIXED_REROLL_CLUB",
+      "causePattern": "expected ['\"]Brazil['\"] to be ['\"]Borussia Mönchengladbach['\"]"
+    },
+    {
+      "file": "src/test/lineupMixedClubs.test.tsx",
+      "title": "plays an added club goalkeeper through the actual Page and local record path",
+      "fullName": "Build Your XI expanded Mixed club catalogue plays an added club goalkeeper through the actual Page and local record path",
+      "ancestors": [
+        "Build Your XI expanded Mixed club catalogue"
+      ],
+      "owned": true,
+      "marker": "MISSING_NEW_CLUB_RECORD_PATH",
+      "causePattern": "expected ['\"]Brazil['\"] to be ['\"]Borussia Mönchengladbach['\"]"
+    },
+    {
+      "file": "src/test/lineupMixedClubs.test.tsx",
+      "title": "preserves the original thirty clubs twenty five nations and every legacy alias",
+      "fullName": "Build Your XI expanded Mixed club catalogue preserves the original thirty clubs twenty five nations and every legacy alias",
+      "ancestors": [
+        "Build Your XI expanded Mixed club catalogue"
+      ],
+      "owned": false
+    },
+    {
+      "file": "src/test/lineupMixedClubs.test.tsx",
+      "title": "keeps goalkeeper and unverified answer refusals from filling a slot",
+      "fullName": "Build Your XI expanded Mixed club catalogue keeps goalkeeper and unverified answer refusals from filling a slot",
+      "ancestors": [
+        "Build Your XI expanded Mixed club catalogue"
+      ],
+      "owned": false
+    }
+  ],
+  "directPaths": [
+    "A\t.github/workflows/build-xi-mixed60.yml",
+    "A\tqa/build-xi-mixed60/SOURCE.json",
+    "A\tscripts/qa/buildXiMixed60.mjs",
+    "A\tscripts/qa/buildXiMixed60Stages.mjs",
+    "A\tscripts/qa/playBuildXiMixed60.mjs",
+    "M\tscripts/simValidatePlayerRecords.mjs",
+    "M\tsrc/components/lineup/TeamSpinner.tsx",
+    "M\tsrc/data/lineupTeams.ts",
+    "M\tsrc/hooks/useLineupBuilder.ts",
+    "A\tsrc/test/lineupMixedClubs.test.tsx",
+    "M\tsupabase/functions/validate-player/index.ts"
+  ],
+  "expected": {
+    "cases": 5,
+    "failed": 0,
+    "passed": 5,
+    "pending": 0,
+    "todo": 0,
+    "fileObjects": 1,
+    "aggregateSuiteUnits": 2,
+    "rawExit": 0,
+    "types": 0,
+    "copiedControls": 2
+  },
+  "testSourceReference": {
+    "sha256": "4f9c1f7e677d21b3b09d9e2b7454b35685a9d836a1594b50bf1516a05eb1464f",
+    "path": "C:/Users/antho/dukb-handoff/2026-10-29/build-your-xi-club-coverage-v1/test-first-post-bs-v2/SOURCE-READY.json",
+    "meaning": "Outside immutable provenance reference only, never read as a physical CI dependency."
+  },
+  "scope": "Source-only positive/build/browser composition after Root actual baseline admission b5504740 and custody e6057bb9. Five frozen product bodies adopted only as a reviewable candidate. Runtime, refs, live validation and deployment unrun.",
+  "sourceFamily": "Fresh actual post-BS main601435; all14parent critical tuples rederived from actual5452tree. Old1229/7apackets remainunlaunched.",
+  "freshTreeReference": {
+    "path": "C:\\Users\\antho\\dukb-handoff\\2026-10-29\\build-xi-more-clubs-v1\\POST-BS-CURRENT-TREE.json",
+    "sha256": "52e049dfe4151b85b965571d4e726672598cc7381c0add0851df9f2dfe50a36e",
+    "tree": "d88b925148444ce88b63557472334dbd486e1b16",
+    "bodies": 5452,
+    "meaning": "Outside source-provenance reference only, no physical CI read."
+  },
+  "priorFailedAttempt": {
+    "run": 40896890407,
+    "source": "d0cadcb041ac3edd8fc21698bd5874e16fe72f31",
+    "observed": "Types0/3ownedassertions2PASS/raw1, but envelopefailed76B offlineblockedBrazilrankingSDKread beforejudge/copied. No baselinequalification inherited.",
+    "correction": "Onlyfiniteknownnational_team_squads selectplayer_name/countryBrazil/limit400 emptyQAfixture. Unknownranking-readtestfailure notclaimed; actualauthorities/casesandzero-transport guardheld."
+  },
+  "browser": {
+    "bound": true,
+    "profiles": 3,
+    "screenshots": 6,
+    "copiedControls": 3,
+    "widths": [
+      320,
+      390,
+      1440
+    ],
+    "baselinePrerequisite": {
+      "run": 40899115438,
+      "head": "feac0cb0d5c65a3f5944760b635567ef1d292263",
+      "rootAdmissionSHA256": "b5504740515e65dce39ba2f013398bd4e695ffa9d29820d317b7d591a5ea9bdb",
+      "custodianAdmissionSHA256": "e6057bb9957528126e2788dd2472b820abc4f01cd77eb8b77a9f0a09db42dd79"
+    },
+    "sourceReference": {
+      "path": "C:\\Users\\antho\\dukb-handoff\\2026-10-29\\build-xi-more-clubs-v1\\qa-positive-browser-v2\\SOURCE-READY.json",
+      "sha256": "9241d330df054152cba136ea38e5ae260567fc603933d55daddf07626c2825ae",
+      "meaning": "Outside provenance only, not CIphysicalread"
+    },
+    "scope": "ActualPage3profiles, explicitfictionalautocomplete transport,3refusals/3GKfills;no realroster/deployedEdge/fullXI/persistedround claim."
+  },
+  "build": {
+    "command": "npm run build",
+    "seoSourceChange": false,
+    "readers": [
+      "simAdsense",
+      "simBrand",
+      "simHeadTags",
+      "simHiddenPages",
+      "simHubs",
+      "simIndexNow",
+      "simIndexing",
+      "simInternalLinks",
+      "simNoRivalNames",
+      "simPrerender",
+      "simPrerenderBoot",
+      "simRetiredRoutes",
+      "simSchema",
+      "simSitemap",
+      "simSnapshotAssets",
+      "simSiteSearch",
+      "simGuideHeadings",
+      "simLegalPages"
+    ],
+    "readerCount": 18,
+    "capsCount": 15,
+    "capsSourceGit": "084cce2062686259437cd2a334093a561c819c36",
+    "recordsHarness": "NOT_INVOKED: unchanged normalpath includesliveDBreads. Literalaliasparity sourceRoot347dandSQLavailability396f only;leadlivegate/deployedEdge owed.",
+    "capsAssets": {
+      "scope": "Caps-only cached actualtemplate fonts and scopedlocal flag GET image denial. No externalrequests, no budgetorofflineguardwaiver.",
+      "contexts": 15,
+      "templateCSS": 15,
+      "fontPerContext": true,
+      "flagCount": "Actual recorded nonempty count, not fixed4",
+      "copiedReceipts": 3
+    }
+  },
+  "priorFailedPositive": {
+    "run": 40905339962,
+    "source": "a50c36262baaecd27c4f0220f9f88a5b22cd4245",
+    "safeBoundary": "da65607c",
+    "actual": "Types0/fivepositive/syntax/build/18readers passed. Capschild0/all15budgetsgreen but strictguardrefused19external presentationcontinuations. Browser320 failedcase-sensitive fictionaloption label, remainingprofiles/COPIEDunrun.",
+    "correction": "QA-only cachedfont/localflag presentation boundary and fictionalQa spelling. Allapp5/test4df/controllereda/caps084c/sourcefamily held. Entire next browser run fresh, no prior PNG substitution."
+  }
+}

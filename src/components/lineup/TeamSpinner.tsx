@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
 import type { TeamAssignment } from '@/types/lineupBuilder';
+import { mixedClubs, nations } from '@/data/lineupTeams';
 
 interface TeamSpinnerProps {
   teams: TeamAssignment[];
@@ -27,16 +28,8 @@ function getFlagUrl(nationName: string): string {
   return `https://flagcdn.com/w80/${code.toLowerCase()}.png`;
 }
 
-const allDisplayTeams = [
-  'Real Madrid', 'Barcelona', 'Man City', 'Liverpool', 'Bayern',
-  'PSG', 'Chelsea', 'Arsenal', 'Man Utd', 'Juventus',
-  'Argentina', 'France', 'Brazil', 'England', 'Spain',
-  'Germany', 'Portugal', 'Netherlands', 'Italy', 'Belgium',
-  'AC Milan', 'Inter', 'Dortmund', 'Napoli', 'Atlético',
-  'Morocco', 'Uruguay', 'Croatia', 'Colombia', 'Senegal',
-];
-
 const TeamSpinner = ({ teams, targetIndex, isSpinning, onFinish }: TeamSpinnerProps) => {
+  const allDisplayTeams = [...mixedClubs, ...nations];
   const [displayIndex, setDisplayIndex] = useState(0);
   const [speed, setSpeed] = useState(60);
   const [settled, setSettled] = useState(!isSpinning);
