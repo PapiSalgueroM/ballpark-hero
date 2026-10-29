@@ -1,0 +1,6 @@
+# Release BS kit, Round 1568 (results-g/rc-1568.txt Block E): playFirstVisitDialogs (Round 1536) in three shards.
+#!serve
+#!playwright
+pf1: PLAYFIRST_SHARD=1/3 node scripts/playFirstVisitDialogs.mjs
+pf2: PLAYFIRST_SHARD=2/3 node scripts/playFirstVisitDialogs.mjs
+pf3: PLAYFIRST_SHARD=3/3 node scripts/playFirstVisitDialogs.mjs
