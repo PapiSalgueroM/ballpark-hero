@@ -28,7 +28,9 @@
  *      still to be named (the World Series MVP from its two clubs, Gold Gloves,
  *      Silver Sluggers, the MVP and the rest in November) or a running total
  *      one season from a milestone (Erik Karlsson at 947 points beside
- *      "1,000+ career points")
+ *      "1,000+ career points"); and (fix-1574) beside the season mark the
+ *      ledger's watchLine names, every man still playing read by his career
+ *      best on both hosts, none at or over its line
  *   6) no man is dealt twice on one board under two names (bconn-049 held
  *      "Goose Gossage" and "Rich Gossage", and the game's own check compares
  *      spellings)
@@ -115,6 +117,8 @@
  *   US_CONN_CONTROL=listonehost the first NHL ledger list keeps one host (list-one-host, it)
  *   US_CONN_CONTROL=nofact     the fact holding the first member of an NHL table group removed (no-fact, him)
  *   US_CONN_CONTROL=stamkos    Steven Stamkos back on nhlconn-016 beside its dated Predators group (second-fit, him)
+ *   US_CONN_CONTROL=watchline  fix-1574: Auston Matthews (69 goals in 2023-24) back in nhlconn-011's Maple Leafs group
+ *                             beside "Scored 70 goals in a season" (watch-line, him)
  * A control is red only when the rule it names fires for the man or group it
  * moved. Any other failure in a control run (a moved man has no two host fact
  * in section 3, say) is printed but never turns the run red on its own, so
@@ -150,7 +154,7 @@ const STRICT = new Set((process.env.US_CONN_LIVE_STRICT ?? '').split(',').filter
 const DUMP = process.env.US_CONN_DUMP ?? '';
 /* the Round 1574 controls work on the NHL table rows: before a round puts nhl in TABLE_RANGE, they put it there in
    memory for their own run */
-const TABLE_CONTROLS = ['tablemiss', 'ages', 'newrunning', 'decisionless', 'recolour', 'dangling', 'permantwice', 'listonehost', 'nofact', 'stamkos'];
+const TABLE_CONTROLS = ['tablemiss', 'ages', 'newrunning', 'decisionless', 'recolour', 'dangling', 'permantwice', 'listonehost', 'nofact', 'stamkos', 'watchline'];
 if (TABLE_CONTROLS.includes(CONTROL) && !TABLE_RANGE.nhl) { TABLE_RANGE.nhl = 'all'; console.log(`US_CONN_CONTROL=${CONTROL}: TABLE_RANGE holds nhl in memory for this run`); }
 /* Round 1567: a club group dated against trades ("Played for the Steelers (as of 2025)") is the same claim as the
    undated one for every man whose seasons there all came before the date, which section 4 checks against the
@@ -375,7 +379,17 @@ if (CONTROL) {
     /* Round 1574: the controls on the NHL table rows */
     const tb = boards.nhl.filter(b => !fileIds.nhl.has(b.id));
     const decs = (ledgerOf('nhl').tableDecisions ??= []);
-    if (CONTROL === 'tablemiss') {
+    if (CONTROL === 'watchline') {
+      /* fix-1574: Auston Matthews (69 goals in 2023-24) back in nhlconn-011's Maple Leafs group, beside its 70 goal
+         group, in place of Dave Keon */
+      const g = boardOf('nhl', 'nhlconn-011')?.groups.find(x => undated(x.theme) === 'Played for the Maple Leafs');
+      const at = g ? g.players.indexOf('Dave Keon') : -1;
+      if (at >= 0) {
+        g.players[at] = 'Auston Matthews';
+        changed = true;
+        own = { kinds: ['watch-line'], subject: 'Auston Matthews' };
+      }
+    } else if (CONTROL === 'tablemiss') {
       changed = true; /* the read itself was emptied above, before the boards were built */
     } else if (CONTROL === 'ages') {
       const c = tb.flatMap(b => b.groups.map(g => sports.nhl.checker.criterion(g.theme))).find(x => x && x.kind !== 'list' && AGES.nhl[x.kind]);
@@ -621,6 +635,31 @@ for (const s of SPORTS) {
     }
   }
   console.log(`   ${s}: ${n} watched men beside a group they may join`);
+}
+/* fix-1574 (review-read-1574 finding 1): the watch reads a season mark on the seasons since 2024-25 only, so the
+   ledger's watchLine reads every man still playing beside its label by his career best, on both hosts (a fact each),
+   and moves those at or over its line. A man still playing beside it whom the line has not read, one it moved, or
+   one kept at or over the line fails */
+for (const s of SPORTS) {
+  const wl = live.has(s) ? null : ledgerOf(s).watchLine;
+  if (!wl) continue;
+  const facts = new Set((ledgerOf(s).facts ?? []).filter(f => f.holds === false && hostsOk(f.sources)).map(f => `${fold(f.label)}|${fold(f.name)}`));
+  let n = 0, read = 0;
+  for (const b of boards[s]) {
+    const g = b.groups.find(x => x.theme === wl.label);
+    if (!g) continue;
+    for (const o of b.groups) if (o !== g) for (const p of o.players) {
+      if (sports[s].checker.active?.(p) !== true) continue;
+      const e = (wl.men ?? []).find(m => m.id === b.id && fold(m.name) === fold(p));
+      const why = !e ? 'the watch line has not read his career best' : e.moved ? 'the watch line moved him off this board'
+        : !(e.best < wl.line) ? `his career best ${e.best} is at or over the line ${wl.line}` : !facts.has(`${fold(wl.label)}|${fold(p)}`) ? 'his career best has no two host fact' : '';
+      if (!why) { read += 1; continue; }
+      n += 1;
+      fire('watch-line', p);
+      fail(`${s} ${b.id}: ${p} ("${o.theme}") is still playing beside "${wl.label}": ${why}`);
+    }
+  }
+  console.log(`   ${s}: the watch line of "${wl.label}" (${wl.line}, on the career best) read ${read} men still playing beside it; ${n} problems`);
 }
 
 console.log('6) no man is dealt twice on one board');

@@ -6522,6 +6522,291 @@
      "says": "no Hart Memorial Trophy in the awards"
     }
    ]
+  },
+  {
+   "id": "nhlconn-011",
+   "label": "Played for the Maple Leafs (as of 2025-26)",
+   "name": "Dave Keon",
+   "holds": true,
+   "why": "member",
+   "sources": [
+    {
+     "host": "api-web.nhle.com",
+     "url": "https://api-web.nhle.com/v1/player/8448468/landing",
+     "says": "NHL clubs to 2025-26: Toronto Maple Leafs, Hartford Whalers"
+    },
+    {
+     "host": "hockey-reference.com",
+     "url": "https://www.hockey-reference.com/players/k/keonda01.html",
+     "says": "NHL seasons with TOR: 1960-61 to 1974-75 (15)"
+    }
+   ]
+  },
+  {
+   "id": "nhlconn-012",
+   "label": "Played for the Oilers (as of 2025-26)",
+   "name": "Nail Yakupov",
+   "holds": true,
+   "why": "member",
+   "sources": [
+    {
+     "host": "api-web.nhle.com",
+     "url": "https://api-web.nhle.com/v1/player/8476855/landing",
+     "says": "NHL clubs to 2025-26: Edmonton Oilers, St. Louis Blues, Colorado Avalanche"
+    },
+    {
+     "host": "hockey-reference.com",
+     "url": "https://www.hockey-reference.com/players/y/yakupna01.html",
+     "says": "NHL seasons with EDM: 2012-13 to 2015-16 (4)"
+    }
+   ]
+  },
+  {
+   "id": "nhlconn-011",
+   "label": "Scored 70 goals in a season",
+   "name": "Auston Matthews",
+   "holds": false,
+   "why": "watch-line",
+   "sources": [
+    {
+     "host": "api-web.nhle.com",
+     "url": "https://api-web.nhle.com/v1/player/8479318/landing",
+     "says": "most regular season goals in a season 69 (2023-24)"
+    },
+    {
+     "host": "hockey-reference.com",
+     "url": "https://www.hockey-reference.com/players/m/matthau01.html",
+     "says": "most NHL goals in a season 69 (2023-24)"
+    }
+   ]
+  },
+  {
+   "id": "nhlconn-012",
+   "label": "Scored 70 goals in a season",
+   "name": "Connor McDavid",
+   "holds": false,
+   "why": "watch-line",
+   "sources": [
+    {
+     "host": "api-web.nhle.com",
+     "url": "https://api-web.nhle.com/v1/player/8478402/landing",
+     "says": "most regular season goals in a season 64 (2022-23)"
+    },
+    {
+     "host": "hockey-reference.com",
+     "url": "https://www.hockey-reference.com/players/m/mcdavco01.html",
+     "says": "most NHL goals in a season 64 (2022-23)"
+    }
+   ]
+  },
+  {
+   "id": "nhlconn-011",
+   "label": "Scored 70 goals in a season",
+   "name": "Mitch Marner",
+   "holds": false,
+   "why": "watch-line-clear",
+   "sources": [
+    {
+     "host": "api-web.nhle.com",
+     "url": "https://api-web.nhle.com/v1/player/8478483/landing",
+     "says": "most regular season goals in a season 35 (2021-22)"
+    },
+    {
+     "host": "hockey-reference.com",
+     "url": "https://www.hockey-reference.com/players/m/marnemi01.html",
+     "says": "most NHL goals in a season 35 (2021-22)"
+    }
+   ]
+  },
+  {
+   "id": "nhlconn-011",
+   "label": "Scored 70 goals in a season",
+   "name": "Cale Makar",
+   "holds": false,
+   "why": "watch-line-clear",
+   "sources": [
+    {
+     "host": "api-web.nhle.com",
+     "url": "https://api-web.nhle.com/v1/player/8480069/landing",
+     "says": "most regular season goals in a season 30 (2024-25)"
+    },
+    {
+     "host": "hockey-reference.com",
+     "url": "https://www.hockey-reference.com/players/m/makarca01.html",
+     "says": "most NHL goals in a season 30 (2024-25)"
+    }
+   ]
+  },
+  {
+   "id": "nhlconn-011",
+   "label": "Scored 70 goals in a season",
+   "name": "Erik Karlsson",
+   "holds": false,
+   "why": "watch-line-clear",
+   "sources": [
+    {
+     "host": "api-web.nhle.com",
+     "url": "https://api-web.nhle.com/v1/player/8474578/landing",
+     "says": "most regular season goals in a season 25 (2022-23)"
+    },
+    {
+     "host": "hockey-reference.com",
+     "url": "https://www.hockey-reference.com/players/k/karlser01.html",
+     "says": "most NHL goals in a season 25 (2022-23)"
+    }
+   ]
+  },
+  {
+   "id": "nhlconn-012",
+   "label": "Scored 70 goals in a season",
+   "name": "Ryan Nugent-Hopkins",
+   "holds": false,
+   "why": "watch-line-clear",
+   "sources": [
+    {
+     "host": "api-web.nhle.com",
+     "url": "https://api-web.nhle.com/v1/player/8476454/landing",
+     "says": "most regular season goals in a season 37 (2022-23)"
+    },
+    {
+     "host": "hockey-reference.com",
+     "url": "https://www.hockey-reference.com/players/n/nugenry01.html",
+     "says": "most NHL goals in a season 37 (2022-23)"
+    }
+   ]
+  },
+  {
+   "id": "nhlconn-012",
+   "label": "Scored 70 goals in a season",
+   "name": "Taylor Hall",
+   "holds": false,
+   "why": "watch-line-clear",
+   "sources": [
+    {
+     "host": "api-web.nhle.com",
+     "url": "https://api-web.nhle.com/v1/player/8475791/landing",
+     "says": "most regular season goals in a season 39 (2017-18)"
+    },
+    {
+     "host": "hockey-reference.com",
+     "url": "https://www.hockey-reference.com/players/h/hallta02.html",
+     "says": "most NHL goals in a season 39 (2017-18)"
+    }
+   ]
+  },
+  {
+   "id": "nhlconn-012",
+   "label": "Scored 70 goals in a season",
+   "name": "Andrei Vasilevskiy",
+   "holds": false,
+   "why": "watch-line-clear",
+   "sources": [
+    {
+     "host": "api-web.nhle.com",
+     "url": "https://api-web.nhle.com/v1/player/8476883/landing",
+     "says": "most regular season goals in a season 0 (2014-15)"
+    },
+    {
+     "host": "hockey-reference.com",
+     "url": "https://www.hockey-reference.com/players/v/vasilan02.html",
+     "says": "most NHL goals in a season 0 (2014-15)"
+    }
+   ]
+  },
+  {
+   "id": "nhlconn-012",
+   "label": "Scored 70 goals in a season",
+   "name": "Evgeni Malkin",
+   "holds": false,
+   "why": "watch-line-clear",
+   "sources": [
+    {
+     "host": "api-web.nhle.com",
+     "url": "https://api-web.nhle.com/v1/player/8471215/landing",
+     "says": "most regular season goals in a season 50 (2011-12)"
+    },
+    {
+     "host": "hockey-reference.com",
+     "url": "https://www.hockey-reference.com/players/m/malkiev01.html",
+     "says": "most NHL goals in a season 50 (2011-12)"
+    }
+   ]
+  },
+  {
+   "id": "nhlconn-012",
+   "label": "Scored 70 goals in a season",
+   "name": "Jack Eichel",
+   "holds": false,
+   "why": "watch-line-clear",
+   "sources": [
+    {
+     "host": "api-web.nhle.com",
+     "url": "https://api-web.nhle.com/v1/player/8478403/landing",
+     "says": "most regular season goals in a season 36 (2019-20)"
+    },
+    {
+     "host": "hockey-reference.com",
+     "url": "https://www.hockey-reference.com/players/e/eicheja01.html",
+     "says": "most NHL goals in a season 36 (2019-20)"
+    }
+   ]
+  },
+  {
+   "id": "nhlconn-012",
+   "label": "Scored 70 goals in a season",
+   "name": "Tyler Seguin",
+   "holds": false,
+   "why": "watch-line-clear",
+   "sources": [
+    {
+     "host": "api-web.nhle.com",
+     "url": "https://api-web.nhle.com/v1/player/8475794/landing",
+     "says": "most regular season goals in a season 40 (2017-18)"
+    },
+    {
+     "host": "hockey-reference.com",
+     "url": "https://www.hockey-reference.com/players/s/seguity01.html",
+     "says": "most NHL goals in a season 40 (2017-18)"
+    }
+   ]
+  },
+  {
+   "id": "nhlconn-012",
+   "label": "Scored 70 goals in a season",
+   "name": "Gabriel Landeskog",
+   "holds": false,
+   "why": "watch-line-clear",
+   "sources": [
+    {
+     "host": "api-web.nhle.com",
+     "url": "https://api-web.nhle.com/v1/player/8476455/landing",
+     "says": "most regular season goals in a season 34 (2018-19)"
+    },
+    {
+     "host": "hockey-reference.com",
+     "url": "https://www.hockey-reference.com/players/l/landega01.html",
+     "says": "most NHL goals in a season 34 (2018-19)"
+    }
+   ]
+  },
+  {
+   "id": "nhlconn-012",
+   "label": "Scored 70 goals in a season",
+   "name": "Drew Doughty",
+   "holds": false,
+   "why": "watch-line-clear",
+   "sources": [
+    {
+     "host": "api-web.nhle.com",
+     "url": "https://api-web.nhle.com/v1/player/8474563/landing",
+     "says": "most regular season goals in a season 16 (2009-10)"
+    },
+    {
+     "host": "hockey-reference.com",
+     "url": "https://www.hockey-reference.com/players/d/doughdr01.html",
+     "says": "most NHL goals in a season 16 (2009-10)"
+    }
+   ]
   }
  ],
  "uncheckedCeiling": 0,
@@ -6727,7 +7012,7 @@
    "way": "RECORD",
    "from": "Played for the Maple Leafs",
    "to": "Played for the Maple Leafs (as of 2025-26)",
-   "why": "club seasons, dated"
+   "why": "club seasons, dated; Auston Matthews (69 goals in 2023-24, his career best on both hosts), still playing, sat over the watch line of the 70 goal group beside it, so Dave Keon (Maple Leafs 1960-61 to 1974-75) takes his place"
   },
   {
    "id": "nhlconn-011",
@@ -6759,7 +7044,7 @@
    "way": "RECORD",
    "from": "Played for the Oilers",
    "to": "Played for the Oilers (as of 2025-26)",
-   "why": "club seasons, dated; Leon Draisaitl (52 goals in 2024-25) sat a hair under the watch line of the 70 goal group, so Taylor Hall (Oilers 2010-11 to 2015-16) takes his place"
+   "why": "club seasons, dated; Leon Draisaitl (55 goals in 2021-22) and Connor McDavid (64 in 2022-23), both still playing, sat over the watch line of the 70 goal group beside it, so Taylor Hall (Oilers 2010-11 to 2015-16) and Nail Yakupov (Oilers 2012-13 to 2015-16) take their places"
   },
   {
    "id": "nhlconn-012",
@@ -7086,6 +7371,13 @@
    "why": "second-fit"
   },
   {
+   "id": "nhlconn-011",
+   "name": "Auston Matthews",
+   "label": "Scored 70 goals in a season",
+   "holds": false,
+   "why": "watch-line"
+  },
+  {
    "id": "nhlconn-012",
    "name": "Bernie Nicholls",
    "label": "Played for the Oilers (as of 2025-26)",
@@ -7102,6 +7394,13 @@
   {
    "id": "nhlconn-012",
    "name": "Leon Draisaitl",
+   "label": "Scored 70 goals in a season",
+   "holds": false,
+   "why": "watch-line"
+  },
+  {
+   "id": "nhlconn-012",
+   "name": "Connor McDavid",
    "label": "Scored 70 goals in a season",
    "holds": false,
    "why": "watch-line"
@@ -7687,6 +7986,7 @@
   "A club group is the only group dated, in the trailing \"(as of 2025-26)\" shape, whenever a man still playing on the board does not fit it (section 8). No other group is dated: a man moves or the group is rebuilt.",
   "A career mark (games, goals, points): a man still playing within one season of it (82 games, 60 goals, 110 points, 80 assists) is watched.",
   "A season mark (\"Scored N goals in a season\"): a man still playing whose best season since 2024-25 reached three quarters of N is watched.",
+  "Review fix of 2026-10-29: beside a season mark the line is read on the career best, not only on the seasons since 2024-25. Every man still playing beside \"Scored 70 goals in a season\" is read on both hosts (watchLine) and leaves the board at three quarters of the mark or more (52.5 of 70), the line that moved Leon Draisaitl (55 in 2021-22, 52 in 2024-25).",
   "Goals for one franchise: a man still playing within 60 of the mark for one franchise is watched. Goalie wins: a goalie still playing within 45 wins.",
   "Goals credited to a goalie: any goalie still playing who has none is watched.",
   "An award: any man still playing who is eligible and has not won it is watched, with no judgement of how likely he is: the Vezina a goalie, the Norris a defenceman, the Calder a man still rookie eligible for 2026-27 (no earlier season over 25 games, not two earlier seasons of 6 or more), the Art Ross and the Rocket Richard a skater, the Hart and the Conn Smythe anyone. An award in a closed past range (\"before 2000\") is fixed.",
@@ -7715,5 +8015,110 @@
    ],
    "resolution": "the two hosts do not agree that he won a Cup with a third franchise, so the fact does not ship and he left the board; Gord Pettinger (Cups with the Rangers, the Red Wings and the Bruins on both hosts) took his place"
   }
- ]
+ ],
+ "watchLine": {
+  "about": "Review fix of 2026-10-29 (review-read-1574 finding 1, the lead's ruling). The round's watch read a season mark only on the seasons since 2024-25, so it moved Leon Draisaitl (52 in 2024-25) off nhlconn-012 and kept Auston Matthews (69 in 2023-24) on nhlconn-011 and Connor McDavid (64 in 2022-23) on nhlconn-012 beside \"Scored 70 goals in a season\". Every man still playing beside that group on every NHL board is now read by his career best season on both hosts (each has a fact: watch-line when moved, watch-line-clear when kept), and the line is the one that moved Draisaitl, three quarters of the mark. At or over it he leaves the board; under it he stays. simUsConnectionsFacts section 5 holds it (control watchline).",
+  "label": "Scored 70 goals in a season",
+  "line": 52.5,
+  "men": [
+   {
+    "id": "nhlconn-011",
+    "name": "Auston Matthews",
+    "best": 69,
+    "season": "2023-24",
+    "moved": true
+   },
+   {
+    "id": "nhlconn-011",
+    "name": "Mitch Marner",
+    "best": 35,
+    "season": "2021-22",
+    "moved": false
+   },
+   {
+    "id": "nhlconn-011",
+    "name": "Cale Makar",
+    "best": 30,
+    "season": "2024-25",
+    "moved": false
+   },
+   {
+    "id": "nhlconn-011",
+    "name": "Erik Karlsson",
+    "best": 25,
+    "season": "2022-23",
+    "moved": false
+   },
+   {
+    "id": "nhlconn-012",
+    "name": "Leon Draisaitl",
+    "best": 55,
+    "season": "2021-22",
+    "moved": true
+   },
+   {
+    "id": "nhlconn-012",
+    "name": "Connor McDavid",
+    "best": 64,
+    "season": "2022-23",
+    "moved": true
+   },
+   {
+    "id": "nhlconn-012",
+    "name": "Ryan Nugent-Hopkins",
+    "best": 37,
+    "season": "2022-23",
+    "moved": false
+   },
+   {
+    "id": "nhlconn-012",
+    "name": "Taylor Hall",
+    "best": 39,
+    "season": "2017-18",
+    "moved": false
+   },
+   {
+    "id": "nhlconn-012",
+    "name": "Andrei Vasilevskiy",
+    "best": 0,
+    "season": null,
+    "moved": false
+   },
+   {
+    "id": "nhlconn-012",
+    "name": "Evgeni Malkin",
+    "best": 50,
+    "season": "2011-12",
+    "moved": false
+   },
+   {
+    "id": "nhlconn-012",
+    "name": "Jack Eichel",
+    "best": 36,
+    "season": "2019-20",
+    "moved": false
+   },
+   {
+    "id": "nhlconn-012",
+    "name": "Tyler Seguin",
+    "best": 40,
+    "season": "2017-18",
+    "moved": false
+   },
+   {
+    "id": "nhlconn-012",
+    "name": "Gabriel Landeskog",
+    "best": 34,
+    "season": "2018-19",
+    "moved": false
+   },
+   {
+    "id": "nhlconn-012",
+    "name": "Drew Doughty",
+    "best": 16,
+    "season": "2009-10",
+    "moved": false
+   }
+  ]
+ }
 }

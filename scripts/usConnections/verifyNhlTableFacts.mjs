@@ -11,7 +11,7 @@
  *   node scripts/usConnections/verifyNhlTableFacts.mjs facts <work> <out.json>
  *
  * Who is read: every member of every NHL table group (scripts/data/nhlConnectionsTable-2026-10.json, the decided
- * board) and every man the round moved (the ledger's tableMoves). A man's page is his only if its career games agree
+ * board), every man the round moved (the ledger's tableMoves) and every man the ledger's watchLine reads. A man's page is his only if its career games agree
  * with the record's (equal for a retired man, within 15 for one still playing); otherwise the next id is tried.
  * `facts` writes, for each member and each moved man, the claim on both hosts; a claim the two hosts do not agree
  * on is printed and never written. Never used by a harness: the harness reads only what the ledger recorded.
@@ -56,6 +56,10 @@ export function needs() {
   for (const m of ledger.tableMoves ?? []) out.push({ id: m.id, label: m.label, name: m.name, holds: m.holds, why: m.why });
   /* the findings this round's checker made on the rows as exported: each fixed finding has its fact */
   for (const m of ledger.exportFindings ?? []) out.push({ id: m.id, label: m.label, name: m.name, holds: m.holds, why: m.why });
+  /* the review fix of 2026-10-29: every man still playing beside the season mark the ledger's watchLine names, read
+     by his career best (moved at or over the line: watch-line; kept under it: watch-line-clear) */
+  const wl = ledger.watchLine;
+  for (const m of wl?.men ?? []) out.push({ id: m.id, label: wl.label, name: m.name, holds: false, why: m.moved ? 'watch-line' : 'watch-line-clear' });
   const seen = new Set();
   return out.filter(n => { const k = `${fold(n.label)}|${fold(n.name)}|${n.holds}`; if (seen.has(k)) return false; seen.add(k); return true; });
 }
