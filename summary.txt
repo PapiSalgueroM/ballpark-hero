@@ -1,0 +1,3 @@
+rival exit=0 20s | No rival product names found. 0 findings.
+anchors exit=0 50s | simHarnessAnchors: green. Every harness parses and none carries an unmatchable anchor.
+simWall exit=0 58s | simUsCareerHallWall: ok, 53 check ids, 7847 checks, 200 careers a sport, 152 old saves
