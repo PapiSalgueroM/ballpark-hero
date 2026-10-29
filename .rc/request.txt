@@ -1,0 +1,8 @@
+tsc: node_modules/.bin/tsc --noEmit -p tsconfig.app.json
+simConnectionsFacts: node scripts/simConnectionsFacts.mjs
+live-post: CONN_LIVE=.rc/x/final-export.json node scripts/simConnectionsFacts.mjs
+simFairPuzzles: node scripts/simFairPuzzles.mjs
+fair-secondfit: FAIR_CONTROL=secondfit node scripts/simFairPuzzles.mjs
+ctl-unknownman: CONN_CONTROL=unknownman node scripts/simConnectionsFacts.mjs
+rehearse: npm install --prefix /tmp/pgl1 @electric-sql/pglite >/dev/null 2>&1 && PGLITE_DIR=/tmp/pgl1 node scripts/qa/rehearseConnections1565.mjs .rc/x/post-apply.json
+dealt: CONN_MIGRATION=supabase/migrations/20261029120000_round_1565_connections_live.sql node scripts/qa/connectionsDealtDay1553.mjs .rc/x/post-apply.json 2026-10-29 2026-10-30 2026-10-31 2026-11-01 2026-11-02 2026-11-03 2026-11-04 2026-11-05 2026-11-06 2026-11-07 2026-11-08 2026-11-09 2026-11-10 2026-11-11 2026-11-12 2026-11-13 2026-11-14 2026-11-15 2026-11-16 2026-11-17 2026-11-18 2026-11-19 2026-11-20 2026-11-21 2026-11-22 2026-11-23 2026-11-24 2026-11-25 2026-11-26 2026-11-27 2026-11-28 2026-11-29 2026-11-30
