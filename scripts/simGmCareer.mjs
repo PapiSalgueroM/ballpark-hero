@@ -131,7 +131,7 @@ const CONTROLS = {
   halfseason: '6', notrim: '6', awayxp: '6', lastcall: '6', noawaydraft: '6', overlap: '7', firedlost: '7', hubcounted: '7',
   /* Round 1559 */
   contribstays: '5', awaycontrib: '6', retainedrolled: '6', thumbfalse: '2t',
-  firenever: '9', nooffers: '9', xpflat: '9', legacyleak: '10', retainedlift: '10',
+  firenever: '9', nooffers: '9', xpflat: '9', nevershut: '9', legacyleak: '10', retainedlift: '10',
 };
 if (CONTROL && !CONTROLS[CONTROL]) {
   console.error(`SIM_GM_CAREER_CONTROL=${CONTROL} is not a control this harness knows (${Object.keys(CONTROLS).join(', ')})`);
@@ -230,6 +230,8 @@ const EDITS = {
   nooffers: ['host', '  const { nextYear, climbTo } = hostNextYear(seat, leagueTiers(teams));',
     '  offers = [];\n  const { nextYear, climbTo } = hostNextYear(seat, leagueTiers(teams));'],
   xpflat: ['host', '  const nextXp = addXp(xp, award.total);', '  const nextXp = addXp(xp, 0);'],
+  /* next year is never shut: no last call, no closed market, so the closed share a year later falls out of its band */
+  nevershut: ['host', '  return seatNextYear(seat.career, tiers);', "  return { ...seatNextYear(seat.career, tiers), nextYear: 'open' };"],
   /* Round 1559, section 10: the shared legacy read grades a season the save has not counted; the shared retained
      step keeps a figure that is not the one the club kept. */
   legacyleak: ['bind', '    lastGrade: f.seasonCounted ? hostLastGrade(s.host, league, f.mandate, outcome) : null,',
@@ -609,6 +611,10 @@ const DRIVE = {
       for (let b = 0; b < 2; b++) cls = EN.nhlAiDraftPicks(lg, cls, EN.nhlFoStandings(lg).map(t => t.abbr).reverse(), rng).remaining;
       EN.nhlOffseason(lg, rng, undefined, { noUserClub: true });
     },
+    /* Sections 4, 5, 9 and 10 read forty leagues, not twenty: the NHL fires about 0.036 of its graded club seasons
+       against the NFL's 0.061 (r1559-s2a), so twenty leagues held 278 first feeds, under section 4's floor of 300.
+       More careers, never a lower floor. Section 9's bands are for sets of this many seeds. */
+    measureSeeds: 40,
     words: NHL_WORDS,
     xpLive: () => DN.NHL_XP_LIVE,
     xpSources: () => DN.NHL_XP_SOURCES,
@@ -628,13 +634,20 @@ const DRIVE = {
     spec: () => M.NC.nhlCareer(),
     legacyOf: (lg, f) => M.NC.nhlLegacy(lg, f),
     /* The old club's own lineup a take hands back to automatic: the contributors he chose. Planted by benching
-       one forward of the automatic six for a healthy one outside it. */
+       one forward of the automatic six for a healthy one outside it; on a club with no healthy forward spare (a
+       roster of 15 at the close, with men out, often has none: 133 of 293 planted on forwards alone, r1559-s2a),
+       one of the four defensemen, then the goalie. */
     lineupField: 'contributors',
     plantLineup(t) {
       const cur = EN.nhlContributors(t);
-      const bench = t.players.find(p => p.out === 0 && (p.pos === 'C' || p.pos === 'W') && !cur.forwards.includes(p.id));
-      if (!bench || cur.forwards.length === 0) return false;
-      return EN.nhlSetContributors(t, { ...cur, forwards: [...cur.forwards.slice(0, -1), bench.id] }) && t.contributors !== undefined;
+      const spare = (isPos, used) => t.players.find(p => p.out === 0 && isPos(p.pos) && !used.includes(p.id));
+      const fwd = spare(pos => pos === 'C' || pos === 'W', cur.forwards);
+      if (fwd && cur.forwards.length > 0 && EN.nhlSetContributors(t, { ...cur, forwards: [...cur.forwards.slice(0, -1), fwd.id] })) return t.contributors !== undefined;
+      const def = spare(pos => pos === 'D', cur.defense);
+      if (def && cur.defense.length > 0 && EN.nhlSetContributors(t, { ...cur, defense: [...cur.defense.slice(0, -1), def.id] })) return t.contributors !== undefined;
+      const g = spare(pos => pos === 'G', cur.goalie === null ? [] : [cur.goalie]);
+      if (g && cur.goalie !== null && EN.nhlSetContributors(t, { ...cur, goalie: g.id })) return t.contributors !== undefined;
+      return false;
     },
     engineSummer: (lg, rng) => EN.nhlOffseason(lg, rng, undefined, { noUserClub: true }),
     /* the retained rows the desk summer keeps (decision 2g), on the replay as on the league */
@@ -1045,7 +1058,8 @@ if (runs('8')) {
 /* ================================================================== */
 /* 4. The market after real firings                                    */
 /* ================================================================== */
-const S4_SEEDS = (process.env.SIM_GM_CAREER_MEASURE_SEEDS || '1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20').split(',').map(Number);
+/* Round 1559: a row may read more leagues (the nhl row's measureSeeds); the nfl row reads 1 to 20 as it always has. */
+const S4_SEEDS = (process.env.SIM_GM_CAREER_MEASURE_SEEDS || Array.from({ length: d.measureSeeds ?? 20 }, (_, i) => i + 1).join(',')).split(',').map(Number);
 const S4_SEASONS = Number(process.env.SIM_GM_CAREER_MEASURE_SEASONS || 12);
 const S4 = {
   firings: 0, first: { offers: 0, quiet: 0, closed: 0 }, raw: { offers: 0, quiet: 0, closed: 0 },
@@ -1202,20 +1216,26 @@ if (runs('4') || runs('5') || runs('9') || runs('10')) {
     /* Men between seats: one track read through the host, one through the raw feed. */
     const tracks = [];
     /* Round 1559, section 9: this seed's own counts (the seed is the sampling unit, R5) */
-    const P9 = { clubSeasons: 0, firings: 0, twoPlus: 0, offers: 0, quietFirst: 0, closedNext: 0, xp: [] };
+    /* passed: the men who passed on their first feed and sat the year out; closedNext: of them, the phone stopped a
+       year later (a last call passed is closed at once: the board refuses a year out on it, hostCanSitOut). The
+       host's first call means every first feed offers, so "closed a year later" is only ever reached by passing. */
+    const P9 = { clubSeasons: 0, firings: 0, twoPlus: 0, offers: 0, passed: 0, closedNext: 0, xp: [] };
     for (let s = 0; s < S4_SEASONS; s++) {
       const r = d.cpuSeason(lg, rng);
       /* A year on for everyone still out of work, read before this close fires anybody new. */
       for (const t of tracks) {
+        if (t.pass && !t.pass.done) {
+          t.pass.done = true; P9.passed++;
+          if (t.pass.next === 'shut') P9.closedNext++;
+          else if (H.hostMarket(host, lg, sitOut(t.pass.seat), label).state === 'closed') P9.closedNext++;
+        }
         for (const k of ['host', 'raw']) {
           const w = t[k];
           if (w.done || w.feeds >= 3) continue;
-          const second = k === 'host' && w.feeds === 1;
-          if (w.next === 'shut') { w.done = true; if (second) { P9.quietFirst++; P9.closedNext++; } continue; }
+          if (w.next === 'shut') { w.done = true; continue; }
           w.seat = sitOut(w.seat);
           const m = k === 'host' ? H.hostMarket(host, lg, w.seat, label) : rawMarket(host, lg, w.seat);
           S4.feedsRead++;
-          if (second) { P9.quietFirst++; if (m.state === 'closed') P9.closedNext++; }
           w.feeds++; w.next = m.nextYear;
           if (m.state === 'offers') { w.hired = true; w.done = true; } else if (m.state === 'closed') w.done = true;
         }
@@ -1253,7 +1273,7 @@ if (runs('4') || runs('5') || runs('9') || runs('10')) {
         if (m.offers.length > raw.offers.length) S4.firstCalls++;
         const room = S4_SEASONS - 1 - s >= 2;
         const track = w => ({ seat, feeds: 1, next: w.nextYear, hired: w.state === 'offers', done: w.state !== 'quiet' });
-        tracks.push({ room, host: track(m), raw: track(raw) });
+        tracks.push({ room, host: track(m), raw: track(raw), pass: m.state === 'offers' ? { seat, next: m.nextYear, done: false } : null });
         gm[id] = newGm(id, lg.season + 1);
       }
       d.cpuSummer(lg, rng);
@@ -1268,7 +1288,7 @@ if (runs('4') || runs('5') || runs('9') || runs('10')) {
     {
       const roomy = tracks.filter(t => t.room);
       S9.seeds.push({ seed, clubSeasons: P9.clubSeasons, firings: P9.firings, twoPlus: P9.twoPlus, offers: P9.offers,
-        eligible: roomy.length, hired3: roomy.filter(t => t.host.hired).length, quietFirst: P9.quietFirst, closedNext: P9.closedNext, xp: P9.xp });
+        eligible: roomy.length, hired3: roomy.filter(t => t.host.hired).length, passed: P9.passed, closedNext: P9.closedNext, xp: P9.xp });
     }
   }
   const pct = (n, of) => (of ? `${((100 * n) / of).toFixed(1)}%` : 'n/a');
@@ -1577,19 +1597,22 @@ if (runs('7')) {
    unit (one league, zero sum standings, trust carried season to season), never a binomial error over club seasons.
    Per seed: the FIRING RATE (firings per graded club season), the OFFERS (the share of first feeds with two or more
    offers, the mean offers in a first feed), the share RE HIRED within three feeds, the CLOSED share a year later
-   (of the men whose first screen was quiet, the share whose phone has stopped the next summer) and the XP a graded
-   club season pays. A band is the three calibration sets' lowest and highest set mean, widened by the larger of
+   (of the men who pass on their first feed and sit the year out, the share whose phone has stopped the next
+   summer; a passed last call counts closed, since the board refuses a year out on it; the host's first call means
+   no first feed is ever quiet, so passing is the only way to a year later) and the XP a graded club season pays. A band is the three calibration sets' lowest and highest set mean, widened by the larger of
    half their spread and three standard errors of the per seed values; a held out fourth set must clear it. A rate
    that sits at 100 or 0 percent on every seed is an invariant, asserted exactly, never a band of width zero.
    The pace cross check ties copy to the engine: hostXpHelp says a .500 season that meets the ask pays N XP and
    "the median club is near this"; the measured median XP of a graded club season must sit inside PACE of N.
    simGmDeskHost measures the same pace on the four adapters with the host's own driver; this measures it in each
    board's own call order through the bind, which is what a player's GM earns. Bands hold for sets of S9_SET seeds
-   (the calibration size): a run on another count prints its numbers and asserts only the invariants.
-   Controls: firenever (the verdict never fires), nooffers (the market never offers), xpflat (a season's XP never
-   reaches the block). The four sports sit side by side once MLB (Part B) and NBA (Part C) add their rows; until
+   (the row's calibration size, its measureSeeds: nfl 20, nhl 40): a run on another count prints its numbers and
+   asserts only the invariants.
+   Controls: firenever (the verdict never fires), nooffers (the market never offers: the offers bands and the re
+   hired invariant), xpflat (a season's XP never reaches the block), nevershut (next year is never shut: the closed
+   share). The four sports sit side by side once MLB (Part B) and NBA (Part C) add their rows; until
    then nfl and nhl. */
-const S9_SET = 20;
+const S9_SET = d.measureSeeds ?? 20;
 const S9_BANDS = {
   nfl: null,
   nhl: null,
@@ -1607,7 +1630,7 @@ if (runs('9')) {
     stat('twoPlus', r => r.firings ? r.twoPlus / r.firings : null),
     stat('meanOffers', r => r.firings ? r.offers / r.firings : null),
     stat('hired3', r => r.eligible ? r.hired3 / r.eligible : null),
-    stat('closedNext', r => r.quietFirst ? r.closedNext / r.quietFirst : null),
+    stat('closedNext', r => r.passed ? r.closedNext / r.passed : null),
     stat('xpMean', r => r.xp.length ? mean(r.xp) : null),
   ];
   const allXp = rows.flatMap(r => r.xp), xpMedian = median(allXp);
@@ -1622,7 +1645,7 @@ if (runs('9')) {
     for (const s of stats) {
       if ((band.invariants ?? {})[s.name] !== undefined) {
         const want = band.invariants[s.name];
-        ok(s.v.every(x => x === want), `${s.name}: an invariant at ${want} on every seed, read ${s.v.filter(x => x !== want).length} seeds off it (mean ${s.m.toFixed(4)})`);
+        ok(s.n > 0 && s.v.every(x => x === want), `${s.name}: an invariant at ${want} on every seed, read ${s.v.filter(x => x !== want).length} seeds off it of ${s.n} (mean ${s.m.toFixed(4)})`);
         continue;
       }
       const b = band[s.name];
@@ -1631,6 +1654,7 @@ if (runs('9')) {
       ok(s.m >= b[0] && s.m <= b[1], `${s.name}: the set mean ${s.m.toFixed(4)} is outside the band ${J(b)}`);
     }
     if (S4_SEEDS.length !== S9_SET) console.log(`   the bands are for sets of ${S9_SET} seeds: on ${S4_SEEDS.length} seeds only the invariants are asserted`);
+    else console.log(`   ${d.sport} bands held on ${S4_SEEDS.length} seeds: ${stats.filter(s => !(s.name in (band.invariants ?? {}))).map(s => `${s.name} ${s.m.toFixed(4)} in ${J(band[s.name])}`).join('; ')}`);
   }
   if (!S9_PACE) fail('no measured pace band (S9_PACE)');
   else ok(xpMedian / even >= S9_PACE[0] && xpMedian / even <= S9_PACE[1], `the median club earns ${xpMedian} XP a graded season, ${(xpMedian / even).toFixed(3)} of the ${even} hostXpHelp says, outside ${J(S9_PACE)}`);
