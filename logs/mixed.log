@@ -1,0 +1,14 @@
+MIXED team: SAME
+  base: 🏳️ NATION France Name a player who has played for France
+  head: 🏳️ NATION France Name a player who has played for France
+MIXED pitchText: SAME
+  base: GK LB CB CB RB CM CM CM LW ST RW
+  head: GK LB CB CB RB CM CM CM LW ST RW
+MIXED reroll: DIFF
+  base: absolute top-2 right-2 flex items-center justify-center w-10 h-10 rounded-lg bg-secondary hover:bg-secondary/80 text-muted-foreground hover:text-foreground transition-all
+  head: absolute top-2 right-2 flex items-center justify-center rounded-lg bg-secondary hover:bg-secondary/80 text-muted-foreground hover:text-foreground transition-all w-10 h-10
+MIXED pick: SAME
+  base: 
+  head: 
+MIXED requests: SAME (0 vs 0)
+walkXi401 mixed DONE: 0 problems
