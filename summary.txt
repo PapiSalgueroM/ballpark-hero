@@ -1,0 +1,6 @@
+rehearse-tamper exit=1 10s | rehearseConnections1565: 1 failure (control tamper fired)
+rehearse-drift exit=1 6s | rehearseConnections1565: 2 failures (control drift fired)
+rehearse exit=0 20s | rehearseConnections1565: green. 37 rows land at the shipped file's boards in place, both forms, and a second run is a no-op.
+ctl-snapshot exit=1 1s | simConnectionsFacts: 13 failures
+rehearse-noguard exit=1 6s | rehearseConnections1565: 2 failures (control noguard fired)
+tsc exit=0 62s | 

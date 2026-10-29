@@ -1,0 +1,30 @@
+CONN_CONTROL=snapshot: the boards were changed; this run must end red
+1) no group claims the present
+  FAIL: crafted-1006: "Arsenal Invincibles 2003-04" names a season in a shape nothing holds to that season's squad
+  FAIL: cx-20260710-06: "Won Copa América 2021 with Argentina" names a year from 2020 on and nothing holds the group to it: stamp a season the checker holds, write the group out in the ledger on two hosts, or retire it
+  FAIL: cx-20260710-11: "Arsenal Invincibles (unbeaten 2003-04 season)" names a season in a shape nothing holds to that season's squad
+   3 present tense, unstamped season or unheld recent year labels; 11 recent year groups owed to part B
+2) no refuted claim is on a board
+   5 refuted claims held off every board, 0 found
+3) every group this round wrote stands on two hosts
+   2 watches over 31 men about to join a list
+   26 squads, 1 lists, 1 ledgered groups, 69 stamped groups, 344 members confirmed, 9 rebuilt boards
+4) one right answer: the cross check over every board
+  FAIL: puzzle-92 | not-a-member | Leroy Sané | Played for Galatasaray
+  FAIL: puzzle-131 | not-a-member | Gianluigi Donnarumma | Played for PSG and Manchester City
+  FAIL: crafted-1001 | not-a-member | Andrea Pirlo | Played for both Milan clubs
+  FAIL: crafted-1011 | not-a-member | Steven Gerrard | Played for LA Galaxy
+  FAIL: crafted-1023 | not-a-member | Zlatan Ibrahimović | Played for Ajax
+  FAIL: cx-20260710-03 | not-a-member | Didier Drogba | Played for Galatasaray
+  FAIL: cx-20260710-05 | not-a-member | Andrea Pirlo | Played for both AC Milan and Inter Milan
+  FAIL: cx-20260710-09 | not-a-member | Radamel Falcao | Played for River Plate
+   878 of 1304 groups judged; members 2830 judged (682 unknown), other tiles 8710 judged (1826 unknown)
+   27 findings: 0 adjudicated, 19 owed to part B on boards not yet rebuilt
+5) the groups nothing checks yet may only get fewer
+  FAIL: 425 groups nothing checks, over the ceiling of 302
+   425 groups nothing checks yet (ceiling 302); part B ledgers them
+6) the shipped file is the copy of the live table (scripts/data/connectionsLiveSnapshot.json)
+  FAIL: puzzle-136: the file's board is not the live board (md5 0748bedc6b638c8b490125da56444d7c, live 1748bedc6b638c8b490125da56444d7c)
+   326 file boards, 326 live rows (expected after supabase/migrations/20261029120000_round_1565...), 1 boards differ
+
+simConnectionsFacts: 13 failures
