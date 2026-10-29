@@ -1,0 +1,9 @@
+tsc: node_modules/.bin/tsc --noEmit -p tsconfig.app.json
+vitest: node_modules/.bin/vitest run src/test/clubCareerAdditions.test.ts --testTimeout=300000 --hookTimeout=120000
+simBingoClubCounts: node scripts/simBingoClubCounts.mjs
+ctl-rule: BINGO_CLUBS_CONTROL=rule node scripts/simBingoClubCounts.mjs
+ctl-onesource: BINGO_CLUBS_CONTROL=onesource node scripts/simBingoClubCounts.mjs
+ctl-pending: BINGO_CLUBS_CONTROL=pending node scripts/simBingoClubCounts.mjs
+ctl-handedit: BINGO_CLUBS_CONTROL=handedit node scripts/simBingoClubCounts.mjs
+ctl-cap: FIXTURE_CONTROL=cap node scripts/simBingoClubCounts.mjs
+simNoRivalNames: node scripts/simNoRivalNames.mjs
