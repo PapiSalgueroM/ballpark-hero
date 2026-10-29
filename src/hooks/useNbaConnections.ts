@@ -3,6 +3,7 @@ import { nbaConnectionsPuzzles } from '@/data/nbaConnectionsPuzzles';
 import { useGameCompletion } from '@/hooks/useGameCompletion';
 import { useDailyPuzzle } from '@/hooks/useDailyPuzzle';
 import { isSportConnectionsLog } from '@/lib/dailySaveShapes';
+import { isSameConnectionsGroup } from '@/lib/connectionsSolvedMatch';
 import { fetchNbaConnectionsPuzzles } from '@/lib/fetchNbaConnectionsPuzzles';
 import { dailyIndex, getTodayET } from '@/lib/dateUtils';
 import { emptyNbaDrafts, nbaDraftKey, nbaDraftScope, parseNbaDrafts, toggleNbaDraft, type NbaConnectionDrafts } from '@/lib/nbaConnectionDrafts';
@@ -113,7 +114,7 @@ export function useNbaConnections() {
   const dailySolvedGroupsFinal = useMemo(() => {
     if (dailyLives > 0 || !dailyPuzzle) return dailySolvedGroups;
     const remaining = dailyPuzzle.groups.filter(
-      g => !dailySolvedGroups.some(s => s.theme === g.theme)
+      g => !dailySolvedGroups.some(s => isSameConnectionsGroup(s, g))
     );
     return [
       ...dailySolvedGroups,
@@ -256,7 +257,7 @@ export function useNbaConnections() {
     submittedRef.current = submission;
 
     const match = puzzle.groups.find(g =>
-      !solvedGroups.some(s => s.theme === g.theme) &&
+      !solvedGroups.some(s => isSameConnectionsGroup(s, g)) &&
       g.players.length === 5 &&
       selected.every(p => g.players.includes(p)) &&
       g.players.every(p => selected.includes(p))
@@ -277,7 +278,7 @@ export function useNbaConnections() {
         const newLives = unlimitedLives - 1;
         setUnlimitedLives(newLives);
         if (newLives <= 0) {
-          const remaining = puzzle.groups.filter(g => !unlimitedSolvedGroups.some(s => s.theme === g.theme));
+          const remaining = puzzle.groups.filter(g => !unlimitedSolvedGroups.some(s => isSameConnectionsGroup(s, g)));
           setUnlimitedRevealed(remaining.map(g => ({ theme: g.theme, players: g.players, difficulty: g.difficulty })));
         }
       }

@@ -54,7 +54,11 @@ const touched = new Set([...migration.matchAll(/^\s*\('((?:bconn|nflconn|nhlconn
 /* DEALT_LABELS_ONLY_SAFE=1 (Round 1567, set by its wrapper): a board whose every known old value holds the same five
    players in each group as the new board, and only a label changed ("Played for the Steelers" to "Played for the
    Steelers (as of 2025)"), cannot strand a tile: a guess saved earlier that day keeps the old label on its solved
-   group and nothing else. Such a board is reported RELABELLED and does not make the day unsafe. With exports, the
+   group. That is safe only because the hooks match a saved group to the board by its label OR its five names
+   (src/lib/connectionsSolvedMatch.ts, added by Round 1567's fix); under the code before it, which matched by label
+   alone, a LOST board showed that group twice, old and new label with the same five names (review-run-1567 finding
+   1). So the code release carrying that matcher must be live before the migration lands. Such a board is reported
+   RELABELLED and does not make the day unsafe. With exports, the
    live row is what is compared with the new board; with "file", the base file's board (the migration's first old
    value for the row). */
 const LABELS_ONLY_SAFE = process.env.DEALT_LABELS_ONLY_SAFE === '1';
