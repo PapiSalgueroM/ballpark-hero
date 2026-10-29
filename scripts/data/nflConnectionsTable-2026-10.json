@@ -1,0 +1,183 @@
+{"about":"Round 1574. The nfl_connections_puzzles rows past the shipped file (src/data/nflConnectionsPuzzles.ts), as the lead's read only export held them (exported) and as the rounds that decided them leave them (board). Written by scripts/qa/usConnectionsTableImport.mjs init; a board changes only with a tableDecisions line in scripts/data/nflConnectionsVerified-2026-10.json, and reaches the live table only through that round's guarded migration. Nothing under src reads this file.",
+"table":"nfl_connections_puzzles",
+"exportedAt":"2026-10-29 14:33 EDT by the lead, read only: the public REST API with the anon key, h = md5 of the jsonb text computed with Round 1565's scripts/lib/pgJsonbText.mjs; the table fingerprint matched Postgres's own aggregate over md5(groups_json::text) through the Supabase MCP",
+"exportFile":"nfl-2026-10-29.json",
+"fingerprint":"58c1007041bc70253c0929832bf1123c",
+"rows":[
+{"puzzle_id":"nflconn-005","sort_order":5,"exportedH":"0ccb4aa19e3309de70057c3265a8ff29",
+  "exported":[
+   {"theme":"Played for the Dallas Cowboys","players":["Emmitt Smith","Tony Romo","DeMarcus Ware","Jason Witten","Dez Bryant"],"difficulty":"yellow"},
+   {"theme":"Played for the Green Bay Packers","players":["Brett Favre","Aaron Rodgers","Charles Woodson","Davante Adams","Jordy Nelson"],"difficulty":"green"},
+   {"theme":"Played for the Seattle Seahawks","players":["Russell Wilson","Marshawn Lynch","Richard Sherman","Bobby Wagner","Kam Chancellor"],"difficulty":"blue"},
+   {"theme":"Played for the Miami Dolphins","players":["Jason Taylor","Tyreek Hill","Cameron Wake","Jarvis Landry","Ryan Tannehill"],"difficulty":"purple"}],
+  "board":[
+   {"theme":"Played for the Dallas Cowboys","players":["Emmitt Smith","Tony Romo","DeMarcus Ware","Jason Witten","Dez Bryant"],"difficulty":"yellow"},
+   {"theme":"Played for the Green Bay Packers","players":["Brett Favre","Aaron Rodgers","Charles Woodson","Davante Adams","Jordy Nelson"],"difficulty":"green"},
+   {"theme":"Played for the Seattle Seahawks","players":["Russell Wilson","Marshawn Lynch","Richard Sherman","Bobby Wagner","Kam Chancellor"],"difficulty":"blue"},
+   {"theme":"Played for the Miami Dolphins","players":["Jason Taylor","Tyreek Hill","Cameron Wake","Jarvis Landry","Ryan Tannehill"],"difficulty":"purple"}]},
+{"puzzle_id":"nflconn-006","sort_order":6,"exportedH":"b30c81a6d087ce10956a5967339aac07",
+  "exported":[
+   {"theme":"Played for the Pittsburgh Steelers","players":["Ben Roethlisberger","Troy Polamalu","Antonio Brown","Hines Ward","T.J. Watt"],"difficulty":"yellow"},
+   {"theme":"Played for the Denver Broncos","players":["Peyton Manning","Von Miller","Champ Bailey","Demaryius Thomas","Courtland Sutton"],"difficulty":"green"},
+   {"theme":"Played for the San Francisco 49ers","players":["Colin Kaepernick","Frank Gore","George Kittle","Deebo Samuel","Patrick Willis"],"difficulty":"blue"},
+   {"theme":"Played for the Cleveland Browns","players":["Myles Garrett","Joe Thomas","Baker Mayfield","Nick Chubb","Denzel Ward"],"difficulty":"purple"}],
+  "board":[
+   {"theme":"Played for the Pittsburgh Steelers","players":["Ben Roethlisberger","Troy Polamalu","Antonio Brown","Hines Ward","T.J. Watt"],"difficulty":"yellow"},
+   {"theme":"Played for the Denver Broncos","players":["Peyton Manning","Von Miller","Champ Bailey","Demaryius Thomas","Courtland Sutton"],"difficulty":"green"},
+   {"theme":"Played for the San Francisco 49ers","players":["Colin Kaepernick","Frank Gore","George Kittle","Deebo Samuel","Patrick Willis"],"difficulty":"blue"},
+   {"theme":"Played for the Cleveland Browns","players":["Myles Garrett","Joe Thomas","Baker Mayfield","Nick Chubb","Denzel Ward"],"difficulty":"purple"}]},
+{"puzzle_id":"nflconn-007","sort_order":7,"exportedH":"f76191a6b0c5d5526d7603fa63c504c6",
+  "exported":[
+   {"theme":"Played for the Dolphins","players":["Tua Tagovailoa","Jaylen Waddle","Jason Taylor","Zach Thomas","Ryan Tannehill"],"difficulty":"yellow"},
+   {"theme":"Played for the Vikings","players":["Justin Jefferson","Randy Moss","Harrison Smith","Dalvin Cook","Adam Thielen"],"difficulty":"green"},
+   {"theme":"Played for the Bengals","players":["Joe Burrow","Ja'Marr Chase","Tee Higgins","Geno Atkins","Chad Johnson"],"difficulty":"blue"},
+   {"theme":"Played for the Falcons","players":["Matt Ryan","Julio Jones","Roddy White","Grady Jarrett","Devonta Freeman"],"difficulty":"purple"}],
+  "board":[
+   {"theme":"Played for the Dolphins","players":["Tua Tagovailoa","Jaylen Waddle","Jason Taylor","Zach Thomas","Ryan Tannehill"],"difficulty":"yellow"},
+   {"theme":"Played for the Vikings","players":["Justin Jefferson","Randy Moss","Harrison Smith","Dalvin Cook","Adam Thielen"],"difficulty":"green"},
+   {"theme":"Played for the Bengals","players":["Joe Burrow","Ja'Marr Chase","Tee Higgins","Geno Atkins","Chad Johnson"],"difficulty":"blue"},
+   {"theme":"Played for the Falcons","players":["Matt Ryan","Julio Jones","Roddy White","Grady Jarrett","Devonta Freeman"],"difficulty":"purple"}]},
+{"puzzle_id":"nflconn-008","sort_order":8,"exportedH":"17cd8249ae5931706dd8605d4e1feebd",
+  "exported":[
+   {"theme":"Played for the Steelers","players":["Ben Roethlisberger","Antonio Brown","Le'Veon Bell","T.J. Watt","Cameron Heyward"],"difficulty":"yellow"},
+   {"theme":"Played for the Giants","players":["Eli Manning","Saquon Barkley","Victor Cruz","Landon Collins","Justin Tuck"],"difficulty":"green"},
+   {"theme":"Played for the Saints","players":["Drew Brees","Alvin Kamara","Cameron Jordan","Marshon Lattimore","Tyrann Mathieu"],"difficulty":"blue"},
+   {"theme":"Played for the Titans","players":["Derrick Henry","A.J. Brown","Kevin Byard","Jeffery Simmons","DeMarco Murray"],"difficulty":"purple"}],
+  "board":[
+   {"theme":"Played for the Steelers","players":["Ben Roethlisberger","Antonio Brown","Le'Veon Bell","T.J. Watt","Cameron Heyward"],"difficulty":"yellow"},
+   {"theme":"Played for the Giants","players":["Eli Manning","Saquon Barkley","Victor Cruz","Landon Collins","Justin Tuck"],"difficulty":"green"},
+   {"theme":"Played for the Saints","players":["Drew Brees","Alvin Kamara","Cameron Jordan","Marshon Lattimore","Tyrann Mathieu"],"difficulty":"blue"},
+   {"theme":"Played for the Titans","players":["Derrick Henry","A.J. Brown","Kevin Byard","Jeffery Simmons","DeMarco Murray"],"difficulty":"purple"}]},
+{"puzzle_id":"nflconn-009","sort_order":9,"exportedH":"1d6f5a9563dfbf2951da126664694072",
+  "exported":[
+   {"theme":"Won a Super Bowl MVP","players":["Patrick Mahomes","Tom Brady","Eli Manning","Nick Foles","Cooper Kupp"],"difficulty":"yellow"},
+   {"theme":"Won the Heisman Trophy","players":["Cam Newton","Lamar Jackson","Derrick Henry","Kyler Murray","Marcus Mariota"],"difficulty":"green"},
+   {"theme":"Retired, then came back","players":["Brett Favre","Rob Gronkowski","Marshawn Lynch","Jason Witten","Randy Moss"],"difficulty":"blue"},
+   {"theme":"Competed on Dancing with the Stars","players":["Emmitt Smith","Jerry Rice","Hines Ward","Von Miller","Rashad Jennings"],"difficulty":"purple"}],
+  "board":[
+   {"theme":"Won a Super Bowl MVP","players":["Patrick Mahomes","Tom Brady","Eli Manning","Nick Foles","Cooper Kupp"],"difficulty":"yellow"},
+   {"theme":"Won the Heisman Trophy","players":["Cam Newton","Lamar Jackson","Derrick Henry","Kyler Murray","Marcus Mariota"],"difficulty":"green"},
+   {"theme":"Retired, then came back","players":["Brett Favre","Rob Gronkowski","Marshawn Lynch","Jason Witten","Randy Moss"],"difficulty":"blue"},
+   {"theme":"Competed on Dancing with the Stars","players":["Emmitt Smith","Jerry Rice","Hines Ward","Von Miller","Rashad Jennings"],"difficulty":"purple"}]},
+{"puzzle_id":"nflconn-010","sort_order":10,"exportedH":"9ffdfd53d6d9318cf746d011c3f135b8",
+  "exported":[
+   {"theme":"Kickers","players":["Adam Vinatieri","Justin Tucker","Robbie Gould","Matt Prater","Stephen Gostkowski"],"difficulty":"yellow"},
+   {"theme":"Went undrafted","players":["Kurt Warner","Tony Romo","Antonio Gates","James Harrison","Adam Thielen"],"difficulty":"green"},
+   {"theme":"Wore number 12","players":["Tom Brady","Aaron Rodgers","Andrew Luck","Ken Stabler","Joe Namath"],"difficulty":"blue"},
+   {"theme":"Caught passes from Peyton Manning","players":["Marvin Harrison","Reggie Wayne","Dallas Clark","Demaryius Thomas","Emmanuel Sanders"],"difficulty":"purple"}],
+  "board":[
+   {"theme":"Kickers","players":["Adam Vinatieri","Justin Tucker","Robbie Gould","Matt Prater","Stephen Gostkowski"],"difficulty":"yellow"},
+   {"theme":"Went undrafted","players":["Kurt Warner","Tony Romo","Antonio Gates","James Harrison","Adam Thielen"],"difficulty":"green"},
+   {"theme":"Wore number 12","players":["Tom Brady","Aaron Rodgers","Andrew Luck","Ken Stabler","Joe Namath"],"difficulty":"blue"},
+   {"theme":"Caught passes from Peyton Manning","players":["Marvin Harrison","Reggie Wayne","Dallas Clark","Demaryius Thomas","Emmanuel Sanders"],"difficulty":"purple"}]},
+{"puzzle_id":"nflconn-011","sort_order":11,"exportedH":"e4996bfe914c968ae5ba3152bce0a25a",
+  "exported":[
+   {"theme":"Returned a kick for a Super Bowl touchdown","players":["Devin Hester","Jacoby Jones","Desmond Howard","Percy Harvin","Jermaine Lewis"],"difficulty":"yellow"},
+   {"theme":"Made an iconic Super Bowl catch","players":["David Tyree","Santonio Holmes","Mario Manningham","Julian Edelman","Lynn Swann"],"difficulty":"green"},
+   {"theme":"Had a 22-sack season","players":["Michael Strahan","T.J. Watt","Mark Gastineau","Jared Allen","Justin Houston"],"difficulty":"blue"},
+   {"theme":"Has a brother who played in the NFL","players":["Travis Kelce","J.J. Watt","Joey Bosa","Devin McCourty","Stefon Diggs"],"difficulty":"purple"}],
+  "board":[
+   {"theme":"Returned a kick for a Super Bowl touchdown","players":["Devin Hester","Jacoby Jones","Desmond Howard","Percy Harvin","Jermaine Lewis"],"difficulty":"yellow"},
+   {"theme":"Made an iconic Super Bowl catch","players":["David Tyree","Santonio Holmes","Mario Manningham","Julian Edelman","Lynn Swann"],"difficulty":"green"},
+   {"theme":"Had a 22-sack season","players":["Michael Strahan","T.J. Watt","Mark Gastineau","Jared Allen","Justin Houston"],"difficulty":"blue"},
+   {"theme":"Has a brother who played in the NFL","players":["Travis Kelce","J.J. Watt","Joey Bosa","Devin McCourty","Stefon Diggs"],"difficulty":"purple"}]},
+{"puzzle_id":"nflconn-012","sort_order":12,"exportedH":"3c858cc72242e5e87c55ac3b9644779a",
+  "exported":[
+   {"theme":"Drafted number 1 overall","players":["Michael Vick","David Carr","Baker Mayfield","Joe Burrow","Trevor Lawrence"],"difficulty":"yellow"},
+   {"theme":"Ran for 2,000 yards in a season","players":["Eric Dickerson","Terrell Davis","Jamal Lewis","Chris Johnson","Derrick Henry"],"difficulty":"green"},
+   {"theme":"Threw for 5,000 yards in a season","players":["Dan Marino","Drew Brees","Matthew Stafford","Jameis Winston","Patrick Mahomes"],"difficulty":"blue"},
+   {"theme":"Walked away in their prime","players":["Barry Sanders","Calvin Johnson","Andrew Luck","Luke Kuechly","Patrick Willis"],"difficulty":"purple"}],
+  "board":[
+   {"theme":"Drafted number 1 overall","players":["Michael Vick","David Carr","Baker Mayfield","Joe Burrow","Trevor Lawrence"],"difficulty":"yellow"},
+   {"theme":"Ran for 2,000 yards in a season","players":["Eric Dickerson","Terrell Davis","Jamal Lewis","Chris Johnson","Derrick Henry"],"difficulty":"green"},
+   {"theme":"Threw for 5,000 yards in a season","players":["Dan Marino","Drew Brees","Matthew Stafford","Jameis Winston","Patrick Mahomes"],"difficulty":"blue"},
+   {"theme":"Walked away in their prime","players":["Barry Sanders","Calvin Johnson","Andrew Luck","Luke Kuechly","Patrick Willis"],"difficulty":"purple"}]},
+{"puzzle_id":"nflconn-013","sort_order":13,"exportedH":"eac4e3d4264cb85aac6c2689ed400a9a",
+  "exported":[
+   {"theme":"Hall of Famers who played for the Jets","players":["Brett Favre","Curtis Martin","Ronnie Lott","LaDainian Tomlinson","Ed Reed"],"difficulty":"yellow"},
+   {"theme":"Won Super Bowl MVP on defense","players":["Richard Dent","Ray Lewis","Dexter Jackson","Malcolm Smith","Von Miller"],"difficulty":"green"},
+   {"theme":"Played 16 or more seasons for one franchise","players":["John Elway","Dan Marino","Darrell Green","Jason Hanson","Bruce Matthews"],"difficulty":"blue"},
+   {"theme":"Threw a Super Bowl touchdown pass but is not a QB","players":["Antwaan Randle El","Trey Burton","Jauan Jennings","Robert Newhouse","Lawrence McCutcheon"],"difficulty":"purple"}],
+  "board":[
+   {"theme":"Hall of Famers who played for the Jets","players":["Brett Favre","Curtis Martin","Ronnie Lott","LaDainian Tomlinson","Ed Reed"],"difficulty":"yellow"},
+   {"theme":"Won Super Bowl MVP on defense","players":["Richard Dent","Ray Lewis","Dexter Jackson","Malcolm Smith","Von Miller"],"difficulty":"green"},
+   {"theme":"Played 16 or more seasons for one franchise","players":["John Elway","Dan Marino","Darrell Green","Jason Hanson","Bruce Matthews"],"difficulty":"blue"},
+   {"theme":"Threw a Super Bowl touchdown pass but is not a QB","players":["Antwaan Randle El","Trey Burton","Jauan Jennings","Robert Newhouse","Lawrence McCutcheon"],"difficulty":"purple"}]},
+{"puzzle_id":"nflconn-014","sort_order":14,"exportedH":"20f15200319273ded608bd636f6ae559",
+  "exported":[
+   {"theme":"Recorded 100 career sacks","players":["Reggie White","Bruce Smith","DeMarcus Ware","J.J. Watt","T.J. Watt"],"difficulty":"yellow"},
+   {"theme":"Returned a kick or punt for a Super Bowl touchdown","players":["Desmond Howard","Devin Hester","Jacoby Jones","Percy Harvin","Fulton Walker"],"difficulty":"green"},
+   {"theme":"Undrafted but made a Pro Bowl","players":["Tony Romo","James Harrison","Antonio Gates","Adam Thielen","Kurt Warner"],"difficulty":"blue"},
+   {"theme":"Also played professional baseball","players":["Bo Jackson","Deion Sanders","Brian Jordan","Drew Henson","D.J. Dozier"],"difficulty":"purple"}],
+  "board":[
+   {"theme":"Recorded 100 career sacks","players":["Reggie White","Bruce Smith","DeMarcus Ware","J.J. Watt","T.J. Watt"],"difficulty":"yellow"},
+   {"theme":"Returned a kick or punt for a Super Bowl touchdown","players":["Desmond Howard","Devin Hester","Jacoby Jones","Percy Harvin","Fulton Walker"],"difficulty":"green"},
+   {"theme":"Undrafted but made a Pro Bowl","players":["Tony Romo","James Harrison","Antonio Gates","Adam Thielen","Kurt Warner"],"difficulty":"blue"},
+   {"theme":"Also played professional baseball","players":["Bo Jackson","Deion Sanders","Brian Jordan","Drew Henson","D.J. Dozier"],"difficulty":"purple"}]},
+{"puzzle_id":"nflconn-015","sort_order":15,"exportedH":"e1d35c980285172d64282b7f0d496bb7",
+  "exported":[
+   {"theme":"Won the MVP award more than once","players":["Peyton Manning","Aaron Rodgers","Brett Favre","Steve Young","Lamar Jackson"],"difficulty":"yellow"},
+   {"theme":"Tight ends with 10,000 receiving yards","players":["Tony Gonzalez","Antonio Gates","Jason Witten","Travis Kelce","Shannon Sharpe"],"difficulty":"green"},
+   {"theme":"Played college ball at Alabama","players":["Julio Jones","Derrick Henry","Amari Cooper","Jalen Hurts","DeVonta Smith"],"difficulty":"blue"},
+   {"theme":"1972 undefeated Dolphins","players":["Bob Griese","Larry Csonka","Mercury Morris","Paul Warfield","Garo Yepremian"],"difficulty":"purple"}],
+  "board":[
+   {"theme":"Won the MVP award more than once","players":["Peyton Manning","Aaron Rodgers","Brett Favre","Steve Young","Lamar Jackson"],"difficulty":"yellow"},
+   {"theme":"Tight ends with 10,000 receiving yards","players":["Tony Gonzalez","Antonio Gates","Jason Witten","Travis Kelce","Shannon Sharpe"],"difficulty":"green"},
+   {"theme":"Played college ball at Alabama","players":["Julio Jones","Derrick Henry","Amari Cooper","Jalen Hurts","DeVonta Smith"],"difficulty":"blue"},
+   {"theme":"1972 undefeated Dolphins","players":["Bob Griese","Larry Csonka","Mercury Morris","Paul Warfield","Garo Yepremian"],"difficulty":"purple"}]},
+{"puzzle_id":"nflconn-016","sort_order":16,"exportedH":"0d8bdcd16c801c416d2094545da70c1a",
+  "exported":[
+   {"theme":"Won the Heisman and an NFL MVP","players":["Barry Sanders","O.J. Simpson","Marcus Allen","Earl Campbell","Paul Hornung"],"difficulty":"yellow"},
+   {"theme":"Offensive Rookie of the Year at QB","players":["Justin Herbert","Kyler Murray","Dak Prescott","Vince Young","Robert Griffin III"],"difficulty":"green"},
+   {"theme":"First overall picks who never made a Pro Bowl","players":["David Carr","JaMarcus Russell","Courtney Brown","Ki-Jana Carter","Tim Couch"],"difficulty":"blue"},
+   {"theme":"Quarterbacks who also punted in the NFL","players":["Danny White","Randall Cunningham","Tom Tupa","Sammy Baugh","Bob Waterfield"],"difficulty":"purple"}],
+  "board":[
+   {"theme":"Won the Heisman and an NFL MVP","players":["Barry Sanders","O.J. Simpson","Marcus Allen","Earl Campbell","Paul Hornung"],"difficulty":"yellow"},
+   {"theme":"Offensive Rookie of the Year at QB","players":["Justin Herbert","Kyler Murray","Dak Prescott","Vince Young","Robert Griffin III"],"difficulty":"green"},
+   {"theme":"First overall picks who never made a Pro Bowl","players":["David Carr","JaMarcus Russell","Courtney Brown","Ki-Jana Carter","Tim Couch"],"difficulty":"blue"},
+   {"theme":"Quarterbacks who also punted in the NFL","players":["Danny White","Randall Cunningham","Tom Tupa","Sammy Baugh","Bob Waterfield"],"difficulty":"purple"}]},
+{"puzzle_id":"nflconn-017","sort_order":17,"exportedH":"6d2030709a5a6e91a418b19f5ceb7d3e",
+  "exported":[
+   {"theme":"Threw 500 career touchdown passes","players":["Tom Brady","Drew Brees","Peyton Manning","Aaron Rodgers","Brett Favre"],"difficulty":"yellow"},
+   {"theme":"Caught 100 career touchdown passes","players":["Jerry Rice","Randy Moss","Terrell Owens","Larry Fitzgerald","Marvin Harrison"],"difficulty":"green"},
+   {"theme":"Played for the Chargers","players":["LaDainian Tomlinson","Philip Rivers","Junior Seau","Joey Bosa","Keenan Allen"],"difficulty":"blue"},
+   {"theme":"Won Defensive Player of the Year more than once","players":["Lawrence Taylor","J.J. Watt","Aaron Donald","Ray Lewis","Joe Greene"],"difficulty":"purple"}],
+  "board":[
+   {"theme":"Threw 500 career touchdown passes","players":["Tom Brady","Drew Brees","Peyton Manning","Aaron Rodgers","Brett Favre"],"difficulty":"yellow"},
+   {"theme":"Caught 100 career touchdown passes","players":["Jerry Rice","Randy Moss","Terrell Owens","Larry Fitzgerald","Marvin Harrison"],"difficulty":"green"},
+   {"theme":"Played for the Chargers","players":["LaDainian Tomlinson","Philip Rivers","Junior Seau","Joey Bosa","Keenan Allen"],"difficulty":"blue"},
+   {"theme":"Won Defensive Player of the Year more than once","players":["Lawrence Taylor","J.J. Watt","Aaron Donald","Ray Lewis","Joe Greene"],"difficulty":"purple"}]},
+{"puzzle_id":"nflconn-018","sort_order":18,"exportedH":"84784747cfc1fb11c9c4db163df0e93c",
+  "exported":[
+   {"theme":"Played QB for the Bears","players":["Jay Cutler","Jim McMahon","Mitchell Trubisky","Justin Fields","Caleb Williams"],"difficulty":"yellow"},
+   {"theme":"Hall of Fame middle linebackers","players":["Dick Butkus","Ray Nitschke","Mike Singletary","Willie Lanier","Jack Lambert"],"difficulty":"green"},
+   {"theme":"Wore number 80","players":["Jerry Rice","Cris Carter","Steve Largent","Isaac Bruce","Andre Johnson"],"difficulty":"blue"},
+   {"theme":"Kicked a 63-yard field goal or longer","players":["Justin Tucker","Matt Prater","Sebastian Janikowski","Tom Dempsey","David Akers"],"difficulty":"purple"}],
+  "board":[
+   {"theme":"Played QB for the Bears","players":["Jay Cutler","Jim McMahon","Mitchell Trubisky","Justin Fields","Caleb Williams"],"difficulty":"yellow"},
+   {"theme":"Hall of Fame middle linebackers","players":["Dick Butkus","Ray Nitschke","Mike Singletary","Willie Lanier","Jack Lambert"],"difficulty":"green"},
+   {"theme":"Wore number 80","players":["Jerry Rice","Cris Carter","Steve Largent","Isaac Bruce","Andre Johnson"],"difficulty":"blue"},
+   {"theme":"Kicked a 63-yard field goal or longer","players":["Justin Tucker","Matt Prater","Sebastian Janikowski","Tom Dempsey","David Akers"],"difficulty":"purple"}]},
+{"puzzle_id":"nflconn-019","sort_order":19,"exportedH":"50e339abf30884c22a21f84704062fbb",
+  "exported":[
+   {"theme":"Played for the Texans","players":["DeAndre Hopkins","Deshaun Watson","Arian Foster","C.J. Stroud","Nico Collins"],"difficulty":"yellow"},
+   {"theme":"Won Offensive Rookie of the Year at RB","players":["Saquon Barkley","Eric Dickerson","Adrian Peterson","Edgerrin James","Alvin Kamara"],"difficulty":"green"},
+   {"theme":"Rushed for 150 yards in a Super Bowl","players":["Timmy Smith","Marcus Allen","John Riggins","Franco Harris","Terrell Davis"],"difficulty":"blue"},
+   {"theme":"Had a pick-six in a Super Bowl","players":["James Harrison","Malcolm Smith","Dwight Smith","Robert Alford","Tracy Porter"],"difficulty":"purple"}],
+  "board":[
+   {"theme":"Played for the Texans","players":["DeAndre Hopkins","Deshaun Watson","Arian Foster","C.J. Stroud","Nico Collins"],"difficulty":"yellow"},
+   {"theme":"Won Offensive Rookie of the Year at RB","players":["Saquon Barkley","Eric Dickerson","Adrian Peterson","Edgerrin James","Alvin Kamara"],"difficulty":"green"},
+   {"theme":"Rushed for 150 yards in a Super Bowl","players":["Timmy Smith","Marcus Allen","John Riggins","Franco Harris","Terrell Davis"],"difficulty":"blue"},
+   {"theme":"Had a pick-six in a Super Bowl","players":["James Harrison","Malcolm Smith","Dwight Smith","Robert Alford","Tracy Porter"],"difficulty":"purple"}]},
+{"puzzle_id":"nflconn-020","sort_order":20,"exportedH":"c44a65f9f1c1051404cea8251700102a",
+  "exported":[
+   {"theme":"Played QB for the Lions","players":["Matthew Stafford","Jared Goff","Dan Orlovsky","Jon Kitna","Charlie Batch"],"difficulty":"yellow"},
+   {"theme":"2007 16-0 regular season Patriots","players":["Randy Moss","Wes Welker","Junior Seau","Asante Samuel","Laurence Maroney"],"difficulty":"green"},
+   {"theme":"Played for the Bills","players":["Josh Allen","Stefon Diggs","Jim Kelly","Thurman Thomas","Andre Reed"],"difficulty":"blue"},
+   {"theme":"Kickers and punters in the Hall of Fame","players":["Ray Guy","Jan Stenerud","Morten Andersen","Lou Groza","George Blanda"],"difficulty":"purple"}],
+  "board":[
+   {"theme":"Played QB for the Lions","players":["Matthew Stafford","Jared Goff","Dan Orlovsky","Jon Kitna","Charlie Batch"],"difficulty":"yellow"},
+   {"theme":"2007 16-0 regular season Patriots","players":["Randy Moss","Wes Welker","Junior Seau","Asante Samuel","Laurence Maroney"],"difficulty":"green"},
+   {"theme":"Played for the Bills","players":["Josh Allen","Stefon Diggs","Jim Kelly","Thurman Thomas","Andre Reed"],"difficulty":"blue"},
+   {"theme":"Kickers and punters in the Hall of Fame","players":["Ray Guy","Jan Stenerud","Morten Andersen","Lou Groza","George Blanda"],"difficulty":"purple"}]}
+]}

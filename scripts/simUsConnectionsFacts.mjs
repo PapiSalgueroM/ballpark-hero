@@ -100,6 +100,7 @@ import { fileURLToPath, pathToFileURL } from 'node:url';
 import { build } from 'esbuild';
 import { crossCheckBoards, findingKey } from './lib/connectionsCrossCheck.mjs';
 import { makeUsChecker, fold } from './lib/usConnectionsCheck.mjs';
+import { TABLE_RANGE, tableBoards } from './lib/usConnectionsTables.mjs';
 
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const R = ROOT.replaceAll('\\', '/');
@@ -107,6 +108,13 @@ const TMP = fs.mkdtempSync(path.join(os.tmpdir(), 'usconnfacts-'));
 const CONTROL = process.env.US_CONN_CONTROL ?? '';
 const LIVE = process.env.US_CONN_LIVE ?? '';
 const SPORTS = ['baseball', 'nfl', 'nhl'];
+/* Round 1574: report mode. US_CONN_TABLES=nfl,nhl adds those sports' table rows (scripts/data/<sport>ConnectionsTable
+   -2026-10.json, all of them, whatever TABLE_RANGE says) for one run, prints every section and exits 0 whatever it
+   finds, "REPORT ONLY" on its last line: the true count of a sport's table rows before and while a round decides
+   them. Never a gate. */
+const REPORT = new Set((process.env.US_CONN_TABLES ?? '').split(',').filter(Boolean));
+for (const s of REPORT) if (!SPORTS.includes(s)) { console.error(`US_CONN_TABLES names ${s}, not a sport here`); process.exit(2); }
+if (REPORT.size && CONTROL) { console.error('US_CONN_TABLES is a report, never a control run'); process.exit(2); }
 /* Round 1567: a club group dated against trades ("Played for the Steelers (as of 2025)") is the same claim as the
    undated one for every man whose seasons there all came before the date, which section 4 checks against the
    record; the ledgers name such groups and facts by the undated label, and a refuted claim stays refuted dated */
@@ -131,6 +139,21 @@ const data = await import(pathToFileURL(path.join(TMP, 'bundle.mjs')).href);
 /* the boards under test: the shipped files, or the lead's export of a live table */
 const boards = {};
 for (const s of SPORTS) boards[s] = data[s].map(b => ({ id: b.id, groups: b.groups.map(g => ({ ...g, players: [...g.players] })) }));
+/* Round 1574: the table rows past the files, for each sport TABLE_RANGE holds (or the report names), held to every
+   section beside the file's boards; an id on both is a failure (the table file is the rows the file does not hold) */
+const tables = new Set();
+const fileIds = {};
+for (const s of SPORTS) {
+  fileIds[s] = new Set(boards[s].map(b => b.id));
+  const range = REPORT.has(s) ? 'all' : TABLE_RANGE[s];
+  if (!range) continue;
+  tables.add(s);
+  for (const b of tableBoards(ROOT, s, range)) {
+    if (fileIds[s].has(b.id)) fail(`${s} ${b.id}: a table row repeats a file board's id`);
+    boards[s].push(b);
+  }
+  console.log(`${REPORT.has(s) ? 'US_CONN_TABLES (report)' : 'TABLE_RANGE'}: ${s} holds ${boards[s].length - fileIds[s].size} table rows beside the file's ${fileIds[s].size} boards`);
+}
 const live = new Set();
 if (LIVE) {
   for (const part of LIVE.split(',')) {
@@ -417,9 +440,10 @@ for (const s of SPORTS) {
   unchecked[s] = cross.unchecked;
   memberUnknown[s] = cross.memberUnknown;
   otherUnknown[s] = cross.otherUnknown;
-  if (live.has(s)) {
+  if (live.has(s) || REPORT.has(s)) {
     const off = [...new Set(boards[s].flatMap(b => b.groups.flatMap(g => g.players)).filter(p => !sports[s].checker.has(p)))];
-    if (off.length) console.log(`   ${s}: ${off.length} MEN ON THE LIVE ROWS ARE NOT IN THE RECORD, SO THEIR GROUPS ARE NOT FULLY CHECKED. Extend the record with NAMES_FROM=<export> (scripts/usConnections/fetch*Record.mjs) and run again. First of them: ${off.slice(0, 8).join(', ')}`);
+    if (off.length) console.log(`   ${s}: ${off.length} MEN ON THE ${live.has(s) ? 'LIVE' : 'TABLE'} ROWS ARE NOT IN THE RECORD, SO THEIR GROUPS ARE NOT FULLY CHECKED. Extend the record with NAMES_FROM=<export> (scripts/usConnections/fetch*Record.mjs) and run again. First of them: ${off.slice(0, 8).join(', ')}`);
+    else console.log(`   ${s}: every man on the ${live.has(s) ? 'live' : 'table'} rows is in the record`);
   }
   console.log(`   ${s}: ${cross.boards} boards, ${cross.checked} of ${cross.groups} groups judged; members ${cross.memberChecks} judged (${cross.memberUnknown} unknown), other tiles ${cross.otherChecks} judged (${cross.otherUnknown} unknown); ${cross.findings.length} findings`);
 }
@@ -506,6 +530,13 @@ for (const s of SPORTS) {
 }
 
 console.log('');
+if (REPORT.size) {
+  const tally = {};
+  for (const f of fires) tally[f.kind] = (tally[f.kind] ?? 0) + 1;
+  console.log(`report: ${failures} failure lines over the files and the table rows of ${[...REPORT].join(', ')}; findings by rule: ${Object.entries(tally).map(([k, n]) => `${k} ${n}`).join(', ') || 'none'}`);
+  console.log('REPORT ONLY');
+  process.exit(0);
+}
 if (CONTROL) {
   /* red only when the rule this control names fired for the man or group it moved: every other failure is noise
      here, so a control whose own rule is deleted goes green and says so */
