@@ -1,0 +1,12 @@
+base chunks: [2m../wb-dist/[22m[2massets/[22m[36mSportsMillionaire-Dob1AZsu.js [39m[1m[2m 31.37 kB[22m[1m[22m[2m │ gzip: 12.40 kB[22m;
+(a) base-a-390 on 2026-11-04: {"state":"error","dailyMode":true,"modes":2,"dailyDisabled":true,"unlDisabled":true,"scrollY":0,"sideways":false}
+(a) base-a-390 after Try again: error, the same card (the reload dealt the same short ladder)
+(a) head-a-390 on 2026-11-04: {"state":"playing","dailyMode":true,"modes":2,"dailyDisabled":false,"unlDisabled":false,"scrollY":0,"sideways":false}
+(a) base-a-1280 on 2026-11-04: {"state":"error","dailyMode":true,"modes":2,"dailyDisabled":true,"unlDisabled":true,"scrollY":0,"sideways":false}
+(a) base-a-1280 after Try again: error, the same card (the reload dealt the same short ladder)
+(a) head-a-1280 on 2026-11-04: {"state":"playing","dailyMode":true,"modes":2,"dailyDisabled":false,"unlDisabled":false,"scrollY":0,"sideways":false}
+(b) base-b-390 on 2026-11-02: {"deals":320,"errorCards":8,"notUnlimited":0,"stuck":0,"jumps":0,"sideways":0}
+(b) head-b-390 on 2026-11-02: {"deals":320,"errorCards":0,"notUnlimited":0,"stuck":0,"jumps":0,"sideways":0}
+(b) base-b-1280 on 2026-11-02: {"deals":320,"errorCards":7,"notUnlimited":0,"stuck":0,"jumps":0,"sideways":0}
+(b) head-b-1280 on 2026-11-02: {"deals":320,"errorCards":0,"notUnlimited":0,"stuck":0,"jumps":0,"sideways":0}
+walk1573: green; (a) on 2026-11-04, (b) error cards base-390 8 of 320, head-390 0 of 320, base-1280 7 of 320, head-1280 0 of 320
