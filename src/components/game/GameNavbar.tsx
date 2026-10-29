@@ -1,5 +1,6 @@
 import { lazy, Suspense, useRef, useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
+import { SiteMenuHost } from '@/components/layout/SiteMenuHost';
 import { Trophy, Star, Medal, Flame, ArrowLeft, UserPlus } from 'lucide-react';
 import { useGameNavbarStats } from '@/hooks/useGameNavbarStats';
 import { useDailyLegend } from '@/hooks/useDailyLegend';
@@ -113,14 +114,17 @@ export function GameNavbar() {
             was, and simMobileChrome still measures every width. */}
         <div className="flex flex-wrap items-center justify-between gap-x-2 gap-y-1.5 px-3 py-2 lg:grid lg:grid-cols-[1fr_auto_1fr]">
           {/* Logo, left, bigger + stretched */}
-          <Link
-            to="/"
-            className="order-1 shrink-0 font-display font-black text-primary hover:opacity-80 transition-opacity lg:justify-self-start"
-          >
-            <span className="text-base sm:text-2xl tracking-[0.18em] sm:tracking-[0.22em] uppercase">
-              DoUKnowBall
-            </span>
-          </Link>
+          <div className="order-1 flex shrink-0 items-center gap-2 lg:justify-self-start">
+            <SiteMenuHost />
+            <Link
+              to="/"
+              className="shrink-0 font-display font-black text-primary hover:opacity-80 transition-opacity"
+            >
+              <span className="text-base sm:text-2xl tracking-[0.18em] sm:tracking-[0.22em] uppercase">
+                DoUKnowBall
+              </span>
+            </Link>
+          </div>
 
           {/* Back, right, boxed so it can't be missed. Second in the DOM so that
               on a phone it shares the top line with the logo instead of being
@@ -129,7 +133,7 @@ export function GameNavbar() {
             ref={backRef}
             onClick={() => navigate(-1)}
             aria-label="Go back"
-            className="order-2 lg:order-3 shrink-0 inline-flex items-center gap-1.5 rounded-lg border-2 border-primary/60 bg-surface-1 px-3 py-1.5 min-h-[36px] text-xs sm:text-sm font-semibold text-primary hover:bg-primary hover:text-primary-foreground transition-colors shadow-sm lg:justify-self-end"
+            className="order-2 lg:order-3 shrink-0 inline-flex items-center gap-1.5 rounded-lg border-2 border-primary/60 bg-surface-1 px-3 py-1.5 min-h-11 text-xs sm:text-sm font-semibold text-primary hover:bg-primary hover:text-primary-foreground transition-colors shadow-sm lg:justify-self-end"
           >
             <ArrowLeft className="w-4 h-4" />
             <span>Back</span>
