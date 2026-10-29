@@ -1,0 +1,25 @@
+tsc: node_modules/.bin/tsc --noEmit -p tsconfig.app.json
+vitest-all: node_modules/.bin/vitest run --testTimeout=300000 --hookTimeout=120000 > /tmp/va.log 2>&1; s=$?; grep -E "FAIL|Test Files|Tests  " /tmp/va.log | head -30 | cut -c1-250; exit $s
+simNoRivalNames: node scripts/simNoRivalNames.mjs
+simHarnessAnchors: node scripts/simHarnessAnchors.mjs
+simStorageWrites: node scripts/simStorageWrites.mjs
+simSiteSearch: node scripts/simSiteSearch.mjs
+simGuideHeadings: node scripts/simGuideHeadings.mjs
+dash-diff: node .rc/x/dashScan.mjs diff f957b34ea
+dash-log: node .rc/x/dashScan.mjs log f957b34ea
+simSoccerCareerLoyalty: NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/simSoccerCareerLoyalty.mjs
+simCareerProgramme: CI=1 NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/simCareerProgramme.mjs
+simCmShootoutResults: NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/simCmShootoutResults.mjs
+simCmShootoutOrder: node scripts/simCmShootoutOrder.mjs
+simManagerMatchPlans: NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/simManagerMatchPlans.mjs
+simPlayerBingoHonours: node scripts/simPlayerBingoHonours.mjs
+vitest-new: node_modules/.bin/vitest run src/lib/soccerCareerProgramme.test.ts src/test/clubManagerLoanDevelopment.test.ts src/test/clubManagerLoanPlanIntegration.test.ts src/test/clubManagerLoanPlanMounted.test.tsx src/test/clubManagerRecruitment.test.ts src/test/clubManagerRecruitmentBaseline.test.tsx src/test/clubManagerRecruitmentBoard.test.tsx src/test/clubManagerRecruitmentHook.test.tsx src/test/clubManagerShootoutDisplay.test.tsx src/test/clubManagerShootoutResults.test.ts src/test/gameSeoIntroLinks.test.tsx src/test/playerBingoCategories.test.ts src/test/pollDayEt.test.ts src/test/soccerCareerCoachingChooser.test.tsx src/test/soccerCareerCoachingStart.consumer.lifecycle.test.tsx src/test/soccerCareerCoachingStart.consumer.test.tsx src/test/soccerCareerCoachingStart.test.ts src/test/soccerCareerCoachingTransaction.test.tsx src/test/soccerCareerLoyalty.engine.test.ts src/test/soccerCareerLoyalty.review.test.tsx src/test/soccerCareerLoyalty.test.ts src/test/soccerCareerManagerJobReview.card.test.tsx src/test/soccerCareerManagerJobReview.consumer.test.tsx src/test/soccerCareerManagerJobReview.test.ts src/test/soccerCareerManagerJobReview.transaction.test.tsx src/test/soccerCareerProgrammeUi.test.tsx --testTimeout=300000 --hookTimeout=120000 > /tmp/vn.log 2>&1; s=$?; grep -E "FAIL|Test Files|Tests  " /tmp/vn.log | head -30 | cut -c1-250; exit $s
+simAccessibility: node scripts/simAccessibility.mjs
+simAccessibility-dialog: SIM_A11Y_CONTROL=dialog node scripts/simAccessibility.mjs
+simCareerNoDeadEnd: node scripts/simCareerNoDeadEnd.mjs
+deadend-pundit: CAREER_DEADEND_CONTROL=pundit node scripts/simCareerNoDeadEnd.mjs
+deadend-strand: CAREER_DEADEND_CONTROL=strand node scripts/simCareerNoDeadEnd.mjs
+deadend-noheal: CAREER_DEADEND_CONTROL=noheal node scripts/simCareerNoDeadEnd.mjs
+simPlayerBingoRodriHonour: CI=1 node scripts/simPlayerBingoRodriHonour.mjs
+simPlayerBingoWorldCupAlias: CI=1 node scripts/simPlayerBingoWorldCupAlias.mjs
+vitest-fix: node_modules/.bin/vitest run src/test/soccerCareerLoyaltyUncut.test.ts src/test/soccerCareerCoachingStartEra.test.ts src/test/soccerCareerManagerJobReviewMarket.test.ts src/test/soccerCareerManagerJobReview.test.ts src/test/soccerCareerManagerPendingRetire.test.tsx src/test/soccerCareerLoyaltyView.test.ts src/test/clubManagerLoanPlanMounted.test.tsx src/test/clubManagerRecruitmentBoard.test.tsx src/test/clubManagerShootoutCopy.test.tsx src/test/playerBingoBirthYear.test.ts src/test/playerBingoCategories.test.ts --testTimeout=300000 --hookTimeout=120000 > /tmp/vf.log 2>&1; s=$?; grep -E "FAIL|Test Files|Tests  |loyalty uncut|coaching era|market job review|bingo birth" /tmp/vf.log | head -30 | cut -c1-250; exit $s
