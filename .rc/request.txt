@@ -1,0 +1,3 @@
+simWall: node scripts/simUsCareerHallWall.mjs
+anchors: node scripts/simHarnessAnchors.mjs
+rival: node scripts/simNoRivalNames.mjs
