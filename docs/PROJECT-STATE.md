@@ -1,3 +1,23 @@
+## Build Your XI more clubs, 2026-10-29 (unreleased, scoped offline checks passed)
+
+Mixed play has 60 clubs and the same 25 nations. Thirty verified club identities were added using existing game records. The original 30-club export and all 35 old stored aliases are retained for Club year integration. See [club identity sources](audits/BUILD-XI-MIXED-CLUBS-2026-10-29.md). No player, value, position, result or transfer records were imported.
+
+Changes cover the Mixed draw, reroll and reel, exact client and validator aliases, the existing records-map count guard, and five permanent tests. Wrong positions and unverified answers still refuse without filling a slot.
+
+The actual pre-change baseline is40899115438 atfeac0cb0: types0, exactly3 intended assertion failures and2 preservation passes, zero blocked transport and3 effective DERIVED copied guards. Rootb5504740/custodye6057bb9/rawpeeredd51b72. Product adoption followed that actual baseline.
+
+[Positive run40911321034](https://github.com/PapiSalgueroM/ballpark-hero/actions/runs/40911321034) at0c64edac8b313cd40880079c4e85bfa69bc5457d passed real types, all5 focused cases, normal production build, all18 saved-page readers and all15 unchanged current BS download limits. Three actual Page journeys at320/390/1440 rejected an outfield pick in goal and accepted a matching keeper. Six fresh original screenshots were reviewed and rehashed. All8 DERIVED copied guards, source5458/parent5447/dist831/font/dependency holds and zero stage transports are admitted: Root48fa15e3, custodyb10f2552, nativeb0739174, independent browser/pixelscb8336ae.
+
+Browser rows are explicitly fictional transport fixtures for real UI, position and local-record mechanics. This does not establish real rosters, all60 club gameplay, full-XI/saved-round behavior, all touch targets or global header/fold behavior. The existing29px GK target and the320 screenshot's lower-edge limit are retained as scoped notes. Failed attempts40896890407 and40905339962 remain failed; only their corrected successors qualified.
+
+The clean delivery contains five product/guard paths, the permanent test and two documentation files. Verification workflows and controllers remain on the separate QA branches.
+
+Release integration follows frozen PR400 then401. Keep ALL_CLUBS30 in both Club year branches; use MIXED_CLUBS60 only in Mixed. Preserve PR401's recordedYear Spinner prop, recorded-year displayTeams branch, length dependency and caption. Replace only its Mixed decorative pool, then retest the actual joined release.
+
+The validator source adds only30 exact self mappings to the live v13-compatible body. Matching Edge deployment and its normal live records harness belong to the release lead; neither is claimed by this offline round. No new backend provider, schema, asset or application dependency was added.
+
+The paired World XI report is already implemented in draft PR399 at206222d. Surgical post-BS port78dd8e41 (Rootliteraljoin889fbfdf) remains source-only and unrun. The lead's two normal real-pool gates remain owed; BS's20 live gates exclude them. No all48 or current playable-nation count is asserted.
+
 ## Release BS LIVE, 2026-10-29 09:57 EDT: Soccer Career and Club Manager from both lanes (Round 1568 plus Chat PRs 421, 415, 418, 419, 416, 420, 410, 408, 414 and 372), the poll clock fix before 2026-11-01
 
 Claude lane published (session K). main 6748ad0a7, deployment 40836fc2-7166-4a95-a045-15539923486d, entry index-C0lDdqsC.js.
