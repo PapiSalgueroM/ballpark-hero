@@ -1,0 +1,8 @@
+main-1 exit=1 18s | ::error file=/tmp/vfmain/src/test/dailySaveShapes.test.tsx,title=src/test/dailySaveShapes.test.tsx > a damaged daily save resets itself > /baseball-connections,line=340,c
+head-1 exit=0 17s |    Duration  17.38s (transform 5.89s, setup 259ms, collect 7.36s, tests 24.37s, environment 1.37s, prepare 286ms)
+main-2 exit=1 16s | ::error file=/tmp/vfmain/src/test/dailySaveShapes.test.tsx,title=src/test/dailySaveShapes.test.tsx > a damaged daily save resets itself > /afl-higher-lower,line=340,colum
+head-2 exit=0 16s |    Duration  15.68s (transform 5.36s, setup 238ms, collect 6.78s, tests 21.47s, environment 1.25s, prepare 290ms)
+main-3 exit=1 16s | ::error file=/tmp/vfmain/src/test/dailySaveShapes.test.tsx,title=src/test/dailySaveShapes.test.tsx > a damaged daily save resets itself > /college-grid,line=340,column=24
+head-3 exit=0 15s |    Duration  15.22s (transform 5.49s, setup 207ms, collect 6.76s, tests 20.97s, environment 1.28s, prepare 258ms)
+main-4 exit=0 15s |    Duration  15.18s (transform 5.03s, setup 191ms, collect 6.51s, tests 21.19s, environment 1.23s, prepare 274ms)
+head-4 exit=1 16s | ::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/test/dailySaveShapes.test.tsx,title=src/test/dailySaveShapes.test.tsx > a damaged daily save resets itself 
