@@ -1,0 +1,5 @@
+build exit=0 37s | [dukb] inlined 1 stylesheet(s) and 1 module(s) into 181 snapshots (11 left alone)
+weight-head exit=0 33s | sweepWeight: green. Every page is inside its budget, and the budgets came down this round.
+analyze-head exit=0 52s | dynamic imports of the route chunk: assets/GmLotteryCard-STUEAUx5.js:1.0K assets/nbaOpeningRatings-DmYGOL8G.js:6.6K
+analyze-base exit=0 46s | dynamic imports of the route chunk: assets/GmLotteryCard-D4bpwDgg.js:1.0K assets/nbaOpeningRatings-DmYGOL8G.js:6.6K
+weight-base exit=0 87s | sweepWeight: green. Every page is inside its budget, and the budgets came down this round.

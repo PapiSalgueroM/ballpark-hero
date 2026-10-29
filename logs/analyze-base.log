@@ -1,0 +1,161 @@
+=== FrontOffice-
+0.8K assets/Celebration-PIPzyioV.js | club-manager/Celebration.tsx:1909
+0.7K assets/CelebrationStyles-CUOmaQFu.js | club-manager/CelebrationStyles.tsx:2112
+1.6K assets/DraftNightCard-NrFRdlLi.js | front-office-shared/DraftNightCard.tsx:4348 lib/draftNight.ts:1468
+1.5K assets/FoAwardBadge-CvcKh24o.js | lib/foStatsCodec.ts:4022 front-office-shared/gmLazyPanel.tsx:776 front-office-shared/FoAwardBadge.tsx:455
+43.7K assets/FrontOffice-B0L51xiu.js | front-office/FrontOfficeBoard.tsx:122719 lib/frontOffice.ts:32340 lib/nflGmDesk.ts:15641 lib/nflSeasonStats.ts:11517 front-office/NflGmDesk.tsx:9577 lib/gmBracket.ts:8766 pages/FrontOffice.tsx:7342 lib/gmCareerFace.ts:6105 lib/gmGameScore.ts:2809 gmBrackets/nfl.ts:1626 lib/frontOfficePostseason.ts:1374 lib/gmGameLog.ts:1321 lib/frontOfficeGameDay.ts:1135 lib/gmPostseason.ts:1068
+0.8K assets/GameHelp-DZFByjKZ.js | game/GameHelp.tsx:3021
+1.7K assets/GameNav-no8njuyi.js | game/GameNav.tsx:7008 game/DailyCountdown.tsx:2474
+3.7K assets/GameNavbar-CiIuM9_1.js | game/GameNavbar.tsx:7516 hooks/useGameNavbarStats.ts:3568 hooks/useDailyLegend.ts:2829 game/SharedResultCard.tsx:1902 lib/sharedResult.ts:1499 icons/user-plus.js:503
+3.0K assets/GameReportContext-Dfet5im4.js | gameContent/loader.ts:6522 game/ReportQuestion.tsx:5864 gameContent/guideShape.ts:876 game/GameReportContext.tsx:57
+2.5K assets/GameSeoContent-C5BhVFo0.js | seo/GameSeoContent.tsx:11068 lib/relatedGames.ts:2102
+33.5K assets/GmTradeBuilder-BoeRr3_j.js | lib/gmContracts.ts:22027 lib/gmContractRules.ts:20869 front-office-shared/GmResignDesk.tsx:16929 gmStaff/packs.ts:16167 front-office-shared/GmStaffPanel.tsx:15645 lib/gmPicks.ts:11534 lib/foHub.ts:6667 lib/gmTradePackage.ts:6273 front-office-shared/GmPicksCard.tsx:4224 front-office-shared/GmTradeBuilder.tsx:3865 lib/foGmPress.ts:3671 front-office-shared/TradeTalksCard.tsx:3325 lib/gmDeadline.ts:3135 front-office-shared/GmPressCard.tsx:2939
+0.8K assets/HowToPlayPopover-C3wWPfVH.js | game/HowToPlayPopover.tsx:2429
+0.6K assets/HubTiles-CmLaHIla.js | hub/HubTiles.tsx:2068
+4.4K assets/ShareButtons-DmEazcr_.js | game/ShareButtons.tsx:12788 game/ShareCard.tsx:3610 icons/share-2.js:565 lib/share.ts:510 icons/image.js:449 icons/mail.js:379
+0.3K assets/arrow-left-DfXT2Mfl.js | icons/arrow-left.js:325
+2.2K assets/badges-B5fMgkQk.js | lib/badges.ts:8966
+0.3K assets/briefcase-D5TJfr83.js | icons/briefcase.js:389
+0.3K assets/circle-help-D1Eooz8K.js | icons/circle-help.js:413
+0.3K assets/copy-CExsuX3p.js | icons/copy.js:402
+0.4K assets/crown-DMjINAU9.js | icons/crown.js:547
+0.3K assets/entityIds-L4Nd6Y8C.js | lib/entityIds.ts:856
+0.6K assets/finalsBracket-DQg8LGI5.js | lib/finalsBracket.ts:1890
+0.3K assets/flag-DuivK6RA.js | icons/flag.js:381
+1.8K assets/foOwnerMandate-CpK5VX3f.js | lib/foOwnerMandate.ts:4969 icons/shield-half.js:503
+8.1K assets/frontOfficePlayers-BMdaeFxZ.js | data/frontOfficePlayers.ts:43805
+1.0K assets/frontOfficeSave-LTb4SYA5.js | lib/frontOfficeSave.ts:3808
+0.4K assets/gmDealTable-DYyD4N4_.js | lib/gmDealTable.ts:1524
+0.7K assets/gmSeatRecord-Cnr4rCr3.js | lib/gmSeatRecord.ts:2389
+3.8K assets/gmStaff-CQgWbtVe.js | lib/gmStaff.ts:15050
+2.2K assets/gmXp-C7Mhtk-f.js | lib/gmXp.ts:8585
+0.2K assets/keyedRng-BKZQ2UGv.js | lib/keyedRng.ts:365
+0.1K assets/keyedShuffle-CJAps3xO.js | lib/keyedShuffle.ts:210
+0.4K assets/medal-N1DanHB0.js | icons/medal.js:660
+0.7K assets/nflDrives-BQPwDUqv.js | gameLaws/nflDrives.ts:1407 gameLaws/nflScore.ts:964
+0.3K assets/rotate-ccw-D5gxFD21.js | icons/rotate-ccw.js:360
+0.4K assets/star-0BtjRW1T.js | icons/star.js:647
+0.6K assets/usCareerReveal-BW47Ke0-.js | lib/usCareerReveal.ts:1427
+0.5K assets/useGameCompletion-Cg2LXFJZ.js | hooks/useGameCompletion.ts:1213 lib/restoredFinish.ts:335
+0.8K assets/useRevealScroll-B7l6awqD.js | hooks/useRevealScroll.ts:3277
+route-own 126.1K in 39 files; entry closure 238.3K in 1 files
+dynamic imports of the route chunk: assets/nflCareerKit-Buq1jzMm.js:2.8K assets/GmJobMarketPanel-B-4HkJaN.js:2.0K assets/GmCareerPanel--edmWxfc.js:1.4K assets/GmXpDeskPanel-CRYwPXCU.js:2.5K assets/NflGameDay-COpgBeIq.js:5.9K assets/NflBracket-K-5b2uEr.js:4.2K assets/NflSeasonStats-BYNJVarD.js:2.8K assets/frontOfficeDepth-hFZ-rvc7.js:55.1K
+=== NhlFrontOffice-
+0.8K assets/Celebration-PIPzyioV.js | club-manager/Celebration.tsx:1909
+0.7K assets/CelebrationStyles-CUOmaQFu.js | club-manager/CelebrationStyles.tsx:2112
+1.6K assets/DraftNightCard-NrFRdlLi.js | front-office-shared/DraftNightCard.tsx:4348 lib/draftNight.ts:1468
+0.8K assets/GameHelp-DZFByjKZ.js | game/GameHelp.tsx:3021
+1.7K assets/GameNav-no8njuyi.js | game/GameNav.tsx:7008 game/DailyCountdown.tsx:2474
+3.7K assets/GameNavbar-CiIuM9_1.js | game/GameNavbar.tsx:7516 hooks/useGameNavbarStats.ts:3568 hooks/useDailyLegend.ts:2829 game/SharedResultCard.tsx:1902 lib/sharedResult.ts:1499 icons/user-plus.js:503
+3.0K assets/GameReportContext-Dfet5im4.js | gameContent/loader.ts:6522 game/ReportQuestion.tsx:5864 gameContent/guideShape.ts:876 game/GameReportContext.tsx:57
+2.5K assets/GameSeoContent-C5BhVFo0.js | seo/GameSeoContent.tsx:11068 lib/relatedGames.ts:2102
+33.5K assets/GmTradeBuilder-BoeRr3_j.js | lib/gmContracts.ts:22027 lib/gmContractRules.ts:20869 front-office-shared/GmResignDesk.tsx:16929 gmStaff/packs.ts:16167 front-office-shared/GmStaffPanel.tsx:15645 lib/gmPicks.ts:11534 lib/foHub.ts:6667 lib/gmTradePackage.ts:6273 front-office-shared/GmPicksCard.tsx:4224 front-office-shared/GmTradeBuilder.tsx:3865 lib/foGmPress.ts:3671 front-office-shared/TradeTalksCard.tsx:3325 lib/gmDeadline.ts:3135 front-office-shared/GmPressCard.tsx:2939
+0.8K assets/HowToPlayPopover-C3wWPfVH.js | game/HowToPlayPopover.tsx:2429
+0.6K assets/HubTiles-CmLaHIla.js | hub/HubTiles.tsx:2068
+25.9K assets/NhlFrontOffice-RAONxxF-.js | nhl-front-office/NhlFrontOfficeBoard.tsx:78918 lib/nhlFrontOffice.ts:25071 lib/nhlGmDesk.ts:16212 nhl-front-office/NhlGmDesk.tsx:10037 pages/NhlFrontOffice.tsx:4055 nhl-front-office/NhlWaiverReceipt.tsx:3505 lib/gmContractsHostNhl.ts:735 nhl-front-office/NhlWaiverReceipt.module.css:432 nhl-front-office/NhlContributors.module.css:401
+4.4K assets/ShareButtons-DmEazcr_.js | game/ShareButtons.tsx:12788 game/ShareCard.tsx:3610 icons/share-2.js:565 lib/share.ts:510 icons/image.js:449 icons/mail.js:379
+0.3K assets/arrow-left-DfXT2Mfl.js | icons/arrow-left.js:325
+2.2K assets/badges-B5fMgkQk.js | lib/badges.ts:8966
+0.3K assets/briefcase-D5TJfr83.js | icons/briefcase.js:389
+0.3K assets/circle-help-D1Eooz8K.js | icons/circle-help.js:413
+1.2K assets/conquestDataNhl-BBvewyKz.js | data/conquestDataNhl.ts:4334
+1.4K assets/conquestMapGeometry-DMIJk1yA.js | lib/conquestMapGeometry.ts:5011
+0.3K assets/copy-CExsuX3p.js | icons/copy.js:402
+0.4K assets/crown-DMjINAU9.js | icons/crown.js:547
+0.3K assets/entityIds-L4Nd6Y8C.js | lib/entityIds.ts:856
+0.3K assets/flag-DuivK6RA.js | icons/flag.js:381
+1.8K assets/foOwnerMandate-CpK5VX3f.js | lib/foOwnerMandate.ts:4969 icons/shield-half.js:503
+0.9K assets/foSchedule-BzpgxJRf.js | lib/foSchedule.ts:3008
+1.0K assets/frontOfficeSave-LTb4SYA5.js | lib/frontOfficeSave.ts:3808
+0.4K assets/gmDealTable-DYyD4N4_.js | lib/gmDealTable.ts:1524
+3.8K assets/gmStaff-CQgWbtVe.js | lib/gmStaff.ts:15050
+0.4K assets/medal-N1DanHB0.js | icons/medal.js:660
+5.3K assets/nhlFoPlayers-j0YE08i0.js | data/nhlFoPlayers.ts:25104
+0.3K assets/rotate-ccw-D5gxFD21.js | icons/rotate-ccw.js:360
+0.4K assets/star-0BtjRW1T.js | icons/star.js:647
+0.6K assets/usCareerReveal-BW47Ke0-.js | lib/usCareerReveal.ts:1427
+5.2K assets/usStatesPaths-DfX_GtuE.js | data/usStatesPaths.ts:18178
+0.5K assets/useGameCompletion-Cg2LXFJZ.js | hooks/useGameCompletion.ts:1213 lib/restoredFinish.ts:335
+0.8K assets/useRevealScroll-B7l6awqD.js | hooks/useRevealScroll.ts:3277
+route-own 108.3K in 36 files; entry closure 238.3K in 1 files
+dynamic imports of the route chunk: assets/nhlOpeningRatings-Y9x0bvK7.js:9.0K
+=== MlbFrontOffice-
+0.8K assets/Celebration-PIPzyioV.js | club-manager/Celebration.tsx:1909
+0.7K assets/CelebrationStyles-CUOmaQFu.js | club-manager/CelebrationStyles.tsx:2112
+1.6K assets/DraftNightCard-NrFRdlLi.js | front-office-shared/DraftNightCard.tsx:4348 lib/draftNight.ts:1468
+0.8K assets/GameHelp-DZFByjKZ.js | game/GameHelp.tsx:3021
+1.7K assets/GameNav-no8njuyi.js | game/GameNav.tsx:7008 game/DailyCountdown.tsx:2474
+3.7K assets/GameNavbar-CiIuM9_1.js | game/GameNavbar.tsx:7516 hooks/useGameNavbarStats.ts:3568 hooks/useDailyLegend.ts:2829 game/SharedResultCard.tsx:1902 lib/sharedResult.ts:1499 icons/user-plus.js:503
+3.0K assets/GameReportContext-Dfet5im4.js | gameContent/loader.ts:6522 game/ReportQuestion.tsx:5864 gameContent/guideShape.ts:876 game/GameReportContext.tsx:57
+2.5K assets/GameSeoContent-C5BhVFo0.js | seo/GameSeoContent.tsx:11068 lib/relatedGames.ts:2102
+33.5K assets/GmTradeBuilder-BoeRr3_j.js | lib/gmContracts.ts:22027 lib/gmContractRules.ts:20869 front-office-shared/GmResignDesk.tsx:16929 gmStaff/packs.ts:16167 front-office-shared/GmStaffPanel.tsx:15645 lib/gmPicks.ts:11534 lib/foHub.ts:6667 lib/gmTradePackage.ts:6273 front-office-shared/GmPicksCard.tsx:4224 front-office-shared/GmTradeBuilder.tsx:3865 lib/foGmPress.ts:3671 front-office-shared/TradeTalksCard.tsx:3325 lib/gmDeadline.ts:3135 front-office-shared/GmPressCard.tsx:2939
+0.8K assets/HowToPlayPopover-C3wWPfVH.js | game/HowToPlayPopover.tsx:2429
+0.6K assets/HubTiles-CmLaHIla.js | hub/HubTiles.tsx:2068
+33.4K assets/MlbFrontOffice-CpMlOVg_.js | mlb-front-office/MlbFrontOfficeBoard.tsx:70572 data/mlbFoRosters2026.ts:47119 lib/mlbFrontOffice.ts:18533 lib/mlbGmDesk.ts:16012 mlb-front-office/MlbGmDesk.tsx:14918 pages/MlbFrontOffice.tsx:3837 lib/gmContractsHostMlb.ts:356 mlb-front-office/MlbTradeRoster.module.css:220
+4.4K assets/ShareButtons-DmEazcr_.js | game/ShareButtons.tsx:12788 game/ShareCard.tsx:3610 icons/share-2.js:565 lib/share.ts:510 icons/image.js:449 icons/mail.js:379
+0.3K assets/arrow-left-DfXT2Mfl.js | icons/arrow-left.js:325
+2.2K assets/badges-B5fMgkQk.js | lib/badges.ts:8966
+0.3K assets/briefcase-D5TJfr83.js | icons/briefcase.js:389
+0.3K assets/circle-help-D1Eooz8K.js | icons/circle-help.js:413
+1.2K assets/conquestDataMlb-B4MKOeDm.js | data/conquestDataMlb.ts:3826
+1.4K assets/conquestMapGeometry-DMIJk1yA.js | lib/conquestMapGeometry.ts:5011
+0.3K assets/copy-CExsuX3p.js | icons/copy.js:402
+0.4K assets/crown-DMjINAU9.js | icons/crown.js:547
+0.3K assets/entityIds-L4Nd6Y8C.js | lib/entityIds.ts:856
+0.3K assets/flag-DuivK6RA.js | icons/flag.js:381
+1.8K assets/foOwnerMandate-CpK5VX3f.js | lib/foOwnerMandate.ts:4969 icons/shield-half.js:503
+0.9K assets/foSchedule-BzpgxJRf.js | lib/foSchedule.ts:3008
+0.4K assets/gmDealTable-DYyD4N4_.js | lib/gmDealTable.ts:1524
+3.8K assets/gmStaff-CQgWbtVe.js | lib/gmStaff.ts:15050
+0.4K assets/medal-N1DanHB0.js | icons/medal.js:660
+0.3K assets/rotate-ccw-D5gxFD21.js | icons/rotate-ccw.js:360
+0.4K assets/star-0BtjRW1T.js | icons/star.js:647
+0.6K assets/usCareerReveal-BW47Ke0-.js | lib/usCareerReveal.ts:1427
+5.2K assets/usStatesPaths-DfX_GtuE.js | data/usStatesPaths.ts:18178
+0.5K assets/useGameCompletion-Cg2LXFJZ.js | hooks/useGameCompletion.ts:1213 lib/restoredFinish.ts:335
+0.8K assets/useRevealScroll-B7l6awqD.js | hooks/useRevealScroll.ts:3277
+route-own 109.3K in 34 files; entry closure 238.3K in 1 files
+dynamic imports of the route chunk: 
+=== NbaFrontOffice-
+0.8K assets/Celebration-PIPzyioV.js | club-manager/Celebration.tsx:1909
+0.7K assets/CelebrationStyles-CUOmaQFu.js | club-manager/CelebrationStyles.tsx:2112
+1.6K assets/DraftNightCard-NrFRdlLi.js | front-office-shared/DraftNightCard.tsx:4348 lib/draftNight.ts:1468
+1.5K assets/FoAwardBadge-CvcKh24o.js | lib/foStatsCodec.ts:4022 front-office-shared/gmLazyPanel.tsx:776 front-office-shared/FoAwardBadge.tsx:455
+1.1K assets/FoSeasonStatsCard-CagP5dcN.js | front-office-shared/FoSeasonStatsCard.tsx:6012
+0.8K assets/GameHelp-DZFByjKZ.js | game/GameHelp.tsx:3021
+1.7K assets/GameNav-no8njuyi.js | game/GameNav.tsx:7008 game/DailyCountdown.tsx:2474
+3.7K assets/GameNavbar-CiIuM9_1.js | game/GameNavbar.tsx:7516 hooks/useGameNavbarStats.ts:3568 hooks/useDailyLegend.ts:2829 game/SharedResultCard.tsx:1902 lib/sharedResult.ts:1499 icons/user-plus.js:503
+3.0K assets/GameReportContext-Dfet5im4.js | gameContent/loader.ts:6522 game/ReportQuestion.tsx:5864 gameContent/guideShape.ts:876 game/GameReportContext.tsx:57
+2.5K assets/GameSeoContent-C5BhVFo0.js | seo/GameSeoContent.tsx:11068 lib/relatedGames.ts:2102
+33.5K assets/GmTradeBuilder-BoeRr3_j.js | lib/gmContracts.ts:22027 lib/gmContractRules.ts:20869 front-office-shared/GmResignDesk.tsx:16929 gmStaff/packs.ts:16167 front-office-shared/GmStaffPanel.tsx:15645 lib/gmPicks.ts:11534 lib/foHub.ts:6667 lib/gmTradePackage.ts:6273 front-office-shared/GmPicksCard.tsx:4224 front-office-shared/GmTradeBuilder.tsx:3865 lib/foGmPress.ts:3671 front-office-shared/TradeTalksCard.tsx:3325 lib/gmDeadline.ts:3135 front-office-shared/GmPressCard.tsx:2939
+0.8K assets/HowToPlayPopover-C3wWPfVH.js | game/HowToPlayPopover.tsx:2429
+0.6K assets/HubTiles-CmLaHIla.js | hub/HubTiles.tsx:2068
+41.4K assets/NbaFrontOffice-4fiGcEvd.js | nba-front-office/NbaFrontOfficeBoard.tsx:83111 lib/nbaFrontOffice.ts:22810 lib/nbaGmDesk.ts:15401 nba-front-office/NbaGmDesk.tsx:8621 lib/gmDraftOrder.ts:8190 lib/nbaSeasonStats.ts:8063 front-office-shared/GmEarnedDraftScreen.tsx:7814 lib/gmEarnedDraft.ts:7540 lib/gmLotteryNight.ts:7130 lib/nbaEarnedDraft.ts:6803 nba-front-office/NbaRotationPanel.tsx:6197 pages/NbaFrontOffice.tsx:5320 lib/gmDraftNight.ts:5206 gmDraftOrder/rules.ts:3656
+4.4K assets/ShareButtons-DmEazcr_.js | game/ShareButtons.tsx:12788 game/ShareCard.tsx:3610 icons/share-2.js:565 lib/share.ts:510 icons/image.js:449 icons/mail.js:379
+0.3K assets/arrow-left-DfXT2Mfl.js | icons/arrow-left.js:325
+0.2K assets/awardDecision-aIUMdt9Z.js | lib/awardDecision.ts:823
+2.2K assets/badges-B5fMgkQk.js | lib/badges.ts:8966
+0.3K assets/briefcase-D5TJfr83.js | icons/briefcase.js:389
+0.3K assets/circle-help-D1Eooz8K.js | icons/circle-help.js:413
+7.8K assets/conquestDataNba-C-3ztOpY.js | data/conquestDataNba.ts:36995
+1.4K assets/conquestMapGeometry-DMIJk1yA.js | lib/conquestMapGeometry.ts:5011
+0.3K assets/copy-CExsuX3p.js | icons/copy.js:402
+0.4K assets/crown-DMjINAU9.js | icons/crown.js:547
+0.3K assets/entityIds-L4Nd6Y8C.js | lib/entityIds.ts:856
+0.3K assets/flag-DuivK6RA.js | icons/flag.js:381
+1.8K assets/foOwnerMandate-CpK5VX3f.js | lib/foOwnerMandate.ts:4969 icons/shield-half.js:503
+0.9K assets/foSchedule-BzpgxJRf.js | lib/foSchedule.ts:3008
+0.8K assets/foSeasonStats-Bc8et4-5.js | lib/foSeasonStats.ts:2635
+0.4K assets/gmDealTable-DYyD4N4_.js | lib/gmDealTable.ts:1524
+3.8K assets/gmStaff-CQgWbtVe.js | lib/gmStaff.ts:15050
+0.2K assets/keyedRng-BKZQ2UGv.js | lib/keyedRng.ts:365
+0.8K assets/lotteryReveal-DDnhoqbO.js | lib/lotteryReveal.ts:2642
+0.4K assets/medal-N1DanHB0.js | icons/medal.js:660
+0.3K assets/rotate-ccw-D5gxFD21.js | icons/rotate-ccw.js:360
+0.4K assets/star-0BtjRW1T.js | icons/star.js:647
+0.6K assets/usCareerReveal-BW47Ke0-.js | lib/usCareerReveal.ts:1427
+5.2K assets/usStatesPaths-DfX_GtuE.js | data/usStatesPaths.ts:18178
+0.5K assets/useGameCompletion-Cg2LXFJZ.js | hooks/useGameCompletion.ts:1213 lib/restoredFinish.ts:335
+0.8K assets/useRevealScroll-B7l6awqD.js | hooks/useRevealScroll.ts:3277
+route-own 128.8K in 40 files; entry closure 238.3K in 1 files
+dynamic imports of the route chunk: assets/GmLotteryCard-D4bpwDgg.js:1.0K assets/nbaOpeningRatings-DmYGOL8G.js:6.6K
