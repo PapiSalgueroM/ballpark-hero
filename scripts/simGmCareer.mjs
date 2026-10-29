@@ -113,9 +113,9 @@
  * in Round 1559's report (results-g/finish-1559.md) and docs/audits.
  *
  * ROUND 1559 FIX PASS (the two adversarial reviews, results-g/review-run-1559.md and review-read-1559.md):
- *   section 6 on the nhl row plants the old club over the roster limit before every summer out (the row's
- *   plantOverLimit) and asserts the trim reaches it; control namedsummer (the summer names the old club, so the
- *   engine skips it) must fire there. Before this the nhl row's check held vacuously for the old club: it never
+ *   section 6 on the nhl row runs every summer out a second time on a probe copy whose old club is planted over
+ *   the roster limit (the row's plantOverLimit) and asserts the trim reaches it; control namedsummer (the summer
+ *   names the old club, so the engine skips it) must fire there. Before this the nhl row's check held vacuously for the old club: it never
  *   stood over 15 at the trim in 360 years out (r1559-run-b, r1559-run-d2).
  *   section 6 on both rows replays every round out on a copy with the same draws against the row's own statement
  *   of the board's round with nobody in the chair (awayRound), as the summer was already replayed; control
@@ -1492,8 +1492,11 @@ if (runs('6')) {
              replayed on a copy with the same draws, it must be the league the away host left (the old club named as
              the user club, so the CPU neither cuts nor tags it: control notrim on the NFL row, namedsummer on the
              NHL row; the NHL's notrim runs the summer with no club trimmed at all). Round 1559 fix pass: where the
-             row can, the old club is planted over the roster limit first, so naming it shows (MAJOR 1). */
-          const plantedOver = d.plantOverLimit ? d.plantOverLimit(lg, team, `${seed}-${y}`) : null;
+             row can, a PROBE (a copy of the league at the summer's start, the old club planted over the roster limit,
+             the away host's own summer run on it with a stream of its own) shows that the summer trims the old club
+             too (MAJOR 1). A probe, not the league: planted men left on the real old club made it weaker and moved
+             the draft ratio from 0.993 to 0.973 (r1559-fx1). */
+          const probe = d.plantOverLimit ? clone(lg) : null;
           const shadow = clone(lg), draws = [];
           const before = d.picksOf(dk, shadow), closed = shadow.season, ids = Object.keys(shadow.teams);
           const out = away.awaySummer(lg, () => { const x = r(); draws.push(x); return x; }, dk);
@@ -1509,11 +1512,15 @@ if (runs('6')) {
             if (d.overLimit(t)) { S6.over++; fail(`${at}: ${abbr} is over the roster limit after the summer`); }
             if (abbr !== team) { S6.away.rosters += t.players.length; S6.away.clubSummers++; }
           }
-          if (plantedOver) {
+          if (probe) {
+            /* Over the limit at the trim by construction (plantOverLimit counts out every man who could leave), so
+               ending at or under it means the trim reached the old club. */
+            const plantedOver = d.plantOverLimit(probe, team, `${seed}-${y}`), going = probe.teams[team].players.length;
+            away.awaySummer(probe, mulberry32(8000 + seed * 10 + y), clone(dk));
             S6.oldPlanted++;
-            const oldT = lg.teams[team], left = oldT.players.filter(p => plantedOver.includes(p.id)).length;
-            if (left < plantedOver.length && !d.overLimit(oldT)) S6.oldTrimmed++;
-            else fail(`${at}: the old club, planted over the roster limit, was not trimmed by the summer (${oldT.players.length} men, ${left} of ${plantedOver.length} planted still on it)`);
+            const oldT = probe.teams[team], left = oldT.players.filter(p => plantedOver.includes(p.id)).length;
+            if (!d.overLimit(oldT)) S6.oldTrimmed++;
+            else fail(`${at}: the old club, planted over the roster limit (${going} men going in), was not trimmed by the summer (${oldT.players.length} men, ${left} of ${plantedOver.length} planted still on it)`);
           }
           return out;
         },
