@@ -1,0 +1,7 @@
+#!serve
+#!playwright
+# Release BT kit: 1 of the 1 request lines of Release BS's rc-BQd6.txt (rBSg/.tmp-fx/bs), the lines of the BT areas (the US My Careers, the Front Offices, Soccer Connections and the daily save shape, Build Your XI and the player search box, What's New, the guides and search index, the weight rows) and the setup lines before them; 0 line(s) outside those areas left out.
+# Release BS kit: 1 of the 10 request lines of Release BR's rc-BQd6.txt (rBRg/.tmp-fx/br), the lines of the BS areas (Soccer Career, Club Manager and the manager games on its engine, Player Bingo, Conquest, Stat and Draft Detective, the US My Career save notice, What's New, the polls, the guide intro) and the setup lines before them; 9 line(s) outside those areas left out: walk playUsDirtyMoney playNflTruth playUsMarketTalk sweepWeight qa-entry1031 qa-outcome1009 qa-review1008 qa-look996.
+# Release BQ, Round 1534 (US My Career shop promises, closing head 1c7205d0): rc-1534.txt rc-ff.txt.
+# Dropped: weight-final (weight1534.mjs, a measure of four routes against 1534's own base 41368514).
+playUsCareerReports: node scripts/playUsCareerReports.mjs
