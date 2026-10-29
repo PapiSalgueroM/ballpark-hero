@@ -50,7 +50,7 @@ export const nflConnectionsPuzzles: NflConnectionsPuzzle[] = [
   {
     id: 'nflconn-001',
     groups: [
-      { theme: 'Played for the Patriots', players: ['Rob Gronkowski', 'Julian Edelman', 'Stephon Gilmore', 'Chandler Jones', 'Jimmy Garoppolo'], difficulty: 'yellow' },
+      { theme: 'Played for the Patriots (as of 2025)', players: ['Rob Gronkowski', 'Julian Edelman', 'Stephon Gilmore', 'Chandler Jones', 'Jimmy Garoppolo'], difficulty: 'yellow' },
       { theme: 'Drafted #1 overall', players: ['Matthew Stafford', 'Andrew Luck', 'Joe Burrow', 'Myles Garrett', 'Kyler Murray'], difficulty: 'green' },
       { theme: '8,500+ career rushing yards', players: ['Frank Gore', 'Adrian Peterson', 'Marshawn Lynch', 'LeSean McCoy', 'Matt Forte'], difficulty: 'blue' },
       { theme: 'Played college ball at Alabama', players: ['Julio Jones', 'Amari Cooper', 'Mark Ingram II', 'Tua Tagovailoa', 'DeVonta Smith'], difficulty: 'purple' },
@@ -59,26 +59,26 @@ export const nflConnectionsPuzzles: NflConnectionsPuzzle[] = [
   {
     id: 'nflconn-002',
     groups: [
-      { theme: 'Played for the Cowboys', players: ['Dez Bryant', 'Jason Witten', 'DeMarcus Ware', 'Tony Romo', 'Zack Martin'], difficulty: 'yellow' },
+      { theme: 'Played for the Cowboys (as of 2025)', players: ['Dez Bryant', 'Jason Witten', 'DeMarcus Ware', 'Tony Romo', 'Zack Martin'], difficulty: 'yellow' },
       { theme: '55,000+ career passing yards', players: ['Drew Brees', 'Philip Rivers', 'Ben Roethlisberger', 'Matt Ryan', 'Eli Manning'], difficulty: 'green' },
-      { theme: 'Played for the Seahawks', players: ['Russell Wilson', 'Richard Sherman', 'Bobby Wagner', 'Kam Chancellor', 'Doug Baldwin'], difficulty: 'blue' },
+      { theme: 'Played for the Seahawks (as of 2025)', players: ['Russell Wilson', 'Richard Sherman', 'Bobby Wagner', 'Kam Chancellor', 'Doug Baldwin'], difficulty: 'blue' },
       { theme: 'Played college ball at LSU', players: ['Odell Beckham Jr.', 'Jarvis Landry', 'Tyrann Mathieu', "Ja'Marr Chase", 'Justin Jefferson'], difficulty: 'purple' },
     ],
   },
   {
     id: 'nflconn-003',
     groups: [
-      { theme: 'Played for the Chiefs', players: ['Patrick Mahomes', 'Travis Kelce', 'Tyreek Hill', 'Eric Berry', 'Chris Jones'], difficulty: 'yellow' },
-      { theme: 'Played for the Broncos', players: ['Von Miller', 'Demaryius Thomas', 'Emmanuel Sanders', 'Chris Harris Jr.', 'Courtland Sutton'], difficulty: 'green' },
+      { theme: 'Played for the Chiefs (as of 2025)', players: ['Patrick Mahomes', 'Travis Kelce', 'Tyreek Hill', 'Eric Berry', 'Chris Jones'], difficulty: 'yellow' },
+      { theme: 'Played for the Broncos (as of 2025)', players: ['Von Miller', 'Demaryius Thomas', 'Emmanuel Sanders', 'Chris Harris Jr.', 'Courtland Sutton'], difficulty: 'green' },
       { theme: 'Played college ball at Ohio State', players: ['Nick Bosa', 'Joey Bosa', 'Ezekiel Elliott', 'Marshon Lattimore', 'Denzel Ward'], difficulty: 'blue' },
-      { theme: 'Played for the Packers', players: ['Davante Adams', 'Jordy Nelson', 'Clay Matthews', 'Aaron Jones', 'Jaire Alexander'], difficulty: 'purple' },
+      { theme: 'Played for the Packers (as of 2025)', players: ['Davante Adams', 'Jordy Nelson', 'Clay Matthews', 'Aaron Jones', 'Jaire Alexander'], difficulty: 'purple' },
     ],
   },
   {
     id: 'nflconn-004',
     groups: [
-      { theme: 'Played for the Steelers', players: ['T.J. Watt', 'Cam Heyward', 'Ben Roethlisberger', 'Troy Polamalu', 'James Harrison'], difficulty: 'yellow' },
-      { theme: 'Played for the Ravens', players: ['Ray Lewis', 'Ed Reed', 'Lamar Jackson', 'Justin Tucker', 'Terrell Suggs'], difficulty: 'green' },
+      { theme: 'Played for the Steelers (as of 2025)', players: ['T.J. Watt', 'Cam Heyward', 'Ben Roethlisberger', 'Troy Polamalu', 'James Harrison'], difficulty: 'yellow' },
+      { theme: 'Played for the Ravens (as of 2025)', players: ['Ray Lewis', 'Ed Reed', 'Lamar Jackson', 'Justin Tucker', 'Terrell Suggs'], difficulty: 'green' },
       { theme: '10,000+ career receiving yards', players: ['Larry Fitzgerald', 'Andre Johnson', 'Calvin Johnson', 'A.J. Green', 'Mike Evans'], difficulty: 'blue' },
       { theme: 'Played college ball at Clemson', players: ['Trevor Lawrence', 'Deshaun Watson', 'Travis Etienne', 'Tee Higgins', 'Hunter Renfrow'], difficulty: 'purple' },
     ],

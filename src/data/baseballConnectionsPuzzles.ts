@@ -29,7 +29,7 @@ export const baseballConnectionsPuzzles: BaseballConnectionsPuzzle[] = [
     id: 'bconn-001',
     groups: [
       { theme: 'Won Rookie of the Year', players: ['Derek Jeter', 'Ichiro Suzuki', 'Mike Trout', 'Mike Piazza', 'Cal Ripken Jr.'], difficulty: 'yellow' },
-      { theme: 'Played for the Boston Red Sox', players: ['Mookie Betts', 'Carl Yastrzemski', 'Wade Boggs', 'Roger Clemens', 'Dwight Evans'], difficulty: 'green' },
+      { theme: 'Played for the Boston Red Sox (as of 2026)', players: ['Mookie Betts', 'Carl Yastrzemski', 'Wade Boggs', 'Roger Clemens', 'Dwight Evans'], difficulty: 'green' },
       { theme: 'Hit 500+ career home runs', players: ['Ken Griffey Jr.', 'Jim Thome', 'Gary Sheffield', 'Barry Bonds', 'Alex Rodriguez'], difficulty: 'blue' },
       { theme: 'Born in the Dominican Republic', players: ['Robinson Cano', 'Juan Soto', 'Fernando Tatis Jr.', 'Vladimir Guerrero', 'Nelson Cruz'], difficulty: 'purple' },
     ],
@@ -38,7 +38,7 @@ export const baseballConnectionsPuzzles: BaseballConnectionsPuzzle[] = [
     id: 'bconn-002',
     groups: [
       { theme: 'Won Cy Young Award', players: ['Clayton Kershaw', 'Max Scherzer', 'Justin Verlander', 'Jacob deGrom', 'Greg Maddux'], difficulty: 'yellow' },
-      { theme: 'Played for the New York Yankees', players: ['Derek Jeter', 'Mariano Rivera', 'Aaron Judge', 'Mickey Mantle', 'Joe DiMaggio'], difficulty: 'green' },
+      { theme: 'Played for the New York Yankees (as of 2026)', players: ['Derek Jeter', 'Mariano Rivera', 'Aaron Judge', 'Mickey Mantle', 'Joe DiMaggio'], difficulty: 'green' },
       { theme: 'First overall draft pick', players: ['Bryce Harper', 'Ken Griffey Jr.', 'Chipper Jones', 'Adrian Gonzalez', 'Joe Mauer'], difficulty: 'blue' },
       { theme: 'Born in Japan', players: ['Hisashi Iwakuma', 'Yu Darvish', 'Hideo Nomo', 'Koji Uehara', 'Daisuke Matsuzaka'], difficulty: 'purple' },
     ],
@@ -48,7 +48,7 @@ export const baseballConnectionsPuzzles: BaseballConnectionsPuzzle[] = [
     groups: [
       { theme: 'World Series MVP winners', players: ['Madison Bumgarner', 'David Ortiz', 'Jorge Soler', 'George Springer', 'Derek Jeter'], difficulty: 'yellow' },
       { theme: 'Stole 50+ bases in a season', players: ['Ichiro Suzuki', 'Lou Brock', 'Joe Morgan', 'Barry Larkin', 'Craig Biggio'], difficulty: 'green' },
-      { theme: 'Played for the Los Angeles Dodgers', players: ['Mookie Betts', 'Clayton Kershaw', 'Cody Bellinger', 'Mike Piazza', 'Duke Snider'], difficulty: 'blue' },
+      { theme: 'Played for the Los Angeles Dodgers (as of 2026)', players: ['Mookie Betts', 'Clayton Kershaw', 'Cody Bellinger', 'Mike Piazza', 'Duke Snider'], difficulty: 'blue' },
       { theme: 'Switch hitters', players: ['Chipper Jones', 'Carlos Beltran', 'Victor Martinez', 'Lance Berkman', 'Jorge Posada'], difficulty: 'purple' },
     ],
   },
@@ -56,7 +56,7 @@ export const baseballConnectionsPuzzles: BaseballConnectionsPuzzle[] = [
     id: 'bconn-004',
     groups: [
       { theme: 'Won Rookie of the Year', players: ['Mike Trout', 'Aaron Judge', 'Shohei Ohtani', 'Ichiro Suzuki', 'Albert Pujols'], difficulty: 'yellow' },
-      { theme: 'Played for the Chicago Cubs', players: ['Anthony Rizzo', 'Javier Baez', 'Jake Arrieta', 'Jon Lester', 'Ernie Banks'], difficulty: 'green' },
+      { theme: 'Played for the Chicago Cubs (as of 2026)', players: ['Anthony Rizzo', 'Javier Baez', 'Jake Arrieta', 'Jon Lester', 'Ernie Banks'], difficulty: 'green' },
       { theme: '300+ career wins', players: ['Tom Glavine', 'Randy Johnson', 'Roger Clemens', 'Nolan Ryan', 'Steve Carlton'], difficulty: 'blue' },
       { theme: 'Born in Venezuela', players: ['Miguel Cabrera', 'Felix Hernandez', 'Jose Altuve', 'Salvador Perez', 'Omar Vizquel'], difficulty: 'purple' },
     ],
@@ -65,7 +65,7 @@ export const baseballConnectionsPuzzles: BaseballConnectionsPuzzle[] = [
     id: 'bconn-005',
     groups: [
       { theme: 'Won the batting Triple Crown', players: ['Miguel Cabrera', 'Carl Yastrzemski', 'Frank Robinson', 'Mickey Mantle', 'Ted Williams'], difficulty: 'yellow' },
-      { theme: 'Played for the Houston Astros', players: ['Jose Altuve', 'Jeff Bagwell', 'Carlos Correa', 'George Springer', 'Alex Bregman'], difficulty: 'green' },
+      { theme: 'Played for the Houston Astros (as of 2026)', players: ['Jose Altuve', 'Jeff Bagwell', 'Carlos Correa', 'George Springer', 'Alex Bregman'], difficulty: 'green' },
       { theme: 'Threw a no-hitter', players: ['Sandy Koufax', 'Max Scherzer', 'Roy Halladay', 'Clayton Kershaw', 'Hideo Nomo'], difficulty: 'blue' },
       { theme: 'Gold Glove winning catchers', players: ['Yadier Molina', 'Buster Posey', 'Salvador Perez', 'J.T. Realmuto', 'Johnny Bench'], difficulty: 'purple' },
     ],
@@ -74,7 +74,7 @@ export const baseballConnectionsPuzzles: BaseballConnectionsPuzzle[] = [
     id: 'bconn-006',
     groups: [
       { theme: 'Hit 40+ HR in a season (2020s)', players: ['Aaron Judge', 'Pete Alonso', 'Kyle Schwarber', 'Matt Olson', 'Shohei Ohtani'], difficulty: 'yellow' },
-      { theme: 'Played for the San Francisco Giants', players: ['Willie Mays', 'Madison Bumgarner', 'Brandon Crawford', 'Tim Lincecum', 'Pablo Sandoval'], difficulty: 'green' },
+      { theme: 'Played for the San Francisco Giants (as of 2026)', players: ['Willie Mays', 'Madison Bumgarner', 'Brandon Crawford', 'Tim Lincecum', 'Pablo Sandoval'], difficulty: 'green' },
       { theme: 'Career .300+ hitters (21st century)', players: ['Ichiro Suzuki', 'Miguel Cabrera', 'Jose Altuve', 'Todd Helton', 'Michael Young'], difficulty: 'blue' },
       { theme: 'Born in Cuba', players: ['Yoenis Cespedes', 'Aroldis Chapman', 'Jose Abreu', 'Yasiel Puig', 'Jose Canseco'], difficulty: 'purple' },
     ],
@@ -83,7 +83,7 @@ export const baseballConnectionsPuzzles: BaseballConnectionsPuzzle[] = [
     id: 'bconn-007',
     groups: [
       { theme: '2024 World Series champion Dodgers', players: ['Freddie Freeman', 'Will Smith', 'Max Muncy', 'Enrique Hernandez', 'Walker Buehler'], difficulty: 'yellow' },
-      { theme: 'Played for the St. Louis Cardinals', players: ['Albert Pujols', 'Yadier Molina', 'Adam Wainwright', 'Matt Carpenter', 'Paul Goldschmidt'], difficulty: 'green' },
+      { theme: 'Played for the St. Louis Cardinals (as of 2026)', players: ['Albert Pujols', 'Yadier Molina', 'Adam Wainwright', 'Matt Carpenter', 'Paul Goldschmidt'], difficulty: 'green' },
       { theme: 'Silver Slugger at shortstop', players: ['Trea Turner', 'Derek Jeter', 'Corey Seager', 'Francisco Lindor', 'Cal Ripken Jr.'], difficulty: 'blue' },
       { theme: 'Undrafted players', players: ['Ichiro Suzuki', 'Miguel Cabrera', 'Oliver Perez', 'Bartolo Colon', 'Aroldis Chapman'], difficulty: 'purple' },
     ],
@@ -92,7 +92,7 @@ export const baseballConnectionsPuzzles: BaseballConnectionsPuzzle[] = [
     id: 'bconn-008',
     groups: [
       { theme: 'Won back-to-back MVPs', players: ['Mickey Mantle', 'Albert Pujols', 'Barry Bonds', 'Frank Thomas', 'Miguel Cabrera'], difficulty: 'yellow' },
-      { theme: 'Played for the Atlanta Braves', players: ['Chipper Jones', 'Freddie Freeman', 'Ronald Acuna Jr.', 'Greg Maddux', 'John Smoltz'], difficulty: 'green' },
+      { theme: 'Played for the Atlanta Braves (as of 2026)', players: ['Chipper Jones', 'Freddie Freeman', 'Ronald Acuna Jr.', 'Greg Maddux', 'John Smoltz'], difficulty: 'green' },
       { theme: 'Hall of Fame shortstops', players: ['Cal Ripken Jr.', 'Ozzie Smith', 'Derek Jeter', 'Barry Larkin', 'Alan Trammell'], difficulty: 'blue' },
       { theme: 'Born in Japan', players: ['Ichiro Suzuki', 'Hideo Nomo', 'Yu Darvish', 'Hideki Matsui', 'Masahiro Tanaka'], difficulty: 'purple' },
     ],
@@ -101,7 +101,7 @@ export const baseballConnectionsPuzzles: BaseballConnectionsPuzzle[] = [
     id: 'bconn-009',
     groups: [
       { theme: 'All-Star Game MVPs (2010s-2020s)', players: ['Mike Trout', 'Mariano Rivera', 'Robinson Cano', 'Vladimir Guerrero Jr.', 'Prince Fielder'], difficulty: 'yellow' },
-      { theme: 'Played for the Philadelphia Phillies', players: ['Bryce Harper', 'Trea Turner', 'J.T. Realmuto', 'Rhys Hoskins', 'Zack Wheeler'], difficulty: 'green' },
+      { theme: 'Played for the Philadelphia Phillies (as of 2026)', players: ['Bryce Harper', 'Trea Turner', 'J.T. Realmuto', 'Rhys Hoskins', 'Zack Wheeler'], difficulty: 'green' },
       { theme: 'Left-handed starting pitchers', players: ['Clayton Kershaw', 'Madison Bumgarner', 'Chris Sale', 'Jon Lester', 'Tom Glavine'], difficulty: 'blue' },
       { theme: 'Born in Puerto Rico', players: ['Carlos Beltran', 'Yadier Molina', 'Carlos Correa', 'Javier Baez', 'Francisco Lindor'], difficulty: 'purple' },
     ],
@@ -110,7 +110,7 @@ export const baseballConnectionsPuzzles: BaseballConnectionsPuzzle[] = [
     id: 'bconn-010',
     groups: [
       { theme: '3,000+ career hits', players: ['Derek Jeter', 'Ichiro Suzuki', 'Albert Pujols', 'Tony Gwynn', 'Miguel Cabrera'], difficulty: 'yellow' },
-      { theme: 'Played for the Texas Rangers', players: ['Michael Young', 'Yu Darvish', 'Corey Seager', 'Max Scherzer', 'Ivan Rodriguez'], difficulty: 'green' },
+      { theme: 'Played for the Texas Rangers (as of 2026)', players: ['Michael Young', 'Yu Darvish', 'Corey Seager', 'Max Scherzer', 'Ivan Rodriguez'], difficulty: 'green' },
       { theme: 'Closers with 300+ saves', players: ['Mariano Rivera', 'Kenley Jansen', 'Craig Kimbrel', 'Trevor Hoffman', 'Francisco Rodriguez'], difficulty: 'blue' },
       { theme: 'Went to the same college (Vanderbilt)', players: ['David Price', 'Sonny Gray', 'Dansby Swanson', 'Walker Buehler', 'Bryan Reynolds'], difficulty: 'purple' },
     ],
@@ -119,7 +119,7 @@ export const baseballConnectionsPuzzles: BaseballConnectionsPuzzle[] = [
     id: 'bconn-011',
     groups: [
       { theme: '50+ HR in a single season', players: ['Mark McGwire', 'Giancarlo Stanton', 'Prince Fielder', 'Chris Davis', 'Shohei Ohtani'], difficulty: 'yellow' },
-      { theme: 'Played for the Cleveland Guardians/Indians', players: ['Francisco Lindor', 'Corey Kluber', 'Jose Ramirez', 'Manny Ramirez', 'Omar Vizquel'], difficulty: 'green' },
+      { theme: 'Played for the Cleveland Guardians/Indians (as of 2026)', players: ['Francisco Lindor', 'Corey Kluber', 'Jose Ramirez', 'Manny Ramirez', 'Omar Vizquel'], difficulty: 'green' },
       { theme: 'Won Gold Glove at outfield', players: ['Torii Hunter', 'Mookie Betts', 'Byron Buxton', 'Kevin Kiermaier', 'Adam Jones'], difficulty: 'blue' },
       { theme: 'Born in Panama', players: ['Mariano Rivera', 'Carlos Lee', 'Rod Carew', 'Ben Oglivie', 'Manny Sanguillen'], difficulty: 'purple' },
     ],
@@ -128,7 +128,7 @@ export const baseballConnectionsPuzzles: BaseballConnectionsPuzzle[] = [
     id: 'bconn-012',
     groups: [
       { theme: 'Pitchers with 3000+ strikeouts', players: ['Nolan Ryan', 'Randy Johnson', 'Roger Clemens', 'Justin Verlander', 'Max Scherzer'], difficulty: 'yellow' },
-      { theme: 'Played for the Minnesota Twins', players: ['Joe Mauer', 'Kirby Puckett', 'Torii Hunter', 'David Ortiz', 'Johan Santana'], difficulty: 'green' },
+      { theme: 'Played for the Minnesota Twins (as of 2026)', players: ['Joe Mauer', 'Kirby Puckett', 'Torii Hunter', 'David Ortiz', 'Johan Santana'], difficulty: 'green' },
       { theme: 'Won batting title (2010s-2020s)', players: ['Jose Altuve', 'Charlie Blackmon', 'Buster Posey', 'Tim Anderson', 'Miguel Cabrera'], difficulty: 'blue' },
       { theme: 'Played college baseball at LSU', players: ['Alex Bregman', 'Paul Skenes', 'Aaron Nola', 'Kevin Gausman', 'Alex Lange'], difficulty: 'purple' },
     ],
@@ -137,7 +137,7 @@ export const baseballConnectionsPuzzles: BaseballConnectionsPuzzle[] = [
     id: 'bconn-013',
     groups: [
       { theme: 'Multiple 100+ RBI seasons', players: ['Albert Pujols', 'Miguel Cabrera', 'Ken Griffey Jr.', 'David Ortiz', 'Alex Rodriguez'], difficulty: 'yellow' },
-      { theme: 'Played for the Tampa Bay Rays', players: ['Kevin Kiermaier', 'Carl Crawford', 'David Price', 'Wander Franco', 'Blake Snell'], difficulty: 'green' },
+      { theme: 'Played for the Tampa Bay Rays (as of 2026)', players: ['Kevin Kiermaier', 'Carl Crawford', 'David Price', 'Wander Franco', 'Blake Snell'], difficulty: 'green' },
       { theme: 'Second basemen (21st century stars)', players: ['Jose Altuve', 'Brandon Phillips', 'Dustin Pedroia', 'DJ LeMahieu', 'Ian Kinsler'], difficulty: 'blue' },
       { theme: 'Born in the Dominican Republic (pitchers)', players: ['Pedro Martinez', 'Bartolo Colon', 'Johnny Cueto', 'Luis Severino', 'Framber Valdez'], difficulty: 'purple' },
     ],
@@ -146,7 +146,7 @@ export const baseballConnectionsPuzzles: BaseballConnectionsPuzzle[] = [
     id: 'bconn-014',
     groups: [
       { theme: 'Won World Series with multiple teams', players: ['Reggie Jackson', 'Johnny Damon', 'Freddie Freeman', 'David Justice', 'Edgar Renteria'], difficulty: 'yellow' },
-      { theme: 'Played for the San Diego Padres', players: ['Fernando Tatis Jr.', 'Manny Machado', 'Juan Soto', 'Tony Gwynn', 'Trevor Hoffman'], difficulty: 'green' },
+      { theme: 'Played for the San Diego Padres (as of 2026)', players: ['Fernando Tatis Jr.', 'Manny Machado', 'Juan Soto', 'Tony Gwynn', 'Trevor Hoffman'], difficulty: 'green' },
       { theme: 'Catchers who hit 30+ HR in a season', players: ['Johnny Bench', 'Gary Carter', 'Ivan Rodriguez', 'Salvador Perez', 'Jorge Posada'], difficulty: 'blue' },
       { theme: 'Played in the 2023 World Baseball Classic final', players: ['Shohei Ohtani', 'Mike Trout', 'Trea Turner', 'Paul Goldschmidt', 'Lars Nootbaar'], difficulty: 'purple' },
     ],
@@ -155,7 +155,7 @@ export const baseballConnectionsPuzzles: BaseballConnectionsPuzzle[] = [
     id: 'bconn-015',
     groups: [
       { theme: 'NL MVP winners (2015-2025)', players: ['Bryce Harper', 'Kris Bryant', 'Cody Bellinger', 'Freddie Freeman', 'Shohei Ohtani'], difficulty: 'yellow' },
-      { theme: 'Played for the Detroit Tigers', players: ['Miguel Cabrera', 'Justin Verlander', 'Prince Fielder', 'Max Scherzer', 'Curtis Granderson'], difficulty: 'green' },
+      { theme: 'Played for the Detroit Tigers (as of 2026)', players: ['Miguel Cabrera', 'Justin Verlander', 'Prince Fielder', 'Max Scherzer', 'Curtis Granderson'], difficulty: 'green' },
       { theme: 'Switch-hitting shortstops', players: ['Francisco Lindor', 'Jose Reyes', 'Jimmy Rollins', 'Ozzie Smith', 'Omar Vizquel'], difficulty: 'blue' },
       { theme: 'Closers with 300+ saves', players: ['Mariano Rivera', 'Trevor Hoffman', 'Lee Smith', 'Billy Wagner', 'Rollie Fingers'], difficulty: 'purple' },
     ],

@@ -48,7 +48,7 @@ export function NflConnectionsHowToPlay({ open, onOpenChange }: Props) {
           </div>
           <div className="space-y-2">
             <p className="font-semibold text-primary">Connections can include</p>
-            <p className="text-muted-foreground">Same franchise, same college, same draft slot, career milestones, and more.</p>
+            <p className="text-muted-foreground">Same franchise, same college, same draft slot, career milestones, and more. A team group marked "as of 2025" only counts seasons up to then, so a signing later on can't change the answer.</p>
           </div>
         </div>
       </DialogContent>

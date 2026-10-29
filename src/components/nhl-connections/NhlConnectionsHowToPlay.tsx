@@ -54,7 +54,7 @@ export function NhlConnectionsHowToPlay({ open, onOpenChange }: Props) {
           </div>
           <div className="space-y-2">
             <p className="font-semibold text-primary">Connections can include</p>
-            <p className="text-muted-foreground">Same franchise, career milestones, same era, and more. A player's career counts for every team it touched.</p>
+            <p className="text-muted-foreground">Same franchise, career milestones, same era, and more. A player's career counts for every team it touched. A team group marked "as of 2025-26" only counts seasons up to then, so a trade later on can't change the answer.</p>
           </div>
         </div>
       </DialogContent>

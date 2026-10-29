@@ -38,6 +38,11 @@
  *      cannot judge (a gray position share, one to four seasons with a legends
  *      club) is counted, held at its ceiling and said aloud, never called fine
  *
+ *   8) (Round 1567) no active man is one move from a second answer: every
+ *      "Played for the X" group on a board with a man still playing who does
+ *      not fit it is dated ("Played for the Steelers (as of 2025)"), which the
+ *      checkers hold to the seasons up to that one
+ *
  * Live rows: players are dealt from the tables baseball_connections_puzzles,
  * nfl_connections_puzzles and nhl_connections_puzzles. This harness never reads
  * them. The lead exports each once with a read only SELECT and runs
@@ -64,6 +69,8 @@
  *                             way men before this round)
  *   US_CONN_CONTROL=frobinson Round 1567: Frank Robinson back among bconn-057's right fielders, beside its
  *                             left fielders (29.4 percent of his games there: must raise gray-back, for him)
+ *   US_CONN_CONTROL=undate    Round 1567: nflconn-004's "Played for the Steelers (as of 2025)" loses its
+ *                             date beside Lamar Jackson, still a Raven (must raise: trade, for him)
  * A control is red only when the rule it names fires for the man or group it
  * moved. Any other failure in a control run (a moved man has no two host fact
  * in section 3, say) is printed but never turns the run red on its own, so
@@ -87,6 +94,10 @@ const TMP = fs.mkdtempSync(path.join(os.tmpdir(), 'usconnfacts-'));
 const CONTROL = process.env.US_CONN_CONTROL ?? '';
 const LIVE = process.env.US_CONN_LIVE ?? '';
 const SPORTS = ['baseball', 'nfl', 'nhl'];
+/* Round 1567: a club group dated against trades ("Played for the Steelers (as of 2025)") is the same claim as the
+   undated one for every man whose seasons there all came before the date, which section 4 checks against the
+   record; the ledgers name such groups and facts by the undated label, and a refuted claim stays refuted dated */
+const undated = l => String(l).replace(/ \(as of [^)]+\)$/, '');
 
 let failures = 0;
 const fail = m => { failures += 1; console.error('  FAIL: ' + m); };
@@ -140,15 +151,15 @@ if (CONTROL) {
     }
   } else if (CONTROL === 'bell') {
     const b = boardOf('nfl', 'nflconn-004');
-    const g = b?.groups.find(x => x.theme === 'Played for the Steelers');
-    if (g && b.groups.some(x => x.theme === 'Played for the Ravens') && g.players.includes('Ben Roethlisberger')) {
+    const g = b?.groups.find(x => undated(x.theme) === 'Played for the Steelers');
+    if (g && b.groups.some(x => undated(x.theme) === 'Played for the Ravens') && g.players.includes('Ben Roethlisberger')) {
       g.players[g.players.indexOf('Ben Roethlisberger')] = "Le'Veon Bell";
       changed = true;
       own = { kinds: ['second-fit'], subject: "Le'Veon Bell" };
     }
   } else if (CONTROL === 'karlsson') {
     const b = boardOf('nhl', 'nhlconn-004');
-    const g = b?.groups.find(x => x.theme === 'Played for the Sharks');
+    const g = b?.groups.find(x => undated(x.theme) === 'Played for the Sharks');
     if (g && b.groups.some(x => x.theme === '1,000+ career points') && g.players.includes('Marc-Edouard Vlasic')) {
       g.players[g.players.indexOf('Marc-Edouard Vlasic')] = 'Erik Karlsson';
       changed = true;
@@ -197,6 +208,15 @@ if (CONTROL) {
       changed = true;
       own = { kinds: ['gray-back'], subject: 'Frank Robinson' };
     }
+  } else if (CONTROL === 'undate') {
+    /* Round 1567: nflconn-004's Steelers group loses its date, beside Lamar Jackson, still playing for the Ravens */
+    const b = boardOf('nfl', 'nflconn-004');
+    const g = b?.groups.find(x => x.theme === 'Played for the Steelers (as of 2025)');
+    if (g && b.groups.some(x => x.players.includes('Lamar Jackson'))) {
+      g.theme = 'Played for the Steelers';
+      changed = true;
+      own = { kinds: ['trade'], subject: 'Lamar Jackson' };
+    }
   } else if (CONTROL === 'unjudged') {
     const b = boardOf('baseball', 'bconn-002');
     const g = b?.groups.find(x => x.theme === 'Born in Japan');
@@ -239,7 +259,7 @@ for (const s of SPORTS) {
   for (const r of refuted) {
     if (!hostsOk(r.sources)) fail(`${s}: refuted "${r.name}" in "${r.label}" does not stand on two hosts`);
     for (const b of boards[s]) for (const g of b.groups) {
-      if (fold(g.theme) === fold(r.label) && g.players.some(p => fold(p) === fold(r.name))) {
+      if (fold(undated(g.theme)) === fold(undated(r.label)) && g.players.some(p => fold(p) === fold(r.name))) {
         n += 1;
         fire('refuted', r.name);
         fail(`${s} ${b.id}: ${r.name} in "${g.theme}" is refuted on two hosts (${r.sources.map(x => x.says).join(' / ')})`);
@@ -274,15 +294,15 @@ for (const s of SPORTS) {
   if (live.has(s)) { console.log(`   ${s}: ${facts.length} facts (the flagged groups are the file's, not checked against a live export)`); continue; }
   /* every member of a group the round flagged is held to it by a fact */
   /* a fact is about a man and a label, whichever board deals them together */
-  const holding = new Set(facts.filter(f => f.holds).map(f => `${fold(f.label)}|${fold(f.name)}`));
+  const holding = new Set(facts.filter(f => f.holds).map(f => `${fold(undated(f.label))}|${fold(f.name)}`));
   let members = 0;
   for (const [id, label] of L.flaggedGroups ?? []) {
     const b = boardOf(s, id);
-    const g = b?.groups.find(x => x.theme === label);
+    const g = b?.groups.find(x => undated(x.theme) === undated(label));
     if (!g) { fail(`${s} ${id}: the ledger flags "${label}" and the board has no such group`); continue; }
     for (const p of g.players) {
       members += 1;
-      if (!holding.has(`${fold(label)}|${fold(p)}`)) { fire('no-fact', p); fail(`${s} ${id}: ${p} in "${label}" has no two host fact`); }
+      if (!holding.has(`${fold(undated(label))}|${fold(p)}`)) { fire('no-fact', p); fail(`${s} ${id}: ${p} in "${label}" has no two host fact`); }
     }
   }
   /* every finding the round fixed has the fact behind it: the man, the label and the verdict the finding
@@ -370,6 +390,29 @@ for (const s of SPORTS) {
     if (o > (L.otherUnknownCeiling ?? 0)) { fire('other-unknown', s); fail(`${s}: ${o} other tiles the record cannot judge, over the ceiling of ${L.otherUnknownCeiling}`); }
   }
   console.log(`   ${s}: ${n} groups nothing judges (ceiling ${L.uncheckedCeiling}), ${u} members the record cannot place (ceiling ${L.memberUnknownCeiling}), ${o} other tiles it cannot judge (ceiling ${L.otherUnknownCeiling})${n ? `: ${unchecked[s].map(x => `${x.id} "${x.label}"`).join(', ')}` : ''}`);
+}
+
+console.log('8) no active man is one move from a second answer');
+/* Round 1567: "Played for the Steelers" holds whoever ever plays for them, so a man still playing who sits on the
+   board in another group becomes a second right answer the day he signs there (Round 1558 counted NFL 10 such men
+   on 2 boards, NHL 46 on 4, before it counted every active man on a board). A club group on a board with an
+   active man who does not fit it is dated ("Played for the Steelers (as of 2025)"), which the checker holds to
+   the seasons up to that one; a legends group needs five seasons, so one move cannot do it */
+for (const s of SPORTS) {
+  let n = 0, dated = 0, open = 0;
+  for (const b of boards[s]) for (const g of b.groups) {
+    const c = sports[s].checker.criterion(g.theme);
+    if (!c || c.kind !== 'club' || c.legend) continue;
+    if (c.asOf !== undefined) { dated += 1; continue; }
+    open += 1;
+    for (const o of b.groups) if (o !== g) for (const p of o.players) {
+      if (sports[s].checker.active?.(p) !== true || sports[s].checker.fits(p, c) === true) continue;
+      n += 1;
+      fire('trade', p);
+      fail(`${s} ${b.id}: ${p} ("${o.theme}") is still playing and one move from "${g.theme}": date the group or rebuild the board`);
+    }
+  }
+  console.log(`   ${s}: ${dated} dated club groups, ${open} undated, ${n} active men one move from a club group beside them`);
 }
 
 console.log('');
