@@ -1,0 +1,24 @@
+
+[1m[46m RUN [49m[22m [36mv3.2.7 [39m[90m/home/runner/work/ballpark-hero/ballpark-hero[39m
+
+Browserslist: browsers data (caniuse-lite) is 16 months old. Please run:
+  npx update-browserslist-db@latest
+  Why you should do it regularly: https://github.com/browserslist/update-db#readme
+ [32m✓[39m src/components/mlb-front-office/MlbGmDesk.test.tsx [2m([22m[2m4 tests[22m[2m)[22m[33m 2043[2mms[22m[39m
+   [33m[2m✓[22m[39m 1020 MLB GM desk on the board[2m > [22ma desk save past the deadline says so, and the trade desk says picks cannot move [33m 323[2mms[22m[39m
+   [33m[2m✓[22m[39m 1020 MLB GM desk on the board[2m > [22ma desk save plays October with the staff edge and takes its winter through the re-sign desk [33m 835[2mms[22m[39m
+   [33m[2m✓[22m[39m 1020 MLB GM desk on the board[2m > [22man old save walks the same season with no desk: nothing handed to the engine, nothing written down [33m 619[2mms[22m[39m
+ [32m✓[39m src/components/mlb-front-office/MlbDraftCapital.test.tsx [2m([22m[2m18 tests[22m[2m)[22m[33m 5245[2mms[22m[39m
+   [33m[2m✓[22m[39m 966 MLB real draft-capital consequences[2m > [22mordinary two choices keep the original two five-rival batches full offseason salaries and RNG [33m 1191[2mms[22m[39m
+   [33m[2m✓[22m[39m 966 MLB real draft-capital consequences[2m > [22mone actual pick consumes exactly once through a same-frame duplicate and refresh [33m 517[2mms[22m[39m
+   [33m[2m✓[22m[39m 966 MLB real draft-capital consequences[2m > [22mfour acquired rights add four real players but only the two ordinary CPU batches [33m 756[2mms[22m[39m
+   [33m[2m✓[22m[39m 966 MLB real draft-capital consequences[2m > [22mlegacy one-left progress trims the old unconsumed first right only on a real selection [33m 328[2mms[22m[39m
+   [33m[2m✓[22m[39m 966 MLB real draft-capital consequences[2m > [22mlegacy two-left with one actual right closes and drains the ordinary CPU quota after that choice [33m 340[2mms[22m[39m
+   [33m[2m✓[22m[39m 966 MLB real draft-capital consequences[2m > [22man exhausted legacy prospect board can be replaced without losing earlier players or rights [33m 352[2mms[22m[39m
+   [33m[2m✓[22m[39m 966 MLB real draft-capital consequences[2m > [22mmalformed pick progress retains exact raw bytes until explicit own-key discard [33m 571[2mms[22m[39m
+
+[2m Test Files [22m [1m[32m2 passed[39m[22m[90m (2)[39m
+[2m      Tests [22m [1m[32m22 passed[39m[22m[90m (22)[39m
+[2m   Start at [22m 19:27:20
+[2m   Duration [22m 9.01s[2m (transform 1.51s, setup 297ms, collect 3.62s, tests 7.29s, environment 1.54s, prepare 248ms)[22m
+

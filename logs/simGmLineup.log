@@ -1,0 +1,28 @@
+1) with no choices each sport reads today's strength exactly
+   mlb: 600 clubs x 3 ways, 0 off today's number
+   nhl: 800 clubs x 3 ways, 0 off today's number
+   nfl: 640 clubs x 3 ways, 0 off today's number
+   fixture: 25 of 25 pinned clubs read their number through both
+2) benching a better man costs strength, on each of 200 walked swaps per sport and seed
+   mlb: 619 bench and 381 order swaps, 0 did not cost, median cost 0.2483
+   nhl: 171 bench and 829 order swaps, 0 did not cost, median cost 0.0520
+   nfl: 312 scheme benchings, 0 did not cost, median cost 0.1527; 688 chart moves followed exactly (3 of them RAISED today's number, see above); 173 moves that fit neither case were not steps
+3) a starter on short rest is weaker
+   925 starters priced a game short; 150 five man turns on full rest, 150 four man turns all short and weaker, 150 of 150 walks went short after a starter was hurt, 150 of 150 clubs read short through the strength after one
+4) the spread of team strength sits inside a band set from the real league
+   mlb: real spread 0.0710; sim season spread / real 1.066 1.066 1.066 1.066 1.066; with GM lineups / without 1.067 1.012 1.067 0.948 1.056
+   nhl: real spread 0.0982; sim season spread / real 1.024 1.024 1.024 1.024 1.024; with GM lineups / without 1.007 1.017 0.978 1.027 0.998
+   nfl: real spread 0.2004; sim season spread / real 0.795 0.795 0.795 0.795 0.795; with GM lineups / without 1.000 0.998 0.998 0.999 1.000
+5) every lineup on the field is one the rules allow
+   mlb: 3600 group lineups, 16362 men placed, 0 not allowed; 1209 hurt men on the rosters read, hurt men named 888 times in scrambled saves
+   nhl: 6400 group lineups, 30254 men placed, 0 not allowed; 1591 hurt men on the rosters read, hurt men named 3136 times in scrambled saves
+   nfl: 17920 group lineups, 76995 men placed, 0 not allowed; 2168 hurt men on the rosters read
+6) a tap made while a saved man is hurt keeps his slot for him
+   mlb: 300 of 300 hurt men were back in their slot once fit, after a tap made while they were out
+   nhl: 480 of 480 hurt men were back in their slot once fit, after a tap made while they were out
+7) a last slot empty for want of a fit man is not a skip
+   150 of 150 reordered four man rotations filled their fifth slot again once the men were fit
+8) a first tap on a group nobody saved keeps a slot for the sim's hurt man
+   mlb: reorder taps 450: held 450, back once fit 450, stand-in the one gone 450, swap back handed over 450; bench taps 450: held 0; field exact after the tap 900 of 900
+   nhl: reorder taps 640: held 640, back once fit 640, stand-in the one gone 640, swap back handed over 640; bench taps 640: held 160; field exact after the tap 1280 of 1280
+simGmLineup: 22635 checks, all green

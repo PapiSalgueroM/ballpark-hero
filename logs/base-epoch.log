@@ -1,0 +1,2 @@
+BASE epoch exit=1 | CONTROL epoch: 1 rewrite(s) applied, 13 failure(s) in section 1 (FIRED)
+BASE nflfull exit=0 | simGmCareer: all checks passed (nfl)

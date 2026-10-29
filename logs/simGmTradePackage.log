@@ -1,0 +1,19 @@
+   1. offering more never turns a yes into a no: 24 checks
+   2. the league rules are data, and each one bites: 93 checks
+   3. the window, walked period by period: 40 checks
+   4. buyers and sellers at the deadline: 53 checks
+   measured: walk nfl: 600 packages, 2516 additions, 42 of a man worth less than nothing, 472 stopped by a hard rule (step 3: 301, step 4: 171)
+   measured: walk nba: 600 packages, 2827 additions, 63 of a man worth less than nothing, 814 stopped by a hard rule (step 3: 517, step 4: 297)
+   measured: walk nhl: 600 packages, 2208 additions, 46 of a man worth less than nothing, 180 stopped by a hard rule (step 4: 180)
+   measured: walk mlb: 600 packages, 7376 additions, 74 of a man worth less than nothing, 5252 stopped by a hard rule (step 3: 4204, step 4: 1048)
+   measured: mlb: 1786 packages with an ordinary pick, 1786 refused at the pick rule
+   measured: firsts nfl: 7287 deals, 0 refused for two drafts running, 67 clubs left without a first two drafts running
+   measured: firsts nba: 4034 deals, 5611 refused for two drafts running, 0 clubs left without a first two drafts running
+   measured: firsts nhl: 8245 deals, 0 refused for two drafts running, 63 clubs left without a first two drafts running
+   measured: firsts mlb: 0 deals, 0 refused for two drafts running, 0 clubs left without a first two drafts running
+   measured: sellers at the deadline, nfl: 6, 14, 6, 3, 8 of 32
+   measured: sellers at the deadline, nba: 1, 4, 2, 1, 1 of 30
+   measured: sellers at the deadline, nhl: 7, 8, 11, 7, 11 of 32
+   measured: sellers at the deadline, mlb: 9, 7, 8, 3, 4 of 30
+   measured: a veteran's price in picks over his value, median: sellers 0.87 (393 men), buyers 1.43 (1233 men), buyers pay 1.64 times what sellers ask
+simGmTradePackage: 210 checks passed over 4 leagues and 5 seeds. Offering more never turns a yes into a no, every league rule is data and bites, the window shuts on the deadline and opens at the close, and sellers sell.

@@ -1,0 +1,18 @@
+1) Fair shakes, pick counters, lesser returns, dial tones
+   straight, add-pick, lesser-return and hang-up all land on their exact thresholds
+2) The one-shot push
+   blink 1.02, sour 1.15, strictly one push per call
+3) Stand-firm odds move on leverage and clamp
+   base 0.35, thin 0.47, youth 0.43, ceiling 0.6
+4) The libs execute what the call agreed, and only the hard rules refuse
+   nfl: agreed 1.02 executes, pick moves once, floors refuse
+   nba: agreed 1.02 executes, pick moves once, floors refuse
+   nhl: agreed 1.02 executes, pick moves once, floors refuse
+   mlb: agreed 1.02 executes, pick moves once, floors refuse
+5) Seeded talks across real leagues in all four sports
+   nfl: 200 calls, 72 straight, 49 pick asks, 63 lesser returns, 16 dial tones, 74 executed clean
+   nba: 200 calls, 77 straight, 35 pick asks, 55 lesser returns, 33 dial tones, 49 executed clean
+   nhl: 200 calls, 87 straight, 25 pick asks, 64 lesser returns, 24 dial tones, 62 executed clean
+   mlb: 200 calls, 82 straight, 32 pick asks, 78 lesser returns, 8 dial tones, 71 executed clean
+
+simTradeTalks: green. The other GM negotiates like a person, and the deal that closes is the deal that was agreed.
