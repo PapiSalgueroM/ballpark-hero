@@ -1,0 +1,2 @@
+pressmarket: node scripts/simCareerPressMarket.mjs
+sim: node scripts/simUsCareerReports.mjs
