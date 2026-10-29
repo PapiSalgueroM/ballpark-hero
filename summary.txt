@@ -1,0 +1,3 @@
+build exit=0 25s | [dukb] inlined 1 stylesheet(s) and 1 module(s) into 181 snapshots (11 left alone)
+units-1514 exit=0 5s |    Duration  5.27s (transform 1.99s, setup 444ms, collect 4.28s, tests 5.31s, environment 1.41s, prepare 336ms)
+savesize-base-1514 exit=0 42s | simClubManagerSaveSize: all sections green
