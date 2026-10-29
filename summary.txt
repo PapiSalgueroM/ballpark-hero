@@ -1,0 +1,9 @@
+m-lastnoseason-vnew exit=1 16s | ::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/test/usCareerReports1569.test.tsx,title=src/test/usCareerReports1569.test.tsx > Round 1569 report B%3A no o
+m-lastnoseason-sim exit=1 2s | simUsCareerReports FAIL: 164 findings, 150 careers a sport, seed 1569
+m-lastnoseason-sim400 exit=1 2s | simUsCareerReports FAIL: 164 findings, 400 careers a sport, seed 1569
+m-lastnoseason-parity exit=0 56s | simUsBoardParity: green. Four sports replayed click for click, save for save and screen for screen with the proved historical main775 coaching Panel.
+m-whyage-vnew exit=1 14s | ::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/test/usCareerReports1569.test.tsx,title=src/test/usCareerReports1569.test.tsx > Round 1569 report B%3A no o
+m-titlecredit-sim exit=1 1s | simUsCareerReports FAIL: 223 findings, 150 careers a sport, seed 1569
+m-creditlow-sim exit=1 1s | simUsCareerReports FAIL: 1086 findings, 150 careers a sport, seed 1569
+sim-60 exit=2 0s | ABORT: 60 careers a sport; CRIT_FLOOR was measured at 150, so run 150 or more
+clean-after exit=0 0s | baa228767ed880c12f56d6f82eb7445ff1043b02
