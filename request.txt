@@ -1,0 +1,10 @@
+#!serve
+#!playwright
+simWritesAreSent: node scripts/simWritesAreSent.mjs
+playSeasonReveal: ENGINES=chromium node scripts/playSeasonReveal.mjs
+playUsMarketTalk: ENGINES=chromium node scripts/playUsMarketTalk.mjs
+playUsSeasonCentre: ENGINES=chromium node scripts/playUsSeasonCentre.mjs
+playUsShopPromises: ENGINES=chromium node scripts/playUsShopPromises.mjs
+playUsRivalLines: ENGINES=chromium node scripts/playUsRivalLines.mjs
+playNbaNumbers: ENGINES=chromium node scripts/playNbaNumbers.mjs
+playCareerHub: ENGINES=chromium node scripts/playCareerHub.mjs

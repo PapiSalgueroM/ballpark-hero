@@ -1,0 +1,9 @@
+build exit=0 36s | [dukb] inlined 1 stylesheet(s) and 1 module(s) into 181 snapshots (11 left alone)
+simWritesAreSent exit=1 14s | simWritesAreSent: 2 failures
+playSeasonReveal exit=0 22s | ALL SEASON REVEAL WALK CHECKS PASSED
+playUsMarketTalk exit=0 49s | playUsMarketTalk: 40 checks, 0 failed
+playUsShopPromises exit=0 30s | playUsShopPromises: green, 9 walks
+playNbaNumbers exit=0 65s | playNbaNumbers: 85 checks, 0 failed
+playCareerHub exit=0 48s | playCareerHub: green. Four career games on live boxes, and every award on the screen has a year on it.
+playUsSeasonCentre exit=0 232s | playUsSeasonCentre: 217 checks, 0 failed
+playUsRivalLines exit=0 2407s | playUsRivalLines: 2281 checks, 0 failed
