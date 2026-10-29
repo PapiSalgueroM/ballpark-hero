@@ -1,0 +1,7 @@
+simPlayerBingoRodriHonour: CI=1 SIM_NETWORK=offline node scripts/simPlayerBingoRodriHonour.mjs
+simPlayerBingoWorldCupAlias: CI=1 SIM_NETWORK=offline node scripts/simPlayerBingoWorldCupAlias.mjs
+simPlayerBingoLoad: node scripts/simPlayerBingoLoad.mjs
+simPlayerBingoLineFeedback: node scripts/simPlayerBingoLineFeedback.mjs
+simScoreShown: node scripts/simScoreShown.mjs
+simMarketYearScope: node scripts/simMarketYearScope.mjs
+simRevealMoments: node scripts/simRevealMoments.mjs
