@@ -1,0 +1,9 @@
+simFairPuzzles exit=0 0s | simFairPuzzles: green. No board has a new second right answer; only the soccer findings the ledger owes to part B remain.
+simConnectionsFacts exit=0 0s | simConnectionsFacts: green. Every claim this round checked stands on two hosts and no rebuilt board has a second answer.
+ctl-snapshot exit=1 0s | simConnectionsFacts: 1 failure
+live-post exit=1 0s | simConnectionsFacts: 11 failures
+simConnectionsLoss exit=0 2s | simConnectionsLoss: all green
+simNoRivalNames exit=0 12s | No rival product names found. 0 findings.
+rehearse exit=0 17s | rehearseConnections1565: green. 38 rows land at the shipped file's boards in place, both forms, and a second run is a no-op.
+vitest-daily exit=0 16s |    Duration  16.17s (transform 2.76s, setup 133ms, collect 2.64s, tests 15.04s, environment 566ms, prepare 262ms)
+tsc exit=0 50s | 
