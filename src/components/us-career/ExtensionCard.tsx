@@ -38,10 +38,12 @@ interface Props {
   wheel?: MarketWheel;
   onWheelContinue?: () => void;
   odds?: Record<MarketResult, number>;
-  /** Round 1569: with no offer, why not, in plain words (age, rating, the market). */
+  /** Round 1569: with no offer, why not, in plain words (age, rating, the market).
+   *  Null after a push pulled the offer: the push is why, and the note says so. */
   why?: string | null;
   /** Round 1569: the season ahead ends the career whatever happens (the
-   *  engine's own age or length limit), so no market opens after it. */
+   *  engine's own age or length limit), so no market opens after it. Asked
+   *  with an offer on the table too: signing does not buy another season. */
   lastSeason?: boolean;
   /** Round 1569: with no offer, the way to retire now, already wrapped in its
    *  confirmation by the board. */
@@ -71,12 +73,16 @@ export default function ExtensionCard({ talk, seasonWord, onPush, onSign, onDecl
         <p className="font-display text-lg font-bold text-foreground">
           <PenLine className="mr-1 inline h-4 w-4 text-gold" /> The final year
         </p>
-        {!o && lastSeason ? (
+        {lastSeason ? (
           /* Round 1569: the old words promised free agency after a season
-             that ends the career, so the market never came. */
+             that ends the career, so the market never came. With an offer
+             (a kicker a year under his age limit can still draw one) the
+             promise was just as false, so the same words, and the choice
+             the card actually gives. */
           <p className="mt-1 text-xs text-muted-foreground">
             This is the last {seasonWord} on your deal, and it will be the last {seasonWord} of your
-            career whatever happens, so no market opens after it. Play it out or retire now.
+            career whatever happens, so no market opens after it. {o ? 'Sign it or play it out.' : 'Play it out or retire now.'}
+            {o && onWheelContinue && <> This talk and your one push survive reload. A wheel reveals the already saved result. For example, 30% fills 30 of 100 equal parts; spinning changes no terms.</>}
           </p>
         ) : (
           <p className="mt-1 text-xs text-muted-foreground">
@@ -86,7 +92,7 @@ export default function ExtensionCard({ talk, seasonWord, onPush, onSign, onDecl
             {onWheelContinue && <> This talk and your one push survive reload. A wheel reveals the already saved result. For example, 30% fills 30 of 100 equal parts; spinning changes no terms.</>}
           </p>
         )}
-        <p key={talk.note} data-extension-reply={talk.pushed ? 'resolved' : 'opening'} className={cn('mt-1 text-[11px] font-semibold text-gold', talk.pushed && motion.reply)}>{!o && lastSeason && !talk.pulled ? `${talk.label} are letting your deal run out.` : talk.note}</p>
+        <p key={talk.note} data-extension-reply={talk.pushed ? 'resolved' : 'opening'} className={cn('mt-1 text-[11px] font-semibold text-gold', talk.pushed && motion.reply)}>{!o && lastSeason ? (talk.pulled ? `${talk.label} pulled the offer.` : `${talk.label} are letting your deal run out.`) : talk.note}</p>
       </div>
       {!o && why && (
         <p data-extension-why="" className="cm-rise rounded-2xl border border-border bg-card px-4 py-3 text-xs text-muted-foreground" style={{ animationDelay: '0.1s' }}>

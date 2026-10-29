@@ -1551,8 +1551,8 @@ export default function UsCareerBoard({ sport }: { sport: UsCareerSport }) {
       {phase === 'extension' && extTalk ? (
         <div ref={revealRef}>
           <ExtensionCard talk={extTalk} seasonWord={sport.seasonWord} onPush={pushExt} onSign={signExt} onDecline={declineExt} wheel={marketTalk?.wheel} onWheelContinue={acknowledgeMarket} odds={extensionMarketProbabilities(sport.extPushArgs(career, Math.random))}
-            why={extTalk.offer ? null : noOfferWhy({ age: career.age, ovr: career.ovr, pos: career.pos, cliffAge: sport.extPushArgs(career, Math.random).cliffAge, market: extTalk.market })}
-            lastSeason={!extTalk.offer && seasonAheadIsLast(career, sport.shouldRetire)}
+            why={extTalk.offer || extTalk.pulled ? null : noOfferWhy({ age: career.age, ovr: career.ovr, cliffAge: sport.extPushArgs(career, Math.random).cliffAge, market: extTalk.market })}
+            lastSeason={seasonAheadIsLast(career, sport.shouldRetire)}
             retire={retireFromMarket('Retire now')} />
         </div>
       ) : phase === 'freeagency' && faWindow ? (

@@ -29,7 +29,6 @@ export function seasonAheadIsLast<C extends UsCareerCore>(c: C, shouldRetire: (c
 export interface NoOfferFacts {
   age: number;
   ovr: number;
-  pos: string;
   /** The position's decline age, the same one the extension's leverage reads. */
   cliffAge: number;
   /** What the open market would pay a year, in millions (the talk's own number). */
@@ -40,11 +39,15 @@ export interface NoOfferFacts {
  *  extension's leverage weighs (usCareerExtension.ts extensionLeverage):
  *  years past the position's decline age, and a rating under the level a
  *  club pays to keep (a rating of 76 or under carries less than the 0.18 the
- *  club needs on its own, at no accolades). */
+ *  club needs on its own, at no accolades).
+ *  The decline age is this game's own tuning, not a sourced fact about the
+ *  real sport (published aging curves put the real decline earlier for most
+ *  positions), so the sentence says it is how this game's clubs price him,
+ *  and names no position code (a raw "a SF" or "a 1B" read wrong). */
 export function noOfferWhy(f: NoOfferFacts): string {
   const reasons: string[] = [];
   const past = f.age - f.cliffAge;
-  if (past > 0) reasons.push(`at ${f.age} you are ${past} year${past === 1 ? '' : 's'} past the age a ${f.pos} usually starts to slide`);
+  if (past > 0) reasons.push(`at ${f.age} you are ${past} year${past === 1 ? '' : 's'} past the age this game's clubs start pricing in decline at your position`);
   if (f.ovr <= 76) reasons.push(`a ${f.ovr} rating is not one they pay to keep`);
   if (!reasons.length) reasons.push('they would rather keep the money free than commit to more years');
   const body = reasons.join(', and ');
