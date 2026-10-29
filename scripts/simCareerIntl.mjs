@@ -66,8 +66,15 @@
      11. the words (Round 1557): every capitalised word in the visible text of
         the national team's files (and Round 1557's regions of the shared
         ones) is a nation, host or competition of the ledger or a fixed word.
-   9, 10 and 11 run by default since Round 1557 (9 and 10 measured at about
-   SECONDS_9_10 s on a runner).
+   9, 10 and 11 run by default since Round 1557. Measured on a runner
+   (r1557-s2b, head f01ee1555): 9 and 10 took 123 s; of 200 careers an era,
+   now 91 went at least once, 86 brought home a medal, 70 a gold, throwback
+   87, 87 and 80; 173 careers with a medal (490 medals) and 178 that only
+   rested; lit in the always go fleet intl_medal 173, olympic_gold 125,
+   world_cup_gold 117, in the always rest fleet 0 (the floors, 20 careers
+   each way and one lighting a badge, sit far under that); 11 read 156
+   capitalised words in 10 sources. Controls: tilenomedal 173 failures,
+   deadmedal 244, realname 2.
 
    Controls (INTL_CONTROL=<name>; run each with INTL_SECTIONS set to its own
    section, or it also runs the default sections). Each is asserted to change
