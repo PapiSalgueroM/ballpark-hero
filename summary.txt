@@ -1,0 +1,14 @@
+tsc exit=0 93s | 
+ctl-tilenomedal exit=1 113s | simCareerIntl: control tilenomedal FIRED (section 9, 173 failures)
+ctl-realname exit=1 0s | simCareerIntl: control realname FIRED (section 11, 2 failures)
+intl-8 exit=0 17s | simCareerIntl: GREEN, 539 checks over sections 8
+ctl-norepair exit=1 15s | simCareerIntl: control norepair FIRED (section 8, 83 failures)
+simCareerParity exit=0 12s | simCareerParity: green. One money app, one fan rule, one rival shape, one badge case, in all five careers.
+ctl-deadbadge exit=0 14s | simCareerParity control deadbadge: green. The planted defect was reported (1 finding), so this harness works.
+parity-base exit=0 29s | parity-base: the NFL, MLB and NHL lines are identical to 2413427460
+ctl-deadmedal exit=1 132s | simCareerIntl: control deadmedal FIRED (section 10, 244 failures)
+simGuideHeadings exit=0 2s | simGuideHeadings: green. 131 guides carry keyword h2s over h3 and h4 sections with every original sentence intact, and all 133 blocks render a clean outline.
+intl-default exit=0 243s | simCareerIntl: GREEN, 56256 checks over sections 1,2,3,4,6,9,10,11,12
+simNoRivalNames exit=0 32s | No rival product names found. 0 findings.
+vitest-us exit=1 101s | ::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/test/usCareerIntlBoard.test.tsx,title=src/test/usCareerIntlBoard.test.tsx > the board fixture's fixed NBA s
+simHarnessAnchors exit=0 72s | simHarnessAnchors: green. Every harness parses and none carries an unmatchable anchor.
