@@ -1,0 +1,4 @@
+tsc exit=0 76s | 
+vitest exit=0 3s |    Duration  3.00s (transform 1.75s, setup 282ms, collect 2.84s, tests 333ms, environment 1.31s, prepare 466ms)
+simConnectionsLoss exit=0 1s | simConnectionsLoss: all green
+ctl-labelonly exit=1 2s | ::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/hooks/useConnectionsRelabel.test.ts,title=src/hooks/useConnectionsRelabel.test.ts > Baseball Connections%3A
