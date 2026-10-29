@@ -51,6 +51,13 @@
         byte for byte, the generator refuses nothing (no club he already has
         under another spelling or slash part), and every added club uses the
         table's own spelling where the table spells it at all.
+     7. the fleet: 200 seeds of a seeded Math.random through generateBoard
+        and buildDeck on BASE and on the tree. Every criterion's eligibility
+        is equal, so the board's tile sequence must be byte identical on all
+        200 seeds; a deck must be identical wherever every board tile kept its
+        support (printed; expected near zero, since the career shape quota
+        puts a club count tile on nearly every board); and no seed that keeps
+        the per tile guarantee in the first cards on BASE loses it.
 
    Negative controls (each asserts it changed something, or exits 3):
      BINGO_CLUBS_CONTROL=rule      the Round 669 lists dropped from the rule:
@@ -70,6 +77,8 @@
                                    of clubCareerAdditions.ts: red.
      (No control for the aliases: no fixture man holds two spellings of one
      club, so an alias moves nobody; the unit test covers the mapping.)
+     BINGO_CLUBS_CONTROL=drift     one extra draw before the tree's boards:
+                                   section 7 red.
      BINGO_CLUBS_CONTROL=handedit  one byte of the derived file changed: red.
      FIXTURE_CONTROL=cap           the stub drops the range and the 1,000 row
                                    cap: at least one man's history changes.
@@ -498,6 +507,59 @@ for (const a of derived.add) {
   }
 }
 console.log(`   ${derived.add.length} men, ${derived.add.reduce((n, a) => n + a.clubs.length, 0)} added clubs; clubs the fixture never spells (new keys, printed): ${unseen.length}${unseen.length ? ': ' + unseen.join('; ') : ''}`);
+
+/* ---------------------------------------------------------------- 7 */
+section = '7';
+console.log('7) The fleet: 200 seeded boards and decks, BASE against the tree');
+/* generateBoard's draws depend only on which criteria are eligible (support at MIN_TILE_SUPPORT or
+   more) and on the bucket sizes, never on the support lists, so with eligibility equal the board's
+   tile sequence must be byte identical seed for seed. buildDeck shuffles each tile's support, so a
+   deck can only be equal where every tile on the board kept its support (printed, expected few:
+   the career shape quota puts a club count tile on nearly every board). The fleet runs on fixture
+   data, where the World Cup and Ballon d'Or sets are empty: these are fixture boards, not live ones. */
+const mulberry32 = seed => () => {
+  seed |= 0; seed = (seed + 0x6D2B79F5) | 0;
+  let t = Math.imul(seed ^ (seed >>> 15), 1 | seed);
+  t = (t + Math.imul(t ^ (t >>> 7), 61 | t)) ^ t;
+  return ((t ^ (t >>> 14)) >>> 0) / 4294967296;
+};
+const realRandom = Math.random;
+const eligible = criteria => criteria.filter(c => c.support.length >= base.MIN_TILE_SUPPORT).map(c => c.id);
+if (JSON.stringify(eligible(baseCriteria)) !== JSON.stringify(eligible(headCriteria))) {
+  const b = new Set(eligible(baseCriteria));
+  const h = new Set(eligible(headCriteria));
+  fail(`eligibility differs from BASE (now eligible: ${[...h].filter(x => !b.has(x)).join(', ') || 'none'}; no longer: ${[...b].filter(x => !h.has(x)).join(', ') || 'none'})`);
+}
+let boardsEqual = 0;
+let decksComparable = 0;
+let decksEqual = 0;
+let guaranteeRegressions = 0;
+const guaranteeHolds = (board, deck) => board.every(t => {
+  const window = new Set(deck.slice(0, base.GUARANTEE_WINDOW).map(p => p.name));
+  return t.support.filter(n => window.has(n)).length >= Math.min(base.GUARANTEED_PER_LINE, t.support.length);
+});
+for (let seed = 1; seed <= 200; seed++) {
+  Math.random = mulberry32(seed);
+  const bBoard = base.generateBoard(baseCriteria);
+  const bDeck = base.buildDeck(baseData.pool, bBoard);
+  Math.random = mulberry32(seed);
+  if (CONTROL === 'drift' && seed === 1) changed('one extra draw before the tree\'s boards');
+  if (CONTROL === 'drift') Math.random();
+  const hBoard = head.generateBoard(headCriteria);
+  const hDeck = head.buildDeck(headData.pool, hBoard);
+  Math.random = realRandom;
+  if (JSON.stringify(bBoard.map(c => c.id)) === JSON.stringify(hBoard.map(c => c.id))) boardsEqual += 1;
+  if (bBoard.every((c, i) => hBoard[i] && JSON.stringify(c.support) === JSON.stringify(hBoard[i].support))) {
+    decksComparable += 1;
+    if (JSON.stringify(bDeck.map(p => p.name)) === JSON.stringify(hDeck.map(p => p.name))) decksEqual += 1;
+    else fail(`seed ${seed}: every board tile kept its support but the deck differs from BASE`);
+  }
+  if (guaranteeHolds(bBoard, bDeck) && !guaranteeHolds(hBoard, hDeck)) guaranteeRegressions += 1;
+}
+Math.random = realRandom;
+if (boardsEqual !== 200) fail(`${200 - boardsEqual} of 200 seeded boards differ from BASE`);
+if (guaranteeRegressions) fail(`${guaranteeRegressions} seeds keep the ${base.GUARANTEED_PER_LINE} per tile guarantee in the first ${base.GUARANTEE_WINDOW} cards on BASE and lose it on the tree`);
+console.log(`   eligibility equal; ${boardsEqual} of 200 boards byte identical; ${decksComparable} boards kept every tile's support, ${decksEqual} of their decks identical; guarantee regressions ${guaranteeRegressions}`);
 
 /* ---------------------------------------------------------------- end */
 const summary = Object.entries(bySection).map(([s, n]) => `section ${s}: ${n}`).join(', ');
