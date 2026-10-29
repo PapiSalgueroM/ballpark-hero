@@ -1,0 +1,2 @@
+fences3-head exit=1 3s | 3 harnesses not green.
+fences3-main exit=1 3s | 3 harnesses not green.
