@@ -69,7 +69,8 @@ async function freshPage(viewport, plant) {
   if (await rules.count()) { await rules.first().click(); await page.waitForTimeout(300); }
   return { context, page, errors };
 }
-const shot = async (page, name) => { if (OUT) await page.screenshot({ path: path.join(OUT, `${name}.png`), fullPage: false }); };
+/* A control run names its shots apart, so a plain run beside it on the same runner keeps its own. */
+const shot = async (page, name) => { if (OUT) await page.screenshot({ path: path.join(OUT, `${CONTROL ? `${CONTROL}-` : ""}${name}.png`), fullPage: false }); };
 const texts = (page, selector) => page.$$eval(selector, els => els.map(el => (el.textContent || '').replace(/\s+/g, ' ').trim()));
 const tile = async (page, title) => { await page.locator('button', { has: page.locator(`div:text-is("${title}")`) }).first().click(); await page.waitForTimeout(250); };
 const hub = async page => { await page.getByRole('button', { name: /Hub/ }).first().click(); await page.waitForTimeout(250); };
