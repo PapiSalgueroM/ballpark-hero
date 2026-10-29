@@ -1412,7 +1412,7 @@ export default function SoccerCareer() {
   };
 
   const handleEndManager = () => {
-    if (!career) return;
+    if (!career || readManagerJobReview(career, clubs)?.pending) return;
     setCareer(endManagerCareer(career));
   };
 
@@ -4662,7 +4662,8 @@ function GameScreen({ career, clubs, onNextSeason, onAcceptOffer, onDismissSumma
             <Button onClick={onAdvanceManager} disabled={!!readManagerJobReview(career, clubs)?.pending} className="flex-1 h-12 text-base font-bold bg-emerald-600 hover:bg-emerald-500 text-black gap-2 max-[399px]:px-3 max-[399px]:text-sm">
               {career.managerState?.unemployed ? "Sit Out A Season" : "Next Manager Season"} <ChevronRight className="w-5 h-5 max-[399px]:hidden" />
             </Button>
-            <Button onClick={onEndManager} variant="outline" className="h-12 text-sm font-bold max-[399px]:px-3">
+            {/* Release BS fix: no ending the career over a job decision still waiting on Accept or Stay */}
+            <Button onClick={onEndManager} disabled={!!readManagerJobReview(career, clubs)?.pending} variant="outline" className="h-12 text-sm font-bold max-[399px]:px-3">
               {career.managerState?.unemployed ? "Walk Away" : "Retire"}
             </Button>
           </div>
