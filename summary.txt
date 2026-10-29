@@ -1,0 +1,2 @@
+wf287x exit=1 229s | wfrun manager-handover-desk.yml: 9 steps ran, 1 failed: All fifteen build and snapshot readers
+wf301x exit=0 557s | wfrun manager-decision-method.yml: 5 steps ran, 0 failed
