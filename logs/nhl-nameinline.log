@@ -1,0 +1,13 @@
+NEGATIVE CONTROL ON: nameinline; section 8 must go red
+8) the words: never empty, no dash, no quote, no placeholder, no player's name, a closed line never says sit, every box fits
+  FAIL [8]: a player's name (Leo Carlsson) on the arrival line, ANA (seed 1): You take over the Anaheim Ducks. They finished 40-28-12, 15th in the league. Leo
+  FAIL [8]: a player's name (David Pastrnak) on the arrival line, BOS (seed 1): You take over the Boston Bruins. They finished 38-31-11, 20th in the league. Dav
+  FAIL [8]: a player's name (Tage Thompson) on the arrival line, BUF (seed 1): You take over the Buffalo Sabres. They finished 34-34-12, 27th in the league. Ta
+  FAIL [8]: a player's name (Sebastian Aho) on the arrival line, CAR (seed 1): You take over the Carolina Hurricanes. They finished 41-35-4, 21st in the league
+  FAIL [8]: a player's name (Kirill Marchenko) on the arrival line, CBJ (seed 1): You take over the Columbus Blue Jackets. They finished 43-28-9, 13th in the leag
+  FAIL [8]: a player's name (Matt Coronato) on the arrival line, CGY (seed 1): You take over the Calgary Flames. They finished 27-40-13, 31st in the league. Ma
+  FAIL [8]: a player's name (Connor Bedard) on the arrival line, CHI (seed 1): You take over the Chicago Blackhawks. They finished 47-29-4, 11th in the league.
+  FAIL [8]: a player's name (Nathan MacKinnon) on the arrival line, COL (seed 1): You take over the Colorado Avalanche. They finished 52-18-10, 1st in the league.
+  FAIL [8]: (further failures in this check not printed)
+   23267 strings and 3976 boxes read over 4 leagues, every roster name checked
+CONTROL nameinline: 1 rewrite(s) applied, 128 failure(s) in section 8 (FIRED)

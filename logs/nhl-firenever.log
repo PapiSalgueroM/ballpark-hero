@@ -1,0 +1,23 @@
+NEGATIVE CONTROL ON: firenever; section 9 must go red
+4) the market after real firings: every club graded as a GM's club, the first out of work screen and the next two
+   MEASURE 40 seeds x 12 seasons: 0 firings
+   first screen with the host's rule: offers 0 (n/a), quiet 0 (n/a), closed 0 (n/a); first calls 0
+   first screen on the raw feed:      offers 0 (n/a), quiet 0 (n/a), closed 0 (n/a)
+   of the screens with offers, last calls: host 0 of 0 (n/a), raw 0 of 0 (n/a)
+   re hired within three feeds (firings with two seasons left to read, 0): host 0 (n/a), raw 0 (n/a); 0 later feeds read
+  FAIL [4]: no club was fired in the measuring run, so it measured nothing
+9) the bands: the firing rate, the offers, re hiring, the closed share and the XP pace, seed by seed against the calibrated bands
+   S9 nhl seeds 1-40: fireRate mean 0.0000 sd 0.0000 se 0.0000 min 0.0000 max 0.0000 over 40 seeds
+   S9 nhl seeds 1-40: twoPlus mean 0.0000 sd 0.0000 se 0.0000 min Infinity max -Infinity over 0 seeds
+   S9 nhl seeds 1-40: meanOffers mean 0.0000 sd 0.0000 se 0.0000 min Infinity max -Infinity over 0 seeds
+   S9 nhl seeds 1-40: hired3 mean 0.0000 sd 0.0000 se 0.0000 min Infinity max -Infinity over 0 seeds
+   S9 nhl seeds 1-40: closedNext mean 0.0000 sd 0.0000 se 0.0000 min Infinity max -Infinity over 0 seeds
+   S9 nhl seeds 1-40: xpMean mean 121.7268 sd 1.1590 se 0.1833 min 119.2969 max 124.3203 over 40 seeds
+   S9 nhl seeds 1-40: xpMedian 104 over 15360 graded club seasons; hostXpHelp's .500 season that meets the ask pays 110 (ratio 0.945)
+  FAIL [9]: fireRate: the set mean 0.0000 is outside the band [0.0321,0.0396]
+  FAIL [9]: twoPlus: the set mean 0.0000 is outside the band [0.0175,0.0868]
+  FAIL [9]: meanOffers: the set mean 0.0000 is outside the band [1.0176,1.0895]
+  FAIL [9]: hired3: an invariant at 1 on every seed, read 0 seeds off it of 0 (mean 0.0000)
+  FAIL [9]: closedNext: the set mean 0.0000 is outside the band [0.4241,0.6225]
+   nhl bands held on 40 seeds: fireRate 0.0000 in [0.0321,0.0396]; twoPlus 0.0000 in [0.0175,0.0868]; meanOffers 0.0000 in [1.0176,1.0895]; closedNext 0.0000 in [0.4241,0.6225]; xpMean 121.7268 in [120.98,122.29]
+CONTROL firenever: 1 rewrite(s) applied, 5 failure(s) in section 9 (FIRED)

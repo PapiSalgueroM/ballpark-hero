@@ -1,0 +1,6 @@
+NEGATIVE CONTROL ON: hubcounted; section 7 must go red
+7) whole careers: the save, the record and the counters agree at every step across firings, takes and years out
+  FAIL [7]: the season counted on hub, desk off: true, the save says false
+  FAIL [7]: the season counted on hub, desk on: true, the save says false
+   10 careers, 84 seasons run: 30 sackings forced, 20 firings, 15 seats taken, 12 years out, 5 closed for good; 210 checkpoints
+CONTROL hubcounted: 1 rewrite(s) applied, 2 failure(s) in section 7 (FIRED)

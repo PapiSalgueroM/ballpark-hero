@@ -1,0 +1,15 @@
+NEGATIVE CONTROL ON: lastcall; section 6 must go red
+6) a season out: the league plays a whole season without him, his record gains a year out and nothing else, and refusals touch nothing
+  FAIL [6]: seed 1 ANA: a year out that must be refused (last-call) was not, or moved the league (played)
+  FAIL [6]: seed 2 ANA: a year out that must be refused (last-call) was not, or moved the league (played)
+  FAIL [6]: seed 3 ANA: a year out that must be refused (last-call) was not, or moved the league (played)
+  FAIL [6]: seed 4 ANA: a year out that must be refused (last-call) was not, or moved the league (played)
+  FAIL [6]: seed 5 ANA: a year out that must be refused (last-call) was not, or moved the league (played)
+  FAIL [6]: seed 6 ANA: a year out that must be refused (last-call) was not, or moved the league (played)
+  FAIL [6]: seed 7 ANA: a year out that must be refused (last-call) was not, or moved the league (played)
+  FAIL [6]: seed 8 ANA: a year out that must be refused (last-call) was not, or moved the league (played)
+  FAIL [6]: (further failures in this check not printed)
+   60 years out over 20 seeds (0 stopped early); refusals: 20 in a seat, 20 closed, 20 last calls
+   drafted men on the other clubs' rosters after the years out: away 590, idle GM 600 (ratio 0.983); mean roster after a summer: away 12.63, idle GM 12.66
+   retained rows planted 20: 40 summers kept at the figure the club kept, 20 dropped when the entry ran out; the old club's contributors back to automatic after 60 of 60 years
+CONTROL lastcall: 1 rewrite(s) applied, 20 failure(s) in section 6 (FIRED)

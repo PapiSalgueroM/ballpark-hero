@@ -1,0 +1,8 @@
+NEGATIVE CONTROL ON: addkey; section 1 must go red
+  seed 1 season 1: the desk gained ["extra"], only seat and xp are this round's
+  seed 1 season 2: the desk gained ["extra"], only seat and xp are this round's
+  seed 1 season 3: the desk gained ["extra"], only seat and xp are this round's
+1) the default path: a desk on save graded through the host is the base's, season for season, and gains only seat and xp
+  FAIL [1]: 48 closes wrote a block other than seat and xp
+   94 checkpoints over 48 seasons against 115c68092 (0 moved); fired at ["3:5","5:3"]; digest 838cdddf98d5a02586935329fa780473f44782d1
+CONTROL addkey: 1 rewrite(s) applied, 1 failure(s) in section 1 (FIRED)
