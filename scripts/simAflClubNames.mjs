@@ -41,7 +41,14 @@
  *     elsewhere, and no panel's text holds an invented place; (iii) the same for a
  *     career with no set, the other way round. Control screen (a vitest swap
  *     through NO_DOUBLE_SWAP: the ladder row prints the raw id): (ii) fails on an
- *     assertion while (i) passes.
+ *     assertion while (i) passes. Test (iv) switches an old career from its Club
+ *     panel, cancels once, confirms once, and finds the save is switchClubSet of the
+ *     one before, with the ladder's order and numbers unchanged.
+ *   5 the switch: for every recipe, switchClubSet gives a save that loads, round
+ *     trips, masks to the base save, is byte for byte the real twin (createLeague's
+ *     key order, critic advice 12), switches once only, leaves its input untouched,
+ *     and plays 60 more bot actions to the base continuation's masked hash. Control
+ *     switchlost (the switch forgets clubName): 5 red, 3 green.
  *
  * Every section prints its counts, so a pass on empty input cannot happen. The
  * run ends on one summary line and exits 1 on any failure.
@@ -82,9 +89,11 @@ const CONTROLS = {
   mixed: [LEAGUE, 'identityIn(setOf(state), id)?.short', "identityIn('afl2026', id)?.short", '3', '0'],
   /* A vitest control (sixth field): the board's ladder row prints the raw id. Test (ii) must fail on an assertion, test (i) pass. */
   screen: [BOARD, '{index + 1}. {clubShort(state, row.clubId)}', '{index + 1}. {row.clubId}', '4', '4i', 'vitest'],
+  /* Step 5: the switch forgets clubName, so a switched save keeps its invented clubName and is refused (section 5). */
+  switchlost: [LEAGUE, "...state, clubName, clubSet: 'afl2026',", "...state, clubSet: 'afl2026',", '5', '3'],
 };
 if (CONTROL && !CONTROLS[CONTROL]) { console.error(`unknown control ${CONTROL}`); process.exit(2); }
-const SECTIONS = ['0', '1', '2a', '2b', '3', '4', '4i'];
+const SECTIONS = ['0', '1', '2a', '2b', '3', '4', '4i', '5'];
 const ONLY = process.env.AFL_NAMES_ONLY || ''; // e.g. "0,1,2a,2b,3" while iterating; a gate run never sets it
 const RUN = CONTROL ? new Set([CONTROLS[CONTROL][3], CONTROLS[CONTROL][4]]) : ONLY ? new Set(ONLY.split(',')) : new Set(SECTIONS);
 
@@ -294,6 +303,7 @@ const TESTS = {
   menu: '(i) a new career picks from the 18 AFL clubs by name, under the five 2026 ladder bands',
   real: '(ii) a real club career prints only two sourced club names on every panel',
   fake: '(iii) a career with no club set prints only its own invented names',
+  switch: '(iv) the Club panel switches an old career to the real names, after one cancel',
 };
 if (RUN.has('4') || RUN.has('4i')) guard('4', () => {
   head('4', `screens: ${TEST_FILE} through vitest${CONTROL ? ` (control ${CONTROL})` : ''}`);
@@ -340,6 +350,38 @@ if (RUN.has('4') || RUN.has('4i')) guard('4', () => {
   check(run.status === 0 && new RegExp(`Tests\\s+${names.length} passed`).test(output), `all ${names.length} screen tests passed (vitest exit ${run.status})`);
   for (const [key, name] of Object.entries(TESTS)) { if (passed(name)) console.log(`  ok: ${name}`); else { if (key === 'menu') failIn('4i', `${name} failed`); else fail(`${name} failed`); } }
   if (run.status !== 0) console.error(output.slice(-3000));
+});
+
+/* ---------- 5. the switch ---------- */
+if (RUN.has('5')) guard('5', () => {
+  head('5', 'the switch: every base save switches to the real names losslessly, once, and plays on as the same game');
+  const want = expectedReal();
+  const groups = new Map();
+  for (const rec of RECORD.recipes) { const key = `${rec.seed}|${rec.club}`; if (!groups.has(key)) groups.set(key, []); groups.get(key).push(rec); }
+  let valid = 0, masked = 0, twin = 0, once = 0, more = 0, untouched = 0, realKept = 0;
+  for (const recs of groups.values()) replayGroup(recs[0].seed, recs[0].club, recs, (rec, state) => {
+    const text = JSON.stringify(state);
+    const loaded = L.readLeagueSave(text);
+    if (!loaded) { fail(`${rec.name}: the base save does not load`); return; }
+    const switched = L.switchClubSet(loaded);
+    const out = JSON.stringify(switched);
+    const back = L.readLeagueSave(out);
+    if (back && JSON.stringify(back) === out && switched.clubSet === 'afl2026' && switched.clubName === want.get(switched.myClub).full) valid += 1; else fail(`${rec.name}: the switched save is refused or misnamed`);
+    if (maskedHash(switched) === rec.masked) masked += 1; else fail(`${rec.name}: the switch changed something besides the names`);
+    if (out === JSON.stringify(realTwin(loaded, want))) twin += 1; else fail(`${rec.name}: the switched save is not byte for byte the real twin (key order or a name)`);
+    if (L.switchClubSet(switched) === switched && JSON.stringify(L.switchClubSet(back ?? switched)) === out) once += 1; else fail(`${rec.name}: switching twice is not switching once`);
+    if (maskedHash(play(L, back ?? switched, MORE)) === rec.after.masked) more += 1; else fail(`${rec.name}: ${MORE} more actions after the switch leave the base's game`);
+    if (JSON.stringify(loaded) === text) untouched += 1; else fail(`${rec.name}: the switch changed the state it was given`);
+    const real = L.readLeagueSave(out);
+    if (real && L.switchClubSet(real) === real) realKept += 1; else fail(`${rec.name}: a real career is switched again`);
+  });
+  const n = RECORD.recipes.length;
+  check(valid === n, `${valid} of ${n} switched saves load, round trip, carry clubSet 'afl2026' and the real name of the player's club`);
+  check(masked === n, `${masked} of ${n} switched saves equal the base save once names are masked (nothing else changed)`);
+  check(twin === n, `${twin} of ${n} switched saves are byte for byte the real twin built by this harness (createLeague's key order)`);
+  check(once === n && realKept === n, `${once} of ${n} switch once only, and ${realKept} of ${n} real careers come back as they are`);
+  check(more === n, `${more} of ${n} play ${MORE} more bot actions after the switch to the base continuation's masked hash`);
+  check(untouched === n, `${untouched} of ${n} leave the state they were given untouched`);
 });
 
 /* ---------- summary ---------- */

@@ -1,6 +1,6 @@
 import { useRef, useState } from 'react';
 import { useGameCompletion } from '@/hooks/useGameCompletion';
-import { createLeague, CURRENT_CLUB_SET, LEGACY_SAVE_KEY, readLeagueSave, reduceLeague, SAVE_KEY, SLUG, type LeagueAction, type LeagueState } from '@/lib/aussieRulesLeague';
+import { createLeague, CURRENT_CLUB_SET, LEGACY_SAVE_KEY, readLeagueSave, reduceLeague, SAVE_KEY, SLUG, switchClubSet, type LeagueAction, type LeagueState } from '@/lib/aussieRulesLeague';
 
 /** Round 1014: the full season's state lives in memory and the whole of it is the save. */
 function load(): { loaded: LeagueState | null; notice: string | null } {
@@ -44,5 +44,13 @@ export function useAussieRulesLeague() {
     try { localStorage.removeItem(SAVE_KEY); setStorageNotice(null); }
     catch { setStorageNotice('This browser could not remove your old save.'); }
   };
-  return { state, start, dispatch, reset, storageNotice };
+  /** Round 1572: an invented league career plays on under the real AFL names; nothing else changes. */
+  const switchNames = (): boolean => {
+    const current = stateRef.current;
+    if (!current || current.clubSet) return false;
+    const next = switchClubSet(current);
+    stateRef.current = next; setState(next); write(next);
+    return true;
+  };
+  return { state, start, dispatch, reset, switchNames, storageNotice };
 }

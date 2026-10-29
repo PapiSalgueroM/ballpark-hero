@@ -78,7 +78,7 @@ export interface HistoryRow {
   leadingGoalkicker: { name: string; club: string; goals: number };
 }
 export interface LeagueState {
-  /** Round 1572: present only on a real club career ('afl2026'); absent is Round 1014's invented league. */
+  /** Round 1572: present only on a real club career, new or switched (switchClubSet) ('afl2026'); absent is Round 1014's invented league. */
   version: 2; seed: number; myClub: string; clubName: string; clubSet?: 'afl2026'; season: number; format: AussieFinalsFormat;
   phase: LeaguePhase; stage: LeagueStage; round: number; week: number;
   clubs: LeagueClub[]; starters: string[]; bench: string[]; preparation: Preparation | null; swapsThisBreak: number;
@@ -278,6 +278,18 @@ export function createLeague(seed: number, clubId: string, set: ClubSetId = 'fic
     clubs: world.clubs, starters: [], bench: [], preparation: null, swapsThisBreak: 0, match: null, results: [], goals: {}, finals: null, draft: null, nextId: world.nextId, history: [],
   };
   return freshSeason(base, 1);
+}
+/**
+ * Round 1572: a career started on the invented clubs plays on under the real AFL names. Lossless:
+ * every id, style and tier is the same in both sets (clubIdentities) and every record holds ids,
+ * never names, so only the names and the set change. One way only; a real career comes back as is.
+ * The keys come out in createLeague's order (clubSet right after clubName, critic advice 12).
+ */
+export function switchClubSet(state: LeagueState): LeagueState {
+  if (state.clubSet) return state;
+  const clubName = identityIn('afl2026', state.myClub)!.full;
+  const head = { version: state.version, seed: state.seed, myClub: state.myClub, clubName, clubSet: 'afl2026' as const };
+  return { ...head, ...state, clubName, clubSet: 'afl2026', clubs: state.clubs.map(club => ({ ...club, name: identityIn('afl2026', club.id)!.full })) };
 }
 
 /** Starters a club fields from its own matchday 23 (repeats v1's line; it ends when v1 retires). */

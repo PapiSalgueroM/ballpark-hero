@@ -6,7 +6,7 @@ import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 import { MemoryRouter } from 'react-router-dom';
 import AussieRulesLeagueBoard from '@/components/aussie-rules-manager/AussieRulesLeagueBoard';
 import AussieRulesManager from '@/pages/AussieRulesManager';
-import { CLUBS, clubOf, createLeague, draftPool, pickRefusal, readLeagueSave, reduceLeague, SAVE_KEY, type ClubSetId, type LeagueAction, type LeagueState } from '@/lib/aussieRulesLeague';
+import { CLUBS, clubOf, createLeague, draftPool, pickRefusal, readLeagueSave, reduceLeague, SAVE_KEY, switchClubSet, type ClubSetId, type LeagueAction, type LeagueState } from '@/lib/aussieRulesLeague';
 import { AFL_CLUBS_2026 } from '@/data/aflClubs2026';
 
 vi.mock('@/lib/completions', () => ({ recordCompletion: vi.fn(), getCurrentPlayerName: () => null }));
@@ -24,19 +24,21 @@ const bot = (s: LeagueState): LeagueAction => s.phase === 'prepare' ? (s.match ?
 const until = (s: LeagueState, done: (s: LeagueState) => boolean) => { let state = s; for (let n = 0; !done(state) && n < 5000; n += 1) state = reduceLeague(state, bot(state)); expect(done(state)).toBe(true); return state; };
 const store = (state: LeagueState) => localStorage.setItem(SAVE_KEY, JSON.stringify(state));
 const words = (text: string | null | undefined) => (text ?? '').replace(/\s+/g, ' ').trim();
+/** A screen's text without the switch card, the one place an invented league career names a real club on purpose. */
+const textOf = (el: Element) => { const copy = el.cloneNode(true) as Element; copy.querySelectorAll('[data-arl-switch]').forEach(card => card.remove()); return words(copy.textContent); };
 
 const REAL_FULL = new Set(AFL_CLUBS_2026.map(c => c.full)), REAL_SHORT = new Set(AFL_CLUBS_2026.map(c => c.short));
 const FAKE_FULL = new Set(CLUBS.map(c => `${c.place} ${c.nickname}`)), FAKE_SHORT = new Set(CLUBS.map(c => c.place));
 const BANDS = ['Finished 1st to 3rd in 2026', 'Finished 4th to 7th in 2026', 'Finished 8th to 11th in 2026', 'Finished 12th to 15th in 2026', 'Finished 16th to 18th in 2026'];
 const has = (text: string, name: string) => new RegExp(`(^|[^A-Za-z])${name}([^A-Za-z]|$)`).test(text);
 
-type Pulled = Record<'header' | 'hub' | 'premier' | 'score' | 'events' | 'results' | 'ladder' | 'finals' | 'history' | 'draft', string[]>;
+type Pulled = Record<'header' | 'hub' | 'premier' | 'score' | 'events' | 'results' | 'ladder' | 'finals' | 'history' | 'draft' | 'switchFrom' | 'switchTo', string[]>;
 const TIE = /^(?:[A-Za-z ]+: )?(.+?)(?: \d+\.\d+ \(\d+\))? v (.+?)(?: \d+\.\d+ \(\d+\))?(?: \(after extra time\))?$/;
 function pair(text: string, into: string[]) { const m = TIE.exec(words(text)); expect(m, `a fixture line: ${text}`).not.toBeNull(); into.push(m![1], m![2]); }
 
 /** Opens every panel the hub offers and pulls each club string out by where it sits on the screen. */
 function pullAll(view: ReturnType<typeof render>, mine: () => void, texts: string[]): Pulled {
-  const out: Pulled = { header: [], hub: [], premier: [], score: [], events: [], results: [], ladder: [], finals: [], history: [], draft: [] };
+  const out: Pulled = { header: [], hub: [], premier: [], score: [], events: [], results: [], ladder: [], finals: [], history: [], draft: [], switchFrom: [], switchTo: [] };
   const box = view.container;
   out.header.push(words(box.querySelector('header p')!.textContent).split(' · Season')[0]);
   const next = view.getByText('Next match', { selector: 'div' }).closest('button')!;
@@ -59,7 +61,8 @@ function pullAll(view: ReturnType<typeof render>, mine: () => void, texts: strin
     }
     if (title === 'Draft') mine();
     for (const row of box.querySelectorAll('.fo-draft-row span.truncate')) { const m = /^\d+\. (.+?) (?:take|select) /.exec(words(row.textContent)); expect(m, row.textContent ?? '').not.toBeNull(); out.draft.push(m![1]); }
-    texts.push(words(box.textContent));
+    for (const card of box.querySelectorAll('[data-arl-switch] p')) { const m = /^Play on with the real AFL club names\? (.+?) become (.+?)\. Players/.exec(words(card.textContent)); expect(m, card.textContent ?? '').not.toBeNull(); out.switchFrom.push(m![1]); out.switchTo.push(m![2]); }
+    texts.push(textOf(box));
     fireEvent.click(view.getByRole('button', { name: /Hub/ }));
   }
   return out;
@@ -86,7 +89,7 @@ function screens(set: ClubSetId | undefined) {
       fireEvent.click(view.container.querySelector(`[data-arl-prospect="${ok.id}"]`)!);
     };
     pulled.push(pullAll(view, pickOne, texts));
-    texts.push(words(view.container.textContent));
+    texts.push(textOf(view.container));
   }
   return { pulled, texts };
 }
@@ -126,6 +129,7 @@ describe('Aussie Rules Manager club names (Round 1572)', () => {
     expect(strays(pulled, REAL_FULL, REAL_SHORT)).toEqual([]);
     expect(texts.length).toBeGreaterThan(20);
     expect(texts.flatMap(text => [...FAKE_SHORT].filter(place => has(text, place)))).toEqual([]);
+    expect(pulled.flatMap(p => p.switchTo), 'a real career is never offered the switch').toEqual([]);
   });
 
   it('(iii) a career with no club set prints only its own invented names', () => {
@@ -135,6 +139,37 @@ describe('Aussie Rules Manager club names (Round 1572)', () => {
     for (const key of ['header', 'hub', 'score', 'events', 'results', 'ladder', 'finals', 'history', 'draft'] as const) expect(n[key], `${key} strings pulled`).toBeGreaterThan(0);
     expect(strays(pulled, FAKE_FULL, FAKE_SHORT)).toEqual([]);
     expect(texts.flatMap(text => [...REAL_FULL, ...REAL_SHORT].filter(name => has(text, name)))).toEqual([]);
+    /* The one real name an old career sees is the offer to switch, on its Club panel at every moment. */
+    expect(pulled.flatMap(p => p.switchFrom)).toEqual(Array(5).fill(`${CLUBS[17].place} ${CLUBS[17].nickname}`));
+    expect(pulled.flatMap(p => p.switchTo)).toEqual(Array(5).fill('Essendon'));
+  });
+
+  it('(iv) the Club panel switches an old career to the real names, after one cancel', () => {
+    const before = until(createLeague(5, 'club-17')!, s => s.round === 3 && s.phase === 'report');
+    store(before);
+    const view = render(<MemoryRouter><AussieRulesLeagueBoard /></MemoryRouter>);
+    const box = view.container;
+    fireEvent.click(view.getByText('Ladder', { selector: 'div' }).closest('button')!);
+    const order = [...box.querySelectorAll('[data-arl-ladder]')].map(row => row.getAttribute('data-arl-ladder'));
+    const numbers = [...box.querySelectorAll('[data-arl-ladder] td')].map(td => words(td.textContent));
+    fireEvent.click(view.getByRole('button', { name: /Hub/ }));
+    fireEvent.click(view.getByText('Club', { selector: 'div' }).closest('button')!);
+    expect(box.querySelector('[data-arl-switchconfirm]')).toBeNull();
+    fireEvent.click(box.querySelector('[data-arl-switchask]')!);
+    fireEvent.click(box.querySelector('[data-arl-switchkeep]')!);
+    expect(localStorage.getItem(SAVE_KEY)).toBe(JSON.stringify(before));
+    expect(box.querySelector('[data-arl-switchask]')).not.toBeNull();
+    fireEvent.click(box.querySelector('[data-arl-switchask]')!);
+    fireEvent.click(box.querySelector('[data-arl-switchconfirm]')!);
+    expect(localStorage.getItem(SAVE_KEY)).toBe(JSON.stringify(switchClubSet(before)));
+    expect(readLeagueSave(localStorage.getItem(SAVE_KEY))).toEqual(switchClubSet(before));
+    expect(box.querySelector('[data-arl-switch]')).toBeNull();
+    expect(words(box.querySelector('header p')!.textContent)).toBe('Essendon · Season 1');
+    fireEvent.click(view.getByRole('button', { name: /Hub/ }));
+    fireEvent.click(view.getByText('Ladder', { selector: 'div' }).closest('button')!);
+    expect([...box.querySelectorAll('[data-arl-ladder]')].map(row => row.getAttribute('data-arl-ladder'))).toEqual(order);
+    expect([...box.querySelectorAll('[data-arl-ladder] td')].map(td => words(td.textContent))).toEqual(numbers);
+    expect([...box.querySelectorAll('[data-arl-ladder] th')].map(th => words(th.textContent).replace(/^\d+\. /, '')).every(name => REAL_SHORT.has(name))).toBe(true);
   });
 });
 

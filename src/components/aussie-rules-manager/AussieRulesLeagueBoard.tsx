@@ -143,9 +143,20 @@ function FinalsPanel({ state }: { state: LeagueState }) {
   </div>;
 }
 
-function ClubPanel({ state }: { state: LeagueState }) {
+function ClubPanel({ state, onSwitch }: { state: LeagueState; onSwitch: () => void }) {
+  const [asking, setAsking] = useState(false);
   const rows = [...state.history].reverse();
-  return <div className={styles.card}><h3>Honour board</h3>
+  return <div className={styles.card}>
+    {/* Round 1572: a career started on the invented clubs can play on under the real names, with an in place confirm. */}
+    {!state.clubSet && <div className={own.week} data-arl-switch>
+      <h3>The real AFL clubs</h3>
+      <p className={styles.muted}>Play on with the real AFL club names? {state.clubName} become {clubFull({ clubSet: 'afl2026' }, state.myClub)}. Players, results and your history stay exactly as they are.</p>
+      {asking ? <div className={styles.actions}>
+        <button className={styles.secondary} data-arl-switchkeep onClick={() => setAsking(false)}>Keep these names</button>
+        <button className={styles.action} data-arl-switchconfirm onClick={() => { onSwitch(); setAsking(false); }}>Switch</button></div>
+        : <button className={styles.secondary} data-arl-switchask onClick={() => setAsking(true)}>Switch to the real names</button>}
+    </div>}
+    <h3>Honour board</h3>
     {rows.length ? <ul className={own.list}>{rows.map(row => <li key={row.season} data-arl-history={row.season}>
       <strong>Season {row.season}</strong>: {ordinal(row.place)} on the ladder ({row.w}-{row.d}-{row.l}), {EXIT_LABELS[row.exit].toLowerCase()}. Premiers: {clubShort(state, row.premier)}, beating {clubShort(state, row.runnerUp)} {score(row.gf.home === row.premier ? row.gf.homeScore : row.gf.awayScore)} to {score(row.gf.home === row.premier ? row.gf.awayScore : row.gf.homeScore)}. Most goals: {row.leadingGoalkicker.name} ({clubShort(state, row.leadingGoalkicker.club)}), {row.leadingGoalkicker.goals}.
     </li>)}</ul> : <p className={styles.muted}>Your first season is under way. Every season you finish goes up here.</p>}
@@ -243,7 +254,7 @@ export default function AussieRulesLeagueBoard({ onStarted }: { onStarted?: () =
           {panel === 'ladder' && <LadderPanel state={state} />}
           {panel === 'squad' && <SquadPanel state={state} act={act} />}
           {panel === 'finals' && <FinalsPanel state={state} />}
-          {panel === 'club' && <ClubPanel state={state} />}
+          {panel === 'club' && <ClubPanel state={state} onSwitch={() => game.switchNames()} />}
           {panel === 'draft' && <DraftPanel state={state} act={act} />}</>}
     </div>}
     {game.storageNotice && <p role="status" className={styles.muted}>{game.storageNotice}</p>}
