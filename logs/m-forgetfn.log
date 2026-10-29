@@ -1,0 +1,7 @@
+MUT forgetfn: applied to supabase/functions/soccer-grid-validate/index.ts
+ supabase/functions/soccer-grid-validate/index.ts | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+  FAIL: the function excludes Arsenal Dzerzhinsk, Arsenal Kyiv, Arsenal Tula, Arsenal Tula II, Arsenal de Sarandí, Berekum Arsenal; gridNamesakes.json sources Arsenal Dzerzhinsk, Arsenal Kyiv, Arsenal Kyiv (-2019), Arsenal Tula, Arsenal Tula II, Arsenal de Sarandí, Berekum Arsenal
+  FAIL: still satisfies the Arsenal label: Arsenal Kyiv (-2019)
+simClubNamesakes: 2 finding(s).
+MUT forgetfn sim=1 rehearse=skip

@@ -1,0 +1,7 @@
+MUT forget: applied to supabase/functions/soccer-grid-validate/index.ts
+MUT forget: dropped Arsenal Kyiv (-2019) from scripts/data/clubNamesakes1584/gridNamesakes.json
+ scripts/data/clubNamesakes1584/gridNamesakes.json | 204 ++++++++++++++--------
+ supabase/functions/soccer-grid-validate/index.ts  |   2 +-
+ 2 files changed, 136 insertions(+), 70 deletions(-)
+simClubNamesakes: green. The detection flags Arsenal FC where it is two clubs, and the grid stops reading Arsenal inside another club's name, nowhere else.
+MUT forget sim=0 rehearse=skip

@@ -1,0 +1,13 @@
+m-fnorder: bash .rc/x/mrun.sh fnorder 0
+m-fnkey: bash .rc/x/mrun.sh fnkey 0
+m-fnnonorm: bash .rc/x/mrun.sh fnnonorm 0
+m-forgetfn: bash .rc/x/mrun.sh forgetfn 0
+m-forget: bash .rc/x/mrun.sh forget 0
+m-mirrornonorm: bash .rc/x/mrun.sh mirrornonorm 0
+m-jsbloc: bash .rc/x/mrun.sh jsbloc 1
+m-jss1: bash .rc/x/mrun.sh jss1 1
+m-sql14: bash .rc/x/mrun.sh sql14 1
+m-sqlsplit: bash .rc/x/mrun.sh sqlsplit 1
+m-sqlq: bash .rc/x/mrun.sh sqlq 1
+m-purgevalid: bash .rc/x/mrun.sh purgevalid 1
+m-purgelondon: bash .rc/x/mrun.sh purgelondon 1

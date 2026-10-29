@@ -1,0 +1,10 @@
+MUT purgelondon: applied to scripts/qa/genClubNamesakePurge1584.mjs
+ scripts/qa/genClubNamesakePurge1584.mjs | 1 -
+ 1 file changed, 1 deletion(-)
+simClubNamesakes: green. The detection flags Arsenal FC where it is two clubs, and the grid stops reading Arsenal inside another club's name, nowhere else.
+  FAIL: the generator lists 3 to delete (aleksandr filtsov|played for arsenal|russia; aleksandr lomovitskiy|russia|played for arsenal; bukayo saka|played for arsenal|england) and 1 held
+  FAIL: the form ran and removed 3 rows: soccer-grid|aleksandr filtsov|played for arsenal|russia; soccer-grid|aleksandr lomovitskiy|russia|played for arsenal; soccer-grid|bukayo saka|played for arsenal|england
+  FAIL: a partial purge: 3 of 2
+  FAIL: a second run raised: Round 1584 purge: 0 of 3 rows still match their read, nothing removed, or changed the table
+rehearseClubNamesakes1584: 4 finding(s).
+MUT purgelondon sim=0 rehearse=1

@@ -1,0 +1,6 @@
+MUT mirrornonorm: applied to scripts/simSoccerGridLabels.mjs
+ scripts/simSoccerGridLabels.mjs | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+  FAIL: the mirror and the function disagree on 7 of 34200 cells: Played for Arsenal x Arsenal de Sarandí; Played for Arsenal x Arsenal Tula; Played for Arsenal x Arsenal Tula II; Played for Arsenal x Arsenal Kyiv
+simClubNamesakes: 1 finding(s).
+MUT mirrornonorm sim=1 rehearse=skip

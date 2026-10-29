@@ -1,0 +1,10 @@
+MUT jss1: applied to scripts/lib/clubNamesakeDetect.mjs
+ scripts/lib/clubNamesakeDetect.mjs | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+  FAIL: the mirror returns 21 rows, the committed list holds 22
+  FAIL: Arsenal FC is not flagged at S1 Arsenal FC 2011
+simClubNamesakes: 2 finding(s).
+  FAIL: the SQL returns 22 rows and the JS 21; 1 only in the SQL, 0 only in the JS: {"signal":"S1","club":"Arsenal FC","year":2011,"n":36,"size_rank":1,"nat":null,"k":null,"bloc_max":null,"bloc_med":null,"rest_q1":null,"rest_med":null,"names":n
+  FAIL: the JS twin no longer returns the fixture's committed expected list
+rehearseClubNamesakes1584: 2 finding(s).
+MUT jss1 sim=1 rehearse=1

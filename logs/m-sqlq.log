@@ -1,0 +1,7 @@
+MUT sqlq: applied to scripts/qa/clubNamesakes1584Detect.sql
+ scripts/qa/clubNamesakes1584Detect.sql | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+simClubNamesakes: green. The detection flags Arsenal FC where it is two clubs, and the grid stops reading Arsenal inside another club's name, nowhere else.
+  FAIL: the SQL returns 16 rows and the JS 22; 6 only in the SQL, 12 only in the JS: {"signal":"S2","club":"Arsenal FC","year":2011,"n":36,"size_rank":1,"nat":"Argentina","k":12,"bloc_max":4000000,"bloc_med":2000000,"rest_q1":7000000,"rest_med":
+rehearseClubNamesakes1584: 1 finding(s).
+MUT sqlq sim=0 rehearse=1

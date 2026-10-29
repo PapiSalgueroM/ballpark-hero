@@ -1,0 +1,6 @@
+MUT sql14: applied to scripts/qa/clubNamesakes1584Detect.sql
+ scripts/qa/clubNamesakes1584Detect.sql | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+simClubNamesakes: green. The detection flags Arsenal FC where it is two clubs, and the grid stops reading Arsenal inside another club's name, nowhere else.
+rehearseClubNamesakes1584: green. Q1 and its JS twin agree in Postgres, and the purge form removes exactly the stale Arsenal yeses or nothing.
+MUT sql14 sim=0 rehearse=0

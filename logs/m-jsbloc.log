@@ -1,0 +1,9 @@
+MUT jsbloc: applied to scripts/lib/clubNamesakeDetect.mjs
+ scripts/lib/clubNamesakeDetect.mjs | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+  FAIL: the mirror returns 13 rows, the committed list holds 22
+simClubNamesakes: 1 finding(s).
+  FAIL: the SQL returns 22 rows and the JS 13; 9 only in the SQL, 0 only in the JS: {"signal":"S2","club":"1.FC Köln","year":2016,"n":17,"size_rank":10,"nat":"Serbia","k":3,"bloc_max":2000000,"bloc_med":2000000,"rest_q1":3000000,"rest_med":4500
+  FAIL: the JS twin no longer returns the fixture's committed expected list
+rehearseClubNamesakes1584: 2 finding(s).
+MUT jsbloc sim=1 rehearse=1

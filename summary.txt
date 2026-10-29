@@ -1,0 +1,13 @@
+m-fnkey exit=1 2s | MUT fnkey sim=1 rehearse=skip
+m-fnnonorm exit=1 2s | MUT fnnonorm sim=1 rehearse=skip
+m-fnorder exit=1 2s | MUT fnorder sim=1 rehearse=skip
+m-mirrornonorm exit=1 2s | MUT mirrornonorm sim=1 rehearse=skip
+m-forget exit=0 2s | MUT forget sim=0 rehearse=skip
+m-forgetfn exit=1 2s | MUT forgetfn sim=1 rehearse=skip
+m-jss1 exit=1 11s | MUT jss1 sim=1 rehearse=1
+m-sql14 exit=0 11s | MUT sql14 sim=0 rehearse=0
+m-jsbloc exit=1 12s | MUT jsbloc sim=1 rehearse=1
+m-purgevalid exit=1 11s | MUT purgevalid sim=0 rehearse=1
+m-sqlsplit exit=0 11s | MUT sqlsplit sim=0 rehearse=0
+m-sqlq exit=1 11s | MUT sqlq sim=0 rehearse=1
+m-purgelondon exit=1 7s | MUT purgelondon sim=0 rehearse=1
