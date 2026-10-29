@@ -1,0 +1,244 @@
+
+ RUN  v3.2.7 /tmp/pr
+
+Browserslist: browsers data (caniuse-lite) is 16 months old. Please run:
+  npx update-browserslist-db@latest
+  Why you should do it regularly: https://github.com/browserslist/update-db#readme
+stdout | src/test/probeUsStale.test.tsx > Start over leaves no screen of the old career behind > leak-intl: Start over on the national team result, then Enter the draft
+PROBE leak-intl after the new draft:  Start over🥈 SilverThe 2004 Olympics in AthensRecord 6-2. You averaged 3.6 points, 2 rebounds and 0.8 assists a game.You came home healthy.The real tournament was played, but these groups and results are this career's own.Your games8 gamesThe bracket2 groupsContinue
+
+stdout | src/test/probeUsStale.test.tsx > Start over leaves no screen of the old career behind > leak-curtain: Start over on the season curtain, then Enter the draft
+PROBE curtain before Start over:  Start over @keyframes cmRise { 0% { opacity: 0; transform: translateY(7px); } 100% { opacity: 1; transform: translateY(0); } } .cm-rise { opacity: 0; animation: cmRise 0.45s ease-out forwards; } @keyframes cmSlam { 0% { opacity: 0; transform: scale(1.6); } 60% { opacity: 1; transform: scale(0.94); } 100% { opacity: 1; transform: scale(1); } } .cm-slam { opacity: 0; animation: cmSlam 0.4s cubic-be
+
+stdout | src/test/probeUsStale.test.tsx > Start over leaves no screen of the old career behind > leak-curtain: Start over on the season curtain, then Enter the draft
+PROBE leak-curtain after the new draft:  Start over @keyframes cmRise { 0% { opacity: 0; transform: translateY(7px); } 100% { opacity: 1; transform: translateY(0); } } .cm-rise { opacity: 0; animation: cmRise 0.45s ease-out forwards; } @keyframes cmSlam { 0% { opacity: 0; transform: scale(1.6); } 60% { opacity: 1; transform: scale(0.94); } 100% { opacity: 1; transform: scale(1); } } .cm-slam { opacity: 0; animation: cmSlam 0.4s cubic-be
+
+ ❯ src/test/probeUsStale.test.tsx (4 tests | 2 failed) 692ms
+   × Start over leaves no screen of the old career behind > leak-intl: Start over on the national team result, then Enter the draft 373ms
+     → the new career opens on the old career's national team result:  Start over🥈 SilverThe 2004 Olympics in AthensRecord 6-2. You averaged 3.6 points, 2 rebounds and 0.8 assists a game.You came home healthy.The real tournament was played, but these groups and results are this career's own.Your games8 gamesThe bracket2 groupsContinue: expected <div data-intl-result="true" …(2)>…(6)</div> to be null
+   ✓ Start over leaves no screen of the old career behind > control-intl: Continue first, then Start over and Enter the draft 89ms
+   × Start over leaves no screen of the old career behind > leak-curtain: Start over on the season curtain, then Enter the draft 102ms
+     → the new career opens on the old career's season curtain:  Start over @keyframes cmRise { 0% { opacity: 0; transform: translateY(7px); } 100% { opacity: 1; transform: translateY(0); } } .cm-rise { opacity: 0; animation: cmRise 0.45s ease-out forwards; } @keyframes cmSlam { 0% { opacity: 0; transform: scale(1.6); } 60% { opacity: 1; transform: scale(0.94); } 100% { opacity: 1; transform: scale(1); } } .cm-slam { opacity: 0; animation: cmSlam 0.4s cubic-be: expected <div …(2)>…(7)</div> to be null
+   ✓ Start over leaves no screen of the old career behind > control-curtain: Continue first, then Start over and Enter the draft 123ms
+
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 2 ⎯⎯⎯⎯⎯⎯⎯
+
+ FAIL  src/test/probeUsStale.test.tsx > Start over leaves no screen of the old career behind > leak-intl: Start over on the national team result, then Enter the draft
+AssertionError: the new career opens on the old career's national team result:  Start over🥈 SilverThe 2004 Olympics in AthensRecord 6-2. You averaged 3.6 points, 2 rebounds and 0.8 assists a game.You came home healthy.The real tournament was played, but these groups and results are this career's own.Your games8 gamesThe bracket2 groupsContinue: expected <div data-intl-result="true" …(2)>…(6)</div> to be null
+
+- Expected: 
+null
+
++ Received: 
+<div
+  class="rounded-xl border-2 border-sky-500/40 bg-gradient-to-b from-sky-500/10 to-transparent p-4 space-y-3"
+  data-intl-result="true"
+  data-intl-view="main"
+>
+  <div
+    class="text-center space-y-1"
+  >
+    <h3
+      class="text-lg font-black tracking-tight"
+      data-intl-place="silver"
+    >
+      🥈 Silver
+    </h3>
+    <p
+      class="text-sm text-muted-foreground"
+    >
+      The 2004 Olympics in Athens
+    </p>
+  </div>
+  <p
+    class="text-sm"
+  >
+    Record 
+    6
+    -
+    2
+    . You averaged 
+    3.6 points, 2 rebounds and 0.8 assists
+     a game.
+  </p>
+  <p
+    class="text-sm"
+  >
+    You came home healthy.
+  </p>
+  <p
+    class="text-xs text-muted-foreground"
+  >
+    The real tournament was played, but these groups and results are this career's own.
+  </p>
+  <div
+    class="grid grid-cols-2 gap-2"
+  >
+    <button
+      class="w-full min-h-[44px] rounded-lg border border-border bg-card px-3 py-2 text-left hover:bg-secondary/60"
+      data-intl-tile="games"
+      type="button"
+    >
+      <span
+        class="block text-sm font-bold"
+      >
+        Your games
+      </span>
+      <span
+        class="block text-xs text-muted-foreground"
+      >
+        8 games
+      </span>
+    </button>
+    <button
+      class="w-full min-h-[44px] rounded-lg border border-border bg-card px-3 py-2 text-left hover:bg-secondary/60"
+      data-intl-tile="bracket"
+      type="button"
+    >
+      <span
+        class="block text-sm font-bold"
+      >
+        The bracket
+      </span>
+      <span
+        class="block text-xs text-muted-foreground"
+      >
+        2 groups
+      </span>
+    </button>
+  </div>
+  <button
+    class="inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-md font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg]:size-4 [&_svg]:shrink-0 bg-primary text-primary-foreground hover:bg-primary/90 h-10 px-4 py-2 min-h-[44px] w-full text-sm"
+    data-intl-continue="true"
+  >
+    Continue
+  </button>
+</div>
+
+ ❯ src/test/probeUsStale.test.tsx:96:113
+     94|     await startOverAndDraft();
+     95|     console.log(`PROBE leak-intl after the new draft: ${text()}`);
+     96|     expect(q('[data-intl-result]'), `the new career opens on the old c…
+       |                                                                                                                 ^
+     97|   }, 60000);
+     98| 
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/2]⎯
+
+ FAIL  src/test/probeUsStale.test.tsx > Start over leaves no screen of the old career behind > leak-curtain: Start over on the season curtain, then Enter the draft
+AssertionError: the new career opens on the old career's season curtain:  Start over @keyframes cmRise { 0% { opacity: 0; transform: translateY(7px); } 100% { opacity: 1; transform: translateY(0); } } .cm-rise { opacity: 0; animation: cmRise 0.45s ease-out forwards; } @keyframes cmSlam { 0% { opacity: 0; transform: scale(1.6); } 60% { opacity: 1; transform: scale(0.94); } 100% { opacity: 1; transform: scale(1); } } .cm-slam { opacity: 0; animation: cmSlam 0.4s cubic-be: expected <div …(2)>…(7)</div> to be null
+
+- Expected: 
+null
+
++ Received: 
+<div
+  class="relative overflow-hidden rounded-2xl border p-4 text-center border-border bg-card"
+  data-season-reveal="true"
+>
+  <style>
+    
+      @keyframes cmRise { 0% { opacity: 0; transform: translateY(7px); } 100% { opacity: 1; transform: translateY(0); } }
+      .cm-rise { opacity: 0; animation: cmRise 0.45s ease-out forwards; }
+      @keyframes cmSlam { 0% { opacity: 0; transform: scale(1.6); } 60% { opacity: 1; transform: scale(0.94); } 100% { opacity: 1; transform: scale(1); } }
+      .cm-slam { opacity: 0; animation: cmSlam 0.4s cubic-bezier(0.2, 0.8, 0.3, 1.2) forwards; }
+      @keyframes cmWinPulse { 0% { box-shadow: 0 0 0 0 rgba(34,197,94,0.45); } 100% { box-shadow: 0 0 0 26px rgba(34,197,94,0); } }
+      .cm-win-pulse { animation: cmWinPulse 0.9s ease-out 1; }
+      @keyframes cmLossShake { 0%, 100% { transform: translateX(0); } 25% { transform: translateX(-4px); } 55% { transform: translateX(3px); } 80% { transform: translateX(-2px); } }
+      .cm-loss-shake { animation: cmLossShake 0.4s ease-in-out 1; }
+      @keyframes cmGoldGlow { 0%, 100% { box-shadow: 0 0 8px rgba(234,179,8,0.35); } 50% { box-shadow: 0 0 22px rgba(234,179,8,0.75); } }
+      .cm-gold-glow { animation: cmGoldGlow 1.5s ease-in-out infinite; }
+      @keyframes cmTickIn { 0% { opacity: 0; transform: translateX(-6px); } 100% { opacity: 1; transform: translateX(0); } }
+      .cm-tick-in { opacity: 0; animation: cmTickIn 0.35s ease-out forwards; }
+      /* cm-rise for a control that must not be pressed before it shows: hidden
+         (so unclickable) through its delay, visible from its first frame. */
+      @keyframes cmRiseGated { 0% { opacity: 0; visibility: visible; transform: translateY(7px); } 100% { opacity: 1; visibility: visible; transform: translateY(0); } }
+      .cm-rise-gated { opacity: 0; visibility: hidden; animation: cmRiseGated 0.45s ease-out forwards; }
+
+
+      @media (prefers-reduced-motion: reduce) {
+        .cm-rise, .cm-slam, .cm-tick-in, .cm-rise-gated { animation: none; opacity: 1; transform: none; visibility: visible; }
+        .cm-win-pulse, .cm-loss-shake, .cm-gold-glow { animation: none; }
+      }
+    
+  </style>
+  <p
+    class="cm-slam text-[10px] font-bold uppercase tracking-widest text-muted-foreground"
+    style="animation-delay: 0.05s;"
+  >
+    The 2004 season
+  </p>
+  <p
+    class="cm-slam mt-0.5 text-xs text-muted-foreground"
+    style="animation-delay: 0.15s;"
+  >
+    Memphis Grizzlies · age 24 · SF
+  </p>
+  <p
+    class="cm-slam mt-2 font-display text-xl font-black text-foreground"
+    style="animation-delay: 0.25s;"
+  >
+    Missed the playoffs
+  </p>
+  <p
+    class="cm-rise mt-1 text-xs font-semibold text-foreground"
+    style="animation-delay: 0.45s;"
+  >
+    3.5 ppg, 1.6 rpg, 0.6 apg
+  </p>
+  <div
+    class="mt-3 space-y-1 text-left"
+  >
+    <p
+      class="cm-tick-in rounded-lg px-2.5 py-1.5 text-xs leading-snug bg-destructive/10 text-foreground"
+      style="animation-delay: 0.6s;"
+    >
+      🪑 Still the second unit. The minutes will come, keep pushing.
+    </p>
+    <p
+      class="cm-tick-in rounded-lg px-2.5 py-1.5 text-xs leading-snug bg-destructive/10 text-foreground"
+      style="animation-delay: 0.82s;"
+    >
+      🪑 Second unit season: your numbers come in bench minutes.
+    </p>
+    <p
+      class="cm-tick-in rounded-lg px-2.5 py-1.5 text-xs leading-snug bg-background text-muted-foreground"
+      style="animation-delay: 1.04s;"
+    >
+      📊 13.5 mpg, 0.4 spg, 0.1 bpg.
+    </p>
+    <p
+      class="cm-tick-in rounded-lg px-2.5 py-1.5 text-xs leading-snug bg-background text-muted-foreground"
+      style="animation-delay: 1.26s;"
+    >
+      🪞 Kai Novak went 3.5 ppg, 2.2 rpg, 0.6 apg and had the better year of the two of you. Head to head 1-1.
+    </p>
+  </div>
+  <button
+    class="cm-rise mt-4 inline-flex min-h-11 items-center gap-2 rounded-full bg-primary px-8 py-2.5 text-sm font-bold text-primary-foreground hover:brightness-110"
+    style="animation-delay: 1.63s;"
+  >
+    Continue
+  </button>
+</div>
+
+ ❯ src/test/probeUsStale.test.tsx:124:109
+    122|     await startOverAndDraft();
+    123|     console.log(`PROBE leak-curtain after the new draft: ${text()}`);
+    124|     expect(q('[data-season-reveal]'), `the new career opens on the old…
+       |                                                                                                             ^
+    125|   }, 60000);
+    126| 
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[2/2]⎯
+
+
+ Test Files  1 failed (1)
+      Tests  2 failed | 2 passed (4)
+   Start at  19:23:56
+   Duration  3.39s (transform 1.37s, setup 57ms, collect 1.88s, tests 692ms, environment 330ms, prepare 123ms)
+
+
+::error file=/tmp/pr/src/test/probeUsStale.test.tsx,title=src/test/probeUsStale.test.tsx > Start over leaves no screen of the old career behind > leak-intl%3A Start over on the national team result%2C then Enter the draft,line=96,column=113::AssertionError: the new career opens on the old career's national team result:  Start over🥈 SilverThe 2004 Olympics in AthensRecord 6-2. You averaged 3.6 points, 2 rebounds and 0.8 assists a game.You came home healthy.The real tournament was played, but these groups and results are this career's own.Your games8 gamesThe bracket2 groupsContinue: expected <div data-intl-result="true" …(2)>…(6)</div> to be null%0A%0A- Expected: %0Anull%0A%0A+ Received: %0A<div%0A  class="rounded-xl border-2 border-sky-500/40 bg-gradient-to-b from-sky-500/10 to-transparent p-4 space-y-3"%0A  data-intl-result="true"%0A  data-intl-view="main"%0A>%0A  <div%0A    class="text-center space-y-1"%0A  >%0A    <h3%0A      class="text-lg font-black tracking-tight"%0A      data-intl-place="silver"%0A    >%0A      🥈 Silver%0A    </h3>%0A    <p%0A      class="text-sm text-muted-foreground"%0A    >%0A      The 2004 Olympics in Athens%0A    </p>%0A  </div>%0A  <p%0A    class="text-sm"%0A  >%0A    Record %0A    6%0A    -%0A    2%0A    . You averaged %0A    3.6 points, 2 rebounds and 0.8 assists%0A     a game.%0A  </p>%0A  <p%0A    class="text-sm"%0A  >%0A    You came home healthy.%0A  </p>%0A  <p%0A    class="text-xs text-muted-foreground"%0A  >%0A    The real tournament was played, but these groups and results are this career's own.%0A  </p>%0A  <div%0A    class="grid grid-cols-2 gap-2"%0A  >%0A    <button%0A      class="w-full min-h-[44px] rounded-lg border border-border bg-card px-3 py-2 text-left hover:bg-secondary/60"%0A      data-intl-tile="games"%0A      type="button"%0A    >%0A      <span%0A        class="block text-sm font-bold"%0A      >%0A        Your games%0A      </span>%0A      <span%0A        class="block text-xs text-muted-foreground"%0A      >%0A        8 games%0A      </span>%0A    </button>%0A    <button%0A      class="w-full min-h-[44px] rounded-lg border border-border bg-card px-3 py-2 text-left hover:bg-secondary/60"%0A      data-intl-tile="bracket"%0A      type="button"%0A    >%0A      <span%0A        class="block text-sm font-bold"%0A      >%0A        The bracket%0A      </span>%0A      <span%0A        class="block text-xs text-muted-foreground"%0A      >%0A        2 groups%0A      </span>%0A    </button>%0A  </div>%0A  <button%0A    class="inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-md font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg]:size-4 [&_svg]:shrink-0 bg-primary text-primary-foreground hover:bg-primary/90 h-10 px-4 py-2 min-h-[44px] w-full text-sm"%0A    data-intl-continue="true"%0A  >%0A    Continue%0A  </button>%0A</div>%0A%0A ❯ src/test/probeUsStale.test.tsx:96:113%0A%0A
+
+::error file=/tmp/pr/src/test/probeUsStale.test.tsx,title=src/test/probeUsStale.test.tsx > Start over leaves no screen of the old career behind > leak-curtain%3A Start over on the season curtain%2C then Enter the draft,line=124,column=109::AssertionError: the new career opens on the old career's season curtain:  Start over @keyframes cmRise { 0%25 { opacity: 0; transform: translateY(7px); } 100%25 { opacity: 1; transform: translateY(0); } } .cm-rise { opacity: 0; animation: cmRise 0.45s ease-out forwards; } @keyframes cmSlam { 0%25 { opacity: 0; transform: scale(1.6); } 60%25 { opacity: 1; transform: scale(0.94); } 100%25 { opacity: 1; transform: scale(1); } } .cm-slam { opacity: 0; animation: cmSlam 0.4s cubic-be: expected <div …(2)>…(7)</div> to be null%0A%0A- Expected: %0Anull%0A%0A+ Received: %0A<div%0A  class="relative overflow-hidden rounded-2xl border p-4 text-center border-border bg-card"%0A  data-season-reveal="true"%0A>%0A  <style>%0A    %0A      @keyframes cmRise { 0%25 { opacity: 0; transform: translateY(7px); } 100%25 { opacity: 1; transform: translateY(0); } }%0A      .cm-rise { opacity: 0; animation: cmRise 0.45s ease-out forwards; }%0A      @keyframes cmSlam { 0%25 { opacity: 0; transform: scale(1.6); } 60%25 { opacity: 1; transform: scale(0.94); } 100%25 { opacity: 1; transform: scale(1); } }%0A      .cm-slam { opacity: 0; animation: cmSlam 0.4s cubic-bezier(0.2, 0.8, 0.3, 1.2) forwards; }%0A      @keyframes cmWinPulse { 0%25 { box-shadow: 0 0 0 0 rgba(34,197,94,0.45); } 100%25 { box-shadow: 0 0 0 26px rgba(34,197,94,0); } }%0A      .cm-win-pulse { animation: cmWinPulse 0.9s ease-out 1; }%0A      @keyframes cmLossShake { 0%25, 100%25 { transform: translateX(0); } 25%25 { transform: translateX(-4px); } 55%25 { transform: translateX(3px); } 80%25 { transform: translateX(-2px); } }%0A      .cm-loss-shake { animation: cmLossShake 0.4s ease-in-out 1; }%0A      @keyframes cmGoldGlow { 0%25, 100%25 { box-shadow: 0 0 8px rgba(234,179,8,0.35); } 50%25 { box-shadow: 0 0 22px rgba(234,179,8,0.75); } }%0A      .cm-gold-glow { animation: cmGoldGlow 1.5s ease-in-out infinite; }%0A      @keyframes cmTickIn { 0%25 { opacity: 0; transform: translateX(-6px); } 100%25 { opacity: 1; transform: translateX(0); } }%0A      .cm-tick-in { opacity: 0; animation: cmTickIn 0.35s ease-out forwards; }%0A      /* cm-rise for a control that must not be pressed before it shows: hidden%0A         (so unclickable) through its delay, visible from its first frame. */%0A      @keyframes cmRiseGated { 0%25 { opacity: 0; visibility: visible; transform: translateY(7px); } 100%25 { opacity: 1; visibility: visible; transform: translateY(0); } }%0A      .cm-rise-gated { opacity: 0; visibility: hidden; animation: cmRiseGated 0.45s ease-out forwards; }%0A%0A%0A      @media (prefers-reduced-motion: reduce) {%0A        .cm-rise, .cm-slam, .cm-tick-in, .cm-rise-gated { animation: none; opacity: 1; transform: none; visibility: visible; }%0A        .cm-win-pulse, .cm-loss-shake, .cm-gold-glow { animation: none; }%0A      }%0A    %0A  </style>%0A  <p%0A    class="cm-slam text-[10px] font-bold uppercase tracking-widest text-muted-foreground"%0A    style="animation-delay: 0.05s;"%0A  >%0A    The 2004 season%0A  </p>%0A  <p%0A    class="cm-slam mt-0.5 text-xs text-muted-foreground"%0A    style="animation-delay: 0.15s;"%0A  >%0A    Memphis Grizzlies · age 24 · SF%0A  </p>%0A  <p%0A    class="cm-slam mt-2 font-display text-xl font-black text-foreground"%0A    style="animation-delay: 0.25s;"%0A  >%0A    Missed the playoffs%0A  </p>%0A  <p%0A    class="cm-rise mt-1 text-xs font-semibold text-foreground"%0A    style="animation-delay: 0.45s;"%0A  >%0A    3.5 ppg, 1.6 rpg, 0.6 apg%0A  </p>%0A  <div%0A    class="mt-3 space-y-1 text-left"%0A  >%0A    <p%0A      class="cm-tick-in rounded-lg px-2.5 py-1.5 text-xs leading-snug bg-destructive/10 text-foreground"%0A      style="animation-delay: 0.6s;"%0A    >%0A      🪑 Still the second unit. The minutes will come, keep pushing.%0A    </p>%0A    <p%0A      class="cm-tick-in rounded-lg px-2.5 py-1.5 text-xs leading-snug bg-destructive/10 text-foreground"%0A      style="animation-delay: 0.82s;"%0A    >%0A      🪑 Second unit season: your numbers come in bench minutes.%0A    </p>%0A    <p%0A      class="cm-tick-in rounded-lg px-2.5 py-1.5 text-xs leading-snug bg-background text-muted-foreground"%0A      style="animation-delay: 1.04s;"%0A    >%0A      📊 13.5 mpg, 0.4 spg, 0.1 bpg.%0A    </p>%0A    <p%0A      class="cm-tick-in rounded-lg px-2.5 py-1.5 text-xs leading-snug bg-background text-muted-foreground"%0A      style="animation-delay: 1.26s;"%0A    >%0A      🪞 Kai Novak went 3.5 ppg, 2.2 rpg, 0.6 apg and had the better year of the two of you. Head to head 1-1.%0A    </p>%0A  </div>%0A  <button%0A    class="cm-rise mt-4 inline-flex min-h-11 items-center gap-2 rounded-full bg-primary px-8 py-2.5 text-sm font-bold text-primary-foreground hover:brightness-110"%0A    style="animation-delay: 1.63s;"%0A  >%0A    Continue%0A  </button>%0A</div>%0A%0A ❯ src/test/probeUsStale.test.tsx:124:109%0A%0A

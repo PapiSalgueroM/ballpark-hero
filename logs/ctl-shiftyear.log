@@ -1,0 +1,17 @@
+NEGATIVE CONTROL shiftyear: oly-2008's src year moved by one (section 2 must fail)
+section 2: the calendar
+  FAIL [2] oly-2008 is not its competition and summer (comp oly, year 2009)
+  FAIL [2] 2008 is the ledger's oly-2008 but the src rows say nothing
+  FAIL [2] 2009 has src row oly-2008 the ledger does not hold
+  2004 to 2050: 23 summers with an edition, 24 without
+  oly-2004 - wc-2006 - oly-2008 - wc-2010 - oly-2012 - wc-2014 - oly-2016 - - wc-2019 - oly-2021 - wc-2023 oly-2024 - - wc-2027 oly-2028 - - wc-2031 oly-2032 - - wc-2035 oly-2036 - - wc-2039 oly-2040 - - wc-2043 oly-2044 - - wc-2047 oly-2048 - -
+  FAIL [2] the gate's ledger summers [2004,2006,2008,2010,2012,2014,2016,2019,2021,2023,2024,2027,2028,2031,2032] are not the ledger rows' years
+  the static gate: 47 of 47 summers 2004 to 2050 agree with the ledger's calendar; help facts equal
+sections 2b and 4: the call, 400 careers an era through the real NBA engine
+  now: 400 careers, 7340 summers, first summer 2027; called at least once 195 (48.8 percent), 644 calls (1.61 a career, 3.30 a called career)
+  now: share of careers ever called if the bar were 84 to 92: 84 75.5, 85 66.3, 86 57.5, 87 48.8, 88 37.3, 89 27.0, 90 19.0, 91 11.0, 92 4.8
+  now: 655 edition summers rated 87 or more; held back by health under 50: 3 (0.5 percent), by age over 36: 4; by a career ending with that season: 4
+  y2004: 400 careers, 7324 summers, first summer 2004; called at least once 189 (47.3 percent), 608 calls (1.52 a career, 3.22 a called career)
+  y2004: share of careers ever called if the bar were 84 to 92: 84 82.0, 85 70.3, 86 59.8, 87 47.3, 88 37.3, 89 29.0, 90 18.8, 91 12.3, 92 4.5
+  y2004: 616 edition summers rated 87 or more; held back by health under 50: 1 (0.2 percent), by age over 36: 3; by a career ending with that season: 4
+simCareerIntl: control shiftyear FIRED (section 2, 4 failures)
