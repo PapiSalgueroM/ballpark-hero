@@ -204,6 +204,56 @@ const DEFAULT_OPP_FORMATION = 1;
 
 const lastName = (n: string) => n.replace(' (Youth)', '').split(' ').slice(-1)[0];
 
+/* Round 1568 (closing check): while the stage is up, Tab and Shift+Tab go round the stage and whatever is drawn
+   over it, and never reach the page under it. Before this, two Shift+Tab presses from Back put the focus on the
+   page's sign up button under the stage, and Enter opened a dialog nobody could see that also took the pointer
+   from the match. A control outside the stage is a stop only when the outermost layer around it sits above the
+   stage's own and is on the screen (the cookie notice at 60 while it waits for an answer, the toasts), so the
+   notice stays reachable and the site's bar (50), its dialogs and its skip link do not. The stage's keydown listener calls this for every Tab: it moves
+   the focus itself and keeps the browser's own move from happening, so nothing under the stage takes the focus
+   even for a moment (a page control taking it would scroll the page under the stage). */
+const TAB_STOPS = 'a[href],area[href],button,input,select,textarea,iframe,summary,[tabindex],[contenteditable="true"]';
+function tabRoundTheStage(e: KeyboardEvent, stage: HTMLElement) {
+  const from = document.activeElement ?? document.body;
+  /* a dialog of its own outside the stage keeps its own Tab */
+  const own = from.closest('[role="dialog"],[role="alertdialog"]');
+  if (own && own !== stage && !stage.contains(own)) return;
+  const stageLayer = Number(getComputedStyle(stage).zIndex) || 0;
+  const layers = new Map<Element, Element | null>();
+  /* the outermost positioned element around el (el itself included) that sets a z-index, or null when none does */
+  const outerLayer = (el: Element | null): Element | null => {
+    if (!el || el === document.body) return null;
+    if (layers.has(el)) return layers.get(el) ?? null;
+    let layer = outerLayer(el.parentElement);
+    if (!layer) {
+      const s = getComputedStyle(el);
+      if (s.position !== 'static' && s.zIndex !== 'auto') layer = el;
+    }
+    layers.set(el, layer);
+    return layer;
+  };
+  /* over the stage: in a layer above the stage's own that is on the screen. The site's skip link sits at 100 but is
+     parked above the window until it has the focus, and it leads into the page under the stage, so it is not one. */
+  const overStage = (el: Element) => {
+    const layer = outerLayer(el);
+    if (!layer || !(Number(getComputedStyle(layer).zIndex) > stageLayer)) return false;
+    const r = layer.getBoundingClientRect();
+    return r.bottom > 0 && r.right > 0 && r.top < window.innerHeight && r.left < window.innerWidth;
+  };
+  const stops = [...document.querySelectorAll<HTMLElement>(TAB_STOPS)].filter(el =>
+    el.tabIndex >= 0 && !(el as HTMLButtonElement).disabled
+    && (stage.contains(el) || overStage(el))
+    && !el.closest('[inert]') && el.getClientRects().length > 0 && getComputedStyle(el).visibility !== 'hidden');
+  e.preventDefault();
+  if (!stops.length) { stage.focus({ preventScroll: true }); return; }
+  let at = stops.indexOf(from as HTMLElement);
+  if (at !== -1) at += e.shiftKey ? -1 : 1;
+  /* focus on something that is not a stop (the stage box itself, the notice's own box): the nearest stop that way */
+  else if (e.shiftKey) at = stops.reduce((last, s, i) => (from.compareDocumentPosition(s) & Node.DOCUMENT_POSITION_PRECEDING ? i : last), -1);
+  else at = Math.max(0, stops.findIndex(s => from.compareDocumentPosition(s) & Node.DOCUMENT_POSITION_FOLLOWING));
+  stops[((at % stops.length) + stops.length) % stops.length].focus();
+}
+
 function initialStage(live: LiveMatch | null, report: MatchWeekReport | null): Stage {
   if (report) return 'done';
   if (!live) return 'first';
@@ -1459,7 +1509,13 @@ export function LiveSimScreen({
   };
   useEffect(() => {
     if (!stageUp) return;
-    const onKey = (e: KeyboardEvent) => { if (e.key === 'Escape') onEscape.current(); };
+    /* Round 1568: an Escape another layer already took (a Radix dialog or the site menu reached by Shift+Tab,
+       which close themselves and mark the key handled) is not also Back for the match. */
+    const onKey = (e: KeyboardEvent) => {
+      if (e.defaultPrevented) return;
+      if (e.key === 'Escape') onEscape.current();
+      else if (e.key === 'Tab' && !e.altKey && !e.ctrlKey && !e.metaKey && stageBox.current) tabRoundTheStage(e, stageBox.current);
+    };
     /* The button that opened the match is under the stage now. The keyboard starts from the stage itself,
        so the first Tab lands on Back and not on something that cannot be seen. */
     const box = stageBox.current;
@@ -1666,7 +1722,8 @@ export function LiveSimScreen({
         </div>
       ) : (
         /* The stage covers the window, so it says what it is and takes the keyboard when it opens. It is not
-           marked modal: the cookie notice is drawn over it from outside it and has to stay reachable. */
+           marked modal: the cookie notice is drawn over it from outside it and has to stay reachable. Tab keeps
+           to the stage and the layers over it (tabRoundTheStage, Round 1568). */
         <div ref={stageBox} role="dialog" aria-label={`${career.clubName} against ${opponent}, the match`} tabIndex={-1} data-cm-live-stagebox="1" className="cm-stagebox bg-background text-foreground outline-none">
           <div className="cm-stage">
             <div className="cm-stage-main">

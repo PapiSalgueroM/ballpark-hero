@@ -154,11 +154,43 @@ try{for(const width of[320,390,1280])for(const fixture of fixtures){const id=wid
     }
     await dialog.locator(soccer?'[data-programme-start]':'[data-us-programme-start]').click();
     const tileSelector=soccer?'[data-programme-tile]':'[data-us-programme-tile]',tiles=await dialog.locator(tileSelector).evaluateAll(es=>es.map(e=>e.getAttribute('data-programme-tile')??e.getAttribute('data-us-programme-tile')));
-    check(tiles.length===(soccer?10:6),'Every promised gameplay system is present');await measure('tiles');await shot('tiles');
+    if(soccer){
+      const expected=[['tactics','Tactical role'],['position','Second position'],['set_pieces','Set piece duty'],['promise','Manager promise'],['negotiation','Contract counteroffer'],['bonuses','Performance bonus'],['adaptation','New club adaptation'],['fitness','Return to fitness'],['captain','Captain duties'],['loan','Loan option to stay'],['loyalty','Loyalty contract']],observed=[];
+      for(const tile of tiles){const item=dialog.locator('[data-programme-tile="'+tile+'"]'),label=(await item.innerText()).replace(/\s+/g,' ').trim(),accessible=dialog.getByRole('button',{name:label,exact:true});observed.push({id:tile,label,accessible:await accessible.count()===1&&await accessible.getAttribute('data-programme-tile')===tile});}
+      const menuFailures=items=>[...(JSON.stringify(items.map(v=>v.id))===JSON.stringify(expected.map(v=>v[0]))?[]:['ordered-ids']),...(items.every(v=>{const title=expected.find(e=>e[0]===v.id)?.[1];return title&&(v.label===title||v.label.startsWith(title+' '))&&v.accessible===true;})?[]:['accessible-labels'])];
+      check(menuFailures(observed).length===0,'All eleven Soccer systems have their exact ordered identities and accessible title labels');row.programmeMenu=observed;
+      if(!report.controls.some(c=>c.name==='programme-menu')){
+        const held=await bytes(),healthy=JSON.stringify(observed),faulty=structuredClone(observed),variants=[];
+        for(const kind of ['omit-loyalty','reorder','rename']){
+          if(kind==='omit-loyalty')faulty.splice(faulty.findIndex(v=>v.id==='loyalty'),1);else if(kind==='reorder')[faulty[0],faulty[1]]=[faulty[1],faulty[0]];else faulty[0].label='Wrong programme label';
+          check(JSON.stringify(faulty)!==healthy,'Copied menu '+kind+' changes actual observed facts');const failures=menuFailures(faulty);assert.deepEqual(failures,[kind==='rename'?'accessible-labels':'ordered-ids']);check(true,'Copied menu '+kind+' is rejected by the exact identity or accessible-label guard');variants.push({kind,changed:structuredClone(faulty),failed:failures});
+          faulty.splice(0,faulty.length,...structuredClone(observed));check(JSON.stringify(faulty)===healthy&&menuFailures(faulty).length===0,'Copied menu '+kind+' restores the full actual observation');
+        }
+        check(await bytes()===held,'Copied menu detectors preserve the complete saved career');report.controls.push({name:'programme-menu',effective:true,variants,restored:true,scope:'Copied actual observations, not served product mutations or fault screenshots'});
+      }
+    }else check(tiles.length===6,'Every promised gameplay system is present');await measure('tiles');await shot('tiles');
     for(const tile of tiles){await dialog.locator('['+(soccer?'data-programme-tile':'data-us-programme-tile')+'="'+tile+'"]').click();
       await measure(tile);if(width===320||tile===tiles[0])await shot(tile);
+      if(soccer&&tile==='loyalty'){
+        const old=await bytes(),initial=JSON.parse(old),detail=dialog.locator('[data-programme-detail="loyalty"]'),cash=detail.locator('[data-programme-choice="cash"]'),loyalty=detail.locator('[data-programme-choice="loyalty"]');
+        check(await detail.getByRole('heading',{name:'Higher weekly pay',exact:true}).count()===1&&await detail.getByRole('heading',{name:'Loyalty payout',exact:true}).count()===1,'Loyalty exposes both actual contract choices');
+        if(fixture.id==='counteroffer'){
+          check(initial.transferSituation.offer.wage===55000&&initial.transferSituation.offer.contractYears===3&&!Object.hasOwn(initial,'loyaltyContracts'),'Counteroffer fixture has real three-year cash terms without a ledger');check(await cash.isDisabled()&&await loyalty.isEnabled(),'Cash is current and the loyalty choice is genuinely eligible');
+          check((await detail.locator('[data-programme-option="cash"] [data-programme-effect]').innerText()).trim()==='Keep the quoted EUR 55,000 a week.','Cash option shows the actual negotiated wage');
+          await detail.getByRole('button',{name:'Choose Loyalty payout',exact:true}).click();await page.waitForFunction(({key,old})=>localStorage.getItem(key)!==old,{key:fixture.key,old},{timeout:2000});
+          const pendingRaw=await bytes(),pending=JSON.parse(pendingRaw),ledger=pending.loyaltyContracts,quote=ledger?.pending,lastYear=initial.seasons[initial.seasons.length-1].year;
+          check(ledger?.v===1&&ledger.deals.length===0&&quote?.club==='Chelsea'&&quote.baseWeeklyWage===55000&&quote.weeklyWage===49500&&quote.bonusEuros===1287000&&quote.years===3&&quote.firstYear===lastYear+1&&quote.finalYear===lastYear+3&&typeof quote.key==='string'&&quote.key.length>0&&typeof quote.offerToken==='string'&&quote.offerToken.length>0,'The actual pending quote records lower weekly pay, the fixed bonus and contract years');
+          const withoutPending=structuredClone(pending);delete withoutPending.loyaltyContracts;assert.deepEqual(withoutPending,initial);check(pending.weeklyWage===initial.weeklyWage&&pending.netWorth===initial.netWorth&&pending.totalEarnings===initial.totalEarnings,'Choosing a pending quote preserves the full other state and all current money');
+          check((await detail.locator('[data-programme-option="loyalty"] [data-programme-effect]').innerText()).trim()==='EUR 49,500 a week and EUR 1,287,000 after 3 recorded contract seasons.','Actual loyalty effect displays the recorded pay, bonus and duration');check(await loyalty.isDisabled()&&await cash.isEnabled(),'Loyalty is now current and cash can be restored');await measure('loyalty-pending');await shot('loyalty-pending');
+          await detail.getByRole('button',{name:'Choose Higher weekly pay',exact:true}).click();await page.waitForFunction(({key,old})=>localStorage.getItem(key)===old,{key:fixture.key,old},{timeout:2000});const restored=await bytes();check(restored===old,'Choosing cash restores the complete pre-tile raw save');check(await cash.isDisabled()&&await loyalty.isEnabled(),'The cash choice is current again');await measure('loyalty-cash-restored');await shot('loyalty-cash-restored');
+          const file=id+'-loyalty-cash-roundtrip.json';fs.writeFileSync(path.join(out,file),JSON.stringify({before:old,pending:pendingRaw,restored},null,2));row.loyaltyRoundTrip={file,before:sha(old),pending:sha(pendingRaw),restored:sha(restored)};
+        }else{
+          check(await cash.isDisabled()&&await loyalty.isDisabled(),'A career without a current permanent offer refuses both contract actions');check(await detail.locator('[data-programme-disabled-reason]').count()===2,'Unavailable contract actions explain their actual refusal');check(await bytes()===old,'Inspecting an unavailable loyalty plan preserves the complete career');row.loyaltyUnavailable={before:sha(old),after:sha(await bytes()),reasons:await detail.locator('[data-programme-disabled-reason]').allTextContents()};
+        }
+      }else{
       const choice=dialog.locator(soccer?'[data-programme-choice]:not(:disabled)':'[data-us-programme-choice]:not(:disabled):not([data-us-programme-choice$=":normal"])').first();
       if(await choice.count()){const selected=await choice.getAttribute(soccer?'data-programme-choice':'data-us-programme-choice'),old=await bytes();await choice.click();await page.waitForFunction(({key,old})=>localStorage.getItem(key)!==old,{key:fixture.key,old},{timeout:2000});const current=await bytes();check(current!==old,'Choice records a real saved decision');const file=id+'-choice-'+tile+'.json';fs.writeFileSync(path.join(out,file),JSON.stringify({before:old,after:current},null,2));row.choices.push({tile,selected,file,before:sha(old),after:sha(current)});}
+      }
       await dialog.locator(soccer?'[data-programme-back]':'[data-us-programme-back]').click();
     }
     const chosen=await bytes();check(row.choices.length>=(fixture.id==='counteroffer'?1:soccer?7:5),'Context supports substantive decisions');
@@ -191,4 +223,4 @@ try{for(const width of[320,390,1280])for(const fixture of fixtures){const id=wid
     row.ok=true;
   }catch(error){row.ok=false;row.error=String(error.stack);console.log('FAIL '+id+': '+row.error);await page.screenshot({path:path.join(out,id+'-failure.png')}).catch(()=>{});}finally{await context.close();}
 }}finally{await browser.close();server.kill();fs.writeFileSync(path.join(out,'report.json'),JSON.stringify(report,null,2));}
-console.log('Career programme native: '+report.checks+' checks, '+report.cases.filter(v=>v.ok).length+'/'+report.cases.length+' completed gameplay journeys');assert.equal(report.cases.length,21);assert(report.cases.every(v=>v.ok));assert.equal(report.controls.length,3);
+console.log('Career programme native: '+report.checks+' checks, '+report.cases.filter(v=>v.ok).length+'/'+report.cases.length+' completed gameplay journeys');assert.equal(report.cases.length,21);assert(report.cases.every(v=>v.ok));assert.equal(report.controls.length,4);

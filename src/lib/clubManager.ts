@@ -2030,9 +2030,9 @@ export interface MatchWeekReport {
     leg: 1 | 2; aggMine: number; aggTheirs: number; byAwayGoals?: boolean; through?: boolean;
     leg1Mine?: number; leg1Theirs?: number; leg1Home?: boolean;
   };
-  /** Round 782: the shootout kick by kick, present only when the manager had
-   *  set a shootout order. `decidedBy` and `shootoutWon` carry the result
-   *  exactly as before, so nothing that reads them changes. */
+  /** The shootout kick by kick, including the default order on new matches.
+   *  Older reports and a bounded detached sampling limit can have no details.
+   *  `decidedBy` and `shootoutWon` carry the result exactly as before. */
   shootout?: ShootoutDetail;
 }
 
@@ -3157,8 +3157,9 @@ export interface CareerState {
   /** Round 782: the shootout order, player ids, up to eleven, set on the
    *  tactics tab. Present only once the manager has set one: absent (every
    *  save before this round, and a manager who never touched it) means the
-   *  shootout is settled the way it always was, in one draw. With an order
-   *  set the shootout goes kick by kick, see settleShootout. */
+   *  winner is settled the way it always was, in one draw. Default-order
+   *  details use a separate keyed stream. With an order set the shootout goes
+   *  kick by kick, see settleShootout. */
   shootoutOrder?: string[];
   /** Three club-bound tactics setups. Older saves have none; the match-plan reader validates entries. */
   matchPlans?: import('@/lib/clubManagerMatchPlans').SavedMatchPlan[];
@@ -16129,7 +16130,7 @@ export interface ShootoutSide {
  * the same draw says whether a miss was saved or wide. `myFirst` is drawn by
  * the caller so this stays replayable from a fixed stream.
  */
-export function runShootout(args: { mine: ShootoutSide; theirs: ShootoutSide; myFirst: boolean }): ShootoutDetail {
+export function runShootout(args: { mine: ShootoutSide; theirs: ShootoutSide; myFirst: boolean }, random: () => number = Math.random): ShootoutDetail {
   const kicks: ShootoutKick[] = [];
   let mine = 0;
   let theirs = 0;
@@ -16145,7 +16146,7 @@ export function runShootout(args: { mine: ShootoutSide; theirs: ShootoutSide; my
     const n = side === 'me' ? takenMine : takenTheirs;
     const taker = us.takers.length ? us.takers[n % us.takers.length] : { name: 'Taker', rating: 75 };
     const p = shootoutKickChance(taker, them.keeperRating);
-    const r = Math.random();
+    const r = random();
     const scored = r < p;
     const result: ShootoutKick['result'] = scored ? 'scored' : r < p + (1 - p) * SHOOTOUT_SAVE_SHARE ? 'saved' : 'missed';
     if (side === 'me') { takenMine += 1; if (scored) mine += 1; } else { takenTheirs += 1; if (scored) theirs += 1; }
@@ -16161,7 +16162,7 @@ export function runShootout(args: { mine: ShootoutSide; theirs: ShootoutSide; my
   }
   if (mine === theirs) {
     /* Fifty rounds level is not a thing that happens; one draw ends it rather than looping. */
-    if (Math.random() < 0.5) mine += 1; else theirs += 1;
+    if (random() < 0.5) mine += 1; else theirs += 1;
   }
   return { kicks, mine, theirs };
 }
@@ -16202,26 +16203,44 @@ export function setShootoutOrder(career: CareerState, ids: readonly string[]): C
 }
 
 /**
- * Settles a shootout at the whistle. With no order set this is the one draw
- * it has always been, the same expression on the same stream, so a save
- * without the field plays exactly as it did before Round 782 (the harness
- * replays a frozen fixture to hold that). With an order set it goes kick by
- * kick: my men in shootoutTakerOrder over the eleven that finished, theirs
- * their best eleven on the pitch by rating with the keeper last, each kick
- * read against the keeper facing it, and who kicks first is one draw.
+ * Settles a shootout at the whistle. No order keeps the original winner draw
+ * and samples default-order details on a detached stream until they match.
+ * Only newly played matches get details; nothing reconstructs older reports.
+ * A listed order still goes kick by kick on the match stream: my men in
+ * shootoutTakerOrder over the eleven that finished, theirs best first with
+ * the keeper last, each kick read against the keeper facing it.
  */
 function settleShootout(
   state: CareerState, live: LiveMatch, fx: MyFixture, finished: XiSlot[], mine: number, oppS: number, end: number,
 ): { won: boolean; detail?: ShootoutDetail } {
   const taker = assignedOnPitch(state.setPieces, 'penalties', men(finished));
   const order = shootoutOrderOf(state);
-  if (!order) return { won: Math.random() < clamp(0.5 + (mine - oppS) * 0.012 + shootoutTakerEdge(taker), 0.2, 0.8) };
+  const roll = order ? null : Math.random();
+  const won = roll !== null && roll < clamp(0.5 + (mine - oppS) * 0.012 + shootoutTakerEdge(taker), 0.2, 0.8);
   /* Theirs: the eleven still out there, or the projected roster for a side
      with no named eleven tonight. */
   const onPitch = oppAt(live, end);
   const theirs: { n: string; p: Position; r: number; g?: boolean }[] = onPitch && onPitch.length
     ? onPitch
     : shootoutRosterSide(oppRosterFor(state, fx.opponent), oppS);
+  if (!order) {
+    /* Release BS fix: the shown list starts with the penalty taker whose rating leaned the draw,
+       then the rest best first and the keeper last, the rule their side follows. Only the detached
+       stream sees it, so the winner and every global draw are unchanged. */
+    const gk = finished.find(x => x.slot?.allowed.includes('GK'))?.p ?? finished.find(x => !x.slot && x.p.position === 'GK')?.p ?? null;
+    const best = finished.map(x => x.p).filter(p => p !== gk && p.id !== taker?.id).sort((a, b) => b.rating - a.rating).map(p => p.id);
+    const sides = shootoutSides(state, taker ? [taker.id, ...best] : best, finished, theirs, oppS);
+    const random = keyedRng(`cm-shootout|${roll}`);
+    for (let attempt = 0; attempt < 128; attempt++) {
+      const detail = runShootout({ ...sides, myFirst: random() < 0.5 }, random);
+      const last = detail.kicks[detail.kicks.length - 1];
+      if ((detail.mine > detail.theirs) === won && last?.mine === detail.mine && last?.theirs === detail.theirs) {
+        return { won, detail };
+      }
+    }
+    // Keep the original winner when no complete matching record was sampled.
+    return { won };
+  }
   const detail = runShootout({ ...shootoutSides(state, order, finished, theirs, oppS), myFirst: Math.random() < 0.5 });
   return { won: detail.mine > detail.theirs, detail };
 }
@@ -18207,7 +18226,7 @@ function playMyMatch(state: CareerState, entry: CalendarEntry, live: LiveMatch):
   let decidedBy: 'regular' | 'aet' | 'pens' = 'regular';
   /* Round 507: who won the shootout, kept apart from who won the night. */
   let shootoutWon: boolean | null = null;
-  /* Round 782: the kicks, only when the manager had set an order. */
+  /* The kicks when recorded, with a chosen or default order. */
   let shootoutKicks: ShootoutDetail | undefined;
   const lastMinute = live.et ? live.et.to : 90;
   let won = myGoals > oppGoals;

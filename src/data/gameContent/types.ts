@@ -58,6 +58,8 @@ export interface GuideHeadings {
 interface GameContentBase {
   /** Two or three short paragraphs introducing the game. */
   intro: string[];
+  /** One exact phrase to link in each declared intro paragraph. */
+  introLinks?: { paragraph: number; text: string; to: string }[];
   /** Game specific questions and answers. */
   faqs: GameFaq[];
   /** Round 638: keyword bearing h2 titles. Required in practice once a guide has sections. */

@@ -1,0 +1,58 @@
+import React, { useEffect, useState } from 'react';
+import { createRoot } from 'react-dom/client';
+import SoccerCareerProgramme from '@/components/soccer-career/SoccerCareerProgramme';
+import { SoccerOfferReview } from '@/components/soccer-career/SoccerOfferReview';
+import { buildSoccerOfferReview } from '@/lib/soccerOfferReview';
+import { acceptOffer, applyRehabChoice, repairCareer } from '@/lib/soccerCareerEngine';
+import { chooseProgramme } from '@/lib/soccerCareerProgramme';
+import { readLoyalty } from '@/lib/soccerCareerLoyalty';
+import { serializeSoccerCareerSave, parseSoccerCareerSave, isSoccerCareerSave } from '@/lib/soccerCareerSave';
+import { setCurrency } from '@/lib/soccerCurrency';
+const KEY = 'sc-loyalty-qualification';
+const offer = { club: { id: 'loyalty-browser', name: 'Generated Contract Club', country: 'Fixture Country', league: 'Fixture League', color: '#123456', tier: 3 }, wage: 10000, contractYears: 2, transferFee: 0 };
+const other = { ...offer, club: { ...offer.club, name: 'Generated Move Club' } };
+setCurrency('EUR');
+function initial() {
+  const raw = localStorage.getItem(KEY);
+  if (raw) {
+    const parsed = parseSoccerCareerSave(raw);
+    if (!isSoccerCareerSave(parsed)) throw new Error('Official saved fixture failed its existing guard');
+    return repairCareer(parsed);
+  }
+  const state = structuredClone(window.__LOYALTY_FIXTURE__);
+  delete state.agentId; delete state.programme; delete state.loyaltyContracts;
+  state.phase = 'contract_offer'; state.retired = false; state.loan = null;
+  state.currentClub = 'Previous Fixture Club'; state.weeklyWage = 8000;
+  state.pendingOffers = [structuredClone(offer)]; state.transferSituation = null;
+  state.netWorth = 2; state.totalEarnings = 3; state.events = []; state.overall = 85;
+  return state;
+}
+const button = 'min-h-11 min-w-11 rounded-lg border p-3 text-sm';
+function App() {
+  const [career, change] = useState(initial), [plans, show] = useState(false);
+  const proposed = career.transferSituation?.offer || career.pendingOffers[0] || offer;
+  useEffect(() => {
+    localStorage.setItem(KEY, serializeSoccerCareerSave(career));
+    window.__LOYALTY_SNAPSHOT__ = () => ({ club: career.currentClub, phase: career.phase, weeklyWage: career.weeklyWage,
+      netWorth: career.netWorth, totalEarnings: career.totalEarnings, ledger: readLoyalty(career), years: career.seasons.length });
+  }, [career]);
+  const playYear = () => change(previous => {
+    const state = { ...previous }, last = state.seasons[state.seasons.length - 1];
+    state.age = last.age + 1; state.phase = 'rehab_choice';
+    state.pendingRehab = { name: 'Recorded qualification injury', weeks: 16, year: last.year + 1, specialistCost: null };
+    return applyRehabChoice(state, 1);
+  });
+  return <main className="mx-auto max-w-md space-y-3 p-4">
+    <div style={{ height: 280 }} aria-hidden="true" />
+    <h1 className="text-xl font-bold">Contract component qualification</h1>
+    <button data-open-plans className={button + ' w-full'} onClick={() => show(true)}>Open career plans</button>
+    <SoccerOfferReview club={proposed.club.name} review={buildSoccerOfferReview(career, proposed)} onAccept={() => change(previous => acceptOffer(previous, proposed))} />
+    <button data-play-year className={button + ' w-full'} onClick={playYear}>Record actual injury payroll year</button>
+    <button data-counteroffer className={button + ' w-full'} onClick={() => change(previous => chooseProgramme(previous, 'negotiation', 'wage'))}>Use actual wage counteroffer</button>
+    <button data-stage-move className={button + ' w-full'} onClick={() => change(previous => ({ ...previous, phase: 'transfer_window', transferSituation: { type: 'one_offer', offer: other } }))}>Stage permanent offer fixture</button>
+    <p data-state>{career.currentClub}, weekly pay {career.weeklyWage}</p>
+    {plans && <SoccerCareerProgramme career={career} onChange={change} onClose={() => show(false)} />}
+    <div style={{ height: 900 }} aria-hidden="true" />
+  </main>;
+}
+createRoot(document.getElementById('root')).render(<App />);

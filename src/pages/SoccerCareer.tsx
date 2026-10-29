@@ -1,6 +1,6 @@
 import { acknowledgeChanceWheel, validChanceWheel } from '@/lib/careerChanceWheel';
 import { soccerEventChoiceConsequence } from '@/lib/soccerCareerContracts';
-import { Component, Fragment, lazy, Suspense, useState, useCallback, useRef, useEffect, useMemo, type ComponentType, type ReactNode, type CSSProperties } from "react";
+import { Component, Fragment, lazy, Suspense, useState, useCallback, useRef, useEffect, useLayoutEffect, useMemo, type ComponentType, type ComponentProps, type ReactNode, type CSSProperties } from "react";
 import { formatNumber } from '@/lib/formatNumber';
 import { focusDialogOnMount, escapeCloses } from '@/lib/dialogA11y';
 import { useGameCompletion } from "@/hooks/useGameCompletion";
@@ -65,6 +65,7 @@ import { loadOwnerTail } from "@/lib/soccerOwnerGate";
 import { careerBeforeBallonDorReveal, revealBallonDorResult, ballonDorAwaitingReveal } from "@/lib/soccerAwardReveal";
 import { readLeagueWorldSeason } from "@/lib/soccerCareerLeagueWorld";
 import { soccerExtensionQuote } from "@/lib/soccerCareerContracts";
+import { loyaltyUncutWage } from "@/lib/soccerCareerLoyalty";
 import { farewellEligibility, readSoccerFarewell } from "@/lib/soccerCareerFarewell";
 import { retirementReason } from "@/lib/soccerCareerRetirementReason";
 import { FarewellSeasonCard } from "@/components/soccer-career/FarewellSeasonCard";
@@ -89,10 +90,14 @@ import { CareerRecordsTile } from '@/components/soccer-career/CareerRecordsTile'
 import { SeasonAmbitionTile, SeasonAmbitionResult } from '@/components/soccer-career/SeasonAmbitionTile';
 import { PreseasonPlanTile, PreseasonPlanResult } from '@/components/soccer-career/PreseasonPlanTile';
 import { CareerMentorTile } from '@/components/soccer-career/CareerMentorTile';
+import { coachingStartChoices, type CoachingStartQuote } from '@/lib/soccerCareerCoachingStart';
+import { useSoccerCoachingStart } from '@/hooks/useSoccerCoachingStart';
+import { useSoccerManagerJobReview } from '@/hooks/useSoccerManagerJobReview';
+import { readManagerJobReview, type ManagerJobChoice, type ManagerJobQuote } from '@/lib/soccerCareerManagerJobReview';
 import PotentialProgress from '@/components/soccer-career/PotentialProgress';
 import type { MoneyAction } from "@/lib/soccerMoney";
 import { bankSummary } from "@/lib/soccerMoney";
-import PhonePanel from "@/components/soccer-career/PhonePanel";
+const PhonePanel = lazy(() => import("@/components/soccer-career/PhonePanel"));
 const CareerStory = lazy(() => import("@/components/soccer-career/CareerStory").catch(() => new Promise<never>(() => undefined)));
 import { BAND_CLASS } from "@/lib/careerRatingBand";
 import { soccerRatingRows, readMatchRating, readOvr, ratingBand } from "@/lib/careerSeasonRatings";
@@ -124,7 +129,7 @@ import { AwardsNightCard, SpeechChoices, SpokenSpeech } from "@/components/caree
 import { availableSpeeches, givenSpeechOf } from "@/lib/careerAwardsNight";
 import { CelebrationStyles, revealDelay } from "@/components/club-manager/Celebration";
 import { SignedSlip } from "@/components/soccer-career/SignedSlip";
-import { SoccerOfferReview } from "@/components/soccer-career/SoccerOfferReview";
+const SoccerOfferReview = lazy(() => import("@/components/soccer-career/SoccerOfferReview").then(m => ({ default: m.SoccerOfferReview })));
 import { buildSoccerOfferReview } from "@/lib/soccerOfferReview";
 import type { SignedNote } from "@/components/soccer-career/SignedSlip";
 import { AcademyFocusPicker, AcademyReportCard } from "@/components/soccer-career/AcademyReportCard";
@@ -154,6 +159,9 @@ const SoccerSeasonCentre = lazy(() => import("@/components/soccer-career/SoccerS
 const ownerScreens = () => import("@/components/soccer-career/OwnerTail").then(m => { if (!m?.OwnerPanel) throw new Error("owner screens"); return m; });
 const OwnerClubSale = lazy(() => ownerScreens().then(m => ({ default: m.OwnerClubSale })).catch(() => new Promise<never>(() => undefined)));
 const OwnerPanel = lazy(() => ownerScreens().then(m => ({ default: m.OwnerPanel })).catch(() => new Promise<never>(() => undefined)));
+const CoachingStartChooser = lazy(() => import('@/components/soccer-career/CoachingStartChooser').catch(() => new Promise<never>(() => undefined)));
+const SoccerManagerJobReview = lazy(() => import('@/components/soccer-career/SoccerManagerJobReview'));
+const CoachingStartWait = ({ onBack }: { onBack: () => void }) => <div className="rounded-xl border border-border p-4 space-y-3"><Button onClick={onBack} variant="outline" className="h-11">Back</Button><p role="status" className="text-sm">Opening coaching options...</p></div>;
 /* the sale list's placeholder keeps its Back where the list puts it, so a chunk that never lands cannot strand the doors */
 const OwnerSaleWait = ({ onBack }: { onBack: () => void }) => <div className="min-h-[14rem]"><Button onClick={onBack} variant="ghost" className="h-8 px-2 text-xs font-bold">Back</Button></div>;
 const OWNER_LOAD_FAILED = "The club owner side didn't load. Check your connection and try again.";
@@ -220,6 +228,47 @@ class CentreMountBoundary extends Component<{ onClose: () => void; what?: string
 /* ─── Constants ─── */
 // Round 76: 131 nations (was 49), every one with a real flag in FlagImg,
 // sorted alphabetically so yours is findable in the scroll.
+/* Release BS fix: a loading layer has one control, so Tab stays on it, the phone layer's rule below */
+function keepTabInside(event: { key: string; preventDefault(): void; stopPropagation(): void; currentTarget: HTMLElement }): boolean {
+  if (event.key !== "Tab") return false;
+  event.preventDefault(); event.stopPropagation();
+  event.currentTarget.querySelector<HTMLButtonElement>("button")?.focus({ preventScroll: true });
+  return true;
+}
+/* Release BS fix: the trophy loading layer takes focus before the lazy cabinet mounts, so the cabinet would record
+   the layer as its opener. This holds the real opener from the first render and hands focus back to it on close,
+   the phone's rule. */
+function ReturnFocusOnClose({ children }: { children: ReactNode }) {
+  const opener = useRef(document.activeElement instanceof HTMLElement ? document.activeElement : null);
+  useLayoutEffect(() => () => queueMicrotask(() => {
+    if (opener.current?.isConnected) opener.current.focus({ preventScroll: true });
+  }), []);
+  return <>{children}</>;
+}
+function PhoneSurface(props: ComponentProps<typeof PhonePanel>) {
+  const opener = useRef(document.activeElement instanceof HTMLElement ? document.activeElement : null);
+  useLayoutEffect(() => () => queueMicrotask(() => {
+    if (opener.current?.isConnected) opener.current.focus({ preventScroll: true });
+  }), []);
+  return (
+    <CentreMountBoundary what="phone" onClose={props.onClose}>
+      <Suspense fallback={
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/70 p-3" data-phone-loading>
+          <div role="dialog" aria-modal="true" aria-label="Opening your phone" tabIndex={-1} ref={focusDialogOnMount}
+            onKeyDown={event => {
+              if (event.key === "Tab") { event.preventDefault(); event.stopPropagation(); event.currentTarget.querySelector<HTMLButtonElement>("button")?.focus({ preventScroll: true }); }
+              else escapeCloses(props.onClose)(event);
+            }} className="w-full max-w-sm rounded-2xl border border-border bg-card p-4 text-center outline-none">
+            <p role="status" className="text-sm">Opening your phone...</p>
+            <button type="button" onClick={props.onClose} className="mt-3 min-h-11 min-w-11 rounded-lg border border-border px-4 text-sm font-bold">Close</button>
+          </div>
+        </div>
+      }>
+        <PhonePanel {...props} />
+      </Suspense>
+    </CentreMountBoundary>
+  );
+}
 const NATIONALITIES = [
   "Albania","Algeria","Angola","Argentina","Armenia","Australia","Austria","Azerbaijan",
   "Bahrain","Belarus","Belgium","Benin","Bolivia","Bosnia & Herzegovina","Brazil","Bulgaria",
@@ -610,8 +659,12 @@ function OfferCard({ offer, onAccept, career }: { offer: ContractOffer; onAccept
         <span className="text-[10px] px-1.5 py-0.5 rounded bg-muted/40">Tier {offer.club.tier}</span>
       </div>
       {review.wageDelta !== null && review.wageDelta < 0 && <div className="text-xs text-amber-400">Lower weekly wage than your current deal</div>}
+      {review.loyaltyQuote && <p data-loyalty-offer className="text-xs text-emerald-400">Loyalty deal: {moneyLine('€' + review.loyaltyQuote.bonusEuros.toLocaleString('en-US'))} after {review.loyaltyQuote.years} recorded contract seasons. Leaving early forfeits it.</p>}
+      {review.loyaltyForfeitEuros && <p data-loyalty-forfeit className="text-xs text-amber-400">A permanent move here forfeits {moneyLine('€' + review.loyaltyForfeitEuros.toLocaleString('en-US'))} of unpaid loyalty pay.</p>}
       {career && <OfferFitLine offer={offer} career={career} />}
-      <SoccerOfferReview club={offer.club.name} review={review} onAccept={onAccept} />
+      <Suspense fallback={<div role="status" data-offer-review-loading className="flex h-11 items-center justify-center rounded-lg border border-border text-sm text-muted-foreground">Opening contract review...</div>}>
+        <SoccerOfferReview club={offer.club.name} review={review} onAccept={onAccept} />
+      </Suspense>
     </div>
   );
 }
@@ -861,8 +914,19 @@ function useFooterLift(enabled: boolean): number {
 /* ─── Main Component ─── */
 const SAVE_KEY = "soccerCareerSave";
 /* Round 1330: the page's own toasts sit at the top centre, clear of the bar,
-   the Training and Phone buttons and the choices a card reveals under them. */
-const PAGE_TOAST = { position: "top-center" } as const;
+   the Training and Phone buttons and the choices a card reveals under them.
+   Round 1568: on a phone (the toast library's own 600 px line) they start 44 px lower, under the site's bar
+   (Round 1451's sticky bar is 44 px tall), so a toast never lies over "Open site menu" and the gap above it
+   (the library's 15 px hover strip) stays below the bar too. On a phone a toast also fades in and out where it
+   rests: the library slides a top toast in from one toast height above and back up on the way out, and that
+   slide crossed the bar (scripts/playSoccerLanding.mjs reads the first frame). And on a phone a leaving toast
+   drops the library's exit ghost (a ::before scaled to twice the toast's height, kept for 200 ms so a mouse
+   hover is not lost): it reached half a toast's height above it, over the bottom of the menu button. Wider screens keep
+   the narrow centred toast, its slide and its ghost. */
+const PAGE_TOAST = {
+  position: "top-center",
+  className: "[@media(max-width:600px)]:top-11 [@media(max-width:600px)]:data-[mounted=false]:[--y:translateY(0)] [@media(max-width:600px)]:data-[removed=true]:data-[front=true]:[--y:translateY(0)] [@media(max-width:600px)]:data-[removed=true]:before:hidden",
+} as const;
 /* Round 1504: the longest a deck card's answer waits for the deck chunk before it says so (handleEventChoice).
    scripts/playSoccerDeck.mjs read the deck's first load (7 chunks, 30.1K gzipped) at 334 ms on a phone line of
    150 ms latency and 1.6 Mbps (rc r1504-s7); about 2.6 s on a 2G line of 250 Kbps and 800 ms by the same bytes. */
@@ -1146,6 +1210,7 @@ export default function SoccerCareer() {
   const handleAcceptOffer = (offer: ContractOffer) => {
     if (!career) return;
     const next = acceptOffer(career, offer);
+    if (next === career) return;
     setCareer(next);
     // Round 530: the slip prints the engine's wage, after the agent's cut, never the offer's.
     setSignedNote({ kind: "transfer", club: next.currentClub, years: next.contractYearsLeft, wage: next.weeklyWage, forCareer: next });
@@ -1341,8 +1406,12 @@ export default function SoccerCareer() {
     setCareer(choosePostRetirement(career, choice, clubs, ownerClub));
   };
 
+  const handleCoachingStart = useSoccerCoachingStart(career, clubs, setCareer);
+  const managerJobReview = useSoccerManagerJobReview(career, clubs, setCareer);
+
   const handleAdvanceManager = () => {
     if (!career) return;
+    if (readManagerJobReview(career, clubs)?.enabled) { managerJobReview.advance(); return; }
     setCareer(advanceManagerSeason(career, clubs));
   };
 
@@ -1353,7 +1422,7 @@ export default function SoccerCareer() {
   };
 
   const handleEndManager = () => {
-    if (!career) return;
+    if (!career || readManagerJobReview(career, clubs)?.pending) return;
     setCareer(endManagerCareer(career));
   };
 
@@ -1634,7 +1703,10 @@ export default function SoccerCareer() {
               onBdorSpeech={handleBdorSpeech}
               onManualRetire={handleManualRetire}
               onPostRetirement={handlePostRetirement}
+              onCoachingStart={handleCoachingStart}
               onAdvanceManager={handleAdvanceManager}
+              onManagerReviewModeChange={managerJobReview.setEnabled}
+              onManagerJobResolve={managerJobReview.resolve}
               onAcceptManagerOffer={handleAcceptManagerOffer}
               onEndManager={handleEndManager}
               onShare={handleShare}
@@ -1663,7 +1735,7 @@ export default function SoccerCareer() {
         {career && (
           <>
             {phoneOpen && (
-              <PhonePanel
+              <PhoneSurface
                 career={career}
                 onAnswer={handlePhoneAnswer}
                 onMoney={handleMoney}
@@ -1673,7 +1745,14 @@ export default function SoccerCareer() {
             )}
             {trainingOpen && (
               <CentreMountBoundary what="training ground" onClose={closeTraining}>
-                <Suspense fallback={<div className="fixed inset-0 z-50 flex items-center justify-center bg-black/70" data-training-loading><div className="rounded-2xl border border-border bg-card px-5 py-4 text-sm">🏋️ Opening the training ground...</div></div>}>
+                <Suspense fallback={
+                  <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/70 p-4" data-training-loading onClick={event => { if (event.target === event.currentTarget) closeTraining(); }}>
+                    <div role="dialog" aria-modal="true" aria-label="Opening the training ground" tabIndex={-1} ref={focusDialogOnMount} onKeyDown={event => { if (!keepTabInside(event)) escapeCloses(closeTraining)(event); }} className="w-full max-w-sm rounded-2xl border border-border bg-card px-5 py-4 text-sm">
+                      <p>🏋️ Opening the training ground...</p>
+                      <Button onClick={closeTraining} variant="outline" className="mt-4 h-11 w-full font-bold">Back to career</Button>
+                    </div>
+                  </div>
+                }>
                   <TrainingPanel
                     career={career}
                     available={trainingAvailable(career)}
@@ -2124,7 +2203,9 @@ function TransferWindowCard({ situation, career, clubs, onCareer, onAcceptOffer,
      the season simulation rolls from, so this line can never overpromise. */
   const seasonsHere = career.seasons.filter(ss => ss.club === career.currentClub && ss.type === "playing").length;
   const projHere = projectLeagueApps(career.overall, career.currentClubTier, career.currentClub, seasonsHere);
-  const extension = soccerExtensionQuote(career);
+  /* Release BS fix: quoted on the wage before a loyalty cut, as signExtension signs it */
+  const uncutWage = loyaltyUncutWage(career);
+  const extension = soccerExtensionQuote({ ...career, weeklyWage: uncutWage });
   const briefResult = transferBriefResult(career, projectLeagueApps);
   if (situation.type === "club_move") return <div data-club-move data-club-move-mode={situation.mode} className="space-y-3 rounded-xl border border-border bg-card p-4">
     <h3 className="text-lg font-black">{situation.mode === "loan" ? "🛫 Your club arranged a loan" : "📤 Your club sold you"}</h3>
@@ -2376,7 +2457,7 @@ function TransferWindowCard({ situation, career, clubs, onCareer, onAcceptOffer,
           </div>
           <div className="rounded-xl border border-border bg-muted/20 p-3 text-sm">
             <p data-contract-extension-wage className="font-bold">Your club offers {formatWage(extension.weeklyWage)}{extension.contractYears !== null ? ` for ${extension.contractYears} year${extension.contractYears === 1 ? "" : "s"}` : ""}.</p>
-            <p className="mt-1 text-xs text-muted-foreground">{extension.rationale}</p>
+            <p className="mt-1 text-xs text-muted-foreground">{extension.rationale}{uncutWage !== career.weeklyWage ? " Quoted on your full wage, without the 10% loyalty cut." : ""}</p>
           </div>
           <Button onClick={onSignExtension} className="w-full h-9 text-sm font-bold bg-emerald-600 hover:bg-emerald-500 text-black">
             Sign Extension with {career.currentClub} 📝
@@ -2971,9 +3052,15 @@ function BallonDorCeremonyCard({ bdor, career, onDismiss, onSpeech, onReveal }: 
 }
 
 /* ─── Retirement Ceremony Card ─── */
-function RetirementCeremonyCard({ career, clubs, totals, onPostRetirement }: { career: CareerState; clubs: ClubData[]; totals: ReturnType<typeof getCareerTotals>; onPostRetirement: (c: PostRetirementChoice, ownerClub?: string) => void }) {
+function RetirementCeremonyCard({ career, clubs, totals, onPostRetirement, onCoachingStart }: { career: CareerState; clubs: ClubData[]; totals: ReturnType<typeof getCareerTotals>; onPostRetirement: (c: PostRetirementChoice, ownerClub?: string) => void; onCoachingStart?: (quote: CoachingStartQuote) => void }) {
   /* Round 1524: the club list opens in place of the four doors */
   const [buying, setBuying] = useState(false);
+  const [coaching, setCoaching] = useState(false);
+  const coachingButton = useRef<HTMLButtonElement>(null);
+  const backFromCoaching = () => {
+    setCoaching(false);
+    requestAnimationFrame(() => coachingButton.current?.focus({ preventScroll: true }));
+  };
   const legacy = career.legacy!;
   const reason = retirementReason(career);
   const tierColors: Record<LegacyTier, string> = { "GOAT": "text-amber-400", "LEGEND": "text-purple-400", "GREAT": "text-emerald-400", "SOLID PRO": "text-blue-400", "JOURNEYMAN": "text-muted-foreground" };
@@ -2989,6 +3076,7 @@ function RetirementCeremonyCard({ career, clubs, totals, onPostRetirement }: { c
      its final from the frame it appears (Round 147). */
   const at = (i: number) => revealDelay(i);
 
+  if (coaching) return <Suspense fallback={<CoachingStartWait onBack={backFromCoaching} />}><CoachingStartChooser career={career} clubs={clubs} onStart={onCoachingStart} onBack={backFromCoaching} /></Suspense>;
   return (
     <div className="relative rounded-xl border-2 border-amber-400/40 bg-gradient-to-b from-amber-500/10 to-transparent p-5 space-y-4">
       {(legacy.tier === "GOAT" || legacy.tier === "LEGEND") && <Confetti pieces={60} gold />}
@@ -3063,6 +3151,9 @@ function RetirementCeremonyCard({ career, clubs, totals, onPostRetirement }: { c
         <Button onClick={() => onPostRetirement("manager")} variant="outline" className="w-full h-11 text-sm font-bold">
           📋 Become a Manager
         </Button>
+        {coachingStartChoices(career, clubs).length > 0 && (
+          <Button ref={coachingButton} onClick={() => setCoaching(true)} variant="outline" className="w-full min-h-11 h-auto py-3 text-sm font-bold whitespace-normal">Use coaching coursework</Button>
+        )}
         <Button onClick={() => onPostRetirement("pundit")} variant="outline" className="w-full h-11 text-sm font-bold">
           🎙️ Become a TV Pundit
         </Button>
@@ -3078,9 +3169,16 @@ function RetirementCeremonyCard({ career, clubs, totals, onPostRetirement }: { c
 }
 
 /* ─── Post-Retirement Card (unused since choices are in ceremony, but kept for direct phase) ─── */
-function PostRetirementCard({ career, clubs, onChoice }: { career: CareerState; clubs: ClubData[]; onChoice: (c: PostRetirementChoice, ownerClub?: string) => void }) {
+function PostRetirementCard({ career, clubs, onChoice, onCoachingStart }: { career: CareerState; clubs: ClubData[]; onChoice: (c: PostRetirementChoice, ownerClub?: string) => void; onCoachingStart?: (quote: CoachingStartQuote) => void }) {
   /* Round 1524: the club list, as on the ceremony */
   const [buying, setBuying] = useState(false);
+  const [coaching, setCoaching] = useState(false);
+  const coachingButton = useRef<HTMLButtonElement>(null);
+  const backFromCoaching = () => {
+    setCoaching(false);
+    requestAnimationFrame(() => coachingButton.current?.focus({ preventScroll: true }));
+  };
+  if (coaching) return <Suspense fallback={<CoachingStartWait onBack={backFromCoaching} />}><CoachingStartChooser career={career} clubs={clubs} onStart={onCoachingStart} onBack={backFromCoaching} /></Suspense>;
   if (buying) {
     return (
       <div className="rounded-xl border border-border p-5">
@@ -3093,6 +3191,9 @@ function PostRetirementCard({ career, clubs, onChoice }: { career: CareerState; 
       <h3 className="text-lg font-black">What's Next?</h3>
       <Button onClick={() => onChoice("retire")} className="w-full h-11 text-sm font-bold bg-emerald-600 hover:bg-emerald-500 text-black">🏖️ Retire and Enjoy Life</Button>
       <Button onClick={() => onChoice("manager")} variant="outline" className="w-full h-11 text-sm font-bold">📋 Become a Manager</Button>
+      {coachingStartChoices(career, clubs).length > 0 && (
+        <Button ref={coachingButton} onClick={() => setCoaching(true)} variant="outline" className="w-full min-h-11 h-auto py-3 text-sm font-bold whitespace-normal">Use coaching coursework</Button>
+      )}
       <Button onClick={() => onChoice("pundit")} variant="outline" className="w-full h-11 text-sm font-bold">🎙️ Become a TV Pundit</Button>
       {career.netWorth >= 200 && (
         <Button onClick={() => setBuying(true)} variant="outline" className="w-full h-11 text-sm font-bold">🏟️ Buy a Football Club</Button>
@@ -3102,13 +3203,27 @@ function PostRetirementCard({ career, clubs, onChoice }: { career: CareerState; 
 }
 
 /* ─── Manager Panel ─── */
-function ManagerPanel({ manager, career, onAdvance, onEnd, onAcceptOffer }: { manager: ManagerState; career: CareerState; onAdvance: () => void; onEnd: () => void; onAcceptOffer?: (i: number) => void }) {
+function ManagerPanel({ manager, career, clubs, onAdvance, onEnd, onAcceptOffer, onReviewModeChange, onResolveJob }: { manager: ManagerState; career: CareerState; clubs: ClubData[]; onAdvance: () => void; onEnd: () => void; onAcceptOffer?: (i: number) => void; onReviewModeChange?: (enabled: boolean) => void; onResolveJob?: (quote: ManagerJobQuote, choice: ManagerJobChoice) => void }) {
+  const review = readManagerJobReview(career, clubs);
+  const [rules, setRules] = useState(false);
+  const rulesTrigger = useRef<HTMLButtonElement>(null);
+  const closeRules = () => { setRules(false); rulesTrigger.current?.focus({ preventScroll: true }); };
   return (
     <div className="rounded-xl border border-border bg-card p-4 space-y-3">
       <div className="text-center space-y-1">
         <h3 className="text-lg font-black">📋 Manager Career</h3>
         <p className="text-xs text-muted-foreground">Managing {manager.club} (Tier {manager.clubTier}) · Season {manager.season}</p>
       </div>
+      {!manager.unemployed && <div className="space-y-2">
+        <div className="flex items-center gap-2">
+          <button className="min-h-11 flex-1 rounded-lg border border-border p-2 text-xs font-bold" aria-pressed={!!review?.enabled} disabled={!!review?.pending || !onReviewModeChange} onClick={() => onReviewModeChange?.(!review?.enabled)}>Review job moves</button>
+          <button className="min-h-11 min-w-11 rounded-lg border border-border p-2 text-xs" ref={rulesTrigger} aria-label="Job move rules" onClick={() => setRules(true)}>?</button>
+        </div>
+        <p className="text-[11px] text-muted-foreground">{review?.enabled ? "On: choose whether to take an earned job move." : "Off: earned job moves happen automatically."}</p>
+      </div>}
+      {(rules || review?.pending) && <Suspense fallback={<div className="space-y-2"><p role="status" className="min-h-11 text-xs">Opening job review...</p>{rules && <button className="min-h-11 w-full rounded-lg border border-border p-2 text-xs" onClick={closeRules}>Back</button>}</div>}>
+        <SoccerManagerJobReview career={career} clubs={clubs} help={rules} onBack={closeRules} onResolve={onResolveJob} />
+      </Suspense>}
 
       {/* Round 530: the results, then the final table under them, tick in on
           one clock, top to bottom. Keyed on the season plus index so a new
@@ -3565,7 +3680,7 @@ function SocialMediaActionCard({ career, onAction, onCoverAthlete, onDismiss }: 
 }
 
 /* ─── Game Screen ─── */
-function GameScreen({ career, clubs, onNextSeason, onAcceptOffer, onDismissSummary, onDismissNewspaper, onStay, onSignExtension, onRequestTransfer, onAcceptLoan, onEventChoice, onDismissDebut, onDismissWorldCup, onWorldCupSpeech, onRetireInternational, onReturnInternational, onDismissRivalryEvent, onDismissBallonDor, onBdorSpeech, onManualRetire, onPostRetirement, onAdvanceManager, onAcceptManagerOffer, onEndManager, onShare, onNewCareer, onOpenPhone, onSocialMediaAction, onCoverAthlete, onDismissSocialMedia, onMoralDilemmaChoice, onRehabChoice, onDismissMoralDilemma, onDismissAppeal, onAcceptRetirement, onDeclineRetirement, onAnnounceFarewell, onPunditAction, onEndPundit, onAdvanceOwner, onEndOwner, onCurrencyChange, onAgentChange, timelineRef, signedNote, academyReport, onAcademyFocus, onCareerPatch, arrival }: {
+function GameScreen({ career, clubs, onNextSeason, onAcceptOffer, onDismissSummary, onDismissNewspaper, onStay, onSignExtension, onRequestTransfer, onAcceptLoan, onEventChoice, onDismissDebut, onDismissWorldCup, onWorldCupSpeech, onRetireInternational, onReturnInternational, onDismissRivalryEvent, onDismissBallonDor, onBdorSpeech, onManualRetire, onPostRetirement, onCoachingStart, onAdvanceManager, onManagerReviewModeChange, onManagerJobResolve, onAcceptManagerOffer, onEndManager, onShare, onNewCareer, onOpenPhone, onSocialMediaAction, onCoverAthlete, onDismissSocialMedia, onMoralDilemmaChoice, onRehabChoice, onDismissMoralDilemma, onDismissAppeal, onAcceptRetirement, onDeclineRetirement, onAnnounceFarewell, onPunditAction, onEndPundit, onAdvanceOwner, onEndOwner, onCurrencyChange, onAgentChange, timelineRef, signedNote, academyReport, onAcademyFocus, onCareerPatch, arrival }: {
   /** Round 1330: set once per Begin Career ("begin-" and a count), null otherwise; the hub lands on the player card when it changes. */
   arrival?: string | null;
   career: CareerState;
@@ -3596,7 +3711,10 @@ function GameScreen({ career, clubs, onNextSeason, onAcceptOffer, onDismissSumma
   onBdorSpeech: (choice: BdorSpeechChoice) => void;
   onManualRetire: () => void;
   onPostRetirement: (choice: PostRetirementChoice, ownerClub?: string) => void;
+  onCoachingStart: (quote: CoachingStartQuote) => void;
   onAdvanceManager: () => void;
+  onManagerReviewModeChange: (enabled: boolean) => void;
+  onManagerJobResolve: (quote: ManagerJobQuote, choice: ManagerJobChoice) => void;
   onAcceptManagerOffer: (i: number) => void;
   onEndManager: () => void;
   onShare: () => void;
@@ -3680,7 +3798,10 @@ function GameScreen({ career, clubs, onNextSeason, onAcceptOffer, onDismissSumma
   }, [centreFor, career.seasons.length, career.phase]);
   // Round 131: the whole attribute tree on its own screen with a back button
   const [attrsOpen, setAttrsOpen] = useState(false);
-  const showActionButton = career.phase === "youth" || career.phase === "playing" || career.phase === "manager_season" || career.phase === "pundit_season" || career.phase === "owner_season";
+  /* Release BS fix: no pundit_season here. The bar's Next Season runs handleNextSeason, which plays
+     only youth and playing years, so in a pundit season it was a green button that did nothing (the
+     10-28 reports). The three pundit actions in the panel are what move his year on. */
+  const showActionButton = career.phase === "youth" || career.phase === "playing" || career.phase === "manager_season" || career.phase === "owner_season";
   /* ─── Round 129: the controls that walked off when he scrolled ───
 
      His report: "if I'm just on my screen and don't touch anything then I can
@@ -4076,7 +4197,7 @@ function GameScreen({ career, clubs, onNextSeason, onAcceptOffer, onDismissSumma
 
           {/* OVERLAY: Retirement Ceremony */}
           {career.phase === "retirement_ceremony" && career.legacy && (
-            <RetirementCeremonyCard career={career} clubs={clubs} totals={totals} onPostRetirement={onPostRetirement} />
+            <RetirementCeremonyCard career={career} clubs={clubs} totals={totals} onPostRetirement={onPostRetirement} onCoachingStart={onCoachingStart} />
           )}
 
           {/* OVERLAY: Retirement Suggestion */}
@@ -4107,12 +4228,12 @@ function GameScreen({ career, clubs, onNextSeason, onAcceptOffer, onDismissSumma
 
           {/* OVERLAY: Post-Retirement Choice */}
           {career.phase === "post_retirement" && (
-            <PostRetirementCard career={career} clubs={clubs} onChoice={onPostRetirement} />
+            <PostRetirementCard career={career} clubs={clubs} onChoice={onPostRetirement} onCoachingStart={onCoachingStart} />
           )}
 
           {/* OVERLAY: Manager Season */}
           {career.phase === "manager_season" && career.managerState && (
-            <ManagerPanel manager={career.managerState} career={career} onAdvance={onAdvanceManager} onEnd={onEndManager} onAcceptOffer={onAcceptManagerOffer} />
+            <ManagerPanel manager={career.managerState} career={career} clubs={clubs} onAdvance={onAdvanceManager} onEnd={onEndManager} onAcceptOffer={onAcceptManagerOffer} onReviewModeChange={onManagerReviewModeChange} onResolveJob={onManagerJobResolve} />
           )}
 
           {/* OVERLAY: Pundit Season */}
@@ -4142,6 +4263,7 @@ function GameScreen({ career, clubs, onNextSeason, onAcceptOffer, onDismissSumma
                 </div>
               </div>
               <div className="text-xs text-center text-muted-foreground font-bold uppercase mt-2">Choose your action this season</div>
+              <p className="text-xs text-center text-muted-foreground" data-pundit-next>Pick one to play out this season on TV and move on to the next.</p>
               <div className="space-y-2">
                 <Button onClick={() => onPunditAction("praise_player")} variant="outline" className="w-full h-10 text-sm font-bold">⭐ Praise a Rising Star</Button>
                 <Button onClick={() => onPunditAction("criticise_manager")} variant="outline" className="w-full h-10 text-sm font-bold">🔥 Criticise a Manager</Button>
@@ -4478,7 +4600,14 @@ function GameScreen({ career, clubs, onNextSeason, onAcceptOffer, onDismissSumma
         </div>
       )}
       {storyOpen && <Suspense fallback={null}><CareerStory career={visibleCareer} onClose={() => setStoryOpen(false)} /></Suspense>}
-      {trophyCategory && <CentreMountBoundary what="trophy cabinet" onClose={() => setTrophyCategory(null)}><Suspense fallback={<div className="fixed inset-0 z-50 flex items-center justify-center bg-background/80" data-trophy-loading><div className="rounded-2xl border border-border bg-card px-5 py-4 text-sm">Opening your trophies...</div></div>}><TrophyCabinet career={visibleCareer} category={trophyCategory} onClose={() => setTrophyCategory(null)} /></Suspense></CentreMountBoundary>}
+      {trophyCategory && <ReturnFocusOnClose><CentreMountBoundary what="trophy cabinet" onClose={() => setTrophyCategory(null)}><Suspense fallback={
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-background/80 p-4" data-trophy-loading onClick={event => { if (event.target === event.currentTarget) setTrophyCategory(null); }}>
+          <div role="dialog" aria-modal="true" aria-label="Opening your trophies" tabIndex={-1} ref={focusDialogOnMount} onKeyDown={event => { if (!keepTabInside(event)) escapeCloses(() => setTrophyCategory(null))(event); }} className="w-full max-w-sm rounded-2xl border border-border bg-card px-5 py-4 text-sm">
+            <p>Opening your trophies...</p>
+            <Button onClick={() => setTrophyCategory(null)} variant="outline" className="mt-4 h-11 w-full font-bold">Back to career</Button>
+          </div>
+        </div>
+      }><TrophyCabinet career={visibleCareer} category={trophyCategory} onClose={() => setTrophyCategory(null)} /></Suspense></CentreMountBoundary></ReturnFocusOnClose>}
       {ratingsOpen && <CentreMountBoundary what="season ratings" onClose={() => setRatingsOpen(false)}><Suspense fallback={null}><SeasonRatings career={visibleCareer} onClose={() => setRatingsOpen(false)} /></Suspense></CentreMountBoundary>}
       {derbyHistoryOpen && <CentreMountBoundary what="derby history" onClose={() => setDerbyHistoryOpen(false)}><Suspense fallback={null}><SoccerDerbyHistory seasons={visibleCareer.seasons} onClose={() => setDerbyHistoryOpen(false)} /></Suspense></CentreMountBoundary>}
       {(() => {
@@ -4491,7 +4620,14 @@ function GameScreen({ career, clubs, onNextSeason, onAcceptOffer, onDismissSumma
         return (
           <div data-no-prerender>
             <CentreMountBoundary onClose={closeCentre}>
-              <Suspense fallback={<div className="fixed inset-0 z-50 flex items-center justify-center bg-background/80" data-season-centre-loading><div className="rounded-2xl border border-border bg-card px-5 py-4 text-sm">📺 Getting your season ready...</div></div>}>
+              <Suspense fallback={
+                <div className="fixed inset-0 z-50 flex items-center justify-center bg-background/80 p-4" data-season-centre-loading onClick={event => { if (event.target === event.currentTarget) closeCentre(); }}>
+                  <div role="dialog" aria-modal="true" aria-label="Getting your season ready" tabIndex={-1} ref={focusDialogOnMount} onKeyDown={event => { if (!keepTabInside(event)) escapeCloses(closeCentre)(event); }} className="w-full max-w-sm rounded-2xl border border-border bg-card px-5 py-4 text-sm">
+                    <p>📺 Getting your season ready...</p>
+                    <Button onClick={closeCentre} variant="outline" className="mt-4 h-11 w-full font-bold">Back to career</Button>
+                  </div>
+                </div>
+              }>
                 <SoccerSeasonCentre career={career} clubs={clubs} row={row} mode={watchRow || replaysOpen ? "watch" : "live"} onClose={closeCentre} onCareer={onCareerPatch} offer={offer} />
               </Suspense>
             </CentreMountBoundary>
@@ -4513,10 +4649,12 @@ function GameScreen({ career, clubs, onNextSeason, onAcceptOffer, onDismissSumma
           and its IntersectionObserver are gone with it. The measurements are in
           the long note above actionBarFloats, and the lift itself is in
           useFooterLift near the top of this file, shared with the training and
-          phone buttons because they were parked on the footer too. */}
+          phone buttons because they were parked on the footer too.
+          Release BS fix: while the cookie choices are unanswered the floating bar sits on top of them
+          (the banner sets data-consent-pending and its height on the body), so Next is never hidden. */}
       <div
         data-career-action-bar={actionBarFloats ? 'floating' : 'inline'}
-        className={`flex items-center gap-3 max-[399px]:gap-2 ${actionBarFloats ? 'fixed bottom-0 left-0 right-0 z-40 bg-background/95 backdrop-blur border-t border-border px-3 max-[399px]:px-2 sm:px-4 py-3 max-w-5xl mx-auto' : ''}`}
+        className={`flex items-center gap-3 max-[399px]:gap-2 ${actionBarFloats ? 'fixed bottom-0 left-0 right-0 z-40 bg-background/95 backdrop-blur border-t border-border px-3 max-[399px]:px-2 sm:px-4 py-3 max-w-5xl mx-auto [body[data-consent-pending]_&]:bottom-[var(--dukb-consent-height,230px)]' : ''}`}
         style={actionBarFloats && footerLift ? { transform: `translateY(-${footerLift}px)` } : undefined}
       >
         {career.phase === "retired" ? (
@@ -4533,10 +4671,11 @@ function GameScreen({ career, clubs, onNextSeason, onAcceptOffer, onDismissSumma
             {/* Round 112: when you are out of work you are not managing a
                 season, you are waiting for a phone call, and the button
                 should say which one of those is happening. */}
-            <Button onClick={onAdvanceManager} className="flex-1 h-12 text-base font-bold bg-emerald-600 hover:bg-emerald-500 text-black gap-2 max-[399px]:px-3 max-[399px]:text-sm">
+            <Button onClick={onAdvanceManager} disabled={!!readManagerJobReview(career, clubs)?.pending} className="flex-1 h-12 text-base font-bold bg-emerald-600 hover:bg-emerald-500 text-black gap-2 max-[399px]:px-3 max-[399px]:text-sm">
               {career.managerState?.unemployed ? "Sit Out A Season" : "Next Manager Season"} <ChevronRight className="w-5 h-5 max-[399px]:hidden" />
             </Button>
-            <Button onClick={onEndManager} variant="outline" className="h-12 text-sm font-bold max-[399px]:px-3">
+            {/* Release BS fix: no ending the career over a job decision still waiting on Accept or Stay */}
+            <Button onClick={onEndManager} disabled={!!readManagerJobReview(career, clubs)?.pending} variant="outline" className="h-12 text-sm font-bold max-[399px]:px-3">
               {career.managerState?.unemployed ? "Walk Away" : "Retire"}
             </Button>
           </div>

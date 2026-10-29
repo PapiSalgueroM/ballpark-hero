@@ -5,8 +5,19 @@
 /* Match mode. A period being played is its own screen: one box the size of the window, drawn in place
    (no portal), so the page under it never scrolls and the pitch gets every pixel the rows around it
    leave. One DOM for every width: only this grid changes at 768 px. Nothing in here animates: panels
-   appear whole, and everything that moves on the pitch is a function of the match clock. */
-.cm-stagebox{position:fixed;inset:0;height:100vh;height:100dvh;z-index:40;overflow:hidden;box-sizing:border-box;padding:env(safe-area-inset-top) env(safe-area-inset-right) env(safe-area-inset-bottom) env(safe-area-inset-left)}
+   appear whole, and everything that moves on the pitch is a function of the match clock.
+   Round 1568: its layer is 55. Since Round 1451 the site's bar across the top (data-site-chrome in App.tsx) is
+   sticky at 50, and at 40 the stage sat under it: the bar took the taps meant for Back, the help and the score.
+   55 puts the stage over the bar and keeps it under the cookie notice (60) and the toasts (the toast library's
+   toaster is at 999999999), the same order as before 1451. While consent is pending, the site's own clamp in
+   src/index.css also ends every role=dialog, this stage included, above the cookie banner. Everything the stage opens (the change sheet, the panels, the VAR card, the help) is drawn
+   inside this box, never portaled, so it rides on the stage's own layer. */
+.cm-stagebox{position:fixed;inset:0;height:100vh;height:100dvh;z-index:55;overflow:hidden;box-sizing:border-box;padding:env(safe-area-inset-top) env(safe-area-inset-right) env(safe-area-inset-bottom) env(safe-area-inset-left)}
+/* Round 1568 (closing check): that clamp ends the stage 24 px above the cookie banner, and the page under the stage
+   showed through the strip between them (and took a tap there). The stage draws its own background over the whole
+   window behind everything in it, so the strip is the stage's. It is fixed, so the box's own clip never cuts it,
+   and at -1 inside the stage's layer it sits under every part of the stage and under the banner (60). */
+.cm-stagebox::after{content:"";position:fixed;inset:0;z-index:-1;background-color:inherit}
 .cm-stage{position:relative;display:flex;flex-direction:column;width:100%;height:100%;min-height:0}
 .cm-stage-main{display:flex;flex-direction:column;flex:1 1 0%;min-width:0;min-height:0}
 

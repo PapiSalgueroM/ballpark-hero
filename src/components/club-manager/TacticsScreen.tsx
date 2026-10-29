@@ -916,7 +916,7 @@ export function TacticsScreen({
         >
           <span className="text-[10px] text-muted-foreground uppercase tracking-wider min-w-0 truncate">
             Shootout order <span className="text-foreground font-bold" data-cm-so-count={shootoutOrder.length}>{shootoutOrder.length}/{SHOOTOUT_MAX_ORDER}</span>
-            {shootoutOrder.length === 0 && <span className="normal-case"> not set, one draw decides it</span>}
+            {shootoutOrder.length === 0 && <span className="normal-case"> not set, one draw decides it, shown kick by kick</span>}
           </span>
           <ChevronDown className={cn('w-4 h-4 shrink-0 text-muted-foreground transition-transform', openTile === 'shootout' && 'rotate-180')} />
         </button>
@@ -943,7 +943,7 @@ export function TacticsScreen({
             )}
           </div>
           <p className="text-[9px] text-muted-foreground mb-2">
-            Tap a man to add him next, tap him again to take him off. At the whistle your men step up in this order, anyone off the pitch is skipped, anyone you left out follows in the order of your eleven with the keeper last, and after five each it is sudden death round the eleven. Leave it empty and it stays one draw that leans toward the stronger side; with a list only the takers and the keepers count, which suits an underdog more than a favourite.
+            Tap a man to add him next, tap him again to take him off. At the whistle your men step up in this order, anyone off the pitch is skipped, anyone you left out follows in the order of your eleven with the keeper last, and after five each it is sudden death round the eleven. Leave it empty and it stays one draw that leans toward the stronger side and your penalty taker, and the report shows it kick by kick with him first; with a list only the takers and the keepers count, which suits an underdog more than a favourite.
           </p>
           {shootoutOrder.length > 0 ? (
             <div className="flex flex-wrap gap-1 mb-2" data-cm-so-list="1">

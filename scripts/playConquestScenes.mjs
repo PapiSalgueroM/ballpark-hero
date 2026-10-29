@@ -30,7 +30,10 @@
  *      label, and one empire per home ring on the map); releasing returns
  *      the map to now and the label goes. The input is scrolled under the
  *      mouse and proved reachable first, because page.mouse works in
- *      viewport coordinates.
+ *      viewport coordinates. Round 1568: its labels row and the slider's top
+ *      edge must answer elementFromPoint themselves too, not only the
+ *      input's centre (a 40 px scroll margin put both under the 44 px site
+ *      bar at 430 while the centre stayed clear, review r1568-run-m m3).
  *   6. The season ends on the banner: rounds are played through Skip and
  *      Continue until data-conquest-complete mounts, with the crown, four
  *      record rows, and the map under one ruler. No console errors.
@@ -42,10 +45,17 @@
  * a browser is launched, and the run refuses to start otherwise. With the
  * control on, "a score landed during the round" must go red on every run and
  * nothing else may, and the harness exits 0 only in that shape.
+ *   CONQUEST_SCENES_CONTROL=margin
+ * (Round 1568) sets the timeline input's scroll-margin-top from the shipped
+ * 80px to 40px just before section 5 brings it into view. It refuses unless
+ * the input read 80px first and reads 40px after. The edge check of section 5
+ * must go red (at 430 the slider's top and its labels row then sit under the
+ * site bar while the centre stays clear) and nothing else may.
  *
  * Data attributes this reads (all in src/components/conquest):
  *   data-imperialism-help, data-conquest-stage, svg[data-map],
  *   data-conquest-status, data-standings, input[data-timeline],
+ *   data-timeline-wrap,
  *   data-conquest-scrub-label,
  *   [data-layer="home"], path[data-layer="fill"][data-owner],
  *   data-conquest-pick, data-conquest-play, data-scene-player,
@@ -84,9 +94,15 @@ const SCORE_ATTR = 'data-scene-score';
 const CONTROL_ATTR = 'data-scene-nope';
 /* The only checks the control may turn red. */
 const CONTROL_TARGETS = ['3. a score landed during the round'];
+/* Round 1568: the margin control, its two scroll margins and the one check it may turn red. */
+const MARGIN_SHIPPED = '80px';
+const MARGIN_CONTROL = '40px';
+const MARGIN_TARGETS = ["5. the timeline's labels row and the slider's top edge answer themselves"];
+let marginSet = 0;
+const marginRefused = [];
 
-if (CONTROL && CONTROL !== 'noscore') {
-  console.error(`CONQUEST_SCENES_CONTROL=${CONTROL} is not a control this harness knows (noscore)`);
+if (CONTROL && CONTROL !== 'noscore' && CONTROL !== 'margin') {
+  console.error(`CONQUEST_SCENES_CONTROL=${CONTROL} is not a control this harness knows (noscore, margin)`);
   process.exit(1);
 }
 
@@ -433,10 +449,43 @@ async function walk(route, width) {
      reason that was not the site. bringIntoReach is the guard, and it is
      asserted rather than assumed: a harness that measures nothing has to go
      red, not green. */
+  if (CONTROL === 'margin') {
+    const m = await slider.evaluate((el, px) => {
+      const was = getComputedStyle(el).scrollMarginTop;
+      el.style.scrollMarginTop = px;
+      return { was, now: getComputedStyle(el).scrollMarginTop };
+    }, MARGIN_CONTROL).catch(e => ({ was: `threw ${String(e).slice(0, 80)}`, now: '' }));
+    if (m.was === MARGIN_SHIPPED && m.now === MARGIN_CONTROL) marginSet += 1;
+    else marginRefused.push(`${tag}: the input read scroll-margin-top ${m.was} (expected ${MARGIN_SHIPPED}) and ${m.now} after the edit`);
+  }
   const reach = await bringIntoReach(page, slider);
   const sb = reach.box;
   const reachable = reach.ok;
   check(`5. the timeline is in the viewport and under the mouse before the drag (${tag})`, reachable, reach.why);
+  /* Round 1568: the centre alone is not the whole control. A finger aims at the thumb anywhere on the track and
+     reads the labels row above it, so the slider's top edge and the labels row (the first row of
+     data-timeline-wrap) must answer themselves too. Review r1568-run-m m3: with a 40 px scroll margin the input
+     came to rest at y 40 to 70 at 430, its centre clear and its top and labels row under the 44 px site bar. */
+  const edge = await slider.evaluate(el => {
+    const wrap = el.closest('[data-timeline-wrap]');
+    const row = wrap ? wrap.firstElementChild : null;
+    if (!wrap || !row || row === el) return { covered: ['no data-timeline-wrap with a labels row above the input'], labels: null, top: null };
+    const r = el.getBoundingClientRect();
+    const q = row.getBoundingClientRect();
+    const pts = [];
+    for (const f of [0.1, 0.5, 0.9]) pts.push(['the labels row', q.left + q.width * f, q.top + q.height / 2]);
+    for (const f of [0.25, 0.5, 0.75]) pts.push(["the slider's top edge", r.left + r.width * f, r.top + 2]);
+    const covered = [];
+    for (const [what, x, y] of pts) {
+      const hit = document.elementFromPoint(x, y);
+      if (hit && wrap.contains(hit)) continue;
+      const by = !hit ? 'nothing (off screen)' : hit.closest('[data-site-chrome]') ? 'the site bar' : hit.tagName.toLowerCase();
+      covered.push(`${what} at ${Math.round(x)},${Math.round(y)} answers ${by}`);
+    }
+    return { covered, labels: `${Math.round(q.top)} to ${Math.round(q.bottom)}`, top: Math.round(r.top) };
+  }).catch(e => ({ covered: [`threw ${String(e).split('\n')[0].slice(0, 100)}`], labels: null, top: null }));
+  check(`5. the timeline's labels row and the slider's top edge answer themselves (${tag})`, edge.covered.length === 0,
+    `labels row y ${edge.labels}, slider top y ${edge.top}${edge.covered.length ? `; ${edge.covered.join('; ')}` : ', every point answers the timeline'}`);
   const liveOwners = await paintedOwners(page);
   let scrubbedLabel = '', scrubbedOwners = -1, labelGone = false, backOwners = -1, valueBack = false;
   let endValue = '', heldValue = '';
@@ -551,6 +600,17 @@ if (CONTROL === 'noscore') {
   if (targeted.length === 0) { console.error('control "noscore": the score check stayed green, the check is dead'); stop(1); }
   if (stray.length > 0) { console.error(`control "noscore": other checks went red too: ${stray.join('; ')}`); stop(1); }
   console.log('control "noscore": exactly the score check went red, the check works');
+  stop(0);
+}
+if (CONTROL === 'margin') {
+  const targeted = failed.filter(f => MARGIN_TARGETS.some(t => f.startsWith(t)));
+  const stray = failed.filter(f => !MARGIN_TARGETS.some(t => f.startsWith(t)));
+  console.log(`control "margin": scroll-margin-top set to ${MARGIN_CONTROL} on ${marginSet} walk(s), ${targeted.length} targeted check(s) red, ${stray.length} other check(s) red`);
+  if (marginRefused.length) { console.error(`control "margin": refused, the edit did not take: ${marginRefused.join('; ')}`); stop(1); }
+  if (marginSet === 0) { console.error('control "margin": no walk reached the timeline, the edit changed nothing'); stop(1); }
+  if (targeted.length === 0) { console.error('control "margin": the edge check stayed green, the check is dead'); stop(1); }
+  if (stray.length > 0) { console.error(`control "margin": other checks went red too: ${stray.join('; ')}`); stop(1); }
+  console.log('control "margin": exactly the edge check went red, the check works');
   stop(0);
 }
 if (failed.length) {
