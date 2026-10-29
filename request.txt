@@ -1,0 +1,50 @@
+#!buildseo
+# Release BS kit: 47 of the 90 request lines of Release BR's rcg-C.txt (rBRg/.tmp-fx/br), the lines of the BS areas (Soccer Career, Club Manager and the manager games on its engine, Player Bingo, Conquest, Stat and Draft Detective, the US My Career save notice, What's New, the polls, the guide intro) and the setup lines before them; 43 line(s) outside those areas left out: simHalftime simMatchDetail simMatchScreen simDeadlineDay simDailyClubPool simExtraTime simTacticsEngine simNationalPools simNationalities simNflTruth simCareerBanking simNflCareer simCareerRealism simCareerParity simAwards simRoles simCareerLeagueWorld simCareerLifeCooldowns simCareerStory simClubVerdict simStatsCentre simPress simCareerRivalryEvents simFixtureBalance simWorldEditor simNbaAwardsSense simDailyDeals simOwnGoalMotion simEra2005 simEra2010 simEra2015 simEra2020 simEras simAwardRaces simTransferBriefPageControl simLineupRecordPositions simSoccerOpponentLabels simFreeAgents simBooks simBoard simBoardObjectives simMidSeasonStart vitest-all.
+# Release BE gate, lane C: Release BD's lane C request (gate-bd lists through mkGateReqG.mjs), unchanged lines, on the BE head
+simCmQuickSubs: node scripts/simCmQuickSubs.mjs
+simCmMatchCentre: node scripts/simCmMatchCentre.mjs
+simCmShootoutOrder: node scripts/simCmShootoutOrder.mjs
+simCmStoppageTime: node scripts/simCmStoppageTime.mjs
+simLiveMatch: node scripts/simLiveMatch.mjs
+simClubManagerSlots: node scripts/simClubManagerSlots.mjs
+simManagerWorldBrowser: node scripts/simManagerWorldBrowser.mjs
+simManagerMatchPlans: node scripts/simManagerMatchPlans.mjs
+simManagerAppealIsolation: node scripts/simManagerAppealIsolation.mjs
+simClubManagerMeters: node scripts/simClubManagerMeters.mjs
+simClubManagerDecisions: node scripts/simClubManagerDecisions.mjs
+simClubManager: node scripts/simClubManager.mjs
+simClubManagerSave: node scripts/simClubManagerSave.mjs
+simCmLeagueRules: node scripts/simCmLeagueRules.mjs
+simManagerHotSeat: node scripts/simManagerHotSeat.mjs
+simClubManagerDeskCues: node scripts/simClubManagerDeskCues.mjs
+simClubManagerCalendar: node scripts/simClubManagerCalendar.mjs
+simCmDataOnDemand: node scripts/simCmDataOnDemand.mjs
+simClubManagerClubList: node scripts/simClubManagerClubList.mjs
+simUsCareerBank: node scripts/simUsCareerBank.mjs
+simLoanSpell: node scripts/simLoanSpell.mjs
+simCmOwnGoals: node scripts/simCmOwnGoals.mjs
+simCmQuickLegs: node scripts/simCmQuickLegs.mjs
+simClubManagerEraUcl: node scripts/simClubManagerEraUcl.mjs
+simLiveSim: node scripts/simLiveSim.mjs
+simClubManagerStaff: node scripts/simClubManagerStaff.mjs
+simCmVar: NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/simCmVar.mjs
+simCmRealFixtures: NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/simCmRealFixtures.mjs
+simCmLeagueFixtures: CM_LEAGUE_FIXTURES_EXPECT=10 CM_LEAGUE_FIXTURES_EXPECT_FROZEN=10 CM_LEAGUE_FIXTURES_EXPECT_BOUND=10 node scripts/simCmLeagueFixtures.mjs
+simCmVarLedger: node scripts/simCmVarLedger.mjs
+simCmLeagueBook: node scripts/simCmLeagueBook.mjs
+simCmLeaguePhase: node scripts/simCmLeaguePhase.mjs
+simClubManagerALeague: node scripts/simClubManagerALeague.mjs
+simClubManagerSaveSize: node scripts/simClubManagerSaveSize.mjs
+simCmLeagueBookFacts: node scripts/simCmLeagueBookFacts.mjs
+simCareerTransferBrief: NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/simCareerTransferBrief.mjs
+simSoccerAgentReview: NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/simSoccerAgentReview.mjs
+simSoccerAgentReviewPageControl: NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/simSoccerAgentReviewPageControl.mjs
+simPlayerBingoLoad: node scripts/simPlayerBingoLoad.mjs
+simPlayerBingoLineFeedback: node scripts/simPlayerBingoLineFeedback.mjs
+simCmLedgerJourney: node scripts/simCmLedgerJourney.mjs
+simCmLedgerBound: node scripts/simCmLedgerBound.mjs
+simManagerEraWorldOracles: MANAGER_ERA_WORLD_CONTROL=all NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/simManagerEraWorldOracles.mjs
+simCmTablesTruth: node scripts/simCmTablesTruth.mjs
+simCmCopy: node scripts/simCmCopy.mjs
+simClubManagerNewLeagues: node scripts/simClubManagerNewLeagues.mjs
+simCmSubs: node scripts/simCmSubs.mjs
