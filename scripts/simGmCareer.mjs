@@ -946,7 +946,8 @@ if (runs('3')) {
   /* Round 1559: a row whose board is not bound yet (the NHL's, Round 1561) has no answerPress to read; the presser
      grid below still runs on its own words and its own sport's effects. */
   if (d.board) {
-    const boardSrc = lf(overrides.get(path.resolve(FILES[d.board]).toLowerCase()) ?? fs.readFileSync(FILES[d.board], 'utf8'));
+    /* the read normalised where it is made (simHarnessAnchors section 2 cannot tell which FILES entry a keyed read names) */
+    const boardSrc = lf(overrides.get(path.resolve(FILES[d.board]).toLowerCase()) ?? lf(fs.readFileSync(FILES[d.board], 'utf8')));
     const from = boardSrc.indexOf('const answerPress = ');
     const body = from < 0 ? '' : boardSrc.slice(from, boardSrc.indexOf('\n  };', from));
     const code = body.replace(/\/\*[\s\S]*?\*\//g, '').replace(/\/\/.*$/gm, '');

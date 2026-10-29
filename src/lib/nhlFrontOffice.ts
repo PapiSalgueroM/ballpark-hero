@@ -621,6 +621,8 @@ export interface NhlOffseasonOptions {
 
 export function nhlOffseason(league: NhlLeague, rng: () => number, userTeam?: string, opts?: NhlOffseasonOptions): string[] {
   const notes: string[] = [];
+  /* Round 1559: read at the top, so the cut block reads it wherever the summer's steps sit (simNhlCpuRosters earlyAge moves it). */
+  const noUserClub = opts?.noUserClub === true;
   /* Round 211: one name book for the whole offseason. */
   const taken = leagueNames(league);
   for (const t of Object.values(league.teams)) {
@@ -648,7 +650,6 @@ export function nhlOffseason(league: NhlLeague, rng: () => number, userTeam?: st
   }
   league.freeAgents = league.freeAgents.sort((a, b) => b.ovr - a.ovr).slice(0, 30);
   for (const fa of league.freeAgents) { fa.age += 1; if (fa.age >= 32) fa.ovr = Math.max(63, fa.ovr - 1); if (league.ratingModelVersion === NHL_RATING_MODEL_VERSION) fa.salary = nhlSalaryFor(fa.ovr, league.ratingModelVersion); }
-  const noUserClub = opts?.noUserClub === true;
   if (noUserClub || (typeof userTeam === 'string' && Object.prototype.hasOwnProperty.call(league.teams, userTeam))) {
     let released = false;
     for (const t of Object.values(league.teams)) {
