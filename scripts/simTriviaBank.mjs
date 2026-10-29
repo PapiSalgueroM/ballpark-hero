@@ -51,6 +51,28 @@ import './lib/seedRandom.mjs';
    of 500 under the old rules, 0 under the new). Section 6b finds 50 names whose saved rows put two
    men in one season, every one listed.
 
+   ROUND 1573: every ladder is fifteen long. A step of generateQuestionLadder throws back a question whose
+   text the ladder already holds, and it gave up after eight draws, so a ladder could come back 14 long: the
+   error card in Unlimited, and on the daily a page nobody could play for that ET date (the boot errors before
+   it keeps the pool). Every worth the most question reads the same and the position and Ballon d'Or questions
+   have few texts, so the repeats pile up late in a climb. The cap is LADDER_ATTEMPTS (64) now. Section 9 deals
+   every fleet through the head and through the eight draw arm (the same bank with a cap of 8) with the same
+   seed or date, and holds checks (i) to (vi), written at the section.
+   MEASURED (runner r1573-s1, 2026-10-29, at da635feb5): the arm dropped a step on 31 of 1,000 Unlimited
+   ladders and 37 of 1,000 dailies of the two label planted pool, 3 of 1,000 and 2 of 500 of the degraded pool
+   (the Ballon d'Or and shirt number reads failed, which the page survives), none of 500 and 500 on the real
+   fixture, and the driver pool on 2035-10-26; every one of them held a worth the most question before the
+   drop. The head dropped none, and every ladder the arm dealt whole the head dealt JSON identical. Sections 1
+   to 8 print the same numbers as on the base 692590145 (r1573-s0). The (vi) floor of 10 on each planted fleet
+   sits under a third of the 31 and 37 measured. Big fleet: see KNOWN_SHORT at section 9.
+   Knobs: TRIVIA_ARM_FILE=<path> makes the arm that file as it is, the tie to origin/main's own bank (git show
+     origin/main:src/lib/triviaQuestionBank.ts > base-bank.ts). Its imports resolve to this tree, so the tie
+     holds while src/data/marketNamesakes.json and src/lib/clearWinner.ts, dateUtils.ts and dealPlayers.ts
+     equal main's.
+   TRIVIA_BIG=unlimited:<from>-<to> or daily:<fromOffset>-<toOffset> deals that range of the real pool through
+     head and arm only (sections 2 to 9 skipped), prints every ladder the arm drops a step on, and ends
+     "simTriviaBank big fleet: N ladders, arm short A, head short H, identical I".
+
    Run: node scripts/simTriviaBank.mjs
    Negative controls (each edits a copy of the bank, refuses to run if its target string is not
    there, and must turn its own section red):
@@ -61,6 +83,12 @@ import './lib/seedRandom.mjs';
      TRIVIA_CONTROL=family    a reserve side and its first team are offered together  (section 8)
      TRIVIA_CONTROL=legacy    dates before ONE_ANSWER_FROM get the new rules          (section 4)
      TRIVIA_CONTROL=rulec     a copy of scripts/genMarketNamesakes.mjs loses rule C   (sections 6 and 6b)
+     TRIVIA_CONTROL=short     a step gives up after eight draws again                 (section 9, check i)
+     TRIVIA_CONTROL=redeal    a step draws from five types, every ladder dealt anew   (sections 4 and 9, ii and iii)
+     TRIVIA_CONTROL=dupe      a step keeps a question the ladder already holds        (sections 4 and 9, iv and ii)
+   Under the first seven the arm is the controlled bank with a cap of 8, so section 9 adds only its (v) lines
+   (4 each for ties, namesake, tense and postense, 3 for family, none for legacy and rulec), plus a
+   "KNOWN_SHORT stale" line wherever the control edits the bank.
    Re-measure the legacy hashes from any copy of the bank (the base of this round was c75d04dad):
      TRIVIA_BANK_FILE=<path> node scripts/simTriviaBank.mjs --print-legacy
 */
@@ -549,9 +577,15 @@ if (plantedTally.built < CALLS) fail(`the new rules built ${plantedTally.built} 
    after section 3, whose unlimited fleet does */
 /* every ladder the eight draw arm is known to drop a step on outside the default fleets, as [pool, fleet, seed or
    date, the step it drops], measured on the pin signature below (a pin on any other signature is stale) */
-const KNOWN_SHORT = { signature: '', measured: '', pins: [] };
-/* (vi) the planted fleets must show the defect on the arm: floor from the measured counts, see the header */
-const PLANTED_FLOOR = 5;
+const KNOWN_SHORT = {
+  signature: 'a49cdf0d3c20de20',
+  measured: '2026-10-29, runner r1573-s1 at da635feb5 (the driver date, inside the default driver fleet too)',
+  pins: [
+    ['driver', 'daily', '2035-10-26', 15],
+  ],
+};
+/* (vi) the planted fleets must show the defect on the arm: 31 and 37 of 1,000 measured, see the header */
+const PLANTED_FLOOR = 10;
 section('9. every ladder is fifteen long: each fleet through the head and through the eight draw arm, same seed or date');
 const arm = await buildArm();
 if (arm.error) fail(`section 9 cannot run: ${arm.error}`);
