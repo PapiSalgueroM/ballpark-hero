@@ -482,7 +482,9 @@ async function child() {
   /* Round 1566: the season's lines are saved in the shared short shape (src/lib/foStatsCodec.ts), so a save is hashed
      with its league's block read as the named rows it stands for (the one expand, its club columns aside) and the
      lines in key order: the season, not the save shape. On a tree from before the round the block already is named
-     rows and only the order applies; section 1's fixture was recorded that way from 5d1198389, the commit before it. */
+     rows and only the order applies. Section 1's fixture (7a8750ba's) still holds as it was: recorded again this way
+     from 5d1198389, the commit before the round (runner r1566-s4b), it came back with every hash and draw count the
+     same, since each play ends at the next season's hub on a fresh empty block, which reads the same in both shapes. */
   const shapeFree = v => {
     if (!v || typeof v !== 'object' || !v.league || !v.league.stats) return v;
     let rows = v.league.stats;

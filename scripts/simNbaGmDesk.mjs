@@ -474,7 +474,8 @@ function mulberry32(seed) {
 /* Round 1566: the season's lines are saved in the shared short shape (src/lib/foStatsCodec.ts), so the hash reads a
    block as the named rows it stands for (the one expand, its club columns aside) with the lines in key order, and holds
    the season, not the save shape. On a tree from before the round the block already is named rows and only the order
-   applies; the fixture was recorded that way on 5d1198389, the commit before the round. */
+   applies. The fixture (8f27082f's) still holds as it was: recorded again this way from 5d1198389, the commit before
+   the round (runner r1566-s4b), it came back with every hash the same. */
 const shapeFree = lg => {
   if (!lg || !lg.stats) return lg;
   let rows = lg.stats;
