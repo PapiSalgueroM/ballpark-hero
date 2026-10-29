@@ -12,7 +12,7 @@ vi.mock('@/integrations/supabase/client', () => ({
 const addedIds = [
   'pos-full-back', 'pos-winger', 'value-30m-under-50m', 'value-50m-under-100m',
   'born-2000-to-2003', 'born-1997-to-1999', 'season-goals-assists-10', 'season-contributions-30',
-  'season-matches-50', 'season-goals-10-under-30-matches',
+  'season-matches-50',
   'season-matches-40-no-red', 'season-yellows-10-red',
 ];
 const oldIds = [
@@ -134,10 +134,10 @@ describe('Player Bingo categories', () => {
     expect([GRID, BOARD_SIZE, FREE_INDEX, MIN_TILE_SUPPORT, GUARANTEE_WINDOW]).toEqual([5, 24, 12, 8, 60]);
   });
 
-  it('adds exactly 12 distinct fixed categories without replacing an old ID', () => {
+  it('adds exactly 11 distinct fixed categories without replacing an old ID', () => {
     const criteria = buildCriteria(emptyData());
-    expect(addedIds.filter(id => !criteria.some(c => c.id === id)), 'all twelve new category IDs must exist').toEqual([]);
-    expect(criteria).toHaveLength(64);
+    expect(addedIds.filter(id => !criteria.some(c => c.id === id)), 'all eleven new category IDs must exist').toEqual([]);
+    expect(criteria).toHaveLength(63);
     expect(new Set(criteria.map(c => c.id)).size).toBe(criteria.length);
   });
 
@@ -189,16 +189,12 @@ describe('Player Bingo categories', () => {
     expect(accepts(combined, [season(), season({ goals: 29, assists: null })])).toBe(false);
   });
 
-  it('checks appearance and scoring efficiency boundaries on a single known season', () => {
+  it('checks appearance boundaries on a single known season', () => {
     expect(accepts('season-matches-50', [season({ matches: 50 })])).toBe(true);
     expect(accepts('season-matches-50', [season({ matches: 49 }), season({ matches: null })])).toBe(false);
-    const id = 'season-goals-10-under-30-matches';
-    expect(accepts(id, [season({ goals: 10, matches: 29 })])).toBe(true);
-    for (const row of [season({ goals: 9, matches: 29 }), season({ goals: 10, matches: 30 }),
-      season({ goals: 10, matches: 0 }), season({ goals: 10 }), season({ matches: 29 })]) {
-      expect(accepts(id, [row])).toBe(false);
-    }
-    expect(accepts(id, [season({ goals: 10 }), season({ matches: 29 })])).toBe(false);
+    /* Release BS fix BS-mix-2: the "10+ goals in under 30 season matches" tile is gone. Its rows are
+       calendar year club totals with youth and reserve games in them, so the data cannot back it. */
+    expect(buildCriteria(emptyData()).some(c => c.id === 'season-goals-10-under-30-matches')).toBe(false);
   });
 
   it('requires known discipline and matches in the same season instead of treating null as zero', () => {
@@ -219,7 +215,7 @@ describe('Player Bingo categories', () => {
       ['season-goals-assists-10', 'season-contributions-30'],
       ['season-matches-40', 'season-matches-50', 'season-matches-40-no-red'],
       ['season-red-card', 'season-yellows-10', 'season-yellows-10-red'],
-      ['season-goals-20', 'season-goals-25', 'season-goals-10-under-30-matches'],
+      ['season-goals-20', 'season-goals-25'],
       ['value-50m', 'value-100m', 'value-50m-under-100m'],
     ]) {
       const groups = ids.map(id => criterion(id).group);

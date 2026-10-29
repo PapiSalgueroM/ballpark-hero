@@ -1097,11 +1097,6 @@ export function buildCriteria(data: BingoData): BingoCriterion[] {
       test: (p, d) => anySeasonMatches(d, p, s => (s.matches ?? 0) >= 50),
     },
     {
-      id: 'season-goals-10-under-30-matches', kind: 'season-stat', group: 'season-goals',
-      label: '10+ goals in under 30 season matches', icon: '🥅',
-      test: (p, d) => anySeasonMatches(d, p, s => (s.goals ?? 0) >= 10 && s.matches != null && s.matches > 0 && s.matches < 30),
-    },
-    {
       id: 'season-matches-40-no-red', kind: 'season-stat', group: 'season-matches',
       label: '40+ matches, no reds in a season', icon: '📅',
       test: (p, d) => anySeasonMatches(d, p, s => (s.matches ?? 0) >= 40 && s.redCards === 0),

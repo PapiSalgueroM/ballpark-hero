@@ -2,6 +2,8 @@
 
 Twelve criteria from already-loaded metadata expand fixed categories from52 to64. They cover full-backs, wingers, middle age/value bands, combined attacking seasons, appearances, scoring in fewer appearances and discipline combinations. A tile still needs eight supported pool players. No new player records, achievement lists, tables or external facts are imported.
 
+Release BS fix, 2026-10-29: the "10+ goals in under 30 season matches" tile was removed before release (its rows are calendar year club totals that include youth and reserve games, so the data cannot back it), leaving eleven new criteria and 63 categories, and every age tile now bands on birth year (Born 2004 or later, Born 2000 to 2003, Born 1997 to 1999, Born 1996 or earlier) because the table age is the age on 1 January and goes stale.
+
 Existing IDs, predicates, quotas, scoring and deck rules are preserved. Related alternatives share exclusion groups. Category labels now wrap within narrow tiles; restoring the original classes reproduces the three320px overflow defects.
 
 Qualified source78ca56a59a2bc1c2d765db4bf1355a07d7647290/run40447951445 passed app types, all10 category cases,18 effective source faults, immutable-original/red and restored controls, existing Bingo controls,68Bingo cases, SEO build,15readers and15unchanged route caps. The actual offline page passed42boards at320/390/1280, all12 additions at each width, real valid placements, hidden-label controls and whole-original-class overflow/restoration. Five selected positive/control images were viewed across main and independent peer.

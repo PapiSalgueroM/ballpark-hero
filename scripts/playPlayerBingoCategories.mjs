@@ -29,7 +29,6 @@ const added = new Map([
   ['10+ goals and 10+ assists in a season', p => p.goals >= 10 && p.assists >= 10],
   ['30+ goals + assists in a season', p => (p.goals ?? 0) + (p.assists ?? 0) >= 30],
   ['50+ matches in a season', p => p.matches >= 50],
-  ['10+ goals in under 30 season matches', p => p.goals >= 10 && p.matches > 0 && p.matches < 30],
   ['40+ matches, no reds in a season', p => p.matches >= 40 && p.red_cards === 0],
   ['10+ yellows and a red in a season', p => p.yellow_cards >= 10 && p.red_cards >= 1],
 ]);
@@ -218,7 +217,7 @@ try {
         await page.evaluate(next => window.__bingoSeed(next), seed + 1);
         await page.getByRole('button', { name: 'Try a new board', exact: true }).click();
       }
-      assert.deepEqual([...added.keys()].filter(label => !seen.has(label)), [], 'All twelve additions appear on actual generated boards');
+      assert.deepEqual([...added.keys()].filter(label => !seen.has(label)), [], 'All eleven additions appear on actual generated boards');
       assert.deepEqual(row.errors, [], 'No browser page errors');
       assert.ok(row.requests.some(q => q.table === 'player_market_values' && q.select === 'player_name' && q.rows === 500), 'The real loader starts with all 500 fictional names');
       row.status = 'passed'; save();

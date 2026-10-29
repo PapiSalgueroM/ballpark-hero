@@ -17,12 +17,12 @@ const sourceFile = 'src/lib/playerBingo.ts';
 const testFile = 'src/test/playerBingoCategories.test.ts';
 const titles = [
   'preserves all 52 original fixed IDs and the board and support rules',
-  'adds exactly 12 distinct fixed categories without replacing an old ID',
+  'adds exactly 11 distinct fixed categories without replacing an old ID',
   'accepts both sides of full-back and winger while refusing other positions',
   'keeps middle value bands disjoint at every boundary and rejects unknown values',
   'fills the two middle age bands without borrowing younger or older players',
   'requires attacking combinations in one season and does not invent missing contributions',
-  'checks appearance and scoring efficiency boundaries on a single known season',
+  'checks appearance boundaries on a single known season',
   'requires known discipline and matches in the same season instead of treating null as zero',
   'groups related attacking appearance discipline and high-value alternatives',
   'deals supported varied boards with a distinct-player winning line in the first 60 reveals',
@@ -34,7 +34,7 @@ const held = await Promise.all(files.map(async file => [file, await readFile(pat
 const hash = bytes => createHash('sha256').update(bytes).digest('hex').toUpperCase();
 const receipts = () => held.map(([file, bytes]) => ({ file, bytes: bytes.length, sha256: hash(bytes) }));
 const source = held[0][1].toString('utf8').replaceAll('\r\n', '\n');
-assert.equal(hash(held[1][1]), 'B25AFA96604DA343B36D407C99390DBC0F3493ABD5C4BAE02C990B76CBE5D14B', 'Frozen test-first suite'); // Release BS fix BS-mix-1: birth year bands
+assert.equal(hash(held[1][1]), '3F49823739827F72E790CF642FD4EE0E75A9181DC1B88F056988D9BCFB0D7AD5', 'Frozen test-first suite'); // Release BS fix BS-mix-1 and BS-mix-2
 const originalHash = 'B446D6FEBC197D9210A01624BD41F71A31CD65EFAD5FF566FDF64DB0EBF792AC';
 const out = path.resolve(process.env.PLAYER_BINGO_CATEGORIES_OUT || path.join(root, '.sim-artifacts/player-bingo-categories'));
 assert.ok(out.startsWith(root + path.sep));
@@ -136,7 +136,6 @@ try {
       ['double10', 'test: (p, d) => anySeasonMatches(d, p, s => (s.goals ?? 0) >= 10 && (s.assists ?? 0) >= 10),', titles[5]],
       ['contributions30', 'test: (p, d) => anySeasonMatches(d, p, s => (s.goals ?? 0) + (s.assists ?? 0) >= 30),', titles[5]],
       ['matches50', 'test: (p, d) => anySeasonMatches(d, p, s => (s.matches ?? 0) >= 50),', titles[6]],
-      ['goals10under30', 'test: (p, d) => anySeasonMatches(d, p, s => (s.goals ?? 0) >= 10 && s.matches != null && s.matches > 0 && s.matches < 30),', titles[6]],
       ['matches40nored', 'test: (p, d) => anySeasonMatches(d, p, s => (s.matches ?? 0) >= 40 && s.redCards === 0),', titles[7]],
       ['yellows10red', 'test: (p, d) => anySeasonMatches(d, p, s => (s.yellowCards ?? 0) >= 10 && (s.redCards ?? 0) >= 1),', titles[7]],
     ];
