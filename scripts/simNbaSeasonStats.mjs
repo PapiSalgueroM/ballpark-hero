@@ -930,15 +930,22 @@ console.log('9) One save shape: the NBA keeps the shared short lines, reads them
       const old = { stats: clone(B.stats) };
       const did = st.nbaCleanStats(old);
       pairs += 1;
-      const same = norm(JSON.stringify(old.stats), epochOf(B)) === norm(JSON.stringify(H.stats), epochOf(H));
-      const canon = s => JSON.stringify({ ...s, lines: Object.fromEntries(Object.entries(s.lines).sort(([a], [b]) => (a < b ? -1 : a > b ? 1 : 0))) });
-      /* the rows the block stands for: the expand without its club columns, which named rows never had */
-      const rowsOf = s => { const { club, ...rows } = st.nbaFoStats(s); void club; return rows; };
-      const lossless = norm(canon(rowsOf(old.stats)), epochOf(B)) === norm(canon(B.stats), epochOf(B));
-      const reads = L => JSON.stringify([st.nbaLeaders(L), Object.keys(L.teams).map(t => st.nbaTeamLines(L, t)), st.nbaSeasonAwards(L)]);
-      const baseReads = L => JSON.stringify([BASE_E.st.nbaLeaders(L), Object.keys(L.teams).map(t => BASE_E.st.nbaTeamLines(L, t)), BASE_E.st.nbaSeasonAwards(L)]);
-      const sameReads = norm(reads({ ...B, stats: old.stats }), epochOf(B)) === norm(baseReads(B), epochOf(B));
-      if (did !== 'converted' || !same || !lossless || !sameReads) baseBad.push(`seed ${seed}: ${did}, bytes ${same}, lossless ${lossless}, reads ${sameReads}`);
+      /* a block the conversion dropped (or anything it left that is not a block) is a failed pair, reported here, not
+         a throw further down that hides the section summaries (review 1566, run lens, finding 3) */
+      if (!old.stats || typeof old.stats !== 'object') { baseBad.push(`seed ${seed}: ${did}, the old block was not kept (${JSON.stringify(old.stats) ?? 'undefined'})`); continue; }
+      try {
+        const same = norm(JSON.stringify(old.stats), epochOf(B)) === norm(JSON.stringify(H.stats), epochOf(H));
+        const canon = s => JSON.stringify({ ...s, lines: Object.fromEntries(Object.entries(s.lines).sort(([a], [b]) => (a < b ? -1 : a > b ? 1 : 0))) });
+        /* the rows the block stands for: the expand without its club columns, which named rows never had */
+        const rowsOf = s => { const { club, ...rows } = st.nbaFoStats(s); void club; return rows; };
+        const lossless = norm(canon(rowsOf(old.stats)), epochOf(B)) === norm(canon(B.stats), epochOf(B));
+        const reads = L => JSON.stringify([st.nbaLeaders(L), Object.keys(L.teams).map(t => st.nbaTeamLines(L, t)), st.nbaSeasonAwards(L)]);
+        const baseReads = L => JSON.stringify([BASE_E.st.nbaLeaders(L), Object.keys(L.teams).map(t => BASE_E.st.nbaTeamLines(L, t)), BASE_E.st.nbaSeasonAwards(L)]);
+        const sameReads = norm(reads({ ...B, stats: old.stats }), epochOf(B)) === norm(baseReads(B), epochOf(B));
+        if (did !== 'converted' || !same || !lossless || !sameReads) baseBad.push(`seed ${seed}: ${did}, bytes ${same}, lossless ${lossless}, reads ${sameReads}`);
+      } catch (e) {
+        baseBad.push(`seed ${seed}: ${did}, the comparison threw: ${e.message}`);
+      }
     }
     ok(9, `the base engine's old block (${pairs} seeded seasons) converts to exactly the block the head writes from the same games, loses nothing, and every reader says what the base said`, pairs === 3 && baseBad.length === 0, baseBad.join(' | '));
   } else {
