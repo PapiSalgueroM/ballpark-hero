@@ -1,0 +1,9 @@
+#!serve
+#!playwright
+#!serial
+# Release BS fix pass (BSF, results-g/fix-BSF.md): its two browser walks on the served head. walkSoccerCareerLayers.mjs: the Season Centre, trophy and training loading layers with their chunk held (Back to career, Tab kept inside, Escape, backdrop), the pundit bar with no dead Next Season, and Next Season above unanswered cookie choices at 320, 390 and 1280. walkCmShortlist.mjs: Buy rows no taller than before with a 44 px Save, Back from the shortlist keeping the list's place and focus, the board's Back on one line, at 320, 390 and 1280.
+# Expected: both exit 0 ("sclayers head: green", "cmwalk head: green at 320, 390 and 1280"); on da4f42889 both were red (fix-BSF.md).
+sclayers: TAG=head node .rc/x/walkSoccerCareerLayers.mjs
+cmwalk: TAG=head node .rc/x/walkCmShortlist.mjs
+# Closing check pass (results-g/fix2-BSF.md section 3, BS-mix-3): every reachable Player Bingo label whole at 320, 360, 375, 390 and 412 in Inter. Expected exit 0 "walkBingoWords head: green"; on 5c2b86344's PlayerBingo.tsx it was RED at 4 widths (runner bsf2-words, words-base).
+bingowords: node .rc/x/walkBingoWords.mjs dist head
