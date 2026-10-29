@@ -1,0 +1,5 @@
+#!serve
+#!playwright
+#!serial
+basebuild: git worktree add /tmp/base 14ec28b1c && ln -s "$PWD/node_modules" /tmp/base/node_modules && cd /tmp/base && git log --oneline -1 && npm run build > /tmp/basebuild.log 2>&1; s=$?; tail -3 /tmp/basebuild.log; ls /tmp/base/dist | head -3; echo "basebuild exit=$s"; exit $s
+walk: node .rc/x/walkVf.mjs

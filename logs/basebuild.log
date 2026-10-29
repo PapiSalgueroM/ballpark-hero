@@ -1,0 +1,10 @@
+Preparing worktree (detached HEAD 14ec28b1cb)
+HEAD is now at 14ec28b1cb test: adopt the qualified loan browser fixture and record complete source results
+14ec28b1cb test: adopt the qualified loan browser fixture and record complete source results
+- Adjust chunk size limit for this warning via build.chunkSizeWarningLimit.[39m
+[32m✓ built in 34.23s[39m
+[dukb] inlined 1 stylesheet(s) and 1 module(s) into 181 snapshots (11 left alone)
+16211a5a50cff8f3434e5db883a21d8f.txt
+_redirects
+about
+basebuild exit=0
