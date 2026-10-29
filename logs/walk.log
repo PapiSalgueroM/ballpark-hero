@@ -1,0 +1,112 @@
+  NOTE  P nba 390 reduce: retirement opener disabled at first sight false, enabled after 2 ms
+  PASS  P nba 390 reduce: retirement opener 358 by 46
+  PASS  P nba 390 reduce wall cold from retirement: the wall's top is in view (56 of 844)
+  PASS  P nba 390 reduce wall cold from retirement: no sideways scroll (390 on 390)
+  PASS  P nba 390 reduce: one tile on the wall ({"n":1,"overlap":0,"outside":0,"cut":[],"bottom":209,"first":"Review Walker 70"})
+  PASS  P nba 390 reduce: no "did not keep" line when the plaque is up
+  PASS  P nba 390 reduce: plaque has no sideways scroll
+  PASS  P nba 390 reduce: Back to retirement focuses the opener (retired)
+  PASS  P nba 390 reduce: New career says the card stays
+  PASS  P nba 390 reduce: create opener reads Hall wall (1)
+  PASS  P nba 390 reduce wall from create: the wall's top is in view (56 of 844)
+  PASS  P nba 390 reduce wall from create: no sideways scroll (390 on 390)
+  PASS  P nba 390 reduce: no "did not keep" line from create
+  PASS  P nba 390 reduce: the create opener is back after a reload
+  PASS  P nba 390 reduce: no page error 
+  NOTE  P nfl 390 reduce: retirement opener disabled at first sight false, enabled after 2 ms
+  PASS  P nfl 390 reduce: retirement opener 358 by 46
+  PASS  P nfl 390 reduce wall cold from retirement: the wall's top is in view (56 of 844)
+  PASS  P nfl 390 reduce wall cold from retirement: no sideways scroll (390 on 390)
+  PASS  P nfl 390 reduce: one tile on the wall ({"n":1,"overlap":0,"outside":0,"cut":[],"bottom":209,"first":"Review Walker 70"})
+  PASS  P nfl 390 reduce: no "did not keep" line when the plaque is up
+  PASS  P nfl 390 reduce: plaque has no sideways scroll
+  PASS  P nfl 390 reduce: Back to retirement focuses the opener (retired)
+  PASS  P nfl 390 reduce: New career says the card stays
+  PASS  P nfl 390 reduce: create opener reads Hall wall (1)
+  PASS  P nfl 390 reduce wall from create: the wall's top is in view (56 of 844)
+  PASS  P nfl 390 reduce wall from create: no sideways scroll (390 on 390)
+  PASS  P nfl 390 reduce: no "did not keep" line from create
+  PASS  P nfl 390 reduce: the create opener is back after a reload
+  PASS  P nfl 390 reduce: no page error 
+  NOTE  P mlb 390 reduce: retirement opener disabled at first sight false, enabled after 2 ms
+  PASS  P mlb 390 reduce: retirement opener 358 by 46
+  PASS  P mlb 390 reduce wall cold from retirement: the wall's top is in view (56 of 844)
+  PASS  P mlb 390 reduce wall cold from retirement: no sideways scroll (390 on 390)
+  PASS  P mlb 390 reduce: one tile on the wall ({"n":1,"overlap":0,"outside":0,"cut":[],"bottom":209,"first":"Review Walker 70"})
+  PASS  P mlb 390 reduce: no "did not keep" line when the plaque is up
+  PASS  P mlb 390 reduce: plaque has no sideways scroll
+  PASS  P mlb 390 reduce: Back to retirement focuses the opener (retired)
+  PASS  P mlb 390 reduce: New career says the card stays
+  PASS  P mlb 390 reduce: create opener reads Hall wall (1)
+  PASS  P mlb 390 reduce wall from create: the wall's top is in view (56 of 844)
+  PASS  P mlb 390 reduce wall from create: no sideways scroll (390 on 390)
+  PASS  P mlb 390 reduce: no "did not keep" line from create
+  PASS  P mlb 390 reduce: the create opener is back after a reload
+  PASS  P mlb 390 reduce: no page error 
+  NOTE  P nhl 390 reduce: retirement opener disabled at first sight false, enabled after 2 ms
+  PASS  P nhl 390 reduce: retirement opener 358 by 46
+  PASS  P nhl 390 reduce wall cold from retirement: the wall's top is in view (56 of 844)
+  PASS  P nhl 390 reduce wall cold from retirement: no sideways scroll (390 on 390)
+  PASS  P nhl 390 reduce: one tile on the wall ({"n":1,"overlap":0,"outside":0,"cut":[],"bottom":209,"first":"Review Walker 70"})
+  PASS  P nhl 390 reduce: no "did not keep" line when the plaque is up
+  PASS  P nhl 390 reduce: plaque has no sideways scroll
+  PASS  P nhl 390 reduce: Back to retirement focuses the opener (retired)
+  PASS  P nhl 390 reduce: New career says the card stays
+  PASS  P nhl 390 reduce: create opener reads Hall wall (1)
+  PASS  P nhl 390 reduce wall from create: the wall's top is in view (56 of 844)
+  PASS  P nhl 390 reduce wall from create: no sideways scroll (390 on 390)
+  PASS  P nhl 390 reduce: no "did not keep" line from create
+  PASS  P nhl 390 reduce: the create opener is back after a reload
+  PASS  P nhl 390 reduce: no page error 
+  NOTE  P nba 1280 no-preference: retirement opener disabled at first sight true, enabled after 627 ms
+  PASS  P nba 1280 no-preference: retirement opener 640 by 46
+  PASS  P nba 1280 no-preference wall cold from retirement: the wall's top is in view (56 of 900)
+  PASS  P nba 1280 no-preference wall cold from retirement: no sideways scroll (1280 on 1280)
+  PASS  P nba 1280 no-preference: one tile on the wall ({"n":1,"overlap":0,"outside":0,"cut":[],"bottom":177,"first":"Review Walker 70"})
+  PASS  P nba 1280 no-preference: no "did not keep" line when the plaque is up
+  PASS  P nba 1280 no-preference: plaque has no sideways scroll
+  PASS  P nba 1280 no-preference: Back to retirement focuses the opener (retired)
+  PASS  P nba 1280 no-preference: New career says the card stays
+  PASS  P nba 1280 no-preference: create opener reads Hall wall (1)
+  PASS  P nba 1280 no-preference wall from create: the wall's top is in view (56 of 900)
+  PASS  P nba 1280 no-preference wall from create: no sideways scroll (1280 on 1280)
+  PASS  P nba 1280 no-preference: no "did not keep" line from create
+  PASS  P nba 1280 no-preference: the create opener is back after a reload
+  PASS  P nba 1280 no-preference: no page error 
+  NOTE  P mlb 1280 no-preference: retirement opener disabled at first sight true, enabled after 641 ms
+  PASS  P mlb 1280 no-preference: retirement opener 640 by 46
+  PASS  P mlb 1280 no-preference wall cold from retirement: the wall's top is in view (56 of 900)
+  PASS  P mlb 1280 no-preference wall cold from retirement: no sideways scroll (1280 on 1280)
+  PASS  P mlb 1280 no-preference: one tile on the wall ({"n":1,"overlap":0,"outside":0,"cut":[],"bottom":177,"first":"Review Walker 70"})
+  PASS  P mlb 1280 no-preference: no "did not keep" line when the plaque is up
+  PASS  P mlb 1280 no-preference: plaque has no sideways scroll
+  PASS  P mlb 1280 no-preference: Back to retirement focuses the opener (retired)
+  PASS  P mlb 1280 no-preference: New career says the card stays
+  PASS  P mlb 1280 no-preference: create opener reads Hall wall (1)
+  PASS  P mlb 1280 no-preference wall from create: the wall's top is in view (56 of 900)
+  PASS  P mlb 1280 no-preference wall from create: no sideways scroll (1280 on 1280)
+  PASS  P mlb 1280 no-preference: no "did not keep" line from create
+  PASS  P mlb 1280 no-preference: the create opener is back after a reload
+  PASS  P mlb 1280 no-preference: no page error 
+  FAIL  F nfl 390 reduce: threw TimeoutError: locator.waitFor: Timeout 20000ms exceeded.
+  PASS  F nfl 390 reduce: no page error 
+  FAIL  F mlb 390 no-preference: threw TimeoutError: locator.waitFor: Timeout 20000ms exceeded.
+  PASS  F mlb 390 no-preference: no page error 
+  FAIL  F nhl 1280 no-preference: threw TimeoutError: locator.waitFor: Timeout 20000ms exceeded.
+  PASS  F nhl 1280 no-preference: no page error 
+  FAIL  F nba 320 reduce: threw TimeoutError: locator.waitFor: Timeout 20000ms exceeded.
+  PASS  F nba 320 reduce: no page error 
+  FAIL  F nba 390 reduce dark: threw TimeoutError: locator.waitFor: Timeout 20000ms exceeded.
+  PASS  F nba 390 reduce dark: no page error 
+  PASS  V nfl 390: New career says the card goes too
+  PASS  V nfl 390 wall: the wall's top is in view (56 of 844)
+  PASS  V nfl 390 wall: no sideways scroll (390 on 390)
+  PASS  V nfl 390: the newer version line
+  PASS  V nfl 390: the v2 wall is not written over
+  PASS  V nfl 390: no page error 
+  PASS  R nhl 390: New career says the card goes too
+  PASS  R nhl 390 wall: the wall's top is in view (56 of 844)
+  PASS  R nhl 390 wall: no sideways scroll (390 on 390)
+  PASS  R nhl 390: the did not keep line
+  PASS  R nhl 390: no page error 
+review walk: 100 PASS, 5 FAIL
