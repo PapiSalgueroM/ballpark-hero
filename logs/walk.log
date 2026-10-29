@@ -1,0 +1,29 @@
+ok   390-rm: the board shows the Arsenal row
+ok   390-rm: Artem Dzyuba (Arsenal Tula only) is not accepted for Arsenal x FWD (cell status empty)
+ok   390-rm: Bukayo Saka is accepted for Arsenal x FWD (cell status correct)
+ok   390-rm: no horizontal overflow (0px)
+ok   390-rm: no page errors 
+ok   390-motion: the board shows the Arsenal row
+ok   390-motion: Artem Dzyuba (Arsenal Tula only) is not accepted for Arsenal x FWD (cell status empty)
+ok   390-motion: Bukayo Saka is accepted for Arsenal x FWD (cell status correct)
+ok   390-motion: no horizontal overflow (0px)
+ok   390-motion: no page errors 
+ok   1280-rm: the board shows the Arsenal row
+ok   1280-rm: Artem Dzyuba (Arsenal Tula only) is not accepted for Arsenal x FWD (cell status empty)
+ok   1280-rm: Bukayo Saka is accepted for Arsenal x FWD (cell status correct)
+ok   1280-rm: no horizontal overflow (0px)
+ok   1280-rm: no page errors 
+ok   1280-motion: the board shows the Arsenal row
+ok   1280-motion: Artem Dzyuba (Arsenal Tula only) is not accepted for Arsenal x FWD (cell status empty)
+ok   1280-motion: Bukayo Saka is accepted for Arsenal x FWD (cell status correct)
+ok   1280-motion: no horizontal overflow (0px)
+ok   1280-motion: no page errors 
+  call: 390-rm Artem Dzyuba | Played for Arsenal | Forward (FWD) -> {"valid":false,"reason":"Artem Dzyuba does not satisfy \"Played for Arsenal\".","fullName":"Artem Dzyuba"}
+  call: 390-rm Bukayo Saka | Played for Arsenal | Forward (FWD) -> {"valid":true,"reason":"Verified from career records.","fullName":"Bukayo Saka"}
+  call: 390-motion Artem Dzyuba | Played for Arsenal | Forward (FWD) -> {"valid":false,"reason":"Artem Dzyuba does not satisfy \"Played for Arsenal\".","fullName":"Artem Dzyuba"}
+  call: 390-motion Bukayo Saka | Played for Arsenal | Forward (FWD) -> {"valid":true,"reason":"Verified from career records.","fullName":"Bukayo Saka"}
+  call: 1280-rm Artem Dzyuba | Played for Arsenal | Forward (FWD) -> {"valid":false,"reason":"Artem Dzyuba does not satisfy \"Played for Arsenal\".","fullName":"Artem Dzyuba"}
+  call: 1280-rm Bukayo Saka | Played for Arsenal | Forward (FWD) -> {"valid":true,"reason":"Verified from career records.","fullName":"Bukayo Saka"}
+  call: 1280-motion Artem Dzyuba | Played for Arsenal | Forward (FWD) -> {"valid":false,"reason":"Artem Dzyuba does not satisfy \"Played for Arsenal\".","fullName":"Artem Dzyuba"}
+  call: 1280-motion Bukayo Saka | Played for Arsenal | Forward (FWD) -> {"valid":true,"reason":"Verified from career records.","fullName":"Bukayo Saka"}
+walkGrid: green
