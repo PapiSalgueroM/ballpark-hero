@@ -1,0 +1,30 @@
+Round1424 historical presentation: proved main775 coaching Panel SHA9390fab969844b20ca4f7adbc097664191d3f5ea082090553f479305fe85d321, current engine and unchanged fixture. This replay gives no current-Panel visual parity credit.
+Historical installed aliases: [{"id":"react/jsx-dev-runtime","file":"/home/runner/work/ballpark-hero/ballpark-hero/node_modules/react/jsx-dev-runtime.js","sha256":"25a7dbfdb2ae574b67fcdd2aab811080b415edd1c8043ead46866a533e99320e"},{"id":"react/jsx-runtime","file":"/home/runner/work/ballpark-hero/ballpark-hero/node_modules/react/jsx-runtime.js","sha256":"28170e60f2ff0bc045bc7d175f5849e86f68dd02d76d7255369420718b30295a"},{"id":"react","file":"/home/runner/work/ballpark-hero/ballpark-hero/node_modules/react/index.js","sha256":"a216c390bf956cbb906c66d29fdb2e2ad6999464a5ca83e476533a6f25ad0ef3"},{"id":"lucide-react","file":"/home/runner/work/ballpark-hero/ballpark-hero/node_modules/lucide-react/dist/cjs/lucide-react.js","sha256":"9590413b4a39d32a36ea229b3a06a597a012702546e23f6b6cca998e8de411ea"}]
+A) the fixture is whole
+   recorded from 3b2ce23e47810f51b51d95bce94c65e675d1c08e (not main: src differs from f8a7e7618c2c4ed6f504d0e860d75c759916ce59)
+   nfl: 475 clicks, 24 seasons, 19 fixed saves, 928 screen steps; 16 wheel steps, 13 steps saved in an extension talk, 27 in free agency
+   nba: 521 clicks, 24 seasons, 19 fixed saves, 932 screen steps; 14 wheel steps, 13 steps saved in an extension talk, 20 in free agency
+   mlb: 455 clicks, 24 seasons, 19 fixed saves, 886 screen steps; 6 wheel steps, 5 steps saved in an extension talk, 13 in free agency
+   nhl: 421 clicks, 24 seasons, 19 fixed saves, 900 screen steps; 6 wheel steps, 11 steps saved in an extension talk, 6 in free agency
+B) the replay: every click, every save, every screen
+   Vitest exit 1, passed [], failed [nfl, nba, mlb, nhl]
+   nfl click path step 118 (after "curtain: Continue"): the markup differs under the same words ("Ryder Blaze · WRMinnesota Vikings2037 · age 33OVR 79$23.4M x")
+   nfl click path step 148 (after "hub: Play the 2039 season"): the screen reads "The 2039 seasonMinnesota Vikings · age 35 · WRLost in the Wild Card round83 rec, 1,196 yds, 8 TD📊 Playoffs: 1 game, 5 rec, 55 yds.💪 You he", fixture "The 2039 seasonMinnesota Vikings · age 35 · WRLost in the Wild Card round83 rec, 1,196 yds, 8 TD📊 Playoffs: 1 game, 5 rec, 55 yds.🪞 Jonah "
+   nfl click path step 150 (after "rival beat: Continue"): the markup differs under the same words ("Ryder Blaze · WRMinnesota Vikings2040 · age 36OVR 71$18.3M x")
+   nba click path step 20 (after "hub: Play the 2026 season"): the markup differs under the same words ("The 2026 seasonGolden State Warriors · age 21 · SGLost in th")
+   nba click path step 22 (after "rival beat: Continue"): the markup differs under the same words ("Trey Buckets · SGGolden State Warriors2027 · age 22OVR 75$2.")
+   nba click path step 42 (after "rival outcome: Continue"): the markup differs under the same words ("Trey Buckets · SGGolden State Warriors2029 · age 24OVR 80$2.")
+   mlb click path step 17 (after "rival beat: Continue"): the markup differs under the same words ("Ace Diamond · CFCincinnati Reds2028 · age 23OVR 72$0.8M x4⭐ ")
+   mlb click path step 29 (after "curtain: Continue"): the markup differs under the same words ("Ace Diamond · CFCincinnati Reds2029 · age 24OVR 73$0.8M x3⭐ ")
+   mlb click path step 38 (after "curtain: Continue"): the markup differs under the same words ("Ace Diamond · CFCincinnati Reds2030 · age 25OVR 75$0.8M x2⭐ ")
+   nhl click path step 24 (after "rival beat: Continue"): the markup differs under the same words ("Gordie Blaze · DCarolina Hurricanes2029 · age 22OVR 74$0.9M ")
+   nhl click path step 34 (after "curtain: Continue"): the markup differs under the same words ("Gordie Blaze · DTampa Bay Lightning2030 · age 23OVR 75$5.1M ")
+   nhl click path step 61 (after "hub: Play the 2034 season"): the screen reads "The 2034 seasonMontreal Canadiens · age 27 · DLost in Round 116 G, 57 A, 73 P📊 Playoffs: 6 games, 2G 6A 8P.💪 You held up your end in the p", fixture "The 2034 seasonMontreal Canadiens · age 27 · DLost in Round 116 G, 57 A, 73 P📊 Playoffs: 6 games, 2G 6A 8P.⭐ All-Star.🪞 Jonah Whitaker wen"
+  FAIL: the replay exited 1
+  FAIL: the replay passed [], not all four sports
+  FAIL: 175 steps differ from the fixture
+
+  If your round meant to change what a US career does, re-record from your tree
+  (node scripts/recordUsBoardFixture.mjs), commit the fixture with the change and say so in the
+  commit. If it did not, the red is a real change: read the first differing step above.
+simUsBoardParity: 3 failures
