@@ -1,0 +1,10 @@
+ok   head E 320 the cookie choices are up (control) {"banner":1}
+ok   head E 320 Next Season shows above the unanswered cookie choices {"found":true,"y":197,"onTop":true,"inView":true}
+ok   head E 320 no page errors []
+ok   head E 390 the cookie choices are up (control) {"banner":1}
+ok   head E 390 Next Season shows above the unanswered cookie choices {"found":true,"y":545,"onTop":true,"inView":true}
+ok   head E 390 no page errors []
+ok   head E 1280 the cookie choices are up (control) {"banner":1}
+ok   head E 1280 Next Season shows above the unanswered cookie choices {"found":true,"y":569,"onTop":true,"inView":true}
+ok   head E 1280 no page errors []
+sclayers head: green

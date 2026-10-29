@@ -1,0 +1,10 @@
+ok   base E 320 the cookie choices are up (control) {"banner":1}
+FAIL base E 320 Next Season shows above the unanswered cookie choices {"found":true,"y":502,"onTop":false,"inView":true}
+ok   base E 320 no page errors []
+ok   base E 390 the cookie choices are up (control) {"banner":1}
+FAIL base E 390 Next Season shows above the unanswered cookie choices {"found":true,"y":778,"onTop":false,"inView":true}
+ok   base E 390 no page errors []
+ok   base E 1280 the cookie choices are up (control) {"banner":1}
+FAIL base E 1280 Next Season shows above the unanswered cookie choices {"found":true,"y":734,"onTop":false,"inView":true}
+ok   base E 1280 no page errors []
+sclayers base: RED, 3 failure(s)
