@@ -1,0 +1,172 @@
+
+[1m[46m RUN [49m[22m [36mv3.2.7 [39m[90m/tmp/b3[39m
+
+Browserslist: browsers data (caniuse-lite) is 16 months old. Please run:
+  npx update-browserslist-db@latest
+  Why you should do it regularly: https://github.com/browserslist/update-db#readme
+ [31m❯[39m src/test/usCareerReports1569.test.tsx [2m([22m[2m52 tests[22m[2m | [22m[31m4 failed[39m[2m)[22m[33m 17635[2mms[22m[39m
+   [33m[2m✓[22m[39m Round 1569 report A: Start over from every screen[2m > [22m'NFL' starts over from the hub of a two season career [33m 725[2mms[22m[39m
+   [33m[2m✓[22m[39m Round 1569 report A: Start over from every screen[2m > [22m'NBA' starts over from the hub of a two season career [33m 415[2mms[22m[39m
+   [33m[2m✓[22m[39m Round 1569 report A: Start over from every screen[2m > [22m'MLB' starts over from the hub of a two season career [33m 404[2mms[22m[39m
+   [33m[2m✓[22m[39m Round 1569 report A: Start over from every screen[2m > [22m'NHL' starts over from the hub of a two season career [33m 487[2mms[22m[39m
+   [33m[2m✓[22m[39m Round 1569 report A: Start over from every screen[2m > [22m'NFL' starts over from the free agency window [33m 530[2mms[22m[39m
+   [33m[2m✓[22m[39m Round 1569 report A: Start over from every screen[2m > [22m'NBA' starts over from the free agency window [33m 442[2mms[22m[39m
+   [33m[2m✓[22m[39m Round 1569 report A: Start over from every screen[2m > [22m'MLB' starts over from the free agency window [33m 545[2mms[22m[39m
+   [33m[2m✓[22m[39m Round 1569 report A: Start over from every screen[2m > [22m'NHL' starts over from the free agency window [33m 558[2mms[22m[39m
+   [33m[2m✓[22m[39m Round 1569 report A: Start over from every screen[2m > [22m'NFL' starts over from the extension talk [33m 412[2mms[22m[39m
+   [33m[2m✓[22m[39m Round 1569 report A: Start over from every screen[2m > [22m'NBA' starts over from the extension talk [33m 363[2mms[22m[39m
+   [33m[2m✓[22m[39m Round 1569 report A: Start over from every screen[2m > [22m'MLB' starts over from the extension talk [33m 430[2mms[22m[39m
+   [33m[2m✓[22m[39m Round 1569 report A: Start over from every screen[2m > [22m'NHL' starts over from the extension talk [33m 452[2mms[22m[39m
+   [33m[2m✓[22m[39m Round 1569 report A: Start over from every screen[2m > [22m'NFL' starts over from the retired card and from the coaching career [33m 392[2mms[22m[39m
+   [33m[2m✓[22m[39m Round 1569 report A: Start over from every screen[2m > [22m'NBA' starts over from the retired card and from the coaching career [33m 396[2mms[22m[39m
+   [33m[2m✓[22m[39m Round 1569 report A: Start over from every screen[2m > [22m'MLB' starts over from the retired card and from the coaching career [33m 317[2mms[22m[39m
+   [33m[2m✓[22m[39m Round 1569 report A: Start over from every screen[2m > [22m'NHL' starts over from the retired card and from the coaching career [33m 412[2mms[22m[39m
+   [33m[2m✓[22m[39m Round 1569 report A: Start over from every screen[2m > [22m'NFL' starts over from the road to the draft [33m 318[2mms[22m[39m
+   [32m✓[39m Round 1569 report A: Start over from every screen[2m > [22m'NBA' starts over from the road to the draft[32m 260[2mms[22m[39m
+   [33m[2m✓[22m[39m Round 1569 report A: Start over from every screen[2m > [22m'MLB' starts over from the road to the draft [33m 475[2mms[22m[39m
+   [33m[2m✓[22m[39m Round 1569 report A: Start over from every screen[2m > [22m'NHL' starts over from the road to the draft [33m 364[2mms[22m[39m
+[31m   [31m×[31m Round 1569 ruling R3: a restart says the Hall card goes too[2m > [22m'NFL' names the Hall card on every restart prompt of a retired career and not on a live one[39m[32m 105[2mms[22m[39m
+[31m     → [2mexpect([22m[31melement[31m[2m).toHaveAccessibleDescription()[22m
+
+Expected element to have accessible description:
+[32m  This deletes your saved NFL player and coaching career on this device. The Hall of Fame card goes too. You cannot undo this.[31m
+Received:
+[31m  This deletes your saved NFL player and coaching career on this device. You cannot undo this.[31m[39m
+[31m   [31m×[31m Round 1569 ruling R3: a restart says the Hall card goes too[2m > [22m'NBA' names the Hall card on every restart prompt of a retired career and not on a live one[39m[32m 92[2mms[22m[39m
+[31m     → [2mexpect([22m[31melement[31m[2m).toHaveAccessibleDescription()[22m
+
+Expected element to have accessible description:
+[32m  This deletes your saved NBA player and coaching career on this device. The Hall of Fame card goes too. You cannot undo this.[31m
+Received:
+[31m  This deletes your saved NBA player and coaching career on this device. You cannot undo this.[31m[39m
+[31m   [31m×[31m Round 1569 ruling R3: a restart says the Hall card goes too[2m > [22m'MLB' names the Hall card on every restart prompt of a retired career and not on a live one[39m[32m 71[2mms[22m[39m
+[31m     → [2mexpect([22m[31melement[31m[2m).toHaveAccessibleDescription()[22m
+
+Expected element to have accessible description:
+[32m  This deletes your saved MLB player and coaching career on this device. The Hall of Fame card goes too. You cannot undo this.[31m
+Received:
+[31m  This deletes your saved MLB player and coaching career on this device. You cannot undo this.[31m[39m
+[31m   [31m×[31m Round 1569 ruling R3: a restart says the Hall card goes too[2m > [22m'NHL' names the Hall card on every restart prompt of a retired career and not on a live one[39m[32m 108[2mms[22m[39m
+[31m     → [2mexpect([22m[31melement[31m[2m).toHaveAccessibleDescription()[22m
+
+Expected element to have accessible description:
+[32m  This deletes your saved NHL player and coaching career on this device. The Hall of Fame card goes too. You cannot undo this.[31m
+Received:
+[31m  This deletes your saved NHL player and coaching career on this device. You cannot undo this.[31m[39m
+   [33m[2m✓[22m[39m Round 1569 report B: no offer is never a dead end[2m > [22m'NFL': a no offer talk in the last season says why, says it is the last, and retires in full [33m 383[2mms[22m[39m
+   [32m✓[39m Round 1569 report B: no offer is never a dead end[2m > [22m'NBA': a no offer talk in the last season says why, says it is the last, and retires in full[32m 270[2mms[22m[39m
+   [33m[2m✓[22m[39m Round 1569 report B: no offer is never a dead end[2m > [22m'MLB': a no offer talk in the last season says why, says it is the last, and retires in full [33m 315[2mms[22m[39m
+   [33m[2m✓[22m[39m Round 1569 report B: no offer is never a dead end[2m > [22m'NHL': a no offer talk in the last season says why, says it is the last, and retires in full [33m 358[2mms[22m[39m
+   [32m✓[39m Round 1569 report B: no offer is never a dead end[2m > [22m'NFL': a talk before the season that reaches the season cap says it is the last (report B, "20 szn")[32m 174[2mms[22m[39m
+   [32m✓[39m Round 1569 report B: no offer is never a dead end[2m > [22m'NBA': a talk before the season that reaches the season cap says it is the last (report B, "20 szn")[32m 290[2mms[22m[39m
+   [32m✓[39m Round 1569 report B: no offer is never a dead end[2m > [22m'MLB': a talk before the season that reaches the season cap says it is the last (report B, "20 szn")[32m 284[2mms[22m[39m
+   [32m✓[39m Round 1569 report B: no offer is never a dead end[2m > [22m'NHL': a talk before the season that reaches the season cap says it is the last (report B, "20 szn")[32m 287[2mms[22m[39m
+   [32m✓[39m Round 1569 report B: no offer is never a dead end[2m > [22m'NFL': one season short of the cap is not called the last[32m 173[2mms[22m[39m
+   [32m✓[39m Round 1569 report B: no offer is never a dead end[2m > [22m'NBA': one season short of the cap is not called the last[32m 292[2mms[22m[39m
+   [32m✓[39m Round 1569 report B: no offer is never a dead end[2m > [22m'MLB': one season short of the cap is not called the last[32m 293[2mms[22m[39m
+   [32m✓[39m Round 1569 report B: no offer is never a dead end[2m > [22m'NHL': one season short of the cap is not called the last[32m 286[2mms[22m[39m
+   [32m✓[39m Round 1569 report B: no offer is never a dead end[2m > [22m'NFL': a pulled offer is not explained as no offer, and a pulled last season promises no market[32m 157[2mms[22m[39m
+   [32m✓[39m Round 1569 report B: no offer is never a dead end[2m > [22m'NBA': a pulled offer is not explained as no offer, and a pulled last season promises no market[32m 132[2mms[22m[39m
+   [32m✓[39m Round 1569 report B: no offer is never a dead end[2m > [22m'MLB': a pulled offer is not explained as no offer, and a pulled last season promises no market[32m 125[2mms[22m[39m
+   [32m✓[39m Round 1569 report B: no offer is never a dead end[2m > [22m'NHL': a pulled offer is not explained as no offer, and a pulled last season promises no market[32m 121[2mms[22m[39m
+   [32m✓[39m Round 1569 report B: no offer is never a dead end[2m > [22m'NFL': an offer in the last season promises no free agency either[32m 216[2mms[22m[39m
+   [32m✓[39m Round 1569 report B: no offer is never a dead end[2m > [22m'NBA': an offer in the last season promises no free agency either[32m 215[2mms[22m[39m
+   [32m✓[39m Round 1569 report B: no offer is never a dead end[2m > [22m'MLB': an offer in the last season promises no free agency either[32m 207[2mms[22m[39m
+   [32m✓[39m Round 1569 report B: no offer is never a dead end[2m > [22m'NHL': an offer in the last season promises no free agency either[32m 207[2mms[22m[39m
+   [32m✓[39m Round 1569 report B: no offer is never a dead end[2m > [22m'NFL': a no offer talk with seasons left keeps the market promise and still offers retirement[32m 260[2mms[22m[39m
+   [32m✓[39m Round 1569 report B: no offer is never a dead end[2m > [22m'NBA': a no offer talk with seasons left keeps the market promise and still offers retirement[32m 255[2mms[22m[39m
+   [32m✓[39m Round 1569 report B: no offer is never a dead end[2m > [22m'MLB': a no offer talk with seasons left keeps the market promise and still offers retirement[32m 255[2mms[22m[39m
+   [32m✓[39m Round 1569 report B: no offer is never a dead end[2m > [22m'NHL': a no offer talk with seasons left keeps the market promise and still offers retirement[32m 252[2mms[22m[39m
+   [33m[2m✓[22m[39m Round 1569 report B: no offer is never a dead end[2m > [22m'NFL': free agency offers a veteran Retire instead, and a two season player none [33m 955[2mms[22m[39m
+   [33m[2m✓[22m[39m Round 1569 report B: no offer is never a dead end[2m > [22m'NBA': free agency offers a veteran Retire instead, and a two season player none [33m 622[2mms[22m[39m
+   [33m[2m✓[22m[39m Round 1569 report B: no offer is never a dead end[2m > [22m'MLB': free agency offers a veteran Retire instead, and a two season player none [33m 511[2mms[22m[39m
+   [33m[2m✓[22m[39m Round 1569 report B: no offer is never a dead end[2m > [22m'NHL': free agency offers a veteran Retire instead, and a two season player none [33m 665[2mms[22m[39m
+
+[31m⎯⎯⎯⎯⎯⎯⎯[39m[1m[41m Failed Tests 4 [49m[22m[31m⎯⎯⎯⎯⎯⎯⎯[39m
+
+[41m[1m FAIL [22m[49m src/test/usCareerReports1569.test.tsx[2m > [22mRound 1569 ruling R3: a restart says the Hall card goes too[2m > [22m'NFL' names the Hall card on every restart prompt of a retired career and not on a live one
+[31m[1mError[22m: [2mexpect([22m[31melement[31m[2m).toHaveAccessibleDescription()[22m
+
+Expected element to have accessible description:
+[32m  This deletes your saved NFL player and coaching career on this device. The Hall of Fame card goes too. You cannot undo this.[31m
+Received:
+[31m  This deletes your saved NFL player and coaching career on this device. You cannot undo this.[31m[39m
+[36m [2m❯[22m restartPromptSays src/test/usCareerReports1569.test.tsx:[2m139:18[22m[39m
+    [90m137| [39m  [35mawait[39m [34mclick[39m(view[33m.[39m[34mgetByRole[39m([32m'button'[39m[33m,[39m { name[33m:[39m opener }))[33m;[39m
+    [90m138| [39m  const dialog = within(document.body).getByRole('alertdialog', { name…
+    [90m139| [39m  [34mexpect[39m(dialog)[33m.[39m[34mtoHaveAccessibleDescription[39m(words)[33m;[39m
+    [90m   | [39m                 [31m^[39m
+    [90m140| [39m  await click(within(dialog).getByRole('button', { name: 'Keep this ca…
+    [90m141| [39m  await waitFor(() => expect(within(document.body).queryByRole('alertd…
+[90m [2m❯[22m src/test/usCareerReports1569.test.tsx:[2m146:5[22m[39m
+
+[31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/4]⎯[22m[39m
+
+[41m[1m FAIL [22m[49m src/test/usCareerReports1569.test.tsx[2m > [22mRound 1569 ruling R3: a restart says the Hall card goes too[2m > [22m'NBA' names the Hall card on every restart prompt of a retired career and not on a live one
+[31m[1mError[22m: [2mexpect([22m[31melement[31m[2m).toHaveAccessibleDescription()[22m
+
+Expected element to have accessible description:
+[32m  This deletes your saved NBA player and coaching career on this device. The Hall of Fame card goes too. You cannot undo this.[31m
+Received:
+[31m  This deletes your saved NBA player and coaching career on this device. You cannot undo this.[31m[39m
+[36m [2m❯[22m restartPromptSays src/test/usCareerReports1569.test.tsx:[2m139:18[22m[39m
+    [90m137| [39m  [35mawait[39m [34mclick[39m(view[33m.[39m[34mgetByRole[39m([32m'button'[39m[33m,[39m { name[33m:[39m opener }))[33m;[39m
+    [90m138| [39m  const dialog = within(document.body).getByRole('alertdialog', { name…
+    [90m139| [39m  [34mexpect[39m(dialog)[33m.[39m[34mtoHaveAccessibleDescription[39m(words)[33m;[39m
+    [90m   | [39m                 [31m^[39m
+    [90m140| [39m  await click(within(dialog).getByRole('button', { name: 'Keep this ca…
+    [90m141| [39m  await waitFor(() => expect(within(document.body).queryByRole('alertd…
+[90m [2m❯[22m src/test/usCareerReports1569.test.tsx:[2m146:5[22m[39m
+
+[31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[2/4]⎯[22m[39m
+
+[41m[1m FAIL [22m[49m src/test/usCareerReports1569.test.tsx[2m > [22mRound 1569 ruling R3: a restart says the Hall card goes too[2m > [22m'MLB' names the Hall card on every restart prompt of a retired career and not on a live one
+[31m[1mError[22m: [2mexpect([22m[31melement[31m[2m).toHaveAccessibleDescription()[22m
+
+Expected element to have accessible description:
+[32m  This deletes your saved MLB player and coaching career on this device. The Hall of Fame card goes too. You cannot undo this.[31m
+Received:
+[31m  This deletes your saved MLB player and coaching career on this device. You cannot undo this.[31m[39m
+[36m [2m❯[22m restartPromptSays src/test/usCareerReports1569.test.tsx:[2m139:18[22m[39m
+    [90m137| [39m  [35mawait[39m [34mclick[39m(view[33m.[39m[34mgetByRole[39m([32m'button'[39m[33m,[39m { name[33m:[39m opener }))[33m;[39m
+    [90m138| [39m  const dialog = within(document.body).getByRole('alertdialog', { name…
+    [90m139| [39m  [34mexpect[39m(dialog)[33m.[39m[34mtoHaveAccessibleDescription[39m(words)[33m;[39m
+    [90m   | [39m                 [31m^[39m
+    [90m140| [39m  await click(within(dialog).getByRole('button', { name: 'Keep this ca…
+    [90m141| [39m  await waitFor(() => expect(within(document.body).queryByRole('alertd…
+[90m [2m❯[22m src/test/usCareerReports1569.test.tsx:[2m146:5[22m[39m
+
+[31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[3/4]⎯[22m[39m
+
+[41m[1m FAIL [22m[49m src/test/usCareerReports1569.test.tsx[2m > [22mRound 1569 ruling R3: a restart says the Hall card goes too[2m > [22m'NHL' names the Hall card on every restart prompt of a retired career and not on a live one
+[31m[1mError[22m: [2mexpect([22m[31melement[31m[2m).toHaveAccessibleDescription()[22m
+
+Expected element to have accessible description:
+[32m  This deletes your saved NHL player and coaching career on this device. The Hall of Fame card goes too. You cannot undo this.[31m
+Received:
+[31m  This deletes your saved NHL player and coaching career on this device. You cannot undo this.[31m[39m
+[36m [2m❯[22m restartPromptSays src/test/usCareerReports1569.test.tsx:[2m139:18[22m[39m
+    [90m137| [39m  [35mawait[39m [34mclick[39m(view[33m.[39m[34mgetByRole[39m([32m'button'[39m[33m,[39m { name[33m:[39m opener }))[33m;[39m
+    [90m138| [39m  const dialog = within(document.body).getByRole('alertdialog', { name…
+    [90m139| [39m  [34mexpect[39m(dialog)[33m.[39m[34mtoHaveAccessibleDescription[39m(words)[33m;[39m
+    [90m   | [39m                 [31m^[39m
+    [90m140| [39m  await click(within(dialog).getByRole('button', { name: 'Keep this ca…
+    [90m141| [39m  await waitFor(() => expect(within(document.body).queryByRole('alertd…
+[90m [2m❯[22m src/test/usCareerReports1569.test.tsx:[2m146:5[22m[39m
+
+[31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[4/4]⎯[22m[39m
+
+
+[2m Test Files [22m [1m[31m1 failed[39m[22m[90m (1)[39m
+[2m      Tests [22m [1m[31m4 failed[39m[22m[2m | [22m[1m[32m48 passed[39m[22m[90m (52)[39m
+[2m   Start at [22m 10:48:59
+[2m   Duration [22m 22.32s[2m (transform 2.52s, setup 106ms, collect 3.43s, tests 17.64s, environment 415ms, prepare 107ms)[22m
+
+
+::error file=/tmp/b3/src/test/usCareerReports1569.test.tsx,title=src/test/usCareerReports1569.test.tsx > Round 1569 ruling R3%3A a restart says the Hall card goes too > 'NFL' names the Hall card on every restart prompt of a retired career and not on a live one,line=139,column=18::Error: expect(element).toHaveAccessibleDescription()%0A%0AExpected element to have accessible description:%0A  This deletes your saved NFL player and coaching career on this device. The Hall of Fame card goes too. You cannot undo this.%0AReceived:%0A  This deletes your saved NFL player and coaching career on this device. You cannot undo this.%0A ❯ restartPromptSays src/test/usCareerReports1569.test.tsx:139:18%0A ❯ src/test/usCareerReports1569.test.tsx:146:5%0A%0A
+
+::error file=/tmp/b3/src/test/usCareerReports1569.test.tsx,title=src/test/usCareerReports1569.test.tsx > Round 1569 ruling R3%3A a restart says the Hall card goes too > 'NBA' names the Hall card on every restart prompt of a retired career and not on a live one,line=139,column=18::Error: expect(element).toHaveAccessibleDescription()%0A%0AExpected element to have accessible description:%0A  This deletes your saved NBA player and coaching career on this device. The Hall of Fame card goes too. You cannot undo this.%0AReceived:%0A  This deletes your saved NBA player and coaching career on this device. You cannot undo this.%0A ❯ restartPromptSays src/test/usCareerReports1569.test.tsx:139:18%0A ❯ src/test/usCareerReports1569.test.tsx:146:5%0A%0A
+
+::error file=/tmp/b3/src/test/usCareerReports1569.test.tsx,title=src/test/usCareerReports1569.test.tsx > Round 1569 ruling R3%3A a restart says the Hall card goes too > 'MLB' names the Hall card on every restart prompt of a retired career and not on a live one,line=139,column=18::Error: expect(element).toHaveAccessibleDescription()%0A%0AExpected element to have accessible description:%0A  This deletes your saved MLB player and coaching career on this device. The Hall of Fame card goes too. You cannot undo this.%0AReceived:%0A  This deletes your saved MLB player and coaching career on this device. You cannot undo this.%0A ❯ restartPromptSays src/test/usCareerReports1569.test.tsx:139:18%0A ❯ src/test/usCareerReports1569.test.tsx:146:5%0A%0A
+
+::error file=/tmp/b3/src/test/usCareerReports1569.test.tsx,title=src/test/usCareerReports1569.test.tsx > Round 1569 ruling R3%3A a restart says the Hall card goes too > 'NHL' names the Hall card on every restart prompt of a retired career and not on a live one,line=139,column=18::Error: expect(element).toHaveAccessibleDescription()%0A%0AExpected element to have accessible description:%0A  This deletes your saved NHL player and coaching career on this device. The Hall of Fame card goes too. You cannot undo this.%0AReceived:%0A  This deletes your saved NHL player and coaching career on this device. You cannot undo this.%0A ❯ restartPromptSays src/test/usCareerReports1569.test.tsx:139:18%0A ❯ src/test/usCareerReports1569.test.tsx:146:5%0A%0A

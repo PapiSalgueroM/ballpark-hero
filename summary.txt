@@ -1,0 +1,14 @@
+vconfirm exit=0 11s |    Duration  10.81s (transform 2.93s, setup 104ms, collect 4.16s, tests 5.01s, environment 532ms, prepare 316ms)
+simUsCareerActionConfirm exit=0 11s | Career confirmation: CRLF controls bind, raw bytes held and owned copies cleaned. Simulated states/explicit events do not prove full-season gameplay or native Enter, view
+vnew exit=0 28s |    Duration  27.35s (transform 3.03s, setup 134ms, collect 4.18s, tests 21.65s, environment 506ms, prepare 220ms)
+uca-restartWiring exit=0 9s | Career confirmation: CRLF controls bind, raw bytes held and owned copies cleaned. Simulated states/explicit events do not prove full-season gameplay or native Enter, view
+uca-direct exit=0 13s | Career confirmation: CRLF controls bind, raw bytes held and owned copies cleaned. Simulated states/explicit events do not prove full-season gameplay or native Enter, view
+r3-base exit=1 24s | ::error file=/tmp/b3/src/test/usCareerReports1569.test.tsx,title=src/test/usCareerReports1569.test.tsx > Round 1569 ruling R3%3A a restart says the Hall card goes too > '
+tsc exit=0 119s | 
+simUsCareerSkips exit=0 125s | PASS: ALL US CAREER SKIP CHECKS PASSED
+simUsCareerSaveRetry exit=0 173s | US career save retry: passed. Evidence at /home/runner/work/ballpark-hero/ballpark-hero/us-career-save-recovery-artifacts/outcomes
+simNoRivalNames exit=0 23s | No rival product names found. 0 findings.
+simStorageWrites exit=0 4s | simStorageWrites: all green (owed: 12)
+dash exit=0 0s | dashscan PASS: 0 of 6504 added lines since f957b34ea carry a dash
+simHarnessAnchors exit=0 60s | simHarnessAnchors: green. Every harness parses and none carries an unmatchable anchor.
+simUsSeasonCentre exit=0 133s | simUsSeasonCentre: 158 checks, 0 failed
