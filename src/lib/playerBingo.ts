@@ -722,6 +722,12 @@ function withSupport(data: BingoData, raw: RawCriterion): BingoCriterion {
 }
 
 /** True if any season row for this player satisfies the given stat predicate. */
+/* Release BS fix: the table's age is his age on 1 January of the row's year and is never moved on,
+   so an age band goes stale as birthdays pass (Haaland read 25 in October 2026). The age tiles band
+   on birth year instead, the 1 January rule the UCL check uses: born in year - age - 1. */
+function bornYear(p: BingoPlayer): number {
+  return p.age > 0 && p.year > 0 ? p.year - p.age - 1 : NaN;
+}
 function anySeasonMatches(data: BingoData, p: BingoPlayer, pred: (s: SeasonStat) => boolean): boolean {
   const stats = data.seasonStats.get(p.name);
   if (!stats) return false;
@@ -840,18 +846,18 @@ export function buildCriteria(data: BingoData): BingoCriterion[] {
     withSupport(data, {
       id: 'age-29-plus',
       kind: 'age',
-      label: 'Aged 29 or older',
+      label: 'Born 1996 or earlier',
       icon: '🎂',
-      test: p => p.age >= 29,
+      test: p => bornYear(p) <= 1996,
     }),
   );
   out.push(
     withSupport(data, {
       id: 'age-21-under',
       kind: 'age',
-      label: 'Aged 21 or younger',
+      label: 'Born 2004 or later',
       icon: '🌱',
-      test: p => p.age > 0 && p.age <= 21,
+      test: p => bornYear(p) >= 2004,
     }),
   );
 
@@ -999,6 +1005,7 @@ export function buildCriteria(data: BingoData): BingoCriterion[] {
     withSupport(data, {
       id: 'season-red-card',
       kind: 'season-stat',
+      group: 'season-discipline',
       label: 'Sent off in a season',
       icon: '🟥',
       test: (p, d) => anySeasonMatches(d, p, s => (s.redCards ?? 0) >= 1),
@@ -1008,6 +1015,7 @@ export function buildCriteria(data: BingoData): BingoCriterion[] {
     withSupport(data, {
       id: 'season-yellows-10',
       kind: 'season-stat',
+      group: 'season-discipline',
       label: '10+ yellow cards in a season',
       icon: '🟨',
       test: (p, d) => anySeasonMatches(d, p, s => (s.yellowCards ?? 0) >= 10),
@@ -1017,6 +1025,7 @@ export function buildCriteria(data: BingoData): BingoCriterion[] {
     withSupport(data, {
       id: 'season-matches-40',
       kind: 'season-stat',
+      group: 'season-matches',
       label: 'Played 40+ matches in a season',
       icon: '📅',
       test: (p, d) => anySeasonMatches(d, p, s => (s.matches ?? 0) >= 40),
@@ -1044,6 +1053,61 @@ export function buildCriteria(data: BingoData): BingoCriterion[] {
       test: (p, d) => (d.clubHistory.get(p.name)?.size ?? 0) >= 4,
     }),
   );
+
+  // More choices from the metadata already loaded for every pool player.
+  const extraTiles: RawCriterion[] = [
+    {
+      id: 'pos-full-back', kind: 'position', label: 'Full-back', icon: '🛡️',
+      test: p => ['left-back', 'right-back'].includes(normalizeName(p.position)),
+    },
+    {
+      id: 'pos-winger', kind: 'position', label: 'Winger', icon: '⚽',
+      test: p => ['left winger', 'right winger'].includes(normalizeName(p.position)),
+    },
+    {
+      id: 'value-30m-under-50m', kind: 'value', label: 'Valued $30M to under $50M', icon: '🪙',
+      test: p => p.value >= 30_000_000 && p.value < 50_000_000,
+    },
+    {
+      id: 'value-50m-under-100m', kind: 'value', group: 'value-up',
+      label: 'Valued $50M to under $100M', icon: '💰',
+      test: p => p.value >= 50_000_000 && p.value < 100_000_000,
+    },
+    {
+      id: 'born-2000-to-2003', kind: 'age', label: 'Born 2000 to 2003', icon: '🌱',
+      test: p => bornYear(p) >= 2000 && bornYear(p) <= 2003,
+    },
+    {
+      id: 'born-1997-to-1999', kind: 'age', label: 'Born 1997 to 1999', icon: '🎂',
+      test: p => bornYear(p) >= 1997 && bornYear(p) <= 1999,
+    },
+    {
+      id: 'season-goals-assists-10', kind: 'season-stat', group: 'season-attack',
+      label: '10+ goals and 10+ assists in a season', icon: '🎯',
+      test: (p, d) => anySeasonMatches(d, p, s => (s.goals ?? 0) >= 10 && (s.assists ?? 0) >= 10),
+    },
+    {
+      id: 'season-contributions-30', kind: 'season-stat', group: 'season-attack',
+      label: '30+ goals + assists in a season', icon: '🥅',
+      test: (p, d) => anySeasonMatches(d, p, s => (s.goals ?? 0) + (s.assists ?? 0) >= 30),
+    },
+    {
+      id: 'season-matches-50', kind: 'season-stat', group: 'season-matches',
+      label: '50+ matches in a season', icon: '📅',
+      test: (p, d) => anySeasonMatches(d, p, s => (s.matches ?? 0) >= 50),
+    },
+    {
+      id: 'season-matches-40-no-red', kind: 'season-stat', group: 'season-matches',
+      label: '40+ matches, no reds in a season', icon: '📅',
+      test: (p, d) => anySeasonMatches(d, p, s => (s.matches ?? 0) >= 40 && s.redCards === 0),
+    },
+    {
+      id: 'season-yellows-10-red', kind: 'season-stat', group: 'season-discipline',
+      label: '10+ yellows and a red in a season', icon: '🟨',
+      test: (p, d) => anySeasonMatches(d, p, s => (s.yellowCards ?? 0) >= 10 && (s.redCards ?? 0) >= 1),
+    },
+  ];
+  for (const tile of extraTiles) out.push(withSupport(data, tile));
 
   return out;
 }

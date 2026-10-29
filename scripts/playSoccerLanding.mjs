@@ -48,6 +48,11 @@
  *            when offered, and buys one thing on the phone. A signing, a random
  *            event, a transfer window and the phone purchase must each raise a
  *            toast that is sampled, at every size, or the drive is a finding.
+ *            Round 1568, on a phone (600 px and narrower) with the site's bar
+ *            ([data-site-chrome]) up: no toast's box, hover strip or exit
+ *            ghost may reach the bar, at its first frame, once settled, and
+ *            as it leaves (its first frame then and 150 ms in); a phone run
+ *            that never sampled a toast leaving is a finding.
  *            BASE: at least one hit at 1280.
  *   bytes    the same seeded career on the base build and on head (390 by
  *            844): Begin Career, then driven step by step (Next Year and Next
@@ -61,6 +66,11 @@
  *            SOCCER_LANDING_CONTROL=seed plays the head arm on another seed and
  *            opens each old save's neighbour on head: both comparisons must go red (CONTROL FIRED,
  *            exits 1; a control that changed nothing exits 2).
+ *            SOCCER_LANDING_CONTROL=toastbar (Round 1568) plays the toasts
+ *            section on the head arm alone at 320x640 and 390x844 with a style
+ *            that puts back, on a phone, the toast 12 px higher, the library's
+ *            exit slide and its exit ghost: the bar reach must go red on all
+ *            three (CONTROL FIRED, exits 1; otherwise exits 2).
  *
  * Pictures of every section at every size go to RC_OUT (or
  * soccer-landing-artifacts/).
@@ -83,8 +93,12 @@ const KEY = 'soccerCareerSave';
 const OUT = process.env.RC_OUT || path.join(ROOT, 'soccer-landing-artifacts');
 fs.mkdirSync(OUT, { recursive: true });
 const CONTROL = process.env.SOCCER_LANDING_CONTROL || '';
-if (CONTROL && CONTROL !== 'seed') { console.error(`SOCCER_LANDING_CONTROL=${CONTROL} is not a control here (seed)`); process.exit(2); }
-const SIZES = (process.env.SIZES || '320x640,390x844,1280x900').split(',').map(s => s.split('x').map(Number));
+if (CONTROL && CONTROL !== 'seed' && CONTROL !== 'toastbar') { console.error(`SOCCER_LANDING_CONTROL=${CONTROL} is not a control here (seed, toastbar)`); process.exit(2); }
+/* Round 1568: the toastbar control plays the toasts section on the head at the two phone sizes with a style that
+   puts back, on a phone, what the round took away: the toast 12 px higher (32 px under the toaster's own offset,
+   so its hover strip reaches over the bar), the library's exit slide for the front toast, and the exit ghost. */
+const TOASTBAR_STYLE = '@media (max-width: 600px) { [data-sonner-toast] { top: 2rem !important; } [data-sonner-toast][data-removed="true"][data-front="true"] { --y: translateY(calc(var(--lift) * -100%)) !important; } [data-sonner-toast][data-removed="true"]::before { display: block !important; } }';
+const SIZES = (process.env.SIZES || (CONTROL === 'toastbar' ? '320x640,390x844' : '320x640,390x844,1280x900')).split(',').map(s => s.split('x').map(Number));
 /* Sizes one section also runs at, as section:WxH. The bar at 360 and 375, the
    commonest phones, where a step down keyed under 360 once left AGE off the
    screen while 320, 390 and 1280 were all green; the name at 480 and 768,
@@ -95,10 +109,10 @@ const EXTRA = (process.env.EXTRA_SIZES ?? 'bar:360x780,bar:375x667,name:480x800,
   return { section, w, h };
 });
 const ALL_SECTIONS = ['landing', 'name', 'bar', 'retire', 'toasts', 'bytes'];
-const SECTIONS = CONTROL ? ['bytes'] : (process.env.SECTIONS || ALL_SECTIONS.join(',')).split(',').map(s => s.trim()).filter(Boolean);
+const SECTIONS = CONTROL === 'seed' ? ['bytes'] : CONTROL === 'toastbar' ? ['toasts'] : (process.env.SECTIONS || ALL_SECTIONS.join(',')).split(',').map(s => s.trim()).filter(Boolean);
 const BASE_DIST = process.env.SOCCER_LANDING_BASE_DIST ? path.resolve(process.env.SOCCER_LANDING_BASE_DIST) : null;
 const HEAD_ONLY = process.env.SOCCER_LANDING_HEAD_ONLY === '1';
-const ARMS = (process.env.SOCCER_LANDING_ARMS || (BASE_DIST ? 'head,base' : 'head')).split(',');
+const ARMS = CONTROL === 'toastbar' ? ['head'] : (process.env.SOCCER_LANDING_ARMS || (BASE_DIST ? 'head,base' : 'head')).split(',');
 if (ARMS.includes('base') && !BASE_DIST) { console.error('the base arm needs SOCCER_LANDING_BASE_DIST (a plain build of the base commit)'); process.exit(2); }
 const SEED = pageSeedOf(import.meta.url, process.env.SOCCER_LANDING_SEED);
 const NAMES = ['Danny Okafor-Whitfield', 'Supercalifragilisticexpialidociouswinger'];
@@ -203,11 +217,52 @@ const BLOCK = /supabase\.co|googlesyndication|doubleclick|google-analytics|googl
 function pageProbes() {
   const INTERACTIVE = 'button, a[href], input, select, textarea, [role="button"], [tabindex]:not([tabindex="-1"]), summary';
   window.__toastAudit = [];
+  /* Round 1568: on a phone (the toast library's own 600 px line, where Soccer Career's PAGE_TOAST classes apply)
+     no part of a toast a tap can land on may reach the site's bar ([data-site-chrome], sticky at the top since
+     Round 1451, with "Open site menu" in it): its box, its hover strip (the library's ::after, gap plus 1 px tall,
+     right above the box) or the exit ghost a leaving toast keeps (a ::before scaled about its centre). The grid
+     below reads what lies under the box only, so the review of 1568 (r1568-run-m) raised the toast 12 px (its
+     strip over the bar) and restored the library's exit slide, and both stayed green. Wider screens keep the
+     library's own toast, slide and ghost on purpose, so this part is judged on a phone only. */
+  window.__toastBar = { phoneSamples: 0, leavingSamples: 0 };
+  const barBottom = () => {
+    const bars = [...document.querySelectorAll('[data-site-chrome]')].map(e => e.getBoundingClientRect()).filter(q => q.height > 0 && q.top < 1 && q.bottom > 0);
+    return bars.length ? Math.max(...bars.map(q => q.bottom)) : null;
+  };
+  const reach = (li, r, leaving) => {
+    if (innerWidth > 600) return [];
+    const bb = barBottom();
+    if (bb === null) return [];
+    const cs = getComputedStyle(li);
+    if (cs.pointerEvents === 'none' || cs.visibility === 'hidden') return [];
+    window.__toastBar.phoneSamples += 1;
+    if (leaving) window.__toastBar.leavingSamples += 1;
+    const out = [];
+    const over = (what, top) => { if (top < bb - 0.5) out.push({ kind: 'bar', what: `${what} reaches y ${Math.round(top)}, over the site bar (0 to ${Math.round(bb)})` }); };
+    over(leaving ? 'its box on the way out' : 'its box', r.top);
+    const after = getComputedStyle(li, '::after');
+    if (after.content !== 'none' && after.display !== 'none') over('its hover strip', r.top - (parseFloat(after.height) || 0));
+    const before = getComputedStyle(li, '::before');
+    if (before.content !== 'none' && before.display !== 'none') {
+      const m = /matrix\(([^)]+)\)/.exec(before.transform || '');
+      const sy = m ? Math.abs(Number(m[1].split(',')[3])) || 1 : 1;
+      const bh = parseFloat(before.height) || r.height;
+      const t0 = parseFloat(before.top) || 0;
+      over('its exit ghost', r.top + t0 + bh / 2 - (sy * bh) / 2);
+    }
+    return out;
+  };
+  const sampleLeaving = (li, when) => {
+    if (!li.isConnected) return;
+    const r = li.getBoundingClientRect();
+    if (r.width === 0 || r.height === 0) return;
+    window.__toastAudit.push({ words: (li.textContent || '').replace(/\s+/g, ' ').trim().slice(0, 80), when, box: { x: Math.round(r.left), y: Math.round(r.top), w: Math.round(r.width), h: Math.round(r.height) }, scrollY: Math.round(scrollY), hits: reach(li, r, true) });
+  };
   const sample = (li, when) => {
     if (!li.isConnected) return;
     const r = li.getBoundingClientRect();
     if (r.width === 0 || r.height === 0) return;
-    const hits = [];
+    const hits = reach(li, r, false);
     for (let i = 0; i < 5; i++) for (let j = 0; j < 3; j++) {
       const x = r.left + (r.width * (i + 0.5)) / 5;
       const y = r.top + (r.height * (j + 0.5)) / 3;
@@ -239,6 +294,20 @@ function pageProbes() {
     }
   }).observe(document.documentElement, { childList: true, subtree: true });
   if (document.documentElement) watch(); else document.addEventListener('DOMContentLoaded', watch);
+  /* Round 1568: a toast is sampled again as it leaves (the library marks it data-removed and unmounts it 200 ms
+     later): at its first frame, which sees the exit ghost, and at 150 ms, by when the library's exit slide has
+     moved it most of the way it would ever go. Only the bar reach above is judged then. */
+  const leavingSeen = new WeakSet();
+  const watchExit = () => new MutationObserver(recs => {
+    for (const m of recs) {
+      const li = m.target;
+      if (!(li instanceof Element) || !li.hasAttribute('data-sonner-toast') || li.getAttribute('data-removed') !== 'true' || leavingSeen.has(li)) continue;
+      leavingSeen.add(li);
+      requestAnimationFrame(() => sampleLeaving(li, 'leaving, first frame'));
+      setTimeout(() => sampleLeaving(li, 'leaving, 150 ms'), 150);
+    }
+  }).observe(document.documentElement, { attributes: true, attributeFilter: ['data-removed'], subtree: true });
+  if (document.documentElement) watchExit(); else document.addEventListener('DOMContentLoaded', watchExit);
   /* The readable area by useRevealScroll's own rule (topInset, bottomInset):
      what is pinned where the screen's top and bottom rows are actually hit,
      at the middle and both edges, no taller than 40 percent of the screen. A
@@ -292,6 +361,10 @@ async function newContext(w, h, seed) {
   await ctx.route(BLOCK, r => r.abort());
   await seedPages(ctx, seed);
   await ctx.addInitScript(pageProbes);
+  if (CONTROL === 'toastbar') await ctx.addInitScript(css => {
+    const put = () => { const s = document.createElement('style'); s.setAttribute('data-toastbar-control', ''); s.textContent = css; (document.head || document.documentElement).appendChild(s); };
+    if (document.documentElement) put(); else document.addEventListener('DOMContentLoaded', put);
+  }, TOASTBAR_STYLE);
   return ctx;
 }
 const shot = async (p, name) => { await p.screenshot({ path: path.join(OUT, `${name}.jpg`), type: 'jpeg', quality: 55 }).catch(() => {}); };
@@ -404,7 +477,7 @@ async function sectionLanding(ctx, arm, size, w, judge = SECTIONS) {
     if (judge.includes('landing')) judgeLanding(arm, size, `"${name}"`, m);
     /* Any toast Begin Career raised, sampled where the player lands. */
     for (const t of await p.evaluate(() => window.__toastAudit ?? [])) {
-      const bad = t.hits.filter(h => h.kind === 'control' || h.kind === 'heading');
+      const bad = t.hits.filter(h => h.kind === 'control' || h.kind === 'heading' || h.kind === 'bar');
       console.log(`   at landing: "${t.words}" ${t.when} at ${t.box.x},${t.box.y} ${t.box.w}x${t.box.h}: ${t.hits.length ? JSON.stringify([...new Set(t.hits.map(h => `${h.kind} ${h.what}`))]) : 'nothing under it'}`);
       if (bad.length && judge.includes('toasts')) rec(arm, 'toasts', size, `at landing "${t.words}" (${t.when}) lies over ${JSON.stringify([...new Set(bad.map(h => `${h.kind} ${h.what}`))])}`);
     }
@@ -703,10 +776,16 @@ async function sectionToasts(ctx, arm, size) {
   for (const w of new Set(seenWords)) if (!audit.some(t => t.words === w)) rec(arm, 'toasts', size, `"${w}" was raised but never sampled, so the audit is blind to it`);
   for (const t of audit) {
     const at = raisedAt.find(r => r.words === t.words);
-    const bad = t.hits.filter(h => h.kind === 'control' || (h.kind === 'heading' && /^Joined /.test(t.words)));
+    const bad = t.hits.filter(h => h.kind === 'control' || h.kind === 'bar' || (h.kind === 'heading' && /^Joined /.test(t.words)));
     console.log(`     "${t.words}" ${t.when} at ${t.box.x},${t.box.y} ${t.box.w}x${t.box.h} (scrollY ${t.scrollY}, ${at?.label ?? 'step unknown'}): ${t.hits.length ? JSON.stringify([...new Set(t.hits.map(h => `${h.kind}${h.where ? ` in the ${h.where}` : ''} ${h.what}`))]) : 'nothing under it'}`);
     if (bad.length) rec(arm, 'toasts', size, `"${t.words}" (${t.when}, ${at?.label ?? 'step unknown'}) lies over ${JSON.stringify([...new Set(bad.map(h => `${h.kind}${h.where ? ` in the ${h.where}` : ''} ${h.what}`))])}`);
   }
+  /* Round 1568: the bar reach is blind to the exit unless a toast was sampled leaving on a phone with the bar up. */
+  const tb = await p.evaluate(() => window.__toastBar ?? { phoneSamples: 0, leavingSamples: 0 });
+  const phone = Number(size.split('x')[0]) <= 600;
+  if (phone) console.log(`     bar reach on a phone: ${tb.phoneSamples} sample(s) with the site bar up, ${tb.leavingSamples} of them leaving`);
+  if (phone && tb.phoneSamples === 0) note(`${arm} ${size}: no site bar at the top of the page, so the bar reach is not measured here`);
+  if (phone && tb.phoneSamples > 0 && tb.leavingSamples === 0) rec(arm, 'toasts', size, 'no toast was sampled leaving on a phone with the site bar up, so the exit is not measured');
   /* Coverage: which of the listed actions raised a toast that was sampled. */
   const sampled = raisedAt.filter(r => audit.some(t => t.words === r.words));
   for (const k of TOAST_KINDS) {
@@ -832,7 +911,7 @@ const MARKED = {
 };
 try {
   for (const arm of ARMS) {
-    if (CONTROL) break;
+    if (CONTROL === 'seed') break;
     for (const [w, h] of SIZES) {
       const size = `${w}x${h}`;
       console.log(`== ${arm} ${size}`);
@@ -867,15 +946,37 @@ try {
   await browser.close();
   for (const s of spawned) s.kill();
 }
+/* Release BS (fix BS-sc421-3, cc0d5f466): a pundit season's bar lost its Next Season on purpose. That button ran
+   handleNextSeason, which plays only youth and playing years, so it did nothing (the 10-28 reports); the panel's
+   three pundit actions move the year on. So for these saves the head must read the value here, not the base's. */
+const FIRST_CHANGED = { pundit: { base: 'Next Season', head: null, why: 'Release BS fix BS-sc421-3 took the dead Next Season off a pundit season' } };
 if (ARMS.includes('head') && ARMS.includes('base') && SECTIONS.includes('bar')) {
   for (const [k, b] of Object.entries(firstNames.base)) {
-    if (firstNames.head[k] !== b) rec('head', 'bar', k.split(' ')[1], `${k.split(' ')[0]}: the first button reads "${firstNames.head[k]}" on head and "${b}" on the base`);
+    const [kind, size] = k.split(' ');
+    const changed = FIRST_CHANGED[kind];
+    if (changed && b === changed.base) {
+      if (firstNames.head[k] !== changed.head) rec('head', 'bar', size, `${kind}: the first button reads "${firstNames.head[k]}" on head where it must read "${changed.head}" (${changed.why}; "${b}" on the base)`);
+      continue;
+    }
+    if (firstNames.head[k] !== b) rec('head', 'bar', size, `${kind}: the first button reads "${firstNames.head[k]}" on head and "${b}" on the base`);
   }
 }
 if (CONTROL === 'seed') {
   if (!URLS.base) { console.log('control cannot run: SOCCER_LANDING_CONTROL=seed needs the base arm'); process.exit(2); }
   if (bytesRed && fleetRed) { console.log(`CONTROL FIRED: SOCCER_LANDING_CONTROL=seed played head on seed ${SEED + 1} and the byte check went red, and the old save comparison went red on ${fleetRed} save(s) given the next seed's save`); process.exit(1); }
   console.log(`CONTROL DID NOT FIRE: the drive's byte check ${bytesRed ? 'went red' : 'stayed equal'} and the old save comparison ${fleetRed ? 'went red' : 'stayed equal'}; both must go red`); process.exit(2);
+}
+if (CONTROL === 'toastbar') {
+  const list = found.head.get('toasts') ?? [];
+  const parts = {
+    'the hover strip over the bar (a resting toast 12 px higher)': list.filter(f => f.message.includes('its hover strip reaches')).length,
+    'the box over the bar on the way out (the exit slide)': list.filter(f => f.message.includes('its box on the way out reaches')).length,
+    'the exit ghost over the bar': list.filter(f => f.message.includes('its exit ghost reaches')).length,
+  };
+  for (const [k, n] of Object.entries(parts)) console.log(`  control toastbar: ${k}: ${n} finding(s)`);
+  if (found.head.has('walk')) { console.log('CONTROL DID NOT RUN: the head walk threw'); process.exit(2); }
+  if (Object.values(parts).every(n => n > 0)) { console.log('CONTROL FIRED: SOCCER_LANDING_CONTROL=toastbar put the higher toast, the exit slide and the exit ghost back on a phone and the bar reach went red on each'); process.exit(1); }
+  console.log('CONTROL DID NOT FIRE: the bar reach stayed green on at least one of the three parts it must see'); process.exit(2);
 }
 let red = 0;
 for (const [section, list] of found.head) { red += list.length; console.log(`  head ${section}: ${list.length} finding(s)`); }
