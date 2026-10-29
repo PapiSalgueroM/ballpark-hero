@@ -1,0 +1,25 @@
+confirm-retireWiring exit=0 10s | Career confirmation: CRLF controls bind, raw bytes held and owned copies cleaned. Simulated states/explicit events do not prove full-season gameplay or native Enter, view
+confirm-legacy exit=0 8s | Career confirmation: CRLF controls bind, raw bytes held and owned copies cleaned. Simulated states/explicit events do not prove full-season gameplay or native Enter, view
+hub exit=0 0s | simCareerHub: green. Nine games on the same boxes now, and every award has a year on it.
+decision exit=0 9s | simCareerDecisionOutcome normal: intended assertions and independent ordinary/rivalry baseline passed.
+entryGuide exit=0 7s | simCareerEntryGuide normal: intended guide outcomes and independent baseline passed.
+vt-wall exit=1 37s | ::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/components/us-career/UsCareerBoard.tsx,title=src/test/usCareerHallWall.test.tsx > 'NHL'%3A old saves and br
+inbox exit=0 3s | simCareerInbox: green. Soccer is unchanged, and the NFL, MLB, NBA and NHL inboxes fire.
+parityCareer exit=0 15s | simCareerParity: green. One money app, one fan rule, one rival shape, one badge case, in all five careers.
+pressMarket exit=0 10s | Press/Market:6 outcomes,27 full original state/RNG pairs,6 effective copied source controls,18 native fixture branches.
+rivalry exit=0 10s | simCareerRivalryEvents: green. Soccer is unchanged, the NFL, MLB, NBA and NHL beats fire, and the rival is never a real player.
+extension exit=0 1s | simExtension: green. The last year of a deal is a decision in all four games now.
+inboxBeats exit=0 60s | simCareerInboxBeats: green. Soccer is unchanged, the NFL, NBA, MLB and NHL inboxes each run on their own calendar, and every rival choice does what it says.
+reveal exit=0 11s | simRevealMoments: green. No counting number, a reduced motion rule beside every keyframe, one pace for every stagger, every fact and number on the cards is the fixture's 
+sessionMarks exit=0 0s | simSessionMarks: green. Nine games count the day you play them, none of them invented a score or a streak day to do it.
+noDouble exit=0 35s | simNoDoubleRecord: all green (67 rows and checks, each recorded once across the finish, the toggles, the coaching, the reveals and the reloads; 115 recorders read)
+prospect exit=0 19s | simUsCareerProspect: 36 actual-board outcomes passed across all four sports
+practice exit=0 32s | simUsCareerPractice: 32 actual-board outcomes passed across NFL, NBA, MLB and NHL
+coach exit=0 4s | PASS: ALL US COACHING CAREER CHECKS PASSED
+dirty exit=0 92s | simUsDirtyMoney: all sections green
+seasonReview-base exit=1 291s | PASS career season review retiredBack
+nflStaff exit=1 0s | Node.js v24.22.1
+reports exit=0 2s | simUsCareerReports PASS: 0 findings, 150 careers a sport, seed 1569
+saveRecovery exit=1 0s | Node.js v24.22.1
+seasonCentre exit=0 101s | simUsSeasonCentre: 158 checks, 0 failed
+summer exit=124 4200s | 6) balance: one child per sport, careers a seed nfl 12000, nba 8000, mlb 8000, nhl 2000, 3 seeds
