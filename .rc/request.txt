@@ -1,0 +1,11 @@
+tsc: node_modules/.bin/tsc --noEmit -p tsconfig.app.json
+simClubNamesakes: ONLY=simClubNamesakes node scripts/runAllSims.mjs
+rehearse: npm install --prefix /tmp/pgl0 @electric-sql/pglite >/dev/null 2>&1 && PGLITE_DIR=/tmp/pgl0 node scripts/qa/rehearseClubNamesakes1584.mjs
+simTeammatesRecord: ONLY=simTeammatesRecord node scripts/runAllSims.mjs
+simValidatorRefusalHold: ONLY=simValidatorRefusalHold node scripts/runAllSims.mjs
+simQuotaHonesty: ONLY=simQuotaHonesty node scripts/runAllSims.mjs
+simEdgeSync: ONLY=simEdgeSync node scripts/runAllSims.mjs; node scripts/simEdgeSync.mjs | grep -E "FAIL|finding"
+simEdgeSync-main: git worktree add -q /tmp/basee bd0c07bf7 && ln -s "$PWD/node_modules" /tmp/basee/node_modules && cd /tmp/basee && node scripts/simEdgeSync.mjs | grep -E "FAIL|finding"; exit ${PIPESTATUS[0]}
+gridSearchDiscovery: ONLY=simSoccerGridSearchDiscovery node scripts/runAllSims.mjs
+gridSearchDiscovery-main: git worktree add -q /tmp/baseg bd0c07bf7 && ln -s "$PWD/node_modules" /tmp/baseg/node_modules && cd /tmp/baseg && ONLY=simSoccerGridSearchDiscovery node scripts/runAllSims.mjs
+fences: ONLY=simLiveScores,simNoRivalNames,simInventedNames,simHarnessAnchors,simNoInventedQuotes,simNoInventedConduct,simLegalPages,simSingleFooter,simCompletionSlugs,simCompletionOnce,simNoDoubleRecord,simDailyPuzzleContract,simDailySaveHardening,simWritesAreSent,simSchemaNames,simFetchRetry,simGoogleOnlyReturn,simReportRelay,simNavbarStatsReads,simLeaderboardCaps,simScoringCoverage,simSiteSearch,simResultMoment,simGuideHeadings node scripts/runAllSims.mjs
