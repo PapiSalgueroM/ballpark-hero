@@ -1,0 +1,49 @@
+# Release BT lane c: Round 1566's closing lines (Front Office one save shape), unserved, from its fix pass on 115c68092 (r1566/.tmp-fx/rc-fy2.txt: simNbaSeasonStats and simNflSeasonStats with every control, each must exit 1 FIRED, never abort) and its last whole run (rc-s7.txt: the Front Office unit files and the engine sims the round touched; results-g/rc-1566.txt).
+# Left out: tsc, simHarnessAnchors, simStorageWrites, simNoRivalNames (lane g) and the 24 fences of rc-s7 (lane z); rc-s7's nba-base, nba-named, nba-oldnever, simNflSeasonStats and nfl-rookieall (rc-fy2 carries the same runs on the final head as nba-base, nba-c-named, nba-c-oldnever, nfl-plain and nfl-c-rookieall).
+nba-plain: node scripts/simNbaSeasonStats.mjs
+nba-base: mkdir -p .rc/nbb1 && git archive 5d1198389 src | tar -x -C .rc/nbb1 && NBA_STATS_BASE=.rc/nbb1 NBA_STATS_BASE_LABEL=5d1198389 node scripts/simNbaSeasonStats.mjs
+nba-seeds10: NBA_STATS_SEED_BASE=10 node scripts/simNbaSeasonStats.mjs
+nba-c-perload: NBA_STATS_CONTROL=perload node scripts/simNbaSeasonStats.mjs
+nba-c-carried: NBA_STATS_CONTROL=carried node scripts/simNbaSeasonStats.mjs
+nba-c-grouped: NBA_STATS_CONTROL=grouped node scripts/simNbaSeasonStats.mjs
+nba-c-named: NBA_STATS_CONTROL=named node scripts/simNbaSeasonStats.mjs
+nba-c-nosplit: NBA_STATS_CONTROL=nosplit node scripts/simNbaSeasonStats.mjs
+nba-c-extradraw: NBA_STATS_CONTROL=extradraw node scripts/simNbaSeasonStats.mjs
+nba-c-mvpnowin: NBA_STATS_CONTROL=mvpnowin node scripts/simNbaSeasonStats.mjs
+nba-c-noqualify: NBA_STATS_CONTROL=noqualify node scripts/simNbaSeasonStats.mjs
+nba-c-sixthstarters: NBA_STATS_CONTROL=sixthstarters node scripts/simNbaSeasonStats.mjs
+nba-c-doubleclose: NBA_STATS_CONTROL=doubleclose node scripts/simNbaSeasonStats.mjs
+nba-c-oldnever: NBA_STATS_CONTROL=oldnever node scripts/simNbaSeasonStats.mjs
+nba-c-rookieany: NBA_STATS_CONTROL=rookieany node scripts/simNbaSeasonStats.mjs
+nba-c-draftlate: NBA_STATS_CONTROL=draftlate node scripts/simNbaSeasonStats.mjs
+nba-c-bench17: NBA_STATS_CONTROL=bench17 node scripts/simNbaSeasonStats.mjs
+nfl-plain: node scripts/simNflSeasonStats.mjs
+nfl-c-perload: NFL_STATS_CONTROL=perload node scripts/simNflSeasonStats.mjs
+nfl-c-kickswap: NFL_STATS_CONTROL=kickswap node scripts/simNflSeasonStats.mjs
+nfl-c-dropone: NFL_STATS_CONTROL=dropone node scripts/simNflSeasonStats.mjs
+nfl-c-nocatch: NFL_STATS_CONTROL=nocatch node scripts/simNflSeasonStats.mjs
+nfl-c-injured: NFL_STATS_CONTROL=injured node scripts/simNflSeasonStats.mjs
+nfl-c-swapsides: NFL_STATS_CONTROL=swapsides node scripts/simNflSeasonStats.mjs
+nfl-c-extradraw: NFL_STATS_CONTROL=extradraw node scripts/simNflSeasonStats.mjs
+nfl-c-unkeyed: NFL_STATS_CONTROL=unkeyed node scripts/simNflSeasonStats.mjs
+nfl-c-randomcredit: NFL_STATS_CONTROL=randomcredit node scripts/simNflSeasonStats.mjs
+nfl-c-passflip: NFL_STATS_CONTROL=passflip node scripts/simNflSeasonStats.mjs
+nfl-c-sackswap: NFL_STATS_CONTROL=sackswap node scripts/simNflSeasonStats.mjs
+nfl-c-tiebreak: NFL_STATS_CONTROL=tiebreak node scripts/simNflSeasonStats.mjs
+nfl-c-rookieall: NFL_STATS_CONTROL=rookieall node scripts/simNflSeasonStats.mjs
+nfl-c-closetwice: NFL_STATS_CONTROL=closetwice node scripts/simNflSeasonStats.mjs
+nfl-c-oldopen: NFL_STATS_CONTROL=oldopen node scripts/simNflSeasonStats.mjs
+nfl-c-wholeroster: NFL_STATS_CONTROL=wholeroster node scripts/simNflSeasonStats.mjs
+nfl-c-quote: NFL_STATS_CONTROL=quote node scripts/simNflSeasonStats.mjs
+vitest-fo: node_modules/.bin/vitest run src/components/nba-front-office src/components/front-office src/components/front-office-shared src/lib/nflSeasonStats.test.ts src/lib/nbaEarnedDraft.test.ts src/lib/nbaOpeningRatings.test.ts src/lib/nbaRotation.test.ts src/test/nbaAwardDecisionLift.test.ts --testTimeout=300000 --hookTimeout=120000
+simNbaGmDesk: node scripts/simNbaGmDesk.mjs
+simNbaEarnedDraft: node scripts/simNbaEarnedDraft.mjs
+simNbaDraftBoard: node scripts/simNbaDraftBoard.mjs
+simFrontOfficeSchedule: node scripts/simFrontOfficeSchedule.mjs
+simNbaRotation: node scripts/simNbaRotation.mjs
+simNbaOpeningRatings: node scripts/simNbaOpeningRatings.mjs
+simGmDeskHost: node scripts/simGmDeskHost.mjs
+simFoLazyDesk: node scripts/simFoLazyDesk.mjs
+simBooks: node scripts/simBooks.mjs
+simGmDesk: node scripts/simGmDesk.mjs
+simEngineIds: node scripts/simEngineIds.mjs
