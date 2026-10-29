@@ -1,0 +1,22 @@
+ctl-rooney: CONN_CONTROL=rooney node scripts/simConnectionsFacts.mjs
+ctl-zidane: CONN_CONTROL=zidane node scripts/simConnectionsFacts.mjs
+ctl-current: CONN_CONTROL=current node scripts/simConnectionsFacts.mjs
+ctl-treblecase: CONN_CONTROL=treblecase node scripts/simConnectionsFacts.mjs
+ctl-onehost: CONN_CONTROL=onehost node scripts/simConnectionsFacts.mjs
+ctl-nominee: CONN_CONTROL=nominee node scripts/simConnectionsFacts.mjs
+ctl-bareyear: CONN_CONTROL=bareyear node scripts/simConnectionsFacts.mjs
+ctl-snapshot: CONN_CONTROL=snapshot node scripts/simConnectionsFacts.mjs
+ctl-snapshotorder: CONN_CONTROL=snapshotorder node scripts/simConnectionsFacts.mjs
+ctl-snapshotids: CONN_CONTROL=snapshotids node scripts/simConnectionsFacts.mjs
+ctl-unknownman: CONN_CONTROL=unknownman node scripts/simConnectionsFacts.mjs
+simConnectionsLoss: node scripts/simConnectionsLoss.mjs
+simConnectionsShake: node scripts/simConnectionsShake.mjs
+simUsConnectionsFacts: node scripts/simUsConnectionsFacts.mjs
+simNoRivalNames: node scripts/simNoRivalNames.mjs
+simHarnessAnchors: node scripts/simHarnessAnchors.mjs
+simStorageWrites: node scripts/simStorageWrites.mjs
+simTrustCopy: node scripts/simTrustCopy.mjs
+simInventedNames: node scripts/simInventedNames.mjs
+simDailyPuzzleContract: node scripts/simDailyPuzzleContract.mjs
+simDailySaveHardening: node scripts/simDailySaveHardening.mjs
+simSiteSearch: node scripts/simSiteSearch.mjs
