@@ -108,41 +108,44 @@ export function automaticCampaign(api: typeof engine, box: typeof stats, seed: n
     games: Object.values(closed.teams).map(t => t.wins + t.losses), booked: !!closed.schedule };
 }
 
+/* Round 1566: the six digests were taken with the season blocks read shape free (above) on 5d1198389, the commit
+   before the round, whose engine still saves named rows (this file copied into a checkout of it, runner result
+   r1566-s3, line rot-base); the head gave the same six and the same draws. The draws are the original ones. */
 const ORIGINAL_REFERENCES: { seed: number; legacy?: boolean; digest: string; draws: number }[] = [
   {
     "seed": 117,
     "legacy": false,
-    "digest": "32a869d8c5d69f54ebc81a9fe96c3bc62e758729357156b13c2bcc666eb4b79d",
+    "digest": "ccf6088208b43998f04015fdbe44d4c9c1dc0dc1be19d745bd787e6f48a1728b",
     "draws": 12648
   },
   {
     "seed": 431,
     "legacy": false,
-    "digest": "c8932bfe7bb8972ade1654767a37e1efcb42d2cb7204338ea9dc83c92b59b610",
+    "digest": "05a1352ceec4de67d22fd319b8560b927f435d70070d367ad6dff019897bf6d7",
     "draws": 12619
   },
   {
     "seed": 907,
     "legacy": false,
-    "digest": "18bc0a486ee1eb2fe6483b86a1b6a377a9c0077314a4d2a61752aefeb6203488",
+    "digest": "b56c4d1df8d71e9709ba6da003698117f318ca09b371e8acbce022f0b7d6e6f7",
     "draws": 12685
   },
   {
     "seed": 117,
     "legacy": true,
-    "digest": "b787f10068a3b8813f4aae761bfa49943a80c28747840edebf67cffecf92fdc6",
+    "digest": "f25f738705ea2c8bb338d4d55e680dd50cff00e0dbdadfbbf721a864722475ed",
     "draws": 17256
   },
   {
     "seed": 431,
     "legacy": true,
-    "digest": "e274495d96f0f7fa600a0a0a397d4fbc53369361f68489654bdb0aeeecb9ba6e",
+    "digest": "26048e582b52b90f13be0ca2d41dbe0e3328a7a9e2e92d0932a039cfbce7debc",
     "draws": 17207
   },
   {
     "seed": 907,
     "legacy": true,
-    "digest": "605d11b4071934263e341d07b4dc9dbc7ed5f7d9148142f10e74f9bf20340e6a",
+    "digest": "d83f6c619d8fd673f3d4b8c00009a65883ac96e79512ca4580103be8bdb5d8cb",
     "draws": 17317
   }
 ];

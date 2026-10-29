@@ -157,8 +157,12 @@ export function nbaRecordBox(stats: FoSavedStats, box: NbaBox): void {
   }
 }
 
-/** The season's lines when this league is keeping them for the season it is in, else null. */
+/** The season's lines when this league is keeping them for the season it is in, else null. A block that is not the
+ *  shared shape (named rows from before Round 1566 that reached the engine by a path other than the board's load) is
+ *  turned into it here first, in place, by nbaCleanStats, so the recorder and every reader see the one shape. */
 export function nbaLiveStats(league: Pick<NbaLeague, 'stats' | 'season'>): FoSavedStats | null {
+  const clubs = (league.stats as { clubs?: unknown } | undefined)?.clubs;
+  if (league.stats !== undefined && (typeof clubs !== 'object' || clubs === null || Array.isArray(clubs))) nbaCleanStats(league);
   return league.stats && league.stats.season === league.season ? league.stats : null;
 }
 

@@ -22,8 +22,9 @@ const snapshot = JSON.parse(read('scripts/data/nbaFoRatingInputs2026.json').toSt
 const seeds = NBA_TEAMS.flatMap(t => t.players.map(p => ({ team: t.id, ...p })));
 const inputs = Object.fromEntries(Object.entries(snapshot.observations).map(([key, set]: [string, any]) => [key, set.rows.map((row: any[]) => Object.fromEntries(set.headers.map((field: string, i: number) => [field, row[i]])))]));
 const people = (league: engine.NbaLeague) => [...Object.values(league.teams).flatMap(t => t.players), ...league.freeAgents];
-/* Round 1566: the head saves its season lines in the shared short shape (src/lib/foStatsCodec.ts) while the e8b39ccc
-   baseline keeps named rows, so the head's block is compared as the rows it stands for, through the one expand. */
+/* Round 1566: the season lines are saved in the shared short shape (src/lib/foStatsCodec.ts); the e8b39ccc engine
+   records through today's nbaSeasonStats.ts too, so both leagues' blocks are compared as the rows they stand for,
+   through the one expand (its club columns aside), which is what this test compared before the round. */
 const asNamed = (league: engine.NbaLeague) => {
   if (!league.stats) return league;
   const rows: Partial<ReturnType<typeof stats.nbaFoStats>> = { ...stats.nbaFoStats(league.stats) };
@@ -98,10 +99,10 @@ function fictionalTeam(abbr: string, salary = 30): engine.NbaGmTeam {
 describe('NBA opening rating integration', () => {
   it('preserves the physical e8b39ccc default league full season and RNG as an independent baseline', () => {
     const a = seeded(895), b = seeded(895), old = baseline.engine.initNbaLeague(a.draw), next = engine.initNbaLeague(b.draw);
-    expect(canonical(asNamed(next))).toEqual(canonical(old)); expect([b.count(), b.state()]).toEqual([a.count(), a.state()]);
+    expect(canonical(asNamed(next))).toEqual(canonical(asNamed(old))); expect([b.count(), b.state()]).toEqual([a.count(), a.state()]);
     expect(canonical(season(engine, stats, next, b.draw))).toEqual(canonical(season(baseline.engine, baseline.stats, old, a.draw)));
     engine.nbaOffseason(next, b.draw); baseline.engine.nbaOffseason(old, a.draw);
-    expect(canonical(asNamed(next))).toEqual(canonical(old)); expect([b.count(), b.state()]).toEqual([a.count(), a.state()]);
+    expect(canonical(asNamed(next))).toEqual(canonical(asNamed(old))); expect([b.count(), b.state()]).toEqual([a.count(), a.state()]);
   });
 
   it('keeps physical old-save grades and absent evidence unchanged through restore and play', () => {
@@ -113,7 +114,7 @@ describe('NBA opening rating integration', () => {
     expect(engine.simRound(next, 'DEN', b.draw)).toEqual(baseline.engine.simRound(old, 'DEN', a.draw));
     expect(canonical(next)).toEqual(canonical(old));
     engine.nbaOffseason(next, b.draw); baseline.engine.nbaOffseason(old, a.draw);
-    expect(canonical(asNamed(next))).toEqual(canonical(old)); expect(people(next).every(p => !p.openingRatingEvidence)).toBe(true);
+    expect(canonical(asNamed(next))).toEqual(canonical(asNamed(old))); expect(people(next).every(p => !p.openingRatingEvidence)).toBe(true);
   });
 
   it('replays all300 frozen model grades and fictional opening prices without named overrides', () => {

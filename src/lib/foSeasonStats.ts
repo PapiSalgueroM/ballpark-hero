@@ -43,10 +43,12 @@ export interface FoSeasonStats {
   teams: Record<string, FoTeamTotals>;
 }
 
-/** A fresh block of named rows. No board saves one since Round 1566; kept because the pinned copies of older NBA
- *  engines that src/lib/nbaOpeningRatings.test.ts bundles against this file still open their seasons with it. */
-export function foNewSeasonStats(season: number): FoSeasonStats {
-  return { season, lines: {}, teams: {} };
+/** No board calls this since Round 1566. It is kept for the pinned copy of an older NBA engine that
+ *  src/lib/nbaOpeningRatings.test.ts bundles against this folder: that engine opens each season with it and records
+ *  through today's nbaSeasonStats.ts, so it hands back today's empty saved block (the shared short shape,
+ *  src/lib/foStatsCodec.ts), not named rows. */
+export function foNewSeasonStats(season: number): { season: number; lines: Record<string, never>; clubs: Record<string, never> } {
+  return { season, lines: {}, clubs: {} };
 }
 
 /** Totals over games, to one decimal. Zero for a man with no games. */
