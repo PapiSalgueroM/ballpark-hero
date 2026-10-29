@@ -1,0 +1,6 @@
+probe3 exit=0 9s |    Duration  7.83s (transform 2.55s, setup 115ms, collect 3.07s, tests 3.52s, environment 492ms, prepare 137ms)
+simClubManagerSave exit=0 20s | simClubManagerSave: all sections green
+simNoRivalNames exit=0 22s | No rival product names found. 0 findings.
+simCmCopy exit=0 47s | simCmCopy: green on this tree. Sections 1, 2, 3, 4, 5: Club Manager says what it means.
+simClubManagerSaveSize exit=0 90s | simClubManagerSaveSize: all sections green
+simTransfers exit=0 100s | ALL TRANSFER CHECKS PASSED
