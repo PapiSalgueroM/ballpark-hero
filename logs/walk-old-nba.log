@@ -1,0 +1,56 @@
+old build exit=0 197 files
+{"tag":"nba-1318x647-banner","swap":"draft","top":-899,"height":878,"bar":44,"readBottom":482,"scrollY":1088,"ok":false}
+PROBLEM nba-1318x647-banner draft: the new screen's top is at -899 (bar 44, readable to 482, board 878 high, scrollY 1088)
+{"tag":"nba-1318x647-banner","swap":"restart","top":22,"height":1245,"bar":44,"readBottom":482,"scrollY":167,"ok":false}
+PROBLEM nba-1318x647-banner restart: the new screen's top is at 22 (bar 44, readable to 482, board 1245 high, scrollY 167)
+{"tag":"nba-1318x647-banner","swap":"road","top":56,"height":1043,"bar":44,"readBottom":482,"scrollY":133,"ok":true}
+{"tag":"nba-1318x647-banner","swap":"join","top":-654,"height":728,"bar":44,"readBottom":482,"scrollY":843,"ok":false}
+PROBLEM nba-1318x647-banner join: the new screen's top is at -654 (bar 44, readable to 482, board 728 high, scrollY 843)
+PROBLEM nba-1318x647-banner: the restart dialog on a retired career does not name the Hall card ("Start a new career?This deletes your saved NBA player and coaching career on this device. You cannot undo this.Keep this careerStart new career")
+{"tag":"nba-1318x647-banner","swap":"newcareer","top":-55,"height":1245,"bar":44,"readBottom":482,"scrollY":244,"ok":false}
+PROBLEM nba-1318x647-banner newcareer: the new screen's top is at -55 (bar 44, readable to 482, board 1245 high, scrollY 244)
+{"tag":"nba-1318x647-answered","swap":"draft","top":-899,"height":878,"bar":44,"readBottom":647,"scrollY":1088,"ok":false}
+PROBLEM nba-1318x647-answered draft: the new screen's top is at -899 (bar 44, readable to 647, board 878 high, scrollY 1088)
+{"tag":"nba-1318x647-answered","swap":"restart","top":22,"height":1245,"bar":44,"readBottom":647,"scrollY":167,"ok":false}
+PROBLEM nba-1318x647-answered restart: the new screen's top is at 22 (bar 44, readable to 647, board 1245 high, scrollY 167)
+{"tag":"nba-1318x647-answered","swap":"road","top":56,"height":1043,"bar":44,"readBottom":647,"scrollY":133,"ok":true}
+{"tag":"nba-1318x647-answered","swap":"join","top":-654,"height":728,"bar":44,"readBottom":647,"scrollY":843,"ok":false}
+PROBLEM nba-1318x647-answered join: the new screen's top is at -654 (bar 44, readable to 647, board 728 high, scrollY 843)
+PROBLEM nba-1318x647-answered: the restart dialog on a retired career does not name the Hall card ("Start a new career?This deletes your saved NBA player and coaching career on this device. You cannot undo this.Keep this careerStart new career")
+{"tag":"nba-1318x647-answered","swap":"newcareer","top":-55,"height":1245,"bar":44,"readBottom":647,"scrollY":244,"ok":false}
+PROBLEM nba-1318x647-answered newcareer: the new screen's top is at -55 (bar 44, readable to 647, board 1245 high, scrollY 244)
+{"tag":"nba-390x844-banner","swap":"draft","top":-969,"height":1174,"bar":44,"readBottom":611,"scrollY":1210,"ok":false}
+PROBLEM nba-390x844-banner draft: the new screen's top is at -969 (bar 44, readable to 611, board 1174 high, scrollY 1210)
+{"tag":"nba-390x844-banner","swap":"restart","top":241,"height":1361,"bar":44,"readBottom":611,"scrollY":0,"ok":true}
+{"tag":"nba-390x844-banner","swap":"road","top":4,"height":1582,"bar":44,"readBottom":611,"scrollY":237,"ok":false}
+PROBLEM nba-390x844-banner road: the new screen's top is at 4 (bar 44, readable to 611, board 1582 high, scrollY 237)
+{"tag":"nba-390x844-banner","swap":"join","top":-668,"height":1000,"bar":44,"readBottom":611,"scrollY":909,"ok":false}
+PROBLEM nba-390x844-banner join: the new screen's top is at -668 (bar 44, readable to 611, board 1000 high, scrollY 909)
+PROBLEM nba-390x844-banner: the restart dialog on a retired career does not name the Hall card ("Start a new career?This deletes your saved NBA player and coaching career on this device. You cannot undo this.Keep this careerStart new career")
+{"tag":"nba-390x844-banner","swap":"newcareer","top":69,"height":1361,"bar":44,"readBottom":611,"scrollY":172,"ok":true}
+{"tag":"nba-390x844-answered","swap":"draft","top":-969,"height":1190,"bar":44,"readBottom":844,"scrollY":1210,"ok":false}
+PROBLEM nba-390x844-answered draft: the new screen's top is at -969 (bar 44, readable to 844, board 1190 high, scrollY 1210)
+{"tag":"nba-390x844-answered","swap":"restart","top":241,"height":1361,"bar":44,"readBottom":844,"scrollY":0,"ok":true}
+{"tag":"nba-390x844-answered","swap":"road","top":4,"height":1582,"bar":44,"readBottom":844,"scrollY":237,"ok":false}
+PROBLEM nba-390x844-answered road: the new screen's top is at 4 (bar 44, readable to 844, board 1582 high, scrollY 237)
+{"tag":"nba-390x844-answered","swap":"join","top":-648,"height":1000,"bar":44,"readBottom":844,"scrollY":889,"ok":false}
+PROBLEM nba-390x844-answered join: the new screen's top is at -648 (bar 44, readable to 844, board 1000 high, scrollY 889)
+PROBLEM nba-390x844-answered: the restart dialog on a retired career does not name the Hall card ("Start a new career?This deletes your saved NBA player and coaching career on this device. You cannot undo this.Keep this careerStart new career")
+{"tag":"nba-390x844-answered","swap":"newcareer","top":69,"height":1361,"bar":44,"readBottom":844,"scrollY":172,"ok":true}
+{"tag":"nba-1280x900-banner","swap":"draft","top":-773,"height":878,"bar":44,"readBottom":735,"scrollY":962,"ok":false}
+PROBLEM nba-1280x900-banner draft: the new screen's top is at -773 (bar 44, readable to 735, board 878 high, scrollY 962)
+{"tag":"nba-1280x900-banner","swap":"restart","top":189,"height":1245,"bar":44,"readBottom":735,"scrollY":0,"ok":true}
+{"tag":"nba-1280x900-banner","swap":"road","top":56,"height":1043,"bar":44,"readBottom":735,"scrollY":133,"ok":true}
+{"tag":"nba-1280x900-banner","swap":"join","top":-527,"height":728,"bar":44,"readBottom":735,"scrollY":716,"ok":false}
+PROBLEM nba-1280x900-banner join: the new screen's top is at -527 (bar 44, readable to 735, board 728 high, scrollY 716)
+PROBLEM nba-1280x900-banner: the restart dialog on a retired career does not name the Hall card ("Start a new career?This deletes your saved NBA player and coaching career on this device. You cannot undo this.Keep this careerStart new career")
+{"tag":"nba-1280x900-banner","swap":"newcareer","top":72,"height":1245,"bar":44,"readBottom":735,"scrollY":117,"ok":true}
+{"tag":"nba-1280x900-answered","swap":"draft","top":-773,"height":878,"bar":44,"readBottom":900,"scrollY":962,"ok":false}
+PROBLEM nba-1280x900-answered draft: the new screen's top is at -773 (bar 44, readable to 900, board 878 high, scrollY 962)
+{"tag":"nba-1280x900-answered","swap":"restart","top":189,"height":1245,"bar":44,"readBottom":900,"scrollY":0,"ok":true}
+{"tag":"nba-1280x900-answered","swap":"road","top":56,"height":1043,"bar":44,"readBottom":900,"scrollY":133,"ok":true}
+{"tag":"nba-1280x900-answered","swap":"join","top":-527,"height":728,"bar":44,"readBottom":900,"scrollY":716,"ok":false}
+PROBLEM nba-1280x900-answered join: the new screen's top is at -527 (bar 44, readable to 900, board 728 high, scrollY 716)
+PROBLEM nba-1280x900-answered: the restart dialog on a retired career does not name the Hall card ("Start a new career?This deletes your saved NBA player and coaching career on this device. You cannot undo this.Keep this careerStart new career")
+{"tag":"nba-1280x900-answered","swap":"newcareer","top":72,"height":1245,"bar":44,"readBottom":900,"scrollY":117,"ok":true}
+walkStart FAIL: 24 problems, 12 of 30 swaps (nba) put the new screen's top in view, base http://localhost:4175
