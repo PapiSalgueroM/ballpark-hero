@@ -1,0 +1,10 @@
+facts exit=0 1s | simUsConnectionsFacts: green. Every Baseball, NFL and NHL Connections group is held to the record, and no board has a second right answer the record can see (other tiles 
+ctl-all exit=0 9s | CTL bogus exit=2 | unknown US_CONN_CONTROL=nosuchcontrol
+norival exit=0 29s | No rival product names found. 0 findings.
+storage exit=0 5s | simStorageWrites: all green (owed: 12)
+conn1553 exit=0 1s | simConnectionsFacts: green. Every claim this round checked stands on two hosts and no rebuilt board has a second answer.
+fair exit=0 1s | simFairPuzzles: green. No board has a new second right answer; only the soccer findings the ledger owes to part B remain.
+migcheck exit=0 0s | supabase/migrations/20261029120000_round_1567_us_connections_gray.sql matches the files
+connloss exit=0 3s | simConnectionsLoss: all green
+anchors exit=0 62s | simHarnessAnchors: green. Every harness parses and none carries an unmatchable anchor.
+tsc exit=0 92s | 

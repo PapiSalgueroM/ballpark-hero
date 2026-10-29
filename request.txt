@@ -1,0 +1,10 @@
+tsc: node_modules/.bin/tsc --noEmit -p tsconfig.app.json
+facts: node scripts/simUsConnectionsFacts.mjs
+ctl-all: for c in arod bell karlsson twice onehost fingers ohtani frobinson undate unjudged yearnfl yearnhl afternfl afternhl aftermlb futuredate grayonehost; do US_CONN_CONTROL=$c node scripts/simUsConnectionsFacts.mjs > /tmp/ctl-$c.log 2>&1; e=$?; echo "CTL $c exit=$e | $(tail -1 /tmp/ctl-$c.log | cut -c1-170)"; done; US_CONN_CONTROL=nosuchcontrol node scripts/simUsConnectionsFacts.mjs > /tmp/ctl-bogus.log 2>&1; echo "CTL bogus exit=$? | $(tail -1 /tmp/ctl-bogus.log)"; exit 0
+norival: node scripts/simNoRivalNames.mjs
+anchors: node scripts/simHarnessAnchors.mjs
+storage: node scripts/simStorageWrites.mjs
+conn1553: node scripts/simConnectionsFacts.mjs
+fair: node scripts/simFairPuzzles.mjs
+migcheck: node scripts/qa/usConnections1567Migration.mjs check
+connloss: node scripts/simConnectionsLoss.mjs
