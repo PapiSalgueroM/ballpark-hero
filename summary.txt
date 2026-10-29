@@ -1,0 +1,11 @@
+head exit=0 0s | c896b6127a Round 1570: C8b holds the wall's read effect to no draw and no save b
+tsc exit=0 55s | 
+alone-c8 exit=0 26s |       Tests  4 passed | 52 skipped (56)
+alone-c8b exit=0 10s |       Tests  4 passed | 52 skipped (56)
+mut-alone-c8 exit=0 27s |       Tests  4 passed | 52 skipped (56)
+mut-alone-c8b exit=1 5s |     414|       expect(stored.draws, `seed ${seed}: draws, a full wall`).toBe(un…
+vt-wall exit=0 55s |    Duration  55.21s (transform 1.68s, setup 102ms, collect 2.94s, tests 53.16s, environment 523ms, prepare 106ms)
+simWall exit=0 56s | simUsCareerHallWall: ok, 53 check ids, 7847 checks, 200 careers a sport, 152 old saves
+c-readdraw exit=1 50s | simUsCareerHallWall CONTROL readdraw: FIRED, C8b red in all four sports and C1, C3, C4, C4b, C5, C6, C7, C8, C9, C10a, C10b, C10c, J green
+c-boarddraw exit=1 39s | simUsCareerHallWall CONTROL boarddraw: FIRED, C8 red in all four sports and C1, C3, C4, C4b, C5, C6, C7, C8b, C9, C10a, C10b, C10c, J green
+clean exit=0 0s | 
