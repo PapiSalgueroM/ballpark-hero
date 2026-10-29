@@ -1,0 +1,3 @@
+m-lastnoseason-vnew exit=1 15s | ::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/test/usCareerReports1569.test.tsx,title=src/test/usCareerReports1569.test.tsx > Round 1569 report B%3A no o
+m-whyage-vnew exit=1 14s | ::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/test/usCareerReports1569.test.tsx,title=src/test/usCareerReports1569.test.tsx > Round 1569 report B%3A no o
+m-lastnoseason-sim exit=1 1s | simUsCareerReports FAIL: 164 findings, 150 careers a sport, seed 1569

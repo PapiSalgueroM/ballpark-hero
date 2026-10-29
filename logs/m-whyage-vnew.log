@@ -1,0 +1,141 @@
+mutR applied whyage in src/components/us-career/UsCareerBoard.tsx
+
+[1m[46m RUN [49m[22m [36mv3.2.7 [39m[90m/home/runner/work/ballpark-hero/ballpark-hero[39m
+
+Browserslist: browsers data (caniuse-lite) is 16 months old. Please run:
+  npx update-browserslist-db@latest
+  Why you should do it regularly: https://github.com/browserslist/update-db#readme
+ [31m❯[39m src/test/usCareerReports1569.test.tsx [2m([22m[2m48 tests[22m[2m | [22m[31m4 failed[39m[2m)[22m[33m 10054[2mms[22m[39m
+   [33m[2m✓[22m[39m Round 1569 report A: Start over from every screen[2m > [22m'NFL' starts over from the hub of a two season career [33m 436[2mms[22m[39m
+   [32m✓[39m Round 1569 report A: Start over from every screen[2m > [22m'NBA' starts over from the hub of a two season career[32m 259[2mms[22m[39m
+   [32m✓[39m Round 1569 report A: Start over from every screen[2m > [22m'MLB' starts over from the hub of a two season career[32m 224[2mms[22m[39m
+   [32m✓[39m Round 1569 report A: Start over from every screen[2m > [22m'NHL' starts over from the hub of a two season career[32m 233[2mms[22m[39m
+   [33m[2m✓[22m[39m Round 1569 report A: Start over from every screen[2m > [22m'NFL' starts over from the free agency window [33m 364[2mms[22m[39m
+   [33m[2m✓[22m[39m Round 1569 report A: Start over from every screen[2m > [22m'NBA' starts over from the free agency window [33m 339[2mms[22m[39m
+   [33m[2m✓[22m[39m Round 1569 report A: Start over from every screen[2m > [22m'MLB' starts over from the free agency window [33m 336[2mms[22m[39m
+   [33m[2m✓[22m[39m Round 1569 report A: Start over from every screen[2m > [22m'NHL' starts over from the free agency window [33m 354[2mms[22m[39m
+   [32m✓[39m Round 1569 report A: Start over from every screen[2m > [22m'NFL' starts over from the extension talk[32m 289[2mms[22m[39m
+   [33m[2m✓[22m[39m Round 1569 report A: Start over from every screen[2m > [22m'NBA' starts over from the extension talk [33m 341[2mms[22m[39m
+   [32m✓[39m Round 1569 report A: Start over from every screen[2m > [22m'MLB' starts over from the extension talk[32m 298[2mms[22m[39m
+   [32m✓[39m Round 1569 report A: Start over from every screen[2m > [22m'NHL' starts over from the extension talk[32m 286[2mms[22m[39m
+   [32m✓[39m Round 1569 report A: Start over from every screen[2m > [22m'NFL' starts over from the retired card and from the coaching career[32m 245[2mms[22m[39m
+   [32m✓[39m Round 1569 report A: Start over from every screen[2m > [22m'NBA' starts over from the retired card and from the coaching career[32m 249[2mms[22m[39m
+   [32m✓[39m Round 1569 report A: Start over from every screen[2m > [22m'MLB' starts over from the retired card and from the coaching career[32m 255[2mms[22m[39m
+   [32m✓[39m Round 1569 report A: Start over from every screen[2m > [22m'NHL' starts over from the retired card and from the coaching career[32m 247[2mms[22m[39m
+   [32m✓[39m Round 1569 report A: Start over from every screen[2m > [22m'NFL' starts over from the road to the draft[32m 214[2mms[22m[39m
+   [32m✓[39m Round 1569 report A: Start over from every screen[2m > [22m'NBA' starts over from the road to the draft[32m 206[2mms[22m[39m
+   [32m✓[39m Round 1569 report A: Start over from every screen[2m > [22m'MLB' starts over from the road to the draft[32m 226[2mms[22m[39m
+   [32m✓[39m Round 1569 report A: Start over from every screen[2m > [22m'NHL' starts over from the road to the draft[32m 222[2mms[22m[39m
+[31m   [31m×[31m Round 1569 report B: no offer is never a dead end[2m > [22m'NFL': a no offer talk in the last season says why, says it is the last, and retires in full[39m[32m 103[2mms[22m[39m
+[31m     → expected 'No offer, and here is why: at 38 you …' to contain 'at 39 you are 5 years past the age'[39m
+[31m   [31m×[31m Round 1569 report B: no offer is never a dead end[2m > [22m'NBA': a no offer talk in the last season says why, says it is the last, and retires in full[39m[32m 84[2mms[22m[39m
+[31m     → expected 'No offer, and here is why: at 39 you …' to contain 'at 40 you are 8 years past the age'[39m
+[31m   [31m×[31m Round 1569 report B: no offer is never a dead end[2m > [22m'MLB': a no offer talk in the last season says why, says it is the last, and retires in full[39m[32m 84[2mms[22m[39m
+[31m     → expected 'No offer, and here is why: at 40 you …' to contain 'at 41 you are 8 years past the age'[39m
+[31m   [31m×[31m Round 1569 report B: no offer is never a dead end[2m > [22m'NHL': a no offer talk in the last season says why, says it is the last, and retires in full[39m[32m 84[2mms[22m[39m
+[31m     → expected 'No offer, and here is why: at 38 you …' to contain 'at 39 you are 7 years past the age'[39m
+   [32m✓[39m Round 1569 report B: no offer is never a dead end[2m > [22m'NFL': a talk before the season that reaches the season cap says it is the last (report B, "20 szn")[32m 85[2mms[22m[39m
+   [32m✓[39m Round 1569 report B: no offer is never a dead end[2m > [22m'NBA': a talk before the season that reaches the season cap says it is the last (report B, "20 szn")[32m 146[2mms[22m[39m
+   [32m✓[39m Round 1569 report B: no offer is never a dead end[2m > [22m'MLB': a talk before the season that reaches the season cap says it is the last (report B, "20 szn")[32m 144[2mms[22m[39m
+   [32m✓[39m Round 1569 report B: no offer is never a dead end[2m > [22m'NHL': a talk before the season that reaches the season cap says it is the last (report B, "20 szn")[32m 143[2mms[22m[39m
+   [32m✓[39m Round 1569 report B: no offer is never a dead end[2m > [22m'NFL': one season short of the cap is not called the last[32m 85[2mms[22m[39m
+   [32m✓[39m Round 1569 report B: no offer is never a dead end[2m > [22m'NBA': one season short of the cap is not called the last[32m 143[2mms[22m[39m
+   [32m✓[39m Round 1569 report B: no offer is never a dead end[2m > [22m'MLB': one season short of the cap is not called the last[32m 150[2mms[22m[39m
+   [32m✓[39m Round 1569 report B: no offer is never a dead end[2m > [22m'NHL': one season short of the cap is not called the last[32m 140[2mms[22m[39m
+   [32m✓[39m Round 1569 report B: no offer is never a dead end[2m > [22m'NFL': a pulled offer is not explained as no offer, and a pulled last season promises no market[32m 64[2mms[22m[39m
+   [32m✓[39m Round 1569 report B: no offer is never a dead end[2m > [22m'NBA': a pulled offer is not explained as no offer, and a pulled last season promises no market[32m 63[2mms[22m[39m
+   [32m✓[39m Round 1569 report B: no offer is never a dead end[2m > [22m'MLB': a pulled offer is not explained as no offer, and a pulled last season promises no market[32m 61[2mms[22m[39m
+   [32m✓[39m Round 1569 report B: no offer is never a dead end[2m > [22m'NHL': a pulled offer is not explained as no offer, and a pulled last season promises no market[32m 64[2mms[22m[39m
+   [32m✓[39m Round 1569 report B: no offer is never a dead end[2m > [22m'NFL': an offer in the last season promises no free agency either[32m 104[2mms[22m[39m
+   [32m✓[39m Round 1569 report B: no offer is never a dead end[2m > [22m'NBA': an offer in the last season promises no free agency either[32m 104[2mms[22m[39m
+   [32m✓[39m Round 1569 report B: no offer is never a dead end[2m > [22m'MLB': an offer in the last season promises no free agency either[32m 104[2mms[22m[39m
+   [32m✓[39m Round 1569 report B: no offer is never a dead end[2m > [22m'NHL': an offer in the last season promises no free agency either[32m 103[2mms[22m[39m
+   [32m✓[39m Round 1569 report B: no offer is never a dead end[2m > [22m'NFL': a no offer talk with seasons left keeps the market promise and still offers retirement[32m 148[2mms[22m[39m
+   [32m✓[39m Round 1569 report B: no offer is never a dead end[2m > [22m'NBA': a no offer talk with seasons left keeps the market promise and still offers retirement[32m 127[2mms[22m[39m
+   [32m✓[39m Round 1569 report B: no offer is never a dead end[2m > [22m'MLB': a no offer talk with seasons left keeps the market promise and still offers retirement[32m 124[2mms[22m[39m
+   [32m✓[39m Round 1569 report B: no offer is never a dead end[2m > [22m'NHL': a no offer talk with seasons left keeps the market promise and still offers retirement[32m 121[2mms[22m[39m
+   [33m[2m✓[22m[39m Round 1569 report B: no offer is never a dead end[2m > [22m'NFL': free agency offers a veteran Retire instead, and a two season player none [33m 480[2mms[22m[39m
+   [33m[2m✓[22m[39m Round 1569 report B: no offer is never a dead end[2m > [22m'NBA': free agency offers a veteran Retire instead, and a two season player none [33m 470[2mms[22m[39m
+   [33m[2m✓[22m[39m Round 1569 report B: no offer is never a dead end[2m > [22m'MLB': free agency offers a veteran Retire instead, and a two season player none [33m 445[2mms[22m[39m
+   [33m[2m✓[22m[39m Round 1569 report B: no offer is never a dead end[2m > [22m'NHL': free agency offers a veteran Retire instead, and a two season player none [33m 455[2mms[22m[39m
+
+[31m⎯⎯⎯⎯⎯⎯⎯[39m[1m[41m Failed Tests 4 [49m[22m[31m⎯⎯⎯⎯⎯⎯⎯[39m
+
+[41m[1m FAIL [22m[49m src/test/usCareerReports1569.test.tsx[2m > [22mRound 1569 report B: no offer is never a dead end[2m > [22m'NFL': a no offer talk in the last season says why, says it is the last, and retires in full
+[31m[1mAssertionError[22m: expected 'No offer, and here is why: at 38 you …' to contain 'at 39 you are 5 years past the age'[39m
+
+Expected: [32m"at 3[7m9[27m you are [7m5[27m years past the age"[39m
+Received: [31m"[7mNo offer, and here is why: [27mat 3[7m8[27m you are [7m4[27m years past the age[7m this game's clubs start pricing in decline at your position, and a 70 rating is not one they pay to keep. The open market prices you around $6.3M a year.[27m"[39m
+
+[36m [2m❯[22m src/test/usCareerReports1569.test.tsx:[2m141:30[22m[39m
+    [90m139| [39m    const past = held.c.age - row.sport.extPushArgs(held.c, () => 0).c…
+    [90m140| [39m    [34mexpect[39m(past)[33m.[39m[34mtoBeGreaterThan[39m([34m0[39m)[33m;[39m
+    [90m141| [39m    expect(why?.textContent).toContain(`at ${held.c.age} you are ${pas…
+    [90m   | [39m                             [31m^[39m
+    [90m142| [39m    expect(why?.textContent).toContain(`a ${held.c.ovr} rating is not …
+    [90m143| [39m    expect(why?.textContent).toContain(`around $${held.contractTalk.ta…
+
+[31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/4]⎯[22m[39m
+
+[41m[1m FAIL [22m[49m src/test/usCareerReports1569.test.tsx[2m > [22mRound 1569 report B: no offer is never a dead end[2m > [22m'NBA': a no offer talk in the last season says why, says it is the last, and retires in full
+[31m[1mAssertionError[22m: expected 'No offer, and here is why: at 39 you …' to contain 'at 40 you are 8 years past the age'[39m
+
+Expected: [32m"at [7m40[27m you are [7m8[27m years past the age"[39m
+Received: [31m"[7mNo offer, and here is why: [27mat [7m39[27m you are [7m7[27m years past the age[7m this game's clubs start pricing in decline at your position, and a 70 rating is not one they pay to keep. The open market prices you around $3.5M a year.[27m"[39m
+
+[36m [2m❯[22m src/test/usCareerReports1569.test.tsx:[2m141:30[22m[39m
+    [90m139| [39m    const past = held.c.age - row.sport.extPushArgs(held.c, () => 0).c…
+    [90m140| [39m    [34mexpect[39m(past)[33m.[39m[34mtoBeGreaterThan[39m([34m0[39m)[33m;[39m
+    [90m141| [39m    expect(why?.textContent).toContain(`at ${held.c.age} you are ${pas…
+    [90m   | [39m                             [31m^[39m
+    [90m142| [39m    expect(why?.textContent).toContain(`a ${held.c.ovr} rating is not …
+    [90m143| [39m    expect(why?.textContent).toContain(`around $${held.contractTalk.ta…
+
+[31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[2/4]⎯[22m[39m
+
+[41m[1m FAIL [22m[49m src/test/usCareerReports1569.test.tsx[2m > [22mRound 1569 report B: no offer is never a dead end[2m > [22m'MLB': a no offer talk in the last season says why, says it is the last, and retires in full
+[31m[1mAssertionError[22m: expected 'No offer, and here is why: at 40 you …' to contain 'at 41 you are 8 years past the age'[39m
+
+Expected: [32m"at 4[7m1[27m you are [7m8[27m years past the age"[39m
+Received: [31m"[7mNo offer, and here is why: [27mat 4[7m0[27m you are [7m7[27m years past the age[7m this game's clubs start pricing in decline at your position, and a 70 rating is not one they pay to keep. The open market prices you around $3.3M a year.[27m"[39m
+
+[36m [2m❯[22m src/test/usCareerReports1569.test.tsx:[2m141:30[22m[39m
+    [90m139| [39m    const past = held.c.age - row.sport.extPushArgs(held.c, () => 0).c…
+    [90m140| [39m    [34mexpect[39m(past)[33m.[39m[34mtoBeGreaterThan[39m([34m0[39m)[33m;[39m
+    [90m141| [39m    expect(why?.textContent).toContain(`at ${held.c.age} you are ${pas…
+    [90m   | [39m                             [31m^[39m
+    [90m142| [39m    expect(why?.textContent).toContain(`a ${held.c.ovr} rating is not …
+    [90m143| [39m    expect(why?.textContent).toContain(`around $${held.contractTalk.ta…
+
+[31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[3/4]⎯[22m[39m
+
+[41m[1m FAIL [22m[49m src/test/usCareerReports1569.test.tsx[2m > [22mRound 1569 report B: no offer is never a dead end[2m > [22m'NHL': a no offer talk in the last season says why, says it is the last, and retires in full
+[31m[1mAssertionError[22m: expected 'No offer, and here is why: at 38 you …' to contain 'at 39 you are 7 years past the age'[39m
+
+Expected: [32m"at 3[7m9[27m you are [7m7[27m years past the age"[39m
+Received: [31m"[7mNo offer, and here is why: [27mat 3[7m8[27m you are [7m6[27m years past the age[7m this game's clubs start pricing in decline at your position, and a 70 rating is not one they pay to keep. The open market prices you around $1.7M a year.[27m"[39m
+
+[36m [2m❯[22m src/test/usCareerReports1569.test.tsx:[2m141:30[22m[39m
+    [90m139| [39m    const past = held.c.age - row.sport.extPushArgs(held.c, () => 0).c…
+    [90m140| [39m    [34mexpect[39m(past)[33m.[39m[34mtoBeGreaterThan[39m([34m0[39m)[33m;[39m
+    [90m141| [39m    expect(why?.textContent).toContain(`at ${held.c.age} you are ${pas…
+    [90m   | [39m                             [31m^[39m
+    [90m142| [39m    expect(why?.textContent).toContain(`a ${held.c.ovr} rating is not …
+    [90m143| [39m    expect(why?.textContent).toContain(`around $${held.contractTalk.ta…
+
+[31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[4/4]⎯[22m[39m
+
+
+[2m Test Files [22m [1m[31m1 failed[39m[22m[90m (1)[39m
+[2m      Tests [22m [1m[31m4 failed[39m[22m[2m | [22m[1m[32m44 passed[39m[22m[90m (48)[39m
+[2m   Start at [22m 08:09:35
+[2m   Duration [22m 13.04s[2m (transform 1.59s, setup 73ms, collect 2.13s, tests 10.05s, environment 309ms, prepare 76ms)[22m
+
+
+::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/test/usCareerReports1569.test.tsx,title=src/test/usCareerReports1569.test.tsx > Round 1569 report B%3A no offer is never a dead end > 'NFL'%3A a no offer talk in the last season says why%2C says it is the last%2C and retires in full,line=141,column=30::AssertionError: expected 'No offer, and here is why: at 38 you …' to contain 'at 39 you are 5 years past the age'%0A%0AExpected: "at 39 you are 5 years past the age"%0AReceived: "No offer, and here is why: at 38 you are 4 years past the age this game's clubs start pricing in decline at your position, and a 70 rating is not one they pay to keep. The open market prices you around $6.3M a year."%0A%0A ❯ src/test/usCareerReports1569.test.tsx:141:30%0A%0A
+
+::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/test/usCareerReports1569.test.tsx,title=src/test/usCareerReports1569.test.tsx > Round 1569 report B%3A no offer is never a dead end > 'NBA'%3A a no offer talk in the last season says why%2C says it is the last%2C and retires in full,line=141,column=30::AssertionError: expected 'No offer, and here is why: at 39 you …' to contain 'at 40 you are 8 years past the age'%0A%0AExpected: "at 40 you are 8 years past the age"%0AReceived: "No offer, and here is why: at 39 you are 7 years past the age this game's clubs start pricing in decline at your position, and a 70 rating is not one they pay to keep. The open market prices you around $3.5M a year."%0A%0A ❯ src/test/usCareerReports1569.test.tsx:141:30%0A%0A
+
+::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/test/usCareerReports1569.test.tsx,title=src/test/usCareerReports1569.test.tsx > Round 1569 report B%3A no offer is never a dead end > 'MLB'%3A a no offer talk in the last season says why%2C says it is the last%2C and retires in full,line=141,column=30::AssertionError: expected 'No offer, and here is why: at 40 you …' to contain 'at 41 you are 8 years past the age'%0A%0AExpected: "at 41 you are 8 years past the age"%0AReceived: "No offer, and here is why: at 40 you are 7 years past the age this game's clubs start pricing in decline at your position, and a 70 rating is not one they pay to keep. The open market prices you around $3.3M a year."%0A%0A ❯ src/test/usCareerReports1569.test.tsx:141:30%0A%0A
+
+::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/test/usCareerReports1569.test.tsx,title=src/test/usCareerReports1569.test.tsx > Round 1569 report B%3A no offer is never a dead end > 'NHL'%3A a no offer talk in the last season says why%2C says it is the last%2C and retires in full,line=141,column=30::AssertionError: expected 'No offer, and here is why: at 38 you …' to contain 'at 39 you are 7 years past the age'%0A%0AExpected: "at 39 you are 7 years past the age"%0AReceived: "No offer, and here is why: at 38 you are 6 years past the age this game's clubs start pricing in decline at your position, and a 70 rating is not one they pay to keep. The open market prices you around $1.7M a year."%0A%0A ❯ src/test/usCareerReports1569.test.tsx:141:30%0A%0A
