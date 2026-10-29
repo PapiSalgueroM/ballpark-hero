@@ -1,0 +1,32 @@
+Preparing worktree (detached HEAD 493926a4f6)
+HEAD is now at 493926a4f6 Round 1569: R3's proof moves to the round's own test, and the confirm harness follows the prompt's new line
+base saves: 16 a sport from /tmp/base; outcomes {"nfl":{"waiting":7,"notOnBallot":8,"inducted":1},"nba":{"notOnBallot":7,"waiting":8,"inducted":1},"mlb":{"fellOff":8,"notOnBallot":8},"nhl":{"notOnBallot":12,"inducted":2,"waiting":2}}
+
+[1m[46m RUN [49m[22m [36mv3.2.7 [39m[90m/home/runner/work/ballpark-hero/ballpark-hero[39m
+
+Browserslist: browsers data (caniuse-lite) is 16 months old. Please run:
+  npx update-browserslist-db@latest
+  Why you should do it regularly: https://github.com/browserslist/update-db#readme
+[90mstdout[2m | src/test/zzReviewOldSaves.test.tsx[2m > [22m[2m'NFL': base saves loaded one after another on the branch board[2m > [22m[2msave bytes, one write, the base card, the prompt, and the eviction rule
+[22m[39mREVIEW NFL: 16 base saves, final wall 12, outcomes {"waiting":7,"notOnBallot":8,"inducted":1}, wall bytes 7690
+
+[90mstdout[2m | src/test/zzReviewOldSaves.test.tsx[2m > [22m[2m'NBA': base saves loaded one after another on the branch board[2m > [22m[2msave bytes, one write, the base card, the prompt, and the eviction rule
+[22m[39mREVIEW NBA: 16 base saves, final wall 12, outcomes {"notOnBallot":7,"waiting":8,"inducted":1}, wall bytes 9631
+
+[90mstdout[2m | src/test/zzReviewOldSaves.test.tsx[2m > [22m[2m'MLB': base saves loaded one after another on the branch board[2m > [22m[2msave bytes, one write, the base card, the prompt, and the eviction rule
+[22m[39mREVIEW MLB: 16 base saves, final wall 12, outcomes {"fellOff":8,"notOnBallot":8}, wall bytes 8024
+
+[90mstdout[2m | src/test/zzReviewOldSaves.test.tsx[2m > [22m[2m'NHL': base saves loaded one after another on the branch board[2m > [22m[2msave bytes, one write, the base card, the prompt, and the eviction rule
+[22m[39mREVIEW NHL: 16 base saves, final wall 12, outcomes {"notOnBallot":12,"inducted":2,"waiting":2}, wall bytes 7132
+
+ [32m✓[39m src/test/zzReviewOldSaves.test.tsx [2m([22m[2m4 tests[22m[2m)[22m[33m 19583[2mms[22m[39m
+   [33m[2m✓[22m[39m 'NFL': base saves loaded one after another on the branch board[2m > [22msave bytes, one write, the base card, the prompt, and the eviction rule [33m 5275[2mms[22m[39m
+   [33m[2m✓[22m[39m 'NBA': base saves loaded one after another on the branch board[2m > [22msave bytes, one write, the base card, the prompt, and the eviction rule [33m 4795[2mms[22m[39m
+   [33m[2m✓[22m[39m 'MLB': base saves loaded one after another on the branch board[2m > [22msave bytes, one write, the base card, the prompt, and the eviction rule [33m 4782[2mms[22m[39m
+   [33m[2m✓[22m[39m 'NHL': base saves loaded one after another on the branch board[2m > [22msave bytes, one write, the base card, the prompt, and the eviction rule [33m 4728[2mms[22m[39m
+
+[2m Test Files [22m [1m[32m1 passed[39m[22m[90m (1)[39m
+[2m      Tests [22m [1m[32m4 passed[39m[22m[90m (4)[39m
+[2m   Start at [22m 16:06:56
+[2m   Duration [22m 22.67s[2m (transform 1.64s, setup 69ms, collect 2.25s, tests 19.58s, environment 327ms, prepare 115ms)[22m
+
