@@ -1,0 +1,7 @@
+MUT tablereorder applied: nhlconn-009 group 0 now Mario Lemieux, Wayne Gretzky, Brett Hull, Alex Ovechkin, Auston Matthews
+supabase/migrations/20261030150000_round_1574_nhl_connections_tables.sql matches the table file at 202ea80f9a601388db08172acfa706ff826805c0 (16 boards)
+note: the table file has changed since 202ea80f9a601388db08172acfa706ff826805c0; the migration stays the round's, and the change is a later round's to migrate
+simUsConnectionsFacts: green. Every Baseball, NFL and NHL Connections group is held to the record, and no board has a second right answer the record can see (other tiles it cannot judge, each at its ceiling: 0 baseball, 0 nfl, 0 nhl).
+TIE: 1 migration rows write a board the tree's table file no longer holds: nhlconn-009
+rehearseUsConnections1574: green. Both forms land the 16 NHL table boards in place, a drifted row is left alone or stops the step, a tampered payload is refused, the table after passes the strict harness, and every date deals the same board.
+MUT tablereorder applied=0 mig1574check=0 plain=0 tie=1 reh=0

@@ -1,0 +1,7 @@
+MUT planswap applied to scripts/qa/usConnections1574Migration.mjs
+supabase/migrations/20261030150000_round_1574_nhl_connections_tables.sql is not what the table file at 202ea80f9a601388db08172acfa706ff826805c0 gives: run write
+  FAIL: the committed migration is not what scripts/qa/usConnections1574Migration.mjs writes
+  FAIL: the payload holds 0 rows (drifted 0, missing 0, already 16), expected 16 and none else
+  FAIL: checksum: nhlconn-005 does not hold the new board
+TIE: 16 migration rows write a board the tree's table file no longer holds: nhlconn-005, nhlconn-006, nhlconn-007, nhlconn-008, nhlconn-009, nhlconn-010, nhlconn-011, nhlconn-012, nhlconn-013, nhlconn-014, nhlconn-015, nhlconn-016, nhlconn-017, nhlconn-018, nhlconn-019, nhlconn-020
+MUT planswap applied=0 mig1574check=1 reh=2 tie=1

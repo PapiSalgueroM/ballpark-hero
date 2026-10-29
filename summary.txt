@@ -1,0 +1,8 @@
+pgl exit=0 1s | pglite
+m-clubasof exit=0 0s | MUT clubasof applied=0 plain=0
+m-watchwins exit=0 1s | MUT watchwins applied=0 plain=0 karlsson=1 newrunning=1 ages=1 stamkos=1 watchprobe=1
+m-planswap exit=0 7s | MUT planswap applied=0 mig1574check=1 reh=2 tie=1
+m-boardfield exit=0 0s | MUT boardfield plain=1
+m-rangedrop exit=0 1s | MUT rangedrop plain=0 stamkos=1 recolour=1 mig1574check=0
+m-tablereorder exit=0 18s | MUT tablereorder applied=0 mig1574check=0 plain=0 tie=1 reh=0
+after exit=0 0s | AFTER restore plain=0

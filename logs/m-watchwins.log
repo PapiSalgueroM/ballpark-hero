@@ -1,0 +1,5 @@
+MUT watchwins applied to scripts/lib/usConnectionsCheck.mjs
+simUsConnectionsFacts: green. Every Baseball, NFL and NHL Connections group is held to the record, and no board has a second right answer the record can see (other tiles it cannot judge, each at its ceiling: 0 baseball, 0 nfl, 0 nhl).
+US_CONN_CONTROL=karlsson fired its own rule 1 time(s): watch x1 for Erik Karlsson (all findings: watch 1; 1 failures in all)
+WATCHPROBE: kind wins, watched set has it true, watch(Vasilevskiy) = null
+MUT watchwins applied=0 plain=0 karlsson=1 newrunning=1 ages=1 stamkos=1 watchprobe=1
