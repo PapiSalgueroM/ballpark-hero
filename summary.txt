@@ -1,0 +1,3 @@
+c4b-real exit=0 4s |    Duration  3.48s (transform 1.39s, setup 54ms, collect 1.91s, tests 898ms, environment 240ms, prepare 150ms)
+c4b-mutAny exit=1 3s | ::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/test/usCareerHallWall.test.tsx,title=src/test/usCareerHallWall.test.tsx > 'NHL'%3A the Hall wall on the boa
+clean exit=0 0s | CLEAN-CHECK-DONE
