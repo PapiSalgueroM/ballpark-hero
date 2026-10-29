@@ -1,0 +1,292 @@
+{
+ "runs": [
+  {
+   "name": "nhlconn-009 390 reduce win",
+   "date": "2026-11-08",
+   "scroll": [
+    "0>361",
+    "361>361",
+    "361>361",
+    "361>361"
+   ],
+   "fail": [],
+   "labels": [
+    "Scored 60 goals in a season",
+    "Won the Vezina Trophy",
+    "Won the Norris Trophy",
+    "Played 1,700 or more NHL games"
+   ]
+  },
+  {
+   "name": "nhlconn-009 390 no-preference win",
+   "date": "2026-11-08",
+   "scroll": [
+    "0>417",
+    "417>361",
+    "361>361",
+    "361>361"
+   ],
+   "fail": [],
+   "labels": [
+    "Scored 60 goals in a season",
+    "Won the Vezina Trophy",
+    "Won the Norris Trophy",
+    "Played 1,700 or more NHL games"
+   ]
+  },
+  {
+   "name": "nhlconn-009 1280 reduce win",
+   "date": "2026-11-08",
+   "scroll": [
+    "0>417",
+    "417>417",
+    "417>417",
+    "417>417"
+   ],
+   "fail": [],
+   "labels": [
+    "Scored 60 goals in a season",
+    "Won the Vezina Trophy",
+    "Won the Norris Trophy",
+    "Played 1,700 or more NHL games"
+   ]
+  },
+  {
+   "name": "nhlconn-009 1280 no-preference win",
+   "date": "2026-11-08",
+   "scroll": [
+    "0>473",
+    "473>417",
+    "417>417",
+    "417>417"
+   ],
+   "fail": [],
+   "labels": [
+    "Scored 60 goals in a season",
+    "Won the Vezina Trophy",
+    "Won the Norris Trophy",
+    "Played 1,700 or more NHL games"
+   ]
+  },
+  {
+   "name": "nhlconn-009 390 lose",
+   "date": "2026-11-08",
+   "scroll": [],
+   "fail": []
+  },
+  {
+   "name": "nhlconn-020 390 reduce win",
+   "date": "2026-11-01",
+   "scroll": [
+    "0>361",
+    "361>361",
+    "361>361",
+    "361>361"
+   ],
+   "fail": [],
+   "labels": [
+    "Won the 2024 Cup with the Panthers",
+    "Drafted first overall",
+    "Drafted second overall",
+    "Goalies with 300 career wins"
+   ]
+  },
+  {
+   "name": "nhlconn-020 390 no-preference win",
+   "date": "2026-11-01",
+   "scroll": [
+    "0>417",
+    "417>361",
+    "361>361",
+    "361>361"
+   ],
+   "fail": [],
+   "labels": [
+    "Won the 2024 Cup with the Panthers",
+    "Drafted first overall",
+    "Drafted second overall",
+    "Goalies with 300 career wins"
+   ]
+  },
+  {
+   "name": "nhlconn-020 1280 reduce win",
+   "date": "2026-11-01",
+   "scroll": [
+    "0>417",
+    "417>417",
+    "417>417",
+    "417>417"
+   ],
+   "fail": [],
+   "labels": [
+    "Won the 2024 Cup with the Panthers",
+    "Drafted first overall",
+    "Drafted second overall",
+    "Goalies with 300 career wins"
+   ]
+  },
+  {
+   "name": "nhlconn-020 1280 no-preference win",
+   "date": "2026-11-01",
+   "scroll": [
+    "0>473",
+    "473>417",
+    "417>417",
+    "417>417"
+   ],
+   "fail": [],
+   "labels": [
+    "Won the 2024 Cup with the Panthers",
+    "Drafted first overall",
+    "Drafted second overall",
+    "Goalies with 300 career wins"
+   ]
+  },
+  {
+   "name": "nhlconn-020 390 lose",
+   "date": "2026-11-01",
+   "scroll": [],
+   "fail": []
+  },
+  {
+   "name": "scroll OLD nhlconn-009 390",
+   "date": "2026-11-08",
+   "scroll": [
+    "0>361",
+    "361>361",
+    "361>361",
+    "361>361"
+   ],
+   "fail": [],
+   "info": true
+  },
+  {
+   "name": "scroll NEW nhlconn-009 390",
+   "date": "2026-11-08",
+   "scroll": [
+    "0>361",
+    "361>361",
+    "361>361",
+    "361>361"
+   ],
+   "fail": [],
+   "info": true
+  },
+  {
+   "name": "scroll OLD nhlconn-009 1280",
+   "date": "2026-11-08",
+   "scroll": [
+    "0>417",
+    "417>417",
+    "417>417",
+    "417>417"
+   ],
+   "fail": [],
+   "info": true
+  },
+  {
+   "name": "scroll NEW nhlconn-009 1280",
+   "date": "2026-11-08",
+   "scroll": [
+    "0>417",
+    "417>417",
+    "417>417",
+    "417>417"
+   ],
+   "fail": [],
+   "info": true
+  },
+  {
+   "name": "oldsave nhlconn-005 solved 0+1 390",
+   "date": "2026-11-20",
+   "scroll": [
+    "0>361",
+    "361>361"
+   ],
+   "fail": [],
+   "saveKeys": [
+    "nhl-connections-daily-2026-11-20"
+   ],
+   "afterReload": {
+    "tiles": 10,
+    "revealed": [
+     "Played for the Chicago Blackhawks",
+     "Played for the Avalanche or Nordiques"
+    ]
+   },
+   "strays": [],
+   "unreachable": [],
+   "afterLoss": {
+    "revealed": [
+     "Played for the Chicago Blackhawks",
+     "Played for the Avalanche or Nordiques",
+     "Played for the Islanders (as of 2025-26)",
+     "Played for the Winnipeg Jets, either era (as of 2025-26)"
+    ],
+    "lost": true,
+    "won": false
+   }
+  },
+  {
+   "name": "oldsave nhlconn-009 solved 2 390",
+   "date": "2026-11-08",
+   "scroll": [
+    "0>361"
+   ],
+   "fail": [],
+   "saveKeys": [
+    "nhl-connections-daily-2026-11-08"
+   ],
+   "afterReload": {
+    "tiles": 19,
+    "revealed": [
+     "Captained a Stanley Cup winner"
+    ]
+   },
+   "strays": [],
+   "unreachable": [],
+   "afterLoss": {
+    "revealed": [
+     "Captained a Stanley Cup winner",
+     "Scored 60 goals in a season",
+     "Won the Vezina Trophy",
+     "Won the Norris Trophy",
+     "Played 1,700 or more NHL games"
+    ],
+    "lost": true,
+    "won": false
+   }
+  },
+  {
+   "name": "oldsave nhlconn-009 solved 3+0 390",
+   "date": "2026-11-08",
+   "scroll": [
+    "0>361",
+    "361>361"
+   ],
+   "fail": [],
+   "saveKeys": [
+    "nhl-connections-daily-2026-11-08"
+   ],
+   "afterReload": {
+    "tiles": 11,
+    "revealed": [
+     "Played 1,700 or more NHL games",
+     "Scored 60 goals in a season"
+    ]
+   },
+   "strays": [],
+   "unreachable": [],
+   "afterLoss": {
+    "revealed": [
+     "Played 1,700 or more NHL games",
+     "Scored 60 goals in a season",
+     "Won the Vezina Trophy",
+     "Won the Norris Trophy"
+    ],
+    "lost": true,
+    "won": false
+   }
+  }
+ ]
+}

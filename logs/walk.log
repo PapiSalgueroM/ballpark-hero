@@ -1,0 +1,18 @@
+nhlconn-009 390 reduce win (2026-11-08): ok; scroll 0>361 361>361 361>361 361>361
+nhlconn-009 390 no-preference win (2026-11-08): ok; scroll 0>417 417>361 361>361 361>361
+nhlconn-009 1280 reduce win (2026-11-08): ok; scroll 0>417 417>417 417>417 417>417
+nhlconn-009 1280 no-preference win (2026-11-08): ok; scroll 0>473 473>417 417>417 417>417
+nhlconn-009 390 lose (2026-11-08): ok; scroll 
+nhlconn-020 390 reduce win (2026-11-01): ok; scroll 0>361 361>361 361>361 361>361
+nhlconn-020 390 no-preference win (2026-11-01): ok; scroll 0>417 417>361 361>361 361>361
+nhlconn-020 1280 reduce win (2026-11-01): ok; scroll 0>417 417>417 417>417 417>417
+nhlconn-020 1280 no-preference win (2026-11-01): ok; scroll 0>473 473>417 417>417 417>417
+nhlconn-020 390 lose (2026-11-01): ok; scroll 
+scroll OLD nhlconn-009 390 (2026-11-08): ok; scroll 0>361 361>361 361>361 361>361
+scroll NEW nhlconn-009 390 (2026-11-08): ok; scroll 0>361 361>361 361>361 361>361
+scroll OLD nhlconn-009 1280 (2026-11-08): ok; scroll 0>417 417>417 417>417 417>417
+scroll NEW nhlconn-009 1280 (2026-11-08): ok; scroll 0>417 417>417 417>417 417>417
+oldsave nhlconn-005 solved 0+1 390 (2026-11-20): ok; scroll 0>361 361>361; after reload {"tiles":10,"revealed":["Played for the Chicago Blackhawks","Played for the Avalanche or Nordiques"]} strays [] end {"revealed":["Played for the Chicago Blackhawks","Played for the Avalanche or Nordiques","Played for the Islanders (as of 2025-26)","Played for the Winnipeg Jets, either era (as of 2025-26)"],"lost":true,"won":false}
+oldsave nhlconn-009 solved 2 390 (2026-11-08): ok; scroll 0>361; after reload {"tiles":19,"revealed":["Captained a Stanley Cup winner"]} strays [] end {"revealed":["Captained a Stanley Cup winner","Scored 60 goals in a season","Won the Vezina Trophy","Won the Norris Trophy","Played 1,700 or more NHL games"],"lost":true,"won":false}
+oldsave nhlconn-009 solved 3+0 390 (2026-11-08): ok; scroll 0>361 361>361; after reload {"tiles":11,"revealed":["Played 1,700 or more NHL games","Scored 60 goals in a season"]} strays [] end {"revealed":["Played 1,700 or more NHL games","Scored 60 goals in a season","Won the Vezina Trophy","Won the Norris Trophy"],"lost":true,"won":false}
+rvwalk: green
