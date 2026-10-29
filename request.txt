@@ -1,0 +1,12 @@
+# Release BS kit, Round 1568 (results-g/rc-1568.txt Block D, fix2-1568.md section 6): Soccer Career depth, Conquest and its consent control, Stat Detective's reports walk, land-toasts (extras chainBase.sh and deckBase1504.mjs), plus the first fix pass's two controls owed to the kit:
+# cq-margin (exit 0 by design, last line "exactly the edge check went red, the check works") and toastbar (exit 1, "CONTROL FIRED").
+#!serve
+#!playwright
+#!serial
+playSoccerCareerDepth: NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/playSoccerCareerDepth.mjs
+playConquestScenes: ENGINES=chromium node scripts/playConquestScenes.mjs
+ctl-none-Conquest: ANSWER_CONSENT_CONTROL=none ENGINES=chromium node scripts/playConquestScenes.mjs
+playDraftDetectiveReports: NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/playDraftDetectiveReports.mjs
+land-toasts: git worktree add -q --detach /tmp/lt b59ebe2b && ln -s "$PWD/node_modules" /tmp/lt/node_modules && git diff 082fc277 2083b375 -- src/pages/SoccerCareer.tsx src/lib/soccerCareerSave.ts | git -C /tmp/lt apply && bash .rc/x/chainBase.sh /tmp/lt && node .rc/x/deckBase1504.mjs /tmp/lt && (cd /tmp/lt && node_modules/.bin/vite build > /tmp/lt-build.log 2>&1 || { tail -20 /tmp/lt-build.log; exit 2; }) && mkdir -p "$TMPDIR/out" && RC_OUT="$TMPDIR/out" PORT=4181 BASE_PORT=4182 SECTIONS=toasts,bytes SOCCER_LANDING_BASE_DIST=/tmp/lt/dist ENGINES=chromium node scripts/playSoccerLanding.mjs 2>&1 | tee "$TMPDIR/ctl.log"; s=${PIPESTATUS[0]}; [ $s -eq 0 ] && grep -qE 'playSoccerLanding: green at .*; toasts, bytes\), every marked section red on the base' "$TMPDIR/ctl.log"
+cq-margin: CONQUEST_SCENES_CONTROL=margin ENGINES=chromium node scripts/playConquestScenes.mjs
+toastbar: mkdir -p "$RC_OUT/tb" && RC_OUT="$RC_OUT/tb" PORT=4183 SOCCER_LANDING_CONTROL=toastbar ENGINES=chromium node scripts/playSoccerLanding.mjs
