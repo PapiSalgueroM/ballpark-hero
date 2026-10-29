@@ -16224,7 +16224,12 @@ function settleShootout(
     ? onPitch
     : shootoutRosterSide(oppRosterFor(state, fx.opponent), oppS);
   if (!order) {
-    const sides = shootoutSides(state, [], finished, theirs, oppS);
+    /* Release BS fix: the shown list starts with the penalty taker whose rating leaned the draw,
+       then the rest best first and the keeper last, the rule their side follows. Only the detached
+       stream sees it, so the winner and every global draw are unchanged. */
+    const gk = finished.find(x => x.slot?.allowed.includes('GK'))?.p ?? finished.find(x => !x.slot && x.p.position === 'GK')?.p ?? null;
+    const best = finished.map(x => x.p).filter(p => p !== gk && p.id !== taker?.id).sort((a, b) => b.rating - a.rating).map(p => p.id);
+    const sides = shootoutSides(state, taker ? [taker.id, ...best] : best, finished, theirs, oppS);
     const random = keyedRng(`cm-shootout|${roll}`);
     for (let attempt = 0; attempt < 128; attempt++) {
       const detail = runShootout({ ...sides, myFirst: random() < 0.5 }, random);
