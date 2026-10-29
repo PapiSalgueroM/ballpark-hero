@@ -1,0 +1,7 @@
+#!build
+#!playwright
+anchors: node scripts/simHarnessAnchors.mjs
+simWall: node scripts/simUsCareerHallWall.mjs
+m-sportimport: SIM_HALL_WALL_CONTROL=sportimport node scripts/simUsCareerHallWall.mjs
+m-clamp: SIM_HALL_WALL_CONTROL=clamp node scripts/simUsCareerHallWall.mjs
+fence-simWritesAreSent: node scripts/simWritesAreSent.mjs
