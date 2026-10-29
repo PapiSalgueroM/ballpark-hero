@@ -1,0 +1,4 @@
+vitest-us-3 exit=0 202s |    Duration  199.98s (transform 7.95s, setup 6.02s, collect 59.02s, tests 387.31s, environment 38.42s, prepare 7.96s)
+vitest-us-2 exit=0 207s |    Duration  205.15s (transform 8.38s, setup 5.85s, collect 60.61s, tests 388.69s, environment 38.57s, prepare 8.15s)
+vitest-us-1 exit=0 209s |    Duration  207.57s (transform 7.96s, setup 5.54s, collect 57.64s, tests 393.69s, environment 37.89s, prepare 8.85s)
+tsc exit=0 73s | 
