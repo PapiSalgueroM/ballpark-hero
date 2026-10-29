@@ -9,7 +9,7 @@
  *     the AFL), and it equals its receipts in scripts/data/aflClubNames2026.json
  *     string for string and source for source, each receipt line printing its
  *     string. Controls typo ('Gold Coast Suns' loses its s) and onesource (Sydney
- *     Swans keeps one source); independent section 3 (critic corrections 3, 4).
+ *     Swans keeps one source); independent section 2a (critic corrections 3, 4).
  *   1 on the list and nothing else: the harness recomputes the ladder bands from
  *     CLUBS' tier counts and each real club's slot from the LEDGER's ladder, and
  *     compares id by id (full, short, style, tier) with clubIdentities('afl2026');
@@ -69,9 +69,9 @@ const started = Date.now();
 const LEAGUE = 'src/lib/aussieRulesLeague.ts', DATA = 'src/data/aflClubs2026.ts', BOARD = 'src/components/aussie-rules-manager/AussieRulesLeagueBoard.tsx';
 /* [file, anchor, replacement, target section, independent section] */
 const CONTROLS = {
-  /* Critic corrections 3 and 4: anchors that occur once, and section 3 as the independent section. */
-  typo: [DATA, "'Gold Coast Suns'", "'Gold Coast Sun'", '0', '3'],
-  onesource: [DATA, "full: 'Sydney Swans', short: 'Sydney', ladder2026: 2, fullSources: ['afl', 'austadiums']", "full: 'Sydney Swans', short: 'Sydney', ladder2026: 2, fullSources: ['afl']", '0', '3'],
+  /* Critic corrections 3 and 4: anchors that occur once, and an independent section that never reads the real names (2a, no set; section 3 builds real twins since step 3). */
+  typo: [DATA, "'Gold Coast Suns'", "'Gold Coast Sun'", '0', '2a'],
+  onesource: [DATA, "full: 'Sydney Swans', short: 'Sydney', ladder2026: 2, fullSources: ['afl', 'austadiums']", "full: 'Sydney Swans', short: 'Sydney', ladder2026: 2, fullSources: ['afl']", '0', '2a'],
   /* Critic advice 13: a wrong but well formed mapping (k counted from the end of its band), read by section 1's id by id comparison. */
   ladder: [LEAGUE, 'const k = row.ladder2026 - low - 1;', 'const k = high - row.ladder2026;', '1', '2a'],
   /* The real set's derived style drifts; createLeagueWorld reads it, so 2b's masked hashes move while 2a (no set) holds. */
@@ -85,7 +85,8 @@ const CONTROLS = {
 };
 if (CONTROL && !CONTROLS[CONTROL]) { console.error(`unknown control ${CONTROL}`); process.exit(2); }
 const SECTIONS = ['0', '1', '2a', '2b', '3', '4', '4i'];
-const RUN = CONTROL ? new Set([CONTROLS[CONTROL][3], CONTROLS[CONTROL][4]]) : new Set(SECTIONS);
+const ONLY = process.env.AFL_NAMES_ONLY || ''; // e.g. "0,1,2a,2b,3" while iterating; a gate run never sets it
+const RUN = CONTROL ? new Set([CONTROLS[CONTROL][3], CONTROLS[CONTROL][4]]) : ONLY ? new Set(ONLY.split(',')) : new Set(SECTIONS);
 
 const { L } = await bundle(ROOT, {
   entries: ["export * from './src/lib/aussieRulesLeague.ts';", "export * as AFL from './src/data/aflClubs2026.ts';"],
