@@ -1,0 +1,11 @@
+simConnectionsFacts exit=0 0s | simConnectionsFacts: green. Every claim this round checked stands on two hosts and no rebuilt board has a second answer.
+live-pre exit=1 0s | simConnectionsFacts: 109 failures
+simFairPuzzles exit=1 0s | simFairPuzzles: 1 failure
+live-post exit=1 0s | simConnectionsFacts: 11 failures
+fair-secondfit exit=1 0s | simFairPuzzles: 3 failures
+simConnectionsLoss exit=0 2s | simConnectionsLoss: all green
+simConnectionsShake exit=0 2s | simConnectionsShake: all green
+simNoRivalNames exit=0 18s | No rival product names found. 0 findings.
+dealt exit=1 0s | 2026-11-30: puzzle-217 of 326 boards, not touched: clear to apply
+vitest-daily exit=0 25s |    Duration  24.32s (transform 4.32s, setup 209ms, collect 3.86s, tests 22.68s, environment 904ms, prepare 284ms)
+tsc exit=0 66s | 
