@@ -1,0 +1,4 @@
+#!playwright
+#!serial
+walk-410: node_modules/.bin/vite build >/dev/null 2>&1 && PFX=a- node .rc/x/walk410.mjs
+walk-1568: git fetch -q origin r1568-games-under-menu; git -c user.name=rv -c user.email=rv@example.invalid merge --no-ff --no-edit 12c1b2cd001f9309a31a887e5c432ca63c373852 >/dev/null && node_modules/.bin/vite build >/dev/null 2>&1 && PFX=m- node .rc/x/walk410.mjs
