@@ -1,0 +1,6 @@
+tsc: node_modules/.bin/tsc --noEmit -p tsconfig.app.json
+nba-plain: node scripts/simNbaSeasonStats.mjs
+nba-c-perload: NBA_STATS_CONTROL=perload node scripts/simNbaSeasonStats.mjs
+nfl-plain: node scripts/simNflSeasonStats.mjs
+nfl-c-perload: NFL_STATS_CONTROL=perload node scripts/simNflSeasonStats.mjs
+simHarnessAnchors: node scripts/simHarnessAnchors.mjs
