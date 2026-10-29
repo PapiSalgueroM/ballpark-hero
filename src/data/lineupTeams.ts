@@ -9,6 +9,41 @@ export const clubs: string[] = [
   'West Ham', 'Marseille', 'Lyon', 'Celtic', 'Galatasaray',
 ];
 
+/** Mixed adds recorded clubs; Club year keeps the original catalogue. */
+export const mixedClubs: string[] = [
+  ...clubs,
+  'Brighton & Hove Albion',
+  'AFC Bournemouth',
+  'Brentford FC',
+  'Crystal Palace',
+  'Everton FC',
+  'Fulham FC',
+  'Leeds United',
+  'Nottingham Forest',
+  'Real Betis Balompié',
+  'Villarreal CF',
+  'Real Sociedad',
+  'Celta de Vigo',
+  'SS Lazio',
+  'ACF Fiorentina',
+  'Bologna FC 1909',
+  'Udinese Calcio',
+  'VfB Stuttgart',
+  'Borussia Mönchengladbach',
+  'SC Freiburg',
+  'LOSC Lille',
+  'Stade Rennais FC',
+  'OGC Nice',
+  'Feyenoord Rotterdam',
+  'AZ Alkmaar',
+  'Rangers FC',
+  'Fenerbahce',
+  'Besiktas JK',
+  'CR Flamengo',
+  'Sociedade Esportiva Palmeiras',
+  'CF América',
+];
+
 export const nations: string[] = [
   'Argentina', 'France', 'Brazil', 'England', 'Belgium',
   'Croatia', 'Netherlands', 'Portugal', 'Spain', 'Italy',
@@ -18,7 +53,7 @@ export const nations: string[] = [
 ];
 
 const allTeams: TeamAssignment[] = [
-  ...clubs.map((name) => ({ name, isNation: false })),
+  ...mixedClubs.map((name) => ({ name, isNation: false })),
   ...nations.map((name) => ({ name, isNation: true })),
 ];
 
@@ -29,7 +64,7 @@ export function getRandomTeamAssignments(count = 11): TeamAssignment[] {
 }
 
 /**
- * THE EXACT STRINGS player_market_values USES FOR THE THIRTY CLUBS ABOVE.
+ * THE EXACT STRINGS player_market_values USES FOR BOTH CLUB CATALOGUES.
  *
  * Round 483. Until this round the dropdown scoped its pool with a substring
  * `ilike` on the club label, and the comment that used to live here admitted
@@ -91,6 +126,36 @@ export const CLUB_TABLE_NAMES: Record<string, string[]> = {
   'Lyon': ['Olympique Lyon'],
   'Celtic': ['Celtic FC'],
   'Galatasaray': ['Galatasaray'],
+  'Brighton & Hove Albion': ['Brighton & Hove Albion'],
+  'AFC Bournemouth': ['AFC Bournemouth'],
+  'Brentford FC': ['Brentford FC'],
+  'Crystal Palace': ['Crystal Palace'],
+  'Everton FC': ['Everton FC'],
+  'Fulham FC': ['Fulham FC'],
+  'Leeds United': ['Leeds United'],
+  'Nottingham Forest': ['Nottingham Forest'],
+  'Real Betis Balompié': ['Real Betis Balompié'],
+  'Villarreal CF': ['Villarreal CF'],
+  'Real Sociedad': ['Real Sociedad'],
+  'Celta de Vigo': ['Celta de Vigo'],
+  'SS Lazio': ['SS Lazio'],
+  'ACF Fiorentina': ['ACF Fiorentina'],
+  'Bologna FC 1909': ['Bologna FC 1909'],
+  'Udinese Calcio': ['Udinese Calcio'],
+  'VfB Stuttgart': ['VfB Stuttgart'],
+  'Borussia Mönchengladbach': ['Borussia Mönchengladbach'],
+  'SC Freiburg': ['SC Freiburg'],
+  'LOSC Lille': ['LOSC Lille'],
+  'Stade Rennais FC': ['Stade Rennais FC'],
+  'OGC Nice': ['OGC Nice'],
+  'Feyenoord Rotterdam': ['Feyenoord Rotterdam'],
+  'AZ Alkmaar': ['AZ Alkmaar'],
+  'Rangers FC': ['Rangers FC'],
+  'Fenerbahce': ['Fenerbahce'],
+  'Besiktas JK': ['Besiktas JK'],
+  'CR Flamengo': ['CR Flamengo'],
+  'Sociedade Esportiva Palmeiras': ['Sociedade Esportiva Palmeiras'],
+  'CF América': ['CF América'],
 };
 
 /** The exact stored club names for a club label, for an `in` filter. */

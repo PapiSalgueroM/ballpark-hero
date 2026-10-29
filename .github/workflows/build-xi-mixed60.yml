@@ -1,0 +1,251 @@
+name: Build Your XI Mixed60 positive build and browser
+on:
+  push:
+    branches: [codex/build-xi-mixed60-positive-post-bs-20261029]
+permissions:
+  contents: read
+concurrency:
+  group: build-xi-mixed60-${{ github.ref }}
+  cancel-in-progress: false
+jobs:
+  proof:
+    runs-on: ubuntu-latest
+    timeout-minutes: 90
+    env:
+      CI: true
+      SIM_NETWORK: offline
+      EXPECTED_MAIN: 601435944bef57aa0557884bbe16fde55e64107c
+      XI_MIXED_SELECTOR_SHA: e37ef09e9e560b822af2cf54808cc21f839e4ac01735f8d49ce5c0952ef29ec2
+    defaults:
+      run:
+        shell: bash
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 2
+          persist-credentials: false
+          ref: ${{ github.sha }}
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: npm
+      - name: Bind exact post-BS source and actual owned baseline
+        id: foundation
+        timeout-minutes: 5
+        run: |
+          set -euo pipefail
+          out="$RUNNER_TEMP/build-xi-mixed60-positive"
+          test ! -e "$out";test ! -L "$out";mkdir "$out"
+          echo "XI_MIXED_OUT=$out" >> "$GITHUB_ENV";export XI_MIXED_OUT="$out"
+          test "$GITHUB_REPOSITORY" = PapiSalgueroM/ballpark-hero
+          test "$GITHUB_REPOSITORY_ID" = 1195729679
+          test "$GITHUB_REF" = refs/heads/codex/build-xi-mixed60-positive-post-bs-20261029
+          test "$(git rev-parse HEAD)" = "$GITHUB_SHA"
+          for name in NODE_OPTIONS NODE_PATH SIM_SEED BYXI_CONTROL BYXI_SEED BYXI_PRINT_DIGEST VITEST ONLY;do test ! -v "$name";done
+          timeout 30s git ls-remote origin refs/heads/main > "$out/main-ref.txt"
+          test "$(cut -f1 "$out/main-ref.txt")" = "$EXPECTED_MAIN"
+          printf '%s  qa/build-xi-mixed60/SOURCE.json\n' "$XI_MIXED_SELECTOR_SHA" | sha256sum -c - > "$out/selector-pin.log"
+          node --input-type=module <<'BIND'
+          import fs from 'node:fs';import path from 'node:path';import cp from 'node:child_process';import assert from 'node:assert/strict';import{createHash}from'node:crypto';
+          const out=process.env.XI_MIXED_OUT,s=JSON.parse(fs.readFileSync('qa/build-xi-mixed60/SOURCE.json'));
+          assert.equal(s.bound,true);assert.equal(s.phase,'all-pass');assert.equal(s.branch,'codex/build-xi-mixed60-positive-post-bs-20261029');assert.equal(s.browser.bound,true);
+          const p=s.browser.baselinePrerequisite;assert.equal(p.run,40899115438);assert.equal(p.head,'feac0cb0d5c65a3f5944760b635567ef1d292263');assert.equal(p.rootAdmissionSHA256,'b5504740515e65dce39ba2f013398bd4e695ffa9d29820d317b7d591a5ea9bdb');assert.equal(p.custodianAdmissionSHA256,'e6057bb9957528126e2788dd2472b820abc4f01cd77eb8b77a9f0a09db42dd79');
+          const git=a=>cp.execFileSync('git',a,{encoding:'utf8'}).trim();
+          assert.equal(git(['show','-s','--format=%P','HEAD']),s.parent);assert.equal(s.parent,process.env.EXPECTED_MAIN);assert.equal(git(['rev-parse',s.parent+'^{tree}']),s.parentTree);
+          const listing=ref=>new Map(cp.execFileSync('git',['ls-tree','-rlz',ref],{encoding:'utf8'}).split('\0').filter(Boolean).map(row=>{const m=row.match(/^(\d+) (\w+) ([a-f0-9]+)\s+(\d+)\t([\s\S]+)$/);assert(m);return[m[5],{mode:m[1],type:m[2],git:m[3],bytes:Number(m[4])}];}));
+          const before=listing(s.parent),after=listing('HEAD'),delta=[],held=[];assert.equal(before.size,5452);assert.equal(after.size,5458);
+          for(const[name,value]of before){assert(after.has(name));if(JSON.stringify(after.get(name))===JSON.stringify(value))held.push(name);else delta.push('M\t'+name);}for(const name of after.keys())if(!before.has(name))delta.push('A\t'+name);
+          assert.deepEqual(delta.sort(),[...s.directPaths].sort());assert.equal(delta.length,11);assert.equal(held.length,5447);assert.equal(delta.filter(x=>x.startsWith('M\t')).length,5);assert.equal(delta.filter(x=>x.startsWith('A\t')).length,6);assert([...after.values()].every(x=>x.type==='blob'));assert(delta.every(x=>after.get(x.slice(2)).mode==='100644'));
+          const blob=b=>createHash('sha1').update(Buffer.concat([Buffer.from('blob '+b.length+'\0'),b])).digest('hex');
+          assert.equal(s.pins.length,35);assert.equal(new Set(s.pins.map(p=>p.path)).size,35);
+          for(const p of s.pins){const st=fs.lstatSync(p.path);assert(st.isFile()&&!st.isSymbolicLink());const b=fs.readFileSync(p.path);assert.equal(blob(b),p.git,'MIXED_SOURCE_PIN:'+p.path);assert.equal(b.length,p.bytes);if(p.sha256)assert.equal(createHash('sha256').update(b).digest('hex'),p.sha256);assert.equal(after.get(p.path).mode,p.mode);}
+          assert.equal(after.get('scripts/sweepWeight.mjs').git,'084cce2062686259437cd2a334093a561c819c36');
+          fs.writeFileSync(path.join(out,'source-binding.json'),JSON.stringify({head:process.env.GITHUB_SHA,parent:s.parent,parentTree:s.parentTree,tree:git(['rev-parse','HEAD^{tree}']),delta,heldParentBodies:held.length,sourceBodies:after.size,pins:s.pins,actualBaseline:p},null,2)+'\n',{flag:'wx'});
+          BIND
+          git ls-tree -rl HEAD > "$out/source-tree.txt"
+          git ls-files -z | sort -z > "$out/source-members.before"
+          git ls-files -z | sort -z | xargs -0 sha256sum > "$out/source.sha256"
+          git diff --exit-code HEAD > "$out/source-clean-before.log"
+          git status --porcelain --untracked-files=all > "$out/status-before.txt";test ! -s "$out/status-before.txt"
+          git archive --format=tar HEAD > "$out/source.tar"
+      - name: Install locked dependencies
+        id: install
+        timeout-minutes: 10
+        run: |
+          set -euo pipefail
+          out="$XI_MIXED_OUT";status=0
+          npm ci > "$out/npm-ci.stdout" 2> "$out/npm-ci.stderr" &
+          pid=$!;printf '%s\n' "$pid" > "$out/npm-ci.pid";wait "$pid" || status=$?
+          printf '%s\n' "$status" > "$out/npm-ci.exit";test "$status" -eq 0
+      - name: Isolated browser tools and compatible font cache
+        id: tools
+        timeout-minutes: 15
+        run: |
+          set -euo pipefail
+          out="$XI_MIXED_OUT";tools="$RUNNER_TEMP/mixed60-tools-$GITHUB_RUN_ID-$GITHUB_RUN_ATTEMPT"
+          test ! -e "$tools";mkdir "$tools"
+          echo "XI_MIXED_TOOLS=$tools" >> "$GITHUB_ENV"
+          printf '{"private":true,"dependencies":{"playwright":"1.64.0"}}\n' > "$tools/package.json"
+          npm install --prefix "$tools" --ignore-scripts --no-audit --no-fund > "$out/browser-install.stdout" 2> "$out/browser-install.stderr"
+          test ! -e node_modules/playwright;test ! -e node_modules/playwright-core
+          ln -s "$tools/node_modules/playwright" node_modules/playwright
+          ln -s "$tools/node_modules/playwright-core" node_modules/playwright-core
+          cp "$tools/package.json" "$out/browser-package.json";cp "$tools/package-lock.json" "$out/browser-package-lock.json"
+          export PLAYWRIGHT_BROWSERS_PATH="$RUNNER_TEMP/mixed60-chromium-$GITHUB_RUN_ID-$GITHUB_RUN_ATTEMPT"
+          echo "PLAYWRIGHT_BROWSERS_PATH=$PLAYWRIGHT_BROWSERS_PATH" >> "$GITHUB_ENV"
+          node "$tools/node_modules/playwright/cli.js" install --with-deps chromium > "$out/chromium.stdout" 2> "$out/chromium.stderr"
+          python -m pip install fonttools pillow > "$out/python-tools.stdout" 2> "$out/python-tools.stderr"
+          export FREE_KICK_FONT_CACHE="$out/font-cache"
+          echo "FREE_KICK_FONT_CACHE=$FREE_KICK_FONT_CACHE" >> "$GITHUB_ENV"
+          node scripts/qa/freeKickLab1070.mjs --prefetch-fonts-only > "$out/font-prefetch.stdout" 2> "$out/font-prefetch.stderr"
+      - name: Inventory immutable dependencies and font inputs
+        id: inputs
+        run: |
+          set -euo pipefail
+          out="$XI_MIXED_OUT"
+          find node_modules -type f -print0 | sort -z > "$out/dependency-members.before"
+          find node_modules -type f -print0 | sort -z | xargs -0 sha256sum > "$out/dependencies.sha256"
+          find node_modules -type l -printf '%p\t%l\0' | sort -z > "$out/dependency-links.before"
+          find node_modules ! -type d ! -type f ! -type l -print > "$out/dependency-nonregular.before";test ! -s "$out/dependency-nonregular.before"
+          (cd "$XI_MIXED_TOOLS" && find . -type f -print0 | sort -z | xargs -0 sha256sum) > "$out/browser-tools.before.sha256"
+          (cd "$XI_MIXED_TOOLS" && find . -type l -printf '%p\t%l\0' | sort -z) > "$out/browser-tools-links.before"
+          test -z "$(find "$XI_MIXED_TOOLS" ! -type d ! -type f ! -type l -print -quit)"
+          test -z "$(find "$FREE_KICK_FONT_CACHE" ! -type d ! -type f -print -quit)"
+          (cd "$FREE_KICK_FONT_CACHE" && find . -type f -print0 | sort -z | xargs -0 sha256sum) > "$out/fonts.before.sha256"
+          node --input-type=module <<'FONTS' > "$out/font-admission.log"
+          import fs from 'node:fs';import path from 'node:path';import assert from 'node:assert/strict';import{createHash}from'node:crypto';
+          const root=process.env.FREE_KICK_FONT_CACHE,rows=JSON.parse(fs.readFileSync(path.join(root,'manifest.json')));assert(Array.isArray(rows)&&rows.length>0);assert.equal(new Set(rows.map(r=>r.url)).size,rows.length);const names=new Set();for(const r of rows){assert(/^[a-f0-9]{64}$/.test(r.file));assert(!names.has(r.file));names.add(r.file);assert.equal(createHash('sha256').update(fs.readFileSync(path.join(root,r.file))).digest('hex'),r.sha256);}console.log('Mixed60 compatible font array and every listed body held.');
+          FONTS
+      - name: Real app types and five actual positive cases
+        id: positive
+        timeout-minutes: 10
+        run: |
+          set -euo pipefail
+          out="$XI_MIXED_OUT";status=0;: > "$out/controller.transport"
+          NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" SIM_OFFLINE_RECEIPT="$out/controller.transport" node scripts/qa/buildXiMixed60.mjs > "$out/controller.stdout" 2> "$out/controller.stderr" || status=$?
+          printf '%s\n' "$status" > "$out/controller.exit";test "$status" -eq 0;test ! -s "$out/controller.transport"
+      - name: Detached unchanged source and remote browser syntax check
+        id: detached
+        run: |
+          set -euo pipefail
+          out="$XI_MIXED_OUT";build_root="$RUNNER_TEMP/mixed60-build-$GITHUB_RUN_ID-$GITHUB_RUN_ATTEMPT"
+          git worktree add --detach "$build_root" HEAD
+          ln -s "$GITHUB_WORKSPACE/node_modules" "$build_root/node_modules"
+          echo "XI_MIXED_BUILD_ROOT=$build_root" >> "$GITHUB_ENV"
+          cd "$build_root"
+          git ls-files -z | sort -z > "$out/build-members.before"
+          git ls-files -z | sort -z | xargs -0 sha256sum > "$out/build-source.sha256"
+          status=0
+          NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/qa/buildXiMixed60Stages.mjs syntax > "$out/syntax-stage.stdout" 2> "$out/syntax-stage.stderr" || status=$?
+          printf '%s\n' "$status" > "$out/syntax-stage.exit";test "$status" -eq 0
+      - name: Actual production build without SEO source regeneration
+        id: build
+        timeout-minutes: 17
+        run: |
+          set -euo pipefail
+          cd "$XI_MIXED_BUILD_ROOT";status=0
+          NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/qa/buildXiMixed60Stages.mjs build > "$XI_MIXED_OUT/build-stage.stdout" 2> "$XI_MIXED_OUT/build-stage.stderr" || status=$?
+          printf '%s\n' "$status" > "$XI_MIXED_OUT/build-stage.exit";test "$status" -eq 0
+          test -z "$(find dist ! -type d ! -type f -print -quit)"
+          find dist -type f -print0 | sort -z | xargs -0 sha256sum > "$XI_MIXED_OUT/dist.before.sha256"
+          tar --format=pax -cf "$XI_MIXED_OUT/dist.tar" -C "$XI_MIXED_BUILD_ROOT" dist
+      - name: All eighteen current built-site readers
+        id: readers
+        if: ${{ always() && steps.build.outcome == 'success' }}
+        timeout-minutes: 17
+        run: |
+          set -euo pipefail
+          cd "$XI_MIXED_BUILD_ROOT";status=0
+          NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/qa/buildXiMixed60Stages.mjs readers > "$XI_MIXED_OUT/readers-stage.stdout" 2> "$XI_MIXED_OUT/readers-stage.stderr" || status=$?
+          printf '%s\n' "$status" > "$XI_MIXED_OUT/readers-stage.exit";test "$status" -eq 0
+      - name: All fifteen unchanged current BS rounded caps
+        id: caps
+        if: ${{ always() && steps.build.outcome == 'success' }}
+        timeout-minutes: 7
+        run: |
+          set -euo pipefail
+          cd "$XI_MIXED_BUILD_ROOT";out="$XI_MIXED_OUT"
+          NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/lib/hostLikeServer.mjs dist 4173 > "$out/caps-server.stdout" 2> "$out/caps-server.stderr" &
+          pid=$!;printf '%s\n' "$pid" > "$out/caps-server.pid"
+          trap 'kill "$pid" 2>/dev/null || true;wait "$pid" 2>/dev/null || true' EXIT
+          for attempt in 1 2 3 4 5 6 7 8 9 10;do kill -0 "$pid";if curl --fail --silent http://127.0.0.1:4173/ > /dev/null;then break;fi;sleep 1;done
+          curl --fail --silent http://127.0.0.1:4173/ > /dev/null
+          status=0
+          NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/qa/buildXiMixed60Stages.mjs caps > "$out/caps-stage.stdout" 2> "$out/caps-stage.stderr" || status=$?
+          printf '%s\n' "$status" > "$out/caps-stage.exit";test "$status" -eq 0
+      - name: Three fresh actual-page browser profiles
+        id: browser
+        if: ${{ always() && steps.build.outcome == 'success' }}
+        timeout-minutes: 7
+        run: |
+          set -euo pipefail
+          cd "$XI_MIXED_BUILD_ROOT";out="$XI_MIXED_OUT"
+          export XI_MIXED_BROWSER_OUT="$out/browser"
+          NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/lib/hostLikeServer.mjs dist 4173 > "$out/browser-server.stdout" 2> "$out/browser-server.stderr" &
+          pid=$!;printf '%s\n' "$pid" > "$out/browser-server.pid"
+          trap 'kill "$pid" 2>/dev/null || true;wait "$pid" 2>/dev/null || true' EXIT
+          for attempt in 1 2 3 4 5 6 7 8 9 10;do kill -0 "$pid";if curl --fail --silent http://127.0.0.1:4173/ > /dev/null;then break;fi;sleep 1;done
+          curl --fail --silent http://127.0.0.1:4173/build-your-xi > "$out/served-build-your-xi.html"
+          if test -f dist/build-your-xi/index.html;then expected=dist/build-your-xi/index.html;else expected=dist/index.html;fi
+          printf '%s\n' "$expected" > "$out/served-document-source.txt"
+          cmp "$expected" "$out/served-build-your-xi.html" > "$out/served-document-held.log"
+          status=0
+          NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/qa/buildXiMixed60Stages.mjs browser > "$out/browser-stage.stdout" 2> "$out/browser-stage.stderr" || status=$?
+          printf '%s\n' "$status" > "$out/browser-stage.exit";test "$status" -eq 0
+          grep -Fx 'Mixed60 browser:3profiles/3wrongpositionrefusals/3acceptedGK/6normalPNGs/3COPIEDguards/sourceheld' "$out/build/browser.stdout"
+      - name: Complete source dependency font and dist holds
+        id: holds
+        if: ${{ always() && steps.inputs.outcome == 'success' }}
+        timeout-minutes: 7
+        run: |
+          set -euo pipefail
+          out="$XI_MIXED_OUT";failed=0
+          sha256sum -c "$out/source.sha256" > "$out/source-hold.log" 2>&1 || failed=1
+          git ls-files -z | sort -z > "$out/source-members.after"
+          cmp "$out/source-members.before" "$out/source-members.after" > "$out/source-members-held.log" 2>&1 || failed=1
+          git diff --exit-code HEAD > "$out/source-clean-after.log" 2>&1 || failed=1
+          git status --porcelain --untracked-files=all > "$out/status-after.txt";test ! -s "$out/status-after.txt" || failed=1
+          sha256sum -c "$out/dependencies.sha256" > "$out/dependency-hold.log" 2>&1 || failed=1
+          find node_modules -type f -print0 | sort -z > "$out/dependency-members.after"
+          cmp "$out/dependency-members.before" "$out/dependency-members.after" > "$out/dependency-members-held.log" 2>&1 || failed=1
+          find node_modules -type l -printf '%p\t%l\0' | sort -z > "$out/dependency-links.after"
+          cmp "$out/dependency-links.before" "$out/dependency-links.after" > "$out/dependency-links-held.log" 2>&1 || failed=1
+          find node_modules ! -type d ! -type f ! -type l -print > "$out/dependency-nonregular.after";test ! -s "$out/dependency-nonregular.after" || failed=1
+          test -z "$(find "$XI_MIXED_TOOLS" ! -type d ! -type f ! -type l -print -quit)" || failed=1
+          test -z "$(find "$FREE_KICK_FONT_CACHE" ! -type d ! -type f -print -quit)" || failed=1
+          (cd "$XI_MIXED_TOOLS" && find . -type l -printf '%p\t%l\0' | sort -z) > "$out/browser-tools-links.after"
+          cmp "$out/browser-tools-links.before" "$out/browser-tools-links.after" > "$out/browser-tools-links-held.log" 2>&1 || failed=1
+          (cd "$XI_MIXED_TOOLS" && find . -type f -print0 | sort -z | xargs -0 sha256sum) > "$out/browser-tools.after.sha256"
+          cmp "$out/browser-tools.before.sha256" "$out/browser-tools.after.sha256" > "$out/browser-tools-held.log" 2>&1 || failed=1
+          (cd "$FREE_KICK_FONT_CACHE" && find . -type f -print0 | sort -z | xargs -0 sha256sum) > "$out/fonts.after.sha256"
+          cmp "$out/fonts.before.sha256" "$out/fonts.after.sha256" > "$out/fonts-held.log" 2>&1 || failed=1
+          if test -v XI_MIXED_BUILD_ROOT;then
+            cd "$XI_MIXED_BUILD_ROOT"
+            sha256sum -c "$out/build-source.sha256" > "$out/build-source-held.log" 2>&1 || failed=1
+            git ls-files -z | sort -z > "$out/build-members.after"
+            cmp "$out/build-members.before" "$out/build-members.after" > "$out/build-members-held.log" 2>&1 || failed=1
+            git diff --exit-code HEAD > "$out/build-clean-after.log" 2>&1 || failed=1
+            git status --porcelain --untracked-files=all > "$out/build-status-after.txt";test ! -s "$out/build-status-after.txt" || failed=1
+            if test -f "$out/dist.before.sha256";then
+              test -z "$(find dist ! -type d ! -type f -print -quit)" || failed=1
+              find dist -type f -print0 | sort -z | xargs -0 sha256sum > "$out/dist.after.sha256"
+              cmp "$out/dist.before.sha256" "$out/dist.after.sha256" > "$out/dist-members-held.log" 2>&1 || failed=1
+              sha256sum -c "$out/dist.before.sha256" > "$out/dist-held.log" 2>&1 || failed=1
+            fi
+          fi
+          printf '%s\n' "$failed" > "$out/holds.exit";exit "$failed"
+      - name: Seal complete or partial evidence
+        if: ${{ always() && env.XI_MIXED_OUT != '' }}
+        run: |
+          set -euo pipefail
+          cd "$XI_MIXED_OUT"
+          find . ! -type d ! -type f -print > nonregular.txt;test ! -s nonregular.txt
+          find . -type f ! -name evidence.sha256 -print0 | sort -z | xargs -0 sha256sum > evidence.sha256
+      - uses: actions/upload-artifact@v4
+        if: ${{ always() && env.XI_MIXED_OUT != '' }}
+        with:
+          name: build-xi-mixed60-positive-${{ github.run_id }}-a${{ github.run_attempt }}
+          path: ${{ env.XI_MIXED_OUT }}
+          include-hidden-files: true
+          if-no-files-found: error
+
