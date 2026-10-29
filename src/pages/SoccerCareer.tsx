@@ -228,6 +228,13 @@ class CentreMountBoundary extends Component<{ onClose: () => void; what?: string
 /* ─── Constants ─── */
 // Round 76: 131 nations (was 49), every one with a real flag in FlagImg,
 // sorted alphabetically so yours is findable in the scroll.
+/* Release BS fix: a loading layer has one control, so Tab stays on it, the phone layer's rule below */
+function keepTabInside(event: { key: string; preventDefault(): void; stopPropagation(): void; currentTarget: HTMLElement }): boolean {
+  if (event.key !== "Tab") return false;
+  event.preventDefault(); event.stopPropagation();
+  event.currentTarget.querySelector<HTMLButtonElement>("button")?.focus({ preventScroll: true });
+  return true;
+}
 function PhoneSurface(props: ComponentProps<typeof PhonePanel>) {
   const opener = useRef(document.activeElement instanceof HTMLElement ? document.activeElement : null);
   useLayoutEffect(() => () => queueMicrotask(() => {
@@ -1729,8 +1736,8 @@ export default function SoccerCareer() {
             {trainingOpen && (
               <CentreMountBoundary what="training ground" onClose={closeTraining}>
                 <Suspense fallback={
-                  <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/70 p-4" data-training-loading>
-                    <div role="dialog" aria-modal="true" aria-label="Opening the training ground" tabIndex={-1} ref={focusDialogOnMount} onKeyDown={escapeCloses(closeTraining)} className="w-full max-w-sm rounded-2xl border border-border bg-card px-5 py-4 text-sm">
+                  <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/70 p-4" data-training-loading onClick={event => { if (event.target === event.currentTarget) closeTraining(); }}>
+                    <div role="dialog" aria-modal="true" aria-label="Opening the training ground" tabIndex={-1} ref={focusDialogOnMount} onKeyDown={event => { if (!keepTabInside(event)) escapeCloses(closeTraining)(event); }} className="w-full max-w-sm rounded-2xl border border-border bg-card px-5 py-4 text-sm">
                       <p>🏋️ Opening the training ground...</p>
                       <Button onClick={closeTraining} variant="outline" className="mt-4 h-11 w-full font-bold">Back to career</Button>
                     </div>
@@ -4584,8 +4591,8 @@ function GameScreen({ career, clubs, onNextSeason, onAcceptOffer, onDismissSumma
       )}
       {storyOpen && <Suspense fallback={null}><CareerStory career={visibleCareer} onClose={() => setStoryOpen(false)} /></Suspense>}
       {trophyCategory && <CentreMountBoundary what="trophy cabinet" onClose={() => setTrophyCategory(null)}><Suspense fallback={
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-background/80 p-4" data-trophy-loading>
-          <div role="dialog" aria-modal="true" aria-label="Opening your trophies" tabIndex={-1} ref={focusDialogOnMount} onKeyDown={escapeCloses(() => setTrophyCategory(null))} className="w-full max-w-sm rounded-2xl border border-border bg-card px-5 py-4 text-sm">
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-background/80 p-4" data-trophy-loading onClick={event => { if (event.target === event.currentTarget) setTrophyCategory(null); }}>
+          <div role="dialog" aria-modal="true" aria-label="Opening your trophies" tabIndex={-1} ref={focusDialogOnMount} onKeyDown={event => { if (!keepTabInside(event)) escapeCloses(() => setTrophyCategory(null))(event); }} className="w-full max-w-sm rounded-2xl border border-border bg-card px-5 py-4 text-sm">
             <p>Opening your trophies...</p>
             <Button onClick={() => setTrophyCategory(null)} variant="outline" className="mt-4 h-11 w-full font-bold">Back to career</Button>
           </div>
@@ -4604,8 +4611,8 @@ function GameScreen({ career, clubs, onNextSeason, onAcceptOffer, onDismissSumma
           <div data-no-prerender>
             <CentreMountBoundary onClose={closeCentre}>
               <Suspense fallback={
-                <div className="fixed inset-0 z-50 flex items-center justify-center bg-background/80 p-4" data-season-centre-loading>
-                  <div role="dialog" aria-modal="true" aria-label="Getting your season ready" tabIndex={-1} ref={focusDialogOnMount} onKeyDown={escapeCloses(closeCentre)} className="w-full max-w-sm rounded-2xl border border-border bg-card px-5 py-4 text-sm">
+                <div className="fixed inset-0 z-50 flex items-center justify-center bg-background/80 p-4" data-season-centre-loading onClick={event => { if (event.target === event.currentTarget) closeCentre(); }}>
+                  <div role="dialog" aria-modal="true" aria-label="Getting your season ready" tabIndex={-1} ref={focusDialogOnMount} onKeyDown={event => { if (!keepTabInside(event)) escapeCloses(closeCentre)(event); }} className="w-full max-w-sm rounded-2xl border border-border bg-card px-5 py-4 text-sm">
                     <p>📺 Getting your season ready...</p>
                     <Button onClick={closeCentre} variant="outline" className="mt-4 h-11 w-full font-bold">Back to career</Button>
                   </div>
