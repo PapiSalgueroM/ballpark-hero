@@ -1,0 +1,4 @@
+vitest-chain exit=0 11s |    Duration  10.44s (transform 3.26s, setup 1.14s, collect 9.67s, tests 8.00s, environment 6.06s, prepare 1.36s)
+simSoccerCareerSavedLoan-ctl-gate exit=0 61s | FIRED-OK
+simSoccerCareerSavedLoan exit=0 74s | simSoccerCareerSavedLoan normal: green.
+programme-ctl-overwrite exit=0 64s | FIRED-OK
