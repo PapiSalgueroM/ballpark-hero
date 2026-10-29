@@ -1,0 +1,8 @@
+6) a season out: the league plays a whole season without him, his record gains a year out and nothing else, and refusals touch nothing
+   60 years out over 20 seeds (0 stopped early); refusals: 20 in a seat, 20 closed, 20 last calls
+   drafted men on the other clubs' rosters after the years out: away 598, idle GM 600 (ratio 0.997); mean roster after a summer: away 12.65, idle GM 12.62
+   retained rows planted 20: 40 summers kept at the figure the club kept, 20 dropped when the entry ran out; the old club's contributors back to automatic after 60 of 60 years
+   the old club drafted 2 men in its 60 years out
+   rounds out replayed against the board's round with no user club: 1200, 0 differed
+   the old club planted over the roster limit before 60 summers out: trimmed to it after 60
+simGmCareer: all checks passed (nhl, sections 6)

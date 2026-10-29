@@ -1,0 +1,7 @@
+NEGATIVE CONTROL ON: oldskip; section 6 must go red
+6) a season out: the league plays a whole season without him, his record gains a year out and nothing else, and refusals touch nothing
+   60 years out over 20 seeds (0 stopped early); refusals: 20 in a seat, 20 closed, 20 last calls
+   drafted men on the other clubs' rosters after the years out: away 1079, idle GM 1080 (ratio 0.999); mean roster after a summer: away 52.26, idle GM 52.25
+   the old club drafted 0 men in its 60 years out
+   rounds out replayed against the board's round with no user club: 1020, 0 differed
+CONTROL oldskip: 1 rewrite(s) applied, 0 failure(s) in section 6 (DID NOT FIRE)
