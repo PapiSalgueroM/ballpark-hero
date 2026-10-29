@@ -775,9 +775,13 @@ if (SECTIONS.has('7')) {
    alone, the rest of the career untouched). */
 if (SECTIONS.has('8')) {
   console.log('section 8: saves');
-  const { fleet } = await buildRealSaves({ root: ROOT, tmpDir: path.join(TMP, 'real') });
+  /* Round 1557 (1544's review, minor 7): every NBA save realSaves.mjs builds over INTL_REAL_SEEDS seeds (default
+     16, half of them played careers, half prospects), not the four seeds' two, and the four planted blocks below
+     go into every one of them rather than the first. */
+  const REAL_SEEDS = Number(process.env.INTL_REAL_SEEDS || 16);
+  const { fleet } = await buildRealSaves({ root: ROOT, tmpDir: path.join(TMP, 'real'), seeds: Array.from({ length: REAL_SEEDS }, (_, i) => i) });
   const saves = (fleet['/nba-my-career'] ?? []).map(raw => JSON.parse(raw)).filter(s => s && s.c);
-  check('8', saves.length >= 2, `only ${saves.length} played NBA saves were built`);
+  check('8', saves.length >= REAL_SEEDS / 2, `only ${saves.length} NBA saves were built over ${REAL_SEEDS} seeds`);
   for (const [k, s] of saves.entries()) {
     const c = JSON.parse(JSON.stringify(s.c));
     const was = JSON.stringify(c);
@@ -788,8 +792,7 @@ if (SECTIONS.has('8')) {
     { year: 2008, edition: 'oly-2008', went: true, age: 25, place: 'gold', games: 8, wins: 8, avg: { pts: 20, reb: 5, ast: 4 }, hurt: false },
   ];
   const plant = (s, intlBlock) => { const c = JSON.parse(JSON.stringify(s.c)); c.intl = intlBlock; return c; };
-  const sample = saves[0];
-  if (sample) {
+  for (const sample of saves) {
     const plain = JSON.stringify(sample.c);
     const a = plant(sample, { v: 9, summers: 'broken' });
     check('8', nbaIntl.NBA_CAREER_INTL.repairOnLoad(a) && !('intl' in a) && JSON.stringify(a) === plain, 'a broken block was not dropped alone');
@@ -800,7 +803,7 @@ if (SECTIONS.has('8')) {
     const d = plant(sample, { v: 1, summers: [{ year: 2035, edition: 'wc-2035', went: true, age: 30, place: 'gold', games: 8, wins: 8, avg: { pts: 20 }, hurt: false }] });
     check('8', nbaIntl.NBA_CAREER_INTL.repairOnLoad(d) === false && d.intl.summers.length === 1, 'a projected summer was dropped');
   }
-  console.log(`  ${saves.length} played NBA saves repaired byte identical; four planted blocks checked`);
+  console.log(`  ${saves.length} NBA saves over ${REAL_SEEDS} seeds (${saves.filter(s => s.c.seasons?.length).length} with seasons played) repaired byte identical; four planted blocks checked in each`);
 
   /* Round 1544 (the lead's ruling L4): nothing of a tournament is stored. A go fleet, each answer's
      tournament captured as it was played, then played again from the career's FINAL save (seasons later,
