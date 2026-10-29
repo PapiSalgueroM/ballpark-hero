@@ -1,0 +1,25 @@
+  FAIL nhlconn-005 390x844 win: scrollY 0 became 417 on submitting "Played for the Blackhawks (as of 2025-26)"
+  FAIL nhlconn-005 390x844 win: scrollY 417 became 361 on submitting "Played for the Avalanche or Nordiques (as of 2025-26)"
+  FAIL nhlconn-005 1280x900 win: scrollY 0 became 473 on submitting "Played for the Blackhawks (as of 2025-26)"
+  FAIL nhlconn-005 1280x900 win: scrollY 473 became 417 on submitting "Played for the Avalanche or Nordiques (as of 2025-26)"
+  FAIL nhlconn-008 390x844 win: scrollY 0 became 417 on submitting "Played for the Stars (as of 2025-26)"
+  FAIL nhlconn-008 390x844 win: scrollY 417 became 361 on submitting "Played for the Sharks (as of 2025-26)"
+  FAIL nhlconn-008 1280x900 win: scrollY 0 became 473 on submitting "Played for the Stars (as of 2025-26)"
+  FAIL nhlconn-008 1280x900 win: scrollY 473 became 417 on submitting "Played for the Sharks (as of 2025-26)"
+  FAIL nhlconn-016 390x844 win: scrollY 0 became 417 on submitting "Played for the Predators (as of 2025-26)"
+  FAIL nhlconn-016 390x844 win: scrollY 417 became 361 on submitting "Played for the Canucks (as of 2025-26)"
+  FAIL nhlconn-016 1280x900 win: scrollY 0 became 473 on submitting "Played for the Predators (as of 2025-26)"
+  FAIL nhlconn-016 1280x900 win: scrollY 473 became 417 on submitting "Played for the Canucks (as of 2025-26)"
+nhlconn-005 390x844 win (2026-11-20): FAIL scrollY 0 became 417 on submitting "Played for the Blackhawks (as of 2025-26)"; scrollY 417 became 361 on submitting "Played for the Avalanche or Nordiques (as of 2025-26)"; scroll 0>417 417>361 361>361 361>361; smallest 10px
+nhlconn-005 390x844 lose (2026-11-20): ok; scroll 0>417 417>361 361>361 361>361; smallest 10px
+nhlconn-005 1280x900 win (2026-11-20): FAIL scrollY 0 became 473 on submitting "Played for the Blackhawks (as of 2025-26)"; scrollY 473 became 417 on submitting "Played for the Avalanche or Nordiques (as of 2025-26)"; scroll 0>473 473>417 417>417 417>417; smallest 10px
+nhlconn-005 1280x900 lose (2026-11-20): ok; scroll 0>473 473>417 417>417 417>417; smallest 10px
+nhlconn-008 390x844 win (2026-11-22): FAIL scrollY 0 became 417 on submitting "Played for the Stars (as of 2025-26)"; scrollY 417 became 361 on submitting "Played for the Sharks (as of 2025-26)"; scroll 0>417 417>361 361>361 361>361; smallest 10px
+nhlconn-008 390x844 lose (2026-11-22): ok; scroll 0>417 417>361 361>361 361>361; smallest 10px
+nhlconn-008 1280x900 win (2026-11-22): FAIL scrollY 0 became 473 on submitting "Played for the Stars (as of 2025-26)"; scrollY 473 became 417 on submitting "Played for the Sharks (as of 2025-26)"; scroll 0>473 473>417 417>417 417>417; smallest 10px
+nhlconn-008 1280x900 lose (2026-11-22): ok; scroll 0>473 473>417 417>417 417>417; smallest 10px
+nhlconn-016 390x844 win (2026-11-15): FAIL scrollY 0 became 417 on submitting "Played for the Predators (as of 2025-26)"; scrollY 417 became 361 on submitting "Played for the Canucks (as of 2025-26)"; scroll 0>417 417>361 361>361 361>361; smallest 10px
+nhlconn-016 390x844 lose (2026-11-15): ok; scroll 0>417 417>361 361>361 361>361; smallest 10px
+nhlconn-016 1280x900 win (2026-11-15): FAIL scrollY 0 became 473 on submitting "Played for the Predators (as of 2025-26)"; scrollY 473 became 417 on submitting "Played for the Canucks (as of 2025-26)"; scroll 0>473 473>417 417>417 417>417; smallest 10px
+nhlconn-016 1280x900 lose (2026-11-15): ok; scroll 0>473 473>417 417>417 417>417; smallest 10px
+walk1574: 12 failure(s)

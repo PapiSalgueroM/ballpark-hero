@@ -1,0 +1,664 @@
+{
+ "base": "http://localhost:4173",
+ "targets": [
+  "nhlconn-005 on 2026-11-20",
+  "nhlconn-008 on 2026-11-22",
+  "nhlconn-016 on 2026-11-15"
+ ],
+ "runs": [
+  {
+   "name": "nhlconn-005 390x844 win",
+   "date": "2026-11-20",
+   "scroll": [
+    [
+     0,
+     417
+    ],
+    [
+     417,
+     361
+    ],
+    [
+     361,
+     361
+    ],
+    [
+     361,
+     361
+    ]
+   ],
+   "fail": [
+    "scrollY 0 became 417 on submitting \"Played for the Blackhawks (as of 2025-26)\"",
+    "scrollY 417 became 361 on submitting \"Played for the Avalanche or Nordiques (as of 2025-26)\""
+   ],
+   "smallText": {
+    "min": 10,
+    "at": "Imperialism on ice: winners annex whole "
+   },
+   "labels": [
+    {
+     "text": "Played for the Blackhawks (as of 2025-26)",
+     "over": 0,
+     "lines": 44
+    },
+    {
+     "text": "Played for the Avalanche or Nordiques (as of 2025-26)",
+     "over": 0,
+     "lines": 64
+    },
+    {
+     "text": "Played for the Islanders (as of 2025-26)",
+     "over": 0,
+     "lines": 44
+    },
+    {
+     "text": "Played for the Winnipeg Jets, either era (as of 2025-26)",
+     "over": 0,
+     "lines": 64
+    }
+   ],
+   "smallest": {
+    "min": 10,
+    "at": "Imperialism on ice: winners annex whole "
+   }
+  },
+  {
+   "name": "nhlconn-005 390x844 lose",
+   "date": "2026-11-20",
+   "scroll": [
+    [
+     0,
+     417
+    ],
+    [
+     417,
+     361
+    ],
+    [
+     361,
+     361
+    ],
+    [
+     361,
+     361
+    ]
+   ],
+   "fail": [],
+   "smallText": {
+    "min": 10,
+    "at": "Imperialism on ice: winners annex whole "
+   },
+   "labels": [
+    {
+     "text": "Played for the Blackhawks (as of 2025-26)",
+     "over": 0,
+     "lines": 44
+    },
+    {
+     "text": "Played for the Avalanche or Nordiques (as of 2025-26)",
+     "over": 0,
+     "lines": 64
+    },
+    {
+     "text": "Played for the Islanders (as of 2025-26)",
+     "over": 0,
+     "lines": 44
+    },
+    {
+     "text": "Played for the Winnipeg Jets, either era (as of 2025-26)",
+     "over": 0,
+     "lines": 64
+    }
+   ],
+   "smallest": {
+    "min": 10,
+    "at": "Imperialism on ice: winners annex whole "
+   }
+  },
+  {
+   "name": "nhlconn-005 1280x900 win",
+   "date": "2026-11-20",
+   "scroll": [
+    [
+     0,
+     473
+    ],
+    [
+     473,
+     417
+    ],
+    [
+     417,
+     417
+    ],
+    [
+     417,
+     417
+    ]
+   ],
+   "fail": [
+    "scrollY 0 became 473 on submitting \"Played for the Blackhawks (as of 2025-26)\"",
+    "scrollY 473 became 417 on submitting \"Played for the Avalanche or Nordiques (as of 2025-26)\""
+   ],
+   "smallText": {
+    "min": 10,
+    "at": "Imperialism on ice: winners annex whole "
+   },
+   "labels": [
+    {
+     "text": "Played for the Blackhawks (as of 2025-26)",
+     "over": 0,
+     "lines": 44
+    },
+    {
+     "text": "Played for the Avalanche or Nordiques (as of 2025-26)",
+     "over": 0,
+     "lines": 44
+    },
+    {
+     "text": "Played for the Islanders (as of 2025-26)",
+     "over": 0,
+     "lines": 44
+    },
+    {
+     "text": "Played for the Winnipeg Jets, either era (as of 2025-26)",
+     "over": 0,
+     "lines": 44
+    }
+   ],
+   "smallest": {
+    "min": 10,
+    "at": "Imperialism on ice: winners annex whole "
+   }
+  },
+  {
+   "name": "nhlconn-005 1280x900 lose",
+   "date": "2026-11-20",
+   "scroll": [
+    [
+     0,
+     473
+    ],
+    [
+     473,
+     417
+    ],
+    [
+     417,
+     417
+    ],
+    [
+     417,
+     417
+    ]
+   ],
+   "fail": [],
+   "smallText": {
+    "min": 10,
+    "at": "Imperialism on ice: winners annex whole "
+   },
+   "labels": [
+    {
+     "text": "Played for the Blackhawks (as of 2025-26)",
+     "over": 0,
+     "lines": 44
+    },
+    {
+     "text": "Played for the Avalanche or Nordiques (as of 2025-26)",
+     "over": 0,
+     "lines": 44
+    },
+    {
+     "text": "Played for the Islanders (as of 2025-26)",
+     "over": 0,
+     "lines": 44
+    },
+    {
+     "text": "Played for the Winnipeg Jets, either era (as of 2025-26)",
+     "over": 0,
+     "lines": 44
+    }
+   ],
+   "smallest": {
+    "min": 10,
+    "at": "Imperialism on ice: winners annex whole "
+   }
+  },
+  {
+   "name": "nhlconn-008 390x844 win",
+   "date": "2026-11-22",
+   "scroll": [
+    [
+     0,
+     417
+    ],
+    [
+     417,
+     361
+    ],
+    [
+     361,
+     361
+    ],
+    [
+     361,
+     361
+    ]
+   ],
+   "fail": [
+    "scrollY 0 became 417 on submitting \"Played for the Stars (as of 2025-26)\"",
+    "scrollY 417 became 361 on submitting \"Played for the Sharks (as of 2025-26)\""
+   ],
+   "smallText": {
+    "min": 10,
+    "at": "Imperialism on ice: winners annex whole "
+   },
+   "labels": [
+    {
+     "text": "Played for the Stars (as of 2025-26)",
+     "over": 0,
+     "lines": 44
+    },
+    {
+     "text": "Played for the Sharks (as of 2025-26)",
+     "over": 0,
+     "lines": 44
+    },
+    {
+     "text": "Played for the Islanders (as of 2025-26)",
+     "over": 0,
+     "lines": 44
+    },
+    {
+     "text": "Played for the Sabres (as of 2025-26)",
+     "over": 0,
+     "lines": 44
+    }
+   ],
+   "smallest": {
+    "min": 10,
+    "at": "Imperialism on ice: winners annex whole "
+   }
+  },
+  {
+   "name": "nhlconn-008 390x844 lose",
+   "date": "2026-11-22",
+   "scroll": [
+    [
+     0,
+     417
+    ],
+    [
+     417,
+     361
+    ],
+    [
+     361,
+     361
+    ],
+    [
+     361,
+     361
+    ]
+   ],
+   "fail": [],
+   "smallText": {
+    "min": 10,
+    "at": "Imperialism on ice: winners annex whole "
+   },
+   "labels": [
+    {
+     "text": "Played for the Stars (as of 2025-26)",
+     "over": 0,
+     "lines": 44
+    },
+    {
+     "text": "Played for the Sharks (as of 2025-26)",
+     "over": 0,
+     "lines": 44
+    },
+    {
+     "text": "Played for the Islanders (as of 2025-26)",
+     "over": 0,
+     "lines": 44
+    },
+    {
+     "text": "Played for the Sabres (as of 2025-26)",
+     "over": 0,
+     "lines": 44
+    }
+   ],
+   "smallest": {
+    "min": 10,
+    "at": "Imperialism on ice: winners annex whole "
+   }
+  },
+  {
+   "name": "nhlconn-008 1280x900 win",
+   "date": "2026-11-22",
+   "scroll": [
+    [
+     0,
+     473
+    ],
+    [
+     473,
+     417
+    ],
+    [
+     417,
+     417
+    ],
+    [
+     417,
+     417
+    ]
+   ],
+   "fail": [
+    "scrollY 0 became 473 on submitting \"Played for the Stars (as of 2025-26)\"",
+    "scrollY 473 became 417 on submitting \"Played for the Sharks (as of 2025-26)\""
+   ],
+   "smallText": {
+    "min": 10,
+    "at": "Imperialism on ice: winners annex whole "
+   },
+   "labels": [
+    {
+     "text": "Played for the Stars (as of 2025-26)",
+     "over": 0,
+     "lines": 44
+    },
+    {
+     "text": "Played for the Sharks (as of 2025-26)",
+     "over": 0,
+     "lines": 44
+    },
+    {
+     "text": "Played for the Islanders (as of 2025-26)",
+     "over": 0,
+     "lines": 44
+    },
+    {
+     "text": "Played for the Sabres (as of 2025-26)",
+     "over": 0,
+     "lines": 44
+    }
+   ],
+   "smallest": {
+    "min": 10,
+    "at": "Imperialism on ice: winners annex whole "
+   }
+  },
+  {
+   "name": "nhlconn-008 1280x900 lose",
+   "date": "2026-11-22",
+   "scroll": [
+    [
+     0,
+     473
+    ],
+    [
+     473,
+     417
+    ],
+    [
+     417,
+     417
+    ],
+    [
+     417,
+     417
+    ]
+   ],
+   "fail": [],
+   "smallText": {
+    "min": 10,
+    "at": "Imperialism on ice: winners annex whole "
+   },
+   "labels": [
+    {
+     "text": "Played for the Stars (as of 2025-26)",
+     "over": 0,
+     "lines": 44
+    },
+    {
+     "text": "Played for the Sharks (as of 2025-26)",
+     "over": 0,
+     "lines": 44
+    },
+    {
+     "text": "Played for the Islanders (as of 2025-26)",
+     "over": 0,
+     "lines": 44
+    },
+    {
+     "text": "Played for the Sabres (as of 2025-26)",
+     "over": 0,
+     "lines": 44
+    }
+   ],
+   "smallest": {
+    "min": 10,
+    "at": "Imperialism on ice: winners annex whole "
+   }
+  },
+  {
+   "name": "nhlconn-016 390x844 win",
+   "date": "2026-11-15",
+   "scroll": [
+    [
+     0,
+     417
+    ],
+    [
+     417,
+     361
+    ],
+    [
+     361,
+     361
+    ],
+    [
+     361,
+     361
+    ]
+   ],
+   "fail": [
+    "scrollY 0 became 417 on submitting \"Played for the Predators (as of 2025-26)\"",
+    "scrollY 417 became 361 on submitting \"Played for the Canucks (as of 2025-26)\""
+   ],
+   "smallText": {
+    "min": 10,
+    "at": "Imperialism on ice: winners annex whole "
+   },
+   "labels": [
+    {
+     "text": "Played for the Predators (as of 2025-26)",
+     "over": 0,
+     "lines": 44
+    },
+    {
+     "text": "Played for the Canucks (as of 2025-26)",
+     "over": 0,
+     "lines": 44
+    },
+    {
+     "text": "Drafted first overall",
+     "over": 0,
+     "lines": 44
+    },
+    {
+     "text": "Won the Conn Smythe Trophy before 2000",
+     "over": 0,
+     "lines": 44
+    }
+   ],
+   "smallest": {
+    "min": 10,
+    "at": "Imperialism on ice: winners annex whole "
+   }
+  },
+  {
+   "name": "nhlconn-016 390x844 lose",
+   "date": "2026-11-15",
+   "scroll": [
+    [
+     0,
+     417
+    ],
+    [
+     417,
+     361
+    ],
+    [
+     361,
+     361
+    ],
+    [
+     361,
+     361
+    ]
+   ],
+   "fail": [],
+   "smallText": {
+    "min": 10,
+    "at": "Imperialism on ice: winners annex whole "
+   },
+   "labels": [
+    {
+     "text": "Played for the Predators (as of 2025-26)",
+     "over": 0,
+     "lines": 44
+    },
+    {
+     "text": "Played for the Canucks (as of 2025-26)",
+     "over": 0,
+     "lines": 44
+    },
+    {
+     "text": "Drafted first overall",
+     "over": 0,
+     "lines": 44
+    },
+    {
+     "text": "Won the Conn Smythe Trophy before 2000",
+     "over": 0,
+     "lines": 44
+    }
+   ],
+   "smallest": {
+    "min": 10,
+    "at": "Imperialism on ice: winners annex whole "
+   }
+  },
+  {
+   "name": "nhlconn-016 1280x900 win",
+   "date": "2026-11-15",
+   "scroll": [
+    [
+     0,
+     473
+    ],
+    [
+     473,
+     417
+    ],
+    [
+     417,
+     417
+    ],
+    [
+     417,
+     417
+    ]
+   ],
+   "fail": [
+    "scrollY 0 became 473 on submitting \"Played for the Predators (as of 2025-26)\"",
+    "scrollY 473 became 417 on submitting \"Played for the Canucks (as of 2025-26)\""
+   ],
+   "smallText": {
+    "min": 10,
+    "at": "Imperialism on ice: winners annex whole "
+   },
+   "labels": [
+    {
+     "text": "Played for the Predators (as of 2025-26)",
+     "over": 0,
+     "lines": 44
+    },
+    {
+     "text": "Played for the Canucks (as of 2025-26)",
+     "over": 0,
+     "lines": 44
+    },
+    {
+     "text": "Drafted first overall",
+     "over": 0,
+     "lines": 44
+    },
+    {
+     "text": "Won the Conn Smythe Trophy before 2000",
+     "over": 0,
+     "lines": 44
+    }
+   ],
+   "smallest": {
+    "min": 10,
+    "at": "Imperialism on ice: winners annex whole "
+   }
+  },
+  {
+   "name": "nhlconn-016 1280x900 lose",
+   "date": "2026-11-15",
+   "scroll": [
+    [
+     0,
+     473
+    ],
+    [
+     473,
+     417
+    ],
+    [
+     417,
+     417
+    ],
+    [
+     417,
+     417
+    ]
+   ],
+   "fail": [],
+   "smallText": {
+    "min": 10,
+    "at": "Imperialism on ice: winners annex whole "
+   },
+   "labels": [
+    {
+     "text": "Played for the Predators (as of 2025-26)",
+     "over": 0,
+     "lines": 44
+    },
+    {
+     "text": "Played for the Canucks (as of 2025-26)",
+     "over": 0,
+     "lines": 44
+    },
+    {
+     "text": "Drafted first overall",
+     "over": 0,
+     "lines": 44
+    },
+    {
+     "text": "Won the Conn Smythe Trophy before 2000",
+     "over": 0,
+     "lines": 44
+    }
+   ],
+   "smallest": {
+    "min": 10,
+    "at": "Imperialism on ice: winners annex whole "
+   }
+  }
+ ]
+}
