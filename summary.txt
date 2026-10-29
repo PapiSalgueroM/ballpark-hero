@@ -1,0 +1,9 @@
+build exit=0 34s | [dukb] inlined 1 stylesheet(s) and 1 module(s) into 181 snapshots (11 left alone)
+tsc exit=0 70s | 
+focus-head exit=1 34s | sclayers head: RED, 2 failure(s)
+fonts exit=0 0s | Prepared 9 declared font dependencies for local fulfillment.
+simCareerTrophyRuns-forwalk exit=0 3s | Trophy campaigns: 9 groups, 24 full AR season pairs, 192 full campaign/RNG pairs, 0 effective controls; artifacts /home/runner/work/ballpark-hero/ballpark-hero/.tmp-fx/ca
+playCareerTrophyRuns exit=0 41s | Trophy Cabinet native: 407 checks,0 failed,12/12 journeys,3 copied detector controls; artifacts /home/runner/work/ballpark-hero/ballpark-hero/.tmp-fx/career-trophy-runs/n
+simAccessibility exit=0 0s | simAccessibility: all green
+base-build exit=0 41s | base served: 200
+focus-base-EXPECT-RED exit=1 33s | sclayers base: RED, 2 failure(s)

@@ -1,0 +1,29 @@
+ok   head C 390 layer shown with the chunk held {"held":1}
+ok   head C 390 the layer has its Back to career button ["Back to career"]
+ok   head C 390 Tab stays inside the layer ["Back to career","Back to career","Back to career"]
+ok   head C 390 Escape closes the layer ""
+FAIL head C 390 FOCUS: back on the opener after the layer closes {"on":false,"at":"Signed with West Ham!Skip to m"}
+ok   head C 390 closing leaves the save as it was {"phase":"newspaper","age":18,"seasons":3,"pundit":null}
+ok   head C 390 no page errors []
+ok   head C 320 layer shown with the chunk held {"held":1}
+ok   head C 320 the layer has its Back to career button ["Back to career"]
+ok   head C 320 Tab stays inside the layer ["Back to career","Back to career","Back to career"]
+ok   head C 320 Escape closes the layer ""
+FAIL head C 320 FOCUS: back on the opener after the layer closes {"on":false,"at":"Signed with West Ham!Skip to m"}
+ok   head C 320 closing leaves the save as it was {"phase":"newspaper","age":18,"seasons":3,"pundit":null}
+ok   head C 320 no page errors []
+ok   head T 390 layer shown with the chunk held ""
+ok   head T 390 Back to career is there ""
+ok   head T 390 Back to career closes the layer ""
+ok   head T 390 FOCUS: back on the trophy tile after the layer closes {"again":true,"on":true,"at":"Leagues: 0. View winning seaso"}
+ok   head T 390 a tap on the backdrop closes the layer ""
+ok   head T 390 the save is unchanged ""
+ok   head T 390 no page errors []
+ok   head A 390 layer shown with the chunk held ""
+ok   head A 390 the layer has its Back to career button ["Back to career"]
+ok   head A 390 Tab stays inside the layer ["Back to career","Back to career","Back to career"]
+ok   head A 390 Escape closes the layer ""
+ok   head A 390 FOCUS: back on the opener after the layer closes {"on":true,"at":"Open the training ground"}
+ok   head A 390 closing leaves the save as it was {"phase":"playing","age":17,"seasons":2,"pundit":null}
+ok   head A 390 no page errors []
+sclayers head: RED, 2 failure(s)
