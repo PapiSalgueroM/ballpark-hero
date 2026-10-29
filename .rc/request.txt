@@ -1,0 +1,23 @@
+nhl-namedsummer: SIM_GM_CAREER_SPORT=nhl SIM_GM_CAREER_ONLY=6 SIM_GM_CAREER_CONTROL=namedsummer node scripts/simGmCareer.mjs
+nhl-awaymoves: SIM_GM_CAREER_SPORT=nhl SIM_GM_CAREER_ONLY=6 SIM_GM_CAREER_CONTROL=awaymoves node scripts/simGmCareer.mjs
+nhl-oldskip: SIM_GM_CAREER_SPORT=nhl SIM_GM_CAREER_ONLY=6 SIM_GM_CAREER_CONTROL=oldskip node scripts/simGmCareer.mjs
+nhl-notrim: SIM_GM_CAREER_SPORT=nhl SIM_GM_CAREER_ONLY=6 SIM_GM_CAREER_CONTROL=notrim node scripts/simGmCareer.mjs
+nhl-halfseason: SIM_GM_CAREER_SPORT=nhl SIM_GM_CAREER_ONLY=6 SIM_GM_CAREER_CONTROL=halfseason node scripts/simGmCareer.mjs
+nhl-awayxp: SIM_GM_CAREER_SPORT=nhl SIM_GM_CAREER_ONLY=6 SIM_GM_CAREER_CONTROL=awayxp node scripts/simGmCareer.mjs
+nhl-lastcall: SIM_GM_CAREER_SPORT=nhl SIM_GM_CAREER_ONLY=6 SIM_GM_CAREER_CONTROL=lastcall node scripts/simGmCareer.mjs
+nhl-noawaydraft: SIM_GM_CAREER_SPORT=nhl SIM_GM_CAREER_ONLY=6 SIM_GM_CAREER_CONTROL=noawaydraft node scripts/simGmCareer.mjs
+nhl-awaycontrib: SIM_GM_CAREER_SPORT=nhl SIM_GM_CAREER_ONLY=6 SIM_GM_CAREER_CONTROL=awaycontrib node scripts/simGmCareer.mjs
+nhl-retainedrolled: SIM_GM_CAREER_SPORT=nhl SIM_GM_CAREER_ONLY=6 SIM_GM_CAREER_CONTROL=retainedrolled node scripts/simGmCareer.mjs
+nhl-retainedclub: SIM_GM_CAREER_SPORT=nhl SIM_GM_CAREER_ONLY=5 SIM_GM_CAREER_CONTROL=retainedclub node scripts/simGmCareer.mjs
+nhl-staffrides: SIM_GM_CAREER_SPORT=nhl SIM_GM_CAREER_ONLY=5 SIM_GM_CAREER_CONTROL=staffrides node scripts/simGmCareer.mjs
+nhl-ledgerrides: SIM_GM_CAREER_SPORT=nhl SIM_GM_CAREER_ONLY=5 SIM_GM_CAREER_CONTROL=ledgerrides node scripts/simGmCareer.mjs
+nhl-rostermove: SIM_GM_CAREER_SPORT=nhl SIM_GM_CAREER_ONLY=5 SIM_GM_CAREER_CONTROL=rostermove node scripts/simGmCareer.mjs
+nhl-contribstays: SIM_GM_CAREER_SPORT=nhl SIM_GM_CAREER_ONLY=5 SIM_GM_CAREER_CONTROL=contribstays node scripts/simGmCareer.mjs
+nhl-askrebuilt: SIM_GM_CAREER_SPORT=nhl SIM_GM_CAREER_ONLY=5 SIM_GM_CAREER_CONTROL=askrebuilt node scripts/simGmCareer.mjs
+nhl-syncalways: SIM_GM_CAREER_SPORT=nhl SIM_GM_CAREER_ONLY=10 SIM_GM_CAREER_CONTROL=syncalways node scripts/simGmCareer.mjs
+nhl-refusedrelease: SIM_GM_CAREER_SPORT=nhl SIM_GM_CAREER_ONLY=10 SIM_GM_CAREER_CONTROL=refusedrelease node scripts/simGmCareer.mjs
+nhl-legacyleak: SIM_GM_CAREER_SPORT=nhl SIM_GM_CAREER_ONLY=10 SIM_GM_CAREER_CONTROL=legacyleak node scripts/simGmCareer.mjs
+nhl-retainedlift: SIM_GM_CAREER_SPORT=nhl SIM_GM_CAREER_ONLY=10 SIM_GM_CAREER_CONTROL=retainedlift node scripts/simGmCareer.mjs
+nhl-overlap: SIM_GM_CAREER_SPORT=nhl SIM_GM_CAREER_CONTROL=overlap node scripts/simGmCareer.mjs
+nhl-firedlost: SIM_GM_CAREER_SPORT=nhl SIM_GM_CAREER_CONTROL=firedlost node scripts/simGmCareer.mjs
+nhl-hubcounted: SIM_GM_CAREER_SPORT=nhl SIM_GM_CAREER_CONTROL=hubcounted node scripts/simGmCareer.mjs
