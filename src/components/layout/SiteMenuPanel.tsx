@@ -3,11 +3,13 @@ import { Link } from 'react-router-dom';
 import { Sheet, SheetClose, SheetContent, SheetDescription, SheetHeader, SheetTitle } from '@/components/ui/sheet';
 import { HUB_NAV } from '@/lib/sportHubNav';
 import { useRoutePath } from '@/hooks/useRoutePath';
+import { focusSiteMenuTrigger } from './siteMenuFocus';
 
 export interface SiteMenuPanelProps {
   open: boolean;
   onOpenChange: (open: boolean) => void;
   returnFocusRef: RefObject<HTMLButtonElement>;
+  returnFocusAllowed?: () => boolean;
   id: string;
 }
 const PLAY_LINKS = [['/', 'Home'], ['/search', 'Search Games'], ['/records', 'Record Books'],
@@ -15,7 +17,7 @@ const PLAY_LINKS = [['/', 'Home'], ['/search', 'Search Games'], ['/records', 'Re
 const SITE_LINKS = [['/about', 'About'], ['/contact', 'Contact'], ['/privacy', 'Privacy Policy'],
   ['/cookie-policy', 'Cookie Policy'], ['/terms', 'Terms of Service'], ['/accessibility', 'Accessibility']] as const;
 
-export function SiteMenuPanel({ open, onOpenChange, returnFocusRef, id }: SiteMenuPanelProps) {
+export function SiteMenuPanel({ open, onOpenChange, returnFocusRef, returnFocusAllowed, id }: SiteMenuPanelProps) {
   const path = useRoutePath();
   const link = (to: string, label: string) => (
     <SheetClose asChild key={to}>
@@ -28,7 +30,10 @@ export function SiteMenuPanel({ open, onOpenChange, returnFocusRef, id }: SiteMe
   return (
     <Sheet open={open} onOpenChange={onOpenChange}>
       <SheetContent side="left" id={id} data-site-chrome=""
-        onCloseAutoFocus={event => { event.preventDefault(); returnFocusRef.current?.focus({ preventScroll: true }); }}
+        onCloseAutoFocus={event => {
+          event.preventDefault();
+          if (returnFocusAllowed?.() !== false) focusSiteMenuTrigger(returnFocusRef.current);
+        }}
         className="flex h-[100dvh] w-[calc(100vw_-_1rem)] max-w-sm flex-col gap-0 p-0 motion-reduce:!animate-none motion-reduce:!transition-none [&>button]:inline-flex [&>button]:h-11 [&>button]:w-11 [&>button]:items-center [&>button]:justify-center">
         <SheetHeader className="shrink-0 p-5 pr-16 text-left">
           <SheetTitle>Menu</SheetTitle>

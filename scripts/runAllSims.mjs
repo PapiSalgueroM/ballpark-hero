@@ -147,9 +147,9 @@ const cleanupTraffic = () => { if (trafficFolder) rmdirSync(trafficFolder); };
    "sweepGames,playGames,simTactics,playClubManager" as a URL path and it died on
    an invalid URL, which reads exactly like a broken harness and is not one.
    A runner has to hand its children a clean environment rather than leaking the
-   flags that were meant for itself, so both of this file's own controls are
+   flags that were meant for itself, so this file's own controls are
    stripped on the way down. */
-const OWN_CONTROLS = ['ONLY', 'BROWSER'];
+const OWN_CONTROLS = ['ONLY', 'BROWSER', 'SIM_RUNNER_PROGRESS'];
 
 function run(file, extraEnv = {}) {
   return new Promise((resolve) => {
@@ -167,6 +167,7 @@ function run(file, extraEnv = {}) {
       cwd: ROOT,
       env: childEnv,
     });
+    if (process.env.SIM_RUNNER_PROGRESS === '1') process.stderr.write('[SIM_RUNNER_PROGRESS] ' + JSON.stringify({ v: 1, event: 'start', file, pid: child.pid ?? null }) + '\n');
     child.stdout.on('data', (d) => { out += d; });
     child.stderr.on('data', (d) => { out += d; });
     child.on('close', (code) => {
@@ -185,6 +186,7 @@ function run(file, extraEnv = {}) {
         verdict = 'FAIL';
         why = 'it reported success after an offline transport block; checks needing live data did not run';
       }
+      if (process.env.SIM_RUNNER_PROGRESS === '1') process.stderr.write('[SIM_RUNNER_PROGRESS] ' + JSON.stringify({ v: 1, event: 'close', file, pid: child.pid ?? null, code, rawVerdict: verdict, ms, lines, outputBytes: Buffer.byteLength(out), transportBlockCount: blocks.length }) + '\n');
       resolve({ file, verdict, why, ms, lines, out, blocks });
     });
   });
