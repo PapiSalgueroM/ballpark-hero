@@ -262,6 +262,7 @@ const CONTROL_FILE_SWAPS = {
   named: {
     'nbaSeasonStats.ts': [
       ['  return foExpand(NBA_CODEC, s);', '  return (s.clubs ? foExpand(NBA_CODEC, s) : s);'],
+      ['  if (league.stats !== undefined && (typeof clubs !== \'object\' || clubs === null || Array.isArray(clubs))) nbaCleanStats(league);', '  void clubs;'],
       [[
         '    foClubGame(NBA_CODEC, stats, side.team, side.pts, other.pts);',
         '    for (const m of side.men) {',
