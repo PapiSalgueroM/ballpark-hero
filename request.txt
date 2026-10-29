@@ -1,0 +1,10 @@
+#!serial
+facts: node scripts/simUsConnectionsFacts.mjs
+mut-nfllt-yearnfl: node .rc/x/rvmut.mjs nfllt && US_CONN_CONTROL=yearnfl node scripts/simUsConnectionsFacts.mjs; s=$?; git checkout -- src scripts; exit $s
+mut-nhllt-yearnhl: node .rc/x/rvmut.mjs nhllt && US_CONN_CONTROL=yearnhl node scripts/simUsConnectionsFacts.mjs; s=$?; git checkout -- src scripts; exit $s
+mut-nflignore-afternfl: node .rc/x/rvmut.mjs nflignore && US_CONN_CONTROL=afternfl node scripts/simUsConnectionsFacts.mjs; s=$?; git checkout -- src scripts; exit $s
+mut-nhlignore-afternhl: node .rc/x/rvmut.mjs nhlignore && US_CONN_CONTROL=afternhl node scripts/simUsConnectionsFacts.mjs; s=$?; git checkout -- src scripts; exit $s
+mut-mlbasofline-aftermlb: node .rc/x/rvmut.mjs mlbasofline && US_CONN_CONTROL=aftermlb node scripts/simUsConnectionsFacts.mjs; s=$?; git checkout -- src scripts; exit $s
+mut-lastopen-futuredate: node .rc/x/fxmut.mjs lastopen && US_CONN_CONTROL=futuredate node scripts/simUsConnectionsFacts.mjs; s=$?; git checkout -- src scripts; exit $s
+mut-grayfire-grayonehost: node .rc/x/fxmut.mjs grayfire && US_CONN_CONTROL=grayonehost node scripts/simUsConnectionsFacts.mjs; s=$?; git checkout -- src scripts; exit $s
+clean: git status --short | grep -c . ; git diff --stat | tail -1; exit 0

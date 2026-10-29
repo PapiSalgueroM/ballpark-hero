@@ -1,0 +1,9 @@
+facts exit=0 1s | simUsConnectionsFacts: green. Every Baseball, NFL and NHL Connections group is held to the record, and no board has a second right answer the record can see (other tiles 
+mut-nfllt-yearnfl exit=0 1s | US_CONN_CONTROL=yearnfl did NOT fire its own rule (second-fit x0 for Jaire Alexander); the 1 other failures do not count for it (findings: not-a-member 1). This control p
+mut-nhllt-yearnhl exit=0 1s | US_CONN_CONTROL=yearnhl did NOT fire its own rule (second-fit x0 for Mitch Marner); the 1 other failures do not count for it (findings: not-a-member 1). This control prov
+mut-nflignore-afternfl exit=0 1s | US_CONN_CONTROL=afternfl did NOT fire its own rule (not-a-member x0 for Von Miller); the 0 other failures do not count for it (findings: nothing). This control proves not
+mut-nhlignore-afternhl exit=0 1s | US_CONN_CONTROL=afternhl did NOT fire its own rule (not-a-member x0 for Mitch Marner); the 0 other failures do not count for it (findings: nothing). This control proves n
+mut-mlbasofline-aftermlb exit=0 1s | US_CONN_CONTROL=aftermlb did NOT fire its own rule (member-unknown x0 for baseball); the 0 other failures do not count for it (findings: nothing). This control proves not
+mut-lastopen-futuredate exit=0 1s | US_CONN_CONTROL=futuredate did NOT fire its own rule (date-open x0 for Played for the Steelers (as of 2030)); the 0 other failures do not count for it (findings: nothing)
+mut-grayfire-grayonehost exit=0 0s | US_CONN_CONTROL=grayonehost did NOT fire its own rule (gray-one-host x0 for Cal Ripken Jr. | Hall of Fame third basemen); the 1 other failures do not count for it (findin
+clean exit=0 0s | 0
