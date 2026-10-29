@@ -1,0 +1,9 @@
+ctl-nobeat exit=1 58s | playNbaIntl: CONTROL nobeat FIRED (walk (a) at 390 met no call, 1 failures)
+ctl-lowbar exit=1 58s | playNbaIntl: CONTROL lowbar FIRED (walk (a) at 390 met no call, 1 failures)
+simUsCareerWeight exit=0 1s | simUsCareerWeight: green. 31 checks: the four wrappers hand the board their own binding, no shared file or binding imports another sport, and every control fired.
+simHarnessAnchors exit=0 67s | simHarnessAnchors: green. Every harness parses and none carries an unmatchable anchor.
+vitest-us exit=1 83s | ::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/test/usCareerIntlBoard.test.tsx,title=src/test/usCareerIntlBoard.test.tsx > the board fixture's fixed NBA s
+simNoRivalNames exit=0 14s | No rival product names found. 0 findings.
+ctl-realname exit=1 0s | simCareerIntl: control realname FIRED (section 11, 2 failures)
+ctl-tilenomedal exit=1 56s | simCareerIntl: control tilenomedal FIRED (section 9, 173 failures)
+intl-7 exit=0 282s | simCareerIntl: GREEN, 2706 checks over sections 7

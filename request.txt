@@ -1,0 +1,10 @@
+#!playwright
+intl-7: mkdir -p /tmp/bs && git archive HEAD | tar -x -C /tmp/bs && grep -v "NBA_CAREER_INTL_LAZY" /tmp/bs/src/lib/nbaCareerSport.ts > /tmp/ncs.ts && mv /tmp/ncs.ts /tmp/bs/src/lib/nbaCareerSport.ts && test "$(grep -c 'intl:' /tmp/bs/src/lib/nbaCareerSport.ts)" = 0 && INTL_BASE_DIR=/tmp/bs INTL_SECTIONS=7 node scripts/simCareerIntl.mjs
+ctl-nobeat: git worktree add -q /tmp/nob HEAD && ln -s "$PWD/node_modules" /tmp/nob/node_modules && sed -i 's/? sport.intl.pendingYear(career) : null;/? null : null;/' /tmp/nob/src/components/us-career/UsCareerBoard.tsx && test "$(grep -c '? null : null;' /tmp/nob/src/components/us-career/UsCareerBoard.tsx)" = 1 && (cd /tmp/nob && node_modules/.bin/vite build > /tmp/nob-build.log 2>&1) && PLAY_INTL_CONTROL=nobeat PLAY_INTL_DIST=/tmp/nob/dist RC_OUT="$RC_OUT/nobeat" node scripts/playNbaIntl.mjs
+ctl-lowbar: git worktree add -q /tmp/low HEAD && ln -s "$PWD/node_modules" /tmp/low/node_modules && sed -i 's/^export const INTL_CALL_UP_OVR = 87;/export const INTL_CALL_UP_OVR = 95;/' /tmp/low/src/lib/nbaCareerIntlGate.ts && test "$(grep -c '^export const INTL_CALL_UP_OVR = 95;' /tmp/low/src/lib/nbaCareerIntlGate.ts)" = 1 && (cd /tmp/low && node_modules/.bin/vite build > /tmp/low-build.log 2>&1) && PLAY_INTL_CONTROL=lowbar PLAY_INTL_DIST=/tmp/low/dist RC_OUT="$RC_OUT/lowbar" node scripts/playNbaIntl.mjs
+vitest-us: node_modules/.bin/vitest run src/test/usCareer src/test/usBoardFixture.test.tsx src/test/myCareerRestore.test.tsx src/test/rivalryChoiceBoard.test.tsx src/test/careerEntryGuide.test.tsx src/test/nbaTrophyTile.test.ts src/test/nbaCareerIntl.test.ts src/test/nbaIntlResultLines.test.tsx src/lib/careerIntl.test.ts --testTimeout=300000 --hookTimeout=120000
+simUsCareerWeight: node scripts/simUsCareerWeight.mjs
+simHarnessAnchors: node scripts/simHarnessAnchors.mjs
+simNoRivalNames: node scripts/simNoRivalNames.mjs
+ctl-tilenomedal: INTL_CONTROL=tilenomedal INTL_SECTIONS=9 node scripts/simCareerIntl.mjs
+ctl-realname: INTL_CONTROL=realname INTL_SECTIONS=11 node scripts/simCareerIntl.mjs

@@ -1,0 +1,19 @@
+NEGATIVE CONTROL tilenomedal: the honours lose the medal row, so the tile forgets the medals (section 9 must fail)
+sections 9 and 10: the case and the badges, 200 careers an era, always go and always rest
+  FAIL [9] now 6: the tile says 4, the rings, the case and the medals are 0 + 4 + 1
+  FAIL [9] now 7: the tile says 12, the rings, the case and the medals are 1 + 11 + 4
+  FAIL [9] now 8: the tile says 8, the rings, the case and the medals are 1 + 7 + 2
+  FAIL [9] now 9: the tile says 27, the rings, the case and the medals are 1 + 26 + 3
+  FAIL [9] now 11: the tile says 21, the rings, the case and the medals are 0 + 21 + 4
+  FAIL [9] now 13: the tile says 8, the rings, the case and the medals are 1 + 7 + 2
+  FAIL [9] now 14: the tile says 14, the rings, the case and the medals are 0 + 14 + 2
+  FAIL [9] now 17: the tile says 3, the rings, the case and the medals are 0 + 3 + 2
+  FAIL [9] now 18: the tile says 16, the rings, the case and the medals are 1 + 15 + 2
+  FAIL [9] now 21: the tile says 3, the rings, the case and the medals are 0 + 3 + 1
+  FAIL [9] now 22: the tile says 12, the rings, the case and the medals are 4 + 8 + 4
+  FAIL [9] now 24: the tile says 9, the rings, the case and the medals are 1 + 8 + 3
+  now: 91 of 200 went at least once, 86 brought home a medal, 70 a gold
+  y2004: 87 of 200 went at least once, 87 brought home a medal, 80 a gold
+  section 9: 173 careers with a medal (490 medals), 178 careers that only rested
+  sections 9 and 10 took 55.7 s
+simCareerIntl: control tilenomedal FIRED (section 9, 173 failures)
