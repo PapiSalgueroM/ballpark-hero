@@ -6807,6 +6807,44 @@
      "says": "most NHL goals in a season 16 (2009-10)"
     }
    ]
+  },
+  {
+   "id": "nhlconn-018",
+   "label": "Drafted first overall",
+   "name": "Mike Modano",
+   "holds": true,
+   "why": "member",
+   "sources": [
+    {
+     "host": "api-web.nhle.com",
+     "url": "https://api-web.nhle.com/v1/player/8449645/landing",
+     "says": "drafted 1988, round 1, 1 overall, by MNS"
+    },
+    {
+     "host": "hockey-reference.com",
+     "url": "https://www.hockey-reference.com/players/m/modanmi01.html",
+     "says": "drafted 1 overall by Minnesota, 1988"
+    }
+   ]
+  },
+  {
+   "id": "nhlconn-018",
+   "label": "Played for Utah (as of 2025-26)",
+   "name": "Taylor Hall",
+   "holds": false,
+   "why": "arizona-not-utah",
+   "sources": [
+    {
+     "host": "api-web.nhle.com",
+     "url": "https://api-web.nhle.com/v1/player/8475791/landing",
+     "says": "NHL clubs to 2025-26: Edmonton Oilers, New Jersey Devils, Arizona Coyotes, Boston Bruins, Buffalo Sabres, Chicago Blackhawks, Carolina Hurricanes"
+    },
+    {
+     "host": "hockey-reference.com",
+     "url": "https://www.hockey-reference.com/players/h/hallta02.html",
+     "says": "no NHL season with UTA/UTA up to 2025-26 (clubs: EDM, NJD, ARI, BUF, BOS, CHI, CAR)"
+    }
+   ]
   }
  ],
  "uncheckedCeiling": 0,
@@ -7252,7 +7290,7 @@
    "way": "REBUILD",
    "from": "Won the Hart Trophy",
    "to": "Drafted first overall",
-   "why": "the Hart is still to be won by any man playing, and every man on the board is; Connor Hellebuyck (Hart 2024-25) was a second answer; rebuilt as a draft group around four of the five"
+   "why": "the Hart is still to be won by any man playing, and every man on the board is; Connor Hellebuyck (Hart 2024-25) was a second answer; rebuilt as a draft group around four of the five. Taylor Hall (an Arizona Coyote in 2019-20, never with Utah on both hosts) left it so the board does not invite an Arizona guess for the Utah group, and Mike Modano (first overall by the Minnesota North Stars, 1988) takes his place (review fix of 2026-10-29)"
   },
   {
    "id": "nhlconn-018",
@@ -7502,6 +7540,13 @@
    "label": "Drafted by the Sabres",
    "holds": true,
    "why": "second-fit"
+  },
+  {
+   "id": "nhlconn-018",
+   "name": "Taylor Hall",
+   "label": "Played for Utah (as of 2025-26)",
+   "holds": false,
+   "why": "arizona-not-utah"
   },
   {
    "id": "nhlconn-019",
