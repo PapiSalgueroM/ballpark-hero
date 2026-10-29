@@ -1,0 +1,38 @@
+{
+  "schema": 1,
+  "status": "SOURCE_ONLY_OLD_PR420_LIGHT_V2_UNRUN",
+  "parentCommit": "11aa2a6ef34c3cda3d2d88d95b2fd7d41fbbcd9e",
+  "parentTree": "bf5e6d0a486f81f3310af7932111bae57b241008",
+  "appSourceReadySHA256": "8ce1527412e830cd800863670196eb41b9ce28d80076e9cab495c8b42cfced0c",
+  "rootSourceGOSHA256": "dc70873da5377e9ada2a4704c1821df1b09c7750b3ec4692db6d5ec12d28a0a2",
+  "files": [
+    {
+      "path": "src/lib/clubManager.ts",
+      "bytes": 1243602,
+      "sha256": "4c3863cfd5a676bdbf4415fef337886b9324a2ae255a4389f12a8269eaa7735d",
+      "gitBlob": "9b6d84fe39b0ec55e35ca0a77603f5b69199300d"
+    },
+    {
+      "path": "src/components/club-manager/TrainingScreen.tsx",
+      "bytes": 13666,
+      "sha256": "ac9fbad9de7b0d9c33cedc32d45723361a36454f9759522aa203d964da6124a2",
+      "gitBlob": "9164f39611e0a5d8e12e7e37fe503d706ea46ed7"
+    },
+    {
+      "path": "src/pages/ClubManager.tsx",
+      "bytes": 104321,
+      "sha256": "22020e1efc2b71069afb3d8c6cb2ba5fc00cc0a7abf3aa306fd7964d379d308c",
+      "gitBlob": "3c26297f95077eabc2843afa69746531f5966af5"
+    },
+    {
+      "path": "src/components/club-manager/IndividualLightSeason.tsx",
+      "bytes": 5418,
+      "sha256": "0d5d6aaeef467edc9d0dc1c2b423c29a5c68b3c71ef8e0987b49dee3236ae98b",
+      "gitBlob": "12fd23c1afa53d16ac7ba6c7648d915dd256c696"
+    }
+  ],
+  "limits": [
+    "Exact old PR420 family only, not current-main, post-BS or live qualification.",
+    "No actual fixed runtime or size result is inferred from this manifest."
+  ]
+}

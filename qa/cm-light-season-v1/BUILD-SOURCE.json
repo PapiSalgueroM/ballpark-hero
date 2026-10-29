@@ -1,0 +1,388 @@
+{
+  "schema": 1,
+  "status": "SOURCE_ONLY_BROWSER_OUTER_ACTUAL_ROOT_POSITIVE_BOUND_UNRUN",
+  "branch": "codex/cm-light-season-browser-20261029",
+  "parentCommit": "11aa2a6ef34c3cda3d2d88d95b2fd7d41fbbcd9e",
+  "parentTree": "bf5e6d0a486f81f3310af7932111bae57b241008",
+  "requiredMain": "9bbb95c73f544e3340d33a52867af6738141b340",
+  "appSourceReadySHA256": "8ce1527412e830cd800863670196eb41b9ce28d80076e9cab495c8b42cfced0c",
+  "testSourceReadySHA256": "d023cc6466c8a135b2e1c25cc607ce308d3fa899c38693d3fd85e831c52783b5",
+  "positiveSourceReadySHA256": "4c9a0e9e9fdcc60e410afb85510defd8570f26fae3cc93da87b9dda60b4722e7",
+  "browserSourceReadySHA256": "7c92d195b8f94d17d49ec39bba13b2a330fce4754f1f73ed66682657fbda2dd4",
+  "files": [
+    {
+      "path": "src/lib/clubManager.ts",
+      "bytes": 1243602,
+      "sha256": "4c3863cfd5a676bdbf4415fef337886b9324a2ae255a4389f12a8269eaa7735d",
+      "gitBlob": "9b6d84fe39b0ec55e35ca0a77603f5b69199300d"
+    },
+    {
+      "path": "src/components/club-manager/TrainingScreen.tsx",
+      "bytes": 13666,
+      "sha256": "ac9fbad9de7b0d9c33cedc32d45723361a36454f9759522aa203d964da6124a2",
+      "gitBlob": "9164f39611e0a5d8e12e7e37fe503d706ea46ed7"
+    },
+    {
+      "path": "src/pages/ClubManager.tsx",
+      "bytes": 104321,
+      "sha256": "22020e1efc2b71069afb3d8c6cb2ba5fc00cc0a7abf3aa306fd7964d379d308c",
+      "gitBlob": "3c26297f95077eabc2843afa69746531f5966af5"
+    },
+    {
+      "path": "src/components/club-manager/IndividualLightSeason.tsx",
+      "bytes": 5418,
+      "sha256": "0d5d6aaeef467edc9d0dc1c2b423c29a5c68b3c71ef8e0987b49dee3236ae98b",
+      "gitBlob": "12fd23c1afa53d16ac7ba6c7648d915dd256c696"
+    },
+    {
+      "path": "src/test/clubManagerLightSeason.test.tsx",
+      "bytes": 35539,
+      "sha256": "f98942892ba17b726f8fae46650ceb13f2ad8f612f5baa4e7aac2b7cb7cca1f3",
+      "gitBlob": "7e6614cae83a0b52459404c49c651645c491667b"
+    },
+    {
+      "path": "scripts/qa/buildCmLightSeasonFixedObserver.mjs",
+      "bytes": 7758,
+      "sha256": "59836655539b96512fa3fbfd502784b49c9ac42f34b7e98ce4a065e4a52e203b",
+      "gitBlob": "98f791f1696d7f0979d650bb07831c74c8b73dae"
+    },
+    {
+      "path": "qa/cm-light-season-v1/original/clubManager.ts",
+      "bytes": 1240569,
+      "sha256": "05de3cfca8d978e6117979fb29b82b2ece7b9fb6ee1f2ce3c051e379e36de86e",
+      "gitBlob": "a505743537b383bc7885bb81f5a72c11e154b566"
+    },
+    {
+      "path": "src/test/clubManagerLightSeasonMounted.test.tsx",
+      "bytes": 17320,
+      "sha256": "feec077e6bdf5aceb21e19220e81a3bf4901fbebca5e0dfb7dc4dd58b4d68712",
+      "gitBlob": "b97828b6fb0d99ae62c51075b22de694a26bc7c7"
+    },
+    {
+      "path": "scripts/qa/cmLightSeasonFirstPositive.mjs",
+      "bytes": 19292,
+      "sha256": "8e18128a51c483165ca42d7b3ff654bd534c12051ba4975647001e707162f7c0",
+      "gitBlob": "9bcead758857ecd3fa4f9b4963429803e30aeded"
+    },
+    {
+      "path": "qa/cm-light-season-v1/PRODUCT-SOURCE-READY.json",
+      "bytes": 1549,
+      "sha256": "163b126e2d761d6a417a51ddab2411c9b195644970daf0e3d2d28075f636bcb8",
+      "gitBlob": "53133e6114acf4f594157444893d95ea80d69f5c"
+    },
+    {
+      "path": "src/hooks/useClubManager.ts",
+      "bytes": 70744,
+      "sha256": "dce880b04eb80792eb3ea97354aa5f0d146f89c5280f57055c04dbb1db274b62",
+      "gitBlob": "7297073ea60b93501df48ea9b7dfc74edd2217de"
+    },
+    {
+      "path": "scripts/simAcademy.mjs",
+      "bytes": 29056,
+      "sha256": "0af666a9f5d3bcdef7923a06eab971c01504c0f63ff557078a746c6411587965",
+      "gitBlob": "4cf364759fff1a0a41aa7b8aaff62cc31bfe5b44"
+    },
+    {
+      "path": "src/test/setup.ts",
+      "bytes": 847,
+      "sha256": "0175cc334b44d9874ff4bd8274a8cc165e9e84cd3738a4298f934db353887289",
+      "gitBlob": "df00cdf5c54e8c8efc71e46d7585ae76acb4fc8d"
+    },
+    {
+      "path": "scripts/lib/offlineTransport.cjs",
+      "bytes": 10660,
+      "sha256": "e60ff1534307e449ccef598e3b7470dcba58681b82cea4005cec7319f14f9221",
+      "gitBlob": "0fda542a2649fe5da937c6976fd0f5b6073e74b6"
+    },
+    {
+      "path": "tsconfig.app.json",
+      "bytes": 680,
+      "sha256": "b12030bfe21ea5be66670842c71d66d194d1771f93f0b8c076e97c867b4b0552",
+      "gitBlob": "51f581dd91641b4c1f1219f646788e73cf6bf00c"
+    },
+    {
+      "path": "vitest.config.ts",
+      "bytes": 5364,
+      "sha256": "6a68dd2f214dab4a3013eb41bad38eea65d703d61440002710ec246495e1c58a",
+      "gitBlob": "ed2a9dc677f77dfe95c061064eeff5782b856864"
+    },
+    {
+      "path": "package.json",
+      "bytes": 3495,
+      "sha256": "acfe14626dea53cf5f9c5e0286b766a22237656b52aac4c888b080873ac90e31",
+      "gitBlob": "2ff64986fb76ebc51b706f2fd24765768874008a"
+    },
+    {
+      "path": "package-lock.json",
+      "bytes": 309049,
+      "sha256": "c7e3867eabf0bfa03a8aa6a5e601b0050b937ed210d48c6bbd241019e3c9ea76",
+      "gitBlob": "97d6f12a052f25f400462938c241789a083f0bfe"
+    },
+    {
+      "path": "src/hooks/useRevealScroll.ts",
+      "bytes": 12565,
+      "sha256": "42ee464df372437ff934b2f6a2b4acafc25493eb4062e0602166bfdd2e7479cd",
+      "gitBlob": "0cd106080bfb4e0461d9b86f0a973689f717d502"
+    },
+    {
+      "path": "src/lib/clubManagerSlots.ts",
+      "bytes": 9763,
+      "sha256": "7b0ec76d80544272a6f823834fb157e55970610b0bd4bf6217266ff780cab8ac",
+      "gitBlob": "cd1a683637ce1fa0444b86b1cff46821aa75127d"
+    },
+    {
+      "path": "src/lib/saveFence.ts",
+      "bytes": 6552,
+      "sha256": "75ac3c8cf136acdb2dae50938cac5ffe522e2db7827f59c453b98b67519d6216",
+      "gitBlob": "1de45b573fd866433eb0982495af927a5427e8f4"
+    },
+    {
+      "path": "scripts/runAllSims.mjs",
+      "bytes": 22720,
+      "sha256": "aea1ca2262f57a5cea27142b0a3576a63bac6120a61ee85bcff09a9a982eb493",
+      "gitBlob": "a7d56d224a472b8eacfe1c4fd2f672f962259d28"
+    },
+    {
+      "path": "scripts/sweepWeight.mjs",
+      "bytes": 97218,
+      "sha256": "4e6e69a1cd9b58f585890c82cd698e598f8c112f88de4c0c9d10fc0f56feb81b",
+      "gitBlob": "10fa2bd492f37a59f77af9356691d7b1248141de"
+    },
+    {
+      "path": "scripts/lib/hostLikeServer.mjs",
+      "bytes": 2690,
+      "sha256": "3958c9a3b4d9e49bb60a3b7dd72d81a997bd1caed56e82e4c3bae07e1a918ef0",
+      "gitBlob": "21059d5e8114669df61106c125d5272d357b6236"
+    },
+    {
+      "path": "scripts/qa/freeKickLab1070.mjs",
+      "bytes": 27126,
+      "sha256": "6279c8f608e56439e73f0bbcda73f9ed69e15d48e9b13119de4d6a7f05fb46b7",
+      "gitBlob": "1cf030d9182fd4fd68fca39f32e757c69bf9e58a"
+    },
+    {
+      "path": "scripts/prerender.mjs",
+      "bytes": 50126,
+      "sha256": "9eb04f0d5fa75aa2f073475f4b5e3c8243326bd148bc7cc5049a7ba5c1ddc80f",
+      "gitBlob": "3d4fb1e595413c48c7bd65b927730d25cc3a2e18"
+    },
+    {
+      "path": "scripts/genSitemap.mjs",
+      "bytes": 21388,
+      "sha256": "f3e6d4dc051ca484d39f36386381c5211e4847bc203e1e223dc5f54f6105fafc",
+      "gitBlob": "08344dfc84be3ca24533c8d56e0f229b02b93c0a"
+    },
+    {
+      "path": "scripts/simAdsense.mjs",
+      "bytes": 29408,
+      "sha256": "4b59a16cb1f9ad9fdbc61d48929a6ee1039eb82601c7745c1c4711aefebe40d3",
+      "gitBlob": "767fd4119f1f24c5dda295834abad29887edc71f"
+    },
+    {
+      "path": "scripts/simBrand.mjs",
+      "bytes": 15815,
+      "sha256": "68d70a75423a5b016ea16d3273c7fe4b1b3df631cfeaf03a23f0b02dc0895391",
+      "gitBlob": "c17f21d76cecce77f0ccbae7986e79f88ee121f5"
+    },
+    {
+      "path": "scripts/simHeadTags.mjs",
+      "bytes": 9031,
+      "sha256": "e5f5430f845399ca4f4b9e495f9701bac98c546915a0ffa0d35e71548b19e7b8",
+      "gitBlob": "a2d1cd4548e5f06a72960b2a9393eee741b1abb6"
+    },
+    {
+      "path": "scripts/simHiddenPages.mjs",
+      "bytes": 5262,
+      "sha256": "9b814aa337e45f6378fe8118d7beddfc10a4f5597b119edf95ab33c48a396cff",
+      "gitBlob": "f5951796f3d1c8f535cfcaf3198f0806c7fa57d2"
+    },
+    {
+      "path": "scripts/simHubs.mjs",
+      "bytes": 19480,
+      "sha256": "34544d701b5efe92389ddda30541e2f7608104a04076f1504c7aab590212a1e4",
+      "gitBlob": "ef8c89f4ed25d000cb4d4796f515b6660c6c5d3e"
+    },
+    {
+      "path": "scripts/simIndexNow.mjs",
+      "bytes": 5747,
+      "sha256": "7713c136f132acbee99fb9c7540346298739e75c2a915d20b32d7e760f2bfdeb",
+      "gitBlob": "970df1757c5cf8ad7c68d5e96e3e4432678a5e3c"
+    },
+    {
+      "path": "scripts/simIndexing.mjs",
+      "bytes": 17439,
+      "sha256": "e34f8f0cbc2d1611b2506c27f9be3ac99a61b2a1b2c84c2ad70a3887f3b808da",
+      "gitBlob": "ded7b515505b7d7dc3e94e0d33a25db69fd2f695"
+    },
+    {
+      "path": "scripts/simInternalLinks.mjs",
+      "bytes": 10063,
+      "sha256": "77694c675c5a813a31d60c9cb114f2574075383c8b432887ec25c10ae7c9f7aa",
+      "gitBlob": "4963212706d2df4d802f0a584a6a0b825bc64dac"
+    },
+    {
+      "path": "scripts/simNoRivalNames.mjs",
+      "bytes": 20911,
+      "sha256": "eb779b90da75b3433ef7cdf88b753c7c33722d8d4d1f59fd37bcb4fe6d4a0c4a",
+      "gitBlob": "0cc180c43c692ed65fb067e7f187826806845798"
+    },
+    {
+      "path": "scripts/simPrerender.mjs",
+      "bytes": 57615,
+      "sha256": "fc74c7a19531ab7a3e6f72e7630fdbc05cf4d4df62fd747deffa098ad2283a48",
+      "gitBlob": "69b86c4732c86e3852d30a2abf3343f655ea728d"
+    },
+    {
+      "path": "scripts/simPrerenderBoot.mjs",
+      "bytes": 14435,
+      "sha256": "d9e6372062a669c51c3f36d2f034f0f1c261f6906725b82893642c404b72bd1c",
+      "gitBlob": "5ded1f8ccc2e65766d15cb0d59957754180ff4f5"
+    },
+    {
+      "path": "scripts/simRetiredRoutes.mjs",
+      "bytes": 7219,
+      "sha256": "74a961483d97fe48519745a36c91fa504b59e067b2453a9708ab1755f7a7a59e",
+      "gitBlob": "e88b9715bb5409c88b5a6059e422ccd872edc272"
+    },
+    {
+      "path": "scripts/simSchema.mjs",
+      "bytes": 15368,
+      "sha256": "fc97df743c48145c91b43b4a3357cd6ea421e9210f496aa7965664b2d61b4636",
+      "gitBlob": "793c7b1e646dafcf3d664263a94144af18e24ee6"
+    },
+    {
+      "path": "scripts/simSitemap.mjs",
+      "bytes": 10368,
+      "sha256": "c0d0c63af03f9dd54d2633c549ea2d1588214df61f2b5d1e90bfafbccc621edf",
+      "gitBlob": "517bac00ae17c029d57c7bfa5bbc55ec78eb9d15"
+    },
+    {
+      "path": "scripts/simSnapshotAssets.mjs",
+      "bytes": 11524,
+      "sha256": "929040c81c7ae027972b35f4ea629ae69d39e3cbc4797bdf8e2df3d25d204317",
+      "gitBlob": "66eaed1457e5ac3087b62d7e46328951f49618c9"
+    },
+    {
+      "path": "src/components/club-manager/ManagerSlotsScreen.tsx",
+      "bytes": 7590,
+      "sha256": "f47001c235c6842236703c77493dc4748ac8a8e53d182d16f36732e5bd7e8b07",
+      "gitBlob": "5031ca1dbb585ea7b7810749fdf9c4136291fd4d"
+    },
+    {
+      "path": "scripts/lib/playwrightLoader.mjs",
+      "bytes": 2777,
+      "sha256": "94a07179be7ca6b9562d118b52c2d5d0dff0b6b2e29e49e4fea16fa2defb5a93",
+      "gitBlob": "4f7739e217e0a47ee82e6bfc8be1c04bed17454a"
+    },
+    {
+      "path": "qa/cm-light-season-v1/browser-earned-raw.txt",
+      "bytes": 76776,
+      "sha256": "26a2d39175ef1b5d6559a8fe9ca63f7aad7a216f6c80173ff744126c87a33984",
+      "gitBlob": "176585de638d7fa2aa116c6dcd26bdac9288d929"
+    },
+    {
+      "path": "qa/cm-light-season-v1/FIRST-POSITIVE-SOURCE.json",
+      "bytes": 16444,
+      "sha256": "09ceab92daacd504131d9650d8753dbc53673ce33cb232a6d32db5f3564b599f",
+      "gitBlob": "8c05b7fd1668d9a0e16232fab2f8cc9e8609df06"
+    },
+    {
+      "path": ".github/workflows/cm-light-season-first-positive.yml",
+      "bytes": 11738,
+      "sha256": "9bc7a32717c1ed7eef98f44bf2fc1be9f72d04281c5f85f42e2bac3f2c020766",
+      "gitBlob": "0a69532a2ae3ae53de63771e20cb88239e22b831"
+    },
+    {
+      "path": "scripts/qa/playCmLightSeason.mjs",
+      "bytes": 23155,
+      "sha256": "04bdf49effa72fd0a659214867e2f55f7ba2379148bf2173bb3dcecc976ae0a8",
+      "gitBlob": "42dd74be703e1991d14afa7bbb6326a0f54f8c5a"
+    },
+    {
+      "path": "qa/cm-light-season-v1/BROWSER-SOURCE.json",
+      "bytes": 7938,
+      "sha256": "0bf8d75bb10b83dc653a682df92c42fa8236273e4cd09715f54a5fb99080a562",
+      "gitBlob": "6aa6f87a8f47b50cb2e1057c0fa583e9d1727925"
+    }
+  ],
+  "selectedPinCount": 49,
+  "allowedDelta": [
+    "M\tsrc/lib/clubManager.ts",
+    "M\tsrc/pages/ClubManager.tsx",
+    "M\tsrc/components/club-manager/TrainingScreen.tsx",
+    "A\tsrc/components/club-manager/IndividualLightSeason.tsx",
+    "A\tsrc/test/clubManagerLightSeason.test.tsx",
+    "A\tsrc/test/clubManagerLightSeasonMounted.test.tsx",
+    "A\tscripts/qa/buildCmLightSeasonFixedObserver.mjs",
+    "A\tqa/cm-light-season-v1/original/clubManager.ts",
+    "A\tscripts/qa/cmLightSeasonFirstPositive.mjs",
+    "A\tqa/cm-light-season-v1/PRODUCT-SOURCE-READY.json",
+    "A\tqa/cm-light-season-v1/FIRST-POSITIVE-SOURCE.json",
+    "A\t.github/workflows/cm-light-season-first-positive.yml",
+    "A\tscripts/qa/playCmLightSeason.mjs",
+    "A\tqa/cm-light-season-v1/BROWSER-SOURCE.json",
+    "A\tqa/cm-light-season-v1/browser-earned-raw.txt",
+    "A\tqa/cm-light-season-v1/BUILD-SOURCE.json",
+    "A\t.github/workflows/cm-light-season-browser.yml"
+  ],
+  "parentBodies": 5396,
+  "finalBodies": 5410,
+  "modified": 3,
+  "added": 14,
+  "heldParentBodies": 5393,
+  "positivePrerequisite": {
+    "status": "ROOT_ADMITTED_ACTUAL_22_METHOD3_COPIED3_BUILD15_CAPS15",
+    "rootAdmissionSHA256": "5bbda41635b44de9376d67560c3663f3836a5666275360a54eea4612cfb89892",
+    "custodianAdmissionSHA256": "1dccd733d1d937a8730ceea25739919d1f3dd5324b93d4891d912a62ab40ec58",
+    "run": 40838096126,
+    "head": "adfe42c1e2e2e460f5d81ce994dc3ac2086fcca0",
+    "tree": "66c5337d437baada08415b1e1bcafbb69eaab245",
+    "required": {
+      "readers": 15,
+      "methodWitnesses": 3,
+      "copiedMethodControls": 3,
+      "healthy": 22,
+      "strictHistoryCopied": 1,
+      "roundedCaps": 15
+    }
+  },
+  "browser": {
+    "normalPNGs": 12,
+    "selectorSHA256": "0bf8d75bb10b83dc653a682df92c42fa8236273e4cd09715f54a5fb99080a562",
+    "helperSHA256": "04bdf49effa72fd0a659214867e2f55f7ba2379148bf2173bb3dcecc976ae0a8",
+    "peerSourceGO": "e03d99bdb83e4732cd523c3c83ba30125759c1f71a3eacac6c139275a28df5b9",
+    "copiedControls": 9,
+    "profiles": [
+      320,
+      390,
+      1280
+    ],
+    "rootSourceGO": "e1ee5e9e"
+  },
+  "scope": {
+    "global": false,
+    "physical": false,
+    "browser": true,
+    "realTypes": true,
+    "seoRoutes": [
+      "/club-manager",
+      "/whats-new"
+    ],
+    "existingTestsRerun": false,
+    "fullUnits": false,
+    "readers": 15,
+    "unchangedRoundedCaps": 15
+  },
+  "holds": [
+    "All canonical tracked bodies and exact17-path tree delta",
+    "All detached tracked source except retained generated public/lastmod output",
+    "Complete dist inventory and font-cache directory inventory before and after helper, including extra-file detection"
+  ],
+  "limits": [
+    "Explicit cleanPR42011aa PRE-BS family only. No current-main/post-BS/Ready/live qualification.",
+    "Root and custodian actual first-positive admissions are bound. Browser runtime and ref authorization remain separate.",
+    "Same-source Engine reference is not an independent implementation. Module initialization draw scope remains excluded.",
+    "Nine controls are COPIED measured observations only, no physical fault or fault PNG.",
+    "Actual browser and twelve fresh original image reviews remain owed. Real height clamps remain refusals."
+  ]
+}
