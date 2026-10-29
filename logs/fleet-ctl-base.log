@@ -1,0 +1,25 @@
+fleet: base /tmp/base, head /home/runner/work/ballpark-hero/ballpark-hero, scale 1, CONTROL base
+S 2026-10-25: base wrote 158 bytes, head read {"currentIndex":0,"lastCorrectIndex":-1,"finalAmount":0,"walkedAway":true}, head writes the same bytes: true
+S 2026-10-26: base wrote 161 bytes, head read {"currentIndex":7,"lastCorrectIndex":6,"finalAmount":1000,"walkedAway":false}, head writes the same bytes: true
+S 2026-10-27: base wrote 166 bytes, head read {"currentIndex":14,"lastCorrectIndex":14,"finalAmount":1000000,"walkedAway":false}, head writes the same bytes: true
+  FAIL: A real unlimited seed 1001 rung 2: the swap dealt "Who won the Ballon d'Or in 2008?", already on the ladder
+  FAIL: A real unlimited seed 1001 rung 3: the swap dealt "Who won the Ballon d'Or in 2017?", already on the ladder
+real unlimited: 2000 ladders (0 short, 0 dealt differently), 30000 swaps; base repeats 6292 (21.0%), base back 0; head repeats 6292, head back 0; fresh 23708, identical 23708; a second worth question 4436
+  FAIL: A real unlimited: 6292 head swaps repeated a ladder text
+  FAIL: A degraded unlimited seed 1001 rung 2: the swap dealt "Who was listed at Central Midfield in the 2026 market values?", already on the ladder
+  FAIL: A degraded unlimited seed 1001 rung 5: the swap dealt "Who was worth the most in the 2026 market values?", already on the ladder
+degraded unlimited: 600 ladders (0 short, 0 dealt differently), 9000 swaps; base repeats 3025 (33.6%), base back 0; head repeats 3025, head back 0; fresh 5975, identical 5975; a second worth question 2138
+  FAIL: A degraded unlimited: 3025 head swaps repeated a ladder text
+  FAIL: A planted unlimited seed 1001 rung 1: the swap dealt "Who was listed at Central Midfield in the 2026 market values?", already on the ladder
+  FAIL: A planted unlimited seed 1001 rung 3: the swap dealt "Who was worth the most in the 2026 market values?", already on the ladder
+planted unlimited: 600 ladders (0 short, 0 dealt differently), 9000 swaps; base repeats 4227 (47.0%), base back 0; head repeats 4227, head back 0; fresh 4773, identical 4773; a second worth question 2092
+  FAIL: A planted unlimited: 4227 head swaps repeated a ladder text
+  FAIL: A real daily 2027-07-02 rung 1: the swap dealt "Who was listed at Right Winger in the 2026 market values?", already on the ladder
+  FAIL: A real daily 2027-07-02 rung 3: the swap dealt "What shirt number has Shirt Fixture 37 worn at Nottingham Forest?", already on the ladder
+real daily: 800 ladders (0 short, 0 dealt differently), 12000 swaps; base repeats 2512 (20.9%), base back 0; head repeats 2512, head back 0; fresh 9488, identical 9488; a second worth question 1769
+  FAIL: A real daily: 2512 head swaps repeated a ladder text
+  FAIL: A real LEGACY daily 2026-10-21 rung 2: the swap dealt "Who won the Ballon d'Or in 2019?", already on the ladder
+  FAIL: A real LEGACY daily 2026-10-20 rung 4: the swap dealt "What shirt number has Shirt Fixture 36 worn at Brighton & Hove Albion?", already on the ladder
+real LEGACY daily: 54 ladders (0 short, 0 dealt differently), 810 swaps; base repeats 15 (1.9%), base back 0; head repeats 15, head back 0; fresh 795, identical 795; a second worth question 135
+  FAIL: A real LEGACY daily: 15 head swaps repeated a ladder text
+fleet: control base fired (15 failure(s))

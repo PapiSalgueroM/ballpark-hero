@@ -1,0 +1,12 @@
+#!serial
+fleet: [ -d /tmp/base ] || { git worktree add /tmp/base 5f9303bf8 && ln -s "$PWD/node_modules" /tmp/base/node_modules; }; node .rc/x/review-run-fleet.mjs
+fleet-ctl-base: [ -d /tmp/base ] || { git worktree add /tmp/base 5f9303bf8 && ln -s "$PWD/node_modules" /tmp/base/node_modules; }; FLEET_CONTROL=base node .rc/x/review-run-fleet.mjs
+mut-offby1: node .rc/x/review-run-mut.mjs offby1 && node scripts/simTriviaBank.mjs; s=$?; git checkout -- src scripts; exit $s
+mut-lastrung: node .rc/x/review-run-mut.mjs lastrung && node scripts/simTriviaBank.mjs; s=$?; git checkout -- src scripts; exit $s
+mut-stale8: node .rc/x/review-run-mut.mjs stale8 && node scripts/simTriviaBank.mjs; s=$?; git checkout -- src scripts; exit $s
+mut-easier: node .rc/x/review-run-mut.mjs easier && node scripts/simTriviaBank.mjs; s=$?; git checkout -- src scripts; exit $s
+mut-asked: node .rc/x/review-run-mut.mjs asked && node_modules/.bin/vitest run src/test/sportsMillionaireSwap.test.tsx --testTimeout=300000 --hookTimeout=120000; s=$?; git checkout -- src scripts; exit $s
+mut-tocome: node .rc/x/review-run-mut.mjs tocome && node_modules/.bin/vitest run src/test/sportsMillionaireSwap.test.tsx --testTimeout=300000 --hookTimeout=120000; s=$?; git checkout -- src scripts; exit $s
+vt-base: git show 5f9303bf8:src/lib/sportsMillionaire.ts > src/lib/sportsMillionaire.ts && git show 5f9303bf8:src/pages/SportsMillionaire.tsx > src/pages/SportsMillionaire.tsx && git diff --stat -- src | tail -1 && node_modules/.bin/vitest run src/test/sportsMillionaireSwap.test.tsx --testTimeout=300000 --hookTimeout=120000; s=$?; git checkout -- src scripts; exit $s
+vt-page: node -e "const fs=require('fs');const f='src/pages/SportsMillionaire.tsx';const s=fs.readFileSync(f,'utf8');const a='swapQuestion(pool, question, ladder)';if(s.split(a).length!==2){console.log('anchor not once');process.exit(2)}fs.writeFileSync(f,s.replace(a,'swapQuestion(pool, question, [question])'));console.log('page control applied')" && node_modules/.bin/vitest run src/test/sportsMillionaireSwap.test.tsx --testTimeout=300000 --hookTimeout=120000; s=$?; git checkout -- src scripts; exit $s
+clean: git status --short | head -5; echo "tree clean lines: $(git status --short | grep -v '^??' | wc -l)"

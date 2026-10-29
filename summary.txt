@@ -1,0 +1,11 @@
+fleet exit=0 109s | fleet: all checks passed
+fleet-ctl-base exit=1 97s | fleet: control base fired (15 failure(s))
+mut-offby1 exit=1 156s | simTriviaBank: 4 failure(s)
+mut-lastrung exit=1 161s | simTriviaBank: 4 failure(s)
+mut-stale8 exit=1 160s | simTriviaBank: 1 failure(s)
+mut-easier exit=1 160s | simTriviaBank: 8 failure(s)
+mut-asked exit=1 3s | ::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/test/sportsMillionaireSwap.test.tsx,title=src/test/sportsMillionaireSwap.test.tsx > Sports Millionaire%2C S
+mut-tocome exit=1 3s | ::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/test/sportsMillionaireSwap.test.tsx,title=src/test/sportsMillionaireSwap.test.tsx > Sports Millionaire%2C S
+vt-base exit=1 3s | ::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/test/sportsMillionaireSwap.test.tsx,title=src/test/sportsMillionaireSwap.test.tsx > Sports Millionaire%2C S
+vt-page exit=1 3s | ::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/test/sportsMillionaireSwap.test.tsx,title=src/test/sportsMillionaireSwap.test.tsx > Sports Millionaire%2C S
+clean exit=0 0s | tree clean lines: 0
