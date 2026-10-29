@@ -1,0 +1,4 @@
+[2m Test Files [22m [1m[31m1 failed[39m[22m[90m (1)[39m
+[31m     → Unable to find an element with the text: Your shortlist is full: 12 of 12. Remove a target to save another.. This could be because the text is broken up by multiple elements. In this case, you can provide a
+[31m[1mTestingLibraryElementError[22m[39m: Unable to find an element with the text: Your shortlist is full: 12 of 12. Remove a target to save another.. This could be because the text is broken up by multiple elements
+::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/test/clubManagerRecruitmentBoard.test.tsx,title=src/test/clubManagerRecruitmentBoard.test.tsx > actual recruitment board and ordinary Buy return > a 13th Sav

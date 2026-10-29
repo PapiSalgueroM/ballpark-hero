@@ -1,0 +1,3 @@
+[2m Test Files [22m [1m[31m1 failed[39m[22m[90m (1)[39m
+[31m[1mAssertionError[22m: expected { phase: 'playing', choice: 'cash' } to deeply equal { phase: 'playing', choice: null }[39m
+::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/test/soccerCareerLoyaltyView.test.ts,title=src/test/soccerCareerLoyaltyView.test.ts > the loyalty plan records only real choices > no ledger and nothing pick
