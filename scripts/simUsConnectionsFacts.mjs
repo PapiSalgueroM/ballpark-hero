@@ -71,6 +71,19 @@
  *                             left fielders (29.4 percent of his games there: must raise gray-back, for him)
  *   US_CONN_CONTROL=undate    Round 1567: nflconn-004's "Played for the Steelers (as of 2025)" loses its
  *                             date beside Lamar Jackson, still a Raven (must raise: trade, for him)
+ *   The date boundary (fix-1567, review-run-1567 finding 3: five mutations of the date filters stayed green):
+ *   US_CONN_CONTROL=yearnfl   Jaire Alexander (one Ravens season, 2025) beside nflconn-004's Ravens
+ *                             (as of 2025) (must raise: second-fit, for him; "<" for "<=" hides him)
+ *   US_CONN_CONTROL=yearnhl   Mitch Marner (one Golden Knights season, 2025-26) beside nhlconn-003's Golden
+ *                             Knights (as of 2025-26) (must raise: second-fit, for him)
+ *   US_CONN_CONTROL=afternfl  Von Miller (one Cowboys season, 2026) inside nflconn-002's Cowboys (as of 2025)
+ *                             (must raise: not-a-member, for him; ignoring the date lets him in)
+ *   US_CONN_CONTROL=afternhl  nhlconn-003's Golden Knights moved back to (as of 2024-25) with Mitch Marner
+ *                             inside it (must raise: not-a-member, for him)
+ *   US_CONN_CONTROL=aftermlb  bconn-011's Cleveland group moved back to (as of 2025): Francisco Lindor's 2026
+ *                             season makes him unknown (must raise: member-unknown, for baseball)
+ *   US_CONN_CONTROL=futuredate nflconn-004's Steelers dated (as of 2030) (must raise: date-open, for it)
+ *   US_CONN_CONTROL=grayonehost the first baseball gray pair keeps one host (must raise: gray-one-host, for it)
  * A control is red only when the rule it names fires for the man or group it
  * moved. Any other failure in a control run (a moved man has no two host fact
  * in section 3, say) is printed but never turns the run red on its own, so
@@ -217,6 +230,76 @@ if (CONTROL) {
       changed = true;
       own = { kinds: ['trade'], subject: 'Lamar Jackson' };
     }
+  } else if (CONTROL === 'yearnfl') {
+    /* fix-1567: the date year counts. Jaire Alexander's one Ravens season on the record is 2025, so beside
+       nflconn-004's "Played for the Ravens (as of 2025)" he is a second answer; a "<" for "<=" hides him */
+    const b = boardOf('nfl', 'nflconn-004');
+    const g = b?.groups.find(x => x.theme === 'Played college ball at Clemson');
+    if (g && b.groups.some(x => x.theme === 'Played for the Ravens (as of 2025)') && g.players.includes('Hunter Renfrow')) {
+      g.players[g.players.indexOf('Hunter Renfrow')] = 'Jaire Alexander';
+      changed = true;
+      own = { kinds: ['second-fit'], subject: 'Jaire Alexander' };
+    }
+  } else if (CONTROL === 'yearnhl') {
+    /* fix-1567: Mitch Marner's one Golden Knights season on the record is 2025-26, so beside nhlconn-003's
+       "Played for the Golden Knights (as of 2025-26)" he is a second answer; a "<" for "<=" hides him */
+    const b = boardOf('nhl', 'nhlconn-003');
+    const g = b?.groups.find(x => x.theme === 'Played for the Bruins (as of 2025-26)');
+    if (g && b.groups.some(x => x.theme === 'Played for the Golden Knights (as of 2025-26)') && g.players.includes('Ray Bourque')) {
+      g.players[g.players.indexOf('Ray Bourque')] = 'Mitch Marner';
+      changed = true;
+      own = { kinds: ['second-fit'], subject: 'Mitch Marner' };
+    }
+  } else if (CONTROL === 'afternfl') {
+    /* fix-1567: a season past the date does not count. Von Miller's one Cowboys season on the record is 2026, so
+       inside nflconn-002's "Played for the Cowboys (as of 2025)" he is no member; ignoring the date lets him in */
+    const b = boardOf('nfl', 'nflconn-002');
+    const g = b?.groups.find(x => x.theme === 'Played for the Cowboys (as of 2025)');
+    if (g && g.players.includes('Zack Martin')) {
+      g.players[g.players.indexOf('Zack Martin')] = 'Von Miller';
+      changed = true;
+      own = { kinds: ['not-a-member'], subject: 'Von Miller' };
+    }
+  } else if (CONTROL === 'afternhl') {
+    /* fix-1567: no NHL man on the record joined a board's club after 2025-26, so the date moves back a season:
+       Mitch Marner's Golden Knights seasons (2025-26 on) all come after "(as of 2024-25)", so he is no member */
+    const b = boardOf('nhl', 'nhlconn-003');
+    const g = b?.groups.find(x => x.theme === 'Played for the Golden Knights (as of 2025-26)');
+    if (g && g.players.includes('Jonathan Marchessault')) {
+      g.theme = 'Played for the Golden Knights (as of 2024-25)';
+      g.players[g.players.indexOf('Jonathan Marchessault')] = 'Mitch Marner';
+      changed = true;
+      own = { kinds: ['not-a-member'], subject: 'Mitch Marner' };
+    }
+  } else if (CONTROL === 'aftermlb') {
+    /* fix-1567: the baseball record counts seasons per club, not which ones, so a member with any season past the
+       date cannot be judged. bconn-011's Cleveland group moves back to "(as of 2025)" and Francisco Lindor (a 2026
+       season, with the Mets) must turn unknown; dropping that line would call him in by his count */
+    const b = boardOf('baseball', 'bconn-011');
+    const g = b?.groups.find(x => x.theme === 'Played for the Cleveland Guardians/Indians (as of 2026)');
+    if (g && g.players.includes('Francisco Lindor')) {
+      g.theme = 'Played for the Cleveland Guardians/Indians (as of 2025)';
+      changed = true;
+      own = { kinds: ['member-unknown'], subject: 'baseball' };
+    }
+  } else if (CONTROL === 'futuredate') {
+    /* fix-1567: a date past the last finished season protects nothing: nflconn-004's Steelers to "(as of 2030)" */
+    const b = boardOf('nfl', 'nflconn-004');
+    const g = b?.groups.find(x => x.theme === 'Played for the Steelers (as of 2025)');
+    if (g) {
+      g.theme = 'Played for the Steelers (as of 2030)';
+      changed = true;
+      own = { kinds: ['date-open'], subject: g.theme };
+    }
+  } else if (CONTROL === 'grayonehost') {
+    /* fix-1567: a gray pair read on one host only (the first pair keeps its first source) */
+    const gp = (ledgerOf('baseball').grayPairs ?? []).find(x => x.sources?.length >= 2);
+    if (gp) {
+      console.log(`US_CONN_CONTROL=grayonehost: the gray pair ${gp.name} beside "${gp.label}" keeps only ${gp.sources[0].host}`);
+      gp.sources = [gp.sources[0]];
+      changed = true;
+      own = { kinds: ['gray-one-host'], subject: `${gp.name} | ${gp.label}` };
+    }
   } else if (CONTROL === 'unjudged') {
     const b = boardOf('baseball', 'bconn-002');
     const g = b?.groups.find(x => x.theme === 'Born in Japan');
@@ -272,7 +355,7 @@ for (const s of SPORTS) {
      left that board; he must not come back beside that group there */
   let back = 0;
   for (const gp of ledgerOf(s).grayPairs ?? []) {
-    if (!hostsOk(gp.sources)) fail(`${s}: the gray pair ${gp.name} beside "${gp.label}" on ${gp.id} is not read on two hosts`);
+    if (!hostsOk(gp.sources)) { fire('gray-one-host', `${gp.name} | ${gp.label}`); fail(`${s}: the gray pair ${gp.name} beside "${gp.label}" on ${gp.id} is not read on two hosts`); }
     const b = boardOf(s, gp.id);
     if (!b || !b.groups.some(g => fold(g.theme) === fold(gp.label))) continue;
     if (b.groups.some(g => g.players.some(p => fold(p) === fold(gp.name)))) {
@@ -387,6 +470,7 @@ for (const s of SPORTS) {
     if (o !== (L.otherUnknownCeiling ?? -1)) fail(`${s}: ${o} other tiles the record cannot judge against a group beside them, the ledger's otherUnknownCeiling says ${L.otherUnknownCeiling}: ${o > L.otherUnknownCeiling ? 'one came back, and it may be a second right answer' : 'lower the ceiling'}`);
   } else if (CONTROL) {
     if (n > (L.uncheckedCeiling ?? 0)) { for (const x of unchecked[s]) fire('unjudged', x.label); fail(`${s}: ${n} groups nothing judges, over the ceiling of ${L.uncheckedCeiling}`); }
+    if (u > (L.memberUnknownCeiling ?? 0)) { fire('member-unknown', s); fail(`${s}: ${u} members the record cannot place, over the ceiling of ${L.memberUnknownCeiling}`); }
     if (o > (L.otherUnknownCeiling ?? 0)) { fire('other-unknown', s); fail(`${s}: ${o} other tiles the record cannot judge, over the ceiling of ${L.otherUnknownCeiling}`); }
   }
   console.log(`   ${s}: ${n} groups nothing judges (ceiling ${L.uncheckedCeiling}), ${u} members the record cannot place (ceiling ${L.memberUnknownCeiling}), ${o} other tiles it cannot judge (ceiling ${L.otherUnknownCeiling})${n ? `: ${unchecked[s].map(x => `${x.id} "${x.label}"`).join(', ')}` : ''}`);
@@ -397,13 +481,19 @@ console.log('8) no active man is one move from a second answer');
    board in another group becomes a second right answer the day he signs there (Round 1558 counted NFL 10 such men
    on 2 boards, NHL 46 on 4, before it counted every active man on a board). A club group on a board with an
    active man who does not fit it is dated ("Played for the Steelers (as of 2025)"), which the checker holds to
-   the seasons up to that one; a legends group needs five seasons, so one move cannot do it */
+   the seasons up to that one; a legends group needs five seasons, so one move cannot do it.
+   fix-1567 (review-read-1567 minor 7): a date only protects when no season after it is still being played, so it
+   may not pass the sport's last finished season on the 2026-10 records: MLB 2026 (the regular season is over), the
+   NFL 2025 (2026 is under way) and the NHL 2025-26 (start year 2025; 2026-27 is under way). A group dated past it
+   ("(as of 2030)") is as open as an undated one and is checked as one. Move these when the records are read again */
+const LAST_FINISHED = { baseball: 2026, nfl: 2025, nhl: 2025 };
 for (const s of SPORTS) {
   let n = 0, dated = 0, open = 0;
   for (const b of boards[s]) for (const g of b.groups) {
     const c = sports[s].checker.criterion(g.theme);
     if (!c || c.kind !== 'club' || c.legend) continue;
-    if (c.asOf !== undefined) { dated += 1; continue; }
+    if (c.asOf !== undefined && c.asOf <= LAST_FINISHED[s]) { dated += 1; continue; }
+    if (c.asOf !== undefined) { fire('date-open', g.theme); fail(`${s} ${b.id}: "${g.theme}" is dated past the last finished season (${LAST_FINISHED[s]}), so a move in a season still being played can add a man`); }
     open += 1;
     for (const o of b.groups) if (o !== g) for (const p of o.players) {
       if (sports[s].checker.active?.(p) !== true || sports[s].checker.fits(p, c) === true) continue;
