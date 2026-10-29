@@ -8,7 +8,7 @@
    ledger is a committed file and the saves of section 8 are built locally by
    scripts/lib/realSaves.mjs.
 
-   Sections (INTL_SECTIONS, default 1,2,3,4,6,12; 5, 7 and 8 are asked for by name):
+   Sections (INTL_SECTIONS, default 1,2,3,4,6,9,10,11,12; 5, 7 and 8 are asked for by name):
      1. the ledger. Every fact in scripts/data/basketballIntlSources.json has two
         reads on two hosts that are not each other (fiba.basketball and
         about.fiba.basketball are one body), none a wiki, each with its words;
@@ -54,7 +54,20 @@
      12. the weight (Round 1544): src/pages/NbaMyCareer.tsx bundled with
         splitting; the page's static closure, read off the metafile, holds the
         gate and none of the ledger, careerIntl.ts or nbaCareerIntl.ts, which
-        sit in lazy chunks. (9 to 11 are Round 1557's.)
+        sit in lazy chunks; Round 1557 adds IntlSummersView.tsx to the lazy list.
+     9. the case (Round 1557), INTL_CASE_FLEET careers an era (default 200),
+        always go and always rest: the hub's tile is the rings plus the case
+        plus the medals (counted by the module, not the tile's reader); the
+        case's medal rows hold every medal once with its summer; no medal is a
+        season's award; a career that only rested draws rings plus the case.
+     10. the badges (Round 1557), the same fleets: each medal badge is lit
+        exactly when the summers say its fact holds, all three are lit in the
+        always go fleet and none ever in the always rest fleet.
+     11. the words (Round 1557): every capitalised word in the visible text of
+        the national team's files (and Round 1557's regions of the shared
+        ones) is a nation, host or competition of the ledger or a fixed word.
+   9, 10 and 11 run by default since Round 1557 (9 and 10 measured at about
+   SECONDS_9_10 s on a runner).
 
    Controls (INTL_CONTROL=<name>; run each with INTL_SECTIONS set to its own
    section, or it also runs the default sections). Each is asserted to change
@@ -81,6 +94,10 @@
      norepair     the repair on load does nothing                        (8 red)
      gateyear     the gate's 2004 moved to 2005                          (2 red)
      staticledger the NBA binding imports the ledger statically         (12 red)
+     tilenomedal  the honours lose the medal row                         (9 red)
+     deadmedal    a gold badge asks for a hundred golds                  (10 red)
+     realname     a real NBA player's name planted in a copy of the
+                  International view                                    (11 red)
    (Round 1544: seasonyear, anyyear, endcall, lowbar and knockage edit the
    gate, where the call's conditions and the knock's numbers now live.)
 
@@ -98,7 +115,7 @@ import { buildRealSaves } from './lib/realSaves.mjs';
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const ROOT_URL = ROOT.replaceAll('\\', '/');
 const CONTROL = process.env.INTL_CONTROL || '';
-const SECTIONS = new Set((process.env.INTL_SECTIONS || '1,2,3,4,6,12').split(',').map(s => s.trim()));
+const SECTIONS = new Set((process.env.INTL_SECTIONS || '1,2,3,4,6,9,10,11,12').split(',').map(s => s.trim()));
 const TMP = fs.mkdtempSync(path.join(os.tmpdir(), 'careerIntl-'));
 process.on('exit', () => { try { fs.rmSync(TMP, { recursive: true, force: true }); } catch { /* best effort */ } });
 
@@ -128,6 +145,9 @@ const CONTROLS = {
   mathrandom: { section: '6', note: 'the pot draw uses Math.random', edits: [{ file: INTL, from: 'const j = Math.floor(rng() * (i + 1));', to: 'const j = Math.floor(Math.random() * (i + 1));' }] },
   gateyear: { section: '2', note: "the gate's first edition summer moved from 2004 to 2005", edits: [{ file: GATE, from: '[2004, 2006, 2008,', to: '[2005, 2006, 2008,' }] },
   staticledger: { section: '12', note: 'the NBA binding imports the ledger statically', edits: [{ file: SPORT, from: "import { NBA_CAREER_INTL_LAZY } from '@/lib/nbaCareerIntlGate';", to: "import { NBA_CAREER_INTL_LAZY } from '@/lib/nbaCareerIntlGate';\nimport { BASKETBALL_INTL_EDITIONS } from '@/data/basketballIntl';" }, { file: SPORT, from: '  intl: NBA_CAREER_INTL_LAZY,', to: '  intl: { ...NBA_CAREER_INTL_LAZY, ledgerRows: BASKETBALL_INTL_EDITIONS.length },' }] },
+  tilenomedal: { section: '9', note: 'the honours lose the medal row, so the tile forgets the medals', edits: [{ file: SPORT, from: "...(medals > 0 ? [{ label: medals === 1 ? 'international medal' : 'international medals', n: medals }] : []),", to: '' }] },
+  deadmedal: { section: '10', note: 'a gold badge asks for a hundred golds, so nobody can earn it', edits: [{ file: 'src/lib/careerBadges.ts', from: 'test: f => (f.intl?.golds[g.comp] ?? 0) >= 1', to: 'test: f => (f.intl?.golds[g.comp] ?? 0) >= 100' }] },
+  realname: { section: '11', note: "a real NBA player's name planted in a copy of the International view" },
 };
 if (CONTROL && !CONTROLS[CONTROL]) { console.error(`unknown control "${CONTROL}": use ${Object.keys(CONTROLS).join(', ')}`); process.exit(2); }
 if (CONTROL && !SECTIONS.has(CONTROLS[CONTROL].section)) SECTIONS.add(CONTROLS[CONTROL].section);
@@ -164,9 +184,10 @@ fs.writeFileSync(ENTRY, [
   `export * as gate from '${ROOT_URL}/src/lib/nbaCareerIntlGate.ts';`,
   `export { NBA_CAREER_SPORT } from '${ROOT_URL}/src/lib/nbaCareerSport.ts';`,
   `export * as drive from '${ROOT_URL}/src/test/helpers/usCareerDrive.ts';`,
+  `export * as hub from '${ROOT_URL}/src/lib/careerHub.ts';`,
 ].join('\n'));
 await build({ entryPoints: [ENTRY], bundle: true, format: 'esm', platform: 'node', outfile: OUT, logLevel: 'error', absWorkingDir: ROOT, alias: { '@': path.join(ROOT, 'src') }, plugins: [controlPlugin] });
-const { data, intl, keyed, nbaIntl, gate, NBA_CAREER_SPORT, drive } = await import(`file://${OUT.replaceAll('\\', '/')}`);
+const { data, intl, keyed, nbaIntl, gate, NBA_CAREER_SPORT, drive, hub } = await import(`file://${OUT.replaceAll('\\', '/')}`);
 const LEDGER = () => ({ shapes: data.BASKETBALL_INTL_SHAPES, editions: data.BASKETBALL_INTL_EDITIONS, cycles: data.BASKETBALL_INTL_CYCLES, partial: data.BASKETBALL_INTL_PARTIAL, lastPlayed: data.BASKETBALL_LAST_PLAYED_SUMMER });
 let MATH_RANDOM_CALLS = 0;
 const realRandom = Math.random;
@@ -888,13 +909,191 @@ if (SECTIONS.has('12')) {
   const statics = inputsOf([...seen]);
   const lazies = inputsOf(Object.keys(outs).filter(k => !seen.has(k)));
   const has = (set, f) => [...set].some(x => x.endsWith(f));
-  for (const f of ['src/data/basketballIntl.ts', 'src/lib/careerIntl.ts', 'src/lib/nbaCareerIntl.ts', 'src/components/us-career/IntlCallUpCard.tsx', 'src/components/us-career/IntlSummerResult.tsx']) {
+  for (const f of ['src/data/basketballIntl.ts', 'src/lib/careerIntl.ts', 'src/lib/nbaCareerIntl.ts', 'src/components/us-career/IntlCallUpCard.tsx', 'src/components/us-career/IntlSummerResult.tsx', 'src/components/us-career/IntlSummersView.tsx']) {
     check('12', !has(statics, f), `${f} is in the static graph of /nba-my-career`);
     check('12', has(lazies, f), `${f} is in no lazy chunk, so the page cannot load it`);
   }
   check('12', has(statics, 'src/lib/nbaCareerIntlGate.ts'), 'the static gate is not in the static graph, so the board cannot read it');
   check('12', statics.size > 200, `the static graph holds ${statics.size} modules, too few to be the page`);
   console.log(`  ${seen.size} static outputs (${statics.size} modules) of ${Object.keys(outs).length}; ledger static: ${has(statics, 'src/data/basketballIntl.ts')}, bracket runner static: ${has(statics, 'src/lib/careerIntl.ts')}, gate static: ${has(statics, 'src/lib/nbaCareerIntlGate.ts')}`);
+}
+
+/* ─── 9 and 10. the case and the badges (Round 1557) ─────────────────────── */
+/* INTL_CASE_FLEET careers an era (default 200, seeds 0 up), each driven twice
+   through the real NBA engine with the face mounted: always go and always rest.
+   9: the hub's tile is the rings plus the case plus the medals (the medals
+   counted by the module, intlStatsOf, not by the reader the tile uses); the
+   case's medal rows hold every medal once with its summer; no medal is ever a
+   season's award; a career that only rested draws rings plus the case. 10: each
+   of the three medal badges is lit exactly when the module says its fact holds,
+   all three are lit somewhere in the always go fleet (both eras together), and
+   none is ever lit in the always rest fleet. */
+const CASE_FLEET = Number(process.env.INTL_CASE_FLEET || 200);
+const MEDAL_BADGES = ['intl_medal', 'olympic_gold', 'world_cup_gold'];
+if (SECTIONS.has('9') || SECTIONS.has('10')) {
+  console.log(`sections 9 and 10: the case and the badges, ${CASE_FLEET} careers an era, always go and always rest`);
+  const t0 = Date.now();
+  const lit = Object.fromEntries(MEDAL_BADGES.map(id => [id, 0]));
+  let restLit = 0; let medalCareers = 0; let medalsSeen = 0; let restCareers = 0;
+  const caseTotal = c => hub.trophyLines(c.seasons).reduce((n, l) => n + l.n, 0);
+  const tileTotal = c => hub.honoursTotal({ rings: NBA_CAREER_SPORT.ringsOf(c), honours: NBA_CAREER_SPORT.honours(c) });
+  for (const [era, eraId] of ERAS) {
+    const e = { went: 0, medals: 0, golds: 0 };
+    for (let i = 0; i < CASE_FLEET; i += 1) {
+      const o = { key: `intl9:${era}:${i}`, pos: POS[i % POS.length], arch: i, eraId, seasons: 30 };
+      const go = JSON.parse(drive.driveCareer(NBA_CAREER_SPORT, { ...o, intl: 'go', intlFace: nbaIntl.NBA_CAREER_INTL }).json);
+      const rest = JSON.parse(drive.driveCareer(NBA_CAREER_SPORT, { ...o, intl: 'rest', intlFace: nbaIntl.NBA_CAREER_INTL }).json);
+      const stats = intl.intlStatsOf(go.intl);
+      const rows = nbaIntl.NBA_CAREER_INTL.trophyRows(go);
+      if (stats.tournaments > 0) e.went += 1;
+      if (stats.medals > 0) { medalCareers += 1; e.medals += 1; medalsSeen += stats.medals; }
+      if (stats.gold > 0) e.golds += 1;
+      if (SECTIONS.has('9')) {
+        const rings = NBA_CAREER_SPORT.ringsOf(go);
+        check('9', tileTotal(go) === rings + caseTotal(go) + stats.medals, `${era} ${i}: the tile says ${tileTotal(go)}, the rings, the case and the medals are ${rings} + ${caseTotal(go)} + ${stats.medals}`);
+        check('9', rows.reduce((n, r) => n + r.n, 0) === stats.medals, `${era} ${i}: the case's medal rows hold ${rows.reduce((n, r) => n + r.n, 0)} medals, the summers ${stats.medals}`);
+        const medalYears = (go.intl?.summers ?? []).filter(r => r.went && ['gold', 'silver', 'bronze'].includes(r.place)).map(r => r.year).sort();
+        check('9', JSON.stringify(rows.flatMap(r => r.years).sort()) === JSON.stringify(medalYears), `${era} ${i}: the medal rows' years are not the medal summers`);
+        const labels = new Set(rows.map(r => r.label));
+        check('9', hub.trophyLines(go.seasons).every(l => !labels.has(l.label) && !/gold|silver|bronze/i.test(l.label)), `${era} ${i}: a medal sits in a season's awards`);
+        if (rest.intl) {
+          restCareers += 1;
+          check('9', tileTotal(rest) === NBA_CAREER_SPORT.ringsOf(rest) + caseTotal(rest) && !NBA_CAREER_SPORT.honours(rest).some(h => /medal/.test(h.label)), `${era} ${i}: a career that only rested has a medal on the tile`);
+        }
+      }
+      if (SECTIONS.has('10')) {
+        const earned = new Set(NBA_CAREER_SPORT.earnedBadges(go).map(b => b.id));
+        const want = { intl_medal: stats.medals > 0, olympic_gold: (stats.byComp.oly?.gold ?? 0) > 0, world_cup_gold: (stats.byComp.wc?.gold ?? 0) > 0 };
+        for (const id of MEDAL_BADGES) {
+          check('10', earned.has(id) === want[id], `${era} ${i}: ${id} is ${earned.has(id) ? 'lit' : 'dark'} while the summers say ${want[id]}`);
+          if (earned.has(id)) lit[id] += 1;
+        }
+        const restEarned = NBA_CAREER_SPORT.earnedBadges(rest).map(b => b.id).filter(id => MEDAL_BADGES.includes(id));
+        check('10', restEarned.length === 0, `${era} ${i}: always rest lit ${restEarned.join(', ')}`);
+        restLit += restEarned.length;
+      }
+    }
+    console.log(`  ${era}: ${e.went} of ${CASE_FLEET} went at least once, ${e.medals} brought home a medal, ${e.golds} a gold`);
+  }
+  if (SECTIONS.has('9')) {
+    check('9', medalCareers >= 20 && restCareers >= 20, `only ${medalCareers} careers with a medal and ${restCareers} that rested, so the section proves little`);
+    console.log(`  section 9: ${medalCareers} careers with a medal (${medalsSeen} medals), ${restCareers} careers that only rested`);
+  }
+  if (SECTIONS.has('10')) {
+    for (const id of MEDAL_BADGES) check('10', lit[id] > 0, `${id} is never lit in the always go fleet: a badge nobody can earn`);
+    console.log(`  section 10: lit in the always go fleet: ${MEDAL_BADGES.map(id => `${id} ${lit[id]}`).join(', ')}; in the always rest fleet: ${restLit}`);
+  }
+  console.log(`  sections 9 and 10 took ${((Date.now() - t0) / 1000).toFixed(1)} s`);
+}
+
+/* ─── 11. the words (Round 1557) ─────────────────────────────────────────── */
+/* Every capitalised word in the string literals, template text and JSX text of
+   the national team's files is a nation, host or competition from the ledger,
+   or one of the fixed words below. No real person is ever named there (the
+   player's own name comes from his save, never from source). Comments are
+   stripped first: a guard reads the code, not the prose about it. */
+const WORD_FILES = [
+  'src/components/us-career/IntlCallUpCard.tsx', 'src/components/us-career/IntlSummerResult.tsx',
+  'src/components/us-career/IntlSummersView.tsx', 'src/components/us-career/TrophyCase.tsx',
+  'src/lib/nbaCareerIntlGate.ts', 'src/lib/nbaCareerIntl.ts',
+];
+/* The new words of shared files: the region between the two anchors, both required. */
+const WORD_REGIONS = [
+  ['src/lib/careerBadges.ts', '/* ─── Round 1557: the medal badges', '/* ─── NFL'],
+  ['src/lib/careerBadges.ts', '...intlBadges<NbaBadgeFacts>({', '...closingBadges<NbaBadgeFacts>('],
+  ['src/components/us-career/UsCareerBoard.tsx', '{panel === \'trophies\' && intlOpen && intl ? (', '{/* Round 469: the peaks between the trophies.'],
+  ['src/lib/nbaCareerSport.ts', '/* Round 1557: and the medals', 'roleBadge:'],
+];
+/* Measured 2026-10-29 on Round 1557's head: 156 capitalised words read in 10 sources, every one of them a ledger
+   word or one of these. Each is a game word (a sentence's first word, a round, a medal, a label), FIBA and the NBA
+   (bodies, not people), and SUSPENDED, a season result the gate compares against. */
+const FIXED_WORDS = new Set([
+  'The', 'You', 'Your', 'Back', 'Continue', 'Go', 'Rest', 'Gold', 'Silver', 'Bronze', 'Olympic', 'International', 'Record',
+  'US', 'A', 'No', 'In', 'If', 'It', 'This', 'Every', 'Nothing', 'Past', 'Example', 'Called', 'Resting', 'Tournaments',
+  'Groups', 'Group', 'Round', 'Quarter', 'Semi', 'Final', 'Fourth', 'Out', 'Champion', 'Host', 'R', 'QF', 'SF', 'W', 'L', 'OT',
+  'Trophy', 'Case', 'Medal', 'Hall', 'Fame', 'MVPs', 'All', 'Star', 'NBA', 'FIBA', 'SUSPENDED',
+]);
+/* The text a reader can see in a source: string literals, template text (not its ${} code) and JSX text. */
+function visibleText(src) {
+  const out = [];
+  let i = 0;
+  const n = src.length;
+  const readQuoted = q => { let s = ''; i += 1; while (i < n && src[i] !== q) { if (src[i] === '\\') { s += src[i + 1] ?? ''; i += 2; continue; } s += src[i]; i += 1; } i += 1; return s; };
+  function code(stopAtBrace) {
+    let depth = 0;
+    let jsx = '';
+    while (i < n) {
+      const c = src[i];
+      const d = src[i + 1];
+      if (c === '/' && d === '/') { while (i < n && src[i] !== '\n') i += 1; continue; }
+      if (c === '/' && d === '*') { const end = src.indexOf('*/', i + 2); i = end < 0 ? n : end + 2; continue; }
+      if (c === '\'' || c === '"') { out.push(readQuoted(c)); continue; }
+      if (c === '`') {
+        i += 1; let s = '';
+        while (i < n && src[i] !== '`') {
+          if (src[i] === '\\') { s += src[i + 1] ?? ''; i += 2; continue; }
+          if (src[i] === '$' && src[i + 1] === '{') { out.push(s); s = ' '; i += 2; code(true); continue; }
+          s += src[i]; i += 1;
+        }
+        i += 1; out.push(s); continue;
+      }
+      if (c === '{') depth += 1;
+      if (c === '}') { if (stopAtBrace && depth === 0) { i += 1; return; } depth -= 1; }
+      /* JSX text: what sits between the > that closes a tag and the next < or {, when it reads as words, not
+         code. A tag's > follows a name, a quote, a brace or a slash, never a space or = (a comparison, an arrow).
+         The text is stepped over, so an apostrophe in it ("this career's own") is never read as a quote. Text
+         goes on after an expression ("for {editionLabel}. You're {age} that summer."), so a } starts a run too. */
+      if ((c === '>' && i > 0 && /[A-Za-z0-9"'}/]/.test(src[i - 1])) || c === '}') {
+        jsx = ''; let j = i + 1;
+        while (j < n && src[j] !== '<' && src[j] !== '{' && src[j] !== '}' && !(src[j] === '/' && (src[j + 1] === '/' || src[j + 1] === '*'))) { jsx += src[j]; j += 1; }
+        if (/[A-Za-z]/.test(jsx) && !/[;=()[\]]/.test(jsx) && !/\b(export|import|interface|const|let|function|type|extends|return)\b/.test(jsx)) { out.push(jsx); i = j; continue; }
+      }
+      i += 1;
+    }
+  }
+  code(false);
+  /* module paths and class lists are not words a reader sees */
+  return out.filter(s => !/^[@.]?\.?\//.test(s) && !/^@\//.test(s));
+}
+/* a word, without its "'s" or "'re": "FIBA's" is FIBA, "You're" is You */
+const capitalised = text => text.match(/\b[A-Z][A-Za-z]*/g) ?? [];
+if (SECTIONS.has('11')) {
+  console.log('section 11: the words of the national team\'s files');
+  const ledgerWords = new Set();
+  for (const r of data.BASKETBALL_INTL_EDITIONS) {
+    for (const s of [r[3], r[4], ...(r[6] ?? [])]) for (const w of capitalised(String(s ?? ''))) ledgerWords.add(w);
+  }
+  const allowed = w => ledgerWords.has(w) || FIXED_WORDS.has(w);
+  const sources = [];
+  for (const f of WORD_FILES) sources.push([f, fs.readFileSync(path.join(ROOT, f), 'utf8').split('\r\n').join('\n')]);
+  for (const [f, from, to] of WORD_REGIONS) {
+    const s = fs.readFileSync(path.join(ROOT, f), 'utf8').split('\r\n').join('\n');
+    const a = s.indexOf(from); const b = a < 0 ? -1 : s.indexOf(to, a + from.length);
+    check('11', a >= 0 && b > a && s.split(from).length === 2, `${f}: the region "${from.slice(0, 40)}" is not there once with its end after it`);
+    if (a >= 0 && b > a) sources.push([`${f} (Round 1557's region)`, s.slice(a, b)]);
+  }
+  if (CONTROL === 'realname') {
+    const k = sources.findIndex(([f]) => f.endsWith('IntlSummersView.tsx'));
+    const anchor = '<h3 className="text-lg font-black tracking-tight">🌍 International</h3>';
+    if (k < 0 || sources[k][1].split(anchor).length !== 2) { console.error('control realname cannot run: the International heading is not in IntlSummersView.tsx once'); process.exit(2); }
+    const before = sources[k][1];
+    sources[k][1] = before.replace(anchor, `${anchor}\n<p>Kevin Durant welcomes you to the national team.</p>`);
+    mustChange('the view', before, sources[k][1]);
+  }
+  let words = 0;
+  const strays = new Map();
+  for (const [f, src] of sources) {
+    for (const t of visibleText(src)) {
+      for (const w of capitalised(t)) {
+        words += 1;
+        if (!allowed(w)) strays.set(w, [...(strays.get(w) ?? []), [f, t.trim().slice(0, 70)]]);
+      }
+    }
+  }
+  if (process.env.INTL_WORDS_LIST) console.log(`  strays: ${[...strays.keys()].join(' ')}`);
+  for (const [w, at] of strays) check('11', false, `"${w}" in ${[...new Set(at.map(x => x[0]))].join(', ')} ("${at[0][1]}") is no nation, host or competition of the ledger and no fixed word`);
+  check('11', words >= 100, `only ${words} capitalised words were read, so the section proves little`);
+  console.log(`  ${words} capitalised words read in ${sources.length} sources, ${ledgerWords.size} ledger words, ${FIXED_WORDS.size} fixed words, ${strays.size} strays`);
 }
 
 /* ─── summary ────────────────────────────────────────────────────────────── */
