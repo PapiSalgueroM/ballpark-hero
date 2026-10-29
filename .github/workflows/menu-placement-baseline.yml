@@ -1,0 +1,135 @@
+name: Menu placement missing-feature baseline
+on:
+  push:
+    branches: [codex/menu-placement-baseline-20261029]
+permissions:
+  contents: read
+concurrency:
+  group: menu-placement-baseline-${{ github.ref }}
+  cancel-in-progress: false
+jobs:
+  baseline:
+    runs-on: ubuntu-latest
+    timeout-minutes: 40
+    env:
+      CI: 'true'
+      SIM_NETWORK: offline
+      ENGINES: chromium
+      TZ: UTC
+      EXPECTED_MAIN: 7a92b329e9901c4bdd41eb6a4bf8c6f5020143c0
+      EXPECTED_PARENT: 81c099778d0c00c6017c6cff811e4f8be20b1766
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 2
+          persist-credentials: false
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: npm
+      - name: Exact two-QA-only additions on clean424
+        run: |
+          set -euo pipefail
+          out="$RUNNER_TEMP/menu-placement-baseline";test ! -e "$out";mkdir "$out"
+          echo "PLACEMENT_OUT=$out" >> "$GITHUB_ENV";echo "FREE_KICK_FONT_CACHE=$out/font-cache" >> "$GITHUB_ENV";echo "PLACEMENT_BROWSER_OUT=$out/browser" >> "$GITHUB_ENV"
+          test "$GITHUB_REPOSITORY" = PapiSalgueroM/ballpark-hero;test "$GITHUB_REPOSITORY_ID" = 1195729679
+          test "$GITHUB_REF" = refs/heads/codex/menu-placement-baseline-20261029
+          test "$(git show -s --format=%P HEAD)" = "$EXPECTED_PARENT";test "$(git rev-parse HEAD)" = "$GITHUB_SHA"
+          test "$(git rev-parse "$EXPECTED_PARENT^{tree}")" = 74a6e3d541bf2995749ab6bd9b357170c3c881d2
+          git ls-remote origin refs/heads/main | cut -f1 > "$out/main-at-start.txt";test "$(cat "$out/main-at-start.txt")" = "$EXPECTED_MAIN"
+          git diff --name-status "$EXPECTED_PARENT" HEAD > "$out/paths.txt"
+          printf 'A\t.github/workflows/menu-placement-baseline.yml\nA\tscripts/qa/playMenuPlacementBaseline.mjs\n' | cmp - "$out/paths.txt"
+          git diff --exit-code "$EXPECTED_PARENT" HEAD -- . ':!.github/workflows/menu-placement-baseline.yml' ':!scripts/qa/playMenuPlacementBaseline.mjs'
+          printf 'd7d9641efc2f43bfda1428c579662df126ff537e5dab9028156434100d26775f  scripts/qa/playMenuPlacementBaseline.mjs\n' | sha256sum -c -
+          for pair in src/App.tsx:b988c18c60d3fd7e1a010cb277a39736d07135e8 src/components/layout/Header.tsx:ea73eb5c4c6652c2684ab302a18381b78ad9cc4d src/components/game/GameNavbar.tsx:03423fde7f951c2d3c2f8fa33ce7bf9a2d3f9a84 src/components/layout/SiteMenu.tsx:40610855743cf57c033f3398d44e236f26ddfc89 src/components/layout/SiteMenuPanel.tsx:cd71514c0d72168f4064c0c8d7b7719095c698e8 src/test/SiteMenu.finder.test.tsx:dca14996069a9a82edf63f08b8abbf691385f362 src/index.css:775df500bd7c9730e5b04aedd3d6b2a1564d49b4 scripts/sweepWeight.mjs:10fa2bd492f37a59f77af9356691d7b1248141de;do test "$(git hash-object "${pair%:*}")" = "${pair##*:}";done
+          git ls-tree -r HEAD > "$out/source-tree.txt";git ls-tree -r "$EXPECTED_PARENT" > "$out/parent-tree.txt"
+          test "$(awk '$2=="blob" && ($1=="100644" || $1=="100755"){n++}END{print n}' "$out/source-tree.txt")" = 5381;test "$(awk '$2=="blob" && ($1=="100644" || $1=="100755"){n++}END{print n}' "$out/parent-tree.txt")" = 5379
+          git rev-parse HEAD > "$out/head.txt";git rev-parse 'HEAD^{tree}' > "$out/tree.txt";git archive --format=tar HEAD > "$out/source.tar"
+          git ls-files -z | sort -z > "$out/source-members.initial";git ls-files -z | sort -z | xargs -0 sha256sum > "$out/source.initial.sha256"
+          git diff --exit-code HEAD;test -z "$(git status --porcelain --untracked-files=no)"
+      - name: Exact locked application packages
+        run: npm ci > "$PLACEMENT_OUT/npm-ci.log" 2>&1
+      - name: Actual app types and eighteen existing Menu cases
+        id: units
+        run: |
+          set -euo pipefail
+          export NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs";: > "$PLACEMENT_OUT/unit-controller.transport"
+          set +e
+          SIM_OFFLINE_RECEIPT="$PLACEMENT_OUT/unit-controller.transport" node <<'NODE' > "$PLACEMENT_OUT/unit-controller.stdout.log" 2> "$PLACEMENT_OUT/unit-controller.stderr.log"
+          const fs=require('node:fs'),path=require('node:path'),a=require('node:assert/strict'),cp=require('node:child_process'),out=process.env.PLACEMENT_OUT;
+          const specs=[{"file":"src/test/SiteMenu.test.tsx","ancestor":"global top-left SiteMenu with the actual Sheet and router","titles":["opens a named dialog with the real site links and all six lightweight sports hubs","lets real Radix Escape dismiss and return focus to the opening trigger","selects a real internal link, changes router location and closes","marks only the normalized current route and closes when that current link is selected","dismisses from the actual Sheet overlay and returns focus","closes on external search/hash and history key changes while the normalized path stays the same"]},{"file":"src/test/SiteMenu.lazy-loading.test.tsx","ancestor":null,"titles":["cancels a pending real panel import without a late dialog, then reopens the actual healthy panel"]},{"file":"src/test/SiteMenu.load-failure.test.tsx","ancestor":null,"titles":["shows truthful load failure with Search and Cancel, returns focus and never opens a dialog"]},{"file":"src/test/SiteMenu.escape-loading.test.tsx","ancestor":null,"titles":["dismisses a pending real menu import with Escape from the trigger, without a late dialog"]},{"file":"src/test/SiteMenu.escape-failure.test.tsx","ancestor":null,"titles":["dismisses an honest menu load failure with Escape from the trigger and each fallback control, without an automatic retry"]},{"file":"src/test/SiteMenu.finder.test.tsx","ancestor":"Menu game finder","titles":["opens without editable autofocus and keeps original navigation","ranks actual catalog games and updates results as query changes","shows honest no results and clears without navigating","passes the full query to the existing search page","navigates to a game and closes including the current game","dismisses from the finder and returns visible trigger focus","clears the finder after close and a real route-key change","keeps draft searches out of the location and saved storage"]}],files=specs.map(s=>s.file),json=(file,data)=>fs.writeFileSync(file,JSON.stringify(data,null,2)+'\n',{flag:'wx'}),strip=s=>s.replace(/\x1b\[[0-?]*[ -/]*[@-~]/g,'');
+          function run(label,args){const dir=path.join(out,label);fs.mkdirSync(dir);const report=path.join(dir,'vitest.json'),receipt=path.join(dir,'transport.jsonl');fs.writeFileSync(receipt,'',{flag:'wx'});const x=fs.openSync(path.join(dir,'stdout.log'),'w'),y=fs.openSync(path.join(dir,'stderr.log'),'w');let p;try{p=cp.spawnSync(process.execPath,args(report),{env:{...process.env,NO_DOUBLE_SWAP:'',SIM_OFFLINE_RECEIPT:receipt},timeout:480000,stdio:['ignore',x,y]});}finally{fs.closeSync(x);fs.closeSync(y);}json(path.join(dir,'process.json'),{status:p.status,signal:p.signal,error:p.error?String(p.error):null});fs.writeFileSync(path.join(dir,'raw.exit'),String(p.status)+'\n',{flag:'wx'});a.ifError(p.error);a.equal(p.signal,null);a.equal(p.status,0,'ACTUAL_CHILD_RAW_ZERO');a.equal(fs.statSync(receipt).size,0);return{report,cli:strip(fs.readFileSync(path.join(dir,'stdout.log'),'utf8')+'\n'+fs.readFileSync(path.join(dir,'stderr.log'),'utf8'))};}
+          const types=run('types',()=>['node_modules/typescript/bin/tsc','--noEmit','-p','tsconfig.app.json']);const actual=run('existing-menu',file=>['node_modules/vitest/vitest.mjs','run',...files,'--maxWorkers=1','--minWorkers=1','--no-file-parallelism','--reporter=default','--reporter=json','--outputFile.json='+file]),d=JSON.parse(fs.readFileSync(actual.report,'utf8'));
+          a.equal(d.success,true);a.equal(d.numTotalTests,18);a.equal(d.numPassedTests,18);a.equal(d.numFailedTests,0);a.equal(d.numPendingTests,0);a.equal(d.numTodoTests,0);a.equal(d.numPendingTestSuites,0);a.equal(d.numTotalTestSuites,8,'EIGHT_AGGREGATE_SUITE_UNITS');a.equal(d.numPassedTestSuites,8);a.equal(d.numFailedTestSuites,0);a.equal(d.testResults.length,6,'SIX_FILES');
+          const seen=new Set(),rows=[];for(const f of d.testResults){const spec=specs.find(s=>path.resolve(s.file)===path.resolve(f.name));a(spec,'EXACT_FILE');a(!seen.has(spec.file));seen.add(spec.file);a.equal(f.status,'passed');a.equal(f.message,'');a.equal(f.assertionResults.length,spec.titles.length);for(let i=0;i<spec.titles.length;i++){const r=f.assertionResults[i],anc=spec.ancestor?[spec.ancestor]:[];a.equal(r.title,spec.titles[i]);a.deepEqual(r.ancestorTitles,anc);a.equal(r.fullName,[...anc,spec.titles[i]].join(' '));a.equal(r.status,'passed');a.deepEqual(r.failureMessages,[]);rows.push({file:spec.file,title:r.title,fullName:r.fullName,status:r.status});}}a.equal(seen.size,6);a.equal(rows.length,18);
+          for(const key of ['numRuntimeErrorTestSuites','numRuntimeErrors','numUnhandledErrors','numErrors'])if(key in d)a.equal(d[key],0);if('unhandledErrors'in d)a.deepEqual(d.unhandledErrors,[]);a.doesNotMatch(actual.cli,/Unhandled\s+(?:Errors?|Rejections?|Exceptions?)|Vitest caught|Failed Suites|No test files found|Cannot find (?:module|package)|Failed to resolve|ReferenceError:|TypeError:|SyntaxError:|TimeoutError|timed out|^\s*Errors\s+[1-9]\d*/mi);
+          const fc=[...actual.cli.matchAll(/^\s*Test Files\s+(.+?)\s+\(6\)\s*$/gm)],tc=[...actual.cli.matchAll(/^\s*Tests\s+(.+?)\s+\(18\)\s*$/gm)];a.equal(fc.length,1);a.equal(tc.length,1);a.equal(fc[0][1].replace(/\s+/g,' '),'6 passed');a.equal(tc[0][1].replace(/\s+/g,' '),'18 passed');a.equal((actual.cli.match(/JSON report written to /g)||[]).length,1);a(actual.cli.includes('JSON report written to '+actual.report));json(path.join(out,'EXISTING-18-ADMISSION.json'),{status:'ACTUAL_EXISTING_18_MENU_CASES_PASSED',source:process.env.GITHUB_SHA,parent:process.env.EXPECTED_PARENT,mainAtStart:process.env.EXPECTED_MAIN,typesRaw:0,rows,files:6,aggregateSuiteUnits:8,fileUnits:6,describeUnits:2,applicationUnchanged:true,missingPlacementBaselineSeparate:true,fullSuite:false});console.log('MENU_PLACEMENT_FOUNDATION: types0 and18 existing Menu cases passed; no product change');
+          NODE
+          raw=$?;set -e;printf '%s\n' "$raw" > "$PLACEMENT_OUT/unit-controller.exit";cat "$PLACEMENT_OUT/unit-controller.stdout.log";cat "$PLACEMENT_OUT/unit-controller.stderr.log";test "$raw" -eq 0;test ! -s "$PLACEMENT_OUT/unit-controller.transport"
+      - name: Isolated browser tooling and actual prepared fonts
+        run: |
+          set -euo pipefail
+          out="$PLACEMENT_OUT"; tools="$RUNNER_TEMP/menu-placement-browser-tools"; test ! -e "$tools"
+          npm install --prefix "$tools" --no-save --package-lock=false playwright@1.64.0 > "$out/browser-install.log" 2>&1
+          test ! -e node_modules/playwright; test ! -e node_modules/playwright-core
+          ln -s "$tools/node_modules/playwright" node_modules/playwright; ln -s "$tools/node_modules/playwright-core" node_modules/playwright-core
+          export PLAYWRIGHT_BROWSERS_PATH="$tools/browsers"; echo "PLAYWRIGHT_BROWSERS_PATH=$PLAYWRIGHT_BROWSERS_PATH" >> "$GITHUB_ENV"; echo "PLACEMENT_TOOLS=$tools" >> "$GITHUB_ENV"
+          executable=$(node -e 'const a=require("node:assert/strict");a.equal(require("playwright/package.json").version,"1.64.0");a.equal(require("playwright-core/package.json").version,"1.64.0");process.stdout.write(require("playwright").chromium.executablePath())')
+          if test ! -f "$executable";then node "$tools/node_modules/playwright/cli.js" install --with-deps chromium > "$out/chromium-install.log" 2>&1;fi
+          node scripts/qa/freeKickLab1070.mjs --prefetch-fonts-only > "$out/font-prefetch.log" 2>&1
+          sha=$(sha256sum "$FREE_KICK_FONT_CACHE/manifest.json" | cut -d ' ' -f1); echo "FONT_CACHE_MANIFEST_SHA256=$sha" >> "$GITHUB_ENV"
+      - name: Serial production build then complete pre-browser inventories
+        id: build
+        run: |
+          set -euo pipefail
+          out="$PLACEMENT_OUT"; export NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs"; : > "$out/build.transport"
+          status=0; SIM_OFFLINE_RECEIPT="$out/build.transport" npm run build > "$out/build.stdout.log" 2> "$out/build.stderr.log" || status=$?; printf '%s\n' "$status" > "$out/build.exit"; test "$status" -eq 0; test ! -s "$out/build.transport"
+          git ls-files -z | sort -z | xargs -0 sha256sum > "$out/source.prebrowser.sha256"; cmp "$out/source.initial.sha256" "$out/source.prebrowser.sha256"
+          for pair in "deps:node_modules" "browser:$PLACEMENT_TOOLS" "fonts:$FREE_KICK_FONT_CACHE" "dist:dist";do label="${pair%%:*}";dir="${pair#*:}";find "$dir" -type f -print0 | sort -z > "$out/$label.members";xargs -0 sha256sum < "$out/$label.members" > "$out/$label.sha256";done
+          find node_modules -type l -printf '%p -> %l\n' | sort > "$out/dependency-links.before"; tar -cf "$out/dist.tar" -C dist .; tar -cf "$out/font-cache.tar" -C "$FREE_KICK_FONT_CACHE" .
+      - name: Three actual healthy journeys and owned missing-placement baseline
+        id: browser
+        if: ${{ !cancelled() && steps.build.outcome == 'success' }}
+        run: |
+          set -euo pipefail
+          out="$PLACEMENT_OUT";export NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs";: > "$out/browser-controller.transport";: > "$out/browser.transport";: > "$out/browser-server.transport"
+          SIM_OFFLINE_RECEIPT="$out/browser-server.transport" node scripts/lib/hostLikeServer.mjs dist 4173 > "$out/browser-server.log" 2>&1 & server=$!;trap 'kill "$server" 2>/dev/null || true' EXIT
+          ready=0;for attempt in 1 2 3 4 5;do if curl --fail --silent http://127.0.0.1:4173/ > /dev/null;then ready=1;break;fi;sleep 1;done;test "$ready" -eq 1
+          set +e
+          SIM_OFFLINE_RECEIPT="$out/browser-controller.transport" node <<'NODE' > "$out/browser-controller.stdout.log" 2> "$out/browser-controller.stderr.log"
+          const fs=require('node:fs'),path=require('node:path'),a=require('node:assert/strict'),cp=require('node:child_process'),{createHash}=require('node:crypto'),out=process.env.PLACEMENT_OUT,dir=process.env.PLACEMENT_BROWSER_OUT,sha=b=>createHash('sha256').update(b).digest('hex'),json=(file,v)=>fs.writeFileSync(file,JSON.stringify(v,null,2)+'\n',{flag:'wx'});
+          const x=fs.openSync(path.join(out,'browser.stdout.log'),'w'),y=fs.openSync(path.join(out,'browser.stderr.log'),'w');let child;try{child=cp.spawnSync(process.execPath,['scripts/qa/playMenuPlacementBaseline.mjs'],{env:{...process.env,SIM_OFFLINE_RECEIPT:path.join(out,'browser.transport')},timeout:720000,stdio:['ignore',x,y]});}finally{fs.closeSync(x);fs.closeSync(y);}json(path.join(out,'browser.process.json'),{status:child.status,signal:child.signal,error:child.error?String(child.error):null});fs.writeFileSync(path.join(out,'browser.raw.exit'),String(child.status)+'\n',{flag:'wx'});a.ifError(child.error);a.equal(child.signal,null,'ACTUAL_COMPLETED_BROWSER_CHILD');a.equal(child.status,1,'EXPECTED_OWNED_BROWSER_RAW_ONE');
+          const cli=(fs.readFileSync(path.join(out,'browser.stdout.log'),'utf8')+'\n'+fs.readFileSync(path.join(out,'browser.stderr.log'),'utf8')).replace(/\x1b\[[0-?]*[ -/]*[@-~]/g,'');a.equal([...cli.matchAll(/^AssertionError \[ERR_ASSERTION\]: MENU_PLACEMENT_EXPECTED_MISSING_PLACEMENT\r?$/gm)].length,1,'ACTUAL_FINAL_OWNED_ASSERTION_LINE');a.doesNotMatch(cli,/MENU_PLACEMENT_BASELINE_NOT_ADMITTED|TypeError:|ReferenceError:|SyntaxError:|Cannot find (?:module|package)|TimeoutError|timed out/,'NO_METHOD_ERROR_CREDIT');
+          const body=name=>{a.equal(path.basename(name),name,'DIRECT_RETAINED_MEMBER');return fs.readFileSync(path.join(dir,name));},load=name=>JSON.parse(body(name).toString('utf8')),r=load('report.json'),ids=['free-kick','home','search'],markers=['MENU_PLACEMENT_GAME_HEADER','MENU_PLACEMENT_SITE_HEADER','MENU_PLACEMENT_SEARCH_FLOW'];
+          a.equal(r.schema,1);a.equal(r.source,process.env.GITHUB_SHA);a.equal(r.immutableClean424Parent,process.env.EXPECTED_PARENT);a.equal(r.mainAtPlan,process.env.EXPECTED_MAIN);a.equal(r.status,'EXPECTED_MISSING_PLACEMENT_BASELINE_COMPLETE');a.equal(r.healthyFoundation,true);a.equal(r.actualPlacementPass,false);a.equal(r.baselineAdmitted,true);a.equal(r.sourceHeld,true);a.deepEqual(r.methodFailures,[]);a.deepEqual(r.planned,{contexts:3,normalImages:9,copiedControls:8,expectedRawProcessExit:1});
+          a.deepEqual(r.contexts.map(v=>v.id),ids);a.equal(r.placement.length,3);a.deepEqual(r.placement.map(v=>v.id),ids);const images=[],seenImages=new Set();
+          for(let i=0;i<3;i++){const row=r.contexts[i],placement=r.placement[i],file=row.id+'-context.json';a.equal(row.healthyFoundation,true);a.equal(row.journeyComplete,true);a.equal(row.images.length,3);a.deepEqual(load(file),row,'ACTUAL_CONTEXT_ORIGINAL');a.equal(placement.marker,markers[i]);a.equal(placement.actualPass,false);a.equal(placement.ownedExpectedFailure,true);a.equal(placement.actualFailure?.name,'AssertionError');a(placement.actualFailure.message.includes(markers[i]),'OWNED_PLACEMENT_IDENTITY');a.equal(placement.originalContext,file);const expectedNames=row.id==='search'?['search-top.png','search-finder-result.png','search-document-scrolled.png']:[row.id+'-top.png',row.id+'-finder-result.png',row.id+'-menu-closed.png'];a.deepEqual(row.images.map(v=>v.file),expectedNames);for(const image of row.images){a.equal(image.normal,true);a(!seenImages.has(image.file));seenImages.add(image.file);const b=body(image.file);a.equal(b.length,image.bytes);a.equal(sha(b),image.sha256);a.equal(b.subarray(0,8).toString('hex'),'89504e470d0a1a0a');a.equal(b.readUInt32BE(16),328);a.equal(b.readUInt32BE(20),515);images.push(image);}}
+          a.deepEqual(r.normalImages,images);a.equal(images.length,9);a.deepEqual(load('actual-foundation-before-placement.json'),r.contexts);a.deepEqual(load('actual-placement-outcomes.json'),r.placement);a.deepEqual(load('source-before.json'),load('source-after.json'),'DRIVER_SELECTED_SOURCE_HELD');
+          const foundation=load('control-derived-foundation.json'),derivations=load('control-witness-derivations.json');a.deepEqual(foundation.map(v=>v.id),ids);a.deepEqual(derivations.map(v=>v.id),ids);
+          for(let i=0;i<3;i++){const original=r.contexts[i],d=derivations[i],w=JSON.parse(JSON.stringify({id:original.id,spec:original.spec,healthyFoundation:original.healthyFoundation,atRest:original.atRest,scrollBefore:original.scrollBefore,scrollAfter:original.scrollAfter}));a.equal(d.scope,'DERIVED_PASSING_PLACEMENT_WITNESS_ONLY');a.equal(d.actualFeaturePassCredit,false);a.equal(d.originalCaseFile,ids[i]+'-context.json');a.deepEqual(d.edits.map(v=>v.field),i<2?['atRest.owner.containsTrigger','atRest.trigger.rect']:['atRest.flowChain.position','scrollAfter.trigger.rect']);for(const e of d.edits){if(e.field==='atRest.owner.containsTrigger'){a.deepEqual(w.atRest.owner.containsTrigger,e.before);w.atRest.owner.containsTrigger=e.after;}else if(e.field==='atRest.trigger.rect'){a.deepEqual(w.atRest.trigger.rect,e.before);w.atRest.trigger.rect=e.after;}else if(e.field==='atRest.flowChain.position'){a.deepEqual(w.atRest.flowChain.map(v=>v.position),e.before);a.equal(w.atRest.flowChain.length,e.after.length);w.atRest.flowChain.forEach((v,n)=>{v.position=e.after[n];});}else if(e.field==='scrollAfter.trigger.rect'){a.deepEqual(w.scrollAfter.trigger.rect,e.before);w.scrollAfter.trigger.rect=e.after;}else a.fail('UNDECLARED_DERIVED_FIELD');}a.deepEqual(w,foundation[i],'EXACT_DECLARED_DERIVATION_FROM_ACTUAL_ORIGINAL');}
+          const controls=[['game-owner','GAME_HEADER'],['home-owner','SITE_HEADER'],['short-header-target','HEADER_44'],['different-logo-row','HEADER_LOGO_ROW'],['sticky-fallback','SEARCH_FLOW'],['fixed-fallback','SEARCH_FLOW'],['no-document-scroll','SEARCH_SCROLL_EVIDENCE'],['pinned-scroll-rectangle','SEARCH_DOCUMENT_MOTION']];a.equal(r.controls.length,8);a.deepEqual(r.controls.map(v=>[v.id,v.marker]),controls.map(([id,marker])=>[id,'MENU_PLACEMENT_'+marker]));
+          for(const c of r.controls){a.equal(c.scope,'DERIVED_COPIED_CHECKER_ONLY');a.equal(c.actualFeaturePassCredit,false);a.equal(c.foundation,'control-derived-foundation.json');const base=body(c.foundation),changed=body(c.changedFile),restored=body(c.restoredFile);a.equal(sha(base),c.beforeSHA256);a.equal(sha(changed),c.changedSHA256);a.equal(sha(restored),c.restoredSHA256);a.notEqual(c.beforeSHA256,c.changedSHA256);a.equal(c.beforeSHA256,c.restoredSHA256);a.equal(c.sameCopyRestored,true);a.deepEqual(restored,base,'EXACT_SAME_COPY_RESTORE');a.equal(c.actualFailure?.name,'AssertionError');a(c.actualFailure.message.includes(c.marker),'SPECIFIC_DERIVED_COPIED_REFUSAL');}
+          a.equal(fs.statSync(path.join(out,'browser.transport')).size,0);json(path.join(out,'OWNED-PLACEMENT-BASELINE-ADMISSION.json'),{status:'ACTUAL_THREE_OWNED_MISSING_PLACEMENT_BASELINE_ONLY',source:process.env.GITHUB_SHA,parent:process.env.EXPECTED_PARENT,mainAtStart:process.env.EXPECTED_MAIN,actualProcessRaw:child.status,healthyFoundations:3,actualOwnedPlacementFailures:r.placement,actualPlacementPass:false,normalImages:images,derivedCopiedControls:r.controls,derivedControlActualFeaturePassCredit:false,allActualContextFilesRetained:true,sourceHeld:true,visualReview:'OWED',productChanged:false,fullSuite:false,readersAndCapsExecuted:false,release:false,live:false});console.log('MENU_PLACEMENT_BASELINE: types0,18 healthy Menu cases,3 healthy journeys,3 owned missing-placement failures/raw1,9PNG,8 DERIVED copied checker controls; no product change');
+          NODE
+          raw=$?;set -e;printf '%s\n' "$raw" > "$out/browser-controller.exit";cat "$out/browser-controller.stdout.log";cat "$out/browser-controller.stderr.log";test "$raw" -eq 0;test ! -s "$out/browser-controller.transport";test ! -s "$out/browser.transport";test ! -s "$out/browser-server.transport"
+      - name: Always retain application source and all post-build inventories
+        if: always()
+        run: |
+          set -euo pipefail
+          out="$PLACEMENT_OUT";failed=0
+          git ls-files -z | sort -z > "$out/source-members.final";git ls-files -z | sort -z | xargs -0 sha256sum > "$out/source.final.sha256"
+          cmp "$out/source-members.initial" "$out/source-members.final" || failed=1;cmp "$out/source.initial.sha256" "$out/source.final.sha256" || failed=1
+          sha256sum -c "$out/source.initial.sha256" > "$out/source-held.log" 2>&1 || failed=1;git diff --exit-code HEAD > "$out/tracked-final.diff" || failed=1
+          if test "${{ steps.build.outcome }}" = success;then
+            for pair in "deps:node_modules" "browser:$PLACEMENT_TOOLS" "fonts:$FREE_KICK_FONT_CACHE" "dist:dist";do label="${pair%%:*}";dir="${pair#*:}";find "$dir" -type f -print0 | sort -z > "$out/$label.members.final";cmp "$out/$label.members" "$out/$label.members.final" || failed=1;sha256sum -c "$out/$label.sha256" > "$out/$label-held.log" 2>&1 || failed=1;done
+            find node_modules -type l -printf '%p -> %l\n' | sort > "$out/dependency-links.final";cmp "$out/dependency-links.before" "$out/dependency-links.final" || failed=1
+          fi
+          while IFS= read -r -d '' file;do test ! -s "$file" || failed=1;done < <(find "$out" -type f \( -name '*.transport' -o -name transport.jsonl \) -print0)
+          printf '%s\n' "$failed" > "$out/final-holds.exit";find "$out" -type f -print0 | sort -z | xargs -0 sha256sum > "$RUNNER_TEMP/menu-placement-evidence.sha256";cp "$RUNNER_TEMP/menu-placement-evidence.sha256" "$out/evidence.sha256";exit "$failed"
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: menu-placement-baseline-${{ github.run_id }}-${{ github.run_attempt }}
+          path: ${{ runner.temp }}/menu-placement-baseline/
+          if-no-files-found: error
+          retention-days: 14
