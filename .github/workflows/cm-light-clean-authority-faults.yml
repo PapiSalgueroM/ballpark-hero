@@ -1,0 +1,240 @@
+name: Club Manager clean seventeen and four owned source faults
+on:
+  push:
+    branches: [codex/cm-light-clean-authority-faults-20261029]
+    paths:
+      - .github/workflows/cm-light-clean-authority-faults.yml
+      - qa/cm-light-season-clean-v1/SOURCE.json
+      - qa/cm-light-season-clean-v1/FAULTS.json
+      - src/test/clubManagerIndividualLightSeason.test.ts
+      - src/test/clubManagerLightSeasonMounted.test.tsx
+permissions:
+  contents: read
+concurrency:
+  group: cm-light-clean-authority-${{ github.sha }}
+  cancel-in-progress: false
+defaults:
+  run:
+    shell: bash
+jobs:
+  clean-seventeen-faults:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    env:
+      CI: '1'
+      SIM_NETWORK: offline
+      CAREER_SEASON_LOCAL_ONLY: '1'
+      CM_LIGHT_CLEAN_OUT: ${{ github.workspace }}/cm-light-clean-authority-fault-artifacts
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.sha }}
+          fetch-depth: 2
+          persist-credentials: false
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: npm
+      - name: Exact clean PR420 family and finite current app bridge
+        run: |
+          set -euo pipefail
+          test "$GITHUB_REF_NAME" = codex/cm-light-clean-authority-faults-20261029
+          test "$(git rev-parse HEAD)" = "$GITHUB_SHA"
+          test "$(git rev-list --parents -n 1 HEAD | wc -w)" = 2
+          test "$(git rev-parse HEAD^)" = 11aa2a6ef34c3cda3d2d88d95b2fd7d41fbbcd9e
+          test "$(git rev-parse HEAD^^{tree})" = bf5e6d0a486f81f3310af7932111bae57b241008
+          mkdir -p "$CM_LIGHT_CLEAN_OUT"
+          git rev-parse HEAD HEAD^{tree} > "$CM_LIGHT_CLEAN_OUT/head-tree.txt"
+          git archive --format=tar HEAD > "$CM_LIGHT_CLEAN_OUT/source.tar"
+          git ls-tree -rl HEAD > "$CM_LIGHT_CLEAN_OUT/source-tree.txt"
+          git ls-files -z | sort -z | xargs -0 sha256sum > "$CM_LIGHT_CLEAN_OUT/tracked-before.sha256"
+          git ls-remote origin refs/heads/main refs/heads/release-bs-gate > "$CM_LIGHT_CLEAN_OUT/main-release-at-start.txt"
+          test "$(awk '$2=="refs/heads/main" {print $1}' "$CM_LIGHT_CLEAN_OUT/main-release-at-start.txt")" = 7a92b329e9901c4bdd41eb6a4bf8c6f5020143c0
+          printf '%s  %s\n' 8cf73d3aa7d34709ca895d668f6183c344077b22e61825a79102ef7d2caea684 qa/cm-light-season-clean-v1/SOURCE.json | sha256sum --check
+          set +e
+          node --input-type=module - <<'NODE' > "$CM_LIGHT_CLEAN_OUT/tree-source-admission.json" 2> "$CM_LIGHT_CLEAN_OUT/tree-source-admission.err"
+          import fs from 'node:fs';import assert from 'node:assert/strict';import{createHash}from'node:crypto';import{execFileSync}from'node:child_process';
+          const m=JSON.parse(fs.readFileSync('qa/cm-light-season-clean-v1/SOURCE.json','utf8')),sha=b=>createHash('sha256').update(b).digest('hex'),git=b=>createHash('sha1').update(Buffer.from('blob '+b.length+'\0')).update(b).digest('hex');
+          assert.equal(m.files.length,16);assert.equal(new Set(m.files.map(f=>f.path)).size,16);for(const f of m.files){const b=fs.readFileSync(f.path);assert.equal(b.length,f.bytes,f.path);assert.equal(sha(b),f.sha256,f.path);assert.equal(git(b),f.gitBlob,f.path);}
+          const config=JSON.parse(fs.readFileSync('tsconfig.app.json','utf8'));assert.deepEqual(config.include,['src']);assert.equal(config.exclude,undefined,'Both selected clean tests are included in the app type gate');
+          const tree=ref=>new Map(execFileSync('git',['ls-tree','-rlz',ref],{encoding:'utf8'}).split('\0').filter(Boolean).map(row=>{const x=row.match(/^(\d+) (\w+) ([a-f0-9]+)\s+(\d+)\t([\s\S]+)$/);assert(x);return[x[5],{mode:x[1],type:x[2],gitBlob:x[3],bytes:Number(x[4])}];}));const old=tree('HEAD^'),current=tree('HEAD'),delta=[];let held=0;assert.equal(old.size,5396);assert.equal(current.size,5402);for(const[p,v]of old){assert(current.has(p));if(JSON.stringify(v)===JSON.stringify(current.get(p)))held++;else delta.push('M\t'+p);}for(const p of current.keys())if(!old.has(p))delta.push('A\t'+p);assert.deepEqual(delta.sort(),[...m.allowedDelta].sort());assert.equal(held,5393);assert(delta.every(x=>current.get(x.slice(2)).mode==='100644'));assert.equal(m.appBridge.files.length,4);for(const f of m.appBridge.files)assert.deepEqual(m.files.find(p=>p.path===f.path),f);
+          console.log(JSON.stringify({status:'SOURCE16_TREE9_APP4_BRIDGE_HELD',files:m.files,delta,heldParentBodies:held,appBridge:m.appBridge,scope:m.scope},null,2));
+          NODE
+          raw=$?
+          set -e
+          printf '%s\n' "$raw" > "$CM_LIGHT_CLEAN_OUT/tree-source-admission.exit"
+          cat "$CM_LIGHT_CLEAN_OUT/tree-source-admission.err"
+          test "$raw" = 0
+      - name: Locked dependencies
+        run: |
+          set -euo pipefail
+          echo '127.0.0.1 flawuiqbvjobmkfkauhw.supabase.co' | sudo tee -a /etc/hosts
+          set +e
+          npm ci > "$CM_LIGHT_CLEAN_OUT/npm-ci.log" 2>&1
+          raw=$?
+          set -e
+          printf '%s\n' "$raw" > "$CM_LIGHT_CLEAN_OUT/npm-ci.exit"
+          cat "$CM_LIGHT_CLEAN_OUT/npm-ci.log"
+          test "$raw" = 0
+      - name: Real application types including both clean test files
+        run: |
+          set -euo pipefail
+          set +e
+          NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node_modules/.bin/tsc --noEmit -p tsconfig.app.json > "$CM_LIGHT_CLEAN_OUT/types.log" 2>&1
+          raw=$?
+          set -e
+          printf '%s\n' "$raw" > "$CM_LIGHT_CLEAN_OUT/types.exit"
+          cat "$CM_LIGHT_CLEAN_OUT/types.log"
+          test "$raw" = 0
+      - name: Fresh clean seventeen then four owned physical source faults
+        run: |
+          set -euo pipefail
+          set +e
+          NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node --input-type=module - <<'NODE' > "$CM_LIGHT_CLEAN_OUT/physical.log" 2>&1
+          import fs from 'node:fs';import path from 'node:path';import os from 'node:os';import assert from 'node:assert/strict';import{createHash}from'node:crypto';import{spawnSync,execFileSync}from'node:child_process';
+          const ROOT=process.cwd(),OUT=process.env.CM_LIGHT_CLEAN_OUT;
+          const m=JSON.parse(fs.readFileSync('qa/cm-light-season-clean-v1/SOURCE.json','utf8')),faults=JSON.parse(fs.readFileSync(m.faultPath,'utf8'));
+          const sha=b=>createHash('sha256').update(b).digest('hex'),pin=b=>({bytes:b.length,sha256:sha(b),gitBlob:createHash('sha1').update(Buffer.from('blob '+b.length+'\0')).update(b).digest('hex')});
+          const read=file=>JSON.parse(fs.readFileSync(file,'utf8')),json=(file,value)=>fs.writeFileSync(file,JSON.stringify(value,null,2)+'\n'),strip=text=>text.replace(/\x1b\[[0-?]*[ -/]*[@-~]/g,'');
+          const ids=['weekly-selected-recovery-omitted','double-charged-selected-light-growth','annual-returning-loan-light-cost-omitted','reload-drops-owned-away-player-record'];
+          assert.equal(process.env.CI,'1');assert.deepEqual(faults.controls.map(c=>c.id),ids);assert.equal(faults.controls.length,4);assert.equal(m.tests.length,2);
+          for(const c of faults.controls){assert.equal(c.path,'src/lib/clubManager.ts','One finite Engine source boundary');assert(typeof c.ownedMessagePattern==='string'&&c.ownedMessagePattern.length>0,'BOUND_NONEMPTY_OWNED_ASSERTION_PATTERN');new RegExp(c.ownedMessagePattern,'s');}
+          let copyRoot,temporary,originalBody,target,canonical;
+          const record={status:'STARTED',scope:m.scope,aggregateSuiteUnits:4,fileObjects:2,controls:[]};
+          function check(root,expected){const b=fs.readFileSync(path.join(root,expected.path));assert.deepEqual(pin(b),{bytes:expected.bytes,sha256:expected.sha256,gitBlob:expected.gitBlob},'Held source '+expected.path);return{path:expected.path,...pin(b)};}
+          function whole(root,control){return canonical.map(item=>{const expected=control&&item.path===control.path?{path:item.path,...control.changedPin}:item;return{...check(root,expected),mode:item.mode};});}
+          function run(name,owner){
+           const dir=path.join(OUT,name);fs.mkdirSync(dir,{recursive:true});const reportPath=path.join(dir,'vitest.json'),stdout=path.join(dir,'stdout.log'),stderr=path.join(dir,'stderr.log');
+           const a=fs.openSync(stdout,'w'),b=fs.openSync(stderr,'w'),args=[path.join(ROOT,'node_modules/vitest/vitest.mjs'),'run',...m.tests.map(t=>t.path),'--maxWorkers=1','--minWorkers=1','--reporter=default','--reporter=json','--outputFile='+reportPath];
+           if(owner)args.push('--testNamePattern=^'+owner.fullName.replace(/[.*+?^$()|[\]\\]/g,'\\$&')+'$');
+           let child;try{child=spawnSync(process.execPath,args,{cwd:copyRoot,env:{...process.env},timeout:600_000,stdio:['ignore',a,b]});}finally{fs.closeSync(a);fs.closeSync(b);}
+           const processRecord={status:child.status,signal:child.signal,error:child.error?String(child.error):null,args,cwd:copyRoot,reportPath,filteredOwner:owner||null};
+           json(path.join(dir,'process.json'),processRecord);fs.writeFileSync(path.join(dir,'raw.exit'),String(child.status)+'\n');
+           const rawLog=fs.readFileSync(stdout,'utf8')+'\n'+fs.readFileSync(stderr,'utf8');fs.writeFileSync(path.join(dir,'combined.log'),rawLog);
+           assert.ifError(child.error);assert.equal(child.signal,null,'Actual child completion');
+           return{result:read(reportPath),text:strip(rawLog),exit:String(child.status),reportPath,dir,processRecord};
+          }
+          function admit(r,text,status,reportPath){
+                      assert.equal(status,'0','CLEAN17_PROCESS');
+                      assert(!/Unhandled (?:Errors?|Rejections?|Exceptions?)|Vitest caught|onTaskUpdate|RPC.*Timeout|No test files found|Failed Suites|DataCloneError|SyntaxError|ReferenceError/.test(text),'CLEAN17_INFRA');
+                      assert.equal(r.success,true);
+                      for(const[k,v]of Object.entries({numTotalTests:17,numPassedTests:17,numFailedTests:0,numPendingTests:0,numTodoTests:0,numTotalTestSuites:4,numPassedTestSuites:4,numFailedTestSuites:0,numPendingTestSuites:0}))assert.equal(r[k],v,k);
+                      assert.equal(r.testResults.length,2,'CLEAN17_FILE_COUNT');assert.equal(m.tests.length,2);
+                      for(const test of m.tests){
+                        const found=r.testResults.filter(f=>path.resolve(f.name)===path.resolve(copyRoot,test.path));assert.equal(found.length,1,'CLEAN17_FILE_ID');const f=found[0];
+                        assert.equal(f.status,'passed');assert.equal(f.message,'','CLEAN17_METHOD');assert.equal(f.assertionResults.length,test.caseCount);
+                        assert.deepEqual(f.assertionResults.map(x=>x.title),test.titles,'CLEAN17_EXACT_ORDERED_CASES');
+                        for(const x of f.assertionResults){assert.deepEqual(x.ancestorTitles,[test.prefix]);assert.equal(x.fullName,test.prefix+' '+x.title);assert.equal(x.status,'passed');assert.deepEqual(x.failureMessages,[]);assert(Number.isFinite(x.duration)&&x.duration>=0);}
+                        assert(Number.isFinite(f.startTime)&&Number.isFinite(f.endTime)&&f.endTime>=f.startTime);
+                      }
+                      assert.equal((text.match(/^\s*Test Files\s+2 passed \(2\)\s*$/gm)||[]).length,1,'CLEAN17_FILES_CLOSING');
+                      assert.equal((text.match(/^\s*Tests\s+17 passed \(17\)\s*$/gm)||[]).length,1,'CLEAN17_TESTS_CLOSING');
+                      assert.equal(text.split('\n').filter(x=>x.trim()==='JSON report written to '+reportPath).length,1,'CLEAN17_JSON_CLOSING');
+                    }
+          function admitHealthy(run){admit(run.result,run.text,run.exit,run.reportPath);return{reportPath:run.reportPath,reportSHA256:sha(fs.readFileSync(run.reportPath)),rawExit:run.exit,testCount:17,fileCount:2,aggregateSuiteUnits:4,rows:run.result.testResults.flatMap(f=>f.assertionResults.map(row=>({file:f.name,...row})))};}
+          function copiedHealthy(run){
+           const controls=[];
+           for(const[cause,change]of[['CLEAN17_PROCESS',x=>{x.exit='1';}],['CLEAN17_INFRA',x=>{x.log+='\nUnhandled Error: COPIED diagnostic only\n';}]]){
+            const value={report:structuredClone(run.result),log:run.text,exit:run.exit},before=JSON.stringify(value);change(value);const changed=JSON.stringify(value);assert.notEqual(changed,before);let refusal;
+            try{admit(value.report,value.log,value.exit,run.reportPath);}catch(e){refusal={name:e.name,code:e.code,message:e.message};}
+            assert(refusal&&refusal.name==='AssertionError'&&refusal.code==='ERR_ASSERTION'&&refusal.message.includes(cause));
+            Object.assign(value,JSON.parse(before));assert.equal(JSON.stringify(value),before);admit(value.report,value.log,value.exit,run.reportPath);
+            controls.push({cause,scope:'COPIED process/infra observation only, not source or app fault',beforeSHA256:sha(before),changedSHA256:sha(changed),restoredSHA256:sha(JSON.stringify(value)),sameCopyRestored:true,refusal});
+           }
+           return controls;
+          }
+          function admitFiltered(run,c,failed){
+           const r=run.result,text=run.text,owner=c.owningCase;
+           assert.equal(run.exit,failed?'1':'0','OWNER_ACTUAL_RAW_EXIT');assert.equal(r.success,!failed);
+           assert(!/Unhandled (?:Errors?|Rejections?|Exceptions?)|Vitest caught|onTaskUpdate|RPC.*Timeout|No test files found|Failed Suites|DataCloneError|SyntaxError|ReferenceError/.test(text),'OWNER_NO_INFRA');
+           for(const[k,v]of Object.entries({numTotalTests:17,numPassedTests:failed?0:1,numFailedTests:failed?1:0,numPendingTests:16,numTodoTests:0,numTotalTestSuites:4,numPassedTestSuites:failed?2:4,numFailedTestSuites:failed?2:0,numPendingTestSuites:0}))assert.equal(r[k],v,k);
+           assert.equal(r.testResults.length,2);let owned=0,filtered=0;
+           for(const test of m.tests){
+            const found=r.testResults.filter(f=>path.resolve(f.name)===path.resolve(copyRoot,test.path));assert.equal(found.length,1);const f=found[0];
+            assert.equal(f.message,'');assert.equal(f.status,failed&&test.path===owner.file?'failed':'passed','JSON file status is not passing-test credit');
+            assert.equal(f.assertionResults.length,test.caseCount);assert.deepEqual(f.assertionResults.map(x=>x.title),test.titles);
+            for(const row of f.assertionResults){
+             assert.deepEqual(row.ancestorTitles,[test.prefix]);assert.equal(row.fullName,test.prefix+' '+row.title);
+             if(test.path===owner.file&&row.fullName===owner.fullName){
+              owned++;assert.equal(row.status,failed?'failed':'passed');
+              if(failed){
+               assert.equal(row.failureMessages.length,1);const message=strip(row.failureMessages[0]);
+               assert(/AssertionError/.test(message)&&!/TypeError|ReferenceError|Cannot find module|Failed to resolve|timed out|TimeoutError/.test(message),'OWNER_ASSERTION_ONLY');
+               assert(new RegExp(c.ownedMessagePattern,'s').test(message),'OWNER_SPECIFIC_CAUSE '+c.id);
+               assert(new RegExp(owner.file.replace(/[.*+?^$()|[\]\\]/g,'\\$&')+':'+owner.assertionLine+':\\d+').test(message),'OWNER_FROZEN_ASSERTION_LINE');
+              }else assert.deepEqual(row.failureMessages,[]);
+             }else{filtered++;assert.equal(row.status,'skipped','EXPLICIT_FILTERED_NOT_PASSED');assert.deepEqual(row.failureMessages,[]);}
+            }
+           }
+           assert.equal(owned,1);assert.equal(filtered,16);
+           const fileClosing=failed?/^\s*Test Files\s+1 failed \| 1 skipped \(2\)\s*$/gm:/^\s*Test Files\s+1 passed \| 1 skipped \(2\)\s*$/gm;
+           const testClosing=failed?/^\s*Tests\s+1 failed \| 16 skipped \(17\)\s*$/gm:/^\s*Tests\s+1 passed \| 16 skipped \(17\)\s*$/gm;
+           assert.equal((text.match(fileClosing)||[]).length,1,'OWNER_FILE_CLOSING');assert.equal((text.match(testClosing)||[]).length,1,'OWNER_TEST_CLOSING');
+           assert.equal(text.split('\n').filter(line=>line.trim()==='JSON report written to '+run.reportPath).length,1);
+           return{reportPath:run.reportPath,reportSHA256:sha(fs.readFileSync(run.reportPath)),rawExit:failed?1:0,ownerCase:owner,ownerStatus:failed?'failed':'passed',filteredCases:16,passedCases:failed?0:1,fileObjects:2,aggregateSuiteUnits:4,failedAggregateSuiteUnits:failed?2:0,note:'Filtered rows are skipped. The skipped file JSON status and skipped aggregate units are not passing-test credit.'};
+          }
+          function sameFilteredCommand(a,b){
+           const args=run=>run.processRecord.args.filter(arg=>!arg.startsWith('--outputFile='));
+           assert.deepEqual(args(a),args(b),'MATCHED_FILTERED_COMMAND_EXCEPT_REPORT_DESTINATION');assert.equal(a.processRecord.cwd,b.processRecord.cwd,'MATCHED_SAME_PHYSICAL_COPY');
+          }
+          try{
+           for(const expected of m.files)check(ROOT,expected);
+           const listed=execFileSync('git',['ls-files','--stage','-z'],{cwd:ROOT,encoding:'utf8'});
+           canonical=listed.split('\0').filter(Boolean).map(line=>{const x=line.match(/^(\d+) ([a-f0-9]{40}) 0\t(.+)$/);assert(x);const actual=pin(fs.readFileSync(x[3]));assert.equal(actual.gitBlob,x[2]);return{path:x[3],mode:x[1],...actual};});
+           assert.equal(canonical.length,5402);record.canonicalBefore=whole(ROOT);json(path.join(OUT,'canonical-before.json'),record.canonicalBefore);
+           temporary=fs.mkdtempSync(path.join(os.tmpdir(),'cm-light-clean-faults-'));copyRoot=path.join(temporary,'source');fs.mkdirSync(copyRoot);
+           execFileSync('tar',['-xf',path.join(OUT,'source.tar'),'-C',copyRoot]);fs.symlinkSync(fs.realpathSync(path.join(ROOT,'node_modules')),path.join(copyRoot,'node_modules'),'dir');
+           const initialMap=whole(copyRoot);json(path.join(OUT,'copy-source-before.json'),initialMap);record.copySourceBeforeSHA256=sha(JSON.stringify(initialMap));
+           target=path.join(copyRoot,'src/lib/clubManager.ts');originalBody=fs.readFileSync(target);fs.writeFileSync(path.join(OUT,'Engine-original.ts'),originalBody);
+           const first=run('healthy-v2-17');record.healthy=admitHealthy(first);record.copiedDiagnostics=copiedHealthy(first);whole(copyRoot);
+           let beforeObservation={reportPath:record.healthy.reportPath,reportSHA256:record.healthy.reportSHA256,sourceMapSHA256:record.copySourceBeforeSHA256};
+           for(const c of faults.controls){
+            const dir=path.join(OUT,'faults',c.id);fs.mkdirSync(dir,{recursive:true});
+            assert.deepEqual(fs.readFileSync(target),originalBody,'Exact original source before each finite fault');assert.deepEqual(pin(originalBody),c.beforePin);
+            const beforeMap=whole(copyRoot);assert.equal(sha(JSON.stringify(beforeMap)),beforeObservation.sourceMapSHA256,'Prior healthy observation/source explicitly joined');
+            const filteredBeforeRun=run('faults/'+c.id+'/filtered-before',c.owningCase),filteredBefore=admitFiltered(filteredBeforeRun,c,false);whole(copyRoot);
+            let source=originalBody.toString('utf8');
+            for(const span of c.spans){assert.equal(source.split(span.before).length-1,1);assert.equal(source.indexOf(span.before),span.characterOffset);source=source.slice(0,span.characterOffset)+span.after+source.slice(span.characterOffset+span.before.length);}
+            const changed=Buffer.from(source);assert.notEqual(sha(changed),sha(originalBody));assert.deepEqual(pin(changed),c.changedPin);
+            fs.writeFileSync(target,changed);fs.writeFileSync(path.join(dir,'Engine-changed.ts'),changed);const actualBefore=check(copyRoot,{path:c.path,...c.changedPin});json(path.join(dir,'changed-source-map.json'),whole(copyRoot,c));
+            const mutation=run('faults/'+c.id+'/mutant',c.owningCase),outcome=admitFiltered(mutation,c,true);sameFilteredCommand(filteredBeforeRun,mutation);assert.deepEqual(check(copyRoot,{path:c.path,...c.changedPin}),actualBefore);whole(copyRoot,c);
+            fs.writeFileSync(target,originalBody);fs.writeFileSync(path.join(dir,'Engine-restored.ts'),fs.readFileSync(target));const restoredMap=whole(copyRoot);assert.equal(sha(JSON.stringify(restoredMap)),record.copySourceBeforeSHA256);
+            const filteredRestoredRun=run('faults/'+c.id+'/filtered-restored',c.owningCase),filteredRestored=admitFiltered(filteredRestoredRun,c,false);sameFilteredCommand(filteredBeforeRun,filteredRestoredRun);whole(copyRoot);
+            const restoredRun=run('faults/'+c.id+'/restored-17'),restored=admitHealthy(restoredRun);json(path.join(dir,'restored-source-map.json'),whole(copyRoot));
+            const item={id:c.id,beforeObservation,actualSourceBefore:c.beforePin,actualChangedSource:actualBefore,filteredBefore,mutant:outcome,filteredRestored,matchedFilteredCommands:true,actualRestoredSource:pin(fs.readFileSync(target)),samePhysicalCopy:true,restored};
+            json(path.join(dir,'ADMISSION.json'),item);record.controls.push(item);
+            beforeObservation={reportPath:restored.reportPath,reportSHA256:restored.reportSHA256,sourceMapSHA256:record.copySourceBeforeSHA256};
+           }
+           assert.equal(record.controls.length,4);record.canonicalAfter=whole(ROOT);assert.deepEqual(record.canonicalAfter,record.canonicalBefore);record.status='ACTUAL_CLEAN_V2_17_AND_FOUR_OWNED_SOURCE_FAULTS_ADMITTED';json(path.join(OUT,'ADMISSION.json'),record);
+           assert.equal(path.dirname(temporary),os.tmpdir());assert(path.basename(temporary).startsWith('cm-light-clean-faults-'));fs.rmSync(temporary,{recursive:true,force:true});temporary=undefined;
+           console.log('CM_LIGHT_CLEAN17_PHYSICAL: healthy17, four matched filtered PASS-FAIL-PASS, four samecopy restored17, two COPIED diagnostics, source held; PRE-BS only');
+          }catch(error){
+           record.status='UNEXPECTED_OR_METHOD_FAILURE';record.failure={name:error.name,message:error.message,stack:error.stack};
+           if(target&&originalBody){try{fs.writeFileSync(target,originalBody);fs.writeFileSync(path.join(OUT,'Engine-emergency-restored.ts'),originalBody);record.emergencySourceRestore=pin(fs.readFileSync(target));record.restored17AfterFailure='UNRUN_NOT_CREDITED';}catch(e){record.restoreFailure=String(e);}}
+           record.temporaryCopy=temporary;json(path.join(OUT,'ADMISSION.json'),record);throw error;
+          }
+          NODE
+          raw=$?
+          set -e
+          printf '%s\n' "$raw" > "$CM_LIGHT_CLEAN_OUT/physical.exit"
+          cat "$CM_LIGHT_CLEAN_OUT/physical.log"
+          test "$raw" = 0
+          grep -Fx "CM_LIGHT_CLEAN17_PHYSICAL: healthy17, four matched filtered PASS-FAIL-PASS, four samecopy restored17, two COPIED diagnostics, source held; PRE-BS only" "$CM_LIGHT_CLEAN_OUT/physical.log"
+      - name: Every canonical tracked body held including failure
+        if: always()
+        run: |
+          set -euo pipefail
+          git ls-files -z | sort -z | xargs -0 sha256sum > "$CM_LIGHT_CLEAN_OUT/tracked-final.sha256"
+          diff -u "$CM_LIGHT_CLEAN_OUT/tracked-before.sha256" "$CM_LIGHT_CLEAN_OUT/tracked-final.sha256"
+          sha256sum --check "$CM_LIGHT_CLEAN_OUT/tracked-before.sha256" > "$CM_LIGHT_CLEAN_OUT/tracked-held.log"
+          git status --porcelain --untracked-files=no > "$CM_LIGHT_CLEAN_OUT/tracked-status.txt"
+          test ! -s "$CM_LIGHT_CLEAN_OUT/tracked-status.txt"
+          git diff --exit-code HEAD
+      - name: Retain original healthy mutant restored outputs including refusal
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: cm-light-clean-authority-faults-${{ github.run_id }}-${{ github.run_attempt }}
+          path: cm-light-clean-authority-fault-artifacts/
+          if-no-files-found: error
+          retention-days: 14

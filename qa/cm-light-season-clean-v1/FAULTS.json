@@ -1,0 +1,205 @@
+{
+  "schema": 1,
+  "status": "SOURCE_ONLY_FINITE_FOUR_OWNED_OUTCOME_CONTROLS_UNRUN",
+  "inventorySourceSHA256": "0823ff6cdef75a402063f0bc157f288e406a786fa57c6980956a3c42eefdf5f4",
+  "controls": [
+    {
+      "id": "weekly-selected-recovery-omitted",
+      "status": "NATIVE_SOURCE_DESIGN_ONLY_EFFECT_UNRUN",
+      "path": "src/lib/clubManager.ts",
+      "nativeInput": "C:/Users/antho/dukb-handoff/2026-10-28/cm-squad-depth-discovery-v1/clean-authority-17-positive-v1/candidate/src/lib/clubManager.ts",
+      "beforePin": {
+        "bytes": 1243602,
+        "sha256": "4c3863cfd5a676bdbf4415fef337886b9324a2ae255a4389f12a8269eaa7735d",
+        "gitBlob": "9b6d84fe39b0ec55e35ca0a77603f5b69199300d"
+      },
+      "changedPin": {
+        "bytes": 1243533,
+        "sha256": "52a32a2b66be5c1e68e5704e021438f300421cdd72ebdce4a707b2929bd867db",
+        "gitBlob": "0375a7fba7ecef71a65d8bc114044902dd2f0618"
+      },
+      "spans": [
+        {
+          "characterOffset": 945736,
+          "before": "    const fitness = fitnessAfterWeek(p.fitness, played, p === light ? recovery!.recoveryMod : recoveryMod, p === light ? recovery!.flat : flat);",
+          "after": "    const fitness = fitnessAfterWeek(p.fitness, played, recoveryMod, flat);"
+        }
+      ],
+      "sourceLine": 17602,
+      "uniqueBefore": true,
+      "wholeForwardInverse": true,
+      "owningCase": {
+        "file": "src/test/clubManagerIndividualLightSeason.test.ts",
+        "title": "uses Light recovery on an actual public weekly match for only the selected player",
+        "fullName": "Individual Light season through public Club Manager APIs uses Light recovery on an actual public weekly match for only the selected player",
+        "testSourcePin": {
+          "bytes": 11905,
+          "sha256": "cf719ae6c241dcaea30a3762f37c3f8d1b4aa9901666fc17c67bb3f5490621a4",
+          "gitBlob": "83a06166b9b9b01b455468619b8c66c26be6ab5e"
+        },
+        "assertionLine": 154,
+        "assertionSource": "expect(owned(a, tiredId).fitness).toBe(owned(l, tiredId).fitness);",
+        "expectedAssertionCause": "AssertionError at the pinned fitness-equals-teamLight assertion: selected individual receives normal recovery instead of the matched team-Light recovery. No invented numeric expectation."
+      },
+      "invariantsPreserved": [
+        "nightSquadTick is byte-held",
+        "all RNG calls and match/fixture authority held",
+        "unselected weekly recovery remains original",
+        "independent default inspection/refusal full-save/RNG case held"
+      ],
+      "firstSmallBatchProposal": true,
+      "full17FailureMap": "UNMEASURED_NOT_ASSUMED_SINGLE_FAILURE",
+      "futureMethod": "One exact physical source-copy patch. Healthy and same-copy restored all17 must pass on the same proposed public-v2 bytes. If only owning case is selected for mutant, require1actual owned failure and16 explicit filtered rows, never call filtered rows passed. Immutable other sources and all test bodies held.",
+      "ownedMessagePattern": "AssertionError.*Object\\.is equality"
+    },
+    {
+      "id": "double-charged-selected-light-growth",
+      "status": "NATIVE_SOURCE_DESIGN_ONLY_EFFECT_UNRUN",
+      "path": "src/lib/clubManager.ts",
+      "nativeInput": "C:/Users/antho/dukb-handoff/2026-10-28/cm-squad-depth-discovery-v1/clean-authority-17-positive-v1/candidate/src/lib/clubManager.ts",
+      "beforePin": {
+        "bytes": 1243602,
+        "sha256": "4c3863cfd5a676bdbf4415fef337886b9324a2ae255a4389f12a8269eaa7735d",
+        "gitBlob": "9b6d84fe39b0ec55e35ca0a77603f5b69199300d"
+      },
+      "changedPin": {
+        "bytes": 1243644,
+        "sha256": "6d87bc5a9f34d6ab8e05c98f4ba183d5a475d601c6bfed6444fa6ce7c3ef947c",
+        "gitBlob": "db8f9aab3fe6426d0bf94b887efd8b02b393aece"
+      },
+      "spans": [
+        {
+          "characterOffset": 1047095,
+          "before": "  const intensity = light && light.id === p.id && sameManKey(light) === sameManKey(p) && light.worldRosterKey === p.worldRosterKey ? 0.78 : plan.intensity === 'double' ? 1.28 : plan.intensity === 'light' ? 0.78 : 1;",
+          "after": "  const intensity = light && light.id === p.id && sameManKey(light) === sameManKey(p) && light.worldRosterKey === p.worldRosterKey ? 0.78 * (plan.intensity === 'light' ? 0.78 : 1) : plan.intensity === 'double' ? 1.28 : plan.intensity === 'light' ? 0.78 : 1;"
+        }
+      ],
+      "sourceLine": 19623,
+      "uniqueBefore": true,
+      "wholeForwardInverse": true,
+      "owningCase": {
+        "file": "src/test/clubManagerIndividualLightSeason.test.ts",
+        "title": "keeps published positive development at Light after a late plan toggle without double charging",
+        "fullName": "Individual Light season through public Club Manager APIs keeps published positive development at Light after a late plan toggle without double charging",
+        "testSourcePin": {
+          "bytes": 11905,
+          "sha256": "cf719ae6c241dcaea30a3762f37c3f8d1b4aa9901666fc17c67bb3f5490621a4",
+          "gitBlob": "83a06166b9b9b01b455468619b8c66c26be6ab5e"
+        },
+        "assertionLine": 168,
+        "assertionSource": "expect(noDraw(() => E.developmentRate(owned(doubleLight, growthId), doubleLight))).toBe(expected);",
+        "expectedAssertionCause": "AssertionError at the pinned doubleLight multiplier equality: the already-Light selected player is charged0.78 twice after the team plan becomesLight. This owns the published development-rate contract; it is not an all-player annual output claim."
+      },
+      "invariantsPreserved": [
+        "unselected development is byte-equivalent",
+        "selected normal-plan first rate remains oneLight factor",
+        "no extra RNG or save operation",
+        "all clamp/facility/staff terms held"
+      ],
+      "firstSmallBatchProposal": true,
+      "full17FailureMap": "UNMEASURED_NOT_ASSUMED_SINGLE_FAILURE",
+      "futureMethod": "One exact physical source-copy patch. Healthy and same-copy restored all17 must pass on the same proposed public-v2 bytes. If only owning case is selected for mutant, require1actual owned failure and16 explicit filtered rows, never call filtered rows passed. Immutable other sources and all test bodies held.",
+      "ownedMessagePattern": "AssertionError.*Object\\.is equality"
+    },
+    {
+      "id": "annual-returning-loan-light-cost-omitted",
+      "status": "NATIVE_SOURCE_DESIGN_ONLY_EFFECT_UNRUN",
+      "path": "src/lib/clubManager.ts",
+      "nativeInput": "C:/Users/antho/dukb-handoff/2026-10-28/cm-squad-depth-discovery-v1/clean-authority-17-positive-v1/candidate/src/lib/clubManager.ts",
+      "beforePin": {
+        "bytes": 1243602,
+        "sha256": "4c3863cfd5a676bdbf4415fef337886b9324a2ae255a4389f12a8269eaa7735d",
+        "gitBlob": "9b6d84fe39b0ec55e35ca0a77603f5b69199300d"
+      },
+      "changedPin": {
+        "bytes": 1243643,
+        "sha256": "05f121502745a5cf5bd901918f7617c20b75fcd3c2b2c3476e386895dc25f330",
+        "gitBlob": "d7fc40325e97f256930bd5649d05173c8ad249c7"
+      },
+      "spans": [
+        {
+          "characterOffset": 1154630,
+          "before": "    drift = Math.round(drift * developmentRate(p, career));",
+          "after": "    drift = Math.round(drift * developmentRate(p, { ...career, individualLightSeason: undefined }));"
+        }
+      ],
+      "sourceLine": 21694,
+      "uniqueBefore": true,
+      "wholeForwardInverse": true,
+      "owningCase": {
+        "file": "src/test/clubManagerIndividualLightSeason.test.ts",
+        "title": "settles a returning owned loan at Light then expires the reservation for the next season",
+        "fullName": "Individual Light season through public Club Manager APIs settles a returning owned loan at Light then expires the reservation for the next season",
+        "testSourcePin": {
+          "bytes": 11905,
+          "sha256": "cf719ae6c241dcaea30a3762f37c3f8d1b4aa9901666fc17c67bb3f5490621a4",
+          "gitBlob": "83a06166b9b9b01b455468619b8c66c26be6ab5e"
+        },
+        "assertionLine": 193,
+        "assertionSource": "expect(a.rating).toBe(l.rating); expect(a.rating).toBeLessThan(n.rating);",
+        "expectedAssertionCause": "AssertionError at the first actual returned-loan rating equality: annual positive drift ignores the selected Light commitment and follows the matched normal growth instead of team-Light. No synthetic actor or rating adjustment."
+      },
+      "invariantsPreserved": [
+        "published developmentRate remains unchanged",
+        "team-Light and unselected/default annual growth unchanged",
+        "all draws/caps/rounding/decline/potential checks remain at the same call site",
+        "reservation consumption and rollover code unchanged"
+      ],
+      "firstSmallBatchProposal": true,
+      "full17FailureMap": "UNMEASURED_MUTANT_WILL_SELECT_ONE_OWNER_WITH16_EXPLICIT_FILTERED",
+      "futureMethod": "Fresh v2 healthy17, one exact source mutation and owning public case failure, whole byte restore in samecopy, all17healthy. No generic drift or extra app source writes.",
+      "ownedMessagePattern": "AssertionError.*Object\\.is equality"
+    },
+    {
+      "id": "reload-drops-owned-away-player-record",
+      "status": "NATIVE_SOURCE_DESIGN_ONLY_EFFECT_UNRUN",
+      "path": "src/lib/clubManager.ts",
+      "nativeInput": "C:/Users/antho/dukb-handoff/2026-10-28/cm-squad-depth-discovery-v1/clean-authority-17-positive-v1/candidate/src/lib/clubManager.ts",
+      "beforePin": {
+        "bytes": 1243602,
+        "sha256": "4c3863cfd5a676bdbf4415fef337886b9324a2ae255a4389f12a8269eaa7735d",
+        "gitBlob": "9b6d84fe39b0ec55e35ca0a77603f5b69199300d"
+      },
+      "changedPin": {
+        "bytes": 1243697,
+        "sha256": "bff7889291e5358e25ea6d1d3ad3525e8bd3b95b452e31e35435fff2737a1115",
+        "gitBlob": "0f456e4c104c5c3ae2c4819aa3bf05bc1b2e38b0"
+      },
+      "spans": [
+        {
+          "characterOffset": 1239140,
+          "before": "    ensureBoardAsks(parsed);\n    return parsed;",
+          "after": "    ensureBoardAsks(parsed);\n    if (lightSeasonReservation(parsed) && !lightSeasonPlayer(parsed)) delete parsed.loanedOut;\n    return parsed;"
+        }
+      ],
+      "sourceLine": 23156,
+      "uniqueBefore": true,
+      "wholeForwardInverse": true,
+      "owningCase": {
+        "file": "src/test/clubManagerIndividualLightSeason.test.ts",
+        "title": "keeps one earned reservation through refusals a legal departure and official save reload",
+        "fullName": "Individual Light season through public Club Manager APIs keeps one earned reservation through refusals a legal departure and official save reload",
+        "testSourcePin": {
+          "bytes": 11905,
+          "sha256": "cf719ae6c241dcaea30a3762f37c3f8d1b4aa9901666fc17c67bb3f5490621a4",
+          "gitBlob": "83a06166b9b9b01b455468619b8c66c26be6ab5e"
+        },
+        "assertionLine": 144,
+        "assertionSource": "expect(loanEngine.lightSeasonPlayer(saved.loaded, true)?.id).toBe(loanId);",
+        "expectedAssertionCause": "AssertionError at the NEW pinned post-load includeLoans ID equality: reservation metadata and absent-squad reader can survive while the actual owned-away record is lost. Existing loanId comes from the genuine public pipeline, not a fabricated player."
+      },
+      "invariantsPreserved": [
+        "save bytes/away input untouched",
+        "valid current reservation metadata kept",
+        "ordinary absent-record default loads unchanged",
+        "the old three post-load metadata/absent/null assertions are intentionally insufficient alone"
+      ],
+      "firstSmallBatchProposal": true,
+      "full17FailureMap": "UNMEASURED_NOT_ASSUMED_SINGLE_FAILURE",
+      "futureMethod": "One exact physical source-copy patch. Healthy and same-copy restored all17 must pass on the same proposed public-v2 bytes. If only owning case is selected for mutant, require1actual owned failure and16 explicit filtered rows, never call filtered rows passed. Immutable other sources and all test bodies held.",
+      "ownedMessagePattern": "AssertionError.*expected undefined to be 'p-kaye-furo'"
+    }
+  ],
+  "physicalCopy": "One serial job, one copy, four exact Engine variants, whole captured source restored after every variant.",
+  "filteredPolicy": "Mutants run one exact owning case across both declared files:1ownedFAIL+16explicitFILTERED, not16passed. Healthy/restored runs require all17PASS."
+}

@@ -1,0 +1,262 @@
+{
+  "schema": 1,
+  "status": "SOURCE_ONLY_CLEAN_PUBLIC_V2_SEVENTEEN_AND_FOUR_FAULTS_UNRUN",
+  "parentCommit": "11aa2a6ef34c3cda3d2d88d95b2fd7d41fbbcd9e",
+  "parentTree": "bf5e6d0a486f81f3310af7932111bae57b241008",
+  "branch": "codex/cm-light-clean-authority-faults-20261029",
+  "requiredMain": "7a92b329e9901c4bdd41eb6a4bf8c6f5020143c0",
+  "requireImmediateMainAndReleaseReviewBeforeRef": true,
+  "files": [
+    {
+      "path": "src/lib/clubManager.ts",
+      "bytes": 1243602,
+      "sha256": "4c3863cfd5a676bdbf4415fef337886b9324a2ae255a4389f12a8269eaa7735d",
+      "gitBlob": "9b6d84fe39b0ec55e35ca0a77603f5b69199300d"
+    },
+    {
+      "path": "src/pages/ClubManager.tsx",
+      "bytes": 104321,
+      "sha256": "22020e1efc2b71069afb3d8c6cb2ba5fc00cc0a7abf3aa306fd7964d379d308c",
+      "gitBlob": "3c26297f95077eabc2843afa69746531f5966af5"
+    },
+    {
+      "path": "src/components/club-manager/TrainingScreen.tsx",
+      "bytes": 13666,
+      "sha256": "ac9fbad9de7b0d9c33cedc32d45723361a36454f9759522aa203d964da6124a2",
+      "gitBlob": "9164f39611e0a5d8e12e7e37fe503d706ea46ed7"
+    },
+    {
+      "path": "src/components/club-manager/IndividualLightSeason.tsx",
+      "bytes": 5427,
+      "sha256": "5dd992d1a55a7b4a0657cc6b5500150ced0bbbb61d85e6898441861d0ba85a63",
+      "gitBlob": "c263e6552d41586c825c8744308a9d50c8d2d102"
+    },
+    {
+      "path": "src/hooks/useClubManager.ts",
+      "bytes": 70744,
+      "sha256": "dce880b04eb80792eb3ea97354aa5f0d146f89c5280f57055c04dbb1db274b62",
+      "gitBlob": "7297073ea60b93501df48ea9b7dfc74edd2217de"
+    },
+    {
+      "path": "src/lib/saveFence.ts",
+      "bytes": 6552,
+      "sha256": "75ac3c8cf136acdb2dae50938cac5ffe522e2db7827f59c453b98b67519d6216",
+      "gitBlob": "1de45b573fd866433eb0982495af927a5427e8f4"
+    },
+    {
+      "path": "scripts/lib/offlineTransport.cjs",
+      "bytes": 10660,
+      "sha256": "e60ff1534307e449ccef598e3b7470dcba58681b82cea4005cec7319f14f9221",
+      "gitBlob": "0fda542a2649fe5da937c6976fd0f5b6073e74b6"
+    },
+    {
+      "path": "package.json",
+      "bytes": 3495,
+      "sha256": "acfe14626dea53cf5f9c5e0286b766a22237656b52aac4c888b080873ac90e31",
+      "gitBlob": "2ff64986fb76ebc51b706f2fd24765768874008a"
+    },
+    {
+      "path": "package-lock.json",
+      "bytes": 309049,
+      "sha256": "c7e3867eabf0bfa03a8aa6a5e601b0050b937ed210d48c6bbd241019e3c9ea76",
+      "gitBlob": "97d6f12a052f25f400462938c241789a083f0bfe"
+    },
+    {
+      "path": "tsconfig.app.json",
+      "bytes": 680,
+      "sha256": "b12030bfe21ea5be66670842c71d66d194d1771f93f0b8c076e97c867b4b0552",
+      "gitBlob": "51f581dd91641b4c1f1219f646788e73cf6bf00c"
+    },
+    {
+      "path": "vitest.config.ts",
+      "bytes": 5364,
+      "sha256": "6a68dd2f214dab4a3013eb41bad38eea65d703d61440002710ec246495e1c58a",
+      "gitBlob": "ed2a9dc677f77dfe95c061064eeff5782b856864"
+    },
+    {
+      "path": "src/test/setup.ts",
+      "bytes": 847,
+      "sha256": "0175cc334b44d9874ff4bd8274a8cc165e9e84cd3738a4298f934db353887289",
+      "gitBlob": "df00cdf5c54e8c8efc71e46d7585ae76acb4fc8d"
+    },
+    {
+      "path": "src/test/clubManagerIndividualLightSeason.test.ts",
+      "bytes": 11905,
+      "sha256": "cf719ae6c241dcaea30a3762f37c3f8d1b4aa9901666fc17c67bb3f5490621a4",
+      "gitBlob": "83a06166b9b9b01b455468619b8c66c26be6ab5e"
+    },
+    {
+      "path": "src/test/clubManagerLightSeasonMounted.test.tsx",
+      "bytes": 14952,
+      "sha256": "936acc05960c6ac9b2db7efcf96cb079078b187191008cb1d2a23b82383c157e",
+      "gitBlob": "ea19d2563aaabae263e004ec4eec0f54d080a8af"
+    },
+    {
+      "path": "src/lib/clubManagerSlots.ts",
+      "bytes": 9763,
+      "sha256": "7b0ec76d80544272a6f823834fb157e55970610b0bd4bf6217266ff780cab8ac",
+      "gitBlob": "cd1a683637ce1fa0444b86b1cff46821aa75127d"
+    },
+    {
+      "path": "qa/cm-light-season-clean-v1/FAULTS.json",
+      "bytes": 12577,
+      "sha256": "c2cac9a9c7115d35971e70f2ef9ff3e3c3b8ffc614c0ea7b1821fcc06c66b72c",
+      "gitBlob": "1b62cf683a5336ace3e98194862586c5eaeefc1b"
+    }
+  ],
+  "allowedDelta": [
+    "M\tsrc/lib/clubManager.ts",
+    "M\tsrc/components/club-manager/TrainingScreen.tsx",
+    "M\tsrc/pages/ClubManager.tsx",
+    "A\tsrc/components/club-manager/IndividualLightSeason.tsx",
+    "A\tsrc/test/clubManagerIndividualLightSeason.test.ts",
+    "A\tsrc/test/clubManagerLightSeasonMounted.test.tsx",
+    "A\tqa/cm-light-season-clean-v1/SOURCE.json",
+    "A\t.github/workflows/cm-light-clean-authority-faults.yml",
+    "A\tqa/cm-light-season-clean-v1/FAULTS.json"
+  ],
+  "parentBodies": 5396,
+  "finalBodies": 5402,
+  "modified": 3,
+  "added": 6,
+  "heldParentBodies": 5393,
+  "tests": [
+    {
+      "path": "src/test/clubManagerIndividualLightSeason.test.ts",
+      "prefix": "Individual Light season through public Club Manager APIs",
+      "titles": [
+        "keeps one earned reservation through refusals a legal departure and official save reload",
+        "uses Light recovery on an actual public weekly match for only the selected player",
+        "keeps published positive development at Light after a late plan toggle without double charging",
+        "preserves default full trimmed lean official save and next draw after optional reads and refusal",
+        "settles a returning owned loan at Light then expires the reservation for the next season"
+      ],
+      "fullNames": [
+        "Individual Light season through public Club Manager APIs keeps one earned reservation through refusals a legal departure and official save reload",
+        "Individual Light season through public Club Manager APIs uses Light recovery on an actual public weekly match for only the selected player",
+        "Individual Light season through public Club Manager APIs keeps published positive development at Light after a late plan toggle without double charging",
+        "Individual Light season through public Club Manager APIs preserves default full trimmed lean official save and next draw after optional reads and refusal",
+        "Individual Light season through public Club Manager APIs settles a returning owned loan at Light then expires the reservation for the next season"
+      ],
+      "caseCount": 5,
+      "testSHA256": "cf719ae6c241dcaea30a3762f37c3f8d1b4aa9901666fc17c67bb3f5490621a4"
+    },
+    {
+      "path": "src/test/clubManagerLightSeasonMounted.test.tsx",
+      "prefix": "Light season through the real Club Manager Page and Hook",
+      "titles": [
+        "can Back out during the actual first cold lazy tick without a write or later reopening",
+        "commits the actual Page choice once through the real writer and official reload",
+        "keeps help and unconfirmed Back read-only and returns focus to the real help button",
+        "reserves before render so the same captured Light request cannot publish twice",
+        "retains memory and disk after both actual save attempts refuse",
+        "denies a stale career and an equal cloned player through the actual writer",
+        "refuses a captured callback after an actual phase-only move out of the hub",
+        "does not overwrite the career made active by another slot",
+        "denies an identical replaced save after the actual hook leaves and reloads its slot",
+        "refuses a genuine newer same-slot fence before the Light transform runs",
+        "invalidates the real commit callback on unmount",
+        "keeps one season reserved after actual loan-out or termination and shows no replacement picker"
+      ],
+      "fullNames": [
+        "Light season through the real Club Manager Page and Hook can Back out during the actual first cold lazy tick without a write or later reopening",
+        "Light season through the real Club Manager Page and Hook commits the actual Page choice once through the real writer and official reload",
+        "Light season through the real Club Manager Page and Hook keeps help and unconfirmed Back read-only and returns focus to the real help button",
+        "Light season through the real Club Manager Page and Hook reserves before render so the same captured Light request cannot publish twice",
+        "Light season through the real Club Manager Page and Hook retains memory and disk after both actual save attempts refuse",
+        "Light season through the real Club Manager Page and Hook denies a stale career and an equal cloned player through the actual writer",
+        "Light season through the real Club Manager Page and Hook refuses a captured callback after an actual phase-only move out of the hub",
+        "Light season through the real Club Manager Page and Hook does not overwrite the career made active by another slot",
+        "Light season through the real Club Manager Page and Hook denies an identical replaced save after the actual hook leaves and reloads its slot",
+        "Light season through the real Club Manager Page and Hook refuses a genuine newer same-slot fence before the Light transform runs",
+        "Light season through the real Club Manager Page and Hook invalidates the real commit callback on unmount",
+        "Light season through the real Club Manager Page and Hook keeps one season reserved after actual loan-out or termination and shows no replacement picker"
+      ],
+      "caseCount": 12,
+      "testSHA256": "936acc05960c6ac9b2db7efcf96cb079078b187191008cb1d2a23b82383c157e"
+    }
+  ],
+  "appBridge": {
+    "status": "EXACT_SOURCE_IDENTITY_ONLY_NO_RUNTIME_INHERITANCE",
+    "appSourceSHA256": "053b631579ca23bc1ecfe4da57a856cae759ad5a66963a239b1e1fd35b023beb",
+    "parallelRun": 40853890541,
+    "parallelHead": "bfeba39f23777aaebd9b921355444e51120a4be6",
+    "parallelTree": "1877a422c33471741e92d55ca27d1c0243eca813",
+    "sourceInventorySHA256": "2a721ed7c0ddcce3de4ad611020fb845956aabea33e044d60f47ffa2ac1bff8d",
+    "files": [
+      {
+        "path": "src/lib/clubManager.ts",
+        "bytes": 1243602,
+        "sha256": "4c3863cfd5a676bdbf4415fef337886b9324a2ae255a4389f12a8269eaa7735d",
+        "gitBlob": "9b6d84fe39b0ec55e35ca0a77603f5b69199300d"
+      },
+      {
+        "path": "src/components/club-manager/TrainingScreen.tsx",
+        "bytes": 13666,
+        "sha256": "ac9fbad9de7b0d9c33cedc32d45723361a36454f9759522aa203d964da6124a2",
+        "gitBlob": "9164f39611e0a5d8e12e7e37fe503d706ea46ed7"
+      },
+      {
+        "path": "src/pages/ClubManager.tsx",
+        "bytes": 104321,
+        "sha256": "22020e1efc2b71069afb3d8c6cb2ba5fc00cc0a7abf3aa306fd7964d379d308c",
+        "gitBlob": "3c26297f95077eabc2843afa69746531f5966af5"
+      },
+      {
+        "path": "src/components/club-manager/IndividualLightSeason.tsx",
+        "bytes": 5427,
+        "sha256": "5dd992d1a55a7b4a0657cc6b5500150ced0bbbb61d85e6898441861d0ba85a63",
+        "gitBlob": "c263e6552d41586c825c8744308a9d50c8d2d102"
+      }
+    ]
+  },
+  "scope": {
+    "types": true,
+    "freshPublicV2Healthy17Required": true,
+    "fullRestored17AfterEach": true,
+    "serialJob": 1,
+    "physicalCopy": 1,
+    "physicalSourceFaults": 4,
+    "mutantOwnerFailed": 1,
+    "mutantExplicitFiltered": 16,
+    "mutantPassed": 0,
+    "copiedProcessInfraDiagnostics": 2,
+    "aggregateSuiteUnits": 4,
+    "fileObjects": 2,
+    "privateOldEngineOrBuilder": false,
+    "appEdits": false,
+    "build": false,
+    "browser": false,
+    "fullSuite": false,
+    "global": false,
+    "sourceFamily": "PRE-BS11aa/App3 only, no main or Ready claim.",
+    "matchedFilteredBeforeAfter": true,
+    "matchedFilteredPositive": "1PASS16FILTERED before and after each source fault",
+    "filteredCommandIdentity": "Exact arguments/cwd except report destination"
+  },
+  "priorActualPublicFive": {
+    "run": 40859373921,
+    "rootAdmissionSHA256": "3be9b3a3b01cdc60dc8d6024ffba997443e3074a6d0d2c4b283d74465cec082d",
+    "testSHA256": "b02150a2d4f9ca05f9d1ae252b4f93cffa5aac925591b902b40c3b05c1497a4c",
+    "scope": "Actual five only, not combined seventeen runtime credit."
+  },
+  "mountedSource": {
+    "sourceSHA256": "35060f874fe84cfb7affa5fa423ac8b850e4317894d76de85dd641d07f845e67",
+    "rootSourceGO": "32272a8bc86aef742a0a2d0eff2bf865af3a397d74e9731f8897a2112438526d",
+    "peerSourceGO": "8553b186d1cb598bb9a32cd1cbc0f413b2c02e4ea9ca4f0dea79c1bc77d7f619",
+    "testSHA256": "936acc05960c6ac9b2db7efcf96cb079078b187191008cb1d2a23b82383c157e",
+    "scope": "Three diagnostic-only cleanup spans, complete twelve-case body suffix held. Cleaned source runtime owed."
+  },
+  "limits": [
+    "Current clean17v1 run40867973046 remains unchanged and uses oldb021, not this publiccf719.",
+    "Fresh v2 healthy17 in this same source copy must pass before any source mutation.",
+    "Every mutant runs only one pinned owning case with16explicitfiltered rows. All filtered rows are skipped, never credited as passed.",
+    "Every restored run is all17positive, and its exact source map/report hash is joined as nextbefore.",
+    "Four declared Engine spans only. No generic drift, expected values from mutants, private Engine or observer.",
+    "No app/ref/localruntime action by this source proposal. Immediate main/release review remains required before any eventual ref."
+  ],
+  "faultPath": "qa/cm-light-season-clean-v1/FAULTS.json",
+  "publicV2Source": "8d91ee0388dc1dfdaa028d1d6abfe41c5096c1912f18022b34dc1c5ebe924431",
+  "aggregateSuiteUnits": 4,
+  "aggregateDefinition": "Two file suite units plus two describes."
+}
