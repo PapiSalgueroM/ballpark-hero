@@ -1,0 +1,5 @@
+#!serve
+#!playwright
+walk: node scripts/playAflClubNames.mjs
+walk-bundlename: PLAY_AFL_NAMES_CONTROL=bundlename node scripts/playAflClubNames.mjs
+simResultMoment: node scripts/simResultMoment.mjs
