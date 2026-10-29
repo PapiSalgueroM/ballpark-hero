@@ -1,0 +1,13 @@
+#!serial
+# Release BS fix pass (BSF, results-g/fix-BSF.md): the harnesses, controls, probe and unit files the 18 fixes added or changed, on a plain runner. Every unit file here is also in rgBSg's vitest-all.
+# Expected: every line exit 0 (deadend-pundit, deadend-strand and deadend-noheal print "NEGATIVE CONTROL ... A control run is expected to be red" and exit 0 when they FIRE; simAccessibility-dialog prints "control run: 1 failure(s) fired as expected").
+simAccessibility: node scripts/simAccessibility.mjs
+simAccessibility-dialog: SIM_A11Y_CONTROL=dialog node scripts/simAccessibility.mjs
+simCareerNoDeadEnd: node scripts/simCareerNoDeadEnd.mjs
+deadend-pundit: CAREER_DEADEND_CONTROL=pundit node scripts/simCareerNoDeadEnd.mjs
+deadend-strand: CAREER_DEADEND_CONTROL=strand node scripts/simCareerNoDeadEnd.mjs
+deadend-noheal: CAREER_DEADEND_CONTROL=noheal node scripts/simCareerNoDeadEnd.mjs
+shoot: git show da4f42889:src/lib/clubManager.ts > src/lib/clubManager.base410.ts && node .rc/x/probeShootout.mjs; s=$?; rm -f src/lib/clubManager.base410.ts; exit $s
+simPlayerBingoRodriHonour: CI=1 node scripts/simPlayerBingoRodriHonour.mjs
+simPlayerBingoWorldCupAlias: CI=1 node scripts/simPlayerBingoWorldCupAlias.mjs
+vitest-fix: node_modules/.bin/vitest run src/test/soccerCareerLoyaltyUncut.test.ts src/test/soccerCareerCoachingStartEra.test.ts src/test/soccerCareerManagerJobReviewMarket.test.ts src/test/soccerCareerManagerJobReview.test.ts src/test/soccerCareerManagerPendingRetire.test.tsx src/test/soccerCareerLoyaltyView.test.ts src/test/clubManagerLoanPlanMounted.test.tsx src/test/clubManagerRecruitmentBoard.test.tsx src/test/clubManagerShootoutCopy.test.tsx src/test/playerBingoBirthYear.test.ts src/test/playerBingoCategories.test.ts --testTimeout=300000 --hookTimeout=120000 > /tmp/vf.log 2>&1; s=$?; grep -E "FAIL|Test Files|Tests  |loyalty uncut|coaching era|market job review|bingo birth" /tmp/vf.log | head -30 | cut -c1-250; exit $s

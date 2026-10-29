@@ -1,0 +1,17 @@
+   the page draws 22 phases, 4 carry the action button, 15 draw only under another field
+1) after a conviction, the career is still playable
+   convicted -> newspaper -> dismissed lands on "playing" (drawn: true, needs another field: false, has buttons: true)
+   an ordinary news season still lands on "season_summary"
+2) a save that is already stranded is healed on load
+   stranded save loads as "season_summary"
+  FAIL: repairCareer leaves a stranded save in season_summary with nothing to summarise, so everyone whose career died before the fix stays dead
+3) every phase the engine can assign is a phase the page can draw
+   the engine assigns 19 distinct phases
+   19/19 assignable phases are drawable, 0 orphaned
+4) every phase whose bar shows the Next button gets a handler that moves the career
+   the bar's generic button runs handleNextSeason; phases that reach it: youth, playing; own branches: retired, manager_season, owner_season
+   youth: Next pressed, the career moved (now contract_offer, age 17)
+   playing: Next pressed, the career moved (now newspaper, age 18)
+   names the handler reached that were stubbed: buildAcademyReport, recordActivity, recordStreakDay, setAcademyReport
+
+NEGATIVE CONTROL noheal was on; 1 finding(s). A control run is expected to be red.

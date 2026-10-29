@@ -1,0 +1,10 @@
+simAccessibility exit=0 0s | simAccessibility: all green
+simAccessibility-dialog exit=0 0s | control run: 1 failure(s) fired as expected
+simCareerNoDeadEnd exit=0 1s | simCareerNoDeadEnd: green. A convicted career is still a career, and a stranded save comes back.
+deadend-pundit exit=0 1s | NEGATIVE CONTROL pundit was on; 1 finding(s). A control run is expected to be red.
+deadend-strand exit=0 1s | NEGATIVE CONTROL strand was on; 2 finding(s). A control run is expected to be red.
+deadend-noheal exit=0 1s | NEGATIVE CONTROL noheal was on; 1 finding(s). A control run is expected to be red.
+shoot exit=0 19s | shootout probe: green
+simPlayerBingoRodriHonour exit=0 11s | simPlayerBingoRodriHonour: fixed proof passed; complete raw reports and changed-copy receipts retained. Offline only.
+simPlayerBingoWorldCupAlias exit=0 2s | Source bytes held; raw unit/output/control receipts retained when OUT is set. Offline proof only.
+vitest-fix exit=0 17s |  Test Files  11 passed (11)
