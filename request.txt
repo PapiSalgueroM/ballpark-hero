@@ -1,0 +1,23 @@
+#!serve
+#!playwright
+# Release BS kit: 11 of the 14 request lines of Release BR's rc-BIe.txt (rBRg/.tmp-fx/br), the lines of the BS areas (Soccer Career, Club Manager and the manager games on its engine, Player Bingo, Conquest, Stat and Draft Detective, the US My Career save notice, What's New, the polls, the guide intro) and the setup lines before them; 3 line(s) outside those areas left out: simEarlyReturnScope simNationJob simHomeFront.
+# Release BI, Round 1343 (retire as a manager, and the highest scoring game), merged as 819d9d16 (first parent
+# dd44adff). simCmRetire's base parts bind RETIRE_BASE to this tree WITHOUT Round 1343 (x/minus1343.sh, send it: since
+# Round 1344 appends its help block after 1343's, treeWithoutMerge 819d9d16 dd44adff alone refuses on the help file, so
+# the helper hands it HEAD with that one file at 819d9d16; simCmRetire never reads the base's help. Every base line
+# fails closed: `|| exit 2`). The round's original base was d4f2c6f6. retire-ctl and retire-ctl-base exit 0 only when every
+# control exits 1 with FIRED. playCmRetire's controls (strip, norecord) must exit 1 with FIRED.
+# CARRIED, not this release's: decisions-seed4 (SIM_SEED=4 simClubManagerDecisions, "only 5 straight reds in the play
+# seasons, under the floor of 6") and qa/managerDecisionRegression1081 are red on main e814c2de with the same first
+# line (results-g/fix2-1343.md and verify2-1343.md).
+retire: node scripts/simCmRetire.mjs
+retire-ctl: r=""; for k in tielast skipgame nomissed basewrites pensdrawn retiretouch legacydrop liveok seasonover drawone dash; do RETIRE_CONTROL=$k node scripts/simCmRetire.mjs > /tmp/r-$k.log 2>&1; e=$?; f=$(grep -c "FIRED" /tmp/r-$k.log); r="$r $k=$e/$f"; done; echo "controls:$r"; [ -z "$(echo "$r" | tr ' ' '\n' | grep -v '^$' | grep -v '=1/[1-9]')" ]
+simCmTablesTruth: node scripts/simCmTablesTruth.mjs
+decisions-seed4: SIM_SEED=4 NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/simClubManagerDecisions.mjs
+simCmShootoutOrder: NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/simCmShootoutOrder.mjs
+simCmQuickLegs: node scripts/simCmQuickLegs.mjs
+simCmVar: NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/simCmVar.mjs
+decisionRegression1081: NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/qa/managerDecisionRegression1081.mjs
+playCmRetire: node scripts/playCmRetire.mjs
+playCmRetire-strip: PLAY_RETIRE_CONTROL=strip node scripts/playCmRetire.mjs
+playCmRetire-norecord: PLAY_RETIRE_CONTROL=norecord node scripts/playCmRetire.mjs
