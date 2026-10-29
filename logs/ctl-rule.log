@@ -1,0 +1,45 @@
+0) The fixture
+   BASE 692590145: pool 474 from 483 names and 3692 rows, 21 requests, largest response 1000 rows, largest history page 781 rows
+1) The diagnosis receipt and the candidate rule
+   BASE Tyler Morton (Olympique Lyon, 2026, Defensive Midfield): clubs [liverpool fc, olympique lyon], count 2, 4+ false, one club false
+   control changed: the Round 669 lists dropped from the rule: 69 candidates become 52
+   hole class: 52 candidates (7 on Round 669's lists, 45 more whose counted rows begin at or after 2023 with a hole year missing)
+  FAIL: Tyler Morton is not a candidate under the rule
+  FAIL: the record's committed candidates differ from the rule (rule only: none; record only: Alan Varela, Amadou Onana, Angelo Stiller, Aurélien Tchouaméni, Boubacar Kamara, Ethan Ampadu)
+   owed to Round 1576, C2: pool men on the hand overlay (no from, each needs a lookup): 100; generated overlay rows whose from club is in none of his counted rows: 1: James Ward-Prowse (Burnley FC)
+   owed, C1 outside the hole (a 2023 to 2025 year missing after his first counted row, not a candidate): 23: Vitinha, Moisés Caicedo, Rodri, Ryan Gravenberch, Sandro Tonali, Aurélien Tchouaméni, Martín Zubimendi, Álvaro Carreras, Mason Greenwood, Amad Diallo, Amadou Onana, Angelo Stiller, James Garner, Morten Hjulmand, Boubacar Kamara, Jamie Leweling, Joshua Kimmich, Máximo Perrone, Alan Varela, Ethan Ampadu, Tyler Morton, Ian Maatsen, Emile Smith Rowe
+   owed, academy filtered rows at a club he has no counted row at (critic advice 10): 29
+     Vitinha (fc porto youth league); Morgan Rogers (manchester city, west bromwich albion, afc bournemouth, lincoln city); Antoine Semenyo (sunderland afc); Eberechi Eze (wycombe wanderers); Nicolò Barella (como 1907); Federico Dimarco (fc empoli)
+     Gianluigi Donnarumma (ac milan primavera); Ademola Lookman (charlton athletic); Serhou Guirassy (aj auxerre); Brennan Johnson (lincoln city); Conor Gallagher (charlton athletic); Dominic Solanke (vitesse arnhem)
+     Dan Ndoye (fc lausanne-sport); Rico Lewis (manchester city u21); Antonio Nusa (stabaek fotball); Ferdi Kadıoğlu (nec nijmegen); Crysencio Summerville (ado den haag, leeds united u21); Evann Guessand (fc lausanne-sport)
+     James Maddison (coventry city); Simon Adingra (fc nordsjaelland u19); Alejandro Grimaldo (fc barcelona); Kingsley Coman (paris saint-germain); Jan Oblak (ud leiria); Nathan Aké (chelsea fc)
+     Nahuel Molina (defensa y justicia); Pervis Estupiñán (ud almeria); André Onana (ajax amsterdam u21); Oleksandr Zinchenko (fc ufa); João Cancelo (sl benfica, sl benfica b)
+   owed, C3 late starters outside the hole (first counted row at a listed age of 22 or more): 23
+     Viktor Gyökeres (2022, 23); Tijjani Reijnders (2022, 23); Yann Bisseck (2023, 22); Mateo Retegui (2022, 22); David Raya (2019, 23); Kiernan Dewsbury-Hall (2022, 23); Ollie Watkins (2018, 22); Yoane Wissa (2020, 23)
+     Mohamed Amoura (2023, 22); Min-jae Kim (2021, 24); Kaoru Mitoma (2021, 23); Robin Le Normand (2019, 22); Mats Wieffer (2023, 23); Guglielmo Vicario (2019, 22); Randal Kolo Muani (2021, 22); Isak Hien (2023, 23)
+     Ivan Toney (2020, 23); Nayef Aguerd (2019, 22); Hiroki Ito (2022, 22); Samuel Lino (2022, 22); Maximilian Kilman (2020, 22); Artem Dovbyk (2021, 23); John McGinn (2018, 23)
+  FAIL: the record's owed lists differ from what the fixture yields (rerun with --write-candidates and commit)
+4) Completeness, a ratchet
+  FAIL: Alan Varela is in pending but is not a candidate
+  FAIL: Amadou Onana is in pending but is not a candidate
+  FAIL: Angelo Stiller is in pending but is not a candidate
+  FAIL: Aurélien Tchouaméni is in pending but is not a candidate
+  FAIL: Boubacar Kamara is in pending but is not a candidate
+  FAIL: Ethan Ampadu is in pending but is not a candidate
+  FAIL: James Garner is in pending but is not a candidate
+  FAIL: Joshua Kimmich is in pending but is not a candidate
+  FAIL: Martín Zubimendi is in pending but is not a candidate
+  FAIL: Moisés Caicedo is in pending but is not a candidate
+  FAIL: Morten Hjulmand is in pending but is not a candidate
+  FAIL: Máximo Perrone is in pending but is not a candidate
+  FAIL: Rodri is in pending but is not a candidate
+  FAIL: Ryan Gravenberch is in pending but is not a candidate
+  FAIL: Sandro Tonali is in pending but is not a candidate
+  FAIL: Vitinha is in pending but is not a candidate
+   52 candidates: 1 additions, 0 agrees, 0 partial, 68 pending (ratchet 68)
+   pending: Abdukodir Khusanov, Adam Wharton, Alan Varela, Aleksandar Pavlovic, Aleksandar Stanković, Amadou Onana, Angelo Stiller, Aurélien Tchouaméni, Bazoumana Touré, Boubacar Kamara, Carlos Baleba, Christian Kofane, Conor Bradley, Dean Huijsen, Dilane Bakwa, Estêvão, Ethan Ampadu, Finn Jeltsch, Fisnik Asllani, Franco Mastantuono, Geovany Quenda, Giuliano Simeone, Gonzalo García, Hayden Hackney, Ibrahim Maza, Ibrahim Mbaye, James Garner, Jesús Rodríguez, Joan García, Joaquín Panichelli, Joel Ordóñez, Johan Manzambi, Joshua Kimmich, Jérémy Jacquet, Kaishu Sano, Konstantinos Karetsas, Lennart Karl, Leon Avdullahu, Mamadou Sangaré, Marco Palestra, Mario Gila, Martín Zubimendi, Mateus Fernandes, Matias Fernandez-Pardo, Mikel Jauregizar, Moisés Caicedo, Morten Hjulmand, Myles Lewis-Skelly, Máximo Perrone, Nick Woltemade, Nico O'Reilly, Pau Cubarsí, Petar Sučić, Rayan, Raúl Asencio, Rodri, Ryan Gravenberch, Rômulo, Said El Mala, Sandro Tonali, Senne Lammens, Senny Mayulu, Thierno Barry, Tyler Dibling, Victor Froholdt, Vitinha, Vitor Reis, Yan Diomande
+5) Sources
+   4 sourced facts checked
+6) The derived file
+   1 men, 2 added clubs; clubs the fixture never spells (new keys, printed): 0
+simBingoClubCounts: CONTROL=rule FIRED (19 failures; section 1: 3, section 4: 16)

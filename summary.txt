@@ -1,0 +1,9 @@
+simBingoClubCounts exit=0 0s | simBingoClubCounts: GREEN, every section held
+ctl-rule exit=1 0s | simBingoClubCounts: CONTROL=rule FIRED (19 failures; section 1: 3, section 4: 16)
+vitest exit=0 1s |    Duration  994ms (transform 150ms, setup 99ms, collect 194ms, tests 10ms, environment 296ms, prepare 121ms)
+ctl-onesource exit=1 0s | simBingoClubCounts: CONTROL=onesource FIRED (1 failures; section 5: 1)
+ctl-pending exit=1 0s | simBingoClubCounts: CONTROL=pending FIRED (2 failures; section 4: 2)
+ctl-cap exit=3 0s |    FIXTURE_CONTROL=cap did not fire: no history page reached the 1,000 row cap (largest 781), so nobody exceeds a page and paging is not exercised by this fixture
+ctl-handedit exit=1 0s | simBingoClubCounts: CONTROL=handedit FIRED (1 failures; section 6: 1)
+simNoRivalNames exit=0 12s | No rival product names found. 0 findings.
+tsc exit=0 50s | 
