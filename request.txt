@@ -1,0 +1,9 @@
+simNflCareer: node scripts/simNflCareer.mjs
+simNbaCareer: node scripts/simNbaCareer.mjs
+simMlbCareer: node scripts/simMlbCareer.mjs
+simNhlCareer: node scripts/simNhlCareer.mjs
+simCareerPress: node scripts/simCareerPress.mjs
+simExtension: node scripts/simExtension.mjs
+simUsCareerWeight: node scripts/simUsCareerWeight.mjs
+simRevealMoments: node scripts/simRevealMoments.mjs
+simUsPostseason: node scripts/simUsPostseason.mjs
