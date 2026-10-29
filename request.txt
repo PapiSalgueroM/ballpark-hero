@@ -1,0 +1,6 @@
+#!serial
+tsc: node_modules/.bin/tsc --noEmit -p tsconfig.app.json
+cafile: node_modules/.bin/vitest run src/components/front-office-shared/FrontOfficeGmCareer.test.tsx --testTimeout=600000 --hookTimeout=120000
+nhlmut: node .rc/x/mutAge.mjs && node_modules/.bin/vitest run src/components/front-office-shared/FrontOfficeGmCareer.test.tsx -t "nhl board: the default path" --testTimeout=600000 --hookTimeout=120000; s=$?; git checkout -- src scripts; exit $s
+nhlbase: B=/tmp/base1559v2; git worktree add -f $B 115c68092 >/dev/null 2>&1 && ln -s "$PWD/node_modules" $B/node_modules && cp src/components/front-office-shared/FrontOfficeGmCareer.test.tsx src/components/front-office-shared/FrontOfficeGmCareer.fixture.json $B/src/components/front-office-shared/ && cd $B && node_modules/.bin/vitest run src/components/front-office-shared/FrontOfficeGmCareer.test.tsx -t "nhl board" --testTimeout=600000 --hookTimeout=120000
+anchors: node scripts/simHarnessAnchors.mjs

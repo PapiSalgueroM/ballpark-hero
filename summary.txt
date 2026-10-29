@@ -1,0 +1,5 @@
+tsc exit=0 72s | 
+cafile exit=0 24s |    Duration  23.58s (transform 1.71s, setup 71ms, collect 202ms, tests 22.52s, environment 313ms, prepare 128ms)
+nhlmut exit=1 6s | ::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/components/front-office-shared/FrontOfficeGmCareer.test.tsx,title=src/components/front-office-shared/FrontO
+nhlbase exit=0 6s |    Duration  4.70s (transform 686ms, setup 72ms, collect 200ms, tests 3.72s, environment 293ms, prepare 103ms)
+anchors exit=0 50s | simHarnessAnchors: green. Every harness parses and none carries an unmatchable anchor.
