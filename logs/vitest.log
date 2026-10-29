@@ -1,0 +1,57 @@
+
+[1m[46m RUN [49m[22m [36mv3.2.7 [39m[90m/home/runner/work/ballpark-hero/ballpark-hero[39m
+
+ [32m✓[39m src/test/saveKeeper.test.ts [2m([22m[2m35 tests[22m[2m)[22m[32m 158[2mms[22m[39m
+Browserslist: browsers data (caniuse-lite) is 16 months old. Please run:
+  npx update-browserslist-db@latest
+  Why you should do it regularly: https://github.com/browserslist/update-db#readme
+[90mstderr[2m | src/test/aussieRulesClubNames.test.tsx[2m > [22m[2mAussie Rules Manager club names (Round 1572)[2m > [22m[2m(i) a new career picks from the 18 AFL clubs by name, under the five 2026 ladder bands
+[22m[39mWarning: Missing `Description` or `aria-describedby={undefined}` for {DialogContent}.
+
+[90mstderr[2m | src/test/aussieRulesManagerBoard.test.tsx[2m > [22m[2mactual Aussie Rules Manager Board[2m > [22m[2mshows real shared rules and the worked example before any season starts, with reusable help
+[22m[39mWarning: Missing `Description` or `aria-describedby={undefined}` for {DialogContent}.
+Warning: Missing `Description` or `aria-describedby={undefined}` for {DialogContent}.
+
+[90mstdout[2m | src/test/aussieRulesClubNames.test.tsx[2m > [22m[2mAussie Rules Manager club names (Round 1572)[2m > [22m[2m(ii) a real club career prints only two sourced club names on every panel
+[22m[39mreal set pulled: {"header":5,"hub":3,"premier":2,"score":6,"events":87,"results":22,"ladder":90,"finals":4,"history":6,"draft":9}
+
+[90mstdout[2m | src/test/aussieRulesManager.test.ts[2m > [22m[2mfictional Aussie Rules manager engine[2m > [22m[2mmeasures stronger squads, counter tactics and rested player readiness against paired seeded match outcomes
+[22m[39mAussie manager pairedsquad:96 seeds, mean point gap25.625, block means26.813,26.563,23.500
+Aussie manager pairedtactics:96 seeds, mean point gap20.698, block means19.906,21.219,20.969
+Aussie manager pairedreadiness:96 seeds, mean point gap16.323, block means16.813,16.219,15.938
+
+ [32m✓[39m src/test/aussieRulesManager.test.ts [2m([22m[2m14 tests[22m[2m)[22m[33m 6354[2mms[22m[39m
+   [33m[2m✓[22m[39m fictional Aussie Rules manager engine[2m > [22mcreates six deterministic fictional clubs with216 unique valid people and legal23-player teams [33m 381[2mms[22m[39m
+   [33m[2m✓[22m[39m fictional Aussie Rules manager engine[2m > [22mderives every quarter and season score from real6/1 events, then produces an exact ten-game ladder and quiet league finish [33m 385[2mms[22m[39m
+   [33m[2m✓[22m[39m fictional Aussie Rules manager engine[2m > [22mmeasures stronger squads, counter tactics and rested player readiness against paired seeded match outcomes [33m 4609[2mms[22m[39m
+[90mstdout[2m | src/test/aussieRulesClubNames.test.tsx[2m > [22m[2mAussie Rules Manager club names (Round 1572)[2m > [22m[2m(iii) a career with no club set prints only its own invented names
+[22m[39minvented set pulled: {"header":5,"hub":3,"premier":2,"score":6,"events":87,"results":22,"ladder":90,"finals":4,"history":6,"draft":9}
+
+ [32m✓[39m src/test/aussieRulesClubNames.test.tsx [2m([22m[2m4 tests[22m[2m)[22m[33m 8111[2mms[22m[39m
+   [33m[2m✓[22m[39m Aussie Rules Manager club names (Round 1572)[2m > [22m(i) a new career picks from the 18 AFL clubs by name, under the five 2026 ladder bands [33m 382[2mms[22m[39m
+   [33m[2m✓[22m[39m Aussie Rules Manager club names (Round 1572)[2m > [22m(ii) a real club career prints only two sourced club names on every panel [33m 3528[2mms[22m[39m
+   [33m[2m✓[22m[39m Aussie Rules Manager club names (Round 1572)[2m > [22m(iii) a career with no club set prints only its own invented names [33m 3944[2mms[22m[39m
+ [32m✓[39m src/test/aussieRulesManagerBoard.test.tsx [2m([22m[2m10 tests[22m[2m)[22m[33m 8034[2mms[22m[39m
+   [33m[2m✓[22m[39m actual Aussie Rules Manager Board[2m > [22mshows real shared rules and the worked example before any season starts, with reusable help [33m 819[2mms[22m[39m
+   [33m[2m✓[22m[39m actual Aussie Rules Manager Board[2m > [22mchooses an unused interchange player and cancels another picker without save or selection changes [33m 324[2mms[22m[39m
+   [33m[2m✓[22m[39m actual Aussie Rules Manager Board[2m > [22moffers only same-role break swaps, commits original IDs and stops at the five-change game limit [33m 419[2mms[22m[39m
+   [33m[2m✓[22m[39m actual Aussie Rules Manager Board[2m > [22mfinishes all ten real rounds with exact ladder and one undefined-score completion, then restores quietly [33m 4418[2mms[22m[39m
+   [33m[2m✓[22m[39m actual Aussie Rules Manager Board[2m > [22mkeeps the actual season playable and finishes once when storage refuses every write [33m 1293[2mms[22m[39m
+ [32m✓[39m src/test/aussieRulesLeague.test.ts [2m([22m[2m6 tests[22m[2m)[22m[33m 4801[2mms[22m[39m
+   [33m[2m✓[22m[39m Aussie Rules Manager full season engine[2m > [22mreads back a real save in every phase of a season and refuses forged ones [33m 3538[2mms[22m[39m
+   [33m[2m✓[22m[39m useAussieRulesLeague[2m > [22mrecords one completion for each finished season and stays quiet when a finished season is restored [33m 1058[2mms[22m[39m
+[90mstderr[2m | src/test/aussieRulesLeagueBoard.test.tsx[2m > [22m[2mAussieRulesLeagueBoard[2m > [22m[2mopens an unfinished ten round season on the old board, and its new season goes to the full season menu
+[22m[39mWarning: Missing `Description` or `aria-describedby={undefined}` for {DialogContent}.
+
+ [32m✓[39m src/test/aussieRulesLeagueBoard.test.tsx [2m([22m[2m9 tests[22m[2m)[22m[33m 2854[2mms[22m[39m
+   [33m[2m✓[22m[39m AussieRulesLeagueBoard[2m > [22mopens the hub from the 18 club menu, and every box opens a panel with a way back [33m 752[2mms[22m[39m
+   [33m[2m✓[22m[39m AussieRulesLeagueBoard[2m > [22mshows the finals tile and the bracket once the finals start [33m 329[2mms[22m[39m
+   [33m[2m✓[22m[39m AussieRulesLeagueBoard[2m > [22mlifts the cup with the Grand Final score when you win the flag [33m 331[2mms[22m[39m
+   [33m[2m✓[22m[39m AussieRulesLeagueBoard[2m > [22mshows the premiership on the hub when you wrap up the season from the match panel [33m 345[2mms[22m[39m
+   [33m[2m✓[22m[39m AussieRulesLeagueBoard[2m > [22mrefuses a draft pick that would leave your list short of rucks, and says why [33m 555[2mms[22m[39m
+
+[2m Test Files [22m [1m[32m6 passed[39m[22m[90m (6)[39m
+[2m      Tests [22m [1m[32m78 passed[39m[22m[90m (78)[39m
+[2m   Start at [22m 20:55:17
+[2m   Duration [22m 15.55s[2m (transform 1.34s, setup 674ms, collect 3.43s, tests 30.31s, environment 4.11s, prepare 761ms)[22m
+

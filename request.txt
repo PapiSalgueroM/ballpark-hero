@@ -1,0 +1,26 @@
+tsc: node_modules/.bin/tsc --noEmit -p tsconfig.app.json
+afl: node scripts/simAflClubNames.mjs
+afl-long: AFL_NAMES_LONG=1 node scripts/simAflClubNames.mjs
+c-typo: AFL_NAMES_CONTROL=typo node scripts/simAflClubNames.mjs
+c-onesource: AFL_NAMES_CONTROL=onesource node scripts/simAflClubNames.mjs
+c-ladder: AFL_NAMES_CONTROL=ladder node scripts/simAflClubNames.mjs
+c-simdrift: AFL_NAMES_CONTROL=simdrift node scripts/simAflClubNames.mjs
+c-oldsave: AFL_NAMES_CONTROL=oldsave node scripts/simAflClubNames.mjs
+c-mixed: AFL_NAMES_CONTROL=mixed node scripts/simAflClubNames.mjs
+c-screen: AFL_NAMES_CONTROL=screen node scripts/simAflClubNames.mjs
+c-switchlost: AFL_NAMES_CONTROL=switchlost node scripts/simAflClubNames.mjs
+season: node scripts/simAussieRulesSeason.mjs
+leagueboard: node scripts/simAussieRulesLeagueBoard.mjs
+managerboard: node scripts/simAussieRulesManagerBoard.mjs
+homefront: node scripts/simHomeFront.mjs
+invented: node scripts/simInventedNames.mjs
+rival: node scripts/simNoRivalNames.mjs
+anchors: node scripts/simHarnessAnchors.mjs
+quotes: node scripts/simNoInventedQuotes.mjs
+conduct: node scripts/simNoInventedConduct.mjs
+trust: node scripts/simTrustCopy.mjs
+search: node scripts/simSiteSearch.mjs
+writes: node scripts/simWritesAreSent.mjs
+storage: node scripts/simStorageWrites.mjs
+guides: node scripts/simGuideHeadings.mjs
+vitest: node_modules/.bin/vitest run src/test/aussieRulesLeague.test.ts src/test/aussieRulesLeagueBoard.test.tsx src/test/saveKeeper.test.ts src/test/aussieRulesManagerBoard.test.tsx src/test/aussieRulesManager.test.ts src/test/aussieRulesClubNames.test.tsx --testTimeout=300000 --hookTimeout=120000
