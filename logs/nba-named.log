@@ -1,0 +1,9 @@
+   control named: the NBA keeps its lines as named rows, the shape before Round 1566
+FAIL: the harness threw before it finished: TypeError: Cannot read properties of undefined (reading 'SAS')
+    at nbaRecordBox (file:///home/runner/work/_temp/t-nba-named/dukb-nbastats-XvZKHx/bundle.mjs:1471:29)
+    at file:///home/runner/work/_temp/t-nba-named/dukb-nbastats-XvZKHx/bundle.mjs:1973:16
+    at file:///home/runner/work/_temp/t-nba-named/dukb-nbastats-XvZKHx/bundle.mjs:1689:7
+    at Array.forEach (<anonymous>)
+    at foPlayRound (file:///home/runner/work/_temp/t-nba-named/dukb-nbastats-XvZKHx/bundle.mjs:1687:12)
+    at Object.simRound (file:///home/runner/work/_temp/t-nba-named/dukb-nbastats-XvZKHx/bundle.mjs:1956:3)
+    at 

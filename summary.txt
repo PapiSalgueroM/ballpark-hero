@@ -1,0 +1,12 @@
+simNbaOpeningRatings exit=0 6s | NBA opening:normalized CRLF bindings, raw holds and owned-copy cleanup passed. These offline cases do not prove historical player ability, native UI, remote saves or all-
+vitest-open exit=0 10s |    Duration  9.04s (transform 3.07s, setup 216ms, collect 4.21s, tests 7.48s, environment 1.30s, prepare 459ms)
+nba-base exit=0 22s | simNbaSeasonStats: 84 checks passed over 10 seeded franchises and 3 seasons each. Every game adds up, the box takes nothing from the league, the awards follow their rules
+nba-named exit=2 0s |     at 
+nba-again exit=0 20s | simNbaSeasonStats: 83 checks passed over 10 seeded franchises and 3 seasons each. Every game adds up, the box takes nothing from the league, the awards follow their rules
+simNflSeasonStats exit=0 66s | simNflSeasonStats: 114 checks, 0 failed; section 1 skipped: LIFT_BASE is not set
+nfl-again exit=0 70s | simNflSeasonStats: 114 checks, 0 failed; section 1 skipped: LIFT_BASE is not set
+tsc exit=0 112s | 
+head-earned exit=0 23s | simNbaEarnedDraft: green.
+head-desk exit=0 38s | simNbaGmDesk: all seven checks passed (10 seeds x 10 seasons)
+nfl-base exit=0 69s | simNflSeasonStats: 114 checks, 0 failed; section 1 skipped: LIFT_BASE is not set
+head-board exit=0 136s | simNbaDraftBoard: green.
