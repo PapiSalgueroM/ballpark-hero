@@ -1207,11 +1207,6 @@ export const SOCCER_CONTENT_2: GameContentMap = {
         heading: "Rerolling thin assignments before typing",
         items: [
           "Reroll thin assignments before typing, knowing the spin can land somewhere worse.",
-        ],
-      },
-      {
-        heading: "Naming goalkeepers from small clubs",
-        items: [
           "Small club on the wheel? Goalkeepers are easy to name, elite wingers are not.",
         ],
       },
