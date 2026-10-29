@@ -1,0 +1,2 @@
+#!playwright
+base-press: git worktree add -f /tmp/bp 115c68092 >/dev/null 2>&1; ln -sfn "$PWD/node_modules" /tmp/bp/node_modules; cd /tmp/bp && node_modules/.bin/vite build > /tmp/bpb.log 2>&1 && { node scripts/lib/hostLikeServer.mjs dist 4174 > /tmp/bps.log 2>&1 & sleep 3; BASE=http://localhost:4174 SWEEP_BASE=http://localhost:4174 node scripts/playGmPress.mjs > /tmp/bpp.log 2>&1; e=$?; grep -m2 FAIL /tmp/bpp.log; echo "BASE playGmPress exit=$e | $(tail -1 /tmp/bpp.log)"; }
