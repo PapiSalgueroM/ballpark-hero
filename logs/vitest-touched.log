@@ -1,0 +1,43 @@
+
+[1m[46m RUN [49m[22m [36mv3.2.7 [39m[90m/home/runner/work/ballpark-hero/ballpark-hero[39m
+
+ [32m✓[39m src/test/playerBingoCategories.test.ts [2m([22m[2m10 tests[22m[2m)[22m[33m 395[2mms[22m[39m
+   [33m[2m✓[22m[39m Player Bingo categories[2m > [22mdeals supported varied boards with a distinct-player winning line in the first 60 reveals [33m 361[2mms[22m[39m
+ [32m✓[39m src/test/soccerCareerContracts.test.ts [2m([22m[2m23 tests[22m[2m)[22m[33m 428[2mms[22m[39m
+ [32m✓[39m src/test/soccerCareerLoyalty.engine.test.ts [2m([22m[2m17 tests[22m[2m)[22m[33m 505[2mms[22m[39m
+ [32m✓[39m src/test/soccerCareerLoyalty.test.ts [2m([22m[2m17 tests[22m[2m)[22m[32m 42[2mms[22m[39m
+[90mstdout[2m | src/test/soccerCareerLoyaltyUncut.test.ts[2m > [22m[2ma loyalty cut ends with its contract[2m > [22m[2mthe extension quotes the uncut wage, the same as the cash run, and the payout is a real gain
+[22m[39mloyalty uncut: 24 extension pairs in step, 15 payout pairs
+
+ [32m✓[39m src/test/playerBingoLoad.test.tsx [2m([22m[2m8 tests[22m[2m)[22m[33m 1831[2mms[22m[39m
+   [33m[2m✓[22m[39m Player Bingo owned load[2m > [22mkeeps a successful board playable and replays without another pool request [33m 1062[2mms[22m[39m
+[90mstdout[2m | src/test/soccerCareerLoyaltyUncut.test.ts[2m > [22m[2ma loyalty cut ends with its contract[2m > [22m[2mthe renewal when he lets the deal run down quotes the uncut wage as well
+[22m[39mloyalty uncut: 13 renewal pairs in step
+
+[90mstdout[2m | src/test/soccerCareerLoyaltyUncut.test.ts[2m > [22m[2ma wage that moves under the cut keeps the uncut wage in step[2m > [22m[2mContract Breakdown, both answers that move the wage: the next contract equals the cash run
+[22m[39mloyalty uncut: 16 Contract Breakdown pairs with a moved wage
+
+ [32m✓[39m src/test/soccerCareerLoyaltyUncut.test.ts [2m([22m[2m4 tests[22m[2m)[22m[33m 6299[2mms[22m[39m
+   [33m[2m✓[22m[39m a loyalty cut ends with its contract[2m > [22mthe extension quotes the uncut wage, the same as the cash run, and the payout is a real gain [33m 3689[2mms[22m[39m
+   [33m[2m✓[22m[39m a loyalty cut ends with its contract[2m > [22mthe renewal when he lets the deal run down quotes the uncut wage as well [33m 2483[2mms[22m[39m
+[90mstdout[2m | src/test/playerBingoBirthYear.test.ts[2m > [22m[2mPlayer Bingo age tiles band on birth year[2m > [22m[2mevery two-source man near the bands lands in the band his real birth year gives
+[22m[39mbingo birth year: 74 two-source men near the bands checked
+
+ [32m✓[39m src/test/playerBingoBirthYear.test.ts [2m([22m[2m2 tests[22m[2m)[22m[32m 26[2mms[22m[39m
+ [32m✓[39m src/test/soccerCareerLoyalty.review.test.tsx [2m([22m[2m5 tests[22m[2m)[22m[33m 535[2mms[22m[39m
+ [32m✓[39m src/test/eventChoiceAfterReload.test.ts [2m([22m[2m3 tests[22m[2m)[22m[32m 38[2mms[22m[39m
+ [32m✓[39m src/test/soccerCareerLoyaltyView.test.ts [2m([22m[2m2 tests[22m[2m)[22m[32m 35[2mms[22m[39m
+ [32m✓[39m src/test/playerBingoLineFeedback.test.tsx [2m([22m[2m7 tests[22m[2m)[22m[33m 6483[2mms[22m[39m
+   [33m[2m✓[22m[39m Player Bingo earned line feedback[2m > [22mannounces one added line as 100 while the actual total moves 100 to 200 [33m 1649[2mms[22m[39m
+   [33m[2m✓[22m[39m Player Bingo earned line feedback[2m > [22mannounces two intersection lines as 200 while the actual total moves 100 to 300 [33m 1030[2mms[22m[39m
+   [33m[2m✓[22m[39m Player Bingo earned line feedback[2m > [22mpreserves the first line choice banked 100 share and once-only completion [33m 527[2mms[22m[39m
+   [33m[2m✓[22m[39m Player Bingo earned line feedback[2m > [22mpreserves full blackout 1700 and original share and completion [33m 496[2mms[22m[39m
+   [33m[2m✓[22m[39m Player Bingo earned line feedback[2m > [22mannounces earned feedback then clears after 1800ms with static reduced-motion binding [33m 616[2mms[22m[39m
+   [33m[2m✓[22m[39m Player Bingo earned line feedback[2m > [22mpreserves wrong placement skip and final deck exhaustion accounting [33m 661[2mms[22m[39m
+   [33m[2m✓[22m[39m Player Bingo earned line feedback[2m > [22mclears pending feedback on replay and unmount without changing banked points [33m 1494[2mms[22m[39m
+
+[2m Test Files [22m [1m[32m11 passed[39m[22m[90m (11)[39m
+[2m      Tests [22m [1m[32m98 passed[39m[22m[90m (98)[39m
+[2m   Start at [22m 08:54:32
+[2m   Duration [22m 15.49s[2m (transform 4.52s, setup 1.17s, collect 13.20s, tests 16.62s, environment 7.53s, prepare 2.11s)[22m
+

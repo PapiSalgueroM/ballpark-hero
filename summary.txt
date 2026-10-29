@@ -1,0 +1,11 @@
+simSoccerCareerLoyalty exit=0 3s | Callbacks retained by location/arity; no cross-bundle closure-equivalence claim. Evidence: /home/runner/work/ballpark-hero/ballpark-hero/.sim-artifacts/soccer-loyalty-248
+simSoccerContractMoves exit=0 3s | simSoccerContractMoves: all full-save contract and club-move checks passed
+vitest-touched exit=0 16s |    Duration  15.49s (transform 4.52s, setup 1.17s, collect 13.20s, tests 16.62s, environment 7.53s, prepare 2.11s)
+simPlayerBingoCategories exit=0 43s | simPlayerBingoCategories: fixed proof passed; raw reports and changed-copy receipts retained.
+simPlayerBingoPool exit=1 3s | SUPABASE UNREACHABLE OR POOL TOO SMALL. NOTHING WAS CHECKED.
+simPlayerBingoLoad exit=0 5s | simPlayerBingoLoad: CRLF bindings proved, raw source bytes held, owned copies cleaned; fictional transport only, no browser or live calls.
+simNoRivalNames exit=0 20s | No rival product names found. 0 findings.
+tsc exit=0 114s | 
+simCareerAwardsNight exit=0 106s | simCareerAwardsNight: ALL 179 CHECKS PASSED
+simStorageWrites exit=0 2s | simStorageWrites: all green (owed: 12)
+simHarnessAnchors exit=0 61s | simHarnessAnchors: green. Every harness parses and none carries an unmatchable anchor.
