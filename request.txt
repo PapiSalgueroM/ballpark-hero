@@ -1,0 +1,15 @@
+default: node scripts/simTriviaBank.mjs
+ctl-short: TRIVIA_CONTROL=short node scripts/simTriviaBank.mjs
+armfile: echo "imports equal to main: [$(git diff --name-only 692590145 -- src/data/marketNamesakes.json src/lib/clearWinner.ts src/lib/dateUtils.ts src/lib/dealPlayers.ts)]" && git show 692590145:src/lib/triviaQuestionBank.ts > "$TMPDIR/base-bank.ts" && TRIVIA_ARM_FILE="$TMPDIR/base-bank.ts" node scripts/simTriviaBank.mjs
+tsc: node_modules/.bin/tsc --noEmit -p tsconfig.app.json
+access: node scripts/simAccessibility.mjs
+cfb: node scripts/simCfbSlate.mjs
+cmfix: node scripts/simCmLeagueFixtures.mjs
+mx: node scripts/simMissingElevenSources.mjs
+lux: node scripts/simNbaLuxuryTax.mjs
+nbass: node scripts/simNbaSeasonStats.mjs
+pso: node scripts/simPerfectSeasonOdds.mjs
+trust: node scripts/simTrustCopy.mjs
+rival: node scripts/simNoRivalNames.mjs
+dr: ONLY=sports-millionaire node scripts/simDailyReload.mjs
+namesakes: node scripts/genMarketNamesakes.mjs --check
