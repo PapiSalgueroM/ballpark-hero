@@ -127,3 +127,48 @@ describe('a loyalty cut ends with its contract', () => {
     expect(compared).toBeGreaterThanOrEqual(8);
   }, 300000);
 });
+
+/* Release BS fix, closing check: a wage that moves under the cut (Contract Breakdown, card 16)
+   moves the uncut wage by the same factor, and a renewal that lands exactly on the cut wage ends the
+   cut. Before it, the first fell back to the moved cut wage and the second kept quoting from the
+   old base. Same seed, same card, same answer on both runs; only the payout choice differs. */
+function breakdown(seed: number, mode: 'cash' | 'loyalty', choice: number) {
+  Math.random = seeded(seed);
+  const signed = E.acceptOffer(chooseLoyalty(fixture(), offer, 10000, mode), offer);
+  const card = E.getAllEvents(signed).find(e => e.id === 16);
+  if (!card || card.title !== 'Contract Breakdown!') throw new Error('card 16 must be Contract Breakdown');
+  const moved = E.applyEventChoice({ ...signed, phase: 'random_events', pendingEvents: [card, card] } as CareerState, choice, clubs);
+  return { signed: signed.weeklyWage, moved: moved.weeklyWage, ext: E.signExtension(moved).weeklyWage,
+    renewal: E.stayAtClub({ ...moved, contractYearsLeft: 0 }).weeklyWage };
+}
+describe('a wage that moves under the cut keeps the uncut wage in step', () => {
+  it('Contract Breakdown, both answers that move the wage: the next contract equals the cash run', () => {
+    let pairs = 0;
+    for (const choice of [0, 1]) for (let seed = 1; seed <= 12; seed += 1) {
+      const loyal = breakdown(seed, 'loyalty', choice), cash = breakdown(seed, 'cash', choice);
+      expect([loyal.signed, cash.signed]).toEqual([9000, 10000]);
+      if (loyal.moved === loyal.signed || cash.moved === cash.signed) continue;
+      pairs += 1;
+      expect({ seed, choice, ext: loyal.ext, renewal: loyal.renewal }).toEqual({ seed, choice, ext: cash.ext, renewal: cash.renewal });
+    }
+    console.log(`loyalty uncut: ${pairs} Contract Breakdown pairs with a moved wage`);
+    expect(pairs).toBeGreaterThanOrEqual(12);
+  });
+  it('a renewal that lands on the cut wage ends the cut', () => {
+    const renewals = (mode: 'cash' | 'loyalty') => {
+      Math.random = seeded(7);
+      const signed = E.acceptOffer(chooseLoyalty(fixture(), offer, 10000, mode), offer);
+      const seasons = signed.seasons.map(row => ({ ...row }));
+      const last = [...seasons].reverse().find(row => row.type === 'playing');
+      if (!last) throw new Error('a playing season is required');
+      last.rating = 6.5;
+      /* 31, rated 70, form under 6.7: the renewal multiplier is 0.90, so the first renewal from the
+         uncut EUR 10,000 is EUR 9,000, exactly the cut wage */
+      const first = E.stayAtClub({ ...signed, age: 31, overall: 70, seasons, contractYearsLeft: 0 });
+      const second = E.stayAtClub({ ...first, contractYearsLeft: 0 });
+      return [signed.weeklyWage, first.weeklyWage, second.weeklyWage];
+    };
+    expect(renewals('cash')).toEqual([10000, 9000, 8100]);
+    expect(renewals('loyalty')).toEqual([9000, 9000, 8100]);
+  });
+});

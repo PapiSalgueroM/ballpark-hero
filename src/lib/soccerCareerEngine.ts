@@ -8,7 +8,7 @@ import { cancelReducedRole, queueReducedRole, reducedRoleSwing, settleReducedRol
 import { personalGoalMilestoneNews } from './soccerCareerMilestone';
 import { soccerExtensionQuote, soccerTransferTerms, soccerWageDemand } from '@/lib/soccerCareerContracts';
 import { programmeEffects, prepareSoccerProgramme, settleSoccerProgramme, interruptSoccerProgramme, completeProgrammeLoanBuy, programmePromiseBroken } from './soccerCareerProgramme';
-import { canAcceptLoyaltyOffer, loyaltySigningWage, commitLoyaltySigning, settleLoyaltySeason, closeLoyaltyForRetirement, closeLoyaltyForExpiry, clearLoyaltyChoice, repairLoyalty, loyaltyUncutWage, type SoccerLoyaltyState } from './soccerCareerLoyalty';
+import { canAcceptLoyaltyOffer, loyaltySigningWage, commitLoyaltySigning, settleLoyaltySeason, closeLoyaltyForRetirement, closeLoyaltyForExpiry, clearLoyaltyChoice, repairLoyalty, loyaltyUncutWage, followLoyaltyWage, endLoyaltyCut, type SoccerLoyaltyState } from './soccerCareerLoyalty';
 import type { SoccerProgrammeState, SoccerProgrammeReceipt } from './soccerCareerProgramme';
 import { announceSoccerFarewell, farewellSeasonComplete, readSoccerFarewell, type SoccerFarewellPlan } from './soccerCareerFarewell';
 import { clearTransferBrief, previewTransferBrief, readTransferBrief, storeTransferBriefResult, transferBriefCandidates, type SoccerTransferBrief, type TransferBriefPreview } from './soccerCareerTransferBrief';
@@ -8166,7 +8166,7 @@ export function applyEventChoice(prev: CareerState, choiceIndex: number, clubs: 
     enterTransferWindow(skipped, clubs);
     return skipped;
   }
-  let s = choice.apply({ ...prev });
+  let s = followLoyaltyWage(prev, choice.apply({ ...prev }));
   s.lastEventId = event.id;
   s.pendingEvents = s.pendingEvents.slice(1);
   s.overall = calcOverall(s, s.position);
@@ -8221,6 +8221,7 @@ export function stayAtClub(prev: CareerState): CareerState {
     const quote = soccerExtensionQuote({ ...s, weeklyWage: loyaltyUncutWage(s) }, 'renewal');
     s.contractYearsLeft = quote.contractYears ?? rand(2, 4);
     s.weeklyWage = quote.weeklyWage;
+    Object.assign(s, endLoyaltyCut(prev, s));
     s.events = [...s.events, `📝 Renewed contract with ${s.currentClub} for ${s.contractYearsLeft} ${s.contractYearsLeft === 1 ? 'year' : 'years'}`];
   }
   return s;
@@ -8235,6 +8236,7 @@ export function signExtension(prev: CareerState): CareerState {
   const extraYears = quote.contractYears ?? rand(2, 4);
   s.contractYearsLeft = extraYears;
   s.weeklyWage = quote.weeklyWage;
+  Object.assign(s, endLoyaltyCut(prev, s));
   s.transferSituation = null; s.pendingLoanOffers = null; s.phase = "playing";
   s.events = [...s.events, `📝 Signed ${extraYears}-year extension with ${s.currentClub} (${formatWage(s.weeklyWage)})`];
   return s;

@@ -19,6 +19,9 @@ export interface LoyaltyDeal {
   baseWeeklyWage: number; weeklyWage: number; bonusEuros: number;
   completed: number; lastYear: number; status: 'active' | 'paid' | 'forfeited'; paidEuros: number;
   reason?: 'move' | 'retired' | 'expiry' | 'gap';
+  /* Release BS fix: set only once his wage moved under this deal's cut. wageNow is the cut wage he is
+     on now (0 once a later contract at the club replaced it), uncutNow the same wage without the cut. */
+  wageNow?: number; uncutNow?: number;
 }
 export interface SoccerLoyaltyState { v: 1; deals: LoyaltyDeal[]; pending?: LoyaltyQuote }
 
@@ -136,10 +139,33 @@ function close<T extends LoyaltyCareer>(state: T, reason: LoyaltyDeal['reason'])
 /* Release BS fix: the 10% cut is a term of the loyalty contract, not of the player. While he is
    still on that cut wage at the club, a later contract there (the extension, or the renewal when
    he stays) quotes from the wage he would have had without it. */
-export function loyaltyUncutWage(state: LoyaltyCareer): number {
+function latestHere(state: LoyaltyCareer): LoyaltyDeal | undefined {
   const deals = readLoyalty(state)?.deals.filter(old => old.club === state.currentClub) ?? [];
-  const deal = deals[deals.length - 1];
-  return deal && deal.weeklyWage === state.weeklyWage ? deal.baseWeeklyWage : state.weeklyWage;
+  return deals[deals.length - 1];
+}
+export function loyaltyUncutWage(state: LoyaltyCareer): number {
+  const deal = latestHere(state);
+  if (!deal) return state.weeklyWage;
+  const cut = deal.wageNow ?? deal.weeklyWage, uncut = deal.uncutNow ?? deal.baseWeeklyWage;
+  return finite(cut) && cut > 0 && cut === state.weeklyWage && finite(uncut) && uncut > 0 ? uncut : state.weeklyWage;
+}
+/* Release BS fix: an event that moves his wage at the club while he is on the cut (Contract
+   Breakdown, a pay rise, a pay cut) moves the uncut wage by the same factor, so a later contract
+   still quotes from the wage without the cut. */
+export function followLoyaltyWage<T extends LoyaltyCareer>(prev: LoyaltyCareer, next: T): T {
+  const uncut = loyaltyUncutWage(prev);
+  if (uncut === prev.weeklyWage || next.currentClub !== prev.currentClub || next.weeklyWage === prev.weeklyWage
+    || !finite(next.weeklyWage) || next.weeklyWage <= 0) return next;
+  const ledger = readLoyalty(next), deal = latestHere(next);
+  if (!ledger || !deal) return next;
+  return replaceDeal(next, ledger, { ...deal, wageNow: next.weeklyWage, uncutNow: Math.round(uncut * next.weeklyWage / prev.weeklyWage) });
+}
+/* Release BS fix: a new contract at the club (the extension, or the renewal when he stays) replaces
+   the cut one. Only a new wage that lands exactly on the cut wage needs saying so. */
+export function endLoyaltyCut<T extends LoyaltyCareer>(prev: LoyaltyCareer, next: T): T {
+  if (loyaltyUncutWage(prev) === prev.weeklyWage || next.currentClub !== prev.currentClub || next.weeklyWage !== prev.weeklyWage) return next;
+  const ledger = readLoyalty(next), deal = latestHere(next);
+  return ledger && deal ? replaceDeal(next, ledger, { ...deal, wageNow: 0, uncutNow: 0 }) : next;
 }
 export function loyaltyForfeitEuros(state: LoyaltyCareer, employer: string): number {
   const ledger = readLoyalty(state), deal = ledger && active(ledger);
