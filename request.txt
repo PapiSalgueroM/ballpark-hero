@@ -1,0 +1,5 @@
+tsc: node_modules/.bin/tsc --noEmit -p tsconfig.app.json
+vitest-nfl: node_modules/.bin/vitest run src/lib/nflSeasonStats.test.ts src/components/front-office/FrontOfficeSeasonStats.test.tsx src/components/front-office/FrontOfficeLazyDesk.test.tsx src/components/front-office-shared/FrontOfficeSeasonClose.test.tsx --testTimeout=300000 --hookTimeout=120000
+simNflSeasonStats: node scripts/simNflSeasonStats.mjs
+nfl-rookieall: NFL_STATS_CONTROL=rookieall node scripts/simNflSeasonStats.mjs
+simFoLazyDesk: node scripts/simFoLazyDesk.mjs

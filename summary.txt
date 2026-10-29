@@ -1,0 +1,5 @@
+vitest-nfl exit=0 15s |    Duration  13.49s (transform 5.27s, setup 627ms, collect 12.51s, tests 14.60s, environment 3.06s, prepare 1.27s)
+simNflSeasonStats exit=0 74s | simNflSeasonStats: 114 checks, 0 failed; section 1 skipped: LIFT_BASE is not set
+nfl-rookieall exit=1 67s | simNflSeasonStats: 114 checks, 2 failed (control rookieall); section 1 skipped: LIFT_BASE is not set
+simFoLazyDesk exit=0 28s | simFoLazyDesk: all checks passed
+tsc exit=0 105s | 
