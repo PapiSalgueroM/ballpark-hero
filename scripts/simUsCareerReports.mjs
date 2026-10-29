@@ -40,6 +40,10 @@
    none empty. Controls on seed 1569: blind 266 findings, nocredit 2,643, alwayslast 968. The rules C1, C2,
    C3 (the level part) and B1 to B3 are exact, so they carry no band; the one band is CRIT_FLOOR, about half
    the smallest measured count, so the gate cannot pass by deleting criticism. Each seed runs in 2 to 3 s.
+   Fix run, measured on a GitHub runner (rc r1569-fx-a, head 57a0153cc, seed 1569 and 9 at 150 careers, 1569 at
+   400): B4 called 40 of 40 late careers a sport last, each exactly at its cap (NFL 19, NBA 21, MLB 21, NHL 22
+   seasons); C5 0 findings; controls noseason 164 findings (B4 only), titlecredit 223 and creditlow 1,086 (C5
+   only), and the three old controls unchanged (blind 266, nocredit 2,643; alwayslast 4,128 now, B2 and B4).
    Run: node scripts/simUsCareerReports.mjs [careers per sport] (SIM_SEED picks the fleet). */
 import os from 'node:os';
 import path from 'node:path';
