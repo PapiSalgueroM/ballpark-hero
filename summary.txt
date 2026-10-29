@@ -1,0 +1,11 @@
+nhlfull exit=1 40s | simGmCareer: 4 failure(s) in 5, 6, 9
+nfl9a exit=1 70s | simGmCareer: 2 failure(s) in 9
+nfl9b exit=1 99s | simGmCareer: 2 failure(s) in 9
+nhl9a exit=1 11s | simGmCareer: 2 failure(s) in 9
+nfl9c exit=1 79s | simGmCareer: 2 failure(s) in 9
+nhl9b exit=1 11s | simGmCareer: 2 failure(s) in 9
+nhl9c exit=1 10s | simGmCareer: 2 failure(s) in 9
+nhl9h exit=1 10s | simGmCareer: 2 failure(s) in 9
+nhl6h exit=1 4s | simGmCareer: 1 failure(s) in 6
+nhl6a exit=1 4s | simGmCareer: 1 failure(s) in 6
+nfl9h exit=1 82s | simGmCareer: 2 failure(s) in 9

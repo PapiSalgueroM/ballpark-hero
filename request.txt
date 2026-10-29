@@ -1,0 +1,11 @@
+nhlfull: SIM_GM_CAREER_SPORT=nhl node scripts/simGmCareer.mjs
+nfl9a: SIM_GM_CAREER_ONLY=9 SIM_GM_CAREER_MEASURE_SEEDS=$(seq -s, 1 20) node scripts/simGmCareer.mjs
+nfl9b: SIM_GM_CAREER_ONLY=9 SIM_GM_CAREER_MEASURE_SEEDS=$(seq -s, 21 40) node scripts/simGmCareer.mjs
+nfl9c: SIM_GM_CAREER_ONLY=9 SIM_GM_CAREER_MEASURE_SEEDS=$(seq -s, 41 60) node scripts/simGmCareer.mjs
+nfl9h: SIM_GM_CAREER_ONLY=9 SIM_GM_CAREER_MEASURE_SEEDS=$(seq -s, 61 80) node scripts/simGmCareer.mjs
+nhl9a: SIM_GM_CAREER_SPORT=nhl SIM_GM_CAREER_ONLY=9 SIM_GM_CAREER_MEASURE_SEEDS=$(seq -s, 1 40) node scripts/simGmCareer.mjs
+nhl9b: SIM_GM_CAREER_SPORT=nhl SIM_GM_CAREER_ONLY=9 SIM_GM_CAREER_MEASURE_SEEDS=$(seq -s, 41 80) node scripts/simGmCareer.mjs
+nhl9c: SIM_GM_CAREER_SPORT=nhl SIM_GM_CAREER_ONLY=9 SIM_GM_CAREER_MEASURE_SEEDS=$(seq -s, 81 120) node scripts/simGmCareer.mjs
+nhl9h: SIM_GM_CAREER_SPORT=nhl SIM_GM_CAREER_ONLY=9 SIM_GM_CAREER_MEASURE_SEEDS=$(seq -s, 121 160) node scripts/simGmCareer.mjs
+nhl6h: SIM_GM_CAREER_SPORT=nhl SIM_GM_CAREER_ONLY=6 SIM_GM_CAREER_AWAY_SEEDS=$(seq -s, 61 80) node scripts/simGmCareer.mjs
+nhl6a: SIM_GM_CAREER_SPORT=nhl SIM_GM_CAREER_ONLY=6 node scripts/simGmCareer.mjs

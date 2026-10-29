@@ -1,0 +1,17 @@
+4) the market after real firings: every club graded as a GM's club, the first out of work screen and the next two
+   MEASURE 40 seeds x 12 seasons: 539 firings
+   first screen with the host's rule: offers 539 (100.0%), quiet 0 (0.0%), closed 0 (0.0%); first calls 300
+   first screen on the raw feed:      offers 239 (44.3%), quiet 231 (42.9%), closed 69 (12.8%)
+   of the screens with offers, last calls: host 112 of 539 (20.8%), raw 43 of 239 (18.0%)
+   re hired within three feeds (firings with two seasons left to read, 440): host 440 (100.0%), raw 266 (60.5%); 250 later feeds read
+9) the bands: the firing rate, the offers, re hiring, the closed share and the XP pace, seed by seed against the calibrated bands
+   S9 nhl seeds 81-120: fireRate mean 0.0351 sd 0.0049 se 0.0008 min 0.0234 max 0.0417 over 40 seeds
+   S9 nhl seeds 81-120: twoPlus mean 0.0475 sd 0.0471 se 0.0075 min 0.0000 max 0.1333 over 40 seeds
+   S9 nhl seeds 81-120: meanOffers mean 1.0516 sd 0.0533 se 0.0084 min 1.0000 max 1.1818 over 40 seeds
+   S9 nhl seeds 81-120: hired3 mean 1.0000 sd 0.0000 se 0.0000 min 1.0000 max 1.0000 over 40 seeds
+   S9 nhl seeds 81-120: closedNext mean 0.4943 sd 0.1479 se 0.0234 min 0.0833 max 0.8182 over 40 seeds
+   S9 nhl seeds 81-120: xpMean mean 121.5572 sd 1.1890 se 0.1880 min 118.5208 max 124.3229 over 40 seeds
+   S9 nhl seeds 81-120: xpMedian 104 over 15360 graded club seasons; hostXpHelp's .500 season that meets the ask pays 110 (ratio 0.945)
+  FAIL [9]: no calibrated bands for the nhl row (S9_BANDS)
+  FAIL [9]: no measured pace band (S9_PACE)
+simGmCareer: 2 failure(s) in 9
