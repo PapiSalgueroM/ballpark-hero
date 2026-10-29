@@ -1,4 +1,5 @@
 import { choosePostRetirement } from './soccerCareerEngine';
+import { adjustClubsForYear } from './careerEras';
 import type { CareerState, ClubData } from './soccerCareerEngine';
 
 export interface CoachingStartQuote {
@@ -39,9 +40,16 @@ function context(state: CareerState): string {
 function seal(state: CareerState, club: ClubData): string {
   return JSON.stringify([context(state), club.id, club.name, club.country, club.league, club.tier, club.color]);
 }
+/* Release BS fix: the clubs that exist in his first manager season, with their tier that year,
+   the same year choosePostRetirement gives the job (the last season plus one). */
+function eraPool(state: CareerState, clubs: readonly ClubData[]): ClubData[] {
+  const year = (state.seasons[state.seasons.length - 1]?.year ?? 2024) + 1;
+  return adjustClubsForYear(clubs.filter(club => !!club && typeof club === 'object'), year);
+}
 /** Recorded coursework offers a destination choice, not a licence or rating bonus. */
 export function coachingStartChoices(state: CareerState, clubs: readonly ClubData[]): readonly CoachingStartQuote[] {
   if (!firstEntry(state)) return [];
+  clubs = eraPool(state, clubs);
   const ids = new Map<string, number>();
   const names = new Map<string, number>();
   for (const club of clubs) if (club && typeof club.id === 'string') ids.set(club.id, (ids.get(club.id) ?? 0) + 1);
@@ -61,7 +69,7 @@ export function startCoachingAppointment(state: CareerState, clubs: readonly Clu
     && candidate.seal === request.seal && candidate.clubName === request.clubName
     && candidate.country === request.country && candidate.level === request.level);
   if (!quote) return state;
-  const current = clubs.filter(club => club && club.id === quote.clubId);
+  const current = eraPool(state, clubs).filter(club => club && club.id === quote.clubId);
   if (current.length !== 1 || !starter(current[0]) || seal(state, current[0]) !== quote.seal) return state;
   return choosePostRetirement(state, 'manager', [current[0]]);
 }
