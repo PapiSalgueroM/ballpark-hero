@@ -1,0 +1,107 @@
+name: Soccer Career manager focus first positive
+on:
+  push:
+    branches: [codex/sc-manager-focus-positive-20261029]
+    paths:
+      - .github/workflows/sc-manager-focus-positive.yml
+      - scripts/qa/soccerManagerFocusPositive.mjs
+      - scripts/qa/buildSoccerManagerFocusFixedObserver.mjs
+      - scripts/qa/buildSoccerManagerJobReviewObserver.mjs
+      - src/test/soccerCareerManagerFocus.test.tsx
+      - src/test/soccerCareerManagerFocus.fixed.consumer.test.tsx
+      - src/test/fixtures/soccerManagerFocus.before.json
+      - 'qa/sc-manager-season-focus-v1/**'
+permissions:
+  contents: read
+concurrency:
+  group: sc-manager-focus-positive-${{ github.sha }}
+  cancel-in-progress: false
+defaults:
+  run:
+    shell: bash
+jobs:
+  first-positive:
+    runs-on: ubuntu-latest
+    timeout-minutes: 60
+    env:
+      CI: '1'
+      SIM_NETWORK: offline
+      CAREER_SEASON_LOCAL_ONLY: '1'
+      SC_MANAGER_FOCUS_POSITIVE_OUT: ${{ github.workspace }}/manager-focus-positive-artifacts
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.sha }}
+          fetch-depth: 2
+          persist-credentials: false
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: npm
+      - name: Exact frozen pre-release family and selected delta
+        run: |
+          set -euo pipefail
+          test "$GITHUB_REF_NAME" = codex/sc-manager-focus-positive-20261029
+          test "$(git rev-parse HEAD)" = "$GITHUB_SHA"
+          test "$(git rev-list --parents -n 1 HEAD | wc -w)" = 2
+          test "$(git rev-parse HEAD^)" = 097589b9a7ef3d5ad10d55e6e463f6031eba391a
+          test "$(git rev-parse HEAD^^{tree})" = 6e70e9cc58ad8a72a6e88de7f1b0b2bbb5cf3b2f
+          mkdir -p "$SC_MANAGER_FOCUS_POSITIVE_OUT"
+          git rev-parse HEAD HEAD^{tree} > "$SC_MANAGER_FOCUS_POSITIVE_OUT/head-tree.txt"
+          git archive --format=tar HEAD > "$SC_MANAGER_FOCUS_POSITIVE_OUT/source.tar"
+          git ls-tree -r HEAD > "$SC_MANAGER_FOCUS_POSITIVE_OUT/source-tree.txt"
+          git ls-files -z | sort -z | xargs -0 sha256sum > "$SC_MANAGER_FOCUS_POSITIVE_OUT/tracked-before.sha256"
+          printf '%s  %s\n' 02600206c23c1855f92f80e9d73c929a3bde7ca4577bfe14788ce05ffc3fceaa qa/sc-manager-season-focus-v1/POSITIVE-SOURCE.json | sha256sum --check
+          printf '%s  %s\n' 0d65f59168f403024e0ded52cbd1019ca3dcc8360e3a76eabb2f6f2d9fdd9c20 scripts/qa/soccerManagerFocusPositive.mjs | sha256sum --check
+          node --check scripts/qa/buildSoccerManagerFocusFixedObserver.mjs
+          node --check scripts/qa/buildSoccerManagerJobReviewObserver.mjs
+          node --check scripts/qa/soccerManagerFocusPositive.mjs
+          node scripts/qa/soccerManagerFocusPositive.mjs source > "$SC_MANAGER_FOCUS_POSITIVE_OUT/source-pins.log" 2>&1
+          cat "$SC_MANAGER_FOCUS_POSITIVE_OUT/source-pins.log"
+          git diff --name-only HEAD^ HEAD | sort > "$SC_MANAGER_FOCUS_POSITIVE_OUT/changed-paths.txt"
+          diff -u <(node -e 'const fs=require("fs");console.log(JSON.parse(fs.readFileSync("qa/sc-manager-season-focus-v1/POSITIVE-SOURCE.json")).allowedPaths.sort().join("\n"))') "$SC_MANAGER_FOCUS_POSITIVE_OUT/changed-paths.txt"
+          git diff --name-status HEAD^ HEAD > "$SC_MANAGER_FOCUS_POSITIVE_OUT/changed-status.txt"
+          test "$(grep -c '^M' "$SC_MANAGER_FOCUS_POSITIVE_OUT/changed-status.txt")" = 5
+          test "$(grep -c '^A' "$SC_MANAGER_FOCUS_POSITIVE_OUT/changed-status.txt")" = 12
+          test "$(git ls-files | wc -l)" = 5440
+      - name: Install locked dependencies
+        run: |
+          set -euo pipefail
+          echo '127.0.0.1 flawuiqbvjobmkfkauhw.supabase.co' | sudo tee -a /etc/hosts
+          npm ci > "$SC_MANAGER_FOCUS_POSITIVE_OUT/npm-ci.log" 2>&1
+          cat "$SC_MANAGER_FOCUS_POSITIVE_OUT/npm-ci.log"
+      - name: Real application types
+        run: |
+          set -euo pipefail
+          NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node_modules/.bin/tsc --noEmit -p tsconfig.app.json > "$SC_MANAGER_FOCUS_POSITIVE_OUT/types.log" 2>&1
+          cat "$SC_MANAGER_FOCUS_POSITIVE_OUT/types.log"
+      - name: First positive cases, held no-environment consumer and copied refusals
+        run: |
+          set -euo pipefail
+          set +e
+          NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/qa/soccerManagerFocusPositive.mjs healthy > "$SC_MANAGER_FOCUS_POSITIVE_OUT/positive.log" 2>&1
+          raw=$?
+          set -e
+          printf '%s\n' "$raw" > "$SC_MANAGER_FOCUS_POSITIVE_OUT/positive.exit"
+          cat "$SC_MANAGER_FOCUS_POSITIVE_OUT/positive.log"
+          test "$raw" = 0
+          grep -Fx "MANAGER_FOCUS_POSITIVE: 23 actual passed, 4 held no-env compatibility passed, 64 default pairs, 256 outcome triples, 16 COPIED guards, source held; PRE-BS first positive only" "$SC_MANAGER_FOCUS_POSITIVE_OUT/positive.log"
+      - name: Every tracked canonical and QA source held
+        if: always()
+        run: |
+          set -euo pipefail
+          git ls-files -z | sort -z | xargs -0 sha256sum > "$SC_MANAGER_FOCUS_POSITIVE_OUT/tracked-final.sha256"
+          diff -u "$SC_MANAGER_FOCUS_POSITIVE_OUT/tracked-before.sha256" "$SC_MANAGER_FOCUS_POSITIVE_OUT/tracked-final.sha256"
+          sha256sum --check "$SC_MANAGER_FOCUS_POSITIVE_OUT/tracked-before.sha256" > "$SC_MANAGER_FOCUS_POSITIVE_OUT/tracked-held.log"
+          git status --porcelain --untracked-files=no > "$SC_MANAGER_FOCUS_POSITIVE_OUT/tracked-status.txt"
+          test ! -s "$SC_MANAGER_FOCUS_POSITIVE_OUT/tracked-status.txt"
+          git diff --exit-code HEAD
+      - name: Retain original evidence including failure
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: sc-manager-focus-positive-${{ github.run_id }}-${{ github.run_attempt }}
+          path: manager-focus-positive-artifacts/
+          if-no-files-found: error
+          retention-days: 14
+

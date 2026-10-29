@@ -1,5 +1,6 @@
 import { advanceManagerSeason, managerNextSeasonYear, type CareerState, type ClubData, type ManagerState } from './soccerCareerEngine';
 import { leagueKeyInYear } from './soccerCareerLeague';
+import { chooseManagerSeasonFocus, type ManagerSeasonFocusChoice } from './soccerCareerManagerFocus';
 
 type Employment = {
   club: string; clubTier: number; hasLeague: boolean; league?: string;
@@ -85,6 +86,10 @@ export function setManagerJobReview(state: CareerState, clubs: ClubData[], enabl
   if (enabled) next.managerJobReview = { version: 1, enabled: true };
   else delete next.managerJobReview;
   return next;
+}
+export function setManagerSeasonFocus(state: CareerState, clubs: ClubData[], choice: ManagerSeasonFocusChoice): CareerState {
+  if (readManagerJobReview(state, clubs)?.pending) return state;
+  return chooseManagerSeasonFocus(state, choice);
 }
 export function advanceReviewedManagerSeason(state: CareerState, clubs: ClubData[]): CareerState {
   const review = readManagerJobReview(state, clubs);

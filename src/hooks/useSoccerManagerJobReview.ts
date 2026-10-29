@@ -1,6 +1,7 @@
 import { useCallback, useLayoutEffect, useRef, type Dispatch, type SetStateAction } from 'react';
 import type { CareerState, ClubData } from '@/lib/soccerCareerEngine';
-import { advanceReviewedManagerSeason, resolveManagerJob, setManagerJobReview, type ManagerJobChoice, type ManagerJobQuote } from '@/lib/soccerCareerManagerJobReview';
+import { advanceReviewedManagerSeason, resolveManagerJob, setManagerJobReview, setManagerSeasonFocus, type ManagerJobChoice, type ManagerJobQuote } from '@/lib/soccerCareerManagerJobReview';
+import type { ManagerSeasonFocusChoice } from '@/lib/soccerCareerManagerFocus';
 
 export function useSoccerManagerJobReview(career: CareerState | null, clubs: ClubData[], setCareer: Dispatch<SetStateAction<CareerState | null>>) {
   const committed = useRef<{ career: CareerState | null; clubs: ClubData[] } | null>(null);
@@ -19,5 +20,6 @@ export function useSoccerManagerJobReview(career: CareerState | null, clubs: Clu
   const advance = useCallback(() => commit(current => advanceReviewedManagerSeason(current, clubs)), [commit, clubs]);
   const setEnabled = useCallback((enabled: boolean) => commit(current => setManagerJobReview(current, clubs, enabled)), [commit, clubs]);
   const resolve = useCallback((quote: ManagerJobQuote, choice: ManagerJobChoice) => commit(current => resolveManagerJob(current, clubs, quote, choice)), [commit, clubs]);
-  return { advance, setEnabled, resolve };
+  const setFocus = useCallback((choice: ManagerSeasonFocusChoice) => commit(current => setManagerSeasonFocus(current, clubs, choice)), [commit, clubs]);
+  return { advance, setEnabled, resolve, setFocus };
 }
