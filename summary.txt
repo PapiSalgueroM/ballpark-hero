@@ -1,0 +1,3 @@
+probe-head exit=0 9s |    Duration  6.44s (transform 2.59s, setup 95ms, collect 3.61s, tests 1.58s, environment 419ms, prepare 238ms)
+vt-fixed exit=0 21s |    Duration  19.67s (transform 4.06s, setup 619ms, collect 12.30s, tests 18.38s, environment 2.48s, prepare 850ms)
+tsc exit=0 71s | 

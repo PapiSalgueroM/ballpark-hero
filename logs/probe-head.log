@@ -1,0 +1,23 @@
+
+ RUN  v3.2.7 /tmp/ph
+
+Browserslist: browsers data (caniuse-lite) is 16 months old. Please run:
+  npx update-browserslist-db@latest
+  Why you should do it regularly: https://github.com/browserslist/update-db#readme
+stdout | src/test/probeUsStale.test.tsx > Start over leaves no screen of the old career behind > leak-intl: Start over on the national team result, then Enter the draft
+PROBE leak-intl new career on the save: Trey Buckets, age 19, year 2026, 0 seasons, intl null; the screen reads:  Start overTrey Buckets · PGAtlanta Hawks2026 · age 19OVR 69$2.5M x4🪑 Second unit @keyframes cmRise { 0% { opacity: 0; transform: translateY(7px); } 100% { opacity: 1; transform: translateY(0); } } .cm-rise { opacity: 0; animation: cmRise 0.45s ease-out forwards; } @keyframes cmSlam { 0% { opacity: 0; transform: scale(1.6); } 60% { opacity: 1; transform: scale(0.94); } 100% { opacity: 1; transfor
+
+stdout | src/test/probeUsStale.test.tsx > Start over leaves no screen of the old career behind > leak-curtain: Start over on the season curtain, then Enter the draft
+PROBE curtain before Start over:  Start over @keyframes cmRise { 0% { opacity: 0; transform: translateY(7px); } 100% { opacity: 1; transform: translateY(0); } } .cm-rise { opacity: 0; animation: cmRise 0.45s ease-out forwards; } @keyframes cmSlam { 0% { opacity: 0; transform: scale(1.6); } 60% { opacity: 1; transform: scale(0.94); } 100% { opacity: 1; transform: scale(1); } } .cm-slam { opacity: 0; animation: cmSlam 0.4s cubic-be
+
+stdout | src/test/probeUsStale.test.tsx > Start over leaves no screen of the old career behind > leak-curtain: Start over on the season curtain, then Enter the draft
+PROBE leak-curtain new career on the save: Trey Buckets, age 19, 0 seasons; the screen's curtain reads: (none)
+
+ ✓ src/test/probeUsStale.test.tsx (4 tests) 1575ms
+   ✓ Start over leaves no screen of the old career behind > leak-intl: Start over on the national team result, then Enter the draft  915ms
+
+ Test Files  1 passed (1)
+      Tests  4 passed (4)
+   Start at  21:19:44
+   Duration  6.44s (transform 2.59s, setup 95ms, collect 3.61s, tests 1.58s, environment 419ms, prepare 238ms)
+

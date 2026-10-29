@@ -1,0 +1,76 @@
+
+ RUN  v3.2.7 /home/runner/work/ballpark-hero/ballpark-hero
+
+Browserslist: browsers data (caniuse-lite) is 16 months old. Please run:
+  npx update-browserslist-db@latest
+  Why you should do it regularly: https://github.com/browserslist/update-db#readme
+stdout | src/test/usCareerStartOverClears.test.tsx > Start over leaves no screen of the old career behind > leak-intl: Start over on the national team result, then Enter the draft
+PROBE leak-intl new career on the save: Trey Buckets, age 19, year 2026, 0 seasons, intl null; the screen reads:  Start overTrey Buckets · PGAtlanta Hawks2026 · age 19OVR 69$2.5M x4🪑 Second unit @keyframes cmRise { 0% { opacity: 0; transform: translateY(7px); } 100% { opacity: 1; transform: translateY(0); } } .cm-rise { opacity: 0; animation: cmRise 0.45s ease-out forwards; } @keyframes cmSlam { 0% { opacity: 0; transform: scale(1.6); } 60% { opacity: 1; transform: scale(0.94); } 100% { opacity: 1; transfor
+
+stdout | src/test/usCareerStartOverClears.test.tsx > Start over leaves no screen of the old career behind > leak-curtain: Start over on the season curtain, then Enter the draft
+PROBE curtain before Start over:  Start over @keyframes cmRise { 0% { opacity: 0; transform: translateY(7px); } 100% { opacity: 1; transform: translateY(0); } } .cm-rise { opacity: 0; animation: cmRise 0.45s ease-out forwards; } @keyframes cmSlam { 0% { opacity: 0; transform: scale(1.6); } 60% { opacity: 1; transform: scale(0.94); } 100% { opacity: 1; transform: scale(1); } } .cm-slam { opacity: 0; animation: cmSlam 0.4s cubic-be
+
+stdout | src/test/usCareerStartOverClears.test.tsx > Start over leaves no screen of the old career behind > leak-curtain: Start over on the season curtain, then Enter the draft
+PROBE leak-curtain new career on the save: Trey Buckets, age 19, 0 seasons; the screen's curtain reads: (none)
+
+ ✓ src/test/usCareerStartOverClears.test.tsx (4 tests) 1491ms
+   ✓ Start over leaves no screen of the old career behind > leak-intl: Start over on the national team result, then Enter the draft  742ms
+   ✓ Start over leaves no screen of the old career behind > control-curtain: Continue first, then Start over and Enter the draft  381ms
+stderr | src/test/usCareerIntlBoard.test.tsx > the board fixture's fixed NBA saves with the bind mounted > draw the board they drew without it where no call is met, and a raised save meets the beat
+Warning: A suspended resource finished loading inside a test, but the event was not wrapped in act(...).
+
+When testing, code that resolves suspended data should be wrapped into act(...):
+
+act(() => {
+  /* finish loading suspended data */
+});
+/* assert on the output */
+
+This ensures that you're testing the behavior the user would see in the browser. Learn more at https://reactjs.org/link/wrap-tests-with-act
+
+ ✓ src/test/xiWingbackFit.test.ts (6 tests) 13ms
+stdout | src/test/usCareerIntlBoard.test.tsx > the board fixture's fixed NBA saves with the bind mounted > draw the board they drew without it where no call is met, and a raised save meets the beat
+usCareerIntlBoard: 19 fixed NBA fixture saves meet no call and draw the same board; 0 meet one
+
+stderr | src/test/usCareerIntlBoard.test.tsx > the board fixture's fixed NBA saves with the bind mounted > draw the board they drew without it where no call is met, and a raised save meets the beat
+Warning: An update to UsCareerBoard inside a test was not wrapped in act(...).
+
+When testing, code that causes React state updates should be wrapped into act(...):
+
+act(() => {
+  /* fire events that update state */
+});
+/* assert on the output */
+
+This ensures that you're testing the behavior the user would see in the browser. Learn more at https://reactjs.org/link/wrap-tests-with-act
+    at UsCareerBoard (/home/runner/work/ballpark-hero/ballpark-hero/src/components/us-career/UsCareerBoard.tsx:166:26)
+    at Router (file:///home/runner/work/ballpark-hero/ballpark-hero/node_modules/react-router/dist/development/chunk-BV7QT456.mjs:7134:13)
+    at MemoryRouter (file:///home/runner/work/ballpark-hero/ballpark-hero/node_modules/react-router/dist/development/chunk-BV7QT456.mjs:7044:3)
+
+ ✓ src/test/usCareerIntlBoard.test.tsx (8 tests) 3588ms
+   ✓ NBA My Career: the national team on the board > a 2003-04 season at 90 meets the 2004 call: the holding box, then the card in place; Go, the result, a reload  721ms
+   ✓ the board fixture's fixed NBA saves with the bind mounted > draw the board they drew without it where no call is met, and a raised save meets the beat  2167ms
+ ✓ src/test/usCareerReports1569.test.tsx (52 tests) 13289ms
+   ✓ Round 1569 report A: Start over from every screen > 'NFL' starts over from the hub of a two season career  996ms
+   ✓ Round 1569 report A: Start over from every screen > 'NBA' starts over from the hub of a two season career  452ms
+   ✓ Round 1569 report A: Start over from every screen > 'MLB' starts over from the hub of a two season career  408ms
+   ✓ Round 1569 report A: Start over from every screen > 'NHL' starts over from the hub of a two season career  476ms
+   ✓ Round 1569 report A: Start over from every screen > 'NFL' starts over from the free agency window  480ms
+   ✓ Round 1569 report A: Start over from every screen > 'NBA' starts over from the free agency window  369ms
+   ✓ Round 1569 report A: Start over from every screen > 'MLB' starts over from the free agency window  349ms
+   ✓ Round 1569 report A: Start over from every screen > 'NHL' starts over from the free agency window  336ms
+   ✓ Round 1569 report A: Start over from every screen > 'NHL' starts over from the extension talk  326ms
+   ✓ Round 1569 ruling R3: a restart says the Hall card goes too > 'NFL' names the Hall card on every restart prompt of a retired career and not on a live one  322ms
+   ✓ Round 1569 ruling R3: a restart says the Hall card goes too > 'NBA' names the Hall card on every restart prompt of a retired career and not on a live one  325ms
+   ✓ Round 1569 ruling R3: a restart says the Hall card goes too > 'MLB' names the Hall card on every restart prompt of a retired career and not on a live one  309ms
+   ✓ Round 1569 ruling R3: a restart says the Hall card goes too > 'NHL' names the Hall card on every restart prompt of a retired career and not on a live one  368ms
+   ✓ Round 1569 report B: no offer is never a dead end > 'NFL': free agency offers a veteran Retire instead, and a two season player none  414ms
+   ✓ Round 1569 report B: no offer is never a dead end > 'NBA': free agency offers a veteran Retire instead, and a two season player none  418ms
+   ✓ Round 1569 report B: no offer is never a dead end > 'MLB': free agency offers a veteran Retire instead, and a two season player none  415ms
+   ✓ Round 1569 report B: no offer is never a dead end > 'NHL': free agency offers a veteran Retire instead, and a two season player none  425ms
+
+ Test Files  4 passed (4)
+      Tests  70 passed (70)
+   Start at  21:19:42
+   Duration  19.67s (transform 4.06s, setup 619ms, collect 12.30s, tests 18.38s, environment 2.48s, prepare 850ms)
+
