@@ -1,0 +1,5 @@
+#!serve
+#!playwright
+walkR3: node .rc/x/walkR3.mjs
+walkFix: node .rc/x/walkFix.mjs
+tsc: node_modules/.bin/tsc --noEmit -p tsconfig.app.json
