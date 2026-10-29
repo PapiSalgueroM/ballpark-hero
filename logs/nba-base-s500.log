@@ -1,0 +1,30 @@
+1) Every game adds up: 2400 box scores, then every club's season
+   2400 box scores, 900 club seasons over 30 closes
+2) The box takes nothing from the league generator: the same seed with and without lines
+   5 seeds played twice, two seasons each
+3) The award rules pick who the lines say: fixtures, then every simulated season against a typed copy of the rules
+   fixtures plus 30 simulated seasons; rookie of the year named in 20; 239 first year lines, 239 marked rookie
+4) The leaders tables are a recount
+5) The lines read like basketball and like this sim
+   club ppg 113.0 to 113.5 (mean 113.26); tenth scorer median 25.89 (25.1 to 27.2)
+   rating vs ppg Spearman 0.877 to 0.965; differential vs winning share 0.901 to 0.970
+   rebounds C 9.23 F 6.46 G 3.50; assists G 4.72 F 2.46 C 1.37
+6) The close happens once and is kept
+7) A save from before the round: no lines this season, lines from the summer
+   vitest NbaSeasonStats.test.tsx: exit 0, 4 passed of 4
+   vitest FrontOfficeSeasonClose.test.tsx: exit 0, 25 passed of 25
+8) The copy says what the engine does
+   Sixth Man winners, points a game over 30 seasons: 10th percentile 12.5, median 12.8, 90th 13.2; the page promises 13
+9) One save shape: the NBA keeps the shared short lines, reads them through the one expand, and an old save of named rows converts byte for byte
+   9e head: the league in the save after the regular season, 10 seeds: median 85600, largest 85923 characters (its lines block: median 20203, largest 20519); headroom to 700K (716800) 630877
+   9e base: the league in the save after the regular season, 10 seeds: median 115601, largest 116445 characters (its lines block: median 50204, largest 51041); headroom to 700K (716800) 600355
+   1. every game adds up: 3 checks
+   2. the box takes nothing from the league generator: 20 checks
+   3. the award rules pick who the lines say: 16 checks
+   4. the leaders tables are a recount: 1 check
+   5. the lines read like basketball and like this sim: 6 checks
+   6. the close happens once and is kept: 6 checks
+   7. an old save: 8 checks
+   8. the copy says what the engine does: 12 checks
+   9. one save shape: 14 checks
+simNbaSeasonStats: 86 checks passed over 10 seeded franchises and 3 seasons each. Every game adds up, the box takes nothing from the league, the awards follow their rules, and the season closes once.

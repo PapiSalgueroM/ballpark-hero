@@ -1,0 +1,32 @@
+   control draftlate: a draft class is marked as debuting two seasons after its close, not one
+1) Every game adds up: 2400 box scores, then every club's season
+   2400 box scores, 900 club seasons over 30 closes
+2) The box takes nothing from the league generator: the same seed with and without lines
+   5 seeds played twice, two seasons each
+3) The award rules pick who the lines say: fixtures, then every simulated season against a typed copy of the rules
+   fixtures plus 30 simulated seasons; rookie of the year named in 10; 238 first year lines, 120 marked rookie
+4) The leaders tables are a recount
+5) The lines read like basketball and like this sim
+   club ppg 112.9 to 113.4 (mean 113.25); tenth scorer median 25.81 (24.6 to 26.8)
+   rating vs ppg Spearman 0.877 to 0.959; differential vs winning share 0.893 to 0.981
+   rebounds C 9.26 F 6.47 G 3.51; assists G 4.71 F 2.46 C 1.35
+6) The close happens once and is kept
+7) A save from before the round: no lines this season, lines from the summer
+   vitest skipped under this control: it reads src, which the control never touches
+8) The copy says what the engine does
+   Sixth Man winners, points a game over 30 seasons: 10th percentile 12.2, median 12.8, 90th 13.3; the page promises 13
+9) One save shape: the NBA keeps the shared short lines, reads them through the one expand, and an old save of named rows converts byte for byte
+   9d skipped: NBA_STATS_BASE is not set (the base comparison is the round's receipt, run on a runner)
+   9e head: the league in the save after the regular season, 10 seeds: median 85494.5, largest 85870 characters (its lines block: median 20101, largest 20463); headroom to 700K (716800) 630930
+   1. every game adds up: 3 checks
+   2. the box takes nothing from the league generator: 20 checks
+   3. the award rules pick who the lines say: 16 checks, 2 FAILED
+   4. the leaders tables are a recount: 1 check
+   5. the lines read like basketball and like this sim: 6 checks
+   6. the close happens once and is kept: 6 checks
+   7. an old save: 5 checks
+   8. the copy says what the engine does: 12 checks
+   9. one save shape: 13 checks
+   red: [3] every simulated season (30) names the man the typed rules name, for all five awards: seed 1 2027: engine {"mvp":"navzp7xk65ciw-11","allLeague":["navzp7xk65ciw-11","navzp7xk65ciw-51","navzp7xk65ciw-41","navzp7xk65ciw-1","navzp7xk65ciw-211"],"roy":null,"dpoy":"navzp7xk65ciw-85","sixth":"navzp7xk65ciw-17"} typed {"minGames":64,"mvp":"navzp7xk65ciw-11","allLeague":["navzp7xk65ciw-11","navzp7xk65ciw-51","navzp7xk65ciw-41","navzp7xk65ciw-1","navzp7xk65ciw-211"],"roy":"navzp7xk65ciw-452","dpoy":"navzp7xk65ciw-85","sixth":"navzp7xk65ciw-17"} | seed 1 2028: engine {"mvp":"navzp7xk65ciw-41","allLeague":["navzp7xk65ciw-41","navzp7xk65ciw-1","navzp7xk65ciw-51","navzp7xk65ciw-61","navzp7xk65ciw-21"],"roy":"navzp7xk65ciw-452","dpoy":"navzp7xk65ciw-1","sixth":"navzp7xk65ciw-283"} typed {"minGames":64,"mvp":"navzp7xk65ciw-41","allLeague":["navzp7xk65ciw-41","navzp7xk65ciw-1","navzp7xk65ciw-51","navzp7xk65ciw-61","navzp7xk65ciw-21"],"roy":"navzp7xk65ciw-543","dpoy":"navzp7xk65ciw-1","sixth":"navzp7xk65ciw-283"} | seed 2 2027: engine {"mvp":"navzp7xk65ciw-698","allLeague":["navzp7xk65ciw-698","navzp7xk65ciw-708","navzp7xk65ciw-738","navzp7xk65ciw-908","navzp7xk65ciw-758"],"roy":null,"dpoy":"navzp7xk65ciw-698","sixth":"navzp7xk65ciw-852"} typed {"minGames":64,"mvp":"navzp7xk65ciw-698","allLeague":["navzp7xk65ciw-698","navzp7xk65ciw-708","navzp7xk65ciw-738","navzp7xk65ciw-908","navzp7xk65ciw-758"],"roy":"navzp7xk65ciw-1157","dpoy":"navzp7xk65ciw-698","sixth":"navzp7xk65ciw-852"}
+   red: [3] the rookie mark is exactly the men drafted at the previous close who played: 358 wrong, e.g. seed 1 2027: Devon Kingman, drafted at the 2026 close, played 80 and is not marked rookie | seed 1 2027: Emory Grissom, drafted at the 2026 close, played 80 and is not marked rookie | seed 1 2027: Corey Quinn, drafted at the 2026 close, played 80 and is not marked rookie
+control "draftlate": section 3 went red as expected (2 failures) and nothing else moved, the check works. Exiting non zero because the checks did fail.
