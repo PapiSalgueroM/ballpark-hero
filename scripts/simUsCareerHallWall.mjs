@@ -31,6 +31,18 @@
  *   clamp      the verdict clamp off                                         section 3 worst case size
  *   version    any version accepted                                          section 3 newer version left alone
  *   sportimport  an NBA import planted in the module                         section 3 weight fence
+ *   nokeep     the board's keep effect returns at once                       section 4: C1 C3 C5 C6 C8 C9 C10b
+ *   loadonly   the keep effect only for a career that was live in this visit section 4: C3 C6 C10b
+ *   kept       hallKept forced true                                          section 4: C4 C6 C10c
+ *   nogate     the bound Hall gate taken out of both effects and the opener  section 4: C7
+ *   stalesave  the keep effect no longer waits for a refused save            section 4: C9
+ *   boarddraw  one Math.random planted in the keep effect                    section 4: C8
+ *
+ *   4. THE BOARD (normal run and the six board controls only). src/test/usCareerHallWall.test.tsx run by vitest
+ *      on the board, or on a copy of it under .sim-control with the control's edits swapped in for it
+ *      (NO_DOUBLE_SWAP, the simUsCareerActionConfirm way). A board control is FIRED only when its cases are red
+ *      in all four sports and the cases it names as untouched stay green in all four; one of those red is a
+ *      refusal (exit 2), never a FIRED.
  * A control's string must be in the source exactly once or the run refuses (exit 2, never 1).
  * Exit: 0 green, 1 red (or, under a control, FIRED), 2 could not run, 3 a control that did not fire.
  *
@@ -68,7 +80,7 @@ const SOURCE_CONTROLS = {
   version: { from: 'if (raw.v !== 1) return', to: 'if (false) return' },
   sportimport: { from: "import type { UsCareerCore } from '@/lib/usCareerSport';\n", to: `import type { UsCareerCore } from '@/lib/usCareerSport';\n${PLANT}` },
 };
-const HARNESS_CONTROLS = ['unstamped', 'calnow'];
+const HARNESS_CONTROLS = ['unstamped', 'calnow', 'nokeep', 'loadonly', 'kept', 'nogate', 'stalesave', 'boarddraw'];
 if (CONTROL && !SOURCE_CONTROLS[CONTROL] && !HARNESS_CONTROLS.includes(CONTROL)) {
   console.error(`simUsCareerHallWall: SIM_HALL_WALL_CONTROL=${CONTROL} is not a control this harness knows`);
   process.exit(2);
@@ -368,11 +380,87 @@ for (const k of Object.keys(longest)) {
   ok('s3.fence', planted.length === 1 && /NBA code/.test(planted[0]), `the fence did not name a planted NBA import: ${JSON.stringify(planted)}`);
 }
 
+/* ---------------------------------------------------------------- 4. THE BOARD */
+/* The board's wall code, held to src/test/usCareerHallWall.test.tsx: each control edits one or two executable
+   strings of the shared board in a copy under .sim-control (each string asserted there exactly once), swaps the
+   copy in for the board (vitest.config.ts NO_DOUBLE_SWAP, as simUsCareerActionConfirm does), and names the
+   cases that must go red and the ones that must stay green. Tags: C1 is "C1 and C2", C10a/b/c the three C10
+   cases (create screen, retirement screen, the honest lines), J the jersey words. */
+const BOARD = 'src/components/us-career/UsCareerBoard.tsx';
+const BOARD_TEST = 'src/test/usCareerHallWall.test.tsx';
+const BOARD_CASES = 48;
+const KEEP = 'if (!sport.hall || !career?.retired || saveFailure) return;';
+const READ = 'if (!sport.hall) return;\n    try {\n      const raw = localStorage.getItem(hallWallKey(sport.slug));';
+const BOARD_CONTROLS = {
+  nokeep: { edits: [[KEEP, 'if (true) return;']], fail: ['C1', 'C3', 'C5', 'C6', 'C8', 'C9', 'C10b'], hold: ['C4', 'C7', 'C10a', 'C10c', 'J'] },
+  loadonly: { edits: [['const [wall, setWall] = useState<HallWall | null>(null);', 'const [wall, setWall] = useState<HallWall | null>(null); const wallSawLive = useRef(false);'],
+    [KEEP, 'if (career && !career.retired) wallSawLive.current = true; if (!sport.hall || !career?.retired || saveFailure || !wallSawLive.current) return;']],
+    fail: ['C3', 'C6', 'C10b'], hold: ['C1', 'C4', 'C5', 'C7', 'C8', 'C9', 'C10a', 'C10c', 'J'] },
+  kept: { edits: [['const hallKept = hallWallKeyNow !== null && !!wall?.entries.some(e => e.key === hallWallKeyNow);', 'const hallKept = hallWallKeyNow !== null;']],
+    fail: ['C4', 'C6', 'C10c'], hold: ['C1', 'C3', 'C5', 'C7', 'C8', 'C9', 'C10a', 'C10b', 'J'] },
+  nogate: { edits: [[READ, READ.replace('if (!sport.hall) return;\n    ', '')], [KEEP, 'if (!career?.retired || saveFailure) return;'],
+    ['{sport.hall && wall && wall.entries.length > 0 && (', '{wall && wall.entries.length > 0 && (']],
+    fail: ['C7'], hold: ['C1', 'C3', 'C4', 'C5', 'C6', 'C8', 'C9', 'C10a', 'C10b', 'C10c', 'J'] },
+  stalesave: { edits: [[KEEP, 'if (!sport.hall || !career?.retired) return;']], fail: ['C9'], hold: ['C1', 'C3', 'C4', 'C5', 'C6', 'C7', 'C8', 'C10a', 'C10b', 'C10c', 'J'] },
+  boarddraw: { edits: [['if (!entry) return;', 'if (!entry) return; Math.random();']], fail: ['C8'], hold: ['C1', 'C3', 'C4', 'C5', 'C6', 'C7', 'C9', 'C10a', 'C10b', 'C10c', 'J'] },
+};
+const tagOf = name => (name.includes('C1 and C2') ? 'C1' : name.includes('C10: focus') ? 'C10a' : name.includes('C10: from the retirement') ? 'C10b'
+  : name.includes('C10: the wall says') ? 'C10c' : name.includes('jersey') ? 'J' : (name.match(/\bC(\d+):/) ?? [])[1] ? `C${name.match(/\bC(\d+):/)[1]}` : '?');
+let boardVerdict = null;
+if (!CONTROL || BOARD_CONTROLS[CONTROL]) {
+  const { spawnSync } = await import('node:child_process');
+  const { mkdirSync, writeFileSync } = await import('node:fs');
+  const heldBoard = readFileSync(path.join(ROOT, BOARD));
+  const boardSource = heldBoard.toString('utf8').replace(/\r\n/g, '\n');
+  for (const [name, c] of Object.entries(BOARD_CONTROLS)) for (const [from] of c.edits) {
+    const n = boardSource.split(from).length - 1;
+    if (n !== 1) { console.error(`simUsCareerHallWall board control ${name}: REFUSED, its string is in the board ${n} times, not once (not a FIRED)`); process.exit(2); }
+  }
+  const work = path.join(ROOT, '.sim-control', `hall-wall-${process.pid}-${Date.now()}`);
+  mkdirSync(work, { recursive: true });
+  const env = { ...process.env, FORCE_COLOR: '0', VITEST_MAX_FORKS: '1', VITEST_MIN_FORKS: '1' };
+  delete env.NO_DOUBLE_SWAP;
+  if (CONTROL) {
+    let changed = boardSource;
+    for (const [from, to] of BOARD_CONTROLS[CONTROL].edits) changed = changed.replace(from, to);
+    const copy = path.join(work, 'UsCareerBoard.tsx');
+    writeFileSync(copy, changed);
+    env.NO_DOUBLE_SWAP = JSON.stringify({ '@/components/us-career/UsCareerBoard': copy });
+  }
+  const report = path.join(work, 'report.json');
+  const run = spawnSync(process.execPath, ['--require', path.join(ROOT, 'scripts/lib/offlineTransport.cjs'), path.join(ROOT, 'node_modules/vitest/vitest.mjs'), 'run', BOARD_TEST,
+    '--reporter=json', `--outputFile.json=${report}`, '--maxWorkers=1', '--no-file-parallelism', '--testTimeout=300000', '--hookTimeout=120000'],
+    { cwd: ROOT, env, encoding: 'utf8', timeout: 600000, maxBuffer: 32 * 1024 * 1024 });
+  let rows = [];
+  try { rows = JSON.parse(readFileSync(report, 'utf8')).testResults.flatMap(f => f.assertionResults); } catch { /* read below */ }
+  rmSync(work, { recursive: true, force: true });
+  ok('s4.held', Buffer.compare(readFileSync(path.join(ROOT, BOARD)), heldBoard) === 0, 'the board bytes changed under the run');
+  if (!rows.length) { console.error(`simUsCareerHallWall section 4: the board test did not report (${String(run.stderr || run.error || '').split('\n').slice(-3).join(' | ')})`); process.exit(2); }
+  const byTag = {};
+  for (const r of rows) (byTag[tagOf(r.fullName)] ??= []).push(r.status);
+  console.log(`section 4${CONTROL ? ` (${CONTROL})` : ''}: ${rows.length} board cases, ${rows.filter(r => r.status === 'passed').length} passed, by tag ${JSON.stringify(Object.fromEntries(Object.entries(byTag).map(([t, s]) => [t, `${s.filter(x => x === 'passed').length}/${s.length}`])))}`);
+  ok('s4.cases', rows.length === BOARD_CASES && !byTag['?'], `the board test has ${rows.length} cases (stated ${BOARD_CASES}), untagged ${byTag['?']?.length ?? 0}`);
+  if (!CONTROL) ok('s4.board', rows.every(r => r.status === 'passed'), () => `board cases red: ${rows.filter(r => r.status !== 'passed').map(r => r.fullName).join('; ').slice(0, 400)}`);
+  else {
+    const c = BOARD_CONTROLS[CONTROL];
+    const fired = c.fail.every(t => byTag[t]?.length === 4 && byTag[t].every(s => s === 'failed'));
+    const heldUp = c.hold.every(t => byTag[t]?.length === 4 && byTag[t].every(s => s === 'passed'));
+    boardVerdict = { fired, heldUp };
+  }
+}
+
 /* ---------------------------------------------------------------- the verdict */
 const TARGET = { draw: 's1.nodraw', unstamped: 's1.record', calnow: 's2.v1.record', dupe: 's3.idem', evict: 's3.hofkept', newcomer: 's3.newcomer', clamp: 's3.bytes', version: 's3.version', sportimport: 's3.weight' };
 Math.random = realRandom;
 for (const [id, msgs] of red) console.log(`RED ${id}: ${msgs.length} (first: ${msgs[0]})`);
 const checks = [...ran.values()].reduce((a, b) => a + b, 0);
+if (CONTROL && BOARD_CONTROLS[CONTROL]) {
+  const c = BOARD_CONTROLS[CONTROL];
+  if (!boardVerdict.heldUp) { console.log(`simUsCareerHallWall CONTROL ${CONTROL}: REFUSED, a case it must leave green went red (${c.hold.join(', ')}); not a FIRED`); process.exit(2); }
+  if (boardVerdict.fired) { console.log(`simUsCareerHallWall CONTROL ${CONTROL}: FIRED, ${c.fail.join(', ')} red in all four sports and ${c.hold.join(', ')} green`); process.exit(1); }
+  console.log(`simUsCareerHallWall CONTROL ${CONTROL}: DID NOT FIRE, ${c.fail.join(', ')} not red in all four sports`);
+  process.exit(3);
+}
 if (CONTROL) {
   const t = TARGET[CONTROL], n = red.get(t)?.length ?? 0;
   if (n > 0) { console.log(`simUsCareerHallWall CONTROL ${CONTROL}: FIRED, ${t} red ${n} times`); process.exit(1); }

@@ -43,7 +43,8 @@ import { NHL_CAREER_SPORT } from '@/lib/nhlCareerSport';
 import { defaultAppearance } from '@/lib/soccerCareerAppearance';
 import { pendingTalk } from '@/lib/usCareerRetirementFlow';
 import { hallRecordFor, type HallRecord } from '@/lib/careerHallOfFame';
-import { hallHeadline } from '@/components/career/HallOfFameCard';
+import { HallOfFameCard, hallHeadline } from '@/components/career/HallOfFameCard';
+import { wallJerseyLine } from '@/components/us-career/UsCareerHallWall';
 import { hallWallEntry, hallWallKey, wallKeyOf, type HallWallEntry } from '@/lib/usCareerHallWall';
 import type { UsCareerCore, UsCareerSport } from '@/lib/usCareerSport';
 
@@ -150,6 +151,15 @@ describe.each(ROWS)('$label: the Hall wall on the board', ({ label, sport }) => 
     await restart('New career');
     expect(localStorage.getItem(sport.saveKey)).toBeNull();
     expect(localStorage.getItem(wallKey(sport))).toBe(bytes);
+    // The create screen offers the wall below Enter the draft, and the plaque says what the card said.
+    const opener = await waitFor(() => { const el = document.querySelector<HTMLButtonElement>('[data-career-hall-wall-opener="create"]'); expect(el).not.toBeNull(); return el!; });
+    expect(opener.textContent).toBe('🏛️ Hall wall (1)');
+    expect(button('Enter the draft')!.compareDocumentPosition(opener) & Node.DOCUMENT_POSITION_FOLLOWING).toBeTruthy();
+    fireEvent.click(opener);
+    const tile = await waitFor(() => { const el = document.querySelector<HTMLButtonElement>('[data-career-hall-wall-tile]'); expect(el).not.toBeNull(); return el!; });
+    expect(tile.textContent).toContain(after.name);
+    fireEvent.click(tile);
+    await waitFor(() => expect(document.querySelector('[data-career-hall-wall-headline]')?.textContent).toBe(headline));
   }, 30000);
 
   it('C4: a refused wall write breaks nothing, and the prompt keeps saying the card goes', async () => {
@@ -327,4 +337,113 @@ describe('C8: the wall draws nothing and moves no save byte', () => {
       expect(absent.counts, `seed ${seed}: draws, absent`).toEqual(written.counts);
     }
   }, 180000);
+});
+
+/** Plaques for a stored wall: one engine career's plaque, copied under new keys and names with the given outcomes. */
+function plaques(sport: UsCareerSport, outcomes: HallRecord['outcome'][], seed = 1590): HallWallEntry[] {
+  const base = hallWallEntry(sport, retiredCareer(sport, seed))!;
+  return outcomes.map((outcome, i) => ({ ...clone(base), key: `stored-${i}`, name: `Stored ${i}`, hall: { ...clone(base.hall), outcome } }));
+}
+const storeWall = (sport: UsCareerSport, entries: HallWallEntry[]) => localStorage.setItem(wallKey(sport), JSON.stringify({ v: 1, entries }));
+const q = <T extends Element = HTMLElement>(sel: string) => document.querySelector<T>(sel);
+const appear = <T extends Element = HTMLElement>(sel: string) => waitFor(() => { const el = q<T>(sel); expect(el, sel).not.toBeNull(); return el!; });
+describe.each(ROWS)('$label: the wall screen', ({ label, sport }) => {
+  it('C5: a full wall keeps 12, the new plaque goes up first and the oldest miss comes down (the oldest Hall of Famer only on a wall of them)', async () => {
+    const I = 'inducted' as const, M = 'fellOff' as const;
+    const mixed = plaques(sport, [I, I, I, M, I, I, I, M, I, I, M, I]);
+    for (const [stored, gone] of [[mixed, 'stored-10'], [plaques(sport, Array(12).fill(I)), 'stored-11']] as const) {
+      cleanup(); localStorage.clear();
+      storeWall(sport, [...stored]);
+      const { c, tq } = activeCareer(sport, 1577);
+      save(sport, c, tq, 'season');
+      mountBoard(sport);
+      await press('Hang them up now');
+      await press('Retire this player');
+      await waitFor(() => expect(readSave(sport).phase).toBe('retired'));
+      await waitFor(() => expect(readWall(sport).entries[0].key).toBe(wallKeyOf(readSave(sport).c, sport.hall!)));
+      const keys = readWall(sport).entries.map(e => e.key);
+      expect(keys.length).toBe(12);
+      expect(keys.slice(1)).toEqual(stored.map(e => e.key).filter(k => k !== gone));
+    }
+  }, 60000);
+
+  it('C10: focus, the "?" and the tap targets, from the create screen', async () => {
+    storeWall(sport, plaques(sport, ['inducted', 'notOnBallot']));
+    mountBoard(sport);
+    const opener = await appear<HTMLButtonElement>('[data-career-hall-wall-opener="create"]');
+    expect(opener.textContent).toBe('🏛️ Hall wall (2)');
+    fireEvent.click(opener);
+    const heading = await waitFor(() => { const h = within(document.body).getByRole('heading', { name: `Your ${label} Hall wall` }); return h; });
+    expect(document.activeElement).toBe(heading);
+    const help = within(document.body).getByRole('button', { name: 'How the Hall wall works' });
+    expect(help).toHaveAttribute('aria-expanded', 'false');
+    fireEvent.click(help);
+    expect(help).toHaveAttribute('aria-expanded', 'true');
+    const rules = document.getElementById(help.getAttribute('aria-controls')!)!;
+    expect(rules.textContent).toContain(`Every player you retire in ${label} My Career goes up on this wall`);
+    expect(rules.textContent).toContain('The wall holds 12.');
+    expect(rules.textContent).toContain('Example: your wall holds 9 Hall of Famers and 3 who missed.');
+    const tiles = [...document.querySelectorAll<HTMLButtonElement>('[data-career-hall-wall-tile]')];
+    expect(tiles.map(t => t.textContent)).toEqual([expect.stringContaining('In the Hall'), expect.stringContaining('Never on the ballot')]);
+    for (const el of [opener, help, ...tiles, button('Back')!]) expect(el.className).toMatch(/min-h-11/);
+    fireEvent.click(tiles[1]);
+    await appear('[data-career-hall-wall-plaque]');
+    fireEvent.click(button('Back to the wall')!);
+    await waitFor(() => expect(document.activeElement?.textContent).toContain('Stored 1'));
+    fireEvent.click(button('Back')!);
+    await waitFor(() => expect(document.activeElement).toBe(q('[data-career-hall-wall-opener="create"]')));
+  }, 30000);
+
+  it('C10: from the retirement screen the opener waits for the card, Back focuses it, and Start over on the wall lands on create', async () => {
+    save(sport, retiredCareer(sport, 1578), null, 'retired');
+    mountBoard(sport);
+    const opener = await appear<HTMLButtonElement>('[data-career-hall-wall-opener="retired"]');
+    expect(opener).toBeDisabled();
+    await waitFor(() => expect(opener).toBeEnabled(), { timeout: 15000 });
+    fireEvent.click(opener);
+    await appear('[data-career-hall-wall-tile]');
+    fireEvent.click(button('Back to retirement')!);
+    await waitFor(() => expect(document.activeElement).toBe(q('[data-career-hall-wall-opener="retired"]')));
+    fireEvent.click(q<HTMLButtonElement>('[data-career-hall-wall-opener="retired"]')!);
+    await appear('[data-career-hall-wall]');
+    await restart('Start over');
+    expect(q('[data-career-hall-wall]')).toBeNull();
+    expect((await appear('[data-career-hall-wall-opener="create"]')).textContent).toBe('🏛️ Hall wall (1)');
+  }, 30000);
+
+  it('C10: the wall says when this player is not on it, and when a newer version saved it', async () => {
+    const real = Storage.prototype.setItem;
+    const refuse = vi.spyOn(Storage.prototype, 'setItem').mockImplementation(function (this: Storage, key: string, value: string) {
+      if (key.endsWith('-my-career-hall-v1')) throw new DOMException('Controlled quota refusal', 'QuotaExceededError');
+      real.call(this, key, value);
+    });
+    save(sport, retiredCareer(sport, 1579), null, 'retired');
+    mountBoard(sport);
+    const opener = await appear<HTMLButtonElement>('[data-career-hall-wall-opener="retired"]');
+    await waitFor(() => expect(opener).toBeEnabled(), { timeout: 15000 });
+    fireEvent.click(opener);
+    await waitFor(() => expect(document.body.textContent).toContain('This browser did not keep the wall, so this player is not on it.'));
+    expect(document.body.textContent).toContain('Nobody on the wall yet. Every player you retire goes up here.');
+    cleanup(); refuse.mockRestore(); localStorage.clear();
+    localStorage.setItem(wallKey(sport), JSON.stringify({ v: 2, entries: [] }));
+    save(sport, retiredCareer(sport, 1579), null, 'retired');
+    mountBoard(sport);
+    const again = await appear<HTMLButtonElement>('[data-career-hall-wall-opener="retired"]');
+    await waitFor(() => expect(again).toBeEnabled(), { timeout: 15000 });
+    fireEvent.click(again);
+    await waitFor(() => expect(document.body.textContent).toContain('This wall was saved by a newer version of the site. Reload the page to see it.'));
+  }, 40000);
+});
+
+describe('Round 1570: the plaque says the jersey in the card\'s own words', () => {
+  it.each(ROWS)('$label', ({ sport }) => {
+    const rec: HallRecord = { ...hallRecordFor(sport.hall!, retiredCareer(sport, 1595)), jersey: { team: 'XYZ', seasons: 7, teamName: 'Fixture Club' } };
+    const one: HallRecord = { ...rec, jersey: { team: 'XYZ', seasons: 1 } };
+    for (const r of [rec, one]) {
+      render(<HallOfFameCard record={r} rules={sport.hall!.rules} onSpeech={() => undefined} onDismiss={() => undefined} />);
+      const said = [...document.querySelectorAll('p')].find(p => p.textContent?.startsWith('👕'))?.textContent;
+      expect(said).toBe(wallJerseyLine(r.jersey!));
+      cleanup();
+    }
+  });
 });

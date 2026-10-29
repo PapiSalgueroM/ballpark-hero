@@ -94,6 +94,8 @@ const CareerSeasonReview = lazy(() => import('@/components/us-career/CareerSeaso
 const FarewellCard = lazy(() => import('@/components/career/FarewellCard').then(m => ({ default: m.FarewellCard })));
 const FarewellSeasonBanner = lazy(() => import('@/components/career/FarewellCard').then(m => ({ default: m.FarewellSeasonBanner })));
 const HallOfFameCard = lazy(() => import('@/components/career/HallOfFameCard').then(m => ({ default: m.HallOfFameCard })));
+/* Round 1570: the Hall wall's screen loads when it is opened. */
+const UsCareerHallWall = lazy(() => import('@/components/us-career/UsCareerHallWall'));
 /* Round 1500: the dirty money desk loads when "Deal with it" is pressed. */
 const DirtyMoneyDesk = lazy(() => import('@/components/us-career/DirtyMoneyDesk'));
 
@@ -161,15 +163,24 @@ export default function UsCareerBoard({ sport }: { sport: UsCareerSport }) {
   // Round 85: the tile rule. The season hub is boxes; each opens its own screen.
   const [panel, setPanel] = useState<'none' | 'bank' | 'stats' | 'log' | 'trophies' | 'news' | 'inbox' | 'dirty'>('none');
   const [retiredReview, setRetiredReview] = useState(false);
-  const reviewReturn = useRef<'log' | 'retired' | null>(null);
+  const reviewReturn = useRef<'log' | 'retired' | 'wallCreate' | 'wallRetired' | null>(null);
   const reviewHubIndex = useRef(0);
   const hubButtons = useRef<HTMLDivElement>(null);
   const retiredReviewButton = useRef<HTMLButtonElement>(null);
-  /* Round 1570: the Hall wall as this browser holds it (null until read, and always with no Hall bound). */
+  /* Round 1570: the Hall wall as this browser holds it (null until read, and always with no Hall bound), the
+     wall screen when it is open (where it opened from, and the plaque on its own screen), its two openers, and
+     its reveal: keyed on the view, so opening the wall from the bottom of the tall create screen brings the
+     wall's top in under the menu bar. All above the focus effect and every early return. */
   const [wall, setWall] = useState<HallWall | null>(null);
+  const [wallView, setWallView] = useState<{ from: 'create' | 'retired'; plaque: string | null } | null>(null);
+  const createWallButton = useRef<HTMLButtonElement>(null);
+  const retiredWallButton = useRef<HTMLButtonElement>(null);
+  const wallTop = useRevealScroll<HTMLDivElement>(wallView ? (wallView.plaque === null ? 'grid' : `plaque:${wallView.plaque}`) : 'closed');
   useEffect(() => {
     if (!reviewReturn.current) return;
     const target = reviewReturn.current === 'retired' ? retiredReviewButton.current
+      : reviewReturn.current === 'wallCreate' ? createWallButton.current
+      : reviewReturn.current === 'wallRetired' ? retiredWallButton.current
       : hubButtons.current?.querySelectorAll<HTMLButtonElement>('button')[reviewHubIndex.current];
     target?.focus({ preventScroll: true });
     reviewReturn.current = null;
@@ -181,7 +192,7 @@ export default function UsCareerBoard({ sport }: { sport: UsCareerSport }) {
       });
     });
     return () => cancelAnimationFrame(frame);
-  }, [panel, retiredReview]);
+  }, [panel, retiredReview, wallView]);
   /* Round 469: the News box opens on three screens, the paper, the gram and
      the rival, so the hub keeps its five boxes (simCareerHub holds that). */
   const [newsTab, setNewsTab] = useState<'headlines' | 'fans' | 'rival'>('headlines');
@@ -1009,6 +1020,7 @@ export default function UsCareerBoard({ sport }: { sport: UsCareerSport }) {
     setRivalryOutcome(null);
     setPanel('none');
     setRetiredReview(false);
+    setWallView(null);
     reviewReturn.current = null;
     coachRef.current = null;
     setCoach(null);
@@ -1081,6 +1093,24 @@ export default function UsCareerBoard({ sport }: { sport: UsCareerSport }) {
       prospectRef.current = null; setProspect(null); setPhase('create');
       saveValue(null);
     }} />);
+  }
+
+  /* ---------------------- Round 1570: the Hall wall ---------------------
+     A screen swap like Review seasons, opened from the create screen (career null) or the retirement screen.
+     The board owns the wrapper the reveal measures, and the fallback has a real height, so the first, cold
+     open (the chunk still loading) is brought into view too. */
+  if (wallView && sport.hall && wall) {
+    const view = wallView;
+    return withSaveStatus(
+      <div ref={wallTop}>
+        <Suspense fallback={<div role="status" style={{ minHeight: 300 }} className="text-center text-xs text-muted-foreground">Loading the Hall wall...</div>}>
+          <UsCareerHallWall sport={sport} wall={wall} from={view.from} plaque={view.plaque} missing={view.from === 'retired' && !hallKept}
+            onOpen={key => setWallView({ from: view.from, plaque: key })}
+            onClosePlaque={() => setWallView({ from: view.from, plaque: null })}
+            onBack={() => { reviewReturn.current = view.from === 'create' ? 'wallCreate' : 'wallRetired'; setWallView(null); }} />
+        </Suspense>
+      </div>,
+    );
   }
 
   /* ------------------------------ create ------------------------------ */
@@ -1163,6 +1193,14 @@ export default function UsCareerBoard({ sport }: { sport: UsCareerSport }) {
           >
             Enter the draft
           </button>
+          {/* Round 1570: below the last control on purpose. The wall is read after mount, so this row arrives
+              one paint late, and below everything it moves nothing a player is reading. */}
+          {sport.hall && wall && wall.entries.length > 0 && (
+            <button ref={createWallButton} type="button" data-career-hall-wall-opener="create" onClick={() => setWallView({ from: 'create', plaque: null })}
+              className="min-h-11 w-full rounded-xl border border-primary/40 bg-primary/10 px-3 py-3 text-sm font-semibold text-foreground">
+              🏛️ Hall wall ({wall.entries.length})
+            </button>
+          )}
         </div>
       </div>
     );
@@ -1349,6 +1387,13 @@ export default function UsCareerBoard({ sport }: { sport: UsCareerSport }) {
         {/* Round 126: the save does not end here any more. */}
         <CoachStartCard sport={sport.slug} existing={coach} onStart={startCoaching} onResume={openCoaching} />
         <button ref={retiredReviewButton} data-career-review-opener="" onClick={() => setRetiredReview(true)} className="min-h-[44px] w-full rounded-xl border border-primary/40 bg-primary/10 px-3 py-3 text-sm font-semibold text-foreground">Review seasons</button>
+        {/* Round 1570: drawn whenever a Hall is bound, so it never arrives late and moves the block under it; held
+            shut until the Hall card has landed or been folded, so a tile cannot spoil the ballot. */}
+        {sport.hall && (
+          <button ref={retiredWallButton} type="button" data-career-hall-wall-opener="retired" disabled={!(hallLanded || hallFolded || !hallRecord)}
+            onClick={() => setWallView({ from: 'retired', plaque: null })}
+            className="min-h-[44px] w-full rounded-xl border border-primary/40 bg-primary/10 px-3 py-3 text-sm font-semibold text-foreground disabled:opacity-50">🏛️ Hall wall</button>
+        )}
         <div className="rounded-2xl border border-border bg-card p-3">
           <p className="mb-1 text-center text-[10px] font-bold uppercase tracking-wider text-muted-foreground">Season by season</p>
           <div className="max-h-72 space-y-0.5 overflow-y-auto">
