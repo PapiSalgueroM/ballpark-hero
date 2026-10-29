@@ -91,6 +91,8 @@ import { PreseasonPlanTile, PreseasonPlanResult } from '@/components/soccer-care
 import { CareerMentorTile } from '@/components/soccer-career/CareerMentorTile';
 import { coachingStartChoices, type CoachingStartQuote } from '@/lib/soccerCareerCoachingStart';
 import { useSoccerCoachingStart } from '@/hooks/useSoccerCoachingStart';
+import { useSoccerManagerJobReview } from '@/hooks/useSoccerManagerJobReview';
+import { readManagerJobReview, type ManagerJobChoice, type ManagerJobQuote } from '@/lib/soccerCareerManagerJobReview';
 import PotentialProgress from '@/components/soccer-career/PotentialProgress';
 import type { MoneyAction } from "@/lib/soccerMoney";
 import { bankSummary } from "@/lib/soccerMoney";
@@ -157,6 +159,7 @@ const ownerScreens = () => import("@/components/soccer-career/OwnerTail").then(m
 const OwnerClubSale = lazy(() => ownerScreens().then(m => ({ default: m.OwnerClubSale })).catch(() => new Promise<never>(() => undefined)));
 const OwnerPanel = lazy(() => ownerScreens().then(m => ({ default: m.OwnerPanel })).catch(() => new Promise<never>(() => undefined)));
 const CoachingStartChooser = lazy(() => import('@/components/soccer-career/CoachingStartChooser').catch(() => new Promise<never>(() => undefined)));
+const SoccerManagerJobReview = lazy(() => import('@/components/soccer-career/SoccerManagerJobReview'));
 const CoachingStartWait = ({ onBack }: { onBack: () => void }) => <div className="rounded-xl border border-border p-4 space-y-3"><Button onClick={onBack} variant="outline" className="h-11">Back</Button><p role="status" className="text-sm">Opening coaching options...</p></div>;
 /* the sale list's placeholder keeps its Back where the list puts it, so a chunk that never lands cannot strand the doors */
 const OwnerSaleWait = ({ onBack }: { onBack: () => void }) => <div className="min-h-[14rem]"><Button onClick={onBack} variant="ghost" className="h-8 px-2 text-xs font-bold">Back</Button></div>;
@@ -1386,9 +1389,11 @@ export default function SoccerCareer() {
   };
 
   const handleCoachingStart = useSoccerCoachingStart(career, clubs, setCareer);
+  const managerJobReview = useSoccerManagerJobReview(career, clubs, setCareer);
 
   const handleAdvanceManager = () => {
     if (!career) return;
+    if (readManagerJobReview(career, clubs)?.enabled) { managerJobReview.advance(); return; }
     setCareer(advanceManagerSeason(career, clubs));
   };
 
@@ -1682,6 +1687,8 @@ export default function SoccerCareer() {
               onPostRetirement={handlePostRetirement}
               onCoachingStart={handleCoachingStart}
               onAdvanceManager={handleAdvanceManager}
+              onManagerReviewModeChange={managerJobReview.setEnabled}
+              onManagerJobResolve={managerJobReview.resolve}
               onAcceptManagerOffer={handleAcceptManagerOffer}
               onEndManager={handleEndManager}
               onShare={handleShare}
@@ -3176,13 +3183,27 @@ function PostRetirementCard({ career, clubs, onChoice, onCoachingStart }: { care
 }
 
 /* ─── Manager Panel ─── */
-function ManagerPanel({ manager, career, onAdvance, onEnd, onAcceptOffer }: { manager: ManagerState; career: CareerState; onAdvance: () => void; onEnd: () => void; onAcceptOffer?: (i: number) => void }) {
+function ManagerPanel({ manager, career, clubs, onAdvance, onEnd, onAcceptOffer, onReviewModeChange, onResolveJob }: { manager: ManagerState; career: CareerState; clubs: ClubData[]; onAdvance: () => void; onEnd: () => void; onAcceptOffer?: (i: number) => void; onReviewModeChange?: (enabled: boolean) => void; onResolveJob?: (quote: ManagerJobQuote, choice: ManagerJobChoice) => void }) {
+  const review = readManagerJobReview(career, clubs);
+  const [rules, setRules] = useState(false);
+  const rulesTrigger = useRef<HTMLButtonElement>(null);
+  const closeRules = () => { setRules(false); rulesTrigger.current?.focus({ preventScroll: true }); };
   return (
     <div className="rounded-xl border border-border bg-card p-4 space-y-3">
       <div className="text-center space-y-1">
         <h3 className="text-lg font-black">📋 Manager Career</h3>
         <p className="text-xs text-muted-foreground">Managing {manager.club} (Tier {manager.clubTier}) · Season {manager.season}</p>
       </div>
+      {!manager.unemployed && <div className="space-y-2">
+        <div className="flex items-center gap-2">
+          <button className="min-h-11 flex-1 rounded-lg border border-border p-2 text-xs font-bold" aria-pressed={!!review?.enabled} disabled={!!review?.pending || !onReviewModeChange} onClick={() => onReviewModeChange?.(!review?.enabled)}>Review job moves</button>
+          <button className="min-h-11 min-w-11 rounded-lg border border-border p-2 text-xs" ref={rulesTrigger} aria-label="Job move rules" onClick={() => setRules(true)}>?</button>
+        </div>
+        <p className="text-[11px] text-muted-foreground">{review?.enabled ? "On: choose whether to take an earned job move." : "Off: earned job moves happen automatically."}</p>
+      </div>}
+      {(rules || review?.pending) && <Suspense fallback={<div className="space-y-2"><p role="status" className="min-h-11 text-xs">Opening job review...</p>{rules && <button className="min-h-11 w-full rounded-lg border border-border p-2 text-xs" onClick={closeRules}>Back</button>}</div>}>
+        <SoccerManagerJobReview career={career} clubs={clubs} help={rules} onBack={closeRules} onResolve={onResolveJob} />
+      </Suspense>}
 
       {/* Round 530: the results, then the final table under them, tick in on
           one clock, top to bottom. Keyed on the season plus index so a new
@@ -3639,7 +3660,7 @@ function SocialMediaActionCard({ career, onAction, onCoverAthlete, onDismiss }: 
 }
 
 /* ─── Game Screen ─── */
-function GameScreen({ career, clubs, onNextSeason, onAcceptOffer, onDismissSummary, onDismissNewspaper, onStay, onSignExtension, onRequestTransfer, onAcceptLoan, onEventChoice, onDismissDebut, onDismissWorldCup, onWorldCupSpeech, onRetireInternational, onReturnInternational, onDismissRivalryEvent, onDismissBallonDor, onBdorSpeech, onManualRetire, onPostRetirement, onCoachingStart, onAdvanceManager, onAcceptManagerOffer, onEndManager, onShare, onNewCareer, onOpenPhone, onSocialMediaAction, onCoverAthlete, onDismissSocialMedia, onMoralDilemmaChoice, onRehabChoice, onDismissMoralDilemma, onDismissAppeal, onAcceptRetirement, onDeclineRetirement, onAnnounceFarewell, onPunditAction, onEndPundit, onAdvanceOwner, onEndOwner, onCurrencyChange, onAgentChange, timelineRef, signedNote, academyReport, onAcademyFocus, onCareerPatch, arrival }: {
+function GameScreen({ career, clubs, onNextSeason, onAcceptOffer, onDismissSummary, onDismissNewspaper, onStay, onSignExtension, onRequestTransfer, onAcceptLoan, onEventChoice, onDismissDebut, onDismissWorldCup, onWorldCupSpeech, onRetireInternational, onReturnInternational, onDismissRivalryEvent, onDismissBallonDor, onBdorSpeech, onManualRetire, onPostRetirement, onCoachingStart, onAdvanceManager, onManagerReviewModeChange, onManagerJobResolve, onAcceptManagerOffer, onEndManager, onShare, onNewCareer, onOpenPhone, onSocialMediaAction, onCoverAthlete, onDismissSocialMedia, onMoralDilemmaChoice, onRehabChoice, onDismissMoralDilemma, onDismissAppeal, onAcceptRetirement, onDeclineRetirement, onAnnounceFarewell, onPunditAction, onEndPundit, onAdvanceOwner, onEndOwner, onCurrencyChange, onAgentChange, timelineRef, signedNote, academyReport, onAcademyFocus, onCareerPatch, arrival }: {
   /** Round 1330: set once per Begin Career ("begin-" and a count), null otherwise; the hub lands on the player card when it changes. */
   arrival?: string | null;
   career: CareerState;
@@ -3672,6 +3693,8 @@ function GameScreen({ career, clubs, onNextSeason, onAcceptOffer, onDismissSumma
   onPostRetirement: (choice: PostRetirementChoice, ownerClub?: string) => void;
   onCoachingStart: (quote: CoachingStartQuote) => void;
   onAdvanceManager: () => void;
+  onManagerReviewModeChange: (enabled: boolean) => void;
+  onManagerJobResolve: (quote: ManagerJobQuote, choice: ManagerJobChoice) => void;
   onAcceptManagerOffer: (i: number) => void;
   onEndManager: () => void;
   onShare: () => void;
@@ -4187,7 +4210,7 @@ function GameScreen({ career, clubs, onNextSeason, onAcceptOffer, onDismissSumma
 
           {/* OVERLAY: Manager Season */}
           {career.phase === "manager_season" && career.managerState && (
-            <ManagerPanel manager={career.managerState} career={career} onAdvance={onAdvanceManager} onEnd={onEndManager} onAcceptOffer={onAcceptManagerOffer} />
+            <ManagerPanel manager={career.managerState} career={career} clubs={clubs} onAdvance={onAdvanceManager} onEnd={onEndManager} onAcceptOffer={onAcceptManagerOffer} onReviewModeChange={onManagerReviewModeChange} onResolveJob={onManagerJobResolve} />
           )}
 
           {/* OVERLAY: Pundit Season */}
@@ -4608,7 +4631,7 @@ function GameScreen({ career, clubs, onNextSeason, onAcceptOffer, onDismissSumma
             {/* Round 112: when you are out of work you are not managing a
                 season, you are waiting for a phone call, and the button
                 should say which one of those is happening. */}
-            <Button onClick={onAdvanceManager} className="flex-1 h-12 text-base font-bold bg-emerald-600 hover:bg-emerald-500 text-black gap-2 max-[399px]:px-3 max-[399px]:text-sm">
+            <Button onClick={onAdvanceManager} disabled={!!readManagerJobReview(career, clubs)?.pending} className="flex-1 h-12 text-base font-bold bg-emerald-600 hover:bg-emerald-500 text-black gap-2 max-[399px]:px-3 max-[399px]:text-sm">
               {career.managerState?.unemployed ? "Sit Out A Season" : "Next Manager Season"} <ChevronRight className="w-5 h-5 max-[399px]:hidden" />
             </Button>
             <Button onClick={onEndManager} variant="outline" className="h-12 text-sm font-bold max-[399px]:px-3">
