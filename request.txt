@@ -1,0 +1,7 @@
+#!serial
+proof-head: node scripts/simUsBoardParity.mjs
+proof-gate: node .rc/x/mutR2.mjs && node scripts/simUsBoardParity.mjs; s=$?; git checkout -- src scripts; exit $s
+recA: node .rc/x/rec1569.mjs $RC_OUT/fixA.json "335c4b1b832a66c577a3dda0a803bec3bca4b40f (Round 1569 fix3, recorded on a GitHub runner with the Round 1424 historical coaching panel the replay uses)"
+recB: node .rc/x/mutR2.mjs && node .rc/x/rec1569.mjs $RC_OUT/fixB.json 335c4b1b832a66c577a3dda0a803bec3bca4b40f-gate-taken-out; s=$?; git checkout -- src scripts; exit $s
+diffB: node .rc/x/fixdiff3.mjs scripts/data/usBoardFixture.json $RC_OUT/fixB.json
+diffAll: node .rc/x/fixdiff3.mjs $RC_OUT/fixB.json $RC_OUT/fixA.json
