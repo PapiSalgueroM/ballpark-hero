@@ -1,0 +1,19 @@
+NEGATIVE CONTROL ON: awaymoves; section 6 must go red
+6) a season out: the league plays a whole season without him, his record gains a year out and nothing else, and refusals touch nothing
+  FAIL [6]: seed 1 year out 1: a round out is not the board's round with no user club (559 of 559 draws replayed, the replay ran out)
+  FAIL [6]: seed 1 year out 1: a round out is not the board's round with no user club (555 of 555 draws replayed, the replay ran out)
+  FAIL [6]: seed 1 year out 1: a round out is not the board's round with no user club (538 of 538 draws replayed, the replay ran out)
+  FAIL [6]: seed 1 year out 1: a round out is not the board's round with no user club (546 of 546 draws replayed, the replay ran out)
+  FAIL [6]: seed 1 year out 1: a round out is not the board's round with no user club (537 of 537 draws replayed, the replay ran out)
+  FAIL [6]: seed 1 year out 1: a round out is not the board's round with no user club (550 of 550 draws replayed, the replay ran out)
+  FAIL [6]: seed 1 year out 1: a round out is not the board's round with no user club (539 of 539 draws replayed, the replay ran out)
+  FAIL [6]: seed 1 year out 1: a round out is not the board's round with no user club (532 of 532 draws replayed, the replay ran out)
+  FAIL [6]: (further failures in this check not printed)
+   60 years out over 20 seeds (0 stopped early); refusals: 20 in a seat, 20 closed, 20 last calls
+   drafted men on the other clubs' rosters after the years out: away 596, idle GM 600 (ratio 0.993); mean roster after a summer: away 12.49, idle GM 12.67
+   retained rows planted 20: 40 summers kept at the figure the club kept, 20 dropped when the entry ran out; the old club's contributors back to automatic after 60 of 60 years
+   the old club drafted 4 men in its 60 years out (printed, not asserted: 2, 0, 6 and 4 on the NHL's four seed sets, r1559-fx2)
+   drafts out replayed against the board's draft with nobody in the chair: 60, 0 differed
+   rounds out replayed against the board's round with no user club: 1200, 1200 differed
+   the old club planted over the roster limit before 60 summers out: trimmed to it after 60
+CONTROL awaymoves: 1 rewrite(s) applied, 1201 failure(s) in section 6 (FIRED)
