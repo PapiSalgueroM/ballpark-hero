@@ -1,0 +1,5 @@
+tsc: node_modules/.bin/tsc --noEmit -p tsconfig.app.json
+sim: node scripts/simBingoClubCounts.mjs
+honours: node scripts/simPlayerBingoHonours.mjs
+gen: node scripts/genBingoClubAdditions.mjs && git diff --exit-code --stat src/data/bingoClubAdditions.json && echo "gen: derived file unchanged by a fresh generator run"
+rivals: node scripts/simNoRivalNames.mjs

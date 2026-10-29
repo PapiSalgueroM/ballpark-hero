@@ -1,0 +1,5 @@
+sim exit=0 4s | simBingoClubCounts: GREEN, every section held
+gen exit=0 1s | gen: derived file unchanged by a fresh generator run
+honours exit=0 14s | simPlayerBingoHonours PASS
+rivals exit=0 20s | No rival product names found. 0 findings.
+tsc exit=0 78s | 
