@@ -1,0 +1,99 @@
+
+[1m[46m RUN [49m[22m [36mv3.2.7 [39m[90m/home/runner/work/ballpark-hero/ballpark-hero[39m
+
+Browserslist: browsers data (caniuse-lite) is 16 months old. Please run:
+  npx update-browserslist-db@latest
+  Why you should do it regularly: https://github.com/browserslist/update-db#readme
+[90mstderr[2m | src/test/usCareerIntlBoard.test.tsx[2m > [22m[2mthe board fixture's fixed NBA saves with the bind mounted[2m > [22m[2mdraw the board they drew without it where no call is met, and a raised save meets the beat
+[22m[39mWarning: A suspended resource finished loading inside a test, but the event was not wrapped in act(...).
+
+When testing, code that resolves suspended data should be wrapped into act(...):
+
+act(() => {
+  /* finish loading suspended data */
+});
+/* assert on the output */
+
+This ensures that you're testing the behavior the user would see in the browser. Learn more at https://reactjs.org/link/wrap-tests-with-act
+
+[90mstdout[2m | src/test/usCareerIntlBoard.test.tsx[2m > [22m[2mthe board fixture's fixed NBA saves with the bind mounted[2m > [22m[2mdraw the board they drew without it where no call is met, and a raised save meets the beat
+[22m[39musCareerIntlBoard: 19 fixed NBA fixture saves meet no call and draw the same board; 0 meet one
+
+[90mstderr[2m | src/test/usCareerIntlBoard.test.tsx[2m > [22m[2mthe board fixture's fixed NBA saves with the bind mounted[2m > [22m[2mdraw the board they drew without it where no call is met, and a raised save meets the beat
+[22m[39mWarning: An update to UsCareerBoard inside a test was not wrapped in act(...).
+
+When testing, code that causes React state updates should be wrapped into act(...):
+
+act(() => {
+  /* fire events that update state */
+});
+/* assert on the output */
+
+This ensures that you're testing the behavior the user would see in the browser. Learn more at https://reactjs.org/link/wrap-tests-with-act
+    at UsCareerBoard (/home/runner/work/ballpark-hero/ballpark-hero/src/components/us-career/UsCareerBoard.tsx:166:26)
+    at Router (file:///home/runner/work/ballpark-hero/ballpark-hero/node_modules/react-router/dist/development/chunk-BV7QT456.mjs:7134:13)
+    at MemoryRouter (file:///home/runner/work/ballpark-hero/ballpark-hero/node_modules/react-router/dist/development/chunk-BV7QT456.mjs:7044:3)
+
+ [32m✓[39m src/test/usCareerIntlBoard.test.tsx [2m([22m[2m8 tests[22m[2m)[22m[33m 3436[2mms[22m[39m
+   [33m[2m✓[22m[39m NBA My Career: the national team on the board[2m > [22ma 2003-04 season at 90 meets the 2004 call: the holding box, then the card in place; Go, the result, a reload [33m 659[2mms[22m[39m
+   [33m[2m✓[22m[39m the board fixture's fixed NBA saves with the bind mounted[2m > [22mdraw the board they drew without it where no call is met, and a raised save meets the beat [33m 2146[2mms[22m[39m
+[90mstdout[2m | src/test/usCareerStartOverClears.test.tsx[2m > [22m[2mStart over leaves no screen of the old career behind[2m > [22m[2mleak-intl: Start over on the national team result, then Enter the draft
+[22m[39mPROBE leak-intl new career on the save: Trey Buckets, age 19, year 2026, 0 seasons, intl null; the screen reads:  Start overTrey Buckets · PGAtlanta Hawks2026 · age 19OVR 69$2.5M x4🪑 Second unit @keyframes cmRise { 0% { opacity: 0; transform: translateY(7px); } 100% { opacity: 1; transform: translateY(0); } } .cm-rise { opacity: 0; animation: cmRise 0.45s ease-out forwards; } @keyframes cmSlam { 0% { opacity: 0; transform: scale(1.6); } 60% { opacity: 1; transform: scale(0.94); } 100% { opacity: 1; transfor
+
+[90mstdout[2m | src/test/usCareerStartOverClears.test.tsx[2m > [22m[2mStart over leaves no screen of the old career behind[2m > [22m[2mleak-curtain: Start over on the season curtain, then Enter the draft
+[22m[39mPROBE curtain before Start over:  Start over @keyframes cmRise { 0% { opacity: 0; transform: translateY(7px); } 100% { opacity: 1; transform: translateY(0); } } .cm-rise { opacity: 0; animation: cmRise 0.45s ease-out forwards; } @keyframes cmSlam { 0% { opacity: 0; transform: scale(1.6); } 60% { opacity: 1; transform: scale(0.94); } 100% { opacity: 1; transform: scale(1); } } .cm-slam { opacity: 0; animation: cmSlam 0.4s cubic-be
+
+[90mstdout[2m | src/test/usCareerStartOverClears.test.tsx[2m > [22m[2mStart over leaves no screen of the old career behind[2m > [22m[2mleak-curtain: Start over on the season curtain, then Enter the draft
+[22m[39mPROBE leak-curtain new career on the save: Trey Buckets, age 19, 0 seasons; the screen's curtain reads: (none)
+
+ [32m✓[39m src/test/usCareerStartOverClears.test.tsx [2m([22m[2m4 tests[22m[2m)[22m[33m 1326[2mms[22m[39m
+   [33m[2m✓[22m[39m Start over leaves no screen of the old career behind[2m > [22mleak-intl: Start over on the national team result, then Enter the draft [33m 584[2mms[22m[39m
+ [32m✓[39m src/test/xiWingbackFit.test.ts [2m([22m[2m6 tests[22m[2m)[22m[32m 22[2mms[22m[39m
+ [32m✓[39m src/test/buildXiClubYearSetup.test.tsx [2m([22m[2m2 tests[22m[2m)[22m[33m 2852[2mms[22m[39m
+   [33m[2m✓[22m[39m Build Your XI club year setup[2m > [22mkeeps the mixed draft and six formations available [33m 2009[2mms[22m[39m
+   [33m[2m✓[22m[39m Build Your XI club year setup[2m > [22moffers a recorded year club draft before formation [33m 841[2mms[22m[39m
+ [32m✓[39m src/test/usCareerReports1569.test.tsx [2m([22m[2m52 tests[22m[2m)[22m[33m 26971[2mms[22m[39m
+   [33m[2m✓[22m[39m Round 1569 report A: Start over from every screen[2m > [22m'NFL' starts over from the hub of a two season career [33m 1071[2mms[22m[39m
+   [33m[2m✓[22m[39m Round 1569 report A: Start over from every screen[2m > [22m'NBA' starts over from the hub of a two season career [33m 662[2mms[22m[39m
+   [33m[2m✓[22m[39m Round 1569 report A: Start over from every screen[2m > [22m'MLB' starts over from the hub of a two season career [33m 428[2mms[22m[39m
+   [33m[2m✓[22m[39m Round 1569 report A: Start over from every screen[2m > [22m'NHL' starts over from the hub of a two season career [33m 348[2mms[22m[39m
+   [33m[2m✓[22m[39m Round 1569 report A: Start over from every screen[2m > [22m'NFL' starts over from the free agency window [33m 829[2mms[22m[39m
+   [33m[2m✓[22m[39m Round 1569 report A: Start over from every screen[2m > [22m'NBA' starts over from the free agency window [33m 948[2mms[22m[39m
+   [33m[2m✓[22m[39m Round 1569 report A: Start over from every screen[2m > [22m'MLB' starts over from the free agency window [33m 879[2mms[22m[39m
+   [33m[2m✓[22m[39m Round 1569 report A: Start over from every screen[2m > [22m'NHL' starts over from the free agency window [33m 1435[2mms[22m[39m
+   [33m[2m✓[22m[39m Round 1569 report A: Start over from every screen[2m > [22m'NFL' starts over from the extension talk [33m 866[2mms[22m[39m
+   [33m[2m✓[22m[39m Round 1569 report A: Start over from every screen[2m > [22m'NBA' starts over from the extension talk [33m 721[2mms[22m[39m
+   [33m[2m✓[22m[39m Round 1569 report A: Start over from every screen[2m > [22m'MLB' starts over from the extension talk [33m 1018[2mms[22m[39m
+   [33m[2m✓[22m[39m Round 1569 report A: Start over from every screen[2m > [22m'NHL' starts over from the extension talk [33m 1184[2mms[22m[39m
+   [33m[2m✓[22m[39m Round 1569 report A: Start over from every screen[2m > [22m'NFL' starts over from the retired card and from the coaching career [33m 839[2mms[22m[39m
+   [33m[2m✓[22m[39m Round 1569 report A: Start over from every screen[2m > [22m'NBA' starts over from the retired card and from the coaching career [33m 918[2mms[22m[39m
+   [33m[2m✓[22m[39m Round 1569 report A: Start over from every screen[2m > [22m'MLB' starts over from the retired card and from the coaching career [33m 611[2mms[22m[39m
+   [33m[2m✓[22m[39m Round 1569 report A: Start over from every screen[2m > [22m'NHL' starts over from the retired card and from the coaching career [33m 534[2mms[22m[39m
+   [33m[2m✓[22m[39m Round 1569 report A: Start over from every screen[2m > [22m'NFL' starts over from the road to the draft [33m 443[2mms[22m[39m
+   [33m[2m✓[22m[39m Round 1569 report A: Start over from every screen[2m > [22m'NBA' starts over from the road to the draft [33m 420[2mms[22m[39m
+   [33m[2m✓[22m[39m Round 1569 report A: Start over from every screen[2m > [22m'MLB' starts over from the road to the draft [33m 591[2mms[22m[39m
+   [33m[2m✓[22m[39m Round 1569 report A: Start over from every screen[2m > [22m'NHL' starts over from the road to the draft [33m 510[2mms[22m[39m
+   [33m[2m✓[22m[39m Round 1569 ruling R3: a restart says the Hall card goes too[2m > [22m'NFL' names the Hall card on every restart prompt of a retired career and not on a live one [33m 705[2mms[22m[39m
+   [33m[2m✓[22m[39m Round 1569 ruling R3: a restart says the Hall card goes too[2m > [22m'NBA' names the Hall card on every restart prompt of a retired career and not on a live one [33m 604[2mms[22m[39m
+   [33m[2m✓[22m[39m Round 1569 ruling R3: a restart says the Hall card goes too[2m > [22m'MLB' names the Hall card on every restart prompt of a retired career and not on a live one [33m 563[2mms[22m[39m
+   [33m[2m✓[22m[39m Round 1569 ruling R3: a restart says the Hall card goes too[2m > [22m'NHL' names the Hall card on every restart prompt of a retired career and not on a live one [33m 584[2mms[22m[39m
+   [33m[2m✓[22m[39m Round 1569 report B: no offer is never a dead end[2m > [22m'NFL': a no offer talk in the last season says why, says it is the last, and retires in full [33m 486[2mms[22m[39m
+   [33m[2m✓[22m[39m Round 1569 report B: no offer is never a dead end[2m > [22m'NBA': a no offer talk in the last season says why, says it is the last, and retires in full [33m 452[2mms[22m[39m
+   [33m[2m✓[22m[39m Round 1569 report B: no offer is never a dead end[2m > [22m'MLB': a no offer talk in the last season says why, says it is the last, and retires in full [33m 436[2mms[22m[39m
+   [33m[2m✓[22m[39m Round 1569 report B: no offer is never a dead end[2m > [22m'NHL': a no offer talk in the last season says why, says it is the last, and retires in full [33m 419[2mms[22m[39m
+   [33m[2m✓[22m[39m Round 1569 report B: no offer is never a dead end[2m > [22m'NFL': free agency offers a veteran Retire instead, and a two season player none [33m 845[2mms[22m[39m
+   [33m[2m✓[22m[39m Round 1569 report B: no offer is never a dead end[2m > [22m'NBA': free agency offers a veteran Retire instead, and a two season player none [33m 831[2mms[22m[39m
+   [33m[2m✓[22m[39m Round 1569 report B: no offer is never a dead end[2m > [22m'MLB': free agency offers a veteran Retire instead, and a two season player none [33m 811[2mms[22m[39m
+   [33m[2m✓[22m[39m Round 1569 report B: no offer is never a dead end[2m > [22m'NHL': free agency offers a veteran Retire instead, and a two season player none [33m 850[2mms[22m[39m
+ [32m✓[39m src/test/buildXiClubYear.test.tsx [2m([22m[2m12 tests[22m[2m)[22m[33m 33058[2mms[22m[39m
+   [33m[2m✓[22m[39m Build Your XI Club year Browse on the real page[2m > [22mbrowses past eight records and reopens after Escape and outside focus [33m 1644[2mms[22m[39m
+   [33m[2m✓[22m[39m Build Your XI Club year Browse on the real page[2m > [22mkeeps typed search at eight and admits the keyboard-selected matching keeper once [33m 1083[2mms[22m[39m
+   [33m[2m✓[22m[39m Build Your XI Club year Browse on the real page[2m > [22mdistinguishes an empty matching record list from a failed read [33m 1306[2mms[22m[39m
+   [33m[2m✓[22m[39m Build Your XI Club year Browse on the real page[2m > [22muses the selected-row report once through review result and replay without a pundit call [33m 9656[2mms[22m[39m
+   [33m[2m✓[22m[39m Build Your XI Club year Browse on the real page[2m > [22mshows an unrated completed draft when the selected rows lack numeric inputs [33m 18986[2mms[22m[39m
+
+[2m Test Files [22m [1m[32m6 passed[39m[22m[90m (6)[39m
+[2m      Tests [22m [1m[32m84 passed[39m[22m[90m (84)[39m
+[2m   Start at [22m 21:47:29
+[2m   Duration [22m 36.99s[2m (transform 5.79s, setup 611ms, collect 14.68s, tests 67.67s, environment 3.86s, prepare 931ms)[22m
+
