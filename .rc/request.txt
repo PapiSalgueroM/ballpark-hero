@@ -1,0 +1,6 @@
+tsc: node_modules/.bin/tsc --noEmit -p tsconfig.app.json
+vitest: node_modules/.bin/vitest run src/test/clubCareerAdditions.test.ts src/test/playerBingoClubCounts.test.ts src/test/playerBingoHonours.test.ts src/test/playerBingoTransport.test.ts src/test/playerBingoWorldCupAlias.test.ts src/test/playerBingoReport.test.tsx src/test/playerBingoLoad.test.tsx src/test/playerBingoLineFeedback.test.tsx src/test/scoreShown.test.tsx src/test/playerBingoRodriHonour.test.ts src/test/playerBingoCategories.test.ts src/test/playerBingoBirthYear.test.ts --testTimeout=300000 --hookTimeout=120000
+simBingoClubCounts: node scripts/simBingoClubCounts.mjs
+simPlayerBingoHonours: node scripts/simPlayerBingoHonours.mjs
+simPlayerBingoCategories: CI=1 SIM_NETWORK=offline node scripts/simPlayerBingoCategories.mjs
+simNoRivalNames: node scripts/simNoRivalNames.mjs
