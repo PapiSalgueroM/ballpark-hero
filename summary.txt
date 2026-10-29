@@ -1,0 +1,6 @@
+guide-refresh exit=0 3s | simGuideHeadings: green. 131 guides carry keyword h2s over h3 and h4 sections with every original sentence intact, and all 133 blocks render a clean outline.
+vitest-case exit=0 11s |    Duration  10.12s (transform 5.77s, setup 622ms, collect 10.52s, tests 7.62s, environment 3.92s, prepare 963ms)
+simUsCareerWeight exit=0 0s | simUsCareerWeight: green. 31 checks: the four wrappers hand the board their own binding, no shared file or binding imports another sport, and every control fired.
+intl-12 exit=0 1s | simCareerIntl: GREEN, 13 checks over sections 12
+tsc exit=0 87s | 
+simNbaAwardsSense exit=0 138s | simNbaAwardsSense: 164 checks, 0 failed (full size), 138s

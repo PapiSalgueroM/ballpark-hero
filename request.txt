@@ -1,0 +1,6 @@
+tsc: node_modules/.bin/tsc --noEmit -p tsconfig.app.json
+vitest-case: node_modules/.bin/vitest run src/test/usCareerIntlBoard.test.tsx src/test/nbaTrophyTile.test.ts src/test/nbaCareerIntl.test.ts src/lib/careerIntl.test.ts src/test/nbaIntlResultLines.test.tsx --testTimeout=300000 --hookTimeout=120000
+guide-refresh: node scripts/simGuideHeadings.mjs --refresh /nba-my-career && cp scripts/data/guideHeadingsFrozen.json "$RC_OUT/" && node scripts/simGuideHeadings.mjs
+simNbaAwardsSense: node scripts/simNbaAwardsSense.mjs
+simUsCareerWeight: node scripts/simUsCareerWeight.mjs
+intl-12: INTL_SECTIONS=12 node scripts/simCareerIntl.mjs
