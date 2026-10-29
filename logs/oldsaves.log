@@ -1,0 +1,1163 @@
+Preparing worktree (detached HEAD 493926a4f6)
+HEAD is now at 493926a4f6 Round 1569: R3's proof moves to the round's own test, and the confirm harness follows the prompt's new line
+base saves: 16 a sport from /tmp/base; outcomes {"nfl":{"waiting":7,"notOnBallot":8,"inducted":1},"nba":{"notOnBallot":7,"waiting":8,"inducted":1},"mlb":{"fellOff":8,"notOnBallot":8},"nhl":{"notOnBallot":12,"inducted":2,"waiting":2}}
+
+[1m[46m RUN [49m[22m [36mv3.2.7 [39m[90m/home/runner/work/ballpark-hero/ballpark-hero[39m
+
+Browserslist: browsers data (caniuse-lite) is 16 months old. Please run:
+  npx update-browserslist-db@latest
+  Why you should do it regularly: https://github.com/browserslist/update-db#readme
+ [31m❯[39m src/test/zzReviewOldSaves.test.tsx [2m([22m[2m4 tests[22m[2m | [22m[31m4 failed[39m[2m)[22m[33m 4623[2mms[22m[39m
+[31m   [31m×[31m 'NFL': base saves loaded one after another on the branch board[2m > [22msave bytes, one write, the base card, the prompt, and the eviction rule[39m[33m 1217[2mms[22m[39m
+[31m     → expected undefined to be truthy
+
+Ignored nodes: comments, script, style
+[36m<html>[31m
+  [36m<head />[31m
+  [36m<body>[31m
+    [36m<div>[31m
+      [36m<div>[31m
+        [36m<div[31m
+          [33mclass[31m=[32m"mb-2 flex justify-end lg:pointer-events-none lg:sticky lg:top-12 lg:z-20 lg:mb-0 lg:h-0"[31m
+          [33mdata-career-start-over[31m=[32m""[31m
+        [36m>[31m
+          [36m<button[31m
+            [33maria-controls[31m=[32m"radix-:r3:"[31m
+            [33maria-expanded[31m=[32m"false"[31m
+            [33maria-haspopup[31m=[32m"dialog"[31m
+            [33mclass[31m=[32m"inline-flex min-h-11 shrink-0 items-center gap-1.5 rounded-full border border-border bg-card px-4 text-xs font-semibold text-muted-foreground shadow-sm hover:text-foreground lg:pointer-events-auto lg:translate-x-[calc(100%+2rem)]"[31m
+            [33mdata-state[31m=[32m"closed"[31m
+            [33mtype[31m=[32m"button"[31m
+          [36m>[31m
+            [36m<svg[31m
+              [33maria-hidden[31m=[32m"true"[31m
+              [33mclass[31m=[32m"lucide lucide-rotate-ccw h-3.5 w-3.5"[31m
+              [33mfill[31m=[32m"none"[31m
+              [33mheight[31m=[32m"24"[31m
+              [33mstroke[31m=[32m"currentColor"[31m
+              [33mstroke-linecap[31m=[32m"round"[31m
+              [33mstroke-linejoin[31m=[32m"round"[31m
+              [33mstroke-width[31m=[32m"2"[31m
+              [33mviewBox[31m=[32m"0 0 24 24"[31m
+              [33mwidth[31m=[32m"24"[31m
+              [33mxmlns[31m=[32m"http://www.w3.org/2000/svg"[31m
+            [36m>[31m
+              [36m<path[31m
+                [33md[31m=[32m"M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"[31m
+              [36m/>[31m
+              [36m<path[31m
+                [33md[31m=[32m"M3 3v5h5"[31m
+              [36m/>[31m
+            [36m</svg>[31m
+            [0m Start over[0m
+          [36m</button>[31m
+        [36m</div>[31m
+        [36m<div>[31m
+          [36m<div[31m
+            [33mclass[31m=[32m"space-y-3"[31m
+            [33mdata-rivalry-event[31m=[32m"true"[31m
+          [36m>[31m
+            [36m<div[31m
+              [33mclass[31m=[32m"cm-rise rounded-2xl border border-gold/40 bg-card p-4 text-center"[31m
+            [36m>[31m
+              [36m<p[31m
+                [33mclass[31m=[32m"text-[10px] font-bold uppercase tracking-wider text-muted-foreground"[31m
+              [36m>[31m
+                [0m🪞 Rivalry[0m
+              [36m</p>[31m
+              [36m<p[31m
+                [33mclass[31m=[32m"cm-slam mt-1 text-3xl leading-none"[31m
+                [33mstyle[31m=[32m"animation-delay: 0.2s;"[31m
+              [36m>[31m
+                [0m👋[0m
+              [36m</p>[31m
+              [36m<p[31m
+                [33mclass[31m=[32m"cm-slam mt-1.5 font-display text-lg font-black text-foreground"[31m
+                [33mstyle[31m=[32m"animation-delay: 0.3s;"[31m
+              [36m>[31m
+                [0mRival Retires[0m
+              [36m</p>[31m
+              [36m<p[31m
+                [33mclass[31m=[32m"cm-rise mt-2 text-sm leading-snug text-muted-foreground"[31m
+                [33mstyle[31m=[32m"animation-delay: 0.55s;"[31m
+              [36m>[31m
+                [0mJonah Nakamura announces retirement. He calls the rivalry the best thing that ever happened to his career.[0m
+              [36m</p>[31m
+              [36m<p[31m
+                [33mclass[31m=[32m"cm-tick-in mt-3 rounded-xl bg-secondary px-3 py-2 text-xs font-semibold text-foreground"[31m
+                [33mstyle[31m=[32m"animation-delay: 0.75s;"[31m
+              [36m>[31m
+                [0mLegacy +10, end of an era[0m
+              [36m</p>[31m
+              [36m<div[31m
+                [33mclass[31m=[32m"cm-rise mt-3 flex items-center justify-between rounded-xl bg-secondary/60 p-3"[31m
+                [33mstyle[31m=[32m"animation-delay: 1s;"[31m
+              [36m>[31m
+                [36m<div[31m
+                  [33mclass[31m=[32m"flex-1 text-center"[31m
+                [36m>[31m
+                  [36m<div[31m
+                    [33mclass[31m=[32m"text-xs font-bold text-foreground"[31m
+                  [36m>[31m
+                    [0mMaximilian Featherstonex[0m
+                  [36m</div>[31m
+                  [36m<div[31m
+                    [33mclass[31m=[32m"text-xl font-black text-gold"[31m
+                  [36m>[31m
+                    [0m67[0m
+                  [36m</div>[31m
+                [36m</div>[31m
+                [36m<div[31m
+                  [33mclass[31m=[32m"text-sm font-black text-muted-foreground"[31m
+                [36m>[31m
+                  [0mVS[0m
+                [36m</div>[31m
+                [36m<div[31m
+                  [33mclass[31m=[32m"flex-1 text-center"[31m
+                [36m>[31m
+                  [36m<div[31m
+                    [33mclass[31m=[32m"text-xs font-bold text-foreground"[31m
+                  [36m>[31m
+                    [0mJonah Nakamura[0m
+                  [36m</div>[31m
+                  [36m<div[31m
+                    [33mclass[31m=[32m"text-xl font-black text-muted-foreground"[31m
+                  [36m>[31m
+                    [0m66[0m
+                  [36m</div>[31m
+                [36m</div>[31m
+              [36m</div>[31m
+            [36m</div>[31m
+            [36m<button[31m
+              [33mclass[31m=[32m"cm-rise mx-auto flex items-center gap-2 rounded-full bg-primary px-8 py-2.5 text-sm font-bold text-primary-foreground hover:brightness-110"[31m
+              [33mstyle[31m=[32m"animation-delay: 1.2s;"[31m
+            [36m>[31m
+              [0mContinue[0m
+            [36m</button>[31m
+          [36m</div>[31m
+        [36m</div>[31m
+      [36m</div>[31m
+    [36m</div>[31m
+  [36m</body>[31m
+[36m</html>[31m[39m
+[31m   [31m×[31m 'NBA': base saves loaded one after another on the branch board[2m > [22msave bytes, one write, the base card, the prompt, and the eviction rule[39m[33m 1136[2mms[22m[39m
+[31m     → expected undefined to be truthy
+
+Ignored nodes: comments, script, style
+[36m<html>[31m
+  [36m<head />[31m
+  [36m<body>[31m
+    [36m<div>[31m
+      [36m<div>[31m
+        [36m<div[31m
+          [33mclass[31m=[32m"mb-2 flex justify-end lg:pointer-events-none lg:sticky lg:top-12 lg:z-20 lg:mb-0 lg:h-0"[31m
+          [33mdata-career-start-over[31m=[32m""[31m
+        [36m>[31m
+          [36m<button[31m
+            [33maria-controls[31m=[32m"radix-:r9:"[31m
+            [33maria-expanded[31m=[32m"false"[31m
+            [33maria-haspopup[31m=[32m"dialog"[31m
+            [33mclass[31m=[32m"inline-flex min-h-11 shrink-0 items-center gap-1.5 rounded-full border border-border bg-card px-4 text-xs font-semibold text-muted-foreground shadow-sm hover:text-foreground lg:pointer-events-auto lg:translate-x-[calc(100%+2rem)]"[31m
+            [33mdata-state[31m=[32m"closed"[31m
+            [33mtype[31m=[32m"button"[31m
+          [36m>[31m
+            [36m<svg[31m
+              [33maria-hidden[31m=[32m"true"[31m
+              [33mclass[31m=[32m"lucide lucide-rotate-ccw h-3.5 w-3.5"[31m
+              [33mfill[31m=[32m"none"[31m
+              [33mheight[31m=[32m"24"[31m
+              [33mstroke[31m=[32m"currentColor"[31m
+              [33mstroke-linecap[31m=[32m"round"[31m
+              [33mstroke-linejoin[31m=[32m"round"[31m
+              [33mstroke-width[31m=[32m"2"[31m
+              [33mviewBox[31m=[32m"0 0 24 24"[31m
+              [33mwidth[31m=[32m"24"[31m
+              [33mxmlns[31m=[32m"http://www.w3.org/2000/svg"[31m
+            [36m>[31m
+              [36m<path[31m
+                [33md[31m=[32m"M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"[31m
+              [36m/>[31m
+              [36m<path[31m
+                [33md[31m=[32m"M3 3v5h5"[31m
+              [36m/>[31m
+            [36m</svg>[31m
+            [0m Start over[0m
+          [36m</button>[31m
+        [36m</div>[31m
+        [36m<div>[31m
+          [36m<div[31m
+            [33mclass[31m=[32m"space-y-3"[31m
+            [33mdata-rivalry-event[31m=[32m"true"[31m
+          [36m>[31m
+            [36m<div[31m
+              [33mclass[31m=[32m"cm-rise rounded-2xl border border-gold/40 bg-card p-4 text-center"[31m
+            [36m>[31m
+              [36m<p[31m
+                [33mclass[31m=[32m"text-[10px] font-bold uppercase tracking-wider text-muted-foreground"[31m
+              [36m>[31m
+                [0m🪞 Rivalry[0m
+              [36m</p>[31m
+              [36m<p[31m
+                [33mclass[31m=[32m"cm-slam mt-1 text-3xl leading-none"[31m
+                [33mstyle[31m=[32m"animation-delay: 0.2s;"[31m
+              [36m>[31m
+                [0m👋[0m
+              [36m</p>[31m
+              [36m<p[31m
+                [33mclass[31m=[32m"cm-slam mt-1.5 font-display text-lg font-black text-foreground"[31m
+                [33mstyle[31m=[32m"animation-delay: 0.3s;"[31m
+              [36m>[31m
+                [0mRival Retires[0m
+              [36m</p>[31m
+              [36m<p[31m
+                [33mclass[31m=[32m"cm-rise mt-2 text-sm leading-snug text-muted-foreground"[31m
+                [33mstyle[31m=[32m"animation-delay: 0.55s;"[31m
+              [36m>[31m
+                [0mRhys Vasquez announces retirement. He calls the rivalry the best thing that ever happened to his career.[0m
+              [36m</p>[31m
+              [36m<p[31m
+                [33mclass[31m=[32m"cm-tick-in mt-3 rounded-xl bg-secondary px-3 py-2 text-xs font-semibold text-foreground"[31m
+                [33mstyle[31m=[32m"animation-delay: 0.75s;"[31m
+              [36m>[31m
+                [0mLegacy +10, end of an era[0m
+              [36m</p>[31m
+              [36m<div[31m
+                [33mclass[31m=[32m"cm-rise mt-3 flex items-center justify-between rounded-xl bg-secondary/60 p-3"[31m
+                [33mstyle[31m=[32m"animation-delay: 1s;"[31m
+              [36m>[31m
+                [36m<div[31m
+                  [33mclass[31m=[32m"flex-1 text-center"[31m
+                [36m>[31m
+                  [36m<div[31m
+                    [33mclass[31m=[32m"text-xs font-bold text-foreground"[31m
+                  [36m>[31m
+                    [0mMaximilian Featherstonex[0m
+                  [36m</div>[31m
+                  [36m<div[31m
+                    [33mclass[31m=[32m"text-xl font-black text-gold"[31m
+                  [36m>[31m
+                    [0m65[0m
+                  [36m</div>[31m
+                [36m</div>[31m
+                [36m<div[31m
+                  [33mclass[31m=[32m"text-sm font-black text-muted-foreground"[31m
+                [36m>[31m
+                  [0mVS[0m
+                [36m</div>[31m
+                [36m<div[31m
+                  [33mclass[31m=[32m"flex-1 text-center"[31m
+                [36m>[31m
+                  [36m<div[31m
+                    [33mclass[31m=[32m"text-xs font-bold text-foreground"[31m
+                  [36m>[31m
+                    [0mRhys Vasquez[0m
+                  [36m</div>[31m
+                  [36m<div[31m
+                    [33mclass[31m=[32m"text-xl font-black text-muted-foreground"[31m
+                  [36m>[31m
+                    [0m75[0m
+                  [36m</div>[31m
+                [36m</div>[31m
+              [36m</div>[31m
+            [36m</div>[31m
+            [36m<button[31m
+              [33mclass[31m=[32m"cm-rise mx-auto flex items-center gap-2 rounded-full bg-primary px-8 py-2.5 text-sm font-bold text-primary-foreground hover:brightness-110"[31m
+              [33mstyle[31m=[32m"animation-delay: 1.2s;"[31m
+            [36m>[31m
+              [0mContinue[0m
+            [36m</button>[31m
+          [36m</div>[31m
+        [36m</div>[31m
+      [36m</div>[31m
+    [36m</div>[31m
+  [36m</body>[31m
+[36m</html>[31m[39m
+[31m   [31m×[31m 'MLB': base saves loaded one after another on the branch board[2m > [22msave bytes, one write, the base card, the prompt, and the eviction rule[39m[33m 1137[2mms[22m[39m
+[31m     → expected undefined to be truthy
+
+Ignored nodes: comments, script, style
+[36m<html>[31m
+  [36m<head />[31m
+  [36m<body>[31m
+    [36m<div>[31m
+      [36m<div>[31m
+        [36m<div[31m
+          [33mclass[31m=[32m"mb-2 flex justify-end lg:pointer-events-none lg:sticky lg:top-12 lg:z-20 lg:mb-0 lg:h-0"[31m
+          [33mdata-career-start-over[31m=[32m""[31m
+        [36m>[31m
+          [36m<button[31m
+            [33maria-controls[31m=[32m"radix-:rf:"[31m
+            [33maria-expanded[31m=[32m"false"[31m
+            [33maria-haspopup[31m=[32m"dialog"[31m
+            [33mclass[31m=[32m"inline-flex min-h-11 shrink-0 items-center gap-1.5 rounded-full border border-border bg-card px-4 text-xs font-semibold text-muted-foreground shadow-sm hover:text-foreground lg:pointer-events-auto lg:translate-x-[calc(100%+2rem)]"[31m
+            [33mdata-state[31m=[32m"closed"[31m
+            [33mtype[31m=[32m"button"[31m
+          [36m>[31m
+            [36m<svg[31m
+              [33maria-hidden[31m=[32m"true"[31m
+              [33mclass[31m=[32m"lucide lucide-rotate-ccw h-3.5 w-3.5"[31m
+              [33mfill[31m=[32m"none"[31m
+              [33mheight[31m=[32m"24"[31m
+              [33mstroke[31m=[32m"currentColor"[31m
+              [33mstroke-linecap[31m=[32m"round"[31m
+              [33mstroke-linejoin[31m=[32m"round"[31m
+              [33mstroke-width[31m=[32m"2"[31m
+              [33mviewBox[31m=[32m"0 0 24 24"[31m
+              [33mwidth[31m=[32m"24"[31m
+              [33mxmlns[31m=[32m"http://www.w3.org/2000/svg"[31m
+            [36m>[31m
+              [36m<path[31m
+                [33md[31m=[32m"M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"[31m
+              [36m/>[31m
+              [36m<path[31m
+                [33md[31m=[32m"M3 3v5h5"[31m
+              [36m/>[31m
+            [36m</svg>[31m
+            [0m Start over[0m
+          [36m</button>[31m
+        [36m</div>[31m
+        [36m<div>[31m
+          [36m<div[31m
+            [33mclass[31m=[32m"space-y-3"[31m
+            [33mdata-rivalry-event[31m=[32m"true"[31m
+          [36m>[31m
+            [36m<div[31m
+              [33mclass[31m=[32m"cm-rise rounded-2xl border border-gold/40 bg-card p-4 text-center"[31m
+            [36m>[31m
+              [36m<p[31m
+                [33mclass[31m=[32m"text-[10px] font-bold uppercase tracking-wider text-muted-foreground"[31m
+              [36m>[31m
+                [0m🪞 Rivalry[0m
+              [36m</p>[31m
+              [36m<p[31m
+                [33mclass[31m=[32m"cm-slam mt-1 text-3xl leading-none"[31m
+                [33mstyle[31m=[32m"animation-delay: 0.2s;"[31m
+              [36m>[31m
+                [0m👋[0m
+              [36m</p>[31m
+              [36m<p[31m
+                [33mclass[31m=[32m"cm-slam mt-1.5 font-display text-lg font-black text-foreground"[31m
+                [33mstyle[31m=[32m"animation-delay: 0.3s;"[31m
+              [36m>[31m
+                [0mRival Retires[0m
+              [36m</p>[31m
+              [36m<p[31m
+                [33mclass[31m=[32m"cm-rise mt-2 text-sm leading-snug text-muted-foreground"[31m
+                [33mstyle[31m=[32m"animation-delay: 0.55s;"[31m
+              [36m>[31m
+                [0mRhys Marchetti announces retirement. He calls the rivalry the best thing that ever happened to his career.[0m
+              [36m</p>[31m
+              [36m<p[31m
+                [33mclass[31m=[32m"cm-tick-in mt-3 rounded-xl bg-secondary px-3 py-2 text-xs font-semibold text-foreground"[31m
+                [33mstyle[31m=[32m"animation-delay: 0.75s;"[31m
+              [36m>[31m
+                [0mLegacy +10, end of an era[0m
+              [36m</p>[31m
+              [36m<div[31m
+                [33mclass[31m=[32m"cm-rise mt-3 flex items-center justify-between rounded-xl bg-secondary/60 p-3"[31m
+                [33mstyle[31m=[32m"animation-delay: 1s;"[31m
+              [36m>[31m
+                [36m<div[31m
+                  [33mclass[31m=[32m"flex-1 text-center"[31m
+                [36m>[31m
+                  [36m<div[31m
+                    [33mclass[31m=[32m"text-xs font-bold text-foreground"[31m
+                  [36m>[31m
+                    [0mMaximilian Featherstonex[0m
+                  [36m</div>[31m
+                  [36m<div[31m
+                    [33mclass[31m=[32m"text-xl font-black text-gold"[31m
+                  [36m>[31m
+                    [0m60[0m
+                  [36m</div>[31m
+                [36m</div>[31m
+                [36m<div[31m
+                  [33mclass[31m=[32m"text-sm font-black text-muted-foreground"[31m
+                [36m>[31m
+                  [0mVS[0m
+                [36m</div>[31m
+                [36m<div[31m
+                  [33mclass[31m=[32m"flex-1 text-center"[31m
+                [36m>[31m
+                  [36m<div[31m
+                    [33mclass[31m=[32m"text-xs font-bold text-foreground"[31m
+                  [36m>[31m
+                    [0mRhys Marchetti[0m
+                  [36m</div>[31m
+                  [36m<div[31m
+                    [33mclass[31m=[32m"text-xl font-black text-muted-foreground"[31m
+                  [36m>[31m
+                    [0m76[0m
+                  [36m</div>[31m
+                [36m</div>[31m
+              [36m</div>[31m
+            [36m</div>[31m
+            [36m<button[31m
+              [33mclass[31m=[32m"cm-rise mx-auto flex items-center gap-2 rounded-full bg-primary px-8 py-2.5 text-sm font-bold text-primary-foreground hover:brightness-110"[31m
+              [33mstyle[31m=[32m"animation-delay: 1.2s;"[31m
+            [36m>[31m
+              [0mContinue[0m
+            [36m</button>[31m
+          [36m</div>[31m
+        [36m</div>[31m
+      [36m</div>[31m
+    [36m</div>[31m
+  [36m</body>[31m
+[36m</html>[31m[39m
+[31m   [31m×[31m 'NHL': base saves loaded one after another on the branch board[2m > [22msave bytes, one write, the base card, the prompt, and the eviction rule[39m[33m 1132[2mms[22m[39m
+[31m     → expected undefined to be truthy
+
+Ignored nodes: comments, script, style
+[36m<html>[31m
+  [36m<head />[31m
+  [36m<body>[31m
+    [36m<div>[31m
+      [36m<div>[31m
+        [36m<div[31m
+          [33mclass[31m=[32m"mb-2 flex justify-end lg:pointer-events-none lg:sticky lg:top-12 lg:z-20 lg:mb-0 lg:h-0"[31m
+          [33mdata-career-start-over[31m=[32m""[31m
+        [36m>[31m
+          [36m<button[31m
+            [33maria-controls[31m=[32m"radix-:rl:"[31m
+            [33maria-expanded[31m=[32m"false"[31m
+            [33maria-haspopup[31m=[32m"dialog"[31m
+            [33mclass[31m=[32m"inline-flex min-h-11 shrink-0 items-center gap-1.5 rounded-full border border-border bg-card px-4 text-xs font-semibold text-muted-foreground shadow-sm hover:text-foreground lg:pointer-events-auto lg:translate-x-[calc(100%+2rem)]"[31m
+            [33mdata-state[31m=[32m"closed"[31m
+            [33mtype[31m=[32m"button"[31m
+          [36m>[31m
+            [36m<svg[31m
+              [33maria-hidden[31m=[32m"true"[31m
+              [33mclass[31m=[32m"lucide lucide-rotate-ccw h-3.5 w-3.5"[31m
+              [33mfill[31m=[32m"none"[31m
+              [33mheight[31m=[32m"24"[31m
+              [33mstroke[31m=[32m"currentColor"[31m
+              [33mstroke-linecap[31m=[32m"round"[31m
+              [33mstroke-linejoin[31m=[32m"round"[31m
+              [33mstroke-width[31m=[32m"2"[31m
+              [33mviewBox[31m=[32m"0 0 24 24"[31m
+              [33mwidth[31m=[32m"24"[31m
+              [33mxmlns[31m=[32m"http://www.w3.org/2000/svg"[31m
+            [36m>[31m
+              [36m<path[31m
+                [33md[31m=[32m"M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"[31m
+              [36m/>[31m
+              [36m<path[31m
+                [33md[31m=[32m"M3 3v5h5"[31m
+              [36m/>[31m
+            [36m</svg>[31m
+            [0m Start over[0m
+          [36m</button>[31m
+        [36m</div>[31m
+        [36m<div>[31m
+          [36m<div[31m
+            [33mclass[31m=[32m"space-y-3"[31m
+            [33mdata-rivalry-event[31m=[32m"true"[31m
+          [36m>[31m
+            [36m<div[31m
+              [33mclass[31m=[32m"cm-rise rounded-2xl border border-gold/40 bg-card p-4 text-center"[31m
+            [36m>[31m
+              [36m<p[31m
+                [33mclass[31m=[32m"text-[10px] font-bold uppercase tracking-wider text-muted-foreground"[31m
+              [36m>[31m
+                [0m🪞 Rivalry[0m
+              [36m</p>[31m
+              [36m<p[31m
+                [33mclass[31m=[32m"cm-slam mt-1 text-3xl leading-none"[31m
+                [33mstyle[31m=[32m"animation-delay: 0.2s;"[31m
+              [36m>[31m
+                [0m👋[0m
+              [36m</p>[31m
+              [36m<p[31m
+                [33mclass[31m=[32m"cm-slam mt-1.5 font-display text-lg font-black text-foreground"[31m
+                [33mstyle[31m=[32m"animation-delay: 0.3s;"[31m
+              [36m>[31m
+                [0mRival Retires[0m
+              [36m</p>[31m
+              [36m<p[31m
+                [33mclass[31m=[32m"cm-rise mt-2 text-sm leading-snug text-muted-foreground"[31m
+                [33mstyle[31m=[32m"animation-delay: 0.55s;"[31m
+              [36m>[31m
+                [0mRowan Vasquez announces retirement. He calls the rivalry the best thing that ever happened to his career.[0m
+              [36m</p>[31m
+              [36m<p[31m
+                [33mclass[31m=[32m"cm-tick-in mt-3 rounded-xl bg-secondary px-3 py-2 text-xs font-semibold text-foreground"[31m
+                [33mstyle[31m=[32m"animation-delay: 0.75s;"[31m
+              [36m>[31m
+                [0mLegacy +10, end of an era[0m
+              [36m</p>[31m
+              [36m<div[31m
+                [33mclass[31m=[32m"cm-rise mt-3 flex items-center justify-between rounded-xl bg-secondary/60 p-3"[31m
+                [33mstyle[31m=[32m"animation-delay: 1s;"[31m
+              [36m>[31m
+                [36m<div[31m
+                  [33mclass[31m=[32m"flex-1 text-center"[31m
+                [36m>[31m
+                  [36m<div[31m
+                    [33mclass[31m=[32m"text-xs font-bold text-foreground"[31m
+                  [36m>[31m
+                    [0mMaximilian Featherstonex[0m
+                  [36m</div>[31m
+                  [36m<div[31m
+                    [33mclass[31m=[32m"text-xl font-black text-gold"[31m
+                  [36m>[31m
+                    [0m62[0m
+                  [36m</div>[31m
+                [36m</div>[31m
+                [36m<div[31m
+                  [33mclass[31m=[32m"text-sm font-black text-muted-foreground"[31m
+                [36m>[31m
+                  [0mVS[0m
+                [36m</div>[31m
+                [36m<div[31m
+                  [33mclass[31m=[32m"flex-1 text-center"[31m
+                [36m>[31m
+                  [36m<div[31m
+                    [33mclass[31m=[32m"text-xs font-bold text-foreground"[31m
+                  [36m>[31m
+                    [0mRowan Vasquez[0m
+                  [36m</div>[31m
+                  [36m<div[31m
+                    [33mclass[31m=[32m"text-xl font-black text-muted-foreground"[31m
+                  [36m>[31m
+                    [0m64[0m
+                  [36m</div>[31m
+                [36m</div>[31m
+              [36m</div>[31m
+            [36m</div>[31m
+            [36m<button[31m
+              [33mclass[31m=[32m"cm-rise mx-auto flex items-center gap-2 rounded-full bg-primary px-8 py-2.5 text-sm font-bold text-primary-foreground hover:brightness-110"[31m
+              [33mstyle[31m=[32m"animation-delay: 1.2s;"[31m
+            [36m>[31m
+              [0mContinue[0m
+            [36m</button>[31m
+          [36m</div>[31m
+        [36m</div>[31m
+      [36m</div>[31m
+    [36m</div>[31m
+  [36m</body>[31m
+[36m</html>[31m[39m
+
+[31m⎯⎯⎯⎯⎯⎯⎯[39m[1m[41m Failed Tests 4 [49m[22m[31m⎯⎯⎯⎯⎯⎯⎯[39m
+
+[41m[1m FAIL [22m[49m src/test/zzReviewOldSaves.test.tsx[2m > [22m'NFL': base saves loaded one after another on the branch board[2m > [22msave bytes, one write, the base card, the prompt, and the eviction rule
+[31m[1mAssertionError[22m[39m: expected undefined to be truthy
+
+Ignored nodes: comments, script, style
+[36m<html>[39m
+  [36m<head />[39m
+  [36m<body>[39m
+    [36m<div>[39m
+      [36m<div>[39m
+        [36m<div[39m
+          [33mclass[39m=[32m"mb-2 flex justify-end lg:pointer-events-none lg:sticky lg:top-12 lg:z-20 lg:mb-0 lg:h-0"[39m
+          [33mdata-career-start-over[39m=[32m""[39m
+        [36m>[39m
+          [36m<button[39m
+            [33maria-controls[39m=[32m"radix-:r3:"[39m
+            [33maria-expanded[39m=[32m"false"[39m
+            [33maria-haspopup[39m=[32m"dialog"[39m
+            [33mclass[39m=[32m"inline-flex min-h-11 shrink-0 items-center gap-1.5 rounded-full border border-border bg-card px-4 text-xs font-semibold text-muted-foreground shadow-sm hover:text-foreground lg:pointer-events-auto lg:translate-x-[calc(100%+2rem)]"[39m
+            [33mdata-state[39m=[32m"closed"[39m
+            [33mtype[39m=[32m"button"[39m
+          [36m>[39m
+            [36m<svg[39m
+              [33maria-hidden[39m=[32m"true"[39m
+              [33mclass[39m=[32m"lucide lucide-rotate-ccw h-3.5 w-3.5"[39m
+              [33mfill[39m=[32m"none"[39m
+              [33mheight[39m=[32m"24"[39m
+              [33mstroke[39m=[32m"currentColor"[39m
+              [33mstroke-linecap[39m=[32m"round"[39m
+              [33mstroke-linejoin[39m=[32m"round"[39m
+              [33mstroke-width[39m=[32m"2"[39m
+              [33mviewBox[39m=[32m"0 0 24 24"[39m
+              [33mwidth[39m=[32m"24"[39m
+              [33mxmlns[39m=[32m"http://www.w3.org/2000/svg"[39m
+            [36m>[39m
+              [36m<path[39m
+                [33md[39m=[32m"M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"[39m
+              [36m/>[39m
+              [36m<path[39m
+                [33md[39m=[32m"M3 3v5h5"[39m
+              [36m/>[39m
+            [36m</svg>[39m
+            [0m Start over[0m
+          [36m</button>[39m
+        [36m</div>[39m
+        [36m<div>[39m
+          [36m<div[39m
+            [33mclass[39m=[32m"space-y-3"[39m
+            [33mdata-rivalry-event[39m=[32m"true"[39m
+          [36m>[39m
+            [36m<div[39m
+              [33mclass[39m=[32m"cm-rise rounded-2xl border border-gold/40 bg-card p-4 text-center"[39m
+            [36m>[39m
+              [36m<p[39m
+                [33mclass[39m=[32m"text-[10px] font-bold uppercase tracking-wider text-muted-foreground"[39m
+              [36m>[39m
+                [0m🪞 Rivalry[0m
+              [36m</p>[39m
+              [36m<p[39m
+                [33mclass[39m=[32m"cm-slam mt-1 text-3xl leading-none"[39m
+                [33mstyle[39m=[32m"animation-delay: 0.2s;"[39m
+              [36m>[39m
+                [0m👋[0m
+              [36m</p>[39m
+              [36m<p[39m
+                [33mclass[39m=[32m"cm-slam mt-1.5 font-display text-lg font-black text-foreground"[39m
+                [33mstyle[39m=[32m"animation-delay: 0.3s;"[39m
+              [36m>[39m
+                [0mRival Retires[0m
+              [36m</p>[39m
+              [36m<p[39m
+                [33mclass[39m=[32m"cm-rise mt-2 text-sm leading-snug text-muted-foreground"[39m
+                [33mstyle[39m=[32m"animation-delay: 0.55s;"[39m
+              [36m>[39m
+                [0mJonah Nakamura announces retirement. He calls the rivalry the best thing that ever happened to his career.[0m
+              [36m</p>[39m
+              [36m<p[39m
+                [33mclass[39m=[32m"cm-tick-in mt-3 rounded-xl bg-secondary px-3 py-2 text-xs font-semibold text-foreground"[39m
+                [33mstyle[39m=[32m"animation-delay: 0.75s;"[39m
+              [36m>[39m
+                [0mLegacy +10, end of an era[0m
+              [36m</p>[39m
+              [36m<div[39m
+                [33mclass[39m=[32m"cm-rise mt-3 flex items-center justify-between rounded-xl bg-secondary/60 p-3"[39m
+                [33mstyle[39m=[32m"animation-delay: 1s;"[39m
+              [36m>[39m
+                [36m<div[39m
+                  [33mclass[39m=[32m"flex-1 text-center"[39m
+                [36m>[39m
+                  [36m<div[39m
+                    [33mclass[39m=[32m"text-xs font-bold text-foreground"[39m
+                  [36m>[39m
+                    [0mMaximilian Featherstonex[0m
+                  [36m</div>[39m
+                  [36m<div[39m
+                    [33mclass[39m=[32m"text-xl font-black text-gold"[39m
+                  [36m>[39m
+                    [0m67[0m
+                  [36m</div>[39m
+                [36m</div>[39m
+                [36m<div[39m
+                  [33mclass[39m=[32m"text-sm font-black text-muted-foreground"[39m
+                [36m>[39m
+                  [0mVS[0m
+                [36m</div>[39m
+                [36m<div[39m
+                  [33mclass[39m=[32m"flex-1 text-center"[39m
+                [36m>[39m
+                  [36m<div[39m
+                    [33mclass[39m=[32m"text-xs font-bold text-foreground"[39m
+                  [36m>[39m
+                    [0mJonah Nakamura[0m
+                  [36m</div>[39m
+                  [36m<div[39m
+                    [33mclass[39m=[32m"text-xl font-black text-muted-foreground"[39m
+                  [36m>[39m
+                    [0m66[0m
+                  [36m</div>[39m
+                [36m</div>[39m
+              [36m</div>[39m
+            [36m</div>[39m
+            [36m<button[39m
+              [33mclass[39m=[32m"cm-rise mx-auto flex items-center gap-2 rounded-full bg-primary px-8 py-2.5 text-sm font-bold text-primary-foreground hover:brightness-110"[39m
+              [33mstyle[39m=[32m"animation-delay: 1.2s;"[39m
+            [36m>[39m
+              [0mContinue[0m
+            [36m</button>[39m
+          [36m</div>[39m
+        [36m</div>[39m
+      [36m</div>[39m
+    [36m</div>[39m
+  [36m</body>[39m
+[36m</html>[39m
+
+[32m- Expected:[39m 
+true
+
+[31m+ Received:[39m 
+undefined
+
+[36m [2m❯[22m src/test/zzReviewOldSaves.test.tsx:[2m98:56[22m[39m
+    [90m 96| [39m      tally[mine[33m.[39mhall[33m.[39moutcome] [33m=[39m (tally[mine[33m.[39mhall[33m.[39moutcome] [33m??[39m [34m0[39m) [33m+[39m [34m1[39m[33m;[39m
+    [90m 97| [39m      // The New career prompt of this retired save says the card stay…
+    [90m 98| [39m      [35mawait[39m [34mwaitFor[39m(() [33m=>[39m [34mexpect[39m([34mbutton[39m([32m'New career'[39m))[33m.[39m[34mtoBeTruthy[39m())[33m;[39m
+    [90m   | [39m                                                       [31m^[39m
+    [90m 99| [39m      fireEvent[33m.[39m[34mclick[39m([34mbutton[39m([32m'New career'[39m)[33m![39m)[33m;[39m
+    [90m100| [39m      const dialog = await waitFor(() => within(document.body).getByRo…
+[90m [2m❯[22m runWithExpensiveErrorDiagnosticsDisabled node_modules/@testing-library/dom/dist/config.js:[2m47:12[22m[39m
+[90m [2m❯[22m checkCallback node_modules/@testing-library/dom/dist/wait-for.js:[2m124:77[22m[39m
+[90m [2m❯[22m Timeout.checkRealTimersCallback node_modules/@testing-library/dom/dist/wait-for.js:[2m118:16[22m[39m
+
+[31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/4]⎯[22m[39m
+
+[41m[1m FAIL [22m[49m src/test/zzReviewOldSaves.test.tsx[2m > [22m'NBA': base saves loaded one after another on the branch board[2m > [22msave bytes, one write, the base card, the prompt, and the eviction rule
+[31m[1mAssertionError[22m[39m: expected undefined to be truthy
+
+Ignored nodes: comments, script, style
+[36m<html>[39m
+  [36m<head />[39m
+  [36m<body>[39m
+    [36m<div>[39m
+      [36m<div>[39m
+        [36m<div[39m
+          [33mclass[39m=[32m"mb-2 flex justify-end lg:pointer-events-none lg:sticky lg:top-12 lg:z-20 lg:mb-0 lg:h-0"[39m
+          [33mdata-career-start-over[39m=[32m""[39m
+        [36m>[39m
+          [36m<button[39m
+            [33maria-controls[39m=[32m"radix-:r9:"[39m
+            [33maria-expanded[39m=[32m"false"[39m
+            [33maria-haspopup[39m=[32m"dialog"[39m
+            [33mclass[39m=[32m"inline-flex min-h-11 shrink-0 items-center gap-1.5 rounded-full border border-border bg-card px-4 text-xs font-semibold text-muted-foreground shadow-sm hover:text-foreground lg:pointer-events-auto lg:translate-x-[calc(100%+2rem)]"[39m
+            [33mdata-state[39m=[32m"closed"[39m
+            [33mtype[39m=[32m"button"[39m
+          [36m>[39m
+            [36m<svg[39m
+              [33maria-hidden[39m=[32m"true"[39m
+              [33mclass[39m=[32m"lucide lucide-rotate-ccw h-3.5 w-3.5"[39m
+              [33mfill[39m=[32m"none"[39m
+              [33mheight[39m=[32m"24"[39m
+              [33mstroke[39m=[32m"currentColor"[39m
+              [33mstroke-linecap[39m=[32m"round"[39m
+              [33mstroke-linejoin[39m=[32m"round"[39m
+              [33mstroke-width[39m=[32m"2"[39m
+              [33mviewBox[39m=[32m"0 0 24 24"[39m
+              [33mwidth[39m=[32m"24"[39m
+              [33mxmlns[39m=[32m"http://www.w3.org/2000/svg"[39m
+            [36m>[39m
+              [36m<path[39m
+                [33md[39m=[32m"M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"[39m
+              [36m/>[39m
+              [36m<path[39m
+                [33md[39m=[32m"M3 3v5h5"[39m
+              [36m/>[39m
+            [36m</svg>[39m
+            [0m Start over[0m
+          [36m</button>[39m
+        [36m</div>[39m
+        [36m<div>[39m
+          [36m<div[39m
+            [33mclass[39m=[32m"space-y-3"[39m
+            [33mdata-rivalry-event[39m=[32m"true"[39m
+          [36m>[39m
+            [36m<div[39m
+              [33mclass[39m=[32m"cm-rise rounded-2xl border border-gold/40 bg-card p-4 text-center"[39m
+            [36m>[39m
+              [36m<p[39m
+                [33mclass[39m=[32m"text-[10px] font-bold uppercase tracking-wider text-muted-foreground"[39m
+              [36m>[39m
+                [0m🪞 Rivalry[0m
+              [36m</p>[39m
+              [36m<p[39m
+                [33mclass[39m=[32m"cm-slam mt-1 text-3xl leading-none"[39m
+                [33mstyle[39m=[32m"animation-delay: 0.2s;"[39m
+              [36m>[39m
+                [0m👋[0m
+              [36m</p>[39m
+              [36m<p[39m
+                [33mclass[39m=[32m"cm-slam mt-1.5 font-display text-lg font-black text-foreground"[39m
+                [33mstyle[39m=[32m"animation-delay: 0.3s;"[39m
+              [36m>[39m
+                [0mRival Retires[0m
+              [36m</p>[39m
+              [36m<p[39m
+                [33mclass[39m=[32m"cm-rise mt-2 text-sm leading-snug text-muted-foreground"[39m
+                [33mstyle[39m=[32m"animation-delay: 0.55s;"[39m
+              [36m>[39m
+                [0mRhys Vasquez announces retirement. He calls the rivalry the best thing that ever happened to his career.[0m
+              [36m</p>[39m
+              [36m<p[39m
+                [33mclass[39m=[32m"cm-tick-in mt-3 rounded-xl bg-secondary px-3 py-2 text-xs font-semibold text-foreground"[39m
+                [33mstyle[39m=[32m"animation-delay: 0.75s;"[39m
+              [36m>[39m
+                [0mLegacy +10, end of an era[0m
+              [36m</p>[39m
+              [36m<div[39m
+                [33mclass[39m=[32m"cm-rise mt-3 flex items-center justify-between rounded-xl bg-secondary/60 p-3"[39m
+                [33mstyle[39m=[32m"animation-delay: 1s;"[39m
+              [36m>[39m
+                [36m<div[39m
+                  [33mclass[39m=[32m"flex-1 text-center"[39m
+                [36m>[39m
+                  [36m<div[39m
+                    [33mclass[39m=[32m"text-xs font-bold text-foreground"[39m
+                  [36m>[39m
+                    [0mMaximilian Featherstonex[0m
+                  [36m</div>[39m
+                  [36m<div[39m
+                    [33mclass[39m=[32m"text-xl font-black text-gold"[39m
+                  [36m>[39m
+                    [0m65[0m
+                  [36m</div>[39m
+                [36m</div>[39m
+                [36m<div[39m
+                  [33mclass[39m=[32m"text-sm font-black text-muted-foreground"[39m
+                [36m>[39m
+                  [0mVS[0m
+                [36m</div>[39m
+                [36m<div[39m
+                  [33mclass[39m=[32m"flex-1 text-center"[39m
+                [36m>[39m
+                  [36m<div[39m
+                    [33mclass[39m=[32m"text-xs font-bold text-foreground"[39m
+                  [36m>[39m
+                    [0mRhys Vasquez[0m
+                  [36m</div>[39m
+                  [36m<div[39m
+                    [33mclass[39m=[32m"text-xl font-black text-muted-foreground"[39m
+                  [36m>[39m
+                    [0m75[0m
+                  [36m</div>[39m
+                [36m</div>[39m
+              [36m</div>[39m
+            [36m</div>[39m
+            [36m<button[39m
+              [33mclass[39m=[32m"cm-rise mx-auto flex items-center gap-2 rounded-full bg-primary px-8 py-2.5 text-sm font-bold text-primary-foreground hover:brightness-110"[39m
+              [33mstyle[39m=[32m"animation-delay: 1.2s;"[39m
+            [36m>[39m
+              [0mContinue[0m
+            [36m</button>[39m
+          [36m</div>[39m
+        [36m</div>[39m
+      [36m</div>[39m
+    [36m</div>[39m
+  [36m</body>[39m
+[36m</html>[39m
+
+[32m- Expected:[39m 
+true
+
+[31m+ Received:[39m 
+undefined
+
+[36m [2m❯[22m src/test/zzReviewOldSaves.test.tsx:[2m98:56[22m[39m
+    [90m 96| [39m      tally[mine[33m.[39mhall[33m.[39moutcome] [33m=[39m (tally[mine[33m.[39mhall[33m.[39moutcome] [33m??[39m [34m0[39m) [33m+[39m [34m1[39m[33m;[39m
+    [90m 97| [39m      // The New career prompt of this retired save says the card stay…
+    [90m 98| [39m      [35mawait[39m [34mwaitFor[39m(() [33m=>[39m [34mexpect[39m([34mbutton[39m([32m'New career'[39m))[33m.[39m[34mtoBeTruthy[39m())[33m;[39m
+    [90m   | [39m                                                       [31m^[39m
+    [90m 99| [39m      fireEvent[33m.[39m[34mclick[39m([34mbutton[39m([32m'New career'[39m)[33m![39m)[33m;[39m
+    [90m100| [39m      const dialog = await waitFor(() => within(document.body).getByRo…
+[90m [2m❯[22m runWithExpensiveErrorDiagnosticsDisabled node_modules/@testing-library/dom/dist/config.js:[2m47:12[22m[39m
+[90m [2m❯[22m checkCallback node_modules/@testing-library/dom/dist/wait-for.js:[2m124:77[22m[39m
+[90m [2m❯[22m Timeout.checkRealTimersCallback node_modules/@testing-library/dom/dist/wait-for.js:[2m118:16[22m[39m
+
+[31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[2/4]⎯[22m[39m
+
+[41m[1m FAIL [22m[49m src/test/zzReviewOldSaves.test.tsx[2m > [22m'MLB': base saves loaded one after another on the branch board[2m > [22msave bytes, one write, the base card, the prompt, and the eviction rule
+[31m[1mAssertionError[22m[39m: expected undefined to be truthy
+
+Ignored nodes: comments, script, style
+[36m<html>[39m
+  [36m<head />[39m
+  [36m<body>[39m
+    [36m<div>[39m
+      [36m<div>[39m
+        [36m<div[39m
+          [33mclass[39m=[32m"mb-2 flex justify-end lg:pointer-events-none lg:sticky lg:top-12 lg:z-20 lg:mb-0 lg:h-0"[39m
+          [33mdata-career-start-over[39m=[32m""[39m
+        [36m>[39m
+          [36m<button[39m
+            [33maria-controls[39m=[32m"radix-:rf:"[39m
+            [33maria-expanded[39m=[32m"false"[39m
+            [33maria-haspopup[39m=[32m"dialog"[39m
+            [33mclass[39m=[32m"inline-flex min-h-11 shrink-0 items-center gap-1.5 rounded-full border border-border bg-card px-4 text-xs font-semibold text-muted-foreground shadow-sm hover:text-foreground lg:pointer-events-auto lg:translate-x-[calc(100%+2rem)]"[39m
+            [33mdata-state[39m=[32m"closed"[39m
+            [33mtype[39m=[32m"button"[39m
+          [36m>[39m
+            [36m<svg[39m
+              [33maria-hidden[39m=[32m"true"[39m
+              [33mclass[39m=[32m"lucide lucide-rotate-ccw h-3.5 w-3.5"[39m
+              [33mfill[39m=[32m"none"[39m
+              [33mheight[39m=[32m"24"[39m
+              [33mstroke[39m=[32m"currentColor"[39m
+              [33mstroke-linecap[39m=[32m"round"[39m
+              [33mstroke-linejoin[39m=[32m"round"[39m
+              [33mstroke-width[39m=[32m"2"[39m
+              [33mviewBox[39m=[32m"0 0 24 24"[39m
+              [33mwidth[39m=[32m"24"[39m
+              [33mxmlns[39m=[32m"http://www.w3.org/2000/svg"[39m
+            [36m>[39m
+              [36m<path[39m
+                [33md[39m=[32m"M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"[39m
+              [36m/>[39m
+              [36m<path[39m
+                [33md[39m=[32m"M3 3v5h5"[39m
+              [36m/>[39m
+            [36m</svg>[39m
+            [0m Start over[0m
+          [36m</button>[39m
+        [36m</div>[39m
+        [36m<div>[39m
+          [36m<div[39m
+            [33mclass[39m=[32m"space-y-3"[39m
+            [33mdata-rivalry-event[39m=[32m"true"[39m
+          [36m>[39m
+            [36m<div[39m
+              [33mclass[39m=[32m"cm-rise rounded-2xl border border-gold/40 bg-card p-4 text-center"[39m
+            [36m>[39m
+              [36m<p[39m
+                [33mclass[39m=[32m"text-[10px] font-bold uppercase tracking-wider text-muted-foreground"[39m
+              [36m>[39m
+                [0m🪞 Rivalry[0m
+              [36m</p>[39m
+              [36m<p[39m
+                [33mclass[39m=[32m"cm-slam mt-1 text-3xl leading-none"[39m
+                [33mstyle[39m=[32m"animation-delay: 0.2s;"[39m
+              [36m>[39m
+                [0m👋[0m
+              [36m</p>[39m
+              [36m<p[39m
+                [33mclass[39m=[32m"cm-slam mt-1.5 font-display text-lg font-black text-foreground"[39m
+                [33mstyle[39m=[32m"animation-delay: 0.3s;"[39m
+              [36m>[39m
+                [0mRival Retires[0m
+              [36m</p>[39m
+              [36m<p[39m
+                [33mclass[39m=[32m"cm-rise mt-2 text-sm leading-snug text-muted-foreground"[39m
+                [33mstyle[39m=[32m"animation-delay: 0.55s;"[39m
+              [36m>[39m
+                [0mRhys Marchetti announces retirement. He calls the rivalry the best thing that ever happened to his career.[0m
+              [36m</p>[39m
+              [36m<p[39m
+                [33mclass[39m=[32m"cm-tick-in mt-3 rounded-xl bg-secondary px-3 py-2 text-xs font-semibold text-foreground"[39m
+                [33mstyle[39m=[32m"animation-delay: 0.75s;"[39m
+              [36m>[39m
+                [0mLegacy +10, end of an era[0m
+              [36m</p>[39m
+              [36m<div[39m
+                [33mclass[39m=[32m"cm-rise mt-3 flex items-center justify-between rounded-xl bg-secondary/60 p-3"[39m
+                [33mstyle[39m=[32m"animation-delay: 1s;"[39m
+              [36m>[39m
+                [36m<div[39m
+                  [33mclass[39m=[32m"flex-1 text-center"[39m
+                [36m>[39m
+                  [36m<div[39m
+                    [33mclass[39m=[32m"text-xs font-bold text-foreground"[39m
+                  [36m>[39m
+                    [0mMaximilian Featherstonex[0m
+                  [36m</div>[39m
+                  [36m<div[39m
+                    [33mclass[39m=[32m"text-xl font-black text-gold"[39m
+                  [36m>[39m
+                    [0m60[0m
+                  [36m</div>[39m
+                [36m</div>[39m
+                [36m<div[39m
+                  [33mclass[39m=[32m"text-sm font-black text-muted-foreground"[39m
+                [36m>[39m
+                  [0mVS[0m
+                [36m</div>[39m
+                [36m<div[39m
+                  [33mclass[39m=[32m"flex-1 text-center"[39m
+                [36m>[39m
+                  [36m<div[39m
+                    [33mclass[39m=[32m"text-xs font-bold text-foreground"[39m
+                  [36m>[39m
+                    [0mRhys Marchetti[0m
+                  [36m</div>[39m
+                  [36m<div[39m
+                    [33mclass[39m=[32m"text-xl font-black text-muted-foreground"[39m
+                  [36m>[39m
+                    [0m76[0m
+                  [36m</div>[39m
+                [36m</div>[39m
+              [36m</div>[39m
+            [36m</div>[39m
+            [36m<button[39m
+              [33mclass[39m=[32m"cm-rise mx-auto flex items-center gap-2 rounded-full bg-primary px-8 py-2.5 text-sm font-bold text-primary-foreground hover:brightness-110"[39m
+              [33mstyle[39m=[32m"animation-delay: 1.2s;"[39m
+            [36m>[39m
+              [0mContinue[0m
+            [36m</button>[39m
+          [36m</div>[39m
+        [36m</div>[39m
+      [36m</div>[39m
+    [36m</div>[39m
+  [36m</body>[39m
+[36m</html>[39m
+
+[32m- Expected:[39m 
+true
+
+[31m+ Received:[39m 
+undefined
+
+[36m [2m❯[22m src/test/zzReviewOldSaves.test.tsx:[2m98:56[22m[39m
+    [90m 96| [39m      tally[mine[33m.[39mhall[33m.[39moutcome] [33m=[39m (tally[mine[33m.[39mhall[33m.[39moutcome] [33m??[39m [34m0[39m) [33m+[39m [34m1[39m[33m;[39m
+    [90m 97| [39m      // The New career prompt of this retired save says the card stay…
+    [90m 98| [39m      [35mawait[39m [34mwaitFor[39m(() [33m=>[39m [34mexpect[39m([34mbutton[39m([32m'New career'[39m))[33m.[39m[34mtoBeTruthy[39m())[33m;[39m
+    [90m   | [39m                                                       [31m^[39m
+    [90m 99| [39m      fireEvent[33m.[39m[34mclick[39m([34mbutton[39m([32m'New career'[39m)[33m![39m)[33m;[39m
+    [90m100| [39m      const dialog = await waitFor(() => within(document.body).getByRo…
+[90m [2m❯[22m runWithExpensiveErrorDiagnosticsDisabled node_modules/@testing-library/dom/dist/config.js:[2m47:12[22m[39m
+[90m [2m❯[22m checkCallback node_modules/@testing-library/dom/dist/wait-for.js:[2m124:77[22m[39m
+[90m [2m❯[22m Timeout.checkRealTimersCallback node_modules/@testing-library/dom/dist/wait-for.js:[2m118:16[22m[39m
+
+[31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[3/4]⎯[22m[39m
+
+[41m[1m FAIL [22m[49m src/test/zzReviewOldSaves.test.tsx[2m > [22m'NHL': base saves loaded one after another on the branch board[2m > [22msave bytes, one write, the base card, the prompt, and the eviction rule
+[31m[1mAssertionError[22m[39m: expected undefined to be truthy
+
+Ignored nodes: comments, script, style
+[36m<html>[39m
+  [36m<head />[39m
+  [36m<body>[39m
+    [36m<div>[39m
+      [36m<div>[39m
+        [36m<div[39m
+          [33mclass[39m=[32m"mb-2 flex justify-end lg:pointer-events-none lg:sticky lg:top-12 lg:z-20 lg:mb-0 lg:h-0"[39m
+          [33mdata-career-start-over[39m=[32m""[39m
+        [36m>[39m
+          [36m<button[39m
+            [33maria-controls[39m=[32m"radix-:rl:"[39m
+            [33maria-expanded[39m=[32m"false"[39m
+            [33maria-haspopup[39m=[32m"dialog"[39m
+            [33mclass[39m=[32m"inline-flex min-h-11 shrink-0 items-center gap-1.5 rounded-full border border-border bg-card px-4 text-xs font-semibold text-muted-foreground shadow-sm hover:text-foreground lg:pointer-events-auto lg:translate-x-[calc(100%+2rem)]"[39m
+            [33mdata-state[39m=[32m"closed"[39m
+            [33mtype[39m=[32m"button"[39m
+          [36m>[39m
+            [36m<svg[39m
+              [33maria-hidden[39m=[32m"true"[39m
+              [33mclass[39m=[32m"lucide lucide-rotate-ccw h-3.5 w-3.5"[39m
+              [33mfill[39m=[32m"none"[39m
+              [33mheight[39m=[32m"24"[39m
+              [33mstroke[39m=[32m"currentColor"[39m
+              [33mstroke-linecap[39m=[32m"round"[39m
+              [33mstroke-linejoin[39m=[32m"round"[39m
+              [33mstroke-width[39m=[32m"2"[39m
+              [33mviewBox[39m=[32m"0 0 24 24"[39m
+              [33mwidth[39m=[32m"24"[39m
+              [33mxmlns[39m=[32m"http://www.w3.org/2000/svg"[39m
+            [36m>[39m
+              [36m<path[39m
+                [33md[39m=[32m"M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"[39m
+              [36m/>[39m
+              [36m<path[39m
+                [33md[39m=[32m"M3 3v5h5"[39m
+              [36m/>[39m
+            [36m</svg>[39m
+            [0m Start over[0m
+          [36m</button>[39m
+        [36m</div>[39m
+        [36m<div>[39m
+          [36m<div[39m
+            [33mclass[39m=[32m"space-y-3"[39m
+            [33mdata-rivalry-event[39m=[32m"true"[39m
+          [36m>[39m
+            [36m<div[39m
+              [33mclass[39m=[32m"cm-rise rounded-2xl border border-gold/40 bg-card p-4 text-center"[39m
+            [36m>[39m
+              [36m<p[39m
+                [33mclass[39m=[32m"text-[10px] font-bold uppercase tracking-wider text-muted-foreground"[39m
+              [36m>[39m
+                [0m🪞 Rivalry[0m
+              [36m</p>[39m
+              [36m<p[39m
+                [33mclass[39m=[32m"cm-slam mt-1 text-3xl leading-none"[39m
+                [33mstyle[39m=[32m"animation-delay: 0.2s;"[39m
+              [36m>[39m
+                [0m👋[0m
+              [36m</p>[39m
+              [36m<p[39m
+                [33mclass[39m=[32m"cm-slam mt-1.5 font-display text-lg font-black text-foreground"[39m
+                [33mstyle[39m=[32m"animation-delay: 0.3s;"[39m
+              [36m>[39m
+                [0mRival Retires[0m
+              [36m</p>[39m
+              [36m<p[39m
+                [33mclass[39m=[32m"cm-rise mt-2 text-sm leading-snug text-muted-foreground"[39m
+                [33mstyle[39m=[32m"animation-delay: 0.55s;"[39m
+              [36m>[39m
+                [0mRowan Vasquez announces retirement. He calls the rivalry the best thing that ever happened to his career.[0m
+              [36m</p>[39m
+              [36m<p[39m
+                [33mclass[39m=[32m"cm-tick-in mt-3 rounded-xl bg-secondary px-3 py-2 text-xs font-semibold text-foreground"[39m
+                [33mstyle[39m=[32m"animation-delay: 0.75s;"[39m
+              [36m>[39m
+                [0mLegacy +10, end of an era[0m
+              [36m</p>[39m
+              [36m<div[39m
+                [33mclass[39m=[32m"cm-rise mt-3 flex items-center justify-between rounded-xl bg-secondary/60 p-3"[39m
+                [33mstyle[39m=[32m"animation-delay: 1s;"[39m
+              [36m>[39m
+                [36m<div[39m
+                  [33mclass[39m=[32m"flex-1 text-center"[39m
+                [36m>[39m
+                  [36m<div[39m
+                    [33mclass[39m=[32m"text-xs font-bold text-foreground"[39m
+                  [36m>[39m
+                    [0mMaximilian Featherstonex[0m
+                  [36m</div>[39m
+                  [36m<div[39m
+                    [33mclass[39m=[32m"text-xl font-black text-gold"[39m
+                  [36m>[39m
+                    [0m62[0m
+                  [36m</div>[39m
+                [36m</div>[39m
+                [36m<div[39m
+                  [33mclass[39m=[32m"text-sm font-black text-muted-foreground"[39m
+                [36m>[39m
+                  [0mVS[0m
+                [36m</div>[39m
+                [36m<div[39m
+                  [33mclass[39m=[32m"flex-1 text-center"[39m
+                [36m>[39m
+                  [36m<div[39m
+                    [33mclass[39m=[32m"text-xs font-bold text-foreground"[39m
+                  [36m>[39m
+                    [0mRowan Vasquez[0m
+                  [36m</div>[39m
+                  [36m<div[39m
+                    [33mclass[39m=[32m"text-xl font-black text-muted-foreground"[39m
+                  [36m>[39m
+                    [0m64[0m
+                  [36m</div>[39m
+                [36m</div>[39m
+              [36m</div>[39m
+            [36m</div>[39m
+            [36m<button[39m
+              [33mclass[39m=[32m"cm-rise mx-auto flex items-center gap-2 rounded-full bg-primary px-8 py-2.5 text-sm font-bold text-primary-foreground hover:brightness-110"[39m
+              [33mstyle[39m=[32m"animation-delay: 1.2s;"[39m
+            [36m>[39m
+              [0mContinue[0m
+            [36m</button>[39m
+          [36m</div>[39m
+        [36m</div>[39m
+      [36m</div>[39m
+    [36m</div>[39m
+  [36m</body>[39m
+[36m</html>[39m
+
+[32m- Expected:[39m 
+true
+
+[31m+ Received:[39m 
+undefined
+
+[36m [2m❯[22m src/test/zzReviewOldSaves.test.tsx:[2m98:56[22m[39m
+    [90m 96| [39m      tally[mine[33m.[39mhall[33m.[39moutcome] [33m=[39m (tally[mine[33m.[39mhall[33m.[39moutcome] [33m??[39m [34m0[39m) [33m+[39m [34m1[39m[33m;[39m
+    [90m 97| [39m      // The New career prompt of this retired save says the card stay…
+    [90m 98| [39m      [35mawait[39m [34mwaitFor[39m(() [33m=>[39m [34mexpect[39m([34mbutton[39m([32m'New career'[39m))[33m.[39m[34mtoBeTruthy[39m())[33m;[39m
+    [90m   | [39m                                                       [31m^[39m
+    [90m 99| [39m      fireEvent[33m.[39m[34mclick[39m([34mbutton[39m([32m'New career'[39m)[33m![39m)[33m;[39m
+    [90m100| [39m      const dialog = await waitFor(() => within(document.body).getByRo…
+[90m [2m❯[22m runWithExpensiveErrorDiagnosticsDisabled node_modules/@testing-library/dom/dist/config.js:[2m47:12[22m[39m
+[90m [2m❯[22m checkCallback node_modules/@testing-library/dom/dist/wait-for.js:[2m124:77[22m[39m
+[90m [2m❯[22m Timeout.checkRealTimersCallback node_modules/@testing-library/dom/dist/wait-for.js:[2m118:16[22m[39m
+
+[31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[4/4]⎯[22m[39m
+
+
+[2m Test Files [22m [1m[31m1 failed[39m[22m[90m (1)[39m
+[2m      Tests [22m [1m[31m4 failed[39m[22m[90m (4)[39m
+[2m   Start at [22m 15:45:12
+[2m   Duration [22m 7.68s[2m (transform 1.62s, setup 70ms, collect 2.26s, tests 4.62s, environment 309ms, prepare 148ms)[22m
+
+
+::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/test/zzReviewOldSaves.test.tsx,title=src/test/zzReviewOldSaves.test.tsx > 'NFL'%3A base saves loaded one after another on the branch board > save bytes%2C one write%2C the base card%2C the prompt%2C and the eviction rule,line=98,column=56::AssertionError: expected undefined to be truthy%0A%0AIgnored nodes: comments, script, style%0A<html>%0A  <head />%0A  <body>%0A    <div>%0A      <div>%0A        <div%0A          class="mb-2 flex justify-end lg:pointer-events-none lg:sticky lg:top-12 lg:z-20 lg:mb-0 lg:h-0"%0A          data-career-start-over=""%0A        >%0A          <button%0A            aria-controls="radix-:r3:"%0A            aria-expanded="false"%0A            aria-haspopup="dialog"%0A            class="inline-flex min-h-11 shrink-0 items-center gap-1.5 rounded-full border border-border bg-card px-4 text-xs font-semibold text-muted-foreground shadow-sm hover:text-foreground lg:pointer-events-auto lg:translate-x-[calc(100%25+2rem)]"%0A            data-state="closed"%0A            type="button"%0A          >%0A            <svg%0A              aria-hidden="true"%0A              class="lucide lucide-rotate-ccw h-3.5 w-3.5"%0A              fill="none"%0A              height="24"%0A              stroke="currentColor"%0A              stroke-linecap="round"%0A              stroke-linejoin="round"%0A              stroke-width="2"%0A              viewBox="0 0 24 24"%0A              width="24"%0A              xmlns="http://www.w3.org/2000/svg"%0A            >%0A              <path%0A                d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"%0A              />%0A              <path%0A                d="M3 3v5h5"%0A              />%0A            </svg>%0A             Start over%0A          </button>%0A        </div>%0A        <div>%0A          <div%0A            class="space-y-3"%0A            data-rivalry-event="true"%0A          >%0A            <div%0A              class="cm-rise rounded-2xl border border-gold/40 bg-card p-4 text-center"%0A            >%0A              <p%0A                class="text-[10px] font-bold uppercase tracking-wider text-muted-foreground"%0A              >%0A                🪞 Rivalry%0A              </p>%0A              <p%0A                class="cm-slam mt-1 text-3xl leading-none"%0A                style="animation-delay: 0.2s;"%0A              >%0A                👋%0A              </p>%0A              <p%0A                class="cm-slam mt-1.5 font-display text-lg font-black text-foreground"%0A                style="animation-delay: 0.3s;"%0A              >%0A                Rival Retires%0A              </p>%0A              <p%0A                class="cm-rise mt-2 text-sm leading-snug text-muted-foreground"%0A                style="animation-delay: 0.55s;"%0A              >%0A                Jonah Nakamura announces retirement. He calls the rivalry the best thing that ever happened to his career.%0A              </p>%0A              <p%0A                class="cm-tick-in mt-3 rounded-xl bg-secondary px-3 py-2 text-xs font-semibold text-foreground"%0A                style="animation-delay: 0.75s;"%0A              >%0A                Legacy +10, end of an era%0A              </p>%0A              <div%0A                class="cm-rise mt-3 flex items-center justify-between rounded-xl bg-secondary/60 p-3"%0A                style="animation-delay: 1s;"%0A              >%0A                <div%0A                  class="flex-1 text-center"%0A                >%0A                  <div%0A                    class="text-xs font-bold text-foreground"%0A                  >%0A                    Maximilian Featherstonex%0A                  </div>%0A                  <div%0A                    class="text-xl font-black text-gold"%0A                  >%0A                    67%0A                  </div>%0A                </div>%0A                <div%0A                  class="text-sm font-black text-muted-foreground"%0A                >%0A                  VS%0A                </div>%0A                <div%0A                  class="flex-1 text-center"%0A                >%0A                  <div%0A                    class="text-xs font-bold text-foreground"%0A                  >%0A                    Jonah Nakamura%0A                  </div>%0A                  <div%0A                    class="text-xl font-black text-muted-foreground"%0A                  >%0A                    66%0A                  </div>%0A                </div>%0A              </div>%0A            </div>%0A            <button%0A              class="cm-rise mx-auto flex items-center gap-2 rounded-full bg-primary px-8 py-2.5 text-sm font-bold text-primary-foreground hover:brightness-110"%0A              style="animation-delay: 1.2s;"%0A            >%0A              Continue%0A            </button>%0A          </div>%0A        </div>%0A      </div>%0A    </div>%0A  </body>%0A</html>%0A%0A- Expected: %0Atrue%0A%0A+ Received: %0Aundefined%0A%0A ❯ src/test/zzReviewOldSaves.test.tsx:98:56%0A ❯ runWithExpensiveErrorDiagnosticsDisabled node_modules/@testing-library/dom/dist/config.js:47:12%0A ❯ checkCallback node_modules/@testing-library/dom/dist/wait-for.js:124:77%0A ❯ Timeout.checkRealTimersCallback node_modules/@testing-library/dom/dist/wait-for.js:118:16%0A%0A
+
+::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/test/zzReviewOldSaves.test.tsx,title=src/test/zzReviewOldSaves.test.tsx > 'NBA'%3A base saves loaded one after another on the branch board > save bytes%2C one write%2C the base card%2C the prompt%2C and the eviction rule,line=98,column=56::AssertionError: expected undefined to be truthy%0A%0AIgnored nodes: comments, script, style%0A<html>%0A  <head />%0A  <body>%0A    <div>%0A      <div>%0A        <div%0A          class="mb-2 flex justify-end lg:pointer-events-none lg:sticky lg:top-12 lg:z-20 lg:mb-0 lg:h-0"%0A          data-career-start-over=""%0A        >%0A          <button%0A            aria-controls="radix-:r9:"%0A            aria-expanded="false"%0A            aria-haspopup="dialog"%0A            class="inline-flex min-h-11 shrink-0 items-center gap-1.5 rounded-full border border-border bg-card px-4 text-xs font-semibold text-muted-foreground shadow-sm hover:text-foreground lg:pointer-events-auto lg:translate-x-[calc(100%25+2rem)]"%0A            data-state="closed"%0A            type="button"%0A          >%0A            <svg%0A              aria-hidden="true"%0A              class="lucide lucide-rotate-ccw h-3.5 w-3.5"%0A              fill="none"%0A              height="24"%0A              stroke="currentColor"%0A              stroke-linecap="round"%0A              stroke-linejoin="round"%0A              stroke-width="2"%0A              viewBox="0 0 24 24"%0A              width="24"%0A              xmlns="http://www.w3.org/2000/svg"%0A            >%0A              <path%0A                d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"%0A              />%0A              <path%0A                d="M3 3v5h5"%0A              />%0A            </svg>%0A             Start over%0A          </button>%0A        </div>%0A        <div>%0A          <div%0A            class="space-y-3"%0A            data-rivalry-event="true"%0A          >%0A            <div%0A              class="cm-rise rounded-2xl border border-gold/40 bg-card p-4 text-center"%0A            >%0A              <p%0A                class="text-[10px] font-bold uppercase tracking-wider text-muted-foreground"%0A              >%0A                🪞 Rivalry%0A              </p>%0A              <p%0A                class="cm-slam mt-1 text-3xl leading-none"%0A                style="animation-delay: 0.2s;"%0A              >%0A                👋%0A              </p>%0A              <p%0A                class="cm-slam mt-1.5 font-display text-lg font-black text-foreground"%0A                style="animation-delay: 0.3s;"%0A              >%0A                Rival Retires%0A              </p>%0A              <p%0A                class="cm-rise mt-2 text-sm leading-snug text-muted-foreground"%0A                style="animation-delay: 0.55s;"%0A              >%0A                Rhys Vasquez announces retirement. He calls the rivalry the best thing that ever happened to his career.%0A              </p>%0A              <p%0A                class="cm-tick-in mt-3 rounded-xl bg-secondary px-3 py-2 text-xs font-semibold text-foreground"%0A                style="animation-delay: 0.75s;"%0A              >%0A                Legacy +10, end of an era%0A              </p>%0A              <div%0A                class="cm-rise mt-3 flex items-center justify-between rounded-xl bg-secondary/60 p-3"%0A                style="animation-delay: 1s;"%0A              >%0A                <div%0A                  class="flex-1 text-center"%0A                >%0A                  <div%0A                    class="text-xs font-bold text-foreground"%0A                  >%0A                    Maximilian Featherstonex%0A                  </div>%0A                  <div%0A                    class="text-xl font-black text-gold"%0A                  >%0A                    65%0A                  </div>%0A                </div>%0A                <div%0A                  class="text-sm font-black text-muted-foreground"%0A                >%0A                  VS%0A                </div>%0A                <div%0A                  class="flex-1 text-center"%0A                >%0A                  <div%0A                    class="text-xs font-bold text-foreground"%0A                  >%0A                    Rhys Vasquez%0A                  </div>%0A                  <div%0A                    class="text-xl font-black text-muted-foreground"%0A                  >%0A                    75%0A                  </div>%0A                </div>%0A              </div>%0A            </div>%0A            <button%0A              class="cm-rise mx-auto flex items-center gap-2 rounded-full bg-primary px-8 py-2.5 text-sm font-bold text-primary-foreground hover:brightness-110"%0A              style="animation-delay: 1.2s;"%0A            >%0A              Continue%0A            </button>%0A          </div>%0A        </div>%0A      </div>%0A    </div>%0A  </body>%0A</html>%0A%0A- Expected: %0Atrue%0A%0A+ Received: %0Aundefined%0A%0A ❯ src/test/zzReviewOldSaves.test.tsx:98:56%0A ❯ runWithExpensiveErrorDiagnosticsDisabled node_modules/@testing-library/dom/dist/config.js:47:12%0A ❯ checkCallback node_modules/@testing-library/dom/dist/wait-for.js:124:77%0A ❯ Timeout.checkRealTimersCallback node_modules/@testing-library/dom/dist/wait-for.js:118:16%0A%0A
+
+::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/test/zzReviewOldSaves.test.tsx,title=src/test/zzReviewOldSaves.test.tsx > 'MLB'%3A base saves loaded one after another on the branch board > save bytes%2C one write%2C the base card%2C the prompt%2C and the eviction rule,line=98,column=56::AssertionError: expected undefined to be truthy%0A%0AIgnored nodes: comments, script, style%0A<html>%0A  <head />%0A  <body>%0A    <div>%0A      <div>%0A        <div%0A          class="mb-2 flex justify-end lg:pointer-events-none lg:sticky lg:top-12 lg:z-20 lg:mb-0 lg:h-0"%0A          data-career-start-over=""%0A        >%0A          <button%0A            aria-controls="radix-:rf:"%0A            aria-expanded="false"%0A            aria-haspopup="dialog"%0A            class="inline-flex min-h-11 shrink-0 items-center gap-1.5 rounded-full border border-border bg-card px-4 text-xs font-semibold text-muted-foreground shadow-sm hover:text-foreground lg:pointer-events-auto lg:translate-x-[calc(100%25+2rem)]"%0A            data-state="closed"%0A            type="button"%0A          >%0A            <svg%0A              aria-hidden="true"%0A              class="lucide lucide-rotate-ccw h-3.5 w-3.5"%0A              fill="none"%0A              height="24"%0A              stroke="currentColor"%0A              stroke-linecap="round"%0A              stroke-linejoin="round"%0A              stroke-width="2"%0A              viewBox="0 0 24 24"%0A              width="24"%0A              xmlns="http://www.w3.org/2000/svg"%0A            >%0A              <path%0A                d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"%0A              />%0A              <path%0A                d="M3 3v5h5"%0A              />%0A            </svg>%0A             Start over%0A          </button>%0A        </div>%0A        <div>%0A          <div%0A            class="space-y-3"%0A            data-rivalry-event="true"%0A          >%0A            <div%0A              class="cm-rise rounded-2xl border border-gold/40 bg-card p-4 text-center"%0A            >%0A              <p%0A                class="text-[10px] font-bold uppercase tracking-wider text-muted-foreground"%0A              >%0A                🪞 Rivalry%0A              </p>%0A              <p%0A                class="cm-slam mt-1 text-3xl leading-none"%0A                style="animation-delay: 0.2s;"%0A              >%0A                👋%0A              </p>%0A              <p%0A                class="cm-slam mt-1.5 font-display text-lg font-black text-foreground"%0A                style="animation-delay: 0.3s;"%0A              >%0A                Rival Retires%0A              </p>%0A              <p%0A                class="cm-rise mt-2 text-sm leading-snug text-muted-foreground"%0A                style="animation-delay: 0.55s;"%0A              >%0A                Rhys Marchetti announces retirement. He calls the rivalry the best thing that ever happened to his career.%0A              </p>%0A              <p%0A                class="cm-tick-in mt-3 rounded-xl bg-secondary px-3 py-2 text-xs font-semibold text-foreground"%0A                style="animation-delay: 0.75s;"%0A              >%0A                Legacy +10, end of an era%0A              </p>%0A              <div%0A                class="cm-rise mt-3 flex items-center justify-between rounded-xl bg-secondary/60 p-3"%0A                style="animation-delay: 1s;"%0A              >%0A                <div%0A                  class="flex-1 text-center"%0A                >%0A                  <div%0A                    class="text-xs font-bold text-foreground"%0A                  >%0A                    Maximilian Featherstonex%0A                  </div>%0A                  <div%0A                    class="text-xl font-black text-gold"%0A                  >%0A                    60%0A                  </div>%0A                </div>%0A                <div%0A                  class="text-sm font-black text-muted-foreground"%0A                >%0A                  VS%0A                </div>%0A                <div%0A                  class="flex-1 text-center"%0A                >%0A                  <div%0A                    class="text-xs font-bold text-foreground"%0A                  >%0A                    Rhys Marchetti%0A                  </div>%0A                  <div%0A                    class="text-xl font-black text-muted-foreground"%0A                  >%0A                    76%0A                  </div>%0A                </div>%0A              </div>%0A            </div>%0A            <button%0A              class="cm-rise mx-auto flex items-center gap-2 rounded-full bg-primary px-8 py-2.5 text-sm font-bold text-primary-foreground hover:brightness-110"%0A              style="animation-delay: 1.2s;"%0A            >%0A              Continue%0A            </button>%0A          </div>%0A        </div>%0A      </div>%0A    </div>%0A  </body>%0A</html>%0A%0A- Expected: %0Atrue%0A%0A+ Received: %0Aundefined%0A%0A ❯ src/test/zzReviewOldSaves.test.tsx:98:56%0A ❯ runWithExpensiveErrorDiagnosticsDisabled node_modules/@testing-library/dom/dist/config.js:47:12%0A ❯ checkCallback node_modules/@testing-library/dom/dist/wait-for.js:124:77%0A ❯ Timeout.checkRealTimersCallback node_modules/@testing-library/dom/dist/wait-for.js:118:16%0A%0A
+
+::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/test/zzReviewOldSaves.test.tsx,title=src/test/zzReviewOldSaves.test.tsx > 'NHL'%3A base saves loaded one after another on the branch board > save bytes%2C one write%2C the base card%2C the prompt%2C and the eviction rule,line=98,column=56::AssertionError: expected undefined to be truthy%0A%0AIgnored nodes: comments, script, style%0A<html>%0A  <head />%0A  <body>%0A    <div>%0A      <div>%0A        <div%0A          class="mb-2 flex justify-end lg:pointer-events-none lg:sticky lg:top-12 lg:z-20 lg:mb-0 lg:h-0"%0A          data-career-start-over=""%0A        >%0A          <button%0A            aria-controls="radix-:rl:"%0A            aria-expanded="false"%0A            aria-haspopup="dialog"%0A            class="inline-flex min-h-11 shrink-0 items-center gap-1.5 rounded-full border border-border bg-card px-4 text-xs font-semibold text-muted-foreground shadow-sm hover:text-foreground lg:pointer-events-auto lg:translate-x-[calc(100%25+2rem)]"%0A            data-state="closed"%0A            type="button"%0A          >%0A            <svg%0A              aria-hidden="true"%0A              class="lucide lucide-rotate-ccw h-3.5 w-3.5"%0A              fill="none"%0A              height="24"%0A              stroke="currentColor"%0A              stroke-linecap="round"%0A              stroke-linejoin="round"%0A              stroke-width="2"%0A              viewBox="0 0 24 24"%0A              width="24"%0A              xmlns="http://www.w3.org/2000/svg"%0A            >%0A              <path%0A                d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"%0A              />%0A              <path%0A                d="M3 3v5h5"%0A              />%0A            </svg>%0A             Start over%0A          </button>%0A        </div>%0A        <div>%0A          <div%0A            class="space-y-3"%0A            data-rivalry-event="true"%0A          >%0A            <div%0A              class="cm-rise rounded-2xl border border-gold/40 bg-card p-4 text-center"%0A            >%0A              <p%0A                class="text-[10px] font-bold uppercase tracking-wider text-muted-foreground"%0A              >%0A                🪞 Rivalry%0A              </p>%0A              <p%0A                class="cm-slam mt-1 text-3xl leading-none"%0A                style="animation-delay: 0.2s;"%0A              >%0A                👋%0A              </p>%0A              <p%0A                class="cm-slam mt-1.5 font-display text-lg font-black text-foreground"%0A                style="animation-delay: 0.3s;"%0A              >%0A                Rival Retires%0A              </p>%0A              <p%0A                class="cm-rise mt-2 text-sm leading-snug text-muted-foreground"%0A                style="animation-delay: 0.55s;"%0A              >%0A                Rowan Vasquez announces retirement. He calls the rivalry the best thing that ever happened to his career.%0A              </p>%0A              <p%0A                class="cm-tick-in mt-3 rounded-xl bg-secondary px-3 py-2 text-xs font-semibold text-foreground"%0A                style="animation-delay: 0.75s;"%0A              >%0A                Legacy +10, end of an era%0A              </p>%0A              <div%0A                class="cm-rise mt-3 flex items-center justify-between rounded-xl bg-secondary/60 p-3"%0A                style="animation-delay: 1s;"%0A              >%0A                <div%0A                  class="flex-1 text-center"%0A                >%0A                  <div%0A                    class="text-xs font-bold text-foreground"%0A                  >%0A                    Maximilian Featherstonex%0A                  </div>%0A                  <div%0A                    class="text-xl font-black text-gold"%0A                  >%0A                    62%0A                  </div>%0A                </div>%0A                <div%0A                  class="text-sm font-black text-muted-foreground"%0A                >%0A                  VS%0A                </div>%0A                <div%0A                  class="flex-1 text-center"%0A                >%0A                  <div%0A                    class="text-xs font-bold text-foreground"%0A                  >%0A                    Rowan Vasquez%0A                  </div>%0A                  <div%0A                    class="text-xl font-black text-muted-foreground"%0A                  >%0A                    64%0A                  </div>%0A                </div>%0A              </div>%0A            </div>%0A            <button%0A              class="cm-rise mx-auto flex items-center gap-2 rounded-full bg-primary px-8 py-2.5 text-sm font-bold text-primary-foreground hover:brightness-110"%0A              style="animation-delay: 1.2s;"%0A            >%0A              Continue%0A            </button>%0A          </div>%0A        </div>%0A      </div>%0A    </div>%0A  </body>%0A</html>%0A%0A- Expected: %0Atrue%0A%0A+ Received: %0Aundefined%0A%0A ❯ src/test/zzReviewOldSaves.test.tsx:98:56%0A ❯ runWithExpensiveErrorDiagnosticsDisabled node_modules/@testing-library/dom/dist/config.js:47:12%0A ❯ checkCallback node_modules/@testing-library/dom/dist/wait-for.js:124:77%0A ❯ Timeout.checkRealTimersCallback node_modules/@testing-library/dom/dist/wait-for.js:118:16%0A%0A

@@ -1,0 +1,8 @@
+oldsaves exit=1 9s | ::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/test/zzReviewOldSaves.test.tsx,title=src/test/zzReviewOldSaves.test.tsx > 'NHL'%3A base saves loaded one af
+mut-hallKeptAny exit=0 45s |    Duration  44.60s (transform 2.48s, setup 295ms, collect 6.00s, tests 56.00s, environment 1.27s, prepare 279ms)
+mut-evictByHof exit=1 49s | unit=1 simWall=1
+mut-keyMax56 exit=1 57s | unit=1 simWall=1 reviewOldSaves=1
+mut-missingAlways exit=0 45s |    Duration  44.04s (transform 1.65s, setup 66ms, collect 2.30s, tests 40.96s, environment 294ms, prepare 118ms)
+mut-upsertFront exit=1 48s | unit=1 simWall=1
+mut-evictNewest exit=1 48s | unit=1 simWall=1
+clean exit=0 0s | CLEAN-CHECK-DONE

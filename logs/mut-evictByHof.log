@@ -1,0 +1,88 @@
+MUTATION evictByHof: applied to src/lib/usCareerHallWall.ts
+
+[1m[46m RUN [49m[22m [36mv3.2.7 [39m[90m/home/runner/work/ballpark-hero/ballpark-hero[39m
+
+ [31m❯[39m src/lib/usCareerHallWall.test.ts [2m([22m[2m18 tests[22m[2m | [22m[31m1 failed[39m[2m)[22m[32m 110[2mms[22m[39m
+   [32m✓[39m Round 1570: the plaque for a retired career[2m > [22m'NFL': the plaque is the card's record and the legacy, and the career is not touched[32m 32[2mms[22m[39m
+   [32m✓[39m Round 1570: the plaque for a retired career[2m > [22m'NBA': the plaque is the card's record and the legacy, and the career is not touched[32m 10[2mms[22m[39m
+   [32m✓[39m Round 1570: the plaque for a retired career[2m > [22m'MLB': the plaque is the card's record and the legacy, and the career is not touched[32m 8[2mms[22m[39m
+   [32m✓[39m Round 1570: the plaque for a retired career[2m > [22m'NHL': the plaque is the card's record and the legacy, and the career is not touched[32m 7[2mms[22m[39m
+   [32m✓[39m Round 1570: the plaque for a retired career[2m > [22m'NFL': no plaque for a career still being played, with no Hall bound, or with a key too long to keep whole[32m 3[2mms[22m[39m
+   [32m✓[39m Round 1570: the plaque for a retired career[2m > [22m'NBA': no plaque for a career still being played, with no Hall bound, or with a key too long to keep whole[32m 3[2mms[22m[39m
+   [32m✓[39m Round 1570: the plaque for a retired career[2m > [22m'MLB': no plaque for a career still being played, with no Hall bound, or with a key too long to keep whole[32m 3[2mms[22m[39m
+   [32m✓[39m Round 1570: the plaque for a retired career[2m > [22m'NHL': no plaque for a career still being played, with no Hall bound, or with a key too long to keep whole[32m 3[2mms[22m[39m
+   [32m✓[39m Round 1570: the plaque for a retired career[2m > [22mthe career key tells careers apart by salt, seasons and games, and never reads NaN[32m 4[2mms[22m[39m
+   [32m✓[39m Round 1570: the plaque for a retired career[2m > [22mmore than eight clubs keeps the first eight and counts the rest[32m 4[2mms[22m[39m
+   [32m✓[39m Round 1570: the wall keeps 12 and a Hall of Famer comes down last[2m > [22mthe same plaque again gives back the same list, and a changed record replaces it where it hangs[32m 2[2mms[22m[39m
+   [32m✓[39m Round 1570: the wall keeps 12 and a Hall of Famer comes down last[2m > [22ma new plaque goes up first[32m 0[2mms[22m[39m
+   [32m✓[39m Round 1570: the wall keeps 12 and a Hall of Famer comes down last[2m > [22mpast 12 the oldest plaque that missed the Hall comes down, never the new one[32m 2[2mms[22m[39m
+[31m   [31m×[31m Round 1570: the wall keeps 12 and a Hall of Famer comes down last[2m > [22mwith 12 Hall of Famers up, a miss still goes up and the oldest Hall of Famer comes down, and only one per run[39m[32m 10[2mms[22m[39m
+[31m     → expected [ 'miss2', 'miss1', 'h0', 'h1', …(8) ] to deeply equal [ 'miss2', 'h0', 'h1', 'h2', …(8) ][39m
+   [32m✓[39m Round 1570: what storage hands back[2m > [22mjunk is an empty wall the next plaque may replace; a newer version is left alone[32m 1[2mms[22m[39m
+   [32m✓[39m Round 1570: what storage hands back[2m > [22ma bad plaque, another sport's plaque and a second copy are each dropped alone[32m 2[2mms[22m[39m
+   [32m✓[39m Round 1570: what storage hands back[2m > [22mevery clamp cuts, and a plaque with every clamp hit is the stated size[32m 1[2mms[22m[39m
+   [32m✓[39m Round 1570: what storage hands back[2m > [22mthe three functions draw nothing[32m 15[2mms[22m[39m
+
+[31m⎯⎯⎯⎯⎯⎯⎯[39m[1m[41m Failed Tests 1 [49m[22m[31m⎯⎯⎯⎯⎯⎯⎯[39m
+
+[41m[1m FAIL [22m[49m src/lib/usCareerHallWall.test.ts[2m > [22mRound 1570: the wall keeps 12 and a Hall of Famer comes down last[2m > [22mwith 12 Hall of Famers up, a miss still goes up and the oldest Hall of Famer comes down, and only one per run
+[31m[1mAssertionError[22m: expected [ 'miss2', 'miss1', 'h0', 'h1', …(8) ] to deeply equal [ 'miss2', 'h0', 'h1', 'h2', …(8) ][39m
+
+[32m- Expected[39m
+[31m+ Received[39m
+
+[2m  [[22m
+[2m    "miss2",[22m
+[31m+   "miss1",[39m
+[2m    "h0",[22m
+[2m    "h1",[22m
+[2m    "h2",[22m
+[2m    "h3",[22m
+[2m    "h4",[22m
+[2m    "h5",[22m
+[2m    "h6",[22m
+[2m    "h7",[22m
+[2m    "h8",[22m
+[2m    "h9",[22m
+[32m-   "h10",[39m
+[2m  ][22m
+
+[36m [2m❯[22m src/lib/usCareerHallWall.test.ts:[2m136:33[22m[39m
+    [90m134| [39m    expect(one.map(e => e.key)).toEqual(['miss1', ...wall.slice(0, 11)…
+    [90m135| [39m    [35mconst[39m two [33m=[39m [34maddToWall[39m(one[33m,[39m [34mplaque[39m([32m'miss2'[39m[33m,[39m [32m'fellOff'[39m))[33m;[39m
+    [90m136| [39m    expect(two.map(e => e.key)).toEqual(['miss2', ...wall.slice(0, 11)…
+    [90m   | [39m                                [31m^[39m
+    [90m137| [39m    expect(addToWall(wall, plaque('hof13', 'inducted')).map(e => e.key…
+    [90m138| [39m  })[33m;[39m
+
+[31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/1]⎯[22m[39m
+
+
+[2m Test Files [22m [1m[31m1 failed[39m[22m[90m (1)[39m
+[2m      Tests [22m [1m[31m1 failed[39m[22m[2m | [22m[1m[32m17 passed[39m[22m[90m (18)[39m
+[2m   Start at [22m 15:46:07
+[2m   Duration [22m 2.21s[2m (transform 1.05s, setup 71ms, collect 1.34s, tests 110ms, environment 299ms, prepare 125ms)[22m
+
+
+::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/lib/usCareerHallWall.test.ts,title=src/lib/usCareerHallWall.test.ts > Round 1570%3A the wall keeps 12 and a Hall of Famer comes down last > with 12 Hall of Famers up%2C a miss still goes up and the oldest Hall of Famer comes down%2C and only one per run,line=136,column=33::AssertionError: expected [ 'miss2', 'miss1', 'h0', 'h1', …(8) ] to deeply equal [ 'miss2', 'h0', 'h1', 'h2', …(8) ]%0A%0A- Expected%0A+ Received%0A%0A  [%0A    "miss2",%0A+   "miss1",%0A    "h0",%0A    "h1",%0A    "h2",%0A    "h3",%0A    "h4",%0A    "h5",%0A    "h6",%0A    "h7",%0A    "h8",%0A    "h9",%0A-   "h10",%0A  ]%0A%0A ❯ src/lib/usCareerHallWall.test.ts:136:33%0A%0A
+section 1 nfl: 200 plaques of 200 careers, bytes median 993 p90 1068, outcomes {"notOnBallot":77,"waiting":105,"inducted":18}
+section 1 nba: 200 plaques of 200 careers, bytes median 730 p90 1083, outcomes {"waiting":90,"notOnBallot":95,"inducted":15}
+section 1 mlb: 200 plaques of 200 careers, bytes median 585 p90 1034, outcomes {"fellOff":92,"notOnBallot":92,"inducted":16}
+section 1 nhl: 200 plaques of 200 careers, bytes median 800 p90 1042, outcomes {"notOnBallot":79,"inducted":26,"waiting":95}
+section 2: 16 retired saves of the parity fixture, 86 V1 rows, 50 retired 1301 rows
+section 3: the worst case plaque is 2251 characters of JSON (stated 2251), a full wall of them 27043
+section 3 clamp name: longest real 12, clamp 40
+section 3 clamp pos: longest real 4, clamp 6
+section 3 clamp eraId: longest real 5, clamp 16
+section 3 clamp team: longest real 3, clamp 8
+section 3 clamp verdict: longest real 54, clamp 160
+section 3 clamp hallName: longest real 41, clamp 80
+section 3 clamp teamName: longest real 22, clamp 60
+section 3 clamp weighs: longest real 187, clamp 320
+section 3 clamp label: longest real 22, clamp 48
+section 4: 48 board cases, 44 passed, by tag {"C1":"4/4","C4":"4/4","C7":"4/4","C3":"4/4","C6":"4/4","C9":"4/4","C8":"4/4","C5":"0/4","C10a":"4/4","C10b":"4/4","C10c":"4/4","J":"4/4"}
+RED s3.hofkept: 1 (first: 13th miss on 9 + 3 gave new,h0,h1,h2,h3,m0,m1,g0,g1,g2,m2,f0)
+RED s3.newcomer: 1 (first: a second miss gave miss2,miss1,h0,h1,h2,h3,h4,h5,h6,h7,h8,h9)
+RED s4.board: 1 (first: board cases red: 'NFL': the wall screen C5: a full wall keeps 12, the new plaque goes up first and the oldest miss comes down (the oldest Hall of Famer only on a wall of them); 'NBA': the wall screen C5: a full wall keeps 12, the new plaque goes up first and the oldest miss comes down (the oldest Hall of Famer only on a wall of them); 'MLB': the wall screen C5: a full wall keeps 12, the new plaque goes up first an)
+simUsCareerHallWall: RED, 3 check ids failed of 53 (7846 checks)
+unit=1 simWall=1
