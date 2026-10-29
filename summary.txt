@@ -1,0 +1,7 @@
+simPlayerBingoWorldCupAlias exit=0 2s | Source bytes held; raw unit/output/control receipts retained when OUT is set. Offline proof only.
+simPlayerBingoLoad exit=0 5s | simPlayerBingoLoad: CRLF bindings proved, raw source bytes held, owned copies cleaned; fictional transport only, no browser or live calls.
+simPlayerBingoLineFeedback exit=0 6s | simPlayerBingoLineFeedback: CRLF bindings proved, original bytes held and owned copies cleaned; fictional fixtures, no browser or backend calls.
+simMarketYearScope exit=0 0s | simMarketYearScope: all green
+simPlayerBingoRodriHonour exit=0 13s | simPlayerBingoRodriHonour: fixed proof passed; complete raw reports and changed-copy receipts retained. Offline only.
+simRevealMoments exit=0 8s | simRevealMoments: green. No counting number, a reduced motion rule beside every keyframe, one pace for every stagger, every fact and number on the cards is the fixture's 
+simScoreShown exit=0 24s | simScoreShown: all sections green
