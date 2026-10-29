@@ -1,0 +1,30 @@
+c-rule exit=1 4s | simBingoClubCounts: CONTROL=rule FIRED (20 failures; section 1: 3, section 4: 17)
+sim exit=0 4s | simBingoClubCounts: GREEN, every section held
+c-onesource exit=1 4s | simBingoClubCounts: CONTROL=onesource FIRED (1 failures; section 5: 1)
+c-pending exit=1 4s | simBingoClubCounts: CONTROL=pending FIRED (2 failures; section 4: 2)
+c-leak exit=1 4s | simBingoClubCounts: CONTROL=leak FIRED (2 failures; section 2: 2)
+c-nomorton exit=1 4s | simBingoClubCounts: CONTROL=nomorton FIRED (4 failures; section 2: 1, section 3: 3)
+c-noapply exit=1 4s | simBingoClubCounts: CONTROL=noapply FIRED (121 failures; section 2: 40, section 3: 81)
+c-noreserve exit=1 4s | simBingoClubCounts: CONTROL=noreserve FIRED (74 failures; section 2: 32, section 3: 42)
+c-nosplit exit=1 4s | simBingoClubCounts: CONTROL=nosplit FIRED (14 failures; section 2: 8, section 3: 6)
+c-drift exit=1 4s | simBingoClubCounts: CONTROL=drift FIRED (1 failures; section 7: 1)
+c-cap exit=3 1s |    FIXTURE_CONTROL=cap did not fire: no history page reached the 1,000 row cap (largest 781), so nobody exceeds a page and paging is not exercised by this fixture
+c-handedit exit=1 3s | simBingoClubCounts: CONTROL=handedit FIRED (1 failures; section 6: 1)
+c-bogus exit=3 5s | simBingoClubCounts: CONTROL=bogus DID NOT FIRE (it changed nothing)
+honours exit=0 18s | simPlayerBingoHonours PASS
+vitest exit=0 28s |    Duration  26.92s (transform 9.94s, setup 2.48s, collect 13.32s, tests 27.94s, environment 8.19s, prepare 2.78s)
+gen exit=0 0s | gen: derived file unchanged by a fresh generator run
+rivals exit=0 23s | No rival product names found. 0 findings.
+cats exit=0 51s | simPlayerBingoCategories: fixed proof passed; raw reports and changed-copy receipts retained.
+yearscope exit=0 0s | simMarketYearScope: all green
+trust exit=0 1s | simTrustCopy: green. One disclaimer under every page and one count of the games, the registry's own.
+invented exit=0 16s | simInventedNames: green. Every invented man on this site is invented all the way down.
+tsc exit=0 125s | 
+guides exit=0 2s | simGuideHeadings: green. 131 guides carry keyword h2s over h3 and h4 sections with every original sentence intact, and all 133 blocks render a clean outline.
+bingoload exit=0 5s | simPlayerBingoLoad: CRLF bindings proved, raw source bytes held, owned copies cleaned; fictional transport only, no browser or live calls.
+linefb exit=0 6s | simPlayerBingoLineFeedback: CRLF bindings proved, original bytes held and owned copies cleaned; fictional fixtures, no browser or backend calls.
+rodri exit=1 0s | Node.js v24.22.1
+wcalias exit=1 0s | Node.js v24.22.1
+probe exit=0 1s | probeFleet: DONE
+quotes exit=0 30s | simNoInventedQuotes: green. No real player is quoted or accused anywhere.
+anchors exit=0 70s | simHarnessAnchors: green. Every harness parses and none carries an unmatchable anchor.
