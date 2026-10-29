@@ -134,8 +134,12 @@ not added). sweepWeight.mjs is not edited; the NHL and MLB rows are the lead's (
   hockey.ts 1144 "... and at zero you are fired and the save ends." and 1213 "... at zero the save ends and you take
   another chair."; Part B baseball.ts 1168 and 1217; Part C basketball.ts 1898 and 1947. Each needs
   simGuideHeadings --refresh on a runner and genSearchKeywords after it lands.
-- The NFL board onto the shared pieces (R3): a hard gate before Part B ships. Until then gmCareerRules.test.ts holds the
-  two copies equal (the feed lines, the kitNeeded truth table, the five "?" sentences).
+- The NFL board onto the shared pieces (R3): a hard gate before Part B ships, and ROUND 1561's own job, its first step.
+  Round 1542 is already in this round's base (`git merge-base --is-ancestor f80edfb3f 115c68092` is true: f80edfb3f is
+  Release BR m7, which carries Round 1542), so R3's "if Round 1542 has closed when 1561 starts" holds, and there is no
+  later 1542 merge that could move simGmCareer's nfl section 1 digest (it replays green on the head). In that step 1561
+  re-aims the NFL's fifty board controls of controlFrontOfficeBoard.mjs and shows each FIRED. Until then
+  gmCareerRules.test.ts holds the two copies equal (the feed lines, the kitNeeded truth table, the five "?" sentences).
 
 ## The final run (head 59a6f90db, origin/main 485f2740c merged; every summary line and exit code read)
 
