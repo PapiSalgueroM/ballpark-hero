@@ -1,0 +1,25 @@
+320: font Inter, system-ui, "Apple Color Emoji", "Segoe UI Emoji", "Noto Color Emoji", sans-serif 600 9px | widest at 9px Manchester 59.5, Goalkeeper 57.7, Champions 56, Tottenham 54.2, Instagram 51.9, teammate 51.8
+320: widest at 8px Manchester 52.9, Goalkeeper 51.3, Champions 49.8, Tottenham 48.1, Instagram 46.1, teammate 46
+320 current: room 39 tile 52.8 maxH 102 overflow 0 split ["matches,","Forward","Liverpool","Goalkeeper","Forward","Chelsea","$100M+","England","Manchester","Defender"]
+320 px05: room 47 tile 52.8 maxH 90.75 overflow 0 split ["Liverpool","Goalkeeper","Manchester","Defender"]
+320 px05gap1: room 48 tile 54.4 maxH 90.75 overflow 0 split ["Goalkeeper","Manchester"]
+320 px05t8: room 47 tile 52.8 maxH 76 overflow 0 split ["Goalkeeper","Manchester"]
+320 px05gap1t8: room 48 tile 54.4 maxH 76 overflow 0 split ["Goalkeeper","Manchester"]
+320 hyph: room 39 tile 52.8 maxH 102 overflow 0 split ["under","matches,","Forward","Liverpool","Goalkeeper","Forward","Chelsea","$100M+","England","Manchester","Defender"]
+360: font Inter, system-ui, "Apple Color Emoji", "Segoe UI Emoji", "Noto Color Emoji", sans-serif 600 9px | widest at 9px Manchester 59.5, Goalkeeper 57.7, Champions 56, Tottenham 54.2, Instagram 51.9, teammate 51.8
+360: widest at 8px Manchester 52.9, Goalkeeper 51.3, Champions 49.8, Tottenham 48.1, Instagram 46.1, teammate 46
+360 current: room 47 tile 60.8 maxH 90.75 overflow 0 split ["Manchester","Liverpool","Defender","Goalkeeper"]
+360 px05: room 55 tile 60.8 maxH 79.5 overflow 0 split ["Manchester","Goalkeeper"]
+360 px05gap1: room 56 tile 62.4 maxH 79.5 overflow 0 split ["Manchester","Goalkeeper"]
+360 px05t8: room 55 tile 60.8 maxH 76 overflow 0 split []
+360 px05gap1t8: room 56 tile 62.4 maxH 76 overflow 0 split []
+360 hyph: room 47 tile 60.8 maxH 90.75 overflow 0 split ["Manchester","Liverpool","Defender","Goalkeeper"]
+390: font Inter, system-ui, "Apple Color Emoji", "Segoe UI Emoji", "Noto Color Emoji", sans-serif 600 9px | widest at 9px Manchester 59.5, Goalkeeper 57.7, Champions 56, Tottenham 54.2, Instagram 51.9, teammate 51.8
+390: widest at 8px Manchester 52.9, Goalkeeper 51.3, Champions 49.8, Tottenham 48.1, Instagram 46.1, teammate 46
+390 current: room 53 tile 66.8 maxH 90.75 overflow 0 split ["Goalkeeper","Manchester"]
+390 px05: room 61 tile 66.8 maxH 79.5 overflow 0 split []
+390 px05gap1: room 62 tile 68.4 maxH 79.5 overflow 0 split []
+390 px05t8: room 61 tile 66.8 maxH 76 overflow 0 split []
+390 px05gap1t8: room 62 tile 68.4 maxH 76 overflow 0 split []
+390 hyph: room 53 tile 66.8 maxH 90.75 overflow 0 split ["Goalkeeper","Manchester"]
+probe-bingo: done, 105 words from 65 labels
