@@ -1,0 +1,8 @@
+simFrontOfficeSchedule exit=0 24s | simFrontOfficeSchedule: GREEN, NBA, MLB and NHL seasons booked and played exactly over 20 seeds
+simNbaRotation exit=0 9s | NBA rotation: executable CRLF controls bind, raw bytes held and owned copies cleaned. Engine simulations do not prove native UI, storage recovery or real-world roster acc
+simNbaOpeningRatings exit=1 8s | Node.js v24.22.1
+vitest-nba exit=1 53s | ::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/lib/nbaOpeningRatings.test.ts,title=src/lib/nbaOpeningRatings.test.ts > NBA opening rating integration > pr
+simSaveKeeper exit=0 7s | simSaveKeeper: all green. The keeper holds on real saves of all 21 long games.
+nba-base exit=0 22s | simNbaSeasonStats: 83 checks passed over 10 seeded franchises and 3 seasons each. Every game adds up, the box takes nothing from the league, the awards follow their rules
+simGmDeskHost exit=0 47s | simGmDeskHost: all 10 checks passed on seeds 1,2,3 (4 engines, 3 seasons a seed)
+tsc exit=0 110s | 
