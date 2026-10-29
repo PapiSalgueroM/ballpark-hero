@@ -1,0 +1,14 @@
+#!serve
+#!playwright
+#!serial
+storage: node scripts/simStorageWrites.mjs
+anchors: node scripts/simHarnessAnchors.mjs
+rival: node scripts/simNoRivalNames.mjs
+walk: node scripts/playUsCareerHallWall.mjs
+walk-nowall: PLAY_CONTROL=nowall node scripts/playUsCareerHallWall.mjs
+weight-head: BASE=http://localhost:4173 node .rc/x/weight4.mjs
+sweepWeight: SWEEP_OFFLINE=1 node scripts/sweepWeight.mjs
+real-csr: node_modules/.bin/vitest run src/test/careerSeasonReview.test.tsx -t "restores existing retirement" --testTimeout=300000 --hookTimeout=120000
+mut-csr: node .rc/x/mut-rewrite.mjs && node_modules/.bin/vitest run src/test/careerSeasonReview.test.tsx -t "restores existing retirement" --testTimeout=300000 --hookTimeout=120000; s=$?; git checkout -- src scripts; exit $s
+clean: git status --short; echo CLEAN-CHECK-DONE
+seasonReview-main: git worktree add /tmp/main-sr dfb2720d7 >/dev/null 2>&1 && cd /tmp/main-sr && ln -s "$OLDPWD/node_modules" node_modules && CAREER_SEASON_REVIEW_CONTROL=all node scripts/simCareerSeasonReview.mjs 2>&1 | grep -E "^FAIL|binds exactly|passed; all modes" ; exit ${PIPESTATUS[0]}
