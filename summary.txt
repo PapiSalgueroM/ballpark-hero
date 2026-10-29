@@ -1,0 +1,7 @@
+ctl-namesake exit=1 105s | simTriviaBank: 7 failure(s) (NEGATIVE CONTROL namesake ON)
+ctl-tense exit=1 106s | simTriviaBank: 7 failure(s) (NEGATIVE CONTROL tense ON)
+ctl-ties exit=1 119s | simTriviaBank: 7 failure(s) (NEGATIVE CONTROL ties ON)
+ctl-family exit=1 80s | simTriviaBank: 7 failure(s) (NEGATIVE CONTROL family ON)
+ctl-postense exit=1 110s | simTriviaBank: 7 failure(s) (NEGATIVE CONTROL postense ON)
+ctl-legacy exit=1 114s | simTriviaBank: 4 failure(s) (NEGATIVE CONTROL legacy ON)
+ctl-rulec exit=1 88s | simTriviaBank: 8 failure(s) (NEGATIVE CONTROL rulec ON)
