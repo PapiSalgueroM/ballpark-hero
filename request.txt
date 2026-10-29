@@ -1,0 +1,7 @@
+bigD1: git show 692590145:src/lib/triviaQuestionBank.ts > "$TMPDIR/base-bank.ts" && TRIVIA_ARM_FILE="$TMPDIR/base-bank.ts" TRIVIA_BIG=daily:0-18262 node scripts/simTriviaBank.mjs
+bigD2: git show 692590145:src/lib/triviaQuestionBank.ts > "$TMPDIR/base-bank.ts" && TRIVIA_ARM_FILE="$TMPDIR/base-bank.ts" TRIVIA_BIG=daily:18263-36524 node scripts/simTriviaBank.mjs
+bigU4: git show 692590145:src/lib/triviaQuestionBank.ts > "$TMPDIR/base-bank.ts" && TRIVIA_ARM_FILE="$TMPDIR/base-bank.ts" TRIVIA_BIG=unlimited:90001-120000 node scripts/simTriviaBank.mjs
+bigU5: git show 692590145:src/lib/triviaQuestionBank.ts > "$TMPDIR/base-bank.ts" && TRIVIA_ARM_FILE="$TMPDIR/base-bank.ts" TRIVIA_BIG=unlimited:120001-150000 node scripts/simTriviaBank.mjs
+bigU6: git show 692590145:src/lib/triviaQuestionBank.ts > "$TMPDIR/base-bank.ts" && TRIVIA_ARM_FILE="$TMPDIR/base-bank.ts" TRIVIA_BIG=unlimited:150001-180000 node scripts/simTriviaBank.mjs
+bigU7: git show 692590145:src/lib/triviaQuestionBank.ts > "$TMPDIR/base-bank.ts" && TRIVIA_ARM_FILE="$TMPDIR/base-bank.ts" TRIVIA_BIG=unlimited:180001-210000 node scripts/simTriviaBank.mjs
+bigU8: git show 692590145:src/lib/triviaQuestionBank.ts > "$TMPDIR/base-bank.ts" && TRIVIA_ARM_FILE="$TMPDIR/base-bank.ts" TRIVIA_BIG=unlimited:210001-240000 node scripts/simTriviaBank.mjs

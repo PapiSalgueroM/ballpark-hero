@@ -1,0 +1,7 @@
+bigD1 exit=0 227s | simTriviaBank big fleet: 18263 ladders, arm short 0, head short 0, identical 18263
+bigD2 exit=0 275s | simTriviaBank big fleet: 18262 ladders, arm short 0, head short 0, identical 18262
+bigU4 exit=0 377s | simTriviaBank big fleet: 30000 ladders, arm short 0, head short 0, identical 30000
+bigU6 exit=0 412s | simTriviaBank big fleet: 30000 ladders, arm short 2, head short 0, identical 29998
+bigU7 exit=0 314s | simTriviaBank big fleet: 30000 ladders, arm short 2, head short 0, identical 29998
+bigU5 exit=0 465s | simTriviaBank big fleet: 30000 ladders, arm short 2, head short 0, identical 29998
+bigU8 exit=0 294s | simTriviaBank big fleet: 30000 ladders, arm short 3, head short 0, identical 29997

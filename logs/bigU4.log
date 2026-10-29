@@ -1,0 +1,15 @@
+1. the fixture [0.1s]
+   5496 rows of 2026, position real for 2497; easy band 109 players on 17 values (biggest tie 18), medium 990, hard 4397
+   easy: 6 listed namesakes (Rodri, Gabriel, João Pedro, Luis Díaz, Matheus Cunha, Reece James)
+   medium: 49 listed namesakes (Antony, Diogo Costa, Wesley, Éderson, Rodrigo Mora, Evanilson, ...)
+   hard: 490 listed namesakes (Christian, Diego Costa, Emerson, Ephron Mason-Clark, Facundo Torres, Gilberto Mora, ...)
+9, big fleet: the real pool, unlimited 90001 to 120000, the head against /home/runner/work/_temp/t-bigU4/base-bank.ts as it is [0.2s]
+   5000 dealt, arm short so far 0 [77.1s]
+   10000 dealt, arm short so far 0 [143.4s]
+   15000 dealt, arm short so far 0 [209.3s]
+   20000 dealt, arm short so far 0 [258.2s]
+   25000 dealt, arm short so far 0 [317.4s]
+   30000 dealt, arm short so far 0 [376.8s]
+   real unlimited 90001 to 120000: 30000 ladders, arm short 0 (dropped step easy 0, medium 0, hard 0), head short 0, identical 30000, rescued 0 [376.8s]
+
+simTriviaBank big fleet: 30000 ladders, arm short 0, head short 0, identical 30000
