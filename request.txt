@@ -1,0 +1,3 @@
+#!serve
+#!playwright
+walk: git worktree add /tmp/wb 692590145 > /dev/null 2>&1 && ln -s "$PWD/node_modules" /tmp/wb/node_modules && (cd /tmp/wb && node_modules/.bin/vite build --outDir /tmp/wb-dist --emptyOutDir > /tmp/wb-build.log 2>&1) && PLAY_BASE_DIST=/tmp/wb-dist PLAY_SHORT_DATE=2026-11-04 PLAY_GOOD_DATE=2026-11-02 PLAY_DEALS=150 node .rc/x/walkrun1573.mjs
