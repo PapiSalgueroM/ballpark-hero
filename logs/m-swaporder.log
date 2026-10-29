@@ -1,0 +1,8 @@
+mut swaporder: src/lib/playerBingo.ts edited (count rule moved above the apply call)
+ src/lib/playerBingo.ts | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+--- harness FAIL lines (0):
+simBingoClubCounts: GREEN, every section held
+--- vitest:
+[2m      Tests [22m [1m[32m18 passed[39m[22m[90m (18)[39m
+MUT swaporder: SURVIVED harness=0 vitest=0

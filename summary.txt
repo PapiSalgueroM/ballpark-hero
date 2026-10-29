@@ -1,0 +1,4 @@
+m-firstmatch exit=1 3s | MUT firstmatch: CAUGHT harness=0 vitest=1
+m-swaporder exit=0 3s | MUT swaporder: SURVIVED harness=0 vitest=0
+m-loosenby exit=1 3s | MUT loosenby: CAUGHT harness=0 vitest=1
+m-nonat exit=1 3s | MUT nonat: CAUGHT harness=0 vitest=1

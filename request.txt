@@ -1,0 +1,5 @@
+#!serial
+m-firstmatch: bash .rc/x/mrun.sh firstmatch
+m-swaporder: bash .rc/x/mrun.sh swaporder
+m-loosenby: bash .rc/x/mrun.sh loosenby
+m-nonat: bash .rc/x/mrun.sh nonat
