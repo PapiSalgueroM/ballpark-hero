@@ -14,7 +14,8 @@
     "squads.json beside this file: the season squads a stamped group is held to.",
     "Round 1565 (2026-10-29): every live board. The game deals from the connections_puzzles table and the file is its copy (src/data/connectionsPuzzles.ts, scripts/data/connectionsLiveSnapshot.json, simConnectionsFacts section 6). The groups the cross check found false or with a second answer on the live boards are rebuilt here (round 1565), each member on two hosts; where a claim could not be held twice the group was replaced by one two lists hold.",
     "Round 1565: adjudicated holds the findings that are gaps in the site's career tables (the man did play there, two hosts) or a namesake; owed is empty because every one of its findings is fixed or adjudicated. uncheckedCeiling moved once, from 302 to 262: the file took in the live boards it never had (the 76 table only boards and the 60 boards edited in the table alone), and the boards rebuilt whole replaced every group nothing checked; on the live table the count fell, from 427 to 262.",
-    "Round 1565, after review: rebuilt now holds the 38 boards the round rewrote and the 27 more the reviewers found false or with a second answer (65 in all), each rebuilt whole: every group is a list the checker holds (an award list, a verified 2025-26 squad, a club or a nation the career tables confirm) or a group this ledger writes out member by member. The datedOwed groups those boards held are gone with them."
+    "Round 1565, after review: rebuilt now holds the 38 boards the round rewrote and the 27 more the reviewers found false or with a second answer (65 in all), each rebuilt whole: every group is a list the checker holds (an award list, a verified 2025-26 squad, a club or a nation the career tables confirm) or a group this ledger writes out member by member. The datedOwed groups those boards held are gone with them.",
+    "Round 1565, after review: memberUnknownCeiling counts the members of judged groups the record cannot place and no ledger group holds (Gian Piero Gasperini, who managed Atalanta and never played for them, passed the cross check that way); like uncheckedCeiling it may only fall."
   ],
   "read": "2026-10-22",
   "lists": {
@@ -3919,6 +3920,7 @@
   ],
   "owed": [],
   "uncheckedCeiling": 262,
+  "memberUnknownCeiling": 539,
   "rebuilt": ["puzzle-1", "puzzle-3", "puzzle-4", "puzzle-5", "puzzle-6", "puzzle-10", "puzzle-11", "puzzle-12", "puzzle-151", "puzzle-2", "puzzle-8", "puzzle-13", "puzzle-16", "puzzle-18", "puzzle-26", "puzzle-28", "puzzle-38", "puzzle-43", "puzzle-46", "puzzle-55", "puzzle-59", "puzzle-64", "puzzle-65", "puzzle-68", "puzzle-70", "puzzle-81", "puzzle-90", "puzzle-92", "puzzle-97", "puzzle-103", "puzzle-109", "puzzle-113", "puzzle-123", "puzzle-131", "puzzle-138", "puzzle-149", "crafted-1005", "crafted-1007", "crafted-1008", "crafted-1009", "crafted-1011", "crafted-1012", "crafted-1020", "cx-20260710-05", "cx-20260710-09", "cx-20260710-11", "cx-20260710-12", "puzzle-134", "puzzle-74", "cx-20260710-04", "cx-20260805-1", "cx-20260805-2", "cx-20260805-5", "cx-20260805-6", "cx-20260805-7", "cx-20260710-10", "cx-20260710-01", "cx-20260710-02", "cx-20260710-03", "cx-20260710-07", "cx-20260710-08", "cx-20260805-4", "crafted-1006", "crafted-1003", "cx-20260709-02", "puzzle-99", "puzzle-89", "puzzle-20", "puzzle-22", "puzzle-63", "puzzle-119", "puzzle-120", "puzzle-132", "crafted-1002"],
   "players": {
     "Fabinho": {

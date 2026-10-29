@@ -32,7 +32,11 @@
  *      wrong, or a namesake) is cleared with its reason; the boards this
  *      round did not rebuild carry theirs in "owed", a list that may only
  *      shrink (Part B of the round empties it); anything else fails
- *   5) the count of groups nothing checks yet, a ceiling that may only fall
+ *   5) the count of groups nothing checks yet, a ceiling that may only fall;
+ *      and (Round 1565 review) the count of members of judged groups the
+ *      record cannot place, not ledgered: the cross check passes such a man
+ *      unseen (Gian Piero Gasperini, who managed Atalanta and never played for
+ *      them, sat in "Played for Atalanta"), so that count is a ceiling too
  *   6) Round 1565: the shipped file is the copy of the live table. The lead's
  *      read of the table (scripts/data/connectionsLiveSnapshot.json: puzzle_id,
  *      sort_order and md5(groups_json::text), written by
@@ -66,6 +70,15 @@
  *                         puzzle-136's Barcelona men (section 1)
  *   CONN_CONTROL=snapshot changes puzzle-136's hash in the live snapshot, in
  *                         memory: the table moved and the file did not (section 6)
+ *   CONN_CONTROL=snapshotorder swaps the sort_order of crafted-1001 and
+ *                         crafted-1002 in the snapshot, in memory (section 6, order)
+ *   CONN_CONTROL=snapshotids drops puzzle-136's row from the snapshot, in memory
+ *                         (section 6, the id set)
+ *   CONN_CONTROL=unknownman deals Marcelo Bielsa, who managed Athletic and never
+ *                         played there and whom the record does not hold, into
+ *                         cx-20260805-8's Athletic group, a board no round rebuilt:
+ *                         the cross check cannot see him, so section 5's
+ *                         memberUnknownCeiling must go red
  *
  * Run: node scripts/simConnectionsFacts.mjs
  */
@@ -181,6 +194,26 @@ if (CONTROL) {
     /* one board of the live table moves and the file does not follow: section 6 must see it */
     const row = snapshot.rows.find(r => r.puzzle_id === 'puzzle-136');
     if (row && /^[0-9a-f]{32}$/.test(row.md5)) { row.md5 = (row.md5[0] === '0' ? '1' : '0') + row.md5.slice(1); changed = true; }
+  } else if (CONTROL === 'snapshotorder') {
+    /* two neighbours swap places in the table and the file keeps its order: the fallback deals another board (section 6) */
+    const a = snapshot.rows.find(r => r.puzzle_id === 'crafted-1001');
+    const b = snapshot.rows.find(r => r.puzzle_id === 'crafted-1002');
+    if (a && b && a.sort_order !== b.sort_order) { [a.sort_order, b.sort_order] = [b.sort_order, a.sort_order]; changed = true; }
+  } else if (CONTROL === 'snapshotids') {
+    /* a row the file holds is gone from the table (section 6, the id set) */
+    const at = snapshot.rows.findIndex(r => r.puzzle_id === 'puzzle-136');
+    if (at >= 0) { snapshot.rows.splice(at, 1); changed = true; }
+  } else if (CONTROL === 'unknownman') {
+    /* a man the record cannot place, dealt over a confirmed member of a judged group on a board no round rebuilt */
+    const b = boardById('cx-20260805-8');
+    const g = b?.groups.find(x => /^Played for Athletic/.test(x.category));
+    const c = g && soccer.criterion(g.category);
+    const at = c ? g.players.findIndex(p => soccer.fits(p, c) === true) : -1;
+    const bielsa = 'Marcelo Bielsa';
+    if (at >= 0 && soccer.fits(bielsa, c) === null && !(ledger.rebuilt ?? []).includes(b.id) && !b.groups.some(x => x.players.includes(bielsa))) {
+      g.players[at] = bielsa;
+      changed = true;
+    }
   } else {
     console.error(`unknown CONN_CONTROL=${CONTROL}`);
     process.exit(2);
@@ -365,6 +398,23 @@ console.log('5) the groups nothing checks yet may only get fewer');
     else if (n < ceiling) fail(`${n} groups nothing checks, under the ceiling of ${ceiling}: lower uncheckedCeiling to ${n} so they cannot come back`);
   }
   console.log(`   ${n} groups nothing checks yet (ceiling ${ceiling}); part B ledgers them`);
+  /* Round 1565 review: a member the record cannot place passes the cross check unseen (fits is unknown, so no
+     finding), which is how Gian Piero Gasperini sat in "Played for Atalanta". A ledgered group stands on two hosts
+     member by member, so only the others count. */
+  let unknown = 0;
+  for (const b of boards) for (const g of b.groups) {
+    if (ledgered.has(`${b.id}|${g.category}`)) continue;
+    const c = soccer.criterion(g.category);
+    if (!c) continue;
+    for (const p of g.players) if (soccer.fits(p, c) === null) unknown += 1;
+  }
+  const uCeiling = ledger.memberUnknownCeiling;
+  if (!process.env.CONN_LIVE) {
+    if (typeof uCeiling !== 'number') fail('the ledger has no memberUnknownCeiling');
+    else if (unknown > uCeiling) fail(`${unknown} members of judged groups the record cannot place, over the ceiling of ${uCeiling}`);
+    else if (unknown < uCeiling) fail(`${unknown} members of judged groups the record cannot place, under the ceiling of ${uCeiling}: lower memberUnknownCeiling to ${unknown} so they cannot come back`);
+  }
+  console.log(`   ${unknown} members of judged groups the record cannot place (ceiling ${uCeiling}); a ledger fact or a swap brings it down`);
 }
 
 console.log('6) the shipped file is the copy of the live table (scripts/data/connectionsLiveSnapshot.json)');
