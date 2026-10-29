@@ -1,0 +1,4 @@
+unseeded exit=1 154s | simCmUnseededWorld: 113 FAILURE(S)
+un-ctl exit=1 473s | controls (each must be 1): guard=3 early=1 never=3 norecord=3 noinverse=1
+vitest-1503 exit=0 5s |    Duration  5.12s (transform 2.05s, setup 254ms, collect 5.34s, tests 3.98s, environment 1.35s, prepare 463ms)
+cont-nobridge exit=1 0s | contCmp m3 without the bridge exited 2, not 1
