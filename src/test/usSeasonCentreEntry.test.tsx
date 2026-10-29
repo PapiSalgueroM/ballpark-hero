@@ -95,7 +95,9 @@ import type { UsCareerCore, UsCareerSport } from '@/lib/usCareerSport';
 
 const squash = (s: string) => s.replace(/\s+/g, ' ').trim();
 const flush = () => act(async () => { await new Promise(resolve => setTimeout(resolve, 0)); });
-const OUTSIDE = '[data-season-centre-entry], section[data-career-practice], section[data-career-prospect-entry], [data-career-review-opener]';
+/* Round 1569: Start over and the market's retire choice are additive ways out with their own proofs
+   (usCareerReports1569.test.tsx); this walk answers the screens and never takes either. */
+const OUTSIDE = '[data-season-centre-entry], section[data-career-practice], section[data-career-prospect-entry], [data-career-review-opener], [data-career-start-over], [data-career-market-retire]';
 const buttons = (root: ParentNode) => ([...root.querySelectorAll('button')] as HTMLButtonElement[]).filter(b => !b.disabled && !b.closest(OUTSIDE));
 const playButton = () => buttons(document.body).find(b => /^Play the \d+ season$/.test(squash(b.textContent ?? '')));
 const click = async (el: Element | null | undefined) => { if (!el) throw new Error('usSeasonCentreEntry.test: nothing to click'); fireEvent.click(el); await flush(); };

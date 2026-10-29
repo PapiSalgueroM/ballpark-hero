@@ -54,6 +54,8 @@ function seed(row: Row, seasons = 6, edit?: Edit) {
 const flush = () => act(async () => { await new Promise(resolve => setTimeout(resolve, 0)); });
 const click = async (el: HTMLElement) => { fireEvent.click(el); await flush(); };
 async function answerTalk(view: RenderResult) {
+  /* The retirement talk's card is a lazy chunk: the first sport to show it waits for it to load. */
+  await waitFor(() => expect(view.queryByRole('button', { name: /One more year|^Play the \d+ season$/ })).not.toBeNull(), { timeout: 20000 });
   const more = view.queryByRole('button', { name: /One more year/ });
   if (more) await click(more);
 }
