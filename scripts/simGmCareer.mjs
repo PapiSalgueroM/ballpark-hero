@@ -122,7 +122,9 @@ const FIXTURE = path.join(ROOT, 'scripts', 'data', 'gmCareerFixture.json');
 const CONTROL = process.env.SIM_GM_CAREER_CONTROL || '';
 const RECORD = process.env.SIM_GM_CAREER_RECORD || '';
 const ONLY = (process.env.SIM_GM_CAREER_ONLY || '').split(',').filter(Boolean);
-const runs = id => ONLY.length === 0 || ONLY.includes(id);
+/* Round 1559: a DRIVE row whose career is not bound yet runs section 1 alone (set once the row is chosen). */
+let ROW_BOUND = true;
+const runs = id => (ONLY.length === 0 || ONLY.includes(id)) && (ROW_BOUND || id === '1');
 const CONTROLS = {
   epoch: '1', addkey: '1', deskoffblock: '2', paytwice: '2', lateseat: '2', emptytile: '8', nameinline: '8',
   flatowner: '2', flatmedia: '3', extradraw: '3', firedclub: '4', unkeyed: '4', staffrides: '5', ledgerrides: '5', rostermove: '5', depthstays: '5', askrebuilt: '5',
@@ -247,6 +249,12 @@ export * as X from ${lib('gmXp')};
 export * as P from ${lib('gmPicks')};
 export * as FP from ${lib('foGmPress')};
 export { isFrontOfficeSave } from ${lib('frontOfficeSave')};
+export { GM_SPORTS } from ${lib('gmSport')};
+export * as EN from ${lib('nhlFrontOffice')};
+export * as DN from ${lib('nhlGmDesk')};
+export { nhlDeskHost } from ${lib('gmDeskHostNhl')};
+export { NHL_OPENING_RATINGS } from '${ROOT_URL}/src/data/nhlOpeningRatings.ts';
+export { NHL_TEAMS } from '${ROOT_URL}/src/data/conquestDataNhl.ts';
 `);
 const esbuild = createRequire(`${NM}/`)('esbuild');
 await esbuild.build({
@@ -295,11 +303,21 @@ if (CONTROL === 'epoch') {
 const M = createRequire(import.meta.url)(BUNDLE);
 Math.random = realRandom;
 const { E, D, C, H, FM, FP, SEAT, G, K, S, X, P, isFrontOfficeSave, nflDeskHost, leagueNames, FO_DEPTH, FO_TEAMS } = M;
+const { GM_SPORTS, EN, DN, nhlDeskHost, NHL_OPENING_RATINGS, NHL_TEAMS } = M;
 const EPOCH = (() => { const id = M.makeIdMinter('x')(); return id.slice(1, id.lastIndexOf('-')); })();
 const unEpoch = s => s.split(EPOCH).join('E');
 
 const NFL_WORDS = { title: 'the Super Bowl', playoffs: 'the playoffs', round: 'a playoff round', games: 17 };
-const LABEL = Object.fromEntries(FO_TEAMS.map(t => [t.abbr, `${t.city} ${t.name}`]));
+/* Round 1559: a sport's words for the owner's ask are its descriptor's (gmSport.ts), the four fields the boards hand
+   buildOwnerMandate and buildGmPresser (simGmDesk check 2 holds the descriptor to the engines). */
+const foWords = key => { const w = GM_SPORTS[key].words; return { title: w.title, playoffs: w.playoffs, round: w.round, games: w.games }; };
+const NHL_WORDS = foWords('nhl');
+const LABELS = {
+  nfl: Object.fromEntries(FO_TEAMS.map(t => [t.abbr, `${t.city} ${t.name}`])),
+  nhl: Object.fromEntries(NHL_TEAMS.map(t => [t.id, `${t.city} ${t.name}`])),
+};
+const SPORT = process.env.SIM_GM_CAREER_SPORT || 'nfl';
+const LABEL = LABELS[SPORT] ?? {};
 const label = id => LABEL[id] ?? id;
 const sameId = id => id;
 
@@ -351,8 +369,49 @@ function nflDraft(lg, team, rng, desk) {
   return desk;
 }
 
+/** Round 1559: the NHL board holds Play while his roster is over NHL_ROSTER_MAX; the GM lets the weakest go (doRelease). */
+function nhlCut(lg, team) {
+  const mine = lg.teams[team];
+  while (mine.players.length > EN.NHL_ROSTER_MAX) {
+    const down = [...mine.players].sort((a, b) => EN.nhlTradeValue(a) - EN.nhlTradeValue(b) || a.id.localeCompare(b.id))[0];
+    if (!down || !EN.nhlRelease(mine, lg.freeAgents, down.id, lg.ratingModelVersion)) break;
+  }
+}
+
+/** Draft night as the NHL board runs it (openDraft, draftPick, draftWithoutPicks): he takes the best grade he sees,
+    his scout's read with the desk on; two batches of the rivals' picks, the order read again before each. */
+function nhlDraft(lg, team, rng, desk) {
+  const mine = lg.teams[team];
+  const count = EN.nhlDraftCapital(mine) ?? 0;
+  let cls = EN.nhlDraftClass(rng, Math.max(24, count + 10), leagueNames(lg));
+  const level = desk ? S.gmStaffLevel(DN.nhlStaffOf(desk, lg, team).block, 'scouting') : null;
+  const grade = pr => (level !== null ? DN.nhlScoutRead(pr, team, lg.season, level) : pr.grade);
+  let left = 2, picksLeft = count;
+  const aiBatch = () => {
+    const order = EN.nhlFoStandings(lg).map(t => t.abbr).reverse().filter(a => a !== team);
+    cls = EN.nhlAiDraftPicks(lg, cls, order, rng).remaining;
+    left -= 1;
+  };
+  while (picksLeft > 0 && mine.picks.length > 0 && cls.length > 0) {
+    const pr = [...cls].sort((a, b) => grade(b) - grade(a) || a.id.localeCompare(b.id))[0];
+    const round = mine.picks[0];
+    if (!EN.nhlConsumeDraftPick(mine)) break;
+    const p = EN.nhlProspectToPlayer(pr, rng, lg.ratingModelVersion);
+    if (desk) DN.nhlSignDraftee(p);
+    mine.players.push(p);
+    if (desk) desk = DN.nhlNoteArrivals(desk, lg, team, [p.id], 'draft', round);
+    cls = cls.filter(x => x.id !== pr.id);
+    const nextPicks = Math.min(picksLeft - 1, mine.picks.length);
+    for (let i = nextPicks === 0 ? left : Math.min(1, left); i > 0; i--) aiBatch();
+    picksLeft = nextPicks;
+  }
+  while (left > 0) aiBatch();
+  return desk;
+}
+
 const DRIVE = {
   nfl: {
+    sport: 'nfl',
     host: nflDeskHost,
     team: 'KC',
     newLeague: (rng, team) => E.initLeague(rng, { depth: FO_DEPTH, userTeam: team }),
@@ -407,17 +466,62 @@ const DRIVE = {
       E.runOffseason(lg, rng);
     },
   },
+  /* Round 1559: the NHL Front Office in its board's own call order (NhlFrontOfficeBoard.tsx: start, playRound,
+     openDraft, draftPick and draftWithoutPicks, finishDraft). Section 1 only until the round binds the career. */
+  nhl: {
+    sport: 'nhl',
+    bound: false,
+    host: nhlDeskHost,
+    team: 'TOR',
+    deskKeys: ['contracts', 'picks', 'staff', 'retained'],
+    newLeague: rng => EN.initNhlLeague(rng, NHL_OPENING_RATINGS),
+    cut: nhlCut,
+    openDesk: (lg, team) => DN.openNhlDesk(lg, team),
+    /* The board's mandateFor. */
+    mandateFor: (lg, team, defendingChamp, tilt = 0) => FM.buildOwnerMandate(
+      FM.strengthRank(Object.fromEntries(Object.entries(lg.teams).map(([a, t]) => [a, EN.nhlStrength(t)])), team),
+      Object.keys(lg.teams).length, defendingChamp, NHL_WORDS, lg.season, tilt),
+    /* playRound pressed every round (the round, the rivals' moves, the desk's tick), the last one playing the playoffs. */
+    season(lg, team, rng, desk) {
+      for (;;) {
+        EN.simNhlRound(lg, team, rng, desk ? DN.nhlDeskRoundOptions(desk, lg, team) : undefined);
+        EN.nhlAiMoves(lg, team, rng);
+        if (desk) desk = DN.nhlDeskAfterRound(desk, lg, team).desk;
+        if (lg.round >= EN.NHL_FO_ROUNDS) break;
+        lg.round += 1;
+      }
+      const po = EN.runNhlFoPlayoffs(lg, rng, desk ? DN.nhlDeskEdges(desk, lg, team) : undefined);
+      lg.champions.push({ season: lg.season, team: po.champion });
+      return { desk, rounds: po.series, champion: po.champion };
+    },
+    /* The board's close: seriesPostseason over the bracket, the bind's one reader once it exists. */
+    outcome: (lg, team, series, champion) => (M.NC && typeof M.NC.nhlOutcome === 'function'
+      ? M.NC.nhlOutcome(lg, team, series, champion)
+      : { wins: lg.teams[team].wins, ...FM.seriesPostseason(series, team), wonTitle: champion === team }),
+    draft: nhlDraft,
+    /* finishDraft: the desk summer when the desk is on, the engine's own (with his club named) otherwise. */
+    summer(lg, team, rng, desk) {
+      if (!desk) { EN.nhlOffseason(lg, rng, team); return desk; }
+      const s = DN.nhlDeskOffseason(lg, desk, team, rng);
+      if (s.ok === false) throw new Error(`the NHL desk summer refused to run: ${s.lines.join(' ')}`);
+      return s.desk;
+    },
+  },
 };
-const SPORT = process.env.SIM_GM_CAREER_SPORT || 'nfl';
 if (!DRIVE[SPORT]) { console.error(`no DRIVE row for ${SPORT}`); process.exit(2); }
 const d = DRIVE[SPORT];
+if (d.bound === false) {
+  ROW_BOUND = false;
+  if (!RECORD) console.log(`sections 2 to 8 not bound for ${SPORT} yet: section 1 alone`);
+}
 
 /* ================================================================== */
 /* 1. The default path, recorded from the base and replayed            */
 /* ================================================================== */
 const S1_SEEDS = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
 const S1_SEASONS = 5;
-const DESK_KEYS = ['contracts', 'picks', 'staff'];
+/* Round 1019's three blocks on the NFL; the NHL's desk has a fourth, the retained salary rows. */
+const DESK_KEYS = d.deskKeys ?? ['contracts', 'picks', 'staff'];
 const GAINED_KEYS = ['seat', 'xp'];
 /* FIRST, before anything else mints an id, so the recorder and the replay walk the same id stream. */
 const s1 = { hashes: {}, seasons: 0, firedAt: [], badKeys: 0 };
