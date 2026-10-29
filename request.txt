@@ -1,0 +1,8 @@
+#!serve
+#!playwright
+walk: ENGINES=chromium node scripts/playNbaIntl.mjs
+ctl-nobeat: git worktree add -q /tmp/nob HEAD && ln -s "$PWD/node_modules" /tmp/nob/node_modules && sed -i 's/? sport.intl.pendingYear(career) : null;/? null : null;/' /tmp/nob/src/components/us-career/UsCareerBoard.tsx && test "$(grep -c '? null : null;' /tmp/nob/src/components/us-career/UsCareerBoard.tsx)" = 1 && (cd /tmp/nob && node_modules/.bin/vite build > /tmp/nob-build.log 2>&1) && PLAY_INTL_CONTROL=nobeat PLAY_INTL_DIST=/tmp/nob/dist RC_OUT="$RC_OUT/nobeat" node scripts/playNbaIntl.mjs
+ctl-lowbar: git worktree add -q /tmp/low HEAD && ln -s "$PWD/node_modules" /tmp/low/node_modules && sed -i 's/^export const INTL_CALL_UP_OVR = 87;/export const INTL_CALL_UP_OVR = 95;/' /tmp/low/src/lib/nbaCareerIntlGate.ts && test "$(grep -c '^export const INTL_CALL_UP_OVR = 95;' /tmp/low/src/lib/nbaCareerIntlGate.ts)" = 1 && (cd /tmp/low && node_modules/.bin/vite build > /tmp/low-build.log 2>&1) && PLAY_INTL_CONTROL=lowbar PLAY_INTL_DIST=/tmp/low/dist RC_OUT="$RC_OUT/lowbar" node scripts/playNbaIntl.mjs
+weight-head: (node scripts/lib/hostLikeServer.mjs dist 4180 > /tmp/wh.log 2>&1 &) && sleep 4 && node .rc/x/weightNba.mjs http://localhost:4180 dist head && node .rc/x/weightNba.mjs http://localhost:4180 dist head2
+weight-base: git worktree add -q /tmp/wb 2413427460 && ln -s "$PWD/node_modules" /tmp/wb/node_modules && (cd /tmp/wb && node_modules/.bin/vite build > /tmp/wb-build.log 2>&1) && (node scripts/lib/hostLikeServer.mjs /tmp/wb/dist 4176 > /tmp/wb-server.log 2>&1 &) && sleep 4 && node .rc/x/weightNba.mjs http://localhost:4176 /tmp/wb/dist base && node .rc/x/weightNba.mjs http://localhost:4176 /tmp/wb/dist base2
+playNbaNumbers: ENGINES=chromium node scripts/playNbaNumbers.mjs

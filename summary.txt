@@ -1,0 +1,7 @@
+build exit=0 23s | [dukb] inlined 1 stylesheet(s) and 1 module(s) into 181 snapshots (11 left alone)
+ctl-nobeat exit=1 48s | playNbaIntl: CONTROL nobeat FIRED (walk (a) at 390 met no call, 1 failures)
+ctl-lowbar exit=1 48s | playNbaIntl: CONTROL lowbar FIRED (walk (a) at 390 met no call, 1 failures)
+weight-head exit=0 13s |   AppearanceBuilder:11.4 Celebration:0.8 CelebrationStyles:0.7 Confetti:0.6 GameHelp:0.8 GameNav:1.7 GameNavbar:3.7 GameReportContext:3.0 GameSeoContent:2.4 HowToPlayPopo
+walk exit=0 69s | playNbaIntl: green. The call, Go and its result's views, Rest, a reload mid beat, the 2027 World Cup's lines and no call at 80 or in 2005, at 320, 390 and 1280; 41 screen
+weight-base exit=0 37s |   AppearanceBuilder:14.9 Celebration:0.8 CelebrationStyles:0.7 Confetti:0.6 GameHelp:0.8 GameNav:1.7 GameNavbar:3.7 GameReportContext:3.0 GameSeoContent:2.4 HowToPlayPopo
+playNbaNumbers exit=0 61s | playNbaNumbers: 85 checks, 0 failed
