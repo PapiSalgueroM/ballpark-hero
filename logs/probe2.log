@@ -1,0 +1,27 @@
+
+[1m[46m RUN [49m[22m [36mv3.2.7 [39m[90m/home/runner/work/ballpark-hero/ballpark-hero[39m
+
+[90mstdout[2m | src/test/probeCm420.test.tsx[2m > [22m[2mPR 420 shortlist across a season[2m > [22m[2mcounts targets aged 19 to 27 that a season later are listed in the market but shown as unavailable
+[22m[39mPROBE2 Everton saved [33m12[39m with key [33m0[39m
+PROBE2 Everton after summer window resolved [33m12[39m of [33m12[39m unresolved but listed in the market by name [33m0[39m
+PROBE2 Everton season 2 UNRESOLVED {"name":"Erling Haaland","savedAt":"Manchester City","pos":"ST","cohort":2001,"key":null,"nowListed":[{"club":"Arsenal","pos":"ST","cohort":2001,"key":"[\"now\",\"Manchester City\",\"Erling Haaland\",\"ST\",2001,0]"}],"sameKeyListed":0,"inMySquad":false,"gone":true,"retired":false}
+PROBE2 Everton season 2 UNRESOLVED {"name":"Will Ferry","savedAt":"Dundee United","pos":"LM","cohort":2001,"key":null,"nowListed":[],"sameKeyListed":0,"inMySquad":false,"gone":false,"retired":false}
+PROBE2 Everton season 2 resolved [33m10[39m of [33m12[39m unresolved but listed in the market by name [33m1[39m
+PROBE2 Brentford saved [33m12[39m with key [33m0[39m
+PROBE2 Brentford after summer window resolved [33m12[39m of [33m12[39m unresolved but listed in the market by name [33m0[39m
+PROBE2 Brentford season 2 resolved [33m12[39m of [33m12[39m unresolved but listed in the market by name [33m0[39m
+PROBE2 Chelsea saved [33m12[39m with key [33m0[39m
+PROBE2 Chelsea after summer window resolved [33m12[39m of [33m12[39m unresolved but listed in the market by name [33m0[39m
+PROBE2 Chelsea season 2 resolved [33m12[39m of [33m12[39m unresolved but listed in the market by name [33m0[39m
+PROBE2 Real Madrid saved [33m12[39m with key [33m0[39m
+PROBE2 Real Madrid after summer window resolved [33m12[39m of [33m12[39m unresolved but listed in the market by name [33m0[39m
+PROBE2 Real Madrid season 2 resolved [33m12[39m of [33m12[39m unresolved but listed in the market by name [33m0[39m
+PROBE2 TOTAL listed by name but shown unavailable [33m1[39m of [33m48[39m
+
+ [32m✓[39m src/test/probeCm420.test.tsx[2m > [22mPR 420 shortlist across a season[2m > [22mcounts targets aged 19 to 27 that a season later are listed in the market but shown as unavailable[33m 3175[2mms[22m[39m
+
+[2m Test Files [22m [1m[32m1 passed[39m[22m[90m (1)[39m
+[2m      Tests [22m [1m[32m1 passed[39m[22m[90m (1)[39m
+[2m   Start at [22m 03:55:36
+[2m   Duration [22m 5.07s[2m (transform 1.08s, setup 52ms, collect 1.30s, tests 3.18s, environment 234ms, prepare 81ms)[22m
+

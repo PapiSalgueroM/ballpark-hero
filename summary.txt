@@ -1,0 +1,1 @@
+probe2 exit=0 6s |    Duration  5.07s (transform 1.08s, setup 52ms, collect 1.30s, tests 3.18s, environment 234ms, prepare 81ms)
