@@ -1,0 +1,2 @@
+#!serial
+record-pair: git worktree add -q /tmp/rm 60199687a && ln -s "$PWD/node_modules" /tmp/rm/node_modules && (cd /tmp/rm && node scripts/recordUsBoardFixture.mjs /tmp/fx-merge.json > /tmp/rm.log 2>&1); tail -2 /tmp/rm.log; node scripts/recordUsBoardFixture.mjs "$RC_OUT/usBoardFixture.json" > /tmp/rh.log 2>&1; tail -2 /tmp/rh.log; node .rc/x/fxdiff.mjs /tmp/fx-merge.json "$RC_OUT/usBoardFixture.json"

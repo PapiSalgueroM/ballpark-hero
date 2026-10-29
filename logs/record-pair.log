@@ -1,0 +1,9 @@
+  nhl: 421 clicks on the path, 24 seasons, 19 fixed saves, 900 screen steps
+recordUsBoardFixture: wrote ../fx-merge.json (2301128 bytes)
+  nhl: 421 clicks on the path, 24 seasons, 19 fixed saves, 900 screen steps
+recordUsBoardFixture: wrote ../../_temp/rc-out/files/usBoardFixture.json (2301128 bytes)
+nfl: 1410 steps over 20 lists; 0 with a moved action or save, 0 with a moved screen (0 of them the badge count alone), 0 lists of another length OK
+nba: 1453 steps over 20 lists; 0 with a moved action or save, 29 with a moved screen (29 of them the badge count alone), 0 lists of another length OK
+mlb: 1341 steps over 20 lists; 0 with a moved action or save, 0 with a moved screen (0 of them the badge count alone), 0 lists of another length OK
+nhl: 1321 steps over 20 lists; 0 with a moved action or save, 0 with a moved screen (0 of them the badge count alone), 0 lists of another length OK
+fxdiff: the only change is the NBA case's badge count, 23 to 26
