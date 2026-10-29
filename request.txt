@@ -1,0 +1,19 @@
+# rBTG-mix reviewer, request a, on the gate head 5572def49 (unserved, three at a time). Extras: post-apply.json (kit copy).
+kw-fresh: node scripts/genSearchKeywords.mjs && git diff --exit-code --stat src/data/searchKeywords.json && echo "keyword index current"
+kw-stale-ctl: git worktree add -q /tmp/kwc HEAD && ln -s "$PWD/node_modules" /tmp/kwc/node_modules && cd /tmp/kwc && git show 601435944:src/data/searchKeywords.json > src/data/searchKeywords.json && git -c user.email=r@x -c user.name=r commit -q -am stale && node scripts/genSearchKeywords.mjs > /dev/null && git diff --exit-code --stat src/data/searchKeywords.json && echo "CONTROL DID NOT FIRE: stale index read as current"
+kw-site-ctl: git worktree add -q /tmp/kws HEAD && ln -s "$PWD/node_modules" /tmp/kws/node_modules && cd /tmp/kws && git show 601435944:src/data/searchKeywords.json > src/data/searchKeywords.json && node scripts/simSiteSearch.mjs
+simSiteSearch: node scripts/simSiteSearch.mjs
+mig-same: git diff --exit-code --stat de0a18dde HEAD -- supabase/migrations/20261029120000_round_1565_connections_live.sql scripts/qa/connections1565Applied.sql scripts/data/connectionsLiveSnapshot.json src/data/connectionsPuzzles.ts && sha256sum supabase/migrations/20261029120000_round_1565_connections_live.sql && echo "1565 migration, applied form, snapshot and file byte for byte as the round closed them"
+nba-plain: node scripts/simNbaSeasonStats.mjs
+nba-c-named: NBA_STATS_CONTROL=named node scripts/simNbaSeasonStats.mjs
+nba-c-oldnever: NBA_STATS_CONTROL=oldnever node scripts/simNbaSeasonStats.mjs
+nfl-plain: node scripts/simNflSeasonStats.mjs
+nfl-c-perload: NFL_STATS_CONTROL=perload node scripts/simNflSeasonStats.mjs
+conn-facts: node scripts/simConnectionsFacts.mjs
+conn-ctl-snapshot: CONN_CONTROL=snapshot node scripts/simConnectionsFacts.mjs
+rehearse: npm install --prefix /tmp/pglA @electric-sql/pglite >/dev/null 2>&1 && PGLITE_DIR=/tmp/pglA node scripts/qa/rehearseConnections1565.mjs .rc/x/post-apply.json
+rehearse-noguard: npm install --prefix /tmp/pglB @electric-sql/pglite >/dev/null 2>&1 && REHEARSE_CONTROL=noguard PGLITE_DIR=/tmp/pglB node scripts/qa/rehearseConnections1565.mjs .rc/x/post-apply.json
+fair: node scripts/simFairPuzzles.mjs
+identity: node_modules/.bin/vitest run src/hooks/useDailyPuzzleIdentity.test.ts --testTimeout=120000
+dailySaveShapes: node_modules/.bin/vitest run src/test/dailySaveShapes.test.tsx --testTimeout=300000 --hookTimeout=120000
+vitest-fo: node_modules/.bin/vitest run src/components/nba-front-office src/components/front-office src/components/front-office-shared src/lib/nflSeasonStats.test.ts src/lib/nbaRotation.test.ts src/test/nbaAwardDecisionLift.test.ts --testTimeout=300000 --hookTimeout=120000
