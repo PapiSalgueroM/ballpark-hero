@@ -240,6 +240,29 @@ describe('NBA My Career: the medals on the shelf', () => {
     expect(localStorage.getItem(sport.saveKey), 'looking at the shelf writes nothing').toBe(bytes);
   });
 
+  /* Round 1557's fix (review-run-1557, minor 2): leaving the trophies panel by the header's Hub button with the
+     International view up, then opening the Trophy Case again, opens the case, not the view. Nothing else held the
+     board's closing effect: with it removed this case goes red and every other one stays green. */
+  it('the header\'s Hub button with the International view up, then the Trophy Case again: the case, not the view', async () => {
+    const { c, tq } = throwback(3, 80);
+    c.intl = { v: 1, summers: [gold, rest] } as unknown as UsCareerCore['intl'];
+    save(c, tq);
+    mount();
+    await waitFor(() => expect(button(`Play the ${c.year} season`)).toBeTruthy());
+    await openCase();
+    await waitFor(() => expect(q('[data-intl-open]')).toBeTruthy());
+    fireEvent.click(q('[data-intl-open]')!);
+    await waitFor(() => expect(q('[data-intl-summers-view="list"]')).toBeTruthy());
+    const hub = [...document.querySelectorAll('button')].find(b => (b.textContent ?? '').trim() === 'Hub');
+    expect(hub, 'the panel header has its Hub button').toBeTruthy();
+    fireEvent.click(hub!);
+    await waitFor(() => expect(button(`Play the ${c.year} season`)).toBeTruthy());
+    fireEvent.click([...document.querySelectorAll('button')].find(b => /Trophy Case/.test(b.textContent ?? ''))!);
+    await waitFor(() => expect(q('[data-trophy-case], [data-intl-summers-view]')).toBeTruthy());
+    expect(q('[data-intl-summers-view]'), 'the Trophy Case opens on the case').toBeNull();
+    expect(q('[data-trophy-case]')).toBeTruthy();
+  });
+
   it('a save with no summer shows no medal row and no International tile, and the badges it always had', async () => {
     const { c, tq } = throwback(3, 80);
     save(c, tq);
