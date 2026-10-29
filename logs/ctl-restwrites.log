@@ -1,0 +1,21 @@
+NEGATIVE CONTROL restwrites: resting takes a point of health (section 7 must fail)
+section 7: what must not move, 400 careers an era against /tmp/bs2
+  FAIL [7] now 3: resting moved something beside the intl block
+  FAIL [7] now 5: resting moved something beside the intl block
+  FAIL [7] now 6: resting moved something beside the intl block
+  FAIL [7] now 12: resting moved something beside the intl block
+  FAIL [7] now 13: resting moved something beside the intl block
+  FAIL [7] now 14: resting moved something beside the intl block
+  FAIL [7] now 14: a call's deal differs between go and rest before the first knock (6 go calls, 6 rest calls up to Infinity)
+  FAIL [7] now 19: resting moved something beside the intl block
+  FAIL [7] now 20: resting moved something beside the intl block
+  FAIL [7] now 20: a call's deal differs between go and rest before the first knock (4 go calls, 4 rest calls up to Infinity)
+  FAIL [7] now 21: resting moved something beside the intl block
+  FAIL [7] now 23: resting moved something beside the intl block
+  now: never called 218, called 182 (went and never hurt 136, hurt at least once 46)
+  now: save bytes of a career of 21 seasons or more that went every time it was called: first 11574 on the base, 12168 on this head (4 summers); the save grows by 593 bytes at the median, 1242 at most, over 83 careers
+  now: called careers, legacy median always go 499 vs always rest 490; Hall share 49.5 vs 48.9 percent (measured, never asserted)
+  y2004: never called 214, called 186 (went and never hurt 139, hurt at least once 47)
+  y2004: save bytes of a career of 21 seasons or more that went every time it was called: first 11631 on the base, 11939 on this head (2 summers); the save grows by 558 bytes at the median, 881 at most, over 93 careers
+  y2004: called careers, legacy median always go 563 vs always rest 550; Hall share 58.6 vs 55.9 percent (measured, never asserted)
+simCareerIntl: control restwrites FIRED (section 7, 374 failures)
