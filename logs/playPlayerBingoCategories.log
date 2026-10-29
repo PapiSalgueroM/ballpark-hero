@@ -1,0 +1,41 @@
+node:internal/modules/run_main:107
+    triggerUncaughtException(
+    ^
+
+AssertionError [ERR_ASSERTION]: The complete old class reproduces the three retained 320px overflow defects
++ actual - expected
+
+  [
+    {
+      kind: 'label-overflow',
++     title: 'Champions League winner'
+-     title: 'Played for Manchester United'
+    },
+    {
+      kind: 'label-overflow',
++     title: 'Played for Manchester United'
+-     title: 'Champions League winner'
+    },
+    {
+      kind: 'label-overflow',
+      title: 'Goalkeeper'
+    }
+
+    at file:///home/runner/work/ballpark-hero/ballpark-hero/scripts/playPlayerBingoCategories.mjs:173:20 {
+  generatedMessage: false,
+  code: 'ERR_ASSERTION',
+  actual: [
+    { kind: 'label-overflow', title: 'Champions League winner' },
+    { kind: 'label-overflow', title: 'Played for Manchester United' },
+    { kind: 'label-overflow', title: 'Goalkeeper' }
+  ],
+  expected: [
+    { kind: 'label-overflow', title: 'Played for Manchester United' },
+    { kind: 'label-overflow', title: 'Champions League winner' },
+    { kind: 'label-overflow', title: 'Goalkeeper' }
+  ],
+  operator: 'deepStrictEqual',
+  diff: 'simple'
+}
+
+Node.js v24.22.1
