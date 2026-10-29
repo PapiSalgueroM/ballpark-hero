@@ -423,6 +423,7 @@ export * as S from '${ROOT_URL}/src/lib/gmStaff.ts';
 export * as G from '${ROOT_URL}/src/lib/gmDesk.ts';
 export * as F from '${ROOT_URL}/src/lib/tradeFinder.ts';
 export { nbaCloseSeasonStats } from '${ROOT_URL}/src/lib/nbaSeasonStats.ts';
+export * as SS from '${ROOT_URL}/src/lib/nbaSeasonStats.ts';
 export { NBA_STAFF_PACK } from '${ROOT_URL}/src/data/gmStaff/packs.ts';
 export { nbaContractHost, nbaSummerKeepingSheets } from '${ROOT_URL}/src/lib/gmContractsHostNba.ts';
 export { cutPlayer, rollDeadCap } from '${ROOT_URL}/src/lib/frontOfficeCuts.ts';
@@ -470,8 +471,19 @@ function mulberry32(seed) {
     return ((t ^ (t >>> 14)) >>> 0) / 4294967296;
   };
 }
-/* Ids carry a per process epoch; the fixture compares the league with it taken out. */
-const leagueHash = lg => crypto.createHash('sha1').update(J(lg).replace(/"n[0-9a-z]+-(\d+)"/g, '"n-$1"')).digest('hex');
+/* Round 1566: the season's lines are saved in the shared short shape (src/lib/foStatsCodec.ts), so the hash reads a
+   block as the named rows it stands for (the one expand, its club columns aside) with the lines in key order, and holds
+   the season, not the save shape. On a tree from before the round the block already is named rows and only the order
+   applies. The fixture (8f27082f's) still holds as it was: recorded again this way from 5d1198389, the commit before
+   the round (runner r1566-s4b), it came back with every hash the same. */
+const shapeFree = lg => {
+  if (!lg || !lg.stats) return lg;
+  let rows = lg.stats;
+  if ('clubs' in rows) { const { club, ...named } = M.SS.nbaFoStats(rows); void club; rows = named; }
+  return { ...lg, stats: { ...rows, lines: Object.fromEntries(Object.entries(rows.lines).sort(([a], [b]) => (a < b ? -1 : a > b ? 1 : 0))) } };
+};
+/* Ids carry a per process epoch; the fixture compares the league with it taken out (a line's key included). */
+const leagueHash = lg => crypto.createHash('sha1').update(J(shapeFree(lg)).replace(/(["|])n[0-9a-z]+-(\d+)"/g, '$1n-$2"')).digest('hex');
 const TEAM = 'BOS';
 
 /** Every man the user drafted with the desk on: the season of his draft and the round. */

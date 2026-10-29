@@ -200,6 +200,7 @@ async function bundle(srcRoot, boardText, tag) {
     "export { default as Board } from '@/components/nba-front-office/NbaFrontOfficeBoard';",
     "export { default as Boundary } from '@/components/RouteErrorBoundary';",
     "export * from '@/lib/nbaFrontOffice';",
+    "export * as SS from '@/lib/nbaSeasonStats';",
     "export { openNbaDesk, syncNbaPicks, nbaPicksOf, nbaStaffOf, nbaScoutRead, nbaDeskOffseason } from '@/lib/nbaGmDesk';",
     "export { openNbaDraftNight, nbaDraftNightOf, NBA_DRAFT_BLOCK, nbaDraftContinue, nbaDraftPick, nbaDraftByStaff, slotsLeftFor } from '@/lib/nbaEarnedDraft';",
     "export { movePicks, pickKey } from '@/lib/gmEarnedDraft';",
@@ -478,7 +479,20 @@ async function child() {
         : typeof v === 'string' ? fix(v) : v);
     return walk(value);
   };
-  const hashOf = value => createHash('sha256').update(JSON.stringify(canonOf(value))).digest('hex');
+  /* Round 1566: the season's lines are saved in the shared short shape (src/lib/foStatsCodec.ts), so a save is hashed
+     with its league's block read as the named rows it stands for (the one expand, its club columns aside) and the
+     lines in key order: the season, not the save shape. On a tree from before the round the block already is named
+     rows and only the order applies. Section 1's fixture (7a8750ba's) still holds as it was: recorded again this way
+     from 5d1198389, the commit before the round (runner r1566-s4b), it came back with every hash and draw count the
+     same, since each play ends at the next season's hub on a fresh empty block, which reads the same in both shapes. */
+  const shapeFree = v => {
+    if (!v || typeof v !== 'object' || !v.league || !v.league.stats) return v;
+    let rows = v.league.stats;
+    if ('clubs' in rows) { const { club, ...named } = E.SS.nbaFoStats(rows); void club; rows = named; }
+    const lines = Object.fromEntries(Object.entries(rows.lines).sort(([a], [b]) => (a < b ? -1 : a > b ? 1 : 0)));
+    return { ...v, league: { ...v.league, stats: { ...rows, lines } } };
+  };
+  const hashOf = value => createHash('sha256').update(JSON.stringify(canonOf(shapeFree(value)))).digest('hex');
 
   /* The season, by construction: thirty clubs on distinct records, a real postseason, the champion pushed. */
   const rng = lehmer(15400 + job.seed * 101);

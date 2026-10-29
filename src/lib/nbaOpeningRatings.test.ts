@@ -22,6 +22,15 @@ const snapshot = JSON.parse(read('scripts/data/nbaFoRatingInputs2026.json').toSt
 const seeds = NBA_TEAMS.flatMap(t => t.players.map(p => ({ team: t.id, ...p })));
 const inputs = Object.fromEntries(Object.entries(snapshot.observations).map(([key, set]: [string, any]) => [key, set.rows.map((row: any[]) => Object.fromEntries(set.headers.map((field: string, i: number) => [field, row[i]])))]));
 const people = (league: engine.NbaLeague) => [...Object.values(league.teams).flatMap(t => t.players), ...league.freeAgents];
+/* Round 1566: the season lines are saved in the shared short shape (src/lib/foStatsCodec.ts); the e8b39ccc engine
+   records through today's nbaSeasonStats.ts too, so both leagues' blocks are compared as the rows they stand for,
+   through the one expand (its club columns aside), which is what this test compared before the round. */
+const asNamed = (league: engine.NbaLeague) => {
+  if (!league.stats || !('clubs' in league.stats)) return league;
+  const rows: Partial<ReturnType<typeof stats.nbaFoStats>> = { ...stats.nbaFoStats(league.stats) };
+  delete rows.club;
+  return { ...league, stats: rows };
+};
 const seeded = (seed: number) => {
   let state = seed >>> 0, count = 0;
   return { draw: () => { count++; state = (Math.imul(state, 1664525) + 1013904223) >>> 0; return state / 4294967296; }, count: () => count, state: () => state };
@@ -79,7 +88,11 @@ function season(api: typeof engine, box: typeof stats, lg: engine.NbaLeague, rng
   for (let round = 1; round <= api.NBA_ROUNDS; round++) { lg.round = round; api.simRound(lg, 'DEN', rng); }
   const postseason = api.runNbaPlayoffs(lg, rng);
   lg.champions.push({ season: lg.season, team: postseason.champion });
-  api.nbaAssessTax(lg); box.nbaCloseSeasonStats(lg);
+  api.nbaAssessTax(lg);
+  /* Round 1566: the pinned e8b39ccc reader reads named rows, while its engine records through today's
+     nbaSeasonStats.ts in the shared shape, so it closes the season on the rows that block stands for. */
+  if (box !== stats && lg.stats && 'clubs' in lg.stats) lg.stats = asNamed(lg).stats as unknown as engine.NbaLeague['stats'];
+  box.nbaCloseSeasonStats(lg);
   return postseason;
 }
 const terms = (p: engine.NbaGmPlayer) => { const { id, ovr, salary, pot, openingRatingEvidence, ...held } = p; return held; };
@@ -90,10 +103,10 @@ function fictionalTeam(abbr: string, salary = 30): engine.NbaGmTeam {
 describe('NBA opening rating integration', () => {
   it('preserves the physical e8b39ccc default league full season and RNG as an independent baseline', () => {
     const a = seeded(895), b = seeded(895), old = baseline.engine.initNbaLeague(a.draw), next = engine.initNbaLeague(b.draw);
-    expect(canonical(next)).toEqual(canonical(old)); expect([b.count(), b.state()]).toEqual([a.count(), a.state()]);
+    expect(canonical(asNamed(next))).toEqual(canonical(asNamed(old))); expect([b.count(), b.state()]).toEqual([a.count(), a.state()]);
     expect(canonical(season(engine, stats, next, b.draw))).toEqual(canonical(season(baseline.engine, baseline.stats, old, a.draw)));
     engine.nbaOffseason(next, b.draw); baseline.engine.nbaOffseason(old, a.draw);
-    expect(canonical(next)).toEqual(canonical(old)); expect([b.count(), b.state()]).toEqual([a.count(), a.state()]);
+    expect(canonical(asNamed(next))).toEqual(canonical(asNamed(old))); expect([b.count(), b.state()]).toEqual([a.count(), a.state()]);
   });
 
   it('keeps physical old-save grades and absent evidence unchanged through restore and play', () => {
@@ -105,7 +118,7 @@ describe('NBA opening rating integration', () => {
     expect(engine.simRound(next, 'DEN', b.draw)).toEqual(baseline.engine.simRound(old, 'DEN', a.draw));
     expect(canonical(next)).toEqual(canonical(old));
     engine.nbaOffseason(next, b.draw); baseline.engine.nbaOffseason(old, a.draw);
-    expect(canonical(next)).toEqual(canonical(old)); expect(people(next).every(p => !p.openingRatingEvidence)).toBe(true);
+    expect(canonical(asNamed(next))).toEqual(canonical(asNamed(old))); expect(people(next).every(p => !p.openingRatingEvidence)).toBe(true);
   });
 
   it('replays all300 frozen model grades and fictional opening prices without named overrides', () => {
@@ -213,7 +226,7 @@ describe('NBA opening rating integration', () => {
     expect(engine.nbaTipOff(lg, rng.draw, 'DEN').refused).toEqual([]); expect(Object.values(lg.teams).every(t => t.players.length >= 14 && t.players.length <= 15)).toBe(true);
     engine.simRound(lg, 'DEN', rng.draw);
     for (const team of Object.values(lg.teams)) {
-      const club = lg.stats!.teams[team.abbr], lines = Object.values(lg.stats!.lines).filter(line => line.team === team.abbr);
+      const named = stats.nbaFoStats(lg.stats!), club = named.teams[team.abbr], lines = Object.values(named.lines).filter(line => line.team === team.abbr);
       expect(club.g).toBe(4); expect(lines.reduce((sum, line) => sum + line.tot.pts, 0)).toBe(club.pts);
       team.players.forEach(p => { if (origins.has(p.id)) expect(p.openingRatingEvidence).toEqual(origins.get(p.id)); else expect(p.openingRatingEvidence).toBeUndefined(); });
     }

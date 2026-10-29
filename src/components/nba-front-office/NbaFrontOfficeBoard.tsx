@@ -20,9 +20,10 @@ import {
   nbaMinContract, nbaDraftSigning, nbaDraftCapital, nbaConsumeDraftPick, nbaAiDraftPicks,
 } from '@/lib/nbaFrontOffice';
 import { FoCapPanel } from '@/components/front-office-shared/FoCapPanel';
+import { FoAwardBadge } from '@/components/front-office-shared/FoAwardBadge';
 /* Round 824: the season's lines and awards, engine in nbaSeasonStats.ts, box shared. */
 import {
-  nbaCloseSeasonStats, nbaLeaders, nbaTeamLines, NBA_AWARD_LABEL, NBA_AWARD_RULE,
+  nbaCleanStats, nbaCloseSeasonStats, nbaLeaders, nbaTeamLines, NBA_AWARD_LABEL, NBA_AWARD_RULE,
   type NbaAwardKey, type NbaAwardPick, type NbaSeasonAwards,
 } from '@/lib/nbaSeasonStats';
 import { FoSeasonStatsCard, type FoStatsAward } from '@/components/front-office-shared/FoSeasonStatsCard';
@@ -269,6 +270,9 @@ export default function NbaFrontOfficeBoard() {
          id fix can hold two men under one. The draft class is passed too: it
          is minted from the same counter, so it shares the id space. */
       ensureNbaLeagueIds(s.league, s.draftClass);
+      /* Round 1566: the season's lines in the shared save shape; a save of named rows is turned into it here, before
+         anything reads the league, so its next save writes the new shape. */
+      nbaCleanStats(s.league);
       setLeague(s.league); setMyTeam(s.myTeam);
       setTitles(s.titles ?? 0); setSeasonsPlayed(s.seasonsPlayed ?? 0);
       setDraftClass(s.draftClass ?? null); setPicksLeft(s.picksLeft ?? 0);
@@ -1308,12 +1312,9 @@ export default function NbaFrontOfficeBoard() {
                   <span className="block text-[10px] text-muted-foreground">{p.pos} · {p.age}y · ${p.salary}M x{p.years}</span>
                   {ratingNote(p)}
                   {/* Round 824: this save's awards, on his card. The names are
-                      real, so each one says it is a sim award, never the real one. */}
-                  {p.awards && p.awards.length > 0 && (
-                    <span data-award-badge className="block truncate text-[10px] text-gold" title={`This save's sim awards, not real NBA ones: ${p.awards.join(', ')}`}>
-                      🏅 {p.awards.slice(-2).reverse().map(a => `Sim ${a}`).join(', ')}{p.awards.length > 2 ? ` +${p.awards.length - 2} more` : ''}
-                    </span>
-                  )}
+                      real, so each one says it is a sim award, never the real one.
+                      Round 1566: the shared badge, the NFL roster's (12 px, wraps). */}
+                  <FoAwardBadge awards={p.awards ?? []} league="NBA" />
                 </span>
                 <span className="ml-2 flex shrink-0 items-center gap-1.5">
                   <b className="text-primary">{p.ovr}{ratingMarker(p)}</b>

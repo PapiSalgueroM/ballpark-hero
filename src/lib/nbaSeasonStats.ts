@@ -46,12 +46,31 @@ import { nbaDefenseValue, nbaMvpValue, nbaProduction } from './awardDecision';
 import type { NbaGmPlayer, NbaGmTeam, NbaLeague } from './nbaFrontOffice';
 import { NBA_ROTATION_MINUTES, nbaRotation as teamRotation, nbaRotationSlots } from './nbaRotation';
 import {
-  type FoSeasonStats, type FoStatLine,
+  type FoStatLine,
   foBoxRng, foLeaders, foMinGames, foPerGame, foPickAward, foRankAward, foSeasonPlayers, foSplit,
 } from './foSeasonStats';
+import {
+  type FoExpandedStats, type FoSavedStats, type FoStatsCodec,
+  foClubGame, foExpand, foLineAdd, foLineGame, foOpenLine, foReadSaved, foSavedFrom,
+} from './foStatsCodec';
 
 export const NBA_STAT_COLS = ['pts', 'reb', 'ast', 'stl', 'blk'] as const;
 export type NbaStatCol = typeof NBA_STAT_COLS[number];
+/**
+ * Round 1566: the NBA's binding of the shared save shape (src/lib/foStatsCodec.ts),
+ * the NFL's since Round 1542: its five columns, a man's starts kept apart from
+ * his games (the bench plays), no club columns of its own. A line is
+ * [name, position, games, starts, points, rebounds, assists, steals, blocks]
+ * and a 1 for a first year man; a club is [games, wins, points for, against].
+ * A save from before (named rows) is turned into it on load (nbaCleanStats).
+ */
+export const NBA_CODEC: FoStatsCodec = { cols: NBA_STAT_COLS, gs: true, clubCols: [] };
+/** The season's lines as the save keeps them. */
+export type NbaSeasonStats = FoSavedStats;
+/** The block spelled out as the shared named lines, the one expand (foExpand) with the NBA's columns. A fresh object. */
+export function nbaFoStats(s: FoSavedStats): FoExpandedStats {
+  return foExpand(NBA_CODEC, s);
+}
 
 export { NBA_ROTATION_MINUTES } from './nbaRotation';
 /** A club's points in an even game. The game's own tuning, not a real league figure. */
@@ -125,34 +144,47 @@ export function nbaBoxScore(
   return { home: h, away: a, margin };
 }
 
-const blankLine = (m: NbaBoxMan, team: string): FoStatLine => ({
-  id: m.id, name: m.name, team, pos: m.pos, g: 0, gs: 0,
-  tot: { pts: 0, reb: 0, ast: 0, stl: 0, blk: 0 },
-  ...(m.rookie ? { rookie: true } : {}),
-});
-
-/** Add one game to the season's lines and club totals. */
-export function nbaRecordBox(stats: FoSeasonStats, box: NbaBox): void {
+/** Add one game to the season's lines and club totals, in the shared shape: the club, then each man (his line opens
+ *  at his first game, with his first year mark then; his name is written fresh every game). */
+export function nbaRecordBox(stats: FoSavedStats, box: NbaBox): void {
   for (const [side, other] of [[box.home, box.away], [box.away, box.home]] as const) {
-    const club = stats.teams[side.team] ?? { g: 0, w: 0, pts: 0, opp: 0 };
-    club.g += 1; club.pts += side.pts; club.opp += other.pts;
-    if (side.pts > other.pts) club.w += 1;
-    stats.teams[side.team] = club;
+    foClubGame(NBA_CODEC, stats, side.team, side.pts, other.pts);
     for (const m of side.men) {
-      const key = `${side.team}|${m.id}`;
-      const line = stats.lines[key] ?? blankLine(m, side.team);
-      line.g += 1;
-      if (m.starter) line.gs += 1;
-      for (const c of NBA_STAT_COLS) line.tot[c] = (line.tot[c] ?? 0) + m[c];
-      line.name = m.name;
-      stats.lines[key] = line;
+      const line = foOpenLine(NBA_CODEC, stats, side.team, m.id, m.name, m.pos, m.rookie);
+      foLineGame(NBA_CODEC, line, m.starter);
+      for (const c of NBA_STAT_COLS) foLineAdd(NBA_CODEC, line, c, m[c]);
     }
   }
 }
 
-/** The season's lines when this league is keeping them for the season it is in, else null. */
-export function nbaLiveStats(league: Pick<NbaLeague, 'stats' | 'season'>): FoSeasonStats | null {
+/** The season's lines when this league is keeping them for the season it is in, else null. A block that is not the
+ *  shared shape (named rows from before Round 1566 that reached the engine by a path other than the board's load) is
+ *  turned into it here first, in place, by nbaCleanStats, so the recorder and every reader see the one shape. */
+export function nbaLiveStats(league: Pick<NbaLeague, 'stats' | 'season'>): FoSavedStats | null {
+  const clubs = (league.stats as { clubs?: unknown } | undefined)?.clubs;
+  if (league.stats !== undefined && (typeof clubs !== 'object' || clubs === null || Array.isArray(clubs))) nbaCleanStats(league);
   return league.stats && league.stats.season === league.season ? league.stats : null;
+}
+
+/**
+ * On load, BEFORE anything else reads the league: a block of named rows (a
+ * save from before Round 1566) is turned into the shared shape, exactly what
+ * the recorder writes from the same games, so the next save writes the new
+ * shape; a block that reads as neither is deleted, and the league keeps no
+ * lines until its next summer (as a save from before lines did). Never throws.
+ * Returns what it did.
+ */
+export function nbaCleanStats(league: { stats?: unknown }): 'none' | 'kept' | 'converted' | 'dropped' {
+  try {
+    if (league.stats === undefined) return 'none';
+    if (foReadSaved(NBA_CODEC, league.stats)) return 'kept';
+    const saved = foSavedFrom(NBA_CODEC, league.stats);
+    if (saved) { league.stats = saved; return 'converted'; }
+    delete league.stats;
+    return 'dropped';
+  } catch {
+    return 'none';
+  }
 }
 
 /* ------------------------------------------------------------------ awards */
@@ -216,8 +248,9 @@ export const nbaDefenseScore = (p: FoStatLine): number => nbaDefenseValue(foPerG
  * written anywhere.
  */
 export function nbaSeasonAwards(league: Pick<NbaLeague, 'stats' | 'season' | 'teams'>): NbaSeasonAwards | null {
-  const stats = nbaLiveStats(league);
-  if (!stats) return null;
+  const live = nbaLiveStats(league);
+  if (!live) return null;
+  const stats = nbaFoStats(live);
   const minGames = foMinGames(stats, NBA_AWARD_GAMES_SHARE);
   const qualified = foSeasonPlayers(stats).filter(p => p.g >= minGames);
   const clubs = Object.entries(stats.teams);
@@ -275,8 +308,9 @@ export function nbaCloseSeasonStats(league: NbaLeague): NbaSeasonAwards | null {
 export interface NbaLeaderRow { id: string; name: string; team: string; g: number; value: number }
 /** The leaders tables the close screen draws: the best `n` qualified men in points, rebounds and assists a game. */
 export function nbaLeaders(league: Pick<NbaLeague, 'stats' | 'season'>, n = 3): { minGames: number; pts: NbaLeaderRow[]; reb: NbaLeaderRow[]; ast: NbaLeaderRow[] } | null {
-  const stats = nbaLiveStats(league);
-  if (!stats) return null;
+  const live = nbaLiveStats(league);
+  if (!live) return null;
+  const stats = nbaFoStats(live);
   const minGames = foMinGames(stats, NBA_AWARD_GAMES_SHARE);
   const players = foSeasonPlayers(stats);
   const rows = (col: NbaStatCol) => foLeaders(players, col, n, minGames).map(p => ({ id: p.id, name: p.name, team: p.team, g: p.g, value: foPerGame(p, col) }));
@@ -286,9 +320,9 @@ export function nbaLeaders(league: Pick<NbaLeague, 'stats' | 'season'>, n = 3): 
 export interface NbaTeamLine { id: string; name: string; pos: string; g: number; gs: number; ppg: number; rpg: number; apg: number; rookie: boolean }
 /** One club's lines this season, for the games each man played for it, most points a game first. */
 export function nbaTeamLines(league: Pick<NbaLeague, 'stats' | 'season'>, abbr: string): NbaTeamLine[] {
-  const stats = nbaLiveStats(league);
-  if (!stats) return [];
-  return Object.values(stats.lines)
+  const live = nbaLiveStats(league);
+  if (!live) return [];
+  return Object.values(nbaFoStats(live).lines)
     .filter(l => l.team === abbr && l.g > 0)
     .map(l => ({ id: l.id, name: l.name, pos: l.pos, g: l.g, gs: l.gs, ppg: foPerGame(l, 'pts'), rpg: foPerGame(l, 'reb'), apg: foPerGame(l, 'ast'), rookie: !!l.rookie }))
     .sort((a, b) => b.ppg - a.ppg || b.g - a.g || a.id.localeCompare(b.id));
