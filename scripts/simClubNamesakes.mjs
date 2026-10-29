@@ -42,8 +42,8 @@
 import fs from 'node:fs';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
-import { transformSync } from 'esbuild';
 import * as detectLib from './lib/clubNamesakeDetect.mjs';
+import { buildGridRule, stripComments, braceEnd, onceAt } from './lib/gridRuleFromSource.mjs';
 
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const DATA = path.join(ROOT, 'scripts', 'data', 'clubNamesakes1584');
@@ -61,7 +61,6 @@ const fired = [];
 
 const readText = p => fs.readFileSync(path.join(ROOT, p), 'utf8').replace(/\r\n/g, '\n');
 const readJson = f => JSON.parse(fs.readFileSync(path.join(DATA, f), 'utf8'));
-const stripComments = s => s.replace(/\/\*[\s\S]*?\*\//g, ' ').replace(/^\s*\/\/.*$/gm, ' ');
 const fold = s => String(s || '').normalize('NFD').replace(/[̀-ͯ]/g, '').toLowerCase();
 
 /* ---------------------------------------------------------------- D */
@@ -113,39 +112,12 @@ const FN_RAW = readText(FN_PATH);
 const LEDGER = readJson('gridNamesakes.json');
 const EXCLUDED = LEDGER.excluded.map(e => e.stored);
 const once = (text, anchor, what) => {
-  const at = text.indexOf(anchor);
-  if (at < 0 || text.indexOf(anchor, at + 1) >= 0) { fail(`${what}: the anchor "${anchor}" is not in the text exactly once`); return -1; }
+  const at = onceAt(text, anchor);
+  if (at < 0) fail(`${what}: the anchor "${anchor}" is not in the text exactly once`);
   return at;
 };
-const braceEnd = (text, from) => {
-  const open = text.indexOf('{', from);
-  let depth = 0;
-  for (let i = open; i < text.length; i++) {
-    if (text[i] === '{') depth++;
-    else if (text[i] === '}') { depth--; if (depth === 0) return i + 1; }
-  }
-  return -1;
-};
-/* every piece of the rule by name, out of the comment stripped source, compiled as TypeScript */
-const PIECES = [
-  ['const TRANSLIT', 'object'], ['const norm =', 'statement'], ['const WC_WINNER_BY_YEAR', 'object'],
-  ['const CLUB_ALIASES', 'object'], ['const CLUB_NAMESAKES', 'object'], ['function clubMatches(', 'block'],
-  ['function parseCriterion(', 'block'],
-];
-function buildRule(raw, what) {
-  const src = stripComments(raw);
-  const parts = [];
-  for (const [anchor, shape] of PIECES) {
-    const at = once(src, anchor, what);
-    if (at < 0) return null;
-    let end = shape === 'statement' ? src.indexOf(';', at) + 1 : braceEnd(src, at);
-    if (shape === 'object') end = src.indexOf(';', end) + 1;
-    parts.push(src.slice(at, end));
-  }
-  const ts = `function __rule() {\n${parts.join('\n')}\nreturn { norm, clubMatches, parseCriterion, CLUB_NAMESAKES };\n}`;
-  const js = transformSync(ts, { loader: 'ts' }).code;
-  return new Function(`${js}\nreturn __rule();`)();
-}
+/* every piece of the rule by name, out of the comment stripped source, compiled as TypeScript (the shared builder) */
+const buildRule = (raw, what) => buildGridRule(raw, { onFail: m => fail(`${what}: ${m}`) });
 const NAMESAKE_BLOCK = /const CLUB_NAMESAKES: Record<string, string\[\]> = \{[\s\S]*?\n\};/;
 let headRaw = FN_RAW;
 if (CONTROL === 'noexclude') {
