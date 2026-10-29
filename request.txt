@@ -1,0 +1,5 @@
+#!serial
+acc-pr: node scripts/simAccessibility.mjs
+acc-base: R=$PWD; git worktree add -q --detach /tmp/ab b20ec6664df9d4c58d63ea0596791d33b2a3b8fc && cd /tmp/ab && ln -s $R/node_modules node_modules && node scripts/simAccessibility.mjs
+acc-pr-pin4: sed -i "s#\['src/pages/SoccerCareer.tsx', 3\]#['src/pages/SoccerCareer.tsx', 4]#" scripts/simAccessibility.mjs && grep -c "SoccerCareer.tsx', 4" scripts/simAccessibility.mjs && node scripts/simAccessibility.mjs; s=$?; git checkout -- scripts; exit $s
+acc-pr-pin4-control: sed -i "s#\['src/pages/SoccerCareer.tsx', 3\]#['src/pages/SoccerCareer.tsx', 4]#" scripts/simAccessibility.mjs && SIM_A11Y_CONTROL=dialog node scripts/simAccessibility.mjs; s=$?; git checkout -- scripts; exit $s

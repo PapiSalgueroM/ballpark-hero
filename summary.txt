@@ -1,0 +1,4 @@
+acc-pr exit=1 0s | simAccessibility: 1 failure(s)
+acc-base exit=0 0s | simAccessibility: all green
+acc-pr-pin4 exit=0 0s | simAccessibility: all green
+acc-pr-pin4-control exit=0 0s | control run: 1 failure(s) fired as expected
