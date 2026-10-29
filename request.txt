@@ -1,0 +1,9 @@
+tsc: node_modules/.bin/tsc --noEmit -p tsconfig.app.json
+vitest-nba: PRINT_NBA_1103=1 node_modules/.bin/vitest run src/components/nba-front-office/NbaRotationPanel.test.tsx src/lib/nbaOpeningRatings.test.ts src/lib/nbaRotation.test.ts src/components/nba-front-office/NbaSeasonStats.test.tsx src/components/front-office-shared/FrontOfficeSeasonClose.test.tsx src/test/nbaAwardDecisionLift.test.ts --testTimeout=300000 --hookTimeout=120000
+probe1103-base: git worktree add -f .rc/b1103 5d1198389 && cp .rc/x/probe1103b.test.ts .rc/b1103/src/test/ && cd .rc/b1103 && ../../node_modules/.bin/vitest run src/test/probe1103b.test.ts --testTimeout=300000
+nba-base: git worktree add -f .rc/nbabase 5d1198389 && NBA_STATS_BASE=.rc/nbabase node scripts/simNbaSeasonStats.mjs
+nba-named: NBA_STATS_CONTROL=named node scripts/simNbaSeasonStats.mjs
+nba-oldnever: NBA_STATS_CONTROL=oldnever node scripts/simNbaSeasonStats.mjs
+simSaveKeeper: node scripts/simSaveKeeper.mjs
+simGmDeskHost: node scripts/simGmDeskHost.mjs
+simNbaGmDesk: node scripts/simNbaGmDesk.mjs

@@ -1,0 +1,20 @@
+Preparing worktree (detached HEAD 5d1198389d)
+Updating files:  52% (2807/5378)Updating files:  53% (2851/5378)Updating files:  54% (2905/5378)Updating files:  55% (2958/5378)Updating files:  56% (3012/5378)Updating files:  57% (3066/5378)Updating files:  58% (3120/5378)Updating files:  59% (3174/5378)Updating files:  60% (3227/5378)Updating files:  61% (3281/5378)Updating files:  62% (3335/5378)Updating files:  63% (3389/5378)Updating files:  64% (3442/5378)Updating files:  65% (3496/5378)Updating files:  66% (3550/5378)Updating files:  67% (3604/5378)Updating files:  68% (3658/5378)Updating files:  69% (3711/5378)Updating files:  70% (3765/5378)Updating files:  71% (3819/5378)Updating files:  72% (3873/5378)Updating files:  73% (3926/5378)Updating files:  74% (3980/5378)Updating files:  75% (4034/5378)Updating files:  76% (4088/5378)Updating files:  77% (4142/5378)Updating files:  78% (4195/5378)Updating files:  79% (4249/5378)Updating files:  80% (4303/5378)Updating files:  81% (4357/5378)Updating files:  82% (4410/5378)Updating files:  83% (4464/5378)Updating files:  84% (4518/5378)Updating files:  85% (4572/5378)Updating files:  86% (4626/5378)Updating files:  87% (4679/5378)Updating files:  88% (4733/5378)Updating files:  89% (4787/5378)Updating files:  90% (4841/5378)Updating files:  91% (4894/5378)Updating files:  92% (4948/5378)Updating files:  93% (5002/5378)Updating files:  94% (5056/5378)Updating files:  95% (5110/5378)Updating files:  96% (5163/5378)Updating files:  97% (5217/5378)Updating files:  98% (5271/5378)Updating files:  99% (5325/5378)Updating files: 100% (5378/5378)Updating files: 100% (5378/5378), done.
+HEAD is now at 5d1198389d Board: for Chat, every Release BS finding is fixed on release-bs-gate and the gate is out
+
+[1m[46m RUN [49m[22m [36mv3.2.7 [39m[90m/home/runner/work/ballpark-hero/ballpark-hero/.rc/b1103[39m
+
+[90mstdout[2m | src/test/probe1103b.test.ts[2m > [22m[2mprints the base hashes
+[22m[39mPROBE1103 11 sorted 4aa02c07f7adcbcfc5927ec7670dcfe709007f307bf58d720e54e4cc0c56695e unsorted 8a2efebd7ed94dc0f65c2b090dd27bcce8dfa98405d833482f65d9b289c61998
+PROBE1103 23 sorted 4fb85cf23a3e3a2c4ee4ff53e78a8724659f805b812b00b3eaef52c1ef38a917 unsorted 3fab06fe6c6e850e5834fa3723ec8ad12a66673b7494804215fa4fdbc0556af0
+PROBE1103 37 sorted 23ee605e9f541c783d2204cdf8aa1ef5eadc7ad6ada8e111d0889b020399c4aa unsorted de2446c7c0fab12dc55400b32363fc072a8f512ce50006105faae6851bae2056
+PROBE1103 41 sorted e21a0daca869449d93a32d8570cd5c0aac720f3bbdeced005cca1073c471dd46 unsorted 987c3039e4a5e5618432d267e3340a41f9c9540c027d73700ab0807e40b26777
+
+ [32m✓[39m src/test/probe1103b.test.ts [2m([22m[2m1 test[22m[2m)[22m[33m 733[2mms[22m[39m
+   [33m[2m✓[22m[39m prints the base hashes [33m 732[2mms[22m[39m
+
+[2m Test Files [22m [1m[32m1 passed[39m[22m[90m (1)[39m
+[2m      Tests [22m [1m[32m1 passed[39m[22m[90m (1)[39m
+[2m   Start at [22m 10:09:48
+[2m   Duration [22m 2.97s[2m (transform 440ms, setup 158ms, collect 529ms, tests 733ms, environment 639ms, prepare 288ms)[22m
+

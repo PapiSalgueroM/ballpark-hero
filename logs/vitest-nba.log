@@ -1,0 +1,260 @@
+
+[1m[46m RUN [49m[22m [36mv3.2.7 [39m[90m/home/runner/work/ballpark-hero/ballpark-hero[39m
+
+Browserslist: browsers data (caniuse-lite) is 16 months old. Please run:
+  npx update-browserslist-db@latest
+  Why you should do it regularly: https://github.com/browserslist/update-db#readme
+ [31m❯[39m src/lib/nbaOpeningRatings.test.ts [2m([22m[2m16 tests[22m[2m | [22m[33m16 skipped[39m[2m)[22m[33m 1605[2mms[22m[39m
+   [2m[90m↓[39m[22m NBA opening rating integration[2m > [22mpreserves the physical e8b39ccc default league full season and RNG as an independent baseline
+   [2m[90m↓[39m[22m NBA opening rating integration[2m > [22mkeeps physical old-save grades and absent evidence unchanged through restore and play
+   [2m[90m↓[39m[22m NBA opening rating integration[2m > [22mreplays all300 frozen model grades and fictional opening prices without named overrides
+   [2m[90m↓[39m[22m NBA opening rating integration[2m > [22mapplies all300 real initializer tuples and preserves30 exact original club budgets
+   [2m[90m↓[39m[22m NBA opening rating integration[2m > [22mholds original terms generated ages free agents schedule tax scale and constructor RNG
+   [2m[90m↓[39m[22m NBA opening rating integration[2m > [22mcarries original developmental headroom onto new grades with a99 potential ceiling
+   [2m[90m↓[39m[22m NBA opening rating integration[2m > [22mcopies exact five-field partial original evidence with distinct prior and unresolved bases
+   [2m[90m↓[39m[22m NBA opening rating integration[2m > [22mresumes progressed JSON saves without rerating or losing original lineage below400KiB
+   [2m[90m↓[39m[22m NBA opening rating integration[2m > [22mretains original player evidence through an actual opening-price trade
+   [2m[90m↓[39m[22m NBA opening rating integration[2m > [22mretains waiver lineage charges actual dead money and prevents same-season return
+   [2m[90m↓[39m[22m NBA opening rating integration[2m > [22mleaves generated free agents and future draft arrivals without historical opening evidence
+   [2m[90m↓[39m[22m NBA opening rating integration[2m > [22mkeeps actual tipoff and played box-score points consistent with opening player identities
+   [2m[90m↓[39m[22m NBA opening rating integration[2m > [22mkeeps hard signing refusals and increasing-salary apron trades while allowing matched over-cap trades
+   [2m[90m↓[39m[22m NBA opening rating integration[2m > [22mplays three complete real seasons drafts and summers with saved lineage and accounting identities
+   [2m[90m↓[39m[22m NBA opening rating integration[2m > [22mretains a dated script-only source checkpoint and excludes raw observations from the browser
+   [2m[90m↓[39m[22m NBA opening rating integration[2m > [22mbounds measured targets before opportunity blending and leaves unmeasured players at a disclosed prior
+[90mstdout[2m | src/lib/nbaRotation.test.ts[2m > [22m[2mNBA manual rotation engine outcomes[2m > [22m[2mmeasures a paired complete-regular-season effect for weaker starters with identical draw counts
+[22m[39mNBA_POLICY {"gains":[47,38,42,43,53,38,43,40,33,37,44,43,44,50,51,46,32,46],"blocks":[43.5,40,44.833333333333336]}
+
+ [31m❯[39m src/lib/nbaRotation.test.ts [2m([22m[2m16 tests[22m[2m | [22m[31m1 failed[39m[2m)[22m[33m 4479[2mms[22m[39m
+[31m   [31m×[31m NBA manual rotation engine outcomes[2m > [22mholds physical original automatic campaigns and RNG fingerprints as an independent baseline[39m[33m 439[2mms[22m[39m
+[31m     → expected '98177eb71d208d900c5d34c80f5c9210b2e24…' to be '32a869d8c5d69f54ebc81a9fe96c3bc62e758…' // Object.is equality[39m
+   [32m✓[39m NBA manual rotation engine outcomes[2m > [22mkeeps automatic tie order, empty fallback and fixed minutes as an independent baseline[32m 4[2mms[22m[39m
+   [32m✓[39m NBA manual rotation engine outcomes[2m > [22mchanges starter and bench strength only after a deliberate owned slot swap[32m 3[2mms[22m[39m
+   [32m✓[39m NBA manual rotation engine outcomes[2m > [22mputs a chosen bench prospect on the real box and keeps the original five starters[32m 2[2mms[22m[39m
+   [32m✓[39m NBA manual rotation engine outcomes[2m > [22mcovers only the injured preferred hole and restores it without rewriting preferences[32m 3[2mms[22m[39m
+   [32m✓[39m NBA manual rotation engine outcomes[2m > [22mkeeps uncovered manual starter holes from stealing bench minutes and starter status[32m 4[2mms[22m[39m
+   [32m✓[39m NBA manual rotation engine outcomes[2m > [22mretains the original all-injured emergency box and points identity for manual and automatic teams[32m 5[2mms[22m[39m
+   [32m✓[39m NBA manual rotation engine outcomes[2m > [22mrefuses invalid, foreign, injured and identical choices without changing raw team state[32m 1[2mms[22m[39m
+   [32m✓[39m NBA manual rotation engine outcomes[2m > [22mreads malformed or duplicate saved preferences safely and repairs them only explicitly[32m 5[2mms[22m[39m
+   [32m✓[39m NBA manual rotation engine outcomes[2m > [22mrepairs successful releases and signs while failed moves stay byte-identical[32m 5[2mms[22m[39m
+   [32m✓[39m NBA manual rotation engine outcomes[2m > [22mreconciles both clubs after an accepted trade while refusals mutate neither[32m 5[2mms[22m[39m
+   [32m✓[39m NBA manual rotation engine outcomes[2m > [22mreconciles both clubs after an accepted talks while refusals mutate neither[32m 1[2mms[22m[39m
+   [32m✓[39m NBA manual rotation engine outcomes[2m > [22mreconciles restored identity repair while preserving the original repaired-ID count[32m 4[2mms[22m[39m
+   [32m✓[39m NBA manual rotation engine outcomes[2m > [22mreconciles real offseason retirement and expiring contracts before the next tip-off[32m 21[2mms[22m[39m
+   [32m✓[39m NBA manual rotation engine outcomes[2m > [22mkeeps a manual prospect playing through season, postseason, summer and a resumed next season[32m 219[2mms[22m[39m
+   [33m[2m✓[22m[39m NBA manual rotation engine outcomes[2m > [22mmeasures a paired complete-regular-season effect for weaker starters with identical draw counts [33m 3756[2mms[22m[39m
+[90mstdout[2m | src/components/front-office-shared/FrontOfficeSeasonClose.test.tsx[2m > [22m[2mNFL Front Office: the season closes once[2m > [22m[2mREPRO: what a reload on the recap lets the player do today
+[22m[39mNFL Front Office: after finishing the season and reloading, hub shown=false, seasonsPlayed 1 -> 1, titles 0 -> 0, league games 544 -> 544, period 17, phase recap -> recap
+
+ [32m✓[39m src/components/nba-front-office/NbaSeasonStats.test.tsx [2m([22m[2m4 tests[22m[2m)[22m[33m 1395[2mms[22m[39m
+   [33m[2m✓[22m[39m NBA Front Office: the season in numbers[2m > [22mdraws the awards the engine named, the leaders and the club lines, labelled as the sim season [33m 599[2mms[22m[39m
+   [33m[2m✓[22m[39m NBA Front Office: the season in numbers[2m > [22ma reload draws the same awards and writes nothing twice [33m 406[2mms[22m[39m
+[90mstdout[2m | src/components/front-office-shared/FrontOfficeSeasonClose.test.tsx[2m > [22m[2mNFL Front Office, full rosters: the season closes once[2m > [22m[2mREPRO: what a reload on the recap lets the player do today
+[22m[39mNFL Front Office, full rosters: after finishing the season and reloading, hub shown=false, seasonsPlayed 1 -> 1, titles 0 -> 0, league games 544 -> 544, period 17, phase recap -> recap
+
+[90mstdout[2m | src/test/nbaAwardDecisionLift.test.ts[2m > [22m[2mRound 1103: the award scores lifted out of NBA Front Office[2m > [22m[2mseed 11: the awards and every man's three scores are what they were
+[22m[39mPRINT_NBA_1103 11 4aa02c07f7adcbcfc5927ec7670dcfe709007f307bf58d720e54e4cc0c56695e
+
+[90mstdout[2m | src/test/nbaAwardDecisionLift.test.ts[2m > [22m[2mRound 1103: the award scores lifted out of NBA Front Office[2m > [22m[2mseed 23: the awards and every man's three scores are what they were
+[22m[39mPRINT_NBA_1103 23 4fb85cf23a3e3a2c4ee4ff53e78a8724659f805b812b00b3eaef52c1ef38a917
+
+[90mstdout[2m | src/test/nbaAwardDecisionLift.test.ts[2m > [22m[2mRound 1103: the award scores lifted out of NBA Front Office[2m > [22m[2mseed 37: the awards and every man's three scores are what they were
+[22m[39mPRINT_NBA_1103 37 23ee605e9f541c783d2204cdf8aa1ef5eadc7ad6ada8e111d0889b020399c4aa
+
+[90mstdout[2m | src/test/nbaAwardDecisionLift.test.ts[2m > [22m[2mRound 1103: the award scores lifted out of NBA Front Office[2m > [22m[2mseed 41: the awards and every man's three scores are what they were
+[22m[39mPRINT_NBA_1103 41 e21a0daca869449d93a32d8570cd5c0aac720f3bbdeced005cca1073c471dd46
+
+ [31m❯[39m src/test/nbaAwardDecisionLift.test.ts [2m([22m[2m6 tests[22m[2m | [22m[31m4 failed[39m[2m)[22m[33m 1031[2mms[22m[39m
+   [32m✓[39m Round 1103: the award scores lifted out of NBA Front Office[2m > [22mthe fixture holds four seasons with a real field each[32m 4[2mms[22m[39m
+[31m   [31m×[31m Round 1103: the award scores lifted out of NBA Front Office[2m > [22mseed 11: the awards and every man's three scores are what they were[39m[33m 318[2mms[22m[39m
+[31m     → expected '4aa02c07f7adcbcfc5927ec7670dcfe709007…' to be 'PENDING' // Object.is equality[39m
+[31m   [31m×[31m Round 1103: the award scores lifted out of NBA Front Office[2m > [22mseed 23: the awards and every man's three scores are what they were[39m[32m 163[2mms[22m[39m
+[31m     → expected '4fb85cf23a3e3a2c4ee4ff53e78a8724659f8…' to be 'PENDING' // Object.is equality[39m
+[31m   [31m×[31m Round 1103: the award scores lifted out of NBA Front Office[2m > [22mseed 37: the awards and every man's three scores are what they were[39m[32m 168[2mms[22m[39m
+[31m     → expected '23ee605e9f541c783d2204cdf8aa1ef5eadc7…' to be 'PENDING' // Object.is equality[39m
+[31m   [31m×[31m Round 1103: the award scores lifted out of NBA Front Office[2m > [22mseed 41: the awards and every man's three scores are what they were[39m[32m 132[2mms[22m[39m
+[31m     → expected 'e21a0daca869449d93a32d8570cd5c0aac720…' to be 'PENDING' // Object.is equality[39m
+   [32m✓[39m Round 1103: the award scores lifted out of NBA Front Office[2m > [22mthe same seed plays the same season twice (the hash is not noise)[32m 243[2mms[22m[39m
+[90mstdout[2m | src/components/front-office-shared/FrontOfficeSeasonClose.test.tsx[2m > [22m[2mNBA Front Office: the season closes once[2m > [22m[2mREPRO: what a reload on the recap lets the player do today
+[22m[39mNBA Front Office: after finishing the season and reloading, hub shown=false, seasonsPlayed 1 -> 1, titles 0 -> 0, league games 2400 -> 2400, period 20, phase recap -> recap
+
+ [32m✓[39m src/components/nba-front-office/NbaRotationPanel.test.tsx [2m([22m[2m15 tests[22m[2m)[22m[33m 5668[2mms[22m[39m
+   [33m[2m✓[22m[39m NBA rotation UI with real board persistence[2m > [22mpreserves an old automatic save and exact original strength as an independent baseline [33m 550[2mms[22m[39m
+   [33m[2m✓[22m[39m NBA rotation UI with real board persistence[2m > [22mswaps a bench player into the starting five and saves the actual changed strength [33m 405[2mms[22m[39m
+   [33m[2m✓[22m[39m NBA rotation UI with real board persistence[2m > [22mpreserves two distinct selections without overwriting the first saved choice [33m 437[2mms[22m[39m
+   [33m[2m✓[22m[39m NBA rotation UI with real board persistence[2m > [22mrejects a foreign option without writing a save or claiming an earned update [33m 323[2mms[22m[39m
+   [33m[2m✓[22m[39m NBA rotation UI with real board persistence[2m > [22mdisables injured options and rejects a forced injured selection without changing the save [33m 373[2mms[22m[39m
+   [33m[2m✓[22m[39m NBA rotation UI with real board persistence[2m > [22mrestores automatic selection by removing its saved preference and announces only that action [33m 575[2mms[22m[39m
+   [33m[2m✓[22m[39m NBA rotation UI with real board persistence[2m > [22mreloads saved manual choices quietly with identical persisted bytes [33m 483[2mms[22m[39m
+   [33m[2m✓[22m[39m NBA rotation UI with real board persistence[2m > [22mkeeps thin roster bench roles and minutes in place when an injured starter has no cover [33m 564[2mms[22m[39m
+   [33m[2m✓[22m[39m NBA rotation UI with real board persistence[2m > [22mgives a chosen bench prospect real simulated games and points while automatic leaves him outside the eight [33m 641[2mms[22m[39m
+   [33m[2m✓[22m[39m NBA rotation UI with real board persistence[2m > [22mshows earned update feedback once with finite motion reduced motion and native sized controls [33m 301[2mms[22m[39m
+[90mstdout[2m | src/components/front-office-shared/FrontOfficeSeasonClose.test.tsx[2m > [22m[2mMLB Front Office: the season closes once[2m > [22m[2mREPRO: what a reload on the recap lets the player do today
+[22m[39mMLB Front Office: after finishing the season and reloading, hub shown=false, seasonsPlayed 1 -> 1, titles 0 -> 0, league games 4860 -> 4860, period 27, phase recap -> recap
+
+[90mstdout[2m | src/components/front-office-shared/FrontOfficeSeasonClose.test.tsx[2m > [22m[2mNHL Front Office: the season closes once[2m > [22m[2mREPRO: what a reload on the recap lets the player do today
+[22m[39mNHL Front Office: after finishing the season and reloading, hub shown=false, seasonsPlayed 1 -> 1, titles 0 -> 0, league games 2560 -> 2560, period 20, phase recap -> recap
+
+ [32m✓[39m src/components/front-office-shared/FrontOfficeSeasonClose.test.tsx [2m([22m[2m25 tests[22m[2m)[22m[33m 5930[2mms[22m[39m
+   [33m[2m✓[22m[39m NFL Front Office: the season closes once[2m > [22mdraws the recap again after a reload and does not replay the season [33m 446[2mms[22m[39m
+   [33m[2m✓[22m[39m NFL Front Office: the season closes once[2m > [22mplays the next season after the draft: the record refuses only the closed one [33m 662[2mms[22m[39m
+   [33m[2m✓[22m[39m NFL Front Office, full rosters: the season closes once[2m > [22mdraws the recap again after a reload and does not replay the season [33m 469[2mms[22m[39m
+   [33m[2m✓[22m[39m NFL Front Office, full rosters: the season closes once[2m > [22mREPRO: what a reload on the recap lets the player do today [33m 386[2mms[22m[39m
+   [33m[2m✓[22m[39m NFL Front Office, full rosters: the season closes once[2m > [22mplays the next season after the draft: the record refuses only the closed one [33m 1770[2mms[22m[39m
+
+[31m⎯⎯⎯⎯⎯⎯[39m[1m[41m Failed Suites 1 [49m[22m[31m⎯⎯⎯⎯⎯⎯⎯[39m
+
+[41m[1m FAIL [22m[49m src/lib/nbaOpeningRatings.test.ts[2m [ src/lib/nbaOpeningRatings.test.ts ][22m
+[31m[1mError[22m: Offline NBA baseline compilation failed: /home/runner/work/ballpark-hero/ballpark-hero/node_modules/esbuild/lib/main.js:2143
+      throw reject;
+      ^
+
+Error: Build failed with 1 error:
+../../_temp/t-vitest-nba/dukb-nba895-baseline-f49ygI/nbaFrontOffice.ts:17:29: ERROR: No matching export in "src/lib/foSeasonStats.ts" for import "foNewSeasonStats"
+    at failureErrorWithLog (/home/runner/work/ballpark-hero/ballpark-hero/node_modules/esbuild/lib/main.js:1472:15)
+    at /home/runner/work/ballpark-hero/ballpark-hero/node_modules/esbuild/lib/main.js:945:25
+    at /home/runner/work/ballpark-hero/ballpark-hero/node_modules/esbuild/lib/main.js:897:52
+    at buildResponseToResult (/home/runner/work/ballpark-hero/ballpark-hero/node_modules/esbuild/lib/main.js:943:7)
+    at /home/runner/work/ballpark-hero/ballpark-hero/node_modules/esbuild/lib/main.js:970:16
+    at responseCallbacks.<computed> (/home/runner/work/ballpark-hero/ballpark-hero/node_modules/esbuild/lib/main.js:622:9)
+    at handleIncomingPacket (/home/runner/work/ballpark-hero/ballpark-hero/node_modules/esbuild/lib/main.js:677:12)
+    at Socket.readFromStdout (/home/runner/work/ballpark-hero/ballpark-hero/node_modules/esbuild/lib/main.js:600:7)
+    at Socket.emit (node:events:514:28)
+    at addChunk (node:internal/streams/readable:569:12) {
+  errors: [
+    {
+      detail: undefined,
+      id: '',
+      location: {
+        column: 29,
+        file: '../../_temp/t-vitest-nba/dukb-nba895-baseline-f49ygI/nbaFrontOffice.ts',
+        length: 16,
+        line: 17,
+        lineText: "import { type FoSeasonStats, foNewSeasonStats } from '@/lib/foSeasonStats';",
+        namespace: '',
+        suggestion: ''
+      },
+      notes: [],
+      pluginName: '',
+      text: 'No matching export in "src/lib/foSeasonStats.ts" for import "foNewSeasonStats"'
+    }
+  ],
+  warnings: []
+}
+
+Node.js v24.22.1
+[39m
+[90m [2m❯[22m failureErrorWithLog node_modules/esbuild/lib/main.js:[2m1472:15[22m[39m
+[90m [2m❯[22m node_modules/esbuild/lib/main.js:[2m945:25[22m[39m
+[90m [2m❯[22m node_modules/esbuild/lib/main.js:[2m897:52[22m[39m
+[90m [2m❯[22m buildResponseToResult node_modules/esbuild/lib/main.js:[2m943:7[22m[39m
+[90m [2m❯[22m node_modules/esbuild/lib/main.js:[2m970:16[22m[39m
+[90m [2m❯[22m responseCallbacks.<computed> node_modules/esbuild/lib/main.js:[2m622:9[22m[39m
+[90m [2m❯[22m handleIncomingPacket node_modules/esbuild/lib/main.js:[2m677:12[22m[39m
+[90m [2m❯[22m Socket.readFromStdout node_modules/esbuild/lib/main.js:[2m600:7[22m[39m
+[36m [2m❯[22m build src/lib/nbaOpeningRatings.test.ts:[2m49:58[22m[39m
+
+[90m [2m❯[22m src/lib/nbaOpeningRatings.test.ts:[2m64:18[22m[39m
+
+[31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/6]⎯[22m[39m
+
+
+[31m⎯⎯⎯⎯⎯⎯⎯[39m[1m[41m Failed Tests 5 [49m[22m[31m⎯⎯⎯⎯⎯⎯⎯[39m
+
+[41m[1m FAIL [22m[49m src/lib/nbaRotation.test.ts[2m > [22mNBA manual rotation engine outcomes[2m > [22mholds physical original automatic campaigns and RNG fingerprints as an independent baseline
+[31m[1mAssertionError[22m: expected '98177eb71d208d900c5d34c80f5c9210b2e24…' to be '32a869d8c5d69f54ebc81a9fe96c3bc62e758…' // Object.is equality[39m
+
+Expected: [32m"32a869d8c5d69f54ebc81a9fe96c3bc62e758729357156b13c2bcc666eb4b79d"[39m
+Received: [31m"98177eb71d208d900c5d34c80f5c9210b2e24e79ff9f86c8dfd7da303827cb7b"[39m
+
+[36m [2m❯[22m src/lib/nbaRotation.test.ts:[2m140:29[22m[39m
+    [90m138| [39m    [35mfor[39m ([35mconst[39m reference [35mof[39m [33mORIGINAL_REFERENCES[39m) {
+    [90m139| [39m      const result = automaticCampaign(engine, stats, reference.seed, …
+    [90m140| [39m      expect(result.digest).toBe(reference.digest); expect(result.draw…
+    [90m   | [39m                            [31m^[39m
+    [90m141| [39m      [34mexpect[39m(result[33m.[39mbooked)[33m.[39m[34mtoBe[39m([33m![39mreference[33m.[39mlegacy)[33m;[39m
+    [90m142| [39m      if (!reference.legacy) expect(result.games).toEqual(Array(30).fi…
+
+[31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[2/6]⎯[22m[39m
+
+[41m[1m FAIL [22m[49m src/test/nbaAwardDecisionLift.test.ts[2m > [22mRound 1103: the award scores lifted out of NBA Front Office[2m > [22mseed 11: the awards and every man's three scores are what they were
+[31m[1mAssertionError[22m: expected '4aa02c07f7adcbcfc5927ec7670dcfe709007…' to be 'PENDING' // Object.is equality[39m
+
+Expected: [32m"PENDING"[39m
+Received: [31m"4aa02c07f7adcbcfc5927ec7670dcfe709007f307bf58d720e54e4cc0c56695e"[39m
+
+[36m [2m❯[22m src/test/nbaAwardDecisionLift.test.ts:[2m122:24[22m[39m
+    [90m120| [39m      [34mexpect[39m(now[33m.[39mmvp)[33m.[39m[34mtoBe[39m(fixture[33m.[39mseasons[[33mString[39m(seed)][33m.[39mmvp)[33m;[39m
+    [90m121| [39m      if (process.env.PRINT_NBA_1103) console.log(`PRINT_NBA_1103 ${se…
+    [90m122| [39m      [34mexpect[39m(now[33m.[39mhash)[33m.[39m[34mtoBe[39m([33mORDERED_1566[39m[[33mString[39m(seed)])[33m;[39m
+    [90m   | [39m                       [31m^[39m
+    [90m123| [39m    })[33m;[39m
+    [90m124| [39m  }
+
+[31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[3/6]⎯[22m[39m
+
+[41m[1m FAIL [22m[49m src/test/nbaAwardDecisionLift.test.ts[2m > [22mRound 1103: the award scores lifted out of NBA Front Office[2m > [22mseed 23: the awards and every man's three scores are what they were
+[31m[1mAssertionError[22m: expected '4fb85cf23a3e3a2c4ee4ff53e78a8724659f8…' to be 'PENDING' // Object.is equality[39m
+
+Expected: [32m"PENDING"[39m
+Received: [31m"4fb85cf23a3e3a2c4ee4ff53e78a8724659f805b812b00b3eaef52c1ef38a917"[39m
+
+[36m [2m❯[22m src/test/nbaAwardDecisionLift.test.ts:[2m122:24[22m[39m
+    [90m120| [39m      [34mexpect[39m(now[33m.[39mmvp)[33m.[39m[34mtoBe[39m(fixture[33m.[39mseasons[[33mString[39m(seed)][33m.[39mmvp)[33m;[39m
+    [90m121| [39m      if (process.env.PRINT_NBA_1103) console.log(`PRINT_NBA_1103 ${se…
+    [90m122| [39m      [34mexpect[39m(now[33m.[39mhash)[33m.[39m[34mtoBe[39m([33mORDERED_1566[39m[[33mString[39m(seed)])[33m;[39m
+    [90m   | [39m                       [31m^[39m
+    [90m123| [39m    })[33m;[39m
+    [90m124| [39m  }
+
+[31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[4/6]⎯[22m[39m
+
+[41m[1m FAIL [22m[49m src/test/nbaAwardDecisionLift.test.ts[2m > [22mRound 1103: the award scores lifted out of NBA Front Office[2m > [22mseed 37: the awards and every man's three scores are what they were
+[31m[1mAssertionError[22m: expected '23ee605e9f541c783d2204cdf8aa1ef5eadc7…' to be 'PENDING' // Object.is equality[39m
+
+Expected: [32m"PENDING"[39m
+Received: [31m"23ee605e9f541c783d2204cdf8aa1ef5eadc7ad6ada8e111d0889b020399c4aa"[39m
+
+[36m [2m❯[22m src/test/nbaAwardDecisionLift.test.ts:[2m122:24[22m[39m
+    [90m120| [39m      [34mexpect[39m(now[33m.[39mmvp)[33m.[39m[34mtoBe[39m(fixture[33m.[39mseasons[[33mString[39m(seed)][33m.[39mmvp)[33m;[39m
+    [90m121| [39m      if (process.env.PRINT_NBA_1103) console.log(`PRINT_NBA_1103 ${se…
+    [90m122| [39m      [34mexpect[39m(now[33m.[39mhash)[33m.[39m[34mtoBe[39m([33mORDERED_1566[39m[[33mString[39m(seed)])[33m;[39m
+    [90m   | [39m                       [31m^[39m
+    [90m123| [39m    })[33m;[39m
+    [90m124| [39m  }
+
+[31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[5/6]⎯[22m[39m
+
+[41m[1m FAIL [22m[49m src/test/nbaAwardDecisionLift.test.ts[2m > [22mRound 1103: the award scores lifted out of NBA Front Office[2m > [22mseed 41: the awards and every man's three scores are what they were
+[31m[1mAssertionError[22m: expected 'e21a0daca869449d93a32d8570cd5c0aac720…' to be 'PENDING' // Object.is equality[39m
+
+Expected: [32m"PENDING"[39m
+Received: [31m"e21a0daca869449d93a32d8570cd5c0aac720f3bbdeced005cca1073c471dd46"[39m
+
+[36m [2m❯[22m src/test/nbaAwardDecisionLift.test.ts:[2m122:24[22m[39m
+    [90m120| [39m      [34mexpect[39m(now[33m.[39mmvp)[33m.[39m[34mtoBe[39m(fixture[33m.[39mseasons[[33mString[39m(seed)][33m.[39mmvp)[33m;[39m
+    [90m121| [39m      if (process.env.PRINT_NBA_1103) console.log(`PRINT_NBA_1103 ${se…
+    [90m122| [39m      [34mexpect[39m(now[33m.[39mhash)[33m.[39m[34mtoBe[39m([33mORDERED_1566[39m[[33mString[39m(seed)])[33m;[39m
+    [90m   | [39m                       [31m^[39m
+    [90m123| [39m    })[33m;[39m
+    [90m124| [39m  }
+
+[31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[6/6]⎯[22m[39m
+
+
+[2m Test Files [22m [1m[31m3 failed[39m[22m[2m | [22m[1m[32m3 passed[39m[22m[90m (6)[39m
+[2m      Tests [22m [1m[31m5 failed[39m[22m[2m | [22m[1m[32m61 passed[39m[22m[2m | [22m[33m16 skipped[39m[90m (82)[39m
+[2m   Start at [22m 10:09:46
+[2m   Duration [22m 13.89s[2m (transform 5.58s, setup 619ms, collect 10.95s, tests 20.11s, environment 3.81s, prepare 940ms)[22m
+
+
+::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/lib/nbaOpeningRatings.test.ts,title=src/lib/nbaOpeningRatings.test.ts,line=49,column=58::Error: Offline NBA baseline compilation failed: /home/runner/work/ballpark-hero/ballpark-hero/node_modules/esbuild/lib/main.js:2143%0A      throw reject;%0A      ^%0A%0AError: Build failed with 1 error:%0A../../_temp/t-vitest-nba/dukb-nba895-baseline-f49ygI/nbaFrontOffice.ts:17:29: ERROR: No matching export in "src/lib/foSeasonStats.ts" for import "foNewSeasonStats"%0A    at failureErrorWithLog (/home/runner/work/ballpark-hero/ballpark-hero/node_modules/esbuild/lib/main.js:1472:15)%0A    at /home/runner/work/ballpark-hero/ballpark-hero/node_modules/esbuild/lib/main.js:945:25%0A    at /home/runner/work/ballpark-hero/ballpark-hero/node_modules/esbuild/lib/main.js:897:52%0A    at buildResponseToResult (/home/runner/work/ballpark-hero/ballpark-hero/node_modules/esbuild/lib/main.js:943:7)%0A    at /home/runner/work/ballpark-hero/ballpark-hero/node_modules/esbuild/lib/main.js:970:16%0A    at responseCallbacks.<computed> (/home/runner/work/ballpark-hero/ballpark-hero/node_modules/esbuild/lib/main.js:622:9)%0A    at handleIncomingPacket (/home/runner/work/ballpark-hero/ballpark-hero/node_modules/esbuild/lib/main.js:677:12)%0A    at Socket.readFromStdout (/home/runner/work/ballpark-hero/ballpark-hero/node_modules/esbuild/lib/main.js:600:7)%0A    at Socket.emit (node:events:514:28)%0A    at addChunk (node:internal/streams/readable:569:12) {%0A  errors: [%0A    {%0A      detail: undefined,%0A      id: '',%0A      location: {%0A        column: 29,%0A        file: '../../_temp/t-vitest-nba/dukb-nba895-baseline-f49ygI/nbaFrontOffice.ts',%0A        length: 16,%0A        line: 17,%0A        lineText: "import { type FoSeasonStats, foNewSeasonStats } from '@/lib/foSeasonStats';",%0A        namespace: '',%0A        suggestion: ''%0A      },%0A      notes: [],%0A      pluginName: '',%0A      text: 'No matching export in "src/lib/foSeasonStats.ts" for import "foNewSeasonStats"'%0A    }%0A  ],%0A  warnings: []%0A}%0A%0ANode.js v24.22.1%0A%0A ❯ failureErrorWithLog node_modules/esbuild/lib/main.js:1472:15%0A ❯ node_modules/esbuild/lib/main.js:945:25%0A ❯ node_modules/esbuild/lib/main.js:897:52%0A ❯ buildResponseToResult node_modules/esbuild/lib/main.js:943:7%0A ❯ node_modules/esbuild/lib/main.js:970:16%0A ❯ responseCallbacks.<computed> node_modules/esbuild/lib/main.js:622:9%0A ❯ handleIncomingPacket node_modules/esbuild/lib/main.js:677:12%0A ❯ Socket.readFromStdout node_modules/esbuild/lib/main.js:600:7%0A ❯ build src/lib/nbaOpeningRatings.test.ts:49:58%0A ❯ src/lib/nbaOpeningRatings.test.ts:64:18%0A%0A
+
+::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/lib/nbaRotation.test.ts,title=src/lib/nbaRotation.test.ts > NBA manual rotation engine outcomes > holds physical original automatic campaigns and RNG fingerprints as an independent baseline,line=140,column=29::AssertionError: expected '98177eb71d208d900c5d34c80f5c9210b2e24…' to be '32a869d8c5d69f54ebc81a9fe96c3bc62e758…' // Object.is equality%0A%0AExpected: "32a869d8c5d69f54ebc81a9fe96c3bc62e758729357156b13c2bcc666eb4b79d"%0AReceived: "98177eb71d208d900c5d34c80f5c9210b2e24e79ff9f86c8dfd7da303827cb7b"%0A%0A ❯ src/lib/nbaRotation.test.ts:140:29%0A%0A
+
+::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/test/nbaAwardDecisionLift.test.ts,title=src/test/nbaAwardDecisionLift.test.ts > Round 1103%3A the award scores lifted out of NBA Front Office > seed 11%3A the awards and every man's three scores are what they were,line=122,column=24::AssertionError: expected '4aa02c07f7adcbcfc5927ec7670dcfe709007…' to be 'PENDING' // Object.is equality%0A%0AExpected: "PENDING"%0AReceived: "4aa02c07f7adcbcfc5927ec7670dcfe709007f307bf58d720e54e4cc0c56695e"%0A%0A ❯ src/test/nbaAwardDecisionLift.test.ts:122:24%0A%0A
+
+::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/test/nbaAwardDecisionLift.test.ts,title=src/test/nbaAwardDecisionLift.test.ts > Round 1103%3A the award scores lifted out of NBA Front Office > seed 23%3A the awards and every man's three scores are what they were,line=122,column=24::AssertionError: expected '4fb85cf23a3e3a2c4ee4ff53e78a8724659f8…' to be 'PENDING' // Object.is equality%0A%0AExpected: "PENDING"%0AReceived: "4fb85cf23a3e3a2c4ee4ff53e78a8724659f805b812b00b3eaef52c1ef38a917"%0A%0A ❯ src/test/nbaAwardDecisionLift.test.ts:122:24%0A%0A
+
+::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/test/nbaAwardDecisionLift.test.ts,title=src/test/nbaAwardDecisionLift.test.ts > Round 1103%3A the award scores lifted out of NBA Front Office > seed 37%3A the awards and every man's three scores are what they were,line=122,column=24::AssertionError: expected '23ee605e9f541c783d2204cdf8aa1ef5eadc7…' to be 'PENDING' // Object.is equality%0A%0AExpected: "PENDING"%0AReceived: "23ee605e9f541c783d2204cdf8aa1ef5eadc7ad6ada8e111d0889b020399c4aa"%0A%0A ❯ src/test/nbaAwardDecisionLift.test.ts:122:24%0A%0A
+
+::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/test/nbaAwardDecisionLift.test.ts,title=src/test/nbaAwardDecisionLift.test.ts > Round 1103%3A the award scores lifted out of NBA Front Office > seed 41%3A the awards and every man's three scores are what they were,line=122,column=24::AssertionError: expected 'e21a0daca869449d93a32d8570cd5c0aac720…' to be 'PENDING' // Object.is equality%0A%0AExpected: "PENDING"%0AReceived: "e21a0daca869449d93a32d8570cd5c0aac720f3bbdeced005cca1073c471dd46"%0A%0A ❯ src/test/nbaAwardDecisionLift.test.ts:122:24%0A%0A

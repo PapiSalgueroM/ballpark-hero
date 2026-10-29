@@ -1,0 +1,9 @@
+probe1103-base exit=0 6s |    Duration  2.97s (transform 440ms, setup 158ms, collect 529ms, tests 733ms, environment 639ms, prepare 288ms)
+vitest-nba exit=1 15s | ::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/test/nbaAwardDecisionLift.test.ts,title=src/test/nbaAwardDecisionLift.test.ts > Round 1103%3A the award sco
+nba-named exit=2 4s |     at process.processTicksAndRejections (node:internal/process/task_queues:104:5)
+nba-oldnever exit=1 3s | control "oldnever": sections 2 and 7 went red as expected (13 failures) and nothing else moved, the check works. Exiting non zero because the checks did fail.
+nba-base exit=1 22s |   [9] the base engine's old block (3 seeded seasons) converts to exactly the block the head writes from the same games, loses nothing, and every reader says what the base
+simSaveKeeper exit=0 6s | simSaveKeeper: all green. The keeper holds on real saves of all 21 long games.
+simNbaGmDesk exit=1 35s | simNbaGmDesk: 9 failure(s) in ["1"]
+simGmDeskHost exit=0 54s | simGmDeskHost: all 10 checks passed on seeds 1,2,3 (4 engines, 3 seasons a seed)
+tsc exit=0 90s | 
