@@ -1,0 +1,566 @@
+US_CONN_CONTROL=newrunning: TABLE_RANGE holds nhl in memory for this run
+TABLE_RANGE: nhl holds 16 table rows beside the file's 4 boards
+US_CONN_CONTROL=newrunning: "Played for the Chicago Blackhawks" on nhlconn-005 now reads as kind probe, running, with no watch
+US_CONN_CONTROL=newrunning: the input was changed; this run must end red
+1) no group claims the present, and every recent year label is one the record judges
+   baseball: 0 present tense or unheld recent year labels
+   nfl: 0 present tense or unheld recent year labels
+  FAIL: nhl nhlconn-020: "Canada's 2025 4 Nations team" names a year from 2020 on and nothing holds the group to it
+  FAIL: nhl nhlconn-020: "Goalies who started a 2020s Cup Final game" names a year from 2020 on and nothing holds the group to it
+   nhl: 2 present tense or unheld recent year labels
+2) no refuted claim is on a board
+   baseball: 32 refuted claims held off every board, 0 found
+   baseball: 57 gray pairs the round took off their boards, 0 back
+   nfl: 0 refuted claims held off every board, 0 found
+   nhl: 0 refuted claims held off every board, 0 found
+3) the ledger stands on two hosts
+   baseball: 659 facts, 0 on one host; 115 flagged groups, 575 members held; 131 fixed findings
+   nfl: 12 facts, 0 on one host; 2 flagged groups, 10 members held; 1 fixed findings
+  FAIL: nhl nhlconn-005: Stan Mikita in "Played for the Chicago Blackhawks" (a table group) has no two host fact
+  FAIL: nhl nhlconn-005: Patrick Kane in "Played for the Chicago Blackhawks" (a table group) has no two host fact
+  FAIL: nhl nhlconn-005: Denis Savard in "Played for the Chicago Blackhawks" (a table group) has no two host fact
+  FAIL: nhl nhlconn-005: Duncan Keith in "Played for the Chicago Blackhawks" (a table group) has no two host fact
+  FAIL: nhl nhlconn-005: Jeremy Roenick in "Played for the Chicago Blackhawks" (a table group) has no two host fact
+  FAIL: nhl nhlconn-005: Joe Sakic in "Played for the Avalanche or Nordiques" (a table group) has no two host fact
+  FAIL: nhl nhlconn-005: Peter Forsberg in "Played for the Avalanche or Nordiques" (a table group) has no two host fact
+  FAIL: nhl nhlconn-005: Milan Hejduk in "Played for the Avalanche or Nordiques" (a table group) has no two host fact
+  FAIL: nhl nhlconn-005: Nathan MacKinnon in "Played for the Avalanche or Nordiques" (a table group) has no two host fact
+  FAIL: nhl nhlconn-005: Adam Foote in "Played for the Avalanche or Nordiques" (a table group) has no two host fact
+  FAIL: nhl nhlconn-005: Mike Bossy in "Played for the New York Islanders" (a table group) has no two host fact
+  FAIL: nhl nhlconn-005: Denis Potvin in "Played for the New York Islanders" (a table group) has no two host fact
+  FAIL: nhl nhlconn-005: Bryan Trottier in "Played for the New York Islanders" (a table group) has no two host fact
+  FAIL: nhl nhlconn-005: John Tavares in "Played for the New York Islanders" (a table group) has no two host fact
+  FAIL: nhl nhlconn-005: Clark Gillies in "Played for the New York Islanders" (a table group) has no two host fact
+  FAIL: nhl nhlconn-005: Dale Hawerchuk in "Played for the Winnipeg Jets (either era)" (a table group) has no two host fact
+  FAIL: nhl nhlconn-005: Blake Wheeler in "Played for the Winnipeg Jets (either era)" (a table group) has no two host fact
+  FAIL: nhl nhlconn-005: Mark Scheifele in "Played for the Winnipeg Jets (either era)" (a table group) has no two host fact
+  FAIL: nhl nhlconn-005: Kyle Connor in "Played for the Winnipeg Jets (either era)" (a table group) has no two host fact
+  FAIL: nhl nhlconn-005: Shane Doan in "Played for the Winnipeg Jets (either era)" (a table group) has no two host fact
+  FAIL: nhl nhlconn-006: Wayne Gretzky in "Played for the Edmonton Oilers" (a table group) has no two host fact
+  FAIL: nhl nhlconn-006: Mark Messier in "Played for the Edmonton Oilers" (a table group) has no two host fact
+  FAIL: nhl nhlconn-006: Connor McDavid in "Played for the Edmonton Oilers" (a table group) has no two host fact
+  FAIL: nhl nhlconn-006: Leon Draisaitl in "Played for the Edmonton Oilers" (a table group) has no two host fact
+  FAIL: nhl nhlconn-006: Jari Kurri in "Played for the Edmonton Oilers" (a table group) has no two host fact
+  FAIL: nhl nhlconn-006: Henri Richard in "Played for the Montreal Canadiens" (a table group) has no two host fact
+  FAIL: nhl nhlconn-006: Guy Lafleur in "Played for the Montreal Canadiens" (a table group) has no two host fact
+  FAIL: nhl nhlconn-006: Larry Robinson in "Played for the Montreal Canadiens" (a table group) has no two host fact
+  FAIL: nhl nhlconn-006: Steve Shutt in "Played for the Montreal Canadiens" (a table group) has no two host fact
+  FAIL: nhl nhlconn-006: Bob Gainey in "Played for the Montreal Canadiens" (a table group) has no two host fact
+  FAIL: nhl nhlconn-006: Bobby Orr in "Played for the Boston Bruins" (a table group) has no two host fact
+  FAIL: nhl nhlconn-006: Ray Bourque in "Played for the Boston Bruins" (a table group) has no two host fact
+  FAIL: nhl nhlconn-006: Phil Esposito in "Played for the Boston Bruins" (a table group) has no two host fact
+  FAIL: nhl nhlconn-006: Brad Marchand in "Played for the Boston Bruins" (a table group) has no two host fact
+  FAIL: nhl nhlconn-006: Patrice Bergeron in "Played for the Boston Bruins" (a table group) has no two host fact
+  FAIL: nhl nhlconn-006: Gordie Howe in "Played for the Detroit Red Wings" (a table group) has no two host fact
+  FAIL: nhl nhlconn-006: Steve Yzerman in "Played for the Detroit Red Wings" (a table group) has no two host fact
+  FAIL: nhl nhlconn-006: Sergei Fedorov in "Played for the Detroit Red Wings" (a table group) has no two host fact
+  FAIL: nhl nhlconn-006: Pavel Datsyuk in "Played for the Detroit Red Wings" (a table group) has no two host fact
+  FAIL: nhl nhlconn-006: Henrik Zetterberg in "Played for the Detroit Red Wings" (a table group) has no two host fact
+  FAIL: nhl nhlconn-007: Alex Ovechkin in "Played for the Capitals" (a table group) has no two host fact
+  FAIL: nhl nhlconn-007: Nicklas Bäckström in "Played for the Capitals" (a table group) has no two host fact
+  FAIL: nhl nhlconn-007: Tom Wilson in "Played for the Capitals" (a table group) has no two host fact
+  FAIL: nhl nhlconn-007: John Carlson in "Played for the Capitals" (a table group) has no two host fact
+  FAIL: nhl nhlconn-007: Peter Bondra in "Played for the Capitals" (a table group) has no two host fact
+  FAIL: nhl nhlconn-007: Bobby Clarke in "Played for the Flyers" (a table group) has no two host fact
+  FAIL: nhl nhlconn-007: Claude Giroux in "Played for the Flyers" (a table group) has no two host fact
+  FAIL: nhl nhlconn-007: Sean Couturier in "Played for the Flyers" (a table group) has no two host fact
+  FAIL: nhl nhlconn-007: Jakub Voráček in "Played for the Flyers" (a table group) has no two host fact
+  FAIL: nhl nhlconn-007: Brian Propp in "Played for the Flyers" (a table group) has no two host fact
+  FAIL: nhl nhlconn-007: Mark Messier in "Played for the Rangers" (a table group) has no two host fact
+  FAIL: nhl nhlconn-007: Adam Fox in "Played for the Rangers" (a table group) has no two host fact
+  FAIL: nhl nhlconn-007: Chris Kreider in "Played for the Rangers" (a table group) has no two host fact
+  FAIL: nhl nhlconn-007: Mika Zibanejad in "Played for the Rangers" (a table group) has no two host fact
+  FAIL: nhl nhlconn-007: Artemi Panarin in "Played for the Rangers" (a table group) has no two host fact
+  FAIL: nhl nhlconn-007: Brett Hull in "Played for the Blues" (a table group) has no two host fact
+  FAIL: nhl nhlconn-007: Al MacInnis in "Played for the Blues" (a table group) has no two host fact
+  FAIL: nhl nhlconn-007: Bernie Federko in "Played for the Blues" (a table group) has no two host fact
+  FAIL: nhl nhlconn-007: Keith Tkachuk in "Played for the Blues" (a table group) has no two host fact
+  FAIL: nhl nhlconn-007: Alex Pietrangelo in "Played for the Blues" (a table group) has no two host fact
+  FAIL: nhl nhlconn-008: Mike Modano in "Played for the Stars" (a table group) has no two host fact
+  FAIL: nhl nhlconn-008: Jamie Benn in "Played for the Stars" (a table group) has no two host fact
+  FAIL: nhl nhlconn-008: Joe Nieuwendyk in "Played for the Stars" (a table group) has no two host fact
+  FAIL: nhl nhlconn-008: Jason Spezza in "Played for the Stars" (a table group) has no two host fact
+  FAIL: nhl nhlconn-008: Tyler Seguin in "Played for the Stars" (a table group) has no two host fact
+  FAIL: nhl nhlconn-008: Joe Thornton in "Played for the Sharks" (a table group) has no two host fact
+  FAIL: nhl nhlconn-008: Patrick Marleau in "Played for the Sharks" (a table group) has no two host fact
+  FAIL: nhl nhlconn-008: Brent Burns in "Played for the Sharks" (a table group) has no two host fact
+  FAIL: nhl nhlconn-008: Erik Karlsson in "Played for the Sharks" (a table group) has no two host fact
+  FAIL: nhl nhlconn-008: Bryan Trottier in "Played for the Islanders" (a table group) has no two host fact
+  FAIL: nhl nhlconn-008: Mike Bossy in "Played for the Islanders" (a table group) has no two host fact
+  FAIL: nhl nhlconn-008: Denis Potvin in "Played for the Islanders" (a table group) has no two host fact
+  FAIL: nhl nhlconn-008: John Tavares in "Played for the Islanders" (a table group) has no two host fact
+  FAIL: nhl nhlconn-008: Zach Parise in "Played for the Islanders" (a table group) has no two host fact
+  FAIL: nhl nhlconn-008: Gilbert Perreault in "Played for the Sabres" (a table group) has no two host fact
+  FAIL: nhl nhlconn-008: Dave Andreychuk in "Played for the Sabres" (a table group) has no two host fact
+  FAIL: nhl nhlconn-008: Alexander Mogilny in "Played for the Sabres" (a table group) has no two host fact
+  FAIL: nhl nhlconn-008: Phil Housley in "Played for the Sabres" (a table group) has no two host fact
+  FAIL: nhl nhlconn-008: Ryan O'Reilly in "Played for the Sabres" (a table group) has no two host fact
+  FAIL: nhl nhlconn-009: Wayne Gretzky in "Scored 60 goals in a season" (a table group) has no two host fact
+  FAIL: nhl nhlconn-009: Mario Lemieux in "Scored 60 goals in a season" (a table group) has no two host fact
+  FAIL: nhl nhlconn-009: Brett Hull in "Scored 60 goals in a season" (a table group) has no two host fact
+  FAIL: nhl nhlconn-009: Alex Ovechkin in "Scored 60 goals in a season" (a table group) has no two host fact
+  FAIL: nhl nhlconn-009: Auston Matthews in "Scored 60 goals in a season" (a table group) has no two host fact
+  FAIL: nhl nhlconn-009: Dominik Hasek in "Won the Vezina Trophy" (a table group) has no two host fact
+  FAIL: nhl nhlconn-009: Martin Brodeur in "Won the Vezina Trophy" (a table group) has no two host fact
+  FAIL: nhl nhlconn-009: Patrick Roy in "Won the Vezina Trophy" (a table group) has no two host fact
+  FAIL: nhl nhlconn-009: Carey Price in "Won the Vezina Trophy" (a table group) has no two host fact
+  FAIL: nhl nhlconn-009: Andrei Vasilevskiy in "Won the Vezina Trophy" (a table group) has no two host fact
+  FAIL: nhl nhlconn-009: Sidney Crosby in "Captained a Stanley Cup winner" (a table group) has no two host fact
+  FAIL: nhl nhlconn-009: Jonathan Toews in "Captained a Stanley Cup winner" (a table group) has no two host fact
+  FAIL: nhl nhlconn-009: Mark Messier in "Captained a Stanley Cup winner" (a table group) has no two host fact
+  FAIL: nhl nhlconn-009: Steve Yzerman in "Captained a Stanley Cup winner" (a table group) has no two host fact
+  FAIL: nhl nhlconn-009: Joe Sakic in "Captained a Stanley Cup winner" (a table group) has no two host fact
+  FAIL: nhl nhlconn-009: Gordie Howe in "Played 1,700 or more NHL games" (a table group) has no two host fact
+  FAIL: nhl nhlconn-009: Jaromir Jagr in "Played 1,700 or more NHL games" (a table group) has no two host fact
+  FAIL: nhl nhlconn-009: Patrick Marleau in "Played 1,700 or more NHL games" (a table group) has no two host fact
+  FAIL: nhl nhlconn-009: Ron Francis in "Played 1,700 or more NHL games" (a table group) has no two host fact
+  FAIL: nhl nhlconn-009: Joe Thornton in "Played 1,700 or more NHL games" (a table group) has no two host fact
+  FAIL: nhl nhlconn-010: Patrick Roy in "Goaltenders" (a table group) has no two host fact
+  FAIL: nhl nhlconn-010: Martin Brodeur in "Goaltenders" (a table group) has no two host fact
+  FAIL: nhl nhlconn-010: Dominik Hasek in "Goaltenders" (a table group) has no two host fact
+  FAIL: nhl nhlconn-010: Carey Price in "Goaltenders" (a table group) has no two host fact
+  FAIL: nhl nhlconn-010: Ken Dryden in "Goaltenders" (a table group) has no two host fact
+  FAIL: nhl nhlconn-010: Alex Ovechkin in "Scored 60 goals in a season" (a table group) has no two host fact
+  FAIL: nhl nhlconn-010: Wayne Gretzky in "Scored 60 goals in a season" (a table group) has no two host fact
+  FAIL: nhl nhlconn-010: Mario Lemieux in "Scored 60 goals in a season" (a table group) has no two host fact
+  FAIL: nhl nhlconn-010: Auston Matthews in "Scored 60 goals in a season" (a table group) has no two host fact
+  FAIL: nhl nhlconn-010: Brett Hull in "Scored 60 goals in a season" (a table group) has no two host fact
+  FAIL: nhl nhlconn-010: Sidney Crosby in "Captained a Stanley Cup winner" (a table group) has no two host fact
+  FAIL: nhl nhlconn-010: Steve Yzerman in "Captained a Stanley Cup winner" (a table group) has no two host fact
+  FAIL: nhl nhlconn-010: Mark Messier in "Captained a Stanley Cup winner" (a table group) has no two host fact
+  FAIL: nhl nhlconn-010: Jonathan Toews in "Captained a Stanley Cup winner" (a table group) has no two host fact
+  FAIL: nhl nhlconn-010: Jean Beliveau in "Captained a Stanley Cup winner" (a table group) has no two host fact
+  FAIL: nhl nhlconn-010: Gordie Howe in "Played 1,650 or more NHL games" (a table group) has no two host fact
+  FAIL: nhl nhlconn-010: Jaromir Jagr in "Played 1,650 or more NHL games" (a table group) has no two host fact
+  FAIL: nhl nhlconn-010: Patrick Marleau in "Played 1,650 or more NHL games" (a table group) has no two host fact
+  FAIL: nhl nhlconn-010: Ron Francis in "Played 1,650 or more NHL games" (a table group) has no two host fact
+  FAIL: nhl nhlconn-010: Mark Recchi in "Played 1,650 or more NHL games" (a table group) has no two host fact
+  FAIL: nhl nhlconn-011: Mats Sundin in "Played for the Maple Leafs" (a table group) has no two host fact
+  FAIL: nhl nhlconn-011: Mitch Marner in "Played for the Maple Leafs" (a table group) has no two host fact
+  FAIL: nhl nhlconn-011: Doug Gilmour in "Played for the Maple Leafs" (a table group) has no two host fact
+  FAIL: nhl nhlconn-011: Wendel Clark in "Played for the Maple Leafs" (a table group) has no two host fact
+  FAIL: nhl nhlconn-011: Auston Matthews in "Played for the Maple Leafs" (a table group) has no two host fact
+  FAIL: nhl nhlconn-011: Ray Bourque in "Won the Norris Trophy" (a table group) has no two host fact
+  FAIL: nhl nhlconn-011: Nicklas Lidstrom in "Won the Norris Trophy" (a table group) has no two host fact
+  FAIL: nhl nhlconn-011: Cale Makar in "Won the Norris Trophy" (a table group) has no two host fact
+  FAIL: nhl nhlconn-011: Erik Karlsson in "Won the Norris Trophy" (a table group) has no two host fact
+  FAIL: nhl nhlconn-011: Denis Potvin in "Won the Norris Trophy" (a table group) has no two host fact
+  FAIL: nhl nhlconn-011: Patrick Kane in "Scored a Stanley Cup winning goal" (a table group) has no two host fact
+  FAIL: nhl nhlconn-011: Bobby Orr in "Scored a Stanley Cup winning goal" (a table group) has no two host fact
+  FAIL: nhl nhlconn-011: Alec Martinez in "Scored a Stanley Cup winning goal" (a table group) has no two host fact
+  FAIL: nhl nhlconn-011: Uwe Krupp in "Scored a Stanley Cup winning goal" (a table group) has no two host fact
+  FAIL: nhl nhlconn-011: Bobby Nystrom in "Scored a Stanley Cup winning goal" (a table group) has no two host fact
+  FAIL: nhl nhlconn-011: Maurice Richard in "Scored 50 goals in 50 games" (a table group) has no two host fact
+  FAIL: nhl nhlconn-011: Mike Bossy in "Scored 50 goals in 50 games" (a table group) has no two host fact
+  FAIL: nhl nhlconn-011: Wayne Gretzky in "Scored 50 goals in 50 games" (a table group) has no two host fact
+  FAIL: nhl nhlconn-011: Mario Lemieux in "Scored 50 goals in 50 games" (a table group) has no two host fact
+  FAIL: nhl nhlconn-011: Brett Hull in "Scored 50 goals in 50 games" (a table group) has no two host fact
+  FAIL: nhl nhlconn-012: Ryan Nugent-Hopkins in "Played for the Oilers" (a table group) has no two host fact
+  FAIL: nhl nhlconn-012: Mark Messier in "Played for the Oilers" (a table group) has no two host fact
+  FAIL: nhl nhlconn-012: Connor McDavid in "Played for the Oilers" (a table group) has no two host fact
+  FAIL: nhl nhlconn-012: Leon Draisaitl in "Played for the Oilers" (a table group) has no two host fact
+  FAIL: nhl nhlconn-012: Paul Coffey in "Played for the Oilers" (a table group) has no two host fact
+  FAIL: nhl nhlconn-012: Dominik Hasek in "Won the Vezina Trophy" (a table group) has no two host fact
+  FAIL: nhl nhlconn-012: Patrick Roy in "Won the Vezina Trophy" (a table group) has no two host fact
+  FAIL: nhl nhlconn-012: Carey Price in "Won the Vezina Trophy" (a table group) has no two host fact
+  FAIL: nhl nhlconn-012: Martin Brodeur in "Won the Vezina Trophy" (a table group) has no two host fact
+  FAIL: nhl nhlconn-012: Andrei Vasilevskiy in "Won the Vezina Trophy" (a table group) has no two host fact
+  FAIL: nhl nhlconn-012: Phil Esposito in "Scored 70 goals in a season" (a table group) has no two host fact
+  FAIL: nhl nhlconn-012: Teemu Selanne in "Scored 70 goals in a season" (a table group) has no two host fact
+  FAIL: nhl nhlconn-012: Alexander Mogilny in "Scored 70 goals in a season" (a table group) has no two host fact
+  FAIL: nhl nhlconn-012: Bernie Nicholls in "Scored 70 goals in a season" (a table group) has no two host fact
+  FAIL: nhl nhlconn-012: Jari Kurri in "Scored 70 goals in a season" (a table group) has no two host fact
+  FAIL: nhl nhlconn-012: Nicklas Lidstrom in "Defensemen who captained a Cup winner" (a table group) has no two host fact
+  FAIL: nhl nhlconn-012: Scott Stevens in "Defensemen who captained a Cup winner" (a table group) has no two host fact
+  FAIL: nhl nhlconn-012: Zdeno Chara in "Defensemen who captained a Cup winner" (a table group) has no two host fact
+  FAIL: nhl nhlconn-012: Denis Potvin in "Defensemen who captained a Cup winner" (a table group) has no two host fact
+  FAIL: nhl nhlconn-012: Derian Hatcher in "Defensemen who captained a Cup winner" (a table group) has no two host fact
+  FAIL: nhl nhlconn-013: Bryan Trottier in "1980s Islanders dynasty" (a table group) has no two host fact
+  FAIL: nhl nhlconn-013: Billy Smith in "1980s Islanders dynasty" (a table group) has no two host fact
+  FAIL: nhl nhlconn-013: Clark Gillies in "1980s Islanders dynasty" (a table group) has no two host fact
+  FAIL: nhl nhlconn-013: John Tonelli in "1980s Islanders dynasty" (a table group) has no two host fact
+  FAIL: nhl nhlconn-013: Mike Bossy in "1980s Islanders dynasty" (a table group) has no two host fact
+  FAIL: nhl nhlconn-013: Jaromir Jagr in "European-born 500 goal scorers" (a table group) has no two host fact
+  FAIL: nhl nhlconn-013: Alex Ovechkin in "European-born 500 goal scorers" (a table group) has no two host fact
+  FAIL: nhl nhlconn-013: Marian Hossa in "European-born 500 goal scorers" (a table group) has no two host fact
+  FAIL: nhl nhlconn-013: Mats Sundin in "European-born 500 goal scorers" (a table group) has no two host fact
+  FAIL: nhl nhlconn-013: Stan Mikita in "European-born 500 goal scorers" (a table group) has no two host fact
+  FAIL: nhl nhlconn-013: Reggie Leach in "Won the Conn Smythe in a losing cause" (a table group) has no two host fact
+  FAIL: nhl nhlconn-013: Ron Hextall in "Won the Conn Smythe in a losing cause" (a table group) has no two host fact
+  FAIL: nhl nhlconn-013: Glenn Hall in "Won the Conn Smythe in a losing cause" (a table group) has no two host fact
+  FAIL: nhl nhlconn-013: Jean-Sebastien Giguere in "Won the Conn Smythe in a losing cause" (a table group) has no two host fact
+  FAIL: nhl nhlconn-013: Roger Crozier in "Won the Conn Smythe in a losing cause" (a table group) has no two host fact
+  FAIL: nhl nhlconn-013: Gordie Howe in "Played NHL games in four different decades" (a table group) has no two host fact
+  FAIL: nhl nhlconn-013: Chris Chelios in "Played NHL games in four different decades" (a table group) has no two host fact
+  FAIL: nhl nhlconn-013: Mark Messier in "Played NHL games in four different decades" (a table group) has no two host fact
+  FAIL: nhl nhlconn-013: Joe Thornton in "Played NHL games in four different decades" (a table group) has no two host fact
+  FAIL: nhl nhlconn-013: Zdeno Chara in "Played NHL games in four different decades" (a table group) has no two host fact
+  FAIL: nhl nhlconn-014: Auston Matthews in "Won the Calder Trophy" (a table group) has no two host fact
+  FAIL: nhl nhlconn-014: Kirill Kaprizov in "Won the Calder Trophy" (a table group) has no two host fact
+  FAIL: nhl nhlconn-014: Nathan MacKinnon in "Won the Calder Trophy" (a table group) has no two host fact
+  FAIL: nhl nhlconn-014: Connor Bedard in "Won the Calder Trophy" (a table group) has no two host fact
+  FAIL: nhl nhlconn-014: Teemu Selanne in "Won the Calder Trophy" (a table group) has no two host fact
+  FAIL: nhl nhlconn-014: Patrick Marleau in "Played 1,500 NHL games" (a table group) has no two host fact
+  FAIL: nhl nhlconn-014: Ron Francis in "Played 1,500 NHL games" (a table group) has no two host fact
+  FAIL: nhl nhlconn-014: Mark Recchi in "Played 1,500 NHL games" (a table group) has no two host fact
+  FAIL: nhl nhlconn-014: Shane Doan in "Played 1,500 NHL games" (a table group) has no two host fact
+  FAIL: nhl nhlconn-014: Dave Andreychuk in "Played 1,500 NHL games" (a table group) has no two host fact
+  FAIL: nhl nhlconn-014: Martin Brodeur in "Goalies credited with scoring a goal" (a table group) has no two host fact
+  FAIL: nhl nhlconn-014: Chris Osgood in "Goalies credited with scoring a goal" (a table group) has no two host fact
+  FAIL: nhl nhlconn-014: Evgeni Nabokov in "Goalies credited with scoring a goal" (a table group) has no two host fact
+  FAIL: nhl nhlconn-014: Damian Rhodes in "Goalies credited with scoring a goal" (a table group) has no two host fact
+  FAIL: nhl nhlconn-014: Pekka Rinne in "Goalies credited with scoring a goal" (a table group) has no two host fact
+  FAIL: nhl nhlconn-014: Claude Lemieux in "Won the Cup with three different franchises" (a table group) has no two host fact
+  FAIL: nhl nhlconn-014: Mike Keane in "Won the Cup with three different franchises" (a table group) has no two host fact
+  FAIL: nhl nhlconn-014: Larry Hillman in "Won the Cup with three different franchises" (a table group) has no two host fact
+  FAIL: nhl nhlconn-014: Al Arbour in "Won the Cup with three different franchises" (a table group) has no two host fact
+  FAIL: nhl nhlconn-014: Joe Nieuwendyk in "Won the Cup with three different franchises" (a table group) has no two host fact
+  FAIL: nhl nhlconn-015: Alexis Lafreniere in "Drafted first overall" (a table group) has no two host fact
+  FAIL: nhl nhlconn-015: Nail Yakupov in "Drafted first overall" (a table group) has no two host fact
+  FAIL: nhl nhlconn-015: Taylor Hall in "Drafted first overall" (a table group) has no two host fact
+  FAIL: nhl nhlconn-015: Owen Power in "Drafted first overall" (a table group) has no two host fact
+  FAIL: nhl nhlconn-015: Juraj Slafkovsky in "Drafted first overall" (a table group) has no two host fact
+  FAIL: nhl nhlconn-015: Jamie Benn in "Won the Art Ross Trophy" (a table group) has no two host fact
+  FAIL: nhl nhlconn-015: Martin St. Louis in "Won the Art Ross Trophy" (a table group) has no two host fact
+  FAIL: nhl nhlconn-015: Henrik Sedin in "Won the Art Ross Trophy" (a table group) has no two host fact
+  FAIL: nhl nhlconn-015: Jarome Iginla in "Won the Art Ross Trophy" (a table group) has no two host fact
+  FAIL: nhl nhlconn-015: Bobby Orr in "Won the Art Ross Trophy" (a table group) has no two host fact
+  FAIL: nhl nhlconn-015: Mike Gartner in "Scored 500 career goals" (a table group) has no two host fact
+  FAIL: nhl nhlconn-015: Dave Andreychuk in "Scored 500 career goals" (a table group) has no two host fact
+  FAIL: nhl nhlconn-015: Luc Robitaille in "Scored 500 career goals" (a table group) has no two host fact
+  FAIL: nhl nhlconn-015: Johnny Bucyk in "Scored 500 career goals" (a table group) has no two host fact
+  FAIL: nhl nhlconn-015: Brendan Shanahan in "Scored 500 career goals" (a table group) has no two host fact
+  FAIL: nhl nhlconn-015: Dominik Hasek in "Goalies who won the Hart Trophy" (a table group) has no two host fact
+  FAIL: nhl nhlconn-015: Carey Price in "Goalies who won the Hart Trophy" (a table group) has no two host fact
+  FAIL: nhl nhlconn-015: Jose Theodore in "Goalies who won the Hart Trophy" (a table group) has no two host fact
+  FAIL: nhl nhlconn-015: Al Rollins in "Goalies who won the Hart Trophy" (a table group) has no two host fact
+  FAIL: nhl nhlconn-015: Jacques Plante in "Goalies who won the Hart Trophy" (a table group) has no two host fact
+  FAIL: nhl nhlconn-016: Roman Josi in "Played for the Predators" (a table group) has no two host fact
+  FAIL: nhl nhlconn-016: Pekka Rinne in "Played for the Predators" (a table group) has no two host fact
+  FAIL: nhl nhlconn-016: Shea Weber in "Played for the Predators" (a table group) has no two host fact
+  FAIL: nhl nhlconn-016: Filip Forsberg in "Played for the Predators" (a table group) has no two host fact
+  FAIL: nhl nhlconn-016: Ryan Ellis in "Played for the Predators" (a table group) has no two host fact
+  FAIL: nhl nhlconn-016: Daniel Sedin in "Played for the Canucks" (a table group) has no two host fact
+  FAIL: nhl nhlconn-016: Roberto Luongo in "Played for the Canucks" (a table group) has no two host fact
+  FAIL: nhl nhlconn-016: Markus Naslund in "Played for the Canucks" (a table group) has no two host fact
+  FAIL: nhl nhlconn-016: Trevor Linden in "Played for the Canucks" (a table group) has no two host fact
+  FAIL: nhl nhlconn-016: Quinn Hughes in "Played for the Canucks" (a table group) has no two host fact
+  FAIL: nhl nhlconn-016: Alex Ovechkin in "Won the Rocket Richard Trophy" (a table group) has no two host fact
+  FAIL: nhl nhlconn-016: Steven Stamkos in "Won the Rocket Richard Trophy" (a table group) has no two host fact
+  FAIL: nhl nhlconn-016: Auston Matthews in "Won the Rocket Richard Trophy" (a table group) has no two host fact
+  FAIL: nhl nhlconn-016: David Pastrnak in "Won the Rocket Richard Trophy" (a table group) has no two host fact
+  FAIL: nhl nhlconn-016: Pavel Bure in "Won the Rocket Richard Trophy" (a table group) has no two host fact
+  FAIL: nhl nhlconn-016: Patrick Roy in "Won the Conn Smythe Trophy" (a table group) has no two host fact
+  FAIL: nhl nhlconn-016: Wayne Gretzky in "Won the Conn Smythe Trophy" (a table group) has no two host fact
+  FAIL: nhl nhlconn-016: Mario Lemieux in "Won the Conn Smythe Trophy" (a table group) has no two host fact
+  FAIL: nhl nhlconn-016: Jean Beliveau in "Won the Conn Smythe Trophy" (a table group) has no two host fact
+  FAIL: nhl nhlconn-016: Bernie Parent in "Won the Conn Smythe Trophy" (a table group) has no two host fact
+  FAIL: nhl nhlconn-017: Daniel Alfredsson in "Played for the Senators" (a table group) has no two host fact
+  FAIL: nhl nhlconn-017: Erik Karlsson in "Played for the Senators" (a table group) has no two host fact
+  FAIL: nhl nhlconn-017: Jason Spezza in "Played for the Senators" (a table group) has no two host fact
+  FAIL: nhl nhlconn-017: Brady Tkachuk in "Played for the Senators" (a table group) has no two host fact
+  FAIL: nhl nhlconn-017: Tim Stutzle in "Played for the Senators" (a table group) has no two host fact
+  FAIL: nhl nhlconn-017: Martin Brodeur in "Goalies with 400 career wins" (a table group) has no two host fact
+  FAIL: nhl nhlconn-017: Patrick Roy in "Goalies with 400 career wins" (a table group) has no two host fact
+  FAIL: nhl nhlconn-017: Marc-Andre Fleury in "Goalies with 400 career wins" (a table group) has no two host fact
+  FAIL: nhl nhlconn-017: Ed Belfour in "Goalies with 400 career wins" (a table group) has no two host fact
+  FAIL: nhl nhlconn-017: Curtis Joseph in "Goalies with 400 career wins" (a table group) has no two host fact
+  FAIL: nhl nhlconn-017: Alex Ovechkin in "Scored 500 goals for one franchise" (a table group) has no two host fact
+  FAIL: nhl nhlconn-017: Steve Yzerman in "Scored 500 goals for one franchise" (a table group) has no two host fact
+  FAIL: nhl nhlconn-017: Mario Lemieux in "Scored 500 goals for one franchise" (a table group) has no two host fact
+  FAIL: nhl nhlconn-017: Bobby Hull in "Scored 500 goals for one franchise" (a table group) has no two host fact
+  FAIL: nhl nhlconn-017: Gilbert Perreault in "Scored 500 goals for one franchise" (a table group) has no two host fact
+  FAIL: nhl nhlconn-017: Peter Forsberg in "Triple Gold Club members" (a table group) has no two host fact
+  FAIL: nhl nhlconn-017: Nicklas Lidstrom in "Triple Gold Club members" (a table group) has no two host fact
+  FAIL: nhl nhlconn-017: Sidney Crosby in "Triple Gold Club members" (a table group) has no two host fact
+  FAIL: nhl nhlconn-017: Jonathan Toews in "Triple Gold Club members" (a table group) has no two host fact
+  FAIL: nhl nhlconn-017: Pavel Datsyuk in "Triple Gold Club members" (a table group) has no two host fact
+  FAIL: nhl nhlconn-018: Clayton Keller in "Played for Utah after the move from Arizona" (a table group) has no two host fact
+  FAIL: nhl nhlconn-018: Logan Cooley in "Played for Utah after the move from Arizona" (a table group) has no two host fact
+  FAIL: nhl nhlconn-018: Dylan Guenther in "Played for Utah after the move from Arizona" (a table group) has no two host fact
+  FAIL: nhl nhlconn-018: Mikhail Sergachev in "Played for Utah after the move from Arizona" (a table group) has no two host fact
+  FAIL: nhl nhlconn-018: Karel Vejmelka in "Played for Utah after the move from Arizona" (a table group) has no two host fact
+  FAIL: nhl nhlconn-018: Jack Eichel in "Drafted by the Sabres" (a table group) has no two host fact
+  FAIL: nhl nhlconn-018: Rasmus Dahlin in "Drafted by the Sabres" (a table group) has no two host fact
+  FAIL: nhl nhlconn-018: Sam Reinhart in "Drafted by the Sabres" (a table group) has no two host fact
+  FAIL: nhl nhlconn-018: Dylan Cozens in "Drafted by the Sabres" (a table group) has no two host fact
+  FAIL: nhl nhlconn-018: Casey Mittelstadt in "Drafted by the Sabres" (a table group) has no two host fact
+  FAIL: nhl nhlconn-018: Connor McDavid in "Won the Hart Trophy" (a table group) has no two host fact
+  FAIL: nhl nhlconn-018: Leon Draisaitl in "Won the Hart Trophy" (a table group) has no two host fact
+  FAIL: nhl nhlconn-018: Auston Matthews in "Won the Hart Trophy" (a table group) has no two host fact
+  FAIL: nhl nhlconn-018: Nathan MacKinnon in "Won the Hart Trophy" (a table group) has no two host fact
+  FAIL: nhl nhlconn-018: Taylor Hall in "Won the Hart Trophy" (a table group) has no two host fact
+  FAIL: nhl nhlconn-018: Connor Hellebuyck in "Won the Vezina Trophy" (a table group) has no two host fact
+  FAIL: nhl nhlconn-018: Andrei Vasilevskiy in "Won the Vezina Trophy" (a table group) has no two host fact
+  FAIL: nhl nhlconn-018: Igor Shesterkin in "Won the Vezina Trophy" (a table group) has no two host fact
+  FAIL: nhl nhlconn-018: Linus Ullmark in "Won the Vezina Trophy" (a table group) has no two host fact
+  FAIL: nhl nhlconn-018: Sergei Bobrovsky in "Won the Vezina Trophy" (a table group) has no two host fact
+  FAIL: nhl nhlconn-019: Wayne Gretzky in "Scored 700 career goals" (a table group) has no two host fact
+  FAIL: nhl nhlconn-019: Alex Ovechkin in "Scored 700 career goals" (a table group) has no two host fact
+  FAIL: nhl nhlconn-019: Gordie Howe in "Scored 700 career goals" (a table group) has no two host fact
+  FAIL: nhl nhlconn-019: Jaromir Jagr in "Scored 700 career goals" (a table group) has no two host fact
+  FAIL: nhl nhlconn-019: Brett Hull in "Scored 700 career goals" (a table group) has no two host fact
+  FAIL: nhl nhlconn-019: Ken Dryden in "1970s Canadiens dynasty" (a table group) has no two host fact
+  FAIL: nhl nhlconn-019: Guy Lafleur in "1970s Canadiens dynasty" (a table group) has no two host fact
+  FAIL: nhl nhlconn-019: Serge Savard in "1970s Canadiens dynasty" (a table group) has no two host fact
+  FAIL: nhl nhlconn-019: Yvan Cournoyer in "1970s Canadiens dynasty" (a table group) has no two host fact
+  FAIL: nhl nhlconn-019: Larry Robinson in "1970s Canadiens dynasty" (a table group) has no two host fact
+  FAIL: nhl nhlconn-019: Martin Brodeur in "Played for the Devils" (a table group) has no two host fact
+  FAIL: nhl nhlconn-019: Scott Stevens in "Played for the Devils" (a table group) has no two host fact
+  FAIL: nhl nhlconn-019: Scott Niedermayer in "Played for the Devils" (a table group) has no two host fact
+  FAIL: nhl nhlconn-019: Patrik Elias in "Played for the Devils" (a table group) has no two host fact
+  FAIL: nhl nhlconn-019: Kirk Muller in "Played for the Devils" (a table group) has no two host fact
+  FAIL: nhl nhlconn-019: Ron Francis in "Hall of Famers who played for the Whalers" (a table group) has no two host fact
+  FAIL: nhl nhlconn-019: Dave Keon in "Hall of Famers who played for the Whalers" (a table group) has no two host fact
+  FAIL: nhl nhlconn-019: Bobby Hull in "Hall of Famers who played for the Whalers" (a table group) has no two host fact
+  FAIL: nhl nhlconn-019: Mark Howe in "Hall of Famers who played for the Whalers" (a table group) has no two host fact
+  FAIL: nhl nhlconn-019: Paul Coffey in "Hall of Famers who played for the Whalers" (a table group) has no two host fact
+  FAIL: nhl nhlconn-020: Sam Bennett in "Won the 2024 Cup with the Panthers" (a table group) has no two host fact
+  FAIL: nhl nhlconn-020: Gustav Forsling in "Won the 2024 Cup with the Panthers" (a table group) has no two host fact
+  FAIL: nhl nhlconn-020: Anton Lundell in "Won the 2024 Cup with the Panthers" (a table group) has no two host fact
+  FAIL: nhl nhlconn-020: Evan Rodrigues in "Won the 2024 Cup with the Panthers" (a table group) has no two host fact
+  FAIL: nhl nhlconn-020: Niko Mikkola in "Won the 2024 Cup with the Panthers" (a table group) has no two host fact
+  FAIL: nhl nhlconn-020: Connor McDavid in "Canada's 2025 4 Nations team" (a table group) has no two host fact
+  FAIL: nhl nhlconn-020: Sidney Crosby in "Canada's 2025 4 Nations team" (a table group) has no two host fact
+  FAIL: nhl nhlconn-020: Nathan MacKinnon in "Canada's 2025 4 Nations team" (a table group) has no two host fact
+  FAIL: nhl nhlconn-020: Cale Makar in "Canada's 2025 4 Nations team" (a table group) has no two host fact
+  FAIL: nhl nhlconn-020: Brad Marchand in "Canada's 2025 4 Nations team" (a table group) has no two host fact
+  FAIL: nhl nhlconn-020: Patrik Laine in "Drafted second overall" (a table group) has no two host fact
+  FAIL: nhl nhlconn-020: Kaapo Kakko in "Drafted second overall" (a table group) has no two host fact
+  FAIL: nhl nhlconn-020: Sam Reinhart in "Drafted second overall" (a table group) has no two host fact
+  FAIL: nhl nhlconn-020: Nolan Patrick in "Drafted second overall" (a table group) has no two host fact
+  FAIL: nhl nhlconn-020: Simon Nemec in "Drafted second overall" (a table group) has no two host fact
+  FAIL: nhl nhlconn-020: Andrei Vasilevskiy in "Goalies who started a 2020s Cup Final game" (a table group) has no two host fact
+  FAIL: nhl nhlconn-020: Darcy Kuemper in "Goalies who started a 2020s Cup Final game" (a table group) has no two host fact
+  FAIL: nhl nhlconn-020: Adin Hill in "Goalies who started a 2020s Cup Final game" (a table group) has no two host fact
+  FAIL: nhl nhlconn-020: Anton Khudobin in "Goalies who started a 2020s Cup Final game" (a table group) has no two host fact
+  FAIL: nhl nhlconn-020: Stuart Skinner in "Goalies who started a 2020s Cup Final game" (a table group) has no two host fact
+   nhl: 320 table members, each to be held by a fact
+   nhl: 12 facts, 0 on one host; 2 flagged groups, 10 members held; 2 fixed findings
+4) one right answer: the shared cross check over every board
+   baseball: 60 boards, 240 of 240 groups judged; members 1200 judged (0 unknown), other tiles 3600 judged (0 unknown); 0 findings
+   nfl: 4 boards, 16 of 16 groups judged; members 80 judged (0 unknown), other tiles 240 judged (0 unknown); 0 findings
+  FAIL: nhl nhlconn-009 | second-fit | Steve Yzerman | Scored 60 goals in a season | listed under Captained a Stanley Cup winner, so the board has two right answers
+  FAIL: nhl nhlconn-009 | second-fit | Jaromir Jagr | Scored 60 goals in a season | listed under Played 1,700 or more NHL games, so the board has two right answers
+  FAIL: nhl nhlconn-009 | second-fit | Mark Messier | Played 1,700 or more NHL games | listed under Captained a Stanley Cup winner, so the board has two right answers
+  FAIL: nhl nhlconn-010 | second-fit | Steve Yzerman | Scored 60 goals in a season | listed under Captained a Stanley Cup winner, so the board has two right answers
+  FAIL: nhl nhlconn-010 | second-fit | Jaromir Jagr | Scored 60 goals in a season | listed under Played 1,650 or more NHL games, so the board has two right answers
+  FAIL: nhl nhlconn-010 | second-fit | Mark Messier | Played 1,650 or more NHL games | listed under Captained a Stanley Cup winner, so the board has two right answers
+  FAIL: nhl nhlconn-011 | second-fit | Bobby Orr | Won the Norris Trophy | listed under Scored a Stanley Cup winning goal, so the board has two right answers
+  FAIL: nhl nhlconn-012 | second-fit | Bernie Nicholls | Played for the Oilers | listed under Scored 70 goals in a season, so the board has two right answers
+  FAIL: nhl nhlconn-012 | second-fit | Jari Kurri | Played for the Oilers | listed under Scored 70 goals in a season, so the board has two right answers
+  FAIL: nhl nhlconn-014 | second-fit | Martin Brodeur | Won the Calder Trophy | listed under Goalies credited with scoring a goal, so the board has two right answers
+  FAIL: nhl nhlconn-014 | second-fit | Evgeni Nabokov | Won the Calder Trophy | listed under Goalies credited with scoring a goal, so the board has two right answers
+  FAIL: nhl nhlconn-014 | second-fit | Joe Nieuwendyk | Won the Calder Trophy | listed under Won the Cup with three different franchises, so the board has two right answers
+  FAIL: nhl nhlconn-014 | second-fit | Mark Recchi | Won the Cup with three different franchises | listed under Played 1,500 NHL games, so the board has two right answers
+  FAIL: nhl nhlconn-015 | second-fit | Jarome Iginla | Scored 500 career goals | listed under Won the Art Ross Trophy, so the board has two right answers
+  FAIL: nhl nhlconn-016 | second-fit | Steven Stamkos | Played for the Predators | listed under Won the Rocket Richard Trophy, so the board has two right answers
+  FAIL: nhl nhlconn-016 | second-fit | Pavel Bure | Played for the Canucks | listed under Won the Rocket Richard Trophy, so the board has two right answers
+  FAIL: nhl nhlconn-016 | second-fit | Alex Ovechkin | Won the Conn Smythe Trophy | listed under Won the Rocket Richard Trophy, so the board has two right answers
+  FAIL: nhl nhlconn-017 | second-fit | Sidney Crosby | Scored 500 goals for one franchise | listed under Triple Gold Club members, so the board has two right answers
+  FAIL: nhl nhlconn-018 | second-fit | Linus Ullmark | Drafted by the Sabres | listed under Won the Vezina Trophy, so the board has two right answers
+  FAIL: nhl nhlconn-018 | second-fit | Connor Hellebuyck | Won the Hart Trophy | listed under Won the Vezina Trophy, so the board has two right answers
+  FAIL: nhl nhlconn-019 | second-fit | Jaromir Jagr | Played for the Devils | listed under Scored 700 career goals, so the board has two right answers
+  FAIL: nhl nhlconn-019 | second-fit | Gordie Howe | Hall of Famers who played for the Whalers | listed under Scored 700 career goals, so the board has two right answers
+  FAIL: nhl nhlconn-020 | second-fit | Sam Reinhart | Won the 2024 Cup with the Panthers | listed under Drafted second overall, so the board has two right answers
+   nhl: 20 boards, 63 of 80 groups judged; members 308 judged (7 unknown), other tiles 930 judged (15 unknown); 23 findings
+5) no man is a season from joining a group beside him
+   baseball: 0 watched men beside a group they may join
+   nfl: 0 watched men beside a group they may join
+  FAIL: nhl nhlconn-010: Alex Ovechkin ("Scored 60 goals in a season") may join "Played 1,650 or more NHL games": active with 1584, within a season of 1650
+  FAIL: nhl nhlconn-013: Alex Ovechkin ("European-born 500 goal scorers") may join "Won the Conn Smythe in a losing cause": active; the 2026-27 Conn Smythe is still to be won
+  FAIL: nhl nhlconn-015: Alexis Lafreniere ("Drafted first overall") may join "Won the Art Ross Trophy": active and eligible; the 2026-27 Art Ross Trophy is still to be won
+  FAIL: nhl nhlconn-015: Taylor Hall ("Drafted first overall") may join "Won the Art Ross Trophy": active and eligible; the 2026-27 Art Ross Trophy is still to be won
+  FAIL: nhl nhlconn-015: Owen Power ("Drafted first overall") may join "Won the Art Ross Trophy": active and eligible; the 2026-27 Art Ross Trophy is still to be won
+  FAIL: nhl nhlconn-015: Juraj Slafkovsky ("Drafted first overall") may join "Won the Art Ross Trophy": active and eligible; the 2026-27 Art Ross Trophy is still to be won
+  FAIL: nhl nhlconn-016: Roman Josi ("Played for the Predators") may join "Won the Rocket Richard Trophy": active and eligible; the 2026-27 Maurice “Rocket” Richard Trophy is still to be won
+  FAIL: nhl nhlconn-016: Filip Forsberg ("Played for the Predators") may join "Won the Rocket Richard Trophy": active and eligible; the 2026-27 Maurice “Rocket” Richard Trophy is still to be won
+  FAIL: nhl nhlconn-016: Ryan Ellis ("Played for the Predators") may join "Won the Rocket Richard Trophy": active and eligible; the 2026-27 Maurice “Rocket” Richard Trophy is still to be won
+  FAIL: nhl nhlconn-016: Quinn Hughes ("Played for the Canucks") may join "Won the Rocket Richard Trophy": active and eligible; the 2026-27 Maurice “Rocket” Richard Trophy is still to be won
+  FAIL: nhl nhlconn-016: Roman Josi ("Played for the Predators") may join "Won the Conn Smythe Trophy": active and eligible; the 2026-27 Conn Smythe Trophy is still to be won
+  FAIL: nhl nhlconn-016: Filip Forsberg ("Played for the Predators") may join "Won the Conn Smythe Trophy": active and eligible; the 2026-27 Conn Smythe Trophy is still to be won
+  FAIL: nhl nhlconn-016: Ryan Ellis ("Played for the Predators") may join "Won the Conn Smythe Trophy": active and eligible; the 2026-27 Conn Smythe Trophy is still to be won
+  FAIL: nhl nhlconn-016: Quinn Hughes ("Played for the Canucks") may join "Won the Conn Smythe Trophy": active and eligible; the 2026-27 Conn Smythe Trophy is still to be won
+  FAIL: nhl nhlconn-016: Steven Stamkos ("Won the Rocket Richard Trophy") may join "Won the Conn Smythe Trophy": active and eligible; the 2026-27 Conn Smythe Trophy is still to be won
+  FAIL: nhl nhlconn-016: Auston Matthews ("Won the Rocket Richard Trophy") may join "Won the Conn Smythe Trophy": active and eligible; the 2026-27 Conn Smythe Trophy is still to be won
+  FAIL: nhl nhlconn-016: David Pastrnak ("Won the Rocket Richard Trophy") may join "Won the Conn Smythe Trophy": active and eligible; the 2026-27 Conn Smythe Trophy is still to be won
+  FAIL: nhl nhlconn-018: Clayton Keller ("Played for Utah after the move from Arizona") may join "Won the Hart Trophy": active and eligible; the 2026-27 Hart Memorial Trophy is still to be won
+  FAIL: nhl nhlconn-018: Logan Cooley ("Played for Utah after the move from Arizona") may join "Won the Hart Trophy": active and eligible; the 2026-27 Hart Memorial Trophy is still to be won
+  FAIL: nhl nhlconn-018: Dylan Guenther ("Played for Utah after the move from Arizona") may join "Won the Hart Trophy": active and eligible; the 2026-27 Hart Memorial Trophy is still to be won
+  FAIL: nhl nhlconn-018: Mikhail Sergachev ("Played for Utah after the move from Arizona") may join "Won the Hart Trophy": active and eligible; the 2026-27 Hart Memorial Trophy is still to be won
+  FAIL: nhl nhlconn-018: Karel Vejmelka ("Played for Utah after the move from Arizona") may join "Won the Hart Trophy": active and eligible; the 2026-27 Hart Memorial Trophy is still to be won
+  FAIL: nhl nhlconn-018: Jack Eichel ("Drafted by the Sabres") may join "Won the Hart Trophy": active and eligible; the 2026-27 Hart Memorial Trophy is still to be won
+  FAIL: nhl nhlconn-018: Rasmus Dahlin ("Drafted by the Sabres") may join "Won the Hart Trophy": active and eligible; the 2026-27 Hart Memorial Trophy is still to be won
+  FAIL: nhl nhlconn-018: Sam Reinhart ("Drafted by the Sabres") may join "Won the Hart Trophy": active and eligible; the 2026-27 Hart Memorial Trophy is still to be won
+  FAIL: nhl nhlconn-018: Dylan Cozens ("Drafted by the Sabres") may join "Won the Hart Trophy": active and eligible; the 2026-27 Hart Memorial Trophy is still to be won
+  FAIL: nhl nhlconn-018: Casey Mittelstadt ("Drafted by the Sabres") may join "Won the Hart Trophy": active and eligible; the 2026-27 Hart Memorial Trophy is still to be won
+  FAIL: nhl nhlconn-018: Andrei Vasilevskiy ("Won the Vezina Trophy") may join "Won the Hart Trophy": active and eligible; the 2026-27 Hart Memorial Trophy is still to be won
+  FAIL: nhl nhlconn-018: Igor Shesterkin ("Won the Vezina Trophy") may join "Won the Hart Trophy": active and eligible; the 2026-27 Hart Memorial Trophy is still to be won
+  FAIL: nhl nhlconn-018: Linus Ullmark ("Won the Vezina Trophy") may join "Won the Hart Trophy": active and eligible; the 2026-27 Hart Memorial Trophy is still to be won
+  FAIL: nhl nhlconn-018: Sergei Bobrovsky ("Won the Vezina Trophy") may join "Won the Hart Trophy": active and eligible; the 2026-27 Hart Memorial Trophy is still to be won
+  FAIL: nhl nhlconn-018: Karel Vejmelka ("Played for Utah after the move from Arizona") may join "Won the Vezina Trophy": active and eligible; the 2026-27 Vezina Trophy is still to be won
+   nhl: 32 watched men beside a group they may join
+6) no man is dealt twice on one board
+   baseball: 0 men dealt twice
+   nfl: 0 men dealt twice
+   nhl: 0 men dealt twice
+7) what the record cannot judge may only get fewer
+   baseball: 0 groups nothing judges (ceiling 0), 0 members the record cannot place (ceiling 0), 0 other tiles it cannot judge (ceiling 0)
+   nfl: 0 groups nothing judges (ceiling 0), 0 members the record cannot place (ceiling 0), 0 other tiles it cannot judge (ceiling 0)
+  FAIL: nhl: 17 groups nothing judges, over the ceiling of 0
+  FAIL: nhl: 7 members the record cannot place, over the ceiling of 0
+  FAIL: nhl: 15 other tiles the record cannot judge, over the ceiling of 0
+   nhl: 17 groups nothing judges (ceiling 0), 7 members the record cannot place (ceiling 0), 15 other tiles it cannot judge (ceiling 0): nhlconn-005 "Played for the New York Islanders", nhlconn-006 "Played for the Edmonton Oilers", nhlconn-006 "Played for the Montreal Canadiens", nhlconn-006 "Played for the Boston Bruins", nhlconn-006 "Played for the Detroit Red Wings", nhlconn-009 "Captained a Stanley Cup winner", nhlconn-010 "Captained a Stanley Cup winner", nhlconn-011 "Scored a Stanley Cup winning goal", nhlconn-011 "Scored 50 goals in 50 games", nhlconn-012 "Defensemen who captained a Cup winner", nhlconn-013 "1980s Islanders dynasty", nhlconn-013 "Played NHL games in four different decades", nhlconn-017 "Triple Gold Club members", nhlconn-018 "Played for Utah after the move from Arizona", nhlconn-019 "1970s Canadiens dynasty", nhlconn-020 "Canada's 2025 4 Nations team", nhlconn-020 "Goalies who started a 2020s Cup Final game"
+8) no active man is one move from a second answer
+   baseball: 15 dated club groups, 0 undated, 0 active men one move from a club group beside them
+   nfl: 8 dated club groups, 0 undated, 0 active men one move from a club group beside them
+  FAIL: nhl nhlconn-005: Patrick Kane ("Played for the Chicago Blackhawks") is still playing and one move from "Played for the Avalanche or Nordiques": date the group or rebuild the board
+  FAIL: nhl nhlconn-005: John Tavares ("Played for the New York Islanders") is still playing and one move from "Played for the Avalanche or Nordiques": date the group or rebuild the board
+  FAIL: nhl nhlconn-005: Mark Scheifele ("Played for the Winnipeg Jets (either era)") is still playing and one move from "Played for the Avalanche or Nordiques": date the group or rebuild the board
+  FAIL: nhl nhlconn-005: Kyle Connor ("Played for the Winnipeg Jets (either era)") is still playing and one move from "Played for the Avalanche or Nordiques": date the group or rebuild the board
+  FAIL: nhl nhlconn-005: Patrick Kane ("Played for the Chicago Blackhawks") is still playing and one move from "Played for the Winnipeg Jets (either era)": date the group or rebuild the board
+  FAIL: nhl nhlconn-005: Nathan MacKinnon ("Played for the Avalanche or Nordiques") is still playing and one move from "Played for the Winnipeg Jets (either era)": date the group or rebuild the board
+  FAIL: nhl nhlconn-005: John Tavares ("Played for the New York Islanders") is still playing and one move from "Played for the Winnipeg Jets (either era)": date the group or rebuild the board
+  FAIL: nhl nhlconn-007: Claude Giroux ("Played for the Flyers") is still playing and one move from "Played for the Capitals": date the group or rebuild the board
+  FAIL: nhl nhlconn-007: Sean Couturier ("Played for the Flyers") is still playing and one move from "Played for the Capitals": date the group or rebuild the board
+  FAIL: nhl nhlconn-007: Adam Fox ("Played for the Rangers") is still playing and one move from "Played for the Capitals": date the group or rebuild the board
+  FAIL: nhl nhlconn-007: Chris Kreider ("Played for the Rangers") is still playing and one move from "Played for the Capitals": date the group or rebuild the board
+  FAIL: nhl nhlconn-007: Mika Zibanejad ("Played for the Rangers") is still playing and one move from "Played for the Capitals": date the group or rebuild the board
+  FAIL: nhl nhlconn-007: Artemi Panarin ("Played for the Rangers") is still playing and one move from "Played for the Capitals": date the group or rebuild the board
+  FAIL: nhl nhlconn-007: Alex Pietrangelo ("Played for the Blues") is still playing and one move from "Played for the Capitals": date the group or rebuild the board
+  FAIL: nhl nhlconn-007: Alex Ovechkin ("Played for the Capitals") is still playing and one move from "Played for the Flyers": date the group or rebuild the board
+  FAIL: nhl nhlconn-007: Tom Wilson ("Played for the Capitals") is still playing and one move from "Played for the Flyers": date the group or rebuild the board
+  FAIL: nhl nhlconn-007: John Carlson ("Played for the Capitals") is still playing and one move from "Played for the Flyers": date the group or rebuild the board
+  FAIL: nhl nhlconn-007: Adam Fox ("Played for the Rangers") is still playing and one move from "Played for the Flyers": date the group or rebuild the board
+  FAIL: nhl nhlconn-007: Chris Kreider ("Played for the Rangers") is still playing and one move from "Played for the Flyers": date the group or rebuild the board
+  FAIL: nhl nhlconn-007: Mika Zibanejad ("Played for the Rangers") is still playing and one move from "Played for the Flyers": date the group or rebuild the board
+  FAIL: nhl nhlconn-007: Artemi Panarin ("Played for the Rangers") is still playing and one move from "Played for the Flyers": date the group or rebuild the board
+  FAIL: nhl nhlconn-007: Alex Pietrangelo ("Played for the Blues") is still playing and one move from "Played for the Flyers": date the group or rebuild the board
+  FAIL: nhl nhlconn-007: Alex Ovechkin ("Played for the Capitals") is still playing and one move from "Played for the Rangers": date the group or rebuild the board
+  FAIL: nhl nhlconn-007: Tom Wilson ("Played for the Capitals") is still playing and one move from "Played for the Rangers": date the group or rebuild the board
+  FAIL: nhl nhlconn-007: John Carlson ("Played for the Capitals") is still playing and one move from "Played for the Rangers": date the group or rebuild the board
+  FAIL: nhl nhlconn-007: Claude Giroux ("Played for the Flyers") is still playing and one move from "Played for the Rangers": date the group or rebuild the board
+  FAIL: nhl nhlconn-007: Sean Couturier ("Played for the Flyers") is still playing and one move from "Played for the Rangers": date the group or rebuild the board
+  FAIL: nhl nhlconn-007: Alex Pietrangelo ("Played for the Blues") is still playing and one move from "Played for the Rangers": date the group or rebuild the board
+  FAIL: nhl nhlconn-007: Alex Ovechkin ("Played for the Capitals") is still playing and one move from "Played for the Blues": date the group or rebuild the board
+  FAIL: nhl nhlconn-007: Tom Wilson ("Played for the Capitals") is still playing and one move from "Played for the Blues": date the group or rebuild the board
+  FAIL: nhl nhlconn-007: John Carlson ("Played for the Capitals") is still playing and one move from "Played for the Blues": date the group or rebuild the board
+  FAIL: nhl nhlconn-007: Claude Giroux ("Played for the Flyers") is still playing and one move from "Played for the Blues": date the group or rebuild the board
+  FAIL: nhl nhlconn-007: Sean Couturier ("Played for the Flyers") is still playing and one move from "Played for the Blues": date the group or rebuild the board
+  FAIL: nhl nhlconn-007: Adam Fox ("Played for the Rangers") is still playing and one move from "Played for the Blues": date the group or rebuild the board
+  FAIL: nhl nhlconn-007: Chris Kreider ("Played for the Rangers") is still playing and one move from "Played for the Blues": date the group or rebuild the board
+  FAIL: nhl nhlconn-007: Mika Zibanejad ("Played for the Rangers") is still playing and one move from "Played for the Blues": date the group or rebuild the board
+  FAIL: nhl nhlconn-007: Artemi Panarin ("Played for the Rangers") is still playing and one move from "Played for the Blues": date the group or rebuild the board
+  FAIL: nhl nhlconn-008: Brent Burns ("Played for the Sharks") is still playing and one move from "Played for the Stars": date the group or rebuild the board
+  FAIL: nhl nhlconn-008: Erik Karlsson ("Played for the Sharks") is still playing and one move from "Played for the Stars": date the group or rebuild the board
+  FAIL: nhl nhlconn-008: Logan Couture ("Played for the Sharks") is still playing and one move from "Played for the Stars": date the group or rebuild the board
+  FAIL: nhl nhlconn-008: John Tavares ("Played for the Islanders") is still playing and one move from "Played for the Stars": date the group or rebuild the board
+  FAIL: nhl nhlconn-008: Ryan O'Reilly ("Played for the Sabres") is still playing and one move from "Played for the Stars": date the group or rebuild the board
+  FAIL: nhl nhlconn-008: Jamie Benn ("Played for the Stars") is still playing and one move from "Played for the Sharks": date the group or rebuild the board
+  FAIL: nhl nhlconn-008: Tyler Seguin ("Played for the Stars") is still playing and one move from "Played for the Sharks": date the group or rebuild the board
+  FAIL: nhl nhlconn-008: John Tavares ("Played for the Islanders") is still playing and one move from "Played for the Sharks": date the group or rebuild the board
+  FAIL: nhl nhlconn-008: Ryan O'Reilly ("Played for the Sabres") is still playing and one move from "Played for the Sharks": date the group or rebuild the board
+  FAIL: nhl nhlconn-008: Jamie Benn ("Played for the Stars") is still playing and one move from "Played for the Islanders": date the group or rebuild the board
+  FAIL: nhl nhlconn-008: Tyler Seguin ("Played for the Stars") is still playing and one move from "Played for the Islanders": date the group or rebuild the board
+  FAIL: nhl nhlconn-008: Brent Burns ("Played for the Sharks") is still playing and one move from "Played for the Islanders": date the group or rebuild the board
+  FAIL: nhl nhlconn-008: Erik Karlsson ("Played for the Sharks") is still playing and one move from "Played for the Islanders": date the group or rebuild the board
+  FAIL: nhl nhlconn-008: Logan Couture ("Played for the Sharks") is still playing and one move from "Played for the Islanders": date the group or rebuild the board
+  FAIL: nhl nhlconn-008: Ryan O'Reilly ("Played for the Sabres") is still playing and one move from "Played for the Islanders": date the group or rebuild the board
+  FAIL: nhl nhlconn-008: Jamie Benn ("Played for the Stars") is still playing and one move from "Played for the Sabres": date the group or rebuild the board
+  FAIL: nhl nhlconn-008: Tyler Seguin ("Played for the Stars") is still playing and one move from "Played for the Sabres": date the group or rebuild the board
+  FAIL: nhl nhlconn-008: Brent Burns ("Played for the Sharks") is still playing and one move from "Played for the Sabres": date the group or rebuild the board
+  FAIL: nhl nhlconn-008: Erik Karlsson ("Played for the Sharks") is still playing and one move from "Played for the Sabres": date the group or rebuild the board
+  FAIL: nhl nhlconn-008: Logan Couture ("Played for the Sharks") is still playing and one move from "Played for the Sabres": date the group or rebuild the board
+  FAIL: nhl nhlconn-008: John Tavares ("Played for the Islanders") is still playing and one move from "Played for the Sabres": date the group or rebuild the board
+  FAIL: nhl nhlconn-011: Cale Makar ("Won the Norris Trophy") is still playing and one move from "Played for the Maple Leafs": date the group or rebuild the board
+  FAIL: nhl nhlconn-011: Erik Karlsson ("Won the Norris Trophy") is still playing and one move from "Played for the Maple Leafs": date the group or rebuild the board
+  FAIL: nhl nhlconn-011: Patrick Kane ("Scored a Stanley Cup winning goal") is still playing and one move from "Played for the Maple Leafs": date the group or rebuild the board
+  FAIL: nhl nhlconn-012: Andrei Vasilevskiy ("Won the Vezina Trophy") is still playing and one move from "Played for the Oilers": date the group or rebuild the board
+  FAIL: nhl nhlconn-016: Quinn Hughes ("Played for the Canucks") is still playing and one move from "Played for the Predators": date the group or rebuild the board
+  FAIL: nhl nhlconn-016: Alex Ovechkin ("Won the Rocket Richard Trophy") is still playing and one move from "Played for the Predators": date the group or rebuild the board
+  FAIL: nhl nhlconn-016: Auston Matthews ("Won the Rocket Richard Trophy") is still playing and one move from "Played for the Predators": date the group or rebuild the board
+  FAIL: nhl nhlconn-016: David Pastrnak ("Won the Rocket Richard Trophy") is still playing and one move from "Played for the Predators": date the group or rebuild the board
+  FAIL: nhl nhlconn-016: Roman Josi ("Played for the Predators") is still playing and one move from "Played for the Canucks": date the group or rebuild the board
+  FAIL: nhl nhlconn-016: Filip Forsberg ("Played for the Predators") is still playing and one move from "Played for the Canucks": date the group or rebuild the board
+  FAIL: nhl nhlconn-016: Ryan Ellis ("Played for the Predators") is still playing and one move from "Played for the Canucks": date the group or rebuild the board
+  FAIL: nhl nhlconn-016: Alex Ovechkin ("Won the Rocket Richard Trophy") is still playing and one move from "Played for the Canucks": date the group or rebuild the board
+  FAIL: nhl nhlconn-016: Steven Stamkos ("Won the Rocket Richard Trophy") is still playing and one move from "Played for the Canucks": date the group or rebuild the board
+  FAIL: nhl nhlconn-016: Auston Matthews ("Won the Rocket Richard Trophy") is still playing and one move from "Played for the Canucks": date the group or rebuild the board
+  FAIL: nhl nhlconn-016: David Pastrnak ("Won the Rocket Richard Trophy") is still playing and one move from "Played for the Canucks": date the group or rebuild the board
+  FAIL: nhl nhlconn-017: Alex Ovechkin ("Scored 500 goals for one franchise") is still playing and one move from "Played for the Senators": date the group or rebuild the board
+  FAIL: nhl nhlconn-017: Sidney Crosby ("Triple Gold Club members") is still playing and one move from "Played for the Senators": date the group or rebuild the board
+  FAIL: nhl nhlconn-019: Alex Ovechkin ("Scored 700 career goals") is still playing and one move from "Played for the Devils": date the group or rebuild the board
+   nhl: 15 dated club groups, 16 undated, 76 active men one move from a club group beside them
+9) the table rows are the export plus recorded decisions
+  FAIL: nhl nhlconn-005: "Played for the Chicago Blackhawks" has no tableDecisions line
+  FAIL: nhl nhlconn-005: "Played for the Avalanche or Nordiques" has no tableDecisions line
+  FAIL: nhl nhlconn-005: "Played for the New York Islanders" has no tableDecisions line
+  FAIL: nhl nhlconn-005: "Played for the Winnipeg Jets (either era)" has no tableDecisions line
+  FAIL: nhl nhlconn-006: "Played for the Edmonton Oilers" has no tableDecisions line
+  FAIL: nhl nhlconn-006: "Played for the Montreal Canadiens" has no tableDecisions line
+  FAIL: nhl nhlconn-006: "Played for the Boston Bruins" has no tableDecisions line
+  FAIL: nhl nhlconn-006: "Played for the Detroit Red Wings" has no tableDecisions line
+  FAIL: nhl nhlconn-007: "Played for the Capitals" has no tableDecisions line
+  FAIL: nhl nhlconn-007: "Played for the Flyers" has no tableDecisions line
+  FAIL: nhl nhlconn-007: "Played for the Rangers" has no tableDecisions line
+  FAIL: nhl nhlconn-007: "Played for the Blues" has no tableDecisions line
+  FAIL: nhl nhlconn-008: "Played for the Stars" has no tableDecisions line
+  FAIL: nhl nhlconn-008: "Played for the Sharks" has no tableDecisions line
+  FAIL: nhl nhlconn-008: "Played for the Islanders" has no tableDecisions line
+  FAIL: nhl nhlconn-008: "Played for the Sabres" has no tableDecisions line
+  FAIL: nhl nhlconn-009: "Scored 60 goals in a season" has no tableDecisions line
+  FAIL: nhl nhlconn-009: "Won the Vezina Trophy" has no tableDecisions line
+  FAIL: nhl nhlconn-009: "Captained a Stanley Cup winner" has no tableDecisions line
+  FAIL: nhl nhlconn-009: "Played 1,700 or more NHL games" has no tableDecisions line
+  FAIL: nhl nhlconn-010: "Goaltenders" has no tableDecisions line
+  FAIL: nhl nhlconn-010: "Scored 60 goals in a season" has no tableDecisions line
+  FAIL: nhl nhlconn-010: "Captained a Stanley Cup winner" has no tableDecisions line
+  FAIL: nhl nhlconn-010: "Played 1,650 or more NHL games" has no tableDecisions line
+  FAIL: nhl nhlconn-011: "Played for the Maple Leafs" has no tableDecisions line
+  FAIL: nhl nhlconn-011: "Won the Norris Trophy" has no tableDecisions line
+  FAIL: nhl nhlconn-011: "Scored a Stanley Cup winning goal" has no tableDecisions line
+  FAIL: nhl nhlconn-011: "Scored 50 goals in 50 games" has no tableDecisions line
+  FAIL: nhl nhlconn-012: "Played for the Oilers" has no tableDecisions line
+  FAIL: nhl nhlconn-012: "Won the Vezina Trophy" has no tableDecisions line
+  FAIL: nhl nhlconn-012: "Scored 70 goals in a season" has no tableDecisions line
+  FAIL: nhl nhlconn-012: "Defensemen who captained a Cup winner" has no tableDecisions line
+  FAIL: nhl nhlconn-013: "1980s Islanders dynasty" has no tableDecisions line
+  FAIL: nhl nhlconn-013: "European-born 500 goal scorers" has no tableDecisions line
+  FAIL: nhl nhlconn-013: "Won the Conn Smythe in a losing cause" has no tableDecisions line
+  FAIL: nhl nhlconn-013: "Played NHL games in four different decades" has no tableDecisions line
+  FAIL: nhl nhlconn-014: "Won the Calder Trophy" has no tableDecisions line
+  FAIL: nhl nhlconn-014: "Played 1,500 NHL games" has no tableDecisions line
+  FAIL: nhl nhlconn-014: "Goalies credited with scoring a goal" has no tableDecisions line
+  FAIL: nhl nhlconn-014: "Won the Cup with three different franchises" has no tableDecisions line
+  FAIL: nhl nhlconn-015: "Drafted first overall" has no tableDecisions line
+  FAIL: nhl nhlconn-015: "Won the Art Ross Trophy" has no tableDecisions line
+  FAIL: nhl nhlconn-015: "Scored 500 career goals" has no tableDecisions line
+  FAIL: nhl nhlconn-015: "Goalies who won the Hart Trophy" has no tableDecisions line
+  FAIL: nhl nhlconn-016: "Played for the Predators" has no tableDecisions line
+  FAIL: nhl nhlconn-016: "Played for the Canucks" has no tableDecisions line
+  FAIL: nhl nhlconn-016: "Won the Rocket Richard Trophy" has no tableDecisions line
+  FAIL: nhl nhlconn-016: "Won the Conn Smythe Trophy" has no tableDecisions line
+  FAIL: nhl nhlconn-017: "Played for the Senators" has no tableDecisions line
+  FAIL: nhl nhlconn-017: "Goalies with 400 career wins" has no tableDecisions line
+  FAIL: nhl nhlconn-017: "Scored 500 goals for one franchise" has no tableDecisions line
+  FAIL: nhl nhlconn-017: "Triple Gold Club members" has no tableDecisions line
+  FAIL: nhl nhlconn-018: "Played for Utah after the move from Arizona" has no tableDecisions line
+  FAIL: nhl nhlconn-018: "Drafted by the Sabres" has no tableDecisions line
+  FAIL: nhl nhlconn-018: "Won the Hart Trophy" has no tableDecisions line
+  FAIL: nhl nhlconn-018: "Won the Vezina Trophy" has no tableDecisions line
+  FAIL: nhl nhlconn-019: "Scored 700 career goals" has no tableDecisions line
+  FAIL: nhl nhlconn-019: "1970s Canadiens dynasty" has no tableDecisions line
+  FAIL: nhl nhlconn-019: "Played for the Devils" has no tableDecisions line
+  FAIL: nhl nhlconn-019: "Hall of Famers who played for the Whalers" has no tableDecisions line
+  FAIL: nhl nhlconn-020: "Won the 2024 Cup with the Panthers" has no tableDecisions line
+  FAIL: nhl nhlconn-020: "Canada's 2025 4 Nations team" has no tableDecisions line
+  FAIL: nhl nhlconn-020: "Drafted second overall" has no tableDecisions line
+  FAIL: nhl nhlconn-020: "Goalies who started a 2020s Cup Final game" has no tableDecisions line
+   nhl: 16 table rows, 0 decisions (RECORD 0, LIST 0, PERMAN 0, REBUILD 0), 64 problems
+10) every criterion kind says how it ages, and every running kind is watched
+   baseball: kinds award 6, club 43, career 6, born 91, firstPick 1, season 5, bats 2, recordList 7, awardAt 23, avg300 1, wsWith 1, undrafted 1, mvpRun 1, hofPos 38, starter 1, posEra 1, wsClubs 1, hofPitcher 11; 0 problems; running and not watched, owed to the baseball table rounds: recordList, avg300, undrafted, hofPos, starter, posEra, wsClubs, hofPitcher
+   nfl: kinds club 8, firstPick 1, yards 3, college 4; 0 problems
+  FAIL: nhl nhlconn-005: "Played for the Chicago Blackhawks" is kind probe, running, and the nhl watch does not handle it, so a man who joins it next season is never seen
+   nhl: kinds club 31, career 7, probe 1, season 3, award 10, pos 1, smytheLost 1, goalieGoal 1, cupClubs 1, draft 2, wins 1, clubGoals 1, draftBy 1, hofClub 1, cupWith 1; 1 problems
+
+US_CONN_CONTROL=newrunning fired its own rule 1 time(s): unwatched x1 for probe (all findings: no-fact 319, second-fit 23, watch 32, unjudged 17, member-unknown 1, other-unknown 1, trade 76, undecided 64, unwatched 1; 520 failures in all)

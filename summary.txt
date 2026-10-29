@@ -1,0 +1,24 @@
+c-arod exit=1 0s | US_CONN_CONTROL=arod fired its own rule 2 time(s): refuted x1, not-a-member x1 for Alex Rodriguez (all findings: refuted 1, no-fact 1, not-a-member 6, second-fit 1, watch
+plain exit=0 0s | simUsConnectionsFacts: green. Every Baseball, NFL and NHL Connections group is held to the record, and no board has a second right answer the record can see (other tiles 
+report exit=0 0s | REPORT ONLY
+c-karlsson exit=1 0s | US_CONN_CONTROL=karlsson fired its own rule 1 time(s): watch x1 for Erik Karlsson (all findings: no-fact 1, watch 1; 2 failures in all)
+c-bell exit=1 0s | US_CONN_CONTROL=bell fired its own rule 1 time(s): second-fit x1 for Le'Veon Bell (all findings: no-fact 1, second-fit 1; 2 failures in all)
+c-twice exit=1 0s | US_CONN_CONTROL=twice fired its own rule 1 time(s): twice x1 for Rich Gossage (all findings: no-fact 1, twice 1; 2 failures in all)
+c-onehost exit=1 0s | US_CONN_CONTROL=onehost fired its own rule 1 time(s): one-host x1 for Derek Jeter | Won Rookie of the Year (all findings: one-host 1; 1 failures in all)
+c-unjudged exit=1 0s | US_CONN_CONTROL=unjudged fired its own rule 1 time(s): unjudged x1 for Played in Japan before MLB (all findings: unjudged 1; 2 failures in all)
+c-fingers exit=1 0s | US_CONN_CONTROL=fingers fired its own rule 1 time(s): other-unknown x1 for baseball (all findings: no-fact 1, other-unknown 1; 2 failures in all)
+c-undate exit=1 0s | US_CONN_CONTROL=undate fired its own rule 1 time(s): trade x1 for Lamar Jackson (all findings: trade 7; 7 failures in all)
+c-frobinson exit=1 0s | US_CONN_CONTROL=frobinson fired its own rule 1 time(s): gray-back x1 for Frank Robinson (all findings: gray-back 1, other-unknown 1; 2 failures in all)
+c-ohtani exit=1 0s | US_CONN_CONTROL=ohtani fired its own rule 1 time(s): watch x1 for Shohei Ohtani (all findings: watch 1; 1 failures in all)
+c-yearnhl exit=1 0s | US_CONN_CONTROL=yearnhl fired its own rule 1 time(s): second-fit x1 for Mitch Marner (all findings: not-a-member 1, second-fit 1; 2 failures in all)
+c-yearnfl exit=1 0s | US_CONN_CONTROL=yearnfl fired its own rule 1 time(s): second-fit x1 for Jaire Alexander (all findings: second-fit 1, not-a-member 1; 2 failures in all)
+c-afternfl exit=1 0s | US_CONN_CONTROL=afternfl fired its own rule 1 time(s): not-a-member x1 for Von Miller (all findings: not-a-member 1; 1 failures in all)
+c-aftermlb exit=1 0s | US_CONN_CONTROL=aftermlb fired its own rule 1 time(s): member-unknown x1 for baseball (all findings: member-unknown 1; 1 failures in all)
+c-afternhl exit=1 0s | US_CONN_CONTROL=afternhl fired its own rule 1 time(s): not-a-member x1 for Mitch Marner (all findings: not-a-member 1; 1 failures in all)
+c-futuredate exit=1 0s | US_CONN_CONTROL=futuredate fired its own rule 1 time(s): date-open x1 for Played for the Steelers (as of 2030) (all findings: date-open 1, trade 7; 8 failures in all)
+c-tablemiss exit=1 0s | US_CONN_CONTROL=tablemiss fired its own rule 1 time(s): tablemiss x1 for nhl (all findings: tablemiss 1; 1 failures in all)
+c-grayonehost exit=1 0s | US_CONN_CONTROL=grayonehost fired its own rule 1 time(s): gray-one-host x1 for Cal Ripken Jr. | Hall of Fame third basemen (all findings: gray-one-host 1; 1 failures in a
+c-ages exit=1 0s | US_CONN_CONTROL=ages fired its own rule 31 time(s): ages x31 for club (all findings: no-fact 319, second-fit 23, watch 32, unjudged 18, member-unknown 1, undecided 64, ag
+c-newrunning exit=1 0s | US_CONN_CONTROL=newrunning fired its own rule 1 time(s): unwatched x1 for probe (all findings: no-fact 319, second-fit 23, watch 32, unjudged 17, member-unknown 1, other-
+c-recolour exit=1 0s | US_CONN_CONTROL=recolour fired its own rule 1 time(s): recolour x1 for nhlconn-005 (all findings: no-fact 319, second-fit 23, watch 32, unjudged 18, member-unknown 1, tra
+c-dangling exit=1 0s | US_CONN_CONTROL=dangling fired its own rule 1 time(s): dangling x1 for nhlconn-005 4 (all findings: no-fact 319, second-fit 23, watch 32, unjudged 18, member-unknown 1, t
