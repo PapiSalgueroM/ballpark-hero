@@ -26,6 +26,10 @@
  * its men and MVP and is untouched; the four hashes of the new order are in
  * ORDERED_1566 below, measured on the base of that round (5d1198389, named
  * rows) with this same order, and the head of the round gives the same.
+ * So since Round 1566 the hash this test compares is ORDERED_1566's, a second
+ * recording kept in this file; the fixture's own hashes (the old order) are
+ * no longer compared, while its men and MVP counts still are. The base's
+ * unsorted hashes equal the fixture's, which is what ties the two together.
  */
 import { describe, it, expect } from 'vitest';
 import { createHash } from 'node:crypto';
