@@ -1,0 +1,18 @@
+
+[1m[46m RUN [49m[22m [36mv3.2.7 [39m[90m/home/runner/work/ballpark-hero/ballpark-hero[39m
+
+[90mstdout[2m | src/test/vfM.test.ts[2m > [22m[2mBS-sc415-1 mechanism at the PR head[2m > [22m[2mextension and renewal read the cut wage, and payout never restores it
+[22m[39mVF signing wage loyal/cash 9000 10000 deal {"id":"[\"World ere\",\"\",\"contract_offer\",2029,\"[\\\"VF Fixture Club\\\",\\\"Fixture Country\\\",\\\"Fixture League\\\",\\\"#123456\\\",3,10000,3,0,false,false,false,false]\",10000]","club":"VF Fixture Club","firstYear":2029,"finalYear":2031,"years":3,"baseWeeklyWage":10000,"weeklyWage":9000,"bonusEuros":234000,"completed":0,"lastYear":2028,"status":"active","paidEuros":0}
+VF after two seasons: contractYearsLeft 1 deal active 2
+VF extension wage loyal/cash 10350 11500 years 2 2 deal after ext active
+VF after season three: deal paid 234000 wage loyal/cash 10350 11500 netWorth gain from payout 0.234
+VF renewal route: deal paid contractYearsLeft 0 renewed wage loyal/cash 9000 10000
+VF second extension loyal/cash 11902 13225 ratio 0.9
+
+ [32m✓[39m src/test/vfM.test.ts [2m([22m[2m2 tests[22m[2m | [22m[33m1 skipped[39m[2m)[22m[32m 35[2mms[22m[39m
+
+[2m Test Files [22m [1m[32m1 passed[39m[22m[90m (1)[39m
+[2m      Tests [22m [1m[32m1 passed[39m[22m[2m | [22m[33m1 skipped[39m[90m (2)[39m
+[2m   Start at [22m 04:33:12
+[2m   Duration [22m 3.93s[2m (transform 1.79s, setup 104ms, collect 2.14s, tests 35ms, environment 484ms, prepare 470ms)[22m
+

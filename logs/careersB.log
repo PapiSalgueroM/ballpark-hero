@@ -1,0 +1,16 @@
+
+[1m[46m RUN [49m[22m [36mv3.2.7 [39m[90m/home/runner/work/ballpark-hero/ballpark-hero[39m
+
+[90mstdout[2m | src/test/vfB.test.ts[2m > [22m[2mBS-sc415-1 whole careers at the PR head[2m > [22m[2mpairs cash, loyal and anchor stayers on the same seeds
+[22m[39mVF ROWS 150
+VF SUMMARY loyal vs cash {"all":{"n":150,"worse":117,"better":32,"meanDiffM":-1.282,"meanPct":-0.39},"everyDealPaid":{"n":142,"worse":112,"better":29,"meanDiffM":-1.496,"meanPct":-0.7},"deals":159,"paid":151,"extWhileActive":133,"meanExtOverCut":1.15,"meanExtOverBase":1.023,"wage30":20963,"wage30cash":22914}
+VF SUMMARY anchor vs cash {"all":{"n":150,"worse":57,"better":90,"meanDiffM":-0.139,"meanPct":1.81},"everyDealPaid":{"n":142,"worse":52,"better":87,"meanDiffM":-0.308,"meanPct":1.61},"deals":159,"paid":151,"extWhileActive":133,"meanExtOverCut":1.2451,"meanExtOverBase":1.1086,"wage30":22979,"wage30cash":22914}
+
+ [32m✓[39m src/test/vfB.test.ts [2m([22m[2m2 tests[22m[2m | [22m[33m1 skipped[39m[2m)[22m[33m 53260[2mms[22m[39m
+   [33m[2m✓[22m[39m BS-sc415-1 whole careers at the PR head[2m > [22mpairs cash, loyal and anchor stayers on the same seeds [33m 53258[2mms[22m[39m
+
+[2m Test Files [22m [1m[32m1 passed[39m[22m[90m (1)[39m
+[2m      Tests [22m [1m[32m1 passed[39m[22m[2m | [22m[33m1 skipped[39m[90m (2)[39m
+[2m   Start at [22m 04:33:12
+[2m   Duration [22m 57.11s[2m (transform 1.77s, setup 114ms, collect 2.10s, tests 53.26s, environment 545ms, prepare 323ms)[22m
+

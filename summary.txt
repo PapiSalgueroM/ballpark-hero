@@ -1,0 +1,3 @@
+mech exit=0 5s |    Duration  3.93s (transform 1.79s, setup 104ms, collect 2.14s, tests 35ms, environment 484ms, prepare 470ms)
+careersB exit=0 58s |    Duration  57.11s (transform 1.77s, setup 114ms, collect 2.10s, tests 53.26s, environment 545ms, prepare 323ms)
+careersA exit=0 59s |    Duration  57.94s (transform 1.80s, setup 138ms, collect 2.15s, tests 54.02s, environment 514ms, prepare 215ms)

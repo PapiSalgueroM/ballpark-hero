@@ -1,0 +1,3 @@
+mech: cp .rc/x/vfLoyaltyAnchor.test.ts src/test/vfM.test.ts && node_modules/.bin/vitest run src/test/vfM.test.ts -t mechanism --testTimeout=300000
+careersA: cp .rc/x/vfLoyaltyAnchor.test.ts src/test/vfA.test.ts && VF_SEED0=0 VF_N=150 node_modules/.bin/vitest run src/test/vfA.test.ts -t "whole careers" --testTimeout=900000
+careersB: cp .rc/x/vfLoyaltyAnchor.test.ts src/test/vfB.test.ts && VF_SEED0=150 VF_N=150 node_modules/.bin/vitest run src/test/vfB.test.ts -t "whole careers" --testTimeout=900000
