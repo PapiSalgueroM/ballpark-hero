@@ -2,7 +2,7 @@ import { supabase } from '@/integrations/supabase/client';
 import { flagFor } from '@/lib/dealPlayers';
 import { clubKey, isSameMan, normalizeName, positionGroup, primaryNationality } from '@/lib/whoAmI';
 import type { PositionGroup } from '@/lib/whoAmI';
-import { applyClubAdditions, type ClubAddition } from '@/lib/clubCareerAdditions';
+import { applyClubAdditions, careerClubs, type CareerClubRules, type ClubAddition } from '@/lib/clubCareerAdditions';
 import clubAdditions from '@/data/bingoClubAdditions.json';
 
 /* Round 668: isSameMan moved out of this file so Who Am I's club history (and,
@@ -51,8 +51,9 @@ export { isSameMan };
  *     Played for 4+ different clubs across history: 136
  *     (Round 1571, re-measured on the 2026-10-29 fixture of the page's own
  *     reads, scripts/data/bingoPoolHistory-2026-10-29.json, 474 pool men,
- *     with the verified club additions bound: One-club man 31, Played for
- *     4+ clubs 150. scripts/simBingoClubCounts.mjs prints both.)
+ *     with the verified club additions and the count rule bound (a "Club A /
+ *     Club B" row is two clubs, reserve sides are none): One-club man 37,
+ *     Played for 4+ clubs 144. scripts/simBingoClubCounts.mjs prints both.)
  *   Existing (unchanged) support: nationalities/clubs/positions/value/age
  *     bands as documented below, World Cup appearance 115, Ballon d'Or 2
  *     (stays dormant, same MIN_TILE_SUPPORT gate as before).
@@ -565,6 +566,9 @@ export async function fetchBingoData(signal?: AbortSignal): Promise<BingoData | 
     // Midfield hole), from the two source record scripts/data/bingoClubAdditions-2026-10.json.
     // Union only, guarded by name, nationality, role and birth year; clubYears is never touched.
     applyClubAdditions(clubHistory, pool, clubAdditions.add as ClubAddition[], { norm: normalizeName, nat: primaryNationality, role: positionGroup, club: clubKey });
+    // Round 1571: count clubs the way the "?" states the rule. A mid season "Club A / Club B" row is
+    // both clubs, two spellings of one club are one, and youth, reserve and B sides are no club at all.
+    for (const [name, set] of clubHistory) clubHistory.set(name, careerClubs(set, clubAdditions.rules as CareerClubRules, clubKey));
 
     return {
       pool,

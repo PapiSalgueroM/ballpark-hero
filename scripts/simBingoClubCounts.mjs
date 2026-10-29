@@ -29,12 +29,18 @@
         this round does not judge (owed by number in the record).
      2. identity, BASE against the tree: the pool, seasonStats and clubYears
         (the honour tiles' input) byte equal; every man's club history is
-        BASE's plus his record additions and nothing else; every criterion's
-        support is equal except the club squares, where every man who moves
-        is in the record (each move printed, before and after).
+        BASE's plus his record additions under the count rule (a "Club A /
+        Club B" row is both clubs, the record's aliases are one club, its
+        reserve sides are none), written again here from the record; every
+        criterion's support is equal except the club squares, where every man
+        who moves is judged in the record (each move printed); and every man
+        whose club square verdict the count rule ALONE would move is judged.
      3. verdicts: Morton counts exactly 4 on the tree, fits 4+ and is not a
-        One-club man; every recorded man's count, 4+ and One-club verdicts on
-        BASE and on the tree are the record's before and after.
+        One-club man; every judged man's count, 4+ and One-club verdicts on
+        BASE and on the tree are the record's before and after; and the clubs
+        the tree counts for him are exactly his sourced senior career (the
+        table's clubs he played for plus his additions), no club short and
+        none over. (--write-verdicts writes before and after; read them.)
      4. completeness, a ratchet: every candidate in exactly one of additions,
         agrees, partial and pending; no name twice; pending may only shrink
         (PENDING_MAX below is lowered by every batch that judges men).
@@ -58,6 +64,12 @@
                                    to the tree's lib: red.
      BINGO_CLUBS_CONTROL=noapply   the apply call line patched out of a copy
                                    of the tree's playerBingo.ts: red.
+     BINGO_CLUBS_CONTROL=noreserve the reserve sides emptied in the derived
+                                   file fed to the tree's lib: red.
+     BINGO_CLUBS_CONTROL=nosplit   the mid season split patched out of a copy
+                                   of clubCareerAdditions.ts: red.
+     (No control for the aliases: no fixture man holds two spellings of one
+     club, so an alias moves nobody; the unit test covers the mapping.)
      BINGO_CLUBS_CONTROL=handedit  one byte of the derived file changed: red.
      FIXTURE_CONTROL=cap           the stub drops the range and the 1,000 row
                                    cap: at least one man's history changes.
@@ -82,7 +94,7 @@ const FIXTURE = 'scripts/data/bingoPoolHistory-2026-10-29.json';
 const FIXTURE_SHA256 = '8c8f8fc276a7dd696e586b97148ea1815712e64c619665750b5d45a9efe353e1';
 const RECORD = 'scripts/data/bingoClubAdditions-2026-10.json';
 const HOLE_YEARS = [2023, 2024, 2025];
-const PENDING_MAX = 68;
+const PENDING_MAX = 64;
 const BANNED_HOSTS = /(^|\.)(wikipedia\.org|wikidata\.org|fandom\.com|thesportsdb\.com|wikiwand\.com)$/;
 const CONTROL = process.env.BINGO_CLUBS_CONTROL || '';
 const FIXTURE_CONTROL = process.env.FIXTURE_CONTROL || '';
@@ -264,10 +276,38 @@ if (CONTROL === 'nomorton') {
   headExtra['@/data/bingoClubAdditions.json'] = JSON.stringify({ ...json, add: kept });
   changed('Tyler Morton removed from the derived file');
 }
+if (CONTROL === 'noreserve') {
+  const json = JSON.parse(read('src/data/bingoClubAdditions.json'));
+  if (!json.rules?.reserves?.length) abort('=noreserve: the derived file lists no reserve sides');
+  headExtra['@/data/bingoClubAdditions.json'] = JSON.stringify({ ...json, rules: { ...json.rules, reserves: [] } });
+  changed('the reserve sides emptied in the derived file');
+}
+if (CONTROL === 'nosplit') {
+  const anchor = "return value.split(' / ')";
+  const module = read('src/lib/clubCareerAdditions.ts');
+  if (!module.includes(anchor)) abort('=nosplit: the split line is not in src/lib/clubCareerAdditions.ts');
+  headExtra['@/lib/clubCareerAdditions'] = module.replace(anchor, 'return [value]');
+  changed('the mid season split patched out of a copy of clubCareerAdditions.ts');
+}
 const head = await loadBingoLib({ root: ROOT, libSource: headSource, label: 'head', tmp, extraSources: headExtra });
 const headData = (await load(head)).data;
 const derivedNow = JSON.parse(read('src/data/bingoClubAdditions.json'));
 const addedBy = new Map(derivedNow.add.map(a => [a.n, a.clubs.map(c => base.clubKey(c))]));
+const judged = new Set([...record.additions, ...record.agrees].map(e => e.name));
+/* The count rule, written again here from the record (not imported from the module under test):
+   split on the spaced slash, drop the record's reserve sides, map its aliases. */
+const reserveKeys = new Set((record.counting?.reserves ?? []).map(r => r.key));
+const aliasOf = new Map((record.counting?.aliases ?? []).map(a => [a.from, a.to]));
+const countRule = keys => {
+  const out = new Set();
+  for (const key of keys) {
+    for (const part of key.split(' / ')) {
+      const k = base.clubKey(part);
+      if (k && !reserveKeys.has(k)) out.add(aliasOf.get(k) ?? k);
+    }
+  }
+  return out;
+};
 if (CONTROL === 'leak') {
   const victim = headData.pool.find(p => !addedBy.has(p.name));
   headData.clubHistory.get(victim.name)?.add('qzx leaked club');
@@ -279,11 +319,12 @@ if (asJson(headData.seasonStats) !== asJson(baseData.seasonStats)) fail('seasonS
 if (asJson(headData.clubYears) !== asJson(baseData.clubYears)) fail('clubYears (the honour tiles\' input) differ from BASE');
 let movedHistories = 0;
 for (const p of baseData.pool) {
-  const want = new Set(baseData.clubHistory.get(p.name) ?? []);
-  for (const k of addedBy.get(p.name) ?? []) want.add(k);
+  const raw = new Set(baseData.clubHistory.get(p.name) ?? []);
+  for (const k of addedBy.get(p.name) ?? []) raw.add(k);
+  const want = [...countRule(raw)].sort();
   const got = [...(headData.clubHistory.get(p.name) ?? [])].sort();
-  if (JSON.stringify(got) !== JSON.stringify([...want].sort())) fail(`${p.name}: club history [${got.join(', ')}] is not BASE's plus his record additions [${[...want].sort().join(', ')}]`);
-  if (got.length !== (baseData.clubHistory.get(p.name)?.size ?? 0)) movedHistories += 1;
+  if (JSON.stringify(got) !== JSON.stringify(want)) fail(`${p.name}: club history [${got.join(', ')}] is not BASE's plus his record additions under the count rule [${want.join(', ')}]`);
+  if (JSON.stringify(got) !== JSON.stringify([...(baseData.clubHistory.get(p.name) ?? [])].sort())) movedHistories += 1;
 }
 const CLUB_SQUARES = id => id === 'one-club-man' || id === 'journeyman-4-clubs' || id.startsWith('club-');
 const baseCriteria = base.buildCriteria(baseData);
@@ -298,12 +339,26 @@ for (const hc of headCriteria) {
   if (!gained.length && !lost.length) continue;
   if (!CLUB_SQUARES(hc.id)) fail(`${hc.id} support moved though it is not a club square (gained ${gained.join(', ')}; lost ${lost.join(', ')})`);
   for (const n of [...gained, ...lost]) {
-    if (!addedBy.has(n)) fail(`${hc.id}: ${n} moved but is not in the record`);
+    if (!judged.has(n)) fail(`${hc.id}: ${n} moved but is not judged in the record (additions or agrees)`);
     verdictMoves.push(`${n} ${gained.includes(n) ? 'now fits' : 'no longer fits'} ${hc.label} (support ${bc.support.length} -> ${hc.support.length})`);
   }
 }
-console.log(`   pool, seasonStats and clubYears equal to BASE; ${movedHistories} club histories grew; ${verdictMoves.length} club square verdicts moved`);
+console.log(`   pool, seasonStats and clubYears equal to BASE; ${movedHistories} club histories changed; ${verdictMoves.length} club square verdicts moved`);
 for (const m of verdictMoves) console.log('     ' + m);
+/* The count rule alone (BASE's rows, no additions): every man whose club square verdict it would
+   move must be judged in the record, so the split, the aliases and the reserve sides never move a
+   verdict nobody checked. */
+const ruledData = { ...baseData, clubHistory: new Map([...baseData.clubHistory].map(([n, s]) => [n, countRule(s)])) };
+const ruledCriteria = base.buildCriteria(ruledData);
+const ruleMovers = new Set();
+for (const rc of ruledCriteria) {
+  if (!CLUB_SQUARES(rc.id)) continue;
+  const bc = baseCriteria.find(c => c.id === rc.id);
+  for (const n of [...rc.support.filter(x => !bc.support.includes(x)), ...bc.support.filter(x => !rc.support.includes(x))]) ruleMovers.add(`${n}|${rc.label}`);
+}
+const ruleMoverNames = new Set([...ruleMovers].map(m => m.split('|')[0]));
+for (const n of ruleMoverNames) if (!judged.has(n)) fail(`the count rule alone moves ${n} (${[...ruleMovers].filter(m => m.startsWith(n + '|')).map(m => m.split('|')[1]).join(', ')}) and he is not judged`);
+console.log(`   the count rule alone (split, aliases, reserve sides) moves ${ruleMoverNames.size} men's club square verdicts: ${[...ruleMovers].map(m => m.replace('|', ': ')).join('; ')}`);
 const support = (criteria, id) => criteria.find(c => c.id === id)?.support.length;
 console.log(`   support on the fixture: One-club man ${support(baseCriteria, 'one-club-man')} -> ${support(headCriteria, 'one-club-man')}, Played for 4+ clubs ${support(baseCriteria, 'journeyman-4-clubs')} -> ${support(headCriteria, 'journeyman-4-clubs')}`);
 
@@ -323,14 +378,28 @@ const verdictOf = (lib, data, name) => {
 const mortonHead = verdictOf(head, headData, 'Tyler Morton');
 console.log(`   tree Tyler Morton: [${[...(headData.clubHistory.get('Tyler Morton') ?? [])].join(', ')}], count ${mortonHead?.count}, 4+ ${mortonHead?.fourPlus}, one club ${mortonHead?.oneClub}`);
 if (!mortonHead || mortonHead.count !== 4 || !mortonHead.fourPlus || mortonHead.oneClub) fail('Tyler Morton must count exactly 4 clubs on the tree, fit Played for 4+ clubs and not be a One-club man');
+const WRITE_VERDICTS = process.argv.includes('--write-verdicts');
+let careerChecked = 0;
 for (const e of [...record.additions, ...record.agrees]) {
-  if (!e.verdict) { fail(`${e.name} has no verdict in the record`); continue; }
   const b = verdictOf(base, baseData, e.name);
   const h = verdictOf(head, headData, e.name);
+  if (WRITE_VERDICTS && !CONTROL) {
+    if (JSON.stringify(e.verdict) !== JSON.stringify({ before: b, after: h })) console.log(`   --write-verdicts: ${e.name} ${JSON.stringify(b)} -> ${JSON.stringify(h)}`);
+    e.verdict = { before: b, after: h };
+  }
+  if (!e.verdict) { fail(`${e.name} has no verdict in the record`); continue; }
   if (JSON.stringify(b) !== JSON.stringify(e.verdict.before)) fail(`${e.name}: BASE gives ${JSON.stringify(b)}, the record's before says ${JSON.stringify(e.verdict.before)}`);
   if (JSON.stringify(h) !== JSON.stringify(e.verdict.after)) fail(`${e.name}: the tree gives ${JSON.stringify(h)}, the record's after says ${JSON.stringify(e.verdict.after)}`);
+  /* The whole senior career the sources give (the table's clubs he played for, plus the additions)
+     is exactly what the tree counts: no club short, none over. */
+  const senior = [...(e.career ?? []), ...(e.clubs ?? [])].map(c => base.clubKey(c.club)).map(k => aliasOf.get(k) ?? k);
+  if (!e.career) { fail(`${e.name} carries no sourced career`); continue; }
+  const got = [...(headData.clubHistory.get(e.name) ?? [])].sort();
+  if (JSON.stringify(got) !== JSON.stringify([...new Set(senior)].sort())) fail(`${e.name}: the tree counts [${got.join(', ')}], his sourced senior career is [${[...new Set(senior)].sort().join(', ')}]`);
+  else careerChecked += 1;
 }
-console.log(`   ${record.additions.length + record.agrees.length} recorded verdicts checked against BASE and the tree`);
+if (WRITE_VERDICTS && !CONTROL) fs.writeFileSync(path.join(ROOT, RECORD), JSON.stringify(record, null, 2) + '\n');
+console.log(`   ${record.additions.length + record.agrees.length} recorded verdicts checked against BASE and the tree; ${careerChecked} whole senior careers equal to what the tree counts`);
 
 /* ---------------------------------------------------------------- 4 */
 section = '4';
@@ -348,13 +417,18 @@ for (const [list, names] of Object.entries(lists)) {
   for (const n of names) {
     if (seen.has(n)) fail(`${n} is in both ${seen.get(n)} and ${list}`);
     seen.set(n, list);
-    if (!candidateSet.has(n) && list !== 'additions') fail(`${n} is in ${list} but is not a candidate`);
   }
 }
 for (const n of candidates) if (!seen.has(n)) fail(`candidate ${n} is in none of additions, agrees, partial and pending`);
-for (const e of record.additions) {
-  if (!candidateSet.has(e.name) && e.name !== 'Tyler Morton') fail(`addition ${e.name} is not a candidate`);
+/* A man who is not a candidate is judged only because the count rule moves one of his club
+   square verdicts (class 'counting'); section 2 requires every such man to be judged. */
+const movers = new Set([...verdictMoves.map(m => m.split(" now fits ")[0].split(" no longer fits ")[0]), ...ruleMoverNames]);
+for (const e of [...record.additions, ...record.agrees]) {
+  if (candidateSet.has(e.name)) continue;
+  if (e.class !== 'counting') fail(`${e.name} is judged but is neither a candidate nor of class counting`);
+  else if (!movers.has(e.name)) fail(`${e.name} is of class counting but no club square verdict of his moves`);
 }
+for (const e of record.partial) if (!candidateSet.has(e.name)) fail(`partial ${e.name} is not a candidate`);
 if (lists.pending.length > PENDING_MAX) fail(`pending holds ${lists.pending.length}, the ratchet allows ${PENDING_MAX} (it may only shrink)`);
 console.log(`   ${candidates.length} candidates: ${lists.additions.length} additions, ${lists.agrees.length} agrees, ${lists.partial.length} partial, ${lists.pending.length} pending (ratchet ${PENDING_MAX})`);
 if (lists.pending.length) console.log(`   pending: ${lists.pending.join(', ')}`);
@@ -366,8 +440,11 @@ const today = new Date().toISOString().slice(0, 10);
 const FIXTURE_DAY = '2026-10-29';
 const sourced = [];
 for (const e of record.additions) for (const c of e.clubs ?? []) sourced.push({ what: `${e.name}: ${c.club}`, sources: c.sources });
-for (const e of record.agrees) sourced.push({ what: `${e.name} (agrees)`, sources: e.sources });
-for (const e of record.additions) for (const c of e.career ?? []) sourced.push({ what: `${e.name}: ${c.club} (career)`, sources: c.sources });
+for (const e of [...record.additions, ...record.agrees]) {
+  if (!(e.career ?? []).length && !(e.clubs ?? []).length) fail(`${e.name}: no sourced club at all`);
+  for (const c of e.career ?? []) sourced.push({ what: `${e.name}: ${c.club} (career)`, sources: c.sources });
+  for (const s of e.identity?.sources ?? []) if (!s.url || !s.quote) fail(`${e.name}: an identity source without url or quote`);
+}
 if (CONTROL === 'onesource') {
   const victim = sourced.find(s => (s.sources ?? []).length >= 2);
   if (victim) {

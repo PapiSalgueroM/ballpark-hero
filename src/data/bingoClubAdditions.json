@@ -1,9 +1,98 @@
 {
   "rules": {
-    "aliases": {},
-    "reserves": []
+    "aliases": {
+      "fc bayern munich": "bayern munich",
+      "juventus": "juventus fc"
+    },
+    "reserves": [
+      "ajax amsterdam u21",
+      "ajax amsterdam uefa u19",
+      "arsenal fc u21",
+      "atalanta u23",
+      "bilbao athletic",
+      "brighton & hove albion u21",
+      "chelsea fc u21",
+      "fc barcelona atletic",
+      "fc bayern munich ii",
+      "fc porto b",
+      "fiorentina primavera",
+      "jong genk",
+      "juventus next gen",
+      "manchester united u21",
+      "real madrid castilla",
+      "recreativo granada",
+      "sassuolo primavera",
+      "sc freiburg ii",
+      "sl benfica b",
+      "tsg 1899 hoffenheim ii",
+      "young reds"
+    ]
   },
   "add": [
+    {
+      "n": "Evanilson",
+      "nat": "Brazil",
+      "by": 1999,
+      "pos": "Centre-Forward",
+      "clubs": [
+        "FC STK 1914 Šamorín"
+      ]
+    },
+    {
+      "n": "Gregor Kobel",
+      "nat": "Switzerland",
+      "by": 1997,
+      "pos": "Goalkeeper",
+      "clubs": [
+        "TSG 1899 Hoffenheim"
+      ]
+    },
+    {
+      "n": "James Garner",
+      "nat": "England",
+      "by": 2001,
+      "pos": "Defensive Midfield",
+      "clubs": [
+        "Watford FC"
+      ]
+    },
+    {
+      "n": "João Cancelo",
+      "nat": "Portugal",
+      "by": 1994,
+      "pos": "Right-Back",
+      "clubs": [
+        "SL Benfica",
+        "Bayern Munich"
+      ]
+    },
+    {
+      "n": "Moisés Caicedo",
+      "nat": "Ecuador",
+      "by": 2001,
+      "pos": "Defensive Midfield",
+      "clubs": [
+        "Beerschot VA"
+      ]
+    },
+    {
+      "n": "Nico Paz",
+      "nat": "Argentina",
+      "by": 2004,
+      "pos": "Attacking Midfield",
+      "clubs": [
+        "Real Madrid"
+      ]
+    },
+    {
+      "n": "Ryan Gravenberch",
+      "nat": "Netherlands",
+      "by": 2002,
+      "pos": "Defensive Midfield",
+      "clubs": [
+        "Bayern Munich"
+      ]
+    },
     {
       "n": "Tyler Morton",
       "nat": "England",

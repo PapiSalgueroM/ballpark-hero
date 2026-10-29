@@ -31,7 +31,8 @@ export async function loadBingoLib({ root, libSource, label, tmp, extraSources =
   ].join('\n'));
   const overrides = new Map();
   for (const [spec, text] of Object.entries(extraSources)) {
-    const file = path.join(tmp, `${label}.${spec.replace(/[^a-zA-Z0-9.]+/g, '_')}`);
+    const stem = `${label}.${spec.replace(/[^a-zA-Z0-9.]+/g, '_')}`;
+    const file = path.join(tmp, path.extname(spec) ? stem : `${stem}.ts`);
     fs.writeFileSync(file, text);
     overrides.set(spec, file);
   }
