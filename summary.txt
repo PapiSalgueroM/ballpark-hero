@@ -1,0 +1,10 @@
+tsc exit=0 46s | 
+nfl-plain exit=0 28s | simNflSeasonStats: 119 checks, 0 failed; section 1 skipped: LIFT_BASE is not set
+nfl-c-kickswap exit=1 28s | simNflSeasonStats: 119 checks, 5 failed (control kickswap); section 1 skipped: LIFT_BASE is not set
+nba-plain exit=0 7s | simNbaSeasonStats: 85 checks passed over 10 seeded franchises and 3 seasons each. Every game adds up, the box takes nothing from the league, the awards follow their rules
+nba-base exit=0 8s | simNbaSeasonStats: 86 checks passed over 10 seeded franchises and 3 seasons each. Every game adds up, the box takes nothing from the league, the awards follow their rules
+nba-c-grouped exit=1 2s | control "grouped": section 9 went red as expected (1 failures) and nothing else moved, the check works. Exiting non zero because the checks did fail.
+nba-c-carried exit=1 2s | control "carried": sections 2 and 9 went red as expected (16 failures) and nothing else moved, the check works. Exiting non zero because the checks did fail.
+m-kickswap-nfl exit=1 29s | MUT kickswap nfl=1 (expect 1)
+m-namedstrict exit=1 8s | MUT namedstrict nba=1 (expect 1)
+simHarnessAnchors exit=0 33s | simHarnessAnchors: green. Every harness parses and none carries an unmatchable anchor.
