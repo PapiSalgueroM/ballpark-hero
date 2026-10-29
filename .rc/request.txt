@@ -1,0 +1,5 @@
+#!serve
+#!playwright
+walk: node .rc/x/walkStart.mjs
+walk-old: git worktree add /tmp/old 2ee79c595 >/dev/null 2>&1; ln -s "$PWD/node_modules" /tmp/old/node_modules; (cd /tmp/old && node_modules/.bin/vite build --outDir /tmp/old-dist > /tmp/vb.log 2>&1); echo "old build exit=$? $(ls /tmp/old-dist 2>/dev/null | wc -l) files"; (node scripts/lib/hostLikeServer.mjs /tmp/old-dist 4175 > /tmp/hs.log 2>&1 &); sleep 3; RC_OUT=$RC_OUT/old BASE=http://localhost:4175 node .rc/x/walkStart.mjs
+tsc: node_modules/.bin/tsc --noEmit -p tsconfig.app.json
