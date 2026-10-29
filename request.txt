@@ -1,0 +1,6 @@
+#!serve
+#!playwright
+#!serial
+# rBTG-mix reviewer, request w, on the gate head 5572def49: What's New and Soccer Connections (fallback, supabase blocked) at 390 and 1280, reduced motion on and off. Extras: walkMix.mjs, boards-head.json.
+walk: node .rc/x/walkMix.mjs
+walk-ctl-noboard: node -e "const f=require('fs');const b=JSON.parse(f.readFileSync('.rc/x/boards-head.json','utf8'));b.forEach(x=>{x.names[0]='Nobody Atall'});f.writeFileSync('/tmp/bad.json',JSON.stringify(b))" && BOARDS_JSON=/tmp/bad.json RC_OUT=/tmp/ctlout node .rc/x/walkMix.mjs

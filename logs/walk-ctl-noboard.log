@@ -1,0 +1,25 @@
+ok   whats-new 390 reduce: newest first (Build Your XI: a Club year draft. / Build Your XI: full backs fit at wing back on their own side. / Soccer Connections: 65 more boards rebuilt. / Front Office season card: easier on a phone, and one way to save it. / NBA My Career: the national team calls.)
+ok   whats-new 390 reduce: no side scroll (0)
+ok   whats-new 390 reduce: no en or em dash in the page text
+ok   connections 390 reduce: no side scroll (0)
+FAIL connections 390 reduce: all sixteen names of exactly one shipped board on screen (none)
+ok   390 reduce: no page error ()
+ok   whats-new 390 no-preference: newest first (Build Your XI: a Club year draft. / Build Your XI: full backs fit at wing back on their own side. / Soccer Connections: 65 more boards rebuilt. / Front Office season card: easier on a phone, and one way to save it. / NBA My Career: the national team calls.)
+ok   whats-new 390 no-preference: no side scroll (0)
+ok   whats-new 390 no-preference: no en or em dash in the page text
+ok   connections 390 no-preference: no side scroll (0)
+FAIL connections 390 no-preference: all sixteen names of exactly one shipped board on screen (none)
+ok   390 no-preference: no page error ()
+ok   whats-new 1280 reduce: newest first (Build Your XI: a Club year draft. / Build Your XI: full backs fit at wing back on their own side. / Soccer Connections: 65 more boards rebuilt. / Front Office season card: easier on a phone, and one way to save it. / NBA My Career: the national team calls.)
+ok   whats-new 1280 reduce: no side scroll (0)
+ok   whats-new 1280 reduce: no en or em dash in the page text
+ok   connections 1280 reduce: no side scroll (0)
+FAIL connections 1280 reduce: all sixteen names of exactly one shipped board on screen (none)
+ok   1280 reduce: no page error ()
+ok   whats-new 1280 no-preference: newest first (Build Your XI: a Club year draft. / Build Your XI: full backs fit at wing back on their own side. / Soccer Connections: 65 more boards rebuilt. / Front Office season card: easier on a phone, and one way to save it. / NBA My Career: the national team calls.)
+ok   whats-new 1280 no-preference: no side scroll (0)
+ok   whats-new 1280 no-preference: no en or em dash in the page text
+ok   connections 1280 no-preference: no side scroll (0)
+FAIL connections 1280 no-preference: all sixteen names of exactly one shipped board on screen (none)
+ok   1280 no-preference: no page error ()
+walkMix: 4 failures of 24 checks
