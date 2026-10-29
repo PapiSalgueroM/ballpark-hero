@@ -1,0 +1,208 @@
+
+[1m[46m RUN [49m[22m [36mv3.2.7 [39m[90m/home/runner/work/ballpark-hero/ballpark-hero[39m
+
+Browserslist: browsers data (caniuse-lite) is 16 months old. Please run:
+  npx update-browserslist-db@latest
+  Why you should do it regularly: https://github.com/browserslist/update-db#readme
+[90mstdout[2m | src/test/noDoubleRecord.test.tsx[2m > [22m[2mno double record[2m > [22m[2mdiscovers the table
+[22m[39mNO_DOUBLE_CASE {"title":"fight-career","id":"fight-career","shape":"fight","usesMark":true,"toggle":false,"coach":false}
+NO_DOUBLE_CASE {"title":"fight-gym","id":"fight-gym","shape":"fight","usesMark":true,"toggle":false,"coach":false}
+NO_DOUBLE_CASE {"title":"fight-promoter","id":"fight-promoter","shape":"fight","usesMark":true,"toggle":false,"coach":false}
+NO_DOUBLE_CASE {"title":"nfl-my-career","id":"nfl-my-career","shape":"career","usesMark":true,"toggle":false,"coach":true}
+NO_DOUBLE_CASE {"title":"nba-my-career","id":"nba-my-career","shape":"career","usesMark":true,"toggle":false,"coach":true}
+NO_DOUBLE_CASE {"title":"mlb-my-career","id":"mlb-my-career","shape":"career","usesMark":true,"toggle":false,"coach":true}
+NO_DOUBLE_CASE {"title":"nhl-my-career","id":"nhl-my-career","shape":"career","usesMark":true,"toggle":false,"coach":true}
+NO_DOUBLE_CASE {"title":"nfl-higher-lower","id":"nfl-higher-lower","shape":"slug","usesMark":true,"toggle":true,"coach":false}
+NO_DOUBLE_CASE {"title":"nba-higher-lower","id":"nba-higher-lower","shape":"slug","usesMark":true,"toggle":true,"coach":false}
+NO_DOUBLE_CASE {"title":"mlb-higher-lower","id":"mlb-higher-lower","shape":"slug","usesMark":true,"toggle":true,"coach":false}
+NO_DOUBLE_CASE {"title":"hockey-higher-lower","id":"hockey-higher-lower","shape":"slug","usesMark":true,"toggle":true,"coach":false}
+NO_DOUBLE_CASE {"title":"cfb-higher-lower","id":"cfb-higher-lower","shape":"slug","usesMark":true,"toggle":true,"coach":false}
+NO_DOUBLE_CASE {"title":"f1-higher-lower","id":"f1-higher-lower","shape":"slug","usesMark":true,"toggle":true,"coach":false}
+NO_DOUBLE_CASE {"title":"tennis-higher-lower","id":"tennis-higher-lower","shape":"slug","usesMark":true,"toggle":true,"coach":false}
+NO_DOUBLE_CASE {"title":"golf-higher-lower","id":"golf-higher-lower","shape":"slug","usesMark":true,"toggle":true,"coach":false}
+NO_DOUBLE_CASE {"title":"afl-higher-lower","id":"afl-higher-lower","shape":"slug","usesMark":true,"toggle":true,"coach":false}
+NO_DOUBLE_CASE {"title":"ufc","id":"ufc","shape":"slug","usesMark":true,"toggle":true,"coach":false}
+NO_DOUBLE_CASE {"title":"football-connect-4","id":"football-connect-4","shape":"slug","usesMark":true,"toggle":true,"coach":false}
+NO_DOUBLE_CASE {"title":"career","id":"career","shape":"slug","usesMark":true,"toggle":true,"coach":false}
+NO_DOUBLE_CASE {"title":"nba-grid","id":"nba-grid","shape":"toggle","usesMark":false,"toggle":true,"coach":false}
+NO_DOUBLE_CASE {"title":"mlb-grid","id":"mlb-grid","shape":"toggle","usesMark":false,"toggle":true,"coach":false}
+NO_DOUBLE_CASE {"title":"hockey-grid","id":"hockey-grid","shape":"toggle","usesMark":false,"toggle":true,"coach":false}
+NO_DOUBLE_CASE {"title":"cbb-grid","id":"cbb-grid","shape":"toggle","usesMark":false,"toggle":true,"coach":false}
+NO_DOUBLE_CASE {"title":"missing-five","id":"missing-five","shape":"toggle","usesMark":true,"toggle":true,"coach":false}
+NO_DOUBLE_CASE {"title":"missing-nine","id":"missing-nine","shape":"toggle","usesMark":true,"toggle":true,"coach":false}
+NO_DOUBLE_CASE {"title":"missing-eleven","id":"missing-eleven","shape":"toggle","usesMark":true,"toggle":true,"coach":false}
+NO_DOUBLE_CASE {"title":"rank-em","id":"rank-em","shape":"toggle","usesMark":true,"toggle":true,"coach":false}
+NO_DOUBLE_CASE {"title":"puck-detective (give up)","id":"puck-detective","shape":"toggle","usesMark":false,"toggle":true,"coach":false}
+NO_DOUBLE_CASE {"title":"puck-detective (solve)","id":"puck-detective","shape":"toggle","usesMark":true,"toggle":true,"coach":false}
+NO_DOUBLE_CASE {"title":"guess-the-golfer","id":"guess-the-golfer","shape":"toggle","usesMark":true,"toggle":true,"coach":false}
+NO_DOUBLE_CASE {"title":"champ-or-not","id":"champ-or-not","shape":"restore","usesMark":true,"toggle":true,"coach":false}
+NO_DOUBLE_CASE {"title":"whod-they-beat","id":"whod-they-beat","shape":"restore","usesMark":true,"toggle":true,"coach":false}
+NO_DOUBLE_CASE {"title":"silverware-sort","id":"silverware-sort","shape":"restore","usesMark":true,"toggle":true,"coach":false}
+NO_DOUBLE_CASE {"title":"jeopardy","id":"jeopardy","shape":"restore","usesMark":true,"toggle":false,"coach":false}
+NO_DOUBLE_CASE {"title":"ball-iq","id":"ball-iq","shape":"restore","usesMark":true,"toggle":false,"coach":false}
+NO_DOUBLE_CASE {"title":"mystery-box","id":"mystery-box","shape":"restore","usesMark":true,"toggle":false,"coach":false}
+NO_DOUBLE_CASE {"title":"nfl-career","id":"nfl-career","shape":"restore","usesMark":false,"toggle":true,"coach":false}
+NO_DOUBLE_CASE {"title":"career-ladder","id":"career-ladder","shape":"extra","usesMark":true,"toggle":true,"coach":false}
+NO_DOUBLE_CASE {"title":"transfer-path","id":"transfer-path","shape":"extra","usesMark":true,"toggle":false,"coach":false}
+NO_DOUBLE_CASE {"title":"grade-transfer","id":"grade-transfer","shape":"extra","usesMark":true,"toggle":false,"coach":false}
+NO_DOUBLE_CASE {"title":"player-stock-market","id":"player-stock-market","shape":"extra","usesMark":true,"toggle":false,"coach":false}
+NO_DOUBLE_CASE {"title":"nfl-higher-lower: a round decided is saved before its reveal ends","id":"nfl-higher-lower","shape":"check","usesMark":false,"toggle":false,"coach":false}
+NO_DOUBLE_CASE {"title":"nba-higher-lower: a round decided is saved before its reveal ends","id":"nba-higher-lower","shape":"check","usesMark":false,"toggle":false,"coach":false}
+NO_DOUBLE_CASE {"title":"mlb-higher-lower: a round decided is saved before its reveal ends","id":"mlb-higher-lower","shape":"check","usesMark":false,"toggle":false,"coach":false}
+NO_DOUBLE_CASE {"title":"hockey-higher-lower: a round decided is saved before its reveal ends","id":"hockey-higher-lower","shape":"check","usesMark":false,"toggle":false,"coach":false}
+NO_DOUBLE_CASE {"title":"cfb-higher-lower: a round decided is saved before its reveal ends","id":"cfb-higher-lower","shape":"check","usesMark":false,"toggle":false,"coach":false}
+NO_DOUBLE_CASE {"title":"f1-higher-lower: a round decided is saved before its reveal ends","id":"f1-higher-lower","shape":"check","usesMark":false,"toggle":false,"coach":false}
+NO_DOUBLE_CASE {"title":"tennis-higher-lower: a round decided is saved before its reveal ends","id":"tennis-higher-lower","shape":"check","usesMark":false,"toggle":false,"coach":false}
+NO_DOUBLE_CASE {"title":"golf-higher-lower: a round decided is saved before its reveal ends","id":"golf-higher-lower","shape":"check","usesMark":false,"toggle":false,"coach":false}
+NO_DOUBLE_CASE {"title":"afl-higher-lower: a round decided is saved before its reveal ends","id":"afl-higher-lower","shape":"check","usesMark":false,"toggle":false,"coach":false}
+NO_DOUBLE_CASE {"title":"champ-or-not: a reload inside the final reveal","id":"champ-or-not","shape":"check","usesMark":true,"toggle":false,"coach":false}
+NO_DOUBLE_CASE {"title":"whod-they-beat: a reload inside the final reveal","id":"whod-they-beat","shape":"check","usesMark":true,"toggle":false,"coach":false}
+NO_DOUBLE_CASE {"title":"silverware-sort: a reload inside the final reveal","id":"silverware-sort","shape":"check","usesMark":true,"toggle":false,"coach":false}
+NO_DOUBLE_CASE {"title":"champ-or-not: Unlimited and back inside the final reveal","id":"champ-or-not","shape":"check","usesMark":false,"toggle":false,"coach":false}
+NO_DOUBLE_CASE {"title":"whod-they-beat: Unlimited and back inside the final reveal","id":"whod-they-beat","shape":"check","usesMark":false,"toggle":false,"coach":false}
+NO_DOUBLE_CASE {"title":"silverware-sort: Unlimited and back inside the final reveal","id":"silverware-sort","shape":"check","usesMark":false,"toggle":false,"coach":false}
+NO_DOUBLE_CASE {"title":"champ-or-not: a final pick after midnight ET","id":"champ-or-not","shape":"check","usesMark":false,"toggle":false,"coach":false}
+NO_DOUBLE_CASE {"title":"whod-they-beat: a final pick after midnight ET","id":"whod-they-beat","shape":"check","usesMark":false,"toggle":false,"coach":false}
+NO_DOUBLE_CASE {"title":"silverware-sort: a final pick after midnight ET","id":"silverware-sort","shape":"check","usesMark":false,"toggle":false,"coach":false}
+NO_DOUBLE_CASE {"title":"champ-or-not: the board renders after midnight ET before the final pick","id":"champ-or-not","shape":"check","usesMark":false,"toggle":false,"coach":false}
+NO_DOUBLE_CASE {"title":"whod-they-beat: the board renders after midnight ET before the final pick","id":"whod-they-beat","shape":"check","usesMark":false,"toggle":false,"coach":false}
+NO_DOUBLE_CASE {"title":"silverware-sort: the board renders after midnight ET before the final pick","id":"silverware-sort","shape":"check","usesMark":false,"toggle":false,"coach":false}
+NO_DOUBLE_CASE {"title":"football-grid: a playing save past the limit, read with Unlimited off","id":"football-grid","shape":"check","usesMark":false,"toggle":false,"coach":false}
+NO_DOUBLE_CASE {"title":"nfl-career: a daily dealt before midnight and solved after it","id":"nfl-career","shape":"check","usesMark":false,"toggle":false,"coach":false}
+NO_DOUBLE_CASE {"title":"nfl-career: a first clue solve records its clue score","id":"nfl-career","shape":"check","usesMark":false,"toggle":false,"coach":false}
+NO_DOUBLE_CASE {"title":"nfl-career: the next day in the same tab records once more","id":"nfl-career","shape":"check","usesMark":false,"toggle":false,"coach":false}
+NO_DOUBLE_CASE {"title":"world-cup-bracket: one record per crowned name","id":"world-cup-bracket","shape":"check","usesMark":false,"toggle":false,"coach":false}
+NO_DOUBLE_TABLE {"rows":41,"fight":3,"career":4,"slug":12,"toggle":11,"restore":7,"extra":4,"checks":26}
+
+ [32m✓[39m src/test/careerSeasonReview.test.tsx [2m([22m[2m19 tests[22m[2m)[22m[33m 12080[2mms[22m[39m
+   [33m[2m✓[22m[39m saved career season review[2m > [22mkeeps zero highs while excluding missing nonfinite and suspended seasons [33m 517[2mms[22m[39m
+   [33m[2m✓[22m[39m saved career season review[2m > [22mopens the original tied high season and restores each navigation focus [33m 778[2mms[22m[39m
+   [33m[2m✓[22m[39m saved career season review[2m > [22mcompares distinct original season indices and returns focus to Compare seasons [33m 325[2mms[22m[39m
+   [33m[2m✓[22m[39m saved career season review[2m > [22mcompares every saved position field in its existing units without postseason prose [33m 1306[2mms[22m[39m
+   [33m[2m✓[22m[39m saved career season review[2m > [22mopens each live Career Log and returns without saves draws or completion calls [33m 5085[2mms[22m[39m
+   [33m[2m✓[22m[39m saved career season review[2m > [22mopens Career Log during a pending choice and restores that exact choice [33m 741[2mms[22m[39m
+   [33m[2m✓[22m[39m saved career season review[2m > [22mreviews retired careers and restores the retirement opener without paying again [33m 1159[2mms[22m[39m
+   [33m[2m✓[22m[39m saved career season review[2m > [22mrestores existing retirement legacy and exact save bytes without another completion [33m 318[2mms[22m[39m
+ [32m✓[39m src/test/usCareerReports1346.test.tsx [2m([22m[2m44 tests[22m[2m)[22m[33m 13976[2mms[22m[39m
+   [33m[2m✓[22m[39m Round 1346: retire from coaching on the real board[2m > [22mnfl: Keep coaching and Escape save nothing, Retire saves only done, and a reload stays retired [33m 2202[2mms[22m[39m
+   [33m[2m✓[22m[39m Round 1346: retire from coaching on the real board[2m > [22mnba: Keep coaching and Escape save nothing, Retire saves only done, and a reload stays retired [33m 1108[2mms[22m[39m
+   [33m[2m✓[22m[39m Round 1346: retire from coaching on the real board[2m > [22mmlb: Keep coaching and Escape save nothing, Retire saves only done, and a reload stays retired [33m 892[2mms[22m[39m
+   [33m[2m✓[22m[39m Round 1346: retire from coaching on the real board[2m > [22mnhl: Keep coaching and Escape save nothing, Retire saves only done, and a reload stays retired [33m 1264[2mms[22m[39m
+   [33m[2m✓[22m[39m Round 1346: retire from coaching on the real board[2m > [22mnfl: a second click right after the retirement opens nothing on the done hub [33m 656[2mms[22m[39m
+   [33m[2m✓[22m[39m Round 1346: retire from coaching on the real board[2m > [22mnba: a second click right after the retirement opens nothing on the done hub [33m 481[2mms[22m[39m
+   [33m[2m✓[22m[39m Round 1346: retire from coaching on the real board[2m > [22mmlb: a second click right after the retirement opens nothing on the done hub [33m 443[2mms[22m[39m
+   [33m[2m✓[22m[39m Round 1346: retire from coaching on the real board[2m > [22mnhl: a second click right after the retirement opens nothing on the done hub [33m 408[2mms[22m[39m
+   [33m[2m✓[22m[39m Round 1346: the showcase Skip can be undone until Draft day[2m > [22mnfl: Undo skip puts the save back to the byte, survives a reload, and is gone after Draft day [33m 305[2mms[22m[39m
+   [33m[2m✓[22m[39m Round 1346: the showcase Skip can be undone until Draft day[2m > [22mnba: Undo skip puts the save back to the byte, survives a reload, and is gone after Draft day [33m 313[2mms[22m[39m
+   [33m[2m✓[22m[39m Round 1346: the showcase Skip can be undone until Draft day[2m > [22mnhl: Undo skip puts the save back to the byte, survives a reload, and is gone after Draft day [33m 366[2mms[22m[39m
+   [33m[2m✓[22m[39m Round 1346: the showcase Skip can be undone until Draft day[2m > [22mnba: a second tap right after Undo skip is never taken as a graded showcase [33m 305[2mms[22m[39m
+ [32m✓[39m src/test/usCareerStatLines.test.tsx [2m([22m[2m117 tests[22m[2m)[22m[33m 3487[2mms[22m[39m
+ [32m✓[39m src/test/careerDecisionOutcome.test.tsx [2m([22m[2m11 tests[22m[2m)[22m[33m 6471[2mms[22m[39m
+   [33m[2m✓[22m[39m ordinary career decision outcomes[2m > [22mapplies the real third-season NBA trade once before its quality draw and keeps the full save on return [33m 1141[2mms[22m[39m
+   [33m[2m✓[22m[39m ordinary career decision outcomes[2m > [22mshows each real sport choice as the actual capped change and saves it once [33m 693[2mms[22m[39m
+   [33m[2m✓[22m[39m ordinary career decision outcomes[2m > [22mreports negative effects and real endorsement earnings with the Cash a banked fee adds [33m 1063[2mms[22m[39m
+   [33m[2m✓[22m[39m ordinary career decision outcomes[2m > [22mconsumes same-frame choices once and accepts the next ordinary event [33m 396[2mms[22m[39m
+   [33m[2m✓[22m[39m ordinary career decision outcomes[2m > [22mcontinues with no extra draws writes season or completion and restores Play focus [33m 1289[2mms[22m[39m
+   [33m[2m✓[22m[39m ordinary career decision outcomes[2m > [22mreloads the applied career without replaying its transient receipt or choice [33m 1079[2mms[22m[39m
+   [33m[2m✓[22m[39m ordinary career decision outcomes[2m > [22mpreserves real ordinary engine choices and the existing rivalry receipt independently [33m 573[2mms[22m[39m
+[90mstderr[2m | src/test/noDoubleRecord.test.tsx[2m > [22m[2mno double record[2m > [22m[2mpuck-detective (give up)
+[22m[39mWarning: Missing `Description` or `aria-describedby={undefined}` for {DialogContent}.
+
+[90mstderr[2m | src/test/noDoubleRecord.test.tsx[2m > [22m[2mno double record[2m > [22m[2mpuck-detective (solve)
+[22m[39mWarning: Missing `Description` or `aria-describedby={undefined}` for {DialogContent}.
+
+[90mstderr[2m | src/test/noDoubleRecord.test.tsx[2m > [22m[2mno double record[2m > [22m[2mguess-the-golfer
+[22m[39mWarning: Missing `Description` or `aria-describedby={undefined}` for {DialogContent}.
+
+ [32m✓[39m src/test/usCareerSummer.test.tsx [2m([22m[2m40 tests[22m[2m)[22m[33m 2845[2mms[22m[39m
+[90mstderr[2m | src/test/noDoubleRecord.test.tsx[2m > [22m[2mno double record[2m > [22m[2mcareer-ladder
+[22m[39mWarning: Missing `Description` or `aria-describedby={undefined}` for {DialogContent}.
+
+ [32m✓[39m src/test/usCareerDraftNightBoard.test.tsx [2m([22m[2m16 tests[22m[2m)[22m[33m 2402[2mms[22m[39m
+   [33m[2m✓[22m[39m draft night on the actual boards[2m > [22m'NFL' the night plays, holds its ending, lands, and starts the career it showed [33m 493[2mms[22m[39m
+   [33m[2m✓[22m[39m draft night on the actual boards[2m > [22m'MLB' the night plays, holds its ending, lands, and starts the career it showed [33m 327[2mms[22m[39m
+ [32m✓[39m src/test/noDoubleRecord.test.tsx [2m([22m[2m69 tests[22m[2m)[22m[33m 27154[2mms[22m[39m
+   [33m[2m✓[22m[39m no double record[2m > [22mfight-career [33m 1034[2mms[22m[39m
+   [33m[2m✓[22m[39m no double record[2m > [22mfight-gym [33m 463[2mms[22m[39m
+   [33m[2m✓[22m[39m no double record[2m > [22mfight-promoter [33m 481[2mms[22m[39m
+   [33m[2m✓[22m[39m no double record[2m > [22mnfl-my-career [33m 1201[2mms[22m[39m
+   [33m[2m✓[22m[39m no double record[2m > [22mnba-my-career [33m 963[2mms[22m[39m
+   [33m[2m✓[22m[39m no double record[2m > [22mmlb-my-career [33m 814[2mms[22m[39m
+   [33m[2m✓[22m[39m no double record[2m > [22mnhl-my-career [33m 813[2mms[22m[39m
+   [33m[2m✓[22m[39m no double record[2m > [22mmlb-higher-lower [33m 316[2mms[22m[39m
+   [33m[2m✓[22m[39m no double record[2m > [22mcfb-higher-lower [33m 301[2mms[22m[39m
+   [33m[2m✓[22m[39m no double record[2m > [22mufc [33m 442[2mms[22m[39m
+   [33m[2m✓[22m[39m no double record[2m > [22mfootball-connect-4 [33m 454[2mms[22m[39m
+   [33m[2m✓[22m[39m no double record[2m > [22mcareer [33m 588[2mms[22m[39m
+   [33m[2m✓[22m[39m no double record[2m > [22mnba-grid [33m 1282[2mms[22m[39m
+   [33m[2m✓[22m[39m no double record[2m > [22mmlb-grid [33m 1032[2mms[22m[39m
+   [33m[2m✓[22m[39m no double record[2m > [22mhockey-grid [33m 1020[2mms[22m[39m
+   [33m[2m✓[22m[39m no double record[2m > [22mcbb-grid [33m 867[2mms[22m[39m
+   [33m[2m✓[22m[39m no double record[2m > [22mmissing-five [33m 742[2mms[22m[39m
+   [33m[2m✓[22m[39m no double record[2m > [22mmissing-nine [33m 663[2mms[22m[39m
+   [33m[2m✓[22m[39m no double record[2m > [22mmissing-eleven [33m 743[2mms[22m[39m
+   [33m[2m✓[22m[39m no double record[2m > [22mrank-em [33m 868[2mms[22m[39m
+   [33m[2m✓[22m[39m no double record[2m > [22mpuck-detective (give up) [33m 774[2mms[22m[39m
+   [33m[2m✓[22m[39m no double record[2m > [22mpuck-detective (solve) [33m 908[2mms[22m[39m
+   [33m[2m✓[22m[39m no double record[2m > [22mguess-the-golfer [33m 878[2mms[22m[39m
+   [33m[2m✓[22m[39m no double record[2m > [22mchamp-or-not [33m 594[2mms[22m[39m
+   [33m[2m✓[22m[39m no double record[2m > [22mwhod-they-beat [33m 591[2mms[22m[39m
+   [33m[2m✓[22m[39m no double record[2m > [22msilverware-sort [33m 610[2mms[22m[39m
+   [33m[2m✓[22m[39m no double record[2m > [22mjeopardy [33m 350[2mms[22m[39m
+   [33m[2m✓[22m[39m no double record[2m > [22mball-iq [33m 347[2mms[22m[39m
+   [33m[2m✓[22m[39m no double record[2m > [22mmystery-box [33m 344[2mms[22m[39m
+   [33m[2m✓[22m[39m no double record[2m > [22mnfl-career [33m 463[2mms[22m[39m
+   [33m[2m✓[22m[39m no double record[2m > [22mcareer-ladder [33m 1228[2mms[22m[39m
+   [33m[2m✓[22m[39m no double record[2m > [22mtransfer-path [33m 493[2mms[22m[39m
+   [33m[2m✓[22m[39m no double record[2m > [22mgrade-transfer [33m 336[2mms[22m[39m
+   [33m[2m✓[22m[39m no double record[2m > [22mplayer-stock-market [33m 759[2mms[22m[39m
+ [32m✓[39m src/test/careerHallV1Replay.test.ts [2m([22m[2m13 tests[22m[2m)[22m[33m 5870[2mms[22m[39m
+   [33m[2m✓[22m[39m Round 1051: the recorded saves through the real board[2m > [22mnfl: the board shows each save the verdict, the legacy and the ballot it was told, and writes nothing [33m 1882[2mms[22m[39m
+   [33m[2m✓[22m[39m Round 1051: the recorded saves through the real board[2m > [22mnba: the board shows each save the verdict, the legacy and the ballot it was told, and writes nothing [33m 1187[2mms[22m[39m
+   [33m[2m✓[22m[39m Round 1051: the recorded saves through the real board[2m > [22mmlb: the board shows each save the verdict, the legacy and the ballot it was told, and writes nothing [33m 1525[2mms[22m[39m
+   [33m[2m✓[22m[39m Round 1051: the recorded saves through the real board[2m > [22mnhl: the board shows each save the verdict, the legacy and the ballot it was told, and writes nothing [33m 1043[2mms[22m[39m
+ [32m✓[39m src/test/usCareerDirtyMoney.test.tsx [2m([22m[2m16 tests[22m[2m)[22m[33m 4247[2mms[22m[39m
+   [33m[2m✓[22m[39m Round 1500: deal with dirty money on the real board[2m > [22mnfl: every washer owned, the desk previews, holds a second tap, and Come clean saves exactly the rule [33m 1429[2mms[22m[39m
+   [33m[2m✓[22m[39m Round 1500: deal with dirty money on the real board[2m > [22mnba: every washer owned, the desk previews, holds a second tap, and Come clean saves exactly the rule [33m 920[2mms[22m[39m
+   [33m[2m✓[22m[39m Round 1500: deal with dirty money on the real board[2m > [22mmlb: every washer owned, the desk previews, holds a second tap, and Come clean saves exactly the rule [33m 564[2mms[22m[39m
+   [33m[2m✓[22m[39m Round 1500: deal with dirty money on the real board[2m > [22mnhl: every washer owned, the desk previews, holds a second tap, and Come clean saves exactly the rule [33m 602[2mms[22m[39m
+ [32m✓[39m src/test/rivalryChoiceBoard.test.tsx [2m([22m[2m8 tests[22m[2m)[22m[33m 696[2mms[22m[39m
+ [32m✓[39m src/test/usCareerPractice.test.tsx [2m([22m[2m32 tests[22m[2m)[22m[33m 28869[2mms[22m[39m
+   [33m[2m✓[22m[39m US career practice on the actual boards[2m > [22m'NFL' quiet legacy restore preserves the existing career unchanged [33m 619[2mms[22m[39m
+   [33m[2m✓[22m[39m US career practice on the actual boards[2m > [22m'NBA' quiet legacy restore preserves the existing career unchanged [33m 336[2mms[22m[39m
+   [33m[2m✓[22m[39m US career practice on the actual boards[2m > [22m'MLB' quiet legacy restore preserves the existing career unchanged [33m 344[2mms[22m[39m
+   [33m[2m✓[22m[39m US career practice on the actual boards[2m > [22m'NHL' quiet legacy restore preserves the existing career unchanged [33m 394[2mms[22m[39m
+   [33m[2m✓[22m[39m US career practice on the actual boards[2m > [22m'NFL' banks played skill into the real save once and survives reload [33m 1227[2mms[22m[39m
+   [33m[2m✓[22m[39m US career practice on the actual boards[2m > [22m'NBA' banks played skill into the real save once and survives reload [33m 877[2mms[22m[39m
+   [33m[2m✓[22m[39m US career practice on the actual boards[2m > [22m'MLB' banks played skill into the real save once and survives reload [33m 822[2mms[22m[39m
+   [33m[2m✓[22m[39m US career practice on the actual boards[2m > [22m'NHL' banks played skill into the real save once and survives reload [33m 833[2mms[22m[39m
+   [33m[2m✓[22m[39m US career practice on the actual boards[2m > [22m'NFL' zero and solid scores bank only the rating earned [33m 1486[2mms[22m[39m
+   [33m[2m✓[22m[39m US career practice on the actual boards[2m > [22m'NBA' zero and solid scores bank only the rating earned [33m 1563[2mms[22m[39m
+   [33m[2m✓[22m[39m US career practice on the actual boards[2m > [22m'MLB' zero and solid scores bank only the rating earned [33m 1119[2mms[22m[39m
+   [33m[2m✓[22m[39m US career practice on the actual boards[2m > [22m'NHL' zero and solid scores bank only the rating earned [33m 1617[2mms[22m[39m
+   [33m[2m✓[22m[39m US career practice on the actual boards[2m > [22m'NFL' ceiling pays only the available headroom [33m 837[2mms[22m[39m
+   [33m[2m✓[22m[39m US career practice on the actual boards[2m > [22m'NBA' ceiling pays only the available headroom [33m 910[2mms[22m[39m
+   [33m[2m✓[22m[39m US career practice on the actual boards[2m > [22m'MLB' ceiling pays only the available headroom [33m 665[2mms[22m[39m
+   [33m[2m✓[22m[39m US career practice on the actual boards[2m > [22m'NHL' ceiling pays only the available headroom [33m 700[2mms[22m[39m
+   [33m[2m✓[22m[39m US career practice on the actual boards[2m > [22m'NFL' old above-ceiling rating is never reduced [33m 818[2mms[22m[39m
+   [33m[2m✓[22m[39m US career practice on the actual boards[2m > [22m'NBA' old above-ceiling rating is never reduced [33m 765[2mms[22m[39m
+   [33m[2m✓[22m[39m US career practice on the actual boards[2m > [22m'MLB' old above-ceiling rating is never reduced [33m 737[2mms[22m[39m
+   [33m[2m✓[22m[39m US career practice on the actual boards[2m > [22m'NHL' old above-ceiling rating is never reduced [33m 676[2mms[22m[39m
+   [33m[2m✓[22m[39m US career practice on the actual boards[2m > [22m'NFL' abort leaves no save changes and rules reopen during play [33m 1205[2mms[22m[39m
+   [33m[2m✓[22m[39m US career practice on the actual boards[2m > [22m'NBA' abort leaves no save changes and rules reopen during play [33m 962[2mms[22m[39m
+   [33m[2m✓[22m[39m US career practice on the actual boards[2m > [22m'MLB' abort leaves no save changes and rules reopen during play [33m 796[2mms[22m[39m
+   [33m[2m✓[22m[39m US career practice on the actual boards[2m > [22m'NHL' abort leaves no save changes and rules reopen during play [33m 1184[2mms[22m[39m
+   [33m[2m✓[22m[39m US career practice on the actual boards[2m > [22m'NFL' earned rating reaches the next real season and practice renews afterwards [33m 1063[2mms[22m[39m
+   [33m[2m✓[22m[39m US career practice on the actual boards[2m > [22m'NBA' earned rating reaches the next real season and practice renews afterwards [33m 1284[2mms[22m[39m
+   [33m[2m✓[22m[39m US career practice on the actual boards[2m > [22m'MLB' earned rating reaches the next real season and practice renews afterwards [33m 1402[2mms[22m[39m
+   [33m[2m✓[22m[39m US career practice on the actual boards[2m > [22m'NHL' earned rating reaches the next real season and practice renews afterwards [33m 2200[2mms[22m[39m
+   [33m[2m✓[22m[39m US career practice on the actual boards[2m > [22m'NFL' keeps pending rivalry ahead of practice and resets a finished career cleanly [33m 366[2mms[22m[39m
+   [33m[2m✓[22m[39m US career practice on the actual boards[2m > [22m'NBA' keeps pending rivalry ahead of practice and resets a finished career cleanly [33m 315[2mms[22m[39m
+   [33m[2m✓[22m[39m US career practice on the actual boards[2m > [22m'MLB' keeps pending rivalry ahead of practice and resets a finished career cleanly [33m 312[2mms[22m[39m
+   [33m[2m✓[22m[39m US career practice on the actual boards[2m > [22m'NHL' keeps pending rivalry ahead of practice and resets a finished career cleanly [33m 321[2mms[22m[39m
+
+[2m Test Files [22m [1m[32m11 passed[39m[22m[90m (11)[39m
+[2m      Tests [22m [1m[32m385 passed[39m[22m[90m (385)[39m
+[2m   Start at [22m 05:51:43
+[2m   Duration [22m 61.43s[2m (transform 12.84s, setup 1.16s, collect 37.12s, tests 108.10s, environment 7.47s, prepare 2.12s)[22m
+

@@ -1,0 +1,19 @@
+nfl: {"playoffs":1126,"lost":1044,"strongLost":547,"credit":547,"crit":51,"lastCalls":2,"lastSound":2,"noOffer":257,"windows":603}
+nba: {"playoffs":1436,"lost":1306,"strongLost":847,"credit":847,"crit":37,"lastCalls":0,"lastSound":0,"noOffer":196,"windows":522}
+mlb: {"playoffs":1094,"lost":1004,"strongLost":392,"credit":392,"crit":58,"lastCalls":0,"lastSound":0,"noOffer":259,"windows":587}
+nhl: {"playoffs":1625,"lost":1478,"strongLost":925,"credit":925,"crit":49,"lastCalls":1,"lastSound":1,"noOffer":279,"windows":664}
+Before and after, fixed seeded postseasons (the same games; before is the old rule's line):
+  nfl RB career 1 | Lost in the Wild Card round | level 63.4, clutch -11.2 | before: You were not the same player in January and everyone saw it. | after: 🎞️ A tough January. Your numbers came in well under your usual level.
+  nfl CB career 5 | Lost in the Wild Card round | level 70.1, clutch -7.8 | before: You were not the same player in January and everyone saw it. | after: (no line)
+  nfl K career 15 | Lost in the Divisional round | level 82.2, clutch -7.5 | before: You were not the same player in January and everyone saw it. | after: 💪 You held up your end in January. The run just ended short of the title.
+  nba PG career 0 | Lost the NBA Finals | level 68.2, clutch -7.3 | before: You disappeared when it mattered. The talk shows had a field day. | after: 🎞️ A tough playoff run. Your numbers came in well under your usual level.
+  nba PG career 0 | Lost in the first round | level 77.8, clutch -7.3 | before: You disappeared when it mattered. The talk shows had a field day. | after: 💪 You held up your end in the playoffs. The run just ended short of the title.
+  nba PG career 0 | Lost the Conference Finals | level 74.9, clutch -10.3 | before: You disappeared when it mattered. The talk shows had a field day. | after: (no line)
+  mlb C career 2 | Lost the Wild Card series | level 68.9, clutch -8.4 | before: You could not buy a hit in October. It will follow you all winter. | after: 🎞️ A tough October. Your numbers came in well under your usual level.
+  mlb 3B career 27 | Lost the World Series | level 75.7, clutch -8.2 | before: You could not buy a hit in October. It will follow you all winter. | after: (no line)
+  mlb SS career 116 | Lost the Championship Series | level 76.5, clutch -8.7 | before: You could not buy a hit in October. It will follow you all winter. | after: 💪 You held up your end in October. The run just ended short of the title.
+  nhl C career 0 | Lost in Round 1 | level 63.3, clutch -8.2 | before: You went quiet in the playoffs. The room noticed. | after: 🎞️ A tough playoff run. Your numbers came in well under your usual level.
+  nhl C career 0 | Lost the Cup Final | level 70.2, clutch -8.3 | before: You went quiet in the playoffs. The room noticed. | after: (no line)
+  nhl RW career 2 | Lost the Conference Final | level 80.3, clutch -8.7 | before: You went quiet in the playoffs. The room noticed. | after: 💪 You held up your end in the playoffs. The run just ended short of the title.
+B1 ok, B2 ok, B3 ok, C1 ok, C2 ok, C3 ok, C4 ok
+simUsCareerReports PASS: 0 findings, 150 careers a sport, seed 1

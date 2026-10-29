@@ -1,0 +1,19 @@
+  FAIL C2: nfl QB: lost on a January level of 80.9 with no credit
+  FAIL C2: nfl QB: lost on a January level of 80.3 with no credit
+  FAIL C2: nfl QB: lost on a January level of 77.2 with no credit
+  FAIL C2: nfl QB: lost on a January level of 77.8 with no credit
+nfl: {"playoffs":1115,"lost":1040,"strongLost":536,"credit":0,"crit":47,"lastCalls":0,"lastSound":0,"noOffer":243,"windows":617}
+nba: {"playoffs":1320,"lost":1234,"strongLost":780,"credit":0,"crit":40,"lastCalls":0,"lastSound":0,"noOffer":197,"windows":527}
+mlb: {"playoffs":1078,"lost":989,"strongLost":404,"credit":0,"crit":54,"lastCalls":0,"lastSound":0,"noOffer":259,"windows":588}
+nhl: {"playoffs":1590,"lost":1473,"strongLost":923,"credit":0,"crit":44,"lastCalls":1,"lastSound":1,"noOffer":272,"windows":660}
+Before and after, fixed seeded postseasons (the same games; before is the old rule's line):
+  nfl QB career 0 | Lost in the Divisional round | level 71.2, clutch -10.3 | before: You were not the same player in January and everyone saw it. | after: (no line)
+  nfl RB career 1 | Lost in the Divisional round | level 69.5, clutch -7.4 | before: You were not the same player in January and everyone saw it. | after: 🎞️ A tough January. Your numbers came in well under your usual level.
+  nba PG career 0 | Lost the Conference Finals | level 60.2, clutch -13.0 | before: You disappeared when it mattered. The talk shows had a field day. | after: 🎞️ A tough playoff run. Your numbers came in well under your usual level.
+  nba PG career 0 | Lost in the first round | level 72.0, clutch -8.6 | before: You disappeared when it mattered. The talk shows had a field day. | after: (no line)
+  mlb SP career 0 | Lost the Division Series | level 68.9, clutch -7.4 | before: You could not buy a hit in October. It will follow you all winter. | after: 🎞️ A tough October. Your numbers came in well under your usual level.
+  mlb CF career 19 | Lost the Wild Card series | level 74.2, clutch -9.3 | before: You could not buy a hit in October. It will follow you all winter. | after: (no line)
+  nhl C career 0 | Lost in Round 1 | level 64.7, clutch -13.0 | before: You went quiet in the playoffs. The room noticed. | after: 🎞️ A tough playoff run. Your numbers came in well under your usual level.
+  nhl D career 3 | Lost the Conference Final | level 75.5, clutch -13.0 | before: You went quiet in the playoffs. The room noticed. | after: (no line)
+B1 ok, B2 ok, B3 ok, C1 ok, C2 FAIL, C3 ok, C4 ok
+simUsCareerReports FAIL: 2643 findings, 150 careers a sport, seed 1569, CONTROL nocredit

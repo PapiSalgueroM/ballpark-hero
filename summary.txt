@@ -1,0 +1,13 @@
+vnew exit=0 29s |    Duration  28.03s (transform 3.55s, setup 155ms, collect 5.03s, tests 20.72s, environment 927ms, prepare 467ms)
+vrel1 exit=0 50s |    Duration  48.12s (transform 5.95s, setup 1.86s, collect 24.77s, tests 95.82s, environment 9.61s, prepare 2.47s)
+sim exit=0 3s | simUsCareerReports PASS: 0 findings, 150 careers a sport, seed 1569
+sim-s1 exit=0 2s | simUsCareerReports PASS: 0 findings, 150 careers a sport, seed 1
+sim-s2 exit=0 2s | simUsCareerReports PASS: 0 findings, 150 careers a sport, seed 2
+sim-s3 exit=0 2s | simUsCareerReports PASS: 0 findings, 150 careers a sport, seed 3
+ctl-blind exit=1 2s | simUsCareerReports FAIL: 266 findings, 150 careers a sport, seed 1569, CONTROL blind
+ctl-nocredit exit=1 2s | simUsCareerReports FAIL: 2643 findings, 150 careers a sport, seed 1569, CONTROL nocredit
+ctl-alwayslast exit=1 2s | simUsCareerReports FAIL: 968 findings, 150 careers a sport, seed 1569, CONTROL alwayslast
+confirm exit=0 12s | Career confirmation: CRLF controls bind, raw bytes held and owned copies cleaned. Simulated states/explicit events do not prove full-season gameplay or native Enter, view
+vrel2 exit=0 63s |    Duration  61.43s (transform 12.84s, setup 1.16s, collect 37.12s, tests 108.10s, environment 7.47s, prepare 2.12s)
+rival exit=0 18s | No rival product names found. 0 findings.
+tsc exit=0 120s | 
