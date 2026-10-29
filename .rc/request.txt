@@ -1,0 +1,5 @@
+docs-only: test -z "$(git diff --name-only 440d3828c HEAD -- . ':!docs/WORKBOARD.md')" && git diff --stat 440d3828c HEAD && echo "only docs/WORKBOARD.md differs from 440d3828c"
+tsc: node_modules/.bin/tsc --noEmit -p tsconfig.app.json
+dash-diff: node .rc/x/dashScan.mjs diff 601435944
+dash-log: node .rc/x/dashScan.mjs log 601435944
+simNoRivalNames: node scripts/simNoRivalNames.mjs
