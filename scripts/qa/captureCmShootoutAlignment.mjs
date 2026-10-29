@@ -20,7 +20,7 @@ const held = () => Object.fromEntries(sources.map(file => [file, hash(fs.readFil
 const sourceBefore = held();
 const harness = fs.readFileSync(path.join(ROOT, 'scripts/simMatchScreen.mjs'), 'utf8');
 assert.equal(blob(Buffer.from(harness)), '01273f2e622f1f5d0374cea2aa2f28ab1c58c9f8', 'Every original MatchScreen assertion remains pinned');
-assert.equal(blob(fs.readFileSync(path.join(ROOT, sources[0]))), 'cf17db1c57cd86a796f40cb8d18ca625084d8679');
+assert.equal(blob(fs.readFileSync(path.join(ROOT, sources[0]))), '4ce178814d8fb9de0564b32488d57c0fc75d91d6'); // Release BS fix BS-cm410-1 moved the default shootout list (display stream only); was cf17db1c
 assert.equal(blob(fs.readFileSync(path.join(ROOT, sources[1]))),
   ['baseline', 'inverse'].includes(phase) ? '879b41c278e920f6faf689b236e96731cbae923c' : '700826475faf82d278cd0a6d4e6ea4861e105d67');
 function filenameSeed(value) {
