@@ -117,6 +117,10 @@
  *   plantOverLimit) and asserts the trim reaches it; control namedsummer (the summer names the old club, so the
  *   engine skips it) must fire there. Before this the nhl row's check held vacuously for the old club: it never
  *   stood over 15 at the trim in 360 years out (r1559-run-b, r1559-run-d2).
+ *   section 6 on both rows replays every round out on a copy with the same draws against the row's own statement
+ *   of the board's round with nobody in the chair (awayRound), as the summer was already replayed; control
+ *   awaymoves (the rivals' in season moves dropped) must fire there. Before this nothing held those moves: the
+ *   mean roster moved (12.52 against 12.66) and is printed, not asserted (review minor 2).
  *
  * Recording: SIM_GM_CAREER_RECORD=<sha of the base> writes the fixture
  * (scripts/data/gmCareerFixture.json, or SIM_GM_CAREER_OUT) and stops.
@@ -152,7 +156,7 @@ const CONTROLS = {
   contribstays: '5', awaycontrib: '6', retainedrolled: '6', thumbfalse: '2t',
   firenever: '9', nooffers: '9', xpflat: '9', nevershut: '9', legacyleak: '10', retainedlift: '10',
   /* Round 1559 fix pass (the adversarial reviews) */
-  namedsummer: '6',
+  namedsummer: '6', awaymoves: '6',
 };
 if (CONTROL && !CONTROLS[CONTROL]) {
   console.error(`SIM_GM_CAREER_CONTROL=${CONTROL} is not a control this harness knows (${Object.keys(CONTROLS).join(', ')})`);
@@ -258,6 +262,8 @@ const EDITS = {
   legacyleak: ['bind', '    lastGrade: f.seasonCounted ? hostLastGrade(s.host, league, f.mandate, outcome) : null,',
     '    lastGrade: hostLastGrade(s.host, league, f.mandate, outcome),'],
   retainedlift: ['trade', '    entry.amount = r.kept;', '    entry.amount = r.kept + 0.1;'],
+  /* Round 1559 fix pass (review minor 2): a week out with the rivals' moves dropped (the round replay, section 6). */
+  awaymoves: ['career', "      aiWeeklyMoves(league, '', rng);", "      /* the rivals' moves dropped */"],
 };
 /* Round 1559: the controls anchored in a sport's own file, re-aimed at the NHL row's own lines. A control in
    NFL_ONLY with no NHL line (the board's press, the depth chart) is not a control of the nhl row and says so. */
@@ -273,6 +279,8 @@ const EDITS_BY_SPORT = {
     /* Round 1559 fix pass (review MAJOR 1): the summer names the old club as its user club, the NFL's notrim edit:
        every other club is trimmed, the old one is skipped (the half of noUserClub naming no club cannot give) */
     namedsummer: ['nhlCareer', '      nhlOffseason(league, rng, undefined, { noUserClub: true });', '      nhlOffseason(league, rng, oldTeam);'],
+    /* Round 1559 fix pass (review minor 2): a round out with the rivals' in season moves dropped */
+    awaymoves: ['nhlCareer', "      nhlAiMoves(league, '', rng);", "      /* the rivals' moves dropped */"],
     noawaydraft: ['nhlCareer', '        cls = nhlAiDraftPicks(league, cls, order, rng).remaining;', '        /* the draft skipped */'],
     /* a year out leaves the old club's contributors as he chose them */
     awaycontrib: ['nhlCareer', '      const old = league.teams[oldTeam];\n      if (old) nhlResetContributors(old);', '      const old = league.teams[oldTeam];'],
@@ -280,7 +288,7 @@ const EDITS_BY_SPORT = {
     retainedrolled: ['nhlCareer', '      const retained = keepRetainedOverSummer(league.teams, retainedBefore);', '      const retained = retainedBefore;'],
   },
 };
-const NFL_ONLY = new Set(['staffrides', 'ledgerrides', 'depthstays', 'halfseason', 'notrim', 'noawaydraft', 'extradraw']);
+const NFL_ONLY = new Set(['staffrides', 'ledgerrides', 'depthstays', 'halfseason', 'notrim', 'noawaydraft', 'extradraw', 'awaymoves']);
 const SPORT_OF_RUN = process.env.SIM_GM_CAREER_SPORT || 'nfl';
 const overrides = new Map();
 let fired = 0;
@@ -574,6 +582,14 @@ const DRIVE = {
     },
     /* The summer with nobody in the chair as the engine runs it, for the year out's replay (section 6). */
     engineSummer: (lg, rng) => E.runOffseason(lg, rng),
+    /* Round 1559 fix pass: playWeek's order with nobody in the chair (injuries, the rivals' moves, every game, the week
+       moved on below the last), for the year out's round replay (section 6, control awaymoves). */
+    awayRound(lg, rng) {
+      E.injuryPass(lg.teams, rng);
+      E.aiWeeklyMoves(lg, '', rng);
+      for (const g of lg.schedule[lg.week - 1]) E.simGame(g, lg.teams, rng);
+      if (lg.week < E.REGULAR_WEEKS) lg.week += 1;
+    },
     overLimit: t => E.deepOverLimit(t) > 0,
   },
   /* Round 1559: the NHL Front Office in its board's own call order (NhlFrontOfficeBoard.tsx: start, playRound,
@@ -678,6 +694,13 @@ const DRIVE = {
       return false;
     },
     engineSummer: (lg, rng) => EN.nhlOffseason(lg, rng, undefined, { noUserClub: true }),
+    /* Round 1559 fix pass: playRound's order with nobody in the chair (the round, the rivals' moves, the round moved
+       on below the last), for the year out's round replay (section 6, control awaymoves). */
+    awayRound(lg, rng) {
+      EN.simNhlRound(lg, '', rng);
+      EN.nhlAiMoves(lg, '', rng);
+      if (lg.round < EN.NHL_FO_ROUNDS) lg.round += 1;
+    },
     /* the retained rows the desk summer keeps (decision 2g), on the replay as on the league */
     afterSummer: (lg, desk) => { TP.keepRetainedOverSummer(lg.teams, DN.nhlRetainedOf(desk)); },
     retainedOf: desk => DN.nhlRetainedOf(desk),
@@ -1389,6 +1412,8 @@ const S6 = {
   retained: { rows: 0, kept: 0, dropped: 0 }, lineupFree: 0, lineupPlanted: 0,
   /* Round 1559 fix pass: summers the old club went into planted over the roster limit, and came out trimmed to it */
   oldPlanted: 0, oldTrimmed: 0,
+  /* Round 1559 fix pass: rounds out replayed against the row's own round, and how many differed */
+  roundShadows: 0, roundsOff: 0,
 };
 const rosterIds = (lg, skip) => new Set(Object.entries(lg.teams).filter(([a]) => a !== skip).flatMap(([, t]) => [...t.players, ...(t.practice ?? [])].map(p => p.id)));
 const everyId = lg => { const s = rosterIds(lg, null); for (const p of lg.freeAgents) s.add(p.id); return s; };
@@ -1493,7 +1518,22 @@ if (runs('6')) {
           return out;
         },
         periods: lg => away.periods(lg),
-        playRound(lg, r, dk) { const b = everyId(lg); const out = away.playRound(lg, r, dk); noneMinted('a week', b, lg); return out; },
+        playRound(lg, r, dk) {
+          const b = everyId(lg);
+          /* Round 1559 fix pass (review minor 2): the round replayed on a copy with the same draws against the row's
+             own statement of the board's round with nobody in the chair; it must be the league the away host left
+             (control awaymoves: the rivals' in season moves dropped). */
+          const shadow = d.awayRound ? clone(lg) : null, draws = [];
+          const out = away.playRound(lg, shadow ? () => { const x = r(); draws.push(x); return x; } : r, dk);
+          noneMinted('a week', b, lg);
+          if (shadow) {
+            let i = 0, threw = false;
+            try { d.awayRound(shadow, () => { if (i >= draws.length) throw new Error('out of draws'); return draws[i++]; }); } catch { threw = true; }
+            S6.roundShadows++;
+            if (threw || i !== draws.length || J(shadow) !== J(lg)) { S6.roundsOff++; fail(`${at}: a round out is not the board's round with no user club (${i} of ${draws.length} draws replayed${threw ? ', the replay ran out' : ''})`); }
+          }
+          return out;
+        },
         playoffs(lg, r, dk) { const b = everyId(lg); const out = away.playoffs(lg, r, dk); noneMinted('the playoffs', b, lg); return out; },
       };
       const season = lgA.season, champs = lgA.champions.length;
@@ -1549,6 +1589,10 @@ if (runs('6')) {
   if (S6.retained.rows > 0 || d.afterSummer) {
     console.log(`   retained rows planted ${S6.retained.rows}: ${S6.retained.kept} summers kept at the figure the club kept, ${S6.retained.dropped} dropped when the entry ran out; the old club's contributors back to automatic after ${S6.lineupFree} of ${S6.years} years`);
     ok(S6.retained.kept >= S6_SEEDS.length, `only ${S6.retained.kept} retained rows carried over a summer`);
+  }
+  if (d.awayRound) {
+    console.log(`   rounds out replayed against the board's round with no user club: ${S6.roundShadows}, ${S6.roundsOff} differed`);
+    ok(S6.roundShadows >= S6.years * d.periods() && S6.roundsOff === 0, `only ${S6.roundShadows} rounds out replayed for ${S6.years} years out of ${d.periods()} rounds, ${S6.roundsOff} differed`);
   }
   if (d.plantOverLimit) {
     console.log(`   the old club planted over the roster limit before ${S6.oldPlanted} summers out: trimmed to it after ${S6.oldTrimmed}`);
