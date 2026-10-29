@@ -1,0 +1,30 @@
+{"tag":"nba-1280x900","bannerTop":null}
+{"tag":"nba-1280x900","at":"hub from the top","top":{"pill":[992,189,1103,233],"parent":"DIV","parentIsMain":false,"position":"sticky","boardBottom":1067,"colRight":960,"vh":900}}
+{"tag":"nba-1280x900-B","covers":[]}
+{"tag":"nba-1280x900","y":360,"w":{"pill":[992,48,1103,92],"parent":"DIV","parentIsMain":false,"position":"sticky","boardBottom":443,"colRight":960,"vh":900}}
+{"tag":"nba-1280x900","y":720,"w":{"pill":[992,48,1103,92],"parent":"DIV","parentIsMain":false,"position":"sticky","boardBottom":83,"colRight":960,"vh":900}}
+{"tag":"nba-1280x900","y":1352,"w":{"pill":[992,-549,1103,-505],"parent":"DIV","parentIsMain":false,"position":"sticky","boardBottom":-549,"colRight":960,"vh":900}}
+{"tag":"nba-1280x900","tapInboxCentre":{"x":856,"y":70.25},"restartDialog":false,"inboxOpen":false}
+{"tag":"nba-1280x900","note":"the Inbox tap opened no panel the walk recognises; see the screenshot"}
+{"tag":"nba-1280x900","at":"guide 6000","g":{"pill":[992,-5658,1103,-5614],"parent":"DIV","parentIsMain":false,"position":"sticky","boardBottom":-5658,"colRight":960,"vh":900}}
+{"tag":"nba-1318x647","bannerTop":482}
+{"tag":"nba-1318x647","at":"hub from the top","top":{"pill":[1011,189,1122,233],"parent":"DIV","parentIsMain":false,"position":"sticky","boardBottom":1067,"colRight":979,"vh":647}}
+{"tag":"nba-1318x647-B","covers":[]}
+{"tag":"nba-1318x647","y":360,"w":{"pill":[1011,48,1122,92],"parent":"DIV","parentIsMain":false,"position":"sticky","boardBottom":443,"colRight":979,"vh":647}}
+{"tag":"nba-1318x647","y":720,"w":{"pill":[1011,48,1122,92],"parent":"DIV","parentIsMain":false,"position":"sticky","boardBottom":83,"colRight":979,"vh":647}}
+{"tag":"nba-1318x647","y":1352,"w":{"pill":[1011,-549,1122,-505],"parent":"DIV","parentIsMain":false,"position":"sticky","boardBottom":-549,"colRight":979,"vh":647}}
+{"tag":"nba-1318x647","tapInboxCentre":{"x":875,"y":70.25},"restartDialog":false,"inboxOpen":false}
+{"tag":"nba-1318x647","note":"the Inbox tap opened no panel the walk recognises; see the screenshot"}
+{"tag":"nba-1318x647","at":"guide 6000","g":{"pill":[1011,-5658,1122,-5614],"parent":"DIV","parentIsMain":false,"position":"sticky","boardBottom":-5658,"colRight":979,"vh":647}}
+{"tag":"nba-390x844","bannerTop":null}
+{"tag":"nba-390x844","at":"hub from the top","top":{"pill":[263,241,374,285],"parent":"DIV","parentIsMain":false,"position":"static","boardBottom":1431,"colRight":374,"vh":844}}
+{"tag":"nba-390x844-B","covers":[]}
+{"tag":"nba-390x844","y":360,"w":{"pill":[263,-119,374,-75],"parent":"DIV","parentIsMain":false,"position":"static","boardBottom":733,"colRight":374,"vh":844}}
+{"tag":"nba-390x844","y":720,"w":{"pill":[263,-479,374,-435],"parent":"DIV","parentIsMain":false,"position":"static","boardBottom":373,"colRight":374,"vh":844}}
+{"tag":"nba-390x844","y":1352,"w":{"pill":[263,-1111,374,-1067],"parent":"DIV","parentIsMain":false,"position":"static","boardBottom":-259,"colRight":374,"vh":844}}
+{"tag":"nba-390x844","tapInboxCentre":{"x":286.5,"y":69.75},"restartDialog":false,"inboxOpen":false}
+{"tag":"nba-390x844","note":"the Inbox tap opened no panel the walk recognises; see the screenshot"}
+{"tag":"nba-390x844","at":"guide 6000","g":{"pill":[263,-5759,374,-5715],"parent":"DIV","parentIsMain":false,"position":"static","boardBottom":-5554,"colRight":374,"vh":844}}
+{"tag":"nba-390x844-FA","covers":[]}
+{"tag":"nba-1280x900-FA","covers":[]}
+walkFix DONE: 0 problems
