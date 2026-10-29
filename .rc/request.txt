@@ -1,0 +1,4 @@
+#!serve
+#!playwright
+walk: node .rc/x/walk.mjs
+pbcr: CI=1 SIM_NETWORK=offline node scripts/playBingoClubRules.mjs
