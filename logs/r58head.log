@@ -1,0 +1,12 @@
+   baseball file: 38 of 38 new boards in the migration equal the shipped file's boards
+   nfl file: 1 of 1 new boards in the migration equal the shipped file's boards
+   nhl file: 1 of 1 new boards in the migration equal the shipped file's boards
+   nfl pre-round: 1 of 1 old values in the migration equal the board from before the round (git eccb77b18)
+   nhl pre-round: 1 of 1 old values in the migration equal the board from before the round (git eccb77b18)
+   baseball seed: 60 rows, 59 valid before and 59 after; 34 rewritten in place; bconn-016 drifted on purpose and left alone
+   baseball file: 60 rows, 59 valid before and 59 after; 34 rewritten in place; bconn-016 drifted on purpose and left alone
+   nfl file: 4 rows, 4 valid before and 4 after; 1 rewritten in place
+   nfl drift: 4 rows, 3 valid before and 3 after; 0 rewritten in place; nflconn-004 drifted on purpose and left alone
+   nhl file: 4 rows, 4 valid before and 4 after; 1 rewritten in place
+   nhl drift: 4 rows, 3 valid before and 3 after; 0 rewritten in place; nhlconn-004 drifted on purpose and left alone
+rehearseUsConnections1558: green. The rows land in place, a drifted row is left alone, and a second run is a no-op.

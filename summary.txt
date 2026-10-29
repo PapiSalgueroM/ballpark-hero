@@ -1,0 +1,3 @@
+pgl exit=0 1s | pglite
+r58head exit=0 20s | rehearseUsConnections1558: green. The rows land in place, a drifted row is left alone, and a second run is a no-op.
+reh1567 exit=0 23s | rehearseUsConnections1567: green. Both forms land the 39 boards in place, a drifted row is left alone or stops the step, a tampered payload is refused, and a second run i

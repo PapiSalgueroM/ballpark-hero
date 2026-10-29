@@ -1,0 +1,4 @@
+#!serial
+pgl: npm install --prefix /tmp/pgl @electric-sql/pglite >/dev/null 2>&1 && ls /tmp/pgl/node_modules/@electric-sql
+r58head: PGLITE_DIR=/tmp/pgl node scripts/qa/rehearseUsConnections1558.mjs
+reh1567: PGLITE_DIR=/tmp/pgl node scripts/qa/rehearseUsConnections1567.mjs
