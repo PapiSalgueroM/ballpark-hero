@@ -1,0 +1,6 @@
+#!serve
+#!playwright
+#!serial
+weight-head: SWEEP_OFFLINE=1 ENGINES=chromium node scripts/sweepWeight.mjs > /tmp/w.txt 2>&1; s=$?; grep -E "front-office" /tmp/w.txt | head -6; tail -3 /tmp/w.txt; exit $s
+weight-main: git worktree add /tmp/m 1229c0190 >/dev/null 2>&1 && ln -s "$PWD/node_modules" /tmp/m/node_modules && (cd /tmp/m && node_modules/.bin/vite build > /tmp/m-build.log 2>&1) && (node scripts/lib/hostLikeServer.mjs /tmp/m/dist 4174 > /tmp/m-server.log 2>&1 &) && sleep 4 && cd /tmp/m && BASE=http://localhost:4174 SWEEP_BASE=http://localhost:4174 SWEEP_OFFLINE=1 ENGINES=chromium node scripts/sweepWeight.mjs > /tmp/wm.txt 2>&1; s=$?; grep -E "front-office" /tmp/wm.txt | head -6; tail -3 /tmp/wm.txt; exit $s
+weight-head2: SWEEP_OFFLINE=1 ENGINES=chromium node scripts/sweepWeight.mjs > /tmp/w2.txt 2>&1; s=$?; grep -E "front-office" /tmp/w2.txt | head -6; tail -3 /tmp/w2.txt; exit $s
