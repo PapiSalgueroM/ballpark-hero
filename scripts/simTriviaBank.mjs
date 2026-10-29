@@ -80,6 +80,21 @@ import './lib/seedRandom.mjs';
      head and arm only (sections 2 to 9 skipped), prints every ladder the arm drops a step on, and ends
      "simTriviaBank big fleet: N ladders, arm short A, head short H, identical I".
 
+   ROUND 1579: Swap Question never deals a question already on the ladder. swapQuestion compared its draw with
+   the question on screen only, so a swap could bring back a rung already answered (sometimes with the same right
+   answer) or one still to come, mostly the one worth the most text nearly every ladder holds. It now refuses
+   every text on the ladder and draws up to LADDER_ATTEMPTS. Section 10 swaps every rung of four fleets of 250
+   ladders through the head and through the swap as it was, on one named stream per swap.
+   MEASURED (runner r1579-s1, 2026-10-29, at 71f17732e): the swap as it was dealt a ladder text on 749 of 3,750
+   real Unlimited swaps (20.0%: 502 already asked, 247 still to come), 829 of 3,750 daily (22.1%), 1,252 of 3,750
+   degraded (33.4%) and 1,777 of 3,750 planted (47.4%), and never handed back the question on screen; the head
+   dealt none, handed back none, and dealt JSON identical on every swap the old one dealt fresh (3,001, 2,921,
+   2,498 and 1,973). The (e) floors (249, 276, 417, 592) are a third of those repeats. Section 10 never draws from
+   the harness's seeded Math.random, so its numbers do not move with SIM_SEED.
+   Knob: TRIVIA_SWAP_ARM_FILE=<path> makes section 10's base arm that file's own swapQuestion (called with pool,
+     current and ladder), the tie to the base commit's own file (git show 5f9303bf8:src/lib/sportsMillionaire.ts
+     > base-sm.ts): the four base digests then equal the default run's. Its imports resolve to this tree.
+
    Run: node scripts/simTriviaBank.mjs
    Negative controls (each edits a copy of the bank, refuses to run if its target string is not
    there, and must turn its own section red):
@@ -94,9 +109,19 @@ import './lib/seedRandom.mjs';
      TRIVIA_CONTROL=redeal    a step draws from five types, every ladder dealt anew   (sections 4 and 9, ii and iii)
      TRIVIA_CONTROL=dupe      a step keeps a question the ladder already holds        (sections 4 and 9, iv and ii)
      TRIVIA_CONTROL=shared    a step's draw counter is shared by the whole ladder     (section 9, the ii floor and vi ceiling)
+   and four on a copy of src/lib/sportsMillionaire.ts, which only section 10's head arm reads:
+     TRIVIA_CONTROL=swaprepeat  the swap compares with the question on screen only    (section 10, a)
+     TRIVIA_CONTROL=swapfive    the swap gives up after five draws again              (section 10, c)
+     TRIVIA_CONTROL=swapmove    the swap draws from five types                        (section 10, b)
+     TRIVIA_CONTROL=swapeasy    the swap deals the easiest band                       (section 10, d and b)
    Under the first seven the arm is the controlled bank with a cap of 8, so section 9 adds only its (v) lines
    (4 each for ties, namesake, tense and postense, 3 for family, none for legacy and rulec), plus a
-   "KNOWN_SHORT stale" line wherever the control edits the bank.
+   "KNOWN_SHORT stale" line wherever the control edits the bank. Section 10 adds no line under any of the first
+   eleven but short: its swap reads the bank's LADDER_ATTEMPTS, so at 8 it hands back the question on screen 12
+   times on the planted fleet, check (c). shared ends with 11 lines (the ii floor on all eight fleets, the vi
+   ceiling on both planted fleets, KNOWN_SHORT stale). swaprepeat fires (a) on every fleet with the base arm's
+   repeats; swapfive (c) 1, 1, 26 and 115; swapmove (b) on every fresh swap; swapeasy (d) on 14 rungs in 15 with
+   (b) beside it.
    Re-measure the legacy hashes from any copy of the bank (the base of this round was c75d04dad):
      TRIVIA_BANK_FILE=<path> node scripts/simTriviaBank.mjs --print-legacy
 */
@@ -490,6 +515,8 @@ mustBeClean('daily', daily);
 for (const k of ['ties', 'namesake', 'tense', 'notAClub']) if (before[k] === 0) fail(`the old rules dealt no ${k} over ${LADDERS} dates, so this checker may be blind to it`);
 
 /* ---------------- 3. unlimited and the swap lifeline's generator ---------------- */
+/* what generateQuestion deals at each difficulty; the filter swapQuestion adds over it (no text already on the
+   ladder) is section 10's */
 section(`3. ${UNLIMITED} unlimited ladders, and ${UNLIMITED} single questions at every difficulty (what Swap Question deals)`);
 const unlimited = newTally();
 for (let k = 0; k < UNLIMITED; k++) checkLadder(T.generateRandomLadder(POOL, 15), unlimited);
