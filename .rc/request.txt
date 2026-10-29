@@ -1,0 +1,20 @@
+tsc: node_modules/.bin/tsc --noEmit -p tsconfig.app.json
+nba-plain: node scripts/simNbaSeasonStats.mjs
+nba-base: mkdir -p .rc/nbb1 && git archive 5d1198389 src | tar -x -C .rc/nbb1 && NBA_STATS_BASE=.rc/nbb1 node scripts/simNbaSeasonStats.mjs
+named-again: mkdir -p .rc/nbb9 && git archive 5d1198389 src | tar -x -C .rc/nbb9 && NBA_STATS_BASE=.rc/nbb9 NBA_STATS_BASE_LABEL=5d1198389 NBA_STATS_RECORD_NAMED=/tmp/named-again.json node scripts/simNbaSeasonStats.mjs > /tmp/na.txt 2>&1; a=$?; tail -2 /tmp/na.txt; cp /tmp/named-again.json "$RC_OUT/"; node .rc/x/cmpNamed.mjs scripts/data/nbaNamedBlockFixture.json /tmp/named-again.json; b=$?; echo "REREC named run=$a compare=$b"; exit $((a|b))
+nba-c-grouped: NBA_STATS_CONTROL=grouped node scripts/simNbaSeasonStats.mjs
+nba-c-carried: NBA_STATS_CONTROL=carried node scripts/simNbaSeasonStats.mjs
+nba-c-named: NBA_STATS_CONTROL=named node scripts/simNbaSeasonStats.mjs
+nba-c-nosplit: NBA_STATS_CONTROL=nosplit node scripts/simNbaSeasonStats.mjs
+nba-c-extradraw: NBA_STATS_CONTROL=extradraw node scripts/simNbaSeasonStats.mjs
+nba-c-mvpnowin: NBA_STATS_CONTROL=mvpnowin node scripts/simNbaSeasonStats.mjs
+nba-c-noqualify: NBA_STATS_CONTROL=noqualify node scripts/simNbaSeasonStats.mjs
+nba-c-sixthstarters: NBA_STATS_CONTROL=sixthstarters node scripts/simNbaSeasonStats.mjs
+nba-c-doubleclose: NBA_STATS_CONTROL=doubleclose node scripts/simNbaSeasonStats.mjs
+nba-c-oldnever: NBA_STATS_CONTROL=oldnever node scripts/simNbaSeasonStats.mjs
+nba-c-rookieany: NBA_STATS_CONTROL=rookieany node scripts/simNbaSeasonStats.mjs
+nba-c-draftlate: NBA_STATS_CONTROL=draftlate node scripts/simNbaSeasonStats.mjs
+nba-c-bench17: NBA_STATS_CONTROL=bench17 node scripts/simNbaSeasonStats.mjs
+simHarnessAnchors: node scripts/simHarnessAnchors.mjs
+simStorageWrites: node scripts/simStorageWrites.mjs
+simNoRivalNames: node scripts/simNoRivalNames.mjs
