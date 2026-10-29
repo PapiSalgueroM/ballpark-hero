@@ -1,0 +1,5 @@
+build exit=0 31s | [dukb] inlined 1 stylesheet(s) and 1 module(s) into 181 snapshots (11 left alone)
+weight-head exit=1 28s | sweepWeight: 2 failures
+weight-base exit=0 63s | sweepWeight: green. Every page is inside its budget, and the budgets came down this round.
+weigh-head exit=0 18s | weighBS head: done, 11 routes
+weigh-base exit=0 18s | weighBS base: done, 11 routes
