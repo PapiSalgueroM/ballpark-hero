@@ -1,0 +1,7 @@
+#!serve
+#!playwright
+#!serial
+walk-pr: TAG=pr node .rc/x/walk421.mjs
+walk-merged1568: bash .rc/x/altbuild.sh /tmp/rvm 12c1b2cd001f9309a31a887e5c432ca63c373852 89dec7530d5e0e60ef3ad6737ada2cfcdbed602c 4174 merged AB
+walk-base: bash .rc/x/altbuild.sh /tmp/rvb b20ec6664df9d4c58d63ea0596791d33b2a3b8fc - 4175 base CD
+tsc: node_modules/.bin/tsc --noEmit -p tsconfig.app.json
