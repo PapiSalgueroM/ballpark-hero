@@ -1,0 +1,231 @@
+mutAge: applied (free agents age two years a summer); the NHL default path must go red at its summers
+
+[1m[46m RUN [49m[22m [36mv3.2.7 [39m[90m/home/runner/work/ballpark-hero/ballpark-hero[39m
+
+Browserslist: browsers data (caniuse-lite) is 16 months old. Please run:
+  npx update-browserslist-db@latest
+  Why you should do it regularly: https://github.com/browserslist/update-db#readme
+[90mstdout[2m | src/components/front-office-shared/FrontOfficeGmCareer.test.tsx[2m > [22m[2mnhl board: the default path[2m > [22m[2mseed 1|desk on: every checkpoint of two seasons is the base's
+[22m[39mFO_GM_CAREER|nhl|seed 1|desk on|16 checkpoints|start,presser,cut,sign,round 1,round 9,recap,answered,draft,summer,round 1,round 9,recap,answered,draft,summer
+
+[90mstdout[2m | src/components/front-office-shared/FrontOfficeGmCareer.test.tsx[2m > [22m[2mnhl board: the default path[2m > [22m[2mseed 1|desk off: every checkpoint of two seasons is the base's
+[22m[39mFO_GM_CAREER|nhl|seed 1|desk off|15 checkpoints|start,cut,sign,round 1,round 9,recap,answered,draft,summer,round 1,round 9,recap,answered,draft,summer
+
+[90mstdout[2m | src/components/front-office-shared/FrontOfficeGmCareer.test.tsx[2m > [22m[2mnhl board: the default path[2m > [22m[2mseed 2|desk on: every checkpoint of two seasons is the base's
+[22m[39mFO_GM_CAREER|nhl|seed 2|desk on|15 checkpoints|start,presser,cut,sign,round 1,round 9,recap,draft,summer,round 1,round 9,recap,answered,draft,summer
+
+[90mstdout[2m | src/components/front-office-shared/FrontOfficeGmCareer.test.tsx[2m > [22m[2mnhl board: the default path[2m > [22m[2mseed 2|desk off: every checkpoint of two seasons is the base's
+[22m[39mFO_GM_CAREER|nhl|seed 2|desk off|14 checkpoints|start,cut,sign,round 1,round 9,recap,draft,summer,round 1,round 9,recap,answered,draft,summer
+
+[90mstdout[2m | src/components/front-office-shared/FrontOfficeGmCareer.test.tsx[2m > [22m[2mnhl board: the default path[2m > [22m[2mseed 3|desk on: every checkpoint of two seasons is the base's
+[22m[39mFO_GM_CAREER|nhl|seed 3|desk on|14 checkpoints|start,presser,cut,sign,round 1,round 9,recap,draft,summer,round 1,round 9,recap,draft,summer
+
+[90mstdout[2m | src/components/front-office-shared/FrontOfficeGmCareer.test.tsx[2m > [22m[2mnhl board: the default path[2m > [22m[2mseed 3|desk off: every checkpoint of two seasons is the base's
+[22m[39mFO_GM_CAREER|nhl|seed 3|desk off|13 checkpoints|start,cut,sign,round 1,round 9,recap,draft,summer,round 1,round 9,recap,draft,summer
+
+ [31m❯[39m src/components/front-office-shared/FrontOfficeGmCareer.test.tsx [2m([22m[2m26 tests[22m[2m | [22m[31m6 failed[39m[2m | [22m[33m19 skipped[39m[2m)[22m[33m 3281[2mms[22m[39m
+   [2m[90m↓[39m[22m nfl board: the default path[2m > [22mseed 1|desk on: every checkpoint of two seasons is the base's
+   [2m[90m↓[39m[22m nfl board: the default path[2m > [22mseed 1|desk off: every checkpoint of two seasons is the base's
+   [2m[90m↓[39m[22m nfl board: the default path[2m > [22mseed 2|desk on: every checkpoint of two seasons is the base's
+   [2m[90m↓[39m[22m nfl board: the default path[2m > [22mseed 2|desk off: every checkpoint of two seasons is the base's
+   [2m[90m↓[39m[22m nfl board: the default path[2m > [22mseed 3|desk on: every checkpoint of two seasons is the base's
+   [2m[90m↓[39m[22m nfl board: the default path[2m > [22mseed 3|desk off: every checkpoint of two seasons is the base's
+   [2m[90m↓[39m[22m nfl board: the default path[2m > [22mthe record is written once, from the base
+[31m   [31m×[31m nhl board: the default path[2m > [22mseed 1|desk on: every checkpoint of two seasons is the base's[39m[33m 1404[2mms[22m[39m
+[31m     → expected [ …(16) ] to deeply equal [ …(16) ][39m
+[31m   [31m×[31m nhl board: the default path[2m > [22mseed 1|desk off: every checkpoint of two seasons is the base's[39m[33m 411[2mms[22m[39m
+[31m     → expected [ …(15) ] to deeply equal [ …(15) ][39m
+[31m   [31m×[31m nhl board: the default path[2m > [22mseed 2|desk on: every checkpoint of two seasons is the base's[39m[33m 408[2mms[22m[39m
+[31m     → expected [ …(15) ] to deeply equal [ …(15) ][39m
+[31m   [31m×[31m nhl board: the default path[2m > [22mseed 2|desk off: every checkpoint of two seasons is the base's[39m[33m 369[2mms[22m[39m
+[31m     → expected [ …(14) ] to deeply equal [ …(14) ][39m
+[31m   [31m×[31m nhl board: the default path[2m > [22mseed 3|desk on: every checkpoint of two seasons is the base's[39m[33m 364[2mms[22m[39m
+[31m     → expected [ …(14) ] to deeply equal [ …(14) ][39m
+[31m   [31m×[31m nhl board: the default path[2m > [22mseed 3|desk off: every checkpoint of two seasons is the base's[39m[33m 324[2mms[22m[39m
+[31m     → expected [ …(13) ] to deeply equal [ …(13) ][39m
+   [32m✓[39m nhl board: the default path[2m > [22mthe record is written once, from the base[32m 1[2mms[22m[39m
+   [2m[90m↓[39m[22m nhl board: the saves the base wrote[2m > [22mfired desk on: it mounts with storage byte equal, on the phase the base wrote
+   [2m[90m↓[39m[22m nhl board: the saves the base wrote[2m > [22mfired desk off: it mounts with storage byte equal, on the phase the base wrote
+   [2m[90m↓[39m[22m nhl board: the saves the base wrote[2m > [22mhub desk on: it mounts with storage byte equal, on the phase the base wrote
+   [2m[90m↓[39m[22m nfl board: the career[2m > [22mfired: the recap offers who is calling and keeps the save; a remount opens the out of work screen with three boxes
+   [2m[90m↓[39m[22m nfl board: the career[2m > [22mtaking an offer takes two taps, never the club that let him go, and the arrival stages no title even at the champion
+   [2m[90m↓[39m[22m nfl board: the career[2m > [22ma year out: two taps, the league a season on with one more champion, his counters as they were
+   [2m[90m↓[39m[22m nfl board: the career[2m > [22ma point spent in Ownership survives a remount, and a tree off the live list sells nothing
+   [2m[90m↓[39m[22m nfl board: the career[2m > [22ma closed market draws no stay out button, and the new front office link deletes the save on the second tap only
+   [2m[90m↓[39m[22m nfl board: the career[2m > [22mlooking at Career and GM level on the hub of a save whose desk is off writes nothing
+   [2m[90m↓[39m[22m nfl board: the career[2m > [22mlooking at all three boxes out of work, desk off, writes nothing
+   [2m[90m↓[39m[22m nfl board: the career[2m > [22ma staff approach that runs out in the final week is still settled after the close
+   [2m[90m↓[39m[22m nfl board: a title watched at the club he took[2m > [22mthe title game watched to full time records one finish, at the career score, and none before it
+
+[31m⎯⎯⎯⎯⎯⎯⎯[39m[1m[41m Failed Tests 6 [49m[22m[31m⎯⎯⎯⎯⎯⎯⎯[39m
+
+[41m[1m FAIL [22m[49m src/components/front-office-shared/FrontOfficeGmCareer.test.tsx[2m > [22mnhl board: the default path[2m > [22mseed 1|desk on: every checkpoint of two seasons is the base's
+[31m[1mAssertionError[22m: expected [ …(16) ] to deeply equal [ …(16) ][39m
+
+[32m- Expected[39m
+[31m+ Received[39m
+
+[33m@@ -6,13 +6,13 @@[39m
+[2m    "round 1:a5d5209c43afb38a50e55d47a9f0423ee750888c",[22m
+[2m    "round 9:16e6d479abbe72dd5c4d0858a9114c2f88b0479e",[22m
+[2m    "recap:363a38fbe40515ffad3c351b1bf6c0213badfa43",[22m
+[2m    "answered:a589f082de4a08195ab73e84c530a123c24b0ba0",[22m
+[2m    "draft:6be1fb3ae49180dbf4370d2700de4719f19f1b6d",[22m
+[32m-   "summer:d3930f46f8ae8245cf17186923cf4bfb7fb170eb",[39m
+[32m-   "round 1:5cbc95c690a80a606dbf8acd26872342b938e4cd",[39m
+[32m-   "round 9:4dd6dce078d265cf8efa84e8c0ac9373c21ff788",[39m
+[32m-   "recap:4498afcab70250aa1d6270807fded18f4c3adbc7",[39m
+[32m-   "answered:4b6be4f746c82c4a0685b935ba2b81eb98a0c2a4",[39m
+[32m-   "draft:854ddb358efc502f72fa4fbe12eca45984bf8d06",[39m
+[32m-   "summer:6beefc2d91f17d53e260083392a91e9eb9853351",[39m
+[31m+   "summer:1db61947d14d87944f916a5f26e714089accefb1",[39m
+[31m+   "round 1:9807aae0b7b6cc2101346eb6b1948f8348918da5",[39m
+[31m+   "round 9:315400e945284021dfbe12655dd92d6f2d4df720",[39m
+[31m+   "recap:ff8c0998cddcebf0f35a3ebd6214771443e5878d",[39m
+[31m+   "answered:30b0f1dcb74e3ef64ac10bedc5be8abdc57122b7",[39m
+[31m+   "draft:85b0a7b37883834fa0cc25a28bf706f5acccb578",[39m
+[31m+   "summer:10d7475960f23448766c4f6caa941e54d6bcafc4",[39m
+[2m  ][22m
+
+[36m [2m❯[22m src/components/front-office-shared/FrontOfficeGmCareer.test.tsx:[2m311:23[22m[39m
+    [90m309| [39m          [35mif[39m ([33mRECORDING[39m) { printed[id] [33m=[39m got[33m;[39m [35mreturn[39m[33m;[39m }
+    [90m310| [39m          expect(recorded?.cases?.[id], `nothing is recorded for ${row…
+    [90m311| [39m          [34mexpect[39m(got)[33m.[39m[34mtoEqual[39m(recorded[33m.[39mcases[id])[33m;[39m
+    [90m   | [39m                      [31m^[39m
+    [90m312| [39m        })[33m;[39m
+    [90m313| [39m      }
+
+[31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/6]⎯[22m[39m
+
+[41m[1m FAIL [22m[49m src/components/front-office-shared/FrontOfficeGmCareer.test.tsx[2m > [22mnhl board: the default path[2m > [22mseed 1|desk off: every checkpoint of two seasons is the base's
+[41m[1m FAIL [22m[49m src/components/front-office-shared/FrontOfficeGmCareer.test.tsx[2m > [22mnhl board: the default path[2m > [22mseed 2|desk on: every checkpoint of two seasons is the base's
+[31m[1mAssertionError[22m: expected [ …(15) ] to deeply equal [ …(15) ][39m
+
+[32m- Expected[39m
+[31m+ Received[39m
+
+[33m@@ -5,13 +5,13 @@[39m
+[2m    "round 1:12726dfcda567bb2c0eb61eedaa779654bbd0375",[22m
+[2m    "round 9:2f20fe7be4dad6c7a272ca509d49edbfbdc06619",[22m
+[2m    "recap:46a771caaa5fc4ec3a759fa2d16f2bd5d930f339",[22m
+[2m    "answered:366d04f88b72288270d2ddff5a1c755ec95147a4",[22m
+[2m    "draft:d27e7135b901fa6fe9389fc6237c02a24c61d4fc",[22m
+[32m-   "summer:896f9bb27a1938fba64f0c834847ecb86fecb6ba",[39m
+[32m-   "round 1:74eab127cc031896ff3aceb17d7752ff04819c96",[39m
+[32m-   "round 9:d15078139e5350fc5a13595d65ed997efeb38a29",[39m
+[32m-   "recap:3fb7f6d2183d3f70f1c0be643cedc9c7d76205cb",[39m
+[32m-   "answered:3ffd339d3e080cac9a91da768720fc3605651933",[39m
+[32m-   "draft:639407267cc03a15c4ae637eab334eb268970e03",[39m
+[32m-   "summer:f107e328a9bda4730d79abc0a9a158b1cb93c6b1",[39m
+[31m+   "summer:fa471bca45b0ec6af91c44b4c09c9dde358fa177",[39m
+[31m+   "round 1:247ffb35115f4d6c600e7d4cc825d995ea3140e8",[39m
+[31m+   "round 9:cc5e0152d1a99fa219cabeafba4775d3475747a3",[39m
+[31m+   "recap:2795d0de700cdb8b8c5e7d40f576697f75592610",[39m
+[31m+   "answered:d140f3557c97e92d163f0480a62bf57c79469532",[39m
+[31m+   "draft:c7ef0c2efefbd95b4c338fbc5798cc4266b5f680",[39m
+[31m+   "summer:4fbb4144dfeed30aa55c3e5272b158f20418674f",[39m
+[2m  ][22m
+
+[36m [2m❯[22m src/components/front-office-shared/FrontOfficeGmCareer.test.tsx:[2m311:23[22m[39m
+    [90m309| [39m          [35mif[39m ([33mRECORDING[39m) { printed[id] [33m=[39m got[33m;[39m [35mreturn[39m[33m;[39m }
+    [90m310| [39m          expect(recorded?.cases?.[id], `nothing is recorded for ${row…
+    [90m311| [39m          [34mexpect[39m(got)[33m.[39m[34mtoEqual[39m(recorded[33m.[39mcases[id])[33m;[39m
+    [90m   | [39m                      [31m^[39m
+    [90m312| [39m        })[33m;[39m
+    [90m313| [39m      }
+
+[31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[2/6]⎯[22m[39m
+
+[41m[1m FAIL [22m[49m src/components/front-office-shared/FrontOfficeGmCareer.test.tsx[2m > [22mnhl board: the default path[2m > [22mseed 2|desk off: every checkpoint of two seasons is the base's
+[41m[1m FAIL [22m[49m src/components/front-office-shared/FrontOfficeGmCareer.test.tsx[2m > [22mnhl board: the default path[2m > [22mseed 3|desk on: every checkpoint of two seasons is the base's
+[31m[1mAssertionError[22m: expected [ …(14) ] to deeply equal [ …(14) ][39m
+
+[32m- Expected[39m
+[31m+ Received[39m
+
+[33m@@ -4,13 +4,13 @@[39m
+[2m    "sign:8ccc582f28f5724d80b39356c67fc72adde2276c",[22m
+[2m    "round 1:fd5e191895a07ccb3cd6ec5053ccc17b6c9492b5",[22m
+[2m    "round 9:f3b546d09372d19b3798f8bc3e4d1b9aa66b7b10",[22m
+[2m    "recap:1d11992f75090941266d8445d1a89c920c648472",[22m
+[2m    "draft:33f4a88b82c58e3d98c1131b88df32ac87c615cc",[22m
+[32m-   "summer:5827c0a3a5fd2a994555993392648e2e3a7c6c93",[39m
+[32m-   "round 1:dc62d2aaa2a5e815bd5fd666770c3dd563371ef9",[39m
+[32m-   "round 9:18b795b401918037e689ae9d45e1b7a070d15fd7",[39m
+[32m-   "recap:3a86cee46812c684ed270d4126c978cc5890467a",[39m
+[32m-   "answered:d52e93dabe20f8d42c8f0e2b7cb65cbe50c36cee",[39m
+[32m-   "draft:9423b65dd2c2b6f465d3d3cee2c53b4f3315bdf8",[39m
+[32m-   "summer:30dbc035f2793d2ace969bcd0d00e9553b12acb0",[39m
+[31m+   "summer:58810f45cb496769982fa34e3bb8b8f914b97ed0",[39m
+[31m+   "round 1:d29ed8d3552bca65f9606b259cd9bbe83ef648e1",[39m
+[31m+   "round 9:093b726f5bfd65958d961eb83133b10ed69db868",[39m
+[31m+   "recap:a8b02ad8ab3a5b7f12dda5960eb8a9e3173196a9",[39m
+[31m+   "answered:e659e26af86f5a8a75b00ed8d184c8bb7d498152",[39m
+[31m+   "draft:ee84635b456220e7ad885a8479e837fb1d7da808",[39m
+[31m+   "summer:6784779bcd3440e6f11a9782d1685919cc66cdc9",[39m
+[2m  ][22m
+
+[36m [2m❯[22m src/components/front-office-shared/FrontOfficeGmCareer.test.tsx:[2m311:23[22m[39m
+    [90m309| [39m          [35mif[39m ([33mRECORDING[39m) { printed[id] [33m=[39m got[33m;[39m [35mreturn[39m[33m;[39m }
+    [90m310| [39m          expect(recorded?.cases?.[id], `nothing is recorded for ${row…
+    [90m311| [39m          [34mexpect[39m(got)[33m.[39m[34mtoEqual[39m(recorded[33m.[39mcases[id])[33m;[39m
+    [90m   | [39m                      [31m^[39m
+    [90m312| [39m        })[33m;[39m
+    [90m313| [39m      }
+
+[31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[3/6]⎯[22m[39m
+
+[41m[1m FAIL [22m[49m src/components/front-office-shared/FrontOfficeGmCareer.test.tsx[2m > [22mnhl board: the default path[2m > [22mseed 3|desk off: every checkpoint of two seasons is the base's
+[31m[1mAssertionError[22m: expected [ …(13) ] to deeply equal [ …(13) ][39m
+
+[32m- Expected[39m
+[31m+ Received[39m
+
+[33m@@ -4,12 +4,12 @@[39m
+[2m    "sign:df763573f59ca7363667857caf025f63d49495dd",[22m
+[2m    "round 1:03e32b0189f43ccb218dcf246491c0da57d1e0c0",[22m
+[2m    "round 9:b59b56aa95e57265a5ee8842baf1b844b098d9e5",[22m
+[2m    "recap:367711da1c4c5cfe70fdb600feba63f03cd99f1d",[22m
+[2m    "draft:d8997780d4f62f381704158202c8a3ca9f43140a",[22m
+[32m-   "summer:59c5d0aeb883861e39777e1d75bdeaa21f8190b8",[39m
+[32m-   "round 1:7363bc2a0d7c32fe6bd0f15e6e3250bd8548b0f7",[39m
+[32m-   "round 9:2807571296bb755013f7010e29d8f5e83c397dac",[39m
+[32m-   "recap:ca49266644d80a62aec4649f60ac7d99c64b6ee8",[39m
+[32m-   "draft:10a405f6c6347d46574f1e8ec007d6ef37d08d24",[39m
+[32m-   "summer:2eed53442646d9958aeece2ad5e04e0404fb43a2",[39m
+[31m+   "summer:eceb0fec83a3709e8f67f84b4c25d1640e0e64a1",[39m
+[31m+   "round 1:3f357823519439cbd3806aac65edd2cf4c9057e8",[39m
+[31m+   "round 9:0234e4b3a6ad55d26295adf377a4393178061d88",[39m
+[31m+   "recap:b77550ed3f7b7cc26b317282f7da00aba3e5392c",[39m
+[31m+   "draft:f5d9b42e132f6619886161273029410ea000fbe6",[39m
+[31m+   "summer:f561fef44becb388b6d47981744c72ff4f1ab1bf",[39m
+[2m  ][22m
+
+[36m [2m❯[22m src/components/front-office-shared/FrontOfficeGmCareer.test.tsx:[2m311:23[22m[39m
+    [90m309| [39m          [35mif[39m ([33mRECORDING[39m) { printed[id] [33m=[39m got[33m;[39m [35mreturn[39m[33m;[39m }
+    [90m310| [39m          expect(recorded?.cases?.[id], `nothing is recorded for ${row…
+    [90m311| [39m          [34mexpect[39m(got)[33m.[39m[34mtoEqual[39m(recorded[33m.[39mcases[id])[33m;[39m
+    [90m   | [39m                      [31m^[39m
+    [90m312| [39m        })[33m;[39m
+    [90m313| [39m      }
+
+[31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[4/6]⎯[22m[39m
+
+
+[2m Test Files [22m [1m[31m1 failed[39m[22m[90m (1)[39m
+[2m      Tests [22m [1m[31m6 failed[39m[22m[2m | [22m[1m[32m1 passed[39m[22m[2m | [22m[33m19 skipped[39m[90m (26)[39m
+[2m   Start at [22m 23:17:22
+[2m   Duration [22m 4.18s[2m (transform 698ms, setup 58ms, collect 195ms, tests 3.28s, environment 261ms, prepare 105ms)[22m
+
+
+::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/components/front-office-shared/FrontOfficeGmCareer.test.tsx,title=src/components/front-office-shared/FrontOfficeGmCareer.test.tsx > nhl board%3A the default path > seed 1|desk on%3A every checkpoint of two seasons is the base's,line=311,column=23::AssertionError: expected [ …(16) ] to deeply equal [ …(16) ]%0A%0A- Expected%0A+ Received%0A%0A@@ -6,13 +6,13 @@%0A    "round 1:a5d5209c43afb38a50e55d47a9f0423ee750888c",%0A    "round 9:16e6d479abbe72dd5c4d0858a9114c2f88b0479e",%0A    "recap:363a38fbe40515ffad3c351b1bf6c0213badfa43",%0A    "answered:a589f082de4a08195ab73e84c530a123c24b0ba0",%0A    "draft:6be1fb3ae49180dbf4370d2700de4719f19f1b6d",%0A-   "summer:d3930f46f8ae8245cf17186923cf4bfb7fb170eb",%0A-   "round 1:5cbc95c690a80a606dbf8acd26872342b938e4cd",%0A-   "round 9:4dd6dce078d265cf8efa84e8c0ac9373c21ff788",%0A-   "recap:4498afcab70250aa1d6270807fded18f4c3adbc7",%0A-   "answered:4b6be4f746c82c4a0685b935ba2b81eb98a0c2a4",%0A-   "draft:854ddb358efc502f72fa4fbe12eca45984bf8d06",%0A-   "summer:6beefc2d91f17d53e260083392a91e9eb9853351",%0A+   "summer:1db61947d14d87944f916a5f26e714089accefb1",%0A+   "round 1:9807aae0b7b6cc2101346eb6b1948f8348918da5",%0A+   "round 9:315400e945284021dfbe12655dd92d6f2d4df720",%0A+   "recap:ff8c0998cddcebf0f35a3ebd6214771443e5878d",%0A+   "answered:30b0f1dcb74e3ef64ac10bedc5be8abdc57122b7",%0A+   "draft:85b0a7b37883834fa0cc25a28bf706f5acccb578",%0A+   "summer:10d7475960f23448766c4f6caa941e54d6bcafc4",%0A  ]%0A%0A ❯ src/components/front-office-shared/FrontOfficeGmCareer.test.tsx:311:23%0A%0A
+
+::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/components/front-office-shared/FrontOfficeGmCareer.test.tsx,title=src/components/front-office-shared/FrontOfficeGmCareer.test.tsx > nhl board%3A the default path > seed 1|desk off%3A every checkpoint of two seasons is the base's,line=311,column=23::AssertionError: expected [ …(15) ] to deeply equal [ …(15) ]%0A%0A- Expected%0A+ Received%0A%0A@@ -5,13 +5,13 @@%0A    "round 1:12726dfcda567bb2c0eb61eedaa779654bbd0375",%0A    "round 9:2f20fe7be4dad6c7a272ca509d49edbfbdc06619",%0A    "recap:46a771caaa5fc4ec3a759fa2d16f2bd5d930f339",%0A    "answered:366d04f88b72288270d2ddff5a1c755ec95147a4",%0A    "draft:d27e7135b901fa6fe9389fc6237c02a24c61d4fc",%0A-   "summer:896f9bb27a1938fba64f0c834847ecb86fecb6ba",%0A-   "round 1:74eab127cc031896ff3aceb17d7752ff04819c96",%0A-   "round 9:d15078139e5350fc5a13595d65ed997efeb38a29",%0A-   "recap:3fb7f6d2183d3f70f1c0be643cedc9c7d76205cb",%0A-   "answered:3ffd339d3e080cac9a91da768720fc3605651933",%0A-   "draft:639407267cc03a15c4ae637eab334eb268970e03",%0A-   "summer:f107e328a9bda4730d79abc0a9a158b1cb93c6b1",%0A+   "summer:fa471bca45b0ec6af91c44b4c09c9dde358fa177",%0A+   "round 1:247ffb35115f4d6c600e7d4cc825d995ea3140e8",%0A+   "round 9:cc5e0152d1a99fa219cabeafba4775d3475747a3",%0A+   "recap:2795d0de700cdb8b8c5e7d40f576697f75592610",%0A+   "answered:d140f3557c97e92d163f0480a62bf57c79469532",%0A+   "draft:c7ef0c2efefbd95b4c338fbc5798cc4266b5f680",%0A+   "summer:4fbb4144dfeed30aa55c3e5272b158f20418674f",%0A  ]%0A%0A ❯ src/components/front-office-shared/FrontOfficeGmCareer.test.tsx:311:23%0A%0A
+
+::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/components/front-office-shared/FrontOfficeGmCareer.test.tsx,title=src/components/front-office-shared/FrontOfficeGmCareer.test.tsx > nhl board%3A the default path > seed 2|desk on%3A every checkpoint of two seasons is the base's,line=311,column=23::AssertionError: expected [ …(15) ] to deeply equal [ …(15) ]%0A%0A- Expected%0A+ Received%0A%0A@@ -5,13 +5,13 @@%0A    "sign:fa2be269f830945e0dcaadc3ee01ccb3d5b5bcab",%0A    "round 1:83a10b9d92d0fab9c7ff57a4f857713d692c4ef1",%0A    "round 9:73acac4cc3dee0deec6b390b31e16b65384b5cff",%0A    "recap:d9b09ec137635af13a1aeaf594e2e0b26970d78f",%0A    "draft:7af9d907cb1f50dc2c3407e1a609e227eca68ced",%0A-   "summer:bc2f52300700a457ac823ece018cfea10bbaabfc",%0A-   "round 1:b18c136644b15c12634dbe64e1d521fecc416e45",%0A-   "round 9:4dbb7a3c28b96254967ffc981771b8c1ec3dc478",%0A-   "recap:b6007ef22a39c270c3f7fc901a06cdd980a4bea8",%0A-   "answered:97390bbad8192b856f3b6b4361ca356828538959",%0A-   "draft:e3f5edab092c629d560e5f2ae2cad3d5f53ac309",%0A-   "summer:1e27621f84ffe77ad4ec2bbda3eea4cebbbe4cf7",%0A+   "summer:40d186efd02907d36c707c192fd174bada8af0b2",%0A+   "round 1:b78445d3050c86b789781465e658ffb40f0cc09f",%0A+   "round 9:a802832542f4bf884c046ddd22714f07304748c6",%0A+   "recap:24cdffb94f4233af5bdb0654ecd10982d0227de6",%0A+   "answered:9d172833e9f49f048f0ebf54c992b41701a2f003",%0A+   "draft:df9ff047ada8da60d4a9709d78551c1ba877f693",%0A+   "summer:8e094a9a8710581346e653e8388ab9271874c228",%0A  ]%0A%0A ❯ src/components/front-office-shared/FrontOfficeGmCareer.test.tsx:311:23%0A%0A
+
+::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/components/front-office-shared/FrontOfficeGmCareer.test.tsx,title=src/components/front-office-shared/FrontOfficeGmCareer.test.tsx > nhl board%3A the default path > seed 2|desk off%3A every checkpoint of two seasons is the base's,line=311,column=23::AssertionError: expected [ …(14) ] to deeply equal [ …(14) ]%0A%0A- Expected%0A+ Received%0A%0A@@ -4,13 +4,13 @@%0A    "sign:8ccc582f28f5724d80b39356c67fc72adde2276c",%0A    "round 1:fd5e191895a07ccb3cd6ec5053ccc17b6c9492b5",%0A    "round 9:f3b546d09372d19b3798f8bc3e4d1b9aa66b7b10",%0A    "recap:1d11992f75090941266d8445d1a89c920c648472",%0A    "draft:33f4a88b82c58e3d98c1131b88df32ac87c615cc",%0A-   "summer:5827c0a3a5fd2a994555993392648e2e3a7c6c93",%0A-   "round 1:dc62d2aaa2a5e815bd5fd666770c3dd563371ef9",%0A-   "round 9:18b795b401918037e689ae9d45e1b7a070d15fd7",%0A-   "recap:3a86cee46812c684ed270d4126c978cc5890467a",%0A-   "answered:d52e93dabe20f8d42c8f0e2b7cb65cbe50c36cee",%0A-   "draft:9423b65dd2c2b6f465d3d3cee2c53b4f3315bdf8",%0A-   "summer:30dbc035f2793d2ace969bcd0d00e9553b12acb0",%0A+   "summer:58810f45cb496769982fa34e3bb8b8f914b97ed0",%0A+   "round 1:d29ed8d3552bca65f9606b259cd9bbe83ef648e1",%0A+   "round 9:093b726f5bfd65958d961eb83133b10ed69db868",%0A+   "recap:a8b02ad8ab3a5b7f12dda5960eb8a9e3173196a9",%0A+   "answered:e659e26af86f5a8a75b00ed8d184c8bb7d498152",%0A+   "draft:ee84635b456220e7ad885a8479e837fb1d7da808",%0A+   "summer:6784779bcd3440e6f11a9782d1685919cc66cdc9",%0A  ]%0A%0A ❯ src/components/front-office-shared/FrontOfficeGmCareer.test.tsx:311:23%0A%0A
+
+::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/components/front-office-shared/FrontOfficeGmCareer.test.tsx,title=src/components/front-office-shared/FrontOfficeGmCareer.test.tsx > nhl board%3A the default path > seed 3|desk on%3A every checkpoint of two seasons is the base's,line=311,column=23::AssertionError: expected [ …(14) ] to deeply equal [ …(14) ]%0A%0A- Expected%0A+ Received%0A%0A@@ -5,12 +5,12 @@%0A    "sign:0781756c0539afa296b09a1c6fb2a638a3e2da76",%0A    "round 1:22bc69f65cf9a9a1d55c4cdbc2fb6f8bc0fd3083",%0A    "round 9:83929c1912cc4d0052f1beeea4cae0695fa42057",%0A    "recap:c67e51ebde31a3259d30c2fc7778265ce60b9d1d",%0A    "draft:76e599234c8458debfca9b7ff20477e3003392a0",%0A-   "summer:4d8731a12bd844848a57a91f157d3d333ab551ab",%0A-   "round 1:717945a74a22424152831902f690389ea59b1771",%0A-   "round 9:86222228231f698cea8a8208c33b078a9ba1b7b6",%0A-   "recap:1be0c648aa19036c2712bb003c0b3396b846da8e",%0A-   "draft:0311aa7f93153a1b457d29f5b5600f9c8145c63e",%0A-   "summer:bcaef6597d2a607f60cffaae5e928c1ef45d26b1",%0A+   "summer:bd2c98fd69e0f64a5611bd93a35db499c81a57c3",%0A+   "round 1:28cab2e4327eb085514d2cfb7fac7be9fd60485f",%0A+   "round 9:b348ae74a209cad6f783861f0df8dd5f54d8adcf",%0A+   "recap:a24976f3101fb88b46ec77d89f1ebc4d6703b8fb",%0A+   "draft:d0d930715c9e775d0e0167e75a99d4ff1a7919f3",%0A+   "summer:07ce3d2d2395f4978b421d3a9b67ab4edc807bf1",%0A  ]%0A%0A ❯ src/components/front-office-shared/FrontOfficeGmCareer.test.tsx:311:23%0A%0A
+
+::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/components/front-office-shared/FrontOfficeGmCareer.test.tsx,title=src/components/front-office-shared/FrontOfficeGmCareer.test.tsx > nhl board%3A the default path > seed 3|desk off%3A every checkpoint of two seasons is the base's,line=311,column=23::AssertionError: expected [ …(13) ] to deeply equal [ …(13) ]%0A%0A- Expected%0A+ Received%0A%0A@@ -4,12 +4,12 @@%0A    "sign:df763573f59ca7363667857caf025f63d49495dd",%0A    "round 1:03e32b0189f43ccb218dcf246491c0da57d1e0c0",%0A    "round 9:b59b56aa95e57265a5ee8842baf1b844b098d9e5",%0A    "recap:367711da1c4c5cfe70fdb600feba63f03cd99f1d",%0A    "draft:d8997780d4f62f381704158202c8a3ca9f43140a",%0A-   "summer:59c5d0aeb883861e39777e1d75bdeaa21f8190b8",%0A-   "round 1:7363bc2a0d7c32fe6bd0f15e6e3250bd8548b0f7",%0A-   "round 9:2807571296bb755013f7010e29d8f5e83c397dac",%0A-   "recap:ca49266644d80a62aec4649f60ac7d99c64b6ee8",%0A-   "draft:10a405f6c6347d46574f1e8ec007d6ef37d08d24",%0A-   "summer:2eed53442646d9958aeece2ad5e04e0404fb43a2",%0A+   "summer:eceb0fec83a3709e8f67f84b4c25d1640e0e64a1",%0A+   "round 1:3f357823519439cbd3806aac65edd2cf4c9057e8",%0A+   "round 9:0234e4b3a6ad55d26295adf377a4393178061d88",%0A+   "recap:b77550ed3f7b7cc26b317282f7da00aba3e5392c",%0A+   "draft:f5d9b42e132f6619886161273029410ea000fbe6",%0A+   "summer:f561fef44becb388b6d47981744c72ff4f1ab1bf",%0A  ]%0A%0A ❯ src/components/front-office-shared/FrontOfficeGmCareer.test.tsx:311:23%0A%0A

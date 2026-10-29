@@ -1,0 +1,37 @@
+
+[1m[46m RUN [49m[22m [36mv3.2.7 [39m[90m/tmp/base1559b[39m
+
+Browserslist: browsers data (caniuse-lite) is 16 months old. Please run:
+  npx update-browserslist-db@latest
+  Why you should do it regularly: https://github.com/browserslist/update-db#readme
+[90mstdout[2m | src/components/front-office-shared/FrontOfficeGmCareer.test.tsx[2m > [22m[2mnhl board: the default path[2m > [22m[2mseed 1|desk on: every checkpoint of two seasons is the base's
+[22m[39mFO_GM_CAREER|nhl|seed 1|desk on|16 checkpoints|start,presser,cut,sign,round 1,round 9,recap,answered,draft,summer,round 1,round 9,recap,answered,draft,summer
+
+[90mstdout[2m | src/components/front-office-shared/FrontOfficeGmCareer.test.tsx[2m > [22m[2mnhl board: the default path[2m > [22m[2mseed 1|desk off: every checkpoint of two seasons is the base's
+[22m[39mFO_GM_CAREER|nhl|seed 1|desk off|15 checkpoints|start,cut,sign,round 1,round 9,recap,answered,draft,summer,round 1,round 9,recap,answered,draft,summer
+
+[90mstdout[2m | src/components/front-office-shared/FrontOfficeGmCareer.test.tsx[2m > [22m[2mnhl board: the default path[2m > [22m[2mseed 2|desk on: every checkpoint of two seasons is the base's
+[22m[39mFO_GM_CAREER|nhl|seed 2|desk on|15 checkpoints|start,presser,cut,sign,round 1,round 9,recap,draft,summer,round 1,round 9,recap,answered,draft,summer
+
+[90mstdout[2m | src/components/front-office-shared/FrontOfficeGmCareer.test.tsx[2m > [22m[2mnhl board: the default path[2m > [22m[2mseed 2|desk off: every checkpoint of two seasons is the base's
+[22m[39mFO_GM_CAREER|nhl|seed 2|desk off|14 checkpoints|start,cut,sign,round 1,round 9,recap,draft,summer,round 1,round 9,recap,answered,draft,summer
+
+[90mstdout[2m | src/components/front-office-shared/FrontOfficeGmCareer.test.tsx[2m > [22m[2mnhl board: the default path[2m > [22m[2mseed 3|desk on: every checkpoint of two seasons is the base's
+[22m[39mFO_GM_CAREER|nhl|seed 3|desk on|14 checkpoints|start,presser,cut,sign,round 1,round 9,recap,draft,summer,round 1,round 9,recap,draft,summer
+
+[90mstdout[2m | src/components/front-office-shared/FrontOfficeGmCareer.test.tsx[2m > [22m[2mnhl board: the default path[2m > [22m[2mseed 3|desk off: every checkpoint of two seasons is the base's
+[22m[39mFO_GM_CAREER|nhl|seed 3|desk off|13 checkpoints|start,cut,sign,round 1,round 9,recap,draft,summer,round 1,round 9,recap,draft,summer
+
+ [32m✓[39m src/components/front-office-shared/FrontOfficeGmCareer.test.tsx [2m([22m[2m26 tests[22m[2m | [22m[33m16 skipped[39m[2m)[22m[33m 3543[2mms[22m[39m
+   [33m[2m✓[22m[39m nhl board: the default path[2m > [22mseed 1|desk on: every checkpoint of two seasons is the base's [33m 1382[2mms[22m[39m
+   [33m[2m✓[22m[39m nhl board: the default path[2m > [22mseed 1|desk off: every checkpoint of two seasons is the base's [33m 426[2mms[22m[39m
+   [33m[2m✓[22m[39m nhl board: the default path[2m > [22mseed 2|desk on: every checkpoint of two seasons is the base's [33m 402[2mms[22m[39m
+   [33m[2m✓[22m[39m nhl board: the default path[2m > [22mseed 2|desk off: every checkpoint of two seasons is the base's [33m 359[2mms[22m[39m
+   [33m[2m✓[22m[39m nhl board: the default path[2m > [22mseed 3|desk on: every checkpoint of two seasons is the base's [33m 365[2mms[22m[39m
+   [33m[2m✓[22m[39m nhl board: the default path[2m > [22mseed 3|desk off: every checkpoint of two seasons is the base's [33m 326[2mms[22m[39m
+
+[2m Test Files [22m [1m[32m1 passed[39m[22m[90m (1)[39m
+[2m      Tests [22m [1m[32m10 passed[39m[22m[2m | [22m[33m16 skipped[39m[90m (26)[39m
+[2m   Start at [22m 23:17:29
+[2m   Duration [22m 4.47s[2m (transform 687ms, setup 62ms, collect 193ms, tests 3.54s, environment 263ms, prepare 59ms)[22m
+
