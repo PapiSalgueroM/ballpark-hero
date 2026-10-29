@@ -1,0 +1,38 @@
+tsc: node_modules/.bin/tsc --noEmit -p tsconfig.app.json
+vnew: node_modules/.bin/vitest run src/test/usCareerReports1569.test.tsx --testTimeout=300000 --hookTimeout=120000
+vboard1: node_modules/.bin/vitest run src/test/careerDecisionOutcome.test.tsx src/test/careerHallV1Replay.test.ts src/test/careerSeasonReview.test.tsx src/test/extensionResponseMotion.test.tsx src/test/myCareerRestore.test.tsx src/test/noDoubleRecord.test.tsx src/test/rivalryChoiceBoard.test.tsx src/test/usCareerActionConfirm.test.tsx src/test/usCareerDirtyMoney.test.tsx src/test/usCareerDraftNightBoard.test.tsx src/test/usCareerHallBoard.test.tsx --testTimeout=300000 --hookTimeout=120000
+vboard2: node_modules/.bin/vitest run src/test/usCareerMarketBoard.test.tsx src/test/usCareerMarketSecondTab.test.tsx src/test/usCareerMarketUi.test.tsx src/test/usCareerPractice.test.tsx src/test/usCareerProspect.test.tsx src/test/usCareerReports1346.test.tsx src/test/usCareerReveals.test.tsx src/test/usCareerSaveRetry.test.tsx src/test/usCareerStatLines.test.tsx src/test/usCareerSummer.test.tsx src/test/usSeasonCentreEntry.test.tsx --testTimeout=300000 --hookTimeout=120000
+parity: node scripts/simUsBoardParity.mjs
+parity-label: US_BOARD_PARITY_CONTROL=label node scripts/simUsBoardParity.mjs
+sim: node scripts/simUsCareerReports.mjs
+ctl-blind: SIM_REPORTS_CONTROL=blind node scripts/simUsCareerReports.mjs
+ctl-nocredit: SIM_REPORTS_CONTROL=nocredit node scripts/simUsCareerReports.mjs
+ctl-alwayslast: SIM_REPORTS_CONTROL=alwayslast node scripts/simUsCareerReports.mjs
+ctl-noseason: SIM_REPORTS_CONTROL=noseason node scripts/simUsCareerReports.mjs
+ctl-titlecredit: SIM_REPORTS_CONTROL=titlecredit node scripts/simUsCareerReports.mjs
+ctl-creditlow: SIM_REPORTS_CONTROL=creditlow node scripts/simUsCareerReports.mjs
+ctl-fangate: SIM_REPORTS_CONTROL=fangate node scripts/simUsCareerReports.mjs
+ctl-fanforget: SIM_REPORTS_CONTROL=fanforget node scripts/simUsCareerReports.mjs
+ctl-fansoccer: SIM_REPORTS_CONTROL=fansoccer node scripts/simUsCareerReports.mjs
+sim-seed1: SIM_SEED=1 node scripts/simUsCareerReports.mjs
+sim-seed2: SIM_SEED=2 node scripts/simUsCareerReports.mjs
+sim-seed3: SIM_SEED=3 node scripts/simUsCareerReports.mjs
+simNflCareer: node scripts/simNflCareer.mjs
+simNbaCareer: node scripts/simNbaCareer.mjs
+simMlbCareer: node scripts/simMlbCareer.mjs
+simNhlCareer: node scripts/simNhlCareer.mjs
+simCareerPressMarket: node scripts/simCareerPressMarket.mjs
+simCareerParity: node scripts/simCareerParity.mjs
+simCareerDerbies: node scripts/simCareerDerbies.mjs
+simCareerSocialBrands: node scripts/simCareerSocialBrands.mjs
+simUsCareerActionConfirm: node scripts/simUsCareerActionConfirm.mjs
+simUsCareerProspect: node scripts/simUsCareerProspect.mjs
+simNoRivalNames: node scripts/simNoRivalNames.mjs
+simHarnessAnchors: node scripts/simHarnessAnchors.mjs
+simStorageWrites: node scripts/simStorageWrites.mjs
+dash: node .rc/x/dashscan.mjs f957b34ea
+dash-control: DASH_CONTROL=1 node .rc/x/dashscan.mjs f957b34ea
+ladder-base: git show 2ee79c595:src/lib/careerSocial.ts > /tmp/careerSocial.base.ts && node .rc/x/ladderSha.mjs /tmp/careerSocial.base.ts
+ladder-head: node .rc/x/ladderSha.mjs src/lib/careerSocial.ts
+r2-base: git worktree add /tmp/b2 2ee79c595 >/dev/null 2>&1; ln -s "$PWD/node_modules" /tmp/b2/node_modules; cp scripts/simUsCareerReports.mjs /tmp/b2/scripts/; cd /tmp/b2 && node scripts/simUsCareerReports.mjs
+r3-base: sleep 8; git worktree add /tmp/b3 2ee79c595 >/dev/null 2>&1; ln -s "$PWD/node_modules" /tmp/b3/node_modules; cp src/test/usCareerActionConfirm.test.tsx /tmp/b3/src/test/; cd /tmp/b3 && node_modules/.bin/vitest run src/test/usCareerActionConfirm.test.tsx --testTimeout=300000 --hookTimeout=120000
