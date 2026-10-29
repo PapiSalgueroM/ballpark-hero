@@ -1,0 +1,7 @@
+ctl-shared exit=1 98s | simTriviaBank: 11 failure(s) (NEGATIVE CONTROL shared ON)
+default exit=0 137s | simTriviaBank: all checks passed
+armfile exit=0 140s | simTriviaBank: all checks passed
+ctl-short exit=1 139s | simTriviaBank: 6 failure(s) (NEGATIVE CONTROL short ON)
+ctl-dupe exit=1 115s | simTriviaBank: 26 failure(s) (NEGATIVE CONTROL dupe ON)
+ctl-redeal exit=1 132s | simTriviaBank: 17 failure(s) (NEGATIVE CONTROL redeal ON)
+ctl-ties exit=1 108s | simTriviaBank: 8 failure(s) (NEGATIVE CONTROL ties ON)

@@ -1,0 +1,7 @@
+default: node scripts/simTriviaBank.mjs
+ctl-shared: TRIVIA_CONTROL=shared node scripts/simTriviaBank.mjs
+armfile: echo "imports equal to 65b3e291a: [$(git diff --name-only 65b3e291a -- src/data/marketNamesakes.json src/lib/clearWinner.ts src/lib/dateUtils.ts src/lib/dealPlayers.ts)]" && git show 65b3e291a:src/lib/triviaQuestionBank.ts > "$TMPDIR/base-bank.ts" && TRIVIA_ARM_FILE="$TMPDIR/base-bank.ts" node scripts/simTriviaBank.mjs
+ctl-short: TRIVIA_CONTROL=short node scripts/simTriviaBank.mjs
+ctl-redeal: TRIVIA_CONTROL=redeal node scripts/simTriviaBank.mjs
+ctl-dupe: TRIVIA_CONTROL=dupe node scripts/simTriviaBank.mjs
+ctl-ties: TRIVIA_CONTROL=ties node scripts/simTriviaBank.mjs
