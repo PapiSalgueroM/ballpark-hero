@@ -1,0 +1,18 @@
+tsc: node_modules/.bin/tsc --noEmit -p tsconfig.app.json
+vitest-notes: node_modules/.bin/vitest run src/test/myCareerRestore.test.tsx src/test/rivalryChoiceBoard.test.tsx src/test/usCareerActionConfirm.test.tsx src/test/usCareerReveals.test.tsx src/test/usCareerStatLines.test.tsx src/test/careerEntryGuide.test.tsx src/test/usCareerHelpRules1104.test.tsx src/test/usCareerSaveRetry.test.tsx src/test/usCareerIntlBoard.test.tsx --testTimeout=300000 --hookTimeout=120000
+vitest-unrun: node_modules/.bin/vitest run src/test/usTrophyTile.test.ts src/test/careerBadgeMotion.test.tsx src/test/nbaOldSaveLines.test.ts src/test/careerDecisionOutcome.test.tsx src/test/careerHallV1Replay.test.ts src/test/nbaCourtRecap1517.test.tsx src/test/seasonCentreWords.test.tsx src/test/usProgrammeCardTruth.test.ts src/test/usSeasonCentre.test.tsx src/test/usSeasonCentreEntry.test.tsx src/test/usSeasonCentreScreens.test.tsx src/lib/usCareerProgramme.test.ts src/test/nbaTrophyTile.test.ts src/test/nbaIntlResultLines.test.tsx --testTimeout=300000 --hookTimeout=120000
+intl-default: node scripts/simCareerIntl.mjs
+intl-8: INTL_SECTIONS=8 node scripts/simCareerIntl.mjs
+simNoRivalNames: node scripts/simNoRivalNames.mjs
+simHarnessAnchors: node scripts/simHarnessAnchors.mjs
+simStorageWrites: node scripts/simStorageWrites.mjs
+simTrustCopy: node scripts/simTrustCopy.mjs
+simUsCoachRetirement: node scripts/simUsCoachRetirement.mjs
+simSaveKeeper: node scripts/simSaveKeeper.mjs
+simCareerEntryGuide: node scripts/simCareerEntryGuide.mjs
+simUsCareerSaveRetry: node scripts/simUsCareerSaveRetry.mjs
+simUsCareerSkips: node scripts/simUsCareerSkips.mjs
+simNbaSeasonStats: node scripts/simNbaSeasonStats.mjs
+simUsBoardParity-head: node scripts/simUsBoardParity.mjs
+attr-board: git worktree add -q /tmp/ab HEAD && ln -s "$PWD/node_modules" /tmp/ab/node_modules && node .rc/x/mutfix.mjs /tmp/ab no3badges && cd /tmp/ab && node scripts/simUsBoardParity.mjs
+lowcall-notes: git worktree add -q /tmp/lc HEAD && ln -s "$PWD/node_modules" /tmp/lc/node_modules && node .rc/x/mutfix.mjs /tmp/lc lowcall && cd /tmp/lc && (node_modules/.bin/vitest run src/test/usCareerStatLines.test.tsx src/test/myCareerRestore.test.tsx --testTimeout=300000 --hookTimeout=120000 > /tmp/lc.log 2>&1; s=$?; grep -a "^note " /tmp/lc.log; tail -4 /tmp/lc.log; exit $s)
