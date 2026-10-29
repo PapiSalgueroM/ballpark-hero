@@ -1,0 +1,17 @@
+simAflClubNames exit=0 19s | simAflClubNames: 38 checks, 0 failures, sections 0,1,2a,2b,3, 18.6 s
+c-typo exit=3 4s | simAflClubNames control typo: target section 0 RED, independent section 3 RED, 3.7 s. DID NOT FIRE
+c-onesource exit=1 4s | simAflClubNames control onesource: target section 0 RED, independent section 3 green, 3.6 s. RED as intended
+c-ladder exit=1 9s | simAflClubNames control ladder: target section 1 RED, independent section 2a green, 8.4 s. RED as intended
+c-simdrift exit=1 14s | simAflClubNames control simdrift: target section 2b RED, independent section 2a green, 13.2 s. RED as intended
+c-oldsave exit=1 2s | simAflClubNames control oldsave: target section 3 RED, independent section 0 green, 1.7 s. RED as intended
+c-mixed exit=1 4s | simAflClubNames control mixed: target section 3 RED, independent section 0 green, 3.7 s. RED as intended
+tsc exit=0 104s | 
+simAussieRulesLeagueBoard exit=0 6s | simAussieRulesLeagueBoard: all 15 engine, hook, board and page tests passed (6.6 s)
+simAussieRulesSeason exit=0 58s | simAussieRulesSeason: all eleven sections green in 57.9 s
+simAussieRulesManager exit=0 5s | simAussieRulesManager: source-copy controls never change the shared repository, league data or existing games.
+simAussieRulesManagerBoard exit=0 7s | simAussieRulesManagerBoard: saved replay, refused storage, quiet restores, finite cue binding and native focus targets execute.
+simAflClubNames-long exit=0 123s | simAflClubNames: 38 checks, 0 failures, sections 0,1,2a,2b,3, 123.2 s
+simHomeFront exit=0 1s | simHomeFront: green. The home front shows real games, real saves and a sport you can tell apart without colour.
+simResultMoment exit=1 0s | Node.js v24.22.1
+simInventedNames exit=0 12s | simInventedNames: green. Every invented man on this site is invented all the way down.
+simNoRivalNames exit=0 15s | No rival product names found. 0 findings.
