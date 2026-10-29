@@ -1,0 +1,9 @@
+src/lib/usCareerHallWall.test.ts(92,30): error TS2353: Object literal may only specify known properties, and 'summerSalt' does not exist in type 'NbaCareerState'.
+src/lib/usCareerHallWall.test.ts(93,30): error TS2322: Type 'UsCareerSeason[]' is not assignable to type 'NbaSeasonLine[]'.
+  Type 'UsCareerSeason' is missing the following properties from type 'NbaSeasonLine': ppg, rpg, apg
+src/lib/usCareerHallWall.test.ts(94,30): error TS2322: Type 'UsCareerSeason[]' is not assignable to type 'NbaSeasonLine[]'.
+  Type 'UsCareerSeason' is missing the following properties from type 'NbaSeasonLine': ppg, rpg, apg
+src/lib/usCareerHallWall.test.ts(96,27): error TS2345: Argument of type 'UsHallSport<NbaCareerState>' is not assignable to parameter of type 'UsHallSport<{ summerSalt: any; seasons: { games: number; year: number; team: string; age: number; ovr: number; awards: string[]; teamResult: string; salary: number; }[]; name: string; pos: string; team: string; year: number; ... 33 more ...; hallCal?: HallCalibration; }>'.
+  Property 'summerSalt' is missing in type 'NbaCareerState' but required in type '{ summerSalt: any; seasons: { games: number; year: number; team: string; age: number; ovr: number; awards: string[]; teamResult: string; salary: number; }[]; name: string; pos: string; team: string; ... 34 more ...; hallCal?: HallCalibration; }'.
+src/lib/usCareerHallWall.test.ts(101,32): error TS2345: Argument of type 'UsCareerCore' is not assignable to parameter of type 'MlbCareerState'.
+  Type 'UsCareerCore' is missing the following properties from type 'MlbCareerState': archetype, rings, mvpCys, allStars

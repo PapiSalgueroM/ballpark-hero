@@ -1,0 +1,14 @@
+simWall exit=0 1s | simUsCareerHallWall: ok, 50 check ids, 7843 checks, 200 careers a sport, 152 old saves
+simWeight exit=0 0s | simUsCareerWeight: green. 31 checks: the four wrappers hand the board their own binding, no shared file or binding imports another sport, and every control fired.
+unit exit=0 3s |    Duration  2.21s (transform 988ms, setup 56ms, collect 1.31s, tests 65ms, environment 314ms, prepare 172ms)
+c-draw exit=1 1s | simUsCareerHallWall CONTROL draw: FIRED, s1.nodraw red 800 times
+c-unstamped exit=1 2s | simUsCareerHallWall CONTROL unstamped: FIRED, s1.record red 800 times
+c-dupe exit=1 1s | simUsCareerHallWall CONTROL dupe: FIRED, s3.idem red 1 times
+c-calnow exit=1 1s | simUsCareerHallWall CONTROL calnow: FIRED, s2.v1.record red 86 times
+c-newcomer exit=1 1s | simUsCareerHallWall CONTROL newcomer: FIRED, s3.newcomer red 2 times
+c-evict exit=1 1s | simUsCareerHallWall CONTROL evict: FIRED, s3.hofkept red 1 times
+c-version exit=1 1s | simUsCareerHallWall CONTROL version: FIRED, s3.version red 1 times
+c-clamp exit=1 1s | simUsCareerHallWall CONTROL clamp: FIRED, s3.bytes red 1 times
+c-sportimport exit=1 1s | simUsCareerHallWall CONTROL sportimport: FIRED, s3.weight red 1 times
+rival exit=0 10s | No rival product names found. 0 findings.
+tsc exit=2 43s |   Type 'UsCareerCore' is missing the following properties from type 'MlbCareerState': archetype, rings, mvpCys, allStars

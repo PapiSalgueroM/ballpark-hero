@@ -1,0 +1,14 @@
+tsc: node_modules/.bin/tsc --noEmit -p tsconfig.app.json
+unit: node_modules/.bin/vitest run src/lib/usCareerHallWall.test.ts --testTimeout=300000 --hookTimeout=120000
+simWall: node scripts/simUsCareerHallWall.mjs
+simWeight: node scripts/simUsCareerWeight.mjs
+c-draw: SIM_HALL_WALL_CONTROL=draw node scripts/simUsCareerHallWall.mjs
+c-unstamped: SIM_HALL_WALL_CONTROL=unstamped node scripts/simUsCareerHallWall.mjs
+c-calnow: SIM_HALL_WALL_CONTROL=calnow node scripts/simUsCareerHallWall.mjs
+c-dupe: SIM_HALL_WALL_CONTROL=dupe node scripts/simUsCareerHallWall.mjs
+c-evict: SIM_HALL_WALL_CONTROL=evict node scripts/simUsCareerHallWall.mjs
+c-newcomer: SIM_HALL_WALL_CONTROL=newcomer node scripts/simUsCareerHallWall.mjs
+c-clamp: SIM_HALL_WALL_CONTROL=clamp node scripts/simUsCareerHallWall.mjs
+c-version: SIM_HALL_WALL_CONTROL=version node scripts/simUsCareerHallWall.mjs
+c-sportimport: SIM_HALL_WALL_CONTROL=sportimport node scripts/simUsCareerHallWall.mjs
+rival: node scripts/simNoRivalNames.mjs
