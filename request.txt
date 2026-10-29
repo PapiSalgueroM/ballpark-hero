@@ -1,0 +1,32 @@
+tsc: node_modules/.bin/tsc --noEmit -p tsconfig.app.json
+vt-wall: node_modules/.bin/vitest run src/test/usCareerHallWall.test.tsx src/lib/usCareerHallWall.test.ts --testTimeout=300000 --hookTimeout=120000
+vt-moved: node_modules/.bin/vitest run src/test/careerSeasonReview.test.tsx src/test/usCareerSaveRetry.test.tsx src/test/usCareerReports1569.test.tsx --testTimeout=300000 --hookTimeout=120000
+simWall: node scripts/simUsCareerHallWall.mjs
+c-nokeep: SIM_WALL_CAREERS=5 SIM_HALL_WALL_CONTROL=nokeep node scripts/simUsCareerHallWall.mjs
+c-loadonly: SIM_WALL_CAREERS=5 SIM_HALL_WALL_CONTROL=loadonly node scripts/simUsCareerHallWall.mjs
+c-kept: SIM_WALL_CAREERS=5 SIM_HALL_WALL_CONTROL=kept node scripts/simUsCareerHallWall.mjs
+c-anyplaque: SIM_WALL_CAREERS=5 SIM_HALL_WALL_CONTROL=anyplaque node scripts/simUsCareerHallWall.mjs
+c-rewrite: SIM_WALL_CAREERS=5 SIM_HALL_WALL_CONTROL=rewrite node scripts/simUsCareerHallWall.mjs
+c-oldline: SIM_WALL_CAREERS=5 SIM_HALL_WALL_CONTROL=oldline node scripts/simUsCareerHallWall.mjs
+c-createline: SIM_WALL_CAREERS=5 SIM_HALL_WALL_CONTROL=createline node scripts/simUsCareerHallWall.mjs
+c-nogate: SIM_WALL_CAREERS=5 SIM_HALL_WALL_CONTROL=nogate node scripts/simUsCareerHallWall.mjs
+c-stalesave: SIM_WALL_CAREERS=5 SIM_HALL_WALL_CONTROL=stalesave node scripts/simUsCareerHallWall.mjs
+c-boarddraw: SIM_WALL_CAREERS=5 SIM_HALL_WALL_CONTROL=boarddraw node scripts/simUsCareerHallWall.mjs
+m-draw: SIM_WALL_CAREERS=5 SIM_HALL_WALL_CONTROL=draw node scripts/simUsCareerHallWall.mjs
+m-unstamped: SIM_WALL_CAREERS=5 SIM_HALL_WALL_CONTROL=unstamped node scripts/simUsCareerHallWall.mjs
+m-calnow: SIM_WALL_CAREERS=5 SIM_HALL_WALL_CONTROL=calnow node scripts/simUsCareerHallWall.mjs
+m-dupe: SIM_WALL_CAREERS=5 SIM_HALL_WALL_CONTROL=dupe node scripts/simUsCareerHallWall.mjs
+m-evict: SIM_WALL_CAREERS=5 SIM_HALL_WALL_CONTROL=evict node scripts/simUsCareerHallWall.mjs
+m-newcomer: SIM_WALL_CAREERS=5 SIM_HALL_WALL_CONTROL=newcomer node scripts/simUsCareerHallWall.mjs
+m-clamp: SIM_WALL_CAREERS=5 SIM_HALL_WALL_CONTROL=clamp node scripts/simUsCareerHallWall.mjs
+m-version: SIM_WALL_CAREERS=5 SIM_HALL_WALL_CONTROL=version node scripts/simUsCareerHallWall.mjs
+m-sportimport: SIM_WALL_CAREERS=5 SIM_HALL_WALL_CONTROL=sportimport node scripts/simUsCareerHallWall.mjs
+seasonReview: node scripts/simCareerSeasonReview.mjs
+seasonReview-all: CAREER_SEASON_REVIEW_CONTROL=all node scripts/simCareerSeasonReview.mjs 2>&1 | grep -E "^(PASS|FAIL)|binds exactly|passed; all modes" ; exit ${PIPESTATUS[0]}
+parity: node scripts/simUsBoardParity.mjs
+confirm: node scripts/simUsCareerActionConfirm.mjs
+saveRetry: node scripts/simUsCareerSaveRetry.mjs
+storage: node scripts/simStorageWrites.mjs
+anchors: node scripts/simHarnessAnchors.mjs
+rival: node scripts/simNoRivalNames.mjs
+usWeight: node scripts/simUsCareerWeight.mjs
