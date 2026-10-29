@@ -1,0 +1,7 @@
+#!build
+#!playwright
+# Release BT kit: 2 of the 2 request lines of Release BS's rc-BQd2.txt (rBSg/.tmp-fx/bs), the lines of the BT areas (the US My Careers, the Front Offices, Soccer Connections and the daily save shape, Build Your XI and the player search box, What's New, the guides and search index, the weight rows) and the setup lines before them; 0 line(s) outside those areas left out.
+# Release BS kit: 2 of the 2 request lines of Release BR's rc-BQd2.txt (rBRg/.tmp-fx/br), the lines of the BS areas (Soccer Career, Club Manager and the manager games on its engine, Player Bingo, Conquest, Stat and Draft Detective, the US My Career save notice, What's New, the polls, the guide intro) and the setup lines before them; 0 line(s) outside those areas left out.
+# Release BQ, Round 1534 (US My Career shop promises, closing head 1c7205d0): rc-1534.txt rc-fb.txt.
+g2: ONLY=simNbaCareer,simNflCareer,simMlbCareer,simNhlCareer,simCareerRealism,simNbaAwardsSense,simUsCareerWeight,simSeasonReveal,simNflTruth,simUsCareerRecovery,simNflCoachStaffRecovery,simUsCareerPractice,simUsCareerActionConfirm,simCareerInbox,simNoDoubleRecord node scripts/runAllSims.mjs --browser
+g5: ONLY=simCareerHub,simCareerInboxBeats,simCareerRivalryEvents,simExtension,simHomeFront,simRevealMoments,simSessionMarks,simUsCoachCareer,simTycoonGear,simCareerTraining,simUsCareerProspect,simCareerPreDraft,simCareerEntryGuide,simCareerSeasonReview,simCareerDecisionOutcome node scripts/runAllSims.mjs --browser
