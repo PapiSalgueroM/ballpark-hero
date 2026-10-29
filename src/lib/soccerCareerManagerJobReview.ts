@@ -66,8 +66,10 @@ export function readManagerJobReview(state: CareerState, clubs: ClubData[]): Rev
     || typeof p.rowResult !== 'string' || typeof p.eventResult !== 'string'
     || p.rowTier !== p.to.clubTier || !matches(ms, p.from)) return null;
   const move = p as PendingMove, row = ms.seasonResults[move.rowIndex];
-  const source = uniqueClub(move.from.club, clubs), destination = boundDestination(move.to, clubs);
-  if (!source || !destination || (leagueKeyInYear(destination, managerNextSeasonYear(state)) ?? destination.league) !== move.to.league
+  /* Release BS fix: Stay restores the stored from tuple, so the source club need not be in the list
+     (a job taken off the market often is not); it stays bound to the live employment by matches(). */
+  const destination = boundDestination(move.to, clubs);
+  if (!destination || (leagueKeyInYear(destination, managerNextSeasonYear(state)) ?? destination.league) !== move.to.league
     || row.club !== move.from.club || row.year !== move.season || row.tier !== move.from.clubTier
     || (row.playerPos !== 3 && row.playerPos !== 4)
     || !move.eventResult.startsWith('📋 Manager Season ' + move.season + ': ')
@@ -100,8 +102,10 @@ export function advanceReviewedManagerSeason(state: CareerState, clubs: ClubData
     || typeof row.result !== 'string' || typeof finished.events[eventIndex] !== 'string') return finished;
   const move: PendingMove = { season: after.season, from: employment(before), to: employment(after),
     rowIndex, rowResult: row.result, rowTier: row.tier, eventIndex, eventResult: finished.events[eventIndex] };
-  const source = uniqueClub(move.from.club, clubs), destination = boundDestination(move.to, clubs);
-  if (!source || !destination || row.tier !== after.clubTier
+  /* Release BS fix: Stay restores the stored from tuple, so the source club need not be in the list
+     (a job taken off the market often is not); it stays bound to the live employment by matches(). */
+  const destination = boundDestination(move.to, clubs);
+  if (!destination || row.tier !== after.clubTier
     || (leagueKeyInYear(destination, managerNextSeasonYear(finished)) ?? destination.league) !== move.to.league) return finished;
   const rowResult = replaceOwned(move.rowResult, move, pendingText(move)), eventResult = replaceOwned(move.eventResult, move, pendingText(move));
   if (rowResult === null || eventResult === null || !move.eventResult.startsWith('📋 Manager Season ' + move.season + ': ')) return finished;
