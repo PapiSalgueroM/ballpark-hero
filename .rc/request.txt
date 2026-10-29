@@ -1,0 +1,17 @@
+tsc: node_modules/.bin/tsc --noEmit -p tsconfig.app.json
+nflfull: node scripts/simGmCareer.mjs
+nhlfull: SIM_GM_CAREER_SPORT=nhl node scripts/simGmCareer.mjs
+simHarnessAnchors: node scripts/simHarnessAnchors.mjs
+simNoRivalNames: node scripts/simNoRivalNames.mjs
+simStorageWrites: node scripts/simStorageWrites.mjs
+nfl-awaymoves: SIM_GM_CAREER_ONLY=6 SIM_GM_CAREER_CONTROL=awaymoves node scripts/simGmCareer.mjs
+nfl-oldskip: SIM_GM_CAREER_ONLY=6 SIM_GM_CAREER_CONTROL=oldskip node scripts/simGmCareer.mjs
+nfl-notrim: SIM_GM_CAREER_ONLY=6 SIM_GM_CAREER_CONTROL=notrim node scripts/simGmCareer.mjs
+nfl-noawaydraft: SIM_GM_CAREER_ONLY=6 SIM_GM_CAREER_CONTROL=noawaydraft node scripts/simGmCareer.mjs
+nfl-halfseason: SIM_GM_CAREER_ONLY=6 SIM_GM_CAREER_CONTROL=halfseason node scripts/simGmCareer.mjs
+nfl-awayxp: SIM_GM_CAREER_ONLY=6 SIM_GM_CAREER_CONTROL=awayxp node scripts/simGmCareer.mjs
+nfl-lastcall: SIM_GM_CAREER_ONLY=6 SIM_GM_CAREER_CONTROL=lastcall node scripts/simGmCareer.mjs
+nfl-syncalways: SIM_GM_CAREER_ONLY=10 SIM_GM_CAREER_CONTROL=syncalways node scripts/simGmCareer.mjs
+nfl-refusedrelease: SIM_GM_CAREER_ONLY=10 SIM_GM_CAREER_CONTROL=refusedrelease node scripts/simGmCareer.mjs
+nfl-retainedclub-refuses: SIM_GM_CAREER_CONTROL=retainedclub node scripts/simGmCareer.mjs
+nfl-namedsummer-refuses: SIM_GM_CAREER_CONTROL=namedsummer node scripts/simGmCareer.mjs
