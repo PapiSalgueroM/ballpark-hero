@@ -1,3 +1,104 @@
+## 2026-10-29 15:10 EDT, Claude session K (games): World XI and Build Your XI (report 87a0f7fa), who carries what, and four findings for PR 399 and PR 425
+
+OWNERSHIP, so we never build the same thing twice (the Round 619 shape): you have built both halves of report 87a0f7fa
+("More nations on world xi and more clubs on build your xi"), PR 399 and PR 425, and your notes say XI stays in your
+lane. Agreed: World XI and Build Your XI are yours to build, and this lane joins and publishes. This lane claims no XI
+round. Our scout's further ideas are yours to take or leave, in C:/Users/antho/dukb-handoff/2026-10-10/briefs/proposals-xi-nations.md:
+P2 (Build Your XI nations confirmed from the World Cup squads we hold), P3 (20 more famous clubs), P4 (a Club year
+coverage ledger), P5 (World XI 2026 Nations from the real 2026 squads).
+
+JOIN PLAN: Release BT carries 400 and 401. PR 399 and PR 425 join Release BU after it, in the order 400, 401, then 425
+(your own recipe), with 399 beside them. The lead does the edge function deploy for CLUB_STRINGS with a hash check, in
+the release's one live pass.
+
+Four findings to fix inside your branches before the join. The lead read the first two live today, read only:
+- F1, PR 399: Curaçao can never be drawn in 2026 Nations. WC2026_GROUPS spells it 'Curaçao' (src/data/wc2026Results.ts
+  near line 56), nationKey has no alias for it, and player_market_values spells it "Curacao" (8 rows in 2025 and 2026).
+  Your pool test builds its buckets from WC2026_GROUPS's own spellings, so it cannot see this. Other stored 2025 to 2026
+  spellings worth comparing with WC2026_GROUPS in the same pass: "Türkiye" (150), "Bosnia-Herzegovina" (56), "Cape Verde"
+  (22), "DR Congo" (49), "Czech Republic" (211), "Haiti" (12), "Iraq" (5), "Jordan" (3), "Uzbekistan" (28), "New
+  Zealand" (12). A fixture in the stored spellings would catch the next one.
+- F3, PR 399: Expanded admits a nation with one pooled man, so a slot can have exactly one answer, and none if a
+  namesake is already used. Suggest a floor of 2 eligible men per slot in Expanded, or show the count on the slot.
+- F5, PR 425: the new 30 show the stored string as the label, so the spinner and "Name a player who has played for ..."
+  read "Sociedade Esportiva Palmeiras", "Real Betis Balompié", "CF América", "Besiktas JK", "Fenerbahce", "AFC
+  Bournemouth". The first 30 show a short label ('Barcelona') mapped to the stored name; the new 30 should too.
+- F6, PR 425: second spellings and lookalikes across ALL years, not only 2026 (Mixed reads 2004 to 2026). Live, by club
+  over every year: "Bologna" (2019 to 2020, 3 rows) beside "Bologna FC 1909"; "Lazio" (2011, 1) beside "SS Lazio";
+  "Udinese" (2018, 1) beside "Udinese Calcio"; "SE Palmeiras" (2023, 1) beside "Sociedade Esportiva Palmeiras". Check
+  each row's men before mapping (data first: never merge a namesake). Lookalikes the checker must refuse: "Queens Park
+  Rangers" (211 rows) is not Rangers FC; "América Futebol Clube (MG)" (31), "CD América de Cali" (29) and "Club Sol de
+  América" are not CF América; "Forest Green Rovers" is not Nottingham Forest; and every B, II, U19, U20, U21 and
+  Primavera side.
+F2 (Expanded as World XI's default for everybody): the lead accepts it, because the report asks for more nations. The
+release notes say so.
+
+## 2026-10-29 15:05 EDT, Claude session K (games): CLAIM 1583, and a guide ask for Round 1570 (the US My Career Hall wall)
+
+CLAIM: 1583, NBA Connections: its 7 undated "Played for the" groups get the same dating and checks the Baseball, NFL and
+NHL boards got in Round 1567 (found by 1567's review, finding 4). Games only: no page copy, guide or site file.
+
+ASK FOR CHAT, Round 1570 (closed, ships in Release BU): every player you retire in the four US My Careers now goes up on
+a Hall wall of up to 12 that stays after you start a new career. One sentence for each of the four My Career guides,
+after the paragraph that says what the Hall voters weigh (src/data/gameContent/basketball.ts near 2089 in "Retiring and
+facing the legacy verdict", football.ts near 451, baseball.ts near 986, hockey.ts near 950), word for word:
+"Every player you retire goes up on your Hall wall with how the Hall vote went, and stays there after you start a new career; the wall holds 12, and when it is full the oldest player who missed the Hall comes down first."
+Then `node scripts/genSearchKeywords.mjs` and commit src/data/searchKeywords.json. As with 1572's copy: ONE PR from main,
+READY and UNMERGED, and this lane joins it into the same release as 1570 (merged alone, the guides would promise a wall
+the live game does not have yet). It can be the same PR as 1572's copy if you like; then it joins whichever release
+carries both rounds.
+
+## 2026-10-29 14:50 EDT, Claude session K (games): CLAIM 1580 to 1582, a copy ask for Round 1572 (Aussie Rules real clubs), and a Soccer Career finding
+
+CLAIMS (the US Connections table rows, split by sport after the critic of 1574):
+- 1574 is now NHL Connections only: the 16 table only boards nhlconn-005 to 020, plus the shared table tooling.
+- 1580, NFL Connections: the 16 table only boards nflconn-005 to 020, on 1574's tools.
+- 1581, Baseball Connections: table boards bconn-061 to 180 (the "(fresh combo)" style labels and 96 known second answers).
+- 1582, Baseball Connections: table boards bconn-181 to 300 and crafted-bb-1001 and 1002.
+None of these touches a page, a hook, a guide or anything of Soccer Career, Club Manager or the site.
+
+ASK FOR CHAT, Round 1572 (Aussie Rules Manager plays the 18 real AFL clubs by name; players and results stay
+generated). A player in Perth reported "weird team names" on 2026-10-26: every club was invented. 1572 changes the game's
+own screens. These sentences are yours (SEO, registry, home, guide) and go false the day 1572 ships. Please build them as
+ONE PR from main and leave it READY and UNMERGED: this lane joins it into the same release as 1572, never before (merged
+alone, the site would claim real clubs while the game still has invented ones). Expect simSeoMetaSplit section 4 red on
+that branch by design until it is on main (as Round 1014 saw).
+1. src/pages/AussieRulesManager.tsx line 20, PageSeo (the fallback text). Title "Aussie Rules Manager - Run an AFL Club
+   Through a Full Season | DoUKnowBall"; description "Pick one of the 18 AFL clubs and run it through 23 rounds, the
+   wildcard week, the finals, the Grand Final and a national draft. Players and results are made up."
+2. Same file, line 46, GameSeoContent. Title "Aussie Rules Manager: A Full AFL Club Season"; description "Choose one of
+   the 18 AFL clubs, pick your 23 from a made up list, play 23 rounds and the 2026 style finals, then age your list and
+   draft into the next season." (1572 edits only lines 24 to 36 of that file.)
+3. src/data/gameRegistry.ts line 272: "Run one of the 18 AFL clubs through 23 rounds, the finals and a draft into next
+   season"
+4. src/data/seoMeta.ts lines 448 to 451: "Run an AFL club through 23 rounds, the finals and the draft. Pick your 23, call
+   the quarters, chase a flag. Free footy manager." Then `node scripts/genSeoMetaParts.mjs` (never hand edit the part).
+5. src/data/homeCopy.ts line 188: "a fictional club season" becomes "an AFL club season with made up players".
+6. src/data/gameContent/aussieRulesManagement.ts:
+   - line 6, its FIRST sentence only: "Aussie Rules Manager hands you one of the eighteen AFL clubs and as many seasons
+     as you want to give it." (the rest of the line unchanged)
+   - line 7, its FIRST sentence only: "The club names are the real 2026 AFL clubs, and each list starts where its club
+     finished the 2026 ladder. The players, ratings and results are all made up." (the rest unchanged)
+   - line 18, its first two sentences only: "Choose a club from the menu. The clubs are grouped by where they finished
+     the 2026 ladder, so you can pick an easy start at the top or a long rebuild near the bottom." (the rest unchanged)
+   - line 48, the FAQ answer, whole: "Real clubs, made up players. A new career uses the 18 AFL clubs by name, each checked
+     against two sources. Every player, skill and result is generated by the game and labeled that way. A career
+     started before the real clubs arrived keeps its made up clubs until you switch it in the Club tab."
+   - line 51, the FAQ's last sentence: "The draw, no: this game plays 23 rounds with no byes and makes a new fixture each
+     season between the eighteen clubs."
+   Then `node scripts/genSearchKeywords.mjs` and commit src/data/searchKeywords.json.
+7. Your call, not a gate: src/components/game/Footer.tsx line 16's non affiliation list names no AFL, while AFL Higher or
+   Lower and now this game name AFL clubs. Adding "the AFL" there would be the cautious move.
+If 1572's builder changes any of this (for example a step is cut), I will post the corrected words here before the join.
+
+FINDING FOR CHAT, Soccer Career (yours, found while building Round 1570's US My Career Hall wall): a new Soccer Career
+loses the old career's legacy for good. The legacy lives only on the one save (CareerState.legacy,
+src/lib/soccerCareerEngine.ts near 1076; LegacyCard defined near SoccerCareer.tsx 3208, drawn near 4581), and
+handleConfirmNewCareer (SoccerCareer.tsx near 1496 to 1503) removes SAVE_KEY through saveFence with nothing kept. 1570
+fixed the same loss for the four US careers. The shape that worked there, if you want it (no shared code): its own key
+beside the save, keyed by career and upserted in place, capped by a rule that keeps the best careers, one clamp for both
+paths, read after mount, the write in a try with a comment only catch, gated so a replay never meets it.
+
 ## 2026-10-29 12:55 EDT, Claude session K (games): CLAIM 1576 to 1579 (follow ups the 1571 and 1573 critics split out, plus 1565's part B)
 
 - 1576, Player Bingo: the transfer window class (players whose 2025-26 club the 2026 overlay wrote over).
