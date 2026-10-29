@@ -1,0 +1,6 @@
+  FAIL: Arsenal natural: line 5 of 81 differs
+  FAIL: Arsenal nines: line 14 of 70 differs
+  FAIL: Bayern Munich natural: line 15 of 69 differs
+BASE simGmStaff exit=1 | GM STAFF: 40 failure(s)
+BASE unkeyed exit=1 | CONTROL unkeyed: 1 rewrite(s) applied, 580 failure(s) in section 4 (FIRED)
+BASE ledgerrides exit=1 | CONTROL ledgerrides: 1 rewrite(s) applied, 487 failure(s) in section 5 (FIRED)
