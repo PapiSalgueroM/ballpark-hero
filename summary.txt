@@ -1,0 +1,7 @@
+simNoRivalNames exit=0 29s | No rival product names found. 0 findings.
+simHarnessAnchors exit=0 100s | simHarnessAnchors: green. Every harness parses and none carries an unmatchable anchor.
+simStorageWrites exit=0 5s | simStorageWrites: all green (owed: 12)
+simSiteSearch exit=0 4s | simSiteSearch: green. Every game is findable by name, typos included, and the ranking can explain itself.
+simGuideHeadings exit=0 2s | simGuideHeadings: green. 131 guides carry keyword h2s over h3 and h4 sections with every original sentence intact, and all 133 blocks render a clean outline.
+tsc exit=0 164s | 
+vitest-all exit=0 871s |  Test Files  670 passed | 2 skipped (672)
