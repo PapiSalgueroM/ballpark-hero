@@ -1,0 +1,7 @@
+viewport 390x844
+   ? open: Club squares present, sideways overflow 0 px, Let's Play button 44 px tall
+   seed 4: Morton dealt after 336 skips; tapped Played for 4+ clubs; strikes 0 of 3 strikes used -> 0 of 3 strikes used; tile reads "🧳Played for 4+ clubsTyler Morton"; scrollY 0 -> 0; height 5694 -> 5694
+viewport 1280x900
+   ? open: Club squares present, sideways overflow 0 px, Let's Play button 44 px tall
+   seed 4: Morton dealt after 336 skips; tapped Played for 4+ clubs; strikes 0 of 3 strikes used -> 0 of 3 strikes used; tile reads "🧳Played for 4+ clubsTyler Morton"; scrollY 0 -> 0; height 4192 -> 4192
+playBingoClubRules: GREEN, both viewports held

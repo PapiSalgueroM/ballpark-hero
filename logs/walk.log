@@ -1,0 +1,22 @@
+viewport 390x844, reducedMotion reduce
+   gate-390-reduce: section x 25 to 365 (dialog 0 to 390, viewport 390), page overflow 0
+   morton-390-reduce: seed 4, Tyler Morton after 336 skips; real click on Played for 4+ clubs (in view false); strikes 0 of 3 strikes used -> 0 of 3 strikes used; tile "🧳Played for 4+ clubsTyler Morton"; scrollY 0 -> 472
+   morton-390-reduce-reopen: section x 25 to 365 (dialog 0 to 390, viewport 390), page overflow 0
+viewport 390x844, reducedMotion no-preference
+   gate-390-no-preference: section x 25 to 365 (dialog 0 to 390, viewport 390), page overflow 0
+   morton-390-no-preference: seed 4, Tyler Morton after 336 skips; real click on Played for 4+ clubs (in view false); strikes 0 of 3 strikes used -> 0 of 3 strikes used; tile "🧳Played for 4+ clubsTyler Morton"; scrollY 0 -> 62
+viewport 1280x900, reducedMotion reduce
+   gate-1280-reduce: section x 441 to 839 (dialog 416 to 864, viewport 1280), page overflow 0
+   morton-1280-reduce: seed 4, Tyler Morton after 336 skips; real click on Played for 4+ clubs (in view false); strikes 0 of 3 strikes used -> 0 of 3 strikes used; tile "🧳Played for 4+ clubsTyler Morton"; scrollY 0 -> 68
+   morton-1280-reduce-reopen: section x 441 to 839 (dialog 416 to 864, viewport 1280), page overflow 0
+viewport 1280x900, reducedMotion no-preference
+   gate-1280-no-preference: section x 441 to 839 (dialog 416 to 864, viewport 1280), page overflow 0
+   morton-1280-no-preference: seed 4, Tyler Morton after 336 skips; real click on Played for 4+ clubs (in view false); strikes 0 of 3 strikes used -> 0 of 3 strikes used; tile "🧳Played for 4+ clubsTyler Morton"; scrollY 0 -> 68
+negatives at 390, reduce
+   gravenberch-390: seed 4, Ryan Gravenberch after 88 skips; real click on Played for 4+ clubs (in view false); strikes 0 of 3 strikes used -> 1 of 3 strikes used; tile "🧳Played for 4+ clubs"; scrollY 0 -> 47
+   asencio-390: seed 1, Raúl Asencio after 281 skips; real click on One-club man (in view false); strikes 0 of 3 strikes used -> 0 of 3 strikes used; tile "❤️One-club manRaúl Asencio"; scrollY 0 -> 59
+   asencio-390-reopen: section x 25 to 365 (dialog 0 to 390, viewport 390), page overflow 0
+old save: best 3 seeded, page reads "Best run 3/12 lines completed"
+whats-new 390: entry found, link /player-bingo, overflow 0, text "Player Bingo: loans count. One of you told us Tyler Morton fits Played for 4+ clubs (Liver..."
+whats-new 1280: entry found, link /player-bingo, overflow 0, text "Player Bingo: loans count. One of you told us Tyler Morton fits Played for 4+ clubs (Liver..."
+walk: GREEN
