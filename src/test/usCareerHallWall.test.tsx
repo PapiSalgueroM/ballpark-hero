@@ -356,6 +356,11 @@ async function pressThrough(sport: UsCareerSport, seed: number, arm: Arm) {
 }
 describe('C8: the wall draws nothing and moves no save byte', () => {
   it.each(ROWS)('$label: five seeds, the wall written, refused and absent, press for press', async ({ sport }) => {
+    /* One discarded press through first. Something outside the wall draws once the first time it runs in a
+       process (r1570-fix8: run alone, the first arm counted 1 draw by the mount and the others 0; the wall's
+       read, all the wall code that runs by then, draws nothing per C8b), so whichever arm ran first paid it and
+       C8 was red when run alone (vitest -t "C8:", r1570-fix7) while green in the whole file. */
+    await pressThrough(sport, 0, 'absent');
     for (let seed = 0; seed < 5; seed += 1) {
       const written = await pressThrough(sport, seed, 'written');
       const refused = await pressThrough(sport, seed, 'refused');
@@ -397,6 +402,7 @@ async function mountOnly(sport: UsCareerSport, seed: number, arm: ReadArm) {
 }
 describe('C8b: the wall\'s read draws nothing and moves no save byte', () => {
   it.each(ROWS)('$label: five seeds, no Hall bound, a bound Hall with no wall and with a full wall', async ({ sport }) => {
+    await mountOnly(sport, 0, 'unbound'); // discarded, so no arm pays a first run's draw (see C8)
     for (let seed = 0; seed < 5; seed += 1) {
       const unbound = await mountOnly(sport, seed, 'unbound');
       const empty = await mountOnly(sport, seed, 'empty');
