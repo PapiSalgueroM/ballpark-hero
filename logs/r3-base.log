@@ -1,0 +1,139 @@
+
+[1m[46m RUN [49m[22m [36mv3.2.7 [39m[90m/tmp/b3[39m
+
+Browserslist: browsers data (caniuse-lite) is 16 months old. Please run:
+  npx update-browserslist-db@latest
+  Why you should do it regularly: https://github.com/browserslist/update-db#readme
+ [31m❯[39m src/test/usCareerActionConfirm.test.tsx [2m([22m[2m23 tests[22m[2m | [22m[31m4 failed[39m[2m)[22m[33m 1843[2mms[22m[39m
+   [32m✓[39m US career destructive action confirmation[2m > [22m'NFL' preserves live restore and engine state as an independent baseline[32m 201[2mms[22m[39m
+   [32m✓[39m US career destructive action confirmation[2m > [22m'NBA' preserves live restore and engine state as an independent baseline[32m 101[2mms[22m[39m
+   [32m✓[39m US career destructive action confirmation[2m > [22m'MLB' preserves live restore and engine state as an independent baseline[32m 105[2mms[22m[39m
+   [32m✓[39m US career destructive action confirmation[2m > [22m'NHL' preserves live restore and engine state as an independent baseline[32m 88[2mms[22m[39m
+   [32m✓[39m US career destructive action confirmation[2m > [22m'NFL' keeps retirement pending until explicit acceptance and records its real legacy once[32m 136[2mms[22m[39m
+   [32m✓[39m US career destructive action confirmation[2m > [22m'NBA' keeps retirement pending until explicit acceptance and records its real legacy once[32m 116[2mms[22m[39m
+   [32m✓[39m US career destructive action confirmation[2m > [22m'MLB' keeps retirement pending until explicit acceptance and records its real legacy once[32m 117[2mms[22m[39m
+   [32m✓[39m US career destructive action confirmation[2m > [22m'NHL' keeps retirement pending until explicit acceptance and records its real legacy once[32m 107[2mms[22m[39m
+   [32m✓[39m US career destructive action confirmation[2m > [22m'NFL' keeps restart pending then deletes only its own career without another completion[32m 124[2mms[22m[39m
+   [32m✓[39m US career destructive action confirmation[2m > [22m'NBA' keeps restart pending then deletes only its own career without another completion[32m 120[2mms[22m[39m
+   [32m✓[39m US career destructive action confirmation[2m > [22m'MLB' keeps restart pending then deletes only its own career without another completion[32m 120[2mms[22m[39m
+   [32m✓[39m US career destructive action confirmation[2m > [22m'NHL' keeps restart pending then deletes only its own career without another completion[32m 130[2mms[22m[39m
+[31m   [31m×[31m US career destructive action confirmation[2m > [22m'NFL' names the Hall card in both restart prompts of a retired career and not on a live one[39m[32m 40[2mms[22m[39m
+[31m     → [2mexpect([22m[31melement[31m[2m).toHaveAccessibleDescription()[22m
+
+Expected element to have accessible description:
+[32m  This deletes your saved NFL player and coaching career on this device. The Hall of Fame card goes too. You cannot undo this.[31m
+Received:
+[31m  This deletes your saved NFL player and coaching career on this device. You cannot undo this.[31m[39m
+[31m   [31m×[31m US career destructive action confirmation[2m > [22m'NBA' names the Hall card in both restart prompts of a retired career and not on a live one[39m[32m 38[2mms[22m[39m
+[31m     → [2mexpect([22m[31melement[31m[2m).toHaveAccessibleDescription()[22m
+
+Expected element to have accessible description:
+[32m  This deletes your saved NBA player and coaching career on this device. The Hall of Fame card goes too. You cannot undo this.[31m
+Received:
+[31m  This deletes your saved NBA player and coaching career on this device. You cannot undo this.[31m[39m
+[31m   [31m×[31m US career destructive action confirmation[2m > [22m'MLB' names the Hall card in both restart prompts of a retired career and not on a live one[39m[32m 37[2mms[22m[39m
+[31m     → [2mexpect([22m[31melement[31m[2m).toHaveAccessibleDescription()[22m
+
+Expected element to have accessible description:
+[32m  This deletes your saved MLB player and coaching career on this device. The Hall of Fame card goes too. You cannot undo this.[31m
+Received:
+[31m  This deletes your saved MLB player and coaching career on this device. You cannot undo this.[31m[39m
+[31m   [31m×[31m US career destructive action confirmation[2m > [22m'NHL' names the Hall card in both restart prompts of a retired career and not on a live one[39m[32m 42[2mms[22m[39m
+[31m     → [2mexpect([22m[31melement[31m[2m).toHaveAccessibleDescription()[22m
+
+Expected element to have accessible description:
+[32m  This deletes your saved NHL player and coaching career on this device. The Hall of Fame card goes too. You cannot undo this.[31m
+Received:
+[31m  This deletes your saved NHL player and coaching career on this device. You cannot undo this.[31m[39m
+   [32m✓[39m US career destructive action confirmation[2m > [22mkeeps closed mounts callback quiet and unrelated payloads exact as an independent baseline[32m 5[2mms[22m[39m
+   [32m✓[39m US career destructive action confirmation[2m > [22mretire starts on Cancel and returns both dismissal paths to its exact opener without scrolling[32m 42[2mms[22m[39m
+   [32m✓[39m US career destructive action confirmation[2m > [22mrestart starts on Cancel and returns both dismissal paths to its exact opener without scrolling[32m 34[2mms[22m[39m
+   [32m✓[39m US career destructive action confirmation[2m > [22maccepts two same-frame Confirm clicks once and rearms only after a new opening[32m 28[2mms[22m[39m
+   [32m✓[39m US career destructive action confirmation[2m > [22munmounts an open prompt without accepting or erasing its caller save[32m 11[2mms[22m[39m
+   [32m✓[39m US career destructive action confirmation[2m > [22mcontains the explicit keyboard boundary events while Cancel spends nothing[32m 19[2mms[22m[39m
+   [32m✓[39m US career destructive action confirmation[2m > [22mretireCoach keeps every guard of the shared prompt from Cancel first to a quiet unmount[32m 81[2mms[22m[39m
+
+[31m⎯⎯⎯⎯⎯⎯⎯[39m[1m[41m Failed Tests 4 [49m[22m[31m⎯⎯⎯⎯⎯⎯⎯[39m
+
+[41m[1m FAIL [22m[49m src/test/usCareerActionConfirm.test.tsx[2m > [22mUS career destructive action confirmation[2m > [22m'NFL' names the Hall card in both restart prompts of a retired career and not on a live one
+[31m[1mError[22m: [2mexpect([22m[31melement[31m[2m).toHaveAccessibleDescription()[22m
+
+Expected element to have accessible description:
+[32m  This deletes your saved NFL player and coaching career on this device. The Hall of Fame card goes too. You cannot undo this.[31m
+Received:
+[31m  This deletes your saved NFL player and coaching career on this device. You cannot undo this.[31m[39m
+[36m [2m❯[22m src/test/usCareerActionConfirm.test.tsx:[2m136:22[22m[39m
+    [90m134| [39m    [35mfor[39m ([35mconst[39m name [35mof[39m [[32m'New career'[39m[33m,[39m [32m'Start over'[39m]) {
+    [90m135| [39m      const dialog = open(retired.getByRole('button', { name }), 'rest…
+    [90m136| [39m      expect(dialog).toHaveAccessibleDescription(`This deletes your sa…
+    [90m   | [39m                     [31m^[39m
+    [90m137| [39m      fireEvent.click(within(dialog).getByRole('button', { name: cance…
+    [90m138| [39m      await waitFor(() => expect(within(document.body).queryByRole('al…
+
+[31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/4]⎯[22m[39m
+
+[41m[1m FAIL [22m[49m src/test/usCareerActionConfirm.test.tsx[2m > [22mUS career destructive action confirmation[2m > [22m'NBA' names the Hall card in both restart prompts of a retired career and not on a live one
+[31m[1mError[22m: [2mexpect([22m[31melement[31m[2m).toHaveAccessibleDescription()[22m
+
+Expected element to have accessible description:
+[32m  This deletes your saved NBA player and coaching career on this device. The Hall of Fame card goes too. You cannot undo this.[31m
+Received:
+[31m  This deletes your saved NBA player and coaching career on this device. You cannot undo this.[31m[39m
+[36m [2m❯[22m src/test/usCareerActionConfirm.test.tsx:[2m136:22[22m[39m
+    [90m134| [39m    [35mfor[39m ([35mconst[39m name [35mof[39m [[32m'New career'[39m[33m,[39m [32m'Start over'[39m]) {
+    [90m135| [39m      const dialog = open(retired.getByRole('button', { name }), 'rest…
+    [90m136| [39m      expect(dialog).toHaveAccessibleDescription(`This deletes your sa…
+    [90m   | [39m                     [31m^[39m
+    [90m137| [39m      fireEvent.click(within(dialog).getByRole('button', { name: cance…
+    [90m138| [39m      await waitFor(() => expect(within(document.body).queryByRole('al…
+
+[31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[2/4]⎯[22m[39m
+
+[41m[1m FAIL [22m[49m src/test/usCareerActionConfirm.test.tsx[2m > [22mUS career destructive action confirmation[2m > [22m'MLB' names the Hall card in both restart prompts of a retired career and not on a live one
+[31m[1mError[22m: [2mexpect([22m[31melement[31m[2m).toHaveAccessibleDescription()[22m
+
+Expected element to have accessible description:
+[32m  This deletes your saved MLB player and coaching career on this device. The Hall of Fame card goes too. You cannot undo this.[31m
+Received:
+[31m  This deletes your saved MLB player and coaching career on this device. You cannot undo this.[31m[39m
+[36m [2m❯[22m src/test/usCareerActionConfirm.test.tsx:[2m136:22[22m[39m
+    [90m134| [39m    [35mfor[39m ([35mconst[39m name [35mof[39m [[32m'New career'[39m[33m,[39m [32m'Start over'[39m]) {
+    [90m135| [39m      const dialog = open(retired.getByRole('button', { name }), 'rest…
+    [90m136| [39m      expect(dialog).toHaveAccessibleDescription(`This deletes your sa…
+    [90m   | [39m                     [31m^[39m
+    [90m137| [39m      fireEvent.click(within(dialog).getByRole('button', { name: cance…
+    [90m138| [39m      await waitFor(() => expect(within(document.body).queryByRole('al…
+
+[31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[3/4]⎯[22m[39m
+
+[41m[1m FAIL [22m[49m src/test/usCareerActionConfirm.test.tsx[2m > [22mUS career destructive action confirmation[2m > [22m'NHL' names the Hall card in both restart prompts of a retired career and not on a live one
+[31m[1mError[22m: [2mexpect([22m[31melement[31m[2m).toHaveAccessibleDescription()[22m
+
+Expected element to have accessible description:
+[32m  This deletes your saved NHL player and coaching career on this device. The Hall of Fame card goes too. You cannot undo this.[31m
+Received:
+[31m  This deletes your saved NHL player and coaching career on this device. You cannot undo this.[31m[39m
+[36m [2m❯[22m src/test/usCareerActionConfirm.test.tsx:[2m136:22[22m[39m
+    [90m134| [39m    [35mfor[39m ([35mconst[39m name [35mof[39m [[32m'New career'[39m[33m,[39m [32m'Start over'[39m]) {
+    [90m135| [39m      const dialog = open(retired.getByRole('button', { name }), 'rest…
+    [90m136| [39m      expect(dialog).toHaveAccessibleDescription(`This deletes your sa…
+    [90m   | [39m                     [31m^[39m
+    [90m137| [39m      fireEvent.click(within(dialog).getByRole('button', { name: cance…
+    [90m138| [39m      await waitFor(() => expect(within(document.body).queryByRole('al…
+
+[31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[4/4]⎯[22m[39m
+
+
+[2m Test Files [22m [1m[31m1 failed[39m[22m[90m (1)[39m
+[2m      Tests [22m [1m[31m4 failed[39m[22m[2m | [22m[1m[32m19 passed[39m[22m[90m (23)[39m
+[2m   Start at [22m 10:43:43
+[2m   Duration [22m 4.17s[2m (transform 1.25s, setup 43ms, collect 1.76s, tests 1.84s, environment 162ms, prepare 56ms)[22m
+
+
+::error file=/tmp/b3/src/test/usCareerActionConfirm.test.tsx,title=src/test/usCareerActionConfirm.test.tsx > US career destructive action confirmation > 'NFL' names the Hall card in both restart prompts of a retired career and not on a live one,line=136,column=22::Error: expect(element).toHaveAccessibleDescription()%0A%0AExpected element to have accessible description:%0A  This deletes your saved NFL player and coaching career on this device. The Hall of Fame card goes too. You cannot undo this.%0AReceived:%0A  This deletes your saved NFL player and coaching career on this device. You cannot undo this.%0A ❯ src/test/usCareerActionConfirm.test.tsx:136:22%0A%0A
+
+::error file=/tmp/b3/src/test/usCareerActionConfirm.test.tsx,title=src/test/usCareerActionConfirm.test.tsx > US career destructive action confirmation > 'NBA' names the Hall card in both restart prompts of a retired career and not on a live one,line=136,column=22::Error: expect(element).toHaveAccessibleDescription()%0A%0AExpected element to have accessible description:%0A  This deletes your saved NBA player and coaching career on this device. The Hall of Fame card goes too. You cannot undo this.%0AReceived:%0A  This deletes your saved NBA player and coaching career on this device. You cannot undo this.%0A ❯ src/test/usCareerActionConfirm.test.tsx:136:22%0A%0A
+
+::error file=/tmp/b3/src/test/usCareerActionConfirm.test.tsx,title=src/test/usCareerActionConfirm.test.tsx > US career destructive action confirmation > 'MLB' names the Hall card in both restart prompts of a retired career and not on a live one,line=136,column=22::Error: expect(element).toHaveAccessibleDescription()%0A%0AExpected element to have accessible description:%0A  This deletes your saved MLB player and coaching career on this device. The Hall of Fame card goes too. You cannot undo this.%0AReceived:%0A  This deletes your saved MLB player and coaching career on this device. You cannot undo this.%0A ❯ src/test/usCareerActionConfirm.test.tsx:136:22%0A%0A
+
+::error file=/tmp/b3/src/test/usCareerActionConfirm.test.tsx,title=src/test/usCareerActionConfirm.test.tsx > US career destructive action confirmation > 'NHL' names the Hall card in both restart prompts of a retired career and not on a live one,line=136,column=22::Error: expect(element).toHaveAccessibleDescription()%0A%0AExpected element to have accessible description:%0A  This deletes your saved NHL player and coaching career on this device. The Hall of Fame card goes too. You cannot undo this.%0AReceived:%0A  This deletes your saved NHL player and coaching career on this device. You cannot undo this.%0A ❯ src/test/usCareerActionConfirm.test.tsx:136:22%0A%0A

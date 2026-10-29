@@ -1,0 +1,2 @@
+DASH control.ts: const x = 'a — b';
+dashscan FAIL: 1 of 6491 added lines since f957b34ea carry a dash, CONTROL
