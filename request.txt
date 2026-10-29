@@ -1,0 +1,10 @@
+tsc: node_modules/.bin/tsc --noEmit -p tsconfig.app.json
+join-parity: node .rc/x/joinPrep.mjs /tmp/jp 493926a4f636614a0b2bef308c94a0bfdc1ef49d && cd /tmp/jp && node scripts/simUsBoardParity.mjs
+simUsBoardParity-head: node scripts/simUsBoardParity.mjs
+attr-board: git worktree add -q /tmp/ab HEAD && ln -s "$PWD/node_modules" /tmp/ab/node_modules && node .rc/x/mutfix.mjs /tmp/ab no3badges && cd /tmp/ab && node scripts/simUsBoardParity.mjs
+join-attr: node .rc/x/joinPrep.mjs /tmp/ja 493926a4f636614a0b2bef308c94a0bfdc1ef49d && node .rc/x/mutfix.mjs /tmp/ja no3badges && cd /tmp/ja && node scripts/simUsBoardParity.mjs
+simNoRivalNames: node scripts/simNoRivalNames.mjs
+join-tsc: node .rc/x/joinPrep.mjs /tmp/jt 493926a4f636614a0b2bef308c94a0bfdc1ef49d && cd /tmp/jt && node_modules/.bin/tsc --noEmit -p tsconfig.app.json
+simHarnessAnchors: node scripts/simHarnessAnchors.mjs
+simStorageWrites: node scripts/simStorageWrites.mjs
+intl-default: node scripts/simCareerIntl.mjs
