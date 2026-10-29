@@ -1,0 +1,13 @@
+pgl exit=0 1s | pglite
+r58base-headdata exit=1 8s | rehearseUsConnections1558: 29 failures
+r58base-basedata exit=0 18s | rehearseUsConnections1558: green. The rows land in place, a drifted row is left alone, and a second run is a no-op.
+r58head exit=0 18s | rehearseUsConnections1558: green. The rows land in place, a drifted row is left alone, and a second run is a no-op.
+reh1567 exit=0 19s | rehearseUsConnections1567: green. Both forms land the 39 boards in place, a drifted row is left alone or stops the step, a tampered payload is refused, and a second run i
+reh-noguard exit=1 10s | rehearseUsConnections1567 control noguard: FIRED, caught by check C (6 failures; checks A, C)
+reh-drift exit=1 10s | rehearseUsConnections1567 control drift: FIRED, caught by check 0 (3 failures; checks 0, A)
+reh-tamper exit=1 10s | rehearseUsConnections1567 control tamper: FIRED, caught by check E (2 failures; checks E)
+reh-nohash exit=1 10s | rehearseUsConnections1567 control nohash: FIRED, caught by check F (2 failures; checks F)
+migcheck exit=0 1s | supabase/migrations/20261029120000_round_1567_us_connections_gray.sql matches the files
+migcheck-laterdata exit=0 1s | note: the three files have changed since e61011096; the migration stays the round's, and the change is a later round's to migrate
+migcheck-sqltamper exit=1 1s | supabase/migrations/20261029120000_round_1567_us_connections_gray.sql is not what the files at 1229c0190 and e61011096 give: run write
+clean exit=0 0s | 0

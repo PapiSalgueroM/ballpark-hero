@@ -1,0 +1,3 @@
+rvmut ripken: src/data/baseballConnectionsPuzzles.ts changed (1 place)
+supabase/migrations/20261029120000_round_1567_us_connections_gray.sql matches the files
+note: the three files have changed since e61011096; the migration stays the round's, and the change is a later round's to migrate

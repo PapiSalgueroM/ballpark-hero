@@ -1,0 +1,41 @@
+  FAIL: baseball bconn-001: the migration's new board is not the file's board; regenerate the migration from the file
+  FAIL: baseball bconn-002: the migration's new board is not the file's board; regenerate the migration from the file
+  FAIL: baseball bconn-003: the migration's new board is not the file's board; regenerate the migration from the file
+  FAIL: baseball bconn-004: the migration's new board is not the file's board; regenerate the migration from the file
+  FAIL: baseball bconn-005: the migration's new board is not the file's board; regenerate the migration from the file
+  FAIL: baseball bconn-006: the migration's new board is not the file's board; regenerate the migration from the file
+  FAIL: baseball bconn-007: the migration's new board is not the file's board; regenerate the migration from the file
+  FAIL: baseball bconn-008: the migration's new board is not the file's board; regenerate the migration from the file
+  FAIL: baseball bconn-009: the migration's new board is not the file's board; regenerate the migration from the file
+  FAIL: baseball bconn-009: the migration's new board is not the file's board; regenerate the migration from the file
+  FAIL: baseball bconn-010: the migration's new board is not the file's board; regenerate the migration from the file
+  FAIL: baseball bconn-011: the migration's new board is not the file's board; regenerate the migration from the file
+  FAIL: baseball bconn-012: the migration's new board is not the file's board; regenerate the migration from the file
+  FAIL: baseball bconn-012: the migration's new board is not the file's board; regenerate the migration from the file
+  FAIL: baseball bconn-013: the migration's new board is not the file's board; regenerate the migration from the file
+  FAIL: baseball bconn-014: the migration's new board is not the file's board; regenerate the migration from the file
+  FAIL: baseball bconn-015: the migration's new board is not the file's board; regenerate the migration from the file
+  FAIL: baseball bconn-015: the migration's new board is not the file's board; regenerate the migration from the file
+  FAIL: baseball bconn-019: the migration's new board is not the file's board; regenerate the migration from the file
+  FAIL: baseball bconn-028: the migration's new board is not the file's board; regenerate the migration from the file
+  FAIL: baseball bconn-029: the migration's new board is not the file's board; regenerate the migration from the file
+  FAIL: baseball bconn-031: the migration's new board is not the file's board; regenerate the migration from the file
+  FAIL: baseball bconn-035: the migration's new board is not the file's board; regenerate the migration from the file
+  FAIL: baseball bconn-038: the migration's new board is not the file's board; regenerate the migration from the file
+  FAIL: baseball bconn-045: the migration's new board is not the file's board; regenerate the migration from the file
+  FAIL: baseball bconn-053: the migration's new board is not the file's board; regenerate the migration from the file
+  FAIL: baseball bconn-057: the migration's new board is not the file's board; regenerate the migration from the file
+   baseball file: 11 of 38 new boards in the migration equal the shipped file's boards
+  FAIL: nfl nflconn-004: the migration's new board is not the file's board; regenerate the migration from the file
+   nfl file: 0 of 1 new boards in the migration equal the shipped file's boards
+  FAIL: nhl nhlconn-004: the migration's new board is not the file's board; regenerate the migration from the file
+   nhl file: 0 of 1 new boards in the migration equal the shipped file's boards
+   nfl pre-round: 1 of 1 old values in the migration equal the board from before the round (git eccb77b18)
+   nhl pre-round: 1 of 1 old values in the migration equal the board from before the round (git eccb77b18)
+   baseball seed: 60 rows, 59 valid before and 59 after; 34 rewritten in place; bconn-016 drifted on purpose and left alone
+   baseball file: 60 rows, 59 valid before and 59 after; 34 rewritten in place; bconn-016 drifted on purpose and left alone
+   nfl file: 4 rows, 4 valid before and 4 after; 1 rewritten in place
+   nfl drift: 4 rows, 3 valid before and 3 after; 0 rewritten in place; nflconn-004 drifted on purpose and left alone
+   nhl file: 4 rows, 4 valid before and 4 after; 1 rewritten in place
+   nhl drift: 4 rows, 3 valid before and 3 after; 0 rewritten in place; nhlconn-004 drifted on purpose and left alone
+rehearseUsConnections1558: 29 failures
