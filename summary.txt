@@ -1,0 +1,5 @@
+head exit=0 0s | probe-done
+site414 exit=1 2s | simSiteSearch: 1 failure
+revertguide exit=0 2s | simSiteSearch: green. Every game is findable by name, typos included, and the ranking can explain itself.
+regen exit=0 2s | simSiteSearch: green. Every game is findable by name, typos included, and the ranking can explain itself.
+after exit=1 2s | simSiteSearch: 1 failure

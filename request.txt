@@ -1,0 +1,6 @@
+#!serial
+head: git log --oneline -1 && node .rc/x/kwprobe.mjs HEAD b20ec6664 && echo probe-done
+site414: node scripts/simSiteSearch.mjs
+revertguide: git checkout b20ec6664 -- src/data/gameContent/soccer2.ts src/data/gameContent/types.ts && git diff --cached --stat | tail -3 && node scripts/simSiteSearch.mjs; s=$?; git reset -q HEAD -- src; git checkout -- src; exit $s
+regen: node scripts/genSearchKeywords.mjs && node .rc/x/kwdiff.mjs && node scripts/simSiteSearch.mjs; s=$?; git checkout -- src/data/searchKeywords.json; exit $s
+after: git status --short src | head -5; node scripts/simSiteSearch.mjs > /tmp/after.txt 2>&1; s=$?; grep -a "guides have changed\|guide hash" /tmp/after.txt; tail -1 /tmp/after.txt; exit $s
