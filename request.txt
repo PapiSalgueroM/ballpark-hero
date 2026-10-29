@@ -1,0 +1,7 @@
+tsc: node_modules/.bin/tsc --noEmit -p tsconfig.app.json
+facts: node scripts/simUsConnectionsFacts.mjs
+migcheck: node scripts/qa/usConnections1567Migration.mjs check
+ctl-undate: US_CONN_CONTROL=undate node scripts/simUsConnectionsFacts.mjs
+ctl-ohtani: US_CONN_CONTROL=ohtani node scripts/simUsConnectionsFacts.mjs
+ctl-frobinson: US_CONN_CONTROL=frobinson node scripts/simUsConnectionsFacts.mjs
+fair: node scripts/simFairPuzzles.mjs
