@@ -1,0 +1,4 @@
+rec-named: mkdir -p .rc/nbb1 && git archive 5d1198389 src | tar -x -C .rc/nbb1 && NBA_STATS_BASE=.rc/nbb1 NBA_STATS_BASE_LABEL=5d1198389 NBA_STATS_RECORD_NAMED=scripts/data/nbaNamedBlockFixture.json node scripts/simNbaSeasonStats.mjs; s=$?; cp scripts/data/nbaNamedBlockFixture.json "$RC_OUT/" ; exit $s
+nfl-plain: node scripts/simNflSeasonStats.mjs
+nfl-c-kickswap: NFL_STATS_CONTROL=kickswap node scripts/simNflSeasonStats.mjs
+tsc: node_modules/.bin/tsc --noEmit -p tsconfig.app.json
