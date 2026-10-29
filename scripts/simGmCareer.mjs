@@ -697,7 +697,10 @@ const DRIVE = {
     xpSources: () => DN.NHL_XP_SOURCES,
     board: null,
     saveSport: 'NHL',
-    periods: () => EN.NHL_FO_ROUNDS,
+    /* Round 1559 fix pass (review minor 9, critic advice 12): the season's shape and the roster limit read from the
+       sport's descriptor (src/lib/gmSport.ts), as the games count is; simGmDesk check 2 holds it equal to the engine,
+       and the board's own calls above keep the engine's constants. */
+    periods: () => GM_SPORTS.nhl.periods,
     gamesOf: t => t.wins + t.losses + t.otLosses,
     games: () => GM_SPORTS.nhl.words.games,
     postKey: 'series',
@@ -770,7 +773,7 @@ const DRIVE = {
       }
       return ids;
     },
-    overLimit: t => t.players.length > EN.NHL_ROSTER_MAX,
+    overLimit: t => t.players.length > GM_SPORTS.nhl.roster.max,
   },
 };
 if (!DRIVE[SPORT]) { console.error(`no DRIVE row for ${SPORT}`); process.exit(2); }
