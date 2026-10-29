@@ -1,0 +1,4 @@
+xi-plain exit=0 20s |    Duration  19.41s (transform 585ms, setup 147ms, collect 1.82s, tests 18.48s, environment 809ms, prepare 441ms)
+mut-nations exit=1 19s | ::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/test/buildXiClubYear.test.tsx,title=src/test/buildXiClubYear.test.tsx > Build Your XI draws under a seeded 
+mut-defaultclub exit=1 20s | ::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/test/buildXiClubYearSetup.test.tsx,title=src/test/buildXiClubYearSetup.test.tsx > Build Your XI club year s
+mut-rerollsame exit=1 20s | ::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/test/buildXiClubYear.test.tsx,title=src/test/buildXiClubYear.test.tsx > Build Your XI draws under a seeded 
