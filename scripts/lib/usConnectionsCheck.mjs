@@ -101,21 +101,25 @@ function posShare(m, set) {
   return all > 0 ? at / all : null;
 }
 /**
- * The share rule: at least 30 percent of his games there fits, under 10 percent does not, between is unknown.
- * Both are judgment lines with no headroom, measured 2026-10-22 over the 60 baseball boards (682 tile and
- * group pairs the share decides, 200 members and 482 other tiles): the 30 line sits 0.3 points under a member
- * who fits (Stan Musial, 30.3 percent in left field, bconn-057) and 0.6 points over the closest other tile
- * (Frank Robinson, 29.4 percent in left field, unknown on bconn-028, 035 and 057); the 10 line sits 0.1
- * points over an other tile that does not fit (Honus Wagner, 9.9 percent at first base, bconn-053). Moved to
- * 25, four other tiles fit; to 35, two more members go unknown; the 10 line at 5 or 15 takes the other tiles
- * the share leaves unknown from 37 (of the 53 baseball other tiles the record cannot judge) to 84 or 26.
- * Section 7 of simUsConnectionsFacts holds the member and other unknowns at the ledger's ceilings exactly, so
- * each of those moves turns it red; a pair between the lines is decided on two hosts, not by a new line.
+ * The share rule: at least 35 percent of his games there fits, under 10 percent does not, between is unknown.
+ * Round 1558 drew the upper line at 30 with no headroom (Stan Musial fit "Hall of Fame left fielders" on
+ * bconn-057 with 30.3 percent while Frank Robinson, 29.4 percent there, was unknown beside him: a coin toss
+ * either way). Round 1567 moved it into the one gap the members leave, measured 2026-10-29 over the 60
+ * baseball boards (200 members the share decides): 33.8 (Jim Thome at designated hitter, bconn-038) to 40.6
+ * (Harmon Killebrew at first base, bconn-035), none between. Musial, Thome and Paul Molitor (29.7 at third)
+ * fell under it and left those groups, and every other tile the record could not judge (53 pairs, a man with
+ * 10 to 30 percent of his games beside a position group) left its board, so no tile sits between the lines.
+ * The 10 line has no gap to move into (the other tiles under it run evenly from 0 to 9.9: Honus Wagner,
+ * 9.9 at first base, bconn-053), so it stays; a tile under it is not called a fit by anyone who knows him.
+ * Section 7 of simUsConnectionsFacts holds both unknown counts at 0, so a pair between the lines that comes
+ * back turns it red; it is rebuilt on its board, never settled by moving a line.
  */
+export const SHARE_FITS = 0.35;
+export const SHARE_OUT = 0.1;
 function shareVerdict(share) {
   if (share === null) return null;
-  if (share >= 0.3) return true;
-  if (share < 0.1) return false;
+  if (share >= SHARE_FITS) return true;
+  if (share < SHARE_OUT) return false;
   return null;
 }
 /** An award won while playing a position: the season's most games position decides. */
