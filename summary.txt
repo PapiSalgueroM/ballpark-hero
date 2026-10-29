@@ -1,0 +1,15 @@
+ctl-swap34 exit=1 4s | simAflClubNames control swap34: target section 0 RED, independent section 2a green, 4.3 s. RED as intended
+ctl-swap1112 exit=1 4s | simAflClubNames control swap1112: target section 0 RED, independent section 2a green, 4.4 s. RED as intended
+ctl-typo exit=1 4s | simAflClubNames control typo: target section 0 RED, independent section 2a green, 4.3 s. RED as intended
+simAflClubNames exit=0 17s | simAflClubNames: 47 checks, 0 failures, sections 0,1,2a,2b,3,4,4i,5, 17.0 s
+ctl-onesource exit=1 4s | simAflClubNames control onesource: target section 0 RED, independent section 2a green, 4.2 s. RED as intended
+ctl-ladder exit=1 3s | simAflClubNames control ladder: target section 1 RED, independent section 2a green, 3.3 s. RED as intended
+ctl-oldsave exit=1 1s | simAflClubNames control oldsave: target section 3 RED, independent section 0 green, 1.1 s. RED as intended
+ctl-mixed exit=1 2s | simAflClubNames control mixed: target section 3 RED, independent section 0 green, 2.0 s. RED as intended
+ctl-simdrift exit=1 7s | simAflClubNames control simdrift: target section 2b RED, independent section 2a green, 7.0 s. RED as intended
+ctl-screen exit=1 3s | simAflClubNames control screen: target section 4 RED, independent section 4i green, 3.1 s. RED as intended
+ctl-switchlost exit=1 3s | simAflClubNames control switchlost: target section 5 RED, independent section 3 green, 3.0 s. RED as intended
+simNoRivalNames exit=0 12s | No rival product names found. 0 findings.
+tsc exit=0 63s | 
+simAussieRulesSeason exit=0 34s | simAussieRulesSeason: all eleven sections green in 34.3 s
+simHarnessAnchors exit=0 42s | simHarnessAnchors: green. Every harness parses and none carries an unmatchable anchor.
