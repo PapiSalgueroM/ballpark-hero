@@ -193,15 +193,19 @@ export interface FanFacts {
  * against you. All four engines store the same fields with the same meaning:
  * corruption heat at or past 65, where league security opens a file; a
  * suspension waiting to be served; a season served on the banned list; and
- * money nobody can explain. Nothing else (a trade request, a scrap) counts,
- * because those flags differ by sport and several of their answers please
- * the fans.
+ * money nobody can explain. And the one trade demand the fans heard about:
+ * the public request, which the NBA and NFL storylines record as 1 on their
+ * own flag (a private one can stay private, and staying is 3). Nothing else
+ * counts: a demand the save does not record is not on the record.
  */
+const PUBLIC_TRADE_REQUEST = ['nb_tradeReq', 'b_traderq'];
 export function conductOnRecord(c: {
   heat?: number; dirtyMoney?: number; suspendedSeasons?: number; seasons: { teamResult: string }[];
+  lifeFlags?: Record<string, number>;
 }): boolean {
   return (c.heat ?? 0) >= 65 || (c.suspendedSeasons ?? 0) > 0 || (c.dirtyMoney ?? 0) > 0
-    || c.seasons.some(s => s.teamResult === 'SUSPENDED');
+    || c.seasons.some(s => s.teamResult === 'SUSPENDED')
+    || PUBLIC_TRADE_REQUEST.some(k => c.lifeFlags?.[k] === 1);
 }
 
 /** Round 1012: the anonymous fans on a derby. No line for a run of draws. */

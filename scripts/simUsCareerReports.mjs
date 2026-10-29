@@ -48,7 +48,8 @@
    gram's comments by the fanbase meter alone, so a bench season (a backup role costs 2 a season) or an MLB
    rookie start of 30 read "Talented but man the attitude...", "Talent wasted on a villain" and "The boos ...
    Deserved." with no villain act behind it. The two low tiers' conduct lines now need a cause the save records
-   (conductOnRecord: heat at or past 65, a suspension waiting, a season served banned, dirty money); the US
+   (conductOnRecord: heat at or past 65, a suspension waiting, a season served banned, dirty money, and the NBA
+   and NFL storylines' public trade request, held on its own three flag values below); the US
    bindings pass it as FanFacts.conduct, and Soccer Career passes nothing. Every fan view after a season's
    progress, read through the real binding (sport.fanComments), is held to:
      F1  no conduct line without a cause on the record, in any view, and a low meter with nothing on the record
@@ -67,8 +68,8 @@
    Measured (seeds 1569, 1, 2, 3 at 150 careers a sport, 16 counts each): low views with nothing on the record
    1,408 to 2,666 a sport (NFL 1,408 to 1,611, NBA 2,132 to 2,288, MLB 2,540 to 2,648, NHL 2,377 to 2,666), every
    one of which the old ladder called a villain or an attitude; low views with a cause 298 to 387 a sport. The
-   floors are about half the smallest (700 and 150). Controls on seed 1569: fangate 18,080 findings (F1 only),
-   fanforget 1,363 (F2 only), fansoccer 1 (F3 only, digest 4c93c68795d34a36).
+   floors are about half the smallest (700 and 150). Controls on seed 1569: fangate 18,088 findings (F1 only),
+   fanforget 1,365 (F2 only), fansoccer 1 (F3 only, digest 4c93c68795d34a36).
    Run: node scripts/simUsCareerReports.mjs [careers per sport] (SIM_SEED picks the fleet). */
 import os from 'node:os';
 import path from 'node:path';
@@ -167,7 +168,8 @@ const table = [];
 const CONDUCT_RE = /attitude|villain|Deserved|Rooting for the old you|Can't support this guy|Focus on \w+ maybe/;
 const CONDUCT_FIRST = ['Talented but man the attitude...', "Can't support this guy anymore"];
 const WANT_FIRST = ['Quiet year. We know you have more in you', 'Rough stretch. It happens'];
-const causeOf = c => (c.heat ?? 0) >= 65 || (c.suspendedSeasons ?? 0) > 0 || (c.dirtyMoney ?? 0) > 0 || c.seasons.some(s => s.teamResult === 'SUSPENDED');
+const causeOf = c => (c.heat ?? 0) >= 65 || (c.suspendedSeasons ?? 0) > 0 || (c.dirtyMoney ?? 0) > 0 || c.seasons.some(s => s.teamResult === 'SUSPENDED')
+  || c.lifeFlags?.nb_tradeReq === 1 || c.lifeFlags?.b_traderq === 1;
 const fanTable = [];
 function fanView(slug, S, c, t, where) {
   const lines = S.fanComments(c), cause = causeOf(c), low = c.fanbase < 50, said = lines.join(' | ');
@@ -281,6 +283,15 @@ for (const slug of SPORTS) {
       if (S.shouldRetire(c)) break;
       tq = S.rollTeamQuality(tq, rng);
     }
+  }
+  /* F1 and F2, the public trade request: the NBA and NFL storylines record it as 1 on their own flag (2 is the
+     private request, 3 is staying), and the request resets the fanbase to 38 or 40. */
+  const TRADE_FLAG = { nba: 'nb_tradeReq', nfl: 'b_traderq' }[slug];
+  if (TRADE_FLAG) for (const v of [1, 2, 3]) {
+    const pos = S.create.positions[0];
+    const c = S.startCareer('Report Trade', pos, S.create.archetypes[pos][0], mulberry32(SEED + v), null, 'now');
+    c.lifeFlags = { ...(c.lifeFlags ?? {}), [TRADE_FLAG]: v }; c.fanbase = 38;
+    fanView(slug, S, c, t, `trade request ${v}`);
   }
   if (t.fansClean < FANS_CLEAN_FLOOR) fail('F1', `${slug}: only ${t.fansClean} low fan views with nothing on the record, the floor is ${FANS_CLEAN_FLOOR}`);
   if (t.fansCause < FANS_CAUSE_FLOOR) fail('F2', `${slug}: only ${t.fansCause} low fan views with a cause on the record, the floor is ${FANS_CAUSE_FLOOR}`);
