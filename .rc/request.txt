@@ -1,0 +1,5 @@
+#!serve
+#!playwright
+dr: ONLY=sports-millionaire node scripts/simDailyReload.mjs
+ndr: node scripts/simNoDoubleRecord.mjs
+play: ENGINES=chromium ONLY=/sports-millionaire node scripts/playGames.mjs
