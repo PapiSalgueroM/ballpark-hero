@@ -1,0 +1,9 @@
+build exit=0 26s | [dukb] inlined 1 stylesheet(s) and 1 module(s) into 181 snapshots (11 left alone)
+fonts exit=0 1s | Prepared 9 declared font dependencies for local fulfillment.
+playDeadline exit=0 73s | Manager deadline browser: passed; 1953 checks, 20 played replies, 2 controls, 42 originals, 0 failures, 0 setup failures.
+playDepth exit=1 0s | no valid artifacts found to download
+playCustomPromotion exit=0 41s | playManagerCustomPromotion: 10 genuine promotion journeys, 520 checks, 0 failed, 0 external requests forwarded
+worldBrowser1077 exit=0 22s | PASS manager world native:3 profiles,9 effective DOM faults,actual modern/edited/historical worlds,unchanged saved tables and sources.
+budget-sweepWeight exit=0 27s | sweepWeight: green. Every page is inside its budget, and the budgets came down this round.
+budget-simClubManagerSaveSize exit=0 43s | simClubManagerSaveSize: all sections green
+budget-simClubManagerSlots exit=0 51s | simClubManagerSlots: all sections green
