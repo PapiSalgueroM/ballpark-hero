@@ -1,0 +1,11 @@
+tsc: node_modules/.bin/tsc --noEmit -p tsconfig.app.json
+default: node scripts/simTriviaBank.mjs
+tie-base: echo "imports differing from 5f9303bf8: [$(git diff --name-only 5f9303bf8 -- src/lib/dateUtils.ts src/lib/dailyRecord.ts)]; bank code lines changed: $(git diff -U0 5f9303bf8 -- src/lib/triviaQuestionBank.ts | grep -E '^[-+]' | grep -v -E '^(\+\+\+|---)' | grep -v -E '^[-+] \*' | wc -l)" && git show 5f9303bf8:src/lib/sportsMillionaire.ts > "$TMPDIR/base-sm.ts" && TRIVIA_SWAP_ARM_FILE="$TMPDIR/base-sm.ts" node scripts/simTriviaBank.mjs
+tie-head: TRIVIA_SWAP_ARM_FILE=src/lib/sportsMillionaire.ts node scripts/simTriviaBank.mjs
+armfile: echo "imports equal to 65b3e291a: [$(git diff --name-only 65b3e291a -- src/data/marketNamesakes.json src/lib/clearWinner.ts src/lib/dateUtils.ts src/lib/dealPlayers.ts)]" && git show 65b3e291a:src/lib/triviaQuestionBank.ts > "$TMPDIR/base-bank.ts" && TRIVIA_ARM_FILE="$TMPDIR/base-bank.ts" node scripts/simTriviaBank.mjs
+repro777: SIM_SEED=777 TRIVIA_UNLIMITED=3000 node scripts/simTriviaBank.mjs
+ctl-shared: TRIVIA_CONTROL=shared node scripts/simTriviaBank.mjs
+swaprepeat: TRIVIA_CONTROL=swaprepeat node scripts/simTriviaBank.mjs
+swapfive: TRIVIA_CONTROL=swapfive node scripts/simTriviaBank.mjs
+swapmove: TRIVIA_CONTROL=swapmove node scripts/simTriviaBank.mjs
+swapeasy: TRIVIA_CONTROL=swapeasy node scripts/simTriviaBank.mjs

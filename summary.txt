@@ -1,0 +1,11 @@
+tsc exit=0 82s | 
+tie-base exit=0 180s | simTriviaBank: all checks passed
+default exit=0 184s | simTriviaBank: all checks passed
+tie-head exit=1 160s | simTriviaBank: 4 failure(s)
+armfile exit=0 161s | simTriviaBank: all checks passed
+repro777 exit=0 180s | simTriviaBank: all checks passed
+ctl-shared exit=1 152s | simTriviaBank: 11 failure(s) (NEGATIVE CONTROL shared ON)
+swaprepeat exit=1 175s | simTriviaBank: 4 failure(s) (NEGATIVE CONTROL swaprepeat ON)
+swapfive exit=1 170s | simTriviaBank: 4 failure(s) (NEGATIVE CONTROL swapfive ON)
+swapmove exit=1 156s | simTriviaBank: 4 failure(s) (NEGATIVE CONTROL swapmove ON)
+swapeasy exit=1 134s | simTriviaBank: 8 failure(s) (NEGATIVE CONTROL swapeasy ON)
