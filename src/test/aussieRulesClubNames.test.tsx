@@ -70,7 +70,8 @@ function pullAll(view: ReturnType<typeof render>, mine: () => void, texts: strin
 
 /** Five moments of one career in a set: prepare, a played match, finals week 1, season over, and the draft after one pick. */
 function moments(set: ClubSetId | undefined) {
-  const start = set ? createLeague(5, 'club-17', set)! : createLeague(5, 'club-17')!;
+  // Seed 6: club-17 has three picks at its first draft (seed 5 has none, so no draft card to read).
+  const start = set ? createLeague(6, 'club-17', set)! : createLeague(6, 'club-17')!;
   const played = until(start, s => s.phase === 'report');
   const finals = until(played, s => s.stage === 'finals' && s.phase === 'report' && s.week === 0);
   const over = until(finals, s => s.phase === 'seasonOver');
@@ -117,7 +118,7 @@ describe('Aussie Rules Manager club names (Round 1572)', () => {
     const saved = readLeagueSave(localStorage.getItem(SAVE_KEY))!;
     expect(saved.clubSet).toBe('afl2026');
     expect(saved.clubName).toBe('Essendon');
-    expect(words(view.container.querySelector('header p')!.textContent)).toBe('Essendon · Season 1');
+    expect(words(view.container.querySelector('section[data-arl-phase] header p')!.textContent)).toBe('Essendon · Season 1');
   });
 
   it('(ii) a real club career prints only two sourced club names on every panel', () => {
