@@ -1,0 +1,9 @@
+c-nocurtain exit=1 9s | ::error file=/tmp/nocurtain/src/test/usCareerStartOverClears.test.tsx,title=src/test/usCareerStartOverClears.test.tsx > Start over leaves no screen of the old career behi
+c-nointl exit=1 9s | ::error file=/tmp/nointl/src/test/usCareerStartOverClears.test.tsx,title=src/test/usCareerStartOverClears.test.tsx > Start over leaves no screen of the old career behind 
+vitest-fix exit=0 42s |    Duration  41.80s (transform 5.99s, setup 792ms, collect 17.81s, tests 75.63s, environment 5.16s, prepare 1.14s)
+c-nations exit=1 40s | ::error file=/tmp/nations/src/test/buildXiClubYear.test.tsx,title=src/test/buildXiClubYear.test.tsx > Build Your XI draws under a seeded generator > a Club year draft dea
+c-defaultclub exit=1 40s | ::error file=/tmp/defaultclub/src/test/buildXiClubYearSetup.test.tsx,title=src/test/buildXiClubYearSetup.test.tsx > Build Your XI club year setup > keeps the mixed draft 
+c-drawall exit=1 27s | ::error file=/tmp/drawall/src/test/buildXiClubYear.test.tsx,title=src/test/buildXiClubYear.test.tsx > Build Your XI draws under a seeded generator > a Club year draft dea
+c-rerollsame exit=1 36s | ::error file=/tmp/rerollsame/src/test/buildXiClubYear.test.tsx,title=src/test/buildXiClubYear.test.tsx > Build Your XI draws under a seeded generator > a Club year draft 
+c-rerollall exit=1 34s | ::error file=/tmp/rerollall/src/test/buildXiClubYear.test.tsx,title=src/test/buildXiClubYear.test.tsx > Build Your XI draws under a seeded generator > a Club year draft d
+c-mixedclubs exit=1 21s | ::error file=/tmp/mixedclubs/src/test/buildXiClubYear.test.tsx,title=src/test/buildXiClubYear.test.tsx > Build Your XI draws under a seeded generator > Mixed%2C the defau
