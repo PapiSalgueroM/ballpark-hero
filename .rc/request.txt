@@ -1,0 +1,5 @@
+#!serial
+p-log: node .rc/x/c8probe.mjs log && node_modules/.bin/vitest run src/test/usCareerHallWall.test.tsx -t "C8:" --testTimeout=300000 --hookTimeout=120000 2>&1 | sed 's/\x1b\[[0-9;]*m//g' | grep -E "C8COUNTS|Tests |AssertionError" | head -40; s=${PIPESTATUS[0]}; git checkout -- src; exit $s
+p-warm-absent: node .rc/x/c8probe.mjs warm-absent && node_modules/.bin/vitest run src/test/usCareerHallWall.test.tsx -t "C8:" --testTimeout=300000 --hookTimeout=120000 2>&1 | sed 's/\x1b\[[0-9;]*m//g' | grep -E "C8COUNTS|Tests |AssertionError" | head -40; s=${PIPESTATUS[0]}; git checkout -- src; exit $s
+p-warm-written: node .rc/x/c8probe.mjs warm-written && node_modules/.bin/vitest run src/test/usCareerHallWall.test.tsx -t "C8:" --testTimeout=300000 --hookTimeout=120000 2>&1 | sed 's/\x1b\[[0-9;]*m//g' | grep -E "C8COUNTS|Tests |AssertionError" | head -40; s=${PIPESTATUS[0]}; git checkout -- src; exit $s
+clean: git status --short | head -20; test -z "$(git status --short -- src scripts)"
