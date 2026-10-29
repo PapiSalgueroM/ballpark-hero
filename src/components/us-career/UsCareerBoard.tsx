@@ -1023,9 +1023,12 @@ export default function UsCareerBoard({ sport }: { sport: UsCareerSport }) {
      floats over the guide below it (it was a fragment, and the page's main was
      the sticky parent). */
   const startOver = phase !== 'create' && (!!career || (phase === 'prospect' && !!prospect));
+  /* Round 1569 (the lead's ruling R3): a retired career's Hall card is drawn from this one save, so both
+     restart prompts say it goes too (the coaching career after retirement included). */
+  const hallOnRestart = !!career?.retired && !!sport.hall;
   const withSaveStatus = (content: ReactNode) => <div ref={boardTop}>
     {saveFailure && <UsCareerSaveNotice operation={saveFailure} onRetry={retrySave} />}
-    {startOver && <UsCareerStartOver sport={sport.label} onConfirm={reset} />}
+    {startOver && <UsCareerStartOver sport={sport.label} onConfirm={reset} hallCard={hallOnRestart} />}
     {content}
   </div>;
 
@@ -1275,7 +1278,7 @@ export default function UsCareerBoard({ sport }: { sport: UsCareerSport }) {
             )}
           </div>
           <div className="mt-4 flex flex-col items-center gap-3 sm:flex-row sm:justify-center">
-            <USCareerActionConfirm action="restart" sport={sport.label} onConfirm={reset}>
+            <USCareerActionConfirm action="restart" sport={sport.label} onConfirm={reset} hallCard={hallOnRestart}>
               <button className="inline-flex min-h-11 min-w-11 items-center gap-2 rounded-full border border-border px-6 py-2.5 text-sm font-semibold text-foreground">
                 <RotateCcw className="h-4 w-4" /> New career
               </button>
