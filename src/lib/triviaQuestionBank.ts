@@ -627,13 +627,13 @@ export function generateQuestion(
  * three of the six types have few texts: every worth the most question reads
  * the same, a position question names one of about a dozen labels, and a
  * Ballon d'Or question one of 17 to 27 years in its band. With eight draws
- * about one ladder in 45,000 lost a step, came back 14 long and showed the
- * page's error screen (far more often when the Ballon d'Or or shirt number
- * read fails, since those two types then build nothing). The loop stops at
- * the first fresh question, so a step that finds one within eight draws
- * makes exactly the draws it always made: every ladder that was whole, the
- * daily's included, is dealt exactly as before, and only a step that would
- * have been dropped draws on. It stays bounded so a pool that truly cannot
+ * 9 of 240,000 Unlimited ladders dealt over the saved 2026 pool lost a step,
+ * came back 14 long and showed the page's error screen (3 of 1,000 when the
+ * Ballon d'Or and shirt number reads fail, since those two types then build
+ * nothing). The loop stops at the first fresh question, so a step that finds
+ * one within eight draws makes exactly the draws it always made: every ladder
+ * that was whole, the daily's included, is dealt exactly as before, and only
+ * a step that would have been dropped draws on. It stays bounded so a pool that truly cannot
  * fill a ladder still ends in the page's error card, never a frozen tab.
  * scripts/simTriviaBank.mjs section 9 holds both.
  */

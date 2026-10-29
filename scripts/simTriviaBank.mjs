@@ -64,7 +64,11 @@ import './lib/seedRandom.mjs';
    fixture, and the driver pool on 2035-10-26; every one of them held a worth the most question before the
    drop. The head dropped none, and every ladder the arm dealt whole the head dealt JSON identical. Sections 1
    to 8 print the same numbers as on the base 692590145 (r1573-s0). The (vi) floor of 10 on each planted fleet
-   sits under a third of the 31 and 37 measured. Big fleet: see KNOWN_SHORT at section 9.
+   sits under a third of the 31 and 37 measured. THE BIG FLEET (runners r1573-s3a and r1573-s3b, at a64581b66,
+   the arm origin/main's own bank at 692590145): on the real fixture the arm dropped a step on 9 of 240,000
+   Unlimited ladders (seeds 1 to 240,000; none below 120,000, 9 above) and on none of 36,525 dailies
+   (2026-10-25 to 2126-10-24); the head dropped none and dealt the other 276,516 JSON identical. The 9 seeds
+   are pinned in KNOWN_SHORT, so the real pool's rescue is proved on every run.
    Knobs: TRIVIA_ARM_FILE=<path> makes the arm that file as it is, the tie to origin/main's own bank (git show
      origin/main:src/lib/triviaQuestionBank.ts > base-bank.ts). Its imports resolve to this tree, so the tie
      holds while src/data/marketNamesakes.json and src/lib/clearWinner.ts, dateUtils.ts and dealPlayers.ts
@@ -579,9 +583,12 @@ if (plantedTally.built < CALLS) fail(`the new rules built ${plantedTally.built} 
    date, the step it drops], measured on the pin signature below (a pin on any other signature is stale) */
 const KNOWN_SHORT = {
   signature: 'a49cdf0d3c20de20',
-  measured: '2026-10-29, runner r1573-s1 at da635feb5 (the driver date, inside the default driver fleet too)',
+  measured: '2026-10-29: the driver date on runner r1573-s1 at da635feb5 (inside the default driver fleet too); the real pool seeds by the big fleet, TRIVIA_BIG=unlimited:1-240000 with TRIVIA_ARM_FILE set to 692590145\'s bank, runners r1573-s3a and r1573-s3b at a64581b66',
   pins: [
     ['driver', 'daily', '2035-10-26', 15],
+    ['real', 'unlimited', 135581, 9], ['real', 'unlimited', 143133, 13], ['real', 'unlimited', 159321, 12],
+    ['real', 'unlimited', 164203, 9], ['real', 'unlimited', 191878, 12], ['real', 'unlimited', 198946, 6],
+    ['real', 'unlimited', 217857, 15], ['real', 'unlimited', 219932, 12], ['real', 'unlimited', 230263, 10],
   ],
 };
 /* (vi) the planted fleets must show the defect on the arm: 31 and 37 of 1,000 measured, see the header */
