@@ -1,0 +1,6 @@
+  expected: 'f5d480495513f58709dfcf4ff2151837135600e5bf5d7009c27a28ad13f62df4',
+  operator: 'strictEqual',
+  diff: 'simple'
+}
+
+Node.js v24.22.1
