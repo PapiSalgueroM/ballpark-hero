@@ -1,0 +1,6 @@
+#!serve
+#!playwright
+weight-head: (node scripts/lib/hostLikeServer.mjs dist 4180 > /tmp/wh.log 2>&1 &) && sleep 4 && node .rc/x/weightNba.mjs http://localhost:4180 dist head
+weight-base: mkdir -p /tmp/wm && git archive 60199687a | tar -x -C /tmp/wm && ln -s "$PWD/node_modules" /tmp/wm/node_modules && (cd /tmp/wm && node_modules/.bin/vite build > /tmp/wm-build.log 2>&1) && (node scripts/lib/hostLikeServer.mjs /tmp/wm/dist 4177 > /tmp/wm-server.log 2>&1 &) && sleep 4 && node .rc/x/weightNba.mjs http://localhost:4177 /tmp/wm/dist base
+weight-join: node .rc/x/joinPrep.mjs /tmp/jw 493926a4f636614a0b2bef308c94a0bfdc1ef49d && (cd /tmp/jw && node_modules/.bin/vite build > /tmp/jw-build.log 2>&1) && (node scripts/lib/hostLikeServer.mjs /tmp/jw/dist 4178 > /tmp/jw-server.log 2>&1 &) && sleep 4 && node .rc/x/weightNba.mjs http://localhost:4178 /tmp/jw/dist join
+sweepWeight-head: SWEEP_OFFLINE=1 node scripts/sweepWeight.mjs
