@@ -1,0 +1,143 @@
+[
+ {
+  "w": 320,
+  "controlA": {
+   "before": {
+    "rows": 50,
+    "name": "Ousmane Dembélé",
+    "listTop": 1866,
+    "pageY": 0
+   },
+   "after": {
+    "listTop": 1866,
+    "sameNode": "ctlA",
+    "pageY": 0,
+    "rowInListWindow": true,
+    "focused": "Buy",
+    "focusedIsRowSave": false
+   }
+  },
+  "main": {
+   "before": {
+    "rows": 50,
+    "name": "Ousmane Dembélé",
+    "listTop": 1866,
+    "pageY": 0
+   },
+   "board": {
+    "listPresent": false,
+    "msg": "Target saved.",
+    "pageY": 0,
+    "btnConnectedOnBoard": false
+   },
+   "afterBack": {
+    "listTop": 0,
+    "sameNode": null,
+    "pageY": 0,
+    "rowInListWindow": false,
+    "focused": "Shortlist",
+    "focusedIsRowSave": false,
+    "btnConnectedAfterBack": false
+   }
+  },
+  "controlB": {
+   "focused": "Shortlist",
+   "focusedIsOpener": true
+  },
+  "errors": 0
+ },
+ {
+  "w": 390,
+  "controlA": {
+   "before": {
+    "rows": 50,
+    "name": "Ousmane Dembélé",
+    "listTop": 1866,
+    "pageY": 0
+   },
+   "after": {
+    "listTop": 1866,
+    "sameNode": "ctlA",
+    "pageY": 0,
+    "rowInListWindow": true,
+    "focused": "Buy",
+    "focusedIsRowSave": false
+   }
+  },
+  "main": {
+   "before": {
+    "rows": 50,
+    "name": "Ousmane Dembélé",
+    "listTop": 1866,
+    "pageY": 0
+   },
+   "board": {
+    "listPresent": false,
+    "msg": "Target saved.",
+    "pageY": 0,
+    "btnConnectedOnBoard": false
+   },
+   "afterBack": {
+    "listTop": 0,
+    "sameNode": null,
+    "pageY": 0,
+    "rowInListWindow": false,
+    "focused": "Shortlist",
+    "focusedIsRowSave": false,
+    "btnConnectedAfterBack": false
+   }
+  },
+  "controlB": {
+   "focused": "Shortlist",
+   "focusedIsOpener": true
+  },
+  "errors": 0
+ },
+ {
+  "w": 1280,
+  "controlA": {
+   "before": {
+    "rows": 50,
+    "name": "Ousmane Dembélé",
+    "listTop": 1866,
+    "pageY": 0
+   },
+   "after": {
+    "listTop": 1866,
+    "sameNode": "ctlA",
+    "pageY": 0,
+    "rowInListWindow": true,
+    "focused": "Buy",
+    "focusedIsRowSave": false
+   }
+  },
+  "main": {
+   "before": {
+    "rows": 50,
+    "name": "Ousmane Dembélé",
+    "listTop": 1866,
+    "pageY": 0
+   },
+   "board": {
+    "listPresent": false,
+    "msg": "Target saved.",
+    "pageY": 0,
+    "btnConnectedOnBoard": false
+   },
+   "afterBack": {
+    "listTop": 0,
+    "sameNode": null,
+    "pageY": 0,
+    "rowInListWindow": false,
+    "focused": "Shortlist",
+    "focusedIsRowSave": false,
+    "btnConnectedAfterBack": false
+   }
+  },
+  "controlB": {
+   "focused": "Shortlist",
+   "focusedIsOpener": true
+  },
+  "errors": 0
+ }
+]
