@@ -1,0 +1,29 @@
+#!build
+#!playwright
+tsc: node_modules/.bin/tsc --noEmit -p tsconfig.app.json
+facts: node scripts/simUsConnectionsFacts.mjs
+liveScores: node scripts/simLiveScores.mjs
+norival: node scripts/simNoRivalNames.mjs
+inventedNames: node scripts/simInventedNames.mjs
+anchors: node scripts/simHarnessAnchors.mjs
+quotes: node scripts/simNoInventedQuotes.mjs
+conduct: node scripts/simNoInventedConduct.mjs
+legal: node scripts/simLegalPages.mjs
+footer: node scripts/simSingleFooter.mjs
+slugs: node scripts/simCompletionSlugs.mjs
+once: node scripts/simCompletionOnce.mjs
+double: node scripts/simNoDoubleRecord.mjs
+dailyContract: node scripts/simDailyPuzzleContract.mjs
+dailyHardening: node scripts/simDailySaveHardening.mjs
+writesSent: node scripts/simWritesAreSent.mjs
+schemaNames: node scripts/simSchemaNames.mjs
+fetchRetry: node scripts/simFetchRetry.mjs
+googleOnly: node scripts/simGoogleOnlyReturn.mjs
+relay: node scripts/simReportRelay.mjs
+navbar: node scripts/simNavbarStatsReads.mjs
+caps: node scripts/simLeaderboardCaps.mjs
+scoring: node scripts/simScoringCoverage.mjs
+search: node scripts/simSiteSearch.mjs
+resultMoment: node scripts/simResultMoment.mjs
+guides: node scripts/simGuideHeadings.mjs
+trust: node scripts/simTrustCopy.mjs
