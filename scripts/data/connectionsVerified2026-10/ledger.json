@@ -13,7 +13,8 @@
     "rebuilt: boards this round rebuilt whole; every group on them is checked and no finding on them may be owed.",
     "squads.json beside this file: the season squads a stamped group is held to.",
     "Round 1565 (2026-10-29): every live board. The game deals from the connections_puzzles table and the file is its copy (src/data/connectionsPuzzles.ts, scripts/data/connectionsLiveSnapshot.json, simConnectionsFacts section 6). The groups the cross check found false or with a second answer on the live boards are rebuilt here (round 1565), each member on two hosts; where a claim could not be held twice the group was replaced by one two lists hold.",
-    "Round 1565: adjudicated holds the findings that are gaps in the site's career tables (the man did play there, two hosts) or a namesake; owed is empty because every one of its findings is fixed or adjudicated. uncheckedCeiling moved once, from 302 to 409, because the file took in the live boards it never had (the 76 table only boards and the 60 boards edited in the table alone); on the live table the count fell, from 427 to 409."
+    "Round 1565: adjudicated holds the findings that are gaps in the site's career tables (the man did play there, two hosts) or a namesake; owed is empty because every one of its findings is fixed or adjudicated. uncheckedCeiling moved once, from 302 to 349: the file took in the live boards it never had (the 76 table only boards and the 60 boards edited in the table alone), and the boards rebuilt whole replaced every group nothing checked; on the live table the count fell, from 427 to 349.",
+    "Round 1565, after review: rebuilt now holds the 38 boards the round rewrote, each rebuilt whole: every group is a list the checker holds (an award list, a verified 2025-26 squad, a club or a nation the career tables confirm) or a group this ledger writes out member by member. The datedOwed groups those boards held are gone with them."
   ],
   "read": "2026-10-22",
   "lists": {
@@ -757,70 +758,6 @@
             "url": "https://www.si.com/soccer/brazil-2002-world-cup-winners-where-are-they-now/app",
             "read": "2026-10-29",
             "says": "Brazil's 2002 World Cup winners: Lucio, Kleberson, Juninho, Belletti among the squad"
-          }
-        ]
-      }
-    },
-    {
-      "id": "puzzle-46",
-      "category": "From Jamaica",
-      "round": 1565,
-      "why": "Raheem Sterling plays for England, and Leon Bailey also played for Bayer Leverkusen, a group on this board. Replaced by four men of Jamaica's 2023 Gold Cup squad.",
-      "members": {
-        "Michail Antonio": [
-          {
-            "host": "insideworldfootball.com",
-            "url": "https://insideworldfootball.com/?p=142358",
-            "read": "2026-10-29",
-            "says": "Jamaica's 2023 Gold Cup squad: Andre Blake, Amari'i Bell, Demarai Gray, Michail Antonio among the 23"
-          },
-          {
-            "host": "jamaicaobserver.com",
-            "url": "https://jamaicaobserver.com/2023/07/12/reggae-boyz-team-unchanged-in-gold-cup-semis-against-mexico",
-            "read": "2026-10-29",
-            "says": "Reggae Boyz team unchanged in Gold Cup semis against Mexico: Andre Blake, Amari'i Bell, Demarai Gray, Michail Antonio"
-          }
-        ],
-        "Demarai Gray": [
-          {
-            "host": "insideworldfootball.com",
-            "url": "https://insideworldfootball.com/?p=142358",
-            "read": "2026-10-29",
-            "says": "Jamaica's 2023 Gold Cup squad: Andre Blake, Amari'i Bell, Demarai Gray, Michail Antonio among the 23"
-          },
-          {
-            "host": "jamaicaobserver.com",
-            "url": "https://jamaicaobserver.com/2023/07/12/reggae-boyz-team-unchanged-in-gold-cup-semis-against-mexico",
-            "read": "2026-10-29",
-            "says": "Reggae Boyz team unchanged in Gold Cup semis against Mexico: Andre Blake, Amari'i Bell, Demarai Gray, Michail Antonio"
-          }
-        ],
-        "Andre Blake": [
-          {
-            "host": "insideworldfootball.com",
-            "url": "https://insideworldfootball.com/?p=142358",
-            "read": "2026-10-29",
-            "says": "Jamaica's 2023 Gold Cup squad: Andre Blake, Amari'i Bell, Demarai Gray, Michail Antonio among the 23"
-          },
-          {
-            "host": "jamaicaobserver.com",
-            "url": "https://jamaicaobserver.com/2023/07/12/reggae-boyz-team-unchanged-in-gold-cup-semis-against-mexico",
-            "read": "2026-10-29",
-            "says": "Reggae Boyz team unchanged in Gold Cup semis against Mexico: Andre Blake, Amari'i Bell, Demarai Gray, Michail Antonio"
-          }
-        ],
-        "Amari'i Bell": [
-          {
-            "host": "insideworldfootball.com",
-            "url": "https://insideworldfootball.com/?p=142358",
-            "read": "2026-10-29",
-            "says": "Jamaica's 2023 Gold Cup squad: Andre Blake, Amari'i Bell, Demarai Gray, Michail Antonio among the 23"
-          },
-          {
-            "host": "jamaicaobserver.com",
-            "url": "https://jamaicaobserver.com/2023/07/12/reggae-boyz-team-unchanged-in-gold-cup-semis-against-mexico",
-            "read": "2026-10-29",
-            "says": "Reggae Boyz team unchanged in Gold Cup semis against Mexico: Andre Blake, Amari'i Bell, Demarai Gray, Michail Antonio"
           }
         ]
       }
@@ -2658,82 +2595,6 @@
       }
     },
     {
-      "id": "crafted-1009",
-      "category": "Sons of professional footballers",
-      "round": 1565,
-      "why": "Erling Haaland also played for Borussia Dortmund, a group on this board. Daley Blind replaces him.",
-      "members": {
-        "Daley Blind": [
-          {
-            "host": "thescore.com",
-            "url": "https://www.thescore.com/epl/news/1378564",
-            "read": "2026-10-29",
-            "says": "All in the family, sons following in footballing footsteps: Justin Kluivert (son of Patrick), Marcus Thuram (son of Lilian), Daley Blind and Kasper Schmeichel among the second-generation pros"
-          },
-          {
-            "host": "newstalk.com",
-            "url": "https://www.newstalk.com/sport/footballing-sons-of-90s-footballers-555004",
-            "read": "2026-10-29",
-            "says": "footballing sons of 90s footballers: Daley Blind (son of Danny Blind), Kasper Schmeichel (son of Peter Schmeichel), Justin Kluivert (son of Patrick Kluivert)"
-          }
-        ],
-        "Kasper Schmeichel": [
-          {
-            "host": "thescore.com",
-            "url": "https://www.thescore.com/epl/news/1378564",
-            "read": "2026-10-29",
-            "says": "All in the family, sons following in footballing footsteps: Justin Kluivert (son of Patrick), Marcus Thuram (son of Lilian), Daley Blind and Kasper Schmeichel among the second-generation pros"
-          },
-          {
-            "host": "newstalk.com",
-            "url": "https://www.newstalk.com/sport/footballing-sons-of-90s-footballers-555004",
-            "read": "2026-10-29",
-            "says": "footballing sons of 90s footballers: Daley Blind (son of Danny Blind), Kasper Schmeichel (son of Peter Schmeichel), Justin Kluivert (son of Patrick Kluivert)"
-          },
-          {
-            "host": "khaleejtimes.com",
-            "url": "https://www.khaleejtimes.com/sports/fifa-world-cup/best-father-son-duos-in-fifa-world-cup-history-from-maldinis-to-haalands",
-            "read": "2026-10-29",
-            "says": "best father-son duos in World Cup history: the Thurams (Lilian and Marcus), the Schmeichels, the Kluiverts"
-          }
-        ],
-        "Justin Kluivert": [
-          {
-            "host": "thescore.com",
-            "url": "https://www.thescore.com/epl/news/1378564",
-            "read": "2026-10-29",
-            "says": "All in the family, sons following in footballing footsteps: Justin Kluivert (son of Patrick), Marcus Thuram (son of Lilian), Daley Blind and Kasper Schmeichel among the second-generation pros"
-          },
-          {
-            "host": "newstalk.com",
-            "url": "https://www.newstalk.com/sport/footballing-sons-of-90s-footballers-555004",
-            "read": "2026-10-29",
-            "says": "footballing sons of 90s footballers: Daley Blind (son of Danny Blind), Kasper Schmeichel (son of Peter Schmeichel), Justin Kluivert (son of Patrick Kluivert)"
-          },
-          {
-            "host": "khaleejtimes.com",
-            "url": "https://www.khaleejtimes.com/sports/fifa-world-cup/best-father-son-duos-in-fifa-world-cup-history-from-maldinis-to-haalands",
-            "read": "2026-10-29",
-            "says": "best father-son duos in World Cup history: the Thurams (Lilian and Marcus), the Schmeichels, the Kluiverts"
-          }
-        ],
-        "Marcus Thuram": [
-          {
-            "host": "thescore.com",
-            "url": "https://www.thescore.com/epl/news/1378564",
-            "read": "2026-10-29",
-            "says": "All in the family, sons following in footballing footsteps: Justin Kluivert (son of Patrick), Marcus Thuram (son of Lilian), Daley Blind and Kasper Schmeichel among the second-generation pros"
-          },
-          {
-            "host": "khaleejtimes.com",
-            "url": "https://www.khaleejtimes.com/sports/fifa-world-cup/best-father-son-duos-in-fifa-world-cup-history-from-maldinis-to-haalands",
-            "read": "2026-10-29",
-            "says": "best father-son duos in World Cup history: the Thurams (Lilian and Marcus), the Schmeichels, the Kluiverts"
-          }
-        ]
-      }
-    },
-    {
       "id": "crafted-1011",
       "category": "Played for LA Galaxy",
       "round": 1565,
@@ -3874,31 +3735,6 @@
       ]
     },
     {
-      "key": "puzzle-113 | not-a-member | Edinson Cavani | Played for Boca Juniors",
-      "round": 1565,
-      "why": "he played for Boca Juniors; the site's career tables miss that club",
-      "sources": [
-        {
-          "host": "goal.com",
-          "url": "https://www.goal.com/en-us/news/edinson-cavani-joins-boca-juniors-free-transfer-valencia-contract/blt9f43ca2470823dae",
-          "read": "2026-10-29",
-          "says": "Edinson Cavani joins Boca Juniors on a free transfer after terminating his Valencia contract"
-        },
-        {
-          "host": "espndeportes.espn.com",
-          "url": "https://espndeportes.espn.com/futbol/argentina/nota/_/id/12380368/edinson-cavani-presentacion-jugador-boca-la-bombonera",
-          "read": "2026-10-29",
-          "says": "Edinson Cavani presented at La Bombonera as a Boca Juniors player (31 July 2023)"
-        },
-        {
-          "host": "olympics.com",
-          "url": "https://www.olympics.com/es/noticias/edinson-cavani-boca-juniors-lista-uruguayos",
-          "read": "2026-10-29",
-          "says": "Edinson Cavani at Boca Juniors, and the full list of Uruguayans at the club"
-        }
-      ]
-    },
-    {
       "key": "puzzle-118 | not-a-member | Andrea Pirlo | Played for both Inter Milan and AC Milan",
       "round": 1565,
       "why": "he played for Inter Milan; the site's career tables miss that club",
@@ -4117,55 +3953,11 @@
           "says": "Drogba deal gets green light: cleared to play for Galatasaray (13 February 2013)"
         }
       ]
-    },
-    {
-      "key": "cx-20260710-05 | not-a-member | Andrea Pirlo | Played for both AC Milan and Inter Milan",
-      "round": 1565,
-      "why": "he played for Inter Milan; the site's career tables miss that club",
-      "sources": [
-        {
-          "host": "si.com",
-          "url": "https://www.si.com/soccer/2017/11/06/italian-legend-andrea-pirlo-officially-announces-retirement-heartfelt-social-media-post",
-          "read": "2026-10-29",
-          "says": "Pirlo joined Inter Milan in 1998 and spent three years with the Nerazzurri, with loans at Reggina and Brescia"
-        },
-        {
-          "host": "goal.com",
-          "url": "https://www.goal.com/en/lists/zlatan-ibrahimovic-andrea-pirlo-derby-della-madonnina-divide-players-played-for-ac-milan-and-inter/blt67ae3f915574498c",
-          "read": "2026-10-29",
-          "says": "names Pirlo among the players who played for both AC Milan and Inter"
-        },
-        {
-          "host": "skysports.com",
-          "url": "https://www.skysports.com/football/news/2375341/andrea-pirlo-profile",
-          "read": "2026-10-29",
-          "says": "profile: moved from Brescia to Inter in 1998, then to Milan in 2001"
-        }
-      ]
-    },
-    {
-      "key": "cx-20260710-09 | not-a-member | Radamel Falcao | Played for River Plate",
-      "round": 1565,
-      "why": "he played for River Plate; the site's career tables miss that club",
-      "sources": [
-        {
-          "host": "skysports.com",
-          "url": "https://www.skysports.com/falcao",
-          "read": "2026-10-29",
-          "says": "transfer history: River Plate to Porto (15 July 2009)"
-        },
-        {
-          "host": "espn.com",
-          "url": "https://www.espn.com/soccer/story/_/id/40397493/radamel-falcao-returns-colombia-play-millonarios",
-          "read": "2026-10-29",
-          "says": "Falcao played four seasons with River Plate before signing with Porto in 2009"
-        }
-      ]
     }
   ],
   "owed": [],
-  "uncheckedCeiling": 409,
-  "rebuilt": ["puzzle-1", "puzzle-3", "puzzle-4", "puzzle-5", "puzzle-6", "puzzle-10", "puzzle-11", "puzzle-12", "puzzle-151"],
+  "uncheckedCeiling": 349,
+  "rebuilt": ["puzzle-1", "puzzle-3", "puzzle-4", "puzzle-5", "puzzle-6", "puzzle-10", "puzzle-11", "puzzle-12", "puzzle-151", "puzzle-2", "puzzle-8", "puzzle-13", "puzzle-16", "puzzle-18", "puzzle-26", "puzzle-28", "puzzle-38", "puzzle-43", "puzzle-46", "puzzle-55", "puzzle-59", "puzzle-64", "puzzle-65", "puzzle-68", "puzzle-70", "puzzle-81", "puzzle-90", "puzzle-92", "puzzle-97", "puzzle-103", "puzzle-109", "puzzle-113", "puzzle-123", "puzzle-131", "puzzle-138", "puzzle-149", "crafted-1005", "crafted-1007", "crafted-1008", "crafted-1009", "crafted-1011", "crafted-1012", "crafted-1020", "cx-20260710-05", "cx-20260710-09", "cx-20260710-11", "cx-20260710-12"],
   "players": {
     "Fabinho": {
       "clubs": ["AS Monaco", "Liverpool"],
@@ -4224,5 +4016,5 @@
       ]
     }
   },
-  "datedOwed": ["puzzle-89 | Played for AC Milan (2020s)", "puzzle-91 | Played in the 2022 World Cup Final", "puzzle-95 | Played for Napoli (2020s)", "puzzle-97 | Played for Borussia Dortmund (2020s)", "puzzle-99 | Played for Juventus (2020s)", "puzzle-108 | Won the Carabao Cup (2020s)", "puzzle-113 | Won the Scudetto with AC Milan (2020s)", "puzzle-119 | Played for PSG (2020s)", "puzzle-127 | Premier League Golden Boot (2020s)", "puzzle-141 | Won 2024 Euros with Spain", "puzzle-149 | Won the 2022 World Cup with Argentina"]
+  "datedOwed": ["puzzle-89 | Played for AC Milan (2020s)", "puzzle-91 | Played in the 2022 World Cup Final", "puzzle-95 | Played for Napoli (2020s)", "puzzle-99 | Played for Juventus (2020s)", "puzzle-108 | Won the Carabao Cup (2020s)", "puzzle-119 | Played for PSG (2020s)", "puzzle-127 | Premier League Golden Boot (2020s)", "puzzle-141 | Won 2024 Euros with Spain"]
 }
