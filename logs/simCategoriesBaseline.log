@@ -1,0 +1,20 @@
+node:internal/modules/run_main:107
+    triggerUncaughtException(
+    ^
+
+AssertionError [ERR_ASSERTION]: Baseline product source is unchanged
++ actual - expected
+
++ '8207B3A625C9E0B7929C154F3F72C367F69D3588364B90CA34EEA196DC19FBB1'
+- 'B446D6FEBC197D9210A01624BD41F71A31CD65EFAD5FF566FDF64DB0EBF792AC'
+
+    at file:///home/runner/work/ballpark-hero/ballpark-hero/scripts/simPlayerBingoCategories.mjs:120:12 {
+  generatedMessage: false,
+  code: 'ERR_ASSERTION',
+  actual: '8207B3A625C9E0B7929C154F3F72C367F69D3588364B90CA34EEA196DC19FBB1',
+  expected: 'B446D6FEBC197D9210A01624BD41F71A31CD65EFAD5FF566FDF64DB0EBF792AC',
+  operator: 'strictEqual',
+  diff: 'simple'
+}
+
+Node.js v24.22.1

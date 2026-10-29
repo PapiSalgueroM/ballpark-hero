@@ -1,0 +1,3 @@
+simRodri: CI=1 SIM_NETWORK=offline PLAYER_BINGO_RODRI_PHASE=fixed NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/simPlayerBingoRodriHonour.mjs
+simWC: CI=1 SIM_NETWORK=offline PLAYER_BINGO_WC_PHASE=fixed NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/simPlayerBingoWorldCupAlias.mjs
+simCategoriesBaseline: CI=1 SIM_NETWORK=offline PLAYER_BINGO_CATEGORIES_PHASE=baseline NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/simPlayerBingoCategories.mjs
