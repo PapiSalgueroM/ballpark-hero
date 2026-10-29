@@ -1,0 +1,5 @@
+#!serial
+pin-clearwinner: printf '\nexport const PIN_PROBE = 1;\n' >> src/lib/clearWinner.ts && node scripts/simTriviaBank.mjs; s=$?; git checkout -- src; exit $s
+pin-dateutils: printf '\nexport const PIN_PROBE = 1;\n' >> src/lib/dateUtils.ts && node scripts/simTriviaBank.mjs; s=$?; git checkout -- src; exit $s
+pin-dealplayers: printf '\nexport const PIN_PROBE = 1;\n' >> src/lib/dealPlayers.ts && node scripts/simTriviaBank.mjs; s=$?; git checkout -- src; exit $s
+pin-comment: printf '\n// a comment only, no code\n' >> src/lib/dealPlayers.ts && printf '\n/* a comment only */\n' >> src/lib/clearWinner.ts && node scripts/simTriviaBank.mjs; s=$?; git checkout -- src; exit $s
