@@ -1,0 +1,159 @@
+name: Soccer Career contextual guide links
+# Pin the shorter contextual source while holding the link proof and download budgets.
+# Full app suite stays on unchanged product source18594 in run40472509494; this follow-up corrects only proof infrastructure.
+on:
+  push:
+    branches: [codex/soccer-career-internal-links-20261027]
+    paths: [.github/workflows/soccer-career-intro-links.yml]
+permissions:
+  contents: read
+concurrency:
+  group: soccer-career-intro-links-${{ github.ref }}
+  cancel-in-progress: false
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    timeout-minutes: 60
+    defaults:
+      run:
+        shell: bash
+    env:
+      CI: '1'
+      SIM_NETWORK: offline
+      ENGINES: chromium
+      SEO_INTRO_BASE: b20ec6664df9d4c58d63ea0596791d33b2a3b8fc
+      SEO_INTRO_ARTIFACTS: ${{ github.workspace }}/soccer-intro-artifacts
+      SEO_INTRO_ORIGINAL_COMPONENT: ${{ github.workspace }}/soccer-intro-artifacts/original/GameSeoContent.tsx
+      FREE_KICK_FONT_CACHE: ${{ github.workspace }}/soccer-intro-artifacts/font-cache
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.sha }}
+          fetch-depth: 0
+          persist-credentials: false
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: npm
+      - name: Retain immutable source and install locked dependencies
+        run: |
+          set -euo pipefail
+          mkdir -p "$SEO_INTRO_ARTIFACTS/original"
+          git rev-parse HEAD > "$SEO_INTRO_ARTIFACTS/source-head.txt"
+          git rev-parse HEAD^{tree} > "$SEO_INTRO_ARTIFACTS/source-tree.txt"
+          git archive --format=tar HEAD > "$SEO_INTRO_ARTIFACTS/source.tar"
+          git merge-base --is-ancestor "$SEO_INTRO_BASE" HEAD
+          git show "$SEO_INTRO_BASE":src/components/seo/GameSeoContent.tsx > "$SEO_INTRO_ORIGINAL_COMPONENT"
+          git ls-files -z -- src scripts .github/workflows index.html package.json package-lock.json ':!scripts/data/lastmod.json' | sort -z | xargs -0 sha256sum > "$SEO_INTRO_ARTIFACTS/source-before.sha256"
+          npm ci
+      - name: Correct app types and permanent DOM regression
+        run: |
+          set -euo pipefail
+          export NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs"
+          node_modules/.bin/tsc --noEmit -p tsconfig.app.json 2>&1 | tee "$SEO_INTRO_ARTIFACTS/types.log"
+          npm run test -- --run src/test/gameSeoIntroLinks.test.tsx --reporter=default --reporter=json --outputFile="$SEO_INTRO_ARTIFACTS/focused-unit.json" --maxWorkers=1 --no-file-parallelism 2>&1 | tee "$SEO_INTRO_ARTIFACTS/focused-unit.log"
+          node --input-type=module - <<'NODE'
+          import assert from 'node:assert/strict';
+          import fs from 'node:fs';
+          const out = JSON.parse(fs.readFileSync(process.env.SEO_INTRO_ARTIFACTS + '/focused-unit.json', 'utf8'));
+          assert.equal(out.success, true); assert.equal(out.numPassedTests, 6); assert.equal(out.numFailedTests, 0);
+          assert.equal(out.numPendingTests, 0);
+          console.log('Focused guide DOM unit: all 6 actual cases passed, no skipped or failed cases.');
+          NODE
+      - name: Isolated known browser and logo tools
+        run: |
+          set -euo pipefail
+          npm install --prefix "$RUNNER_TEMP/seo-intro-browser" --no-save --package-lock=false playwright@1.64.0
+          ln -s "$RUNNER_TEMP/seo-intro-browser/node_modules/playwright" node_modules/playwright
+          ln -s "$RUNNER_TEMP/seo-intro-browser/node_modules/playwright-core" node_modules/playwright-core
+          node "$RUNNER_TEMP/seo-intro-browser/node_modules/playwright/cli.js" install --with-deps chromium
+          python -m pip install fonttools pillow
+          node scripts/qa/freeKickLab1070.mjs --prefetch-fonts-only > "$SEO_INTRO_ARTIFACTS/fonts.log" 2>&1
+      - name: Actual original fixed and physical href render outcomes
+        run: |
+          set -euo pipefail
+          export NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs"
+          for mode in baseline fixed href-control; do
+            set +e
+            SEO_INTRO_RENDER_MODE="$mode" node scripts/qa/simSoccerCareerIntroLinks.mjs 2>&1 | tee "$SEO_INTRO_ARTIFACTS/render-$mode.log"
+            actual_status=${PIPESTATUS[0]}
+            set -e
+            node --input-type=module - "$mode" "$actual_status" <<'NODE'
+          import assert from 'node:assert/strict';
+          import fs from 'node:fs';
+          const [mode, status] = process.argv.slice(2);
+          const out = JSON.parse(fs.readFileSync(process.env.SEO_INTRO_ARTIFACTS + '/render-' + mode + '/report.json', 'utf8'));
+          const expected = mode === 'baseline'
+            ? ['escaped-annotated-text', 'real-anchor-contract-chaos', 'real-anchor-wonderkid-factory']
+            : mode === 'href-control' ? ['real-anchor-wonderkid-factory'] : [];
+          assert.equal(Number(status), expected.length ? 1 : 0); assert.equal(out.sourceHeld, true);
+          assert.equal(out.cases.length, 7);
+          const failed = out.cases.filter(row => row.status === 'failed');
+          assert.deepEqual(failed.map(row => row.name).sort(), expected);
+          assert(failed.every(row => row.errorName === 'AssertionError'), 'Infrastructure errors never qualify as intended failures');
+          if (mode === 'baseline') {
+            for (const row of failed.filter(row => row.name.startsWith('real-anchor-'))) assert(row.message.includes('One actual inline anchor'));
+            assert(failed.find(row => row.name === 'escaped-annotated-text').message.includes('Only a declared anchor'));
+          }
+          if (mode === 'href-control') {
+            assert(failed[0].message.includes('Exact internal href for Wonderkid Factory'));
+            assert.notEqual(out.mutation.before, out.mutation.changed);
+          }
+          assert.equal(out.guideCensus.registeredRoutes.length,
+            out.guideCensus.loadedGuideRoutes.length + out.guideCensus.missingGuides.length);
+          console.log('Qualified real render ' + mode + ': ' + out.passed + ' passed, ' + out.failed + ' intended failures; loaded/missing guide census retained.');
+          NODE
+          done
+      - name: Candidate build and exact generation baseline
+        run: |
+          set -euo pipefail
+          NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" npm run build 2>&1 | tee "$SEO_INTRO_ARTIFACTS/build-before.log"
+          node scripts/qa/checkSoccerIntroSnapshotDelta.mjs before 2>&1 | tee "$SEO_INTRO_ARTIFACTS/delta-before.log"
+      - name: Generate only Soccer Career and rebuild its shadow
+        run: |
+          set -euo pipefail
+          PRERENDER_ONLY=/soccer-career NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/prerender.mjs 2>&1 | tee "$SEO_INTRO_ARTIFACTS/prerender.log"
+          node scripts/genSitemap.mjs 2>&1 | tee "$SEO_INTRO_ARTIFACTS/sitemap.log"
+          NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" npm run build 2>&1 | tee "$SEO_INTRO_ARTIFACTS/build-after.log"
+          git diff --binary HEAD -- public scripts/data/lastmod.json > "$SEO_INTRO_ARTIFACTS/generated.patch"
+      - name: Actual raw and hydrated client links on both URL forms
+        run: |
+          set -euo pipefail
+          node scripts/playSoccerCareerIntroLinks.mjs 2>&1 | tee "$SEO_INTRO_ARTIFACTS/browser.log"
+      - name: All rebuilt readers and existing guide related flagship guards
+        run: |
+          set -euo pipefail
+          failed=0
+          for harness in simAdsense simBrand simHeadTags simHiddenPages simHubs simIndexNow simIndexing simInternalLinks simNoRivalNames simPrerender simPrerenderBoot simRetiredRoutes simSchema simSitemap simSnapshotAssets simGuideHeadings simRelatedGames simFlagshipWeight; do
+            ONLY="$harness" node scripts/runAllSims.mjs --browser 2>&1 | tee "$SEO_INTRO_ARTIFACTS/$harness.log" || failed=1
+            if grep -E '(^|[[:space:]])(SKIP|EMPTY)([[:space:]]|$)' "$SEO_INTRO_ARTIFACTS/$harness.log"; then failed=1; fi
+          done
+          exit "$failed"
+      - name: All 15 unchanged route download budgets
+        run: |
+          set -euo pipefail
+          node scripts/lib/hostLikeServer.mjs dist 4173 > "$SEO_INTRO_ARTIFACTS/host.log" 2>&1 &
+          host_pid=$!
+          trap 'kill "$host_pid" 2>/dev/null || true' EXIT
+          for attempt in 1 2 3 4 5; do
+            if curl --fail --silent http://127.0.0.1:4173/ > /dev/null; then break; fi
+            sleep 1
+          done
+          curl --fail --silent http://127.0.0.1:4173/ > /dev/null
+          BASE=http://127.0.0.1:4173 SWEEP_OFFLINE=1 NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/sweepWeight.mjs 2>&1 | tee "$SEO_INTRO_ARTIFACTS/weights.log"
+      - name: Preserve exact source and one-route generation delta
+        if: always()
+        run: |
+          set -euo pipefail
+          if test -f "$SEO_INTRO_ARTIFACTS/delta/before.json"; then
+            node scripts/qa/checkSoccerIntroSnapshotDelta.mjs after 2>&1 | tee "$SEO_INTRO_ARTIFACTS/delta-after.log"
+          fi
+          sha256sum -c "$SEO_INTRO_ARTIFACTS/source-before.sha256" > "$SEO_INTRO_ARTIFACTS/source-held.log"
+          git diff --exit-code HEAD -- src scripts .github/workflows index.html package.json package-lock.json ':!scripts/data/lastmod.json'
+      - name: Always preserve exact observations
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: soccer-intro-links-${{ github.run_id }}-${{ github.run_attempt }}
+          retention-days: 7
+          path: soccer-intro-artifacts/

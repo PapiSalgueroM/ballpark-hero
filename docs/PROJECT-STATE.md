@@ -19627,3 +19627,60 @@ Qualified application source: 78ca56a59a2bc1c2d765db4bf1355a07d7647290, run40447
 The first browser run40444101391 failed on three existing320px labels and remains retained. Final original artifact12709597233/3015359bytes/SHAcd46e4ae29569ee6120179df7d57d3bf579f9d2116c0e800be0e791874e89abd is saved once under C:/Users/antho/dukb-handoff/2026-10-26/bingo-categories-main-chat-v1/remote-40447951445. Main viewed320board/placement/original-class images; independent peer viewed390and1280boards. This is five specific images, not every capture. Geometry is bounded label/board coverage with fictional rows, not live data, global chrome, every account state or every-game qualification.
 
 Generated output differs only in the sitemap generator's date comment; no content, ledger or URL-row change is proposed from that patch. Root dirty source/index/stashes and prior originals remain preserved. Owner I retains combined-target integration and sole publication. No main merge or live deployment is claimed.
+## Main continuation: Soccer Career contextual links proposal, 2026-10-27
+
+Anthony explicitly selected Soccer Career as the source page for contextual internal links. This isolated proposal adds descriptive anchors to Wonderkid Factory and Contract Chaos inside the existing Soccer Career introduction. An optional introLinks field and the existing React Router Link renderer preserve the original paragraph text. Other guide entries, game behavior, saves, existing related-game tiles, structured data and routes are held.
+
+Owner I retains canonical public snapshots, the lastmod ledger, sitemap, guide composition, current-target verification, main and publication. This branch is a reviewable source proposal based on immutable main b20ec6664df9d4c58d63ea0596791d33b2a3b8fc, not an adoption into I's composed target. No Google Search Console query, impression or position dataset was available. No ranking improvement is claimed.
+
+Qualification is UNRUN at authoring. The branch workflow runs the actual app type gate, focused DOM tests, baseline/current/control renderer comparisons across loaded registered guides, two scoped builds with only the Soccer Career snapshot and ledger row permitted, raw and client pages at 320/390/1280 with both slash forms and destination follows, source and snapshot controls, all fifteen dist/public readers, guide and related-game guards, unchanged fifteen download caps, and the full app unit suite in a separate ordinary-push job. No local application runtime, browser, test or Git process was used. All observations must be admitted from the original remote artifacts before claiming qualification.
+
+
+### Original-renderer proof method correction
+
+First verify run40472509494 stopped before any renderer case: the copied original TSX renderer outside the app tsconfig compiled as classic JSX, causing React-is-not-defined at its first SSR call. This is an infrastructure refusal, not an intended baseline failure. Types and all6 focused DOM cases passed. Original artifact12718569587 is36817239bytes,SHA2567a150478079fae3a926d0ff823fe40a1dde4d871143eb6f159b7e42f23b456d6, acquired once with all24 body hashes admitted before JSON.
+
+The follow-up makes the esbuild JSX mode explicitly automatic, matching the app and previously qualified component proof. Product files, test assertions, fixture mutation, geometry thresholds and the immutable original renderer remain exact. The original full-app job remains on source18594fded9b7da662fa9d05e0443488877a2280c; the follow-up does not duplicate it because only proof infrastructure and this outcome note changed. No app full-unit result is claimed while that original job is pending. No workflow was manually rerun or cancelled.
+
+
+### Full-unit fixture-history refusal and corrected setup
+
+Original source18594fded9b7da662fa9d05e0443488877a2280c/run40472509494 full-unit job122082745348 completed with9577passed,2failed assertions and109pending of9688cases, plus3collection failures. All5failed files report unavailable physical historical Git bodies (2b7dda2951fb9b63e76a2af66970cb682f312105,31a4ec01,56356be9,e8b39ccc,6b7596d2). The new6focused guide cases passed. This is not a full-suite pass and no product-regression conclusion is inferred from missing fixtures.
+
+That job omitted fetch-depth:0, unlike the previously qualified full-suite workflow. The standalone corrective workflow checks out full history, retains/probes all11 original bodies consumed by those tests, pins the same3application file hashes, runs the real type gate and full app suite, and always verifies tracked-source holds. It is a separate ordinary-push proof branch, so the existing JSX renderer proof continues independently. There is no manual workflow rerun or cancellation and no application/test assertion change.
+
+Full-unit original artifact12721125355 is1000522bytes, SHA2560b87e764c1bf06530b3b0959f010df2ca642fd6c4c53d1b8f000aa1e45b1dc78. The first regional transport stalled for over5minutes before any target file existed and was interrupted; a refreshed provider URL produced the one admitted local original. All4ZIP bodies were hashed before JSON. The8679687byte unit log exceeds the connector log limit and is retained in that original ZIP; do not repeatedly fetch it through the log tool. The corrected full-history run is UNRUN at this authoring point.
+
+
+### Raw/client proof and destination-readiness correction
+
+JSX-corrected sourceffe628ea65694483ca7f015e46fe68cfa67f8f84/run40473535004/job122092497079 reached the browser step. Actual6focused cases passed; renderer baseline4passed/3intended assertion failures, fixed7/0, href-control6/1;133registered guides loaded,132unannotated,0missing. Both builds closed successfully. Generation delta held4308other files with4effective copied controls and only the Soccer Career snapshot/ledger plus allowed sitemap comment/row changes. All4261selected source-manifest checks passed. All12raw/client width/slash cases and7controls passed, with6client font cases and no blocked requests.
+
+The first target-follow case failed its heading assertion. The old helper saved that row only after the assertion, so actual failing headings were discarded. A lazy-route readiness race is supported by the source, not retrospectively proven by retained DOM. The selected QA-only correction retains the target row before navigation, waits for the same target-heading predicate before sampling, and saves URL/headings/errors/HTML/screenshot on failure. It holds both real clicks,12source cases,7controls,assertion predicates,fixture policy and all3product bodies. Its whole inverse exactly restores captured helper4588e1d7. Runtime remains UNRUN at authoring.
+
+Original artifact12720201901 is39276005bytes,SHA2567e7b81f961690467e8ea79769e957c138b6ebecd09eeeb6da061fc6ea3be1a11, acquired once by the delegated peer with74safe body hashes before JSON. Intake receipt SHA256606a0df1d6e7aa7141987467d3134edde29348a7fbe09db5deacfb4ffe0feab8. No later rebuilt-reader/extra-guard/download-cap step executed in that failed run, so no pass is claimed for them. Standalone full-history run40477104570 onf77749ff944d64471064c827b28dbad22c580e20 continues independently with identical application bodies. No main, live result or rank change is claimed.
+
+
+### Linked destinations passed; unchanged cap requires smaller copy
+
+Sourcea54012b3cce32ec3695d5204f0762d270c89d6ac/run40479833041 passes actual6focused cases,3renderer phases,all133loaded guides (132unannotated),12raw/client cases,7controls,both real target clicks,15required readers,3extra guide guards,4delta controls with4308other files held,and4262source-manifest checks. Retained afterClick observations show the URL changing while old Soccer Career headings remain, then the target-specific readiness wait resolves to the correct game.
+
+Exactly1of15unchanged cap rows fails: /soccer-grid rounds320K against319K,319.5Kto the tenth; Soccer Career passes839.6Kagainst840K. Originalartifact12721963975 is39284700bytes,SHA256327407618fe3fd80b384793f0ff001b19ef99bb5cd585aa67865e97e5e59deda, acquired once with94safe ZIP hashes beforeJSON. Peerreceipt SHA256356fb73d1296d7e7420321c8f3194a72ce25a1efdeb0b2ee1ad7bdaa890d4ad5. This is not an overall cap pass.
+
+The selected source-only correction shortens only the2new contextual sentences, saving151source bytes. Both exact anchor labels/targets,original paragraph text,allotherguide entries,sharedrenderer/types andtest/assertion/cap logic remain held. Source soccer2 SHA2560a2ee79469b76bffc0931b86a9beb7590fe7310b815e6a6d45c32dabef0ee36e,whole inverse to3d3d29e8verified. Actual gzip savings and new cap results are UNRUN at this authoring point. No budget is relaxed.
+
+The full-history app run40477104570/job122097932512 onf77749ff944d64471064c827b28dbad22c580e20 passed9630cases with58skips (9688total),realtypesandphysicalhistoricalfixturesheld. Originalartifact12722282056 is1337612bytes,SHA256b23c9e05310e874b9e64d8d718ff075f7c4fbdb2c287d56332a71b3c3244fd0f;all21ZIPbodieshashed beforeJSON. That full-suite result precedes this2sentence-only correction; current focused/render/browser/readers/caps will qualify the copy, and no full current-suite rerun is inferred. Owner I still retains joined-target gates,mainandpublication. No live or ranking result is claimed.
+
+
+### Short-copy source pin correction
+
+Run40483040271/sourceb380bc99e58202029b2932d5aca800fd96721376 stopped before renderer cases because the QA helper still pinned the previous long-copy soccer2 hash3d3d29e8. Actual short-copy body0a2ee794 matches the151byte reduction and native Git blob. Types and6focused cases passed; build/browser/readers/caps did not run. Originalartifact12723159030 is36065410bytes,SHA2562f07170cc1c17977545e0c801bd1656477efae552e129f0cfe9fb8c0b991815d, acquired once after a no-file regional transport timeout, with21safe body hashes beforeJSON. Intake receipt SHA256c73ee4566a8098942753fef4bdec14eb15cfcab9c24cdd36068f46d166d2a20b.
+
+This follow-up refreshes that one immutable QA source pin to exact0a2ee794 and changes the workflow trigger comment. Product,classifiers,allassertions andall15cap thresholds remain held. Compiled gzip effect remains UNRUN at authoring. No full current-suite or cap pass is inferred.
+
+
+## Soccer Career contextual links qualified for integration review
+
+Final source d745815f9fde04eba6970e31c1425f5565ae699b/run40485985900 passes app types,6focused cases,3renderer arms,133loaded/132unchanged-unannotated guides,12raw/client cases+7controls+2targets,all15rebuiltreaders+3guideguards,all15unchangedcaps,4deltacontrols/4308otherheld and4262sourcechecks. Parentactuallyviewed320/390 intro captures, peer1280; readableunderlinedlinks/focus,nooverlap. Original12724889612/39254446B/SHA3bf35ca814a880f2d21735b9a436a44c432b1f145ac2154d9f4bf0a13a2d25af admittedonce with94bodyhashes. Peerreceipt3e6772cb9b86725fb93b62cb484aebd6c9affe32e7c1a46ea78afeafaf4df6b4. Fullhistory9630pass/58skip onf777 precedes2sentence-onlyshortening and is recordedwiththatlimit. See docs/SOCCER-CAREER-INTERNAL-LINKS-2026-10-27.md for exactsource/evidence/bounds.
+
+This is ready for Owner I's protected integration review, not canonical adoption or publication. I must regenerate the target snapshot/lastmod/sitemap from joined source. No ranking or live result is claimed.
