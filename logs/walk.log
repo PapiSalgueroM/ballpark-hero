@@ -1,0 +1,7 @@
+(r) 390: rules sheet open, the Swap sentence present
+(s) 390 before: {"rung":"Question 1 of 15","question":"Who was worth the most in the 2026 market values?","swapDisabled":false,"scrollX":0,"scrollY":0,"sideways":false}
+(s) 390 after: {"rung":"Question 1 of 15","question":"Which club was Omar Marmoush at in the 2026 market values?","swapDisabled":true,"scrollX":0,"scrollY":0,"sideways":false}
+(r) 1280: rules sheet open, the Swap sentence present
+(s) 1280 before: {"rung":"Question 1 of 15","question":"Who was worth the most in the 2026 market values?","swapDisabled":false,"scrollX":0,"scrollY":0,"sideways":false}
+(s) 1280 after: {"rung":"Question 1 of 15","question":"Which club was Omar Marmoush at in the 2026 market values?","swapDisabled":true,"scrollX":0,"scrollY":0,"sideways":false}
+walk1579: green
