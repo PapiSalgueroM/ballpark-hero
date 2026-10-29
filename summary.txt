@@ -1,0 +1,4 @@
+identity exit=0 1s |    Duration  960ms (transform 71ms, setup 71ms, collect 157ms, tests 41ms, environment 308ms, prepare 92ms)
+identity-oldhook exit=1 2s | ::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/hooks/useDailyPuzzleIdentity.test.ts,title=src/hooks/useDailyPuzzleIdentity.test.ts > useDailyPuzzle%3A the
+save-head exit=0 2s |    Duration  1.86s (transform 273ms, setup 68ms, collect 365ms, tests 748ms, environment 290ms, prepare 107ms)
+save-head-headindex exit=0 2s |    Duration  1.88s (transform 271ms, setup 67ms, collect 367ms, tests 747ms, environment 289ms, prepare 64ms)
