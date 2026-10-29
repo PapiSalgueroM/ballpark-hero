@@ -1,0 +1,3 @@
+  FAIL  the offseason set a new mandate
+  FAIL  the feed credits the press answer for the softer bar
+BASE playGmPress exit=1 | playGmPress: 2 failures
