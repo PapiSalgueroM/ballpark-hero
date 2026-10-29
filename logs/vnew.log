@@ -1,0 +1,43 @@
+
+[1m[46m RUN [49m[22m [36mv3.2.7 [39m[90m/home/runner/work/ballpark-hero/ballpark-hero[39m
+
+Browserslist: browsers data (caniuse-lite) is 16 months old. Please run:
+  npx update-browserslist-db@latest
+  Why you should do it regularly: https://github.com/browserslist/update-db#readme
+ [32m✓[39m src/test/usCareerActionConfirm.test.tsx [2m([22m[2m19 tests[22m[2m)[22m[33m 4493[2mms[22m[39m
+   [33m[2m✓[22m[39m US career destructive action confirmation[2m > [22m'NFL' preserves live restore and engine state as an independent baseline [33m 612[2mms[22m[39m
+   [33m[2m✓[22m[39m US career destructive action confirmation[2m > [22m'NBA' preserves live restore and engine state as an independent baseline [33m 392[2mms[22m[39m
+   [33m[2m✓[22m[39m US career destructive action confirmation[2m > [22m'NFL' keeps retirement pending until explicit acceptance and records its real legacy once [33m 437[2mms[22m[39m
+   [33m[2m✓[22m[39m US career destructive action confirmation[2m > [22m'MLB' keeps retirement pending until explicit acceptance and records its real legacy once [33m 332[2mms[22m[39m
+   [33m[2m✓[22m[39m US career destructive action confirmation[2m > [22m'NFL' keeps restart pending then deletes only its own career without another completion [33m 431[2mms[22m[39m
+   [33m[2m✓[22m[39m US career destructive action confirmation[2m > [22m'NBA' keeps restart pending then deletes only its own career without another completion [33m 304[2mms[22m[39m
+   [33m[2m✓[22m[39m US career destructive action confirmation[2m > [22m'MLB' keeps restart pending then deletes only its own career without another completion [33m 305[2mms[22m[39m
+ [32m✓[39m src/test/usCareerReports1569.test.tsx [2m([22m[2m32 tests[22m[2m)[22m[33m 10728[2mms[22m[39m
+   [33m[2m✓[22m[39m Round 1569 report A: Start over from every screen[2m > [22m'NFL' starts over from the hub of a two season career [33m 705[2mms[22m[39m
+   [33m[2m✓[22m[39m Round 1569 report A: Start over from every screen[2m > [22m'NBA' starts over from the hub of a two season career [33m 542[2mms[22m[39m
+   [33m[2m✓[22m[39m Round 1569 report A: Start over from every screen[2m > [22m'MLB' starts over from the hub of a two season career [33m 373[2mms[22m[39m
+   [33m[2m✓[22m[39m Round 1569 report A: Start over from every screen[2m > [22m'NHL' starts over from the hub of a two season career [33m 405[2mms[22m[39m
+   [33m[2m✓[22m[39m Round 1569 report A: Start over from every screen[2m > [22m'NFL' starts over from the free agency window [33m 622[2mms[22m[39m
+   [33m[2m✓[22m[39m Round 1569 report A: Start over from every screen[2m > [22m'NBA' starts over from the free agency window [33m 641[2mms[22m[39m
+   [33m[2m✓[22m[39m Round 1569 report A: Start over from every screen[2m > [22m'MLB' starts over from the free agency window [33m 592[2mms[22m[39m
+   [33m[2m✓[22m[39m Round 1569 report A: Start over from every screen[2m > [22m'NHL' starts over from the free agency window [33m 449[2mms[22m[39m
+   [33m[2m✓[22m[39m Round 1569 report A: Start over from every screen[2m > [22m'NFL' starts over from the extension talk [33m 404[2mms[22m[39m
+   [33m[2m✓[22m[39m Round 1569 report A: Start over from every screen[2m > [22m'NBA' starts over from the extension talk [33m 323[2mms[22m[39m
+   [33m[2m✓[22m[39m Round 1569 report A: Start over from every screen[2m > [22m'NHL' starts over from the extension talk [33m 319[2mms[22m[39m
+   [33m[2m✓[22m[39m Round 1569 report B: no offer is never a dead end[2m > [22m'NFL': free agency offers a veteran Retire instead, and a two season player none [33m 419[2mms[22m[39m
+   [33m[2m✓[22m[39m Round 1569 report B: no offer is never a dead end[2m > [22m'NBA': free agency offers a veteran Retire instead, and a two season player none [33m 406[2mms[22m[39m
+   [33m[2m✓[22m[39m Round 1569 report B: no offer is never a dead end[2m > [22m'MLB': free agency offers a veteran Retire instead, and a two season player none [33m 437[2mms[22m[39m
+   [33m[2m✓[22m[39m Round 1569 report B: no offer is never a dead end[2m > [22m'NHL': free agency offers a veteran Retire instead, and a two season player none [33m 447[2mms[22m[39m
+ [32m✓[39m src/test/usSeasonCentreEntry.test.tsx [2m([22m[2m64 tests[22m[2m)[22m[33m 11232[2mms[22m[39m
+   [33m[2m✓[22m[39m 'NBA' My Career: watching changes nothing[2m > [22msaves the same bytes after every press whether he presses Play or Week by week [33m 3534[2mms[22m[39m
+   [33m[2m✓[22m[39m 'NBA' My Career: watching changes nothing[2m > [22mCONTROL: one extra Math.random in the press makes the twin saves differ [33m 679[2mms[22m[39m
+   [33m[2m✓[22m[39m 'NFL' My Career: watching changes nothing[2m > [22msaves the same bytes after every press whether he presses Play or Week by week [33m 1582[2mms[22m[39m
+   [33m[2m✓[22m[39m 'NFL' My Career: watching changes nothing[2m > [22mCONTROL: one extra Math.random in the press makes the twin saves differ [33m 491[2mms[22m[39m
+   [33m[2m✓[22m[39m 'MLB' My Career: watching changes nothing[2m > [22msaves the same bytes after every press whether he presses Play or Week by week [33m 1800[2mms[22m[39m
+   [33m[2m✓[22m[39m 'MLB' My Career: watching changes nothing[2m > [22mCONTROL: one extra Math.random in the press makes the twin saves differ [33m 587[2mms[22m[39m
+
+[2m Test Files [22m [1m[32m3 passed[39m[22m[90m (3)[39m
+[2m      Tests [22m [1m[32m115 passed[39m[22m[90m (115)[39m
+[2m   Start at [22m 06:22:34
+[2m   Duration [22m 15.36s[2m (transform 2.89s, setup 344ms, collect 9.13s, tests 26.45s, environment 1.36s, prepare 473ms)[22m
+
