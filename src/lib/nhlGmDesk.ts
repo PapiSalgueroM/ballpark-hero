@@ -51,6 +51,9 @@ import {
   EASTERN, NHL_FO_ROUNDS, NHL_ROSTER_MAX, NHL_ROSTER_MIN, type NhlGmPlayer, type NhlLeague, type NhlProspect,
   type NhlRoundOptions, nhlCapUsed, nhlStrength, nhlTradeValue, repairNhlContributors,
 } from './nhlFrontOffice';
+/* Round 1559: the GM's career lists (types only, so this desk evaluates nothing of the host or of gmXp). */
+import type { HostXpSource } from './gmDeskHost';
+import type { GmTree } from './gmXp';
 
 /* ------------------------------------------------------------------ */
 /* The blocks                                                          */
@@ -123,7 +126,8 @@ const freshPicks = (league: NhlLeague): GmPickLedger =>
      is the year the old list was for, and the two later years start whole. */
   migrateLegacyPicks(league.teams, league.season, nhlGamePickRules(), 2).ledger;
 
-const freshStaff = (league: NhlLeague, team: string): NhlStaffState => ({
+/* Round 1559: exported, so the career's block rows (nhlGmCareer.ts) open a new club's staff the way the desk does. */
+export const freshStaff = (league: NhlLeague, team: string): NhlStaffState => ({
   block: gmDefaultStaff(NHL_STAFF_PACK.rules, nhlStaffCtx(league, team)),
   purse: NHL_STAFF_PACK.money.seasonPurse,
 });
@@ -594,3 +598,17 @@ export function nhlDealsTile(league: NhlLeague, on = true): GmTileFace {
     accent: w.open && w.periodsLeft <= 1,
   };
 }
+
+/* ------------------------------------------------------------------ */
+/* Round 1559: the GM's career, the desk host's two lists for this board */
+/* ------------------------------------------------------------------ */
+
+/**
+ * The trees this desk routes to its engine (the NFL's two, the same host
+ * calls). It grows a tree a round, never ahead of the route: a tree off the
+ * list sells no point (hostSpendPoint refuses it whatever a screen allows).
+ */
+export const NHL_XP_LIVE: readonly GmTree[] = ['ownership', 'media'];
+
+/** What this board's save holds the facts for, so the GM level screen promises nothing more. */
+export const NHL_XP_SOURCES: readonly HostXpSource[] = ['wins', 'titles', 'playoffs', 'mandate'];
