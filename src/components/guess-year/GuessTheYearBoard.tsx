@@ -43,6 +43,7 @@ export function GuessTheYearBoard() {
     <div ref={gameRef}>
       <GameShell
         width="narrow"
+        showNavbar={false}
         title="Guess The Year"
         emoji="📅"
         subtitle="What year did all these sports events happen?"

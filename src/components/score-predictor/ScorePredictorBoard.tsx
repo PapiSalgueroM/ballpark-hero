@@ -43,6 +43,7 @@ export function ScorePredictorBoard() {
   return (
     <GameShell
       width="narrow"
+      showNavbar={false}
       title="Score Predictor"
       headerExtra={
         <p className="text-xs text-muted-foreground mt-1">
