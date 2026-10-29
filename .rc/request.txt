@@ -1,0 +1,19 @@
+tsc: node_modules/.bin/tsc --noEmit -p tsconfig.app.json
+sim: node scripts/simUsCareerReports.mjs
+sim-400: node scripts/simUsCareerReports.mjs 400
+sim-60: SIM_SEED=11 node scripts/simUsCareerReports.mjs 60
+sim-s9: SIM_SEED=9 node scripts/simUsCareerReports.mjs
+ctl-blind: SIM_REPORTS_CONTROL=blind node scripts/simUsCareerReports.mjs
+ctl-nocredit: SIM_REPORTS_CONTROL=nocredit node scripts/simUsCareerReports.mjs
+ctl-alwayslast: SIM_REPORTS_CONTROL=alwayslast node scripts/simUsCareerReports.mjs
+vnew: node_modules/.bin/vitest run src/test/usCareerReports1569.test.tsx --testTimeout=300000 --hookTimeout=120000
+vdigest: node_modules/.bin/vitest run src/test/usCareerTruthDigest.test.ts --testTimeout=600000 --hookTimeout=120000
+vold: node_modules/.bin/vitest run src/test/usRivalOldSaves.test.ts src/test/usRivalOldSavesB.test.ts src/test/careerHallSaves1301.test.ts src/test/nbaOldSaveLines.test.ts src/test/myCareerRestore.test.tsx --testTimeout=300000 --hookTimeout=120000
+vmore: node_modules/.bin/vitest run src/test/nflTruthRules1104.test.ts src/test/usCareerHelpRules1104.test.tsx src/test/seasonCentreWords.test.tsx src/test/usSeasonCentre.test.tsx src/test/usSeasonCentreScreens.test.tsx src/test/careerHall.test.tsx src/test/usCareerEraCards.test.ts src/test/usPlayoffs.test.ts --testTimeout=300000 --hookTimeout=120000
+vlib: node_modules/.bin/vitest run src/lib/careerDirtyMoney.test.ts src/lib/mlbCareerLifeC.test.ts src/lib/nbaCareerLifeC.test.ts src/lib/nhlCareerLifeC.test.ts src/lib/usCareerAnnualBenefits.test.ts src/lib/usCareerProgramme.test.ts src/lib/usCareerRecovery.test.ts src/lib/usCareerShopPromises.test.ts --testTimeout=300000 --hookTimeout=120000
+parity: node scripts/simUsBoardParity.mjs
+pressmarket: node scripts/simCareerPressMarket.mjs
+entryguide: node scripts/simCareerEntryGuide.mjs
+norival: node scripts/simNoRivalNames.mjs
+confirm: node scripts/simUsCareerActionConfirm.mjs
+probe: node .rc/x/probeReview.mjs
