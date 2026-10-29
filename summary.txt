@@ -1,0 +1,4 @@
+c-slashdup exit=1 3s | simBingoClubCounts: CONTROL=slashdup FIRED (1 failures; section 6: 1)
+sim exit=0 4s | simBingoClubCounts: GREEN, every section held
+c-aliasdup exit=1 4s | simBingoClubCounts: CONTROL=aliasdup FIRED (1 failures; section 6: 1)
+c-tableclubs exit=1 2s | simBingoClubCounts: CONTROL=tableclubs FIRED (1 failures; section 6: 1)
