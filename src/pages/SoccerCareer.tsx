@@ -39,7 +39,7 @@ import {
   dismissSummary, stayAtClub, signExtension, requestTransferDecision, applyEventChoice,
   dismissDebut, dismissWorldCup, retireFromInternational, dismissRivalryEvent,
   dismissBallonDor, giveBdorSpeech, bdorSpeechOpen, type BdorSpeechChoice, SOCCER_BALLON_DOR, SOCCER_BDOR_SPEECHES, SOCCER_WORLD_CUP_SPEECHES,
-  giveWorldCupSpeech, type WorldCupSpeechChoice, manualRetire, choosePostRetirement, advanceManagerSeason, acceptManagerOffer, endManagerCareer, loadManagerMarket,
+  giveWorldCupSpeech, type WorldCupSpeechChoice, manualRetire, choosePostRetirement, acceptManagerOffer, endManagerCareer, loadManagerMarket,
   acceptRetirementSuggestion, declineRetirementSuggestion, announceFarewellSeason,
   advancePunditSeason, endPunditCareer, punditLegacyPaid, playedSeniorSeason, POST_RETIREMENT_BONUS_CAP,
   advanceOwnerSeason, endOwnerCareer,
@@ -93,6 +93,7 @@ import { coachingStartChoices, type CoachingStartQuote } from '@/lib/soccerCaree
 import { useSoccerCoachingStart } from '@/hooks/useSoccerCoachingStart';
 import { useSoccerManagerJobReview } from '@/hooks/useSoccerManagerJobReview';
 import { readManagerJobReview, type ManagerJobChoice, type ManagerJobQuote } from '@/lib/soccerCareerManagerJobReview';
+import { readManagerSeasonFocus, type ManagerSeasonFocusChoice } from '@/lib/soccerCareerManagerFocus';
 import PotentialProgress from '@/components/soccer-career/PotentialProgress';
 import type { MoneyAction } from "@/lib/soccerMoney";
 import { bankSummary } from "@/lib/soccerMoney";
@@ -160,6 +161,7 @@ const OwnerClubSale = lazy(() => ownerScreens().then(m => ({ default: m.OwnerClu
 const OwnerPanel = lazy(() => ownerScreens().then(m => ({ default: m.OwnerPanel })).catch(() => new Promise<never>(() => undefined)));
 const CoachingStartChooser = lazy(() => import('@/components/soccer-career/CoachingStartChooser').catch(() => new Promise<never>(() => undefined)));
 const SoccerManagerJobReview = lazy(() => import('@/components/soccer-career/SoccerManagerJobReview'));
+const SoccerManagerSeasonFocus = lazy(() => import('@/components/soccer-career/SoccerManagerSeasonFocus').catch(() => new Promise<never>(() => undefined)));
 const CoachingStartWait = ({ onBack }: { onBack: () => void }) => <div className="rounded-xl border border-border p-4 space-y-3"><Button onClick={onBack} variant="outline" className="h-11">Back</Button><p role="status" className="text-sm">Opening coaching options...</p></div>;
 /* the sale list's placeholder keeps its Back where the list puts it, so a chunk that never lands cannot strand the doors */
 const OwnerSaleWait = ({ onBack }: { onBack: () => void }) => <div className="min-h-[14rem]"><Button onClick={onBack} variant="ghost" className="h-8 px-2 text-xs font-bold">Back</Button></div>;
@@ -1392,9 +1394,7 @@ export default function SoccerCareer() {
   const managerJobReview = useSoccerManagerJobReview(career, clubs, setCareer);
 
   const handleAdvanceManager = () => {
-    if (!career) return;
-    if (readManagerJobReview(career, clubs)?.enabled) { managerJobReview.advance(); return; }
-    setCareer(advanceManagerSeason(career, clubs));
+    managerJobReview.advance();
   };
 
   /* Round 111: take one of the jobs on the table after being sacked. */
@@ -1687,6 +1687,7 @@ export default function SoccerCareer() {
               onPostRetirement={handlePostRetirement}
               onCoachingStart={handleCoachingStart}
               onAdvanceManager={handleAdvanceManager}
+              onManagerFocusChange={managerJobReview.setFocus}
               onManagerReviewModeChange={managerJobReview.setEnabled}
               onManagerJobResolve={managerJobReview.resolve}
               onAcceptManagerOffer={handleAcceptManagerOffer}
@@ -3176,11 +3177,19 @@ function PostRetirementCard({ career, clubs, onChoice, onCoachingStart }: { care
 }
 
 /* ─── Manager Panel ─── */
-function ManagerPanel({ manager, career, clubs, onAdvance, onEnd, onAcceptOffer, onReviewModeChange, onResolveJob }: { manager: ManagerState; career: CareerState; clubs: ClubData[]; onAdvance: () => void; onEnd: () => void; onAcceptOffer?: (i: number) => void; onReviewModeChange?: (enabled: boolean) => void; onResolveJob?: (quote: ManagerJobQuote, choice: ManagerJobChoice) => void }) {
+function ManagerPanel({ manager, career, clubs, onAdvance, onEnd, onAcceptOffer, onReviewModeChange, onResolveJob, onFocusChange }: { manager: ManagerState; career: CareerState; clubs: ClubData[]; onAdvance: () => void; onEnd: () => void; onAcceptOffer?: (i: number) => void; onReviewModeChange?: (enabled: boolean) => void; onResolveJob?: (quote: ManagerJobQuote, choice: ManagerJobChoice) => void; onFocusChange?: (choice: ManagerSeasonFocusChoice) => void }) {
   const review = readManagerJobReview(career, clubs);
   const [rules, setRules] = useState(false);
   const rulesTrigger = useRef<HTMLButtonElement>(null);
   const closeRules = () => { setRules(false); rulesTrigger.current?.focus({ preventScroll: true }); };
+  const [focusOpen, setFocusOpen] = useState(false);
+  const focusTrigger = useRef<HTMLButtonElement>(null);
+  const closeFocus = () => { setFocusOpen(false); requestAnimationFrame(() => focusTrigger.current?.focus({ preventScroll: true })); };
+  useEffect(() => { if (focusOpen) closeFocus(); }, [career]);
+  const focus = readManagerSeasonFocus(career);
+  if (focusOpen) return <Suspense fallback={<div className="space-y-2"><button className="min-h-11 rounded-lg border border-border px-3 text-xs font-bold" onClick={closeFocus}>Back</button><p role="status" className="text-xs">Opening season focus...</p></div>}>
+    <SoccerManagerSeasonFocus career={career} blocked={!!review?.pending} onChoose={onFocusChange} onBack={closeFocus} />
+  </Suspense>;
   return (
     <div className="rounded-xl border border-border bg-card p-4 space-y-3">
       <div className="text-center space-y-1">
@@ -3188,6 +3197,7 @@ function ManagerPanel({ manager, career, clubs, onAdvance, onEnd, onAcceptOffer,
         <p className="text-xs text-muted-foreground">Managing {manager.club} (Tier {manager.clubTier}) · Season {manager.season}</p>
       </div>
       {!manager.unemployed && <div className="space-y-2">
+        <button ref={focusTrigger} className="min-h-11 w-full rounded-lg border border-border p-2 text-xs font-bold" disabled={!!review?.pending} onClick={() => setFocusOpen(true)}>Season focus: {focus === 'league' ? 'League' : focus === 'cup' ? 'Cup' : 'Balanced'}</button>
         <div className="flex items-center gap-2">
           <button className="min-h-11 flex-1 rounded-lg border border-border p-2 text-xs font-bold" aria-pressed={!!review?.enabled} disabled={!!review?.pending || !onReviewModeChange} onClick={() => onReviewModeChange?.(!review?.enabled)}>Review job moves</button>
           <button className="min-h-11 min-w-11 rounded-lg border border-border p-2 text-xs" ref={rulesTrigger} aria-label="Job move rules" onClick={() => setRules(true)}>?</button>
@@ -3217,6 +3227,7 @@ function ManagerPanel({ manager, career, clubs, onAdvance, onEnd, onAcceptOffer,
           your own row, the W-D-L line, and how the cup run ended. Round 1524:
           the block is DugoutTableBlock, which the owner's panel shows too. */}
       <DugoutTableBlock results={manager.seasonResults} />
+      {(manager.seasonResults[manager.seasonResults.length - 1]?.focus === 'league' || manager.seasonResults[manager.seasonResults.length - 1]?.focus === 'cup') && <p className="text-xs text-muted-foreground">Preparation used last season: {manager.seasonResults[manager.seasonResults.length - 1].focus === 'league' ? 'League focus' : 'Cup focus'}.</p>}
 
       {/* Round 111: out of work, with a feed you had to earn. */}
       {manager.unemployed && (
@@ -3653,7 +3664,7 @@ function SocialMediaActionCard({ career, onAction, onCoverAthlete, onDismiss }: 
 }
 
 /* ─── Game Screen ─── */
-function GameScreen({ career, clubs, onNextSeason, onAcceptOffer, onDismissSummary, onDismissNewspaper, onStay, onSignExtension, onRequestTransfer, onAcceptLoan, onEventChoice, onDismissDebut, onDismissWorldCup, onWorldCupSpeech, onRetireInternational, onReturnInternational, onDismissRivalryEvent, onDismissBallonDor, onBdorSpeech, onManualRetire, onPostRetirement, onCoachingStart, onAdvanceManager, onManagerReviewModeChange, onManagerJobResolve, onAcceptManagerOffer, onEndManager, onShare, onNewCareer, onOpenPhone, onSocialMediaAction, onCoverAthlete, onDismissSocialMedia, onMoralDilemmaChoice, onRehabChoice, onDismissMoralDilemma, onDismissAppeal, onAcceptRetirement, onDeclineRetirement, onAnnounceFarewell, onPunditAction, onEndPundit, onAdvanceOwner, onEndOwner, onCurrencyChange, onAgentChange, timelineRef, signedNote, academyReport, onAcademyFocus, onCareerPatch, arrival }: {
+function GameScreen({ career, clubs, onNextSeason, onAcceptOffer, onDismissSummary, onDismissNewspaper, onStay, onSignExtension, onRequestTransfer, onAcceptLoan, onEventChoice, onDismissDebut, onDismissWorldCup, onWorldCupSpeech, onRetireInternational, onReturnInternational, onDismissRivalryEvent, onDismissBallonDor, onBdorSpeech, onManualRetire, onPostRetirement, onCoachingStart, onAdvanceManager, onManagerFocusChange, onManagerReviewModeChange, onManagerJobResolve, onAcceptManagerOffer, onEndManager, onShare, onNewCareer, onOpenPhone, onSocialMediaAction, onCoverAthlete, onDismissSocialMedia, onMoralDilemmaChoice, onRehabChoice, onDismissMoralDilemma, onDismissAppeal, onAcceptRetirement, onDeclineRetirement, onAnnounceFarewell, onPunditAction, onEndPundit, onAdvanceOwner, onEndOwner, onCurrencyChange, onAgentChange, timelineRef, signedNote, academyReport, onAcademyFocus, onCareerPatch, arrival }: {
   /** Round 1330: set once per Begin Career ("begin-" and a count), null otherwise; the hub lands on the player card when it changes. */
   arrival?: string | null;
   career: CareerState;
@@ -3686,6 +3697,7 @@ function GameScreen({ career, clubs, onNextSeason, onAcceptOffer, onDismissSumma
   onPostRetirement: (choice: PostRetirementChoice, ownerClub?: string) => void;
   onCoachingStart: (quote: CoachingStartQuote) => void;
   onAdvanceManager: () => void;
+  onManagerFocusChange: (choice: ManagerSeasonFocusChoice) => void;
   onManagerReviewModeChange: (enabled: boolean) => void;
   onManagerJobResolve: (quote: ManagerJobQuote, choice: ManagerJobChoice) => void;
   onAcceptManagerOffer: (i: number) => void;
@@ -4203,7 +4215,7 @@ function GameScreen({ career, clubs, onNextSeason, onAcceptOffer, onDismissSumma
 
           {/* OVERLAY: Manager Season */}
           {career.phase === "manager_season" && career.managerState && (
-            <ManagerPanel manager={career.managerState} career={career} clubs={clubs} onAdvance={onAdvanceManager} onEnd={onEndManager} onAcceptOffer={onAcceptManagerOffer} onReviewModeChange={onManagerReviewModeChange} onResolveJob={onManagerJobResolve} />
+            <ManagerPanel manager={career.managerState} career={career} clubs={clubs} onAdvance={onAdvanceManager} onEnd={onEndManager} onAcceptOffer={onAcceptManagerOffer} onReviewModeChange={onManagerReviewModeChange} onResolveJob={onManagerJobResolve} onFocusChange={onManagerFocusChange} />
           )}
 
           {/* OVERLAY: Pundit Season */}

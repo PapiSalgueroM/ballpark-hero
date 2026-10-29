@@ -1,0 +1,428 @@
+{
+  "schema": 1,
+  "status": "FIRST_POSITIVE_SOURCE_ONLY_PRE_BS_RUNTIME_UNRUN",
+  "baseCommit": "097589b9a7ef3d5ad10d55e6e463f6031eba391a",
+  "baseTree": "6e70e9cc58ad8a72a6e88de7f1b0b2bbb5cf3b2f",
+  "codeParent": "47dc71eafa15870935718f032ff545fb07de0110",
+  "sourceFamily": "Frozen PRE-BS source family only. Later fresh main port and qualification must preserve Release BS join fixes.",
+  "branch": "codex/sc-manager-focus-positive-v3-20261029",
+  "allowedPaths": [
+    ".github/workflows/sc-manager-focus-positive.yml",
+    "qa/sc-manager-season-focus-v1/COPIED-CHECKER-CONTROLS.json",
+    "qa/sc-manager-season-focus-v1/original/soccerCareerEngine.ts",
+    "qa/sc-manager-season-focus-v1/PHYSICAL-CONTROLS.json",
+    "qa/sc-manager-season-focus-v1/POSITIVE-SOURCE.json",
+    "scripts/qa/buildSoccerManagerFocusFixedObserver.mjs",
+    "scripts/qa/buildSoccerManagerJobReviewObserver.mjs",
+    "scripts/qa/soccerManagerFocusPositive.mjs",
+    "src/components/soccer-career/SoccerManagerSeasonFocus.tsx",
+    "src/hooks/useSoccerManagerJobReview.ts",
+    "src/lib/soccerCareerEngine.ts",
+    "src/lib/soccerCareerManagerFocus.ts",
+    "src/lib/soccerCareerManagerJobReview.ts",
+    "src/pages/SoccerCareer.tsx",
+    "src/test/fixtures/soccerManagerFocus.before.json",
+    "src/test/soccerCareerManagerFocus.fixed.consumer.test.tsx",
+    "src/test/soccerCareerManagerFocus.test.tsx"
+  ],
+  "modified": 5,
+  "added": 12,
+  "deleted": 0,
+  "expectedRegularBodies": 5440,
+  "files": [
+    {
+      "path": "src/pages/SoccerCareer.tsx",
+      "bytes": 281708,
+      "sha256": "f22a1e472aa7f3c6a540b03ae9b46e1050b9c8d48aa2a3544ade0a4166475da3",
+      "gitBlob": "23f7ba63b2b8b535417eefc030f2db5a7ac9dc90"
+    },
+    {
+      "path": "src/test/soccerCareerManagerJobReview.consumer.test.tsx",
+      "bytes": 9146,
+      "sha256": "ff909f687731622ef8b47d5b3ceb4f005e7e9b15db39330d52e78525970597d4",
+      "gitBlob": "a7426295011be8568a42f4cb8a14fa04fe5cbe4f"
+    },
+    {
+      "path": "qa/sc-manager-season-focus-v1/COPIED-CHECKER-CONTROLS.json",
+      "bytes": 3696,
+      "sha256": "fa70efe5e68d61450abb15ec16a299f414d0d6373035681139ddfcf43af4c97d",
+      "gitBlob": "1b843439c6ffa80ee3613ff76b54c28d7b488219"
+    },
+    {
+      "path": "qa/sc-manager-season-focus-v1/PHYSICAL-CONTROLS.json",
+      "bytes": 21092,
+      "sha256": "f32b4a5a0bddffc56628e098e6851e0e89fbc05d38c519031b1b3fd23875ca46",
+      "gitBlob": "231e9c3b694f022649fa8ee45e45cd924aa39fbe"
+    },
+    {
+      "path": "qa/sc-manager-season-focus-v1/original/soccerCareerEngine.ts",
+      "bytes": 552077,
+      "sha256": "bf4beb5151213325277a44c83cef6a72528d14b612368b8db70c7b2288508708",
+      "gitBlob": "97e40cf67e30c3cbf6425eab95afa0c53a20d66b"
+    },
+    {
+      "path": "src/test/soccerCareerManagerFocus.fixed.consumer.test.tsx",
+      "bytes": 19700,
+      "sha256": "adc6e4b89574ed5d0c01e4696137538fd8f3a17fb97c85bdcfbe7f5506362a13",
+      "gitBlob": "ceea8671bcdbcd37d85e29c610751bd0b4485429"
+    },
+    {
+      "path": "scripts/qa/buildSoccerManagerFocusFixedObserver.mjs",
+      "bytes": 7313,
+      "sha256": "d04ba6c6fb5f8eba25a847dce0aefb8dc9c5e64cc0e25501c3976415e83f1a7b",
+      "gitBlob": "57191580cd4901521f28c9b78746fe41b8eb3a9a"
+    },
+    {
+      "path": "src/test/fixtures/soccerManagerFocus.before.json",
+      "bytes": 280689,
+      "sha256": "3448808ddadc15cc89ab7384db232d30243916d3612443938996a7b930025420",
+      "gitBlob": "b63e7cd932d496bc0b175ebf168dbeaee680d5b3"
+    },
+    {
+      "path": "src/test/soccerCareerManagerFocus.test.tsx",
+      "bytes": 22060,
+      "sha256": "31da65425e9c5cef6e4587703f7987608920e51d8ad22da7eb3abb113ea8f55f",
+      "gitBlob": "019e606df2eade1cbbe14106aeb27cf8ab098194"
+    },
+    {
+      "path": "scripts/qa/buildSoccerManagerJobReviewObserver.mjs",
+      "bytes": 5569,
+      "sha256": "5f55381175f31e705c520bfb37dc4e9ca725d7ecbd1f09ece3de4a0b084da89c",
+      "gitBlob": "2dc0588facd6fa9a67e97fab21fa0cf046e59ffb"
+    },
+    {
+      "path": "src/components/soccer-career/SoccerManagerSeasonFocus.tsx",
+      "bytes": 3780,
+      "sha256": "aa5be1f16ffdd20c52226a84a2a0017923d4fd28e82bb031e6c33eb27200a5a0",
+      "gitBlob": "9cb70754695c166f40b6bc39c2e12d09c28d0762"
+    },
+    {
+      "path": "src/lib/soccerCareerManagerFocus.ts",
+      "bytes": 2697,
+      "sha256": "597174857adbed8e8d314b9c5e372a120e124d880b9a601022a7fbdd2230b4a3",
+      "gitBlob": "0e948cb6368ffa80809e656fd18393796bd57491"
+    },
+    {
+      "path": "package-lock.json",
+      "bytes": 309049,
+      "sha256": "c7e3867eabf0bfa03a8aa6a5e601b0050b937ed210d48c6bbd241019e3c9ea76",
+      "gitBlob": "97d6f12a052f25f400462938c241789a083f0bfe"
+    },
+    {
+      "path": "package.json",
+      "bytes": 3495,
+      "sha256": "acfe14626dea53cf5f9c5e0286b766a22237656b52aac4c888b080873ac90e31",
+      "gitBlob": "2ff64986fb76ebc51b706f2fd24765768874008a"
+    },
+    {
+      "path": "vitest.config.ts",
+      "bytes": 5364,
+      "sha256": "6a68dd2f214dab4a3013eb41bad38eea65d703d61440002710ec246495e1c58a",
+      "gitBlob": "ed2a9dc677f77dfe95c061064eeff5782b856864"
+    },
+    {
+      "path": "scripts/data/careerLeagueWorldSaves1100.json",
+      "bytes": 102331,
+      "sha256": "1c2ac7441402ad6db4916c844181b869a3550726c7e0afed4cce194f5e6ca8ef",
+      "gitBlob": "81425f731297f0ff72fc4e163dfe1a4cb86814ab"
+    },
+    {
+      "path": "tsconfig.app.json",
+      "bytes": 680,
+      "sha256": "b12030bfe21ea5be66670842c71d66d194d1771f93f0b8c076e97c867b4b0552",
+      "gitBlob": "51f581dd91641b4c1f1219f646788e73cf6bf00c"
+    },
+    {
+      "path": "scripts/lib/offlineTransport.cjs",
+      "bytes": 10660,
+      "sha256": "e60ff1534307e449ccef598e3b7470dcba58681b82cea4005cec7319f14f9221",
+      "gitBlob": "0fda542a2649fe5da937c6976fd0f5b6073e74b6"
+    },
+    {
+      "path": "scripts/lib/careerStep.mjs",
+      "bytes": 2741,
+      "sha256": "3a5a141ff77d2487f030a47ebbdbab88fc2c567e6a5f56ece8c37711961e8432",
+      "gitBlob": "b88a67dda20846669d6cf5404faee226fe493c0e"
+    },
+    {
+      "path": "src/data/soccerCareerClubPool.ts",
+      "bytes": 49030,
+      "sha256": "5e565223239c8bb5ea8f5be3d2ecfb5c72ed026d3598031fcb5221f265e01d58",
+      "gitBlob": "83e9df78441c0d16509f80b8ec0bfbadb0f08f26"
+    },
+    {
+      "path": "src/lib/managerOffers.ts",
+      "bytes": 12319,
+      "sha256": "c445ec9427502ff797348527077034d76b9c668b3a4980c8387aaba4ab75e24d",
+      "gitBlob": "b251b339a7ff0b6d1f8d2e9692adef8229ebedd5"
+    },
+    {
+      "path": "src/lib/managerJobMarket.ts",
+      "bytes": 3955,
+      "sha256": "2df0a3fed4336c23c0bcaa7868a06d63a4cbaa417b3e0e8880e17d8bc879774d",
+      "gitBlob": "82e11ce8c1c76b780059969674a26ad368bd4db4"
+    },
+    {
+      "path": "src/lib/soccerCareerLife.ts",
+      "bytes": 105609,
+      "sha256": "1ba72d3a9b0f1fd30fe45eab2d5e34a955369effa6b224e02a9db3e3db92befc",
+      "gitBlob": "592170d7967162d9967e3cf13e22333afb840732"
+    },
+    {
+      "path": "src/lib/careerEras.ts",
+      "bytes": 105789,
+      "sha256": "f3e7347f58abe993db9fd72e9896ea0767a6ca7eb3b19861b75b92b387f89c1c",
+      "gitBlob": "e037022342382b1df9c8a5ede620d2cce480bc23"
+    },
+    {
+      "path": "src/lib/soccerCareerLeagueWorld.ts",
+      "bytes": 15636,
+      "sha256": "360c629f5d6ecc9cd959f5aae9a3791eb99b4f5cecdca2236da563168c2bb8c6",
+      "gitBlob": "72fcabdd0c557a743aa849b01208140c3030048f"
+    },
+    {
+      "path": "src/lib/soccerCareerLeague.ts",
+      "bytes": 47020,
+      "sha256": "fe3efae2f43e780c2cd4d13ca7fa85f023a2fefe8cf1b002866a1cf0d963268a",
+      "gitBlob": "9c05bf681f30bcd3703f55ad72c1289f4eeb9844"
+    },
+    {
+      "path": "src/lib/soccerCareerSave.ts",
+      "bytes": 6287,
+      "sha256": "b486dfd8c4073230b6967c674058e46c7b56a6afd2a8a165f1e215501205477a",
+      "gitBlob": "86ec011693fd5bc702b5e8ccec05d27775a72a76"
+    },
+    {
+      "path": "src/lib/soccerCareerManagerJobReview.ts",
+      "bytes": 9889,
+      "sha256": "cea147457b7623667e6eec105c7f09013f16f0c38b75cfdc6f59af626540a042",
+      "gitBlob": "b604dc9e3de5589d537287c8898d4a6d815748ec"
+    },
+    {
+      "path": "src/lib/soccerCareerCoachingStart.ts",
+      "bytes": 4043,
+      "sha256": "7720957192ccb8a0de5b1fef64817e409ee30d7ce7dd035425e598d0fd903aff",
+      "gitBlob": "0733d114d66b748131ac2c623fb858c6d9c97fd2"
+    },
+    {
+      "path": "src/lib/soccerCareerEngine.ts",
+      "bytes": 552601,
+      "sha256": "479369c8de4d117bfa2f90ad50b15f9f3b7ff7d4cfc4423b857dec2ce97977bf",
+      "gitBlob": "bffa371aab07c961afe094aeaef934c341105b37"
+    },
+    {
+      "path": "src/hooks/useSoccerManagerJobReview.ts",
+      "bytes": 1896,
+      "sha256": "09977cb473d582faad39865cd35b1a938a7a1beac193297fcf6d185365604aa7",
+      "gitBlob": "e65b0bd1dbbe4c8e1ad573d75d2e9eef933165eb"
+    },
+    {
+      "path": "src/test/setup.ts",
+      "bytes": 847,
+      "sha256": "0175cc334b44d9874ff4bd8274a8cc165e9e84cd3738a4298f934db353887289",
+      "gitBlob": "df00cdf5c54e8c8efc71e46d7585ae76acb4fc8d"
+    },
+    {
+      "path": "scripts/qa/soccerManagerFocusPositive.mjs",
+      "bytes": 25686,
+      "sha256": "0d65f59168f403024e0ded52cbd1019ca3dcc8360e3a76eabb2f6f2d9fdd9c20",
+      "gitBlob": "7cdeceb7f39662458cd06e5a4dca5c6e7c0df7ce"
+    }
+  ],
+  "focusedTestPaths": [
+    "src/test/soccerCareerManagerFocus.test.tsx",
+    "src/test/soccerCareerManagerFocus.fixed.consumer.test.tsx"
+  ],
+  "fixturePath": "src/test/fixtures/soccerManagerFocus.before.json",
+  "cases": [
+    {
+      "file": "src/test/soccerCareerManagerFocus.test.tsx",
+      "title": "keeps absent Balanced selection as an identity with zero draws",
+      "fullName": "manager season focus authority and persistence keeps absent Balanced selection as an identity with zero draws"
+    },
+    {
+      "file": "src/test/soccerCareerManagerFocus.test.tsx",
+      "title": "binds explicit preparation to the current job and survives official load",
+      "fullName": "manager season focus authority and persistence binds explicit preparation to the current job and survives official load"
+    },
+    {
+      "file": "src/test/soccerCareerManagerFocus.test.tsx",
+      "title": "reads ignored optional records without writes and permits explicit recovery",
+      "fullName": "manager season focus authority and persistence reads ignored optional records without writes and permits explicit recovery"
+    },
+    {
+      "file": "src/test/soccerCareerManagerFocus.test.tsx",
+      "title": "keeps exact optional league presence and rejects inactive or malformed current contexts",
+      "fullName": "manager season focus authority and persistence keeps exact optional league presence and rejects inactive or malformed current contexts"
+    },
+    {
+      "file": "src/test/soccerCareerManagerFocus.test.tsx",
+      "title": "refuses selection and advance while an actual earned job decision is pending",
+      "fullName": "manager season focus authority and persistence refuses selection and advance while an actual earned job decision is pending"
+    },
+    {
+      "file": "src/test/soccerCareerManagerFocus.test.tsx",
+      "title": "consumes one valid focus on the actual played row and returns the next season to Balanced",
+      "fullName": "manager season focus authority and persistence consumes one valid focus on the actual played row and returns the next season to Balanced"
+    },
+    {
+      "file": "src/test/soccerCareerManagerFocus.test.tsx",
+      "title": "matches captured pre-product default save outputs and every action draw and next draw",
+      "fullName": "manager season focus authority and persistence matches captured pre-product default save outputs and every action draw and next draw"
+    },
+    {
+      "file": "src/test/soccerCareerManagerFocus.test.tsx",
+      "title": "preserves ignored raw metadata through untouched default play without a repair write",
+      "fullName": "manager season focus authority and persistence preserves ignored raw metadata through untouched default play without a repair write"
+    },
+    {
+      "file": "src/test/soccerCareerManagerFocus.test.tsx",
+      "title": "keeps the existing club-season path when genuine national-call flags are already present",
+      "fullName": "manager season focus authority and persistence keeps the existing club-season path when genuine national-call flags are already present"
+    },
+    {
+      "file": "src/test/soccerCareerManagerFocus.test.tsx",
+      "title": "shows both preparation benefits and costs in matched actual league and cup outcomes",
+      "fullName": "manager season focus authority and persistence shows both preparation benefits and costs in matched actual league and cup outcomes"
+    },
+    {
+      "file": "src/test/soccerCareerManagerFocus.test.tsx",
+      "title": "keeps the actual old unemployed acceptance output and zero-draw receipt",
+      "fullName": "manager season focus authority and persistence keeps the actual old unemployed acceptance output and zero-draw receipt"
+    },
+    {
+      "file": "src/test/soccerCareerManagerFocus.test.tsx",
+      "title": "reserves focus before same-render stale callbacks and commits one later season only",
+      "fullName": "manager focus committed authority reserves focus before same-render stale callbacks and commits one later season only"
+    },
+    {
+      "file": "src/test/soccerCareerManagerFocus.test.tsx",
+      "title": "refuses callbacks captured before an actual committed source replacement",
+      "fullName": "manager focus committed authority refuses callbacks captured before an actual committed source replacement"
+    },
+    {
+      "file": "src/test/soccerCareerManagerFocus.test.tsx",
+      "title": "revokes retained callbacks on a committed phase change and on unmount",
+      "fullName": "manager focus committed authority revokes retained callbacks on a committed phase change and on unmount"
+    },
+    {
+      "file": "src/test/soccerCareerManagerFocus.test.tsx",
+      "title": "offers three compact choices and returns Back without mutating the career",
+      "fullName": "manager focus compact card offers three compact choices and returns Back without mutating the career"
+    },
+    {
+      "file": "src/test/soccerCareerManagerFocus.test.tsx",
+      "title": "keeps all choices enabled for explicit recovery of an ignored old record",
+      "fullName": "manager focus compact card keeps all choices enabled for explicit recovery of an ignored old record"
+    },
+    {
+      "file": "src/test/soccerCareerManagerFocus.test.tsx",
+      "title": "scopes its worked example to actual help and returns to the choice tiles",
+      "fullName": "manager focus compact card scopes its worked example to actual help and returns to the choice tiles"
+    },
+    {
+      "file": "src/test/soccerCareerManagerFocus.test.tsx",
+      "title": "leaves selection disabled while a real job decision is pending",
+      "fullName": "manager focus compact card leaves selection disabled while a real job decision is pending"
+    },
+    {
+      "file": "src/test/soccerCareerManagerFocus.test.tsx",
+      "title": "guards actual disabled-review Page callbacks across focus adoption and duplicate advance",
+      "fullName": "actual Page manager focus transaction guards actual disabled-review Page callbacks across focus adoption and duplicate advance"
+    },
+    {
+      "file": "src/test/soccerCareerManagerFocus.fixed.consumer.test.tsx",
+      "title": "employed manager can open season focus and reopen its help",
+      "fullName": "manager season focus fixed consumer employed manager can open season focus and reopen its help"
+    },
+    {
+      "file": "src/test/soccerCareerManagerFocus.fixed.consumer.test.tsx",
+      "title": "selected focus changes actual league and cup outcomes with the declared tradeoff",
+      "fullName": "manager season focus fixed consumer selected focus changes actual league and cup outcomes with the declared tradeoff"
+    },
+    {
+      "file": "src/test/soccerCareerManagerFocus.fixed.consumer.test.tsx",
+      "title": "canonical default manager seasons preserve complete state save and random stream",
+      "fullName": "manager season focus fixed consumer canonical default manager seasons preserve complete state save and random stream"
+    },
+    {
+      "file": "src/test/soccerCareerManagerFocus.fixed.consumer.test.tsx",
+      "title": "existing unemployed job acceptance preserves complete state save and zero draws",
+      "fullName": "manager season focus fixed consumer existing unemployed job acceptance preserves complete state save and zero draws"
+    }
+  ],
+  "caseCount": 23,
+  "copiedCheckerPlan": "qa/sc-manager-season-focus-v1/COPIED-CHECKER-CONTROLS.json",
+  "copiedCheckerControls": 16,
+  "physicalVariantsExecuted": 0,
+  "compatibility": {
+    "testPath": "src/test/soccerCareerManagerJobReview.consumer.test.tsx",
+    "cases": [
+      {
+        "title": "employed manager can opt into reviewing earned job moves",
+        "fullName": "actual existing Soccer Career manager consumers employed manager can opt into reviewing earned job moves"
+      },
+      {
+        "title": "employed manager can reopen job move rules without advancing",
+        "fullName": "actual existing Soccer Career manager consumers employed manager can reopen job move rules without advancing"
+      },
+      {
+        "title": "canonical default manager seasons preserve complete state save and random stream",
+        "fullName": "actual existing Soccer Career manager consumers canonical default manager seasons preserve complete state save and random stream"
+      },
+      {
+        "title": "existing unemployed job acceptance preserves complete state save and zero draws",
+        "fullName": "actual existing Soccer Career manager consumers existing unemployed job acceptance preserves complete state save and zero draws"
+      }
+    ],
+    "caseCount": 4,
+    "observerOverride": "ABSENT",
+    "builder": "scripts/qa/buildSoccerManagerJobReviewObserver.mjs",
+    "oneCanonicalEngineMetafileRequired": true,
+    "scope": "Unchanged held consumer with its existing fixture and assertions; no new natural actor or independent frozen authority claim."
+  },
+  "scope": {
+    "realApplicationTypes": true,
+    "healthy23": true,
+    "retainedNoEnv4": true,
+    "physical8": false,
+    "fullUnits": false,
+    "build": false,
+    "browser": false,
+    "globalProfile": false,
+    "postBSMain": false,
+    "ready": false,
+    "moduleInitialization": "EXCLUDED_AND_UNMEASURED",
+    "reference": "Only Enginebf4 is frozen in fixed reference bundle, all other dependencies current."
+  },
+  "retryProvenance": {
+    "failedRun": 40827227038,
+    "failedHead": "b3e4b6bf77ca3823d7aedcc4cd6d4538d5f336a6",
+    "failedPacketSHA256": "75dfaf1f4375a918d513948ff82ce19c7abf31cc9492c6cfdf61a7c65ecb6c21",
+    "failureAdmissionSHA256": "0d89e592e58b05421c8445b34ced3d11abbf0e5ed8b99a81af12326207df4c74",
+    "oldAppSourceSHA256": "f6dec4f7869a2315ec859a60c8bf13e59b1b9663d6f48c791839aa084beb77cf",
+    "newAppSourceSHA256": "26381b5484bda046c9e3034436890f64e10cfb9ed5dbead828ccc28a9959cc7a",
+    "appFixPeerSHA256": "453574b50d9acfb0498fb746ae581482fa22224a8601070e0c38c3c9b27e1291",
+    "correction": "One missing JSX closing brace after the owned Page paragraph; controller, cases and all other app logic are held.",
+    "priorActualPositiveCases": 0,
+    "priorActualCompatibilityCases": 0,
+    "priorActualCopiedControls": 0
+  },
+  "physicalDescriptorStatus": {
+    "path": "qa/sc-manager-season-focus-v1/PHYSICAL-CONTROLS.json",
+    "sha256": "f32b4a5a0bddffc56628e098e6851e0e89fbc05d38c519031b1b3fd23875ca46",
+    "status": "UNUSED_STALE_PAGE_BINDING_FUTURE_REBIND_REQUIRED",
+    "oldPageSHA256": "351172da2e327672d73e7f2bc78b9282bd037eb8fdbdd0ad0ff73d4f923500ba",
+    "newPageSHA256": "f22a1e472aa7f3c6a540b03ae9b46e1050b9c8d48aa2a3544ade0a4166475da3",
+    "physicalRuns": 0,
+    "requirement": "Do not run this descriptor on the corrected Page. Separately rebind Page before/changed body hashes and review future conditional suite bookkeeping and owned causes. No blanket drift allowance."
+  },
+  "sourceReceipts": {
+    "app": "26381b5484bda046c9e3034436890f64e10cfb9ed5dbead828ccc28a9959cc7a",
+    "persistent": "e5a0aeb4aec590753284ed04751a9f7b1a8857ad66f3e86daec6dd635286236b",
+    "inner": "1814a13ba4aab50215bb5356a6f4b73fb00f426e6a97a34dc959a9584fc7c97e",
+    "rootInner": "20a490b59c9252b7aabec04f495cf170c5ccadbc746a7ce24aefd87e3a4af4aa",
+    "peerInner": "d762e7d4728ea03cc245749a8f0dd04ad2a3646c76d5e095914e394495b27a03",
+    "classifier": "74995224b4bea38eebd1cde9ddfd643b792f1695175922ec33419d959e57a6a5"
+  }
+}

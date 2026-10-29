@@ -18,6 +18,7 @@ import { recentClubForm } from './soccerCareerSelection';
 import { applyCareerPreparation, preparationInjuryDelta, settleCareerPreparation, type CareerPreparationPlan, type PreparationResult } from './soccerCareerPreparation';
 import { createCareerMentor, recordMentorSeason, endCareerMentorForMove, endCareerMentorForRetirement, validMentor, type CareerMentor } from './soccerCareerMentor';
 import { settleSoccerPress, type SoccerPressState } from './soccerCareerPress';
+import { readManagerSeasonFocus, type ManagerSeasonFocus, type ManagerSeasonFocusCareer } from './soccerCareerManagerFocus';
 /* Round 546: the competition's real format per season, two source verified and
    importing nothing, so the knockout ladder and the leg count are read rather
    than kept as a second hardcoded copy here. */
@@ -579,6 +580,8 @@ export interface ManagerState {
     record?: string;
     /** How far the domestic cup run went. */
     cup?: string;
+    /** Preparation used for this actual played club season. */
+    focus?: ManagerSeasonFocus;
   }[];
   nationalTeamOffer: boolean;
   managingNationalTeam: boolean;
@@ -9041,6 +9044,7 @@ export function advanceManagerSeason(prev: CareerState, clubs: ClubData[]): Care
   const s = { ...prev };
   if (!s.managerState) return s;
   const ms = { ...s.managerState };
+  const focus = readManagerSeasonFocus(prev);
   ms.season += 1;
 
   // Round 111: out of work means you sit through the season, and every
@@ -9060,6 +9064,8 @@ export function advanceManagerSeason(prev: CareerState, clubs: ClubData[]): Care
     return s;
   }
   
+  if (focus) delete (s as ManagerSeasonFocusCareer).managerSeasonFocus;
+
   /* ─── Round 227: the dugout season is simulated, not adjectives ───
      For a hundred rounds this was three independent coin flips: 15% sacked,
      maybe promoted, maybe a league trophy out of nowhere, else an adjective
@@ -9116,7 +9122,9 @@ export function advanceManagerSeason(prev: CareerState, clubs: ClubData[]): Care
 
   /* Round 1524: the table itself is playDugoutTable (soccerCareerLeague.ts),
      which the club owner plays on too; moved there draw for draw. */
-  const { table, me, record } = playDugoutTable(field, ms.club, edge, Math.random);
+  const leagueEdge = focus ? edge + (focus === 'league' ? 1 : -1) : edge;
+  const cupEdge = focus ? edge + (focus === 'cup' ? 1 : -1) : edge;
+  const { table, me, record } = playDugoutTable(field, ms.club, leagueEdge, Math.random);
   const leagueSize = table.length;
   const relegationLine = leagueSize - 2;
 
@@ -9125,7 +9133,7 @@ export function advanceManagerSeason(prev: CareerState, clubs: ClubData[]): Care
      goes all the way, which is what cups are for. */
   const CUP_ROUNDS = ["out in the 3rd round", "out in the 4th round", "out in the quarter-final", "out in the semi-final", "beaten in the final", "WON the cup"];
   let cupWins = 0;
-  const winChance = 0.44 + edge * 0.03 + (2 - Math.min(2, ms.clubTier)) * 0.05;
+  const winChance = 0.44 + cupEdge * 0.03 + (2 - Math.min(2, ms.clubTier)) * 0.05;
   while (cupWins < 5 && Math.random() < winChance) cupWins += 1;
   const cup = CUP_ROUNDS[cupWins];
   const wonCup = cupWins === 5;
@@ -9232,6 +9240,7 @@ export function advanceManagerSeason(prev: CareerState, clubs: ClubData[]): Care
     knownRivals: lf.named.length,
     ...(lf.lineupUnknown ? { lineupUnknown: true } : {}),
     ...(lf.leagueName && lf.leagueName !== lf.league ? { leagueName: lf.leagueName } : {}),
+    ...(focus ? { focus } : {}),
   }];
 
   // National team offer, now earned by the season rather than rolled blind:

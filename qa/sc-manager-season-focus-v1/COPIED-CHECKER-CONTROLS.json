@@ -1,0 +1,31 @@
+{
+  "schema": 1,
+  "status": "COPIED_CHECKER_DIAGNOSTIC_PLAN_SOURCE_ONLY_UNRUN",
+  "scope": "Mutate only a structured clone of the actual healthy result, CLI and parsed retained evidence. These are copied observations, not physical product or browser controls.",
+  "requirements": [
+    "Capture the original whole copied-input serialization before mutation.",
+    "Assert the intended existing field or CLI closing is present and the mutation actually changes the copied input.",
+    "Call the same classifyManagerFocus and assertManagerFocusEvidence functions used for admission.",
+    "Require actual AssertionError with the exact listed cause, not any caught exception.",
+    "Restore the exact SAME copy, require byte-identical serialization and successfully readmit it.",
+    "Keep original raw result, CLI, fixture and evidence files hash-held.",
+    "Retain changed observations or their exact field patch plus actual whole-copy hashes. If only a patch is retained, label a reconstructed full copy as derived."
+  ],
+  "controls": [
+    {"id":"truncated-cli","change":"Remove the one actual Test Files closing from copied CLI, after asserting exactly one match.","cause":"ACTUAL_CLI_COMPLETION"},
+    {"id":"suite-method-error","change":"Set the first copied suite.message from empty to COPIED method failure.","cause":"NO_SUITE_METHOD_ERROR"},
+    {"id":"unhandled-cli","change":"Append Unhandled Rejection: COPIED diagnostic to copied CLI.","cause":"NO_INFRASTRUCTURE"},
+    {"id":"actual-ui-entry","change":"Change copied evidence.acquisition.entry.evidence.confirm from Confirm Retirement to COPIED absent confirmation.","cause":"ACTUAL_UI_ENTRY_ELIGIBILITY"},
+    {"id":"national-flags","change":"Change copied actual national witness nationalTeamOffer from true to false.","cause":"NATURAL_NATIONAL_FLAGS_WITNESS"},
+    {"id":"default-draw","change":"Append 0.123456 to the first copied actual default action.draws array.","cause":"COMPLETE_DEFAULT_PAIR"},
+    {"id":"accepted-state","change":"Change the copied actual unemployed accepted state's managerState.club to COPIED wrong club.","cause":"COMPLETE_ACCEPTED_PAIR"},
+    {"id":"played-focus","change":"Add focus league to the first copied Balanced actual played row, after asserting it was absent.","cause":"ACTUAL_PLAYED_FOCUS"},
+    {"id":"consumed-once","change":"Add an owned managerSeasonFocus object to the first copied Balanced actual output, after asserting it was absent.","cause":"ACTUAL_FOCUS_CONSUMED_ONCE"},
+    {"id":"tradeoff-claimed-count","change":"Increment copied tradeoff.counts.ordinary.leagueGain by 1 while the copied actual result rows stay held.","cause":"ACTUAL_TRADEOFF_RECOMPUTED_COUNTS"},
+    {"id":"tradeoff-actual-benefit","change":"For every copied triple set only League's played-row playerPts equal to Balanced's actual playerPts. Set both copied claimed leagueGain counts to 0 so recomputed counts remain coherent. Other outcome fields stay held.","cause":"ACTUAL_MANAGER_SEASON_FOCUS_TRADEOFF"},
+    {"id":"captured-default-witness-drop","change":"Remove both copied fixture.defaults witnesses after asserting the exact two original contexts.","cause":"CAPTURED_MANAGER_DEFAULT_WITNESS_COUNT"},
+    {"id":"page-selection-core","change":"Increment the copied pageSelection.selected.state.netWorth by 1 after asserting it is finite. Other selected metadata, raw fields and draw records stay held.","cause":"MANAGER_PAGE_SELECTION_CORE_HELD"},
+    {"id":"page-accepted-state","change":"Increment copied pageAdvance.actual.state.netWorth by 1 after asserting it is finite. Expected accepted state, raw and tape stay held.","cause":"MANAGER_PAGE_COMPLETE_ONE_SEASON"}
+  ],
+  "runtime": "UNRUN"
+}
