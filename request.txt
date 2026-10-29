@@ -1,0 +1,17 @@
+tsc: node_modules/.bin/tsc --noEmit -p tsconfig.app.json
+vt-wall: node_modules/.bin/vitest run src/test/usCareerHallWall.test.tsx src/lib/usCareerHallWall.test.ts --testTimeout=300000 --hookTimeout=120000
+simWall: node scripts/simUsCareerHallWall.mjs
+c-readdraw: SIM_WALL_CAREERS=5 SIM_HALL_WALL_CONTROL=readdraw node scripts/simUsCareerHallWall.mjs
+c-boarddraw: SIM_WALL_CAREERS=5 SIM_HALL_WALL_CONTROL=boarddraw node scripts/simUsCareerHallWall.mjs
+c-nokeep: SIM_WALL_CAREERS=5 SIM_HALL_WALL_CONTROL=nokeep node scripts/simUsCareerHallWall.mjs
+c-loadonly: SIM_WALL_CAREERS=5 SIM_HALL_WALL_CONTROL=loadonly node scripts/simUsCareerHallWall.mjs
+c-kept: SIM_WALL_CAREERS=5 SIM_HALL_WALL_CONTROL=kept node scripts/simUsCareerHallWall.mjs
+c-anyplaque: SIM_WALL_CAREERS=5 SIM_HALL_WALL_CONTROL=anyplaque node scripts/simUsCareerHallWall.mjs
+c-rewrite: SIM_WALL_CAREERS=5 SIM_HALL_WALL_CONTROL=rewrite node scripts/simUsCareerHallWall.mjs
+c-oldline: SIM_WALL_CAREERS=5 SIM_HALL_WALL_CONTROL=oldline node scripts/simUsCareerHallWall.mjs
+c-createline: SIM_WALL_CAREERS=5 SIM_HALL_WALL_CONTROL=createline node scripts/simUsCareerHallWall.mjs
+c-nogate: SIM_WALL_CAREERS=5 SIM_HALL_WALL_CONTROL=nogate node scripts/simUsCareerHallWall.mjs
+c-stalesave: SIM_WALL_CAREERS=5 SIM_HALL_WALL_CONTROL=stalesave node scripts/simUsCareerHallWall.mjs
+storage: node scripts/simStorageWrites.mjs
+anchors: node scripts/simHarnessAnchors.mjs
+rival: node scripts/simNoRivalNames.mjs
