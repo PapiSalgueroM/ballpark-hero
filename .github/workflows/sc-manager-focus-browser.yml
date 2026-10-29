@@ -1,0 +1,215 @@
+name: Soccer Career manager focus bounded build and browser
+on:
+  push:
+    branches: [codex/sc-manager-focus-browser-20261029]
+    paths:
+      - '.github/workflows/sc-manager-focus-browser.yml'
+      - 'qa/sc-manager-season-focus-v1/BUILD-SOURCE.json'
+      - 'scripts/qa/playSoccerManagerFocus.mjs'
+permissions:
+  contents: read
+concurrency:
+  group: sc-manager-focus-build-${{ github.sha }}
+  cancel-in-progress: false
+defaults:
+  run:
+    shell: bash
+jobs:
+  build-browser:
+    runs-on: ubuntu-latest
+    timeout-minutes: 90
+    env:
+      CI: '1'
+      SIM_NETWORK: offline
+      CAREER_SEASON_LOCAL_ONLY: '1'
+      ENGINES: chromium
+      SC_MANAGER_FOCUS_BUILD_OUT: ${{ github.workspace }}/manager-focus-build-artifacts/build
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.sha }}
+          fetch-depth: 2
+          persist-credentials: false
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: npm
+      - name: Complete frozen source, unchanged main and positive prerequisite
+        run: |
+          set -euo pipefail
+          test "$GITHUB_REF_NAME" = codex/sc-manager-focus-browser-20261029
+          test "$(git rev-parse HEAD)" = "$GITHUB_SHA"
+          test "$(git rev-list --parents -n 1 HEAD | wc -w)" = 2
+          test "$(git rev-parse HEAD^)" = 097589b9a7ef3d5ad10d55e6e463f6031eba391a
+          test "$(git rev-parse HEAD^^{tree})" = 6e70e9cc58ad8a72a6e88de7f1b0b2bbb5cf3b2f
+          mkdir -p "$SC_MANAGER_FOCUS_BUILD_OUT"
+          git rev-parse HEAD HEAD^{tree} > "$SC_MANAGER_FOCUS_BUILD_OUT/head-tree.txt"
+          git archive --format=tar HEAD > "$SC_MANAGER_FOCUS_BUILD_OUT/source.tar"
+          git ls-tree -r HEAD > "$SC_MANAGER_FOCUS_BUILD_OUT/source-tree.txt"
+          git ls-files -z | sort -z | xargs -0 sha256sum > "$SC_MANAGER_FOCUS_BUILD_OUT/tracked-before.sha256"
+          git ls-remote origin refs/heads/main | cut -f 1 > "$SC_MANAGER_FOCUS_BUILD_OUT/main-at-start.txt"
+          test "$(cat "$SC_MANAGER_FOCUS_BUILD_OUT/main-at-start.txt")" = 9bbb95c73f544e3340d33a52867af6738141b340
+          printf '%s  %s\n' bd25088e20edfabf725905f7bcef8851c63c247638089414f833da45b4e80f37 qa/sc-manager-season-focus-v1/BUILD-SOURCE.json | sha256sum --check
+          printf '%s  %s\n' 63b15e089918337a00e54126fc6f427819c7f5c79726a0e763c32df0e81fe28d scripts/qa/playSoccerManagerFocus.mjs | sha256sum --check
+          node --check scripts/qa/playSoccerManagerFocus.mjs
+          node --input-type=module - <<'NODE' > "$SC_MANAGER_FOCUS_BUILD_OUT/source-pins.log" 2>&1
+          import fs from 'node:fs';import assert from 'node:assert/strict';import{createHash}from'node:crypto';
+          const m=JSON.parse(fs.readFileSync('qa/sc-manager-season-focus-v1/BUILD-SOURCE.json','utf8'));
+          const sha=b=>createHash('sha256').update(b).digest('hex'),git=b=>createHash('sha1').update(Buffer.from('blob '+b.length+'\0')).update(b).digest('hex');
+          assert.equal(m.files.length,34);assert.equal(new Set(m.files.map(f=>f.path)).size,34);
+          for(const f of m.files){const b=fs.readFileSync(f.path);assert.equal(b.length,f.bytes,'Source bytes '+f.path);assert.equal(sha(b),f.sha256,'Source SHA '+f.path);assert.equal(git(b),f.gitBlob,'Source Git '+f.path);}
+          const p=m.positiveSelector,b=fs.readFileSync(p.path);assert.equal(b.length,p.pin.bytes);assert.equal(sha(b),p.pin.sha256);assert.equal(git(b),p.pin.gitBlob);
+          assert.equal(m.allowedPaths.length,20);assert.equal(new Set(m.allowedPaths).size,20);assert.equal(m.modified,5);assert.equal(m.added,15);assert.equal(m.expectedRegularBodies,5443);
+          assert.equal(m.positivePrerequisite.status,'ROOT_ADMITTED_ACTUAL_23_NOENV4_COPIED16','Actual positive prerequisite not admitted');assert.match(m.positivePrerequisite.admissionSHA256||'',/^[a-f0-9]{64}$/);assert.match(m.positivePrerequisite.head||'',/^[a-f0-9]{40}$/);
+          fs.writeFileSync(process.env.SC_MANAGER_FOCUS_BUILD_OUT+'/source-admission.json',JSON.stringify({status:'SOURCE34_AND_REQUIRED_POSITIVE_ADMISSION_BOUND',files:m.files,positivePrerequisite:m.positivePrerequisite,scope:m.scope},null,2)+'\n');
+          console.log('MANAGER_FOCUS_BUILD_SOURCE: 34 exact selected bodies and actual positive admission bound');
+          NODE
+          cat "$SC_MANAGER_FOCUS_BUILD_OUT/source-pins.log"
+          git diff --name-only HEAD^ HEAD | sort > "$SC_MANAGER_FOCUS_BUILD_OUT/changed-paths.txt"
+          diff -u <(node -e 'const fs=require("fs");console.log(JSON.parse(fs.readFileSync("qa/sc-manager-season-focus-v1/BUILD-SOURCE.json")).allowedPaths.sort().join("\n"))') "$SC_MANAGER_FOCUS_BUILD_OUT/changed-paths.txt"
+          git diff --name-status HEAD^ HEAD > "$SC_MANAGER_FOCUS_BUILD_OUT/changed-status.txt"
+          test "$(grep -c '^M' "$SC_MANAGER_FOCUS_BUILD_OUT/changed-status.txt")" = 5
+          test "$(grep -c '^A' "$SC_MANAGER_FOCUS_BUILD_OUT/changed-status.txt")" = 15
+          test "$(git ls-files | wc -l)" = 5443
+      - name: Install locked dependencies
+        run: |
+          set -euo pipefail
+          echo '127.0.0.1 flawuiqbvjobmkfkauhw.supabase.co' | sudo tee -a /etc/hosts
+          set +e
+          npm ci > "$SC_MANAGER_FOCUS_BUILD_OUT/npm-ci.log" 2>&1
+          raw=$?
+          set -e
+          printf '%s\n' "$raw" > "$SC_MANAGER_FOCUS_BUILD_OUT/npm-ci.exit"
+          cat "$SC_MANAGER_FOCUS_BUILD_OUT/npm-ci.log"
+          test "$raw" = 0
+      - name: Real application types
+        id: types
+        run: |
+          set -euo pipefail
+          set +e
+          NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node_modules/.bin/tsc --noEmit -p tsconfig.app.json > "$SC_MANAGER_FOCUS_BUILD_OUT/types.log" 2>&1
+          raw=$?
+          set -e
+          printf '%s\n' "$raw" > "$SC_MANAGER_FOCUS_BUILD_OUT/types.exit"
+          cat "$SC_MANAGER_FOCUS_BUILD_OUT/types.log"
+          test "$raw" = 0
+      - name: Detached build, browser tools and exact retained fonts
+        env:
+          FREE_KICK_FONT_CACHE: ${{ github.workspace }}/manager-focus-build-artifacts/build/font-cache
+        run: |
+          set -euo pipefail
+          build_root="$RUNNER_TEMP/manager-focus-build-$GITHUB_RUN_ID-$GITHUB_RUN_ATTEMPT"
+          git worktree add --detach "$build_root" HEAD
+          ln -s "$GITHUB_WORKSPACE/node_modules" "$build_root/node_modules"
+          echo "MANAGER_FOCUS_BUILD_ROOT=$build_root" >> "$GITHUB_ENV"
+          browser_tools="$RUNNER_TEMP/manager-focus-browser-tools-$GITHUB_RUN_ID-$GITHUB_RUN_ATTEMPT"
+          mkdir -p "$browser_tools"
+          printf '{"private":true,"dependencies":{"playwright":"1.64.0"}}\n' > "$browser_tools/package.json"
+          npm install --prefix "$browser_tools" --ignore-scripts --no-audit --no-fund 2>&1 | tee "$SC_MANAGER_FOCUS_BUILD_OUT/browser-install.log"
+          test ! -e node_modules/playwright
+          test ! -e node_modules/playwright-core
+          ln -s "$browser_tools/node_modules/playwright" node_modules/playwright
+          ln -s "$browser_tools/node_modules/playwright-core" node_modules/playwright-core
+          cp "$browser_tools/package.json" "$SC_MANAGER_FOCUS_BUILD_OUT/browser-package.json"
+          cp "$browser_tools/package-lock.json" "$SC_MANAGER_FOCUS_BUILD_OUT/browser-package-lock.json"
+          export PLAYWRIGHT_BROWSERS_PATH="$RUNNER_TEMP/manager-focus-chromium-$GITHUB_RUN_ID-$GITHUB_RUN_ATTEMPT"
+          echo "PLAYWRIGHT_BROWSERS_PATH=$PLAYWRIGHT_BROWSERS_PATH" >> "$GITHUB_ENV"
+          node "$browser_tools/node_modules/playwright/cli.js" install --with-deps chromium 2>&1 | tee "$SC_MANAGER_FOCUS_BUILD_OUT/chromium.log"
+          python -m pip install fonttools pillow 2>&1 | tee "$SC_MANAGER_FOCUS_BUILD_OUT/python-tools.log"
+          node scripts/qa/freeKickLab1070.mjs --prefetch-fonts-only 2>&1 | tee "$SC_MANAGER_FOCUS_BUILD_OUT/font-prefetch.log"
+      - name: Actual two-route SEO build in detached tree
+        id: build
+        env:
+          PRERENDER_ONLY: /soccer-career,/whats-new
+        run: |
+          set -euo pipefail
+          cd "$MANAGER_FOCUS_BUILD_ROOT"
+          mkdir -p "$SC_MANAGER_FOCUS_BUILD_OUT/generation"
+          for route in soccer-career whats-new; do cp "public/$route/index.html" "$SC_MANAGER_FOCUS_BUILD_OUT/generation/$route.before.html"; done
+          cp scripts/data/lastmod.json "$SC_MANAGER_FOCUS_BUILD_OUT/generation/lastmod.before.json"
+          retain_generation() {
+            git diff -- public scripts/data/lastmod.json > "$SC_MANAGER_FOCUS_BUILD_OUT/generation/full.diff"
+            for route in soccer-career whats-new; do cp "public/$route/index.html" "$SC_MANAGER_FOCUS_BUILD_OUT/generation/$route.after.html" || true; done
+            cp scripts/data/lastmod.json "$SC_MANAGER_FOCUS_BUILD_OUT/generation/lastmod.after.json" || true
+          }
+          trap retain_generation EXIT
+          set +e
+          NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" npm run build:seo > "$SC_MANAGER_FOCUS_BUILD_OUT/build.log" 2>&1
+          raw=$?
+          set -e
+          printf '%s\n' "$raw" > "$SC_MANAGER_FOCUS_BUILD_OUT/build.exit"
+          cat "$SC_MANAGER_FOCUS_BUILD_OUT/build.log"
+          test "$raw" = 0
+          find dist -type f -print0 | sort -z | xargs -0 sha256sum > "$SC_MANAGER_FOCUS_BUILD_OUT/dist.sha256"
+      - name: All fifteen unchanged rebuilt-site readers
+        run: |
+          set -euo pipefail
+          cd "$MANAGER_FOCUS_BUILD_ROOT"
+          set +e
+          ONLY=simAdsense,simBrand,simHeadTags,simHiddenPages,simHubs,simIndexNow,simIndexing,simInternalLinks,simNoRivalNames,simPrerender,simPrerenderBoot,simRetiredRoutes,simSchema,simSitemap,simSnapshotAssets NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/runAllSims.mjs --browser > "$SC_MANAGER_FOCUS_BUILD_OUT/readers.log" 2>&1
+          raw=$?
+          set -e
+          printf '%s\n' "$raw" > "$SC_MANAGER_FOCUS_BUILD_OUT/readers.exit"
+          cat "$SC_MANAGER_FOCUS_BUILD_OUT/readers.log"
+          test "$raw" = 0
+          test "$(grep -c '^All 15 harnesses green\.$' "$SC_MANAGER_FOCUS_BUILD_OUT/readers.log")" = 1
+      - name: All fifteen unchanged rounded fatal download caps
+        if: always() && steps.build.outcome == 'success'
+        run: |
+          set -euo pipefail
+          cd "$MANAGER_FOCUS_BUILD_ROOT"
+          NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/lib/hostLikeServer.mjs dist 4173 > "$SC_MANAGER_FOCUS_BUILD_OUT/weight-server.log" 2>&1 &
+          server_pid=$!
+          trap 'kill "$server_pid" 2>/dev/null || true' EXIT
+          for attempt in 1 2 3 4 5; do if curl --fail --silent http://127.0.0.1:4173/ > /dev/null; then break; fi; sleep 1; done
+          curl --fail --silent http://127.0.0.1:4173/ > /dev/null
+          set +e
+          BASE=http://127.0.0.1:4173 SWEEP_OFFLINE=1 NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/sweepWeight.mjs > "$SC_MANAGER_FOCUS_BUILD_OUT/weights.log" 2>&1
+          raw=$?
+          set -e
+          printf '%s\n' "$raw" > "$SC_MANAGER_FOCUS_BUILD_OUT/weights.exit"
+          cat "$SC_MANAGER_FOCUS_BUILD_OUT/weights.log"
+          test "$raw" = 0
+      - name: Actual focus routes and genuine played-table phone no-jump contexts
+        if: always() && steps.build.outcome == 'success'
+        env:
+          FREE_KICK_FONT_CACHE: ${{ github.workspace }}/manager-focus-build-artifacts/build/font-cache
+          SC_MANAGER_FOCUS_BROWSER_OUT: ${{ github.workspace }}/manager-focus-build-artifacts/build/browser
+        run: |
+          set -euo pipefail
+          cd "$MANAGER_FOCUS_BUILD_ROOT"
+          set +e
+          NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/qa/playSoccerManagerFocus.mjs > "$SC_MANAGER_FOCUS_BUILD_OUT/browser.log" 2>&1
+          raw=$?
+          set -e
+          printf '%s\n' "$raw" > "$SC_MANAGER_FOCUS_BUILD_OUT/browser.exit"
+          cat "$SC_MANAGER_FOCUS_BUILD_OUT/browser.log"
+          test "$raw" = 0
+          grep -Fx 'MANAGER_FOCUS_BROWSER:3 actual routes,12 normal captures,actual choice/help/Back/focus,one canonical played season each,official reload,3 earned pending refusals,2 actual played-panel phone no-jump contexts,9 COPIED guards,source and dist held' "$SC_MANAGER_FOCUS_BUILD_OUT/browser.log"
+      - name: Exact built source and complete distribution held
+        if: always()
+        run: |
+          set -euo pipefail
+          if test -n "${MANAGER_FOCUS_BUILD_ROOT:-}"; then
+            git -C "$MANAGER_FOCUS_BUILD_ROOT" diff --exit-code HEAD -- src scripts qa .github/workflows docs package.json package-lock.json bun.lock index.html ':!scripts/data/lastmod.json'
+            git -C "$MANAGER_FOCUS_BUILD_ROOT" diff -- public scripts/data/lastmod.json > "$SC_MANAGER_FOCUS_BUILD_OUT/generated.patch"
+            if test -f "$SC_MANAGER_FOCUS_BUILD_OUT/dist.sha256"; then (cd "$MANAGER_FOCUS_BUILD_ROOT" && sha256sum --check "$SC_MANAGER_FOCUS_BUILD_OUT/dist.sha256") > "$SC_MANAGER_FOCUS_BUILD_OUT/dist-held.log"; fi
+          fi
+      - name: Every tracked canonical and QA source held
+        if: always()
+        run: |
+          set -euo pipefail
+          git ls-files -z | sort -z | xargs -0 sha256sum > "$SC_MANAGER_FOCUS_BUILD_OUT/tracked-final.sha256"
+          diff -u "$SC_MANAGER_FOCUS_BUILD_OUT/tracked-before.sha256" "$SC_MANAGER_FOCUS_BUILD_OUT/tracked-final.sha256"
+          sha256sum --check "$SC_MANAGER_FOCUS_BUILD_OUT/tracked-before.sha256" > "$SC_MANAGER_FOCUS_BUILD_OUT/tracked-held.log"
+          git status --porcelain --untracked-files=no > "$SC_MANAGER_FOCUS_BUILD_OUT/tracked-status.txt"
+          test ! -s "$SC_MANAGER_FOCUS_BUILD_OUT/tracked-status.txt"
+          git diff --exit-code HEAD
+      - name: Retain original build and browser evidence including failure
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: sc-manager-focus-build-${{ github.run_id }}-${{ github.run_attempt }}
+          path: manager-focus-build-artifacts/
+          if-no-files-found: error
+          retention-days: 14
