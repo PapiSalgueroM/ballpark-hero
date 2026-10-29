@@ -1,0 +1,114 @@
+MUTATION keepamount applied to src/lib/gmTradePackage.ts
+1) a save from before the desk plays exactly as the engine did before this round
+   9 seasons replayed against f8e6cd06
+2) over ten seasons a seed, no expiring man of yours leaves without a recorded decision, applied as written
+   280 expiring men: 166 decided by the GM, 114 by the staff's rule; 99 draftees came up after exactly their entry level seasons
+3) no trade lands after the deadline, and deals do land before it
+   686 deals before the deadline, 400 tries after it, 0 landed; 1973 buyer and 498 seller places at the deadline
+   2000 rounds where the trade paths' refusal matched the window; 4 of 4 board trade handlers ask the deadline first
+4) picks are conserved league wide after every deal and every summer
+   796 ledger checks, 664 deals with a pick in them, 61 with salary retained
+   offer sheets cashed in: 22 by the GM, 3 by the staff's rule; 41 picks paid, 0 owed by a club with none left
+5) the staff's effects change their consumer at every level step
+   each post alone: hc win 0.566 to 0.614; specialTeams win 0.566 to 0.590; goalie win 0.566 to 0.590; scouting miss 2.227 to 0.566; medical out 3.000 to 2.252
+   edge 0.00 to 2.40, win 0.566 to 0.660, miss 2.23 to 0.57, rounds out 3.00 to 2.25
+6) migration keeps every marker, a corrupt block resets alone, retained salary holds its figure and its limits
+  FAIL [6]: after a summer the retained line reads {"playerId":"hvobqqj1nb5yeh-12334","name":"Matthew Knies","amount":2.2,"seasonsLeft":3}, wanted 4.4 again
+7) every desk panel draws, and the re-sign desk shows a tile for every expiring man
+   4 panels drawn, 5 re-sign tiles for 5 expiring men
+simNhlGmDesk: 1 failure(s) in ["6"]
+1) a save from before the desk plays exactly as the engine did before this round
+   9 seasons replayed against 8f27082f
+2) over ten seasons a seed, no expiring man of yours leaves without a recorded decision, applied as written
+   1088 expiring men: 568 decided by the GM, 520 by the staff's rule; 415 tendered under club control; qualifying offers 163 taken, 79 turned down
+   165 draftees came up after exactly 3 seasons, 85 reached free agency at 6
+3) no trade lands after the deadline, and deals do land before it
+   472 deals before the deadline, 800 tries after it, 0 landed; 1560 buyer and 746 seller places at the deadline
+   2700 rounds where the trade paths' refusal matched the window; 4 of 4 board trade handlers ask the deadline first; the old paths carry no pick with the desk on
+4) picks are conserved league wide after every deal and every winter, and none ever moves
+   582 ledger checks; 400 packages carried a pick, 400 refused by MLB's rule; 49 deals with cash; 63 extra picks paid by turned down qualifying offers
+5) the staff's effects change their consumer at every level step
+   each post alone: manager win 0.495 to 0.513; pitching win 0.495 to 0.519; hitting win 0.495 to 0.524; scouting miss 2.242 to 0.567; farm grow 2.000 to 2.208; medical out 3.000 to 2.255
+   the desk's winter: 60 young men grow 131 points under a level 1 farm, 143 under a level 10 one; rivals unchanged
+   edge 0.00 to 3.00, win 0.495 to 0.564, miss 2.24 to 0.57, rounds out 3.00 to 2.25, winter growth 2.000 to 2.208
+6) migration keeps every marker, a corrupt block resets alone, cash in a deal holds its figure and its limits
+  FAIL [6]: after a winter the cash line reads {"playerId":"mtppvbx9u7kq9-24886","name":"Payton Tolle","amount":5.1,"seasonsLeft":3}, wanted 10.1 again
+7) every desk panel draws, and the re-sign desk shows a tile for every expiring man
+   4 panels drawn, 4 re-sign tiles for 4 expiring men, the desk help drawn
+simMlbGmDesk: 1 failure(s) in ["6"]
+   1. offering more never turns a yes into a no: 24 checks
+   2. the league rules are data, and each one bites: 93 checks
+   3. the window, walked period by period: 40 checks
+   4. buyers and sellers at the deadline: 53 checks
+   measured: walk nfl: 600 packages, 2516 additions, 42 of a man worth less than nothing, 472 stopped by a hard rule (step 3: 301, step 4: 171)
+   measured: walk nba: 600 packages, 2827 additions, 63 of a man worth less than nothing, 814 stopped by a hard rule (step 3: 517, step 4: 297)
+   measured: walk nhl: 600 packages, 2208 additions, 46 of a man worth less than nothing, 180 stopped by a hard rule (step 4: 180)
+   measured: walk mlb: 600 packages, 7376 additions, 74 of a man worth less than nothing, 5252 stopped by a hard rule (step 3: 4204, step 4: 1048)
+   measured: mlb: 1786 packages with an ordinary pick, 1786 refused at the pick rule
+   measured: firsts nfl: 7287 deals, 0 refused for two drafts running, 67 clubs left without a first two drafts running
+   measured: firsts nba: 4034 deals, 5611 refused for two drafts running, 0 clubs left without a first two drafts running
+   measured: firsts nhl: 8245 deals, 0 refused for two drafts running, 63 clubs left without a first two drafts running
+   measured: firsts mlb: 0 deals, 0 refused for two drafts running, 0 clubs left without a first two drafts running
+   measured: sellers at the deadline, nfl: 6, 14, 6, 3, 8 of 32
+   measured: sellers at the deadline, nba: 1, 4, 2, 1, 1 of 30
+   measured: sellers at the deadline, nhl: 7, 8, 11, 7, 11 of 32
+   measured: sellers at the deadline, mlb: 9, 7, 8, 3, 4 of 30
+   measured: a veteran's price in picks over his value, median: sellers 0.87 (393 men), buyers 1.43 (1233 men), buyers pay 1.64 times what sellers ask
+simGmTradePackage: 210 checks passed over 4 leagues and 5 seeds. Offering more never turns a yes into a no, every league rule is data and bites, the window shuts on the deadline and opens at the close, and sellers sell.
+1) the default path: a desk on save graded through the host is the base's, season for season, and gains only seat and xp
+   94 checkpoints over 48 seasons against 115c68092 (0 moved); fired at ["3:5","5:3"]; digest 838cdddf98d5a02586935329fa780473f44782d1
+2) the verdict on every club's real season: desk off it is today's two calls, desk on it records once and pays once
+   1152 desk off closes equal today's two calls; 384 desk on closes recorded once (46824 XP paid, the median club 122 a season), 384 reloads paid nothing, 384 older saves started on time
+   OWNERSHIP: 174 losing and 210 winning club seasons walked at levels 0 to 5; from trust 60 a season costs missed 16, 15, 14, 13, 12, 10; badly 28, 26, 24, 22, 20, 18; trust 16, missed: level 0 fired (0), level 1 keeps the job on 1
+2t) the rule of thumb: three bad years from trust 60 fire Ownership levels 0 to 4 on the grades alone and not 5, and the press can change that
+   from trust 60, three badly seasons of COL: level 0 fired after 3, level 1 fired after 3, level 2 fired after 3, level 3 fired after 3, level 4 fired after 3, level 5 kept; with "Say the right, empty things" after each: kept at levels 4 (level 4: 60 > 40 > 41 > 21 > 22 > 2 > 3)
+3) Media: every gamble lands exactly one step more often a level, the safe answers and the tilt never move, one draw an answer
+   the nhl board is not bound to the career yet: its answerPress is read when it is
+   4 pressers, 6 gambles and 6 safe answers at levels 0 to 5; landed of 1000: Intro 700/730/760/790/820/850; Intro 500/530/560/590/620/650; Podium 600/630/660/690/720/750; Scrum 450/480/510/540/570/600; Trade 700/730/760/790/820/850; Trade 550/580/610/640/670/700
+8) the words: never empty, no dash, no quote, no placeholder, no player's name, a closed line never says sit, every box fits
+   23651 strings and 3976 boxes read over 4 leagues, every roster name checked
+4) the market after real firings: every club graded as a GM's club, the first out of work screen and the next two
+   MEASURE 40 seeds x 12 seasons: 562 firings
+   first screen with the host's rule: offers 562 (100.0%), quiet 0 (0.0%), closed 0 (0.0%); first calls 314
+   first screen on the raw feed:      offers 248 (44.1%), quiet 257 (45.7%), closed 57 (10.1%)
+   of the screens with offers, last calls: host 94 of 562 (16.7%), raw 37 of 248 (14.9%)
+   re hired within three feeds (firings with two seasons left to read, 472): host 472 (100.0%), raw 287 (60.8%); 280 later feeds read
+   ASSERTED on 562 first feeds (374 straight after a badly season): never the club that fired him, no top tier after badly, every ask for next season, keyed
+5) taking a seat: 584 offers taken (491 with a planted depth chart), 562 followed through the draft and the summer, 0 refused
+6) a season out: the league plays a whole season without him, his record gains a year out and nothing else, and refusals touch nothing
+  FAIL [6]: seed 1 year out 1: ANA's retained entry reads 1.2, the club kept 2.4
+  FAIL [6]: seed 1 year out 2: ANA's retained entry reads 0.6, the club kept 2.4
+  FAIL [6]: seed 2 year out 1: ANA's retained entry reads 1.2, the club kept 2.4
+  FAIL [6]: seed 2 year out 2: ANA's retained entry reads 0.6, the club kept 2.4
+  FAIL [6]: seed 3 year out 1: ANA's retained entry reads 1.2, the club kept 2.4
+  FAIL [6]: seed 3 year out 2: ANA's retained entry reads 0.6, the club kept 2.4
+  FAIL [6]: seed 4 year out 1: ANA's retained entry reads 1.2, the club kept 2.4
+  FAIL [6]: seed 4 year out 2: ANA's retained entry reads 0.6, the club kept 2.4
+  FAIL [6]: (further failures in this check not printed)
+   60 years out over 20 seeds (0 stopped early); refusals: 20 in a seat, 20 closed, 20 last calls
+   drafted men on the other clubs' rosters after the years out: away 596, idle GM 600 (ratio 0.993); mean roster after a summer: away 12.65, idle GM 12.65
+   retained rows planted 20: 0 summers kept at the figure the club kept, 20 dropped when the entry ran out; the old club's contributors back to automatic after 60 of 60 years
+7) whole careers: the save, the record and the counters agree at every step across firings, takes and years out
+   10 careers, 74 seasons run: 26 sackings forced, 18 firings, 10 seats taken, 13 years out, 6 closed for good; 183 checkpoints
+9) the bands: the firing rate, the offers, re hiring, the closed share and the XP pace, seed by seed against the calibrated bands
+   S9 nhl seeds 1-40: fireRate mean 0.0366 sd 0.0061 se 0.0010 min 0.0234 max 0.0495 over 40 seeds
+   S9 nhl seeds 1-40: twoPlus mean 0.0488 sd 0.0631 se 0.0100 min 0.0000 max 0.2500 over 40 seeds
+   S9 nhl seeds 1-40: meanOffers mean 1.0503 sd 0.0687 se 0.0109 min 1.0000 max 1.3125 over 40 seeds
+   S9 nhl seeds 1-40: hired3 mean 1.0000 sd 0.0000 se 0.0000 min 1.0000 max 1.0000 over 40 seeds
+   S9 nhl seeds 1-40: closedNext mean 0.4993 sd 0.1375 se 0.0217 min 0.2667 max 0.8571 over 40 seeds
+   S9 nhl seeds 1-40: xpMean mean 121.7268 sd 1.1590 se 0.1833 min 119.2969 max 124.3203 over 40 seeds
+   S9 nhl seeds 1-40: xpMedian 104 over 15360 graded club seasons; hostXpHelp's .500 season that meets the ask pays 110 (ratio 0.945)
+   nhl bands held on 40 seeds: fireRate 0.0366 in [0.0321,0.0396]; twoPlus 0.0488 in [0.0175,0.0868]; meanOffers 1.0503 in [1.0176,1.0895]; closedNext 0.4993 in [0.4241,0.6225]; xpMean 121.7268 in [120.98,122.29]
+10) the lift: the shared legacy read, season counted rule, retained step and take equal what the NFL wrote inline
+  FAIL [10]: seed 1: the shared retained step is not the old summer step (6 rows kept, 6 by the old step)
+  FAIL [10]: seed 1: the shared retained step is not the old summer step (6 rows kept, 6 by the old step)
+  FAIL [10]: seed 1: the shared retained step is not the old summer step (6 rows kept, 6 by the old step)
+  FAIL [10]: seed 2: the shared retained step is not the old summer step (6 rows kept, 6 by the old step)
+  FAIL [10]: seed 2: the shared retained step is not the old summer step (6 rows kept, 6 by the old step)
+  FAIL [10]: seed 2: the shared retained step is not the old summer step (6 rows kept, 6 by the old step)
+  FAIL [10]: seed 3: the shared retained step is not the old summer step (6 rows kept, 6 by the old step)
+  FAIL [10]: seed 3: the shared retained step is not the old summer step (6 rows kept, 6 by the old step)
+  FAIL [10]: (further failures in this check not printed)
+   1536 legacy reads equal the old body and the nhl wrapper; 15 season counted rows; 108 retained rows through both summers' old step; the take: 1124 moves (562 desk off), 562 refusals
+simGmCareer: 53 failure(s) in 6, 10
+keepamount: simNhlGmDesk=1 simMlbGmDesk=1 simGmTradePackage=0 simGmCareer-nhl=1

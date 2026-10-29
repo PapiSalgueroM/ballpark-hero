@@ -1,0 +1,67 @@
+MUTATION kitlast applied to src/components/front-office-shared/careerKitLoader.ts
+
+[1m[46m RUN [49m[22m [36mv3.2.7 [39m[90m/home/runner/work/ballpark-hero/ballpark-hero[39m
+
+ [31m❯[39m src/lib/gmCareerRules.test.ts [2m([22m[2m9 tests[22m[2m | [22m[31m2 failed[39m[2m)[22m[32m 13[2mms[22m[39m
+   [32m✓[39m hostCareerRules[2m > [22mis the NFL page's five career sentences byte for byte for 'nfl'[32m 2[2mms[22m[39m
+   [32m✓[39m hostCareerRules[2m > [22mnames the books from the sport descriptor: a payroll under a tax line, a cap sheet under a cap[32m 1[2mms[22m[39m
+   [32m✓[39m the three feed lines[2m > [22man offer gone is the board's literal line[32m 0[2mms[22m[39m
+   [32m✓[39m the three feed lines[2m > [22ma take is the board's template on the same offer[32m 0[2mms[22m[39m
+   [32m✓[39m the three feed lines[2m > [22ma year out is the board's template on the same report[32m 0[2mms[22m[39m
+[31m   [31m×[31m careerKitNeeded[2m > [22mequals the NFL board's kitNeeded on every moment, and the board never asks once the kit is here[39m[32m 6[2mms[22m[39m
+[31m     → {"phase":"hub","presser":null,"careerBoxOpen":false,"league":{"week":17}}: expected false to be true // Object.is equality[39m
+[31m   [31m×[31m careerKitNeeded[2m > [22ma season being played, the draft and the pick screen never ask[39m[32m 1[2mms[22m[39m
+[31m     → expected false to be true // Object.is equality[39m
+   [32m✓[39m makeCareerKitLoader[2m > [22mfetches once for every caller and keeps the kit[32m 0[2mms[22m[39m
+   [32m✓[39m makeCareerKitLoader[2m > [22mforgets a failed fetch, so the next ask tries again[32m 1[2mms[22m[39m
+
+[31m⎯⎯⎯⎯⎯⎯⎯[39m[1m[41m Failed Tests 2 [49m[22m[31m⎯⎯⎯⎯⎯⎯⎯[39m
+
+[41m[1m FAIL [22m[49m src/lib/gmCareerRules.test.ts[2m > [22mcareerKitNeeded[2m > [22mequals the NFL board's kitNeeded on every moment, and the board never asks once the kit is here
+[31m[1mAssertionError[22m: {"phase":"hub","presser":null,"careerBoxOpen":false,"league":{"week":17}}: expected false to be true // Object.is equality[39m
+
+[32m- Expected[39m
+[31m+ Received[39m
+
+[32m- true[39m
+[31m+ false[39m
+
+[36m [2m❯[22m src/lib/gmCareerRules.test.ts:[2m95:157[22m[39m
+    [90m 93| [39m            const want = !!boardKitNeeded(null, phase, presser, career…
+    [90m 94| [39m            const lastPeriod = !!league && league.week >= REGULAR_WEEK…
+    [90m 95| [39m            expect(careerKitNeeded({ phase, presser: presser !== null,…
+    [90m   | [39m                                                                                                                                                            [31m^[39m
+    [90m 96| [39m            expect(!!boardKitNeeded({}, phase, presser, careerBoxOpen,…
+    [90m 97| [39m            rows[33m++[39m[33m;[39m [35mif[39m (want) asks[33m++[39m[33m;[39m
+
+[31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/2]⎯[22m[39m
+
+[41m[1m FAIL [22m[49m src/lib/gmCareerRules.test.ts[2m > [22mcareerKitNeeded[2m > [22ma season being played, the draft and the pick screen never ask
+[31m[1mAssertionError[22m: expected false to be true // Object.is equality[39m
+
+[32m- Expected[39m
+[31m+ Received[39m
+
+[32m- true[39m
+[31m+ false[39m
+
+[36m [2m❯[22m src/lib/gmCareerRules.test.ts:[2m110:97[22m[39m
+    [90m108| [39m    for (const phase of ['pick', 'draft']) expect(careerKitNeeded({ ph…
+    [90m109| [39m    expect(careerKitNeeded({ phase: 'hub', presser: false, boxOpen: fa…
+    [90m110| [39m    expect(careerKitNeeded({ phase: 'hub', presser: false, boxOpen: fa…
+    [90m   | [39m                                                                                                [31m^[39m
+    [90m111| [39m  })[33m;[39m
+    [90m112| [39m})[33m;[39m
+
+[31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[2/2]⎯[22m[39m
+
+
+[2m Test Files [22m [1m[31m1 failed[39m[22m[90m (1)[39m
+[2m      Tests [22m [1m[31m2 failed[39m[22m[2m | [22m[1m[32m7 passed[39m[22m[90m (9)[39m
+[2m   Start at [22m 20:35:27
+[2m   Duration [22m 752ms[2m (transform 172ms, setup 48ms, collect 195ms, tests 13ms, environment 218ms, prepare 74ms)[22m
+
+
+::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/lib/gmCareerRules.test.ts,title=src/lib/gmCareerRules.test.ts > careerKitNeeded > equals the NFL board's kitNeeded on every moment%2C and the board never asks once the kit is here,line=95,column=157::AssertionError: {"phase":"hub","presser":null,"careerBoxOpen":false,"league":{"week":17}}: expected false to be true // Object.is equality%0A%0A- Expected%0A+ Received%0A%0A- true%0A+ false%0A%0A ❯ src/lib/gmCareerRules.test.ts:95:157%0A%0A
+
+::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/lib/gmCareerRules.test.ts,title=src/lib/gmCareerRules.test.ts > careerKitNeeded > a season being played%2C the draft and the pick screen never ask,line=110,column=97::AssertionError: expected false to be true // Object.is equality%0A%0A- Expected%0A+ Received%0A%0A- true%0A+ false%0A%0A ❯ src/lib/gmCareerRules.test.ts:110:97%0A%0A

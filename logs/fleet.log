@@ -1,0 +1,5 @@
+path A: 160 season digests, 0 differ; base 0b79d4e3c4f38fe8945d5a7c3910f91cfa199620 head 0b79d4e3c4f38fe8945d5a7c3910f91cfa199620
+path B: 160 season digests, 0 differ; base d7cf006bed62560f01a41b13a1d4f688cc46826a head d7cf006bed62560f01a41b13a1d4f688cc46826a
+path C: 160 season digests, 0 differ; base 08bd1a766f6c4c5f264f53374e30ec805c130133 head 08bd1a766f6c4c5f264f53374e30ec805c130133
+path D: 160 season digests, 0 differ; base 433699b379407ed962173be514b0e8cccfe80dfb head 433699b379407ed962173be514b0e8cccfe80dfb
+rvFleet: BASE and HEAD byte equal on all four paths (40 seeds x 4 seasons)

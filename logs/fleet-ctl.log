@@ -1,0 +1,5 @@
+path A: 160 season digests, 156 differ (first at index 4); base 0b79d4e3c4f38fe8945d5a7c3910f91cfa199620 head 737a063c06394c3bd92c2053b274693a81d37fe3
+path B: 160 season digests, 160 differ (first at index 0); base d7cf006bed62560f01a41b13a1d4f688cc46826a head 0d22af3a7f45872f078bf4fadc2c7f52fbc25197
+path C: 160 season digests, 160 differ (first at index 0); base 08bd1a766f6c4c5f264f53374e30ec805c130133 head 47f7af317e3355a7d437312ebacb4babb00208f2
+path D: 160 season digests, 0 differ; base 433699b379407ed962173be514b0e8cccfe80dfb head 433699b379407ed962173be514b0e8cccfe80dfb
+RV_FLEET_CONTROL option: 476 digests differ (FIRED)

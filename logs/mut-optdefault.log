@@ -1,0 +1,64 @@
+MUTATION optdefault applied to src/lib/nhlFrontOffice.ts
+1) the default path: a desk on save graded through the host is the base's, season for season, and gains only seat and xp
+  FAIL [1]: seed 1 checkpoint 4 (summer): not the base's
+  FAIL [1]: seed 2: 9 checkpoints played, the base played 10
+  FAIL [1]: seed 2 checkpoint 1 (close): not the base's
+  FAIL [1]: seed 3: 5 checkpoints played, the base played 9
+  FAIL [1]: seed 3 checkpoint 1 (close): not the base's
+  FAIL [1]: seed 4 checkpoint 1 (close): not the base's
+  FAIL [1]: seed 5: 10 checkpoints played, the base played 5
+  FAIL [1]: seed 5 checkpoint 1 (close): not the base's
+  FAIL [1]: (further failures in this check not printed)
+   13 checkpoints over 48 seasons against 115c68092 (10 moved); fired at ["2:5","3:3","6:5"]; digest 89508280def1c74c025f41b1c8f7ee240253558a
+simGmCareer: 14 failure(s) in 1
+1) a save from before the desk plays exactly as the engine did before this round
+  FAIL [1]: seed 22 season 2: the league is not the one the engine before this round played (7361721a9b vs 3de292d3c2)
+  FAIL [1]: seed 22 season 3: the league is not the one the engine before this round played (3da13bd372 vs c4e33cfea1)
+  FAIL [1]: seed 33 season 1: the league is not the one the engine before this round played (600c9bba57 vs fe20f7ceec)
+  FAIL [1]: seed 33 season 2: the league is not the one the engine before this round played (982cbd9e84 vs a9f0f57af9)
+  FAIL [1]: seed 33 season 3: the league is not the one the engine before this round played (8c62fea2e1 vs f4f3c68f96)
+   9 seasons replayed against f8e6cd06
+2) over ten seasons a seed, no expiring man of yours leaves without a recorded decision, applied as written
+   296 expiring men: 172 decided by the GM, 124 by the staff's rule; 102 draftees came up after exactly their entry level seasons
+3) no trade lands after the deadline, and deals do land before it
+   693 deals before the deadline, 400 tries after it, 0 landed; 1967 buyer and 494 seller places at the deadline
+   2000 rounds where the trade paths' refusal matched the window; 4 of 4 board trade handlers ask the deadline first
+4) picks are conserved league wide after every deal and every summer
+   803 ledger checks, 672 deals with a pick in them, 66 with salary retained
+   offer sheets cashed in: 22 by the GM, 1 by the staff's rule; 33 picks paid, 0 owed by a club with none left
+5) the staff's effects change their consumer at every level step
+   each post alone: hc win 0.566 to 0.614; specialTeams win 0.566 to 0.590; goalie win 0.566 to 0.590; scouting miss 2.227 to 0.566; medical out 3.000 to 2.252
+   edge 0.00 to 2.40, win 0.566 to 0.660, miss 2.23 to 0.57, rounds out 3.00 to 2.25
+6) migration keeps every marker, a corrupt block resets alone, retained salary holds its figure and its limits
+7) every desk panel draws, and the re-sign desk shows a tile for every expiring man
+   4 panels drawn, 5 re-sign tiles for 5 expiring men
+simNhlGmDesk: 5 failure(s) in ["1"]
+path A: 160 season digests, 156 differ (first at index 4); base 0b79d4e3c4f38fe8945d5a7c3910f91cfa199620 head 737a063c06394c3bd92c2053b274693a81d37fe3
+path B: 160 season digests, 160 differ (first at index 0); base d7cf006bed62560f01a41b13a1d4f688cc46826a head 0d22af3a7f45872f078bf4fadc2c7f52fbc25197
+path C: 160 season digests, 160 differ (first at index 0); base 08bd1a766f6c4c5f264f53374e30ec805c130133 head 47f7af317e3355a7d437312ebacb4babb00208f2
+path D: 160 season digests, 0 differ; base 433699b379407ed962173be514b0e8cccfe80dfb head 433699b379407ed962173be514b0e8cccfe80dfb
+rvFleet: 476 digests differ
+node:internal/modules/run_main:107
+    triggerUncaughtException(
+    ^
+
+AssertionError [ERR_ASSERTION]: Exact observed meaningful control map
++ actual - expected
+
++ [
++   0,
++   5
++ ]
+- []
+
+    at file:///home/runner/work/ballpark-hero/ballpark-hero/scripts/simNhlCpuRosters.mjs:76:12 {
+  generatedMessage: false,
+  code: 'ERR_ASSERTION',
+  actual: [ 0, 5 ],
+  expected: [],
+  operator: 'deepStrictEqual',
+  diff: 'simple'
+}
+
+Node.js v24.22.1
+optdefault: simGmCareer-nhl-s1=1 simNhlGmDesk=1 rvFleet=1 simNhlCpuRosters-all=1

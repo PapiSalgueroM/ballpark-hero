@@ -1,0 +1,15 @@
+#!serial
+fleet: (git worktree add /tmp/base 115c68092 >/dev/null 2>&1 || true) && node .rc/x/rvFleet.mjs
+fleet-ctl: (git worktree add /tmp/base 115c68092 >/dev/null 2>&1 || true) && RV_FLEET_CONTROL=option node .rc/x/rvFleet.mjs
+mut-reverse: node .rc/x/rvMut.mjs reverse && SIM_GM_CAREER_SPORT=nhl node scripts/simGmCareer.mjs; s=$?; git checkout -- src scripts; exit $s
+mut-swaprelease-nhl: node .rc/x/rvMut.mjs swaprelease && SIM_GM_CAREER_SPORT=nhl node scripts/simGmCareer.mjs; s=$?; git checkout -- src scripts; exit $s
+mut-swaprelease-nfl: node .rc/x/rvMut.mjs swaprelease && SIM_GM_CAREER_ONLY=5 node scripts/simGmCareer.mjs; s=$?; git checkout -- src scripts; exit $s
+mut-dropaimoves: node .rc/x/rvMut.mjs dropaimoves && SIM_GM_CAREER_SPORT=nhl node scripts/simGmCareer.mjs; s=$?; git checkout -- src scripts; exit $s
+mut-stalesummer: node .rc/x/rvMut.mjs stalesummer && SIM_GM_CAREER_SPORT=nhl node scripts/simGmCareer.mjs; s=$?; git checkout -- src scripts; exit $s
+mut-retainedclub: node .rc/x/rvMut.mjs retainedclub && SIM_GM_CAREER_SPORT=nhl node scripts/simGmCareer.mjs; s=$?; git checkout -- src scripts; exit $s
+mut-namedsummer: node .rc/x/rvMut.mjs namedsummer && SIM_GM_CAREER_SPORT=nhl node scripts/simGmCareer.mjs; s=$?; git checkout -- src scripts; exit $s
+mut-countedpick: node .rc/x/rvMut.mjs countedpick && SIM_GM_CAREER_SPORT=nhl node scripts/simGmCareer.mjs; s=$?; git checkout -- src scripts; exit $s
+mut-books: node .rc/x/rvMut.mjs books && node_modules/.bin/vitest run src/lib/gmCareerRules.test.ts --testTimeout=300000; s=$?; git checkout -- src scripts; exit $s
+mut-kitlast: node .rc/x/rvMut.mjs kitlast && node_modules/.bin/vitest run src/lib/gmCareerRules.test.ts --testTimeout=300000; s=$?; git checkout -- src scripts; exit $s
+mut-keepamount: node .rc/x/rvMut.mjs keepamount && { node scripts/simNhlGmDesk.mjs; a=$?; node scripts/simMlbGmDesk.mjs; b=$?; node scripts/simGmTradePackage.mjs; c=$?; SIM_GM_CAREER_SPORT=nhl node scripts/simGmCareer.mjs; e=$?; git checkout -- src scripts; echo "keepamount: simNhlGmDesk=$a simMlbGmDesk=$b simGmTradePackage=$c simGmCareer-nhl=$e"; exit $((a+b+c+e>0)); }
+mut-optdefault: (git worktree add /tmp/base 115c68092 >/dev/null 2>&1 || true) && node .rc/x/rvMut.mjs optdefault && { SIM_GM_CAREER_SPORT=nhl SIM_GM_CAREER_ONLY=1 node scripts/simGmCareer.mjs; a=$?; node scripts/simNhlGmDesk.mjs; b=$?; node .rc/x/rvFleet.mjs; c=$?; NHL_CPU_ROSTERS_CONTROL=all node scripts/simNhlCpuRosters.mjs; e=$?; git checkout -- src scripts; echo "optdefault: simGmCareer-nhl-s1=$a simNhlGmDesk=$b rvFleet=$c simNhlCpuRosters-all=$e"; exit $((a+b+c+e>0)); }

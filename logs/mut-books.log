@@ -1,0 +1,42 @@
+MUTATION books applied to src/lib/gmCareerFace.ts
+
+[1m[46m RUN [49m[22m [36mv3.2.7 [39m[90m/home/runner/work/ballpark-hero/ballpark-hero[39m
+
+ [31m❯[39m src/lib/gmCareerRules.test.ts [2m([22m[2m9 tests[22m[2m | [22m[31m1 failed[39m[2m)[22m[32m 14[2mms[22m[39m
+   [32m✓[39m hostCareerRules[2m > [22mis the NFL page's five career sentences byte for byte for 'nfl'[32m 2[2mms[22m[39m
+[31m   [31m×[31m hostCareerRules[2m > [22mnames the books from the sport descriptor: a payroll under a tax line, a cap sheet under a cap[39m[32m 6[2mms[22m[39m
+[31m     → expected 'Take a job and you move to that club\…' to be 'Take a job and you move to that club\…' // Object.is equality[39m
+   [32m✓[39m the three feed lines[2m > [22man offer gone is the board's literal line[32m 0[2mms[22m[39m
+   [32m✓[39m the three feed lines[2m > [22ma take is the board's template on the same offer[32m 0[2mms[22m[39m
+   [32m✓[39m the three feed lines[2m > [22ma year out is the board's template on the same report[32m 0[2mms[22m[39m
+   [32m✓[39m careerKitNeeded[2m > [22mequals the NFL board's kitNeeded on every moment, and the board never asks once the kit is here[32m 3[2mms[22m[39m
+   [32m✓[39m careerKitNeeded[2m > [22ma season being played, the draft and the pick screen never ask[32m 0[2mms[22m[39m
+   [32m✓[39m makeCareerKitLoader[2m > [22mfetches once for every caller and keeps the kit[32m 0[2mms[22m[39m
+   [32m✓[39m makeCareerKitLoader[2m > [22mforgets a failed fetch, so the next ask tries again[32m 1[2mms[22m[39m
+
+[31m⎯⎯⎯⎯⎯⎯⎯[39m[1m[41m Failed Tests 1 [49m[22m[31m⎯⎯⎯⎯⎯⎯⎯[39m
+
+[41m[1m FAIL [22m[49m src/lib/gmCareerRules.test.ts[2m > [22mhostCareerRules[2m > [22mnames the books from the sport descriptor: a payroll under a tax line, a cap sheet under a cap
+[31m[1mAssertionError[22m: expected 'Take a job and you move to that club\…' to be 'Take a job and you move to that club\…' // Object.is equality[39m
+
+Expected: [32m"Take a job and you move to that club's real roster, [7mcap sheet[27m and picks, meet the room and run its draft. Your record, your titles and your GM XP come with you. The old club's staff and re-sign desk stay behind."[39m
+Received: [31m"Take a job and you move to that club's real roster, [7mpayroll[27m and picks, meet the room and run its draft. Your record, your titles and your GM XP come with you. The old club's staff and re-sign desk stay behind."[39m
+
+[36m [2m❯[22m src/lib/gmCareerRules.test.ts:[2m49:24[22m[39m
+    [90m 47| [39m      const books = GM_SPORTS[key].cap.model === 'cbtLine' ? 'payroll'…
+    [90m 48| [39m      [34mexpect[39m(rules)[33m.[39m[34mtoHaveLength[39m([34m5[39m)[33m;[39m
+    [90m 49| [39m      [34mexpect[39m(rules[[34m1[39m])[33m.[39m[34mtoBe[39m(nfl[[34m1[39m][33m.[39m[34mreplace[39m([32m'cap sheet'[39m[33m,[39m books))[33m;[39m
+    [90m   | [39m                       [31m^[39m
+    [90m 50| [39m      expect(rules.filter((_, i) => i !== 1)).toEqual(nfl.filter((_, i…
+    [90m 51| [39m    }
+
+[31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/1]⎯[22m[39m
+
+
+[2m Test Files [22m [1m[31m1 failed[39m[22m[90m (1)[39m
+[2m      Tests [22m [1m[31m1 failed[39m[22m[2m | [22m[1m[32m8 passed[39m[22m[90m (9)[39m
+[2m   Start at [22m 20:35:25
+[2m   Duration [22m 802ms[2m (transform 172ms, setup 51ms, collect 195ms, tests 14ms, environment 233ms, prepare 104ms)[22m
+
+
+::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/lib/gmCareerRules.test.ts,title=src/lib/gmCareerRules.test.ts > hostCareerRules > names the books from the sport descriptor%3A a payroll under a tax line%2C a cap sheet under a cap,line=49,column=24::AssertionError: expected 'Take a job and you move to that club\…' to be 'Take a job and you move to that club\…' // Object.is equality%0A%0AExpected: "Take a job and you move to that club's real roster, cap sheet and picks, meet the room and run its draft. Your record, your titles and your GM XP come with you. The old club's staff and re-sign desk stay behind."%0AReceived: "Take a job and you move to that club's real roster, payroll and picks, meet the room and run its draft. Your record, your titles and your GM XP come with you. The old club's staff and re-sign desk stay behind."%0A%0A ❯ src/lib/gmCareerRules.test.ts:49:24%0A%0A

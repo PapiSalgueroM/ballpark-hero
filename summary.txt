@@ -1,0 +1,14 @@
+fleet exit=0 13s | rvFleet: BASE and HEAD byte equal on all four paths (40 seeds x 4 seasons)
+fleet-ctl exit=1 12s | RV_FLEET_CONTROL option: 476 digests differ (FIRED)
+mut-reverse exit=1 17s | simGmCareer: 1 failure(s) in 6
+mut-swaprelease-nhl exit=1 17s | simGmCareer: 491 failure(s) in 5
+mut-swaprelease-nfl exit=1 73s | simGmCareer: 487 failure(s) in 5
+mut-dropaimoves exit=0 17s | simGmCareer: all checks passed (nhl)
+mut-stalesummer exit=1 17s | simGmCareer: 121 failure(s) in 6
+mut-retainedclub exit=0 17s | simGmCareer: all checks passed (nhl)
+mut-namedsummer exit=0 17s | simGmCareer: all checks passed (nhl)
+mut-countedpick exit=1 17s | simGmCareer: 3 failure(s) in 7, 10
+mut-books exit=1 1s | ::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/lib/gmCareerRules.test.ts,title=src/lib/gmCareerRules.test.ts > hostCareerRules > names the books from the 
+mut-kitlast exit=1 1s | ::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/lib/gmCareerRules.test.ts,title=src/lib/gmCareerRules.test.ts > careerKitNeeded > a season being played%2C 
+mut-keepamount exit=1 30s | keepamount: simNhlGmDesk=1 simMlbGmDesk=1 simGmTradePackage=0 simGmCareer-nhl=1
+mut-optdefault exit=1 15s | optdefault: simGmCareer-nhl-s1=1 simNhlGmDesk=1 rvFleet=1 simNhlCpuRosters-all=1
