@@ -1,0 +1,9 @@
+#!serve
+#!playwright
+#!serial
+help: node .rc/x/walkXi401.mjs help
+draft: node .rc/x/walkXi401.mjs draft
+draft2: node .rc/x/walkXi401.mjs draft2
+arsenal: node .rc/x/walkXi401.mjs arsenal
+mixed: git worktree add /tmp/base 601435944 >/dev/null 2>&1 && ln -s "$PWD/node_modules" /tmp/base/node_modules && (cd /tmp/base && node_modules/.bin/vite build > /tmp/base-build.log 2>&1) && (node scripts/lib/hostLikeServer.mjs /tmp/base/dist 4174 > /tmp/base-server.log 2>&1 &) && sleep 4 && BASE2=http://localhost:4174 node .rc/x/walkXi401.mjs mixed
+base-touch: cd /tmp/base && node scripts/simPlayerAutocompleteTouchScroll.mjs > /tmp/bt.log 2>&1; s=$?; tail -6 /tmp/bt.log; exit $s
