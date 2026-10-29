@@ -1,0 +1,15 @@
+tsc: node_modules/.bin/tsc --noEmit -p tsconfig.app.json
+nflfull: node scripts/simGmCareer.mjs
+nhl1: SIM_GM_CAREER_SPORT=nhl node scripts/simGmCareer.mjs
+vitestlift: node_modules/.bin/vitest run src/lib/gmCareerRules.test.ts src/lib/gmDeskHost.test.ts src/lib/gmXp.test.ts src/lib/gmSeat.test.ts src/components/front-office-shared/GmCareerDesk.test.tsx src/components/mlb-front-office/MlbGmDesk.test.tsx --testTimeout=300000 --hookTimeout=120000
+vitestfo: node_modules/.bin/vitest run src/components/front-office-shared/FrontOfficeSeasonClose.test.tsx src/components/front-office-shared/FrontOfficeGmCareer.test.tsx src/components/front-office/FrontOfficeLazyDesk.test.tsx src/components/front-office/FrontOfficeOnePress.test.tsx src/test/frontOfficeSaveRecovery.test.tsx --testTimeout=600000 --hookTimeout=120000
+simGmDeskHost123: node scripts/simGmDeskHost.mjs
+simGmDeskHost456: SIM_GM_DESK_HOST_SEEDS=4,5,6 node scripts/simGmDeskHost.mjs
+simGmDeskHost789: SIM_GM_DESK_HOST_SEEDS=7,8,9 node scripts/simGmDeskHost.mjs
+emptyfeed: SIM_GM_DESK_HOST_CONTROL=emptyfeed node scripts/simGmDeskHost.mjs
+dhanchors: SIM_GM_DESK_HOST_ANCHORS=1 node scripts/simGmDeskHost.mjs
+simFoLazyDesk: node scripts/simFoLazyDesk.mjs
+lz-eager: SIM_FO_LAZY_DESK_CONTROL=eager node scripts/simFoLazyDesk.mjs
+lz-hostimport: SIM_FO_LAZY_DESK_CONTROL=hostimport node scripts/simFoLazyDesk.mjs
+lz-tiertile: SIM_FO_LAZY_DESK_CONTROL=tiertile node scripts/simFoLazyDesk.mjs
+lz-boxseasons: SIM_FO_LAZY_DESK_CONTROL=boxseasons node scripts/simFoLazyDesk.mjs
