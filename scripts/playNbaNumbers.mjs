@@ -70,6 +70,13 @@ async function open(width, height, reduced) {
   page.on('requestfinished', r => { if (/supabase\.co/.test(r.url())) seen.reached++; });
   await page.route(/supabase\.co/, r => r.abort());
   await page.addInitScript(route => localStorage.setItem(`rules-gate-seen:${route}`, '1'), ROUTE);
+  /* Round 1557 (critic-1541 correction 9): the walk says whether its careers met the national team's call, so a
+     later change to the bar cannot break it silently. Counted in the page, read by close(). */
+  await page.addInitScript(() => {
+    window.__intlCalls = 0;
+    new MutationObserver(() => { const up = !!document.querySelector('[data-intl-call]'); if (up && !window.__intlUp) window.__intlCalls += 1; window.__intlUp = up; })
+      .observe(document, { childList: true, subtree: true });
+  });
   await page.goto(`${BASE}${ROUTE}`, { waitUntil: 'networkidle' });
   await page.waitForTimeout(900);
   await answerConsent(page); await page.waitForTimeout(300);
@@ -153,6 +160,7 @@ async function close(w, what) {
   const real = w.seen.errors.filter(e => !/supabase|Failed to fetch|CORS/i.test(e));
   say(real.length === 0, `${what}: no page errors (${real[0] ?? 'clean'})`);
   say(w.seen.reached === 0, `${what}: no request to the live database finished (${w.seen.reached})`);
+  console.log(`  note ${what}: national team calls met on this page: ${await w.page.evaluate(() => window.__intlCalls ?? 0).catch(() => 'unread')}`);
   await w.ctx.close();
 }
 
