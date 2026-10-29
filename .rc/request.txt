@@ -1,0 +1,8 @@
+c-loadonly: SIM_WALL_CAREERS=5 SIM_HALL_WALL_CONTROL=loadonly node scripts/simUsCareerHallWall.mjs
+c-kept: SIM_WALL_CAREERS=5 SIM_HALL_WALL_CONTROL=kept node scripts/simUsCareerHallWall.mjs
+c-anyplaque: SIM_WALL_CAREERS=5 SIM_HALL_WALL_CONTROL=anyplaque node scripts/simUsCareerHallWall.mjs
+c-rewrite: SIM_WALL_CAREERS=5 SIM_HALL_WALL_CONTROL=rewrite node scripts/simUsCareerHallWall.mjs
+c-oldline: SIM_WALL_CAREERS=5 SIM_HALL_WALL_CONTROL=oldline node scripts/simUsCareerHallWall.mjs
+c-createline: SIM_WALL_CAREERS=5 SIM_HALL_WALL_CONTROL=createline node scripts/simUsCareerHallWall.mjs
+c-nogate: SIM_WALL_CAREERS=5 SIM_HALL_WALL_CONTROL=nogate node scripts/simUsCareerHallWall.mjs
+c-stalesave: SIM_WALL_CAREERS=5 SIM_HALL_WALL_CONTROL=stalesave node scripts/simUsCareerHallWall.mjs
