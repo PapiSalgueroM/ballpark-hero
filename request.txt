@@ -1,0 +1,8 @@
+tsc: node_modules/.bin/tsc --noEmit -p tsconfig.app.json
+facts: node scripts/simUsConnectionsFacts.mjs
+ctl-ohtani: US_CONN_CONTROL=ohtani node scripts/simUsConnectionsFacts.mjs
+ctl-frobinson: US_CONN_CONTROL=frobinson node scripts/simUsConnectionsFacts.mjs
+ctl-fingers: US_CONN_CONTROL=fingers node scripts/simUsConnectionsFacts.mjs
+conn1553: node scripts/simConnectionsFacts.mjs
+fair: node scripts/simFairPuzzles.mjs
+norival: node scripts/simNoRivalNames.mjs
