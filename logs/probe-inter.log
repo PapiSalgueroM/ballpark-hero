@@ -1,0 +1,56 @@
+320: Inter loaded true
+320: font Inter, system-ui, "Apple Color Emoji", "Segoe UI Emoji", "Noto Color Emoji", sans-serif 600 9px | widest at 9px Manchester 52, Champions 50, Goalkeeper 49, Tottenham 46, Dortmund 45, Midfielder 44
+320: widest at 8px Manchester 47, Goalkeeper 46, Champions 44, Tottenham 42, Barcelona 40, Defensive 40
+320 current: room 39 tile 52.8 maxH 91.875 overflow 0 split ["matches,","Liverpool","Defender","Goalkeeper","Manchester"]
+320 px1: room 43 tile 52.8 maxH 91.875 overflow 0 split ["Goalkeeper","Manchester"]
+320 px1t8: room 43 tile 52.8 maxH 76 overflow 0 split ["Goalkeeper","Manchester"]
+320 px05: room 47 tile 52.8 maxH 80.625 overflow 0 split ["Goalkeeper","Manchester"]
+320 px05gap1: room 48 tile 54.4 maxH 80.625 overflow 0 split ["Goalkeeper","Manchester"]
+320 px05t8: room 47 tile 52.8 maxH 76 overflow 0 split ["Manchester"]
+320 px05gap1t8: room 48 tile 54.4 maxH 76 overflow 0 split []
+320 hyph: room 39 tile 52.8 maxH 91.875 overflow 0 split ["matches,","Liverpool","Defender","Goalkeeper","Manchester"]
+360: Inter loaded true
+360: font Inter, system-ui, "Apple Color Emoji", "Segoe UI Emoji", "Noto Color Emoji", sans-serif 600 9px | widest at 9px Manchester 52, Champions 50, Goalkeeper 49, Tottenham 46, Dortmund 45, Midfielder 44
+360: widest at 8px Manchester 47, Goalkeeper 46, Champions 44, Tottenham 42, Barcelona 40, Defensive 40
+360 current: room 47 tile 60.8 maxH 91.875 overflow 0 split ["Manchester","Goalkeeper"]
+360 px1: room 51 tile 60.8 maxH 80.625 overflow 0 split ["Manchester"]
+360 px1t8: room 51 tile 60.8 maxH 76 overflow 0 split []
+360 px05: room 55 tile 60.8 maxH 80.625 overflow 0 split []
+360 px05gap1: room 56 tile 62.4 maxH 76 overflow 0 split []
+360 px05t8: room 55 tile 60.8 maxH 76 overflow 0 split []
+360 px05gap1t8: room 56 tile 62.4 maxH 76 overflow 0 split []
+360 hyph: room 47 tile 60.8 maxH 91.875 overflow 0 split ["Manchester","Goalkeeper"]
+375: Inter loaded true
+375: font Inter, system-ui, "Apple Color Emoji", "Segoe UI Emoji", "Noto Color Emoji", sans-serif 600 9px | widest at 9px Manchester 52, Champions 50, Goalkeeper 49, Tottenham 46, Dortmund 45, Midfielder 44
+375: widest at 8px Manchester 47, Goalkeeper 46, Champions 44, Tottenham 42, Barcelona 40, Defensive 40
+375 current: room 50 tile 63.8 maxH 80.625 overflow 0 split ["Manchester"]
+375 px1: room 54 tile 63.8 maxH 80.625 overflow 0 split []
+375 px1t8: room 54 tile 63.8 maxH 76 overflow 0 split []
+375 px05: room 58 tile 63.8 maxH 80.625 overflow 0 split []
+375 px05gap1: room 59 tile 65.4 maxH 80.625 overflow 0 split []
+375 px05t8: room 58 tile 63.8 maxH 76 overflow 0 split []
+375 px05gap1t8: room 59 tile 65.4 maxH 76 overflow 0 split []
+375 hyph: room 50 tile 63.8 maxH 80.625 overflow 0 split ["under","Manchester"]
+390: Inter loaded true
+390: font Inter, system-ui, "Apple Color Emoji", "Segoe UI Emoji", "Noto Color Emoji", sans-serif 600 9px | widest at 9px Manchester 52, Champions 50, Goalkeeper 49, Tottenham 46, Dortmund 45, Midfielder 44
+390: widest at 8px Manchester 47, Goalkeeper 46, Champions 44, Tottenham 42, Barcelona 40, Defensive 40
+390 current: room 53 tile 66.8 maxH 80.625 overflow 0 split []
+390 px1: room 57 tile 66.8 maxH 76 overflow 0 split []
+390 px1t8: room 57 tile 66.8 maxH 76 overflow 0 split []
+390 px05: room 61 tile 66.8 maxH 76 overflow 0 split []
+390 px05gap1: room 62 tile 68.4 maxH 76 overflow 0 split []
+390 px05t8: room 61 tile 66.8 maxH 76 overflow 0 split []
+390 px05gap1t8: room 62 tile 68.4 maxH 76 overflow 0 split []
+390 hyph: room 53 tile 66.8 maxH 80.625 overflow 0 split ["under"]
+412: Inter loaded true
+412: font Inter, system-ui, "Apple Color Emoji", "Segoe UI Emoji", "Noto Color Emoji", sans-serif 600 9px | widest at 9px Manchester 52, Champions 50, Goalkeeper 49, Tottenham 46, Dortmund 45, Midfielder 44
+412: widest at 8px Manchester 47, Goalkeeper 46, Champions 44, Tottenham 42, Barcelona 40, Defensive 40
+412 current: room 57 tile 71.2 maxH 80.625 overflow 0 split []
+412 px1: room 61 tile 71.2 maxH 76 overflow 0 split []
+412 px1t8: room 61 tile 71.2 maxH 76 overflow 0 split []
+412 px05: room 65 tile 71.2 maxH 76 overflow 0 split []
+412 px05gap1: room 67 tile 72.8 maxH 76 overflow 0 split []
+412 px05t8: room 65 tile 71.2 maxH 76 overflow 0 split []
+412 px05gap1t8: room 67 tile 72.8 maxH 76 overflow 0 split []
+412 hyph: room 57 tile 71.2 maxH 80.625 overflow 0 split ["under","under"]
+probe-bingo: done, 105 words from 65 labels

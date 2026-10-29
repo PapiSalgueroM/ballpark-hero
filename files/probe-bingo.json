@@ -1,0 +1,940 @@
+{
+  "words": 105,
+  "labels": 65,
+  "viewports": [
+    {
+      "width": 320,
+      "font": "Inter, system-ui, \"Apple Color Emoji\", \"Segoe UI Emoji\", \"Noto Color Emoji\", sans-serif 600 9px",
+      "w9": [
+        [
+          "Manchester",
+          52
+        ],
+        [
+          "Champions",
+          50
+        ],
+        [
+          "Goalkeeper",
+          49
+        ],
+        [
+          "Tottenham",
+          46
+        ],
+        [
+          "Dortmund",
+          45
+        ],
+        [
+          "Midfielder",
+          44
+        ],
+        [
+          "Defensive",
+          44
+        ],
+        [
+          "Instagram",
+          44
+        ],
+        [
+          "Barcelona",
+          43
+        ],
+        [
+          "Defender",
+          42
+        ],
+        [
+          "Attacking",
+          42
+        ],
+        [
+          "teammate",
+          42
+        ],
+        [
+          "Juventus",
+          41
+        ],
+        [
+          "followers",
+          40
+        ]
+      ],
+      "w8": [
+        [
+          "Manchester",
+          47
+        ],
+        [
+          "Goalkeeper",
+          46
+        ],
+        [
+          "Champions",
+          44
+        ],
+        [
+          "Tottenham",
+          42
+        ],
+        [
+          "Barcelona",
+          40
+        ],
+        [
+          "Defensive",
+          40
+        ],
+        [
+          "teammate",
+          40
+        ],
+        [
+          "Dortmund",
+          39
+        ],
+        [
+          "Midfielder",
+          39
+        ],
+        [
+          "Attacking",
+          39
+        ],
+        [
+          "Instagram",
+          39
+        ],
+        [
+          "Liverpool",
+          37
+        ],
+        [
+          "Juventus",
+          37
+        ],
+        [
+          "Defender",
+          37
+        ]
+      ],
+      "cands": {
+        "current": {
+          "room": 39,
+          "tileW": 52.8,
+          "maxTileH": 91.875,
+          "split": [
+            "matches,",
+            "Liverpool",
+            "Defender",
+            "Goalkeeper",
+            "Manchester"
+          ],
+          "overflow": 0
+        },
+        "px1": {
+          "room": 43,
+          "tileW": 52.8,
+          "maxTileH": 91.875,
+          "split": [
+            "Goalkeeper",
+            "Manchester"
+          ],
+          "overflow": 0
+        },
+        "px1t8": {
+          "room": 43,
+          "tileW": 52.8,
+          "maxTileH": 76,
+          "split": [
+            "Goalkeeper",
+            "Manchester"
+          ],
+          "overflow": 0
+        },
+        "px05": {
+          "room": 47,
+          "tileW": 52.8,
+          "maxTileH": 80.625,
+          "split": [
+            "Goalkeeper",
+            "Manchester"
+          ],
+          "overflow": 0
+        },
+        "px05gap1": {
+          "room": 48,
+          "tileW": 54.4,
+          "maxTileH": 80.625,
+          "split": [
+            "Goalkeeper",
+            "Manchester"
+          ],
+          "overflow": 0
+        },
+        "px05t8": {
+          "room": 47,
+          "tileW": 52.8,
+          "maxTileH": 76,
+          "split": [
+            "Manchester"
+          ],
+          "overflow": 0
+        },
+        "px05gap1t8": {
+          "room": 48,
+          "tileW": 54.4,
+          "maxTileH": 76,
+          "split": [],
+          "overflow": 0
+        },
+        "hyph": {
+          "room": 39,
+          "tileW": 52.8,
+          "maxTileH": 91.875,
+          "split": [
+            "matches,",
+            "Liverpool",
+            "Defender",
+            "Goalkeeper",
+            "Manchester"
+          ],
+          "overflow": 0
+        }
+      }
+    },
+    {
+      "width": 360,
+      "font": "Inter, system-ui, \"Apple Color Emoji\", \"Segoe UI Emoji\", \"Noto Color Emoji\", sans-serif 600 9px",
+      "w9": [
+        [
+          "Manchester",
+          52
+        ],
+        [
+          "Champions",
+          50
+        ],
+        [
+          "Goalkeeper",
+          49
+        ],
+        [
+          "Tottenham",
+          46
+        ],
+        [
+          "Dortmund",
+          45
+        ],
+        [
+          "Midfielder",
+          44
+        ],
+        [
+          "Defensive",
+          44
+        ],
+        [
+          "Instagram",
+          44
+        ],
+        [
+          "Barcelona",
+          43
+        ],
+        [
+          "Defender",
+          42
+        ],
+        [
+          "Attacking",
+          42
+        ],
+        [
+          "teammate",
+          42
+        ],
+        [
+          "Juventus",
+          41
+        ],
+        [
+          "followers",
+          40
+        ]
+      ],
+      "w8": [
+        [
+          "Manchester",
+          47
+        ],
+        [
+          "Goalkeeper",
+          46
+        ],
+        [
+          "Champions",
+          44
+        ],
+        [
+          "Tottenham",
+          42
+        ],
+        [
+          "Barcelona",
+          40
+        ],
+        [
+          "Defensive",
+          40
+        ],
+        [
+          "teammate",
+          40
+        ],
+        [
+          "Dortmund",
+          39
+        ],
+        [
+          "Midfielder",
+          39
+        ],
+        [
+          "Attacking",
+          39
+        ],
+        [
+          "Instagram",
+          39
+        ],
+        [
+          "Liverpool",
+          37
+        ],
+        [
+          "Juventus",
+          37
+        ],
+        [
+          "Defender",
+          37
+        ]
+      ],
+      "cands": {
+        "current": {
+          "room": 47,
+          "tileW": 60.8,
+          "maxTileH": 91.875,
+          "split": [
+            "Manchester",
+            "Goalkeeper"
+          ],
+          "overflow": 0
+        },
+        "px1": {
+          "room": 51,
+          "tileW": 60.8,
+          "maxTileH": 80.625,
+          "split": [
+            "Manchester"
+          ],
+          "overflow": 0
+        },
+        "px1t8": {
+          "room": 51,
+          "tileW": 60.8,
+          "maxTileH": 76,
+          "split": [],
+          "overflow": 0
+        },
+        "px05": {
+          "room": 55,
+          "tileW": 60.8,
+          "maxTileH": 80.625,
+          "split": [],
+          "overflow": 0
+        },
+        "px05gap1": {
+          "room": 56,
+          "tileW": 62.4,
+          "maxTileH": 76,
+          "split": [],
+          "overflow": 0
+        },
+        "px05t8": {
+          "room": 55,
+          "tileW": 60.8,
+          "maxTileH": 76,
+          "split": [],
+          "overflow": 0
+        },
+        "px05gap1t8": {
+          "room": 56,
+          "tileW": 62.4,
+          "maxTileH": 76,
+          "split": [],
+          "overflow": 0
+        },
+        "hyph": {
+          "room": 47,
+          "tileW": 60.8,
+          "maxTileH": 91.875,
+          "split": [
+            "Manchester",
+            "Goalkeeper"
+          ],
+          "overflow": 0
+        }
+      }
+    },
+    {
+      "width": 375,
+      "font": "Inter, system-ui, \"Apple Color Emoji\", \"Segoe UI Emoji\", \"Noto Color Emoji\", sans-serif 600 9px",
+      "w9": [
+        [
+          "Manchester",
+          52
+        ],
+        [
+          "Champions",
+          50
+        ],
+        [
+          "Goalkeeper",
+          49
+        ],
+        [
+          "Tottenham",
+          46
+        ],
+        [
+          "Dortmund",
+          45
+        ],
+        [
+          "Midfielder",
+          44
+        ],
+        [
+          "Defensive",
+          44
+        ],
+        [
+          "Instagram",
+          44
+        ],
+        [
+          "Barcelona",
+          43
+        ],
+        [
+          "Defender",
+          42
+        ],
+        [
+          "Attacking",
+          42
+        ],
+        [
+          "teammate",
+          42
+        ],
+        [
+          "Juventus",
+          41
+        ],
+        [
+          "followers",
+          40
+        ]
+      ],
+      "w8": [
+        [
+          "Manchester",
+          47
+        ],
+        [
+          "Goalkeeper",
+          46
+        ],
+        [
+          "Champions",
+          44
+        ],
+        [
+          "Tottenham",
+          42
+        ],
+        [
+          "Barcelona",
+          40
+        ],
+        [
+          "Defensive",
+          40
+        ],
+        [
+          "teammate",
+          40
+        ],
+        [
+          "Dortmund",
+          39
+        ],
+        [
+          "Midfielder",
+          39
+        ],
+        [
+          "Attacking",
+          39
+        ],
+        [
+          "Instagram",
+          39
+        ],
+        [
+          "Liverpool",
+          37
+        ],
+        [
+          "Juventus",
+          37
+        ],
+        [
+          "Defender",
+          37
+        ]
+      ],
+      "cands": {
+        "current": {
+          "room": 50,
+          "tileW": 63.8,
+          "maxTileH": 80.625,
+          "split": [
+            "Manchester"
+          ],
+          "overflow": 0
+        },
+        "px1": {
+          "room": 54,
+          "tileW": 63.8,
+          "maxTileH": 80.625,
+          "split": [],
+          "overflow": 0
+        },
+        "px1t8": {
+          "room": 54,
+          "tileW": 63.8,
+          "maxTileH": 76,
+          "split": [],
+          "overflow": 0
+        },
+        "px05": {
+          "room": 58,
+          "tileW": 63.8,
+          "maxTileH": 80.625,
+          "split": [],
+          "overflow": 0
+        },
+        "px05gap1": {
+          "room": 59,
+          "tileW": 65.4,
+          "maxTileH": 80.625,
+          "split": [],
+          "overflow": 0
+        },
+        "px05t8": {
+          "room": 58,
+          "tileW": 63.8,
+          "maxTileH": 76,
+          "split": [],
+          "overflow": 0
+        },
+        "px05gap1t8": {
+          "room": 59,
+          "tileW": 65.4,
+          "maxTileH": 76,
+          "split": [],
+          "overflow": 0
+        },
+        "hyph": {
+          "room": 50,
+          "tileW": 63.8,
+          "maxTileH": 80.625,
+          "split": [
+            "under",
+            "Manchester"
+          ],
+          "overflow": 0
+        }
+      }
+    },
+    {
+      "width": 390,
+      "font": "Inter, system-ui, \"Apple Color Emoji\", \"Segoe UI Emoji\", \"Noto Color Emoji\", sans-serif 600 9px",
+      "w9": [
+        [
+          "Manchester",
+          52
+        ],
+        [
+          "Champions",
+          50
+        ],
+        [
+          "Goalkeeper",
+          49
+        ],
+        [
+          "Tottenham",
+          46
+        ],
+        [
+          "Dortmund",
+          45
+        ],
+        [
+          "Midfielder",
+          44
+        ],
+        [
+          "Defensive",
+          44
+        ],
+        [
+          "Instagram",
+          44
+        ],
+        [
+          "Barcelona",
+          43
+        ],
+        [
+          "Defender",
+          42
+        ],
+        [
+          "Attacking",
+          42
+        ],
+        [
+          "teammate",
+          42
+        ],
+        [
+          "Juventus",
+          41
+        ],
+        [
+          "followers",
+          40
+        ]
+      ],
+      "w8": [
+        [
+          "Manchester",
+          47
+        ],
+        [
+          "Goalkeeper",
+          46
+        ],
+        [
+          "Champions",
+          44
+        ],
+        [
+          "Tottenham",
+          42
+        ],
+        [
+          "Barcelona",
+          40
+        ],
+        [
+          "Defensive",
+          40
+        ],
+        [
+          "teammate",
+          40
+        ],
+        [
+          "Dortmund",
+          39
+        ],
+        [
+          "Midfielder",
+          39
+        ],
+        [
+          "Attacking",
+          39
+        ],
+        [
+          "Instagram",
+          39
+        ],
+        [
+          "Liverpool",
+          37
+        ],
+        [
+          "Juventus",
+          37
+        ],
+        [
+          "Defender",
+          37
+        ]
+      ],
+      "cands": {
+        "current": {
+          "room": 53,
+          "tileW": 66.8,
+          "maxTileH": 80.625,
+          "split": [],
+          "overflow": 0
+        },
+        "px1": {
+          "room": 57,
+          "tileW": 66.8,
+          "maxTileH": 76,
+          "split": [],
+          "overflow": 0
+        },
+        "px1t8": {
+          "room": 57,
+          "tileW": 66.8,
+          "maxTileH": 76,
+          "split": [],
+          "overflow": 0
+        },
+        "px05": {
+          "room": 61,
+          "tileW": 66.8,
+          "maxTileH": 76,
+          "split": [],
+          "overflow": 0
+        },
+        "px05gap1": {
+          "room": 62,
+          "tileW": 68.4,
+          "maxTileH": 76,
+          "split": [],
+          "overflow": 0
+        },
+        "px05t8": {
+          "room": 61,
+          "tileW": 66.8,
+          "maxTileH": 76,
+          "split": [],
+          "overflow": 0
+        },
+        "px05gap1t8": {
+          "room": 62,
+          "tileW": 68.4,
+          "maxTileH": 76,
+          "split": [],
+          "overflow": 0
+        },
+        "hyph": {
+          "room": 53,
+          "tileW": 66.8,
+          "maxTileH": 80.625,
+          "split": [
+            "under"
+          ],
+          "overflow": 0
+        }
+      }
+    },
+    {
+      "width": 412,
+      "font": "Inter, system-ui, \"Apple Color Emoji\", \"Segoe UI Emoji\", \"Noto Color Emoji\", sans-serif 600 9px",
+      "w9": [
+        [
+          "Manchester",
+          52
+        ],
+        [
+          "Champions",
+          50
+        ],
+        [
+          "Goalkeeper",
+          49
+        ],
+        [
+          "Tottenham",
+          46
+        ],
+        [
+          "Dortmund",
+          45
+        ],
+        [
+          "Midfielder",
+          44
+        ],
+        [
+          "Defensive",
+          44
+        ],
+        [
+          "Instagram",
+          44
+        ],
+        [
+          "Barcelona",
+          43
+        ],
+        [
+          "Defender",
+          42
+        ],
+        [
+          "Attacking",
+          42
+        ],
+        [
+          "teammate",
+          42
+        ],
+        [
+          "Juventus",
+          41
+        ],
+        [
+          "followers",
+          40
+        ]
+      ],
+      "w8": [
+        [
+          "Manchester",
+          47
+        ],
+        [
+          "Goalkeeper",
+          46
+        ],
+        [
+          "Champions",
+          44
+        ],
+        [
+          "Tottenham",
+          42
+        ],
+        [
+          "Barcelona",
+          40
+        ],
+        [
+          "Defensive",
+          40
+        ],
+        [
+          "teammate",
+          40
+        ],
+        [
+          "Dortmund",
+          39
+        ],
+        [
+          "Midfielder",
+          39
+        ],
+        [
+          "Attacking",
+          39
+        ],
+        [
+          "Instagram",
+          39
+        ],
+        [
+          "Liverpool",
+          37
+        ],
+        [
+          "Juventus",
+          37
+        ],
+        [
+          "Defender",
+          37
+        ]
+      ],
+      "cands": {
+        "current": {
+          "room": 57,
+          "tileW": 71.2,
+          "maxTileH": 80.625,
+          "split": [],
+          "overflow": 0
+        },
+        "px1": {
+          "room": 61,
+          "tileW": 71.2,
+          "maxTileH": 76,
+          "split": [],
+          "overflow": 0
+        },
+        "px1t8": {
+          "room": 61,
+          "tileW": 71.2,
+          "maxTileH": 76,
+          "split": [],
+          "overflow": 0
+        },
+        "px05": {
+          "room": 65,
+          "tileW": 71.2,
+          "maxTileH": 76,
+          "split": [],
+          "overflow": 0
+        },
+        "px05gap1": {
+          "room": 67,
+          "tileW": 72.8,
+          "maxTileH": 76,
+          "split": [],
+          "overflow": 0
+        },
+        "px05t8": {
+          "room": 65,
+          "tileW": 71.2,
+          "maxTileH": 76,
+          "split": [],
+          "overflow": 0
+        },
+        "px05gap1t8": {
+          "room": 67,
+          "tileW": 72.8,
+          "maxTileH": 76,
+          "split": [],
+          "overflow": 0
+        },
+        "hyph": {
+          "room": 57,
+          "tileW": 71.2,
+          "maxTileH": 80.625,
+          "split": [
+            "under",
+            "under"
+          ],
+          "overflow": 0
+        }
+      }
+    }
+  ]
+}
