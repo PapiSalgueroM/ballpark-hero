@@ -1,7 +1,7 @@
 {
  "round": 1572,
  "verifiedOn": "2026-10-29",
- "rule": "Every string the game prints is printed by two independent non wiki publishers, compared case insensitively with spaces and punctuation exact. AFL.com.au and the club sites are ONE publisher. The ladder place is the 2026 final home and away ladder, read from two publishers.",
+ "rule": "Every string the game prints is printed by two independent non wiki publishers, compared case insensitively with spaces and punctuation exact. AFL.com.au and the club sites are ONE publisher. The ladder place is the 2026 final home and away ladder, read from two publishers. Each ladder line names its club in the cell after its place: the full form, the short form, or the name that one source prints for it (printedOnLadderAs, two such names).",
  "sources": [
   {
    "id": "afl",
@@ -492,6 +492,12 @@
     "afltables",
     "zerohanger"
    ],
+   "printedOnLadderAs": [
+    {
+     "source": "zerohanger",
+     "name": "BULLDOGS"
+    }
+   ],
    "receipts": {
     "full": [
      {
@@ -757,6 +763,12 @@
    "ladderSources": [
     "afltables",
     "zerohanger"
+   ],
+   "printedOnLadderAs": [
+    {
+     "source": "afltables",
+     "name": "Greater Western Sydney"
+    }
    ],
    "receipts": {
     "full": [

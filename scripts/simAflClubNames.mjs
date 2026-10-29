@@ -8,8 +8,17 @@
  *     from two distinct non wiki publishers (AFL.com.au and the club sites are one,
  *     the AFL), and it equals its receipts in scripts/data/aflClubNames2026.json
  *     string for string and source for source, each receipt line printing its
- *     string. Controls typo ('Gold Coast Suns' loses its s) and onesource (Sydney
- *     Swans keeps one source); independent section 2a (critic corrections 3, 4).
+ *     string, and each ladder line naming its own club in the cell after its
+ *     place (the full form, the short form, or the name that one source prints for
+ *     it, the ledger's printedOnLadderAs). Controls typo ('Gold Coast Suns' loses
+ *     its s), onesource (Sydney Swans keeps one source), and swap34 and swap1112
+ *     (review of 2026-10-29: the clubs at a band edge, Brisbane Lions and
+ *     Hawthorn, then St Kilda and GWS Giants, trade names and name receipts in
+ *     BOTH files, in memory, while each place keeps its ladder lines); independent
+ *     section 2a (critic corrections 3, 4). Residual, left on purpose by the lead:
+ *     a NAME receipt line is still matched as a substring, so a string mistyped
+ *     the same way in both files as a fragment of what the page printed ("Gold
+ *     Coast Sun") passes; that takes a deliberate edit of two files (sabotage).
  *   1 on the list and nothing else: the harness recomputes the ladder bands from
  *     CLUBS' tier counts and each real club's slot from the LEDGER's ladder, and
  *     compares id by id (full, short, style, tier) with clubIdentities('afl2026');
@@ -54,7 +63,8 @@
  * run ends on one summary line and exits 1 on any failure.
  *
  * Controls: AFL_NAMES_CONTROL=<name> patches the BUNDLE (an esbuild onLoad hook,
- * never the source on disk), refuses to run unless its anchor occurs exactly once
+ * never the source on disk; swap34 and swap1112 instead trade two rows in memory
+ * and refuse unless both clubs sit once at the same place in both files), refuses to run unless its anchor occurs exactly once
  * and the patched text differs (exit 2), then runs only its target section and one
  * independent section. It ends on "RED as intended" and exits 1 when the target is
  * red and the independent section green; anything else exits 3 (DID NOT FIRE).
@@ -79,6 +89,10 @@ const CONTROLS = {
   /* Critic corrections 3 and 4: anchors that occur once, and an independent section that never reads the real names (2a, no set; section 3 builds real twins since step 3). */
   typo: [DATA, "'Gold Coast Suns'", "'Gold Coast Sun'", '0', '2a'],
   onesource: [DATA, "full: 'Sydney Swans', short: 'Sydney', ladder2026: 2, fullSources: ['afl', 'austadiums']", "full: 'Sydney Swans', short: 'Sydney', ladder2026: 2, fullSources: ['afl']", '0', '2a'],
+  /* Review of 2026-10-29 (read M2, run 4): the two clubs at a band edge trade names and name receipts in BOTH files, in
+     memory (sixth field 'memory': no bundle patch), while each place keeps its ladder lines. The second field names the pair. */
+  swap34: [DATA, 'Brisbane Lions|Hawthorn', '', '0', '2a', 'memory'],
+  swap1112: [DATA, 'St Kilda|GWS Giants', '', '0', '2a', 'memory'],
   /* Critic advice 13: a wrong but well formed mapping (k counted from the end of its band), read by section 1's id by id comparison. */
   ladder: [LEAGUE, 'const k = row.ladder2026 - low - 1;', 'const k = high - row.ladder2026;', '1', '2a'],
   /* The real set's derived style drifts; createLeagueWorld reads it, so 2b's masked hashes move while 2a (no set) holds. */
@@ -114,11 +128,30 @@ const guard = (n, fn) => { section = n; failures.set(n, failures.get(n) || 0); t
 /* ---------- 0. sources ---------- */
 const DASHES = [String.fromCharCode(0x2013), String.fromCharCode(0x2014)];
 const same = (a, b) => JSON.stringify(a) === JSON.stringify(b);
+/* Controls swap34 and swap1112: a consistent mistake in both files that every other check of section 0 passes. Refuses
+   (exit 2) unless both names sit once at the same place in each list and the trade really moves them. */
+const IDENTITY = ['full', 'short', 'fullSources', 'shortSources'];
+function swapControl(rows, clubs) {
+  const spec = CONTROL ? CONTROLS[CONTROL] : null;
+  if (!spec || spec[5] !== 'memory') return [rows, clubs];
+  const [a, b] = spec[1].split('|');
+  const at = (list, name) => list.filter(x => x.full === name).length === 1 ? list.findIndex(x => x.full === name) : -1;
+  const ia = at(rows, a), ib = at(rows, b);
+  if (ia < 0 || ib < 0 || at(clubs, a) !== ia || at(clubs, b) !== ib) { console.error(`control ${CONTROL} cannot run: ${a} and ${b} do not each sit once at the same place in both files`); process.exit(2); }
+  const pick = x => Object.fromEntries(IDENTITY.map(key => [key, x[key]]));
+  const trade = (list, take) => list.map((x, k) => k === ia ? take(x, list[ib]) : k === ib ? take(x, list[ia]) : x);
+  const outRows = trade(rows, (self, other) => ({ ...self, ...pick(other) }));
+  const outClubs = trade(clubs, (self, other) => ({ ...self, ...pick(other), printedOnLadderAs: other.printedOnLadderAs, receipts: { ...self.receipts, full: other.receipts.full, short: other.receipts.short } }));
+  if (outRows[ia].full !== b || outClubs[ib].full !== a || outClubs[ia].receipts.ladder !== clubs[ia].receipts.ladder || outClubs[ia].receipts.full !== clubs[ib].receipts.full) { console.error(`control ${CONTROL} changed nothing`); process.exit(2); }
+  console.log(`  control ${CONTROL}: ${a} (place ${rows[ia].ladder2026}) and ${b} (place ${rows[ib].ladder2026}) trade names and name receipts in both files; each place keeps its ladder lines`);
+  return [outRows, outClubs];
+}
 if (RUN.has('0')) guard('0', () => {
   head('0', 'sources: 18 clubs, every printed string from two independent non wiki publishers, the data file equals its receipts');
-  const rows = L.AFL.AFL_CLUBS_2026, sources = L.AFL.AFL_CLUB_SOURCES;
+  const sources = L.AFL.AFL_CLUB_SOURCES;
+  const [rows, clubs] = swapControl(L.AFL.AFL_CLUBS_2026, LEDGER.clubs);
   const publisher = new Map(sources.map(s => [s.id, s.publisher]));
-  check(rows.length === 18 && LEDGER.clubs.length === 18, `${rows.length} clubs in the data file, ${LEDGER.clubs.length} in the ledger (18 expected)`);
+  check(rows.length === 18 && clubs.length === 18, `${rows.length} clubs in the data file, ${clubs.length} in the ledger (18 expected)`);
   check(same(rows.map(r => r.ladder2026), Array.from({ length: 18 }, (_, i) => i + 1)), 'ladder places are 1 to 18 once each, in ladder order');
   const strings = rows.flatMap((r, i) => [[r.full, i], [r.short, i]]);
   const clash = strings.filter(([s, i]) => strings.some(([t, j]) => j !== i && s.toLowerCase() === t.toLowerCase()));
@@ -140,7 +173,7 @@ if (RUN.has('0')) guard('0', () => {
   check(same(sources.map(s => [s.id, s.publisher]), LEDGER.sources.map(s => [s.id, s.publisher.startsWith('AFL (') ? 'AFL' : s.publisher])), `the data file's ${sources.length} sources are the ledger's, id for id and publisher for publisher`);
   let agree = 0, lines = 0, lineBad = [];
   rows.forEach((r, i) => {
-    const l = LEDGER.clubs[i];
+    const l = clubs[i];
     if (l && l.full === r.full && l.short === r.short && l.ladder2026 === r.ladder2026 && same(l.fullSources, r.fullSources) && same(l.shortSources, r.shortSources) && same(l.ladderSources, r.ladderSources)
       && same(l.receipts.full.map(x => x.source), r.fullSources) && same(l.receipts.short.map(x => x.source), r.shortSources) && same(l.receipts.ladder.map(x => x.source), r.ladderSources)) agree += 1;
     else fail(`row ${i + 1} (${r.full}) differs from its receipts in the ledger`);
@@ -150,6 +183,26 @@ if (RUN.has('0')) guard('0', () => {
   });
   check(agree === 18, `${agree} of 18 rows equal the ledger string for string and source for source`);
   check(lines >= 108 && lineBad.length === 0, `every one of ${lines} receipt lines prints its string (or starts with its ladder place)${lineBad.length ? `; not: ${lineBad.join('; ')}` : ''}`);
+  /* Review of 2026-10-29 (read M2, run 4): a ladder line names ITS club in the cell right after its place (Zero Hanger puts a
+     "- " movement mark between some), as the full form, the short form or the name that one source prints for it. */
+  let cells = 0;
+  const cellBad = [];
+  rows.forEach((r, i) => {
+    const l = clubs[i];
+    if (!l) return;
+    for (const x of l.receipts.ladder) {
+      cells += 1;
+      const names = [r.full, r.short, ...(l.printedOnLadderAs || []).filter(a => a.source === x.source).map(a => a.name)].map(n => n.toLowerCase());
+      const lead = [`${r.ladder2026} - `, `${r.ladder2026} `].find(p => x.line.startsWith(p));
+      const cell = lead ? x.line.slice(lead.length).toLowerCase() : '';
+      if (!names.some(n => cell.startsWith(`${n} `))) cellBad.push(`${r.full} ladder ${x.source} ("${x.line.slice(0, 30)}")`);
+    }
+  });
+  check(cells >= 36 && cellBad.length === 0, `every one of ${cells} ladder receipt lines names its own club in the cell after its place${cellBad.length ? `; not: ${cellBad.join('; ')}` : ''}`);
+  const forms = new Map(rows.flatMap(r => [[r.full.toLowerCase(), r.full], [r.short.toLowerCase(), r.full]]));
+  const aliases = clubs.flatMap((l, i) => (l.printedOnLadderAs || []).map(a => [rows[i], a]));
+  const aliasBad = aliases.filter(([r, a]) => !r || !r.ladderSources.includes(a.source) || (forms.has(a.name.toLowerCase()) && forms.get(a.name.toLowerCase()) !== r.full)).map(([r, a]) => `${r ? r.full : '?'} ${a.source} ${a.name}`);
+  check(aliasBad.length === 0, `each of ${aliases.length} names a ladder source prints for a club is one of that club's ladder sources and no other club's form${aliasBad.length ? `; bad: ${aliasBad.join('; ')}` : ''}`);
 });
 
 
