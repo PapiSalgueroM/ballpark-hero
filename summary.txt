@@ -1,0 +1,22 @@
+sim exit=0 5s | simBingoClubCounts: GREEN, every section held
+honours exit=0 17s | simPlayerBingoHonours PASS
+c-slashdup exit=1 2s | simBingoClubCounts: CONTROL=slashdup FIRED (1 failures; section 6: 1)
+vitest exit=0 29s |    Duration  27.70s (transform 9.70s, setup 2.00s, collect 14.29s, tests 27.08s, environment 8.65s, prepare 2.31s)
+c-aliasdup exit=1 2s | simBingoClubCounts: CONTROL=aliasdup FIRED (1 failures; section 6: 1)
+c-tableclubs exit=1 2s | simBingoClubCounts: CONTROL=tableclubs FIRED (1 failures; section 6: 1)
+c-noseason exit=1 3s | simBingoClubCounts: CONTROL=noseason FIRED (1 failures; section 5: 1)
+c-nomorton exit=1 3s | simBingoClubCounts: CONTROL=nomorton FIRED (4 failures; section 2: 1, section 3: 3)
+gen exit=0 0s | gen: derived file unchanged by a fresh generator run
+c-noapply exit=1 3s | simBingoClubCounts: CONTROL=noapply FIRED (121 failures; section 2: 40, section 3: 81)
+rivals exit=0 26s | No rival product names found. 0 findings.
+storage exit=0 4s | simStorageWrites: all green (owed: 12)
+anchors exit=0 73s | simHarnessAnchors: green. Every harness parses and none carries an unmatchable anchor.
+cats exit=0 44s | simPlayerBingoCategories: fixed proof passed; raw reports and changed-copy receipts retained.
+wcalias exit=0 2s | Source bytes held; raw unit/output/control receipts retained when OUT is set. Offline proof only.
+tsc exit=0 120s | 
+bingoload exit=0 5s | simPlayerBingoLoad: CRLF bindings proved, raw source bytes held, owned copies cleaned; fictional transport only, no browser or live calls.
+trust exit=0 0s | simTrustCopy: green. One disclaimer under every page and one count of the games, the registry's own.
+rodri exit=0 15s | simPlayerBingoRodriHonour: fixed proof passed; complete raw reports and changed-copy receipts retained. Offline only.
+linefb exit=0 7s | simPlayerBingoLineFeedback: CRLF bindings proved, original bytes held and owned copies cleaned; fictional fixtures, no browser or backend calls.
+yearscope exit=0 0s | simMarketYearScope: all green
+quotes exit=0 23s | simNoInventedQuotes: green. No real player is quoted or accused anywhere.
