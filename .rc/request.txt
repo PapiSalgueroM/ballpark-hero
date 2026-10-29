@@ -1,0 +1,6 @@
+#!serve
+#!playwright
+#!serial
+m-clubasof2: node .rc/x/rvmut.mjs clubasof; m=$?; for c in yearnhl afternhl; do US_CONN_CONTROL=$c node scripts/simUsConnectionsFacts.mjs > /tmp/q$c.log 2>&1; echo "$c=$?"; tail -1 /tmp/q$c.log | cut -c1-200; done; git checkout -- scripts src; echo "MUT clubasof2 applied=$m (yearnhl and afternhl codes above)"
+watchsurvey: node .rc/x/rvmut.mjs watchsurvey
+walk2: node .rc/x/rvwalk2.mjs
