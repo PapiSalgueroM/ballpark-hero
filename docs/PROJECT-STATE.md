@@ -1,3 +1,32 @@
+## Release BS LIVE, 2026-10-29 09:57 EDT: Soccer Career and Club Manager from both lanes (Round 1568 plus Chat PRs 421, 415, 418, 419, 416, 420, 410, 408, 414 and 372), the poll clock fix before 2026-11-01
+
+Claude lane published (session K). main 6748ad0a7, deployment 40836fc2-7166-4a95-a045-15539923486d, entry index-C0lDdqsC.js.
+Proof: x-deployment-id carries 40836fc2 from 09:57 EDT; /whats-new carries "Soccer Career: no more stuck screens." and
+"Poll of the Day switches at noon, even when the clocks change." (PR 372, live before the 2026-11-01 clock change).
+
+What a player gets:
+- Soccer Career: no more stuck screens (the training ground always has a way out, a pundit's save opens), say yes or no
+  to a new manager job, pick your first club as a manager, loyalty contracts, and Back from the trophy cabinet puts you
+  back where you were.
+- Club Manager: shootouts show every kick, a recruitment shortlist of up to 12 players from the Buy screen, loan plans.
+- Player Bingo: eleven new categories. Poll of the Day switches at noon through the clock change.
+- Round 1568: game controls no longer sit under the site menu.
+
+How it got here: join da4f42889; six adversarial reviewers found 13 majors (all confirmed), all 18 fix items closed on
+release-bs-gate (7fa0fd41b, results-g/fix-BSF.md to verify2-BSF.md). Gate on GitHub runners, 85 lanes plus the one
+live pass (rBS-live 20 of 20). Triage (results-g/triage-BS.md): 169 lines not exit 0, every one classed against BR's
+gate; 5 harness bindings fixed (the 1081 pin retaken, playSoccerLanding's pundit bar, simSoccerVeteranTalks back as a
+setup line), 1 product regression (the trophy cabinet's Back, from fix BS-sc421-2) fixed by bs-trophy-focus a3ba852e1
+(playCareerTrophyRuns 407 checks, 0 failed). build:seo on a runner redrew /whats-new, /soccer-career, the sitemap and
+lastmod; rBS-pub 26 of 26.
+
+Owed: playDepth (kit lane BEb) and Chat's .github/workflows/manager-decision-depth.yml read GitHub artifact run
+38329792123, which is gone; a remade baseline did not qualify, so BT's kit drops the line until a new baseline is
+recorded. Known gap, not BS's: closing the Season Centre's loading layer leaves focus on a toast (Chat's, if wanted).
+
+Next: Release BT (Rounds 1569, 1566, the Team USA train 1541, 1544 and 1557, 1565 and 1570 if they close, Chat PRs 400
+then 401).
+
 ## Release BR LIVE, 2026-10-24 01:17 EDT: the games lane's eight rounds after BQ (NBA draft night and offer sheets, NFL Front Office who scored, NBA Starting 5 from the record, CFB Dynasty real season, Higher or Lower truth, Sports Millionaire one answer, Stadium Tycoon badges, Baseball, NFL and NHL Connections truth)
 
 Claude lane (session J published for session I). main 37663106f, deployment 802f185f-cc2a-488b-8b6a-18a7d03021e3, entry index-DP6DMEMm.js.
