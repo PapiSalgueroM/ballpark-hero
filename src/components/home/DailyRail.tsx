@@ -55,10 +55,10 @@ export function DailyRail({ today }: { today?: string }) {
           </p>
         </div>
         <div className="hidden shrink-0 gap-1.5 sm:flex">
-          <button type="button" onClick={() => nudge(-1)} aria-label="Scroll the daily puzzles back" className="grid h-9 w-9 place-items-center rounded-full border border-border bg-surface-1 text-muted-foreground transition-colors hover:border-primary/40 hover:text-foreground">
+          <button type="button" onClick={() => nudge(-1)} aria-label="Scroll the daily puzzles back" className="grid h-11 w-11 place-items-center rounded-full border border-border bg-surface-1 text-muted-foreground transition-colors hover:border-primary/40 hover:text-foreground">
             <ChevronLeft className="h-4 w-4" />
           </button>
-          <button type="button" onClick={() => nudge(1)} aria-label="Scroll the daily puzzles on" className="grid h-9 w-9 place-items-center rounded-full border border-border bg-surface-1 text-muted-foreground transition-colors hover:border-primary/40 hover:text-foreground">
+          <button type="button" onClick={() => nudge(1)} aria-label="Scroll the daily puzzles on" className="grid h-11 w-11 place-items-center rounded-full border border-border bg-surface-1 text-muted-foreground transition-colors hover:border-primary/40 hover:text-foreground">
             <ChevronRight className="h-4 w-4" />
           </button>
         </div>

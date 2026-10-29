@@ -19730,3 +19730,15 @@ The proposed child changes only the shared poll-day helper comment/body to Easte
 First Green sourcea6d0a919/run39859333398 completed FAILURE. Its focused job passed13normal, exactold4owned9healthy,13restored and8existingpoll cases in raw output, then failed because simDateDraws requested live transfer-grade and quiz-board data behind the strict offline guard. The guard correctly refused that traffic. The saved_pages CI job succeeded, including real types/plain build,18readers and14 unchanged caps; this is not complete native release qualification.
 
 This method-only child changes only the workflow and append-only notes. It retains simDaily as the pure daily regression with exactone-harness evidence and records simDateDraws as NOT_RUN/unverified due to its live-data dependency. It does not edit the helper90cc, testd34, callers, harnesses, games, dependencies or caps, and uses no live mode or substitute data. Failed run39859333398 remains failed and preserved. Fresh full Green/native proof remains pending. I retains publication and game ownership.
+
+
+## 2026-10-29: Home tap targets requalified on current main
+
+Daily puzzles arrows are 44 by 44px, and Your sport buttons are 44px high. This remains three size-class edits in two Home components, with keyboard selection, saved preference, arrow visibility and rail behavior preserved.
+
+The fresh product is based on dfb2720d783a30a6ecd814aa86e8c199ec6b4175. Ordinary-push qualification 40925416965/a1 at 616c26e7 passed the real application type check, production manifest build, all 15 unchanged current fatal download caps, HomeFront/HomeFold and all 18 saved-page readers. Twelve dark Chromium profiles cover 320, 390, 430, 640, 768 and 1440 widths and both normal and reduced motion. Actual browser records show pointer and keyboard actions, saved Golf preference after reload, action-time position stability, 30 original images and 20 effective copied checker refusals with exact same-copy restores. All 30 original images were visually reviewed.
+
+Original artifact 12919269551 is retained once, 52172383 bytes, SHA256 f25973cc4b5b38cff1ada24e23b2af3dfee3dcefe715c0a9e6356ab84510954c. All 437 outer bodies, 5454 source bodies, 832 built bodies and 10 font bodies were hashed before payload inspection. Root source/build/font/evidence association receipt 1a4668e3 and independent visual receipt 722ab5b7 are retained outside the root. Exact originals and failed prior attempts remain preserved.
+
+This is a scoped fresh-main milestone. Full default Vitest, light theme, physical touch, pending consent and combined Menu plus Home qualification are unrun. Reload and deliberate preparation scrolls are outside the action-time stability claim. Clean delivery carries only the two Home components and this append; verification workflow and driver remain on the isolated proof branch. Claude retains joined release gates, integration and publication. No merge or live claim.
+
