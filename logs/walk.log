@@ -1,0 +1,15 @@
+WALK 320 rows {"listHeight":382,"rows":50,"rowWithSave":93.85,"rowWithoutSave":47.6,"visibleWith":4.1,"visibleWithout":8}
+WALK 320 save row 20 {"before":{"name":"Ousmane Dembélé","listTop":1866,"pageY":0},"board":{"pageY":0,"msg":"Target saved."}} after Back {"listTop":0,"pageY":0,"focused":"Shortlist"}
+WALK 320 13th save {"pageY":0,"msg":"Could not save this target. Check the save notice and try again."}
+WALK 320 full board {"boardHeight":770,"viewport":640,"backHeight":58,"backWidth":56,"docWidth":320}
+WALK 320 loan plan open {"y0":562,"body":697,"pageY":562,"docWidth":320,"viewport":640}
+WALK 320 page errors 0 []
+WALK 390 rows {"listHeight":382,"rows":50,"rowWithSave":93.85,"rowWithoutSave":47.6,"visibleWith":4.1,"visibleWithout":8}
+WALK 390 save row 20 {"before":{"name":"Ousmane Dembélé","listTop":1866,"pageY":0},"board":{"pageY":0,"msg":"Target saved."}} after Back {"listTop":0,"pageY":0,"focused":"Shortlist"}
+WALK 390 loan plan open {"y0":8,"body":603,"pageY":468,"docWidth":390,"viewport":844}
+WALK 390 page errors 0 []
+WALK 1280 rows {"listHeight":382,"rows":50,"rowWithSave":93.85,"rowWithoutSave":47.6,"visibleWith":4.1,"visibleWithout":8}
+WALK 1280 save row 20 {"before":{"name":"Ousmane Dembélé","listTop":1866,"pageY":0},"board":{"pageY":0,"msg":"Target saved."}} after Back {"listTop":0,"pageY":0,"focused":"Shortlist"}
+WALK 1280 loan plan open {"y0":0,"body":451,"pageY":0,"docWidth":1280,"viewport":900}
+WALK 1280 page errors 0 []
+walk: done
