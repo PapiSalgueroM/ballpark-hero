@@ -1,0 +1,5 @@
+build exit=0 36s | [dukb] inlined 1 stylesheet(s) and 1 module(s) into 181 snapshots (11 left alone)
+simResultMoment exit=0 7s | simResultMoment: green. Every live game reaches the shared result moment or is listed with what it draws instead, the pill shows exactly the score it is given, the three 
+simAccessibility exit=0 0s | simAccessibility: all green
+walk exit=0 16s | playAflClubNames: 36 checks, 0 failures (a 0, b 0, c 0), 2 viewports, 4 routes walked, 14.8 s
+walk-bundlename exit=1 44s | playAflClubNames control bundlename: 2 scripts rewritten, (a) RED, 2 routes walked, 43.5 s. RED as intended
