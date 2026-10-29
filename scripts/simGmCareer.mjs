@@ -156,7 +156,7 @@ const CONTROLS = {
   contribstays: '5', awaycontrib: '6', retainedrolled: '6', thumbfalse: '2t',
   firenever: '9', nooffers: '9', xpflat: '9', nevershut: '9', legacyleak: '10', retainedlift: '10',
   /* Round 1559 fix pass (the adversarial reviews) */
-  namedsummer: '6', awaymoves: '6', oldskip: '6',
+  namedsummer: '6', awaymoves: '6', oldskip: '6', retainedclub: '5',
 };
 if (CONTROL && !CONTROLS[CONTROL]) {
   console.error(`SIM_GM_CAREER_CONTROL=${CONTROL} is not a control this harness knows (${Object.keys(CONTROLS).join(', ')})`);
@@ -289,6 +289,8 @@ const EDITS_BY_SPORT = {
     noawaydraft: ['nhlCareer', '        cls = nhlAiDraftPicks(league, cls, order, rng).remaining;', '        /* the draft skipped */'],
     /* a year out leaves the old club's contributors as he chose them */
     awaycontrib: ['nhlCareer', '      const old = league.teams[oldTeam];\n      if (old) nhlResetContributors(old);', '      const old = league.teams[oldTeam];'],
+    /* Round 1559 fix pass (review minor 3): the retained salary rows made the club's on a move, the new club's empty */
+    retainedclub: ['nhlCareer', "    { key: NHL_DESK_KEYS.retained, owner: 'league' },", "    { key: NHL_DESK_KEYS.retained, owner: 'club', fresh: () => [] },"],
     /* the year out's summer rolls the retained rows' dead cap like any other entry */
     retainedrolled: ['nhlCareer', '      const retained = keepRetainedOverSummer(league.teams, retainedBefore);', '      const retained = retainedBefore;'],
   },
@@ -1139,7 +1141,7 @@ const S4 = {
   firings: 0, first: { offers: 0, quiet: 0, closed: 0 }, raw: { offers: 0, quiet: 0, closed: 0 },
   lastCalls: 0, rawLastCalls: 0, firstCalls: 0, eligible: 0, hired3: 0, rawHired3: 0, feedsRead: 0, asserted: 0, badly: 0,
 };
-const S5 = { takes: 0, follows: 0, planted: 0, refused: 0 };
+const S5 = { takes: 0, follows: 0, planted: 0, refused: 0, retained: 0 };
 /* Round 1559: section 9 reads section 4's league seed by seed; section 10's bind cases run on section 5's takes. */
 const S9 = { seeds: [] };
 const S10 = { moves: 0, refusals: 0, deskOff: 0 };
@@ -1222,6 +1224,9 @@ function takeChecks(lgAtFiring, old, g, seat, m0, salt) {
     d.syncPicks(lg, d.picksOf(desk, lg));
     desk = G.withGmBlock(desk, H.GM_HOST_KEYS.seat, g.desk.blocks.seat);
     if (g.desk.blocks.xp !== undefined) desk = G.withGmBlock(desk, H.GM_HOST_KEYS.xp, g.desk.blocks.xp);
+    /* Round 1559 fix pass (review minor 3): on a desk that keeps retained salary, a row planted on a rival before the
+       take, so the rows' owner on a move (the league's: they stay as they are) is seen (control retainedclub). */
+    if (d.plantRetained) { desk = d.plantRetained(lg, desk, old); S5.retained++; }
     const save = { myTeam: old, trust: g.trust, fired: true, mandate: g.mandate, pressTilt: 1, seasonTradeLine: 'a deal' };
     const legacy = H.hostLegacy(d.host, lg, { team: old, seasonsPlayed: g.seasonsPlayed, titles: g.titles, fired: true, seasonCounted: true });
     const at = `${old} to ${offer.teamId} (${salt})`;
@@ -1236,6 +1241,7 @@ function takeChecks(lgAtFiring, old, g, seat, m0, salt) {
     ok(withoutDepth(lg, old) === lgBefore, `${at}: taking the seat moved the league (a roster, a pick, a standing)`);
     ok(lg.teams[old][d.lineupField] === undefined, `${at}: his old club kept the ${d.lineupField} he saved`);
     ok(pickCount(lg) === picksBefore && J(r.desk.blocks.picks) === J(desk.blocks.picks), `${at}: picks were not conserved`);
+    if (d.retainedOf) ok(d.retainedOf(desk).length > 0 && J(d.retainedOf(r.desk)) === J(d.retainedOf(desk)), `${at}: the retained salary rows did not stay as they were (the league's): ${J(d.retainedOf(r.desk))}`);
     ok(J(r.desk.blocks.xp) === J(desk.blocks.xp), `${at}: his XP moved`);
     ok(J(r.save) === J(SEAT.takeSeat(save, offer)) && r.save.myTeam === offer.teamId && r.save.trust === FM.FO_TRUST_START
       && r.save.fired === false && J(r.save.mandate) === J(offer.ask), `${at}: the save's six fields are not takeSeat's`);
@@ -1381,6 +1387,10 @@ if (runs('4') || runs('5') || runs('9') || runs('10')) {
     check = '5';
     console.log(`5) taking a seat: ${S5.takes} offers taken (${S5.planted} with a planted depth chart), ${S5.follows} followed through the draft and the summer, ${S5.refused} refused`);
     ok(S5.takes >= 400 && S5.follows >= 300 && S5.planted >= (d.plantShare ?? 0.9) * S5.takes, `too few seats taken (${S5.takes}, ${S5.follows} followed, ${S5.planted} planted, floor ${d.plantShare ?? 0.9} of the takes)`);
+    if (d.plantRetained) {
+      console.log(`   ${S5.retained} desks held a retained salary row at the take`);
+      ok(S5.retained === S5.takes + S5.refused, `a retained row was planted on ${S5.retained} desks of ${S5.takes + S5.refused}`);
+    }
   }
 }
 
