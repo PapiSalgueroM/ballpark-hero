@@ -107,7 +107,7 @@ import path from 'node:path';
 import { fileURLToPath, pathToFileURL } from 'node:url';
 
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
-const CONTROLS = ['ties', 'namesake', 'tense', 'postense', 'family', 'legacy', 'rulec', 'short', 'redeal', 'dupe', 'shared'];
+const CONTROLS = ['ties', 'namesake', 'tense', 'postense', 'family', 'legacy', 'rulec', 'short', 'redeal', 'dupe', 'shared', 'swaprepeat', 'swapfive', 'swapmove', 'swapeasy'];
 const CONTROL = process.env.TRIVIA_CONTROL || '';
 if (CONTROL && !CONTROLS.includes(CONTROL)) { console.error(`TRIVIA_CONTROL=${CONTROL} is not a control this harness knows`); process.exit(1); }
 const PRINT_LEGACY = process.argv.includes('--print-legacy');
@@ -179,6 +179,26 @@ const ARM_FROM_PRISTINE = ['short', 'redeal', 'dupe'];
 const GEN_SWAPS = {
   rulec: ['if (seen.size >= 2) {', 'if (false) {', "the generator's rule C (two different rows in one season are two men) is gone"],
 };
+/* Round 1579, section 10: a control on Swap Question edits a copy of src/lib/sportsMillionaire.ts, which section 10
+   bundles as the head's swap; the base arm never reads the copy, so a control moves the head alone */
+const SM_SWAPS = {
+  swaprepeat: ['    if (candidate && !onLadder.has(candidate.question)) return candidate;', '    if (candidate && candidate.question !== current.question) return candidate;', 'the swap compares with the question on screen only, as it did'],
+  swapfive: ['  for (let attempt = 0; attempt < LADDER_ATTEMPTS; attempt++) {', '  for (let attempt = 0; attempt < 5; attempt++) {', 'the swap gives up after five draws again'],
+  swapmove: ['    const candidate = generateQuestion(pool, current.difficulty, rng);', "    const candidate = generateQuestion(pool, current.difficulty, rng, ['ballon-dor']);", 'the swap draws from five types'],
+  swapeasy: ['    const candidate = generateQuestion(pool, current.difficulty, rng);', '    const candidate = generateQuestion(pool, 1, rng);', 'the swap deals the easiest band'],
+};
+const SM_IMPORT = "} from '@/lib/triviaQuestionBank';";
+/* TRIVIA_SWAP_ARM_FILE=<path>: section 10's base arm is that file's own swapQuestion (the one time tie to the base
+   commit's src/lib/sportsMillionaire.ts), always called with (pool, current, ladder) */
+const SWAP_ARM_FILE = process.env.TRIVIA_SWAP_ARM_FILE ? path.resolve(process.env.TRIVIA_SWAP_ARM_FILE) : '';
+let smSource = read('src/lib/sportsMillionaire.ts');
+if (smSource.split(SM_IMPORT).length !== 2) { console.error(`cannot run: src/lib/sportsMillionaire.ts does not hold ${JSON.stringify(SM_IMPORT)} once`); process.exit(1); }
+if (SM_SWAPS[CONTROL]) {
+  const [from, to, what] = SM_SWAPS[CONTROL];
+  if (smSource.split(from).length !== 2) { console.error(`control cannot run: src/lib/sportsMillionaire.ts does not hold ${JSON.stringify(from.trim())} once`); process.exit(1); }
+  smSource = smSource.replace(from, to);
+  console.log(`NEGATIVE CONTROL ON: ${what}`);
+}
 const tmp = fs.mkdtempSync(path.join(os.tmpdir(), 'dukb-trivia-'));
 let bankSource = fs.readFileSync(BANK_FILE, 'utf8').replace(/\r\n/g, '\n');
 const pristineSource = bankSource;
@@ -659,6 +679,116 @@ else {
   console.log(`   (ii) compared, where the arm dealt whole: ${paired.map(f => `${f.name} ${f.ladders - f.armShort} of ${f.ladders}`).join(', ')}`);
   for (const f of paired) if (f.ladders - f.armShort < Math.ceil(f.ladders * COMPARED_SHARE)) fail(`(ii) compared only ${f.ladders - f.armShort} of ${f.ladders} ${f.name} ladders, under the floor of ${COMPARED_SHARE * 100}%, so the eight draw arm is broken and the identity proof is empty`);
   for (const name of ['planted unlimited', 'planted daily']) if (fleets[name].armShort > PLANTED_CEILING) fail(`(vi) the eight draw arm dropped a step on ${fleets[name].armShort} ${name} ladders, over the ceiling of ${PLANTED_CEILING}, so the arm is broken rather than showing the defect`);
+}
+
+/* ---------------- 10. Swap Question never deals a question already on the ladder ---------------- */
+/* Round 1579. swapQuestion compared its draw with the question on screen only, so about one swap in five dealt a
+   text the ladder already held: a rung already answered, or one still to come. Every rung of every whole ladder of
+   four fleets is swapped twice on the same named stream, through the head's swapQuestion (a copy of
+   src/lib/sportsMillionaire.ts over this run's bank copy, a swap control applied) and through the swap as it was
+   (or TRIVIA_SWAP_ARM_FILE's own), and the section holds:
+     (a) the head's swap is never a text on the ladder, other than the question on screen handed back;
+     (b) where the base arm's swap is fresh (a text not on the ladder), the head's swap is JSON identical to it;
+     (c) the head's swap never hands back the question on screen;
+     (d) the head's swap keeps the difficulty on screen and is sound (four distinct options, the right one in
+         range, a known template); structural only, since what generateQuestion deals is section 3's;
+     (e) the base arm repeats a ladder text at least SWAP_FLOOR times on each fleet, or the section may be blind.
+   A swap's stream is mulberry32((key * 16 + rung + 1) >>> 0), key the seed or dateSeed(date), set before each arm.
+   The seeded Math.random the harness runs on is put back afterwards untouched, so this section never draws from it
+   and its counts do not move with SIM_SEED. */
+/* a third of the base arm's repeats measured on each fleet (749, 829, 1,252 and 1,777, see the header) */
+const SWAP_FLOOR = { 'real unlimited': 249, 'real daily': 276, 'degraded unlimited': 417, 'planted unlimited': 592 };
+section('10. Swap Question never deals a question already on the ladder: every rung of four fleets, the head against the swap as it was');
+{
+  const seeded = Math.random;
+  const swapDir = fs.mkdtempSync(path.join(tmp, 'swap-'));
+  const bundleSwap = async (src, name) => {
+    if (src.split(SM_IMPORT).length !== 2) return { error: `${name} does not hold ${JSON.stringify(SM_IMPORT)} once` };
+    if (/from '\.\.?\//.test(src)) return { error: `${name} imports by relative path, so a copy of it cannot be bundled` };
+    const file = path.join(swapDir, `${name}.ts`);
+    fs.writeFileSync(file, src.replace(SM_IMPORT, `} from '${fwd(bankCopy)}';`));
+    const outFile = path.join(swapDir, `${name}.mjs`);
+    await build({ entryPoints: [file], bundle: true, format: 'esm', platform: 'node', outfile: outFile, logLevel: 'error', absWorkingDir: ROOT,
+      alias: { '@/integrations/supabase/client': STUB, '@': path.join(ROOT, 'src') } });
+    return { S: await import(pathToFileURL(outFile).href) };
+  };
+  /* the swap as it was at 5f9303bf8 (src/lib/sportsMillionaire.ts), over the head bank T */
+  function swapBefore(pool, current) {
+    const rng = () => Math.random();
+    for (let attempt = 0; attempt < 5; attempt++) {
+      const candidate = T.generateQuestion(pool, current.difficulty, rng);
+      if (candidate && candidate.question !== current.question) return candidate;
+    }
+    return current;
+  }
+  const headSwap = await bundleSwap(smSource, 'head');
+  let base = swapBefore;
+  let baseWhat = 'the swap as it was (five draws, compared with the question on screen only)';
+  let ready = !headSwap.error;
+  if (headSwap.error) fail(`section 10 cannot run: ${headSwap.error}`);
+  if (SWAP_ARM_FILE) {
+    const b = await bundleSwap(fs.readFileSync(SWAP_ARM_FILE, 'utf8').replace(/\r\n/g, '\n'), 'base');
+    if (b.error) { fail(`section 10 cannot run: ${b.error}`); ready = false; }
+    else { base = b.S.swapQuestion; baseWhat = `${fwd(SWAP_ARM_FILE)} as it is`; }
+  }
+  console.log(`   the base arm: ${baseWhat}`);
+  const typeOf = text => (TEMPLATES.find(([, re]) => re.test(text)) || ['unknown'])[0];
+  const SWAP_FLEETS = [['real unlimited', POOL, 'unlimited'], ['real daily', POOL, 'daily'], ['degraded unlimited', DEGRADED, 'unlimited'], ['planted unlimited', PLANTED, 'unlimited']];
+  for (const [name, P, kind] of ready ? SWAP_FLEETS : []) {
+    const s = { ladders: 0, skipped: 0, swaps: 0, repeats: 0, asked: 0, toCome: 0, byType: {}, baseBack: 0, headRepeats: 0, headBack: 0, fresh: 0, identical: 0, redrawn: 0, fails: {} };
+    const digest = crypto.createHash('sha256');
+    for (let k = 1; k <= 250; k++) {
+      const d = kind === 'daily' ? addDays(T.ONE_ANSWER_FROM, k - 1) : '';
+      const ladder = kind === 'daily' ? T.generateDailyLadder(P, d, 15) : T.generateQuestionLadder(P, 15, mulberry32(k));
+      const key = kind === 'daily' ? dateSeed(d) : k;
+      s.ladders += 1;
+      if (ladder.length !== 15) { s.skipped += 1; continue; }
+      const texts = ladder.map(q => q.question);
+      const onLadder = new Set(texts);
+      for (let i = 0; i < 15; i++) {
+        const current = ladder[i];
+        const at = `${kind === 'daily' ? d : `seed ${k}`} rung ${i + 1}`;
+        let was;
+        let now;
+        try {
+          Math.random = mulberry32((key * 16 + i + 1) >>> 0);
+          was = base(P, current, ladder);
+          Math.random = mulberry32((key * 16 + i + 1) >>> 0);
+          now = headSwap.S.swapQuestion(P, current, ladder);
+        } finally {
+          Math.random = seeded;
+        }
+        s.swaps += 1;
+        digest.update(JSON.stringify(was));
+        const wasBack = was === current || was.question === current.question;
+        const wasFresh = !wasBack && !onLadder.has(was.question);
+        if (wasBack) s.baseBack += 1;
+        else if (!wasFresh) {
+          s.repeats += 1;
+          if (texts.indexOf(was.question) < i) s.asked += 1; else s.toCome += 1;
+          const t = typeOf(was.question);
+          s.byType[t] = (s.byType[t] || 0) + 1;
+        }
+        const nowBack = now === current || now.question === current.question;
+        if (nowBack) { s.headBack += 1; flunk(s, '(c) the swap handed back the question on screen', at); }
+        else if (onLadder.has(now.question)) { s.headRepeats += 1; flunk(s, '(a) the swap dealt a question already on the ladder', at); }
+        else if (!wasFresh) s.redrawn += 1;
+        if (wasFresh) {
+          s.fresh += 1;
+          if (JSON.stringify(now) === JSON.stringify(was)) s.identical += 1;
+          else flunk(s, '(b) the swap moved where the old one dealt a fresh question', at);
+        }
+        if (now.difficulty !== current.difficulty) flunk(s, '(d) the swap moved the difficulty', at);
+        if (now.options.length !== 4 || new Set(now.options).size !== 4 || !(now.correctIndex >= 0 && now.correctIndex < 4)) flunk(s, '(d) broken options', at);
+        if (typeOf(now.question) === 'unknown') flunk(s, '(d) unknown template', at);
+      }
+    }
+    const pct = s.swaps ? ((s.repeats / s.swaps) * 100).toFixed(1) : '0.0';
+    console.log(`   ${name}: ${s.ladders} ladders (skipped ${s.skipped} short), ${s.swaps} swaps; the base arm: repeats ${s.repeats} (${pct}%; asked before ${s.asked}, still to come ${s.toCome}; ${Object.entries(s.byType).map(([t, n]) => `${t} ${n}`).join(', ') || 'none'}), handed back ${s.baseBack}, digest ${digest.digest('hex').slice(0, 16)}`);
+    console.log(`   ${name}: the head: repeats ${s.headRepeats}, handed back ${s.headBack}; fresh before ${s.fresh}, identical ${s.identical}; redrawn ${s.redrawn} [${((Date.now() - T0) / 1000).toFixed(1)}s]`);
+    for (const [check, b] of Object.entries(s.fails)) fail(`10 ${name}: ${b.n} x ${check} (first: ${b.keys.join(', ')})`);
+    if (s.repeats < SWAP_FLOOR[name]) fail(`(e) 10 ${name}: the base arm repeated a ladder text ${s.repeats} times, under the floor of ${SWAP_FLOOR[name]}, so section 10 may be blind to the defect`);
+  }
 }
 
 console.log(`\nsimTriviaBank: ${failures === 0 ? 'all checks passed' : `${failures} failure(s)`}${CONTROL ? ` (NEGATIVE CONTROL ${CONTROL} ON)` : ''}`);

@@ -236,7 +236,7 @@ const SportsMillionaire = () => {
 
   const useSwapQuestion = () => {
     if (phase !== 'playing' || lifelines.used['swap-question'] || !question || !pool) return;
-    const swapped = swapQuestion(pool, question);
+    const swapped = swapQuestion(pool, question, ladder);
     setLadder((prev) => {
       const next = [...prev];
       next[currentIndex] = swapped;
