@@ -125,6 +125,12 @@
  *   US_CONN_CONTROL=stamkos    Steven Stamkos back on nhlconn-016 beside its dated Predators group (second-fit, him)
  *   US_CONN_CONTROL=watchline  fix-1574: Auston Matthews (69 goals in 2023-24) back in nhlconn-011's Maple Leafs group
  *                             beside "Scored 70 goals in a season" (watch-line, him)
+ *   US_CONN_CONTROL=watchline60 fix2-1574: John Tavares (47 in 2018-19) back in nhlconn-010's Islanders group beside
+ *                             "Scored 60 goals in a season", over its 45 line (watch-line, him). No board carries a
+ *                             single season mark other than goals, so no control plants one
+ *   US_CONN_CONTROL=watchbest  fix2-1574: Evgeni Malkin's hockey-reference number in his watch line fact read as 53,
+ *                             over 52.5 (watch-line, him)
+ *   US_CONN_CONTROL=seasonage  fix2-1574: AGES.nhl.season back to 'running' in memory (season-age, season)
  * A control is red only when the rule it names fires for the man or group it
  * moved. Any other failure in a control run (a moved man has no two host fact
  * in section 3, say) is printed but never turns the run red on its own, so
@@ -160,7 +166,7 @@ const STRICT = new Set((process.env.US_CONN_LIVE_STRICT ?? '').split(',').filter
 const DUMP = process.env.US_CONN_DUMP ?? '';
 /* the Round 1574 controls work on the NHL table rows, which TABLE_RANGE holds since that round; fix-1574: with nhl
    dropped from it they refuse (exit 2) rather than put it back in memory, and the plain run fails unranged */
-const TABLE_CONTROLS = ['tablemiss', 'ages', 'newrunning', 'decisionless', 'recolour', 'dangling', 'permantwice', 'listonehost', 'nofact', 'stamkos', 'watchline'];
+const TABLE_CONTROLS = ['tablemiss', 'ages', 'newrunning', 'decisionless', 'recolour', 'dangling', 'permantwice', 'listonehost', 'nofact', 'stamkos', 'watchline', 'watchline60', 'watchbest', 'seasonage'];
 if (TABLE_CONTROLS.includes(CONTROL) && !TABLE_RANGE.nhl) { console.error(`US_CONN_CONTROL=${CONTROL} ABORTED: TABLE_RANGE does not hold nhl, so the NHL table rows are checked by nothing (the plain run fails unranged); this control will not put it back in memory`); process.exit(2); }
 /* fix-1574 (review-run-1574 finding 3): US_CONN_CONTROL=rangedrop drops nhl from TABLE_RANGE in memory */
 const rangeDropped = CONTROL === 'rangedrop' && !!TABLE_RANGE.nhl;
@@ -402,6 +408,35 @@ if (CONTROL) {
         g.players[at] = 'Auston Matthews';
         changed = true;
         own = { kinds: ['watch-line'], subject: 'Auston Matthews' };
+      }
+    } else if (CONTROL === 'watchline60') {
+      /* fix2-1574: John Tavares (47 goals in 2018-19, over 45) back in nhlconn-010's Islanders group, beside its 60
+         goal group, in place of John Tonelli: the one rule holds a second season mark, not only the 70 */
+      const g = boardOf('nhl', 'nhlconn-010')?.groups.find(x => undated(x.theme) === 'Played for the Islanders');
+      const at = g ? g.players.indexOf('John Tonelli') : -1;
+      if (at >= 0) {
+        g.players[at] = 'John Tavares';
+        changed = true;
+        own = { kinds: ['watch-line'], subject: 'John Tavares' };
+      }
+    } else if (CONTROL === 'watchbest') {
+      /* fix2-1574: the second host's number in Evgeni Malkin's watch line fact (50 in 2011-12, kept beside the 70
+         goal group on nhlconn-012) read as 53, over 52.5: the line is held on both hosts, not on the ledger's entry */
+      const f = (ledgerOf('nhl').facts ?? []).find(x => x.name === 'Evgeni Malkin' && x.label === 'Scored 70 goals in a season' && x.holds === false);
+      const src = f?.sources.find(x => x.host === 'hockey-reference.com' && x.says.includes('in a season 50 '));
+      if (src) {
+        src.says = src.says.replace('in a season 50 ', 'in a season 53 ');
+        console.log(`US_CONN_CONTROL=watchbest: Evgeni Malkin's hockey-reference line now reads "${src.says}"`);
+        changed = true;
+        own = { kinds: ['watch-line'], subject: 'Evgeni Malkin' };
+      }
+    } else if (CONTROL === 'seasonage') {
+      /* fix2-1574: the season kind aged 'running' as before the fix, so the watch line would read no group */
+      if (AGES.nhl.season === 'season') {
+        AGES.nhl.season = 'running';
+        console.log('US_CONN_CONTROL=seasonage: AGES.nhl.season is running in memory');
+        changed = true;
+        own = { kinds: ['season-age'], subject: 'season' };
       }
     } else if (CONTROL === 'tablemiss') {
       changed = true; /* the read itself was emptied above, before the boards were built */
