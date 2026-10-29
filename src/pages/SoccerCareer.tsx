@@ -235,6 +235,16 @@ function keepTabInside(event: { key: string; preventDefault(): void; stopPropaga
   event.currentTarget.querySelector<HTMLButtonElement>("button")?.focus({ preventScroll: true });
   return true;
 }
+/* Release BS fix: the trophy loading layer takes focus before the lazy cabinet mounts, so the cabinet would record
+   the layer as its opener. This holds the real opener from the first render and hands focus back to it on close,
+   the phone's rule. */
+function ReturnFocusOnClose({ children }: { children: ReactNode }) {
+  const opener = useRef(document.activeElement instanceof HTMLElement ? document.activeElement : null);
+  useLayoutEffect(() => () => queueMicrotask(() => {
+    if (opener.current?.isConnected) opener.current.focus({ preventScroll: true });
+  }), []);
+  return <>{children}</>;
+}
 function PhoneSurface(props: ComponentProps<typeof PhonePanel>) {
   const opener = useRef(document.activeElement instanceof HTMLElement ? document.activeElement : null);
   useLayoutEffect(() => () => queueMicrotask(() => {
@@ -4590,14 +4600,14 @@ function GameScreen({ career, clubs, onNextSeason, onAcceptOffer, onDismissSumma
         </div>
       )}
       {storyOpen && <Suspense fallback={null}><CareerStory career={visibleCareer} onClose={() => setStoryOpen(false)} /></Suspense>}
-      {trophyCategory && <CentreMountBoundary what="trophy cabinet" onClose={() => setTrophyCategory(null)}><Suspense fallback={
+      {trophyCategory && <ReturnFocusOnClose><CentreMountBoundary what="trophy cabinet" onClose={() => setTrophyCategory(null)}><Suspense fallback={
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-background/80 p-4" data-trophy-loading onClick={event => { if (event.target === event.currentTarget) setTrophyCategory(null); }}>
           <div role="dialog" aria-modal="true" aria-label="Opening your trophies" tabIndex={-1} ref={focusDialogOnMount} onKeyDown={event => { if (!keepTabInside(event)) escapeCloses(() => setTrophyCategory(null))(event); }} className="w-full max-w-sm rounded-2xl border border-border bg-card px-5 py-4 text-sm">
             <p>Opening your trophies...</p>
             <Button onClick={() => setTrophyCategory(null)} variant="outline" className="mt-4 h-11 w-full font-bold">Back to career</Button>
           </div>
         </div>
-      }><TrophyCabinet career={visibleCareer} category={trophyCategory} onClose={() => setTrophyCategory(null)} /></Suspense></CentreMountBoundary>}
+      }><TrophyCabinet career={visibleCareer} category={trophyCategory} onClose={() => setTrophyCategory(null)} /></Suspense></CentreMountBoundary></ReturnFocusOnClose>}
       {ratingsOpen && <CentreMountBoundary what="season ratings" onClose={() => setRatingsOpen(false)}><Suspense fallback={null}><SeasonRatings career={visibleCareer} onClose={() => setRatingsOpen(false)} /></Suspense></CentreMountBoundary>}
       {derbyHistoryOpen && <CentreMountBoundary what="derby history" onClose={() => setDerbyHistoryOpen(false)}><Suspense fallback={null}><SoccerDerbyHistory seasons={visibleCareer.seasons} onClose={() => setDerbyHistoryOpen(false)} /></Suspense></CentreMountBoundary>}
       {(() => {
