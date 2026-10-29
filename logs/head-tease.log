@@ -1,0 +1,2 @@
+{"stuckEx":null,"blockedEx":null,"staleEx":{"age":28,"type":"contract_expiry","club":"Juventus","pendingFirstYear":2036,"last":2037},"errEx":null}
+RESULT head tease n=150 careers=150 unfinished=0 errors=0 meanTE=119.479 medTE=85.35 meanNW=101.519 meanFees=1.63 wage30=149233.959 deals=549 paid=213 paidEvents=0 paidEurosM=321.28 forfeit={"move":292,"retired":37,"expiry":6,"gap":1} stuck=0 blockedNoPending=0 staleBlocked=22 maxSave=59979 maxLedger=3187 digest=bba0c867df9572f8

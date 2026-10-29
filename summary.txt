@@ -1,0 +1,9 @@
+base-cash exit=0 26s | RESULT base cash n=150 careers=150 unfinished=0 errors=0 meanTE=124.593 medTE=88.5 meanNW=104.836 meanFees=1.31 wage30=161584.157 deals=0 paid=0 paidEvents=0 paidEurosM=0
+head-loyal exit=0 27s | RESULT head loyal n=150 careers=150 unfinished=0 errors=0 meanTE=119.479 medTE=85.35 meanNW=101.519 meanFees=1.63 wage30=149233.959 deals=549 paid=213 paidEvents=0 paidEu
+head-cash exit=0 30s | RESULT head cash n=150 careers=150 unfinished=0 errors=0 meanTE=124.593 medTE=88.5 meanNW=104.836 meanFees=1.31 wage30=161584.157 deals=0 paid=0 paidEvents=0 paidEurosM=0
+head-staycash exit=0 27s | RESULT head staycash n=150 careers=150 unfinished=0 errors=0 meanTE=88.928 medTE=72.18 meanNW=73.712 meanFees=0.001 wage30=43887.981 deals=0 paid=0 paidEvents=0 paidEuros
+head-stayloyal exit=0 26s | RESULT head stayloyal n=150 careers=150 unfinished=0 errors=0 meanTE=87.134 medTE=70.96 meanNW=72.507 meanFees=0.002 wage30=41335.049 deals=161 paid=152 paidEvents=0 paid
+head-tease exit=0 28s | RESULT head tease n=150 careers=150 unfinished=0 errors=0 meanTE=119.479 medTE=85.35 meanNW=101.519 meanFees=1.63 wage30=149233.959 deals=549 paid=213 paidEvents=0 paidEu
+stack exit=0 4s | CONFLICT (content): Merge conflict in docs/PROJECT-STATE.md
+head-shady exit=0 22s | RESULT head shady n=150 careers=150 unfinished=0 errors=0 meanTE=117.763 medTE=86.71 meanNW=104.792 meanFees=1.696 wage30=162814.881 deals=529 paid=187 paidEvents=0 paidE
+base-staycash exit=0 23s | RESULT base staycash n=150 careers=150 unfinished=0 errors=0 meanTE=88.928 medTE=72.18 meanNW=73.712 meanFees=0.001 wage30=43887.981 deals=0 paid=0 paidEvents=0 paidEuros
