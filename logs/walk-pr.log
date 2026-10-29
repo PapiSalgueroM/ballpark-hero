@@ -1,0 +1,44 @@
+
+C pr 390
+  C pr 390 reached playing: {"ok":true,"s":{"phase":"playing","age":17,"seasons":2},"trail":["youth@16:Next Year","contract_offer@17:Review contract","contract_offer@17:Sign contract"]}
+  C pr 390 week by week: {"found":true,"label":"📺Week by weekNEW","x":316,"y":802,"onTop":true,"coveredBy":null}
+  C pr 390 layer shown: true
+  C pr 390 held chunk requests: 1
+  C pr 390 save before / after the press: {"before":{"phase":"playing","age":17,"seasons":2},"after":{"phase":"newspaper","age":18,"seasons":3}}
+  C pr 390 controls or dialog inside the layer: 0
+  C pr 390 controls a tap can reach: []
+  C pr 390 Continue to Season Summary: {"found":true,"label":"Continue to Season Summary →","x":195,"y":422,"onTop":false,"coveredBy":"fixed inset-0 z-50 flex items-center justify-center bg-background/80"}
+  C pr 390 after a real tap on Continue: save, layer: {"save":{"phase":"newspaper","age":18,"seasons":3},"layer":1}
+  C pr 390 site menu button: {"found":true,"label":"Menu","x":43,"y":22,"onTop":false,"coveredBy":"LI"}
+  C pr 390 after a real tap on the site menu: dialogs or menus before, after, layer: [0,0,1]
+  C pr 390 layer still up after Escape: 1
+  C pr 390 layer still up 20 s later, held: [1,1]
+  C pr 390 LATE toasts up, site menu button: [1,{"found":true,"x":43,"y":22,"onTop":false,"coveredByLayer":false,"top":"<li tabindex=\"0\" class=\"group toast group-[.toaster]:bg-background group-[.toaster]:text-foreground group-[.toaster]:bor"}]
+  C pr 390 LATE real tap on the site menu: dialogs or menus before, after; layer; reachable now: [0,0,1,[]]
+  C pr 390 Tab presses to reach Continue: {"reached":true,"presses":11,"first":["A Skip to main content","BUTTON Open site menu","A DoUKnowBall","BUTTON Go back"]}
+  C pr 390 after Enter on focused Continue: save, layer: {"save":{"phase":"season_summary","age":18,"seasons":3},"layer":1}
+  C pr 390 CONTROL layer gone after release, dialogs now: [true,2]
+  C pr 390 page errors: []
+
+C pr 320
+  C pr 320 reached playing: {"ok":true,"s":{"phase":"playing","age":17,"seasons":2},"trail":["youth@16:Next Year","contract_offer@17:Review contract","contract_offer@17:Sign contract"]}
+  C pr 320 week by week: {"found":true,"label":"📺Week by weekNEW","x":246,"y":526,"onTop":true,"coveredBy":null}
+  C pr 320 layer shown: true
+  C pr 320 held chunk requests: 1
+  C pr 320 save before / after the press: {"before":{"phase":"playing","age":17,"seasons":2},"after":{"phase":"newspaper","age":18,"seasons":3}}
+  C pr 320 controls or dialog inside the layer: 0
+  C pr 320 controls a tap can reach: []
+  C pr 320 Continue to Season Summary: {"found":true,"label":"Continue to Season Summary →","x":160,"y":284,"onTop":false,"coveredBy":"fixed inset-0 z-50 flex items-center justify-center bg-background/80"}
+  C pr 320 after a real tap on Continue: save, layer: {"save":{"phase":"newspaper","age":18,"seasons":3},"layer":1}
+  C pr 320 site menu button: {"found":true,"label":"Menu","x":43,"y":22,"onTop":false,"coveredBy":"LI"}
+  C pr 320 after a real tap on the site menu: dialogs or menus before, after, layer: [0,0,1]
+  C pr 320 layer still up after Escape: 1
+  C pr 320 layer still up 20 s later, held: [1,1]
+  C pr 320 LATE toasts up, site menu button: [1,{"found":true,"x":43,"y":22,"onTop":false,"coveredByLayer":false,"top":"<li tabindex=\"0\" class=\"group toast group-[.toaster]:bg-background group-[.toaster]:text-foreground group-[.toaster]:bor"}]
+  C pr 320 LATE real tap on the site menu: dialogs or menus before, after; layer; reachable now: [0,0,1,[]]
+  C pr 320 Tab presses to reach Continue: {"reached":true,"presses":11,"first":["A Skip to main content","BUTTON Open site menu","A DoUKnowBall","BUTTON Go back"]}
+  C pr 320 after Enter on focused Continue: save, layer: {"save":{"phase":"season_summary","age":18,"seasons":3},"layer":1}
+  C pr 320 CONTROL layer gone after release, dialogs now: [true,2]
+  C pr 320 page errors: []
+SUMMARY {"C pr 390":{"advanced":true,"phaseUnder":"newspaper","inLayer":0,"reach":0,"contOnTop":false,"menuOnTop":false,"escUp":1,"lateUp":1,"releaseClears":true},"C pr 320":{"advanced":true,"phaseUnder":"newspaper","inLayer":0,"reach":0,"contOnTop":false,"menuOnTop":false,"escUp":1,"lateUp":1,"releaseClears":true}}
+vfwalk pr: probe completed
