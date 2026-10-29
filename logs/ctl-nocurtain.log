@@ -1,0 +1,23 @@
+MUT nocurtain applied to src/components/us-career/UsCareerBoard.tsx
+save E: seed 1544, bronze in 2004, 2 summer rows, the tile should read 7 honours
+save A: last season 2003, phase event, the gate's call 2004
+save B: last season 2003, phase season, the gate's call 2004
+save C: last season 2026, phase season, the gate's call 2027
+save D1: last season 2003, phase season, the gate's call none
+save D2: last season 2004, phase season, the gate's call none
+  g-320-k0: Continue tapped at scrollY 351; next "🪞 RIVALRY" arrived with its top at -110 in a 640 high view (scrollY 351)
+  FAIL g-320-k0: after the curtain "🪞 RIVALRY" arrived with its top at -110 in a 640 high view (Continue tapped at scrollY 351, now 351)
+  g-320-k1: Continue tapped at scrollY 427; next "🪞 RIVALRY" arrived with its top at -186 in a 640 high view (scrollY 427)
+  FAIL g-320-k1: after the curtain "🪞 RIVALRY" arrived with its top at -186 in a 640 high view (Continue tapped at scrollY 427, now 427)
+  g-320-k2: Continue tapped at scrollY 465; next "🪞 RIVALRY" arrived with its top at -224 in a 640 high view (scrollY 465)
+  FAIL g-320-k2: after the curtain "🪞 RIVALRY" arrived with its top at -224 in a 640 high view (Continue tapped at scrollY 465, now 465)
+  g-320-k3: Continue tapped at scrollY 432; next the call arrived with its top at -191 in a 640 high view (scrollY 432)
+  FAIL g-320-k3: after the curtain the call arrived with its top at -191 in a 640 high view (Continue tapped at scrollY 432, now 432)
+  g-390-k0: Continue tapped at scrollY 0; next "🪞 RIVALRY" arrived with its top at 241 in a 844 high view (scrollY 0)
+  g-390-k1: Continue tapped at scrollY 0; next "🪞 RIVALRY" arrived with its top at 241 in a 844 high view (scrollY 0)
+  g-320-call2006: Continue tapped at scrollY 574; next "🪞 RIVALRY" arrived with its top at -333 in a 640 high view (scrollY 574)
+  FAIL g-320-call2006: after the curtain "🪞 RIVALRY" arrived with its top at -333 in a 640 high view (Continue tapped at scrollY 574, now 574)
+  g-390-call2006: Continue tapped at scrollY 423; next "🪞 RIVALRY" arrived with its top at -182 in a 844 high view (scrollY 423)
+  FAIL g-390-call2006: after the curtain "🪞 RIVALRY" arrived with its top at -182 in a 844 high view (Continue tapped at scrollY 423, now 423)
+  g: 4 runs at 320 measured from a scrolled page (floor 2)
+playNbaIntl: CONTROL nocurtain FIRED (walk (g): 4 runs at 320 measured from a scrolled page, 6 failures)

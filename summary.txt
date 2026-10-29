@@ -1,0 +1,5 @@
+build exit=0 36s | [dukb] inlined 1 stylesheet(s) and 1 module(s) into 181 snapshots (11 left alone)
+tsc exit=0 87s | 
+ctl-nocurtain exit=1 94s | playNbaIntl: CONTROL nocurtain FIRED (walk (g): 4 runs at 320 measured from a scrolled page, 6 failures)
+notes-tests exit=0 15s |       Tests  203 passed (203)
+walk exit=0 114s | playNbaIntl: green. The call, Go and its result's views, Rest, a reload mid beat, the 2027 World Cup's lines and no call at 80 or in 2005, at 320, 390 and 1280; 47 screen
