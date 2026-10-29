@@ -1,0 +1,27 @@
+vt-moved exit=0 31s |    Duration  30.22s (transform 4.18s, setup 579ms, collect 14.24s, tests 51.70s, environment 2.63s, prepare 811ms)
+vt-wall exit=0 56s |    Duration  55.05s (transform 4.47s, setup 283ms, collect 7.58s, tests 49.47s, environment 1.65s, prepare 692ms)
+m-draw exit=1 2s | simUsCareerHallWall CONTROL draw: FIRED, s1.nodraw red 800 times
+m-unstamped exit=1 2s | simUsCareerHallWall CONTROL unstamped: FIRED, s1.record red 800 times
+m-calnow exit=1 2s | simUsCareerHallWall CONTROL calnow: FIRED, s2.v1.record red 86 times
+m-dupe exit=1 2s | simUsCareerHallWall CONTROL dupe: FIRED, s3.idem red 1 times
+m-evict exit=1 2s | simUsCareerHallWall CONTROL evict: FIRED, s3.hofkept red 1 times
+m-newcomer exit=1 2s | simUsCareerHallWall CONTROL newcomer: FIRED, s3.newcomer red 2 times
+m-clamp exit=1 2s | simUsCareerHallWall CONTROL clamp: FIRED, s3.bytes red 1 times
+m-version exit=1 2s | simUsCareerHallWall CONTROL version: FIRED, s3.version red 1 times
+m-sportimport exit=1 2s | simUsCareerHallWall CONTROL sportimport: FIRED, s3.weight red 1 times
+simWall exit=0 49s | simUsCareerHallWall: ok, 53 check ids, 7846 checks, 200 careers a sport, 152 old saves
+tsc exit=0 95s | 
+c-nokeep exit=1 51s | simUsCareerHallWall CONTROL nokeep: FIRED, C1, C3, C5, C6, C8, C9, C10b red in all four sports and C4, C7, C10a, C10c, J green
+c-loadonly exit=1 57s | simUsCareerHallWall CONTROL loadonly: FIRED, C3, C6, C10b red in all four sports and C1, C4, C5, C7, C8, C9, C10a, C10c, J green
+c-kept exit=1 46s | simUsCareerHallWall CONTROL kept: FIRED, C4, C6, C10c red in all four sports and C1, C3, C5, C7, C8, C9, C10a, C10b, J green
+c-boarddraw exit=1 28s | simUsCareerHallWall CONTROL boarddraw: FIRED, C8 red in all four sports and C1, C3, C4, C5, C6, C7, C9, C10a, C10b, C10c, J green
+c-bogus exit=2 0s | simUsCareerHallWall: SIM_HALL_WALL_CONTROL=bogus is not a control this harness knows
+c-nogate exit=1 46s | simUsCareerHallWall CONTROL nogate: FIRED, C7 red in all four sports and C1, C3, C4, C5, C6, C8, C9, C10a, C10b, C10c, J green
+confirm exit=0 7s | Career confirmation: CRLF controls bind, raw bytes held and owned copies cleaned. Simulated states/explicit events do not prove full-season gameplay or native Enter, view
+c-stalesave exit=1 47s | simUsCareerHallWall CONTROL stalesave: FIRED, C9 red in all four sports and C1, C3, C4, C5, C6, C7, C8, C10a, C10b, C10c, J green
+storage exit=0 6s | simStorageWrites: all green (owed: 12)
+weight exit=0 0s | simUsCareerWeight: green. 31 checks: the four wrappers hand the board their own binding, no shared file or binding imports another sport, and every control fired.
+rival exit=0 18s | No rival product names found. 0 findings.
+seasonReview exit=0 10s | simCareerSeasonReview normal: intended assertions and independent retirement baseline passed.
+anchors exit=0 63s | simHarnessAnchors: green. Every harness parses and none carries an unmatchable anchor.
+parity exit=0 75s | simUsBoardParity: green. Four sports replayed click for click, save for save and screen for screen with the proved historical main775 coaching Panel.
