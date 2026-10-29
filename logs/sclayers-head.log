@@ -1,0 +1,37 @@
+ok   head C 390 layer shown with the chunk held {"held":1}
+ok   head C 390 the layer has its Back to career button ["Back to career"]
+ok   head C 390 Tab stays inside the layer ["Back to career","Back to career","Back to career"]
+ok   head C 390 Escape closes the layer ""
+ok   head C 390 closing leaves the save as it was {"phase":"newspaper","age":18,"seasons":3,"pundit":null}
+ok   head C 390 no page errors []
+ok   head C 320 layer shown with the chunk held {"held":1}
+ok   head C 320 the layer has its Back to career button ["Back to career"]
+ok   head C 320 Tab stays inside the layer ["Back to career","Back to career","Back to career"]
+ok   head C 320 Escape closes the layer ""
+ok   head C 320 closing leaves the save as it was {"phase":"newspaper","age":18,"seasons":3,"pundit":null}
+ok   head C 320 no page errors []
+ok   head T 390 layer shown with the chunk held ""
+ok   head T 390 Back to career is there ""
+ok   head T 390 Back to career closes the layer ""
+ok   head T 390 a tap on the backdrop closes the layer ""
+ok   head T 390 the save is unchanged ""
+ok   head T 390 no page errors []
+ok   head A 390 layer shown with the chunk held ""
+ok   head A 390 the layer has its Back to career button ["Back to career"]
+ok   head A 390 Tab stays inside the layer ["Back to career","Back to career","Back to career"]
+ok   head A 390 Escape closes the layer ""
+ok   head A 390 closing leaves the save as it was {"phase":"playing","age":17,"seasons":2,"pundit":null}
+ok   head A 390 no page errors []
+ok   head P 390 no Next Season in the pundit bar []
+ok   head P 390 the panel says a pick moves the season on "Pick one to play out this season on TV and move on to the next."
+ok   head P 390 control: a pundit pick moves the season {"before":0,"after":1}
+ok   head P 390 no page errors []
+ok   head P 320 no Next Season in the pundit bar []
+ok   head P 320 the panel says a pick moves the season on "Pick one to play out this season on TV and move on to the next."
+ok   head P 320 control: a pundit pick moves the season {"before":0,"after":1}
+ok   head P 320 no page errors []
+ERROR locator.click: Timeout 30000ms exceeded.
+Call log:
+  - waiting for locator('[role="combobox"]').filter({ hasText: 'Choose nationality' }).first()
+    - locator resolved to <button dir="ltr" type="button" role="combobox" data-state="closed" data-placeholder="" aria-expanded="false" aria-autocomplete="none" aria-controls="radix-:r4:" class="flex h-10 w-full items-center justify-between rounded-md border border-input px-3 py-2 text-sm ring-offset-background placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 disabled:cursor-not-allowed disabled:op
+sclayers head: could not run

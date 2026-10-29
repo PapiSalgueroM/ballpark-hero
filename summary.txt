@@ -1,0 +1,6 @@
+build exit=0 37s | [dukb] inlined 1 stylesheet(s) and 1 module(s) into 181 snapshots (11 left alone)
+sclayers-head exit=2 85s | sclayers head: could not run
+cmwalk-head exit=0 9s | cmwalk head: green at 320, 390 and 1280
+basebuild exit=0 39s | base served 200
+sclayers-base exit=2 144s | sclayers base: could not run
+cmwalk-base exit=1 8s | cmwalk base: RED, 7 failure(s)

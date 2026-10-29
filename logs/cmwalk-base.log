@@ -1,0 +1,19 @@
+ok   base 320 rows: every row has a 44 px Save {"rows":50,"saves":50,"small":0,"median":88,"whole":3,"sideways":0}
+FAIL base 320 rows: no taller than before {"median":88,"whole":3}
+ok   base 320 rows: no sideways overflow {"sideways":0}
+FAIL base 320 back: one line {"lines":2,"text":"Back"}
+FAIL base 320 place: Back keeps the list and focus {"before":{"name":"Ousmane Dembélé","listTop":1866},"after":{"listTop":0,"focusedIsRowSave":false,"focused":"Shortlist"}}
+ok   base 320 no page errors []
+ok   base 390 rows: every row has a 44 px Save {"rows":50,"saves":50,"small":0,"median":88,"whole":3,"sideways":0}
+FAIL base 390 rows: no taller than before {"median":88,"whole":3}
+ok   base 390 rows: no sideways overflow {"sideways":0}
+ok   base 390 back: one line {"lines":1,"text":"Back"}
+FAIL base 390 place: Back keeps the list and focus {"before":{"name":"Ousmane Dembélé","listTop":1866},"after":{"listTop":0,"focusedIsRowSave":false,"focused":"Shortlist"}}
+ok   base 390 no page errors []
+ok   base 1280 rows: every row has a 44 px Save {"rows":50,"saves":50,"small":0,"median":88,"whole":3,"sideways":0}
+FAIL base 1280 rows: no taller than before {"median":88,"whole":3}
+ok   base 1280 rows: no sideways overflow {"sideways":0}
+ok   base 1280 back: one line {"lines":1,"text":"Back"}
+FAIL base 1280 place: Back keeps the list and focus {"before":{"name":"Ousmane Dembélé","listTop":1866},"after":{"listTop":0,"focusedIsRowSave":false,"focused":"Shortlist"}}
+ok   base 1280 no page errors []
+cmwalk base: RED, 7 failure(s)

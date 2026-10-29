@@ -1,0 +1,37 @@
+ok   base C 390 layer shown with the chunk held {"held":1}
+FAIL base C 390 the layer has its Back to career button []
+FAIL base C 390 Tab stays inside the layer ["Report a problem","Wonderkid Factory","Contract Chaos"]
+FAIL base C 390 Escape closes the layer ""
+ok   base C 390 closing leaves the save as it was {"phase":"newspaper","age":18,"seasons":3,"pundit":null}
+ok   base C 390 no page errors []
+ok   base C 320 layer shown with the chunk held {"held":1}
+FAIL base C 320 the layer has its Back to career button []
+FAIL base C 320 Tab stays inside the layer ["Report a problem","Wonderkid Factory","Contract Chaos"]
+FAIL base C 320 Escape closes the layer ""
+ok   base C 320 closing leaves the save as it was {"phase":"newspaper","age":18,"seasons":3,"pundit":null}
+ok   base C 320 no page errors []
+ok   base T 390 layer shown with the chunk held ""
+FAIL base T 390 Back to career is there ""
+FAIL base T 390 Back to career closes the layer ""
+FAIL base T 390 a tap on the backdrop closes the layer ""
+ok   base T 390 the save is unchanged ""
+ok   base T 390 no page errors []
+ok   base A 390 layer shown with the chunk held ""
+ok   base A 390 the layer has its Back to career button ["Back to career"]
+FAIL base A 390 Tab stays inside the layer ["Back to career","Report a problem","Wonderkid Factory"]
+FAIL base A 390 Escape closes the layer ""
+ok   base A 390 closing leaves the save as it was {"phase":"playing","age":17,"seasons":2,"pundit":null}
+ok   base A 390 no page errors []
+FAIL base P 390 no Next Season in the pundit bar ["Next Season "]
+FAIL base P 390 the panel says a pick moves the season on ""
+ok   base P 390 control: a pundit pick moves the season {"before":0,"after":1}
+ok   base P 390 no page errors []
+FAIL base P 320 no Next Season in the pundit bar ["Next Season "]
+FAIL base P 320 the panel says a pick moves the season on ""
+ok   base P 320 control: a pundit pick moves the season {"before":0,"after":1}
+ok   base P 320 no page errors []
+ERROR locator.click: Timeout 30000ms exceeded.
+Call log:
+  - waiting for locator('[role="combobox"]').filter({ hasText: 'Choose nationality' }).first()
+    - locator resolved to <button dir="ltr" type="button" role="combobox" data-state="closed" data-placeholder="" aria-expanded="false" aria-autocomplete="none" aria-controls="radix-:r4:" class="flex h-10 w-full items-center justify-between rounded-md border border-input px-3 py-2 text-sm ring-offset-background placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 disabled:cursor-not-allowed disabled:op
+sclayers base: could not run
