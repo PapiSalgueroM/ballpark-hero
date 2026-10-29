@@ -1,0 +1,21 @@
+
+[1m[46m RUN [49m[22m [36mv3.2.7 [39m[90m/home/runner/work/ballpark-hero/ballpark-hero[39m
+
+ [32m✓[39m src/test/nbaOldSaveLines.test.ts [2m([22m[2m37 tests[22m[2m)[22m[32m 142[2mms[22m[39m
+ [32m✓[39m src/test/usRivalOldSavesB.test.ts [2m([22m[2m11 tests[22m[2m)[22m[32m 44[2mms[22m[39m
+[90mstdout[2m | src/test/careerHallSaves1301.test.ts[2m > [22m[2mRound 1301: a career the old code retired keeps the calibration and the ballot it was told[2m > [22m[2mthe stamp is what keeps them: read on calibration 3 instead, NHL careers of the set score lower and Hall of Famers fall out
+[22m[39mcareerHallSaves1301 main: of 16 retired NHL saves, on calibration 3 11 would score lower, 0 higher, 2 Hall of Famers would fall out, 0 would come in; of 4 open careers 4 are scored lower on 3 than the old code would have
+careerHallSaves1301 r1226: of 16 retired NHL saves, on calibration 3 10 would score lower, 1 higher, 3 Hall of Famers would fall out, 0 would come in; of 4 open careers 3 are scored lower on 3 than the old code would have
+
+ [32m✓[39m src/test/careerHallSaves1301.test.ts [2m([22m[2m19 tests[22m[2m)[22m[32m 203[2mms[22m[39m
+ [32m✓[39m src/test/usRivalOldSaves.test.ts [2m([22m[2m6 tests[22m[2m)[22m[32m 51[2mms[22m[39m
+Browserslist: browsers data (caniuse-lite) is 16 months old. Please run:
+  npx update-browserslist-db@latest
+  Why you should do it regularly: https://github.com/browserslist/update-db#readme
+ [32m✓[39m src/test/myCareerRestore.test.tsx [2m([22m[2m4 tests[22m[2m)[22m[33m 431[2mms[22m[39m
+
+[2m Test Files [22m [1m[32m5 passed[39m[22m[90m (5)[39m
+[2m      Tests [22m [1m[32m77 passed[39m[22m[90m (77)[39m
+[2m   Start at [22m 07:11:26
+[2m   Duration [22m 6.55s[2m (transform 3.36s, setup 633ms, collect 6.76s, tests 872ms, environment 3.20s, prepare 929ms)[22m
+

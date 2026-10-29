@@ -1,0 +1,9 @@
+nfl: {"careers":300,"noOffer":493,"lastCalls":1,"missedLast":2,"endedAfterNoOffer":3,"creditDrop":16,"creditTitle":0,"critStrong":0,"credit":1077,"lossesStrong":1237,"titles":173,"seasonsAtEnd":{"9":2,"10":4,"11":11,"12":23,"13":6,"14":16,"15":33,"16":60,"17":50,"18":95}}
+nba: {"careers":300,"noOffer":402,"lastCalls":0,"missedLast":0,"endedAfterNoOffer":0,"creditDrop":41,"creditTitle":0,"critStrong":0,"credit":1536,"lossesStrong":1708,"titles":169,"seasonsAtEnd":{"15":4,"16":18,"17":55,"18":65,"19":77,"20":52,"21":29}}
+mlb: {"careers":300,"noOffer":521,"lastCalls":0,"missedLast":2,"endedAfterNoOffer":2,"creditDrop":8,"creditTitle":0,"critStrong":0,"credit":831,"lossesStrong":975,"titles":175,"seasonsAtEnd":{"15":1,"16":2,"17":35,"18":96,"19":88,"20":49,"21":29}}
+nhl: {"careers":300,"noOffer":554,"lastCalls":5,"missedLast":0,"endedAfterNoOffer":5,"creditDrop":59,"creditTitle":0,"critStrong":0,"credit":1818,"lossesStrong":2031,"titles":260,"seasonsAtEnd":{"19":10,"20":54,"21":105,"22":131}}
+  missed last: nfl career 136 QB before {"age":37,"ovr":68,"seasons":15} after {"age":38,"ovr":64,"seasons":16}
+  missed last: nfl career 257 RB before {"age":30,"ovr":69,"seasons":8} after {"age":31,"ovr":64,"seasons":9}
+  missed last: mlb career 131 DH before {"age":40,"ovr":67,"seasons":19} after {"age":41,"ovr":62,"seasons":20}
+  missed last: mlb career 296 DH before {"age":40,"ovr":66,"seasons":19} after {"age":41,"ovr":62,"seasons":20}
+probeReview DONE: 300 careers a sport, seed 1569
