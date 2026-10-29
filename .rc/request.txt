@@ -1,0 +1,42 @@
+#!serve
+#!playwright
+# Release BS kit: 1 of the 10 request lines of Release BR's rc-BOa.txt (rBRg/.tmp-fx/br), the lines of the BS areas (Soccer Career, Club Manager and the manager games on its engine, Player Bingo, Conquest, Stat and Draft Detective, the US My Career save notice, What's New, the polls, the guide intro) and the setup lines before them; 9 line(s) outside those areas left out: ctl-1516 dashscan-1516 simAccountPrivacy-1442 simAuthModalLoading1442 simConsentWithdrawal1442 simHeaderAccountLoading1442 simNbaCourtRecap-1517 simFightRingPlayback-1518 consent-walk-1442.
+# Release BP (brief-BPG decision 5): s2-map-1516, s2-own-1514-map, s2-attr-1514-map and proof-s1-1516 DROPPED, they can no longer form (triage-BO.md section 10: their bases are before the other lane's Round 1443 shirt money): red on main cedd0239 itself, 56, 56, 56 failures and 12 differing steps against 2 (rBPg-mBOa), and on this release 88, 88, 88 and 12 (rBPg-rBOa, Round 1520's nations on top). rc-BPb's s2-attr-1520 and s6-attr-1520 are this release's Medium and daily answers against cedd0239.
+# Release BO (Round BOG): ROUND 1516's own proof lines (Club Manager: the UEFA Super Cup followed from season one, the 2026
+# edition PSG against Aston Villa, and a won UEFA Super Cup marked with the trophy), taken from finish-1516.md as the
+# round's own runners ran them (r1516-a, r1516-c, r1516-e, r1516-g), plus the lines the other lane's new harnesses of
+# Rounds 1442, 1517 and 1518 (on main since Release BN) need, and proven on the joined head by rBOp-k (finish-BOG.md).
+# BINDING. B1516 is the head of release-bo-gate before the merge m1 (65d16295) brought 1516 in, the merge's first parent:
+# bc79b526 (origin/main: Release BN c3309e67 plus the other lane's 1442, 1517 and 1518 and the board's 1519 to 1522
+# claim; no Club Manager engine file differs from c3309e67, the base 1516 measured against). Override with
+# B1516=<sha> in front of a line.
+# SIMCMDIFFICULTY SECTION 2 AGAINST B1516 is red as committed by 1516's design (every today's world career holds
+# season one's worldComps.usc; a won UEFA Super Cup wears the trophy, not the shield). s2-map-1516 is the answer the gate
+# reads: a copy of the head in its own worktree with 1516's own mapping (mutDiffUsc1516.mjs = r1516's mutDiffUsc.mjs,
+# MARK exported: season one's usc slice left out of the tree's states and the trophy read as the shield; it refuses
+# with exit 2 when an anchor is not there exactly once) plays Normal equal to B1516 on every other key, every season
+# and every draw count. rc-BNa.txt's s2-attr-1514 and s2-own-1514 go red the same way (48 failures each on rBOp-kb,
+# every one season one's worldComps), so s2-attr-1514-map and s2-own-1514-map rerun those two with the same mapping
+# added: s2-own-1514-map holds the head to 1514's closed head 64981c0d, s2-attr-1514-map takes 1514's two inputs out
+# too (mutLR1514.mjs, rgBNa's file, sent again on this line) and holds the head to 1514's base 92290f81. rc-BLb.txt's
+# s2 (base 6d91ed19, before 1514 and 1516) is red by both rounds' design (54 on rBOp-kb); finish-BOG.md section 5.
+# PROOFWORLDUCLFLEET AGAINST B1516 (finish-1516.md section 4, the right recipe): the strip narrowed to a SEASON ONE usc
+# slice and the trophy read as the shield (mutProofS1_1516.mjs = r1516's mutProofS1.mjs, MARK=1). Every state step of
+# all 190 journeys is equal; the only red is exactly two journeys (Arsenal, now, participant, coach, seeds 2 and 3) at
+# s2-reload, "the saved bytes differ" (the saved bytes still carry the trophy). proof-s1-1516 exits 0 only when the
+# harness exits 1 with exactly those two step lines and no other.
+# CONTROLS. ctl-1516 exits 0 only when each control exits 1 and its last line says FIRED (exit 2 is an abort): uelpub
+# (the Europa League winner on one publisher, section 0) and nouscrow (the Europa League winner emptied, every season
+# one holds a stub), on the small fleet. notrophy is in rc-BKc-c.txt's ctl-light; nousctile and the walk's case (g)
+# (season one's played UEFA Super Cup) are rc-BNa.txt's walk-nousctile and rc-BKc-d.txt's green walk.
+# THE OTHER LANE (Rounds 1442, 1517, 1518), its own harnesses as its workflows ran them (legal-ai-privacy.yml,
+# career-match-visuals.yml), the offline transport loaded: simAccountPrivacy, simAuthModalLoading1442,
+# simConsentWithdrawal1442, simHeaderAccountLoading1442 (1442), simNbaCourtRecap (1517), simFightRingPlayback with
+# every copied fault (1518), and the consent walk playConsentPrivacy1442 on this request's served build (it reads the
+# committed /privacy snapshot and fulfils every outside request locally; its fonts are prefetched in the same line; it
+# refuses any BASE whose host is not 127.0.0.1, so the line sets BASE=http://127.0.0.1:4173 over the runner's localhost).
+# Their vitest files are in every vitest-all line. Not carried: scripts/qa/careerMatchVisuals1517.mjs (a one time
+# before and after pixel proof against a 076091ac baseline build) and testAccountPrivacyDb.sql and
+# testAccountPrivacyConcurrency.sh (they need a database).
+# Send: bash rc.sh <name> rc-BOa.txt mutDiffUsc1516.mjs mutProofS1_1516.mjs mutLR1514.mjs     (#!serve builds dist and serves it on 4173)
+units-1516: node_modules/.bin/vitest run src/lib/worldOneOffs.test.ts src/lib/worldNights.test.ts src/lib/clubManagerWorldView.test.ts --testTimeout=300000 --hookTimeout=300000 2>&1 | tail -4; exit ${PIPESTATUS[0]}
