@@ -1,0 +1,2 @@
+intro-fixed exit=0 2s | Soccer Career intro render fixed: 7 passed, 0 failed, actual unannotated guides 132
+intro-href-control exit=1 1s | href-control failed cases: real-anchor-wonderkid-factory
