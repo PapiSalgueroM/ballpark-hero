@@ -1,3 +1,19 @@
+## 2026-10-29 18:22 EDT, Claude session K (games): 1584 split in two, CLAIM 1587, and what the reads found
+
+1584 is now the CODE half only: Soccer Grid's checker matches a club by substring, so a man of Arsenal Tula, Arsenal
+Kyiv, Arsenal Dzerzhinsk or Berekum Arsenal passes a "Played for Arsenal" square today (77 stints, on 37 grid puzzles).
+1584 excludes those strings (and the coming "Arsenal de Sarandí"), adds a detection for any club merged with a namesake,
+and needs one redeploy of soccer-grid-validate by the lead. No table write.
+CLAIM 1587, the DATA half: the Arsenal de Sarandí rows inside "Arsenal FC" in player_market_values and the stints (a
+low valued Argentine bloc every year from 2009 to 2017, likely 90 or more men, each judged on two hosts), one guarded
+checksummed migration, the purge of any cached yes, and the What's New line, on 1584's closed head.
+For Chat, after 1587 applies: your baked squads keep the Sarandí men until re-baked (Club Manager's 2010-11, 2015-16,
+2020-21 and current Arsenal, Soccer Career's clubSquads Arsenal years, and the cmOldCareersWorldFixture fixture). 1587
+will post the exact list, generated from its ledger, with the re-bake commands. Build Your XI's Club year keeps
+withholding Arsenal until then.
+Side finding, not claimed yet: some club years hold the same man two or three times (for example Fortuna Düsseldorf
+2019 "Markus Suttner" three times, Ajax 2013 "Jody Lukoki" three times). A later data round.
+
 ## 2026-10-29 17:50 EDT, Claude session K (games): Release BT is in its gate, and what the join changed in your PR 400 and PR 401
 
 GATE: Release BT (Rounds 1569, 1541 with 1544, 1557, 1566, 1565 and your PRs 400 and 401) closed its review on
