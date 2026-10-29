@@ -1,0 +1,9 @@
+tsc: node_modules/.bin/tsc --noEmit -p tsconfig.app.json
+vitest-intl: node_modules/.bin/vitest run src/test/usCareerIntlBoard.test.tsx src/test/nbaCareerIntl.test.ts src/lib/careerIntl.test.ts src/test/nbaIntlResultLines.test.tsx src/test/careerSeasonReview.test.tsx src/test/nbaTrophyTile.test.ts --testTimeout=300000 --hookTimeout=120000
+intl-default: node scripts/simCareerIntl.mjs
+simUsBoardParity: node scripts/simUsBoardParity.mjs
+simUsCareerWeight: node scripts/simUsCareerWeight.mjs
+simHarnessAnchors: node scripts/simHarnessAnchors.mjs
+simNoRivalNames: node scripts/simNoRivalNames.mjs
+simNbaAwardsSense: node scripts/simNbaAwardsSense.mjs
+simCareerParity: node scripts/simCareerParity.mjs

@@ -1,0 +1,9 @@
+vitest-intl exit=0 14s |    Duration  13.43s (transform 5.14s, setup 713ms, collect 10.81s, tests 14.09s, environment 3.92s, prepare 946ms)
+simUsBoardParity exit=0 75s | simUsBoardParity: green. Four sports replayed click for click, save for save and screen for screen with the proved historical main775 coaching Panel.
+simUsCareerWeight exit=0 0s | simUsCareerWeight: green. 31 checks: the four wrappers hand the board their own binding, no shared file or binding imports another sport, and every control fired.
+tsc exit=0 94s | 
+simNoRivalNames exit=0 23s | No rival product names found. 0 findings.
+intl-default exit=0 126s | simCareerIntl: GREEN, 52863 checks over sections 1,2,3,4,6,12
+simCareerParity exit=0 12s | simCareerParity: green. One money app, one fan rule, one rival shape, one badge case, in all five careers.
+simHarnessAnchors exit=0 69s | simHarnessAnchors: green. Every harness parses and none carries an unmatchable anchor.
+simNbaAwardsSense exit=0 93s | simNbaAwardsSense: 164 checks, 0 failed (full size), 92s
