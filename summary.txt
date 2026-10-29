@@ -1,0 +1,3 @@
+probe exit=0 5s |    Duration  4.18s (transform 1.17s, setup 74ms, collect 1.41s, tests 1.86s, environment 337ms, prepare 184ms)
+fixprtests exit=0 81s |    Duration  7.38s (transform 1.71s, setup 374ms, collect 5.55s, tests 6.97s, environment 2.37s, prepare 462ms)
+fixprobe exit=1 11s | ::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/test/zzVfbsProbe.test.ts,title=src/test/zzVfbsProbe.test.ts > vfbs sc418 era probe > measures chooser clubs

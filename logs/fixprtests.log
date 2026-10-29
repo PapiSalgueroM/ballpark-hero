@@ -1,0 +1,18 @@
+FIX APPLIED edits=4
+
+[1m[46m RUN [49m[22m [36mv3.2.7 [39m[90m/home/runner/work/ballpark-hero/ballpark-hero[39m
+
+ [32m✓[39m src/test/soccerCareerCoachingStart.test.ts [2m([22m[2m10 tests[22m[2m)[22m[32m 44[2mms[22m[39m
+ [32m✓[39m src/test/soccerCareerCoachingChooser.test.tsx [2m([22m[2m6 tests[22m[2m)[22m[33m 776[2mms[22m[39m
+ [32m✓[39m src/test/soccerCareerCoachingTransaction.test.tsx [2m([22m[2m6 tests[22m[2m)[22m[32m 106[2mms[22m[39m
+ [32m✓[39m src/test/soccerCareerCoachingStart.consumer.test.tsx [2m([22m[2m4 tests[22m[2m)[22m[33m 1250[2mms[22m[39m
+ [32m✓[39m src/test/soccerCareerCoachingStart.consumer.lifecycle.test.tsx [2m([22m[2m8 tests[22m[2m)[22m[33m 4799[2mms[22m[39m
+   [33m[2m✓[22m[39m actual retirement card coaching lifecycle[2m > [22mceremony cold pending Back restores its actual opener without a late reopen [33m 1376[2mms[22m[39m
+   [33m[2m✓[22m[39m actual retirement card coaching lifecycle[2m > [22mceremony loaded chooser keeps help and Back focus without committing [33m 483[2mms[22m[39m
+   [33m[2m✓[22m[39m actual retirement card coaching lifecycle[2m > [22mdirect retirement cold pending Back restores its actual opener without a late reopen [33m 755[2mms[22m[39m
+
+[2m Test Files [22m [1m[32m5 passed[39m[22m[90m (5)[39m
+[2m      Tests [22m [1m[32m34 passed[39m[22m[90m (34)[39m
+[2m   Start at [22m 04:17:57
+[2m   Duration [22m 7.38s[2m (transform 1.71s, setup 374ms, collect 5.55s, tests 6.97s, environment 2.37s, prepare 462ms)[22m
+

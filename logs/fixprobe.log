@@ -1,0 +1,36 @@
+FIX APPLIED edits=4
+
+[1m[46m RUN [49m[22m [36mv3.2.7 [39m[90m/home/runner/work/ballpark-hero/ballpark-hero[39m
+
+[90mstdout[2m | src/test/zzVfbsProbe.test.ts[2m > [22m[2mvfbs sc418 era probe[2m > [22m[2mmeasures chooser clubs the era filter drops
+[22m[39mVFBS C1 tier3+ raw=403 droppedByEraIn2013=221 mumbaiDropped=true mumbaiInPool=true
+VFBS L1 firstJob=2008 sets=400 setsWithEraDroppedClub=0 offered=1200 offeredDropped=0 typedFoundingSets=0 filteredPoolBadSets=0 top=
+VFBS L1 firstJob=2013 sets=400 setsWithEraDroppedClub=0 offered=1200 offeredDropped=0 typedFoundingSets=0 filteredPoolBadSets=0 top=
+VFBS L1 firstJob=2018 sets=400 setsWithEraDroppedClub=0 offered=1200 offeredDropped=0 typedFoundingSets=0 filteredPoolBadSets=0 top=
+VFBS L1 firstJob=2023 sets=400 setsWithEraDroppedClub=0 offered=1200 offeredDropped=0 typedFoundingSets=0 filteredPoolBadSets=0 top=
+VFBS L1 firstJob=2026 sets=400 setsWithEraDroppedClub=0 offered=1200 offeredDropped=0 typedFoundingSets=0 filteredPoolBadSets=0 top=
+VFBS L1 firstJob=2031 sets=400 setsWithEraDroppedClub=0 offered=1200 offeredDropped=0 typedFoundingSets=0 filteredPoolBadSets=0 top=
+VFBS E2E found=false
+VFBS OLD randomPathPool=403 droppedIn2013=221 in2008=224
+
+ [31m❯[39m src/test/zzVfbsProbe.test.ts [2m([22m[2m1 test[22m[2m | [22m[31m1 failed[39m[2m)[22m[33m 8709[2mms[22m[39m
+[31m   [31m×[31m vfbs sc418 era probe[2m > [22mmeasures chooser clubs the era filter drops[39m[33m 8708[2mms[22m[39m
+[31m     → expected null not to be null[39m
+
+[31m⎯⎯⎯⎯⎯⎯⎯[39m[1m[41m Failed Tests 1 [49m[22m[31m⎯⎯⎯⎯⎯⎯⎯[39m
+
+[41m[1m FAIL [22m[49m src/test/zzVfbsProbe.test.ts[2m > [22mvfbs sc418 era probe[2m > [22mmeasures chooser clubs the era filter drops
+[31m[1mAssertionError[22m: expected null not to be null[39m
+[36m [2m❯[22m src/test/zzVfbsProbe.test.ts:[2m79:23[22m[39m
+
+
+[31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/1]⎯[22m[39m
+
+
+[2m Test Files [22m [1m[31m1 failed[39m[22m[90m (1)[39m
+[2m      Tests [22m [1m[31m1 failed[39m[22m[90m (1)[39m
+[2m   Start at [22m 04:18:06
+[2m   Duration [22m 10.82s[2m (transform 1.10s, setup 67ms, collect 1.31s, tests 8.71s, environment 299ms, prepare 66ms)[22m
+
+
+::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/test/zzVfbsProbe.test.ts,title=src/test/zzVfbsProbe.test.ts > vfbs sc418 era probe > measures chooser clubs the era filter drops,line=79,column=23::AssertionError: expected null not to be null%0A ❯ src/test/zzVfbsProbe.test.ts:79:23%0A%0A

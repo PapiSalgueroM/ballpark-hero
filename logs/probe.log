@@ -1,0 +1,23 @@
+
+[1m[46m RUN [49m[22m [36mv3.2.7 [39m[90m/home/runner/work/ballpark-hero/ballpark-hero[39m
+
+[90mstdout[2m | src/test/zzVfbsProbe.test.ts[2m > [22m[2mvfbs sc418 era probe[2m > [22m[2mmeasures chooser clubs the era filter drops
+[22m[39mVFBS C1 tier3+ raw=403 droppedByEraIn2013=221 mumbaiDropped=true mumbaiInPool=true
+VFBS L1 firstJob=2008 sets=400 setsWithEraDroppedClub=357 offered=1200 offeredDropped=754 typedFoundingSets=6 filteredPoolBadSets=0 top=Red Bull Bragantino:9,Minnesota United:9,Queretaro:9,Udinese:8
+VFBS L1 firstJob=2013 sets=400 setsWithEraDroppedClub=358 offered=1200 offeredDropped=785 typedFoundingSets=7 filteredPoolBadSets=0 top=Al Kholood:8,Rapid Wien:8,Austin FC:8,La Louviere:8
+VFBS L1 firstJob=2018 sets=400 setsWithEraDroppedClub=356 offered=1200 offeredDropped=788 typedFoundingSets=1 filteredPoolBadSets=0 top=Santos Laguna:9,OB:8,LASK:8,Levadiakos:8
+VFBS L1 firstJob=2023 sets=400 setsWithEraDroppedClub=347 offered=1200 offeredDropped=784 typedFoundingSets=1 filteredPoolBadSets=0 top=FC Dallas:11,Silkeborg IF:8,Queretaro:7,Gladbach:7
+VFBS L1 firstJob=2026 sets=400 setsWithEraDroppedClub=0 offered=1200 offeredDropped=0 typedFoundingSets=0 filteredPoolBadSets=0 top=
+VFBS L1 firstJob=2031 sets=400 setsWithEraDroppedClub=0 offered=1200 offeredDropped=0 typedFoundingSets=0 filteredPoolBadSets=0 top=
+VFBS E2E name="Probe Player 311" chooser="Sparta Prague Czech Republic Club level 4 | Mumbai City India Club level 4 | Partizan Serbia Club level 4" phase=manager_season managerClub=Mumbai City tier=4 firstManagerSeason=2013 eraPoolHasIt=false
+VFBS E2E found=true
+VFBS OLD randomPathPool=403 droppedIn2013=221 in2008=224
+
+ [32m✓[39m src/test/zzVfbsProbe.test.ts [2m([22m[2m1 test[22m[2m)[22m[33m 1856[2mms[22m[39m
+   [33m[2m✓[22m[39m vfbs sc418 era probe[2m > [22mmeasures chooser clubs the era filter drops [33m 1855[2mms[22m[39m
+
+[2m Test Files [22m [1m[32m1 passed[39m[22m[90m (1)[39m
+[2m      Tests [22m [1m[32m1 passed[39m[22m[90m (1)[39m
+[2m   Start at [22m 04:16:41
+[2m   Duration [22m 4.18s[2m (transform 1.17s, setup 74ms, collect 1.41s, tests 1.86s, environment 337ms, prepare 184ms)[22m
+

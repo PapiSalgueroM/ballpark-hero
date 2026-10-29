@@ -1,0 +1,4 @@
+#!serial
+probe: cp .rc/x/zzVfbsProbe.test.ts src/test/zzVfbsProbe.test.ts && node_modules/.bin/vitest run src/test/zzVfbsProbe.test.ts --testTimeout=600000 --hookTimeout=120000
+fixprtests: node .rc/x/vfbsFix.mjs && node_modules/.bin/tsc --noEmit -p tsconfig.app.json && node_modules/.bin/vitest run src/test/soccerCareerCoachingChooser.test.tsx src/test/soccerCareerCoachingStart.consumer.lifecycle.test.tsx src/test/soccerCareerCoachingStart.consumer.test.tsx src/test/soccerCareerCoachingStart.test.ts src/test/soccerCareerCoachingTransaction.test.tsx --testTimeout=300000 --hookTimeout=120000; s=$?; git checkout -- src scripts; exit $s
+fixprobe: node .rc/x/vfbsFix.mjs && cp .rc/x/zzVfbsProbe.test.ts src/test/zzVfbsProbe.test.ts && node_modules/.bin/vitest run src/test/zzVfbsProbe.test.ts --testTimeout=600000 --hookTimeout=120000; s=$?; git checkout -- src scripts; exit $s
