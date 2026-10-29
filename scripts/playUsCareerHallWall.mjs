@@ -8,8 +8,10 @@
  *      sideways scroll; the "?" shows the four lines; a tile opens the plaque, whose headline is the card's; Back
  *      gives the tile focus and moves scrollY by at most 1 px; a reload keeps the wall's bytes and its tiles.
  *   B  a retired save: the retirement screen's opener, scrolled to and pressed once the card has landed, opens
- *      the wall cold with its top in view.
- *   C  a stored wall of 12: the whole grid fits the screen without a scroll (390 and 1280; 320 reported), and the
+ *      the wall cold with its top in view; Start over pressed on the wall closes it and lands on the create
+ *      screen with its top in view and "Hall wall (1)" below Enter the draft.
+ *   C  a stored wall of 12 with 24 letter names: the whole grid fits the screen without a scroll and no tile line
+ *      is cut (390 and 1280; 320 reported), and the
  *      layout shift of the create screen at 1280 by 900 with that wall and with none is reported.
  * After each screen: a screenshot in $RC_OUT (or .tmp-fx/play-hall-wall) to LOOK at.
  *
@@ -86,7 +88,9 @@ const saveOf = (c, tq, phase) => JSON.stringify({ c, phase, teamQuality: tq, coa
 function wallOf12(sport) {
   const { c } = activeCareer(sport, 1700); c.retired = true;
   const base = M.hallWallEntry(sport, c);
-  return JSON.stringify({ v: 1, entries: Array.from({ length: 12 }, (_, i) => ({ ...base, key: `walk-${i}`, name: `Plaque Walker ${i + 1}` })) });
+  /* 24 letters, the create screen's cap, so the tiles' wrapping is walked at its worst (the run lens saw 11 of 12
+     such names cut at 390 before the tile lines wrapped). */
+  return JSON.stringify({ v: 1, entries: Array.from({ length: 12 }, (_, i) => ({ ...base, key: `walk-${i}`, name: `Christopher Vandenberg ${String.fromCharCode(65 + i)}` })) });
 }
 
 const port = await new Promise((resolve, reject) => {
@@ -224,6 +228,19 @@ async function journeyB(browser, sport, size) {
     await tap(size, opener);
     await wallInView(page, size, `${id} cold from the retirement screen`);
     await shot(page, `B-${sport.slug}-${size.width}-wall`);
+    /* Critic correction 2, measured in a real browser (the read lens, finding 8): Start over pressed ON the wall
+       closes the wall and lands on the create screen with its top in view and the wall's opener there. */
+    await page.waitForFunction(k => !!localStorage.getItem(k), M.hallWallKey(sport.slug));
+    await tap(size, page.locator('[data-career-start-over] button'));
+    await tap(size, page.getByRole('alertdialog').getByRole('button', { name: 'Start new career' }));
+    await page.getByRole('button', { name: 'Enter the draft' }).waitFor();
+    await page.waitForTimeout(700);
+    const top = await page.getByText('Create your player').first().boundingBox(), v = await view(page);
+    const closed = await page.locator('[data-career-hall-wall]').count() === 0;
+    const opener1 = (await page.locator('[data-career-hall-wall-opener="create"]').textContent())?.includes('Hall wall (1)') ?? false;
+    sayAt(size, closed && opener1 && !!top && top.y >= 0 && top.y < v.ih - 60,
+      `${id}: Start over on the wall lands on create, top in view (${Math.round(top?.y ?? -1)} of ${v.ih}), wall closed ${closed}, opener reads 1 ${opener1}`);
+    await shot(page, `B-${sport.slug}-${size.width}-after-start-over`);
   } finally {
     sayAt(size, errors.length === 0, `${id}: no page error ${errors.join(' | ').slice(0, 160)}`);
     await context.close();
@@ -258,8 +275,10 @@ async function journeyC(browser, sport, size) {
     const fit = await page.evaluate(() => {
       const tiles = [...document.querySelectorAll('[data-career-hall-wall-tile]')].map(t => t.getBoundingClientRect());
       const wall = document.querySelector('[data-career-hall-wall]').getBoundingClientRect();
-      return { n: tiles.length, top: wall.top, bottom: Math.max(...tiles.map(r => r.bottom)), ih: innerHeight, tileH: Math.min(...tiles.map(r => r.height)) };
+      const cut = [...document.querySelectorAll('[data-career-hall-wall-tile] span')].filter(s => s.scrollWidth > s.clientWidth + 1).length;
+      return { n: tiles.length, top: wall.top, bottom: Math.max(...tiles.map(r => r.bottom)), ih: innerHeight, tileH: Math.min(...tiles.map(r => r.height)), cut };
     });
+    sayAt(size, fit.cut === 0, `${id}: no tile line is cut (${fit.cut} lines wider than their box)`);
     measured.push(`${id}: 12 tiles from ${Math.round(fit.top)} to ${Math.round(fit.bottom)} of ${fit.ih}, the shortest tile ${Math.round(fit.tileH)} px`);
     sayAt(size, fit.n === 12 && fit.top >= 40 && fit.bottom <= fit.ih, `${id}: the whole wall of 12 fits the screen (${Math.round(fit.top)} to ${Math.round(fit.bottom)} of ${fit.ih})`);
     sayAt(size, fit.tileH >= 44, `${id}: every tile is at least 44 px tall (${Math.round(fit.tileH)})`);
