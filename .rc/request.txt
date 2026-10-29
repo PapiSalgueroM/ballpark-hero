@@ -1,0 +1,9 @@
+nhlfull: SIM_GM_CAREER_SPORT=nhl node scripts/simGmCareer.mjs
+nhl7-only: SIM_GM_CAREER_SPORT=nhl SIM_GM_CAREER_ONLY=7 node scripts/simGmCareer.mjs
+nfl7-only: SIM_GM_CAREER_ONLY=7 node scripts/simGmCareer.mjs
+nhl-overlap: SIM_GM_CAREER_SPORT=nhl SIM_GM_CAREER_CONTROL=overlap node scripts/simGmCareer.mjs
+nhl-firedlost: SIM_GM_CAREER_SPORT=nhl SIM_GM_CAREER_CONTROL=firedlost node scripts/simGmCareer.mjs
+nhl-hubcounted: SIM_GM_CAREER_SPORT=nhl SIM_GM_CAREER_CONTROL=hubcounted node scripts/simGmCareer.mjs
+simHarnessAnchors: node scripts/simHarnessAnchors.mjs
+simNoRivalNames: node scripts/simNoRivalNames.mjs
+simStorageWrites: node scripts/simStorageWrites.mjs
