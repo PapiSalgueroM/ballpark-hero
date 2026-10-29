@@ -1,0 +1,7 @@
+build exit=0 29s | [dukb] inlined 1 stylesheet(s) and 1 module(s) into 181 snapshots (11 left alone)
+playClubManagerNewCountries exit=0 54s | playClubManagerNewCountries: green. Russia can be picked, started, played live and found in an old save's world (3 runs: 390x844, 1280x800, 390x844 reduced motion).
+playClubManagerSaveLeave exit=0 21s | playClubManagerSaveLeave: green, the career survived leaving the page and the banner behaves
+playClubManagerSlots exit=0 11s | playClubManagerSlots: green
+playCmBoardVerdict exit=0 77s | playCmBoardVerdict GREEN: 48 of 48 checks green
+playConquestScenes exit=0 73s | ALL CONQUEST SCENE SCREEN CHECKS PASSED
+playSoccerLanding exit=1 276s | playSoccerLanding: RED, no base arm (set SOCCER_LANDING_BASE_DIST); a head arm alone is not a proof
