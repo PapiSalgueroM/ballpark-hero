@@ -1,0 +1,19 @@
+tsc: node_modules/.bin/tsc --noEmit -p tsconfig.app.json
+vnew: node_modules/.bin/vitest run src/test/usCareerReports1569.test.tsx --testTimeout=300000 --hookTimeout=120000
+r3-base: git worktree add /tmp/b3 2ee79c595 >/dev/null 2>&1; ln -s "$PWD/node_modules" /tmp/b3/node_modules; cp src/test/usCareerReports1569.test.tsx /tmp/b3/src/test/; cd /tmp/b3 && node_modules/.bin/vitest run src/test/usCareerReports1569.test.tsx --testTimeout=300000 --hookTimeout=120000
+sim: node scripts/simUsCareerReports.mjs
+sim-seed2: SIM_SEED=2 node scripts/simUsCareerReports.mjs
+ctl-fangate: SIM_REPORTS_CONTROL=fangate node scripts/simUsCareerReports.mjs
+ctl-fanforget: SIM_REPORTS_CONTROL=fanforget node scripts/simUsCareerReports.mjs
+ctl-fansoccer: SIM_REPORTS_CONTROL=fansoccer node scripts/simUsCareerReports.mjs
+r2-base: sleep 5; git worktree add /tmp/b2 2ee79c595 >/dev/null 2>&1; ln -s "$PWD/node_modules" /tmp/b2/node_modules; cp scripts/simUsCareerReports.mjs /tmp/b2/scripts/; cd /tmp/b2 && node scripts/simUsCareerReports.mjs
+parity: node scripts/simUsBoardParity.mjs
+parity-label: US_BOARD_PARITY_CONTROL=label node scripts/simUsBoardParity.mjs
+simUsCareerActionConfirm: node scripts/simUsCareerActionConfirm.mjs
+uca-restartWiring: US_CAREER_ACTION_CONTROL=restartWiring node scripts/simUsCareerActionConfirm.mjs
+ladder-base: git show 2ee79c595:src/lib/careerSocial.ts > /tmp/careerSocial.base.ts && node .rc/x/ladderSha.mjs /tmp/careerSocial.base.ts
+ladder-head: node .rc/x/ladderSha.mjs src/lib/careerSocial.ts
+simCareerDerbies: node scripts/simCareerDerbies.mjs
+simCareerParity: node scripts/simCareerParity.mjs
+simNoRivalNames: node scripts/simNoRivalNames.mjs
+dash: node .rc/x/dashscan.mjs f957b34ea
