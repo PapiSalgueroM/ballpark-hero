@@ -1,0 +1,6 @@
+#!serial
+base-c8-a: node_modules/.bin/vitest run src/test/usCareerHallWall.test.tsx -t "C8:" --testTimeout=300000 --hookTimeout=120000 2>&1 | sed 's/\x1b\[[0-9;]*m//g' | grep -E "C8|AssertionError|Tests " | head -30; exit ${PIPESTATUS[0]}
+base-c8-b: node_modules/.bin/vitest run src/test/usCareerHallWall.test.tsx -t "C8:" --testTimeout=300000 --hookTimeout=120000 2>&1 | sed 's/\x1b\[[0-9;]*m//g' | grep -E "C8|AssertionError|Tests " | head -30; exit ${PIPESTATUS[0]}
+mut-c8: node .rc/x/mut-readdraw.mjs && node_modules/.bin/vitest run src/test/usCareerHallWall.test.tsx -t "C8:" --testTimeout=300000 --hookTimeout=120000 2>&1 | sed 's/\x1b\[[0-9;]*m//g' | grep -E -A 40 "AssertionError|^ *[x✓×] C8" | head -120; s=${PIPESTATUS[0]}; git checkout -- src; exit $s
+mut-c8-again: node .rc/x/mut-readdraw.mjs && node_modules/.bin/vitest run src/test/usCareerHallWall.test.tsx -t "C8:" --testTimeout=300000 --hookTimeout=120000 2>&1 | sed 's/\x1b\[[0-9;]*m//g' | grep -E "C8|AssertionError|Tests " | head -30; s=${PIPESTATUS[0]}; git checkout -- src; exit $s
+clean: git status --short | head -20; test -z "$(git status --short -- src scripts)"
