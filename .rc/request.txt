@@ -1,0 +1,5 @@
+#!serve
+#!playwright
+#!serial
+walk: node .rc/x/walkXi400.mjs
+ctl-nofix: mkdir -p $RC_OUT/ctl && node .rc/x/mutXi.mjs nofix && node_modules/.bin/vite build --outDir /tmp/distm --emptyOutDir > /tmp/vbm.log 2>&1 && (node scripts/lib/hostLikeServer.mjs /tmp/distm 4174 > /tmp/hlm.log 2>&1 &) && sleep 4 && BASE=http://localhost:4174 RC_OUT=$RC_OUT/ctl node .rc/x/walkXi400.mjs; s=$?; git checkout -- src scripts; exit $s
