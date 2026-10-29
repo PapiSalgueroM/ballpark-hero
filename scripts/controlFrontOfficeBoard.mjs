@@ -149,6 +149,8 @@ const T = {
   caLookHub: [CA, 'looking at Career and GM level on the hub'],
   caLookOut: [CA, 'looking at all three boxes out of work'],
   caTick: [CA, 'a staff approach that runs out in the final week'],
+  /* Round 1559 (1533's finding 12): the title watched at the club he took */
+  caWatched: [CA, 'the title game watched to full time records one finish'],
   /* Round 1550 */
   lzSeason: [LZ, 'a season being played never asks for it'],
   lzBox: [LZ, 'a career box opened asks for it'],
@@ -215,7 +217,7 @@ const CONTROLS = {
   pressspoils: ["the press card shows the room the title game's press called while he watches it", [['const seenPresser = roomHeld ? roomHeld.presser : presser;', 'const seenPresser = presser;']], [T.psTitleRoom], [T.psTitleWatch, T.psWatchRound]],
   tiewhere: ['"Your game" opens the first game between the two clubs, whatever its round (the review\'s mutant)', [['games.findIndex(g => g.where === tie.round && (g.home === p.home', 'games.findIndex(g => (g.home === p.home']], [T.psTieRival], [T.psFaces, T.psBye]],
   hurtweeks: ['a man hurt on "Play Week 17" is out a count of weeks in the feed, though nobody heals in the bracket', [["const outForPlayoffs = lg.week >= REGULAR_WEEKS && asked === 'bracket';", 'const outForPlayoffs = false;']], [T.psHurtFeed], [T.psChipPress, T.psKeep]],
-  donenow: ["the finish is recorded at the title game's press while he watches it", [["useGameCompletion('front-office', roomHeld ? roomHeld.won : wonTitleNow,", "useGameCompletion('front-office', wonTitleNow,"]], [T.psTitleRoom], [T.psTitleWatch, T.psWatchRound]],
+  donenow: ["the finish is recorded at the title game's press while he watches it", [["useGameCompletion('front-office', roomHeld ? roomHeld.won : wonTitleNow,", "useGameCompletion('front-office', wonTitleNow,"]], [T.psTitleRoom, T.caWatched], [T.psTitleWatch, T.psWatchRound]],
   /* Round 1533: the close through the desk host writes a third block beside seat and xp (critic 1533 correction 2) */
   thirdkey: ['the season close writes a third block on the desk', [['if (v.desk && v.desk !== deskNow) setGm(v.desk);', "if (v.desk) setGm(withGmBlock(v.desk, 'extra', 1));"]], [T.opDeskOn], [T.opDeskOff]],
   /* Round 1533: the fired recap's button wired back to the reset that deletes the save; the arrival recap staging the
