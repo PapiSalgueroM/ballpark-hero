@@ -1,0 +1,15 @@
+tsc: node_modules/.bin/tsc --noEmit -p tsconfig.app.json
+daily5-1: node_modules/.bin/vitest run src/test/dailySaveParity.test.tsx src/test/dailySaveShapes.test.tsx src/test/dailySaveHardening.test.tsx src/test/dailyReload.test.tsx src/test/dailyMenuResume.test.tsx --testTimeout=300000 --hookTimeout=120000
+daily5-2: node_modules/.bin/vitest run src/test/dailySaveParity.test.tsx src/test/dailySaveShapes.test.tsx src/test/dailySaveHardening.test.tsx src/test/dailyReload.test.tsx src/test/dailyMenuResume.test.tsx --testTimeout=300000 --hookTimeout=120000
+daily5-3: node_modules/.bin/vitest run src/test/dailySaveParity.test.tsx src/test/dailySaveShapes.test.tsx src/test/dailySaveHardening.test.tsx src/test/dailyReload.test.tsx src/test/dailyMenuResume.test.tsx --testTimeout=300000 --hookTimeout=120000
+daily5-4: node_modules/.bin/vitest run src/test/dailySaveParity.test.tsx src/test/dailySaveShapes.test.tsx src/test/dailySaveHardening.test.tsx src/test/dailyReload.test.tsx src/test/dailyMenuResume.test.tsx --testTimeout=300000 --hookTimeout=120000
+daily5-5: node_modules/.bin/vitest run src/test/dailySaveParity.test.tsx src/test/dailySaveShapes.test.tsx src/test/dailySaveHardening.test.tsx src/test/dailyReload.test.tsx src/test/dailyMenuResume.test.tsx --testTimeout=300000 --hookTimeout=120000
+daily5-6: node_modules/.bin/vitest run src/test/dailySaveParity.test.tsx src/test/dailySaveShapes.test.tsx src/test/dailySaveHardening.test.tsx src/test/dailyReload.test.tsx src/test/dailyMenuResume.test.tsx --testTimeout=300000 --hookTimeout=120000
+daily5-7: node_modules/.bin/vitest run src/test/dailySaveParity.test.tsx src/test/dailySaveShapes.test.tsx src/test/dailySaveHardening.test.tsx src/test/dailyReload.test.tsx src/test/dailyMenuResume.test.tsx --testTimeout=300000 --hookTimeout=120000
+daily5-8: node_modules/.bin/vitest run src/test/dailySaveParity.test.tsx src/test/dailySaveShapes.test.tsx src/test/dailySaveHardening.test.tsx src/test/dailyReload.test.tsx src/test/dailyMenuResume.test.tsx --testTimeout=300000 --hookTimeout=120000
+shapes-1: node_modules/.bin/vitest run src/test/dailySaveShapes.test.tsx --testTimeout=300000 --hookTimeout=120000
+shapes-2: node_modules/.bin/vitest run src/test/dailySaveShapes.test.tsx --testTimeout=300000 --hookTimeout=120000
+shapes-3: node_modules/.bin/vitest run src/test/dailySaveShapes.test.tsx --testTimeout=300000 --hookTimeout=120000
+simDailySaveHardening: node scripts/simDailySaveHardening.mjs
+ctl-metalate: R848_CONTROL=metalate node scripts/simDailySaveHardening.mjs
+ctl-metaheld: R848_CONTROL=metaheld node scripts/simDailySaveHardening.mjs
