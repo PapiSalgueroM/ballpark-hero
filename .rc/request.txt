@@ -1,0 +1,23 @@
+tsc: node_modules/.bin/tsc --noEmit -p tsconfig.app.json
+sim: node scripts/simClubNamesakes.mjs
+sim-suite: ONLY=simClubNamesakes node scripts/runAllSims.mjs
+ctl-blind: SIM_NAMESAKE_CONTROL=blind node scripts/simClubNamesakes.mjs
+ctl-unmerge: SIM_NAMESAKE_CONTROL=unmerge node scripts/simClubNamesakes.mjs
+ctl-noexclude: SIM_NAMESAKE_CONTROL=noexclude node scripts/simClubNamesakes.mjs
+ctl-wide: SIM_NAMESAKE_CONTROL=wide node scripts/simClubNamesakes.mjs
+ctl-mirrordrift: SIM_NAMESAKE_CONTROL=mirrordrift node scripts/simClubNamesakes.mjs
+ctl-onehost: SIM_NAMESAKE_CONTROL=onehost node scripts/simClubNamesakes.mjs
+rehearse: npm install --prefix /tmp/pgl0 @electric-sql/pglite >/dev/null 2>&1 && PGLITE_DIR=/tmp/pgl0 node scripts/qa/rehearseClubNamesakes1584.mjs
+rh-parity: npm install --prefix /tmp/pgl1 @electric-sql/pglite >/dev/null 2>&1 && REHEARSE_CONTROL=parity PGLITE_DIR=/tmp/pgl1 node scripts/qa/rehearseClubNamesakes1584.mjs
+rh-tamper: npm install --prefix /tmp/pgl2 @electric-sql/pglite >/dev/null 2>&1 && REHEARSE_CONTROL=tamper PGLITE_DIR=/tmp/pgl2 node scripts/qa/rehearseClubNamesakes1584.mjs
+rh-drift: npm install --prefix /tmp/pgl3 @electric-sql/pglite >/dev/null 2>&1 && REHEARSE_CONTROL=drift PGLITE_DIR=/tmp/pgl3 node scripts/qa/rehearseClubNamesakes1584.mjs
+rh-noguard: npm install --prefix /tmp/pgl4 @electric-sql/pglite >/dev/null 2>&1 && REHEARSE_CONTROL=noguard PGLITE_DIR=/tmp/pgl4 node scripts/qa/rehearseClubNamesakes1584.mjs
+simTeammatesRecord: ONLY=simTeammatesRecord node scripts/runAllSims.mjs
+simValidatorRefusalHold: ONLY=simValidatorRefusalHold node scripts/runAllSims.mjs
+simQuotaHonesty: ONLY=simQuotaHonesty node scripts/runAllSims.mjs
+simEdgeSync: node scripts/simEdgeSync.mjs 2>&1 | grep -E "FAIL|finding|green"; exit ${PIPESTATUS[0]}
+gridSearchDiscovery: ONLY=simSoccerGridSearchDiscovery node scripts/runAllSims.mjs
+gridSearchDiscovery-base: git worktree add -q /tmp/baseg eb8ae0614 && ln -s "$PWD/node_modules" /tmp/baseg/node_modules && cd /tmp/baseg && ONLY=simSoccerGridSearchDiscovery node scripts/runAllSims.mjs
+simHarnessAnchors: node scripts/simHarnessAnchors.mjs
+simNoRivalNames: node scripts/simNoRivalNames.mjs
+play: node .rc/x/playGrid.mjs
