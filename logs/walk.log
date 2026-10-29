@@ -1,0 +1,86 @@
+--- 390
+  PASS  390: a right back at LWB is refused with its reason
+  PASS  390: the refused pick filled nothing (0/11)
+  PASS  390: the left back fills LWB (1/11)
+  PASS  390: the right back fills RWB (2/11)
+  role tile with LB at LWB and RB at RWB: "ROLE FIT 0 all in place"
+  PASS  390: role fit tile reads 0, all in place, with both full backs at wing back
+  PASS  390: the CAM fills CDM (3/11)
+  role tile with a CAM at CDM too: "ROLE FIT -0.2 1 out of place"
+  PASS  390: role fit tile reads -0.2, 1 out of place
+  role detail: "BEFORE KICK OFF Back CDM: Qzxcam Fixture, a CAM, next door to this slot. 2 off him. A slot his positions cover costs nothing. Next door costs 2 on that man, averaged over the eleven. Side total -0.2."
+  PASS  390: the detail names the CAM at CDM, 2 off him
+  PASS  390: the detail does not list either full back
+  PASS  390: no sideways scroll on the pitch screen (0px)
+  PASS  390: Qzxkeeper Fixture fills GK (4/11)
+  PASS  390: Qzxcbone Fixture fills CB (5/11)
+  PASS  390: Qzxcbtwo Fixture fills CB (6/11)
+  PASS  390: Qzxcbthree Fixture fills CB (7/11)
+  PASS  390: Qzxcmone Fixture fills CM (8/11)
+  PASS  390: Qzxcmtwo Fixture fills CM (9/11)
+  PASS  390: Qzxstone Fixture fills ST (10/11)
+  FAIL  390: Qzxsttwo Fixture fills ST (11/11)
+  review role tile: "ROLE FIT -0.2 1 out of place"
+  PASS  390: the review card reads -0.2, 1 out of place
+  season report: "📋 Season Report One season with this XI, every player at his peak SQUAD RATING 81/100 LEAGUE FINISH 2nd / 20 POINTS 109 TROPHIES 1 ROLE FIT 0 pts CHEMISTRY +1 pt BALANCE -2 pts What each was worth this season: the same 38 games played again without it. One season is lumpy, so a small edge can come out at 0. The league was played at 81.8. DEFENCE 81 MIDFIELD 81 ATTACK 81 A top-four finish in the 3-5-2, European football locked in. Finished 2nd with 109 points (36W 1D 1L). 5 points off the top. Longest unbeaten run: 21 games. Scored 109, conceded 28, 16 clean sheets. Qzxcam Fixture top-scored with 29 goals. Player of the season: Qzxkeeper Fixture (rating 81). Goal of the season: Qzxcam Fixtur"
+  PASS  390: the season report shows what role fit was worth
+  PASS  390: no sideways scroll on the result (0px)
+  validator calls: 7
+--- 390rm
+  PASS  390rm: a right back at LWB is refused with its reason
+  PASS  390rm: the refused pick filled nothing (0/11)
+  PASS  390rm: the left back fills LWB (1/11)
+  PASS  390rm: the right back fills RWB (2/11)
+  role tile with LB at LWB and RB at RWB: "ROLE FIT 0 all in place"
+  PASS  390rm: role fit tile reads 0, all in place, with both full backs at wing back
+  PASS  390rm: the CAM fills CDM (3/11)
+  role tile with a CAM at CDM too: "ROLE FIT -0.2 1 out of place"
+  PASS  390rm: role fit tile reads -0.2, 1 out of place
+  role detail: "BEFORE KICK OFF Back CDM: Qzxcam Fixture, a CAM, next door to this slot. 2 off him. A slot his positions cover costs nothing. Next door costs 2 on that man, averaged over the eleven. Side total -0.2."
+  PASS  390rm: the detail names the CAM at CDM, 2 off him
+  PASS  390rm: the detail does not list either full back
+  PASS  390rm: no sideways scroll on the pitch screen (0px)
+  PASS  390rm: Qzxkeeper Fixture fills GK (4/11)
+  PASS  390rm: Qzxcbone Fixture fills CB (5/11)
+  PASS  390rm: Qzxcbtwo Fixture fills CB (6/11)
+  PASS  390rm: Qzxcbthree Fixture fills CB (7/11)
+  PASS  390rm: Qzxcmone Fixture fills CM (8/11)
+  PASS  390rm: Qzxcmtwo Fixture fills CM (9/11)
+  PASS  390rm: Qzxstone Fixture fills ST (10/11)
+  FAIL  390rm: Qzxsttwo Fixture fills ST (11/11)
+  review role tile: "ROLE FIT -0.2 1 out of place"
+  PASS  390rm: the review card reads -0.2, 1 out of place
+  season report: "📋 Season Report One season with this XI, every player at his peak SQUAD RATING 81/100 LEAGUE FINISH 2nd / 20 POINTS 109 TROPHIES 1 ROLE FIT 0 pts CHEMISTRY +1 pt BALANCE -2 pts What each was worth this season: the same 38 games played again without it. One season is lumpy, so a small edge can come out at 0. The league was played at 81.8. DEFENCE 81 MIDFIELD 81 ATTACK 81 A top-four finish in the 3-5-2, European football locked in. Finished 2nd with 109 points (36W 1D 1L). 5 points off the top. Longest unbeaten run: 21 games. Scored 109, conceded 28, 16 clean sheets. Qzxcam Fixture top-scored with 29 goals. Player of the season: Qzxkeeper Fixture (rating 81). Goal of the season: Qzxcam Fixtur"
+  PASS  390rm: the season report shows what role fit was worth
+  PASS  390rm: no sideways scroll on the result (0px)
+  validator calls: 4
+--- 1280
+  PASS  1280: a right back at LWB is refused with its reason
+  PASS  1280: the refused pick filled nothing (0/11)
+  PASS  1280: the left back fills LWB (1/11)
+  PASS  1280: the right back fills RWB (2/11)
+  role tile with LB at LWB and RB at RWB: "ROLE FIT 0 all in place"
+  PASS  1280: role fit tile reads 0, all in place, with both full backs at wing back
+  PASS  1280: the CAM fills CDM (3/11)
+  role tile with a CAM at CDM too: "ROLE FIT -0.2 1 out of place"
+  PASS  1280: role fit tile reads -0.2, 1 out of place
+  role detail: "BEFORE KICK OFF Back CDM: Qzxcam Fixture, a CAM, next door to this slot. 2 off him. A slot his positions cover costs nothing. Next door costs 2 on that man, averaged over the eleven. Side total -0.2."
+  PASS  1280: the detail names the CAM at CDM, 2 off him
+  PASS  1280: the detail does not list either full back
+  PASS  1280: no sideways scroll on the pitch screen (0px)
+  PASS  1280: Qzxkeeper Fixture fills GK (4/11)
+  PASS  1280: Qzxcbone Fixture fills CB (5/11)
+  PASS  1280: Qzxcbtwo Fixture fills CB (6/11)
+  PASS  1280: Qzxcbthree Fixture fills CB (7/11)
+  PASS  1280: Qzxcmone Fixture fills CM (8/11)
+  PASS  1280: Qzxcmtwo Fixture fills CM (9/11)
+  PASS  1280: Qzxstone Fixture fills ST (10/11)
+  FAIL  1280: Qzxsttwo Fixture fills ST (11/11)
+  review role tile: "ROLE FIT -0.2 1 out of place"
+  PASS  1280: the review card reads -0.2, 1 out of place
+  season report: "📋 Season Report One season with this XI, every player at his peak SQUAD RATING 81/100 LEAGUE FINISH 2nd / 20 POINTS 109 TROPHIES 1 ROLE FIT 0 pts CHEMISTRY +1 pt BALANCE -2 pts What each was worth this season: the same 38 games played again without it. One season is lumpy, so a small edge can come out at 0. The league was played at 81.8. DEFENCE 81 MIDFIELD 81 ATTACK 81 A top-four finish in the 3-5-2, European football locked in. Finished 2nd with 109 points (36W 1D 1L). 5 points off the top. Longest unbeaten run: 21 games. Scored 109, conceded 28, 16 clean sheets. Qzxcam Fixture top-scored with 29 goals. Player of the season: Qzxkeeper Fixture (rating 81). Goal of the season: Qzxcam Fixtur"
+  PASS  1280: the season report shows what role fit was worth
+  PASS  1280: no sideways scroll on the result (0px)
+  validator calls: 7
+  PASS  no page errors (0)
+walkXi400 FAIL: 3 problems
