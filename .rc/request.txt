@@ -1,0 +1,5 @@
+#!serial
+earned-rerecord: SIM_NBA_EARNED_DRAFT_RECORD=5d1198389 node scripts/simNbaEarnedDraft.mjs; a=$?; git diff --stat --exit-code scripts/data/nbaEarnedDraftFixture.json; b=$?; git checkout -- scripts/data; echo "REREC earned record=$a diff=$b"; exit $((a|b))
+earned-oldfixture: git show 5d1198389:scripts/data/nbaEarnedDraftFixture.json > scripts/data/nbaEarnedDraftFixture.json && node scripts/simNbaEarnedDraft.mjs; a=$?; git checkout -- scripts/data; echo "OLDFIX earned head=$a (expect 1)"; exit $a
+rot-base: git worktree add -f .rc/rb 5d1198389 > /dev/null 2>&1 && cp src/lib/nbaRotation.test.ts src/lib/foStatsCodec.ts .rc/rb/src/lib/ && cd .rc/rb && ../../node_modules/.bin/vitest run src/lib/nbaRotation.test.ts --testTimeout=300000 --hookTimeout=120000
+award1103-base: git worktree add -f .rc/b1103 5d1198389 > /dev/null 2>&1 && cp .rc/x/probe1103b.test.ts .rc/b1103/src/test/ && cd .rc/b1103 && ../../node_modules/.bin/vitest run src/test/probe1103b.test.ts --testTimeout=300000 > /tmp/p1103.txt 2>&1; s=$?; grep PROBE1103 /tmp/p1103.txt; tail -3 /tmp/p1103.txt; exit $s
