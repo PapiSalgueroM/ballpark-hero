@@ -1,0 +1,5 @@
+#!serial
+shapes-head-1: node_modules/.bin/vitest run src/test/dailySaveShapes.test.tsx --testTimeout=300000 --hookTimeout=120000
+shapes-head-2: node_modules/.bin/vitest run src/test/dailySaveShapes.test.tsx --testTimeout=300000 --hookTimeout=120000
+shapes-main: R=$PWD; git worktree add /tmp/vfmain 1229c0190 >/dev/null 2>&1 && ln -s $R/node_modules /tmp/vfmain/node_modules && cd /tmp/vfmain && node_modules/.bin/vitest run src/test/dailySaveShapes.test.tsx --testTimeout=300000 --hookTimeout=120000
+vitest-daily-again: node_modules/.bin/vitest run src/test/dailySaveParity.test.tsx src/test/dailySaveShapes.test.tsx src/test/dailySaveHardening.test.tsx src/test/dailyReload.test.tsx src/test/dailyMenuResume.test.tsx --testTimeout=300000 --hookTimeout=120000
