@@ -1,0 +1,5 @@
+rodri exit=0 10s | simPlayerBingoRodriHonour: fixed proof passed; complete raw reports and changed-copy receipts retained. Offline only.
+wcalias exit=0 1s | Source bytes held; raw unit/output/control receipts retained when OUT is set. Offline proof only.
+probe2 exit=0 0s | probe2: DONE
+basetest exit=1 2s | on BASE the bind test exits 1
+slashdup exit=1 3s | simBingoClubCounts: RED, 1 failures (section 6: 1)

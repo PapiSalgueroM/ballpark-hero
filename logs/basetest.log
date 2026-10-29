@@ -1,0 +1,7 @@
+     → expected Set{ 'liverpool fc', 'olympique lyon' } to deeply equal Set{ 'liverpool fc', …(3) }
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 1 ⎯⎯⎯⎯⎯⎯⎯
+ FAIL  src/test/playerBingoClubCounts.test.ts > Player Bingo club additions, through fetchBingoData > counts Morton at four clubs: he fits Played for 4+ clubs and is not a One-club man
+AssertionError: expected Set{ 'liverpool fc', 'olympique lyon' } to deeply equal Set{ 'liverpool fc', …(3) }
+      Tests  1 failed | 3 passed (4)
+::error file=/tmp/base/src/test/playerBingoClubCounts.test.ts,title=src/test/playerBingoClubCounts.test.ts > Player Bingo club additions%2C through fetchBingoData > counts Morton at four clubs%3A he fits Played for 4+ clubs and is not a One-club man,line=82,column=50::AssertionError: expected Set{ 'liverpool fc', 'olympique lyon' } to deeply equal Set{ 'liverpool fc', …(3) }%0A%0A- Expected%0A+ Received%0A%0A  Set {%0A-   "blackburn rovers",%0A-   "hull city",%0A    "liverpool fc",%0A    "olympique lyon",%0A  }%0A%0A ❯ src/test/playerBingoClubCounts.test.ts:82:50%0A%0A
+on BASE the bind test exits 1

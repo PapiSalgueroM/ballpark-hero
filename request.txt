@@ -1,0 +1,6 @@
+#!serial
+rodri: CI=1 SIM_NETWORK=offline node scripts/simPlayerBingoRodriHonour.mjs
+wcalias: CI=1 SIM_NETWORK=offline node scripts/simPlayerBingoWorldCupAlias.mjs
+probe2: node .rc/x/probe2.mjs
+basetest: git worktree add /tmp/base 692590145 >/dev/null 2>&1 && cp src/test/playerBingoClubCounts.test.ts /tmp/base/src/test/ && cp src/data/bingoClubAdditions.json /tmp/base/src/data/ && ln -s "$PWD/node_modules" /tmp/base/node_modules && cd /tmp/base && node_modules/.bin/vitest run src/test/playerBingoClubCounts.test.ts > /tmp/basetest.log 2>&1; s=$?; grep -E "FAIL |Tests |expected" /tmp/basetest.log | sed 's/\x1b\[[0-9;]*m//g' | head -8; echo "on BASE the bind test exits $s"; exit $s
+slashdup: node .rc/x/plant.mjs && node scripts/simBingoClubCounts.mjs > /tmp/sd.log 2>&1; s=$?; grep "FAIL" /tmp/sd.log | head -4; git checkout -- scripts src; tail -1 /tmp/sd.log; exit $s

@@ -1,0 +1,3 @@
+plant: Olympique Lyon added to Morton's record clubs (he already has it in the table)
+  FAIL: the generator refuses: Tyler Morton: Olympique Lyon is already one of his table clubs (liverpool fc, olympique lyon)
+simBingoClubCounts: RED, 1 failures (section 6: 1)
