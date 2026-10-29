@@ -1,0 +1,5 @@
+#!serial
+xi-plain: node_modules/.bin/vitest run src/test/buildXiClubYear.test.tsx src/test/buildXiClubYearSetup.test.tsx --testTimeout=300000 --hookTimeout=120000
+mut-nations: node .rc/x/mut401.mjs nations && node_modules/.bin/vitest run src/test/buildXiClubYear.test.tsx src/test/buildXiClubYearSetup.test.tsx --testTimeout=300000 --hookTimeout=120000; s=$?; git checkout -- src scripts; exit $s
+mut-defaultclub: node .rc/x/mut401.mjs defaultclub && node_modules/.bin/vitest run src/test/buildXiClubYear.test.tsx src/test/buildXiClubYearSetup.test.tsx --testTimeout=300000 --hookTimeout=120000; s=$?; git checkout -- src scripts; exit $s
+mut-rerollsame: node .rc/x/mut401.mjs rerollsame && node_modules/.bin/vitest run src/test/buildXiClubYear.test.tsx src/test/buildXiClubYearSetup.test.tsx --testTimeout=300000 --hookTimeout=120000; s=$?; git checkout -- src scripts; exit $s
