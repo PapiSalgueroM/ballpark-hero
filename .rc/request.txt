@@ -1,0 +1,12 @@
+#!serial
+reh: npm install --prefix /tmp/pgl @electric-sql/pglite --silent --no-audit --no-fund && PGLITE_DIR=/tmp/pgl node scripts/qa/rehearseUsConnections1574.mjs
+reh-noguard: PGLITE_DIR=/tmp/pgl REHEARSE_CONTROL=noguard node scripts/qa/rehearseUsConnections1574.mjs
+reh-drift: PGLITE_DIR=/tmp/pgl REHEARSE_CONTROL=drift node scripts/qa/rehearseUsConnections1574.mjs
+reh-tamper: PGLITE_DIR=/tmp/pgl REHEARSE_CONTROL=tamper node scripts/qa/rehearseUsConnections1574.mjs
+reh-nohash: PGLITE_DIR=/tmp/pgl REHEARSE_CONTROL=nohash node scripts/qa/rehearseUsConnections1574.mjs
+reh-dupname: PGLITE_DIR=/tmp/pgl REHEARSE_CONTROL=dupname node scripts/qa/rehearseUsConnections1574.mjs
+reh1567: PGLITE_DIR=/tmp/pgl node scripts/qa/rehearseUsConnections1567.mjs
+mut-rangedrop: sed -i "s/export const TABLE_RANGE = { nhl: 'all' };/export const TABLE_RANGE = {};/" scripts/lib/usConnectionsTables.mjs && grep -q "export const TABLE_RANGE = {};" scripts/lib/usConnectionsTables.mjs && node scripts/simUsConnectionsFacts.mjs; s=$?; git checkout -- scripts; exit $s
+mut-rangedrop-ctl: sed -i "s/export const TABLE_RANGE = { nhl: 'all' };/export const TABLE_RANGE = {};/" scripts/lib/usConnectionsTables.mjs && grep -q "export const TABLE_RANGE = {};" scripts/lib/usConnectionsTables.mjs && US_CONN_CONTROL=stamkos node scripts/simUsConnectionsFacts.mjs; s=$?; git checkout -- scripts; exit $s
+mut-staleplan: R1574_ROUND_FILES=202ea80f9a601388db08172acfa706ff826805c0 node scripts/qa/usConnections1574Migration.mjs check
+after: node scripts/simUsConnectionsFacts.mjs
