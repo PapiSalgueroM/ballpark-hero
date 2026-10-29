@@ -1,0 +1,65 @@
+58651f74fb rc request vfbs-mix1 for fb42ded0a7eccb3efab00a961cbf366089788fa0
+tile age-21-under present label="Aged 21 or younger" support=107
+tile age-22-to-25 present label="Aged 22 to 25" support=225
+tile age-26-to-28 present label="Aged 26 to 28" support=133
+tile age-29-plus present label="Aged 29 or older" support=35
+semantics: 2026 rows 100, table age equals age on 2026-01-01 82, on 2026-08-01 52, on 2026-10-29 39
+men checked 109, in repo top 500 66, repo age equals live pull age 66/66
+age-21-under: shipped YES but false on 2026-10-29: 3; shipped no but true: 0
+  falseYES Michael Kayode (b 2004-07-10, row 2026 age 21, real 22, pool $38M)
+  falseYES João Neves (b 2004-09-27, row 2026 age 21, real 22, pool $119M)
+  falseYES Johan Bakayoko (b 2003-04-20, row 2025 age 21, real 23, not in top 500)
+age-22-to-25: shipped YES but false on 2026-10-29: 11; shipped no but true: 3
+  falseYES Mikkel Damsgaard (b 2000-07-03, row 2026 age 25, real 26, pool $32M)
+  falseYES Vinicius Junior (b 2000-07-12, row 2026 age 25, real 26, pool $162M)
+  falseYES Dominik Szoboszlai (b 2000-10-25, row 2026 age 25, real 26, pool $108M)
+  falseYES Erling Haaland (b 2000-07-21, row 2026 age 25, real 26, pool $216M)
+  falseYES Phil Foden (b 2000-05-28, row 2026 age 25, real 26, pool $86M)
+  falseYES Antoine Semenyo (b 2000-01-07, row 2026 age 25, real 26, pool $81M)
+  falseYES Marc Guéhi (b 2000-07-13, row 2026 age 25, real 26, pool $70M)
+  falseYES Julián Alvarez (b 2000-01-31, row 2026 age 25, real 26, pool $97M)
+  falseYES Niklas Beste (b 1999-01-04, row 2025 age 25, real 27, not in top 500)
+  falseYES Giacomo Raspadori (b 2000-02-18, row 2025 age 24, real 26, not in top 500)
+  falseYES Nicolò Zaniolo (b 1999-07-02, row 2025 age 25, real 27, not in top 500)
+  falseNO  Michael Kayode (b 2004-07-10, row 2026 age 21, real 22, pool $38M)
+  falseNO  João Neves (b 2004-09-27, row 2026 age 21, real 22, pool $119M)
+  falseNO  Johan Bakayoko (b 2003-04-20, row 2025 age 21, real 23, not in top 500)
+age-26-to-28: shipped YES but false on 2026-10-29: 3; shipped no but true: 11
+  falseYES Luis Díaz (b 1997-01-13, row 2026 age 28, real 29, pool $76M)
+  falseYES Ousmane Dembélé (b 1997-05-15, row 2026 age 28, real 29, pool $108M)
+  falseYES Lautaro Martínez (b 1997-08-22, row 2026 age 28, real 29, pool $92M)
+  falseNO  Mikkel Damsgaard (b 2000-07-03, row 2026 age 25, real 26, pool $32M)
+  falseNO  Vinicius Junior (b 2000-07-12, row 2026 age 25, real 26, pool $162M)
+  falseNO  Dominik Szoboszlai (b 2000-10-25, row 2026 age 25, real 26, pool $108M)
+  falseNO  Erling Haaland (b 2000-07-21, row 2026 age 25, real 26, pool $216M)
+  falseNO  Phil Foden (b 2000-05-28, row 2026 age 25, real 26, pool $86M)
+  falseNO  Antoine Semenyo (b 2000-01-07, row 2026 age 25, real 26, pool $81M)
+  falseNO  Marc Guéhi (b 2000-07-13, row 2026 age 25, real 26, pool $70M)
+  falseNO  Julián Alvarez (b 2000-01-31, row 2026 age 25, real 26, pool $97M)
+  falseNO  Niklas Beste (b 1999-01-04, row 2025 age 25, real 27, not in top 500)
+  falseNO  Giacomo Raspadori (b 2000-02-18, row 2025 age 24, real 26, not in top 500)
+  falseNO  Nicolò Zaniolo (b 1999-07-02, row 2025 age 25, real 27, not in top 500)
+age-29-plus: shipped YES but false on 2026-10-29: 0; shipped no but true: 3
+  falseNO  Luis Díaz (b 1997-01-13, row 2026 age 28, real 29, pool $76M)
+  falseNO  Ousmane Dembélé (b 1997-05-15, row 2026 age 28, real 29, pool $108M)
+  falseNO  Lautaro Martínez (b 1997-08-22, row 2026 age 28, real 29, pool $92M)
+fix premise: derived birth year equals real 91/109; born-year band (2000-2003, 1997-1999) right for 66/66 men touching those bands
+  off Lionel Messi real 1987 derived 1986 (row 2026 age 39)
+  off Borja Iglesias real 1993 derived 1992 (row 2026 age 33)
+  off Ruslan Malinovskyi real 1993 derived 1992 (row 2026 age 33)
+  off Pierre-Emerick Aubameyang real 1989 derived 1988 (row 2026 age 37)
+  off Duván Zapata real 1991 derived 1990 (row 2026 age 35)
+  off Lucas Moura real 1992 derived 1991 (row 2026 age 34)
+  off Dan-Axel Zagadou real 1999 derived 1998 (row 2026 age 27)
+  off Arkadiusz Milik real 1994 derived 1993 (row 2026 age 32)
+  off Eric Bailly real 1994 derived 1993 (row 2026 age 32)
+  off Ivan Perišić real 1989 derived 1988 (row 2026 age 37)
+  off Jordan Henderson real 1990 derived 1989 (row 2026 age 36)
+  off Alex Oxlade-Chamberlain real 1993 derived 1992 (row 2026 age 33)
+  off Kerem Demirbay real 1993 derived 1992 (row 2026 age 33)
+  off Edin Dzeko real 1986 derived 1985 (row 2026 age 40)
+  off Keita Baldé real 1995 derived 1994 (row 2026 age 31)
+  off Wojciech Szczęsny real 1990 derived 1989 (row 2026 age 36)
+  off Hulk real 1986 derived 1985 (row 2026 age 40)
+  off Stefan Savic real 1991 derived 1990 (row 2026 age 35)
+vfprobe done

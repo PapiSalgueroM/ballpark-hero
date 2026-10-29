@@ -1,0 +1,2 @@
+probe-pr exit=0 0s | vfprobe done
+probe-main exit=0 1s | vfprobe done
