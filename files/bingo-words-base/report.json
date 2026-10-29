@@ -1,0 +1,144 @@
+{
+  "name": "base",
+  "build": "/home/runner/work/ballpark-hero/ballpark-hero/dist-base",
+  "labels": 142,
+  "widths": [
+    {
+      "width": 320,
+      "inter": true,
+      "room": 39,
+      "tile": 52.8,
+      "maxTileH": 91.875,
+      "fontSize": "9px",
+      "board": [
+        "matches,",
+        "Goalkeeper",
+        "Defender",
+        "Liverpool",
+        "Manchester"
+      ],
+      "library": [
+        "Barcelona: Barcelona",
+        "Manchester United: Manchester",
+        "Manchester City: Manchester",
+        "Liverpool: Liverpool",
+        "Tottenham: Tottenham",
+        "Borussia Dortmund: Dortmund",
+        "Juventus: Juventus",
+        "Goalkeeper: Goalkeeper",
+        "Defender: Defender",
+        "Midfielder: Midfielder",
+        "Central Midfielder: Midfielder",
+        "Defensive Midfielder: Defensive Midfielder",
+        "Attacking Midfielder: Attacking Midfielder",
+        "Left Midfielder: Midfielder",
+        "Right Midfielder: Midfielder",
+        "Champions League winner: Champions",
+        "10M+ Instagram followers: Instagram followers",
+        "Messi club teammate: teammate",
+        "40+ matches, no reds in a season: matches,",
+        "Played for Barcelona: Barcelona",
+        "Played for Manchester United: Manchester",
+        "Played for Manchester City: Manchester",
+        "Played for Liverpool: Liverpool",
+        "Played for Tottenham: Tottenham",
+        "Played for Borussia Dortmund: Dortmund",
+        "Played for Juventus: Juventus",
+        "From Uruguay: Uruguay",
+        "From Germany: Germany",
+        "From Hungary: Hungary",
+        "From Argentina: Argentina",
+        "From Netherlands: Netherlands",
+        "From Cameroon: Cameroon",
+        "From Colombia: Colombia",
+        "From Denmark: Denmark",
+        "From Switzerland: Switzerland",
+        "From Uzbekistan: Uzbekistan",
+        "From Northern Ireland: Northern",
+        "From Paraguay: Paraguay",
+        "From Montenegro: Montenegro",
+        "From Bosnia-Herzegovina: Herzegovina",
+        "From Mozambique: Mozambique"
+      ],
+      "overflow": 0
+    },
+    {
+      "width": 360,
+      "inter": true,
+      "room": 47,
+      "tile": 60.8,
+      "maxTileH": 91.875,
+      "fontSize": "9px",
+      "board": [
+        "Goalkeeper",
+        "Manchester"
+      ],
+      "library": [
+        "Manchester United: Manchester",
+        "Manchester City: Manchester",
+        "Goalkeeper: Goalkeeper",
+        "Champions League winner: Champions",
+        "Played for Manchester United: Manchester",
+        "Played for Manchester City: Manchester",
+        "From Netherlands: Netherlands",
+        "From Switzerland: Switzerland",
+        "From Uzbekistan: Uzbekistan",
+        "From Montenegro: Montenegro",
+        "From Bosnia-Herzegovina: Herzegovina",
+        "From Mozambique: Mozambique"
+      ],
+      "overflow": 0
+    },
+    {
+      "width": 375,
+      "inter": true,
+      "room": 50,
+      "tile": 63.8,
+      "maxTileH": 80.625,
+      "fontSize": "9px",
+      "board": [
+        "Manchester"
+      ],
+      "library": [
+        "Manchester United: Manchester",
+        "Manchester City: Manchester",
+        "Champions League winner: Champions",
+        "Played for Manchester United: Manchester",
+        "Played for Manchester City: Manchester",
+        "From Netherlands: Netherlands",
+        "From Switzerland: Switzerland",
+        "From Montenegro: Montenegro",
+        "From Bosnia-Herzegovina: Herzegovina",
+        "From Mozambique: Mozambique"
+      ],
+      "overflow": 0
+    },
+    {
+      "width": 390,
+      "inter": true,
+      "room": 53,
+      "tile": 66.8,
+      "maxTileH": 80.625,
+      "fontSize": "9px",
+      "board": [],
+      "library": [
+        "From Netherlands: Netherlands",
+        "From Montenegro: Montenegro",
+        "From Bosnia-Herzegovina: Herzegovina",
+        "From Mozambique: Mozambique"
+      ],
+      "overflow": 0
+    },
+    {
+      "width": 412,
+      "inter": true,
+      "room": 57,
+      "tile": 71.2,
+      "maxTileH": 76,
+      "fontSize": "9px",
+      "board": [],
+      "library": [],
+      "overflow": 0
+    }
+  ]
+}

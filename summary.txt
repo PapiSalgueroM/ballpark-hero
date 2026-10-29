@@ -1,0 +1,5 @@
+build exit=0 34s | [dukb] inlined 1 stylesheet(s) and 1 module(s) into 181 snapshots (11 left alone)
+words-head exit=1 4s | walkBingoWords head: RED, 2 width(s) break a word
+simPlayerBingoCategories exit=0 46s | simPlayerBingoCategories: fixed proof passed; raw reports and changed-copy receipts retained.
+playPlayerBingoCategories exit=0 10s | playPlayerBingoCategories: actual offline built-page proof passed; raw geometry, requests and screenshots retained.
+words-base exit=1 39s | walkBingoWords base: RED, 4 width(s) break a word

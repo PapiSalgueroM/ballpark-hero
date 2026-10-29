@@ -1,0 +1,68 @@
+{
+  "name": "head",
+  "build": "/home/runner/work/ballpark-hero/ballpark-hero/dist",
+  "labels": 142,
+  "widths": [
+    {
+      "width": 320,
+      "inter": true,
+      "room": 48,
+      "tile": 54.4,
+      "maxTileH": 76,
+      "fontSize": "8px",
+      "board": [],
+      "library": [
+        "From Bosnia-Herzegovina: Herzegovina",
+        "From Mozambique: Mozambique"
+      ],
+      "overflow": 0
+    },
+    {
+      "width": 360,
+      "inter": true,
+      "room": 55,
+      "tile": 60.8,
+      "maxTileH": 80.625,
+      "fontSize": "9px",
+      "board": [],
+      "library": [
+        "From Bosnia-Herzegovina: Herzegovina",
+        "From Mozambique: Mozambique"
+      ],
+      "overflow": 0
+    },
+    {
+      "width": 375,
+      "inter": true,
+      "room": 58,
+      "tile": 63.8,
+      "maxTileH": 76,
+      "fontSize": "9px",
+      "board": [],
+      "library": [],
+      "overflow": 0
+    },
+    {
+      "width": 390,
+      "inter": true,
+      "room": 61,
+      "tile": 66.8,
+      "maxTileH": 76,
+      "fontSize": "9px",
+      "board": [],
+      "library": [],
+      "overflow": 0
+    },
+    {
+      "width": 412,
+      "inter": true,
+      "room": 65,
+      "tile": 71.2,
+      "maxTileH": 76,
+      "fontSize": "9px",
+      "board": [],
+      "library": [],
+      "overflow": 0
+    }
+  ]
+}

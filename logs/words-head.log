@@ -1,0 +1,6 @@
+FAIL 320: Inter true, 8px, room 48 of tile 54.4, tallest tile 76, board splits [], library labels split 2 ["From Bosnia-Herzegovina: Herzegovina","From Mozambique: Mozambique"]
+FAIL 360: Inter true, 9px, room 55 of tile 60.8, tallest tile 80.625, board splits [], library labels split 2 ["From Bosnia-Herzegovina: Herzegovina","From Mozambique: Mozambique"]
+ok   375: Inter true, 9px, room 58 of tile 63.8, tallest tile 76, board splits [], library labels split 0
+ok   390: Inter true, 9px, room 61 of tile 66.8, tallest tile 76, board splits [], library labels split 0
+ok   412: Inter true, 9px, room 65 of tile 71.2, tallest tile 76, board splits [], library labels split 0
+walkBingoWords head: RED, 2 width(s) break a word
