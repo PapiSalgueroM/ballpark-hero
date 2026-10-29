@@ -1,0 +1,20 @@
+MUT wronggold applied to src/lib/careerBadges.ts
+  now: 91 of 200 went at least once, 86 brought home a medal, 70 a gold
+  y2004: 87 of 200 went at least once, 87 brought home a medal, 80 a gold
+  section 9: 173 careers with a medal (490 medals), 178 careers that only rested
+  section 10: lit in the always go fleet: intl_medal 173, olympic_gold 125, world_cup_gold 125; in the always rest fleet: 0
+  sections 9 and 10 took 75.3 s
+simCareerIntl: RED, 3382 checks, section 10: 58
+ [32m✓[39m src/test/usCareerIntlBoard.test.tsx [2m([22m[2m7 tests[22m[2m)[22m[33m 935[2mms[22m[39m
+   [33m[2m✓[22m[39m the board fixture's fixed NBA saves with the bind mounted[2m > [22mdraw the board they drew without it where no call is met, and a raised save meets the beat [33m 595[2mms[22m[39m
+
+[2m Test Files [22m [1m[32m2 passed[39m[22m[90m (2)[39m
+[2m      Tests [22m [1m[32m16 passed[39m[22m[90m (16)[39m
+[2m   Start at [22m 11:55:04
+[2m   Duration [22m 3.06s[2m (transform 1.49s, setup 132ms, collect 2.37s, tests 958ms, environment 572ms, prepare 202ms)[22m
+
+   mlb: 26 badges, 40 ordinary and 66 elite careers, 26 earned at least once
+   nhl: 23 badges, 40 ordinary and 36 elite careers, 23 earned at least once
+
+simCareerParity: green. One money app, one fan rule, one rival shape, one badge case, in all five careers.
+MUT wronggold: sim910=1 vitest=0 parity=0

@@ -1,0 +1,14 @@
+  section 10: lit in the always go fleet: intl_medal 173, olympic_gold 125, world_cup_gold 117; in the always rest fleet: 0
+  sections 9 and 10 took 68.7 s
+simCareerIntl: GREEN, 3382 checks over sections 9,10
+ [32m✓[39m src/test/usCareerIntlBoard.test.tsx [2m([22m[2m7 tests[22m[2m)[22m[33m 955[2mms[22m[39m
+   [33m[2m✓[22m[39m the board fixture's fixed NBA saves with the bind mounted[2m > [22mdraw the board they drew without it where no call is met, and a raised save meets the beat [33m 602[2mms[22m[39m
+
+[2m Test Files [22m [1m[32m2 passed[39m[22m[90m (2)[39m
+[2m      Tests [22m [1m[32m16 passed[39m[22m[90m (16)[39m
+[2m   Start at [22m 11:53:34
+[2m   Duration [22m 3.54s[2m (transform 1.75s, setup 134ms, collect 2.75s, tests 975ms, environment 718ms, prepare 359ms)[22m
+
+
+simCareerParity: green. One money app, one fan rule, one rival shape, one badge case, in all five careers.
+MUT none: sim910=0 vitest=0 parity=0

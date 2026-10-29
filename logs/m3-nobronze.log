@@ -1,0 +1,20 @@
+MUT nobronze applied to src/lib/careerBadges.ts
+  FAIL [10] y2004 145: intl_medal is dark while the summers say true
+  y2004: 87 of 200 went at least once, 87 brought home a medal, 80 a gold
+  section 9: 173 careers with a medal (490 medals), 178 careers that only rested
+  section 10: lit in the always go fleet: intl_medal 164, olympic_gold 125, world_cup_gold 117; in the always rest fleet: 0
+  sections 9 and 10 took 65.1 s
+simCareerIntl: RED, 3382 checks, section 9: 53, section 10: 9
+
+[2m Test Files [22m [1m[31m1 failed[39m[22m[2m | [22m[1m[32m1 passed[39m[22m[90m (2)[39m
+[2m      Tests [22m [1m[31m1 failed[39m[22m[2m | [22m[1m[32m15 passed[39m[22m[90m (16)[39m
+[2m   Start at [22m 11:54:53
+[2m   Duration [22m 3.35s[2m (transform 1.35s, setup 132ms, collect 2.16s, tests 1.27s, environment 571ms, prepare 142ms)[22m
+
+
+::error file=/tmp/m3/src/test/nbaTrophyTile.test.ts,title=src/test/nbaTrophyTile.test.ts > Round 1557%3A a medal from a summer with the national team > is counted once on the tile%2C and a summer with no medal changes nothing,line=137,column=35::AssertionError: expected '2 honours' to be '3 honours' // Object.is equality%0A%0AExpected: "3 honours"%0AReceived: "2 honours"%0A%0A ❯ src/test/nbaTrophyTile.test.ts:137:35%0A%0A
+   mlb: 26 badges, 40 ordinary and 66 elite careers, 26 earned at least once
+   nhl: 23 badges, 40 ordinary and 36 elite careers, 23 earned at least once
+
+simCareerParity: green. One money app, one fan rule, one rival shape, one badge case, in all five careers.
+MUT nobronze: sim910=1 vitest=1 parity=0

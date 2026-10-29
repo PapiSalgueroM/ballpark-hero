@@ -1,0 +1,14 @@
+MUT noclose applied to src/components/us-career/UsCareerBoard.tsx
+    at UsCareerBoard (/tmp/m4/src/components/us-career/UsCareerBoard.tsx:162:26)
+    at Router (file:///home/runner/work/ballpark-hero/ballpark-hero/node_modules/react-router/dist/development/chunk-BV7QT456.mjs:7134:13)
+    at MemoryRouter (file:///home/runner/work/ballpark-hero/ballpark-hero/node_modules/react-router/dist/development/chunk-BV7QT456.mjs:7044:3)
+
+ [32m✓[39m src/test/usCareerIntlBoard.test.tsx [2m([22m[2m7 tests[22m[2m)[22m[33m 1211[2mms[22m[39m
+   [33m[2m✓[22m[39m the board fixture's fixed NBA saves with the bind mounted[2m > [22mdraw the board they drew without it where no call is met, and a raised save meets the beat [33m 812[2mms[22m[39m
+
+[2m Test Files [22m [1m[32m2 passed[39m[22m[90m (2)[39m
+[2m      Tests [22m [1m[32m16 passed[39m[22m[90m (16)[39m
+[2m   Start at [22m 11:53:51
+[2m   Duration [22m 3.52s[2m (transform 1.66s, setup 139ms, collect 2.53s, tests 1.23s, environment 594ms, prepare 153ms)[22m
+
+MUT noclose: vitest=0

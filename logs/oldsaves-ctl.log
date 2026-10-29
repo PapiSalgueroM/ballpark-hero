@@ -1,0 +1,11 @@
+MUT offbyone applied to src/lib/nbaCareerSport.ts
+  BREAK ob2 NBA era=now go #1: honours are not the old ones plus the medal row: [{"label":"MVPs","n":0},{"label":"All-NBA nods","n":5},{"label":"All-Star nods","n":7},{"label":"in other awards","n":3}]
+  BREAK ob2 NBA era=now go #4: honours are not the old ones plus the medal row: [{"label":"MVPs","n":1},{"label":"All-NBA nods","n":4},{"label":"All-Star nods","n":6},{"label":"in other awards","n":0}]
+  BREAK ob2 NBA era=now go #15: honours are not the old ones plus the medal row: [{"label":"MVPs","n":0},{"label":"All-NBA nods","n":1},{"label":"All-Star nods","n":1},{"label":"in other awards","n":0}]
+  BREAK ob2 NBA era=now go #35: honours are not the old ones plus the medal row: [{"label":"MVPs","n":0},{"label":"All-NBA nods","n":4},{"label":"All-Star nods","n":5},{"label":"in other awards","n":5}]
+  BREAK ob2 NBA era=y2004 go #16: honours are not the old ones plus the medal row: [{"label":"MVPs","n":1},{"label":"All-NBA nods","n":3},{"label":"All-Star nods","n":4},{"label":"in other awards","n":2}]
+  BREAK ob2 NBA era=y2004 go #23: honours are not the old ones plus the medal row: [{"label":"MVPs","n":0},{"label":"All-NBA nods","n":1},{"label":"All-Star nods","n":1},{"label":"in other awards","n":0}]
+  BREAK ob2 NBA era=y2004 go #29: honours are not the old ones plus the medal row: [{"label":"MVPs","n":0},{"label":"All-NBA nods","n":0},{"label":"All-Star nods","n":2},{"label":"in other awards","n":2}]
+  BREAK ob2 NBA era=y2004 go #30: honours are not the old ones plus the medal row: [{"label":"MVPs","n":0},{"label":"All-NBA nods","n":0},{"label":"All-Star nods","n":2},{"label":"in other awards","n":1}]
+  ob2: 278 saves with no summer, 41 with summers and no medal, 41 with a medal, 0 repaired by the head
+oldsaves: RED, 8 breaks in 1609 checks

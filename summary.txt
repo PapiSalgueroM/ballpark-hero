@@ -1,0 +1,10 @@
+m0-clean exit=0 83s | MUT none: sim910=0 vitest=0 parity=0
+m2-offbyone exit=0 83s | MUT offbyone: sim910=1 vitest=1 parity=0
+m1-compidx exit=0 86s | MUT compidx: sim910=1 vitest=0 parity=1
+m4-noclose exit=0 5s | MUT noclose: vitest=0
+m5-norows exit=0 6s | MUT norows: vitest=1
+m6-countmedals exit=0 5s | MUT countmedals: vitest=1
+oldsaves exit=0 44s | oldsaves: green, 2407 checks over 2 old trees
+m3-nobronze exit=0 79s | MUT nobronze: sim910=1 vitest=1 parity=0
+m8-wronggold exit=0 86s | MUT wronggold: sim910=1 vitest=0 parity=0
+oldsaves-ctl exit=1 25s | oldsaves: RED, 8 breaks in 1609 checks
