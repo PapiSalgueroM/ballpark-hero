@@ -1,0 +1,4 @@
+#!serve
+#!playwright
+mid-head: WHO=head node .rc/x/review-run-midnight.mjs
+mid-base: git worktree add /tmp/base 5f9303bf8 && ln -s "$PWD/node_modules" /tmp/base/node_modules && (cd /tmp/base && node_modules/.bin/vite build > /tmp/base-build.log 2>&1; echo "base build exit $?") && { node scripts/lib/hostLikeServer.mjs /tmp/base/dist 4175 > /tmp/base-server.log 2>&1 & SP=$!; sleep 2; BASE=http://localhost:4175 WHO=base node .rc/x/review-run-midnight.mjs; s=$?; kill $SP; exit $s; }
