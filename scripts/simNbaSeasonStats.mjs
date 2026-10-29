@@ -90,7 +90,16 @@
         engines: the base's old block converts to exactly the block the head
         writes from the same games, expands back to the base's rows (nothing
         lost), and the leaders, every club's lines and the awards read off it
-        by the head are what the base read off its own.
+        by the head are what the base read off its own. 9e prints the league's
+        size after a regular season (ids pinned at the longest epoch) and holds
+        it byte stable for one seed played twice in one process. 9f, on every
+        run: a real old block the base engine wrote (committed in
+        scripts/data/nbaNamedBlockFixture.json with the block the recorder
+        wrote from the same games) converts on load to that block byte for
+        byte. Record it again (only from the base engine):
+        NBA_STATS_BASE=<base checkout> NBA_STATS_BASE_LABEL=<its sha>
+        NBA_STATS_RECORD_NAMED=scripts/data/nbaNamedBlockFixture.json
+        node scripts/simNbaSeasonStats.mjs
 
    Controls, through NBA_STATS_CONTROL. None touches src: the rewritten source
    is served to the bundler from memory, and each refuses to run if its anchor
@@ -120,6 +129,10 @@
    Added by Round 1566:
      named          the NBA keeps named rows, recorder and readers    -> 9
                     (every other section reads the same lines either way)
+   Added by Round 1566's fix pass (reviews of 2026-10-29):
+     grouped        the load time conversion keeps only each club's
+                    last run of old rows (works on rows grouped by
+                    club, as 9b's plant is; breaks on a real save)    -> 9 (9f alone)
 
    Run: node scripts/simNbaSeasonStats.mjs
    The base comparison (9d): NBA_STATS_BASE=<checkout of the commit before Round 1566> node scripts/simNbaSeasonStats.mjs
@@ -159,6 +172,8 @@ const EXPECT = {
   draftlate: [3],
   bench17: [8],
   named: [9],
+  /* added by Round 1566's fix pass: 9f (a real old save) gets a control */
+  grouped: [9],
 };
 if (CONTROL && !EXPECT[CONTROL]) {
   console.error(`NBA_STATS_CONTROL=${CONTROL} is not a control this harness knows (${Object.keys(EXPECT).join(', ')})`);
@@ -291,6 +306,11 @@ const CONTROL_FILE_SWAPS = {
       ['  league.stats = foNewSaved(league.season);', '  league.stats = { season: league.season, lines: {}, teams: {} };'],
     ],
   },
+  /* Round 1566's fix pass. grouped: a conversion that only works on rows grouped by club, which 9b's plant (made by the
+     expand) always is and a real old save (rows in game order) is not, so only 9f can see it. */
+  grouped: {
+    'foStatsCodec.ts': [['  if (foReadNamed(c, v)) return foPack(c, v);', '  if (foReadNamed(c, v)) { const p = foPack(c, v); const runs: Record<string, Record<string, FoSavedLine>> = {}; let prev = \'\'; for (const l of Object.values(v.lines)) { if (l.team !== prev) runs[l.team] = {}; runs[l.team][l.id] = p.lines[l.team][l.id]; prev = l.team; } return { ...p, lines: runs }; }']],
+  },
 };
 /* Copy controls rewrite what section 8 reads, in memory, never the file. */
 const CONTROL_COPY_SWAPS = {
@@ -308,6 +328,7 @@ const NOTE = {
   draftlate: 'a draft class is marked as debuting two seasons after its close, not one',
   bench17: "the page's worked example promises a 17 a game sixth man (the claim the review found)",
   named: 'the NBA keeps its lines as named rows, the shape before Round 1566',
+  grouped: "the load time conversion takes the old rows as grouped by club, the way the expand lists them, and keeps only each club's last run of rows",
 }[CONTROL];
 if (NOTE) console.log(`   control ${CONTROL}: ${NOTE}`);
 
@@ -994,6 +1015,51 @@ console.log('9) One save shape: the NBA keeps the shared short lines, reads them
     };
     say('head', head);
     if (BASE_E) say('base', fleet(BASE_E.nba));
+    /* 9f. THE OLD SAVE FROM A REAL OLD ENGINE, on every run (review 1566, read lens, finding 2: 9b plants its old save
+       with the head's own expand, so it holds pack after expand and nothing more). scripts/data/nbaNamedBlockFixture.json
+       holds one regular season's block of named rows exactly as the base engine (the commit before Round 1566) wrote it,
+       its ids as that run minted them (`block`), and the block the head's recorder wrote from the same games
+       (`packed`, ids as their place past the league's lowest, since each run mints with its own epoch). Here the head
+       converts the old block on load and must get `packed` byte for byte. Nothing is played: it pins the conversion
+       against a real old save, not the engine's games or the award rules (9d holds those against the base). Recorded
+       only with NBA_STATS_BASE set and NBA_STATS_RECORD_NAMED naming the file to write, and only after the base's
+       block, converted, is the head's block from the same games (9d's proof, refused otherwise). */
+    const FIXTURE = path.join(ROOT, 'scripts', 'data', 'nbaNamedBlockFixture.json');
+    const at = lg => {
+      const ids = [...Object.values(lg.teams).flatMap(t => t.players), ...lg.freeAgents].map(p => p.id);
+      return { ep: ids[0].slice(1, ids[0].lastIndexOf('-')), low: Math.min(...ids.map(id => Number(id.slice(id.lastIndexOf('-') + 1)))) };
+    };
+    const byPlace = (json, { ep, low }) => json.replace(new RegExp('n' + ep + '-(\\d+)', 'g'), (_, k) => `#${Number(k) - low}`);
+    const converted = block => { const o = { stats: clone(block) }; const did = st.nbaCleanStats(o); return { did, stats: o.stats }; };
+    if (process.env.NBA_STATS_RECORD_NAMED) {
+      if (!BASE_E) { console.error('FAIL: NBA_STATS_RECORD_NAMED records from the base engine, so it needs NBA_STATS_BASE'); process.exit(2); }
+      const seed = 1;
+      const B = regular(BASE_E.nba, seed);
+      const H = regular(nba, seed);
+      const where = at(B);
+      const packed = byPlace(JSON.stringify(H.stats), at(H));
+      const c = converted(B.stats);
+      if (c.did !== 'converted' || byPlace(JSON.stringify(c.stats), where) !== packed) {
+        console.error(`FAIL: not recorded: the base's block (${c.did}) does not convert to the head's block from the same games`);
+        process.exit(2);
+      }
+      fs.writeFileSync(path.resolve(process.env.NBA_STATS_RECORD_NAMED), JSON.stringify({
+        recordedFrom: process.env.NBA_STATS_BASE_LABEL || path.basename(BASE_ROOT),
+        what: 'One regular season of the NBA Front Office, seed 1 of scripts/simNbaSeasonStats.mjs section 9e: block is the named rows the engine before Round 1566 saved; packed is the block the Round 1566 recorder wrote from the same games, ids by place. Written by NBA_STATS_RECORD_NAMED; read by section 9f.',
+        seed, ep: where.ep, low: where.low, packed: JSON.parse(packed), block: B.stats,
+      }) + '\n');
+      console.log(`   9f recorded: seed ${seed}, ${Object.keys(B.stats.lines).length} named lines, into ${process.env.NBA_STATS_RECORD_NAMED}`);
+    }
+    let F = null;
+    try { F = JSON.parse(fs.readFileSync(FIXTURE, 'utf8')); } catch { F = null; }
+    const real = !!F && codec.foReadNamed(st.NBA_CODEC, F.block) && !!F.packed && typeof F.ep === 'string' && Number.isInteger(F.low);
+    ok(9, 'the real old block fixture is there: named rows from the base engine and the block the recorder wrote (scripts/data/nbaNamedBlockFixture.json)', real, F ? `recorded from ${F.recordedFrom}` : 'no fixture');
+    if (real) {
+      const c = converted(F.block);
+      const kept = !!c.stats && typeof c.stats === 'object';
+      const sameBytes = kept && byPlace(JSON.stringify(c.stats), F) === JSON.stringify(F.packed);
+      ok(9, `the base engine's real old block (seed ${F.seed}, ${Object.keys(F.block.lines).length} named lines, recorded from ${F.recordedFrom}) converts on load to exactly the block the recorder wrote from the same games`, c.did === 'converted' && sameBytes, `${c.did}, bytes ${sameBytes}`);
+    }
   }
 }
 
