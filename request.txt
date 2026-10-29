@@ -1,0 +1,13 @@
+sim: node scripts/simTriviaBank.mjs
+seed777: SIM_SEED=777 TRIVIA_UNLIMITED=3000 node scripts/simTriviaBank.mjs
+seed9-20k: SIM_SEED=9 TRIVIA_UNLIMITED=20000 node scripts/simTriviaBank.mjs
+c-short: TRIVIA_CONTROL=short node scripts/simTriviaBank.mjs
+c-redeal: TRIVIA_CONTROL=redeal node scripts/simTriviaBank.mjs
+c-dupe: TRIVIA_CONTROL=dupe node scripts/simTriviaBank.mjs
+c-ties: TRIVIA_CONTROL=ties node scripts/simTriviaBank.mjs
+c-namesake: TRIVIA_CONTROL=namesake node scripts/simTriviaBank.mjs
+c-tense: TRIVIA_CONTROL=tense node scripts/simTriviaBank.mjs
+c-postense: TRIVIA_CONTROL=postense node scripts/simTriviaBank.mjs
+c-family: TRIVIA_CONTROL=family node scripts/simTriviaBank.mjs
+c-legacy: TRIVIA_CONTROL=legacy node scripts/simTriviaBank.mjs
+c-rulec: TRIVIA_CONTROL=rulec node scripts/simTriviaBank.mjs

@@ -1,0 +1,13 @@
+sim exit=0 109s | simTriviaBank: all checks passed
+seed777 exit=0 137s | simTriviaBank: all checks passed
+c-short exit=1 89s | simTriviaBank: 6 failure(s) (NEGATIVE CONTROL short ON)
+seed9-20k exit=0 248s | simTriviaBank: all checks passed
+c-redeal exit=1 128s | simTriviaBank: 17 failure(s) (NEGATIVE CONTROL redeal ON)
+c-dupe exit=1 105s | simTriviaBank: 26 failure(s) (NEGATIVE CONTROL dupe ON)
+c-namesake exit=1 80s | simTriviaBank: 8 failure(s) (NEGATIVE CONTROL namesake ON)
+c-ties exit=1 124s | simTriviaBank: 8 failure(s) (NEGATIVE CONTROL ties ON)
+c-tense exit=1 122s | simTriviaBank: 8 failure(s) (NEGATIVE CONTROL tense ON)
+c-postense exit=1 97s | simTriviaBank: 8 failure(s) (NEGATIVE CONTROL postense ON)
+c-family exit=1 103s | simTriviaBank: 8 failure(s) (NEGATIVE CONTROL family ON)
+c-legacy exit=1 92s | simTriviaBank: 5 failure(s) (NEGATIVE CONTROL legacy ON)
+c-rulec exit=1 94s | simTriviaBank: 8 failure(s) (NEGATIVE CONTROL rulec ON)
