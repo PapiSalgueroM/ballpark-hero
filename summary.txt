@@ -1,0 +1,6 @@
+ctl-pending exit=1 2s | simBingoClubCounts: CONTROL=pending FIRED (2 failures; section 4: 2)
+ctl-onesource exit=1 3s | simBingoClubCounts: CONTROL=onesource FIRED (1 failures; section 5: 1)
+simBingoClubCounts exit=0 3s | simBingoClubCounts: GREEN, every section held
+ctl-noapply exit=1 3s | simBingoClubCounts: CONTROL=noapply FIRED (121 failures; section 2: 40, section 3: 81)
+simPlayerBingoHonours exit=0 13s | simPlayerBingoHonours PASS
+vitest exit=0 20s |    Duration  19.49s (transform 6.57s, setup 830ms, collect 8.19s, tests 19.75s, environment 5.00s, prepare 1.84s)

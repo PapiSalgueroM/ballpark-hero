@@ -1,0 +1,72 @@
+0) The fixture
+   BASE 692590145: pool 474 from 483 names and 3692 rows, 21 requests, largest response 1000 rows, largest history page 781 rows
+1) The diagnosis receipt and the candidate rule
+   BASE Tyler Morton (Olympique Lyon, 2026, Defensive Midfield): clubs [liverpool fc, olympique lyon], count 2, 4+ false, one club false
+   hole class: 69 candidates (24 on Round 669's lists, 45 more whose counted rows begin at or after 2023 with a hole year missing)
+   owed to Round 1576, C2: pool men on the hand overlay (no from, each needs a lookup): 98; generated overlay rows whose from club is in none of his counted rows: 1: James Ward-Prowse (Burnley FC)
+   owed, C1 outside the hole (a 2023 to 2025 year missing after his first counted row, not a candidate): 6: Álvaro Carreras, Mason Greenwood, Amad Diallo, Jamie Leweling, Ian Maatsen, Emile Smith Rowe
+   owed, academy filtered rows at a club he has no counted row at (critic advice 10): 28
+     Morgan Rogers (manchester city, west bromwich albion, afc bournemouth, lincoln city); Antoine Semenyo (sunderland afc); Eberechi Eze (wycombe wanderers); Nicolò Barella (como 1907); Federico Dimarco (fc empoli); Gianluigi Donnarumma (ac milan primavera)
+     Ademola Lookman (charlton athletic); Serhou Guirassy (aj auxerre); Brennan Johnson (lincoln city); Conor Gallagher (charlton athletic); Dominic Solanke (vitesse arnhem); Dan Ndoye (fc lausanne-sport)
+     Rico Lewis (manchester city u21); Antonio Nusa (stabaek fotball); Ferdi Kadıoğlu (nec nijmegen); Crysencio Summerville (ado den haag, leeds united u21); Evann Guessand (fc lausanne-sport); James Maddison (coventry city)
+     Simon Adingra (fc nordsjaelland u19); Alejandro Grimaldo (fc barcelona); Kingsley Coman (paris saint-germain); Jan Oblak (ud leiria); Nathan Aké (chelsea fc); Nahuel Molina (defensa y justicia)
+     Pervis Estupiñán (ud almeria); André Onana (ajax amsterdam u21); Oleksandr Zinchenko (fc ufa); João Cancelo (sl benfica, sl benfica b)
+   owed, C3 late starters outside the hole (first counted row at a listed age of 22 or more): 23
+     Viktor Gyökeres (2022, 23); Tijjani Reijnders (2022, 23); Yann Bisseck (2023, 22); Mateo Retegui (2022, 22); David Raya (2019, 23); Kiernan Dewsbury-Hall (2022, 23); Ollie Watkins (2018, 22); Yoane Wissa (2020, 23)
+     Mohamed Amoura (2023, 22); Min-jae Kim (2021, 24); Kaoru Mitoma (2021, 23); Robin Le Normand (2019, 22); Mats Wieffer (2023, 23); Guglielmo Vicario (2019, 22); Randal Kolo Muani (2021, 22); Isak Hien (2023, 23)
+     Ivan Toney (2020, 23); Nayef Aguerd (2019, 22); Hiroki Ito (2022, 22); Samuel Lino (2022, 22); Maximilian Kilman (2020, 22); Artem Dovbyk (2021, 23); John McGinn (2018, 23)
+2) Identity, BASE against the tree
+   pool, seasonStats and clubYears equal to BASE; 69 club histories changed; 41 club square verdicts moved
+     Nico Paz now fits Played for Real Madrid (support 27 -> 30)
+     Franco Mastantuono now fits Played for Real Madrid (support 27 -> 30)
+     Mario Gila now fits Played for Real Madrid (support 27 -> 30)
+     Máximo Perrone now fits Played for Manchester City (support 42 -> 43)
+     Ryan Gravenberch now fits Played for Bayern Munich (support 28 -> 31)
+     Angelo Stiller now fits Played for Bayern Munich (support 28 -> 31)
+     João Cancelo now fits Played for Bayern Munich (support 28 -> 31)
+     Dean Huijsen now fits Played for Juventus (support 21 -> 23)
+     João Cancelo now fits Played for Juventus (support 21 -> 23)
+     Alejandro Balde now fits One-club man (support 31 -> 29)
+     Nico Williams now fits One-club man (support 31 -> 29)
+     Diogo Costa now fits One-club man (support 31 -> 29)
+     Gavi now fits One-club man (support 31 -> 29)
+     Raúl Asencio now fits One-club man (support 31 -> 29)
+     Unai Simón now fits One-club man (support 31 -> 29)
+     Adam Wharton no longer fits One-club man (support 31 -> 29)
+     Carlos Baleba no longer fits One-club man (support 31 -> 29)
+     Kaishu Sano no longer fits One-club man (support 31 -> 29)
+     Joel Ordóñez no longer fits One-club man (support 31 -> 29)
+     Aleksandar Stanković no longer fits One-club man (support 31 -> 29)
+     Hayden Hackney no longer fits One-club man (support 31 -> 29)
+     Leon Avdullahu no longer fits One-club man (support 31 -> 29)
+     Conor Bradley no longer fits One-club man (support 31 -> 29)
+     Sandro Tonali now fits Played for 4+ clubs (support 149 -> 155)
+     Dean Huijsen now fits Played for 4+ clubs (support 149 -> 155)
+     Nick Woltemade now fits Played for 4+ clubs (support 149 -> 155)
+     Amadou Onana now fits Played for 4+ clubs (support 149 -> 155)
+     Morten Hjulmand now fits Played for 4+ clubs (support 149 -> 155)
+     Bazoumana Touré now fits Played for 4+ clubs (support 149 -> 155)
+     Mateus Fernandes now fits Played for 4+ clubs (support 149 -> 155)
+     Máximo Perrone now fits Played for 4+ clubs (support 149 -> 155)
+     Tyler Morton now fits Played for 4+ clubs (support 149 -> 155)
+     Mamadou Sangaré now fits Played for 4+ clubs (support 149 -> 155)
+     Thierno Barry now fits Played for 4+ clubs (support 149 -> 155)
+     Dilane Bakwa now fits Played for 4+ clubs (support 149 -> 155)
+     Ryan Gravenberch no longer fits Played for 4+ clubs (support 149 -> 155)
+     Jules Koundé no longer fits Played for 4+ clubs (support 149 -> 155)
+     Gonçalo Ramos no longer fits Played for 4+ clubs (support 149 -> 155)
+     Matías Soulé no longer fits Played for 4+ clubs (support 149 -> 155)
+     Marcos Llorente no longer fits Played for 4+ clubs (support 149 -> 155)
+     Noussair Mazraoui no longer fits Played for 4+ clubs (support 149 -> 155)
+   the count rule alone (split, aliases, reserve sides) moves 18 men's club square verdicts: João Cancelo: Played for Juventus; Nico Paz: One-club man; Alejandro Balde: One-club man; Nico Williams: One-club man; Diogo Costa: One-club man; Gavi: One-club man; Raúl Asencio: One-club man; Unai Simón: One-club man; Moisés Caicedo: Played for 4+ clubs; Ryan Gravenberch: Played for 4+ clubs; Jules Koundé: Played for 4+ clubs; James Garner: Played for 4+ clubs; Gregor Kobel: Played for 4+ clubs; Gonçalo Ramos: Played for 4+ clubs; Evanilson: Played for 4+ clubs; Matías Soulé: Played for 4+ clubs; Marcos Llorente: Played for 4+ clubs; Noussair Mazraoui: Played for 4+ clubs
+   support on the fixture: One-club man 31 -> 29, Played for 4+ clubs 149 -> 155
+3) Verdicts
+   tree Tyler Morton: [liverpool fc, olympique lyon, blackburn rovers, hull city], count 4, 4+ true, one club false
+   82 recorded verdicts checked against BASE and the tree; 82 whole senior careers equal to what the tree counts
+4) Completeness, a ratchet
+   69 candidates: 40 additions, 42 agrees, 1 partial, 0 pending (ratchet 0)
+5) Sources
+   227 sourced facts checked
+6) The derived file
+   40 men, 55 added clubs; clubs the fixture never spells (new keys, printed): 15: Abdukodir Khusanov: Energetik-BGU; Aleksandar Stanković: FC Luzern; Bazoumana Touré: ASEC Mimosas; Ethan Ampadu: Exeter City; Evanilson: FC STK 1914 Šamorín; Fisnik Asllani: FK Austria Vienna; Hayden Hackney: Scunthorpe United; Jérémy Jacquet: Clermont Foot 63; Kaishu Sano: FC Machida Zelvia; Mamadou Sangaré: Grazer AK; Mamadou Sangaré: SV Zulte Waregem; Moisés Caicedo: Beerschot VA; Morten Hjulmand: FC Admira Wacker; Petar Sučić: HŠK Zrinjski Mostar; Thierno Barry: SK Beveren
+simBingoClubCounts: GREEN, every section held

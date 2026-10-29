@@ -1,0 +1,6 @@
+simBingoClubCounts: node scripts/simBingoClubCounts.mjs
+ctl-pending: BINGO_CLUBS_CONTROL=pending node scripts/simBingoClubCounts.mjs
+ctl-onesource: BINGO_CLUBS_CONTROL=onesource node scripts/simBingoClubCounts.mjs
+ctl-noapply: BINGO_CLUBS_CONTROL=noapply node scripts/simBingoClubCounts.mjs
+vitest: node_modules/.bin/vitest run src/test/clubCareerAdditions.test.ts src/test/playerBingoClubCounts.test.ts src/test/playerBingoHonours.test.ts src/test/playerBingoTransport.test.ts src/test/playerBingoWorldCupAlias.test.ts src/test/playerBingoReport.test.tsx src/test/playerBingoLoad.test.tsx src/test/playerBingoLineFeedback.test.tsx src/test/scoreShown.test.tsx src/test/playerBingoRodriHonour.test.ts --testTimeout=300000 --hookTimeout=120000
+simPlayerBingoHonours: node scripts/simPlayerBingoHonours.mjs
