@@ -1,0 +1,16 @@
+#!serial
+# Release BT kit: 1 of the 1 request lines of Release BS's rc-BLa.txt (rBSg/.tmp-fx/bs), the lines of the BT areas (the US My Careers, the Front Offices, Soccer Connections and the daily save shape, Build Your XI and the player search box, What's New, the guides and search index, the weight rows) and the setup lines before them; 0 line(s) outside those areas left out.
+# Release BS kit: 1 of the 10 request lines of Release BR's rc-BLa.txt (rBRg/.tmp-fx/br), the lines of the BS areas (Soccer Career, Club Manager and the manager games on its engine, Player Bingo, Conquest, Stat and Draft Detective, the US My Career save notice, What's New, the polls, the guide intro) and the setup lines before them; 9 line(s) outside those areas left out: p1423 p1425 p1428 p1426 p1427 p1429 p1430 p1432 p1431.
+# Release BL (Round BLG, finish-BLG.md section 3): one line per packet, each the packet's own prover (the core of its own
+# workflow's tests step, plus the existing harnesses and controls that step names) at its own merge commit with its
+# pinned base bound to the joined tree, every line as finally run green (runners rBLb1, rBLb2, rBLb3 on 6bae5306).
+# Send with: bash rc.sh <name> rc-BLa.txt bindAt.sh bindHash.sh runProver.sh   (runProver.sh of THIS kit: it knows
+# RP_NODE_MODULES=hardlink, which p1424 needs). Merges and their first parents: m1 539f635b (PR337, b967a309),
+# m2 ab1fe605 (PR338, 539f635b), m3 75340a83 (PR339, ab1fe605), m4 5a58cf7b (PR341, 75340a83), m5 9afad878 (PR345,
+# 5a58cf7b), m6 85fa7592 (PR340, 9afad878), m7 bf451369 (PR342, 85fa7592), m8 21c8fc4b (PR343, bf451369), m9 29c94aa5
+# (PR344, 21c8fc4b), m10 6bae5306 (PR346, 29c94aa5). These are fixed commits, so the lines run the same on any later head.
+# Bindings beyond the plain base: p1431 rebinds the builder hash pair (94a22773 to 145b59dd, abbf03e4 to 573fb045, the
+# joined builder carrying PR333's aria-pressed, rc-BLb1.txt header); p1430, p1431 and p1432 bind the parent CHAIN so their
+# historical replays run the parent's own sim on its bound base (rc-BLb3.txt header). p1424 needs the hard linked
+# node_modules (its "Native installed copied-panel alias" check).
+p1424: C=$(bash .rc/x/bindAt.sh ab1fe605 775564305e9da84dab59f2b9fe246d044a3cc8e9=539f635b scripts/simNflCoachStaffRecovery.mjs) && RP_NODE_MODULES=hardlink bash .rc/x/runProver.sh $C p1424 NFL_COACH_OUT NFL_COACH_MODE=fixed -- bash -c 'set -eo pipefail; o=$NFL_COACH_OUT; : > $o/r.transport; SIM_OFFLINE_RECEIPT=$o/r.transport node scripts/simNflCoachStaffRecovery.mjs; test -s $o/unit/fixtures.json; for m in simUsCoachCareer simUsCoachRetirement simUsCoaching simUsCoachPoaching simUsBoardParity; do : > $o/$m.transport; SIM_OFFLINE_RECEIPT=$o/$m.transport node scripts/$m.mjs > $o/$m.log 2>&1 || { echo "$m FAILED"; tail -5 $o/$m.log; exit 1; }; echo "$m: $(tail -1 $o/$m.log | cut -c1-160)"; test ! -s $o/$m.transport; done; for c in label draw binding restore era talk fixture wheel nosave nophase noresult; do US_BOARD_PARITY_CONTROL=$c node scripts/simUsBoardParity.mjs > $o/p-$c.log 2>&1 || { echo "parity control $c FAILED"; tail -5 $o/p-$c.log; exit 1; }; echo "parity-$c: $(tail -1 $o/p-$c.log | cut -c1-160)"; done; echo "p1424 PROOF DONE"'
