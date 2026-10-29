@@ -59,7 +59,7 @@ import LineupBuilder from '@/pages/LineupBuilder';
 import { useLineupBuilder } from '@/hooks/useLineupBuilder';
 import { FORMATIONS } from '@/types/lineupBuilder';
 import { displayName } from '@/lib/playerSearch';
-import { clubTableNames, clubs } from '@/data/lineupTeams';
+import { clubTableNames, clubs, clubYearClubs, CLUB_YEAR_WITHHELD } from '@/data/lineupTeams';
 
 type Choice = { mode: 'mixed' } | { mode: 'club-year'; year: number };
 type DraftHook = Omit<ReturnType<typeof useLineupBuilder>, 'selectFormation'> & {
@@ -207,6 +207,70 @@ beforeEach(async () => {
 });
 afterEach(() => {
   cleanup(); io.rest = null; vi.clearAllTimers(); vi.useRealTimers(); vi.restoreAllMocks(); vi.unstubAllGlobals();
+});
+
+/* Release BT: a seeded generator for the draw tests. With Math.random pinned
+ * at 0.5 the shuffle comparator calls every pair equal, so the draw returns
+ * the list in order (eleven clubs first) and a reroll always takes the middle
+ * of what is left: a nations draw or a same club reroll could not be seen. */
+function mulberry32(seed: number): () => number {
+  let a = seed >>> 0;
+  return () => {
+    a = (a + 0x6d2b79f5) | 0;
+    let t = Math.imul(a ^ (a >>> 15), 1 | a);
+    t = (t + Math.imul(t ^ (t >>> 7), 61 | t)) ^ t;
+    return ((t ^ (t >>> 14)) >>> 0) / 4294967296;
+  };
+}
+const SEEDS = 25;
+const REROLLS = 12;
+
+describe('Build Your XI draws under a seeded generator', () => {
+  it('a Club year draft deals clubs only, never a withheld club, and every reroll moves to another club', async () => {
+    expect(CLUB_YEAR_WITHHELD.has('Arsenal'),
+      'XI_CLUB_YEAR_ARSENAL: the stored "Arsenal FC" also holds Arsenal de Sarandi, so a Club year never deals Arsenal').toBe(true);
+    const seen = new Set<string>();
+    for (let seed = 1; seed <= SEEDS; seed++) {
+      vi.mocked(Math.random).mockImplementation(mulberry32(seed));
+      const view = await startHook(2010);
+      for (let roll = 0; ; roll++) {
+        const teams = api(view).teamAssignments;
+        expect(teams, 'XI_CLUB_YEAR_CLUBS_ONLY: eleven teams, seed ' + seed).toHaveLength(11);
+        expect(teams.filter(team => team.isNation || !clubs.includes(team.name)).map(team => team.name),
+          'XI_CLUB_YEAR_CLUBS_ONLY: no nation, seed ' + seed + ' roll ' + roll).toEqual([]);
+        expect(teams.filter(team => CLUB_YEAR_WITHHELD.has(team.name)).map(team => team.name),
+          'XI_CLUB_YEAR_WITHHELD: seed ' + seed + ' roll ' + roll).toEqual([]);
+        expect(new Set(teams.map(team => team.name)).size, 'XI_CLUB_YEAR_UNIQUE: seed ' + seed).toBe(11);
+        teams.forEach(team => seen.add(team.name));
+        if (roll === REROLLS) break;
+        const before = api(view).currentTeam!.name;
+        act(() => api(view).rerollTeam());
+        expect(api(view).currentTeam?.name, 'XI_CLUB_YEAR_REROLL_MOVES: seed ' + seed + ' roll ' + roll).not.toBe(before);
+      }
+      view.unmount();
+    }
+    expect([...seen].sort(), 'XI_CLUB_YEAR_REACH: the seeded draws reach every club the Club year deals')
+      .toEqual([...clubYearClubs].sort());
+    legacyQuiet();
+  });
+
+  it('Mixed, the default, still deals clubs and nations', async () => {
+    let nations = 0, clubsDealt = 0;
+    for (let seed = 1; seed <= SEEDS; seed++) {
+      vi.mocked(Math.random).mockImplementation(mulberry32(seed));
+      const view = renderHook(() => useLineupBuilder());
+      act(() => api(view).selectFormation('4-4-2'));
+      expect(api(view).draftChoice, 'XI_MIXED_DEFAULT: no choice means Mixed').toEqual({ mode: 'mixed' });
+      const teams = api(view).teamAssignments;
+      expect(teams).toHaveLength(11);
+      nations += teams.filter(team => team.isNation).length;
+      clubsDealt += teams.filter(team => !team.isNation).length;
+      view.unmount();
+    }
+    expect(nations, 'XI_MIXED_NATIONS: Mixed deals nations').toBeGreaterThan(0);
+    expect(clubsDealt, 'XI_MIXED_CLUBS: Mixed deals clubs').toBeGreaterThan(0);
+    legacyQuiet();
+  });
 });
 
 describe('Build Your XI recorded year admissions', () => {

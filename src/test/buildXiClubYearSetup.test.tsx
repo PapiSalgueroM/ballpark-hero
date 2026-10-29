@@ -44,6 +44,12 @@ afterEach(() => {
 describe('Build Your XI club year setup', () => {
   it('keeps the mixed draft and six formations available', () => {
     render(<LineupBuilder />);
+    /* Release BT: the page opens on Mixed, so a player who never touches the
+       new choice plays the game exactly as before. */
+    expect(screen.getByRole('button', { name: 'Mixed' }), 'XI_SETUP_MIXED_DEFAULT: Mixed is pressed on load')
+      .toHaveAttribute('aria-pressed', 'true');
+    expect(screen.getByRole('button', { name: 'Club year draft' }), 'XI_SETUP_MIXED_DEFAULT: Club year is not')
+      .toHaveAttribute('aria-pressed', 'false');
     const buttons = formationButtons();
     expect(buttons).toHaveLength(6);
     expect(buttons.every(button => !button.hasAttribute('disabled'))).toBe(true);
