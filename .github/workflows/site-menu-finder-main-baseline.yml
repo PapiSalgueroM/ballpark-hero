@@ -1,0 +1,101 @@
+name: Fresh main Menu finder missing-feature baseline
+on:
+  push:
+    branches: [codex/site-menu-finder-main-baseline-20261029]
+permissions:
+  contents: read
+concurrency:
+  group: finder-main-baseline-${{ github.ref }}
+  cancel-in-progress: false
+jobs:
+  baseline:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    env:
+      CI: '1'
+      SIM_NETWORK: offline
+      EXPECTED_MAIN: 5d1198389d436ddb615c816a1330d57296a6d9d2
+      FINDER_OUT: ${{ runner.temp }}/finder-main-baseline
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 2
+          persist-credentials: false
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: npm
+      - name: Exact QA-only source on current main
+        run: |
+          set -euo pipefail
+          test "$GITHUB_REPOSITORY" = PapiSalgueroM/ballpark-hero
+          test "$GITHUB_REF" = refs/heads/codex/site-menu-finder-main-baseline-20261029
+          test "$(git show -s --format=%P HEAD)" = "$EXPECTED_MAIN"
+          test "$(git rev-parse HEAD)" = "$GITHUB_SHA"
+          mkdir "$FINDER_OUT"
+          git ls-remote origin refs/heads/main | cut -f1 > "$FINDER_OUT/main-at-start.txt"
+          test "$(cat "$FINDER_OUT/main-at-start.txt")" = "$EXPECTED_MAIN"
+          git diff --name-status "$EXPECTED_MAIN" HEAD > "$FINDER_OUT/paths.txt"
+          printf 'A\t.github/workflows/site-menu-finder-main-baseline.yml\nA\tsrc/test/SiteMenu.finder.test.tsx\n' | cmp - "$FINDER_OUT/paths.txt"
+          test "$(git hash-object src/test/SiteMenu.finder.test.tsx)" = dca14996069a9a82edf63f08b8abbf691385f362
+          git diff --exit-code "$EXPECTED_MAIN" HEAD -- src ':!src/test/SiteMenu.finder.test.tsx'
+          git ls-files -z | sort -z | xargs -0 sha256sum > "$FINDER_OUT/source-before.sha256"
+          git ls-tree -r HEAD > "$FINDER_OUT/source-tree.txt"
+          git rev-parse HEAD > "$FINDER_OUT/head.txt"
+          git rev-parse 'HEAD^{tree}' > "$FINDER_OUT/tree.txt"
+          git archive --format=tar HEAD > "$FINDER_OUT/source.tar"
+      - name: Exact locked packages
+        run: npm ci > "$FINDER_OUT/npm-ci.log" 2>&1
+      - name: App types and actual baseline causes
+        run: |
+          set -euo pipefail
+          export NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs"
+          : > "$FINDER_OUT/types.transport"
+          SIM_OFFLINE_RECEIPT="$FINDER_OUT/types.transport" node_modules/.bin/tsc --noEmit -p tsconfig.app.json > "$FINDER_OUT/types.log" 2>&1
+          test ! -s "$FINDER_OUT/types.transport"
+          : > "$FINDER_OUT/classifier.transport"
+          SIM_OFFLINE_RECEIPT="$FINDER_OUT/classifier.transport" node <<'NODE' > "$FINDER_OUT/baseline.log" 2>&1
+          const fs=require('node:fs'),path=require('node:path'),assert=require('node:assert/strict'),cp=require('node:child_process');
+          const out=process.env.FINDER_OUT, titles=["opens without editable autofocus and keeps original navigation","ranks actual catalog games and updates results as query changes","shows honest no results and clears without navigating","passes the full query to the existing search page","navigates to a game and closes including the current game","dismisses from the finder and returns visible trigger focus","clears the finder after close and a real route-key change","keeps draft searches out of the location and saved storage"];
+          const strip=s=>s.replace(/\x1b\[[0-?]*[ -/]*[@-~]/g,'');
+          function child(label,files,raw){const dir=path.join(out,label);fs.mkdirSync(dir);
+           const report=path.join(dir,'vitest.json'),stdout=fs.openSync(path.join(dir,'stdout.log'),'w'),stderr=fs.openSync(path.join(dir,'stderr.log'),'w'),receipt=path.join(dir,'transport.jsonl');fs.writeFileSync(receipt,'',{flag:'wx'});
+           let p;try{p=cp.spawnSync(process.execPath,['node_modules/vitest/vitest.mjs','run',...files,'--maxWorkers=1','--minWorkers=1','--no-file-parallelism','--reporter=default','--reporter=json','--outputFile.json='+report],{cwd:process.cwd(),env:{...process.env,SIM_OFFLINE_RECEIPT:receipt},timeout:360000,stdio:['ignore',stdout,stderr]});}finally{fs.closeSync(stdout);fs.closeSync(stderr);}
+           const processResult={status:p.status,signal:p.signal,error:p.error?String(p.error):null};fs.writeFileSync(path.join(dir,'process.json'),JSON.stringify(processResult,null,2)+'\n');fs.writeFileSync(path.join(dir,'raw.exit'),String(p.status)+'\n');
+           assert.equal(p.error,undefined,'CHILD_NO_METHOD_ERROR');assert.equal(p.signal,null,'CHILD_COMPLETED');assert.equal(p.status,raw,'CHILD_RAW_EXIT');assert.equal(fs.statSync(receipt).size,0,'CHILD_OFFLINE');
+           const cli=strip(fs.readFileSync(path.join(dir,'stdout.log'),'utf8')+'\n'+fs.readFileSync(path.join(dir,'stderr.log'),'utf8'));
+           assert(!/Unhandled (?:Errors?|Rejections?|Exceptions?)|Vitest caught|Failed Suites|No test files found|^\s*Errors\s+[1-9]\d*\s+errors?/mi.test(cli),'CHILD_NO_INFRASTRUCTURE');
+           const data=JSON.parse(fs.readFileSync(report,'utf8'));return{data,cli,status:p.status,report};}
+          function admit(r,missing){const d=r.data,expected=missing?8:10,failed=missing?8:0;
+           assert.equal(r.status,missing?1:0,'RAW_CLASSIFICATION');assert.equal(d.success,!missing,'SUCCESS_CLASSIFICATION');
+           assert.equal(d.numTotalTests,expected,'TOTAL_CASES');assert.equal(d.numFailedTests,failed,'FAILED_CASES');assert.equal(d.numPassedTests,expected-failed,'PASSED_CASES');assert.equal(d.numPendingTests,0,'NO_SKIPS');assert.equal(d.numTodoTests||0,0,'NO_TODO');assert.equal(d.numPendingTestSuites,0,'NO_PENDING_SUITES');
+           assert.equal(d.testResults.length,missing?1:5,'EXACT_FILE_COUNT');const rows=[];
+           for(const f of d.testResults){assert.equal(f.message,'','NO_FILE_METHOD_ERROR');assert.equal(f.status,missing?'failed':'passed','FILE_STATUS');for(const t of f.assertionResults){assert.equal(t.status,missing?'failed':'passed','CASE_STATUS');assert(Array.isArray(t.failureMessages));if(missing){assert.equal(t.failureMessages.length,1);assert(/AssertionError/.test(t.failureMessages[0]),'OWNED_ASSERTION');assert(t.failureMessages[0].includes('MENU_FINDER_FIELD_PRESENT'),'OWNED_MISSING_FIELD');assert(!/TypeError|ReferenceError|Cannot find module|Failed to resolve|timed out|TimeoutError/i.test(t.failureMessages[0]),'NO_METHOD_ASSERTION');}else assert.deepEqual(t.failureMessages,[]);rows.push({title:t.title,fullName:t.fullName,status:t.status});}}
+           assert.equal(rows.length,expected,'EXACT_ROWS');
+           if(missing){assert(d.testResults[0].name.replaceAll('\\','/').endsWith('/src/test/SiteMenu.finder.test.tsx'),'EXACT_FINDER_FILE');assert.deepEqual(rows.map(x=>x.title),titles,'EXACT_EIGHT_TITLES');assert.deepEqual(rows.map(x=>x.fullName),titles.map(t=>'Menu game finder '+t),'EXACT_EIGHT_IDENTITIES');}
+           assert(new RegExp('Test Files\\s+'+(missing?'1 failed':'5 passed')+'\\s+\\('+(missing?'1':'5')+'\\)').test(r.cli),'ACTUAL_FILE_CLOSING');assert(new RegExp('Tests\\s+'+(missing?'8 failed':'10 passed')+'\\s+\\('+(missing?'8':'10')+'\\)').test(r.cli),'ACTUAL_CASE_CLOSING');assert.equal((r.cli.match(/JSON report written to /g)||[]).length,1,'ACTUAL_JSON_CLOSING');assert(r.cli.includes('JSON report written to '+r.report),'ACTUAL_REPORT_PATH');return rows;}
+          const compatibility=child('existing',["src/test/SiteMenu.test.tsx","src/test/SiteMenu.lazy-loading.test.tsx","src/test/SiteMenu.load-failure.test.tsx","src/test/SiteMenu.escape-loading.test.tsx","src/test/SiteMenu.escape-failure.test.tsx"],0),normal=admit(compatibility,false),baseline=child('missing',['src/test/SiteMenu.finder.test.tsx'],1),missing=admit(baseline,true),controls=[];
+          for(const kind of ['failed-count','file-status','owned-cause']){const copy=structuredClone(baseline),before=JSON.stringify(copy);if(kind==='failed-count')copy.data.numFailedTests--;else if(kind==='file-status')copy.data.testResults[0].status='passed';else copy.data.testResults[0].assertionResults[0].failureMessages=['AssertionError: wrong assertion'];
+           const changed=JSON.stringify(copy);assert.notEqual(changed,before);assert.throws(()=>admit(copy,true),/FAILED_CASES|FILE_STATUS|OWNED_MISSING_FIELD/);
+           const restored=JSON.parse(before);for(const key of Object.keys(copy))delete copy[key];Object.assign(copy,restored);assert.equal(JSON.stringify(copy),before,'SAME_SERIALIZED_COPY_RESTORE');admit(copy,true);controls.push({kind,changed:true,refused:true,sameCopyRestored:true});}
+          fs.writeFileSync(path.join(out,'BASELINE-ADMISSION.json'),JSON.stringify({status:'ACTUAL_FRESH_MAIN_BASELINE_ONLY',head:process.env.GITHUB_SHA,parent:process.env.EXPECTED_MAIN,existing:normal,missing,controls,scope:'10 existing passes and8 owned missing-field failures. No finder implementation/build/browser/full-suite/global/live credit.'},null,2)+'\n',{flag:'wx'});
+          console.log('FINDER_MAIN_BASELINE: 10 existing PASS; 8 owned missing-field failures; 3 copied refusals and same-copy restores; baseline only');
+          NODE
+          cat "$FINDER_OUT/baseline.log"
+          test ! -s "$FINDER_OUT/classifier.transport"
+      - name: Source held and original outputs retained
+        if: always()
+        run: |
+          set -euo pipefail
+          git ls-files -z | sort -z | xargs -0 sha256sum > "$FINDER_OUT/source-after.sha256"
+          cmp "$FINDER_OUT/source-before.sha256" "$FINDER_OUT/source-after.sha256"
+          git diff --exit-code HEAD
+          find "$FINDER_OUT" -type f -print0 | sort -z | xargs -0 sha256sum > "$RUNNER_TEMP/finder-baseline-evidence.sha256"
+          cp "$RUNNER_TEMP/finder-baseline-evidence.sha256" "$FINDER_OUT/evidence.sha256"
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: finder-main-baseline-${{ github.run_id }}-${{ github.run_attempt }}
+          path: ${{ runner.temp }}/finder-main-baseline/
+          if-no-files-found: error
+          retention-days: 14
