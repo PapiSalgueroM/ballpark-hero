@@ -1,0 +1,384 @@
+/**
+ * Round 1570: the Hall wall (src/lib/usCareerHallWall.ts) in all four US My Careers.
+ *
+ * Every player retired in NBA, NFL, MLB or NHL My Career goes up on a wall kept under its own key beside the
+ * save, so a restart no longer takes his Hall of Fame card. This harness holds the module to that promise.
+ *
+ *   1. FLEET. SIM_WALL_CAREERS careers a sport (default 200, seeds 1 on), made with the binding's own calls and
+ *      played to retirement, stamped as the board's persist stamps them. For every career the plaque's record
+ *      deep equals hallRecordFor (what the card shows), its legacy, verdict and Hall verdict equal legacyOf, its
+ *      career line is the save's, the career is not touched, the three functions draw no Math.random, and the
+ *      round trip through JSON and the sanitizer is lossless. Prints each sport's plaque bytes and outcomes.
+ *   2. OLD SAVES. Every retired save in scripts/data/usBoardFixture.json, every row of
+ *      src/test/fixtures/careerHallV1.json and every retired row of src/test/fixtures/careerHallSaves1301.json,
+ *      repaired in memory the way the board's load repairs it: the plaque carries what that save's card told the
+ *      player (V1 whole; 1301 apart from the weighs sentence, which its own test leaves free, and whole against
+ *      the card today), the career is not touched, nothing is written to storage, the round trip is lossless.
+ *   3. THE STORE. The cap and its one eviction rule (the new plaque always goes up; past 12 the oldest that
+ *      missed the Hall comes down; the oldest Hall of Famer only when all 12 up are Hall of Famers), the keyed
+ *      upsert (the same plaque is the same list, a changed record replaces it where it hangs), the worst case
+ *      size, a newer version left alone, a bad or foreign plaque dropped alone, every clamp above every real
+ *      string, and the weight fence: the module is loaded eagerly on all four routes, so it may import no sport
+ *      (scripts/lib/usCareerFiles.mjs weightProblemsIn; a planted sport import must be found on every run).
+ *
+ * Controls (SIM_HALL_WALL_CONTROL), each must turn its own check red:
+ *   draw       one Math.random planted in hallWallEntry                      section 1 no draw
+ *   unstamped  the plaque built on a copy with no calibration stamp          section 1 record equals the card
+ *   calnow     old saves read on today's calibration                         section 2 V1 records
+ *   dupe       the key check off                                             section 3 idempotence
+ *   evict      the oldest comes down whatever its outcome                    section 3 Hall of Famer kept
+ *   newcomer   the eviction looks at all 13, the new plaque included         section 3 the new plaque goes up
+ *   clamp      the verdict clamp off                                         section 3 worst case size
+ *   version    any version accepted                                          section 3 newer version left alone
+ *   sportimport  an NBA import planted in the module                         section 3 weight fence
+ * A control's string must be in the source exactly once or the run refuses (exit 2, never 1).
+ * Exit: 0 green, 1 red (or, under a control, FIRED), 2 could not run, 3 a control that did not fire.
+ *
+ * Measured 2026-10-29 (seeds 1 to 200 a sport, this tree): plaque bytes median and p90 nfl 993 and 1068, nba 730
+ * and 1083, mlb 585 and 1034, nhl 800 and 1042; Hall of Famers 18, 15, 16 and 26 of 200. Old saves: 16 retired
+ * parity saves, 86 V1 rows, 50 retired 1301 rows. The worst case plaque is 2,251 characters, a full wall of them
+ * 27,043. Longest real strings against their clamps: name 12/40 (the input caps a name at 24), pos 4/6, eraId
+ * 5/16, team 3/8, verdict 54/160, hallName 41/80, teamName 21/60, weighs 187/320, honours label 22/48. Every
+ * control fired on 5 careers a sport. Fleet sizes are printed, never asserted; the clamp fence asks for a quarter
+ * of room above the longest real string.
+ */
+import os from 'node:os';
+import path from 'node:path';
+import assert from 'node:assert/strict';
+import { build } from 'esbuild';
+import { mkdtempSync, readFileSync, rmSync } from 'node:fs';
+import { pathToFileURL, fileURLToPath } from 'node:url';
+import { weightProblemsIn } from './lib/usCareerFiles.mjs';
+
+const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
+const CONTROL = process.env.SIM_HALL_WALL_CONTROL || '';
+const CAREERS = Number(process.env.SIM_WALL_CAREERS || 200);
+const MODULE = 'src/lib/usCareerHallWall.ts';
+const SPORTS = ['nfl', 'nba', 'mlb', 'nhl'];
+const ENGINE = { nfl: { file: 'nflMyCareer', weights: 'NFL_LEGACY_WEIGHTS' }, nba: { file: 'nbaMyCareer', weights: 'NBA_LEGACY_WEIGHTS' }, mlb: { file: 'mlbMyCareer', weights: 'MLB_LEGACY_WEIGHTS' }, nhl: { file: 'nhlMyCareer', weights: 'NHL_LEGACY_WEIGHTS' } };
+const PLANT = "import { NBA_CAREER_SPORT } from '@/lib/nbaCareerSport';\n";
+
+/* Each source control rewrites one string of the module as it is bundled; the string must be there once. */
+const SOURCE_CONTROLS = {
+  draw: { from: 'const hall = sport.hall;', to: 'const hall = sport.hall; Math.random();' },
+  dupe: { from: 'const at = list.findIndex(e => e.key === entry.key);', to: 'const at = -1;' },
+  evict: { from: "if (next[i].hall.outcome !== 'inducted') { drop = i; break; }", to: 'if (true) { drop = i; break; }' },
+  newcomer: { from: 'for (let i = next.length - 1; i >= 1; i -= 1)', to: 'for (let i = next.length - 1; i >= 0; i -= 1)' },
+  clamp: { from: 'verdict = cut(raw.verdict, C.verdict)', to: 'verdict = cut(raw.verdict, 1e9)' },
+  version: { from: 'if (raw.v !== 1) return', to: 'if (false) return' },
+  sportimport: { from: "import type { UsCareerCore } from '@/lib/usCareerSport';\n", to: `import type { UsCareerCore } from '@/lib/usCareerSport';\n${PLANT}` },
+};
+const HARNESS_CONTROLS = ['unstamped', 'calnow'];
+if (CONTROL && !SOURCE_CONTROLS[CONTROL] && !HARNESS_CONTROLS.includes(CONTROL)) {
+  console.error(`simUsCareerHallWall: SIM_HALL_WALL_CONTROL=${CONTROL} is not a control this harness knows`);
+  process.exit(2);
+}
+const rawSource = readFileSync(path.join(ROOT, MODULE), 'utf8');
+const source = rawSource.replace(/\r\n/g, '\n');
+let controlled = source;
+if (SOURCE_CONTROLS[CONTROL]) {
+  const { from, to } = SOURCE_CONTROLS[CONTROL];
+  const hits = source.split(from).length - 1;
+  if (hits !== 1) { console.error(`simUsCareerHallWall CONTROL ${CONTROL}: REFUSED, its string is in ${MODULE} ${hits} times, not once (not a FIRED)`); process.exit(2); }
+  controlled = source.replace(from, to);
+}
+
+const TMP = mkdtempSync(path.join(os.tmpdir(), 'hall-wall-'));
+const OUT = path.join(TMP, 'bundle.mjs');
+const entry = [
+  `export * from './${MODULE}';`,
+  `export { hallRecordFor, stampHallCalibration, hallWeighLine, HALL_CALIBRATION, LEGACY_GAME_RULES } from './src/lib/careerHallOfFame.ts';`,
+  `export { repairSummerOnLoad, newSummerSalt } from './src/lib/usCareerSummer.ts';`,
+  `export { repairHallOnLoad } from './src/lib/usCareerRetirementFlow.ts';`,
+  ...SPORTS.map(s => `export { ${s.toUpperCase()}_CAREER_SPORT as SPORT_${s} } from './src/lib/${s}CareerSport.ts';`),
+  ...SPORTS.map(s => `export { ${s.toUpperCase()}_HALL_WORDS as WORDS_${s} } from './src/lib/${s}CareerHall.ts';`),
+  ...SPORTS.map(s => `export { ${ENGINE[s].weights} as WEIGHTS_${s} } from './src/lib/${ENGINE[s].file}.ts';`),
+].join('\n');
+const modulePath = path.join(ROOT, MODULE);
+const controlPlugin = {
+  name: 'hall-wall-control',
+  setup(b) {
+    b.onLoad({ filter: /usCareerHallWall\.ts$/ }, args => (path.resolve(args.path) === modulePath ? { contents: controlled, loader: 'ts' } : undefined));
+  },
+};
+try {
+  await build({
+    stdin: { contents: entry, resolveDir: ROOT, loader: 'ts' }, bundle: true, format: 'esm', platform: 'node', outfile: OUT,
+    absWorkingDir: ROOT, logLevel: 'error', alias: { '@': './src' }, plugins: [controlPlugin], jsx: 'automatic',
+    banner: { js: "import { createRequire as __wallRequire } from 'node:module'; const require = __wallRequire(import.meta.url);" },
+  });
+} catch (err) {
+  console.error(`simUsCareerHallWall: the bundle did not build (${String(err && err.message).split('\n')[0]})`);
+  process.exit(2);
+}
+/* The bindings and the stamp read localStorage; this run keeps it in memory and counts every write. */
+const store = new Map();
+let storageWrites = 0;
+globalThis.localStorage = {
+  getItem: k => (store.has(k) ? store.get(k) : null), setItem: (k, v) => { storageWrites += 1; store.set(k, String(v)); },
+  removeItem: k => { storageWrites += 1; store.delete(k); }, clear: () => store.clear(), key: () => null, get length() { return store.size; },
+};
+const W = await import(pathToFileURL(OUT).href);
+rmSync(TMP, { recursive: true, force: true });
+
+/* Every check has an id; a control names the id it must turn red. */
+const red = new Map();
+const ran = new Map();
+const ok = (id, cond, msg) => {
+  ran.set(id, (ran.get(id) ?? 0) + 1);
+  if (cond) return;
+  if (!red.has(id)) red.set(id, []);
+  red.get(id).push(typeof msg === 'function' ? msg() : msg);
+};
+const same = (a, b) => { try { assert.deepStrictEqual(a, b); return true; } catch { return false; } };
+const clone = v => JSON.parse(JSON.stringify(v));
+const realRandom = Math.random;
+let draws = 0;
+Math.random = () => { draws += 1; return realRandom(); };
+function seeded(seed) {
+  let s = seed >>> 0;
+  return () => { s = (s + 0x6d2b79f5) >>> 0; let t = Math.imul(s ^ (s >>> 15), s | 1); t ^= t + Math.imul(t ^ (t >>> 7), t | 61); return ((t ^ (t >>> 14)) >>> 0) / 4294967296; };
+}
+const pct = (xs, q) => { const s = [...xs].sort((a, b) => a - b); return s[Math.min(s.length - 1, Math.floor(q * s.length))]; };
+/* The longest real string seen for each clamp, from the fleet, the old saves and the tables. */
+const longest = { name: 0, pos: 0, eraId: 0, team: 0, verdict: 0, hallName: 0, teamName: 0, weighs: 0, label: 0 };
+const seeLen = (k, s) => { if (typeof s === 'string' && s.length > longest[k]) longest[k] = s.length; };
+const seeEntry = (e) => {
+  seeLen('name', e.name); seeLen('pos', e.pos); seeLen('eraId', e.eraId); seeLen('verdict', e.verdict);
+  for (const t of e.teams) seeLen('team', t);
+  for (const h of e.honours) seeLen('label', h.label);
+  seeLen('hallName', e.hall.hallName); seeLen('weighs', e.hall.weighs);
+  if (e.hall.jersey) { seeLen('team', e.hall.jersey.team); seeLen('teamName', e.hall.jersey.teamName); }
+};
+/** The checks every plaque must pass, against the career it was built from. */
+function checkPlaque(id, S, c, e, expectHall) {
+  ok(`${id}.built`, !!e, `${S.slug} ${c.name}: no plaque for a retired career`);
+  if (!e) return;
+  seeEntry(e);
+  ok(`${id}.record`, same(e.hall, expectHall), () => `${S.slug} ${c.name}: the plaque's record is not the card's`);
+  const L = S.legacyOf(c);
+  ok(`${id}.legacy`, e.legacy === L.score && e.verdict === L.verdict && e.hof === L.hof, `${S.slug} ${c.name}: legacy differs`);
+  const teams = [...new Set(c.seasons.map(s => s.team))];
+  const line = { key: W.wallKeyOf(c, S.hall), name: c.name, pos: c.pos, seasons: c.seasons.length, from: c.seasons[0]?.year ?? c.year,
+    to: c.seasons.length ? c.seasons[c.seasons.length - 1].year : c.year, teams: teams.slice(0, 8), moreTeams: teams.length > 8 ? teams.length - 8 : undefined,
+    rings: S.ringsOf(c), honours: S.honours(c).filter(h => h.n > 0), eraId: c.eraId };
+  const got = { key: e.key, name: e.name, pos: e.pos, seasons: e.seasons, from: e.from, to: e.to, teams: e.teams, moreTeams: e.moreTeams, rings: e.rings, honours: e.honours, eraId: e.eraId };
+  ok(`${id}.line`, same(got, line), () => `${S.slug} ${c.name}: career line ${JSON.stringify(got).slice(0, 160)}`);
+  const back = W.sanitizeHallWall(JSON.parse(JSON.stringify({ v: 1, entries: [e] })), S.slug);
+  ok(`${id}.roundtrip`, same(back, { entries: [e], writable: true }), `${S.slug} ${c.name}: the round trip lost something`);
+}
+
+/* ---------------------------------------------------------------- 1. FLEET */
+const fleet = {};
+for (const [si, slug] of SPORTS.entries()) {
+  const S = W[`SPORT_${slug}`];
+  const positions = Object.keys(S.create.archetypes);
+  const eras = S.create.eras.map(e => e.id);
+  const bytes = [], outcomes = {};
+  for (let seed = 1; seed <= CAREERS; seed += 1) {
+    try {
+      const rng = seeded(seed * 4 + si);
+      const pos = positions[seed % positions.length];
+      const arch = S.create.archetypes[pos][Math.floor(rng() * S.create.archetypes[pos].length)];
+      const c = S.startCareer(`Wall ${slug} ${seed}`, pos, arch, rng, null, eras[seed % eras.length]);
+      c.summerSalt = W.newSummerSalt ? W.newSummerSalt(rng) : Math.floor(rng() * 0x100000000).toString(36);
+      let tq = S.rollTeamQuality(null, rng);
+      S.assignRole(c, tq, rng);
+      for (let i = 0; i < 40 && !S.shouldRetire(c); i += 1) { S.simSeason(c, tq, rng); S.progress(c, rng); tq = S.rollTeamQuality(tq, rng); }
+      c.retired = true;
+      W.stampHallCalibration(c);
+      const expectHall = W.hallRecordFor(S.hall, c);
+      const before = JSON.stringify(c);
+      const built = CONTROL === 'unstamped' ? (() => { const u = clone(c); delete u.hallCal; return u; })() : c;
+      draws = 0;
+      const e = W.hallWallEntry(S, built);
+      const again = e ? W.addToWall(W.addToWall([], e), e) : [];
+      W.sanitizeHallWall(JSON.parse(JSON.stringify({ v: 1, entries: again })), slug);
+      ok('s1.nodraw', draws === 0, `${slug} seed ${seed}: ${draws} Math.random calls`);
+      ok('s1.untouched', JSON.stringify(c) === before, `${slug} seed ${seed}: the career changed`);
+      ok('s1.once', again.length === (e ? 1 : 0), `${slug} seed ${seed}: the same plaque twice made ${again.length}`);
+      checkPlaque('s1', S, c, e, expectHall);
+      if (e) { bytes.push(JSON.stringify(e).length); outcomes[e.hall.outcome] = (outcomes[e.hall.outcome] ?? 0) + 1; }
+    } catch (err) {
+      ok('s1.crash', false, `${slug} seed ${seed}: ${String(err && err.message).split('\n')[0]}`);
+    }
+  }
+  fleet[slug] = { n: bytes.length, median: pct(bytes, 0.5), p90: pct(bytes, 0.9), outcomes };
+  console.log(`section 1 ${slug}: ${bytes.length} plaques of ${CAREERS} careers, bytes median ${fleet[slug].median} p90 ${fleet[slug].p90}, outcomes ${JSON.stringify(outcomes)}`);
+}
+
+/* ------------------------------------------------------------ 2. OLD SAVES */
+/** The board's load effect, in memory: the repairs it makes before it sets the career. */
+function loadAsBoard(S, c) {
+  if (!c.role) c.role = 'starter';
+  const loaded = S.repairNetWorth(c);
+  W.repairSummerOnLoad(loaded);
+  W.repairHallOnLoad(loaded);
+  return loaded;
+}
+/** One old retired save: the plaque carries what its card said, nothing is written, the career is not touched. */
+function oldSave(id, S, raw, expect) {
+  store.clear();
+  store.set(S.saveKey, raw);
+  const writesBefore = storageWrites;
+  const c = loadAsBoard(S, JSON.parse(raw).c);
+  const before = JSON.stringify(c);
+  const built = CONTROL === 'calnow' ? { ...clone(c), hallCal: W.HALL_CALIBRATION } : c;
+  draws = 0;
+  const e = W.hallWallEntry(S, built);
+  ok(`${id}.nodraw`, draws === 0, `${S.slug}: ${draws} draws`);
+  ok(`${id}.untouched`, JSON.stringify(c) === before, `${S.slug} ${c.name}: the career changed`);
+  ok(`${id}.nowrite`, storageWrites === writesBefore && store.get(S.saveKey) === raw, `${S.slug} ${c.name}: storage was written`);
+  checkPlaque(id, S, c, e, expect(c).hall);
+  if (e && expect(c).rest) {
+    const { weighs, ...rest } = e.hall;
+    ok(`${id}.told`, same(rest, expect(c).rest) && typeof weighs === typeof expect(c).weighs, () => `${S.slug} ${c.name}: the record differs from what the old code told him`);
+  }
+  if (e && expect(c).legacy) {
+    const t = expect(c).legacy;
+    ok(`${id}.toldLegacy`, e.legacy === t.score && e.verdict === t.verdict && e.hof === t.hof, `${S.slug} ${c.name}: the legacy differs from what he was told`);
+  }
+  return e;
+}
+const readJson = rel => JSON.parse(readFileSync(path.join(ROOT, rel), 'utf8'));
+const FX = readJson('scripts/data/usBoardFixture.json');
+const V1 = readJson('src/test/fixtures/careerHallV1.json');
+const R1301 = readJson('src/test/fixtures/careerHallSaves1301.json');
+const counted = { fixture: 0, v1: 0, r1301: 0 };
+for (const slug of SPORTS) {
+  const S = W[`SPORT_${slug}`];
+  for (const raw of Object.values(FX.sports[slug].saves)) {
+    let s; try { s = JSON.parse(raw); } catch { continue; }
+    if (!s?.c?.retired) continue;
+    counted.fixture += 1;
+    oldSave('s2.fixture', S, raw, c => ({ hall: W.hallRecordFor(S.hall, c) }));
+  }
+  for (const row of V1.sports[slug]) {
+    counted.v1 += 1;
+    // A V1 row is a bare career; the board's save wraps it.
+    oldSave('s2.v1', S, JSON.stringify({ c: row.save, phase: 'retired', teamQuality: 80, coach: null }), () => ({ hall: row.hall, legacy: row.legacy }));
+  }
+  for (const r of R1301.recordings) {
+    for (const row of r.sports[slug].filter(x => x.kind !== 'open')) {
+      counted.r1301 += 1;
+      const { weighs, ...rest } = row.hall;
+      oldSave('s2.r1301', S, JSON.stringify({ c: row.save, phase: 'retired', teamQuality: 80, coach: null }), c => ({ hall: W.hallRecordFor(S.hall, c), rest, weighs, legacy: row.legacy }));
+    }
+  }
+}
+console.log(`section 2: ${counted.fixture} retired saves of the parity fixture, ${counted.v1} V1 rows, ${counted.r1301} retired 1301 rows`);
+ok('s2.counted', counted.fixture > 0 && counted.v1 > 0 && counted.r1301 > 0, `section 2 read nothing: ${JSON.stringify(counted)}`);
+
+/* ---------------------------------------------------------------- 3. THE STORE */
+const CL = W.HALL_WALL_CLAMPS, LI = W.HALL_WALL_LISTS;
+const wide = n => 'W'.repeat(n);
+/** A raw plaque with every string past its clamp and every list past its length. */
+function overlong(sport, key = wide(W.HALL_WALL_KEY_MAX), outcome = 'notOnBallot') {
+  return {
+    key, name: wide(2 * CL.name), pos: wide(2 * CL.pos), eraId: wide(2 * CL.eraId), seasons: 99, from: 9999, to: 9999,
+    teams: Array.from({ length: LI.teams + 3 }, () => wide(2 * CL.team)), moreTeams: 999, rings: 999,
+    honours: Array.from({ length: LI.honours + 3 }, () => ({ label: wide(2 * CL.label), n: 9999 })), legacy: -99999,
+    verdict: wide(2 * CL.verdict), hof: false,
+    hall: { sport, hallName: wide(2 * CL.hallName), firstClass: 9999, score: -99999, outcome,
+      ballots: Array.from({ length: LI.ballots + 3 }, () => ({ classYear: 9999, share: 99.9, elected: false })),
+      inductedClass: 9999, firstBallot: false, jersey: { team: wide(2 * CL.team), seasons: 99, teamName: wide(2 * CL.teamName) }, weighs: wide(2 * CL.weighs) },
+  };
+}
+const plaque = (key, outcome) => {
+  const e = W.sanitizeHallWall({ v: 1, entries: [{ ...overlong('nba', key, outcome), name: `P ${key}` }] }, 'nba').entries[0];
+  if (!e) throw new Error(`simUsCareerHallWall: the store's plaque ${key} did not pass`);
+  return e;
+};
+const keys = list => list.map(e => e.key);
+const hof = (n, tag) => Array.from({ length: n }, (_, i) => plaque(`${tag}${i}`, 'inducted'));
+// Idempotence and the keyed upsert.
+{
+  const wall = [plaque('a', 'inducted'), plaque('b', 'fellOff'), plaque('c', 'waiting')];
+  const again = W.addToWall(wall, clone(wall[1]));
+  ok('s3.idem', again === wall && again.length === 3, `the same plaque again gave ${keys(again)}`);
+  const changed = { ...clone(wall[1]), rings: 3 };
+  const up = W.addToWall(wall, changed);
+  ok('s3.upsert', up !== wall && same(keys(up), ['a', 'b', 'c']) && same(up[1], changed), `a changed record gave ${keys(up)}`);
+  ok('s3.upsert', W.addToWall(up, clone(changed)) === up, 'an unchanged record after an update was written again');
+}
+// The cap: 9 Hall of Famers and 3 misses, the OLDEST plaque a Hall of Famer, the misses in the middle.
+{
+  const wall = [...hof(4, 'h'), plaque('m0', 'fellOff'), plaque('m1', 'waiting'), ...hof(3, 'g'), plaque('m2', 'notOnBallot'), ...hof(2, 'f')];
+  ok('s3.setup', wall.length === W.HALL_WALL_CAP, `the cap wall has ${wall.length}`);
+  const next = W.addToWall(wall, plaque('new', 'fellOff'));
+  ok('s3.hofkept', next.length === W.HALL_WALL_CAP && next[0].key === 'new' && !keys(next).includes('m2')
+    && next.filter(e => e.hall.outcome === 'inducted').length === 9, `13th miss on 9 + 3 gave ${keys(next)}`);
+}
+// Twelve Hall of Famers: the new plaque still goes up, one Hall of Famer comes down, and a second quick career takes the first.
+{
+  const wall = hof(12, 'h');
+  const one = W.addToWall(wall, plaque('miss1', 'notOnBallot'));
+  ok('s3.newcomer', same(keys(one), ['miss1', ...keys(wall).slice(0, 11)]), `a miss on 12 Hall of Famers gave ${keys(one)}`);
+  const two = W.addToWall(one, plaque('miss2', 'fellOff'));
+  ok('s3.newcomer', same(keys(two), ['miss2', ...keys(wall).slice(0, 11)]), `a second miss gave ${keys(two)}`);
+}
+// The size: one plaque with every clamp hit is the stated bound, and twelve fit the stated total.
+{
+  const e = W.sanitizeHallWall({ v: 1, entries: [overlong('nhl')] }, 'nhl').entries[0];
+  const n = e ? JSON.stringify(e).length : -1;
+  const full = e ? JSON.stringify({ v: 1, entries: Array(W.HALL_WALL_CAP).fill(e) }).length : -1;
+  console.log(`section 3: the worst case plaque is ${n} characters of JSON (stated ${W.HALL_WALL_ENTRY_MAX_BYTES}), a full wall of them ${full}`);
+  ok('s3.bytes', n === W.HALL_WALL_ENTRY_MAX_BYTES, `the worst case is ${n}, the module states ${W.HALL_WALL_ENTRY_MAX_BYTES}`);
+  ok('s3.longkey', W.sanitizeHallWall({ v: 1, entries: [overlong('nhl', wide(W.HALL_WALL_KEY_MAX + 1))] }, 'nhl').entries.length === 0, 'a key past the bound was kept');
+}
+// A newer version is left alone; junk is an empty writable wall; a bad, foreign or repeated plaque is dropped alone.
+{
+  const good = [plaque('a', 'inducted'), plaque('b', 'fellOff')];
+  ok('s3.version', same(W.sanitizeHallWall({ v: 2, entries: good }, 'nba'), { entries: [], writable: false }), 'a v 2 wall was read as this build\'s');
+  for (const junk of [null, 'x', 7, [], {}]) ok('s3.junk', same(W.sanitizeHallWall(junk, 'nba'), { entries: [], writable: true }), `junk ${JSON.stringify(junk)}`);
+  const bad = { ...clone(good[0]), key: 'x', from: 'soon' };
+  const foreign = { ...clone(good[1]), key: 'y', hall: { ...clone(good[1].hall), sport: 'nhl' } };
+  const got = W.sanitizeHallWall(clone({ v: 1, entries: [good[0], bad, foreign, good[0], good[1]] }), 'nba');
+  ok('s3.dropalone', same(got, { entries: good, writable: true }), `a mixed wall kept ${keys(got.entries)}`);
+}
+// Every clamp sits above every real string with room: the fleet and the old saves, every verdict in the four
+// legacy tables, and every weighs line the four sports' words can build.
+for (const slug of SPORTS) {
+  const src = readFileSync(path.join(ROOT, `src/lib/${ENGINE[slug].file}.ts`), 'utf8');
+  const at = src.indexOf('const verdict = score >=');
+  ok('s3.tables', at >= 0, `${slug}: no verdict table found`);
+  const table = at >= 0 ? src.slice(at, src.indexOf(';', at)) : '';
+  for (const m of table.matchAll(/'([^']*)'/g)) seeLen('verdict', m[1]);
+  const words = W[`WORDS_${slug}`];
+  for (const cal of [2, 3]) {
+    const weights = W[`WEIGHTS_${slug}`][cal];
+    for (const pos of Object.keys(weights.positions)) {
+      seeLen('weighs', W.hallWeighLine(words, weights, pos, null));
+      for (const s of weights.positions[pos].standout ?? []) {
+        seeLen('weighs', W.hallWeighLine(words, weights, pos, { stat: s.stat, label: s.label, total: 999999, credit: 999 }));
+      }
+    }
+  }
+}
+for (const k of Object.keys(longest)) {
+  console.log(`section 3 clamp ${k}: longest real ${longest[k]}, clamp ${CL[k]}`);
+  ok('s3.clamps', longest[k] > 0 || k === 'eraId', `${k}: no real string was seen`);
+  ok('s3.clamps', longest[k] * 1.25 <= CL[k], `${k}: the longest real string ${longest[k]} has under a quarter of room below its clamp ${CL[k]}`);
+}
+// The weight fence: the board loads this module on all four routes, so it may import no sport.
+{
+  const found = weightProblemsIn(MODULE, controlled, null);
+  ok('s3.weight', found.length === 0, () => found.join('; '));
+  const planted = weightProblemsIn(MODULE, source.replace("import type { UsCareerCore } from '@/lib/usCareerSport';\n", `import type { UsCareerCore } from '@/lib/usCareerSport';\n${PLANT}`), null);
+  ok('s3.fence', planted.length === 1 && /NBA code/.test(planted[0]), `the fence did not name a planted NBA import: ${JSON.stringify(planted)}`);
+}
+
+/* ---------------------------------------------------------------- the verdict */
+const TARGET = { draw: 's1.nodraw', unstamped: 's1.record', calnow: 's2.v1.record', dupe: 's3.idem', evict: 's3.hofkept', newcomer: 's3.newcomer', clamp: 's3.bytes', version: 's3.version', sportimport: 's3.weight' };
+Math.random = realRandom;
+for (const [id, msgs] of red) console.log(`RED ${id}: ${msgs.length} (first: ${msgs[0]})`);
+const checks = [...ran.values()].reduce((a, b) => a + b, 0);
+if (CONTROL) {
+  const t = TARGET[CONTROL], n = red.get(t)?.length ?? 0;
+  if (n > 0) { console.log(`simUsCareerHallWall CONTROL ${CONTROL}: FIRED, ${t} red ${n} times`); process.exit(1); }
+  console.log(`simUsCareerHallWall CONTROL ${CONTROL}: DID NOT FIRE, ${t} stayed green over ${ran.get(t) ?? 0} checks`);
+  process.exit(3);
+}
+if (red.size) { console.log(`simUsCareerHallWall: RED, ${red.size} check ids failed of ${ran.size} (${checks} checks)`); process.exit(1); }
+console.log(`simUsCareerHallWall: ok, ${ran.size} check ids, ${checks} checks, ${CAREERS} careers a sport, ${counted.fixture + counted.v1 + counted.r1301} old saves`);
+process.exit(0);
