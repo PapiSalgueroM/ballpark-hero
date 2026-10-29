@@ -1,0 +1,21 @@
+#!build
+#!playwright
+# Release BT kit: 9 of the 10 request lines of Release BS's rc-BIg.txt (rBSg/.tmp-fx/bs), the lines of the BT areas (the US My Careers, the Front Offices, Soccer Connections and the daily save shape, Build Your XI and the player search box, What's New, the guides and search index, the weight rows) and the setup lines before them; 1 line(s) outside those areas left out: coaching.
+# Release BS kit: 10 of the 20 request lines of Release BR's rc-BIg.txt (rBRg/.tmp-fx/br), the lines of the BS areas (Soccer Career, Club Manager and the manager games on its engine, Player Bingo, Conquest, Stat and Draft Detective, the US My Career save notice, What's New, the polls, the guide intro) and the setup lines before them; 10 line(s) outside those areas left out: tsc coachret coachret-ctl poach coachcareer predraft draftnight c993 c993-reveal draftnight-walk.
+# Release BI, Round 1346 (US My Careers: retire from coaching, and the showcase Skip undo), merged in Round BIH as
+# b31c9894 (first parent d8aaa4cb; the round's closed head db552c78, verify2-1346.md). No proof of this round compares
+# with a base commit, so nothing is bound. Every control is in the bundle or in the browser, never in src, so no
+# line writes into src and the file is not serial. Controls: each loop line exits 0 only when every control exits 1
+# AND its last lines say FIRED (it prints name=exit/FIRED for each). c993-reveal is self asserting: exit 0 means its
+# control fired (read "Native reveal control ... fails its own visibility assertion"). CARRIED, not this round's:
+# simUsCareerSummer runs one sport a line, each on a runner of its own (its header; about 11 to 50 minutes a sport),
+# and simWritesAreSent's Guess the Nation step is red on every runner (it needs the live database).
+vitest1346: node_modules/.bin/vitest run src/test/usCoachRetirement.test.tsx src/test/usCareerReports1346.test.tsx src/test/usCareerActionConfirm.test.tsx src/test/careerDraftNight.test.tsx src/test/usCareerHelpRules1104.test.tsx src/test/usCareerReveals.test.tsx src/test/usCareerProgrammeUi.test.tsx --testTimeout=300000 --hookTimeout=120000
+skips: node scripts/simUsCareerSkips.mjs
+skips-ctl: ok=0; r=""; for k in noundo leak graded clamp; do US_CAREER_SKIPS_CONTROL=$k node scripts/simUsCareerSkips.mjs > /tmp/sk-$k.log 2>&1; e=$?; f=$(tail -3 /tmp/sk-$k.log | grep -c FIRED); r="$r $k=$e/$f"; if [ $e != 1 ] || [ $f = 0 ]; then ok=1; tail -3 /tmp/sk-$k.log; fi; done; echo "controls (exit/FIRED):$r"; exit $ok
+parity: node scripts/simUsBoardParity.mjs
+confirm: node scripts/simUsCareerActionConfirm.mjs
+prospect: node scripts/simUsCareerProspect.mjs
+usweight: node scripts/simUsCareerWeight.mjs
+walk: ENGINES=chromium node scripts/playUsCareerReports.mjs
+walk-ctl: ok=0; r=""; for k in noretire noundo noreplay nosettle; do PLAY_US_REPORTS_CONTROL=$k ENGINES=chromium node scripts/playUsCareerReports.mjs > /tmp/wk-$k.log 2>&1; e=$?; f=$(tail -3 /tmp/wk-$k.log | grep -c FIRED); r="$r $k=$e/$f"; if [ $e != 1 ] || [ $f = 0 ]; then ok=1; tail -3 /tmp/wk-$k.log; fi; done; echo "controls (exit/FIRED):$r"; exit $ok
