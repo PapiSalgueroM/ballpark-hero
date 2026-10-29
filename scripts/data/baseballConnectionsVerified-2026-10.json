@@ -6,7 +6,8 @@
   "Every member of a group the checker flagged before the round holds his group on two hosts (flaggedGroups lists those groups under their labels after the round).",
   "Every finding the checker made before the round (fixed) has the fact behind it on two hosts: the member who did not fit, or the man from another group who did.",
   "uncheckedCeiling, memberUnknownCeiling and otherUnknownCeiling may only fall: a label, a member or another tile the record cannot judge must not come back.",
-  "Round 1567: a pair the record cannot judge is never settled by a new line; it is read on both hosts (grayPairs) and, a coin toss, its man leaves that board in place (rebuilt1567). Every member of a rebuilt group holds it on two hosts (its group is in flaggedGroups)."
+  "Round 1567: a pair the record cannot judge is never settled by a new line; it is read on both hosts (grayPairs) and, a coin toss, its man leaves that board in place (rebuilt1567). Every member of a rebuilt group holds it on two hosts (its group is in flaggedGroups).",
+  "fix2-1567: a near-line fact (why \"near-line\") records a man dealt beside a Hall of Fame position group with 8.5 to 9.9 percent of his games at its position, just under the 10 percent line the checker calls out (review-read-1567 minor 3). Each is read on the league record and baseball-reference.com by his share, and on the Hall of Fame's own page by his primary position; none puts him in that group, so the pair stays on its board as decided, not as a coin toss."
  ],
  "boardsChanged": [
   "bconn-001",
@@ -13286,6 +13287,156 @@
     }
    ],
    "round": 1567
+  },
+  {
+   "id": "bconn-053",
+   "label": "Hall of Fame first basemen",
+   "name": "Honus Wagner",
+   "holds": false,
+   "why": "near-line",
+   "finding": "bconn-053 | Honus Wagner (Hall of Fame shortstops) | Hall of Fame first basemen | under the 10 percent line at first base by less than one and a half points; no host puts him in the group (review-read-1567 minor 3; fix2-1567)",
+   "sources": [
+    {
+     "host": "statsapi.mlb.com",
+     "url": "https://statsapi.mlb.com/api/v1/people/123784/stats?stats=career&group=fielding",
+     "says": "career fielding games by position {\"P\":2,\"1B\":252,\"2B\":58,\"3B\":209,\"SS\":1888,\"LF\":32,\"CF\":15,\"RF\":96}; share of games at first base: 252 of 2550, 0.099"
+    },
+    {
+     "host": "baseball-reference.com",
+     "url": "https://www.baseball-reference.com/players/w/wagneho01.shtml",
+     "says": "Positions: Shortstop, Rightfielder and First Baseman; Standard Fielding career G: SS 1887, 1B 248, 2B 57, 3B 210, OF 374 (LF 32, RF 96, CF 15), all 2778; share of games at first base: 248 of 2545, 0.097 (0.089 of 2776 counting all 374 outfield games)"
+    },
+    {
+     "host": "baseballhall.org",
+     "url": "https://baseballhall.org/hall-of-famers/wagner-honus",
+     "says": "Primary Position: Shortstop; inducted 1936"
+    }
+   ]
+  },
+  {
+   "id": "bconn-028",
+   "label": "Hall of Fame left fielders",
+   "name": "Hank Aaron",
+   "holds": false,
+   "why": "near-line",
+   "finding": "bconn-028, bconn-035, bconn-057 | Hank Aaron (Hall of Fame right fielders) | Hall of Fame left fielders | under the 10 percent line at left field by less than one and a half points; no host puts him in the group (review-read-1567 minor 3; fix2-1567)",
+   "sources": [
+    {
+     "host": "statsapi.mlb.com",
+     "url": "https://statsapi.mlb.com/api/v1/people/110001/stats?stats=career&group=fielding",
+     "says": "career fielding games by position {\"1B\":210,\"2B\":43,\"3B\":7,\"LF\":315,\"CF\":308,\"RF\":2174,\"DH\":196}; share of games at left field: 315 of 3253, 0.097"
+    },
+    {
+     "host": "baseball-reference.com",
+     "url": "https://www.baseball-reference.com/players/a/aaronha01.shtml",
+     "says": "Positions: Rightfielder and First Baseman; Standard Fielding career G: RF 2174, CF 308, LF 315, 1B 210, 2B 43, 3B 7, DH 201, all 3020; share of games at left field: 315 of 3258, 0.097 (0.104 of his 3020 fielding games, DH games left out: still under 0.35)"
+    },
+    {
+     "host": "baseballhall.org",
+     "url": "https://baseballhall.org/hall-of-famers/aaron-hank",
+     "says": "Primary Position: Right Fielder; inducted 1982"
+    }
+   ]
+  },
+  {
+   "id": "bconn-035",
+   "label": "Hall of Fame center fielders",
+   "name": "Hank Aaron",
+   "holds": false,
+   "why": "near-line",
+   "finding": "bconn-035, bconn-057 | Hank Aaron (Hall of Fame right fielders) | Hall of Fame center fielders | under the 10 percent line at center field by less than one and a half points; no host puts him in the group (review-read-1567 minor 3; fix2-1567)",
+   "sources": [
+    {
+     "host": "statsapi.mlb.com",
+     "url": "https://statsapi.mlb.com/api/v1/people/110001/stats?stats=career&group=fielding",
+     "says": "career fielding games by position {\"1B\":210,\"2B\":43,\"3B\":7,\"LF\":315,\"CF\":308,\"RF\":2174,\"DH\":196}; share of games at center field: 308 of 3253, 0.095"
+    },
+    {
+     "host": "baseball-reference.com",
+     "url": "https://www.baseball-reference.com/players/a/aaronha01.shtml",
+     "says": "Positions: Rightfielder and First Baseman; Standard Fielding career G: RF 2174, CF 308, LF 315, 1B 210, 2B 43, 3B 7, DH 201, all 3020; share of games at center field: 308 of 3258, 0.095 (0.102 of his 3020 fielding games, DH games left out: still under 0.35)"
+    },
+    {
+     "host": "baseballhall.org",
+     "url": "https://baseballhall.org/hall-of-famers/aaron-hank",
+     "says": "Primary Position: Right Fielder; inducted 1982"
+    }
+   ]
+  },
+  {
+   "id": "bconn-028",
+   "label": "Hall of Fame right fielders",
+   "name": "Lou Brock",
+   "holds": false,
+   "why": "near-line",
+   "finding": "bconn-028, bconn-045, bconn-057 | Lou Brock (Hall of Fame left fielders) | Hall of Fame right fielders | under the 10 percent line at right field by less than one and a half points; no host puts him in the group (review-read-1567 minor 3; fix2-1567)",
+   "sources": [
+    {
+     "host": "statsapi.mlb.com",
+     "url": "https://statsapi.mlb.com/api/v1/people/111495/stats?stats=career&group=fielding",
+     "says": "career fielding games by position {\"CF\":115,\"RF\":242,\"LF\":2161}; share of games at right field: 242 of 2518, 0.096"
+    },
+    {
+     "host": "baseball-reference.com",
+     "url": "https://www.baseball-reference.com/players/b/brocklo01.shtml",
+     "says": "Position: Leftfielder; Standard Fielding career G: LF 2161, RF 242, CF 115, OF 2507; share of games at right field: 242 of 2518, 0.096"
+    },
+    {
+     "host": "baseballhall.org",
+     "url": "https://baseballhall.org/hall-of-famers/brock-lou",
+     "says": "Primary Position: Left Fielder; inducted 1985"
+    }
+   ]
+  },
+  {
+   "id": "bconn-045",
+   "label": "Hall of Fame right fielders",
+   "name": "Ken Griffey Jr.",
+   "holds": false,
+   "why": "near-line",
+   "finding": "bconn-045 | Ken Griffey Jr. (Hall of Fame center fielders) | Hall of Fame right fielders | under the 10 percent line at right field by less than one and a half points; no host puts him in the group (review-read-1567 minor 3; fix2-1567)",
+   "sources": [
+    {
+     "host": "statsapi.mlb.com",
+     "url": "https://statsapi.mlb.com/api/v1/people/115135/stats?stats=career&group=fielding",
+     "says": "career fielding games by position {\"LF\":11,\"CF\":2145,\"RF\":231,\"DH\":200,\"1B\":2}; share of games at right field: 231 of 2589, 0.089"
+    },
+    {
+     "host": "baseball-reference.com",
+     "url": "https://www.baseball-reference.com/players/g/griffke02.shtml",
+     "says": "Position: Centerfielder; Standard Fielding career G: CF 2145, RF 231, LF 11, 1B 2, DH 200, all 2384; share of games at right field: 231 of 2589, 0.089"
+    },
+    {
+     "host": "baseballhall.org",
+     "url": "https://baseballhall.org/hall-of-famers/griffey-jr-ken",
+     "says": "Primary Position: Center Fielder; inducted 2016"
+    }
+   ]
+  },
+  {
+   "id": "bconn-018",
+   "label": "Hall of Fame third basemen",
+   "name": "Johnny Bench",
+   "holds": false,
+   "why": "near-line",
+   "finding": "bconn-018, bconn-036 | Johnny Bench (Hall of Fame catchers) | Hall of Fame third basemen | under the 10 percent line at third base by less than one and a half points; no host puts him in the group (review-read-1567 minor 3; fix2-1567)",
+   "sources": [
+    {
+     "host": "statsapi.mlb.com",
+     "url": "https://statsapi.mlb.com/api/v1/people/110849/stats?stats=career&group=fielding",
+     "says": "career fielding games by position {\"C\":1743,\"1B\":146,\"3B\":195,\"LF\":55,\"CF\":2,\"RF\":55}; share of games at third base: 195 of 2196, 0.089"
+    },
+    {
+     "host": "baseball-reference.com",
+     "url": "https://www.baseball-reference.com/players/b/benchjo01.shtml",
+     "says": "Positions: Catcher, Third Baseman and First Baseman; Standard Fielding career G: C 1742, 1B 145, 3B 195, LF 55, RF 55, CF 2, all 2193; share of games at third base: 195 of 2194, 0.089"
+    },
+    {
+     "host": "baseballhall.org",
+     "url": "https://baseballhall.org/hall-of-famers/bench-johnny",
+     "says": "Primary Position: Catcher; inducted 1989"
+    }
+   ]
   }
  ],
  "watchLines": {
