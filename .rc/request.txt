@@ -1,0 +1,11 @@
+tsc: node_modules/.bin/tsc --noEmit -p tsconfig.app.json
+vitest-bingo: node_modules/.bin/vitest run src/test/playerBingoCategories.test.ts src/test/playerBingoHonours.test.ts src/test/playerBingoLineFeedback.test.tsx src/test/playerBingoLoad.test.tsx src/test/playerBingoReport.test.tsx src/test/playerBingoRodriHonour.test.ts src/test/playerBingoTransport.test.ts src/test/playerBingoWorldCupAlias.test.ts --testTimeout=300000 --hookTimeout=120000
+simCategories: CI=1 SIM_NETWORK=offline PLAYER_BINGO_CATEGORIES_PHASE=fixed NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/simPlayerBingoCategories.mjs
+simHonours: NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/simPlayerBingoHonours.mjs
+simLoad: NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/simPlayerBingoLoad.mjs
+simLineFeedback: NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/simPlayerBingoLineFeedback.mjs
+simRodri: PLAYER_BINGO_RODRI_PHASE=fixed node scripts/simPlayerBingoRodriHonour.mjs
+simWC: PLAYER_BINGO_WC_PHASE=fixed node scripts/simPlayerBingoWorldCupAlias.mjs
+simPool: node scripts/simPlayerBingoPool.mjs
+simSportsBingo: node scripts/simSportsBingo.mjs
+probe408: node .rc/x/probe408.mjs "$PWD" b20ec6664
