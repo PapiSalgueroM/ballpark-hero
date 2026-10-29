@@ -1,0 +1,14 @@
+#!serial
+pgl: npm install --prefix /tmp/pgl @electric-sql/pglite >/dev/null 2>&1 && ls /tmp/pgl/node_modules/@electric-sql
+r58base-headdata: git show 1229c0190:scripts/qa/rehearseUsConnections1558.mjs > scripts/qa/zzfx1558.mjs && PGLITE_DIR=/tmp/pgl node scripts/qa/zzfx1558.mjs; s=$?; rm -f scripts/qa/zzfx1558.mjs; exit $s
+r58base-basedata: git show 1229c0190:scripts/qa/rehearseUsConnections1558.mjs > scripts/qa/zzfx1558.mjs && git checkout 1229c0190 -- src/data/baseballConnectionsPuzzles.ts src/data/nflConnectionsPuzzles.ts src/data/nhlConnectionsPuzzles.ts && PGLITE_DIR=/tmp/pgl node scripts/qa/zzfx1558.mjs; s=$?; rm -f scripts/qa/zzfx1558.mjs; git checkout HEAD -- src scripts; exit $s
+r58head: PGLITE_DIR=/tmp/pgl node scripts/qa/rehearseUsConnections1558.mjs
+reh1567: PGLITE_DIR=/tmp/pgl node scripts/qa/rehearseUsConnections1567.mjs
+reh-noguard: REHEARSE_CONTROL=noguard PGLITE_DIR=/tmp/pgl node scripts/qa/rehearseUsConnections1567.mjs
+reh-drift: REHEARSE_CONTROL=drift PGLITE_DIR=/tmp/pgl node scripts/qa/rehearseUsConnections1567.mjs
+reh-tamper: REHEARSE_CONTROL=tamper PGLITE_DIR=/tmp/pgl node scripts/qa/rehearseUsConnections1567.mjs
+reh-nohash: REHEARSE_CONTROL=nohash PGLITE_DIR=/tmp/pgl node scripts/qa/rehearseUsConnections1567.mjs
+migcheck: node scripts/qa/usConnections1567Migration.mjs check
+migcheck-laterdata: node .rc/x/rvmut.mjs ripken && node scripts/qa/usConnections1567Migration.mjs check; s=$?; git checkout -- src scripts; exit $s
+migcheck-sqltamper: sed -i '0,/bconn-0/s/bconn-0/bconn-9/' supabase/migrations/20261029120000_round_1567_us_connections_gray.sql && node scripts/qa/usConnections1567Migration.mjs check; s=$?; git checkout -- supabase; exit $s
+clean: git status --short | grep -v '^??' | grep -c . ; exit 0
