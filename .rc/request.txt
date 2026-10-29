@@ -1,0 +1,12 @@
+#!build
+#!playwright
+#!serial
+tsc: node_modules/.bin/tsc --noEmit -p tsconfig.app.json
+vitest-intro: node_modules/.bin/vitest run src/test/gameSeoIntroLinks.test.tsx src/test/careerEntryGuide.test.tsx src/test/f1ConstructorGuideScore.test.tsx --testTimeout=300000 --hookTimeout=120000
+simSiteSearch: node scripts/simSiteSearch.mjs
+simGuideHeadings: node scripts/simGuideHeadings.mjs
+simSeoDiscovery1444: node scripts/simSeoDiscovery1444.mjs
+simTrustCopy: node scripts/simTrustCopy.mjs
+simInternalLinks: node scripts/simInternalLinks.mjs
+simNoRivalNames: node scripts/simNoRivalNames.mjs
+prerenderSC: PRERENDER_ONLY=/soccer-career node scripts/prerender.mjs; s=$?; mkdir -p "$RC_OUT/sc"; cp dist/soccer-career/index.html "$RC_OUT/sc/dist.html" 2>/dev/null; cp public/soccer-career/index.html "$RC_OUT/sc/public.html" 2>/dev/null; git diff --stat -- public | tail -3; grep -o '<p>[^<]*<a href="/wonderkid-factory">Wonderkid Factory</a>[^<]*</p>' dist/soccer-career/index.html public/soccer-career/index.html | head -3; grep -o '<a href="/contract-chaos">Contract Chaos</a>[^<]*' dist/soccer-career/index.html | head -2; exit $s
