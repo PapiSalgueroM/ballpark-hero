@@ -1,0 +1,10 @@
+age-22-to-25 label="Aged 22 to 25" support 225/500 | Erling Haaland=YES Vinicius Junior=YES Dominik Szoboszlai=YES Phil Foden=YES Ousmane Dembélé=no Lautaro Martínez=no Cole Palmer=YES Curtis Jones=YES Kylian Mbappé=no
+age-26-to-28 label="Aged 26 to 28" support 133/500 | Erling Haaland=no Vinicius Junior=no Dominik Szoboszlai=no Phil Foden=no Ousmane Dembélé=YES Lautaro Martínez=YES Cole Palmer=no Curtis Jones=no Kylian Mbappé=YES
+season-goals-10-under-30-matches label="10+ goals in under 30 season matches" support 28/500 | Erling Haaland=YES Vinicius Junior=no Dominik Szoboszlai=no Phil Foden=no Ousmane Dembélé=no Lautaro Martínez=YES Cole Palmer=YES Curtis Jones=YES Kylian Mbappé=no
+value-30m-under-50m label="Valued $30M to under $50M" support 239/500 | Erling Haaland=no Vinicius Junior=no Dominik Szoboszlai=no Phil Foden=no Ousmane Dembélé=no Lautaro Martínez=no Cole Palmer=no Curtis Jones=YES Kylian Mbappé=no
+Cole Palmer rows that pass the goals-under-30 tile: [{"goals":17,"assists":9,"matches":28,"yellowCards":3,"redCards":0,"year":2021}]
+Curtis Jones rows that pass the goals-under-30 tile: [{"goals":17,"assists":6,"matches":29,"yellowCards":2,"redCards":0,"year":2019}]
+seed 11 main {"fitPct":"91.5","tilesOfTheseKindsPerBoard":"12.33"} pr {"fitPct":"94.9","tilesOfTheseKindsPerBoard":"12.48"}
+seed 29 main {"fitPct":"91.8","tilesOfTheseKindsPerBoard":"12.36"} pr {"fitPct":"94.8","tilesOfTheseKindsPerBoard":"12.47"}
+seed 47 main {"fitPct":"91.7","tilesOfTheseKindsPerBoard":"12.34"} pr {"fitPct":"95.0","tilesOfTheseKindsPerBoard":"12.49"}
+probe408 done
