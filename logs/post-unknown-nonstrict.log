@@ -1,0 +1,7 @@
+post rows 20; replaced 16; unknown copy: nhlconn-009 "Scored 60 goals in a season" Wayne Gretzky -> Zed Nobodyson
+   nhl: 1 MEN ON THE LIVE ROWS ARE NOT IN THE RECORD, SO THEIR GROUPS ARE NOT FULLY CHECKED. Extend the record with NAMES_FROM=<export> (scripts/usConnections/fetch*Record.mjs) and run again. First of them: Zed Nobodyson
+   baseball: 0 groups nothing judges (ceiling 0), 0 members the record cannot place (ceiling 0), 0 other tiles it cannot judge (ceiling 0)
+   nfl: 0 groups nothing judges (ceiling 0), 0 members the record cannot place (ceiling 0), 0 other tiles it cannot judge (ceiling 0)
+   nhl: 0 groups nothing judges (ceiling 0), 1 members the record cannot place (ceiling 0), 3 other tiles it cannot judge (ceiling 0)
+
+simUsConnectionsFacts: 142 failures

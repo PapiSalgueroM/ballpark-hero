@@ -1,0 +1,4 @@
+#!serial
+post-strict: node .rc/x/mkpost.mjs && US_CONN_LIVE=nhl=/tmp/rr-post.json US_CONN_LIVE_STRICT=nhl node scripts/simUsConnectionsFacts.mjs > $RC_OUT/c.log 2>&1; s=$?; echo "fail lines $(grep -c 'FAIL' $RC_OUT/c.log); on 001-004 $(grep 'FAIL' $RC_OUT/c.log | grep -c 'nhlconn-00[1-4]'); on 005-020 $(grep 'FAIL' $RC_OUT/c.log | grep -c 'nhlconn-0\(0[5-9]\|1[0-9]\|20\)')"; tail -2 $RC_OUT/c.log; exit $s
+post-unknown-strict: node .rc/x/mkpost.mjs && US_CONN_LIVE=nhl=/tmp/rr-post-unknown.json US_CONN_LIVE_STRICT=nhl node scripts/simUsConnectionsFacts.mjs > $RC_OUT/d.log 2>&1; s=$?; grep 'Zed Nobodyson\|STRICT\|ceiling' $RC_OUT/d.log | head -8; tail -2 $RC_OUT/d.log; exit $s
+post-unknown-nonstrict: node .rc/x/mkpost.mjs && US_CONN_LIVE=nhl=/tmp/rr-post-unknown.json node scripts/simUsConnectionsFacts.mjs > $RC_OUT/e.log 2>&1; s=$?; grep 'Zed Nobodyson\|STRICT\|ceiling' $RC_OUT/e.log | head -8; tail -2 $RC_OUT/e.log; exit $s

@@ -1,0 +1,3 @@
+post-strict exit=1 1s | simUsConnectionsFacts: 142 failures
+post-unknown-strict exit=1 1s | simUsConnectionsFacts: 145 failures
+post-unknown-nonstrict exit=1 1s | simUsConnectionsFacts: 142 failures

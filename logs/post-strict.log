@@ -1,0 +1,4 @@
+post rows 20; replaced 16; unknown copy: nhlconn-009 "Scored 60 goals in a season" Wayne Gretzky -> Zed Nobodyson
+fail lines 142; on 001-004 142; on 005-020 0
+
+simUsConnectionsFacts: 142 failures
