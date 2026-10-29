@@ -1,0 +1,19 @@
+ok   head 320 rows: every row has a 44 px Save {"rows":50,"saves":50,"small":0,"median":45,"whole":7,"sideways":0}
+ok   head 320 rows: no taller than before {"median":45,"whole":7}
+ok   head 320 rows: no sideways overflow {"sideways":0}
+ok   head 320 back: one line {"lines":1,"text":"Back"}
+ok   head 320 place: Back keeps the list and focus {"before":{"name":"Ousmane Dembélé","listTop":971},"after":{"listTop":971,"focusedIsRowSave":true,"focused":"Save Ousmane Dembélé"}}
+ok   head 320 no page errors []
+ok   head 390 rows: every row has a 44 px Save {"rows":50,"saves":50,"small":0,"median":45,"whole":7,"sideways":0}
+ok   head 390 rows: no taller than before {"median":45,"whole":7}
+ok   head 390 rows: no sideways overflow {"sideways":0}
+ok   head 390 back: one line {"lines":1,"text":"Back"}
+ok   head 390 place: Back keeps the list and focus {"before":{"name":"Ousmane Dembélé","listTop":971},"after":{"listTop":971,"focusedIsRowSave":true,"focused":"Save Ousmane Dembélé"}}
+ok   head 390 no page errors []
+ok   head 1280 rows: every row has a 44 px Save {"rows":50,"saves":50,"small":0,"median":45,"whole":7,"sideways":0}
+ok   head 1280 rows: no taller than before {"median":45,"whole":7}
+ok   head 1280 rows: no sideways overflow {"sideways":0}
+ok   head 1280 back: one line {"lines":1,"text":"Back"}
+ok   head 1280 place: Back keeps the list and focus {"before":{"name":"Ousmane Dembélé","listTop":971},"after":{"listTop":971,"focusedIsRowSave":true,"focused":"Save Ousmane Dembélé"}}
+ok   head 1280 no page errors []
+cmwalk head: green at 320, 390 and 1280
