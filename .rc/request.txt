@@ -1,0 +1,11 @@
+#!serial
+tsc: node_modules/.bin/tsc --noEmit -p tsconfig.app.json
+nfl-plain: node scripts/simNflSeasonStats.mjs
+nfl-c-kickswap: NFL_STATS_CONTROL=kickswap node scripts/simNflSeasonStats.mjs
+nba-plain: node scripts/simNbaSeasonStats.mjs
+nba-base: mkdir -p .rc/nbb1 && git archive 5d1198389 src | tar -x -C .rc/nbb1 && NBA_STATS_BASE=.rc/nbb1 node scripts/simNbaSeasonStats.mjs
+nba-c-grouped: NBA_STATS_CONTROL=grouped node scripts/simNbaSeasonStats.mjs
+nba-c-carried: NBA_STATS_CONTROL=carried node scripts/simNbaSeasonStats.mjs
+m-kickswap-nfl: node .rc/x/mut1566.mjs kickswap && node scripts/simNflSeasonStats.mjs; a=$?; git checkout -- src scripts; echo "MUT kickswap nfl=$a (expect 1)"; exit $a
+m-namedstrict: mkdir -p .rc/ob && (test -d .rc/ob/src || git archive 5d1198389 src | tar -x -C .rc/ob) && node .rc/x/mut1566.mjs namedstrict && NBA_STATS_BASE=.rc/ob node scripts/simNbaSeasonStats.mjs; a=$?; git checkout -- src scripts; echo "MUT namedstrict nba=$a (expect 1)"; exit $a
+simHarnessAnchors: node scripts/simHarnessAnchors.mjs
