@@ -1,0 +1,1 @@
+probe: cp .rc/x/zzVfbsSc4191.test.ts src/test/zzVfbsSc4191.test.ts && node_modules/.bin/vitest run src/test/zzVfbsSc4191.test.ts --testTimeout=600000 --hookTimeout=120000
