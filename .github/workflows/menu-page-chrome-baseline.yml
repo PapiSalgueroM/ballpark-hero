@@ -1,0 +1,212 @@
+name: Menu routed-page chrome negative baseline
+on:
+  push:
+    branches: [codex/menu-page-chrome-baseline-v2-20261029]
+permissions:
+  contents: read
+concurrency:
+  group: menu-page-chrome-baseline-${{ github.ref }}
+  cancel-in-progress: false
+jobs:
+  baseline:
+    runs-on: ubuntu-latest
+    timeout-minutes: 45
+    defaults:
+      run:
+        shell: bash
+    env:
+      CI: 'true'
+      SIM_NETWORK: offline
+      TZ: UTC
+      EXPECTED_MAIN: dfb2720d783a30a6ecd814aa86e8c199ec6b4175
+      EXPECTED_PARENT: 155522e65265f9b6a1f9f1316a455fe52f40ba49
+    steps:
+      - name: Initialize bounded evidence outside source
+        run: |
+          set -euo pipefail
+          out="$RUNNER_TEMP/menu-page-chrome-baseline";test ! -e "$out";mkdir "$out"
+          echo "MENU_CHROME_OUT=$out" >> "$GITHUB_ENV"
+          printf '%s\n' "$GITHUB_SHA" > "$out/declared-head.txt"
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          persist-credentials: false
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: npm
+      - name: Exact two QA additions and all5454 parent bodies
+        run: |
+          set -euo pipefail
+          out="$MENU_CHROME_OUT";set +e
+          (
+            set -euo pipefail
+            test "$GITHUB_REPOSITORY" = PapiSalgueroM/ballpark-hero;test "$GITHUB_REPOSITORY_ID" = 1195729679
+            test "$GITHUB_REF" = refs/heads/codex/menu-page-chrome-baseline-v2-20261029
+            test "$(git show -s --format=%P HEAD)" = "$EXPECTED_PARENT";test "$(git rev-parse HEAD)" = "$GITHUB_SHA"
+            test "$(git rev-parse "$EXPECTED_PARENT^{tree}")" = 19f9c47675485fd4b572d2328d079318d9587b1f
+            git ls-remote origin refs/heads/main | cut -f1 > "$out/main-at-start.txt";test "$(cat "$out/main-at-start.txt")" = "$EXPECTED_MAIN"
+            git diff --no-renames --name-status "$EXPECTED_PARENT" HEAD > "$out/paths.txt"
+            printf 'A\t.github/workflows/menu-page-chrome-baseline.yml\nA\tsrc/test/SiteMenu.page-chrome.test.tsx\n' | cmp - "$out/paths.txt"
+            git diff --exit-code "$EXPECTED_PARENT" HEAD -- . ':!.github/workflows/menu-page-chrome-baseline.yml' ':!src/test/SiteMenu.page-chrome.test.tsx'
+            printf '66ac4d135b2cb6dcb5740d990ef5d91be92d72c478544680a31e7ccbdb4e93d1  src/test/SiteMenu.page-chrome.test.tsx\n' | sha256sum -c -
+            test "$(git hash-object src/test/SiteMenu.page-chrome.test.tsx)" = be4c51b559af62da3544d2a28f7cfc35eb220d6e
+            for file in .github/workflows/menu-page-chrome-baseline.yml src/test/SiteMenu.page-chrome.test.tsx;do test "$(git ls-tree HEAD -- "$file" | awk '{print $1}')" = 100644;git show "HEAD:$file" | cmp - "$file";done
+            git ls-tree -r HEAD > "$out/source-tree.txt";git ls-tree -rl HEAD > "$out/source-tree-with-sizes.txt";git ls-tree -r "$EXPECTED_PARENT" > "$out/parent-tree.txt"
+            awk '$2!="blob" || ($1!="100644" && $1!="100755"){bad=1}END{exit bad}' "$out/source-tree.txt"
+            test "$(awk 'END{print NR}' "$out/source-tree.txt")" = 5456;test "$(awk 'END{print NR}' "$out/parent-tree.txt")" = 5454
+            git rev-parse HEAD > "$out/head.txt";git rev-parse 'HEAD^{tree}' > "$out/tree.txt";git rev-parse "$EXPECTED_PARENT^{tree}" > "$out/parent-tree-sha.txt"
+            git archive --format=tar HEAD > "$out/source.tar"
+            git ls-files -z | sort -z > "$out/source-members.initial";git ls-files -z | sort -z | xargs -0 sha256sum > "$out/source.initial.sha256"
+            git ls-files --others --exclude-standard -z > "$out/source-untracked.initial";test ! -s "$out/source-untracked.initial"
+            git diff --exit-code HEAD;test -z "$(git status --porcelain --untracked-files=no)"
+          ) > "$out/source-gate.stdout.log" 2> "$out/source-gate.stderr.log"
+          raw=$?;set -e;printf '%s\n' "$raw" > "$out/source-gate.exit";cat "$out/source-gate.stdout.log";cat "$out/source-gate.stderr.log";test "$raw" -eq 0
+      - name: Exact locked packages only
+        run: |
+          set -euo pipefail
+          set +e;npm ci > "$MENU_CHROME_OUT/npm-ci.stdout.log" 2> "$MENU_CHROME_OUT/npm-ci.stderr.log";raw=$?;set -e
+          printf '%s\n' "$raw" > "$MENU_CHROME_OUT/npm-ci.exit";cat "$MENU_CHROME_OUT/npm-ci.stdout.log";cat "$MENU_CHROME_OUT/npm-ci.stderr.log";test "$raw" -eq 0
+      - name: Retain reviewed controller first literal fragment
+        run: |
+          set -euo pipefail
+          out="$MENU_CHROME_OUT"
+          cat > "$out/baseline-controller.cjs" <<'BASELINE_PART_1'
+          const fs=require('node:fs'),path=require('node:path'),a=require('node:assert/strict'),cp=require('node:child_process'),{createHash}=require('node:crypto'),{createRequire}=require('node:module'),{pathToFileURL}=require('node:url');
+          const out=process.env.MENU_CHROME_OUT,root=process.cwd(),target='src/test/SiteMenu.page-chrome.test.tsx',workflow='.github/workflows/menu-page-chrome-baseline.yml',sha=b=>createHash('sha256').update(b).digest('hex'),json=(file,v)=>fs.writeFileSync(file,JSON.stringify(v,null,2)+'\n',{flag:'wx'}),strip=s=>s.replace(/\x1b\[[0-?]*[ -/]*[@-~]/g,''),rel=p=>path.relative(root,p).split(path.sep).join('/');
+          const sourcePins=[{"path":"src/App.tsx","bytes":35925,"sha256":"f6572f98fab5b8e85a97d4e6321dc4109023738743527e20dd5a6700477ed89e","gitBlob":"79da1b8cf2de7870ea216703d0a1a56fceb69673","mode":"100644","type":"blob"},{"path":"src/components/auth/AuthModal.tsx","bytes":2075,"sha256":"50e4ba8230cec5531022768437a552445b71a2675be9572ccdea51cc102c4a88","gitBlob":"da7a8ba420657ed2649208df549c940408256bc1","mode":"100644","type":"blob"},{"path":"src/components/game/GameHelp.tsx","bytes":4566,"sha256":"a3dc6c386a3da57cce2a0042a6615682aa335c350135c7b85cdeb021f4e0c48b","gitBlob":"be6d3941548b5c059bae2dc5822a0018700df8d8","mode":"100644","type":"blob"},{"path":"src/components/game/GameNavbar.tsx","bytes":13258,"sha256":"7209cf373209c47a21a5e6b98c6b928a2985b2dabe2376f68c237b41525003db","gitBlob":"9fbcece74a9222bd2a7d1ec5a2e500212ad4cf6d","mode":"100644","type":"blob"},{"path":"src/components/game/GameShell.tsx","bytes":6391,"sha256":"cf0204bfcae8c5ecd300780fcff7fbefe4f03552db65a3d5bf5b16d3ec09d18f","gitBlob":"fead16a74355c3e553a936c98f587da126d60f1c","mode":"100644","type":"blob"},{"path":"src/components/game/HowToPlayPopover.tsx","bytes":3579,"sha256":"7c9c7205bb62612d6715e8721ef46bb482b44664e35f356d9bbd81d0c9a1bc22","gitBlob":"527f3c07171db29772d81c6887df5b238eb6e4c4","mode":"100644","type":"blob"},{"path":"src/components/game/ReportQuestion.tsx","bytes":6746,"sha256":"02b8fd8654cd1fd36000f618c7cf9b49c337215607523f4b8a83420cc8a115fb","gitBlob":"c8d175d3c25548450130c49246969c298a4f1243","mode":"100644","type":"blob"},{"path":"src/components/game/SharedResultCard.tsx","bytes":1770,"sha256":"683fd31d7bdef2cb64da6b6940f9e1143b87b4223163100276ddeec1495d17c8","gitBlob":"6c46714d61a494c9045b0438e0f89817706439fd","mode":"100644","type":"blob"},{"path":"src/components/guess-the-nation/GuessTheNationBoard.tsx","bytes":18731,"sha256":"5c245fa49d1e41606cf045ab96b155f68b766c8b2eb2d5321b130f7610269b17","gitBlob":"7fccc4aad69db24c652c6464300d4016847b9912","mode":"100644","type":"blob"},{"path":"src/components/guess-the-nation/GuessTheNationHowToPlay.tsx","bytes":1839,"sha256":"42c9d8fd33085c54f49eadf58a34b49050821b4237da024fb51682239cdf8e91","gitBlob":"42be5bace8a30ca3fd36a025e2c20fd0fe38f1e9","mode":"100644","type":"blob"},{"path":"src/components/guess-the-nation/NationSearch.tsx","bytes":2470,"sha256":"d521145e5e9faa0d0c0df6e7f01dcda2d347db488c950e7606dc6239d7733efa","gitBlob":"3b6672262da22579a08877792b0ab479603683a3","mode":"100644","type":"blob"},{"path":"src/components/guess-year/GuessTheYearBoard.tsx","bytes":8970,"sha256":"fb6828ffc3cff957c7d4f0e0208411bf0c0a1920c7b19efd2d027f43e78e25e9","gitBlob":"583cfdf462f77e0473eaa7084bc09c1aa0ca125f","mode":"100644","type":"blob"},{"path":"src/components/hof-or-bust/HofOrBustBoard.tsx","bytes":8910,"sha256":"287faa3883bbad00c365a1f1e5349653fa1efd897b898e30b41656c5c8dc7129","gitBlob":"577463b9f9349bdac987b36bad42a8341c45ce75","mode":"100644","type":"blob"},{"path":"src/components/layout/Header.tsx","bytes":11501,"sha256":"b0f43467bec631dfaac8c3023edb2df8ec6d1a044189dd93486ab27f30554a05","gitBlob":"9fb6484e88b1c8d2eff3a0e72e4b188c4a93bd0b","mode":"100644","type":"blob"},{"path":"src/components/layout/SiteMenu.tsx","bytes":3127,"sha256":"3553da010c40664cd3cd7ccbc2c62cf6cf99d7c9225d25e393133765895e0ce9","gitBlob":"26ecdad990a15f8361f281015311d010b74b7de6","mode":"100644","type":"blob"},{"path":"src/components/layout/SiteMenuHost.tsx","bytes":2327,"sha256":"257cab50164f031e4b91323f8f820fe3ef64ed417870b3816efcc7934dd3cde9","gitBlob":"a5bdf4e40ae8d5ca3257bef229d98270ce425a3b","mode":"100644","type":"blob"},{"path":"src/components/score-predictor/ScorePredictorBoard.tsx","bytes":8263,"sha256":"f5ea8ab46fdd13b8f70953824a6919912726fc5099640b566918b348ee783202","gitBlob":"a955e6757078f748bc73c69364ab94cb4d546232","mode":"100644","type":"blob"},{"path":"src/contexts/AuthContext.tsx","bytes":5558,"sha256":"fa796d80d1414738c6253dad4da2e0a6a99e7a6c84c0bd4ae517328b30b044fa","gitBlob":"9debce950794310717dc9924a2dcca5950504454","mode":"100644","type":"blob"},{"path":"src/data/hofPlayers.ts","bytes":14568,"sha256":"9a9294a66b4e5829537e59f041deefab52e5aebb61b951769346716dd147c5dc","gitBlob":"1e247c7e738e077f3d84141db239463111e383aa","mode":"100644","type":"blob"},{"path":"src/data/scorePredictorPuzzles.ts","bytes":11706,"sha256":"288449d88653ef4e0d4701c05bf461c3d9447f7bcd5532fe6e68d5ac564a0ed7","gitBlob":"c4035789d6427f60f958128d65b02109a50f5894","mode":"100644","type":"blob"},{"path":"src/hooks/useDailyLegend.ts","bytes":4985,"sha256":"5e2dcac32b64b14c78455259c894eec4b19dc4d47608af23a7b9eee6386f367d","gitBlob":"b49a39b0e3a6c0b4ab0f3d5963fe70ad76f34d11","mode":"100644","type":"blob"},{"path":"src/hooks/useGameNavbarStats.ts","bytes":6417,"sha256":"a817aae8e0d0f0b5907147e6db4586488565d7a2560c7ab47c7f33cce5bb0b9d","gitBlob":"ac4095d56fceb4ba1c491d580c615bd304c43287","mode":"100644","type":"blob"},{"path":"src/hooks/useGuessTheNation.ts","bytes":11261,"sha256":"d5223ab79f3267ee696185df3938f6027f3704c5480763fd00bdfee198001451","gitBlob":"759cdd9bebfecbf0df7d0c7c378e3722559ace21","mode":"100644","type":"blob"},{"path":"src/hooks/useGuessTheYear.ts","bytes":4880,"sha256":"884750d012362b28f7c7ca9c741e07387e372da65093528bba7b39891670a31a","gitBlob":"0ff10ea6478eecfd9dc63077289fba6b0c2dd3e9","mode":"100644","type":"blob"},{"path":"src/hooks/useHofOrBust.ts","bytes":5330,"sha256":"9d5317f670444b3bc3681b29c55a95f180a8a0f3c2fc2976f944b84e34495fec","gitBlob":"d58dd631b4bd16d6f4be106358067b272ea2728a","mode":"100644","type":"blob"},{"path":"src/hooks/useScorePredictor.ts","bytes":4485,"sha256":"6349e5c171d4aaceeb34da8275c1dca85e0afd393d25379bb2637604f08e1545","gitBlob":"34736e6922df1f77ca456e142592290763e9d097","mode":"100644","type":"blob"},{"path":"src/hooks/useScrollToGame.ts","bytes":732,"sha256":"b867e9ec4594029120a3bffc648a339fc61868b665824d3f4fea74510b23a2cd","gitBlob":"7bb63380648b3eff8970fac07e9b5191cc321d1b","mode":"100644","type":"blob"},{"path":"src/lib/hofHall.ts","bytes":1307,"sha256":"daed314f04204d3f30d9e772e9a50b561e94a77515b95d9da5dadf8a01996c60","gitBlob":"71d872f51cf1671200581ef2182dfcd11c415eca","mode":"100644","type":"blob"},{"path":"src/lib/sharedResult.ts","bytes":1642,"sha256":"23aacb67826e04893e7dd37130ac5ad06e8a9dabb5288a047f3316a1091f4372","gitBlob":"751718439e612c99ef4d4a479a87c1e15123d4a0","mode":"100644","type":"blob"},{"path":"src/pages/GuessTheNation.tsx","bytes":1922,"sha256":"fbfd2398120b4f56d042bc8353e03a4bd7b29f6aba16458f8866559a95b0d5d2","gitBlob":"c8e8e96b23669ff08116602d85c120ee4f290da0","mode":"100644","type":"blob"},{"path":"src/pages/GuessTheYear.tsx","bytes":1758,"sha256":"67199a1c328ec0c35278672017c4ff723682c15d9bdbd22f93635ccc11a1f293","gitBlob":"9a1fb40b196a30f1254afd6f1a4e1f338a8e74d2","mode":"100644","type":"blob"},{"path":"src/pages/HofOrBust.tsx","bytes":1683,"sha256":"b827611cc222ba92046336229a9608225869cd5b3d694e5645ace5f2e5ad5c83","gitBlob":"6be953cb1bd42aba83a92a7b80221f64c7c12d47","mode":"100644","type":"blob"},{"path":"src/pages/ScorePredictor.tsx","bytes":1606,"sha256":"4c93819d003f04188ebf8d3c68d067fb86f015b8722c4b93013e671bb845dbce","gitBlob":"48bd8574d3bf34a66b429ab8d76e944436326e34","mode":"100644","type":"blob"},{"path":"src/test/setup.ts","bytes":847,"sha256":"0175cc334b44d9874ff4bd8274a8cc165e9e84cd3738a4298f934db353887289","gitBlob":"df00cdf5c54e8c8efc71e46d7585ae76acb4fc8d","mode":"100644","type":"blob"},{"path":"src/types/guessTheNation.ts","bytes":1493,"sha256":"b3425be7d970e3800451c76b2941239c7f03429008bdaf871aa764c43eddab87","gitBlob":"3fe56f9247d583b3c3dcfe0d7be72403006c14e6","mode":"100644","type":"blob"},{"path":"src/types/guessTheYear.ts","bytes":298,"sha256":"e7cca25e9ef5991af30b2401a081e30a295adfce2ca69fc1e9c84d8289bac4cf","gitBlob":"db4e8a114c7633d928f18b4c0c49d7cccb487ab8","mode":"100644","type":"blob"}],specs=[{"file":"src/test/SiteMenu.test.tsx","ancestor":"global top-left SiteMenu with the actual Sheet and router","titles":["opens a named dialog with the real site links and all six lightweight sports hubs","lets real Radix Escape dismiss and return focus to the opening trigger","selects a real internal link, changes router location and closes","marks only the normalized current route and closes when that current link is selected","dismisses from the actual Sheet overlay and returns focus","closes on external search/hash and history key changes while the normalized path stays the same"]},{"file":"src/test/SiteMenu.lazy-loading.test.tsx","ancestor":null,"titles":["cancels a pending real panel import without a late dialog, then reopens the actual healthy panel"]},{"file":"src/test/SiteMenu.load-failure.test.tsx","ancestor":null,"titles":["shows truthful load failure with Search and Cancel, returns focus and never opens a dialog"]},{"file":"src/test/SiteMenu.escape-loading.test.tsx","ancestor":null,"titles":["dismisses a pending real menu import with Escape from the trigger, without a late dialog"]},{"file":"src/test/SiteMenu.escape-failure.test.tsx","ancestor":null,"titles":["dismisses an honest menu load failure with Escape from the trigger and each fallback control, without an automatic retry"]},{"file":"src/test/SiteMenu.finder.test.tsx","ancestor":"Menu game finder","titles":["opens without editable autofocus and keeps original navigation","ranks actual catalog games and updates results as query changes","shows honest no results and clears without navigating","passes the full query to the existing search page","navigates to a game and closes including the current game","dismisses from the finder and returns visible trigger focus","clears the finder after close and a real route-key change","keeps draft searches out of the location and saved storage"]}],cases=[{"ancestor":"routed game chrome keeps one real header","title":"keeps one header for the active HofOrBust page","marker":"MENU_TOPOLOGY_SINGLE_HOF","expectedStatus":"failed","observed":"UNRUN"},{"ancestor":"routed game chrome keeps one real header","title":"keeps one header for the active ScorePredictor page","marker":"MENU_TOPOLOGY_SINGLE_SCORE","expectedStatus":"failed","observed":"UNRUN"},{"ancestor":"routed game chrome keeps one real header","title":"keeps one header for the active GuessTheYear page","marker":"MENU_TOPOLOGY_SINGLE_YEAR","expectedStatus":"failed","observed":"UNRUN"},{"ancestor":"routed game chrome keeps one real header","title":"keeps one header for the active GuessTheNation page","marker":"MENU_TOPOLOGY_SINGLE_NATION","expectedStatus":"failed","observed":"UNRUN"},{"ancestor":"routed game chrome keeps one real header","title":"preserves the Nation loading header and page help","marker":"MENU_TOPOLOGY_NATION_EARLY_LOADING","expectedStatus":"passed","observed":"UNRUN"},{"ancestor":"routed game chrome keeps one real header","title":"preserves the Nation error header and page help","marker":"MENU_TOPOLOGY_NATION_EARLY_ERROR","expectedStatus":"passed","observed":"UNRUN"},{"ancestor":"routed game chrome keeps one real header","title":"preserves the Nation mode header and page help","marker":"MENU_TOPOLOGY_NATION_EARLY_MODE","expectedStatus":"passed","observed":"UNRUN"}],apiPins=[{"path":"node_modules/vitest/dist/reporters.js","sha256":"374f93a9d3bede1ad1575081077fd72037067d75eb71e24dce000d90b815c905"},{"path":"node_modules/vitest/dist/chunks/index.VByaPkjc.js","sha256":"59d12f5f70a230e6cf7d165a7ebba867675e992c49a7eb2308a032c6619d3870"},{"path":"node_modules/vitest/dist/chunks/cli-api.DVe0nWUx.js","sha256":"4c2fecfeb976ee9cdf00cf4a03daef462cefd08e0e502b2ce7c1daf3ac540135"},{"path":"node_modules/@vitest/runner/dist/chunk-hooks.js","sha256":"5e0b0ece2242e3475a0312a375fac6e47287602792d7f4999d2d733ecda2d69a"},{"path":"node_modules/@vitest/utils/dist/error.js","sha256":"db4fb717645c259e9149beead55e48b85252646e3383e0b6fcef7f657f7f6c12"},{"path":"node_modules/@vitest/expect/dist/index.js","sha256":"dd1e7e900565b46dd15eb7bf729b0b5b7a17f27a9e721527b74d43e888eb3650"},{"path":"node_modules/chai/index.js","sha256":"a38c60a6984fc6342eeacbbd676fb66a8fe1b06d67a5bc60e3431a94c347223e"}],reporterTemplate="import { JsonReporter } from __ACTUAL_JSON_REPORTER_URL__;\nimport fs from 'node:fs';\nimport a from 'node:assert/strict';\nexport default class RuntimeJsonReporter extends JsonReporter {\n  async onFinished(files, errors, coverage) {\n    a(Array.isArray(files), 'MENU_CHROME_ACTUAL_FILES_ARRAY');\n    a(Array.isArray(errors), 'MENU_CHROME_ACTUAL_ERRORS_ARRAY');\n    const testRows=[],suiteRows=[];\n    const visit=(task,file,ancestors)=>{\n      a(Array.isArray(task.result?.errors??[]),'MENU_CHROME_ACTUAL_TASK_ERRORS_ARRAY');\n      const row={file,ancestorTitles:ancestors,title:task.name,type:task.type,mode:task.mode,state:task.result?.state??null,errors:task.result?.errors??[]};\n      if(task.type==='test')testRows.push(row);\n      else {a.equal(task.type,'suite');suiteRows.push(row);a(Array.isArray(task.tasks));for(const child of task.tasks)visit(child,file,[...ancestors,task.name]);}\n    };\n    for(const file of files){\n      a.equal(typeof file.filepath,'string');a(Array.isArray(file.tasks));a(Array.isArray(file.result?.errors??[]));\n      suiteRows.push({file:file.filepath,ancestorTitles:[],title:file.name,type:'file',mode:file.mode,state:file.result?.state??null,errors:file.result?.errors??[]});\n      for(const task of file.tasks)visit(task,file.filepath,[]);\n    }\n    fs.writeFileSync(process.env.MENU_CHROME_RUNTIME_JSON,JSON.stringify({schema:1,source:process.env.GITHUB_SHA,arrayReceived:true,count:errors.length,errors,files:files.map(file=>file.filepath),testRows,suiteRows},null,2)+String.fromCharCode(10),{flag:'wx'});\n    await super.onFinished(files, errors, coverage);\n  }\n}\n";
+          
+          a(out&&path.isAbsolute(out)&&!out.startsWith(root+path.sep),'MENU_CHROME_OUTSIDE_SOURCE');
+          const code=fs.readFileSync(target),workflowBody=fs.readFileSync(workflow);
+          a.equal(sha(code),'66ac4d135b2cb6dcb5740d990ef5d91be92d72c478544680a31e7ccbdb4e93d1','MENU_CHROME_FROZEN_TEST_BODY');
+          for(const p of sourcePins){const b=fs.readFileSync(p.path);a.equal(b.length,p.bytes);a.equal(sha(b),p.sha256,'MENU_CHROME_PARENT_SOURCE_PIN');const git=createHash('sha1').update(Buffer.from('blob '+b.length+'\0')).update(b).digest('hex');a.equal(git,p.gitBlob,'MENU_CHROME_PARENT_GIT_PIN');}
+          for(const p of apiPins){a.equal(sha(fs.readFileSync(p.path)),p.sha256,'MENU_CHROME_ACTUAL_REPORTER_API_PIN');const saved=path.join(out,'reporter-authority',p.path);fs.mkdirSync(path.dirname(saved),{recursive:true});fs.copyFileSync(p.path,saved);}
+          a.equal(JSON.parse(fs.readFileSync('node_modules/vitest/package.json','utf8')).version,'3.2.7');
+          fs.copyFileSync(target,path.join(out,'SiteMenu.page-chrome.test.tsx'));fs.copyFileSync(workflow,path.join(out,'workflow-source.yml'));
+          BASELINE_PART_1
+      - name: Append reviewed controller second literal fragment
+        run: |
+          set -euo pipefail
+          out="$MENU_CHROME_OUT"
+          cat >> "$out/baseline-controller.cjs" <<'BASELINE_PART_2'
+          json(path.join(out,'SOURCE-BINDINGS.json'),{source:process.env.GITHUB_SHA,parent:process.env.EXPECTED_PARENT,mainAtStart:process.env.EXPECTED_MAIN,test:{path:target,bytes:code.length,sha256:sha(code)},workflow:{path:workflow,bytes:workflowBody.length,sha256:sha(workflowBody)},sourcePins,apiPins});
+          const requireRoot=createRequire(path.join(root,'package.json')),entry=requireRoot.resolve('vitest/reporters');a.equal(path.resolve(entry),path.resolve('node_modules/vitest/dist/reporters.js'));
+          const token='__ACTUAL_JSON_REPORTER_URL__';a.equal(reporterTemplate.split(token).length,2);const reporterBody=reporterTemplate.replace(token,JSON.stringify(pathToFileURL(entry).href)),reporterFile=path.join(out,'actual-runtime-json-reporter.mjs');fs.writeFileSync(reporterFile,reporterBody,{flag:'wx'});const reporterSHA=sha(fs.readFileSync(reporterFile));fs.writeFileSync(path.join(out,'reporter.before.sha256'),reporterSHA+'  '+reporterFile+'\n',{flag:'wx'});json(path.join(out,'REPORTER-BINDING.json'),{path:reporterFile,sha256:reporterSHA,apiPins,actualCallbackErrorsRequired:true,actualTaskErrorsRetained:true});
+          function run(label,args,vitest=false){
+           const dir=path.join(out,label);fs.mkdirSync(dir);const report=path.join(dir,'vitest.json'),runtime=path.join(dir,'actual-runtime-errors.json'),receipt=path.join(dir,'transport.jsonl'),argv=args(report);
+           fs.writeFileSync(receipt,'',{flag:'wx'});const env={...process.env,SIM_OFFLINE_RECEIPT:receipt,MENU_CHROME_RUNTIME_JSON:runtime};delete env.NO_DOUBLE_SWAP;json(path.join(dir,'command.json'),{executable:process.execPath,args:argv,cwd:root,source:process.env.GITHUB_SHA,CI:env.CI,NODE_OPTIONS:env.NODE_OPTIONS,receipt,runtime,NO_DOUBLE_SWAP_UNSET:!Object.hasOwn(env,'NO_DOUBLE_SWAP')});
+           const x=fs.openSync(path.join(dir,'stdout.log'),'w'),y=fs.openSync(path.join(dir,'stderr.log'),'w');let child;try{child=cp.spawnSync(process.execPath,argv,{cwd:root,env,timeout:480000,stdio:['ignore',x,y]});}finally{fs.closeSync(x);fs.closeSync(y);}
+           const processRecord={status:child.status,signal:child.signal,error:child.error?String(child.error):null};json(path.join(dir,'process.json'),processRecord);fs.writeFileSync(path.join(dir,'raw.exit'),String(child.status)+'\n',{flag:'wx'});
+           a.equal(fs.statSync(receipt).size,0,'MENU_CHROME_EMPTY_CHILD_TRANSPORT');a.ifError(child.error);a.equal(child.signal,null,'MENU_CHROME_NO_SIGNAL');a.equal(sha(fs.readFileSync(reporterFile)),reporterSHA,'MENU_CHROME_REPORTER_HELD');
+           const result={process:processRecord,cli:strip(fs.readFileSync(path.join(dir,'stdout.log'),'utf8')+'\n'+fs.readFileSync(path.join(dir,'stderr.log'),'utf8'))};
+           if(vitest){result.report=JSON.parse(fs.readFileSync(report,'utf8'));result.runtime=JSON.parse(fs.readFileSync(runtime,'utf8'));result.reportFile=report;}
+           return result;
+          }
+          function runtimeBase(v,expectedFiles,total,suiteUnits){
+           const r=v.runtime;a.equal(r.source,process.env.GITHUB_SHA);a.equal(r.arrayReceived,true,'MENU_CHROME_ACTUAL_ERRORS_ARRAY');a(Array.isArray(r.errors),'MENU_CHROME_ACTUAL_ERRORS_ARRAY');a.equal(r.count,r.errors.length);a.equal(r.count,0,'MENU_CHROME_NO_UNHANDLED_ERRORS');a.deepEqual(r.errors,[]);
+           a.deepEqual(r.files.map(rel).sort(),expectedFiles.slice().sort(),'MENU_CHROME_ACTUAL_CALLBACK_FILES');a.equal(r.testRows.length,total,'MENU_CHROME_ACTUAL_TASK_COUNT');a.equal(r.suiteRows.length,suiteUnits,'MENU_CHROME_ACTUAL_AGGREGATE_UNITS');
+           for(const row of r.suiteRows){a(Array.isArray(row.errors));a.deepEqual(row.errors,[],'MENU_CHROME_NO_SUITE_METHOD_ERRORS');}
+           const d=v.report;for(const name of ['numRuntimeErrorTestSuites','numRuntimeErrors','numUnhandledErrors','numErrors'])if(name in d)a.equal(d[name],0,'MENU_CHROME_NO_RUNTIME_ERRORS');if('unhandledErrors'in d)a.deepEqual(d.unhandledErrors,[]);
+           a.doesNotMatch(v.cli,/Unhandled\s+(?:Errors?|Rejections?|Exceptions?)|Vitest caught|Failed Suites|No test files found|Cannot find (?:module|package)|Failed to resolve|ReferenceError:|TypeError:|SyntaxError:|TimeoutError|timed out|^\s*Errors\s+[1-9]\d*/mi,'MENU_CHROME_NO_METHOD_DIAGNOSTIC');
+          }
+          function summary(cli,label,total){
+           const re=new RegExp('^\\s*'+label+'\\s+(.+?)\\s+\\((\\d+)\\)\\s*$','gm'),hits=[...cli.matchAll(re)];a.equal(hits.length,1,'MENU_CHROME_DEFAULT_CLI');a.equal(Number(hits[0][2]),total,'MENU_CHROME_DEFAULT_CLI');
+           const result={passed:0,failed:0,skipped:0,todo:0},seen=new Set();for(const part of hits[0][1].split('|')){const match=part.trim().match(/^(\d+)\s+(passed|failed|skipped|todo)$/);a(match,'MENU_CHROME_DEFAULT_CLI');a(!seen.has(match[2]),'MENU_CHROME_DEFAULT_CLI');seen.add(match[2]);result[match[2]]=Number(match[1]);}return result;
+          }
+          function cliBase(v,fileCounts,testCounts){
+           a.deepEqual(summary(v.cli,'Test Files',Object.values(fileCounts).reduce((x,y)=>x+y,0)),fileCounts,'MENU_CHROME_DEFAULT_CLI');
+           a.deepEqual(summary(v.cli,'Tests',Object.values(testCounts).reduce((x,y)=>x+y,0)),testCounts,'MENU_CHROME_DEFAULT_CLI');
+           a.equal((v.cli.match(/JSON report written to /g)||[]).length,1,'MENU_CHROME_JSON_REPORT_CLI');a(v.cli.includes('JSON report written to '+v.reportFile),'MENU_CHROME_JSON_REPORT_CLI');
+          }
+          const focusedFiles=specs.map(s=>s.file),vitestArgs=(files,report)=>['node_modules/vitest/vitest.mjs','run',...files,'--maxWorkers=1','--minWorkers=1','--no-file-parallelism','--reporter=default','--reporter='+reporterFile,'--outputFile.json='+report];
+          const types=run('types',()=>['node_modules/typescript/bin/tsc','--noEmit','-p','tsconfig.app.json']);a.equal(types.process.status,0,'MENU_CHROME_ACTUAL_APP_TYPES_ZERO');
+          const focused=run('existing-menu',report=>vitestArgs(focusedFiles,report),true),d=focused.report;
+          a.equal(focused.process.status,0,'MENU_CHROME_EXISTING_RAW_ZERO');runtimeBase(focused,focusedFiles,18,8);a.equal(d.success,true);a.equal(d.numTotalTests,18);a.equal(d.numPassedTests,18);a.equal(d.numFailedTests,0);a.equal(d.numPendingTests,0);a.equal(d.numTodoTests,0);a.equal(d.numPendingTestSuites,0);a.equal(d.numTotalTestSuites,8);a.equal(d.numPassedTestSuites,8);a.equal(d.numFailedTestSuites,0);a.equal(d.testResults.length,6);
+          const focusedRows=[],seenFiles=new Set();for(const f of d.testResults){const spec=specs.find(s=>s.file===rel(f.name));a(spec,'MENU_CHROME_EXISTING_FILE');a(!seenFiles.has(spec.file));seenFiles.add(spec.file);a.equal(f.status,'passed');a.equal(f.message,'');a.equal(f.assertionResults.length,spec.titles.length);for(let i=0;i<spec.titles.length;i++){const row=f.assertionResults[i],anc=spec.ancestor?[spec.ancestor]:[];a.equal(row.title,spec.titles[i]);a.deepEqual(row.ancestorTitles,anc);a.equal(row.fullName,[...anc,row.title].join(' '));a.equal(row.status,'passed');a.deepEqual(row.failureMessages,[]);focusedRows.push({file:spec.file,title:row.title,ancestorTitles:anc,status:row.status});}}
+          a.equal(focusedRows.length,18);a.equal(seenFiles.size,6);a.deepEqual(focused.runtime.testRows.map(r=>JSON.stringify([rel(r.file),r.ancestorTitles,r.title])).sort(),focusedRows.map(r=>JSON.stringify([r.file,r.ancestorTitles,r.title])).sort(),'MENU_CHROME_EXISTING_ACTUAL_TASK_IDENTITIES');for(const row of focused.runtime.testRows){const spec=specs.find(s=>s.file===rel(row.file));a(spec&&spec.titles.includes(row.title),'MENU_CHROME_EXISTING_ACTUAL_TASK');a.equal(row.state,'pass');a.deepEqual(row.errors,[]);}
+          a.equal(focused.runtime.suiteRows.filter(row=>row.type==='file').length,6);a.equal(focused.runtime.suiteRows.filter(row=>row.type==='suite').length,2);for(const row of focused.runtime.suiteRows)a.equal(row.state,'pass');
+          cliBase(focused,{passed:6,failed:0,skipped:0,todo:0},{passed:18,failed:0,skipped:0,todo:0});
+          json(path.join(out,'EXISTING-18-ADMISSION.json'),{status:'ACTUAL_EXISTING_18_MENU_CASES_PASSED',source:process.env.GITHUB_SHA,parent:process.env.EXPECTED_PARENT,mainAtStart:process.env.EXPECTED_MAIN,typesRaw:types.process.status,rows:focusedRows,fileUnits:6,describeUnits:2,aggregateSuiteUnits:8,applicationBoundToDeclaredSourceHead:true,fullSuite:false});
+          const actual=run('page-chrome',report=>vitestArgs([target],report),true);
+          function inspect(v){
+           a.equal(v.process.status,1,'MENU_CHROME_EXPECTED_RAW_ONE');a.equal(v.process.signal,null,'MENU_CHROME_NO_SIGNAL');a.equal(v.process.error,null,'MENU_CHROME_NO_PROCESS_ERROR');
+           const d=v.report;a.equal(d.numTotalTests,7,'MENU_CHROME_CASE_COUNT');a.equal(d.testResults.length,1,'MENU_CHROME_FILE_COUNT');const file=d.testResults[0];a.equal(rel(file.name),target,'MENU_CHROME_FILE_IDENTITY');a.equal(file.assertionResults.length,7,'MENU_CHROME_CASE_COUNT');a.equal(file.status,'failed','MENU_CHROME_FILE_STATUS');a.equal(file.message,'','MENU_CHROME_NO_FILE_METHOD_ERROR');
+           a.equal(d.numTotalTestSuites,2,'MENU_CHROME_AGGREGATE_COUNTER');a.equal(d.numFailedTestSuites,2,'MENU_CHROME_AGGREGATE_COUNTER');a.equal(d.numPassedTestSuites,0,'MENU_CHROME_AGGREGATE_COUNTER');a.equal(d.numPendingTestSuites,0,'MENU_CHROME_AGGREGATE_COUNTER');a.equal(d.numFailedTests,4,'MENU_CHROME_CASE_COUNTER');a.equal(d.numPassedTests,3,'MENU_CHROME_CASE_COUNTER');a.equal(d.numPendingTests,0,'MENU_CHROME_NO_SKIPS');a.equal(d.numTodoTests,0,'MENU_CHROME_NO_TODO');a.equal(d.success,false);
+           runtimeBase(v,[target],7,2);a.equal(v.runtime.suiteRows.filter(row=>row.type==='file').length,1);a.equal(v.runtime.suiteRows.filter(row=>row.type==='suite').length,1);for(const row of v.runtime.suiteRows)a.equal(row.state,'fail');
+           const rows=[],seen=new Set();for(const row of file.assertionResults){
+            const spec=cases.find(c=>c.title===row.title);a(spec,'MENU_CHROME_EXACT_CASE_IDENTITY');a(!seen.has(row.title),'MENU_CHROME_UNIQUE_CASE');seen.add(row.title);a.deepEqual(row.ancestorTitles,[spec.ancestor]);a.equal(row.fullName,spec.ancestor+' '+spec.title);
+            const tasks=v.runtime.testRows.filter(t=>rel(t.file)===target&&t.title===spec.title&&JSON.stringify(t.ancestorTitles)===JSON.stringify([spec.ancestor]));a.equal(tasks.length,1,'MENU_CHROME_ACTUAL_TASK_IDENTITY');const task=tasks[0];a.equal(task.type,'test');
+            if(spec.expectedStatus==='failed'){
+             a.equal(row.status,'failed','MENU_CHROME_OWNED_STATUS');a.equal(task.state,'fail','MENU_CHROME_OWNED_STATUS');a.equal(row.failureMessages.length,1,'MENU_CHROME_OWNED_CAUSE');a.equal(task.errors.length,1,'MENU_CHROME_OWNED_CAUSE');const error=task.errors[0],message=strip(row.failureMessages[0]);a.equal(error.name,'AssertionError','MENU_CHROME_OWNED_CAUSE');a.equal(error.operator,'strictEqual','MENU_CHROME_OWNED_CAUSE');a.equal(error.actual,'2','MENU_CHROME_OWNED_CAUSE');a.equal(error.expected,'1','MENU_CHROME_OWNED_CAUSE');a.equal(error.showDiff,true,'MENU_CHROME_OWNED_CAUSE');
+             a(error.message.startsWith(spec.marker+': '),'MENU_CHROME_OWNED_CAUSE');a(error.message.includes('expected 2 to be 1 // Object.is equality'),'MENU_CHROME_OWNED_CAUSE');a(message.includes(spec.marker+': '),'MENU_CHROME_OWNED_CAUSE');a(message.includes('expected 2 to be 1 // Object.is equality'),'MENU_CHROME_OWNED_CAUSE');a(String(error.stack).includes(target+':'),'MENU_CHROME_OWNED_SOURCE_ASSERTION');a(!cases.some(c=>c!==spec&&error.message.includes(c.marker)),'MENU_CHROME_OWNED_CAUSE');
+             rows.push({title:row.title,fullName:row.fullName,status:row.status,marker:spec.marker,actual:2,required:1,actualError:error});
+            }else{a.equal(row.status,'passed','MENU_CHROME_PRESERVATION_PASS');a.equal(task.state,'pass','MENU_CHROME_PRESERVATION_PASS');a.deepEqual(row.failureMessages,[],'MENU_CHROME_PRESERVATION_PASS');a.deepEqual(task.errors,[],'MENU_CHROME_PRESERVATION_PASS');rows.push({title:row.title,fullName:row.fullName,status:row.status,marker:spec.marker});}
+           }
+           a.equal(seen.size,7,'MENU_CHROME_CASE_COUNT');a.equal(rows.filter(r=>r.status==='failed').length,4);a.equal(rows.filter(r=>r.status==='passed').length,3);
+           cliBase(v,{passed:0,failed:1,skipped:0,todo:0},{passed:3,failed:4,skipped:0,todo:0});return rows;
+          }
+          const admittedRows=inspect(actual),foundation=JSON.stringify(actual,null,2)+'\n',copy=path.join(out,'classifier-copy.json');fs.writeFileSync(path.join(out,'classifier-foundation.json'),foundation,{flag:'wx'});fs.writeFileSync(copy,foundation,{flag:'wx'});const foundationSHA=sha(Buffer.from(foundation)),controls=[];
+          const changes=[
+           ['case-count','MENU_CHROME_CASE_COUNT',v=>v.report.testResults[0].assertionResults.pop()],
+           ['wrong-owned-cause','MENU_CHROME_OWNED_CAUSE',v=>{v.runtime.testRows.find(r=>r.title===cases[0].title).errors[0].actual='3';}],
+           ['preservation-fail','MENU_CHROME_PRESERVATION_PASS',v=>{v.report.testResults[0].assertionResults.find(r=>r.title===cases[4].title).status='failed';}],
+           ['file-status','MENU_CHROME_FILE_STATUS',v=>{v.report.testResults[0].status='passed';}],
+           ['aggregate-counter','MENU_CHROME_AGGREGATE_COUNTER',v=>{v.report.numTotalTestSuites=3;v.report.numFailedTestSuites=3;}],
+           ['wrong-raw','MENU_CHROME_EXPECTED_RAW_ONE',v=>{v.process.status=0;}]
+          ];
+          for(const [id,marker,mutate]of changes){
+           const before=fs.readFileSync(copy);a.equal(sha(before),foundationSHA);inspect(JSON.parse(before));const changed=JSON.parse(before);mutate(changed);fs.writeFileSync(copy,JSON.stringify(changed,null,2)+'\n');const changedBody=fs.readFileSync(copy);a.notEqual(sha(changedBody),foundationSHA,'MENU_CHROME_EFFECTIVE_COPIED_CONTROL');const changedFile='control-'+id+'.changed.json',restoredFile='control-'+id+'.restored.json';fs.copyFileSync(copy,path.join(out,changedFile));let failure;try{inspect(JSON.parse(fs.readFileSync(copy,'utf8')));}catch(error){failure={name:error.name,message:error.message};}a.equal(failure?.name,'AssertionError','MENU_CHROME_CONTROL_MUST_REFUSE');a(failure.message.includes(marker),'MENU_CHROME_CONTROL_SPECIFIC_REFUSAL');
+           fs.writeFileSync(copy,before);const restored=fs.readFileSync(copy);a.deepEqual(restored,before,'MENU_CHROME_SAME_COPY_RESTORE');inspect(JSON.parse(restored));fs.copyFileSync(copy,path.join(out,restoredFile));controls.push({id,marker,scope:'COPIED_NEGATIVE_RECEIPT_CLASSIFIER_ONLY',actualFeaturePassCredit:false,physicalCopyFile:path.basename(copy),changedFile,restoredFile,beforeSHA256:sha(before),changedSHA256:sha(changedBody),restoredSHA256:sha(restored),sameCopyRestored:true,actualFailure:failure});
+          }
+          a.equal(controls.length,6);a.equal(sha(fs.readFileSync(target)),sha(code),'MENU_CHROME_TEST_HELD');a.equal(sha(fs.readFileSync(workflow)),sha(workflowBody),'MENU_CHROME_WORKFLOW_HELD');a.equal(sha(fs.readFileSync(reporterFile)),reporterSHA,'MENU_CHROME_REPORTER_HELD');for(const p of sourcePins)a.equal(sha(fs.readFileSync(p.path)),p.sha256,'MENU_CHROME_PARENT_SOURCE_HELD');for(const p of apiPins)a.equal(sha(fs.readFileSync(p.path)),p.sha256,'MENU_CHROME_REPORTER_API_HELD');
+          json(path.join(out,'CLASSIFIER-CONTROLS.json'),controls);json(path.join(out,'OWNED-PAGE-CHROME-BASELINE-ADMISSION.json'),{schema:1,status:'ACTUAL_FOUR_OWNED_DUPLICATE_HEADERS_BASELINE_ONLY',source:process.env.GITHUB_SHA,parent:process.env.EXPECTED_PARENT,mainAtStart:process.env.EXPECTED_MAIN,typesRaw:types.process.status,existing18Passed:true,actualProcessRaw:actual.process.status,rows:admittedRows,fileUnits:1,describeUnits:1,aggregateSuiteUnits:2,actualOwnedFailures:4,preservedCasesPassed:3,actualUnhandledErrors:0,copiedClassifierControls:controls,applicationBoundToDeclaredSourceHead:true,sourceSelectedHeldAtController:true,finalFullSourceHoldSeparate:true,productFixAuthored:false,fullSuite:false,build:false,browser:false,caps:false,release:false,live:false});
+          console.log('MENU_PAGE_CHROME_BASELINE: types0,18 existing Menu cases passed; actual7 cases=4 owned nav2-vs1 AssertionErrors+3 Nation early passes/raw1;6 copied classifier refusals and same-copy restores. Final source holds required separately.');
+          BASELINE_PART_2
+      - name: App types0 existing18pass and exact four-owned duplicate-header failures
+        id: scoped
+        run: |
+          set -euo pipefail
+          out="$MENU_CHROME_OUT"
+          printf '116f733f5973d6b795f282d5d934868f15667ffff8a4d088bdc2efb9262a1bbe  %s\n' "$out/baseline-controller.cjs" | sha256sum -c -
+          sha256sum "$out/baseline-controller.cjs" > "$out/controller.before.sha256";: > "$out/controller.transport"
+          export NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs"
+          set +e
+          SIM_OFFLINE_RECEIPT="$out/controller.transport" node "$out/baseline-controller.cjs" > "$out/controller.stdout.log" 2> "$out/controller.stderr.log"
+          raw=$?;set -e;printf '%s\n' "$raw" > "$out/controller.exit";cat "$out/controller.stdout.log";cat "$out/controller.stderr.log";test "$raw" -eq 0;test ! -s "$out/controller.transport"
+      - name: Always retain full source holds and actual dependency inventory after Vitest cache
+        if: always()
+        run: |
+          set -uo pipefail
+          out="${MENU_CHROME_OUT:-$RUNNER_TEMP/menu-page-chrome-baseline}";mkdir -p "$out";failed=0
+          {
+            if test -f "$out/source.initial.sha256" && test -f "$out/source-members.initial";then
+              git ls-files -z | sort -z > "$out/source-members.final" || failed=1
+              git ls-files -z | sort -z | xargs -0 sha256sum > "$out/source.final.sha256" || failed=1
+              cmp "$out/source-members.initial" "$out/source-members.final" || failed=1;cmp "$out/source.initial.sha256" "$out/source.final.sha256" || failed=1
+              sha256sum -c "$out/source.initial.sha256" > "$out/source-held.log" 2>&1 || failed=1
+              git ls-tree -r HEAD > "$out/source-tree.final" || failed=1;cmp "$out/source-tree.txt" "$out/source-tree.final" || failed=1
+              git ls-files --others --exclude-standard -z > "$out/source-untracked.final" || failed=1;test ! -s "$out/source-untracked.final" || failed=1
+              git diff --exit-code HEAD > "$out/tracked-final.diff" || failed=1
+              git show HEAD:.github/workflows/menu-page-chrome-baseline.yml | cmp - .github/workflows/menu-page-chrome-baseline.yml || failed=1
+              git show HEAD:src/test/SiteMenu.page-chrome.test.tsx | cmp - src/test/SiteMenu.page-chrome.test.tsx || failed=1
+            else printf 'UNRUN: no complete initial source inventory\n';failed=1;fi
+            for label in controller reporter;do if test -f "$out/$label.before.sha256";then sha256sum -c "$out/$label.before.sha256" > "$out/$label-held.log" 2>&1 || failed=1;fi;done
+            if test -d node_modules;then
+              find node_modules -type f -print0 | sort -z > "$out/deps.members.after-vitest" || failed=1
+              xargs -0 sha256sum < "$out/deps.members.after-vitest" > "$out/deps.after-vitest.sha256" || failed=1
+              find node_modules -type l -printf '%p -> %l\n' | sort > "$out/dependency-links.after-vitest" || failed=1
+              printf 'Actual post-execution inventory only. Dependency bodies are not locally archived or claimed held during Vitest cache writes.\n' > "$out/dependency-inventory-scope.txt"
+            else printf 'UNRUN: no installed dependency directory\n' > "$out/dependency-inventory-scope.txt";fi
+            while IFS= read -r -d '' file;do test ! -s "$file" || failed=1;done < <(find "$out" -type f \( -name '*.transport' -o -name transport.jsonl \) -print0)
+          } > "$out/final-holds.log" 2>&1
+          printf '%s\n' "$failed" > "$out/final-holds.exit"
+          find "$out" -type f ! -name evidence.sha256 -print0 | sort -z | xargs -0 sha256sum > "$RUNNER_TEMP/menu-page-chrome-evidence.sha256"
+          cp "$RUNNER_TEMP/menu-page-chrome-evidence.sha256" "$out/evidence.sha256";cat "$out/final-holds.log";exit "$failed"
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: menu-page-chrome-baseline-${{ github.run_id }}-${{ github.run_attempt }}
+          path: ${{ runner.temp }}/menu-page-chrome-baseline/
+          include-hidden-files: true
+          if-no-files-found: error
+          retention-days: 14
