@@ -133,6 +133,11 @@ function close<T extends LoyaltyCareer>(state: T, reason: LoyaltyDeal['reason'])
   return replaceDeal(state, ledger, { ...deal, status: 'forfeited', reason },
     'Loyalty payout of EUR ' + deal.bonusEuros.toLocaleString('en-US') + ' at ' + deal.club + ' forfeited.');
 }
+/** A deal's 10% cut belongs to its own term: the next contract at that club is quoted from the uncut wage. */
+export function loyaltyUncutWage(state: LoyaltyCareer): number {
+  const deal = readLoyalty(state)?.deals.filter(old => old.club === state.currentClub).at(-1);
+  return deal && deal.weeklyWage === state.weeklyWage ? deal.baseWeeklyWage : state.weeklyWage;
+}
 export function loyaltyForfeitEuros(state: LoyaltyCareer, employer: string): number {
   const ledger = readLoyalty(state), deal = ledger && active(ledger);
   return deal && deal.club !== employer ? deal.bonusEuros : 0;
