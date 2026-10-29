@@ -1,0 +1,9 @@
+FAIL seed 1 regular-end engine: the block after the regular season is the base's, converted, byte for byte 
+FAIL seed 5 regular-end engine: the block after the regular season is the base's, converted, byte for byte 
+FAIL seed 9 regular-end engine: the block after the regular season is the base's, converted, byte for byte 
+FAIL seed 13 regular-end engine: the block after the regular season is the base's, converted, byte for byte 
+FAIL seed 17 regular-end engine: the block after the regular season is the base's, converted, byte for byte 
+FAIL seed 21 regular-end engine: the block after the regular season is the base's, converted, byte for byte 
+NBA: 24 old saves, tally of the board's conversion {"converted":24,"kept":0,"dropped":0,"none":0}
+NFL: 20 seasons, 340 weeks recorded on both; closed league sizes 112170 to 671748
+oldsave1566: 519 checks, 6 failed

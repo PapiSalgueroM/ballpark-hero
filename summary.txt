@@ -1,0 +1,9 @@
+probe exit=1 6s | oldsave1566: 519 checks, 6 failed
+m-packrookie exit=1 13s | MUT packrookie nba=1
+m-packswap exit=1 12s | MUT packswap nba=1
+m-expandgs exit=1 12s | MUT expandgs nba=1
+m-namedstrict exit=1 11s | MUT namedstrict nba=1
+m-rookieoff exit=1 56s | MUT rookieoff nba=1 nfl=1
+m-kickswap exit=0 79s | MUT kickswap nfl=0 vitest=0
+m-liveclean exit=1 20s | MUT liveclean schedule=1 nba=0
+m-clubtie exit=0 55s | MUT clubtie nfl=0 nba=0
