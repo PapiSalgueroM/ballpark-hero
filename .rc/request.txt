@@ -1,0 +1,6 @@
+plain: node scripts/simUsConnectionsFacts.mjs
+report: US_CONN_TABLES=nfl,nhl node scripts/simUsConnectionsFacts.mjs
+probe: node .rc/x/probe-lift.mjs .
+probeflip: PROBE_CONTROL=flip node .rc/x/probe-lift.mjs .
+drift: node scripts/qa/usConnectionsTableImport.mjs drift nhl=.rc/x/nhl-2026-10-29.json,nfl=.rc/x/nfl-2026-10-29.json
+norival: node scripts/simNoRivalNames.mjs
