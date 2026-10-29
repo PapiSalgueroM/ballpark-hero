@@ -1,0 +1,3 @@
+#!build
+#!playwright
+probe-inter: node .rc/x/probeBingoInter.mjs
