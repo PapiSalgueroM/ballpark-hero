@@ -1,0 +1,13 @@
+#!serial
+# Release BS kit: 2 of the 2 request lines of Release BR's rc-BPc2.txt (rBRg/.tmp-fx/br), the lines of the BS areas (Soccer Career, Club Manager and the manager games on its engine, Player Bingo, Conquest, Stat and Draft Detective, the US My Career save notice, What's New, the polls, the guide intro) and the setup lines before them; 0 line(s) outside those areas left out.
+# Release BP (Round BPG): ROUND 1522's long lines, sent on their own name beside rc-BPc.txt.
+# ctl-fleet-1522: the six fleet controls (finish-1522.md, r1522-c1 and c2, the form TIERS=mid SEEDS=4 PAR=1), each
+# must exit 1 with a last line "control <name> FIRED": flat (read), dominant (dominance), nolegs (effects 1),
+# notempo, nowidth, noline (effects 2 each). Exit 3 is a control that did not fire (the first flat run did, on c1).
+# dominance-1522: the lead's no dominant strategy band over all 80 fixed sets at mid table clubs (seeds 0 to 15,
+# ARMS=all TIERS=mid, sixteen shards of SHARD=k/16 run four at a time in four batches, the size r1522-d0 to d3 and
+# rBPg-d0 to d3 ran at about 360 s a batch, then folded with FOLD): "none of 80 fixed sets beats balanced by over
+# +6.00% at a mid table club in either block" (finish-1522.md; rBPg-fdom folded the same sixteen shards). Its shard
+# JSON comes back under files/fm/. It exits 2 if a shard did not write its file.
+ctl-fleet-1522: bad=0; for c in flat dominant nolegs notempo nowidth noline; do CM_TACTICS_CONTROL=$c TIERS=mid SEEDS=4 PAR=1 node scripts/simCmTactics.mjs > /tmp/cf22-$c.log 2>&1; e=$?; echo "$c exit=$e $(tail -1 /tmp/cf22-$c.log | cut -c1-160)"; if [ $e -ne 1 ] || ! tail -1 /tmp/cf22-$c.log | grep -q "control $c FIRED"; then bad=1; fi; done; exit $bad
+dominance-1522: mkdir -p /tmp/fm "$RC_OUT/fm" && for g in 0 1 2 3; do for j in 0 1 2 3; do k=$((4*g+j)); SECTION=fleet ARMS=all TIERS=mid SEEDS=16 SHARD=$k/16 OUT_JSON=/tmp/fm/s$k.json node scripts/simCmTactics.mjs > /tmp/fm/log$k.txt 2>&1 & done; wait; done; n=$(ls /tmp/fm/*.json | wc -l); echo "shards written $n of 16"; cp /tmp/fm/*.json "$RC_OUT/fm/"; [ "$n" = 16 ] || exit 2; FOLD=/tmp/fm node scripts/simCmTactics.mjs > /tmp/fm/fold.txt 2>&1; s=$?; grep -E "dominance|top " /tmp/fm/fold.txt | head -4 | cut -c1-220; tail -1 /tmp/fm/fold.txt | cut -c1-200; exit $s
