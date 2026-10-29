@@ -127,21 +127,6 @@ describe('US career destructive action confirmation', () => {
     expect(localStorage.getItem(row.saveKey)).toBeNull(); expect(localStorage.getItem(SENTINEL_KEY)).toBe(SENTINEL); expect(recordCompletion).not.toHaveBeenCalled();
   });
 
-  /* Round 1569 (the lead's ruling R3): the Hall card is drawn from the one career save, so a restart of a retired
-     career takes it too, and both of its restart prompts say so; a live career has no Hall card to name. */
-  it.each(CASES)('$label names the Hall card in both restart prompts of a retired career and not on a live one', async row => {
-    seed(row, true); const retired = render(<row.Board />);
-    for (const name of ['New career', 'Start over']) {
-      const dialog = open(retired.getByRole('button', { name }), 'restart');
-      expect(dialog).toHaveAccessibleDescription(`This deletes your saved ${row.label} player and coaching career on this device. The Hall of Fame card goes too. You cannot undo this.`);
-      fireEvent.click(within(dialog).getByRole('button', { name: cancelName('restart') }));
-      await waitFor(() => expect(within(document.body).queryByRole('alertdialog')).toBeNull());
-    }
-    retired.unmount(); localStorage.clear(); seed(row);
-    const live = render(<row.Board />), dialog = open(live.getByRole('button', { name: 'Start over' }), 'restart');
-    expect(dialog).toHaveAccessibleDescription(`This deletes your saved ${row.label} player and coaching career on this device. You cannot undo this.`);
-  });
-
   it('keeps closed mounts callback quiet and unrelated payloads exact as an independent baseline', () => {
     const { view, opener, accept, unrelated } = shared(); expect(opener).toHaveTextContent('Original fixture action');
     expect(within(document.body).queryByRole('alertdialog')).toBeNull(); fireEvent.click(view.getByRole('button', { name: 'Unrelated fixture action' }));

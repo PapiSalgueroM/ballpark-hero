@@ -127,6 +127,33 @@ describe('Round 1569 report A: Start over from every screen', () => {
   });
 });
 
+/* The lead's ruling R3 (fix pass of 2026-10-29): the Hall card is drawn from the one career save, so clearing a
+   retired career takes it too, and every restart prompt of a retired career says so in plain words: the retired
+   card's New career, Start over beside it, and Start over in the coaching career after it. A live career has no
+   Hall card, and its prompt reads exactly as before. */
+const restartWords = (row: Row, hall: boolean) =>
+  `This deletes your saved ${row.label} player and coaching career on this device.${hall ? ' The Hall of Fame card goes too.' : ''} You cannot undo this.`;
+async function restartPromptSays(view: RenderResult, opener: string, words: string) {
+  await click(view.getByRole('button', { name: opener }));
+  const dialog = within(document.body).getByRole('alertdialog', { name: 'Start a new career?' });
+  expect(dialog).toHaveAccessibleDescription(words);
+  await click(within(dialog).getByRole('button', { name: 'Keep this career' }));
+  await waitFor(() => expect(within(document.body).queryByRole('alertdialog')).toBeNull());
+}
+describe('Round 1569 ruling R3: a restart says the Hall card goes too', () => {
+  it.each(ROWS)('$label names the Hall card on every restart prompt of a retired career and not on a live one', async row => {
+    seed(row, 6, (c, save) => { c.retired = true; save.phase = 'retired'; }); const view = render(<row.Board />); await flush();
+    await restartPromptSays(view, 'New career', restartWords(row, true));
+    await restartPromptSays(view, 'Start over', restartWords(row, true));
+    await click(view.getByRole('button', { name: /Go after a coaching job/ }));
+    await restartPromptSays(view, 'Start over', restartWords(row, true));
+    view.unmount(); localStorage.clear();
+    seed(row, 2); const live = render(<row.Board />); await flush();
+    await restartPromptSays(live, 'Start over', restartWords(row, false));
+    expect(localStorage.getItem(row.sport.saveKey)).not.toBeNull();
+  });
+});
+
 describe('Round 1569 report B: no offer is never a dead end', () => {
   it.each(ROWS)('$label: a no offer talk in the last season says why, says it is the last, and retires in full', async row => {
     seed(row, 6, c => { c.contractYears = 1; c.age = row.lastAge; c.ovr = 70; }); const view = render(<row.Board />); await flush();
