@@ -1,0 +1,18 @@
+MUTATION athletic: scripts/lib/soccerConnectionsCheck.mjs: "athleticclub: 'athleticbilbao'," -> ""
+1) no group claims the present
+   0 present tense, unstamped season or unheld recent year labels; 11 recent year groups owed to part B
+2) no refuted claim is on a board
+   5 refuted claims held off every board, 0 found
+3) every group this round wrote stands on two hosts
+   2 watches over 31 men about to join a list
+   26 squads, 1 lists, 49 ledgered groups, 69 stamped groups, 344 members confirmed, 9 rebuilt boards
+4) one right answer: the cross check over every board
+  FAIL: cx-20260805-8 | not-a-member | Nico Williams | Played for Athletic Club
+   880 of 1304 groups judged; members 2839 judged (681 unknown), other tiles 8708 judged (1852 unknown)
+   27 findings: 26 adjudicated, 0 owed to part B on boards not yet rebuilt
+5) the groups nothing checks yet may only get fewer
+   409 groups nothing checks yet (ceiling 409); part B ledgers them
+6) the shipped file is the copy of the live table (scripts/data/connectionsLiveSnapshot.json)
+   326 file boards, 326 live rows (expected after supabase/migrations/20261029120000_round_1565...), 0 boards differ
+
+simConnectionsFacts: 1 failure

@@ -1,0 +1,8 @@
+MUTATION migdrift: supabase/migrations/20261029120000_round_1565_connections_live.sql: "Denílson" -> "Denilson" (x2)
+export: 326 rows; migration rewrites 38; control none
+1) md5(groups_json::text) equals boardMd5 on 326 exported and 326 file boards: yes
+FAIL: puzzle-2 is not at the shipped file's board after the migration
+FAIL: puzzle-28 is not at the shipped file's board after the migration
+2) migration: 324 of 326 rows at the file's board, 0 moved, valid pool 326 unchanged, second run a no-op
+3) production form: landed; table changed
+rehearseConnections1565: 2 failures

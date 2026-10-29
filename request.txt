@@ -1,0 +1,13 @@
+#!serial
+mut-order: node .rc/x/mut.mjs order && node scripts/simConnectionsFacts.mjs; s=$?; git checkout -- src scripts supabase; exit $s
+mut-content: node .rc/x/mut.mjs content && node scripts/simConnectionsFacts.mjs; s=$?; git checkout -- src scripts supabase; exit $s
+mut-milanpair: node .rc/x/mut.mjs milanpair && node scripts/simConnectionsFacts.mjs; s=$?; git checkout -- src scripts supabase; exit $s
+mut-nopairs: node .rc/x/mut.mjs nopairs && node scripts/simConnectionsFacts.mjs; s=$?; git checkout -- src scripts supabase; exit $s
+mut-athletic: node .rc/x/mut.mjs athletic && node scripts/simConnectionsFacts.mjs; s=$?; git checkout -- src scripts supabase; exit $s
+mut-unknownman: node .rc/x/mut.mjs unknownman && node scripts/simConnectionsFacts.mjs; s=$?; git checkout -- src scripts supabase; exit $s
+mut-pgsort-facts: node .rc/x/mut.mjs pgsort && node scripts/simConnectionsFacts.mjs; s=$?; git checkout -- src scripts supabase; exit $s
+mut-pgsort-rehearse: npm install --prefix /tmp/pglm1 @electric-sql/pglite >/dev/null 2>&1 && node .rc/x/mut.mjs pgsort && PGLITE_DIR=/tmp/pglm1 node scripts/qa/rehearseConnections1565.mjs .rc/x/post-apply.json; s=$?; git checkout -- src scripts supabase; exit $s
+mut-migdrift: npm install --prefix /tmp/pglm2 @electric-sql/pglite >/dev/null 2>&1 && node .rc/x/mut.mjs migdrift && PGLITE_DIR=/tmp/pglm2 node scripts/qa/rehearseConnections1565.mjs .rc/x/post-apply.json; s=$?; git checkout -- src scripts supabase; exit $s
+save-head: cp .rc/x/rvConnSave.test.tsx src/test/rvConnSave.test.tsx && RV_EXPORT=$PWD/.rc/x/post-apply.json RV_DAY=2026-11-01 RV_ID=crafted-1028 RV_INDEX=0 node_modules/.bin/vitest run src/test/rvConnSave.test.tsx --testTimeout=120000; s=$?; rm -f src/test/rvConnSave.test.tsx; exit $s
+save-head-headindex: cp .rc/x/rvConnSave.test.tsx src/test/rvConnSave.test.tsx && RV_EXPORT=$PWD/.rc/x/post-apply.json RV_DAY=2026-11-01 RV_ID=crafted-1028 RV_INDEX=277 node_modules/.bin/vitest run src/test/rvConnSave.test.tsx --testTimeout=120000; s=$?; rm -f src/test/rvConnSave.test.tsx; exit $s
+save-base: R=$PWD; git worktree add /tmp/rvbase 5d1198389 >/dev/null 2>&1 && ln -s $R/node_modules /tmp/rvbase/node_modules && cp .rc/x/rvConnSave.test.tsx /tmp/rvbase/src/test/rvConnSave.test.tsx && cd /tmp/rvbase && RV_EXPORT=$R/.rc/x/post-apply.json RV_DAY=2026-11-01 RV_ID=crafted-1028 RV_INDEX=0 node_modules/.bin/vitest run src/test/rvConnSave.test.tsx --testTimeout=120000

@@ -1,0 +1,12 @@
+mut-order exit=1 1s | simConnectionsFacts: 1 failure
+mut-content exit=1 1s | simConnectionsFacts: 1 failure
+mut-milanpair exit=1 1s | simConnectionsFacts: 2 failures
+mut-nopairs exit=1 1s | simConnectionsFacts: 5 failures
+mut-athletic exit=1 1s | simConnectionsFacts: 1 failure
+mut-unknownman exit=1 1s | simConnectionsFacts: 1 failure
+mut-pgsort-facts exit=1 1s | simConnectionsFacts: 326 failures
+mut-pgsort-rehearse exit=1 7s | rehearseConnections1565: 328 failures
+mut-migdrift exit=1 7s | rehearseConnections1565: 2 failures
+save-head exit=1 2s | ::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/test/rvConnSave.test.tsx,title=src/test/rvConnSave.test.tsx > soccer Connections daily save across the Roun
+save-head-headindex exit=0 2s |    Duration  1.87s (transform 264ms, setup 68ms, collect 365ms, tests 748ms, environment 297ms, prepare 150ms)
+save-base exit=0 3s |    Duration  1.92s (transform 261ms, setup 68ms, collect 351ms, tests 748ms, environment 317ms, prepare 148ms)
