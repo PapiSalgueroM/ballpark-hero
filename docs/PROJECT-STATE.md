@@ -19684,3 +19684,20 @@ This follow-up refreshes that one immutable QA source pin to exact0a2ee794 and c
 Final source d745815f9fde04eba6970e31c1425f5565ae699b/run40485985900 passes app types,6focused cases,3renderer arms,133loaded/132unchanged-unannotated guides,12raw/client cases+7controls+2targets,all15rebuiltreaders+3guideguards,all15unchangedcaps,4deltacontrols/4308otherheld and4262sourcechecks. Parentactuallyviewed320/390 intro captures, peer1280; readableunderlinedlinks/focus,nooverlap. Original12724889612/39254446B/SHA3bf35ca814a880f2d21735b9a436a44c432b1f145ac2154d9f4bf0a13a2d25af admittedonce with94bodyhashes. Peerreceipt3e6772cb9b86725fb93b62cb484aebd6c9affe32e7c1a46ea78afeafaf4df6b4. Fullhistory9630pass/58skip onf777 precedes2sentence-onlyshortening and is recordedwiththatlimit. See docs/SOCCER-CAREER-INTERNAL-LINKS-2026-10-27.md for exactsource/evidence/bounds.
 
 This is ready for Owner I's protected integration review, not canonical adoption or publication. I must regenerate the target snapshot/lastmod/sitemap from joined source. No ranking or live result is claimed.
+## Round1450 poll noon Eastern regression, Original proof pending, 2026-10-22 UTC
+
+This child adds thirteen date-helper regression cases and a branch-only ordinary CI workflow from verified main89765449d170955aff841c93398179ecf0a4e135. The tests are unexecuted at authoring. Source inspection predicts four owned AssertionErrors and nine healthy cases around Eastern daylight-saving transitions; only actual raw CI results can establish that RED.
+
+The original dateUtils helper b580faa8 stays unchanged. CI must retain the ordinary failing test exit, complete raw JSON/logs and exact source/input/offline holds. No helper implementation, caller-specific noon query proof, mounted refresh behavior, qualified application or live result is claimed. I retains publication and game ownership.
+
+## Round1450 calendar-day helper, Green verification pending, 2026-10-22 UTC
+
+Prepared after Original source3dcc9c8e/run39857298617. Preliminary raw output reports the expected four noon-boundary errors and nine healthy cases. Complete native Original admission was still pending at preparation; its pinned successful receipt is mandatory before adopting this child.
+
+The proposed child changes only the shared poll-day helper comment/body to Eastern civil-day arithmetic, its branch workflow and append-only notes. It preserves the thirteen tests, caller, config, dependencies and game files. Green requires the same13 tests normal, exact oldb580 body control and fresh restoration, existing poll rendering/fallback tests and daily harnesses, real types/plain build, all saved-page readers and unchanged page caps. Green is unexecuted here. No caller-query, mounted noon refresh, qualified release or live result is claimed. I retains publication and game ownership.
+
+## Round1450 offline method correction, fresh Green pending, 2026-10-22 UTC
+
+First Green sourcea6d0a919/run39859333398 completed FAILURE. Its focused job passed13normal, exactold4owned9healthy,13restored and8existingpoll cases in raw output, then failed because simDateDraws requested live transfer-grade and quiz-board data behind the strict offline guard. The guard correctly refused that traffic. The saved_pages CI job succeeded, including real types/plain build,18readers and14 unchanged caps; this is not complete native release qualification.
+
+This method-only child changes only the workflow and append-only notes. It retains simDaily as the pure daily regression with exactone-harness evidence and records simDateDraws as NOT_RUN/unverified due to its live-data dependency. It does not edit the helper90cc, testd34, callers, harnesses, games, dependencies or caps, and uses no live mode or substitute data. Failed run39859333398 remains failed and preserved. Fresh full Green/native proof remains pending. I retains publication and game ownership.
