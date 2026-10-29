@@ -453,10 +453,9 @@ async function walkCurtain(browser, size, saveValue, randomSeed, tag) {
     const m = await page.evaluate(() => {
       const w = window.__curtainWrap;
       const r = w && w.isConnected && !w.querySelector('[data-season-reveal]') ? w.getBoundingClientRect() : null;
-      const heading = w?.querySelector('h1, h2, h3, h4, [data-intl-call], [data-intl-holding]');
       const what = !r ? (document.querySelector('[data-season-reveal]') ? 'the curtain still up' : 'a screen outside the curtain\'s wrapper (the hub)')
         : w.querySelector('[data-intl-call]') ? 'the call' : w.querySelector('[data-intl-holding]') ? 'the holding box' : w.querySelector('[data-career-event]') || w.matches('[data-career-event]') ? 'a summer card'
-        : `"${(heading?.textContent ?? w.textContent).trim().replace(/\s+/g, ' ').slice(0, 40)}"`;
+        : `"${(w.innerText || '').trim().split('\n')[0].slice(0, 40)}"`;
       return { top: r && r.height > 0 ? Math.round(r.top) : null, ih: innerHeight, sy: Math.round(scrollY), what };
     });
     if (m.top === null) {
