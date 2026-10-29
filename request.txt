@@ -1,0 +1,12 @@
+tsc: node_modules/.bin/tsc --noEmit -p tsconfig.app.json
+simAflClubNames: node scripts/simAflClubNames.mjs
+c-screen: AFL_NAMES_CONTROL=screen node scripts/simAflClubNames.mjs
+c-switchlost: AFL_NAMES_CONTROL=switchlost node scripts/simAflClubNames.mjs
+c-typo: AFL_NAMES_CONTROL=typo node scripts/simAflClubNames.mjs
+c-onesource: AFL_NAMES_CONTROL=onesource node scripts/simAflClubNames.mjs
+c-ladder: AFL_NAMES_CONTROL=ladder node scripts/simAflClubNames.mjs
+c-simdrift: AFL_NAMES_CONTROL=simdrift node scripts/simAflClubNames.mjs
+c-oldsave: AFL_NAMES_CONTROL=oldsave node scripts/simAflClubNames.mjs
+c-mixed: AFL_NAMES_CONTROL=mixed node scripts/simAflClubNames.mjs
+simAussieRulesLeagueBoard: node scripts/simAussieRulesLeagueBoard.mjs
+simTrustCopy: node scripts/simTrustCopy.mjs
