@@ -1,0 +1,5 @@
+mechfix exit=1 6s | ::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/test/vfM.test.ts,title=src/test/vfM.test.ts > BS-sc415-1 mechanism at the PR head > extension and renewal r
+units exit=0 7s |    Duration  5.76s (transform 2.62s, setup 659ms, collect 7.44s, tests 1.06s, environment 2.70s, prepare 1.03s)
+careersB exit=1 81s |    Duration  79.91s (transform 1.89s, setup 143ms, collect 2.31s, tests 76.19s, environment 599ms, prepare 106ms)
+careersA exit=1 83s |    Duration  81.90s (transform 2.38s, setup 135ms, collect 2.92s, tests 77.86s, environment 491ms, prepare 127ms)
+tsc exit=0 103s | 

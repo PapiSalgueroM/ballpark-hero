@@ -1,0 +1,31 @@
+
+[1m[46m RUN [49m[22m [36mv3.2.7 [39m[90m/home/runner/work/ballpark-hero/ballpark-hero[39m
+
+[90mstdout[2m | src/test/vfA.test.ts[2m > [22m[2mBS-sc415-1 whole careers at the PR head[2m > [22m[2mpairs cash, loyal and anchor stayers on the same seeds
+[22m[39mVF ROWS 150
+VF SUMMARY loyal vs cash {"all":{"n":150,"worse":54,"better":95,"meanDiffM":-0.946,"meanPct":-0.63},"everyDealPaid":{"n":141,"worse":48,"better":92,"meanDiffM":-0.955,"meanPct":-0.92},"deals":157,"paid":148,"extWhileActive":137,"meanExtOverCut":1.2526,"meanExtOverBase":1.111,"wage30":25408,"wage30cash":28119}
+VF SUMMARY anchor vs cash {"all":{"n":150,"worse":54,"better":95,"meanDiffM":-0.946,"meanPct":-0.63},"everyDealPaid":{"n":141,"worse":48,"better":92,"meanDiffM":-0.955,"meanPct":-0.92},"deals":157,"paid":148,"extWhileActive":137,"meanExtOverCut":1.2526,"meanExtOverBase":1.111,"wage30":25408,"wage30cash":28119}
+
+ [32m✓[39m src/test/vfA.test.ts [2m([22m[2m2 tests[22m[2m | [22m[33m1 skipped[39m[2m)[22m[33m 77859[2mms[22m[39m
+   [33m[2m✓[22m[39m BS-sc415-1 whole careers at the PR head[2m > [22mpairs cash, loyal and anchor stayers on the same seeds [33m 77858[2mms[22m[39m
+[31m⎯⎯⎯⎯⎯⎯[39m[1m[41m Unhandled Errors [49m[22m[31m⎯⎯⎯⎯⎯⎯[39m
+[31m[1m
+Vitest caught 1 unhandled error during the test run.
+This might cause false positive tests. Resolve unhandled errors to make sure your tests are not affected.[22m[39m
+
+[31m⎯⎯⎯⎯⎯⎯[39m[1m[41m Unhandled Error [49m[22m[31m⎯⎯⎯⎯⎯⎯⎯[39m
+[31m[1mError[22m: [vitest-worker]: Timeout calling "onTaskUpdate"[39m
+[90m [2m❯[22m Object.onTimeoutError node_modules/vitest/dist/chunks/rpc.-pEldfrD.js:[2m53:10[22m[39m
+[90m [2m❯[22m Timeout._onTimeout node_modules/vitest/dist/chunks/index.B521nVV-.js:[2m59:62[22m[39m
+[90m [2m❯[22m listOnTimeout node:internal/timers:[2m685:17[22m[39m
+[90m [2m❯[22m processTimers node:internal/timers:[2m618:7[22m[39m
+
+[31m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[39m
+
+
+[2m Test Files [22m [1m[32m1 passed[39m[22m[90m (1)[39m
+[2m      Tests [22m [1m[32m1 passed[39m[22m[2m | [22m[33m1 skipped[39m[90m (2)[39m
+[2m     Errors [22m [1m[31m1 error[39m[22m
+[2m   Start at [22m 04:56:25
+[2m   Duration [22m 81.90s[2m (transform 2.38s, setup 135ms, collect 2.92s, tests 77.86s, environment 491ms, prepare 127ms)[22m
+

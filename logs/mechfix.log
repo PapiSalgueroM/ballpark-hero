@@ -1,0 +1,45 @@
+
+[1m[46m RUN [49m[22m [36mv3.2.7 [39m[90m/home/runner/work/ballpark-hero/ballpark-hero[39m
+
+[90mstdout[2m | src/test/vfM.test.ts[2m > [22m[2mBS-sc415-1 mechanism at the PR head[2m > [22m[2mextension and renewal read the cut wage, and payout never restores it
+[22m[39mVF signing wage loyal/cash 9000 10000 deal {"id":"[\"World ere\",\"\",\"contract_offer\",2029,\"[\\\"VF Fixture Club\\\",\\\"Fixture Country\\\",\\\"Fixture League\\\",\\\"#123456\\\",3,10000,3,0,false,false,false,false]\",10000]","club":"VF Fixture Club","firstYear":2029,"finalYear":2031,"years":3,"baseWeeklyWage":10000,"weeklyWage":9000,"bonusEuros":234000,"completed":0,"lastYear":2028,"status":"active","paidEuros":0}
+VF after two seasons: contractYearsLeft 1 deal active 2
+VF extension wage loyal/cash 11500 11500 years 2 2 deal after ext active
+VF after season three: deal paid 234000 wage loyal/cash 11500 11500 netWorth gain from payout 0.234
+VF renewal route: deal paid contractYearsLeft 0 renewed wage loyal/cash 10000 10000
+VF second extension loyal/cash 13225 13225 ratio 1
+
+ [31m❯[39m src/test/vfM.test.ts [2m([22m[2m2 tests[22m[2m | [22m[31m1 failed[39m[2m | [22m[33m1 skipped[39m[2m)[22m[32m 52[2mms[22m[39m
+[31m   [31m×[31m BS-sc415-1 mechanism at the PR head[2m > [22mextension and renewal read the cut wage, and payout never restores it[39m[32m 51[2mms[22m[39m
+[31m     → expected 11500 to be 10350 // Object.is equality[39m
+   [2m[90m↓[39m[22m BS-sc415-1 whole careers at the PR head[2m > [22mpairs cash, loyal and anchor stayers on the same seeds
+
+[31m⎯⎯⎯⎯⎯⎯⎯[39m[1m[41m Failed Tests 1 [49m[22m[31m⎯⎯⎯⎯⎯⎯⎯[39m
+
+[41m[1m FAIL [22m[49m src/test/vfM.test.ts[2m > [22mBS-sc415-1 mechanism at the PR head[2m > [22mextension and renewal read the cut wage, and payout never restores it
+[31m[1mAssertionError[22m: expected 11500 to be 10350 // Object.is equality[39m
+
+[32m- Expected[39m
+[31m+ Received[39m
+
+[32m- 10350[39m
+[31m+ 11500[39m
+
+[36m [2m❯[22m src/test/vfM.test.ts:[2m66:27[22m[39m
+    [90m 64| [39m    [34mexpect[39m(cash0[33m.[39mweeklyWage)[33m.[39m[34mtoBe[39m([34m10000[39m)[33m;[39m
+    [90m 65| [39m    [34mexpect[39m([34mdeal[39m(le)[33m?.[39mstatus)[33m.[39m[34mtoBe[39m([32m'active'[39m)[33m;[39m
+    [90m 66| [39m    [34mexpect[39m(le[33m.[39mweeklyWage)[33m.[39m[34mtoBe[39m([33mMath[39m[33m.[39m[34mround[39m([34m9000[39m [33m*[39m [34m1.15[39m))[33m;[39m
+    [90m   | [39m                          [31m^[39m
+    [90m 67| [39m    [34mexpect[39m(ce[33m.[39mweeklyWage)[33m.[39m[34mtoBe[39m([34m11500[39m)[33m;[39m
+    [90m 68| [39m    [34mexpect[39m([34mdeal[39m(lp)[33m?.[39mstatus)[33m.[39m[34mtoBe[39m([32m'paid'[39m)[33m;[39m
+
+[31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/1]⎯[22m[39m
+
+
+[2m Test Files [22m [1m[31m1 failed[39m[22m[90m (1)[39m
+[2m      Tests [22m [1m[31m1 failed[39m[22m[2m | [22m[33m1 skipped[39m[90m (2)[39m
+[2m   Start at [22m 04:56:19
+[2m   Duration [22m 4.82s[2m (transform 2.19s, setup 138ms, collect 2.76s, tests 52ms, environment 882ms, prepare 422ms)[22m
+
+
+::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/test/vfM.test.ts,title=src/test/vfM.test.ts > BS-sc415-1 mechanism at the PR head > extension and renewal read the cut wage%2C and payout never restores it,line=66,column=27::AssertionError: expected 11500 to be 10350 // Object.is equality%0A%0A- Expected%0A+ Received%0A%0A- 10350%0A+ 11500%0A%0A ❯ src/test/vfM.test.ts:66:27%0A%0A
