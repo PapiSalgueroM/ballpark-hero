@@ -22,6 +22,7 @@
  */
 import pw from './lib/playwrightLoader.mjs';
 import { answerConsent } from './lib/answerConsent.mjs';
+import { noteIntlCalls, watchIntlCalls } from './lib/intlCallNote.mjs';
 
 const { chromium } = pw;
 const BASE = process.env.BASE ?? process.env.SWEEP_BASE ?? 'http://localhost:4173';
@@ -79,6 +80,9 @@ console.log('1) The final year opens a decision, in all four games');
 for (const game of GAMES) {
   const ctx = await browser.newContext({ viewport: { width: 390, height: 844 } });
   const page = await ctx.newPage();
+  /* Round 1557 (critic-1541 correction 9): the NBA walk prints whether its career met the national team's call
+     (walks two and three play the NFL only). */
+  if (game.path === '/nba-my-career') await watchIntlCalls(page);
   const errors = [];
   page.on('pageerror', e => errors.push(String(e)));
 
@@ -97,6 +101,7 @@ for (const game of GAMES) {
   }
   const real = errors.filter(e => !/supabase|Failed to fetch|CORS/i.test(e));
   say(real.length === 0, `${game.name}: no page errors (${real.length ? real[0] : 'clean'})`);
+  if (game.path === '/nba-my-career') noteIntlCalls(game.name, page);
   await ctx.close();
 }
 

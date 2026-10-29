@@ -783,11 +783,16 @@ if (SECTIONS.has('7')) {
 if (SECTIONS.has('8')) {
   console.log('section 8: saves');
   /* Round 1557 (1544's review, minor 7): every NBA save realSaves.mjs builds over INTL_REAL_SEEDS seeds (default
-     16, half of them played careers, half prospects), not the four seeds' two, and the four planted blocks below
-     go into every one of them rather than the first. */
+     16), not the four seeds' two, and the four planted blocks below go into every one of them rather than the
+     first. realSaves builds one NBA save a seed: a played career on the seeds with seed % 4 below 2 and a prospect
+     (c null, no career to repair) on the others, so the saves checked here are the played half, 8 of 16 by
+     construction (corrected by 1557's fix, review-read-1557 minor 5: the floor below is that structural count, not
+     a measured band, so it has no headroom to set). */
   const REAL_SEEDS = Number(process.env.INTL_REAL_SEEDS || 16);
   const { fleet } = await buildRealSaves({ root: ROOT, tmpDir: path.join(TMP, 'real'), seeds: Array.from({ length: REAL_SEEDS }, (_, i) => i) });
-  const saves = (fleet['/nba-my-career'] ?? []).map(raw => JSON.parse(raw)).filter(s => s && s.c);
+  const built = (fleet['/nba-my-career'] ?? []).map(raw => JSON.parse(raw));
+  const saves = built.filter(s => s && s.c);
+  console.log(`  realSaves built ${built.length} NBA saves: ${saves.length} played careers, ${built.length - saves.length} prospects with no career`);
   check('8', saves.length >= REAL_SEEDS / 2, `only ${saves.length} NBA saves were built over ${REAL_SEEDS} seeds`);
   for (const [k, s] of saves.entries()) {
     const c = JSON.parse(JSON.stringify(s.c));

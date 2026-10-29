@@ -39,6 +39,10 @@ import { MLB_RIVALRY_CHOICES } from '@/lib/mlbCareerRivalryEvents';
 import { NHL_RIVALRY_CHOICES } from '@/lib/nhlCareerRivalryEvents';
 import { rivalryChoiceCard } from '@/lib/careerRivalryChoices';
 import type { RivalryChoiceCard, RivalryChoiceDef } from '@/lib/careerRivalryChoices';
+import { noteIntlCalls } from '@/test/helpers/intlCallNote';
+
+/* Round 1557 (critic-1541 correction 9): the file prints whether its NBA saves meet the national team's call. */
+noteIntlCalls('rivalryChoiceBoard');
 
 /** The fields of a saved career this test reads and writes. */
 interface SavedCareer {

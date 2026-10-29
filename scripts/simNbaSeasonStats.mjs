@@ -113,6 +113,7 @@ import path from 'node:path';
 import { createRequire } from 'node:module';
 import { spawnSync } from 'node:child_process';
 import { fileURLToPath, pathToFileURL } from 'node:url';
+import { noteNoIntlCareer } from './lib/intlCallNote.mjs';
 
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const LIB = path.join(ROOT, 'src', 'lib');
@@ -807,4 +808,6 @@ if (fails.length) {
   for (const f of fails.slice(0, 24)) console.error('  ' + f);
   process.exit(1);
 }
+/* Round 1557 (critic-1541 correction 9): every harness naming the NBA career says whether it meets the national team's call. */
+noteNoIntlCareer('simNbaSeasonStats', "it plays the NBA Front Office, never a My Career save; '/nba-my-career' is only where its guide entry ends");
 console.log(`simNbaSeasonStats: ${checks} checks passed over ${SEEDS.length} seeded franchises and ${SEASONS} seasons each. Every game adds up, the box takes nothing from the league, the awards follow their rules, and the season closes once.`);
