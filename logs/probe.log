@@ -1,0 +1,29 @@
+
+[1m[46m RUN [49m[22m [36mv3.2.7 [39m[90m/home/runner/work/ballpark-hero/ballpark-hero[39m
+
+[90mstdout[2m | src/test/vfbsCm416.test.tsx[2m > [22m[2mBS-cm416-1 skeptic probe[2m > [22m[2mEverton
+[22m[39mVFBS Everton player=Harrison Armstrong age=18 start=78 host=AC Milan steps=41 reviews=24 refused=17 savedChanges=[0] awayRatings=[78] historyRows=12 historyChanges=[0] reviewAtSeasonOver=null recallLoggedChange=0 squadMenWhoseRatingMovedInSeason=0/19 awayAtSeasonEnd=78 homeAfterSummer=83 historyAfterSummer=12 anyRowRecordsReturn=false control=3
+
+ [32m✓[39m src/test/vfbsCm416.test.tsx[2m > [22mBS-cm416-1 skeptic probe[2m > [22mEverton[33m 733[2mms[22m[39m
+[90mstdout[2m | src/test/vfbsCm416.test.tsx[2m > [22m[2mBS-cm416-1 skeptic probe[2m > [22m[2mFulham
+[22m[39mVFBS Fulham player=Josh King age=18 start=81 host=AC Milan steps=43 reviews=42 refused=1 savedChanges=[0] awayRatings=[81] historyRows=12 historyChanges=[0] reviewAtSeasonOver=null recallLoggedChange=0 squadMenWhoseRatingMovedInSeason=0/23 awayAtSeasonEnd=81 homeAfterSummer=86 historyAfterSummer=12 anyRowRecordsReturn=false control=3
+
+ [32m✓[39m src/test/vfbsCm416.test.tsx[2m > [22mBS-cm416-1 skeptic probe[2m > [22mFulham[33m 638[2mms[22m[39m
+[90mstdout[2m | src/test/vfbsCm416.test.tsx[2m > [22m[2mBS-cm416-1 skeptic probe[2m > [22m[2mNewcastle United
+[22m[39mVFBS Newcastle United player=Matteo Brennan (Youth) age=17 start=55 host=AC Milan steps=5 reviews=5 refused=0 savedChanges=[0] awayRatings=[55] historyRows=5 historyChanges=[0] reviewAtSeasonOver=null recallLoggedChange=0 squadMenWhoseRatingMovedInSeason=0/15 awayAtSeasonEnd=55 homeAfterSummer=59 historyAfterSummer=5 anyRowRecordsReturn=false control=3
+
+ [32m✓[39m src/test/vfbsCm416.test.tsx[2m > [22mBS-cm416-1 skeptic probe[2m > [22mNewcastle United[32m 196[2mms[22m[39m
+[90mstdout[2m | src/test/vfbsCm416.test.tsx[2m > [22m[2mBS-cm416-1 skeptic probe[2m > [22m[2mChelsea
+[22m[39mVFBS Chelsea player=Estêvão age=18 start=89 host=AC Milan steps=42 reviews=41 refused=1 savedChanges=[0] awayRatings=[89] historyRows=12 historyChanges=[0] reviewAtSeasonOver=null recallLoggedChange=0 squadMenWhoseRatingMovedInSeason=0/24 awayAtSeasonEnd=89 homeAfterSummer=93 historyAfterSummer=12 anyRowRecordsReturn=false control=3
+
+ [32m✓[39m src/test/vfbsCm416.test.tsx[2m > [22mBS-cm416-1 skeptic probe[2m > [22mChelsea[33m 556[2mms[22m[39m
+[90mstdout[2m | src/test/vfbsCm416.test.tsx[2m > [22m[2mBS-cm416-1 skeptic probe[2m > [22m[2mBrentford
+[22m[39mVFBS Brentford player=Kaye Furo age=18 start=76 host=AC Milan steps=43 reviews=42 refused=1 savedChanges=[0] awayRatings=[76] historyRows=12 historyChanges=[0] reviewAtSeasonOver=null recallLoggedChange=0 squadMenWhoseRatingMovedInSeason=0/23 awayAtSeasonEnd=76 homeAfterSummer=80 historyAfterSummer=12 anyRowRecordsReturn=false control=3
+
+ [32m✓[39m src/test/vfbsCm416.test.tsx[2m > [22mBS-cm416-1 skeptic probe[2m > [22mBrentford[33m 538[2mms[22m[39m
+
+[2m Test Files [22m [1m[32m1 passed[39m[22m[90m (1)[39m
+[2m      Tests [22m [1m[32m5 passed[39m[22m[90m (5)[39m
+[2m   Start at [22m 04:29:10
+[2m   Duration [22m 4.69s[2m (transform 1.15s, setup 57ms, collect 1.37s, tests 2.66s, environment 252ms, prepare 98ms)[22m
+
