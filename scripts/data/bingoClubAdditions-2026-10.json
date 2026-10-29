@@ -12,7 +12,8 @@
     "club": "A club counts when he was on its senior first team squad, permanently or on loan, for all or part of a season. Each club counts once however many spells he had. Youth, academy, reserve and B sides do not count.",
     "candidates": "The hole class (lead ruling R1, critic correction 1): every pool man with no counted row in one or more of 2023, 2024 and 2025 whose counted rows begin in 2023 or later, plus every pool man on Round 669's write and existingChecked lists (scripts/data/defensiveMidfield2026.json). Counted rows are the rows the club squares count: the lib's identity guard and academy filter applied. Each candidate is checked for his WHOLE senior career.",
     "sources": "Two sources on two different hosts for every added club and every agrees verdict: Transfermarkt's transfer history (its transferHistory list) and FotMob's senior career list by default (Round 669's pair), each with the url, the date read and the line quoted. A club or league official site or AP, Reuters, BBC, ESPN or Sky settles a disagreement. Never wikipedia, wikidata, a fandom site or thesportsdb. When the two disagree and nothing settles it, the club does not ship and the man goes to partial.",
-    "partial": "A man who cannot be two sourced is never taken out of the pool: he stays exactly as today (no addition) and is listed in partial with the reason (lead ruling R4)."
+    "partial": "A man who cannot be two sourced is never taken out of the pool: he stays exactly as today (no addition) and is listed in partial with the reason (lead ruling R4).",
+    "quotes": "Transfermarkt and FotMob serve these lists as data, so a quoted line is one entry rendered in a fixed shape: Transfermarkt as \"season date from -> to (fee)\" from its transferHistory list, FotMob as \"team (on loan) start to end, N apps\" from the senior career entries on the player page. Nothing is paraphrased beyond that shape."
   },
   "candidates": [
     "Abdukodir Khusanov",
@@ -85,7 +86,124 @@
     "Vitor Reis",
     "Yan Diomande"
   ],
-  "additions": [],
+  "additions": [
+    {
+      "name": "Tyler Morton",
+      "nationality": "England",
+      "birthYear": 2002,
+      "position": "Defensive Midfield",
+      "class": "hole (Round 669 write list; C1 gap 2022 then 2026)",
+      "identity": {
+        "fixtureRows": [
+          167582,
+          177631
+        ],
+        "personKey": null,
+        "born": "2002-10-31",
+        "bornSources": [
+          {
+            "url": "https://www.fotmob.com/players/1113724",
+            "read": "2026-10-29",
+            "quote": "birthDate 2002-10-31"
+          },
+          {
+            "url": "https://www.transfermarkt.com/tyler-morton/profil/spieler/618494",
+            "read": "2026-10-29",
+            "quote": "Date of birth/Age: 31/10/2002 (23)"
+          }
+        ]
+      },
+      "fullCareer": true,
+      "tableClubs": [
+        "liverpool fc",
+        "olympique lyon"
+      ],
+      "career": [
+        {
+          "club": "Liverpool FC",
+          "seasons": "2021-22, 2024-25",
+          "sources": [
+            {
+              "url": "https://www.transfermarkt.com/ceapi/transferHistory/list/618494",
+              "read": "2026-10-29",
+              "quote": "24/25 01/07/2024 Liverpool U21 -> Liverpool (-)"
+            },
+            {
+              "url": "https://www.fotmob.com/players/1113724",
+              "read": "2026-10-29",
+              "quote": "Liverpool 2021-07-01 to 2022-08-01, 9 apps; Liverpool 2024-07-25 to 2025-08-05, 5 apps"
+            }
+          ]
+        },
+        {
+          "club": "Olympique Lyon",
+          "seasons": "2025-26 on",
+          "sources": [
+            {
+              "url": "https://www.transfermarkt.com/ceapi/transferHistory/list/618494",
+              "read": "2026-10-29",
+              "quote": "25/26 05/08/2025 Liverpool -> Lyon (€10M)"
+            },
+            {
+              "url": "https://www.fotmob.com/players/1113724",
+              "read": "2026-10-29",
+              "quote": "Lyon 2025-08-05 to now, 57 apps"
+            }
+          ]
+        }
+      ],
+      "clubs": [
+        {
+          "club": "Blackburn Rovers",
+          "fromSeason": "2022-23",
+          "toSeason": "2022-23",
+          "loan": true,
+          "sources": [
+            {
+              "url": "https://www.transfermarkt.com/ceapi/transferHistory/list/618494",
+              "read": "2026-10-29",
+              "quote": "22/23 01/08/2022 Liverpool U21 -> Blackburn (loan transfer)"
+            },
+            {
+              "url": "https://www.fotmob.com/players/1113724",
+              "read": "2026-10-29",
+              "quote": "Blackburn Rovers (on loan) 2022-08-01 to 2023-06-30, 46 apps"
+            }
+          ]
+        },
+        {
+          "club": "Hull City",
+          "fromSeason": "2023-24",
+          "toSeason": "2023-24",
+          "loan": true,
+          "sources": [
+            {
+              "url": "https://www.transfermarkt.com/ceapi/transferHistory/list/618494",
+              "read": "2026-10-29",
+              "quote": "23/24 01/09/2023 Liverpool U21 -> Hull City (loan transfer)"
+            },
+            {
+              "url": "https://www.fotmob.com/players/1113724",
+              "read": "2026-10-29",
+              "quote": "Hull City (on loan) 2023-09-01 to 2024-06-30, 41 apps"
+            }
+          ]
+        }
+      ],
+      "verdict": {
+        "before": {
+          "count": 2,
+          "fourPlus": false,
+          "oneClub": false
+        },
+        "after": {
+          "count": 4,
+          "fourPlus": true,
+          "oneClub": false
+        }
+      }
+    }
+  ],
   "agrees": [],
   "partial": [],
   "pending": [
@@ -153,7 +271,6 @@
     "Senny Mayulu",
     "Thierno Barry",
     "Tyler Dibling",
-    "Tyler Morton",
     "Victor Froholdt",
     "Vitinha",
     "Vitor Reis",

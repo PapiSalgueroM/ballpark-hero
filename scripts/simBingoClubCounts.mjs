@@ -33,6 +33,10 @@
      5. sources: every added club and every agrees verdict carries two or more
         sources on different hosts, none crowd edited, each with a url, the
         date read (not after today, not before the fixture) and a quoted line.
+     6. derived: src/data/bingoClubAdditions.json is the generator's output
+        byte for byte, the generator refuses nothing (no club he already has
+        under another spelling or slash part), and every added club uses the
+        table's own spelling where the table spells it at all.
 
    Negative controls (each asserts it changed something, or exits 3):
      BINGO_CLUBS_CONTROL=rule      the Round 669 lists dropped from the rule:
@@ -40,6 +44,7 @@
      BINGO_CLUBS_CONTROL=onesource one sourced entry loses a source: red.
      BINGO_CLUBS_CONTROL=pending   one judged man put back in pending, so
                                    pending grows past PENDING_MAX: red.
+     BINGO_CLUBS_CONTROL=handedit  one byte of the derived file changed: red.
      FIXTURE_CONTROL=cap           the stub drops the range and the 1,000 row
                                    cap: at least one man's history changes.
    Exit 0 green, 1 red (or a control that fired), 2 could not run, 3 a control
@@ -63,7 +68,7 @@ const FIXTURE = 'scripts/data/bingoPoolHistory-2026-10-29.json';
 const FIXTURE_SHA256 = '8c8f8fc276a7dd696e586b97148ea1815712e64c619665750b5d45a9efe353e1';
 const RECORD = 'scripts/data/bingoClubAdditions-2026-10.json';
 const HOLE_YEARS = [2023, 2024, 2025];
-const PENDING_MAX = 69;
+const PENDING_MAX = 68;
 const BANNED_HOSTS = /(^|\.)(wikipedia\.org|wikidata\.org|fandom\.com|thesportsdb\.com|wikiwand\.com)$/;
 const CONTROL = process.env.BINGO_CLUBS_CONTROL || '';
 const FIXTURE_CONTROL = process.env.FIXTURE_CONTROL || '';
@@ -259,6 +264,7 @@ const FIXTURE_DAY = '2026-10-29';
 const sourced = [];
 for (const e of record.additions) for (const c of e.clubs ?? []) sourced.push({ what: `${e.name}: ${c.club}`, sources: c.sources });
 for (const e of record.agrees) sourced.push({ what: `${e.name} (agrees)`, sources: e.sources });
+for (const e of record.additions) for (const c of e.career ?? []) sourced.push({ what: `${e.name}: ${c.club} (career)`, sources: c.sources });
 if (CONTROL === 'onesource') {
   const victim = sourced.find(s => (s.sources ?? []).length >= 2);
   if (victim) {
@@ -286,6 +292,32 @@ for (const s of sourced) {
   if (hosts.size < 2) fail(`${s.what}: ${hosts.size} host(s), two different hosts are required`);
 }
 console.log(`   ${sourced.length} sourced facts checked`);
+
+/* ---------------------------------------------------------------- 6 */
+section = '6';
+console.log('6) The derived file');
+const { buildDerived, DERIVED } = await import(new URL('./genBingoClubAdditions.mjs', import.meta.url).href);
+const built = buildDerived(record);
+for (const r of built.refusals) fail(`the generator refuses: ${r}`);
+let shipped = read(DERIVED).replaceAll('\r\n', '\n');
+if (CONTROL === 'handedit') {
+  const edited = shipped.replace('"Hull City"', '"Hull Citx"');
+  if (edited !== shipped) changed('one byte of the derived file edited by hand');
+  shipped = edited;
+}
+if (shipped !== built.text) fail(`${DERIVED} is not the generator's output (run node scripts/genBingoClubAdditions.mjs, never edit it by hand)`);
+const derived = JSON.parse(built.text);
+const spellings = new Map();
+for (const r of rows) if (r.club) spellings.set(norm(r.club), r.club);
+const unseen = [];
+for (const a of derived.add) {
+  for (const club of a.clubs) {
+    const table = spellings.get(norm(club));
+    if (table && table !== club) fail(`${a.n}: "${club}" is spelled "${table}" in the table`);
+    if (!table) unseen.push(`${a.n}: ${club}`);
+  }
+}
+console.log(`   ${derived.add.length} men, ${derived.add.reduce((n, a) => n + a.clubs.length, 0)} added clubs; clubs the fixture never spells (new keys, printed): ${unseen.length}${unseen.length ? ': ' + unseen.join('; ') : ''}`);
 
 /* ---------------------------------------------------------------- end */
 const summary = Object.entries(bySection).map(([s, n]) => `section ${s}: ${n}`).join(', ');

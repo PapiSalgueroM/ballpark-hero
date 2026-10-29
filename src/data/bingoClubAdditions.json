@@ -1,0 +1,19 @@
+{
+  "rules": {
+    "aliases": {},
+    "reserves": []
+  },
+  "add": [
+    {
+      "n": "Tyler Morton",
+      "nat": "England",
+      "by": 2002,
+      "pos": "Defensive Midfield",
+      "clubs": [
+        "Blackburn Rovers",
+        "Hull City"
+      ]
+    }
+  ],
+  "partial": []
+}
