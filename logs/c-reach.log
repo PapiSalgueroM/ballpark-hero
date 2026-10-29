@@ -1,0 +1,27 @@
+NEGATIVE CONTROL ON (reach): neighbours reach 60 percent of the pitch across, so men who do not stand next to each other link; section 2 must go red
+1) the same eleven in its natural slots against shuffled, 300 elevens, BYXI_SEED 0
+   300 of 300 shuffled elevens put somebody outside his slot's set; natural minus shuffled points, mean: role fit only 10.42 (floor 6), all three 11.68 (floor 7), keeper kept and outfield shuffled 6.58 (floor 4)
+2) a chemistry link exists only between neighbours the data says share a club or a country
+   one club under two stored names: 5 of 5 clubs link their two spellings
+  FAIL [2]: 4-3-3: slots 0-1 (GK and LB) count as neighbours but do not stand next to each other
+  FAIL [2]: 4-3-3: slots 0-4 (GK and RB) count as neighbours but do not stand next to each other
+  FAIL [2]: 4-3-3: slots 1-6 (LB and CM) count as neighbours but do not stand next to each other
+  FAIL [2]: 4-3-3: slots 1-7 (LB and CM) count as neighbours but do not stand next to each other
+  FAIL [2]: 4-3-3: slots 2-7 (CB and CM) count as neighbours but do not stand next to each other
+  FAIL [2]: 4-3-3: slots 3-5 (CB and CM) count as neighbours but do not stand next to each other
+  FAIL [2]: 4-3-3: slots 4-5 (RB and CM) count as neighbours but do not stand next to each other
+  FAIL [2]: 4-3-3: slots 4-6 (RB and CM) count as neighbours but do not stand next to each other
+  FAIL [2]: (further failures in this section not printed)
+   8240 links over 1027 elevens (3843 club), every one between neighbours who share what it says, none missing; 129 neighbour pairs over 6 shapes, the same as this file's own reading
+3) every bonus and penalty inside its stated bound
+   material: 696 elevens with no holding midfielder, 640 with a narrow flank, 233 with somebody next door
+   one club, one country: links raw 28, paid 2 (cap 2)
+   601 of 601 elevens: the three tiles show exactly the three numbers the season played
+   600 seasons replayed factor by factor, 540 of them moved by at least one; stated: role fit 2/6/14 on the man, chemistry x0.2 up to 2, holding 1, width 0.5 a flank
+   through the slot check: 740 natural, 266 next door, 0 wrong line, 0 keeper
+4) World XI's seasons are the ones it played before this round (240 squads)
+   digest 2f8cca6578202d4b1ccf3dbc45be0908cef51bf5be50b91a6ff2365722ea6c6c
+   60 of 60 Build Your XI elevens play the same season with a zero breakdown as with none
+5) old reports render, and the new tiles render for full and half built elevens
+   worth tiles, report tabs, breakdown and its three details rendered for old, full and half built
+CONTROL FIRED: BYXI_CONTROL=reach turned section 2 red and nothing else

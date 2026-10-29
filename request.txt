@@ -1,0 +1,23 @@
+#!serial
+xi-vitest: node_modules/.bin/vitest run src/test/xiWingbackFit.test.ts --testTimeout=300000
+xi-sim: node scripts/simBuildYourXiFit.mjs
+probe: git show 601435944:src/lib/xiFit.ts > src/lib/xiFitBase.ts && cp .rc/x/xiProbe400.test.ts src/test/xiProbe400.test.ts && node_modules/.bin/vitest run src/test/xiProbe400.test.ts --testTimeout=300000; s=$?; rm -f src/lib/xiFitBase.ts src/test/xiProbe400.test.ts; exit $s
+m-nolwb-vt: node .rc/x/mutXi.mjs nolwb && node_modules/.bin/vitest run src/test/xiWingbackFit.test.ts; s=$?; git checkout -- src scripts; exit $s
+m-norwb-vt: node .rc/x/mutXi.mjs norwb && node_modules/.bin/vitest run src/test/xiWingbackFit.test.ts; s=$?; git checkout -- src scripts; exit $s
+m-anyside-vt: node .rc/x/mutXi.mjs anyside && node_modules/.bin/vitest run src/test/xiWingbackFit.test.ts; s=$?; git checkout -- src scripts; exit $s
+m-history-vt: node .rc/x/mutXi.mjs history && node_modules/.bin/vitest run src/test/xiWingbackFit.test.ts; s=$?; git checkout -- src scripts; exit $s
+m-slotlist-vt: node .rc/x/mutXi.mjs slotlist && node_modules/.bin/vitest run src/test/xiWingbackFit.test.ts; s=$?; git checkout -- src scripts; exit $s
+m-wbtofb-vt: node .rc/x/mutXi.mjs wbtofb && node_modules/.bin/vitest run src/test/xiWingbackFit.test.ts; s=$?; git checkout -- src scripts; exit $s
+m-nolwb-sim: node .rc/x/mutXi.mjs nolwb && node scripts/simBuildYourXiFit.mjs; s=$?; git checkout -- src scripts; exit $s
+m-norwb-sim: node .rc/x/mutXi.mjs norwb && node scripts/simBuildYourXiFit.mjs; s=$?; git checkout -- src scripts; exit $s
+m-nofix-sim: node .rc/x/mutXi.mjs nofix && node scripts/simBuildYourXiFit.mjs; s=$?; git checkout -- src scripts; exit $s
+m-anyside-sim: node .rc/x/mutXi.mjs anyside && node scripts/simBuildYourXiFit.mjs; s=$?; git checkout -- src scripts; exit $s
+c-nofit: BYXI_CONTROL=nofit node scripts/simBuildYourXiFit.mjs
+c-farlinks: BYXI_CONTROL=farlinks node scripts/simBuildYourXiFit.mjs
+c-reach: BYXI_CONTROL=reach node scripts/simBuildYourXiFit.mjs
+c-alias: BYXI_CONTROL=alias node scripts/simBuildYourXiFit.mjs
+c-nocap: BYXI_CONTROL=nocap node scripts/simBuildYourXiFit.mjs
+c-nogate: BYXI_CONTROL=nogate node scripts/simBuildYourXiFit.mjs
+c-tileraw: BYXI_CONTROL=tileraw node scripts/simBuildYourXiFit.mjs
+c-leak: BYXI_CONTROL=leak node scripts/simBuildYourXiFit.mjs
+c-oldcrash: BYXI_CONTROL=oldcrash node scripts/simBuildYourXiFit.mjs

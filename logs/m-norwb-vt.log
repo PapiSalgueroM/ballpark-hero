@@ -1,0 +1,42 @@
+MUT norwb applied to src/lib/xiFit.ts
+
+[1m[46m RUN [49m[22m [36mv3.2.7 [39m[90m/home/runner/work/ballpark-hero/ballpark-hero[39m
+
+ [31m❯[39m src/test/xiWingbackFit.test.ts [2m([22m[2m6 tests[22m[2m | [22m[31m1 failed[39m[2m)[22m[32m 9[2mms[22m[39m
+   [32m✓[39m Build Your XI same-side wingback role fit[2m > [22mkeeps a primary left back at full value in both actual left wingback formations[32m 2[2mms[22m[39m
+[31m   [31m×[31m Build Your XI same-side wingback role fit[2m > [22mkeeps a primary right back at full value in both actual right wingback formations[39m[32m 5[2mms[22m[39m
+[31m     → XI_RIGHT_BACK_AT_RWB: a same-side fullback must not lose rating points: expected 2 to be +0 // Object.is equality[39m
+   [32m✓[39m Build Your XI same-side wingback role fit[2m > [22mretains the existing opposite-side and other outfield penalties[32m 1[2mms[22m[39m
+   [32m✓[39m Build Your XI same-side wingback role fit[2m > [22mretains the goalkeeper boundary even when verified history names a fullback[32m 0[2mms[22m[39m
+   [32m✓[39m Build Your XI same-side wingback role fit[2m > [22mpreserves verified wingback history, missing positions, empty slots and input bodies[32m 0[2mms[22m[39m
+   [32m✓[39m Build Your XI same-side wingback role fit[2m > [22mleaves the shared grade and actual pick-admission boundaries unchanged[32m 0[2mms[22m[39m
+
+[31m⎯⎯⎯⎯⎯⎯⎯[39m[1m[41m Failed Tests 1 [49m[22m[31m⎯⎯⎯⎯⎯⎯⎯[39m
+
+[41m[1m FAIL [22m[49m src/test/xiWingbackFit.test.ts[2m > [22mBuild Your XI same-side wingback role fit[2m > [22mkeeps a primary right back at full value in both actual right wingback formations
+[31m[1mAssertionError[22m: XI_RIGHT_BACK_AT_RWB: a same-side fullback must not lose rating points: expected 2 to be +0 // Object.is equality[39m
+
+[32m- Expected[39m
+[31m+ Received[39m
+
+[32m- 0[39m
+[31m+ 2[39m
+
+[36m [2m❯[22m src/test/xiWingbackFit.test.ts:[2m45:121[22m[39m
+    [90m 43| [39m      const filled = new Map([[index, filledSlot(positions[index], 'RB…
+    [90m 44| [39m      const breakdown = xiFitBreakdown(lineupFitSlots(positions, fille…
+    [90m 45| [39m      expect(breakdown.roleFit.perMan[index], 'XI_RIGHT_BACK_AT_RWB: a…
+    [90m   | [39m                                                                                                                        [31m^[39m
+    [90m 46| [39m      [34mexpect[39m(breakdown[33m.[39mroleFit[33m.[39mgrades[index])[33m.[39m[34mtoBe[39m([32m'natural'[39m)[33m;[39m
+    [90m 47| [39m      [34mexpect[39m(breakdown[33m.[39mroleFit[33m.[39mvalue)[33m.[39m[34mtoBe[39m([34m0[39m)[33m;[39m
+
+[31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/1]⎯[22m[39m
+
+
+[2m Test Files [22m [1m[31m1 failed[39m[22m[90m (1)[39m
+[2m      Tests [22m [1m[31m1 failed[39m[22m[2m | [22m[1m[32m5 passed[39m[22m[90m (6)[39m
+[2m   Start at [22m 17:56:39
+[2m   Duration [22m 643ms[2m (transform 139ms, setup 41ms, collect 179ms, tests 9ms, environment 166ms, prepare 65ms)[22m
+
+
+::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/test/xiWingbackFit.test.ts,title=src/test/xiWingbackFit.test.ts > Build Your XI same-side wingback role fit > keeps a primary right back at full value in both actual right wingback formations,line=45,column=121::AssertionError: XI_RIGHT_BACK_AT_RWB: a same-side fullback must not lose rating points: expected 2 to be +0 // Object.is equality%0A%0A- Expected%0A+ Received%0A%0A- 0%0A+ 2%0A%0A ❯ src/test/xiWingbackFit.test.ts:45:121%0A%0A

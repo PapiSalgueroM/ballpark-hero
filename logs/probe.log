@@ -1,0 +1,19 @@
+
+[1m[46m RUN [49m[22m [36mv3.2.7 [39m[90m/home/runner/work/ballpark-hero/ballpark-hero[39m
+
+[90mstdout[2m | src/test/xiProbe400.test.ts[2m > [22m[2mxi400 probe[2m > [22m[2msingle slot: only a primary LB at LWB and a primary RB at RWB change, family to natural
+[22m[39mPROBE single: 4080 cases, 28 differ, 6 same side cases already natural
+PROBE single diffs: RWB|RB|undef|family->natural ; RWB|RB|none|family->natural ; RWB|RB|GK|family->natural ; RWB|RB|CB|family->natural ; RWB|RB|LB|family->natural ; RWB|RB|RB|family->natural ; RWB|RB|LWB|family->natural ; RWB|RB|CDM|family->natural ; RWB|RB|CM|family->natural ; RWB|RB|CAM|family->natural ; RWB|RB|LM|family->natural ; RWB|RB|LW|family->natural ; RWB|RB|CF|family->natural ; RWB|RB|ST|family->natural ; LWB|LB|undef|family->natural ; LWB|LB|none|family->natural ; LWB|LB|GK|family->natural ; LWB|LB|CB|family->natural ; LWB|LB|LB|family->natural ; LWB|LB|RB|family->natural ; LWB|LB|RWB|family->natural ; LWB|LB|CDM|family->natural ; LWB|LB|CM|family->natural ; LWB|LB|CAM|family->natural ; LWB|LB|RM|family->natural ; LWB|LB|RW|family->natural ; LWB|LB|CF|family->natural ; LWB|LB|ST|family->natural
+
+[90mstdout[2m | src/test/xiProbe400.test.ts[2m > [22m[2mxi400 probe[2m > [22m[2melevens the gate accepts: only role fit moves, never down, and the season never loses points
+[22m[39mPROBE elevens: 9000 (2121 with a same side full back at wing back), 6943 identical breakdowns, role fit up in 2057 (mean +0.246)
+PROBE seasons: points up 233 (mean +1.57), same 8767, DOWN 0 (largest 0)
+
+ [32m✓[39m src/test/xiProbe400.test.ts [2m([22m[2m2 tests[22m[2m)[22m[33m 7833[2mms[22m[39m
+   [33m[2m✓[22m[39m xi400 probe[2m > [22melevens the gate accepts: only role fit moves, never down, and the season never loses points [33m 7787[2mms[22m[39m
+
+[2m Test Files [22m [1m[32m1 passed[39m[22m[90m (1)[39m
+[2m      Tests [22m [1m[32m2 passed[39m[22m[90m (2)[39m
+[2m   Start at [22m 17:56:28
+[2m   Duration [22m 8.59s[2m (transform 195ms, setup 43ms, collect 250ms, tests 7.83s, environment 178ms, prepare 41ms)[22m
+

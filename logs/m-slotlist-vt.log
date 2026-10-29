@@ -1,0 +1,58 @@
+MUT slotlist applied to src/lib/positionFit.ts
+
+[1m[46m RUN [49m[22m [36mv3.2.7 [39m[90m/home/runner/work/ballpark-hero/ballpark-hero[39m
+
+ [31m❯[39m src/test/xiWingbackFit.test.ts [2m([22m[2m6 tests[22m[2m | [22m[31m2 failed[39m[2m)[22m[32m 9[2mms[22m[39m
+   [32m✓[39m Build Your XI same-side wingback role fit[2m > [22mkeeps a primary left back at full value in both actual left wingback formations[32m 2[2mms[22m[39m
+   [32m✓[39m Build Your XI same-side wingback role fit[2m > [22mkeeps a primary right back at full value in both actual right wingback formations[32m 0[2mms[22m[39m
+[31m   [31m×[31m Build Your XI same-side wingback role fit[2m > [22mretains the existing opposite-side and other outfield penalties[39m[32m 4[2mms[22m[39m
+[31m     → RB at LWB: expected 'family' to be 'wrong' // Object.is equality[39m
+   [32m✓[39m Build Your XI same-side wingback role fit[2m > [22mretains the goalkeeper boundary even when verified history names a fullback[32m 0[2mms[22m[39m
+   [32m✓[39m Build Your XI same-side wingback role fit[2m > [22mpreserves verified wingback history, missing positions, empty slots and input bodies[32m 0[2mms[22m[39m
+[31m   [31m×[31m Build Your XI same-side wingback role fit[2m > [22mleaves the shared grade and actual pick-admission boundaries unchanged[39m[32m 1[2mms[22m[39m
+[31m     → expected 'natural' to be 'family' // Object.is equality[39m
+
+[31m⎯⎯⎯⎯⎯⎯⎯[39m[1m[41m Failed Tests 2 [49m[22m[31m⎯⎯⎯⎯⎯⎯⎯[39m
+
+[41m[1m FAIL [22m[49m src/test/xiWingbackFit.test.ts[2m > [22mBuild Your XI same-side wingback role fit[2m > [22mretains the existing opposite-side and other outfield penalties
+[31m[1mAssertionError[22m: RB at LWB: expected 'family' to be 'wrong' // Object.is equality[39m
+
+Expected: [32m"wrong"[39m
+Received: [31m"family"[39m
+
+[36m [2m❯[22m src/test/xiWingbackFit.test.ts:[2m65:68[22m[39m
+    [90m 63| [39m    [35mfor[39m ([35mconst[39m row [35mof[39m cases) {
+    [90m 64| [39m      [35mconst[39m b [33m=[39m [34mxiFitBreakdown[39m([34msingle[39m(row[33m.[39mrole[33m,[39m row[33m.[39mprimary))[33m;[39m
+    [90m 65| [39m      expect(b.roleFit.grades[0], row.primary + ' at ' + row.role).toB…
+    [90m   | [39m                                                                   [31m^[39m
+    [90m 66| [39m      [34mexpect[39m(b[33m.[39mroleFit[33m.[39mperMan[[34m0[39m])[33m.[39m[34mtoBe[39m(row[33m.[39mpenalty)[33m;[39m
+    [90m 67| [39m    }
+
+[31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/2]⎯[22m[39m
+
+[41m[1m FAIL [22m[49m src/test/xiWingbackFit.test.ts[2m > [22mBuild Your XI same-side wingback role fit[2m > [22mleaves the shared grade and actual pick-admission boundaries unchanged
+[31m[1mAssertionError[22m: expected 'natural' to be 'family' // Object.is equality[39m
+
+Expected: [32m"family"[39m
+Received: [31m"natural"[39m
+
+[36m [2m❯[22m src/test/xiWingbackFit.test.ts:[2m95:56[22m[39m
+    [90m 93| [39m
+    [90m 94| [39m  it('leaves the shared grade and actual pick-admission boundaries unc…
+    [90m 95| [39m    [34mexpect[39m([34mgradeFit[39m([[32m'LB'[39m][33m,[39m [33mSLOT_ALLOWED_BY_ROLE[39m[33m.[39m[33mLWB[39m))[33m.[39m[34mtoBe[39m([32m'family'[39m)[33m;[39m
+    [90m   | [39m                                                       [31m^[39m
+    [90m 96| [39m    [34mexpect[39m([34mgradeFit[39m([[32m'RB'[39m][33m,[39m [33mSLOT_ALLOWED_BY_ROLE[39m[33m.[39m[33mRWB[39m))[33m.[39m[34mtoBe[39m([32m'family'[39m)[33m;[39m
+    [90m 97| [39m    expect(checkLineupPick('Fictional Left', 'LWB', 'LWB', 'Left-Back'…
+
+[31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[2/2]⎯[22m[39m
+
+
+[2m Test Files [22m [1m[31m1 failed[39m[22m[90m (1)[39m
+[2m      Tests [22m [1m[31m2 failed[39m[22m[2m | [22m[1m[32m4 passed[39m[22m[90m (6)[39m
+[2m   Start at [22m 17:56:45
+[2m   Duration [22m 653ms[2m (transform 130ms, setup 39ms, collect 168ms, tests 9ms, environment 163ms, prepare 41ms)[22m
+
+
+::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/test/xiWingbackFit.test.ts,title=src/test/xiWingbackFit.test.ts > Build Your XI same-side wingback role fit > retains the existing opposite-side and other outfield penalties,line=65,column=68::AssertionError: RB at LWB: expected 'family' to be 'wrong' // Object.is equality%0A%0AExpected: "wrong"%0AReceived: "family"%0A%0A ❯ src/test/xiWingbackFit.test.ts:65:68%0A%0A
+
+::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/test/xiWingbackFit.test.ts,title=src/test/xiWingbackFit.test.ts > Build Your XI same-side wingback role fit > leaves the shared grade and actual pick-admission boundaries unchanged,line=95,column=56::AssertionError: expected 'natural' to be 'family' // Object.is equality%0A%0AExpected: "family"%0AReceived: "natural"%0A%0A ❯ src/test/xiWingbackFit.test.ts:95:56%0A%0A
