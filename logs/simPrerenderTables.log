@@ -1,0 +1,16 @@
+1) every table the data draws reaches its saved page as a table, never as a run of paragraphs
+   23 data backed pages, 339 tables paired with their data, 0 rows written as paragraphs
+   5 format pages found in source, 5 with a literal header to hold them to
+2) every saved table carries the rows its data has, in order
+   339 tables match their data, 3135 saved rows compared
+3) no cell outside a table anywhere, tables hold only rows, and every page drawing a table is accounted for
+   171 saved pages, 0 loose table tags, 0 malformed table blocks
+   29 sitemap routes draw a table in source, 23 of them from committed data
+   not data backed: /conquest (0 tables saved; drawn from play or the database, reported not asserted)
+   not data backed: /world-cup-bracket (0 tables saved; drawn from play or the database, reported not asserted)
+   not data backed: /stadium-tycoon (0 tables saved; drawn from play or the database, reported not asserted)
+   not data backed: /conquest-nba (0 tables saved; drawn from play or the database, reported not asserted)
+   not data backed: /aussie-rules-manager (0 tables saved; drawn from play or the database, reported not asserted)
+   not data backed: /world-cup-2026-results (19 tables saved; drawn from play or the database, reported not asserted)
+
+simPrerenderTables: green. 23 data backed pages carry every table as a table, row for row.

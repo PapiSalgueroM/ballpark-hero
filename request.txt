@@ -1,0 +1,23 @@
+# Release BS publish prep: build:seo on the publish head (the gate head 7fa0fd41b, the triage's harness bindings 305a34d8a, the lead's bs-trophy-focus merge c23ce53f3 and origin/main 7a92b329e merged as 0a1255a38, plus any later triage binding), its changed files exported, then the readers of the saved pages and the weight on that runner. Model: rBRg/.tmp-fx/triage-br/rcg-seo.txt (simRecordBooks left out: its section 2 reads the live database and BS touches no record page).
+#!buildseo
+#!export
+#!serve
+#!playwright
+#!serial
+simGuideHeadings: node scripts/simGuideHeadings.mjs
+simSiteSearch: node scripts/simSiteSearch.mjs
+simPrerender: node scripts/simPrerender.mjs
+simSitemap: node scripts/simSitemap.mjs
+simIndexNow: node scripts/simIndexNow.mjs
+simHeadTags: node scripts/simHeadTags.mjs
+simRecordPages: node scripts/simRecordPages.mjs
+simPrerenderTables: node scripts/simPrerenderTables.mjs
+sweepWeight: SWEEP_OFFLINE=1 node scripts/sweepWeight.mjs
+tsc: node_modules/.bin/tsc --noEmit -p tsconfig.app.json
+simHarnessAnchors: node scripts/simHarnessAnchors.mjs
+simNoRivalNames: node scripts/simNoRivalNames.mjs
+simAccessibility: node scripts/simAccessibility.mjs
+fonts: mkdir -p .tmp-fx/font-cache && FREE_KICK_FONT_CACHE="$PWD/.tmp-fx/font-cache" node scripts/qa/freeKickLab1070.mjs --prefetch-fonts-only
+simCareerTrophyRuns-forwalk: NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/simCareerTrophyRuns.mjs
+playCareerTrophyRuns: FREE_KICK_FONT_CACHE="$PWD/.tmp-fx/font-cache" NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/playCareerTrophyRuns.mjs
+vitest-all: node_modules/.bin/vitest run --testTimeout=300000 --hookTimeout=120000 > /tmp/va.log 2>&1; s=$?; grep -E "FAIL|Test Files|Tests  " /tmp/va.log | head -30 | cut -c1-250; exit $s
