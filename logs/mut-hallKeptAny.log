@@ -1,0 +1,176 @@
+MUTATION hallKeptAny: applied to src/components/us-career/UsCareerBoard.tsx
+
+[1m[46m RUN [49m[22m [36mv3.2.7 [39m[90m/home/runner/work/ballpark-hero/ballpark-hero[39m
+
+Browserslist: browsers data (caniuse-lite) is 16 months old. Please run:
+  npx update-browserslist-db@latest
+  Why you should do it regularly: https://github.com/browserslist/update-db#readme
+ [32m✓[39m src/lib/usCareerHallWall.test.ts [2m([22m[2m18 tests[22m[2m)[22m[32m 85[2mms[22m[39m
+ [32m✓[39m src/test/usCareerReports1569.test.tsx [2m([22m[2m56 tests[22m[2m)[22m[33m 7982[2mms[22m[39m
+   [33m[2m✓[22m[39m Round 1569 report A: Start over from every screen[2m > [22m'NFL' starts over from the hub of a two season career [33m 368[2mms[22m[39m
+ [31m❯[39m src/test/usCareerHallWall.test.tsx [2m([22m[2m52 tests[22m[2m | [22m[31m4 failed[39m[2m)[22m[33m 44062[2mms[22m[39m
+   [33m[2m✓[22m[39m 'NFL': the Hall wall on the board[2m > [22mC1 and C2: a career retired through the board goes up on the wall, and a restart keeps it there [33m 397[2mms[22m[39m
+   [32m✓[39m 'NFL': the Hall wall on the board[2m > [22mC4: a refused wall write breaks nothing, and the prompt keeps saying the card goes[32m 127[2mms[22m[39m
+[31m   [31m×[31m 'NFL': the Hall wall on the board[2m > [22mC4b: a refused wall write with another plaque already up: the prompt says the card goes, the opener reads 1[39m[32m 146[2mms[22m[39m
+[31m     → [2mexpect([22m[31melement[31m[2m).toHaveAccessibleDescription()[22m
+
+Expected element to have accessible description:
+[32m  This deletes your saved NFL player and coaching career on this device. The Hall of Fame card goes too. You cannot undo this.[31m
+Received:
+[31m  This deletes your saved NFL player and coaching career on this device. The Hall of Fame card stays on your Hall wall. You cannot undo this.[31m[39m
+   [32m✓[39m 'NFL': the Hall wall on the board[2m > [22mC7: with no Hall bound (the parity replay) the wall is never read, written or drawn[32m 89[2mms[22m[39m
+   [32m✓[39m 'NBA': the Hall wall on the board[2m > [22mC1 and C2: a career retired through the board goes up on the wall, and a restart keeps it there[32m 145[2mms[22m[39m
+   [32m✓[39m 'NBA': the Hall wall on the board[2m > [22mC4: a refused wall write breaks nothing, and the prompt keeps saying the card goes[32m 84[2mms[22m[39m
+[31m   [31m×[31m 'NBA': the Hall wall on the board[2m > [22mC4b: a refused wall write with another plaque already up: the prompt says the card goes, the opener reads 1[39m[32m 128[2mms[22m[39m
+[31m     → [2mexpect([22m[31melement[31m[2m).toHaveAccessibleDescription()[22m
+
+Expected element to have accessible description:
+[32m  This deletes your saved NBA player and coaching career on this device. The Hall of Fame card goes too. You cannot undo this.[31m
+Received:
+[31m  This deletes your saved NBA player and coaching career on this device. The Hall of Fame card stays on your Hall wall. You cannot undo this.[31m[39m
+   [32m✓[39m 'NBA': the Hall wall on the board[2m > [22mC7: with no Hall bound (the parity replay) the wall is never read, written or drawn[32m 45[2mms[22m[39m
+   [32m✓[39m 'MLB': the Hall wall on the board[2m > [22mC1 and C2: a career retired through the board goes up on the wall, and a restart keeps it there[32m 118[2mms[22m[39m
+   [32m✓[39m 'MLB': the Hall wall on the board[2m > [22mC4: a refused wall write breaks nothing, and the prompt keeps saying the card goes[32m 77[2mms[22m[39m
+[31m   [31m×[31m 'MLB': the Hall wall on the board[2m > [22mC4b: a refused wall write with another plaque already up: the prompt says the card goes, the opener reads 1[39m[32m 130[2mms[22m[39m
+[31m     → [2mexpect([22m[31melement[31m[2m).toHaveAccessibleDescription()[22m
+
+Expected element to have accessible description:
+[32m  This deletes your saved MLB player and coaching career on this device. The Hall of Fame card goes too. You cannot undo this.[31m
+Received:
+[31m  This deletes your saved MLB player and coaching career on this device. The Hall of Fame card stays on your Hall wall. You cannot undo this.[31m[39m
+   [32m✓[39m 'MLB': the Hall wall on the board[2m > [22mC7: with no Hall bound (the parity replay) the wall is never read, written or drawn[32m 51[2mms[22m[39m
+   [32m✓[39m 'NHL': the Hall wall on the board[2m > [22mC1 and C2: a career retired through the board goes up on the wall, and a restart keeps it there[32m 118[2mms[22m[39m
+   [32m✓[39m 'NHL': the Hall wall on the board[2m > [22mC4: a refused wall write breaks nothing, and the prompt keeps saying the card goes[32m 79[2mms[22m[39m
+[31m   [31m×[31m 'NHL': the Hall wall on the board[2m > [22mC4b: a refused wall write with another plaque already up: the prompt says the card goes, the opener reads 1[39m[32m 124[2mms[22m[39m
+[31m     → [2mexpect([22m[31melement[31m[2m).toHaveAccessibleDescription()[22m
+
+Expected element to have accessible description:
+[32m  This deletes your saved NHL player and coaching career on this device. The Hall of Fame card goes too. You cannot undo this.[31m
+Received:
+[31m  This deletes your saved NHL player and coaching career on this device. The Hall of Fame card stays on your Hall wall. You cannot undo this.[31m[39m
+   [32m✓[39m 'NHL': the Hall wall on the board[2m > [22mC7: with no Hall bound (the parity replay) the wall is never read, written or drawn[32m 50[2mms[22m[39m
+   [33m[2m✓[22m[39m 'NFL': old saves and broken walls[2m > [22mC3: an old retired save of every class goes up as its card told him, and its save is never written [33m 705[2mms[22m[39m
+   [32m✓[39m 'NFL': old saves and broken walls[2m > [22mC6: junk is replaced, a newer version is never written over, a bad plaque is dropped alone[32m 213[2mms[22m[39m
+   [32m✓[39m 'NFL': old saves and broken walls[2m > [22mC9: a refused retirement save holds the plaque back until the save's own Retry lands[32m 85[2mms[22m[39m
+   [33m[2m✓[22m[39m 'NBA': old saves and broken walls[2m > [22mC3: an old retired save of every class goes up as its card told him, and its save is never written [33m 681[2mms[22m[39m
+   [32m✓[39m 'NBA': old saves and broken walls[2m > [22mC6: junk is replaced, a newer version is never written over, a bad plaque is dropped alone[32m 197[2mms[22m[39m
+   [32m✓[39m 'NBA': old saves and broken walls[2m > [22mC9: a refused retirement save holds the plaque back until the save's own Retry lands[32m 91[2mms[22m[39m
+   [33m[2m✓[22m[39m 'MLB': old saves and broken walls[2m > [22mC3: an old retired save of every class goes up as its card told him, and its save is never written [33m 672[2mms[22m[39m
+   [32m✓[39m 'MLB': old saves and broken walls[2m > [22mC6: junk is replaced, a newer version is never written over, a bad plaque is dropped alone[32m 204[2mms[22m[39m
+   [32m✓[39m 'MLB': old saves and broken walls[2m > [22mC9: a refused retirement save holds the plaque back until the save's own Retry lands[32m 84[2mms[22m[39m
+   [33m[2m✓[22m[39m 'NHL': old saves and broken walls[2m > [22mC3: an old retired save of every class goes up as its card told him, and its save is never written [33m 668[2mms[22m[39m
+   [32m✓[39m 'NHL': old saves and broken walls[2m > [22mC6: junk is replaced, a newer version is never written over, a bad plaque is dropped alone[32m 195[2mms[22m[39m
+   [32m✓[39m 'NHL': old saves and broken walls[2m > [22mC9: a refused retirement save holds the plaque back until the save's own Retry lands[32m 91[2mms[22m[39m
+   [33m[2m✓[22m[39m C8: the wall draws nothing and moves no save byte[2m > [22m'NFL': five seeds, the wall written, refused and absent, press for press [33m 5335[2mms[22m[39m
+   [33m[2m✓[22m[39m C8: the wall draws nothing and moves no save byte[2m > [22m'NBA': five seeds, the wall written, refused and absent, press for press [33m 5245[2mms[22m[39m
+   [33m[2m✓[22m[39m C8: the wall draws nothing and moves no save byte[2m > [22m'MLB': five seeds, the wall written, refused and absent, press for press [33m 5291[2mms[22m[39m
+   [33m[2m✓[22m[39m C8: the wall draws nothing and moves no save byte[2m > [22m'NHL': five seeds, the wall written, refused and absent, press for press [33m 5228[2mms[22m[39m
+   [32m✓[39m 'NFL': the wall screen[2m > [22mC5: a full wall keeps 12, the new plaque goes up first and the oldest miss comes down (the oldest Hall of Famer only on a wall of them)[32m 48[2mms[22m[39m
+   [32m✓[39m 'NFL': the wall screen[2m > [22mC10: focus, the "?" and the tap targets, from the create screen[32m 33[2mms[22m[39m
+   [33m[2m✓[22m[39m 'NFL': the wall screen[2m > [22mC10: from the retirement screen the opener waits for the card, Back focuses it, and Start over on the wall lands on create [33m 1044[2mms[22m[39m
+   [33m[2m✓[22m[39m 'NFL': the wall screen[2m > [22mC10: the wall says when this player is not on it, and when a newer version saved it [33m 3150[2mms[22m[39m
+   [32m✓[39m 'NBA': the wall screen[2m > [22mC5: a full wall keeps 12, the new plaque goes up first and the oldest miss comes down (the oldest Hall of Famer only on a wall of them)[32m 82[2mms[22m[39m
+   [32m✓[39m 'NBA': the wall screen[2m > [22mC10: focus, the "?" and the tap targets, from the create screen[32m 38[2mms[22m[39m
+   [33m[2m✓[22m[39m 'NBA': the wall screen[2m > [22mC10: from the retirement screen the opener waits for the card, Back focuses it, and Start over on the wall lands on create [33m 1044[2mms[22m[39m
+   [33m[2m✓[22m[39m 'NBA': the wall screen[2m > [22mC10: the wall says when this player is not on it, and when a newer version saved it [33m 3148[2mms[22m[39m
+   [32m✓[39m 'MLB': the wall screen[2m > [22mC5: a full wall keeps 12, the new plaque goes up first and the oldest miss comes down (the oldest Hall of Famer only on a wall of them)[32m 51[2mms[22m[39m
+   [32m✓[39m 'MLB': the wall screen[2m > [22mC10: focus, the "?" and the tap targets, from the create screen[32m 44[2mms[22m[39m
+   [33m[2m✓[22m[39m 'MLB': the wall screen[2m > [22mC10: from the retirement screen the opener waits for the card, Back focuses it, and Start over on the wall lands on create [33m 1042[2mms[22m[39m
+   [33m[2m✓[22m[39m 'MLB': the wall screen[2m > [22mC10: the wall says when this player is not on it, and when a newer version saved it [33m 3149[2mms[22m[39m
+   [32m✓[39m 'NHL': the wall screen[2m > [22mC5: a full wall keeps 12, the new plaque goes up first and the oldest miss comes down (the oldest Hall of Famer only on a wall of them)[32m 47[2mms[22m[39m
+   [32m✓[39m 'NHL': the wall screen[2m > [22mC10: focus, the "?" and the tap targets, from the create screen[32m 30[2mms[22m[39m
+   [33m[2m✓[22m[39m 'NHL': the wall screen[2m > [22mC10: from the retirement screen the opener waits for the card, Back focuses it, and Start over on the wall lands on create [33m 1040[2mms[22m[39m
+   [33m[2m✓[22m[39m 'NHL': the wall screen[2m > [22mC10: the wall says when this player is not on it, and when a newer version saved it [33m 3144[2mms[22m[39m
+   [32m✓[39m Round 1570: the plaque says the jersey and its counts in the card's own words[2m > [22m'NFL'[32m 11[2mms[22m[39m
+   [32m✓[39m Round 1570: the plaque says the jersey and its counts in the card's own words[2m > [22m'NBA'[32m 7[2mms[22m[39m
+   [32m✓[39m Round 1570: the plaque says the jersey and its counts in the card's own words[2m > [22m'MLB'[32m 7[2mms[22m[39m
+   [32m✓[39m Round 1570: the plaque says the jersey and its counts in the card's own words[2m > [22m'NHL'[32m 7[2mms[22m[39m
+
+[31m⎯⎯⎯⎯⎯⎯⎯[39m[1m[41m Failed Tests 4 [49m[22m[31m⎯⎯⎯⎯⎯⎯⎯[39m
+
+[41m[1m FAIL [22m[49m src/test/usCareerHallWall.test.tsx[2m > [22m'NFL': the Hall wall on the board[2m > [22mC4b: a refused wall write with another plaque already up: the prompt says the card goes, the opener reads 1
+[31m[1mError[22m: [2mexpect([22m[31melement[31m[2m).toHaveAccessibleDescription()[22m
+
+Expected element to have accessible description:
+[32m  This deletes your saved NFL player and coaching career on this device. The Hall of Fame card goes too. You cannot undo this.[31m
+Received:
+[31m  This deletes your saved NFL player and coaching career on this device. The Hall of Fame card stays on your Hall wall. You cannot undo this.[31m[39m
+[36m [2m❯[22m promptSays src/test/usCareerHallWall.test.tsx:[2m112:18[22m[39m
+    [90m110| [39masync function promptSays(label: string, opener: string, hall: string)…
+    [90m111| [39m  [35mconst[39m dialog [33m=[39m [35mawait[39m [34mdialogSays[39m(opener)[33m;[39m
+    [90m112| [39m  [34mexpect[39m(dialog)[33m.[39m[34mtoHaveAccessibleDescription[39m([34mwords[39m(label[33m,[39m hall))[33m;[39m
+    [90m   | [39m                 [31m^[39m
+    [90m113| [39m  fireEvent.click(within(dialog).getByRole('button', { name: 'Keep thi…
+    [90m114| [39m  await waitFor(() => expect(within(document.body).queryByRole('alertd…
+[90m [2m❯[22m src/test/usCareerHallWall.test.tsx:[2m197:5[22m[39m
+
+[31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/4]⎯[22m[39m
+
+[41m[1m FAIL [22m[49m src/test/usCareerHallWall.test.tsx[2m > [22m'NBA': the Hall wall on the board[2m > [22mC4b: a refused wall write with another plaque already up: the prompt says the card goes, the opener reads 1
+[31m[1mError[22m: [2mexpect([22m[31melement[31m[2m).toHaveAccessibleDescription()[22m
+
+Expected element to have accessible description:
+[32m  This deletes your saved NBA player and coaching career on this device. The Hall of Fame card goes too. You cannot undo this.[31m
+Received:
+[31m  This deletes your saved NBA player and coaching career on this device. The Hall of Fame card stays on your Hall wall. You cannot undo this.[31m[39m
+[36m [2m❯[22m promptSays src/test/usCareerHallWall.test.tsx:[2m112:18[22m[39m
+    [90m110| [39masync function promptSays(label: string, opener: string, hall: string)…
+    [90m111| [39m  [35mconst[39m dialog [33m=[39m [35mawait[39m [34mdialogSays[39m(opener)[33m;[39m
+    [90m112| [39m  [34mexpect[39m(dialog)[33m.[39m[34mtoHaveAccessibleDescription[39m([34mwords[39m(label[33m,[39m hall))[33m;[39m
+    [90m   | [39m                 [31m^[39m
+    [90m113| [39m  fireEvent.click(within(dialog).getByRole('button', { name: 'Keep thi…
+    [90m114| [39m  await waitFor(() => expect(within(document.body).queryByRole('alertd…
+[90m [2m❯[22m src/test/usCareerHallWall.test.tsx:[2m197:5[22m[39m
+
+[31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[2/4]⎯[22m[39m
+
+[41m[1m FAIL [22m[49m src/test/usCareerHallWall.test.tsx[2m > [22m'MLB': the Hall wall on the board[2m > [22mC4b: a refused wall write with another plaque already up: the prompt says the card goes, the opener reads 1
+[31m[1mError[22m: [2mexpect([22m[31melement[31m[2m).toHaveAccessibleDescription()[22m
+
+Expected element to have accessible description:
+[32m  This deletes your saved MLB player and coaching career on this device. The Hall of Fame card goes too. You cannot undo this.[31m
+Received:
+[31m  This deletes your saved MLB player and coaching career on this device. The Hall of Fame card stays on your Hall wall. You cannot undo this.[31m[39m
+[36m [2m❯[22m promptSays src/test/usCareerHallWall.test.tsx:[2m112:18[22m[39m
+    [90m110| [39masync function promptSays(label: string, opener: string, hall: string)…
+    [90m111| [39m  [35mconst[39m dialog [33m=[39m [35mawait[39m [34mdialogSays[39m(opener)[33m;[39m
+    [90m112| [39m  [34mexpect[39m(dialog)[33m.[39m[34mtoHaveAccessibleDescription[39m([34mwords[39m(label[33m,[39m hall))[33m;[39m
+    [90m   | [39m                 [31m^[39m
+    [90m113| [39m  fireEvent.click(within(dialog).getByRole('button', { name: 'Keep thi…
+    [90m114| [39m  await waitFor(() => expect(within(document.body).queryByRole('alertd…
+[90m [2m❯[22m src/test/usCareerHallWall.test.tsx:[2m197:5[22m[39m
+
+[31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[3/4]⎯[22m[39m
+
+[41m[1m FAIL [22m[49m src/test/usCareerHallWall.test.tsx[2m > [22m'NHL': the Hall wall on the board[2m > [22mC4b: a refused wall write with another plaque already up: the prompt says the card goes, the opener reads 1
+[31m[1mError[22m: [2mexpect([22m[31melement[31m[2m).toHaveAccessibleDescription()[22m
+
+Expected element to have accessible description:
+[32m  This deletes your saved NHL player and coaching career on this device. The Hall of Fame card goes too. You cannot undo this.[31m
+Received:
+[31m  This deletes your saved NHL player and coaching career on this device. The Hall of Fame card stays on your Hall wall. You cannot undo this.[31m[39m
+[36m [2m❯[22m promptSays src/test/usCareerHallWall.test.tsx:[2m112:18[22m[39m
+    [90m110| [39masync function promptSays(label: string, opener: string, hall: string)…
+    [90m111| [39m  [35mconst[39m dialog [33m=[39m [35mawait[39m [34mdialogSays[39m(opener)[33m;[39m
+    [90m112| [39m  [34mexpect[39m(dialog)[33m.[39m[34mtoHaveAccessibleDescription[39m([34mwords[39m(label[33m,[39m hall))[33m;[39m
+    [90m   | [39m                 [31m^[39m
+    [90m113| [39m  fireEvent.click(within(dialog).getByRole('button', { name: 'Keep thi…
+    [90m114| [39m  await waitFor(() => expect(within(document.body).queryByRole('alertd…
+[90m [2m❯[22m src/test/usCareerHallWall.test.tsx:[2m197:5[22m[39m
+
+[31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[4/4]⎯[22m[39m
+
+
+[2m Test Files [22m [1m[31m1 failed[39m[22m[2m | [22m[1m[32m2 passed[39m[22m[90m (3)[39m
+[2m      Tests [22m [1m[31m4 failed[39m[22m[2m | [22m[1m[32m122 passed[39m[22m[90m (126)[39m
+[2m   Start at [22m 17:42:56
+[2m   Duration [22m 46.09s[2m (transform 1.68s, setup 151ms, collect 4.25s, tests 52.13s, environment 771ms, prepare 253ms)[22m
+
+
+::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/test/usCareerHallWall.test.tsx,title=src/test/usCareerHallWall.test.tsx > 'NFL'%3A the Hall wall on the board > C4b%3A a refused wall write with another plaque already up%3A the prompt says the card goes%2C the opener reads 1,line=112,column=18::Error: expect(element).toHaveAccessibleDescription()%0A%0AExpected element to have accessible description:%0A  This deletes your saved NFL player and coaching career on this device. The Hall of Fame card goes too. You cannot undo this.%0AReceived:%0A  This deletes your saved NFL player and coaching career on this device. The Hall of Fame card stays on your Hall wall. You cannot undo this.%0A ❯ promptSays src/test/usCareerHallWall.test.tsx:112:18%0A ❯ src/test/usCareerHallWall.test.tsx:197:5%0A%0A
+
+::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/test/usCareerHallWall.test.tsx,title=src/test/usCareerHallWall.test.tsx > 'NBA'%3A the Hall wall on the board > C4b%3A a refused wall write with another plaque already up%3A the prompt says the card goes%2C the opener reads 1,line=112,column=18::Error: expect(element).toHaveAccessibleDescription()%0A%0AExpected element to have accessible description:%0A  This deletes your saved NBA player and coaching career on this device. The Hall of Fame card goes too. You cannot undo this.%0AReceived:%0A  This deletes your saved NBA player and coaching career on this device. The Hall of Fame card stays on your Hall wall. You cannot undo this.%0A ❯ promptSays src/test/usCareerHallWall.test.tsx:112:18%0A ❯ src/test/usCareerHallWall.test.tsx:197:5%0A%0A
+
+::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/test/usCareerHallWall.test.tsx,title=src/test/usCareerHallWall.test.tsx > 'MLB'%3A the Hall wall on the board > C4b%3A a refused wall write with another plaque already up%3A the prompt says the card goes%2C the opener reads 1,line=112,column=18::Error: expect(element).toHaveAccessibleDescription()%0A%0AExpected element to have accessible description:%0A  This deletes your saved MLB player and coaching career on this device. The Hall of Fame card goes too. You cannot undo this.%0AReceived:%0A  This deletes your saved MLB player and coaching career on this device. The Hall of Fame card stays on your Hall wall. You cannot undo this.%0A ❯ promptSays src/test/usCareerHallWall.test.tsx:112:18%0A ❯ src/test/usCareerHallWall.test.tsx:197:5%0A%0A
+
+::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/test/usCareerHallWall.test.tsx,title=src/test/usCareerHallWall.test.tsx > 'NHL'%3A the Hall wall on the board > C4b%3A a refused wall write with another plaque already up%3A the prompt says the card goes%2C the opener reads 1,line=112,column=18::Error: expect(element).toHaveAccessibleDescription()%0A%0AExpected element to have accessible description:%0A  This deletes your saved NHL player and coaching career on this device. The Hall of Fame card goes too. You cannot undo this.%0AReceived:%0A  This deletes your saved NHL player and coaching career on this device. The Hall of Fame card stays on your Hall wall. You cannot undo this.%0A ❯ promptSays src/test/usCareerHallWall.test.tsx:112:18%0A ❯ src/test/usCareerHallWall.test.tsx:197:5%0A%0A

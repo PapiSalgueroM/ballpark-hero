@@ -1,0 +1,5 @@
+tsc exit=0 44s | 
+vt-wall exit=0 46s |    Duration  45.40s (transform 1.31s, setup 83ms, collect 2.49s, tests 43.69s, environment 408ms, prepare 191ms)
+c-anyplaque exit=1 47s | simUsCareerHallWall CONTROL anyplaque: FIRED, C4b red in all four sports and C1, C3, C4, C5, C6, C7, C8, C9, C10a, C10b, C10c, J green
+mut-hallKeptAny exit=1 47s | ::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/test/usCareerHallWall.test.tsx,title=src/test/usCareerHallWall.test.tsx > 'NHL'%3A the Hall wall on the boa
+clean exit=0 0s | CLEAN-CHECK-DONE
