@@ -1,0 +1,12 @@
+build exit=0 26s | [dukb] inlined 1 stylesheet(s) and 1 module(s) into 181 snapshots (11 left alone)
+weight exit=0 29s | sweepWeight: green. Every page is inside its budget, and the budgets came down this round.
+card exit=0 61s | playFoSeasonCard: 216 checks, 0 failed
+nflwalk exit=0 42s | playNflSeasonStats: 112 checks, 0 failed
+named-again exit=1 8s | REREC named record=0 diff=1
+named-headonly exit=1 8s | FIXTURE packed-as-block nba=1 (expect 1)
+m-namedstrict exit=1 8s | MUT namedstrict nba=1
+m-kickswap-nfl exit=1 29s | MUT kickswap nfl=1 (expect 1)
+earned-rerecord exit=0 1s | REREC earned record=0 diff=0
+earned-oldfixture exit=1 9s | OLDFIX earned head=1 (expect 1)
+rot-base exit=1 2s | ::error file=/home/runner/work/ballpark-hero/ballpark-hero/.rc/rb/src/lib/nbaSeasonStats.ts,title=src/lib/nbaRotation.test.ts > NBA manual rotation engine outcomes > meas
+award1103-base exit=0 2s |    Duration  758ms (transform 114ms, setup 42ms, collect 127ms, tests 165ms, environment 169ms, prepare 70ms)

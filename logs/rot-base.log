@@ -1,0 +1,15 @@
+2
+[22m[39mNBA_ROTATION_PRINT 117 false ccf6088208b43998f04015fdbe44d4c9c1dc0dc1be19d745bd787e6f48a1728b 12648
+NBA_ROTATION_PRINT 431 false 05a1352ceec4de67d22fd319b8560b927f435d70070d367ad6dff019897bf6d7 12619
+NBA_ROTATION_PRINT 907 false b56c4d1df8d71e9709ba6da003698117f318ca09b371e8acbce022f0b7d6e6f7 12685
+NBA_ROTATION_PRINT 117 true f25f738705ea2c8bb338d4d55e680dd50cff00e0dbdadfbbf721a864722475ed 17256
+NBA_ROTATION_PRINT 431 true 26048e582b52b90f13be0ca2d41dbe0e3328a7a9e2e92d0932a039cfbce7debc 17207
+NBA_ROTATION_PRINT 907 true d83f6c619d8fd673f3d4b8c00009a65883ac96e79512ca4580103be8bdb5d8cb 17317
+[41m[1m FAIL [22m[49m src/lib/nbaRotation.test.ts[2m > [22mNBA manual rotation engine outcomes[2m > [22mkeeps a manual prospect playing through season, postseason, summer and a resumed next season
+[41m[1m FAIL [22m[49m src/lib/nbaRotation.test.ts[2m > [22mNBA manual rotation engine outcomes[2m > [22mmeasures a paired complete-regular-season effect for weaker starters with identical draw counts
+[2m   Duration [22m 918ms[2m (transform 122ms, setup 40ms, collect 132ms, tests 322ms, environment 170ms, prepare 72ms)[22m
+
+
+::error file=/home/runner/work/ballpark-hero/ballpark-hero/.rc/rb/src/lib/nbaSeasonStats.ts,title=src/lib/nbaRotation.test.ts > NBA manual rotation engine outcomes > keeps a manual prospect playing through season%2C postseason%2C summer and a resumed next season,line=137,column=29::TypeError: Cannot read properties of undefined (reading 'LAC')%0A ❯ Module.nbaRecordBox src/lib/nbaSeasonStats.ts:137:29%0A ❯ play src/lib/nbaFrontOffice.ts:415:16%0A ❯ forEach src/lib/foSchedule.ts:131:67%0A ❯ Module.foPlayRound src/lib/foSchedule.ts:131:12%0A ❯ Module.simRound src/lib/nbaFrontOffice.ts:405:3%0A ❯ src/lib/nbaRotation.test.ts:291:74%0A%0A
+
+::error file=/home/runner/work/ballpark-hero/ballpark-hero/.rc/rb/src/lib/nbaSeasonStats.ts,title=src/lib/nbaRotation.test.ts > NBA manual rotation engine outcomes > measures a paired complete-regular-season effect for weaker starters with identical draw counts,line=137,column=29::TypeError: Cannot read properties of undefined (reading 'MIL')%0A ❯ Module.nbaRecordBox src/lib/nbaSeasonStats.ts:137:29%0A ❯ play src/lib/nbaFrontOffice.ts:415:16%0A ❯ forEach src/lib/foSchedule.ts:131:67%0A ❯ Module.foPlayRound src/lib/foSchedule.ts:131:12%0A ❯ Module.simRound src/lib/nbaFrontOffice.ts:405:3%0A ❯ src/lib/nbaRotation.test.ts:316:16%0A%0A
