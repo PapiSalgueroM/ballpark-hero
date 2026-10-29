@@ -1,0 +1,10 @@
+build exit=0 34s | [dukb] inlined 1 stylesheet(s) and 1 module(s) into 181 snapshots (11 left alone)
+weight-head exit=0 9s |   AppearanceBuilder:15.4 Celebration:0.8 CelebrationStyles:0.7 Confetti:0.6 GameHelp:0.8 GameNav:1.7 GameNavbar:3.7 GameReportContext:3.0 GameSeoContent:2.4 HowToPlayPopo
+weight-merge exit=0 62s |   AppearanceBuilder:15.0 Celebration:0.8 CelebrationStyles:0.7 Confetti:0.6 GameHelp:0.8 GameNav:1.7 GameNavbar:3.7 GameReportContext:3.0 GameSeoContent:2.4 HowToPlayPopo
+tsc exit=0 113s | 
+simCareerParity exit=0 14s | simCareerParity: green. One money app, one fan rule, one rival shape, one badge case, in all five careers.
+vitest-case exit=0 9s |    Duration  7.86s (transform 4.51s, setup 571ms, collect 8.31s, tests 6.27s, environment 3.23s, prepare 1.10s)
+ctl-deadmedal exit=1 122s | simCareerIntl: control deadmedal FIRED (section 10, 126 failures)
+walk exit=0 71s | playNbaIntl: green. The call, Go and its result's views, Rest, a reload mid beat, the 2027 World Cup's lines and no call at 80 or in 2005, at 320, 390 and 1280; 41 screen
+intl-default exit=0 236s | simCareerIntl: GREEN, 56250 checks over sections 1,2,3,4,6,9,10,11,12
+simNbaAwardsSense exit=0 110s | simNbaAwardsSense: 164 checks, 0 failed (full size), 110s

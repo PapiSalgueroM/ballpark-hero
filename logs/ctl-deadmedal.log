@@ -1,0 +1,19 @@
+NEGATIVE CONTROL deadmedal: the Olympic gold badge asks for a hundred golds, so nobody can earn it (section 10 must fail)
+sections 9 and 10: the case and the badges, 200 careers an era, always go and always rest
+  FAIL [10] now 7: olympic_gold is dark while the summers say true
+  FAIL [10] now 8: olympic_gold is dark while the summers say true
+  FAIL [10] now 9: olympic_gold is dark while the summers say true
+  FAIL [10] now 11: olympic_gold is dark while the summers say true
+  FAIL [10] now 13: olympic_gold is dark while the summers say true
+  FAIL [10] now 14: olympic_gold is dark while the summers say true
+  FAIL [10] now 22: olympic_gold is dark while the summers say true
+  FAIL [10] now 24: olympic_gold is dark while the summers say true
+  FAIL [10] now 25: olympic_gold is dark while the summers say true
+  FAIL [10] now 28: olympic_gold is dark while the summers say true
+  FAIL [10] now 30: olympic_gold is dark while the summers say true
+  FAIL [10] now 32: olympic_gold is dark while the summers say true
+  now: 91 of 200 went at least once, 86 brought home a medal, 70 a gold
+  y2004: 87 of 200 went at least once, 87 brought home a medal, 80 a gold
+  section 10: lit in the always go fleet: intl_medal 173, olympic_gold 0, world_cup_gold 117; in the always rest fleet: 0
+  sections 9 and 10 took 121.5 s
+simCareerIntl: control deadmedal FIRED (section 10, 126 failures)
