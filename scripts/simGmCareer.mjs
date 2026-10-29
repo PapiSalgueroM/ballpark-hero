@@ -156,7 +156,7 @@ const CONTROLS = {
   contribstays: '5', awaycontrib: '6', retainedrolled: '6', thumbfalse: '2t',
   firenever: '9', nooffers: '9', xpflat: '9', nevershut: '9', legacyleak: '10', retainedlift: '10',
   /* Round 1559 fix pass (the adversarial reviews) */
-  namedsummer: '6', awaymoves: '6',
+  namedsummer: '6', awaymoves: '6', oldskip: '6',
 };
 if (CONTROL && !CONTROLS[CONTROL]) {
   console.error(`SIM_GM_CAREER_CONTROL=${CONTROL} is not a control this harness knows (${Object.keys(CONTROLS).join(', ')})`);
@@ -264,6 +264,9 @@ const EDITS = {
   retainedlift: ['trade', '    entry.amount = r.kept;', '    entry.amount = r.kept + 0.1;'],
   /* Round 1559 fix pass (review minor 2): a week out with the rivals' moves dropped (the round replay, section 6). */
   awaymoves: ['career', "      aiWeeklyMoves(league, '', rng);", "      /* the rivals' moves dropped */"],
+  /* Round 1559 fix pass (review minor 7): the old club left out of the year out's draft (named as the user club). */
+  oldskip: ['career', "      for (let i = 0; i < batches; i++) cls = nflAiDraftPicks(league, cls, '', rng).remaining;",
+    '      for (let i = 0; i < batches; i++) cls = nflAiDraftPicks(league, cls, oldTeam, rng).remaining;'],
 };
 /* Round 1559: the controls anchored in a sport's own file, re-aimed at the NHL row's own lines. A control in
    NFL_ONLY with no NHL line (the board's press, the depth chart) is not a control of the nhl row and says so. */
@@ -281,6 +284,8 @@ const EDITS_BY_SPORT = {
     namedsummer: ['nhlCareer', '      nhlOffseason(league, rng, undefined, { noUserClub: true });', '      nhlOffseason(league, rng, oldTeam);'],
     /* Round 1559 fix pass (review minor 2): a round out with the rivals' in season moves dropped */
     awaymoves: ['nhlCareer', "      nhlAiMoves(league, '', rng);", "      /* the rivals' moves dropped */"],
+    /* Round 1559 fix pass (review minor 7): the old club filtered out of the year out's draft order */
+    oldskip: ['nhlCareer', '        const order = nhlFoStandings(league).map(t => t.abbr).reverse();', '        const order = nhlFoStandings(league).map(t => t.abbr).reverse().filter(a => a !== oldTeam);'],
     noawaydraft: ['nhlCareer', '        cls = nhlAiDraftPicks(league, cls, order, rng).remaining;', '        /* the draft skipped */'],
     /* a year out leaves the old club's contributors as he chose them */
     awaycontrib: ['nhlCareer', '      const old = league.teams[oldTeam];\n      if (old) nhlResetContributors(old);', '      const old = league.teams[oldTeam];'],
@@ -288,7 +293,7 @@ const EDITS_BY_SPORT = {
     retainedrolled: ['nhlCareer', '      const retained = keepRetainedOverSummer(league.teams, retainedBefore);', '      const retained = retainedBefore;'],
   },
 };
-const NFL_ONLY = new Set(['staffrides', 'ledgerrides', 'depthstays', 'halfseason', 'notrim', 'noawaydraft', 'extradraw', 'awaymoves']);
+const NFL_ONLY = new Set(['staffrides', 'ledgerrides', 'depthstays', 'halfseason', 'notrim', 'noawaydraft', 'extradraw', 'awaymoves', 'oldskip']);
 const SPORT_OF_RUN = process.env.SIM_GM_CAREER_SPORT || 'nfl';
 const overrides = new Map();
 let fired = 0;
@@ -1414,6 +1419,8 @@ const S6 = {
   oldPlanted: 0, oldTrimmed: 0,
   /* Round 1559 fix pass: rounds out replayed against the row's own round, and how many differed */
   roundShadows: 0, roundsOff: 0,
+  /* Round 1559 fix pass: men the old club drafted in its years out */
+  oldDrafted: 0,
 };
 const rosterIds = (lg, skip) => new Set(Object.entries(lg.teams).filter(([a]) => a !== skip).flatMap(([, t]) => [...t.players, ...(t.practice ?? [])].map(p => p.id)));
 const everyId = lg => { const s = rosterIds(lg, null); for (const p of lg.freeAgents) s.add(p.id); return s; };
@@ -1486,7 +1493,15 @@ if (runs('6')) {
       const away = d.awayHost(team);
       const noneMinted = (step, b, lg) => { for (const id of everyId(lg)) if (!b.has(id)) { S6.minted++; fail(`${at}: ${step} minted a player`); break; } };
       const wrapped = {
-        awayDraft(lg, r, dk) { const b = rosterIds(lg, null); const out = away.awayDraft(lg, r, dk); for (const id of rosterIds(lg, null)) if (!b.has(id)) drafted.add(id); return out; },
+        awayDraft(lg, r, dk) {
+          const b = rosterIds(lg, null); const out = away.awayDraft(lg, r, dk);
+          for (const id of rosterIds(lg, null)) if (!b.has(id)) drafted.add(id);
+          /* Round 1559 fix pass (review minor 7): the old club drafts in a year out too (nobody filtered out of the
+             order); the ratio above reads the other clubs only, so its own draftees are counted here (control oldskip). */
+          const oldNow = lg.teams[team];
+          if (oldNow) for (const p of [...oldNow.players, ...(oldNow.practice ?? [])]) if (!b.has(p.id)) S6.oldDrafted++;
+          return out;
+        },
         awaySummer(lg, r, dk) {
           /* The summer with nobody in the chair is the engine's offseason with NO user club, then the ledger rolled:
              replayed on a copy with the same draws, it must be the league the away host left (the old club named as
@@ -1597,6 +1612,7 @@ if (runs('6')) {
     console.log(`   retained rows planted ${S6.retained.rows}: ${S6.retained.kept} summers kept at the figure the club kept, ${S6.retained.dropped} dropped when the entry ran out; the old club's contributors back to automatic after ${S6.lineupFree} of ${S6.years} years`);
     ok(S6.retained.kept >= S6_SEEDS.length, `only ${S6.retained.kept} retained rows carried over a summer`);
   }
+  console.log(`   the old club drafted ${S6.oldDrafted} men in its ${S6.years} years out`);
   if (d.awayRound) {
     console.log(`   rounds out replayed against the board's round with no user club: ${S6.roundShadows}, ${S6.roundsOff} differed`);
     ok(S6.roundShadows >= S6.years * d.periods() && S6.roundsOff === 0, `only ${S6.roundShadows} rounds out replayed for ${S6.years} years out of ${d.periods()} rounds, ${S6.roundsOff} differed`);
