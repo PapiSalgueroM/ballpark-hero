@@ -1,0 +1,16 @@
+
+390 by 844
+  FAIL (a) the menu drew 18 club tiles with a name on the list (18: Fremantle, Sydney Swans, Brisbane Lions, Hawthorn, Geelong Cats, Adelaide Crows, Melbourne, Western Bulldogs, Collingwod, Carlton, St Kilda, GWS Giants, Gold Coast Suns, North Melbourne, Port Adelaide, West Coast Eagles, Richmond, Essendon)
+  FAIL (a) the 18 names are exactly the two sourced 2026 full forms
+  PASS (a) no sideways scroll (scrollWidth 390, innerWidth 390)
+  PASS (a) no tile name is clipped (0)
+  PASS (a) no page errors (0)
+
+1280 by 800
+  FAIL (a) the menu drew 18 club tiles with a name on the list (18: Fremantle, Sydney Swans, Brisbane Lions, Hawthorn, Geelong Cats, Adelaide Crows, Melbourne, Western Bulldogs, Collingwod, Carlton, St Kilda, GWS Giants, Gold Coast Suns, North Melbourne, Port Adelaide, West Coast Eagles, Richmond, Essendon)
+  FAIL (a) the 18 names are exactly the two sourced 2026 full forms
+  PASS (a) no sideways scroll (scrollWidth 1280, innerWidth 1280)
+  PASS (a) no tile name is clipped (0)
+  PASS (a) no page errors (0)
+
+playAflClubNames control bundlename: 2 scripts rewritten, (a) RED, 2 routes walked, 42.8 s. RED as intended
