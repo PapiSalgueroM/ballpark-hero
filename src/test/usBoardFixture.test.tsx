@@ -135,8 +135,14 @@ function oneCardBoard(sport: () => UsCareerSport): ComponentType {
     let Board = knobbed.get(s);
     if (!Board) {
       /* Round 1039: and with no Hall bound, so no retirement talk is asked and
-         the retirement screen is the old one. */
-      const knob: UsCareerSport = { ...s, summer: ONE_CARD_KNOB, hall: undefined };
+         the retirement screen is the old one. Round 1544: and with no
+         international summers bound (critic advice 18: this knob is SHARED by
+         the four sports, so the bridge is on all four; only the NBA binds one),
+         so a recorded NBA career rated 87 in an edition summer is never called
+         and the recording stays the board it was. The call itself is tested in
+         src/test/usCareerIntlBoard.test.tsx, whose last arm replays the
+         recorded saves with the bind mounted and counts which meet a call. */
+      const knob: UsCareerSport = { ...s, summer: ONE_CARD_KNOB, hall: undefined, intl: undefined };
       Board = function KnobBoard() { return <UsCareerBoard sport={knob} />; };
       knobbed.set(s, Board);
     }
