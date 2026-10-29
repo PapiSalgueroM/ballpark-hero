@@ -1,0 +1,5 @@
+ann exit=0 8s | Career yearly support: fictional offline engine fixtures only, no native UI, full career completion or historical-data validation claim.
+summer89 exit=0 18s | simUsCareerSummer: green. Sections 8, 9 held.
+defects exit=0 30s | simUsCareerDefects: 157 tests passed across the stat lines, the era cards and the shop cap.
+vitest-a exit=0 30s |    Duration  29.31s (transform 5.50s, setup 2.03s, collect 19.92s, tests 39.87s, environment 12.34s, prepare 2.87s)
+summer-rest exit=0 192s | simUsCareerSummer: green. Sections 1, 2, 3, 3b, 4, 5, 7, 10, 11, 12 held over 400 careers a sport.
