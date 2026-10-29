@@ -417,6 +417,18 @@
  * 47 screens move (diffAll), every one a SocialGram screen now reading the
  * new line, in all four sports. No click, save or coverage count moved.
  * 2,298,804 bytes.
+ * Release BT's join re-recorded it once, by the same method, from 6d109b351
+ * (Rounds 1569, 1541, 1544, 1557, 1566 and 1565 and PRs 400 and 401 merged;
+ * rc rBTg-fix, extra files mutfix.mjs, rec1569.mjs, fixdiff3.mjs). One input
+ * moved it: Round 1557's three national team badges (src/lib/careerBadges.ts,
+ * NBA_BADGES 23 to 26), so the NBA Trophy Case reads "Badges n of 26" where
+ * the fixture read "n of 23". With the three badges taken out (mutfix.mjs
+ * no3badges) the joined head replays Round 1569's recording green
+ * (proof-attr) and a recording equals it in every click, save, coverage
+ * count and screen (diffB 0); with nothing taken out, 29 NBA screens move
+ * (diffAll: 8 on the click path, 21 on the fixed saves), every one the badge
+ * count. No click, save or coverage count moved, and the NFL, MLB and NHL
+ * boards replay unchanged. 2,298,804 bytes.
  *
  * Controls, one per run (each is a full replay, about three minutes):
  *   US_BOARD_PARITY_CONTROL=label    one label changed in a copy of the shared
