@@ -1,0 +1,6 @@
+tsc: node_modules/.bin/tsc --noEmit -p tsconfig.app.json
+nflfull: node scripts/simGmCareer.mjs
+nhlfull: SIM_GM_CAREER_SPORT=nhl node scripts/simGmCareer.mjs
+simHarnessAnchors: node scripts/simHarnessAnchors.mjs
+simNoRivalNames: node scripts/simNoRivalNames.mjs
+simStorageWrites: node scripts/simStorageWrites.mjs
