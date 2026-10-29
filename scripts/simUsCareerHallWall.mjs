@@ -57,7 +57,9 @@
  * 27,043. Longest real strings against their clamps: name 12/40 (the input caps a name at 24), pos 4/6, eraId
  * 5/16, team 3/8, verdict 54/160, hallName 41/80, teamName 21/60, weighs 187/320, honours label 22/48. Every
  * control fired on 5 careers a sport. Fleet sizes are printed, never asserted; the clamp fence asks for a quarter
- * of room above the longest real string.
+ * of room above the longest real string. Since the review fixes the fence reads fixed, finite sources only (the
+ * old saves, the tables, the bindings' lists and labels, the name input's cap) and prints the fleet's longest
+ * beside them, so a bigger SIM_WALL_CAREERS can never move it.
  */
 import os from 'node:os';
 import path from 'node:path';
@@ -157,21 +159,26 @@ function seeded(seed) {
   return () => { s = (s + 0x6d2b79f5) >>> 0; let t = Math.imul(s ^ (s >>> 15), s | 1); t ^= t + Math.imul(t ^ (t >>> 7), t | 61); return ((t ^ (t >>> 14)) >>> 0) / 4294967296; };
 }
 const pct = (xs, q) => { const s = [...xs].sort((a, b) => a - b); return s[Math.min(s.length - 1, Math.floor(q * s.length))]; };
-/* The longest real string seen for each clamp, from the fleet, the old saves and the tables. */
+/* The longest real string for each clamp. The clamp fence (section 3) asserts on `longest` alone, which holds
+   fixed, finite sources only: the old saves (recordings), every honours label and every team label (each team
+   the old saves name, in every era) their bindings give, the four legacy verdict tables, every weighs line, each
+   binding's positions, eras and Hall name, and the create screen's name cap. The fleet's strings go in
+   `fleetLongest`, printed and never asserted: the max of a sample only grows with the sample (the read lens). */
 const longest = { name: 0, pos: 0, eraId: 0, team: 0, verdict: 0, hallName: 0, teamName: 0, weighs: 0, label: 0 };
-const seeLen = (k, s) => { if (typeof s === 'string' && s.length > longest[k]) longest[k] = s.length; };
-const seeEntry = (e) => {
-  seeLen('name', e.name); seeLen('pos', e.pos); seeLen('eraId', e.eraId); seeLen('verdict', e.verdict);
-  for (const t of e.teams) seeLen('team', t);
-  for (const h of e.honours) seeLen('label', h.label);
-  seeLen('hallName', e.hall.hallName); seeLen('weighs', e.hall.weighs);
-  if (e.hall.jersey) { seeLen('team', e.hall.jersey.team); seeLen('teamName', e.hall.jersey.teamName); }
+const fleetLongest = { ...longest };
+const seeLen = (k, s, into = longest) => { if (typeof s === 'string' && s.length > into[k]) into[k] = s.length; };
+const seeEntry = (e, into) => {
+  seeLen('name', e.name, into); seeLen('pos', e.pos, into); seeLen('eraId', e.eraId, into); seeLen('verdict', e.verdict, into);
+  for (const t of e.teams) seeLen('team', t, into);
+  for (const h of e.honours) seeLen('label', h.label, into);
+  seeLen('hallName', e.hall.hallName, into); seeLen('weighs', e.hall.weighs, into);
+  if (e.hall.jersey) { seeLen('team', e.hall.jersey.team, into); seeLen('teamName', e.hall.jersey.teamName, into); }
 };
 /** The checks every plaque must pass, against the career it was built from. */
 function checkPlaque(id, S, c, e, expectHall) {
   ok(`${id}.built`, !!e, `${S.slug} ${c.name}: no plaque for a retired career`);
   if (!e) return;
-  seeEntry(e);
+  seeEntry(e, id === 's1' ? fleetLongest : longest);
   ok(`${id}.record`, same(e.hall, expectHall), () => `${S.slug} ${c.name}: the plaque's record is not the card's`);
   const L = S.legacyOf(c);
   ok(`${id}.legacy`, e.legacy === L.score && e.verdict === L.verdict && e.hof === L.hof, `${S.slug} ${c.name}: legacy differs`);
@@ -247,6 +254,9 @@ function oldSave(id, S, raw, expect) {
   ok(`${id}.untouched`, JSON.stringify(c) === before, `${S.slug} ${c.name}: the career changed`);
   ok(`${id}.nowrite`, storageWrites === writesBefore && store.get(S.saveKey) === raw, `${S.slug} ${c.name}: storage was written`);
   checkPlaque(id, S, c, e, expect(c).hall);
+  // Every label the binding can give this save, and every team it names labelled in every era (the jersey's words).
+  for (const h of S.honours(c)) seeLen('label', h.label);
+  for (const t of new Set(c.seasons.map(s => s.team))) for (const era of S.create.eras) seeLen('teamName', S.teamLabelOf(t, era.id));
   if (e && expect(c).rest) {
     const { weighs, ...rest } = e.hall;
     ok(`${id}.told`, same(rest, expect(c).rest) && typeof weighs === typeof expect(c).weighs, () => `${S.slug} ${c.name}: the record differs from what the old code told him`);
@@ -353,9 +363,20 @@ const hof = (n, tag) => Array.from({ length: n }, (_, i) => plaque(`${tag}${i}`,
   const got = W.sanitizeHallWall(clone({ v: 1, entries: [good[0], bad, foreign, good[0], good[1]] }), 'nba');
   ok('s3.dropalone', same(got, { entries: good, writable: true }), `a mixed wall kept ${keys(got.entries)}`);
 }
-// Every clamp sits above every real string with room: the fleet and the old saves, every verdict in the four
-// legacy tables, and every weighs line the four sports' words can build.
+// Every clamp sits above every real string with room, over fixed sources only (see `longest`): the old saves,
+// every verdict in the four legacy tables, every weighs line the four sports' words can build, each binding's
+// positions, eras and Hall name, and the create screen's name cap. The fleet is printed beside it.
+{
+  const board = readFileSync(path.join(ROOT, 'src/components/us-career/UsCareerBoard.tsx'), 'utf8');
+  const caps = [...board.matchAll(/maxLength=\{(\d+)\}/g)].map(m => Number(m[1]));
+  ok('s3.tables', caps.length === 1, `the board has ${caps.length} maxLength caps, not the name input's one`);
+  if (caps.length === 1) seeLen('name', 'W'.repeat(caps[0]));
+}
 for (const slug of SPORTS) {
+  const S = W[`SPORT_${slug}`];
+  for (const p of Object.keys(S.create.archetypes)) seeLen('pos', p);
+  for (const era of S.create.eras) seeLen('eraId', era.id);
+  seeLen('hallName', S.hall?.rules.hallName);
   const src = readFileSync(path.join(ROOT, `src/lib/${ENGINE[slug].file}.ts`), 'utf8').replace(/\r\n/g, '\n');
   const at = src.indexOf('const verdict = score >=');
   ok('s3.tables', at >= 0, `${slug}: no verdict table found`);
@@ -373,7 +394,7 @@ for (const slug of SPORTS) {
   }
 }
 for (const k of Object.keys(longest)) {
-  console.log(`section 3 clamp ${k}: longest real ${longest[k]}, clamp ${CL[k]}`);
+  console.log(`section 3 clamp ${k}: longest real ${longest[k]} (the fleet's longest ${fleetLongest[k]}, printed only), clamp ${CL[k]}`);
   ok('s3.clamps', longest[k] > 0 || k === 'eraId', `${k}: no real string was seen`);
   ok('s3.clamps', longest[k] * 1.25 <= CL[k], `${k}: the longest real string ${longest[k]} has under a quarter of room below its clamp ${CL[k]}`);
 }
