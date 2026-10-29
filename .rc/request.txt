@@ -1,0 +1,3 @@
+unkeyed-head-seeded: SIM_SEED=3251579268 SIM_GM_CAREER_CONTROL=unkeyed SIM_GM_CAREER_ONLY=4 node scripts/simGmCareer.mjs
+unkeyed-mut-seeded: node .rc/x/mutUnkeyed.mjs && SIM_SEED=3251579268 SIM_GM_CAREER_CONTROL=unkeyed SIM_GM_CAREER_ONLY=4 node scripts/simGmCareerMut1559.mjs
+base-unkeyed-seeded: git worktree add -f /tmp/bu 115c68092 >/dev/null 2>&1; ln -sfn "$PWD/node_modules" /tmp/bu/node_modules; cd /tmp/bu && { SIM_SEED=3251579268 SIM_GM_CAREER_CONTROL=unkeyed SIM_GM_CAREER_ONLY=4 node scripts/simGmCareer.mjs > /tmp/bu.log 2>&1; echo "BASE unkeyed seeded exit=$? | $(tail -1 /tmp/bu.log)"; }
