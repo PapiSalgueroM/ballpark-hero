@@ -1,0 +1,10 @@
+#!serve
+#!playwright
+#!serial
+# Release BT kit: 2 of the 20 request lines of Release BS's rc-BPh-c.txt (rBSg/.tmp-fx/bs), the lines of the BT areas (the US My Careers, the Front Offices, Soccer Connections and the daily save shape, Build Your XI and the player search box, What's New, the guides and search index, the weight rows) and the setup lines before them; 18 line(s) outside those areas left out: return-native farewell-native playSoccerResultsLayout playSoccerAgentReview playClubManager playCmFinanceDesk ctl-desk-small playLiveMatchFit playLiveMatchFit-fresh livefit-ctl ctl-none-playClubManager ctl-none-playCmFinanceDesk ctl-none-playLiveMatchFit ctl-desk-cut ctl-desk-wrap playCmSubsRule playCmRetire playGames-club-manager.
+# Release BS kit: 20 of the 35 request lines of Release BR's rc-BPh-c.txt (rBRg/.tmp-fx/br), the lines of the BS areas (Soccer Career, Club Manager and the manager games on its engine, Player Bingo, Conquest, Stat and Draft Detective, the US My Career save notice, What's New, the polls, the guide intro) and the setup lines before them; 15 line(s) outside those areas left out: pm-fonts pm-units pm-outcomes pm-native playSessionMarks ctl-none-playSessionMarks tt-all simTactics simMobileChrome playGames-front-office playStorageBlocked playStorageBlocked-open boxing-fonts playBoxingShowForecast1086 playTranslatedPage.
+# Release BP part two (Round BPH, finish-BPH.md). ROUND 1535, part C: the D, H, I and M walks (offline, font cache, native proofs).
+# Proven on adeba447 as rBPh-m7c and on the final head.
+# pm-native moved after pm-units and pm-outcomes (it reads their native-fixtures.json; on rBPh-m7c it ran first and stopped on ENOENT).
+fonts: mkdir -p .tmp-fx/font-cache && FREE_KICK_FONT_CACHE="$PWD/.tmp-fx/font-cache" node scripts/qa/freeKickLab1070.mjs --prefetch-fonts-only
+playUsCareerSaveSeam: node scripts/playUsCareerSaveSeam.mjs
