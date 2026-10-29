@@ -1,0 +1,7 @@
+nhlBench: node scripts/simNhlPlanningBench.mjs
+nbaBench: node scripts/simNbaPlanningBench.mjs
+trust: node scripts/simTrustCopy.mjs
+pso: node scripts/simPerfectSeasonOdds.mjs
+m11: node scripts/simMissingElevenSources.mjs
+cfb: node scripts/simCfbSlate.mjs
+vbench: node_modules/.bin/vitest run src/test/nhlPlanningBench.test.tsx --testTimeout=300000 --hookTimeout=120000
