@@ -1,0 +1,17 @@
+recording from ce98b6ef8351d24d7f60a4307bd12dbac7ba6149 (not main: src differs from 5d1198389d436ddb615c816a1330d57296a6d9d2)
+  nfl: 482 clicks on the path, 24 seasons, 19 fixed saves, 928 screen steps
+  nba: 521 clicks on the path, 24 seasons, 19 fixed saves, 932 screen steps
+  mlb: 455 clicks on the path, 24 seasons, 19 fixed saves, 886 screen steps
+  nhl: 421 clicks on the path, 24 seasons, 19 fixed saves, 900 screen steps
+recordUsBoardFixture: wrote ../../_temp/rc-out/files/usBoardFixture.json (2301128 bytes)
+nfl: 928 steps over 20 lists; 31 with a moved action or save, 31 with a moved screen (0 of them the badge count alone), 1 lists of another length NOT OK
+   path: 475 steps, now 482
+   screens.coach 0: the action or the save moved
+   screens.coach 0: "🧢 Coach Ryder BlazeOut of work2055Standing 0📪12 seasons without oneNobody is calling and" now "🧢 Coach Ryder BlazeNew England Patriots2055Standing 60The 2054 season8-9New England Patri"
+   screens.coach 1: the action or the save moved
+   screens.coach 1: "Ryder Blaze retiresA long, proud career17 seasons, 0 rings, 0 MVPs, 0 All-Pro nods1,249 ca" now "Ryder Blaze retiresA long, proud career17 seasons, 0 rings, 0 MVPs, 0 All-Pro nods1,249 ca"
+   screens.coach 2: the action or the save moved
+nba: 1453 steps over 20 lists; 0 with a moved action or save, 29 with a moved screen (29 of them the badge count alone), 0 lists of another length OK
+mlb: 1341 steps over 20 lists; 0 with a moved action or save, 0 with a moved screen (0 of them the badge count alone), 0 lists of another length OK
+nhl: 1321 steps over 20 lists; 0 with a moved action or save, 0 with a moved screen (0 of them the badge count alone), 0 lists of another length OK
+fxdiff: 1 sports moved more than the badge count
