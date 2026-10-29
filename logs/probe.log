@@ -1,0 +1,30 @@
+C nfl: {"playoffs":1115,"lost":1040,"blame":81,"blameStrong":11,"blameMid":23,"credit":90,"lostStrongNoLine":529}
+C nba: {"playoffs":1320,"lost":1234,"blame":102,"blameStrong":22,"blameMid":40,"credit":98,"lostStrongNoLine":759}
+C mlb: {"playoffs":1078,"lost":989,"blame":74,"blameStrong":4,"blameMid":16,"credit":76,"lostStrongNoLine":400}
+C nhl: {"playoffs":1590,"lost":1473,"blame":119,"blameStrong":29,"blameMid":46,"credit":98,"lostStrongNoLine":897}
+C before table (blame line on a January level of 76 or more):
+  nfl K OVR 80 | Lost in the Wild Card round | 📊 Playoffs: 1 game, 2 of 3 on field goals. | level 77, clutch -8 | shown: 😬 You were not the same player in January and everyone saw it.
+  nfl K OVR 76 | Lost in the Wild Card round | 📊 Playoffs: 1 game, 2 of 3 on field goals. | level 76.7, clutch -7.2 | shown: 😬 You were not the same player in January and everyone saw it.
+  nfl EDGE OVR 84 | WON THE SUPER BOWL | 📊 Playoffs: 4 games, 32 tackles, 2 sacks. | level 79.7, clutch -8.1 | shown: 😬 You were not the same player in January and everyone saw it.
+  nfl EDGE OVR 83 | WON THE SUPER BOWL | 📊 Playoffs: 4 games, 33 tackles, 2.5 sacks. | level 81, clutch -7.7 | shown: 😬 You were not the same player in January and everyone saw it.
+  nba SG OVR 82 | Lost in the first round | 📊 32.4 mpg, 1.2 spg, 0.4 bpg. | level 79.4, clutch -7.1 | shown: 😬 You disappeared when it mattered. The talk shows had a field day.
+  nba C OVR 85 | Lost in the first round | 📊 36.8 mpg, 1.1 spg, 1.4 bpg. | level 80.6, clutch -13 | shown: 😬 You disappeared when it mattered. The talk shows had a field day.
+  nba SG OVR 82 | Lost the Conference Finals | 📊 33.1 mpg, 2.0 spg, 0.5 bpg. | level 76.1, clutch -11.6 | shown: 😬 You disappeared when it mattered. The talk shows had a field day.
+  nba SG OVR 86 | Lost the NBA Finals | 📊 31.9 mpg, 1.0 spg, 0.3 bpg. | level 76.3, clutch -8.4 | shown: 😬 You disappeared when it mattered. The talk shows had a field day.
+  mlb CF OVR 85 | Lost the Wild Card series | 📊 Postseason: 3 games, 3 for 12 (.250), 0 HR. | level 77.8, clutch -7.2 | shown: 😬 You could not buy a hit in October. It will follow you all winter.
+  mlb SP OVR 81 | Lost the Wild Card series | 📊 Postseason: 2 games, 1 appearance, 4.11 ERA, 6 K. | level 77.3, clutch -7.1 | shown: 😬 You could not buy a hit in October. It will follow you all winter.
+  mlb C OVR 82 | Lost the Wild Card series | 📊 Postseason: 3 games, 3 for 12 (.250), 1 HR. | level 77.2, clutch -11.8 | shown: 😬 You could not buy a hit in October. It will follow you all winter.
+  mlb CF OVR 84 | Lost the Division Series | 📊 Postseason: 8 games, 8 for 32 (.250), 1 HR. | level 76.3, clutch -7.5 | shown: 😬 You could not buy a hit in October. It will follow you all winter.
+  nhl LW OVR 83 | Lost in Round 2 | 📊 Playoffs: 11 games, 5G 4A 9P. | level 78.5, clutch -8.4 | shown: 😬 You went quiet in the playoffs. The room noticed.
+  nhl G OVR 87 | Lost in Round 1 | 📊 Playoffs: 5 games, 3 wins, 0.923 SV%. | level 79.4, clutch -13 | shown: 😬 You went quiet in the playoffs. The room noticed.
+  nhl D OVR 83 | Lost in Round 1 | 📊 Playoffs: 6 games, 2G 5A 7P. | level 82.2, clutch -7.6 | shown: 😬 You went quiet in the playoffs. The room noticed.
+  nhl G OVR 85 | Lost in Round 2 | 📊 Playoffs: 13 games, 7 wins, 0.926 SV%. | level 79.1, clutch -10.5 | shown: 😬 You went quiet in the playoffs. The room noticed.
+B late screens (season 16 on): 1953; extensions 400, with no offer 282, of those the career ended after the very season played: 3
+B market windows late: 1553, with zero live offers: 0, min offers 2
+  nba career 1: season 17, age 35, OVR 77: "Sacramento Kings are letting your deal run out. Play the season and the market decides." then played on
+  nba career 2: season 16, age 35, OVR 78: "Dallas Mavericks are letting your deal run out. Play the season and the market decides." then played on
+  nba career 6: season 17, age 35, OVR 81: "Orlando Magic are letting your deal run out. Play the season and the market decides." then played on
+  nba career 7: season 18, age 36, OVR 79: "Orlando Magic are letting your deal run out. Play the season and the market decides." then played on
+  nba career 15: season 17, age 35, OVR 79: "Atlanta Hawks are letting your deal run out. Play the season and the market decides." then played on
+  nba career 16: season 16, age 35, OVR 84: "Philadelphia 76ers are letting your deal run out. Play the season and the market decides." then played on
+probe1569 DONE
