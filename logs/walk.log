@@ -1,0 +1,34 @@
+shot fallback-390-rm-rules.png
+fallback-390-rm: dealt puzzle-34
+shot fallback-390-rm-start.png
+fallback-390-rm: page scroll sideways false; nothing cut off
+shot fallback-390-rm-wrong.png
+shot fallback-390-rm-end.png
+fallback-390-rm: after all four groups, "Solved" or win text present: true
+fallback-390-motion: dealt puzzle-34
+shot fallback-390-motion-start.png
+fallback-390-motion: page scroll sideways false; nothing cut off
+shot fallback-390-motion-wrong.png
+shot fallback-390-motion-end.png
+fallback-390-motion: after all four groups, "Solved" or win text present: true
+fallback-1280-rm: dealt puzzle-34
+shot fallback-1280-rm-start.png
+fallback-1280-rm: page scroll sideways false; nothing cut off
+shot fallback-1280-rm-wrong.png
+shot fallback-1280-rm-end.png
+fallback-1280-rm: after all four groups, "Solved" or win text present: true
+fallback-1280-motion: dealt puzzle-34
+shot fallback-1280-motion-start.png
+fallback-1280-motion: page scroll sideways false; nothing cut off
+shot fallback-1280-motion-wrong.png
+shot fallback-1280-motion-end.png
+fallback-1280-motion: after all four groups, "Solved" or win text present: true
+live-treble: dealt cx-20260710-12
+shot live-treble-start.png
+live-treble: guessed Neville, Xavi, Ribery, Neuer as "Won a treble", lives left 3
+shot live-treble-guess.png
+save-0: dealt crafted-1028; Submit button shown (still playing) true; stored now {"v":1,"date":"2026-11-01","puzzleIndex":0,"puzzleId":"crafted-1028","guesses":[{"t":"give"}],"gameStatus":"lost"}
+shot save-index0.png
+save-277: dealt crafted-1028; Submit button shown (still playing) false; stored now {"v":1,"date":"2026-11-01","puzzleIndex":277,"puzzleId":"crafted-1028","guesses":[{"t":"give"}],"gameStatus":"lost"}
+shot save-index277.png
+walk done, 0 problems
