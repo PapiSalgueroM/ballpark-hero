@@ -88,7 +88,22 @@ export function automaticCampaign(api: typeof engine, box: typeof stats, seed: n
     if (new Set(entries.map(([key]) => key)).size !== entries.length) throw new Error('Campaign identity projection collided');
     return Object.fromEntries(entries);
   };
-  const normalized = normalize(JSON.parse(JSON.stringify(result)));
+  /* Round 1566: the season's lines are saved in the shared short shape now (src/lib/foStatsCodec.ts), club by club, so
+     the digest reads each block as the named rows it stands for (the one expand, its club columns aside) with the
+     lines in the order of their projected keys, which neither shape can move. On a tree from before the round the
+     block already is named rows and only the order applies; the references were taken that way (see below). */
+  const plain = JSON.parse(JSON.stringify(result)) as { closed: NbaLeague; league: NbaLeague };
+  for (const lg of [plain.closed, plain.league]) {
+    if (lg.stats && 'clubs' in lg.stats) {
+      const rows: Partial<ReturnType<typeof box.nbaFoStats>> = { ...box.nbaFoStats(lg.stats) };
+      delete rows.club;
+      (lg as { stats: unknown }).stats = rows;
+    }
+  }
+  const normalized = normalize(plain) as { closed: { stats?: { lines: Record<string, unknown> } }; league: { stats?: { lines: Record<string, unknown> } } };
+  for (const lg of [normalized.closed, normalized.league]) {
+    if (lg.stats) lg.stats.lines = Object.fromEntries(Object.entries(lg.stats.lines).sort(([a], [b]) => (a < b ? -1 : a > b ? 1 : 0)));
+  }
   return { digest: createHash('sha256').update(JSON.stringify(normalized)).digest('hex'), draws, normalized,
     games: Object.values(closed.teams).map(t => t.wins + t.losses), booked: !!closed.schedule };
 }
@@ -135,8 +150,9 @@ const ORIGINAL_REFERENCES: { seed: number; legacy?: boolean; digest: string; dra
 describe('NBA manual rotation engine outcomes', () => {
   it('holds physical original automatic campaigns and RNG fingerprints as an independent baseline', () => {
     expect(ORIGINAL_REFERENCES).toHaveLength(6);
-    for (const reference of ORIGINAL_REFERENCES) {
-      const result = automaticCampaign(engine, stats, reference.seed, reference.legacy);
+    const runs = ORIGINAL_REFERENCES.map(reference => ({ reference, result: automaticCampaign(engine, stats, reference.seed, reference.legacy) }));
+    if (process.env.PRINT_NBA_ROTATION) for (const { reference, result } of runs) console.log(`NBA_ROTATION_PRINT ${reference.seed} ${!!reference.legacy} ${result.digest} ${result.draws}`);
+    for (const { reference, result } of runs) {
       expect(result.digest).toBe(reference.digest); expect(result.draws).toBe(reference.draws);
       expect(result.booked).toBe(!reference.legacy);
       if (!reference.legacy) expect(result.games).toEqual(Array(30).fill(80));

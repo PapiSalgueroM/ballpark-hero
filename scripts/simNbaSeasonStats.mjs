@@ -878,7 +878,8 @@ console.log('9) One save shape: the NBA keeps the shared short lines, reads them
   ok(9, 'a save already in the shared shape is kept as it is', st.nbaCleanStats(keep) === 'kept' && JSON.stringify(keep.stats) === JSON.stringify(closes[0].league.stats));
   const brokenNamed = clone(st.nbaFoStats(closes[0].league.stats));
   Object.values(brokenNamed.lines)[0].g = -1;
-  const brokenSaved = clone(closes[0].league.stats);
+  /* packed from the rows, so the plant is a short block under every control */
+  const brokenSaved = codec.foPack(st.NBA_CODEC, clone(st.nbaFoStats(closes[0].league.stats)));
   Object.values(Object.values(brokenSaved.lines)[0])[0][2] = 'x';
   const drops = [{ stats: brokenNamed }, { stats: brokenSaved }, { stats: 5 }, { stats: { season: 2026, lines: 5, clubs: {} } }].map(o => [st.nbaCleanStats(o), 'stats' in o]);
   ok(9, 'a block that reads as neither shape is dropped on load, never thrown on', drops.every(([d, has]) => d === 'dropped' && !has), JSON.stringify(drops));
@@ -930,7 +931,9 @@ console.log('9) One save shape: the NBA keeps the shared short lines, reads them
       pairs += 1;
       const same = norm(JSON.stringify(old.stats), epochOf(B)) === norm(JSON.stringify(H.stats), epochOf(H));
       const canon = s => JSON.stringify({ ...s, lines: Object.fromEntries(Object.entries(s.lines).sort(([a], [b]) => (a < b ? -1 : a > b ? 1 : 0))) });
-      const lossless = norm(canon(st.nbaFoStats(old.stats)), epochOf(B)) === norm(canon(B.stats), epochOf(B));
+      /* the rows the block stands for: the expand without its club columns, which named rows never had */
+      const rowsOf = s => { const { club, ...rows } = st.nbaFoStats(s); void club; return rows; };
+      const lossless = norm(canon(rowsOf(old.stats)), epochOf(B)) === norm(canon(B.stats), epochOf(B));
       const reads = L => JSON.stringify([st.nbaLeaders(L), Object.keys(L.teams).map(t => st.nbaTeamLines(L, t)), st.nbaSeasonAwards(L)]);
       const baseReads = L => JSON.stringify([BASE_E.st.nbaLeaders(L), Object.keys(L.teams).map(t => BASE_E.st.nbaTeamLines(L, t)), BASE_E.st.nbaSeasonAwards(L)]);
       const sameReads = norm(reads({ ...B, stats: old.stats }), epochOf(B)) === norm(baseReads(B), epochOf(B));

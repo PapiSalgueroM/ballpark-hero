@@ -40,10 +40,10 @@ const FIXTURE = path.resolve(__dirname, 'fixtures/nbaFoAwards1103.json');
 const SEEDS = [11, 23, 37, 41];
 /** Round 1566: the hash of each seed with the men in counter order, taken on 5d1198389 (see the header). */
 const ORDERED_1566: Record<string, string> = {
-  '11': 'PENDING',
-  '23': 'PENDING',
-  '37': 'PENDING',
-  '41': 'PENDING',
+  '11': '4aa02c07f7adcbcfc5927ec7670dcfe709007f307bf58d720e54e4cc0c56695e',
+  '23': '4fb85cf23a3e3a2c4ee4ff53e78a8724659f805b812b00b3eaef52c1ef38a917',
+  '37': '23ee605e9f541c783d2204cdf8aa1ef5eadc7ad6ada8e111d0889b020399c4aa',
+  '41': 'e21a0daca869449d93a32d8570cd5c0aac720f3bbdeced005cca1073c471dd46',
 };
 const RECORD = process.env.RECORD_NBA_1103 === 'lift';
 

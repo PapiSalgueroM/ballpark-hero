@@ -43,6 +43,12 @@ export interface FoSeasonStats {
   teams: Record<string, FoTeamTotals>;
 }
 
+/** A fresh block of named rows. No board saves one since Round 1566; kept because the pinned copies of older NBA
+ *  engines that src/lib/nbaOpeningRatings.test.ts bundles against this file still open their seasons with it. */
+export function foNewSeasonStats(season: number): FoSeasonStats {
+  return { season, lines: {}, teams: {} };
+}
+
 /** Totals over games, to one decimal. Zero for a man with no games. */
 export function foPerGame(line: Pick<FoStatLine, 'g' | 'tot'>, col: string): number {
   return line.g > 0 ? Math.round(((line.tot[col] ?? 0) / line.g) * 10) / 10 : 0;
