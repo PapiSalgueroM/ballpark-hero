@@ -1,0 +1,5 @@
+#!serve
+#!playwright
+#!serial
+probe2: cp .rc/x/zzRvbsProbe2.test.ts src/test/zzRvbsProbe2.test.ts && node_modules/.bin/vitest run src/test/zzRvbsProbe2.test.ts --testTimeout=600000 --hookTimeout=120000
+walk: node .rc/x/rvbsWalk.mjs
