@@ -1,0 +1,10 @@
+#!serve
+#!playwright
+#!serial
+walk: ENGINES=chromium node scripts/playFoSeasonCard.mjs
+nfl-walk: ENGINES=chromium node scripts/playNflSeasonStats.mjs
+weight-head: LABEL=head DIST=dist BASE=http://localhost:4173 node .rc/x/weightCard.mjs
+base: git worktree add -f /tmp/wbase 5d1198389 > /dev/null 2>&1 && ln -s "$PWD/node_modules" /tmp/wbase/node_modules && (cd /tmp/wbase && npx vite build --outDir /tmp/dist-base --logLevel error) && (node scripts/lib/hostLikeServer.mjs /tmp/dist-base 4182 > /dev/null 2>&1 &) && sleep 3 && (BASE=http://localhost:4182 ENGINES=chromium node scripts/playFoSeasonCard.mjs; echo "base walk exit $?"; LABEL=base DIST=/tmp/dist-base BASE=http://localhost:4182 node .rc/x/weightCard.mjs)
+c-nocue: node .rc/x/mutCard.mjs nocue && npx vite build --outDir /tmp/dist-nocue --logLevel error && (node scripts/lib/hostLikeServer.mjs /tmp/dist-nocue 4185 > /dev/null 2>&1 &) && sleep 3 && BASE=http://localhost:4185 PLAY_FO_CARD_CONTROL=nocue ENGINES=chromium node scripts/playFoSeasonCard.mjs; s=$?; git checkout -- src; exit $s
+c-shortbox: node .rc/x/mutCard.mjs shortbox && npx vite build --outDir /tmp/dist-short --logLevel error && (node scripts/lib/hostLikeServer.mjs /tmp/dist-short 4186 > /dev/null 2>&1 &) && sleep 3 && BASE=http://localhost:4186 PLAY_FO_CARD_CONTROL=shortbox ENGINES=chromium node scripts/playFoSeasonCard.mjs; s=$?; git checkout -- src; exit $s
+c-oldbadge: node .rc/x/mutCard.mjs oldbadge && npx vite build --outDir /tmp/dist-badge --logLevel error && (node scripts/lib/hostLikeServer.mjs /tmp/dist-badge 4187 > /dev/null 2>&1 &) && sleep 3 && BASE=http://localhost:4187 PLAY_FO_CARD_CONTROL=oldbadge ENGINES=chromium node scripts/playFoSeasonCard.mjs; s=$?; git checkout -- src; exit $s
