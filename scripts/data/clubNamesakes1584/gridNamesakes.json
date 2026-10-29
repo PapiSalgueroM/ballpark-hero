@@ -1,0 +1,85 @@
+{
+  "round": 1584,
+  "what": "Every stored soccer_player_club_stints club string that contains the word arsenal and names a club other than Arsenal of London. Soccer Grid's clubMatches reads CLUB_NAMESAKES so a stint at one of these never satisfies the label Arsenal. Each string has two independent hosts (never a wiki, soccerway's regional mirrors count as one host, Transfermarkt at most one) and the table's own rows agree.",
+  "readMethod": "fotmob.com's Arsenal Tula page and upl.ua's Arsenal-Kyiv page were fetched directly; every other source was read from the search engine's result title and summary for that exact URL on 2026-10-29. Every fact used is only the club's identity: its name, town and country.",
+  "label": "Arsenal",
+  "readFrom": "C:/Users/antho/dukb-handoff/2026-10-10/results-g/export-1584/stintClubsArsenal.json (the lead's Q3b, read only, 2026-10-29) and stintsArsenalMen.json (Q3c) for the nationality mix",
+  "excluded": [
+    {
+      "stored": "Arsenal de Sarandí",
+      "stints": 0,
+      "club": "Arsenal de Sarandí, Avellaneda, Buenos Aires, Argentina",
+      "tableRows": "none yet: the string is reserved here and written by Round 1587's data half",
+      "sources": [
+        { "host": "worldfootball.net", "url": "https://worldfootball.net/teams/arsenal-de-sarandi/20", "read": "2026-10-29", "says": "Club page titled Arsenal de Sarandí, an Argentine club founded 1957, based in Avellaneda." },
+        { "host": "sofascore.com", "url": "https://www.sofascore.com/team/football/arsenal-de-sarandi/3221", "read": "2026-10-29", "says": "Team page titled Arsenal de Sarandí, listed in Argentina's Primera B Metropolitana." }
+      ]
+    },
+    {
+      "stored": "Arsenal Tula",
+      "stints": 44,
+      "club": "FC Arsenal Tula, Tula, Russia",
+      "tableRows": "44 stints 2004 to 2026: Russia 29, the rest single foreign signings (Serbia, Slovakia, Belarus, Spain and others)",
+      "sources": [
+        { "host": "fotmob.com", "url": "https://www.fotmob.com/teams/1677/overview/arsenal-tula", "read": "2026-10-29", "says": "Arsenal Tula, a Russian club from the city of Tula, in the Russian First League." },
+        { "host": "soccerway.com", "url": "https://us.soccerway.com/teams/russia/arsenal-tula/1863/", "read": "2026-10-29", "says": "Club page filed under Russia as FK Arsenal Tula." }
+      ]
+    },
+    {
+      "stored": "Arsenal Tula II",
+      "stints": 1,
+      "club": "Arsenal Tula's reserve side (Arsenal-2 Tula), Russia",
+      "tableRows": "1 stint, 2023, a Russian",
+      "sources": [
+        { "host": "fotmob.com", "url": "https://www.fotmob.com/teams/553807/overview/arsenal-tula-ii", "read": "2026-10-29", "says": "Team page Arsenal Tula II, in a Russian lower division table." },
+        { "host": "soccerway.com", "url": "https://za.soccerway.com/teams/russia/arsenal-tula-ii/29461/", "read": "2026-10-29", "says": "Club page filed under Russia as FK Arsenal Tula II." }
+      ]
+    },
+    {
+      "stored": "Arsenal Kyiv",
+      "stints": 28,
+      "club": "FC Arsenal Kyiv, Kyiv, Ukraine",
+      "tableRows": "28 stints 2004 to 2013: Ukraine 15, the rest Russia, Brazil, Lithuania and others",
+      "sources": [
+        { "host": "upl.ua", "url": "https://upl.ua/en/clubs/view/2", "read": "2026-10-29", "says": "The Ukrainian Premier League's own club page for Arsenal-Kyiv." },
+        { "host": "soccerway.com", "url": "https://int.soccerway.com/teams/ukraine/fc-arsenal-kyiv/2259/", "read": "2026-10-29", "says": "Club page filed under Ukraine as FC Arsenal Kyiv." }
+      ]
+    },
+    {
+      "stored": "Arsenal Kyiv (-2019)",
+      "stints": 2,
+      "club": "FC Arsenal Kyiv, Kyiv, Ukraine (the suffix is the source's own mark for a club that stopped playing; the identity this exclusion needs is only that it is the Kyiv club, which both hosts and the table's rows show)",
+      "tableRows": "2 stints, 2012, both Ukrainians",
+      "sources": [
+        { "host": "worldfootball.net", "url": "https://www.worldfootball.net/teams/arsenal-kiev/9/", "read": "2026-10-29", "says": "Arsenal Kiev's manager history, the last coach listed to 30/06/2019 (read through the search engine's summary of the page: a direct fetch got HTTP 402)." },
+        { "host": "playmakerstats.com", "url": "https://www.playmakerstats.com/team/arsenal-kyiv/2159", "read": "2026-10-29", "says": "Team page titled Arsenal Kyiv, filed under Ukraine (read from the search result title: a direct fetch got HTTP 403)." }
+      ]
+    },
+    {
+      "stored": "Arsenal Dzerzhinsk",
+      "stints": 1,
+      "club": "FK Arsenal Dzerzhinsk (Dzyarzhynsk), Belarus",
+      "tableRows": "1 stint, 2025, a Belarusian",
+      "sources": [
+        { "host": "fotmob.com", "url": "https://www.fotmob.com/teams/1142489/overview/arsenal-dzerzhinsk", "read": "2026-10-29", "says": "Team page Arsenal Dzerzhinsk, in Belarus's top division table." },
+        { "host": "soccerway.com", "url": "https://ng.soccerway.com/teams/belarus/belarus-fk-arsenal-dzyarzhynsk/46586/", "read": "2026-10-29", "says": "Club page filed under Belarus as FK Arsenal Dzyarzhynsk, city Dzyarzhynsk." }
+      ]
+    },
+    {
+      "stored": "Berekum Arsenal",
+      "stints": 1,
+      "club": "Berekum Arsenal FC, Berekum, Ghana",
+      "tableRows": "1 stint, 2012 to 2013, a Ghanaian",
+      "sources": [
+        { "host": "soccerway.com", "url": "https://us.soccerway.com/teams/ghana/berekum-arsenal-fc/", "read": "2026-10-29", "says": "Club page filed under Ghana as Berekum Arsenal FC, home ground in Berekum." },
+        { "host": "ghanaweb.com", "url": "https://www.ghanaweb.com/GhanaHomePage/SportsArchive/Berekum-Arsenal-Profile-94352", "read": "2026-10-29", "says": "Profile of Berekum Arsenal, a club formed in Berekum, Ghana." }
+      ]
+    }
+  ],
+  "kept": [
+    { "stored": "Arsenal FC", "stints": 242, "why": "Arsenal of London (Round 1587 moves the Sarandí men out of it)" },
+    { "stored": "Arsenal FC U21", "stints": 11, "why": "London's reserve side; reserve sides on the grid are not this round (brief R1)" },
+    { "stored": "Arsenal FC U18", "stints": 1, "why": "London's youth side; same" },
+    { "stored": "Arsenal FC / Nottingham Forest", "stints": 1, "why": "a season split with London's Arsenal as one part" }
+  ]
+}

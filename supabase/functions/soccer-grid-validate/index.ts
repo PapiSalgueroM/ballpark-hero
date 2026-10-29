@@ -182,6 +182,25 @@ const CLUB_ALIASES: Record<string, string[]> = {
   "atletico madrid": ["Atlético de Madrid"],
 };
 
+/* ROUND 1584: A DIFFERENT CLUB WEARING THE LABEL'S WORD. The substring test
+   above reads "arsenal" inside "arsenal tula", so a man who only ever played
+   for Arsenal Tula, Arsenal Kyiv or Berekum Arsenal was confirmed for "Played
+   for Arsenal" and that yes was cached for good. Each string below is a stored
+   stint club that carries the word and is another club, checked on two hosts
+   (scripts/data/clubNamesakes1584/gridNamesakes.json). "Arsenal de Sarandí" is
+   reserved here for Round 1587, which moves the Sarandí men out of "Arsenal FC".
+   EXACT and subtractive: it only ever removes a match, and only for the listed
+   pairs. London's reserve sides ("Arsenal FC U21", "U18") stay matched. With
+   a career that looks complete the records pass then says no; otherwise the
+   model decides, so this stops the records CONFIRMING these men and promises
+   nothing more. */
+const CLUB_NAMESAKES: Record<string, string[]> = {
+  "arsenal": [
+    "Arsenal de Sarandí", "Arsenal Tula", "Arsenal Tula II", "Arsenal Kyiv",
+    "Arsenal Kyiv (-2019)", "Arsenal Dzerzhinsk", "Berekum Arsenal",
+  ],
+};
+
 function clubMatches(stintClub: string, wanted: string): boolean {
   const b = norm(wanted);
   if (!b) return false;
@@ -191,6 +210,7 @@ function clubMatches(stintClub: string, wanted: string): boolean {
   return String(stintClub || "").split(" / ").some((part) => {
     const a = norm(part);
     if (!a) return false;
+    if ((CLUB_NAMESAKES[b] ?? []).map(norm).includes(a)) return false;
     if (a === b || a.includes(b) || b.includes(a)) return true;
     return aliases.includes(a);
   });

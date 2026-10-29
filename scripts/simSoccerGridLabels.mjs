@@ -83,6 +83,22 @@ let ALIASES = {};
   }
 }
 if (CONTROL === 'noalias') ALIASES = {};
+/* Round 1584: the namesake map is read out of the same source the same way, so
+   section 3 does not call the function's new refusals a contradiction. */
+let NAMESAKES = {};
+{
+  const at = SRC.indexOf('const CLUB_NAMESAKES');
+  if (at < 0) fail('soccer-grid-validate no longer carries CLUB_NAMESAKES');
+  else {
+    const open = SRC.indexOf('{', at);
+    let depth = 0, end = -1;
+    for (let i = open; i < SRC.length; i++) {
+      if (SRC[i] === '{') depth++;
+      else if (SRC[i] === '}') { depth--; if (depth === 0) { end = i; break; } }
+    }
+    NAMESAKES = new Function(`return (${SRC.slice(open, end + 1)})`)();
+  }
+}
 
 /* clubMatches, exactly as the function defines it. */
 const clubMatches = (stintClub, wanted) => {
@@ -92,6 +108,7 @@ const clubMatches = (stintClub, wanted) => {
   return String(stintClub || '').split(' / ').some(part => {
     const a = norm(part);
     if (!a) return false;
+    if ((NAMESAKES[b] ?? []).map(norm).includes(a)) return false;
     if (a === b || a.includes(b) || b.includes(a)) return true;
     return aliases.includes(a);
   });
