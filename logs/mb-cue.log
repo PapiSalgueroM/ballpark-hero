@@ -1,0 +1,52 @@
+
+ RUN  v3.2.7 /home/runner/work/ballpark-hero/ballpark-hero
+
+ ✓ src/test/aussieRulesManagerBoard.test.tsx > actual Aussie Rules Manager Board > shows real shared rules and the worked example before any season starts, with reusable help 593ms
+ ↓ src/test/aussieRulesManagerBoard.test.tsx > actual Aussie Rules Manager Board > starts the exact generated squad and focuses the surviving round heading without scoring
+ ↓ src/test/aussieRulesManagerBoard.test.tsx > actual Aussie Rules Manager Board > targets only eligible original starter candidates and commits an exact bench exchange with stable slot focus
+ ↓ src/test/aussieRulesManagerBoard.test.tsx > actual Aussie Rules Manager Board > chooses an unused interchange player and cancels another picker without save or selection changes
+ ↓ src/test/aussieRulesManagerBoard.test.tsx > actual Aussie Rules Manager Board > passes exact training and non-first tactic choices through the real reducer and displays event-derived points
+ ↓ src/test/aussieRulesManagerBoard.test.tsx > actual Aussie Rules Manager Board > offers only same-role break swaps, commits original IDs and stops at the five-change game limit
+ ↓ src/test/aussieRulesManagerBoard.test.tsx > actual Aussie Rules Manager Board > finishes all ten real rounds with exact ladder and one undefined-score completion, then restores quietly
+ × src/test/aussieRulesManagerBoard.test.tsx > actual Aussie Rules Manager Board > cues only a committed quarter, retains its node on clones, clears finite feedback and resumes exact break state 96ms
+   → expect(element).toHaveClass("_committed_dd2c4c")
+
+Expected the element to have class:
+  _committed_dd2c4c
+Received:
+
+ ↓ src/test/aussieRulesManagerBoard.test.tsx > actual Aussie Rules Manager Board > keeps the actual season playable and finishes once when storage refuses every write
+ ↓ src/test/aussieRulesManagerBoard.test.tsx > actual Aussie Rules Manager Board > requires confirmation before replacing a season and restores focus on both cancel and the new club menu
+
+ Test Files  1 failed (1)
+      Tests  1 failed | 1 passed | 8 skipped (10)
+   Start at  20:12:15
+   Duration  3.15s (transform 809ms, setup 111ms, collect 1.29s, tests 691ms, environment 424ms, prepare 114ms)
+
+
+Browserslist: browsers data (caniuse-lite) is 16 months old. Please run:
+  npx update-browserslist-db@latest
+  Why you should do it regularly: https://github.com/browserslist/update-db#readme
+stderr | src/test/aussieRulesManagerBoard.test.tsx > actual Aussie Rules Manager Board > shows real shared rules and the worked example before any season starts, with reusable help
+Warning: Missing `Description` or `aria-describedby={undefined}` for {DialogContent}.
+Warning: Missing `Description` or `aria-describedby={undefined}` for {DialogContent}.
+
+
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 1 ⎯⎯⎯⎯⎯⎯⎯
+
+ FAIL  src/test/aussieRulesManagerBoard.test.tsx > actual Aussie Rules Manager Board > cues only a committed quarter, retains its node on clones, clears finite feedback and resumes exact break state
+Error: expect(element).toHaveClass("_committed_dd2c4c")
+
+Expected the element to have class:
+  _committed_dd2c4c
+Received:
+
+ ❯ src/test/aussieRulesManagerBoard.test.tsx:133:93
+
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/1]⎯
+
+simAussieRulesManagerBoard cue: the changed binding fails its intended rendered outcome; the independent pre-play rules check passes and eight tests are skipped.
+simAussieRulesManagerBoard: original eligible player IDs, role filters, preparation, tactics and five-change limits execute.
+simAussieRulesManagerBoard: event totals, thirty league results, ten-round ladder and one undefined-score completion execute.
+simAussieRulesManagerBoard: saved replay, refused storage, quiet restores, finite cue binding and native focus targets execute.

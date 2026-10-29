@@ -1,0 +1,113 @@
+
+0. sources: 18 clubs, every printed string from two independent non wiki publishers, the data file equals its receipts
+  ok: 18 clubs in the data file, 18 in the ledger (18 expected)
+  ok: ladder places are 1 to 18 once each, in ladder order
+  ok: no club's full or short form equals another club's (36 strings)
+  ok: every string is trimmed, single spaced and dash free (0 bad)
+  ok: every full form, short form and ladder place has two or more distinct publishers (54 checked)
+  ok: no publisher or address is a wiki (14 read)
+  ok: AFL.com.au and the club sites count as the one publisher AFL (1 such source)
+  ok: the read date 2026-10-29 is a date and matches the ledger and every source's read date
+  ok: the data file's 7 sources are the ledger's, id for id and publisher for publisher
+  ok: 18 of 18 rows equal the ledger string for string and source for source
+  ok: every one of 154 receipt lines prints its string (or starts with its ladder place)
+
+1. on the list and nothing else: the real set is the ledger, slot by slot; the invented set is CLUBS
+  ok: the 18 ids map onto the 18 AFL clubs one to one (18 recomputed, 18 from the engine)
+  ok: 18 of 18 ids carry the full, short, style and tier the 2026 ladder band gives (club-00 Fremantle, club-01 Western Bulldogs, club-02 Hawthorn, club-03 GWS Giants, club-04 Geelong Cats, club-05 West Coast Eagles, club-06 Collingwood, club-07 Sydney Swans, club-08 Gold Coast Suns, club-09 Adelaide Crows, club-10 Richmond, club-11 Carlton, club-12 North Melbourne, club-13 Melbourne, club-14 Brisbane Lions, club-15 St Kilda, club-16 Port Adelaide, club-17 Essendon)
+  ok: clubFull and clubShort of a real set save print the ledger's strings for all 18 ids (18)
+  ok: no real set reader prints a string that is not on the two sourced list (0)
+  ok: the invented set and the readers of a save with no set equal CLUBS exactly (18 of 18)
+  ok: an empty or unknown id ('' and 'club-18') prints as itself in both sets, never undefined and never a throw
+
+2a. identity (a): a career with no club set is the base record, checkpoint for checkpoint
+  ok: the record holds 72 fleet careers (72 expected)
+  ok: (a) no set: 9 careers, 27 checkpoints (default, seeds 1, 12, 24 by club-00, club-06, club-17) in 7.7 s
+  ok: (a) no set: 27 of 27 checkpoints equal the base's raw and masked hashes
+  ok: (a) no set: 27 of 27 checkpoints carry no clubSet key
+  ok: (a) no set: 27 of 27 checkpoints name every club and the player's club in their own set
+  ok: (a) no set: 27 of 27 checkpoints load through readLeagueSave
+
+2b. identity (b): a real club career is the base career once names, clubName and clubSet are masked
+  ok: (b) real set: 9 careers, 27 checkpoints (default, seeds 1, 12, 24 by club-00, club-06, club-17) in 6.2 s
+  ok: (b) real set: 27 of 27 checkpoints equal the base's MASKED hash (the same game with other names on it)
+  ok: (b) real set: 27 of 27 checkpoints carry clubSet 'afl2026'
+  ok: (b) real set: 27 of 27 checkpoints name every club and the player's club in their own set
+  ok: (b) real set: 27 of 27 checkpoints load through readLeagueSave
+
+3. old saves: every base save loads, round trips, opens the league and plays on to the base
+  ok: the record holds 16 save recipes (16 expected)
+  ok: 16 of 16 recipes replay to the base's raw save string
+  ok: 16 of 16 load and 16 round trip byte for byte
+  ok: 16 of 16 open the league board
+  ok: 16 of 16 play 60 more bot actions to the base's raw and masked hash
+  ok: 16 of 16 never carry a clubSet key
+  ok: 16 of 16 print their own invented names through clubFull and clubShort for all 18 ids
+  ok: 10 of 10 saves with a match show "v <invented place>" on the hub's Next match
+  ok: 16 of 16 real twins (the same save under the real names, built by this harness) load, round trip and mask to the same game
+  ok: 64 of 64 wrong ways to write a set are refused (clubSet fictional, afl2026 over invented names, one club renamed, an invented clubName)
+
+4. screens: src/test/aussieRulesClubNames.test.tsx through vitest
+  vitest exit 1 in 6.1 s
+  FAIL [4]: all 3 screen tests passed (vitest exit 1)
+  FAIL [4i]: (i) a new career picks from the 18 AFL clubs by name, under the five 2026 ladder bands failed
+  FAIL [4]: (ii) a real club career prints only two sourced club names on every panel failed
+  FAIL [4]: (iii) a career with no club set prints only its own invented names failed
+serslist: browsers data (caniuse-lite) is 16 months old. Please run:
+  npx update-browserslist-db@latest
+  Why you should do it regularly: https://github.com/browserslist/update-db#readme
+stderr | src/test/aussieRulesClubNames.test.tsx > Aussie Rules Manager club names (Round 1572) > (i) a new career picks from the 18 AFL clubs by name, under the five 2026 ladder bands
+Warning: Missing `Description` or `aria-describedby={undefined}` for {DialogContent}.
+
+
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 3 ⎯⎯⎯⎯⎯⎯⎯
+
+ FAIL  src/test/aussieRulesClubNames.test.tsx > Aussie Rules Manager club names (Round 1572) > (i) a new career picks from the 18 AFL clubs by name, under the five 2026 ladder bands
+AssertionError: expected 'The 18 AFL clubs by name, with made u…' to be 'Essendon · Season 1' // Object.is equality
+
+Expected: "Essendon · Season 1"
+Received: "The 18 AFL clubs by name, with made up players. 23 rounds, the finals, then the draft."
+
+ ❯ src/test/aussieRulesClubNames.test.tsx:117:74
+    115|     expect(saved.clubSet).toBe('afl2026');
+    116|     expect(saved.clubName).toBe('Essendon');
+    117|     expect(words(view.container.querySelector('header p')!.textContent…
+       |                                                                          ^
+    118|   });
+    119| 
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/3]⎯
+
+ FAIL  src/test/aussieRulesClubNames.test.tsx > Aussie Rules Manager club names (Round 1572) > (ii) a real club career prints only two sourced club names on every panel
+TypeError: Cannot read properties of undefined (reading 'id')
+ ❯ mine src/test/aussieRulesClubNames.test.tsx:86:78
+     84|       if (state.phase !== 'draft') return;
+     85|       const ok = draftPool(state).find(p => pickRefusal(state, p.id) =…
+     86|       fireEvent.click(view.container.querySelector(`[data-arl-prospect…
+       |                                                                              ^
+     87|     };
+     88|     pulled.push(pullAll(view, pickOne, texts));
+ ❯ pullAll src/test/aussieRulesClubNames.test.tsx:60:28
+ ❯ screens src/test/aussieRulesClubNames.test.tsx:88:17
+ ❯ src/test/aussieRulesClubNames.test.tsx:121:31
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[2/3]⎯
+
+ FAIL  src/test/aussieRulesClubNames.test.tsx > Aussie Rules Manager club names (Round 1572) > (iii) a career with no club set prints only its own invented names
+TypeError: Cannot read properties of undefined (reading 'id')
+ ❯ mine src/test/aussieRulesClubNames.test.tsx:86:78
+     84|       if (state.phase !== 'draft') return;
+     85|       const ok = draftPool(state).find(p => pickRefusal(state, p.id) =…
+     86|       fireEvent.click(view.container.querySelector(`[data-arl-prospect…
+       |                                                                              ^
+     87|     };
+     88|     pulled.push(pullAll(view, pickOne, texts));
+ ❯ pullAll src/test/aussieRulesClubNames.test.tsx:60:28
+ ❯ screens src/test/aussieRulesClubNames.test.tsx:88:17
+ ❯ src/test/aussieRulesClubNames.test.tsx:132:31
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[3/3]⎯
+
+
+
+simAflClubNames: 39 checks, 4 failures, sections 0,1,2a,2b,3,4,4i, red: 4,4i, 23.2 s

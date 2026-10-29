@@ -1,0 +1,468 @@
+
+ RUN  v3.2.7 /home/runner/work/ballpark-hero/ballpark-hero
+
+ ✓ src/test/aussieRulesManagerBoard.test.tsx > actual Aussie Rules Manager Board > shows real shared rules and the worked example before any season starts, with reusable help 683ms
+ ↓ src/test/aussieRulesManagerBoard.test.tsx > actual Aussie Rules Manager Board > starts the exact generated squad and focuses the surviving round heading without scoring
+ ↓ src/test/aussieRulesManagerBoard.test.tsx > actual Aussie Rules Manager Board > targets only eligible original starter candidates and commits an exact bench exchange with stable slot focus
+ ↓ src/test/aussieRulesManagerBoard.test.tsx > actual Aussie Rules Manager Board > chooses an unused interchange player and cancels another picker without save or selection changes
+ × src/test/aussieRulesManagerBoard.test.tsx > actual Aussie Rules Manager Board > passes exact training and non-first tactic choices through the real reducer and displays event-derived points 219ms
+   → expected { seed: 1349302631, …(10) } to deeply equal { seed: 1349302631, …(10) }
+ ↓ src/test/aussieRulesManagerBoard.test.tsx > actual Aussie Rules Manager Board > offers only same-role break swaps, commits original IDs and stops at the five-change game limit
+ ↓ src/test/aussieRulesManagerBoard.test.tsx > actual Aussie Rules Manager Board > finishes all ten real rounds with exact ladder and one undefined-score completion, then restores quietly
+ ↓ src/test/aussieRulesManagerBoard.test.tsx > actual Aussie Rules Manager Board > cues only a committed quarter, retains its node on clones, clears finite feedback and resumes exact break state
+ ↓ src/test/aussieRulesManagerBoard.test.tsx > actual Aussie Rules Manager Board > keeps the actual season playable and finishes once when storage refuses every write
+ ↓ src/test/aussieRulesManagerBoard.test.tsx > actual Aussie Rules Manager Board > requires confirmation before replacing a season and restores focus on both cancel and the new club menu
+
+ Test Files  1 failed (1)
+      Tests  1 failed | 1 passed | 8 skipped (10)
+   Start at  20:12:05
+   Duration  3.41s (transform 723ms, setup 107ms, collect 1.17s, tests 904ms, environment 513ms, prepare 182ms)
+
+
+Browserslist: browsers data (caniuse-lite) is 16 months old. Please run:
+  npx update-browserslist-db@latest
+  Why you should do it regularly: https://github.com/browserslist/update-db#readme
+stderr | src/test/aussieRulesManagerBoard.test.tsx > actual Aussie Rules Manager Board > shows real shared rules and the worked example before any season starts, with reusable help
+Warning: Missing `Description` or `aria-describedby={undefined}` for {DialogContent}.
+Warning: Missing `Description` or `aria-describedby={undefined}` for {DialogContent}.
+
+
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 1 ⎯⎯⎯⎯⎯⎯⎯
+
+ FAIL  src/test/aussieRulesManagerBoard.test.tsx > actual Aussie Rules Manager Board > passes exact training and non-first tactic choices through the real reducer and displays event-derived points
+AssertionError: expected { seed: 1349302631, …(10) } to deeply equal { seed: 1349302631, …(10) }
+
+- Expected
++ Received
+
+@@ -11,329 +11,329 @@
+      {
+        "id": "club-0",
+        "name": "Caldermere Comets",
+        "players": [
+          {
+-           "fatigue": 8,
++           "fatigue": 0,
+            "id": "club-0-p-0",
+            "name": "Nerwick Verrendale",
+-           "prep": 8,
++           "prep": 0,
+            "role": "defender",
+            "skill": 50,
+            "stamina": 54,
+          },
+          {
+-           "fatigue": 8,
++           "fatigue": 0,
+            "id": "club-0-p-1",
+            "name": "Dorren Glenwick",
+-           "prep": 8,
++           "prep": 0,
+            "role": "defender",
+            "skill": 74,
+            "stamina": 72,
+          },
+          {
+-           "fatigue": 8,
++           "fatigue": 0,
+            "id": "club-0-p-2",
+            "name": "Marven Kelworth",
+-           "prep": 8,
++           "prep": 0,
+            "role": "defender",
+            "skill": 70,
+            "stamina": 72,
+          },
+          {
+-           "fatigue": 8,
++           "fatigue": 0,
+            "id": "club-0-p-3",
+            "name": "Valen Verrendale",
+-           "prep": 8,
++           "prep": 0,
+            "role": "defender",
+            "skill": 84,
+            "stamina": 51,
+          },
+          {
+-           "fatigue": 8,
++           "fatigue": 0,
+            "id": "club-0-p-4",
+            "name": "Marven Caldermere",
+-           "prep": 8,
++           "prep": 0,
+            "role": "defender",
+            "skill": 67,
+            "stamina": 90,
+          },
+          {
+-           "fatigue": 8,
++           "fatigue": 0,
+            "id": "club-0-p-5",
+            "name": "Lioren Verrendale",
+-           "prep": 8,
++           "prep": 0,
+            "role": "defender",
+            "skill": 61,
+            "stamina": 69,
+          },
+          {
+-           "fatigue": 8,
++           "fatigue": 0,
+            "id": "club-0-p-6",
+            "name": "Kelren Mosswick",
+-           "prep": 8,
++           "prep": 0,
+            "role": "defender",
+            "skill": 40,
+            "stamina": 76,
+          },
+          {
+-           "fatigue": 8,
++           "fatigue": 0,
+            "id": "club-0-p-7",
+            "name": "Averin Mosswick",
+-           "prep": 8,
++           "prep": 0,
+            "role": "defender",
+            "skill": 90,
+            "stamina": 65,
+          },
+          {
+-           "fatigue": 8,
++           "fatigue": 0,
+            "id": "club-0-p-8",
+            "name": "Averin Haverfen",
+-           "prep": 8,
++           "prep": 0,
+            "role": "defender",
+            "skill": 78,
+            "stamina": 84,
+          },
+          {
+-           "fatigue": 8,
++           "fatigue": 0,
+            "id": "club-0-p-9",
+            "name": "Renwick Brindlefern",
+-           "prep": 8,
++           "prep": 0,
+            "role": "defender",
+            "skill": 60,
+            "stamina": 52,
+          },
+          {
+-           "fatigue": 8,
++           "fatigue": 0,
+            "id": "club-0-p-10",
+            "name": "Calven Darnwick",
+-           "prep": 8,
++           "prep": 0,
+            "role": "defender",
+            "skill": 71,
+            "stamina": 49,
+          },
+          {
+-           "fatigue": 8,
++           "fatigue": 0,
+            "id": "club-0-p-11",
+            "name": "Valen Hollowmere",
+-           "prep": 8,
++           "prep": 0,
+            "role": "defender",
+            "skill": 47,
+            "stamina": 61,
+          },
+          {
+-           "fatigue": 8,
++           "fatigue": 0,
+            "id": "club-0-p-12",
+            "name": "Marven Bellmere",
+-           "prep": 8,
++           "prep": 0,
+            "role": "midfielder",
+            "skill": 53,
+            "stamina": 88,
+          },
+          {
+-           "fatigue": 8,
++           "fatigue": 0,
+            "id": "club-0-p-13",
+            "name": "Orlin Brindlefern",
+-           "prep": 8,
++           "prep": 0,
+            "role": "midfielder",
+            "skill": 79,
+            "stamina": 84,
+          },
+          {
+-           "fatigue": 8,
++           "fatigue": 0,
+            "id": "club-0-p-14",
+            "name": "Brevren Fernwick",
+-           "prep": 8,
++           "prep": 0,
+            "role": "midfielder",
+            "skill": 62,
+            "stamina": 61,
+          },
+          {
+-           "fatigue": 8,
++           "fatigue": 0,
+            "id": "club-0-p-15",
+            "name": "Darven Kelworth",
+-           "prep": 8,
++           "prep": 0,
+            "role": "midfielder",
+            "skill": 64,
+            "stamina": 67,
+          },
+          {
+-           "fatigue": 8,
++           "fatigue": 0,
+            "id": "club-0-p-16",
+            "name": "Nerwick Brindlefern",
+-           "prep": 8,
++           "prep": 0,
+            "role": "midfielder",
+            "skill": 57,
+            "stamina": 63,
+          },
+          {
+-           "fatigue": 8,
++           "fatigue": 0,
+            "id": "club-0-p-17",
+            "name": "Lioren Haverfen",
+-           "prep": 8,
++           "prep": 0,
+            "role": "midfielder",
+            "skill": 61,
+            "stamina": 74,
+          },
+          {
+-           "fatigue": 8,
++           "fatigue": 0,
+            "id": "club-0-p-18",
+            "name": "Dorren Haverfen",
+-           "prep": 8,
++           "prep": 0,
+            "role": "midfielder",
+            "skill": 74,
+            "stamina": 46,
+          },
+          {
+-           "fatigue": 8,
++           "fatigue": 0,
+            "id": "club-0-p-19",
+            "name": "Tavren Caldermere",
+-           "prep": 8,
++           "prep": 0,
+            "role": "midfielder",
+            "skill": 81,
+            "stamina": 46,
+          },
+          {
+-           "fatigue": 8,
++           "fatigue": 0,
+            "id": "club-0-p-20",
+            "name": "Dorren Mosswick",
+-           "prep": 8,
++           "prep": 0,
+            "role": "midfielder",
+            "skill": 55,
+            "stamina": 86,
+          },
+          {
+-           "fatigue": 8,
++           "fatigue": 0,
+            "id": "club-0-p-21",
+            "name": "Ellorin Tarnwick",
+-           "prep": 8,
++           "prep": 0,
+            "role": "midfielder",
+            "skill": 59,
+            "stamina": 68,
+          },
+          {
+-           "fatigue": 8,
++           "fatigue": 0,
+            "id": "club-0-p-22",
+            "name": "Sovren Caldermere",
+-           "prep": 8,
++           "prep": 0,
+            "role": "ruck",
+            "skill": 46,
+            "stamina": 67,
+          },
+          {
+-           "fatigue": 8,
++           "fatigue": 0,
+            "id": "club-0-p-23",
+            "name": "Averin Verrendale",
+-           "prep": 8,
++           "prep": 0,
+            "role": "ruck",
+            "skill": 83,
+            "stamina": 76,
+          },
+          {
+-           "fatigue": 8,
++           "fatigue": 0,
+            "id": "club-0-p-24",
+            "name": "Orlin Caldermere",
+-           "prep": 8,
++           "prep": 0,
+            "role": "ruck",
+            "skill": 89,
+            "stamina": 49,
+          },
+          {
+-           "fatigue": 8,
++           "fatigue": 0,
+            "id": "club-0-p-25",
+            "name": "Nerwick Tressvale",
+-           "prep": 8,
++           "prep": 0,
+            "role": "ruck",
+            "skill": 72,
+            "stamina": 45,
+          },
+          {
+-           "fatigue": 8,
++           "fatigue": 0,
+            "id": "club-0-p-26",
+            "name": "Sovren Tarnwick",
+-           "prep": 8,
++           "prep": 0,
+            "role": "forward",
+            "skill": 47,
+            "stamina": 50,
+          },
+          {
+-           "fatigue": 8,
++           "fatigue": 0,
+            "id": "club-0-p-27",
+            "name": "Ellorin Hollowmere",
+-           "prep": 8,
++           "prep": 0,
+            "role": "forward",
+            "skill": 82,
+            "stamina": 51,
+          },
+          {
+-           "fatigue": 8,
++           "fatigue": 0,
+            "id": "club-0-p-28",
+            "name": "Renwick Hollowmere",
+-           "prep": 8,
++           "prep": 0,
+            "role": "forward",
+            "skill": 56,
+            "stamina": 69,
+          },
+          {
+-           "fatigue": 8,
++           "fatigue": 0,
+            "id": "club-0-p-29",
+            "name": "Marven Elverfern",
+-           "prep": 8,
++           "prep": 0,
+            "role": "forward",
+            "skill": 46,
+            "stamina": 70,
+          },
+          {
+-           "fatigue": 8,
++           "fatigue": 0,
+            "id": "club-0-p-30",
+            "name": "Evrin Fernwick",
+-           "prep": 8,
++           "prep": 0,
+            "role": "forward",
+            "skill": 85,
+            "stamina": 66,
+          },
+          {
+-           "fatigue": 8,
++           "fatigue": 0,
+            "id": "club-0-p-31",
+            "name": "Ellorin Kelworth",
+-           "prep": 8,
++           "prep": 0,
+            "role": "forward",
+            "skill": 63,
+            "stamina": 74,
+          },
+          {
+-           "fatigue": 8,
++           "fatigue": 0,
+            "id": "club-0-p-32",
+            "name": "Averin Darnwick",
+-           "prep": 8,
++           "prep": 0,
+            "role": "forward",
+            "skill": 42,
+            "stamina": 76,
+          },
+          {
+-           "fatigue": 8,
++           "fatigue": 0,
+            "id": "club-0-p-33",
+            "name": "Valen Brindlefern",
+-           "prep": 8,
++           "prep": 0,
+            "role": "forward",
+            "skill": 50,
+            "stamina": 75,
+          },
+          {
+-           "fatigue": 8,
++           "fatigue": 0,
+            "id": "club-0-p-34",
+            "name": "Tavren Westmere",
+-           "prep": 8,
++           "prep": 0,
+            "role": "forward",
+            "skill": 77,
+            "stamina": 88,
+          },
+          {
+-           "fatigue": 8,
++           "fatigue": 0,
+            "id": "club-0-p-35",
+            "name": "Sovren Fernwick",
+-           "prep": 8,
++           "prep": 0,
+            "role": "forward",
+            "skill": 41,
+            "stamina": 60,
+          },
+        ],
+@@ -2061,11 +2061,11 @@
+      ],
+      "quarter": 0,
+      "round": 0,
+    },
+    "phase": "quarter",
+-   "preparation": "train",
++   "preparation": "rest",
+    "results": [],
+    "round": 0,
+    "seed": 1349302631,
+    "starters": [
+      "club-0-p-7",
+
+ ❯ advance src/test/aussieRulesManagerBoard.test.tsx:34:25
+     32| function advance(view: ReturnType<typeof render>, action: ManagerActio…
+     33|   const expected = reduceManager(current, action); expect(expected).no…
+     34|   expect(saved().state).toEqual(expected); return expected;
+       |                         ^
+     35| }
+     36| function season(view: ReturnType<typeof render>, state = saved().state…
+ ❯ src/test/aussieRulesManagerBoard.test.tsx:98:44
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/1]⎯
+
+simAussieRulesManagerBoard prepare: the changed binding fails its intended rendered outcome; the independent pre-play rules check passes and eight tests are skipped.
+simAussieRulesManagerBoard: original eligible player IDs, role filters, preparation, tactics and five-change limits execute.
+simAussieRulesManagerBoard: event totals, thirty league results, ten-round ladder and one undefined-score completion execute.
+simAussieRulesManagerBoard: saved replay, refused storage, quiet restores, finite cue binding and native focus targets execute.

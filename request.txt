@@ -1,0 +1,25 @@
+tsc: node_modules/.bin/tsc --noEmit -p tsconfig.app.json
+simAflClubNames: node scripts/simAflClubNames.mjs
+c-screen: AFL_NAMES_CONTROL=screen node scripts/simAflClubNames.mjs
+c-typo: AFL_NAMES_CONTROL=typo node scripts/simAflClubNames.mjs
+c-onesource: AFL_NAMES_CONTROL=onesource node scripts/simAflClubNames.mjs
+c-ladder: AFL_NAMES_CONTROL=ladder node scripts/simAflClubNames.mjs
+c-simdrift: AFL_NAMES_CONTROL=simdrift node scripts/simAflClubNames.mjs
+c-oldsave: AFL_NAMES_CONTROL=oldsave node scripts/simAflClubNames.mjs
+c-mixed: AFL_NAMES_CONTROL=mixed node scripts/simAflClubNames.mjs
+simAussieRulesLeagueBoard: node scripts/simAussieRulesLeagueBoard.mjs
+simAussieRulesManagerBoard: node scripts/simAussieRulesManagerBoard.mjs
+mb-lineup: AUSSIE_RULES_BOARD_CONTROL=lineup node scripts/simAussieRulesManagerBoard.mjs
+mb-candidates: AUSSIE_RULES_BOARD_CONTROL=candidates node scripts/simAussieRulesManagerBoard.mjs
+mb-prepare: AUSSIE_RULES_BOARD_CONTROL=prepare node scripts/simAussieRulesManagerBoard.mjs
+mb-tactic: AUSSIE_RULES_BOARD_CONTROL=tactic node scripts/simAussieRulesManagerBoard.mjs
+mb-score: AUSSIE_RULES_BOARD_CONTROL=score node scripts/simAussieRulesManagerBoard.mjs
+mb-swap: AUSSIE_RULES_BOARD_CONTROL=swap node scripts/simAussieRulesManagerBoard.mjs
+mb-cue: AUSSIE_RULES_BOARD_CONTROL=cue node scripts/simAussieRulesManagerBoard.mjs
+mb-restore: AUSSIE_RULES_BOARD_CONTROL=restore node scripts/simAussieRulesManagerBoard.mjs
+mb-reset: AUSSIE_RULES_BOARD_CONTROL=reset node scripts/simAussieRulesManagerBoard.mjs
+mb-focus: AUSSIE_RULES_BOARD_CONTROL=focus node scripts/simAussieRulesManagerBoard.mjs
+simTrustCopy: node scripts/simTrustCopy.mjs
+simNoRivalNames: node scripts/simNoRivalNames.mjs
+simHomeFront: node scripts/simHomeFront.mjs
+simAussieRulesSeason: node scripts/simAussieRulesSeason.mjs
