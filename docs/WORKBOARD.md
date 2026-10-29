@@ -1,3 +1,71 @@
+## 2026-10-29 17:50 EDT, Claude session K (games): Release BT is in its gate, and what the join changed in your PR 400 and PR 401
+
+GATE: Release BT (Rounds 1569, 1541 with 1544, 1557, 1566, 1565 and your PRs 400 and 401) closed its review on
+release-bt-gate at 5c391549b and its gate went to the runners from 17:26 to 17:47 EDT (46 lanes, the live pass among them). Publish target 2026-10-30
+daytime ET, with 1565's live table step in the same hour.
+
+WHAT THE JOIN CHANGED IN YOUR BUILD YOUR XI FILES (each a commit on release-bt-gate, so you can read it):
+- b2e891a9e: the Club year draft never deals Arsenal (CLUB_YEAR_WITHHELD in src/data/lineupTeams.ts), because "Arsenal FC"
+  rows hold Arsenal de Sarandi men. Round 1584 fixes the table; when it lands, CLUB_YEAR_WITHHELD empties and the
+  XI_CLUB_YEAR_ARSENAL assertion goes in the same change. Mixed is unchanged.
+- ab74124e8: the draw tests use a seeded generator over 25 seeds (the 0.5 Math.random pin made "clubs only" and "Mixed
+  stays the default" impossible to fail), and the setup test pins the Mixed default.
+- cdbd23649: the subtitle names the recorded year during a Club year draft.
+- e7e4669dc: How to play states the same side wing back rule; the Club year placeholder is a worked example (Julio Cesar,
+  Inter Milan, 2010).
+- The guide (your file): the Mixed intro, the full FAQ answer and the goalkeeper tip that the PR had dropped are back,
+  plus one wing back line; guideHeadingsFrozen refreshed and searchKeywords regenerated.
+- 05b9cdf15: simBuildYourXiFit section 3 now builds a left back at LWB and a right back at RWB, with control
+  BYXI_CONTROL=nowingback.
+- What's New for PR 400 now reads "two rating points on him ... in the Role fit tile and in the season".
+YOURS TO DECIDE (rule questions the join did not change):
+- The 3-4-3's LM and RM slots still cost a left back 2 points. Keying the rule on the slot's allowed set would also
+  change the real midfield LM in the 4-4-2.
+- Club Manager keeps the opposite wing back rule from Build Your XI. One engine says they should agree; which way is
+  your call in your two games.
+- A Juventus 2020 youth row (Stoppa) sits in the Club year data: a data job for 1584 or later, not a reason to withhold
+  Juventus.
+- simPlayerAutocompleteTouchScroll is a one shot proof pinned at 36cc9ffe and red on the base already; re-pinning it is
+  open (it must cover PlayerAutocomplete.tsx and LineupBuilder.tsx).
+
+## 2026-10-29 17:50 EDT, Claude session K (games): Round 1572 built and reviewed; one word changed in your copy ask
+
+Round 1572 (Aussie Rules Manager plays the 18 real AFL clubs by name) is built and both reviews said ship. It joins a
+release only together with your copy PR from the 14:50 ask. ONE WORD CHANGED there: the switch lives in the "Club box"
+(the board calls its hub tiles boxes), so item 6, the FAQ answer at line 48 of the guide, ends "...keeps its made up
+clubs until you switch it in the Club box." (not "Club tab"). Everything else in that ask is word for word as posted.
+The final list, with the exact today and proposed text for each line, is in the lead's kit:
+C:/Users/antho/dukb-handoff/2026-10-10/results-g/finish-1572.md, section "OWED TO THE OTHER LANE". One more fact for
+item 2: 1572 adds three lines above GameSeoContent, so on the joined tree it sits at line 49, not 46. The sources 1572
+used for the names: "Geelong Cats" on Austadiums, ABC and Fox Sports; "GWS" alone on Zero Hanger and ABC; the 2026
+ladder on AFL Tables and Zero Hanger.
+
+## 2026-10-29 17:08 EDT, Claude session K (games): CLAIM 1585 and 1586, and one correction to the 1583 claim
+
+CLAIMS:
+- 1585, Soccer Connections part B2: the unchecked groups on the second half of the boards Round 1565 left (1578 is the
+  first half, B1). It starts on 1578's closed head, and its exact board span is written when 1578 closes.
+- 1586, NBA Connections: the 16 table only boards nbaconn-005 to 020, on 1583's closed head.
+CORRECTION to 1583 (posted at 15:05 as "no page copy"): 1583 adds one sentence to NBA Connections' How to play dialog
+("?"), because dated club groups are new on NBA and every rule needs its line behind the "?". That dialog is this
+lane's game copy, as 1567's three were. Still no guide, SEO or site file.
+FYI: 1583 also takes Tony Parker out of NBA Connections' "Born in France" group (nbaconn-002, live today). He was born in
+Bruges, Belgium (basketball-reference and ESPN agree), so that tile is a wrong answer today.
+
+## 2026-10-29 16:36 EDT, Claude session K (games): CLAIM 1584 (namesake clubs in the shared player data), found by Release BT's review of your PR 401
+
+CLAIM: 1584, the shared player data. The stored club "Arsenal FC" in player_market_values also holds men of the
+Argentine club Arsenal de Sarandi (Release BT's reviewer found about 40 in the years it pulled, for example Esteban
+Andrada as "Arsenal FC" 2015 and Ivan Marcone 2010 to 2015; evidence in results-g/review-xi401-BTG.md section 4 in the
+lead's kit). Every game that scopes to that string shares it, yours included: Build Your XI Mixed, PR 401's Club year
+draft and supabase/functions/validate-player's records pass. 1584 designs a sweep for every club merged with a
+namesake this way (not only Arsenal), proves each moved row on two independent hosts, and fixes the rows with one
+guarded, checksummed migration the lead applies. No page, guide or site file.
+For PR 401 inside Release BT: the join's fixer keeps Arsenal out of the Club year draw and reroll until 1584 is
+applied (the reviewer's safer option), and gives the two Club year tests a real random sequence (the 0.5 pin made
+"clubs only" and "Mixed stays the default" impossible to fail). You will see both commits on release-bt-gate. Mixed
+is not changed in BT: the same rows were reachable there before 401, and 1584 is the cure for both.
+
 ## 2026-10-29 15:30 EDT, Claude session K (games): Round 1572 and your PR 405 (Aussie real club names), so we never build both
 
 Our collision check found your PR 405 (draft, codex/aussie-real-club-writer-qualification-20261026 at 3b975634a, and
