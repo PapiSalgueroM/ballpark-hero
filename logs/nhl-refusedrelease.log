@@ -1,0 +1,19 @@
+NEGATIVE CONTROL ON: refusedrelease; section 10 must go red
+4) the market after real firings: every club graded as a GM's club, the first out of work screen and the next two
+  FAIL [10]: DAL to NSH (102): a refused take (his old club) moved the league or called the spec ({"open":0,"sync":0,"release":1})
+  FAIL [10]: DAL to NSH (102): a refused desk off take moved the league or synced or released ({"open":1,"sync":0,"release":1})
+  FAIL [10]: TBL to SJS (102): a refused take (his old club) moved the league or called the spec ({"open":0,"sync":0,"release":1})
+  FAIL [10]: TBL to SJS (102): a refused desk off take moved the league or synced or released ({"open":1,"sync":0,"release":1})
+  FAIL [10]: MTL to OTT (103): a refused take (his old club) moved the league or called the spec ({"open":0,"sync":0,"release":1})
+  FAIL [10]: MTL to OTT (103): a refused desk off take moved the league or synced or released ({"open":1,"sync":0,"release":1})
+  FAIL [10]: WPG to VGK (103): a refused take (his old club) moved the league or called the spec ({"open":0,"sync":0,"release":1})
+  FAIL [10]: WPG to VGK (103): a refused desk off take moved the league or synced or released ({"open":1,"sync":0,"release":1})
+  FAIL [10]: (further failures in this check not printed)
+   MEASURE 40 seeds x 12 seasons: 562 firings
+   first screen with the host's rule: offers 562 (100.0%), quiet 0 (0.0%), closed 0 (0.0%); first calls 314
+   first screen on the raw feed:      offers 248 (44.1%), quiet 257 (45.7%), closed 57 (10.1%)
+   of the screens with offers, last calls: host 94 of 562 (16.7%), raw 37 of 248 (14.9%)
+   re hired within three feeds (firings with two seasons left to read, 472): host 472 (100.0%), raw 287 (60.8%); 280 later feeds read
+10) the lift: the shared legacy read, season counted rule, retained step and take equal what the NFL wrote inline
+   1536 legacy reads equal the old body and the nhl wrapper; 15 season counted rows; 108 retained rows through both summers' old step; the take: 1124 moves (562 desk off), 562 refusals
+CONTROL refusedrelease: 1 rewrite(s) applied, 1124 failure(s) in section 10 (FIRED)
