@@ -1,0 +1,10 @@
+build exit=0 29s | [dukb] inlined 1 stylesheet(s) and 1 module(s) into 181 snapshots (11 left alone)
+playCmTablesFit exit=0 77s | Shots and part1.json: /home/runner/work/_temp/rc-out/files/shots
+playCmHubLanding exit=0 88s | playCmHubLanding: green (A 8 pass 0 fail, B 65 pass 0 fail, C 112 pass 0 fail, E 65 pass 0 fail, F 9 pass 0 fail); the hub lands on the club on its first frame
+playCmDifficulty exit=0 113s |   PASS  no page errors
+playCmNoSack exit=0 267s |   PASS  no page errors
+playCmSavePoints exit=0 133s | playCmSavePoints: OK at 390 and 1280
+fonts exit=0 1s | Prepared 9 declared font dependencies for local fulfillment.
+ctl-playCmHubLanding exit=1 89s | playCmHubLanding: 1 failure(s) (A 8 pass 0 fail, B 63 pass 1 fail, C 112 pass 0 fail, E 65 pass 0 fail, F 9 pass 0 fail)
+simCareerProgramme-forwalk exit=0 60s | Career programme:50 original/compatibility/full product season pairs with exact RNG,240 opted gameplay seasons,21 effective loaded faults,163 unchanged chance outcomes an
+ctl-playUsCareerSaveSeam exit=1 31s | playUsCareerSaveSeam: 15 journeys, 71 checks, 2 failed
