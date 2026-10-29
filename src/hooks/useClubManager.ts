@@ -1165,6 +1165,20 @@ export function useClubManager() {
     setCareer(prev => (prev ? loanOutPlayer(prev, playerId) ?? prev : prev));
   }, []);
 
+  const commitLoanPlan = useCallback((make: (c: CareerState) => CareerState | null): boolean => {
+    if (phase !== 'hub' || !holdsActiveSlot() || movedOn()) return false;
+    const now = careerRef.current;
+    if (!now) return false;
+    const next = make(now);
+    if (!next) return false;
+    if (next === now) return true;
+    if (!persist(next)) return false;
+    careerRef.current = next;
+    setCareer(next);
+    setDeskNote(null);
+    return true;
+  }, [phase, holdsActiveSlot, movedOn, persist]);
+
   /* ---------- Round 105: contracts ---------- */
   const renew = useCallback((playerId: string) => {
     setCareer(prev => (prev ? renewContract(prev, playerId) ?? prev : prev));
@@ -1366,7 +1380,7 @@ export function useClubManager() {
     appointStaff, payOffStaff, matchStaff, letStaffGo, spendPoint, updateManager,
     setCurrency, setNationJobs, setStrictness, turnOnNoSack, setDifficulty,
     acceptIncomingBid, rejectIncomingBid,
-    setStatus, loanOut, renew, renewWithClause, terminate, signFree, setRole,
+    setStatus, loanOut, commitLoanPlan, renew, renewWithClause, terminate, signFree, setRole,
     upgradeFacility, sendScout, callScoutHome, promote, release, setTraining,
     subAtHalftime, shapeAtHalftime, changeAtHalftime, secondHalf, startSecondHalfLive, startExtraTimeLive, changeAt, markMinute,
     talk, halftimeTalk, sayIt, sendAssistant,
