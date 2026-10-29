@@ -1,0 +1,8 @@
+#!build
+#!playwright
+#!serial
+# Release BT kit: 3 of the 3 request lines of Release BS's rc-BSc.txt (rBSg/.tmp-fx/bs), the lines of the BT areas (the US My Careers, the Front Offices, Soccer Connections and the daily save shape, Build Your XI and the player search box, What's New, the guides and search index, the weight rows) and the setup lines before them; 0 line(s) outside those areas left out.
+# Release BS kit, Round 1568 (fix2-1568.md section 6 item 2): playUsCareerSaveSeam, the only walk that measures the US My Career save notice under the site bar, with its controls nostick (exit 1, "control nostick: RED AT THE NAMED CHECK (stuck)") and hidden (from rc-fx2-b.txt).
+usSeam: node scripts/playUsCareerSaveSeam.mjs
+usSeam-nostick: US_SAVE_SEAM_CONTROL=nostick node scripts/playUsCareerSaveSeam.mjs
+usSeam-hidden: US_SAVE_SEAM_CONTROL=hidden node scripts/playUsCareerSaveSeam.mjs
