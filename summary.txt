@@ -1,0 +1,4 @@
+p-log exit=1 20s | ::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/test/usCareerHallWall.test.tsx,title=src/test/usCareerHallWall.test.tsx > C8%3A the wall draws nothing and 
+p-warm-absent exit=0 25s |       Tests  4 passed | 52 skipped (56)
+p-warm-written exit=0 25s |       Tests  4 passed | 52 skipped (56)
+clean exit=0 0s | 
