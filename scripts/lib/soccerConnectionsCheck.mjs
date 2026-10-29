@@ -151,9 +151,6 @@ export function makeSoccerChecker({ careerPlayers, clubSeasonsOf, nationalityMap
     m = t.match(/^Played for (?:both )?(.+)$/);
     if (m) {
       if (/[()0-9+]/.test(m[1])) return null;
-      /* Round 1565: "Played for and later managed Real Madrid" is a claim about a manager's job too,
-         which no table here holds; it was read as a club named "and later managed Real Madrid" */
-      if (/^and /i.test(m[1]) || /\bmanag/i.test(m[1])) return null;
       const clubs = m[1].split(/,| AND | and /).map(s => s.trim()).filter(Boolean).map(club).flatMap(c => PAIRS[c] ?? [c]);
       return { kind: 'club', clubs };
     }
