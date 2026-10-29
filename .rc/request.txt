@@ -1,0 +1,7 @@
+plain: node scripts/simUsConnectionsFacts.mjs
+plainbytes: git worktree add -q /tmp/base b4a331a9cb1db7411b91538eaeaf29385d2ce3a9 && ln -s "$PWD/node_modules" /tmp/base/node_modules && (cd /tmp/base && node scripts/simUsConnectionsFacts.mjs > /tmp/base.txt 2>&1); node scripts/simUsConnectionsFacts.mjs > /tmp/head.txt 2>&1; cmp /tmp/base.txt /tmp/head.txt && echo "plain output byte equal to the base ($(wc -l < /tmp/head.txt) lines)"
+dumpbytes: git worktree add -q /tmp/base2 b4a331a9cb1db7411b91538eaeaf29385d2ce3a9 && ln -s "$PWD/node_modules" /tmp/base2/node_modules && (cd /tmp/base2 && US_CONN_DUMP=/tmp/dbase.txt node scripts/simUsConnectionsFacts.mjs > /dev/null 2>&1); US_CONN_DUMP=/tmp/dhead.txt node scripts/simUsConnectionsFacts.mjs > /dev/null 2>&1; cmp /tmp/dbase.txt /tmp/dhead.txt && echo "dump byte equal to the base ($(wc -l < /tmp/dhead.txt) verdicts)"
+reportnba: US_CONN_TABLES=nba node scripts/simUsConnectionsFacts.mjs > /tmp/r.txt 2>&1; s=$?; grep -E "^   nba|^report" /tmp/r.txt | cut -c1-400; tail -1 /tmp/r.txt; exit $s
+reportnone: US_CONN_TABLES=mls node scripts/simUsConnectionsFacts.mjs
+mig1574: node scripts/qa/usConnections1574Migration.mjs check
+mig1567: node scripts/qa/usConnections1567Migration.mjs check
