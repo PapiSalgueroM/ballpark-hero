@@ -1,0 +1,9 @@
+item 2: the file boards' verdicts, base against head
+   base 5440 verdicts, head 5440: IDENTICAL
+   the harness dump holds 5440 file verdicts: IDENTICAL to the head's
+item 3: every man and field of the base records is in the head's
+   nfl: 80 base men, 80 head men, 0 differences on the base's fields
+PROBE_CONTROL=record: Aaron Ekblad's career points moved by one
+  FAIL: nhl Aaron Ekblad.career changed
+   nhl: 75 base men, 238 head men, 1 differences on the base's fields
+probe-proofs: 1 failure(s)

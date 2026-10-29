@@ -1,0 +1,9 @@
+item 2: the file boards' verdicts, base against head
+PROBE_CONTROL=verdict: flipped baseball | bconn-001 | Born in the Dominican Republic | Fernando Tatis Jr.
+   base 5440 verdicts, head 5440: DIFFERENT
+  FAIL: first difference: base "baseball	bconn-001	Born in the Dominican Republic	Fernando Tatis Jr.	true" head "baseball	bconn-001	Born in the Dominican Republic	Fernando Tatis Jr.	false"
+   the harness dump holds 5440 file verdicts: DIFFERENT
+item 3: every man and field of the base records is in the head's
+   nfl: 80 base men, 80 head men, 0 differences on the base's fields
+   nhl: 75 base men, 238 head men, 0 differences on the base's fields
+probe-proofs: 1 failure(s)
