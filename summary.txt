@@ -1,0 +1,4 @@
+build exit=0 35s | [dukb] inlined 1 stylesheet(s) and 1 module(s) into 181 snapshots (11 left alone)
+pbcr exit=0 35s | playBingoClubRules: GREEN, both viewports held
+pbcr-wrongtile exit=1 35s | playBingoClubRules: CONTROL=wrongtile FIRED (tapped From France for Morton; 4 failures)
+walk exit=0 85s | walk: GREEN
