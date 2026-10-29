@@ -1,0 +1,6 @@
+NEGATIVE CONTROL realname: a real NBA player's name planted in a copy of the International view (section 11 must fail)
+section 11: the words of the national team's files
+  FAIL [11] "Kevin" in src/components/us-career/IntlSummerResult.tsx ("Kevin Durant welcomes you to the national team.") is no nation, host or competition of the ledger and no fixed word
+  FAIL [11] "Durant" in src/components/us-career/IntlSummerResult.tsx ("Kevin Durant welcomes you to the national team.") is no nation, host or competition of the ledger and no fixed word
+  158 capitalised words read in 9 sources, 69 ledger words, 54 fixed words, 2 strays
+simCareerIntl: control realname FIRED (section 11, 2 failures)
