@@ -1,0 +1,1022 @@
+{
+ "base": "http://localhost:4173",
+ "control": "",
+ "arms": [
+  "blocked",
+  "full"
+ ],
+ "walked": [
+  {
+   "route": "/nba-my-career",
+   "view": "phone",
+   "isGame": true,
+   "mountOnly": false,
+   "open": {
+    "route": "/nba-my-career",
+    "view": "phone",
+    "mode": "open",
+    "presses": [
+     {
+      "label": "Let's Play!",
+      "inDialog": true,
+      "changed": true,
+      "threw": false
+     },
+     {
+      "label": "The Pest Picks pockets, gets under skin",
+      "inDialog": false,
+      "changed": false,
+      "threw": false
+     },
+     {
+      "label": "Play your road to the draft",
+      "inDialog": false,
+      "changed": true,
+      "threw": false
+     },
+     {
+      "label": "Start over",
+      "inDialog": false,
+      "changed": true,
+      "threw": false
+     }
+    ],
+    "changed": 3,
+    "first": {
+     "buttons": 40,
+     "links": 28,
+     "inputs": 1,
+     "snapshot": false,
+     "bootCover": false,
+     "boundary": false,
+     "notice": null,
+     "mainTop": 133,
+     "firstTile": {
+      "p": "/nhl-connections",
+      "top": 12346.25
+     },
+     "banner": true,
+     "storageKind": "[object Storage]",
+     "native": {
+      "own": true,
+      "configurable": true
+     }
+    },
+    "last": {
+     "buttons": 15,
+     "links": 28,
+     "inputs": 0,
+     "snapshot": false,
+     "bootCover": false,
+     "boundary": false,
+     "notice": null,
+     "mainTop": 133,
+     "firstTile": {
+      "p": "/nhl-connections",
+      "top": 12624.953125
+     },
+     "banner": true,
+     "storageKind": "[object Storage]",
+     "native": {
+      "own": true,
+      "configurable": true
+     }
+    },
+    "pageErrors": [],
+    "storageConsole": [],
+    "thirdParty": 0
+   },
+   "arms": [
+    {
+     "route": "/nba-my-career",
+     "view": "phone",
+     "mode": "blocked",
+     "presses": [
+      {
+       "label": "Let's Play!",
+       "inDialog": true,
+       "changed": true,
+       "threw": false
+      },
+      {
+       "label": "The Pest Picks pockets, gets under skin",
+       "inDialog": false,
+       "changed": false,
+       "threw": false
+      },
+      {
+       "label": "Play your road to the draft",
+       "inDialog": false,
+       "changed": true,
+       "threw": false
+      },
+      {
+       "label": "Start over",
+       "inDialog": false,
+       "changed": true,
+       "threw": false
+      }
+     ],
+     "changed": 3,
+     "first": {
+      "buttons": 40,
+      "links": 28,
+      "inputs": 1,
+      "snapshot": false,
+      "bootCover": false,
+      "boundary": false,
+      "notice": {
+       "kind": "blocked",
+       "height": 28,
+       "shown": true,
+       "text": "Storage is blocked, so progress won't save."
+      },
+      "mainTop": 161,
+      "firstTile": {
+       "p": "/nhl-connections",
+       "top": 12374.25
+      },
+      "banner": true,
+      "storageKind": "[object Object]",
+      "native": {
+       "own": true,
+       "configurable": true
+      }
+     },
+     "last": {
+      "buttons": 15,
+      "links": 28,
+      "inputs": 0,
+      "snapshot": false,
+      "bootCover": false,
+      "boundary": false,
+      "notice": {
+       "kind": "blocked",
+       "height": 28,
+       "shown": true,
+       "text": "Storage is blocked, so progress won't save."
+      },
+      "mainTop": 161,
+      "firstTile": {
+       "p": "/nhl-connections",
+       "top": 12652.953125
+      },
+      "banner": true,
+      "storageKind": "[object Object]",
+      "native": {
+       "own": true,
+       "configurable": true
+      }
+     },
+     "pageErrors": [],
+     "storageConsole": [],
+     "thirdParty": 0
+    },
+    {
+     "route": "/nba-my-career",
+     "view": "phone",
+     "mode": "full",
+     "presses": [
+      {
+       "label": "Let's Play!",
+       "inDialog": true,
+       "changed": true,
+       "threw": false
+      },
+      {
+       "label": "The Pest Picks pockets, gets under skin",
+       "inDialog": false,
+       "changed": false,
+       "threw": false
+      },
+      {
+       "label": "Play your road to the draft",
+       "inDialog": false,
+       "changed": true,
+       "threw": false
+      },
+      {
+       "label": "Start over",
+       "inDialog": false,
+       "changed": true,
+       "threw": false
+      }
+     ],
+     "changed": 3,
+     "first": {
+      "buttons": 40,
+      "links": 28,
+      "inputs": 1,
+      "snapshot": false,
+      "bootCover": false,
+      "boundary": false,
+      "notice": {
+       "kind": "full",
+       "height": 28,
+       "shown": true,
+       "text": "Storage is full, so progress won't save."
+      },
+      "mainTop": 161,
+      "firstTile": {
+       "p": "/nhl-connections",
+       "top": 12374.25
+      },
+      "banner": true,
+      "storageKind": "[object Storage]",
+      "native": {
+       "own": true,
+       "configurable": true
+      }
+     },
+     "last": {
+      "buttons": 17,
+      "links": 28,
+      "inputs": 0,
+      "snapshot": false,
+      "bootCover": false,
+      "boundary": false,
+      "notice": {
+       "kind": "full",
+       "height": 28,
+       "shown": true,
+       "text": "Storage is full, so progress won't save."
+      },
+      "mainTop": 161,
+      "firstTile": {
+       "p": "/nhl-connections",
+       "top": 12781.953125
+      },
+      "banner": true,
+      "storageKind": "[object Storage]",
+      "native": {
+       "own": true,
+       "configurable": true
+      }
+     },
+     "pageErrors": [],
+     "storageConsole": [],
+     "thirdParty": 0
+    }
+   ]
+  },
+  {
+   "route": "/nba-my-career",
+   "view": "desktop",
+   "isGame": true,
+   "mountOnly": false,
+   "open": {
+    "route": "/nba-my-career",
+    "view": "desktop",
+    "mode": "open",
+    "presses": [
+     {
+      "label": "Let's Play!",
+      "inDialog": true,
+      "changed": true,
+      "threw": false
+     },
+     {
+      "label": "The Pest Picks pockets, gets under skin",
+      "inDialog": false,
+      "changed": false,
+      "threw": false
+     },
+     {
+      "label": "Play your road to the draft",
+      "inDialog": false,
+      "changed": true,
+      "threw": false
+     },
+     {
+      "label": "Start over",
+      "inDialog": false,
+      "changed": true,
+      "threw": false
+     }
+    ],
+    "changed": 3,
+    "first": {
+     "buttons": 40,
+     "links": 28,
+     "inputs": 1,
+     "snapshot": false,
+     "bootCover": false,
+     "boundary": false,
+     "notice": null,
+     "mainTop": 97,
+     "firstTile": {
+      "p": "/nhl-connections",
+      "top": 8221.75
+     },
+     "banner": true,
+     "storageKind": "[object Storage]",
+     "native": {
+      "own": true,
+      "configurable": true
+     }
+    },
+    "last": {
+     "buttons": 15,
+     "links": 28,
+     "inputs": 0,
+     "snapshot": false,
+     "bootCover": false,
+     "boundary": false,
+     "notice": null,
+     "mainTop": 97,
+     "firstTile": {
+      "p": "/nhl-connections",
+      "top": 8077.984375
+     },
+     "banner": true,
+     "storageKind": "[object Storage]",
+     "native": {
+      "own": true,
+      "configurable": true
+     }
+    },
+    "pageErrors": [],
+    "storageConsole": [],
+    "thirdParty": 0
+   },
+   "arms": [
+    {
+     "route": "/nba-my-career",
+     "view": "desktop",
+     "mode": "blocked",
+     "presses": [
+      {
+       "label": "Let's Play!",
+       "inDialog": true,
+       "changed": true,
+       "threw": false
+      },
+      {
+       "label": "The Pest Picks pockets, gets under skin",
+       "inDialog": false,
+       "changed": false,
+       "threw": false
+      },
+      {
+       "label": "Play your road to the draft",
+       "inDialog": false,
+       "changed": true,
+       "threw": false
+      },
+      {
+       "label": "Start over",
+       "inDialog": false,
+       "changed": true,
+       "threw": false
+      }
+     ],
+     "changed": 3,
+     "first": {
+      "buttons": 40,
+      "links": 28,
+      "inputs": 1,
+      "snapshot": false,
+      "bootCover": false,
+      "boundary": false,
+      "notice": {
+       "kind": "blocked",
+       "height": 28,
+       "shown": true,
+       "text": "This browser blocks storage, so progress won't be saved. You can still play everything."
+      },
+      "mainTop": 125,
+      "firstTile": {
+       "p": "/nhl-connections",
+       "top": 8249.75
+      },
+      "banner": true,
+      "storageKind": "[object Object]",
+      "native": {
+       "own": true,
+       "configurable": true
+      }
+     },
+     "last": {
+      "buttons": 15,
+      "links": 28,
+      "inputs": 0,
+      "snapshot": false,
+      "bootCover": false,
+      "boundary": false,
+      "notice": {
+       "kind": "blocked",
+       "height": 28,
+       "shown": true,
+       "text": "This browser blocks storage, so progress won't be saved. You can still play everything."
+      },
+      "mainTop": 125,
+      "firstTile": {
+       "p": "/nhl-connections",
+       "top": 8105.984375
+      },
+      "banner": true,
+      "storageKind": "[object Object]",
+      "native": {
+       "own": true,
+       "configurable": true
+      }
+     },
+     "pageErrors": [],
+     "storageConsole": [],
+     "thirdParty": 0
+    },
+    {
+     "route": "/nba-my-career",
+     "view": "desktop",
+     "mode": "full",
+     "presses": [
+      {
+       "label": "Let's Play!",
+       "inDialog": true,
+       "changed": true,
+       "threw": false
+      },
+      {
+       "label": "The Pest Picks pockets, gets under skin",
+       "inDialog": false,
+       "changed": false,
+       "threw": false
+      },
+      {
+       "label": "Play your road to the draft",
+       "inDialog": false,
+       "changed": true,
+       "threw": false
+      },
+      {
+       "label": "Start over",
+       "inDialog": false,
+       "changed": true,
+       "threw": false
+      }
+     ],
+     "changed": 3,
+     "first": {
+      "buttons": 40,
+      "links": 28,
+      "inputs": 1,
+      "snapshot": false,
+      "bootCover": false,
+      "boundary": false,
+      "notice": {
+       "kind": "full",
+       "height": 28,
+       "shown": true,
+       "text": "This browser's storage is full, so progress won't be saved. You can still play everything."
+      },
+      "mainTop": 125,
+      "firstTile": {
+       "p": "/nhl-connections",
+       "top": 8249.75
+      },
+      "banner": true,
+      "storageKind": "[object Storage]",
+      "native": {
+       "own": true,
+       "configurable": true
+      }
+     },
+     "last": {
+      "buttons": 17,
+      "links": 28,
+      "inputs": 0,
+      "snapshot": false,
+      "bootCover": false,
+      "boundary": false,
+      "notice": {
+       "kind": "full",
+       "height": 28,
+       "shown": true,
+       "text": "This browser's storage is full, so progress won't be saved. You can still play everything."
+      },
+      "mainTop": 125,
+      "firstTile": {
+       "p": "/nhl-connections",
+       "top": 8215.484375
+      },
+      "banner": true,
+      "storageKind": "[object Storage]",
+      "native": {
+       "own": true,
+       "configurable": true
+      }
+     },
+     "pageErrors": [],
+     "storageConsole": [],
+     "thirdParty": 0
+    }
+   ]
+  },
+  {
+   "route": "/nfl-my-career",
+   "view": "phone",
+   "isGame": true,
+   "mountOnly": false,
+   "open": {
+    "route": "/nfl-my-career",
+    "view": "phone",
+    "mode": "open",
+    "presses": [
+     {
+      "label": "Let's Play!",
+      "inDialog": true,
+      "changed": true,
+      "threw": false
+     },
+     {
+      "label": "Play your road to the draft",
+      "inDialog": false,
+      "changed": true,
+      "threw": false
+     },
+     {
+      "label": "Start over",
+      "inDialog": false,
+      "changed": true,
+      "threw": false
+     },
+     {
+      "label": "Start new career",
+      "inDialog": true,
+      "changed": true,
+      "threw": false
+     }
+    ],
+    "changed": 4,
+    "first": {
+     "buttons": 43,
+     "links": 28,
+     "inputs": 1,
+     "snapshot": false,
+     "bootCover": false,
+     "boundary": false,
+     "notice": null,
+     "mainTop": 133,
+     "firstTile": {
+      "p": "/mlb-higher-lower",
+      "top": 12526.75
+     },
+     "banner": true,
+     "storageKind": "[object Storage]",
+     "native": {
+      "own": true,
+      "configurable": true
+     }
+    },
+    "last": {
+     "buttons": 43,
+     "links": 28,
+     "inputs": 1,
+     "snapshot": false,
+     "bootCover": false,
+     "boundary": false,
+     "notice": null,
+     "mainTop": 133,
+     "firstTile": {
+      "p": "/mlb-higher-lower",
+      "top": 12526.75
+     },
+     "banner": true,
+     "storageKind": "[object Storage]",
+     "native": {
+      "own": true,
+      "configurable": true
+     }
+    },
+    "pageErrors": [],
+    "storageConsole": [],
+    "thirdParty": 0
+   },
+   "arms": [
+    {
+     "route": "/nfl-my-career",
+     "view": "phone",
+     "mode": "blocked",
+     "presses": [
+      {
+       "label": "Let's Play!",
+       "inDialog": true,
+       "changed": true,
+       "threw": false
+      },
+      {
+       "label": "Play your road to the draft",
+       "inDialog": false,
+       "changed": true,
+       "threw": false
+      },
+      {
+       "label": "Start over",
+       "inDialog": false,
+       "changed": true,
+       "threw": false
+      },
+      {
+       "label": "Start new career",
+       "inDialog": true,
+       "changed": true,
+       "threw": false
+      }
+     ],
+     "changed": 4,
+     "first": {
+      "buttons": 43,
+      "links": 28,
+      "inputs": 1,
+      "snapshot": false,
+      "bootCover": false,
+      "boundary": false,
+      "notice": {
+       "kind": "blocked",
+       "height": 28,
+       "shown": true,
+       "text": "Storage is blocked, so progress won't save."
+      },
+      "mainTop": 161,
+      "firstTile": {
+       "p": "/mlb-higher-lower",
+       "top": 12554.75
+      },
+      "banner": true,
+      "storageKind": "[object Object]",
+      "native": {
+       "own": true,
+       "configurable": true
+      }
+     },
+     "last": {
+      "buttons": 43,
+      "links": 28,
+      "inputs": 1,
+      "snapshot": false,
+      "bootCover": false,
+      "boundary": false,
+      "notice": {
+       "kind": "blocked",
+       "height": 28,
+       "shown": true,
+       "text": "Storage is blocked, so progress won't save."
+      },
+      "mainTop": 161,
+      "firstTile": {
+       "p": "/mlb-higher-lower",
+       "top": 12554.75
+      },
+      "banner": true,
+      "storageKind": "[object Object]",
+      "native": {
+       "own": true,
+       "configurable": true
+      }
+     },
+     "pageErrors": [],
+     "storageConsole": [],
+     "thirdParty": 0
+    },
+    {
+     "route": "/nfl-my-career",
+     "view": "phone",
+     "mode": "full",
+     "presses": [
+      {
+       "label": "Let's Play!",
+       "inDialog": true,
+       "changed": true,
+       "threw": false
+      },
+      {
+       "label": "Play your road to the draft",
+       "inDialog": false,
+       "changed": true,
+       "threw": false
+      },
+      {
+       "label": "Start over",
+       "inDialog": false,
+       "changed": true,
+       "threw": false
+      },
+      {
+       "label": "Start new career",
+       "inDialog": true,
+       "changed": true,
+       "threw": false
+      }
+     ],
+     "changed": 4,
+     "first": {
+      "buttons": 43,
+      "links": 28,
+      "inputs": 1,
+      "snapshot": false,
+      "bootCover": false,
+      "boundary": false,
+      "notice": {
+       "kind": "full",
+       "height": 28,
+       "shown": true,
+       "text": "Storage is full, so progress won't save."
+      },
+      "mainTop": 161,
+      "firstTile": {
+       "p": "/mlb-higher-lower",
+       "top": 12554.75
+      },
+      "banner": true,
+      "storageKind": "[object Storage]",
+      "native": {
+       "own": true,
+       "configurable": true
+      }
+     },
+     "last": {
+      "buttons": 43,
+      "links": 28,
+      "inputs": 1,
+      "snapshot": false,
+      "bootCover": false,
+      "boundary": false,
+      "notice": {
+       "kind": "full",
+       "height": 28,
+       "shown": true,
+       "text": "Storage is full, so progress won't save."
+      },
+      "mainTop": 161,
+      "firstTile": {
+       "p": "/mlb-higher-lower",
+       "top": 12554.75
+      },
+      "banner": true,
+      "storageKind": "[object Storage]",
+      "native": {
+       "own": true,
+       "configurable": true
+      }
+     },
+     "pageErrors": [],
+     "storageConsole": [],
+     "thirdParty": 0
+    }
+   ]
+  },
+  {
+   "route": "/nfl-my-career",
+   "view": "desktop",
+   "isGame": true,
+   "mountOnly": false,
+   "open": {
+    "route": "/nfl-my-career",
+    "view": "desktop",
+    "mode": "open",
+    "presses": [
+     {
+      "label": "Let's Play!",
+      "inDialog": true,
+      "changed": true,
+      "threw": false
+     },
+     {
+      "label": "Play your road to the draft",
+      "inDialog": false,
+      "changed": true,
+      "threw": false
+     },
+     {
+      "label": "Start over",
+      "inDialog": false,
+      "changed": true,
+      "threw": false
+     },
+     {
+      "label": "Start new career",
+      "inDialog": true,
+      "changed": true,
+      "threw": false
+     }
+    ],
+    "changed": 4,
+    "first": {
+     "buttons": 43,
+     "links": 28,
+     "inputs": 1,
+     "snapshot": false,
+     "bootCover": false,
+     "boundary": false,
+     "notice": null,
+     "mainTop": 97,
+     "firstTile": {
+      "p": "/mlb-higher-lower",
+      "top": 8467
+     },
+     "banner": true,
+     "storageKind": "[object Storage]",
+     "native": {
+      "own": true,
+      "configurable": true
+     }
+    },
+    "last": {
+     "buttons": 43,
+     "links": 28,
+     "inputs": 1,
+     "snapshot": false,
+     "bootCover": false,
+     "boundary": false,
+     "notice": null,
+     "mainTop": 97,
+     "firstTile": {
+      "p": "/mlb-higher-lower",
+      "top": 8467
+     },
+     "banner": true,
+     "storageKind": "[object Storage]",
+     "native": {
+      "own": true,
+      "configurable": true
+     }
+    },
+    "pageErrors": [],
+    "storageConsole": [],
+    "thirdParty": 0
+   },
+   "arms": [
+    {
+     "route": "/nfl-my-career",
+     "view": "desktop",
+     "mode": "blocked",
+     "presses": [
+      {
+       "label": "Let's Play!",
+       "inDialog": true,
+       "changed": true,
+       "threw": false
+      },
+      {
+       "label": "Play your road to the draft",
+       "inDialog": false,
+       "changed": true,
+       "threw": false
+      },
+      {
+       "label": "Start over",
+       "inDialog": false,
+       "changed": true,
+       "threw": false
+      },
+      {
+       "label": "Start new career",
+       "inDialog": true,
+       "changed": true,
+       "threw": false
+      }
+     ],
+     "changed": 4,
+     "first": {
+      "buttons": 43,
+      "links": 28,
+      "inputs": 1,
+      "snapshot": false,
+      "bootCover": false,
+      "boundary": false,
+      "notice": {
+       "kind": "blocked",
+       "height": 28,
+       "shown": true,
+       "text": "This browser blocks storage, so progress won't be saved. You can still play everything."
+      },
+      "mainTop": 125,
+      "firstTile": {
+       "p": "/mlb-higher-lower",
+       "top": 8495
+      },
+      "banner": true,
+      "storageKind": "[object Object]",
+      "native": {
+       "own": true,
+       "configurable": true
+      }
+     },
+     "last": {
+      "buttons": 43,
+      "links": 28,
+      "inputs": 1,
+      "snapshot": false,
+      "bootCover": false,
+      "boundary": false,
+      "notice": {
+       "kind": "blocked",
+       "height": 28,
+       "shown": true,
+       "text": "This browser blocks storage, so progress won't be saved. You can still play everything."
+      },
+      "mainTop": 125,
+      "firstTile": {
+       "p": "/mlb-higher-lower",
+       "top": 8495
+      },
+      "banner": true,
+      "storageKind": "[object Object]",
+      "native": {
+       "own": true,
+       "configurable": true
+      }
+     },
+     "pageErrors": [],
+     "storageConsole": [],
+     "thirdParty": 0
+    },
+    {
+     "route": "/nfl-my-career",
+     "view": "desktop",
+     "mode": "full",
+     "presses": [
+      {
+       "label": "Let's Play!",
+       "inDialog": true,
+       "changed": true,
+       "threw": false
+      },
+      {
+       "label": "Play your road to the draft",
+       "inDialog": false,
+       "changed": true,
+       "threw": false
+      },
+      {
+       "label": "Start over",
+       "inDialog": false,
+       "changed": true,
+       "threw": false
+      },
+      {
+       "label": "Start new career",
+       "inDialog": true,
+       "changed": true,
+       "threw": false
+      }
+     ],
+     "changed": 4,
+     "first": {
+      "buttons": 43,
+      "links": 28,
+      "inputs": 1,
+      "snapshot": false,
+      "bootCover": false,
+      "boundary": false,
+      "notice": {
+       "kind": "full",
+       "height": 28,
+       "shown": true,
+       "text": "This browser's storage is full, so progress won't be saved. You can still play everything."
+      },
+      "mainTop": 125,
+      "firstTile": {
+       "p": "/mlb-higher-lower",
+       "top": 8495
+      },
+      "banner": true,
+      "storageKind": "[object Storage]",
+      "native": {
+       "own": true,
+       "configurable": true
+      }
+     },
+     "last": {
+      "buttons": 43,
+      "links": 28,
+      "inputs": 1,
+      "snapshot": false,
+      "bootCover": false,
+      "boundary": false,
+      "notice": {
+       "kind": "full",
+       "height": 28,
+       "shown": true,
+       "text": "This browser's storage is full, so progress won't be saved. You can still play everything."
+      },
+      "mainTop": 125,
+      "firstTile": {
+       "p": "/mlb-higher-lower",
+       "top": 8495
+      },
+      "banner": true,
+      "storageKind": "[object Storage]",
+      "native": {
+       "own": true,
+       "configurable": true
+      }
+     },
+     "pageErrors": [],
+     "storageConsole": [],
+     "thirdParty": 0
+    }
+   ]
+  }
+ ]
+}

@@ -1,0 +1,15 @@
+  PASS  /nfl-my-career shell: needed the button, 2 click(s), buttons: Menu | 🏈 2026The league as it  | ⏪ 2005 throwbackThe 2005
+  PASS  /nfl-my-career wrongtype: needed the button, 2 click(s), buttons: Menu | 🏈 2026The league as it  | ⏪ 2005 throwbackThe 2005
+  PASS  /nfl-my-career summer: needed the button, 2 click(s), buttons: Menu | 🏈 2026The league as it  | ⏪ 2005 throwbackThe 2005
+  PASS  /nba-my-career shell: needed the button, 2 click(s), buttons: Menu | 🏀 2026The league as it  | ⏪ 2003-04 throwbackThe 2
+  PASS  /nba-my-career wrongtype: needed the button, 2 click(s), buttons: Menu | 🏀 2026The league as it  | ⏪ 2003-04 throwbackThe 2
+  PASS  /nba-my-career summer: needed the button, 2 click(s), buttons: Menu | 🏀 2026The league as it  | ⏪ 2003-04 throwbackThe 2
+  PASS  /mlb-my-career shell: needed the button, 2 click(s), buttons: Menu | ⚾ 2026The league as it i | ⏪ 2004 throwbackThe 2004
+  PASS  /mlb-my-career wrongtype: needed the button, 2 click(s), buttons: Menu | ⚾ 2026The league as it i | ⏪ 2004 throwbackThe 2004
+  PASS  /mlb-my-career summer: needed the button, 2 click(s), buttons: Menu | ⚾ 2026The league as it i | ⏪ 2004 throwbackThe 2004
+  PASS  /nhl-my-career shell: needed the button, 2 click(s), buttons: Menu | 🏒 2026The league as it  | ⏪ 2006-07 throwbackThe 3
+  PASS  /nhl-my-career wrongtype: needed the button, 2 click(s), buttons: Menu | 🏒 2026The league as it  | ⏪ 2006-07 throwbackThe 3
+  PASS  /nhl-my-career summer: needed the button, 2 click(s), buttons: Menu | 🏒 2026The league as it  | ⏪ 2006-07 throwbackThe 3
+
+12 broken saves over 4 long games: 12 reached the error page and needed the button, 0 were coped with by the game, 0 drew the broken save without throwing, 0 could not be judged offline, 0 trapped
+playCorruptSaves: green. No broken save traps a long game.
