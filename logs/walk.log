@@ -1,0 +1,12 @@
+  P1 390 reduce: sheet 0,63 390x717; Let's Play at y 720 h 44; sentence true
+  P1 390 reduce: "Who was worth the most in the 2026 market values?" swapped for "Which club was Levi Colwill at in the 2026 market values?" (difficulty 1)
+  P1 390 no-preference: sheet 0,63 390x717; Let's Play at y 720 h 44; sentence true
+  P1 390 no-preference: "Who was worth the most in the 2026 market values?" swapped for "Which club was Levi Colwill at in the 2026 market values?" (difficulty 1)
+  P1 1280 reduce: sheet 416,133 448x634; Let's Play at y 698 h 44; sentence true
+  P1 1280 reduce: "Who was worth the most in the 2026 market values?" swapped for "Who won the Ballon d'Or in 2010?" (difficulty 1)
+  P1 1280 no-preference: sheet 416,133 448x634; Let's Play at y 698 h 44; sentence true
+  P1 1280 no-preference: "Who was worth the most in the 2026 market values?" swapped for "Who won the Ballon d'Or in 2010?" (difficulty 1)
+  P2 390 no-preference: question 12 "What nationality is Patrik Blahut?" (difficulty 12) swapped for "What nationality is Anthoni?" (difficulty 12); ladder texts Who was worth the most in the 2026 marke / Which club was Iliman Ndiaye at in the 2 / What nationality is Maghnes Akliouche? / What nationality is Désiré Doué? / What nationality is Eberechi Eze? / Who won the Ballon d'Or in 1998? / What nationality is Douglas Luiz? / What nationality is Sindre Walle Egeli? / Who was listed at Goalkeeper in the 2026 / What nationality is Leon Bailey? / Which club was Marcos Ledesma at in the  / What nationality is Patrik Blahut? / Who was listed at Central Midfield in th / What nationality is Felipe Augusto? / What nationality is Lucas Cepeda?
+  P2 1280 reduce: question 12 "What nationality is Patrik Blahut?" (difficulty 12) swapped for "What nationality is Anthoni?" (difficulty 12); ladder texts Who was worth the most in the 2026 marke / Which club was Iliman Ndiaye at in the 2 / What nationality is Maghnes Akliouche? / What nationality is Désiré Doué? / What nationality is Eberechi Eze? / Who won the Ballon d'Or in 1998? / What nationality is Douglas Luiz? / What nationality is Sindre Walle Egeli? / Who was listed at Goalkeeper in the 2026 / What nationality is Leon Bailey? / Which club was Marcos Ledesma at in the  / What nationality is Patrik Blahut? / Who was listed at Central Midfield in th / What nationality is Felipe Augusto? / What nationality is Lucas Cepeda?
+review-run-walk HEAD: swaps 41, repeats 0, handed back 0, other rungs moved 0
+review-run-walk: green

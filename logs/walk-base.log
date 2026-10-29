@@ -1,0 +1,27 @@
+Preparing worktree (detached HEAD 5f9303bf8f)
+HEAD is now at 5f9303bf8f Round 1573: merge origin/main at 65b3e291a (three board commits, docs/WORKBOARD.md only)
+base build exit 0
+[32m✓ built in 23.71s[39m
+[dukb] inlined 1 stylesheet(s) and 1 module(s) into 181 snapshots (11 left alone)
+  P1 390 reduce: sheet 0,89 390x666; Let's Play at y 686 h 44; sentence false
+  P1 390 reduce: "Who was worth the most in the 2026 market values?" swapped for "Which club was Levi Colwill at in the 2026 market values?" (difficulty 1)
+  P1 390 no-preference: sheet 0,89 390x666; Let's Play at y 686 h 44; sentence false
+  P1 390 no-preference: "Who was worth the most in the 2026 market values?" swapped for "Which club was Levi Colwill at in the 2026 market values?" (difficulty 1)
+  P1 1280 reduce: sheet 416,163 448x574; Let's Play at y 668 h 44; sentence false
+  P1 1280 reduce: "Who was worth the most in the 2026 market values?" swapped for "Who won the Ballon d'Or in 2010?" (difficulty 1)
+  P1 1280 no-preference: sheet 416,163 448x574; Let's Play at y 668 h 44; sentence false
+  P1 1280 no-preference: "Who was worth the most in the 2026 market values?" swapped for "Who won the Ballon d'Or in 2010?" (difficulty 1)
+  P2 390 no-preference: question 12 "What nationality is Patrik Blahut?" (difficulty 12) swapped for "What nationality is Anthoni?" (difficulty 12); ladder texts Who was worth the most in the 2026 marke / Which club was Iliman Ndiaye at in the 2 / What nationality is Maghnes Akliouche? / What nationality is Désiré Doué? / What nationality is Eberechi Eze? / Who won the Ballon d'Or in 1998? / What nationality is Douglas Luiz? / What nationality is Sindre Walle Egeli? / Who was listed at Goalkeeper in the 2026 / What nationality is Leon Bailey? / Which club was Marcos Ledesma at in the  / What nationality is Patrik Blahut? / Who was listed at Central Midfield in th / What nationality is Felipe Augusto? / What nationality is Lucas Cepeda?
+  P2 1280 reduce: question 12 "What nationality is Patrik Blahut?" (difficulty 12) swapped for "What nationality is Anthoni?" (difficulty 12); ladder texts Who was worth the most in the 2026 marke / Which club was Iliman Ndiaye at in the 2 / What nationality is Maghnes Akliouche? / What nationality is Désiré Doué? / What nationality is Eberechi Eze? / Who won the Ballon d'Or in 1998? / What nationality is Douglas Luiz? / What nationality is Sindre Walle Egeli? / Who was listed at Goalkeeper in the 2026 / What nationality is Leon Bailey? / Which club was Marcos Ledesma at in the  / What nationality is Patrik Blahut? / Who was listed at Central Midfield in th / What nationality is Felipe Augusto? / What nationality is Lucas Cepeda?
+review-run-walk BASE: swaps 41, repeats 6, handed back 0, other rungs moved 0
+  RED: P1 390 reduce: the rules sheet lacks the Swap sentence
+  RED: P1 390 no-preference: the rules sheet lacks the Swap sentence
+  RED: P1 1280 reduce: the rules sheet lacks the Swap sentence
+  RED: P1 1280 no-preference: the rules sheet lacks the Swap sentence
+  RED: P3 1280 reduce #2 q1: the swap at question 1 dealt "Who was worth the most in the 2026 market values?", already rung 8 of the ladder
+  RED: P3 1280 reduce #12 q1: the swap at question 1 dealt "Who was worth the most in the 2026 market values?", already rung 4 of the ladder
+  RED: P3 1280 reduce #16 q1: the swap at question 1 dealt "Who was listed at Attacking Midfield in the 2026 market values?", already rung 2 of the ladder
+  RED: P3 1280 reduce #24 q1: the swap at question 1 dealt "Who was worth the most in the 2026 market values?", already rung 8 of the ladder
+  RED: P3 1280 reduce #29 q1: the swap at question 1 dealt "Who was worth the most in the 2026 market values?", already rung 5 of the ladder
+  RED: P3 1280 reduce #33 q12: the swap at question 12 dealt "Who was worth the most in the 2026 market values?", already rung 5 of the ladder
+review-run-walk: control base fired (6 repeat(s) in 41 swaps)
