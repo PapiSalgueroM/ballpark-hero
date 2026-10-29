@@ -1,0 +1,9 @@
+build exit=0 36s | [dukb] inlined 1 stylesheet(s) and 1 module(s) into 181 snapshots (11 left alone)
+vitest exit=0 27s |    Duration  26.37s (transform 5.84s, setup 2.51s, collect 19.03s, tests 36.50s, environment 9.87s, prepare 2.49s)
+simCmSavePoints exit=0 72s | simCmSavePoints: OK, all eight sections green
+simClubManagerScore exit=0 153s | ALL SEASON SCORE CHECKS PASSED
+simClubManagerSlots exit=0 110s | simClubManagerSlots: all sections green
+simCmNoSack exit=0 198s | simCmNoSack: PASS (sections 1, 2, 3, 4, 5, 6, 7)
+simClubManagerSaveSize exit=0 72s | simClubManagerSaveSize: all sections green
+playCmSavePoints exit=0 138s | playCmSavePoints: OK at 390 and 1280
+walk-nodoor exit=1 187s | playCmSavePoints: control nodoor FIRED (7 door check(s) red, 7 in all)
