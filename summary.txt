@@ -1,0 +1,4 @@
+build exit=0 33s | [dukb] inlined 1 stylesheet(s) and 1 module(s) into 181 snapshots (11 left alone)
+tsc exit=0 85s | 
+walk exit=1 2284s | walkStart FAIL: 24 problems, 120 of 120 swaps put the new screen's top in view, base http://localhost:4173
+walk-old exit=1 2330s | walkStart FAIL: 101 problems, 43 of 120 swaps put the new screen's top in view, base http://localhost:4175
