@@ -1,0 +1,3 @@
+#!serve
+#!playwright
+walk1521: node .rc/x/walkrun1521.mjs
