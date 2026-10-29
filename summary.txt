@@ -1,0 +1,4 @@
+vitest-bh exit=0 9s |    Duration  8.78s (transform 2.65s, setup 1.45s, collect 6.31s, tests 6.53s, environment 4.92s, prepare 1.19s)
+rodri-proof exit=0 10s | simPlayerBingoRodriHonour: fixed proof passed; complete raw reports and changed-copy receipts retained. Offline only.
+simSportsBingo exit=0 0s | simSportsBingo: green. Every card can be finished, and the packs play fair.
+simBingoSeats exit=0 1s | simBingoSeats: all checks passed
