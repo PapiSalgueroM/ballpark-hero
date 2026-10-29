@@ -1,0 +1,5 @@
+8) agreement: careerEventDeck.ts against soccerCareerEngine.ts on 10,000 cases
+   10000 cases, 1428 on cooldown, 0 disagree
+9) board: src/test/usCareerSummer.test.tsx on the real board
+   Vitest exit 0, 40 passed, 0 failed
+simUsCareerSummer: green. Sections 8, 9 held.
