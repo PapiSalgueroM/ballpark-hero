@@ -1,0 +1,3 @@
+#!serve
+#!playwright
+walk: mkdir -p .rc/ob && (test -d .rc/ob/src || git archive 5d1198389 src | tar -x -C .rc/ob) && node .rc/x/walk1566.mjs
