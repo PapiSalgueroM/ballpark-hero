@@ -1,0 +1,5 @@
+✘ [ERROR] control refused: src/lib/soccerCareerEngine.ts does not contain "    const quote = soccerExtensionQuote(s, 'renewal');\n    s.contractYearsLeft = " [plugin awards-night-load]
+  let error = new Error(text);
+Error: Build failed with 1 error:
+node_modules/esbuild/lib/main.js:1275:21: ERROR: [plugin: awards-night-load] control refused: src/lib/soccerCareerEngine.ts does not contain "    const quote = soccerExtensionQuote(s, 'renewal');\n    s.contractYearsLeft = "
+    at failureErrorWithLog (/home/runner/work/ballpark-hero/ballpark-hero/node_modules/esbuild/lib/main.js:1472:15)

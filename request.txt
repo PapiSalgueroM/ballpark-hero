@@ -1,0 +1,3 @@
+#!serial
+contract-before: git checkout 1d0d79ba009a4d0eaabec18f8a1bde83fd87ff8d -- scripts/lib/soccerContractBaseline1177.mjs src/lib/soccerCareerEngine.ts src/lib/soccerCareerLoyalty.ts && node scripts/simSoccerContractMoves.mjs 2>&1 | grep -E "control refused|passed|ok |FAIL|Error" | head -8; s=${PIPESTATUS[0]}; git checkout HEAD -- src scripts; exit $s
+awards-before: git checkout 1d0d79ba009a4d0eaabec18f8a1bde83fd87ff8d -- scripts/lib/soccerContractBaseline1177.mjs src/lib/soccerCareerEngine.ts src/lib/soccerCareerLoyalty.ts && node scripts/simCareerAwardsNight.mjs 2>&1 | grep -E "control refused|passed|ok |FAIL|Error" | head -8; s=${PIPESTATUS[0]}; git checkout HEAD -- src scripts; exit $s

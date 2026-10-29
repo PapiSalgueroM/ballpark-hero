@@ -1,0 +1,2 @@
+    if (!text.includes(p.from)) throw new Error(`train out refused: ${file} does not contain ${JSON.stringify(p.from.slice(0, 80))}`);
+Error: train out refused: src/lib/soccerCareerEngine.ts does not contain "    const quote = soccerExtensionQuote(s, 'renewal');\n    s.contractYearsLeft = "

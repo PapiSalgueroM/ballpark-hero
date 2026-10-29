@@ -1,0 +1,2 @@
+contract-before exit=1 2s |     at failureErrorWithLog (/home/runner/work/ballpark-hero/ballpark-hero/node_modules/esbuild/lib/main.js:1472:15)
+awards-before exit=1 37s | Error: train out refused: src/lib/soccerCareerEngine.ts does not contain "    const quote = soccerExtensionQuote(s, 'renewal');\n    s.contractYearsLeft = "
