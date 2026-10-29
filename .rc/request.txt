@@ -1,0 +1,15 @@
+#!serve
+#!playwright
+#!serial
+sclayers: TAG=head node .rc/x/walkSoccerCareerLayers.mjs
+cmwalk: TAG=head node .rc/x/walkCmShortlist.mjs
+fonts: mkdir -p .tmp-fx/font-cache && FREE_KICK_FONT_CACHE="$PWD/.tmp-fx/font-cache" node scripts/qa/freeKickLab1070.mjs --prefetch-fonts-only
+simPlayerBingoCategories: CI=1 PLAYER_BINGO_CATEGORIES_OUT="$PWD/.tmp-fx/pbc" NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/simPlayerBingoCategories.mjs
+playPlayerBingoCategories: CI=1 PLAYER_BINGO_BROWSER_OUT="$PWD/.tmp-fx/pbb" NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/playPlayerBingoCategories.mjs
+align-capture: C=src/components/club-manager/ShootoutKicks.tsx && A="$PWD/.tmp-fx/al" && mkdir -p "$A" && cp $C "$A/fixed-component.tsx" && git show 616df9261cc0ce7ad9213f4690dedb1e557410aa:$C > $C && CM_ALIGNMENT_ARTIFACTS="$A" CM_ALIGNMENT_PHASE=baseline NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/qa/captureCmShootoutAlignment.mjs; s=$?; cp "$A/fixed-component.tsx" $C; [ $s -eq 0 ] && CM_ALIGNMENT_ARTIFACTS="$A" CM_ALIGNMENT_PHASE=fixed NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/qa/captureCmShootoutAlignment.mjs
+playCmShootoutAlignment: CI=1 CM_ALIGNMENT_ARTIFACTS="$PWD/.tmp-fx/al" FREE_KICK_FONT_CACHE="$PWD/.tmp-fx/font-cache" node scripts/playCmShootoutAlignment.mjs
+intro-fixed: mkdir -p .tmp-fx/si/original && git show b20ec6664:src/components/seo/GameSeoContent.tsx > .tmp-fx/si/original/GameSeoContent.tsx && CI=1 SEO_INTRO_ARTIFACTS="$PWD/.tmp-fx/si" SEO_INTRO_ORIGINAL_COMPONENT="$PWD/.tmp-fx/si/original/GameSeoContent.tsx" SEO_INTRO_RENDER_MODE=fixed node scripts/qa/simSoccerCareerIntroLinks.mjs
+intro-href-control: CI=1 SEO_INTRO_ARTIFACTS="$PWD/.tmp-fx/si" SEO_INTRO_ORIGINAL_COMPONENT="$PWD/.tmp-fx/si/original/GameSeoContent.tsx" SEO_INTRO_RENDER_MODE=href-control node scripts/qa/simSoccerCareerIntroLinks.mjs; s=$?; node -e "const r=require(process.cwd()+'/.tmp-fx/si/render-href-control/report.json');console.log('href-control failed cases: '+r.cases.filter(c=>c.status==='failed').map(c=>c.name).join(' '))"; exit $s
+playSoccerCareerIntroLinks: PRERENDER_ONLY=/soccer-career NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/prerender.mjs > /tmp/pre.log 2>&1 && tail -2 /tmp/pre.log && node_modules/.bin/vite build > /tmp/b2.log 2>&1 && CI=1 SEO_INTRO_ARTIFACTS="$PWD/.tmp-fx/si" FREE_KICK_FONT_CACHE="$PWD/.tmp-fx/font-cache" node scripts/playSoccerCareerIntroLinks.mjs
+shoot: git show da4f42889:src/lib/clubManager.ts > src/lib/clubManager.base410.ts && node .rc/x/probeShootout.mjs; s=$?; rm -f src/lib/clubManager.base410.ts; exit $s
+weight-head: SWEEP_OFFLINE=1 node scripts/sweepWeight.mjs
