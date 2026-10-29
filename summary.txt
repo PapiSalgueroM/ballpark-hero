@@ -1,0 +1,14 @@
+build exit=0 35s | [dukb] inlined 1 stylesheet(s) and 1 module(s) into 181 snapshots (11 left alone)
+s178 exit=0 14s | simCmDifficulty: all green (sections 1,7,8)
+dials exit=0 0s | Very Easy, Easy and Medium dial lines changed since B1515: 0
+c-helpdrift exit=1 1s | simCmDifficulty: 1 FAILURES (sections 7)
+vitest exit=0 21s |    Duration  20.15s (transform 5.89s, setup 1.73s, collect 15.74s, tests 23.60s, environment 8.00s, prepare 2.41s)
+c-helplines exit=1 1s | simCmDifficulty: 1 FAILURES (sections 7)
+c-edge exit=1 51s | simCmDifficulty: 19 FAILURES (sections 3)
+simCmSavePoints exit=0 69s | simCmSavePoints: OK, all eight sections green
+s3 exit=0 104s | simCmDifficulty: all green (sections 3)
+simClubManagerSlots exit=0 93s | simClubManagerSlots: all sections green
+simClubManagerSaveSize exit=0 78s | simClubManagerSaveSize: all sections green
+walk-nomark exit=1 37s | playCmSavePoints: control nomark FIRED (2 slot check(s) red, 2 in all)
+walk-noevent exit=1 37s | playCmSavePoints: control noevent FIRED (2 slot check(s) red, 2 in all)
+walk exit=0 138s | playCmSavePoints: OK at 390 and 1280
