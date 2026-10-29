@@ -1,0 +1,42 @@
+ok   head C 390 layer shown with the chunk held {"held":1}
+ok   head C 390 the layer has its Back to career button ["Back to career"]
+ok   head C 390 Tab stays inside the layer ["Back to career","Back to career","Back to career"]
+ok   head C 390 Escape closes the layer ""
+ok   head C 390 closing leaves the save as it was {"phase":"newspaper","age":18,"seasons":3,"pundit":null}
+ok   head C 390 no page errors []
+ok   head C 320 layer shown with the chunk held {"held":1}
+ok   head C 320 the layer has its Back to career button ["Back to career"]
+ok   head C 320 Tab stays inside the layer ["Back to career","Back to career","Back to career"]
+ok   head C 320 Escape closes the layer ""
+ok   head C 320 closing leaves the save as it was {"phase":"newspaper","age":18,"seasons":3,"pundit":null}
+ok   head C 320 no page errors []
+ok   head T 390 layer shown with the chunk held ""
+ok   head T 390 Back to career is there ""
+ok   head T 390 Back to career closes the layer ""
+ok   head T 390 a tap on the backdrop closes the layer ""
+ok   head T 390 the save is unchanged ""
+ok   head T 390 no page errors []
+ok   head A 390 layer shown with the chunk held ""
+ok   head A 390 the layer has its Back to career button ["Back to career"]
+ok   head A 390 Tab stays inside the layer ["Back to career","Back to career","Back to career"]
+ok   head A 390 Escape closes the layer ""
+ok   head A 390 closing leaves the save as it was {"phase":"playing","age":17,"seasons":2,"pundit":null}
+ok   head A 390 no page errors []
+ok   head P 390 no Next Season in the pundit bar []
+ok   head P 390 the panel says a pick moves the season on "Pick one to play out this season on TV and move on to the next."
+ok   head P 390 control: a pundit pick moves the season {"before":0,"after":1}
+ok   head P 390 no page errors []
+ok   head P 320 no Next Season in the pundit bar []
+ok   head P 320 the panel says a pick moves the season on "Pick one to play out this season on TV and move on to the next."
+ok   head P 320 control: a pundit pick moves the season {"before":0,"after":1}
+ok   head P 320 no page errors []
+ok   head E 320 the cookie choices are up (control) {"banner":1}
+ok   head E 320 Next Season shows above the unanswered cookie choices {"found":true,"y":197,"onTop":true,"inView":true}
+ok   head E 320 no page errors []
+ok   head E 390 the cookie choices are up (control) {"banner":1}
+ok   head E 390 Next Season shows above the unanswered cookie choices {"found":true,"y":545,"onTop":true,"inView":true}
+ok   head E 390 no page errors []
+ok   head E 1280 the cookie choices are up (control) {"banner":1}
+ok   head E 1280 Next Season shows above the unanswered cookie choices {"found":true,"y":569,"onTop":true,"inView":true}
+ok   head E 1280 no page errors []
+sclayers head: green

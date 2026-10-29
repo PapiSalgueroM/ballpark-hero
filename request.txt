@@ -1,0 +1,11 @@
+#!serve
+#!playwright
+#!serial
+# Release BS trophy focus fix narrowed (a3ba852e1 on 7fa0fd41b): every line exit 0.
+tsc: node_modules/.bin/tsc --noEmit -p tsconfig.app.json
+fonts: mkdir -p .tmp-fx/font-cache && FREE_KICK_FONT_CACHE="$PWD/.tmp-fx/font-cache" node scripts/qa/freeKickLab1070.mjs --prefetch-fonts-only
+simCareerTrophyRuns-forwalk: NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/simCareerTrophyRuns.mjs
+playCareerTrophyRuns: FREE_KICK_FONT_CACHE="$PWD/.tmp-fx/font-cache" NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/playCareerTrophyRuns.mjs
+sclayers: TAG=head node .rc/x/walkSoccerCareerLayers.mjs
+simAccessibility: node scripts/simAccessibility.mjs
+simNoRivalNames: node scripts/simNoRivalNames.mjs

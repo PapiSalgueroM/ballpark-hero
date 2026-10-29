@@ -1,0 +1,8 @@
+build exit=0 26s | [dukb] inlined 1 stylesheet(s) and 1 module(s) into 181 snapshots (11 left alone)
+tsc exit=0 47s | 
+fonts exit=0 0s | Prepared 9 declared font dependencies for local fulfillment.
+simCareerTrophyRuns-forwalk exit=0 2s | Trophy campaigns: 9 groups, 24 full AR season pairs, 192 full campaign/RNG pairs, 0 effective controls; artifacts /home/runner/work/ballpark-hero/ballpark-hero/.tmp-fx/ca
+playCareerTrophyRuns exit=0 32s | Trophy Cabinet native: 407 checks,0 failed,12/12 journeys,3 copied detector controls; artifacts /home/runner/work/ballpark-hero/ballpark-hero/.tmp-fx/career-trophy-runs/n
+sclayers exit=0 81s | sclayers head: green
+simAccessibility exit=0 0s | simAccessibility: all green
+simNoRivalNames exit=0 10s | No rival product names found. 0 findings.
