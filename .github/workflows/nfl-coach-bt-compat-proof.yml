@@ -1,0 +1,181 @@
+name: NFL coach harness compatibility proof
+on:
+  push:
+    branches: [codex/nfl-coach-bt-compat-proof-20261030]
+permissions:
+  contents: read
+jobs:
+  qualify:
+    runs-on: ubuntu-latest
+    timeout-minutes: 90
+    env:
+      CI: 'true'
+      SIM_NETWORK: offline
+      GIT_OPTIONAL_LOCKS: '0'
+      EXPECTED_PARENT: 857e32ae10ddcc2f773ba6b7ba0d6420bf1c86d8
+      EXPECTED_TREE: 83a7982557809a458906b8359de4f32006fa7bbe
+      EXPECTED_MAIN: 67f3ab0add5f44838dec08677bbeffd17ad6c2dc
+      MAIN_TREE: 5556cabd126739cc8dbc75dde6b4c60361bcd37f
+      EXPECTED_BT: 9064a0a28c5612d4f83b5b043b0219d5da29c8bd
+      BT_TREE: b8e256b1782cc1a88a1562846d5e41f3c86e0020
+      CANDIDATE_SHA: 8dc89a90cf63c2cb9facc82ed3cf659374b6bd2505e677751cedc7524e10e6fa
+      CANDIDATE_GIT: 55a88126a8b7e8cfc9cece4c87284e7483d153a2
+      ORIGINAL_SHA: 3ee08427bb2f86f66b5889ef7831c4a27e1338ab2652d379c512142d3dd6f99d
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          persist-credentials: false
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '24'
+      - name: Bind QA-only source and archive before dependencies
+        run: |
+          set -euo pipefail
+          out="$RUNNER_TEMP/nfl-coach-bt-compat-proof"; copies="$RUNNER_TEMP/nfl-coach-bt-copies"
+          test ! -e "$out"; test ! -e "$copies"; mkdir -p "$out/helpers" "$copies"
+          echo "NFL_QA_OUT=$out" >> "$GITHUB_ENV"; echo "NFL_QA_COPIES=$copies" >> "$GITHUB_ENV"
+          h=scripts/simNflCoachStaffRecovery.mjs
+          test "$GITHUB_REF_NAME" = codex/nfl-coach-bt-compat-proof-20261030
+          test "$(git rev-list --parents -n1 HEAD)" = "$GITHUB_SHA $EXPECTED_PARENT"
+          test "$(git rev-parse "$EXPECTED_PARENT^{tree}")" = "$EXPECTED_TREE"
+          test "$(git rev-list --parents -n1 "$EXPECTED_PARENT")" = "$EXPECTED_PARENT d6bd61ea7ea6ed8862b7ffdaa11be99207da2f46"
+          test "$(git rev-list --parents -n1 d6bd61ea7ea6ed8862b7ffdaa11be99207da2f46)" = "d6bd61ea7ea6ed8862b7ffdaa11be99207da2f46 $EXPECTED_MAIN"
+          test "$(git rev-parse "$EXPECTED_MAIN^{tree}")" = "$MAIN_TREE"
+          test "$(git rev-parse "$EXPECTED_BT^{tree}")" = "$BT_TREE"
+          test "$(git ls-files | wc -l)" -eq 5453
+          printf 'M\t%s\n' "$h" > "$out/expected-product.diff"
+          git diff --name-status "$EXPECTED_MAIN" "$EXPECTED_PARENT" > "$out/product.diff"; cmp "$out/product.diff" "$out/expected-product.diff"
+          printf 'A\t.github/workflows/nfl-coach-bt-compat-proof.yml\n' > "$out/expected-proof.diff"
+          git diff --name-status "$EXPECTED_PARENT" HEAD > "$out/proof.diff"; cmp "$out/proof.diff" "$out/expected-proof.diff"
+          test "$(sha256sum "$h" | cut -d' ' -f1)" = "$CANDIDATE_SHA"
+          test "$(git rev-parse "HEAD:$h")" = "$CANDIDATE_GIT"
+          git cat-file -e 775564305e9da84dab59f2b9fe246d044a3cc8e9^{commit}
+          git cat-file -e 88aa833b9d295ec22fb68f899d9b533116a14b28^{commit}
+          git ls-files -z | sort -z > "$out/source.members"
+          xargs -0 sha256sum < "$out/source.members" > "$out/source.sha256"
+          git ls-files --others --exclude-standard -z | sort -z > "$out/untracked.initial"
+          git archive --format=tar HEAD > "$out/source.tar"
+          git for-each-ref --format='%(refname) %(objectname)' > "$out/refs.before"
+          cp "$h" "$out/candidate-harness.mjs"
+          raw=0; node --check "$h" > "$out/syntax.stdout" 2> "$out/syntax.stderr" || raw=$?
+          printf '%s\n' "$raw" > "$out/syntax.exit"; test "$raw" -eq 0
+      - name: Emit bounded retained-report checks
+        run: |
+          set -euo pipefail
+          cat > "$NFL_QA_OUT/helpers/check.cjs" <<'CHECK'
+          const fs=require('node:fs'),p=require('node:path'),a=require('node:assert/strict'),{createHash}=require('node:crypto');
+          const [mode,dir,target]=process.argv.slice(2),read=n=>fs.readFileSync(p.join(dir,n),'utf8'),j=n=>JSON.parse(read(n)),sha=b=>createHash('sha256').update(b).digest('hex');
+          if(mode==='original'){
+            a.equal(read('original.exit').trim(),'1');a.equal(read('original.stdout'),'');
+            const s=read('original.stderr').replace(/\x1b\[[0-?]*[ -/]*[@-~]/g,'');
+            a.deepEqual([...s.matchAll(/^AssertionError \[ERR_ASSERTION\]: Frozen whole source: (.+)$/gm)].map(m=>m[1]),[target]);
+            a.match(s,/operator: 'strictEqual'/);a.doesNotMatch(s,/^(?:TypeError|ReferenceError|SyntaxError|Error \[ERR_MODULE_NOT_FOUND\]):/m);
+            a.equal(fs.existsSync(p.join(dir,'original-evidence/unit')),false);
+          }else{
+            const r=j('candidate-evidence/unit/report.json'),u='candidate-evidence/unit/';
+            a.equal(r.version,2);a.equal(r.mode,'fixed');a.equal(r.cases,23);a.equal(r.qualified,true);a.equal(r.productQualified,false);a.equal(r.sourceHeld,true);a.equal(r.temporaryControlsRemoved,true);
+            a.deepEqual(r.arms.map(x=>[x.name,x.passed,x.failed]),[['fixed',23,0],['whole-original',21,2],['button-removed',21,2],['transition-neutral',21,2],['restored',23,0]]);
+            for(const arm of r.arms){
+              const v=j(u+arm.name+'/vitest.json'),c=j(u+arm.name+'/process.json');
+              a.equal(c.status,arm.failed?1:0);a.equal(c.signal,null);a.equal(c.error,null);a.equal(v.numTotalTests,23);a.equal(v.numPassedTests,arm.passed);a.equal(v.numFailedTests,arm.failed);a.equal(v.numPendingTests,0);a.equal(v.numTodoTests,0);
+              const old=v.testResults.filter(x=>x.name.endsWith('/src/test/usCoachRetirement.test.tsx'));a.equal(old.length,1);a.equal(old[0].assertionResults.length,14);a(old[0].assertionResults.every(x=>x.status==='passed'));
+            }
+            const g=j(u+'fixture-input-admission.json');a.deepEqual(r.fixtureGuard,g);a.deepEqual(g.inputs,['nfl','nba','mlb','nhl']);a.equal(g.scope,'HISTORICAL_COACHING_INPUTS_ONLY');
+            a.equal(g.sameCopyRestored,true);a.equal(g.onlyNflCoachInputChanged,true);a.equal(g.productionRouteCredit,false);a.equal(g.refusal.name,'AssertionError');a.equal(g.refusal.code,'ERR_ASSERTION');a(g.refusal.message.includes('Historical coaching fixture inputs stay exact'));
+            a.equal(g.beforeSHA256,g.restoredSHA256);a.notEqual(g.beforeSHA256,g.changedSHA256);
+            a.equal(sha(fs.readFileSync(p.join(dir,u+'fixture-input-control.json'))),g.beforeSHA256);a.equal(sha(fs.readFileSync(p.join(dir,u+'fixture-input.changed.json'))),g.changedSHA256);
+            const s=read('candidate.stdout');for(const line of [
+              'simNflCoachStaffRecovery: fixed23pass, whole-original21pass2missing, button-removed21pass2missing, transition-neutral21pass2callback, restored23pass.',
+              'simNflCoachStaffRecovery: all fourteen original retirement cases pass in every arm; whole fixtures, tracked bodies, membership and empty child/direct transports held.',
+              'simNflCoachStaffRecovery: exact engine/panel inverses, unchanged historical hash and effective inverse controls held (3 engine,22 panel).',
+              'simNflCoachStaffRecovery: four historical coaching inputs held; altered NFL input refused and the same copy restored.'
+            ])a(s.split('\n').includes(line));
+          }
+          fs.writeFileSync(p.join(dir,mode+'-admission.json'),JSON.stringify({mode,qualified:true,scope:'QA_HARNESS_COMPATIBILITY_ONLY',productionRouteCredit:false})+'\n',{flag:'wx'});
+          CHECK
+          node --check "$NFL_QA_OUT/helpers/check.cjs"
+          sha256sum "$NFL_QA_OUT/helpers/check.cjs" > "$NFL_QA_OUT/helpers.sha256"
+      - name: Original failures and corrected five-arm harness on actual Main and BT
+        run: |
+          set -euo pipefail
+          out="$NFL_QA_OUT"; h=scripts/simNflCoachStaffRecovery.mjs
+          for label in main bt; do
+            if test "$label" = main; then ref="$EXPECTED_MAIN"; cause=scripts/data/usBoardFixture.json; else ref="$EXPECTED_BT"; cause=src/components/us-career/UsCareerBoard.tsx; fi
+            copy="$NFL_QA_COPIES/$label"; rec="$out/$label"; mkdir -p "$rec/original-evidence" "$rec/candidate-evidence"
+            git worktree add --detach "$copy" "$ref" > "$rec/worktree.log" 2>&1
+            cd "$copy"
+            git ls-files -z | sort -z > "$rec/source.members"
+            xargs -0 sha256sum < "$rec/source.members" > "$rec/original.sha256"
+            git ls-files --others --exclude-standard -z | sort -z > "$rec/untracked.initial"
+            cp "$h" "$rec/original-harness.mjs"
+            test "$(sha256sum "$h" | cut -d' ' -f1)" = "$ORIGINAL_SHA"
+            git archive --format=tar HEAD > "$out/$label-original-source.tar"
+            env -u NODE_OPTIONS timeout --signal=TERM --kill-after=15s 10m npm ci > "$rec/npm-ci.stdout" 2> "$rec/npm-ci.stderr"
+            unset US_BOARD_CONTROL_ALIAS US_BOARD_CONTROL_FILE NO_DOUBLE_SWAP US_COACH_RETIRE_CONTROL NFL_COACH_MODE NFL_COACH_FIXTURE_OUT
+            export NODE_OPTIONS="--require=$copy/scripts/lib/offlineTransport.cjs"
+            : > "$rec/original.transport"; raw=0
+            SIM_OFFLINE_RECEIPT="$rec/original.transport" NFL_COACH_OUT="$rec/original-evidence" FORCE_COLOR=0 env -u NO_COLOR timeout --signal=TERM --kill-after=15s 4m node "$h" > "$rec/original.stdout" 2> "$rec/original.stderr" || raw=$?
+            printf '%s\n' "$raw" > "$rec/original.exit"; test "$raw" -eq 1; test ! -s "$rec/original.transport"
+            node "$out/helpers/check.cjs" original "$rec" "$cause"
+            sha256sum -c "$rec/original.sha256" > "$rec/original-source-held.log"
+            cp "$out/candidate-harness.mjs" "$h"
+            trap 'cp "$rec/original-harness.mjs" "$copy/$h"' EXIT
+            test "$(sha256sum "$h" | cut -d' ' -f1)" = "$CANDIDATE_SHA"
+            git diff --name-status HEAD > "$rec/candidate.paths"
+            printf 'M\t%s\n' "$h" | cmp - "$rec/candidate.paths"
+            xargs -0 sha256sum < "$rec/source.members" > "$rec/candidate.sha256"
+            : > "$rec/types.transport"; raw=0
+            SIM_OFFLINE_RECEIPT="$rec/types.transport" FORCE_COLOR=0 env -u NO_COLOR timeout --signal=TERM --kill-after=15s 5m node_modules/.bin/tsc --noEmit -p tsconfig.app.json > "$rec/types.stdout" 2> "$rec/types.stderr" || raw=$?
+            printf '%s\n' "$raw" > "$rec/types.exit"; test "$raw" -eq 0; test ! -s "$rec/types.stdout"; test ! -s "$rec/types.stderr"; test ! -s "$rec/types.transport"
+            : > "$rec/candidate.transport"; raw=0
+            SIM_OFFLINE_RECEIPT="$rec/candidate.transport" NFL_COACH_OUT="$rec/candidate-evidence" FORCE_COLOR=0 env -u NO_COLOR timeout --signal=TERM --kill-after=15s 22m node "$h" > "$rec/candidate.stdout" 2> "$rec/candidate.stderr" || raw=$?
+            printf '%s\n' "$raw" > "$rec/candidate.exit"; test "$raw" -eq 0; test ! -s "$rec/candidate.transport"
+            node "$out/helpers/check.cjs" candidate "$rec"
+            sha256sum -c "$rec/candidate.sha256" > "$rec/candidate-source-held.log"
+            cp "$rec/original-harness.mjs" "$h"; trap - EXIT
+            sha256sum -c "$rec/original.sha256" > "$rec/restored-source-held.log"
+            find node_modules -type f -print0 | sort -z > "$rec/deps.members"
+            xargs -0 sha256sum < "$rec/deps.members" > "$rec/deps.sha256"
+            find node_modules -type l -printf '%p -> %l\n' | sort > "$rec/links.initial"
+            cd "$GITHUB_WORKSPACE"
+          done
+      - name: Always retain strict source restores and postqualification dependency holds
+        if: ${{ always() }}
+        run: |
+          set -euo pipefail
+          out="${NFL_QA_OUT:-$RUNNER_TEMP/nfl-coach-bt-compat-proof}"; mkdir -p "$out"; failed=0
+          cd "$GITHUB_WORKSPACE"
+          for label in main bt; do
+            rec="$out/$label"; copy="${NFL_QA_COPIES:-$RUNNER_TEMP/nfl-coach-bt-copies}/$label"
+            if test -d "$copy" && test -f "$rec/original-harness.mjs"; then
+              cp "$rec/original-harness.mjs" "$copy/scripts/simNflCoachStaffRecovery.mjs"
+              cd "$copy"
+              git ls-files -z | sort -z > "$rec/source.members.final"; cmp "$rec/source.members" "$rec/source.members.final" || failed=1
+              sha256sum -c "$rec/original.sha256" > "$rec/final-source-held.log" 2>&1 || failed=1
+              git ls-files --others --exclude-standard -z | sort -z > "$rec/untracked.final"; cmp "$rec/untracked.initial" "$rec/untracked.final" || failed=1
+              if test -f "$rec/deps.sha256"; then
+                find node_modules -type f -print0 | sort -z > "$rec/deps.members.final"; cmp "$rec/deps.members" "$rec/deps.members.final" || failed=1
+                sha256sum -c "$rec/deps.sha256" > "$rec/postqualification-deps-held.log" 2>&1 || failed=1
+                find node_modules -type l -printf '%p -> %l\n' | sort > "$rec/links.final"; cmp "$rec/links.initial" "$rec/links.final" || failed=1
+              fi
+              cd "$GITHUB_WORKSPACE"
+            fi
+          done
+          git ls-files -z | sort -z > "$out/source.members.final"; cmp "$out/source.members" "$out/source.members.final" || failed=1
+          sha256sum -c "$out/source.sha256" > "$out/shipping-source-held.log" 2>&1 || failed=1
+          git ls-files --others --exclude-standard -z | sort -z > "$out/untracked.final"; cmp "$out/untracked.initial" "$out/untracked.final" || failed=1
+          git for-each-ref --format='%(refname) %(objectname)' > "$out/refs.after"; cmp "$out/refs.before" "$out/refs.after" || failed=1
+          sha256sum -c "$out/helpers.sha256" > "$out/helpers-held.log" 2>&1 || failed=1
+          printf '%s\n' "$failed" > "$out/final-holds.exit"
+          printf '{"scope":"QA_ONLY","types":"ACTUAL_BOTH_IF_COMPLETED","routeBrowser":"UNRUN","build":"UNRUN","caps":"UNRUN","fullSEO":"UNRUN","fullDefaultVitest":"UNRUN","runAllSims":"UNRUN","dependencyHolds":"POST_QUALIFICATION_ONLY","featureOrReleaseReady":false}\n' > "$out/SCOPE.json"
+          find "$out" -type f -print0 | sort -z | xargs -0 sha256sum > "$RUNNER_TEMP/nfl-coach-bt-evidence.sha256"
+          cp "$RUNNER_TEMP/nfl-coach-bt-evidence.sha256" "$out/evidence.sha256"
+          exit "$failed"
+      - uses: actions/upload-artifact@v4
+        if: ${{ always() }}
+        with:
+          name: nfl-coach-bt-compat-${{ github.run_id }}-a${{ github.run_attempt }}
+          path: ${{ runner.temp }}/nfl-coach-bt-compat-proof
+          if-no-files-found: error
+          retention-days: 14
