@@ -1,0 +1,14 @@
+simAwardRaces: node scripts/simAwardRaces.mjs
+simClubManager: node scripts/simClubManager.mjs
+simClubManagerFacilities: node scripts/simClubManagerFacilities.mjs
+simClubManagerSave: node scripts/simClubManagerSave.mjs
+simCmApplications: node scripts/simCmApplications.mjs
+simCmLeagueBook: node scripts/simCmLeagueBook.mjs
+simCmNoSack: node scripts/simCmNoSack.mjs
+simCmRealFixtures: node scripts/simCmRealFixtures.mjs
+simCmTactics: node scripts/simCmTactics.mjs
+simCup: node scripts/simCup.mjs
+simHalftime: node scripts/simHalftime.mjs
+simMatchDetail: node scripts/simMatchDetail.mjs
+simStatsCentre: node scripts/simStatsCentre.mjs
+simWorldEuro: node scripts/simWorldEuro.mjs

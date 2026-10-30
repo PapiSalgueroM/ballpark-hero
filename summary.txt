@@ -1,0 +1,14 @@
+simClubManagerFacilities exit=0 14s | simClubManagerFacilities: PASS. Four facilities that cost what the desk says, help what they say, and tax nobody who ignores them.
+simAwardRaces exit=0 27s | ALL AWARD RACE CHECKS PASSED
+simClubManagerSave exit=0 20s | simClubManagerSave: all sections green
+simClubManager exit=0 64s | ALL CLUB MANAGER SIMS PASSED
+simCmLeagueBook exit=0 118s | simCmLeagueBook: green, 11 sections, 5 careers x 2 seasons (118s)
+simCmRealFixtures exit=0 6s | simCmRealFixtures normal premier: 10 outcome groups passed on 20 clubs, 38 matchdays and 380 fixtures, BASE GROUPS NOT RUN.
+simCmApplications exit=0 134s | simCmApplications: green. The answer is earned, the limits hold, a summer move fires once, joining now moves the manager that week, and old saves load.
+simCup exit=0 101s | ALL CUP CHECKS PASSED
+simCmNoSack exit=0 233s | simCmNoSack: PASS (sections 1, 2, 3, 4, 5, 6, 7)
+simMatchDetail exit=0 12s | simMatchDetail: all green
+simStatsCentre exit=0 7s | ALL STATS CENTRE CHECKS PASSED
+simCmTactics exit=0 1331s | simCmTactics: all green (sections table, styles, balanced, fleet)
+simHalftime exit=0 1410s | ALL HALFTIME CHECKS PASSED
+simWorldEuro exit=2 1457s | simWorldEuro: cannot run: section 3 needs WORLD_EURO_BASE, the commit before the board step
