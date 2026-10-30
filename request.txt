@@ -1,0 +1,5 @@
+#!serve
+#!playwright
+simNoRivalNames: node scripts/simNoRivalNames.mjs
+simHarnessAnchors: node scripts/simHarnessAnchors.mjs
+states: ONLY=/club-manager,/soccer-career,/world-cup-bracket node scripts/playFirstVisitDialogs.mjs

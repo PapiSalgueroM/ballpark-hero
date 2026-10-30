@@ -1,0 +1,4 @@
+build exit=0 29s | [dukb] inlined 1 stylesheet(s) and 1 module(s) into 181 snapshots (11 left alone)
+simNoRivalNames exit=0 17s | No rival product names found. 0 findings.
+simHarnessAnchors exit=0 44s | simHarnessAnchors: green. Every harness parses and none carries an unmatchable anchor.
+states exit=0 94s | playFirstVisitDialogs: green. Every first visit dialog can be started, and no fixed button or link meets the banner, with the cookie banner unanswered.
