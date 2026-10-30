@@ -54,6 +54,7 @@ import fs from 'node:fs';
 import path from 'node:path';
 import vm from 'node:vm';
 import crypto from 'node:crypto';
+import zlib from 'node:zlib';
 import { createRequire } from 'node:module';
 import { fileURLToPath } from 'node:url';
 import { build } from 'esbuild';
@@ -111,7 +112,10 @@ const ctx = vm.createContext({ module, exports: module.exports, require,
 new vm.Script(out.outputFiles[0].text, { filename: 'fa-fleet.cjs' }).runInContext(ctx);
 const { cm, eras, ledger } = module.exports;
 await eras.ensureAllEraRosters();
-const lz = require('lz-string');
+/* The fixture's saves are gzip in hex: base64 text can spell a banned word by chance (simNoRivalNames found one in
+   the first fixture), hex has no letter past f. */
+const pack = s => zlib.gzipSync(Buffer.from(JSON.stringify(s), 'utf8'), { level: 9 }).toString('hex');
+const unpack = hex => JSON.parse(zlib.gunzipSync(Buffer.from(hex, 'hex')).toString('utf8'));
 
 /* ---------- playing ---------- */
 const SEASONS = Number(process.env.CM_FA_SEASONS || 8);
@@ -220,7 +224,7 @@ if (WRITE_OLD) {
       const records = ledger.readWorldRoster(s)?.records ?? [];
       const gone = [...tracked.values()].filter(m => placesOf(s, m, records).total === 0).map(m => m.name);
       const recoverable = gone.filter(n => records.some(r => r.player.name === n && r.status === 'released' && r.owner === null));
-      captured = { club, eraId, seed, season, lostOnMain: gone, recoverableOnMain: recoverable, save: lz.compressToBase64(JSON.stringify(s)) };
+      captured = { club, eraId, seed, season, lostOnMain: gone, recoverableOnMain: recoverable, save: pack(s) };
       return true;
     });
     if (!captured) cannot(`${club}: the fixture career did not reach the end of season ${OLD_AT}`);
@@ -228,7 +232,7 @@ if (WRITE_OLD) {
     saves.push(captured);
   }
   fs.mkdirSync(path.dirname(path.resolve(WRITE_OLD)), { recursive: true });
-  fs.writeFileSync(WRITE_OLD, JSON.stringify({ base: process.env.CM_FA_BASE || 'unknown', season: OLD_AT, saves }, null, 1) + '\n');
+  fs.writeFileSync(WRITE_OLD, JSON.stringify({ base: process.env.CM_FA_BASE || 'unknown', season: OLD_AT, saves, encoding: 'gzip-hex' }, null, 1) + '\n');
   console.log(`simCmFreeAgencyFleet: wrote ${saves.length} saves to ${WRITE_OLD}`);
   process.exit(0);
 }
@@ -262,7 +266,7 @@ if (!SKIP_OLD) {
   if (!fs.existsSync(FIXTURE)) cannot(`no fixture at ${FIXTURE}: write it on main with CM_FA_WRITE_OLD`);
   const fixture = JSON.parse(fs.readFileSync(FIXTURE, 'utf8'));
   for (const entry of fixture.saves) {
-    const saved = JSON.parse(lz.decompressFromBase64(entry.save));
+    const saved = unpack(entry.save);
     store.clear(); store.set(cm.SAVE_KEY, JSON.stringify(saved));
     const loaded = cm.loadCareer();
     if (!loaded) { fail(4, `${entry.club}: the old save does not load`); continue; }

@@ -318,6 +318,15 @@ export default function ClubManagerSeasonSummary({ sm, c, g }: {
           </div>
           {/* Round 1513 review: the save points, before the summer runs. */}
           {g.pointsSlot && <div className="mt-3"><SavePointsDoor career={c} pointsSlot={g.pointsSlot} /></div>}
+          {/* Round 1597: the summer contracts checkpoint, the last thing before Continue. */}
+          <ExpiringDealsCheckpoint
+            c={c}
+            ids={deals.ids}
+            letGo={deals.letGo}
+            onRenew={id => g.renew?.(id)}
+            onLetGo={id => setDeals(d => ({ ...d, letGo: new Set([...d.letGo, id]) }))}
+            onLetRestGo={() => setDeals(d => ({ ...d, letGo: new Set([...d.letGo, ...dealAnswers(c, d.ids, d.letGo).filter(r => r.answer === 'open').map(r => r.id)]) }))}
+          />
         </ResultScreen>
   );
 }
@@ -415,14 +424,6 @@ export function SackedCareerSummary({ c, g }: {
               </p>
             )}
           </div>
-          <ExpiringDealsCheckpoint
-            c={c}
-            ids={deals.ids}
-            letGo={deals.letGo}
-            onRenew={id => g.renew?.(id)}
-            onLetGo={id => setDeals(d => ({ ...d, letGo: new Set([...d.letGo, id]) }))}
-            onLetRestGo={() => setDeals(d => ({ ...d, letGo: new Set([...d.letGo, ...dealAnswers(c, d.ids, d.letGo).filter(r => r.answer === 'open').map(r => r.id)]) }))}
-          />
         </ResultScreen>
   );
 }

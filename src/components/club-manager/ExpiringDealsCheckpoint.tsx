@@ -41,7 +41,7 @@ export function ExpiringDealsCheckpoint({ c, ids, letGo, onRenew, onLetGo, onLet
   const open = rows.filter(r => r.answer === 'open').length;
   const ex = exampleTerms();
   return (
-    <div data-cm-deals className="text-left bg-surface-2 border border-primary/40 rounded-xl p-3 mb-3">
+    <div data-cm-deals className="text-left bg-surface-2 border border-primary/40 rounded-xl p-3 mt-3">
       <div className="flex items-center justify-between gap-2 mb-1">
         <div className="text-[10px] text-muted-foreground uppercase tracking-wider">📝 Deals ending this summer</div>
         <button
