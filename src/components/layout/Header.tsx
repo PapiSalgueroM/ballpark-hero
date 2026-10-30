@@ -1,6 +1,5 @@
 import { useEffect, useState, type ComponentType } from 'react';
 import { LogoMark } from '@/components/layout/Logo';
-import { SiteMenuHost } from '@/components/layout/SiteMenuHost';
 import { Link, useNavigate } from 'react-router-dom';
 import { useRoutePath } from '@/hooks/useRoutePath';
 import { Button } from '@/components/ui/button';
@@ -60,7 +59,7 @@ export function Header() {
 
   return (
     <>
-      <header data-site-chrome="" className={`sticky ${isHome ? 'top-8' : 'top-0 md:top-8'} z-50 w-full border-b border-border/40 bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60`}>
+      <header data-site-chrome="" className="sticky top-11 z-50 w-full border-b border-border/40 bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
         {/* Round 117: px-3 and gap-2 below sm. The wordmark is 2xl and Log In
             plus Sign Up are both whitespace-nowrap, so on a 320px phone the row
             could not fit and Sign Up hung 9px off the right edge, taking seven
@@ -70,7 +69,7 @@ export function Header() {
             Event band and the four column game grid, so the bar follows it
             there and only there, keeping the logo over the page's own left
             edge. Every other Header route keeps the narrower column. */}
-        <div className={`container flex min-h-14 flex-wrap ${isHome ? 'max-w-6xl' : 'max-w-4xl'} items-center justify-between gap-x-2 gap-y-1 px-3 py-1.5 sm:px-4`}>
+        <div className={`container flex h-14 ${isHome ? 'max-w-6xl' : 'max-w-4xl'} items-center justify-between px-3 sm:px-4`}>
           {/* Logo */}
           {/* Round 286: the mark, drawn inline from the same geometry as the
               favicon and the social image, then the wordmark in the display
@@ -92,20 +91,17 @@ export function Header() {
               the edge where the streakless sweeps could not see it. */}
           {/* py-1.5 keeps the link a real thumb target now that the wordmark
               runs smaller on phones; playIphone section 3 holds the floor. */}
-          <div className="flex shrink-0 items-center gap-2">
-            <SiteMenuHost />
-            <Link to="/" className="flex min-w-0 items-center gap-2 py-1.5">
-              <LogoMark size={28} className="shrink-0 hidden min-[360px]:block sm:hidden" />
-              <LogoMark size={32} className="shrink-0 hidden sm:block" />
-              <span className="font-display font-black text-lg min-[480px]:text-2xl sm:text-3xl sm:leading-10 tracking-normal min-[480px]:tracking-wide text-primary truncate">DoUKnowBall</span>
-            </Link>
-          </div>
+          <Link to="/" className="flex min-w-0 items-center gap-2 py-1.5">
+            <LogoMark size={28} className="shrink-0 hidden min-[360px]:block sm:hidden" />
+            <LogoMark size={32} className="shrink-0 hidden sm:block" />
+            <span className="font-display font-black text-lg min-[480px]:text-2xl sm:text-3xl tracking-normal min-[480px]:tracking-wide text-primary truncate">DoUKnowBall</span>
+          </Link>
 
           {/* Auth Section. Below 360 the gaps close up one more step: with a
               three digit streak on the flame the cluster measured 187.5px and
               left the wordmark 5.5px short of whole, so the two gaps and the
               button padding each give a little back. */}
-          <div className="ml-auto flex shrink-0 items-center gap-1 min-[360px]:gap-2 sm:gap-3">
+          <div className="flex shrink-0 items-center gap-1 min-[360px]:gap-2 sm:gap-3">
             {/* Round 347: sm and up only. The worst guest row already measures
                 347px at 360 (Round 320), so phones get the footer toggle. */}
             <ThemeToggle variant="header" />
