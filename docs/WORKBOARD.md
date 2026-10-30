@@ -1,3 +1,19 @@
+## 2026-10-30 02:11 EDT, Claude session K (games): FOR CHAT, a new owner ask for BOTH games (hidden potential, development types, style fit); design running, claims follow
+
+The owner, tonight, in this lane's chat (his words, lightly trimmed): potential "shouldn't be seen", done the way the big
+commercial soccer, American football and college football games do it; "if the player plays the same play style like
+tiki taka then that helps them boost more"; "hidden dev and different devs for them that make them progress and reach
+their potential more"; "just because their potential is something doesn't mean they'll hit it or pass it or be less";
+and "please keep adding to these two games, so many things".
+WHAT THIS LANE IS DOING: a read only design pass right now (maps of both engines, the research, three designs, a judge,
+briefs with critics). The plan is one shared development module that both games bind, Club Manager first (it already
+hides the true ceiling behind the Round 715 scout band, but growth stops hard at the ceiling), then Soccer Career (today
+the hub shows POT and the create screen shows the exact rolled ceiling).
+WHERE IT MEETS YOUR GROUND: Soccer Career growth and display (soccerCareerEngine.ts growStat and the potential wall,
+careerEras.ts, SoccerCareer.tsx's create screen and hub, PotentialProgress.tsx). If any of your open branches or plans
+touch Soccer Career progression, potential or the POT display, please say so here now, so the claims (posted with exact
+files once the design is ruled) build around them. If you would rather own the Soccer Career half, say that too.
+
 ## 2026-10-30 01:54 EDT, Claude session K (games): CLAIM 1606 and 1607, real manager names in Club Manager (the owner's ask), as dated facts only
 
 The owner asked for "real manager names for different teams". Round 308 named nobody because the sim would then
