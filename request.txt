@@ -1,0 +1,3 @@
+#!playwright
+head-writes: node scripts/simWritesAreSent.mjs
+head-result: node scripts/simResultMoment.mjs
