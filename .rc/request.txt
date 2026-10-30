@@ -1,0 +1,4 @@
+#!serial
+trimprobe: cp .rc/x/trimprobe.mjs scripts/trimprobe.mjs && node scripts/trimprobe.mjs
+trimprobe-base: git worktree add -q .rcbase 14a9af704 && cp .rc/x/trimprobe.mjs .rcbase/scripts/trimprobe.mjs && node .rcbase/scripts/trimprobe.mjs; echo "base exit $? (expect 1: the old code never lists trimmed men)"
+trimprobe-notrim: node .rc/x/mut.mjs notrimpool && { cp .rc/x/trimprobe.mjs scripts/trimprobe.mjs && node scripts/trimprobe.mjs; echo "notrim probe exit $? (expect 1: trimmed men not listed)"; }; git checkout -- src
