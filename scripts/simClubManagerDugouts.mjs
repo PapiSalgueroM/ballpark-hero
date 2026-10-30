@@ -17,9 +17,13 @@
    3. coverage is exact for every league the receipt declares covered: rows plus partial entries equal the
       league's club count with each club once; a league not declared is listed, not failed;
    4. the hosts agree on the man after accent folding, and a stored month is printed by at least two reads
-      on two different domains while no read prints another month; a month is never after the opening;
+      on two different domains while no read prints another month; a month is never after its league's opener;
    5. a table name that is also a player's name is LISTED (the 2026 world rosters, then the four era
-      bakes), never silently merged; so is any name the made up name generator could build (expected none).
+      bakes), never silently merged; so is any name the made up name generator could build (expected none);
+   6. the opening day, the fact itself: every covered league's opener date is in the receipt on two vetted
+      registrable domains, and every chair rests on at least one read published on or before its league's
+      opener, or on a report of that club's matchday 1 (role "matchday 1 report"). A list dated after the
+      opener can still back a chair, but never alone.
 
    Section 0 also fails a man who sits in two chairs (one table, one opening day, one club each).
 
@@ -33,6 +37,7 @@
                               that the two host rule counts domains, not source ids)
    DUGOUTS_CONTROL=monthsamedomain a stored month is printed by two source ids on one domain (section 4; same)
    DUGOUTS_CONTROL=wikimirror S-PL2 moves to infogalactic.com, a Wikipedia fork without "wiki" in its name (section 1)
+   DUGOUTS_CONTROL=latereads  every source is dated 2026-12-01 and the matchday 1 report loses its role (section 6)
    A control run prints "control <name> FIRED" and exits 1 when its section went red, exits 3 if it did not
    fire, and exits 2 when it refuses to run (unknown name, or its mutation could not be applied or changed nothing).
 
@@ -50,7 +55,7 @@ import { fileURLToPath, pathToFileURL } from 'node:url';
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const SRC = `${ROOT.replaceAll('\\', '/')}/src`;
 const CONTROL = process.env.DUGOUTS_CONTROL || '';
-const CONTROLS = { twochairs: 0, onehost: 1, samedomain: 1, wikimirror: 1, orphan: 2, gap: 3, monthclash: 4, monthsamedomain: 4 };
+const CONTROLS = { twochairs: 0, onehost: 1, samedomain: 1, wikimirror: 1, orphan: 2, gap: 3, monthclash: 4, monthsamedomain: 4, latereads: 6 };
 if (CONTROL && !(CONTROL in CONTROLS)) { console.error(`unknown DUGOUTS_CONTROL=${CONTROL}`); process.exit(2); }
 
 const failed = new Set();
@@ -106,6 +111,9 @@ if (CONTROL) {
     const c = receipt.chairs[0];
     if (!c || c.reads.length < 2 || new Set(c.reads.map(r => r.source)).size < 2) refuse('the first chair has no second source to remove');
     for (const r of c.reads) r.source = c.reads[0].source;
+  } else if (CONTROL === 'latereads') {
+    /* Every page dated after every opener, and no matchday 1 report: nothing then shows who was there on the day. */
+    for (const s of receipt.sources) { s.published = '2026-12-01'; if (s.role === 'matchday 1 report') delete s.role; }
   } else if (CONTROL === 'wikimirror') {
     /* A Wikipedia fork with no "wiki" in its name: the closed ban list alone let this through once. */
     const s = receipt.sources.find(x => x.id === 'S-PL2');
@@ -181,6 +189,8 @@ const VETTED = {
   'theanalyst.com': 'outlet', 'dazn.com': 'outlet', 'skysports.com': 'outlet', 'esdiario.com': 'outlet', 'elidealgallego.com': 'outlet',
   'sportsmole.co.uk': 'outlet', 'rtp.pt': 'outlet', 'infobae.com': 'outlet', 'sky.it': 'outlet', 'fantacalcio.it': 'outlet', '90min.de': 'outlet',
   'flashscore.de': 'outlet', 'flashscore.fr': 'outlet', 'info.fr': 'outlet', 'orange.fr': 'outlet', 'maxifoot.fr': 'outlet',
+  // the opening day reads (section 6)
+  'futbolfantasy.com': 'outlet', 'beinsports.com': 'outlet', 'lapresse.it': 'outlet', 'fantacalcio-online.com': 'outlet', 'sky.de': 'outlet', 'sport1.de': 'outlet',
 };
 const vettedKind = url => VETTED[domainOf(url)] ?? null;
 const sources = new Map(receipt.sources.map(s => [s.id, s]));
@@ -190,7 +200,8 @@ const rows = table[ERA] ?? {};
 const partial = partialTable[ERA] ?? [];
 const chairs = receipt.chairs;
 const MONTH = /^\d{4}-(0[1-9]|1[0-2])$/;
-const OPENING = '2026-08';
+const DAY = /^\d{4}-\d{2}-\d{2}$/;
+const openers = receipt.openers ?? {};
 
 /* ---- 0. the table is the receipt ---- */
 console.log('section 0: the shipped table equals the receipt');
@@ -275,7 +286,9 @@ for (const c of chairs) {
   const distinct = new Set(months.map(r => r.month));
   if (c.appointed) {
     if (!MONTH.test(c.appointed)) fail(4, `${c.club}: stored month ${c.appointed} is not YYYY-MM`);
-    if (c.appointed > OPENING) fail(4, `${c.club}: stored month ${c.appointed} is after the opening day`);
+    const openMonth = openers[c.league]?.date?.slice(0, 7);
+    if (!openMonth) fail(4, `${c.club}: ${c.league} has no opening day, so a stored month cannot be checked against it`);
+    else if (c.appointed > openMonth) fail(4, `${c.club}: stored month ${c.appointed} is after the opening day (${openers[c.league].date})`);
     const agreeing = new Set(months.filter(r => r.month === c.appointed).map(r => domainOf(sources.get(r.source)?.url ?? 'https://x.invalid')));
     if (agreeing.size < 2) fail(4, `${c.club}: month ${c.appointed} printed on ${agreeing.size} domain(s), two needed`);
     if (distinct.size > 1) fail(4, `${c.club}: reads print ${[...distinct].join(' and ')}, so the month must be dropped (name only)`);
@@ -312,6 +325,35 @@ else {
   const hits = names.filter(n => gen.has(n));
   console.log(`  generator set (${GEN_FIRST.length} by ${GEN_LAST.length} = ${gen.size} names) met in the table: ${hits.length}${hits.length ? `: ${hits.join(', ')}` : ' (expected none)'}`);
 }
+
+/* ---- 6. the opening day: each league's opener is two hosted, and every chair rests on a read from before it ---- */
+console.log("section 6: every chair rests on a read published on or before its league's opener, or a matchday 1 report");
+for (const s of receipt.sources) if (s.published != null && !DAY.test(s.published)) fail(6, `${s.id}: published ${s.published} is not YYYY-MM-DD or null`);
+for (const id of receipt.coveredLeagues) {
+  const o = openers[id];
+  if (!o || !DAY.test(o.date ?? '')) { fail(6, `${id}: no opening day date in the receipt`); continue; }
+  const doms = new Set();
+  for (const r of o.reads ?? []) {
+    if (!/^https:\/\//.test(r.url ?? '')) { fail(6, `${id} opener: a read with no https url`); continue; }
+    if (isWiki(r.url) || !vettedKind(r.url)) fail(6, `${id} opener: ${domainOf(r.url)} is a wiki or a host nobody vetted`);
+    if (!r.title || !r.row || !DAY.test(r.readOn ?? '')) fail(6, `${id} opener: ${r.url} has no title, row or read date`);
+    doms.add(domainOf(r.url));
+  }
+  if (doms.size < 2) fail(6, `${id}: opener ${o.date} rests on ${doms.size} registrable domain(s), two needed`);
+  console.log(`  ${id}: opens ${o.date} (${[...doms].join(', ')})`);
+}
+let restsBefore = 0;
+for (const c of chairs) {
+  const o = openers[c.league];
+  if (!o?.date) continue;
+  const early = (c.reads ?? []).filter(r => {
+    const s = sources.get(r.source);
+    return s && ((DAY.test(s.published ?? '') && s.published <= o.date) || s.role === 'matchday 1 report');
+  });
+  if (!early.length) fail(6, `${c.club}: no read published on or before the ${c.league} opener ${o.date}, and no matchday 1 report`);
+  else restsBefore += 1;
+}
+console.log(`  ${restsBefore} of ${chairs.length} chairs rest on a read from on or before their opener (or a matchday 1 report)`);
 
 fs.rmSync(tmp, { recursive: true, force: true });
 if (CONTROL) {

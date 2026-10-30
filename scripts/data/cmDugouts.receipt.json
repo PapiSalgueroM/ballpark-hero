@@ -8,6 +8,28 @@
   "coveredLeagues": ["premier", "laliga", "seriea", "bundesliga", "ligue1"],
   "validatedFields": ["club", "name", "appointed"],
   "excludedFields": ["quote", "rating", "style", "record", "conduct", "contract", "age", "nationality", "previous clubs", "reason for leaving"],
+  "openers": {
+    "premier": { "date": "2026-08-21", "reads": [
+      { "url": "https://www.premierleague.com/en/news/4675508", "title": "Premier League Fixture Schedule Released for Season 2026/27", "published": "2026-06-19", "readOn": "2026-10-30", "row": "Arsenal at home to Coventry City on Friday 21 August opens the season" },
+      { "url": "https://www.skysports.com/football/news/11681/13555675/premier-league-2026-27-fixtures-dates-schedule-arsenal-face-coventry-and-liverpool-in-opening-round", "title": "Premier League 2026/27 fixtures, dates, schedule: Arsenal face Coventry and Liverpool at Newcastle in opening round", "published": "2026-06-19", "readOn": "2026-10-30", "row": "Arsenal vs Coventry City, Friday August 21, the season's first match" }
+    ] },
+    "laliga": { "date": "2026-08-15", "reads": [
+      { "url": "https://www.futbolfantasy.com/laliga/noticias/147326-laliga-publica-los-horarios-de-las-jornadas-1-y-2", "title": "LaLiga publica los horarios de las jornadas 1, 2 y 3", "published": "2026-07-14", "readOn": "2026-10-30", "row": "Jornada 1 opens with Deportivo Alavés v Getafe CF on 15/08" },
+      { "url": "https://www.beinsports.com/en-us/soccer/la-liga/articles/when-does-the-2026-27-laliga-season-start-2026-08-13", "title": "When Does the 2026-27 LaLiga Season Start?", "published": null, "publishedNote": "no date printed; the url carries 2026-08-13", "readOn": "2026-10-30", "row": "the campaign begins on August 15 with Alavés hosting Getafe" }
+    ] },
+    "seriea": { "date": "2026-08-22", "reads": [
+      { "url": "https://www.lapresse.it/calcio/2026/08/21/serie-a-2026-27-al-via-il-22-agosto-partite-orari-e-dove-vederla/", "title": "Serie A 2026-27 al via il 22 agosto: partite, orari e dove vederla", "published": "2026-08-21", "readOn": "2026-10-30", "row": "Saturday 22 August 18:30, Inter v Monza and Udinese v Como, the first matches" },
+      { "url": "https://www.fantacalcio-online.com/en/seriea_news/fantacalcio-seriea-2026-2027-quando-inizia-date-ufficiali", "title": "Fantacalcio 2026/2027: date ufficiali, listoni e le novità della stagione", "published": "2026-07-27", "readOn": "2026-10-30", "row": "the league starts on Saturday 22 August 2026" }
+    ] },
+    "bundesliga": { "date": "2026-08-28", "reads": [
+      { "url": "https://sport.sky.de/fussball/artikel/fc-bayern-eroeffnet-bundesligasaison-2026-27-gegen-den-vfb-stuttgart/13559534/34943", "title": "FC Bayern eröffnet Bundesligasaison 2026/27 gegen den VfB Stuttgart", "published": "2026-07-01", "readOn": "2026-10-30", "row": "Bayern open the season on 28 August at home to Stuttgart" },
+      { "url": "https://www.sport1.de/news/fussball/bundesliga/2026/07/dfl-veroeffentlicht-den-spielplan-der-bundesliga", "title": "Bundesliga-Spielplan wird veröffentlicht", "published": "2026-07-02", "readOn": "2026-10-30", "row": "the opener is on Friday 28 August" }
+    ] },
+    "ligue1": { "date": "2026-08-21", "reads": [
+      { "url": "https://ligue1.com/fr/articles/l1_article_5284-ligue-1-mcdonald-s-le-calendrier-de-la-saison-26-27", "title": "Ligue 1 McDonald's : Le calendrier de la saison 2026/2027 !", "published": "2026-06-10", "readOn": "2026-10-30", "row": "the 2026/2027 season starts on Friday 21 August 2026" },
+      { "url": "https://info.fr/ligue-1-2026-2027-calendrier-om-strasbourg-psg-rennes/", "title": "Ligue 1 2026-2027 : OM-Strasbourg ouvre la saison le 21 août", "published": "2026-07-06", "readOn": "2026-10-30", "row": "matchday 1 opens on Friday 21 August with OM v Strasbourg" }
+    ] }
+  },
   "nameNormalization": {
     "AFC Bournemouth": "Bournemouth",
     "Brighton & Hove Albion": "Brighton",
@@ -71,7 +93,7 @@
     { "id": "S-ES2", "url": "https://dxtcampeon.elidealgallego.com/deportivo/depor/2026-06-22/ya-estan-completos-todos-los-banquillos-de-primera-division-estos-son-los-entrenadores-para-la-temporada-2026-862948.html", "title": "Ya están completos todos los banquillos de Primera División: estos son los entrenadores para la temporada 2026-27", "published": "2026-06-22", "readOn": "2026-10-30" },
     { "id": "S-ES3", "url": "https://www.dazn.com/es-ES/news/otros/quienes-son-los-entrenadores-de-laliga/nmil2e6jsufg1m2brkgj0pjpa", "title": "¿Quiénes son los entrenadores de LALIGA 2026/27?", "published": "2026-10-28", "publishedNote": "the page prints 28 Oct without a year; a current list, used only for chairs it dates to before the opening day or that another read places on the opening day", "readOn": "2026-10-30" },
     { "id": "S-ES4", "url": "https://www.sportsmole.co.uk/football/real-madrid/race-for-the-la-liga-title/feature/la-liga-2026-27-season-preview-barca-or-real-madrid-for-the-title_602603.html", "title": "La Liga 2026-27 season preview: Predicted standings, top scorer, title favourites, relegation battle", "published": "2026-08-07", "readOn": "2026-10-30" },
-    { "id": "S-ES5", "url": "https://www.rtp.pt/noticias/futebol-internacional/levante-de-luis-castro-perde-com-espanyol-na-estreia-na-la-liga_d1759856", "title": "Levante, de Luís Castro, perde com Espanyol na estreia na La Liga", "published": null, "publishedNote": "no date printed; the report is of Levante's first league match of 2026-27", "readOn": "2026-10-30" },
+    { "id": "S-ES5", "url": "https://www.rtp.pt/noticias/futebol-internacional/levante-de-luis-castro-perde-com-espanyol-na-estreia-na-la-liga_d1759856", "title": "Levante, de Luís Castro, perde com Espanyol na estreia na La Liga", "published": null, "publishedNote": "no date printed; the report is of Levante's first league match of 2026-27", "role": "matchday 1 report", "readOn": "2026-10-30" },
     { "id": "S-ES6", "url": "https://www.infobae.com/espana/agencias/2026/08/06/el-racing-se-presenta-ante-su-aficion/", "title": "El Racing se presenta ante su afición", "published": "2026-08-06", "readOn": "2026-10-30" },
     { "id": "S-IT1", "url": "https://sport.sky.it/calciomercato/allenatori-serie-a-2026-2027-situazione-panchine-squadre", "title": "Serie A 2026-2027, gli allenatori squadra per squadra: Allegri ufficiale al Napoli", "published": "2026-07-03", "readOn": "2026-10-30" },
     { "id": "S-IT2", "url": "https://www.fantacalcio.it/news/calcio-italia/05_07_2026/tra-conferme-ritorni-e-nuove-idee-gli-allenatori-della-serie-a-2026-27-494975", "title": "Tra conferme, ritorni e nuove idee: gli allenatori della Serie A 2026/27", "published": "2026-07-05", "readOn": "2026-10-30" },
