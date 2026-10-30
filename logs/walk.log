@@ -1,0 +1,15 @@
+Browserslist: browsers data (caniuse-lite) is 16 months old. Please run:
+  npx update-browserslist-db@latest
+  Why you should do it regularly: https://github.com/browserslist/update-db#readme
+
+[1m[33mwarn[39m[22m - The class `duration-[800ms]` is ambiguous and matches multiple utilities.
+[1m[33mwarn[39m[22m - If this is content and not a class, replace it with `duration-&lsqb;800ms&rsqb;` to silence this warning.
+[dukb] preload wrapper: a cancelled chunk error waits for the reload (vite 5.4.21)
+[dukb] inlined 1 stylesheet(s) and 1 module(s) into 181 snapshots (11 left alone)
+{"tag":"head","w":390,"hubPlay":454,"mcPlay":912,"mcDugout":"Manager: Zeke TrevisanMADE UP","mcDugoutKind":"made-up","mcClipped":false,"tieHeight":63,"clubLine":"Manager: Youri Sagna · since S1MADE UP","clubKind":"made-up","clubClipped":false,"clubLineOld":null,"errors":0}
+{"tag":"main","w":390,"hubPlay":454,"mcPlay":882,"mcDugout":null,"mcDugoutKind":null,"mcClipped":null,"tieHeight":33.5,"clubLine":null,"clubKind":null,"clubClipped":null,"clubLineOld":"Dugout: Youri Sagna since S1","errors":0}
+{"tag":"head","w":1280,"hubPlay":438,"mcPlay":866,"mcDugout":"Manager: Zeke TrevisanMADE UP","mcDugoutKind":"made-up","mcClipped":false,"tieHeight":47.5,"clubLine":"Manager: Youri Sagna · since S1MADE UP","clubKind":"made-up","clubClipped":false,"clubLineOld":null,"errors":0}
+{"tag":"main","w":1280,"hubPlay":438,"mcPlay":852,"mcDugout":null,"mcDugoutKind":null,"mcClipped":null,"tieHeight":33.5,"clubLine":null,"clubKind":null,"clubClipped":null,"clubLineOld":"Dugout: Youri Sagna since S1","errors":0}
+   390: Match Centre Play Live y 882 on main, 912 here (30 px), fold 844
+   1280: Match Centre Play Live y 852 on main, 866 here (14 px), fold 900
+walk1606: all green
