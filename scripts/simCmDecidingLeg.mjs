@@ -50,7 +50,16 @@
      nogate    judgedByTie ignores tieRules and matchRules: section 3's gate goes red.
      cutover   HOT_SEAT_TIE_FROM moved to 2026-10-01, before the base commit: section 3's cutover goes red.
 
-   MEASURED (filled from the runner, see the commit that set the floor).
+   MEASURED on GitHub runners, 2026-10-30 (remote checks r1603-s2 and r1603-s3, head c21aed83c), 16 careers, 15 of
+   them in the Champions League, 8 replays a leg. The fleet's own dice: 234 deciding legs, 80 where the night and the
+   tie differ (65 through, 15 out, 8 on penalties, 2 in extra time). Three other streams (DECIDING_LEG_SALT a, b, c):
+   64 of 180, 73 of 207, 75 of 243. So the floor of 30 sits under half the lowest count seen. Careers that parted
+   from the old engine at a deciding leg: 4 to 8 of 15, between weeks 31 and 46. OLD equals the base tree
+   (4bd20c993) at every week of every career; the only words that differ are a named haul (2 saves or reports).
+   Manager Hot Seat: none of the 44 dailies (2026-09-30 to 2026-11-12) or the free runs met a second leg at all
+   (a run is five league games from week 6 to 14, and the deciding legs sit later in the season), so the gate is
+   held at the engine (section 3) as well as by the replays; the 2026-10-28 daily (PSG) has a four goal haul in its feed, which now
+   reads "scored four" and nothing else about the day moves. Each control fired (exit 1, FIRED) on r1603-s2/s3.
 
    Run: node scripts/simCmDecidingLeg.mjs   (DECIDING_LEG_CAREERS, DECIDING_LEG_REPLAYS, DECIDING_LEG_SECTION) */
 import { build } from 'esbuild';
