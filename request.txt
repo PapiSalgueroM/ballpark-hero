@@ -1,0 +1,6 @@
+#!serve
+#!playwright
+walkE-nhl: PLAY_GM_CAREER_SPORT=nhl PLAY_GM_CAREER_WALKS=E node scripts/playGmCareer.mjs
+walkE-nfl: PLAY_GM_CAREER_SPORT=nfl PLAY_GM_CAREER_WALKS=E node scripts/playGmCareer.mjs
+nofallback-E: PLAY_GM_CAREER_CONTROL=nofallback PLAY_GM_CAREER_WALKS=E node scripts/playGmCareer.mjs
+weightFo: SWEEP_OFFLINE=1 node .rc/x/weightFo.mjs

@@ -1,0 +1,5 @@
+build exit=0 35s | [dukb] inlined 1 stylesheet(s) and 1 module(s) into 181 snapshots (11 left alone)
+nofallback-E exit=1 149s | playGmCareer control nofallback: 4/4 guarded checks fired, 0 missed, 22 unrelated failure(s)
+weightFo exit=0 9s | weightFo: the copy exited 1
+walkE-nhl exit=1 301s | playGmCareer: 1 failure
+walkE-nfl exit=1 319s | playGmCareer: 1 failure

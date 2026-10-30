@@ -1,0 +1,15 @@
+1) Every page is inside its download budget
+   /front-office       389K gz over  43 files (budget 9999K, 389.0K to the tenth)
+   /nhl-front-office   378K gz over  42 files (budget 9999K, 378.1K to the tenth)
+   /nba-front-office   397K gz over  44 files (budget 9999K, 396.6K to the tenth)
+   /mlb-front-office   367K gz over  37 files (budget 9999K, 367.4K to the tenth)
+  FAIL: /front-office: 389K against a 9999K budget, so the budget is stale and should be lowered in this round
+  FAIL: /nhl-front-office: 378K against a 9999K budget, so the budget is stale and should be lowered in this round
+  FAIL: /nba-front-office: 397K against a 9999K budget, so the budget is stale and should be lowered in this round
+  FAIL: /mlb-front-office: 367K against a 9999K budget, so the budget is stale and should be lowered in this round
+  FAIL: section 4 cannot tell: /club-manager was not measured in section 1 (it needs a row in BUDGETS)
+  FAIL: section 4 cannot tell: /manager-hot-seat was not measured in section 1 (it needs a row in BUDGETS)
+  FAIL: section 4 cannot tell: /deadline-day was not measured in section 1 (it needs a row in BUDGETS)
+  FAIL: section 4 cannot tell: /transfer-path was not measured in section 1 (it needs a row in BUDGETS)
+  FAIL: /soccer-career fetches no file with the national team pools, and it is the page that reads them: either they moved or the probes cannot see them
+weightFo: the copy exited 1
