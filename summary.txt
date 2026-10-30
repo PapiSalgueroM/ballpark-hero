@@ -1,0 +1,3 @@
+build exit=0 25s | [dukb] inlined 1 stylesheet(s) and 1 module(s) into 181 snapshots (11 left alone)
+clubDetailRoster exit=1 4s | Current-roster browser: failed; 142 checks, 0 saved page journeys, 0 effective controls, 0 originals, 5 failures, 0 setup failures.
+playCmPlayerCard exit=1 144s | playCmPlayerCard: 61 FAILURE(S)

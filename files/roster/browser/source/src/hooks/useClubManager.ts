@@ -1,0 +1,1411 @@
+import { useState, useEffect, useLayoutEffect, useMemo, useCallback, useRef } from 'react';
+import { recordCompletion, recordActivity, recordStreakDay } from '@/lib/completions';
+import { saveMatchPlan as savePlan, applyMatchPlan as applyPlan, deleteMatchPlan as deletePlan } from '@/lib/clubManagerMatchPlans';
+import {
+  CareerState, MatchWeekReport, SeasonSummary, MarketPlayer, Mentality,
+  FORMATIONS, startCareer, playNextEntry, finishSeason, startNextSeason,
+  marketForScreen, buyPlayer, autoPickXI, nextFixture, sortedLeagueTable,
+  leaguePosition, currentSeasonScore, saveCareer, loadCareer, clearCareer, savedCareerEraId, savedCareerFixtureKey, leagueOf,
+  startNegotiation, makeOffer, offerTerms, exerciseLoanOption, breakLoan, recallLoanedPlayer, walkAway, respondApproach, expandGround,
+  enterWilderness, wildernessWeek, acceptWildernessJob, takeNationJob, leaveNationJob, payClause, loanIn, acceptBid, rejectBid,
+  answerMessage, setTransferStatus, loanOutPlayer, renewContract, renewContractWithClause,
+  upgradeAcademy, hireScout, recallScout, promoteProspect, releaseProspect, setTrainingPlan,
+  resumeMatch, makeHalftimeSub, setHalftimeMentality, setSquadRole,
+  setTeamTalk, giveHalftimeTalk, answerPress, duckPress,
+  matchFacts,
+  changeLive, startSecondHalf, startExtraTime, markLiveMinute, setInstructions,
+  setDuty, setSetPiece, autoSetPieces, startRetraining, stopRetraining,
+  setShootoutOrder,
+  DEFAULT_ERA_ID,
+  releasePlayer, signFreeAgent,
+  doorRefusal, loanOutRefusal,
+  applyForJob, joinClubInSummer,
+  editManager,
+} from '@/lib/clubManager';
+import type { MarketDoor } from '@/lib/clubManager';
+import type { MatchFacts, LiveChange, Duty, SetPieceKey, Formation } from '@/lib/clubManager';
+import { tacticsImpl, type TeamInstructions } from '@/lib/clubManagerTacticsCore';
+import { carryShape } from '@/lib/clubManagerCarry';
+import type { Position } from '@/types/game';
+import type { TransferStatus, FacilityKind, TrainingPlan, SquadRole, TalkTone, DealExtras } from '@/lib/clubManager';
+import type { NextFixtureInfo, TableRow, CustomClubSpec, ManagerSpec, ManagerEdit, BoardObjective } from '@/lib/clubManager';
+import { simToWeek as runSimToWeek, startMidSeason, joinClubNow } from '@/lib/clubManagerCalendar';
+import { CM_VAR_LIVE } from '@/lib/clubManagerVarLive';
+import { cmVarGameAsk } from '@/lib/clubManagerVar';
+import { eraById, eraRostersLoaded, ensureEraRosters, isHistoricEra } from '@/lib/clubManagerEras';
+import { ensureRealLeagueFixtures, realLeagueFixturesLoaded, realLeagueFixtureKeyFor } from '@/lib/clubManagerFixtures';
+import { reloadToRetryChunk } from '@/lib/freshBuild';
+import { readSlots, switchSlot, deleteSlot, activeSlot, type SlotView } from '@/lib/clubManagerSlots';
+import { clearSlotPoints, noteSeasonCredited, seasonPosts } from '@/lib/cmSavePointsStore';
+import type { MidSeasonEntry } from '@/lib/clubManagerCalendar';
+import { upgradeFacility as upgradeClubFacility } from '@/lib/clubManagerFacilities';
+import type { FacilityId } from '@/lib/clubManagerFacilities';
+import type { PersonalTerms } from '@/lib/clubManagerDeals';
+import { acceptSponsor, pushSponsor, setConcessionTier, setTicketPolicy } from '@/lib/clubManagerFinances';
+import type { ConcessionTier } from '@/lib/clubManagerFinances';
+import { hireStaff, matchStaffOffer, releaseToPoacher, sackStaff } from '@/lib/clubManagerStaff';
+import type { StaffPostId } from '@/lib/clubManagerStaff';
+import { spendSkillPoint } from '@/lib/clubManagerXp';
+import { postsScore as careerPostsScore, setDifficulty as setDifficultyFor, setStartOption, turnOnNoSack as turnOnNoSackFor } from '@/lib/clubManagerStart';
+import type { DifficultyLevel } from '@/lib/managerDifficulty';
+/* Round 1501: the level, applied with No sacking on the Dugout step's choice, and the market listed to you. */
+import { marketForMe, setUpCareer } from '@/lib/clubManagerDifficulty';
+import { buildBoardAsks, isBoardAsk } from '@/lib/clubManagerBoardAsks';
+import { validWorldEdit } from '@/lib/clubManagerWorldEdit';
+import type { CareerSetup, CurrencyCode } from '@/lib/clubManagerStart';
+import type { SkillTree } from '@/lib/clubManagerXp';
+
+export type CMPhase = 'boot' | 'resume' | 'clubSelect' | 'hub' | 'halftime' | 'matchResult' | 'seasonEnd' | 'sacked' | 'retired';
+
+/** Round 1343: where a saved career opens: a retired career on its farewell (the only phase it can reach), then a
+ *  sacked one out of work, then a finished season's summary, then the hub. */
+export function phaseFor(c: CareerState): CMPhase {
+  return c.retired ? 'retired' : c.sacked ? 'sacked' : c.pendingSummary ? 'seasonEnd' : 'hub';
+}
+export type HubTab = 'overview' | 'squad' | 'tactics' | 'table' | 'transfers';
+
+/**
+ * Round 505: a new shape keeps the eleven you picked. Until this round a
+ * formation change threw the whole XI away and auto picked a fresh one, so a
+ * manager who had put ten defenders out on purpose (the owner's own example)
+ * lost the lot the moment he tried a different shape. Now every man carries
+ * across to the first free slot wearing his old slot's label (RB to RB, CM to
+ * CM, ST to ST), and his slot's duty travels with him because the label is
+ * the line. Whatever is still empty is filled by the engine's own auto pick
+ * over the men not already placed, so a fresh save still gets the best
+ * winger for a shape that grew a wing. Pure, no draw.
+ *
+ * The label pass alone was not enough (the Round 505 review): a man whose
+ * label the new shape does not have at all (the CDM going to a 4-4-2, the
+ * tenth defender going anywhere) fell through to the auto pick and was
+ * quietly benched, duty and all. So every man the labels did not place gets
+ * a still free slot before the auto pick runs: one on his old slot's duty
+ * line first, then one on the same band of the pitch, then any that is left,
+ * and his duty rides along wherever the new slot's line offers it.
+ */
+/* Round 1522: the rule itself now lives in clubManagerCarry.ts (carryShape), so the live sheet's reshape and this
+   tab move an eleven the same way. */
+function carryAcross(state: CareerState, from: Formation, to: Formation): { xiIds: (string | null)[]; xiDuties: (Duty | null)[] } {
+  return carryShape(state.xiIds, state.xiDuties ?? [], from, to, state.squad);
+}
+
+/* Round 1522: the tactics module (clubManagerTactics.ts) loads apart from the engine, so the page and the dailies
+   do not carry it until it is wanted. A career with instructions, or a live match whose log or shape changed,
+   needs it before any match of it is played; until it is in, every match action below waits (does nothing), and
+   the effect in the hook loads it. The screens that set instructions import it themselves. */
+const needsTactics = (c: CareerState | null | undefined): boolean =>
+  !!c && (!!c.instructions || !!c.live?.instrLog?.length || !!c.live?.formChanges?.length);
+const tacticsWait = (c: CareerState | null | undefined): boolean => needsTactics(c) && tacticsImpl() === null;
+const loadTactics = (): Promise<unknown> => import('@/lib/clubManagerTactics');
+
+/** Round 1225: the key of the real fixture list a new career at this club would open on, or null. */
+function startFixtureKey(clubName: string, eraId: string): string | null {
+  return isHistoricEra(eraId) ? null : realLeagueFixtureKeyFor(leagueOf(clubName).id, eraById(eraId).startYear);
+}
+/** Round 1225 review: a new career held back while its league's fixture list is out. */
+type StartHold = { key: string; begin: () => void; settle: () => void; over: boolean; timer: ReturnType<typeof setTimeout> | null };
+
+/* Round 1323: the save fence, imported here beside the hook that uses it. */
+import { saveFence, fenceKeyOf } from '@/lib/saveFence';
+import { SAVE_KEY } from '@/lib/clubManager';
+import { setAsideSave, browserStorage, SET_ASIDE_SLOT_KEY } from '@/lib/brokenSaveRecovery';
+import { CONTINUE_SAVES } from '@/data/continueSaves';
+import { takeLandOnHub } from '@/lib/clubManagerLanding';
+
+/* Round 1501: the board's card for a career set up off Medium (Round 1512: any of the other four levels) before a ball is kicked. Everything
+   that is not one of the board's asks stays; the asks are built again for the smaller cheque and the
+   market as it is listed to you. Draws nothing (buildBoardAsks picks by a hash). */
+function rebuildBoardAsks(s: CareerState): BoardObjective[] {
+  return [...(s.boardObjectives ?? []).filter(o => !isBoardAsk(o.id)), ...buildBoardAsks(s)];
+}
+
+/* Round 1513: a season posts its score once per career. The record sits
+   outside the save (src/lib/cmSavePointsStore.ts), so going back to a save
+   point cannot post a season twice; a career with no points has no record.
+   Every scored ping below asks this, the engine's rule (No sacking, the easy
+   mark) and then the record; creditSeason notes a season as it finishes. */
+function postsScore(s: CareerState): boolean {
+  return careerPostsScore(s) && seasonPosts(activeSlot(), s.season);
+}
+function creditSeason(s: CareerState): void {
+  noteSeasonCredited(activeSlot(), s.season);
+}
+
+export function useClubManager() {
+  const [phase, setPhase] = useState<CMPhase>('boot');
+  const [career, setCareer] = useState<CareerState | null>(null);
+  const [report, setReport] = useState<MatchWeekReport | null>(null);
+  const [summary, setSummary] = useState<SeasonSummary | null>(null);
+  const [activeTab, setActiveTab] = useState<HubTab>('overview');
+  const [pendingClub, setPendingClub] = useState<string | null>(null);
+
+  /* Round 832: the label of an era whose squads would not load at boot, or
+     null. An era save cannot be played without its squads. loadCareer can
+     still hand one back without them (the review opened a 2005, a 2010 and a
+     2015 save that way: its repairs did not happen to read the squads), and
+     the first screen or match that does read them then throws; a repair that
+     does read them makes loadCareer answer "no save". Either way the career
+     must not open early, so the page holds on a plain notice with a retry
+     instead of a crash or a fresh start over the career. */
+  const [bootError, setBootError] = useState<string | null>(null);
+  const [bootTry, setBootTry] = useState(0);
+  /* Round 1225: what would not load, the season's squads or its real fixture list. */
+  const [bootNoun, setBootNoun] = useState<'squads' | 'fixture list'>('squads');
+  const retryBoot = useCallback(() => setBootTry(n => n + 1), []);
+
+  /* Round 928: the three manager slots, as read off the store without opening
+     a save, and a note when a swap was refused. slotEpoch reruns the boot
+     below after a swap, so the incoming career opens through the very same
+     path a page load takes (its era's squads first). goStraightIn is set by
+     Continue on a parked slot, so that career opens on its hub rather than
+     back on the slots screen. */
+  const [slots, setSlots] = useState<SlotView[]>([]);
+  const [slotNote, setSlotNote] = useState<string | null>(null);
+  const [slotEpoch, setSlotEpoch] = useState(0);
+  const goStraightIn = useRef(false);
+  /* Round 928 review: the slot whose career this page holds. Another tab can
+     switch managers under it, and then the index names another slot and
+     SAVE_KEY holds that slot's career, whose parked copy the swap has already
+     dropped. Every write this page makes (the effect, pagehide, unmount, a
+     tab switch, a swap of its own) checks the index against this first, and
+     a page whose slot has moved writes nothing over the other career. */
+  const ownSlot = useRef(1);
+  const holdsActiveSlot = useCallback(() => activeSlot() === ownSlot.current, []);
+
+  /* Round 1323: one tab wins (src/lib/saveFence.ts). True once another tab
+     has written this career since this page read it: every write this page
+     tries is refused by saveCareer from then on, and the page covers itself
+     with a notice that asks for a reload. Never saveFailed for it, because
+     the browser is fine; the career is just newer somewhere else. */
+  const [saveMoved, setSaveMoved] = useState(false);
+  const movedOn = useCallback((): boolean => {
+    const moved = saveFence.moved(SAVE_KEY);
+    if (moved) setSaveMoved(true);
+    return moved;
+  }, []);
+
+  // Boot: look for a saved career and offer to resume it.
+  useEffect(() => {
+    let alive = true;
+    const open = () => {
+      ownSlot.current = activeSlot();
+      /* Round 1323: BEFORE the save is read, so a write that lands between
+         the two reads leaves this page stale, never the other tab. */
+      saveFence.adopt(SAVE_KEY);
+      /* Round 1323: Hot Seat's carry on opens its career on the hub. */
+      if (takeLandOnHub()) goStraightIn.current = true;
+      const saved = loadCareer();
+      const views = readSlots();
+      setSlots(views);
+      if (saved) {
+        setCareer(saved);
+        if (saved.pendingSummary) setSummary(saved.pendingSummary);
+        if (goStraightIn.current) {
+          goStraightIn.current = false;
+          setPhase(phaseFor(saved));
+          setActiveTab('overview');
+        } else {
+          setPhase('resume');
+        }
+      } else if (views.some(v => v.summary || v.damaged)) {
+        /* Round 1323: a slot holding a save that cannot be read lands here
+           too, on its damaged tile, never on the picker without a word (the
+           next pick used to write over it). */
+        /* Round 928: nothing playable in the active slot, but another slot
+           holds a career, so the slots screen, never a picker over them. A
+           career the player just asked for that would not open says so,
+           rather than dropping him back on the tiles without a word. */
+        if (goStraightIn.current) setSlotNote('That career would not open on this version of the game. It is still saved in its slot, and your other managers are fine.');
+        goStraightIn.current = false;
+        setPhase('resume');
+      } else {
+        goStraightIn.current = false;
+        setPhase('clubSelect');
+      }
+    };
+    /* Round 832: an era save fetches its era's squads first. Today's world
+       and an era already here open exactly as before, in this same pass. */
+    const eraId = savedCareerEraId() ?? undefined;
+    /* Round 1225: and a save whose first season plays a real fixture list
+       fetches that list first, in the same wait. The Premier League's list
+       rides with the engine, so nothing changes for it. */
+    const fixtureKey = savedCareerFixtureKey();
+    if (eraRostersLoaded(eraId) && realLeagueFixturesLoaded(fixtureKey)) {
+      open();
+      return;
+    }
+    setBootError(null);
+    Promise.all([ensureEraRosters(eraId), ensureRealLeagueFixtures(fixtureKey)]).then(
+      () => { if (alive) open(); },
+      () => {
+        if (!alive) return;
+        /* Round 832 review: a retry the player asked for reloads the page,
+           because Chromium never fetches a failed chunk again in the same
+           page (see reloadToRetryChunk). The first failure only shows the
+           notice; offline, the notice stays. */
+        if (bootTry > 0 && reloadToRetryChunk()) return;
+        setBootNoun(eraRostersLoaded(eraId) ? 'fixture list' : 'squads');
+        setBootError(eraById(eraId).label);
+      },
+    );
+    return () => { alive = false; };
+  }, [bootTry, slotEpoch]);
+
+  /* Round 634: whether the last write was refused. saveCareer swallowed every
+     throw until this round, so a browser out of storage for this site, or one
+     blocking it, dropped the career on the floor and the player was told
+     nothing ("Manager career doesnt save if you leave the website", filed
+     2026-09-13). True from the first refused write until one succeeds, and
+     the page shows a plain banner while it is true. */
+  const [saveFailed, setSaveFailed] = useState(false);
+  const note = useCallback((ok: boolean) => setSaveFailed(!ok), []);
+  /* Round 1323: the write, reported: a refusal because another tab moved the
+     career on raises the notice and leaves saveFailed as it was. */
+  const persist = useCallback((c: CareerState): boolean => {
+    const ok = saveCareer(c);
+    if (ok || !movedOn()) note(ok);
+    return ok;
+  }, [note, movedOn]);
+  /* Round 634 review: why the last press on the transfer desk did nothing, in
+     the engine's own words (doorRefusal, loanOutRefusal), or null when it went
+     through. A refused press used to be a dead button. */
+  const [deskNote, setDeskNote] = useState<string | null>(null);
+
+  // Persist the career on every change.
+  useEffect(() => {
+    if (!career) return;
+    if (!holdsActiveSlot()) {
+      /* Round 928 review: another tab switched managers. This career was
+         parked by that switch, as it stood at its last write, so nothing is
+         lost by not writing it; writing it would put it over the other one.
+         The page goes back to the slots, as read now, and says why. */
+      setCareer(null);
+      setReport(null);
+      setSummary(null);
+      setPendingClub(null);
+      setDeskNote(null);
+      setSlots(readSlots());
+      setSlotNote('You switched managers in another tab, so this one has stepped back to your managers. Pick one to carry on.');
+      setPhase('resume');
+      return;
+    }
+    persist(career);
+  }, [career, persist, holdsActiveSlot]);
+
+  /* ---------- Round 567: and persist it when the page goes away ---------- */
+
+  /*
+   * The effect above is the ordinary write and it is reliable for everything
+   * done while the page is up: measured across 23 transitions (a club chosen,
+   * a shape, an XI, a training plan, a role, a transfer status, a ticket
+   * price, a negotiation, a signing, a match, a half time, a quick sim, a run
+   * of weeks) the save on disk was byte identical to the career in memory
+   * after every single one.
+   *
+   * What it cannot do is write a change that is decided at the moment the page
+   * is going. A setCareer from a pagehide listener, a visibilitychange
+   * listener or an unmount cleanup is a state update on a tree React is
+   * tearing down: it never commits, so the effect keyed on `career` never
+   * runs, so nothing reaches localStorage.
+   *
+   * That is not hypothetical. Round 543 added exactly such a handler to the
+   * live match viewer for the clock, for the case it names in its own comment,
+   * "tapping Back, or the DoUKnowBall logo, or any nav link". Measured on the
+   * shipped code: the viewer on screen in the 19th minute, the save still at
+   * minute 0, and still at 0 after the route unmounted, so the half was
+   * replayed from the start. It worked only when the viewer alone unmounted
+   * and the page stayed, which is the one case it was not written for.
+   *
+   * So the career is readable synchronously here, and the write at that moment
+   * goes straight to localStorage rather than through a render.
+   */
+  const careerRef = useRef<CareerState | null>(null);
+  useEffect(() => { careerRef.current = career; }, [career]);
+  const recruitmentCurrent = useRef<CareerState | null>(null);
+  useLayoutEffect(() => {
+    recruitmentCurrent.current = phase === 'hub' ? career : null;
+    return () => { recruitmentCurrent.current = null; };
+  }, [career, phase]);
+
+  useEffect(() => {
+    /* Round 634: the same write, and it reports. A refused write at pagehide
+       cannot reach the screen (the page is going), but one at a tab switch
+       can, and the banner is there when the tab comes back. Same career,
+       same bytes, so a write that repeats the effect's own is harmless. */
+    /* Round 928 review: and never once another tab has switched managers
+       (holdsActiveSlot): closing this page must not write its career over
+       the one that tab switched in. */
+    /* Round 1323: and never once another tab has played this career on since
+       (the fence inside saveCareer refuses it), which is the clobber that
+       wiped three matches when an old tab was closed. */
+    const write = () => { const c = careerRef.current; if (c && holdsActiveSlot()) persist(c); };
+    const onHidden = () => { if (document.visibilityState === 'hidden') write(); };
+    window.addEventListener('pagehide', write);
+    document.addEventListener('visibilitychange', onHidden);
+    return () => {
+      window.removeEventListener('pagehide', write);
+      document.removeEventListener('visibilitychange', onHidden);
+      /* Leaving the route is the same event as leaving the site as far as this
+         hook is concerned: both end with no render left to run. Writing the
+         career it is holding costs one localStorage write and closes the gap
+         between a commit and the passive effect that would have saved it. */
+      write();
+      /* Round 1323: the last write is done, so this page holds nothing now.
+         Review: except a page another tab has moved on. React runs this
+         cleanup before its children's, and the live viewer's own unmount
+         write (Round 543's onMark, through markMinute) comes after it:
+         released, that write is a claim and puts this stale career back over
+         the other tab's (a stale tab left by Back mid match wiped three
+         matches). Held, saveCareer refuses it. The release waits for the end
+         of this commit, and is dropped if a page has adopted the save since. */
+      if (!saveFence.moved(SAVE_KEY)) saveFence.release(SAVE_KEY);
+      else queueMicrotask(() => { if (saveFence.moved(SAVE_KEY)) saveFence.release(SAVE_KEY); });
+    };
+  }, []);
+
+  /* ---------- derived ---------- */
+  const market: MarketPlayer[] = useMemo(
+    /* Round 1344: the screen's market also lists a man another club bought this season at his new club (refused
+       until the summer), so the search finds him where he went. */
+    /* Round 1501: the market as it is listed to you, marked by the level (the same array on Normal). */
+    () => (career ? marketForMe(career, marketForScreen(career)) : []),
+    [career],
+  );
+  const nextFx: NextFixtureInfo | null = useMemo(
+    () => (career ? nextFixture(career) : null),
+    [career],
+  );
+  const tableRows: TableRow[] = useMemo(
+    () => (career ? sortedLeagueTable(career) : []),
+    [career],
+  );
+  const myPosition = useMemo(
+    () => (career ? leaguePosition(career) : 0),
+    [career],
+  );
+  /* Round 157: everything the pre-match facts screen shows, derived from the
+     save itself: real form, real head-to-head, the engine's own odds. */
+  /* Round 1522: the tactics module, loaded when this career needs it (the odds read the instructions through it,
+     so the facts are worked out again once it is in). */
+  const [tacticsIn, setTacticsIn] = useState(() => tacticsImpl() !== null);
+  const [tacticsFailed, setTacticsFailed] = useState(false);
+  useEffect(() => {
+    if (tacticsIn || !needsTactics(career)) return;
+    let live = true;
+    loadTactics().then(() => { if (live) setTacticsIn(true); }, () => { if (live) setTacticsFailed(true); });
+    return () => { live = false; };
+  }, [career, tacticsIn]);
+  /* Round 1522 review: a tap on Play, Quick Sim, the calendar or Second half made while the module is still on its
+     way is held and played the moment it lands (the last one wins, and only on the career it was made on), and a
+     module that cannot load says so on the page instead of leaving the tap dead. The live and dressing room actions
+     need no hold: only the live screen and the dressing room call them, and both import the module. */
+  const tacticsHeld = useRef<{ c: CareerState; run: () => void } | null>(null);
+  const heldForTactics = useCallback((run: () => void): boolean => {
+    const c = careerRef.current;
+    if (!c || !tacticsWait(c)) return false;
+    tacticsHeld.current = { c, run };
+    loadTactics().then(() => setTacticsIn(true), () => setTacticsFailed(true));
+    return true;
+  }, []);
+  useEffect(() => {
+    const h = tacticsHeld.current;
+    if (!tacticsIn || !h) return;
+    tacticsHeld.current = null;
+    if (careerRef.current === h.c) h.run();
+  }, [tacticsIn]);
+  const facts: MatchFacts | null = useMemo(
+    () => (career && !career.live ? matchFacts(career) : null),
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    [career, tacticsIn],
+  );
+
+  /* ---------- lifecycle actions ---------- */
+  const resume = useCallback(() => {
+    if (!career) { setPhase('clubSelect'); return; }
+    const next = phaseFor(career);
+    if (next === 'seasonEnd') setSummary(career.pendingSummary);
+    setPhase(next);
+    setActiveTab('overview');
+  }, [career]);
+
+  /** Round 1343: retire. The write comes first: only a retired career the disk holds moves the page to the
+   *  farewell. Refused (another tab moved the career on, or no room) the page stays where it was, the notice or the
+   *  banner already up. True when it retired. The rule comes in from the door (retireCareer in
+   *  clubManagerRetire.ts), so the hook's first load does not carry that module. */
+  const retire = useCallback((make: (c: CareerState) => CareerState | null): boolean => {
+    const now = careerRef.current;
+    if (!now || !holdsActiveSlot()) return false;
+    const next = make(now);
+    if (next && !next.retired) return false;
+    if (!next || !persist(next)) return false;
+    careerRef.current = next;
+    setCareer(next);
+    setPhase('retired');
+    setActiveTab('overview');
+    return true;
+  }, [holdsActiveSlot, persist]);
+
+  /* ---------- Round 928: the manager slots ---------- */
+
+  /* The career in memory is written before anything moves, and handed to the
+     swap as the copy to park, so the parked career is the freshest one. Then
+     careerRef is emptied synchronously, for Round 567's reason: the pagehide
+     write must never put the outgoing career back over the incoming one.
+     Review: a page whose slot another tab has moved hands nothing in, so the
+     swap parks what SAVE_KEY really holds (that tab's career) under the slot
+     it really belongs to. */
+  const leaveActive = useCallback((slot: number): boolean => {
+    /* Round 1323: a stale page swaps nothing; the notice says why. */
+    if (movedOn()) return false;
+    const out = holdsActiveSlot() ? careerRef.current : null;
+    if (out) saveCareer(out);
+    if (!switchSlot(slot, out)) {
+      setSlotNote('This browser would not save the switch, so nothing moved. Your managers are all where they were. Free up some site storage and try again.');
+      setSlots(readSlots());
+      return false;
+    }
+    ownSlot.current = slot;
+    /* Round 1515: the kept aside card asks its offer again, for this slot (the slot marks key is the event's name). */
+    dispatchEvent(new Event(SET_ASIDE_SLOT_KEY));
+    setSlotNote(null);
+    careerRef.current = null;
+    setCareer(null);
+    setReport(null);
+    setSummary(null);
+    setPendingClub(null);
+    /* Review: the transfer desk's last refusal was about the outgoing club. */
+    setDeskNote(null);
+    return true;
+  }, [holdsActiveSlot, movedOn]);
+
+  /* Review: once another tab has switched managers, the career this page
+     holds sits parked in its slot as of its last write, so the copy in memory
+     is let go. Kept, its week and board were shown on the other career's tile. */
+  const letGoIfStale = useCallback(() => {
+    if (!careerRef.current || holdsActiveSlot()) return;
+    careerRef.current = null;
+    setCareer(null);
+    setReport(null);
+    setSummary(null);
+  }, [holdsActiveSlot]);
+
+  /* Review: the managers screen follows a change another tab makes to the
+     slots, so its tiles never offer what is no longer there. Only while it is
+     on screen, since every career write in another tab fires this. */
+  useEffect(() => {
+    if (phase !== 'resume') return;
+    const onStorage = () => { letGoIfStale(); setSlots(readSlots()); };
+    window.addEventListener('storage', onStorage);
+    return () => window.removeEventListener('storage', onStorage);
+  }, [phase, letGoIfStale]);
+
+  /* Round 1323: and in EVERY phase, a write another tab makes to this career
+     puts the notice up at once (the fence key moves on every game write; a
+     person or a walk editing the save by hand moves nothing). A page back from
+     the back forward cache missed the events, and a tab coming back into view
+     is the moment the player looks, so both check as well. */
+  useEffect(() => {
+    const fenceKey = fenceKeyOf(SAVE_KEY);
+    const onStorage = (e: StorageEvent) => { if (e.key === null || e.key === fenceKey) movedOn(); };
+    const onShow = () => { movedOn(); };
+    const onVisible = () => { if (document.visibilityState === 'visible') movedOn(); };
+    window.addEventListener('storage', onStorage);
+    window.addEventListener('pageshow', onShow);
+    document.addEventListener('visibilitychange', onVisible);
+    return () => {
+      window.removeEventListener('storage', onStorage);
+      window.removeEventListener('pageshow', onShow);
+      document.removeEventListener('visibilitychange', onVisible);
+    };
+  }, [movedOn]);
+
+  /** Continue a slot's career. The active one opens straight away; a parked
+   *  one is swapped in and opened through the boot, era squads first. */
+  const openSlot = useCallback((slot: number) => {
+    if (slot === activeSlot() && holdsActiveSlot() && career) { resume(); return; }
+    if (!leaveActive(slot)) return;
+    goStraightIn.current = true;
+    setPhase('boot');
+    setSlotEpoch(n => n + 1);
+  }, [career, resume, leaveActive, holdsActiveSlot]);
+
+  /** A new manager in an empty slot: the current career is parked, and the
+   *  picker starts a fresh one that lands in this slot. */
+  const newInSlot = useCallback((slot: number) => {
+    /* Only ever an empty or unreadable slot: a career is deleted on purpose,
+       behind the screen's confirm, never by starting over it. */
+    if (readSlots()[slot - 1]?.summary) {
+      /* Review: only a tile drawn before another tab filled this slot gets
+         here. Show the slots as they are now and say why nothing happened. */
+      setSlots(readSlots());
+      setSlotNote('That slot holds a career now, so nothing was started over it. Here are your managers as they stand.');
+      return;
+    }
+    /* Round 1323: a stale page clears nothing; the notice says why. */
+    if (movedOn()) return;
+    const damaged = !!readSlots()[slot - 1]?.damaged;
+    if (slot !== activeSlot() && !leaveActive(slot)) return;
+    /* Round 1323: an unreadable save is never thrown away. Its bytes are set
+       aside to a backup first, the error boundary's own fresh start, so the
+       restore card offers it back; with no room for the copy nothing is
+       cleared and the managers screen says so. */
+    if (damaged) {
+      const entry = CONTINUE_SAVES.find(e => e.saveKey === SAVE_KEY);
+      if (!entry || !setAsideSave(entry, browserStorage()).ok) {
+        setSlots(readSlots());
+        setSlotNote('This browser had no room to keep a copy of that save, so nothing was cleared. Free up some site storage and try again.');
+        setPhase('resume');
+        return;
+      }
+    }
+    /* Clears the engine's registrations; SAVE_KEY is already empty for a
+       slot just switched to, and a damaged active one is cleared for good
+       (the screen asks first). The career the picker starts is this slot's. */
+    clearCareer();
+    /* Round 1513: a new career never finds an old one's save points. */
+    clearSlotPoints(slot);
+    ownSlot.current = slot;
+    careerRef.current = null;
+    setCareer(null);
+    setDeskNote(null);
+    setSlots(readSlots());
+    setPhase('clubSelect');
+  }, [leaveActive, movedOn]);
+
+  /** Delete one slot's career for good (the screen asks first). */
+  const removeSlot = useCallback((slot: number) => {
+    if (slot === activeSlot()) {
+      clearCareer();
+      ownSlot.current = slot;
+      careerRef.current = null;
+      setCareer(null);
+      setReport(null);
+      setSummary(null);
+    } else {
+      deleteSlot(slot);
+    }
+    /* Round 1513: the career's save points and its score record go with it. */
+    clearSlotPoints(slot);
+    const views = readSlots();
+    setSlots(views);
+    setSlotNote(null);
+    if (!views.some(v => v.summary || v.damaged)) setPhase('clubSelect');
+  }, []);
+
+  /** Back to the slots screen from inside a career, or from an era whose
+   *  squads would not load (review: that screen had no way back). */
+  const showSlots = useCallback(() => {
+    if (careerRef.current && holdsActiveSlot() && !saveCareer(careerRef.current)) movedOn();
+    letGoIfStale();
+    setBootError(null);
+    setSlots(readSlots());
+    setSlotNote(null);
+    setPhase('resume');
+  }, [holdsActiveSlot, letGoIfStale, movedOn]);
+
+  /* Start a new manager: from the season's end, from Start New Career once
+     sacked, and from the farewell. Before Round 928 the first two wiped the
+     career in one tap; the review found they still did after the slots came
+     in, which is exactly what the round promised would stop. Now the career
+     stays in its slot (Delete on the managers screen is the only way to remove
+     one, and since Round 1343 retire above is the way to end one) and the new
+     one starts in an empty slot. With all three taken, the managers screen
+     says so. */
+  const startNew = useCallback(() => {
+    const empty = readSlots().find(v => !v.summary && !v.damaged);
+    if (empty) { newInSlot(empty.slot); return; }
+    showSlots();
+    setSlotNote('All three slots hold a career. Delete one you are done with to make room for a new manager.');
+  }, [newInSlot, showSlots]);
+
+  /* Round 1225: a league with a real first season fixture list keeps it in a
+     small file of its own. The page asks for it when a club is tapped (it
+     passes the picked era), while the dugout step is on screen, so the career
+     starts on it without a wait. fixtureFetch is that fetch while it is out.
+     Round 1225 review: what a file that will not load does, said as it is.
+     The first failed chunk in a tab, online, meets the site's stale chunk rule
+     (reloadOnceForStaleChunk in src/lib/freshBuild.ts): the page reloads to
+     pick up the new build, the picker starts over and the next pick gets its
+     list. Only after that, offline, or with session storage blocked does the
+     failure reach confirmClub below, which then says so and asks. */
+  const fixtureFetch = useRef<{ key: string; done: Promise<void> } | null>(null);
+  /* Round 1225 review: a career whose start is waiting for its list. startWait
+     is what the page shows (the season's label, and whether the list has
+     failed or run out of time); startHold is the start itself, kept so the
+     player's answer can finish it. Leaving the page drops it: the review found
+     the first version began the career up to eight seconds later whatever
+     page was on screen by then. */
+  const [startWait, setStartWait] = useState<{ label: string; failed: boolean } | null>(null);
+  const startHold = useRef<StartHold | null>(null);
+  const dropStartHold = useCallback(() => {
+    const hold = startHold.current;
+    if (hold?.timer) clearTimeout(hold.timer);
+    startHold.current = null;
+    return hold;
+  }, []);
+  useEffect(() => () => { dropStartHold(); }, [dropStartHold]);
+  const chooseClub = useCallback((clubName: string, eraId?: string) => {
+    setPendingClub(clubName);
+    const key = clubName && eraId ? startFixtureKey(clubName, eraId) : null;
+    fixtureFetch.current = key && !realLeagueFixturesLoaded(key) ? { key, done: ensureRealLeagueFixtures(key).catch(() => undefined) } : null;
+  }, []);
+
+  /* Round 132: the era rides in from the picker. Nothing passed means the
+     current era, which is the world this game has always started in.
+     Round 303: the optional manager spec rides the same way; absent means
+     the second person career this has always been. */
+  /* Round 964: and so does a world editor edit, null or absent for the real world.
+     It passes validWorldEdit on the way in, so an edit the editor could not
+     have made (a club in two leagues, a league the wrong size) starts the
+     real world rather than a broken one. */
+  /* Round 1342: and the Dugout step's career options (No sacking), applied
+     after the takeover; absent is the career startCareer made, untouched. */
+  const confirmClub = useCallback((eraId?: string, manager?: ManagerSpec, entry?: MidSeasonEntry, worldEdit?: Record<string, string[]> | null, setup?: CareerSetup) => {
+    if (!pendingClub) return;
+    const club = pendingClub, era = eraId ?? DEFAULT_ERA_ID, edit = validWorldEdit(worldEdit ?? null);
+    const begin = () => {
+      const fresh = startCareer(club, era, undefined, manager, undefined, edit);
+      /* Round 549: a mid season takeover plays the run-in first, under the
+         manager before you, and hands the club over where it stands. */
+      const s = setUpCareer(entry ? startMidSeason(fresh, entry) : fresh, setup, rebuildBoardAsks);
+      clearSlotPoints(activeSlot());
+      setCareer(s);
+      setActiveTab('overview');
+      setPhase('hub');
+    };
+    /* Round 1225: startCareer opens a career on its league's real list only
+       when that list is here. It nearly always is (the club tap asked for
+       it). When that fetch is still out, wait for it on a screen that says
+       what it is waiting for. A caller that never asked for the list (a test
+       that drives this hook taps a club with no era) starts at once, on
+       generated fixtures, exactly as before this round.
+       Round 1225 review: a list that failed, or is still out after eight
+       seconds, no longer starts the career on generated fixtures without a
+       word. Help and What's New promise the real list, so the page says the
+       list did not load and the player picks: try again, or start on
+       generated fixtures (retryStart and startWithoutList below). A list
+       that turns up while the notice is on screen starts the career on it. */
+    const fixtureKey = edit ? null : startFixtureKey(club, era);
+    const fetching = fixtureFetch.current;
+    if (!fixtureKey || realLeagueFixturesLoaded(fixtureKey) || !fetching || fetching.key !== fixtureKey) { begin(); return; }
+    const label = eraById(era).label;
+    dropStartHold();
+    const hold: StartHold = {
+      key: fixtureKey,
+      begin,
+      over: false,
+      timer: null,
+      settle: () => {
+        if (startHold.current !== hold) return;   /* answered already, or the page was left */
+        if (hold.timer) { clearTimeout(hold.timer); hold.timer = null; }
+        if (realLeagueFixturesLoaded(fixtureKey)) { startHold.current = null; setStartWait(null); begin(); }
+        else setStartWait({ label, failed: true });
+      },
+    };
+    startHold.current = hold;
+    setStartWait({ label, failed: false });
+    setPhase('boot');
+    fetching.done.then(() => { hold.over = true; hold.settle(); });
+    hold.timer = setTimeout(hold.settle, 8000);
+  }, [pendingClub, dropStartHold]);
+
+  /* Round 1225 review: Try again on that notice. A fetch that failed stays
+     failed for the life of the page in Chromium (see reloadToRetryChunk), so
+     asking again means a new page: the picker starts over there, and nothing
+     had been saved yet. Offline that reload is refused and the notice stays.
+     A fetch that is only slow is still out, so it gets another eight seconds. */
+  const retryStart = useCallback(() => {
+    const hold = startHold.current;
+    if (!hold) return;
+    if (realLeagueFixturesLoaded(hold.key)) { hold.settle(); return; }
+    if (hold.over) { reloadToRetryChunk(); return; }
+    setStartWait(w => (w ? { ...w, failed: false } : w));
+    if (hold.timer) clearTimeout(hold.timer);
+    hold.timer = setTimeout(hold.settle, 8000);
+  }, []);
+
+  /* And the other answer: start now, on the game's own generated fixtures.
+     startCareer gives no key while the list is not here, so the Calendar
+     claims nothing it cannot show. */
+  const startWithoutList = useCallback(() => {
+    const hold = dropStartHold();
+    if (!hold) return;
+    setStartWait(null);
+    hold.begin();
+  }, [dropStartHold]);
+
+  /* Round 154: founding your own club skips the pending-club dance, because
+     the create form is its own confirmation. */
+  const confirmCustomClub = useCallback((eraId: string | undefined, spec: CustomClubSpec, manager?: ManagerSpec, entry?: MidSeasonEntry, setup?: CareerSetup) => {
+    const fresh = startCareer(spec.name, eraId ?? DEFAULT_ERA_ID, spec, manager);
+    const s = setUpCareer(entry ? startMidSeason(fresh, entry) : fresh, setup, rebuildBoardAsks);
+    clearSlotPoints(activeSlot());
+    setCareer(s);
+    setPendingClub(null);
+    setActiveTab('overview');
+    setPhase('hub');
+  }, []);
+
+  /* ---------- tactics ---------- */
+  const saveMatchPlan = useCallback((slot: number, name: string) => {
+    if (phase !== 'hub' || !holdsActiveSlot()) return false;
+    if (!career || savePlan(career, slot, name) === career) return false;
+    setCareer(prev => prev ? savePlan(prev, slot, name) : prev);
+    return true;
+  }, [career, phase, holdsActiveSlot]);
+
+  const applyMatchPlan = useCallback((slot: number) => {
+    if (phase !== 'hub' || !holdsActiveSlot()) return false;
+    if (!career || applyPlan(career, slot) === career) return false;
+    setCareer(prev => prev ? applyPlan(prev, slot) : prev);
+    return true;
+  }, [career, phase, holdsActiveSlot]);
+
+  const deleteMatchPlan = useCallback((slot: number) => {
+    if (phase !== 'hub' || !holdsActiveSlot()) return false;
+    if (!career || deletePlan(career, slot) === career) return false;
+    setCareer(prev => prev ? deletePlan(prev, slot) : prev);
+    return true;
+  }, [career, phase, holdsActiveSlot]);
+
+  const setFormationIndex = useCallback((idx: number) => {
+    setCareer(prev => {
+      if (!prev) return prev;
+      const to = FORMATIONS[idx];
+      if (!to || idx === prev.formationIndex) return prev;
+      const from = FORMATIONS[prev.formationIndex] ?? FORMATIONS[0];
+      const { xiIds, xiDuties } = carryAcross(prev, from, to);
+      return { ...prev, formationIndex: idx, xiIds, xiDuties };
+    });
+  }, []);
+
+  /* ---------- Round 505: duties, set pieces and the second position ---------- */
+  /** The duty on a slot of the current shape, or null to clear it. The engine refuses one the slot's line does not offer. */
+  const setSlotDuty = useCallback((slotIdx: number, duty: Duty | null) => {
+    setCareer(prev => (prev ? setDuty(prev, slotIdx, duty) ?? prev : prev));
+  }, []);
+
+  /** Hand a set piece job (or the armband) to a man; null hands it back to the auto pick. */
+  const assignSetPiece = useCallback((key: SetPieceKey, playerId: string | null) => {
+    setCareer(prev => (prev ? setSetPiece(prev, key, playerId) ?? prev : prev));
+  }, []);
+
+  const autoPickSetPieces = useCallback(() => {
+    setCareer(prev => (prev ? autoSetPieces(prev) : prev));
+  }, []);
+
+  /** Round 782: the shootout order, player ids in kicking order; an empty list clears it. A bad id leaves the save alone. */
+  const setShootoutOrderIds = useCallback((ids: string[]) => {
+    setCareer(prev => (prev ? setShootoutOrder(prev, ids) ?? prev : prev));
+  }, []);
+
+  /** Put an outfielder to work on a second position. A refusal leaves the save alone; the screen prints why. */
+  const retrain = useCallback((playerId: string, to: Position) => {
+    setCareer(prev => (prev ? startRetraining(prev, playerId, to) ?? prev : prev));
+  }, []);
+
+  const stopRetrain = useCallback((playerId: string) => {
+    setCareer(prev => (prev ? stopRetraining(prev, playerId) : prev));
+  }, []);
+
+  const setMentality = useCallback((m: Mentality) => {
+    setCareer(prev => (prev ? { ...prev, mentality: m } : prev));
+  }, []);
+
+  /* Round 1522: the four standing instructions, between matches (the engine refuses with a match on, and drops
+     the field when all four are back on balanced). */
+  const setTeamInstructions = useCallback((i: TeamInstructions) => {
+    setCareer(prev => (prev ? setInstructions(prev, i) ?? prev : prev));
+  }, []);
+
+  const setXiSlot = useCallback((slotIdx: number, playerId: string | null) => {
+    setCareer(prev => {
+      if (!prev) return prev;
+      const xi = [...prev.xiIds];
+      // Round 114: picking someone who is already in the XI now SWAPS the two
+      // rather than leaving an empty hole where he used to stand, which is
+      // what the drag on the pitch does and what everyone expects anyway.
+      const at = playerId === null ? -1 : xi.findIndex(id => id === playerId);
+      if (at >= 0 && at !== slotIdx) xi[at] = xi[slotIdx];
+      xi[slotIdx] = playerId;
+      return { ...prev, xiIds: xi };
+    });
+  }, []);
+
+  /** Round 114: drag a player onto another spot and the two trade places. */
+  const swapXiSlots = useCallback((a: number, b: number) => {
+    setCareer(prev => {
+      if (!prev) return prev;
+      if (a === b) return prev;
+      const xi = [...prev.xiIds];
+      if (a < 0 || b < 0 || a >= xi.length || b >= xi.length) return prev;
+      const held = xi[a];
+      xi[a] = xi[b];
+      xi[b] = held;
+      return { ...prev, xiIds: xi };
+    });
+  }, []);
+
+  const autoPick = useCallback(() => {
+    setCareer(prev => {
+      if (!prev) return prev;
+      return { ...prev, xiIds: autoPickXI(prev.squad, FORMATIONS[prev.formationIndex]) };
+    });
+  }, []);
+
+  /* ---------- season progression ---------- */
+  const runEntry = useCallback((skipHalftime: boolean) => {
+    if (!career) return;
+    if (heldForTactics(() => { runEntry(skipHalftime); })) return;
+    const res = playNextEntry(career, { skipHalftime, ...cmVarGameAsk(CM_VAR_LIVE) });
+    setCareer(res.state);
+    /* Round 119: the match stops at the interval now. Everything this game has
+       built for eleven rounds happens between fixtures; this is the one moment
+       inside one where the manager gets to manage. Round 157: unless you asked
+       for the quick sim, which plays it in one shot and shows the report. */
+    if (res.kind === 'halftime') {
+      setPhase('halftime');
+    } else if (res.kind === 'window') {
+      setActiveTab('transfers');
+      setPhase('hub');
+    } else if (res.kind === 'match' && res.report) {
+      /* Round 157: a played match counts as playing the game TODAY, not only
+         at the end of a 50-fixture season. This is what feeds the header's
+         games-played, points and rank, which sat at zero all session for
+         anyone mid-season (his screenshot, 2026-08-18). */
+      /* Round 392: as ACTIVITY, the shape Round 301 gave the other sims. A
+         completion here fed the signed in save on every match, so a season
+         was fifty ranked rows and the running season score was added to the
+         player's points fifty times over. Measured 2026-09-01: the top of
+         the points table held 80,246 of its 87,800 from 1,586 Club Manager
+         rows. The finished season below is the completion. */
+      /* Round 1342: a No sacking career pings with no score, so it never ranks. */
+      if (postsScore(res.state)) recordActivity('/club-manager', currentSeasonScore(res.state));
+      else recordActivity('/club-manager');
+      recordStreakDay('/club-manager');
+      setReport(res.report);
+      setPhase('matchResult');
+    } else if (res.kind === 'seasonOver') {
+      const { state, summary: sm } = finishSeason(res.state);
+      if (postsScore(state)) recordCompletion('/club-manager', sm.seasonScore);
+      else recordCompletion('/club-manager');
+      creditSeason(state);
+      setCareer(state);
+      setSummary(sm);
+      setPhase('seasonEnd');
+    }
+  }, [career]);
+
+  const play = useCallback(() => runEntry(false), [runEntry]);
+  /** Round 157: the quick sim. One tap, full result, no dressing room stop. */
+  const quickPlay = useCallback(() => runEntry(true), [runEntry]);
+
+  /* Round 93: his calendar complaint. "u can click through and sim much
+     faster... simulate through date or play match or whatever." Quick sim
+     plays a run of fixtures back to back and only stops early for the things
+     that genuinely need you: the transfer window, or the end of the season.
+     The final match still surfaces its report so the run has a payoff.
+     Round 399: a sacking ends the run too.
+     Round 466: the loop itself now lives in src/lib/clubManagerCalendar.ts
+     (simToWeek), because a tap on any day of the calendar runs the very same
+     loop to that day, and it also stops when a club's approach lands. This
+     runs it to a week and does what the screens need with how it stopped. */
+  const simToWeek = useCallback((targetWeek: number) => {
+    if (!career) return;
+    if (heldForTactics(() => { simToWeek(targetWeek); })) return;
+    const run = runSimToWeek(career, targetWeek, cmVarGameAsk(CM_VAR_LIVE));
+    if (run.halt === 'window') {
+      setCareer(run.state);
+      setActiveTab('transfers');
+      setPhase('hub');
+      return;
+    }
+    if (run.halt === 'seasonOver') {
+      const { state: done, summary: sm } = finishSeason(run.state);
+      if (postsScore(done)) recordCompletion('/club-manager', sm.seasonScore);
+      else recordCompletion('/club-manager');
+      creditSeason(done);
+      setCareer(done);
+      setSummary(sm);
+      setPhase('seasonEnd');
+      return;
+    }
+    setCareer(run.state);
+    if (run.lastReport) {
+      // Round 157: a fast-forwarded run still counts as playing today.
+      if (postsScore(run.state)) recordActivity('/club-manager', currentSeasonScore(run.state));
+      else recordActivity('/club-manager');
+      recordStreakDay('/club-manager');
+      setReport(run.lastReport);
+      setPhase('matchResult');
+    }
+  }, [career]);
+
+  const continueFromReport = useCallback(() => {
+    if (!career) return;
+    if (career.sacked) {
+      if (postsScore(career)) recordCompletion('/club-manager', currentSeasonScore(career));
+      else recordCompletion('/club-manager');
+      creditSeason(career);
+      /* Round 201: the sack opens the wilderness rather than closing the
+         save. The screen is the same route ('sacked'), what changed is that
+         it now has a way onward. */
+      setCareer(prev => (prev ? enterWilderness(prev) : prev));
+      setPhase('sacked');
+      return;
+    }
+    if (career.week >= career.calendar.length) {
+      const { state, summary: sm } = finishSeason(career);
+      if (postsScore(state)) recordCompletion('/club-manager', sm.seasonScore);
+      else recordCompletion('/club-manager');
+      creditSeason(state);
+      setCareer(state);
+      setSummary(sm);
+      setPhase('seasonEnd');
+      return;
+    }
+    setReport(null);
+    setActiveTab('overview');
+    setPhase('hub');
+  }, [career]);
+
+  const nextSeason = useCallback((acceptOfferClub?: string) => {
+    if (!career) return;
+    const s = startNextSeason(career, acceptOfferClub);
+    setCareer(s);
+    setSummary(null);
+    setReport(null);
+    setActiveTab('overview');
+    setPhase('hub');
+  }, [career]);
+
+  /* ---------- transfers ---------- */
+  /* Round 634 review: read off the career the player is looking at (the last
+     commit), which is the one his press was made against. */
+  const explain = useCallback((mp: MarketPlayer, door: MarketDoor) => {
+    const now = careerRef.current;
+    setDeskNote(now ? doorRefusal(now, mp, door) : null);
+  }, []);
+
+  const buy = useCallback((mp: MarketPlayer) => {
+    explain(mp, 'buy');
+    setCareer(prev => {
+      if (!prev) return prev;
+      const next = buyPlayer(prev, mp);
+      return next ?? prev;
+    });
+  }, [explain]);
+
+  /* Round 141: the instant sell action is gone. Selling is: transfer list
+     him (setTransferStatus), let bids arrive, accept one (acceptBid below).
+     The owner asked for exactly this: offers or nothing. */
+
+  /* ---------- Round 71: negotiations, clauses, loans, incoming bids ---------- */
+  const negotiate = useCallback((mp: MarketPlayer) => {
+    explain(mp, 'talk');
+    setCareer(prev => (prev ? startNegotiation(prev, mp) ?? prev : prev));
+  }, [explain]);
+
+  /* Round 161: an offer can be a package: cash plus add-ons plus a sell-on
+     plus a part-exchange player. Extras default to nothing, which is the
+     exact deal this hook has always sent. */
+  const offer = useCallback((amount: number, extras?: DealExtras) => {
+    setCareer(prev => (prev ? makeOffer(prev, amount, extras) ?? prev : prev));
+  }, []);
+
+  const walk = useCallback(() => {
+    setCareer(prev => (prev ? walkAway(prev) : prev));
+  }, []);
+
+  /* Round 506: the second table. A fee being agreed no longer signs anybody,
+     so this is the call that actually finishes a transfer. */
+  const proposeTerms = useCallback((terms: PersonalTerms) => {
+    setCareer(prev => (prev ? offerTerms(prev, terms) ?? prev : prev));
+  }, []);
+
+  /* Round 506: the two loan figures agreed when he arrived. */
+  const buyLoanee = useCallback((playerId: string) => {
+    setCareer(prev => (prev ? exerciseLoanOption(prev, playerId) ?? prev : prev));
+  }, []);
+
+  const endLoanEarly = useCallback((playerId: string) => {
+    setCareer(prev => (prev ? breakLoan(prev, playerId) ?? prev : prev));
+  }, []);
+
+  /* Round 508: bring one of MY loans back early, at the recall figure. */
+  const recallLoanee = useCallback((playerId: string) => {
+    setCareer(prev => (prev ? recallLoanedPlayer(prev, playerId) ?? prev : prev));
+  }, []);
+
+  /* Round 168: answer the mid-season approach from the Manager panel. */
+  const answerApproach = useCallback((commit: boolean) => {
+    setCareer(prev => (prev ? respondApproach(prev, commit) : prev));
+  }, []);
+
+  /* Round 171: the finance desk. Round 467: a price change carries the fans'
+     and the board's reaction with it, and food has a price of its own. */
+  const setTickets = useCallback((tier: 0 | 1 | 2) => {
+    setCareer(prev => (prev ? setTicketPolicy(prev, tier) : prev));
+  }, []);
+  const setConcessions = useCallback((tier: ConcessionTier) => {
+    setCareer(prev => (prev ? setConcessionTier(prev, tier) : prev));
+  }, []);
+  const expandStadium = useCallback(() => {
+    setCareer(prev => (prev ? expandGround(prev) ?? prev : prev));
+  }, []);
+  /* Round 200: the commercial desk. Round 467: it negotiates, and it signs
+     the offer as it stands on the desk, pushes and bad brands included. */
+  const takeSponsor = useCallback((offerId: string) => {
+    setCareer(prev => (prev ? acceptSponsor(prev, offerId) ?? prev : prev));
+  }, []);
+  const pushSponsorOffer = useCallback((offerId: string) => {
+    setCareer(prev => (prev ? pushSponsor(prev, offerId) ?? prev : prev));
+  }, []);
+  /* Round 467: the facilities desk. */
+  const buyFacility = useCallback((id: FacilityId) => {
+    setCareer(prev => (prev ? upgradeClubFacility(prev, id) ?? prev : prev));
+  }, []);
+  /* Round 514: the three start options. Each one returns null when it would
+     change nothing, so `?? prev` leaves the save alone. */
+  const setCurrency = useCallback((code: CurrencyCode) => {
+    setCareer(prev => (prev ? setStartOption(prev, 'currency', code) ?? prev : prev));
+  }, []);
+  const setNationJobs = useCallback((on: boolean) => {
+    setCareer(prev => (prev ? setStartOption(prev, 'nationJobs', on) ?? prev : prev));
+  }, []);
+  const setStrictness = useCallback((level: number) => {
+    setCareer(prev => (prev ? setStartOption(prev, 'strictness', level) ?? prev : prev));
+  }, []);
+  /* Round 1342: No sacking, one way. Null (already on, sacked, out of work) leaves the save alone. */
+  const turnOnNoSack = useCallback(() => {
+    setCareer(prev => (prev ? turnOnNoSackFor(prev) ?? prev : prev));
+  }, []);
+  /* Round 1512: the level, changed between matches from Options. Null (the same level, a match at halftime)
+     leaves the save alone; anything else moves only the level and the one way easy mark. */
+  const setDifficulty = useCallback((level: DifficultyLevel) => {
+    setCareer(prev => (prev ? setDifficultyFor(prev, level) ?? prev : prev));
+  }, []);
+  /* Round 513: a point into a tree. One way only, so it never needs a refund
+     path, and null when there is nothing free to spend. */
+  /* Round 965: the Edit manager sheet. editManager returns null on a refused
+     edit (a real name, a country the engine does not run, a new background),
+     and ?? prev leaves the save alone, the shape every action here uses. */
+  const updateManager = useCallback((edit: ManagerEdit) => {
+    setCareer(prev => (prev ? editManager(prev, edit) ?? prev : prev));
+  }, []);
+  const spendPoint = useCallback((tree: SkillTree) => {
+    setCareer(prev => (prev ? spendSkillPoint(prev, tree) ?? prev : prev));
+  }, []);
+  /* Round 471: the staff desk. Four posts, and the rival on the phone. */
+  const appointStaff = useCallback((post: StaffPostId, candidateId: string) => {
+    setCareer(prev => (prev ? hireStaff(prev, post, candidateId) ?? prev : prev));
+  }, []);
+  const payOffStaff = useCallback((post: StaffPostId) => {
+    setCareer(prev => (prev ? sackStaff(prev, post) ?? prev : prev));
+  }, []);
+  const matchStaff = useCallback(() => {
+    setCareer(prev => (prev ? matchStaffOffer(prev) ?? prev : prev));
+  }, []);
+  const letStaffGo = useCallback(() => {
+    setCareer(prev => (prev ? releaseToPoacher(prev) ?? prev : prev));
+  }, []);
+  /* Round 202: the country. */
+  const acceptNation = useCallback(() => {
+    setCareer(prev => (prev ? takeNationJob(prev) : prev));
+  }, []);
+  const resignNation = useCallback(() => {
+    setCareer(prev => (prev ? leaveNationJob(prev) : prev));
+  }, []);
+
+  /* Round 201: out of work. Waiting is a move, and taking a job is the
+     ordinary season rollover with a different club at the end of it. */
+  const waitAWeek = useCallback(() => {
+    setCareer(prev => (prev ? wildernessWeek(prev.wilderness ? prev : enterWilderness(prev)) : prev));
+  }, []);
+  const takeJob = useCallback((club: string) => {
+    setCareer(prev => {
+      if (!prev) return prev;
+      const next = acceptWildernessJob(prev, club);
+      if (!next) return prev;
+      setPhase('hub');
+      return next;
+    });
+  }, []);
+
+  const dismissNegotiation = useCallback(() => {
+    setCareer(prev => (prev ? { ...prev, negotiation: null } : prev));
+  }, []);
+
+  const clause = useCallback((mp: MarketPlayer) => {
+    explain(mp, 'clause');
+    setCareer(prev => (prev ? payClause(prev, mp) ?? prev : prev));
+  }, [explain]);
+
+  const loan = useCallback((mp: MarketPlayer) => {
+    explain(mp, 'loan');
+    setCareer(prev => (prev ? loanIn(prev, mp) ?? prev : prev));
+  }, [explain]);
+
+  const acceptIncomingBid = useCallback((playerId: string) => {
+    /* Round 634 review: a loan approach goes through loanOutPlayer, so it is
+       refused on the same one-a-season rule and says so. */
+    const now = careerRef.current;
+    const bid = now?.incomingBids?.find(b => b.playerId === playerId);
+    setDeskNote(now && bid?.loan ? loanOutRefusal(now, playerId) : null);
+    setCareer(prev => (prev ? acceptBid(prev, playerId) ?? prev : prev));
+  }, []);
+
+  const rejectIncomingBid = useCallback((playerId: string) => {
+    setCareer(prev => (prev ? rejectBid(prev, playerId) : prev));
+  }, []);
+
+  /* ---------- Round 94: transfer list, loan list, block ---------- */
+  const setStatus = useCallback((playerId: string, status: TransferStatus | null) => {
+    setCareer(prev => (prev ? setTransferStatus(prev, playerId, status) : prev));
+  }, []);
+
+  const loanOut = useCallback((playerId: string) => {
+    const now = careerRef.current;
+    setDeskNote(now ? loanOutRefusal(now, playerId) : null);
+    setCareer(prev => (prev ? loanOutPlayer(prev, playerId) ?? prev : prev));
+  }, []);
+
+  const commitLoanPlan = useCallback((make: (c: CareerState) => CareerState | null): boolean => {
+    if (phase !== 'hub' || !holdsActiveSlot() || movedOn()) return false;
+    const now = careerRef.current;
+    if (!now) return false;
+    const next = make(now);
+    if (!next) return false;
+    if (next === now) return true;
+    if (!persist(next)) return false;
+    careerRef.current = next;
+    setCareer(next);
+    setDeskNote(null);
+    return true;
+  }, [phase, holdsActiveSlot, movedOn, persist]);
+
+  const commitRecruitment = useCallback((make: (c: CareerState) => CareerState | null): boolean => {
+    if (phase !== 'hub' || !holdsActiveSlot() || movedOn()) return false;
+    const now = recruitmentCurrent.current;
+    if (!now) return false;
+    const next = make(now);
+    if (!next) return false;
+    if (next === now) return true;
+    if (!persist(next)) return false;
+    recruitmentCurrent.current = next;
+    careerRef.current = next;
+    setCareer(next);
+    return true;
+  }, [phase, holdsActiveSlot, movedOn, persist]);
+
+  /* ---------- Round 105: contracts ---------- */
+  const renew = useCallback((playerId: string) => {
+    setCareer(prev => (prev ? renewContract(prev, playerId) ?? prev : prev));
+  }, []);
+
+  /* Round 619: end a deal early. The settlement is written on the save and
+     keeps counting against the wage cap, so this is not a delete button. */
+  const terminate = useCallback((playerId: string) => {
+    setCareer(prev => (prev ? releasePlayer(prev, playerId) ?? prev : prev));
+  }, []);
+
+  /* Round 619: sign a man with no club. The only signing that works with the
+     transfer window shut. */
+  const signFree = useCallback((name: string) => {
+    setCareer(prev => (prev ? signFreeAgent(prev, name) ?? prev : prev));
+  }, []);
+
+  /* Round 193: the clause renewal, cheaper wage for an exit door. */
+  const renewWithClause = useCallback((playerId: string) => {
+    setCareer(prev => (prev ? renewContractWithClause(prev, playerId) ?? prev : prev));
+  }, []);
+
+  /* ---------- Round 127: squad roles and playing time promises ---------- */
+  const setRole = useCallback((playerId: string, role: SquadRole) => {
+    setCareer(prev => (prev ? setSquadRole(prev, playerId, role) ?? prev : prev));
+  }, []);
+
+  /* ---------- Round 116: the academy and the training ground ---------- */
+  const upgradeFacility = useCallback((kind: FacilityKind) => {
+    setCareer(prev => (prev ? upgradeAcademy(prev, kind) ?? prev : prev));
+  }, []);
+
+  const sendScout = useCallback((candidateId: string, regionId: string, weeks: number) => {
+    setCareer(prev => (prev ? hireScout(prev, candidateId, regionId, weeks) ?? prev : prev));
+  }, []);
+
+  const callScoutHome = useCallback((scoutId: string) => {
+    setCareer(prev => (prev ? recallScout(prev, scoutId) : prev));
+  }, []);
+
+  const promote = useCallback((prospectId: string) => {
+    setCareer(prev => (prev ? promoteProspect(prev, prospectId) ?? prev : prev));
+  }, []);
+
+  const release = useCallback((prospectId: string) => {
+    setCareer(prev => (prev ? releaseProspect(prev, prospectId) : prev));
+  }, []);
+
+  const setTraining = useCallback((plan: TrainingPlan) => {
+    setCareer(prev => (prev ? setTrainingPlan(prev, plan) : prev));
+  }, []);
+
+  /* ---------- Round 119: the dressing room ---------- */
+  const subAtHalftime = useCallback((outId: string, inId: string) => {
+    setCareer(prev => (prev && !tacticsWait(prev) ? makeHalftimeSub(prev, outId, inId) ?? prev : prev));
+  }, []);
+
+  const shapeAtHalftime = useCallback((m: Mentality) => {
+    setCareer(prev => (prev && !tacticsWait(prev) ? setHalftimeMentality(prev, m) : prev));
+  }, []);
+
+  /* Round 1522: instructions, a formation or a duty in the dressing room, for tonight only (the restart, 46). */
+  const changeAtHalftime = useCallback((change: LiveChange) => {
+    setCareer(prev => (prev && !tacticsWait(prev) ? changeLive(prev, 46, change) ?? prev : prev));
+  }, []);
+
+  /* Round 504: secondHalf is the FINISH of a live match now. The classic half
+     time screen still calls it straight from the break (the whistle draws the
+     second half itself), and the live viewer calls it when its clock reaches
+     90 on a second half that startSecondHalfLive already drew. */
+  const secondHalf = useCallback(() => {
+    if (!career) return;
+    if (heldForTactics(() => { secondHalf(); })) return;
+    const res = resumeMatch(career);
+    setCareer(res.state);
+    if (res.report) {
+      // Round 157: a finished match counts toward today, mid-season included.
+      if (postsScore(res.state)) recordActivity('/club-manager', currentSeasonScore(res.state));
+      else recordActivity('/club-manager');
+      recordStreakDay('/club-manager');
+      setReport(res.report);
+      setPhase('matchResult');
+    } else {
+      setPhase('hub');
+    }
+  }, [career]);
+
+  /* Round 504: the second half is drawn when you send them back out, so the
+     viewer walks football that is already decided and a change in the 70th
+     minute has something to redraw. */
+  const startSecondHalfLive = useCallback(() => {
+    setCareer(prev => (prev && !tacticsWait(prev) ? startSecondHalf(prev) ?? prev : prev));
+  }, []);
+
+  /* Round 670: extra time, drawn by the engine when the viewer's clock
+     reaches 90 on a level decider, so the viewer walks thirty minutes that are
+     already football. The engine refuses (null) when it is not due.
+     Round 670 review: the viewer asks at every 90 and this answers on the
+     latest save (prev), so a change still on its way when the clock got
+     there is part of the answer; the viewer reads it off live.et. */
+  const startExtraTimeLive = useCallback(() => {
+    setCareer(prev => (prev && !tacticsWait(prev) ? startExtraTime(prev) ?? prev : prev));
+  }, []);
+
+  /* Round 504: a sub or a shape change at any minute of a live match. The
+     engine keeps everything at or before that minute and redraws the rest of
+     the half off the eleven and the shape you just chose. */
+  const changeAt = useCallback((minute: number, change: LiveChange, plus?: number) => {
+    /* Round 781: and how far into the board it was made, for the line's label. */
+    setCareer(prev => (prev && !tacticsWait(prev) ? changeLive(prev, minute, change, plus) ?? prev : prev));
+  }, []);
+
+  /* Round 504: where the clock stands, so a save closed in the 30th minute
+     opens again in the 30th rather than at the last change. The viewer calls
+     it at the interval and when the page is hidden, never on a tick, because
+     every career write goes to localStorage. The engine hands back the same
+     object when nothing moves, so React skips the write.
+
+     Round 567: and the write happens HERE rather than in the persist effect,
+     because three of the four moments this is called are moments the page is
+     going away (a pagehide, a tab hidden, the viewer's own unmount cleanup)
+     and a state update made then never commits. The state update is still
+     made, from the latest state and through the engine's own pure function,
+     so nothing about the in-page behaviour changes; the disk write just no
+     longer depends on a render that may not happen. */
+  const markMinute = useCallback((minute: number) => {
+    const now = careerRef.current;
+    if (!now) return;
+    const next = markLiveMinute(now, minute);
+    if (next === now) return;
+    careerRef.current = next;
+    /* Round 928 review: the live clock of a page whose slot another tab has
+       switched must not write over the career that tab switched in. */
+    if (holdsActiveSlot()) saveCareer(next);
+    setCareer(prev => (prev ? markLiveMinute(prev, minute) : prev));
+  }, [holdsActiveSlot]);
+
+  /* ---------- Round 135: the microphone and the dressing room ---------- */
+  /* Tapping the tone you already picked takes it back, so a mis-tap is not a
+     decision you are stuck with for ninety minutes. */
+  const talk = useCallback((tone: TalkTone) => {
+    setCareer(prev => (prev ? setTeamTalk(prev, tone) : prev));
+  }, []);
+
+  const halftimeTalk = useCallback((tone: TalkTone) => {
+    setCareer(prev => (prev ? giveHalftimeTalk(prev, tone) : prev));
+  }, []);
+
+  const sayIt = useCallback((optionIdx: number) => {
+    setCareer(prev => (prev ? answerPress(prev, optionIdx) : prev));
+  }, []);
+
+  const sendAssistant = useCallback(() => {
+    setCareer(prev => (prev ? duckPress(prev) : prev));
+  }, []);
+
+  /* ---------- Round 73: the inbox ---------- */
+  const answer = useCallback((messageId: string, optionIdx: number) => {
+    setCareer(prev => {
+      if (!prev) return prev;
+      /* Round 783: joining the club that said yes, today, is the mid season
+         takeover in clubManagerCalendar.ts rather than an inbox effect, so
+         that one answer is routed there. Everything else is the inbox's. */
+      const msg = (prev.inbox ?? []).find(m => m.id === messageId);
+      if (msg && !msg.resolved && msg.options[optionIdx]?.effect === 'joinNow') return joinClubNow(prev) ?? prev;
+      return answerMessage(prev, messageId, optionIdx);
+    });
+  }, []);
+
+  /* ---------- Round 783: the job hunt ---------- */
+  const applyJob = useCallback((club: string) => {
+    setCareer(prev => (prev ? applyForJob(prev, club) ?? prev : prev));
+  }, []);
+  const joinSummer = useCallback(() => {
+    setCareer(prev => (prev ? joinClubInSummer(prev) ?? prev : prev));
+  }, []);
+  const joinNow = useCallback(() => {
+    setCareer(prev => (prev ? joinClubNow(prev) ?? prev : prev));
+  }, []);
+
+  return {
+    simToWeek,
+    saveFailed, saveMoved, deskNote, clearDeskNote: () => setDeskNote(null),
+    tacticsFailed, retryTactics: () => { reloadToRetryChunk(); },
+    bootError, bootNoun, retryBoot,
+    startWait, retryStart, startWithoutList,
+    slots, slotNote, openSlot, newInSlot, removeSlot, showSlots,
+    /* Round 1513: the slot whose save points this page may touch; null on a page another tab has moved on from. */
+    pointsSlot: (): number | null => (holdsActiveSlot() ? ownSlot.current : null),
+    phase, career, report, summary, activeTab, setActiveTab, pendingClub,
+    market, nextFx, tableRows, myPosition, facts,
+    resume, startNew, retire, chooseClub, confirmClub, confirmCustomClub,
+    setFormationIndex, setMentality, setTeamInstructions, setXiSlot, swapXiSlots, autoPick,
+    saveMatchPlan, applyMatchPlan, deleteMatchPlan,
+    setSlotDuty, assignSetPiece, autoPickSetPieces, setShootoutOrder: setShootoutOrderIds, retrain, stopRetrain,
+    play, quickPlay, continueFromReport, nextSeason,
+    buy,
+    negotiate, offer, walk, proposeTerms, buyLoanee, endLoanEarly, recallLoanee, answerApproach, setTickets, setConcessions, expandStadium, takeSponsor, pushSponsorOffer, buyFacility, waitAWeek, takeJob, acceptNation, resignNation, dismissNegotiation, clause, loan,
+    appointStaff, payOffStaff, matchStaff, letStaffGo, spendPoint, updateManager,
+    setCurrency, setNationJobs, setStrictness, turnOnNoSack, setDifficulty,
+    acceptIncomingBid, rejectIncomingBid,
+    setStatus, loanOut, commitLoanPlan, commitRecruitment, renew, renewWithClause, terminate, signFree, setRole,
+    upgradeFacility, sendScout, callScoutHome, promote, release, setTraining,
+    subAtHalftime, shapeAtHalftime, changeAtHalftime, secondHalf, startSecondHalfLive, startExtraTimeLive, changeAt, markMinute,
+    talk, halftimeTalk, sayIt, sendAssistant,
+    answer,
+    applyJob, joinSummer, joinNow,
+  };
+}
+
+export type ClubManagerGame = ReturnType<typeof useClubManager>;
