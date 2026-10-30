@@ -1,0 +1,20 @@
+tsc exit=0 95s | 
+fleet exit=0 194s | simCmFreeAgencyFleet: green, all four sections held
+fleet-deletepool exit=1 210s | simCmFreeAgencyFleet: CONTROL deletepool FIRED: section 1 red (red: 1 (390), 4 (16))
+fleet-noretire exit=1 208s | simCmFreeAgencyFleet: CONTROL noretire FIRED: section 2 red
+fleet-nodedupe exit=1 190s | simCmFreeAgencyFleet: CONTROL nodedupe FIRED: section 3 red (red: 2 (2), 3 (113))
+fleet-norecover exit=1 197s | simCmFreeAgencyFleet: CONTROL norecover FIRED: section 4 red
+fa exit=0 136s | simFreeAgents: all sections passed
+fa-olddelete exit=1 148s | simFreeAgents: 4 failure(s)
+fa-nosummer exit=1 146s | simFreeAgents: 2 failure(s)
+fleet-12seasons exit=0 397s | simCmFreeAgencyFleet: green, all three sections held
+fa-nodecay exit=1 155s | simFreeAgents: 1 failure(s)
+vitest exit=0 7s |    Duration  6.01s (transform 2.87s, setup 185ms, collect 7.98s, tests 1.67s, environment 928ms, prepare 254ms)
+savesize exit=0 96s | simClubManagerSaveSize: all sections green
+fa-nodecaywire exit=1 149s | simFreeAgents: 1 failure(s)
+contracts exit=0 32s | ALL CONTRACT CHECKS PASSED
+fa-rollseed exit=1 155s | simFreeAgents: 1 failure(s)
+cmsave exit=0 19s | simClubManagerSave: all sections green
+norival exit=0 21s | No rival product names found. 0 findings.
+savesize-uncapped exit=1 96s | simClubManagerSaveSize: CONTROL FIRED as it should, SAVE_SIZE_CONTROL=uncapped turned section 1 red (33 failures) and nothing else
+ledgerbound exit=0 281s | simCmLedgerBound: green, all four sections held

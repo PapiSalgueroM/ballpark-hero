@@ -1,0 +1,18 @@
+  Everton now none: 65 men left, lost 0, twice 0, 0 retired off the list; at season 9 58 on the list besides the journeymen, median age 27
+  Everton now eleven: 31 men left, lost 0, twice 0, 0 retired off the list; at season 9 37 on the list besides the journeymen, median age 25
+  Villarreal now none: 70 men left, lost 0, twice 0, 0 retired off the list; at season 9 67 on the list besides the journeymen, median age 25
+  Villarreal now eleven: 38 men left, lost 0, twice 0, 0 retired off the list; at season 9 43 on the list besides the journeymen, median age 25
+  Freiburg now none: 65 men left, lost 0, twice 0, 0 retired off the list; at season 9 62 on the list besides the journeymen, median age 28
+  Freiburg now eleven: 37 men left, lost 0, twice 0, 0 retired off the list; at season 9 39 on the list besides the journeymen, median age 26
+  Ajax now none: 69 men left, lost 0, twice 0, 0 retired off the list; at season 9 65 on the list besides the journeymen, median age 25
+  Ajax now eleven: 40 men left, lost 0, twice 0, 0 retired off the list; at season 9 42 on the list besides the journeymen, median age 33
+  Braga now none: 70 men left, lost 0, twice 0, 0 retired off the list; at season 9 68 on the list besides the journeymen, median age 27
+  Braga now eleven: 37 men left, lost 0, twice 0, 0 retired off the list; at season 9 44 on the list besides the journeymen, median age 26
+  Southampton era2015 none: 67 men left, lost 0, twice 0, 0 retired off the list; at season 9 57 on the list besides the journeymen, median age 25
+  Southampton era2015 eleven: 37 men left, lost 0, twice 0, 0 retired off the list; at season 9 34 on the list besides the journeymen, median age 24
+  old save Everton now (written on 14a9af704, end of season 5): main had lost 12 men, 4 of them recoverable; recoverable here 4, back after the summer 4
+  old save Ajax now (written on 14a9af704, end of season 5): main had lost 15 men, 4 of them recoverable; recoverable here 4, back after the summer 4
+  old save Southampton era2015 (written on 14a9af704, end of season 5): main had lost 11 men, 5 of them recoverable; recoverable here 5, back after the summer 5
+  FAIL section 2: only 0 men retired off the list over the fleet, under 13
+simCmFreeAgencyFleet: 12 careers to season 9; 626 men left a squad, 2592 summer checks; lost 0, twice 0; 0 retired off the list (0 summers unseen); list size at the end median 57, its median age median 26; old saves recoverable 13, recovered 13
+simCmFreeAgencyFleet: CONTROL noretire FIRED: section 2 red

@@ -1,0 +1,33 @@
+  FAIL section 1: Everton now none, summer into season 4: Jordan Pickford (left at a summer) is in no squad, not on the list and not retired
+  FAIL section 1: Everton now none, summer into season 4: Mark Travers (left at a summer) is in no squad, not on the list and not retired
+  FAIL section 1: Everton now none, summer into season 5: Jarrad Branthwaite (left at a summer) is in no squad, not on the list and not retired
+  FAIL section 1: Everton now none, summer into season 5: Brennan Johnson (left at a summer) is in no squad, not on the list and not retired
+  FAIL section 1: Everton now none, summer into season 5: Thierno Barry (left at a summer) is in no squad, not on the list and not retired
+  FAIL section 1: Everton now none, summer into season 5: Vitaliy Mykolenko (left at a summer) is in no squad, not on the list and not retired
+  FAIL section 1: Everton now none, summer into season 5: Merlin Röhl (left at a summer) is in no squad, not on the list and not retired
+  FAIL section 1: Everton now none, summer into season 5: Harrison Armstrong (left at a summer) is in no squad, not on the list and not retired
+  Everton now none: 66 men left, lost 40, twice 0, 6 retired off the list; at season 9 18 on the list besides the journeymen, median age 23
+  Everton now eleven: 31 men left, lost 20, twice 0, 7 retired off the list; at season 9 8 on the list besides the journeymen, median age 22
+  Villarreal now none: 69 men left, lost 42, twice 0, 8 retired off the list; at season 9 14 on the list besides the journeymen, median age 23
+  Villarreal now eleven: 39 men left, lost 24, twice 0, 8 retired off the list; at season 9 10 on the list besides the journeymen, median age 21
+  Freiburg now none: 67 men left, lost 44, twice 0, 7 retired off the list; at season 9 15 on the list besides the journeymen, median age 24
+  Freiburg now eleven: 36 men left, lost 21, twice 0, 9 retired off the list; at season 9 9 on the list besides the journeymen, median age 21
+  Ajax now none: 73 men left, lost 45, twice 0, 10 retired off the list; at season 9 19 on the list besides the journeymen, median age 23
+  Ajax now eleven: 39 men left, lost 20, twice 0, 9 retired off the list; at season 9 12 on the list besides the journeymen, median age 21
+  Braga now none: 69 men left, lost 47, twice 0, 6 retired off the list; at season 9 14 on the list besides the journeymen, median age 23
+  Braga now eleven: 37 men left, lost 28, twice 0, 4 retired off the list; at season 9 9 on the list besides the journeymen, median age 21
+  Southampton era2015 none: 67 men left, lost 35, twice 0, 2 retired off the list; at season 9 21 on the list besides the journeymen, median age 22
+  Southampton era2015 eleven: 37 men left, lost 24, twice 0, 3 retired off the list; at season 9 8 on the list besides the journeymen, median age 21
+  FAIL section 4: Everton: Hayden Hackney, on the old save's list, is gone after its next summer
+  FAIL section 4: Everton: Tyrique George, on the old save's list, is gone after its next summer
+  FAIL section 4: Everton: Carlos Alcaraz, on the old save's list, is gone after its next summer
+  FAIL section 4: Everton: Marco Ravenhill (Youth), on the old save's list, is gone after its next summer
+  old save Everton now (written on 14a9af704, end of season 5): main had lost 12 men, 4 of them recoverable; recoverable here 4, back after the summer 4
+  FAIL section 4: Ajax: Tolu Arokodare, on the old save's list, is gone after its next summer
+  FAIL section 4: Ajax: Yves Bissouma, on the old save's list, is gone after its next summer
+  FAIL section 4: Ajax: Sofyan Amrabat, on the old save's list, is gone after its next summer
+  FAIL section 4: Ajax: Rayane Bounida, on the old save's list, is gone after its next summer
+  old save Ajax now (written on 14a9af704, end of season 5): main had lost 15 men, 4 of them recoverable; recoverable here 4, back after the summer 4
+  old save Southampton era2015 (written on 14a9af704, end of season 5): main had lost 11 men, 5 of them recoverable; recoverable here 5, back after the summer 5
+simCmFreeAgencyFleet: 12 careers to season 9; 630 men left a squad, 1650 summer checks; lost 390, twice 0; 79 retired off the list (0 summers unseen); list size at the end median 14, its median age median 22; old saves recoverable 13, recovered 13
+simCmFreeAgencyFleet: CONTROL deletepool FIRED: section 1 red (red: 1 (390), 4 (16))
