@@ -22316,6 +22316,8 @@ export function startNextSeason(career: CareerState, acceptOfferClub?: string): 
      winner, admitted to the watched Champions League as nextUclField admits it (row Q4). */
   const watchCup = euroCupOf(career);
   const watchUelHolder = uelHolderOf(career);
+  /* Round 1593: whether my own club won it, read here with the holder for the same reason (the qualifiedUcl guard). */
+  const wonUelPlayed = wonUelThisSeason(career);
   /* Round 1510: and what the season hands its country's super cup (the top flight's order and the cup final),
      here for the same reason: after the swap a promoted club would be read in the wrong league. */
   const oneOffFrom = oneOffTablesOf(career);
@@ -22605,7 +22607,11 @@ export function startNextSeason(career: CareerState, acceptOfferClub?: string): 
      above before the new memberships registered. */
   /* Round 543: the fallback arm counts the places the league PLAYED in really
      had, the same way Round 310 made it check that league's euro flag. */
-  const qualifiedUcl = (summary ? summary.qualifiedUcl : prevPos <= playedLeagueUclPlaces) && nextLeague.euro;
+  /* Round 1593: the Europa League's winner plays next season's Champions League whatever league it is in (row Q4,
+     no condition on the domestic league), so a winner in the Championship, or relegated the season it won the final,
+     keeps the place the review promised. The title is the club's, so a manager who walks away does not take it. */
+  const wonUelHere = !moving && wonUelPlayed;
+  const qualifiedUcl = ((summary ? summary.qualifiedUcl : prevPos <= playedLeagueUclPlaces) && nextLeague.euro) || wonUelHere;
   const league = nextLeague;
   /* Paired modern divisions move the same displaced slot every summer. */
   const nextReplaced = custom
