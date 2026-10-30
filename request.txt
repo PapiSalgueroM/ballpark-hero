@@ -1,0 +1,4 @@
+#!serve
+#!playwright
+walk-AB: WALK_ONLY=AB RC_OUT=$RC_OUT/ab node .rc/x/walkcmsc.mjs
+walk-CD: WALK_ONLY=CD RC_OUT=$RC_OUT/cd node .rc/x/walkcmsc.mjs

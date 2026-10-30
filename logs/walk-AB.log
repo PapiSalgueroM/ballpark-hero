@@ -1,0 +1,100 @@
+  info  fixture NEAR: Everton season 1 week 48, league weeks left 4, expiring 3, managers 19 real
+  info  fixture END: review pending true, expiring 3
+  info  fixture HOT: Chelsea (survived); slot 1 holds Aston Villa
+-- 390rm section A
+  ok    390rm A: Take the job (confirm bar) 168x44 at 555 to 599, banner top 611, hit itself
+  ok    390rm A: Skip: just manage 324x42 at 401 to 443, banner top 611, hit itself
+  ok    390rm A: in the job at Everton, season 1
+  info  390rm A: no fixture dugout line on the hub
+  ok    390rm A: Liverpool's club page reads "Manager: Andoni Iraola" (real)
+  ok    390rm A: Liverpool page Back 47x16 at 160 to 176, banner top 611, hit itself
+  ok    390rm A: Newcastle's club page reads "Manager: Matthias Jaissle · since Aug 2026" (real)
+  ok    390rm A: Newcastle page Back 47x16 at 160 to 176, banner top 611, hit itself
+  ok    390rm A: Chelsea's club page reads "Manager: Xabi Alonso" (real)
+  ok    390rm A: Chelsea page Back 47x16 at 160 to 176, banner top 611, hit itself
+  ok    390rm A: squad row Seasons button 332x44 at 400 to 444, banner top 611, hit itself
+  ok    390rm A: player card Back 57x44 at 157 to 201, banner top 611, hit itself
+-- 390rm section B
+  ok    390rm B: leaders board rival row 332x44 at 400 to 444, banner top 611, hit itself
+  info  390rm B: leaders card starts "Back Viktor Gyökeres ST · age 27 · Arsenal Rated 88, Worth £52.5m LEAGUE, THIS SEASON 21 goals, 9 assists The count is for Arsenal only. If "
+  ok    390rm B: leaders card Back 57x44 at 157 to 201, banner top 611, hit itself
+  info  390rm B: driver steps home,calendar,rest,continue
+  ok    390rm B: a deal Renew button 54x44 at 400 to 444, banner top 611, hit itself
+  ok    390rm B: a deal Let go button 80x44 at 400 to 444, banner top 611, hit itself
+  ok    390rm B: Let the rest go 92x44 at 400 to 444, banner top 611, hit itself
+  ok    390rm B: every deal answered (renewed Jordan Pickford, let go Christian Nørgaard), "Continue to Season 2" opens
+  ok    390rm B: Continue to Season 2 230x48 at 398 to 446, banner top 611, hit itself
+  ok    390rm B: season 2 begun, 11 on the free agent list
+-- 1280rm section A
+  ok    1280rm A: Take the job (confirm bar) 168x44 at 679 to 723, banner top 735, hit itself
+  ok    1280rm A: Skip: just manage 316x44 at 428 to 472, banner top 735, hit itself
+  ok    1280rm A: in the job at Everton, season 1
+  info  1280rm A: no fixture dugout line on the hub
+  ok    1280rm A: Liverpool's club page reads "Manager: Andoni Iraola" (real)
+  ok    1280rm A: Liverpool page Back 47x16 at 140 to 156, banner top 735, hit itself
+  ok    1280rm A: Newcastle's club page reads "Manager: Matthias Jaissle · since Aug 2026" (real)
+  ok    1280rm A: Newcastle page Back 47x16 at 140 to 156, banner top 735, hit itself
+  ok    1280rm A: Chelsea's club page reads "Manager: Xabi Alonso" (real)
+  ok    1280rm A: Chelsea page Back 47x16 at 140 to 156, banner top 735, hit itself
+  ok    1280rm A: squad row Seasons button 830x44 at 428 to 472, banner top 735, hit itself
+  ok    1280rm A: player card Back 57x44 at 137 to 181, banner top 735, hit itself
+-- 1280rm section B
+  ok    1280rm B: leaders board rival row 838x44 at 428 to 472, banner top 735, hit itself
+  info  1280rm B: leaders card starts "Back Viktor Gyökeres ST · age 27 · Arsenal Rated 88, Worth £52.5m LEAGUE, THIS SEASON 21 goals, 9 assists The count is for Arsenal only. If "
+  ok    1280rm B: leaders card Back 57x44 at 137 to 181, banner top 735, hit itself
+  info  1280rm B: driver steps home,calendar,rest,continue
+  ok    1280rm B: a deal Renew button 54x44 at 428 to 472, banner top 735, hit itself
+  ok    1280rm B: a deal Let go button 80x44 at 428 to 472, banner top 735, hit itself
+  ok    1280rm B: Let the rest go 92x44 at 428 to 472, banner top 735, hit itself
+  ok    1280rm B: every deal answered (renewed Jordan Pickford, let go Christian Nørgaard), "Continue to Season 2" opens
+  ok    1280rm B: Continue to Season 2 230x48 at 426 to 474, banner top 735, hit itself
+  ok    1280rm B: season 2 begun, 11 on the free agent list
+-- 390mo section A
+  ok    390mo A: Take the job (confirm bar) 168x44 at 555 to 599, banner top 611, hit itself
+  ok    390mo A: Skip: just manage 324x42 at 521 to 563, banner top 611, hit itself
+  ok    390mo A: in the job at Everton, season 1
+  info  390mo A: no fixture dugout line on the hub
+  ok    390mo A: Liverpool's club page reads "Manager: Andoni Iraola" (real)
+  ok    390mo A: Liverpool page Back 47x16 at 160 to 176, banner top 611, hit itself
+  ok    390mo A: Newcastle's club page reads "Manager: Matthias Jaissle · since Aug 2026" (real)
+  ok    390mo A: Newcastle page Back 47x16 at 160 to 176, banner top 611, hit itself
+  ok    390mo A: Chelsea's club page reads "Manager: Xabi Alonso" (real)
+  ok    390mo A: Chelsea page Back 47x16 at 160 to 176, banner top 611, hit itself
+  ok    390mo A: squad row Seasons button 332x44 at 400 to 444, banner top 611, hit itself
+  ok    390mo A: player card Back 57x44 at 157 to 201, banner top 611, hit itself
+-- 390mo section B
+  ok    390mo B: leaders board rival row 332x44 at 400 to 444, banner top 611, hit itself
+  info  390mo B: leaders card starts "Back Viktor Gyökeres ST · age 27 · Arsenal Rated 88, Worth £52.5m LEAGUE, THIS SEASON 21 goals, 9 assists The count is for Arsenal only. If "
+  ok    390mo B: leaders card Back 57x44 at 157 to 201, banner top 611, hit itself
+  info  390mo B: driver steps home,calendar,rest,continue
+  ok    390mo B: a deal Renew button 54x44 at 400 to 444, banner top 611, hit itself
+  ok    390mo B: a deal Let go button 80x44 at 400 to 444, banner top 611, hit itself
+  ok    390mo B: Let the rest go 92x44 at 400 to 444, banner top 611, hit itself
+  ok    390mo B: every deal answered (renewed Jordan Pickford, let go Christian Nørgaard), "Continue to Season 2" opens
+  ok    390mo B: Continue to Season 2 230x48 at 398 to 446, banner top 611, hit itself
+  ok    390mo B: season 2 begun, 11 on the free agent list
+-- 1280mo section A
+  ok    1280mo A: Take the job (confirm bar) 168x44 at 679 to 723, banner top 735, hit itself
+  ok    1280mo A: Skip: just manage 316x44 at 489 to 533, banner top 735, hit itself
+  ok    1280mo A: in the job at Everton, season 1
+  info  1280mo A: no fixture dugout line on the hub
+  ok    1280mo A: Liverpool's club page reads "Manager: Andoni Iraola" (real)
+  ok    1280mo A: Liverpool page Back 47x16 at 140 to 156, banner top 735, hit itself
+  ok    1280mo A: Newcastle's club page reads "Manager: Matthias Jaissle · since Aug 2026" (real)
+  ok    1280mo A: Newcastle page Back 47x16 at 140 to 156, banner top 735, hit itself
+  ok    1280mo A: Chelsea's club page reads "Manager: Xabi Alonso" (real)
+  ok    1280mo A: Chelsea page Back 47x16 at 140 to 156, banner top 735, hit itself
+  ok    1280mo A: squad row Seasons button 830x44 at 428 to 472, banner top 735, hit itself
+  ok    1280mo A: player card Back 57x44 at 137 to 181, banner top 735, hit itself
+-- 1280mo section B
+  ok    1280mo B: leaders board rival row 838x44 at 428 to 472, banner top 735, hit itself
+  info  1280mo B: leaders card starts "Back Viktor Gyökeres ST · age 27 · Arsenal Rated 88, Worth £52.5m LEAGUE, THIS SEASON 21 goals, 9 assists The count is for Arsenal only. If "
+  ok    1280mo B: leaders card Back 57x44 at 137 to 181, banner top 735, hit itself
+  info  1280mo B: driver steps home,calendar,rest,continue
+  ok    1280mo B: a deal Renew button 54x44 at 428 to 472, banner top 735, hit itself
+  ok    1280mo B: a deal Let go button 80x44 at 428 to 472, banner top 735, hit itself
+  ok    1280mo B: Let the rest go 92x44 at 428 to 472, banner top 735, hit itself
+  ok    1280mo B: every deal answered (renewed Jordan Pickford, let go Christian Nørgaard), "Continue to Season 2" opens
+  ok    1280mo B: Continue to Season 2 230x48 at 426 to 474, banner top 735, hit itself
+  ok    1280mo B: season 2 begun, 11 on the free agent list
+walkcmsc: green
