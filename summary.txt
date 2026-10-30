@@ -1,0 +1,11 @@
+annual-age exit=0 5s | Career yearly support: fictional offline engine fixtures only, no native UI, full career completion or historical-data validation claim.
+annual-chef exit=0 5s | Career yearly support: fictional offline engine fixtures only, no native UI, full career completion or historical-data validation claim.
+annual-cap exit=0 5s | Career yearly support: fictional offline engine fixtures only, no native UI, full career completion or historical-data validation claim.
+annual-ownership exit=0 5s | Career yearly support: fictional offline engine fixtures only, no native UI, full career completion or historical-data validation claim.
+annual-permanent exit=0 5s | Career yearly support: fictional offline engine fixtures only, no native UI, full career completion or historical-data validation claim.
+annual-duplicate exit=0 5s | Career yearly support: fictional offline engine fixtures only, no native UI, full career completion or historical-data validation claim.
+annual-nflCall exit=0 5s | Career yearly support: fictional offline engine fixtures only, no native UI, full career completion or historical-data validation claim.
+annual-unknown exit=0 5s | Career yearly support: fictional offline engine fixtures only, no native UI, full career completion or historical-data validation claim.
+annual-note exit=0 5s | Career yearly support: fictional offline engine fixtures only, no native UI, full career completion or historical-data validation claim.
+annual-before exit=0 4s | Career yearly support: fictional offline engine fixtures only, no native UI, full career completion or historical-data validation claim.
+annual-payout exit=0 4s | Career yearly support: fictional offline engine fixtures only, no native UI, full career completion or historical-data validation claim.

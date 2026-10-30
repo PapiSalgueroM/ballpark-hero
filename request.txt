@@ -1,0 +1,14 @@
+# Release BT kit: 11 of the 11 request lines of Release BS's rc-BQd5.txt (rBSg/.tmp-fx/bs), the lines of the BT areas (the US My Careers, the Front Offices, Soccer Connections and the daily save shape, Build Your XI and the player search box, What's New, the guides and search index, the weight rows) and the setup lines before them; 0 line(s) outside those areas left out.
+# Release BS kit: 11 of the 35 request lines of Release BR's rc-BQd5.txt (rBRg/.tmp-fx/br), the lines of the BS areas (Soccer Career, Club Manager and the manager games on its engine, Player Bingo, Conquest, Stat and Draft Detective, the US My Career save notice, What's New, the polls, the guide intro) and the setup lines before them; 24 line(s) outside those areas left out: shop-basecheck shop-rate shop-words shop-camp shop-nocall shop-chance shop-twice shop-office shop-lawyer shop-leak shop-coolall shop-backpay dirty-words dirty-mathrandom dirty-flat dirty-farm dirty-cap dirty-cool8 dirty-deck dirty-lawyerdesk dirty-noop dirty-nodesk dirty-sentence dirty-anyphase.
+# Release BQ, Round 1534 (US My Career shop promises, closing head 1c7205d0): rc-1534.txt rc-fe.txt.
+annual-chef: US_CAREER_ANNUAL_CONTROL=chef node scripts/simUsCareerAnnualBenefits.mjs
+annual-cap: US_CAREER_ANNUAL_CONTROL=cap node scripts/simUsCareerAnnualBenefits.mjs
+annual-age: US_CAREER_ANNUAL_CONTROL=age node scripts/simUsCareerAnnualBenefits.mjs
+annual-duplicate: US_CAREER_ANNUAL_CONTROL=duplicate node scripts/simUsCareerAnnualBenefits.mjs
+annual-ownership: US_CAREER_ANNUAL_CONTROL=ownership node scripts/simUsCareerAnnualBenefits.mjs
+annual-permanent: US_CAREER_ANNUAL_CONTROL=permanent node scripts/simUsCareerAnnualBenefits.mjs
+annual-unknown: US_CAREER_ANNUAL_CONTROL=unknown node scripts/simUsCareerAnnualBenefits.mjs
+annual-note: US_CAREER_ANNUAL_CONTROL=note node scripts/simUsCareerAnnualBenefits.mjs
+annual-nflCall: US_CAREER_ANNUAL_CONTROL=nflCall node scripts/simUsCareerAnnualBenefits.mjs
+annual-payout: US_CAREER_ANNUAL_CONTROL=payout node scripts/simUsCareerAnnualBenefits.mjs
+annual-before: US_CAREER_ANNUAL_CONTROL=before node scripts/simUsCareerAnnualBenefits.mjs
