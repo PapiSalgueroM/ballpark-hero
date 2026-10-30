@@ -1,0 +1,3 @@
+simCmDailyView: node scripts/simCmDailyView.mjs
+view-stuck: CM_DAILY_VIEW_CONTROL=stuck node scripts/simCmDailyView.mjs
+view-off: CM_DAILY_VIEW_CONTROL=off node scripts/simCmDailyView.mjs

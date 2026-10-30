@@ -1,0 +1,6 @@
+1. 77 dates before the cutover 2026-11-16
+   arm F deals arm A's day on 77 of 77
+   with no view (F0) the flip deals another day on 77 of 77
+2. from the cutover: arm F deals what F0 deals on 14 of 14 dates
+3. Club Manager in arm F before the dailies 61e3ba7966cf6b83, after 61e3ba7966cf6b83; arm A 09b976505403bf1d
+simCmDailyView: 5 checks, 0 failures

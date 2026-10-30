@@ -1,0 +1,3 @@
+simCmDailyView exit=0 36s | simCmDailyView: 5 checks, 0 failures
+view-off exit=1 36s | simCmDailyView: 5 checks, 1 failures (control off)
+view-stuck exit=1 36s | simCmDailyView: 5 checks, 1 failures (control stuck)
