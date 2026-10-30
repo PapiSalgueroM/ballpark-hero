@@ -1,0 +1,9 @@
+tsc: node_modules/.bin/tsc --noEmit -p tsconfig.app.json
+vitest: node_modules/.bin/vitest run src/test/managerHotSeatCarryOn.test.ts src/test/managerHotSeatCarryOnCard.test.tsx --testTimeout=300000 --hookTimeout=120000
+hs: node scripts/simManagerHotSeat.mjs
+c-clobber: HOT_SEAT_CONTROL=clobber node scripts/simManagerHotSeat.mjs
+simStorageWrites: node scripts/simStorageWrites.mjs
+simNoRivalNames: node scripts/simNoRivalNames.mjs
+simHarnessAnchors: node scripts/simHarnessAnchors.mjs
+simCmSavePoints: node scripts/simCmSavePoints.mjs
+simClubManagerSlots: node scripts/simClubManagerSlots.mjs
