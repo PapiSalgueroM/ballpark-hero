@@ -1,0 +1,6 @@
+tsc: node_modules/.bin/tsc --noEmit -p tsconfig.app.json
+oldLedger: node scripts/simCmOldLedger.mjs
+oldLedger-exact: CM_OLD_LEDGER_CONTROL=exact node scripts/simCmOldLedger.mjs
+levelReads: node scripts/simCmLevelReads.mjs
+lr-youth: CM_LEVEL_READS_CONTROL=youth node scripts/simCmLevelReads.mjs
+headSha: git rev-parse HEAD^ HEAD; git log -1 --format=%s HEAD^

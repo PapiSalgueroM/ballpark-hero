@@ -1,0 +1,6 @@
+oldLedger exit=0 3s | simCmOldLedger: all sections green
+oldLedger-exact exit=1 4s | simCmOldLedger: control exact FIRED (section 2: men at two clubs on load)
+lr-youth exit=1 2s | simCmLevelReads: 32 checks, 5 failures (control youth)
+levelReads exit=0 2s | simCmLevelReads: 32 checks, 0 failures
+headSha exit=0 0s | Round 1600: merge origin/main at c18c4b7a8 (docs/WORKBOARD.md only, main's text)
+tsc exit=0 50s | 
