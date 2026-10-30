@@ -20,6 +20,15 @@
  *            entry he did not hold before, nobody outside the squad and the loans holds one, no entry is empty;
  *            after the summer the list is unchanged; pastFrom is the first season ended and never moves; nobody
  *            holds more than PAST_KEPT rows; the careful reader reads a JSON round trip as the same list
+ *   cards    the card equals the save (src/lib/clubManagerCards.ts), on the first seed of every club: at every fifth
+ *            entry, every season end and after every summer, for every man of mine, this season is his line, the
+ *            league line is comp.league with his league clean sheets from the book (left off on a late book), his
+ *            goals and assists are his numbers on the boards (plus his `b` line on a late book; never clean sheets
+ *            there), and his seasons are the archive's with history's clubs; at every season end every rival book
+ *            row reads as that row on its card, with the roster's facts or, for a man the roster no longer holds,
+ *            none and the left club note; the late and thin notes follow the book; a man of a club outside the
+ *            league reads no league line and the outside note; two men of one name in different positions at one
+ *            club each read their own row; and on the two old saves six entries after the load (a late book)
  *   cap      a renewing Everton career (every man whose deal is in its last year renewed each summer through the
  *            engine's own renewContract) of CARDS_LONG seasons: the most rows any man held reaches PAST_KEPT (else
  *            exit 2, could not run) and never passes it; and a constructed squad archived twelve times holds exactly
@@ -41,6 +50,8 @@
  *   noarchive  the call is taken out of finishSeason                         -> archive, oldsave
  *   nocap      the writer's slice to PAST_KEPT is gone                       -> cap
  *   loadwrite  loadCareer stamps pastFrom                                    -> oldsave
+ *   allcomps   the reader's league line is the all competitions line        -> cards
+ *   namekey    the reader finds a rival's book row by name alone            -> cards
  *   hotseat    the Hot Seat calls finishSeason after every match it plays    -> dailies
  * Exit 0 green, 1 red (or a control fired), 2 could not run, 3 a control did not fire in its section.
  *
@@ -67,6 +78,7 @@ const cannot = why => { console.error(`simCmPlayerCard: cannot run: ${why}`); pr
 const ENGINE = 'src/lib/clubManager.ts';
 const LINES = 'src/lib/clubManagerCareerLines.ts';
 const HOT = 'src/lib/managerHotSeat.ts';
+const CARDS = 'src/lib/clubManagerCards.ts';
 const CALL = '  archiveCareerSeason(state);\n  state.pendingSummary = summary;';
 const CARDS_OFF = [{ file: ENGINE, from: CALL, to: '  state.pendingSummary = summary;' }];
 
@@ -77,6 +89,8 @@ const CONTROLS = {
   noarchive: { section: 'archive', patches: CARDS_OFF },
   nocap: { section: 'cap', patches: [{ file: LINES, from: '.sort((a, b) => a[0] - b[0]).slice(-PAST_KEPT);', to: '.sort((a, b) => a[0] - b[0]);' }] },
   loadwrite: { section: 'oldsave', patches: [{ file: ENGINE, from: '    ensureMadeUpNations(parsed);\n', to: '    ensureMadeUpNations(parsed);\n    parsed.pastFrom = 1;\n' }] },
+  allcomps: { section: 'cards', patches: [{ file: CARDS, from: '    const lg = p.comp?.league;', to: '    const lg = { apps: p.apps, goals: p.seasonGoals, assists: p.seasonAssists, yellows: p.seasonYellows, reds: p.seasonReds, ratingSum: p.ratingSum };' }] },
+  namekey: { section: 'cards', patches: [{ file: CARDS, from: 'boards.input.book.c[ref.club]?.m[rowKey({ n: ref.name, p: ref.pos, r: 0 })]', to: "Object.entries(boards.input.book.c[ref.club]?.m ?? {}).find(([key]) => key.slice(0, key.lastIndexOf('|')) === ref.name)?.[1]" }] },
   hotseat: { section: 'dailies', patches: [
     { file: HOT, from: '  playNextEntry,\n', to: '  playNextEntry,\n  finishSeason,\n' },
     { file: HOT, from: '    run.leash = run.leaguePlayed;\n  }\n  settle(run);', to: '    run.leash = run.leaguePlayed;\n  }\n  run.state = finishSeason(run.state).state;\n  settle(run);' },
@@ -99,6 +113,9 @@ async function engine(label, root, patches = []) {
     `export * as hs from ${P(HOT)};`,
     `export * as dd from ${P('src/lib/deadlineDay.ts')};`,
     fs.existsSync(path.join(root, LINES)) ? `export * as lines from ${P(LINES)};` : 'export const lines = null;',
+    fs.existsSync(path.join(root, CARDS)) ? `export * as cards from ${P(CARDS)};` : 'export const cards = null;',
+    `export * as book from ${P('src/lib/clubManagerLeagueBook.ts')};`,
+    `export * as boards from ${P('src/lib/clubManagerLeagueBoards.ts')};`,
   ].join('\n') + '\n');
   const applied = new Set();
   await build({
@@ -123,7 +140,7 @@ async function engine(label, root, patches = []) {
   if (applied.size !== patches.length) throw new Error(`${label}: ${patches.length - applied.size} patch(es) never met their file`);
   const mod = await import(pathToFileURL(out).href);
   await mod.cm.ensureAllEraRosters();
-  return { label, cm: mod.cm, hs: mod.hs, dd: mod.dd, lines: mod.lines };
+  return { label, cm: mod.cm, hs: mod.hs, dd: mod.dd, lines: mod.lines, cards: mod.cards, book: mod.book, boards: mod.boards };
 }
 
 /* ---------- the stream, the clock, the faces ---------- */
@@ -282,9 +299,96 @@ const archiveHooks = (f, stats) => {
     },
   };
 };
+
+/* ---------- section cards: the card equals the save ---------- */
+const near = (a, b) => (a === null || b === null ? a === b : Math.abs(a - b) < 1e-9);
+const avgOf = (apps, sum) => (apps > 0 ? Math.round((sum ?? 0) * 10) / 10 / apps : null);
+const notesSeen = new Map();
+const seeNote = n => notesSeen.set(n.k, (notesSeen.get(n.k) ?? 0) + 1);
+/** Every man of mine against his own line, his league line, the boards and the archive. */
+function checkMine(mod, s, where) {
+  const { cm, cards, boards: bd, book } = mod;
+  const lb = cm.leagueBoardsOf(s);
+  const late = lb && lb.from !== null;
+  const board = kind => new Map((lb ? bd.leaders(lb.input, kind, Number.MAX_SAFE_INTEGER) : []).filter(m => m.mine).map(m => [`${m.name}|${m.pos}`, m.n]));
+  const goals = board('goals'), assists = board('assists'), sheets = board('sheets');
+  const opened = late ? new Map((lb.input.book.b ?? []).map(t => [t[0], t])) : new Map();
+  for (const p of s.squad) {
+    tick('cards');
+    const c = cards.playerCardOf(s, { k: 'mine', id: p.id });
+    const who = `${where}: ${p.name} (${p.position})`;
+    if (!c) { fail('cards', `${who}: no card`); continue; }
+    c.notes.forEach(seeNote);
+    const back = p.position === 'GK' || cm.groupOf(p.position) === 'DEF';
+    const lg = p.comp?.league ?? {};
+    const wantNow = [p.apps ?? 0, p.seasonGoals, p.seasonAssists, back ? p.cleanSheets ?? 0 : null, p.seasonYellows ?? 0, p.seasonReds ?? 0];
+    const gotNow = [c.now?.apps, c.now?.goals, c.now?.assists, c.now?.cleanSheets, c.now?.yellows, c.now?.reds];
+    if (JSON.stringify(gotNow) !== JSON.stringify(wantNow) || !near(c.now?.average ?? null, avgOf(p.apps ?? 0, p.ratingSum))) fail('cards', `${who}: this season ${JSON.stringify(gotNow)} is not his line ${JSON.stringify(wantNow)}`);
+    const wantLg = [lg.apps ?? 0, lg.goals ?? 0, lg.assists ?? 0, back && lb && !late ? book.mineSheets(lb.input.book, p.id) : null];
+    const gotLg = [c.league?.apps, c.league?.goals, c.league?.assists, c.league?.cleanSheets];
+    if (JSON.stringify(gotLg) !== JSON.stringify(wantLg) || !near(c.league?.average ?? null, avgOf(lg.apps ?? 0, lg.ratingSum))) fail('cards', `${who}: league ${JSON.stringify(gotLg)} is not comp.league ${JSON.stringify(wantLg)}`);
+    if (lb) {
+      const key = `${p.name}|${p.position}`;
+      const b = opened.get(p.id);
+      /* Two of mine with one name and position share a board row: the board cannot tell them apart. */
+      if (s.squad.filter(x => x.name === p.name && x.position === p.position).length === 1) {
+        const g = (goals.get(key) ?? 0) + (b ? b[1] : 0), a = (assists.get(key) ?? 0) + (b ? b[2] : 0);
+        if (c.league?.goals !== g || c.league?.assists !== a) fail('cards', `${who}: league ${c.league?.goals} goals ${c.league?.assists} assists, the boards say ${g} and ${a}`);
+        if (back && !late && c.league?.cleanSheets !== (sheets.get(key) ?? 0)) fail('cards', `${who}: ${c.league?.cleanSheets} league clean sheets, the board says ${sheets.get(key) ?? 0}`);
+      }
+      if (back && late && !c.notes.some(n => n.k === 'late')) fail('cards', `${who}: a keeper or defender on a late book with no late note`);
+    }
+    const rows = mod.lines.pastOf(s.pastLines, p.id).slice().reverse();
+    const want = rows.map(r => [r[0], s.history.find(h => h.season === r[0])?.club ?? null, r[1], r[2], r[3], back ? r[4] : null, r[5] / 10 / r[1]]);
+    const got = c.past.map(l => { const m = k => l.metrics.find(x => x.key === k)?.value ?? null; return [l.season, l.club, m('apps'), m('goals'), m('assists'), m('cleanSheets'), m('rating')]; });
+    if (JSON.stringify(got) !== JSON.stringify(want)) fail('cards', `${who}: seasons ${JSON.stringify(got).slice(0, 120)} are not the archive's ${JSON.stringify(want).slice(0, 120)}`);
+    if (c.keptFrom !== (s.pastFrom ?? null)) fail('cards', `${who}: kept from ${c.keptFrom}, the save says ${s.pastFrom}`);
+  }
+}
+/** Every rival row of the book, and one man outside the league. Returns how many rows were held. */
+function checkRivals(mod, s, where) {
+  const { cm, cards, book } = mod;
+  const lb = cm.leagueBoardsOf(s);
+  if (!lb) return 0;
+  let n = 0;
+  for (const row of book.bookRows(lb.input.book)) {
+    tick('cards');
+    n += 1;
+    const c = cards.playerCardOf(s, { k: 'man', name: row.name, pos: row.pos, club: row.club });
+    const who = `${where}: ${row.name} (${row.pos}, ${row.club})`;
+    if (!c) { fail('cards', `${who}: no card for a book row`); continue; }
+    c.notes.forEach(seeNote);
+    const back = row.pos === 'GK' || cm.groupOf(row.pos) === 'DEF';
+    const want = [null, row.goals, row.assists, back ? row.cleanSheets : null, null];
+    const got = [c.league?.apps, c.league?.goals, c.league?.assists, c.league?.cleanSheets, c.league?.average];
+    if (JSON.stringify(got) !== JSON.stringify(want)) fail('cards', `${who}: league ${JSON.stringify(got)} is not the book row ${JSON.stringify(want)}`);
+    const man = cm.oppRosterFor(s, row.club).find(x => x.n === row.name && x.p === row.pos);
+    if (man ? c.age !== man.a || c.rating !== man.r : c.age !== null || !c.notes.some(x => x.k === 'leftclub')) fail('cards', `${who}: roster facts ${c.age}/${c.rating} against ${man ? `${man.a}/${man.r}` : 'a man the roster no longer holds'}`);
+    if ((lb.from !== null) !== c.notes.some(x => x.k === 'late')) fail('cards', `${who}: the late note does not follow the book`);
+    if ((lb.share < 95) !== c.notes.some(x => x.k === 'thin')) fail('cards', `${who}: the thin note does not follow the share ${lb.share}`);
+  }
+  const other = s.leagueClubs.includes('Real Madrid') ? 'Everton' : 'Real Madrid';
+  const out = cm.oppRosterFor(s, other)[0];
+  tick('cards');
+  const c = out && cards.playerCardOf(s, { k: 'man', name: out.n, pos: out.p, club: other });
+  if (!c || c.league !== null || JSON.stringify(c.notes) !== '[{"k":"outside"}]') fail('cards', `${where}: a man of ${other} (outside the league) reads ${JSON.stringify(c && { league: c.league, notes: c.notes })}`);
+  return n;
+}
+const cardStats = { mine: 0, rival: 0 };
+let namesakeState = null;
+const cardHooks = f => {
+  let k = 0;
+  return {
+    entry(s) { if (++k % 5 === 0) { checkMine(candidate, s, `${f.name}, entry ${k}`); cardStats.mine += 1; } },
+    before(s) { if (!namesakeState) namesakeState = JSON.parse(JSON.stringify(s)); checkMine(candidate, s, `${f.name}, season ${s.season} end`); cardStats.rival += checkRivals(candidate, s, `${f.name}, season ${s.season} end`); },
+    summer(fin, next) { checkMine(candidate, next, `${f.name}, after summer ${fin.season}`); },
+  };
+};
+const both = (a, b) => Object.fromEntries([...new Set([...Object.keys(a), ...Object.keys(b)])].map(key => [key, (...args) => { a[key]?.(...args); b[key]?.(...args); }]));
 {
   const stats = { rows: 0, most: 0 };
-  const facesC = FLEET.map(f => playCareer(candidate, f, archiveHooks(f, stats)));
+  const facesC = FLEET.map((f, i) => playCareer(candidate, f, i < CLUBS.length ? both(archiveHooks(f, stats), cardHooks(f)) : archiveHooks(f, stats)));
+  console.log(`cards   ${checks.get('cards') ?? 0} checks: my men at ${cardStats.mine} points, ${cardStats.rival} rival book rows at season ends, on the first seed of every club; notes seen ${JSON.stringify(Object.fromEntries(notesSeen))}`);
   const arms = [['off', off], ...(base ? [['base', base]] : [])];
   for (const [name, mod] of arms) {
     let same = 0, total = 0;
@@ -304,6 +408,27 @@ const archiveHooks = (f, stats) => {
   if (!base) console.log('stream  base arm NOT RUN: set CARDS_BASE to a worktree of the base commit');
   console.log(`archive ${checks.get('archive') ?? 0} checks; ${stats.rows} rows written and checked, the most rows one man held ${stats.most}`);
   if (!stats.rows) fail('archive', 'no row was written in the whole fleet');
+  if (!cardStats.rival) fail('cards', 'no rival book row was held against its card in the whole fleet');
+}
+/* Two men of one name in different positions at one rival club (the case rowKey exists for): two goals moved off
+   one row onto "Nando Hedlund|ST" and one onto "Nando Hedlund|GK", so the club's goals still add up; each card
+   must read its own row. */
+{
+  const s = namesakeState;
+  if (!s) cannot('no season end was reached, so the namesake case has no save');
+  const rows = s.leagueBook?.c ? Object.entries(s.leagueBook.c) : [];
+  const hit = rows.map(([club, e]) => [club, Object.entries(e.m).find(([, r]) => r[0] >= 3)]).find(([, r]) => r);
+  if (!hit) cannot('no rival row of the saved season end holds three goals to move');
+  const [club, [, row]] = hit;
+  row[0] -= 3;
+  s.leagueBook.c[club].m['Nando Hedlund|ST'] = [2, 0, 0, 1];
+  s.leagueBook.c[club].m['Nando Hedlund|GK'] = [1, 0, 0, 1];
+  for (const [pos, goals] of [['ST', 2], ['GK', 1]]) {
+    tick('cards');
+    const c = candidate.cards.playerCardOf(s, { k: 'man', name: 'Nando Hedlund', pos, club });
+    if (c?.league?.goals !== goals) fail('cards', `Nando Hedlund (${pos}) at ${club}: the card reads ${c?.league?.goals} goals, his row holds ${goals}`);
+  }
+  console.log(`cards   the namesake case at ${club}: each of two men of one name reads his own row`);
 }
 
 /* ---------- section cap: a renewing career, and a constructed squad ---------- */
@@ -393,6 +518,15 @@ const onlySeason = (fin, season) => (Array.isArray(fin.pastLines) ? fin.pastLine
     if (!s) { fail('oldsave', `${name}: did not load`); continue; }
     if ('pastLines' in s || 'pastFrom' in s) fail('oldsave', `${name}: the load wrote ${'pastLines' in s ? 'pastLines' : 'pastFrom'}`);
     if (JSON.stringify(s) !== JSON.stringify(o)) fail('oldsave', `${name}: the loaded save is not byte equal to the off engine's load`);
+    /* The card on an old save: a late book after its first entries, and the kept from line. */
+    const mid = onStream(seed + 5, () => { let x = s; for (let i = 0; i < 6; i++) x = candidate.cm.playNextEntry(nudge(x), { skipHalftime: true }).state; return x; });
+    checkMine(candidate, mid, `${name}, six entries after the load`);
+    const rivals = checkRivals(candidate, mid, `${name}, six entries after the load`);
+    const first = Math.min(mid.season, ...mid.history.map(h => h.season));
+    const kept = candidate.cards.playerCardOf(mid, { k: 'mine', id: mid.squad[0].id })?.notes.find(n => n.k === 'keptfrom');
+    tick('oldsave');
+    if (mid.season > first ? kept?.from !== mid.season : kept) fail('oldsave', `${name}: the kept from line reads ${JSON.stringify(kept)} on season ${mid.season} of a career from season ${first}`);
+    console.log(`oldsave ${name}: six entries on, book ${candidate.cm.leagueBoardsOf(mid)?.from ?? 'none'} (late round index), ${rivals} rival rows held, kept from ${kept?.from ?? 'no line'}`);
     const fin = onStream(seed + 1, () => candidate.cm.finishSeason(playOut(candidate, s)).state);
     if (fin.pastFrom !== s.season) fail('oldsave', `${name}: after its season ${s.season} ended pastFrom is ${fin.pastFrom}`);
     if (!onlySeason(fin, s.season)) fail('oldsave', `${name}: a row of a season before ${s.season} was written`);
