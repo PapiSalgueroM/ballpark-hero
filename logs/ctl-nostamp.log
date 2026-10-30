@@ -1,0 +1,31 @@
+CONTROL nostamp APPLIED to src/data/clubManagerWorldRosters.ts
+1. arm A, the files as shipped
+   rows carrying a level: 2636
+  FAIL arm A: 2636 rows carry a level on files no META stamps
+   arm A: 454 of 454 clubs equal on xi, scale, anchors, tier, budget, exp
+2. arm B1, the squads file stamped curve 2 with its ages untouched
+   rows carrying a level 2636, shown on another rating 0, level equal to arm A's rating 2477 of 5113
+  FAIL arm B1: the stamp did not apply (2636 levels, 0 moved ratings)
+  FAIL arm B1: 2636 men's level is not the rating arm A shows
+   arm B1: 454 of 454 clubs equal on xi, scale, anchors, tier, budget, exp
+   real men under 24: 1972, of whom 213 leave the game the first summer in arm A; arm B1 differs on 0
+   day one ceilings at four clubs: 81 men under 30, 0 shown under their level in arm B1, ceilings differing 0
+  FAIL arm B1: 0 of 81 ceilings differ from arm A's on the same dice (the roll must read the higher of rating and level)
+3. arm B2, stamped and aged (4225 of 4401 ages moved)
+   arm B2: 454 of 454 clubs equal on xi, anchors, tier, budget, exp
+   value scales the age move shifts (information, ages enter the curve): 223 clubs
+   Lionel Messi (Inter Miami): curve 1 86 at 39, flipped 86 at 39 on level 78
+  FAIL arm B2: Lionel Messi shows 86 on level 78, the table says 86 on 86
+   Cristiano Ronaldo (Al-Nassr): curve 1 86 at 40, flipped 86 at 41 on level 78
+  FAIL arm B2: Cristiano Ronaldo shows 86 on level 78, the table says 86 on 86
+   Luka Modrić (AC Milan): curve 1 80 at 40, flipped 80 at 40 on level 72
+  FAIL arm B2: Luka Modrić shows 80 on level 72, the table says 80 on 80
+   Virgil van Dijk (Liverpool): curve 1 84 at 34, flipped 85 at 35 on level 80
+  FAIL arm B2: Virgil van Dijk shows 85 on level 80, the table says 85 on 84
+   Harry Kane (Bayern Munich): curve 1 90 at 32, flipped 91 at 33 on level 88
+  FAIL arm B2: Harry Kane shows 91 on level 88, the table says 91 on 90
+   Lamine Yamal (Barcelona): curve 1 94 at 18, flipped 94 at 19 on level 94
+   section 1: 1 failures
+   section 2: 3 failures
+   section 3: 5 failures
+simCmLevelReads: 14 checks, 9 failures (control nostamp)

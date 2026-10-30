@@ -1,0 +1,21 @@
+tsc: node_modules/.bin/tsc --noEmit -p tsconfig.app.json
+vitest-cm: node_modules/.bin/vitest run src/test/cmValueCurve.test.ts src/lib/clubManagerOwnClubLevel.test.ts src/lib/clubManagerTrajectory.test.ts src/lib/cmMatchDisplay.test.ts --testTimeout=300000 --hookTimeout=120000
+simCmLevelReads: node scripts/simCmLevelReads.mjs
+ctl-nostamp: CM_LEVEL_READS_CONTROL=nostamp node scripts/simCmLevelReads.mjs
+ctl-xi: CM_LEVEL_READS_CONTROL=xi node scripts/simCmLevelReads.mjs
+simCmDailyView: node scripts/simCmDailyView.mjs
+view-off: CM_DAILY_VIEW_CONTROL=off node scripts/simCmDailyView.mjs
+genview-check: node scripts/genCmCurve1View.mjs --check
+basis-check: node scripts/genCmAgesBasis2026.mjs --from HEAD
+simFreeAgents: node scripts/simFreeAgents.mjs
+simClubManagerALeague: node scripts/simClubManagerALeague.mjs
+simClubManagerGathered: node scripts/simClubManagerGathered.mjs
+simEraBakeExtend: node scripts/simEraBakeExtend.mjs
+simClubManagerSaveSize: node scripts/simClubManagerSaveSize.mjs
+simCmLedgerBound: node scripts/simCmLedgerBound.mjs
+simDeadlineDay: node scripts/simDeadlineDay.mjs
+simManagerHotSeat: node scripts/simManagerHotSeat.mjs
+simDailyDeals: node scripts/simDailyDeals.mjs
+simNoRivalNames: node scripts/simNoRivalNames.mjs
+simHarnessAnchors: node scripts/simHarnessAnchors.mjs
+build: npx vite build --logLevel error && echo BUILD_OK

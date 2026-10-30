@@ -1,0 +1,21 @@
+simCmLevelReads exit=0 2s | simCmLevelReads: 14 checks, 0 failures
+ctl-nostamp exit=1 2s | simCmLevelReads: 14 checks, 9 failures (control nostamp)
+ctl-xi exit=1 2s | simCmLevelReads: 14 checks, 2 failures (control xi)
+vitest-cm exit=1 22s | ::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/lib/clubManagerTrajectory.test.ts,title=src/lib/clubManagerTrajectory.test.ts > save-scoped actual world pr
+simCmDailyView exit=1 30s | simCmDailyView: 5 checks, 1 failures
+genview-check exit=0 0s | genCmCurve1View: the committed view is 14a9af7042793e487d12af0bffcaf030a0d0da9a's squads file, byte for byte
+basis-check exit=0 0s | genCmAgesBasis2026: in step, nothing to write
+view-off exit=1 26s | simCmDailyView: 5 checks, 1 failures (control off)
+simClubManagerALeague exit=0 10s | simClubManagerALeague: all checks passed
+simClubManagerGathered exit=1 2s | simClubManagerGathered: 17 failure(s) (E 16, G 1)
+simEraBakeExtend exit=0 0s | simEraBakeExtend: green. The shared extend step still fails closed on every guard.
+tsc exit=0 89s | 
+simClubManagerSaveSize exit=0 75s | simClubManagerSaveSize: all sections green
+simDeadlineDay exit=1 4s | simDeadlineDay: 2 failure(s)
+simFreeAgents exit=1 125s | simFreeAgents: 1 failure(s)
+simDailyDeals exit=1 4s | simDailyDeals: 3 FAILURE(S): Hot Seat [2027-01-19, 2027-01-30, 2027-02-06], Deadline Day []
+simNoRivalNames exit=0 17s | No rival product names found. 0 findings.
+simManagerHotSeat exit=0 60s | simManagerHotSeat: green. The target is the club's, reading the room pays, outcomes replay, a Club Manager save keeps its registrations and a survivor carries on in Club 
+build exit=0 38s | BUILD_OK
+simHarnessAnchors exit=0 59s | simHarnessAnchors: green. Every harness parses and none carries an unmatchable anchor.
+simCmLedgerBound exit=0 316s | simCmLedgerBound: green, all four sections held

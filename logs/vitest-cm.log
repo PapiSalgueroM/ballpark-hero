@@ -1,0 +1,247 @@
+
+[1m[46m RUN [49m[22m [36mv3.2.7 [39m[90m/home/runner/work/ballpark-hero/ballpark-hero[39m
+
+[90mstdout[2m | src/lib/clubManagerTrajectory.test.ts[2m > [22m[2mClub Manager save-bound player trajectories[2m > [22m[2mmakes both rare development turns reachable without escaping their per-season bounds
+[22m[39mTRAJECTORY zero-curve outcomes: {"players":1024,"breakouts":51,"setbacks":35,"unchanged":938}
+
+[90mstdout[2m | src/test/cmValueCurve.test.ts[2m > [22m[2mlevelFrom: the age read run backwards, total[2m > [22m[2mit inverts the read wherever no clamp bit, and the clamped cells are counted
+[22m[39mlevelFrom: clamped cells of 1,664 a top (52 levels by 32 ages): {"94":299,"96":235,"97":203,"98":171}
+
+[90mstdout[2m | src/test/cmValueCurve.test.ts[2m > [22m[2mone order in every world: the stretch first, then the age points[2m > [22m[2mover every row of the four past seasons: never more than six down or eight up, nobody past the top
+[22m[39mera2005: 829 of 1727 rows change, swing -6 to 8, on the top of 96: Ronaldinho, Thierry Henry
+era2010: 890 of 1751 rows change, swing -6 to 8, on the top of 97: Cristiano Ronaldo, Lionel Messi
+era2015: 738 of 1659 rows change, swing -6 to 8, on the top of 98: Cristiano Ronaldo, Lionel Messi
+era2020: 862 of 1774 rows change, swing -6 to 8, on the top of 94: Kylian Mbappé, Lionel Messi
+
+[90mstdout[2m | src/test/cmValueCurve.test.ts[2m > [22m[2mwhat every 2026 age will stand on (the basis file), man for man against the squads main ships[2m > [22m[2mevery line is what the ages rule resolves from the committed ledgers, and its last item is the value rating
+[22m[39m2026 at the flip: 2078 of 4401 ratings change; by points {"0":2323,"1":230,"2":324,"3":110,"4":76,"5":44,"6":20,"7":11,"8":13,"-1":379,"-2":306,"-3":245,"-4":182,"-6":50,"-5":88}
+
+ [32m✓[39m src/test/cmValueCurve.test.ts [2m([22m[2m57 tests[22m[2m)[22m[33m 634[2mms[22m[39m
+ [32m✓[39m src/lib/clubManagerOwnClubLevel.test.ts [2m([22m[2m7 tests[22m[2m)[22m[33m 2355[2mms[22m[39m
+   [33m[2m✓[22m[39m the manager's own club is read from his club, never the world roster[2m > [22mhis club screen average is the base read in season one, however many men he released [33m 302[2mms[22m[39m
+   [33m[2m✓[22m[39m the manager's own club is read from his club, never the world roster[2m > [22mhis club strength at the summer rollover is the base read, so the free agent level rule reads the base [33m 497[2mms[22m[39m
+   [33m[2m✓[22m[39m the manager's own club is read from his club, never the world roster[2m > [22mthe one club read is the world read, club for club, in today and in a past era, cold and cached [33m 595[2mms[22m[39m
+   [33m[2m✓[22m[39m the manager's own club is read from his club, never the world roster[2m > [22min every career the market lists nobody at his own club, ledger or none, and the club he leaves is listed at once [33m 360[2mms[22m[39m
+[90mstdout[2m | src/lib/cmMatchDisplay.test.ts[2m > [22m[2mthe pitch name and the initials (Round 1340b)[2m > [22m[2mholds over every name the game can put on a pitch
+[22m[39mpitch names: 9337 real names and 99678 generated ones checked; 190 real names print differently from the old last word
+  Koni De Winter -> De Winter; Mees de Wit -> de Wit; Marc-André ter Stegen -> ter Stegen; Carlos Júnior -> Carlos Júnior; Aschraf El Mahdioui -> El Mahdioui; Coba da Costa -> da Costa; Branco van den Boomen -> van den Boomen; Ignacio de Arruabarrena -> de Arruabarrena
+  Charles De Ketelaere -> De Ketelaere; Robin Le Normand -> Le Normand; Frenkie de Jong -> de Jong; Eliesse Ben Seghir -> Ben Seghir; Souffian El Karouani -> El Karouani; José Neto -> José Neto; Michele Di Gregorio -> Di Gregorio; Amine El Ouazzani -> El Ouazzani
+  Sepp van den Berg -> van den Berg; Maxim De Cuyper -> De Cuyper; Brian De Keersmaecker -> De Keersmaecker; Kevin Van Den Kerkhof -> Van Den Kerkhof; Luca de la Torre -> de la Torre; Pedro Neto -> Pedro Neto; Lucas Da Cunha -> Da Cunha; Milan van Ewijk -> van Ewijk
+  Martim Neto -> Martim Neto; Stefano Di Mario -> Di Mario; Omar El Hilali -> El Hilali; Urko González de Zárate -> de Zárate; Prince Amoako Junior -> Amoako Junior; Mathias de Amorim -> de Amorim; Tom van de Looi -> van de Looi; Finn van Breemen -> van Breemen
+  Jeremiah St. Juste -> St. Juste; David de Gea -> de Gea; Giorgian de Arrascaeta -> de Arrascaeta; Nicolás de la Cruz -> de la Cruz; Hendrik Van Crombrugge -> Van Crombrugge; Stephan El Shaarawy -> El Shaarawy; Donny van de Beek -> van de Beek; Jari De Busser -> De Busser
+  Filipe de Carvalho -> de Carvalho; Zakaria El Ouahdi -> El Ouahdi; Nathan De Cat -> De Cat; Rodrigo De Paul -> De Paul; Dayne St. Clair -> St. Clair; Louey Ben Farhat -> Ben Farhat; Dion De Neve -> De Neve; Said El Mala -> El Mala
+  Rav van den Berg -> van den Berg; Alexis Mac Allister -> Mac Allister; Virgil van Dijk -> van Dijk; Théo Le Bris -> Le Bris; Matteo Di Giusto -> Di Giusto; Matthijs de Ligt -> de Ligt; Jeffrey de Lange -> de Lange; Ortwin De Wolf -> De Wolf
+  Casper De Norre -> De Norre; Anthony Markanich Jr. -> Markanich; Giovanni Di Lorenzo -> Di Lorenzo; Kevin De Bruyne -> De Bruyne; Matthew Dos Santos -> Dos Santos; Anis Ben Slimane -> Ben Slimane; Justin von der Hitz -> von der Hitz; Ayoub El Kaabi -> El Kaabi
+  Romain Del Castillo -> Del Castillo; Mauro Júnior -> Mauro Júnior; Ruben van Bommel -> van Bommel; Stefan de Vrij -> de Vrij; Thibault De Smet -> De Smet; David Da Costa -> Da Costa; Neil El Aynaoui -> El Aynaoui; Jorge de Frutos -> de Frutos
+  Vinicius Junior -> Vinicius Junior; Marten de Roon -> de Roon; CJ dos Santos -> dos Santos; Robinho Junior -> Robinho Junior; Ignace Van der Brempt -> Van der Brempt; Mitchell van Bergen -> van Bergen; Samir El Mourabet -> El Mourabet; Mateo Del Blanco -> Del Blanco
+  Bilal El Khannouss -> El Khannouss; Enzo Le Fée -> Le Fée; Micky van de Ven -> van de Ven; Jan Paul van Hecke -> van Hecke; Cristian Cásseres Jr. -> Cásseres; Bart van Rooij -> van Rooij; Zeno Van Den Bosch -> Van Den Bosch; Kevin Mac Allister -> Mac Allister
+  Kamiel Van De Perre -> Van De Perre; Anouar Ait El Hadj -> El Hadj; Dani de Wit -> de Wit; Davy van den Berg -> van den Berg; Gabriele De Donno -> De Donno; Justin de Haas -> de Haas; Kayne van Oevelen -> van Oevelen; Andréa Le Borgne -> Le Borgne
+  Luiz Júnior -> Luiz Júnior; Anselmo de Moraes -> de Moraes; Francis de Vries -> de Vries; Arthur De Lima -> De Lima; Giovanni De Abreu -> De Abreu; Miguel Di Pizio -> Di Pizio; Hodaifa El Mhassani -> El Mhassani; Quique de Lucas -> de Lucas
+  Robin van Persie -> van Persie; Ulises de la Cruz -> de la Cruz; Mark van Bommel -> van Bommel; Giovanni van Bronckhorst -> van Bronckhorst; Roque Júnior -> Roque Júnior; Talal El Karkouri -> El Karkouri; Asier del Horno -> del Horno; Julian de Guzmán -> de Guzmán
+  Nasir El Kasmi -> El Kasmi; Iván de la Peña -> de la Peña; Andy van der Meyde -> van der Meyde; Hassan El Fakiri -> El Fakiri; Daniel Van Buyten -> Van Buyten; Rafael van der Vaart -> van der Vaart; Dick van Burik -> van Burik; Alessandro Del Piero -> Del Piero
+  Túlio de Melo -> de Melo; Aleksey Eremenko Jr. -> Eremenko; Hatem Ben Arfa -> Ben Arfa; Antônio da Silva -> da Silva; Ruud van Nistelrooy -> van Nistelrooy; Edwin van der Sar -> van der Sar; Arturo Di Napoli -> Di Napoli; Frédéric Da Rocha -> Da Rocha
+  Arjan de Zeeuw -> de Zeeuw; Daniele De Rossi -> De Rossi; Ulrich Le Pen -> Le Pen; Morgan De Sanctis -> De Sanctis; David Di Michele -> Di Michele; Antonio Di Natale -> Di Natale; Marco Di Vaio -> Di Vaio; Jelle Van Damme -> Van Damme
+  Peter Van der Heyden -> Van der Heyden; Óscar de Marcos -> de Marcos; Anthony Le Tallec -> Le Tallec; Jonathan dos Santos -> dos Santos; Franco Di Santo -> Di Santo; Fahid Ben Khalfallah -> Ben Khalfallah; Youssef El Arabi -> El Arabi; Rajiv van La Parra -> van La Parra
+  Patrick van Aanholt -> van Aanholt; Lorenzo De Silvestri -> De Silvestri; Manu del Moral -> del Moral; Igor de Camargo -> de Camargo; Joseba del Olmo -> del Olmo; Paolo De Ceglie -> De Ceglie; Simone Del Nero -> Del Nero; Nabil El Zhar -> El Zhar
+  Arnaud Le Lan -> Le Lan; Nigel de Jong -> de Jong; Abdelhamid El Kaoutari -> El Kaoutari; Chaouki Ben Saada -> Ben Saada; Ángel Di María -> Di María; Alberto de la Bella -> de la Bella; Angelo da Costa -> da Costa; Paulo da Silva -> da Silva
+  Manuel da Costa -> da Costa; Mattia De Sciglio -> De Sciglio; Munir El Haddadi -> El Haddadi; Damien Da Silva -> Da Silva; Jonathan de Guzmán -> de Guzmán; Antonio Di Gaudio -> Di Gaudio; Sebastien De Maio -> De Maio; Laurent Dos Santos -> Dos Santos
+  Johannes van den Bergh -> van den Bergh; Ritchie De Laet -> De Laet; Vincent Le Goff -> Le Goff; Pablo de Blasis -> de Blasis; Siem de Jong -> de Jong; Francesco Della Rocca -> Della Rocca; Gregory van der Wiel -> van der Wiel; Ricky van Wolfswinkel -> van Wolfswinkel
+  Nicolas de Préville -> de Préville; Marco van Ginkel -> van Ginkel; Omar El Kaddouri -> El Kaddouri; Wissam Ben Yedder -> Ben Yedder; Giovani dos Santos -> dos Santos; Farid El Melali -> El Melali; Anwar El Ghazi -> El Ghazi; Ahmed El Mohamady -> El Mohamady
+  Konrad de la Fuente -> de la Fuente; Bobby De Cordova-Reid -> De Cordova-Reid; Damien Le Tallec -> Le Tallec; Antonino La Gumina -> La Gumina; Luuk de Jong -> de Jong; Hidde ter Avest -> ter Avest
+the longest pitch name in the pool: Amaimouni-Echghouyab (20 characters)
+
+ [32m✓[39m src/lib/cmMatchDisplay.test.ts [2m([22m[2m7 tests[22m[2m)[22m[33m 9127[2mms[22m[39m
+   [33m[2m✓[22m[39m the pitch name and the initials (Round 1340b)[2m > [22mholds over every name the game can put on a pitch [33m 9102[2mms[22m[39m
+[90mstdout[2m | src/lib/clubManagerTrajectory.test.ts[2m > [22m[2mClub Manager save-bound player trajectories[2m > [22m[2mrespects every source age curve, rating floor and carried potential ceiling
+[22m[39mTRAJECTORY bounded player years: 122712
+
+[90mstdout[2m | src/lib/clubManagerTrajectory.test.ts[2m > [22m[2mClub Manager save-bound player trajectories[2m > [22m[2mmeasures save variety and leader changes across the complete real source pool
+[22m[39mTRAJECTORY measured real-pool outcomes: {"sourceRows":5113,"clubs":412,"seeds":[7,31,81,307,1207,2026],"years":5,"variedPlayers":5110,"changedClubLeaders":279,"drift":{"0":1641,"1":1899,"2":2495,"3":2431,"4":2239,"5":1864,"6":1526,"7":1043,"8":705,"9":464,"10":256,"11":159,"12":56,"13":28,"14":9,"15":6,"16":4,"17":2,"-5":941,"-6":856,"-4":1057,"-3":1122,"-1":1438,"-2":1303,"-14":338,"-12":530,"-10":673,"-17":210,"-7":811,"-8":729,"-9":698,"-11":580,"-21":153,"-24":122,"-27":70,"-29":49,"-30":38,"-18":201,"-16":259,"-15":282,"-13":421,"-22":160,"-26":63,"-19":221,"-23":120,"-32":20,"-31":32,"-28":55,"-33":33,"-25":76,"-20":154,"-36":8,"-34":20,"-37":4,"-35":4}}
+
+[90mstdout[2m | src/lib/clubManagerTrajectory.test.ts[2m > [22m[2msave-scoped actual world projections[2m > [22m[2mmeasures actual seeded world leader changes without asserting an unmeasured frequency
+[22m[39mTRAJECTORY actual world outcomes: {"clubs":454,"seeds":[7,31,81,307,1207,2026],"years":5,"variedClubs":408,"changedLeaders":301,"generatedRows":19054,"drift":{"0":734,"1":894,"2":1271,"3":1291,"4":1241,"5":1061,"6":872,"7":583,"8":387,"9":260,"10":149,"11":98,"12":25,"13":21,"14":5,"15":3,"16":4,"17":1,"-2":500,"-5":238,"-9":94,"-14":14,"-1":576,"-3":341,"-4":261,"-12":51,"-6":173,"-10":84,"-17":13,"-7":134,"-8":103,"-11":59,"-13":35,"-15":18,"-18":4,"-16":11,"-19":4,"-29":2,"-20":2,"-24":2,"-22":2,"-21":3}}
+
+ [31m❯[39m src/lib/clubManagerTrajectory.test.ts [2m([22m[2m44 tests[22m[2m | [22m[31m2 failed[39m[2m)[22m[33m 18754[2mms[22m[39m
+[31m   [31m×[31m Club Manager save-bound player trajectories[2m > [22mleaves every real season-zero source row byte-exact without adding potential[39m[32m 61[2mms[22m[39m
+[31m     → expected [ …(19) ] to deeply equal [ …(19) ][39m
+   [32m✓[39m Club Manager save-bound player trajectories[2m > [22mignores 'absent context' without mutation or fields[32m 1[2mms[22m[39m
+   [32m✓[39m Club Manager save-bound player trajectories[2m > [22mignores 'null context' without mutation or fields[32m 0[2mms[22m[39m
+   [32m✓[39m Club Manager save-bound player trajectories[2m > [22mignores 'absent seed' without mutation or fields[32m 0[2mms[22m[39m
+   [32m✓[39m Club Manager save-bound player trajectories[2m > [22mignores 'negative seed' without mutation or fields[32m 0[2mms[22m[39m
+   [32m✓[39m Club Manager save-bound player trajectories[2m > [22mignores 'overflow seed' without mutation or fields[32m 0[2mms[22m[39m
+   [32m✓[39m Club Manager save-bound player trajectories[2m > [22mignores 'fractional seed' without mutation or fields[32m 0[2mms[22m[39m
+   [32m✓[39m Club Manager save-bound player trajectories[2m > [22mignores 'empty identity' without mutation or fields[32m 0[2mms[22m[39m
+   [32m✓[39m Club Manager save-bound player trajectories[2m > [22mignores 'negative year' without mutation or fields[32m 0[2mms[22m[39m
+   [32m✓[39m Club Manager save-bound player trajectories[2m > [22mignores 'fractional year' without mutation or fields[32m 0[2mms[22m[39m
+   [32m✓[39m Club Manager save-bound player trajectories[2m > [22mignores 'reversed curve' without mutation or fields[32m 0[2mms[22m[39m
+   [32m✓[39m Club Manager save-bound player trajectories[2m > [22mignores 'invalid curve' without mutation or fields[32m 0[2mms[22m[39m
+   [32m✓[39m Club Manager save-bound player trajectories[2m > [22mignores 'missing curve' without mutation or fields[32m 0[2mms[22m[39m
+   [32m✓[39m Club Manager save-bound player trajectories[2m > [22mignores 'zero scale' without mutation or fields[32m 0[2mms[22m[39m
+   [32m✓[39m Club Manager save-bound player trajectories[2m > [22mignores 'invalid scale' without mutation or fields[32m 0[2mms[22m[39m
+   [32m✓[39m Club Manager save-bound player trajectories[2m > [22mignores a malformed player { a: NaN }[32m 3[2mms[22m[39m
+   [32m✓[39m Club Manager save-bound player trajectories[2m > [22mignores a malformed player { a: 99 }[32m 0[2mms[22m[39m
+   [32m✓[39m Club Manager save-bound player trajectories[2m > [22mignores a malformed player { r: 39 }[32m 0[2mms[22m[39m
+   [32m✓[39m Club Manager save-bound player trajectories[2m > [22mignores a malformed player { anchor: NaN }[32m 0[2mms[22m[39m
+   [32m✓[39m Club Manager save-bound player trajectories[2m > [22mignores a malformed player { potential: 69 }[32m 0[2mms[22m[39m
+   [32m✓[39m Club Manager save-bound player trajectories[2m > [22mignores a malformed player { potential: Infinity }[32m 0[2mms[22m[39m
+   [32m✓[39m Club Manager save-bound player trajectories[2m > [22muses seed zero and the highest uint32 as genuine saved seeds[32m 1[2mms[22m[39m
+   [32m✓[39m Club Manager save-bound player trajectories[2m > [22mages a generated slot with finite anchor 38 without changing its provenance[32m 0[2mms[22m[39m
+   [32m✓[39m Club Manager save-bound player trajectories[2m > [22mages a generated slot with finite anchor 101 without changing its provenance[32m 0[2mms[22m[39m
+   [32m✓[39m Club Manager save-bound player trajectories[2m > [22mpreserves complete nondevelopment fields and nested references[32m 0[2mms[22m[39m
+   [32m✓[39m Club Manager save-bound player trajectories[2m > [22mdoes not consume global randomness even while producing an entire future world[32m 75[2mms[22m[39m
+   [33m[2m✓[22m[39m Club Manager save-bound player trajectories[2m > [22mreplays complete outputs after serialization and arbitrary read order [33m 387[2mms[22m[39m
+   [32m✓[39m Club Manager save-bound player trajectories[2m > [22mholds the trajectory after a destination, display name or squad-order change[32m 0[2mms[22m[39m
+   [32m✓[39m Club Manager save-bound player trajectories[2m > [22mmakes both rare development turns reachable without escaping their per-season bounds[32m 62[2mms[22m[39m
+   [33m[2m✓[22m[39m Club Manager save-bound player trajectories[2m > [22mrespects every source age curve, rating floor and carried potential ceiling [33m 15252[2mms[22m[39m
+   [33m[2m✓[22m[39m Club Manager save-bound player trajectories[2m > [22mmeasures save variety and leader changes across the complete real source pool [33m 358[2mms[22m[39m
+   [32m✓[39m save-scoped actual world projections[2m > [22mkeeps the entire season-zero world and objects unchanged for every valid seed[32m 39[2mms[22m[39m
+   [32m✓[39m save-scoped actual world projections[2m > [22mkeeps the exact original future cache for a 'absent' seed[32m 49[2mms[22m[39m
+   [32m✓[39m save-scoped actual world projections[2m > [22mkeeps the exact original future cache for a 'null' seed[32m 8[2mms[22m[39m
+   [32m✓[39m save-scoped actual world projections[2m > [22mkeeps the exact original future cache for a 'negative' seed[32m 8[2mms[22m[39m
+   [32m✓[39m save-scoped actual world projections[2m > [22mkeeps the exact original future cache for a 'overflow' seed[32m 8[2mms[22m[39m
+   [32m✓[39m save-scoped actual world projections[2m > [22mkeeps the exact original future cache for a 'fractional' seed[32m 7[2mms[22m[39m
+   [32m✓[39m save-scoped actual world projections[2m > [22mkeeps the exact original future cache for a 'NaN' seed[32m 7[2mms[22m[39m
+   [32m✓[39m save-scoped actual world projections[2m > [22mkeeps the exact original future cache for a 'infinite' seed[32m 7[2mms[22m[39m
+   [32m✓[39m save-scoped actual world projections[2m > [22mkeeps the exact original future cache for a 'string' seed[32m 7[2mms[22m[39m
+   [32m✓[39m save-scoped actual world projections[2m > [22mkeeps zero as a distinct valid saved seed and all public reads on its same world[32m 68[2mms[22m[39m
+   [32m✓[39m save-scoped actual world projections[2m > [22mpreserves complete worlds through saved seed serialization, reordered reads and interleaved careers without draws[32m 191[2mms[22m[39m
+[31m   [31m×[31m save-scoped actual world projections[2m > [22muses the actual curve and value scale while carrying original identities and simulated ceilings[39m[32m 38[2mms[22m[39m
+[31m     → expected { n: 'Lovro Majer', p: 'CAM', …(7) } to deeply equal { n: 'Lovro Majer', p: 'CAM', …(7) }[39m
+   [33m[2m✓[22m[39m save-scoped actual world projections[2m > [22mmeasures actual seeded world leader changes without asserting an unmeasured frequency [33m 2093[2mms[22m[39m
+
+[31m⎯⎯⎯⎯⎯⎯⎯[39m[1m[41m Failed Tests 2 [49m[22m[31m⎯⎯⎯⎯⎯⎯⎯[39m
+
+[41m[1m FAIL [22m[49m src/lib/clubManagerTrajectory.test.ts[2m > [22mClub Manager save-bound player trajectories[2m > [22mleaves every real season-zero source row byte-exact without adding potential
+[31m[1mAssertionError[22m: expected [ …(19) ] to deeply equal [ …(19) ][39m
+
+[32m- Expected[39m
+[31m+ Received[39m
+
+[33m@@ -27,11 +27,10 @@[39m
+[2m      "r": 83,[22m
+[2m      "v": 24,[22m
+[2m    },[22m
+[2m    {[22m
+[2m      "a": 23,[22m
+[32m-     "lv": 83,[39m
+[2m      "n": "Omari Hutchinson",[22m
+[2m      "p": "CAM",[22m
+[2m      "r": 82,[22m
+[2m      "v": 24,[22m
+[2m    },[22m
+[33m@@ -42,27 +41,24 @@[39m
+[2m      "r": 82,[22m
+[2m      "v": 20.3,[22m
+[2m    },[22m
+[2m    {[22m
+[2m      "a": 22,[22m
+[32m-     "lv": 82,[39m
+[2m      "n": "Diego Moreira",[22m
+[2m      "p": "LM",[22m
+[2m      "r": 80,[22m
+[2m      "v": 20.3,[22m
+[2m    },[22m
+[2m    {[22m
+[2m      "a": 31,[22m
+[32m-     "lv": 82,[39m
+[2m      "n": "Mike Maignan",[22m
+[2m      "p": "GK",[22m
+[2m      "r": 84,[22m
+[2m      "v": 20.3,[22m
+[2m    },[22m
+[2m    {[22m
+[2m      "a": 21,[22m
+[32m-     "lv": 82,[39m
+[2m      "n": "Davide Bartesaghi",[22m
+[2m      "p": "LB",[22m
+[2m      "r": 79,[22m
+[2m      "v": 18.8,[22m
+[2m    },[22m
+[33m@@ -80,11 +76,10 @@[39m
+[2m      "r": 82,[22m
+[2m      "v": 17.8,[22m
+[2m    },[22m
+[2m    {[22m
+[2m      "a": 31,[22m
+[32m-     "lv": 81,[39m
+[2m      "n": "Adrien Rabiot",[22m
+[2m      "p": "CM",[22m
+[2m      "r": 83,[22m
+[2m      "v": 16.5,[22m
+[2m    },[22m
+[33m@@ -116,27 +111,24 @@[39m
+[2m      "r": 79,[22m
+[2m      "v": 11.3,[22m
+[2m    },[22m
+[2m    {[22m
+[2m      "a": 30,[22m
+[32m-     "lv": 77,[39m
+[2m      "n": "Ruben Loftus-Cheek",[22m
+[2m      "p": "CM",[22m
+[2m      "r": 78,[22m
+[2m      "v": 8.3,[22m
+[2m    },[22m
+[2m    {[22m
+[2m      "a": 20,[22m
+[32m-     "lv": 76,[39m
+[2m      "n": "Alphadjo Cissè",[22m
+[2m      "p": "CAM",[22m
+[2m      "r": 72,[22m
+[2m      "v": 6,[22m
+[2m    },[22m
+[2m    {[22m
+[2m      "a": 40,[22m
+[32m-     "lv": 72,[39m
+[2m      "n": "Luka Modrić",[22m
+[2m      "p": "CM",[22m
+[2m      "r": 80,[22m
+[2m      "v": 3,[22m
+[2m    },[22m
+
+[36m [2m❯[22m src/lib/clubManagerTrajectory.test.ts:[2m37:71[22m[39m
+    [90m 35| [39m    [34mexpect[39m(pool[33m.[39mlength)[33m.[39m[34mtoBeGreaterThan[39m([34m4000[39m)[33m;[39m
+    [90m 36| [39m    for (const [club, players] of Object.entries(projectedWorldFor('no…
+    [90m 37| [39m      expect(players.map(({ n, p, a, r, v }) => ({ n, p, a, r, v }))).…
+    [90m   | [39m                                                                      [31m^[39m
+    [90m 38| [39m    }
+    [90m 39| [39m    [35mfor[39m ([35mconst[39m { player } [35mof[39m pool) {
+
+[31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/2]⎯[22m[39m
+
+[41m[1m FAIL [22m[49m src/lib/clubManagerTrajectory.test.ts[2m > [22msave-scoped actual world projections[2m > [22muses the actual curve and value scale while carrying original identities and simulated ceilings
+[31m[1mAssertionError[22m: expected { n: 'Lovro Majer', p: 'CAM', …(7) } to deeply equal { n: 'Lovro Majer', p: 'CAM', …(7) }[39m
+
+[32m- Expected[39m
+[31m+ Received[39m
+
+[33m@@ -4,8 +4,8 @@[39m
+[2m    "n": "Lovro Majer",[22m
+[2m    "p": "CAM",[22m
+[2m    "potential": 80,[22m
+[2m    "r": 77,[22m
+[2m    "since": 0,[22m
+[32m-   "v": 4.2,[39m
+[31m+   "v": 5.2,[39m
+[2m    "worldRosterKey": "[\"now\",\"AEK Athens\",\"Lovro Majer\",\"CAM\",1998,0]",[22m
+[2m  }[22m
+
+[36m [2m❯[22m src/lib/clubManagerTrajectory.test.ts:[2m283:24[22m[39m
+    [90m281| [39m        [34mexpect[39m(before)[33m.[39m[34mtoBeDefined[39m()[33m;[39m
+    [90m282| [39m        const expected = advanceClubManagerTrajectory({ ...before, wor…
+    [90m283| [39m        expect(player).toEqual({ ...expected, v: Math.max(0.2, Math.ro…
+    [90m   | [39m                       [31m^[39m
+    [90m284| [39m        [34mexpect[39m(player[33m.[39mpotential)[33m.[39m[34mtoBeGreaterThanOrEqual[39m(player[33m.[39mr)[33m;[39m
+    [90m285| [39m      }
+
+[31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[2/2]⎯[22m[39m
+
+
+[2m Test Files [22m [1m[31m1 failed[39m[22m[2m | [22m[1m[32m3 passed[39m[22m[90m (4)[39m
+[2m      Tests [22m [1m[31m2 failed[39m[22m[2m | [22m[1m[32m113 passed[39m[22m[90m (115)[39m
+[2m   Start at [22m 07:11:41
+[2m   Duration [22m 22.01s[2m (transform 4.67s, setup 405ms, collect 8.32s, tests 30.87s, environment 2.59s, prepare 683ms)[22m
+
+
+::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/lib/clubManagerTrajectory.test.ts,title=src/lib/clubManagerTrajectory.test.ts > Club Manager save-bound player trajectories > leaves every real season-zero source row byte-exact without adding potential,line=37,column=71::AssertionError: expected [ …(19) ] to deeply equal [ …(19) ]%0A%0A- Expected%0A+ Received%0A%0A@@ -27,11 +27,10 @@%0A      "r": 83,%0A      "v": 24,%0A    },%0A    {%0A      "a": 23,%0A-     "lv": 83,%0A      "n": "Omari Hutchinson",%0A      "p": "CAM",%0A      "r": 82,%0A      "v": 24,%0A    },%0A@@ -42,27 +41,24 @@%0A      "r": 82,%0A      "v": 20.3,%0A    },%0A    {%0A      "a": 22,%0A-     "lv": 82,%0A      "n": "Diego Moreira",%0A      "p": "LM",%0A      "r": 80,%0A      "v": 20.3,%0A    },%0A    {%0A      "a": 31,%0A-     "lv": 82,%0A      "n": "Mike Maignan",%0A      "p": "GK",%0A      "r": 84,%0A      "v": 20.3,%0A    },%0A    {%0A      "a": 21,%0A-     "lv": 82,%0A      "n": "Davide Bartesaghi",%0A      "p": "LB",%0A      "r": 79,%0A      "v": 18.8,%0A    },%0A@@ -80,11 +76,10 @@%0A      "r": 82,%0A      "v": 17.8,%0A    },%0A    {%0A      "a": 31,%0A-     "lv": 81,%0A      "n": "Adrien Rabiot",%0A      "p": "CM",%0A      "r": 83,%0A      "v": 16.5,%0A    },%0A@@ -116,27 +111,24 @@%0A      "r": 79,%0A      "v": 11.3,%0A    },%0A    {%0A      "a": 30,%0A-     "lv": 77,%0A      "n": "Ruben Loftus-Cheek",%0A      "p": "CM",%0A      "r": 78,%0A      "v": 8.3,%0A    },%0A    {%0A      "a": 20,%0A-     "lv": 76,%0A      "n": "Alphadjo Cissè",%0A      "p": "CAM",%0A      "r": 72,%0A      "v": 6,%0A    },%0A    {%0A      "a": 40,%0A-     "lv": 72,%0A      "n": "Luka Modrić",%0A      "p": "CM",%0A      "r": 80,%0A      "v": 3,%0A    },%0A%0A ❯ src/lib/clubManagerTrajectory.test.ts:37:71%0A%0A
+
+::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/lib/clubManagerTrajectory.test.ts,title=src/lib/clubManagerTrajectory.test.ts > save-scoped actual world projections > uses the actual curve and value scale while carrying original identities and simulated ceilings,line=283,column=24::AssertionError: expected { n: 'Lovro Majer', p: 'CAM', …(7) } to deeply equal { n: 'Lovro Majer', p: 'CAM', …(7) }%0A%0A- Expected%0A+ Received%0A%0A@@ -4,8 +4,8 @@%0A    "n": "Lovro Majer",%0A    "p": "CAM",%0A    "potential": 80,%0A    "r": 77,%0A    "since": 0,%0A-   "v": 4.2,%0A+   "v": 5.2,%0A    "worldRosterKey": "[\"now\",\"AEK Athens\",\"Lovro Majer\",\"CAM\",1998,0]",%0A  }%0A%0A ❯ src/lib/clubManagerTrajectory.test.ts:283:24%0A%0A
