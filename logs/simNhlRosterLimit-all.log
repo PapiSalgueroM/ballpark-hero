@@ -1,0 +1,37 @@
+NHL roster normal: PASS: actual overage restore retains all players and names the required roster decision
+NHL roster normal: PASS: overage cannot advance through its control or the actual handler
+NHL roster normal: PASS: two deliberate waivers keep their real costs and allow the next round at fifteen
+NHL roster normal: PASS: ordinary within-limit opening play keeps the original engine outcome and draw tape
+NHL roster normal: 4/4 passed, 0 exact outcome rejections, all four cases executed.
+NHL roster original: FAIL: actual overage restore retains all players and names the required roster decision
+NHL roster original: FAIL: overage cannot advance through its control or the actual handler
+NHL roster original: FAIL: two deliberate waivers keep their real costs and allow the next round at fifteen
+NHL roster original: PASS: ordinary within-limit opening play keeps the original engine outcome and draw tape
+NHL roster original: 1/4 passed, 3 exact outcome rejections, all four cases executed.
+NHL roster handler: PASS: actual overage restore retains all players and names the required roster decision
+NHL roster handler: FAIL: overage cannot advance through its control or the actual handler
+NHL roster handler: PASS: two deliberate waivers keep their real costs and allow the next round at fifteen
+NHL roster handler: PASS: ordinary within-limit opening play keeps the original engine outcome and draw tape
+NHL roster handler: 3/4 passed, 1 exact outcome rejections, all four cases executed.
+NHL roster disabled: PASS: actual overage restore retains all players and names the required roster decision
+NHL roster disabled: FAIL: overage cannot advance through its control or the actual handler
+NHL roster disabled: PASS: two deliberate waivers keep their real costs and allow the next round at fifteen
+NHL roster disabled: PASS: ordinary within-limit opening play keeps the original engine outcome and draw tape
+NHL roster disabled: 3/4 passed, 1 exact outcome rejections, all four cases executed.
+NHL roster warning: FAIL: actual overage restore retains all players and names the required roster decision
+NHL roster warning: PASS: overage cannot advance through its control or the actual handler
+NHL roster warning: FAIL: two deliberate waivers keep their real costs and allow the next round at fifteen
+NHL roster warning: PASS: ordinary within-limit opening play keeps the original engine outcome and draw tape
+NHL roster warning: 2/4 passed, 2 exact outcome rejections, all four cases executed.
+NHL roster roster: FAIL: actual overage restore retains all players and names the required roster decision
+NHL roster roster: PASS: overage cannot advance through its control or the actual handler
+NHL roster roster: FAIL: two deliberate waivers keep their real costs and allow the next round at fifteen
+NHL roster roster: PASS: ordinary within-limit opening play keeps the original engine outcome and draw tape
+NHL roster roster: 2/4 passed, 2 exact outcome rejections, all four cases executed.
+NHL roster waive: PASS: actual overage restore retains all players and names the required roster decision
+NHL roster waive: PASS: overage cannot advance through its control or the actual handler
+NHL roster waive: FAIL: two deliberate waivers keep their real costs and allow the next round at fifteen
+NHL roster waive: PASS: ordinary within-limit opening play keeps the original engine outcome and draw tape
+NHL roster waive: 3/4 passed, 1 exact outcome rejections, all four cases executed.
+NHL roster receipt: /home/runner/work/_temp/t-simNhlRosterLimit-all/dukb-nhl968-proof-2evFpo
+NHL roster: exact controls, CRLF-safe matching, bounded cleanup and zero outside transport verified.

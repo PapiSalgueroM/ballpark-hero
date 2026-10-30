@@ -1,0 +1,3 @@
+control nhl-blank (THIS FILE'S OWN CONTROL on the NHL board: a comment is reworded and nothing else, so nothing may fire): vitest exit 0; 0 red, 43 green of 43
+control nhl-blank: DID NOT FIRE. "nhl board: the default path" stayed green
+controlFrontOfficeBoard: 0 of 1 control(s) fired. NOT FIRED: nhl-blank
