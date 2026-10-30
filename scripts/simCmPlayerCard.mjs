@@ -182,9 +182,12 @@ const nudge = s => (s.boardConfidence < 35 ? { ...s, boardConfidence: 55 } : s);
 const failures = new Map();
 const checks = new Map();
 const tick = (section, n = 1) => checks.set(section, (checks.get(section) ?? 0) + n);
+const shapes = new Set();
 const fail = (section, msg) => {
   const list = failures.get(section) ?? [];
-  if (list.length < 8) console.log(`  FAIL ${section}: ${msg}`);
+  /* The first failure of every shape is printed (the text after the last colon, digits folded), up to twenty. */
+  const shape = `${section}:${String(msg).split(': ').slice(-1)[0].replace(/[0-9]+/g, 'N')}`;
+  if (!shapes.has(shape) && shapes.size < 20) { shapes.add(shape); console.log(`  FAIL ${section}: ${msg}`); }
   list.push(msg);
   failures.set(section, list);
 };
@@ -334,7 +337,8 @@ function checkMine(mod, s, where) {
       if (s.squad.filter(x => x.name === p.name && x.position === p.position).length === 1) {
         const g = (goals.get(key) ?? 0) + (b ? b[1] : 0), a = (assists.get(key) ?? 0) + (b ? b[2] : 0);
         if (c.league?.goals !== g || c.league?.assists !== a) fail('cards', `${who}: league ${c.league?.goals} goals ${c.league?.assists} assists, the boards say ${g} and ${a}`);
-        if (back && !late && c.league?.cleanSheets !== (sheets.get(key) ?? 0)) fail('cards', `${who}: ${c.league?.cleanSheets} league clean sheets, the board says ${sheets.get(key) ?? 0}`);
+        /* The clean sheets board is keepers only (clubManagerLeagueBoards.ts ordered): a defender's are held to the book above. */
+        if (p.position === 'GK' && !late && c.league?.cleanSheets !== (sheets.get(key) ?? 0)) fail('cards', `${who}: ${c.league?.cleanSheets} league clean sheets, the board says ${sheets.get(key) ?? 0}`);
       }
       if (back && late && !c.notes.some(n => n.k === 'late')) fail('cards', `${who}: a keeper or defender on a late book with no late note`);
     }
