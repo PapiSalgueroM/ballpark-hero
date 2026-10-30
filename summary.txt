@@ -1,0 +1,5 @@
+prepare exit=0 62s | ordinary-build raw=0
+simTicker exit=0 0s | simTicker.mjs raw=0
+simTickerDepth exit=0 0s | simTickerDepth.mjs raw=0
+playLiveTicker exit=1 38s | playLiveTicker.mjs raw=1
+finish exit=0 6s | 

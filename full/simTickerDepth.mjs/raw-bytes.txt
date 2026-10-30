@@ -1,0 +1,3 @@
+1894 /home/runner/work/_temp/rc-out/full/simTickerDepth.mjs/stdout.log
+   0 /home/runner/work/_temp/rc-out/full/simTickerDepth.mjs/stderr.log
+1894 total

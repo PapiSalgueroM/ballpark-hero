@@ -1,0 +1,7 @@
+#!serial
+# Focused P motion verification against retained F failures. No new default or full-unit coverage claim.
+prepare: bash .rc/default-support.sh prepare
+simTicker: bash .rc/default-support.sh run simTicker.mjs
+simTickerDepth: bash .rc/default-support.sh run simTickerDepth.mjs
+playLiveTicker: bash .rc/default-support.sh run playLiveTicker.mjs
+finish: bash .rc/default-support.sh finish
