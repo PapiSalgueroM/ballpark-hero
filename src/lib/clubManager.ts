@@ -93,6 +93,8 @@ import {
   eraRostersLoaded,
 } from '@/lib/clubManagerEras';
 import type { ProjectedPlayer, CMEra } from '@/lib/clubManagerEras';
+/* Round 1597 closing check: the world's own odds of leaving these leagues, for a made up free agent. */
+import { dropOutChance } from '@/lib/clubManagerEras';
 /* Round 1520: after the eras module, which brings the nationality maps in first, so the chunk keeps its order. */
 import { countNations, drawNation, mapSpelling, type NationCount } from '@/lib/clubManagerMadeUpNations';
 import { nationalityOf } from '@/data/playerNationalities';
@@ -2872,6 +2874,9 @@ export interface CareerState {
   /** Round 1597: the men on the free agent list who retired at the last summer, for the new season's first
    *  screen (retiredLastSummer is the squad's). Rewritten every summer; absent when nobody did. */
   freeAgentsRetired?: { name: string; age: number; rating: number }[];
+  /** Round 1597 closing check: the made up men on the free agent list who left these leagues at the last summer
+   *  (leavesTheLeagues), for the new season's first screen. Rewritten every summer; absent when nobody did. */
+  freeAgentsLeft?: { name: string; age: number; rating: number }[];
   aiHeadlines: string[];
   /** Names no longer purchasable (bought by me or by AI clubs this season). */
   goneNames: string[];
@@ -7883,16 +7888,24 @@ function isJourneyman(f: FreeAgent): boolean {
  * same odds a squad player does: nobody before 32, everybody by 42.
  *
  * Pure. Returns the pool for startNextSeason to carry and the men who retired,
- * whom the rollover writes onto retiredNames and into the news.
+ * whom the rollover writes onto retiredNames and into the news, and (closing
+ * check) the made up men who left these leagues (leavesTheLeagues), said on the
+ * new season's first screen the same way.
  */
-export function summerFreeAgents(career: CareerState): { pool: FreeAgent[]; retired: { name: string; age: number; rating: number }[] } {
+export function summerFreeAgents(career: CareerState): { pool: FreeAgent[]; retired: { name: string; age: number; rating: number }[]; left: { name: string; age: number; rating: number }[] } {
   const pool = career.freeAgents ?? [];
   const retired: { name: string; age: number; rating: number }[] = [];
-  if (!pool.length) return { pool, retired };
+  const left: { name: string; age: number; rating: number }[] = [];
+  if (!pool.length) return { pool, retired, left };
   const nextSeason = career.season + 1, year = worldYear(career);
   const ahead = livingWorldOf(career) ? worldRosterView(refreshWorldRoster({ ...career, season: nextSeason })) : null;
   const neutral = { ...career, training: DEFAULT_TRAINING, academy: undefined, facilities: undefined, staff: undefined };
   const kept: FreeAgent[] = [];
+  /* Round 1597 closing check: a made up man still playing may leave these leagues (leavesTheLeagues). */
+  const stay = (f: FreeAgent, aged: FreeAgent) => {
+    if (leavesTheLeagues(career, aged, f.since, nextSeason)) left.push({ name: f.name, age: aged.age, rating: aged.rating });
+    else kept.push(aged);
+  };
   for (const f of pool) {
     if (isJourneyman(f)) { kept.push(f); continue; }
     const held = (ahead?.records ?? []).filter(r => r.owner === null && (r.status === 'released' || r.status === 'retired')
@@ -7900,7 +7913,7 @@ export function summerFreeAgents(career: CareerState): { pool: FreeAgent[]; reti
     if (held.length === 1) {
       const r = held[0];
       if (r.status === 'retired') { retired.push({ name: f.name, age: r.player.age, rating: r.player.rating }); continue; }
-      kept.push({ ...f, age: r.player.age, rating: r.player.rating, ...(f.value !== undefined && r.player.value !== undefined ? { value: r.player.value } : {}) });
+      stay(f, { ...f, age: r.player.age, rating: r.player.rating, ...(f.value !== undefined && r.player.value !== undefined ? { value: r.player.value } : {}) });
       continue;
     }
     const random = keyedRng(`free-agent-summer|${worldSeedOf(career) ?? 'legacy'}|${f.name}|${f.since}|${nextSeason}`);
@@ -7909,9 +7922,27 @@ export function summerFreeAgents(career: CareerState): { pool: FreeAgent[]; reti
       fitness: 100, morale: 70, injuryWeeks: 0, suspendedMatches: 0, isYouth: false, seasonGoals: 0, seasonAssists: 0,
     } as CMPlayer, neutral, random);
     if (random() < retireChance(man.age, man.rating, man.position)) { retired.push({ name: f.name, age: man.age, rating: man.rating }); continue; }
-    kept.push({ ...f, age: man.age, rating: man.rating, ...(f.value !== undefined && man.value !== undefined ? { value: man.value } : {}) });
+    stay(f, { ...f, age: man.age, rating: man.rating, ...(f.value !== undefined && man.value !== undefined ? { value: man.value } : {}) });
   }
-  return { pool: kept, retired };
+  return { pool: kept, retired, left };
+}
+
+/**
+ * Round 1597 closing check: a made up man on the free agent list leaves these leagues on the world's own odds.
+ *
+ * The list keeps a man until a club signs him or he retires, and until FA-3 the only club that signs from it is
+ * mine, so the made up men who walked (youth pads, academy boys, a made up squad man) piled up: a median 43 men
+ * besides the journeymen by season 9 in fleet careers that renew nobody, median age 25, a youth pad listed for up
+ * to fifteen years. Every man of the projected world leaves these leagues on dropOutChance each summer (a lower
+ * division, a league abroad: projectedWorld's worldExitChance), so a made up free agent does too, after his aging,
+ * on a stream keyed by his name, the season he arrived and the summer (no draw of the summer moves). Never a
+ * journeyman (decayFreeAgents clears those) and never a real footballer: a real man stays until a club signs him
+ * or he retires, as FA-1 promises. The new season's first screen names every man who left (freeAgentsLeft).
+ */
+function leavesTheLeagues(career: CareerState, aged: FreeAgent, since: number, nextSeason: number): boolean {
+  if (aged.generated !== true && !aged.name.endsWith(YOUTH_PAD_SUFFIX)) return false;
+  const random = keyedRng(`free-agent-leaves|${worldSeedOf(career) ?? 'legacy'}|${aged.name}|${since}|${nextSeason}`);
+  return random() < dropOutChance(aged.age, aged.rating, aged.position);
 }
 
 /**
@@ -22161,7 +22192,8 @@ export function startNextSeason(career: CareerState, acceptOfferClub?: string): 
      it). An old save first gets back the men its ledger still holds as released (recoverPooledReleases, once), then
      every man on the list ages a year and the old ones may retire (summerFreeAgents). Those who retire go onto
      retiredNames here, so the pool block's gone set, the fill and the market all treat them as retired, and into
-     the news further down. Nobody leaves the list any other way except by signing. */
+     the news further down. Nobody leaves the list any other way except by signing, or (closing check) a made up
+     man leaving these leagues on the world's odds, which the new season's first screen names too (freeAgentsLeft). */
   career = recoverPooledReleases(career);
   const poolSummer = summerFreeAgents(career);
   if (Array.isArray(career.freeAgents)) {
@@ -22936,6 +22968,9 @@ export function startNextSeason(career: CareerState, acceptOfferClub?: string): 
      here was pushed off in 34 of the fleet's summers (simCmFreeAgencyFleet's first run). */
   if (poolSummer.retired.length) state.freeAgentsRetired = poolSummer.retired;
   else delete state.freeAgentsRetired;
+  /* Round 1597 closing check: and the made up men who left these leagues off the list (leavesTheLeagues), the same way. */
+  if (poolSummer.left.length) state.freeAgentsLeft = poolSummer.left;
+  else delete state.freeAgentsLeft;
   /* Round 508: an exercised option is a TRANSFER, so it goes in the transfer
      log rather than only into the headline feed. The feed is capped at eight
      and two more prepends follow this line, so a summer with promotion news and

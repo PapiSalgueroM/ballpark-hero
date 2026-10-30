@@ -62,6 +62,15 @@
  *   ledger record says retired"; staleseason "Jordan Pickford was 32 on the list a summer ago and is 32 now";
  *   noloanrow 4 lent men's deals ran out unlisted; norenewloan 3 of the 4 men renewed on loan walked (refused).
  *
+ * ADDED BY THE CLOSING CHECK FIX (the list grew until FA-3 and a youth pad stayed on it for up to fifteen years):
+ *   section 8 LEFT          a made up man on the list (never a journeyman, never a real player) leaves these leagues
+ *                           on the world's own dropOutChance (leavesTheLeagues), and the new season's first screen
+ *                           names him (freeAgentsLeft). At every summer of every fleet career: nobody leaves the list
+ *                           unsigned, not retired and unnamed; nobody named is real, a journeyman or still here; and
+ *                           over the fleet the count named sits within four standard deviations of the sum of each
+ *                           made up man's dropOutChance at his new age and rating. Section 1 counts a tracked man
+ *                           named as off the list as accounted for, and section 4 a recovered one.
+ *
  * CONTROLS (CM_FA_CONTROL=name), each must turn its own section red (exit 1, the last line says FIRED):
  *   deletepool  decayFreeAgents deletes every man two summers after he arrived again (the old bug)   -> section 1
  *   noretire    nobody on the list ever retires                                                      -> section 2
@@ -70,6 +79,9 @@
  *   notrimpool  the trim's men are written to a throwaway array, never the list (main's bug)          -> section 5
  *   trimstranger the trim writes its men without fromMyClub or the trimmed mark (the build as reviewed) -> section 5
  *   trimbar     releasedByYou ignores the trimmed mark, so a trimmed man is barred for ever          -> section 5
+ *   dropreal    a real man on the list may leave these leagues too                                   -> section 8
+ *   nodropout   nobody ever leaves these leagues off the list (the list as reviewed)                 -> section 8
+ *   leftunsaid  the men who leave are not written to freeAgentsLeft, so nobody names them            -> section 8
  *   ledgeroff   summerFreeAgents' ledger match is a birth year off, so the ledger path never runs    -> section 6
  *   staleseason summerFreeAgents reads the ledger at this year, so a ledger held man skips a year    -> section 6
  *   noloanrow   expiringDeals forgets the men out on loan (the round as first built)                 -> section 7
@@ -119,6 +131,10 @@ const EDITS = {
     '        founderSaleRatio: p.founderSaleRatio, reason: \'released\' as const,\n']],
   trimbar: [[CORE, '  return fa.fromMyClub === true && fa.reason === \'released\' && fa.trimmed !== true;\n',
     '  return fa.fromMyClub === true && fa.reason === \'released\';\n']],
+  /* Closing check fix: a made up free agent leaves these leagues on the world's odds, and only he, and said. */
+  dropreal: [[CORE, '  if (aged.generated !== true && !aged.name.endsWith(YOUTH_PAD_SUFFIX)) return false;\n', '']],
+  nodropout: [[CORE, '  return random() < dropOutChance(aged.age, aged.rating, aged.position);\n', '  return random() < 0;\n']],
+  leftunsaid: [[CORE, '  if (poolSummer.left.length) state.freeAgentsLeft = poolSummer.left;\n', '']],
   ledgeroff: [[CORE, '&& r.origin.birthYear === year - f.age && r.player.position === f.position);\n',
     '&& r.origin.birthYear === year - f.age - 1 && r.player.position === f.position);\n']],
   staleseason: [[CORE, '  const nextSeason = career.season + 1, year = worldYear(career);\n', '  const nextSeason = career.season, year = worldYear(career);\n']],
@@ -211,10 +227,12 @@ function placesOf(s, man, records) {
   return { squad, pool, retired, ai, total: squad + pool + retired + ai };
 }
 
-const failures = { 1: [], 2: [], 3: [], 4: [], 5: [], 6: [], 7: [] };
+const failures = { 1: [], 2: [], 3: [], 4: [], 5: [], 6: [], 7: [], 8: [] };
 const fail = (section, line) => { failures[section].push(line); if (failures[section].length <= 8) console.log(`  FAIL section ${section}: ${line}`); };
 const totals = { careers: 0, tracked: 0, checks: 0, lost: 0, twice: 0, poolRetired: 0, unseen: 0,
-  ledgerHeld: 0, aged: 0, trimmed: 0, trimMine: 0, lentFinal: 0, lentWalked: 0, lentRenewed: 0 };
+  ledgerHeld: 0, aged: 0, trimmed: 0, trimMine: 0, lentFinal: 0, lentWalked: 0, lentRenewed: 0,
+  left: 0, leftExpected: 0, leftVar: 0, leftReal: 0, leftTracked: 0 };
+const madeUpAgent = f => f.generated === true || f.name.endsWith(' (Youth)');
 const endAges = [], endSizes = [];
 
 /* One career. atSeasonEnd(s, season, tracked) may stop it (return true) after a season's finishSeason, before its summer.
@@ -227,6 +245,7 @@ function runCareer(club, eraId, seed, policy, seasons, atSeasonEnd, hooks = {}) 
   const tracked = new Map();
   const track = (p, how, st) => { if (!tracked.has(p.name)) tracked.set(p.name, { name: p.name, birth: cm.worldYear(st) - p.age, how, done: false }); };
   const row = { club, eraId, policy, tracked: 0, lost: 0, twice: 0, retiredOff: 0 };
+  const leftNames = new Set();
   for (let season = 1; season <= seasons; season += 1) {
     s = preseason(s, track);
     if (hooks.preseason) s = hooks.preseason(s, season);
@@ -263,6 +282,33 @@ function runCareer(club, eraId, seed, policy, seasons, atSeasonEnd, hooks = {}) 
     if (unsaid.length || said.size !== offList.length) {
       totals.unseen += 1; fail(2, `${club} ${policy} summer ${season}: ${offList.length} retired off the list, the new season's first screen names ${said.size} of them (${unsaid.map(f => f.name).slice(0, 3).join(', ')} unsaid)`);
     }
+    /* Section 8 (closing check): who left the list at this summer other than by signing or retiring. Only a made up
+       man may leave that way (leavesTheLeagues), only on the world's odds, and only with the first screen naming him. */
+    const listedBefore = new Map((before.freeAgents ?? []).map(f => [f.name, f]));
+    const nowListed = new Set((s.freeAgents ?? []).map(f => f.name));
+    const signedNow = new Set(s.squad.map(p => p.name));
+    const retiredNow = new Set(s.retiredNames ?? []);
+    const saidLeft = new Map((s.freeAgentsLeft ?? []).map(r => [r.name, r]));
+    for (const [name, f] of listedBefore) {
+      if (isJourneyman(f) || nowListed.has(name) || signedNow.has(name) || retiredNow.has(name) || saidLeft.has(name)) continue;
+      fail(8, `${club} ${policy}, summer into season ${season + 1}: ${name} left the list unsigned, not retired, and the first screen does not name him`);
+    }
+    for (const [name] of saidLeft) {
+      const f = listedBefore.get(name);
+      leftNames.add(name); totals.left += 1;
+      if (!f) { fail(8, `${club} ${policy}, summer into season ${season + 1}: ${name} is named as off the list but was not on it`); continue; }
+      if (!madeUpAgent(f) || isJourneyman(f)) { totals.leftReal += 1; fail(8, `${club} ${policy}, summer into season ${season + 1}: ${name}, a real player, left the list for a league the game does not follow`); }
+      if (nowListed.has(name) || signedNow.has(name) || retiredNow.has(name)) fail(8, `${club} ${policy}, summer into season ${season + 1}: ${name} is named as off the list and is still here`);
+    }
+    /* The rate: a made up man still playing after this summer (on the list now, or named as off it) had
+       dropOutChance at his new age and rating of leaving, so the fleet's count must sit near the sum. */
+    for (const [name, f] of listedBefore) {
+      if (isJourneyman(f) || !madeUpAgent(f) || signedNow.has(name)) continue;
+      const after = saidLeft.get(name) ?? (s.freeAgents ?? []).find(x => x.name === name);
+      if (!after) continue;
+      const p = eras.dropOutChance(after.age, after.rating, f.position);
+      totals.leftExpected += p; totals.leftVar += p * (1 - p);
+    }
     /* Sections 1 and 3: every man tracked so far, at this summer. */
     const records = ledger.readWorldRoster(s)?.records ?? [];
     /* Section 6: FA-1 rule 2. A list man the ledger holds (exactly one released or retired record with no owner, by
@@ -284,6 +330,7 @@ function runCareer(club, eraId, seed, policy, seasons, atSeasonEnd, hooks = {}) 
     for (const man of tracked.values()) {
       if (man.done) continue;
       const at = placesOf(s, man, records); totals.checks += 1;
+      if (at.total === 0 && leftNames.has(man.name)) { man.done = true; totals.leftTracked += 1; continue; }
       if (at.total === 0) { row.lost += 1; man.done = true; fail(1, `${club} ${eraId} ${policy}, summer into season ${season + 1}: ${man.name} (${man.how}) is in no squad, not on the list and not retired`); continue; }
       if (at.total > 1 || at.pool > 1) { row.twice += 1; fail(3, `${club} ${policy}, season ${season + 1}: ${man.name} is in ${JSON.stringify(at)}`); }
       if (at.retired) man.done = true;
@@ -424,7 +471,8 @@ if (!SKIP_OLD) {
     const recoverable = [...new Set(records.filter(r => r.status === 'released' && r.owner === null && !here.has(r.player.name)).map(r => r.player.name))];
     Math.random = stream(entry.seed + 0x77);
     const next = cm.startNextSeason(loaded);
-    const there = new Set([...next.squad.map(p => p.name), ...(next.freeAgents ?? []).map(f => f.name), ...(next.retiredNames ?? [])]);
+    const there = new Set([...next.squad.map(p => p.name), ...(next.freeAgents ?? []).map(f => f.name), ...(next.retiredNames ?? []),
+      ...(next.freeAgentsLeft ?? []).map(r => r.name)]);
     const back = recoverable.filter(n => there.has(n));
     recoverableTotal += recoverable.length; recoveredTotal += back.length;
     for (const n of recoverable) if (!there.has(n)) fail(4, `${entry.club}: ${n}, held by the ledger as released and listed nowhere, did not come back at the next summer`);
@@ -448,18 +496,25 @@ if (totals.poolRetired < RETIRE_FLOOR) fail(2, `only ${totals.poolRetired} men r
 /* Sections 5 to 7's floors, so a run that stops trimming, stops reaching the ledger or stops lending cannot pass by
    having nothing to check: a tenth of the first measured run for the ledger counts (684 held, 1,860 a summer on),
    a third for the 12 trimmed and half for the 4 and 4 men out on loan (remote check r1597-fx3). */
+/* Section 8 (closing check): the made up men who left the list against the sum of their dropOutChance, inside four
+   standard deviations (a binomial count, so the band follows the fleet's size rather than a number picked), and a
+   floor on the expected count so a fleet with nobody at risk cannot pass on nothing. LEFT_FLOOR is provisional. */
+const LEFT_FLOOR = 1;
+const leftBand = 4 * Math.sqrt(totals.leftVar) + 2;
+if (totals.leftExpected < LEFT_FLOOR) fail(8, `only ${totals.leftExpected.toFixed(1)} made up men were expected to leave the list over the fleet, under ${LEFT_FLOOR}`);
+if (Math.abs(totals.left - totals.leftExpected) > leftBand) fail(8, `${totals.left} men left the list for a league the game does not follow, against ${totals.leftExpected.toFixed(1)} expected on the world's odds (band ${leftBand.toFixed(1)})`);
 const TRIM_FLOOR = 4, HELD_FLOOR = 68, AGED_FLOOR = 186, LENT_FLOOR = 2, RENEWED_LENT_FLOOR = 2;
 if (totals.trimmed < TRIM_FLOOR) fail(5, `only ${totals.trimmed} men were trimmed at a summer, under ${TRIM_FLOOR}`);
 if (totals.ledgerHeld < HELD_FLOOR) fail(6, `only ${totals.ledgerHeld} list men were held by the ledger at a summer, under ${HELD_FLOOR}`);
 if (totals.aged < AGED_FLOOR) fail(6, `only ${totals.aged} list men were seen a summer on, under ${AGED_FLOOR}`);
 if (totals.lentFinal < LENT_FLOOR) fail(7, `only ${totals.lentFinal} men were out on loan in their last year at a summer, under ${LENT_FLOOR}`);
 if (totals.lentRenewed < RENEWED_LENT_FLOOR) fail(7, `only ${totals.lentRenewed} men out on loan were renewed, under ${RENEWED_LENT_FLOOR}`);
-console.log(`simCmFreeAgencyFleet: ${totals.careers} careers to season ${SEASONS + 1}, ${TRIM_CAREERS.length} trim and loan careers to season 4; ${totals.tracked} men left a squad, ${totals.checks} summer checks; lost ${totals.lost}, twice ${totals.twice}; ${totals.poolRetired} retired off the list (${totals.unseen} summers unseen); list size at the end median ${median(endSizes)}, its median age median ${median(endAges)}; trimmed ${totals.trimmed} (mine and never barred ${totals.trimMine}); ledger held list men ${totals.ledgerHeld}, a summer on ${totals.aged}; out on loan in the last year ${totals.lentFinal} (left ${totals.lentWalked}, renewed ${totals.lentRenewed})${SKIP_OLD ? '; old saves skipped' : `; old saves recoverable ${recoverableTotal}, recovered ${recoveredTotal}`}`);
+console.log(`simCmFreeAgencyFleet: ${totals.careers} careers to season ${SEASONS + 1}, ${TRIM_CAREERS.length} trim and loan careers to season 4; ${totals.tracked} men left a squad, ${totals.checks} summer checks; lost ${totals.lost}, twice ${totals.twice}; ${totals.poolRetired} retired off the list (${totals.unseen} summers unseen); list size at the end median ${median(endSizes)}, its median age median ${median(endAges)}; left for a league the game does not follow ${totals.left} (expected ${totals.leftExpected.toFixed(1)}, sd ${Math.sqrt(totals.leftVar).toFixed(1)}; real ${totals.leftReal}; tracked men among them ${totals.leftTracked}); trimmed ${totals.trimmed} (mine and never barred ${totals.trimMine}); ledger held list men ${totals.ledgerHeld}, a summer on ${totals.aged}; out on loan in the last year ${totals.lentFinal} (left ${totals.lentWalked}, renewed ${totals.lentRenewed})${SKIP_OLD ? '; old saves skipped' : `; old saves recoverable ${recoverableTotal}, recovered ${recoveredTotal}`}`);
 const red = Object.entries(failures).filter(([, list]) => list.length).map(([k, list]) => `${k} (${list.length})`);
-const TARGET = { deletepool: '1', noretire: '2', nodedupe: '3', norecover: '4', notrimpool: '5', trimstranger: '5', trimbar: '5', ledgeroff: '6', staleseason: '6', noloanrow: '7', norenewloan: '7' }[CONTROL];
+const TARGET = { deletepool: '1', noretire: '2', nodedupe: '3', norecover: '4', notrimpool: '5', trimstranger: '5', trimbar: '5', dropreal: '8', nodropout: '8', leftunsaid: '8', ledgeroff: '6', staleseason: '6', noloanrow: '7', norenewloan: '7' }[CONTROL];
 if (CONTROL) {
   if (failures[TARGET].length) { console.log(`simCmFreeAgencyFleet: CONTROL ${CONTROL} FIRED: section ${TARGET} red${red.length > 1 ? ` (red: ${red.join(', ')})` : ''}`); process.exit(1); }
   console.log(`simCmFreeAgencyFleet: CONTROL ${CONTROL} DID NOT FIRE: section ${TARGET} stayed green (red: ${red.join(', ') || 'none'})`); process.exit(3);
 }
 if (red.length) { console.log(`simCmFreeAgencyFleet: RED, sections ${red.join(', ')}`); process.exit(1); }
-console.log(`simCmFreeAgencyFleet: green, all ${SKIP_OLD ? 'six' : 'seven'} sections held`);
+console.log(`simCmFreeAgencyFleet: green, all ${SKIP_OLD ? 'seven' : 'eight'} sections held`);

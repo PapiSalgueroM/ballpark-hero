@@ -262,7 +262,7 @@ if (CONTROL === 'nosev') {
 } else if (CONTROL === 'nosummer') {
   rewrite('nosummer', 'engine',
     '  const poolSummer = summerFreeAgents(career);',
-    '  const poolSummer = { pool: career.freeAgents ?? [], retired: [] as { name: string; age: number; rating: number }[] };');
+    '  const poolSummer = { pool: career.freeAgents ?? [], retired: [] as { name: string; age: number; rating: number }[], left: [] as { name: string; age: number; rating: number }[] };');
 } else if (CONTROL === 'nodecaywire') {
   rewrite('nodecaywire', 'engine',
     'const carried = decayFreeAgents(career.freeAgents ?? [], career.season + 1, gone);',

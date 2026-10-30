@@ -1160,6 +1160,16 @@ const ClubManager = () => {
               <div className="text-[9px] text-muted-foreground mt-1">Nobody signed them, so they have hung up their boots.</div>
             </div>
           )}
+          {/* Round 1597 closing check: and the made up men who left the list for a club outside these leagues. */}
+          {!leagueStarted(c) && (c.freeAgentsLeft ?? []).length > 0 && (
+            <div data-cm-fa-left className="rounded-xl border border-border bg-card p-2.5">
+              <div className="text-[10px] text-muted-foreground uppercase tracking-wider mb-1">🧳 Off the free agent list</div>
+              <div className="text-xs text-foreground">
+                {(c.freeAgentsLeft ?? []).map(r => `${r.name} (${r.age}, rated ${r.rating})`).join(' · ')}
+              </div>
+              <div className="text-[9px] text-muted-foreground mt-1">Made up players nobody here signed. They found a club in a league this game does not follow, so they are off the list.</div>
+            </div>
+          )}
           {/* Round 1597: the last weeks of a season name every deal that runs out, so none ends unseen. */}
           {dealsLine && (
             <button
