@@ -1,0 +1,6 @@
+#!serial
+# Supplemental passive geometry diagnostic only. No default qualification or 1022 credit.
+prepare: bash .rc/default-support.sh prepare
+playLiveTicker: bash .rc/default-support.sh run playLiveTicker.mjs
+playCmHubLanding: bash .rc/default-support.sh run playCmHubLanding.mjs
+finish: bash .rc/default-support.sh finish
