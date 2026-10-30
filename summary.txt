@@ -1,0 +1,5 @@
+build exit=0 38s | [dukb] inlined 1 stylesheet(s) and 1 module(s) into 181 snapshots (11 left alone)
+states exit=1 47s | Node.js v24.22.1
+shard2 exit=1 256s | Node.js v24.22.1
+shard1 exit=1 274s | Node.js v24.22.1
+shard3 exit=1 287s | Node.js v24.22.1
