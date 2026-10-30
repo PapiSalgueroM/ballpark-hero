@@ -1,0 +1,5 @@
+base-createClub exit=1 11s | simCreateClub: 1 failure
+base-intl exit=0 59s | simCmInternationals: all green
+base-boardAsks exit=0 89s | simBoardAsks: green. Every ask a board makes can be met, and nobody real is quoted.
+base-difficulty exit=0 309s | simCmDifficulty: all green (sections 1,2,3,6,7,8)
+base-roles exit=0 1526s | ALL ROLE CHECKS PASSED
