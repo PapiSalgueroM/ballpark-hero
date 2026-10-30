@@ -1,0 +1,11 @@
+parity exit=1 | control parity FIRED: applied (parity: David Raya (id 7) worth 1 more in PGlite only) and 1 check(s) went red
+  FAIL: 1 Q2 and 0 Q3 rows whose Postgres recipe differs from the export's h
+tamper exit=1 | control tamper FIRED: applied (tamper: one payload club changed after its checksum) and 1 check(s) went red
+  FAIL: the applied form raised: Round 1587: the payload checksum does not match, nothing written
+drift exit=1 | control drift FIRED: applied (drift: id 6876's position edited before the run) and 2 check(s) went red
+  FAIL: the record: Round 1587: 109 market rows and 56 stint rows rewritten, 0 already current, 1 drifted, 0 missing
+  FAIL: the applied form raised: Round 1587: 1 market and 0 stint rows drifted, 0 and 0 missing, nothing written
+noguard exit=1 | control noguard FIRED: applied (noguard: the record's market update guard stripped, with a row edited after the read) and 3 check(s) went red
+  FAIL: the record: Round 1587: 110 market rows and 56 stint rows rewritten, 0 already current, 1 drifted, 0 missing
+  FAIL: the record: the row edited after the read (id 6876) was overwritten to Arsenal de Sarandí
+  FAIL: the applied form raised: Round 1587: 1 market and 0 stint rows drifted, 0 and 0 missing, nothing written

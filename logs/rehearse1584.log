@@ -1,0 +1,17 @@
+A) the detection SQL and its JS twin return the same rows
+  ok: 1714 fixture rows loaded
+  ok: the fixture: the SQL and the JS twin agree on all 22 rows (20 S2, 2 S1)
+  ok: the JS twin returns the fixture's committed expected list
+A2) the two clauses the fixture cannot reach: S1 sized from every row, and split seasons left out
+  ok: the row with no nationality takes S1 Arsenal FC 2011 off the JS list (margin 5 to 4)
+  ok: the twelve split rows would be an S2 row under a plain club name, and as a split season they are left out
+  ok: the fixture plus the synthetic rows: the SQL and the JS twin agree on all 21 rows (20 S2, 1 S1)
+B) the cache purge removes exactly the stale Arsenal yeses, all or nothing
+  ok: the generator lists the 2 stale yeses and holds the surname only key
+  ok: the form ran and removed exactly the 2 stale yeses
+  ok: every row left in the table is byte for byte as it was
+  ok: every removed row still matched the hash Q6 read
+  ok: all or nothing: 2 of 2
+  ok: a second run raises (0 of 2 still match) and changes nothing
+
+rehearseClubNamesakes1584: green. Q1 and its JS twin agree in Postgres, and the purge form removes exactly the stale Arsenal yeses or nothing.

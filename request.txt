@@ -1,0 +1,13 @@
+tsc: node_modules/.bin/tsc --noEmit -p tsconfig.app.json
+simClubNamesakes: node scripts/simClubNamesakes.mjs
+simClubNamesakes-controls: bad=0; for c in blind unmerge noexclude wide mirrordrift onehost forget manhost wiki twotm unjudged payload londonspan leak; do SIM_NAMESAKE_CONTROL=$c node scripts/simClubNamesakes.mjs > /tmp/sc-$c.log 2>&1; e=$?; echo "$c exit=$e | $(grep -E 'FIRED|ABORTED' /tmp/sc-$c.log | tail -1)"; if [ $e -ne 1 ] || ! grep -q "control $c FIRED" /tmp/sc-$c.log; then bad=1; fi; done; exit $bad
+rehearse1587: npm install --prefix /tmp/pgl7 @electric-sql/pglite > /dev/null 2>&1 && PGLITE_DIR=/tmp/pgl7 node scripts/qa/rehearseClubNamesakes1587.mjs
+rehearse1587-controls: npm install --prefix /tmp/pgl8 @electric-sql/pglite > /dev/null 2>&1; bad=0; for c in parity tamper drift noguard; do REHEARSE_CONTROL=$c PGLITE_DIR=/tmp/pgl8 node scripts/qa/rehearseClubNamesakes1587.mjs > /tmp/rh-$c.log 2>&1; e=$?; echo "$c exit=$e | $(grep -E 'FIRED|ABORTED|DID NOT' /tmp/rh-$c.log | tail -1)"; grep -E 'FAIL' /tmp/rh-$c.log | head -3; if [ $e -ne 1 ] || ! grep -q "control $c FIRED" /tmp/rh-$c.log; then bad=1; fi; done; exit $bad
+rehearse1584: npm install --prefix /tmp/pgl4 @electric-sql/pglite > /dev/null 2>&1 && PGLITE_DIR=/tmp/pgl4 node scripts/qa/rehearseClubNamesakes1584.mjs
+dealtDay-listing: node scripts/qa/namesakeDealtDay1587.mjs 2026-10-30 +32
+dealtDay-clear: node scripts/qa/namesakeDealtDay1587.mjs 2026-10-31 2026-11-01 2026-11-02 2026-11-03 2026-11-04 2026-11-05 2026-11-06 2026-11-08 2026-11-09 2026-11-10
+dealtDay-nov07: node scripts/qa/namesakeDealtDay1587.mjs 2026-11-07
+dealtDay-always: DEALT_CONTROL=always node scripts/qa/namesakeDealtDay1587.mjs 2026-11-02
+genChecks: node scripts/qa/genArsenalLedger1587.mjs --check && node scripts/qa/genClubNamesakes1587.mjs --check && node scripts/qa/genArsenalOwed1587.mjs --check
+simNoRivalNames: node scripts/simNoRivalNames.mjs
+simHarnessAnchors: node scripts/simHarnessAnchors.mjs
