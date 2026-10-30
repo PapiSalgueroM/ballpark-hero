@@ -1,0 +1,4 @@
+simCmWorldMoves: node scripts/simCmWorldMoves.mjs
+simCmUnseededWorld: node scripts/simCmUnseededWorld.mjs
+base-WorldMoves: mkdir -p /tmp/base1 && git archive 9ae24b23c | tar -x -C /tmp/base1 && ln -s "$PWD/node_modules" /tmp/base1/node_modules && cd /tmp/base1 && node scripts/simCmWorldMoves.mjs
+base-Unseeded: mkdir -p /tmp/base2 && git archive 9ae24b23c | tar -x -C /tmp/base2 && ln -s "$PWD/node_modules" /tmp/base2/node_modules && cd /tmp/base2 && node scripts/simCmUnseededWorld.mjs
