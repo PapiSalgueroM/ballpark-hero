@@ -1,0 +1,5 @@
+order-base: git worktree add -q .rcbase1 4bd20c993 && cd .rcbase1 && node scripts/simCmShootoutOrder.mjs
+var-base: git worktree add -q .rcbase2 4bd20c993 && cd .rcbase2 && node scripts/simCmVar.mjs
+continuity-base: git worktree add -q .rcbase3 4bd20c993 && cd .rcbase3 && node scripts/simManagerWorldContinuity.mjs
+unseeded-base: git worktree add -q .rcbase4 4bd20c993 && cd .rcbase4 && node scripts/simCmUnseededWorld.mjs
+order-head: node scripts/simCmShootoutOrder.mjs
