@@ -1,0 +1,7 @@
+build exit=0 36s | [dukb] inlined 1 stylesheet(s) and 1 module(s) into 181 snapshots (11 left alone)
+walk exit=0 73s | rv-walk: green
+mut-ids1-samedomain exit=3 1s | control samedomain DID NOT FIRE: section 1 stayed green
+mut-ids4-monthsamedomain exit=3 1s | control monthsamedomain DID NOT FIRE: section 4 stayed green
+mut-fold7-spelling exit=3 1s | control spelling DID NOT FIRE: section 7 stayed green
+mut-nodate6-latereads exit=3 1s | control latereads DID NOT FIRE: section 6 stayed green
+mut-nomirrorlist-wikimirror exit=1 1s | control wikimirror FIRED: section 1 red (1 failure(s) in all)
