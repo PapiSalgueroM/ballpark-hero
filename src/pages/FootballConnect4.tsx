@@ -46,8 +46,8 @@ const FootballConnect4 = () => {
 
   const handleSelectPlayer = async (entity: PlayerEntity) => {
     if (isValidating) return;
-    await submitPlayer(entity.name);
     setPlayerInput('');
+    await submitPlayer(entity.name);
   };
 
   const colAttr = selectedColumn !== null ? boardConfig.columnAttributes[selectedColumn] : '';

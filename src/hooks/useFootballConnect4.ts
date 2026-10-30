@@ -1,4 +1,4 @@
-import { useState, useCallback, useMemo, useEffect } from 'react';
+import { useState, useCallback, useMemo, useEffect, useRef } from 'react';
 import { makeFirstDraw } from '@/lib/firstDraw';
 import { useGameCompletion } from '@/hooks/useGameCompletion';
 import { useDailyPuzzle } from '@/hooks/useDailyPuzzle';
@@ -165,6 +165,16 @@ export function useFootballConnect4() {
   const [targetRow, setTargetRow] = useState<number | null>(null);
   const [isValidating, setIsValidating] = useState(false);
   const [validationError, setValidationError] = useState<string | null>(null);
+  const requestIdRef = useRef(0);
+  const validatingRef = useRef(false);
+
+  const invalidateRequest = useCallback(() => {
+    requestIdRef.current += 1;
+    validatingRef.current = false;
+    setIsValidating(false);
+  }, []);
+
+  useEffect(() => () => { requestIdRef.current += 1; }, []);
 
   const selectColumn = useCallback(
     (col: number) => {
@@ -182,14 +192,15 @@ export function useFootballConnect4() {
   );
 
   const cancelSelection = useCallback(() => {
+    invalidateRequest();
     setSelectedColumn(null);
     setTargetRow(null);
     setValidationError(null);
-  }, []);
+  }, [invalidateRequest]);
 
   const submitPlayer = useCallback(
     async (playerName: string) => {
-      if (phase !== 'playing' || selectedColumn === null || targetRow === null) return;
+      if (phase !== 'playing' || selectedColumn === null || targetRow === null || validatingRef.current) return;
 
       const trimmed = playerName.trim();
       if (!trimmed) return;
@@ -199,6 +210,8 @@ export function useFootballConnect4() {
         return;
       }
 
+      const requestId = ++requestIdRef.current;
+      validatingRef.current = true;
       setIsValidating(true);
       setValidationError(null);
 
@@ -219,6 +232,7 @@ export function useFootballConnect4() {
         );
 
         const payload: unknown = await resp.json().catch(() => null);
+        if (requestId !== requestIdRef.current) return;
         const result: ValidatorResponse | null = payload && typeof payload === 'object'
           ? payload as ValidatorResponse
           : null;
@@ -274,9 +288,13 @@ export function useFootballConnect4() {
         setSelectedColumn(null);
         setTargetRow(null);
       } catch {
+        if (requestId !== requestIdRef.current) return;
         setValidationError('Answer checker could not connect. This guess was not used. Try again.');
       } finally {
-        setIsValidating(false);
+        if (requestId === requestIdRef.current) {
+          validatingRef.current = false;
+          setIsValidating(false);
+        }
       }
     },
     [phase, selectedColumn, targetRow, board, currentTurn, boardConfig, usedPlayers, mode, addDailyAction, unlimitedBoard],
@@ -295,6 +313,7 @@ export function useFootballConnect4() {
   }, [phase, currentTurn, mode, addDailyAction]);
 
   const switchMode = useCallback((m: FootballConnect4Mode) => {
+    invalidateRequest();
     if (m === 'unlimited') {
       setUnlimitedBoardConfig(getRandomBoard());
       setUnlimitedBoard(createEmptyBoard());
@@ -308,10 +327,11 @@ export function useFootballConnect4() {
     setSelectedColumn(null);
     setTargetRow(null);
     setValidationError(null);
-  }, []);
+  }, [invalidateRequest]);
 
   const resetGame = useCallback(() => {
     if (mode !== 'unlimited') return;
+    invalidateRequest();
     setUnlimitedBoardConfig(getRandomBoard());
     setUnlimitedBoard(createEmptyBoard());
     setUnlimitedCurrentTurn('blue');
@@ -322,7 +342,7 @@ export function useFootballConnect4() {
     setSelectedColumn(null);
     setTargetRow(null);
     setValidationError(null);
-  }, [mode]);
+  }, [mode, invalidateRequest]);
 
   const getShareText = useCallback(() => {
     const grid = board
