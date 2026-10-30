@@ -1,0 +1,2 @@
+302865b9c6a6d3bb52cb692d75082650583e9c2d3ee55179f3fc40a11ad031b1  /home/runner/work/_temp/rc-out/full/simPromotion.mjs/stdout.log
+e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855  /home/runner/work/_temp/rc-out/full/simPromotion.mjs/stderr.log

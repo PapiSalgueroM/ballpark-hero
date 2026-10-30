@@ -1,0 +1,3 @@
+1642 /home/runner/work/_temp/rc-out/full/simAdminAccess.mjs/stdout.log
+   0 /home/runner/work/_temp/rc-out/full/simAdminAccess.mjs/stderr.log
+1642 total

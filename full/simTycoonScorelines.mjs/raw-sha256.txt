@@ -1,0 +1,2 @@
+742efe6be85d8b0da7044e6b41056bcf604e32c9089dfbe5109e8477c005d413  /home/runner/work/_temp/rc-out/full/simTycoonScorelines.mjs/stdout.log
+e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855  /home/runner/work/_temp/rc-out/full/simTycoonScorelines.mjs/stderr.log

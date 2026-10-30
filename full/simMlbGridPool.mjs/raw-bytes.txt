@@ -1,0 +1,3 @@
+1077 /home/runner/work/_temp/rc-out/full/simMlbGridPool.mjs/stdout.log
+   0 /home/runner/work/_temp/rc-out/full/simMlbGridPool.mjs/stderr.log
+1077 total

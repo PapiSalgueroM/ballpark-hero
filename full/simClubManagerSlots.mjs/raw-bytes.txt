@@ -1,0 +1,3 @@
+2142 /home/runner/work/_temp/rc-out/full/simClubManagerSlots.mjs/stdout.log
+   0 /home/runner/work/_temp/rc-out/full/simClubManagerSlots.mjs/stderr.log
+2142 total

@@ -1,0 +1,3 @@
+1818 /home/runner/work/_temp/rc-out/full/simDraftPoolFilters.mjs/stdout.log
+   0 /home/runner/work/_temp/rc-out/full/simDraftPoolFilters.mjs/stderr.log
+1818 total

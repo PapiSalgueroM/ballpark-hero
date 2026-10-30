@@ -1,0 +1,2 @@
+6e868eedab44de4002e917df6b6d9aabfbc436a07173651fa9852782b0922f25  /home/runner/work/_temp/rc-out/full/ordinary-build/stdout.log
+d6937f142a9cc1afd8eab373eef223b7c7f2910454c18a951bc236a2a9fae5ab  /home/runner/work/_temp/rc-out/full/ordinary-build/stderr.log

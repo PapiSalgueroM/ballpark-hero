@@ -1,0 +1,3 @@
+52719 /home/runner/work/_temp/rc-out/full/simCareerHall.mjs/stdout.log
+    0 /home/runner/work/_temp/rc-out/full/simCareerHall.mjs/stderr.log
+52719 total

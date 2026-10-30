@@ -1,0 +1,2 @@
+eaa210e8627f8e6306aae0e884cd74a66c00226c19c29831bf3eccf42bde009b  /home/runner/work/_temp/rc-out/full/simManagerLiveLineups.mjs/stdout.log
+e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855  /home/runner/work/_temp/rc-out/full/simManagerLiveLineups.mjs/stderr.log

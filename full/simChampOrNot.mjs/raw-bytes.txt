@@ -1,0 +1,3 @@
+2884 /home/runner/work/_temp/rc-out/full/simChampOrNot.mjs/stdout.log
+   0 /home/runner/work/_temp/rc-out/full/simChampOrNot.mjs/stderr.log
+2884 total

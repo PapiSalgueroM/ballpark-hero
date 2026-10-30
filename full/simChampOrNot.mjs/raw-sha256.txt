@@ -1,0 +1,2 @@
+84f03b3fa6ef39b1ad85d7b001f59768509e892d35de970db9ba6c398cc1b6c6  /home/runner/work/_temp/rc-out/full/simChampOrNot.mjs/stdout.log
+e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855  /home/runner/work/_temp/rc-out/full/simChampOrNot.mjs/stderr.log

@@ -1,0 +1,3 @@
+2748 /home/runner/work/_temp/rc-out/full/simPhonePanelFocus.mjs/stdout.log
+   0 /home/runner/work/_temp/rc-out/full/simPhonePanelFocus.mjs/stderr.log
+2748 total

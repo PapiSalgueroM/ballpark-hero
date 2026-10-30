@@ -1,0 +1,2 @@
+8195ef3bcdd78caa754a3ba94e61282b1b7486952a10ec5bed3a61448bc72096  /home/runner/work/_temp/rc-out/full/simFootleDaily.mjs/stdout.log
+e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855  /home/runner/work/_temp/rc-out/full/simFootleDaily.mjs/stderr.log

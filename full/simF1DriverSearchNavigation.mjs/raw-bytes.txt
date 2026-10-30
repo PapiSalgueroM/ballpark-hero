@@ -1,0 +1,3 @@
+3686 /home/runner/work/_temp/rc-out/full/simF1DriverSearchNavigation.mjs/stdout.log
+   0 /home/runner/work/_temp/rc-out/full/simF1DriverSearchNavigation.mjs/stderr.log
+3686 total

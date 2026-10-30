@@ -1,0 +1,2 @@
+23d60bdfb48248ec60a48e197e90bc9893484a2bcb228f84fed3d79fd6888743  /home/runner/work/_temp/rc-out/full/simSoccerDerbyHistory.mjs/stdout.log
+e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855  /home/runner/work/_temp/rc-out/full/simSoccerDerbyHistory.mjs/stderr.log

@@ -1,0 +1,3 @@
+906 /home/runner/work/_temp/rc-out/full/simSeasonLaw.mjs/stdout.log
+  0 /home/runner/work/_temp/rc-out/full/simSeasonLaw.mjs/stderr.log
+906 total

@@ -1,0 +1,3 @@
+1203 /home/runner/work/_temp/rc-out/full/simPromotion.mjs/stdout.log
+   0 /home/runner/work/_temp/rc-out/full/simPromotion.mjs/stderr.log
+1203 total

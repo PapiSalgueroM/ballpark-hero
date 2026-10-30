@@ -1,0 +1,3 @@
+1977 /home/runner/work/_temp/rc-out/full/simWhodTheyBeat.mjs/stdout.log
+   0 /home/runner/work/_temp/rc-out/full/simWhodTheyBeat.mjs/stderr.log
+1977 total

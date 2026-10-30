@@ -1,0 +1,3 @@
+30566 /home/runner/work/_temp/rc-out/full/simManagerLiveLineups.mjs/stdout.log
+    0 /home/runner/work/_temp/rc-out/full/simManagerLiveLineups.mjs/stderr.log
+30566 total

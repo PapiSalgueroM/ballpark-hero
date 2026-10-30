@@ -1,0 +1,2 @@
+37f96910c918067c7ac3174ee5d9c6b459c83707c8ad7df2db034d6c904f6640  /home/runner/work/_temp/rc-out/full/simUsCareerSkips.mjs/stdout.log
+e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855  /home/runner/work/_temp/rc-out/full/simUsCareerSkips.mjs/stderr.log

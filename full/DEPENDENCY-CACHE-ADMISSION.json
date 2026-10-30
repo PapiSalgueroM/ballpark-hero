@@ -1,0 +1,22 @@
+{
+  "originalFilesAndBodiesHeld": true,
+  "entries": [
+    {
+      "file": "node_modules/.vite/vitest/da39a3ee5e6b4b0d3255bfef95601890afd80709/results.json",
+      "bytes": 777,
+      "sha256": "c2baf4c7d91bdffba2bdfc996e9ecd940c06bbafe782dc2b8e8bf518bcfd8f58",
+      "tests": [
+        ":src/test/cagePracticeFeedback.test.tsx",
+        ":src/test/draftPoolFilters.test.tsx",
+        ":src/test/f1DriverSearchNavigation.test.tsx",
+        ":src/hooks/useGame.test.ts",
+        ":src/test/homePersonalReads.test.tsx",
+        ":src/test/nbaChainFeedback.test.tsx",
+        ":src/lib/nhlOpeningRatings.test.ts",
+        ":src/test/phonePanelFocus.test.tsx",
+        ":src/test/usCareerReports1346.test.tsx"
+      ],
+      "kind": "NEW_GENERATED_RESULTS_CACHE_ONLY_NO_TEST_CREDIT"
+    }
+  ]
+}

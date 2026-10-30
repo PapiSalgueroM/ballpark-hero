@@ -1,0 +1,3 @@
+2525 /home/runner/work/_temp/rc-out/full/simCagePracticeFeedback.mjs/stdout.log
+   0 /home/runner/work/_temp/rc-out/full/simCagePracticeFeedback.mjs/stderr.log
+2525 total

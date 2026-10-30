@@ -1,0 +1,3 @@
+1900 /home/runner/work/_temp/rc-out/full/simStreakHistory.mjs/stdout.log
+   0 /home/runner/work/_temp/rc-out/full/simStreakHistory.mjs/stderr.log
+1900 total

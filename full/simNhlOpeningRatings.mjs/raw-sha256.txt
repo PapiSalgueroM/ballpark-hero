@@ -1,0 +1,2 @@
+26a0e422dc990157d137b24bb24ee6998a60aedb93626a44c3fd44a0d922c7b6  /home/runner/work/_temp/rc-out/full/simNhlOpeningRatings.mjs/stdout.log
+e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855  /home/runner/work/_temp/rc-out/full/simNhlOpeningRatings.mjs/stderr.log

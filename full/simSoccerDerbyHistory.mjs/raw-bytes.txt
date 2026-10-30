@@ -1,0 +1,3 @@
+593 /home/runner/work/_temp/rc-out/full/simSoccerDerbyHistory.mjs/stdout.log
+  0 /home/runner/work/_temp/rc-out/full/simSoccerDerbyHistory.mjs/stderr.log
+593 total

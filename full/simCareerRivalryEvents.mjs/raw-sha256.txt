@@ -1,0 +1,2 @@
+acd868b6659ee3bb5057bcaa8e8b53c454d24094fe0d7092689d481f8f878ac6  /home/runner/work/_temp/rc-out/full/simCareerRivalryEvents.mjs/stdout.log
+e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855  /home/runner/work/_temp/rc-out/full/simCareerRivalryEvents.mjs/stderr.log
