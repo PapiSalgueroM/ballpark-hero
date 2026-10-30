@@ -1,0 +1,6 @@
+tsc: node_modules/.bin/tsc --noEmit -p tsconfig.app.json
+simTrustCopy: node scripts/simTrustCopy.mjs
+simNoRivalNames: node scripts/simNoRivalNames.mjs
+genChecks: node scripts/qa/genArsenalLedger1587.mjs --check && node scripts/qa/genClubNamesakes1587.mjs --check && node scripts/qa/genArsenalOwed1587.mjs --check
+ledgerFresh-control: node .rc/x/ledgerFreshControl1587.mjs
+simClubNamesakes: node scripts/simClubNamesakes.mjs
