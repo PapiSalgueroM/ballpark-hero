@@ -71,3 +71,25 @@ A running career keeps its own squad's saved numbers (no `lv`, its men's ratings
 market read the new files. Loading `scripts/data/cmOldSave1052Fixture.json` gives the same squad on the base and the
 head (runner r1600-s8, probe). The loan guard reads the age with a year either side (`sameManNearAge`, ported from
 Round 1102's fix 2e8715bf), since an old save's men now sit a year off the world's rows for them.
+
+## The drop out table and the August ages (simEras section 6, the draft's cause two)
+
+dropOutChance's table (`src/lib/clubManagerEras.ts`) was fitted to the bake's age column, the 1 January age. The
+flip moved 4,225 of 4,401 men a year on. The column read both ways (a local read of the shipped file and of the
+curve 1 view, `.tmp-fx/ageColumn.mjs`, never committed), share of the 4,401 men at each age and the loss from one
+age to the next, the curve 1 column at k against the August column at k + 1:
+
+    age k   share before   share after   loss before k to k+1   loss after k+1 to k+2
+    27      8.27           8.41          0.058                  0.034
+    28      7.79           8.11          0.315                  0.333
+    29      5.34           7.84          0.226                  0.200
+    30      4.14           5.23          0.214                  0.239
+    31      3.25           4.18          0.245                  0.214
+    32      2.45           3.18          0.259                  0.309
+    33      1.82           2.50          0.450                  0.421
+    34      1.00           1.73          0.477                  0.545
+
+The refit is the old table one year later, so today's world on curve 2 hands the table its age less one
+(`dropShift` in projectClub); the past seasons and the curve 1 view hand it the age as it is; retireChance and
+ageDriftBand read the age as it is everywhere. Before this, runner r1600-s7 had simEras section 6 at 43.7 percent of
+first teams real five years on (floor 45) and 11.3 ten years on (floor 12).

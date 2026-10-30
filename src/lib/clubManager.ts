@@ -95,7 +95,7 @@ import {
   makeGeneratedName, eraBakeRating, bakedValueForRating,
   eraRostersLoaded,
   // Round 1600: a man's level beside his shown rating (one holder, in the file that imports nothing of this one).
-  levelOf,
+  levelOf, levelForShown,
 } from '@/lib/clubManagerEras';
 import type { ProjectedPlayer, CMEra } from '@/lib/clubManagerEras';
 /* Round 1520: after the eras module, which brings the nationality maps in first, so the chunk keeps its order. */
@@ -6413,7 +6413,7 @@ export function buildCustomSquad(spec: CustomClubSpec, eraId?: string): CMPlayer
       isYouth: false,
       seasonGoals: 0,
       seasonAssists: 0,
-      value: customFounderValue(rating, eraId),
+      value: customFounderValue(rating, eraId, age),
       generated: true,
     };
     const saleRatio = customFounderSaleRatio(founder.value as number, customFounderValue(ceilingRating, eraId));
@@ -6493,9 +6493,13 @@ function customFounderSaleRatio(value: number, boughtValue: number): number {
    A save written before this round is repriced on load, ensureCustomClubValues. */
 export const CUSTOM_VALUES_VERSION = 1;
 
-/** Round 640: a made up founder's value, the real market's price for his rating in this era. */
-export function customFounderValue(rating: number, eraId?: string): number {
-  return Math.max(JOURNEYMAN_VALUE, Math.round(bakedValueForRating(eraBakeRating(eraId, rating)) * 10) / 10);
+/** Round 640: a made up founder's value, the real market's price for his rating in this era.
+ *  Round 1600: with his age, the price of the LEVEL his shown rating stands on (levelForShown), which is what the
+ *  market pays for a real man shown at that rating and age: a 21 year old founder shown 84 costs what a real 84 at
+ *  21 costs, more than an 84 at 30. With no age (a club's money ceiling) the rating is read as the level. */
+export function customFounderValue(rating: number, eraId?: string, age?: number): number {
+  const level = age === undefined ? rating : levelForShown(eraId, rating, age);
+  return Math.max(JOURNEYMAN_VALUE, Math.round(bakedValueForRating(eraBakeRating(eraId, level)) * 10) / 10);
 }
 
 /** Round 640: the value buildCustomSquad stored before this round, the raw curve. */

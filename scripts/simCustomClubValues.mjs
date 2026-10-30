@@ -182,7 +182,7 @@ const ok = (m) => { checks += 1; console.log(`   ok   ${m}`); };
 /* ---------- the engine, pristine and rewritten ---------- */
 const PRISTINE = fs.readFileSync(path.join(ROOT, 'src/lib/clubManager.ts'), 'utf8').replaceAll('\r\n', '\n');
 
-const VALUE_LINE = '      value: customFounderValue(rating, eraId),\n';
+const VALUE_LINE = '      value: customFounderValue(rating, eraId, age),\n';
 const OLD_VALUE_LINE = '      value: preRound640FounderValue(rating, age),\n';
 const LOAD_LINE = '      const repriced = ensureCustomClubValues(parsed);\n';
 const NO_LOAD = '      const repriced = false;\n';
@@ -224,7 +224,7 @@ if (CONTROL === 'realtoo') {
 if (CONTROL === 'nosalecap') live = rewrite(live, SALE_CAP_LINE, '    const worth = p.value;\n', 'control nosalecap');
 /* The cap lowers the founder's own value too, not just his sale price. */
 if (CONTROL === 'capall') {
-  live = rewrite(live, VALUE_LINE, '      value: Math.min(customFounderValue(rating, eraId), customFounderValue(ceilingRating, eraId)),\n', 'control capall');
+  live = rewrite(live, VALUE_LINE, '      value: Math.min(customFounderValue(rating, eraId, age), customFounderValue(ceilingRating, eraId)),\n', 'control capall');
 }
 /* The bill based cap only, at the founding and on load. */
 if (CONTROL === 'tightcap') {
@@ -469,7 +469,7 @@ const realCaps = [];
           squads += 1;
           founderCount += f.length;
           for (const p of f) {
-            if (p.value !== cm.customFounderValue(p.rating, era)) wrongValue += 1;
+            if (p.value !== cm.customFounderValue(p.rating, era, p.age)) wrongValue += 1;
             const same = realByRating.get(`${era}|${p.rating}|${ageBand(p.age)}`) ?? [];
             if (same.length >= 8) manByMan.push(p.value / median(same));
             /* Historic founders above the uplift pivot, against the era's real
@@ -540,7 +540,7 @@ const realCaps = [];
         const before = new Map(was.squad.map(p => [p.id, p]));
         foundings += 1;
         for (const p of founders(st)) {
-          const honest = cm.customFounderValue(p.rating, era);
+          const honest = cm.customFounderValue(p.rating, era, p.age);
           const c = atCeiling.get(p.id);
           if (!c || !(c.value < honest)) continue;
           capped += 1;
