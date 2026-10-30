@@ -1,0 +1,2 @@
+nba file ids nbaconn-001, nbaconn-002, nbaconn-003, nbaconn-004 against nba-2026-10-29.json: 4 current (nbaconn-001, nbaconn-002, nbaconn-003, nbaconn-004); 0 already holding this round's board; 0 drifted; 0 missing
+nbaConnections1583Migration compare: green. Every file id's live row holds the base file's board (or already this round's).

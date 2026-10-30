@@ -1,0 +1,2 @@
+DEALT_CONTROL=reshaped: the row lines of supabase/migrations/20261031120000_round_1583_nba_connections_dated.sql reshaped into .tmp-fx/dealt-reshaped-1583.sql; this run must stop, never print a clear day
+STOP: the dealt day check reads 0 rows of .tmp-fx/dealt-reshaped-1583.sql, the plan rewrites 4 (nbaconn-001, nbaconn-002, nbaconn-003, nbaconn-004 unread): it would call a rewritten day clear

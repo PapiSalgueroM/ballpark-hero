@@ -1,0 +1,4 @@
+baseball same (4800 lines)
+nfl same (320 lines)
+nhl DIFFERS base 1600 head 1600, diff lines 32
+nba DIFFERS base 0 head 320, diff lines 320

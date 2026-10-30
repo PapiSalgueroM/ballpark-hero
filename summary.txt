@@ -1,0 +1,31 @@
+plain exit=0 1s | simUsConnectionsFacts: green. Every Baseball, NFL, NHL and NBA Connections group is held to the record, and no board has a second right answer the record can see (other t
+c-nbaundate exit=1 1s | US_CONN_CONTROL=nbaundate fired its own rule 1 time(s): trade x1 for Joel Embiid (all findings: trade 4; 4 failures in all)
+c-nbayear exit=1 1s | US_CONN_CONTROL=nbayear fired its own rule 1 time(s): second-fit x1 for Pascal Siakam (all findings: second-fit 1; 1 failures in all)
+c-nbaafter exit=1 1s | US_CONN_CONTROL=nbaafter fired its own rule 1 time(s): not-a-member x1 for Jayson Tatum (all findings: not-a-member 1; 1 failures in all)
+c-parker exit=1 1s | US_CONN_CONTROL=parker fired its own rule 1 time(s): refuted x1 for Tony Parker (all findings: refuted 1, no-fact 1, not-a-member 1; 3 failures in all)
+c-kareem exit=1 1s | US_CONN_CONTROL=kareem fired its own rule 1 time(s): member-unknown x1 for Kareem Abdul-Jabbar (all findings: member-unknown 2; 1 failures in all)
+c-nbawatch exit=1 1s | US_CONN_CONTROL=nbawatch fired its own rule 1 time(s): watch x1 for Nicolas Batum (all findings: no-fact 1, watch 1; 2 failures in all)
+c-cousins exit=1 1s | US_CONN_CONTROL=cousins fired its own rule 1 time(s): gray-back x1 for DeMarcus Cousins (all findings: gray-back 1, no-fact 1; 2 failures in all)
+c-nbaborn exit=1 1s | US_CONN_CONTROL=nbaborn fired its own rule 1 time(s): second-fit x1 for Dillon Brooks (all findings: no-fact 2, not-a-member 2, second-fit 2; 6 failures in all)
+c-nbaclub exit=1 1s | US_CONN_CONTROL=nbaclub fired its own rule 1 time(s): unjudged x1 for Played for the Miami Heat (as of 2025-26) (all findings: unjudged 1; 2 failures in all)
+c-nbalineage exit=1 1s | US_CONN_CONTROL=nbalineage fired its own rule 1 time(s): other-unknown x1 for Pascal Siakam (all findings: other-unknown 2; 1 failures in all)
+c-nbaaba exit=1 1s | US_CONN_CONTROL=nbaaba fired its own rule 1 time(s): other-unknown x1 for Moses Malone (all findings: not-a-member 5, second-fit 2, other-unknown 2; 9 failures in all)
+reportnone exit=2 0s | US_CONN_TABLES names mls, not a sport here
+reportnba exit=0 1s | REPORT ONLY
+othersbytes-74 exit=0 3s | baseball, nfl and nhl verdicts byte equal to a6295d759 (6720 lines; nba adds 320)
+othersbytes-base exit=0 3s | nba DIFFERS base 0 head 320, diff lines 320
+compare exit=0 0s | nbaConnections1583Migration compare: green. Every file id's live row holds the base file's board (or already this round's).
+mig1583 exit=0 0s | supabase/migrations/20261031120000_round_1583_nba_connections_dated.sql matches the file at b4a331a9cb1db7411b91538eaeaf29385d2ce3a9 and 4708a3d5965729156892f3e538633b2c3
+compare-edit exit=1 1s | STOP: a file id's live row is neither the base file's board nor this round's. Read it in the export: the live row is what gets decided, and its board joins the migration'
+dealt exit=1 1s | 2026-12-08: nba nbaconn-004 of 20 REWRITTEN: a board the 1583 migration rewrites is dealt: not this day
+dealt-reshaped exit=1 1s | STOP: the dealt day check reads 0 rows of .tmp-fx/dealt-reshaped-1583.sql, the plan rewrites 4 (nbaconn-001, nbaconn-002, nbaconn-003, nbaconn-004 unread): it would call 
+dealt-labels exit=1 1s | 2026-12-08: nba nbaconn-004 of 20 REWRITTEN: a board the 1583 migration rewrites is dealt: not this day
+vitest7 exit=0 36s |    Duration  35.34s (transform 7.73s, setup 1.20s, collect 10.03s, tests 40.87s, environment 4.90s, prepare 1.33s)
+simConnectionsFacts exit=0 0s | simConnectionsFacts: green. Every claim this round checked stands on two hosts and no rebuilt board has a second answer.
+simFairPuzzles exit=0 0s | simFairPuzzles: green. No board has a new second right answer; only the soccer findings the ledger owes to part B remain.
+simNbaPlanningBench exit=0 5s | simNbaPlanningBench normal: exact expected assertions and independent Daily restore passed.
+simDailyPuzzleContract exit=0 1s | simDailyPuzzleContract: green. Every caller honours the contract the selection memo depends on.
+simNoRivalNames exit=0 19s | No rival product names found. 0 findings.
+simDailySaveHardening exit=0 101s | simDailySaveHardening: part all green
+tsc exit=0 116s | 
+simHarnessAnchors exit=0 63s | simHarnessAnchors: green. Every harness parses and none carries an unmatchable anchor.
