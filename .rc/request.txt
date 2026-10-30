@@ -1,0 +1,6 @@
+#!serial
+# Supplemental passive Deck diagnostic only. No final-source1022 qualification credit.
+prepare: bash .rc/default-support.sh prepare
+simSoccerDeck: bash .rc/default-support.sh run simSoccerDeck.mjs
+deckCapture: node .rc/captureSoccerDeck.mjs
+finish: bash .rc/default-support.sh finish
