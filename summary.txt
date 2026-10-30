@@ -1,0 +1,10 @@
+nothursday exit=1 132s | simCmEuroPlay: control nothursday FIRED (114 failures, all its own)
+mineflip exit=1 141s | simCmEuroPlay: control mineflip FIRED (97 failures, all its own)
+legfromucl exit=1 130s | simCmEuroPlay: control legfromucl FIRED (9 failures, all its own)
+noplaygate exit=1 132s | simCmEuroPlay: control noplaygate FIRED (32 failures, all its own)
+rawlength exit=1 69s | simCmEuroPlay: control rawlength FIRED (22 failures, all its own)
+nocarry exit=1 144s | simCmEuroPlay: control nocarry FIRED (6 failures, all its own)
+sim exit=0 519s | simCmEuroPlay: green, 1413 checks, 0 failures
+nouelucl exit=1 136s | simCmEuroPlay: control nouelucl FIRED (1 failures, all its own)
+noplayrevert exit=1 377s | simCmEuroPlay: control noplayrevert FIRED (12 failures, all its own)
+sim-seeds34 exit=0 372s | simCmEuroPlay: green, 1383 checks, 0 failures

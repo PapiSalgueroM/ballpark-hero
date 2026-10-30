@@ -1,0 +1,3 @@
+  5 weeks: 20 saves, 11 seasons with a night, 0 saves with none (byte equal to the step reverted), 0 moved by the step
+  5 control rawlength failed on: Arsenal seed 1 season 2 (1 night, 55 entries); Arsenal seed 2 season 2 (1 night, 55 entries); Manchester City seed 1 season 2 (2 nights, 56 entries); Manchester City seed 2 season 2 (1 night, 55 entries); Bayern Munich seed 1 season 2 (2 nights, 52 entries); Bayern Munich seed 2 season 2 (1 night, 51 entries); Barcelona seed 1 season 2 (1 night, 55 entries); PSG seed 1 season 2 (2 nights, 52 entries); PSG seed 2 season 2 (1 night, 51 entries); Celtic seed 2 season 2 (17 nights, 55 entries); Everton seed 2 season 2 (1 night, 55 entries)
+simCmEuroPlay: control rawlength FIRED (22 failures, all its own)
