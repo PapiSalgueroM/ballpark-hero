@@ -1,0 +1,19 @@
+mutation G APPLIED (dropped column: position out of the SQL market guard) in scripts/lib/arsenalGuard1587.mjs
+pages 64, judged rows 162, men 74: sarandi 56 (110 rows), london 18, held 0, pending 0
+wrote scripts/data/clubNamesakes1584/arsenalLedger.json
+market 110 rows, stints 56 rows, held 0; payload md5 3ffefa34360b317d34796f515b42ce9a
+wrote supabase/migrations/20261101120000_round_1587_arsenal_de_sarandi.sql
+wrote scripts/qa/clubNamesakes1587Applied.sql
+ scripts/lib/arsenalGuard1587.mjs                                     | 2 +-
+ scripts/qa/clubNamesakes1587Applied.sql                              | 4 ++--
+ supabase/migrations/20261101120000_round_1587_arsenal_de_sarandi.sql | 4 ++--
+ 3 files changed, 5 insertions(+), 5 deletions(-)
+  ok: 160 tripwire rows, every one judged; 2 men came in by the roster net only
+  ok: the market payload is exactly the ledger's 110 sarandi rows
+  ok: R: the club-arsenal pool holds no sarandi man after the apply (217 names before, 161 after)
+simClubNamesakes: green. The detection flags Arsenal FC where it is two clubs, and the grid stops reading Arsenal inside another club's name, nowhere else.
+  FAIL: 663 Q2 and 0 Q3 rows whose Postgres recipe differs from the export's h
+  FAIL: the record: Round 1587: 0 market rows and 56 stint rows rewritten, 0 already current, 110 drifted, 0 missing
+  FAIL: the record: market: 110 payload rows without their new club, 0 with another column changed, 0 rows outside the payload changed
+  FAIL: the applied form raised: Round 1587: 110 market and 0 stint rows drifted, 0 and 0 missing, nothing written
+MUT G regen: sim exit=0 rehearse exit=1 ledgerCheck exit=0 payloadCheck exit=0: CAUGHT

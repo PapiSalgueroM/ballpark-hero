@@ -1,0 +1,17 @@
+mutation D APPLIED (stale constant: a birth year jump of 2 splits a man) in scripts/qa/genArsenalLedger1587.mjs
+  pending Valentín Serrano 2026 sar:espn.com lon: DOB? soccerway.com 2024-2026 Valentín Serrano 2004-02-23
+wrote scripts/data/clubNamesakes1584/arsenalLedger.json
+1 men are neither sarandi nor london (Valentín Serrano). Nothing written.
+ scripts/data/clubNamesakes1584/arsenalLedger.json | 45 ++++++++++++++++++-----
+ scripts/qa/genArsenalLedger1587.mjs               |  2 +-
+ 2 files changed, 37 insertions(+), 10 deletions(-)
+  FAIL: verdicts other than sarandi and london: london, sarandi, pending
+  FAIL: short of two good hosts: Valentín Serrano
+  ok: 160 tripwire rows, every one judged; 2 men came in by the roster net only
+  FAIL: the market payload holds 110 ids, the ledger's sarandi rows are 109
+  FAIL: the generator now gives 109 market rows, 55 stints and 1 held, not the committed payload
+  FAIL: the stints payload breaks the rule at Valentín Serrano 2025-2026
+  FAIL: after the apply: 0 sarandi rows still read Arsenal FC, 0 read another club, 1 other rows changed
+  ok: R: the club-arsenal pool holds no sarandi man after the apply (217 names before, 161 after)
+rehearseClubNamesakes1587: green. Both forms move exactly the 110 market rows and 56 stints to Arsenal de Sarandí and nothing else, and a second run changes nothing.
+MUT D regen: sim exit=1 rehearse exit=0 ledgerCheck exit=0 payloadCheck exit=1: CAUGHT

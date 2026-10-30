@@ -1,0 +1,10 @@
+mutation C APPLIED (off by one: a stint span loses its last year) in scripts/qa/genClubNamesakes1587.mjs
+ scripts/qa/genClubNamesakes1587.mjs | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+  ok: 160 tripwire rows, every one judged; 2 men came in by the roster net only
+  ok: the market payload is exactly the ledger's 110 sarandi rows
+  FAIL: the generator now gives 110 market rows, 33 stints and 23 held, not the committed payload
+  ok: R: the club-arsenal pool holds no sarandi man after the apply (217 names before, 161 after)
+simClubNamesakes: 1 finding(s).
+rehearseClubNamesakes1587: green. Both forms move exactly the 110 market rows and 56 stints to Arsenal de Sarandí and nothing else, and a second run changes nothing.
+MUT C plain: sim exit=1 rehearse exit=0 ledgerCheck exit=0 payloadCheck exit=1: CAUGHT

@@ -1,0 +1,16 @@
+mutation B APPLIED (dropped filter: the roster net) in scripts/qa/genArsenalLedger1587.mjs
+pages 64, judged rows 160, men 72: sarandi 54 (108 rows), london 18, held 0, pending 0
+wrote scripts/data/clubNamesakes1584/arsenalLedger.json
+market 108 rows, stints 54 rows, held 0; payload md5 f6e6d38c9fe040909b397aca45ae5ff8
+wrote supabase/migrations/20261101120000_round_1587_arsenal_de_sarandi.sql
+wrote scripts/qa/clubNamesakes1587Applied.sql
+ scripts/qa/clubNamesakes1587Applied.sql            |  10 +-
+ scripts/qa/genArsenalLedger1587.mjs                |   2 +-
+ ...0261101120000_round_1587_arsenal_de_sarandi.sql |   8 +-
+ 4 files changed, 14 insertions(+), 116 deletions(-)
+  ok: 160 tripwire rows, every one judged; 0 men came in by the roster net only
+  ok: the market payload is exactly the ledger's 108 sarandi rows
+  ok: R: the club-arsenal pool holds no sarandi man after the apply (217 names before, 163 after)
+simClubNamesakes: green. The detection flags Arsenal FC where it is two clubs, and the grid stops reading Arsenal inside another club's name, nowhere else.
+rehearseClubNamesakes1587: green. Both forms move exactly the 108 market rows and 54 stints to Arsenal de Sarandí and nothing else, and a second run changes nothing.
+MUT B regen: sim exit=0 rehearse exit=0 ledgerCheck exit=0 payloadCheck exit=0: NOT CAUGHT (every check green)

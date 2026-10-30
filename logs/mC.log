@@ -1,0 +1,18 @@
+mutation C APPLIED (off by one: a stint span loses its last year) in scripts/qa/genClubNamesakes1587.mjs
+pages 64, judged rows 162, men 74: sarandi 56 (110 rows), london 18, held 0, pending 0
+wrote scripts/data/clubNamesakes1584/arsenalLedger.json
+market 110 rows, stints 33 rows, held 23; payload md5 62e1694fa9d8a23531ec139d3746d457
+wrote supabase/migrations/20261101120000_round_1587_arsenal_de_sarandi.sql
+wrote scripts/qa/clubNamesakes1587Applied.sql
+ scripts/qa/clubNamesakes1587Applied.sql                        | 10 +++++-----
+ scripts/qa/genClubNamesakes1587.mjs                            |  2 +-
+ .../20261101120000_round_1587_arsenal_de_sarandi.sql           |  8 ++++----
+ 3 files changed, 10 insertions(+), 10 deletions(-)
+  ok: 160 tripwire rows, every one judged; 2 men came in by the roster net only
+  ok: the market payload is exactly the ledger's 110 sarandi rows
+  FAIL: the generator now gives 110 market rows, 33 stints and 23 held, not the committed payload
+  FAIL: the stints payload breaks the rule at Claudio Corvalán 2015-2015, Cristian Llama 2006-2006, Diego Galván 2010-2010
+  ok: R: the club-arsenal pool holds no sarandi man after the apply (217 names before, 161 after)
+simClubNamesakes: 2 finding(s).
+rehearseClubNamesakes1587: green. Both forms move exactly the 110 market rows and 33 stints to Arsenal de Sarandí and nothing else, and a second run changes nothing.
+MUT C regen: sim exit=1 rehearse exit=0 ledgerCheck exit=0 payloadCheck exit=0: CAUGHT

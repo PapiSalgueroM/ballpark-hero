@@ -1,0 +1,10 @@
+pgl exit=0 1s | /tmp/pglM/node_modules/@electric-sql/pglite/package.json
+mA exit=1 9s | MUT A regen: sim exit=0 rehearse exit=0 ledgerCheck exit=0 payloadCheck exit=0: NOT CAUGHT (every check green)
+mB exit=1 6s | MUT B regen: sim exit=0 rehearse exit=0 ledgerCheck exit=0 payloadCheck exit=0: NOT CAUGHT (every check green)
+mB-plain exit=0 6s | MUT B plain: sim exit=1 rehearse exit=0 ledgerCheck exit=1 payloadCheck exit=0: CAUGHT
+mC-plain exit=0 8s | MUT C plain: sim exit=1 rehearse exit=0 ledgerCheck exit=0 payloadCheck exit=1: CAUGHT
+mC exit=0 9s | MUT C regen: sim exit=1 rehearse exit=0 ledgerCheck exit=0 payloadCheck exit=0: CAUGHT
+mD exit=0 9s | MUT D regen: sim exit=1 rehearse exit=0 ledgerCheck exit=0 payloadCheck exit=1: CAUGHT
+mG exit=0 9s | MUT G regen: sim exit=0 rehearse exit=1 ledgerCheck exit=0 payloadCheck exit=0: CAUGHT
+mJ exit=0 9s | MUT J regen: sim exit=1 rehearse exit=0 ledgerCheck exit=0 payloadCheck exit=0: CAUGHT
+clean exit=0 0s | tree clean check done

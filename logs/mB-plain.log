@@ -1,0 +1,10 @@
+mutation B APPLIED (dropped filter: the roster net) in scripts/qa/genArsenalLedger1587.mjs
+ scripts/qa/genArsenalLedger1587.mjs | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+  FAIL: arsenalLedger.json differs from what genArsenalLedger1587.mjs writes: regenerate it, never edit it by hand
+  ok: 160 tripwire rows, every one judged; 2 men came in by the roster net only
+  ok: the market payload is exactly the ledger's 110 sarandi rows
+  ok: R: the club-arsenal pool holds no sarandi man after the apply (217 names before, 161 after)
+simClubNamesakes: 1 finding(s).
+rehearseClubNamesakes1587: green. Both forms move exactly the 110 market rows and 56 stints to Arsenal de Sarandí and nothing else, and a second run changes nothing.
+MUT B plain: sim exit=1 rehearse exit=0 ledgerCheck exit=1 payloadCheck exit=0: CAUGHT

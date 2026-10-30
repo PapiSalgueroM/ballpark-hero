@@ -1,0 +1,11 @@
+#!serial
+pgl: npm install --prefix /tmp/pglM @electric-sql/pglite > /dev/null 2>&1 && ls /tmp/pglM/node_modules/@electric-sql/pglite/package.json
+mA: bash .rc/x/runmut.sh A regen
+mB: bash .rc/x/runmut.sh B regen
+mB-plain: bash .rc/x/runmut.sh B plain
+mC-plain: bash .rc/x/runmut.sh C plain
+mC: bash .rc/x/runmut.sh C regen
+mD: bash .rc/x/runmut.sh D regen
+mG: bash .rc/x/runmut.sh G regen
+mJ: bash .rc/x/runmut.sh J regen
+clean: git status --short | head -5; echo "tree clean check done"
