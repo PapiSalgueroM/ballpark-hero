@@ -89,22 +89,19 @@ const LEAGUE_SIZES: Record<string, SizeWindow[]> = {
   "Belgian Pro League": [{ from: 2026, size: 18 }],
   "2. Bundesliga": [{ from: 2026, size: 18 }],
   "Brasileirao": [{ from: 2026, size: 20 }],
-};
-/* The dugout's alone: second flights whose clubs the career club pool does
-   not carry yet (the generator holds them), so no player can sign there and
-   only a manager's table needs their size. Each moves up into LEAGUE_SIZES,
-   with its format and cadence rows, in the commit that releases its clubs. */
-const DUGOUT_SIZES: Record<string, SizeWindow[]> = {
+  "Ligue 2": [{ from: 2026, size: 18 }],
   /* Round 1040: Club Manager's Serie B is a manager's job now, so a Soccer
      Career dugout can be offered one. Only the 2026-27 season is read (20
      clubs: espn.com/soccer/standings/_/league/ita.2 and Sky Sport Italia's
      "Serie B 2026-27, le squadre del prossimo campionato", 2026-06-07, read
      2026-10-06), so no size is claimed before it. */
   "Serie B": [{ from: 2026, size: 20 }],
-  /* The same for Ligue 2: 18 clubs in 2026-27 (espn.com/soccer/standings/
-     _/league/fra.2 and Saint-Étienne's own Ligue 2 BKT table, asse.fr, both
-     read 2026-10-06). */
-  "Ligue 2": [{ from: 2026, size: 18 }],
+};
+/* The dugout's alone: second flights whose clubs the career club pool does
+   not carry yet (the generator holds them), so no player can sign there and
+   only a manager's table needs their size. Each moves up into LEAGUE_SIZES,
+   with its format and cadence rows, in the commit that releases its clubs. */
+const DUGOUT_SIZES: Record<string, SizeWindow[]> = {
   /* And the Segunda División: 22 clubs in 2026-27 (espn.com/soccer/standings/
      _/league/esp.2 and laliga.com's LALIGA HYPERMOTION table, both read
      2026-10-06). Club Manager plays 20 of them, but the dugout's table is

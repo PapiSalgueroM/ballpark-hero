@@ -64,8 +64,6 @@ export const POOL_LEAGUE_ROWS = [
 /* Leagues the table names but the pool does not read yet, each with its
    reason. None of their clubs is generated and none gets a ladder. */
 export const HELD_LEAGUES = {
-  serieb: '11 clubs without a verified colour, and its format read from one source so far',
-  ligue2: '9 clubs without a verified colour, and its format read from one source so far',
   segunda: '10 clubs without a verified colour, and its format read from one source so far',
   /* Round 1052 read one host for each club's colour and shipped none, so
      Club Manager draws all sixteen in the neutral grey the generator

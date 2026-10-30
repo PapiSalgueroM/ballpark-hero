@@ -3442,6 +3442,45 @@
           "url": "https://site.api.espn.com/apis/site/v2/sports/soccer/ita.2/scoreboard?dates=YYYYMMDD",
           "read": "2026-10-07",
           "says": "ESPN's scoreboard feed read for every day of the season calendar (71 dates, 2026-08-21 to 2027-05-14): 380 fixtures, 20 clubs, 38 games a club, 190 pairs meet 2 times"
+        },
+        {
+          "url": "https://www.legab.it/news/i-criteri-della-serie-bkt-2026-2027",
+          "publisher": "Lega B",
+          "publisherGroup": "Lega B",
+          "read": "2026-10-28",
+          "says": "Current season has 38 rounds and outward/return legs. Wording: 38 giornate di campionato",
+          "access": "direct text read",
+          "published": "2026-07-21",
+          "locator": "Lead and criteria 1/5 distinguish outward and return fixtures"
+        },
+        {
+          "url": "https://www.legab.it/news/le-novita-della-serie-bkt-2026-2027",
+          "publisher": "Lega B",
+          "publisherGroup": "Lega B",
+          "read": "2026-10-28",
+          "says": "Current season has 20 clubs. Wording: 15 squadre su 20",
+          "access": "direct text read",
+          "published": "2026-08-18",
+          "locator": "Opening paragraph"
+        },
+        {
+          "url": "https://d5rzfs5ck83rq.cloudfront.net/legab.it/documenti/2023-24/Linee-Guida-SERIE-B-2024-2029.pdf",
+          "publisher": "Lega B",
+          "publisherGroup": "Lega B",
+          "read": "2026-10-28",
+          "says": "Twenty clubs meet every other club once home and once away, 380 regular-season fixtures. Same document allows possible later reduction, so current season news supplies freshness. Wording: partecipazione di 20 squadre; un incontro in casa e uno in trasferta; 380 eventi",
+          "access": "direct PDF text read",
+          "locator": "PDF page 4 of 56, Parte II paragraph 1"
+        },
+        {
+          "url": "https://files.figc.it/view/acePublic/alias/contentid/1qzg5l96u12qfpnd689/0/tit3_noif_art_da47a70_------------aggiornato-al_CU209A_del_06-05-2026.pdf",
+          "publisher": "FIGC",
+          "publisherGroup": "FIGC",
+          "read": "2026-10-28",
+          "says": "Home/away competition and 3 for a win, 1 for a draw, 0 for a loss. No tiebreak or playoff rule selected. Wording: tre punti per la gara vinta; di un punto; non vengono attribuiti punti",
+          "access": "direct PDF text read",
+          "published": "2026-05-06",
+          "locator": "PDF page 12 of 32, Art.51 paragraphs 1 and 2; linked by current FIGC NOIF index"
         }
       ]
     },
@@ -3493,6 +3532,18 @@
           "url": "https://site.api.espn.com/apis/site/v2/sports/soccer/fra.2/scoreboard?dates=YYYYMMDD",
           "read": "2026-10-07",
           "says": "ESPN's scoreboard feed read for every day of the season calendar (54 dates, 2026-08-08 to 2027-05-22): 306 fixtures, 18 clubs, 34 games a club, 153 pairs meet 2 times"
+        },
+        {
+          "url": "https://www.lfp.fr/assets/26_27_Reglement_Competitions_08_09_2026_45d0881157.pdf",
+          "publisher": "LFP",
+          "read": "2026-10-28",
+          "says": "2026-27 competition regulations, articles 518 and 518 BIS, printed page 120: 18 clubs in one group, 17 outward and 17 return games; win 3, draw 1, loss 0."
+        },
+        {
+          "url": "https://www.asse.fr/fr/actualites/le-calendrier-2026-2027-devoile--ac40700",
+          "publisher": "AS Saint-Etienne",
+          "read": "2026-10-28",
+          "says": "The club's 34-row 2026-27 calendar lists 17 distinct opponents once at home and once away. Only membership and home/away format are used; the introduction's date inconsistency is excluded."
         }
       ]
     },
@@ -3607,7 +3658,7 @@
     }
   },
   "clubColours": {
-    "about": "Round 1100. Home colours for pool clubs Club Manager has no colour for (it answers its fallback grey). The fact is the colour in words, from two sources; hex is this game's rendering of that word and nothing more. scripts/lib/careerClubPool.mjs POOL_COLORS may only use a club listed here.",
+    "about": "Round 1100. Verified home-colour words and decorative game renderings for career pool clubs. The fact is the colour in words, from two sources; hex is this game's rendering of that word and nothing more. scripts/lib/careerClubPool.mjs POOL_COLORS and the added Ligue 2 and Serie B Club Manager colours use only the records listed here.",
     "clubs": {
       "Macarthur FC": {
         "colour": "black, with thin white pinstripes",
@@ -3622,6 +3673,482 @@
             "url": "https://macarthurfc.com.au/news/bulls-pay-homage-to-local-region-with-striking-new-kit",
             "read": "2026-10-07",
             "says": "the club, on its 2021-22 home jersey: \"honouring the colours synonymous with the region, the classic black and white\""
+          }
+        ]
+      },
+      "Red Star FC": {
+        "colour": "green and white",
+        "hex": "#0a7040",
+        "sources": [
+          {
+            "url": "https://www.redstar.fr/2016-07-25/les-pros/les-nouveaux-maillots-du-red-star/",
+            "publisher": "Red Star FC",
+            "read": "2026-10-28",
+            "says": "Le Vert et le Blanc",
+            "access": "opened-text",
+            "published": "2016-07-25"
+          },
+          {
+            "url": "https://www.usldunkerque.com/presentation-red-star/",
+            "publisher": "USL Dunkerque, separate club publisher",
+            "read": "2026-10-28",
+            "says": "Couleurs : Vert et blanc",
+            "access": "opened-text",
+            "published": "2017-08-01"
+          }
+        ]
+      },
+      "Annecy": {
+        "colour": "red",
+        "hex": "#d02128",
+        "sources": [
+          {
+            "url": "https://www.fc-annecy.fr/news/fiche-actualite/sortie-du-maillot-domicile-2021-2022",
+            "publisher": "FC Annecy",
+            "read": "2026-10-28",
+            "says": "D’un rouge historique pour le club",
+            "access": "opened-text",
+            "published": "2021-07-29"
+          },
+          {
+            "url": "https://maligue2.fr/2024/02/06/les-secrets-des-maillots-de-ligue-2-episode-1-4/",
+            "publisher": "MaLigue2, Etienne Comte original reporting",
+            "read": "2026-10-28",
+            "says": "le FCA a toujours évolué en rouge",
+            "access": "search-returned article text; later direct open timed out",
+            "published": "2024-02-06"
+          }
+        ]
+      },
+      "Pau": {
+        "colour": "yellow and blue",
+        "hex": "#f7d417",
+        "sources": [
+          {
+            "url": "https://www.paufc.fr/club/identite",
+            "publisher": "Pau FC",
+            "read": "2026-10-28",
+            "says": "Jaune & Bleu",
+            "access": "opened-text"
+          },
+          {
+            "url": "https://www.usldunkerque.com/presentation-pau-fc/",
+            "publisher": "USL Dunkerque, separate club publisher",
+            "read": "2026-10-28",
+            "says": "Couleurs : Jaune et bleu",
+            "access": "opened-text",
+            "published": "2017-07-25"
+          }
+        ]
+      },
+      "Dunkerque": {
+        "colour": "blue and white",
+        "hex": "#1b458f",
+        "sources": [
+          {
+            "url": "https://www.usldunkerque.com/les-horaires-douverture-de-la-boutique/",
+            "publisher": "USL Dunkerque",
+            "read": "2026-10-28",
+            "says": "aux couleurs bleu et blanc",
+            "access": "opened-text",
+            "published": "2025-12-13"
+          },
+          {
+            "url": "https://www.sofoot.com/articles/dunkerque-en-ligue-2-et-a-bon-port-24-ans-plus-tard-france",
+            "publisher": "So Foot, Florent Caffery original reporting/interview",
+            "read": "2026-10-28",
+            "says": "sous le maillot bleu et blanc",
+            "access": "search-returned article text; direct open timed out",
+            "published": "2020-05-15"
+          }
+        ]
+      },
+      "Grenoble": {
+        "colour": "blue and white",
+        "hex": "#1b458f",
+        "sources": [
+          {
+            "url": "https://gf38.fr/gaetan-paquiez-quitte-le-grenoble-foot-38/",
+            "publisher": "Grenoble Foot38",
+            "read": "2026-10-28",
+            "says": "Sous le maillot bleu et blanc",
+            "access": "opened-text",
+            "published": "2026-05-27"
+          },
+          {
+            "url": "https://www.grenoblefoot.info/passion-partage-et-convivialite-retour-sur-lhistoire-dun-tifo/",
+            "publisher": "Grenoble Foot Info / Metro-Sports, original supporter interview",
+            "read": "2026-10-28",
+            "says": "bleu et blanc, les couleurs du club",
+            "access": "opened-text",
+            "published": "2017-04-25"
+          }
+        ]
+      },
+      "Rodez": {
+        "colour": "red and yellow",
+        "hex": "#d02128",
+        "sources": [
+          {
+            "url": "https://rodezaveyronfootball.com/2026/07/porte-ensemble-domicile-2026-2027/",
+            "publisher": "Rodez Aveyron Football",
+            "read": "2026-10-28",
+            "says": "le rouge et le jaune",
+            "access": "opened-text",
+            "published": "2026-07-21"
+          },
+          {
+            "url": "https://maligue2.fr/2024/05/06/les-secrets-des-maillots-de-ligue-2-episode-4-4-qrm-rodez-asse-estac-vafc/",
+            "publisher": "MaLigue2, Etienne Comte original reporting",
+            "read": "2026-10-28",
+            "says": "Le rouge et le jaune sont une évidence",
+            "access": "opened-text",
+            "published": "2024-05-06"
+          }
+        ]
+      },
+      "Clermont": {
+        "colour": "red and blue",
+        "hex": "#d02128",
+        "sources": [
+          {
+            "url": "https://www.clermontfoot.com/nouveau-maillot-domicile-2025-2026-kappa-et-les-rayures-rouge-et-bleu-signent-un-retour-iconique",
+            "publisher": "Clermont Foot63",
+            "read": "2026-10-28",
+            "says": "bleu marine et rouge profond",
+            "access": "opened-text",
+            "published": "2025-07-11"
+          },
+          {
+            "url": "https://sportune.20minutes.fr/sport-business/football/clermont-foot-devoile-les-maillots-2021-22-de-sa-1re-saison-en-ligue-1-263168",
+            "publisher": "Sportune, Thomas Filhol original unveiling report",
+            "read": "2026-10-28",
+            "says": "En rouge et bleu à domicile",
+            "access": "opened-text",
+            "published": "2021-07-10"
+          }
+        ]
+      },
+      "Boulogne": {
+        "colour": "red and black",
+        "hex": "#d02128",
+        "sources": [
+          {
+            "url": "https://www.usbco.com/actu/informations-deplacement-clermont-foot-63",
+            "publisher": "US Boulogne CO",
+            "read": "2026-10-28",
+            "says": "accompagner les Rouge et Noir",
+            "access": "opened-text",
+            "published": "2026-09-10"
+          },
+          {
+            "url": "https://le11hdf.fr/national-lus-boulogne-change-encore-son-ecusson/",
+            "publisher": "Le11HDF, Enzo Notargiacomo original report",
+            "read": "2026-10-28",
+            "says": "ses couleurs : le noir et le rouge",
+            "access": "opened-text",
+            "published": "2025-06-24"
+          }
+        ]
+      },
+      "Laval": {
+        "colour": "tango (orange) and black",
+        "hex": "#ff6600",
+        "sources": [
+          {
+            "url": "https://www.fclorient.bzh/de-lorient-a-laval-le-tango-et-noir-dans-la-peau/",
+            "publisher": "FC Lorient, separate club publisher",
+            "read": "2026-10-28",
+            "says": "le tango et noir (ou orange et noir",
+            "access": "opened-text",
+            "published": "2025-02-19"
+          },
+          {
+            "url": "https://www.sportstrategies.com/le-stade-lavallois-confie-son-logo-a-ses-fans/",
+            "publisher": "Sport Strategies, independent business publisher",
+            "read": "2026-10-28",
+            "says": "les couleurs du logo doivent être déclinables en tango et noir",
+            "access": "opened-text",
+            "published": "2015-01-29"
+          }
+        ]
+      },
+      "Avellino": {
+        "colour": "green and white",
+        "hex": "#0a7040",
+        "sources": [
+          {
+            "url": "https://www.usavellino1912.com/club/storia-del-club/",
+            "publisher": "US Avellino 1912",
+            "publisherGroup": "US Avellino 1912",
+            "read": "2026-10-28",
+            "says": "la maglia biancoverde",
+            "access": "direct text read",
+            "locator": "Le origini dei colori sociali, paragraph naming the biancoverde shirt"
+          },
+          {
+            "url": "https://www.magicapro.it/serie-b/avellino-storia-e-colori-della-maglia-dei-lupi/",
+            "publisher": "Magica Pro",
+            "publisherGroup": "Magica Pro",
+            "read": "2026-10-28",
+            "says": "maglia verde e i pantaloncini bianchi",
+            "access": "direct text read",
+            "published": "2015-01-15",
+            "locator": "Avellino, storia e colori della maglia dei Lupi; colour-history paragraph"
+          }
+        ]
+      },
+      "Carrarese": {
+        "colour": "azure and yellow",
+        "hex": "#f7d417",
+        "sources": [
+          {
+            "url": "https://carraresecalcio1908.it/presentazione-home-kit-stagione-2024-2025/",
+            "publisher": "Carrarese Calcio 1908",
+            "publisherGroup": "Carrarese Calcio 1908",
+            "read": "2026-10-28",
+            "says": "dominata dall’azzurro; pin stripes gialle",
+            "access": "direct text read",
+            "published": "2024-08-03",
+            "locator": "Home-shirt description"
+          },
+          {
+            "url": "https://www.lanazione.it/massa-carrara/cronaca/carrarese-lesodo-del-popolo-azzurro-pullman-per-benevento-e-maxischermo-a-marina-ded96ee1",
+            "publisher": "La Nazione",
+            "publisherGroup": "QN / Monrif",
+            "read": "2026-10-28",
+            "says": "due colori, il giallo e l’azzurro",
+            "access": "direct text read",
+            "published": "2024-05-30",
+            "locator": "Supporters report, two club colours"
+          }
+        ]
+      },
+      "Catanzaro": {
+        "colour": "yellow and red",
+        "hex": "#d02128",
+        "sources": [
+          {
+            "url": "https://www.uscatanzaro1929.com/2026/10/25/michele-mignani-nuovo-allenatore/",
+            "publisher": "US Catanzaro 1929",
+            "publisherGroup": "US Catanzaro 1929",
+            "read": "2026-10-28",
+            "says": "società giallorossa",
+            "access": "direct text read",
+            "published": "2026-10-25",
+            "locator": "First paragraph, club colour adjective"
+          },
+          {
+            "url": "https://carraresecalcio1908.it/3918-2/",
+            "publisher": "Carrarese Calcio 1908",
+            "publisherGroup": "Carrarese Calcio 1908",
+            "read": "2026-10-28",
+            "says": "le maglie giallo rosse",
+            "access": "direct text read",
+            "published": "2026-03-04",
+            "locator": "Carrarese-Catanzaro, paragraph for minute 41"
+          }
+        ]
+      },
+      "Entella": {
+        "colour": "white and sky blue",
+        "hex": "#87d8f7",
+        "sources": [
+          {
+            "url": "https://www.entella.it/prima-squadra/albiceleste-quei-chiavaresi-di-buenos-aires-da-domani-su-entella-tube/",
+            "publisher": "Virtus Entella",
+            "publisherGroup": "Virtus Entella",
+            "read": "2026-10-28",
+            "says": "il bianco e il celeste",
+            "access": "direct text read",
+            "locator": "Paragraph describing the two colours of the club shirt"
+          },
+          {
+            "url": "https://www.pianetaempoli.it/virtus-entella-si-puo-fare/",
+            "publisher": "PianetaEmpoli",
+            "publisherGroup": "Associazione Pianetaempoli.it",
+            "read": "2026-10-28",
+            "says": "I colori bianco e celeste",
+            "access": "direct text read",
+            "published": "2019-12-13",
+            "locator": "Club-shirt history before the marketing-director interview"
+          }
+        ]
+      },
+      "Juve Stabia": {
+        "colour": "yellow and blue",
+        "hex": "#f7d417",
+        "sources": [
+          {
+            "url": "https://www.ssjuvestabia.it/lhome-kit-2025-26-delle-vespe/",
+            "publisher": "SS Juve Stabia",
+            "publisherGroup": "SS Juve Stabia",
+            "read": "2026-10-28",
+            "says": "colori storici giallo e blu",
+            "access": "direct text read after redirect",
+            "locator": "First paragraph"
+          },
+          {
+            "url": "https://www.pianetaempoli.it/la-storia-degli-altri-jive-stabia/",
+            "publisher": "PianetaEmpoli",
+            "publisherGroup": "Associazione Pianetaempoli.it",
+            "read": "2026-10-28",
+            "says": "il giallo ed il blu",
+            "access": "direct text read",
+            "published": "2025-12-12",
+            "locator": "COLORI SOCIALI section"
+          }
+        ]
+      },
+      "Mantova": {
+        "colour": "white and red",
+        "hex": "#d02128",
+        "sources": [
+          {
+            "url": "https://shop.mantova1911.club/products/mantova-1911-maglia-gara-home-2026-27",
+            "publisher": "Mantova 1911 eStore",
+            "publisherGroup": "Mantova 1911",
+            "read": "2026-10-28",
+            "says": "il bianco; bordato di rosso",
+            "access": "direct text read",
+            "locator": "Product description, paragraph after La maglia bianca"
+          },
+          {
+            "url": "https://www.mantovanotizie.com/guida-mantova/ac-mantova-calcio",
+            "publisher": "MantovaNotizie",
+            "publisherGroup": "MantovaNotizie.com",
+            "read": "2026-10-28",
+            "says": "il bianco e il rosso",
+            "access": "direct text read",
+            "locator": "I colori sociali paragraph"
+          }
+        ]
+      },
+      "Modena": {
+        "colour": "yellow and blue",
+        "hex": "#f7d417",
+        "sources": [
+          {
+            "url": "https://modenacalcio.com/una-citta-due-colori-tre-maglie-ununica-grande-passione/",
+            "publisher": "Modena FC",
+            "publisherGroup": "Modena FC",
+            "read": "2026-10-28",
+            "says": "l’inconfondibile giallo del Modena; banda orizzontale blu",
+            "access": "direct text read",
+            "published": "2026-07-15",
+            "locator": "Home-shirt paragraph"
+          },
+          {
+            "url": "https://www.pianetaempoli.it/la-storia-degli-altri-modena/",
+            "publisher": "PianetaEmpoli",
+            "publisherGroup": "Associazione Pianetaempoli.it",
+            "read": "2026-10-28",
+            "says": "giallo e blu",
+            "access": "direct text read",
+            "published": "2025-10-24",
+            "locator": "COLORI SOCIALI section"
+          }
+        ]
+      },
+      "Padova": {
+        "colour": "white and red",
+        "hex": "#d02128",
+        "sources": [
+          {
+            "url": "https://www.padovacalcio.it/macron-calciopadova-partnership/",
+            "publisher": "Calcio Padova",
+            "publisherGroup": "Calcio Padova",
+            "read": "2026-10-28",
+            "says": "il bianco e il rosso come colori sociali",
+            "access": "direct text read",
+            "published": "2023-08-30",
+            "locator": "Paragraph naming social colours"
+          },
+          {
+            "url": "https://www.glieroidelcalcio.com/i-gagliardetti-ditalia-il-padova/",
+            "publisher": "Gli Eroi del Calcio",
+            "publisherGroup": "Gli Eroi del Calcio / Sport Review",
+            "read": "2026-10-28",
+            "says": "i colori bianco e rosso",
+            "access": "direct text read",
+            "published": "2024-03-20",
+            "locator": "Opening paragraph"
+          }
+        ]
+      },
+      "Sudtirol": {
+        "colour": "white and red",
+        "hex": "#d02128",
+        "sources": [
+          {
+            "url": "https://shop.fc-suedtirol.com/products/match-home-jersey-26-27-copia",
+            "publisher": "FC Südtirol official shop",
+            "publisherGroup": "FC Südtirol",
+            "read": "2026-10-28",
+            "says": "Classico bianco con maniche bianche; motivo rosso",
+            "access": "direct text read",
+            "locator": "Maglia Home FC Südtirol 2026/2027, description"
+          },
+          {
+            "url": "https://www.figc.it/media/2330/comunicato-ufficiale-n-015-del-4-09-2018.pdf",
+            "publisher": "FIGC",
+            "publisherGroup": "FIGC",
+            "read": "2026-10-28",
+            "says": "MAGLIA BIANCO ROSSA",
+            "access": "direct PDF text read",
+            "published": "2018-09-04",
+            "locator": "PDF page 4 of 11, FUSSBALCLUB SÜDTIROL S.R.L. row, COLORI SOCIALI"
+          }
+        ]
+      },
+      "Vicenza": {
+        "colour": "white and red",
+        "hex": "#d02128",
+        "sources": [
+          {
+            "url": "https://www.lrvicenza.net/svelata-la-nuova-divisa-home-lr-vicenza-2020-2021/",
+            "publisher": "LR Vicenza",
+            "publisherGroup": "LR Vicenza",
+            "read": "2026-10-28",
+            "says": "strisce verticali bianche e rosse",
+            "access": "direct text read",
+            "published": "2020-09-23",
+            "locator": "Shirt-description paragraph"
+          },
+          {
+            "url": "https://www.comune.vicenza.it/Novita/Comunicati/La-tribuna-d-onore-del-Menti-intitolata-a-Savoini-a-dieci-anni-dalla-scomparsa-dell-ex-giocatore-e-allenatore-biancorosso",
+            "publisher": "Comune di Vicenza",
+            "publisherGroup": "Comune di Vicenza",
+            "read": "2026-10-28",
+            "says": "la maglia biancorossa",
+            "access": "direct text read",
+            "published": "2026-05-08",
+            "locator": "Mayor's account identifying the Vicenza shirt"
+          }
+        ]
+      },
+      "Arezzo": {
+        "colour": "amaranto",
+        "hex": "#7d1c2a",
+        "sources": [
+          {
+            "url": "https://store.ssarezzo.it/",
+            "publisher": "SS Arezzo official store",
+            "publisherGroup": "SS Arezzo",
+            "read": "2026-10-28",
+            "says": "i colori amaranto",
+            "access": "direct text read",
+            "locator": "CHI SIAMO"
+          },
+          {
+            "url": "https://www.lanazione.it/arezzo/cronaca/cento-anni-color-amaranto-sabato-il-regalo-ai-lettori-bbeafdb1",
+            "publisher": "La Nazione",
+            "publisherGroup": "QN / Monrif",
+            "read": "2026-10-28",
+            "says": "è arrivata all’amaranto",
+            "access": "direct text read",
+            "published": "2023-12-12",
+            "locator": "Final visible article paragraph"
           }
         ]
       }
