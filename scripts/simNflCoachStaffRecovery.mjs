@@ -127,18 +127,51 @@ const credit = "      s.profile = { ...s.profile, departure: 'poached' };\n";
 const reconstructed = once(once(stripRetireHunks(stripNflStaffRecoveryHunk(fixedEngine)), departure, oldDeparture), credit, '');
 const historicalHash = 'e607f294869072f78f63433bfda86f018b845443a6cb580b58c3fd5f3d955879';
 assert.equal(sha(reconstructed), historicalHash, 'Historical pre888 hash stays exact');
-for (const file of [oldSuite, 'src/lib/usCareerToCoach.ts', 'src/components/us-career/UsCareerBoard.tsx', 'src/test/usCareerReports1346.test.tsx', 'scripts/data/usBoardFixture.json', 'src/test/fixtures/usCoachPoachingScouts888.json', 'vitest.config.ts', 'package.json', 'package-lock.json']) assert.equal(read(file), original(file), 'Frozen whole source: ' + file);
+for (const file of [oldSuite, 'src/lib/usCareerToCoach.ts', 'src/test/usCareerReports1346.test.tsx', 'src/test/fixtures/usCoachPoachingScouts888.json', 'vitest.config.ts', 'package.json', 'package-lock.json']) assert.equal(read(file), original(file), 'Frozen whole source: ' + file);
+const fixture = 'scripts/data/usBoardFixture.json';
+const coachInputs = source => {
+  const catalogue = JSON.parse(source);
+  return Object.fromEntries(['nfl', 'nba', 'mlb', 'nhl'].map(sport => [sport, JSON.parse(catalogue.sports[sport].saves.coach).c]));
+};
+const historicalCoachInputs = coachInputs(original(fixture));
+const assertCoachInputs = source => assert.deepEqual(coachInputs(source), historicalCoachInputs, 'Historical coaching fixture inputs stay exact');
+assertCoachInputs(read(fixture));
 assert.equal(read(suite), git(['show', admitted + ':' + suite]), 'All nine admitted tests remain whole');
 const artifactRoot = process.env.NFL_COACH_OUT || fs.mkdtempSync(path.join(os.tmpdir(), 'dukb-nfl-staff-'));
 assert(path.isAbsolute(artifactRoot) && fs.statSync(artifactRoot).isDirectory(), 'Existing absolute evidence root');
 assert(path.relative(root, artifactRoot).split(path.sep).includes('..'), 'Evidence outside checkout');
 const out = path.join(artifactRoot, 'unit'); assert(!fs.existsSync(out)); fs.mkdirSync(out);
 const write = (file, body) => fs.writeFileSync(path.join(out, file), typeof body === 'string' || Buffer.isBuffer(body) ? body : JSON.stringify(body, null, 2) + '\n', { flag: 'wx' });
+const fixtureBody = read(fixture), fixtureCopy = path.join(out, 'fixture-input-control.json');
+write('fixture-input-control.json', fixtureBody);
+const changedFixture = JSON.parse(fixtureBody), changedCoach = JSON.parse(changedFixture.sports.nfl.saves.coach);
+assert.notEqual(changedCoach.c, null, 'Fixture control changes an actual coaching input');
+changedCoach.c = null;
+changedFixture.sports.nfl.saves.coach = JSON.stringify(changedCoach);
+const changedFixtureBody = JSON.stringify(changedFixture), inverseFixture = JSON.parse(changedFixtureBody);
+assert.notEqual(changedFixtureBody, fixtureBody);
+inverseFixture.sports.nfl.saves.coach = JSON.parse(fixtureBody).sports.nfl.saves.coach;
+assert.deepEqual(inverseFixture, JSON.parse(fixtureBody), 'Only the NFL coaching input changed semantically');
+let fixtureRefusal = null;
+try {
+  fs.writeFileSync(fixtureCopy, changedFixtureBody);
+  write('fixture-input.changed.json', fs.readFileSync(fixtureCopy));
+  assert.throws(() => assertCoachInputs(fs.readFileSync(fixtureCopy, 'utf8')), error => {
+    fixtureRefusal = { name: error.name, code: error.code, message: error.message };
+    return error instanceof assert.AssertionError && error.message.includes('Historical coaching fixture inputs stay exact');
+  }, 'Changed coaching fixture is refused by its own guard');
+} finally {
+  fs.writeFileSync(fixtureCopy, fixtureBody);
+  assert.equal(fs.readFileSync(fixtureCopy, 'utf8'), fixtureBody, 'Same fixture copy bytes restored');
+  assertCoachInputs(fs.readFileSync(fixtureCopy, 'utf8'));
+}
+const fixtureGuard = { inputs: ['nfl', 'nba', 'mlb', 'nhl'], scope: 'HISTORICAL_COACHING_INPUTS_ONLY', beforeSHA256: sha(fixtureBody), changedSHA256: sha(changedFixtureBody), restoredSHA256: sha(fs.readFileSync(fixtureCopy)), onlyNflCoachInputChanged: true, sameCopyRestored: true, refusal: fixtureRefusal, productionRouteCredit: false };
+write('fixture-input-admission.json', fixtureGuard);
 function sourceMap() {
   return git(['ls-files', '-z']).split('\0').filter(Boolean).sort().map(file => { const body = Buffer.from(fs.readFileSync(path.join(root, file), 'utf8').replace(/\r\n/g, '\n')); return { file, bytes: body.length, sha256: sha(body) }; });
 }
 const initial = sourceMap(), statusBefore = git(['status', '--porcelain', '--untracked-files=all']);
-const report = { version: 2, base, admitted, head: git(['rev-parse', 'HEAD']).trim(), mode: 'fixed', qualified: false, productQualified: false, cases: 23, arms: [], sourceHeld: false, temporaryControlsRemoved: false, historicalHash, inverseControls: ['missing', 'altered', 'duplicated'], panelInverseControls: { hunks: 7, cases: 22, kinds: ['missing', 'changed', 'duplicated', 'unrelated'] } };
+const report = { version: 2, base, admitted, head: git(['rev-parse', 'HEAD']).trim(), mode: 'fixed', qualified: false, productQualified: false, cases: 23, arms: [], sourceHeld: false, temporaryControlsRemoved: false, fixtureGuard, historicalHash, inverseControls: ['missing', 'altered', 'duplicated'], panelInverseControls: { hunks: 7, cases: 22, kinds: ['missing', 'changed', 'duplicated', 'unrelated'] } };
 write('source-before.json', initial);
 write('source-bindings.json', { engine: sha(fixedEngine), panel: sha(fixedPanel), suite: sha(read(suite)), oldSuite: sha(read(oldSuite)), originalEngine: sha(originalEngine), originalPanel: sha(originalPanel), titles, oldTitles, faults });
 const require = createRequire(import.meta.url);
@@ -251,4 +284,5 @@ try {
 console.log('simNflCoachStaffRecovery: fixed23pass, whole-original21pass2missing, button-removed21pass2missing, transition-neutral21pass2callback, restored23pass.');
 console.log('simNflCoachStaffRecovery: all fourteen original retirement cases pass in every arm; whole fixtures, tracked bodies, membership and empty child/direct transports held.');
 console.log('simNflCoachStaffRecovery: exact engine/panel inverses, unchanged historical hash and effective inverse controls held (3 engine,22 panel).');
+console.log('simNflCoachStaffRecovery: four historical coaching inputs held; altered NFL input refused and the same copy restored.');
 console.log('simNflCoachStaffRecovery: component evidence ' + path.join(out, 'report.json') + '; actual production-route evidence is separate.');
