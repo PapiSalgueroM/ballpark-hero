@@ -1,0 +1,2 @@
+euro-merged-hauloff exit=1 290s | simCmEuroPlay: RED, 1413 checks, 2 failures
+euro-merged-tieoff exit=0 290s | simCmEuroPlay: green, 1413 checks, 0 failures
