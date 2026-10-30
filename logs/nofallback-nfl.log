@@ -1,0 +1,81 @@
+/front-office at 390 by 844
+  PASS  nfl 390x844 A: no button on the recap deletes the save
+  PASS  nfl 390x844 A: the recap offers who is calling
+  PASS  nfl 390x844 A: no career panel chunk is asked for before a box is tapped (0)
+  PASS  nfl 390x844 A: the save survives the firing, fired, on the out of work screen
+  PASS  nfl 390x844 A: the out of work screen
+  PASS  nfl 390x844 A out of work: nothing wider than the screen (0px over)
+  PASS  nfl 390x844 A out of work: every control at least 44 px tall (all)
+  PASS  nfl 390x844 A out of work: no text under its floor (none)
+  MEASURED nfl 390x844 A: holding box 43px, landed panel 255px
+  PASS  nfl 390x844 A: on a slow connection the holding box shows while the panel loads
+  CAUGHT  nfl 390x844 A: the holding box keeps the panel's room (43px for 255px)
+  CAUGHT  nfl 390x844 A: at 390 the holding box is the Job market's own height (43px for 255px)
+  PASS  nfl 390x844 A: the page does not move when the panel lands (top 241 to 241, scroll 185 to 185)
+  PASS  nfl 390x844 A: the Job market chunk is asked for on the tap
+  PASS  nfl 390x844 A market: nothing wider than the screen (0px over)
+  PASS  nfl 390x844 A market: every control at least 44 px tall (all)
+  PASS  nfl 390x844 A market: no text under its floor (none)
+  PASS  nfl 390x844 A: somebody calls, and never the club that let him go (CLE)
+  PASS  nfl 390x844 A: one tap only arms the offer
+  PASS  nfl 390x844 A: the second tap takes the job (CLE, trust 60, recap)
+  PASS  nfl 390x844 A: the arrival recap says who he takes over, with no confetti
+  PASS  nfl 390x844 A: the arrival recap holds the re-sign box
+  PASS  nfl 390x844 A: the new club's re-sign box opens
+  PASS  nfl 390x844 A: the new club's draft runs to the hub
+  PASS  nfl 390x844 A: the hub has the Career box
+  PASS  nfl 390x844 A: the hub has the GM level box
+  MEASURED nfl 390x844 A: the Career screen is 184 px tall at 390
+  PASS  nfl 390x844 A career: nothing wider than the screen (0px over)
+  PASS  nfl 390x844 A career: every control at least 44 px tall (all)
+  PASS  nfl 390x844 A career: no text under its floor (none)
+  MEASURED nfl 390x844 A: the GM level panel is 730 px tall at 390
+  MEASURED nfl 390x844 A: the GM level screen is 684 px tall at 390
+  PASS  nfl 390x844 A: the GM level panel fits one and a half screens at 390 (730px)
+  PASS  nfl 390x844 A GM level: nothing wider than the screen (0px over)
+  PASS  nfl 390x844 A GM level: every control at least 44 px tall (all)
+  PASS  nfl 390x844 A GM level: no text under its floor (none)
+  PASS  nfl 390x844 A: a tree off the live list sells nothing
+  PASS  nfl 390x844 A: a point spent in Ownership is in the save after a reload
+  PASS  nfl 390x844 A: a week plays at the new club
+  PASS  nfl 390x844 A: no console error (clean)
+  PASS  nfl 390x844 E: the pick screen does not ask for the career kit (0 asks)
+  PASS  nfl 390x844 E: a new front office brings the kit with its league
+  PASS  nfl 390x844 E: mid season, the hub draws the Career box without the kit
+  PASS  nfl 390x844 E: mid season, the hub draws the GM level box without the kit
+  PASS  nfl 390x844 E: a season being played does not ask for the kit (0 asks)
+  FAIL  nfl 390x844 E: on a slow line the last week's press waits for the kit
+  PASS  nfl 390x844 E: the last week asks for the kit
+  PASS  nfl 390x844 E: fired, on the out of work screen
+  PASS  nfl 390x844 E: a reload on the fired screen holds while the kit is on its way
+  MEASURED nfl 390x844 E: fired reload holding box 19px at 340, out of work screen at 340, scroll 0
+  PASS  nfl 390x844 E: the out of work screen lands where the holding box stood, the page not moving
+  PASS  nfl 390x844 E: the fired screen asks for the kit
+  PASS  nfl 390x844 E out of work: nothing wider than the screen (0px over)
+  FAIL  nfl 390x844 E out of work: every control at least 44 px tall (Start a new front office 21px)
+  PASS  nfl 390x844 E out of work: no text under its floor (none)
+  PASS  nfl 390x844 E: the market opens on the slow line, 1 offer(s)
+  PASS  nfl 390x844 E: a seat taken on the slow line (CLE, recap)
+  PASS  nfl 390x844 E: the arrival recap holds the re-sign box
+  PASS  nfl 390x844 E: the new club's re-sign box opens
+  PASS  nfl 390x844 E: the new club's draft runs to the hub
+  PASS  nfl 390x844 E: the new club's hub draws its boxes without asking for the kit
+  PASS  nfl 390x844 E: the GM level box holds, under its own header, while the kit is on its way (xp)
+  MEASURED nfl 390x844 E: the GM level holding box before the kit 19px, the landed screen 336px
+  CAUGHT  nfl 390x844 E: at 390 the holding box before the kit is the GM level screen's own height (19px for 336px)
+  PASS  nfl 390x844 E: the GM level box asks for the kit
+  PASS  nfl 390x844 E GM level: nothing wider than the screen (0px over)
+  FAIL  nfl 390x844 E GM level: every control at least 44 px tall (? 21px; Spend a point (0/5) 21px; ? 21px)
+  PASS  nfl 390x844 E GM level: no text under its floor (none)
+  PASS  nfl 390x844 E: reloaded again, the hub draws the Career box without asking for the kit
+  MEASURED nfl 390x844 E: the Career box before the kit 19.0 to 19.0px over 90 frame(s), its screen's own holding box 19.0 to 19.0px over 1 frame(s), the landed screen 208.0px, scroll 64 to 269
+  PASS  nfl 390x844 E: the Career box holds, under its own header, while the kit is on its way (90 frame(s), career)
+  CAUGHT  nfl 390x844 E: at 390 every holding frame of the Career box is the Career screen's own height (19.0 to 19.0px over 91 frame(s) for 208px)
+  FAIL  nfl 390x844 E: the Career screen lands where its holding box stood, the page not moving (top 467 to 467, scroll 64 to 269)
+  PASS  nfl 390x844 E: the Career box asks for the kit
+  PASS  nfl 390x844 E Career: nothing wider than the screen (0px over)
+  FAIL  nfl 390x844 E Career: every control at least 44 px tall (? 21px)
+  PASS  nfl 390x844 E Career: no text under its floor (none)
+  PASS  nfl 390x844 E: no console error (clean)
+
+playGmCareer control nofallback: 4/4 guarded checks fired, 0 missed, 5 unrelated failure(s)
