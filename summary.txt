@@ -1,0 +1,3 @@
+ctl-offer exit=0 37s | control run: offer FIRED, 7h went red 13 time(s), 13 naming the sentinel
+ctl-liveevent exit=0 56s | control run: liveevent FIRED, 7f went red 44 time(s), 44 naming the sentinel
+simManagers exit=0 62s | simManagers: all green

@@ -1,0 +1,57 @@
+7) real dugouts: a sentinel registered as real is a display fact and nothing else
+   sentinel "Testa Realmann" is in no src file; 47 leagues across 5 eras hold it
+   7b: 200 summers, 200 with the sentinel's chair emptied (17 by the sim's own draw), 200 with a second chair to recycle into, 149 offers read (2 for the emptied real chair, all saying only that the club is making a change), 0 failures (27 s)
+   7c: 200 of 200 sentinel careers equal their empty table twin after the strip, draw for draw
+  FAIL: 7f: now championship seed 0: the match report of week 30 says Testa Realmann: ","minute":50,"assist":"Ben Sheaf"}],"oppScorers":[],"events":["The other bench, Testa Realmann, never sat down."],"troph"
+  FAIL: 7f: now championship seed 0: the match report of week 61 says Testa Realmann: "e":89,"assist":"Nathan Broadhead"}],"oppScorers":[],"events":["The other bench, Testa Realmann, never sat down.","🟥 Joe"
+  FAIL: 7f: now seriea seed 1: the match report of week 2 says Testa Realmann: "me":"Omari Hutchinson","minute":75,"penalty":true}],"events":["The other bench, Testa Realmann, never sat down.","🩹 And"
+  FAIL: 7f: now seriea seed 1: the match report of week 10 says Testa Realmann: ","minute":26},{"name":"Diego Moreira","minute":30}],"events":["The other bench, Testa Realmann, never sat down.","❌ Knoc"
+  FAIL: 7f: now seriea seed 1: the match report of week 30 says Testa Realmann: ","minute":70},{"name":"Gonçalo Ramos","minute":84}],"events":["The other bench, Testa Realmann, never sat down.","😶 The"
+  FAIL: 7f: now ligue1 seed 2: the match report of week 1 says Testa Realmann: ","oppScorers":[{"name":"Louis Mouton","minute":33}],"events":["The other bench, Testa Realmann, never sat down.","🩹 Jud"
+  FAIL: 7f: now ligue1 seed 2: the match report of week 27 says Testa Realmann: "me":"Harouna Djibirin","minute":73,"penalty":true}],"events":["The other bench, Testa Realmann, never sat down."],"troph"
+  FAIL: 7f: now saudi seed 3: the match report of week 13 says Testa Realmann: "5,"assist":"Amadou Koné","plus":4}],"oppScorers":[],"events":["The other bench, Testa Realmann, never sat down."],"troph"
+  FAIL: 7f: now saudi seed 3: the match report of week 38 says Testa Realmann: "Kick":true},{"name":"Michy Batshuayi","minute":44}],"events":["The other bench, Testa Realmann, never sat down."],"troph"
+  FAIL: 7f: era2020 laliga2020 seed 0: the match report of week 14 says Testa Realmann: "e":22,"assist":"Pervis Estupiñán"}],"oppScorers":[],"events":["The other bench, Testa Realmann, never sat down."],"troph"
+  FAIL: 7f: era2020 laliga2020 seed 0: the match report of week 43 says Testa Realmann: "ppScorers":[{"name":"Joselu","minute":90,"plus":4}],"events":["The other bench, Testa Realmann, never sat down.","📉 The"
+  FAIL: 7f: era2020 bundesliga2020 seed 1: the match report of week 5 says Testa Realmann: ""oppScorers":[{"name":"Marcel Hartel","minute":80}],"events":["The other bench, Testa Realmann, never sat down."],"troph"
+  FAIL: 7f: era2020 bundesliga2020 seed 1: the match report of week 32 says Testa Realmann: ""oppScorers":[{"name":"Marcel Hartel","minute":10}],"events":["The other bench, Testa Realmann, never sat down."],"troph"
+  FAIL: 7f: era2020 premier2020 seed 2: the match report of week 17 says Testa Realmann: "","shootoutWon":null,"myScorers":[],"oppScorers":[],"events":["The other bench, Testa Realmann, never sat down."],"troph"
+  FAIL: 7f: era2020 premier2020 seed 2: the match report of week 46 says Testa Realmann: "ute":84,"assist":"Daniel Podence"}],"oppScorers":[],"events":["The other bench, Testa Realmann, never sat down.","📉 The"
+  FAIL: 7f: era2020 seriea2020 seed 3: the match report of week 9 says Testa Realmann: ""name":"Alexis Saelemaekers","minute":90,"plus":1}],"events":["The other bench, Testa Realmann, never sat down."],"troph"
+  FAIL: 7f: era2020 seriea2020 seed 3: the match report of week 39 says Testa Realmann: "],"oppScorers":[{"name":"Mauro Icardi","minute":7}],"events":["The other bench, Testa Realmann, never sat down.","📉 The"
+  FAIL: 7f: era2015 laliga2015 seed 0: the match report of week 14 says Testa Realmann: "],"oppScorers":[{"name":"Raúl García","minute":53}],"events":["The other bench, Testa Realmann, never sat down."],"troph"
+  FAIL: 7f: era2015 laliga2015 seed 0: the match report of week 43 says Testa Realmann: ""minute":30},{"name":"Markel Susaeta","minute":68}],"events":["The other bench, Testa Realmann, never sat down.","😶 The"
+  FAIL: 7f: era2015 bundesliga2015 seed 1: the match report of week 5 says Testa Realmann: "},{"name":"Max Kruse","minute":67}],"oppScorers":[],"events":["The other bench, Testa Realmann, never sat down."],"troph"
+  FAIL: 7f: era2015 bundesliga2015 seed 1: the match report of week 32 says Testa Realmann: "rrle","minute":80,"freeKick":true}],"oppScorers":[],"events":["The other bench, Testa Realmann, never sat down.","🟥 Jos"
+  FAIL: 7f: era2015 premier2015 seed 2: the match report of week 12 says Testa Realmann: ""oppScorers":[{"name":"Jack Wilshere","minute":52}],"events":["The other bench, Testa Realmann, never sat down."],"troph"
+  FAIL: 7f: era2015 premier2015 seed 2: the match report of week 42 says Testa Realmann: "e":"Cheikhou Kouyaté","minute":42}],"oppScorers":[],"events":["The other bench, Testa Realmann, never sat down."],"troph"
+  FAIL: 7f: era2015 seriea2015 seed 3: the match report of week 25 says Testa Realmann: "{"name":"Carlos Bacca","minute":25,"penalty":true}],"events":["The other bench, Testa Realmann, never sat down.","🟥 Osc"
+  FAIL: 7f: era2015 seriea2015 seed 3: the match report of week 53 says Testa Realmann: ","oppScorers":[{"name":"Jérémy Ménez","minute":66}],"events":["The other bench, Testa Realmann, never sat down.","🩹 Pab"
+  FAIL: 7f: era2010 laliga2010 seed 0: the match report of week 15 says Testa Realmann: "oppScorers":[{"name":"Modeste M'Bami","minute":15}],"events":["The other bench, Testa Realmann, never sat down."],"troph"
+  FAIL: 7f: era2010 laliga2010 seed 0: the match report of week 44 says Testa Realmann: "inute":89,"assist":"Ángel Lafita"}],"oppScorers":[],"events":["The other bench, Testa Realmann, never sat down.","🟥 Gab"
+  FAIL: 7f: era2010 bundesliga2010 seed 1: the match report of week 24 says Testa Realmann: "ppScorers":[{"name":"Michael Ballack","minute":42}],"events":["The other bench, Testa Realmann, never sat down."],"troph"
+  FAIL: 7f: era2010 bundesliga2010 seed 1: the match report of week 51 says Testa Realmann: "orers":[{"name":"Tranquillo Barnetta","minute":66}],"events":["The other bench, Testa Realmann, never sat down.","🩹 Kar"
+  FAIL: 7f: era2010 premier2010 seed 2: the match report of week 1 says Testa Realmann: "orers":[{"name":"Sébastien Squillaci","minute":12}],"events":["The other bench, Testa Realmann, never sat down."],"troph"
+  FAIL: 7f: era2010 premier2010 seed 2: the match report of week 22 says Testa Realmann: "inute":48},{"name":"Thomas Vermaelen","minute":49}],"events":["The other bench, Testa Realmann, never sat down.","❌ Knoc"
+  FAIL: 7f: era2010 premier2010 seed 2: the match report of week 29 says Testa Realmann: "pScorers":[{"name":"Robin van Persie","minute":51}],"events":["The other bench, Testa Realmann, never sat down.","🩹 Nen"
+  FAIL: 7f: era2010 seriea2010 seed 3: the match report of week 26 says Testa Realmann: "oppScorers":[{"name":"Alexandre Pato","minute":84}],"events":["The other bench, Testa Realmann, never sat down."],"troph"
+  FAIL: 7f: era2010 seriea2010 seed 3: the match report of week 55 says Testa Realmann: "Kick":true},{"name":"Gennaro Gattuso","minute":25}],"events":["The other bench, Testa Realmann, never sat down."],"troph"
+  FAIL: 7f: era2005 laliga2005 seed 0: the match report of week 3 says Testa Realmann: "ppScorers":[{"name":"Quique de Lucas","minute":12}],"events":["The other bench, Testa Realmann, never sat down."],"troph"
+  FAIL: 7f: era2005 laliga2005 seed 0: the match report of week 33 says Testa Realmann: "[],"oppScorers":[{"name":"Pape Thiaw","minute":28}],"events":["The other bench, Testa Realmann, never sat down.","🩹 Sáv"
+  FAIL: 7f: era2005 bundesliga2005 seed 1: the match report of week 17 says Testa Realmann: "[],"oppScorers":[{"name":"Diego León","minute":44}],"events":["The other bench, Testa Realmann, never sat down."],"troph"
+  FAIL: 7f: era2005 bundesliga2005 seed 1: the match report of week 38 says Testa Realmann: "80,"assist":"Andrés D'Alessandro"}],"oppScorers":[],"events":["The other bench, Testa Realmann, never sat down.","🎟️ In"
+  FAIL: 7f: era2005 bundesliga2005 seed 1: the match report of week 45 says Testa Realmann: "","shootoutWon":null,"myScorers":[],"oppScorers":[],"events":["The other bench, Testa Realmann, never sat down."],"troph"
+  FAIL: 7f: era2005 premier2005 seed 2: the match report of week 7 says Testa Realmann: ""minute":52},{"name":"Aleksandr Hleb","minute":67}],"events":["The other bench, Testa Realmann, never sat down."],"troph"
+  FAIL: 7f: era2005 premier2005 seed 2: the match report of week 38 says Testa Realmann: ":86},{"name":"Cesc Fàbregas","minute":90,"plus":4}],"events":["The other bench, Testa Realmann, never sat down.","📉 The"
+  FAIL: 7f: era2005 seriea2005 seed 3: the match report of week 22 says Testa Realmann: "nute":37},{"name":"Andriy Shevchenko","minute":64}],"events":["The other bench, Testa Realmann, never sat down.","❌ Knoc"
+  FAIL: 7f: era2005 seriea2005 seed 3: the match report of week 27 says Testa Realmann: "e","minute":49,"assist":"Barreto"}],"oppScorers":[],"events":["The other bench, Testa Realmann, never sat down."],"troph"
+  FAIL: 7f: era2005 seriea2005 seed 3: the match report of week 56 says Testa Realmann: "e":78},{"name":"Pablo Aimar","minute":90,"plus":5}],"events":["The other bench, Testa Realmann, never sat down."],"troph"
+   7f: 20 whole seasons with the sentinel seated, 823 entries, 44 matches against his club, 2201 distinct lines read, 20 of 20 equal to their empty table twin, 44 failures (22 s)
+   7a: 47 of 47 sentinel chairs held on day one, 47 partial chairs made up and marked
+   7a: a later world and a season two repair seat nobody real; an outside club shows him in season one only
+   7g: 47 summers took the sentinel's own job, 39 takeover lines read (all "You take over at {club}."), 0 failures
+   7d: Arsenal left the league over that summer under this control, so the chair you left is not read
+   7d: nothing at Arsenal as your club, the club you left, a club you managed, Hot Seat or a mid season start
+   7e: the old save loads with its 19 chairs byte identical (Arsenal: Youri Sagna)
+
+control run: liveevent FIRED, 7f went red 44 time(s), 44 naming the sentinel
