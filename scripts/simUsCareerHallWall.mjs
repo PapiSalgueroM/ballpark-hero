@@ -417,8 +417,11 @@ for (const k of Object.keys(longest)) {
    cases (create screen, retirement screen, the honest lines), J the jersey words. */
 const BOARD = 'src/components/us-career/UsCareerBoard.tsx';
 const BOARD_TEST = 'src/test/usCareerHallWall.test.tsx';
-const BOARD_CASES = 56;
-const KEEP = 'if (!sport.hall || !career?.retired || saveFailure) return;';
+/* 57 since Release BU: C11 (NBA only, one case) is the lead's L3 seam, the keep effect held while a loaded save's
+   intl repair is pending. No board control names it (each control's tags count four sports); its negative control
+   is the release's mutl3hold line, which takes the hold out and must turn C11 red. */
+const BOARD_CASES = 57;
+const KEEP = 'if (!sport.hall || !career?.retired || saveFailure || intlRepairPending) return;';
 const MISSING = "missing={view.from === 'retired' && hallRefused}";
 const KEPT_LINE ='const hallKept = hallWallKeyNow !== null && !!wall?.entries.some(e => e.key === hallWallKeyNow);';
 const READ = 'if (!sport.hall) return;\n    try {\n      const raw = localStorage.getItem(hallWallKey(sport.slug));';
@@ -427,7 +430,7 @@ const BOARD_CONTROLS = {
      line shows only after a refusal. */
   nokeep: { edits: [[KEEP, 'if (true) return;']], fail: ['C1', 'C3', 'C4b', 'C5', 'C6', 'C8', 'C9', 'C10b', 'C10c'], hold: ['C4', 'C7', 'C8b', 'C10a', 'J'] },
   loadonly: { edits: [['const [wall, setWall] = useState<HallWall | null>(null);', 'const [wall, setWall] = useState<HallWall | null>(null); const wallSawLive = useRef(false);'],
-    [KEEP, 'if (career && !career.retired) wallSawLive.current = true; if (!sport.hall || !career?.retired || saveFailure || !wallSawLive.current) return;']],
+    [KEEP, 'if (career && !career.retired) wallSawLive.current = true; if (!sport.hall || !career?.retired || saveFailure || intlRepairPending || !wallSawLive.current) return;']],
     fail: ['C3', 'C4b', 'C6', 'C10b', 'C10c'], hold: ['C1', 'C4', 'C5', 'C7', 'C8', 'C8b', 'C9', 'C10a', 'J'] },
   kept: { edits: [[KEPT_LINE, 'const hallKept = hallWallKeyNow !== null;']],
     fail: ['C4', 'C4b', 'C6', 'C10c'], hold: ['C1', 'C3', 'C5', 'C7', 'C8', 'C8b', 'C9', 'C10a', 'C10b', 'J'] },
@@ -444,10 +447,10 @@ const BOARD_CONTROLS = {
     fail: ['C10c'], hold: ['C1', 'C3', 'C4', 'C4b', 'C5', 'C6', 'C7', 'C8', 'C8b', 'C9', 'C10a', 'C10b', 'J'] },
   createline: { edits: [[MISSING, 'missing={!hallKept}']],
     fail: ['C10a', 'C10c'], hold: ['C1', 'C3', 'C4', 'C4b', 'C5', 'C6', 'C7', 'C8', 'C8b', 'C9', 'C10b', 'J'] },
-  nogate: { edits: [[READ, READ.replace('if (!sport.hall) return;\n    ', '')], [KEEP, 'if (!career?.retired || saveFailure) return;'],
+  nogate: { edits: [[READ, READ.replace('if (!sport.hall) return;\n    ', '')], [KEEP, 'if (!career?.retired || saveFailure || intlRepairPending) return;'],
     ['{sport.hall && wall && wall.entries.length > 0 && (', '{wall && wall.entries.length > 0 && (']],
     fail: ['C7'], hold: ['C1', 'C3', 'C4', 'C4b', 'C5', 'C6', 'C8', 'C8b', 'C9', 'C10a', 'C10b', 'C10c', 'J'] },
-  stalesave: { edits: [[KEEP, 'if (!sport.hall || !career?.retired) return;']], fail: ['C9'], hold: ['C1', 'C3', 'C4', 'C4b', 'C5', 'C6', 'C7', 'C8', 'C8b', 'C10a', 'C10b', 'C10c', 'J'] },
+  stalesave: { edits: [[KEEP, 'if (!sport.hall || !career?.retired || intlRepairPending) return;']], fail: ['C9'], hold: ['C1', 'C3', 'C4', 'C4b', 'C5', 'C6', 'C7', 'C8', 'C8b', 'C10a', 'C10b', 'C10c', 'J'] },
   boarddraw: { edits: [['if (!entry) return;', 'if (!entry) return; Math.random();']], fail: ['C8'], hold: ['C1', 'C3', 'C4', 'C4b', 'C5', 'C6', 'C7', 'C8b', 'C9', 'C10a', 'C10b', 'C10c', 'J'] },
   /* The closing check's residual: a draw planted in the read effect is equal in all three of C8's arms (each binds
      the Hall), so C8 stays green and C8b, whose baseline binds none, must go red. */

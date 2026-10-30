@@ -574,7 +574,7 @@ describe('Round 1570: the plaque says the jersey and its counts in the card\'s o
    field the plaque reads, so the unrepaired plaque and the repaired one differ. Without the board's hold the
    keep effect writes the unrepaired plaque while the repair is pending and replaces it after (two writes). */
 describe('Release BU: a loaded NBA save waits for its international repair before its plaque goes up', () => {
-  it('writes the wall once, after the repair, and never the unrepaired plaque', async () => {
+  it('C11: the wall is written once, after the repair, and never with the unrepaired plaque', async () => {
     const real = NBA_CAREER_SPORT.intl!;
     let open!: () => void;
     const gate = new Promise<void>(resolve => { open = resolve; });
