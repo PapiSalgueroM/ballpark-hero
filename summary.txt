@@ -1,0 +1,13 @@
+simClubManagerGathered exit=1 3s | simClubManagerGathered: 1 failure(s) (G 1)
+simBoardAsks exit=0 69s | simBoardAsks: green. Every ask a board makes can be met, and nobody real is quoted.
+simCmCopy exit=0 50s | simCmCopy: green on this tree. Sections 1, 2, 3, 4, 5: Club Manager says what it means.
+simClubManagerScore exit=0 148s | ALL SEASON SCORE CHECKS PASSED
+simClubManagerBudget exit=1 255s | simClubManagerBudget: 1 FAILURE(S)
+simCmSavePoints exit=0 58s | simCmSavePoints: OK, all eight sections green
+simCmOwnClubMarket exit=0 460s | simCmOwnClubMarket: green (mode rule, sections 1, 2, 3, 4, 5): the market lists nobody at my own club in every old save and moves nothing else
+simCmLedgerBound exit=1 513s | simCmLedgerBound: RED, sections 1 (1)
+simManagerCustomPromotion exit=0 8s | PASS all five actual save/load summers: identical outcomes and RNG draws; source bytes held
+simCmWorldMoves exit=1 1634s | simCmWorldMoves: RED, sections 5 (96), 6 (270), 8 (57)
+simUclField exit=0 8s | simUclField: all green
+simEras exit=0 1859s | ALL ERA AND AGEING CHECKS PASSED
+simPress exit=0 2633s | ALL PRESS AND TEAM TALK CHECKS PASSED
