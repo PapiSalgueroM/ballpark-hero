@@ -1,0 +1,22 @@
+tsc: node_modules/.bin/tsc --noEmit -p tsconfig.app.json
+levelReads: node scripts/simCmLevelReads.mjs
+lr-xi: CM_LEVEL_READS_CONTROL=xi node scripts/simCmLevelReads.mjs
+lr-anchor: CM_LEVEL_READS_CONTROL=anchor node scripts/simCmLevelReads.mjs
+lr-scale: CM_LEVEL_READS_CONTROL=scale node scripts/simCmLevelReads.mjs
+lr-exit: CM_LEVEL_READS_CONTROL=exit node scripts/simCmLevelReads.mjs
+lr-ceiling: CM_LEVEL_READS_CONTROL=ceiling node scripts/simCmLevelReads.mjs
+lr-nostamp: CM_LEVEL_READS_CONTROL=nostamp node scripts/simCmLevelReads.mjs
+lr-pointsfirst: CM_LEVEL_READS_CONTROL=pointsfirst node scripts/simCmLevelReads.mjs
+lr-noeraread: CM_LEVEL_READS_CONTROL=noeraread node scripts/simCmLevelReads.mjs
+dailyView: node scripts/simCmDailyView.mjs
+dv-off: CM_DAILY_VIEW_CONTROL=off node scripts/simCmDailyView.mjs
+dv-untagged: CM_DAILY_VIEW_CONTROL=untagged node scripts/simCmDailyView.mjs
+dv-halfswap: CM_DAILY_VIEW_CONTROL=halfswap node scripts/simCmDailyView.mjs
+dv-stuck: CM_DAILY_VIEW_CONTROL=stuck node scripts/simCmDailyView.mjs
+boardAsks: node scripts/simBoardAsks.mjs
+ba-nopromise: BOARD_ASKS_CONTROL=nopromise node scripts/simBoardAsks.mjs
+customValues: node scripts/simCustomClubValues.mjs
+cv-capall: CUSTOM_VALUE_CONTROL=capall node scripts/simCustomClubValues.mjs
+vitest: node_modules/.bin/vitest run src/test/cmValueCurve.test.ts src/lib/clubManagerTrajectory.test.ts src/lib/clubManagerWorldMoves.test.ts src/lib/clubManagerWorldRoster.test.ts src/test/clubManagerSave.test.tsx --testTimeout=300000 --hookTimeout=120000
+noRival: node scripts/simNoRivalNames.mjs
+anchors: node scripts/simHarnessAnchors.mjs
