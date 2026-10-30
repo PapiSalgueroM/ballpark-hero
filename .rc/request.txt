@@ -1,0 +1,8 @@
+tsc: node_modules/.bin/tsc --noEmit -p tsconfig.app.json
+simClubManagerDugouts: node scripts/simClubManagerDugouts.mjs
+simManagers-fleet: SIM_MANAGERS_BASE=c0c66e087 node scripts/simManagers.mjs
+simManagers: node scripts/simManagers.mjs
+simInventedNames: node scripts/simInventedNames.mjs
+simNoInventedQuotes: node scripts/simNoInventedQuotes.mjs
+simNoRivalNames: node scripts/simNoRivalNames.mjs
+vitest-clubDetail: node_modules/.bin/vitest run src/test/clubDetailOwnClub.test.tsx src/test/clubDetailCurrentRoster.test.tsx src/test/clubDetailFixtures.test.tsx --testTimeout=300000 --hookTimeout=120000
