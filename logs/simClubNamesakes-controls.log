@@ -1,0 +1,14 @@
+blind exit=1 | control blind FIRED: applied (blind: the detector returned nothing) and 3 check(s) went red
+unmerge exit=1 | control unmerge FIRED: applied (unmerge: the 36 fixture rows of the ledger's sarandi men removed by id, Arsenal FC left the list) and 3 check(s) went red
+noexclude exit=1 | control noexclude FIRED: applied (noexclude: CLUB_NAMESAKES emptied in the function text) and 1 check(s) went red
+wide exit=1 | control wide FIRED: applied (wide: "Arsenal FC" added to the exclusion) and 2 check(s) went red
+mirrordrift exit=1 | control mirrordrift FIRED: applied (mirrordrift: the namesake line taken out of the mirror's clubMatches) and 1 check(s) went red
+onehost exit=1 | control onehost FIRED: applied (onehost: Arsenal Tula left with one source) and 1 check(s) went red
+forget exit=1 | control forget FIRED: applied (forget: "Arsenal Kyiv (-2019)" dropped from the function and from gridNamesakes.json together) and 1 check(s) went red
+manhost exit=1 | control manhost FIRED: applied (manhost: Israel Damonte left with one source) and 1 check(s) went red
+wiki exit=1 | control wiki FIRED: applied (wiki: Israel Damonte's statscrew source swapped for en.wikipedia.org) and 1 check(s) went red
+twotm exit=1 | control twotm FIRED: applied (twotm: both of Israel Damonte's sources made Transfermarkt) and 1 check(s) went red
+unjudged exit=1 | control unjudged FIRED: applied (unjudged: a made up Argentine Arsenal FC row added to Q2 in memory) and 1 check(s) went red
+payload exit=1 | control payload FIRED: applied (payload: market row 6876 dropped from the parsed payload) and 6 check(s) went red
+londonspan exit=1 | control londonspan FIRED: applied (londonspan: a london row of Andrés San Martín's name and nationality added inside his moved stint's span (2007)) and 2 check(s) went red
+leak exit=1 | control leak FIRED: applied (leak: Cristian Llama's row 60080 put back to Arsenal FC in the state after) and 2 check(s) went red

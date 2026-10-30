@@ -1,0 +1,9 @@
+simClubNamesakes exit=0 2s | simClubNamesakes: green. The detection flags Arsenal FC where it is two clubs, and the grid stops reading Arsenal inside another club's name, nowhere else.
+rehearse1587 exit=0 8s | rehearseClubNamesakes1587: green. Both forms move exactly the 110 market rows and 56 stints to Arsenal de Sarandí and nothing else, and a second run changes nothing.
+simClubNamesakes-controls exit=0 24s | leak exit=1 | control leak FIRED: applied (leak: Cristian Llama's row 60080 put back to Arsenal FC in the state after) and 2 check(s) went red
+rehearse1584 exit=0 8s | rehearseClubNamesakes1584: green. Q1 and its JS twin agree in Postgres, and the purge form removes exactly the stale Arsenal yeses or nothing.
+ledgerCheck exit=0 1s | same: scripts/qa/clubNamesakes1587Applied.sql
+rehearse1587-controls exit=0 26s |   FAIL: the applied form raised: Round 1587: 1 market and 0 stint rows drifted, 0 and 0 missing, nothing written
+simNoRivalNames exit=0 18s | No rival product names found. 0 findings.
+tsc exit=0 81s | 
+simHarnessAnchors exit=0 48s | simHarnessAnchors: green. Every harness parses and none carries an unmatchable anchor.
