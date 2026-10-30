@@ -918,7 +918,12 @@ async function watcherPass() {
 async function selfRelative() {
   /* From step E5 the holder line is reverted in BOTH arms, so this section compares the binding alone; what the
      holder moves is section 5's, by attribution. */
-  const holder = [...(hasE5() ? [HOLDER_EDIT] : []), ...(UEL_HOLDER_EDIT ? [UEL_HOLDER_EDIT] : [])];
+  /* Round 1593: and my own club's Europa League opt in dropped in BOTH arms (scripts/lib/worldUelPlay.mjs). The
+     Europa League's field reads the Champions League this arm switches off, so a club can earn a played place in one
+     arm only, and a played place moves the calendar and the board, not just worldComps.uel. simCmEuroPlay holds the
+     participant. */
+  const { PLAY_EDITS } = await import(pathToFileURL(path.join(path.dirname(fileURLToPath(import.meta.url)), 'lib', 'worldUelPlay.mjs')).href);
+  const holder = [...(hasE5() ? [HOLDER_EDIT] : []), ...(UEL_HOLDER_EDIT ? [UEL_HOLDER_EDIT] : []), ...PLAY_EDITS];
   const head = await engineOf(ROOT, 'head2', { edits: [...careerEdits(), ...holder] }, cannot);
   const off = await engineOf(ROOT, 'off', { edits: [...BINDING_OFF, ...holder] }, cannot);
   if (careerEdits().length) changed = true;
