@@ -1,0 +1,1 @@
+wcprobe: bash .rc/x/wcProbe.sh
