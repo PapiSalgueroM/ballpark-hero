@@ -1,0 +1,14 @@
+{
+  "id": "restored-browser",
+  "command": "/opt/hostedtoolcache/node/24.22.1/x64/bin/node",
+  "args": [
+    "scripts/qa/playScCentreFocus.mjs",
+    "browser"
+  ],
+  "cwd": "/home/runner/work/_temp/sc-centre-focus-matched-41137330144-a1",
+  "start": "2026-10-30T22:26:41.604Z",
+  "end": "2026-10-30T22:26:49.826Z",
+  "raw": 0,
+  "signal": null,
+  "error": null
+}

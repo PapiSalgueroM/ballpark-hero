@@ -1,0 +1,12 @@
+import{j as i}from"./index-ClOkKhdF.js";import{CelebrationStyles as p}from"./CelebrationStyles-CZPiVWG1.js";function r(t){const e=Math.sin(t*127.1+311.7)*43758.5453;return e-Math.floor(e)}const s=["#22c55e","#eab308","#3b82f6","#ef4444","#a855f7","#f97316","#facc15"];function l(t,e=.6,n=.22){return`${Math.round((e+t*n)*1e3)/1e3}s`}function c(t,e=.6,n=.22){return Math.round((e+t*n)*1e3)/1e3}function m(t){let e=1;for(let n=0;n<t.length;n++)e=e*31+t.charCodeAt(n)>>>0;return e%997}function d({seed:t=1,count:e=30}){return i.jsxs("div",{className:"absolute inset-0 overflow-hidden pointer-events-none","aria-hidden":!0,children:[Array.from({length:e},(n,a)=>{const o=a+t*97;return i.jsx("span",{className:"absolute -top-2 w-1.5 h-2.5 cm-confetti",style:{left:`${4+r(o)*92}%`,backgroundColor:s[a%s.length],animationDuration:`${1.1+r(o*3)*1.2}s`,animationDelay:`${r(o*7)*.35}s`,transform:`rotate(${Math.floor(r(o*13)*360)}deg)`}},a)}),i.jsx("style",{children:`
+        @keyframes cmConfettiFall {
+          0% { opacity: 0; transform: translateY(-10px) rotate(0deg); }
+          8% { opacity: 1; }
+          100% { opacity: 0; transform: translateY(240px) rotate(560deg); }
+        }
+        .cm-confetti { animation-name: cmConfettiFall; animation-timing-function: ease-in; animation-fill-mode: forwards; }
+
+        @media (prefers-reduced-motion: reduce) {
+          .cm-confetti { display: none; }
+        }
+      `})]})}export{p as CelebrationStyles,d as ConfettiBurst,m as confettiSeedOf,c as revealAfter,l as revealDelay};

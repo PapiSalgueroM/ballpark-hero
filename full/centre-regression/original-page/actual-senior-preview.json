@@ -1,0 +1,1341 @@
+{
+  "seed": 1,
+  "value": {
+    "playerName": "League Release",
+    "nationality": "France",
+    "position": "CM",
+    "era": "2020s",
+    "age": 18,
+    "potential": 60,
+    "potentialEarned": 0,
+    "eliteStreak": 0,
+    "startingOverall": 42,
+    "physique": {
+      "heightCm": 180,
+      "weightKg": 75
+    },
+    "attrShape": {},
+    "karma": 50,
+    "phoneUsedIds": [
+      "kids_camp",
+      "agent_boots"
+    ],
+    "phoneInbox": [
+      {
+        "id": "kids_camp-2025",
+        "defId": "kids_camp",
+        "from": "Community team",
+        "emoji": "⚽",
+        "text": "Summer kids camp needs a surprise guest coach for a morning. No fee, just chaos and juice boxes.",
+        "year": 2025,
+        "choices": [
+          {
+            "label": "Do the full morning",
+            "reply": "I'm in. Someone else does the juice run though",
+            "karma": 8,
+            "popularity": 3,
+            "morale": 3
+          },
+          {
+            "label": "Send signed balls instead",
+            "reply": "Can't make it, sending a box of signed balls",
+            "karma": 3
+          }
+        ]
+      },
+      {
+        "id": "agent_boots-2025",
+        "defId": "agent_boots",
+        "from": "Agent",
+        "emoji": "💼",
+        "text": "Boot deal on the table. Decent money but the brand got caught using sweatshops last year. Your call.",
+        "year": 2025,
+        "choices": [
+          {
+            "label": "Take the money",
+            "reply": "Money is money. Send the contract",
+            "karma": -7,
+            "cash": 1.5
+          },
+          {
+            "label": "Turn it down publicly",
+            "reply": "Not wearing that. And I'm saying why",
+            "karma": 9,
+            "popularity": 4
+          },
+          {
+            "label": "Quietly decline",
+            "reply": "Pass on this one. Keep it quiet",
+            "karma": 4
+          }
+        ]
+      }
+    ],
+    "currentClub": "Boulogne",
+    "currentClubCountry": "France",
+    "currentClubTier": 4,
+    "currentClubColor": "#d02128",
+    "currentLeague": "Ligue 2",
+    "contractYearsLeft": 2,
+    "weeklyWage": 4704,
+    "marketValue": 0.5,
+    "pace": 46,
+    "shooting": 45,
+    "passing": 46,
+    "dribbling": 45,
+    "defending": 48,
+    "physical": 48,
+    "reflexes": 46,
+    "overall": 46,
+    "seasons": [
+      {
+        "year": 2025,
+        "age": 16,
+        "club": "Nice Youth",
+        "clubCountry": "France",
+        "clubTier": 3,
+        "apps": 0,
+        "goals": 0,
+        "assists": 0,
+        "cleanSheets": 0,
+        "yellowCards": 0,
+        "redCards": 0,
+        "rating": 0,
+        "leagueTitle": false,
+        "domesticCup": false,
+        "championsLeague": false,
+        "worldCup": false,
+        "ballonDor": false,
+        "ballonDorRank": null,
+        "type": "youth",
+        "intApps": 0,
+        "intGoals": 0,
+        "intAssists": 0,
+        "intRating": 0,
+        "tournament": null,
+        "tournamentResult": null
+      },
+      {
+        "year": 2026,
+        "age": 17,
+        "club": "Nice Youth",
+        "clubCountry": "France",
+        "clubTier": 3,
+        "apps": 13,
+        "goals": 2,
+        "assists": 5,
+        "cleanSheets": 0,
+        "yellowCards": 0,
+        "redCards": 0,
+        "rating": 0,
+        "leagueTitle": false,
+        "domesticCup": false,
+        "championsLeague": false,
+        "worldCup": false,
+        "ballonDor": false,
+        "ballonDorRank": null,
+        "type": "youth",
+        "intApps": 0,
+        "intGoals": 0,
+        "intAssists": 0,
+        "intRating": 0,
+        "tournament": null,
+        "tournamentResult": null
+      },
+      {
+        "year": 2027,
+        "age": 18,
+        "club": "Boulogne",
+        "clubCountry": "France",
+        "clubTier": 4,
+        "apps": 13,
+        "leagueApps": 11,
+        "goals": 3,
+        "assists": 3,
+        "cleanSheets": 0,
+        "yellowCards": 1,
+        "redCards": 0,
+        "rating": 5.4,
+        "ovr": 46,
+        "injury": null,
+        "injuryWeeks": 0,
+        "injurySevere": false,
+        "leagueTitle": false,
+        "leagueFinish": 7,
+        "leagueSize": 18,
+        "domesticCup": false,
+        "championsLeague": false,
+        "worldCup": false,
+        "ballonDor": false,
+        "ballonDorRank": null,
+        "type": "playing",
+        "intApps": 0,
+        "intGoals": 0,
+        "intAssists": 0,
+        "intRating": 0,
+        "tournament": null,
+        "tournamentResult": null,
+        "leagueWorld": {
+          "league": "Ligue 2",
+          "members": [
+            "Metz",
+            "Nantes",
+            "Saint-Étienne",
+            "Red Star FC",
+            "Reims",
+            "Montpellier",
+            "Nancy",
+            "Annecy",
+            "Sochaux",
+            "Dijon",
+            "Pau",
+            "Guingamp",
+            "Dunkerque",
+            "Grenoble",
+            "Rodez",
+            "Clermont",
+            "Boulogne",
+            "Laval"
+          ],
+          "champion": "Annecy",
+          "simulation": "simulated",
+          "movements": [
+            {
+              "club": "Annecy",
+              "from": "Ligue 2",
+              "to": "Ligue 1",
+              "kind": "promoted"
+            },
+            {
+              "club": "Laval",
+              "from": "Ligue 2",
+              "to": "Ligue 1",
+              "kind": "promoted"
+            }
+          ]
+        },
+        "cupRun": {
+          "cup": "Coupe de France",
+          "stages": [
+            {
+              "stage": "early",
+              "won": false
+            }
+          ],
+          "opening": {
+            "opp": "Grenoble",
+            "country": "France",
+            "league": "Ligue 2",
+            "won": false,
+            "for": 0,
+            "against": 2,
+            "home": false
+          }
+        }
+      }
+    ],
+    "events": [
+      "⚽ Solid season at Boulogne"
+    ],
+    "retired": false,
+    "phase": "newspaper",
+    "pendingOffers": [],
+    "pendingSummary": {
+      "year": 2027,
+      "age": 18,
+      "club": "Boulogne",
+      "clubCountry": "France",
+      "clubTier": 4,
+      "apps": 13,
+      "leagueApps": 11,
+      "goals": 3,
+      "assists": 3,
+      "cleanSheets": 0,
+      "yellowCards": 1,
+      "redCards": 0,
+      "rating": 5.4,
+      "ovr": 46,
+      "injury": null,
+      "injuryWeeks": 0,
+      "injurySevere": false,
+      "leagueTitle": false,
+      "leagueFinish": 7,
+      "leagueSize": 18,
+      "domesticCup": false,
+      "championsLeague": false,
+      "worldCup": false,
+      "ballonDor": false,
+      "ballonDorRank": null,
+      "type": "playing",
+      "intApps": 0,
+      "intGoals": 0,
+      "intAssists": 0,
+      "intRating": 0,
+      "tournament": null,
+      "tournamentResult": null,
+      "leagueWorld": {
+        "league": "Ligue 2",
+        "members": [
+          "Metz",
+          "Nantes",
+          "Saint-Étienne",
+          "Red Star FC",
+          "Reims",
+          "Montpellier",
+          "Nancy",
+          "Annecy",
+          "Sochaux",
+          "Dijon",
+          "Pau",
+          "Guingamp",
+          "Dunkerque",
+          "Grenoble",
+          "Rodez",
+          "Clermont",
+          "Boulogne",
+          "Laval"
+        ],
+        "champion": "Annecy",
+        "simulation": "simulated",
+        "movements": [
+          {
+            "club": "Annecy",
+            "from": "Ligue 2",
+            "to": "Ligue 1",
+            "kind": "promoted"
+          },
+          {
+            "club": "Laval",
+            "from": "Ligue 2",
+            "to": "Ligue 1",
+            "kind": "promoted"
+          }
+        ]
+      },
+      "cupRun": {
+        "cup": "Coupe de France",
+        "stages": [
+          {
+            "stage": "early",
+            "won": false
+          }
+        ],
+        "opening": {
+          "opp": "Grenoble",
+          "country": "France",
+          "league": "Ligue 2",
+          "won": false,
+          "for": 0,
+          "against": 2,
+          "home": false
+        }
+      }
+    },
+    "transferSituation": null,
+    "loan": null,
+    "pendingLoanOffers": null,
+    "pendingEvents": [],
+    "lastEventId": null,
+    "statBoostNextSeason": {},
+    "pendingNews": [
+      {
+        "newspaper": "The Daily Nutmeg",
+        "type": "negative",
+        "headline": "THE COLUMN: Hollis Stallybrass Says The Argument About League Release Is Over",
+        "body": "3 goals and 3 assists in 13 games. Hollis Stallybrass has stopped asking questions about it. That is worse."
+      },
+      {
+        "newspaper": "Football Weekly",
+        "type": "negative",
+        "headline": "CRISIS AT BOULOGNE: League Release Dropped From Squad After Poor Run Of Form",
+        "body": "Sources inside the dressing room confirm that League Release has been left out of the matchday squad following a disappointing spell. With just 13 appearances and a 5.4 average rating, questions are mounting."
+      }
+    ],
+    "internationalCareer": false,
+    "sponsorDeal": null,
+    "totalEarnings": 0.24,
+    "popularity": 10,
+    "morale": 64,
+    "isLeader": false,
+    "hasRelationship": false,
+    "intStats": {
+      "caps": 0,
+      "goals": 0,
+      "assists": 0,
+      "tournaments": 0,
+      "worldCups": 0,
+      "continentals": 0,
+      "worldCupWins": 0,
+      "continentalWins": 0,
+      "isCaptain": false,
+      "isRetired": false,
+      "debutYear": null,
+      "debutAge": null,
+      "worldCupResults": [],
+      "squadSnubs": 0,
+      "failedQualifications": 0
+    },
+    "pendingWorldCup": null,
+    "pendingTournament": null,
+    "lastTournament": null,
+    "intlHistory": [],
+    "rival": null,
+    "rivalCreated": false,
+    "pendingRivalryEvent": null,
+    "lastRivalryEventId": null,
+    "rivalrySummary": null,
+    "netWorth": 0.19,
+    "lifestyleLevel": "Humble",
+    "lifestyleCostPerYear": 0.05,
+    "socialMediaFollowers": 0.14,
+    "sponsorshipIncome": 0,
+    "properties": [],
+    "investments": [],
+    "consecutiveDeficitYears": 0,
+    "agentFeesPaid": 0,
+    "family": {
+      "isMarried": false,
+      "marriedAge": null,
+      "children": 0,
+      "isDivorced": false,
+      "divorceAge": null
+    },
+    "purchasedItems": [],
+    "investmentHoldings": [],
+    "totalAssetValue": 0,
+    "customYearlyCosts": 0,
+    "awards": [],
+    "pendingBallonDor": {
+      "year": 2027,
+      "nominees": [
+        {
+          "name": "Vinícius Jr",
+          "nationality": "Brazil",
+          "position": "LW",
+          "club": "Real Madrid",
+          "points": 101,
+          "goals": 28,
+          "trophies": [
+            "UCL"
+          ],
+          "isPlayer": false
+        },
+        {
+          "name": "Jude Bellingham",
+          "nationality": "England",
+          "position": "CAM",
+          "club": "Real Madrid",
+          "points": 84,
+          "goals": 21,
+          "trophies": [
+            "UCL"
+          ],
+          "isPlayer": false
+        },
+        {
+          "name": "Kylian Mbappé",
+          "nationality": "France",
+          "position": "ST",
+          "club": "Real Madrid",
+          "points": 72,
+          "goals": 38,
+          "trophies": [
+            "UCL"
+          ],
+          "isPlayer": false
+        },
+        {
+          "name": "Erling Haaland",
+          "nationality": "Norway",
+          "position": "ST",
+          "club": "Man City",
+          "points": 68,
+          "goals": 39,
+          "trophies": [],
+          "isPlayer": false
+        },
+        {
+          "name": "Jamal Musiala",
+          "nationality": "Germany",
+          "position": "CAM",
+          "club": "Bayern Munich",
+          "points": 63,
+          "goals": 20,
+          "trophies": [
+            "League"
+          ],
+          "isPlayer": false
+        },
+        {
+          "name": "Ousmane Dembélé",
+          "nationality": "France",
+          "position": "LW",
+          "club": "PSG",
+          "points": 61,
+          "goals": 27,
+          "trophies": [],
+          "isPlayer": false
+        },
+        {
+          "name": "Endrick",
+          "nationality": "Brazil",
+          "position": "ST",
+          "club": "Real Madrid",
+          "points": 59,
+          "goals": 24,
+          "trophies": [
+            "UCL"
+          ],
+          "isPlayer": false
+        },
+        {
+          "name": "Florian Wirtz",
+          "nationality": "Germany",
+          "position": "CAM",
+          "club": "Liverpool",
+          "points": 58,
+          "goals": 21,
+          "trophies": [
+            "League"
+          ],
+          "isPlayer": false
+        },
+        {
+          "name": "Federico Valverde",
+          "nationality": "Uruguay",
+          "position": "CM",
+          "club": "Real Madrid",
+          "points": 54,
+          "goals": 11,
+          "trophies": [
+            "UCL"
+          ],
+          "isPlayer": false
+        },
+        {
+          "name": "Harry Kane",
+          "nationality": "England",
+          "position": "ST",
+          "club": "Bayern Munich",
+          "points": 54,
+          "goals": 28,
+          "trophies": [
+            "League"
+          ],
+          "isPlayer": false
+        }
+      ],
+      "playerRank": null,
+      "playerPoints": 0,
+      "playerNominated": false
+    },
+    "lastUCLResult": {
+      "qualified": false,
+      "matches": [],
+      "result": "N/A",
+      "playerGoals": 0,
+      "isTopScorer": false,
+      "seasonYear": 2027,
+      "club": "Boulogne"
+    },
+    "legacy": null,
+    "postRetirementChoice": null,
+    "managerState": null,
+    "isFinalSeason": false,
+    "isPundit": false,
+    "punditEvents": [],
+    "primeType": "normal",
+    "socialMediaActionUsedThisSeason": false,
+    "socialMediaFocusBoost": false,
+    "pendingCoverAthleteEvent": false,
+    "coverAthleteAccepted": false,
+    "activeSponsorship": null,
+    "personality": null,
+    "agentId": null,
+    "lifeFlags": {},
+    "appearance": null,
+    "corruptionHeat": 0,
+    "dirtyMoney": 0,
+    "prisonSeasons": 0,
+    "academyClubName": "Nice",
+    "moralDilemmasTriggered": [],
+    "pendingMoralDilemma": null,
+    "pedSeasonsRemaining": 0,
+    "pedActive": false,
+    "matchFixBanned": 0,
+    "divingActive": false,
+    "integrityBonus": 0,
+    "pendingAppealResult": null,
+    "childEventsSeen": [],
+    "pregnancyAnnounced": false,
+    "punditState": null,
+    "ownerState": null,
+    "peakOverall": 46,
+    "retirementSuggested": false,
+    "phone": {
+      "threads": [
+        {
+          "id": "th_x_communityteam",
+          "c": "other",
+          "name": "Community team",
+          "emoji": "💬",
+          "lines": [
+            {
+              "w": 0,
+              "t": "Summer kids camp needs a surprise guest coach for a morning. No fee, just chaos and juice boxes.",
+              "y": 2025
+            },
+            {
+              "w": 0,
+              "t": "Bumping this up your inbox.",
+              "y": 2026
+            }
+          ],
+          "rel": 36,
+          "pending": {
+            "kind": "legacy",
+            "msgId": "kids_camp-2025"
+          },
+          "waiting": 2026,
+          "cold": 1,
+          "seen": [],
+          "lastReplyYear": null
+        },
+        {
+          "id": "th_fitness",
+          "c": "fitness",
+          "name": "Fitness coach",
+          "emoji": "🏋️",
+          "lines": [
+            {
+              "w": 0,
+              "t": "Optional extras start Monday. 6am. Nobody has signed up yet which tells you everything.",
+              "y": 2025
+            },
+            {
+              "w": 0,
+              "t": "Bumping this up your inbox.",
+              "y": 2026
+            }
+          ],
+          "rel": 36,
+          "pending": {
+            "kind": "convo",
+            "convo": "fitness_extra",
+            "beat": 0
+          },
+          "waiting": 2026,
+          "cold": 1,
+          "seen": [
+            "fitness_extra"
+          ],
+          "lastReplyYear": null
+        },
+        {
+          "id": "th_agent",
+          "c": "agent",
+          "name": "Your agent",
+          "emoji": "💼",
+          "lines": [
+            {
+              "w": 0,
+              "t": "Boot deal on the table. Decent money but the brand got caught using sweatshops last year. Your call.",
+              "y": 2025
+            },
+            {
+              "w": 0,
+              "t": "Still need an answer on that when you get a sec.",
+              "y": 2026
+            }
+          ],
+          "rel": 36,
+          "pending": {
+            "kind": "legacy",
+            "msgId": "agent_boots-2025"
+          },
+          "waiting": 2026,
+          "cold": 1,
+          "seen": [],
+          "lastReplyYear": null
+        }
+      ],
+      "feed": [
+        "⭐ Real Madrid are champions of Europe.",
+        "🏆 Liverpool win the Premier League.",
+        "🏆 Atletico Madrid win La Liga.",
+        "🔮 Your world's 2027-28, as it played out:"
+      ],
+      "world": {
+        "year": 2027,
+        "ucl": "Real Madrid",
+        "leagues": {
+          "Premier League": "Liverpool",
+          "La Liga": "Atletico Madrid",
+          "Bundesliga": "Bayern Munich",
+          "Serie A": "Juventus",
+          "Ligue 1": "Marseille",
+          "Primeira Liga": "Benfica",
+          "Eredivisie": "Ajax",
+          "Scottish Premiership": "Celtic",
+          "Brasileirao": "Botafogo",
+          "Saudi Pro League": "Al Nassr",
+          "MLS": "LAFC",
+          "K League 1": "Jeonbuk Motors",
+          "Championship": "Blackburn Rovers",
+          "2. Bundesliga": "Heidenheim",
+          "Ligue 2": "Annecy",
+          "Serie B": "Juve Stabia",
+          "Segunda Division": "Las Palmas"
+        },
+        "cups": {
+          "Premier League": "Chelsea",
+          "La Liga": "Barcelona",
+          "Bundesliga": "Dortmund",
+          "Serie A": "Napoli",
+          "Ligue 1": "Lyon",
+          "Primeira Liga": "Sporting CP",
+          "Eredivisie": "PSV",
+          "Scottish Premiership": "Aberdeen",
+          "Brasileirao": "Palmeiras",
+          "Saudi Pro League": "Al Nassr",
+          "MLS": "Seattle Sounders",
+          "K League 1": "Ulsan HD"
+        },
+        "moves": [],
+        "topScorer": null,
+        "intl": null
+      },
+      "clubs": {
+        "Kylian Mbappé": "Real Madrid",
+        "Erling Haaland": "Man City",
+        "Jude Bellingham": "Real Madrid",
+        "Vinícius Jr": "Real Madrid",
+        "Lamine Yamal": "Barcelona",
+        "Florian Wirtz": "Liverpool",
+        "Jamal Musiala": "Bayern Munich",
+        "Bukayo Saka": "Arsenal",
+        "Pedri": "Barcelona",
+        "Rodri": "Barcelona",
+        "Federico Valverde": "Real Madrid",
+        "Harry Kane": "Bayern Munich",
+        "Mohamed Salah": "Trabzonspor",
+        "Phil Foden": "Man City",
+        "Declan Rice": "Arsenal",
+        "Raphinha": "Barcelona",
+        "Endrick": "Real Madrid",
+        "Nico Williams": "Athletic Bilbao",
+        "Désiré Doué": "PSG",
+        "Kobbie Mainoo": "Man United",
+        "Gianluigi Donnarumma": "Man City",
+        "Ousmane Dembélé": "PSG"
+      },
+      "rivalClub": null,
+      "seed": 1586863211,
+      "offers": 0,
+      "perksTaken": 0
+    },
+    "frozenOut": 0,
+    "badSeasonStreak": 0,
+    "story": [
+      {
+        "year": 2025,
+        "age": 16,
+        "club": "Nice Youth",
+        "lines": [
+          "📋 Joined Nice Youth Academy aged 16"
+        ]
+      },
+      {
+        "year": 2026,
+        "age": 17,
+        "club": "Nice Youth",
+        "lines": [
+          "📈 Stats improved during youth development (OVR 46)",
+          "📩 Professional contract offers received!",
+          "✍️ Signed with Boulogne 🇫🇷 (3yr, €5k/wk)"
+        ]
+      }
+    ],
+    "sponsorBonus": 0,
+    "money": {
+      "seed": 3881761866,
+      "vault": 0,
+      "hold": {
+        "ladder": 0,
+        "bricks": 0,
+        "cleats": 0,
+        "screens": 0,
+        "spark": 0
+      },
+      "cost": {
+        "ladder": 0,
+        "bricks": 0,
+        "cleats": 0,
+        "screens": 0,
+        "spark": 0
+      },
+      "price": {
+        "ladder": 108.37,
+        "bricks": 95.98,
+        "cleats": 93.42,
+        "screens": 138.65,
+        "spark": 115.25
+      },
+      "hist": {
+        "ladder": [
+          100,
+          101.52,
+          108.37
+        ],
+        "bricks": [
+          100,
+          112.98,
+          95.98
+        ],
+        "cleats": [
+          100,
+          100.93,
+          93.42
+        ],
+        "screens": [
+          100,
+          106.49,
+          138.65
+        ],
+        "spark": [
+          100,
+          130.83,
+          115.25
+        ]
+      },
+      "log": [],
+      "year": 2027,
+      "age": 2,
+      "won": 0,
+      "lost": 0,
+      "cPlays": 0,
+      "cNet": 0,
+      "cYear": 0,
+      "cShut": false,
+      "aYear": 0,
+      "aBest": 0,
+      "aPlays": 0
+    },
+    "leagueWorld": {
+      "year": 2028,
+      "leagues": {
+        "Premier League": [
+          "Arsenal",
+          "Man City",
+          "Liverpool",
+          "Chelsea",
+          "Man United",
+          "Tottenham",
+          "Newcastle",
+          "Nottingham Forest",
+          "Brighton",
+          "Aston Villa",
+          "Everton",
+          "Crystal Palace",
+          "Bournemouth",
+          "Leeds United",
+          "Ipswich Town",
+          "Coventry City",
+          "Hull City",
+          "Blackburn Rovers",
+          "Stoke City",
+          "Norwich City"
+        ],
+        "Championship": [
+          "West Ham",
+          "Wolves",
+          "Burnley",
+          "Southampton",
+          "Middlesbrough",
+          "Sheffield United",
+          "Swansea City",
+          "Birmingham City",
+          "Watford",
+          "Wrexham",
+          "Derby County",
+          "QPR",
+          "West Brom",
+          "Bristol City",
+          "Millwall",
+          "Preston North End",
+          "Charlton Athletic",
+          "Bolton Wanderers",
+          "Cardiff City",
+          "Lincoln City",
+          "Portsmouth",
+          "Fulham",
+          "Sunderland",
+          "Brentford"
+        ],
+        "Bundesliga": [
+          "Bayern Munich",
+          "Dortmund",
+          "Leipzig",
+          "Stuttgart",
+          "Leverkusen",
+          "Frankfurt",
+          "Hoffenheim",
+          "Freiburg",
+          "Augsburg",
+          "Hamburg",
+          "Mainz",
+          "Gladbach",
+          "Koln",
+          "Union Berlin",
+          "Schalke 04",
+          "Elversberg",
+          "Heidenheim",
+          "Dynamo Dresden"
+        ],
+        "2. Bundesliga": [
+          "Wolfsburg",
+          "St. Pauli",
+          "Nurnberg",
+          "Holstein Kiel",
+          "Arminia Bielefeld",
+          "Bochum",
+          "Braunschweig",
+          "Darmstadt",
+          "Energie Cottbus",
+          "Greuther Furth",
+          "Hannover 96",
+          "Hertha Berlin",
+          "Kaiserslautern",
+          "Karlsruhe",
+          "Magdeburg",
+          "Osnabruck",
+          "Werder Bremen",
+          "Paderborn"
+        ],
+        "Ligue 1": [
+          "PSG",
+          "Lyon",
+          "Marseille",
+          "Monaco",
+          "Lille",
+          "Nice",
+          "Strasbourg",
+          "Rennes",
+          "Lens",
+          "Lorient",
+          "Auxerre",
+          "Paris FC",
+          "Angers",
+          "Le Havre",
+          "Le Mans",
+          "Troyes",
+          "Annecy",
+          "Laval"
+        ],
+        "Ligue 2": [
+          "Metz",
+          "Nantes",
+          "Saint-Étienne",
+          "Red Star FC",
+          "Reims",
+          "Montpellier",
+          "Nancy",
+          "Sochaux",
+          "Dijon",
+          "Pau",
+          "Guingamp",
+          "Dunkerque",
+          "Grenoble",
+          "Rodez",
+          "Clermont",
+          "Boulogne",
+          "Brest",
+          "Toulouse"
+        ],
+        "Serie A": [
+          "Inter Milan",
+          "Juventus",
+          "Roma",
+          "Como",
+          "AC Milan",
+          "Napoli",
+          "Atalanta",
+          "Fiorentina",
+          "Lazio",
+          "Bologna",
+          "Torino",
+          "Sassuolo",
+          "Parma",
+          "Cagliari",
+          "Lecce",
+          "Monza",
+          "Frosinone",
+          "Juve Stabia",
+          "Verona",
+          "Sampdoria"
+        ],
+        "Serie B": [
+          "Cremonese",
+          "Pisa",
+          "Avellino",
+          "Carrarese",
+          "Catanzaro",
+          "Cesena",
+          "Empoli",
+          "Entella",
+          "Mantova",
+          "Modena",
+          "Padova",
+          "Palermo",
+          "Südtirol",
+          "Vicenza",
+          "Arezzo",
+          "Benevento",
+          "Ascoli",
+          "Genoa",
+          "Venezia",
+          "Udinese"
+        ],
+        "La Liga": [
+          "Real Madrid",
+          "Barcelona",
+          "Atletico Madrid",
+          "Athletic Bilbao",
+          "Sevilla",
+          "Villarreal",
+          "Real Sociedad",
+          "Valencia",
+          "Espanyol",
+          "Deportivo",
+          "Levante",
+          "Getafe",
+          "Rayo Vallecano",
+          "Osasuna",
+          "Elche",
+          "Alaves",
+          "Malaga",
+          "Las Palmas",
+          "Sabadell",
+          "FC Andorra"
+        ],
+        "Segunda Division": [
+          "Real Oviedo",
+          "Girona",
+          "Mallorca",
+          "Eibar",
+          "Castellón",
+          "Almería",
+          "Burgos",
+          "Sporting Gijón",
+          "Granada",
+          "Tenerife",
+          "Leganés",
+          "Valladolid",
+          "Córdoba",
+          "Eldense",
+          "Cádiz",
+          "Ceuta",
+          "Albacete",
+          "Celta Vigo",
+          "Real Betis",
+          "Racing Santander"
+        ]
+      },
+      "movements": [
+        {
+          "club": "Fulham",
+          "from": "Premier League",
+          "to": "Championship",
+          "kind": "relegated"
+        },
+        {
+          "club": "Sunderland",
+          "from": "Premier League",
+          "to": "Championship",
+          "kind": "relegated"
+        },
+        {
+          "club": "Brentford",
+          "from": "Premier League",
+          "to": "Championship",
+          "kind": "relegated"
+        },
+        {
+          "club": "Blackburn Rovers",
+          "from": "Championship",
+          "to": "Premier League",
+          "kind": "promoted"
+        },
+        {
+          "club": "Stoke City",
+          "from": "Championship",
+          "to": "Premier League",
+          "kind": "promoted"
+        },
+        {
+          "club": "Norwich City",
+          "from": "Championship",
+          "to": "Premier League",
+          "kind": "promoted"
+        },
+        {
+          "club": "Werder Bremen",
+          "from": "Bundesliga",
+          "to": "2. Bundesliga",
+          "kind": "relegated"
+        },
+        {
+          "club": "Paderborn",
+          "from": "Bundesliga",
+          "to": "2. Bundesliga",
+          "kind": "relegated"
+        },
+        {
+          "club": "Heidenheim",
+          "from": "2. Bundesliga",
+          "to": "Bundesliga",
+          "kind": "promoted"
+        },
+        {
+          "club": "Dynamo Dresden",
+          "from": "2. Bundesliga",
+          "to": "Bundesliga",
+          "kind": "promoted"
+        },
+        {
+          "club": "Brest",
+          "from": "Ligue 1",
+          "to": "Ligue 2",
+          "kind": "relegated"
+        },
+        {
+          "club": "Toulouse",
+          "from": "Ligue 1",
+          "to": "Ligue 2",
+          "kind": "relegated"
+        },
+        {
+          "club": "Annecy",
+          "from": "Ligue 2",
+          "to": "Ligue 1",
+          "kind": "promoted"
+        },
+        {
+          "club": "Laval",
+          "from": "Ligue 2",
+          "to": "Ligue 1",
+          "kind": "promoted"
+        },
+        {
+          "club": "Genoa",
+          "from": "Serie A",
+          "to": "Serie B",
+          "kind": "relegated"
+        },
+        {
+          "club": "Venezia",
+          "from": "Serie A",
+          "to": "Serie B",
+          "kind": "relegated"
+        },
+        {
+          "club": "Udinese",
+          "from": "Serie A",
+          "to": "Serie B",
+          "kind": "relegated"
+        },
+        {
+          "club": "Juve Stabia",
+          "from": "Serie B",
+          "to": "Serie A",
+          "kind": "promoted"
+        },
+        {
+          "club": "Verona",
+          "from": "Serie B",
+          "to": "Serie A",
+          "kind": "promoted"
+        },
+        {
+          "club": "Sampdoria",
+          "from": "Serie B",
+          "to": "Serie A",
+          "kind": "promoted"
+        },
+        {
+          "club": "Celta Vigo",
+          "from": "La Liga",
+          "to": "Segunda Division",
+          "kind": "relegated"
+        },
+        {
+          "club": "Real Betis",
+          "from": "La Liga",
+          "to": "Segunda Division",
+          "kind": "relegated"
+        },
+        {
+          "club": "Racing Santander",
+          "from": "La Liga",
+          "to": "Segunda Division",
+          "kind": "relegated"
+        },
+        {
+          "club": "Las Palmas",
+          "from": "Segunda Division",
+          "to": "La Liga",
+          "kind": "promoted"
+        },
+        {
+          "club": "Sabadell",
+          "from": "Segunda Division",
+          "to": "La Liga",
+          "kind": "promoted"
+        },
+        {
+          "club": "FC Andorra",
+          "from": "Segunda Division",
+          "to": "La Liga",
+          "kind": "promoted"
+        }
+      ]
+    }
+  },
+  "draws": [
+    0.6270739405881613,
+    0.002735721180215478,
+    0.5274470399599522,
+    0.9810509674716741,
+    0.9683778982143849,
+    0.281103502959013,
+    0.6128388606011868,
+    0.7207431411370635,
+    0.425796952098608,
+    0.9948229456786066,
+    0.45527112716808915,
+    0.48878831742331386,
+    0.13893358339555562,
+    0.40374476509168744,
+    0.24752389639616013,
+    0.15449313493445516,
+    0.48914389545097947,
+    0.0673698834143579,
+    0.3946193160954863,
+    0.7671080259606242,
+    0.28586167353205383,
+    0.19087357842363417,
+    0.042729709995910525,
+    0.42738195578567684,
+    0.590382493333891,
+    0.7986842156387866,
+    0.29486987087875605,
+    0.2054697866551578,
+    0.6581296445801854,
+    0.5460823616012931,
+    0.758442840538919,
+    0.19281403115019202,
+    0.7209477317519486,
+    0.4541360163129866,
+    0.770413824589923,
+    0.9945340014528483,
+    0.23933332320302725,
+    0.7570012940559536,
+    0.15327094192616642,
+    0.3233316196128726,
+    0.41319697513245046,
+    0.2492126589640975,
+    0.15208827191963792,
+    0.7261048289947212,
+    0.5763414488174021,
+    0.1272108720149845,
+    0.2646576233673841,
+    0.04872346459887922,
+    0.6222200409974903,
+    0.8657720659393817,
+    0.2384942057542503,
+    0.9893774879164994,
+    0.7183051232714206,
+    0.40229789447039366,
+    0.30237284884788096,
+    0.6772149445023388,
+    0.9526314393151551,
+    0.9233311791904271,
+    0.6927437745034695,
+    0.9188837746623904,
+    0.8344218644779176,
+    0.9338382876012474,
+    0.11480565904639661,
+    0.039448006078600883,
+    0.8686861454043537,
+    0.2944759235251695,
+    0.8812265309970826,
+    0.5100586309563369,
+    0.935894250869751,
+    0.7043953672982752,
+    0.1662571767810732,
+    0.6768090052064508,
+    0.9488812151830643,
+    0.13192058261483908,
+    0.977882576873526,
+    0.163012815406546,
+    0.38835551869124174,
+    0.1175976269878447,
+    0.40124258142895997,
+    0.32432492286898196,
+    0.6575514690484852,
+    0.5090645046439022,
+    0.5315440169069916,
+    0.07611245918087661,
+    0.8079907614737749,
+    0.8542386966291815,
+    0.2727865446358919,
+    0.1642689702566713,
+    0.30325650586746633,
+    0.8939741610083729,
+    0.2899394116830081,
+    0.14372913632541895,
+    0.6545765674673021,
+    0.5490608897525817,
+    0.32461709063500166,
+    0.12016563094221056,
+    0.14134371187537909,
+    0.0674284459091723,
+    0.3008269227575511,
+    0.6756080056075007,
+    0.6514434448909014,
+    0.11683864914812148,
+    0.5081705288030207,
+    0.5232367371208966,
+    0.21183973387815058,
+    0.7921984903514385,
+    0.25234164693392813,
+    0.9916538530960679,
+    0.9540082972962409,
+    0.8700099086854607,
+    0.0037072612904012203,
+    0.1829710581805557,
+    0.028350597014650702,
+    0.9842514398042113,
+    0.3297178002540022,
+    0.7206749657634646,
+    0.865408998914063,
+    0.09385255631059408,
+    0.25060852500610054,
+    0.8697691259440035,
+    0.7952138101682067,
+    0.79182173544541,
+    0.22080625081434846,
+    0.09626300842501223,
+    0.14913744502700865,
+    0.4086632030084729,
+    0.542554419953376,
+    0.28729558805935085,
+    0.8845363629516214,
+    0.312199495267123,
+    0.9091057269833982,
+    0.8617564626038074,
+    0.6329721552319825,
+    0.6690632752142847
+  ],
+  "next": 0.23455683374777436
+}

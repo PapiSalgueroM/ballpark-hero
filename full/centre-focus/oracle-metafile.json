@@ -1,0 +1,3999 @@
+{
+  "inputs": {
+    "<define:import.meta.env>": {
+      "bytes": 0,
+      "imports": []
+    },
+    "src/lib/careerChanceWheel.ts": {
+      "bytes": 1321,
+      "imports": [
+        {
+          "path": "<define:import.meta.env>",
+          "kind": "import-statement",
+          "external": true
+        }
+      ],
+      "format": "esm"
+    },
+    "src/lib/captaincy.ts": {
+      "bytes": 518,
+      "imports": [
+        {
+          "path": "<define:import.meta.env>",
+          "kind": "import-statement",
+          "external": true
+        }
+      ],
+      "format": "esm"
+    },
+    "src/lib/soccerDiscipline.ts": {
+      "bytes": 755,
+      "imports": [
+        {
+          "path": "<define:import.meta.env>",
+          "kind": "import-statement",
+          "external": true
+        }
+      ],
+      "format": "esm"
+    },
+    "src/lib/soccerCareerRole.ts": {
+      "bytes": 3071,
+      "imports": [
+        {
+          "path": "<define:import.meta.env>",
+          "kind": "import-statement",
+          "external": true
+        }
+      ],
+      "format": "esm"
+    },
+    "src/lib/soccerCareerMilestone.ts": {
+      "bytes": 2714,
+      "imports": [
+        {
+          "path": "<define:import.meta.env>",
+          "kind": "import-statement",
+          "external": true
+        }
+      ],
+      "format": "esm"
+    },
+    "src/lib/soccerCareerLifeConsequences.ts": {
+      "bytes": 1473,
+      "imports": [
+        {
+          "path": "<define:import.meta.env>",
+          "kind": "import-statement",
+          "external": true
+        }
+      ],
+      "format": "esm"
+    },
+    "src/lib/soccerCareerContracts.ts": {
+      "bytes": 3157,
+      "imports": [
+        {
+          "path": "src/lib/soccerCareerLifeConsequences.ts",
+          "kind": "import-statement",
+          "original": "./soccerCareerLifeConsequences"
+        },
+        {
+          "path": "<define:import.meta.env>",
+          "kind": "import-statement",
+          "external": true
+        }
+      ],
+      "format": "esm"
+    },
+    "src/lib/soccerCareerRoutineEvents.ts": {
+      "bytes": 7385,
+      "imports": [
+        {
+          "path": "<define:import.meta.env>",
+          "kind": "import-statement",
+          "external": true
+        }
+      ],
+      "format": "esm"
+    },
+    "src/lib/careerIdentity.ts": {
+      "bytes": 6526,
+      "imports": [
+        {
+          "path": "<define:import.meta.env>",
+          "kind": "import-statement",
+          "external": true
+        }
+      ],
+      "format": "esm"
+    },
+    "src/lib/soccerCareerLife.ts": {
+      "bytes": 105609,
+      "imports": [
+        {
+          "path": "src/lib/careerChanceWheel.ts",
+          "kind": "import-statement",
+          "original": "./careerChanceWheel"
+        },
+        {
+          "path": "src/lib/soccerCareerRoutineEvents.ts",
+          "kind": "import-statement",
+          "original": "./soccerCareerRoutineEvents"
+        },
+        {
+          "path": "src/lib/soccerCareerLifeConsequences.ts",
+          "kind": "import-statement",
+          "original": "./soccerCareerLifeConsequences"
+        },
+        {
+          "path": "src/lib/careerIdentity.ts",
+          "kind": "import-statement",
+          "original": "./careerIdentity"
+        },
+        {
+          "path": "<define:import.meta.env>",
+          "kind": "import-statement",
+          "external": true
+        }
+      ],
+      "format": "esm"
+    },
+    "src/lib/soccerCareerLoyalty.ts": {
+      "bytes": 15294,
+      "imports": [
+        {
+          "path": "<define:import.meta.env>",
+          "kind": "import-statement",
+          "external": true
+        }
+      ],
+      "format": "esm"
+    },
+    "src/lib/soccerCareerProgramme.ts": {
+      "bytes": 33549,
+      "imports": [
+        {
+          "path": "src/lib/soccerCareerLife.ts",
+          "kind": "import-statement",
+          "original": "./soccerCareerLife"
+        },
+        {
+          "path": "src/lib/soccerCareerLoyalty.ts",
+          "kind": "import-statement",
+          "original": "./soccerCareerLoyalty"
+        },
+        {
+          "path": "<define:import.meta.env>",
+          "kind": "import-statement",
+          "external": true
+        }
+      ],
+      "format": "esm"
+    },
+    "src/lib/soccerCareerFarewell.ts": {
+      "bytes": 6094,
+      "imports": [
+        {
+          "path": "<define:import.meta.env>",
+          "kind": "import-statement",
+          "external": true
+        }
+      ],
+      "format": "esm"
+    },
+    "src/data/soccerCareerClubPool.ts": {
+      "bytes": 49030,
+      "imports": [
+        {
+          "path": "<define:import.meta.env>",
+          "kind": "import-statement",
+          "external": true
+        }
+      ],
+      "format": "esm"
+    },
+    "src/data/soccerCareerLowerClubs.ts": {
+      "bytes": 1491,
+      "imports": [
+        {
+          "path": "<define:import.meta.env>",
+          "kind": "import-statement",
+          "external": true
+        }
+      ],
+      "format": "esm"
+    },
+    "src/data/clubRivalries.ts": {
+      "bytes": 45752,
+      "imports": [
+        {
+          "path": "<define:import.meta.env>",
+          "kind": "import-statement",
+          "external": true
+        }
+      ],
+      "format": "esm"
+    },
+    "src/lib/keyedRng.ts": {
+      "bytes": 1289,
+      "imports": [
+        {
+          "path": "<define:import.meta.env>",
+          "kind": "import-statement",
+          "external": true
+        }
+      ],
+      "format": "esm"
+    },
+    "src/lib/soccerCareerLeagueWorld.ts": {
+      "bytes": 15636,
+      "imports": [
+        {
+          "path": "src/data/soccerCareerClubPool.ts",
+          "kind": "import-statement",
+          "original": "../data/soccerCareerClubPool"
+        },
+        {
+          "path": "src/data/soccerCareerLowerClubs.ts",
+          "kind": "import-statement",
+          "original": "../data/soccerCareerLowerClubs"
+        },
+        {
+          "path": "src/data/clubRivalries.ts",
+          "kind": "import-statement",
+          "original": "../data/clubRivalries"
+        },
+        {
+          "path": "src/lib/keyedRng.ts",
+          "kind": "import-statement",
+          "original": "./keyedRng"
+        },
+        {
+          "path": "<define:import.meta.env>",
+          "kind": "import-statement",
+          "external": true
+        }
+      ],
+      "format": "esm"
+    },
+    "src/lib/soccerCareerTransferBrief.ts": {
+      "bytes": 10825,
+      "imports": [
+        {
+          "path": "src/lib/soccerCareerLeagueWorld.ts",
+          "kind": "import-statement",
+          "original": "./soccerCareerLeagueWorld"
+        },
+        {
+          "path": "<define:import.meta.env>",
+          "kind": "import-statement",
+          "external": true
+        }
+      ],
+      "format": "esm"
+    },
+    "src/lib/soccerCareerAmbitions.ts": {
+      "bytes": 5529,
+      "imports": [
+        {
+          "path": "<define:import.meta.env>",
+          "kind": "import-statement",
+          "external": true
+        }
+      ],
+      "format": "esm"
+    },
+    "src/lib/soccerCareerSelection.ts": {
+      "bytes": 2446,
+      "imports": [
+        {
+          "path": "<define:import.meta.env>",
+          "kind": "import-statement",
+          "external": true
+        }
+      ],
+      "format": "esm"
+    },
+    "src/lib/soccerCareerPreparation.ts": {
+      "bytes": 3721,
+      "imports": [
+        {
+          "path": "<define:import.meta.env>",
+          "kind": "import-statement",
+          "external": true
+        }
+      ],
+      "format": "esm"
+    },
+    "src/lib/intlNames.ts": {
+      "bytes": 19710,
+      "imports": [
+        {
+          "path": "<define:import.meta.env>",
+          "kind": "import-statement",
+          "external": true
+        }
+      ],
+      "format": "esm"
+    },
+    "src/lib/soccerCareerMentor.ts": {
+      "bytes": 7446,
+      "imports": [
+        {
+          "path": "src/lib/intlNames.ts",
+          "kind": "import-statement",
+          "original": "./intlNames"
+        },
+        {
+          "path": "<define:import.meta.env>",
+          "kind": "import-statement",
+          "external": true
+        }
+      ],
+      "format": "esm"
+    },
+    "src/lib/soccerCareerPress.ts": {
+      "bytes": 16217,
+      "imports": [
+        {
+          "path": "<define:import.meta.env>",
+          "kind": "import-statement",
+          "external": true
+        }
+      ],
+      "format": "esm"
+    },
+    "src/lib/uclFormatHistory.ts": {
+      "bytes": 19387,
+      "imports": [
+        {
+          "path": "<define:import.meta.env>",
+          "kind": "import-statement",
+          "external": true
+        }
+      ],
+      "format": "esm"
+    },
+    "src/lib/uclTieRule.ts": {
+      "bytes": 3152,
+      "imports": [
+        {
+          "path": "<define:import.meta.env>",
+          "kind": "import-statement",
+          "external": true
+        }
+      ],
+      "format": "esm"
+    },
+    "src/lib/intlFormatHistory.ts": {
+      "bytes": 30475,
+      "imports": [
+        {
+          "path": "<define:import.meta.env>",
+          "kind": "import-statement",
+          "external": true
+        }
+      ],
+      "format": "esm"
+    },
+    "src/lib/soccerInternational.ts": {
+      "bytes": 50568,
+      "imports": [
+        {
+          "path": "src/lib/intlFormatHistory.ts",
+          "kind": "import-statement",
+          "original": "./intlFormatHistory"
+        },
+        {
+          "path": "<define:import.meta.env>",
+          "kind": "import-statement",
+          "external": true
+        }
+      ],
+      "format": "esm"
+    },
+    "src/lib/careerEras.ts": {
+      "bytes": 105789,
+      "imports": [
+        {
+          "path": "src/lib/careerChanceWheel.ts",
+          "kind": "import-statement",
+          "original": "./careerChanceWheel"
+        },
+        {
+          "path": "src/lib/soccerCareerLife.ts",
+          "kind": "import-statement",
+          "original": "./soccerCareerLife"
+        },
+        {
+          "path": "src/data/soccerCareerClubPool.ts",
+          "kind": "import-statement",
+          "original": "../data/soccerCareerClubPool"
+        },
+        {
+          "path": "<define:import.meta.env>",
+          "kind": "import-statement",
+          "external": true
+        }
+      ],
+      "format": "esm"
+    },
+    "src/lib/clubManagerUclGroups.ts": {
+      "bytes": 15773,
+      "imports": [
+        {
+          "path": "<define:import.meta.env>",
+          "kind": "import-statement",
+          "external": true
+        }
+      ],
+      "format": "esm"
+    },
+    "src/lib/soccerCareerContinental.ts": {
+      "bytes": 49545,
+      "imports": [
+        {
+          "path": "src/lib/soccerInternational.ts",
+          "kind": "import-statement",
+          "original": "./soccerInternational"
+        },
+        {
+          "path": "src/lib/careerEras.ts",
+          "kind": "import-statement",
+          "original": "./careerEras"
+        },
+        {
+          "path": "src/lib/uclFormatHistory.ts",
+          "kind": "import-statement",
+          "original": "./uclFormatHistory"
+        },
+        {
+          "path": "src/lib/clubManagerUclGroups.ts",
+          "kind": "import-statement",
+          "original": "./clubManagerUclGroups"
+        },
+        {
+          "path": "<define:import.meta.env>",
+          "kind": "import-statement",
+          "external": true
+        }
+      ],
+      "format": "esm"
+    },
+    "src/data/careerLeagueSeasons.ts": {
+      "bytes": 78342,
+      "imports": [
+        {
+          "path": "<define:import.meta.env>",
+          "kind": "import-statement",
+          "external": true
+        }
+      ],
+      "format": "esm"
+    },
+    "src/data/leagueOddFormats.ts": {
+      "bytes": 4877,
+      "imports": [
+        {
+          "path": "<define:import.meta.env>",
+          "kind": "import-statement",
+          "external": true
+        }
+      ],
+      "format": "esm"
+    },
+    "src/lib/soccerCareerLeague.ts": {
+      "bytes": 47020,
+      "imports": [
+        {
+          "path": "src/lib/careerEras.ts",
+          "kind": "import-statement",
+          "original": "./careerEras"
+        },
+        {
+          "path": "src/data/clubRivalries.ts",
+          "kind": "import-statement",
+          "original": "../data/clubRivalries"
+        },
+        {
+          "path": "src/data/careerLeagueSeasons.ts",
+          "kind": "import-statement",
+          "original": "../data/careerLeagueSeasons"
+        },
+        {
+          "path": "src/data/soccerCareerClubPool.ts",
+          "kind": "import-statement",
+          "original": "../data/soccerCareerClubPool"
+        },
+        {
+          "path": "src/data/leagueOddFormats.ts",
+          "kind": "import-statement",
+          "original": "../data/leagueOddFormats"
+        },
+        {
+          "path": "<define:import.meta.env>",
+          "kind": "import-statement",
+          "external": true
+        }
+      ],
+      "format": "esm"
+    },
+    "src/lib/soccerCareerOwner.ts": {
+      "bytes": 18348,
+      "imports": [
+        {
+          "path": "src/lib/careerEras.ts",
+          "kind": "import-statement",
+          "original": "./careerEras"
+        },
+        {
+          "path": "src/lib/soccerCareerLeague.ts",
+          "kind": "import-statement",
+          "original": "./soccerCareerLeague"
+        },
+        {
+          "path": "<define:import.meta.env>",
+          "kind": "import-statement",
+          "external": true
+        }
+      ],
+      "format": "esm"
+    },
+    "src/lib/soccerOwnerGate.ts": {
+      "bytes": 2102,
+      "imports": [
+        {
+          "path": "<define:import.meta.env>",
+          "kind": "import-statement",
+          "external": true
+        },
+        {
+          "path": "src/lib/soccerCareerOwner.ts",
+          "kind": "dynamic-import",
+          "original": "./soccerCareerOwner"
+        }
+      ],
+      "format": "esm"
+    },
+    "src/lib/soccerCareerDerby.ts": {
+      "bytes": 23401,
+      "imports": [
+        {
+          "path": "src/lib/keyedRng.ts",
+          "kind": "import-statement",
+          "original": "./keyedRng"
+        },
+        {
+          "path": "src/lib/careerEras.ts",
+          "kind": "import-statement",
+          "original": "./careerEras"
+        },
+        {
+          "path": "src/lib/soccerCareerLeague.ts",
+          "kind": "import-statement",
+          "original": "./soccerCareerLeague"
+        },
+        {
+          "path": "src/data/clubRivalries.ts",
+          "kind": "import-statement",
+          "original": "../data/clubRivalries"
+        },
+        {
+          "path": "<define:import.meta.env>",
+          "kind": "import-statement",
+          "external": true
+        }
+      ],
+      "format": "esm"
+    },
+    "src/lib/soccerCareerCup.ts": {
+      "bytes": 32868,
+      "imports": [
+        {
+          "path": "src/lib/careerEras.ts",
+          "kind": "import-statement",
+          "original": "./careerEras"
+        },
+        {
+          "path": "src/lib/soccerCareerContinental.ts",
+          "kind": "import-statement",
+          "original": "./soccerCareerContinental"
+        },
+        {
+          "path": "src/lib/keyedRng.ts",
+          "kind": "import-statement",
+          "original": "./keyedRng"
+        },
+        {
+          "path": "<define:import.meta.env>",
+          "kind": "import-statement",
+          "external": true
+        }
+      ],
+      "format": "esm"
+    },
+    "src/lib/soccerWorldTruth.ts": {
+      "bytes": 13431,
+      "imports": [
+        {
+          "path": "<define:import.meta.env>",
+          "kind": "import-statement",
+          "external": true
+        }
+      ],
+      "format": "esm"
+    },
+    "src/lib/soccerPhone.ts": {
+      "bytes": 107753,
+      "imports": [
+        {
+          "path": "src/lib/careerEras.ts",
+          "kind": "import-statement",
+          "original": "./careerEras"
+        },
+        {
+          "path": "src/lib/soccerCareerLeague.ts",
+          "kind": "import-statement",
+          "original": "./soccerCareerLeague"
+        },
+        {
+          "path": "src/lib/soccerCareerCup.ts",
+          "kind": "import-statement",
+          "original": "./soccerCareerCup"
+        },
+        {
+          "path": "src/lib/soccerWorldTruth.ts",
+          "kind": "import-statement",
+          "original": "./soccerWorldTruth"
+        },
+        {
+          "path": "<define:import.meta.env>",
+          "kind": "import-statement",
+          "external": true
+        }
+      ],
+      "format": "esm"
+    },
+    "src/lib/careerForm.ts": {
+      "bytes": 4583,
+      "imports": [
+        {
+          "path": "<define:import.meta.env>",
+          "kind": "import-statement",
+          "external": true
+        }
+      ],
+      "format": "esm"
+    },
+    "src/lib/awardDraw.ts": {
+      "bytes": 4117,
+      "imports": [
+        {
+          "path": "<define:import.meta.env>",
+          "kind": "import-statement",
+          "external": true
+        }
+      ],
+      "format": "esm"
+    },
+    "src/lib/soccerSeasonAwards.ts": {
+      "bytes": 8949,
+      "imports": [
+        {
+          "path": "src/lib/awardDraw.ts",
+          "kind": "import-statement",
+          "original": "./awardDraw"
+        },
+        {
+          "path": "src/lib/soccerWorldTruth.ts",
+          "kind": "import-statement",
+          "original": "./soccerWorldTruth"
+        },
+        {
+          "path": "<define:import.meta.env>",
+          "kind": "import-statement",
+          "external": true
+        }
+      ],
+      "format": "esm"
+    },
+    "src/lib/careerMoney.ts": {
+      "bytes": 36144,
+      "imports": [
+        {
+          "path": "<define:import.meta.env>",
+          "kind": "import-statement",
+          "external": true
+        }
+      ],
+      "format": "esm"
+    },
+    "src/lib/soccerMoney.ts": {
+      "bytes": 5176,
+      "imports": [
+        {
+          "path": "src/lib/careerMoney.ts",
+          "kind": "import-statement",
+          "original": "./careerMoney"
+        },
+        {
+          "path": "src/lib/careerMoney.ts",
+          "kind": "import-statement",
+          "original": "./careerMoney"
+        },
+        {
+          "path": "<define:import.meta.env>",
+          "kind": "import-statement",
+          "external": true
+        }
+      ],
+      "format": "esm"
+    },
+    "src/lib/careerInbox.ts": {
+      "bytes": 18355,
+      "imports": [
+        {
+          "path": "src/lib/keyedRng.ts",
+          "kind": "import-statement",
+          "original": "./keyedRng"
+        },
+        {
+          "path": "<define:import.meta.env>",
+          "kind": "import-statement",
+          "external": true
+        }
+      ],
+      "format": "esm"
+    },
+    "src/lib/careerRivalryEvents.ts": {
+      "bytes": 6941,
+      "imports": [
+        {
+          "path": "<define:import.meta.env>",
+          "kind": "import-statement",
+          "external": true
+        }
+      ],
+      "format": "esm"
+    },
+    "src/lib/careerRivalryChoices.ts": {
+      "bytes": 13828,
+      "imports": [
+        {
+          "path": "src/lib/keyedRng.ts",
+          "kind": "import-statement",
+          "original": "./keyedRng"
+        },
+        {
+          "path": "<define:import.meta.env>",
+          "kind": "import-statement",
+          "external": true
+        }
+      ],
+      "format": "esm"
+    },
+    "src/lib/soccerCurrency.ts": {
+      "bytes": 8325,
+      "imports": [
+        {
+          "path": "<define:import.meta.env>",
+          "kind": "import-statement",
+          "external": true
+        }
+      ],
+      "format": "esm"
+    },
+    "src/lib/managerOffers.ts": {
+      "bytes": 12319,
+      "imports": [
+        {
+          "path": "<define:import.meta.env>",
+          "kind": "import-statement",
+          "external": true
+        }
+      ],
+      "format": "esm"
+    },
+    "src/lib/soccerCareerToManager.ts": {
+      "bytes": 6270,
+      "imports": [
+        {
+          "path": "src/lib/managerOffers.ts",
+          "kind": "import-statement",
+          "original": "./managerOffers"
+        },
+        {
+          "path": "<define:import.meta.env>",
+          "kind": "import-statement",
+          "external": true
+        }
+      ],
+      "format": "esm"
+    },
+    "src/lib/careerSocial.ts": {
+      "bytes": 35377,
+      "imports": [
+        {
+          "path": "<define:import.meta.env>",
+          "kind": "import-statement",
+          "external": true
+        }
+      ],
+      "format": "esm"
+    },
+    "src/lib/careerBrand.ts": {
+      "bytes": 10153,
+      "imports": [
+        {
+          "path": "<define:import.meta.env>",
+          "kind": "import-statement",
+          "external": true
+        }
+      ],
+      "format": "esm"
+    },
+    "src/lib/soccerCareerBrand.ts": {
+      "bytes": 9787,
+      "imports": [
+        {
+          "path": "src/lib/soccerCareerLife.ts",
+          "kind": "import-statement",
+          "original": "./soccerCareerLife"
+        },
+        {
+          "path": "<define:import.meta.env>",
+          "kind": "import-statement",
+          "external": true
+        }
+      ],
+      "format": "esm"
+    },
+    "src/lib/soccerCareerAttributes.ts": {
+      "bytes": 22286,
+      "imports": [
+        {
+          "path": "<define:import.meta.env>",
+          "kind": "import-statement",
+          "external": true
+        }
+      ],
+      "format": "esm"
+    },
+    "src/lib/soccerCareerCorruption.ts": {
+      "bytes": 31588,
+      "imports": [
+        {
+          "path": "src/lib/careerChanceWheel.ts",
+          "kind": "import-statement",
+          "original": "./careerChanceWheel"
+        },
+        {
+          "path": "<define:import.meta.env>",
+          "kind": "import-statement",
+          "external": true
+        }
+      ],
+      "format": "esm"
+    },
+    "src/lib/soccerCareerRealismA.ts": {
+      "bytes": 81400,
+      "imports": [
+        {
+          "path": "src/lib/careerChanceWheel.ts",
+          "kind": "import-statement",
+          "original": "./careerChanceWheel"
+        },
+        {
+          "path": "src/lib/soccerCareerLife.ts",
+          "kind": "import-statement",
+          "original": "./soccerCareerLife"
+        },
+        {
+          "path": "<define:import.meta.env>",
+          "kind": "import-statement",
+          "external": true
+        }
+      ],
+      "format": "esm"
+    },
+    "src/lib/soccerCareerRealismB.ts": {
+      "bytes": 94053,
+      "imports": [
+        {
+          "path": "src/lib/careerChanceWheel.ts",
+          "kind": "import-statement",
+          "original": "./careerChanceWheel"
+        },
+        {
+          "path": "src/lib/soccerInternational.ts",
+          "kind": "import-statement",
+          "original": "./soccerInternational"
+        },
+        {
+          "path": "src/lib/soccerCareerLife.ts",
+          "kind": "import-statement",
+          "original": "./soccerCareerLife"
+        },
+        {
+          "path": "<define:import.meta.env>",
+          "kind": "import-statement",
+          "external": true
+        }
+      ],
+      "format": "esm"
+    },
+    "src/lib/soccerCareerRealism.ts": {
+      "bytes": 1838,
+      "imports": [
+        {
+          "path": "src/lib/soccerCareerRealismA.ts",
+          "kind": "import-statement",
+          "original": "./soccerCareerRealismA"
+        },
+        {
+          "path": "src/lib/soccerCareerRealismB.ts",
+          "kind": "import-statement",
+          "original": "./soccerCareerRealismB"
+        },
+        {
+          "path": "<define:import.meta.env>",
+          "kind": "import-statement",
+          "external": true
+        }
+      ],
+      "format": "esm"
+    },
+    "src/lib/careerCritic.ts": {
+      "bytes": 9543,
+      "imports": [
+        {
+          "path": "<define:import.meta.env>",
+          "kind": "import-statement",
+          "external": true
+        }
+      ],
+      "format": "esm"
+    },
+    "src/lib/soccerCareerCritic.ts": {
+      "bytes": 11874,
+      "imports": [
+        {
+          "path": "src/lib/careerChanceWheel.ts",
+          "kind": "import-statement",
+          "original": "./careerChanceWheel"
+        },
+        {
+          "path": "src/lib/careerCritic.ts",
+          "kind": "import-statement",
+          "original": "./careerCritic"
+        },
+        {
+          "path": "<define:import.meta.env>",
+          "kind": "import-statement",
+          "external": true
+        }
+      ],
+      "format": "esm"
+    },
+    "src/lib/soccerCareerBoot.ts": {
+      "bytes": 5837,
+      "imports": [
+        {
+          "path": "src/lib/careerChanceWheel.ts",
+          "kind": "import-statement",
+          "original": "./careerChanceWheel"
+        },
+        {
+          "path": "<define:import.meta.env>",
+          "kind": "import-statement",
+          "external": true
+        }
+      ],
+      "format": "esm"
+    },
+    "src/lib/soccerCareerAcademy.ts": {
+      "bytes": 12925,
+      "imports": [
+        {
+          "path": "src/lib/soccerCareerAttributes.ts",
+          "kind": "import-statement",
+          "original": "./soccerCareerAttributes"
+        },
+        {
+          "path": "src/lib/careerEras.ts",
+          "kind": "import-statement",
+          "original": "./careerEras"
+        },
+        {
+          "path": "<define:import.meta.env>",
+          "kind": "import-statement",
+          "external": true
+        }
+      ],
+      "format": "esm"
+    },
+    "src/lib/season/momentsSave.ts": {
+      "bytes": 6946,
+      "imports": [
+        {
+          "path": "<define:import.meta.env>",
+          "kind": "import-statement",
+          "external": true
+        }
+      ],
+      "format": "esm"
+    },
+    "src/data/nationalPools.ts": {
+      "bytes": 280080,
+      "imports": [
+        {
+          "path": "<define:import.meta.env>",
+          "kind": "import-statement",
+          "external": true
+        }
+      ],
+      "format": "esm"
+    },
+    "src/lib/soccerInternationalSquads.ts": {
+      "bytes": 16037,
+      "imports": [
+        {
+          "path": "src/lib/intlNames.ts",
+          "kind": "import-statement",
+          "original": "./intlNames"
+        },
+        {
+          "path": "src/data/nationalPools.ts",
+          "kind": "import-statement",
+          "original": "@/data/nationalPools"
+        },
+        {
+          "path": "src/lib/soccerInternational.ts",
+          "kind": "import-statement",
+          "original": "./soccerInternational"
+        },
+        {
+          "path": "<define:import.meta.env>",
+          "kind": "import-statement",
+          "external": true
+        }
+      ],
+      "format": "esm"
+    },
+    "src/lib/careerEventDeck.ts": {
+      "bytes": 5265,
+      "imports": [
+        {
+          "path": "<define:import.meta.env>",
+          "kind": "import-statement",
+          "external": true
+        }
+      ],
+      "format": "esm"
+    },
+    "src/lib/gmInbox.ts": {
+      "bytes": 57382,
+      "imports": [
+        {
+          "path": "src/lib/careerInbox.ts",
+          "kind": "import-statement",
+          "original": "./careerInbox"
+        },
+        {
+          "path": "src/lib/careerEventDeck.ts",
+          "kind": "import-statement",
+          "original": "./careerEventDeck"
+        },
+        {
+          "path": "src/lib/keyedRng.ts",
+          "kind": "import-statement",
+          "original": "./keyedRng"
+        },
+        {
+          "path": "<define:import.meta.env>",
+          "kind": "import-statement",
+          "external": true
+        }
+      ],
+      "format": "esm"
+    },
+    "src/lib/arcade.ts": {
+      "bytes": 4476,
+      "imports": [
+        {
+          "path": "<define:import.meta.env>",
+          "kind": "import-statement",
+          "external": true
+        }
+      ],
+      "format": "esm"
+    },
+    "src/lib/freeKick.ts": {
+      "bytes": 9724,
+      "imports": [
+        {
+          "path": "src/lib/arcade.ts",
+          "kind": "import-statement",
+          "original": "./arcade"
+        },
+        {
+          "path": "<define:import.meta.env>",
+          "kind": "import-statement",
+          "external": true
+        }
+      ],
+      "format": "esm"
+    },
+    "src/lib/careerDrills.ts": {
+      "bytes": 29482,
+      "imports": [
+        {
+          "path": "src/lib/arcade.ts",
+          "kind": "import-statement",
+          "original": "./arcade"
+        },
+        {
+          "path": "src/lib/freeKick.ts",
+          "kind": "import-statement",
+          "original": "./freeKick"
+        },
+        {
+          "path": "src/lib/soccerCareerEngine.ts",
+          "kind": "import-statement",
+          "original": "./soccerCareerEngine"
+        },
+        {
+          "path": "src/lib/season/momentsSave.ts",
+          "kind": "import-statement",
+          "original": "./season/momentsSave"
+        },
+        {
+          "path": "<define:import.meta.env>",
+          "kind": "import-statement",
+          "external": true
+        }
+      ],
+      "format": "esm"
+    },
+    "src/lib/firstTouchDrill.ts": {
+      "bytes": 3722,
+      "imports": [
+        {
+          "path": "src/lib/arcade.ts",
+          "kind": "import-statement",
+          "original": "./arcade"
+        },
+        {
+          "path": "<define:import.meta.env>",
+          "kind": "import-statement",
+          "external": true
+        }
+      ],
+      "format": "esm"
+    },
+    "src/lib/throughBallDrill.ts": {
+      "bytes": 14984,
+      "imports": [
+        {
+          "path": "src/lib/arcade.ts",
+          "kind": "import-statement",
+          "original": "./arcade"
+        },
+        {
+          "path": "src/lib/firstTouchDrill.ts",
+          "kind": "import-statement",
+          "original": "./firstTouchDrill"
+        },
+        {
+          "path": "<define:import.meta.env>",
+          "kind": "import-statement",
+          "external": true
+        }
+      ],
+      "format": "esm"
+    },
+    "src/lib/season/law.ts": {
+      "bytes": 2081,
+      "imports": [
+        {
+          "path": "<define:import.meta.env>",
+          "kind": "import-statement",
+          "external": true
+        }
+      ],
+      "format": "esm"
+    },
+    "src/lib/leagueCore.ts": {
+      "bytes": 2488,
+      "imports": [
+        {
+          "path": "<define:import.meta.env>",
+          "kind": "import-statement",
+          "external": true
+        }
+      ],
+      "format": "esm"
+    },
+    "src/lib/keyedShuffle.ts": {
+      "bytes": 662,
+      "imports": [
+        {
+          "path": "<define:import.meta.env>",
+          "kind": "import-statement",
+          "external": true
+        }
+      ],
+      "format": "esm"
+    },
+    "src/lib/season/core.ts": {
+      "bytes": 54412,
+      "imports": [
+        {
+          "path": "src/lib/leagueCore.ts",
+          "kind": "import-statement",
+          "original": "../leagueCore"
+        },
+        {
+          "path": "src/lib/keyedRng.ts",
+          "kind": "import-statement",
+          "original": "../keyedRng"
+        },
+        {
+          "path": "src/lib/keyedShuffle.ts",
+          "kind": "import-statement",
+          "original": "../keyedShuffle"
+        },
+        {
+          "path": "<define:import.meta.env>",
+          "kind": "import-statement",
+          "external": true
+        }
+      ],
+      "format": "esm"
+    },
+    "src/data/leagueFormat.ts": {
+      "bytes": 7070,
+      "imports": [
+        {
+          "path": "<define:import.meta.env>",
+          "kind": "import-statement",
+          "external": true
+        }
+      ],
+      "format": "esm"
+    },
+    "src/lib/ownGoalRule.ts": {
+      "bytes": 2322,
+      "imports": [
+        {
+          "path": "src/lib/keyedRng.ts",
+          "kind": "import-statement",
+          "original": "./keyedRng"
+        },
+        {
+          "path": "<define:import.meta.env>",
+          "kind": "import-statement",
+          "external": true
+        }
+      ],
+      "format": "esm"
+    },
+    "src/lib/season/soccerEvents.ts": {
+      "bytes": 16126,
+      "imports": [
+        {
+          "path": "src/lib/season/core.ts",
+          "kind": "import-statement",
+          "original": "./core"
+        },
+        {
+          "path": "src/lib/ownGoalRule.ts",
+          "kind": "import-statement",
+          "original": "../ownGoalRule"
+        },
+        {
+          "path": "<define:import.meta.env>",
+          "kind": "import-statement",
+          "external": true
+        }
+      ],
+      "format": "esm"
+    },
+    "src/lib/season/soccer.ts": {
+      "bytes": 24509,
+      "imports": [
+        {
+          "path": "src/lib/season/law.ts",
+          "kind": "import-statement",
+          "original": "./law"
+        },
+        {
+          "path": "src/lib/season/core.ts",
+          "kind": "import-statement",
+          "original": "./core"
+        },
+        {
+          "path": "src/lib/soccerCareerLeague.ts",
+          "kind": "import-statement",
+          "original": "../soccerCareerLeague"
+        },
+        {
+          "path": "src/lib/soccerCareerDerby.ts",
+          "kind": "import-statement",
+          "original": "../soccerCareerDerby"
+        },
+        {
+          "path": "src/lib/careerEras.ts",
+          "kind": "import-statement",
+          "original": "../careerEras"
+        },
+        {
+          "path": "src/lib/keyedRng.ts",
+          "kind": "import-statement",
+          "original": "../keyedRng"
+        },
+        {
+          "path": "src/data/leagueFormat.ts",
+          "kind": "import-statement",
+          "original": "../../data/leagueFormat"
+        },
+        {
+          "path": "src/data/clubRivalries.ts",
+          "kind": "import-statement",
+          "original": "../../data/clubRivalries"
+        },
+        {
+          "path": "src/lib/season/soccerEvents.ts",
+          "kind": "import-statement",
+          "original": "./soccerEvents"
+        },
+        {
+          "path": "src/lib/careerDrills.ts",
+          "kind": "import-statement",
+          "original": "../careerDrills"
+        },
+        {
+          "path": "src/lib/soccerCareerLeagueWorld.ts",
+          "kind": "import-statement",
+          "original": "../soccerCareerLeagueWorld"
+        },
+        {
+          "path": "<define:import.meta.env>",
+          "kind": "import-statement",
+          "external": true
+        }
+      ],
+      "format": "esm"
+    },
+    "src/lib/season/soccerMoments.ts": {
+      "bytes": 15494,
+      "imports": [
+        {
+          "path": "src/lib/keyedRng.ts",
+          "kind": "import-statement",
+          "original": "../keyedRng"
+        },
+        {
+          "path": "src/lib/careerDrills.ts",
+          "kind": "import-statement",
+          "original": "../careerDrills"
+        },
+        {
+          "path": "src/lib/throughBallDrill.ts",
+          "kind": "import-statement",
+          "original": "../throughBallDrill"
+        },
+        {
+          "path": "src/lib/season/momentsSave.ts",
+          "kind": "import-statement",
+          "original": "./momentsSave"
+        },
+        {
+          "path": "src/lib/season/soccer.ts",
+          "kind": "import-statement",
+          "original": "./soccer"
+        },
+        {
+          "path": "src/lib/season/core.ts",
+          "kind": "import-statement",
+          "original": "./core"
+        },
+        {
+          "path": "<define:import.meta.env>",
+          "kind": "import-statement",
+          "external": true
+        }
+      ],
+      "format": "esm"
+    },
+    "src/data/soccerDeck/starter.ts": {
+      "bytes": 21411,
+      "imports": [
+        {
+          "path": "<define:import.meta.env>",
+          "kind": "import-statement",
+          "external": true
+        }
+      ],
+      "format": "esm"
+    },
+    "src/data/soccerDeck/index.ts": {
+      "bytes": 247,
+      "imports": [
+        {
+          "path": "src/data/soccerDeck/starter.ts",
+          "kind": "import-statement",
+          "original": "./starter"
+        },
+        {
+          "path": "<define:import.meta.env>",
+          "kind": "import-statement",
+          "external": true
+        }
+      ],
+      "format": "esm"
+    },
+    "src/data/soccerDeck/words.ts": {
+      "bytes": 2899,
+      "imports": [
+        {
+          "path": "<define:import.meta.env>",
+          "kind": "import-statement",
+          "external": true
+        }
+      ],
+      "format": "esm"
+    },
+    "src/lib/soccerDeck.ts": {
+      "bytes": 20648,
+      "imports": [
+        {
+          "path": "src/lib/gmInbox.ts",
+          "kind": "import-statement",
+          "original": "./gmInbox"
+        },
+        {
+          "path": "src/lib/careerEventDeck.ts",
+          "kind": "import-statement",
+          "original": "./careerEventDeck"
+        },
+        {
+          "path": "src/lib/keyedRng.ts",
+          "kind": "import-statement",
+          "original": "./keyedRng"
+        },
+        {
+          "path": "src/lib/careerDrills.ts",
+          "kind": "import-statement",
+          "original": "./careerDrills"
+        },
+        {
+          "path": "src/lib/season/soccerMoments.ts",
+          "kind": "import-statement",
+          "original": "@/lib/season/soccerMoments"
+        },
+        {
+          "path": "src/lib/soccerCareerDerby.ts",
+          "kind": "import-statement",
+          "original": "./soccerCareerDerby"
+        },
+        {
+          "path": "src/data/soccerDeck/index.ts",
+          "kind": "import-statement",
+          "original": "@/data/soccerDeck"
+        },
+        {
+          "path": "src/data/soccerDeck/words.ts",
+          "kind": "import-statement",
+          "original": "@/data/soccerDeck/words"
+        },
+        {
+          "path": "<define:import.meta.env>",
+          "kind": "import-statement",
+          "external": true
+        }
+      ],
+      "format": "esm"
+    },
+    "src/lib/soccerDeckGate.ts": {
+      "bytes": 4711,
+      "imports": [
+        {
+          "path": "<define:import.meta.env>",
+          "kind": "import-statement",
+          "external": true
+        },
+        {
+          "path": "src/lib/soccerDeck.ts",
+          "kind": "dynamic-import",
+          "original": "./soccerDeck"
+        }
+      ],
+      "format": "esm"
+    },
+    "src/lib/careerAwardsNight.ts": {
+      "bytes": 18000,
+      "imports": [
+        {
+          "path": "<define:import.meta.env>",
+          "kind": "import-statement",
+          "external": true
+        }
+      ],
+      "format": "esm"
+    },
+    "src/lib/nameFold.ts": {
+      "bytes": 883,
+      "imports": [
+        {
+          "path": "<define:import.meta.env>",
+          "kind": "import-statement",
+          "external": true
+        }
+      ],
+      "format": "esm"
+    },
+    "src/lib/nameModeration.ts": {
+      "bytes": 5589,
+      "imports": [
+        {
+          "path": "<define:import.meta.env>",
+          "kind": "import-statement",
+          "external": true
+        }
+      ],
+      "format": "esm"
+    },
+    "src/data/clubManagerPremierFixtures2026.ts": {
+      "bytes": 25140,
+      "imports": [
+        {
+          "path": "<define:import.meta.env>",
+          "kind": "import-statement",
+          "external": true
+        }
+      ],
+      "format": "esm"
+    },
+    "src/data/clubManagerChampionshipFixtures2026.ts": {
+      "bytes": 19767,
+      "imports": [
+        {
+          "path": "<define:import.meta.env>",
+          "kind": "import-statement",
+          "external": true
+        }
+      ],
+      "format": "esm"
+    },
+    "src/data/clubManagerLaLigaFixtures2026.ts": {
+      "bytes": 13258,
+      "imports": [
+        {
+          "path": "<define:import.meta.env>",
+          "kind": "import-statement",
+          "external": true
+        }
+      ],
+      "format": "esm"
+    },
+    "src/data/clubManagerSerieAFixtures2026.ts": {
+      "bytes": 10682,
+      "imports": [
+        {
+          "path": "<define:import.meta.env>",
+          "kind": "import-statement",
+          "external": true
+        }
+      ],
+      "format": "esm"
+    },
+    "src/data/clubManagerBundesligaFixtures2026.ts": {
+      "bytes": 11190,
+      "imports": [
+        {
+          "path": "<define:import.meta.env>",
+          "kind": "import-statement",
+          "external": true
+        }
+      ],
+      "format": "esm"
+    },
+    "src/data/clubManagerEredivisieFixtures2026.ts": {
+      "bytes": 10490,
+      "imports": [
+        {
+          "path": "<define:import.meta.env>",
+          "kind": "import-statement",
+          "external": true
+        }
+      ],
+      "format": "esm"
+    },
+    "src/data/clubManagerPrimeiraFixtures2026.ts": {
+      "bytes": 10663,
+      "imports": [
+        {
+          "path": "<define:import.meta.env>",
+          "kind": "import-statement",
+          "external": true
+        }
+      ],
+      "format": "esm"
+    },
+    "src/data/clubManagerSuperLigFixtures2026.ts": {
+      "bytes": 11057,
+      "imports": [
+        {
+          "path": "<define:import.meta.env>",
+          "kind": "import-statement",
+          "external": true
+        }
+      ],
+      "format": "esm"
+    },
+    "src/data/clubManagerBundesliga2Fixtures2026.ts": {
+      "bytes": 11639,
+      "imports": [
+        {
+          "path": "<define:import.meta.env>",
+          "kind": "import-statement",
+          "external": true
+        }
+      ],
+      "format": "esm"
+    },
+    "src/data/clubManagerLigue2Fixtures2026.ts": {
+      "bytes": 9004,
+      "imports": [
+        {
+          "path": "<define:import.meta.env>",
+          "kind": "import-statement",
+          "external": true
+        }
+      ],
+      "format": "esm"
+    },
+    "src/lib/clubManagerFixtures.ts": {
+      "bytes": 9841,
+      "imports": [
+        {
+          "path": "src/data/clubManagerPremierFixtures2026.ts",
+          "kind": "import-statement",
+          "original": "@/data/clubManagerPremierFixtures2026"
+        },
+        {
+          "path": "<define:import.meta.env>",
+          "kind": "import-statement",
+          "external": true
+        },
+        {
+          "path": "src/data/clubManagerChampionshipFixtures2026.ts",
+          "kind": "dynamic-import",
+          "original": "@/data/clubManagerChampionshipFixtures2026"
+        },
+        {
+          "path": "src/data/clubManagerLaLigaFixtures2026.ts",
+          "kind": "dynamic-import",
+          "original": "@/data/clubManagerLaLigaFixtures2026"
+        },
+        {
+          "path": "src/data/clubManagerSerieAFixtures2026.ts",
+          "kind": "dynamic-import",
+          "original": "@/data/clubManagerSerieAFixtures2026"
+        },
+        {
+          "path": "src/data/clubManagerBundesligaFixtures2026.ts",
+          "kind": "dynamic-import",
+          "original": "@/data/clubManagerBundesligaFixtures2026"
+        },
+        {
+          "path": "src/data/clubManagerEredivisieFixtures2026.ts",
+          "kind": "dynamic-import",
+          "original": "@/data/clubManagerEredivisieFixtures2026"
+        },
+        {
+          "path": "src/data/clubManagerPrimeiraFixtures2026.ts",
+          "kind": "dynamic-import",
+          "original": "@/data/clubManagerPrimeiraFixtures2026"
+        },
+        {
+          "path": "src/data/clubManagerSuperLigFixtures2026.ts",
+          "kind": "dynamic-import",
+          "original": "@/data/clubManagerSuperLigFixtures2026"
+        },
+        {
+          "path": "src/data/clubManagerBundesliga2Fixtures2026.ts",
+          "kind": "dynamic-import",
+          "original": "@/data/clubManagerBundesliga2Fixtures2026"
+        },
+        {
+          "path": "src/data/clubManagerLigue2Fixtures2026.ts",
+          "kind": "dynamic-import",
+          "original": "@/data/clubManagerLigue2Fixtures2026"
+        }
+      ],
+      "format": "esm"
+    },
+    "src/lib/clubManagerRecords.ts": {
+      "bytes": 5055,
+      "imports": [
+        {
+          "path": "<define:import.meta.env>",
+          "kind": "import-statement",
+          "external": true
+        }
+      ],
+      "format": "esm"
+    },
+    "src/data/clubManagerVarRates.ts": {
+      "bytes": 6342,
+      "imports": [
+        {
+          "path": "<define:import.meta.env>",
+          "kind": "import-statement",
+          "external": true
+        }
+      ],
+      "format": "esm"
+    },
+    "src/lib/clubManagerVar.ts": {
+      "bytes": 11992,
+      "imports": [
+        {
+          "path": "src/lib/keyedRng.ts",
+          "kind": "import-statement",
+          "original": "@/lib/keyedRng"
+        },
+        {
+          "path": "src/data/clubManagerVarRates.ts",
+          "kind": "import-statement",
+          "original": "@/data/clubManagerVarRates"
+        },
+        {
+          "path": "<define:import.meta.env>",
+          "kind": "import-statement",
+          "external": true
+        }
+      ],
+      "format": "esm"
+    },
+    "src/lib/soccerBootIds.ts": {
+      "bytes": 441,
+      "imports": [
+        {
+          "path": "<define:import.meta.env>",
+          "kind": "import-statement",
+          "external": true
+        }
+      ],
+      "format": "esm"
+    },
+    "src/lib/soccerBoots.ts": {
+      "bytes": 2749,
+      "imports": [
+        {
+          "path": "src/lib/soccerBootIds.ts",
+          "kind": "import-statement",
+          "original": "@/lib/soccerBootIds"
+        },
+        {
+          "path": "<define:import.meta.env>",
+          "kind": "import-statement",
+          "external": true
+        }
+      ],
+      "format": "esm"
+    },
+    "src/lib/soccerCareerAppearance.ts": {
+      "bytes": 11324,
+      "imports": [
+        {
+          "path": "src/lib/soccerBoots.ts",
+          "kind": "import-statement",
+          "original": "@/lib/soccerBoots"
+        },
+        {
+          "path": "src/lib/soccerBoots.ts",
+          "kind": "import-statement",
+          "original": "@/lib/soccerBoots"
+        },
+        {
+          "path": "<define:import.meta.env>",
+          "kind": "import-statement",
+          "external": true
+        }
+      ],
+      "format": "esm"
+    },
+    "src/lib/clubManagerJobHunt.ts": {
+      "bytes": 19164,
+      "imports": [
+        {
+          "path": "src/lib/managerOffers.ts",
+          "kind": "import-statement",
+          "original": "@/lib/managerOffers"
+        },
+        {
+          "path": "<define:import.meta.env>",
+          "kind": "import-statement",
+          "external": true
+        }
+      ],
+      "format": "esm"
+    },
+    "src/lib/clubManagerScore.ts": {
+      "bytes": 25383,
+      "imports": [
+        {
+          "path": "<define:import.meta.env>",
+          "kind": "import-statement",
+          "external": true
+        }
+      ],
+      "format": "esm"
+    },
+    "src/lib/squadShape.ts": {
+      "bytes": 8101,
+      "imports": [
+        {
+          "path": "<define:import.meta.env>",
+          "kind": "import-statement",
+          "external": true
+        }
+      ],
+      "format": "esm"
+    },
+    "src/lib/positionFit.ts": {
+      "bytes": 10271,
+      "imports": [
+        {
+          "path": "<define:import.meta.env>",
+          "kind": "import-statement",
+          "external": true
+        }
+      ],
+      "format": "esm"
+    },
+    "src/lib/calDate.ts": {
+      "bytes": 3409,
+      "imports": [
+        {
+          "path": "<define:import.meta.env>",
+          "kind": "import-statement",
+          "external": true
+        }
+      ],
+      "format": "esm"
+    },
+    "src/lib/worldNights.ts": {
+      "bytes": 7138,
+      "imports": [
+        {
+          "path": "src/lib/calDate.ts",
+          "kind": "import-statement",
+          "original": "@/lib/calDate"
+        },
+        {
+          "path": "<define:import.meta.env>",
+          "kind": "import-statement",
+          "external": true
+        }
+      ],
+      "format": "esm"
+    },
+    "src/data/cmOneOffRows.ts": {
+      "bytes": 8270,
+      "imports": [
+        {
+          "path": "<define:import.meta.env>",
+          "kind": "import-statement",
+          "external": true
+        }
+      ],
+      "format": "esm"
+    },
+    "src/lib/leagueSlate.ts": {
+      "bytes": 15627,
+      "imports": [
+        {
+          "path": "src/lib/leagueCore.ts",
+          "kind": "import-statement",
+          "original": "./leagueCore"
+        },
+        {
+          "path": "<define:import.meta.env>",
+          "kind": "import-statement",
+          "external": true
+        }
+      ],
+      "format": "esm"
+    },
+    "src/lib/uclLeaguePhase.ts": {
+      "bytes": 13749,
+      "imports": [
+        {
+          "path": "src/lib/leagueCore.ts",
+          "kind": "import-statement",
+          "original": "./leagueCore"
+        },
+        {
+          "path": "src/lib/leagueSlate.ts",
+          "kind": "import-statement",
+          "original": "./leagueSlate"
+        },
+        {
+          "path": "src/lib/keyedRng.ts",
+          "kind": "import-statement",
+          "original": "./keyedRng"
+        },
+        {
+          "path": "<define:import.meta.env>",
+          "kind": "import-statement",
+          "external": true
+        }
+      ],
+      "format": "esm"
+    },
+    "src/lib/worldCompetition.ts": {
+      "bytes": 27464,
+      "imports": [
+        {
+          "path": "src/lib/keyedRng.ts",
+          "kind": "import-statement",
+          "original": "./keyedRng"
+        },
+        {
+          "path": "src/lib/uclTieRule.ts",
+          "kind": "import-statement",
+          "original": "./uclTieRule"
+        },
+        {
+          "path": "src/lib/clubManagerUclGroups.ts",
+          "kind": "import-statement",
+          "original": "./clubManagerUclGroups"
+        },
+        {
+          "path": "src/lib/uclLeaguePhase.ts",
+          "kind": "import-statement",
+          "original": "./uclLeaguePhase"
+        },
+        {
+          "path": "<define:import.meta.env>",
+          "kind": "import-statement",
+          "external": true
+        }
+      ],
+      "format": "esm"
+    },
+    "src/lib/worldOneOffs.ts": {
+      "bytes": 17951,
+      "imports": [
+        {
+          "path": "src/data/cmOneOffRows.ts",
+          "kind": "import-statement",
+          "original": "@/data/cmOneOffRows"
+        },
+        {
+          "path": "src/lib/calDate.ts",
+          "kind": "import-statement",
+          "original": "@/lib/calDate"
+        },
+        {
+          "path": "src/lib/keyedRng.ts",
+          "kind": "import-statement",
+          "original": "@/lib/keyedRng"
+        },
+        {
+          "path": "src/lib/worldCompetition.ts",
+          "kind": "import-statement",
+          "original": "@/lib/worldCompetition"
+        },
+        {
+          "path": "<define:import.meta.env>",
+          "kind": "import-statement",
+          "external": true
+        }
+      ],
+      "format": "esm"
+    },
+    "src/lib/clubManagerGoalWeight.ts": {
+      "bytes": 1898,
+      "imports": [
+        {
+          "path": "<define:import.meta.env>",
+          "kind": "import-statement",
+          "external": true
+        }
+      ],
+      "format": "esm"
+    },
+    "src/lib/clubManagerLeagueBook.ts": {
+      "bytes": 24267,
+      "imports": [
+        {
+          "path": "src/lib/keyedRng.ts",
+          "kind": "import-statement",
+          "original": "@/lib/keyedRng"
+        },
+        {
+          "path": "src/lib/ownGoalRule.ts",
+          "kind": "import-statement",
+          "original": "@/lib/ownGoalRule"
+        },
+        {
+          "path": "src/lib/clubManagerGoalWeight.ts",
+          "kind": "import-statement",
+          "original": "@/lib/clubManagerGoalWeight"
+        },
+        {
+          "path": "<define:import.meta.env>",
+          "kind": "import-statement",
+          "external": true
+        }
+      ],
+      "format": "esm"
+    },
+    "src/lib/clubManagerLeagueBoards.ts": {
+      "bytes": 14559,
+      "imports": [
+        {
+          "path": "src/lib/clubManagerLeagueBook.ts",
+          "kind": "import-statement",
+          "original": "@/lib/clubManagerLeagueBook"
+        },
+        {
+          "path": "src/lib/clubManagerLeagueBook.ts",
+          "kind": "import-statement",
+          "original": "@/lib/clubManagerLeagueBook"
+        },
+        {
+          "path": "<define:import.meta.env>",
+          "kind": "import-statement",
+          "external": true
+        }
+      ],
+      "format": "esm"
+    },
+    "node_modules/lz-string/libs/lz-string.js": {
+      "bytes": 16032,
+      "imports": [
+        {
+          "path": "<define:import.meta.env>",
+          "kind": "import-statement",
+          "external": true
+        }
+      ],
+      "format": "cjs"
+    },
+    "src/lib/clubManagerWorldRoster.ts": {
+      "bytes": 21152,
+      "imports": [
+        {
+          "path": "node_modules/lz-string/libs/lz-string.js",
+          "kind": "import-statement",
+          "original": "lz-string"
+        },
+        {
+          "path": "<define:import.meta.env>",
+          "kind": "import-statement",
+          "external": true
+        }
+      ],
+      "format": "esm"
+    },
+    "src/data/players.ts": {
+      "bytes": 113969,
+      "imports": [
+        {
+          "path": "@/types/game",
+          "kind": "import-statement",
+          "external": true
+        },
+        {
+          "path": "<define:import.meta.env>",
+          "kind": "import-statement",
+          "external": true
+        }
+      ],
+      "format": "esm"
+    },
+    "src/data/clubManagerRosters.ts": {
+      "bytes": 276025,
+      "imports": [
+        {
+          "path": "<define:import.meta.env>",
+          "kind": "import-statement",
+          "external": true
+        }
+      ],
+      "format": "esm"
+    },
+    "src/data/clubManagerFreeAgents2026.ts": {
+      "bytes": 1495,
+      "imports": [
+        {
+          "path": "<define:import.meta.env>",
+          "kind": "import-statement",
+          "external": true
+        }
+      ],
+      "format": "esm"
+    },
+    "src/data/clubManagerALeague2026.ts": {
+      "bytes": 32647,
+      "imports": [
+        {
+          "path": "<define:import.meta.env>",
+          "kind": "import-statement",
+          "external": true
+        }
+      ],
+      "format": "esm"
+    },
+    "src/data/clubManagerRussia2026.ts": {
+      "bytes": 40325,
+      "imports": [
+        {
+          "path": "<define:import.meta.env>",
+          "kind": "import-statement",
+          "external": true
+        }
+      ],
+      "format": "esm"
+    },
+    "src/data/clubManagerWorldRosters.ts": {
+      "bytes": 4830,
+      "imports": [
+        {
+          "path": "src/data/clubManagerRosters.ts",
+          "kind": "import-statement",
+          "original": "@/data/clubManagerRosters"
+        },
+        {
+          "path": "src/data/clubManagerALeague2026.ts",
+          "kind": "import-statement",
+          "original": "@/data/clubManagerALeague2026"
+        },
+        {
+          "path": "src/data/clubManagerRussia2026.ts",
+          "kind": "import-statement",
+          "original": "@/data/clubManagerRussia2026"
+        },
+        {
+          "path": "<define:import.meta.env>",
+          "kind": "import-statement",
+          "external": true
+        }
+      ],
+      "format": "esm"
+    },
+    "src/data/clubManagerFinalTables2025_26.ts": {
+      "bytes": 20027,
+      "imports": [
+        {
+          "path": "<define:import.meta.env>",
+          "kind": "import-statement",
+          "external": true
+        }
+      ],
+      "format": "esm"
+    },
+    "src/lib/clubManagerTrajectory.ts": {
+      "bytes": 3038,
+      "imports": [
+        {
+          "path": "<define:import.meta.env>",
+          "kind": "import-statement",
+          "external": true
+        }
+      ],
+      "format": "esm"
+    },
+    "src/data/nationalities/era2020.ts": {
+      "bytes": 55043,
+      "imports": [
+        {
+          "path": "<define:import.meta.env>",
+          "kind": "import-statement",
+          "external": true
+        }
+      ],
+      "format": "esm"
+    },
+    "src/data/nationalities/era2015.ts": {
+      "bytes": 51422,
+      "imports": [
+        {
+          "path": "<define:import.meta.env>",
+          "kind": "import-statement",
+          "external": true
+        }
+      ],
+      "format": "esm"
+    },
+    "src/data/nationalities/era2010.ts": {
+      "bytes": 54112,
+      "imports": [
+        {
+          "path": "<define:import.meta.env>",
+          "kind": "import-statement",
+          "external": true
+        }
+      ],
+      "format": "esm"
+    },
+    "src/data/nationalities/era2005.ts": {
+      "bytes": 53661,
+      "imports": [
+        {
+          "path": "<define:import.meta.env>",
+          "kind": "import-statement",
+          "external": true
+        }
+      ],
+      "format": "esm"
+    },
+    "src/data/playerNationalities.ts": {
+      "bytes": 142698,
+      "imports": [
+        {
+          "path": "src/data/clubManagerALeague2026.ts",
+          "kind": "import-statement",
+          "original": "@/data/clubManagerALeague2026"
+        },
+        {
+          "path": "src/data/clubManagerRussia2026.ts",
+          "kind": "import-statement",
+          "original": "@/data/clubManagerRussia2026"
+        },
+        {
+          "path": "<define:import.meta.env>",
+          "kind": "import-statement",
+          "external": true
+        },
+        {
+          "path": "src/data/nationalities/era2020.ts",
+          "kind": "dynamic-import",
+          "original": "@/data/nationalities/era2020"
+        },
+        {
+          "path": "src/data/nationalities/era2015.ts",
+          "kind": "dynamic-import",
+          "original": "@/data/nationalities/era2015"
+        },
+        {
+          "path": "src/data/nationalities/era2010.ts",
+          "kind": "dynamic-import",
+          "original": "@/data/nationalities/era2010"
+        },
+        {
+          "path": "src/data/nationalities/era2005.ts",
+          "kind": "dynamic-import",
+          "original": "@/data/nationalities/era2005"
+        }
+      ],
+      "format": "esm"
+    },
+    "src/data/clubManagerEra2010.ts": {
+      "bytes": 107562,
+      "imports": [
+        {
+          "path": "<define:import.meta.env>",
+          "kind": "import-statement",
+          "external": true
+        }
+      ],
+      "format": "esm"
+    },
+    "src/data/clubManagerEra2015.ts": {
+      "bytes": 102476,
+      "imports": [
+        {
+          "path": "<define:import.meta.env>",
+          "kind": "import-statement",
+          "external": true
+        }
+      ],
+      "format": "esm"
+    },
+    "src/data/clubManagerEra2005.ts": {
+      "bytes": 106546,
+      "imports": [
+        {
+          "path": "<define:import.meta.env>",
+          "kind": "import-statement",
+          "external": true
+        }
+      ],
+      "format": "esm"
+    },
+    "src/data/clubManagerEra2020.ts": {
+      "bytes": 109379,
+      "imports": [
+        {
+          "path": "<define:import.meta.env>",
+          "kind": "import-statement",
+          "external": true
+        }
+      ],
+      "format": "esm"
+    },
+    "src/lib/clubManagerEras.ts": {
+      "bytes": 55905,
+      "imports": [
+        {
+          "path": "src/data/clubManagerRosters.ts",
+          "kind": "import-statement",
+          "original": "@/data/clubManagerRosters"
+        },
+        {
+          "path": "src/lib/clubManagerTrajectory.ts",
+          "kind": "import-statement",
+          "original": "@/lib/clubManagerTrajectory"
+        },
+        {
+          "path": "src/data/clubManagerWorldRosters.ts",
+          "kind": "import-statement",
+          "original": "@/data/clubManagerWorldRosters"
+        },
+        {
+          "path": "src/data/playerNationalities.ts",
+          "kind": "import-statement",
+          "original": "@/data/playerNationalities"
+        },
+        {
+          "path": "<define:import.meta.env>",
+          "kind": "import-statement",
+          "external": true
+        },
+        {
+          "path": "src/data/clubManagerEra2010.ts",
+          "kind": "dynamic-import",
+          "original": "@/data/clubManagerEra2010"
+        },
+        {
+          "path": "src/data/clubManagerEra2015.ts",
+          "kind": "dynamic-import",
+          "original": "@/data/clubManagerEra2015"
+        },
+        {
+          "path": "src/data/clubManagerEra2005.ts",
+          "kind": "dynamic-import",
+          "original": "@/data/clubManagerEra2005"
+        },
+        {
+          "path": "src/data/clubManagerEra2020.ts",
+          "kind": "dynamic-import",
+          "original": "@/data/clubManagerEra2020"
+        }
+      ],
+      "format": "esm"
+    },
+    "src/lib/clubManagerMadeUpNations.ts": {
+      "bytes": 3157,
+      "imports": [
+        {
+          "path": "src/lib/keyedRng.ts",
+          "kind": "import-statement",
+          "original": "@/lib/keyedRng"
+        },
+        {
+          "path": "<define:import.meta.env>",
+          "kind": "import-statement",
+          "external": true
+        }
+      ],
+      "format": "esm"
+    },
+    "src/lib/clubManagerFacilities.ts": {
+      "bytes": 13120,
+      "imports": [
+        {
+          "path": "src/lib/clubManager.ts",
+          "kind": "import-statement",
+          "original": "@/lib/clubManager"
+        },
+        {
+          "path": "<define:import.meta.env>",
+          "kind": "import-statement",
+          "external": true
+        }
+      ],
+      "format": "esm"
+    },
+    "src/lib/gmStaff.ts": {
+      "bytes": 38781,
+      "imports": [
+        {
+          "path": "<define:import.meta.env>",
+          "kind": "import-statement",
+          "external": true
+        }
+      ],
+      "format": "esm"
+    },
+    "src/lib/clubManagerStaff.ts": {
+      "bytes": 24289,
+      "imports": [
+        {
+          "path": "src/lib/clubManager.ts",
+          "kind": "import-statement",
+          "original": "@/lib/clubManager"
+        },
+        {
+          "path": "src/lib/gmStaff.ts",
+          "kind": "import-statement",
+          "original": "@/lib/gmStaff"
+        },
+        {
+          "path": "<define:import.meta.env>",
+          "kind": "import-statement",
+          "external": true
+        }
+      ],
+      "format": "esm"
+    },
+    "src/lib/gmXp.ts": {
+      "bytes": 22167,
+      "imports": [
+        {
+          "path": "<define:import.meta.env>",
+          "kind": "import-statement",
+          "external": true
+        }
+      ],
+      "format": "esm"
+    },
+    "src/lib/clubManagerXp.ts": {
+      "bytes": 23964,
+      "imports": [
+        {
+          "path": "src/lib/gmXp.ts",
+          "kind": "import-statement",
+          "original": "@/lib/gmXp"
+        },
+        {
+          "path": "src/lib/gmXp.ts",
+          "kind": "import-statement",
+          "original": "@/lib/gmXp"
+        },
+        {
+          "path": "<define:import.meta.env>",
+          "kind": "import-statement",
+          "external": true
+        }
+      ],
+      "format": "esm"
+    },
+    "src/lib/clubManagerMeters.ts": {
+      "bytes": 10074,
+      "imports": [
+        {
+          "path": "src/lib/clubManager.ts",
+          "kind": "import-statement",
+          "original": "@/lib/clubManager"
+        },
+        {
+          "path": "<define:import.meta.env>",
+          "kind": "import-statement",
+          "external": true
+        }
+      ],
+      "format": "esm"
+    },
+    "src/lib/clubManagerFinances.ts": {
+      "bytes": 38868,
+      "imports": [
+        {
+          "path": "src/lib/clubManager.ts",
+          "kind": "import-statement",
+          "original": "@/lib/clubManager"
+        },
+        {
+          "path": "src/lib/clubManagerFacilities.ts",
+          "kind": "import-statement",
+          "original": "@/lib/clubManagerFacilities"
+        },
+        {
+          "path": "src/lib/clubManagerStaff.ts",
+          "kind": "import-statement",
+          "original": "@/lib/clubManagerStaff"
+        },
+        {
+          "path": "src/lib/clubManagerXp.ts",
+          "kind": "import-statement",
+          "original": "@/lib/clubManagerXp"
+        },
+        {
+          "path": "src/lib/clubManagerMeters.ts",
+          "kind": "import-statement",
+          "original": "@/lib/clubManagerMeters"
+        },
+        {
+          "path": "<define:import.meta.env>",
+          "kind": "import-statement",
+          "external": true
+        }
+      ],
+      "format": "esm"
+    },
+    "src/lib/clubManagerDecisions.ts": {
+      "bytes": 26246,
+      "imports": [
+        {
+          "path": "src/lib/clubManager.ts",
+          "kind": "import-statement",
+          "original": "@/lib/clubManager"
+        },
+        {
+          "path": "src/lib/positionFit.ts",
+          "kind": "import-statement",
+          "original": "@/lib/positionFit"
+        },
+        {
+          "path": "<define:import.meta.env>",
+          "kind": "import-statement",
+          "external": true
+        }
+      ],
+      "format": "esm"
+    },
+    "src/lib/gmDealTable.ts": {
+      "bytes": 7594,
+      "imports": [
+        {
+          "path": "<define:import.meta.env>",
+          "kind": "import-statement",
+          "external": true
+        }
+      ],
+      "format": "esm"
+    },
+    "src/lib/clubManagerDeals.ts": {
+      "bytes": 21329,
+      "imports": [
+        {
+          "path": "src/lib/clubManager.ts",
+          "kind": "import-statement",
+          "original": "@/lib/clubManager"
+        },
+        {
+          "path": "src/lib/clubManagerStaff.ts",
+          "kind": "import-statement",
+          "original": "@/lib/clubManagerStaff"
+        },
+        {
+          "path": "src/lib/clubManagerXp.ts",
+          "kind": "import-statement",
+          "original": "@/lib/clubManagerXp"
+        },
+        {
+          "path": "src/lib/gmDealTable.ts",
+          "kind": "import-statement",
+          "original": "@/lib/gmDealTable"
+        },
+        {
+          "path": "src/lib/gmDealTable.ts",
+          "kind": "import-statement",
+          "original": "@/lib/gmDealTable"
+        },
+        {
+          "path": "<define:import.meta.env>",
+          "kind": "import-statement",
+          "external": true
+        }
+      ],
+      "format": "esm"
+    },
+    "src/lib/managerDifficulty.ts": {
+      "bytes": 2199,
+      "imports": [
+        {
+          "path": "<define:import.meta.env>",
+          "kind": "import-statement",
+          "external": true
+        }
+      ],
+      "format": "esm"
+    },
+    "src/lib/clubManagerStart.ts": {
+      "bytes": 17277,
+      "imports": [
+        {
+          "path": "src/lib/managerDifficulty.ts",
+          "kind": "import-statement",
+          "original": "@/lib/managerDifficulty"
+        },
+        {
+          "path": "<define:import.meta.env>",
+          "kind": "import-statement",
+          "external": true
+        }
+      ],
+      "format": "esm"
+    },
+    "src/lib/clubManagerBoardVerdict.ts": {
+      "bytes": 8029,
+      "imports": [
+        {
+          "path": "<define:import.meta.env>",
+          "kind": "import-statement",
+          "external": true
+        }
+      ],
+      "format": "esm"
+    },
+    "src/lib/clubManagerDifficulty.ts": {
+      "bytes": 9717,
+      "imports": [
+        {
+          "path": "src/lib/clubManagerStart.ts",
+          "kind": "import-statement",
+          "original": "@/lib/clubManagerStart"
+        },
+        {
+          "path": "src/lib/clubManagerBoardVerdict.ts",
+          "kind": "import-statement",
+          "original": "@/lib/clubManagerBoardVerdict"
+        },
+        {
+          "path": "<define:import.meta.env>",
+          "kind": "import-statement",
+          "external": true
+        }
+      ],
+      "format": "esm"
+    },
+    "src/lib/clubManagerSubsRule.ts": {
+      "bytes": 3778,
+      "imports": [
+        {
+          "path": "<define:import.meta.env>",
+          "kind": "import-statement",
+          "external": true
+        }
+      ],
+      "format": "esm"
+    },
+    "src/lib/clubManagerBoardAsks.ts": {
+      "bytes": 22217,
+      "imports": [
+        {
+          "path": "src/lib/clubManager.ts",
+          "kind": "import-statement",
+          "original": "@/lib/clubManager"
+        },
+        {
+          "path": "src/lib/clubManagerDifficulty.ts",
+          "kind": "import-statement",
+          "original": "@/lib/clubManagerDifficulty"
+        },
+        {
+          "path": "<define:import.meta.env>",
+          "kind": "import-statement",
+          "external": true
+        }
+      ],
+      "format": "esm"
+    },
+    "src/lib/clubManagerCalendar.ts": {
+      "bytes": 56974,
+      "imports": [
+        {
+          "path": "src/lib/clubManager.ts",
+          "kind": "import-statement",
+          "original": "@/lib/clubManager"
+        },
+        {
+          "path": "src/lib/clubManagerBoardVerdict.ts",
+          "kind": "import-statement",
+          "original": "@/lib/clubManagerBoardVerdict"
+        },
+        {
+          "path": "src/lib/clubManagerDifficulty.ts",
+          "kind": "import-statement",
+          "original": "@/lib/clubManagerDifficulty"
+        },
+        {
+          "path": "src/lib/clubManagerEras.ts",
+          "kind": "import-statement",
+          "original": "@/lib/clubManagerEras"
+        },
+        {
+          "path": "src/lib/clubManagerJobHunt.ts",
+          "kind": "import-statement",
+          "original": "@/lib/clubManagerJobHunt"
+        },
+        {
+          "path": "src/lib/clubManagerWorldRoster.ts",
+          "kind": "import-statement",
+          "original": "@/lib/clubManagerWorldRoster"
+        },
+        {
+          "path": "src/lib/calDate.ts",
+          "kind": "import-statement",
+          "original": "@/lib/calDate"
+        },
+        {
+          "path": "src/lib/calDate.ts",
+          "kind": "import-statement",
+          "original": "@/lib/calDate"
+        },
+        {
+          "path": "<define:import.meta.env>",
+          "kind": "import-statement",
+          "external": true
+        }
+      ],
+      "format": "esm"
+    },
+    "src/lib/clubManagerInternationals.ts": {
+      "bytes": 33304,
+      "imports": [
+        {
+          "path": "src/lib/clubManager.ts",
+          "kind": "import-statement",
+          "original": "@/lib/clubManager"
+        },
+        {
+          "path": "src/data/playerNationalities.ts",
+          "kind": "import-statement",
+          "original": "@/data/playerNationalities"
+        },
+        {
+          "path": "src/lib/soccerInternational.ts",
+          "kind": "import-statement",
+          "original": "@/lib/soccerInternational"
+        },
+        {
+          "path": "src/lib/clubManagerEras.ts",
+          "kind": "import-statement",
+          "original": "@/lib/clubManagerEras"
+        },
+        {
+          "path": "src/lib/clubManagerCalendar.ts",
+          "kind": "import-statement",
+          "original": "@/lib/clubManagerCalendar"
+        },
+        {
+          "path": "<define:import.meta.env>",
+          "kind": "import-statement",
+          "external": true
+        }
+      ],
+      "format": "esm"
+    },
+    "src/lib/euroAccess.ts": {
+      "bytes": 9734,
+      "imports": [
+        {
+          "path": "<define:import.meta.env>",
+          "kind": "import-statement",
+          "external": true
+        }
+      ],
+      "format": "esm"
+    },
+    "src/lib/clubManagerClock.ts": {
+      "bytes": 1838,
+      "imports": [
+        {
+          "path": "<define:import.meta.env>",
+          "kind": "import-statement",
+          "external": true
+        }
+      ],
+      "format": "esm"
+    },
+    "src/lib/clubManagerTacticsCore.ts": {
+      "bytes": 4652,
+      "imports": [
+        {
+          "path": "<define:import.meta.env>",
+          "kind": "import-statement",
+          "external": true
+        }
+      ],
+      "format": "esm"
+    },
+    "src/lib/saveFence.ts": {
+      "bytes": 6552,
+      "imports": [
+        {
+          "path": "<define:import.meta.env>",
+          "kind": "import-statement",
+          "external": true
+        }
+      ],
+      "format": "esm"
+    },
+    "src/lib/clubManager.ts": {
+      "bytes": 1245234,
+      "imports": [
+        {
+          "path": "src/lib/nameFold.ts",
+          "kind": "import-statement",
+          "original": "@/lib/nameFold"
+        },
+        {
+          "path": "src/lib/nameModeration.ts",
+          "kind": "import-statement",
+          "original": "@/lib/nameModeration"
+        },
+        {
+          "path": "src/lib/clubManagerFixtures.ts",
+          "kind": "import-statement",
+          "original": "@/lib/clubManagerFixtures"
+        },
+        {
+          "path": "src/lib/clubManagerRecords.ts",
+          "kind": "import-statement",
+          "original": "@/lib/clubManagerRecords"
+        },
+        {
+          "path": "src/lib/clubManagerVar.ts",
+          "kind": "import-statement",
+          "original": "@/lib/clubManagerVar"
+        },
+        {
+          "path": "src/lib/managerJobMarket.ts",
+          "kind": "import-statement",
+          "original": "@/lib/managerJobMarket"
+        },
+        {
+          "path": "src/lib/soccerInternational.ts",
+          "kind": "import-statement",
+          "original": "@/lib/soccerInternational"
+        },
+        {
+          "path": "src/lib/soccerCareerAppearance.ts",
+          "kind": "import-statement",
+          "original": "@/lib/soccerCareerAppearance"
+        },
+        {
+          "path": "src/lib/clubManagerJobHunt.ts",
+          "kind": "import-statement",
+          "original": "@/lib/clubManagerJobHunt"
+        },
+        {
+          "path": "src/lib/clubManagerScore.ts",
+          "kind": "import-statement",
+          "original": "@/lib/clubManagerScore"
+        },
+        {
+          "path": "src/lib/squadShape.ts",
+          "kind": "import-statement",
+          "original": "@/lib/squadShape"
+        },
+        {
+          "path": "src/lib/captaincy.ts",
+          "kind": "import-statement",
+          "original": "@/lib/captaincy"
+        },
+        {
+          "path": "src/lib/positionFit.ts",
+          "kind": "import-statement",
+          "original": "@/lib/positionFit"
+        },
+        {
+          "path": "src/lib/ownGoalRule.ts",
+          "kind": "import-statement",
+          "original": "@/lib/ownGoalRule"
+        },
+        {
+          "path": "src/lib/keyedRng.ts",
+          "kind": "import-statement",
+          "original": "@/lib/keyedRng"
+        },
+        {
+          "path": "src/lib/worldNights.ts",
+          "kind": "import-statement",
+          "original": "@/lib/worldNights"
+        },
+        {
+          "path": "src/lib/worldOneOffs.ts",
+          "kind": "import-statement",
+          "original": "@/lib/worldOneOffs"
+        },
+        {
+          "path": "src/data/cmOneOffRows.ts",
+          "kind": "import-statement",
+          "original": "@/data/cmOneOffRows"
+        },
+        {
+          "path": "src/lib/clubManagerGoalWeight.ts",
+          "kind": "import-statement",
+          "original": "@/lib/clubManagerGoalWeight"
+        },
+        {
+          "path": "src/lib/clubManagerLeagueBook.ts",
+          "kind": "import-statement",
+          "original": "@/lib/clubManagerLeagueBook"
+        },
+        {
+          "path": "src/lib/clubManagerLeagueBoards.ts",
+          "kind": "import-statement",
+          "original": "@/lib/clubManagerLeagueBoards"
+        },
+        {
+          "path": "src/lib/clubManagerWorldRoster.ts",
+          "kind": "import-statement",
+          "original": "@/lib/clubManagerWorldRoster"
+        },
+        {
+          "path": "src/data/players.ts",
+          "kind": "import-statement",
+          "original": "@/data/players"
+        },
+        {
+          "path": "src/data/clubManagerRosters.ts",
+          "kind": "import-statement",
+          "original": "@/data/clubManagerRosters"
+        },
+        {
+          "path": "src/data/clubManagerFreeAgents2026.ts",
+          "kind": "import-statement",
+          "original": "@/data/clubManagerFreeAgents2026"
+        },
+        {
+          "path": "src/data/clubManagerWorldRosters.ts",
+          "kind": "import-statement",
+          "original": "@/data/clubManagerWorldRosters"
+        },
+        {
+          "path": "src/data/clubManagerFinalTables2025_26.ts",
+          "kind": "import-statement",
+          "original": "@/data/clubManagerFinalTables2025_26"
+        },
+        {
+          "path": "src/data/clubRivalries.ts",
+          "kind": "import-statement",
+          "original": "@/data/clubRivalries"
+        },
+        {
+          "path": "src/lib/clubManagerEras.ts",
+          "kind": "import-statement",
+          "original": "@/lib/clubManagerEras"
+        },
+        {
+          "path": "src/lib/clubManagerMadeUpNations.ts",
+          "kind": "import-statement",
+          "original": "@/lib/clubManagerMadeUpNations"
+        },
+        {
+          "path": "src/data/playerNationalities.ts",
+          "kind": "import-statement",
+          "original": "@/data/playerNationalities"
+        },
+        {
+          "path": "src/lib/clubManagerFacilities.ts",
+          "kind": "import-statement",
+          "original": "@/lib/clubManagerFacilities"
+        },
+        {
+          "path": "src/lib/clubManagerFinances.ts",
+          "kind": "import-statement",
+          "original": "@/lib/clubManagerFinances"
+        },
+        {
+          "path": "src/lib/clubManagerDecisions.ts",
+          "kind": "import-statement",
+          "original": "@/lib/clubManagerDecisions"
+        },
+        {
+          "path": "src/lib/clubManagerStaff.ts",
+          "kind": "import-statement",
+          "original": "@/lib/clubManagerStaff"
+        },
+        {
+          "path": "src/lib/clubManagerDeals.ts",
+          "kind": "import-statement",
+          "original": "@/lib/clubManagerDeals"
+        },
+        {
+          "path": "src/lib/clubManagerXp.ts",
+          "kind": "import-statement",
+          "original": "@/lib/clubManagerXp"
+        },
+        {
+          "path": "src/lib/clubManagerStart.ts",
+          "kind": "import-statement",
+          "original": "@/lib/clubManagerStart"
+        },
+        {
+          "path": "src/lib/clubManagerDifficulty.ts",
+          "kind": "import-statement",
+          "original": "@/lib/clubManagerDifficulty"
+        },
+        {
+          "path": "src/lib/clubManagerSubsRule.ts",
+          "kind": "import-statement",
+          "original": "@/lib/clubManagerSubsRule"
+        },
+        {
+          "path": "src/lib/clubManagerSubsRule.ts",
+          "kind": "import-statement",
+          "original": "@/lib/clubManagerSubsRule"
+        },
+        {
+          "path": "src/lib/clubManagerBoardAsks.ts",
+          "kind": "import-statement",
+          "original": "@/lib/clubManagerBoardAsks"
+        },
+        {
+          "path": "src/lib/clubManagerBoardVerdict.ts",
+          "kind": "import-statement",
+          "original": "@/lib/clubManagerBoardVerdict"
+        },
+        {
+          "path": "src/lib/clubManagerBoardVerdict.ts",
+          "kind": "import-statement",
+          "original": "@/lib/clubManagerBoardVerdict"
+        },
+        {
+          "path": "src/lib/clubManagerInternationals.ts",
+          "kind": "import-statement",
+          "original": "@/lib/clubManagerInternationals"
+        },
+        {
+          "path": "src/lib/clubManagerCalendar.ts",
+          "kind": "import-statement",
+          "original": "@/lib/clubManagerCalendar"
+        },
+        {
+          "path": "src/lib/clubManagerUclGroups.ts",
+          "kind": "import-statement",
+          "original": "@/lib/clubManagerUclGroups"
+        },
+        {
+          "path": "src/lib/uclTieRule.ts",
+          "kind": "import-statement",
+          "original": "@/lib/uclTieRule"
+        },
+        {
+          "path": "src/lib/worldCompetition.ts",
+          "kind": "import-statement",
+          "original": "@/lib/worldCompetition"
+        },
+        {
+          "path": "src/lib/euroAccess.ts",
+          "kind": "import-statement",
+          "original": "@/lib/euroAccess"
+        },
+        {
+          "path": "src/lib/uclLeaguePhase.ts",
+          "kind": "import-statement",
+          "original": "@/lib/uclLeaguePhase"
+        },
+        {
+          "path": "src/lib/clubManagerClock.ts",
+          "kind": "import-statement",
+          "original": "@/lib/clubManagerClock"
+        },
+        {
+          "path": "src/lib/clubManagerTacticsCore.ts",
+          "kind": "import-statement",
+          "original": "@/lib/clubManagerTacticsCore"
+        },
+        {
+          "path": "src/lib/clubManagerClock.ts",
+          "kind": "import-statement",
+          "original": "@/lib/clubManagerClock"
+        },
+        {
+          "path": "src/lib/clubManagerEras.ts",
+          "kind": "import-statement",
+          "original": "@/lib/clubManagerEras"
+        },
+        {
+          "path": "src/lib/clubManagerEras.ts",
+          "kind": "import-statement",
+          "original": "@/lib/clubManagerEras"
+        },
+        {
+          "path": "src/lib/saveFence.ts",
+          "kind": "import-statement",
+          "original": "@/lib/saveFence"
+        },
+        {
+          "path": "<define:import.meta.env>",
+          "kind": "import-statement",
+          "external": true
+        }
+      ],
+      "format": "esm"
+    },
+    "src/lib/managerJobMarket.ts": {
+      "bytes": 3955,
+      "imports": [
+        {
+          "path": "src/lib/clubManager.ts",
+          "kind": "import-statement",
+          "original": "./clubManager"
+        },
+        {
+          "path": "src/lib/managerOffers.ts",
+          "kind": "import-statement",
+          "original": "./managerOffers"
+        },
+        {
+          "path": "<define:import.meta.env>",
+          "kind": "import-statement",
+          "external": true
+        }
+      ],
+      "format": "esm"
+    },
+    "src/lib/soccerCareerEngine.ts": {
+      "bytes": 552324,
+      "imports": [
+        {
+          "path": "src/lib/careerChanceWheel.ts",
+          "kind": "import-statement",
+          "original": "@/lib/careerChanceWheel"
+        },
+        {
+          "path": "src/lib/captaincy.ts",
+          "kind": "import-statement",
+          "original": "@/lib/captaincy"
+        },
+        {
+          "path": "src/lib/soccerDiscipline.ts",
+          "kind": "import-statement",
+          "original": "@/lib/soccerDiscipline"
+        },
+        {
+          "path": "src/lib/soccerCareerRole.ts",
+          "kind": "import-statement",
+          "original": "./soccerCareerRole"
+        },
+        {
+          "path": "src/lib/soccerCareerMilestone.ts",
+          "kind": "import-statement",
+          "original": "./soccerCareerMilestone"
+        },
+        {
+          "path": "src/lib/soccerCareerContracts.ts",
+          "kind": "import-statement",
+          "original": "@/lib/soccerCareerContracts"
+        },
+        {
+          "path": "src/lib/soccerCareerProgramme.ts",
+          "kind": "import-statement",
+          "original": "./soccerCareerProgramme"
+        },
+        {
+          "path": "src/lib/soccerCareerLoyalty.ts",
+          "kind": "import-statement",
+          "original": "./soccerCareerLoyalty"
+        },
+        {
+          "path": "src/lib/soccerCareerFarewell.ts",
+          "kind": "import-statement",
+          "original": "./soccerCareerFarewell"
+        },
+        {
+          "path": "src/lib/soccerCareerTransferBrief.ts",
+          "kind": "import-statement",
+          "original": "./soccerCareerTransferBrief"
+        },
+        {
+          "path": "src/lib/soccerCareerLeagueWorld.ts",
+          "kind": "import-statement",
+          "original": "./soccerCareerLeagueWorld"
+        },
+        {
+          "path": "src/lib/soccerCareerAmbitions.ts",
+          "kind": "import-statement",
+          "original": "./soccerCareerAmbitions"
+        },
+        {
+          "path": "src/lib/soccerCareerSelection.ts",
+          "kind": "import-statement",
+          "original": "./soccerCareerSelection"
+        },
+        {
+          "path": "src/lib/soccerCareerPreparation.ts",
+          "kind": "import-statement",
+          "original": "./soccerCareerPreparation"
+        },
+        {
+          "path": "src/lib/soccerCareerMentor.ts",
+          "kind": "import-statement",
+          "original": "./soccerCareerMentor"
+        },
+        {
+          "path": "src/lib/soccerCareerPress.ts",
+          "kind": "import-statement",
+          "original": "./soccerCareerPress"
+        },
+        {
+          "path": "src/lib/uclFormatHistory.ts",
+          "kind": "import-statement",
+          "original": "@/lib/uclFormatHistory"
+        },
+        {
+          "path": "src/lib/uclTieRule.ts",
+          "kind": "import-statement",
+          "original": "@/lib/uclTieRule"
+        },
+        {
+          "path": "src/lib/soccerCareerContinental.ts",
+          "kind": "import-statement",
+          "original": "./soccerCareerContinental"
+        },
+        {
+          "path": "src/data/soccerCareerClubPool.ts",
+          "kind": "import-statement",
+          "original": "@/data/soccerCareerClubPool"
+        },
+        {
+          "path": "src/lib/careerEras.ts",
+          "kind": "import-statement",
+          "original": "./careerEras"
+        },
+        {
+          "path": "src/lib/soccerCareerLeague.ts",
+          "kind": "import-statement",
+          "original": "./soccerCareerLeague"
+        },
+        {
+          "path": "src/lib/soccerOwnerGate.ts",
+          "kind": "import-statement",
+          "original": "./soccerOwnerGate"
+        },
+        {
+          "path": "src/lib/soccerOwnerGate.ts",
+          "kind": "import-statement",
+          "original": "./soccerOwnerGate"
+        },
+        {
+          "path": "src/lib/soccerCareerDerby.ts",
+          "kind": "import-statement",
+          "original": "./soccerCareerDerby"
+        },
+        {
+          "path": "src/lib/soccerCareerCup.ts",
+          "kind": "import-statement",
+          "original": "./soccerCareerCup"
+        },
+        {
+          "path": "src/lib/soccerPhone.ts",
+          "kind": "import-statement",
+          "original": "./soccerPhone"
+        },
+        {
+          "path": "src/lib/careerForm.ts",
+          "kind": "import-statement",
+          "original": "./careerForm"
+        },
+        {
+          "path": "src/lib/soccerSeasonAwards.ts",
+          "kind": "import-statement",
+          "original": "./soccerSeasonAwards"
+        },
+        {
+          "path": "src/lib/soccerMoney.ts",
+          "kind": "import-statement",
+          "original": "./soccerMoney"
+        },
+        {
+          "path": "src/lib/careerInbox.ts",
+          "kind": "import-statement",
+          "original": "./careerInbox"
+        },
+        {
+          "path": "src/lib/careerRivalryEvents.ts",
+          "kind": "import-statement",
+          "original": "./careerRivalryEvents"
+        },
+        {
+          "path": "src/lib/careerRivalryChoices.ts",
+          "kind": "import-statement",
+          "original": "./careerRivalryChoices"
+        },
+        {
+          "path": "src/lib/intlNames.ts",
+          "kind": "import-statement",
+          "original": "./intlNames"
+        },
+        {
+          "path": "src/lib/soccerCurrency.ts",
+          "kind": "import-statement",
+          "original": "./soccerCurrency"
+        },
+        {
+          "path": "src/lib/soccerCareerToManager.ts",
+          "kind": "import-statement",
+          "original": "./soccerCareerToManager"
+        },
+        {
+          "path": "src/lib/managerOffers.ts",
+          "kind": "import-statement",
+          "original": "./managerOffers"
+        },
+        {
+          "path": "src/lib/soccerCareerLife.ts",
+          "kind": "import-statement",
+          "original": "./soccerCareerLife"
+        },
+        {
+          "path": "src/lib/careerSocial.ts",
+          "kind": "import-statement",
+          "original": "./careerSocial"
+        },
+        {
+          "path": "src/lib/careerBrand.ts",
+          "kind": "import-statement",
+          "original": "./careerBrand"
+        },
+        {
+          "path": "src/lib/soccerCareerBrand.ts",
+          "kind": "import-statement",
+          "original": "./soccerCareerBrand"
+        },
+        {
+          "path": "src/lib/soccerCareerAttributes.ts",
+          "kind": "import-statement",
+          "original": "./soccerCareerAttributes"
+        },
+        {
+          "path": "src/lib/soccerCareerCorruption.ts",
+          "kind": "import-statement",
+          "original": "./soccerCareerCorruption"
+        },
+        {
+          "path": "src/lib/soccerCareerRealism.ts",
+          "kind": "import-statement",
+          "original": "./soccerCareerRealism"
+        },
+        {
+          "path": "src/lib/soccerCareerCritic.ts",
+          "kind": "import-statement",
+          "original": "./soccerCareerCritic"
+        },
+        {
+          "path": "src/lib/soccerCareerBoot.ts",
+          "kind": "import-statement",
+          "original": "./soccerCareerBoot"
+        },
+        {
+          "path": "src/lib/soccerCareerAcademy.ts",
+          "kind": "import-statement",
+          "original": "./soccerCareerAcademy"
+        },
+        {
+          "path": "src/lib/season/momentsSave.ts",
+          "kind": "import-statement",
+          "original": "./season/momentsSave"
+        },
+        {
+          "path": "src/lib/soccerInternational.ts",
+          "kind": "import-statement",
+          "original": "./soccerInternational"
+        },
+        {
+          "path": "src/lib/soccerInternationalSquads.ts",
+          "kind": "import-statement",
+          "original": "./soccerInternationalSquads"
+        },
+        {
+          "path": "src/lib/soccerInternational.ts",
+          "kind": "import-statement",
+          "original": "./soccerInternational"
+        },
+        {
+          "path": "src/lib/careerEventDeck.ts",
+          "kind": "import-statement",
+          "original": "./careerEventDeck"
+        },
+        {
+          "path": "src/lib/keyedRng.ts",
+          "kind": "import-statement",
+          "original": "./keyedRng"
+        },
+        {
+          "path": "src/lib/soccerWorldTruth.ts",
+          "kind": "import-statement",
+          "original": "./soccerWorldTruth"
+        },
+        {
+          "path": "src/lib/soccerCareerMilestone.ts",
+          "kind": "import-statement",
+          "original": "./soccerCareerMilestone"
+        },
+        {
+          "path": "src/lib/soccerDeckGate.ts",
+          "kind": "import-statement",
+          "original": "./soccerDeckGate"
+        },
+        {
+          "path": "src/lib/soccerCareerBrand.ts",
+          "kind": "import-statement",
+          "original": "./soccerCareerBrand"
+        },
+        {
+          "path": "src/lib/careerAwardsNight.ts",
+          "kind": "import-statement",
+          "original": "./careerAwardsNight"
+        },
+        {
+          "path": "<define:import.meta.env>",
+          "kind": "import-statement",
+          "external": true
+        },
+        {
+          "path": "src/lib/managerJobMarket.ts",
+          "kind": "dynamic-import",
+          "original": "./managerJobMarket"
+        }
+      ],
+      "format": "esm"
+    },
+    "src/lib/soccerCareerSave.ts": {
+      "bytes": 6287,
+      "imports": [
+        {
+          "path": "node_modules/lz-string/libs/lz-string.js",
+          "kind": "import-statement",
+          "original": "lz-string"
+        },
+        {
+          "path": "<define:import.meta.env>",
+          "kind": "import-statement",
+          "external": true
+        }
+      ],
+      "format": "esm"
+    },
+    "node_modules/react/cjs/react.production.min.js": {
+      "bytes": 6930,
+      "imports": [
+        {
+          "path": "<define:import.meta.env>",
+          "kind": "import-statement",
+          "external": true
+        }
+      ],
+      "format": "cjs"
+    },
+    "node_modules/react/cjs/react.development.js": {
+      "bytes": 87593,
+      "imports": [
+        {
+          "path": "<define:import.meta.env>",
+          "kind": "import-statement",
+          "external": true
+        }
+      ],
+      "format": "cjs"
+    },
+    "node_modules/react/index.js": {
+      "bytes": 190,
+      "imports": [
+        {
+          "path": "<define:import.meta.env>",
+          "kind": "import-statement",
+          "external": true
+        },
+        {
+          "path": "node_modules/react/cjs/react.production.min.js",
+          "kind": "require-call",
+          "original": "./cjs/react.production.min.js"
+        },
+        {
+          "path": "node_modules/react/cjs/react.development.js",
+          "kind": "require-call",
+          "original": "./cjs/react.development.js"
+        }
+      ],
+      "format": "cjs"
+    },
+    "src/components/career-moments/useCareerMoment.ts": {
+      "bytes": 3945,
+      "imports": [
+        {
+          "path": "node_modules/react/index.js",
+          "kind": "import-statement",
+          "original": "react"
+        },
+        {
+          "path": "<define:import.meta.env>",
+          "kind": "import-statement",
+          "external": true
+        }
+      ],
+      "format": "esm"
+    },
+    "src/components/soccer-career/careerMoments.ts": {
+      "bytes": 6752,
+      "imports": [
+        {
+          "path": "src/components/career-moments/useCareerMoment.ts",
+          "kind": "import-statement",
+          "original": "@/components/career-moments/useCareerMoment"
+        },
+        {
+          "path": "src/components/career-moments/useCareerMoment.ts",
+          "kind": "import-statement",
+          "original": "@/components/career-moments/useCareerMoment"
+        },
+        {
+          "path": "<define:import.meta.env>",
+          "kind": "import-statement",
+          "external": true
+        }
+      ],
+      "format": "esm"
+    },
+    "<stdin>": {
+      "bytes": 232,
+      "imports": [
+        {
+          "path": "src/lib/soccerCareerEngine.ts",
+          "kind": "import-statement",
+          "original": "./src/lib/soccerCareerEngine"
+        },
+        {
+          "path": "src/lib/soccerCareerSave.ts",
+          "kind": "import-statement",
+          "original": "./src/lib/soccerCareerSave"
+        },
+        {
+          "path": "src/data/soccerCareerClubPool.ts",
+          "kind": "import-statement",
+          "original": "./src/data/soccerCareerClubPool"
+        },
+        {
+          "path": "src/components/soccer-career/careerMoments.ts",
+          "kind": "import-statement",
+          "original": "./src/components/soccer-career/careerMoments"
+        },
+        {
+          "path": "<define:import.meta.env>",
+          "kind": "import-statement",
+          "external": true
+        }
+      ],
+      "format": "esm"
+    }
+  },
+  "outputs": {
+    "../../_temp/rc-out/full/centre-focus/oracle.cjs": {
+      "imports": [],
+      "exports": [],
+      "entryPoint": "<stdin>",
+      "inputs": {
+        "<define:import.meta.env>": {
+          "bytesInOutput": 83
+        },
+        "src/lib/careerChanceWheel.ts": {
+          "bytesInOutput": 349
+        },
+        "src/lib/captaincy.ts": {
+          "bytesInOutput": 197
+        },
+        "src/lib/soccerDiscipline.ts": {
+          "bytesInOutput": 420
+        },
+        "src/lib/soccerCareerRole.ts": {
+          "bytesInOutput": 1988
+        },
+        "src/lib/soccerCareerMilestone.ts": {
+          "bytesInOutput": 2461
+        },
+        "src/lib/soccerCareerLifeConsequences.ts": {
+          "bytesInOutput": 1664
+        },
+        "src/lib/soccerCareerContracts.ts": {
+          "bytesInOutput": 2370
+        },
+        "src/lib/soccerCareerRoutineEvents.ts": {
+          "bytesInOutput": 7197
+        },
+        "src/lib/careerIdentity.ts": {
+          "bytesInOutput": 1184
+        },
+        "src/lib/soccerCareerLife.ts": {
+          "bytesInOutput": 125849
+        },
+        "src/lib/soccerCareerLoyalty.ts": {
+          "bytesInOutput": 11257
+        },
+        "src/lib/soccerCareerProgramme.ts": {
+          "bytesInOutput": 15257
+        },
+        "src/lib/soccerCareerFarewell.ts": {
+          "bytesInOutput": 4434
+        },
+        "src/data/soccerCareerClubPool.ts": {
+          "bytesInOutput": 50604
+        },
+        "src/data/soccerCareerLowerClubs.ts": {
+          "bytesInOutput": 938
+        },
+        "src/data/clubRivalries.ts": {
+          "bytesInOutput": 39331
+        },
+        "src/lib/keyedRng.ts": {
+          "bytesInOutput": 465
+        },
+        "src/lib/soccerCareerLeagueWorld.ts": {
+          "bytesInOutput": 10036
+        },
+        "src/lib/soccerCareerTransferBrief.ts": {
+          "bytesInOutput": 7925
+        },
+        "src/lib/soccerCareerAmbitions.ts": {
+          "bytesInOutput": 2070
+        },
+        "src/lib/soccerCareerSelection.ts": {
+          "bytesInOutput": 1739
+        },
+        "src/lib/soccerCareerPreparation.ts": {
+          "bytesInOutput": 2470
+        },
+        "src/lib/intlNames.ts": {
+          "bytesInOutput": 18743
+        },
+        "src/lib/soccerCareerMentor.ts": {
+          "bytesInOutput": 5327
+        },
+        "src/lib/soccerCareerPress.ts": {
+          "bytesInOutput": 6430
+        },
+        "src/lib/uclFormatHistory.ts": {
+          "bytesInOutput": 8908
+        },
+        "src/lib/uclTieRule.ts": {
+          "bytesInOutput": 791
+        },
+        "src/lib/intlFormatHistory.ts": {
+          "bytesInOutput": 13673
+        },
+        "src/lib/soccerInternational.ts": {
+          "bytesInOutput": 25266
+        },
+        "src/lib/careerEras.ts": {
+          "bytesInOutput": 90597
+        },
+        "src/lib/clubManagerUclGroups.ts": {
+          "bytesInOutput": 4201
+        },
+        "src/lib/soccerCareerContinental.ts": {
+          "bytesInOutput": 28724
+        },
+        "src/data/careerLeagueSeasons.ts": {
+          "bytesInOutput": 78403
+        },
+        "src/data/leagueOddFormats.ts": {
+          "bytesInOutput": 748
+        },
+        "src/lib/soccerCareerLeague.ts": {
+          "bytesInOutput": 16167
+        },
+        "src/lib/soccerCareerOwner.ts": {
+          "bytesInOutput": 12430
+        },
+        "src/lib/soccerOwnerGate.ts": {
+          "bytesInOutput": 852
+        },
+        "src/lib/soccerCareerDerby.ts": {
+          "bytesInOutput": 9295
+        },
+        "src/lib/soccerCareerCup.ts": {
+          "bytesInOutput": 17801
+        },
+        "src/lib/soccerWorldTruth.ts": {
+          "bytesInOutput": 4104
+        },
+        "src/lib/soccerPhone.ts": {
+          "bytesInOutput": 85823
+        },
+        "src/lib/careerForm.ts": {
+          "bytesInOutput": 809
+        },
+        "src/lib/awardDraw.ts": {
+          "bytesInOutput": 675
+        },
+        "src/lib/soccerSeasonAwards.ts": {
+          "bytesInOutput": 2903
+        },
+        "src/lib/careerMoney.ts": {
+          "bytesInOutput": 16060
+        },
+        "src/lib/soccerMoney.ts": {
+          "bytesInOutput": 1228
+        },
+        "src/lib/careerInbox.ts": {
+          "bytesInOutput": 4030
+        },
+        "src/lib/careerRivalryEvents.ts": {
+          "bytesInOutput": 1133
+        },
+        "src/lib/careerRivalryChoices.ts": {
+          "bytesInOutput": 449
+        },
+        "src/lib/soccerCurrency.ts": {
+          "bytesInOutput": 2000
+        },
+        "src/lib/managerOffers.ts": {
+          "bytesInOutput": 4937
+        },
+        "src/lib/soccerCareerToManager.ts": {
+          "bytesInOutput": 1736
+        },
+        "src/lib/careerSocial.ts": {
+          "bytesInOutput": 1853
+        },
+        "src/lib/careerBrand.ts": {
+          "bytesInOutput": 2361
+        },
+        "src/lib/soccerCareerBrand.ts": {
+          "bytesInOutput": 7091
+        },
+        "src/lib/soccerCareerAttributes.ts": {
+          "bytesInOutput": 12717
+        },
+        "src/lib/soccerCareerCorruption.ts": {
+          "bytesInOutput": 35541
+        },
+        "src/lib/soccerCareerRealismA.ts": {
+          "bytesInOutput": 100864
+        },
+        "src/lib/soccerCareerRealismB.ts": {
+          "bytesInOutput": 112961
+        },
+        "src/lib/soccerCareerRealism.ts": {
+          "bytesInOutput": 293
+        },
+        "src/lib/careerCritic.ts": {
+          "bytesInOutput": 3659
+        },
+        "src/lib/soccerCareerCritic.ts": {
+          "bytesInOutput": 6840
+        },
+        "src/lib/soccerCareerBoot.ts": {
+          "bytesInOutput": 3623
+        },
+        "src/lib/soccerCareerAcademy.ts": {
+          "bytesInOutput": 1261
+        },
+        "src/lib/season/momentsSave.ts": {
+          "bytesInOutput": 2030
+        },
+        "src/data/nationalPools.ts": {
+          "bytesInOutput": 290408
+        },
+        "src/lib/soccerInternationalSquads.ts": {
+          "bytesInOutput": 8301
+        },
+        "src/lib/careerEventDeck.ts": {
+          "bytesInOutput": 1118
+        },
+        "src/lib/soccerDeckGate.ts": {
+          "bytesInOutput": 354
+        },
+        "src/lib/careerAwardsNight.ts": {
+          "bytesInOutput": 4338
+        },
+        "src/lib/nameFold.ts": {
+          "bytesInOutput": 653
+        },
+        "src/lib/nameModeration.ts": {
+          "bytesInOutput": 3464
+        },
+        "src/data/clubManagerPremierFixtures2026.ts": {
+          "bytesInOutput": 31374
+        },
+        "src/lib/clubManagerFixtures.ts": {
+          "bytesInOutput": 252
+        },
+        "src/lib/clubManagerRecords.ts": {
+          "bytesInOutput": 119
+        },
+        "src/data/clubManagerVarRates.ts": {
+          "bytesInOutput": 122
+        },
+        "src/lib/clubManagerVar.ts": {
+          "bytesInOutput": 164
+        },
+        "src/lib/soccerBootIds.ts": {
+          "bytesInOutput": 539
+        },
+        "src/lib/soccerBoots.ts": {
+          "bytesInOutput": 2643
+        },
+        "src/lib/soccerCareerAppearance.ts": {
+          "bytesInOutput": 2670
+        },
+        "src/lib/clubManagerJobHunt.ts": {
+          "bytesInOutput": 145
+        },
+        "src/lib/clubManagerScore.ts": {
+          "bytesInOutput": 115
+        },
+        "src/lib/squadShape.ts": {
+          "bytesInOutput": 2900
+        },
+        "src/lib/positionFit.ts": {
+          "bytesInOutput": 105
+        },
+        "src/lib/ownGoalRule.ts": {
+          "bytesInOutput": 126
+        },
+        "src/lib/calDate.ts": {
+          "bytesInOutput": 97
+        },
+        "src/lib/worldNights.ts": {
+          "bytesInOutput": 125
+        },
+        "src/data/cmOneOffRows.ts": {
+          "bytesInOutput": 108
+        },
+        "src/lib/leagueCore.ts": {
+          "bytesInOutput": 103
+        },
+        "src/lib/leagueSlate.ts": {
+          "bytesInOutput": 128
+        },
+        "src/lib/uclLeaguePhase.ts": {
+          "bytesInOutput": 731
+        },
+        "src/lib/worldCompetition.ts": {
+          "bytesInOutput": 219
+        },
+        "src/lib/worldOneOffs.ts": {
+          "bytesInOutput": 202
+        },
+        "src/lib/clubManagerGoalWeight.ts": {
+          "bytesInOutput": 125
+        },
+        "src/lib/clubManagerLeagueBook.ts": {
+          "bytesInOutput": 204
+        },
+        "src/lib/clubManagerLeagueBoards.ts": {
+          "bytesInOutput": 197
+        },
+        "node_modules/lz-string/libs/lz-string.js": {
+          "bytesInOutput": 18088
+        },
+        "src/lib/clubManagerWorldRoster.ts": {
+          "bytesInOutput": 205
+        },
+        "src/data/players.ts": {
+          "bytesInOutput": 98
+        },
+        "src/data/clubManagerRosters.ts": {
+          "bytesInOutput": 297945
+        },
+        "src/data/clubManagerFreeAgents2026.ts": {
+          "bytesInOutput": 134
+        },
+        "src/data/clubManagerALeague2026.ts": {
+          "bytesInOutput": 20914
+        },
+        "src/data/clubManagerRussia2026.ts": {
+          "bytesInOutput": 27526
+        },
+        "src/data/clubManagerWorldRosters.ts": {
+          "bytesInOutput": 992
+        },
+        "src/data/clubManagerFinalTables2025_26.ts": {
+          "bytesInOutput": 142
+        },
+        "src/lib/clubManagerTrajectory.ts": {
+          "bytesInOutput": 125
+        },
+        "src/data/playerNationalities.ts": {
+          "bytesInOutput": 191
+        },
+        "src/lib/clubManagerEras.ts": {
+          "bytesInOutput": 7252
+        },
+        "src/lib/clubManagerMadeUpNations.ts": {
+          "bytesInOutput": 152
+        },
+        "src/lib/clubManagerFacilities.ts": {
+          "bytesInOutput": 149
+        },
+        "src/lib/gmStaff.ts": {
+          "bytesInOutput": 97
+        },
+        "src/lib/clubManagerStaff.ts": {
+          "bytesInOutput": 159
+        },
+        "src/lib/gmXp.ts": {
+          "bytesInOutput": 380
+        },
+        "src/lib/clubManagerXp.ts": {
+          "bytesInOutput": 426
+        },
+        "src/lib/clubManagerMeters.ts": {
+          "bytesInOutput": 141
+        },
+        "src/lib/clubManagerFinances.ts": {
+          "bytesInOutput": 264
+        },
+        "src/lib/clubManagerDecisions.ts": {
+          "bytesInOutput": 8393
+        },
+        "src/lib/gmDealTable.ts": {
+          "bytesInOutput": 105
+        },
+        "src/lib/clubManagerDeals.ts": {
+          "bytesInOutput": 242
+        },
+        "src/lib/managerDifficulty.ts": {
+          "bytesInOutput": 117
+        },
+        "src/lib/clubManagerStart.ts": {
+          "bytesInOutput": 1596
+        },
+        "src/lib/clubManagerBoardVerdict.ts": {
+          "bytesInOutput": 129
+        },
+        "src/lib/clubManagerDifficulty.ts": {
+          "bytesInOutput": 190
+        },
+        "src/lib/clubManagerSubsRule.ts": {
+          "bytesInOutput": 121
+        },
+        "src/lib/clubManagerBoardAsks.ts": {
+          "bytesInOutput": 181
+        },
+        "src/lib/clubManagerCalendar.ts": {
+          "bytesInOutput": 349
+        },
+        "src/lib/clubManagerInternationals.ts": {
+          "bytesInOutput": 281
+        },
+        "src/lib/euroAccess.ts": {
+          "bytesInOutput": 103
+        },
+        "src/lib/clubManagerClock.ts": {
+          "bytesInOutput": 115
+        },
+        "src/lib/clubManagerTacticsCore.ts": {
+          "bytesInOutput": 127
+        },
+        "src/lib/saveFence.ts": {
+          "bytesInOutput": 2162
+        },
+        "src/lib/clubManager.ts": {
+          "bytesInOutput": 108964
+        },
+        "src/lib/managerJobMarket.ts": {
+          "bytesInOutput": 1633
+        },
+        "src/lib/soccerCareerEngine.ts": {
+          "bytesInOutput": 409011
+        },
+        "node_modules/react/cjs/react.production.min.js": {
+          "bytesInOutput": 9706
+        },
+        "node_modules/react/cjs/react.development.js": {
+          "bytesInOutput": 77185
+        },
+        "node_modules/react/index.js": {
+          "bytesInOutput": 324
+        },
+        "<stdin>": {
+          "bytesInOutput": 353
+        },
+        "src/lib/soccerCareerSave.ts": {
+          "bytesInOutput": 5891
+        },
+        "src/components/soccer-career/careerMoments.ts": {
+          "bytesInOutput": 1708
+        },
+        "src/components/career-moments/useCareerMoment.ts": {
+          "bytesInOutput": 212
+        }
+      },
+      "bytes": 2409543
+    }
+  }
+}

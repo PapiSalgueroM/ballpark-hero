@@ -1,0 +1,14 @@
+{
+  "id": "restored-compile",
+  "command": "/opt/hostedtoolcache/node/24.22.1/x64/bin/node",
+  "args": [
+    "scripts/qa/playScCentreFocus.mjs",
+    "compile"
+  ],
+  "cwd": "/home/runner/work/_temp/sc-centre-focus-matched-41137330144-a1",
+  "start": "2026-10-30T22:26:04.218Z",
+  "end": "2026-10-30T22:26:36.736Z",
+  "raw": 0,
+  "signal": null,
+  "error": null
+}

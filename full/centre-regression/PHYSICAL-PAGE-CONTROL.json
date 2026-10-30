@@ -1,0 +1,19 @@
+{
+  "fixed": {
+    "gitBlob": "2dc4cd701dc930106d58a1150c2667eebea171ae",
+    "sha256": "6e489232b929a5d54701a896cb48ba1d7c18b6cd42fa1d53a467e47f14e472b2",
+    "bytes": 284904
+  },
+  "original": {
+    "gitBlob": "70e1f27988ec3891a15a5260282dfe9fd1502f18",
+    "sha256": "ddc1056c3606f3f4bfac4e8bd257e8f6087b94b5dd8592e6f3ae3b7dee46b1a2",
+    "bytes": 283915
+  },
+  "wholeBody": true,
+  "resumeHeld": {
+    "gitBlob": "2ba957977bfb1e80bf3a179f36564f5706bd2fb2",
+    "sha256": "81876bdad5c4d01396c9843a81fac191ef1acf5244baf52166e79860dee1f56c",
+    "bytes": 2554
+  },
+  "noResumeRuntimeClaim": true
+}

@@ -1,0 +1,1167 @@
+{
+  "seed": 30,
+  "value": {
+    "initial": {
+      "playerName": "League Release",
+      "nationality": "France",
+      "position": "CM",
+      "era": "2020s",
+      "age": 16,
+      "potential": 60,
+      "potentialEarned": 0,
+      "eliteStreak": 0,
+      "startingOverall": 42,
+      "physique": {
+        "heightCm": 180,
+        "weightKg": 75
+      },
+      "attrShape": {},
+      "karma": 50,
+      "phoneUsedIds": [
+        "kids_camp"
+      ],
+      "phoneInbox": [
+        {
+          "id": "kids_camp-2025",
+          "defId": "kids_camp",
+          "from": "Community team",
+          "emoji": "⚽",
+          "text": "Summer kids camp needs a surprise guest coach for a morning. No fee, just chaos and juice boxes.",
+          "year": 2025,
+          "choices": [
+            {
+              "label": "Do the full morning",
+              "reply": "I'm in. Someone else does the juice run though",
+              "karma": 8,
+              "popularity": 3,
+              "morale": 3
+            },
+            {
+              "label": "Send signed balls instead",
+              "reply": "Can't make it, sending a box of signed balls",
+              "karma": 3
+            }
+          ]
+        }
+      ],
+      "currentClub": "Nice Youth",
+      "currentClubCountry": "France",
+      "currentClubTier": 3,
+      "currentClubColor": "#CC0000",
+      "currentLeague": "Ligue 1",
+      "contractYearsLeft": 2,
+      "weeklyWage": 500,
+      "marketValue": 0.1,
+      "pace": 42,
+      "shooting": 42,
+      "passing": 42,
+      "dribbling": 42,
+      "defending": 42,
+      "physical": 42,
+      "reflexes": 42,
+      "overall": 42,
+      "seasons": [
+        {
+          "year": 2025,
+          "age": 16,
+          "club": "Nice Youth",
+          "clubCountry": "France",
+          "clubTier": 3,
+          "apps": 0,
+          "goals": 0,
+          "assists": 0,
+          "cleanSheets": 0,
+          "yellowCards": 0,
+          "redCards": 0,
+          "rating": 0,
+          "leagueTitle": false,
+          "domesticCup": false,
+          "championsLeague": false,
+          "worldCup": false,
+          "ballonDor": false,
+          "ballonDorRank": null,
+          "type": "youth",
+          "intApps": 0,
+          "intGoals": 0,
+          "intAssists": 0,
+          "intRating": 0,
+          "tournament": null,
+          "tournamentResult": null
+        }
+      ],
+      "events": [
+        "📋 Joined Nice Youth Academy aged 16"
+      ],
+      "retired": false,
+      "phase": "youth",
+      "pendingOffers": [],
+      "pendingSummary": null,
+      "transferSituation": null,
+      "loan": null,
+      "pendingLoanOffers": null,
+      "pendingEvents": [],
+      "lastEventId": null,
+      "statBoostNextSeason": {},
+      "pendingNews": [],
+      "internationalCareer": false,
+      "sponsorDeal": null,
+      "totalEarnings": 0,
+      "popularity": 10,
+      "morale": 70,
+      "isLeader": false,
+      "hasRelationship": false,
+      "intStats": {
+        "caps": 0,
+        "goals": 0,
+        "assists": 0,
+        "tournaments": 0,
+        "worldCups": 0,
+        "continentals": 0,
+        "worldCupWins": 0,
+        "continentalWins": 0,
+        "isCaptain": false,
+        "isRetired": false,
+        "debutYear": null,
+        "debutAge": null,
+        "worldCupResults": [],
+        "squadSnubs": 0,
+        "failedQualifications": 0
+      },
+      "pendingWorldCup": null,
+      "pendingTournament": null,
+      "lastTournament": null,
+      "intlHistory": [],
+      "rival": null,
+      "rivalCreated": false,
+      "pendingRivalryEvent": null,
+      "lastRivalryEventId": null,
+      "rivalrySummary": null,
+      "netWorth": 0,
+      "lifestyleLevel": "Humble",
+      "lifestyleCostPerYear": 0.02,
+      "socialMediaFollowers": 0,
+      "sponsorshipIncome": 0,
+      "properties": [],
+      "investments": [],
+      "consecutiveDeficitYears": 0,
+      "agentFeesPaid": 0,
+      "family": {
+        "isMarried": false,
+        "marriedAge": null,
+        "children": 0,
+        "isDivorced": false,
+        "divorceAge": null
+      },
+      "purchasedItems": [],
+      "investmentHoldings": [],
+      "totalAssetValue": 0,
+      "customYearlyCosts": 0,
+      "awards": [],
+      "pendingBallonDor": null,
+      "lastUCLResult": null,
+      "legacy": null,
+      "postRetirementChoice": null,
+      "managerState": null,
+      "isFinalSeason": false,
+      "isPundit": false,
+      "punditEvents": [],
+      "primeType": "normal",
+      "socialMediaActionUsedThisSeason": false,
+      "socialMediaFocusBoost": false,
+      "pendingCoverAthleteEvent": false,
+      "coverAthleteAccepted": false,
+      "activeSponsorship": null,
+      "personality": null,
+      "agentId": null,
+      "lifeFlags": {},
+      "appearance": null,
+      "corruptionHeat": 0,
+      "dirtyMoney": 0,
+      "prisonSeasons": 0,
+      "academyClubName": "Nice",
+      "moralDilemmasTriggered": [],
+      "pendingMoralDilemma": null,
+      "pedSeasonsRemaining": 0,
+      "pedActive": false,
+      "matchFixBanned": 0,
+      "divingActive": false,
+      "integrityBonus": 0,
+      "pendingAppealResult": null,
+      "childEventsSeen": [],
+      "pregnancyAnnounced": false,
+      "punditState": null,
+      "ownerState": null,
+      "peakOverall": 42,
+      "retirementSuggested": false,
+      "phone": {
+        "threads": [
+          {
+            "id": "th_x_communityteam",
+            "c": "other",
+            "name": "Community team",
+            "emoji": "💬",
+            "lines": [
+              {
+                "w": 0,
+                "t": "Summer kids camp needs a surprise guest coach for a morning. No fee, just chaos and juice boxes.",
+                "y": 2025
+              }
+            ],
+            "rel": 50,
+            "pending": {
+              "kind": "legacy",
+              "msgId": "kids_camp-2025"
+            },
+            "waiting": 2025,
+            "cold": 0,
+            "seen": [],
+            "lastReplyYear": null
+          },
+          {
+            "id": "th_fitness",
+            "c": "fitness",
+            "name": "Fitness coach",
+            "emoji": "🏋️",
+            "lines": [
+              {
+                "w": 0,
+                "t": "Optional extras start Monday. 6am. Nobody has signed up yet which tells you everything.",
+                "y": 2025
+              }
+            ],
+            "rel": 50,
+            "pending": {
+              "kind": "convo",
+              "convo": "fitness_extra",
+              "beat": 0
+            },
+            "waiting": 2025,
+            "cold": 0,
+            "seen": [
+              "fitness_extra"
+            ],
+            "lastReplyYear": null
+          }
+        ],
+        "feed": [],
+        "world": null,
+        "clubs": {},
+        "rivalClub": null,
+        "seed": 2629653458,
+        "offers": 0,
+        "perksTaken": 0
+      }
+    },
+    "youth": {
+      "playerName": "League Release",
+      "nationality": "France",
+      "position": "CM",
+      "era": "2020s",
+      "age": 17,
+      "potential": 60,
+      "potentialEarned": 0,
+      "eliteStreak": 0,
+      "startingOverall": 42,
+      "physique": {
+        "heightCm": 180,
+        "weightKg": 75
+      },
+      "attrShape": {},
+      "karma": 50,
+      "phoneUsedIds": [
+        "kids_camp",
+        "agent_boots"
+      ],
+      "phoneInbox": [
+        {
+          "id": "kids_camp-2025",
+          "defId": "kids_camp",
+          "from": "Community team",
+          "emoji": "⚽",
+          "text": "Summer kids camp needs a surprise guest coach for a morning. No fee, just chaos and juice boxes.",
+          "year": 2025,
+          "choices": [
+            {
+              "label": "Do the full morning",
+              "reply": "I'm in. Someone else does the juice run though",
+              "karma": 8,
+              "popularity": 3,
+              "morale": 3
+            },
+            {
+              "label": "Send signed balls instead",
+              "reply": "Can't make it, sending a box of signed balls",
+              "karma": 3
+            }
+          ]
+        },
+        {
+          "id": "agent_boots-2025",
+          "defId": "agent_boots",
+          "from": "Agent",
+          "emoji": "💼",
+          "text": "Boot deal on the table. Decent money but the brand got caught using sweatshops last year. Your call.",
+          "year": 2025,
+          "choices": [
+            {
+              "label": "Take the money",
+              "reply": "Money is money. Send the contract",
+              "karma": -7,
+              "cash": 1.5
+            },
+            {
+              "label": "Turn it down publicly",
+              "reply": "Not wearing that. And I'm saying why",
+              "karma": 9,
+              "popularity": 4
+            },
+            {
+              "label": "Quietly decline",
+              "reply": "Pass on this one. Keep it quiet",
+              "karma": 4
+            }
+          ]
+        }
+      ],
+      "currentClub": "Nice Youth",
+      "currentClubCountry": "France",
+      "currentClubTier": 3,
+      "currentClubColor": "#CC0000",
+      "currentLeague": "Ligue 1",
+      "contractYearsLeft": 2,
+      "weeklyWage": 500,
+      "marketValue": 2,
+      "pace": 45,
+      "shooting": 45,
+      "passing": 45,
+      "dribbling": 45,
+      "defending": 47,
+      "physical": 48,
+      "reflexes": 46,
+      "overall": 46,
+      "seasons": [
+        {
+          "year": 2025,
+          "age": 16,
+          "club": "Nice Youth",
+          "clubCountry": "France",
+          "clubTier": 3,
+          "apps": 0,
+          "goals": 0,
+          "assists": 0,
+          "cleanSheets": 0,
+          "yellowCards": 0,
+          "redCards": 0,
+          "rating": 0,
+          "leagueTitle": false,
+          "domesticCup": false,
+          "championsLeague": false,
+          "worldCup": false,
+          "ballonDor": false,
+          "ballonDorRank": null,
+          "type": "youth",
+          "intApps": 0,
+          "intGoals": 0,
+          "intAssists": 0,
+          "intRating": 0,
+          "tournament": null,
+          "tournamentResult": null
+        },
+        {
+          "year": 2026,
+          "age": 17,
+          "club": "Nice Youth",
+          "clubCountry": "France",
+          "clubTier": 3,
+          "apps": 13,
+          "goals": 2,
+          "assists": 5,
+          "cleanSheets": 0,
+          "yellowCards": 0,
+          "redCards": 0,
+          "rating": 0,
+          "leagueTitle": false,
+          "domesticCup": false,
+          "championsLeague": false,
+          "worldCup": false,
+          "ballonDor": false,
+          "ballonDorRank": null,
+          "type": "youth",
+          "intApps": 0,
+          "intGoals": 0,
+          "intAssists": 0,
+          "intRating": 0,
+          "tournament": null,
+          "tournamentResult": null
+        }
+      ],
+      "events": [
+        "📈 Stats improved during youth development (OVR 46)",
+        "📩 Professional contract offers received!"
+      ],
+      "retired": false,
+      "phase": "contract_offer",
+      "pendingOffers": [
+        {
+          "club": {
+            "id": "fb-105",
+            "name": "Nice",
+            "country": "France",
+            "tier": 3,
+            "color": "#CC0000",
+            "league": "Ligue 1"
+          },
+          "contractYears": 5,
+          "wage": 6934,
+          "transferFee": 0,
+          "isHomegrown": true
+        },
+        {
+          "club": {
+            "id": "cm-mechelen",
+            "name": "Mechelen",
+            "country": "Belgium",
+            "tier": 3,
+            "color": "#f2b705",
+            "league": "Belgian Pro League"
+          },
+          "contractYears": 4,
+          "wage": 9800,
+          "transferFee": 0
+        },
+        {
+          "club": {
+            "id": "cm-boulogne",
+            "name": "Boulogne",
+            "country": "France",
+            "tier": 4,
+            "color": "#d02128",
+            "league": "Ligue 2"
+          },
+          "contractYears": 3,
+          "wage": 4704,
+          "transferFee": 0
+        },
+        {
+          "club": {
+            "id": "cm-palermo",
+            "name": "Palermo",
+            "country": "Italy",
+            "tier": 4,
+            "color": "#e75ba5",
+            "league": "Serie B"
+          },
+          "contractYears": 2,
+          "wage": 2486,
+          "transferFee": 0
+        }
+      ],
+      "pendingSummary": null,
+      "transferSituation": null,
+      "loan": null,
+      "pendingLoanOffers": null,
+      "pendingEvents": [],
+      "lastEventId": null,
+      "statBoostNextSeason": {},
+      "pendingNews": [],
+      "internationalCareer": false,
+      "sponsorDeal": null,
+      "totalEarnings": 0,
+      "popularity": 10,
+      "morale": 67,
+      "isLeader": false,
+      "hasRelationship": false,
+      "intStats": {
+        "caps": 0,
+        "goals": 0,
+        "assists": 0,
+        "tournaments": 0,
+        "worldCups": 0,
+        "continentals": 0,
+        "worldCupWins": 0,
+        "continentalWins": 0,
+        "isCaptain": false,
+        "isRetired": false,
+        "debutYear": null,
+        "debutAge": null,
+        "worldCupResults": [],
+        "squadSnubs": 0,
+        "failedQualifications": 0
+      },
+      "pendingWorldCup": null,
+      "pendingTournament": null,
+      "lastTournament": null,
+      "intlHistory": [],
+      "rival": null,
+      "rivalCreated": false,
+      "pendingRivalryEvent": null,
+      "lastRivalryEventId": null,
+      "rivalrySummary": null,
+      "netWorth": 0,
+      "lifestyleLevel": "Humble",
+      "lifestyleCostPerYear": 0.02,
+      "socialMediaFollowers": 0,
+      "sponsorshipIncome": 0,
+      "properties": [],
+      "investments": [],
+      "consecutiveDeficitYears": 0,
+      "agentFeesPaid": 0,
+      "family": {
+        "isMarried": false,
+        "marriedAge": null,
+        "children": 0,
+        "isDivorced": false,
+        "divorceAge": null
+      },
+      "purchasedItems": [],
+      "investmentHoldings": [],
+      "totalAssetValue": 0,
+      "customYearlyCosts": 0,
+      "awards": [],
+      "pendingBallonDor": null,
+      "lastUCLResult": null,
+      "legacy": null,
+      "postRetirementChoice": null,
+      "managerState": null,
+      "isFinalSeason": false,
+      "isPundit": false,
+      "punditEvents": [],
+      "primeType": "normal",
+      "socialMediaActionUsedThisSeason": false,
+      "socialMediaFocusBoost": false,
+      "pendingCoverAthleteEvent": false,
+      "coverAthleteAccepted": false,
+      "activeSponsorship": null,
+      "personality": null,
+      "agentId": null,
+      "lifeFlags": {},
+      "appearance": null,
+      "corruptionHeat": 0,
+      "dirtyMoney": 0,
+      "prisonSeasons": 0,
+      "academyClubName": "Nice",
+      "moralDilemmasTriggered": [],
+      "pendingMoralDilemma": null,
+      "pedSeasonsRemaining": 0,
+      "pedActive": false,
+      "matchFixBanned": 0,
+      "divingActive": false,
+      "integrityBonus": 0,
+      "pendingAppealResult": null,
+      "childEventsSeen": [],
+      "pregnancyAnnounced": false,
+      "punditState": null,
+      "ownerState": null,
+      "peakOverall": 42,
+      "retirementSuggested": false,
+      "phone": {
+        "threads": [
+          {
+            "id": "th_x_communityteam",
+            "c": "other",
+            "name": "Community team",
+            "emoji": "💬",
+            "lines": [
+              {
+                "w": 0,
+                "t": "Summer kids camp needs a surprise guest coach for a morning. No fee, just chaos and juice boxes.",
+                "y": 2025
+              }
+            ],
+            "rel": 50,
+            "pending": {
+              "kind": "legacy",
+              "msgId": "kids_camp-2025"
+            },
+            "waiting": 2025,
+            "cold": 0,
+            "seen": [],
+            "lastReplyYear": null
+          },
+          {
+            "id": "th_fitness",
+            "c": "fitness",
+            "name": "Fitness coach",
+            "emoji": "🏋️",
+            "lines": [
+              {
+                "w": 0,
+                "t": "Optional extras start Monday. 6am. Nobody has signed up yet which tells you everything.",
+                "y": 2025
+              }
+            ],
+            "rel": 50,
+            "pending": {
+              "kind": "convo",
+              "convo": "fitness_extra",
+              "beat": 0
+            },
+            "waiting": 2025,
+            "cold": 0,
+            "seen": [
+              "fitness_extra"
+            ],
+            "lastReplyYear": null
+          },
+          {
+            "id": "th_agent",
+            "c": "agent",
+            "name": "Your agent",
+            "emoji": "💼",
+            "lines": [
+              {
+                "w": 0,
+                "t": "Boot deal on the table. Decent money but the brand got caught using sweatshops last year. Your call.",
+                "y": 2025
+              }
+            ],
+            "rel": 50,
+            "pending": {
+              "kind": "legacy",
+              "msgId": "agent_boots-2025"
+            },
+            "waiting": 2025,
+            "cold": 0,
+            "seen": [],
+            "lastReplyYear": null
+          }
+        ],
+        "feed": [],
+        "world": null,
+        "clubs": {},
+        "rivalClub": null,
+        "seed": 3278628941,
+        "offers": 0,
+        "perksTaken": 0
+      },
+      "frozenOut": 0,
+      "badSeasonStreak": 0,
+      "story": [
+        {
+          "year": 2025,
+          "age": 16,
+          "club": "Nice Youth",
+          "lines": [
+            "📋 Joined Nice Youth Academy aged 16"
+          ]
+        }
+      ],
+      "sponsorBonus": 0,
+      "money": {
+        "seed": 1859494545,
+        "vault": 0,
+        "hold": {
+          "ladder": 0,
+          "bricks": 0,
+          "cleats": 0,
+          "screens": 0,
+          "spark": 0
+        },
+        "cost": {
+          "ladder": 0,
+          "bricks": 0,
+          "cleats": 0,
+          "screens": 0,
+          "spark": 0
+        },
+        "price": {
+          "ladder": 101.52,
+          "bricks": 112.98,
+          "cleats": 100.93,
+          "screens": 106.49,
+          "spark": 130.83
+        },
+        "hist": {
+          "ladder": [
+            100,
+            101.52
+          ],
+          "bricks": [
+            100,
+            112.98
+          ],
+          "cleats": [
+            100,
+            100.93
+          ],
+          "screens": [
+            100,
+            106.49
+          ],
+          "spark": [
+            100,
+            130.83
+          ]
+        },
+        "log": [],
+        "year": 2026,
+        "age": 1,
+        "won": 0,
+        "lost": 0,
+        "cPlays": 0,
+        "cNet": 0,
+        "cYear": 0,
+        "cShut": false,
+        "aYear": 0,
+        "aBest": 0,
+        "aPlays": 0
+      }
+    },
+    "offered": {
+      "club": {
+        "id": "cm-boulogne",
+        "name": "Boulogne",
+        "country": "France",
+        "tier": 4,
+        "color": "#d02128",
+        "league": "Ligue 2"
+      },
+      "contractYears": 3,
+      "wage": 4704,
+      "transferFee": 0
+    },
+    "signed": {
+      "playerName": "League Release",
+      "nationality": "France",
+      "position": "CM",
+      "era": "2020s",
+      "age": 17,
+      "potential": 60,
+      "potentialEarned": 0,
+      "eliteStreak": 0,
+      "startingOverall": 42,
+      "physique": {
+        "heightCm": 180,
+        "weightKg": 75
+      },
+      "attrShape": {},
+      "karma": 50,
+      "phoneUsedIds": [
+        "kids_camp",
+        "agent_boots"
+      ],
+      "phoneInbox": [
+        {
+          "id": "kids_camp-2025",
+          "defId": "kids_camp",
+          "from": "Community team",
+          "emoji": "⚽",
+          "text": "Summer kids camp needs a surprise guest coach for a morning. No fee, just chaos and juice boxes.",
+          "year": 2025,
+          "choices": [
+            {
+              "label": "Do the full morning",
+              "reply": "I'm in. Someone else does the juice run though",
+              "karma": 8,
+              "popularity": 3,
+              "morale": 3
+            },
+            {
+              "label": "Send signed balls instead",
+              "reply": "Can't make it, sending a box of signed balls",
+              "karma": 3
+            }
+          ]
+        },
+        {
+          "id": "agent_boots-2025",
+          "defId": "agent_boots",
+          "from": "Agent",
+          "emoji": "💼",
+          "text": "Boot deal on the table. Decent money but the brand got caught using sweatshops last year. Your call.",
+          "year": 2025,
+          "choices": [
+            {
+              "label": "Take the money",
+              "reply": "Money is money. Send the contract",
+              "karma": -7,
+              "cash": 1.5
+            },
+            {
+              "label": "Turn it down publicly",
+              "reply": "Not wearing that. And I'm saying why",
+              "karma": 9,
+              "popularity": 4
+            },
+            {
+              "label": "Quietly decline",
+              "reply": "Pass on this one. Keep it quiet",
+              "karma": 4
+            }
+          ]
+        }
+      ],
+      "currentClub": "Boulogne",
+      "currentClubCountry": "France",
+      "currentClubTier": 4,
+      "currentClubColor": "#d02128",
+      "currentLeague": "Ligue 2",
+      "contractYearsLeft": 3,
+      "weeklyWage": 4704,
+      "marketValue": 2,
+      "pace": 45,
+      "shooting": 45,
+      "passing": 45,
+      "dribbling": 45,
+      "defending": 47,
+      "physical": 48,
+      "reflexes": 46,
+      "overall": 46,
+      "seasons": [
+        {
+          "year": 2025,
+          "age": 16,
+          "club": "Nice Youth",
+          "clubCountry": "France",
+          "clubTier": 3,
+          "apps": 0,
+          "goals": 0,
+          "assists": 0,
+          "cleanSheets": 0,
+          "yellowCards": 0,
+          "redCards": 0,
+          "rating": 0,
+          "leagueTitle": false,
+          "domesticCup": false,
+          "championsLeague": false,
+          "worldCup": false,
+          "ballonDor": false,
+          "ballonDorRank": null,
+          "type": "youth",
+          "intApps": 0,
+          "intGoals": 0,
+          "intAssists": 0,
+          "intRating": 0,
+          "tournament": null,
+          "tournamentResult": null
+        },
+        {
+          "year": 2026,
+          "age": 17,
+          "club": "Nice Youth",
+          "clubCountry": "France",
+          "clubTier": 3,
+          "apps": 13,
+          "goals": 2,
+          "assists": 5,
+          "cleanSheets": 0,
+          "yellowCards": 0,
+          "redCards": 0,
+          "rating": 0,
+          "leagueTitle": false,
+          "domesticCup": false,
+          "championsLeague": false,
+          "worldCup": false,
+          "ballonDor": false,
+          "ballonDorRank": null,
+          "type": "youth",
+          "intApps": 0,
+          "intGoals": 0,
+          "intAssists": 0,
+          "intRating": 0,
+          "tournament": null,
+          "tournamentResult": null
+        }
+      ],
+      "events": [
+        "📈 Stats improved during youth development (OVR 46)",
+        "📩 Professional contract offers received!",
+        "✍️ Signed with Boulogne 🇫🇷 (3yr, €5k/wk)"
+      ],
+      "retired": false,
+      "phase": "playing",
+      "pendingOffers": [],
+      "pendingSummary": null,
+      "transferSituation": null,
+      "loan": null,
+      "pendingLoanOffers": null,
+      "pendingEvents": [],
+      "lastEventId": null,
+      "statBoostNextSeason": {},
+      "pendingNews": [],
+      "internationalCareer": false,
+      "sponsorDeal": null,
+      "totalEarnings": 0,
+      "popularity": 10,
+      "morale": 67,
+      "isLeader": false,
+      "hasRelationship": false,
+      "intStats": {
+        "caps": 0,
+        "goals": 0,
+        "assists": 0,
+        "tournaments": 0,
+        "worldCups": 0,
+        "continentals": 0,
+        "worldCupWins": 0,
+        "continentalWins": 0,
+        "isCaptain": false,
+        "isRetired": false,
+        "debutYear": null,
+        "debutAge": null,
+        "worldCupResults": [],
+        "squadSnubs": 0,
+        "failedQualifications": 0
+      },
+      "pendingWorldCup": null,
+      "pendingTournament": null,
+      "lastTournament": null,
+      "intlHistory": [],
+      "rival": null,
+      "rivalCreated": false,
+      "pendingRivalryEvent": null,
+      "lastRivalryEventId": null,
+      "rivalrySummary": null,
+      "netWorth": 0,
+      "lifestyleLevel": "Humble",
+      "lifestyleCostPerYear": 0.02,
+      "socialMediaFollowers": 0,
+      "sponsorshipIncome": 0,
+      "properties": [],
+      "investments": [],
+      "consecutiveDeficitYears": 0,
+      "agentFeesPaid": 0,
+      "family": {
+        "isMarried": false,
+        "marriedAge": null,
+        "children": 0,
+        "isDivorced": false,
+        "divorceAge": null
+      },
+      "purchasedItems": [],
+      "investmentHoldings": [],
+      "totalAssetValue": 0,
+      "customYearlyCosts": 0,
+      "awards": [],
+      "pendingBallonDor": null,
+      "lastUCLResult": null,
+      "legacy": null,
+      "postRetirementChoice": null,
+      "managerState": null,
+      "isFinalSeason": false,
+      "isPundit": false,
+      "punditEvents": [],
+      "primeType": "normal",
+      "socialMediaActionUsedThisSeason": false,
+      "socialMediaFocusBoost": false,
+      "pendingCoverAthleteEvent": false,
+      "coverAthleteAccepted": false,
+      "activeSponsorship": null,
+      "personality": null,
+      "agentId": null,
+      "lifeFlags": {},
+      "appearance": null,
+      "corruptionHeat": 0,
+      "dirtyMoney": 0,
+      "prisonSeasons": 0,
+      "academyClubName": "Nice",
+      "moralDilemmasTriggered": [],
+      "pendingMoralDilemma": null,
+      "pedSeasonsRemaining": 0,
+      "pedActive": false,
+      "matchFixBanned": 0,
+      "divingActive": false,
+      "integrityBonus": 0,
+      "pendingAppealResult": null,
+      "childEventsSeen": [],
+      "pregnancyAnnounced": false,
+      "punditState": null,
+      "ownerState": null,
+      "peakOverall": 42,
+      "retirementSuggested": false,
+      "phone": {
+        "threads": [
+          {
+            "id": "th_x_communityteam",
+            "c": "other",
+            "name": "Community team",
+            "emoji": "💬",
+            "lines": [
+              {
+                "w": 0,
+                "t": "Summer kids camp needs a surprise guest coach for a morning. No fee, just chaos and juice boxes.",
+                "y": 2025
+              }
+            ],
+            "rel": 50,
+            "pending": {
+              "kind": "legacy",
+              "msgId": "kids_camp-2025"
+            },
+            "waiting": 2025,
+            "cold": 0,
+            "seen": [],
+            "lastReplyYear": null
+          },
+          {
+            "id": "th_fitness",
+            "c": "fitness",
+            "name": "Fitness coach",
+            "emoji": "🏋️",
+            "lines": [
+              {
+                "w": 0,
+                "t": "Optional extras start Monday. 6am. Nobody has signed up yet which tells you everything.",
+                "y": 2025
+              }
+            ],
+            "rel": 50,
+            "pending": {
+              "kind": "convo",
+              "convo": "fitness_extra",
+              "beat": 0
+            },
+            "waiting": 2025,
+            "cold": 0,
+            "seen": [
+              "fitness_extra"
+            ],
+            "lastReplyYear": null
+          },
+          {
+            "id": "th_agent",
+            "c": "agent",
+            "name": "Your agent",
+            "emoji": "💼",
+            "lines": [
+              {
+                "w": 0,
+                "t": "Boot deal on the table. Decent money but the brand got caught using sweatshops last year. Your call.",
+                "y": 2025
+              }
+            ],
+            "rel": 50,
+            "pending": {
+              "kind": "legacy",
+              "msgId": "agent_boots-2025"
+            },
+            "waiting": 2025,
+            "cold": 0,
+            "seen": [],
+            "lastReplyYear": null
+          }
+        ],
+        "feed": [],
+        "world": null,
+        "clubs": {},
+        "rivalClub": null,
+        "seed": 3278628941,
+        "offers": 0,
+        "perksTaken": 0
+      },
+      "frozenOut": 0,
+      "badSeasonStreak": 0,
+      "story": [
+        {
+          "year": 2025,
+          "age": 16,
+          "club": "Nice Youth",
+          "lines": [
+            "📋 Joined Nice Youth Academy aged 16"
+          ]
+        }
+      ],
+      "sponsorBonus": 0,
+      "money": {
+        "seed": 1859494545,
+        "vault": 0,
+        "hold": {
+          "ladder": 0,
+          "bricks": 0,
+          "cleats": 0,
+          "screens": 0,
+          "spark": 0
+        },
+        "cost": {
+          "ladder": 0,
+          "bricks": 0,
+          "cleats": 0,
+          "screens": 0,
+          "spark": 0
+        },
+        "price": {
+          "ladder": 101.52,
+          "bricks": 112.98,
+          "cleats": 100.93,
+          "screens": 106.49,
+          "spark": 130.83
+        },
+        "hist": {
+          "ladder": [
+            100,
+            101.52
+          ],
+          "bricks": [
+            100,
+            112.98
+          ],
+          "cleats": [
+            100,
+            100.93
+          ],
+          "screens": [
+            100,
+            106.49
+          ],
+          "spark": [
+            100,
+            130.83
+          ]
+        },
+        "log": [],
+        "year": 2026,
+        "age": 1,
+        "won": 0,
+        "lost": 0,
+        "cPlays": 0,
+        "cNet": 0,
+        "cYear": 0,
+        "cShut": false,
+        "aYear": 0,
+        "aBest": 0,
+        "aPlays": 0
+      }
+    }
+  },
+  "draws": [
+    0.8614467836450785,
+    0.8714880095794797,
+    0.4295337414368987,
+    0.1817374979145825,
+    0.15870022494345903,
+    0.43420498073101044,
+    0.8698286220896989,
+    0.44275726028718054,
+    0.9228398089762777,
+    0.3693096279166639,
+    0.8252512658946216,
+    0.4326682810205966,
+    0.8668416943401098,
+    0.7317408220842481,
+    0.792981588980183,
+    0.7656856416724622,
+    0.6653242674656212,
+    0.4871514239348471,
+    0.5988952973857522,
+    0.20394737739115953,
+    0.312051962595433,
+    0.934838029788807,
+    0.005309251602739096,
+    0.8846646680030972,
+    0.36668091733008623,
+    0.30483293463476,
+    0.5955284114461392,
+    0.8800925370305777,
+    0.47997587523423135,
+    0.18328246264718473,
+    0.9297749819234014,
+    0.6407480689231306,
+    0.9341836387757212,
+    0.9793054594192654,
+    0.6646949623245746,
+    0.20921549829654396,
+    0.4413126490544528,
+    0.8666299618780613
+  ],
+  "next": 0.5464361105114222
+}

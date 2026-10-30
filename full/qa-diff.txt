@@ -1,0 +1,14 @@
+A	.github/workflows/lane-remote-check.yml
+A	.rc/admitResultCache.mjs
+A	.rc/admitted-plan.json
+A	.rc/child-journal.cjs
+A	.rc/default-support.sh
+A	.rc/fonts.cjs
+A	.rc/original-SoccerCareer.tsx
+A	.rc/request.txt
+A	.rc/run.sh
+A	qa/sc-centre-focus-v1/CONTRACT.json
+A	scripts/qa/playScCentreFocus.mjs
+A	scripts/qa/prepareScCentreFocus.mjs
+A	scripts/qa/proveScCentreFocus.mjs
+A	scripts/qa/scCentreFocusCustody.mjs

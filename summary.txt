@@ -1,0 +1,4 @@
+prepare exit=0 68s | ordinary-build raw=0
+fixture exit=0 1s | focus-fixture raw=0
+regression exit=0 259s | focus-regression raw=0
+finish exit=0 8s | 

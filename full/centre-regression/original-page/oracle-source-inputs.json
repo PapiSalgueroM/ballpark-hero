@@ -1,0 +1,1022 @@
+[
+  {
+    "file": "src/lib/careerChanceWheel.ts",
+    "bytes": 1321,
+    "sha256": "c59d577262eebbe8586b769500ab0b9b386feb435d7b189f2476d25330cdaef5",
+    "gitBlob": "9cea3b8347b2d68f1af3ae871d805cc67833ea72"
+  },
+  {
+    "file": "src/lib/captaincy.ts",
+    "bytes": 518,
+    "sha256": "eba4cffde54608f665916f0324055ff6615d4fc27b73899ae5eabd047ca0ceea",
+    "gitBlob": "f1686373b0cc5198c2986f258f3dd5fedb93cfc0"
+  },
+  {
+    "file": "src/lib/soccerDiscipline.ts",
+    "bytes": 755,
+    "sha256": "1fabe4d973954f14c46d4d6bc0602c9b634750db3806587335b4f48f5f44e317",
+    "gitBlob": "38cc5a3065d13c5f27c64bd363d16b1157837a58"
+  },
+  {
+    "file": "src/lib/soccerCareerRole.ts",
+    "bytes": 3071,
+    "sha256": "6133d386040c1f0da0389b16b386f29e2ec28a0112d85c42525610aa75e653da",
+    "gitBlob": "486e6265728daa53a197096a828a1c204c64f9fe"
+  },
+  {
+    "file": "src/lib/soccerCareerMilestone.ts",
+    "bytes": 2714,
+    "sha256": "4031baf2c4c6ae55a75d6afdbb037825718aeb5ee2e468c6ac8d7c9f5005e586",
+    "gitBlob": "d560cdff8b70a3655819ecd7a6cfd3f9c0a798ce"
+  },
+  {
+    "file": "src/lib/soccerCareerLifeConsequences.ts",
+    "bytes": 1473,
+    "sha256": "a24f66f5fd2943b8dfb26e9b72ea9e8a1c5b5d470bf53a53d3f28a1d58ace6fc",
+    "gitBlob": "31dc3d9a198626030cd12a4acbbe92d9c7b4517f"
+  },
+  {
+    "file": "src/lib/soccerCareerContracts.ts",
+    "bytes": 3157,
+    "sha256": "153167ffd1b746d0311c07002b3dbdce996bdcf070b4496e381f0f78bcc7100a",
+    "gitBlob": "c145d47ddaed57c4b6866dc7cc93b8e4ef6ce1bd"
+  },
+  {
+    "file": "src/lib/soccerCareerRoutineEvents.ts",
+    "bytes": 7385,
+    "sha256": "7fc25242e1ce90d92cd92b31a0b1593e1219b395757d58c9b54ebc4a72e36878",
+    "gitBlob": "074f5f2456449d3f943f9d0c063987becd92a17c"
+  },
+  {
+    "file": "src/lib/careerIdentity.ts",
+    "bytes": 6526,
+    "sha256": "cfb303fd338c670f60c86c1bba336566d215632fa4c659dd8360664008c35d41",
+    "gitBlob": "671af0abb6cab6fd5c2bc65160a495adb67d3154"
+  },
+  {
+    "file": "src/lib/soccerCareerLife.ts",
+    "bytes": 105609,
+    "sha256": "1ba72d3a9b0f1fd30fe45eab2d5e34a955369effa6b224e02a9db3e3db92befc",
+    "gitBlob": "592170d7967162d9967e3cf13e22333afb840732"
+  },
+  {
+    "file": "src/lib/soccerCareerLoyalty.ts",
+    "bytes": 15294,
+    "sha256": "c814c8abc9719357226c739f0a6237b56b2d8eef96e4013d438f26d52ac345aa",
+    "gitBlob": "54abe2e7ec76814be2b5be7e1d5c8501cfc2d6b1"
+  },
+  {
+    "file": "src/lib/soccerCareerProgramme.ts",
+    "bytes": 33549,
+    "sha256": "6bfc2a86b2ec11bbef91cb67e63e3e05ef9d6ac21cabdd74b85bfa78ec1957d5",
+    "gitBlob": "5dca0371812eed97f9c28c5ed11c83fb423f9c72"
+  },
+  {
+    "file": "src/lib/soccerCareerFarewell.ts",
+    "bytes": 6094,
+    "sha256": "b124219e6db1385d24fe7dbfcf7d2949f5a75facac99e907275de1c9a83a4a17",
+    "gitBlob": "04d3c96fd0df26dbfa8884729960f523026022ed"
+  },
+  {
+    "file": "src/data/soccerCareerClubPool.ts",
+    "bytes": 49030,
+    "sha256": "5e565223239c8bb5ea8f5be3d2ecfb5c72ed026d3598031fcb5221f265e01d58",
+    "gitBlob": "83e9df78441c0d16509f80b8ec0bfbadb0f08f26"
+  },
+  {
+    "file": "src/data/soccerCareerLowerClubs.ts",
+    "bytes": 1491,
+    "sha256": "36241ad52bca901f3ebe6b24d04769580c429974f03fce5585dc33be3e1a5892",
+    "gitBlob": "88318bbb4103ae91dccba1671b42b8e13fe3ddbc"
+  },
+  {
+    "file": "src/data/clubRivalries.ts",
+    "bytes": 45752,
+    "sha256": "7ca46e55151966a81e65cc41d971d86f799fb778db4c88c1b4caa17586f29c2a",
+    "gitBlob": "f971e4a8ba818a0a73ac2dcdf069b806aa4ed9cf"
+  },
+  {
+    "file": "src/lib/keyedRng.ts",
+    "bytes": 1289,
+    "sha256": "dc78803cd8f86fd73c70e26b36faf40915b4e6bbca7f6b0c4efffab28e9032ef",
+    "gitBlob": "acfd3a0a410e03ac0950953aa05b82e4c46e004f"
+  },
+  {
+    "file": "src/lib/soccerCareerLeagueWorld.ts",
+    "bytes": 15636,
+    "sha256": "360c629f5d6ecc9cd959f5aae9a3791eb99b4f5cecdca2236da563168c2bb8c6",
+    "gitBlob": "72fcabdd0c557a743aa849b01208140c3030048f"
+  },
+  {
+    "file": "src/lib/soccerCareerTransferBrief.ts",
+    "bytes": 10825,
+    "sha256": "4654ccd0ae2c30fe1208c42179ae835d58ebe20852101bb6f1ed78d451d6b90b",
+    "gitBlob": "34775a4629fcc33444a83aad17f10f758e52cf15"
+  },
+  {
+    "file": "src/lib/soccerCareerAmbitions.ts",
+    "bytes": 5529,
+    "sha256": "60cd5838feab613da0ffd72975f013dc408052d39fbebc4d34cfc72d4a3c42f4",
+    "gitBlob": "cdeb3af4931183f004c43b7be84e24f3ee771945"
+  },
+  {
+    "file": "src/lib/soccerCareerSelection.ts",
+    "bytes": 2446,
+    "sha256": "9cc9ec464a161658a022b43ee7142c90def0a2306e7e66678a74bfdd72498e4d",
+    "gitBlob": "55f9503e304e31bdc163085b12d2e5e1cc12d012"
+  },
+  {
+    "file": "src/lib/soccerCareerPreparation.ts",
+    "bytes": 3721,
+    "sha256": "b6abd752e7030e8376c7ac2c00cce1296e7cb83f6220786c22335190de0014ca",
+    "gitBlob": "2837f87e567b3934f727b74e96c3ca1425f27648"
+  },
+  {
+    "file": "src/lib/intlNames.ts",
+    "bytes": 19710,
+    "sha256": "b6bfb5103b86544388fd0d49c5580870491f48d3785f3385e3ea0f2ea00955b4",
+    "gitBlob": "19b86e174dd5522874681984f78b9ac643724818"
+  },
+  {
+    "file": "src/lib/soccerCareerMentor.ts",
+    "bytes": 7446,
+    "sha256": "0b541682cd9280f5d38c357409cfdb05f9ba7bee602ae88e2ca26e1cdbdbe07e",
+    "gitBlob": "552435816268202edecf5dc2e732cd4d1543927c"
+  },
+  {
+    "file": "src/lib/soccerCareerPress.ts",
+    "bytes": 16217,
+    "sha256": "196441a89d900140c05aeb9671f72e6b454cfd75eafd0264eb81083765b0fcff",
+    "gitBlob": "6a1b88e7797e79835dcfb9195051898dcb4444f5"
+  },
+  {
+    "file": "src/lib/uclFormatHistory.ts",
+    "bytes": 19387,
+    "sha256": "cb2d4e853bec4a708cac7c83276f1762ee8d4bb787506da96137cd722426fea4",
+    "gitBlob": "dda84f0df1e8033ab09594abeb09d639ae9ee196"
+  },
+  {
+    "file": "src/lib/uclTieRule.ts",
+    "bytes": 3152,
+    "sha256": "f0f527501a5fb80360a877a8164edcbfc3ddcefbf51c4db2de634f7f56216b4a",
+    "gitBlob": "2c4578a894efa2eb5282321dffe3dd434df89737"
+  },
+  {
+    "file": "src/lib/intlFormatHistory.ts",
+    "bytes": 30475,
+    "sha256": "1a2f55217bf184ba5e8f50358efa902c889e50e92b63a4bb1a8315ebc62ae479",
+    "gitBlob": "c9f1e77efe4c0c2636c65cd425fd76735ba263c6"
+  },
+  {
+    "file": "src/lib/soccerInternational.ts",
+    "bytes": 50568,
+    "sha256": "8a0df25deda005f365321e58f82191d90da41660c8de9d225aeebc8dec982941",
+    "gitBlob": "c614da7b4baeabe8e39d8f4a9a5b4d6b917bef64"
+  },
+  {
+    "file": "src/lib/careerEras.ts",
+    "bytes": 105789,
+    "sha256": "f3e7347f58abe993db9fd72e9896ea0767a6ca7eb3b19861b75b92b387f89c1c",
+    "gitBlob": "e037022342382b1df9c8a5ede620d2cce480bc23"
+  },
+  {
+    "file": "src/lib/clubManagerUclGroups.ts",
+    "bytes": 15773,
+    "sha256": "c043b733d33d483d7906d2d323e6b8b53532efcf94194a0cbf743399d4618963",
+    "gitBlob": "906a656efe76b1069fd6c06e568f2fbd2a49b4f2"
+  },
+  {
+    "file": "src/lib/soccerCareerContinental.ts",
+    "bytes": 49545,
+    "sha256": "1e9e462a16c68dd58c2849613c5e2e3de4e8a98e757ef006039189878bfb6e47",
+    "gitBlob": "44d4acee04504ac92382a986b3e2cfd5301d4ac1"
+  },
+  {
+    "file": "src/data/careerLeagueSeasons.ts",
+    "bytes": 78342,
+    "sha256": "3346772b1c61a0d46dabd7191ec4d021f76a6c9089dc35d0814d3a0432cf3c33",
+    "gitBlob": "eb57362c1d0e774259d582674edf2d38186c0dc8"
+  },
+  {
+    "file": "src/data/leagueOddFormats.ts",
+    "bytes": 4877,
+    "sha256": "5427ed0b0ae21c2dc43b3bc59a976d2eaa11acb73b94590113937b19cc3423f3",
+    "gitBlob": "c4f1aa9f996acb82475ff5a993f7b07defae6933"
+  },
+  {
+    "file": "src/lib/soccerCareerLeague.ts",
+    "bytes": 47020,
+    "sha256": "fe3efae2f43e780c2cd4d13ca7fa85f023a2fefe8cf1b002866a1cf0d963268a",
+    "gitBlob": "9c05bf681f30bcd3703f55ad72c1289f4eeb9844"
+  },
+  {
+    "file": "src/lib/soccerCareerOwner.ts",
+    "bytes": 18348,
+    "sha256": "a3e50f5e6ddde989afb15d63d62addd906f20e985ac0c994ec9e6cf463ae1dde",
+    "gitBlob": "ddd2c00ea4f0a2927c301a9f018f307f3c4c1bf0"
+  },
+  {
+    "file": "src/lib/soccerOwnerGate.ts",
+    "bytes": 2102,
+    "sha256": "aaba4bcdeb22ecd3ee6882818b6f867dbaa79c5774d5babb53a5a8d1f1a89fef",
+    "gitBlob": "594c25f19c7e9258342396c792aa3112264333f4"
+  },
+  {
+    "file": "src/lib/soccerCareerDerby.ts",
+    "bytes": 23401,
+    "sha256": "24b47bb4f83a37f4c43fcd5cb42be7976eac299a5bec0f7673af0621c6c804e8",
+    "gitBlob": "e25062b2b6560957feb414fd709b7bbc5b4af7ba"
+  },
+  {
+    "file": "src/lib/soccerCareerCup.ts",
+    "bytes": 32868,
+    "sha256": "ee9a4f92fad35ed582d1b687964197592d5efbff032a9015a0fea667e1cc374c",
+    "gitBlob": "0f2a6cc03afed64642d396af4d0979474a3c41cf"
+  },
+  {
+    "file": "src/lib/soccerWorldTruth.ts",
+    "bytes": 13431,
+    "sha256": "49dca948e81fcf758db8c3ded5615f05a1ed3c9239be3b8195466c5a065d7992",
+    "gitBlob": "2dd8507b11ad4c588e8c6055eeab382697e2386d"
+  },
+  {
+    "file": "src/lib/soccerPhone.ts",
+    "bytes": 107753,
+    "sha256": "e054da81e1f45d442f8a7dca9aecefc4c0264ec337171b177968fd398d4fbef2",
+    "gitBlob": "f81e5a1b5207d776aea9594e28f130d0e8888832"
+  },
+  {
+    "file": "src/lib/careerForm.ts",
+    "bytes": 4583,
+    "sha256": "62f537d1a8acd2f7f8f1bed7f1fb1e5ef6e9c2e44368b7bb1b48c8b89c581d82",
+    "gitBlob": "f469db9173bea005c3d297bc30bea82b284d6387"
+  },
+  {
+    "file": "src/lib/awardDraw.ts",
+    "bytes": 4117,
+    "sha256": "3a0327cdadc29fffa11f9050aebf5e954e56e0a695b95690f348aeb34c340b89",
+    "gitBlob": "2094292a6ee25f062a20add5d2921e600dc06638"
+  },
+  {
+    "file": "src/lib/soccerSeasonAwards.ts",
+    "bytes": 8949,
+    "sha256": "6e70611ccc57eef30619490d9cdae5bf5a5e50960359f96fe9b016c5343e9c4d",
+    "gitBlob": "7c5bbff8bea49ddb5a53e4f7d0f007ad68a63a68"
+  },
+  {
+    "file": "src/lib/careerMoney.ts",
+    "bytes": 36144,
+    "sha256": "f158b9b831554819766c3820c08b01354b434809436343d75c9b8ec0cc9715a5",
+    "gitBlob": "8784506b189f161c2fd5aba559b01d26a50ad9ce"
+  },
+  {
+    "file": "src/lib/soccerMoney.ts",
+    "bytes": 5176,
+    "sha256": "92addb9c145ad734bc6baa14f233ad055ec9084f4ea21722a4f380e417c713d7",
+    "gitBlob": "379f7144f178fa1b5d051fd3d49e77b486b4e5a7"
+  },
+  {
+    "file": "src/lib/careerInbox.ts",
+    "bytes": 18355,
+    "sha256": "758de3321e8f6137342971c8765251c604b2c61a35f14aee65341b492e321d76",
+    "gitBlob": "bf28dba2eb3c052d31dec3b7c23b84a3644772f4"
+  },
+  {
+    "file": "src/lib/careerRivalryEvents.ts",
+    "bytes": 6941,
+    "sha256": "55e3873f82ef153c9dd9a5678d82ead4b373014e961e7fc1bebb5c58fd33f980",
+    "gitBlob": "ed38a67d73454ef508273248469913a606c8e284"
+  },
+  {
+    "file": "src/lib/careerRivalryChoices.ts",
+    "bytes": 13828,
+    "sha256": "a5d4710bb4408c6bcf69cb8c4eecbdf1e76470d4bfde3a40839563f4cd8f397f",
+    "gitBlob": "0ee4fb98548142a341e1306af7ab0c8fa1447e9f"
+  },
+  {
+    "file": "src/lib/soccerCurrency.ts",
+    "bytes": 8325,
+    "sha256": "50c4ccaed2a9f3788a63d9a90f1587a5be089773292821de3d1c675f2cbff645",
+    "gitBlob": "7c6ee15d30ba84ca9eccff7bc1209c4cc50fe6c7"
+  },
+  {
+    "file": "src/lib/managerOffers.ts",
+    "bytes": 12319,
+    "sha256": "c445ec9427502ff797348527077034d76b9c668b3a4980c8387aaba4ab75e24d",
+    "gitBlob": "b251b339a7ff0b6d1f8d2e9692adef8229ebedd5"
+  },
+  {
+    "file": "src/lib/soccerCareerToManager.ts",
+    "bytes": 6270,
+    "sha256": "f37ebc8a133fb5a6d5a4360c5ddcd41e54099133f95e5330284b9762a0ef2129",
+    "gitBlob": "bc43caa0f0fc3ada49c88012f5d2ef5640fefdcb"
+  },
+  {
+    "file": "src/lib/careerSocial.ts",
+    "bytes": 35377,
+    "sha256": "69cf36de5c3ffa1a8a901c5b2d435f44a96563e47235e0be1104f039e4d16722",
+    "gitBlob": "74cc5d0edd58ed701c0c339c43d85c56567c9c7d"
+  },
+  {
+    "file": "src/lib/careerBrand.ts",
+    "bytes": 10153,
+    "sha256": "b546dff35e15030550cb600b1657d7fec510f1af312297362549a01545aee364",
+    "gitBlob": "d20a5a38b99ceb57c7615a651a290abb17190ed7"
+  },
+  {
+    "file": "src/lib/soccerCareerBrand.ts",
+    "bytes": 9787,
+    "sha256": "bf7e56dd5fbbf6aff02e23417227f1a1f07d7d7aa2a5f8501bfcf2d3e3f7503d",
+    "gitBlob": "ad0b81ae755a565fa23bb59f08e15ec413764f68"
+  },
+  {
+    "file": "src/lib/soccerCareerAttributes.ts",
+    "bytes": 22286,
+    "sha256": "44643b3c5588518ea4ef93adc4bf0832fae8723d75f5fbf1ef41c93ee16d03f8",
+    "gitBlob": "2615a09ad90df3355f4f7d86ed84f95e91178137"
+  },
+  {
+    "file": "src/lib/soccerCareerCorruption.ts",
+    "bytes": 31588,
+    "sha256": "e936fade2a7a4c9cc76c966e5ed2e07613ac93bbbf1f2f5c5acc56d84c904e91",
+    "gitBlob": "bf0efd61dee54a2c689598acbb0af4c342e3fb95"
+  },
+  {
+    "file": "src/lib/soccerCareerRealismA.ts",
+    "bytes": 81400,
+    "sha256": "a8b8a21392d5026039e0bac6b3138043d2e75782be5ebb35cec7057f5e4a60e2",
+    "gitBlob": "c1dbab5463347da75002b33159ff2f9edcb303fe"
+  },
+  {
+    "file": "src/lib/soccerCareerRealismB.ts",
+    "bytes": 94053,
+    "sha256": "5e76fa822877d708aaee5ca4e2a0b7bc40bdb636bd9f00f11b84cd796b59ad44",
+    "gitBlob": "cb1f96e16f42da9a129cb0c8134a87fac32fede8"
+  },
+  {
+    "file": "src/lib/soccerCareerRealism.ts",
+    "bytes": 1838,
+    "sha256": "4550d7e40cb75424e02df5b08bbe9f13fd2ba4c81b0645916fc3c7352349cf45",
+    "gitBlob": "3635eecc804fc4068f2047a54bcb7c349a591aae"
+  },
+  {
+    "file": "src/lib/careerCritic.ts",
+    "bytes": 9543,
+    "sha256": "6cedf0fc60adf7e8638fa2ed89dd831abeb0053d858295a4c265e9637128666c",
+    "gitBlob": "c0f3827c8eb562b00550dc5c5fafa75a92d345af"
+  },
+  {
+    "file": "src/lib/soccerCareerCritic.ts",
+    "bytes": 11874,
+    "sha256": "7e79194742affdce95a724a2790b601b03fe5e1360f7aa441b094d85ca8c3bf7",
+    "gitBlob": "e41d5b841e6851f85c6b5836a459eb174ea385fe"
+  },
+  {
+    "file": "src/lib/soccerCareerBoot.ts",
+    "bytes": 5837,
+    "sha256": "5976fc7b574bb9371fc112332cd7b408744f3f305a709f8e69ac3083f01584c5",
+    "gitBlob": "ca3a648f2dd72179864fba62d6fb58044a06efd1"
+  },
+  {
+    "file": "src/lib/soccerCareerAcademy.ts",
+    "bytes": 12925,
+    "sha256": "652904ec3054700d775e6f86a9e78c0179202674bbbe427e164bb3c17a0e33a3",
+    "gitBlob": "dcdfcf7ca0795ea8bf0ca586d527c586bead2980"
+  },
+  {
+    "file": "src/lib/season/momentsSave.ts",
+    "bytes": 6946,
+    "sha256": "1dac6eeb3d60fe4d784be51cda838aab520c4ecb51cae8aa25ced81bd6153655",
+    "gitBlob": "c1ee578f855d29a107f8d69b71eb1258ed166ca9"
+  },
+  {
+    "file": "src/data/nationalPools.ts",
+    "bytes": 280080,
+    "sha256": "69c2fb4c6bdef52a14dc9a6fea0ea4c9ab098f53ccebfc37bdcf5f5c328f73ac",
+    "gitBlob": "0a2c56d544a73527efc86c6731b2443776e52647"
+  },
+  {
+    "file": "src/lib/soccerInternationalSquads.ts",
+    "bytes": 16037,
+    "sha256": "ba62597e1ce753cb84d844045900f8352b039ae9580b48b17075d2e0206077f5",
+    "gitBlob": "6186772fd583698ae8d65cc5bcd38c08f4d3179c"
+  },
+  {
+    "file": "src/lib/careerEventDeck.ts",
+    "bytes": 5265,
+    "sha256": "7c54d6a22353fcf8a885899b900d6a0db72f0f3e5e29bba475ef775457bd4b18",
+    "gitBlob": "ec0fab5782878308296d754d7082f9055b5a1c3c"
+  },
+  {
+    "file": "src/lib/gmInbox.ts",
+    "bytes": 57382,
+    "sha256": "5b448890558a9962e4ce8f85c05ea001e745ff094a8501f9a6487ecf64d4084c",
+    "gitBlob": "63644ceccbeae2744d1010a866f989ae4cc456fd"
+  },
+  {
+    "file": "src/lib/arcade.ts",
+    "bytes": 4476,
+    "sha256": "3026c3e114fb16580ca3798c1d35c78793281a160e6835f0696e501192662a65",
+    "gitBlob": "218a3bf3b415164920411273923b094172999618"
+  },
+  {
+    "file": "src/lib/freeKick.ts",
+    "bytes": 9724,
+    "sha256": "117c9970ecbb59ca8136fbb292ea00f1144768439c92b99593ea32073c11eeb7",
+    "gitBlob": "7320c7d87029d6805d808eabb3d02b0f8e32cb4e"
+  },
+  {
+    "file": "src/lib/careerDrills.ts",
+    "bytes": 29482,
+    "sha256": "66acef16d52f023fcb73ec7fb18a626f44c372bbfc182ca355681ac65f17caec",
+    "gitBlob": "6125570ccdf2f037a7debeaa7ad14815e9ed860e"
+  },
+  {
+    "file": "src/lib/firstTouchDrill.ts",
+    "bytes": 3722,
+    "sha256": "c3e41e6074b8c31de12e6304103ee6ec195f43fa3b1f105e5072e64d043e3727",
+    "gitBlob": "24b8bdce50df97fa1a9e74be5c8213b390faeae2"
+  },
+  {
+    "file": "src/lib/throughBallDrill.ts",
+    "bytes": 14984,
+    "sha256": "f70c1a0c8dc0614d92de64f77c1f66b0ebcc984d49e927acd8375f19ba3a6a39",
+    "gitBlob": "0e181697485d6a4f61fd5e4cb208c29fdeb491df"
+  },
+  {
+    "file": "src/lib/season/law.ts",
+    "bytes": 2081,
+    "sha256": "db62d9e3daf129914c4ad29c903ddfd39d90bda9694bd475a3295b263faa353d",
+    "gitBlob": "f0ce689cb9523aaf7f703188ff875342f3e31159"
+  },
+  {
+    "file": "src/lib/leagueCore.ts",
+    "bytes": 2488,
+    "sha256": "9c37a88f13585def063097e69db2cdc94a90aab24b470f3b564bda9c1f7d57f9",
+    "gitBlob": "1405c2c4982a4da0fc129769f53082a11bc06c93"
+  },
+  {
+    "file": "src/lib/keyedShuffle.ts",
+    "bytes": 662,
+    "sha256": "38efe3c8f7c0bb3a398b484809f7f6c2198ed7657672380fd97b53aae99557eb",
+    "gitBlob": "c4cd8367d668461a15af28f84c87e3523124facb"
+  },
+  {
+    "file": "src/lib/season/core.ts",
+    "bytes": 54412,
+    "sha256": "450693bf1c6449105990e09c7799ee276a0a2389b42f04a156ac82ead05e90a0",
+    "gitBlob": "fe54ceaef5baeede559502ee3dc16ce4466bf812"
+  },
+  {
+    "file": "src/data/leagueFormat.ts",
+    "bytes": 7070,
+    "sha256": "915b4acd46f103d7c371d58c043c600a85e4e592ae6b59d5a8000d930e76fca5",
+    "gitBlob": "802650466c0c4439f12c741e7d1ae28957280f9b"
+  },
+  {
+    "file": "src/lib/ownGoalRule.ts",
+    "bytes": 2322,
+    "sha256": "720a93a8f3ecb92544df0066b23c95fa40c58cddbf886da0a56faf59201bea1d",
+    "gitBlob": "48def815686c9c93fb92a15b621cecb860eb0658"
+  },
+  {
+    "file": "src/lib/season/soccerEvents.ts",
+    "bytes": 16126,
+    "sha256": "e89316045b7d0c60801dc508fcd0cbbc8bb8edfe813f7fab8e0e577f6250f28d",
+    "gitBlob": "11a0b104bc1e151bfcf4b1912b4a37b3e0ec50fa"
+  },
+  {
+    "file": "src/lib/season/soccer.ts",
+    "bytes": 24509,
+    "sha256": "fefc54713b21160cc76530c7e0288fe6f2786ac23d0f8e696219505bd4f82294",
+    "gitBlob": "819e2d97d0435c4ef29a4c1ed441511a6906e986"
+  },
+  {
+    "file": "src/lib/season/soccerMoments.ts",
+    "bytes": 15494,
+    "sha256": "4152ee0945765b6e6c1eb9e9b7ae7e700a2497b5744cb86f6742cff6f4eb84d2",
+    "gitBlob": "92ef009537ed23f89d59ed1de75500cc3f8c6be7"
+  },
+  {
+    "file": "src/data/soccerDeck/starter.ts",
+    "bytes": 21411,
+    "sha256": "bf64469d437d5c2cb017b6857d9cfe225515808c3aadf98f293595a67502894b",
+    "gitBlob": "ff324082b503dc3a72cae460c51dce6199c2157a"
+  },
+  {
+    "file": "src/data/soccerDeck/index.ts",
+    "bytes": 247,
+    "sha256": "e722b33bdd7419b4521e8a982fef1f281ee5b217e2ac62d68890f86907c57fe7",
+    "gitBlob": "7680b2362346bd9235dd31873ce9a2576ad19be4"
+  },
+  {
+    "file": "src/data/soccerDeck/words.ts",
+    "bytes": 2899,
+    "sha256": "80ee93ed79c4b9163f08a5184e9162bb818dbd78b87ef48872c543c4add9c36e",
+    "gitBlob": "561248bd108ef1bc188d9477fc5bcf1c551a4657"
+  },
+  {
+    "file": "src/lib/soccerDeck.ts",
+    "bytes": 20648,
+    "sha256": "f3f8f22f3066bc6faadfd7f393857c949c34ddbe37f3b51031bd5c29582e55c6",
+    "gitBlob": "f6c6a4f8033d2d241f81c11e2f77a7e05169428a"
+  },
+  {
+    "file": "src/lib/soccerDeckGate.ts",
+    "bytes": 4711,
+    "sha256": "ee12e3251b5d63f737960a797035b0174acb91a2379cbc8a520c02468d3d664f",
+    "gitBlob": "39d0b682ba64eb0d4c76db69a980709766551405"
+  },
+  {
+    "file": "src/lib/careerAwardsNight.ts",
+    "bytes": 18000,
+    "sha256": "9b5c3add2c20fa81d868c4e14618227808806c5e046ca4b7c58ce4b42126a65e",
+    "gitBlob": "9e93b771ca565d22c523fb4f09cb72e58cf0fed0"
+  },
+  {
+    "file": "src/lib/nameFold.ts",
+    "bytes": 883,
+    "sha256": "e36d89a779d486a748edc2b22a6a29e38b85105956e3d8ffb19af907c3e5f15c",
+    "gitBlob": "abb3e270fa1c87e78aa3871598c06571ff44a069"
+  },
+  {
+    "file": "src/lib/nameModeration.ts",
+    "bytes": 5589,
+    "sha256": "8e24174b72c952e849883058d04bc03565f4ed753840f1c031646174bbbd7140",
+    "gitBlob": "8953f0d3daf853793cbbfb3eff2f3d376b5f5480"
+  },
+  {
+    "file": "src/data/clubManagerPremierFixtures2026.ts",
+    "bytes": 25140,
+    "sha256": "acef076f2ded4e396454d20a316fd6deeff9b2e60d537615047dfc913a760f51",
+    "gitBlob": "b53d376d95234baf7af41f79f40ebb4ed4f9690d"
+  },
+  {
+    "file": "src/data/clubManagerChampionshipFixtures2026.ts",
+    "bytes": 19767,
+    "sha256": "a715afa3aabc8b021f9664c91d786724fc42ce7e9beb07fa2cfebe91c317dc90",
+    "gitBlob": "1eaa88f3df76ff49f9a1ab59fa5f987d25ed39db"
+  },
+  {
+    "file": "src/data/clubManagerLaLigaFixtures2026.ts",
+    "bytes": 13258,
+    "sha256": "a7b0d51e9b71b8eceacade37676431e34b804a0f098cb313df694f74d184e1e6",
+    "gitBlob": "1b29fc97357e4eb80c33640b26bdf7c997658a22"
+  },
+  {
+    "file": "src/data/clubManagerSerieAFixtures2026.ts",
+    "bytes": 10682,
+    "sha256": "4835218791b8a2fcf527f319a440f4699723a16bdbe18f95c6f74b42a89eb08b",
+    "gitBlob": "36e2e486c7069567d2105d9ce1fdbb890bd16aec"
+  },
+  {
+    "file": "src/data/clubManagerBundesligaFixtures2026.ts",
+    "bytes": 11190,
+    "sha256": "bc46ac60dc1d111ad32848c418ef383b25bcb92b29f4d68714634ea90c827aff",
+    "gitBlob": "e70d29c2ab5af0808055450d64f3a4920e596144"
+  },
+  {
+    "file": "src/data/clubManagerEredivisieFixtures2026.ts",
+    "bytes": 10490,
+    "sha256": "21a9eeb1b520fb7c5c00dcc5fc32db18a0971099ae2523652fe1d38d44f5d8b0",
+    "gitBlob": "9aafc6a9e3df5a86ad63c039fce3592263b76884"
+  },
+  {
+    "file": "src/data/clubManagerPrimeiraFixtures2026.ts",
+    "bytes": 10663,
+    "sha256": "09a6a70dce597889e361be62723bd4dd492c613730abad9d33d8597e71762dbb",
+    "gitBlob": "173540189293a1122102bb7bd74678836c006a7a"
+  },
+  {
+    "file": "src/data/clubManagerSuperLigFixtures2026.ts",
+    "bytes": 11057,
+    "sha256": "e1e87a26df06a7db748a587dfede7d557b9e6a64c4914f5617499ee7feb502e1",
+    "gitBlob": "0e3ff4fe639bb6ee389ee083409a3c0436708436"
+  },
+  {
+    "file": "src/data/clubManagerBundesliga2Fixtures2026.ts",
+    "bytes": 11639,
+    "sha256": "174f70b1cecb345457a1bdefdf1f9c0c6cd73ad2076033d1e43e2464540bd5ac",
+    "gitBlob": "f2d255241361f99e5dc2a7332856f4c3ba035d27"
+  },
+  {
+    "file": "src/data/clubManagerLigue2Fixtures2026.ts",
+    "bytes": 9004,
+    "sha256": "aa57a60ee76b2fd8341f29b6cc3fe4013313316f065457108c14647a1bbd8347",
+    "gitBlob": "84caef83eaac1a72dad85bf6e8e97d236d5dd074"
+  },
+  {
+    "file": "src/lib/clubManagerFixtures.ts",
+    "bytes": 9841,
+    "sha256": "9ca9e7233ce26939ae588f12c0823d32daa00f12b1be169cd27b7d8ffbe0bf3d",
+    "gitBlob": "a9bbb510574d9d4be5f904337ec7e35ac6051b82"
+  },
+  {
+    "file": "src/lib/clubManagerRecords.ts",
+    "bytes": 5055,
+    "sha256": "feb2ce871bb7c73e85d4968b29bd75c2beaa1274f88e579d271ad02fdfb715e7",
+    "gitBlob": "7f0e3443a8ff8a352797106a37beecadecabb5c2"
+  },
+  {
+    "file": "src/data/clubManagerVarRates.ts",
+    "bytes": 6342,
+    "sha256": "8d78118026672607695ff46ceda4a635c9a6e24ea6ad6960786a969ded8f0088",
+    "gitBlob": "0786a3a78a316eab5e9dcc40c86a4e6d65cd0581"
+  },
+  {
+    "file": "src/lib/clubManagerVar.ts",
+    "bytes": 11992,
+    "sha256": "6960f2a33aa140d026ba543da1d3ba7d4fab26b5b46715f2986eb3a06ebfa8eb",
+    "gitBlob": "56c4a97b6e7708256fafd7484c5d08df48f7aa0a"
+  },
+  {
+    "file": "src/lib/soccerBootIds.ts",
+    "bytes": 441,
+    "sha256": "256e3d56f8e06d3c64f79717d72d6a7c9fa12e8e5d10c63b3394b74a628afe4d",
+    "gitBlob": "ffe7eac0e54b4281cbc4c49a7afe750f2359d0c1"
+  },
+  {
+    "file": "src/lib/soccerBoots.ts",
+    "bytes": 2749,
+    "sha256": "cca379a915bc83deaa8047960393732c76727bf088bd057dd97bcde8a1f4b543",
+    "gitBlob": "fc08c2a61e86afeea30621df9b13598ba795004c"
+  },
+  {
+    "file": "src/lib/soccerCareerAppearance.ts",
+    "bytes": 11324,
+    "sha256": "8c02ecde902ca176dd38736b0f7d6d5d9395a21523d923082f233d95dc25a7b2",
+    "gitBlob": "d3c10f93a0dd9feae26b5b6deea4962a5ca37b27"
+  },
+  {
+    "file": "src/lib/clubManagerJobHunt.ts",
+    "bytes": 19164,
+    "sha256": "ec85cc00be6c9ebdc8d9668f5e5698faabd11ecf05a25e733110d20f1fa45448",
+    "gitBlob": "1259b3724080f71d5606716d484e09fc4cc05ea8"
+  },
+  {
+    "file": "src/lib/clubManagerScore.ts",
+    "bytes": 25383,
+    "sha256": "f0392c0063164e43cef4a1baa9afdb65f5edc331572acade0ee891b06d322295",
+    "gitBlob": "67f5efa2ce87002ea86673f48df6e6732806fcf2"
+  },
+  {
+    "file": "src/lib/squadShape.ts",
+    "bytes": 8101,
+    "sha256": "faea57d79ff069880ab45556ed9032477f1d419e4dd69171fae713c459fd963b",
+    "gitBlob": "b116f1dfb7cde01be9904c98e263c514bfc114aa"
+  },
+  {
+    "file": "src/lib/positionFit.ts",
+    "bytes": 10271,
+    "sha256": "5da6886100bc49248424a8aebab205f656091d4d7894909e07654c0259d37e22",
+    "gitBlob": "868a0f0f92fedfde8f09d8fe31a4495f4965272e"
+  },
+  {
+    "file": "src/lib/calDate.ts",
+    "bytes": 3409,
+    "sha256": "fd96974659c6c2c45afafdd28f2885d7a4d64863b20c82e9c2760adb574d8593",
+    "gitBlob": "de6ac7b2537fa351f1f2053a0bf3fc22d05777f6"
+  },
+  {
+    "file": "src/lib/worldNights.ts",
+    "bytes": 7138,
+    "sha256": "95ca78f3f61426c97e390f3f59ae2c4234be2a3a47f45555ecf53e2de690d5fe",
+    "gitBlob": "d1d533f0e4011c5eb3def788cfcf0bce4bd53992"
+  },
+  {
+    "file": "src/data/cmOneOffRows.ts",
+    "bytes": 8270,
+    "sha256": "487d7fdc65fa91dad0fa22c1a4f9f3de590b7f0cd5b31624d677f3bad280f2b0",
+    "gitBlob": "0b881c2ea9d20fc9e9c2c4d0aba06251162d13e2"
+  },
+  {
+    "file": "src/lib/leagueSlate.ts",
+    "bytes": 15627,
+    "sha256": "6529ce3acb934ba902e2fe3cf3ae406d2ac0a4390429b866cd14b1f615061197",
+    "gitBlob": "bd3e088e74edd3dec2f025ceae78f76063c43905"
+  },
+  {
+    "file": "src/lib/uclLeaguePhase.ts",
+    "bytes": 13749,
+    "sha256": "ccb55bdac48c0f6903a8730bcf85fae8633b91711251c5dc7557dcf9c3720840",
+    "gitBlob": "77eee8669435c92f2c07ffcdf68fb6150cce9ccd"
+  },
+  {
+    "file": "src/lib/worldCompetition.ts",
+    "bytes": 27464,
+    "sha256": "b9bc507f669f367918ce59e13af0f3be4a441c9a5495f078cfd62825e7afd8a0",
+    "gitBlob": "4cab41fd6c006599d1bf5b21b83ae5c0f2e4bb9e"
+  },
+  {
+    "file": "src/lib/worldOneOffs.ts",
+    "bytes": 17951,
+    "sha256": "9ebddd5c33519138ba3b8f3a861d575b9870914dc4cb1de5cd9294e1a67e84b0",
+    "gitBlob": "a51b2435c68655a5ea41e5468d353fb5035ed0fb"
+  },
+  {
+    "file": "src/lib/clubManagerGoalWeight.ts",
+    "bytes": 1898,
+    "sha256": "ada0fea1a35f4a1091e8743c958b8573af8ff15b2073060a7544e7b32729627a",
+    "gitBlob": "25bc95d55af5bb36d31a6a1c23ef5cce3804a82f"
+  },
+  {
+    "file": "src/lib/clubManagerLeagueBook.ts",
+    "bytes": 24267,
+    "sha256": "9d37fc583b1e7a46fbd3c5ba959a02a765eefb68eb4188fed3e90f79971f3dc8",
+    "gitBlob": "f3a8f24de2ef017cb4b96005663d2d3274a4d2d8"
+  },
+  {
+    "file": "src/lib/clubManagerLeagueBoards.ts",
+    "bytes": 14559,
+    "sha256": "b2b19656adae7ef36e06f42e23c11f4d21d2a66bba641a0715a246fe38d1e618",
+    "gitBlob": "60ffe1024ff5f93d952561c3c900d8b700873b10"
+  },
+  {
+    "file": "src/lib/clubManagerWorldRoster.ts",
+    "bytes": 21152,
+    "sha256": "f6adb423530a29fc75fcc6e759bb746e6885b2b718ef4dc12033304e8669e4b4",
+    "gitBlob": "8fc15c82723512dd36482747bf9d06f8c731fa01"
+  },
+  {
+    "file": "src/data/players.ts",
+    "bytes": 113969,
+    "sha256": "e3873243b4e0c59ff4d7b541d990611bba44a3dcee5e8b93cd2c8a3e4869aa3f",
+    "gitBlob": "e3435eaae958a2853ae24de9d7eca29f5cfcf0da"
+  },
+  {
+    "file": "src/data/clubManagerRosters.ts",
+    "bytes": 276025,
+    "sha256": "f1a2ef3b68df755765e624d359831cf2627378e6987b3387d26f2943a087bbed",
+    "gitBlob": "01a6be13a8bc7f4594f8a5810a19a4c959001dbf"
+  },
+  {
+    "file": "src/data/clubManagerFreeAgents2026.ts",
+    "bytes": 1495,
+    "sha256": "048221843c0f3caf324da6bfa86662a946611261a15e887888e27c40720d2250",
+    "gitBlob": "380fcde45de8ec7e973b5c20b12503f99acdbad4"
+  },
+  {
+    "file": "src/data/clubManagerALeague2026.ts",
+    "bytes": 32647,
+    "sha256": "5fb22a86874955dd53e704bbbcf8c09cf935f301ddd96c6d9a4ad7f00a059ece",
+    "gitBlob": "89be13074147347c1fdb8277255077a5567a0d77"
+  },
+  {
+    "file": "src/data/clubManagerRussia2026.ts",
+    "bytes": 40325,
+    "sha256": "ccbb26127e4609f743ef07593f186efa36ebed6f6c163622746544bdf1ca02ba",
+    "gitBlob": "13c075218cac112a1e09b1db3658d274c9661588"
+  },
+  {
+    "file": "src/data/clubManagerWorldRosters.ts",
+    "bytes": 4830,
+    "sha256": "32f4d470368576706016afb77508a15b4be5335f700eb223af6aec783a64e65d",
+    "gitBlob": "dd40be6c6a2060eadc7b546a74b91b0d6f66f3ec"
+  },
+  {
+    "file": "src/data/clubManagerFinalTables2025_26.ts",
+    "bytes": 20027,
+    "sha256": "780f6c03cac48bb31b5a338422bb97ba20ba40b84070c53523e7d25e64a3b05d",
+    "gitBlob": "8d21c79cde3cb503b8425fa26234b272075f4adc"
+  },
+  {
+    "file": "src/lib/clubManagerTrajectory.ts",
+    "bytes": 3038,
+    "sha256": "7c235eacea92c60509cd2d02321b62dc924ed06e2543d6bc24f27ae790925da6",
+    "gitBlob": "08273e767320b6b268cf9a071511611fc2468136"
+  },
+  {
+    "file": "src/data/nationalities/era2020.ts",
+    "bytes": 55043,
+    "sha256": "d0c8b1b9bec1c29f0f9727bbe6d9d55f2ed5f71d6578594412efcaa776932522",
+    "gitBlob": "a74e62e5768bcead6547c34075468ad8bd2e5b4a"
+  },
+  {
+    "file": "src/data/nationalities/era2015.ts",
+    "bytes": 51422,
+    "sha256": "e52489a133a95b989959266edfae9651e9dc52b2af0cb4e9b9aab1f515fa2637",
+    "gitBlob": "8dc92bf5533ee12652695c141b2b0e86e9b46a08"
+  },
+  {
+    "file": "src/data/nationalities/era2010.ts",
+    "bytes": 54112,
+    "sha256": "c1cc235a5e243520b639800cc9abdb8074060f8d8d4c578ac847c755d0cd7bb3",
+    "gitBlob": "782d4930ec3ec1e3900e3e7aa9157fd0c57e29fa"
+  },
+  {
+    "file": "src/data/nationalities/era2005.ts",
+    "bytes": 53661,
+    "sha256": "8fdd3851fd30f7d5f22e1cc97b618f1b97c0c6316b02ad4dae44a90dacb86e1f",
+    "gitBlob": "abe7ef244e83fb5ee71f10adfe8f218ff919f479"
+  },
+  {
+    "file": "src/data/playerNationalities.ts",
+    "bytes": 142698,
+    "sha256": "db21b93b9a7202e88f7e66bb5d0774261e4b05ab5cda8ed8d0e4f411288c8779",
+    "gitBlob": "5cfd22a23453577cc15834b54a7c713d4e28275b"
+  },
+  {
+    "file": "src/data/clubManagerEra2010.ts",
+    "bytes": 107562,
+    "sha256": "ca2955e4c541d3e76bbd527382ee92c613010150876d99c590bf0117fef36e5f",
+    "gitBlob": "1f34b2305279348a0b5ba2d5b056aa4ac47499a2"
+  },
+  {
+    "file": "src/data/clubManagerEra2015.ts",
+    "bytes": 102476,
+    "sha256": "4c65cb2f0c76abc8ca9388a0d090499f4bfed1a10c9f4ae46ded1fa8750d6a6c",
+    "gitBlob": "47c8044b864564db419dcb1f5b36e7ce02ae0344"
+  },
+  {
+    "file": "src/data/clubManagerEra2005.ts",
+    "bytes": 106546,
+    "sha256": "bdd5c1f5eaeeae5a0a2b9394010f1aac3d407f48e0b8c6b2669e75b89668ee6a",
+    "gitBlob": "31f40b53e7f568eef4e6246bc38e22b42223a772"
+  },
+  {
+    "file": "src/data/clubManagerEra2020.ts",
+    "bytes": 109379,
+    "sha256": "2e8d121349d0d056dc3834f60f8e470459f1518d60f896c6181511a97cbfc5b3",
+    "gitBlob": "a6ca4b97e0eec1f1389d14621beb8c9148c3f095"
+  },
+  {
+    "file": "src/lib/clubManagerEras.ts",
+    "bytes": 55905,
+    "sha256": "74fcf309fee3943670a4ec1c44333a68ffb290f67b1d1325769dc2d368e55ec3",
+    "gitBlob": "8ebd4c560e81ba65dd4712d3271bcfd05a906d2b"
+  },
+  {
+    "file": "src/lib/clubManagerMadeUpNations.ts",
+    "bytes": 3157,
+    "sha256": "eb75d0e041d89fb3f57f51b4e97f947769eab270d416e659cee5b39f9e9edb91",
+    "gitBlob": "9a906a290b575a8bb57347fbf81faefae7600757"
+  },
+  {
+    "file": "src/lib/clubManagerFacilities.ts",
+    "bytes": 13120,
+    "sha256": "05534e0831d1d494ccbbc0f837c15fc8d65560a84ae0cd5a0a3af5e51c26ffd2",
+    "gitBlob": "4a3aa41a7652cb8dfbdfcc8ffb624d41faba1c51"
+  },
+  {
+    "file": "src/lib/gmStaff.ts",
+    "bytes": 38781,
+    "sha256": "2fa3c824f86850a38da9bd6e0ccd1520a827cb0bceb4b9c98c07066eb6b12ba3",
+    "gitBlob": "5431228a0c7cab9e19d19643f21571c1e1f56467"
+  },
+  {
+    "file": "src/lib/clubManagerStaff.ts",
+    "bytes": 24289,
+    "sha256": "a02562f9bb4fe375aea152930f78af98df546764e2a7de13dcb031f07a9cd11b",
+    "gitBlob": "51730710854b44722f3581c2fc7f9d1d28b04c9c"
+  },
+  {
+    "file": "src/lib/gmXp.ts",
+    "bytes": 22167,
+    "sha256": "3abeaf63ed85be97541d8aa060eccd3ebdbfd07384664ccb9d1bb4fad88fa75b",
+    "gitBlob": "9ba9172aa6951899d91e26fa74d65cee4ce0119d"
+  },
+  {
+    "file": "src/lib/clubManagerXp.ts",
+    "bytes": 23964,
+    "sha256": "5c1ca7124b93c7451644a9c421d4bd1fd37827820fecbf092ed60ce470ce5b26",
+    "gitBlob": "004bed2a40acebee9af3a98ec0987d364e534264"
+  },
+  {
+    "file": "src/lib/clubManagerMeters.ts",
+    "bytes": 10074,
+    "sha256": "0f2d08797d3eeedf9d755a516f7a97760c2550cc8c1ceb9d7d28a864b3212424",
+    "gitBlob": "c1f7301c0a1b0c14656273dfa89056c827bd929b"
+  },
+  {
+    "file": "src/lib/clubManagerFinances.ts",
+    "bytes": 38868,
+    "sha256": "8b4a59515252187b129feb41f69770c36e4c7175a3eada55bb700ef7042cd76b",
+    "gitBlob": "acbc15cd0080651631584ae1c940268e8f29de5c"
+  },
+  {
+    "file": "src/lib/clubManagerDecisions.ts",
+    "bytes": 26246,
+    "sha256": "04a2a47ea77c87bc2e3db2cb62e8d579bdbb05e3af232234813842a60aec229a",
+    "gitBlob": "57b07905df06c7e15456fd7dd264578cb1ff35e7"
+  },
+  {
+    "file": "src/lib/gmDealTable.ts",
+    "bytes": 7594,
+    "sha256": "5c83fb5102ad0440e90f02034f98fd175ab8cdfcda0d151ebe89d860c25f5170",
+    "gitBlob": "3baeaac5179f7503f7bf860e5fb18a3a5010fbd1"
+  },
+  {
+    "file": "src/lib/clubManagerDeals.ts",
+    "bytes": 21329,
+    "sha256": "963aeb25192aa16c3b38bdbf2a2e12c31f06c835720db20e8c9471955a86b20f",
+    "gitBlob": "6e62966e4950ac6e2fa0577f45d21527b9266ce6"
+  },
+  {
+    "file": "src/lib/managerDifficulty.ts",
+    "bytes": 2199,
+    "sha256": "a6499c5f86a87899834793e7eb32d0277f9dc4f7546d9f91d3d9acd540ff2c28",
+    "gitBlob": "65641dd886f02e829a95761f41762969e6b7ffb1"
+  },
+  {
+    "file": "src/lib/clubManagerStart.ts",
+    "bytes": 17277,
+    "sha256": "930288f04d6cb1a880eb70948472f2452fafdab4af1c519cd189af8cfa76f0ad",
+    "gitBlob": "0ff4cb5dbff9a8d9a97cf885140f11cfdd3474a8"
+  },
+  {
+    "file": "src/lib/clubManagerBoardVerdict.ts",
+    "bytes": 8029,
+    "sha256": "b6697c0204340a962f7d2f6b93eba6c759013f4fc9077196d1bfcad45c97106a",
+    "gitBlob": "e016f7d35e6d9adf615087f114875694c59d637e"
+  },
+  {
+    "file": "src/lib/clubManagerDifficulty.ts",
+    "bytes": 9717,
+    "sha256": "61b979f64d47e8df5b23a8b42326287b9d05bc851178c8cc011fa618f50e76dc",
+    "gitBlob": "f7d106fb78bddffe61cc35d5f1705df25d88d34d"
+  },
+  {
+    "file": "src/lib/clubManagerSubsRule.ts",
+    "bytes": 3778,
+    "sha256": "a8ea36d24a5506b5bc9e51c120ba31d94c044f35979d4b2741c739f334a8b3d9",
+    "gitBlob": "a9bfbfdba82185c1efd1f8905fd4e1eba7915a28"
+  },
+  {
+    "file": "src/lib/clubManagerBoardAsks.ts",
+    "bytes": 22217,
+    "sha256": "6b43866ed04163b717e7b4dc26e654b51ee6b1a165a05e80a422539c2586fd42",
+    "gitBlob": "52cf510e45f23f559ae31a6a3f675e2ca3e8308d"
+  },
+  {
+    "file": "src/lib/clubManagerCalendar.ts",
+    "bytes": 56974,
+    "sha256": "ee7a0ad2086ea52d10ef30f3fc02a4479132899eb30cbab815753cad3b4d6f6b",
+    "gitBlob": "3653027149d6a1bef4194e0bece4fb5783c1c1e2"
+  },
+  {
+    "file": "src/lib/clubManagerInternationals.ts",
+    "bytes": 33304,
+    "sha256": "fefd1c706eb2c507f91e5c580f96a7514fd696a29c9b6d0cc11e70e3ac59001b",
+    "gitBlob": "548c66f84d03181f3b00e6143d18353808649afa"
+  },
+  {
+    "file": "src/lib/euroAccess.ts",
+    "bytes": 9734,
+    "sha256": "2695e81f54d70eee84172f3c8303829d7517475e8cadafb3160f308626bcd569",
+    "gitBlob": "f81299a65671e141fc4f98f33f7b44dc8ed16e4c"
+  },
+  {
+    "file": "src/lib/clubManagerClock.ts",
+    "bytes": 1838,
+    "sha256": "819ebfdd38e823037d7ac0eb3f0780b679ba5044bb5e350c55ca5f1420bb249a",
+    "gitBlob": "41cdef9f5340eeae1082aae37a25273ec260bb7a"
+  },
+  {
+    "file": "src/lib/clubManagerTacticsCore.ts",
+    "bytes": 4652,
+    "sha256": "b09655663c218a9c906d8d426e443f51ad028213cbf5b824a752c6e1273449f1",
+    "gitBlob": "bc1c9b08c5946863b9cc9e111b03afaa45736eb1"
+  },
+  {
+    "file": "src/lib/saveFence.ts",
+    "bytes": 6552,
+    "sha256": "75ac3c8cf136acdb2dae50938cac5ffe522e2db7827f59c453b98b67519d6216",
+    "gitBlob": "1de45b573fd866433eb0982495af927a5427e8f4"
+  },
+  {
+    "file": "src/lib/clubManager.ts",
+    "bytes": 1245234,
+    "sha256": "ea2bf9c72ad4097af2df77fa5c19e04cfbca0bcc9c39bf71dc7fc42f249b3cc2",
+    "gitBlob": "962aab2c18611c40c1fc998c77c384ab02b2d7b6"
+  },
+  {
+    "file": "src/lib/managerJobMarket.ts",
+    "bytes": 3955,
+    "sha256": "2df0a3fed4336c23c0bcaa7868a06d63a4cbaa417b3e0e8880e17d8bc879774d",
+    "gitBlob": "82e11ce8c1c76b780059969674a26ad368bd4db4"
+  },
+  {
+    "file": "src/lib/soccerCareerEngine.ts",
+    "bytes": 552324,
+    "sha256": "7c79aef8322ea52d617c2390500bba5d2b93de8af2295f75dd3f2b079902711e",
+    "gitBlob": "6661bca7a583d57933a533f9edcabc1fc102c700"
+  },
+  {
+    "file": "src/lib/soccerCareerSave.ts",
+    "bytes": 6287,
+    "sha256": "b486dfd8c4073230b6967c674058e46c7b56a6afd2a8a165f1e215501205477a",
+    "gitBlob": "86ec011693fd5bc702b5e8ccec05d27775a72a76"
+  },
+  {
+    "file": "src/components/career-moments/useCareerMoment.ts",
+    "bytes": 3945,
+    "sha256": "7dc6419e5e0ceea0eb145dcfd67df41aff478e3269acbf07244419c308291e75",
+    "gitBlob": "1f9322dae64f5638b71df768dd818accec931871"
+  },
+  {
+    "file": "src/components/soccer-career/careerMoments.ts",
+    "bytes": 6752,
+    "sha256": "e668c21f443a8935798830c77af8f2627780c948eb1f4799dc09a767d3962bc0",
+    "gitBlob": "e9618355bc011458cde8930ceefdfec34d026b0d"
+  }
+]

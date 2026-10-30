@@ -1,0 +1,17 @@
+{
+  "id": "archive-dist-original-page",
+  "command": "tar",
+  "args": [
+    "-czf",
+    "/home/runner/work/_temp/rc-out/full/centre-regression/dist-original-page.tar.gz",
+    "-C",
+    "/home/runner/work/_temp/sc-centre-focus-matched-41137330144-a1/dist",
+    "."
+  ],
+  "cwd": "/home/runner/work/_temp/sc-centre-focus-matched-41137330144-a1/dist",
+  "start": "2026-10-30T22:25:14.527Z",
+  "end": "2026-10-30T22:25:15.246Z",
+  "raw": 0,
+  "signal": null,
+  "error": null
+}

@@ -1,0 +1,14 @@
+{
+  "id": "fixed-ordinary",
+  "command": "npm",
+  "args": [
+    "run",
+    "build"
+  ],
+  "cwd": "/home/runner/work/_temp/sc-centre-focus-matched-41137330144-a1",
+  "start": "2026-10-30T22:22:41.319Z",
+  "end": "2026-10-30T22:23:16.180Z",
+  "raw": 0,
+  "signal": null,
+  "error": null
+}

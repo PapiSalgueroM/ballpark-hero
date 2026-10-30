@@ -1,0 +1,717 @@
+{
+  "status": "PREPARED",
+  "sourceBefore": {
+    "index.html": {
+      "gitBlob": "f6d81a169d0c98f3b86551665c5cc83c7919dc48",
+      "sha256": "4f948e82c43b2667fdbae1a5f27957b2b9fc6fa0e081c2a9fa16c2601b61ede6"
+    },
+    "package-lock.json": {
+      "gitBlob": "97d6f12a052f25f400462938c241789a083f0bfe",
+      "sha256": "c7e3867eabf0bfa03a8aa6a5e601b0050b937ed210d48c6bbd241019e3c9ea76"
+    },
+    "package.json": {
+      "gitBlob": "2ff64986fb76ebc51b706f2fd24765768874008a",
+      "sha256": "acfe14626dea53cf5f9c5e0286b766a22237656b52aac4c888b080873ac90e31"
+    },
+    "scripts/data/soccerCareerFacts.json": {
+      "gitBlob": "9828e41da792eafeead8036879d49f05242a5164",
+      "sha256": "bc02c0d49e6d0b5fde50c2a2b1b78b30d6b1ec035a75d96265638cc9047b4ae6"
+    },
+    "scripts/lib/answerConsent.mjs": {
+      "gitBlob": "c6d16997e4c06e8b35dcfd0bab5efcad3069d899",
+      "sha256": "00de3f510782d77e48a5535462c1770472beecbccf9413f9fd488a1bddda32aa"
+    },
+    "scripts/lib/careerClubPool.mjs": {
+      "gitBlob": "16ccc6137958a1adf2e40e5d26b99de466b38e24",
+      "sha256": "ded92933aa4790e4c4a532647d09e5ee3c65b22dfec57432de18d25641d9dce0"
+    },
+    "scripts/lib/hostLikeServer.mjs": {
+      "gitBlob": "21059d5e8114669df61106c125d5272d357b6236",
+      "sha256": "3958c9a3b4d9e49bb60a3b7dd72d81a997bd1caed56e82e4c3bae07e1a918ef0"
+    },
+    "scripts/lib/offlineTransport.cjs": {
+      "gitBlob": "0fda542a2649fe5da937c6976fd0f5b6073e74b6",
+      "sha256": "e60ff1534307e449ccef598e3b7470dcba58681b82cea4005cec7319f14f9221"
+    },
+    "scripts/lib/playwrightLoader.mjs": {
+      "gitBlob": "4f7739e217e0a47ee82e6bfc8be1c04bed17454a",
+      "sha256": "94a07179be7ca6b9562d118b52c2d5d0dff0b6b2e29e49e4fea16fa2defb5a93"
+    },
+    "scripts/qa/freeKickLab1070.mjs": {
+      "gitBlob": "1cf030d9182fd4fd68fca39f32e757c69bf9e58a",
+      "sha256": "6279c8f608e56439e73f0bbcda73f9ed69e15d48e9b13119de4d6a7f05fb46b7"
+    },
+    "src/components/season-centre/SeasonCentre.tsx": {
+      "gitBlob": "286f0955b0abb0cd8a4d936954c7c37e3615f7c4",
+      "sha256": "df59581487914cd0bafe3e1d8269920948d58aea17cb3bec5390bc1c5b15b4ca"
+    },
+    "src/components/soccer-career/careerMoments.ts": {
+      "gitBlob": "e9618355bc011458cde8930ceefdfec34d026b0d",
+      "sha256": "e668c21f443a8935798830c77af8f2627780c948eb1f4799dc09a767d3962bc0"
+    },
+    "src/components/soccer-career/SoccerSeasonCentre.tsx": {
+      "gitBlob": "21fac3191f5d6294175b908c2584d29788e8fa2a",
+      "sha256": "94c3c55e9d5c46a84c9c17a5d17713114bc14c0e94e26e03391b363ce7895ce2"
+    },
+    "src/data/leagueFormat.ts": {
+      "gitBlob": "802650466c0c4439f12c741e7d1ae28957280f9b",
+      "sha256": "915b4acd46f103d7c371d58c043c600a85e4e592ae6b59d5a8000d930e76fca5"
+    },
+    "src/data/soccerCareerClubPool.ts": {
+      "gitBlob": "83e9df78441c0d16509f80b8ec0bfbadb0f08f26",
+      "sha256": "5e565223239c8bb5ea8f5be3d2ecfb5c72ed026d3598031fcb5221f265e01d58"
+    },
+    "src/index.css": {
+      "gitBlob": "775df500bd7c9730e5b04aedd3d6b2a1564d49b4",
+      "sha256": "ada9cc819db63d0e2eb013bd3c29eec16877e2a30166c390b81901142369fef3"
+    },
+    "src/lib/clubManager.ts": {
+      "gitBlob": "962aab2c18611c40c1fc998c77c384ab02b2d7b6",
+      "sha256": "ea2bf9c72ad4097af2df77fa5c19e04cfbca0bcc9c39bf71dc7fc42f249b3cc2"
+    },
+    "src/lib/season/core.ts": {
+      "gitBlob": "fe54ceaef5baeede559502ee3dc16ce4466bf812",
+      "sha256": "450693bf1c6449105990e09c7799ee276a0a2389b42f04a156ac82ead05e90a0"
+    },
+    "src/lib/season/soccer.ts": {
+      "gitBlob": "819e2d97d0435c4ef29a4c1ed441511a6906e986",
+      "sha256": "fefc54713b21160cc76530c7e0288fe6f2786ac23d0f8e696219505bd4f82294"
+    },
+    "src/lib/soccerCareerCoachingStart.ts": {
+      "gitBlob": "e28c79d67d54950e5b554e392048483693abbc4b",
+      "sha256": "3864fc30c2edbd311f4f7e967530f92ffa84a9369d724a55bd9c2dffd28ae1fe"
+    },
+    "src/lib/soccerCareerDerby.ts": {
+      "gitBlob": "e25062b2b6560957feb414fd709b7bbc5b4af7ba",
+      "sha256": "24b47bb4f83a37f4c43fcd5cb42be7976eac299a5bec0f7673af0621c6c804e8"
+    },
+    "src/lib/soccerCareerEngine.ts": {
+      "gitBlob": "6661bca7a583d57933a533f9edcabc1fc102c700",
+      "sha256": "7c79aef8322ea52d617c2390500bba5d2b93de8af2295f75dd3f2b079902711e"
+    },
+    "src/lib/soccerCareerLeague.ts": {
+      "gitBlob": "9c05bf681f30bcd3703f55ad72c1289f4eeb9844",
+      "sha256": "fe3efae2f43e780c2cd4d13ca7fa85f023a2fefe8cf1b002866a1cf0d963268a"
+    },
+    "src/lib/soccerCareerSave.ts": {
+      "gitBlob": "86ec011693fd5bc702b5e8ccec05d27775a72a76",
+      "sha256": "b486dfd8c4073230b6967c674058e46c7b56a6afd2a8a165f1e215501205477a"
+    },
+    "src/pages/SoccerCareer.tsx": {
+      "gitBlob": "2dc4cd701dc930106d58a1150c2667eebea171ae",
+      "sha256": "6e489232b929a5d54701a896cb48ba1d7c18b6cd42fa1d53a467e47f14e472b2"
+    },
+    "vite.config.ts": {
+      "gitBlob": "0112b6ac4f2ad80b2fc04f9ec2f7185300913e7d",
+      "sha256": "02fd27231ac2eb44864a8f0c7f568ff3ce44e5114302df6f110f1406e4b65e81"
+    },
+    "src/lib/dialogA11y.ts": {
+      "gitBlob": "823eaec15df9fd5527295caf41f8cebe94efcb7e",
+      "sha256": "d43a2a4c7f3c895e8ab1d151337d2a532f2242f32284af5b09462dcf22a88aa5"
+    },
+    "src/components/soccer-career/SeasonResumeChip.tsx": {
+      "gitBlob": "2ba957977bfb1e80bf3a179f36564f5706bd2fb2",
+      "sha256": "81876bdad5c4d01396c9843a81fac191ef1acf5244baf52166e79860dee1f56c"
+    }
+  },
+  "youthAttempts": [
+    {
+      "seed": 1,
+      "overall": 46,
+      "phase": "contract_offer",
+      "offerIds": [
+        "fb-71",
+        "fb-110",
+        "fb-144",
+        "fb-129"
+      ],
+      "drawCount": 38,
+      "next": 0.15327094192616642,
+      "selected": null
+    },
+    {
+      "seed": 2,
+      "overall": 45,
+      "phase": "contract_offer",
+      "offerIds": [
+        "fb-71",
+        "fb-118",
+        "cm-arouca",
+        "fb-141"
+      ],
+      "drawCount": 38,
+      "next": 0.0006261211819946766,
+      "selected": null
+    },
+    {
+      "seed": 3,
+      "overall": 46,
+      "phase": "contract_offer",
+      "offerIds": [
+        "fb-71",
+        "cm-cercle-brugge",
+        "fb-173",
+        "fb-61"
+      ],
+      "drawCount": 38,
+      "next": 0.6820647406857461,
+      "selected": null
+    },
+    {
+      "seed": 4,
+      "overall": 47,
+      "phase": "contract_offer",
+      "offerIds": [
+        "fb-105",
+        "fb-189",
+        "cm-getafe",
+        "cm-arminia-bielefeld"
+      ],
+      "drawCount": 38,
+      "next": 0.06054745987057686,
+      "selected": null
+    },
+    {
+      "seed": 5,
+      "overall": 45,
+      "phase": "contract_offer",
+      "offerIds": [
+        "fb-71",
+        "cm-freiburg",
+        "cm-swansea-city",
+        "cm-catanzaro"
+      ],
+      "drawCount": 38,
+      "next": 0.7223614330869168,
+      "selected": null
+    },
+    {
+      "seed": 6,
+      "overall": 45,
+      "phase": "contract_offer",
+      "offerIds": [
+        "fb-71",
+        "fb-182",
+        "cm-lugano",
+        "cm-athletico-paranaense"
+      ],
+      "drawCount": 38,
+      "next": 0.5783014234621078,
+      "selected": null
+    },
+    {
+      "seed": 7,
+      "overall": 46,
+      "phase": "contract_offer",
+      "offerIds": [
+        "fb-50",
+        "cm-antwerp",
+        "cm-kifisia",
+        "cm-fc-zurich"
+      ],
+      "drawCount": 38,
+      "next": 0.17494154698215425,
+      "selected": null
+    },
+    {
+      "seed": 8,
+      "overall": 45,
+      "phase": "contract_offer",
+      "offerIds": [
+        "fb-50",
+        "fb-57",
+        "fb-136",
+        "fb-172"
+      ],
+      "drawCount": 38,
+      "next": 0.6492377039976418,
+      "selected": null
+    },
+    {
+      "seed": 9,
+      "overall": 47,
+      "phase": "contract_offer",
+      "offerIds": [
+        "fb-50",
+        "fb-54",
+        "fb-137",
+        "cm-pachuca"
+      ],
+      "drawCount": 38,
+      "next": 0.6587297026999295,
+      "selected": null
+    },
+    {
+      "seed": 10,
+      "overall": 46,
+      "phase": "contract_offer",
+      "offerIds": [
+        "fb-71",
+        "cm-fc-midtjylland",
+        "fb-140",
+        "fb-68"
+      ],
+      "drawCount": 38,
+      "next": 0.4179618286434561,
+      "selected": null
+    },
+    {
+      "seed": 11,
+      "overall": 46,
+      "phase": "contract_offer",
+      "offerIds": [
+        "fb-71",
+        "fb-186",
+        "fb-159",
+        "cm-catanzaro"
+      ],
+      "drawCount": 38,
+      "next": 0.5534459529444575,
+      "selected": null
+    },
+    {
+      "seed": 12,
+      "overall": 46,
+      "phase": "contract_offer",
+      "offerIds": [
+        "fb-70",
+        "cm-gladbach",
+        "cm-bahia",
+        "fb-158"
+      ],
+      "drawCount": 38,
+      "next": 0.39960541599430144,
+      "selected": null
+    },
+    {
+      "seed": 13,
+      "overall": 46,
+      "phase": "contract_offer",
+      "offerIds": [
+        "fb-71",
+        "fb-55",
+        "cm-cardiff-city",
+        "fb-175"
+      ],
+      "drawCount": 38,
+      "next": 0.018659049877896905,
+      "selected": null
+    },
+    {
+      "seed": 14,
+      "overall": 45,
+      "phase": "contract_offer",
+      "offerIds": [
+        "fb-70",
+        "fb-116",
+        "fb-164",
+        "fb-75"
+      ],
+      "drawCount": 38,
+      "next": 0.7753536717500538,
+      "selected": null
+    },
+    {
+      "seed": 15,
+      "overall": 45,
+      "phase": "contract_offer",
+      "offerIds": [
+        "fb-50",
+        "cm-koln",
+        "fb-148",
+        "fb-164"
+      ],
+      "drawCount": 38,
+      "next": 0.8919548792764544,
+      "selected": null
+    },
+    {
+      "seed": 16,
+      "overall": 46,
+      "phase": "contract_offer",
+      "offerIds": [
+        "fb-71",
+        "cm-neom-sc",
+        "cm-rayo-vallecano",
+        "fb-158"
+      ],
+      "drawCount": 38,
+      "next": 0.7888999227434397,
+      "selected": null
+    },
+    {
+      "seed": 17,
+      "overall": 46,
+      "phase": "contract_offer",
+      "offerIds": [
+        "fb-71",
+        "fb-107",
+        "fb-161",
+        "cm-eyupspor"
+      ],
+      "drawCount": 38,
+      "next": 0.7182202776893973,
+      "selected": null
+    },
+    {
+      "seed": 18,
+      "overall": 45,
+      "phase": "contract_offer",
+      "offerIds": [
+        "fb-70",
+        "fb-97",
+        "cm-dundee-united",
+        "cm-alverca"
+      ],
+      "drawCount": 38,
+      "next": 0.3627975743729621,
+      "selected": null
+    },
+    {
+      "seed": 19,
+      "overall": 46,
+      "phase": "contract_offer",
+      "offerIds": [
+        "fb-50",
+        "fb-53",
+        "cm-vaduz",
+        "cm-maritimo"
+      ],
+      "drawCount": 38,
+      "next": 0.933917717076838,
+      "selected": null
+    },
+    {
+      "seed": 20,
+      "overall": 46,
+      "phase": "contract_offer",
+      "offerIds": [
+        "fb-105",
+        "fb-116",
+        "cm-osijek",
+        "fb-69"
+      ],
+      "drawCount": 38,
+      "next": 0.8078821545932442,
+      "selected": null
+    },
+    {
+      "seed": 21,
+      "overall": 47,
+      "phase": "contract_offer",
+      "offerIds": [
+        "fb-70",
+        "fb-102",
+        "fb-152",
+        "fb-153"
+      ],
+      "drawCount": 38,
+      "next": 0.5819234754890203,
+      "selected": null
+    },
+    {
+      "seed": 22,
+      "overall": 46,
+      "phase": "contract_offer",
+      "offerIds": [
+        "fb-71",
+        "fb-106",
+        "cm-falkirk",
+        "cm-bournemouth"
+      ],
+      "drawCount": 38,
+      "next": 0.37701181950978935,
+      "selected": null
+    },
+    {
+      "seed": 23,
+      "overall": 45,
+      "phase": "contract_offer",
+      "offerIds": [
+        "fb-50",
+        "fb-109",
+        "fb-134",
+        "cm-levadiakos"
+      ],
+      "drawCount": 38,
+      "next": 0.3108540126122534,
+      "selected": null
+    },
+    {
+      "seed": 24,
+      "overall": 45,
+      "phase": "contract_offer",
+      "offerIds": [
+        "fb-70",
+        "fb-47",
+        "cm-charleroi",
+        "cm-la-louviere"
+      ],
+      "drawCount": 38,
+      "next": 0.8437316720373929,
+      "selected": null
+    },
+    {
+      "seed": 25,
+      "overall": 44,
+      "phase": "contract_offer",
+      "offerIds": [
+        "fb-71",
+        "cm-augsburg",
+        "cm-nec-nijmegen",
+        "fb-93"
+      ],
+      "drawCount": 38,
+      "next": 0.9095022587571293,
+      "selected": null
+    },
+    {
+      "seed": 26,
+      "overall": 46,
+      "phase": "contract_offer",
+      "offerIds": [
+        "fb-71",
+        "fb-105",
+        "cm-eyupspor",
+        "cm-middlesbrough"
+      ],
+      "drawCount": 38,
+      "next": 0.28786629461683333,
+      "selected": null
+    },
+    {
+      "seed": 27,
+      "overall": 45,
+      "phase": "contract_offer",
+      "offerIds": [
+        "fb-70",
+        "fb-48",
+        "cm-monza",
+        "cm-viborg-ff"
+      ],
+      "drawCount": 38,
+      "next": 0.4657107356470078,
+      "selected": null
+    },
+    {
+      "seed": 28,
+      "overall": 45,
+      "phase": "contract_offer",
+      "offerIds": [
+        "fb-70",
+        "fb-105",
+        "fb-156",
+        "fb-172"
+      ],
+      "drawCount": 38,
+      "next": 0.7041234311182052,
+      "selected": null
+    },
+    {
+      "seed": 29,
+      "overall": 45,
+      "phase": "contract_offer",
+      "offerIds": [
+        "fb-50",
+        "fb-44",
+        "fb-77",
+        "cm-remo"
+      ],
+      "drawCount": 38,
+      "next": 0.8296560887247324,
+      "selected": null
+    },
+    {
+      "seed": 30,
+      "overall": 46,
+      "phase": "contract_offer",
+      "offerIds": [
+        "fb-105",
+        "cm-mechelen",
+        "cm-boulogne",
+        "cm-palermo"
+      ],
+      "drawCount": 38,
+      "next": 0.5464361105114222,
+      "selected": "cm-boulogne"
+    }
+  ],
+  "seniorAttempts": [
+    {
+      "seed": 1,
+      "phase": "newspaper",
+      "pendingNews": 2,
+      "club": "Boulogne",
+      "year": 2027,
+      "apps": 13,
+      "injurySevere": false,
+      "leagueSize": 18,
+      "memberCount": 18,
+      "drawCount": 134,
+      "next": 0.23455683374777436,
+      "accepted": true
+    }
+  ],
+  "bounds": {
+    "youth": 512,
+    "senior": 256
+  },
+  "scope": "Actual engine constructor, youth, offered contract and senior preview in Node. No browser onboarding or real match claim.",
+  "files": [
+    {
+      "name": "oracle.cjs",
+      "bytes": 2409543,
+      "sha256": "2e6e02635b66bd1abf16a87e5c5f089c243363ef0b1ce02b2e24622a07ef70ce"
+    },
+    {
+      "name": "oracle-metafile.json",
+      "bytes": 105898,
+      "sha256": "69cc60a8c055bac7bfc75b0993fa8418e4071c470fccbdead05d286cd21aabbf"
+    },
+    {
+      "name": "oracle-source-inputs.json",
+      "bytes": 36277,
+      "sha256": "06548c6df0eb5d0dca95bf3732546fc18c9cc99dcf3a2049118d4501016bf57c"
+    },
+    {
+      "name": "actual-youth-contract.json",
+      "bytes": 30644,
+      "sha256": "bc14c48c01a01eda5765cc0ab4c25ce153648e7809a7af90659d7b78aff9503b"
+    },
+    {
+      "name": "actual-senior-preview.json",
+      "bytes": 32784,
+      "sha256": "f0c986e010bec40b4c8dfd95e4692baba145cd327ba7045f55acddaf84e76d3d"
+    },
+    {
+      "name": "signed.save",
+      "bytes": 6230,
+      "sha256": "118c5ff5e06306dc3a2c24f1d077d7b246c419006a0fa4bc6b048ced81898ffc"
+    },
+    {
+      "name": "preview.save",
+      "bytes": 17148,
+      "sha256": "0f5c690cbf6f1473a50788bf9b6cf9a3065a02ed9cc32f742c64e3fc57578817"
+    },
+    {
+      "name": "replay.save",
+      "bytes": 17148,
+      "sha256": "0f5c690cbf6f1473a50788bf9b6cf9a3065a02ed9cc32f742c64e3fc57578817"
+    }
+  ],
+  "seniorSeed": 1,
+  "sourceAfter": {
+    "index.html": {
+      "gitBlob": "f6d81a169d0c98f3b86551665c5cc83c7919dc48",
+      "sha256": "4f948e82c43b2667fdbae1a5f27957b2b9fc6fa0e081c2a9fa16c2601b61ede6"
+    },
+    "package-lock.json": {
+      "gitBlob": "97d6f12a052f25f400462938c241789a083f0bfe",
+      "sha256": "c7e3867eabf0bfa03a8aa6a5e601b0050b937ed210d48c6bbd241019e3c9ea76"
+    },
+    "package.json": {
+      "gitBlob": "2ff64986fb76ebc51b706f2fd24765768874008a",
+      "sha256": "acfe14626dea53cf5f9c5e0286b766a22237656b52aac4c888b080873ac90e31"
+    },
+    "scripts/data/soccerCareerFacts.json": {
+      "gitBlob": "9828e41da792eafeead8036879d49f05242a5164",
+      "sha256": "bc02c0d49e6d0b5fde50c2a2b1b78b30d6b1ec035a75d96265638cc9047b4ae6"
+    },
+    "scripts/lib/answerConsent.mjs": {
+      "gitBlob": "c6d16997e4c06e8b35dcfd0bab5efcad3069d899",
+      "sha256": "00de3f510782d77e48a5535462c1770472beecbccf9413f9fd488a1bddda32aa"
+    },
+    "scripts/lib/careerClubPool.mjs": {
+      "gitBlob": "16ccc6137958a1adf2e40e5d26b99de466b38e24",
+      "sha256": "ded92933aa4790e4c4a532647d09e5ee3c65b22dfec57432de18d25641d9dce0"
+    },
+    "scripts/lib/hostLikeServer.mjs": {
+      "gitBlob": "21059d5e8114669df61106c125d5272d357b6236",
+      "sha256": "3958c9a3b4d9e49bb60a3b7dd72d81a997bd1caed56e82e4c3bae07e1a918ef0"
+    },
+    "scripts/lib/offlineTransport.cjs": {
+      "gitBlob": "0fda542a2649fe5da937c6976fd0f5b6073e74b6",
+      "sha256": "e60ff1534307e449ccef598e3b7470dcba58681b82cea4005cec7319f14f9221"
+    },
+    "scripts/lib/playwrightLoader.mjs": {
+      "gitBlob": "4f7739e217e0a47ee82e6bfc8be1c04bed17454a",
+      "sha256": "94a07179be7ca6b9562d118b52c2d5d0dff0b6b2e29e49e4fea16fa2defb5a93"
+    },
+    "scripts/qa/freeKickLab1070.mjs": {
+      "gitBlob": "1cf030d9182fd4fd68fca39f32e757c69bf9e58a",
+      "sha256": "6279c8f608e56439e73f0bbcda73f9ed69e15d48e9b13119de4d6a7f05fb46b7"
+    },
+    "src/components/season-centre/SeasonCentre.tsx": {
+      "gitBlob": "286f0955b0abb0cd8a4d936954c7c37e3615f7c4",
+      "sha256": "df59581487914cd0bafe3e1d8269920948d58aea17cb3bec5390bc1c5b15b4ca"
+    },
+    "src/components/soccer-career/careerMoments.ts": {
+      "gitBlob": "e9618355bc011458cde8930ceefdfec34d026b0d",
+      "sha256": "e668c21f443a8935798830c77af8f2627780c948eb1f4799dc09a767d3962bc0"
+    },
+    "src/components/soccer-career/SoccerSeasonCentre.tsx": {
+      "gitBlob": "21fac3191f5d6294175b908c2584d29788e8fa2a",
+      "sha256": "94c3c55e9d5c46a84c9c17a5d17713114bc14c0e94e26e03391b363ce7895ce2"
+    },
+    "src/data/leagueFormat.ts": {
+      "gitBlob": "802650466c0c4439f12c741e7d1ae28957280f9b",
+      "sha256": "915b4acd46f103d7c371d58c043c600a85e4e592ae6b59d5a8000d930e76fca5"
+    },
+    "src/data/soccerCareerClubPool.ts": {
+      "gitBlob": "83e9df78441c0d16509f80b8ec0bfbadb0f08f26",
+      "sha256": "5e565223239c8bb5ea8f5be3d2ecfb5c72ed026d3598031fcb5221f265e01d58"
+    },
+    "src/index.css": {
+      "gitBlob": "775df500bd7c9730e5b04aedd3d6b2a1564d49b4",
+      "sha256": "ada9cc819db63d0e2eb013bd3c29eec16877e2a30166c390b81901142369fef3"
+    },
+    "src/lib/clubManager.ts": {
+      "gitBlob": "962aab2c18611c40c1fc998c77c384ab02b2d7b6",
+      "sha256": "ea2bf9c72ad4097af2df77fa5c19e04cfbca0bcc9c39bf71dc7fc42f249b3cc2"
+    },
+    "src/lib/season/core.ts": {
+      "gitBlob": "fe54ceaef5baeede559502ee3dc16ce4466bf812",
+      "sha256": "450693bf1c6449105990e09c7799ee276a0a2389b42f04a156ac82ead05e90a0"
+    },
+    "src/lib/season/soccer.ts": {
+      "gitBlob": "819e2d97d0435c4ef29a4c1ed441511a6906e986",
+      "sha256": "fefc54713b21160cc76530c7e0288fe6f2786ac23d0f8e696219505bd4f82294"
+    },
+    "src/lib/soccerCareerCoachingStart.ts": {
+      "gitBlob": "e28c79d67d54950e5b554e392048483693abbc4b",
+      "sha256": "3864fc30c2edbd311f4f7e967530f92ffa84a9369d724a55bd9c2dffd28ae1fe"
+    },
+    "src/lib/soccerCareerDerby.ts": {
+      "gitBlob": "e25062b2b6560957feb414fd709b7bbc5b4af7ba",
+      "sha256": "24b47bb4f83a37f4c43fcd5cb42be7976eac299a5bec0f7673af0621c6c804e8"
+    },
+    "src/lib/soccerCareerEngine.ts": {
+      "gitBlob": "6661bca7a583d57933a533f9edcabc1fc102c700",
+      "sha256": "7c79aef8322ea52d617c2390500bba5d2b93de8af2295f75dd3f2b079902711e"
+    },
+    "src/lib/soccerCareerLeague.ts": {
+      "gitBlob": "9c05bf681f30bcd3703f55ad72c1289f4eeb9844",
+      "sha256": "fe3efae2f43e780c2cd4d13ca7fa85f023a2fefe8cf1b002866a1cf0d963268a"
+    },
+    "src/lib/soccerCareerSave.ts": {
+      "gitBlob": "86ec011693fd5bc702b5e8ccec05d27775a72a76",
+      "sha256": "b486dfd8c4073230b6967c674058e46c7b56a6afd2a8a165f1e215501205477a"
+    },
+    "src/pages/SoccerCareer.tsx": {
+      "gitBlob": "2dc4cd701dc930106d58a1150c2667eebea171ae",
+      "sha256": "6e489232b929a5d54701a896cb48ba1d7c18b6cd42fa1d53a467e47f14e472b2"
+    },
+    "vite.config.ts": {
+      "gitBlob": "0112b6ac4f2ad80b2fc04f9ec2f7185300913e7d",
+      "sha256": "02fd27231ac2eb44864a8f0c7f568ff3ce44e5114302df6f110f1406e4b65e81"
+    },
+    "src/lib/dialogA11y.ts": {
+      "gitBlob": "823eaec15df9fd5527295caf41f8cebe94efcb7e",
+      "sha256": "d43a2a4c7f3c895e8ab1d151337d2a532f2242f32284af5b09462dcf22a88aa5"
+    },
+    "src/components/soccer-career/SeasonResumeChip.tsx": {
+      "gitBlob": "2ba957977bfb1e80bf3a179f36564f5706bd2fb2",
+      "sha256": "81876bdad5c4d01396c9843a81fac191ef1acf5244baf52166e79860dee1f56c"
+    }
+  }
+}

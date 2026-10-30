@@ -1,0 +1,6 @@
+#!serial
+# Same four cases: fixed, physical whole original Page, exact fixed restoration.
+prepare: bash .rc/default-support.sh prepare
+fixture: bash .rc/default-support.sh focus fixture
+regression: bash .rc/default-support.sh focus regression
+finish: bash .rc/default-support.sh finish

@@ -1,0 +1,24 @@
+import{j as a}from"./index-BGBLzPC2.js";function i(){return a.jsx("style",{children:`
+      @keyframes cmRise { 0% { opacity: 0; transform: translateY(7px); } 100% { opacity: 1; transform: translateY(0); } }
+      .cm-rise { opacity: 0; animation: cmRise 0.45s ease-out forwards; }
+      @keyframes cmSlam { 0% { opacity: 0; transform: scale(1.6); } 60% { opacity: 1; transform: scale(0.94); } 100% { opacity: 1; transform: scale(1); } }
+      .cm-slam { opacity: 0; animation: cmSlam 0.4s cubic-bezier(0.2, 0.8, 0.3, 1.2) forwards; }
+      @keyframes cmWinPulse { 0% { box-shadow: 0 0 0 0 rgba(34,197,94,0.45); } 100% { box-shadow: 0 0 0 26px rgba(34,197,94,0); } }
+      .cm-win-pulse { animation: cmWinPulse 0.9s ease-out 1; }
+      @keyframes cmLossShake { 0%, 100% { transform: translateX(0); } 25% { transform: translateX(-4px); } 55% { transform: translateX(3px); } 80% { transform: translateX(-2px); } }
+      .cm-loss-shake { animation: cmLossShake 0.4s ease-in-out 1; }
+      @keyframes cmGoldGlow { 0%, 100% { box-shadow: 0 0 8px rgba(234,179,8,0.35); } 50% { box-shadow: 0 0 22px rgba(234,179,8,0.75); } }
+      .cm-gold-glow { animation: cmGoldGlow 1.5s ease-in-out infinite; }
+      @keyframes cmTickIn { 0% { opacity: 0; transform: translateX(-6px); } 100% { opacity: 1; transform: translateX(0); } }
+      .cm-tick-in { opacity: 0; animation: cmTickIn 0.35s ease-out forwards; }
+      /* cm-rise for a control that must not be pressed before it shows: hidden
+         (so unclickable) through its delay, visible from its first frame. */
+      @keyframes cmRiseGated { 0% { opacity: 0; visibility: visible; transform: translateY(7px); } 100% { opacity: 1; visibility: visible; transform: translateY(0); } }
+      .cm-rise-gated { opacity: 0; visibility: hidden; animation: cmRiseGated 0.45s ease-out forwards; }
+
+
+      @media (prefers-reduced-motion: reduce) {
+        .cm-rise, .cm-slam, .cm-tick-in, .cm-rise-gated { animation: none; opacity: 1; transform: none; visibility: visible; }
+        .cm-win-pulse, .cm-loss-shake, .cm-gold-glow { animation: none; }
+      }
+    `})}export{i as CelebrationStyles};

@@ -1,0 +1,1 @@
+const a={base:1.25,perPoint:.055,min:.12,max:4.2,cap:7,home:.2,away:-.08};function s(t,o){const n=a.base+t*a.perPoint+o;return n<a.min?a.min:n>a.max?a.max:n}function m(t,o){const n=Math.exp(-t);let e=0,i=1;do e+=1,i*=o();while(i>n);return Math.min(e-1,a.cap)}export{a as L,s as g,m as p};

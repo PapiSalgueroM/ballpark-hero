@@ -1,0 +1,18 @@
+{
+  "id": "archive-source-fixed",
+  "command": "tar",
+  "args": [
+    "-czf",
+    "/home/runner/work/_temp/rc-out/full/centre-regression/source-fixed.tar.gz",
+    "--null",
+    "--verbatim-files-from",
+    "-T",
+    "/home/runner/work/_temp/rc-out/full/centre-regression/tracked-files.nul"
+  ],
+  "cwd": "/home/runner/work/_temp/sc-centre-focus-matched-41137330144-a1",
+  "start": "2026-10-30T22:23:51.777Z",
+  "end": "2026-10-30T22:23:55.975Z",
+  "raw": 0,
+  "signal": null,
+  "error": null
+}
