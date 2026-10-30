@@ -1,0 +1,6 @@
+#!serial
+# Supplemental four-body old-chrome source control only. No1022-default credit or shipping revert.
+prepare: bash .rc/default-support.sh prepare
+playLiveTicker: bash .rc/default-support.sh run playLiveTicker.mjs
+playCmHubLanding: bash .rc/default-support.sh run playCmHubLanding.mjs
+finish: bash .rc/default-support.sh finish
