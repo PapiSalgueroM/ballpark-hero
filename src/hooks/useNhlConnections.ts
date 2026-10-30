@@ -3,6 +3,7 @@ import { nhlConnectionsPuzzles } from '@/data/nhlConnectionsPuzzles';
 import { useGameCompletion } from '@/hooks/useGameCompletion';
 import { useDailyPuzzle } from '@/hooks/useDailyPuzzle';
 import { isSportConnectionsLog } from '@/lib/dailySaveShapes';
+import { isSameConnectionsGroup } from '@/lib/connectionsSolvedMatch';
 import { fetchNhlConnectionsPuzzles } from '@/lib/fetchNhlConnectionsPuzzles';
 import { dailyIndex, getTodayET } from '@/lib/dateUtils';
 import { emptyNhlDrafts, nhlDraftKey, nhlDraftScope, parseNhlDrafts, toggleNhlDraft, type NhlConnectionDrafts } from '@/lib/nhlConnectionDrafts';
@@ -111,7 +112,7 @@ export function useNhlConnections() {
   const dailySolvedGroupsFinal = useMemo(() => {
     if (dailyLives > 0 || !dailyPuzzle) return dailySolvedGroups;
     const remaining = dailyPuzzle.groups.filter(
-      g => !dailySolvedGroups.some(s => s.theme === g.theme)
+      g => !dailySolvedGroups.some(s => isSameConnectionsGroup(s, g))
     );
     return [
       ...dailySolvedGroups,
@@ -254,7 +255,7 @@ export function useNhlConnections() {
     submittedRef.current = submission;
 
     const match = puzzle.groups.find(g =>
-      !solvedGroups.some(s => s.theme === g.theme) &&
+      !solvedGroups.some(s => isSameConnectionsGroup(s, g)) &&
       g.players.length === 5 &&
       selected.every(p => g.players.includes(p)) &&
       g.players.every(p => selected.includes(p))
@@ -275,7 +276,7 @@ export function useNhlConnections() {
         const newLives = unlimitedLives - 1;
         setUnlimitedLives(newLives);
         if (newLives <= 0) {
-          const remaining = puzzle.groups.filter(g => !unlimitedSolvedGroups.some(s => s.theme === g.theme));
+          const remaining = puzzle.groups.filter(g => !unlimitedSolvedGroups.some(s => isSameConnectionsGroup(s, g)));
           setUnlimitedRevealed(remaining.map(g => ({ theme: g.theme, players: g.players, difficulty: g.difficulty })));
         }
       }

@@ -48,7 +48,7 @@ export function BaseballConnectionsHowToPlay({ open, onOpenChange }: Props) {
           </div>
           <div className="space-y-2">
             <p className="font-semibold text-[hsl(var(--bb-red-ink))]">Connections can include</p>
-            <p className="text-muted-foreground">Same team, same draft class, same country, same award, same position, same era, and more.</p>
+            <p className="text-muted-foreground">Same team, same draft class, same country, same award, same position, same era, and more. A team group marked "as of 2026" only counts seasons up to then, so a trade later on can't change the answer.</p>
           </div>
         </div>
       </DialogContent>

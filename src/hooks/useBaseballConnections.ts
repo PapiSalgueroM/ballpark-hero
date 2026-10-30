@@ -3,6 +3,7 @@ import { baseballConnectionsPuzzles } from '@/data/baseballConnectionsPuzzles';
 import { useGameCompletion } from '@/hooks/useGameCompletion';
 import { useDailyPuzzle } from '@/hooks/useDailyPuzzle';
 import { isSportConnectionsLog } from '@/lib/dailySaveShapes';
+import { isSameConnectionsGroup } from '@/lib/connectionsSolvedMatch';
 import { fetchBaseballConnectionsPuzzles } from '@/lib/fetchBaseballConnectionsPuzzles';
 import { dailyIndex, getTodayET } from '@/lib/dateUtils';
 
@@ -97,7 +98,7 @@ export function useBaseballConnections() {
   const dailySolvedGroupsFinal = useMemo(() => {
     if (dailyLives > 0 || !dailyPuzzle) return dailySolvedGroups;
     const remaining = dailyPuzzle.groups.filter(
-      g => !dailySolvedGroups.some(s => s.theme === g.theme)
+      g => !dailySolvedGroups.some(s => isSameConnectionsGroup(s, g))
     );
     return [
       ...dailySolvedGroups,
@@ -190,7 +191,7 @@ export function useBaseballConnections() {
     if (selected.length !== 5 || gameStatus !== 'playing' || !puzzle) return;
 
     const match = puzzle.groups.find(g =>
-      !solvedGroups.some(s => s.theme === g.theme) &&
+      !solvedGroups.some(s => isSameConnectionsGroup(s, g)) &&
       g.players.length === 5 &&
       selected.every(p => g.players.includes(p)) &&
       g.players.every(p => selected.includes(p))
@@ -210,7 +211,7 @@ export function useBaseballConnections() {
         const newLives = unlimitedLives - 1;
         setUnlimitedLives(newLives);
         if (newLives <= 0) {
-          const remaining = puzzle.groups.filter(g => !unlimitedSolvedGroups.some(s => s.theme === g.theme));
+          const remaining = puzzle.groups.filter(g => !unlimitedSolvedGroups.some(s => isSameConnectionsGroup(s, g)));
           setUnlimitedRevealed(remaining.map(g => ({ theme: g.theme, players: g.players, difficulty: g.difficulty })));
         }
       }

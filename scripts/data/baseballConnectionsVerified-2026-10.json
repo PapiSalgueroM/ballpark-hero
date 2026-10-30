@@ -5,7 +5,9 @@
   "A fact names a man, a group label and whether he fits it (holds), and carries two sources on two different hosts, neither a wiki: the record first, the second host after it.",
   "Every member of a group the checker flagged before the round holds his group on two hosts (flaggedGroups lists those groups under their labels after the round).",
   "Every finding the checker made before the round (fixed) has the fact behind it on two hosts: the member who did not fit, or the man from another group who did.",
-  "uncheckedCeiling, memberUnknownCeiling and otherUnknownCeiling may only fall: a label, a member or another tile the record cannot judge must not come back."
+  "uncheckedCeiling, memberUnknownCeiling and otherUnknownCeiling may only fall: a label, a member or another tile the record cannot judge must not come back.",
+  "Round 1567: a pair the record cannot judge is never settled by a new line; it is read on both hosts (grayPairs) and, a coin toss, its man leaves that board in place (rebuilt1567). Every member of a rebuilt group holds it on two hosts (its group is in flaggedGroups).",
+  "fix2-1567: a near-line fact (why \"near-line\") records a man dealt beside a Hall of Fame position group with 8.5 to 9.9 percent of his games at its position, just under the 10 percent line the checker calls out (review-read-1567 minor 3). Each is read on the league record and baseball-reference.com by his share, and on the Hall of Fame's own page by his primary position; none puts him in that group, so the pair stays on its board as decided, not as a coin toss."
  ],
  "boardsChanged": [
   "bconn-001",
@@ -408,6 +410,102 @@
   [
    "bconn-021",
    "Dodgers legends"
+  ],
+  [
+   "bconn-018",
+   "Hall of Fame shortstops"
+  ],
+  [
+   "bconn-018",
+   "Hall of Fame second basemen"
+  ],
+  [
+   "bconn-019",
+   "San Francisco Giants legends"
+  ],
+  [
+   "bconn-022",
+   "Hall of Fame center fielders"
+  ],
+  [
+   "bconn-024",
+   "Philadelphia Phillies legends"
+  ],
+  [
+   "bconn-026",
+   "San Diego Padres legends"
+  ],
+  [
+   "bconn-028",
+   "Hall of Fame right fielders"
+  ],
+  [
+   "bconn-029",
+   "Kansas City Royals legends"
+  ],
+  [
+   "bconn-031",
+   "Montreal Expos / Washington Nationals legends"
+  ],
+  [
+   "bconn-031",
+   "Toronto Blue Jays legends"
+  ],
+  [
+   "bconn-032",
+   "Colorado Rockies legends"
+  ],
+  [
+   "bconn-032",
+   "Arizona Diamondbacks legends"
+  ],
+  [
+   "bconn-032",
+   "Tampa Bay Rays legends"
+  ],
+  [
+   "bconn-035",
+   "Hall of Fame right fielders"
+  ],
+  [
+   "bconn-035",
+   "Hall of Fame center fielders"
+  ],
+  [
+   "bconn-036",
+   "Hall of Fame second basemen"
+  ],
+  [
+   "bconn-036",
+   "Hall of Fame shortstops"
+  ],
+  [
+   "bconn-038",
+   "Hall of Fame relief pitchers"
+  ],
+  [
+   "bconn-038",
+   "Hall of Fame designated hitters / sluggers"
+  ],
+  [
+   "bconn-041",
+   "Hall of Fame third basemen"
+  ],
+  [
+   "bconn-041",
+   "Hall of Fame second basemen"
+  ],
+  [
+   "bconn-053",
+   "Hall of Fame third basemen"
+  ],
+  [
+   "bconn-053",
+   "Hall of Fame second basemen"
+  ],
+  [
+   "bconn-057",
+   "Hall of Fame center fielders"
   ]
  ],
  "fixed": [
@@ -540,7 +638,8 @@
   "bconn-003 | Mookie Betts (Played for the Los Angeles Dodgers) | World Series MVP winners | played in 2026; the 2026 WSMVP is still to be named",
   "bconn-003 | Cody Bellinger (Played for the Los Angeles Dodgers) | World Series MVP winners | played in 2026; the 2026 WSMVP is still to be named",
   "bconn-011 | Aaron Judge (50+ HR in a single season) | Won Gold Glove at outfield | played most of 2026 at RF; the 2026 ALGG/NLGG is still to be named",
-  "bconn-051 | Salvador Perez (Won a Silver Slugger at catcher) | Won a Silver Slugger at designated hitter | played most of 2026 at DH; the 2026 ALSS/NLSS is still to be named"
+  "bconn-051 | Salvador Perez (Won a Silver Slugger at catcher) | Won a Silver Slugger at designated hitter | played most of 2026 at DH; the 2026 ALSS/NLSS is still to be named",
+  "bconn-002 | Shohei Ohtani (Born in Japan) | Won Cy Young Award | pitched in 2026 (14 starts as a two way man); the 2026 ALCY/NLCY is still to be named"
  ],
  "facts": [
   {
@@ -10962,6 +11061,2382 @@
      "says": "a Major League Baseball player for the Brooklyn Dodgers (1947 - 1956); Teams Played For: Brooklyn Dodgers 1947 to 1956"
     }
    ]
+  },
+  {
+   "id": "bconn-002",
+   "label": "Born in Japan",
+   "name": "Hisashi Iwakuma",
+   "holds": true,
+   "why": "member",
+   "sources": [
+    {
+     "host": "statsapi.mlb.com",
+     "url": "https://statsapi.mlb.com/api/v1/people/547874",
+     "says": "birthCountry Japan"
+    },
+    {
+     "host": "baseball-reference.com",
+     "url": "https://www.baseball-reference.com/players/i/iwakuhi01.shtml",
+     "says": "Born: April 12 , 1981 in Higashi Yamato, Japan jp"
+    }
+   ],
+   "round": 1567
+  },
+  {
+   "id": "bconn-018",
+   "label": "Hall of Fame shortstops",
+   "name": "Luis Aparicio",
+   "holds": true,
+   "why": "member",
+   "sources": [
+    {
+     "host": "statsapi.mlb.com",
+     "url": "https://statsapi.mlb.com/api/v1/people/110290",
+     "says": "MLBHOF 1984; games by position {\"SS\":2582}; last 1973-09-28"
+    },
+    {
+     "host": "baseball-reference.com",
+     "url": "https://www.baseball-reference.com/players/a/aparilu01.shtml",
+     "says": "Hall of Fame 1984; Positions: Shortstop; share of games at SS: 1.00"
+    }
+   ],
+   "round": 1567
+  },
+  {
+   "id": "bconn-018",
+   "label": "Hall of Fame shortstops",
+   "name": "Ernie Banks",
+   "holds": true,
+   "why": "member",
+   "sources": [
+    {
+     "host": "statsapi.mlb.com",
+     "url": "https://statsapi.mlb.com/api/v1/people/110533",
+     "says": "MLBHOF 1977; games by position {\"SS\":1125,\"3B\":69,\"1B\":1258,\"LF\":23}; last 1971-09-26"
+    },
+    {
+     "host": "baseball-reference.com",
+     "url": "https://www.baseball-reference.com/players/b/bankser01.shtml",
+     "says": "Hall of Fame 1977; Positions: First Baseman and Shortstop; share of games at SS: 0.45"
+    }
+   ],
+   "round": 1567
+  },
+  {
+   "id": "bconn-018",
+   "label": "Hall of Fame second basemen",
+   "name": "Joe Morgan",
+   "holds": true,
+   "why": "member",
+   "sources": [
+    {
+     "host": "statsapi.mlb.com",
+     "url": "https://statsapi.mlb.com/api/v1/people/119371",
+     "says": "MLBHOF 1990; games by position {\"2B\":2526,\"LF\":14,\"CF\":2,\"3B\":3,\"DH\":2}; last 1984-09-30"
+    },
+    {
+     "host": "baseball-reference.com",
+     "url": "https://www.baseball-reference.com/players/m/morgajo02.shtml",
+     "says": "Hall of Fame 1990; Positions: Second Baseman; share of games at 2B: 0.99"
+    }
+   ],
+   "round": 1567
+  },
+  {
+   "id": "bconn-018",
+   "label": "Hall of Fame second basemen",
+   "name": "Ryne Sandberg",
+   "holds": true,
+   "why": "member",
+   "sources": [
+    {
+     "host": "statsapi.mlb.com",
+     "url": "https://statsapi.mlb.com/api/v1/people/121665",
+     "says": "MLBHOF 2005; games by position {\"2B\":1994,\"SS\":7,\"3B\":133,\"DH\":1}; last 1997-09-28"
+    },
+    {
+     "host": "baseball-reference.com",
+     "url": "https://www.baseball-reference.com/players/s/sandbry01.shtml",
+     "says": "Hall of Fame 2005; Positions: Second Baseman and Third Baseman; share of games at 2B: 0.93"
+    }
+   ],
+   "round": 1567
+  },
+  {
+   "id": "bconn-018",
+   "label": "Hall of Fame second basemen",
+   "name": "Nellie Fox",
+   "holds": true,
+   "why": "member",
+   "sources": [
+    {
+     "host": "statsapi.mlb.com",
+     "url": "https://statsapi.mlb.com/api/v1/people/114361",
+     "says": "MLBHOF 1997; games by position {\"2B\":2295,\"1B\":2,\"3B\":6}; last 1965-07-25"
+    },
+    {
+     "host": "baseball-reference.com",
+     "url": "https://www.baseball-reference.com/players/f/foxne01.shtml",
+     "says": "Hall of Fame 1997; Positions: Second Baseman; share of games at 2B: 1.00"
+    }
+   ],
+   "round": 1567
+  },
+  {
+   "id": "bconn-018",
+   "label": "Hall of Fame second basemen",
+   "name": "Bill Mazeroski",
+   "holds": true,
+   "why": "member",
+   "sources": [
+    {
+     "host": "statsapi.mlb.com",
+     "url": "https://statsapi.mlb.com/api/v1/people/118497",
+     "says": "MLBHOF 2001; games by position {\"2B\":2094,\"3B\":10}; last 1972-10-04"
+    },
+    {
+     "host": "baseball-reference.com",
+     "url": "https://www.baseball-reference.com/players/m/mazerbi01.shtml",
+     "says": "Hall of Fame 2001; Positions: Second Baseman; share of games at 2B: 1.00"
+    }
+   ],
+   "round": 1567
+  },
+  {
+   "id": "bconn-018",
+   "label": "Hall of Fame second basemen",
+   "name": "Roberto Alomar",
+   "holds": true,
+   "why": "member",
+   "sources": [
+    {
+     "host": "statsapi.mlb.com",
+     "url": "https://statsapi.mlb.com/api/v1/people/110183",
+     "says": "MLBHOF 2011; games by position {\"2B\":2320,\"SS\":5,\"DH\":19}; last 2004-09-05"
+    },
+    {
+     "host": "baseball-reference.com",
+     "url": "https://www.baseball-reference.com/players/a/alomaro01.shtml",
+     "says": "Hall of Fame 2011; Positions: Second Baseman; share of games at 2B: 0.99"
+    }
+   ],
+   "round": 1567
+  },
+  {
+   "id": "bconn-019",
+   "label": "San Francisco Giants legends",
+   "name": "Willie Mays",
+   "holds": true,
+   "why": "member",
+   "sources": [
+    {
+     "host": "statsapi.mlb.com",
+     "url": "https://statsapi.mlb.com/api/v1/people/118495",
+     "says": "seasons with club 137: 21"
+    },
+    {
+     "host": "baseball-reference.com",
+     "url": "https://www.baseball-reference.com/players/m/mayswi01.shtml",
+     "says": "seasons with the club: 21 (1951 to 1972)"
+    }
+   ],
+   "round": 1567
+  },
+  {
+   "id": "bconn-019",
+   "label": "San Francisco Giants legends",
+   "name": "Barry Bonds",
+   "holds": true,
+   "why": "member",
+   "sources": [
+    {
+     "host": "statsapi.mlb.com",
+     "url": "https://statsapi.mlb.com/api/v1/people/111188",
+     "says": "seasons with club 137: 15"
+    },
+    {
+     "host": "baseball-reference.com",
+     "url": "https://www.baseball-reference.com/players/b/bondsba01.shtml",
+     "says": "seasons with the club: 15 (1993 to 2007)"
+    }
+   ],
+   "round": 1567
+  },
+  {
+   "id": "bconn-019",
+   "label": "San Francisco Giants legends",
+   "name": "Willie McCovey",
+   "holds": true,
+   "why": "member",
+   "sources": [
+    {
+     "host": "statsapi.mlb.com",
+     "url": "https://statsapi.mlb.com/api/v1/people/118605",
+     "says": "seasons with club 137: 19"
+    },
+    {
+     "host": "baseball-reference.com",
+     "url": "https://www.baseball-reference.com/players/m/mccovwi01.shtml",
+     "says": "seasons with the club: 19 (1959 to 1980)"
+    }
+   ],
+   "round": 1567
+  },
+  {
+   "id": "bconn-019",
+   "label": "San Francisco Giants legends",
+   "name": "Buster Posey",
+   "holds": true,
+   "why": "member",
+   "sources": [
+    {
+     "host": "statsapi.mlb.com",
+     "url": "https://statsapi.mlb.com/api/v1/people/457763",
+     "says": "seasons with club 137: 12"
+    },
+    {
+     "host": "baseball-reference.com",
+     "url": "https://www.baseball-reference.com/players/p/poseybu01.shtml",
+     "says": "seasons with the club: 12 (2009 to 2021)"
+    }
+   ],
+   "round": 1567
+  },
+  {
+   "id": "bconn-019",
+   "label": "San Francisco Giants legends",
+   "name": "Madison Bumgarner",
+   "holds": true,
+   "why": "member",
+   "sources": [
+    {
+     "host": "statsapi.mlb.com",
+     "url": "https://statsapi.mlb.com/api/v1/people/518516",
+     "says": "seasons with club 137: 11"
+    },
+    {
+     "host": "baseball-reference.com",
+     "url": "https://www.baseball-reference.com/players/b/bumgama01.shtml",
+     "says": "seasons with the club: 11 (2009 to 2019)"
+    }
+   ],
+   "round": 1567
+  },
+  {
+   "id": "bconn-022",
+   "label": "Hall of Fame center fielders",
+   "name": "Joe DiMaggio",
+   "holds": true,
+   "why": "member",
+   "sources": [
+    {
+     "host": "statsapi.mlb.com",
+     "url": "https://statsapi.mlb.com/api/v1/people/113376",
+     "says": "MLBHOF 1955; games by position {\"LF\":67,\"CF\":1635,\"RF\":20,\"1B\":1}; last 1951-09-30"
+    },
+    {
+     "host": "baseball-reference.com",
+     "url": "https://www.baseball-reference.com/players/d/dimagjo01.shtml",
+     "says": "Hall of Fame 1955; Positions: Centerfielder; share of games at CF: 0.95"
+    }
+   ],
+   "round": 1567
+  },
+  {
+   "id": "bconn-022",
+   "label": "Hall of Fame center fielders",
+   "name": "Ty Cobb",
+   "holds": true,
+   "why": "member",
+   "sources": [
+    {
+     "host": "statsapi.mlb.com",
+     "url": "https://statsapi.mlb.com/api/v1/people/112431",
+     "says": "MLBHOF 1936; games by position {\"LF\":36,\"CF\":2194,\"RF\":709,\"2B\":3,\"1B\":14,\"P\":3,\"3B\":1}; last 1928-09-11"
+    },
+    {
+     "host": "baseball-reference.com",
+     "url": "https://www.baseball-reference.com/players/c/cobbty01.shtml",
+     "says": "Hall of Fame 1936; Positions: Centerfielder; share of games at CF: 0.74"
+    }
+   ],
+   "round": 1567
+  },
+  {
+   "id": "bconn-024",
+   "label": "Philadelphia Phillies legends",
+   "name": "Mike Schmidt",
+   "holds": true,
+   "why": "member",
+   "sources": [
+    {
+     "host": "statsapi.mlb.com",
+     "url": "https://statsapi.mlb.com/api/v1/people/121836",
+     "says": "seasons with club 143: 18"
+    },
+    {
+     "host": "baseball-reference.com",
+     "url": "https://www.baseball-reference.com/players/s/schmimi01.shtml",
+     "says": "seasons with the club: 18 (1972 to 1989)"
+    }
+   ],
+   "round": 1567
+  },
+  {
+   "id": "bconn-024",
+   "label": "Philadelphia Phillies legends",
+   "name": "Steve Carlton",
+   "holds": true,
+   "why": "member",
+   "sources": [
+    {
+     "host": "statsapi.mlb.com",
+     "url": "https://statsapi.mlb.com/api/v1/people/112008",
+     "says": "seasons with club 143: 15"
+    },
+    {
+     "host": "baseball-reference.com",
+     "url": "https://www.baseball-reference.com/players/c/carltst01.shtml",
+     "says": "seasons with the club: 15 (1972 to 1986)"
+    }
+   ],
+   "round": 1567
+  },
+  {
+   "id": "bconn-024",
+   "label": "Philadelphia Phillies legends",
+   "name": "Ryan Howard",
+   "holds": true,
+   "why": "member",
+   "sources": [
+    {
+     "host": "statsapi.mlb.com",
+     "url": "https://statsapi.mlb.com/api/v1/people/429667",
+     "says": "seasons with club 143: 13"
+    },
+    {
+     "host": "baseball-reference.com",
+     "url": "https://www.baseball-reference.com/players/h/howarry01.shtml",
+     "says": "seasons with the club: 13 (2004 to 2016)"
+    }
+   ],
+   "round": 1567
+  },
+  {
+   "id": "bconn-024",
+   "label": "Philadelphia Phillies legends",
+   "name": "Chase Utley",
+   "holds": true,
+   "why": "member",
+   "sources": [
+    {
+     "host": "statsapi.mlb.com",
+     "url": "https://statsapi.mlb.com/api/v1/people/400284",
+     "says": "seasons with club 143: 13"
+    },
+    {
+     "host": "baseball-reference.com",
+     "url": "https://www.baseball-reference.com/players/u/utleych01.shtml",
+     "says": "seasons with the club: 13 (2003 to 2015)"
+    }
+   ],
+   "round": 1567
+  },
+  {
+   "id": "bconn-024",
+   "label": "Philadelphia Phillies legends",
+   "name": "Jimmy Rollins",
+   "holds": true,
+   "why": "member",
+   "sources": [
+    {
+     "host": "statsapi.mlb.com",
+     "url": "https://statsapi.mlb.com/api/v1/people/276519",
+     "says": "seasons with club 143: 15"
+    },
+    {
+     "host": "baseball-reference.com",
+     "url": "https://www.baseball-reference.com/players/r/rolliji01.shtml",
+     "says": "seasons with the club: 15 (2000 to 2014)"
+    }
+   ],
+   "round": 1567
+  },
+  {
+   "id": "bconn-026",
+   "label": "San Diego Padres legends",
+   "name": "Tony Gwynn",
+   "holds": true,
+   "why": "member",
+   "sources": [
+    {
+     "host": "statsapi.mlb.com",
+     "url": "https://statsapi.mlb.com/api/v1/people/115270",
+     "says": "seasons with club 135: 20"
+    },
+    {
+     "host": "baseball-reference.com",
+     "url": "https://www.baseball-reference.com/players/g/gwynnto01.shtml",
+     "says": "seasons with the club: 20 (1982 to 2001)"
+    }
+   ],
+   "round": 1567
+  },
+  {
+   "id": "bconn-026",
+   "label": "San Diego Padres legends",
+   "name": "Trevor Hoffman",
+   "holds": true,
+   "why": "member",
+   "sources": [
+    {
+     "host": "statsapi.mlb.com",
+     "url": "https://statsapi.mlb.com/api/v1/people/116034",
+     "says": "seasons with club 135: 16"
+    },
+    {
+     "host": "baseball-reference.com",
+     "url": "https://www.baseball-reference.com/players/h/hoffmtr01.shtml",
+     "says": "seasons with the club: 16 (1993 to 2008)"
+    }
+   ],
+   "round": 1567
+  },
+  {
+   "id": "bconn-026",
+   "label": "San Diego Padres legends",
+   "name": "Benito Santiago",
+   "holds": true,
+   "why": "member",
+   "sources": [
+    {
+     "host": "statsapi.mlb.com",
+     "url": "https://statsapi.mlb.com/api/v1/people/121693",
+     "says": "seasons with club 135: 7"
+    },
+    {
+     "host": "baseball-reference.com",
+     "url": "https://www.baseball-reference.com/players/s/santibe01.shtml",
+     "says": "seasons with the club: 7 (1986 to 1992)"
+    }
+   ],
+   "round": 1567
+  },
+  {
+   "id": "bconn-026",
+   "label": "San Diego Padres legends",
+   "name": "Jake Peavy",
+   "holds": true,
+   "why": "member",
+   "sources": [
+    {
+     "host": "statsapi.mlb.com",
+     "url": "https://statsapi.mlb.com/api/v1/people/408241",
+     "says": "seasons with club 135: 8"
+    },
+    {
+     "host": "baseball-reference.com",
+     "url": "https://www.baseball-reference.com/players/p/peavyja01.shtml",
+     "says": "seasons with the club: 8 (2002 to 2009)"
+    }
+   ],
+   "round": 1567
+  },
+  {
+   "id": "bconn-026",
+   "label": "San Diego Padres legends",
+   "name": "Randy Jones",
+   "holds": true,
+   "why": "member",
+   "sources": [
+    {
+     "host": "statsapi.mlb.com",
+     "url": "https://statsapi.mlb.com/api/v1/people/116715",
+     "says": "seasons with club 135: 8"
+    },
+    {
+     "host": "baseball-reference.com",
+     "url": "https://www.baseball-reference.com/players/j/jonesra01.shtml",
+     "says": "seasons with the club: 8 (1973 to 1980)"
+    }
+   ],
+   "round": 1567
+  },
+  {
+   "id": "bconn-028",
+   "label": "Hall of Fame left fielders",
+   "name": "Jim Rice",
+   "holds": true,
+   "why": "member",
+   "sources": [
+    {
+     "host": "statsapi.mlb.com",
+     "url": "https://statsapi.mlb.com/api/v1/people/121140",
+     "says": "MLBHOF 2009; games by position {\"LF\":1503,\"DH\":519,\"RF\":44,\"CF\":1}; last 1989-08-03"
+    },
+    {
+     "host": "baseball-reference.com",
+     "url": "https://www.baseball-reference.com/players/r/riceji01.shtml",
+     "says": "Hall of Fame 2009; Positions: Leftfielder and Designated Hitter; share of games at LF: 0.73"
+    }
+   ],
+   "round": 1567
+  },
+  {
+   "id": "bconn-028",
+   "label": "Hall of Fame right fielders",
+   "name": "Ichiro Suzuki",
+   "holds": true,
+   "why": "member",
+   "sources": [
+    {
+     "host": "statsapi.mlb.com",
+     "url": "https://statsapi.mlb.com/api/v1/people/400085",
+     "says": "MLBHOF 2025; games by position {\"RF\":1970,\"DH\":52,\"CF\":322,\"LF\":117,\"P\":1}; last 2019-03-21"
+    },
+    {
+     "host": "baseball-reference.com",
+     "url": "https://www.baseball-reference.com/players/s/suzukic01.shtml",
+     "says": "Hall of Fame 2025; Positions: Rightfielder; share of games at RF: 0.81"
+    }
+   ],
+   "round": 1567
+  },
+  {
+   "id": "bconn-029",
+   "label": "Kansas City Royals legends",
+   "name": "George Brett",
+   "holds": true,
+   "why": "member",
+   "sources": [
+    {
+     "host": "statsapi.mlb.com",
+     "url": "https://statsapi.mlb.com/api/v1/people/111437",
+     "says": "seasons with club 118: 21"
+    },
+    {
+     "host": "baseball-reference.com",
+     "url": "https://www.baseball-reference.com/players/b/brettge01.shtml",
+     "says": "seasons with the club: 21 (1973 to 1993)"
+    }
+   ],
+   "round": 1567
+  },
+  {
+   "id": "bconn-029",
+   "label": "Kansas City Royals legends",
+   "name": "Bret Saberhagen",
+   "holds": true,
+   "why": "member",
+   "sources": [
+    {
+     "host": "statsapi.mlb.com",
+     "url": "https://statsapi.mlb.com/api/v1/people/121604",
+     "says": "seasons with club 118: 8"
+    },
+    {
+     "host": "baseball-reference.com",
+     "url": "https://www.baseball-reference.com/players/s/saberbr01.shtml",
+     "says": "seasons with the club: 8 (1984 to 1991)"
+    }
+   ],
+   "round": 1567
+  },
+  {
+   "id": "bconn-029",
+   "label": "Kansas City Royals legends",
+   "name": "Frank White",
+   "holds": true,
+   "why": "member",
+   "sources": [
+    {
+     "host": "statsapi.mlb.com",
+     "url": "https://statsapi.mlb.com/api/v1/people/124170",
+     "says": "seasons with club 118: 18"
+    },
+    {
+     "host": "baseball-reference.com",
+     "url": "https://www.baseball-reference.com/players/w/whitefr01.shtml",
+     "says": "seasons with the club: 18 (1973 to 1990)"
+    }
+   ],
+   "round": 1567
+  },
+  {
+   "id": "bconn-029",
+   "label": "Kansas City Royals legends",
+   "name": "Salvador Perez",
+   "holds": true,
+   "why": "member",
+   "sources": [
+    {
+     "host": "statsapi.mlb.com",
+     "url": "https://statsapi.mlb.com/api/v1/people/521692",
+     "says": "seasons with club 118: 15"
+    },
+    {
+     "host": "baseball-reference.com",
+     "url": "https://www.baseball-reference.com/players/p/perezsa02.shtml",
+     "says": "seasons with the club: 15 (2011 to 2026)"
+    }
+   ],
+   "round": 1567
+  },
+  {
+   "id": "bconn-029",
+   "label": "Kansas City Royals legends",
+   "name": "Alex Gordon",
+   "holds": true,
+   "why": "member",
+   "sources": [
+    {
+     "host": "statsapi.mlb.com",
+     "url": "https://statsapi.mlb.com/api/v1/people/460086",
+     "says": "seasons with club 118: 14"
+    },
+    {
+     "host": "baseball-reference.com",
+     "url": "https://www.baseball-reference.com/players/g/gordoal01.shtml",
+     "says": "seasons with the club: 14 (2007 to 2020)"
+    }
+   ],
+   "round": 1567
+  },
+  {
+   "id": "bconn-029",
+   "label": "Oakland Athletics legends",
+   "name": "Catfish Hunter",
+   "holds": true,
+   "why": "member",
+   "sources": [
+    {
+     "host": "statsapi.mlb.com",
+     "url": "https://statsapi.mlb.com/api/v1/people/116334",
+     "says": "seasons with club 133: 10"
+    },
+    {
+     "host": "baseball-reference.com",
+     "url": "https://www.baseball-reference.com/players/h/hunteca01.shtml",
+     "says": "seasons with the club: 10 (1965 to 1974)"
+    }
+   ],
+   "round": 1567
+  },
+  {
+   "id": "bconn-031",
+   "label": "New York Mets legends",
+   "name": "Keith Hernandez",
+   "holds": true,
+   "why": "member",
+   "sources": [
+    {
+     "host": "statsapi.mlb.com",
+     "url": "https://statsapi.mlb.com/api/v1/people/115826",
+     "says": "seasons with club 121: 7"
+    },
+    {
+     "host": "baseball-reference.com",
+     "url": "https://www.baseball-reference.com/players/h/hernake01.shtml",
+     "says": "seasons with the club: 7 (1983 to 1989)"
+    }
+   ],
+   "round": 1567
+  },
+  {
+   "id": "bconn-031",
+   "label": "Montreal Expos / Washington Nationals legends",
+   "name": "Andre Dawson",
+   "holds": true,
+   "why": "member",
+   "sources": [
+    {
+     "host": "statsapi.mlb.com",
+     "url": "https://statsapi.mlb.com/api/v1/people/113151",
+     "says": "seasons with club 120: 11"
+    },
+    {
+     "host": "baseball-reference.com",
+     "url": "https://www.baseball-reference.com/players/d/dawsoan01.shtml",
+     "says": "seasons with the club: 11 (1976 to 1986)"
+    }
+   ],
+   "round": 1567
+  },
+  {
+   "id": "bconn-031",
+   "label": "Montreal Expos / Washington Nationals legends",
+   "name": "Tim Raines",
+   "holds": true,
+   "why": "member",
+   "sources": [
+    {
+     "host": "statsapi.mlb.com",
+     "url": "https://statsapi.mlb.com/api/v1/people/120891",
+     "says": "seasons with club 120: 13"
+    },
+    {
+     "host": "baseball-reference.com",
+     "url": "https://www.baseball-reference.com/players/r/raineti01.shtml",
+     "says": "seasons with the club: 13 (1979 to 2001)"
+    }
+   ],
+   "round": 1567
+  },
+  {
+   "id": "bconn-031",
+   "label": "Montreal Expos / Washington Nationals legends",
+   "name": "Ryan Zimmerman",
+   "holds": true,
+   "why": "member",
+   "sources": [
+    {
+     "host": "statsapi.mlb.com",
+     "url": "https://statsapi.mlb.com/api/v1/people/475582",
+     "says": "seasons with club 120: 16"
+    },
+    {
+     "host": "baseball-reference.com",
+     "url": "https://www.baseball-reference.com/players/z/zimmery01.shtml",
+     "says": "seasons with the club: 16 (2005 to 2021)"
+    }
+   ],
+   "round": 1567
+  },
+  {
+   "id": "bconn-031",
+   "label": "Montreal Expos / Washington Nationals legends",
+   "name": "Stephen Strasburg",
+   "holds": true,
+   "why": "member",
+   "sources": [
+    {
+     "host": "statsapi.mlb.com",
+     "url": "https://statsapi.mlb.com/api/v1/people/544931",
+     "says": "seasons with club 120: 13"
+    },
+    {
+     "host": "baseball-reference.com",
+     "url": "https://www.baseball-reference.com/players/s/strasst01.shtml",
+     "says": "seasons with the club: 13 (2010 to 2022)"
+    }
+   ],
+   "round": 1567
+  },
+  {
+   "id": "bconn-031",
+   "label": "Montreal Expos / Washington Nationals legends",
+   "name": "Dennis Martinez",
+   "holds": true,
+   "why": "member",
+   "sources": [
+    {
+     "host": "statsapi.mlb.com",
+     "url": "https://statsapi.mlb.com/api/v1/people/118371",
+     "says": "seasons with club 120: 8"
+    },
+    {
+     "host": "baseball-reference.com",
+     "url": "https://www.baseball-reference.com/players/m/martide01.shtml",
+     "says": "seasons with the club: 8 (1986 to 1993)"
+    }
+   ],
+   "round": 1567
+  },
+  {
+   "id": "bconn-031",
+   "label": "Toronto Blue Jays legends",
+   "name": "Roy Halladay",
+   "holds": true,
+   "why": "member",
+   "sources": [
+    {
+     "host": "statsapi.mlb.com",
+     "url": "https://statsapi.mlb.com/api/v1/people/136880",
+     "says": "seasons with club 141: 12"
+    },
+    {
+     "host": "baseball-reference.com",
+     "url": "https://www.baseball-reference.com/players/h/hallaro01.shtml",
+     "says": "seasons with the club: 12 (1998 to 2009)"
+    }
+   ],
+   "round": 1567
+  },
+  {
+   "id": "bconn-031",
+   "label": "Toronto Blue Jays legends",
+   "name": "George Bell",
+   "holds": true,
+   "why": "member",
+   "sources": [
+    {
+     "host": "statsapi.mlb.com",
+     "url": "https://statsapi.mlb.com/api/v1/people/110823",
+     "says": "seasons with club 141: 9"
+    },
+    {
+     "host": "baseball-reference.com",
+     "url": "https://www.baseball-reference.com/players/b/bellge02.shtml",
+     "says": "seasons with the club: 9 (1981 to 1990)"
+    }
+   ],
+   "round": 1567
+  },
+  {
+   "id": "bconn-031",
+   "label": "Toronto Blue Jays legends",
+   "name": "Joe Carter",
+   "holds": true,
+   "why": "member",
+   "sources": [
+    {
+     "host": "statsapi.mlb.com",
+     "url": "https://statsapi.mlb.com/api/v1/people/112064",
+     "says": "seasons with club 141: 7"
+    },
+    {
+     "host": "baseball-reference.com",
+     "url": "https://www.baseball-reference.com/players/c/cartejo01.shtml",
+     "says": "seasons with the club: 7 (1991 to 1997)"
+    }
+   ],
+   "round": 1567
+  },
+  {
+   "id": "bconn-031",
+   "label": "Toronto Blue Jays legends",
+   "name": "Dave Stieb",
+   "holds": true,
+   "why": "member",
+   "sources": [
+    {
+     "host": "statsapi.mlb.com",
+     "url": "https://statsapi.mlb.com/api/v1/people/122791",
+     "says": "seasons with club 141: 15"
+    },
+    {
+     "host": "baseball-reference.com",
+     "url": "https://www.baseball-reference.com/players/s/stiebda01.shtml",
+     "says": "seasons with the club: 15 (1979 to 1998)"
+    }
+   ],
+   "round": 1567
+  },
+  {
+   "id": "bconn-031",
+   "label": "Toronto Blue Jays legends",
+   "name": "Vladimir Guerrero Jr.",
+   "holds": true,
+   "why": "member",
+   "sources": [
+    {
+     "host": "statsapi.mlb.com",
+     "url": "https://statsapi.mlb.com/api/v1/people/665489",
+     "says": "seasons with club 141: 8"
+    },
+    {
+     "host": "baseball-reference.com",
+     "url": "https://www.baseball-reference.com/players/g/guerrvl02.shtml",
+     "says": "seasons with the club: 8 (2019 to 2026)"
+    }
+   ],
+   "round": 1567
+  },
+  {
+   "id": "bconn-031",
+   "label": "Texas Rangers legends",
+   "name": "Elvis Andrus",
+   "holds": true,
+   "why": "member",
+   "sources": [
+    {
+     "host": "statsapi.mlb.com",
+     "url": "https://statsapi.mlb.com/api/v1/people/462101",
+     "says": "seasons with club 140: 12"
+    },
+    {
+     "host": "baseball-reference.com",
+     "url": "https://www.baseball-reference.com/players/a/andruel01.shtml",
+     "says": "seasons with the club: 12 (2009 to 2020)"
+    }
+   ],
+   "round": 1567
+  },
+  {
+   "id": "bconn-032",
+   "label": "Colorado Rockies legends",
+   "name": "Todd Helton",
+   "holds": true,
+   "why": "member",
+   "sources": [
+    {
+     "host": "statsapi.mlb.com",
+     "url": "https://statsapi.mlb.com/api/v1/people/115732",
+     "says": "seasons with club 115: 17"
+    },
+    {
+     "host": "baseball-reference.com",
+     "url": "https://www.baseball-reference.com/players/h/heltoto01.shtml",
+     "says": "seasons with the club: 17 (1997 to 2013)"
+    }
+   ],
+   "round": 1567
+  },
+  {
+   "id": "bconn-032",
+   "label": "Colorado Rockies legends",
+   "name": "Larry Walker",
+   "holds": true,
+   "why": "member",
+   "sources": [
+    {
+     "host": "statsapi.mlb.com",
+     "url": "https://statsapi.mlb.com/api/v1/people/123833",
+     "says": "seasons with club 115: 10"
+    },
+    {
+     "host": "baseball-reference.com",
+     "url": "https://www.baseball-reference.com/players/w/walkela01.shtml",
+     "says": "seasons with the club: 10 (1995 to 2004)"
+    }
+   ],
+   "round": 1567
+  },
+  {
+   "id": "bconn-032",
+   "label": "Colorado Rockies legends",
+   "name": "Carlos Gonzalez",
+   "holds": true,
+   "why": "member",
+   "sources": [
+    {
+     "host": "statsapi.mlb.com",
+     "url": "https://statsapi.mlb.com/api/v1/people/471865",
+     "says": "seasons with club 115: 10"
+    },
+    {
+     "host": "baseball-reference.com",
+     "url": "https://www.baseball-reference.com/players/g/gonzaca01.shtml",
+     "says": "seasons with the club: 10 (2009 to 2018)"
+    }
+   ],
+   "round": 1567
+  },
+  {
+   "id": "bconn-032",
+   "label": "Colorado Rockies legends",
+   "name": "Troy Tulowitzki",
+   "holds": true,
+   "why": "member",
+   "sources": [
+    {
+     "host": "statsapi.mlb.com",
+     "url": "https://statsapi.mlb.com/api/v1/people/453064",
+     "says": "seasons with club 115: 10"
+    },
+    {
+     "host": "baseball-reference.com",
+     "url": "https://www.baseball-reference.com/players/t/tulowtr01.shtml",
+     "says": "seasons with the club: 10 (2006 to 2015)"
+    }
+   ],
+   "round": 1567
+  },
+  {
+   "id": "bconn-032",
+   "label": "Colorado Rockies legends",
+   "name": "Charlie Blackmon",
+   "holds": true,
+   "why": "member",
+   "sources": [
+    {
+     "host": "statsapi.mlb.com",
+     "url": "https://statsapi.mlb.com/api/v1/people/453568",
+     "says": "seasons with club 115: 14"
+    },
+    {
+     "host": "baseball-reference.com",
+     "url": "https://www.baseball-reference.com/players/b/blackch02.shtml",
+     "says": "seasons with the club: 14 (2011 to 2024)"
+    }
+   ],
+   "round": 1567
+  },
+  {
+   "id": "bconn-032",
+   "label": "Arizona Diamondbacks legends",
+   "name": "Randy Johnson",
+   "holds": true,
+   "why": "member",
+   "sources": [
+    {
+     "host": "statsapi.mlb.com",
+     "url": "https://statsapi.mlb.com/api/v1/people/116615",
+     "says": "seasons with club 109: 8"
+    },
+    {
+     "host": "baseball-reference.com",
+     "url": "https://www.baseball-reference.com/players/j/johnsra05.shtml",
+     "says": "seasons with the club: 8 (1999 to 2008)"
+    }
+   ],
+   "round": 1567
+  },
+  {
+   "id": "bconn-032",
+   "label": "Arizona Diamondbacks legends",
+   "name": "Luis Gonzalez",
+   "holds": true,
+   "why": "member",
+   "sources": [
+    {
+     "host": "statsapi.mlb.com",
+     "url": "https://statsapi.mlb.com/api/v1/people/114935",
+     "says": "seasons with club 109: 8"
+    },
+    {
+     "host": "baseball-reference.com",
+     "url": "https://www.baseball-reference.com/players/g/gonzalu01.shtml",
+     "says": "seasons with the club: 8 (1999 to 2006)"
+    }
+   ],
+   "round": 1567
+  },
+  {
+   "id": "bconn-032",
+   "label": "Arizona Diamondbacks legends",
+   "name": "Paul Goldschmidt",
+   "holds": true,
+   "why": "member",
+   "sources": [
+    {
+     "host": "statsapi.mlb.com",
+     "url": "https://statsapi.mlb.com/api/v1/people/502671",
+     "says": "seasons with club 109: 8"
+    },
+    {
+     "host": "baseball-reference.com",
+     "url": "https://www.baseball-reference.com/players/g/goldspa01.shtml",
+     "says": "seasons with the club: 8 (2011 to 2018)"
+    }
+   ],
+   "round": 1567
+  },
+  {
+   "id": "bconn-032",
+   "label": "Arizona Diamondbacks legends",
+   "name": "Ketel Marte",
+   "holds": true,
+   "why": "member",
+   "sources": [
+    {
+     "host": "statsapi.mlb.com",
+     "url": "https://statsapi.mlb.com/api/v1/people/606466",
+     "says": "seasons with club 109: 10"
+    },
+    {
+     "host": "baseball-reference.com",
+     "url": "https://www.baseball-reference.com/players/m/marteke01.shtml",
+     "says": "seasons with the club: 10 (2017 to 2026)"
+    }
+   ],
+   "round": 1567
+  },
+  {
+   "id": "bconn-032",
+   "label": "Arizona Diamondbacks legends",
+   "name": "Brandon Webb",
+   "holds": true,
+   "why": "member",
+   "sources": [
+    {
+     "host": "statsapi.mlb.com",
+     "url": "https://statsapi.mlb.com/api/v1/people/425630",
+     "says": "seasons with club 109: 7"
+    },
+    {
+     "host": "baseball-reference.com",
+     "url": "https://www.baseball-reference.com/players/w/webbbr01.shtml",
+     "says": "seasons with the club: 7 (2003 to 2009)"
+    }
+   ],
+   "round": 1567
+  },
+  {
+   "id": "bconn-032",
+   "label": "Tampa Bay Rays legends",
+   "name": "James Shields",
+   "holds": true,
+   "why": "member",
+   "sources": [
+    {
+     "host": "statsapi.mlb.com",
+     "url": "https://statsapi.mlb.com/api/v1/people/448306",
+     "says": "seasons with club 139: 7"
+    },
+    {
+     "host": "baseball-reference.com",
+     "url": "https://www.baseball-reference.com/players/s/shielja02.shtml",
+     "says": "seasons with the club: 7 (2006 to 2012)"
+    }
+   ],
+   "round": 1567
+  },
+  {
+   "id": "bconn-032",
+   "label": "Tampa Bay Rays legends",
+   "name": "Carl Crawford",
+   "holds": true,
+   "why": "member",
+   "sources": [
+    {
+     "host": "statsapi.mlb.com",
+     "url": "https://statsapi.mlb.com/api/v1/people/408307",
+     "says": "seasons with club 139: 9"
+    },
+    {
+     "host": "baseball-reference.com",
+     "url": "https://www.baseball-reference.com/players/c/crawfca02.shtml",
+     "says": "seasons with the club: 9 (2002 to 2010)"
+    }
+   ],
+   "round": 1567
+  },
+  {
+   "id": "bconn-032",
+   "label": "Tampa Bay Rays legends",
+   "name": "David Price",
+   "holds": true,
+   "why": "member",
+   "sources": [
+    {
+     "host": "statsapi.mlb.com",
+     "url": "https://statsapi.mlb.com/api/v1/people/456034",
+     "says": "seasons with club 139: 7"
+    },
+    {
+     "host": "baseball-reference.com",
+     "url": "https://www.baseball-reference.com/players/p/priceda01.shtml",
+     "says": "seasons with the club: 7 (2008 to 2014)"
+    }
+   ],
+   "round": 1567
+  },
+  {
+   "id": "bconn-032",
+   "label": "Tampa Bay Rays legends",
+   "name": "Ben Zobrist",
+   "holds": true,
+   "why": "member",
+   "sources": [
+    {
+     "host": "statsapi.mlb.com",
+     "url": "https://statsapi.mlb.com/api/v1/people/450314",
+     "says": "seasons with club 139: 9"
+    },
+    {
+     "host": "baseball-reference.com",
+     "url": "https://www.baseball-reference.com/players/z/zobribe01.shtml",
+     "says": "seasons with the club: 9 (2006 to 2014)"
+    }
+   ],
+   "round": 1567
+  },
+  {
+   "id": "bconn-032",
+   "label": "Tampa Bay Rays legends",
+   "name": "Kevin Kiermaier",
+   "holds": true,
+   "why": "member",
+   "sources": [
+    {
+     "host": "statsapi.mlb.com",
+     "url": "https://statsapi.mlb.com/api/v1/people/595281",
+     "says": "seasons with club 139: 10"
+    },
+    {
+     "host": "baseball-reference.com",
+     "url": "https://www.baseball-reference.com/players/k/kiermke01.shtml",
+     "says": "seasons with the club: 10 (2013 to 2022)"
+    }
+   ],
+   "round": 1567
+  },
+  {
+   "id": "bconn-035",
+   "label": "Hall of Fame left fielders",
+   "name": "Joe Medwick",
+   "holds": true,
+   "why": "member",
+   "sources": [
+    {
+     "host": "statsapi.mlb.com",
+     "url": "https://statsapi.mlb.com/api/v1/people/118904",
+     "says": "MLBHOF 1968; games by position {\"LF\":1790,\"CF\":19,\"RF\":43,\"1B\":19}; last 1948-07-25"
+    },
+    {
+     "host": "baseball-reference.com",
+     "url": "https://www.baseball-reference.com/players/m/medwijo01.shtml",
+     "says": "Hall of Fame 1968; Positions: Leftfielder; share of games at LF: 0.96"
+    }
+   ],
+   "round": 1567
+  },
+  {
+   "id": "bconn-035",
+   "label": "Hall of Fame left fielders",
+   "name": "Jim Rice",
+   "holds": true,
+   "why": "member",
+   "sources": [
+    {
+     "host": "statsapi.mlb.com",
+     "url": "https://statsapi.mlb.com/api/v1/people/121140",
+     "says": "MLBHOF 2009; games by position {\"LF\":1503,\"DH\":519,\"RF\":44,\"CF\":1}; last 1989-08-03"
+    },
+    {
+     "host": "baseball-reference.com",
+     "url": "https://www.baseball-reference.com/players/r/riceji01.shtml",
+     "says": "Hall of Fame 2009; Positions: Leftfielder and Designated Hitter; share of games at LF: 0.73"
+    }
+   ],
+   "round": 1567
+  },
+  {
+   "id": "bconn-035",
+   "label": "Hall of Fame center fielders",
+   "name": "Tris Speaker",
+   "holds": true,
+   "why": "member",
+   "sources": [
+    {
+     "host": "statsapi.mlb.com",
+     "url": "https://statsapi.mlb.com/api/v1/people/122566",
+     "says": "MLBHOF 1937; games by position {\"RF\":7,\"LF\":2,\"CF\":2691,\"P\":1,\"1B\":18}; last 1928-08-30"
+    },
+    {
+     "host": "baseball-reference.com",
+     "url": "https://www.baseball-reference.com/players/s/speaktr01.shtml",
+     "says": "Hall of Fame 1937; Positions: Centerfielder; share of games at CF: 0.99"
+    }
+   ],
+   "round": 1567
+  },
+  {
+   "id": "bconn-035",
+   "label": "Hall of Fame center fielders",
+   "name": "Joe DiMaggio",
+   "holds": true,
+   "why": "member",
+   "sources": [
+    {
+     "host": "statsapi.mlb.com",
+     "url": "https://statsapi.mlb.com/api/v1/people/113376",
+     "says": "MLBHOF 1955; games by position {\"LF\":67,\"CF\":1635,\"RF\":20,\"1B\":1}; last 1951-09-30"
+    },
+    {
+     "host": "baseball-reference.com",
+     "url": "https://www.baseball-reference.com/players/d/dimagjo01.shtml",
+     "says": "Hall of Fame 1955; Positions: Centerfielder; share of games at CF: 0.95"
+    }
+   ],
+   "round": 1567
+  },
+  {
+   "id": "bconn-035",
+   "label": "Hall of Fame center fielders",
+   "name": "Edd Roush",
+   "holds": true,
+   "why": "member",
+   "sources": [
+    {
+     "host": "statsapi.mlb.com",
+     "url": "https://statsapi.mlb.com/api/v1/people/121497",
+     "says": "MLBHOF 1962; games by position {\"CF\":1609,\"RF\":10,\"1B\":12,\"2B\":1,\"LF\":43}; last 1931-09-27"
+    },
+    {
+     "host": "baseball-reference.com",
+     "url": "https://www.baseball-reference.com/players/r/roushed01.shtml",
+     "says": "Hall of Fame 1962; Positions: Centerfielder; share of games at CF: 0.94"
+    }
+   ],
+   "round": 1567
+  },
+  {
+   "id": "bconn-035",
+   "label": "Hall of Fame first basemen",
+   "name": "Todd Helton",
+   "holds": true,
+   "why": "member",
+   "sources": [
+    {
+     "host": "statsapi.mlb.com",
+     "url": "https://statsapi.mlb.com/api/v1/people/115732",
+     "says": "MLBHOF 2024; games by position {\"1B\":2178,\"LF\":13,\"RF\":2,\"DH\":2}; last 2013-09-29"
+    },
+    {
+     "host": "baseball-reference.com",
+     "url": "https://www.baseball-reference.com/players/h/heltoto01.shtml",
+     "says": "Hall of Fame 2024; Positions: First Baseman; share of games at 1B: 0.99"
+    }
+   ],
+   "round": 1567
+  },
+  {
+   "id": "bconn-036",
+   "label": "Hall of Fame second basemen",
+   "name": "Joe Morgan",
+   "holds": true,
+   "why": "member",
+   "sources": [
+    {
+     "host": "statsapi.mlb.com",
+     "url": "https://statsapi.mlb.com/api/v1/people/119371",
+     "says": "MLBHOF 1990; games by position {\"2B\":2526,\"LF\":14,\"CF\":2,\"3B\":3,\"DH\":2}; last 1984-09-30"
+    },
+    {
+     "host": "baseball-reference.com",
+     "url": "https://www.baseball-reference.com/players/m/morgajo02.shtml",
+     "says": "Hall of Fame 1990; Positions: Second Baseman; share of games at 2B: 0.99"
+    }
+   ],
+   "round": 1567
+  },
+  {
+   "id": "bconn-036",
+   "label": "Hall of Fame second basemen",
+   "name": "Charlie Gehringer",
+   "holds": true,
+   "why": "member",
+   "sources": [
+    {
+     "host": "statsapi.mlb.com",
+     "url": "https://statsapi.mlb.com/api/v1/people/114682",
+     "says": "MLBHOF 1949; games by position {\"2B\":2206,\"3B\":6,\"1B\":9}; last 1942-09-27"
+    },
+    {
+     "host": "baseball-reference.com",
+     "url": "https://www.baseball-reference.com/players/g/gehrich01.shtml",
+     "says": "Hall of Fame 1949; Positions: Second Baseman; share of games at 2B: 0.99"
+    }
+   ],
+   "round": 1567
+  },
+  {
+   "id": "bconn-036",
+   "label": "Hall of Fame second basemen",
+   "name": "Nap Lajoie",
+   "holds": true,
+   "why": "member",
+   "sources": [
+    {
+     "host": "statsapi.mlb.com",
+     "url": "https://statsapi.mlb.com/api/v1/people/117414",
+     "says": "MLBHOF 1937; games by position {\"1B\":288,\"3B\":22,\"2B\":2036,\"SS\":74,\"LF\":3}; last 1916-08-26"
+    },
+    {
+     "host": "baseball-reference.com",
+     "url": "https://www.baseball-reference.com/players/l/lajoina01.shtml",
+     "says": "Hall of Fame 1937; Positions: Second Baseman and First Baseman; share of games at 2B: 0.83"
+    }
+   ],
+   "round": 1567
+  },
+  {
+   "id": "bconn-036",
+   "label": "Hall of Fame second basemen",
+   "name": "Roberto Alomar",
+   "holds": true,
+   "why": "member",
+   "sources": [
+    {
+     "host": "statsapi.mlb.com",
+     "url": "https://statsapi.mlb.com/api/v1/people/110183",
+     "says": "MLBHOF 2011; games by position {\"2B\":2320,\"SS\":5,\"DH\":19}; last 2004-09-05"
+    },
+    {
+     "host": "baseball-reference.com",
+     "url": "https://www.baseball-reference.com/players/a/alomaro01.shtml",
+     "says": "Hall of Fame 2011; Positions: Second Baseman; share of games at 2B: 0.99"
+    }
+   ],
+   "round": 1567
+  },
+  {
+   "id": "bconn-036",
+   "label": "Hall of Fame second basemen",
+   "name": "Ryne Sandberg",
+   "holds": true,
+   "why": "member",
+   "sources": [
+    {
+     "host": "statsapi.mlb.com",
+     "url": "https://statsapi.mlb.com/api/v1/people/121665",
+     "says": "MLBHOF 2005; games by position {\"2B\":1994,\"SS\":7,\"3B\":133,\"DH\":1}; last 1997-09-28"
+    },
+    {
+     "host": "baseball-reference.com",
+     "url": "https://www.baseball-reference.com/players/s/sandbry01.shtml",
+     "says": "Hall of Fame 2005; Positions: Second Baseman and Third Baseman; share of games at 2B: 0.93"
+    }
+   ],
+   "round": 1567
+  },
+  {
+   "id": "bconn-036",
+   "label": "Hall of Fame shortstops",
+   "name": "Robin Yount",
+   "holds": true,
+   "why": "member",
+   "sources": [
+    {
+     "host": "statsapi.mlb.com",
+     "url": "https://statsapi.mlb.com/api/v1/people/124721",
+     "says": "MLBHOF 1999; games by position {\"SS\":1478,\"DH\":131,\"1B\":12,\"LF\":69,\"CF\":1150}; last 1993-10-03"
+    },
+    {
+     "host": "baseball-reference.com",
+     "url": "https://www.baseball-reference.com/players/y/yountro01.shtml",
+     "says": "Hall of Fame 1999; Positions: Shortstop and Centerfielder; share of games at SS: 0.52"
+    }
+   ],
+   "round": 1567
+  },
+  {
+   "id": "bconn-036",
+   "label": "Hall of Fame shortstops",
+   "name": "Alan Trammell",
+   "holds": true,
+   "why": "member",
+   "sources": [
+    {
+     "host": "statsapi.mlb.com",
+     "url": "https://statsapi.mlb.com/api/v1/people/123437",
+     "says": "MLBHOF 2018; games by position {\"SS\":2139,\"DH\":51,\"3B\":43,\"LF\":5,\"CF\":4,\"2B\":11}; last 1996-09-29"
+    },
+    {
+     "host": "baseball-reference.com",
+     "url": "https://www.baseball-reference.com/players/t/trammal01.shtml",
+     "says": "Hall of Fame 2018; Positions: Shortstop; share of games at SS: 0.95"
+    }
+   ],
+   "round": 1567
+  },
+  {
+   "id": "bconn-036",
+   "label": "Hall of Fame shortstops",
+   "name": "Luis Aparicio",
+   "holds": true,
+   "why": "member",
+   "sources": [
+    {
+     "host": "statsapi.mlb.com",
+     "url": "https://statsapi.mlb.com/api/v1/people/110290",
+     "says": "MLBHOF 1984; games by position {\"SS\":2582}; last 1973-09-28"
+    },
+    {
+     "host": "baseball-reference.com",
+     "url": "https://www.baseball-reference.com/players/a/aparilu01.shtml",
+     "says": "Hall of Fame 1984; Positions: Shortstop; share of games at SS: 1.00"
+    }
+   ],
+   "round": 1567
+  },
+  {
+   "id": "bconn-038",
+   "label": "Hall of Fame relief pitchers",
+   "name": "Mariano Rivera",
+   "holds": true,
+   "why": "member",
+   "sources": [
+    {
+     "host": "statsapi.mlb.com",
+     "url": "https://statsapi.mlb.com/api/v1/people/121250",
+     "says": "MLBHOF 2019; pitchHand R; 10 starts in 1115 games, 652 saves"
+    },
+    {
+     "host": "baseball-reference.com",
+     "url": "https://www.baseball-reference.com/players/r/riverma01.shtml",
+     "says": "Hall of Fame 2019; Throws: Right; 10 starts in 1115 games, 652 saves"
+    }
+   ],
+   "round": 1567
+  },
+  {
+   "id": "bconn-038",
+   "label": "Hall of Fame relief pitchers",
+   "name": "Trevor Hoffman",
+   "holds": true,
+   "why": "member",
+   "sources": [
+    {
+     "host": "statsapi.mlb.com",
+     "url": "https://statsapi.mlb.com/api/v1/people/116034",
+     "says": "MLBHOF 2018; pitchHand R; 0 starts in 1034 games, 601 saves"
+    },
+    {
+     "host": "baseball-reference.com",
+     "url": "https://www.baseball-reference.com/players/h/hoffmtr01.shtml",
+     "says": "Hall of Fame 2018; Throws: Right; 0 starts in 1035 games, 601 saves"
+    }
+   ],
+   "round": 1567
+  },
+  {
+   "id": "bconn-038",
+   "label": "Hall of Fame relief pitchers",
+   "name": "Rollie Fingers",
+   "holds": true,
+   "why": "member",
+   "sources": [
+    {
+     "host": "statsapi.mlb.com",
+     "url": "https://statsapi.mlb.com/api/v1/people/114129",
+     "says": "MLBHOF 1992; pitchHand R; 37 starts in 944 games, 341 saves"
+    },
+    {
+     "host": "baseball-reference.com",
+     "url": "https://www.baseball-reference.com/players/f/fingero01.shtml",
+     "says": "Hall of Fame 1992; Throws: Right; 37 starts in 944 games, 341 saves"
+    }
+   ],
+   "round": 1567
+  },
+  {
+   "id": "bconn-038",
+   "label": "Hall of Fame designated hitters / sluggers",
+   "name": "Frank Thomas",
+   "holds": true,
+   "why": "member",
+   "sources": [
+    {
+     "host": "statsapi.mlb.com",
+     "url": "https://statsapi.mlb.com/api/v1/people/123245",
+     "says": "MLBHOF 2014; games by position {\"1B\":971,\"DH\":1308}; last 2008-08-29"
+    },
+    {
+     "host": "baseball-reference.com",
+     "url": "https://www.baseball-reference.com/players/t/thomafr04.shtml",
+     "says": "Hall of Fame 2014; Positions: Designated Hitter and First Baseman; share of games at DH: 0.57"
+    }
+   ],
+   "round": 1567
+  },
+  {
+   "id": "bconn-038",
+   "label": "Hall of Fame designated hitters / sluggers",
+   "name": "Edgar Martinez",
+   "holds": true,
+   "why": "member",
+   "sources": [
+    {
+     "host": "statsapi.mlb.com",
+     "url": "https://statsapi.mlb.com/api/v1/people/118365",
+     "says": "MLBHOF 2019; games by position {\"3B\":563,\"DH\":1396,\"1B\":28}; last 2004-10-03"
+    },
+    {
+     "host": "baseball-reference.com",
+     "url": "https://www.baseball-reference.com/players/m/martied01.shtml",
+     "says": "Hall of Fame 2019; Positions: Designated Hitter and Third Baseman; share of games at DH: 0.70"
+    }
+   ],
+   "round": 1567
+  },
+  {
+   "id": "bconn-038",
+   "label": "Hall of Fame designated hitters / sluggers",
+   "name": "David Ortiz",
+   "holds": true,
+   "why": "member",
+   "sources": [
+    {
+     "host": "statsapi.mlb.com",
+     "url": "https://statsapi.mlb.com/api/v1/people/120074",
+     "says": "MLBHOF 2022; games by position {\"1B\":278,\"DH\":2015}; last 2016-10-02"
+    },
+    {
+     "host": "baseball-reference.com",
+     "url": "https://www.baseball-reference.com/players/o/ortizda01.shtml",
+     "says": "Hall of Fame 2022; Positions: Designated Hitter and First Baseman; share of games at DH: 0.88"
+    }
+   ],
+   "round": 1567
+  },
+  {
+   "id": "bconn-038",
+   "label": "Hall of Fame designated hitters / sluggers",
+   "name": "Harold Baines",
+   "holds": true,
+   "why": "member",
+   "sources": [
+    {
+     "host": "statsapi.mlb.com",
+     "url": "https://statsapi.mlb.com/api/v1/people/110456",
+     "says": "MLBHOF 2019; games by position {\"RF\":1042,\"CF\":30,\"DH\":1565,\"LF\":7}; last 2001-09-27"
+    },
+    {
+     "host": "baseball-reference.com",
+     "url": "https://www.baseball-reference.com/players/b/baineha01.shtml",
+     "says": "Hall of Fame 2019; Positions: Designated Hitter and Rightfielder; share of games at DH: 0.61"
+    }
+   ],
+   "round": 1567
+  },
+  {
+   "id": "bconn-038",
+   "label": "Hall of Fame designated hitters / sluggers",
+   "name": "Paul Molitor",
+   "holds": true,
+   "why": "member",
+   "sources": [
+    {
+     "host": "statsapi.mlb.com",
+     "url": "https://statsapi.mlb.com/api/v1/people/119236",
+     "says": "MLBHOF 2004; games by position {\"2B\":400,\"3B\":792,\"SS\":57,\"DH\":1169,\"CF\":42,\"RF\":4,\"LF\":4,\"1B\":197}; last 1998-09-27"
+    },
+    {
+     "host": "baseball-reference.com",
+     "url": "https://www.baseball-reference.com/players/m/molitpa01.shtml",
+     "says": "Hall of Fame 2004; Positions: Designated Hitter, Third Baseman and Second Baseman; share of games at DH: 0.44"
+    }
+   ],
+   "round": 1567
+  },
+  {
+   "id": "bconn-041",
+   "label": "Hall of Fame third basemen",
+   "name": "Chipper Jones",
+   "holds": true,
+   "why": "member",
+   "sources": [
+    {
+     "host": "statsapi.mlb.com",
+     "url": "https://statsapi.mlb.com/api/v1/people/116706",
+     "says": "MLBHOF 2018; games by position {\"SS\":49,\"3B\":1992,\"LF\":356,\"RF\":9,\"DH\":28}; last 2012-10-03"
+    },
+    {
+     "host": "baseball-reference.com",
+     "url": "https://www.baseball-reference.com/players/j/jonesch06.shtml",
+     "says": "Hall of Fame 2018; Positions: Third Baseman and Leftfielder; share of games at 3B: 0.82"
+    }
+   ],
+   "round": 1567
+  },
+  {
+   "id": "bconn-041",
+   "label": "Hall of Fame third basemen",
+   "name": "Mike Schmidt",
+   "holds": true,
+   "why": "member",
+   "sources": [
+    {
+     "host": "statsapi.mlb.com",
+     "url": "https://statsapi.mlb.com/api/v1/people/121836",
+     "says": "MLBHOF 1995; games by position {\"2B\":6,\"3B\":2212,\"1B\":157,\"SS\":24}; last 1989-05-28"
+    },
+    {
+     "host": "baseball-reference.com",
+     "url": "https://www.baseball-reference.com/players/s/schmimi01.shtml",
+     "says": "Hall of Fame 1995; Positions: Third Baseman and First Baseman; share of games at 3B: 0.92"
+    }
+   ],
+   "round": 1567
+  },
+  {
+   "id": "bconn-041",
+   "label": "Hall of Fame third basemen",
+   "name": "Pie Traynor",
+   "holds": true,
+   "why": "member",
+   "sources": [
+    {
+     "host": "statsapi.mlb.com",
+     "url": "https://statsapi.mlb.com/api/v1/people/123446",
+     "says": "MLBHOF 1948; games by position {\"SS\":50,\"3B\":1863,\"1B\":1}; last 1937-08-14"
+    },
+    {
+     "host": "baseball-reference.com",
+     "url": "https://www.baseball-reference.com/players/t/traynpi01.shtml",
+     "says": "Hall of Fame 1948; Positions: Third Baseman; share of games at 3B: 0.97"
+    }
+   ],
+   "round": 1567
+  },
+  {
+   "id": "bconn-041",
+   "label": "Hall of Fame third basemen",
+   "name": "Ron Santo",
+   "holds": true,
+   "why": "member",
+   "sources": [
+    {
+     "host": "statsapi.mlb.com",
+     "url": "https://statsapi.mlb.com/api/v1/people/121697",
+     "says": "MLBHOF 2012; games by position {\"3B\":2129,\"SS\":18,\"LF\":8,\"2B\":42,\"1B\":3,\"DH\":38}; last 1974-09-29"
+    },
+    {
+     "host": "baseball-reference.com",
+     "url": "https://www.baseball-reference.com/players/s/santoro01.shtml",
+     "says": "Hall of Fame 2012; Positions: Third Baseman; share of games at 3B: 0.95"
+    }
+   ],
+   "round": 1567
+  },
+  {
+   "id": "bconn-041",
+   "label": "Hall of Fame third basemen",
+   "name": "Scott Rolen",
+   "holds": true,
+   "why": "member",
+   "sources": [
+    {
+     "host": "statsapi.mlb.com",
+     "url": "https://statsapi.mlb.com/api/v1/people/121409",
+     "says": "MLBHOF 2023; games by position {\"3B\":2023}; last 2012-10-03"
+    },
+    {
+     "host": "baseball-reference.com",
+     "url": "https://www.baseball-reference.com/players/r/rolensc01.shtml",
+     "says": "Hall of Fame 2023; Positions: Third Baseman; share of games at 3B: 1.00"
+    }
+   ],
+   "round": 1567
+  },
+  {
+   "id": "bconn-041",
+   "label": "Hall of Fame second basemen",
+   "name": "Joe Morgan",
+   "holds": true,
+   "why": "member",
+   "sources": [
+    {
+     "host": "statsapi.mlb.com",
+     "url": "https://statsapi.mlb.com/api/v1/people/119371",
+     "says": "MLBHOF 1990; games by position {\"2B\":2526,\"LF\":14,\"CF\":2,\"3B\":3,\"DH\":2}; last 1984-09-30"
+    },
+    {
+     "host": "baseball-reference.com",
+     "url": "https://www.baseball-reference.com/players/m/morgajo02.shtml",
+     "says": "Hall of Fame 1990; Positions: Second Baseman; share of games at 2B: 0.99"
+    }
+   ],
+   "round": 1567
+  },
+  {
+   "id": "bconn-041",
+   "label": "Hall of Fame second basemen",
+   "name": "Bill Mazeroski",
+   "holds": true,
+   "why": "member",
+   "sources": [
+    {
+     "host": "statsapi.mlb.com",
+     "url": "https://statsapi.mlb.com/api/v1/people/118497",
+     "says": "MLBHOF 2001; games by position {\"2B\":2094,\"3B\":10}; last 1972-10-04"
+    },
+    {
+     "host": "baseball-reference.com",
+     "url": "https://www.baseball-reference.com/players/m/mazerbi01.shtml",
+     "says": "Hall of Fame 2001; Positions: Second Baseman; share of games at 2B: 1.00"
+    }
+   ],
+   "round": 1567
+  },
+  {
+   "id": "bconn-041",
+   "label": "Hall of Fame second basemen",
+   "name": "Roberto Alomar",
+   "holds": true,
+   "why": "member",
+   "sources": [
+    {
+     "host": "statsapi.mlb.com",
+     "url": "https://statsapi.mlb.com/api/v1/people/110183",
+     "says": "MLBHOF 2011; games by position {\"2B\":2320,\"SS\":5,\"DH\":19}; last 2004-09-05"
+    },
+    {
+     "host": "baseball-reference.com",
+     "url": "https://www.baseball-reference.com/players/a/alomaro01.shtml",
+     "says": "Hall of Fame 2011; Positions: Second Baseman; share of games at 2B: 0.99"
+    }
+   ],
+   "round": 1567
+  },
+  {
+   "id": "bconn-041",
+   "label": "Hall of Fame second basemen",
+   "name": "Rod Carew",
+   "holds": true,
+   "why": "member",
+   "sources": [
+    {
+     "host": "statsapi.mlb.com",
+     "url": "https://statsapi.mlb.com/api/v1/people/111986",
+     "says": "MLBHOF 1991; games by position {\"2B\":1130,\"SS\":4,\"1B\":1184,\"3B\":2,\"DH\":62,\"LF\":1}; last 1985-10-05"
+    },
+    {
+     "host": "baseball-reference.com",
+     "url": "https://www.baseball-reference.com/players/c/carewro01.shtml",
+     "says": "Hall of Fame 1991; Positions: First Baseman and Second Baseman; share of games at 2B: 0.47"
+    }
+   ],
+   "round": 1567
+  },
+  {
+   "id": "bconn-041",
+   "label": "Hall of Fame second basemen",
+   "name": "Charlie Gehringer",
+   "holds": true,
+   "why": "member",
+   "sources": [
+    {
+     "host": "statsapi.mlb.com",
+     "url": "https://statsapi.mlb.com/api/v1/people/114682",
+     "says": "MLBHOF 1949; games by position {\"2B\":2206,\"3B\":6,\"1B\":9}; last 1942-09-27"
+    },
+    {
+     "host": "baseball-reference.com",
+     "url": "https://www.baseball-reference.com/players/g/gehrich01.shtml",
+     "says": "Hall of Fame 1949; Positions: Second Baseman; share of games at 2B: 0.99"
+    }
+   ],
+   "round": 1567
+  },
+  {
+   "id": "bconn-045",
+   "label": "Hall of Fame right fielders",
+   "name": "Larry Walker",
+   "holds": true,
+   "why": "member",
+   "sources": [
+    {
+     "host": "statsapi.mlb.com",
+     "url": "https://statsapi.mlb.com/api/v1/people/123833",
+     "says": "MLBHOF 2020; games by position {\"LF\":33,\"RF\":1718,\"1B\":81,\"CF\":69,\"DH\":27,\"2B\":1,\"3B\":1}; last 2005-10-02"
+    },
+    {
+     "host": "baseball-reference.com",
+     "url": "https://www.baseball-reference.com/players/w/walkela01.shtml",
+     "says": "Hall of Fame 2020; Positions: Rightfielder and First Baseman; share of games at RF: 0.90"
+    }
+   ],
+   "round": 1567
+  },
+  {
+   "id": "bconn-045",
+   "label": "Hall of Fame center fielders",
+   "name": "Joe DiMaggio",
+   "holds": true,
+   "why": "member",
+   "sources": [
+    {
+     "host": "statsapi.mlb.com",
+     "url": "https://statsapi.mlb.com/api/v1/people/113376",
+     "says": "MLBHOF 1955; games by position {\"LF\":67,\"CF\":1635,\"RF\":20,\"1B\":1}; last 1951-09-30"
+    },
+    {
+     "host": "baseball-reference.com",
+     "url": "https://www.baseball-reference.com/players/d/dimagjo01.shtml",
+     "says": "Hall of Fame 1955; Positions: Centerfielder; share of games at CF: 0.95"
+    }
+   ],
+   "round": 1567
+  },
+  {
+   "id": "bconn-053",
+   "label": "Hall of Fame shortstops",
+   "name": "Alan Trammell",
+   "holds": true,
+   "why": "member",
+   "sources": [
+    {
+     "host": "statsapi.mlb.com",
+     "url": "https://statsapi.mlb.com/api/v1/people/123437",
+     "says": "MLBHOF 2018; games by position {\"SS\":2139,\"DH\":51,\"3B\":43,\"LF\":5,\"CF\":4,\"2B\":11}; last 1996-09-29"
+    },
+    {
+     "host": "baseball-reference.com",
+     "url": "https://www.baseball-reference.com/players/t/trammal01.shtml",
+     "says": "Hall of Fame 2018; Positions: Shortstop; share of games at SS: 0.95"
+    }
+   ],
+   "round": 1567
+  },
+  {
+   "id": "bconn-053",
+   "label": "Hall of Fame third basemen",
+   "name": "Mike Schmidt",
+   "holds": true,
+   "why": "member",
+   "sources": [
+    {
+     "host": "statsapi.mlb.com",
+     "url": "https://statsapi.mlb.com/api/v1/people/121836",
+     "says": "MLBHOF 1995; games by position {\"2B\":6,\"3B\":2212,\"1B\":157,\"SS\":24}; last 1989-05-28"
+    },
+    {
+     "host": "baseball-reference.com",
+     "url": "https://www.baseball-reference.com/players/s/schmimi01.shtml",
+     "says": "Hall of Fame 1995; Positions: Third Baseman and First Baseman; share of games at 3B: 0.92"
+    }
+   ],
+   "round": 1567
+  },
+  {
+   "id": "bconn-053",
+   "label": "Hall of Fame third basemen",
+   "name": "Chipper Jones",
+   "holds": true,
+   "why": "member",
+   "sources": [
+    {
+     "host": "statsapi.mlb.com",
+     "url": "https://statsapi.mlb.com/api/v1/people/116706",
+     "says": "MLBHOF 2018; games by position {\"SS\":49,\"3B\":1992,\"LF\":356,\"RF\":9,\"DH\":28}; last 2012-10-03"
+    },
+    {
+     "host": "baseball-reference.com",
+     "url": "https://www.baseball-reference.com/players/j/jonesch06.shtml",
+     "says": "Hall of Fame 2018; Positions: Third Baseman and Leftfielder; share of games at 3B: 0.82"
+    }
+   ],
+   "round": 1567
+  },
+  {
+   "id": "bconn-053",
+   "label": "Hall of Fame third basemen",
+   "name": "Eddie Mathews",
+   "holds": true,
+   "why": "member",
+   "sources": [
+    {
+     "host": "statsapi.mlb.com",
+     "url": "https://statsapi.mlb.com/api/v1/people/118416",
+     "says": "MLBHOF 1978; games by position {\"3B\":2180,\"LF\":52,\"1B\":112}; last 1968-09-27"
+    },
+    {
+     "host": "baseball-reference.com",
+     "url": "https://www.baseball-reference.com/players/m/matheed01.shtml",
+     "says": "Hall of Fame 1978; Positions: Third Baseman and First Baseman; share of games at 3B: 0.93"
+    }
+   ],
+   "round": 1567
+  },
+  {
+   "id": "bconn-053",
+   "label": "Hall of Fame third basemen",
+   "name": "Brooks Robinson",
+   "holds": true,
+   "why": "member",
+   "sources": [
+    {
+     "host": "statsapi.mlb.com",
+     "url": "https://statsapi.mlb.com/api/v1/people/121301",
+     "says": "MLBHOF 1983; games by position {\"3B\":2870,\"2B\":25,\"SS\":5}; last 1977-08-13"
+    },
+    {
+     "host": "baseball-reference.com",
+     "url": "https://www.baseball-reference.com/players/r/robinbr01.shtml",
+     "says": "Hall of Fame 1983; Positions: Third Baseman; share of games at 3B: 0.99"
+    }
+   ],
+   "round": 1567
+  },
+  {
+   "id": "bconn-053",
+   "label": "Hall of Fame third basemen",
+   "name": "Wade Boggs",
+   "holds": true,
+   "why": "member",
+   "sources": [
+    {
+     "host": "statsapi.mlb.com",
+     "url": "https://statsapi.mlb.com/api/v1/people/111153",
+     "says": "MLBHOF 2005; games by position {\"1B\":67,\"3B\":2213,\"LF\":1,\"DH\":101,\"P\":2}; last 1999-08-27"
+    },
+    {
+     "host": "baseball-reference.com",
+     "url": "https://www.baseball-reference.com/players/b/boggswa01.shtml",
+     "says": "Hall of Fame 2005; Positions: Third Baseman; share of games at 3B: 0.93"
+    }
+   ],
+   "round": 1567
+  },
+  {
+   "id": "bconn-053",
+   "label": "Hall of Fame second basemen",
+   "name": "Joe Morgan",
+   "holds": true,
+   "why": "member",
+   "sources": [
+    {
+     "host": "statsapi.mlb.com",
+     "url": "https://statsapi.mlb.com/api/v1/people/119371",
+     "says": "MLBHOF 1990; games by position {\"2B\":2526,\"LF\":14,\"CF\":2,\"3B\":3,\"DH\":2}; last 1984-09-30"
+    },
+    {
+     "host": "baseball-reference.com",
+     "url": "https://www.baseball-reference.com/players/m/morgajo02.shtml",
+     "says": "Hall of Fame 1990; Positions: Second Baseman; share of games at 2B: 0.99"
+    }
+   ],
+   "round": 1567
+  },
+  {
+   "id": "bconn-053",
+   "label": "Hall of Fame second basemen",
+   "name": "Roberto Alomar",
+   "holds": true,
+   "why": "member",
+   "sources": [
+    {
+     "host": "statsapi.mlb.com",
+     "url": "https://statsapi.mlb.com/api/v1/people/110183",
+     "says": "MLBHOF 2011; games by position {\"2B\":2320,\"SS\":5,\"DH\":19}; last 2004-09-05"
+    },
+    {
+     "host": "baseball-reference.com",
+     "url": "https://www.baseball-reference.com/players/a/alomaro01.shtml",
+     "says": "Hall of Fame 2011; Positions: Second Baseman; share of games at 2B: 0.99"
+    }
+   ],
+   "round": 1567
+  },
+  {
+   "id": "bconn-053",
+   "label": "Hall of Fame second basemen",
+   "name": "Eddie Collins",
+   "holds": true,
+   "why": "member",
+   "sources": [
+    {
+     "host": "statsapi.mlb.com",
+     "url": "https://statsapi.mlb.com/api/v1/people/112506",
+     "says": "MLBHOF 1939; games by position {\"3B\":1,\"SS\":37,\"2B\":2648,\"LF\":2,\"CF\":7,\"RF\":7}; last 1930-08-05"
+    },
+    {
+     "host": "baseball-reference.com",
+     "url": "https://www.baseball-reference.com/players/c/collied01.shtml",
+     "says": "Hall of Fame 1939; Positions: Second Baseman; share of games at 2B: 0.98"
+    }
+   ],
+   "round": 1567
+  },
+  {
+   "id": "bconn-053",
+   "label": "Hall of Fame second basemen",
+   "name": "Charlie Gehringer",
+   "holds": true,
+   "why": "member",
+   "sources": [
+    {
+     "host": "statsapi.mlb.com",
+     "url": "https://statsapi.mlb.com/api/v1/people/114682",
+     "says": "MLBHOF 1949; games by position {\"2B\":2206,\"3B\":6,\"1B\":9}; last 1942-09-27"
+    },
+    {
+     "host": "baseball-reference.com",
+     "url": "https://www.baseball-reference.com/players/g/gehrich01.shtml",
+     "says": "Hall of Fame 1949; Positions: Second Baseman; share of games at 2B: 0.99"
+    }
+   ],
+   "round": 1567
+  },
+  {
+   "id": "bconn-053",
+   "label": "Hall of Fame second basemen",
+   "name": "Ryne Sandberg",
+   "holds": true,
+   "why": "member",
+   "sources": [
+    {
+     "host": "statsapi.mlb.com",
+     "url": "https://statsapi.mlb.com/api/v1/people/121665",
+     "says": "MLBHOF 2005; games by position {\"2B\":1994,\"SS\":7,\"3B\":133,\"DH\":1}; last 1997-09-28"
+    },
+    {
+     "host": "baseball-reference.com",
+     "url": "https://www.baseball-reference.com/players/s/sandbry01.shtml",
+     "says": "Hall of Fame 2005; Positions: Second Baseman and Third Baseman; share of games at 2B: 0.93"
+    }
+   ],
+   "round": 1567
+  },
+  {
+   "id": "bconn-057",
+   "label": "Hall of Fame left fielders",
+   "name": "Willie Stargell",
+   "holds": true,
+   "why": "member",
+   "sources": [
+    {
+     "host": "statsapi.mlb.com",
+     "url": "https://statsapi.mlb.com/api/v1/people/122685",
+     "says": "MLBHOF 1988; games by position {\"LF\":1229,\"CF\":8,\"RF\":69,\"1B\":847}; last 1982-10-03"
+    },
+    {
+     "host": "baseball-reference.com",
+     "url": "https://www.baseball-reference.com/players/s/stargwi01.shtml",
+     "says": "Hall of Fame 1988; Positions: Leftfielder and First Baseman; share of games at LF: 0.57"
+    }
+   ],
+   "round": 1567
+  },
+  {
+   "id": "bconn-057",
+   "label": "Hall of Fame center fielders",
+   "name": "Tris Speaker",
+   "holds": true,
+   "why": "member",
+   "sources": [
+    {
+     "host": "statsapi.mlb.com",
+     "url": "https://statsapi.mlb.com/api/v1/people/122566",
+     "says": "MLBHOF 1937; games by position {\"RF\":7,\"LF\":2,\"CF\":2691,\"P\":1,\"1B\":18}; last 1928-08-30"
+    },
+    {
+     "host": "baseball-reference.com",
+     "url": "https://www.baseball-reference.com/players/s/speaktr01.shtml",
+     "says": "Hall of Fame 1937; Positions: Centerfielder; share of games at CF: 0.99"
+    }
+   ],
+   "round": 1567
+  },
+  {
+   "id": "bconn-057",
+   "label": "Hall of Fame center fielders",
+   "name": "Mickey Mantle",
+   "holds": true,
+   "why": "member",
+   "sources": [
+    {
+     "host": "statsapi.mlb.com",
+     "url": "https://statsapi.mlb.com/api/v1/people/118258",
+     "says": "MLBHOF 1974; games by position {\"CF\":1742,\"RF\":147,\"3B\":1,\"SS\":7,\"LF\":129,\"2B\":1,\"1B\":261}; last 1968-09-28"
+    },
+    {
+     "host": "baseball-reference.com",
+     "url": "https://www.baseball-reference.com/players/m/mantlmi01.shtml",
+     "says": "Hall of Fame 1974; Positions: Centerfielder and First Baseman; share of games at CF: 0.76"
+    }
+   ],
+   "round": 1567
+  },
+  {
+   "id": "bconn-057",
+   "label": "Hall of Fame center fielders",
+   "name": "Joe DiMaggio",
+   "holds": true,
+   "why": "member",
+   "sources": [
+    {
+     "host": "statsapi.mlb.com",
+     "url": "https://statsapi.mlb.com/api/v1/people/113376",
+     "says": "MLBHOF 1955; games by position {\"LF\":67,\"CF\":1635,\"RF\":20,\"1B\":1}; last 1951-09-30"
+    },
+    {
+     "host": "baseball-reference.com",
+     "url": "https://www.baseball-reference.com/players/d/dimagjo01.shtml",
+     "says": "Hall of Fame 1955; Positions: Centerfielder; share of games at CF: 0.95"
+    }
+   ],
+   "round": 1567
+  },
+  {
+   "id": "bconn-057",
+   "label": "Hall of Fame right fielders",
+   "name": "Larry Walker",
+   "holds": true,
+   "why": "member",
+   "sources": [
+    {
+     "host": "statsapi.mlb.com",
+     "url": "https://statsapi.mlb.com/api/v1/people/123833",
+     "says": "MLBHOF 2020; games by position {\"LF\":33,\"RF\":1718,\"1B\":81,\"CF\":69,\"DH\":27,\"2B\":1,\"3B\":1}; last 2005-10-02"
+    },
+    {
+     "host": "baseball-reference.com",
+     "url": "https://www.baseball-reference.com/players/w/walkela01.shtml",
+     "says": "Hall of Fame 2020; Positions: Rightfielder and First Baseman; share of games at RF: 0.90"
+    }
+   ],
+   "round": 1567
+  },
+  {
+   "id": "bconn-002",
+   "label": "Won Cy Young Award",
+   "name": "Shohei Ohtani",
+   "holds": false,
+   "why": "watch",
+   "finding": "bconn-002 | Shohei Ohtani (Born in Japan) | Won Cy Young Award | pitched in 2026 (14 starts as a two way man); the 2026 ALCY/NLCY is still to be named",
+   "sources": [
+    {
+     "host": "statsapi.mlb.com",
+     "url": "https://statsapi.mlb.com/api/v1/people/660271",
+     "says": "ALCY none; NLCY none; 2026 pitching: 14 games, 14 starts (primary position TWP, two way)"
+    },
+    {
+     "host": "baseball-reference.com",
+     "url": "https://www.baseball-reference.com/awards/cya.shtml",
+     "says": "not on the cya list"
+    },
+    {
+     "host": "baseball-reference.com",
+     "url": "https://www.baseball-reference.com/players/o/ohtansh01.shtml",
+     "says": "2026 LAD pitching: 14 games, 14 starts, 8 wins; Positions: Designated Hitter and Pitcher"
+    }
+   ],
+   "round": 1567
+  },
+  {
+   "id": "bconn-053",
+   "label": "Hall of Fame first basemen",
+   "name": "Honus Wagner",
+   "holds": false,
+   "why": "near-line",
+   "finding": "bconn-053 | Honus Wagner (Hall of Fame shortstops) | Hall of Fame first basemen | under the 10 percent line at first base by less than one and a half points; no host puts him in the group (review-read-1567 minor 3; fix2-1567)",
+   "sources": [
+    {
+     "host": "statsapi.mlb.com",
+     "url": "https://statsapi.mlb.com/api/v1/people/123784/stats?stats=career&group=fielding",
+     "says": "career fielding games by position {\"P\":2,\"1B\":252,\"2B\":58,\"3B\":209,\"SS\":1888,\"LF\":32,\"CF\":15,\"RF\":96}; share of games at first base: 252 of 2550, 0.099"
+    },
+    {
+     "host": "baseball-reference.com",
+     "url": "https://www.baseball-reference.com/players/w/wagneho01.shtml",
+     "says": "Positions: Shortstop, Rightfielder and First Baseman; Standard Fielding career G: SS 1887, 1B 248, 2B 57, 3B 210, OF 374 (LF 32, RF 96, CF 15), all 2778; share of games at first base: 248 of 2545, 0.097 (0.089 of 2776 counting all 374 outfield games)"
+    },
+    {
+     "host": "baseballhall.org",
+     "url": "https://baseballhall.org/hall-of-famers/wagner-honus",
+     "says": "Primary Position: Shortstop; inducted 1936"
+    }
+   ]
+  },
+  {
+   "id": "bconn-028",
+   "label": "Hall of Fame left fielders",
+   "name": "Hank Aaron",
+   "holds": false,
+   "why": "near-line",
+   "finding": "bconn-028, bconn-035, bconn-057 | Hank Aaron (Hall of Fame right fielders) | Hall of Fame left fielders | under the 10 percent line at left field by less than one and a half points; no host puts him in the group (review-read-1567 minor 3; fix2-1567)",
+   "sources": [
+    {
+     "host": "statsapi.mlb.com",
+     "url": "https://statsapi.mlb.com/api/v1/people/110001/stats?stats=career&group=fielding",
+     "says": "career fielding games by position {\"1B\":210,\"2B\":43,\"3B\":7,\"LF\":315,\"CF\":308,\"RF\":2174,\"DH\":196}; share of games at left field: 315 of 3253, 0.097"
+    },
+    {
+     "host": "baseball-reference.com",
+     "url": "https://www.baseball-reference.com/players/a/aaronha01.shtml",
+     "says": "Positions: Rightfielder and First Baseman; Standard Fielding career G: RF 2174, CF 308, LF 315, 1B 210, 2B 43, 3B 7, DH 201, all 3020; share of games at left field: 315 of 3258, 0.097 (0.104 of his 3020 fielding games, DH games left out: still under 0.35)"
+    },
+    {
+     "host": "baseballhall.org",
+     "url": "https://baseballhall.org/hall-of-famers/aaron-hank",
+     "says": "Primary Position: Right Fielder; inducted 1982"
+    }
+   ]
+  },
+  {
+   "id": "bconn-035",
+   "label": "Hall of Fame center fielders",
+   "name": "Hank Aaron",
+   "holds": false,
+   "why": "near-line",
+   "finding": "bconn-035, bconn-057 | Hank Aaron (Hall of Fame right fielders) | Hall of Fame center fielders | under the 10 percent line at center field by less than one and a half points; no host puts him in the group (review-read-1567 minor 3; fix2-1567)",
+   "sources": [
+    {
+     "host": "statsapi.mlb.com",
+     "url": "https://statsapi.mlb.com/api/v1/people/110001/stats?stats=career&group=fielding",
+     "says": "career fielding games by position {\"1B\":210,\"2B\":43,\"3B\":7,\"LF\":315,\"CF\":308,\"RF\":2174,\"DH\":196}; share of games at center field: 308 of 3253, 0.095"
+    },
+    {
+     "host": "baseball-reference.com",
+     "url": "https://www.baseball-reference.com/players/a/aaronha01.shtml",
+     "says": "Positions: Rightfielder and First Baseman; Standard Fielding career G: RF 2174, CF 308, LF 315, 1B 210, 2B 43, 3B 7, DH 201, all 3020; share of games at center field: 308 of 3258, 0.095 (0.102 of his 3020 fielding games, DH games left out: still under 0.35)"
+    },
+    {
+     "host": "baseballhall.org",
+     "url": "https://baseballhall.org/hall-of-famers/aaron-hank",
+     "says": "Primary Position: Right Fielder; inducted 1982"
+    }
+   ]
+  },
+  {
+   "id": "bconn-028",
+   "label": "Hall of Fame right fielders",
+   "name": "Lou Brock",
+   "holds": false,
+   "why": "near-line",
+   "finding": "bconn-028, bconn-045, bconn-057 | Lou Brock (Hall of Fame left fielders) | Hall of Fame right fielders | under the 10 percent line at right field by less than one and a half points; no host puts him in the group (review-read-1567 minor 3; fix2-1567)",
+   "sources": [
+    {
+     "host": "statsapi.mlb.com",
+     "url": "https://statsapi.mlb.com/api/v1/people/111495/stats?stats=career&group=fielding",
+     "says": "career fielding games by position {\"CF\":115,\"RF\":242,\"LF\":2161}; share of games at right field: 242 of 2518, 0.096"
+    },
+    {
+     "host": "baseball-reference.com",
+     "url": "https://www.baseball-reference.com/players/b/brocklo01.shtml",
+     "says": "Position: Leftfielder; Standard Fielding career G: LF 2161, RF 242, CF 115, OF 2507; share of games at right field: 242 of 2518, 0.096"
+    },
+    {
+     "host": "baseballhall.org",
+     "url": "https://baseballhall.org/hall-of-famers/brock-lou",
+     "says": "Primary Position: Left Fielder; inducted 1985"
+    }
+   ]
+  },
+  {
+   "id": "bconn-045",
+   "label": "Hall of Fame right fielders",
+   "name": "Ken Griffey Jr.",
+   "holds": false,
+   "why": "near-line",
+   "finding": "bconn-045 | Ken Griffey Jr. (Hall of Fame center fielders) | Hall of Fame right fielders | under the 10 percent line at right field by less than one and a half points; no host puts him in the group (review-read-1567 minor 3; fix2-1567)",
+   "sources": [
+    {
+     "host": "statsapi.mlb.com",
+     "url": "https://statsapi.mlb.com/api/v1/people/115135/stats?stats=career&group=fielding",
+     "says": "career fielding games by position {\"LF\":11,\"CF\":2145,\"RF\":231,\"DH\":200,\"1B\":2}; share of games at right field: 231 of 2589, 0.089"
+    },
+    {
+     "host": "baseball-reference.com",
+     "url": "https://www.baseball-reference.com/players/g/griffke02.shtml",
+     "says": "Position: Centerfielder; Standard Fielding career G: CF 2145, RF 231, LF 11, 1B 2, DH 200, all 2384; share of games at right field: 231 of 2589, 0.089"
+    },
+    {
+     "host": "baseballhall.org",
+     "url": "https://baseballhall.org/hall-of-famers/griffey-jr-ken",
+     "says": "Primary Position: Center Fielder; inducted 2016"
+    }
+   ]
+  },
+  {
+   "id": "bconn-018",
+   "label": "Hall of Fame third basemen",
+   "name": "Johnny Bench",
+   "holds": false,
+   "why": "near-line",
+   "finding": "bconn-018, bconn-036 | Johnny Bench (Hall of Fame catchers) | Hall of Fame third basemen | under the 10 percent line at third base by less than one and a half points; no host puts him in the group (review-read-1567 minor 3; fix2-1567)",
+   "sources": [
+    {
+     "host": "statsapi.mlb.com",
+     "url": "https://statsapi.mlb.com/api/v1/people/110849/stats?stats=career&group=fielding",
+     "says": "career fielding games by position {\"C\":1743,\"1B\":146,\"3B\":195,\"LF\":55,\"CF\":2,\"RF\":55}; share of games at third base: 195 of 2196, 0.089"
+    },
+    {
+     "host": "baseball-reference.com",
+     "url": "https://www.baseball-reference.com/players/b/benchjo01.shtml",
+     "says": "Positions: Catcher, Third Baseman and First Baseman; Standard Fielding career G: C 1742, 1B 145, 3B 195, LF 55, RF 55, CF 2, all 2193; share of games at third base: 195 of 2194, 0.089"
+    },
+    {
+     "host": "baseballhall.org",
+     "url": "https://baseballhall.org/hall-of-famers/bench-johnny",
+     "says": "Primary Position: Catcher; inducted 1989"
+    }
+   ]
   }
  ],
  "watchLines": {
@@ -11006,8 +13481,1521 @@
   }
  ],
  "uncheckedCeiling": 0,
- "memberUnknownCeiling": 2,
- "otherUnknownCeiling": 53,
- "otherUnknownNote": "Other tiles the record cannot judge against a group beside them, 53 pairs on the head: position groups where a man has between 10 and 30 percent of his games at the position (Frank Robinson against \"Hall of Fame left fielders\", 29.4 percent), legends groups where a man has one to four seasons with the club (Max Scherzer against \"Texas Rangers legends\"), and Dennis Eckersley (361 starts in 1071 games) against \"Hall of Fame right-handed starting pitchers\". These are exactly where a second right answer could hide, so the count may only fall. Rollie Fingers against \"Milwaukee Brewers legends\" on bconn-029 was one (the Brewers retired his 34) and left the board.",
- "memberUnknownNote": "Curt Schilling in \"Arizona Diamondbacks legends\" (four seasons there: the legend rule says five fit, none does not, one to four is unknown) and Paul Molitor in \"Hall of Fame third basemen\" (29.7 per cent of his games at third: the share rule says a third fits, under a tenth does not). Neither is contradicted; neither board was flagged."
+ "memberUnknownCeiling": 0,
+ "otherUnknownCeiling": 0,
+ "otherUnknownNote": "Round 1567 took this to 0. Round 1558 left 53 other tiles the record could not judge against a group beside them (a man with 10 to 30 percent of his games at a position group's position, one to four seasons beside a legends group, Dennis Eckersley's 361 starts in 1071 games beside \"Hall of Fame right-handed starting pitchers\"). Each is read on both hosts under grayPairs; none was decided by either (one, Eckersley, the hosts decide apart), so each is a coin toss on the record and its man left that board, with a man the record decides against every group on it taking his place (rebuilt1567). The count may not rise again.",
+ "memberUnknownNote": "Round 1567 took this to 0. Curt Schilling (four seasons with Arizona) and Paul Molitor (29.7 percent of his games at third) left the groups the record could not place them in, and so did Stan Musial (30.3 percent in left field) and Jim Thome (33.8 percent at designated hitter), members just over the old 30 percent line that the share rule moved to 35; each is under grayPairs with both hosts' numbers.",
+ "grayPairs": [
+  {
+   "id": "bconn-018",
+   "label": "Hall of Fame third basemen",
+   "name": "Cal Ripken Jr.",
+   "listedUnder": "Hall of Fame shortstops",
+   "sources": [
+    {
+     "host": "statsapi.mlb.com",
+     "url": "https://statsapi.mlb.com/api/v1/people/121222",
+     "says": "MLBHOF 2007; games by position {\"3B\":674,\"SS\":2302,\"DH\":24}; last 2001-10-06",
+     "verdict": null
+    },
+    {
+     "host": "baseball-reference.com",
+     "url": "https://www.baseball-reference.com/players/r/ripkeca01.shtml",
+     "says": "Hall of Fame 2007; Positions: Shortstop and Third Baseman; share of games at 3B: 0.22",
+     "verdict": null
+    }
+   ],
+   "round": 1567,
+   "resolution": "coin toss on the record: Cal Ripken Jr. left bconn-018; Luis Aparicio took his place in \"Hall of Fame shortstops\""
+  },
+  {
+   "id": "bconn-018",
+   "label": "Hall of Fame third basemen",
+   "name": "Jackie Robinson",
+   "listedUnder": "Hall of Fame second basemen",
+   "sources": [
+    {
+     "host": "statsapi.mlb.com",
+     "url": "https://statsapi.mlb.com/api/v1/people/121314",
+     "says": "MLBHOF 1962; games by position {\"1B\":198,\"SS\":37,\"2B\":745,\"3B\":256,\"LF\":150,\"RF\":1}; last 1956-09-30",
+     "verdict": null
+    },
+    {
+     "host": "baseball-reference.com",
+     "url": "https://www.baseball-reference.com/players/r/robinja02.shtml",
+     "says": "Hall of Fame 1962; Positions: Second Baseman, Third Baseman and First Baseman; share of games at 3B: 0.18",
+     "verdict": null
+    }
+   ],
+   "round": 1567,
+   "resolution": "coin toss on the record: Jackie Robinson left bconn-018; Nellie Fox took his place in \"Hall of Fame second basemen\""
+  },
+  {
+   "id": "bconn-019",
+   "label": "Boston Red Sox legends",
+   "name": "Juan Marichal",
+   "listedUnder": "San Francisco Giants legends",
+   "sources": [
+    {
+     "host": "statsapi.mlb.com",
+     "url": "https://statsapi.mlb.com/api/v1/people/118283",
+     "says": "seasons with club 111: 1",
+     "verdict": null
+    },
+    {
+     "host": "baseball-reference.com",
+     "url": "https://www.baseball-reference.com/players/m/maricju01.shtml",
+     "says": "seasons with the club: 1 (1974 to 1974)",
+     "verdict": null
+    }
+   ],
+   "round": 1567,
+   "resolution": "coin toss on the record: Juan Marichal left bconn-019; Madison Bumgarner took his place in \"San Francisco Giants legends\""
+  },
+  {
+   "id": "bconn-022",
+   "label": "Hall of Fame first basemen",
+   "name": "Mickey Mantle",
+   "listedUnder": "Hall of Fame center fielders",
+   "sources": [
+    {
+     "host": "statsapi.mlb.com",
+     "url": "https://statsapi.mlb.com/api/v1/people/118258",
+     "says": "MLBHOF 1974; games by position {\"CF\":1742,\"RF\":147,\"3B\":1,\"SS\":7,\"LF\":129,\"2B\":1,\"1B\":261}; last 1968-09-28",
+     "verdict": null
+    },
+    {
+     "host": "baseball-reference.com",
+     "url": "https://www.baseball-reference.com/players/m/mantlmi01.shtml",
+     "says": "Hall of Fame 1974; Positions: Centerfielder and First Baseman; share of games at 1B: 0.11",
+     "verdict": null
+    }
+   ],
+   "round": 1567,
+   "resolution": "coin toss on the record: Mickey Mantle left bconn-022; Kirby Puckett took his place in \"Hall of Fame center fielders\""
+  },
+  {
+   "id": "bconn-024",
+   "label": "Baltimore Orioles legends",
+   "name": "Robin Roberts",
+   "listedUnder": "Philadelphia Phillies legends",
+   "sources": [
+    {
+     "host": "statsapi.mlb.com",
+     "url": "https://statsapi.mlb.com/api/v1/people/121283",
+     "says": "seasons with club 110: 4",
+     "verdict": null
+    },
+    {
+     "host": "baseball-reference.com",
+     "url": "https://www.baseball-reference.com/players/r/roberro01.shtml",
+     "says": "seasons with the club: 4 (1962 to 1965)",
+     "verdict": null
+    }
+   ],
+   "round": 1567,
+   "resolution": "coin toss on the record: Robin Roberts left bconn-024; Jimmy Rollins took his place in \"Philadelphia Phillies legends\""
+  },
+  {
+   "id": "bconn-026",
+   "label": "Minnesota Twins legends",
+   "name": "Dave Winfield",
+   "listedUnder": "San Diego Padres legends",
+   "sources": [
+    {
+     "host": "statsapi.mlb.com",
+     "url": "https://statsapi.mlb.com/api/v1/people/124448",
+     "says": "seasons with club 142: 2",
+     "verdict": null
+    },
+    {
+     "host": "baseball-reference.com",
+     "url": "https://www.baseball-reference.com/players/w/winfida01.shtml",
+     "says": "seasons with the club: 2 (1993 to 1994)",
+     "verdict": null
+    }
+   ],
+   "round": 1567,
+   "resolution": "coin toss on the record: Dave Winfield left bconn-026; Benito Santiago took his place in \"San Diego Padres legends\""
+  },
+  {
+   "id": "bconn-028",
+   "label": "Hall of Fame right fielders",
+   "name": "Billy Williams",
+   "listedUnder": "Hall of Fame left fielders",
+   "sources": [
+    {
+     "host": "statsapi.mlb.com",
+     "url": "https://statsapi.mlb.com/api/v1/people/124290",
+     "says": "MLBHOF 1987; games by position {\"LF\":1738,\"RF\":381,\"CF\":31,\"1B\":96,\"DH\":242}; last 1976-10-02",
+     "verdict": null
+    },
+    {
+     "host": "baseball-reference.com",
+     "url": "https://www.baseball-reference.com/players/w/willibi01.shtml",
+     "says": "Hall of Fame 1987; Positions: Leftfielder and First Baseman; share of games at RF: 0.16",
+     "verdict": null
+    }
+   ],
+   "round": 1567,
+   "resolution": "coin toss on the record: Billy Williams left bconn-028; Jim Rice took his place in \"Hall of Fame left fielders\""
+  },
+  {
+   "id": "bconn-028",
+   "label": "Hall of Fame left fielders",
+   "name": "Frank Robinson",
+   "listedUnder": "Hall of Fame right fielders",
+   "sources": [
+    {
+     "host": "statsapi.mlb.com",
+     "url": "https://statsapi.mlb.com/api/v1/people/121311",
+     "says": "MLBHOF 1982; games by position {\"LF\":834,\"CF\":101,\"1B\":308,\"3B\":13,\"RF\":1270,\"DH\":308}; last 1976-09-18",
+     "verdict": null
+    },
+    {
+     "host": "baseball-reference.com",
+     "url": "https://www.baseball-reference.com/players/r/robinfr02.shtml",
+     "says": "Hall of Fame 1982; Positions: Outfielder and First Baseman; share of games at LF: 0.30",
+     "verdict": null
+    }
+   ],
+   "round": 1567,
+   "resolution": "coin toss on the record: Frank Robinson left bconn-028; Ichiro Suzuki took his place in \"Hall of Fame right fielders\""
+  },
+  {
+   "id": "bconn-028",
+   "label": "Hall of Fame left fielders",
+   "name": "Willie McCovey",
+   "listedUnder": "Hall of Fame first basemen",
+   "sources": [
+    {
+     "host": "statsapi.mlb.com",
+     "url": "https://statsapi.mlb.com/api/v1/people/118605",
+     "says": "MLBHOF 1986; games by position {\"1B\":2045,\"LF\":256,\"RF\":20,\"DH\":7}; last 1980-07-06",
+     "verdict": null
+    },
+    {
+     "host": "baseball-reference.com",
+     "url": "https://www.baseball-reference.com/players/m/mccovwi01.shtml",
+     "says": "Hall of Fame 1986; Positions: First Baseman and Leftfielder; share of games at LF: 0.11",
+     "verdict": null
+    }
+   ],
+   "round": 1567,
+   "resolution": "coin toss on the record: Willie McCovey left bconn-028; Lou Gehrig took his place in \"Hall of Fame first basemen\""
+  },
+  {
+   "id": "bconn-028",
+   "label": "Hall of Fame first basemen",
+   "name": "Frank Robinson",
+   "listedUnder": "Hall of Fame right fielders",
+   "sources": [
+    {
+     "host": "statsapi.mlb.com",
+     "url": "https://statsapi.mlb.com/api/v1/people/121311",
+     "says": "MLBHOF 1982; games by position {\"LF\":834,\"CF\":101,\"1B\":308,\"3B\":13,\"RF\":1270,\"DH\":308}; last 1976-09-18",
+     "verdict": null
+    },
+    {
+     "host": "baseball-reference.com",
+     "url": "https://www.baseball-reference.com/players/r/robinfr02.shtml",
+     "says": "Hall of Fame 1982; Positions: Outfielder and First Baseman; share of games at 1B: 0.11",
+     "verdict": null
+    }
+   ],
+   "round": 1567,
+   "resolution": "coin toss on the record: Frank Robinson left bconn-028; Ichiro Suzuki took his place in \"Hall of Fame right fielders\""
+  },
+  {
+   "id": "bconn-028",
+   "label": "Hall of Fame first basemen",
+   "name": "Carl Yastrzemski",
+   "listedUnder": "Hall of Fame left fielders",
+   "sources": [
+    {
+     "host": "statsapi.mlb.com",
+     "url": "https://statsapi.mlb.com/api/v1/people/124650",
+     "says": "MLBHOF 1989; games by position {\"LF\":1912,\"CF\":165,\"3B\":34,\"RF\":8,\"1B\":760,\"DH\":402}; last 1983-10-02",
+     "verdict": null
+    },
+    {
+     "host": "baseball-reference.com",
+     "url": "https://www.baseball-reference.com/players/y/yastrca01.shtml",
+     "says": "Hall of Fame 1989; Positions: Leftfielder and First Baseman; share of games at 1B: 0.23",
+     "verdict": null
+    }
+   ],
+   "round": 1567,
+   "resolution": "coin toss on the record: Carl Yastrzemski left bconn-028; Tim Raines took his place in \"Hall of Fame left fielders\""
+  },
+  {
+   "id": "bconn-029",
+   "label": "Milwaukee Brewers legends",
+   "name": "Zack Greinke",
+   "listedUnder": "Kansas City Royals legends",
+   "sources": [
+    {
+     "host": "statsapi.mlb.com",
+     "url": "https://statsapi.mlb.com/api/v1/people/425844",
+     "says": "seasons with club 158: 2",
+     "verdict": null
+    },
+    {
+     "host": "baseball-reference.com",
+     "url": "https://www.baseball-reference.com/players/g/greinza01.shtml",
+     "says": "seasons with the club: 2 (2011 to 2012)",
+     "verdict": null
+    }
+   ],
+   "round": 1567,
+   "resolution": "coin toss on the record: Zack Greinke left bconn-029; Alex Gordon took his place in \"Kansas City Royals legends\""
+  },
+  {
+   "id": "bconn-029",
+   "label": "Cleveland Guardians legends",
+   "name": "Dennis Eckersley",
+   "listedUnder": "Oakland Athletics legends",
+   "sources": [
+    {
+     "host": "statsapi.mlb.com",
+     "url": "https://statsapi.mlb.com/api/v1/people/113726",
+     "says": "seasons with club 114: 3",
+     "verdict": null
+    },
+    {
+     "host": "baseball-reference.com",
+     "url": "https://www.baseball-reference.com/players/e/eckerde01.shtml",
+     "says": "seasons with the club: 3 (1975 to 1977)",
+     "verdict": null
+    }
+   ],
+   "round": 1567,
+   "resolution": "coin toss on the record: Dennis Eckersley left bconn-029; Catfish Hunter took his place in \"Oakland Athletics legends\""
+  },
+  {
+   "id": "bconn-031",
+   "label": "Texas Rangers legends",
+   "name": "Jacob deGrom",
+   "listedUnder": "New York Mets legends",
+   "sources": [
+    {
+     "host": "statsapi.mlb.com",
+     "url": "https://statsapi.mlb.com/api/v1/people/594798",
+     "says": "seasons with club 140: 4",
+     "verdict": null
+    },
+    {
+     "host": "baseball-reference.com",
+     "url": "https://www.baseball-reference.com/players/d/degroja01.shtml",
+     "says": "seasons with the club: 4 (2023 to 2026)",
+     "verdict": null
+    }
+   ],
+   "round": 1567,
+   "resolution": "coin toss on the record: Jacob deGrom left bconn-031; Keith Hernandez took his place in \"New York Mets legends\""
+  },
+  {
+   "id": "bconn-031",
+   "label": "Texas Rangers legends",
+   "name": "Max Scherzer",
+   "listedUnder": "Montreal Expos / Washington Nationals legends",
+   "sources": [
+    {
+     "host": "statsapi.mlb.com",
+     "url": "https://statsapi.mlb.com/api/v1/people/453286",
+     "says": "seasons with club 140: 2",
+     "verdict": null
+    },
+    {
+     "host": "baseball-reference.com",
+     "url": "https://www.baseball-reference.com/players/s/scherma01.shtml",
+     "says": "seasons with the club: 2 (2023 to 2024)",
+     "verdict": null
+    }
+   ],
+   "round": 1567,
+   "resolution": "coin toss on the record: Max Scherzer left bconn-031; Stephen Strasburg took his place in \"Montreal Expos / Washington Nationals legends\""
+  },
+  {
+   "id": "bconn-031",
+   "label": "Texas Rangers legends",
+   "name": "Vladimir Guerrero",
+   "listedUnder": "Montreal Expos / Washington Nationals legends",
+   "sources": [
+    {
+     "host": "statsapi.mlb.com",
+     "url": "https://statsapi.mlb.com/api/v1/people/115223",
+     "says": "seasons with club 140: 1",
+     "verdict": null
+    },
+    {
+     "host": "baseball-reference.com",
+     "url": "https://www.baseball-reference.com/players/g/guerrvl01.shtml",
+     "says": "seasons with the club: 1 (2010 to 2010)",
+     "verdict": null
+    }
+   ],
+   "round": 1567,
+   "resolution": "coin toss on the record: Vladimir Guerrero left bconn-031; Dennis Martinez took his place in \"Montreal Expos / Washington Nationals legends\""
+  },
+  {
+   "id": "bconn-031",
+   "label": "Toronto Blue Jays legends",
+   "name": "Max Scherzer",
+   "listedUnder": "Montreal Expos / Washington Nationals legends",
+   "sources": [
+    {
+     "host": "statsapi.mlb.com",
+     "url": "https://statsapi.mlb.com/api/v1/people/453286",
+     "says": "seasons with club 141: 2",
+     "verdict": null
+    },
+    {
+     "host": "baseball-reference.com",
+     "url": "https://www.baseball-reference.com/players/s/scherma01.shtml",
+     "says": "seasons with the club: 2 (2025 to 2026)",
+     "verdict": null
+    }
+   ],
+   "round": 1567,
+   "resolution": "coin toss on the record: Max Scherzer left bconn-031; Stephen Strasburg took his place in \"Montreal Expos / Washington Nationals legends\""
+  },
+  {
+   "id": "bconn-031",
+   "label": "New York Mets legends",
+   "name": "Carlos Delgado",
+   "listedUnder": "Toronto Blue Jays legends",
+   "sources": [
+    {
+     "host": "statsapi.mlb.com",
+     "url": "https://statsapi.mlb.com/api/v1/people/113232",
+     "says": "seasons with club 121: 4",
+     "verdict": null
+    },
+    {
+     "host": "baseball-reference.com",
+     "url": "https://www.baseball-reference.com/players/d/delgaca01.shtml",
+     "says": "seasons with the club: 4 (2006 to 2009)",
+     "verdict": null
+    }
+   ],
+   "round": 1567,
+   "resolution": "coin toss on the record: Carlos Delgado left bconn-031; George Bell took his place in \"Toronto Blue Jays legends\""
+  },
+  {
+   "id": "bconn-031",
+   "label": "New York Mets legends",
+   "name": "Roberto Alomar",
+   "listedUnder": "Toronto Blue Jays legends",
+   "sources": [
+    {
+     "host": "statsapi.mlb.com",
+     "url": "https://statsapi.mlb.com/api/v1/people/110183",
+     "says": "seasons with club 121: 2",
+     "verdict": null
+    },
+    {
+     "host": "baseball-reference.com",
+     "url": "https://www.baseball-reference.com/players/a/alomaro01.shtml",
+     "says": "seasons with the club: 2 (2002 to 2003)",
+     "verdict": null
+    }
+   ],
+   "round": 1567,
+   "resolution": "coin toss on the record: Roberto Alomar left bconn-031; Dave Stieb took his place in \"Toronto Blue Jays legends\""
+  },
+  {
+   "id": "bconn-031",
+   "label": "New York Mets legends",
+   "name": "Max Scherzer",
+   "listedUnder": "Montreal Expos / Washington Nationals legends",
+   "sources": [
+    {
+     "host": "statsapi.mlb.com",
+     "url": "https://statsapi.mlb.com/api/v1/people/453286",
+     "says": "seasons with club 121: 2",
+     "verdict": null
+    },
+    {
+     "host": "baseball-reference.com",
+     "url": "https://www.baseball-reference.com/players/s/scherma01.shtml",
+     "says": "seasons with the club: 2 (2022 to 2023)",
+     "verdict": null
+    }
+   ],
+   "round": 1567,
+   "resolution": "coin toss on the record: Max Scherzer left bconn-031; Stephen Strasburg took his place in \"Montreal Expos / Washington Nationals legends\""
+  },
+  {
+   "id": "bconn-031",
+   "label": "Montreal Expos / Washington Nationals legends",
+   "name": "Ivan Rodriguez",
+   "listedUnder": "Texas Rangers legends",
+   "sources": [
+    {
+     "host": "statsapi.mlb.com",
+     "url": "https://statsapi.mlb.com/api/v1/people/121358",
+     "says": "seasons with club 120: 2",
+     "verdict": null
+    },
+    {
+     "host": "baseball-reference.com",
+     "url": "https://www.baseball-reference.com/players/r/rodriiv01.shtml",
+     "says": "seasons with the club: 2 (2010 to 2011)",
+     "verdict": null
+    }
+   ],
+   "round": 1567,
+   "resolution": "coin toss on the record: Ivan Rodriguez left bconn-031; Elvis Andrus took his place in \"Texas Rangers legends\""
+  },
+  {
+   "id": "bconn-032",
+   "label": "Arizona Diamondbacks legends",
+   "name": "Nolan Arenado",
+   "listedUnder": "Colorado Rockies legends",
+   "sources": [
+    {
+     "host": "statsapi.mlb.com",
+     "url": "https://statsapi.mlb.com/api/v1/people/571448",
+     "says": "seasons with club 109: 1",
+     "verdict": null
+    },
+    {
+     "host": "baseball-reference.com",
+     "url": "https://www.baseball-reference.com/players/a/arenano01.shtml",
+     "says": "seasons with the club: 1 (2026 to 2026)",
+     "verdict": null
+    }
+   ],
+   "round": 1567,
+   "resolution": "coin toss on the record: Nolan Arenado left bconn-032; Carlos Gonzalez took his place in \"Colorado Rockies legends\""
+  },
+  {
+   "id": "bconn-032",
+   "label": "Arizona Diamondbacks legends",
+   "name": "Curt Schilling",
+   "listedUnder": "Arizona Diamondbacks legends",
+   "sources": [
+    {
+     "host": "statsapi.mlb.com",
+     "url": "https://statsapi.mlb.com/api/v1/people/121811",
+     "says": "seasons with club 109: 4",
+     "verdict": null
+    },
+    {
+     "host": "baseball-reference.com",
+     "url": "https://www.baseball-reference.com/players/s/schilcu01.shtml",
+     "says": "seasons with the club: 4 (2000 to 2003)",
+     "verdict": null
+    }
+   ],
+   "round": 1567,
+   "resolution": "coin toss on the record: Curt Schilling left bconn-032; Ketel Marte took his place in \"Arizona Diamondbacks legends\""
+  },
+  {
+   "id": "bconn-032",
+   "label": "Arizona Diamondbacks legends",
+   "name": "Evan Longoria",
+   "listedUnder": "Tampa Bay Rays legends",
+   "sources": [
+    {
+     "host": "statsapi.mlb.com",
+     "url": "https://statsapi.mlb.com/api/v1/people/446334",
+     "says": "seasons with club 109: 1",
+     "verdict": null
+    },
+    {
+     "host": "baseball-reference.com",
+     "url": "https://www.baseball-reference.com/players/l/longoev01.shtml",
+     "says": "seasons with the club: 1 (2023 to 2023)",
+     "verdict": null
+    }
+   ],
+   "round": 1567,
+   "resolution": "coin toss on the record: Evan Longoria left bconn-032; James Shields took his place in \"Tampa Bay Rays legends\""
+  },
+  {
+   "id": "bconn-035",
+   "label": "Hall of Fame first basemen",
+   "name": "Carl Yastrzemski",
+   "listedUnder": "Hall of Fame left fielders",
+   "sources": [
+    {
+     "host": "statsapi.mlb.com",
+     "url": "https://statsapi.mlb.com/api/v1/people/124650",
+     "says": "MLBHOF 1989; games by position {\"LF\":1912,\"CF\":165,\"3B\":34,\"RF\":8,\"1B\":760,\"DH\":402}; last 1983-10-02",
+     "verdict": null
+    },
+    {
+     "host": "baseball-reference.com",
+     "url": "https://www.baseball-reference.com/players/y/yastrca01.shtml",
+     "says": "Hall of Fame 1989; Positions: Leftfielder and First Baseman; share of games at 1B: 0.23",
+     "verdict": null
+    }
+   ],
+   "round": 1567,
+   "resolution": "coin toss on the record: Carl Yastrzemski left bconn-035; Jim Rice took his place in \"Hall of Fame left fielders\""
+  },
+  {
+   "id": "bconn-035",
+   "label": "Hall of Fame first basemen",
+   "name": "Frank Robinson",
+   "listedUnder": "Hall of Fame right fielders",
+   "sources": [
+    {
+     "host": "statsapi.mlb.com",
+     "url": "https://statsapi.mlb.com/api/v1/people/121311",
+     "says": "MLBHOF 1982; games by position {\"LF\":834,\"CF\":101,\"1B\":308,\"3B\":13,\"RF\":1270,\"DH\":308}; last 1976-09-18",
+     "verdict": null
+    },
+    {
+     "host": "baseball-reference.com",
+     "url": "https://www.baseball-reference.com/players/r/robinfr02.shtml",
+     "says": "Hall of Fame 1982; Positions: Outfielder and First Baseman; share of games at 1B: 0.11",
+     "verdict": null
+    }
+   ],
+   "round": 1567,
+   "resolution": "coin toss on the record: Frank Robinson left bconn-035; Mel Ott took his place in \"Hall of Fame right fielders\""
+  },
+  {
+   "id": "bconn-035",
+   "label": "Hall of Fame first basemen",
+   "name": "Mickey Mantle",
+   "listedUnder": "Hall of Fame center fielders",
+   "sources": [
+    {
+     "host": "statsapi.mlb.com",
+     "url": "https://statsapi.mlb.com/api/v1/people/118258",
+     "says": "MLBHOF 1974; games by position {\"CF\":1742,\"RF\":147,\"3B\":1,\"SS\":7,\"LF\":129,\"2B\":1,\"1B\":261}; last 1968-09-28",
+     "verdict": null
+    },
+    {
+     "host": "baseball-reference.com",
+     "url": "https://www.baseball-reference.com/players/m/mantlmi01.shtml",
+     "says": "Hall of Fame 1974; Positions: Centerfielder and First Baseman; share of games at 1B: 0.11",
+     "verdict": null
+    }
+   ],
+   "round": 1567,
+   "resolution": "coin toss on the record: Mickey Mantle left bconn-035; Tris Speaker took his place in \"Hall of Fame center fielders\""
+  },
+  {
+   "id": "bconn-035",
+   "label": "Hall of Fame left fielders",
+   "name": "Willie McCovey",
+   "listedUnder": "Hall of Fame first basemen",
+   "sources": [
+    {
+     "host": "statsapi.mlb.com",
+     "url": "https://statsapi.mlb.com/api/v1/people/118605",
+     "says": "MLBHOF 1986; games by position {\"1B\":2045,\"LF\":256,\"RF\":20,\"DH\":7}; last 1980-07-06",
+     "verdict": null
+    },
+    {
+     "host": "baseball-reference.com",
+     "url": "https://www.baseball-reference.com/players/m/mccovwi01.shtml",
+     "says": "Hall of Fame 1986; Positions: First Baseman and Leftfielder; share of games at LF: 0.11",
+     "verdict": null
+    }
+   ],
+   "round": 1567,
+   "resolution": "coin toss on the record: Willie McCovey left bconn-035; Jeff Bagwell took his place in \"Hall of Fame first basemen\""
+  },
+  {
+   "id": "bconn-035",
+   "label": "Hall of Fame left fielders",
+   "name": "Harmon Killebrew",
+   "listedUnder": "Hall of Fame first basemen",
+   "sources": [
+    {
+     "host": "statsapi.mlb.com",
+     "url": "https://statsapi.mlb.com/api/v1/people/117051",
+     "says": "MLBHOF 1984; games by position {\"2B\":11,\"3B\":791,\"LF\":471,\"1B\":970,\"RF\":1,\"DH\":145}; last 1975-09-26",
+     "verdict": null
+    },
+    {
+     "host": "baseball-reference.com",
+     "url": "https://www.baseball-reference.com/players/k/killeha01.shtml",
+     "says": "Hall of Fame 1984; Positions: First Baseman, Third Baseman and Leftfielder; share of games at LF: 0.20",
+     "verdict": null
+    }
+   ],
+   "round": 1567,
+   "resolution": "coin toss on the record: Harmon Killebrew left bconn-035; Todd Helton took his place in \"Hall of Fame first basemen\""
+  },
+  {
+   "id": "bconn-035",
+   "label": "Hall of Fame left fielders",
+   "name": "Frank Robinson",
+   "listedUnder": "Hall of Fame right fielders",
+   "sources": [
+    {
+     "host": "statsapi.mlb.com",
+     "url": "https://statsapi.mlb.com/api/v1/people/121311",
+     "says": "MLBHOF 1982; games by position {\"LF\":834,\"CF\":101,\"1B\":308,\"3B\":13,\"RF\":1270,\"DH\":308}; last 1976-09-18",
+     "verdict": null
+    },
+    {
+     "host": "baseball-reference.com",
+     "url": "https://www.baseball-reference.com/players/r/robinfr02.shtml",
+     "says": "Hall of Fame 1982; Positions: Outfielder and First Baseman; share of games at LF: 0.30",
+     "verdict": null
+    }
+   ],
+   "round": 1567,
+   "resolution": "coin toss on the record: Frank Robinson left bconn-035; Mel Ott took his place in \"Hall of Fame right fielders\""
+  },
+  {
+   "id": "bconn-035",
+   "label": "Hall of Fame right fielders",
+   "name": "Billy Williams",
+   "listedUnder": "Hall of Fame left fielders",
+   "sources": [
+    {
+     "host": "statsapi.mlb.com",
+     "url": "https://statsapi.mlb.com/api/v1/people/124290",
+     "says": "MLBHOF 1987; games by position {\"LF\":1738,\"RF\":381,\"CF\":31,\"1B\":96,\"DH\":242}; last 1976-10-02",
+     "verdict": null
+    },
+    {
+     "host": "baseball-reference.com",
+     "url": "https://www.baseball-reference.com/players/w/willibi01.shtml",
+     "says": "Hall of Fame 1987; Positions: Leftfielder and First Baseman; share of games at RF: 0.16",
+     "verdict": null
+    }
+   ],
+   "round": 1567,
+   "resolution": "coin toss on the record: Billy Williams left bconn-035; Ralph Kiner took his place in \"Hall of Fame left fielders\""
+  },
+  {
+   "id": "bconn-035",
+   "label": "Hall of Fame right fielders",
+   "name": "Ty Cobb",
+   "listedUnder": "Hall of Fame center fielders",
+   "sources": [
+    {
+     "host": "statsapi.mlb.com",
+     "url": "https://statsapi.mlb.com/api/v1/people/112431",
+     "says": "MLBHOF 1936; games by position {\"LF\":36,\"CF\":2194,\"RF\":709,\"2B\":3,\"1B\":14,\"P\":3,\"3B\":1}; last 1928-09-11",
+     "verdict": null
+    },
+    {
+     "host": "baseball-reference.com",
+     "url": "https://www.baseball-reference.com/players/c/cobbty01.shtml",
+     "says": "Hall of Fame 1936; Positions: Centerfielder; share of games at RF: 0.24",
+     "verdict": null
+    }
+   ],
+   "round": 1567,
+   "resolution": "coin toss on the record: Ty Cobb left bconn-035; Richie Ashburn took his place in \"Hall of Fame center fielders\""
+  },
+  {
+   "id": "bconn-035",
+   "label": "Hall of Fame right fielders",
+   "name": "Duke Snider",
+   "listedUnder": "Hall of Fame center fielders",
+   "sources": [
+    {
+     "host": "statsapi.mlb.com",
+     "url": "https://statsapi.mlb.com/api/v1/people/122488",
+     "says": "MLBHOF 1980; games by position {\"LF\":81,\"CF\":1589,\"RF\":293}; last 1964-10-03",
+     "verdict": null
+    },
+    {
+     "host": "baseball-reference.com",
+     "url": "https://www.baseball-reference.com/players/s/snidedu01.shtml",
+     "says": "Hall of Fame 1980; Positions: Centerfielder; share of games at RF: 0.15",
+     "verdict": null
+    }
+   ],
+   "round": 1567,
+   "resolution": "coin toss on the record: Duke Snider left bconn-035; Edd Roush took his place in \"Hall of Fame center fielders\""
+  },
+  {
+   "id": "bconn-035",
+   "label": "Hall of Fame center fielders",
+   "name": "Rickey Henderson",
+   "listedUnder": "Hall of Fame left fielders",
+   "sources": [
+    {
+     "host": "statsapi.mlb.com",
+     "url": "https://statsapi.mlb.com/api/v1/people/115749",
+     "says": "MLBHOF 2009; games by position {\"LF\":2421,\"CF\":446,\"RF\":27,\"DH\":133}; last 2003-09-19",
+     "verdict": null
+    },
+    {
+     "host": "baseball-reference.com",
+     "url": "https://www.baseball-reference.com/players/h/henderi01.shtml",
+     "says": "Hall of Fame 2009; Positions: Leftfielder; share of games at CF: 0.15",
+     "verdict": null
+    }
+   ],
+   "round": 1567,
+   "resolution": "coin toss on the record: Rickey Henderson left bconn-035; Joe Medwick took his place in \"Hall of Fame left fielders\""
+  },
+  {
+   "id": "bconn-035",
+   "label": "Hall of Fame center fielders",
+   "name": "Al Kaline",
+   "listedUnder": "Hall of Fame right fielders",
+   "sources": [
+    {
+     "host": "statsapi.mlb.com",
+     "url": "https://statsapi.mlb.com/api/v1/people/116822",
+     "says": "MLBHOF 1980; games by position {\"LF\":17,\"CF\":489,\"RF\":2031,\"3B\":2,\"1B\":135,\"DH\":144}; last 1974-10-02",
+     "verdict": null
+    },
+    {
+     "host": "baseball-reference.com",
+     "url": "https://www.baseball-reference.com/players/k/kalinal01.shtml",
+     "says": "Hall of Fame 1980; Positions: Rightfielder and First Baseman; share of games at CF: 0.18",
+     "verdict": null
+    }
+   ],
+   "round": 1567,
+   "resolution": "coin toss on the record: Al Kaline left bconn-035; Vladimir Guerrero took his place in \"Hall of Fame right fielders\""
+  },
+  {
+   "id": "bconn-036",
+   "label": "Hall of Fame catchers",
+   "name": "Craig Biggio",
+   "listedUnder": "Hall of Fame second basemen",
+   "sources": [
+    {
+     "host": "statsapi.mlb.com",
+     "url": "https://statsapi.mlb.com/api/v1/people/110987",
+     "says": "MLBHOF 2015; games by position {\"C\":428,\"LF\":109,\"CF\":255,\"RF\":2,\"2B\":1989,\"DH\":20}; last 2007-09-30",
+     "verdict": null
+    },
+    {
+     "host": "baseball-reference.com",
+     "url": "https://www.baseball-reference.com/players/b/biggicr01.shtml",
+     "says": "Hall of Fame 2015; Positions: Second Baseman, Catcher and Centerfielder; share of games at C: 0.15",
+     "verdict": null
+    }
+   ],
+   "round": 1567,
+   "resolution": "coin toss on the record: Craig Biggio left bconn-036; Roberto Alomar took his place in \"Hall of Fame second basemen\""
+  },
+  {
+   "id": "bconn-036",
+   "label": "Hall of Fame shortstops",
+   "name": "Rogers Hornsby",
+   "listedUnder": "Hall of Fame second basemen",
+   "sources": [
+    {
+     "host": "statsapi.mlb.com",
+     "url": "https://statsapi.mlb.com/api/v1/people/116156",
+     "says": "MLBHOF 1942; games by position {\"SS\":359,\"1B\":43,\"2B\":1555,\"3B\":193,\"CF\":1,\"RF\":14,\"LF\":6}; last 1937-07-20",
+     "verdict": null
+    },
+    {
+     "host": "baseball-reference.com",
+     "url": "https://www.baseball-reference.com/players/h/hornsro01.shtml",
+     "says": "Hall of Fame 1942; Positions: Second Baseman, Shortstop and Third Baseman; share of games at SS: 0.17",
+     "verdict": null
+    }
+   ],
+   "round": 1567,
+   "resolution": "coin toss on the record: Rogers Hornsby left bconn-036; Charlie Gehringer took his place in \"Hall of Fame second basemen\""
+  },
+  {
+   "id": "bconn-036",
+   "label": "Hall of Fame third basemen",
+   "name": "Cal Ripken Jr.",
+   "listedUnder": "Hall of Fame shortstops",
+   "sources": [
+    {
+     "host": "statsapi.mlb.com",
+     "url": "https://statsapi.mlb.com/api/v1/people/121222",
+     "says": "MLBHOF 2007; games by position {\"3B\":674,\"SS\":2302,\"DH\":24}; last 2001-10-06",
+     "verdict": null
+    },
+    {
+     "host": "baseball-reference.com",
+     "url": "https://www.baseball-reference.com/players/r/ripkeca01.shtml",
+     "says": "Hall of Fame 2007; Positions: Shortstop and Third Baseman; share of games at 3B: 0.22",
+     "verdict": null
+    }
+   ],
+   "round": 1567,
+   "resolution": "coin toss on the record: Cal Ripken Jr. left bconn-036; Derek Jeter took his place in \"Hall of Fame shortstops\""
+  },
+  {
+   "id": "bconn-038",
+   "label": "Hall of Fame right-handed starting pitchers",
+   "name": "Dennis Eckersley",
+   "listedUnder": "Hall of Fame relief pitchers",
+   "sources": [
+    {
+     "host": "statsapi.mlb.com",
+     "url": "https://statsapi.mlb.com/api/v1/people/113726",
+     "says": "MLBHOF 2004; pitchHand R; 361 starts in 1071 games, 390 saves",
+     "verdict": null
+    },
+    {
+     "host": "baseball-reference.com",
+     "url": "https://www.baseball-reference.com/players/e/eckerde01.shtml",
+     "says": "Hall of Fame 2004; Throws: Right; 361 starts in 1071 games, 390 saves",
+     "verdict": false
+    }
+   ],
+   "round": 1567,
+   "resolution": "coin toss on the record: Dennis Eckersley left bconn-038; Lee Smith took his place in \"Hall of Fame relief pitchers\""
+  },
+  {
+   "id": "bconn-041",
+   "label": "Hall of Fame second basemen",
+   "name": "Paul Molitor",
+   "listedUnder": "Hall of Fame third basemen",
+   "sources": [
+    {
+     "host": "statsapi.mlb.com",
+     "url": "https://statsapi.mlb.com/api/v1/people/119236",
+     "says": "MLBHOF 2004; games by position {\"2B\":400,\"3B\":792,\"SS\":57,\"DH\":1169,\"CF\":42,\"RF\":4,\"LF\":4,\"1B\":197}; last 1998-09-27",
+     "verdict": null
+    },
+    {
+     "host": "baseball-reference.com",
+     "url": "https://www.baseball-reference.com/players/m/molitpa01.shtml",
+     "says": "Hall of Fame 2004; Positions: Designated Hitter, Third Baseman and Second Baseman; share of games at 2B: 0.15",
+     "verdict": null
+    }
+   ],
+   "round": 1567,
+   "resolution": "coin toss on the record: Paul Molitor left bconn-041; Mike Schmidt took his place in \"Hall of Fame third basemen\""
+  },
+  {
+   "id": "bconn-041",
+   "label": "Hall of Fame third basemen",
+   "name": "Jackie Robinson",
+   "listedUnder": "Hall of Fame second basemen",
+   "sources": [
+    {
+     "host": "statsapi.mlb.com",
+     "url": "https://statsapi.mlb.com/api/v1/people/121314",
+     "says": "MLBHOF 1962; games by position {\"1B\":198,\"SS\":37,\"2B\":745,\"3B\":256,\"LF\":150,\"RF\":1}; last 1956-09-30",
+     "verdict": null
+    },
+    {
+     "host": "baseball-reference.com",
+     "url": "https://www.baseball-reference.com/players/r/robinja02.shtml",
+     "says": "Hall of Fame 1962; Positions: Second Baseman, Third Baseman and First Baseman; share of games at 3B: 0.18",
+     "verdict": null
+    }
+   ],
+   "round": 1567,
+   "resolution": "coin toss on the record: Jackie Robinson left bconn-041; Joe Morgan took his place in \"Hall of Fame second basemen\""
+  },
+  {
+   "id": "bconn-041",
+   "label": "Hall of Fame third basemen",
+   "name": "Frankie Frisch",
+   "listedUnder": "Hall of Fame second basemen",
+   "sources": [
+    {
+     "host": "statsapi.mlb.com",
+     "url": "https://statsapi.mlb.com/api/v1/people/114448",
+     "says": "MLBHOF 1947; games by position {\"2B\":1762,\"3B\":456,\"SS\":80}; last 1937-08-05",
+     "verdict": null
+    },
+    {
+     "host": "baseball-reference.com",
+     "url": "https://www.baseball-reference.com/players/f/friscfr01.shtml",
+     "says": "Hall of Fame 1947; Positions: Second Baseman and Third Baseman; share of games at 3B: 0.20",
+     "verdict": null
+    }
+   ],
+   "round": 1567,
+   "resolution": "coin toss on the record: Frankie Frisch left bconn-041; Charlie Gehringer took his place in \"Hall of Fame second basemen\""
+  },
+  {
+   "id": "bconn-041",
+   "label": "Hall of Fame third basemen",
+   "name": "Paul Molitor",
+   "listedUnder": "Hall of Fame third basemen",
+   "sources": [
+    {
+     "host": "statsapi.mlb.com",
+     "url": "https://statsapi.mlb.com/api/v1/people/119236",
+     "says": "MLBHOF 2004; games by position {\"2B\":400,\"3B\":792,\"SS\":57,\"DH\":1169,\"CF\":42,\"RF\":4,\"LF\":4,\"1B\":197}; last 1998-09-27",
+     "verdict": null
+    },
+    {
+     "host": "baseball-reference.com",
+     "url": "https://www.baseball-reference.com/players/m/molitpa01.shtml",
+     "says": "Hall of Fame 2004; Positions: Designated Hitter, Third Baseman and Second Baseman; share of games at 3B: 0.30",
+     "verdict": null
+    }
+   ],
+   "round": 1567,
+   "resolution": "coin toss on the record: Paul Molitor left bconn-041; Mike Schmidt took his place in \"Hall of Fame third basemen\""
+  },
+  {
+   "id": "bconn-045",
+   "label": "Hall of Fame left fielders",
+   "name": "Dave Winfield",
+   "listedUnder": "Hall of Fame right fielders",
+   "sources": [
+    {
+     "host": "statsapi.mlb.com",
+     "url": "https://statsapi.mlb.com/api/v1/people/124448",
+     "says": "MLBHOF 2001; games by position {\"1B\":8,\"LF\":465,\"CF\":223,\"RF\":1883,\"DH\":408,\"3B\":2}; last 1995-10-01",
+     "verdict": null
+    },
+    {
+     "host": "baseball-reference.com",
+     "url": "https://www.baseball-reference.com/players/w/winfida01.shtml",
+     "says": "Hall of Fame 2001; Positions: Rightfielder; share of games at LF: 0.16",
+     "verdict": null
+    }
+   ],
+   "round": 1567,
+   "resolution": "coin toss on the record: Dave Winfield left bconn-045; Roberto Clemente took his place in \"Hall of Fame right fielders\""
+  },
+  {
+   "id": "bconn-045",
+   "label": "Hall of Fame left fielders",
+   "name": "Orlando Cepeda",
+   "listedUnder": "Hall of Fame first basemen",
+   "sources": [
+    {
+     "host": "statsapi.mlb.com",
+     "url": "https://statsapi.mlb.com/api/v1/people/112157",
+     "says": "MLBHOF 1999; games by position {\"1B\":1683,\"3B\":4,\"LF\":213,\"RF\":19,\"DH\":167}; last 1974-09-19",
+     "verdict": null
+    },
+    {
+     "host": "baseball-reference.com",
+     "url": "https://www.baseball-reference.com/players/c/cepedor01.shtml",
+     "says": "Hall of Fame 1999; Positions: First Baseman and Leftfielder; share of games at LF: 0.10",
+     "verdict": null
+    }
+   ],
+   "round": 1567,
+   "resolution": "coin toss on the record: Orlando Cepeda left bconn-045; Eddie Murray took his place in \"Hall of Fame first basemen\""
+  },
+  {
+   "id": "bconn-045",
+   "label": "Hall of Fame right fielders",
+   "name": "Kirby Puckett",
+   "listedUnder": "Hall of Fame center fielders",
+   "sources": [
+    {
+     "host": "statsapi.mlb.com",
+     "url": "https://statsapi.mlb.com/api/v1/people/120790",
+     "says": "MLBHOF 2001; games by position {\"CF\":1432,\"DH\":80,\"2B\":4,\"3B\":4,\"SS\":3,\"LF\":10,\"RF\":276}; last 1995-09-28",
+     "verdict": null
+    },
+    {
+     "host": "baseball-reference.com",
+     "url": "https://www.baseball-reference.com/players/p/puckeki01.shtml",
+     "says": "Hall of Fame 2001; Positions: Centerfielder; share of games at RF: 0.15",
+     "verdict": null
+    }
+   ],
+   "round": 1567,
+   "resolution": "coin toss on the record: Kirby Puckett left bconn-045; Joe DiMaggio took his place in \"Hall of Fame center fielders\""
+  },
+  {
+   "id": "bconn-045",
+   "label": "Hall of Fame first basemen",
+   "name": "Harry Heilmann",
+   "listedUnder": "Hall of Fame right fielders",
+   "sources": [
+    {
+     "host": "statsapi.mlb.com",
+     "url": "https://statsapi.mlb.com/api/v1/people/115705",
+     "says": "MLBHOF 1952; games by position {\"1B\":445,\"2B\":18,\"LF\":8,\"CF\":72,\"RF\":1525}; last 1932-05-31",
+     "verdict": null
+    },
+    {
+     "host": "baseball-reference.com",
+     "url": "https://www.baseball-reference.com/players/h/heilmha01.shtml",
+     "says": "Hall of Fame 1952; Positions: Rightfielder and First Baseman; share of games at 1B: 0.22",
+     "verdict": null
+    }
+   ],
+   "round": 1567,
+   "resolution": "coin toss on the record: Harry Heilmann left bconn-045; Larry Walker took his place in \"Hall of Fame right fielders\""
+  },
+  {
+   "id": "bconn-053",
+   "label": "Hall of Fame third basemen",
+   "name": "Cal Ripken Jr.",
+   "listedUnder": "Hall of Fame shortstops",
+   "sources": [
+    {
+     "host": "statsapi.mlb.com",
+     "url": "https://statsapi.mlb.com/api/v1/people/121222",
+     "says": "MLBHOF 2007; games by position {\"3B\":674,\"SS\":2302,\"DH\":24}; last 2001-10-06",
+     "verdict": null
+    },
+    {
+     "host": "baseball-reference.com",
+     "url": "https://www.baseball-reference.com/players/r/ripkeca01.shtml",
+     "says": "Hall of Fame 2007; Positions: Shortstop and Third Baseman; share of games at 3B: 0.22",
+     "verdict": null
+    }
+   ],
+   "round": 1567,
+   "resolution": "coin toss on the record: Cal Ripken Jr. left bconn-053; Alan Trammell took his place in \"Hall of Fame shortstops\""
+  },
+  {
+   "id": "bconn-053",
+   "label": "Hall of Fame first basemen",
+   "name": "George Brett",
+   "listedUnder": "Hall of Fame third basemen",
+   "sources": [
+    {
+     "host": "statsapi.mlb.com",
+     "url": "https://statsapi.mlb.com/api/v1/people/111437",
+     "says": "MLBHOF 1999; games by position {\"3B\":1692,\"SS\":11,\"DH\":500,\"1B\":462,\"LF\":22,\"RF\":14}; last 1993-10-03",
+     "verdict": null
+    },
+    {
+     "host": "baseball-reference.com",
+     "url": "https://www.baseball-reference.com/players/b/brettge01.shtml",
+     "says": "Hall of Fame 1999; Positions: Third Baseman and First Baseman; share of games at 1B: 0.17",
+     "verdict": null
+    }
+   ],
+   "round": 1567,
+   "resolution": "coin toss on the record: George Brett left bconn-053; Chipper Jones took his place in \"Hall of Fame third basemen\""
+  },
+  {
+   "id": "bconn-053",
+   "label": "Hall of Fame shortstops",
+   "name": "Rogers Hornsby",
+   "listedUnder": "Hall of Fame second basemen",
+   "sources": [
+    {
+     "host": "statsapi.mlb.com",
+     "url": "https://statsapi.mlb.com/api/v1/people/116156",
+     "says": "MLBHOF 1942; games by position {\"SS\":359,\"1B\":43,\"2B\":1555,\"3B\":193,\"CF\":1,\"RF\":14,\"LF\":6}; last 1937-07-20",
+     "verdict": null
+    },
+    {
+     "host": "baseball-reference.com",
+     "url": "https://www.baseball-reference.com/players/h/hornsro01.shtml",
+     "says": "Hall of Fame 1942; Positions: Second Baseman, Shortstop and Third Baseman; share of games at SS: 0.17",
+     "verdict": null
+    }
+   ],
+   "round": 1567,
+   "resolution": "coin toss on the record: Rogers Hornsby left bconn-053; Roberto Alomar took his place in \"Hall of Fame second basemen\""
+  },
+  {
+   "id": "bconn-057",
+   "label": "Hall of Fame center fielders",
+   "name": "Stan Musial",
+   "listedUnder": "Hall of Fame left fielders",
+   "sources": [
+    {
+     "host": "statsapi.mlb.com",
+     "url": "https://statsapi.mlb.com/api/v1/people/119602",
+     "says": "MLBHOF 1969; games by position {\"LF\":929,\"RF\":786,\"CF\":331,\"1B\":1016,\"P\":1}; last 1963-09-29",
+     "verdict": null
+    },
+    {
+     "host": "baseball-reference.com",
+     "url": "https://www.baseball-reference.com/players/m/musiast01.shtml",
+     "says": "Hall of Fame 1969; Positions: Outfielder and First Baseman; share of games at CF: 0.11",
+     "verdict": null
+    }
+   ],
+   "round": 1567,
+   "resolution": "coin toss on the record: Stan Musial left bconn-057; Willie Stargell took his place in \"Hall of Fame left fielders\""
+  },
+  {
+   "id": "bconn-057",
+   "label": "Hall of Fame center fielders",
+   "name": "Rickey Henderson",
+   "listedUnder": "Hall of Fame left fielders",
+   "sources": [
+    {
+     "host": "statsapi.mlb.com",
+     "url": "https://statsapi.mlb.com/api/v1/people/115749",
+     "says": "MLBHOF 2009; games by position {\"LF\":2421,\"CF\":446,\"RF\":27,\"DH\":133}; last 2003-09-19",
+     "verdict": null
+    },
+    {
+     "host": "baseball-reference.com",
+     "url": "https://www.baseball-reference.com/players/h/henderi01.shtml",
+     "says": "Hall of Fame 2009; Positions: Leftfielder; share of games at CF: 0.15",
+     "verdict": null
+    }
+   ],
+   "round": 1567,
+   "resolution": "coin toss on the record: Rickey Henderson left bconn-057; Ralph Kiner took his place in \"Hall of Fame left fielders\""
+  },
+  {
+   "id": "bconn-057",
+   "label": "Hall of Fame right fielders",
+   "name": "Ty Cobb",
+   "listedUnder": "Hall of Fame center fielders",
+   "sources": [
+    {
+     "host": "statsapi.mlb.com",
+     "url": "https://statsapi.mlb.com/api/v1/people/112431",
+     "says": "MLBHOF 1936; games by position {\"LF\":36,\"CF\":2194,\"RF\":709,\"2B\":3,\"1B\":14,\"P\":3,\"3B\":1}; last 1928-09-11",
+     "verdict": null
+    },
+    {
+     "host": "baseball-reference.com",
+     "url": "https://www.baseball-reference.com/players/c/cobbty01.shtml",
+     "says": "Hall of Fame 1936; Positions: Centerfielder; share of games at RF: 0.24",
+     "verdict": null
+    }
+   ],
+   "round": 1567,
+   "resolution": "coin toss on the record: Ty Cobb left bconn-057; Richie Ashburn took his place in \"Hall of Fame center fielders\""
+  },
+  {
+   "id": "bconn-057",
+   "label": "Hall of Fame right fielders",
+   "name": "Stan Musial",
+   "listedUnder": "Hall of Fame left fielders",
+   "sources": [
+    {
+     "host": "statsapi.mlb.com",
+     "url": "https://statsapi.mlb.com/api/v1/people/119602",
+     "says": "MLBHOF 1969; games by position {\"LF\":929,\"RF\":786,\"CF\":331,\"1B\":1016,\"P\":1}; last 1963-09-29",
+     "verdict": null
+    },
+    {
+     "host": "baseball-reference.com",
+     "url": "https://www.baseball-reference.com/players/m/musiast01.shtml",
+     "says": "Hall of Fame 1969; Positions: Outfielder and First Baseman; share of games at RF: 0.27",
+     "verdict": null
+    }
+   ],
+   "round": 1567,
+   "resolution": "coin toss on the record: Stan Musial left bconn-057; Willie Stargell took his place in \"Hall of Fame left fielders\""
+  },
+  {
+   "id": "bconn-057",
+   "label": "Hall of Fame left fielders",
+   "name": "Frank Robinson",
+   "listedUnder": "Hall of Fame right fielders",
+   "sources": [
+    {
+     "host": "statsapi.mlb.com",
+     "url": "https://statsapi.mlb.com/api/v1/people/121311",
+     "says": "MLBHOF 1982; games by position {\"LF\":834,\"CF\":101,\"1B\":308,\"3B\":13,\"RF\":1270,\"DH\":308}; last 1976-09-18",
+     "verdict": null
+    },
+    {
+     "host": "baseball-reference.com",
+     "url": "https://www.baseball-reference.com/players/r/robinfr02.shtml",
+     "says": "Hall of Fame 1982; Positions: Outfielder and First Baseman; share of games at LF: 0.30",
+     "verdict": null
+    }
+   ],
+   "round": 1567,
+   "resolution": "coin toss on the record: Frank Robinson left bconn-057; Larry Walker took his place in \"Hall of Fame right fielders\""
+  },
+  {
+   "id": "bconn-057",
+   "label": "Hall of Fame left fielders",
+   "name": "Stan Musial",
+   "listedUnder": "Hall of Fame left fielders",
+   "sources": [
+    {
+     "host": "statsapi.mlb.com",
+     "url": "https://statsapi.mlb.com/api/v1/people/119602",
+     "says": "MLBHOF 1969; games by position {\"LF\":929,\"RF\":786,\"CF\":331,\"1B\":1016,\"P\":1}; last 1963-09-29",
+     "verdict": null
+    },
+    {
+     "host": "baseball-reference.com",
+     "url": "https://www.baseball-reference.com/players/m/musiast01.shtml",
+     "says": "Hall of Fame 1969; Positions: Outfielder and First Baseman; share of games at LF: 0.32",
+     "verdict": null
+    }
+   ],
+   "round": 1567,
+   "resolution": "coin toss on the record: Stan Musial left bconn-057; Willie Stargell took his place in \"Hall of Fame left fielders\""
+  },
+  {
+   "id": "bconn-038",
+   "label": "Hall of Fame designated hitters / sluggers",
+   "name": "Jim Thome",
+   "listedUnder": "Hall of Fame designated hitters / sluggers",
+   "sources": [
+    {
+     "host": "statsapi.mlb.com",
+     "url": "https://statsapi.mlb.com/api/v1/people/123272",
+     "says": "MLBHOF 2018; games by position {\"3B\":493,\"DH\":815,\"1B\":1106}; last 2012-10-03",
+     "verdict": null
+    },
+    {
+     "host": "baseball-reference.com",
+     "url": "https://www.baseball-reference.com/players/t/thomeji01.shtml",
+     "says": "Hall of Fame 2018; Positions: First Baseman, Designated Hitter and Third Baseman; share of games at DH: 0.34",
+     "verdict": null
+    }
+   ],
+   "round": 1567,
+   "resolution": "coin toss on the record: Jim Thome left bconn-038; Paul Molitor took his place in \"Hall of Fame designated hitters / sluggers\""
+  }
+ ],
+ "rebuilt1567": [
+  {
+   "id": "bconn-002",
+   "out": "Shohei Ohtani",
+   "in": "Hisashi Iwakuma"
+  },
+  {
+   "id": "bconn-018",
+   "out": "Cal Ripken Jr.",
+   "in": "Luis Aparicio"
+  },
+  {
+   "id": "bconn-018",
+   "out": "Jackie Robinson",
+   "in": "Nellie Fox"
+  },
+  {
+   "id": "bconn-019",
+   "out": "Juan Marichal",
+   "in": "Madison Bumgarner"
+  },
+  {
+   "id": "bconn-022",
+   "out": "Mickey Mantle",
+   "in": "Kirby Puckett"
+  },
+  {
+   "id": "bconn-024",
+   "out": "Robin Roberts",
+   "in": "Jimmy Rollins"
+  },
+  {
+   "id": "bconn-026",
+   "out": "Dave Winfield",
+   "in": "Benito Santiago"
+  },
+  {
+   "id": "bconn-028",
+   "out": "Billy Williams",
+   "in": "Jim Rice"
+  },
+  {
+   "id": "bconn-028",
+   "out": "Carl Yastrzemski",
+   "in": "Tim Raines"
+  },
+  {
+   "id": "bconn-028",
+   "out": "Frank Robinson",
+   "in": "Ichiro Suzuki"
+  },
+  {
+   "id": "bconn-028",
+   "out": "Willie McCovey",
+   "in": "Lou Gehrig"
+  },
+  {
+   "id": "bconn-029",
+   "out": "Zack Greinke",
+   "in": "Alex Gordon"
+  },
+  {
+   "id": "bconn-029",
+   "out": "Dennis Eckersley",
+   "in": "Catfish Hunter"
+  },
+  {
+   "id": "bconn-031",
+   "out": "Jacob deGrom",
+   "in": "Keith Hernandez"
+  },
+  {
+   "id": "bconn-031",
+   "out": "Max Scherzer",
+   "in": "Stephen Strasburg"
+  },
+  {
+   "id": "bconn-031",
+   "out": "Vladimir Guerrero",
+   "in": "Dennis Martinez"
+  },
+  {
+   "id": "bconn-031",
+   "out": "Carlos Delgado",
+   "in": "George Bell"
+  },
+  {
+   "id": "bconn-031",
+   "out": "Roberto Alomar",
+   "in": "Dave Stieb"
+  },
+  {
+   "id": "bconn-031",
+   "out": "Ivan Rodriguez",
+   "in": "Elvis Andrus"
+  },
+  {
+   "id": "bconn-032",
+   "out": "Nolan Arenado",
+   "in": "Carlos Gonzalez"
+  },
+  {
+   "id": "bconn-032",
+   "out": "Curt Schilling",
+   "in": "Ketel Marte"
+  },
+  {
+   "id": "bconn-032",
+   "out": "Evan Longoria",
+   "in": "James Shields"
+  },
+  {
+   "id": "bconn-035",
+   "out": "Carl Yastrzemski",
+   "in": "Jim Rice"
+  },
+  {
+   "id": "bconn-035",
+   "out": "Frank Robinson",
+   "in": "Mel Ott"
+  },
+  {
+   "id": "bconn-035",
+   "out": "Mickey Mantle",
+   "in": "Tris Speaker"
+  },
+  {
+   "id": "bconn-035",
+   "out": "Willie McCovey",
+   "in": "Jeff Bagwell"
+  },
+  {
+   "id": "bconn-035",
+   "out": "Harmon Killebrew",
+   "in": "Todd Helton"
+  },
+  {
+   "id": "bconn-035",
+   "out": "Billy Williams",
+   "in": "Ralph Kiner"
+  },
+  {
+   "id": "bconn-035",
+   "out": "Ty Cobb",
+   "in": "Richie Ashburn"
+  },
+  {
+   "id": "bconn-035",
+   "out": "Duke Snider",
+   "in": "Edd Roush"
+  },
+  {
+   "id": "bconn-035",
+   "out": "Rickey Henderson",
+   "in": "Joe Medwick"
+  },
+  {
+   "id": "bconn-035",
+   "out": "Al Kaline",
+   "in": "Vladimir Guerrero"
+  },
+  {
+   "id": "bconn-036",
+   "out": "Craig Biggio",
+   "in": "Roberto Alomar"
+  },
+  {
+   "id": "bconn-036",
+   "out": "Rogers Hornsby",
+   "in": "Charlie Gehringer"
+  },
+  {
+   "id": "bconn-036",
+   "out": "Cal Ripken Jr.",
+   "in": "Derek Jeter"
+  },
+  {
+   "id": "bconn-038",
+   "out": "Dennis Eckersley",
+   "in": "Lee Smith"
+  },
+  {
+   "id": "bconn-038",
+   "out": "Jim Thome",
+   "in": "Paul Molitor"
+  },
+  {
+   "id": "bconn-041",
+   "out": "Paul Molitor",
+   "in": "Mike Schmidt"
+  },
+  {
+   "id": "bconn-041",
+   "out": "Jackie Robinson",
+   "in": "Joe Morgan"
+  },
+  {
+   "id": "bconn-041",
+   "out": "Frankie Frisch",
+   "in": "Charlie Gehringer"
+  },
+  {
+   "id": "bconn-045",
+   "out": "Dave Winfield",
+   "in": "Roberto Clemente"
+  },
+  {
+   "id": "bconn-045",
+   "out": "Orlando Cepeda",
+   "in": "Eddie Murray"
+  },
+  {
+   "id": "bconn-045",
+   "out": "Kirby Puckett",
+   "in": "Joe DiMaggio"
+  },
+  {
+   "id": "bconn-045",
+   "out": "Harry Heilmann",
+   "in": "Larry Walker"
+  },
+  {
+   "id": "bconn-053",
+   "out": "Cal Ripken Jr.",
+   "in": "Alan Trammell"
+  },
+  {
+   "id": "bconn-053",
+   "out": "George Brett",
+   "in": "Chipper Jones"
+  },
+  {
+   "id": "bconn-053",
+   "out": "Rogers Hornsby",
+   "in": "Roberto Alomar"
+  },
+  {
+   "id": "bconn-057",
+   "out": "Stan Musial",
+   "in": "Willie Stargell"
+  },
+  {
+   "id": "bconn-057",
+   "out": "Rickey Henderson",
+   "in": "Ralph Kiner"
+  },
+  {
+   "id": "bconn-057",
+   "out": "Ty Cobb",
+   "in": "Richie Ashburn"
+  },
+  {
+   "id": "bconn-057",
+   "out": "Frank Robinson",
+   "in": "Larry Walker"
+  }
+ ]
 }

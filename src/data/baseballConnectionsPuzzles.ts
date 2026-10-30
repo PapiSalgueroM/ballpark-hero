@@ -29,7 +29,7 @@ export const baseballConnectionsPuzzles: BaseballConnectionsPuzzle[] = [
     id: 'bconn-001',
     groups: [
       { theme: 'Won Rookie of the Year', players: ['Derek Jeter', 'Ichiro Suzuki', 'Mike Trout', 'Mike Piazza', 'Cal Ripken Jr.'], difficulty: 'yellow' },
-      { theme: 'Played for the Boston Red Sox', players: ['Mookie Betts', 'Carl Yastrzemski', 'Wade Boggs', 'Roger Clemens', 'Dwight Evans'], difficulty: 'green' },
+      { theme: 'Played for the Boston Red Sox (as of 2026)', players: ['Mookie Betts', 'Carl Yastrzemski', 'Wade Boggs', 'Roger Clemens', 'Dwight Evans'], difficulty: 'green' },
       { theme: 'Hit 500+ career home runs', players: ['Ken Griffey Jr.', 'Jim Thome', 'Gary Sheffield', 'Barry Bonds', 'Alex Rodriguez'], difficulty: 'blue' },
       { theme: 'Born in the Dominican Republic', players: ['Robinson Cano', 'Juan Soto', 'Fernando Tatis Jr.', 'Vladimir Guerrero', 'Nelson Cruz'], difficulty: 'purple' },
     ],
@@ -38,9 +38,9 @@ export const baseballConnectionsPuzzles: BaseballConnectionsPuzzle[] = [
     id: 'bconn-002',
     groups: [
       { theme: 'Won Cy Young Award', players: ['Clayton Kershaw', 'Max Scherzer', 'Justin Verlander', 'Jacob deGrom', 'Greg Maddux'], difficulty: 'yellow' },
-      { theme: 'Played for the New York Yankees', players: ['Derek Jeter', 'Mariano Rivera', 'Aaron Judge', 'Mickey Mantle', 'Joe DiMaggio'], difficulty: 'green' },
+      { theme: 'Played for the New York Yankees (as of 2026)', players: ['Derek Jeter', 'Mariano Rivera', 'Aaron Judge', 'Mickey Mantle', 'Joe DiMaggio'], difficulty: 'green' },
       { theme: 'First overall draft pick', players: ['Bryce Harper', 'Ken Griffey Jr.', 'Chipper Jones', 'Adrian Gonzalez', 'Joe Mauer'], difficulty: 'blue' },
-      { theme: 'Born in Japan', players: ['Shohei Ohtani', 'Yu Darvish', 'Hideo Nomo', 'Koji Uehara', 'Daisuke Matsuzaka'], difficulty: 'purple' },
+      { theme: 'Born in Japan', players: ['Hisashi Iwakuma', 'Yu Darvish', 'Hideo Nomo', 'Koji Uehara', 'Daisuke Matsuzaka'], difficulty: 'purple' },
     ],
   },
   {
@@ -48,7 +48,7 @@ export const baseballConnectionsPuzzles: BaseballConnectionsPuzzle[] = [
     groups: [
       { theme: 'World Series MVP winners', players: ['Madison Bumgarner', 'David Ortiz', 'Jorge Soler', 'George Springer', 'Derek Jeter'], difficulty: 'yellow' },
       { theme: 'Stole 50+ bases in a season', players: ['Ichiro Suzuki', 'Lou Brock', 'Joe Morgan', 'Barry Larkin', 'Craig Biggio'], difficulty: 'green' },
-      { theme: 'Played for the Los Angeles Dodgers', players: ['Mookie Betts', 'Clayton Kershaw', 'Cody Bellinger', 'Mike Piazza', 'Duke Snider'], difficulty: 'blue' },
+      { theme: 'Played for the Los Angeles Dodgers (as of 2026)', players: ['Mookie Betts', 'Clayton Kershaw', 'Cody Bellinger', 'Mike Piazza', 'Duke Snider'], difficulty: 'blue' },
       { theme: 'Switch hitters', players: ['Chipper Jones', 'Carlos Beltran', 'Victor Martinez', 'Lance Berkman', 'Jorge Posada'], difficulty: 'purple' },
     ],
   },
@@ -56,7 +56,7 @@ export const baseballConnectionsPuzzles: BaseballConnectionsPuzzle[] = [
     id: 'bconn-004',
     groups: [
       { theme: 'Won Rookie of the Year', players: ['Mike Trout', 'Aaron Judge', 'Shohei Ohtani', 'Ichiro Suzuki', 'Albert Pujols'], difficulty: 'yellow' },
-      { theme: 'Played for the Chicago Cubs', players: ['Anthony Rizzo', 'Javier Baez', 'Jake Arrieta', 'Jon Lester', 'Ernie Banks'], difficulty: 'green' },
+      { theme: 'Played for the Chicago Cubs (as of 2026)', players: ['Anthony Rizzo', 'Javier Baez', 'Jake Arrieta', 'Jon Lester', 'Ernie Banks'], difficulty: 'green' },
       { theme: '300+ career wins', players: ['Tom Glavine', 'Randy Johnson', 'Roger Clemens', 'Nolan Ryan', 'Steve Carlton'], difficulty: 'blue' },
       { theme: 'Born in Venezuela', players: ['Miguel Cabrera', 'Felix Hernandez', 'Jose Altuve', 'Salvador Perez', 'Omar Vizquel'], difficulty: 'purple' },
     ],
@@ -65,7 +65,7 @@ export const baseballConnectionsPuzzles: BaseballConnectionsPuzzle[] = [
     id: 'bconn-005',
     groups: [
       { theme: 'Won the batting Triple Crown', players: ['Miguel Cabrera', 'Carl Yastrzemski', 'Frank Robinson', 'Mickey Mantle', 'Ted Williams'], difficulty: 'yellow' },
-      { theme: 'Played for the Houston Astros', players: ['Jose Altuve', 'Jeff Bagwell', 'Carlos Correa', 'George Springer', 'Alex Bregman'], difficulty: 'green' },
+      { theme: 'Played for the Houston Astros (as of 2026)', players: ['Jose Altuve', 'Jeff Bagwell', 'Carlos Correa', 'George Springer', 'Alex Bregman'], difficulty: 'green' },
       { theme: 'Threw a no-hitter', players: ['Sandy Koufax', 'Max Scherzer', 'Roy Halladay', 'Clayton Kershaw', 'Hideo Nomo'], difficulty: 'blue' },
       { theme: 'Gold Glove winning catchers', players: ['Yadier Molina', 'Buster Posey', 'Salvador Perez', 'J.T. Realmuto', 'Johnny Bench'], difficulty: 'purple' },
     ],
@@ -74,7 +74,7 @@ export const baseballConnectionsPuzzles: BaseballConnectionsPuzzle[] = [
     id: 'bconn-006',
     groups: [
       { theme: 'Hit 40+ HR in a season (2020s)', players: ['Aaron Judge', 'Pete Alonso', 'Kyle Schwarber', 'Matt Olson', 'Shohei Ohtani'], difficulty: 'yellow' },
-      { theme: 'Played for the San Francisco Giants', players: ['Willie Mays', 'Madison Bumgarner', 'Brandon Crawford', 'Tim Lincecum', 'Pablo Sandoval'], difficulty: 'green' },
+      { theme: 'Played for the San Francisco Giants (as of 2026)', players: ['Willie Mays', 'Madison Bumgarner', 'Brandon Crawford', 'Tim Lincecum', 'Pablo Sandoval'], difficulty: 'green' },
       { theme: 'Career .300+ hitters (21st century)', players: ['Ichiro Suzuki', 'Miguel Cabrera', 'Jose Altuve', 'Todd Helton', 'Michael Young'], difficulty: 'blue' },
       { theme: 'Born in Cuba', players: ['Yoenis Cespedes', 'Aroldis Chapman', 'Jose Abreu', 'Yasiel Puig', 'Jose Canseco'], difficulty: 'purple' },
     ],
@@ -83,7 +83,7 @@ export const baseballConnectionsPuzzles: BaseballConnectionsPuzzle[] = [
     id: 'bconn-007',
     groups: [
       { theme: '2024 World Series champion Dodgers', players: ['Freddie Freeman', 'Will Smith', 'Max Muncy', 'Enrique Hernandez', 'Walker Buehler'], difficulty: 'yellow' },
-      { theme: 'Played for the St. Louis Cardinals', players: ['Albert Pujols', 'Yadier Molina', 'Adam Wainwright', 'Matt Carpenter', 'Paul Goldschmidt'], difficulty: 'green' },
+      { theme: 'Played for the St. Louis Cardinals (as of 2026)', players: ['Albert Pujols', 'Yadier Molina', 'Adam Wainwright', 'Matt Carpenter', 'Paul Goldschmidt'], difficulty: 'green' },
       { theme: 'Silver Slugger at shortstop', players: ['Trea Turner', 'Derek Jeter', 'Corey Seager', 'Francisco Lindor', 'Cal Ripken Jr.'], difficulty: 'blue' },
       { theme: 'Undrafted players', players: ['Ichiro Suzuki', 'Miguel Cabrera', 'Oliver Perez', 'Bartolo Colon', 'Aroldis Chapman'], difficulty: 'purple' },
     ],
@@ -92,7 +92,7 @@ export const baseballConnectionsPuzzles: BaseballConnectionsPuzzle[] = [
     id: 'bconn-008',
     groups: [
       { theme: 'Won back-to-back MVPs', players: ['Mickey Mantle', 'Albert Pujols', 'Barry Bonds', 'Frank Thomas', 'Miguel Cabrera'], difficulty: 'yellow' },
-      { theme: 'Played for the Atlanta Braves', players: ['Chipper Jones', 'Freddie Freeman', 'Ronald Acuna Jr.', 'Greg Maddux', 'John Smoltz'], difficulty: 'green' },
+      { theme: 'Played for the Atlanta Braves (as of 2026)', players: ['Chipper Jones', 'Freddie Freeman', 'Ronald Acuna Jr.', 'Greg Maddux', 'John Smoltz'], difficulty: 'green' },
       { theme: 'Hall of Fame shortstops', players: ['Cal Ripken Jr.', 'Ozzie Smith', 'Derek Jeter', 'Barry Larkin', 'Alan Trammell'], difficulty: 'blue' },
       { theme: 'Born in Japan', players: ['Ichiro Suzuki', 'Hideo Nomo', 'Yu Darvish', 'Hideki Matsui', 'Masahiro Tanaka'], difficulty: 'purple' },
     ],
@@ -101,7 +101,7 @@ export const baseballConnectionsPuzzles: BaseballConnectionsPuzzle[] = [
     id: 'bconn-009',
     groups: [
       { theme: 'All-Star Game MVPs (2010s-2020s)', players: ['Mike Trout', 'Mariano Rivera', 'Robinson Cano', 'Vladimir Guerrero Jr.', 'Prince Fielder'], difficulty: 'yellow' },
-      { theme: 'Played for the Philadelphia Phillies', players: ['Bryce Harper', 'Trea Turner', 'J.T. Realmuto', 'Rhys Hoskins', 'Zack Wheeler'], difficulty: 'green' },
+      { theme: 'Played for the Philadelphia Phillies (as of 2026)', players: ['Bryce Harper', 'Trea Turner', 'J.T. Realmuto', 'Rhys Hoskins', 'Zack Wheeler'], difficulty: 'green' },
       { theme: 'Left-handed starting pitchers', players: ['Clayton Kershaw', 'Madison Bumgarner', 'Chris Sale', 'Jon Lester', 'Tom Glavine'], difficulty: 'blue' },
       { theme: 'Born in Puerto Rico', players: ['Carlos Beltran', 'Yadier Molina', 'Carlos Correa', 'Javier Baez', 'Francisco Lindor'], difficulty: 'purple' },
     ],
@@ -110,7 +110,7 @@ export const baseballConnectionsPuzzles: BaseballConnectionsPuzzle[] = [
     id: 'bconn-010',
     groups: [
       { theme: '3,000+ career hits', players: ['Derek Jeter', 'Ichiro Suzuki', 'Albert Pujols', 'Tony Gwynn', 'Miguel Cabrera'], difficulty: 'yellow' },
-      { theme: 'Played for the Texas Rangers', players: ['Michael Young', 'Yu Darvish', 'Corey Seager', 'Max Scherzer', 'Ivan Rodriguez'], difficulty: 'green' },
+      { theme: 'Played for the Texas Rangers (as of 2026)', players: ['Michael Young', 'Yu Darvish', 'Corey Seager', 'Max Scherzer', 'Ivan Rodriguez'], difficulty: 'green' },
       { theme: 'Closers with 300+ saves', players: ['Mariano Rivera', 'Kenley Jansen', 'Craig Kimbrel', 'Trevor Hoffman', 'Francisco Rodriguez'], difficulty: 'blue' },
       { theme: 'Went to the same college (Vanderbilt)', players: ['David Price', 'Sonny Gray', 'Dansby Swanson', 'Walker Buehler', 'Bryan Reynolds'], difficulty: 'purple' },
     ],
@@ -119,7 +119,7 @@ export const baseballConnectionsPuzzles: BaseballConnectionsPuzzle[] = [
     id: 'bconn-011',
     groups: [
       { theme: '50+ HR in a single season', players: ['Mark McGwire', 'Giancarlo Stanton', 'Prince Fielder', 'Chris Davis', 'Shohei Ohtani'], difficulty: 'yellow' },
-      { theme: 'Played for the Cleveland Guardians/Indians', players: ['Francisco Lindor', 'Corey Kluber', 'Jose Ramirez', 'Manny Ramirez', 'Omar Vizquel'], difficulty: 'green' },
+      { theme: 'Played for the Cleveland Guardians/Indians (as of 2026)', players: ['Francisco Lindor', 'Corey Kluber', 'Jose Ramirez', 'Manny Ramirez', 'Omar Vizquel'], difficulty: 'green' },
       { theme: 'Won Gold Glove at outfield', players: ['Torii Hunter', 'Mookie Betts', 'Byron Buxton', 'Kevin Kiermaier', 'Adam Jones'], difficulty: 'blue' },
       { theme: 'Born in Panama', players: ['Mariano Rivera', 'Carlos Lee', 'Rod Carew', 'Ben Oglivie', 'Manny Sanguillen'], difficulty: 'purple' },
     ],
@@ -128,7 +128,7 @@ export const baseballConnectionsPuzzles: BaseballConnectionsPuzzle[] = [
     id: 'bconn-012',
     groups: [
       { theme: 'Pitchers with 3000+ strikeouts', players: ['Nolan Ryan', 'Randy Johnson', 'Roger Clemens', 'Justin Verlander', 'Max Scherzer'], difficulty: 'yellow' },
-      { theme: 'Played for the Minnesota Twins', players: ['Joe Mauer', 'Kirby Puckett', 'Torii Hunter', 'David Ortiz', 'Johan Santana'], difficulty: 'green' },
+      { theme: 'Played for the Minnesota Twins (as of 2026)', players: ['Joe Mauer', 'Kirby Puckett', 'Torii Hunter', 'David Ortiz', 'Johan Santana'], difficulty: 'green' },
       { theme: 'Won batting title (2010s-2020s)', players: ['Jose Altuve', 'Charlie Blackmon', 'Buster Posey', 'Tim Anderson', 'Miguel Cabrera'], difficulty: 'blue' },
       { theme: 'Played college baseball at LSU', players: ['Alex Bregman', 'Paul Skenes', 'Aaron Nola', 'Kevin Gausman', 'Alex Lange'], difficulty: 'purple' },
     ],
@@ -137,7 +137,7 @@ export const baseballConnectionsPuzzles: BaseballConnectionsPuzzle[] = [
     id: 'bconn-013',
     groups: [
       { theme: 'Multiple 100+ RBI seasons', players: ['Albert Pujols', 'Miguel Cabrera', 'Ken Griffey Jr.', 'David Ortiz', 'Alex Rodriguez'], difficulty: 'yellow' },
-      { theme: 'Played for the Tampa Bay Rays', players: ['Kevin Kiermaier', 'Carl Crawford', 'David Price', 'Wander Franco', 'Blake Snell'], difficulty: 'green' },
+      { theme: 'Played for the Tampa Bay Rays (as of 2026)', players: ['Kevin Kiermaier', 'Carl Crawford', 'David Price', 'Wander Franco', 'Blake Snell'], difficulty: 'green' },
       { theme: 'Second basemen (21st century stars)', players: ['Jose Altuve', 'Brandon Phillips', 'Dustin Pedroia', 'DJ LeMahieu', 'Ian Kinsler'], difficulty: 'blue' },
       { theme: 'Born in the Dominican Republic (pitchers)', players: ['Pedro Martinez', 'Bartolo Colon', 'Johnny Cueto', 'Luis Severino', 'Framber Valdez'], difficulty: 'purple' },
     ],
@@ -146,7 +146,7 @@ export const baseballConnectionsPuzzles: BaseballConnectionsPuzzle[] = [
     id: 'bconn-014',
     groups: [
       { theme: 'Won World Series with multiple teams', players: ['Reggie Jackson', 'Johnny Damon', 'Freddie Freeman', 'David Justice', 'Edgar Renteria'], difficulty: 'yellow' },
-      { theme: 'Played for the San Diego Padres', players: ['Fernando Tatis Jr.', 'Manny Machado', 'Juan Soto', 'Tony Gwynn', 'Trevor Hoffman'], difficulty: 'green' },
+      { theme: 'Played for the San Diego Padres (as of 2026)', players: ['Fernando Tatis Jr.', 'Manny Machado', 'Juan Soto', 'Tony Gwynn', 'Trevor Hoffman'], difficulty: 'green' },
       { theme: 'Catchers who hit 30+ HR in a season', players: ['Johnny Bench', 'Gary Carter', 'Ivan Rodriguez', 'Salvador Perez', 'Jorge Posada'], difficulty: 'blue' },
       { theme: 'Played in the 2023 World Baseball Classic final', players: ['Shohei Ohtani', 'Mike Trout', 'Trea Turner', 'Paul Goldschmidt', 'Lars Nootbaar'], difficulty: 'purple' },
     ],
@@ -155,7 +155,7 @@ export const baseballConnectionsPuzzles: BaseballConnectionsPuzzle[] = [
     id: 'bconn-015',
     groups: [
       { theme: 'NL MVP winners (2015-2025)', players: ['Bryce Harper', 'Kris Bryant', 'Cody Bellinger', 'Freddie Freeman', 'Shohei Ohtani'], difficulty: 'yellow' },
-      { theme: 'Played for the Detroit Tigers', players: ['Miguel Cabrera', 'Justin Verlander', 'Prince Fielder', 'Max Scherzer', 'Curtis Granderson'], difficulty: 'green' },
+      { theme: 'Played for the Detroit Tigers (as of 2026)', players: ['Miguel Cabrera', 'Justin Verlander', 'Prince Fielder', 'Max Scherzer', 'Curtis Granderson'], difficulty: 'green' },
       { theme: 'Switch-hitting shortstops', players: ['Francisco Lindor', 'Jose Reyes', 'Jimmy Rollins', 'Ozzie Smith', 'Omar Vizquel'], difficulty: 'blue' },
       { theme: 'Closers with 300+ saves', players: ['Mariano Rivera', 'Trevor Hoffman', 'Lee Smith', 'Billy Wagner', 'Rollie Fingers'], difficulty: 'purple' },
     ],
@@ -182,9 +182,9 @@ export const baseballConnectionsPuzzles: BaseballConnectionsPuzzle[] = [
     id: 'bconn-018',
     groups: [
       { theme: 'Hall of Fame catchers', players: ['Johnny Bench', 'Yogi Berra', 'Carlton Fisk', 'Gary Carter', 'Mike Piazza'], difficulty: 'yellow' },
-      { theme: 'Hall of Fame shortstops', players: ['Cal Ripken Jr.', 'Ozzie Smith', 'Derek Jeter', 'Barry Larkin', 'Ernie Banks'], difficulty: 'green' },
+      { theme: 'Hall of Fame shortstops', players: ['Luis Aparicio', 'Ozzie Smith', 'Derek Jeter', 'Barry Larkin', 'Ernie Banks'], difficulty: 'green' },
       { theme: 'Hall of Fame third basemen', players: ['Mike Schmidt', 'George Brett', 'Wade Boggs', 'Brooks Robinson', 'Chipper Jones'], difficulty: 'blue' },
-      { theme: 'Hall of Fame second basemen', players: ['Joe Morgan', 'Ryne Sandberg', 'Jackie Robinson', 'Bill Mazeroski', 'Roberto Alomar'], difficulty: 'purple' },
+      { theme: 'Hall of Fame second basemen', players: ['Joe Morgan', 'Ryne Sandberg', 'Nellie Fox', 'Bill Mazeroski', 'Roberto Alomar'], difficulty: 'purple' },
     ],
   },
   {
@@ -193,7 +193,7 @@ export const baseballConnectionsPuzzles: BaseballConnectionsPuzzle[] = [
       { theme: 'New York Yankees legends', players: ['Yogi Berra', 'Lou Gehrig', 'Mickey Mantle', 'Joe DiMaggio', 'Derek Jeter'], difficulty: 'yellow' },
       { theme: 'St. Louis Cardinals legends', players: ['Stan Musial', 'Bob Gibson', 'Ozzie Smith', 'Albert Pujols', 'Yadier Molina'], difficulty: 'green' },
       { theme: 'Boston Red Sox legends', players: ['Ted Williams', 'Carl Yastrzemski', 'David Ortiz', 'Pedro Martinez', 'Carlton Fisk'], difficulty: 'blue' },
-      { theme: 'San Francisco Giants legends', players: ['Willie Mays', 'Barry Bonds', 'Willie McCovey', 'Buster Posey', 'Juan Marichal'], difficulty: 'purple' },
+      { theme: 'San Francisco Giants legends', players: ['Willie Mays', 'Barry Bonds', 'Willie McCovey', 'Buster Posey', 'Madison Bumgarner'], difficulty: 'purple' },
     ],
   },
   {
@@ -219,7 +219,7 @@ export const baseballConnectionsPuzzles: BaseballConnectionsPuzzle[] = [
     groups: [
       { theme: 'Hall of Fame first basemen', players: ['Lou Gehrig', 'Jeff Bagwell', 'Eddie Murray', 'Willie McCovey', 'Frank Thomas'], difficulty: 'yellow' },
       { theme: 'Hall of Fame relief pitchers', players: ['Mariano Rivera', 'Trevor Hoffman', 'Dennis Eckersley', 'Rollie Fingers', 'Goose Gossage'], difficulty: 'green' },
-      { theme: 'Hall of Fame center fielders', players: ['Willie Mays', 'Ken Griffey Jr.', 'Mickey Mantle', 'Joe DiMaggio', 'Ty Cobb'], difficulty: 'blue' },
+      { theme: 'Hall of Fame center fielders', players: ['Willie Mays', 'Ken Griffey Jr.', 'Kirby Puckett', 'Joe DiMaggio', 'Ty Cobb'], difficulty: 'blue' },
       { theme: 'Hall of Fame left-handed starting pitchers', players: ['Sandy Koufax', 'Steve Carlton', 'Warren Spahn', 'Randy Johnson', 'Tom Glavine'], difficulty: 'purple' },
     ],
   },
@@ -237,7 +237,7 @@ export const baseballConnectionsPuzzles: BaseballConnectionsPuzzle[] = [
     groups: [
       { theme: 'Atlanta Braves legends', players: ['Hank Aaron', 'Chipper Jones', 'Greg Maddux', 'Tom Glavine', 'John Smoltz'], difficulty: 'yellow' },
       { theme: 'Baltimore Orioles legends', players: ['Cal Ripken Jr.', 'Brooks Robinson', 'Jim Palmer', 'Eddie Murray', 'Frank Robinson'], difficulty: 'green' },
-      { theme: 'Philadelphia Phillies legends', players: ['Mike Schmidt', 'Steve Carlton', 'Ryan Howard', 'Chase Utley', 'Robin Roberts'], difficulty: 'blue' },
+      { theme: 'Philadelphia Phillies legends', players: ['Mike Schmidt', 'Steve Carlton', 'Ryan Howard', 'Chase Utley', 'Jimmy Rollins'], difficulty: 'blue' },
       { theme: 'Pittsburgh Pirates legends', players: ['Roberto Clemente', 'Willie Stargell', 'Honus Wagner', 'Barry Bonds', 'Ralph Kiner'], difficulty: 'purple' },
     ],
   },
@@ -255,7 +255,7 @@ export const baseballConnectionsPuzzles: BaseballConnectionsPuzzle[] = [
     groups: [
       { theme: 'Seattle Mariners legends', players: ['Ken Griffey Jr.', 'Edgar Martinez', 'Ichiro Suzuki', 'Felix Hernandez', 'Jay Buhner'], difficulty: 'yellow' },
       { theme: 'Houston Astros legends', players: ['Jeff Bagwell', 'Craig Biggio', 'Jose Altuve', 'Roy Oswalt', 'Lance Berkman'], difficulty: 'green' },
-      { theme: 'San Diego Padres legends', players: ['Tony Gwynn', 'Trevor Hoffman', 'Dave Winfield', 'Jake Peavy', 'Randy Jones'], difficulty: 'blue' },
+      { theme: 'San Diego Padres legends', players: ['Tony Gwynn', 'Trevor Hoffman', 'Benito Santiago', 'Jake Peavy', 'Randy Jones'], difficulty: 'blue' },
       { theme: 'Minnesota Twins legends', players: ['Rod Carew', 'Kirby Puckett', 'Harmon Killebrew', 'Joe Mauer', 'Johan Santana'], difficulty: 'purple' },
     ],
   },
@@ -271,17 +271,17 @@ export const baseballConnectionsPuzzles: BaseballConnectionsPuzzle[] = [
   {
     id: 'bconn-028',
     groups: [
-      { theme: 'Hall of Fame right fielders', players: ['Hank Aaron', 'Roberto Clemente', 'Frank Robinson', 'Reggie Jackson', 'Tony Gwynn'], difficulty: 'yellow' },
-      { theme: 'Hall of Fame left fielders', players: ['Ted Williams', 'Lou Brock', 'Rickey Henderson', 'Carl Yastrzemski', 'Billy Williams'], difficulty: 'green' },
-      { theme: 'Hall of Fame first basemen', players: ['Jeff Bagwell', 'Eddie Murray', 'Willie McCovey', 'Frank Thomas', 'Tony Perez'], difficulty: 'blue' },
+      { theme: 'Hall of Fame right fielders', players: ['Hank Aaron', 'Roberto Clemente', 'Ichiro Suzuki', 'Reggie Jackson', 'Tony Gwynn'], difficulty: 'yellow' },
+      { theme: 'Hall of Fame left fielders', players: ['Ted Williams', 'Lou Brock', 'Rickey Henderson', 'Tim Raines', 'Jim Rice'], difficulty: 'green' },
+      { theme: 'Hall of Fame first basemen', players: ['Jeff Bagwell', 'Eddie Murray', 'Lou Gehrig', 'Frank Thomas', 'Tony Perez'], difficulty: 'blue' },
       { theme: 'Hall of Fame starting pitchers', players: ['Nolan Ryan', 'Bob Gibson', 'Pedro Martinez', 'Greg Maddux', 'Tom Seaver'], difficulty: 'purple' },
     ],
   },
   {
     id: 'bconn-029',
     groups: [
-      { theme: 'Oakland Athletics legends', players: ['Rickey Henderson', 'Reggie Jackson', 'Jose Canseco', 'Mark McGwire', 'Dennis Eckersley'], difficulty: 'yellow' },
-      { theme: 'Kansas City Royals legends', players: ['George Brett', 'Bret Saberhagen', 'Frank White', 'Salvador Perez', 'Zack Greinke'], difficulty: 'green' },
+      { theme: 'Oakland Athletics legends', players: ['Rickey Henderson', 'Reggie Jackson', 'Jose Canseco', 'Mark McGwire', 'Catfish Hunter'], difficulty: 'yellow' },
+      { theme: 'Kansas City Royals legends', players: ['George Brett', 'Bret Saberhagen', 'Frank White', 'Salvador Perez', 'Alex Gordon'], difficulty: 'green' },
       { theme: 'Milwaukee Brewers legends', players: ['Robin Yount', 'Paul Molitor', 'Ryan Braun', 'Prince Fielder', 'Cecil Cooper'], difficulty: 'blue' },
       { theme: 'Cleveland Guardians legends', players: ['Bob Feller', 'Jim Thome', 'Omar Vizquel', 'Kenny Lofton', 'Manny Ramirez'], difficulty: 'purple' },
     ],
@@ -298,19 +298,19 @@ export const baseballConnectionsPuzzles: BaseballConnectionsPuzzle[] = [
   {
     id: 'bconn-031',
     groups: [
-      { theme: 'Texas Rangers legends', players: ['Ivan Rodriguez', 'Juan Gonzalez', 'Adrian Beltre', 'Michael Young', 'Rafael Palmeiro'], difficulty: 'yellow' },
-      { theme: 'Toronto Blue Jays legends', players: ['Roy Halladay', 'Carlos Delgado', 'Joe Carter', 'Roberto Alomar', 'Vladimir Guerrero Jr.'], difficulty: 'green' },
-      { theme: 'New York Mets legends', players: ['Tom Seaver', 'David Wright', 'Mike Piazza', 'Dwight Gooden', 'Jacob deGrom'], difficulty: 'blue' },
-      { theme: 'Montreal Expos / Washington Nationals legends', players: ['Andre Dawson', 'Tim Raines', 'Ryan Zimmerman', 'Max Scherzer', 'Vladimir Guerrero'], difficulty: 'purple' },
+      { theme: 'Texas Rangers legends', players: ['Elvis Andrus', 'Juan Gonzalez', 'Adrian Beltre', 'Michael Young', 'Rafael Palmeiro'], difficulty: 'yellow' },
+      { theme: 'Toronto Blue Jays legends', players: ['Roy Halladay', 'George Bell', 'Joe Carter', 'Dave Stieb', 'Vladimir Guerrero Jr.'], difficulty: 'green' },
+      { theme: 'New York Mets legends', players: ['Tom Seaver', 'David Wright', 'Mike Piazza', 'Dwight Gooden', 'Keith Hernandez'], difficulty: 'blue' },
+      { theme: 'Montreal Expos / Washington Nationals legends', players: ['Andre Dawson', 'Tim Raines', 'Ryan Zimmerman', 'Stephen Strasburg', 'Dennis Martinez'], difficulty: 'purple' },
     ],
   },
   {
     id: 'bconn-032',
     groups: [
       { theme: 'Los Angeles Angels legends', players: ['Mike Trout', 'Nolan Ryan', 'Tim Salmon', 'Garret Anderson', 'Chuck Finley'], difficulty: 'yellow' },
-      { theme: 'Colorado Rockies legends', players: ['Todd Helton', 'Larry Walker', 'Nolan Arenado', 'Troy Tulowitzki', 'Charlie Blackmon'], difficulty: 'green' },
-      { theme: 'Arizona Diamondbacks legends', players: ['Randy Johnson', 'Luis Gonzalez', 'Paul Goldschmidt', 'Curt Schilling', 'Brandon Webb'], difficulty: 'blue' },
-      { theme: 'Tampa Bay Rays legends', players: ['Evan Longoria', 'Carl Crawford', 'David Price', 'Ben Zobrist', 'Kevin Kiermaier'], difficulty: 'purple' },
+      { theme: 'Colorado Rockies legends', players: ['Todd Helton', 'Larry Walker', 'Carlos Gonzalez', 'Troy Tulowitzki', 'Charlie Blackmon'], difficulty: 'green' },
+      { theme: 'Arizona Diamondbacks legends', players: ['Randy Johnson', 'Luis Gonzalez', 'Paul Goldschmidt', 'Ketel Marte', 'Brandon Webb'], difficulty: 'blue' },
+      { theme: 'Tampa Bay Rays legends', players: ['James Shields', 'Carl Crawford', 'David Price', 'Ben Zobrist', 'Kevin Kiermaier'], difficulty: 'purple' },
     ],
   },
   {
@@ -334,18 +334,18 @@ export const baseballConnectionsPuzzles: BaseballConnectionsPuzzle[] = [
   {
     id: 'bconn-035',
     groups: [
-      { theme: 'Hall of Fame first basemen', players: ['Lou Gehrig', 'Jimmie Foxx', 'Willie McCovey', 'Eddie Murray', 'Harmon Killebrew'], difficulty: 'yellow' },
-      { theme: 'Hall of Fame left fielders', players: ['Ted Williams', 'Tim Raines', 'Rickey Henderson', 'Carl Yastrzemski', 'Billy Williams'], difficulty: 'green' },
-      { theme: 'Hall of Fame right fielders', players: ['Hank Aaron', 'Roberto Clemente', 'Frank Robinson', 'Reggie Jackson', 'Al Kaline'], difficulty: 'blue' },
-      { theme: 'Hall of Fame center fielders', players: ['Willie Mays', 'Mickey Mantle', 'Joe DiMaggio', 'Ty Cobb', 'Duke Snider'], difficulty: 'purple' },
+      { theme: 'Hall of Fame first basemen', players: ['Lou Gehrig', 'Jimmie Foxx', 'Jeff Bagwell', 'Eddie Murray', 'Todd Helton'], difficulty: 'yellow' },
+      { theme: 'Hall of Fame left fielders', players: ['Ted Williams', 'Tim Raines', 'Joe Medwick', 'Jim Rice', 'Ralph Kiner'], difficulty: 'green' },
+      { theme: 'Hall of Fame right fielders', players: ['Hank Aaron', 'Roberto Clemente', 'Mel Ott', 'Reggie Jackson', 'Vladimir Guerrero'], difficulty: 'blue' },
+      { theme: 'Hall of Fame center fielders', players: ['Willie Mays', 'Tris Speaker', 'Joe DiMaggio', 'Richie Ashburn', 'Edd Roush'], difficulty: 'purple' },
     ],
   },
   {
     id: 'bconn-036',
     groups: [
       { theme: 'Hall of Fame catchers', players: ['Johnny Bench', 'Carlton Fisk', 'Gary Carter', 'Yogi Berra', 'Roy Campanella'], difficulty: 'yellow' },
-      { theme: 'Hall of Fame shortstops', players: ['Cal Ripken Jr.', 'Ozzie Smith', 'Robin Yount', 'Alan Trammell', 'Luis Aparicio'], difficulty: 'green' },
-      { theme: 'Hall of Fame second basemen', players: ['Joe Morgan', 'Rogers Hornsby', 'Nap Lajoie', 'Craig Biggio', 'Ryne Sandberg'], difficulty: 'blue' },
+      { theme: 'Hall of Fame shortstops', players: ['Derek Jeter', 'Ozzie Smith', 'Robin Yount', 'Alan Trammell', 'Luis Aparicio'], difficulty: 'green' },
+      { theme: 'Hall of Fame second basemen', players: ['Joe Morgan', 'Charlie Gehringer', 'Nap Lajoie', 'Roberto Alomar', 'Ryne Sandberg'], difficulty: 'blue' },
       { theme: 'Hall of Fame third basemen', players: ['Mike Schmidt', 'George Brett', 'Wade Boggs', 'Brooks Robinson', 'Eddie Mathews'], difficulty: 'purple' },
     ],
   },
@@ -363,8 +363,8 @@ export const baseballConnectionsPuzzles: BaseballConnectionsPuzzle[] = [
     groups: [
       { theme: 'Hall of Fame right-handed starting pitchers', players: ['Tom Seaver', 'Bob Gibson', 'Nolan Ryan', 'Christy Mathewson', 'Cy Young'], difficulty: 'yellow' },
       { theme: 'Hall of Fame left-handed pitchers', players: ['Sandy Koufax', 'Steve Carlton', 'Warren Spahn', 'Whitey Ford', 'Lefty Grove'], difficulty: 'green' },
-      { theme: 'Hall of Fame relief pitchers', players: ['Mariano Rivera', 'Trevor Hoffman', 'Dennis Eckersley', 'Rollie Fingers', 'Bruce Sutter'], difficulty: 'blue' },
-      { theme: 'Hall of Fame designated hitters / sluggers', players: ['Frank Thomas', 'Edgar Martinez', 'David Ortiz', 'Harold Baines', 'Jim Thome'], difficulty: 'purple' },
+      { theme: 'Hall of Fame relief pitchers', players: ['Mariano Rivera', 'Trevor Hoffman', 'Lee Smith', 'Rollie Fingers', 'Bruce Sutter'], difficulty: 'blue' },
+      { theme: 'Hall of Fame designated hitters / sluggers', players: ['Frank Thomas', 'Edgar Martinez', 'David Ortiz', 'Harold Baines', 'Paul Molitor'], difficulty: 'purple' },
     ],
   },
   {
@@ -390,8 +390,8 @@ export const baseballConnectionsPuzzles: BaseballConnectionsPuzzle[] = [
     groups: [
       { theme: 'Hall of Fame catchers', players: ['Mike Piazza', 'Ivan Rodriguez', 'Bill Dickey', 'Mickey Cochrane', 'Gabby Hartnett'], difficulty: 'yellow' },
       { theme: 'Hall of Fame shortstops', players: ['Derek Jeter', 'Barry Larkin', 'Ernie Banks', 'Honus Wagner', 'Pee Wee Reese'], difficulty: 'green' },
-      { theme: 'Hall of Fame second basemen', players: ['Jackie Robinson', 'Bill Mazeroski', 'Roberto Alomar', 'Rod Carew', 'Frankie Frisch'], difficulty: 'blue' },
-      { theme: 'Hall of Fame third basemen', players: ['Chipper Jones', 'Paul Molitor', 'Pie Traynor', 'Ron Santo', 'Scott Rolen'], difficulty: 'purple' },
+      { theme: 'Hall of Fame second basemen', players: ['Joe Morgan', 'Bill Mazeroski', 'Roberto Alomar', 'Rod Carew', 'Charlie Gehringer'], difficulty: 'blue' },
+      { theme: 'Hall of Fame third basemen', players: ['Chipper Jones', 'Mike Schmidt', 'Pie Traynor', 'Ron Santo', 'Scott Rolen'], difficulty: 'purple' },
     ],
   },
   {
@@ -425,9 +425,9 @@ export const baseballConnectionsPuzzles: BaseballConnectionsPuzzle[] = [
     id: 'bconn-045',
     groups: [
       { theme: 'Hall of Fame left fielders', players: ['Lou Brock', 'Ted Williams', 'Ralph Kiner', 'Minnie Minoso', 'Goose Goslin'], difficulty: 'yellow' },
-      { theme: 'Hall of Fame right fielders', players: ['Tony Gwynn', 'Dave Winfield', 'Vladimir Guerrero', 'Paul Waner', 'Harry Heilmann'], difficulty: 'green' },
-      { theme: 'Hall of Fame first basemen', players: ['Jeff Bagwell', 'Frank Thomas', 'Tony Perez', 'Orlando Cepeda', 'George Sisler'], difficulty: 'blue' },
-      { theme: 'Hall of Fame center fielders', players: ['Ken Griffey Jr.', 'Kirby Puckett', 'Willie Mays', 'Richie Ashburn', 'Larry Doby'], difficulty: 'purple' },
+      { theme: 'Hall of Fame right fielders', players: ['Tony Gwynn', 'Roberto Clemente', 'Vladimir Guerrero', 'Paul Waner', 'Larry Walker'], difficulty: 'green' },
+      { theme: 'Hall of Fame first basemen', players: ['Jeff Bagwell', 'Frank Thomas', 'Tony Perez', 'Eddie Murray', 'George Sisler'], difficulty: 'blue' },
+      { theme: 'Hall of Fame center fielders', players: ['Ken Griffey Jr.', 'Joe DiMaggio', 'Willie Mays', 'Richie Ashburn', 'Larry Doby'], difficulty: 'purple' },
     ],
   },
   {
@@ -496,10 +496,10 @@ export const baseballConnectionsPuzzles: BaseballConnectionsPuzzle[] = [
   {
     id: 'bconn-053',
     groups: [
-      { theme: 'Hall of Fame third basemen', players: ['Mike Schmidt', 'George Brett', 'Eddie Mathews', 'Brooks Robinson', 'Wade Boggs'], difficulty: 'yellow' },
+      { theme: 'Hall of Fame third basemen', players: ['Mike Schmidt', 'Chipper Jones', 'Eddie Mathews', 'Brooks Robinson', 'Wade Boggs'], difficulty: 'yellow' },
       { theme: 'Hall of Fame first basemen', players: ['Lou Gehrig', 'Jimmie Foxx', 'Hank Greenberg', 'Willie McCovey', 'Bill Terry'], difficulty: 'green' },
-      { theme: 'Hall of Fame second basemen', players: ['Joe Morgan', 'Rogers Hornsby', 'Eddie Collins', 'Charlie Gehringer', 'Ryne Sandberg'], difficulty: 'blue' },
-      { theme: 'Hall of Fame shortstops', players: ['Cal Ripken Jr.', 'Derek Jeter', 'Honus Wagner', 'Barry Larkin', 'Ozzie Smith'], difficulty: 'purple' },
+      { theme: 'Hall of Fame second basemen', players: ['Joe Morgan', 'Roberto Alomar', 'Eddie Collins', 'Charlie Gehringer', 'Ryne Sandberg'], difficulty: 'blue' },
+      { theme: 'Hall of Fame shortstops', players: ['Alan Trammell', 'Derek Jeter', 'Honus Wagner', 'Barry Larkin', 'Ozzie Smith'], difficulty: 'purple' },
     ],
   },
   {
@@ -532,9 +532,9 @@ export const baseballConnectionsPuzzles: BaseballConnectionsPuzzle[] = [
   {
     id: 'bconn-057',
     groups: [
-      { theme: 'Hall of Fame center fielders', players: ['Ty Cobb', 'Tris Speaker', 'Willie Mays', 'Mickey Mantle', 'Joe DiMaggio'], difficulty: 'yellow' },
-      { theme: 'Hall of Fame right fielders', players: ['Roberto Clemente', 'Hank Aaron', 'Mel Ott', 'Frank Robinson', 'Reggie Jackson'], difficulty: 'green' },
-      { theme: 'Hall of Fame left fielders', players: ['Ted Williams', 'Stan Musial', 'Rickey Henderson', 'Carl Yastrzemski', 'Lou Brock'], difficulty: 'blue' },
+      { theme: 'Hall of Fame center fielders', players: ['Richie Ashburn', 'Tris Speaker', 'Willie Mays', 'Mickey Mantle', 'Joe DiMaggio'], difficulty: 'yellow' },
+      { theme: 'Hall of Fame right fielders', players: ['Roberto Clemente', 'Hank Aaron', 'Mel Ott', 'Larry Walker', 'Reggie Jackson'], difficulty: 'green' },
+      { theme: 'Hall of Fame left fielders', players: ['Ted Williams', 'Willie Stargell', 'Ralph Kiner', 'Carl Yastrzemski', 'Lou Brock'], difficulty: 'blue' },
       { theme: 'Hall of Fame catchers', players: ['Johnny Bench', 'Yogi Berra', 'Carlton Fisk', 'Gary Carter', 'Mike Piazza'], difficulty: 'purple' },
     ],
   },

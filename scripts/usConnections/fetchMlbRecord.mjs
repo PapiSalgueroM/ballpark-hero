@@ -36,6 +36,9 @@ export const EXTRA = [
   /* men the round took off the boards: kept, so the live table's rows from before the round are judged too */
   'Al Simmons', 'Babe Ruth', 'Billy Hamilton', 'CC Sabathia', 'Cole Hamels', 'Dale Murphy', 'Dee Gordon', 'J.D. Martinez',
   'Justin Turner', 'Kumar Rocker', 'Mike Mussina', 'Nomar Garciaparra', 'Rich Gossage', 'Xander Bogaerts',
+  /* Round 1567: men its rebuilt groups took off every board (each sat beside a group the record could not judge
+     him against), kept for the same reason */
+  'Curt Schilling', 'Dave Winfield', 'Evan Longoria', 'Frankie Frisch', 'Harry Heilmann', 'Robin Roberts', 'Rogers Hornsby',
 ];
 /* tile name -> statsapi person id, where a namesake would otherwise win */
 export const PICK = {
@@ -261,4 +264,61 @@ if (step === 'person') {
     await sleep(120);
   }
   console.log('person step: ids', ids.size, 'fetched this run', Math.min(n, MAX));
+}
+
+/*
+ * Round 1567: add only the men the record has no row for (a man a rebuilt group deals in), without touching any
+ * other row. Each is searched, read and trimmed exactly as search, person, pick and export would do it (PICK first,
+ * then the most games rule, namesakes printed), and written as its own line of the committed record in the
+ * export's order; every other line stays byte for byte, so a later full export changes nothing it already holds.
+ *   node scripts/usConnections/fetchMlbRecord.mjs add <work>
+ */
+if (step === 'add') {
+  const file = path.join(ROOT, 'scripts', 'data', 'baseballConnectionsRecord-2026-10.json');
+  const text = fs.readFileSync(file, 'utf8');
+  const doc = JSON.parse(text);
+  const want = (await tileNames()).filter(n => !doc.men[n]);
+  const rows = {};
+  for (const name of want) {
+    const sf = path.join(WORK, 'search', slug(name) + '.json');
+    if (!fs.existsSync(sf)) {
+      const people = new Map();
+      for (const q of [...new Set([name, name.replace(SUFFIX, ''), name.replace(/\./g, '')])]) {
+        const j = await getJson(searchUrl(q));
+        for (const p of j?.people ?? []) people.set(p.id, { id: p.id, fullName: p.fullName, birthDate: p.birthDate, debut: p.mlbDebutDate ?? null, last: p.lastPlayedDate ?? null });
+        await sleep(120);
+      }
+      fs.writeFileSync(sf, JSON.stringify({ name, people: [...people.values()] }));
+    }
+    const s = JSON.parse(fs.readFileSync(sf, 'utf8'));
+    const ids = PICK[name] ? [PICK[name]] : s.people.filter(p => p.debut).map(p => p.id);
+    const cands = [];
+    for (const id of ids) {
+      const pf = path.join(WORK, 'person', id + '.json');
+      if (!fs.existsSync(pf)) {
+        const j = await getJson(personUrl(id));
+        if (j) fs.writeFileSync(pf, JSON.stringify(j));
+        await sleep(120);
+      }
+      if (fs.existsSync(pf)) cands.push(compact(JSON.parse(fs.readFileSync(pf, 'utf8')).people[0]));
+    }
+    if (!cands.length) { console.log('NO RECORD', name); continue; }
+    cands.sort((a, b) => gamesOf(b) - gamesOf(a));
+    if (cands.length > 1) console.log(`  namesakes for ${name}: ${cands.map(c => `${c.id} ${c.name} ${c.debut}..${c.last} G${gamesOf(c)}`).join(' | ')}`);
+    rows[name] = trim(cands[0]);
+  }
+  const eol = text.includes('\r\n') ? '\r\n' : '\n';
+  const lines = text.split(eol);
+  const first = lines.findIndex(l => l === '"men":{') + 1;
+  const nameOf = l => (l.match(/^"((?:[^"\\]|\\.)*)":\{"id"/) ?? [])[1];
+  for (const name of Object.keys(rows).sort()) {
+    let at = first;
+    while (nameOf(lines[at]) !== undefined && JSON.parse(`"${nameOf(lines[at])}"`) < name) at += 1;
+    if (nameOf(lines[at]) === undefined) throw new Error(`add: ${name} sorts after the last man; write it by a full export instead`);
+    lines.splice(at, 0, `${JSON.stringify(name)}:${JSON.stringify(rows[name])},`);
+  }
+  const out = lines.join(eol);
+  JSON.parse(out);
+  fs.writeFileSync(file, out);
+  console.log(`add: ${Object.keys(rows).length} of ${want.length} missing men written: ${Object.keys(rows).join(', ')}`);
 }

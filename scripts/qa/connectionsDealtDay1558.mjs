@@ -45,8 +45,35 @@ if (args.length === 2 && /^\+\d+$/.test(args[1])) {
 
 const groupsOf = raw => { const v = typeof raw === 'string' ? JSON.parse(raw) : raw; return Array.isArray(v) ? v : (v?.groups ?? []); };
 const valid = g => { const all = g.flatMap(x => x.players ?? []); return g.length === 4 && g.every(x => (x.players ?? []).length === 5) && new Set(all).size === 20; };
-const migration = fs.readFileSync(path.join(ROOT, 'supabase/migrations/20261022180000_round_1558_us_connections_truth.sql'), 'utf8');
+/* DEALT_MIGRATION (Round 1567): the same check for a later round's migration of these three tables
+   (scripts/qa/connectionsDealtDay1567.mjs sets it), so one script deals for every round */
+const MIGRATION_FILE = process.env.DEALT_MIGRATION ?? 'supabase/migrations/20261022180000_round_1558_us_connections_truth.sql';
+const ROUND = (MIGRATION_FILE.match(/round_(\d+)/) ?? [])[1] ?? '1558';
+const migration = fs.readFileSync(path.join(ROOT, MIGRATION_FILE), 'utf8');
 const touched = new Set([...migration.matchAll(/^\s*\('((?:bconn|nflconn|nhlconn)-[0-9]+)', /gm)].map(x => x[1]));
+/* DEALT_LABELS_ONLY_SAFE=1 (Round 1567, set by its wrapper): a board whose every known old value holds the same five
+   players in each group as the new board, and only a label changed ("Played for the Steelers" to "Played for the
+   Steelers (as of 2025)"), cannot strand a tile: a guess saved earlier that day keeps the old label on its solved
+   group. That is safe only because the hooks match a saved group to the board by its label OR its five names
+   (src/lib/connectionsSolvedMatch.ts, added by Round 1567's fix); under the code before it, which matched by label
+   alone, a LOST board showed that group twice, old and new label with the same five names (review-run-1567 finding
+   1). So the code release carrying that matcher must be live before the migration lands. Such a board is reported
+   RELABELLED and does not make the day unsafe. With exports, the
+   live row is what is compared with the new board; with "file", the base file's board (the migration's first old
+   value for the row). */
+const LABELS_ONLY_SAFE = process.env.DEALT_LABELS_ONLY_SAFE === '1';
+const sets = g => g.map(x => [...(x.players ?? [])].sort().join('|')).join('/');
+const migRows = new Map();
+for (const x of migration.matchAll(/^\s*\('((?:bconn|nflconn|nhlconn)-[0-9]+)', '((?:[^']|'')*)', '((?:[^']|'')*)'\)/gm)) {
+  const [old, next] = [x[2], x[3]].map(j => JSON.parse(j.replace(/''/g, "'")));
+  if (!migRows.has(x[1])) migRows.set(x[1], { next, olds: [] });
+  migRows.get(x[1]).olds.push(old);
+}
+const relabelOnly = (id, groups) => {
+  if (!LABELS_ONLY_SAFE || !migRows.has(id)) return false;
+  const r = migRows.get(id);
+  return sets(source === 'file' ? r.olds[0] : groups) === sets(r.next);
+};
 
 const pools = {};
 if (source === 'file') {
@@ -64,12 +91,14 @@ for (const d of dates) {
   const line = [];
   for (const [s, rows] of Object.entries(pools)) {
     const pool = rows.filter(r => valid(r.groups));
-    const id = pool[m.dailyIndex(d, pool.length)]?.puzzle_id;
-    const hit = touched.has(id);
+    const row = pool[m.dailyIndex(d, pool.length)];
+    const id = row?.puzzle_id;
+    const relabel = touched.has(id) && relabelOnly(id, row.groups);
+    const hit = touched.has(id) && !relabel;
     if (hit) clash += 1;
-    line.push(`${s} ${id} of ${pool.length}${hit ? ' REWRITTEN' : ''}`);
+    line.push(`${s} ${id} of ${pool.length}${hit ? ' REWRITTEN' : relabel ? ' RELABELLED' : ''}`);
   }
   const bad = line.some(x => x.endsWith('REWRITTEN'));
-  console.log(`${d}: ${line.join('; ')}: ${bad ? 'a board the 1558 migration rewrites is dealt: not this day' : 'clear'}`);
+  console.log(`${d}: ${line.join('; ')}: ${bad ? `a board the ${ROUND} migration rewrites is dealt: not this day` : 'clear'}`);
 }
 process.exit(clash ? 1 : 0);

@@ -101,21 +101,26 @@ function posShare(m, set) {
   return all > 0 ? at / all : null;
 }
 /**
- * The share rule: at least 30 percent of his games there fits, under 10 percent does not, between is unknown.
- * Both are judgment lines with no headroom, measured 2026-10-22 over the 60 baseball boards (682 tile and
- * group pairs the share decides, 200 members and 482 other tiles): the 30 line sits 0.3 points under a member
- * who fits (Stan Musial, 30.3 percent in left field, bconn-057) and 0.6 points over the closest other tile
- * (Frank Robinson, 29.4 percent in left field, unknown on bconn-028, 035 and 057); the 10 line sits 0.1
- * points over an other tile that does not fit (Honus Wagner, 9.9 percent at first base, bconn-053). Moved to
- * 25, four other tiles fit; to 35, two more members go unknown; the 10 line at 5 or 15 takes the other tiles
- * the share leaves unknown from 37 (of the 53 baseball other tiles the record cannot judge) to 84 or 26.
- * Section 7 of simUsConnectionsFacts holds the member and other unknowns at the ledger's ceilings exactly, so
- * each of those moves turns it red; a pair between the lines is decided on two hosts, not by a new line.
+ * The share rule: at least 35 percent of his games there fits, under 10 percent does not, between is unknown.
+ * Round 1558 drew the upper line at 30 with no headroom (Stan Musial fit "Hall of Fame left fielders" on
+ * bconn-057 with 30.3 percent while Frank Robinson, 29.4 percent there, was unknown beside him: a coin toss
+ * either way). Round 1567 moved it into the one gap the members leave, measured 2026-10-29 over the 60
+ * baseball boards (200 members the share decides): 33.8 (Jim Thome at designated hitter, bconn-038) to 40.6
+ * (Harmon Killebrew at first base, bconn-035), none between. Musial, Thome and Paul Molitor (29.7 at third)
+ * fell under it and left those groups, and every other tile the record could not judge (53 pairs, a man with
+ * 10 to 30 percent of his games beside a position group) left its board, so no tile sits between the lines.
+ * After the round the closest member is Frank Thomas, 42.6 percent at first base (bconn-022, 028, 045).
+ * The 10 line has no gap to move into (the other tiles under it run evenly from 0 to 9.9: Honus Wagner,
+ * 9.9 at first base, bconn-053), so it stays; a tile under it is not called a fit by anyone who knows him.
+ * Section 7 of simUsConnectionsFacts holds both unknown counts at 0, so a pair between the lines that comes
+ * back turns it red; it is rebuilt on its board, never settled by moving a line.
  */
+export const SHARE_FITS = 0.35;
+export const SHARE_OUT = 0.1;
 function shareVerdict(share) {
   if (share === null) return null;
-  if (share >= 0.3) return true;
-  if (share < 0.1) return false;
+  if (share >= SHARE_FITS) return true;
+  if (share < SHARE_OUT) return false;
   return null;
 }
 /** An award won while playing a position: the season's most games position decides. */
@@ -179,11 +184,12 @@ export function makeBaseballChecker({ record, ledger = {} }) {
       const c = MLB_COUNTRIES[fold(m[1])];
       return c ? { kind: 'born', country: c, pitchers: !!m[2] } : null;
     }
-    if ((m = label.match(/^Played for the (.+)$/)) || (m = label.match(/^(.+) legends$/))) {
+    if ((m = label.match(/^Played for the (.+?)(?: \(as of (\d{4})\))?$/)) || (m = label.match(/^(.+) legends$/))) {
       /* "Montreal Expos / Washington Nationals" and "Cleveland Guardians/Indians" name one franchise twice */
       const ids = new Set([MLB_CLUBS[fold(m[1])], ...m[1].split(/\s*\/\s*/).map(p => MLB_CLUBS[fold(p)])].filter(Boolean));
       if (ids.size !== 1) return null;
-      return { kind: 'club', id: [...ids][0], legend: /legends$/.test(label) };
+      /* "(as of 2026)" (Round 1567): only seasons up to that year count, so a trade after it cannot add a man */
+      return { kind: 'club', id: [...ids][0], legend: /legends$/.test(label), ...(m[2] ? { asOf: Number(m[2]) } : {}) };
     }
     switch (f) {
       case 'wonmvpinbothleagues': return { kind: 'mvpBoth' };
@@ -266,6 +272,10 @@ export function makeBaseballChecker({ record, ledger = {} }) {
       }
       case 'club': {
         const seasons = m.fr?.[c.id] ?? 0;
+        /* a dated group: the record keeps a count of seasons per club, not which seasons, so a man with any season
+           past the date (a record read after it) cannot be judged by the count and is unknown; none with the club
+           at all is still no */
+        if (c.asOf !== undefined && seasons > 0 && Object.keys(m.ss ?? {}).some(y => Number(y) > c.asOf)) return null;
         if (!c.legend) return seasons > 0;
         /* a legend is not a man who passed through: five seasons or more fits, none does not, one to four is
            unknown (the board cannot say whether four years make a legend, so neither can the checker) */
@@ -364,7 +374,10 @@ export function makeBaseballChecker({ record, ledger = {} }) {
         return awardSeasons(m, ['ALMVP', 'NLMVP']).includes(2025) ? 'won the 2025 MVP and played in 2026' : null;
       case 'award':
         if (c.to !== undefined && c.to < 2026) return null;
-        if (c.codes.includes('ALCY') && !isPitcher(m)) return null;
+        /* a two way man is on the Cy Young ballot whenever he pitched that season, whatever his career share of
+           games on the mound (Round 1567: Shohei Ohtani, 14 starts in 2026, sat beside "Won Cy Young Award" on
+           bconn-002 unwatched, because 114 of his 1286 games are pitching) */
+        if (c.codes.includes('ALCY') && !isPitcher(m) && !((m.ss['2026'][5] ?? 0) > 0)) return null;
         if (c.codes.includes('ALROY') && m.debut && Number(m.debut.slice(0, 4)) < 2025) return null;
         if (c.codes.includes('ASMVP')) return null;
         /* the 2026 World Series MVP comes from one of its two clubs (the ledger names them on two hosts);
@@ -394,7 +407,10 @@ export function makeBaseballChecker({ record, ledger = {} }) {
 
   /* the man a tile names, by his league id: two spellings of one man ("Goose Gossage", "Rich Gossage") are one */
   const identity = name => { const m = byName.get(fold(name)); return m?.id ? `mlb:${m.id}` : fold(name); };
-  return { criterion, fits, watch, identity, has: name => byName.has(fold(name)) };
+  /* a man who can still change clubs (Round 1567's trade check): no last game on the record (the service leaves it
+     empty while a man is active, Yu Darvish's lost 2026 included), or one from 2025 on; null off the record */
+  const active = name => { const m = byName.get(fold(name)); return m ? (!m.last || Number(m.last.slice(0, 4)) >= 2025) : null; };
+  return { criterion, fits, watch, identity, active, has: name => byName.has(fold(name)) };
 }
 
 /* ------------------------------------------------------------------ */
@@ -420,6 +436,8 @@ const NFL_COLLEGES = {
   notredame: ['notredame'], oklahoma: ['oklahoma'], texas: ['texas'], florida: ['florida'],
 };
 const FIRST_OVERALL = /Rd 1, Pk 1 \(/;
+/* the last season the NFL Grid roster table and the ledger's added stints reach */
+const NFL_TABLE_LAST = 2025;
 
 /**
  * NFL's checker. record: ESPN's rows; grid: the NFL Grid table; ledger: the round's two host ledger.
@@ -456,9 +474,10 @@ export function makeNflChecker({ record, grid, ledger = {} }) {
     const f = fold(label);
     if (lists.has(f)) return { kind: 'list', key: f };
     let m;
-    if ((m = label.match(/^Played for the (.+)$/))) {
+    if ((m = label.match(/^Played for the (.+?)(?: \(as of (\d{4})\))?$/))) {
       const club = NFL_CLUBS[fold(m[1])];
-      return club ? { kind: 'club', espn: club[0], grid: club[1] } : null;
+      /* "(as of 2025)" (Round 1567): only seasons up to that one count, so a move after it cannot add a man */
+      return club ? { kind: 'club', espn: club[0], grid: club[1], ...(m[2] ? { asOf: Number(m[2]) } : {}) } : null;
     }
     if ((m = label.match(/^Played college ball at (.+)$/))) {
       const c = NFL_COLLEGES[fold(m[1])];
@@ -480,10 +499,13 @@ export function makeNflChecker({ record, grid, ledger = {} }) {
     if (!m && !g) return null;
     switch (c.kind) {
       case 'club': {
-        const espn = new Set(Object.values(m?.seasons ?? {}).flat());
-        const extra = new Set(m?.clubsAlso ?? []);
+        const upTo = y => c.asOf === undefined || Number(y) <= c.asOf;
+        const espn = new Set(Object.entries(m?.seasons ?? {}).filter(([y]) => upTo(y)).flatMap(([, v]) => v));
+        /* the ledger's added stints (Le'Veon Bell's 2021 Ravens games) and the roster table (1970 to 2025) carry
+           no season per club, so a dated group counts them only when its date is past their last season */
+        const extra = new Set(c.asOf === undefined || c.asOf >= NFL_TABLE_LAST ? m?.clubsAlso ?? [] : []);
         if (c.espn.some(a => espn.has(a) || extra.has(a))) return true;
-        if (g && c.grid.some(a => g.teams.includes(a))) return true;
+        if (g && (c.asOf === undefined || (g.seasons?.[1] ?? 9999) <= c.asOf) && c.grid.some(a => g.teams.includes(a))) return true;
         return m ? false : null;
       }
       case 'college': {
@@ -534,7 +556,9 @@ export function makeNflChecker({ record, grid, ledger = {} }) {
   }
 
   const identity = name => { const m = byName.get(fold(name)); return m?.espn ? `espn:${m.espn}` : fold(name); };
-  return { criterion, fits, watch, identity, clubDisagreement, has: name => byName.has(fold(name)) || gridBy.has(fold(name)) };
+  /* a man who can still change clubs (Round 1567's trade check): a season in 2025 or 2026 on ESPN's record */
+  const active = name => { const m = byName.get(fold(name)); return m ? !!(m.seasons?.['2025'] || m.seasons?.['2026']) : null; };
+  return { criterion, fits, watch, identity, active, clubDisagreement, has: name => byName.has(fold(name)) || gridBy.has(fold(name)) };
 }
 
 /* ------------------------------------------------------------------ */
@@ -555,7 +579,8 @@ export function makeNhlChecker({ record, ledger = {} }) {
     const f = fold(label);
     if (lists.has(f)) return { kind: 'list', key: f };
     let m;
-    if ((m = label.match(/^Played for the (.+)$/))) return { kind: 'club', nick: fold(m[1]) };
+    /* "(as of 2025-26)" (Round 1567): only seasons up to that one count, so a trade after it cannot add a man */
+    if ((m = label.match(/^Played for the (.+?)(?: \(as of (\d{4})-\d{2}\))?$/))) return { kind: 'club', nick: fold(m[1]), ...(m[2] ? { asOf: Number(m[2]) } : {}) };
     if ((m = label.replace(/,/g, '').match(/^(\d+)\+ career (points|goals|assists|games)$/))) {
       return { kind: 'career', stat: { points: 'P', goals: 'G', assists: 'A', games: 'GP' }[m[2]], min: Number(m[1]) };
     }
@@ -570,7 +595,7 @@ export function makeNhlChecker({ record, ledger = {} }) {
     }
     const m = byName.get(fold(name));
     if (!m) return null;
-    if (c.kind === 'club') return Object.values(m.seasons ?? {}).flat().some(t => fold(t).endsWith(c.nick));
+    if (c.kind === 'club') return Object.entries(m.seasons ?? {}).filter(([s]) => c.asOf === undefined || Number(s.slice(0, 4)) <= c.asOf).flatMap(([, v]) => v).some(t => fold(t).endsWith(c.nick));
     if (c.kind === 'career') return (m.career?.[c.stat] ?? 0) >= c.min;
     return null;
   }
@@ -587,7 +612,9 @@ export function makeNhlChecker({ record, ledger = {} }) {
   }
 
   const identity = name => { const m = byName.get(fold(name)); return m?.nhl ? `nhl:${m.nhl}` : fold(name); };
-  return { criterion, fits, watch, identity, has: name => byName.has(fold(name)) };
+  /* a man who can still change clubs (Round 1567's trade check): the league's own active flag */
+  const active = name => { const m = byName.get(fold(name)); return m ? !!m.active : null; };
+  return { criterion, fits, watch, identity, active, has: name => byName.has(fold(name)) };
 }
 
 /* ------------------------------------------------------------------ */

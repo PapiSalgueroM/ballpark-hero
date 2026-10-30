@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
 import { useBaseballConnections } from '@/hooks/useBaseballConnections';
+import { ConnectionsGroupLabel } from '@/components/game/ConnectionsGroupLabel';
 import { GameNav } from '@/components/game/GameNav';
 import { GameShell } from '@/components/game/GameShell';
 import { ResultScreen } from '@/components/game/ResultScreen';
@@ -131,7 +132,7 @@ const BaseballConnections = () => {
                   'text-xs font-bold uppercase tracking-wider mb-2 px-2 py-1 rounded-md inline-block',
                   DIFFICULTY_HEADER[group.difficulty]
                 )}>
-                  {group.theme}
+                  <ConnectionsGroupLabel theme={group.theme} />
                 </p>
                 <div className="flex flex-wrap gap-2">
                   {group.players.map((p) => (
