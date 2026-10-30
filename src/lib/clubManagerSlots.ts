@@ -289,11 +289,13 @@ function writeParked(slot: number, career: CareerState): boolean {
   }
 }
 
-/** Puts a key back to the value it had, null meaning absent. Never throws. */
-function putBack(key: string, value: string | null): void {
+/** Puts a key back to the value it had, null meaning absent. Never the
+ *  career key: only a parked key, a kept aside copy or the copies' slot marks.
+ *  Never throws. */
+function putBack(at: string, value: string | null): void {
   try {
-    if (value === null) localStorage.removeItem(key);
-    else localStorage.setItem(key, value);
+    if (value === null) localStorage.removeItem(at);
+    else localStorage.setItem(at, value);
   } catch { /* it was that size a moment ago */ }
 }
 

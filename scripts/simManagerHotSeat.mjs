@@ -43,9 +43,20 @@
         board and the hot seat's final table to the row (so the same league
         position and points), and Club Manager plays the rest of that season
         through its own playNextEntry without a throw, until every club in the
-        table has played the same number of league games. A career already
-        saved (one Club Manager's own saveCareer wrote, then an unreadable
-        one) is asked about and left byte for byte until the replace is said.
+        table has played the same number of league games. Round 1592 (report
+        fe949903, a career lost with two slots empty): on every survivor the
+        carry goes through Club Manager's slots, never over a career:
+        (a) an empty device lands in slot 1; (b) a career in slot 1 stays,
+        parked byte for byte in summary, and opens again through loadCareer,
+        while the job lands in slot 2; (c) the active slot 2 full and slot 1
+        empty lands in slot 1; (d) all three full answers 'full' and not a
+        byte of the store moves; (e) an unreadable slot 2 counts as a career,
+        so the job lands in slot 3 and the bytes stay; (f) the free slot's
+        old save points go, the kept career's stay; (g) a refused write on
+        the swap, on the parked write and on a replace answers 'failed' and
+        not a byte moves; (h) a picked slot (all full) is kept aside first,
+        the same bytes, marked with its slot, and its points go; (i) a slot
+        that changed since the card read it is not replaced.
         Every sacked run, the silent arm's and the talk past the room arm's, is
         refused and writes nothing. In a full run the reprieves section 2
         played are handed over too, since the section's own runs rarely have
@@ -71,8 +82,17 @@
    HOT_SEAT_SECTION=5, for re-measuring its floors):
      HOT_SEAT_CONTROL=nocal      the handover drops the calendar. Club
        Manager's loadCareer refuses every save, section 5 must go red.
-     HOT_SEAT_CONTROL=clobber    the existing save check is skipped, so a
-       saved career is written over without the confirm. Must go red.
+     HOT_SEAT_CONTROL=clobber    the carry writes over the career being
+       played, the report fe949903 shape (a copy of clubManagerSlots.ts
+       whose free slot is always the active one). Must go red.
+     HOT_SEAT_CONTROL=damagedfree an unreadable save counts as an empty
+       slot, so it is written over. Arm (e) must go red.
+     HOT_SEAT_CONTROL=nopoints   the free slot's old save points stay. Arm
+       (f) must go red.
+     HOT_SEAT_CONTROL=norollback a refused swap leaves the new career in the
+       free slot's parked key. Arm (g) must go red.
+     HOT_SEAT_CONTROL=nobackup   a picked career is replaced with no kept
+       aside copy. Arm (h) must go red.
      HOT_SEAT_CONTROL=sackoffer  a sacked manager is offered the career.
        Must go red.
      HOT_SEAT_CONTROL=nostamp    the takeover goes across without the
@@ -113,8 +133,8 @@
      sacked runs refused               fixed 11 to 26                     floor 5
      reprieves handed over             fixed 0 to 2 (section 5 alone)     (reported)
      window before the next fixture    fixed 3 (own seed, after the fixes) (reported)
-   Under nocal no career is handed over; under clobber the first confirm
-   check fails on every survivor; under sackoffer every sacked run fails;
+   Under nocal no career is handed over; under clobber arm (b) fails on
+   every survivor; under sackoffer every sacked run fails;
    under nostamp and card every handover fails (39 of 39 on the own seed).
    A review probe on a sixth seed saw 6 careers sacked in Club Manager, so
    the reported 2 to 4 is not a ceiling; the offer card warns when the board
@@ -142,7 +162,7 @@ const TMP = os.tmpdir().replaceAll('\\', '/');
 const CONTROL = process.env.HOT_SEAT_CONTROL || '';
 /* Round 956: the handover controls aim at section 5 alone, so they run it
    alone and a red they cause is section 5's red. */
-const HANDOVER_CONTROLS = ['nocal', 'clobber', 'sackoffer', 'nostamp', 'card'];
+const HANDOVER_CONTROLS = ['nocal', 'clobber', 'sackoffer', 'nostamp', 'card', 'damagedfree', 'nopoints', 'norollback', 'nobackup'];
 if (CONTROL && !['flat', 'deaf', 'drift', 'leak', ...HANDOVER_CONTROLS].includes(CONTROL)) {
   console.error(`HOT_SEAT_CONTROL=${CONTROL} is not a control this harness knows`);
   process.exit(1);
@@ -199,8 +219,18 @@ function rewrite(file, edits, outName, what) {
   }
   const out = `${TMP}/${process.pid}.${outName}`;
   fs.writeFileSync(out, src);
+  if (controlCopy) slotsCopy = controlCopy;
   controlCopy = out;
   return out;
+}
+/* Round 1592: the carry's slot rule lives in src/lib/clubManagerSlots.ts, so
+   its controls rewrite a copy of that file and point the lib's import at it.
+   The copy's two relative imports go through the alias from the temp folder. */
+const SLOTS = path.join(ROOT, 'src', 'lib', 'clubManagerSlots.ts');
+let slotsCopy = null;
+function rewriteSlots(edits, name, what) {
+  const copy = rewrite(SLOTS, [...edits, ["from './clubManager';", "from '@/lib/clubManager';"], ["from './clubManagerEras';", "from '@/lib/clubManagerEras';"]], `clubManagerSlots.${name}.ts`, what);
+  return rewrite(LIB, [["from '@/lib/clubManagerSlots';", `from '${copy}';`]], `managerHotSeat.${name}.ts`, 'the slots import');
 }
 if (CONTROL === 'flat') {
   libPath = rewrite(LIB, [['export const TARGET_PER_POINT = 0.07;\n', 'export const TARGET_PER_POINT = 0;\n']], 'managerHotSeat.flat.ts', 'the per point term');
@@ -231,8 +261,24 @@ if (CONTROL === 'card') {
   console.log('NEGATIVE CONTROL ON: the offer card counts only the games played in the job; section 5 must go red');
 }
 if (CONTROL === 'clobber') {
-  libPath = rewrite(LIB, [['  if (!opts.replace && existingClubManagerSave() !== null) return \'confirm\';\n', '  if (!opts.replace && false) return \'confirm\';\n']], 'managerHotSeat.clobber.ts', 'the existing save check');
-  console.log('NEGATIVE CONTROL ON: the handover writes over a saved career without asking; section 5 must go red');
+  libPath = rewriteSlots([['  const free = freeSlot(views);\n', '  const free = from;\n']], 'clobber', 'the free slot pick');
+  console.log('NEGATIVE CONTROL ON: the handover writes over the career being played, the report fe949903 shape; section 5 must go red');
+}
+if (CONTROL === 'damagedfree') {
+  libPath = rewriteSlots([['  return views.find(v => !v.summary && !v.damaged)?.slot ?? null;\n', '  return views.find(v => !v.summary)?.slot ?? null;\n']], 'damagedfree', 'the free slot rule');
+  console.log('NEGATIVE CONTROL ON: an unreadable save counts as an empty slot; section 5 must go red');
+}
+if (CONTROL === 'nopoints') {
+  libPath = rewriteSlots([['    clearSlotPoints(free, listable());\n', '']], 'nopoints', 'the free slot\'s points clear');
+  console.log('NEGATIVE CONTROL ON: the new career inherits the slot\'s old save points; section 5 must go red');
+}
+if (CONTROL === 'norollback') {
+  libPath = rewriteSlots([['        putBack(parkedKey(free), null);\n', '']], 'norollback', 'the refused swap\'s clean up');
+  console.log('NEGATIVE CONTROL ON: a refused swap leaves the new career parked in the free slot; section 5 must go red');
+}
+if (CONTROL === 'nobackup') {
+  libPath = rewriteSlots([['  const copy = copyAside(entry, store);\n', '  const copy = { ok: true, backupKey: \'dukb-none\' };\n']], 'nobackup', 'the replaced career\'s kept aside copy');
+  console.log('NEGATIVE CONTROL ON: a picked career is replaced without a kept aside copy; section 5 must go red');
 }
 if (CONTROL === 'sackoffer') {
   libPath = rewrite(LIB, [['  return (kind === \'survived\' || kind === \'reprieve\') && !run.state.sacked;\n', '  return kind !== undefined;\n']], 'managerHotSeat.sackoffer.ts', 'the survivors only rule');
@@ -248,14 +294,27 @@ const BUNDLE = `${TMP}/managerHotSeat.${process.pid}.bundle.cjs`;
 fs.writeFileSync(ENTRY, `
 export * as hs from '${libPath}';
 export * as cm from '${ROOT_URL}/src/lib/clubManager.ts';
+export * as sl from '${ROOT_URL}/src/lib/clubManagerSlots.ts';
+export * as pts from '${ROOT_URL}/src/lib/cmSavePointsStore.ts';
 `);
 execSync(`"${ESBUILD}" "${ENTRY}" --bundle --format=cjs --platform=node --alias:@=${ROOT_URL}/src --outfile="${BUNDLE}" --log-level=error`, {
   stdio: 'inherit',
   env: { ...process.env, NODE_PATH: path.dirname(path.dirname(ESBUILD)) },
 });
 const store = new Map();
-globalThis.localStorage = { getItem: k => store.get(k) ?? null, setItem: (k, v) => store.set(k, String(v)), removeItem: k => store.delete(k), clear: () => store.clear() };
-const { hs, cm } = createRequire(import.meta.url)(BUNDLE);
+/* Round 1592: it lists its keys (the save points clear and the kept aside
+   copies need that), and `refuse` makes it refuse a write the way a full
+   browser store does, for the carry's roll back. */
+let refuse = () => false;
+globalThis.localStorage = {
+  getItem: k => store.get(k) ?? null,
+  setItem: (k, v) => { if (refuse(k)) throw new Error('quota'); store.set(k, String(v)); },
+  removeItem: k => store.delete(k),
+  clear: () => store.clear(),
+  get length() { return store.size; },
+  key: i => [...store.keys()][i] ?? null,
+};
+const { hs, cm, sl, pts } = createRequire(import.meta.url)(BUNDLE);
 const {
   startHotSeat, playHotSeatMatch, answerHotSeatPress, replayHotSeat, pendingPress, hotSeatPool, dailyHotSeat,
   HOT_SEAT_LEASH, HOT_SEAT_BOARD_START, HOT_SEAT_TAKEOVER_MIN, HOT_SEAT_TAKEOVER_MAX,
@@ -438,7 +497,9 @@ ok('a custom club and a league override registered before the run are the same o
 /* ---------- 5. carrying on in Club Manager (Round 956) ---------- */
 console.log('5) A manager who keeps the job carries on in Club Manager');
 const failsBeforeFive = failures;
-const { canCarryOn, carryOnInClubManager, carryOnSummary, existingClubManagerSave, hotSeatLeagues, hotSeatMeters } = hs;
+const { canCarryOn, carryOnInClubManager, carryOnSummary, hotSeatLeagues, hotSeatMeters } = hs;
+const { readSlots, activeSlot, switchSlot, parkedKey, summarize, SLOTS_INDEX_KEY } = sl;
+const { pointsIndexKey, pointKey } = pts;
 const { loadCareer, saveCareer, startCareer, playNextEntry, leaguePosition, nextFixture, ensureHandover } = cm;
 const SAVE_KEY = 'dukb-club-manager-save';
 /* Floors from the measured runs in the header, section 5's table. */
@@ -458,29 +519,125 @@ store.clear();
 const other = startCareer(pool[pool.length - 1].club);
 if (!saveCareer(other)) fail('Club Manager\'s own saveCareer refused the probe career');
 const otherRaw = store.get(SAVE_KEY);
-if (typeof otherRaw !== 'string') fail(`saveCareer did not write ${SAVE_KEY}; the hot seat reads the wrong key`);
-if (existingClubManagerSave()?.club !== other.clubName) fail('the hot seat does not see the career Club Manager saved');
-let handed = 0, toSeasonEnd = 0, sackedInCm = 0, refusals = 0, asked = 0, reprieves = 0, windowFirst = 0, oldPostDropped = 0;
+if (typeof otherRaw !== 'string') fail(`saveCareer did not write ${SAVE_KEY}; the slots read the wrong key`);
+if (summarize(otherRaw)?.clubName !== other.clubName) fail('the slots do not see the career Club Manager saved');
+const otherSum = JSON.stringify(summarize(otherRaw));
+const BACKUP_PREFIX = `${SAVE_KEY}.broken-`;
+/* Every key and value in the store, in key order. */
+const snap = () => JSON.stringify([...store.keys()].sort().map(k => [k, store.get(k)]));
+const sumOfKey = k => JSON.stringify(summarize(store.get(k) ?? null));
+/* Round 1592 (report fe949903): the slot arms, each from a fresh store, for
+   one survivor's run. Returns the number of arms that failed. */
+const arms = { emptyDevice: 0, keptSlotOne: 0, intoSlotOne: 0, fullAsked: 0, damagedKept: 0, pointsCleared: 0, rolledBack: 0, picked: 0, changedRefused: 0 };
+function slotArms(run, tag) {
+  const club = run.state.clubName;
+  /* (a) an empty device: slot 1, no index written. */
+  store.clear();
+  let res = carryOnInClubManager(run);
+  if (res !== 'saved' || activeSlot() !== 1 || store.has(SLOTS_INDEX_KEY) || summarize(store.get(SAVE_KEY))?.clubName !== club) fail(`${tag} (a): an empty device answered ${res}, active slot ${activeSlot()}`);
+  else arms.emptyDevice += 1;
+  /* (b) and (f): a career in slot 1 with save points, slots 2 and 3 empty, points left in slot 2. */
+  store.clear();
+  store.set(SAVE_KEY, otherRaw);
+  const ownPoints = [[pointsIndexKey(1), '{"v":1,"points":[],"credited":[1],"blocked":[]}'], [pointKey(1, 'keep'), 'packed']];
+  const strayPoints = [[pointsIndexKey(2), '{"v":1,"points":[],"credited":[1],"blocked":[]}'], [pointKey(2, 'gone'), 'packed']];
+  for (const [k, v] of [...ownPoints, ...strayPoints]) store.set(k, v);
+  res = carryOnInClubManager(run);
+  if (res !== 'saved' || activeSlot() !== 2 || sumOfKey(parkedKey(1)) !== otherSum || summarize(store.get(SAVE_KEY))?.clubName !== club) {
+    fail(`${tag} (b): with a career in slot 1 the carry answered ${res}, active slot ${activeSlot()}, slot 1 holds ${sumOfKey(parkedKey(1)).slice(0, 80)}`);
+  } else arms.keptSlotOne += 1;
+  if (strayPoints.some(([k]) => store.has(k)) || ownPoints.some(([k, v]) => store.get(k) !== v)) fail(`${tag} (f): the free slot's old points stayed, or the kept career's points moved`);
+  else arms.pointsCleared += 1;
+  return res;
+}
+/* After the handed over season is played: Club Manager's own loadCareer would
+   re-register the engine for another career, so these run once it is done. */
+function slotArmsRest(run, tag) {
+  const club = run.state.clubName;
+  const index = active => (active === 1 ? store.delete(SLOTS_INDEX_KEY) : store.set(SLOTS_INDEX_KEY, JSON.stringify({ v: 1, active })));
+  /* (b) again, then slot 1 opens through Club Manager's own loadCareer on the career it held. */
+  store.clear();
+  store.set(SAVE_KEY, otherRaw);
+  if (carryOnInClubManager(run) !== 'saved' || !switchSlot(1)) fail(`${tag} (b): slot 1 would not open after the carry`);
+  else {
+    const back = loadCareer();
+    if (!back || back.clubName !== other.clubName || back.season !== other.season || back.week !== other.week) fail(`${tag} (b): slot 1 opens on ${back?.clubName} week ${back?.week}, not ${other.clubName} week ${other.week}`);
+  }
+  /* (c) the active slot 2 holds a career, slot 1 is empty: the job lands in slot 1. */
+  store.clear();
+  index(2);
+  store.set(SAVE_KEY, otherRaw);
+  let res = carryOnInClubManager(run);
+  if (res !== 'saved' || activeSlot() !== 1 || sumOfKey(parkedKey(2)) !== otherSum || summarize(store.get(SAVE_KEY))?.clubName !== club) fail(`${tag} (c): with slot 2 active and full the carry answered ${res}, active slot ${activeSlot()}`);
+  else arms.intoSlotOne += 1;
+  /* (d) all three full: 'full', and not a byte moves. */
+  store.clear();
+  store.set(SAVE_KEY, otherRaw);
+  store.set(parkedKey(2), otherRaw);
+  store.set(parkedKey(3), '{broken');
+  let was = snap();
+  res = carryOnInClubManager(run);
+  if (res !== 'full' || snap() !== was) fail(`${tag} (d): with all three slots full the carry answered ${res}${snap() !== was ? ' and the store changed' : ''}`);
+  else arms.fullAsked += 1;
+  /* (i) a slot that changed since the card read it is not replaced. */
+  const shown = readSlots()[1];
+  store.set(parkedKey(2), '{broken too');
+  was = snap();
+  res = carryOnInClubManager(run, shown);
+  if (res !== 'changed' || snap() !== was) fail(`${tag} (i): a changed slot answered ${res}${snap() !== was ? ' and the store changed' : ''}`);
+  else arms.changedRefused += 1;
+  store.set(parkedKey(2), otherRaw);
+  /* (h) a picked career: kept aside first, byte for byte, marked with its slot; its points go; the others stay. */
+  store.set(pointsIndexKey(2), '{"v":1,"points":[],"credited":[1],"blocked":[]}');
+  const twoWas = store.get(parkedKey(2));
+  res = carryOnInClubManager(run, readSlots()[1]);
+  const aside = [...store.keys()].filter(k => k.startsWith(BACKUP_PREFIX));
+  let marks = {};
+  try { marks = JSON.parse(store.get('dukb-set-aside-slot') ?? '{}') ?? {}; } catch { /* reads as none */ }
+  if (res !== 'saved' || activeSlot() !== 2 || summarize(store.get(SAVE_KEY))?.clubName !== club) fail(`${tag} (h): a picked slot answered ${res}, active slot ${activeSlot()}`);
+  else if (aside.length !== 1 || store.get(aside[0]) !== twoWas || marks[aside[0]] !== 2) fail(`${tag} (h): the replaced career has ${aside.length} kept aside copies${aside.length ? `, ${store.get(aside[0]) === twoWas ? 'the same bytes' : 'other bytes'}, marked slot ${marks[aside[0]]}` : ''}`);
+  else if (store.has(pointsIndexKey(2)) || store.get(parkedKey(3)) !== '{broken' || sumOfKey(parkedKey(1)) !== otherSum) fail(`${tag} (h): the picked slot kept its points or another slot moved`);
+  else arms.picked += 1;
+  /* (e) slot 2 unreadable, slot 3 empty: it lands in slot 3 and the unreadable bytes stay. */
+  store.clear();
+  store.set(SAVE_KEY, otherRaw);
+  store.set(parkedKey(2), '{broken');
+  res = carryOnInClubManager(run);
+  if (res !== 'saved' || activeSlot() !== 3 || store.get(parkedKey(2)) !== '{broken' || sumOfKey(parkedKey(1)) !== otherSum) fail(`${tag} (e): with slot 2 unreadable the carry answered ${res}, active slot ${activeSlot()}, slot 2 ${store.get(parkedKey(2)) === '{broken' ? 'kept' : 'written over'}`);
+  else arms.damagedKept += 1;
+  /* (g) a browser that refuses the career's write: 'failed' and not a byte moves, on both paths. */
+  let rolled = true;
+  for (const [what, refuseKey, pick] of [['the swap', SAVE_KEY, false], ['the parked write', parkedKey(2), false], ['the replace', SAVE_KEY, true]]) {
+    store.clear();
+    store.set(SAVE_KEY, otherRaw);
+    if (pick) { store.set(parkedKey(2), otherRaw); store.set(parkedKey(3), otherRaw); }
+    was = snap();
+    refuse = k => k === refuseKey;
+    try { res = carryOnInClubManager(run, pick ? readSlots()[0] : undefined); } finally { refuse = () => false; }
+    if (res !== 'failed' || snap() !== was) { rolled = false; fail(`${tag} (g): a refused write on ${what} answered ${res}${snap() !== was ? ' and the store changed' : ''}`); }
+  }
+  if (rolled) arms.rolledBack += 1;
+}
+let handed = 0, toSeasonEnd = 0, sackedInCm = 0, refusals = 0, reprieves = 0, windowFirst = 0, oldPostDropped = 0, slotRuns = 0;
 const leaguesHanded = new Set();
 function checkHandover(run, tag, league) {
   if (!run.verdict) { fail(`${tag}: no verdict to hand over`); return; }
   if (run.verdict.kind === 'sacked' || run.verdict.kind === 'boardSacked') {
     /* No offer to the sacked, and nothing written even to an empty device. */
     store.clear();
-    if (canCarryOn(run) || carryOnInClubManager(run, { replace: true }) !== 'refused' || store.has(SAVE_KEY)) fail(`${tag}: a ${run.verdict.kind} manager was offered the career`);
+    if (canCarryOn(run) || carryOnInClubManager(run) !== 'refused' || store.size) fail(`${tag}: a ${run.verdict.kind} manager was offered the career`);
     else refusals += 1;
     return;
   }
   if (!canCarryOn(run)) { fail(`${tag}: a ${run.verdict.kind} manager was not offered the career`); return; }
   if (run.verdict.kind === 'reprieve') reprieves += 1;
-  /* A career already saved: asked, and left byte for byte; then replaced on the say so. */
-  store.set(SAVE_KEY, otherRaw);
-  const first = carryOnInClubManager(run, { replace: false });
-  if (first !== 'confirm' || store.get(SAVE_KEY) !== otherRaw) { fail(`${tag}: a saved Club Manager career was replaced without the confirm (${first})`); return; }
-  store.set(SAVE_KEY, '{broken');
-  if (carryOnInClubManager(run, { replace: false }) !== 'confirm' || store.get(SAVE_KEY) !== '{broken') { fail(`${tag}: an unreadable save was replaced without the confirm`); return; }
-  asked += 1;
-  if (carryOnInClubManager(run, { replace: true }) !== 'saved') { fail(`${tag}: the handover was not saved`); return; }
+  /* Round 1592: the slot arms; the career in slot 1 stays and the job is in slot 2 when this returns. */
+  slotRuns += 1;
+  if (slotArms(run, tag) !== 'saved') { fail(`${tag}: the handover was not saved`); return; }
+  playOn(run, tag, league);
+  slotArmsRest(run, tag);
+}
+function playOn(run, tag, league) {
   const loaded = loadCareer();
   if (!loaded) { fail(`${tag}: Club Manager's loadCareer refused the handed over career`); return; }
   const sum = carryOnSummary(run);
@@ -539,17 +696,20 @@ for (const setup of handSetups) {
 for (const run of (sectionTwoArms ? Object.values(sectionTwoArms).flat() : []).filter(x => x.verdict?.kind === 'reprieve').slice(0, 6)) {
   checkHandover(run, `${run.setup.club} seed ${run.setup.seed} (section 2 reprieve)`, hotSeatPool().find(c => c.club === run.setup.club)?.leagueId ?? '?');
 }
-console.log(`   ${handSetups.length} setups in ${hotSeatLeagues().length} leagues: ${handed} handed over (${reprieves} on a reprieve) from ${leaguesHanded.size} leagues, ${toSeasonEnd} played to the end of the season, ${sackedInCm} sacked in Club Manager on the way, ${refusals} sacked runs refused, ${asked} asked before replacing, ${windowFirst} with a window before the next fixture, ${oldPostDropped} of the previous manager's messages left behind`);
+console.log(`   ${handSetups.length} setups in ${hotSeatLeagues().length} leagues: ${handed} handed over (${reprieves} on a reprieve) from ${leaguesHanded.size} leagues, ${toSeasonEnd} played to the end of the season, ${sackedInCm} sacked in Club Manager on the way, ${refusals} sacked runs refused, ${windowFirst} with a window before the next fixture, ${oldPostDropped} of the previous manager's messages left behind`);
 if (handed < HAND_FLOOR) fail(`only ${handed} careers were handed over (floor ${HAND_FLOOR})`);
 if (leaguesHanded.size < LEAGUE_FLOOR) fail(`careers were handed over from only ${leaguesHanded.size} leagues (floor ${LEAGUE_FLOOR})`);
 if (toSeasonEnd < SEASON_END_FLOOR) fail(`only ${toSeasonEnd} handed over seasons were played to the end (floor ${SEASON_END_FLOOR})`);
 if (refusals < REFUSAL_FLOOR) fail(`only ${refusals} sacked runs were checked for the refusal (floor ${REFUSAL_FLOOR})`);
+/* Round 1592: every slot arm ran, and held, on at least as many survivors as the handover floor. */
+console.log(`   slot arms on ${slotRuns} survivors: ${Object.entries(arms).map(([k, n]) => `${k} ${n}`).join(', ')}`);
+for (const [k, n] of Object.entries(arms)) if (n < HAND_FLOOR) fail(`the slot arm ${k} held on only ${n} of ${slotRuns} survivors (floor ${HAND_FLOOR})`);
 /* Only when section 5 itself stayed clean (review fix: it used to print under its own FAILs). */
-if (failures === failsBeforeFive) ok('every survivor\'s career opens in Club Manager on the hot seat\'s own table, with the takeover stamp and the card\'s numbers, and plays to the end of the season; a saved career is never replaced without the confirm, and a sacked manager is never offered one');
+if (failures === failsBeforeFive) ok('every survivor\'s career goes into an empty Club Manager slot and never over a career (a full house answers full, a picked career is kept aside first, a refused write moves nothing), opens on the hot seat\'s own table with the takeover stamp and the card\'s numbers, and plays to the end of the season; a sacked manager is never offered one');
 
 /* ---------- verdict ---------- */
 
-for (const f of [ENTRY, BUNDLE, controlCopy]) { if (f) { try { fs.unlinkSync(f); } catch { /* fine */ } } }
+for (const f of [ENTRY, BUNDLE, controlCopy, slotsCopy]) { if (f) { try { fs.unlinkSync(f); } catch { /* fine */ } } }
 if (failures) {
   console.error(`\nsimManagerHotSeat: ${failures} failure(s)`);
   process.exit(1);

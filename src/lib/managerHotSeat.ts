@@ -893,5 +893,5 @@ export type CarryOnResult = 'saved' | 'full' | 'changed' | 'refused' | 'failed';
 export function carryOnInClubManager(run: HotSeatRun, replace?: SlotView): CarryOnResult {
   if (!canCarryOn(run)) return 'refused';
   const res = handOverCareer(handoverState(run), replace);
-  return res.ok ? 'saved' : res.why;
+  return 'why' in res ? res.why : 'saved';
 }
