@@ -1,0 +1,5 @@
+simCmBoardVerdict could not run: ReferenceError: graded is not defined
+    at eval (eval at ladderOracle (file:///home/runner/work/ballpark-hero/ballpark-hero/scripts/simCmBoardVerdict.mjs:1095:10), <anonymous>:4:3)
+    at pureSection (file:///home/runner/work/ballpark-hero/ballpark-hero/scripts/simCmBoardVerdict.mjs:1116:20)
+    at main (file:///home/runner/work/ballpark-hero/ballpark-hero/scripts/simCmBoardVerdict.mjs:1276:7)
+    at process.processTicksAndRejections (node:internal/process/task_queues:104:5)
