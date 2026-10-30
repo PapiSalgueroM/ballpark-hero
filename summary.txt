@@ -1,0 +1,5 @@
+ctl-trimstranger exit=1 216s | simCmFreeAgencyFleet: CONTROL trimstranger FIRED: section 5 red
+ctl-trimbar exit=1 223s | simCmFreeAgencyFleet: CONTROL trimbar FIRED: section 5 red
+ctl-nodropout exit=1 224s | simCmFreeAgencyFleet: CONTROL nodropout FIRED: section 8 red
+ctl-dropreal exit=1 160s | simCmFreeAgencyFleet: CONTROL dropreal FIRED: section 8 red
+ctl-leftunsaid exit=1 156s | simCmFreeAgencyFleet: CONTROL leftunsaid FIRED: section 8 red (red: 1 (128), 4 (5), 8 (131))
