@@ -1,0 +1,8 @@
+simCmMatchDay exit=0 44s | simCmMatchDay: all sections green (918 matches: 462 home, 448 away, 8 neutral)
+simCmShootoutOrder exit=0 36s | simCmShootoutOrder: all sections passed
+simCmLeagueRules exit=0 95s | simCmLeagueRules: all checks passed (modern, eras, pure, drop4, cupless, shapes, chunks)
+tsc exit=0 115s | 
+simNoRivalNames exit=0 24s | No rival product names found. 0 findings.
+vitest exit=0 16s |    Duration  15.42s (transform 5.10s, setup 722ms, collect 15.15s, tests 14.10s, environment 5.18s, prepare 1.16s)
+simCmDecidingLeg exit=0 93s | simCmDecidingLeg: PASS, 19 of 19 checks green. A deciding second leg is judged by the tie, the record keeps the night, Hot Seat replays and hauls are counted.
+bv-dailies exit=0 81s | simCmBoardVerdict GREEN: 3 of 3 checks green (parts dailies, 79 s)

@@ -1,0 +1,8 @@
+tsc: node_modules/.bin/tsc --noEmit -p tsconfig.app.json
+simCmLeagueRules: node scripts/simCmLeagueRules.mjs
+simCmMatchDay: node scripts/simCmMatchDay.mjs
+simCmShootoutOrder: node scripts/simCmShootoutOrder.mjs
+simCmDecidingLeg: node scripts/simCmDecidingLeg.mjs
+bv-dailies: git worktree add -q .rcbase1 4bd20c993 && CM_BOARD_BASE=$PWD/.rcbase1 node scripts/simCmBoardVerdict.mjs --part=dailies
+simNoRivalNames: node scripts/simNoRivalNames.mjs
+vitest: node_modules/.bin/vitest run src/test/cmDecidingLegCard.test.tsx src/test/managerPenaltyMarkers.test.tsx src/test/managerQuickSimLegs.test.tsx src/test/cmReportBoardWord.test.tsx src/test/managerScorerMarks.test.tsx src/lib/clubManagerReportedScorers.test.ts --testTimeout=300000 --hookTimeout=120000
