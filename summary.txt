@@ -1,0 +1,8 @@
+ctl-leftunsaid exit=1 254s | simCmFreeAgencyFleet: CONTROL leftunsaid FIRED: section 8 red (red: 1 (128), 4 (5), 8 (131))
+ctl-ledgeroff exit=1 263s | simCmFreeAgencyFleet: CONTROL ledgeroff FIRED: section 6 red
+ctl-nodropout exit=1 276s | simCmFreeAgencyFleet: CONTROL nodropout FIRED: section 8 red
+ctl-staleseason exit=1 266s | simCmFreeAgencyFleet: CONTROL staleseason FIRED: section 6 red
+ctl-nofilllink exit=1 265s | simCmFreeAgencyFleet: CONTROL nofilllink FIRED: section 6 red
+ctl-noloanrow exit=1 264s | simCmFreeAgencyFleet: CONTROL noloanrow FIRED: section 7 red
+fa-nosummer exit=1 108s | simFreeAgents: 2 failure(s)
+ctl-norenewloan exit=1 198s | simCmFreeAgencyFleet: CONTROL norenewloan FIRED: section 7 red
