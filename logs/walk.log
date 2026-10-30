@@ -1,0 +1,19 @@
+  ok   phone: the review lists 6 final year men
+  ok   phone: Continue is shut: "Answer 6 deals first"
+  ok   phone: letting a man go moves nothing on the page (scroll 1155 to 1155, tile top 212 to 212, height 420 to 420)
+  ok   phone: Renew on Jamie Vaszary (Youth) renewed him on the save (1 to 4 years, wage 11 to 28k, budget 440.25 to 435.3)
+  ok   phone: a renewal keeps the row and the page still (height 420 to 420)
+  ok   phone: Let the rest go opens Continue: "Continue to Season 6"
+  ok   phone: the ? opens the rules
+  ok   phone: no sideways scroll (0 px)
+  ok   phone: no page errors
+  ok   desktop: the review lists 6 final year men
+  ok   desktop: Continue is shut: "Answer 6 deals first"
+  ok   desktop: letting a man go moves nothing on the page (scroll 958 to 958, tile top 240 to 240, height 420 to 420)
+  ok   desktop: Renew on Jamie Vaszary (Youth) renewed him on the save (1 to 4 years, wage 11 to 28k, budget 440.25 to 435.3)
+  ok   desktop: a renewal keeps the row and the page still (height 420 to 420)
+  ok   desktop: Let the rest go opens Continue: "Continue to Season 6"
+  ok   desktop: the ? opens the rules
+  ok   desktop: no sideways scroll (0 px)
+  ok   desktop: no page errors
+walk1597: green
