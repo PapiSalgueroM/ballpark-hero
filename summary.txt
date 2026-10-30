@@ -1,0 +1,8 @@
+head exit=0 0s | main c0c66e087 is an ancestor
+sim exit=0 5s | simBingoClubCounts: GREEN, every section held
+c-window exit=1 5s | simBingoClubCounts: CONTROL=window FIRED (4 failures; section 1: 2, section 4: 2)
+simNoRivalNames exit=0 29s | No rival product names found. 0 findings.
+simStorageWrites exit=0 4s | simStorageWrites: all green (owed: 12)
+dashes exit=0 0s | dashes: 0 in 1 files
+simHarnessAnchors exit=0 62s | simHarnessAnchors: green. Every harness parses and none carries an unmatchable anchor.
+tsc exit=0 90s | 
