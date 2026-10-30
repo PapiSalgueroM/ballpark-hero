@@ -1,0 +1,7 @@
+#!build
+#!playwright
+#!serial
+# Release BU lane c2: the Bingo club rules walk with its wrongtile and base1571 controls (each exit 1).
+playBingoClubRules: CI=1 SIM_NETWORK=offline RC_OUT=$RC_OUT node scripts/playBingoClubRules.mjs
+ctl-wrongtile: CI=1 SIM_NETWORK=offline PLAY_BINGO_CLUBS_CONTROL=wrongtile RC_OUT=$RC_OUT/wrongtile node scripts/playBingoClubRules.mjs
+ctl-base1571: git worktree add -q /tmp/base1571 32baab916 && ln -s "$PWD/node_modules" /tmp/base1571/node_modules && (cd /tmp/base1571 && node_modules/.bin/vite build --outDir /tmp/base1571-dist > /tmp/base1571-build.log 2>&1; tail -2 /tmp/base1571-build.log) && CI=1 SIM_NETWORK=offline PLAY_BINGO_CLUBS_CONTROL=base1571 PLAY_BINGO_BUILD=/tmp/base1571-dist PLAY_BINGO_PORT=4197 RC_OUT=$RC_OUT/base1571 node scripts/playBingoClubRules.mjs
