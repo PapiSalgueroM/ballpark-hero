@@ -26,7 +26,9 @@ import { createClient } from '@supabase/supabase-js';
 import { TRANSFER_OVERLAY_2026 } from './transferOverlay2026.mjs';
 import { DB_TO_ENGINE } from './lib/dbClubNames.mjs';
 import { POS_MAP, ratingOf, gbpM } from './lib/cmValueCurve.mjs';
-// Round 1600: the file is written on curve 2 (stamped, every man at his 1 August 2026 age) by the shared library.
+// Round 1600: the file is written on curve 2 (stamped, each age moved on to 1 August 2026 by the rule in
+// scripts/lib/cmAges.mjs: exact where a birth date is on file, otherwise a year over for a man born after 1 August)
+// by the shared library.
 import { stampedSquads, agedSquads } from './lib/cmSquadAges.mjs';
 
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
@@ -484,7 +486,7 @@ out += `};\n`;
    throws naming the man: run scripts/genCmAgesBasis2026.mjs for the men who moved, then bake again. */
 const curve2 = agedSquads(stampedSquads(out), JSON.parse(fs.readFileSync(path.join(ROOT, 'scripts/data/cmAgesBasis2026.json'), 'utf8')));
 out = curve2.text;
-console.log(`Curve 2: ${curve2.rows} men at their 1 August 2026 age, ${curve2.moved} of them moved off the table's age`);
+console.log(`Curve 2: ${curve2.rows} men with ages moved on to 1 August 2026 (exact only where a birth date is on file), ${curve2.moved} of them moved off the table's age`);
 fs.writeFileSync(path.join(ROOT, 'src/data/clubManagerRosters.ts'), out);
 console.log(`Wrote src/data/clubManagerRosters.ts (${(out.length / 1024).toFixed(0)}KB), ${partial.length} partial clubs`);
 

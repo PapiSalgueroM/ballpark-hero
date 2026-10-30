@@ -4,8 +4,9 @@
  * either side of the flip (simCmLevelReads, simCmDailyView).
  *
  * CURVE 2 means two things in a squads file, and nothing else: its META says `curve: 2`, so the engine reads each
- * man's age at load (src/data/clubManagerWorldRosters.ts), and each man's `a` is his age on 1 August 2026 as
- * scripts/data/cmAgesBasis2026.json resolves it through the rule in scripts/lib/cmAges.mjs. His `r` stays his value
+ * man's age at load (src/data/clubManagerWorldRosters.ts), and each man's `a` is the age for 1 August 2026 that
+ * scripts/data/cmAgesBasis2026.json resolves through the rule in scripts/lib/cmAges.mjs: exact where a birth date is
+ * on file, otherwise the table's age moved on, which is a year over for a man born after 1 August. His `r` stays his value
  * rating, the level, on either curve.
  *
  * Pure text in, text out. Every function fails closed: a basis that does not line up with the squads, man for man
@@ -31,7 +32,7 @@ export function stampedSquads(text) {
   return isStamped(lf) ? lf : lf.replace(META_OPEN, `${META_OPEN}${STAMP}`);
 }
 
-/** One basis line's age on 1 August 2026: [table age, row year, row id, how, born?, value rating]. */
+/** One basis line's age for 1 August 2026 under the rule (exact only for a 'born' line): [table age, row year, row id, how, born?, value rating]. */
 export function augustOf(line) {
   const [age, year, id, how, born] = line;
   if (how === 'born') return ageOn(born, AGES_AS_OF);

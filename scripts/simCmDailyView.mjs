@@ -6,7 +6,7 @@
  *
  * THREE ARMS of the real engine and both dailies, bundled with esbuild:
  *   A    the files as shipped (the world every day so far was dealt on).
- *   F    the main squads file flipped (stamped curve 2, every man at his 1 August 2026 age: scripts/lib/cmSquadAges.mjs),
+ *   F    the main squads file flipped (stamped curve 2, each age moved on to 1 August 2026 by scripts/lib/cmSquadAges.mjs),
  *        the view in place: the release as it will ship.
  *   F0   the same flip with the view taken out of onStaticWorld: what the release would deal with no view.
  *
