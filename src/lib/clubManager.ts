@@ -6416,7 +6416,8 @@ export function buildCustomSquad(spec: CustomClubSpec, eraId?: string): CMPlayer
       value: customFounderValue(rating, eraId, age),
       generated: true,
     };
-    const saleRatio = customFounderSaleRatio(founder.value as number, customFounderValue(ceilingRating, eraId));
+    /* Round 1600: the same man at the ceiling is the same age, so his price there reads the same age too. */
+    const saleRatio = customFounderSaleRatio(founder.value as number, customFounderValue(ceilingRating, eraId, age));
     if (aboveCeiling && saleRatio < 1) founder.founderSaleRatio = saleRatio;
     return founder;
   }));

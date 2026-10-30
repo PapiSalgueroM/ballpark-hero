@@ -224,7 +224,7 @@ if (CONTROL === 'realtoo') {
 if (CONTROL === 'nosalecap') live = rewrite(live, SALE_CAP_LINE, '    const worth = p.value;\n', 'control nosalecap');
 /* The cap lowers the founder's own value too, not just his sale price. */
 if (CONTROL === 'capall') {
-  live = rewrite(live, VALUE_LINE, '      value: Math.min(customFounderValue(rating, eraId, age), customFounderValue(ceilingRating, eraId)),\n', 'control capall');
+  live = rewrite(live, VALUE_LINE, '      value: Math.min(customFounderValue(rating, eraId, age), customFounderValue(ceilingRating, eraId, age)),\n', 'control capall');
 }
 /* The bill based cap only, at the founding and on load. */
 if (CONTROL === 'tightcap') {
@@ -445,6 +445,9 @@ const realCaps = [];
         const k = `${era}|${p.rating}|${ageBand(p.age)}`;
         if (!realByRating.has(k)) realByRating.set(k, []);
         realByRating.get(k).push(p.value);
+        const ka = `${era}|${p.rating}|a${p.age}`;
+        if (!realByRating.has(ka)) realByRating.set(ka, []);
+        realByRating.get(ka).push(p.value);
         const e = `${era}|${p.rating}`;
         if (!realByEraRating.has(e)) realByEraRating.set(e, []);
         realByEraRating.get(e).push(p.value);
@@ -453,6 +456,8 @@ const realCaps = [];
     }));
   }
   const manByMan = [];
+  const manByBand = {};
+  const manByAge = [];
   const topEnd = [];
   const ratios = [];
   const byCfg = {};
@@ -471,7 +476,14 @@ const realCaps = [];
           for (const p of f) {
             if (p.value !== cm.customFounderValue(p.rating, era, p.age)) wrongValue += 1;
             const same = realByRating.get(`${era}|${p.rating}|${ageBand(p.age)}`) ?? [];
-            if (same.length >= 8) manByMan.push(p.value / median(same));
+            if (same.length >= 8) {
+              manByMan.push(p.value / median(same));
+              (manByBand[`${era === 'now' ? 'now' : 'past'} band ${ageBand(p.age)}`] ??= []).push(p.value / median(same));
+            }
+            /* Round 1600, printed only: the same man against real players of his exact age, the grain the age
+               read prices at (a band spans up to four years of it). */
+            const sameAge = realByRating.get(`${era}|${p.rating}|a${p.age}`) ?? [];
+            if (sameAge.length >= 8) manByAge.push(p.value / median(sameAge));
             /* Historic founders above the uplift pivot, against the era's real
                players the engine rates within a point of him. */
             if (era !== 'now' && p.rating > 80) {
@@ -499,6 +511,8 @@ const realCaps = [];
     fail(`a created squad's value a head runs p10 ${f2(pct(ratios, 0.1))}, p50 ${f2(median(ratios))}, p90 ${f2(pct(ratios, 0.9))} of the real squads of its level, outside p10 ${BAND_P10}, p50 ${BAND_P50.join(' to ')}, p90 ${BAND_P90}`);
   } else ok(`a created squad's value a head runs p10 ${f2(pct(ratios, 0.1))}, p50 ${f2(median(ratios))}, p90 ${f2(pct(ratios, 0.9))} of the real squads of its level in its league (bands p10 ${BAND_P10}, p50 ${BAND_P50.join(' to ')}, p90 ${BAND_P90})`);
   console.log(`   man by man, ${manByMan.length} founders against the median real player of the same era, rating and age band (8 or more of them): p10 ${f2(pct(manByMan, 0.1))}, p50 ${f2(median(manByMan))}, p90 ${f2(pct(manByMan, 0.9))}`);
+  console.log(`   by age band (0 is 21 or under, 1 is 22 to 24, 2 is 25 to 28, 3 is 29 to 31): ${Object.entries(manByBand).sort().map(([k, v]) => `${k} p10 ${f2(pct(v, 0.1))} p50 ${f2(median(v))} p90 ${f2(pct(v, 0.9))} (${v.length})`).join('; ')}`);
+  console.log(`   the same founders against real players of their exact age (8 or more, ${manByAge.length} men): p10 ${f2(pct(manByAge, 0.1))}, p50 ${f2(median(manByAge))}, p90 ${f2(pct(manByAge, 0.9))}`);
   if (manByMan.length < 3000) fail(`only ${manByMan.length} founders had 8 real players of their era, rating and age band to compare with`);
   else if (!(pct(manByMan, 0.1) >= MAN_P10 && inBand(median(manByMan), MAN_P50) && pct(manByMan, 0.9) <= MAN_P90)) {
     fail(`a founder is worth p10 ${f2(pct(manByMan, 0.1))}, p50 ${f2(median(manByMan))}, p90 ${f2(pct(manByMan, 0.9))} of the real players of his era, rating and age band, outside p10 ${MAN_P10}, p50 ${MAN_P50.join(' to ')}, p90 ${MAN_P90}`);
