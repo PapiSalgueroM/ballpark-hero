@@ -1,0 +1,8 @@
+#!serve
+#!playwright
+sweepWeight-head: SWEEP_OFFLINE=1 node scripts/sweepWeight.mjs
+sweepWeight-base: git worktree add -q .rcbase3 4bd20c993 && cd .rcbase3 && ../node_modules/.bin/vite build > /dev/null 2>&1 && (node scripts/lib/hostLikeServer.mjs dist 4174 > /dev/null 2>&1 &) && sleep 5 && BASE=http://localhost:4174 SWEEP_OFFLINE=1 node scripts/sweepWeight.mjs
+gathered-base: git worktree add -q .rcbase1 4bd20c993 && cd .rcbase1 && node scripts/simClubManagerGathered.mjs
+gathered-head: node scripts/simClubManagerGathered.mjs
+deadline-base: git worktree add -q .rcbase2 4bd20c993 && cd .rcbase2 && node scripts/simClubManagerDecisionDeadline.mjs
+deadline-head-coreref: CM_DEADLINE_CORE_REF=HEAD node scripts/simClubManagerDecisionDeadline.mjs

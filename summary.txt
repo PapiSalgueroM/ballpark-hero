@@ -1,0 +1,7 @@
+build exit=0 23s | [dukb] inlined 1 stylesheet(s) and 1 module(s) into 181 snapshots (11 left alone)
+gathered-base exit=1 2s | simClubManagerGathered: 1 failure(s) (G 1)
+gathered-head exit=1 1s | simClubManagerGathered: 1 failure(s) (G 1)
+deadline-base exit=1 1s | Node.js v24.22.1
+deadline-head-coreref exit=0 5s | simClubManagerDecisionDeadline normal: green.
+sweepWeight-head exit=1 29s | sweepWeight: 2 failures
+sweepWeight-base exit=0 60s | sweepWeight: green. Every page is inside its budget, and the budgets came down this round.
