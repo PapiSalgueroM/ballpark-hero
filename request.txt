@@ -1,0 +1,4 @@
+tsc: node_modules/.bin/tsc --noEmit -p tsconfig.app.json
+base: git worktree add -q .rcbase 14a9af704 && cp scripts/simCmFreeAgencyFleet.mjs .rcbase/scripts/ && CM_FA_BASE=14a9af704 CM_FA_WRITE_OLD=$RC_OUT/cmFreeAgencyOldSaves.json node .rcbase/scripts/simCmFreeAgencyFleet.mjs && CM_FA_SEASON_ONE=1 node .rcbase/scripts/simCmFreeAgencyFleet.mjs > $RC_OUT/s1-base.txt && CM_FA_SEASON_ONE=1 node scripts/simCmFreeAgencyFleet.mjs > $RC_OUT/s1-branch.txt && diff $RC_OUT/s1-base.txt $RC_OUT/s1-branch.txt && echo SEASON_ONE_IDENTICAL; CM_FA_SKIP_OLD=1 node .rcbase/scripts/simCmFreeAgencyFleet.mjs
+fleet: CM_FA_SKIP_OLD=1 node scripts/simCmFreeAgencyFleet.mjs
+simFreeAgents: node scripts/simFreeAgents.mjs

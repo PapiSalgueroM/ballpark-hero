@@ -1,0 +1,4 @@
+tsc exit=0 68s | 
+fleet exit=1 150s | simCmFreeAgencyFleet: RED, sections 2 (34)
+simFreeAgents exit=1 89s | simFreeAgents: 1 failure(s)
+base exit=1 171s | simCmFreeAgencyFleet: RED, sections 1 (404), 2 (1)

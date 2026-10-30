@@ -1,0 +1,13 @@
+  Everton now none: 2542c616d103f46846c3
+  Everton now eleven: a248de12dd3f2cc32c5e
+  Villarreal now none: 970679380fbda9d3fefd
+  Villarreal now eleven: 9c3512dc7b0a73e3a170
+  Freiburg now none: 6758324d94c970ef322d
+  Freiburg now eleven: 9120a5349ee0206f329b
+  Ajax now none: 9286a12ed1229acd2783
+  Ajax now eleven: 4dd8bb08ca6bea41eabb
+  Braga now none: 70fffb6a4459eb8e98ba
+  Braga now eleven: 1a99e39ae2c69e2c05a6
+  Southampton era2015 none: e7901be6c50b0dbace0b
+  Southampton era2015 eleven: 90d6f2c2f75e5681f9a1
+simCmFreeAgencyFleet: season one hashes printed
