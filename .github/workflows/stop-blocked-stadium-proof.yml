@@ -1,0 +1,31 @@
+name: Stop only the blocked Stadium proof
+on:
+  push:
+    branches: [codex/stadium-proof-stop-20261030]
+permissions:
+  actions: write
+  contents: read
+jobs:
+  stop:
+    if: github.ref == 'refs/heads/codex/stadium-proof-stop-20261030'
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - name: Verify the exact owned proof before stopping it
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const assert = require('node:assert/strict');
+            assert.equal(context.repo.owner, 'PapiSalgueroM');
+            assert.equal(context.repo.repo, 'ballpark-hero');
+            const request = { ...context.repo, run_id: 41001903471 };
+            const { data: run } = await github.rest.actions.getWorkflowRun(request);
+            assert.equal(run.head_sha, '9db32ac2804dfda3011cdc91c590f4c15a60cf24');
+            assert.equal(run.head_branch, 'codex/stadium-plan-qualified-v3-20261030');
+            assert.equal(run.path, '.github/workflows/stadium-plan-qualified.yml');
+            core.info(JSON.stringify({ id: run.id, head: run.head_sha, status: run.status, conclusion: run.conclusion }));
+            if (run.status === 'completed') { core.info('Already completed, no cancellation request sent.'); return; }
+            assert.equal(run.status, 'in_progress');
+            const response = await github.rest.actions.cancelWorkflowRun(request);
+            assert.equal(response.status, 202);
+            core.info('Cancellation accepted for the single verified blocked proof. This is not product validation.');
