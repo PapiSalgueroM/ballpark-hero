@@ -1,0 +1,12 @@
+so-noskip exit=1 54s | simCmShootoutOrder: 29 FAILURE(S)
+so-ignoreorder exit=1 55s | simCmShootoutOrder: 30 FAILURE(S)
+so-nocap exit=1 55s | simCmShootoutOrder: 4 FAILURE(S)
+so-nooppkeeper exit=1 50s | simCmShootoutOrder: 4 FAILURE(S)
+so-ownkeeper exit=1 52s | simCmShootoutOrder: 2 FAILURE(S)
+so-wrongkeeper exit=1 54s | simCmShootoutOrder: 3 FAILURE(S)
+so-thinside exit=1 50s | simCmShootoutOrder: 3 FAILURE(S)
+so-oppworst exit=1 52s | simCmShootoutOrder: 30 FAILURE(S)
+so-nomakeup exit=1 52s | simCmShootoutOrder: 11 FAILURE(S)
+so-seed5 exit=0 47s | simCmShootoutOrder: all sections passed
+so-seed4 exit=0 52s | simCmShootoutOrder: all sections passed
+so-keeperonfull exit=1 55s | simCmShootoutOrder: 1 FAILURE(S)
