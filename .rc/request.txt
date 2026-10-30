@@ -1,0 +1,5 @@
+#!serve
+#!playwright
+#!serial
+walk-nohold: PLAY_CARDS_CONTROL=nohold ENGINES=chromium node scripts/playCmPlayerCard.mjs
+walk-nohold-2: PLAY_CARDS_CONTROL=nohold ENGINES=chromium node scripts/playCmPlayerCard.mjs
