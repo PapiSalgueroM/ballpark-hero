@@ -1,0 +1,3 @@
+#!serve
+#!playwright
+walk: cp .rc/x/mkwalk.mjs scripts/mkwalk.mjs && node scripts/mkwalk.mjs && node .rc/x/walk.mjs
