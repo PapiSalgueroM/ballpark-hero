@@ -1,0 +1,12 @@
+simWorldUcl: node scripts/simWorldUcl.mjs
+simUclSeasonOne: node scripts/simUclSeasonOne.mjs
+simUclField: node scripts/simUclField.mjs
+simWorldEditor: node scripts/simWorldEditor.mjs
+simManagerHotSeat: node scripts/simManagerHotSeat.mjs
+simDeadlineDay: node scripts/simDeadlineDay.mjs
+simDailyDeals: node scripts/simDailyDeals.mjs
+simClubManagerCalendar: node scripts/simClubManagerCalendar.mjs
+simClubManagerSaveSize: node scripts/simClubManagerSaveSize.mjs
+simCmShootoutOrder: node scripts/simCmShootoutOrder.mjs
+simExtraTime: node scripts/simExtraTime.mjs
+tieGolden: node scripts/recordWorldTieGolden1347.mjs --ref HEAD --check
