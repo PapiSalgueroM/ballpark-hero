@@ -145,8 +145,8 @@ const write = (file, body) => fs.writeFileSync(path.join(out, file), typeof body
 const fixtureBody = read(fixture), fixtureCopy = path.join(out, 'fixture-input-control.json');
 write('fixture-input-control.json', fixtureBody);
 const changedFixture = JSON.parse(fixtureBody), changedCoach = JSON.parse(changedFixture.sports.nfl.saves.coach);
-assert.notEqual(changedCoach.c, null, 'Fixture control changes an actual coaching input');
-changedCoach.c = null;
+assert.equal(typeof changedCoach.c.team, 'string', 'Fixture control changes an actual coaching input');
+changedCoach.c.team += ' fixture control';
 changedFixture.sports.nfl.saves.coach = JSON.stringify(changedCoach);
 const changedFixtureBody = JSON.stringify(changedFixture), inverseFixture = JSON.parse(changedFixtureBody);
 assert.notEqual(changedFixtureBody, fixtureBody);
