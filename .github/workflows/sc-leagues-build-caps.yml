@@ -1,0 +1,80 @@
+name: Soccer leagues build caps and existing readers only
+on:
+  push:
+    branches: [codex/soccer-centre-focus-caps-20261030]
+  workflow_dispatch:
+permissions:
+  contents: read
+concurrency:
+  group: sc-leagues-build-caps-${{ github.sha }}
+  cancel-in-progress: false
+jobs:
+  build-caps:
+    if: github.ref == 'refs/heads/codex/soccer-centre-focus-caps-20261030'
+    runs-on: ubuntu-latest
+    timeout-minutes: 45
+    env:
+      CI: 'true'
+      TZ: UTC
+      GIT_OPTIONAL_LOCKS: '0'
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.sha }}
+          fetch-depth: 0
+          persist-credentials: false
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: npm
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: External output and frozen source helper
+        shell: bash
+        run: |
+          set -euo pipefail
+          out="$RUNNER_TEMP/sc-leagues-build-caps-${GITHUB_RUN_ID}-a${GITHUB_RUN_ATTEMPT}"
+          mkdir "$out"
+          echo "SC_BUILD_CAPS_OUT=$out" >> "$GITHUB_ENV"
+          printf '%s  %s\n' 15a3ac153f510c0886981303be2e605fd5a5a7df15963d8ac834cc3fa8b154ae scripts/qa/proveSoccerLeagueBuildCaps.mjs | sha256sum --check
+          raw=0
+          node --check scripts/qa/proveSoccerLeagueBuildCaps.mjs > "$out/syntax.stdout.log" 2> "$out/syntax.stderr.log" || raw=$?
+          printf '%s\n' "$raw" > "$out/syntax.exit"
+          exit "$raw"
+      - name: Exact locked application dependencies
+        shell: bash
+        run: |
+          set -euo pipefail
+          raw=0
+          npm ci > "$SC_BUILD_CAPS_OUT/npm-ci.stdout.log" 2> "$SC_BUILD_CAPS_OUT/npm-ci.stderr.log" || raw=$?
+          printf '%s\n' "$raw" > "$SC_BUILD_CAPS_OUT/npm-ci.exit"
+          exit "$raw"
+      - name: Existing brand reader dependencies
+        shell: bash
+        run: |
+          set -euo pipefail
+          raw=0
+          python -m pip install fonttools pillow > "$SC_BUILD_CAPS_OUT/python-install.stdout.log" 2> "$SC_BUILD_CAPS_OUT/python-install.stderr.log" || raw=$?
+          printf '%s\n' "$raw" > "$SC_BUILD_CAPS_OUT/python-install.exit"
+          python --version > "$SC_BUILD_CAPS_OUT/python-version.log"
+          python -m pip freeze > "$SC_BUILD_CAPS_OUT/python-packages.log"
+          exit "$raw"
+      - name: Actual types build unchanged caps and all fifteen existing readers
+        shell: bash
+        run: |
+          set -euo pipefail
+          raw=0
+          node scripts/qa/proveSoccerLeagueBuildCaps.mjs > "$SC_BUILD_CAPS_OUT/controller.stdout.log" 2> "$SC_BUILD_CAPS_OUT/controller.stderr.log" || raw=$?
+          printf '%s\n' "$raw" > "$SC_BUILD_CAPS_OUT/controller.exit"
+          exit "$raw"
+      - name: Retain original source dist fonts and raw evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: sc-leagues-build-caps-${{ github.run_id }}-a${{ github.run_attempt }}
+          path: |
+            ${{ runner.temp }}/sc-leagues-build-caps-${{ github.run_id }}-a${{ github.run_attempt }}/
+            !${{ runner.temp }}/sc-leagues-build-caps-${{ github.run_id }}-a${{ github.run_attempt }}/matched-source/**
+          if-no-files-found: error
+          retention-days: 14
