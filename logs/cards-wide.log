@@ -1,0 +1,28 @@
+simCmPlayerCard: 48 careers of 4 seasons, engines: candidate, off, base; PAST_KEPT 10
+cards   10686 checks: my men at 214 points, 4687 rival book rows at season ends, on the first seed of every club; notes seen {"leftclub":8,"thin":1448}
+stream  9070 of 9070 faces equal to the off engine (every entry, season end and summer, with the draw count)
+stream  9070 of 9070 faces equal to the base engine (every entry, season end and summer, with the draw count)
+archive 9157 checks; 4137 rows written and checked, the most rows one man held 4
+cards   the namesake case at Coventry City: each of two men of one name reads his own row
+cap     Everton renewing, 15 seasons: 15 seasons, the most rows one man held 10
+size    candidate bytes a season: 162615 176321 187154 187052 191862 226722 202460 203620 206379 206371 206862 206791 211334 209656 211858
+size    archive bytes a season:   836 1220 1585 1944 2196 2546 2876 3006 3151 3319 3321 3545 3470 3191 3476
+size    season 15: 211858 bytes, of which the archive 3476; slope over seasons 4 to 15 1247 bytes a season (printed for the lead, not gated here)
+size    base bytes a season:      161753 175075 185543 185082 189640 224150 199558 200588 203202 203026 203515 203220 207838 206439 208356
+size    base season 15: 208356 bytes, slope 1119; candidate minus base: 862 1246 1611 1970 2222 2572 2902 3032 3177 3345 3347 3571 3496 3217 3502
+cap     a constructed squad of 25 archived 12 times holds 10 rows a man, the newest
+oldsave the committed save of Round 1052 (Sevilla): six entries on, book 34 (late round index), 146 rival rows held, kept from no line
+oldsave the committed save of Round 1052 (Sevilla): loaded clean, season 1 played out, pastFrom 1, 20 men with a row
+oldsave the committed second tier save (Valencia): six entries on, book 34 (late round index), 136 rival rows held, kept from no line
+oldsave the committed second tier save (Valencia): loaded clean, season 1 played out, pastFrom 1, 17 men with a row
+oldsave a save parked on its season 1 review: nothing on load or at the summer, pastFrom 2 after season 2
+dailies 38 states of 4 Hot Seat days and 2 Deadline Day runs looked at
+markup  12 of 12 renders (Squad, Stats, a leaders board, a club page, on 3 saves) with no provider byte equal to the base commit's
+  cards    11014 checks, 0 failed
+  archive  9157 checks, 0 failed
+  stream   96 checks, 0 failed
+  cap      332 checks, 0 failed
+  oldsave  12 checks, 0 failed
+  dailies  38 checks, 0 failed
+  markup   12 checks, 0 failed
+simCmPlayerCard: all green, 20661 checks (737s)
