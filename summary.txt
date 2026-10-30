@@ -1,0 +1,8 @@
+simClubManagerDugouts exit=0 1s | simClubManagerDugouts: all green (96 chairs, 0 partial)
+simManagers exit=1 40s | simManagers: 210 failure(s)
+simInventedNames exit=0 14s | simInventedNames: green. Every invented man on this site is invented all the way down.
+simNoInventedQuotes exit=0 28s | simNoInventedQuotes: green. No real player is quoted or accused anywhere.
+simManagers-fleet exit=1 106s | simManagers: 210 failure(s)
+simNoRivalNames exit=0 20s | No rival product names found. 0 findings.
+tsc exit=0 112s | 
+vitest-clubDetail exit=0 6s |    Duration  5.08s (transform 2.10s, setup 314ms, collect 7.20s, tests 3.09s, environment 1.61s, prepare 426ms)
