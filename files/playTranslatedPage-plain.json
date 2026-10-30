@@ -1,0 +1,682 @@
+{
+ "base": "http://localhost:4173",
+ "control": "",
+ "entry": "/assets/index-CA7EFQSM.js",
+ "seed": 20261008,
+ "checks": 43,
+ "failed": [],
+ "rows": [
+  {
+   "route": "/nba-my-career",
+   "view": "phone",
+   "mode": "keep",
+   "steps": 9,
+   "boundaryAt": null,
+   "stuckAt": null,
+   "notFound": 0,
+   "notFoundSample": "",
+   "guardLines": 0,
+   "guardOn": true,
+   "moved": 0,
+   "movedByTranslator": 0,
+   "movedList": [],
+   "swapped": 326,
+   "maxStale": 0,
+   "staleSample": [],
+   "staleList": [],
+   "staleAt": "",
+   "maxOrder": 0,
+   "orderList": [],
+   "takenBack": 0,
+   "judged": 290,
+   "live": {
+    "swaps": 326,
+    "removed": 0,
+    "inserted": 0,
+    "restored": 1,
+    "returned": 0
+   },
+   "age": {
+    "looks": 0,
+    "older": 0,
+    "wrong": 0,
+    "wrongAt": ""
+   },
+   "maxLeft": 0,
+   "undo": null,
+   "bank": null,
+   "directLive": {
+    "remove": "the copy left with it",
+    "insert": "in front",
+    "write": "shows 17",
+    "undo": "shows 18"
+   },
+   "pressed": [
+    "Let's Play!",
+    "🏀 2026The league as it is today. Full money, all 30 franchi",
+    "⏪ 2003-04 throwbackThe 29 team league of 2003-04: the SuperS",
+    "PG",
+    "SG",
+    "SF",
+    "PF",
+    "C"
+   ],
+   "dbBlocked": 1,
+   "blocked": [
+    "fonts.googleapis.com"
+   ],
+   "retry": null,
+   "direct": {
+    "remove": "quiet",
+    "insert": "quiet"
+   },
+   "unspanned": [],
+   "create": null,
+   "stepList": [
+    {
+     "name": "the page draws",
+     "ok": true,
+     "did": "",
+     "by": "",
+     "boundary": false,
+     "moved": 0,
+     "stale": 0,
+     "phase": "",
+     "age": null
+    },
+    {
+     "name": "press 1",
+     "ok": true,
+     "did": "Let's Play!",
+     "by": "mouse",
+     "boundary": false,
+     "moved": 0,
+     "stale": 0,
+     "phase": "",
+     "age": null
+    },
+    {
+     "name": "press 2",
+     "ok": true,
+     "did": "🏀 2026The league as it is today. Full money, all 30 franchi",
+     "by": "mouse",
+     "boundary": false,
+     "moved": 0,
+     "stale": 0,
+     "phase": "",
+     "age": null
+    },
+    {
+     "name": "press 3",
+     "ok": true,
+     "did": "⏪ 2003-04 throwbackThe 29 team league of 2003-04: the SuperS",
+     "by": "mouse",
+     "boundary": false,
+     "moved": 0,
+     "stale": 0,
+     "phase": "",
+     "age": null
+    },
+    {
+     "name": "press 4",
+     "ok": true,
+     "did": "PG",
+     "by": "mouse",
+     "boundary": false,
+     "moved": 0,
+     "stale": 0,
+     "phase": "",
+     "age": null
+    },
+    {
+     "name": "press 5",
+     "ok": true,
+     "did": "SG",
+     "by": "mouse",
+     "boundary": false,
+     "moved": 0,
+     "stale": 0,
+     "phase": "",
+     "age": null
+    },
+    {
+     "name": "press 6",
+     "ok": true,
+     "did": "SF",
+     "by": "mouse",
+     "boundary": false,
+     "moved": 0,
+     "stale": 0,
+     "phase": "",
+     "age": null
+    },
+    {
+     "name": "press 7",
+     "ok": true,
+     "did": "PF",
+     "by": "mouse",
+     "boundary": false,
+     "moved": 0,
+     "stale": 0,
+     "phase": "",
+     "age": null
+    },
+    {
+     "name": "press 8",
+     "ok": true,
+     "did": "C",
+     "by": "mouse",
+     "boundary": false,
+     "moved": 0,
+     "stale": 0,
+     "phase": "",
+     "age": null
+    }
+   ]
+  },
+  {
+   "route": "/nba-my-career",
+   "view": "desktop",
+   "mode": "keep",
+   "steps": 9,
+   "boundaryAt": null,
+   "stuckAt": null,
+   "notFound": 0,
+   "notFoundSample": "",
+   "guardLines": 0,
+   "guardOn": true,
+   "moved": 0,
+   "movedByTranslator": 0,
+   "movedList": [],
+   "swapped": 326,
+   "maxStale": 0,
+   "staleSample": [],
+   "staleList": [],
+   "staleAt": "",
+   "maxOrder": 0,
+   "orderList": [],
+   "takenBack": 0,
+   "judged": 290,
+   "live": {
+    "swaps": 326,
+    "removed": 0,
+    "inserted": 0,
+    "restored": 1,
+    "returned": 0
+   },
+   "age": {
+    "looks": 0,
+    "older": 0,
+    "wrong": 0,
+    "wrongAt": ""
+   },
+   "maxLeft": 0,
+   "undo": null,
+   "bank": null,
+   "directLive": {
+    "remove": "the copy left with it",
+    "insert": "in front",
+    "write": "shows 17",
+    "undo": "shows 18"
+   },
+   "pressed": [
+    "Let's Play!",
+    "🏀 2026The league as it is today. Full money, all 30 franchi",
+    "⏪ 2003-04 throwbackThe 29 team league of 2003-04: the SuperS",
+    "PG",
+    "SG",
+    "SF",
+    "PF",
+    "C"
+   ],
+   "dbBlocked": 1,
+   "blocked": [
+    "fonts.googleapis.com"
+   ],
+   "retry": null,
+   "direct": {
+    "remove": "quiet",
+    "insert": "quiet"
+   },
+   "unspanned": [],
+   "create": null,
+   "stepList": [
+    {
+     "name": "the page draws",
+     "ok": true,
+     "did": "",
+     "by": "",
+     "boundary": false,
+     "moved": 0,
+     "stale": 0,
+     "phase": "",
+     "age": null
+    },
+    {
+     "name": "press 1",
+     "ok": true,
+     "did": "Let's Play!",
+     "by": "mouse",
+     "boundary": false,
+     "moved": 0,
+     "stale": 0,
+     "phase": "",
+     "age": null
+    },
+    {
+     "name": "press 2",
+     "ok": true,
+     "did": "🏀 2026The league as it is today. Full money, all 30 franchi",
+     "by": "mouse",
+     "boundary": false,
+     "moved": 0,
+     "stale": 0,
+     "phase": "",
+     "age": null
+    },
+    {
+     "name": "press 3",
+     "ok": true,
+     "did": "⏪ 2003-04 throwbackThe 29 team league of 2003-04: the SuperS",
+     "by": "mouse",
+     "boundary": false,
+     "moved": 0,
+     "stale": 0,
+     "phase": "",
+     "age": null
+    },
+    {
+     "name": "press 4",
+     "ok": true,
+     "did": "PG",
+     "by": "mouse",
+     "boundary": false,
+     "moved": 0,
+     "stale": 0,
+     "phase": "",
+     "age": null
+    },
+    {
+     "name": "press 5",
+     "ok": true,
+     "did": "SG",
+     "by": "mouse",
+     "boundary": false,
+     "moved": 0,
+     "stale": 0,
+     "phase": "",
+     "age": null
+    },
+    {
+     "name": "press 6",
+     "ok": true,
+     "did": "SF",
+     "by": "mouse",
+     "boundary": false,
+     "moved": 0,
+     "stale": 0,
+     "phase": "",
+     "age": null
+    },
+    {
+     "name": "press 7",
+     "ok": true,
+     "did": "PF",
+     "by": "mouse",
+     "boundary": false,
+     "moved": 0,
+     "stale": 0,
+     "phase": "",
+     "age": null
+    },
+    {
+     "name": "press 8",
+     "ok": true,
+     "did": "C",
+     "by": "mouse",
+     "boundary": false,
+     "moved": 0,
+     "stale": 0,
+     "phase": "",
+     "age": null
+    }
+   ]
+  },
+  {
+   "route": "/nba-my-career",
+   "view": "phone",
+   "mode": "alter",
+   "steps": 9,
+   "boundaryAt": null,
+   "stuckAt": null,
+   "notFound": 0,
+   "notFoundSample": "",
+   "guardLines": 0,
+   "guardOn": true,
+   "moved": 0,
+   "movedByTranslator": 0,
+   "movedList": [],
+   "swapped": 326,
+   "maxStale": 0,
+   "staleSample": [],
+   "staleList": [],
+   "staleAt": "",
+   "maxOrder": 0,
+   "orderList": [],
+   "takenBack": 0,
+   "judged": 290,
+   "live": {
+    "swaps": 326,
+    "removed": 0,
+    "inserted": 0,
+    "restored": 1,
+    "returned": 0
+   },
+   "age": {
+    "looks": 0,
+    "older": 0,
+    "wrong": 0,
+    "wrongAt": ""
+   },
+   "maxLeft": 0,
+   "undo": null,
+   "bank": null,
+   "directLive": {
+    "remove": "the copy left with it",
+    "insert": "in front",
+    "write": "shows 17",
+    "undo": "shows 18"
+   },
+   "pressed": [
+    "Let's Play!",
+    "🏀 2026The league as it is today. Full money, all 30 franchi",
+    "⏪ 2003-04 throwbackThe 29 team league of 2003-04: the SuperS",
+    "PG",
+    "SG",
+    "SF",
+    "PF",
+    "C"
+   ],
+   "dbBlocked": 1,
+   "blocked": [
+    "fonts.googleapis.com"
+   ],
+   "retry": null,
+   "direct": {
+    "remove": "quiet",
+    "insert": "quiet"
+   },
+   "unspanned": [],
+   "create": null,
+   "stepList": [
+    {
+     "name": "the page draws",
+     "ok": true,
+     "did": "",
+     "by": "",
+     "boundary": false,
+     "moved": 0,
+     "stale": 0,
+     "phase": "",
+     "age": null
+    },
+    {
+     "name": "press 1",
+     "ok": true,
+     "did": "Let's Play!",
+     "by": "mouse",
+     "boundary": false,
+     "moved": 0,
+     "stale": 0,
+     "phase": "",
+     "age": null
+    },
+    {
+     "name": "press 2",
+     "ok": true,
+     "did": "🏀 2026The league as it is today. Full money, all 30 franchi",
+     "by": "mouse",
+     "boundary": false,
+     "moved": 0,
+     "stale": 0,
+     "phase": "",
+     "age": null
+    },
+    {
+     "name": "press 3",
+     "ok": true,
+     "did": "⏪ 2003-04 throwbackThe 29 team league of 2003-04: the SuperS",
+     "by": "mouse",
+     "boundary": false,
+     "moved": 0,
+     "stale": 0,
+     "phase": "",
+     "age": null
+    },
+    {
+     "name": "press 4",
+     "ok": true,
+     "did": "PG",
+     "by": "mouse",
+     "boundary": false,
+     "moved": 0,
+     "stale": 0,
+     "phase": "",
+     "age": null
+    },
+    {
+     "name": "press 5",
+     "ok": true,
+     "did": "SG",
+     "by": "mouse",
+     "boundary": false,
+     "moved": 0,
+     "stale": 0,
+     "phase": "",
+     "age": null
+    },
+    {
+     "name": "press 6",
+     "ok": true,
+     "did": "SF",
+     "by": "mouse",
+     "boundary": false,
+     "moved": 0,
+     "stale": 0,
+     "phase": "",
+     "age": null
+    },
+    {
+     "name": "press 7",
+     "ok": true,
+     "did": "PF",
+     "by": "mouse",
+     "boundary": false,
+     "moved": 0,
+     "stale": 0,
+     "phase": "",
+     "age": null
+    },
+    {
+     "name": "press 8",
+     "ok": true,
+     "did": "C",
+     "by": "mouse",
+     "boundary": false,
+     "moved": 0,
+     "stale": 0,
+     "phase": "",
+     "age": null
+    }
+   ]
+  },
+  {
+   "route": "/nba-my-career",
+   "view": "desktop",
+   "mode": "alter",
+   "steps": 9,
+   "boundaryAt": null,
+   "stuckAt": null,
+   "notFound": 0,
+   "notFoundSample": "",
+   "guardLines": 0,
+   "guardOn": true,
+   "moved": 0,
+   "movedByTranslator": 0,
+   "movedList": [],
+   "swapped": 327,
+   "maxStale": 0,
+   "staleSample": [],
+   "staleList": [],
+   "staleAt": "",
+   "maxOrder": 0,
+   "orderList": [],
+   "takenBack": 0,
+   "judged": 290,
+   "live": {
+    "swaps": 327,
+    "removed": 0,
+    "inserted": 0,
+    "restored": 1,
+    "returned": 0
+   },
+   "age": {
+    "looks": 0,
+    "older": 0,
+    "wrong": 0,
+    "wrongAt": ""
+   },
+   "maxLeft": 0,
+   "undo": null,
+   "bank": null,
+   "directLive": {
+    "remove": "the copy left with it",
+    "insert": "in front",
+    "write": "shows 17",
+    "undo": "shows 18"
+   },
+   "pressed": [
+    "Let's Play!",
+    "🏀 2026The league as it is today. Full money, all 30 franchi",
+    "⏪ 2003-04 throwbackThe 29 team league of 2003-04: the SuperS",
+    "PG",
+    "SG",
+    "SF",
+    "PF",
+    "C"
+   ],
+   "dbBlocked": 1,
+   "blocked": [
+    "fonts.googleapis.com"
+   ],
+   "retry": null,
+   "direct": {
+    "remove": "quiet",
+    "insert": "quiet"
+   },
+   "unspanned": [],
+   "create": null,
+   "stepList": [
+    {
+     "name": "the page draws",
+     "ok": true,
+     "did": "",
+     "by": "",
+     "boundary": false,
+     "moved": 0,
+     "stale": 0,
+     "phase": "",
+     "age": null
+    },
+    {
+     "name": "press 1",
+     "ok": true,
+     "did": "Let's Play!",
+     "by": "mouse",
+     "boundary": false,
+     "moved": 0,
+     "stale": 0,
+     "phase": "",
+     "age": null
+    },
+    {
+     "name": "press 2",
+     "ok": true,
+     "did": "🏀 2026The league as it is today. Full money, all 30 franchi",
+     "by": "mouse",
+     "boundary": false,
+     "moved": 0,
+     "stale": 0,
+     "phase": "",
+     "age": null
+    },
+    {
+     "name": "press 3",
+     "ok": true,
+     "did": "⏪ 2003-04 throwbackThe 29 team league of 2003-04: the SuperS",
+     "by": "mouse",
+     "boundary": false,
+     "moved": 0,
+     "stale": 0,
+     "phase": "",
+     "age": null
+    },
+    {
+     "name": "press 4",
+     "ok": true,
+     "did": "PG",
+     "by": "mouse",
+     "boundary": false,
+     "moved": 0,
+     "stale": 0,
+     "phase": "",
+     "age": null
+    },
+    {
+     "name": "press 5",
+     "ok": true,
+     "did": "SG",
+     "by": "mouse",
+     "boundary": false,
+     "moved": 0,
+     "stale": 0,
+     "phase": "",
+     "age": null
+    },
+    {
+     "name": "press 6",
+     "ok": true,
+     "did": "SF",
+     "by": "mouse",
+     "boundary": false,
+     "moved": 0,
+     "stale": 0,
+     "phase": "",
+     "age": null
+    },
+    {
+     "name": "press 7",
+     "ok": true,
+     "did": "PF",
+     "by": "mouse",
+     "boundary": false,
+     "moved": 0,
+     "stale": 0,
+     "phase": "",
+     "age": null
+    },
+    {
+     "name": "press 8",
+     "ok": true,
+     "did": "C",
+     "by": "mouse",
+     "boundary": false,
+     "moved": 0,
+     "stale": 0,
+     "phase": "",
+     "age": null
+    }
+   ]
+  }
+ ]
+}

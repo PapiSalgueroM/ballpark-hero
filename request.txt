@@ -1,0 +1,16 @@
+#!serve
+#!playwright
+# Release BT lane b2: the Team USA train's browser lines on the served build. Round 1557's walk pass (r1557/.tmp-fx/fix-1793277653/rc-f2w.txt: playNbaIntl and its nocurtain control, the US career walks its fix touched, the two qa walks it updated) and Round 1544's walk controls (rc-fW.txt: nobeat and lowbar, each on a tree built with one line changed). ctl-nocurtain, w44-nobeat and w44-lowbar must exit 1 with their control line. Extra: mutfix.mjs.
+# Left out: 1544's weight-head, weight-base and sweepWeight (the join measured every route on rBTg-w; sweepWeight rides the inherited lanes) and its walk (the same playNbaIntl run as walk here).
+walk: ENGINES=chromium node scripts/playNbaIntl.mjs
+ctl-nocurtain: git worktree add -q /tmp/nc HEAD && ln -s "$PWD/node_modules" /tmp/nc/node_modules && node .rc/x/mutfixB.mjs /tmp/nc nocurtain && (cd /tmp/nc && node_modules/.bin/vite build > /tmp/nc-build.log 2>&1) && PLAY_INTL_CONTROL=nocurtain PLAY_INTL_DIST=/tmp/nc/dist ENGINES=chromium node scripts/playNbaIntl.mjs
+playDepthChart: ENGINES=chromium node scripts/playDepthChart.mjs
+playCareerHub: ENGINES=chromium node scripts/playCareerHub.mjs
+playExtension: ENGINES=chromium node scripts/playExtension.mjs
+playUsCareerSaveSeam: ENGINES=chromium node scripts/playUsCareerSaveSeam.mjs
+playUsMarketTalk: ENGINES=chromium node scripts/playUsMarketTalk.mjs
+playTranslatedPage-nba: ONLY=/nba-my-career ENGINES=chromium node scripts/playTranslatedPage.mjs
+qa1085: node scripts/qa/numberFormatting1085.mjs --prefetch-fonts-only && node scripts/qa/numberFormatting1085.mjs
+qa1079: node scripts/qa/managerMatchPlans1079.mjs --prefetch-fonts-only && node scripts/qa/managerMatchPlans1079.mjs
+w44-nobeat: git worktree add -q /tmp/nob HEAD && ln -s "$PWD/node_modules" /tmp/nob/node_modules && sed -i 's/? sport.intl.pendingYear(career) : null;/? null : null;/' /tmp/nob/src/components/us-career/UsCareerBoard.tsx && test "$(grep -c '? null : null;' /tmp/nob/src/components/us-career/UsCareerBoard.tsx)" = 1 && (cd /tmp/nob && node_modules/.bin/vite build > /tmp/nob-build.log 2>&1) && PLAY_INTL_CONTROL=nobeat PLAY_INTL_DIST=/tmp/nob/dist RC_OUT="$RC_OUT/nobeat" node scripts/playNbaIntl.mjs
+w44-lowbar: git worktree add -q /tmp/low HEAD && ln -s "$PWD/node_modules" /tmp/low/node_modules && sed -i 's/^export const INTL_CALL_UP_OVR = 87;/export const INTL_CALL_UP_OVR = 95;/' /tmp/low/src/lib/nbaCareerIntlGate.ts && test "$(grep -c '^export const INTL_CALL_UP_OVR = 95;' /tmp/low/src/lib/nbaCareerIntlGate.ts)" = 1 && (cd /tmp/low && node_modules/.bin/vite build > /tmp/low-build.log 2>&1) && PLAY_INTL_CONTROL=lowbar PLAY_INTL_DIST=/tmp/low/dist RC_OUT="$RC_OUT/lowbar" node scripts/playNbaIntl.mjs

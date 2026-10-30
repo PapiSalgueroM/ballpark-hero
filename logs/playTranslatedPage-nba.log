@@ -1,0 +1,73 @@
+playTranslatedPage: http://localhost:4173, 1 page(s), views phone and desktop, text keep and alter
+  PASS  0. the served entry chunk (/assets/index-CA7EFQSM.js) holds the guard's off switch __DUKB_NO_TRANSLATE_GUARD__
+  PASS  0. the served entry chunk holds the guard's console line
+  PASS  0. the served entry chunk holds layer two's off switch __DUKB_NO_TRANSLATE_LIVE__
+
+/nba-my-career phone keep
+        note /nba-my-career phone keep: national team calls met 0, curtain lines 0
+  PASS  1. /nba-my-career phone keep: the translator ran: 326 text node(s) swapped, lang="pt"
+  PASS  1. /nba-my-career phone keep: the guard is installed on the page
+  PASS  8. /nba-my-career phone keep: asked directly, removing a moved node is quiet and inserting before one appends: removeChild quiet, insertBefore quiet
+  PASS  10. /nba-my-career phone keep: the page says what React holds, at every look: 290 element(s) with words of their own at the fullest look
+  PASS  11. /nba-my-career phone keep: asked directly, a string the translator took and the page then removes, inserts before or rewrites comes out right: removed: the copy left with it; inserted before: in front; rewritten 16 to 17: shows 17
+  PASS  12. /nba-my-career phone keep: no text the translator will not take again is back on the page
+  PASS  17. /nba-my-career phone keep: asked directly, a string layer two had refreshed still follows the page after the translator gives it back: rewritten to 17, taken again, given back, rewritten to 18: shows 18
+  PASS  5. /nba-my-career phone keep: the walk pressed at least two controls: 8: Let's Play! > 🏀 2026The league as i > ⏪ 2003-04 throwbackThe > PG > SG > SF > PF > C
+  PASS  6. /nba-my-career phone keep: the route error boundary never appeared
+  PASS  7. /nba-my-career phone keep: no NotFoundError
+
+/nba-my-career phone alter
+        note /nba-my-career phone alter: national team calls met 0, curtain lines 0
+  PASS  1. /nba-my-career phone alter: the translator ran: 326 text node(s) swapped, lang="pt"
+  PASS  1. /nba-my-career phone alter: the guard is installed on the page
+  PASS  8. /nba-my-career phone alter: asked directly, removing a moved node is quiet and inserting before one appends: removeChild quiet, insertBefore quiet
+  PASS  10. /nba-my-career phone alter: the page says what React holds, at every look: 290 element(s) with words of their own at the fullest look
+  PASS  11. /nba-my-career phone alter: asked directly, a string the translator took and the page then removes, inserts before or rewrites comes out right: removed: the copy left with it; inserted before: in front; rewritten 16 to 17: shows 17
+  PASS  12. /nba-my-career phone alter: no text the translator will not take again is back on the page
+  PASS  17. /nba-my-career phone alter: asked directly, a string layer two had refreshed still follows the page after the translator gives it back: rewritten to 17, taken again, given back, rewritten to 18: shows 18
+  PASS  5. /nba-my-career phone alter: the walk pressed at least two controls: 8: Let's Play! > 🏀 2026The league as i > ⏪ 2003-04 throwbackThe > PG > SG > SF > PF > C
+  PASS  6. /nba-my-career phone alter: the route error boundary never appeared
+  PASS  7. /nba-my-career phone alter: no NotFoundError
+
+/nba-my-career desktop keep
+        note /nba-my-career desktop keep: national team calls met 0, curtain lines 0
+  PASS  1. /nba-my-career desktop keep: the translator ran: 326 text node(s) swapped, lang="pt"
+  PASS  1. /nba-my-career desktop keep: the guard is installed on the page
+  PASS  8. /nba-my-career desktop keep: asked directly, removing a moved node is quiet and inserting before one appends: removeChild quiet, insertBefore quiet
+  PASS  10. /nba-my-career desktop keep: the page says what React holds, at every look: 290 element(s) with words of their own at the fullest look
+  PASS  11. /nba-my-career desktop keep: asked directly, a string the translator took and the page then removes, inserts before or rewrites comes out right: removed: the copy left with it; inserted before: in front; rewritten 16 to 17: shows 17
+  PASS  12. /nba-my-career desktop keep: no text the translator will not take again is back on the page
+  PASS  17. /nba-my-career desktop keep: asked directly, a string layer two had refreshed still follows the page after the translator gives it back: rewritten to 17, taken again, given back, rewritten to 18: shows 18
+  PASS  5. /nba-my-career desktop keep: the walk pressed at least two controls: 8: Let's Play! > 🏀 2026The league as i > ⏪ 2003-04 throwbackThe > PG > SG > SF > PF > C
+  PASS  6. /nba-my-career desktop keep: the route error boundary never appeared
+  PASS  7. /nba-my-career desktop keep: no NotFoundError
+
+/nba-my-career desktop alter
+        note /nba-my-career desktop alter: national team calls met 0, curtain lines 0
+  PASS  1. /nba-my-career desktop alter: the translator ran: 327 text node(s) swapped, lang="pt"
+  PASS  1. /nba-my-career desktop alter: the guard is installed on the page
+  PASS  8. /nba-my-career desktop alter: asked directly, removing a moved node is quiet and inserting before one appends: removeChild quiet, insertBefore quiet
+  PASS  10. /nba-my-career desktop alter: the page says what React holds, at every look: 290 element(s) with words of their own at the fullest look
+  PASS  11. /nba-my-career desktop alter: asked directly, a string the translator took and the page then removes, inserts before or rewrites comes out right: removed: the copy left with it; inserted before: in front; rewritten 16 to 17: shows 17
+  PASS  12. /nba-my-career desktop alter: no text the translator will not take again is back on the page
+  PASS  17. /nba-my-career desktop alter: asked directly, a string layer two had refreshed still follows the page after the translator gives it back: rewritten to 17, taken again, given back, rewritten to 18: shows 18
+  PASS  5. /nba-my-career desktop alter: the walk pressed at least two controls: 8: Let's Play! > 🏀 2026The league as i > ⏪ 2003-04 throwbackThe > PG > SG > SF > PF > C
+  PASS  6. /nba-my-career desktop alter: the route error boundary never appeared
+  PASS  7. /nba-my-career desktop alter: no NotFoundError
+
+EVERY WALK
+  page                 view     text   boundary                          NotFound  guard line  moved nodes  stale text  steps
+  /nba-my-career       phone    keep   none                              0         0           0            0           9
+  /nba-my-career       desktop  keep   none                              0         0           0            0           9
+  /nba-my-career       phone    alter  none                              0         0           0            0           9
+  /nba-my-career       desktop  alter  none                              0         0           0            0           9
+
+BY PAGE
+  /nba-my-career       broke in 0 of 4 walk(s); the guard printed its line in 0; moved nodes per walk 0, 0, 0, 0; stale text at most 0
+
+LAYER TWO on 4 page load(s): 1305 text node(s) seen taken, 0 removal(s) and 0 insert(s) put through, 4 string(s) handed back fresh, 0 node(s) taken up again after the translator gave them back. Text the translator will not take again, back on the page: 0.
+
+nothing left this machine: 4 request(s) to the database host aborted, other hosts aborted [fonts.googleapis.com], 0 screenshot(s) in /home/runner/work/_temp/rc-out/files/translated-plain
+0 call(s) in all named a node its parent no longer owned, each one a crash without the guard. Layer one had to fall back, and printed its line, on 0 of 4 page load(s).
+
+playTranslatedPage: 43 checks, 0 failed

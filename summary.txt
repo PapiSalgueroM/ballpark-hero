@@ -1,0 +1,13 @@
+build exit=0 35s | [dukb] inlined 1 stylesheet(s) and 1 module(s) into 181 snapshots (11 left alone)
+playDepthChart exit=0 23s | ALL DEPTH CHART WALK CHECKS PASSED
+playCareerHub exit=0 50s | playCareerHub: green. Four career games on live boxes, and every award on the screen has a year on it.
+ctl-nocurtain exit=1 88s | playNbaIntl: CONTROL nocurtain FIRED (walk (g): 4 runs at 320 measured from a scrolled page, 6 failures)
+walk exit=0 110s | playNbaIntl: green. The call, Go and its result's views, Rest, a reload mid beat, the 2027 World Cup's lines and no call at 80 or in 2005, at 320, 390 and 1280; 47 screen
+playExtension exit=0 43s | playExtension: green. The last year of a deal is a real fork in all four games.
+playUsCareerSaveSeam exit=0 34s | playUsCareerSaveSeam: 15 journeys, 71 checks, 0 failed
+playTranslatedPage-nba exit=0 14s | playTranslatedPage: 43 checks, 0 failed
+qa1085 exit=0 14s | Number formatting native: 6 actual route cases and 9 effective restored DOM controls passed.
+playUsMarketTalk exit=0 54s | playUsMarketTalk: 40 checks, 0 failed
+w44-nobeat exit=1 61s | playNbaIntl: CONTROL nobeat FIRED (walk (a) at 390 met no call, 1 failures)
+w44-lowbar exit=1 61s | playNbaIntl: CONTROL lowbar FIRED (walk (a) at 390 met no call, 1 failures)
+qa1079 exit=0 100s | PASS manager match plans native: 3 actual hook journeys, 12 effective restored DOM faults, independent engine previews and kickoff, reload and club isolation.

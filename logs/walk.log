@@ -1,0 +1,17 @@
+save E: seed 1544, bronze in 2004, 2 summer rows, the tile should read 7 honours
+save A: last season 2003, phase event, the gate's call 2004
+save B: last season 2003, phase season, the gate's call 2004
+save C: last season 2026, phase season, the gate's call 2027
+save D1: last season 2003, phase season, the gate's call none
+save D2: last season 2004, phase season, the gate's call none
+  g-320-k0: Continue tapped at scrollY 407; next "🪞 RIVALRY" arrived with its top at 56 in a 640 high view (scrollY 241)
+  g-320-k1: Continue tapped at scrollY 549; next "🪞 RIVALRY" arrived with its top at 56 in a 640 high view (scrollY 241)
+  g-320-k2: Continue tapped at scrollY 586; next "🪞 RIVALRY" arrived with its top at 56 in a 640 high view (scrollY 241)
+  g-320-k3: Continue tapped at scrollY 550; next the call arrived with its top at 56 in a 640 high view (scrollY 237)
+  g-390-k0: Continue tapped at scrollY 0; next "🪞 RIVALRY" arrived with its top at 297 in a 844 high view (scrollY 0)
+  g-390-k1: Continue tapped at scrollY 0; next "🪞 RIVALRY" arrived with its top at 297 in a 844 high view (scrollY 0)
+  g-320-call2006: Continue tapped at scrollY 647; next "🪞 RIVALRY" arrived with its top at 56 in a 640 high view (scrollY 241)
+  g-390-call2006: Continue tapped at scrollY 75; next "🪞 RIVALRY" arrived with its top at 222 in a 844 high view (scrollY 75)
+  g: 4 runs at 320 measured from a scrolled page (floor 2)
+  screenshots in /home/runner/work/_temp/rc-out/files: a-320-1-holding.png a-320-2-call.png a-320-3-result.png a-320-4-games.png a-320-5-bracket.png a-320-6-group-or-round.png a-320-7-summer-card.png a-390-1-holding.png a-390-2-call.png a-390-3-result.png a-390-4-games.png a-390-5-bracket.png a-390-6-group-or-round.png a-390-7-summer-card.png a-1280-1-holding.png a-1280-2-call.png a-1280-3-result.png a-1280-4-games.png a-1280-5-bracket.png a-1280-6-group-or-round.png a-1280-7-summer-card.png reload-390-asked-again.png b-390-hub.png c-320-call-2027.png f-320-1-case.png f-320-2-international.png f-320-3-summer-2004.png f-320-4-back-to-list.png f-320-5-back-to-case.png f-390-1-case.png f-390-2-international.png f-390-3-summer-2004.png f-390-4-back-to-list.png f-390-5-back-to-case.png f-1280-1-case.png f-1280-2-international.png f-1280-3-summer-2004.png f-1280-4-back-to-list.png f-1280-5-back-to-case.png g-320-k0-after-curtain.png g-320-k1-after-curtain.png g-320-k2-after-curtain.png g-320-k3-after-curtain.png g-390-k0-after-curtain.png g-390-k1-after-curtain.png g-320-call2006-after-curtain.png g-390-call2006-after-curtain.png
+playNbaIntl: green. The call, Go and its result's views, Rest, a reload mid beat, the 2027 World Cup's lines and no call at 80 or in 2005, at 320, 390 and 1280; 47 screenshots to look at.
