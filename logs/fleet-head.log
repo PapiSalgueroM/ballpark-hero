@@ -1,0 +1,2738 @@
+FLEET PATCHED src/components/front-office-shared/FleetGm.test.tsx seeds 4, 5, 6, 7, 8, 9 + mount block
+
+[1m[46m RUN [49m[22m [36mv3.2.7 [39m[90m/home/runner/work/ballpark-hero/ballpark-hero[39m
+
+Browserslist: browsers data (caniuse-lite) is 16 months old. Please run:
+  npx update-browserslist-db@latest
+  Why you should do it regularly: https://github.com/browserslist/update-db#readme
+[90mstdout[2m | src/components/front-office-shared/FleetGm.test.tsx[2m > [22m[2mnfl board: the default path[2m > [22m[2mseed 4|desk on: every checkpoint of two seasons is the base's
+[22m[39mFO_GM_CAREER|nfl|seed 4|desk on|15 checkpoints|start,presser,cut,sign,week 1,week 9,recap,answered,draft,summer,week 1,week 9,recap,draft,summer
+
+[90mstderr[2m | src/components/front-office-shared/FleetGm.test.tsx[2m > [22m[2mnfl board: the default path[2m > [22m[2mseed 4|desk off: every checkpoint of two seasons is the base's
+[22m[39mWarning: A suspended resource finished loading inside a test, but the event was not wrapped in act(...).
+
+When testing, code that resolves suspended data should be wrapped into act(...):
+
+act(() => {
+  /* finish loading suspended data */
+});
+/* assert on the output */
+
+This ensures that you're testing the behavior the user would see in the browser. Learn more at https://reactjs.org/link/wrap-tests-with-act
+Warning: A suspended resource finished loading inside a test, but the event was not wrapped in act(...).
+
+When testing, code that resolves suspended data should be wrapped into act(...):
+
+act(() => {
+  /* finish loading suspended data */
+});
+/* assert on the output */
+
+This ensures that you're testing the behavior the user would see in the browser. Learn more at https://reactjs.org/link/wrap-tests-with-act
+
+[90mstderr[2m | src/components/front-office-shared/FleetGm.test.tsx[2m > [22m[2mnfl board: the default path[2m > [22m[2mseed 4|desk off: every checkpoint of two seasons is the base's
+[22m[39mWarning: A suspended resource finished loading inside a test, but the event was not wrapped in act(...).
+
+When testing, code that resolves suspended data should be wrapped into act(...):
+
+act(() => {
+  /* finish loading suspended data */
+});
+/* assert on the output */
+
+This ensures that you're testing the behavior the user would see in the browser. Learn more at https://reactjs.org/link/wrap-tests-with-act
+Warning: A suspended resource finished loading inside a test, but the event was not wrapped in act(...).
+
+When testing, code that resolves suspended data should be wrapped into act(...):
+
+act(() => {
+  /* finish loading suspended data */
+});
+/* assert on the output */
+
+This ensures that you're testing the behavior the user would see in the browser. Learn more at https://reactjs.org/link/wrap-tests-with-act
+
+[90mstdout[2m | src/components/front-office-shared/FleetGm.test.tsx[2m > [22m[2mnfl board: the default path[2m > [22m[2mseed 4|desk off: every checkpoint of two seasons is the base's
+[22m[39mFO_GM_CAREER|nfl|seed 4|desk off|15 checkpoints|start,cut,sign,week 1,week 9,recap,answered,draft,summer,week 1,week 9,recap,answered,draft,summer
+
+[90mstderr[2m | src/components/front-office-shared/FleetGm.test.tsx[2m > [22m[2mnfl board: the default path[2m > [22m[2mseed 5|desk on: every checkpoint of two seasons is the base's
+[22m[39mWarning: A suspended resource finished loading inside a test, but the event was not wrapped in act(...).
+
+When testing, code that resolves suspended data should be wrapped into act(...):
+
+act(() => {
+  /* finish loading suspended data */
+});
+/* assert on the output */
+
+This ensures that you're testing the behavior the user would see in the browser. Learn more at https://reactjs.org/link/wrap-tests-with-act
+Warning: A suspended resource finished loading inside a test, but the event was not wrapped in act(...).
+
+When testing, code that resolves suspended data should be wrapped into act(...):
+
+act(() => {
+  /* finish loading suspended data */
+});
+/* assert on the output */
+
+This ensures that you're testing the behavior the user would see in the browser. Learn more at https://reactjs.org/link/wrap-tests-with-act
+
+[90mstderr[2m | src/components/front-office-shared/FleetGm.test.tsx[2m > [22m[2mnfl board: the default path[2m > [22m[2mseed 5|desk on: every checkpoint of two seasons is the base's
+[22m[39mWarning: A suspended resource finished loading inside a test, but the event was not wrapped in act(...).
+
+When testing, code that resolves suspended data should be wrapped into act(...):
+
+act(() => {
+  /* finish loading suspended data */
+});
+/* assert on the output */
+
+This ensures that you're testing the behavior the user would see in the browser. Learn more at https://reactjs.org/link/wrap-tests-with-act
+Warning: A suspended resource finished loading inside a test, but the event was not wrapped in act(...).
+
+When testing, code that resolves suspended data should be wrapped into act(...):
+
+act(() => {
+  /* finish loading suspended data */
+});
+/* assert on the output */
+
+This ensures that you're testing the behavior the user would see in the browser. Learn more at https://reactjs.org/link/wrap-tests-with-act
+
+[90mstdout[2m | src/components/front-office-shared/FleetGm.test.tsx[2m > [22m[2mnfl board: the default path[2m > [22m[2mseed 5|desk on: every checkpoint of two seasons is the base's
+[22m[39mFO_GM_CAREER|nfl|seed 5|desk on|15 checkpoints|start,presser,cut,sign,week 1,week 9,recap,draft,summer,week 1,week 9,recap,answered,draft,summer
+
+[90mstderr[2m | src/components/front-office-shared/FleetGm.test.tsx[2m > [22m[2mnfl board: the default path[2m > [22m[2mseed 5|desk off: every checkpoint of two seasons is the base's
+[22m[39mWarning: A suspended resource finished loading inside a test, but the event was not wrapped in act(...).
+
+When testing, code that resolves suspended data should be wrapped into act(...):
+
+act(() => {
+  /* finish loading suspended data */
+});
+/* assert on the output */
+
+This ensures that you're testing the behavior the user would see in the browser. Learn more at https://reactjs.org/link/wrap-tests-with-act
+Warning: A suspended resource finished loading inside a test, but the event was not wrapped in act(...).
+
+When testing, code that resolves suspended data should be wrapped into act(...):
+
+act(() => {
+  /* finish loading suspended data */
+});
+/* assert on the output */
+
+This ensures that you're testing the behavior the user would see in the browser. Learn more at https://reactjs.org/link/wrap-tests-with-act
+
+[90mstderr[2m | src/components/front-office-shared/FleetGm.test.tsx[2m > [22m[2mnfl board: the default path[2m > [22m[2mseed 5|desk off: every checkpoint of two seasons is the base's
+[22m[39mWarning: A suspended resource finished loading inside a test, but the event was not wrapped in act(...).
+
+When testing, code that resolves suspended data should be wrapped into act(...):
+
+act(() => {
+  /* finish loading suspended data */
+});
+/* assert on the output */
+
+This ensures that you're testing the behavior the user would see in the browser. Learn more at https://reactjs.org/link/wrap-tests-with-act
+Warning: A suspended resource finished loading inside a test, but the event was not wrapped in act(...).
+
+When testing, code that resolves suspended data should be wrapped into act(...):
+
+act(() => {
+  /* finish loading suspended data */
+});
+/* assert on the output */
+
+This ensures that you're testing the behavior the user would see in the browser. Learn more at https://reactjs.org/link/wrap-tests-with-act
+
+[90mstdout[2m | src/components/front-office-shared/FleetGm.test.tsx[2m > [22m[2mnfl board: the default path[2m > [22m[2mseed 5|desk off: every checkpoint of two seasons is the base's
+[22m[39mFO_GM_CAREER|nfl|seed 5|desk off|14 checkpoints|start,cut,sign,week 1,week 9,recap,draft,summer,week 1,week 9,recap,answered,draft,summer
+
+[90mstderr[2m | src/components/front-office-shared/FleetGm.test.tsx[2m > [22m[2mnfl board: the default path[2m > [22m[2mseed 6|desk on: every checkpoint of two seasons is the base's
+[22m[39mWarning: A suspended resource finished loading inside a test, but the event was not wrapped in act(...).
+
+When testing, code that resolves suspended data should be wrapped into act(...):
+
+act(() => {
+  /* finish loading suspended data */
+});
+/* assert on the output */
+
+This ensures that you're testing the behavior the user would see in the browser. Learn more at https://reactjs.org/link/wrap-tests-with-act
+Warning: A suspended resource finished loading inside a test, but the event was not wrapped in act(...).
+
+When testing, code that resolves suspended data should be wrapped into act(...):
+
+act(() => {
+  /* finish loading suspended data */
+});
+/* assert on the output */
+
+This ensures that you're testing the behavior the user would see in the browser. Learn more at https://reactjs.org/link/wrap-tests-with-act
+
+[90mstderr[2m | src/components/front-office-shared/FleetGm.test.tsx[2m > [22m[2mnfl board: the default path[2m > [22m[2mseed 6|desk on: every checkpoint of two seasons is the base's
+[22m[39mWarning: A suspended resource finished loading inside a test, but the event was not wrapped in act(...).
+
+When testing, code that resolves suspended data should be wrapped into act(...):
+
+act(() => {
+  /* finish loading suspended data */
+});
+/* assert on the output */
+
+This ensures that you're testing the behavior the user would see in the browser. Learn more at https://reactjs.org/link/wrap-tests-with-act
+Warning: A suspended resource finished loading inside a test, but the event was not wrapped in act(...).
+
+When testing, code that resolves suspended data should be wrapped into act(...):
+
+act(() => {
+  /* finish loading suspended data */
+});
+/* assert on the output */
+
+This ensures that you're testing the behavior the user would see in the browser. Learn more at https://reactjs.org/link/wrap-tests-with-act
+
+[90mstdout[2m | src/components/front-office-shared/FleetGm.test.tsx[2m > [22m[2mnfl board: the default path[2m > [22m[2mseed 6|desk on: every checkpoint of two seasons is the base's
+[22m[39mFO_GM_CAREER|nfl|seed 6|desk on|14 checkpoints|start,presser,cut,sign,week 1,week 9,recap,draft,summer,week 1,week 9,recap,draft,summer
+
+[90mstderr[2m | src/components/front-office-shared/FleetGm.test.tsx[2m > [22m[2mnfl board: the default path[2m > [22m[2mseed 6|desk off: every checkpoint of two seasons is the base's
+[22m[39mWarning: A suspended resource finished loading inside a test, but the event was not wrapped in act(...).
+
+When testing, code that resolves suspended data should be wrapped into act(...):
+
+act(() => {
+  /* finish loading suspended data */
+});
+/* assert on the output */
+
+This ensures that you're testing the behavior the user would see in the browser. Learn more at https://reactjs.org/link/wrap-tests-with-act
+Warning: A suspended resource finished loading inside a test, but the event was not wrapped in act(...).
+
+When testing, code that resolves suspended data should be wrapped into act(...):
+
+act(() => {
+  /* finish loading suspended data */
+});
+/* assert on the output */
+
+This ensures that you're testing the behavior the user would see in the browser. Learn more at https://reactjs.org/link/wrap-tests-with-act
+
+[90mstderr[2m | src/components/front-office-shared/FleetGm.test.tsx[2m > [22m[2mnfl board: the default path[2m > [22m[2mseed 6|desk off: every checkpoint of two seasons is the base's
+[22m[39mWarning: A suspended resource finished loading inside a test, but the event was not wrapped in act(...).
+
+When testing, code that resolves suspended data should be wrapped into act(...):
+
+act(() => {
+  /* finish loading suspended data */
+});
+/* assert on the output */
+
+This ensures that you're testing the behavior the user would see in the browser. Learn more at https://reactjs.org/link/wrap-tests-with-act
+Warning: A suspended resource finished loading inside a test, but the event was not wrapped in act(...).
+
+When testing, code that resolves suspended data should be wrapped into act(...):
+
+act(() => {
+  /* finish loading suspended data */
+});
+/* assert on the output */
+
+This ensures that you're testing the behavior the user would see in the browser. Learn more at https://reactjs.org/link/wrap-tests-with-act
+
+[90mstdout[2m | src/components/front-office-shared/FleetGm.test.tsx[2m > [22m[2mnfl board: the default path[2m > [22m[2mseed 6|desk off: every checkpoint of two seasons is the base's
+[22m[39mFO_GM_CAREER|nfl|seed 6|desk off|14 checkpoints|start,cut,sign,week 1,week 9,recap,draft,summer,week 1,week 9,recap,answered,draft,summer
+
+[90mstderr[2m | src/components/front-office-shared/FleetGm.test.tsx[2m > [22m[2mnfl board: the default path[2m > [22m[2mseed 7|desk on: every checkpoint of two seasons is the base's
+[22m[39mWarning: A suspended resource finished loading inside a test, but the event was not wrapped in act(...).
+
+When testing, code that resolves suspended data should be wrapped into act(...):
+
+act(() => {
+  /* finish loading suspended data */
+});
+/* assert on the output */
+
+This ensures that you're testing the behavior the user would see in the browser. Learn more at https://reactjs.org/link/wrap-tests-with-act
+Warning: A suspended resource finished loading inside a test, but the event was not wrapped in act(...).
+
+When testing, code that resolves suspended data should be wrapped into act(...):
+
+act(() => {
+  /* finish loading suspended data */
+});
+/* assert on the output */
+
+This ensures that you're testing the behavior the user would see in the browser. Learn more at https://reactjs.org/link/wrap-tests-with-act
+
+[90mstderr[2m | src/components/front-office-shared/FleetGm.test.tsx[2m > [22m[2mnfl board: the default path[2m > [22m[2mseed 7|desk on: every checkpoint of two seasons is the base's
+[22m[39mWarning: A suspended resource finished loading inside a test, but the event was not wrapped in act(...).
+
+When testing, code that resolves suspended data should be wrapped into act(...):
+
+act(() => {
+  /* finish loading suspended data */
+});
+/* assert on the output */
+
+This ensures that you're testing the behavior the user would see in the browser. Learn more at https://reactjs.org/link/wrap-tests-with-act
+Warning: A suspended resource finished loading inside a test, but the event was not wrapped in act(...).
+
+When testing, code that resolves suspended data should be wrapped into act(...):
+
+act(() => {
+  /* finish loading suspended data */
+});
+/* assert on the output */
+
+This ensures that you're testing the behavior the user would see in the browser. Learn more at https://reactjs.org/link/wrap-tests-with-act
+
+[90mstdout[2m | src/components/front-office-shared/FleetGm.test.tsx[2m > [22m[2mnfl board: the default path[2m > [22m[2mseed 7|desk on: every checkpoint of two seasons is the base's
+[22m[39mFO_GM_CAREER|nfl|seed 7|desk on|15 checkpoints|start,presser,cut,sign,week 1,week 9,recap,draft,summer,week 1,week 9,recap,answered,draft,summer
+
+[90mstderr[2m | src/components/front-office-shared/FleetGm.test.tsx[2m > [22m[2mnfl board: the default path[2m > [22m[2mseed 7|desk off: every checkpoint of two seasons is the base's
+[22m[39mWarning: A suspended resource finished loading inside a test, but the event was not wrapped in act(...).
+
+When testing, code that resolves suspended data should be wrapped into act(...):
+
+act(() => {
+  /* finish loading suspended data */
+});
+/* assert on the output */
+
+This ensures that you're testing the behavior the user would see in the browser. Learn more at https://reactjs.org/link/wrap-tests-with-act
+Warning: A suspended resource finished loading inside a test, but the event was not wrapped in act(...).
+
+When testing, code that resolves suspended data should be wrapped into act(...):
+
+act(() => {
+  /* finish loading suspended data */
+});
+/* assert on the output */
+
+This ensures that you're testing the behavior the user would see in the browser. Learn more at https://reactjs.org/link/wrap-tests-with-act
+
+[90mstderr[2m | src/components/front-office-shared/FleetGm.test.tsx[2m > [22m[2mnfl board: the default path[2m > [22m[2mseed 7|desk off: every checkpoint of two seasons is the base's
+[22m[39mWarning: A suspended resource finished loading inside a test, but the event was not wrapped in act(...).
+
+When testing, code that resolves suspended data should be wrapped into act(...):
+
+act(() => {
+  /* finish loading suspended data */
+});
+/* assert on the output */
+
+This ensures that you're testing the behavior the user would see in the browser. Learn more at https://reactjs.org/link/wrap-tests-with-act
+Warning: A suspended resource finished loading inside a test, but the event was not wrapped in act(...).
+
+When testing, code that resolves suspended data should be wrapped into act(...):
+
+act(() => {
+  /* finish loading suspended data */
+});
+/* assert on the output */
+
+This ensures that you're testing the behavior the user would see in the browser. Learn more at https://reactjs.org/link/wrap-tests-with-act
+
+[90mstdout[2m | src/components/front-office-shared/FleetGm.test.tsx[2m > [22m[2mnfl board: the default path[2m > [22m[2mseed 7|desk off: every checkpoint of two seasons is the base's
+[22m[39mFO_GM_CAREER|nfl|seed 7|desk off|13 checkpoints|start,cut,sign,week 1,week 9,recap,draft,summer,week 1,week 9,recap,draft,summer
+
+[90mstderr[2m | src/components/front-office-shared/FleetGm.test.tsx[2m > [22m[2mnfl board: the default path[2m > [22m[2mseed 8|desk on: every checkpoint of two seasons is the base's
+[22m[39mWarning: A suspended resource finished loading inside a test, but the event was not wrapped in act(...).
+
+When testing, code that resolves suspended data should be wrapped into act(...):
+
+act(() => {
+  /* finish loading suspended data */
+});
+/* assert on the output */
+
+This ensures that you're testing the behavior the user would see in the browser. Learn more at https://reactjs.org/link/wrap-tests-with-act
+Warning: A suspended resource finished loading inside a test, but the event was not wrapped in act(...).
+
+When testing, code that resolves suspended data should be wrapped into act(...):
+
+act(() => {
+  /* finish loading suspended data */
+});
+/* assert on the output */
+
+This ensures that you're testing the behavior the user would see in the browser. Learn more at https://reactjs.org/link/wrap-tests-with-act
+
+[90mstderr[2m | src/components/front-office-shared/FleetGm.test.tsx[2m > [22m[2mnfl board: the default path[2m > [22m[2mseed 8|desk on: every checkpoint of two seasons is the base's
+[22m[39mWarning: A suspended resource finished loading inside a test, but the event was not wrapped in act(...).
+
+When testing, code that resolves suspended data should be wrapped into act(...):
+
+act(() => {
+  /* finish loading suspended data */
+});
+/* assert on the output */
+
+This ensures that you're testing the behavior the user would see in the browser. Learn more at https://reactjs.org/link/wrap-tests-with-act
+Warning: A suspended resource finished loading inside a test, but the event was not wrapped in act(...).
+
+When testing, code that resolves suspended data should be wrapped into act(...):
+
+act(() => {
+  /* finish loading suspended data */
+});
+/* assert on the output */
+
+This ensures that you're testing the behavior the user would see in the browser. Learn more at https://reactjs.org/link/wrap-tests-with-act
+
+[90mstdout[2m | src/components/front-office-shared/FleetGm.test.tsx[2m > [22m[2mnfl board: the default path[2m > [22m[2mseed 8|desk on: every checkpoint of two seasons is the base's
+[22m[39mFO_GM_CAREER|nfl|seed 8|desk on|16 checkpoints|start,presser,cut,sign,week 1,week 9,recap,answered,draft,summer,week 1,week 9,recap,answered,draft,summer
+
+[90mstderr[2m | src/components/front-office-shared/FleetGm.test.tsx[2m > [22m[2mnfl board: the default path[2m > [22m[2mseed 8|desk off: every checkpoint of two seasons is the base's
+[22m[39mWarning: A suspended resource finished loading inside a test, but the event was not wrapped in act(...).
+
+When testing, code that resolves suspended data should be wrapped into act(...):
+
+act(() => {
+  /* finish loading suspended data */
+});
+/* assert on the output */
+
+This ensures that you're testing the behavior the user would see in the browser. Learn more at https://reactjs.org/link/wrap-tests-with-act
+Warning: A suspended resource finished loading inside a test, but the event was not wrapped in act(...).
+
+When testing, code that resolves suspended data should be wrapped into act(...):
+
+act(() => {
+  /* finish loading suspended data */
+});
+/* assert on the output */
+
+This ensures that you're testing the behavior the user would see in the browser. Learn more at https://reactjs.org/link/wrap-tests-with-act
+
+[90mstderr[2m | src/components/front-office-shared/FleetGm.test.tsx[2m > [22m[2mnfl board: the default path[2m > [22m[2mseed 8|desk off: every checkpoint of two seasons is the base's
+[22m[39mWarning: A suspended resource finished loading inside a test, but the event was not wrapped in act(...).
+
+When testing, code that resolves suspended data should be wrapped into act(...):
+
+act(() => {
+  /* finish loading suspended data */
+});
+/* assert on the output */
+
+This ensures that you're testing the behavior the user would see in the browser. Learn more at https://reactjs.org/link/wrap-tests-with-act
+Warning: A suspended resource finished loading inside a test, but the event was not wrapped in act(...).
+
+When testing, code that resolves suspended data should be wrapped into act(...):
+
+act(() => {
+  /* finish loading suspended data */
+});
+/* assert on the output */
+
+This ensures that you're testing the behavior the user would see in the browser. Learn more at https://reactjs.org/link/wrap-tests-with-act
+
+[90mstdout[2m | src/components/front-office-shared/FleetGm.test.tsx[2m > [22m[2mnfl board: the default path[2m > [22m[2mseed 8|desk off: every checkpoint of two seasons is the base's
+[22m[39mFO_GM_CAREER|nfl|seed 8|desk off|15 checkpoints|start,cut,sign,week 1,week 9,recap,answered,draft,summer,week 1,week 9,recap,answered,draft,summer
+
+[90mstderr[2m | src/components/front-office-shared/FleetGm.test.tsx[2m > [22m[2mnfl board: the default path[2m > [22m[2mseed 9|desk on: every checkpoint of two seasons is the base's
+[22m[39mWarning: A suspended resource finished loading inside a test, but the event was not wrapped in act(...).
+
+When testing, code that resolves suspended data should be wrapped into act(...):
+
+act(() => {
+  /* finish loading suspended data */
+});
+/* assert on the output */
+
+This ensures that you're testing the behavior the user would see in the browser. Learn more at https://reactjs.org/link/wrap-tests-with-act
+Warning: A suspended resource finished loading inside a test, but the event was not wrapped in act(...).
+
+When testing, code that resolves suspended data should be wrapped into act(...):
+
+act(() => {
+  /* finish loading suspended data */
+});
+/* assert on the output */
+
+This ensures that you're testing the behavior the user would see in the browser. Learn more at https://reactjs.org/link/wrap-tests-with-act
+
+[90mstderr[2m | src/components/front-office-shared/FleetGm.test.tsx[2m > [22m[2mnfl board: the default path[2m > [22m[2mseed 9|desk on: every checkpoint of two seasons is the base's
+[22m[39mWarning: A suspended resource finished loading inside a test, but the event was not wrapped in act(...).
+
+When testing, code that resolves suspended data should be wrapped into act(...):
+
+act(() => {
+  /* finish loading suspended data */
+});
+/* assert on the output */
+
+This ensures that you're testing the behavior the user would see in the browser. Learn more at https://reactjs.org/link/wrap-tests-with-act
+Warning: A suspended resource finished loading inside a test, but the event was not wrapped in act(...).
+
+When testing, code that resolves suspended data should be wrapped into act(...):
+
+act(() => {
+  /* finish loading suspended data */
+});
+/* assert on the output */
+
+This ensures that you're testing the behavior the user would see in the browser. Learn more at https://reactjs.org/link/wrap-tests-with-act
+
+[90mstdout[2m | src/components/front-office-shared/FleetGm.test.tsx[2m > [22m[2mnfl board: the default path[2m > [22m[2mseed 9|desk on: every checkpoint of two seasons is the base's
+[22m[39mFO_GM_CAREER|nfl|seed 9|desk on|15 checkpoints|start,presser,cut,sign,week 1,week 9,recap,answered,draft,summer,week 1,week 9,recap,draft,summer
+
+[90mstderr[2m | src/components/front-office-shared/FleetGm.test.tsx[2m > [22m[2mnfl board: the default path[2m > [22m[2mseed 9|desk off: every checkpoint of two seasons is the base's
+[22m[39mWarning: A suspended resource finished loading inside a test, but the event was not wrapped in act(...).
+
+When testing, code that resolves suspended data should be wrapped into act(...):
+
+act(() => {
+  /* finish loading suspended data */
+});
+/* assert on the output */
+
+This ensures that you're testing the behavior the user would see in the browser. Learn more at https://reactjs.org/link/wrap-tests-with-act
+Warning: A suspended resource finished loading inside a test, but the event was not wrapped in act(...).
+
+When testing, code that resolves suspended data should be wrapped into act(...):
+
+act(() => {
+  /* finish loading suspended data */
+});
+/* assert on the output */
+
+This ensures that you're testing the behavior the user would see in the browser. Learn more at https://reactjs.org/link/wrap-tests-with-act
+
+[90mstderr[2m | src/components/front-office-shared/FleetGm.test.tsx[2m > [22m[2mnfl board: the default path[2m > [22m[2mseed 9|desk off: every checkpoint of two seasons is the base's
+[22m[39mWarning: A suspended resource finished loading inside a test, but the event was not wrapped in act(...).
+
+When testing, code that resolves suspended data should be wrapped into act(...):
+
+act(() => {
+  /* finish loading suspended data */
+});
+/* assert on the output */
+
+This ensures that you're testing the behavior the user would see in the browser. Learn more at https://reactjs.org/link/wrap-tests-with-act
+Warning: A suspended resource finished loading inside a test, but the event was not wrapped in act(...).
+
+When testing, code that resolves suspended data should be wrapped into act(...):
+
+act(() => {
+  /* finish loading suspended data */
+});
+/* assert on the output */
+
+This ensures that you're testing the behavior the user would see in the browser. Learn more at https://reactjs.org/link/wrap-tests-with-act
+
+[90mstdout[2m | src/components/front-office-shared/FleetGm.test.tsx[2m > [22m[2mnfl board: the default path[2m > [22m[2mseed 9|desk off: every checkpoint of two seasons is the base's
+[22m[39mFO_GM_CAREER|nfl|seed 9|desk off|13 checkpoints|start,cut,sign,week 1,week 9,recap,draft,summer,week 1,week 9,recap,draft,summer
+
+[90mstdout[2m | src/components/front-office-shared/FleetGm.test.tsx[2m > [22m[2mnfl board: the default path[2m > [22m[2mthe record is written once, from the base
+[22m[39mFO_GM_CAREER_RECORD nfl 12 cases -> /tmp/fleet-head.json
+
+[90mstderr[2m | src/components/front-office-shared/FleetGm.test.tsx[2m > [22m[2mnhl board: the default path[2m > [22m[2mseed 4|desk on: every checkpoint of two seasons is the base's
+[22m[39mWarning: A suspended resource finished loading inside a test, but the event was not wrapped in act(...).
+
+When testing, code that resolves suspended data should be wrapped into act(...):
+
+act(() => {
+  /* finish loading suspended data */
+});
+/* assert on the output */
+
+This ensures that you're testing the behavior the user would see in the browser. Learn more at https://reactjs.org/link/wrap-tests-with-act
+Warning: A suspended resource finished loading inside a test, but the event was not wrapped in act(...).
+
+When testing, code that resolves suspended data should be wrapped into act(...):
+
+act(() => {
+  /* finish loading suspended data */
+});
+/* assert on the output */
+
+This ensures that you're testing the behavior the user would see in the browser. Learn more at https://reactjs.org/link/wrap-tests-with-act
+
+[90mstderr[2m | src/components/front-office-shared/FleetGm.test.tsx[2m > [22m[2mnhl board: the default path[2m > [22m[2mseed 4|desk on: every checkpoint of two seasons is the base's
+[22m[39mWarning: A suspended resource finished loading inside a test, but the event was not wrapped in act(...).
+
+When testing, code that resolves suspended data should be wrapped into act(...):
+
+act(() => {
+  /* finish loading suspended data */
+});
+/* assert on the output */
+
+This ensures that you're testing the behavior the user would see in the browser. Learn more at https://reactjs.org/link/wrap-tests-with-act
+Warning: A suspended resource finished loading inside a test, but the event was not wrapped in act(...).
+
+When testing, code that resolves suspended data should be wrapped into act(...):
+
+act(() => {
+  /* finish loading suspended data */
+});
+/* assert on the output */
+
+This ensures that you're testing the behavior the user would see in the browser. Learn more at https://reactjs.org/link/wrap-tests-with-act
+
+[90mstdout[2m | src/components/front-office-shared/FleetGm.test.tsx[2m > [22m[2mnhl board: the default path[2m > [22m[2mseed 4|desk on: every checkpoint of two seasons is the base's
+[22m[39mFO_GM_CAREER|nhl|seed 4|desk on|14 checkpoints|start,presser,cut,sign,round 1,round 9,recap,draft,summer,round 1,round 9,recap,draft,summer
+
+[90mstdout[2m | src/components/front-office-shared/FleetGm.test.tsx[2m > [22m[2mnhl board: the default path[2m > [22m[2mseed 4|desk off: every checkpoint of two seasons is the base's
+[22m[39mFO_GM_CAREER|nhl|seed 4|desk off|14 checkpoints|start,cut,sign,round 1,round 9,recap,answered,draft,summer,round 1,round 9,recap,draft,summer
+
+[90mstdout[2m | src/components/front-office-shared/FleetGm.test.tsx[2m > [22m[2mnhl board: the default path[2m > [22m[2mseed 5|desk on: every checkpoint of two seasons is the base's
+[22m[39mFO_GM_CAREER|nhl|seed 5|desk on|14 checkpoints|start,presser,cut,sign,round 1,round 9,recap,draft,summer,round 1,round 9,recap,draft,summer
+
+[90mstdout[2m | src/components/front-office-shared/FleetGm.test.tsx[2m > [22m[2mnhl board: the default path[2m > [22m[2mseed 5|desk off: every checkpoint of two seasons is the base's
+[22m[39mFO_GM_CAREER|nhl|seed 5|desk off|13 checkpoints|start,cut,sign,round 1,round 9,recap,draft,summer,round 1,round 9,recap,draft,summer
+
+[90mstdout[2m | src/components/front-office-shared/FleetGm.test.tsx[2m > [22m[2mnhl board: the default path[2m > [22m[2mseed 6|desk on: every checkpoint of two seasons is the base's
+[22m[39mFO_GM_CAREER|nhl|seed 6|desk on|15 checkpoints|start,presser,cut,sign,round 1,round 9,recap,draft,summer,round 1,round 9,recap,answered,draft,summer
+
+[90mstdout[2m | src/components/front-office-shared/FleetGm.test.tsx[2m > [22m[2mnhl board: the default path[2m > [22m[2mseed 6|desk off: every checkpoint of two seasons is the base's
+[22m[39mFO_GM_CAREER|nhl|seed 6|desk off|15 checkpoints|start,cut,sign,round 1,round 9,recap,answered,draft,summer,round 1,round 9,recap,answered,draft,summer
+
+[90mstdout[2m | src/components/front-office-shared/FleetGm.test.tsx[2m > [22m[2mnhl board: the default path[2m > [22m[2mseed 7|desk on: every checkpoint of two seasons is the base's
+[22m[39mFO_GM_CAREER|nhl|seed 7|desk on|14 checkpoints|start,presser,cut,sign,round 1,round 9,recap,draft,summer,round 1,round 9,recap,draft,summer
+
+[90mstdout[2m | src/components/front-office-shared/FleetGm.test.tsx[2m > [22m[2mnhl board: the default path[2m > [22m[2mseed 7|desk off: every checkpoint of two seasons is the base's
+[22m[39mFO_GM_CAREER|nhl|seed 7|desk off|14 checkpoints|start,cut,sign,round 1,round 9,recap,draft,summer,round 1,round 9,recap,answered,draft,summer
+
+[90mstdout[2m | src/components/front-office-shared/FleetGm.test.tsx[2m > [22m[2mnhl board: the default path[2m > [22m[2mseed 8|desk on: every checkpoint of two seasons is the base's
+[22m[39mFO_GM_CAREER|nhl|seed 8|desk on|15 checkpoints|start,presser,cut,sign,round 1,round 9,recap,draft,summer,round 1,round 9,recap,answered,draft,summer
+
+[90mstdout[2m | src/components/front-office-shared/FleetGm.test.tsx[2m > [22m[2mnhl board: the default path[2m > [22m[2mseed 8|desk off: every checkpoint of two seasons is the base's
+[22m[39mFO_GM_CAREER|nhl|seed 8|desk off|13 checkpoints|start,cut,sign,round 1,round 9,recap,draft,summer,round 1,round 9,recap,draft,summer
+
+[90mstdout[2m | src/components/front-office-shared/FleetGm.test.tsx[2m > [22m[2mnhl board: the default path[2m > [22m[2mseed 9|desk on: every checkpoint of two seasons is the base's
+[22m[39mFO_GM_CAREER|nhl|seed 9|desk on|14 checkpoints|start,presser,cut,sign,round 1,round 9,recap,draft,summer,round 1,round 9,recap,draft,summer
+
+[90mstdout[2m | src/components/front-office-shared/FleetGm.test.tsx[2m > [22m[2mnhl board: the default path[2m > [22m[2mseed 9|desk off: every checkpoint of two seasons is the base's
+[22m[39mFO_GM_CAREER|nhl|seed 9|desk off|15 checkpoints|start,cut,sign,round 1,round 9,recap,answered,draft,summer,round 1,round 9,recap,answered,draft,summer
+
+[90mstdout[2m | src/components/front-office-shared/FleetGm.test.tsx[2m > [22m[2mnhl board: the default path[2m > [22m[2mthe record is written once, from the base
+[22m[39mFO_GM_CAREER_RECORD nhl 12 cases -> /tmp/fleet-head.json
+
+[90mstdout[2m | src/components/front-office-shared/FleetGm.test.tsx[2m > [22m[2mnhl board: the saves the base wrote[2m > [22m[2mthree saves written by the base board are recorded beside its default path
+[22m[39mFO_GM_CAREER_PLANTED fired desk on|155518 chars|phase fired
+FO_GM_CAREER_PLANTED fired desk off|143760 chars|phase fired
+FO_GM_CAREER_PLANTED hub desk on|153889 chars|phase hub
+
+[90mstderr[2m | src/components/front-office-shared/FleetGm.test.tsx[2m > [22m[2mnfl board: fleet of base saves[2m > [22m[2mmounts 167 distinct base saves, writes nothing, never sticks on a holding box
+[22m[39mWarning: An update to FrontOfficeBoard inside a test was not wrapped in act(...).
+
+When testing, code that causes React state updates should be wrapped into act(...):
+
+act(() => {
+  /* fire events that update state */
+});
+/* assert on the output */
+
+This ensures that you're testing the behavior the user would see in the browser. Learn more at https://reactjs.org/link/wrap-tests-with-act
+    at FrontOfficeBoard (/home/runner/work/ballpark-hero/ballpark-hero/src/components/front-office/FrontOfficeBoard.tsx:169:53)
+Warning: An update to FrontOfficeBoard inside a test was not wrapped in act(...).
+
+When testing, code that causes React state updates should be wrapped into act(...):
+
+act(() => {
+  /* fire events that update state */
+});
+/* assert on the output */
+
+This ensures that you're testing the behavior the user would see in the browser. Learn more at https://reactjs.org/link/wrap-tests-with-act
+    at FrontOfficeBoard (/home/runner/work/ballpark-hero/ballpark-hero/src/components/front-office/FrontOfficeBoard.tsx:169:53)
+
+[90mstderr[2m | src/components/front-office-shared/FleetGm.test.tsx[2m > [22m[2mnfl board: fleet of base saves[2m > [22m[2mmounts 167 distinct base saves, writes nothing, never sticks on a holding box
+[22m[39mWarning: A suspended resource finished loading inside a test, but the event was not wrapped in act(...).
+
+When testing, code that resolves suspended data should be wrapped into act(...):
+
+act(() => {
+  /* finish loading suspended data */
+});
+/* assert on the output */
+
+This ensures that you're testing the behavior the user would see in the browser. Learn more at https://reactjs.org/link/wrap-tests-with-act
+
+[90mstderr[2m | src/components/front-office-shared/FleetGm.test.tsx[2m > [22m[2mnfl board: fleet of base saves[2m > [22m[2mmounts 167 distinct base saves, writes nothing, never sticks on a holding box
+[22m[39mWarning: An update to FrontOfficeBoard inside a test was not wrapped in act(...).
+
+When testing, code that causes React state updates should be wrapped into act(...):
+
+act(() => {
+  /* fire events that update state */
+});
+/* assert on the output */
+
+This ensures that you're testing the behavior the user would see in the browser. Learn more at https://reactjs.org/link/wrap-tests-with-act
+    at FrontOfficeBoard (/home/runner/work/ballpark-hero/ballpark-hero/src/components/front-office/FrontOfficeBoard.tsx:169:53)
+Warning: An update to FrontOfficeBoard inside a test was not wrapped in act(...).
+
+When testing, code that causes React state updates should be wrapped into act(...):
+
+act(() => {
+  /* fire events that update state */
+});
+/* assert on the output */
+
+This ensures that you're testing the behavior the user would see in the browser. Learn more at https://reactjs.org/link/wrap-tests-with-act
+    at FrontOfficeBoard (/home/runner/work/ballpark-hero/ballpark-hero/src/components/front-office/FrontOfficeBoard.tsx:169:53)
+
+[90mstderr[2m | src/components/front-office-shared/FleetGm.test.tsx[2m > [22m[2mnfl board: fleet of base saves[2m > [22m[2mmounts 167 distinct base saves, writes nothing, never sticks on a holding box
+[22m[39mWarning: A suspended resource finished loading inside a test, but the event was not wrapped in act(...).
+
+When testing, code that resolves suspended data should be wrapped into act(...):
+
+act(() => {
+  /* finish loading suspended data */
+});
+/* assert on the output */
+
+This ensures that you're testing the behavior the user would see in the browser. Learn more at https://reactjs.org/link/wrap-tests-with-act
+
+[90mstderr[2m | src/components/front-office-shared/FleetGm.test.tsx[2m > [22m[2mnfl board: fleet of base saves[2m > [22m[2mmounts 167 distinct base saves, writes nothing, never sticks on a holding box
+[22m[39mWarning: An update to FrontOfficeBoard inside a test was not wrapped in act(...).
+
+When testing, code that causes React state updates should be wrapped into act(...):
+
+act(() => {
+  /* fire events that update state */
+});
+/* assert on the output */
+
+This ensures that you're testing the behavior the user would see in the browser. Learn more at https://reactjs.org/link/wrap-tests-with-act
+    at FrontOfficeBoard (/home/runner/work/ballpark-hero/ballpark-hero/src/components/front-office/FrontOfficeBoard.tsx:169:53)
+Warning: An update to FrontOfficeBoard inside a test was not wrapped in act(...).
+
+When testing, code that causes React state updates should be wrapped into act(...):
+
+act(() => {
+  /* fire events that update state */
+});
+/* assert on the output */
+
+This ensures that you're testing the behavior the user would see in the browser. Learn more at https://reactjs.org/link/wrap-tests-with-act
+    at FrontOfficeBoard (/home/runner/work/ballpark-hero/ballpark-hero/src/components/front-office/FrontOfficeBoard.tsx:169:53)
+
+[90mstderr[2m | src/components/front-office-shared/FleetGm.test.tsx[2m > [22m[2mnfl board: fleet of base saves[2m > [22m[2mmounts 167 distinct base saves, writes nothing, never sticks on a holding box
+[22m[39mWarning: A suspended resource finished loading inside a test, but the event was not wrapped in act(...).
+
+When testing, code that resolves suspended data should be wrapped into act(...):
+
+act(() => {
+  /* finish loading suspended data */
+});
+/* assert on the output */
+
+This ensures that you're testing the behavior the user would see in the browser. Learn more at https://reactjs.org/link/wrap-tests-with-act
+
+[90mstderr[2m | src/components/front-office-shared/FleetGm.test.tsx[2m > [22m[2mnfl board: fleet of base saves[2m > [22m[2mmounts 167 distinct base saves, writes nothing, never sticks on a holding box
+[22m[39mWarning: An update to FrontOfficeBoard inside a test was not wrapped in act(...).
+
+When testing, code that causes React state updates should be wrapped into act(...):
+
+act(() => {
+  /* fire events that update state */
+});
+/* assert on the output */
+
+This ensures that you're testing the behavior the user would see in the browser. Learn more at https://reactjs.org/link/wrap-tests-with-act
+    at FrontOfficeBoard (/home/runner/work/ballpark-hero/ballpark-hero/src/components/front-office/FrontOfficeBoard.tsx:169:53)
+Warning: An update to FrontOfficeBoard inside a test was not wrapped in act(...).
+
+When testing, code that causes React state updates should be wrapped into act(...):
+
+act(() => {
+  /* fire events that update state */
+});
+/* assert on the output */
+
+This ensures that you're testing the behavior the user would see in the browser. Learn more at https://reactjs.org/link/wrap-tests-with-act
+    at FrontOfficeBoard (/home/runner/work/ballpark-hero/ballpark-hero/src/components/front-office/FrontOfficeBoard.tsx:169:53)
+
+[90mstderr[2m | src/components/front-office-shared/FleetGm.test.tsx[2m > [22m[2mnfl board: fleet of base saves[2m > [22m[2mmounts 167 distinct base saves, writes nothing, never sticks on a holding box
+[22m[39mWarning: A suspended resource finished loading inside a test, but the event was not wrapped in act(...).
+
+When testing, code that resolves suspended data should be wrapped into act(...):
+
+act(() => {
+  /* finish loading suspended data */
+});
+/* assert on the output */
+
+This ensures that you're testing the behavior the user would see in the browser. Learn more at https://reactjs.org/link/wrap-tests-with-act
+
+[90mstderr[2m | src/components/front-office-shared/FleetGm.test.tsx[2m > [22m[2mnfl board: fleet of base saves[2m > [22m[2mmounts 167 distinct base saves, writes nothing, never sticks on a holding box
+[22m[39mWarning: An update to FrontOfficeBoard inside a test was not wrapped in act(...).
+
+When testing, code that causes React state updates should be wrapped into act(...):
+
+act(() => {
+  /* fire events that update state */
+});
+/* assert on the output */
+
+This ensures that you're testing the behavior the user would see in the browser. Learn more at https://reactjs.org/link/wrap-tests-with-act
+    at FrontOfficeBoard (/home/runner/work/ballpark-hero/ballpark-hero/src/components/front-office/FrontOfficeBoard.tsx:169:53)
+Warning: An update to FrontOfficeBoard inside a test was not wrapped in act(...).
+
+When testing, code that causes React state updates should be wrapped into act(...):
+
+act(() => {
+  /* fire events that update state */
+});
+/* assert on the output */
+
+This ensures that you're testing the behavior the user would see in the browser. Learn more at https://reactjs.org/link/wrap-tests-with-act
+    at FrontOfficeBoard (/home/runner/work/ballpark-hero/ballpark-hero/src/components/front-office/FrontOfficeBoard.tsx:169:53)
+
+[90mstderr[2m | src/components/front-office-shared/FleetGm.test.tsx[2m > [22m[2mnfl board: fleet of base saves[2m > [22m[2mmounts 167 distinct base saves, writes nothing, never sticks on a holding box
+[22m[39mWarning: A suspended resource finished loading inside a test, but the event was not wrapped in act(...).
+
+When testing, code that resolves suspended data should be wrapped into act(...):
+
+act(() => {
+  /* finish loading suspended data */
+});
+/* assert on the output */
+
+This ensures that you're testing the behavior the user would see in the browser. Learn more at https://reactjs.org/link/wrap-tests-with-act
+
+[90mstderr[2m | src/components/front-office-shared/FleetGm.test.tsx[2m > [22m[2mnfl board: fleet of base saves[2m > [22m[2mmounts 167 distinct base saves, writes nothing, never sticks on a holding box
+[22m[39mWarning: An update to FrontOfficeBoard inside a test was not wrapped in act(...).
+
+When testing, code that causes React state updates should be wrapped into act(...):
+
+act(() => {
+  /* fire events that update state */
+});
+/* assert on the output */
+
+This ensures that you're testing the behavior the user would see in the browser. Learn more at https://reactjs.org/link/wrap-tests-with-act
+    at FrontOfficeBoard (/home/runner/work/ballpark-hero/ballpark-hero/src/components/front-office/FrontOfficeBoard.tsx:169:53)
+Warning: An update to FrontOfficeBoard inside a test was not wrapped in act(...).
+
+When testing, code that causes React state updates should be wrapped into act(...):
+
+act(() => {
+  /* fire events that update state */
+});
+/* assert on the output */
+
+This ensures that you're testing the behavior the user would see in the browser. Learn more at https://reactjs.org/link/wrap-tests-with-act
+    at FrontOfficeBoard (/home/runner/work/ballpark-hero/ballpark-hero/src/components/front-office/FrontOfficeBoard.tsx:169:53)
+
+[90mstderr[2m | src/components/front-office-shared/FleetGm.test.tsx[2m > [22m[2mnfl board: fleet of base saves[2m > [22m[2mmounts 167 distinct base saves, writes nothing, never sticks on a holding box
+[22m[39mWarning: A suspended resource finished loading inside a test, but the event was not wrapped in act(...).
+
+When testing, code that resolves suspended data should be wrapped into act(...):
+
+act(() => {
+  /* finish loading suspended data */
+});
+/* assert on the output */
+
+This ensures that you're testing the behavior the user would see in the browser. Learn more at https://reactjs.org/link/wrap-tests-with-act
+
+[90mstderr[2m | src/components/front-office-shared/FleetGm.test.tsx[2m > [22m[2mnfl board: fleet of base saves[2m > [22m[2mmounts 167 distinct base saves, writes nothing, never sticks on a holding box
+[22m[39mWarning: An update to FrontOfficeBoard inside a test was not wrapped in act(...).
+
+When testing, code that causes React state updates should be wrapped into act(...):
+
+act(() => {
+  /* fire events that update state */
+});
+/* assert on the output */
+
+This ensures that you're testing the behavior the user would see in the browser. Learn more at https://reactjs.org/link/wrap-tests-with-act
+    at FrontOfficeBoard (/home/runner/work/ballpark-hero/ballpark-hero/src/components/front-office/FrontOfficeBoard.tsx:169:53)
+Warning: An update to FrontOfficeBoard inside a test was not wrapped in act(...).
+
+When testing, code that causes React state updates should be wrapped into act(...):
+
+act(() => {
+  /* fire events that update state */
+});
+/* assert on the output */
+
+This ensures that you're testing the behavior the user would see in the browser. Learn more at https://reactjs.org/link/wrap-tests-with-act
+    at FrontOfficeBoard (/home/runner/work/ballpark-hero/ballpark-hero/src/components/front-office/FrontOfficeBoard.tsx:169:53)
+
+[90mstderr[2m | src/components/front-office-shared/FleetGm.test.tsx[2m > [22m[2mnfl board: fleet of base saves[2m > [22m[2mmounts 167 distinct base saves, writes nothing, never sticks on a holding box
+[22m[39mWarning: A suspended resource finished loading inside a test, but the event was not wrapped in act(...).
+
+When testing, code that resolves suspended data should be wrapped into act(...):
+
+act(() => {
+  /* finish loading suspended data */
+});
+/* assert on the output */
+
+This ensures that you're testing the behavior the user would see in the browser. Learn more at https://reactjs.org/link/wrap-tests-with-act
+
+[90mstderr[2m | src/components/front-office-shared/FleetGm.test.tsx[2m > [22m[2mnfl board: fleet of base saves[2m > [22m[2mmounts 167 distinct base saves, writes nothing, never sticks on a holding box
+[22m[39mWarning: An update to FrontOfficeBoard inside a test was not wrapped in act(...).
+
+When testing, code that causes React state updates should be wrapped into act(...):
+
+act(() => {
+  /* fire events that update state */
+});
+/* assert on the output */
+
+This ensures that you're testing the behavior the user would see in the browser. Learn more at https://reactjs.org/link/wrap-tests-with-act
+    at FrontOfficeBoard (/home/runner/work/ballpark-hero/ballpark-hero/src/components/front-office/FrontOfficeBoard.tsx:169:53)
+Warning: An update to FrontOfficeBoard inside a test was not wrapped in act(...).
+
+When testing, code that causes React state updates should be wrapped into act(...):
+
+act(() => {
+  /* fire events that update state */
+});
+/* assert on the output */
+
+This ensures that you're testing the behavior the user would see in the browser. Learn more at https://reactjs.org/link/wrap-tests-with-act
+    at FrontOfficeBoard (/home/runner/work/ballpark-hero/ballpark-hero/src/components/front-office/FrontOfficeBoard.tsx:169:53)
+
+[90mstderr[2m | src/components/front-office-shared/FleetGm.test.tsx[2m > [22m[2mnfl board: fleet of base saves[2m > [22m[2mmounts 167 distinct base saves, writes nothing, never sticks on a holding box
+[22m[39mWarning: A suspended resource finished loading inside a test, but the event was not wrapped in act(...).
+
+When testing, code that resolves suspended data should be wrapped into act(...):
+
+act(() => {
+  /* finish loading suspended data */
+});
+/* assert on the output */
+
+This ensures that you're testing the behavior the user would see in the browser. Learn more at https://reactjs.org/link/wrap-tests-with-act
+
+[90mstderr[2m | src/components/front-office-shared/FleetGm.test.tsx[2m > [22m[2mnfl board: fleet of base saves[2m > [22m[2mmounts 167 distinct base saves, writes nothing, never sticks on a holding box
+[22m[39mWarning: An update to FrontOfficeBoard inside a test was not wrapped in act(...).
+
+When testing, code that causes React state updates should be wrapped into act(...):
+
+act(() => {
+  /* fire events that update state */
+});
+/* assert on the output */
+
+This ensures that you're testing the behavior the user would see in the browser. Learn more at https://reactjs.org/link/wrap-tests-with-act
+    at FrontOfficeBoard (/home/runner/work/ballpark-hero/ballpark-hero/src/components/front-office/FrontOfficeBoard.tsx:169:53)
+Warning: An update to FrontOfficeBoard inside a test was not wrapped in act(...).
+
+When testing, code that causes React state updates should be wrapped into act(...):
+
+act(() => {
+  /* fire events that update state */
+});
+/* assert on the output */
+
+This ensures that you're testing the behavior the user would see in the browser. Learn more at https://reactjs.org/link/wrap-tests-with-act
+    at FrontOfficeBoard (/home/runner/work/ballpark-hero/ballpark-hero/src/components/front-office/FrontOfficeBoard.tsx:169:53)
+
+[90mstderr[2m | src/components/front-office-shared/FleetGm.test.tsx[2m > [22m[2mnfl board: fleet of base saves[2m > [22m[2mmounts 167 distinct base saves, writes nothing, never sticks on a holding box
+[22m[39mWarning: A suspended resource finished loading inside a test, but the event was not wrapped in act(...).
+
+When testing, code that resolves suspended data should be wrapped into act(...):
+
+act(() => {
+  /* finish loading suspended data */
+});
+/* assert on the output */
+
+This ensures that you're testing the behavior the user would see in the browser. Learn more at https://reactjs.org/link/wrap-tests-with-act
+
+[90mstderr[2m | src/components/front-office-shared/FleetGm.test.tsx[2m > [22m[2mnfl board: fleet of base saves[2m > [22m[2mmounts 167 distinct base saves, writes nothing, never sticks on a holding box
+[22m[39mWarning: An update to FrontOfficeBoard inside a test was not wrapped in act(...).
+
+When testing, code that causes React state updates should be wrapped into act(...):
+
+act(() => {
+  /* fire events that update state */
+});
+/* assert on the output */
+
+This ensures that you're testing the behavior the user would see in the browser. Learn more at https://reactjs.org/link/wrap-tests-with-act
+    at FrontOfficeBoard (/home/runner/work/ballpark-hero/ballpark-hero/src/components/front-office/FrontOfficeBoard.tsx:169:53)
+Warning: An update to FrontOfficeBoard inside a test was not wrapped in act(...).
+
+When testing, code that causes React state updates should be wrapped into act(...):
+
+act(() => {
+  /* fire events that update state */
+});
+/* assert on the output */
+
+This ensures that you're testing the behavior the user would see in the browser. Learn more at https://reactjs.org/link/wrap-tests-with-act
+    at FrontOfficeBoard (/home/runner/work/ballpark-hero/ballpark-hero/src/components/front-office/FrontOfficeBoard.tsx:169:53)
+
+[90mstderr[2m | src/components/front-office-shared/FleetGm.test.tsx[2m > [22m[2mnfl board: fleet of base saves[2m > [22m[2mmounts 167 distinct base saves, writes nothing, never sticks on a holding box
+[22m[39mWarning: A suspended resource finished loading inside a test, but the event was not wrapped in act(...).
+
+When testing, code that resolves suspended data should be wrapped into act(...):
+
+act(() => {
+  /* finish loading suspended data */
+});
+/* assert on the output */
+
+This ensures that you're testing the behavior the user would see in the browser. Learn more at https://reactjs.org/link/wrap-tests-with-act
+
+[90mstderr[2m | src/components/front-office-shared/FleetGm.test.tsx[2m > [22m[2mnfl board: fleet of base saves[2m > [22m[2mmounts 167 distinct base saves, writes nothing, never sticks on a holding box
+[22m[39mWarning: An update to FrontOfficeBoard inside a test was not wrapped in act(...).
+
+When testing, code that causes React state updates should be wrapped into act(...):
+
+act(() => {
+  /* fire events that update state */
+});
+/* assert on the output */
+
+This ensures that you're testing the behavior the user would see in the browser. Learn more at https://reactjs.org/link/wrap-tests-with-act
+    at FrontOfficeBoard (/home/runner/work/ballpark-hero/ballpark-hero/src/components/front-office/FrontOfficeBoard.tsx:169:53)
+Warning: An update to FrontOfficeBoard inside a test was not wrapped in act(...).
+
+When testing, code that causes React state updates should be wrapped into act(...):
+
+act(() => {
+  /* fire events that update state */
+});
+/* assert on the output */
+
+This ensures that you're testing the behavior the user would see in the browser. Learn more at https://reactjs.org/link/wrap-tests-with-act
+    at FrontOfficeBoard (/home/runner/work/ballpark-hero/ballpark-hero/src/components/front-office/FrontOfficeBoard.tsx:169:53)
+
+[90mstderr[2m | src/components/front-office-shared/FleetGm.test.tsx[2m > [22m[2mnfl board: fleet of base saves[2m > [22m[2mmounts 167 distinct base saves, writes nothing, never sticks on a holding box
+[22m[39mWarning: A suspended resource finished loading inside a test, but the event was not wrapped in act(...).
+
+When testing, code that resolves suspended data should be wrapped into act(...):
+
+act(() => {
+  /* finish loading suspended data */
+});
+/* assert on the output */
+
+This ensures that you're testing the behavior the user would see in the browser. Learn more at https://reactjs.org/link/wrap-tests-with-act
+
+[90mstderr[2m | src/components/front-office-shared/FleetGm.test.tsx[2m > [22m[2mnfl board: fleet of base saves[2m > [22m[2mmounts 167 distinct base saves, writes nothing, never sticks on a holding box
+[22m[39mWarning: An update to FrontOfficeBoard inside a test was not wrapped in act(...).
+
+When testing, code that causes React state updates should be wrapped into act(...):
+
+act(() => {
+  /* fire events that update state */
+});
+/* assert on the output */
+
+This ensures that you're testing the behavior the user would see in the browser. Learn more at https://reactjs.org/link/wrap-tests-with-act
+    at FrontOfficeBoard (/home/runner/work/ballpark-hero/ballpark-hero/src/components/front-office/FrontOfficeBoard.tsx:169:53)
+Warning: An update to FrontOfficeBoard inside a test was not wrapped in act(...).
+
+When testing, code that causes React state updates should be wrapped into act(...):
+
+act(() => {
+  /* fire events that update state */
+});
+/* assert on the output */
+
+This ensures that you're testing the behavior the user would see in the browser. Learn more at https://reactjs.org/link/wrap-tests-with-act
+    at FrontOfficeBoard (/home/runner/work/ballpark-hero/ballpark-hero/src/components/front-office/FrontOfficeBoard.tsx:169:53)
+
+[90mstderr[2m | src/components/front-office-shared/FleetGm.test.tsx[2m > [22m[2mnfl board: fleet of base saves[2m > [22m[2mmounts 167 distinct base saves, writes nothing, never sticks on a holding box
+[22m[39mWarning: A suspended resource finished loading inside a test, but the event was not wrapped in act(...).
+
+When testing, code that resolves suspended data should be wrapped into act(...):
+
+act(() => {
+  /* finish loading suspended data */
+});
+/* assert on the output */
+
+This ensures that you're testing the behavior the user would see in the browser. Learn more at https://reactjs.org/link/wrap-tests-with-act
+
+[90mstderr[2m | src/components/front-office-shared/FleetGm.test.tsx[2m > [22m[2mnfl board: fleet of base saves[2m > [22m[2mmounts 167 distinct base saves, writes nothing, never sticks on a holding box
+[22m[39mWarning: An update to FrontOfficeBoard inside a test was not wrapped in act(...).
+
+When testing, code that causes React state updates should be wrapped into act(...):
+
+act(() => {
+  /* fire events that update state */
+});
+/* assert on the output */
+
+This ensures that you're testing the behavior the user would see in the browser. Learn more at https://reactjs.org/link/wrap-tests-with-act
+    at FrontOfficeBoard (/home/runner/work/ballpark-hero/ballpark-hero/src/components/front-office/FrontOfficeBoard.tsx:169:53)
+Warning: An update to FrontOfficeBoard inside a test was not wrapped in act(...).
+
+When testing, code that causes React state updates should be wrapped into act(...):
+
+act(() => {
+  /* fire events that update state */
+});
+/* assert on the output */
+
+This ensures that you're testing the behavior the user would see in the browser. Learn more at https://reactjs.org/link/wrap-tests-with-act
+    at FrontOfficeBoard (/home/runner/work/ballpark-hero/ballpark-hero/src/components/front-office/FrontOfficeBoard.tsx:169:53)
+
+[90mstderr[2m | src/components/front-office-shared/FleetGm.test.tsx[2m > [22m[2mnfl board: fleet of base saves[2m > [22m[2mmounts 167 distinct base saves, writes nothing, never sticks on a holding box
+[22m[39mWarning: A suspended resource finished loading inside a test, but the event was not wrapped in act(...).
+
+When testing, code that resolves suspended data should be wrapped into act(...):
+
+act(() => {
+  /* finish loading suspended data */
+});
+/* assert on the output */
+
+This ensures that you're testing the behavior the user would see in the browser. Learn more at https://reactjs.org/link/wrap-tests-with-act
+
+[90mstderr[2m | src/components/front-office-shared/FleetGm.test.tsx[2m > [22m[2mnfl board: fleet of base saves[2m > [22m[2mmounts 167 distinct base saves, writes nothing, never sticks on a holding box
+[22m[39mWarning: An update to FrontOfficeBoard inside a test was not wrapped in act(...).
+
+When testing, code that causes React state updates should be wrapped into act(...):
+
+act(() => {
+  /* fire events that update state */
+});
+/* assert on the output */
+
+This ensures that you're testing the behavior the user would see in the browser. Learn more at https://reactjs.org/link/wrap-tests-with-act
+    at FrontOfficeBoard (/home/runner/work/ballpark-hero/ballpark-hero/src/components/front-office/FrontOfficeBoard.tsx:169:53)
+Warning: An update to FrontOfficeBoard inside a test was not wrapped in act(...).
+
+When testing, code that causes React state updates should be wrapped into act(...):
+
+act(() => {
+  /* fire events that update state */
+});
+/* assert on the output */
+
+This ensures that you're testing the behavior the user would see in the browser. Learn more at https://reactjs.org/link/wrap-tests-with-act
+    at FrontOfficeBoard (/home/runner/work/ballpark-hero/ballpark-hero/src/components/front-office/FrontOfficeBoard.tsx:169:53)
+
+[90mstderr[2m | src/components/front-office-shared/FleetGm.test.tsx[2m > [22m[2mnfl board: fleet of base saves[2m > [22m[2mmounts 167 distinct base saves, writes nothing, never sticks on a holding box
+[22m[39mWarning: A suspended resource finished loading inside a test, but the event was not wrapped in act(...).
+
+When testing, code that resolves suspended data should be wrapped into act(...):
+
+act(() => {
+  /* finish loading suspended data */
+});
+/* assert on the output */
+
+This ensures that you're testing the behavior the user would see in the browser. Learn more at https://reactjs.org/link/wrap-tests-with-act
+
+[90mstderr[2m | src/components/front-office-shared/FleetGm.test.tsx[2m > [22m[2mnfl board: fleet of base saves[2m > [22m[2mmounts 167 distinct base saves, writes nothing, never sticks on a holding box
+[22m[39mWarning: An update to FrontOfficeBoard inside a test was not wrapped in act(...).
+
+When testing, code that causes React state updates should be wrapped into act(...):
+
+act(() => {
+  /* fire events that update state */
+});
+/* assert on the output */
+
+This ensures that you're testing the behavior the user would see in the browser. Learn more at https://reactjs.org/link/wrap-tests-with-act
+    at FrontOfficeBoard (/home/runner/work/ballpark-hero/ballpark-hero/src/components/front-office/FrontOfficeBoard.tsx:169:53)
+Warning: An update to FrontOfficeBoard inside a test was not wrapped in act(...).
+
+When testing, code that causes React state updates should be wrapped into act(...):
+
+act(() => {
+  /* fire events that update state */
+});
+/* assert on the output */
+
+This ensures that you're testing the behavior the user would see in the browser. Learn more at https://reactjs.org/link/wrap-tests-with-act
+    at FrontOfficeBoard (/home/runner/work/ballpark-hero/ballpark-hero/src/components/front-office/FrontOfficeBoard.tsx:169:53)
+
+[90mstderr[2m | src/components/front-office-shared/FleetGm.test.tsx[2m > [22m[2mnfl board: fleet of base saves[2m > [22m[2mmounts 167 distinct base saves, writes nothing, never sticks on a holding box
+[22m[39mWarning: A suspended resource finished loading inside a test, but the event was not wrapped in act(...).
+
+When testing, code that resolves suspended data should be wrapped into act(...):
+
+act(() => {
+  /* finish loading suspended data */
+});
+/* assert on the output */
+
+This ensures that you're testing the behavior the user would see in the browser. Learn more at https://reactjs.org/link/wrap-tests-with-act
+
+[90mstderr[2m | src/components/front-office-shared/FleetGm.test.tsx[2m > [22m[2mnfl board: fleet of base saves[2m > [22m[2mmounts 167 distinct base saves, writes nothing, never sticks on a holding box
+[22m[39mWarning: An update to FrontOfficeBoard inside a test was not wrapped in act(...).
+
+When testing, code that causes React state updates should be wrapped into act(...):
+
+act(() => {
+  /* fire events that update state */
+});
+/* assert on the output */
+
+This ensures that you're testing the behavior the user would see in the browser. Learn more at https://reactjs.org/link/wrap-tests-with-act
+    at FrontOfficeBoard (/home/runner/work/ballpark-hero/ballpark-hero/src/components/front-office/FrontOfficeBoard.tsx:169:53)
+Warning: An update to FrontOfficeBoard inside a test was not wrapped in act(...).
+
+When testing, code that causes React state updates should be wrapped into act(...):
+
+act(() => {
+  /* fire events that update state */
+});
+/* assert on the output */
+
+This ensures that you're testing the behavior the user would see in the browser. Learn more at https://reactjs.org/link/wrap-tests-with-act
+    at FrontOfficeBoard (/home/runner/work/ballpark-hero/ballpark-hero/src/components/front-office/FrontOfficeBoard.tsx:169:53)
+
+[90mstderr[2m | src/components/front-office-shared/FleetGm.test.tsx[2m > [22m[2mnfl board: fleet of base saves[2m > [22m[2mmounts 167 distinct base saves, writes nothing, never sticks on a holding box
+[22m[39mWarning: A suspended resource finished loading inside a test, but the event was not wrapped in act(...).
+
+When testing, code that resolves suspended data should be wrapped into act(...):
+
+act(() => {
+  /* finish loading suspended data */
+});
+/* assert on the output */
+
+This ensures that you're testing the behavior the user would see in the browser. Learn more at https://reactjs.org/link/wrap-tests-with-act
+
+[90mstderr[2m | src/components/front-office-shared/FleetGm.test.tsx[2m > [22m[2mnfl board: fleet of base saves[2m > [22m[2mmounts 167 distinct base saves, writes nothing, never sticks on a holding box
+[22m[39mWarning: An update to FrontOfficeBoard inside a test was not wrapped in act(...).
+
+When testing, code that causes React state updates should be wrapped into act(...):
+
+act(() => {
+  /* fire events that update state */
+});
+/* assert on the output */
+
+This ensures that you're testing the behavior the user would see in the browser. Learn more at https://reactjs.org/link/wrap-tests-with-act
+    at FrontOfficeBoard (/home/runner/work/ballpark-hero/ballpark-hero/src/components/front-office/FrontOfficeBoard.tsx:169:53)
+Warning: An update to FrontOfficeBoard inside a test was not wrapped in act(...).
+
+When testing, code that causes React state updates should be wrapped into act(...):
+
+act(() => {
+  /* fire events that update state */
+});
+/* assert on the output */
+
+This ensures that you're testing the behavior the user would see in the browser. Learn more at https://reactjs.org/link/wrap-tests-with-act
+    at FrontOfficeBoard (/home/runner/work/ballpark-hero/ballpark-hero/src/components/front-office/FrontOfficeBoard.tsx:169:53)
+
+[90mstderr[2m | src/components/front-office-shared/FleetGm.test.tsx[2m > [22m[2mnfl board: fleet of base saves[2m > [22m[2mmounts 167 distinct base saves, writes nothing, never sticks on a holding box
+[22m[39mWarning: A suspended resource finished loading inside a test, but the event was not wrapped in act(...).
+
+When testing, code that resolves suspended data should be wrapped into act(...):
+
+act(() => {
+  /* finish loading suspended data */
+});
+/* assert on the output */
+
+This ensures that you're testing the behavior the user would see in the browser. Learn more at https://reactjs.org/link/wrap-tests-with-act
+
+[90mstderr[2m | src/components/front-office-shared/FleetGm.test.tsx[2m > [22m[2mnfl board: fleet of base saves[2m > [22m[2mmounts 167 distinct base saves, writes nothing, never sticks on a holding box
+[22m[39mWarning: An update to FrontOfficeBoard inside a test was not wrapped in act(...).
+
+When testing, code that causes React state updates should be wrapped into act(...):
+
+act(() => {
+  /* fire events that update state */
+});
+/* assert on the output */
+
+This ensures that you're testing the behavior the user would see in the browser. Learn more at https://reactjs.org/link/wrap-tests-with-act
+    at FrontOfficeBoard (/home/runner/work/ballpark-hero/ballpark-hero/src/components/front-office/FrontOfficeBoard.tsx:169:53)
+Warning: An update to FrontOfficeBoard inside a test was not wrapped in act(...).
+
+When testing, code that causes React state updates should be wrapped into act(...):
+
+act(() => {
+  /* fire events that update state */
+});
+/* assert on the output */
+
+This ensures that you're testing the behavior the user would see in the browser. Learn more at https://reactjs.org/link/wrap-tests-with-act
+    at FrontOfficeBoard (/home/runner/work/ballpark-hero/ballpark-hero/src/components/front-office/FrontOfficeBoard.tsx:169:53)
+
+[90mstderr[2m | src/components/front-office-shared/FleetGm.test.tsx[2m > [22m[2mnfl board: fleet of base saves[2m > [22m[2mmounts 167 distinct base saves, writes nothing, never sticks on a holding box
+[22m[39mWarning: A suspended resource finished loading inside a test, but the event was not wrapped in act(...).
+
+When testing, code that resolves suspended data should be wrapped into act(...):
+
+act(() => {
+  /* finish loading suspended data */
+});
+/* assert on the output */
+
+This ensures that you're testing the behavior the user would see in the browser. Learn more at https://reactjs.org/link/wrap-tests-with-act
+
+[90mstderr[2m | src/components/front-office-shared/FleetGm.test.tsx[2m > [22m[2mnfl board: fleet of base saves[2m > [22m[2mmounts 167 distinct base saves, writes nothing, never sticks on a holding box
+[22m[39mWarning: An update to FrontOfficeBoard inside a test was not wrapped in act(...).
+
+When testing, code that causes React state updates should be wrapped into act(...):
+
+act(() => {
+  /* fire events that update state */
+});
+/* assert on the output */
+
+This ensures that you're testing the behavior the user would see in the browser. Learn more at https://reactjs.org/link/wrap-tests-with-act
+    at FrontOfficeBoard (/home/runner/work/ballpark-hero/ballpark-hero/src/components/front-office/FrontOfficeBoard.tsx:169:53)
+Warning: An update to FrontOfficeBoard inside a test was not wrapped in act(...).
+
+When testing, code that causes React state updates should be wrapped into act(...):
+
+act(() => {
+  /* fire events that update state */
+});
+/* assert on the output */
+
+This ensures that you're testing the behavior the user would see in the browser. Learn more at https://reactjs.org/link/wrap-tests-with-act
+    at FrontOfficeBoard (/home/runner/work/ballpark-hero/ballpark-hero/src/components/front-office/FrontOfficeBoard.tsx:169:53)
+
+[90mstderr[2m | src/components/front-office-shared/FleetGm.test.tsx[2m > [22m[2mnfl board: fleet of base saves[2m > [22m[2mmounts 167 distinct base saves, writes nothing, never sticks on a holding box
+[22m[39mWarning: A suspended resource finished loading inside a test, but the event was not wrapped in act(...).
+
+When testing, code that resolves suspended data should be wrapped into act(...):
+
+act(() => {
+  /* finish loading suspended data */
+});
+/* assert on the output */
+
+This ensures that you're testing the behavior the user would see in the browser. Learn more at https://reactjs.org/link/wrap-tests-with-act
+
+[90mstderr[2m | src/components/front-office-shared/FleetGm.test.tsx[2m > [22m[2mnfl board: fleet of base saves[2m > [22m[2mmounts 167 distinct base saves, writes nothing, never sticks on a holding box
+[22m[39mWarning: An update to FrontOfficeBoard inside a test was not wrapped in act(...).
+
+When testing, code that causes React state updates should be wrapped into act(...):
+
+act(() => {
+  /* fire events that update state */
+});
+/* assert on the output */
+
+This ensures that you're testing the behavior the user would see in the browser. Learn more at https://reactjs.org/link/wrap-tests-with-act
+    at FrontOfficeBoard (/home/runner/work/ballpark-hero/ballpark-hero/src/components/front-office/FrontOfficeBoard.tsx:169:53)
+Warning: An update to FrontOfficeBoard inside a test was not wrapped in act(...).
+
+When testing, code that causes React state updates should be wrapped into act(...):
+
+act(() => {
+  /* fire events that update state */
+});
+/* assert on the output */
+
+This ensures that you're testing the behavior the user would see in the browser. Learn more at https://reactjs.org/link/wrap-tests-with-act
+    at FrontOfficeBoard (/home/runner/work/ballpark-hero/ballpark-hero/src/components/front-office/FrontOfficeBoard.tsx:169:53)
+
+[90mstderr[2m | src/components/front-office-shared/FleetGm.test.tsx[2m > [22m[2mnfl board: fleet of base saves[2m > [22m[2mmounts 167 distinct base saves, writes nothing, never sticks on a holding box
+[22m[39mWarning: A suspended resource finished loading inside a test, but the event was not wrapped in act(...).
+
+When testing, code that resolves suspended data should be wrapped into act(...):
+
+act(() => {
+  /* finish loading suspended data */
+});
+/* assert on the output */
+
+This ensures that you're testing the behavior the user would see in the browser. Learn more at https://reactjs.org/link/wrap-tests-with-act
+
+[90mstderr[2m | src/components/front-office-shared/FleetGm.test.tsx[2m > [22m[2mnfl board: fleet of base saves[2m > [22m[2mmounts 167 distinct base saves, writes nothing, never sticks on a holding box
+[22m[39mWarning: An update to FrontOfficeBoard inside a test was not wrapped in act(...).
+
+When testing, code that causes React state updates should be wrapped into act(...):
+
+act(() => {
+  /* fire events that update state */
+});
+/* assert on the output */
+
+This ensures that you're testing the behavior the user would see in the browser. Learn more at https://reactjs.org/link/wrap-tests-with-act
+    at FrontOfficeBoard (/home/runner/work/ballpark-hero/ballpark-hero/src/components/front-office/FrontOfficeBoard.tsx:169:53)
+Warning: An update to FrontOfficeBoard inside a test was not wrapped in act(...).
+
+When testing, code that causes React state updates should be wrapped into act(...):
+
+act(() => {
+  /* fire events that update state */
+});
+/* assert on the output */
+
+This ensures that you're testing the behavior the user would see in the browser. Learn more at https://reactjs.org/link/wrap-tests-with-act
+    at FrontOfficeBoard (/home/runner/work/ballpark-hero/ballpark-hero/src/components/front-office/FrontOfficeBoard.tsx:169:53)
+
+[90mstderr[2m | src/components/front-office-shared/FleetGm.test.tsx[2m > [22m[2mnfl board: fleet of base saves[2m > [22m[2mmounts 167 distinct base saves, writes nothing, never sticks on a holding box
+[22m[39mWarning: A suspended resource finished loading inside a test, but the event was not wrapped in act(...).
+
+When testing, code that resolves suspended data should be wrapped into act(...):
+
+act(() => {
+  /* finish loading suspended data */
+});
+/* assert on the output */
+
+This ensures that you're testing the behavior the user would see in the browser. Learn more at https://reactjs.org/link/wrap-tests-with-act
+
+[90mstderr[2m | src/components/front-office-shared/FleetGm.test.tsx[2m > [22m[2mnfl board: fleet of base saves[2m > [22m[2mmounts 167 distinct base saves, writes nothing, never sticks on a holding box
+[22m[39mWarning: An update to FrontOfficeBoard inside a test was not wrapped in act(...).
+
+When testing, code that causes React state updates should be wrapped into act(...):
+
+act(() => {
+  /* fire events that update state */
+});
+/* assert on the output */
+
+This ensures that you're testing the behavior the user would see in the browser. Learn more at https://reactjs.org/link/wrap-tests-with-act
+    at FrontOfficeBoard (/home/runner/work/ballpark-hero/ballpark-hero/src/components/front-office/FrontOfficeBoard.tsx:169:53)
+Warning: An update to FrontOfficeBoard inside a test was not wrapped in act(...).
+
+When testing, code that causes React state updates should be wrapped into act(...):
+
+act(() => {
+  /* fire events that update state */
+});
+/* assert on the output */
+
+This ensures that you're testing the behavior the user would see in the browser. Learn more at https://reactjs.org/link/wrap-tests-with-act
+    at FrontOfficeBoard (/home/runner/work/ballpark-hero/ballpark-hero/src/components/front-office/FrontOfficeBoard.tsx:169:53)
+
+[90mstderr[2m | src/components/front-office-shared/FleetGm.test.tsx[2m > [22m[2mnfl board: fleet of base saves[2m > [22m[2mmounts 167 distinct base saves, writes nothing, never sticks on a holding box
+[22m[39mWarning: A suspended resource finished loading inside a test, but the event was not wrapped in act(...).
+
+When testing, code that resolves suspended data should be wrapped into act(...):
+
+act(() => {
+  /* finish loading suspended data */
+});
+/* assert on the output */
+
+This ensures that you're testing the behavior the user would see in the browser. Learn more at https://reactjs.org/link/wrap-tests-with-act
+
+[90mstderr[2m | src/components/front-office-shared/FleetGm.test.tsx[2m > [22m[2mnfl board: fleet of base saves[2m > [22m[2mmounts 167 distinct base saves, writes nothing, never sticks on a holding box
+[22m[39mWarning: An update to FrontOfficeBoard inside a test was not wrapped in act(...).
+
+When testing, code that causes React state updates should be wrapped into act(...):
+
+act(() => {
+  /* fire events that update state */
+});
+/* assert on the output */
+
+This ensures that you're testing the behavior the user would see in the browser. Learn more at https://reactjs.org/link/wrap-tests-with-act
+    at FrontOfficeBoard (/home/runner/work/ballpark-hero/ballpark-hero/src/components/front-office/FrontOfficeBoard.tsx:169:53)
+Warning: An update to FrontOfficeBoard inside a test was not wrapped in act(...).
+
+When testing, code that causes React state updates should be wrapped into act(...):
+
+act(() => {
+  /* fire events that update state */
+});
+/* assert on the output */
+
+This ensures that you're testing the behavior the user would see in the browser. Learn more at https://reactjs.org/link/wrap-tests-with-act
+    at FrontOfficeBoard (/home/runner/work/ballpark-hero/ballpark-hero/src/components/front-office/FrontOfficeBoard.tsx:169:53)
+
+[90mstderr[2m | src/components/front-office-shared/FleetGm.test.tsx[2m > [22m[2mnfl board: fleet of base saves[2m > [22m[2mmounts 167 distinct base saves, writes nothing, never sticks on a holding box
+[22m[39mWarning: A suspended resource finished loading inside a test, but the event was not wrapped in act(...).
+
+When testing, code that resolves suspended data should be wrapped into act(...):
+
+act(() => {
+  /* finish loading suspended data */
+});
+/* assert on the output */
+
+This ensures that you're testing the behavior the user would see in the browser. Learn more at https://reactjs.org/link/wrap-tests-with-act
+
+[90mstderr[2m | src/components/front-office-shared/FleetGm.test.tsx[2m > [22m[2mnfl board: fleet of base saves[2m > [22m[2mmounts 167 distinct base saves, writes nothing, never sticks on a holding box
+[22m[39mWarning: An update to FrontOfficeBoard inside a test was not wrapped in act(...).
+
+When testing, code that causes React state updates should be wrapped into act(...):
+
+act(() => {
+  /* fire events that update state */
+});
+/* assert on the output */
+
+This ensures that you're testing the behavior the user would see in the browser. Learn more at https://reactjs.org/link/wrap-tests-with-act
+    at FrontOfficeBoard (/home/runner/work/ballpark-hero/ballpark-hero/src/components/front-office/FrontOfficeBoard.tsx:169:53)
+Warning: An update to FrontOfficeBoard inside a test was not wrapped in act(...).
+
+When testing, code that causes React state updates should be wrapped into act(...):
+
+act(() => {
+  /* fire events that update state */
+});
+/* assert on the output */
+
+This ensures that you're testing the behavior the user would see in the browser. Learn more at https://reactjs.org/link/wrap-tests-with-act
+    at FrontOfficeBoard (/home/runner/work/ballpark-hero/ballpark-hero/src/components/front-office/FrontOfficeBoard.tsx:169:53)
+
+[90mstderr[2m | src/components/front-office-shared/FleetGm.test.tsx[2m > [22m[2mnfl board: fleet of base saves[2m > [22m[2mmounts 167 distinct base saves, writes nothing, never sticks on a holding box
+[22m[39mWarning: A suspended resource finished loading inside a test, but the event was not wrapped in act(...).
+
+When testing, code that resolves suspended data should be wrapped into act(...):
+
+act(() => {
+  /* finish loading suspended data */
+});
+/* assert on the output */
+
+This ensures that you're testing the behavior the user would see in the browser. Learn more at https://reactjs.org/link/wrap-tests-with-act
+
+[90mstderr[2m | src/components/front-office-shared/FleetGm.test.tsx[2m > [22m[2mnfl board: fleet of base saves[2m > [22m[2mmounts 167 distinct base saves, writes nothing, never sticks on a holding box
+[22m[39mWarning: An update to FrontOfficeBoard inside a test was not wrapped in act(...).
+
+When testing, code that causes React state updates should be wrapped into act(...):
+
+act(() => {
+  /* fire events that update state */
+});
+/* assert on the output */
+
+This ensures that you're testing the behavior the user would see in the browser. Learn more at https://reactjs.org/link/wrap-tests-with-act
+    at FrontOfficeBoard (/home/runner/work/ballpark-hero/ballpark-hero/src/components/front-office/FrontOfficeBoard.tsx:169:53)
+Warning: An update to FrontOfficeBoard inside a test was not wrapped in act(...).
+
+When testing, code that causes React state updates should be wrapped into act(...):
+
+act(() => {
+  /* fire events that update state */
+});
+/* assert on the output */
+
+This ensures that you're testing the behavior the user would see in the browser. Learn more at https://reactjs.org/link/wrap-tests-with-act
+    at FrontOfficeBoard (/home/runner/work/ballpark-hero/ballpark-hero/src/components/front-office/FrontOfficeBoard.tsx:169:53)
+
+[90mstderr[2m | src/components/front-office-shared/FleetGm.test.tsx[2m > [22m[2mnfl board: fleet of base saves[2m > [22m[2mmounts 167 distinct base saves, writes nothing, never sticks on a holding box
+[22m[39mWarning: A suspended resource finished loading inside a test, but the event was not wrapped in act(...).
+
+When testing, code that resolves suspended data should be wrapped into act(...):
+
+act(() => {
+  /* finish loading suspended data */
+});
+/* assert on the output */
+
+This ensures that you're testing the behavior the user would see in the browser. Learn more at https://reactjs.org/link/wrap-tests-with-act
+
+[90mstderr[2m | src/components/front-office-shared/FleetGm.test.tsx[2m > [22m[2mnfl board: fleet of base saves[2m > [22m[2mmounts 167 distinct base saves, writes nothing, never sticks on a holding box
+[22m[39mWarning: An update to FrontOfficeBoard inside a test was not wrapped in act(...).
+
+When testing, code that causes React state updates should be wrapped into act(...):
+
+act(() => {
+  /* fire events that update state */
+});
+/* assert on the output */
+
+This ensures that you're testing the behavior the user would see in the browser. Learn more at https://reactjs.org/link/wrap-tests-with-act
+    at FrontOfficeBoard (/home/runner/work/ballpark-hero/ballpark-hero/src/components/front-office/FrontOfficeBoard.tsx:169:53)
+Warning: An update to FrontOfficeBoard inside a test was not wrapped in act(...).
+
+When testing, code that causes React state updates should be wrapped into act(...):
+
+act(() => {
+  /* fire events that update state */
+});
+/* assert on the output */
+
+This ensures that you're testing the behavior the user would see in the browser. Learn more at https://reactjs.org/link/wrap-tests-with-act
+    at FrontOfficeBoard (/home/runner/work/ballpark-hero/ballpark-hero/src/components/front-office/FrontOfficeBoard.tsx:169:53)
+
+[90mstderr[2m | src/components/front-office-shared/FleetGm.test.tsx[2m > [22m[2mnfl board: fleet of base saves[2m > [22m[2mmounts 167 distinct base saves, writes nothing, never sticks on a holding box
+[22m[39mWarning: A suspended resource finished loading inside a test, but the event was not wrapped in act(...).
+
+When testing, code that resolves suspended data should be wrapped into act(...):
+
+act(() => {
+  /* finish loading suspended data */
+});
+/* assert on the output */
+
+This ensures that you're testing the behavior the user would see in the browser. Learn more at https://reactjs.org/link/wrap-tests-with-act
+
+[90mstderr[2m | src/components/front-office-shared/FleetGm.test.tsx[2m > [22m[2mnfl board: fleet of base saves[2m > [22m[2mmounts 167 distinct base saves, writes nothing, never sticks on a holding box
+[22m[39mWarning: An update to FrontOfficeBoard inside a test was not wrapped in act(...).
+
+When testing, code that causes React state updates should be wrapped into act(...):
+
+act(() => {
+  /* fire events that update state */
+});
+/* assert on the output */
+
+This ensures that you're testing the behavior the user would see in the browser. Learn more at https://reactjs.org/link/wrap-tests-with-act
+    at FrontOfficeBoard (/home/runner/work/ballpark-hero/ballpark-hero/src/components/front-office/FrontOfficeBoard.tsx:169:53)
+Warning: An update to FrontOfficeBoard inside a test was not wrapped in act(...).
+
+When testing, code that causes React state updates should be wrapped into act(...):
+
+act(() => {
+  /* fire events that update state */
+});
+/* assert on the output */
+
+This ensures that you're testing the behavior the user would see in the browser. Learn more at https://reactjs.org/link/wrap-tests-with-act
+    at FrontOfficeBoard (/home/runner/work/ballpark-hero/ballpark-hero/src/components/front-office/FrontOfficeBoard.tsx:169:53)
+
+[90mstderr[2m | src/components/front-office-shared/FleetGm.test.tsx[2m > [22m[2mnfl board: fleet of base saves[2m > [22m[2mmounts 167 distinct base saves, writes nothing, never sticks on a holding box
+[22m[39mWarning: A suspended resource finished loading inside a test, but the event was not wrapped in act(...).
+
+When testing, code that resolves suspended data should be wrapped into act(...):
+
+act(() => {
+  /* finish loading suspended data */
+});
+/* assert on the output */
+
+This ensures that you're testing the behavior the user would see in the browser. Learn more at https://reactjs.org/link/wrap-tests-with-act
+
+[90mstderr[2m | src/components/front-office-shared/FleetGm.test.tsx[2m > [22m[2mnfl board: fleet of base saves[2m > [22m[2mmounts 167 distinct base saves, writes nothing, never sticks on a holding box
+[22m[39mWarning: An update to FrontOfficeBoard inside a test was not wrapped in act(...).
+
+When testing, code that causes React state updates should be wrapped into act(...):
+
+act(() => {
+  /* fire events that update state */
+});
+/* assert on the output */
+
+This ensures that you're testing the behavior the user would see in the browser. Learn more at https://reactjs.org/link/wrap-tests-with-act
+    at FrontOfficeBoard (/home/runner/work/ballpark-hero/ballpark-hero/src/components/front-office/FrontOfficeBoard.tsx:169:53)
+Warning: An update to FrontOfficeBoard inside a test was not wrapped in act(...).
+
+When testing, code that causes React state updates should be wrapped into act(...):
+
+act(() => {
+  /* fire events that update state */
+});
+/* assert on the output */
+
+This ensures that you're testing the behavior the user would see in the browser. Learn more at https://reactjs.org/link/wrap-tests-with-act
+    at FrontOfficeBoard (/home/runner/work/ballpark-hero/ballpark-hero/src/components/front-office/FrontOfficeBoard.tsx:169:53)
+
+[90mstderr[2m | src/components/front-office-shared/FleetGm.test.tsx[2m > [22m[2mnfl board: fleet of base saves[2m > [22m[2mmounts 167 distinct base saves, writes nothing, never sticks on a holding box
+[22m[39mWarning: A suspended resource finished loading inside a test, but the event was not wrapped in act(...).
+
+When testing, code that resolves suspended data should be wrapped into act(...):
+
+act(() => {
+  /* finish loading suspended data */
+});
+/* assert on the output */
+
+This ensures that you're testing the behavior the user would see in the browser. Learn more at https://reactjs.org/link/wrap-tests-with-act
+
+[90mstderr[2m | src/components/front-office-shared/FleetGm.test.tsx[2m > [22m[2mnfl board: fleet of base saves[2m > [22m[2mmounts 167 distinct base saves, writes nothing, never sticks on a holding box
+[22m[39mWarning: An update to FrontOfficeBoard inside a test was not wrapped in act(...).
+
+When testing, code that causes React state updates should be wrapped into act(...):
+
+act(() => {
+  /* fire events that update state */
+});
+/* assert on the output */
+
+This ensures that you're testing the behavior the user would see in the browser. Learn more at https://reactjs.org/link/wrap-tests-with-act
+    at FrontOfficeBoard (/home/runner/work/ballpark-hero/ballpark-hero/src/components/front-office/FrontOfficeBoard.tsx:169:53)
+Warning: An update to FrontOfficeBoard inside a test was not wrapped in act(...).
+
+When testing, code that causes React state updates should be wrapped into act(...):
+
+act(() => {
+  /* fire events that update state */
+});
+/* assert on the output */
+
+This ensures that you're testing the behavior the user would see in the browser. Learn more at https://reactjs.org/link/wrap-tests-with-act
+    at FrontOfficeBoard (/home/runner/work/ballpark-hero/ballpark-hero/src/components/front-office/FrontOfficeBoard.tsx:169:53)
+
+[90mstderr[2m | src/components/front-office-shared/FleetGm.test.tsx[2m > [22m[2mnfl board: fleet of base saves[2m > [22m[2mmounts 167 distinct base saves, writes nothing, never sticks on a holding box
+[22m[39mWarning: A suspended resource finished loading inside a test, but the event was not wrapped in act(...).
+
+When testing, code that resolves suspended data should be wrapped into act(...):
+
+act(() => {
+  /* finish loading suspended data */
+});
+/* assert on the output */
+
+This ensures that you're testing the behavior the user would see in the browser. Learn more at https://reactjs.org/link/wrap-tests-with-act
+
+[90mstderr[2m | src/components/front-office-shared/FleetGm.test.tsx[2m > [22m[2mnfl board: fleet of base saves[2m > [22m[2mmounts 167 distinct base saves, writes nothing, never sticks on a holding box
+[22m[39mWarning: An update to FrontOfficeBoard inside a test was not wrapped in act(...).
+
+When testing, code that causes React state updates should be wrapped into act(...):
+
+act(() => {
+  /* fire events that update state */
+});
+/* assert on the output */
+
+This ensures that you're testing the behavior the user would see in the browser. Learn more at https://reactjs.org/link/wrap-tests-with-act
+    at FrontOfficeBoard (/home/runner/work/ballpark-hero/ballpark-hero/src/components/front-office/FrontOfficeBoard.tsx:169:53)
+Warning: An update to FrontOfficeBoard inside a test was not wrapped in act(...).
+
+When testing, code that causes React state updates should be wrapped into act(...):
+
+act(() => {
+  /* fire events that update state */
+});
+/* assert on the output */
+
+This ensures that you're testing the behavior the user would see in the browser. Learn more at https://reactjs.org/link/wrap-tests-with-act
+    at FrontOfficeBoard (/home/runner/work/ballpark-hero/ballpark-hero/src/components/front-office/FrontOfficeBoard.tsx:169:53)
+
+[90mstderr[2m | src/components/front-office-shared/FleetGm.test.tsx[2m > [22m[2mnfl board: fleet of base saves[2m > [22m[2mmounts 167 distinct base saves, writes nothing, never sticks on a holding box
+[22m[39mWarning: A suspended resource finished loading inside a test, but the event was not wrapped in act(...).
+
+When testing, code that resolves suspended data should be wrapped into act(...):
+
+act(() => {
+  /* finish loading suspended data */
+});
+/* assert on the output */
+
+This ensures that you're testing the behavior the user would see in the browser. Learn more at https://reactjs.org/link/wrap-tests-with-act
+
+[90mstderr[2m | src/components/front-office-shared/FleetGm.test.tsx[2m > [22m[2mnfl board: fleet of base saves[2m > [22m[2mmounts 167 distinct base saves, writes nothing, never sticks on a holding box
+[22m[39mWarning: An update to FrontOfficeBoard inside a test was not wrapped in act(...).
+
+When testing, code that causes React state updates should be wrapped into act(...):
+
+act(() => {
+  /* fire events that update state */
+});
+/* assert on the output */
+
+This ensures that you're testing the behavior the user would see in the browser. Learn more at https://reactjs.org/link/wrap-tests-with-act
+    at FrontOfficeBoard (/home/runner/work/ballpark-hero/ballpark-hero/src/components/front-office/FrontOfficeBoard.tsx:169:53)
+Warning: An update to FrontOfficeBoard inside a test was not wrapped in act(...).
+
+When testing, code that causes React state updates should be wrapped into act(...):
+
+act(() => {
+  /* fire events that update state */
+});
+/* assert on the output */
+
+This ensures that you're testing the behavior the user would see in the browser. Learn more at https://reactjs.org/link/wrap-tests-with-act
+    at FrontOfficeBoard (/home/runner/work/ballpark-hero/ballpark-hero/src/components/front-office/FrontOfficeBoard.tsx:169:53)
+
+[90mstderr[2m | src/components/front-office-shared/FleetGm.test.tsx[2m > [22m[2mnfl board: fleet of base saves[2m > [22m[2mmounts 167 distinct base saves, writes nothing, never sticks on a holding box
+[22m[39mWarning: A suspended resource finished loading inside a test, but the event was not wrapped in act(...).
+
+When testing, code that resolves suspended data should be wrapped into act(...):
+
+act(() => {
+  /* finish loading suspended data */
+});
+/* assert on the output */
+
+This ensures that you're testing the behavior the user would see in the browser. Learn more at https://reactjs.org/link/wrap-tests-with-act
+
+[90mstderr[2m | src/components/front-office-shared/FleetGm.test.tsx[2m > [22m[2mnfl board: fleet of base saves[2m > [22m[2mmounts 167 distinct base saves, writes nothing, never sticks on a holding box
+[22m[39mWarning: An update to FrontOfficeBoard inside a test was not wrapped in act(...).
+
+When testing, code that causes React state updates should be wrapped into act(...):
+
+act(() => {
+  /* fire events that update state */
+});
+/* assert on the output */
+
+This ensures that you're testing the behavior the user would see in the browser. Learn more at https://reactjs.org/link/wrap-tests-with-act
+    at FrontOfficeBoard (/home/runner/work/ballpark-hero/ballpark-hero/src/components/front-office/FrontOfficeBoard.tsx:169:53)
+Warning: An update to FrontOfficeBoard inside a test was not wrapped in act(...).
+
+When testing, code that causes React state updates should be wrapped into act(...):
+
+act(() => {
+  /* fire events that update state */
+});
+/* assert on the output */
+
+This ensures that you're testing the behavior the user would see in the browser. Learn more at https://reactjs.org/link/wrap-tests-with-act
+    at FrontOfficeBoard (/home/runner/work/ballpark-hero/ballpark-hero/src/components/front-office/FrontOfficeBoard.tsx:169:53)
+
+[90mstderr[2m | src/components/front-office-shared/FleetGm.test.tsx[2m > [22m[2mnfl board: fleet of base saves[2m > [22m[2mmounts 167 distinct base saves, writes nothing, never sticks on a holding box
+[22m[39mWarning: A suspended resource finished loading inside a test, but the event was not wrapped in act(...).
+
+When testing, code that resolves suspended data should be wrapped into act(...):
+
+act(() => {
+  /* finish loading suspended data */
+});
+/* assert on the output */
+
+This ensures that you're testing the behavior the user would see in the browser. Learn more at https://reactjs.org/link/wrap-tests-with-act
+
+[90mstderr[2m | src/components/front-office-shared/FleetGm.test.tsx[2m > [22m[2mnfl board: fleet of base saves[2m > [22m[2mmounts 167 distinct base saves, writes nothing, never sticks on a holding box
+[22m[39mWarning: An update to FrontOfficeBoard inside a test was not wrapped in act(...).
+
+When testing, code that causes React state updates should be wrapped into act(...):
+
+act(() => {
+  /* fire events that update state */
+});
+/* assert on the output */
+
+This ensures that you're testing the behavior the user would see in the browser. Learn more at https://reactjs.org/link/wrap-tests-with-act
+    at FrontOfficeBoard (/home/runner/work/ballpark-hero/ballpark-hero/src/components/front-office/FrontOfficeBoard.tsx:169:53)
+Warning: An update to FrontOfficeBoard inside a test was not wrapped in act(...).
+
+When testing, code that causes React state updates should be wrapped into act(...):
+
+act(() => {
+  /* fire events that update state */
+});
+/* assert on the output */
+
+This ensures that you're testing the behavior the user would see in the browser. Learn more at https://reactjs.org/link/wrap-tests-with-act
+    at FrontOfficeBoard (/home/runner/work/ballpark-hero/ballpark-hero/src/components/front-office/FrontOfficeBoard.tsx:169:53)
+
+[90mstderr[2m | src/components/front-office-shared/FleetGm.test.tsx[2m > [22m[2mnfl board: fleet of base saves[2m > [22m[2mmounts 167 distinct base saves, writes nothing, never sticks on a holding box
+[22m[39mWarning: A suspended resource finished loading inside a test, but the event was not wrapped in act(...).
+
+When testing, code that resolves suspended data should be wrapped into act(...):
+
+act(() => {
+  /* finish loading suspended data */
+});
+/* assert on the output */
+
+This ensures that you're testing the behavior the user would see in the browser. Learn more at https://reactjs.org/link/wrap-tests-with-act
+
+[90mstderr[2m | src/components/front-office-shared/FleetGm.test.tsx[2m > [22m[2mnfl board: fleet of base saves[2m > [22m[2mmounts 167 distinct base saves, writes nothing, never sticks on a holding box
+[22m[39mWarning: An update to FrontOfficeBoard inside a test was not wrapped in act(...).
+
+When testing, code that causes React state updates should be wrapped into act(...):
+
+act(() => {
+  /* fire events that update state */
+});
+/* assert on the output */
+
+This ensures that you're testing the behavior the user would see in the browser. Learn more at https://reactjs.org/link/wrap-tests-with-act
+    at FrontOfficeBoard (/home/runner/work/ballpark-hero/ballpark-hero/src/components/front-office/FrontOfficeBoard.tsx:169:53)
+Warning: An update to FrontOfficeBoard inside a test was not wrapped in act(...).
+
+When testing, code that causes React state updates should be wrapped into act(...):
+
+act(() => {
+  /* fire events that update state */
+});
+/* assert on the output */
+
+This ensures that you're testing the behavior the user would see in the browser. Learn more at https://reactjs.org/link/wrap-tests-with-act
+    at FrontOfficeBoard (/home/runner/work/ballpark-hero/ballpark-hero/src/components/front-office/FrontOfficeBoard.tsx:169:53)
+
+[90mstderr[2m | src/components/front-office-shared/FleetGm.test.tsx[2m > [22m[2mnfl board: fleet of base saves[2m > [22m[2mmounts 167 distinct base saves, writes nothing, never sticks on a holding box
+[22m[39mWarning: A suspended resource finished loading inside a test, but the event was not wrapped in act(...).
+
+When testing, code that resolves suspended data should be wrapped into act(...):
+
+act(() => {
+  /* finish loading suspended data */
+});
+/* assert on the output */
+
+This ensures that you're testing the behavior the user would see in the browser. Learn more at https://reactjs.org/link/wrap-tests-with-act
+
+[90mstderr[2m | src/components/front-office-shared/FleetGm.test.tsx[2m > [22m[2mnfl board: fleet of base saves[2m > [22m[2mmounts 167 distinct base saves, writes nothing, never sticks on a holding box
+[22m[39mWarning: An update to FrontOfficeBoard inside a test was not wrapped in act(...).
+
+When testing, code that causes React state updates should be wrapped into act(...):
+
+act(() => {
+  /* fire events that update state */
+});
+/* assert on the output */
+
+This ensures that you're testing the behavior the user would see in the browser. Learn more at https://reactjs.org/link/wrap-tests-with-act
+    at FrontOfficeBoard (/home/runner/work/ballpark-hero/ballpark-hero/src/components/front-office/FrontOfficeBoard.tsx:169:53)
+Warning: An update to FrontOfficeBoard inside a test was not wrapped in act(...).
+
+When testing, code that causes React state updates should be wrapped into act(...):
+
+act(() => {
+  /* fire events that update state */
+});
+/* assert on the output */
+
+This ensures that you're testing the behavior the user would see in the browser. Learn more at https://reactjs.org/link/wrap-tests-with-act
+    at FrontOfficeBoard (/home/runner/work/ballpark-hero/ballpark-hero/src/components/front-office/FrontOfficeBoard.tsx:169:53)
+
+[90mstderr[2m | src/components/front-office-shared/FleetGm.test.tsx[2m > [22m[2mnfl board: fleet of base saves[2m > [22m[2mmounts 167 distinct base saves, writes nothing, never sticks on a holding box
+[22m[39mWarning: A suspended resource finished loading inside a test, but the event was not wrapped in act(...).
+
+When testing, code that resolves suspended data should be wrapped into act(...):
+
+act(() => {
+  /* finish loading suspended data */
+});
+/* assert on the output */
+
+This ensures that you're testing the behavior the user would see in the browser. Learn more at https://reactjs.org/link/wrap-tests-with-act
+
+[90mstdout[2m | src/components/front-office-shared/FleetGm.test.tsx[2m > [22m[2mnfl board: fleet of base saves[2m > [22m[2mmounts 167 distinct base saves, writes nothing, never sticks on a holding box
+[22m[39mFLEET_MOUNT|nfl|167 saves|{"hub":108,"recap":35,"draft":24}|0 bad
+
+[90mstderr[2m | src/components/front-office-shared/FleetGm.test.tsx[2m > [22m[2mnhl board: fleet of base saves[2m > [22m[2mmounts 164 distinct base saves, writes nothing, never sticks on a holding box
+[22m[39mWarning: An update to NhlFrontOfficeBoard inside a test was not wrapped in act(...).
+
+When testing, code that causes React state updates should be wrapped into act(...):
+
+act(() => {
+  /* fire events that update state */
+});
+/* assert on the output */
+
+This ensures that you're testing the behavior the user would see in the browser. Learn more at https://reactjs.org/link/wrap-tests-with-act
+    at NhlFrontOfficeBoard (/home/runner/work/ballpark-hero/ballpark-hero/src/components/nhl-front-office/NhlFrontOfficeBoard.tsx:448:53)
+Warning: An update to NhlFrontOfficeBoard inside a test was not wrapped in act(...).
+
+When testing, code that causes React state updates should be wrapped into act(...):
+
+act(() => {
+  /* fire events that update state */
+});
+/* assert on the output */
+
+This ensures that you're testing the behavior the user would see in the browser. Learn more at https://reactjs.org/link/wrap-tests-with-act
+    at NhlFrontOfficeBoard (/home/runner/work/ballpark-hero/ballpark-hero/src/components/nhl-front-office/NhlFrontOfficeBoard.tsx:448:53)
+
+[90mstderr[2m | src/components/front-office-shared/FleetGm.test.tsx[2m > [22m[2mnhl board: fleet of base saves[2m > [22m[2mmounts 164 distinct base saves, writes nothing, never sticks on a holding box
+[22m[39mWarning: An update to NhlFrontOfficeBoard inside a test was not wrapped in act(...).
+
+When testing, code that causes React state updates should be wrapped into act(...):
+
+act(() => {
+  /* fire events that update state */
+});
+/* assert on the output */
+
+This ensures that you're testing the behavior the user would see in the browser. Learn more at https://reactjs.org/link/wrap-tests-with-act
+    at NhlFrontOfficeBoard (/home/runner/work/ballpark-hero/ballpark-hero/src/components/nhl-front-office/NhlFrontOfficeBoard.tsx:448:53)
+Warning: An update to NhlFrontOfficeBoard inside a test was not wrapped in act(...).
+
+When testing, code that causes React state updates should be wrapped into act(...):
+
+act(() => {
+  /* fire events that update state */
+});
+/* assert on the output */
+
+This ensures that you're testing the behavior the user would see in the browser. Learn more at https://reactjs.org/link/wrap-tests-with-act
+    at NhlFrontOfficeBoard (/home/runner/work/ballpark-hero/ballpark-hero/src/components/nhl-front-office/NhlFrontOfficeBoard.tsx:448:53)
+
+[90mstderr[2m | src/components/front-office-shared/FleetGm.test.tsx[2m > [22m[2mnhl board: fleet of base saves[2m > [22m[2mmounts 164 distinct base saves, writes nothing, never sticks on a holding box
+[22m[39mWarning: An update to NhlFrontOfficeBoard inside a test was not wrapped in act(...).
+
+When testing, code that causes React state updates should be wrapped into act(...):
+
+act(() => {
+  /* fire events that update state */
+});
+/* assert on the output */
+
+This ensures that you're testing the behavior the user would see in the browser. Learn more at https://reactjs.org/link/wrap-tests-with-act
+    at NhlFrontOfficeBoard (/home/runner/work/ballpark-hero/ballpark-hero/src/components/nhl-front-office/NhlFrontOfficeBoard.tsx:448:53)
+Warning: An update to NhlFrontOfficeBoard inside a test was not wrapped in act(...).
+
+When testing, code that causes React state updates should be wrapped into act(...):
+
+act(() => {
+  /* fire events that update state */
+});
+/* assert on the output */
+
+This ensures that you're testing the behavior the user would see in the browser. Learn more at https://reactjs.org/link/wrap-tests-with-act
+    at NhlFrontOfficeBoard (/home/runner/work/ballpark-hero/ballpark-hero/src/components/nhl-front-office/NhlFrontOfficeBoard.tsx:448:53)
+
+[90mstderr[2m | src/components/front-office-shared/FleetGm.test.tsx[2m > [22m[2mnhl board: fleet of base saves[2m > [22m[2mmounts 164 distinct base saves, writes nothing, never sticks on a holding box
+[22m[39mWarning: An update to NhlFrontOfficeBoard inside a test was not wrapped in act(...).
+
+When testing, code that causes React state updates should be wrapped into act(...):
+
+act(() => {
+  /* fire events that update state */
+});
+/* assert on the output */
+
+This ensures that you're testing the behavior the user would see in the browser. Learn more at https://reactjs.org/link/wrap-tests-with-act
+    at NhlFrontOfficeBoard (/home/runner/work/ballpark-hero/ballpark-hero/src/components/nhl-front-office/NhlFrontOfficeBoard.tsx:448:53)
+Warning: An update to NhlFrontOfficeBoard inside a test was not wrapped in act(...).
+
+When testing, code that causes React state updates should be wrapped into act(...):
+
+act(() => {
+  /* fire events that update state */
+});
+/* assert on the output */
+
+This ensures that you're testing the behavior the user would see in the browser. Learn more at https://reactjs.org/link/wrap-tests-with-act
+    at NhlFrontOfficeBoard (/home/runner/work/ballpark-hero/ballpark-hero/src/components/nhl-front-office/NhlFrontOfficeBoard.tsx:448:53)
+
+[90mstderr[2m | src/components/front-office-shared/FleetGm.test.tsx[2m > [22m[2mnhl board: fleet of base saves[2m > [22m[2mmounts 164 distinct base saves, writes nothing, never sticks on a holding box
+[22m[39mWarning: An update to NhlFrontOfficeBoard inside a test was not wrapped in act(...).
+
+When testing, code that causes React state updates should be wrapped into act(...):
+
+act(() => {
+  /* fire events that update state */
+});
+/* assert on the output */
+
+This ensures that you're testing the behavior the user would see in the browser. Learn more at https://reactjs.org/link/wrap-tests-with-act
+    at NhlFrontOfficeBoard (/home/runner/work/ballpark-hero/ballpark-hero/src/components/nhl-front-office/NhlFrontOfficeBoard.tsx:448:53)
+Warning: An update to NhlFrontOfficeBoard inside a test was not wrapped in act(...).
+
+When testing, code that causes React state updates should be wrapped into act(...):
+
+act(() => {
+  /* fire events that update state */
+});
+/* assert on the output */
+
+This ensures that you're testing the behavior the user would see in the browser. Learn more at https://reactjs.org/link/wrap-tests-with-act
+    at NhlFrontOfficeBoard (/home/runner/work/ballpark-hero/ballpark-hero/src/components/nhl-front-office/NhlFrontOfficeBoard.tsx:448:53)
+
+[90mstderr[2m | src/components/front-office-shared/FleetGm.test.tsx[2m > [22m[2mnhl board: fleet of base saves[2m > [22m[2mmounts 164 distinct base saves, writes nothing, never sticks on a holding box
+[22m[39mWarning: An update to NhlFrontOfficeBoard inside a test was not wrapped in act(...).
+
+When testing, code that causes React state updates should be wrapped into act(...):
+
+act(() => {
+  /* fire events that update state */
+});
+/* assert on the output */
+
+This ensures that you're testing the behavior the user would see in the browser. Learn more at https://reactjs.org/link/wrap-tests-with-act
+    at NhlFrontOfficeBoard (/home/runner/work/ballpark-hero/ballpark-hero/src/components/nhl-front-office/NhlFrontOfficeBoard.tsx:448:53)
+Warning: An update to NhlFrontOfficeBoard inside a test was not wrapped in act(...).
+
+When testing, code that causes React state updates should be wrapped into act(...):
+
+act(() => {
+  /* fire events that update state */
+});
+/* assert on the output */
+
+This ensures that you're testing the behavior the user would see in the browser. Learn more at https://reactjs.org/link/wrap-tests-with-act
+    at NhlFrontOfficeBoard (/home/runner/work/ballpark-hero/ballpark-hero/src/components/nhl-front-office/NhlFrontOfficeBoard.tsx:448:53)
+
+[90mstderr[2m | src/components/front-office-shared/FleetGm.test.tsx[2m > [22m[2mnhl board: fleet of base saves[2m > [22m[2mmounts 164 distinct base saves, writes nothing, never sticks on a holding box
+[22m[39mWarning: An update to NhlFrontOfficeBoard inside a test was not wrapped in act(...).
+
+When testing, code that causes React state updates should be wrapped into act(...):
+
+act(() => {
+  /* fire events that update state */
+});
+/* assert on the output */
+
+This ensures that you're testing the behavior the user would see in the browser. Learn more at https://reactjs.org/link/wrap-tests-with-act
+    at NhlFrontOfficeBoard (/home/runner/work/ballpark-hero/ballpark-hero/src/components/nhl-front-office/NhlFrontOfficeBoard.tsx:448:53)
+Warning: An update to NhlFrontOfficeBoard inside a test was not wrapped in act(...).
+
+When testing, code that causes React state updates should be wrapped into act(...):
+
+act(() => {
+  /* fire events that update state */
+});
+/* assert on the output */
+
+This ensures that you're testing the behavior the user would see in the browser. Learn more at https://reactjs.org/link/wrap-tests-with-act
+    at NhlFrontOfficeBoard (/home/runner/work/ballpark-hero/ballpark-hero/src/components/nhl-front-office/NhlFrontOfficeBoard.tsx:448:53)
+
+[90mstderr[2m | src/components/front-office-shared/FleetGm.test.tsx[2m > [22m[2mnhl board: fleet of base saves[2m > [22m[2mmounts 164 distinct base saves, writes nothing, never sticks on a holding box
+[22m[39mWarning: An update to NhlFrontOfficeBoard inside a test was not wrapped in act(...).
+
+When testing, code that causes React state updates should be wrapped into act(...):
+
+act(() => {
+  /* fire events that update state */
+});
+/* assert on the output */
+
+This ensures that you're testing the behavior the user would see in the browser. Learn more at https://reactjs.org/link/wrap-tests-with-act
+    at NhlFrontOfficeBoard (/home/runner/work/ballpark-hero/ballpark-hero/src/components/nhl-front-office/NhlFrontOfficeBoard.tsx:448:53)
+Warning: An update to NhlFrontOfficeBoard inside a test was not wrapped in act(...).
+
+When testing, code that causes React state updates should be wrapped into act(...):
+
+act(() => {
+  /* fire events that update state */
+});
+/* assert on the output */
+
+This ensures that you're testing the behavior the user would see in the browser. Learn more at https://reactjs.org/link/wrap-tests-with-act
+    at NhlFrontOfficeBoard (/home/runner/work/ballpark-hero/ballpark-hero/src/components/nhl-front-office/NhlFrontOfficeBoard.tsx:448:53)
+
+[90mstderr[2m | src/components/front-office-shared/FleetGm.test.tsx[2m > [22m[2mnhl board: fleet of base saves[2m > [22m[2mmounts 164 distinct base saves, writes nothing, never sticks on a holding box
+[22m[39mWarning: An update to NhlFrontOfficeBoard inside a test was not wrapped in act(...).
+
+When testing, code that causes React state updates should be wrapped into act(...):
+
+act(() => {
+  /* fire events that update state */
+});
+/* assert on the output */
+
+This ensures that you're testing the behavior the user would see in the browser. Learn more at https://reactjs.org/link/wrap-tests-with-act
+    at NhlFrontOfficeBoard (/home/runner/work/ballpark-hero/ballpark-hero/src/components/nhl-front-office/NhlFrontOfficeBoard.tsx:448:53)
+Warning: An update to NhlFrontOfficeBoard inside a test was not wrapped in act(...).
+
+When testing, code that causes React state updates should be wrapped into act(...):
+
+act(() => {
+  /* fire events that update state */
+});
+/* assert on the output */
+
+This ensures that you're testing the behavior the user would see in the browser. Learn more at https://reactjs.org/link/wrap-tests-with-act
+    at NhlFrontOfficeBoard (/home/runner/work/ballpark-hero/ballpark-hero/src/components/nhl-front-office/NhlFrontOfficeBoard.tsx:448:53)
+
+[90mstderr[2m | src/components/front-office-shared/FleetGm.test.tsx[2m > [22m[2mnhl board: fleet of base saves[2m > [22m[2mmounts 164 distinct base saves, writes nothing, never sticks on a holding box
+[22m[39mWarning: An update to NhlFrontOfficeBoard inside a test was not wrapped in act(...).
+
+When testing, code that causes React state updates should be wrapped into act(...):
+
+act(() => {
+  /* fire events that update state */
+});
+/* assert on the output */
+
+This ensures that you're testing the behavior the user would see in the browser. Learn more at https://reactjs.org/link/wrap-tests-with-act
+    at NhlFrontOfficeBoard (/home/runner/work/ballpark-hero/ballpark-hero/src/components/nhl-front-office/NhlFrontOfficeBoard.tsx:448:53)
+Warning: An update to NhlFrontOfficeBoard inside a test was not wrapped in act(...).
+
+When testing, code that causes React state updates should be wrapped into act(...):
+
+act(() => {
+  /* fire events that update state */
+});
+/* assert on the output */
+
+This ensures that you're testing the behavior the user would see in the browser. Learn more at https://reactjs.org/link/wrap-tests-with-act
+    at NhlFrontOfficeBoard (/home/runner/work/ballpark-hero/ballpark-hero/src/components/nhl-front-office/NhlFrontOfficeBoard.tsx:448:53)
+
+[90mstderr[2m | src/components/front-office-shared/FleetGm.test.tsx[2m > [22m[2mnhl board: fleet of base saves[2m > [22m[2mmounts 164 distinct base saves, writes nothing, never sticks on a holding box
+[22m[39mWarning: An update to NhlFrontOfficeBoard inside a test was not wrapped in act(...).
+
+When testing, code that causes React state updates should be wrapped into act(...):
+
+act(() => {
+  /* fire events that update state */
+});
+/* assert on the output */
+
+This ensures that you're testing the behavior the user would see in the browser. Learn more at https://reactjs.org/link/wrap-tests-with-act
+    at NhlFrontOfficeBoard (/home/runner/work/ballpark-hero/ballpark-hero/src/components/nhl-front-office/NhlFrontOfficeBoard.tsx:448:53)
+Warning: An update to NhlFrontOfficeBoard inside a test was not wrapped in act(...).
+
+When testing, code that causes React state updates should be wrapped into act(...):
+
+act(() => {
+  /* fire events that update state */
+});
+/* assert on the output */
+
+This ensures that you're testing the behavior the user would see in the browser. Learn more at https://reactjs.org/link/wrap-tests-with-act
+    at NhlFrontOfficeBoard (/home/runner/work/ballpark-hero/ballpark-hero/src/components/nhl-front-office/NhlFrontOfficeBoard.tsx:448:53)
+
+[90mstderr[2m | src/components/front-office-shared/FleetGm.test.tsx[2m > [22m[2mnhl board: fleet of base saves[2m > [22m[2mmounts 164 distinct base saves, writes nothing, never sticks on a holding box
+[22m[39mWarning: An update to NhlFrontOfficeBoard inside a test was not wrapped in act(...).
+
+When testing, code that causes React state updates should be wrapped into act(...):
+
+act(() => {
+  /* fire events that update state */
+});
+/* assert on the output */
+
+This ensures that you're testing the behavior the user would see in the browser. Learn more at https://reactjs.org/link/wrap-tests-with-act
+    at NhlFrontOfficeBoard (/home/runner/work/ballpark-hero/ballpark-hero/src/components/nhl-front-office/NhlFrontOfficeBoard.tsx:448:53)
+Warning: An update to NhlFrontOfficeBoard inside a test was not wrapped in act(...).
+
+When testing, code that causes React state updates should be wrapped into act(...):
+
+act(() => {
+  /* fire events that update state */
+});
+/* assert on the output */
+
+This ensures that you're testing the behavior the user would see in the browser. Learn more at https://reactjs.org/link/wrap-tests-with-act
+    at NhlFrontOfficeBoard (/home/runner/work/ballpark-hero/ballpark-hero/src/components/nhl-front-office/NhlFrontOfficeBoard.tsx:448:53)
+
+[90mstderr[2m | src/components/front-office-shared/FleetGm.test.tsx[2m > [22m[2mnhl board: fleet of base saves[2m > [22m[2mmounts 164 distinct base saves, writes nothing, never sticks on a holding box
+[22m[39mWarning: An update to NhlFrontOfficeBoard inside a test was not wrapped in act(...).
+
+When testing, code that causes React state updates should be wrapped into act(...):
+
+act(() => {
+  /* fire events that update state */
+});
+/* assert on the output */
+
+This ensures that you're testing the behavior the user would see in the browser. Learn more at https://reactjs.org/link/wrap-tests-with-act
+    at NhlFrontOfficeBoard (/home/runner/work/ballpark-hero/ballpark-hero/src/components/nhl-front-office/NhlFrontOfficeBoard.tsx:448:53)
+Warning: An update to NhlFrontOfficeBoard inside a test was not wrapped in act(...).
+
+When testing, code that causes React state updates should be wrapped into act(...):
+
+act(() => {
+  /* fire events that update state */
+});
+/* assert on the output */
+
+This ensures that you're testing the behavior the user would see in the browser. Learn more at https://reactjs.org/link/wrap-tests-with-act
+    at NhlFrontOfficeBoard (/home/runner/work/ballpark-hero/ballpark-hero/src/components/nhl-front-office/NhlFrontOfficeBoard.tsx:448:53)
+
+[90mstderr[2m | src/components/front-office-shared/FleetGm.test.tsx[2m > [22m[2mnhl board: fleet of base saves[2m > [22m[2mmounts 164 distinct base saves, writes nothing, never sticks on a holding box
+[22m[39mWarning: An update to NhlFrontOfficeBoard inside a test was not wrapped in act(...).
+
+When testing, code that causes React state updates should be wrapped into act(...):
+
+act(() => {
+  /* fire events that update state */
+});
+/* assert on the output */
+
+This ensures that you're testing the behavior the user would see in the browser. Learn more at https://reactjs.org/link/wrap-tests-with-act
+    at NhlFrontOfficeBoard (/home/runner/work/ballpark-hero/ballpark-hero/src/components/nhl-front-office/NhlFrontOfficeBoard.tsx:448:53)
+Warning: An update to NhlFrontOfficeBoard inside a test was not wrapped in act(...).
+
+When testing, code that causes React state updates should be wrapped into act(...):
+
+act(() => {
+  /* fire events that update state */
+});
+/* assert on the output */
+
+This ensures that you're testing the behavior the user would see in the browser. Learn more at https://reactjs.org/link/wrap-tests-with-act
+    at NhlFrontOfficeBoard (/home/runner/work/ballpark-hero/ballpark-hero/src/components/nhl-front-office/NhlFrontOfficeBoard.tsx:448:53)
+
+[90mstderr[2m | src/components/front-office-shared/FleetGm.test.tsx[2m > [22m[2mnhl board: fleet of base saves[2m > [22m[2mmounts 164 distinct base saves, writes nothing, never sticks on a holding box
+[22m[39mWarning: An update to NhlFrontOfficeBoard inside a test was not wrapped in act(...).
+
+When testing, code that causes React state updates should be wrapped into act(...):
+
+act(() => {
+  /* fire events that update state */
+});
+/* assert on the output */
+
+This ensures that you're testing the behavior the user would see in the browser. Learn more at https://reactjs.org/link/wrap-tests-with-act
+    at NhlFrontOfficeBoard (/home/runner/work/ballpark-hero/ballpark-hero/src/components/nhl-front-office/NhlFrontOfficeBoard.tsx:448:53)
+Warning: An update to NhlFrontOfficeBoard inside a test was not wrapped in act(...).
+
+When testing, code that causes React state updates should be wrapped into act(...):
+
+act(() => {
+  /* fire events that update state */
+});
+/* assert on the output */
+
+This ensures that you're testing the behavior the user would see in the browser. Learn more at https://reactjs.org/link/wrap-tests-with-act
+    at NhlFrontOfficeBoard (/home/runner/work/ballpark-hero/ballpark-hero/src/components/nhl-front-office/NhlFrontOfficeBoard.tsx:448:53)
+
+[90mstderr[2m | src/components/front-office-shared/FleetGm.test.tsx[2m > [22m[2mnhl board: fleet of base saves[2m > [22m[2mmounts 164 distinct base saves, writes nothing, never sticks on a holding box
+[22m[39mWarning: An update to NhlFrontOfficeBoard inside a test was not wrapped in act(...).
+
+When testing, code that causes React state updates should be wrapped into act(...):
+
+act(() => {
+  /* fire events that update state */
+});
+/* assert on the output */
+
+This ensures that you're testing the behavior the user would see in the browser. Learn more at https://reactjs.org/link/wrap-tests-with-act
+    at NhlFrontOfficeBoard (/home/runner/work/ballpark-hero/ballpark-hero/src/components/nhl-front-office/NhlFrontOfficeBoard.tsx:448:53)
+Warning: An update to NhlFrontOfficeBoard inside a test was not wrapped in act(...).
+
+When testing, code that causes React state updates should be wrapped into act(...):
+
+act(() => {
+  /* fire events that update state */
+});
+/* assert on the output */
+
+This ensures that you're testing the behavior the user would see in the browser. Learn more at https://reactjs.org/link/wrap-tests-with-act
+    at NhlFrontOfficeBoard (/home/runner/work/ballpark-hero/ballpark-hero/src/components/nhl-front-office/NhlFrontOfficeBoard.tsx:448:53)
+
+[90mstderr[2m | src/components/front-office-shared/FleetGm.test.tsx[2m > [22m[2mnhl board: fleet of base saves[2m > [22m[2mmounts 164 distinct base saves, writes nothing, never sticks on a holding box
+[22m[39mWarning: An update to NhlFrontOfficeBoard inside a test was not wrapped in act(...).
+
+When testing, code that causes React state updates should be wrapped into act(...):
+
+act(() => {
+  /* fire events that update state */
+});
+/* assert on the output */
+
+This ensures that you're testing the behavior the user would see in the browser. Learn more at https://reactjs.org/link/wrap-tests-with-act
+    at NhlFrontOfficeBoard (/home/runner/work/ballpark-hero/ballpark-hero/src/components/nhl-front-office/NhlFrontOfficeBoard.tsx:448:53)
+Warning: An update to NhlFrontOfficeBoard inside a test was not wrapped in act(...).
+
+When testing, code that causes React state updates should be wrapped into act(...):
+
+act(() => {
+  /* fire events that update state */
+});
+/* assert on the output */
+
+This ensures that you're testing the behavior the user would see in the browser. Learn more at https://reactjs.org/link/wrap-tests-with-act
+    at NhlFrontOfficeBoard (/home/runner/work/ballpark-hero/ballpark-hero/src/components/nhl-front-office/NhlFrontOfficeBoard.tsx:448:53)
+
+[90mstderr[2m | src/components/front-office-shared/FleetGm.test.tsx[2m > [22m[2mnhl board: fleet of base saves[2m > [22m[2mmounts 164 distinct base saves, writes nothing, never sticks on a holding box
+[22m[39mWarning: An update to NhlFrontOfficeBoard inside a test was not wrapped in act(...).
+
+When testing, code that causes React state updates should be wrapped into act(...):
+
+act(() => {
+  /* fire events that update state */
+});
+/* assert on the output */
+
+This ensures that you're testing the behavior the user would see in the browser. Learn more at https://reactjs.org/link/wrap-tests-with-act
+    at NhlFrontOfficeBoard (/home/runner/work/ballpark-hero/ballpark-hero/src/components/nhl-front-office/NhlFrontOfficeBoard.tsx:448:53)
+Warning: An update to NhlFrontOfficeBoard inside a test was not wrapped in act(...).
+
+When testing, code that causes React state updates should be wrapped into act(...):
+
+act(() => {
+  /* fire events that update state */
+});
+/* assert on the output */
+
+This ensures that you're testing the behavior the user would see in the browser. Learn more at https://reactjs.org/link/wrap-tests-with-act
+    at NhlFrontOfficeBoard (/home/runner/work/ballpark-hero/ballpark-hero/src/components/nhl-front-office/NhlFrontOfficeBoard.tsx:448:53)
+
+[90mstderr[2m | src/components/front-office-shared/FleetGm.test.tsx[2m > [22m[2mnhl board: fleet of base saves[2m > [22m[2mmounts 164 distinct base saves, writes nothing, never sticks on a holding box
+[22m[39mWarning: An update to NhlFrontOfficeBoard inside a test was not wrapped in act(...).
+
+When testing, code that causes React state updates should be wrapped into act(...):
+
+act(() => {
+  /* fire events that update state */
+});
+/* assert on the output */
+
+This ensures that you're testing the behavior the user would see in the browser. Learn more at https://reactjs.org/link/wrap-tests-with-act
+    at NhlFrontOfficeBoard (/home/runner/work/ballpark-hero/ballpark-hero/src/components/nhl-front-office/NhlFrontOfficeBoard.tsx:448:53)
+Warning: An update to NhlFrontOfficeBoard inside a test was not wrapped in act(...).
+
+When testing, code that causes React state updates should be wrapped into act(...):
+
+act(() => {
+  /* fire events that update state */
+});
+/* assert on the output */
+
+This ensures that you're testing the behavior the user would see in the browser. Learn more at https://reactjs.org/link/wrap-tests-with-act
+    at NhlFrontOfficeBoard (/home/runner/work/ballpark-hero/ballpark-hero/src/components/nhl-front-office/NhlFrontOfficeBoard.tsx:448:53)
+
+[90mstderr[2m | src/components/front-office-shared/FleetGm.test.tsx[2m > [22m[2mnhl board: fleet of base saves[2m > [22m[2mmounts 164 distinct base saves, writes nothing, never sticks on a holding box
+[22m[39mWarning: An update to NhlFrontOfficeBoard inside a test was not wrapped in act(...).
+
+When testing, code that causes React state updates should be wrapped into act(...):
+
+act(() => {
+  /* fire events that update state */
+});
+/* assert on the output */
+
+This ensures that you're testing the behavior the user would see in the browser. Learn more at https://reactjs.org/link/wrap-tests-with-act
+    at NhlFrontOfficeBoard (/home/runner/work/ballpark-hero/ballpark-hero/src/components/nhl-front-office/NhlFrontOfficeBoard.tsx:448:53)
+Warning: An update to NhlFrontOfficeBoard inside a test was not wrapped in act(...).
+
+When testing, code that causes React state updates should be wrapped into act(...):
+
+act(() => {
+  /* fire events that update state */
+});
+/* assert on the output */
+
+This ensures that you're testing the behavior the user would see in the browser. Learn more at https://reactjs.org/link/wrap-tests-with-act
+    at NhlFrontOfficeBoard (/home/runner/work/ballpark-hero/ballpark-hero/src/components/nhl-front-office/NhlFrontOfficeBoard.tsx:448:53)
+
+[90mstderr[2m | src/components/front-office-shared/FleetGm.test.tsx[2m > [22m[2mnhl board: fleet of base saves[2m > [22m[2mmounts 164 distinct base saves, writes nothing, never sticks on a holding box
+[22m[39mWarning: An update to NhlFrontOfficeBoard inside a test was not wrapped in act(...).
+
+When testing, code that causes React state updates should be wrapped into act(...):
+
+act(() => {
+  /* fire events that update state */
+});
+/* assert on the output */
+
+This ensures that you're testing the behavior the user would see in the browser. Learn more at https://reactjs.org/link/wrap-tests-with-act
+    at NhlFrontOfficeBoard (/home/runner/work/ballpark-hero/ballpark-hero/src/components/nhl-front-office/NhlFrontOfficeBoard.tsx:448:53)
+Warning: An update to NhlFrontOfficeBoard inside a test was not wrapped in act(...).
+
+When testing, code that causes React state updates should be wrapped into act(...):
+
+act(() => {
+  /* fire events that update state */
+});
+/* assert on the output */
+
+This ensures that you're testing the behavior the user would see in the browser. Learn more at https://reactjs.org/link/wrap-tests-with-act
+    at NhlFrontOfficeBoard (/home/runner/work/ballpark-hero/ballpark-hero/src/components/nhl-front-office/NhlFrontOfficeBoard.tsx:448:53)
+
+[90mstderr[2m | src/components/front-office-shared/FleetGm.test.tsx[2m > [22m[2mnhl board: fleet of base saves[2m > [22m[2mmounts 164 distinct base saves, writes nothing, never sticks on a holding box
+[22m[39mWarning: An update to NhlFrontOfficeBoard inside a test was not wrapped in act(...).
+
+When testing, code that causes React state updates should be wrapped into act(...):
+
+act(() => {
+  /* fire events that update state */
+});
+/* assert on the output */
+
+This ensures that you're testing the behavior the user would see in the browser. Learn more at https://reactjs.org/link/wrap-tests-with-act
+    at NhlFrontOfficeBoard (/home/runner/work/ballpark-hero/ballpark-hero/src/components/nhl-front-office/NhlFrontOfficeBoard.tsx:448:53)
+Warning: An update to NhlFrontOfficeBoard inside a test was not wrapped in act(...).
+
+When testing, code that causes React state updates should be wrapped into act(...):
+
+act(() => {
+  /* fire events that update state */
+});
+/* assert on the output */
+
+This ensures that you're testing the behavior the user would see in the browser. Learn more at https://reactjs.org/link/wrap-tests-with-act
+    at NhlFrontOfficeBoard (/home/runner/work/ballpark-hero/ballpark-hero/src/components/nhl-front-office/NhlFrontOfficeBoard.tsx:448:53)
+
+[90mstderr[2m | src/components/front-office-shared/FleetGm.test.tsx[2m > [22m[2mnhl board: fleet of base saves[2m > [22m[2mmounts 164 distinct base saves, writes nothing, never sticks on a holding box
+[22m[39mWarning: An update to NhlFrontOfficeBoard inside a test was not wrapped in act(...).
+
+When testing, code that causes React state updates should be wrapped into act(...):
+
+act(() => {
+  /* fire events that update state */
+});
+/* assert on the output */
+
+This ensures that you're testing the behavior the user would see in the browser. Learn more at https://reactjs.org/link/wrap-tests-with-act
+    at NhlFrontOfficeBoard (/home/runner/work/ballpark-hero/ballpark-hero/src/components/nhl-front-office/NhlFrontOfficeBoard.tsx:448:53)
+Warning: An update to NhlFrontOfficeBoard inside a test was not wrapped in act(...).
+
+When testing, code that causes React state updates should be wrapped into act(...):
+
+act(() => {
+  /* fire events that update state */
+});
+/* assert on the output */
+
+This ensures that you're testing the behavior the user would see in the browser. Learn more at https://reactjs.org/link/wrap-tests-with-act
+    at NhlFrontOfficeBoard (/home/runner/work/ballpark-hero/ballpark-hero/src/components/nhl-front-office/NhlFrontOfficeBoard.tsx:448:53)
+
+[90mstderr[2m | src/components/front-office-shared/FleetGm.test.tsx[2m > [22m[2mnhl board: fleet of base saves[2m > [22m[2mmounts 164 distinct base saves, writes nothing, never sticks on a holding box
+[22m[39mWarning: An update to NhlFrontOfficeBoard inside a test was not wrapped in act(...).
+
+When testing, code that causes React state updates should be wrapped into act(...):
+
+act(() => {
+  /* fire events that update state */
+});
+/* assert on the output */
+
+This ensures that you're testing the behavior the user would see in the browser. Learn more at https://reactjs.org/link/wrap-tests-with-act
+    at NhlFrontOfficeBoard (/home/runner/work/ballpark-hero/ballpark-hero/src/components/nhl-front-office/NhlFrontOfficeBoard.tsx:448:53)
+Warning: An update to NhlFrontOfficeBoard inside a test was not wrapped in act(...).
+
+When testing, code that causes React state updates should be wrapped into act(...):
+
+act(() => {
+  /* fire events that update state */
+});
+/* assert on the output */
+
+This ensures that you're testing the behavior the user would see in the browser. Learn more at https://reactjs.org/link/wrap-tests-with-act
+    at NhlFrontOfficeBoard (/home/runner/work/ballpark-hero/ballpark-hero/src/components/nhl-front-office/NhlFrontOfficeBoard.tsx:448:53)
+
+[90mstderr[2m | src/components/front-office-shared/FleetGm.test.tsx[2m > [22m[2mnhl board: fleet of base saves[2m > [22m[2mmounts 164 distinct base saves, writes nothing, never sticks on a holding box
+[22m[39mWarning: An update to NhlFrontOfficeBoard inside a test was not wrapped in act(...).
+
+When testing, code that causes React state updates should be wrapped into act(...):
+
+act(() => {
+  /* fire events that update state */
+});
+/* assert on the output */
+
+This ensures that you're testing the behavior the user would see in the browser. Learn more at https://reactjs.org/link/wrap-tests-with-act
+    at NhlFrontOfficeBoard (/home/runner/work/ballpark-hero/ballpark-hero/src/components/nhl-front-office/NhlFrontOfficeBoard.tsx:448:53)
+Warning: An update to NhlFrontOfficeBoard inside a test was not wrapped in act(...).
+
+When testing, code that causes React state updates should be wrapped into act(...):
+
+act(() => {
+  /* fire events that update state */
+});
+/* assert on the output */
+
+This ensures that you're testing the behavior the user would see in the browser. Learn more at https://reactjs.org/link/wrap-tests-with-act
+    at NhlFrontOfficeBoard (/home/runner/work/ballpark-hero/ballpark-hero/src/components/nhl-front-office/NhlFrontOfficeBoard.tsx:448:53)
+
+[90mstderr[2m | src/components/front-office-shared/FleetGm.test.tsx[2m > [22m[2mnhl board: fleet of base saves[2m > [22m[2mmounts 164 distinct base saves, writes nothing, never sticks on a holding box
+[22m[39mWarning: An update to NhlFrontOfficeBoard inside a test was not wrapped in act(...).
+
+When testing, code that causes React state updates should be wrapped into act(...):
+
+act(() => {
+  /* fire events that update state */
+});
+/* assert on the output */
+
+This ensures that you're testing the behavior the user would see in the browser. Learn more at https://reactjs.org/link/wrap-tests-with-act
+    at NhlFrontOfficeBoard (/home/runner/work/ballpark-hero/ballpark-hero/src/components/nhl-front-office/NhlFrontOfficeBoard.tsx:448:53)
+Warning: An update to NhlFrontOfficeBoard inside a test was not wrapped in act(...).
+
+When testing, code that causes React state updates should be wrapped into act(...):
+
+act(() => {
+  /* fire events that update state */
+});
+/* assert on the output */
+
+This ensures that you're testing the behavior the user would see in the browser. Learn more at https://reactjs.org/link/wrap-tests-with-act
+    at NhlFrontOfficeBoard (/home/runner/work/ballpark-hero/ballpark-hero/src/components/nhl-front-office/NhlFrontOfficeBoard.tsx:448:53)
+
+[90mstderr[2m | src/components/front-office-shared/FleetGm.test.tsx[2m > [22m[2mnhl board: fleet of base saves[2m > [22m[2mmounts 164 distinct base saves, writes nothing, never sticks on a holding box
+[22m[39mWarning: An update to NhlFrontOfficeBoard inside a test was not wrapped in act(...).
+
+When testing, code that causes React state updates should be wrapped into act(...):
+
+act(() => {
+  /* fire events that update state */
+});
+/* assert on the output */
+
+This ensures that you're testing the behavior the user would see in the browser. Learn more at https://reactjs.org/link/wrap-tests-with-act
+    at NhlFrontOfficeBoard (/home/runner/work/ballpark-hero/ballpark-hero/src/components/nhl-front-office/NhlFrontOfficeBoard.tsx:448:53)
+Warning: An update to NhlFrontOfficeBoard inside a test was not wrapped in act(...).
+
+When testing, code that causes React state updates should be wrapped into act(...):
+
+act(() => {
+  /* fire events that update state */
+});
+/* assert on the output */
+
+This ensures that you're testing the behavior the user would see in the browser. Learn more at https://reactjs.org/link/wrap-tests-with-act
+    at NhlFrontOfficeBoard (/home/runner/work/ballpark-hero/ballpark-hero/src/components/nhl-front-office/NhlFrontOfficeBoard.tsx:448:53)
+
+[90mstderr[2m | src/components/front-office-shared/FleetGm.test.tsx[2m > [22m[2mnhl board: fleet of base saves[2m > [22m[2mmounts 164 distinct base saves, writes nothing, never sticks on a holding box
+[22m[39mWarning: An update to NhlFrontOfficeBoard inside a test was not wrapped in act(...).
+
+When testing, code that causes React state updates should be wrapped into act(...):
+
+act(() => {
+  /* fire events that update state */
+});
+/* assert on the output */
+
+This ensures that you're testing the behavior the user would see in the browser. Learn more at https://reactjs.org/link/wrap-tests-with-act
+    at NhlFrontOfficeBoard (/home/runner/work/ballpark-hero/ballpark-hero/src/components/nhl-front-office/NhlFrontOfficeBoard.tsx:448:53)
+Warning: An update to NhlFrontOfficeBoard inside a test was not wrapped in act(...).
+
+When testing, code that causes React state updates should be wrapped into act(...):
+
+act(() => {
+  /* fire events that update state */
+});
+/* assert on the output */
+
+This ensures that you're testing the behavior the user would see in the browser. Learn more at https://reactjs.org/link/wrap-tests-with-act
+    at NhlFrontOfficeBoard (/home/runner/work/ballpark-hero/ballpark-hero/src/components/nhl-front-office/NhlFrontOfficeBoard.tsx:448:53)
+
+[90mstderr[2m | src/components/front-office-shared/FleetGm.test.tsx[2m > [22m[2mnhl board: fleet of base saves[2m > [22m[2mmounts 164 distinct base saves, writes nothing, never sticks on a holding box
+[22m[39mWarning: An update to NhlFrontOfficeBoard inside a test was not wrapped in act(...).
+
+When testing, code that causes React state updates should be wrapped into act(...):
+
+act(() => {
+  /* fire events that update state */
+});
+/* assert on the output */
+
+This ensures that you're testing the behavior the user would see in the browser. Learn more at https://reactjs.org/link/wrap-tests-with-act
+    at NhlFrontOfficeBoard (/home/runner/work/ballpark-hero/ballpark-hero/src/components/nhl-front-office/NhlFrontOfficeBoard.tsx:448:53)
+Warning: An update to NhlFrontOfficeBoard inside a test was not wrapped in act(...).
+
+When testing, code that causes React state updates should be wrapped into act(...):
+
+act(() => {
+  /* fire events that update state */
+});
+/* assert on the output */
+
+This ensures that you're testing the behavior the user would see in the browser. Learn more at https://reactjs.org/link/wrap-tests-with-act
+    at NhlFrontOfficeBoard (/home/runner/work/ballpark-hero/ballpark-hero/src/components/nhl-front-office/NhlFrontOfficeBoard.tsx:448:53)
+
+[90mstderr[2m | src/components/front-office-shared/FleetGm.test.tsx[2m > [22m[2mnhl board: fleet of base saves[2m > [22m[2mmounts 164 distinct base saves, writes nothing, never sticks on a holding box
+[22m[39mWarning: An update to NhlFrontOfficeBoard inside a test was not wrapped in act(...).
+
+When testing, code that causes React state updates should be wrapped into act(...):
+
+act(() => {
+  /* fire events that update state */
+});
+/* assert on the output */
+
+This ensures that you're testing the behavior the user would see in the browser. Learn more at https://reactjs.org/link/wrap-tests-with-act
+    at NhlFrontOfficeBoard (/home/runner/work/ballpark-hero/ballpark-hero/src/components/nhl-front-office/NhlFrontOfficeBoard.tsx:448:53)
+Warning: An update to NhlFrontOfficeBoard inside a test was not wrapped in act(...).
+
+When testing, code that causes React state updates should be wrapped into act(...):
+
+act(() => {
+  /* fire events that update state */
+});
+/* assert on the output */
+
+This ensures that you're testing the behavior the user would see in the browser. Learn more at https://reactjs.org/link/wrap-tests-with-act
+    at NhlFrontOfficeBoard (/home/runner/work/ballpark-hero/ballpark-hero/src/components/nhl-front-office/NhlFrontOfficeBoard.tsx:448:53)
+
+[90mstderr[2m | src/components/front-office-shared/FleetGm.test.tsx[2m > [22m[2mnhl board: fleet of base saves[2m > [22m[2mmounts 164 distinct base saves, writes nothing, never sticks on a holding box
+[22m[39mWarning: An update to NhlFrontOfficeBoard inside a test was not wrapped in act(...).
+
+When testing, code that causes React state updates should be wrapped into act(...):
+
+act(() => {
+  /* fire events that update state */
+});
+/* assert on the output */
+
+This ensures that you're testing the behavior the user would see in the browser. Learn more at https://reactjs.org/link/wrap-tests-with-act
+    at NhlFrontOfficeBoard (/home/runner/work/ballpark-hero/ballpark-hero/src/components/nhl-front-office/NhlFrontOfficeBoard.tsx:448:53)
+Warning: An update to NhlFrontOfficeBoard inside a test was not wrapped in act(...).
+
+When testing, code that causes React state updates should be wrapped into act(...):
+
+act(() => {
+  /* fire events that update state */
+});
+/* assert on the output */
+
+This ensures that you're testing the behavior the user would see in the browser. Learn more at https://reactjs.org/link/wrap-tests-with-act
+    at NhlFrontOfficeBoard (/home/runner/work/ballpark-hero/ballpark-hero/src/components/nhl-front-office/NhlFrontOfficeBoard.tsx:448:53)
+
+[90mstderr[2m | src/components/front-office-shared/FleetGm.test.tsx[2m > [22m[2mnhl board: fleet of base saves[2m > [22m[2mmounts 164 distinct base saves, writes nothing, never sticks on a holding box
+[22m[39mWarning: An update to NhlFrontOfficeBoard inside a test was not wrapped in act(...).
+
+When testing, code that causes React state updates should be wrapped into act(...):
+
+act(() => {
+  /* fire events that update state */
+});
+/* assert on the output */
+
+This ensures that you're testing the behavior the user would see in the browser. Learn more at https://reactjs.org/link/wrap-tests-with-act
+    at NhlFrontOfficeBoard (/home/runner/work/ballpark-hero/ballpark-hero/src/components/nhl-front-office/NhlFrontOfficeBoard.tsx:448:53)
+Warning: An update to NhlFrontOfficeBoard inside a test was not wrapped in act(...).
+
+When testing, code that causes React state updates should be wrapped into act(...):
+
+act(() => {
+  /* fire events that update state */
+});
+/* assert on the output */
+
+This ensures that you're testing the behavior the user would see in the browser. Learn more at https://reactjs.org/link/wrap-tests-with-act
+    at NhlFrontOfficeBoard (/home/runner/work/ballpark-hero/ballpark-hero/src/components/nhl-front-office/NhlFrontOfficeBoard.tsx:448:53)
+
+[90mstdout[2m | src/components/front-office-shared/FleetGm.test.tsx[2m > [22m[2mnhl board: fleet of base saves[2m > [22m[2mmounts 164 distinct base saves, writes nothing, never sticks on a holding box
+[22m[39mFLEET_MOUNT|nhl|164 saves|{"hub":108,"recap":32,"draft":24}|0 bad
+
+ [31m❯[39m src/components/front-office-shared/FleetGm.test.tsx [2m([22m[2m46 tests[22m[2m | [22m[31m2 failed[39m[2m | [22m[33m17 skipped[39m[2m)[22m[33m 47685[2mms[22m[39m
+   [33m[2m✓[22m[39m nfl board: the default path[2m > [22mseed 4|desk on: every checkpoint of two seasons is the base's [33m 2833[2mms[22m[39m
+   [33m[2m✓[22m[39m nfl board: the default path[2m > [22mseed 4|desk off: every checkpoint of two seasons is the base's [33m 1507[2mms[22m[39m
+   [33m[2m✓[22m[39m nfl board: the default path[2m > [22mseed 5|desk on: every checkpoint of two seasons is the base's [33m 1544[2mms[22m[39m
+   [33m[2m✓[22m[39m nfl board: the default path[2m > [22mseed 5|desk off: every checkpoint of two seasons is the base's [33m 1475[2mms[22m[39m
+   [33m[2m✓[22m[39m nfl board: the default path[2m > [22mseed 6|desk on: every checkpoint of two seasons is the base's [33m 1500[2mms[22m[39m
+   [33m[2m✓[22m[39m nfl board: the default path[2m > [22mseed 6|desk off: every checkpoint of two seasons is the base's [33m 1465[2mms[22m[39m
+   [33m[2m✓[22m[39m nfl board: the default path[2m > [22mseed 7|desk on: every checkpoint of two seasons is the base's [33m 1583[2mms[22m[39m
+   [33m[2m✓[22m[39m nfl board: the default path[2m > [22mseed 7|desk off: every checkpoint of two seasons is the base's [33m 1444[2mms[22m[39m
+   [33m[2m✓[22m[39m nfl board: the default path[2m > [22mseed 8|desk on: every checkpoint of two seasons is the base's [33m 1596[2mms[22m[39m
+   [33m[2m✓[22m[39m nfl board: the default path[2m > [22mseed 8|desk off: every checkpoint of two seasons is the base's [33m 1433[2mms[22m[39m
+   [33m[2m✓[22m[39m nfl board: the default path[2m > [22mseed 9|desk on: every checkpoint of two seasons is the base's [33m 1586[2mms[22m[39m
+   [33m[2m✓[22m[39m nfl board: the default path[2m > [22mseed 9|desk off: every checkpoint of two seasons is the base's [33m 1472[2mms[22m[39m
+[31m   [31m×[31m nfl board: the default path[2m > [22mthe record is written once, from the base[39m[32m 8[2mms[22m[39m
+[31m     → expected [ 'seed 4|desk on', …(11) ] to have a length of 6 but got 12[39m
+   [33m[2m✓[22m[39m nhl board: the default path[2m > [22mseed 4|desk on: every checkpoint of two seasons is the base's [33m 626[2mms[22m[39m
+   [32m✓[39m nhl board: the default path[2m > [22mseed 4|desk off: every checkpoint of two seasons is the base's[32m 291[2mms[22m[39m
+   [33m[2m✓[22m[39m nhl board: the default path[2m > [22mseed 5|desk on: every checkpoint of two seasons is the base's [33m 312[2mms[22m[39m
+   [32m✓[39m nhl board: the default path[2m > [22mseed 5|desk off: every checkpoint of two seasons is the base's[32m 272[2mms[22m[39m
+   [33m[2m✓[22m[39m nhl board: the default path[2m > [22mseed 6|desk on: every checkpoint of two seasons is the base's [33m 335[2mms[22m[39m
+   [33m[2m✓[22m[39m nhl board: the default path[2m > [22mseed 6|desk off: every checkpoint of two seasons is the base's [33m 309[2mms[22m[39m
+   [33m[2m✓[22m[39m nhl board: the default path[2m > [22mseed 7|desk on: every checkpoint of two seasons is the base's [33m 302[2mms[22m[39m
+   [32m✓[39m nhl board: the default path[2m > [22mseed 7|desk off: every checkpoint of two seasons is the base's[32m 285[2mms[22m[39m
+   [33m[2m✓[22m[39m nhl board: the default path[2m > [22mseed 8|desk on: every checkpoint of two seasons is the base's [33m 302[2mms[22m[39m
+   [32m✓[39m nhl board: the default path[2m > [22mseed 8|desk off: every checkpoint of two seasons is the base's[32m 272[2mms[22m[39m
+   [33m[2m✓[22m[39m nhl board: the default path[2m > [22mseed 9|desk on: every checkpoint of two seasons is the base's [33m 329[2mms[22m[39m
+   [32m✓[39m nhl board: the default path[2m > [22mseed 9|desk off: every checkpoint of two seasons is the base's[32m 287[2mms[22m[39m
+[31m   [31m×[31m nhl board: the default path[2m > [22mthe record is written once, from the base[39m[32m 1[2mms[22m[39m
+[31m     → expected [ 'seed 4|desk on', …(11) ] to have a length of 6 but got 12[39m
+   [32m✓[39m nhl board: the saves the base wrote[2m > [22mthree saves written by the base board are recorded beside its default path[32m 245[2mms[22m[39m
+   [2m[90m↓[39m[22m nfl board: the career[2m > [22mfired: the recap offers who is calling and keeps the save; a remount opens the out of work screen with three boxes
+   [2m[90m↓[39m[22m nfl board: the career[2m > [22mtaking an offer takes two taps, never the club that let him go, and the arrival stages no title even at the champion
+   [2m[90m↓[39m[22m nfl board: the career[2m > [22ma year out: two taps, the league a season on with one more champion, his counters as they were
+   [2m[90m↓[39m[22m nfl board: the career[2m > [22ma point spent in Ownership survives a remount, and a tree off the live list sells nothing
+   [2m[90m↓[39m[22m nfl board: the career[2m > [22ma closed market draws no stay out button, and the new front office link deletes the save on the second tap only
+   [2m[90m↓[39m[22m nfl board: the career[2m > [22mlooking at Career and GM level on the hub of a save whose desk is off writes nothing
+   [2m[90m↓[39m[22m nfl board: the career[2m > [22mlooking at all three boxes out of work, desk off, writes nothing
+   [2m[90m↓[39m[22m nfl board: the career[2m > [22ma staff approach that runs out in the final week is still settled after the close
+   [2m[90m↓[39m[22m nhl board: the career[2m > [22mfired: the recap offers who is calling and keeps the save; a remount opens the out of work screen with three boxes
+   [2m[90m↓[39m[22m nhl board: the career[2m > [22mtaking an offer takes two taps, never the club that let him go, and the arrival stages no title even at the champion
+   [2m[90m↓[39m[22m nhl board: the career[2m > [22ma year out: two taps, the league a season on with one more champion, his counters as they were
+   [2m[90m↓[39m[22m nhl board: the career[2m > [22ma point spent in Ownership survives a remount, and a tree off the live list sells nothing
+   [2m[90m↓[39m[22m nhl board: the career[2m > [22ma closed market draws no stay out button, and the new front office link deletes the save on the second tap only
+   [2m[90m↓[39m[22m nhl board: the career[2m > [22mlooking at Career and GM level on the hub of a save whose desk is off writes nothing
+   [2m[90m↓[39m[22m nhl board: the career[2m > [22mlooking at all three boxes out of work, desk off, writes nothing
+   [2m[90m↓[39m[22m nhl board: the career[2m > [22ma staff approach that runs out in the final week is still settled after the close
+   [2m[90m↓[39m[22m nfl board: a title watched at the club he took[2m > [22mthe title game watched to full time records one finish, at the career score, and none before it
+   [33m[2m✓[22m[39m nfl board: fleet of base saves[2m > [22mmounts 167 distinct base saves, writes nothing, never sticks on a holding box [33m 13636[2mms[22m[39m
+   [33m[2m✓[22m[39m nhl board: fleet of base saves[2m > [22mmounts 164 distinct base saves, writes nothing, never sticks on a holding box [33m 10433[2mms[22m[39m
+
+[31m⎯⎯⎯⎯⎯⎯⎯[39m[1m[41m Failed Tests 2 [49m[22m[31m⎯⎯⎯⎯⎯⎯⎯[39m
+
+[41m[1m FAIL [22m[49m src/components/front-office-shared/FleetGm.test.tsx[2m > [22mnfl board: the default path[2m > [22mthe record is written once, from the base
+[41m[1m FAIL [22m[49m src/components/front-office-shared/FleetGm.test.tsx[2m > [22mnhl board: the default path[2m > [22mthe record is written once, from the base
+[31m[1mAssertionError[22m: expected [ 'seed 4|desk on', …(11) ] to have a length of 6 but got 12[39m
+
+[32m- Expected[39m
+[31m+ Received[39m
+
+[32m- 6[39m
+[31m+ 12[39m
+
+[36m [2m❯[22m src/components/front-office-shared/FleetGm.test.tsx:[2m348:36[22m[39m
+    [90m346| [39m      fs[33m.[39m[34mwriteFileSync[39m(file[33m,[39m [32m`[39m[36m${[39m[33mJSON[39m[33m.[39m[34mstringify[39m(prior[33m,[39m [35mnull[39m[33m,[39m [34m2[39m)[36m}[39m[32m\n`[39m)[33m;[39m
+    [90m347| [39m      console.log(`FO_GM_CAREER_RECORD ${row.sport} ${Object.keys(prin…
+    [90m348| [39m      [34mexpect[39m([33mObject[39m[33m.[39m[34mkeys[39m(printed))[33m.[39m[34mtoHaveLength[39m([34m6[39m)[33m;[39m
+    [90m   | [39m                                   [31m^[39m
+    [90m349| [39m    })[33m;[39m
+    [90m350| [39m  })[33m;[39m
+
+[31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/2]⎯[22m[39m
+
+
+[2m Test Files [22m [1m[31m1 failed[39m[22m[90m (1)[39m
+[2m      Tests [22m [1m[31m2 failed[39m[22m[2m | [22m[1m[32m27 passed[39m[22m[2m | [22m[33m17 skipped[39m[90m (46)[39m
+[2m   Start at [22m 03:15:40
+[2m   Duration [22m 49.74s[2m (transform 1.38s, setup 50ms, collect 1.37s, tests 47.68s, environment 221ms, prepare 74ms)[22m
+
+
+::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/components/front-office-shared/FleetGm.test.tsx,title=src/components/front-office-shared/FleetGm.test.tsx > nfl board%3A the default path > the record is written once%2C from the base,line=348,column=36::AssertionError: expected [ 'seed 4|desk on', …(11) ] to have a length of 6 but got 12%0A%0A- Expected%0A+ Received%0A%0A- 6%0A+ 12%0A%0A ❯ src/components/front-office-shared/FleetGm.test.tsx:348:36%0A%0A
+
+::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/components/front-office-shared/FleetGm.test.tsx,title=src/components/front-office-shared/FleetGm.test.tsx > nhl board%3A the default path > the record is written once%2C from the base,line=348,column=36::AssertionError: expected [ 'seed 4|desk on', …(11) ] to have a length of 6 but got 12%0A%0A- Expected%0A+ Received%0A%0A- 6%0A+ 12%0A%0A ❯ src/components/front-office-shared/FleetGm.test.tsx:348:36%0A%0A
+vitest exit 1
+FLEET nfl: 12 cases, 174 checkpoints, 167 distinct digests, 0 differ
+FLEET nhl: 12 cases, 170 checkpoints, 164 distinct digests, 0 differ
+FLEET RESULT: every case of both sports equal to the base
