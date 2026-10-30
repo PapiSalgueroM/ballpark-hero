@@ -35,7 +35,14 @@
  * Controls (PLAY_GM_CAREER_CONTROL, through scripts/lib/servedCodeControl.mjs,
  * the served chunks rewritten, never a rebuild):
  *   wipebutton  the fired recap's button deletes the save again (Walk A red)
- *   nofallback  the holding box loses its minimum height (the jump check red)
+ *   nofallback  the holding box loses its minimum height (the jump check red;
+ *               Round 1561: also the two 390 checks, Walk A's Job market and
+ *               Walk E's GM level before the kit). Run it with
+ *               PLAY_GM_CAREER_WALKS=A for a clean verdict: under Walk E the
+ *               served copy also loses its stylesheet and its kit delay, so
+ *               four unrelated checks go red beside the aimed one (r1561-g5:
+ *               "3/3 guarded checks fired ... 4 unrelated failure(s)", the
+ *               aimed E check CAUGHT at 19px for 336px).
  *   eagerpanel  the Job market chunk is asked for when the board loads (the
  *               chunk check red)
  *   eagerkit    the career kit's chunk is asked for when the board loads (Walk
