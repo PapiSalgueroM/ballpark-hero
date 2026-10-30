@@ -1,0 +1,2 @@
+87fa67ac9566cffe4e08702f01a7e973a65141e84e413aa20a58ad3b73bc2cb1  /home/runner/work/_temp/rc-out/full/simFoLazyDesk.mjs/stdout.log
+e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855  /home/runner/work/_temp/rc-out/full/simFoLazyDesk.mjs/stderr.log

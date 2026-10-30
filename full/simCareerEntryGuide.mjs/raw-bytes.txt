@@ -1,0 +1,3 @@
+7320 /home/runner/work/_temp/rc-out/full/simCareerEntryGuide.mjs/stdout.log
+   0 /home/runner/work/_temp/rc-out/full/simCareerEntryGuide.mjs/stderr.log
+7320 total

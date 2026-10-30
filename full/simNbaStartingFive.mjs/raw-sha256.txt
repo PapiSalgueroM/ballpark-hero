@@ -1,0 +1,2 @@
+5ad1134c844c73b9968959d9af17295c4b2afa414c248a5efaa71f57196143ae  /home/runner/work/_temp/rc-out/full/simNbaStartingFive.mjs/stdout.log
+e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855  /home/runner/work/_temp/rc-out/full/simNbaStartingFive.mjs/stderr.log

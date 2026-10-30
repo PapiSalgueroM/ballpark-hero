@@ -1,0 +1,3 @@
+23666 /home/runner/work/_temp/rc-out/full/simSoccerAwardReveal.mjs/stdout.log
+    0 /home/runner/work/_temp/rc-out/full/simSoccerAwardReveal.mjs/stderr.log
+23666 total

@@ -1,0 +1,3 @@
+3814 /home/runner/work/_temp/rc-out/full/simYouthPadding.mjs/stdout.log
+   0 /home/runner/work/_temp/rc-out/full/simYouthPadding.mjs/stderr.log
+3814 total

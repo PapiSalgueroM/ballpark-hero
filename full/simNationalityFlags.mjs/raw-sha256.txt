@@ -1,0 +1,2 @@
+05bb371b37675524dd501e4fa2a4ab918c9a7f1eac757600dffff9416d548439  /home/runner/work/_temp/rc-out/full/simNationalityFlags.mjs/stdout.log
+e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855  /home/runner/work/_temp/rc-out/full/simNationalityFlags.mjs/stderr.log

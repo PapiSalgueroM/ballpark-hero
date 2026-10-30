@@ -1,0 +1,2 @@
+4c4fb99aeef8266b8f9413048f3379fbcaa6c0cb4e3329f25ca1e647c25654d2  /home/runner/work/_temp/rc-out/full/simSoccerOwnerTail.mjs/stdout.log
+e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855  /home/runner/work/_temp/rc-out/full/simSoccerOwnerTail.mjs/stderr.log

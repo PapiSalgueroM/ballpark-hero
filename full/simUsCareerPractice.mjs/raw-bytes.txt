@@ -1,0 +1,3 @@
+702 /home/runner/work/_temp/rc-out/full/simUsCareerPractice.mjs/stdout.log
+  0 /home/runner/work/_temp/rc-out/full/simUsCareerPractice.mjs/stderr.log
+702 total

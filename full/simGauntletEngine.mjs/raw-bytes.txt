@@ -1,0 +1,3 @@
+5566 /home/runner/work/_temp/rc-out/full/simGauntletEngine.mjs/stdout.log
+   0 /home/runner/work/_temp/rc-out/full/simGauntletEngine.mjs/stderr.log
+5566 total

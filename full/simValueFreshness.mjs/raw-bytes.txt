@@ -1,0 +1,3 @@
+1159 /home/runner/work/_temp/rc-out/full/simValueFreshness.mjs/stdout.log
+   0 /home/runner/work/_temp/rc-out/full/simValueFreshness.mjs/stderr.log
+1159 total

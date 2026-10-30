@@ -1,0 +1,23 @@
+{
+  "originalFilesAndBodiesHeld": true,
+  "entries": [
+    {
+      "file": "node_modules/.vite/vitest/da39a3ee5e6b4b0d3255bfef95601890afd80709/results.json",
+      "bytes": 876,
+      "sha256": "a0cf6f43b2fe572e2974eca98496e92ce8fbf7ee537e0e414f071314d9a1fed7",
+      "tests": [
+        ":src/test/academyFilters.test.tsx",
+        ":src/test/cageCircuit.test.tsx",
+        ":src/test/careerEntryGuide.test.tsx",
+        ":src/components/auth/googlePaused.test.tsx",
+        ":src/test/leaderboardEligibility.test.tsx",
+        ":src/test/nhlContributorsBoard.test.tsx",
+        ":src/test/soccerAwardReveal.test.tsx",
+        ":src/test/soccerAwardGeneration.test.ts",
+        ":src/test/tycoonPacks.test.tsx",
+        ":src/test/usCareerPractice.test.tsx"
+      ],
+      "kind": "NEW_GENERATED_RESULTS_CACHE_ONLY_NO_TEST_CREDIT"
+    }
+  ]
+}

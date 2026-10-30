@@ -1,0 +1,3 @@
+3098 /home/runner/work/_temp/rc-out/full/simNhlContributorsBoard.mjs/stdout.log
+   0 /home/runner/work/_temp/rc-out/full/simNhlContributorsBoard.mjs/stderr.log
+3098 total

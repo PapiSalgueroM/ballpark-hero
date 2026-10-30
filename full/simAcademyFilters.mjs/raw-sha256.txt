@@ -1,0 +1,2 @@
+25ffa35f0b24c4e47d6c832dfd3db3d3f5f42554136a3e5cbddd0905af582c65  /home/runner/work/_temp/rc-out/full/simAcademyFilters.mjs/stdout.log
+e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855  /home/runner/work/_temp/rc-out/full/simAcademyFilters.mjs/stderr.log

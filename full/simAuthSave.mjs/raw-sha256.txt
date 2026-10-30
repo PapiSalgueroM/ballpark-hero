@@ -1,0 +1,2 @@
+2a13c5098b4c6fd0cff5f70f493bcbca8e56d6e040b7234743c40015f861f536  /home/runner/work/_temp/rc-out/full/simAuthSave.mjs/stdout.log
+e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855  /home/runner/work/_temp/rc-out/full/simAuthSave.mjs/stderr.log

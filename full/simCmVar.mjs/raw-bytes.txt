@@ -1,0 +1,3 @@
+1984 /home/runner/work/_temp/rc-out/full/simCmVar.mjs/stdout.log
+   0 /home/runner/work/_temp/rc-out/full/simCmVar.mjs/stderr.log
+1984 total

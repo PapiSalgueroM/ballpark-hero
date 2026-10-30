@@ -1,0 +1,3 @@
+988 /home/runner/work/_temp/rc-out/full/simHigherLower.mjs/stdout.log
+  0 /home/runner/work/_temp/rc-out/full/simHigherLower.mjs/stderr.log
+988 total

@@ -1,0 +1,3 @@
+702 /home/runner/work/_temp/rc-out/full/simFoLazyDesk.mjs/stdout.log
+  0 /home/runner/work/_temp/rc-out/full/simFoLazyDesk.mjs/stderr.log
+702 total

@@ -1,0 +1,3 @@
+1227 /home/runner/work/_temp/rc-out/full/simNationalityFlags.mjs/stdout.log
+   0 /home/runner/work/_temp/rc-out/full/simNationalityFlags.mjs/stderr.log
+1227 total

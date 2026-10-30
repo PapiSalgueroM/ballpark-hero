@@ -1,0 +1,2 @@
+8642f725e29420ddda7735675c9c04f6a596f91bc4b39ddf07f0054fb4c2447a  /home/runner/work/_temp/rc-out/full/simStockCampaign.mjs/stdout.log
+e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855  /home/runner/work/_temp/rc-out/full/simStockCampaign.mjs/stderr.log

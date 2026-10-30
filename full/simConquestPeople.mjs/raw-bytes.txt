@@ -1,0 +1,3 @@
+920 /home/runner/work/_temp/rc-out/full/simConquestPeople.mjs/stdout.log
+  0 /home/runner/work/_temp/rc-out/full/simConquestPeople.mjs/stderr.log
+920 total

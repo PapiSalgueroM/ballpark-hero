@@ -1,0 +1,2 @@
+71c485ffd0f3450045ad90572c0d77d1846fe105ae184ffe999dc0e821c06c0d  /home/runner/work/_temp/rc-out/full/simGoogleOnlyReturn.mjs/stdout.log
+e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855  /home/runner/work/_temp/rc-out/full/simGoogleOnlyReturn.mjs/stderr.log

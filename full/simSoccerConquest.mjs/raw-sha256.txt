@@ -1,0 +1,2 @@
+4fc1efec51cfa0d7d5ac16e8353d46673e4fb7165328be70739a9c0960bbe474  /home/runner/work/_temp/rc-out/full/simSoccerConquest.mjs/stdout.log
+e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855  /home/runner/work/_temp/rc-out/full/simSoccerConquest.mjs/stderr.log

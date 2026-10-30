@@ -1,0 +1,3 @@
+24618 /home/runner/work/_temp/rc-out/full/simTycoonPacks.mjs/stdout.log
+    0 /home/runner/work/_temp/rc-out/full/simTycoonPacks.mjs/stderr.log
+24618 total

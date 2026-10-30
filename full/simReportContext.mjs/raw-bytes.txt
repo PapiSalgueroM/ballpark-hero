@@ -1,0 +1,3 @@
+1547 /home/runner/work/_temp/rc-out/full/simReportContext.mjs/stdout.log
+   0 /home/runner/work/_temp/rc-out/full/simReportContext.mjs/stderr.log
+1547 total
