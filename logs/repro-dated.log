@@ -1,0 +1,9 @@
+cmp: both dated copies byte identical
+pages 64, judged rows 162, men 74: sarandi 56 (110 rows), london 18, held 0, pending 0
+unjudged rows from 2025 on: 38 rows, 27 names. Confirm each is a London Arsenal man before the write:
+  David Raya (2026 Spain, 2025 Spain); Illan Meslier (2026 France); Kepa Arrizabalaga (2026 Spain); William Saliba (2026 France, 2025 France); Ezri Konsa (2026 England); Cristhian Mosquera (2026 Spain); Jakub Kiwior (2025 Poland); Riccardo Calafiori (2026 Italy, 2025 Italy); Myles Lewis-Skelly (2026 England, 2025 England); Oleksandr Zinchenko (2025 Ukraine); Kieran Tierney (2025 Scotland); Jurriën Timber (2026 Netherlands, 2025 Netherlands); Ben White (2026 England, 2025 England); Martin Ødegaard (2026 Norway, 2025 Norway); Eberechi Eze (2026 England); Ethan Nwaneri (2025 England); Bukayo Saka (2026 England, 2025 England); Noni Madueke (2026 England); Max Dowman (2026 England); Raheem Sterling (2025 England); Christos Tzolis (2026 Greece); Leandro Trossard (2025 Belgium); Declan Rice (2026 England, 2025 England); Mikel Merino (2026 Spain, 2025 Spain); Viktor Gyökeres (2026 Sweden); Kai Havertz (2026 Germany, 2025 Germany); Martín Zubimendi (2026 Spain)
+ok: the committed ledger equals the generator's output
+STEP2 exit 0
+market 110 rows, stints 56 rows, held 0; payload md5 3ffefa34360b317d34796f515b42ce9a
+same: supabase/migrations/20261101120000_round_1587_arsenal_de_sarandi.sql
+same: scripts/qa/clubNamesakes1587Applied.sql

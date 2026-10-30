@@ -1,0 +1,16 @@
+#!serial
+tsc: node_modules/.bin/tsc --noEmit -p tsconfig.app.json
+repro-dated: D=/tmp/fresh && mkdir -p $D && cp scripts/data/clubNamesakes1584/arsenalMarket-2026-10-29.json $D/arsenalMarket-2026-11-03.json && cp scripts/data/clubNamesakes1584/arsenalStints-2026-10-29.json $D/arsenalStints-2026-11-03.json && cmp scripts/data/clubNamesakes1584/arsenalMarket-2026-10-29.json $D/arsenalMarket-2026-11-03.json && cmp scripts/data/clubNamesakes1584/arsenalStints-2026-10-29.json $D/arsenalStints-2026-11-03.json && echo "cmp: both dated copies byte identical" && node scripts/qa/genArsenalLedger1587.mjs --market $D/arsenalMarket-2026-11-03.json --check && echo "STEP2 exit 0" && node scripts/qa/genClubNamesakes1587.mjs --market $D/arsenalMarket-2026-11-03.json --stints $D/arsenalStints-2026-11-03.json --check
+repro-oldgen: D=/tmp/fresh2 && mkdir -p $D && cp scripts/data/clubNamesakes1584/arsenalMarket-2026-10-29.json $D/arsenalMarket-2026-11-03.json && cp scripts/data/clubNamesakes1584/arsenalStints-2026-10-29.json $D/arsenalStints-2026-11-03.json && git worktree add -q /tmp/base 253ff4257 && node /tmp/base/scripts/qa/genClubNamesakes1587.mjs --market $D/arsenalMarket-2026-11-03.json --stints $D/arsenalStints-2026-11-03.json --check
+repro-refuse: node scripts/qa/genClubNamesakes1587.mjs --market scripts/data/clubNamesakes1584/arsenalMarket-2026-10-29.json; s=$?; echo "changed files: $(git status --short | wc -l)"; echo "refuse-exit=$s"; [ $s -eq 2 ]
+sim: node scripts/simClubNamesakes.mjs
+c-freshmoved: SIM_NAMESAKE_CONTROL=freshmoved node scripts/simClubNamesakes.mjs
+c-freshstill: SIM_NAMESAKE_CONTROL=freshstill node scripts/simClubNamesakes.mjs
+c-purgeblind: SIM_NAMESAKE_CONTROL=purgeblind node scripts/simClubNamesakes.mjs
+rh: npm install --prefix /tmp/pgl @electric-sql/pglite > /dev/null 2>&1 && PGLITE_DIR=/tmp/pgl node scripts/qa/rehearseClubNamesakes1587.mjs
+rh-cachedrift: REHEARSE_CONTROL=cachedrift PGLITE_DIR=/tmp/pgl node scripts/qa/rehearseClubNamesakes1587.mjs
+gen-ledger: node scripts/qa/genArsenalLedger1587.mjs --check
+gen-payload: node scripts/qa/genClubNamesakes1587.mjs --check
+gen-owed: node scripts/qa/genArsenalOwed1587.mjs --check
+simEdgeSync: node scripts/simEdgeSync.mjs
+clean: git status --short | wc -l
