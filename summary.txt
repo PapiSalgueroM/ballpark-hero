@@ -1,0 +1,12 @@
+so-keepcurve exit=1 40s | simCmShootoutOrder: 4 FAILURE(S)
+shootoutResults exit=0 12s | ALL SHOOTOUT RESULTS CHECKS PASSED
+shootout exit=0 53s | simCmShootoutOrder: all sections passed
+sr-keepcurve exit=2 2s |     at process.processTicksAndRejections (node:internal/process/task_queues:104:5)
+subs-pressedge exit=1 47s | control pressedge FIRED: 1 of 4 checks red
+tsc exit=0 102s | 
+decision-head exit=1 0s | Node.js v24.22.1
+handover-head exit=1 0s | Node.js v24.22.1
+lineups-head exit=1 0s | Node.js v24.22.1
+restart-head exit=1 0s | Node.js v24.22.1
+subs exit=0 72s | simCmSubs GREEN: 59 of 59 checks green (parts ledger, rule, extratime, cutover, oppextratime, opponent, coach, press)
+subs-pressold exit=1 36s | control pressold FIRED: 3 of 4 checks red
