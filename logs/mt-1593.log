@@ -1,0 +1,10 @@
+e8eab9e5e
+scripts/data/cmLeagueRulesDigest.json
+src/pages/WhatsNew.tsx
+
+Auto-merging scripts/data/cmLeagueRulesDigest.json
+CONFLICT (content): Merge conflict in scripts/data/cmLeagueRulesDigest.json
+Auto-merging src/lib/clubManager.ts
+Auto-merging src/pages/WhatsNew.tsx
+CONFLICT (content): Merge conflict in src/pages/WhatsNew.tsx
+r1593 merge-tree exit=1

@@ -1,0 +1,6 @@
+mt-1593: git fetch -q origin r1593-cm-europa-play && git rev-parse --short=9 FETCH_HEAD && git merge-tree --write-tree --name-only HEAD^ FETCH_HEAD | tail -n +2; echo "r1593 merge-tree exit=${PIPESTATUS[0]}"
+mt-1597: git fetch -q origin r1597-cm-nobody-vanishes && git rev-parse --short=9 FETCH_HEAD && git merge-tree --write-tree --name-only HEAD^ FETCH_HEAD | tail -n +2; echo "r1597 merge-tree exit=${PIPESTATUS[0]}"
+mt-1600: git fetch -q origin r1600-cm-veteran-level && git rev-parse --short=9 FETCH_HEAD && git merge-tree --write-tree --name-only HEAD^ FETCH_HEAD | tail -n +2; echo "r1600 merge-tree exit=${PIPESTATUS[0]}"
+mt-380: git fetch -q origin codex/cm-coached-styles-20261023 && git rev-parse --short=9 FETCH_HEAD && git merge-tree --write-tree --name-only HEAD^ FETCH_HEAD | tail -n +2; echo "pr380 merge-tree exit=${PIPESTATUS[0]}"
+mt-382: git fetch -q origin codex/cm-free-positions-20261023 && git rev-parse --short=9 FETCH_HEAD && git merge-tree --write-tree --name-only HEAD^ FETCH_HEAD | tail -n +2; echo "pr382 merge-tree exit=${PIPESTATUS[0]}"
+mt-429: git fetch -q origin codex/cm-market-continuity-20261030 && git rev-parse --short=9 FETCH_HEAD && git merge-tree --write-tree --name-only HEAD^ FETCH_HEAD | tail -n +2; echo "pr429 merge-tree exit=${PIPESTATUS[0]}"
