@@ -1,0 +1,3 @@
+old-skew exit=1 81s | oldfleet: RED, 24 failures
+old-aa exit=0 144s | oldfleet: green
+old-ab exit=0 196s | oldfleet: green

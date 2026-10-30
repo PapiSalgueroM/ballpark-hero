@@ -1,0 +1,35 @@
+oldfleet: mode skew, 1 seeds
+  FAIL Everton now seed 0 mid1: the head left the base's stream at face 0 of 39/39 (a:0 c97f4d56a54e298c8812|1278 vs a:0 8a5e7cb461dc6df4c543|1278)
+    keys that differ: world
+    world: head ...onship":{"round":46,"table":[{"club":"Birmingham City","w":17,"d":13,"l":16,"gf":62,"ga":64,"pts":64},{"club":"Blackburn Rovers","w":10,"d":... base ...onship":{"round":46,"table":[{"club":"Birmingham City","w":16,"d":14,"l":16,"gf":62,"ga":65,"pts":62},{"club":"Blackburn Rovers","w":10,"d":...
+  FAIL Everton now seed 0 parked1: the head left the base's stream at face 0 of 50/49 (summer0 0b6b96a6847bb4b03aee|797 vs summer0 ffbf662d7953a6aea787|793)
+    keys that differ: budget, boardConfidence, squad, xiIds, leagueClubs, table, form, clubStrengths, aiHeadlines, goneNames, cupDraw, cupBracket, world, careerStats, boardObjectives, cupExit, transferLog, resultLog, inbox, pairResults, freeAgents, academy, press, scorerRace, leagueBook, intl, worldRoster, books, clubForm, h2h, finance, worldComps, decisions
+    budget: head ...149.11... base ...145.05...
+    boardConfidence: head ...100... base ...39.69999999999999...
+  FAIL Everton now seed 0 mid2: the head left the base's stream at face 0 of 41/41 (a:0 95c74582bf2655ad201d|1309 vs a:0 8cb05a180b64d59608d7|1309)
+    keys that differ: world, inbox
+    world: head ...:{"round":46,"table":[{"club":"Birmingham City","w":23,"d":12,"l":11,"gf":74,"ga":49,"pts":81},{"club":"Blackburn Rovers","w":7,"d":6,"l":33... base ...:{"round":46,"table":[{"club":"Birmingham City","w":23,"d":13,"l":10,"gf":75,"ga":49,"pts":82},{"club":"Blackburn Rovers","w":7,"d":6,"l":33...
+    inbox: head ...t down and sort it out","effect":"listen"}],"id":"msg-2-45-23","week":45},{"playerName":"Jake O'Brien","playerId":"p-jake-o-brien","kind":"w... base ...t down and sort it out","effect":"listen"}],"id":"msg-2-45-22","week":45},{"playerName":"Jake O'Brien","playerId":"p-jake-o-brien","kind":"w...
+  FAIL Everton now seed 0 parked2: the head left the base's stream at face 0 of 49/49 (summer0 b4908a932769d5daf8fe|799 vs summer0 571f102df88bfbee10e8|799)
+  FAIL Real Madrid now seed 0 mid1: the head left the base's stream at face 0 of 48/47 (a:0 1ddffafbfdfe7258b336|443 vs a:0 e97ed73dd261e4f2002c|479)
+  FAIL Real Madrid now seed 0 parked1: the head left the base's stream at face 0 of 63/61 (summer0 b8b99e6045be24fa92b5|810 vs summer0 9518dfca9eba8cde1aca|813)
+  FAIL Real Madrid now seed 0 mid2: the head left the base's stream at face 0 of 51/53 (a:0 775be6de5d7d8e521197|1518 vs a:0 b1dccc8ac379d15f3209|1526)
+  FAIL Real Madrid now seed 0 parked2: the head left the base's stream at face 0 of 60/56 (summer0 e5e10a9f2fbdd02c3d65|853 vs summer0 61e6c0bd69a81179de1c|857)
+  FAIL Lincoln City now seed 0 mid1: the head left the base's stream at face 0 of 44/44 (a:0 8c40cf3bc9ba4208adb8|1436 vs a:0 442ea63c119688e57e87|1436)
+  FAIL Lincoln City now seed 0 parked1: the head left the base's stream at face 0 of 57/57 (summer0 6f58fd40172c3a73b3f2|770 vs summer0 85916fc610733aad55b2|771)
+  FAIL Lincoln City now seed 0 mid2: the head left the base's stream at face 0 of 50/49 (a:0 29b1d173ba84e53a5158|360 vs a:0 4e09c78c3146923e7e2d|389)
+  FAIL Lincoln City now seed 0 parked2: the head left the base's stream at face 0 of 57/57 (summer0 6d08f92d59cb796f2d1f|781 vs summer0 933916d27f5dd64812ee|782)
+  FAIL Hertha BSC now seed 0 mid1: the head left the base's stream at face 0 of 33/33 (a:0 2f55f7b0c522144a1d74|1326 vs a:0 f0315dec69d3d17a9955|1326)
+  FAIL Hertha BSC now seed 0 parked1: the head left the base's stream at face 0 of 45/46 (summer0 da0aab3b5a9f50a6fff0|726 vs summer0 e20f73b697bcbf4871a6|725)
+  FAIL Hertha BSC now seed 0 mid2: the head left the base's stream at face 0 of 36/36 (a:0 1300699fa3e3d9003980|1207 vs a:0 c71989a44afca3fc3ef2|1207)
+  FAIL Hertha BSC now seed 0 parked2: the head left the base's stream at face 0 of 45/45 (summer0 ef9d5a562da73c0883b6|752 vs summer0 1e41b3989026cd81cfe2|764)
+  FAIL Arsenal era2010 seed 0 mid1: the head left the base's stream at face 0 of 50/49 (a:0 50d66c17186277873318|263 vs a:0 97c0a726789cd6e542ae|245)
+  FAIL Arsenal era2010 seed 0 parked1: the head left the base's stream at face 0 of 55/56 (summer0 318fa7a25a65fcecfc5a|473 vs summer0 c3edcadbf64b732ebd75|490)
+  FAIL Arsenal era2010 seed 0 mid2: the head left the base's stream at face 0 of 47/47 (a:0 22ab9e10d44f3178e722|638 vs a:0 a5a0bebd47cf2c74bb62|638)
+  FAIL Arsenal era2010 seed 0 parked2: the head left the base's stream at face 0 of 49/50 (summer0 6b25240841deb1a402d8|444 vs summer0 62bb7037070c895ff446|437)
+  FAIL Liverpool now seed 0 mid1: the head left the base's stream at face 0 of 37/37 (a:0 5ff7f64888426e2a6ea5|1543 vs a:0 afcba1ee7dee6f513931|1543)
+  FAIL Liverpool now seed 0 parked1: the head left the base's stream at face 0 of 61/62 (summer0 2b7ee104bb0682541e2e|809 vs summer0 e0e998ac16fa65300b9a|809)
+  FAIL Liverpool now seed 0 mid2: the head left the base's stream at face 0 of 52/54 (a:0 cf9b2620b3b5b32dab97|433 vs a:0 486aebcfd19f2f2242c2|446)
+  FAIL Liverpool now seed 0 parked2: the head left the base's stream at face 0 of 50/51 (summer0 b38dc3a6aeee0ea12e85|803 vs summer0 cc9301cd38982357842a|781)
+oldfleet: 24 old saves made on the base engine (12 parked on review), 0 entries written on the head, 60 checks, 24 failed
+oldfleet: RED, 24 failures

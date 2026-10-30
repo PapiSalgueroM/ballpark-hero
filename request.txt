@@ -1,0 +1,3 @@
+old-ab: git worktree add -f /tmp/ob1 14a9af704 -q && ln -s "$PWD/node_modules" /tmp/ob1/node_modules && OLD_BASE=/tmp/ob1 node .rc/x/oldfleet.mjs
+old-aa: git worktree add -f /tmp/ob2 14a9af704 -q && ln -s "$PWD/node_modules" /tmp/ob2/node_modules && OLD_MODE=aa OLD_SEEDS=2 OLD_BASE=/tmp/ob2 node .rc/x/oldfleet.mjs
+old-skew: git worktree add -f /tmp/ob3 14a9af704 -q && ln -s "$PWD/node_modules" /tmp/ob3/node_modules && OLD_MODE=skew OLD_SEEDS=1 OLD_BASE=/tmp/ob3 node .rc/x/oldfleet.mjs
