@@ -921,6 +921,10 @@ export const SOCCER_CONTENT_1: GameContentMap = {
         q: "What kinds of categories appear?",
         a: "Clubs a player has appeared for, nationalities, positions, value bands, age brackets, World Cup and Champions League winners, and quirks like sharing a pitch with Messi.",
       },
+      {
+        q: "Do loans count on the club squares?",
+        a: "Yes. Club squares count senior first teams, loans included, and each club only once. Tyler Morton (Liverpool, then Blackburn Rovers and Hull City on loan, then Lyon) has played for four clubs. Youth and B teams do not count.",
+      },
     ],
   },
 
