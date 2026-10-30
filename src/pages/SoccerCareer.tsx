@@ -1578,6 +1578,7 @@ export default function SoccerCareer() {
     setPreviewStats(null);
     setRolledOvr(null);
     setRolledPot(null);
+    setAcademyPreview(null);
     setPhoneOpen(false);
     setTrainingOpen(false);
     setPlayerName(""); setNationality(""); setPosition(""); setEra("");
