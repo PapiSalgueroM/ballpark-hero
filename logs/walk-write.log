@@ -1,0 +1,22 @@
+playCmPlayerCard: saves built: S1 season 3 week 26, 22 men with kept seasons; S2 week 27, share 53; S3 kept from 3
+playCmPlayerCard: page seed 1397084510
+  FAIL 2: S1-320-top: data-cm-card-help is 44.0 by 44.0 and a tap at its middle lands elsewhere
+  FAIL 2: S1-320-keeper: data-cm-card-help is 44.0 by 44.0 and a tap at its middle lands elsewhere
+  FAIL 2: S1-320-idle: data-cm-card-help is 44.0 by 44.0 and a tap at its middle lands elsewhere
+  FAIL 2: S1-320: a goals board row link is 262.0 by 44.0
+  FAIL 2: S1-320-goals: data-cm-card-help is 44.0 by 44.0 and a tap at its middle lands elsewhere
+  FAIL 2: S1-320: a sheets board row link is 262.0 by 44.0
+  FAIL 2: S1-320-sheets: data-cm-card-help is 44.0 by 44.0 and a tap at its middle lands elsewhere
+  FAIL 2: S1-320: a assists board row link is 262.0 by 44.0
+  FAIL 2: S1-320-assists: data-cm-card-help is 44.0 by 44.0 and a tap at its middle lands elsewhere
+  FAIL 2: S2-320: a goals board row link is 262.0 by 44.0
+  FAIL 2: S2-320-goals: data-cm-card-help is 44.0 by 44.0 and a tap at its middle lands elsewhere
+  FAIL 2: S2-320: a sheets board row link is 262.0 by 44.0
+4       lines read on 9 S1 rival cards, 9 S1 cards of mine, 9 S2 rival cards (share 53), 9 S3 cards of mine (kept from 2028-29)
+  FAIL 5: the looking arm could not go on: locator.waitFor: Timeout 20000ms exceeded.
+green 1 the page is the reader: 36 checks
+RED   2 the fit: 342 checks, 45 failed
+green 3 nothing stacks or jumps: 108 checks
+green 4 the lines: 36 checks
+RED   5 a match with cards opened: 2 checks, 1 failed
+playCmPlayerCard: CONTROL write DID NOT FIRE as it must: section 5 has 1 failures, other red sections [2]
