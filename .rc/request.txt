@@ -1,0 +1,8 @@
+#!serve
+#!playwright
+diag-a: node .rc/x/pscDiag.mjs && PORT=4196 ATTEMPTS=1 ENGINES=chromium node scripts/pscDiag.mjs
+psc: PORT=4191 ENGINES=chromium node scripts/playSoccerCareer.mjs
+psc-noagg: PORT=4193 SC_WALK_CONTROL=noagg ENGINES=chromium node scripts/playSoccerCareer.mjs
+psc-s2: PORT=4194 SEED=20260101 ENGINES=chromium node scripts/playSoccerCareer.mjs
+psc-s3: PORT=4195 SEED=16040 ENGINES=chromium node scripts/playSoccerCareer.mjs
+diag-b: node .rc/x/pscDiag.mjs && PORT=4197 SEED=16040 ATTEMPTS=1 ENGINES=chromium node scripts/pscDiag.mjs
