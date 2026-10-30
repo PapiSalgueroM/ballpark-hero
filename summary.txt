@@ -1,0 +1,7 @@
+nhlhostvalue exit=1 33s | simFoLazyDesk CONTROL nhlhostvalue FIRED: section 3 went red with 3 failures (red sections 3)
+simFoLazyDesk exit=0 35s | simFoLazyDesk: all checks passed
+nhleager exit=1 38s | simFoLazyDesk CONTROL nhleager FIRED: section 3 went red with 10 failures (red sections 3)
+nhltiertile exit=1 31s | simFoLazyDesk CONTROL nhltiertile FIRED: section 4 went red with 15552 failures (red sections 2, 4)
+eager exit=1 32s | simFoLazyDesk CONTROL eager FIRED: section 1 went red with 12 failures (red sections 1)
+nhlboxseasons exit=1 38s | simFoLazyDesk CONTROL nhlboxseasons FIRED: section 4 went red with 20736 failures (red sections 2, 4)
+tiertile exit=1 23s | simFoLazyDesk CONTROL tiertile FIRED: section 2 went red with 14904 failures (red sections 2, 4)
