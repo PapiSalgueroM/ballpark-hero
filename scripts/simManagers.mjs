@@ -540,13 +540,14 @@ async function realDugoutsSection() {
         const read = {
           entry: (r, s) => {
             entries += 1;
-            const res = r.result;
+            /* The match is r.report (PlayResult has no result field: pass 1's r.result?.events reads nothing). */
+            const res = r.report;
             if (res && (res.home === L.sentinel || res.away === L.sentinel)) vsHim += 1;
             for (const e of res?.events ?? []) line(e);
             for (const h of s.aiHeadlines ?? []) line(h);
             for (const m of s.inbox ?? []) { line(m.text); line(m.resolved); }
             for (const d of Array.isArray(s.decisions) ? s.decisions : []) { line(d.text); line(d.resolved); for (const o of d.options ?? []) line(o.label); }
-            hit(`the match result of week ${s.week}`, JSON.stringify(res ?? null));
+            hit(`the match report of week ${s.week}`, JSON.stringify(res ?? null));
             hit(`week ${s.week}`, said(s));
           },
           state: (st, label) => hit(label, said(st)),
@@ -602,7 +603,12 @@ async function ownAndManaged(S, L) {
   const moved = seeded(22, () => S.cm.startNextSeason(own, L.career)).value;
   if (moved.clubName !== L.career) fail(`7d: the move from ${L.sentinel} to ${L.career} did not happen, the check tests nothing`);
   says(moved, `the season after leaving ${L.sentinel}`);
-  if (!moved.managers?.[L.sentinel]) fail(`7d: ${L.sentinel} has nobody in its dugout after you left`);
+  /* A club out of the league keeps no chair in the record (Round 310). The zero point season can send it down when a
+     control skips sections 1 to 6 and the save's shuffle differs; the plain run must read the chair. */
+  if (!moved.leagueClubs.includes(L.sentinel)) {
+    if (MODE) console.log(`   7d: ${L.sentinel} left the league over that summer under this control, so the chair you left is not read`);
+    else fail(`7d: ${L.sentinel} left the league over the summer, so the chair you left was not read`);
+  } else if (!moved.managers?.[L.sentinel]) fail(`7d: ${L.sentinel} has nobody in its dugout after you left`);
   /* A club this career managed, reached another way (a job taken mid season): the record is scrubbed. */
   const other = seeded(23, () => S.cm.startCareer(L.career, 'now')).value;
   other.careerStats = { ...other.careerStats, clubsManaged: [...(other.careerStats.clubsManaged ?? []), L.sentinel] };
