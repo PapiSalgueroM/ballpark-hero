@@ -1,0 +1,6 @@
+tsc: node_modules/.bin/tsc --noEmit -p tsconfig.app.json
+vitest: node_modules/.bin/vitest run src/lib/worldCompetition.test.ts src/lib/worldNights.test.ts src/lib/euroAccess.test.ts --testTimeout=300000 --hookTimeout=120000
+tieGolden: node scripts/recordWorldTieGolden1347.mjs --ref HEAD --check
+proofFleet: node scripts/proofWorldUclFleet.mjs --base 14a9af704 --fleet all --coach nocoach --seeds 1,2 --eval
+simWorldEuro: node scripts/simWorldEuro.mjs
+simWorldUcl: node scripts/simWorldUcl.mjs

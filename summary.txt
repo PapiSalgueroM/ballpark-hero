@@ -1,0 +1,6 @@
+tieGolden exit=0 2s | recordWorldTieGolden1347: SAME: 44 cases recorded from HEAD equal the 44 of scripts/data/worldTieGolden1347.json
+vitest exit=0 10s |    Duration  7.92s (transform 3.39s, setup 491ms, collect 11.23s, tests 4.36s, environment 2.35s, prepare 565ms)
+tsc exit=0 119s | 
+proofFleet exit=0 299s | proofWorldUclFleet: GREEN, 38 journeys and 4888 steps byte equal to 14a9af704, draws equal
+simWorldEuro exit=2 1032s | simWorldEuro: cannot run: section 3 needs WORLD_EURO_BASE, the commit before the board step
+simWorldUcl exit=0 1694s | simWorldUcl: green, 495863 checks, 0 failures
