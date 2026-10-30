@@ -1,0 +1,10 @@
+#!serial
+pgl: npm install --silent --prefix /tmp/pgl @electric-sql/pglite > /tmp/pgl.log 2>&1; s=$?; ls /tmp/pgl/node_modules/@electric-sql/pglite/dist/index.js; exit $s
+rh1567: PGLITE_DIR=/tmp/pgl node scripts/qa/rehearseUsConnections1567.mjs
+rh1567-noguard: REHEARSE_CONTROL=noguard PGLITE_DIR=/tmp/pgl node scripts/qa/rehearseUsConnections1567.mjs
+rh1567-drift: REHEARSE_CONTROL=drift PGLITE_DIR=/tmp/pgl node scripts/qa/rehearseUsConnections1567.mjs
+rh1567-tamper: REHEARSE_CONTROL=tamper PGLITE_DIR=/tmp/pgl node scripts/qa/rehearseUsConnections1567.mjs
+rh1567-nohash: REHEARSE_CONTROL=nohash PGLITE_DIR=/tmp/pgl node scripts/qa/rehearseUsConnections1567.mjs
+rh1574: PGLITE_DIR=/tmp/pgl node scripts/qa/rehearseUsConnections1574.mjs
+rh1583: PGLITE_DIR=/tmp/pgl node scripts/qa/rehearseNbaConnections1583.mjs
+l3-mut: node .rc/x/mutl3hold.mjs && node_modules/.bin/vitest run src/test/usCareerHallWall.test.tsx -t "Release BU" --testTimeout=300000; s=$?; git checkout -- src; exit $s
