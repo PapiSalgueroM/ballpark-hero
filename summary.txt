@@ -1,0 +1,15 @@
+vitest exit=0 7s |    Duration  6.34s (transform 2.81s, setup 215ms, collect 6.41s, tests 2.98s, environment 1.16s, prepare 401ms)
+simCmEuroPlay-rawlength exit=1 69s | simCmEuroPlay: control rawlength FIRED (20 failures, all its own)
+tsc exit=0 111s | 
+simCmCopy exit=0 56s | simCmCopy: green on this tree. Sections 1, 2, 3, 4, 5: Club Manager says what it means.
+simCmEuroPlay exit=0 134s | simCmEuroPlay: green, 91 checks, 0 failures
+simCmCopy-summer exit=1 51s | simCmCopy: CONTROL summer FIRED (2 failures, as it must)
+simClubManagerFinances exit=0 93s | simClubManagerFinances: PASS. The books add up, the projection lands, prices move the fans and the board, and the sponsor desk pays what it says.
+simHarnessAnchors exit=0 66s | simHarnessAnchors: green. Every harness parses and none carries an unmatchable anchor.
+simClubManagerStaff exit=0 31s | simClubManagerStaff: PASS. Four made up men who cost what the desk says, lift only their own half of the pitch, tax nobody who ignores them, and can be taken off you.
+simGmStaff exit=1 5s | GM STAFF: 40 failure(s)
+simClubManagerCalendar exit=0 62s | simClubManagerCalendar: all green
+simDailyDeals exit=0 5s | simDailyDeals: green. 12 Hot Seat dates (5 Premier League) and 6 Deadline Day dates (3 Premier League) deal what Release AS dealt, no daily carries the real fixture key, 
+simBoard exit=0 7s | ALL BOARD CHECKS PASSED
+simCmUnseededWorld exit=1 176s | simCmUnseededWorld: 113 FAILURE(S)
+simOneOffCups exit=0 2695s | simOneOffCups: green, 270840 checks (2695 s)
