@@ -1,0 +1,2 @@
+2571f4c246cb40cfff053c7bf150fdaee49ac80035262b813d315102a07fb2d5  /home/runner/work/_temp/rc-out/full/playGames.mjs/stdout.log
+e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855  /home/runner/work/_temp/rc-out/full/playGames.mjs/stderr.log
