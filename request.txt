@@ -1,0 +1,16 @@
+head: git rev-parse HEAD && echo "changed since 548be6c9f:" && git diff --name-only 548be6c9f HEAD && git merge-base --is-ancestor a23b1e9a9 HEAD && echo "main a23b1e9a9 is an ancestor"
+tsc: node_modules/.bin/tsc --noEmit -p tsconfig.app.json
+sim: node scripts/simBingoClubCounts.mjs
+gen: node scripts/genBingoClubAdditions.mjs && git diff --exit-code src/data/bingoClubAdditions.json && echo "derived file is the generator's output"
+honours: node scripts/simPlayerBingoHonours.mjs
+c-bornone: BINGO_CLUBS_CONTROL=bornone node scripts/simBingoClubCounts.mjs
+c-shortname: BINGO_CLUBS_CONTROL=shortname node scripts/simBingoClubCounts.mjs
+c-forgot: BINGO_CLUBS_CONTROL=forgot node scripts/simBingoClubCounts.mjs
+c-window: BINGO_CLUBS_CONTROL=window node scripts/simBingoClubCounts.mjs
+c-nowindow: BINGO_CLUBS_CONTROL=nowindow node scripts/simBingoClubCounts.mjs
+vitest: node_modules/.bin/vitest run clubCareerAdditions playerBingo --testTimeout=300000 --hookTimeout=120000
+simNoRivalNames: node scripts/simNoRivalNames.mjs
+simHarnessAnchors: node scripts/simHarnessAnchors.mjs
+simStorageWrites: node scripts/simStorageWrites.mjs
+simPlayerBingoCategories: CI=1 SIM_NETWORK=offline node scripts/simPlayerBingoCategories.mjs
+dashes: git log --format=%B --first-parent 548be6c9f..HEAD > /tmp/msgs2.txt && node .rc/x/dashcheck.mjs /tmp/msgs2.txt src/pages/WhatsNew.tsx scripts/simBingoClubCounts.mjs src/data/bingoClubAdditions.json

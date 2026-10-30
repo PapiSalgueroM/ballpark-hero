@@ -1,0 +1,16 @@
+head exit=0 1s | main a23b1e9a9 is an ancestor
+gen exit=0 0s | derived file is the generator's output
+sim exit=0 2s | simBingoClubCounts: GREEN, every section held
+c-bornone exit=1 3s | simBingoClubCounts: CONTROL=bornone FIRED (1 failures; section 5: 1)
+c-shortname exit=1 3s | simBingoClubCounts: CONTROL=shortname FIRED (1 failures; section 6: 1)
+honours exit=0 9s | simPlayerBingoHonours PASS
+c-forgot exit=1 2s | simBingoClubCounts: CONTROL=forgot FIRED (2 failures; section 4: 2)
+c-window exit=1 2s | simBingoClubCounts: CONTROL=window FIRED (4 failures; section 1: 2, section 4: 2)
+c-nowindow exit=1 2s | simBingoClubCounts: CONTROL=nowindow FIRED (1 failures; section 8: 1)
+vitest exit=0 7s |    Duration  6.34s (transform 861ms, setup 679ms, collect 2.66s, tests 6.28s, environment 4.19s, prepare 1.07s)
+simNoRivalNames exit=0 17s | No rival product names found. 0 findings.
+simStorageWrites exit=0 3s | simStorageWrites: all green (owed: 12)
+simPlayerBingoCategories exit=0 29s | simPlayerBingoCategories: fixed proof passed; raw reports and changed-copy receipts retained.
+dashes exit=0 0s | dashes: 0 in 4 files
+simHarnessAnchors exit=0 47s | simHarnessAnchors: green. Every harness parses and none carries an unmatchable anchor.
+tsc exit=0 71s | 

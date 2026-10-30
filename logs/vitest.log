@@ -1,0 +1,32 @@
+
+[1m[46m RUN [49m[22m [36mv3.2.7 [39m[90m/home/runner/work/ballpark-hero/ballpark-hero[39m
+
+ [32m✓[39m src/test/playerBingoHonours.test.ts [2m([22m[2m11 tests[22m[2m)[22m[32m 250[2mms[22m[39m
+ [32m✓[39m src/test/playerBingoTransport.test.ts [2m([22m[2m11 tests[22m[2m)[22m[32m 291[2mms[22m[39m
+ [32m✓[39m src/test/playerBingoCategories.test.ts [2m([22m[2m10 tests[22m[2m)[22m[33m 350[2mms[22m[39m
+   [33m[2m✓[22m[39m Player Bingo categories[2m > [22mdeals supported varied boards with a distinct-player winning line in the first 60 reveals [33m 336[2mms[22m[39m
+ [32m✓[39m src/test/playerBingoWorldCupAlias.test.ts [2m([22m[2m9 tests[22m[2m)[22m[32m 116[2mms[22m[39m
+ [32m✓[39m src/test/clubCareerAdditions.test.ts [2m([22m[2m14 tests[22m[2m)[22m[32m 13[2mms[22m[39m
+ [32m✓[39m src/test/playerBingoLoad.test.tsx [2m([22m[2m8 tests[22m[2m)[22m[33m 1005[2mms[22m[39m
+   [33m[2m✓[22m[39m Player Bingo owned load[2m > [22mkeeps a successful board playable and replays without another pool request [33m 708[2mms[22m[39m
+ [32m✓[39m src/test/playerBingoClubCounts.test.ts [2m([22m[2m4 tests[22m[2m)[22m[32m 137[2mms[22m[39m
+ [32m✓[39m src/test/playerBingoRodriHonour.test.ts [2m([22m[2m11 tests[22m[2m)[22m[32m 25[2mms[22m[39m
+[90mstdout[2m | src/test/playerBingoBirthYear.test.ts[2m > [22m[2mPlayer Bingo age tiles band on birth year[2m > [22m[2mevery two-source man near the bands lands in the band his real birth year gives
+[22m[39mbingo birth year: 74 two-source men near the bands checked
+
+ [32m✓[39m src/test/playerBingoBirthYear.test.ts [2m([22m[2m2 tests[22m[2m)[22m[32m 21[2mms[22m[39m
+ [32m✓[39m src/test/playerBingoReport.test.tsx [2m([22m[2m1 test[22m[2m)[22m[33m 504[2mms[22m[39m
+   [33m[2m✓[22m[39m Player Bingo minimal report context[2m > [22mremembers the rejected card after advancing once without repeating validation [33m 503[2mms[22m[39m
+ [32m✓[39m src/test/playerBingoLineFeedback.test.tsx [2m([22m[2m7 tests[22m[2m)[22m[33m 3567[2mms[22m[39m
+   [33m[2m✓[22m[39m Player Bingo earned line feedback[2m > [22mannounces one added line as 100 while the actual total moves 100 to 200 [33m 906[2mms[22m[39m
+   [33m[2m✓[22m[39m Player Bingo earned line feedback[2m > [22mannounces two intersection lines as 200 while the actual total moves 100 to 300 [33m 625[2mms[22m[39m
+   [33m[2m✓[22m[39m Player Bingo earned line feedback[2m > [22mpreserves the first line choice banked 100 share and once-only completion [33m 339[2mms[22m[39m
+   [33m[2m✓[22m[39m Player Bingo earned line feedback[2m > [22mannounces earned feedback then clears after 1800ms with static reduced-motion binding [33m 313[2mms[22m[39m
+   [33m[2m✓[22m[39m Player Bingo earned line feedback[2m > [22mpreserves wrong placement skip and final deck exhaustion accounting [33m 376[2mms[22m[39m
+   [33m[2m✓[22m[39m Player Bingo earned line feedback[2m > [22mclears pending feedback on replay and unmount without changing banked points [33m 713[2mms[22m[39m
+
+[2m Test Files [22m [1m[32m11 passed[39m[22m[90m (11)[39m
+[2m      Tests [22m [1m[32m88 passed[39m[22m[90m (88)[39m
+[2m   Start at [22m 05:45:35
+[2m   Duration [22m 6.34s[2m (transform 861ms, setup 679ms, collect 2.66s, tests 6.28s, environment 4.19s, prepare 1.07s)[22m
+
