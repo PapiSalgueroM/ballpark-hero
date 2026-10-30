@@ -1,0 +1,1 @@
+scan exit=0 170s |   FAIL: 150 rows differ from the actual pre-1072 engine with no order set

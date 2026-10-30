@@ -1,0 +1,61 @@
+1
+== seed 782003
+   section 1 base: seed 782003, cup R16 against Getafe (18 on their roster, 2 keepers); the fixture base's tie is against Mallorca (8 on theirs)
+   150 cup matches, 28 shootouts, 28 with my first kicks in the listed order, 28 where skipping a listed man off the pitch changed who took the first five
+   their first time round the list read off their roster in 28 shootouts, best first with the keeper last in 28
+   synthetic eleven 90..62 vs itself, 4000 shootouts an arm: best five first 50.4%, worst five first 40.8%, gap 9.7 points
+   0 of 150 rows reproduced (15 of them shootouts, written from clubManager.r781-premerge-71df177e.ts on 2026-10-01); 15 carried kicks
+  FAIL: 150 rows differ from the actual pre-1072 engine with no order set
+== seed 782004
+   section 1 base: seed 782004, cup R16 against Barcelona (24 on their roster, 3 keepers); the fixture base's tie is against Mallorca (8 on theirs)
+   150 cup matches, 36 shootouts, 36 with my first kicks in the listed order, 36 where skipping a listed man off the pitch changed who took the first five
+   their first time round the list read off their roster in 36 shootouts, best first with the keeper last in 36
+   synthetic eleven 90..62 vs itself, 4000 shootouts an arm: best five first 50.4%, worst five first 40.8%, gap 9.7 points
+   0 of 150 rows reproduced (15 of them shootouts, written from clubManager.r781-premerge-71df177e.ts on 2026-10-01); 15 carried kicks
+  FAIL: 150 rows differ from the actual pre-1072 engine with no order set
+== seed 782005
+   section 1 base: seed 782005, cup R16 against Elche (16 on their roster, 2 keepers); the fixture base's tie is against Mallorca (8 on theirs)
+   150 cup matches, 32 shootouts, 32 with my first kicks in the listed order, 32 where skipping a listed man off the pitch changed who took the first five
+   their first time round the list read off their roster in 32 shootouts, best first with the keeper last in 32
+   synthetic eleven 90..62 vs itself, 4000 shootouts an arm: best five first 50.4%, worst five first 40.8%, gap 9.7 points
+   0 of 150 rows reproduced (15 of them shootouts, written from clubManager.r781-premerge-71df177e.ts on 2026-10-01); 15 carried kicks
+  FAIL: 150 rows differ from the actual pre-1072 engine with no order set
+== seed 782006
+   section 1 base: seed 782006, cup R16 against Athletic Club (21 on their roster, 2 keepers); the fixture base's tie is against Mallorca (8 on theirs)
+   150 cup matches, 39 shootouts, 39 with my first kicks in the listed order, 39 where skipping a listed man off the pitch changed who took the first five
+   their first time round the list read off their roster in 39 shootouts, best first with the keeper last in 39
+   synthetic eleven 90..62 vs itself, 4000 shootouts an arm: best five first 50.4%, worst five first 40.8%, gap 9.7 points
+   0 of 150 rows reproduced (15 of them shootouts, written from clubManager.r781-premerge-71df177e.ts on 2026-10-01); 15 carried kicks
+  FAIL: 150 rows differ from the actual pre-1072 engine with no order set
+== seed 782007
+   section 1 base: seed 782007, cup R16 against Real Betis (29 on their roster, 4 keepers); the fixture base's tie is against Mallorca (8 on theirs)
+   150 cup matches, 46 shootouts, 46 with my first kicks in the listed order, 46 where skipping a listed man off the pitch changed who took the first five
+   their first time round the list read off their roster in 46 shootouts, best first with the keeper last in 46
+   synthetic eleven 90..62 vs itself, 4000 shootouts an arm: best five first 50.4%, worst five first 40.8%, gap 9.7 points
+   0 of 150 rows reproduced (15 of them shootouts, written from clubManager.r781-premerge-71df177e.ts on 2026-10-01); 15 carried kicks
+  FAIL: 150 rows differ from the actual pre-1072 engine with no order set
+== seed 782008
+   section 1 base: seed 782008, cup R16 against Athletic Club (21 on their roster, 2 keepers); the fixture base's tie is against Mallorca (8 on theirs)
+   150 cup matches, 37 shootouts, 37 with my first kicks in the listed order, 37 where skipping a listed man off the pitch changed who took the first five
+   their first time round the list read off their roster in 37 shootouts, best first with the keeper last in 37
+   synthetic eleven 90..62 vs itself, 4000 shootouts an arm: best five first 50.4%, worst five first 40.8%, gap 9.7 points
+   0 of 150 rows reproduced (15 of them shootouts, written from clubManager.r781-premerge-71df177e.ts on 2026-10-01); 15 carried kicks
+  FAIL: 150 rows differ from the actual pre-1072 engine with no order set
+== seed 782009
+section 1's base (seed 782009) drew Almería, whose roster of 5 (0 keepers) cannot name an eleven, so their order would be read off nobody; pick a base seed whose first cup tie is against a full roster
+== seed 782010
+section 1's base (seed 782010) drew Albacete, whose roster of 1 (0 keepers) cannot name an eleven, so their order would be read off nobody; pick a base seed whose first cup tie is against a full roste
+== seed 782011
+   section 1 base: seed 782011, cup R16 against Levante (14 on their roster, 2 keepers); the fixture base's tie is against Mallorca (8 on theirs)
+   150 cup matches, 26 shootouts, 26 with my first kicks in the listed order, 26 where skipping a listed man off the pitch changed who took the first five
+   their first time round the list read off their roster in 26 shootouts, best first with the keeper last in 26
+   synthetic eleven 90..62 vs itself, 4000 shootouts an arm: best five first 50.4%, worst five first 40.8%, gap 9.7 points
+   0 of 150 rows reproduced (15 of them shootouts, written from clubManager.r781-premerge-71df177e.ts on 2026-10-01); 15 carried kicks
+  FAIL: 150 rows differ from the actual pre-1072 engine with no order set
+== seed 782012
+   section 1 base: seed 782012, cup R16 against Sevilla (18 on their roster, 2 keepers); the fixture base's tie is against Mallorca (8 on theirs)
+   150 cup matches, 25 shootouts, 25 with my first kicks in the listed order, 25 where skipping a listed man off the pitch changed who took the first five
+   their first time round the list read off their roster in 25 shootouts, best first with the keeper last in 25
+   synthetic eleven 90..62 vs itself, 4000 shootouts an arm: best five first 50.4%, worst five first 40.8%, gap 9.7 points
+   0 of 150 rows reproduced (15 of them shootouts, written from clubManager.r781-premerge-71df177e.ts on 2026-10-01); 15 carried kicks
+  FAIL: 150 rows differ from the actual pre-1072 engine with no order set
