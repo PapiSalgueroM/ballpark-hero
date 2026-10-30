@@ -20,12 +20,15 @@
  *    through the function's own parseCriterion. Against the same matrix with CLUB_NAMESAKES emptied (the rule before
  *    this round), the ONLY cells that differ are ("Arsenal", a string with an excluded part), each excluded string
  *    flips, nothing flips from no to yes, London's "Arsenal FC", "U21", "U18" and split rows still match, and no label
- *    that had a match loses its last one. Then the hand mirror in scripts/simSoccerGridLabels.mjs (its norm, its two
+ *    that had a match loses its last one. The ledger keeps exactly London's four strings, and every string of Q3b
+ *    the old rule reads as Arsenal is kept or excluded (completeness: a string forgotten in both the function and the
+ *    ledger passes every other check). Then the hand mirror in scripts/simSoccerGridLabels.mjs (its norm, its two
  *    map reads and its clubMatches, run on the same source text) must agree with the function on every cell
  *    (critic advice 20: that file pages production and is never run by a builder, so this is its proof).
  *
  * Controls, SIM_NAMESAKE_CONTROL=<name>; each asserts the thing it changes exists before changing it (exit 2,
- * ABORTED, when it does not) and its last line says what fired:
+ * ABORTED, when it does not). Its last line says FIRED only when it was applied and a check went red (exit 1); applied
+ * with every check green prints DID NOT FIRE and exits 3:
  *   blind       the detector returns nothing: D is red.
  *   unmerge     the Arsenal FC rows of the Argentine candidates the lead's live Q1 named are taken out of the fixture
  *               by id: Arsenal FC must leave the list, so D is red, and the run aborts if Arsenal stays (the check
@@ -34,6 +37,7 @@
  *   wide        "Arsenal FC" added to the exclusion: the only-these-cells check and the London check go red.
  *   mirrordrift the namesake line taken out of the mirror's clubMatches: the mirror check goes red.
  *   onehost     Arsenal Tula's second source dropped: N is red.
+ *   forget      "Arsenal Kyiv (-2019)" dropped from the function AND gridNamesakes.json: only completeness is red.
  * N, THE HOSTS. Every excluded string in scripts/data/clubNamesakes1584/gridNamesakes.json stands on two registrable
  *    hosts (soccerway's regional mirrors are one host), none a wiki, at most one Transfermarkt, each with its url, the
  *    date read and a one line summary.
@@ -47,7 +51,7 @@ import { buildGridRule, stripComments, braceEnd, onceAt } from './lib/gridRuleFr
 
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const DATA = path.join(ROOT, 'scripts', 'data', 'clubNamesakes1584');
-const CONTROLS = ['blind', 'unmerge', 'noexclude', 'wide', 'mirrordrift', 'onehost'];
+const CONTROLS = ['blind', 'unmerge', 'noexclude', 'wide', 'mirrordrift', 'onehost', 'forget'];
 const CONTROL = process.env.SIM_NAMESAKE_CONTROL || '';
 if (CONTROL && !CONTROLS.includes(CONTROL)) {
   console.error(`SIM_NAMESAKE_CONTROL=${CONTROL} is not a control this harness knows (${CONTROLS.join(', ')}), ABORTED`);
@@ -110,7 +114,13 @@ console.log('G) the grid rule changes only the (Arsenal, namesake) cells');
 const FN_PATH = 'supabase/functions/soccer-grid-validate/index.ts';
 const FN_RAW = readText(FN_PATH);
 const LEDGER = readJson('gridNamesakes.json');
+const FORGOTTEN = 'Arsenal Kyiv (-2019)';
+if (CONTROL === 'forget') {
+  if (LEDGER.excluded.filter(e => e.stored === FORGOTTEN).length !== 1) abort(`"${FORGOTTEN}" is not in gridNamesakes.json once`);
+  LEDGER.excluded = LEDGER.excluded.filter(e => e.stored !== FORGOTTEN);
+}
 const EXCLUDED = LEDGER.excluded.map(e => e.stored);
+const KEPT = (LEDGER.kept ?? []).map(e => e.stored);
 const once = (text, anchor, what) => {
   const at = onceAt(text, anchor);
   if (at < 0) fail(`${what}: the anchor "${anchor}" is not in the text exactly once`);
@@ -130,6 +140,12 @@ if (CONTROL === 'wide') {
   if (headRaw.split(anchor).length !== 2) abort('the "arsenal" entry of CLUB_NAMESAKES is not in the function once');
   headRaw = headRaw.replace(anchor, anchor + '    "Arsenal FC",\n');
   fired.push('wide: "Arsenal FC" added to the exclusion');
+}
+if (CONTROL === 'forget') {
+  const anchor = `"${FORGOTTEN}", `;
+  if (headRaw.split(anchor).length !== 2) abort(`"${FORGOTTEN}" is not in the function once`);
+  headRaw = headRaw.replace(anchor, '');
+  fired.push(`forget: "${FORGOTTEN}" dropped from the function and from gridNamesakes.json together`);
 }
 const head = buildRule(headRaw, 'the function');
 const baseRaw = NAMESAKE_BLOCK.test(FN_RAW) ? FN_RAW.replace(NAMESAKE_BLOCK, 'const CLUB_NAMESAKES: Record<string, string[]> = {};') : FN_RAW;
@@ -179,6 +195,19 @@ if (head && base) {
   const lostLondon = arsenal.length ? LONDON.filter(s => !head.clubMatches(s, arsenal[0].c.value)) : LONDON;
   if (!lostLondon.length) ok('London stays matched: Arsenal FC, U21, U18 and a split season');
   else fail(`the Arsenal label no longer matches ${lostLondon.join(', ')}`);
+  if (JSON.stringify(KEPT.slice().sort()) === JSON.stringify(LONDON.slice().sort())) ok(`gridNamesakes.json keeps exactly London's ${KEPT.length} strings`);
+  else fail(`gridNamesakes.json keeps ${KEPT.join(', ') || 'nothing'}; London's strings are ${LONDON.join(', ')}`);
+  /* COMPLETENESS (review M1): every stored string the lead's Q3b holds that the rule before this round reads as
+     Arsenal, part by part for a split season, is either kept as London's or excluded. A string forgotten in both the
+     function and the ledger passes every check above and fails here. */
+  if (arsenal.length) {
+    const q3b = readJson('stintClubsArsenal-2026-10-29.json').map(r => r.club);
+    const read = q3b.filter(c => base.clubMatches(c, arsenal[0].c.value));
+    const unlisted = read.filter(c => !KEPT.includes(c) && !EXCLUDED.includes(c)
+      && c.split(' / ').some(p => base.clubMatches(p, arsenal[0].c.value) && !KEPT.includes(p) && !EXCLUDED.includes(p)));
+    if (read.length && !unlisted.length) ok(`all ${read.length} of Q3b's ${q3b.length} strings the old rule reads as Arsenal are kept or excluded (${read.filter(c => KEPT.includes(c)).length} kept, ${read.filter(c => EXCLUDED.includes(c)).length} excluded)`);
+    else fail(`Q3b strings the old rule reads as Arsenal that are neither kept nor excluded: ${unlisted.join(', ') || 'none read at all'}`);
+  }
   if (!lostLabels.length) ok('no label lost its last matching club');
   else fail(`labels left with no match: ${lostLabels.join(', ')}`);
 
@@ -233,7 +262,13 @@ console.log('N) every excluded string stands on two hosts');
 }
 
 console.log('');
-if (CONTROL) console.log(`control ${CONTROL} ${fired.length ? 'FIRED' : 'DID NOT FIRE'}: ${fired.join('; ') || 'nothing changed'}`);
+/* a control FIRED only when it was applied AND a check went red; applied with every check green is a control that
+   moved nothing, which exits 3 and never prints the green line */
+if (CONTROL) {
+  if (!fired.length) { console.log(`control ${CONTROL} DID NOT FIRE: nothing changed`); process.exit(3); }
+  if (!failures) { console.log(`control ${CONTROL} DID NOT FIRE: applied (${fired.join('; ')}) but every check stayed green`); process.exit(3); }
+  console.log(`control ${CONTROL} FIRED: applied (${fired.join('; ')}) and ${failures} check(s) went red`);
+}
 if (failures) {
   console.log(`simClubNamesakes: ${failures} finding(s).`);
   process.exit(1);
