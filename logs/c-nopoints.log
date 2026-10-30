@@ -1,0 +1,50 @@
+NEGATIVE CONTROL ON: the new career inherits the slot's old save points; section 5 must go red
+5) A manager who keeps the job carries on in Club Manager
+  FAIL: Manchester United seed 3363520565 (f): the free slot's old points stayed, or the kept career's points moved
+  FAIL: Southampton seed 2129143751 (f): the free slot's old points stayed, or the kept career's points moved
+  FAIL: Bristol City seed 2505143299 (f): the free slot's old points stayed, or the kept career's points moved
+  FAIL: Rayo Vallecano seed 46472915 (f): the free slot's old points stayed, or the kept career's points moved
+  FAIL: AC Milan seed 354240859 (f): the free slot's old points stayed, or the kept career's points moved
+  FAIL: Lecce seed 256002035 (f): the free slot's old points stayed, or the kept career's points moved
+  FAIL: Bayer Leverkusen seed 1978703287 (f): the free slot's old points stayed, or the kept career's points moved
+  FAIL: Lyon seed 3145330018 (f): the free slot's old points stayed, or the kept career's points moved
+  FAIL: Paris FC seed 1317516283 (f): the free slot's old points stayed, or the kept career's points moved
+  FAIL: Al-Ahli seed 604329556 (f): the free slot's old points stayed, or the kept career's points moved
+  FAIL: Atlanta United seed 1940166480 (f): the free slot's old points stayed, or the kept career's points moved
+  FAIL: New York Red Bulls seed 3722624121 (f): the free slot's old points stayed, or the kept career's points moved
+  FAIL: San Diego FC seed 3037863773 (f): the free slot's old points stayed, or the kept career's points moved
+  FAIL: Rangers seed 4166563788 (f): the free slot's old points stayed, or the kept career's points moved
+  FAIL: Celtic seed 3271775616 (f): the free slot's old points stayed, or the kept career's points moved
+  FAIL: Fenerbahçe seed 2644371663 (f): the free slot's old points stayed, or the kept career's points moved
+  FAIL: Alanyaspor seed 1036092406 (f): the free slot's old points stayed, or the kept career's points moved
+  FAIL: St. Pauli seed 181223470 (f): the free slot's old points stayed, or the kept career's points moved
+  FAIL: Union Saint-Gilloise seed 2601737660 (f): the free slot's old points stayed, or the kept career's points moved
+  FAIL: Sint-Truiden seed 2004413658 (f): the free slot's old points stayed, or the kept career's points moved
+  FAIL: RB Salzburg seed 4031434727 (f): the free slot's old points stayed, or the kept career's points moved
+  FAIL: Rapid Wien seed 4188792220 (f): the free slot's old points stayed, or the kept career's points moved
+  FAIL: Olympiacos seed 1583074016 (f): the free slot's old points stayed, or the kept career's points moved
+  FAIL: AEK Athens seed 1264500175 (f): the free slot's old points stayed, or the kept career's points moved
+  FAIL: FC Midtjylland seed 4219463631 (f): the free slot's old points stayed, or the kept career's points moved
+  FAIL: FC Nordsjælland seed 555865432 (f): the free slot's old points stayed, or the kept career's points moved
+  FAIL: Young Boys seed 3876892485 (f): the free slot's old points stayed, or the kept career's points moved
+  FAIL: Basel seed 1134408367 (f): the free slot's old points stayed, or the kept career's points moved
+  FAIL: Hajduk Split seed 2868281908 (f): the free slot's old points stayed, or the kept career's points moved
+  FAIL: Dinamo Zagreb seed 2203934071 (f): the free slot's old points stayed, or the kept career's points moved
+  FAIL: Corinthians seed 792915288 (f): the free slot's old points stayed, or the kept career's points moved
+  FAIL: São Paulo seed 2206950394 (f): the free slot's old points stayed, or the kept career's points moved
+  FAIL: Guadalajara seed 465234352 (f): the free slot's old points stayed, or the kept career's points moved
+  FAIL: Atlético San Luis seed 1085373004 (f): the free slot's old points stayed, or the kept career's points moved
+  FAIL: Sydney FC seed 2669063318 (f): the free slot's old points stayed, or the kept career's points moved
+  FAIL: Pisa seed 3445988560 (f): the free slot's old points stayed, or the kept career's points moved
+  FAIL: Verona seed 2502081045 (f): the free slot's old points stayed, or the kept career's points moved
+  FAIL: Nantes seed 3877975989 (f): the free slot's old points stayed, or the kept career's points moved
+  FAIL: Reims seed 311012506 (f): the free slot's old points stayed, or the kept career's points moved
+  FAIL: Girona seed 3609287469 (f): the free slot's old points stayed, or the kept career's points moved
+  FAIL: Mallorca seed 2000764252 (f): the free slot's old points stayed, or the kept career's points moved
+  FAIL: CSKA Moscow seed 1708035320 (f): the free slot's old points stayed, or the kept career's points moved
+  FAIL: Rodina Moscow seed 3981509664 (f): the free slot's old points stayed, or the kept career's points moved
+   54 setups in 27 leagues: 43 handed over (1 on a reprieve) from 25 leagues, 37 played to the end of the season, 6 sacked in Club Manager on the way, 24 sacked runs refused, 2 with a window before the next fixture, 164 of the previous manager's messages left behind
+   slot arms on 43 survivors: emptyDevice 43, keptSlotOne 43, intoSlotOne 43, fullAsked 43, damagedKept 43, pointsCleared 0, rolledBack 43, picked 43, changedRefused 43
+  FAIL: the slot arm pointsCleared held on only 0 of 43 survivors (floor 20)
+
+simManagerHotSeat: 44 failure(s)

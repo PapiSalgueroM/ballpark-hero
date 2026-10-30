@@ -1,0 +1,22 @@
+tsc: node_modules/.bin/tsc --noEmit -p tsconfig.app.json
+vitest: node_modules/.bin/vitest run src/test/managerHotSeatCarryOn.test.ts src/test/managerHotSeatCarryOnCard.test.tsx src/lib/clubManagerSlots.test.ts src/test/clubManagerSlots.test.tsx src/lib/brokenSaveRecovery.test.ts src/test/saveKeeper.test.ts --testTimeout=300000 --hookTimeout=120000
+hs: node scripts/simManagerHotSeat.mjs
+hs5-seed3: SIM_SEED=3 HOT_SEAT_SECTION=5 node scripts/simManagerHotSeat.mjs
+hs5-seed4: SIM_SEED=4 HOT_SEAT_SECTION=5 node scripts/simManagerHotSeat.mjs
+c-clobber: HOT_SEAT_CONTROL=clobber node scripts/simManagerHotSeat.mjs
+c-damagedfree: HOT_SEAT_CONTROL=damagedfree node scripts/simManagerHotSeat.mjs
+c-nopoints: HOT_SEAT_CONTROL=nopoints node scripts/simManagerHotSeat.mjs
+c-norollback: HOT_SEAT_CONTROL=norollback node scripts/simManagerHotSeat.mjs
+c-nobackup: HOT_SEAT_CONTROL=nobackup node scripts/simManagerHotSeat.mjs
+c-nocal: HOT_SEAT_CONTROL=nocal node scripts/simManagerHotSeat.mjs
+c-sackoffer: HOT_SEAT_CONTROL=sackoffer node scripts/simManagerHotSeat.mjs
+c-nostamp: HOT_SEAT_CONTROL=nostamp node scripts/simManagerHotSeat.mjs
+c-card: HOT_SEAT_CONTROL=card node scripts/simManagerHotSeat.mjs
+simStorageWrites: node scripts/simStorageWrites.mjs
+simSaveFence: node scripts/simSaveFence.mjs
+simNoRivalNames: node scripts/simNoRivalNames.mjs
+simClubManagerSlots: node scripts/simClubManagerSlots.mjs
+simSaveKeeper: node scripts/simSaveKeeper.mjs
+simDailyDeals: node scripts/simDailyDeals.mjs
+simCmSavePoints: node scripts/simCmSavePoints.mjs
+r2diff: git worktree add -f rcbase 14a9af704 > /dev/null 2>&1; (cd rcbase && node scripts/simManagerHotSeat.mjs > /tmp/r2base.out 2>&1); node scripts/simManagerHotSeat.mjs > /tmp/r2head.out 2>&1; sed -n '/^1) /,/^5) /p' /tmp/r2base.out > /tmp/r2b; sed -n '/^1) /,/^5) /p' /tmp/r2head.out > /tmp/r2h; n=$(wc -l < /tmp/r2b); test "$n" -gt 10 || { echo "R2 EMPTY base output ($n lines)"; tail -5 /tmp/r2base.out; exit 2; }; diff /tmp/r2b /tmp/r2h | head -40; diff -q /tmp/r2b /tmp/r2h > /dev/null && echo "R2: sections 1 to 4 print identically on base 14a9af704 and head ($n lines)"
