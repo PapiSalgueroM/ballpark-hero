@@ -1,0 +1,2 @@
+fd0ce9e419ea0e28ddf4fb63f9e76f5ccd7968ee22a723db9c8cb131c13e1aac  /home/runner/work/_temp/rc-out/full/playEra2020.mjs/stdout.log
+e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855  /home/runner/work/_temp/rc-out/full/playEra2020.mjs/stderr.log

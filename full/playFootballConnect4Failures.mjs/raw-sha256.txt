@@ -1,0 +1,2 @@
+bd3984da5c2df951d5fa9b5104f09bb3dbaa73336cefa792c19fa873f6f414b6  /home/runner/work/_temp/rc-out/full/playFootballConnect4Failures.mjs/stdout.log
+e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855  /home/runner/work/_temp/rc-out/full/playFootballConnect4Failures.mjs/stderr.log

@@ -1,0 +1,12 @@
+prepare exit=0 65s | ordinary-build raw=0
+playEra2015 exit=1 19s | playEra2015.mjs raw=1
+playEra2020 exit=0 19s | playEra2020.mjs raw=0
+playExtension exit=1 44s | playExtension.mjs raw=1
+playFirstTeamFit exit=0 5s | playFirstTeamFit.mjs raw=0
+playFirstVisitDialogs exit=0 748s | playFirstVisitDialogs.mjs raw=0
+playFlagshipLazy exit=0 9s | playFlagshipLazy.mjs raw=0
+playFoHub exit=0 61s | playFoHub.mjs raw=0
+playFoOneRating exit=0 17s | playFoOneRating.mjs raw=0
+playFoSeasonCard exit=0 63s | playFoSeasonCard.mjs raw=0
+playFootballConnect4Failures exit=0 6s | playFootballConnect4Failures.mjs raw=0
+finish exit=0 6s | 

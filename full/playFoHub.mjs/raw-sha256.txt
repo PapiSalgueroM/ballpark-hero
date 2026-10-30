@@ -1,0 +1,2 @@
+4d0a6ff5fb2f22d52098ec212d8fb01c4a2e467500b7de76ae4ecd9627242457  /home/runner/work/_temp/rc-out/full/playFoHub.mjs/stdout.log
+e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855  /home/runner/work/_temp/rc-out/full/playFoHub.mjs/stderr.log

@@ -1,0 +1,3 @@
+51147 /home/runner/work/_temp/rc-out/full/playFirstVisitDialogs.mjs/stdout.log
+    0 /home/runner/work/_temp/rc-out/full/playFirstVisitDialogs.mjs/stderr.log
+51147 total

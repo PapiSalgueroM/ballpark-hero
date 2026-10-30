@@ -1,0 +1,3 @@
+835 /home/runner/work/_temp/rc-out/full/playFlagshipLazy.mjs/stdout.log
+  0 /home/runner/work/_temp/rc-out/full/playFlagshipLazy.mjs/stderr.log
+835 total

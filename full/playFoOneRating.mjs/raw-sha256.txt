@@ -1,0 +1,2 @@
+6878e8e7748bae3d6ceac6a17520d6188a2610edd33bf3c970346692a30d6b6c  /home/runner/work/_temp/rc-out/full/playFoOneRating.mjs/stdout.log
+e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855  /home/runner/work/_temp/rc-out/full/playFoOneRating.mjs/stderr.log

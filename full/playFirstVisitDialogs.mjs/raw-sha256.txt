@@ -1,0 +1,2 @@
+a53eba40cd499886eb1c8c05a5b28440da906da4a04094f68f86de72cb516234  /home/runner/work/_temp/rc-out/full/playFirstVisitDialogs.mjs/stdout.log
+e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855  /home/runner/work/_temp/rc-out/full/playFirstVisitDialogs.mjs/stderr.log
