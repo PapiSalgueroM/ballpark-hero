@@ -41,6 +41,16 @@
  * N, THE HOSTS. Every excluded string in scripts/data/clubNamesakes1584/gridNamesakes.json stands on two registrable
  *    hosts (soccerway's regional mirrors are one host), none a wiki, at most one Transfermarkt, each with its url, the
  *    date read and a one line summary.
+ * L, THE LEDGER (Round 1587). arsenalLedger.json must equal what scripts/qa/genArsenalLedger1587.mjs writes from the
+ *    lead's Q2 export and the committed page list (so a verdict is never typed), every man is sarandi or london
+ *    (measured: 74 men, 56 sarandi on 110 rows, 18 london), each on two hosts by N's rule, and the stored name
+ *    'Arsenal de Sarandí' on two hosts.
+ * T, THE TRIPWIRE (Round 1587). Every Q2 row with a CONMEBOL nationality token, an empty nationality or Arsenal FC as
+ *    the middle of a three part split (160 rows) belongs to a judged man, and no row id sits in two men. While the
+ *    migration does not exist it may print pending; once it exists pending must be 0.
+ * Round 1587 controls: manhost (the first two source sarandi man loses one), wiki (his statscrew source becomes
+ *    en.wikipedia.org), twotm (both his sources Transfermarkt): L is red. unjudged (a made up Argentine row added to Q2
+ *    in memory): T is red once the migration exists. unmerge now removes the ledger's sarandi rows by id.
  *
  * Run: node scripts/simClubNamesakes.mjs            (green: the closing line and exit 0) */
 import fs from 'node:fs';
@@ -48,10 +58,23 @@ import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 import * as detectLib from './lib/clubNamesakeDetect.mjs';
 import { buildGridRule, stripComments, braceEnd, onceAt } from './lib/gridRuleFromSource.mjs';
+import * as ARSENAL from './qa/genArsenalLedger1587.mjs';
 
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const DATA = path.join(ROOT, 'scripts', 'data', 'clubNamesakes1584');
-const CONTROLS = ['blind', 'unmerge', 'noexclude', 'wide', 'mirrordrift', 'onehost', 'forget'];
+const MIGRATION_PATH = 'supabase/migrations/20261101120000_round_1587_arsenal_de_sarandi.sql';
+const CONTROLS = ['blind', 'unmerge', 'noexclude', 'wide', 'mirrordrift', 'onehost', 'forget',
+  'manhost', 'wiki', 'twotm', 'unjudged'];
+const WIKI_HOST = /(^|\.)(wikipedia|wikidata|wikimedia|fandom|wikiwand)\./i;
+const regDomain = h => h.toLowerCase().replace(/^www\./, '').split('.').slice(-2).join('.');
+/* two registrable hosts (soccerway's and ESPN's regional mirrors are one host each), no wiki, at most one Transfermarkt,
+   and every source with its https url on its own host, the date read and a one line summary */
+const twoHosts = sources => {
+  const hosts = sources.map(s => s.host);
+  return new Set(hosts.map(regDomain)).size >= 2 && hosts.filter(h => /transfermarkt/i.test(h)).length <= 1
+    && !hosts.some(h => WIKI_HOST.test(h))
+    && sources.every(s => s.host && /^https:\/\//.test(s.url) && s.read && s.says && regDomain(new URL(s.url).hostname) === regDomain(s.host));
+};
 const CONTROL = process.env.SIM_NAMESAKE_CONTROL || '';
 if (CONTROL && !CONTROLS.includes(CONTROL)) {
   console.error(`SIM_NAMESAKE_CONTROL=${CONTROL} is not a control this harness knows (${CONTROLS.join(', ')}), ABORTED`);
@@ -79,18 +102,15 @@ console.log('D) the detection finds the merged club on the fixture');
     fired.push('blind: the detector returned nothing');
   }
   if (CONTROL === 'unmerge') {
-    /* the Argentine candidates the lead's live Q1 named in Arsenal FC's S2 blocs (export-1584/README.md), by surname,
-       never Emiliano Martinez (London's keeper, in the 2016 and 2017 blocs) */
-    const SURNAMES = ['leguizamon', 'carrera', 'campestrini', 'pellerano', 'sena', 'yacuzzi', 'diaz', 'poggi', 'jara',
-      'obolo', 'alvarez', 'galvan', 'marcone', 'lopez', 'caffa', 'burdisso', 'nervo', 'ortiz', 'aguirre', 'zuculini',
-      'perez', 'sperduti', 'andrada', 'munoz', 'corvalan', 'ruiz', 'bazan', 'barbieri', 'brunetta', 'marin'];
-    const out = new Set(rows.filter(r => r.club === 'Arsenal FC' && /argentina/i.test(r.nationality || '')
-      && !/martinez$/.test(fold(r.player_name)) && SURNAMES.includes(fold(r.player_name).split(' ').pop())).map(r => r.id));
-    if (!out.size) abort('no Arsenal FC row of a named candidate is in the fixture');
+    /* Round 1587: the ledger's sarandi rows (arsenalLedger.json, real table ids, the same ids the fixture carries) are
+       taken out by id; Round 1584 used the surnames the lead's live Q1 named, before a ledger existed */
+    const sarRows = new Set(readJson(ARSENAL.LEDGER_FILE).men.filter(m => m.verdict === 'sarandi').flatMap(m => m.rows));
+    const out = new Set(rows.filter(r => sarRows.has(r.id)).map(r => r.id));
+    if (!out.size) abort('no row of a ledger sarandi man is in the fixture');
     rows = rows.filter(r => !out.has(r.id));
     const left = detect(rows).filter(d => d.club === 'Arsenal FC');
     if (left.length) abort(`${out.size} rows removed and Arsenal FC is still flagged (${left.map(d => d.signal + ' ' + d.year).join(', ')})`);
-    fired.push(`unmerge: ${out.size} Arsenal FC rows of named candidates removed by id, Arsenal FC left the list`);
+    fired.push(`unmerge: the ${out.size} fixture rows of the ledger's sarandi men removed by id, Arsenal FC left the list`);
   }
   const got = detect(rows);
   if (JSON.stringify(got) === JSON.stringify(fx.expected)) ok(`the mirror returns the committed list exactly (${fx.expected.length} rows)`);
@@ -259,6 +279,64 @@ console.log('N) every excluded string stands on two hosts');
   }
   if (!bad.length) ok(`${entries.length} strings, each on two registrable hosts, no wiki, at most one Transfermarkt, url, date and summary`);
   else fail(`short of two good hosts: ${bad.join(', ')}`);
+}
+
+/* ---------------------------------------------------------------- L (Round 1587) */
+console.log('L) every judged man stands on two hosts, and the ledger is what its generator writes');
+const MARKET = readJson(ARSENAL.MARKET_FILE);
+const AL = readJson(ARSENAL.LEDGER_FILE);
+{
+  const pages = ARSENAL.parsePages(fs.readFileSync(path.join(DATA, ARSENAL.PAGES_FILE), 'utf8'));
+  const again = ARSENAL.buildLedger(MARKET, pages);
+  if (JSON.stringify(again) === JSON.stringify(AL)) ok(`arsenalLedger.json equals genArsenalLedger1587's output from the ${pages.length} committed pages and the Q2 export`);
+  else fail('arsenalLedger.json differs from what genArsenalLedger1587.mjs writes: regenerate it, never edit it by hand');
+  const men = AL.men.map(m => ({ ...m, sources: m.sources.map(s => ({ ...s })) }));
+  const firstSar = men.find(m => m.verdict === 'sarandi' && m.sources.length === 2);
+  if (CONTROL === 'manhost') {
+    if (!firstSar) abort('no sarandi man stands on exactly two sources');
+    firstSar.sources.pop();
+    fired.push(`manhost: ${firstSar.name} left with one source`);
+  }
+  if (CONTROL === 'wiki') {
+    if (!firstSar || !/statscrew/.test(firstSar.sources[0].host)) abort('the first two source sarandi man does not open on statscrew');
+    firstSar.sources[0] = { ...firstSar.sources[0], host: 'en.wikipedia.org', url: 'https://en.wikipedia.org/wiki/Arsenal_de_Sarand%C3%AD' };
+    fired.push(`wiki: ${firstSar.name}'s statscrew source swapped for en.wikipedia.org`);
+  }
+  if (CONTROL === 'twotm') {
+    if (!firstSar) abort('no sarandi man stands on exactly two sources');
+    firstSar.sources = firstSar.sources.map((s, i) => ({ ...s, host: i ? 'transfermarkt.co.uk' : 'transfermarkt.com', url: `https://www.transfermarkt.${i ? 'co.uk' : 'com'}/x/profil/spieler/${i}` }));
+    fired.push(`twotm: both of ${firstSar.name}'s sources made Transfermarkt`);
+  }
+  const verdicts = new Set(men.map(m => m.verdict));
+  if ([...verdicts].every(v => v === 'sarandi' || v === 'london')) ok(`${men.length} men, every verdict sarandi or london (${men.filter(m => m.verdict === 'sarandi').length} and ${men.filter(m => m.verdict === 'london').length}), none held or pending`);
+  else fail(`verdicts other than sarandi and london: ${[...verdicts].join(', ')}`);
+  const bad = men.filter(m => !twoHosts(m.sources)).map(m => m.name);
+  if (!bad.length) ok('every man has two registrable hosts, no wiki, at most one Transfermarkt, url, date and summary');
+  else fail(`short of two good hosts: ${bad.join(', ')}`);
+  if (twoHosts(AL.nameSources) && AL.namesake === ARSENAL.NAMESAKE) ok(`the stored name '${AL.namesake}' stands on two hosts`);
+  else fail(`the stored name '${AL.namesake}' is not on two good hosts`);
+}
+
+/* ---------------------------------------------------------------- T (Round 1587) */
+console.log('T) every tripwire row and every roster net row belongs to exactly one judged man');
+{
+  let market = MARKET;
+  if (CONTROL === 'unjudged') {
+    if (!market.some(r => r.id === 6876)) abort('Esteban Andrada 2015 (id 6876) is not in the Q2 export');
+    market = market.concat([{ ...market.find(r => r.id === 6876), id: 99999991, player_name: 'Ficticio Unjudged', name_folded: 'ficticio unjudged' }]);
+    fired.push('unjudged: a made up Argentine Arsenal FC row added to Q2 in memory');
+  }
+  const owner = new Map();
+  let twice = 0;
+  for (const m of AL.men) for (const id of m.rows) { if (owner.has(id)) twice += 1; owner.set(id, m.name); }
+  const trip = market.filter(r => ARSENAL.tripwireKind(r));
+  const pending = trip.filter(r => !owner.has(r.id));
+  const migrationThere = fs.existsSync(path.join(ROOT, MIGRATION_PATH));
+  if (twice) fail(`${twice} row ids sit in two men`);
+  else ok(`no row id sits in two men (${owner.size} judged rows)`);
+  if (!pending.length) ok(`${trip.length} tripwire rows, every one judged; ${AL.men.filter(m => m.nets.includes('roster')).length} men came in by the roster net only`);
+  else if (!migrationThere) ok(`pending ${pending.length} (allowed while the migration does not exist)`);
+  else fail(`pending ${pending.length} tripwire rows with the migration written: ${pending.slice(0, 3).map(r => r.player_name + ' ' + r.year).join(', ')}`);
 }
 
 console.log('');
