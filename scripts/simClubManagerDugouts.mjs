@@ -8,9 +8,10 @@
 
    0. the table is the receipt: the same chairs, the same names, the same months, and a row carries a name
       and a month and nothing else;
-   1. every chair has reads on at least two different registrable domains, none of them a wiki, a wiki
-      mirror or a host the receipt bans, and every read names its source (an https url and a read date),
-      its club and its man;
+   1. every chair has reads on at least two different registrable domains, every source's domain is on the
+      fence's VETTED list (a league's own site, a club's own site or a news outlet, each checked by hand) and on
+      none of WIKI_DOMAINS (wikis and the sites that copy them) nor any host with "wiki" in it, and every read
+      names its source (an https url and a read date), its club and its man;
    2. every chair's club is a club of its league's 2026-27 table (REAL_LEAGUES), and every read's club maps
       to it through the receipt's nameNormalization (no orphan rows, no read about another club);
    3. coverage is exact for every league the receipt declares covered: rows plus partial entries equal the
@@ -31,6 +32,7 @@
    DUGOUTS_CONTROL=samedomain a two read chair rests on two source ids on one registrable domain (section 1; pins
                               that the two host rule counts domains, not source ids)
    DUGOUTS_CONTROL=monthsamedomain a stored month is printed by two source ids on one domain (section 4; same)
+   DUGOUTS_CONTROL=wikimirror S-PL2 moves to infogalactic.com, a Wikipedia fork without "wiki" in its name (section 1)
    A control run prints "control <name> FIRED" and exits 1 when its section went red, exits 3 if it did not
    fire, and exits 2 when it refuses to run (unknown name, or its mutation could not be applied or changed nothing).
 
@@ -48,7 +50,7 @@ import { fileURLToPath, pathToFileURL } from 'node:url';
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const SRC = `${ROOT.replaceAll('\\', '/')}/src`;
 const CONTROL = process.env.DUGOUTS_CONTROL || '';
-const CONTROLS = { twochairs: 0, onehost: 1, samedomain: 1, orphan: 2, gap: 3, monthclash: 4, monthsamedomain: 4 };
+const CONTROLS = { twochairs: 0, onehost: 1, samedomain: 1, wikimirror: 1, orphan: 2, gap: 3, monthclash: 4, monthsamedomain: 4 };
 if (CONTROL && !(CONTROL in CONTROLS)) { console.error(`unknown DUGOUTS_CONTROL=${CONTROL}`); process.exit(2); }
 
 const failed = new Set();
@@ -104,6 +106,11 @@ if (CONTROL) {
     const c = receipt.chairs[0];
     if (!c || c.reads.length < 2 || new Set(c.reads.map(r => r.source)).size < 2) refuse('the first chair has no second source to remove');
     for (const r of c.reads) r.source = c.reads[0].source;
+  } else if (CONTROL === 'wikimirror') {
+    /* A Wikipedia fork with no "wiki" in its name: the closed ban list alone let this through once. */
+    const s = receipt.sources.find(x => x.id === 'S-PL2');
+    if (!s || domainOf(s.url) === 'infogalactic.com') refuse('S-PL2 is missing or already on the mirror');
+    s.url = 'https://infogalactic.com/info/Premier_League';
   } else if (CONTROL === 'samedomain') {
     /* Two DIFFERENT source ids on ONE registrable domain: a fence that counted ids instead of domains stays green. */
     let hit = null;
@@ -160,8 +167,22 @@ if (CONTROL) {
 }
 
 /* ---- the receipt's view ---- */
-const WIKI_DOMAINS = new Set(['wikipedia.org', 'wikimedia.org', 'wikidata.org', 'fandom.com', 'wikia.com', 'wikia.org', 'wikiwand.com', 'dbpedia.org', 'alchetron.com', 'everybodywiki.com', 'wiki2.org']);
+/* The ban: wikis and the sites that copy them, many of them without "wiki" in the name. A backstop only: the
+   real gate is VETTED below, so a mirror nobody has heard of is refused for being unvetted. */
+const WIKI_DOMAINS = new Set(['wikipedia.org', 'wikimedia.org', 'wikidata.org', 'fandom.com', 'wikia.com', 'wikia.org', 'wikiwand.com', 'dbpedia.org', 'alchetron.com', 'everybodywiki.com', 'wiki2.org',
+  'infogalactic.com', 'en-academic.com', 'enacademic.com', 'academic.ru', 'justapedia.org', 'explained.today', 'everipedia.org', 'newworldencyclopedia.org',
+  'wikimili.com', 'wikizero.com', 'thereaderwiki.com', 'hmong.es', 'thefreedictionary.com']);
 const isWiki = url => WIKI_DOMAINS.has(domainOf(url)) || /wiki/i.test(new URL(url).hostname);
+/* VETTED: every registrable domain the receipt may cite, each checked by hand to be the league's own site, a
+   club's own site or a news outlet with its own reporting, never a wiki copy. A new host fails section 1 until it
+   is added here with its kind, so a wiki mirror cannot slip in under a name the ban list has never seen. */
+const VETTED = {
+  'premierleague.com': 'league', 'bundesliga.com': 'league', 'ligue1.com': 'league',
+  'theanalyst.com': 'outlet', 'dazn.com': 'outlet', 'skysports.com': 'outlet', 'esdiario.com': 'outlet', 'elidealgallego.com': 'outlet',
+  'sportsmole.co.uk': 'outlet', 'rtp.pt': 'outlet', 'infobae.com': 'outlet', 'sky.it': 'outlet', 'fantacalcio.it': 'outlet', '90min.de': 'outlet',
+  'flashscore.de': 'outlet', 'flashscore.fr': 'outlet', 'info.fr': 'outlet', 'orange.fr': 'outlet', 'maxifoot.fr': 'outlet',
+};
+const vettedKind = url => VETTED[domainOf(url)] ?? null;
 const sources = new Map(receipt.sources.map(s => [s.id, s]));
 const mapClub = c => receipt.nameNormalization[c] ?? c;
 const leagueById = new Map(mod.REAL_LEAGUES.map(l => [l.id, l]));
@@ -201,6 +222,7 @@ console.log('section 1: two hosts on two registrable domains per chair, none a w
 for (const s of receipt.sources) {
   if (!/^https:\/\//.test(s.url ?? '')) fail(1, `${s.id}: no https url`);
   else if (isWiki(s.url)) fail(1, `${s.id}: ${domainOf(s.url)} is a wiki or a wiki mirror`);
+  else if (!vettedKind(s.url)) fail(1, `${s.id}: ${domainOf(s.url)} is a host nobody vetted (add it to VETTED with its kind once it is checked not to copy a wiki)`);
   if (!/^\d{4}-\d{2}-\d{2}$/.test(s.readOn ?? '')) fail(1, `${s.id}: no read date`);
   if (!s.title) fail(1, `${s.id}: no title`);
 }
