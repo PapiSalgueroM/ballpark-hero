@@ -1,0 +1,13 @@
+pgl exit=0 1s | /tmp/pgl/node_modules/@electric-sql/pglite/dist/index.js
+eq83 exit=0 24s | EQUAL exit=0 18 lines: rehearseNbaConnections1583: green. Both forms land the 4 NBA file boards in place, a drifted row is left alone or stops 
+eq83-noguard exit=1 14s | EQUAL exit=1 20 lines: rehearseNbaConnections1583 control noguard: FIRED, caught by check B (2 failures; checks A, B)
+eq83-drift exit=1 14s | EQUAL exit=1 21 lines: rehearseNbaConnections1583 control drift: FIRED, caught by check 0 (3 failures; checks 0, A, G)
+eq83-tamper exit=1 14s | EQUAL exit=1 20 lines: rehearseNbaConnections1583 control tamper: FIRED, caught by check D (2 failures; checks D)
+eq83-nohash exit=1 14s | EQUAL exit=1 20 lines: rehearseNbaConnections1583 control nohash: FIRED, caught by check E (2 failures; checks E)
+eq83-dupname exit=1 14s | EQUAL exit=1 20 lines: rehearseNbaConnections1583 control dupname: FIRED, caught by check H (1 failure; checks H)
+eq74 exit=0 24s | EQUAL exit=0 18 lines: rehearseUsConnections1574: green. Both forms land the 16 NHL table boards in place, a drifted row is left alone or stops
+eq74-noguard exit=1 13s | EQUAL exit=1 20 lines: rehearseUsConnections1574 control noguard: FIRED, caught by check B (2 failures; checks A, B)
+eq74-drift exit=1 13s | EQUAL exit=1 21 lines: rehearseUsConnections1574 control drift: FIRED, caught by check 0 (3 failures; checks 0, A, G)
+eq74-tamper exit=1 13s | EQUAL exit=1 20 lines: rehearseUsConnections1574 control tamper: FIRED, caught by check D (2 failures; checks D)
+eq74-nohash exit=1 13s | EQUAL exit=1 20 lines: rehearseUsConnections1574 control nohash: FIRED, caught by check E (2 failures; checks E)
+eq74-dupname exit=1 13s | EQUAL exit=1 20 lines: rehearseUsConnections1574 control dupname: FIRED, caught by check H (1 failure; checks H)
