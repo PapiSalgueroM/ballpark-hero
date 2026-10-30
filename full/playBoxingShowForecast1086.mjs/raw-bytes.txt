@@ -1,0 +1,3 @@
+985 /home/runner/work/_temp/rc-out/full/playBoxingShowForecast1086.mjs/stdout.log
+  0 /home/runner/work/_temp/rc-out/full/playBoxingShowForecast1086.mjs/stderr.log
+985 total

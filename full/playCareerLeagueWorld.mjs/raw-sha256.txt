@@ -1,0 +1,2 @@
+f4377333235316ceec93172b47814782aa72480d26d6b290b312bbdc39178f60  /home/runner/work/_temp/rc-out/full/playCareerLeagueWorld.mjs/stdout.log
+e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855  /home/runner/work/_temp/rc-out/full/playCareerLeagueWorld.mjs/stderr.log

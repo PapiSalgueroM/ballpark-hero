@@ -1,0 +1,3 @@
+6340 /home/runner/work/_temp/rc-out/full/playCareerMoments.mjs/stdout.log
+   0 /home/runner/work/_temp/rc-out/full/playCareerMoments.mjs/stderr.log
+6340 total

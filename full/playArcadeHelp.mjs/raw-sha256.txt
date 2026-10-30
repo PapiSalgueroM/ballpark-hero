@@ -1,0 +1,2 @@
+cb6a2a258d585fd5bca1eb94886e10682dacb967e33e9b1155ebc849c95b231e  /home/runner/work/_temp/rc-out/full/playArcadeHelp.mjs/stdout.log
+e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855  /home/runner/work/_temp/rc-out/full/playArcadeHelp.mjs/stderr.log

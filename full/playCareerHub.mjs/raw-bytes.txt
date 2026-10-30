@@ -1,0 +1,3 @@
+11131 /home/runner/work/_temp/rc-out/full/playCareerHub.mjs/stdout.log
+    0 /home/runner/work/_temp/rc-out/full/playCareerHub.mjs/stderr.log
+11131 total

@@ -1,0 +1,2 @@
+673103f7799baf8354734f45f0c0898e334cdff26611eef9c61295f2b70b3f8e  /home/runner/work/_temp/rc-out/full/playBoxingShowForecast1086.mjs/stdout.log
+e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855  /home/runner/work/_temp/rc-out/full/playBoxingShowForecast1086.mjs/stderr.log

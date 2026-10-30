@@ -1,0 +1,2 @@
+29112b9896e58e89f96553599ac80bac2c115e2fc9208f4036eb36023a67c3a5  /home/runner/work/_temp/rc-out/full/playCareerHallLine.mjs/stdout.log
+e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855  /home/runner/work/_temp/rc-out/full/playCareerHallLine.mjs/stderr.log

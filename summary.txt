@@ -1,0 +1,12 @@
+prepare exit=0 60s | ordinary-build raw=0
+playAdRoutes exit=1 66s | playAdRoutes.mjs raw=1
+playArcadeHelp exit=0 21s | playArcadeHelp.mjs raw=0
+playAutocompleteRace exit=0 147s | playAutocompleteRace.mjs raw=0
+playBootShift exit=1 31s | playBootShift.mjs raw=1
+playBoxingShowForecast1086 exit=1 1s | playBoxingShowForecast1086.mjs raw=1
+playCareerHallLine exit=0 87s | playCareerHallLine.mjs raw=0
+playCareerHub exit=0 47s | playCareerHub.mjs raw=0
+playCareerLeagueWorld exit=0 16s | playCareerLeagueWorld.mjs raw=0
+playCareerMoments exit=0 62s | playCareerMoments.mjs raw=0
+playCareerPress exit=1 17s | playCareerPress.mjs raw=1
+finish exit=0 6s | 

@@ -1,0 +1,2 @@
+594c9ebec8fb8ef39b19a3191b833faab0292ac32a8224c9c180664fc40a6807  /home/runner/work/_temp/rc-out/full/playBootShift.mjs/stdout.log
+e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855  /home/runner/work/_temp/rc-out/full/playBootShift.mjs/stderr.log

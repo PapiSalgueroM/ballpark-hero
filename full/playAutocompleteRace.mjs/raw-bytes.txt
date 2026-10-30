@@ -1,0 +1,3 @@
+4858 /home/runner/work/_temp/rc-out/full/playAutocompleteRace.mjs/stdout.log
+   0 /home/runner/work/_temp/rc-out/full/playAutocompleteRace.mjs/stderr.log
+4858 total
