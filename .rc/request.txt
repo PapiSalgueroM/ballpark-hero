@@ -1,0 +1,8 @@
+intl-head-18: SEEDS=18 node scripts/simCmInternationals.mjs
+intl-base-18: R=$PWD; git worktree add /tmp/ib 14a9af704 >/dev/null 2>&1 && cd /tmp/ib && ln -s $R/node_modules node_modules && cp $R/scripts/simCmInternationals.mjs scripts/simCmInternationals.mjs && SEEDS=18 node scripts/simCmInternationals.mjs
+sack-head-0: SECTION=0 LEVELS=normal SEEDS=60 SEED_OFFSET=0 SEASONS=1 DRIVERS=steady SHARD=0/3 OUT_JSON=$RC_OUT/sack-head-0.json node scripts/simCmDifficulty.mjs
+sack-head-1: SECTION=0 LEVELS=normal SEEDS=60 SEED_OFFSET=0 SEASONS=1 DRIVERS=steady SHARD=1/3 OUT_JSON=$RC_OUT/sack-head-1.json node scripts/simCmDifficulty.mjs
+sack-head-2: SECTION=0 LEVELS=normal SEEDS=60 SEED_OFFSET=0 SEASONS=1 DRIVERS=steady SHARD=2/3 OUT_JSON=$RC_OUT/sack-head-2.json node scripts/simCmDifficulty.mjs
+sack-base-0: R=$PWD; O=$RC_OUT; git worktree add /tmp/sb0 14a9af704 >/dev/null 2>&1 && cd /tmp/sb0 && ln -s $R/node_modules node_modules && SECTION=0 LEVELS=normal SEEDS=60 SEED_OFFSET=0 SEASONS=1 DRIVERS=steady SHARD=0/3 OUT_JSON=$O/sack-base-0.json node scripts/simCmDifficulty.mjs
+sack-base-1: R=$PWD; O=$RC_OUT; git worktree add /tmp/sb1 14a9af704 >/dev/null 2>&1 && cd /tmp/sb1 && ln -s $R/node_modules node_modules && SECTION=0 LEVELS=normal SEEDS=60 SEED_OFFSET=0 SEASONS=1 DRIVERS=steady SHARD=1/3 OUT_JSON=$O/sack-base-1.json node scripts/simCmDifficulty.mjs
+sack-base-2: R=$PWD; O=$RC_OUT; git worktree add /tmp/sb2 14a9af704 >/dev/null 2>&1 && cd /tmp/sb2 && ln -s $R/node_modules node_modules && SECTION=0 LEVELS=normal SEEDS=60 SEED_OFFSET=0 SEASONS=1 DRIVERS=steady SHARD=2/3 OUT_JSON=$O/sack-base-2.json node scripts/simCmDifficulty.mjs
