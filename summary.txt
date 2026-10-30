@@ -1,0 +1,2 @@
+digest-playoff exit=0 57s | digest1593 playoff: simCmLeagueRules exit 0
+digest-plain exit=1 57s | digest1593 plain: simCmLeagueRules exit 1

@@ -1,0 +1,3 @@
+#!serial
+digest-playoff: node .rc/x/digest1593.mjs playoff
+digest-plain: node .rc/x/digest1593.mjs plain
