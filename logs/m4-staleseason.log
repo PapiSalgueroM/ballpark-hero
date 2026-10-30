@@ -1,0 +1,7 @@
+MUT staleseason applied (1 edit)
+m4 fleet exit 1
+simCmFreeAgencyFleet: 12 careers to season 9, 4 trim and loan careers to season 4; 760 men left a squad, 2720 summer checks; lost 0, twice 0; 143 retired off the list (0 summers unseen); list size at the end median 48, its median age median 24; trimmed 12; ledger held list men 194, a summer on 1897; out on loan in the last year 4 (left 4, renewed 4); old saves skipped
+simCmFreeAgencyFleet: RED, sections 6 (214)
+m4 fa exit 0
+   ok   signing a real free agent to sell him on does not pay: 4 percent of sales at a profit (ceiling 25), -0.08m a sale
+simFreeAgents: all sections passed

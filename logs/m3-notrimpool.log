@@ -1,0 +1,7 @@
+MUT notrimpool applied (1 edit)
+m3 fleet exit 1
+simCmFreeAgencyFleet: 12 careers to season 9, 4 trim and loan careers to season 4; 762 men left a squad, 2681 summer checks; lost 12, twice 0; 151 retired off the list (0 summers unseen); list size at the end median 43, its median age median 25; trimmed 12; ledger held list men 680, a summer on 1829; out on loan in the last year 4 (left 4, renewed 4); old saves skipped
+simCmFreeAgencyFleet: RED, sections 1 (12), 5 (12)
+m3 fa exit 0
+   ok   signing a real free agent to sell him on does not pay: 4 percent of sales at a profit (ceiling 25), -0.08m a sale
+simFreeAgents: all sections passed

@@ -1,0 +1,26 @@
+  FAIL section 6: Everton none, season 4: Christian Nørgaard is on the list and his ledger record says retired
+  FAIL section 6: Everton none, season 4: Ainsley Maitland-Niles is 31, rated 75 on the list and 31, rated 77 on his ledger record
+  FAIL section 6: Everton none, season 5: Ainsley Maitland-Niles is 32, rated 74 on the list and 32, rated 75 on his ledger record
+  FAIL section 6: Everton none, season 7: Ainsley Maitland-Niles is 34, rated 72 on the list and 34, rated 71 on his ledger record
+  FAIL section 6: Everton none, season 7: Kiernan Dewsbury-Hall is 33, rated 83 on the list and 33, rated 82 on his ledger record
+  FAIL section 6: Everton none, season 7: Tyler Dibling is 25, rated 84 on the list and 25, rated 85 on his ledger record
+  FAIL section 6: Everton none, season 8: Brennan Johnson is 31, rated 84 on the list and 31, rated 85 on his ledger record
+  FAIL section 6: Everton none, season 8: Thierno Barry is 30, rated 84 on the list and 30, rated 83 on his ledger record
+  Everton now none: 65 men left, lost 0, twice 0, 16 retired off the list; at season 9 43 on the list besides the journeymen, median age 25
+  Everton now eleven: 31 men left, lost 0, twice 0, 12 retired off the list; at season 9 25 on the list besides the journeymen, median age 23
+  Villarreal now none: 68 men left, lost 0, twice 0, 11 retired off the list; at season 9 55 on the list besides the journeymen, median age 25
+  Villarreal now eleven: 39 men left, lost 0, twice 0, 9 retired off the list; at season 9 34 on the list besides the journeymen, median age 24
+  Freiburg now none: 66 men left, lost 0, twice 0, 11 retired off the list; at season 9 51 on the list besides the journeymen, median age 25
+  Freiburg now eleven: 37 men left, lost 0, twice 0, 13 retired off the list; at season 9 28 on the list besides the journeymen, median age 23
+  Ajax now none: 74 men left, lost 0, twice 0, 17 retired off the list; at season 9 52 on the list besides the journeymen, median age 25
+  Ajax now eleven: 40 men left, lost 0, twice 0, 15 retired off the list; at season 9 27 on the list besides the journeymen, median age 23
+  Braga now none: 68 men left, lost 0, twice 0, 10 retired off the list; at season 9 55 on the list besides the journeymen, median age 25
+  Braga now eleven: 37 men left, lost 0, twice 0, 9 retired off the list; at season 9 35 on the list besides the journeymen, median age 25
+  Southampton era2015 none: 67 men left, lost 0, twice 0, 3 retired off the list; at season 9 54 on the list besides the journeymen, median age 25
+  Southampton era2015 eleven: 37 men left, lost 0, twice 0, 5 retired off the list; at season 9 29 on the list besides the journeymen, median age 23
+  trim Everton now: squad 35 into the summer, 30 after; 3 trimmed, listed as {"released":3}; lent out Christian Nørgaard
+  trim Ajax now: squad 39 into the summer, 30 after; 5 trimmed, listed as {"released":5}; lent out Simon Adingra
+  trim Southampton era2015: squad 36 into the summer, 30 after; 0 trimmed, listed as {}; lent out Graziano Pellè
+  trim Freiburg now: squad 38 into the summer, 30 after; 4 trimmed, listed as {"released":4}; lent out Maximilian Eggestein
+simCmFreeAgencyFleet: 12 careers to season 9, 4 trim and loan careers to season 4; 762 men left a squad, 2715 summer checks; lost 0, twice 0; 151 retired off the list (0 summers unseen); list size at the end median 43, its median age median 25; trimmed 12; ledger held list men 689, a summer on 1867; out on loan in the last year 4 (left 4, renewed 4); old saves skipped
+simCmFreeAgencyFleet: RED, sections 6 (215)
