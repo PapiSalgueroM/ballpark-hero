@@ -1,0 +1,4 @@
+#!playwright
+#!serial
+tsc: node_modules/.bin/tsc --noEmit -p tsconfig.app.json
+m1always: node .rc/x/fx-mut.mjs m1 && node_modules/.bin/vite build --outDir /tmp/dm1 --emptyOutDir > /dev/null 2>&1 && { node scripts/lib/hostLikeServer.mjs /tmp/dm1 4181 > /dev/null 2>&1 & } && sleep 4 && BASE=http://localhost:4181 ONLY=/club-manager node scripts/playFirstVisitDialogs.mjs; s=$?; git checkout -- src scripts; exit $s
