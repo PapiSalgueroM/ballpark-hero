@@ -601,6 +601,24 @@
       round is the only cause. Written with --part=modern,eras,pure --write
       on 21f8a5ee itself (line digest-write, 231 lines changed, blob
       8d27ddb7), then run green whole on the same runner.
+      Round 1603 (2026-10-30: a deciding second leg is judged by the tie,
+      four and five goal hauls named) took it once more. Against the file
+      as it stood 31 entries move, all 27 modern saves and 4 of the era
+      saves (premier2015, bundesliga2015, premier2020, ligue12020): whole in
+      all 31, wholeNext, s2_whole and start in some (start in 5), and in
+      four saves the table, results, world, cup and the next season's views
+      too. Saves whose club plays no Champions League night move as well:
+      they are played after the others in the same bundled engine, and the
+      legs below show the tie reading is still the only cause; pure held.
+      Attribution on a GitHub runner
+      (remote check r1603-f12, head daac9d99), three legs: with the tie
+      reading forced off and the old haul words back the file is green
+      whole (legA-both-off); with only the haul words back it stays red at
+      31 (legB-haul-off); with only the tie reading off it is green whole
+      (legB-tie-off). So the tie reading is the whole cause and the haul
+      words move nothing here. Written with --part=modern,eras,pure --write
+      on daac9d99 itself (line write, 122 lines changed), then run green
+      whole on the same runner.
    2. DIGEST, ERAS (hard). The same for every league of every historic era,
       one career each.
    3. DIGEST, PURE (hard). For every modern and era league: the drop count,
