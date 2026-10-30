@@ -1,0 +1,11 @@
+vitest exit=0 25s |    Duration  23.51s (transform 7.71s, setup 2.88s, collect 20.90s, tests 19.31s, environment 12.25s, prepare 3.95s)
+hs5 exit=0 30s | simManagerHotSeat: green (section 5 only). A survivor carries on in Club Manager on the hot seat's own season.
+simSaveFence exit=0 80s | simSaveFence: all green (tabs, source, fleet)
+hs5-clobber exit=1 27s | simManagerHotSeat: 395 failure(s)
+hs5-nopoints exit=1 25s | simManagerHotSeat: 44 failure(s)
+hs5-damagedfree exit=1 28s | simManagerHotSeat: 176 failure(s)
+tsc exit=0 123s | 
+simStorageWrites exit=1 4s | simStorageWrites: 1 failed (owed: 12)
+hs5-nobackup exit=1 24s | simManagerHotSeat: 44 failure(s)
+hs5-norollback exit=1 28s | simManagerHotSeat: 44 failure(s)
+simNoRivalNames exit=0 17s | No rival product names found. 0 findings.

@@ -1,0 +1,50 @@
+NEGATIVE CONTROL ON: a picked career is replaced without a kept aside copy; section 5 must go red
+5) A manager who keeps the job carries on in Club Manager
+  FAIL: Manchester United seed 3363520565 (h): the replaced career has 0 kept aside copies
+  FAIL: Southampton seed 2129143751 (h): the replaced career has 0 kept aside copies
+  FAIL: Bristol City seed 2505143299 (h): the replaced career has 0 kept aside copies
+  FAIL: Rayo Vallecano seed 46472915 (h): the replaced career has 0 kept aside copies
+  FAIL: AC Milan seed 354240859 (h): the replaced career has 0 kept aside copies
+  FAIL: Lecce seed 256002035 (h): the replaced career has 0 kept aside copies
+  FAIL: Bayer Leverkusen seed 1978703287 (h): the replaced career has 0 kept aside copies
+  FAIL: Lyon seed 3145330018 (h): the replaced career has 0 kept aside copies
+  FAIL: Paris FC seed 1317516283 (h): the replaced career has 0 kept aside copies
+  FAIL: Al-Ahli seed 604329556 (h): the replaced career has 0 kept aside copies
+  FAIL: Atlanta United seed 1940166480 (h): the replaced career has 0 kept aside copies
+  FAIL: New York Red Bulls seed 3722624121 (h): the replaced career has 0 kept aside copies
+  FAIL: San Diego FC seed 3037863773 (h): the replaced career has 0 kept aside copies
+  FAIL: Rangers seed 4166563788 (h): the replaced career has 0 kept aside copies
+  FAIL: Celtic seed 3271775616 (h): the replaced career has 0 kept aside copies
+  FAIL: Fenerbahçe seed 2644371663 (h): the replaced career has 0 kept aside copies
+  FAIL: Alanyaspor seed 1036092406 (h): the replaced career has 0 kept aside copies
+  FAIL: St. Pauli seed 181223470 (h): the replaced career has 0 kept aside copies
+  FAIL: Union Saint-Gilloise seed 2601737660 (h): the replaced career has 0 kept aside copies
+  FAIL: Sint-Truiden seed 2004413658 (h): the replaced career has 0 kept aside copies
+  FAIL: RB Salzburg seed 4031434727 (h): the replaced career has 0 kept aside copies
+  FAIL: Rapid Wien seed 4188792220 (h): the replaced career has 0 kept aside copies
+  FAIL: Olympiacos seed 1583074016 (h): the replaced career has 0 kept aside copies
+  FAIL: AEK Athens seed 1264500175 (h): the replaced career has 0 kept aside copies
+  FAIL: FC Midtjylland seed 4219463631 (h): the replaced career has 0 kept aside copies
+  FAIL: FC Nordsjælland seed 555865432 (h): the replaced career has 0 kept aside copies
+  FAIL: Young Boys seed 3876892485 (h): the replaced career has 0 kept aside copies
+  FAIL: Basel seed 1134408367 (h): the replaced career has 0 kept aside copies
+  FAIL: Hajduk Split seed 2868281908 (h): the replaced career has 0 kept aside copies
+  FAIL: Dinamo Zagreb seed 2203934071 (h): the replaced career has 0 kept aside copies
+  FAIL: Corinthians seed 792915288 (h): the replaced career has 0 kept aside copies
+  FAIL: São Paulo seed 2206950394 (h): the replaced career has 0 kept aside copies
+  FAIL: Guadalajara seed 465234352 (h): the replaced career has 0 kept aside copies
+  FAIL: Atlético San Luis seed 1085373004 (h): the replaced career has 0 kept aside copies
+  FAIL: Sydney FC seed 2669063318 (h): the replaced career has 0 kept aside copies
+  FAIL: Pisa seed 3445988560 (h): the replaced career has 0 kept aside copies
+  FAIL: Verona seed 2502081045 (h): the replaced career has 0 kept aside copies
+  FAIL: Nantes seed 3877975989 (h): the replaced career has 0 kept aside copies
+  FAIL: Reims seed 311012506 (h): the replaced career has 0 kept aside copies
+  FAIL: Girona seed 3609287469 (h): the replaced career has 0 kept aside copies
+  FAIL: Mallorca seed 2000764252 (h): the replaced career has 0 kept aside copies
+  FAIL: CSKA Moscow seed 1708035320 (h): the replaced career has 0 kept aside copies
+  FAIL: Rodina Moscow seed 3981509664 (h): the replaced career has 0 kept aside copies
+   54 setups in 27 leagues: 43 handed over (1 on a reprieve) from 25 leagues, 37 played to the end of the season, 6 sacked in Club Manager on the way, 24 sacked runs refused, 2 with a window before the next fixture, 164 of the previous manager's messages left behind
+   slot arms on 43 survivors: emptyDevice 43, keptSlotOne 43, intoSlotOne 43, fullAsked 43, damagedKept 43, pointsCleared 43, rolledBack 43, picked 0, changedRefused 43
+  FAIL: the slot arm picked held on only 0 of 43 survivors (floor 20)
+
+simManagerHotSeat: 44 failure(s)

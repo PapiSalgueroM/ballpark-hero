@@ -1,0 +1,43 @@
+
+[1m[46m RUN [49m[22m [36mv3.2.7 [39m[90m/home/runner/work/ballpark-hero/ballpark-hero[39m
+
+ [32m✓[39m src/test/saveKeeper.test.ts [2m([22m[2m35 tests[22m[2m)[22m[32m 189[2mms[22m[39m
+Browserslist: browsers data (caniuse-lite) is 16 months old. Please run:
+  npx update-browserslist-db@latest
+  Why you should do it regularly: https://github.com/browserslist/update-db#readme
+ [32m✓[39m src/test/routeErrorRecovery.test.tsx [2m([22m[2m65 tests[22m[2m)[22m[33m 1787[2mms[22m[39m
+ [32m✓[39m src/test/seasonCentreSlots.test.tsx [2m([22m[2m16 tests[22m[2m)[22m[32m 251[2mms[22m[39m
+ [32m✓[39m src/test/cmSavePoints.test.ts [2m([22m[2m15 tests[22m[2m)[22m[33m 1760[2mms[22m[39m
+ [32m✓[39m src/test/managerHotSeatCarryOn.test.ts [2m([22m[2m15 tests[22m[2m)[22m[33m 1898[2mms[22m[39m
+ [32m✓[39m src/lib/clubManagerSlots.test.ts [2m([22m[2m15 tests[22m[2m)[22m[33m 1045[2mms[22m[39m
+ [32m✓[39m src/test/clubManagerSlots.test.tsx [2m([22m[2m12 tests[22m[2m)[22m[33m 5715[2mms[22m[39m
+   [33m[2m✓[22m[39m Club Manager: three manager slots[2m > [22mtwo managers survive leaving the page, and either one opens [33m 716[2mms[22m[39m
+   [33m[2m✓[22m[39m Club Manager: three manager slots[2m > [22mleaving in the middle of a swap never writes the outgoing career back [33m 354[2mms[22m[39m
+   [33m[2m✓[22m[39m Club Manager: three manager slots[2m > [22mthe screen asks before it deletes, and every tile says what it holds [33m 498[2mms[22m[39m
+   [33m[2m✓[22m[39m Club Manager: three manager slots[2m > [22mdelete takes one career and leaves the other [33m 344[2mms[22m[39m
+   [33m[2m✓[22m[39m Club Manager slots: two tabs on one device[2m > [22mclosing the old tab after a switch in another never wipes the career switched in [33m 568[2mms[22m[39m
+   [33m[2m✓[22m[39m Club Manager slots: two tabs on one device[2m > [22ma change in the old tab writes nothing over the other career and goes back to the managers [33m 576[2mms[22m[39m
+   [33m[2m✓[22m[39m Club Manager slots: two tabs on one device[2m > [22mthe old tab live clock writes nothing over the career switched in [33m 722[2mms[22m[39m
+   [33m[2m✓[22m[39m Club Manager slots: two tabs on one device[2m > [22mManagers tapped on the old tab hub writes nothing over the other career [33m 482[2mms[22m[39m
+   [33m[2m✓[22m[39m Club Manager slots: two tabs on one device[2m > [22ma new manager from the old tab managers screen parks the other career where it belongs [33m 363[2mms[22m[39m
+   [33m[2m✓[22m[39m Club Manager slots: two tabs on one device[2m > [22mthe old tab managers screen follows the other tab, and a stale New manager says why it did nothing [33m 357[2mms[22m[39m
+   [33m[2m✓[22m[39m Club Manager slots: a parked era career[2m > [22mopens through the era boot, squads first [33m 523[2mms[22m[39m
+ [32m✓[39m src/test/saveFence.test.ts [2m([22m[2m11 tests[22m[2m)[22m[32m 23[2mms[22m[39m
+ [32m✓[39m src/test/managerHotSeatCarryOnCard.test.tsx [2m([22m[2m7 tests[22m[2m)[22m[33m 2707[2mms[22m[39m
+   [33m[2m✓[22m[39m Manager Hot Seat: the Carry on in Club Manager card[2m > [22mall three slots full: the chooser names each career, Cancel writes nothing, a pick keeps a copy aside [33m 395[2mms[22m[39m
+   [33m[2m✓[22m[39m Manager Hot Seat: the offer waits on the menu[2m > [22ma finished free run that kept the job reopens on its verdict with the offer [33m 459[2mms[22m[39m
+ [32m✓[39m src/lib/brokenSaveRecovery.test.ts [2m([22m[2m7 tests[22m[2m)[22m[32m 25[2mms[22m[39m
+ [32m✓[39m src/test/useSaveFenceWatch.test.tsx [2m([22m[2m9 tests[22m[2m)[22m[32m 65[2mms[22m[39m
+ [32m✓[39m src/test/routeErrorHeldSave.test.tsx [2m([22m[2m3 tests[22m[2m)[22m[32m 205[2mms[22m[39m
+ [32m✓[39m src/test/cmSavePointsScreen.test.tsx [2m([22m[2m8 tests[22m[2m)[22m[33m 1710[2mms[22m[39m
+   [33m[2m✓[22m[39m the save points screen names the right cause[2m > [22ma delete of a point another tab removed says it is gone, not still there [33m 691[2mms[22m[39m
+ [32m✓[39m src/test/cmSavePointsHook.test.tsx [2m([22m[2m3 tests[22m[2m)[22m[33m 921[2mms[22m[39m
+   [33m[2m✓[22m[39m the hook asks the points record before a scored ping[2m > [22ma season with no mark pings its score (the baseline) [33m 527[2mms[22m[39m
+ [32m✓[39m src/test/cmSavePointsDoor.test.tsx [2m([22m[2m4 tests[22m[2m)[22m[33m 1009[2mms[22m[39m
+   [33m[2m✓[22m[39m the save points button off the hub[2m > [22mopens the save points screen on the sacked screen, with the slot's points listed [33m 442[2mms[22m[39m
+
+[2m Test Files [22m [1m[32m15 passed[39m[22m[90m (15)[39m
+[2m      Tests [22m [1m[32m225 passed[39m[22m[90m (225)[39m
+[2m   Start at [22m 05:19:10
+[2m   Duration [22m 23.51s[2m (transform 7.71s, setup 2.88s, collect 20.90s, tests 19.31s, environment 12.25s, prepare 3.95s)[22m
+
