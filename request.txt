@@ -1,0 +1,1 @@
+fob-all: node scripts/controlFrontOfficeBoard.mjs all
