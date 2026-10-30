@@ -1,0 +1,10 @@
+build exit=0 37s | [dukb] inlined 1 stylesheet(s) and 1 module(s) into 181 snapshots (11 left alone)
+nolift exit=1 88s | playFirstVisitDialogs: CONSENT_BAR_CONTROL=nolift FIRED. 15 of 15 lines with the lift stripped read red, the Soccer Career hub among them
+states exit=0 96s | playFirstVisitDialogs: green. Every first visit dialog can be started, and no fixed button or link meets the banner, with the cookie banner unanswered.
+always exit=1 96s | playFirstVisitDialogs: CONSENT_BAR_CONTROL=always FIRED. 15 of 15 lines with the lift pinned read red for the answered half, the Soccer Career hub among them
+badname exit=2 1s | CONSENT_BAR_CONTROL=bogus is not a control this walk knows (nolift, always, inflow, offtop)
+inflow exit=1 93s | playFirstVisitDialogs: CONSENT_BAR_CONTROL=inflow FIRED. 2 of 2 lines it moved read red for inflow, the Soccer Career hub among them
+offtop exit=1 93s | playFirstVisitDialogs: CONSENT_BAR_CONTROL=offtop FIRED. 15 of 15 lines it moved read red for offscreen, the Soccer Career hub among them
+shard1 exit=0 276s | playFirstVisitDialogs: green. Every first visit dialog can be started, and no fixed button or link meets the banner, with the cookie banner unanswered.
+shard2 exit=0 263s | playFirstVisitDialogs: green. Every first visit dialog can be started, and no fixed button or link meets the banner, with the cookie banner unanswered.
+shard3 exit=0 325s | playFirstVisitDialogs: green. Every first visit dialog can be started, and no fixed button or link meets the banner, with the cookie banner unanswered.
