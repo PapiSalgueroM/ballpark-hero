@@ -1,0 +1,6 @@
+build exit=0 34s | [dukb] inlined 1 stylesheet(s) and 1 module(s) into 181 snapshots (11 left alone)
+walk-fixed exit=0 45s | walk1604 fixed: 54 checks, 0 failed, red paths: none
+walk-main exit=1 143s | walk1604 main: 51 checks, 24 failed, red paths: A, B, C
+chunkdelta exit=0 1s | all JS gz 4682723 -> 4683433 (710 bytes), first /tmp/base-dist, second dist
+sweepweight exit=0 29s | sweepWeight: green. Every page is inside its budget, and the budgets came down this round.
+flagship exit=0 1s | simFlagshipWeight: green. The flagship carries its own game and nobody else's.
