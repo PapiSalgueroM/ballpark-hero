@@ -21,7 +21,7 @@ import {
 import { generatedLeagueCountClauses, generatedLeagueMonthClause } from '@/data/clubManagerWorldRosters';
 import { FACILITY_IDS, facilitiesOf } from '@/lib/clubManagerFacilities';
 import { projectFinances } from '@/lib/clubManagerFinances';
-import { inboxTile, kittyChange, leagueTileValue, recordLine } from '@/lib/clubManagerHubLines';
+import { expiringDealsLine, inboxTile, kittyChange, leagueTileValue, recordLine } from '@/lib/clubManagerHubLines';
 import { myClubFirst, pitchName } from '@/lib/cmMatchDisplay';
 import { BOARD_EDGE, boardMeter } from '@/lib/clubManagerMeters';
 import { STAFF_POST_IDS, STAFF_POST_INFO, staffOf } from '@/lib/clubManagerStaff';
@@ -977,6 +977,8 @@ const ClubManager = () => {
   /* Round 979: an open appeal or decision counts as unread on the tile.
      Round 1328: the count and the line come from one rule, the panel's own. */
   const inboxLine = inboxTile(c);
+  /* Round 1597: the deals that run out this summer, named in the season's last weeks. */
+  const dealsLine = expiringDealsLine(c);
   const lastRes = (c.resultLog ?? []).slice(-1)[0];
   const rivalName = c.boardObjectives?.find(o => o.id === 'rival')?.rivalName ?? null;
   const rivalIdx = rivalName ? g.tableRows.findIndex(r => r.club === rivalName) : -1;
@@ -1133,6 +1135,16 @@ const ClubManager = () => {
               </div>
               <div className="text-[9px] text-muted-foreground mt-1">Nobody signed them, so they have hung up their boots.</div>
             </div>
+          )}
+          {/* Round 1597: the last weeks of a season name every deal that runs out, so none ends unseen. */}
+          {dealsLine && (
+            <button
+              data-cm-deals-line
+              onClick={() => g.setActiveTab('squad')}
+              className="w-full rounded-xl border border-primary/40 bg-primary/10 p-2.5 text-left text-xs text-foreground hover:bg-primary/20 transition-colors"
+            >
+              📝 {dealsLine.text} <span className="font-bold text-primary">Open the contracts desk</span>
+            </button>
           )}
           {c.transferWindow !== null && (
             <button

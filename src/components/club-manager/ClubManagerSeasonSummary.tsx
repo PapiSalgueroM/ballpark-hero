@@ -3,7 +3,7 @@ import { ChevronLeft, Trophy } from 'lucide-react';
 import { ResultScreen } from '@/components/game/ResultScreen';
 import { revealDelay } from '@/components/club-manager/Celebration';
 import { cn } from '@/lib/utils';
-import { bookAwardsState, evalWorldUcl, money } from '@/lib/clubManager';
+import { bookAwardsState, evalWorldUcl, expiringPlayers, money } from '@/lib/clubManager';
 import { BOOK_FULL_SHARE, type AwardMan } from '@/lib/clubManagerLeagueBoards';
 import { MadeUpTag } from '@/components/club-manager/SquadScreen';
 import { TeamLines } from '@/components/club-manager/SeasonHonoursCard';
@@ -11,6 +11,7 @@ import type { CareerState, SeasonSummary } from '@/lib/clubManager';
 import type { SeasonFate } from '@/lib/clubManagerBoardVerdict';
 import type { useClubManager } from '@/hooks/useClubManager';
 import { SavePointsDoor } from '@/components/club-manager/SavePointsDoor';
+import { dealAnswers, ExpiringDealsCheckpoint } from '@/components/club-manager/ExpiringDealsCheckpoint';
 
 /* Round 633: the five terms, in the order they are worth. Kept beside the
    screen that prints them rather than in the engine, because the wording is
@@ -34,7 +35,7 @@ const FATE_WORD: Record<SeasonFate, string> = { up: 'promoted', down: 'relegated
 export default function ClubManagerSeasonSummary({ sm, c, g }: {
   sm: SeasonSummary;
   c: CareerState;
-  g: Pick<ReturnType<typeof useClubManager>, 'nextSeason' | 'startNew'> & Partial<Pick<ReturnType<typeof useClubManager>, 'pointsSlot'>>;
+  g: Pick<ReturnType<typeof useClubManager>, 'nextSeason' | 'startNew'> & Partial<Pick<ReturnType<typeof useClubManager>, 'pointsSlot' | 'renew'>>;
 }) {
   const trophyLine = sm.trophies.length ? sm.trophies.map(() => '🏆').join('') : '-';
   /* Optional: a summary stored before Round 633 carries no breakdown, and the
@@ -76,6 +77,13 @@ export default function ClubManagerSeasonSummary({ sm, c, g }: {
     if (askingOffer) { takeRef.current?.focus({ preventScroll: true }); return; }
     if (backTo.current) { cardRefs.current[backTo.current]?.focus({ preventScroll: true }); backTo.current = null; }
   }, [askingOffer]);
+  /* Round 1597: the summer contracts checkpoint. The men are fixed when the review opens, so a man renewed here
+     keeps his row and the page does not jump; reset if the review is ever handed another season. Not asked when
+     the manager is leaving for a job he booked (summerMove): the squad stays with the old club. */
+  const freshDeals = () => ({ season: sm.season, ids: summerMove ? [] : expiringPlayers(c).map(p => p.id), letGo: new Set<string>() });
+  const [deals, setDeals] = useState(freshDeals);
+  if (deals.season !== sm.season) setDeals(freshDeals());
+  const openDeals = dealAnswers(c, deals.ids, deals.letGo).filter(r => r.answer === 'open').length;
   const mineInTeam = awards?.xi ? awards.xi.filter(m => (m[3] & 2) !== 0).length : 0;
   const winner = (m: AwardMan) => (
     <><span className={cn('font-bold', (m[3] & 2) !== 0 && 'text-primary')}>{m[0]}</span>{(m[3] & 1) !== 0 && <MadeUpTag className="ml-1" />} ({m[1]}, {m[2]})</>
@@ -99,7 +107,9 @@ export default function ClubManagerSeasonSummary({ sm, c, g }: {
             gamePath: '/club-manager',
           }}
           onPlayAgain={() => g.nextSeason()}
-          playAgainLabel={summerMove ? `Start Season ${sm.season + 1} at ${summerMove.club}` : `Continue to Season ${sm.season + 1}`}
+          playAgainDisabled={openDeals > 0}
+          playAgainLabel={openDeals > 0 ? `Answer ${openDeals} deal${openDeals === 1 ? '' : 's'} first`
+            : summerMove ? `Start Season ${sm.season + 1} at ${summerMove.club}` : `Continue to Season ${sm.season + 1}`}
           playNext={
             <div className="space-y-3">
               {summerMove && (
@@ -405,6 +415,14 @@ export function SackedCareerSummary({ c, g }: {
               </p>
             )}
           </div>
+          <ExpiringDealsCheckpoint
+            c={c}
+            ids={deals.ids}
+            letGo={deals.letGo}
+            onRenew={id => g.renew?.(id)}
+            onLetGo={id => setDeals(d => ({ ...d, letGo: new Set([...d.letGo, id]) }))}
+            onLetRestGo={() => setDeals(d => ({ ...d, letGo: new Set([...d.letGo, ...dealAnswers(c, d.ids, d.letGo).filter(r => r.answer === 'open').map(r => r.id)]) }))}
+          />
         </ResultScreen>
   );
 }

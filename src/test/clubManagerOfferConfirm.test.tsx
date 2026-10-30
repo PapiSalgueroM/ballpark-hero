@@ -59,6 +59,9 @@ describe('Round 1335: an offer asks first', () => {
 
   it('Continue still turns every offer down', () => {
     const { view, g, sm } = review();
+    /* Round 1597: the deals that run out are answered first (the summer contracts checkpoint). */
+    const rest = view.container.querySelector('[data-cm-deals-rest]');
+    if (rest) fireEvent.click(rest);
     const cont = [...view.container.querySelectorAll('button')].find(b => b.textContent?.includes(`Continue to Season ${sm.season + 1}`))!;
     expect(cont).toBeDefined();
     fireEvent.click(cont);

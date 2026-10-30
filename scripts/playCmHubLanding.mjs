@@ -229,6 +229,10 @@ if (SECTIONS.has('A')) {
    Returns a word for the log, or 'review' once the season review is up. */
 async function advance(page, how) {
   const has = async (loc) => (await loc.count()) > 0 && await loc.first().isVisible().catch(() => false);
+  /* Round 1597: the season review shuts Continue until every deal that runs out has an answer; answering them all
+     at once changes no save, so the landing measured below is the same summer. */
+  const rest = page.locator('[data-cm-deals-rest]:not([disabled])');
+  if (await has(rest)) await rest.first().click();
   const review = page.getByRole('button', { name: /^Continue to Season \d+/ });
   if (await has(review)) return 'review';
   const cont = page.locator('button', { hasText: /^Continue/ });
