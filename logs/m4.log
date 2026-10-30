@@ -1,0 +1,10 @@
+MUTATION m4: applied to src/lib/clubManagerHandOver.ts
+  FAIL: the slot arm picked held on only 0 of 43 survivors (floor 20)
+
+simManagerHotSeat: 44 failure(s)
+sim FAIL lines: 44
+[31m⎯⎯⎯⎯⎯⎯⎯[39m[1m[41m Failed Tests 2 [49m[22m[31m⎯⎯⎯⎯⎯⎯⎯[39m
+[41m[1m FAIL [22m[49m src/test/managerHotSeatCarryOn.test.ts[2m > [22mManager Hot Seat: carry on in Club Manager[2m > [22ma picked career is kept aside first, its points go, the others stay byte for byte
+[41m[1m FAIL [22m[49m src/test/managerHotSeatCarryOnCard.test.tsx[2m > [22mManager Hot Seat: the Carry on in Club Manager card[2m > [22mall three slots full: the chooser names each career, Cancel writes nothing, a pick keeps a copy aside
+[2m      Tests [22m [1m[31m2 failed[39m[22m[2m | [22m[1m[32m20 passed[39m[22m[90m (22)[39m
+MUT m4 sim=1 vitest=1

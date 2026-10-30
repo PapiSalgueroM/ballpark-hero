@@ -1,0 +1,7 @@
+m0 exit=0 24s | MUT m0 sim=0 vitest=0
+m1 exit=1 23s | MUT m1 sim=0 vitest=1
+m2 exit=0 23s | MUT m2 sim=0 vitest=0
+m3 exit=2 23s | MUT m3 sim=1 vitest=1
+m4 exit=2 23s | MUT m4 sim=1 vitest=1
+m5 exit=1 23s | MUT m5 sim=0 vitest=1
+m6 exit=2 22s | MUT m6 sim=1 vitest=1

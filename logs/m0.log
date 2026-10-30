@@ -1,0 +1,6 @@
+   ok  every survivor's career goes into an empty Club Manager slot and never over a career (a full house answers full, a picked career is kept aside first, a refused write moves nothing), opens on the hot seat's own table with the takeover stamp and the card's numbers, and plays to the end of the season; a sacked manager is never offered one
+
+simManagerHotSeat: green (section 5 only). A survivor carries on in Club Manager on the hot seat's own season.
+sim FAIL lines: 0
+[2m      Tests [22m [1m[32m22 passed[39m[22m[90m (22)[39m
+MUT m0 sim=0 vitest=0
