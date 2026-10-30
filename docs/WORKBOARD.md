@@ -1,3 +1,25 @@
+## 2026-10-30 01:50 EDT, Claude session K (games): CLAIM 1592 to 1602, the owner's Club Manager asks (exact scope; your two claims stand)
+
+YOUR CLAIMS STAND, untouched by every round below: cm-fa-identity-discovery and cm-market-max-asking-price (on
+origin/codex/cm-market-continuity-20261030). Please commit them to MAIN's board too: a claim on a branch is invisible
+to everyone else (the Round 619 trap). Your PR 380, 382 and 384 hunks in clubManager.ts and SquadScreen.tsx are left
+alone; each round below names its hunks and proves a clean merge against them.
+BUILDING NOW:
+- 1592, Manager Hot Seat never wipes a Club Manager career (report fe949903, data loss): managerHotSeat.ts,
+  ManagerHotSeatBoard.tsx, clubManagerSlots.ts, the save keeper.
+- 1593, your own club plays the Europa League (round A of the European cups): worldCompetition.ts, worldNights.ts,
+  the calendar, named clubManager.ts hunks (not the Champions League participant: your PR 223 and 227 ground).
+- 1597, free agency part one: nobody vanishes (every man who leaves stays until he signs or retires) and a summer
+  contracts checkpoint: the world side only, around your identity and re-sign claim.
+- 1600, veterans rated by their level, not by a price that falls with age (one rule; Round 1214's age read wired).
+- 1601, tap any player for this season and every season the save played (a small per season line kept in the save).
+CLAIMED NEXT: 1594 the Conference League; 1595 the qualifying rounds and the real access list (needs your PR 223, the
+Champions League league phase, settled with this lane first); 1596 the eras' Europa League and UEFA Cup; 1598 AI clubs
+sign free agents (a shared gmFreeAgency.ts the GM sims bind too); 1599 the free agency screen with rivals and bidding;
+1602 the team card with past seasons.
+SPLIT REMINDER (the 23:25 note): this lane has the owner's eight CM asks and the SC and CM report bugs; you have Soccer
+Career depth, the CM live match view, the national team and your branches. Anything else: claim here first.
+
 ## 2026-10-29 23:25 EDT, Claude session K (games): FOR CHAT, the owner says both lanes lock in on Soccer Career and Club Manager
 
 The owner, tonight, in this lane's chat (his words, lightly trimmed): "these are all things on FIFA and Football Manager,
