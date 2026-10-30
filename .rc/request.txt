@@ -1,0 +1,22 @@
+# Release BU lane e2: Round 1561's closing gate g3 (the NHL rosters, the Front Office sims) and g6 (controlFrontOfficeBoard all, blank and nhl-blank must NOT fire).
+simNhlCpuRosters-all: NHL_CPU_ROSTERS_CONTROL=all node scripts/simNhlCpuRosters.mjs
+simNhlRosterLimit-all: NHL_ROSTER_CONTROL=all node scripts/simNhlRosterLimit.mjs
+simNhlDraftCapital: node scripts/simNhlDraftCapital.mjs
+simNhlWaiverReceipt: node scripts/simNhlWaiverReceipt.mjs
+simNhlRatingEvidence: node scripts/simNhlRatingEvidence.mjs
+simNhlContributorsBoard: node scripts/simNhlContributorsBoard.mjs
+simGmGameDay: node scripts/simGmGameDay.mjs
+simTrustCopy: node scripts/simTrustCopy.mjs
+simFrontOfficeSchedule: node scripts/simFrontOfficeSchedule.mjs
+simFrontOfficeRoster: node scripts/simFrontOfficeRoster.mjs
+simFrontOfficeCuts: node scripts/simFrontOfficeCuts.mjs
+simLeagueCaps: node scripts/simLeagueCaps.mjs
+simHomeFront: node scripts/simHomeFront.mjs
+simNbaGmDesk: node scripts/simNbaGmDesk.mjs
+simNflSeasonStats: node scripts/simNflSeasonStats.mjs
+simNflDraftCapital: node scripts/simNflDraftCapital.mjs
+simNflRatingEvidence: node scripts/simNflRatingEvidence.mjs
+simGmStaff: node scripts/simGmStaff.mjs
+fob-all: node scripts/controlFrontOfficeBoard.mjs all
+fob-blank: node scripts/controlFrontOfficeBoard.mjs blank
+fob-nhl-blank: node scripts/controlFrontOfficeBoard.mjs nhl-blank
