@@ -1,0 +1,22 @@
+{
+  "originalFilesAndBodiesHeld": true,
+  "entries": [
+    {
+      "file": "node_modules/.vite/vitest/da39a3ee5e6b4b0d3255bfef95601890afd80709/results.json",
+      "bytes": 828,
+      "sha256": "482fc1a113c95e546885bbf034c37c67639bf79915f2cdc4df487f19dd1844f3",
+      "tests": [
+        ":src/test/arcadeHoldRelease.test.tsx",
+        ":src/test/clubManagerBracketMoment.test.tsx",
+        ":src/test/moneyAppFeedback.test.tsx",
+        ":src/components/front-office-shared/FrontOfficeSeasonClose.test.tsx",
+        ":src/lib/frontOfficeRatings.test.ts",
+        ":src/test/playerBingoTransport.test.ts",
+        ":src/test/playerBingoLoad.test.tsx",
+        ":src/test/silverwareReveal.test.tsx",
+        ":src/test/tycoonAway.test.tsx"
+      ],
+      "kind": "NEW_GENERATED_RESULTS_CACHE_ONLY_NO_TEST_CREDIT"
+    }
+  ]
+}

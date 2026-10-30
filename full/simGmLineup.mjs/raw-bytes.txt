@@ -1,0 +1,3 @@
+2926 /home/runner/work/_temp/rc-out/full/simGmLineup.mjs/stdout.log
+   0 /home/runner/work/_temp/rc-out/full/simGmLineup.mjs/stderr.log
+2926 total

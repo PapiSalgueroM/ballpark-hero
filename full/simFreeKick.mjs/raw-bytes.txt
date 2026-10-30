@@ -1,0 +1,3 @@
+1466 /home/runner/work/_temp/rc-out/full/simFreeKick.mjs/stdout.log
+   0 /home/runner/work/_temp/rc-out/full/simFreeKick.mjs/stderr.log
+1466 total

@@ -1,0 +1,3 @@
+6321 /home/runner/work/_temp/rc-out/full/simFightGym.mjs/stdout.log
+   0 /home/runner/work/_temp/rc-out/full/simFightGym.mjs/stderr.log
+6321 total

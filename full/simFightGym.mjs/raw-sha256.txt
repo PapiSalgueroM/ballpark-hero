@@ -1,0 +1,2 @@
+d8741b9e3a0434936507ffa9de5f48b4a368a5b541a6fa14223ab9f16e04e981  /home/runner/work/_temp/rc-out/full/simFightGym.mjs/stdout.log
+e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855  /home/runner/work/_temp/rc-out/full/simFightGym.mjs/stderr.log

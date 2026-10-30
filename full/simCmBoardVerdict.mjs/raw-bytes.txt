@@ -1,0 +1,3 @@
+3100 /home/runner/work/_temp/rc-out/full/simCmBoardVerdict.mjs/stdout.log
+   0 /home/runner/work/_temp/rc-out/full/simCmBoardVerdict.mjs/stderr.log
+3100 total

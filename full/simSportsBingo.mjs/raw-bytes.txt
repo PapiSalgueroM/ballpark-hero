@@ -1,0 +1,3 @@
+928 /home/runner/work/_temp/rc-out/full/simSportsBingo.mjs/stdout.log
+  0 /home/runner/work/_temp/rc-out/full/simSportsBingo.mjs/stderr.log
+928 total

@@ -1,0 +1,2 @@
+b73aa58ecc61ecdb321d44f9157857d6c967d2e2d285b267a203b47ffc868620  /home/runner/work/_temp/rc-out/full/simArcadeHoldRelease.mjs/stdout.log
+e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855  /home/runner/work/_temp/rc-out/full/simArcadeHoldRelease.mjs/stderr.log

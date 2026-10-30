@@ -1,0 +1,2 @@
+903ba96f9c527f30afb747cc0be86e91be7376445ecbb7ddf79442f5468ac1bd  /home/runner/work/_temp/rc-out/full/simConnect4ClubRecords.mjs/stdout.log
+e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855  /home/runner/work/_temp/rc-out/full/simConnect4ClubRecords.mjs/stderr.log

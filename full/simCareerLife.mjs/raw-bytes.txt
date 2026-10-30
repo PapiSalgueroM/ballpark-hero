@@ -1,0 +1,3 @@
+3009 /home/runner/work/_temp/rc-out/full/simCareerLife.mjs/stdout.log
+   0 /home/runner/work/_temp/rc-out/full/simCareerLife.mjs/stderr.log
+3009 total

@@ -1,0 +1,2 @@
+5ac5630f86a308e418631d9ee339a72bf8a2038934488b9640abf57a003ba277  /home/runner/work/_temp/rc-out/full/simCmBoardVerdict.mjs/stdout.log
+e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855  /home/runner/work/_temp/rc-out/full/simCmBoardVerdict.mjs/stderr.log

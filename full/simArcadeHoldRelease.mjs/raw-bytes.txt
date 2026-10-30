@@ -1,0 +1,3 @@
+805 /home/runner/work/_temp/rc-out/full/simArcadeHoldRelease.mjs/stdout.log
+  0 /home/runner/work/_temp/rc-out/full/simArcadeHoldRelease.mjs/stderr.log
+805 total

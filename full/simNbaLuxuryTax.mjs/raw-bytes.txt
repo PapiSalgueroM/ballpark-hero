@@ -1,0 +1,3 @@
+4300 /home/runner/work/_temp/rc-out/full/simNbaLuxuryTax.mjs/stdout.log
+   0 /home/runner/work/_temp/rc-out/full/simNbaLuxuryTax.mjs/stderr.log
+4300 total

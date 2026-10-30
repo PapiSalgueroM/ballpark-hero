@@ -1,0 +1,2 @@
+f0bb823580f606a6931926e65c3de2977fe2c5e69d3202d7195cf0e8b9435298  /home/runner/work/_temp/rc-out/full/simCareerTransferBrief.mjs/stdout.log
+e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855  /home/runner/work/_temp/rc-out/full/simCareerTransferBrief.mjs/stderr.log

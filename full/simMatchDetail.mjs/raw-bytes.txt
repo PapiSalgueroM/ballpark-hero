@@ -1,0 +1,3 @@
+1060 /home/runner/work/_temp/rc-out/full/simMatchDetail.mjs/stdout.log
+   0 /home/runner/work/_temp/rc-out/full/simMatchDetail.mjs/stderr.log
+1060 total

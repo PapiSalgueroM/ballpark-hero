@@ -1,0 +1,2 @@
+630de6ca5265db234c6061310c4f645bbf1cb271de67e6c582d799f7b26982a5  /home/runner/work/_temp/rc-out/full/simTycoonAwayMatchdays.mjs/stdout.log
+e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855  /home/runner/work/_temp/rc-out/full/simTycoonAwayMatchdays.mjs/stderr.log

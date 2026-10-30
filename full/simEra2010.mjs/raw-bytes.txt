@@ -1,0 +1,3 @@
+2005 /home/runner/work/_temp/rc-out/full/simEra2010.mjs/stdout.log
+   0 /home/runner/work/_temp/rc-out/full/simEra2010.mjs/stderr.log
+2005 total

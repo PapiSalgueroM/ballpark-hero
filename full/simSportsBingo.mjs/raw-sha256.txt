@@ -1,0 +1,2 @@
+eb328a409d87a35623d9ccd2dd790e3e6c469a9f4e5aaa23720ac5ca0e58e32b  /home/runner/work/_temp/rc-out/full/simSportsBingo.mjs/stdout.log
+e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855  /home/runner/work/_temp/rc-out/full/simSportsBingo.mjs/stderr.log

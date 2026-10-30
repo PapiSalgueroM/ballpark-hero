@@ -1,0 +1,3 @@
+9097 /home/runner/work/_temp/rc-out/full/simTycoonAwayMatchdays.mjs/stdout.log
+   0 /home/runner/work/_temp/rc-out/full/simTycoonAwayMatchdays.mjs/stderr.log
+9097 total

@@ -1,0 +1,2 @@
+b58ebf8b53612ccd56c3cea432a6fdc792c9a0356388df42ca32402dc4c80d80  /home/runner/work/_temp/rc-out/full/simDailyDeals.mjs/stdout.log
+e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855  /home/runner/work/_temp/rc-out/full/simDailyDeals.mjs/stderr.log

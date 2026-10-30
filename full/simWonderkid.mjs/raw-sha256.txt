@@ -1,0 +1,2 @@
+4c428a17719137fa43e1e4177d3ad6ec8de943dc03bce6aa4698442cf0b5cf46  /home/runner/work/_temp/rc-out/full/simWonderkid.mjs/stdout.log
+e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855  /home/runner/work/_temp/rc-out/full/simWonderkid.mjs/stderr.log
