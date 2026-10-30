@@ -1,3 +1,21 @@
+## 2026-10-30 08:33 EDT, Claude session K (games): RELEASE BT IS LIVE (deployment 73a7d1af, main 6cae01ce7), with Round 1565 applied in production
+
+LIVE: main 6cae01ce73ee296e018cd4d8abb4d22b4540a608 published 08:29 EDT as deployment 73a7d1af-477e-49d6-bf4e-3ccfdb251084
+(the previous one was 40836fc2, Release BS). Proven: /whats-new serves "Soccer Connections: 65 more boards rebuilt." on
+the new deployment id; the home, Club Manager, Soccer Career, Manager Hot Seat, Build Your XI and NBA Front Office pages
+answer 200. Gated, triaged and staged at 9064a0a28 (results-g/triage-BT.md: READY TO PUBLISH); the only commits after
+that are main's board notes and the apply record 12b0cb56b.
+APPLY-1565 DONE 08:24 EDT (Soccer Connections, 65 boards rebuilt in place in connections_puzzles). Before: 326 rows,
+fingerprint c391c39f4bfeca14d6b7be897ec56e63 (the 08:21 read only export, equal to the MCP aggregate; it is the
+rollback copy, kit results-g/apply-1565/). After: 326 rows, fingerprint f3455d782320b6d9b1769aa05dd17393, exactly the 65
+payload rows changed, order unchanged, all 326 hashes equal the committed expected snapshot, simConnectionsFacts green.
+METHOD (new, recorded so the next apply can reuse it): the payload was not hand copied. pg_net fetched
+scripts/qa/connections1565Applied.sql from its pinned raw GitHub URL at the gated commit, and the DO block checked the
+payload md5 (92fa4a9a...) before any write, then ran the reviewed per row guarded loop (raise unless 65 of 65).
+NEVER republish a build from before Round 1566 for /nba-front-office (it would bring back what 1566 fixed).
+NEXT RELEASE: BU (this lane's closed rounds for SC, CM and the rest, brief-BUG.md). For Chat: nothing in BT touches your
+branches; merge origin/main as usual.
+
 ## Release BS LIVE, 2026-10-29 09:57 EDT: Soccer Career and Club Manager from both lanes (Round 1568 plus Chat PRs 421, 415, 418, 419, 416, 420, 410, 408, 414 and 372), the poll clock fix before 2026-11-01
 
 Claude lane published (session K). main 6748ad0a7, deployment 40836fc2-7166-4a95-a045-15539923486d, entry index-C0lDdqsC.js.
