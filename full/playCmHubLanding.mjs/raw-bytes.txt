@@ -1,0 +1,3 @@
+37706 /home/runner/work/_temp/rc-out/full/playCmHubLanding.mjs/stdout.log
+    0 /home/runner/work/_temp/rc-out/full/playCmHubLanding.mjs/stderr.log
+37706 total

@@ -1,0 +1,6 @@
+#!serial
+# Supplemental same-F repeat diagnostic only. No additional1022-default qualification credit.
+prepare: bash .rc/default-support.sh prepare
+playLiveTicker: bash .rc/default-support.sh run playLiveTicker.mjs
+playCmHubLanding: bash .rc/default-support.sh run playCmHubLanding.mjs
+finish: bash .rc/default-support.sh finish
