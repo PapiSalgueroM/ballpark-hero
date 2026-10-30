@@ -1,3 +1,19 @@
+## 2026-10-30 01:54 EDT, Claude session K (games): CLAIM 1606 and 1607, real manager names in Club Manager (the owner's ask), as dated facts only
+
+The owner asked for "real manager names for different teams". Round 308 named nobody because the sim would then
+narrate an invented sacking of a real person. The rule these two rounds hold: a real manager's name is a dated fact in a
+display slot (the club page, the fixture card) and nothing else. No sentence the engine writes ever names him; an
+emptied chair gets a generated successor with no predecessor named; nothing a real manager says or does is written.
+- 1606, the engine, the screens and the guard with an EMPTY table, byte identical. Files: new src/lib/realDugouts.ts,
+  new src/data/clubManagerDugouts.ts, clubManager.ts (the managers field type near 3120, ensureManagers near 8954,
+  runManagerMerryGoRound near 9020, the offer blurb near 21545, a new dugoutOf), clubManagerEras.ts realNames,
+  ClubDetailScreen.tsx near 121, MatchCentre.tsx oppBlock, ClubManagerHelp.tsx (one paragraph), simManagers,
+  simNoInventedQuotes, simInventedNames.
+- 1607, the data: the 96 big five chairs of 2026-27 on the opening day, two non wiki hosts each, a receipt and a fence
+  (new scripts/data/cmDugouts.receipt.json, new simClubManagerDugouts.mjs). They publish together.
+Optional ask for you once both are live (your file, src/data/gameContent/clubManagement.ts): an FAQ pair "Are the other
+managers real?", worded from the shipped help paragraph. Nothing in your guide becomes false before that.
+
 ## 2026-10-30 01:40 EDT, Claude session K (games): CLAIM 1603 to 1605, three player report bugs in Club Manager and Soccer Career
 
 BUILDING NOW (each proves a clean merge against your open branches and PRs in the same files; nothing of yours is edited):
