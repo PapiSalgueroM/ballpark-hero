@@ -1,0 +1,18 @@
+tsc: node_modules/.bin/tsc --noEmit -p tsconfig.app.json
+vitest-create: node_modules/.bin/vitest run src/test/soccerCareerCreationRoll.test.tsx src/test/soccerCareerSaveRecovery.test.tsx src/test/soccerCareerSaveRetry.test.tsx --testTimeout=300000 --hookTimeout=120000
+academy: node scripts/simSoccerAcademyPlacement.mjs
+academy-base: SC_ACADEMY_BASE=4bd20c993 node scripts/simSoccerAcademyPlacement.mjs
+academy-redraw: SC_ACADEMY_CONTROL=redraw node scripts/simSoccerAcademyPlacement.mjs
+academy-pickfirst: SC_ACADEMY_CONTROL=pickfirst node scripts/simSoccerAcademyPlacement.mjs
+academy-extradraw: SC_ACADEMY_CONTROL=extradraw node scripts/simSoccerAcademyPlacement.mjs
+academy-extradraw-base: SC_ACADEMY_BASE=4bd20c993 SC_ACADEMY_CONTROL=extradraw node scripts/simSoccerAcademyPlacement.mjs
+clubpool: node scripts/simCareerClubPool.mjs
+clubpool-academypick: SIM_CLUB_POOL_CONTROL=academypick node scripts/simCareerClubPool.mjs
+simNoRivalNames: node scripts/simNoRivalNames.mjs
+simHarnessAnchors: node scripts/simHarnessAnchors.mjs
+simStorageWrites: node scripts/simStorageWrites.mjs
+simCreation: node scripts/simCreation.mjs
+trustcopy: node scripts/simTrustCopy.mjs
+accessibility: node scripts/simAccessibility.mjs
+nodeadend: node scripts/simCareerNoDeadEnd.mjs
+simSaveFence: node scripts/simSaveFence.mjs
