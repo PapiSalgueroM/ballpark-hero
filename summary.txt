@@ -1,0 +1,8 @@
+cards-full exit=2 2s | src/lib/clubManagerWorldRoster.ts:1:53: ERROR: Could not resolve "lz-string"
+cards-draw exit=1 57s | simCmPlayerCard: control draw FIRED, 6 failures in section stream (6 in all) (57s)
+cards-emptykey exit=1 60s | simCmPlayerCard: control emptykey FIRED, 46 failures in section archive (46 in all) (60s)
+cards-offbyone exit=1 59s | simCmPlayerCard: control offbyone FIRED, 375 failures in section archive (375 in all) (59s)
+cards-noarchive exit=1 61s | simCmPlayerCard: control noarchive FIRED, 393 failures in section archive (396 in all) (60s)
+cards-loadwrite exit=1 63s | simCmPlayerCard: control loadwrite FIRED, 7 failures in section oldsave (7 in all) (62s)
+cards-nocap exit=1 72s | simCmPlayerCard: control nocap FIRED, 47 failures in section cap (47 in all) (72s)
+cards-hotseat exit=1 43s | simCmPlayerCard: control hotseat FIRED, 4 failures in section dailies (4 in all) (43s)
