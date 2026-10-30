@@ -1,0 +1,5 @@
+#!serve
+#!playwright
+xi-base: git worktree add -f /tmp/base 4bd20c993 >/dev/null 2>&1 && ln -s "$PWD/node_modules" /tmp/base/node_modules && (cd /tmp/base && node_modules/.bin/vite build --outDir /tmp/base-dist --emptyOutDir > /tmp/base-build.log 2>&1 || (tail -20 /tmp/base-build.log; exit 9)) && (node scripts/lib/hostLikeServer.mjs /tmp/base-dist 4178 >/dev/null 2>&1 &) && sleep 3 && BASE=http://localhost:4178 SWEEP_BASE=http://localhost:4178 ENGINES=chromium node scripts/playStartingXi.mjs
+landing-head: SOCCER_LANDING_HEAD_ONLY=1 PORT=4197 ENGINES=chromium node scripts/playSoccerLanding.mjs
+xi-head2: ENGINES=chromium node scripts/playStartingXi.mjs
