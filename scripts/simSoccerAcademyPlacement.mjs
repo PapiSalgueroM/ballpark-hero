@@ -24,14 +24,14 @@
                 name), the path before this round: the agreement rate is
                 printed per band and must stay under AGREE_CEILING, which shows
                 the grid can see the defect at all.
-   3 UNCHANGED  initCareer without the name, with null and with a name that is
-                in no list, against the engine of the base commit (SC_ACADEMY_BASE,
-                default the merge base of HEAD and origin/main, bundled from git
-                show): the whole state and the next three Math.random draws are
-                byte equal, so every existing caller and fleet harness is
-                untouched. Once the round is on main the base is this engine
-                itself and the section says so; the null and stray name halves
-                still hold.
+   3 UNCHANGED  initCareer without the name equals initCareer with null and
+                with a name that is in no list: the whole state and the next
+                three Math.random draws are byte equal. With SC_ACADEMY_BASE set
+                to a commit (bundled from git show) the same holds against that
+                commit's engine, so every existing caller and fleet harness is
+                untouched; this round's gate runs it with 4bd20c993. Without it
+                the base half is skipped and says so, so a later round that
+                means to change a new career is not blamed on this one.
 
    Negative controls, SC_ACADEMY_CONTROL=<name>, each rewrites the engine in
    memory only and refuses to run (exit 2) when its anchor is missing. A control
@@ -50,7 +50,8 @@
    sampling error on 16080 cases is about 0.35 points, so AGREE_CEILING sits
    at 35 percent, some 25 errors above the measure and far below the 100 the
    pickfirst control reaches. More clubs in the pool only push it lower.
-   Run: node scripts/simSoccerAcademyPlacement.mjs   (SEEDS=n, default 3)
+   Run: node scripts/simSoccerAcademyPlacement.mjs   (SEEDS=n, default 3;
+   SC_ACADEMY_BASE=4bd20c993 adds section 3's base half, as this round's gate does)
    No network and no database: everything is bundled from this tree. */
 import fs from 'node:fs';
 import os from 'node:os';
@@ -190,12 +191,19 @@ head('2', 'OLD PATH: two independent draws, the way it was before this round');
 
 head('3', 'UNCHANGED: initCareer without a name is the base engine, byte for byte');
 {
-  let baseRef = process.env.SC_ACADEMY_BASE || '';
+  /* The base half runs only when SC_ACADEMY_BASE names a commit (this round's
+     gate sets the commit it was cut from, 4bd20c993). By default it is off:
+     a later round that means to change a new career's opening state would
+     otherwise go red here blaming this round, and a shallow clone has no
+     merge base to read. The null and stray name halves below always run. */
+  const baseRef = process.env.SC_ACADEMY_BASE || '';
   let baseSrc = null;
-  try {
-    if (!baseRef) baseRef = execFileSync('git', ['merge-base', 'HEAD', 'origin/main'], { cwd: ROOT, encoding: 'utf8' }).trim();
-    baseSrc = execFileSync('git', ['show', `${baseRef}:src/lib/soccerCareerEngine.ts`], { cwd: ROOT, encoding: 'utf8', maxBuffer: 1 << 28 }).replaceAll('\r\n', '\n');
-  } catch (e) { fail(`no base engine to compare with (${baseRef || 'merge base of HEAD and origin/main'}): ${e && e.message}`); }
+  if (!baseRef) console.log('  base half skipped (set SC_ACADEMY_BASE=<commit> to compare the default path with that engine)');
+  else {
+    try {
+      baseSrc = execFileSync('git', ['show', `${baseRef}:src/lib/soccerCareerEngine.ts`], { cwd: ROOT, encoding: 'utf8', maxBuffer: 1 << 28 }).replaceAll('\r\n', '\n');
+    } catch (e) { fail(`no base engine to compare with (${baseRef}): ${e && e.message}`); }
+  }
   const ownSrc = fs.readFileSync(path.join(ROOT, 'src/lib/soccerCareerEngine.ts'), 'utf8').replaceAll('\r\n', '\n');
   let base = null;
   if (baseSrc !== null) {
