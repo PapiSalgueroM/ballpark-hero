@@ -1,0 +1,21 @@
+#!serial
+# Release BU lane a2: the three Connections rehearsals in PGlite on the runner, each with its controls (each control exit 1, its last line FIRED), and Round 1558's.
+pgl: npm install --silent --prefix /tmp/pgl @electric-sql/pglite > /tmp/pgl.log 2>&1; s=$?; ls /tmp/pgl/node_modules/@electric-sql/pglite/dist/index.js; exit $s
+rh1567: PGLITE_DIR=/tmp/pgl node scripts/qa/rehearseUsConnections1567.mjs
+rh1567-noguard: REHEARSE_CONTROL=noguard PGLITE_DIR=/tmp/pgl node scripts/qa/rehearseUsConnections1567.mjs
+rh1567-drift: REHEARSE_CONTROL=drift PGLITE_DIR=/tmp/pgl node scripts/qa/rehearseUsConnections1567.mjs
+rh1567-tamper: REHEARSE_CONTROL=tamper PGLITE_DIR=/tmp/pgl node scripts/qa/rehearseUsConnections1567.mjs
+rh1567-nohash: REHEARSE_CONTROL=nohash PGLITE_DIR=/tmp/pgl node scripts/qa/rehearseUsConnections1567.mjs
+rh1574: PGLITE_DIR=/tmp/pgl node scripts/qa/rehearseUsConnections1574.mjs
+rh1574-noguard: REHEARSE_CONTROL=noguard PGLITE_DIR=/tmp/pgl node scripts/qa/rehearseUsConnections1574.mjs
+rh1574-drift: REHEARSE_CONTROL=drift PGLITE_DIR=/tmp/pgl node scripts/qa/rehearseUsConnections1574.mjs
+rh1574-tamper: REHEARSE_CONTROL=tamper PGLITE_DIR=/tmp/pgl node scripts/qa/rehearseUsConnections1574.mjs
+rh1574-nohash: REHEARSE_CONTROL=nohash PGLITE_DIR=/tmp/pgl node scripts/qa/rehearseUsConnections1574.mjs
+rh1574-dupname: REHEARSE_CONTROL=dupname PGLITE_DIR=/tmp/pgl node scripts/qa/rehearseUsConnections1574.mjs
+rh1583: PGLITE_DIR=/tmp/pgl node scripts/qa/rehearseNbaConnections1583.mjs
+rh1583-noguard: REHEARSE_CONTROL=noguard PGLITE_DIR=/tmp/pgl node scripts/qa/rehearseNbaConnections1583.mjs
+rh1583-drift: REHEARSE_CONTROL=drift PGLITE_DIR=/tmp/pgl node scripts/qa/rehearseNbaConnections1583.mjs
+rh1583-tamper: REHEARSE_CONTROL=tamper PGLITE_DIR=/tmp/pgl node scripts/qa/rehearseNbaConnections1583.mjs
+rh1583-nohash: REHEARSE_CONTROL=nohash PGLITE_DIR=/tmp/pgl node scripts/qa/rehearseNbaConnections1583.mjs
+rh1583-dupname: REHEARSE_CONTROL=dupname PGLITE_DIR=/tmp/pgl node scripts/qa/rehearseNbaConnections1583.mjs
+rh1558: PGLITE_DIR=/tmp/pgl node scripts/qa/rehearseUsConnections1558.mjs
