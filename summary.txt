@@ -1,0 +1,3 @@
+fob-check exit=0 1s | controlFrontOfficeBoard: check passed. Every string of all 64 controls is in the board exactly once.
+simHarnessAnchors exit=0 56s | simHarnessAnchors: green. Every harness parses and none carries an unmatchable anchor.
+tsc exit=0 83s | 
