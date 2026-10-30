@@ -395,7 +395,9 @@ export function worldUelStatus(career: CareerState, view: WorldCompView | null):
   const value = view.winner ? `Won by ${view.winner}`
     : !next ? 'Season over'
       : next.stage === 'md' ? `Matchday ${(next.md ?? 0) + 1} of ${first} next` : `${nightLabel(next)} next`;
-  const sub = slice?.me && slice.me !== career.clubName ? `${slice.me} play it, and their nights go on without you now`
+  /* A manager who moved mid season: his new club, when it is one of the entrants, is in it without him (decision 9). */
+  const sub = slice?.me && slice.me !== career.clubName
+    ? slice.clubs.includes(career.clubName) ? "Your new club's Europa League nights this season are played without you" : `${slice.me} play it, and their nights go on without you now`
     : !view.earned ? 'You are following it from outside'
       : career.season === 1 ? "You earned a place, but season one's places were settled before you arrived"
         : 'You earned a place before your own nights were in the game, so this season you follow it';
