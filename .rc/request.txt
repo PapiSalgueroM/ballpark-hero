@@ -1,0 +1,15 @@
+tsc: node_modules/.bin/tsc --noEmit -p tsconfig.app.json
+vitest-dugout: node_modules/.bin/vitest run src/test/clubDetailDugout.test.tsx src/test/clubDetailOwnClub.test.tsx src/test/clubDetailCurrentRoster.test.tsx src/test/clubDetailFixtures.test.tsx src/test/managerScorerMarks.test.tsx src/test/cmMinuteLabel.test.ts --testTimeout=300000 --hookTimeout=120000
+simCmMatchCentre: node scripts/simCmMatchCentre.mjs
+simCmTactics: node scripts/simCmTactics.mjs
+simClubManagerMeters: node scripts/simClubManagerMeters.mjs
+simCmBoardVerdict: node scripts/simCmBoardVerdict.mjs
+simPress: node scripts/simPress.mjs
+simRoles: node scripts/simRoles.mjs
+simEras: node scripts/simEras.mjs
+simClubDetailCurrentRoster: node scripts/simClubDetailCurrentRoster.mjs
+simClubDetailFixtures: node scripts/simClubDetailFixtures.mjs
+simMatchScreen: node scripts/simMatchScreen.mjs
+simNoRivalNames: node scripts/simNoRivalNames.mjs
+simNoInventedQuotes: node scripts/simNoInventedQuotes.mjs
+simCmMatchDay: node scripts/simCmMatchDay.mjs
