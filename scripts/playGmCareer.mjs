@@ -321,6 +321,9 @@ async function walkA(row, w, h) {
   else {
     say(!!hold, `${tag}: on a slow connection the holding box shows while the panel loads`);
     say(!!hold && !!landed && hold.h >= Math.min(220, landed.h) - 2, `${tag}: the holding box keeps the panel's room (${hold ? Math.round(hold.h) : 0}px for ${landed ? Math.round(landed.h) : 0}px)`, aimed('nofallback'));
+    /* Round 1561 (finding 9): on the owner's phone the holding box is the screen it holds for, to 8 px (the floor in
+       gmCareerDesk.tsx, GM_CAREER_FLOORS, measured here); at 320 and 1280 the check above and the one below hold */
+    if (w === 390) say(!!hold && !!landed && Math.abs(hold.h - landed.h) <= 8, `${tag}: at 390 the holding box is the Job market's own height (${hold ? Math.round(hold.h) : 0}px for ${landed ? Math.round(landed.h) : 0}px)`, aimed('nofallback'));
   }
   say(!hold || !landed || (hold.top === landed.top && y0 === y1), `${tag}: the page does not move when the panel lands (top ${hold?.top} to ${landed?.top}, scroll ${y0} to ${y1})`);
   say(chunkAsked(assets, row).length >= 1, `${tag}: the Job market chunk is asked for on the tap`);
@@ -592,10 +595,16 @@ async function walkE(row, w, h) {
   say(kitAsked(n0) === 0, `${tag}: the new club's hub draws its boxes without asking for the kit`);
   const [, boxHold] = await Promise.all([careerBox(page, 'GM level').click(), page.waitForFunction(() => {
     const panel = document.querySelector('[data-gm-desk="panel"]');
-    return panel && panel.querySelector('[data-gm-panel-loading]') ? panel.getAttribute('data-gm-panel') : null;
+    const held = panel && panel.querySelector('[data-gm-panel-loading]');
+    return held ? { key: panel.getAttribute('data-gm-panel'), h: held.getBoundingClientRect().height } : null;
   }, null, { timeout: 8000, polling: 'raf' }).then(r => r.jsonValue(), () => null)]);
-  say(boxHold === 'xp', `${tag}: the GM level box holds, under its own header, while the kit is on its way (${boxHold})`);
+  say(boxHold?.key === 'xp', `${tag}: the GM level box holds, under its own header, while the kit is on its way (${boxHold?.key ?? null})`);
   await page.locator('[data-gm-tree="ownership"] button').first().waitFor({ timeout: 90000 });
+  /* Round 1561 (finding 9): the board's own holding box (GmCareerKitHolding, before the kit) stands at the floor the
+     panel's holding box reads, so on the owner's phone it is the GM level screen's height, to 8 px */
+  const xpLanded = await page.evaluate(() => { const el = document.querySelector('[data-gm-xp-desk]'); return el ? el.getBoundingClientRect().height : null; });
+  console.log(`  MEASURED ${tag}: the GM level holding box before the kit ${boxHold ? Math.round(boxHold.h) : 'none'}px, the landed screen ${xpLanded ? Math.round(xpLanded) : 'none'}px`);
+  if (w === 390) say(!!boxHold && !!xpLanded && Math.abs(boxHold.h - xpLanded) <= 8, `${tag}: at 390 the holding box before the kit is the GM level screen's own height (${boxHold ? Math.round(boxHold.h) : 0}px for ${xpLanded ? Math.round(xpLanded) : 0}px)`, aimed('nofallback'));
   say(kitAsked(n0) >= 1, `${tag}: the GM level box asks for the kit`);
   await shot(page, `${row.sport}-${w}-slow-gm-level`);
   await screenChecks(page, `${tag} GM level`);

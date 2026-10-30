@@ -75,7 +75,7 @@ import { nhlCareerKitLoader } from '@/components/nhl-front-office/nhlCareerKitLo
 import { useGmCareerKit } from '@/components/front-office-shared/useGmCareerKit';
 import { GmCareerKitHolding } from '@/components/front-office-shared/GmCareerKitHolding';
 import { careerBindingOf } from '@/components/front-office-shared/careerBinding';
-import { GM_CAREER_PANELS } from '@/components/front-office-shared/gmCareerDesk';
+import { GM_CAREER_PANELS, gmCareerFloor } from '@/components/front-office-shared/gmCareerDesk';
 
 /* Round 180: 'fired' is new. Zero trust upstairs ends the save. */
 type Phase = 'pick' | 'hub' | 'draft' | 'recap' | 'fired';
@@ -1321,7 +1321,7 @@ export default function NhlFrontOfficeBoard() {
         ? (
           <div data-gm-desk="panel" data-gm-panel={gmPanelFor(GM_CAREER_PANELS, gmOpen)?.key} className="space-y-3">
             <FoPanelHeader title={gmPanelFor(GM_CAREER_PANELS, gmOpen)?.title ?? ''} onBack={() => openDesk(null)} />
-            <GmCareerKitHolding failed={kitFailed} onRetry={retryKit} minHeight={220} />
+            <GmCareerKitHolding failed={kitFailed} onRetry={retryKit} minHeight={gmCareerFloor(gmOpen)} />
           </div>
         )
         : (

@@ -54,7 +54,7 @@ import { loadNflCareerKit, nflCareerKitLoader, type NflCareerKit } from '@/compo
 import { useGmCareerKit } from '@/components/front-office-shared/useGmCareerKit';
 import { GmCareerKitHolding } from '@/components/front-office-shared/GmCareerKitHolding';
 import { careerBindingOf } from '@/components/front-office-shared/careerBinding';
-import { GM_CAREER_PANELS } from '@/components/front-office-shared/gmCareerDesk';
+import { GM_CAREER_PANELS, gmCareerFloor } from '@/components/front-office-shared/gmCareerDesk';
 import type { GmTree } from '@/lib/gmXp';
 import OwnerMandateCard from '@/components/front-office-shared/OwnerMandateCard';
 /* Round 187: the verdict curtain. stageVerdict decides the presentation
@@ -1999,7 +1999,7 @@ export default function FrontOfficeBoard() {
         ? (
           <div data-gm-desk="panel" data-gm-panel={gmPanelFor(GM_CAREER_PANELS, gmOpen)?.key} className="space-y-3">
             <FoPanelHeader title={gmPanelFor(GM_CAREER_PANELS, gmOpen)?.title ?? ''} onBack={() => openDesk(null)} />
-            <GmCareerKitHolding failed={kitFailed} onRetry={retryKit} minHeight={220} />
+            <GmCareerKitHolding failed={kitFailed} onRetry={retryKit} minHeight={gmCareerFloor(gmOpen)} />
           </div>
         )
         : (
