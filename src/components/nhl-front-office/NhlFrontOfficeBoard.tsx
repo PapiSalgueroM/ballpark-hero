@@ -30,8 +30,8 @@ import { recordActivity } from '@/lib/completions';
 import { cn } from '@/lib/utils';
 // Round 180: the owner upstairs, shared engine and card.
 import {
-  buildOwnerMandate, strengthRank, mandatePace, gradeSeason, applyMandateResult,
-  firedLine, seriesPostseason, FO_TRUST_START, type OwnerMandate, type FoSportWords,
+  buildOwnerMandate, strengthRank, mandatePace, gradeSeason,
+  FO_TRUST_START, type OwnerMandate, type FoSportWords,
 } from '@/lib/foOwnerMandate';
 import OwnerMandateCard from '@/components/front-office-shared/OwnerMandateCard';
 /* Round 187: the verdict curtain. stageVerdict decides the presentation
@@ -59,11 +59,25 @@ import { gmStaffLevel } from '@/lib/gmStaff';
 import {
   deskCopy, nhlDeadlineRefusal, nhlDeskAfterRound, nhlDeskEdges, nhlDeskOffseason, nhlDeskRoundOptions, nhlMirrorPickMove,
   nhlNoteArrivals, nhlPicksOf, nhlScoutRead, nhlSignDraftee, nhlStaffOf, nhlTradeWindow, openNhlDesk, syncNhlPicks, NHL_DESK_KEYS,
+  NHL_XP_LIVE, NHL_XP_SOURCES,
 } from '@/lib/nhlGmDesk';
 /* By its full path, not './': the waiver, roster limit and draft capital harnesses bundle a copy of this board from a temp folder. */
-import { NHL_DESK_PANELS, NHL_RECAP_PANELS, type NhlDeskFacts } from '@/components/nhl-front-office/NhlGmDesk';
+import { NHL_DESK_PANELS, NHL_HUB_PANELS, NHL_RECAP_PANELS, type NhlDeskFacts } from '@/components/nhl-front-office/NhlGmDesk';
+/* Round 1561: the GM's career, the NFL board's since Round 1533 and shared since Round 1559. The page carries only what
+   every screen reads (gmCareerFace.ts: the record and XP readers, the hub boxes, the summer's ask) and the shared board
+   pieces (the kit's state and when to ask, the holding box, the binding the three boxes read). The rest (the verdict,
+   the market, a seat, the year out, the out of work screen) is the career kit (nhlCareerKit.ts), fetched when a screen
+   needs it: useGmCareerKit below asks. Every import by its full '@/' path, as above. */
+import { GM_HOST_KEYS, hostSeasonCounted, hostSummerMandate } from '@/lib/gmCareerFace';
+import type { GmCareerBinding } from '@/lib/gmDeskHost';
+import type { GmTree } from '@/lib/gmXp';
+import { nhlCareerKitLoader } from '@/components/nhl-front-office/nhlCareerKitLoad';
+import { useGmCareerKit } from '@/components/front-office-shared/useGmCareerKit';
+import { GmCareerKitHolding } from '@/components/front-office-shared/GmCareerKitHolding';
+import { careerBindingOf } from '@/components/front-office-shared/careerBinding';
+import { GM_CAREER_PANELS, gmCareerFloor } from '@/components/front-office-shared/gmCareerDesk';
 
-/* Round 180: 'fired' is new. Zero trust upstairs ends the save. */
+/* Round 180: 'fired' is new. Round 1561: zero trust upstairs ends the job, not the save (the out of work screen). */
 type Phase = 'pick' | 'hub' | 'draft' | 'recap' | 'fired';
 type Tab = 'team' | 'market' | 'trade' | 'round' | 'standings';
 
@@ -265,6 +279,10 @@ export default function NhlFrontOfficeBoard() {
   const [trust, setTrust] = useState(FO_TRUST_START);
   const [fired, setFired] = useState(false);
   const [gradeLine, setGradeLine] = useState<string | null>(null);
+  /* Round 1561: the recap's GM XP line, transient like the presser (a reload shows none), and the club he has just
+     taken a seat at (the arrival recap brings its top onto the screen once, keyed to the club). Never saved. */
+  const [xpLine, setXpLine] = useState<string | null>(null);
+  const [landedAt, setLandedAt] = useState<string | null>(null);
   /* Round 192: the room. Presser transient; tilt and trade line persist. */
   const [presser, setPresser] = useState<GmPresser | null>(null);
   const [pressTilt, setPressTilt] = useState<-1 | 0 | 1>(0);
@@ -276,6 +294,22 @@ export default function NhlFrontOfficeBoard() {
   const gmLive = useRef<GmDesk | null>(null);
   const setGm = (d: GmDesk | null) => { gmLive.current = d; setGmState(d); };
   const [gmOpen, setGmOpen] = useState<string | null>(null);
+
+  /* Round 1561: the career kit (nhlCareerKit.ts), null until it has arrived, asked for when a screen needs it and at
+     no other time (the shared hook, the NFL board's rule): the recap and the fired screen, a press conference to
+     answer, a career box opened, and the last round of the season, so the verdict's code is here before the press
+     that closes the season (that press waits for it: closeWaits). A new front office fetches it with its ratings
+     (start). A season being played, the draft and the pick screen never ask. The two career landings ('out' and the
+     club he took) bring their top onto the screen. */
+  const careerBoxOpen = gmPanelFor(GM_CAREER_PANELS, gmOpen) !== null;
+  const careerKit = useGmCareerKit(nhlCareerKitLoader, {
+    phase,
+    presser: presser !== null,
+    boxOpen: careerBoxOpen,
+    lastPeriod: !!league && league.round >= NHL_FO_ROUNDS,
+  }, { phase, landedAt });
+  const { kit, failed: kitFailed, retry: retryKit, revealRef: careerRevealRef } = careerKit;
+  const closeWaits = careerKit.waits;
 
   useGameCompletion('nhl-front-office', wonNow, titles * 100 + seasonsPlayed * 5);
 
@@ -359,8 +393,12 @@ export default function NhlFrontOfficeBoard() {
     if (startPending.current) return;
     startPending.current = true; setStarting(true); setStartError('');
     try {
-    const { NHL_OPENING_RATINGS } = await import('@/data/nhlOpeningRatings');
+    /* Round 1561: and the career kit beside the ratings, fetched in parallel: his record opens on the day he takes
+       the club, at its tier (hostNewSeat below). A failed fetch of either is the line below and starts nothing. */
+    const [{ NHL_OPENING_RATINGS }, k] = await Promise.all([import('@/data/nhlOpeningRatings'), nhlCareerKitLoader.load()]);
     if (!alive.current) return;
+    careerKit.arrived(k);
+    const { hostNewSeat, hostSeatTeams, leagueTiers, nhlDeskHost } = k;
     const lg = initNhlLeague(Math.random, NHL_OPENING_RATINGS);
     setSaveError(false);
     const m = mandateFor(lg, abbr, false);
@@ -382,9 +420,15 @@ export default function NhlFrontOfficeBoard() {
        before it waits for the GM to open a desk box. */
     const desk = openNhlDesk(lg, abbr);
     setGm(desk); setGmOpen(null);
+    /* Round 1561: and his record from the first day, so the Career box knows the tier he took over at (only a record
+       built from an older save leaves the tier off). */
+    setGm(withGmBlock(desk, GM_HOST_KEYS.seat, hostNewSeat(abbr, leagueTiers(hostSeatTeams(nhlDeskHost, lg, label)).get(abbr) ?? 4, lg.season)));
+    setXpLine(null); setLandedAt(null);
     persist({ phase: 'hub', titles: 0, seasonsPlayed: 0, mandate: m, trust: FO_TRUST_START, fired: false, pressTilt: 0, seasonTradeLine: null }, lg, abbr);
     } catch {
-      if (alive.current) setStartError('We could not load the opening ratings. Try your team again. Your existing save is unchanged.');
+      /* Round 1561 (closing check, finding 12): either fetch fails here, the ratings or the career kit, so the line names
+         neither */
+      if (alive.current) setStartError('We could not load the new front office. Try your team again. Your existing save is unchanged.');
     } finally {
       startPending.current = false;
       if (alive.current) setStarting(false);
@@ -395,7 +439,12 @@ export default function NhlFrontOfficeBoard() {
      waits for the next mandate build. */
   const answerPress = (i: 0 | 1 | 2) => {
     if (!presser || !league) return;
-    const res = applyGmPressChoice(trust, presser.options[i], Math.random);
+    /* Round 1561: a presser is only ever built by a path that already holds the kit (a start, a close, a seat taken),
+       so this guard never turns an answer away in play. Media eases a gamble's odds (the same option when he has no
+       point or it does not gamble); one draw either way, as before. */
+    if (!kit) return;
+    const { hostPressOption, hostXpEffects } = kit;
+    const res = applyGmPressChoice(trust, hostPressOption(presser.options[i], hostXpEffects(gm, 'nhl')), Math.random);
     setTrust(res.trust);
     setPressTilt(res.tilt);
     setFeed(f => [res.line, ...f].slice(0, 6));
@@ -446,6 +495,9 @@ export default function NhlFrontOfficeBoard() {
        already has one is a closed season being clicked again, and the answer
        is to do nothing rather than play an extra round. */
     if (league.champions.some(c => c.season === league.season)) return;
+    /* Round 1561: the close is the career kit's. The final round's button waits for it (closeWaits), so this is the
+       belt: nothing is copied or drawn until it is here. */
+    if (league.round >= NHL_FO_ROUNDS && !kit) return;
     const lg: NhlLeague = JSON.parse(JSON.stringify(league));
     /* Round 987: with the desk on, the staff's edge and the trainer ride on
        the round; with it off the round is called exactly as before. */
@@ -478,14 +530,24 @@ export default function NhlFrontOfficeBoard() {
       let newTrust = trust, nowFired = fired;
       let gradeResult: ReturnType<typeof gradeSeason>['result'] | null = null;
       let gradeVerdict: string | null = null;
-      if (mandate) {
-        const post = seriesPostseason(sr, myTeam);
-        const grade = gradeSeason(mandate, { wins: lg.teams[myTeam].wins, ...post, wonTitle: won });
-        const applied = applyMandateResult(trust, grade);
-        newTrust = applied.trust; nowFired = applied.fired;
+      setXpLine(null);
+      if (mandate && kit) {
+        /* Round 1561: the verdict through the desk host, as the NFL's close. With the desk off it is gradeSeason then
+           applyMandateResult over the same grade (nhlOutcome is the grade's one reader), the two calls this board made;
+           with it on the season is also recorded once on his record and pays its GM XP. The counters handed in are the
+           ones from before this season (the host's contract), and the desk is the one after the round's tick. */
+        const { hostSeasonVerdict, hostXpRecapLine, nhlDeskHost, nhlOutcome } = kit;
+        const v = hostSeasonVerdict(nhlDeskHost, lg, {
+          team: myTeam, mandate, trust, fired, outcome: nhlOutcome(lg, myTeam, sr, champ), desk: nextGm, seasonsPlayed, titles,
+        });
+        const grade = v.grade!;
+        newTrust = v.trust; nowFired = v.fired;
         gradeResult = grade.result;
-        setTrust(applied.trust); setFired(applied.fired); setGradeLine(grade.verdict);
+        setTrust(v.trust); setFired(v.fired); setGradeLine(grade.verdict);
         gradeVerdict = grade.verdict;
+        if (v.desk && v.desk !== nextGm) setGm(v.desk);
+        /* the review's finding 6 on the NFL: a season that paid nothing prints no XP line */
+        setXpLine(v.desk && v.award && v.award.total > 0 ? hostXpRecapLine({ award: v.award, levelAfter: v.levelAfter, desk: v.desk }, NHL_XP_LIVE) : null);
       }
       /* Round 192: the room reacts to the season that actually happened.
          A fired GM gets no presser, and a quiet, mandate-met, no-news
@@ -603,7 +665,10 @@ export default function NhlFrontOfficeBoard() {
       /* Round 180: ownership re-reads the roster and sets next season's ask. */
       /* Round 192: what you said at the podium tilts the ask, then the
          tilt is spent. */
-      const m = mandateFor(lg, myTeam, champion === myTeam, pressTilt);
+      /* Round 1561: the ask he was shown is the ask he is graded on. The summer after he takes another club's seat
+         keeps the offer's ask (built for this new season); on every other path the stored one is a season old and the
+         ask built here stands, as before. */
+      const m = hostSummerMandate(mandate, mandateFor(lg, myTeam, champion === myTeam, pressTilt), lg.season);
       setMandate(m);
       setFeed([
         `🏛️ The new mandate: ${m.text}`,
@@ -812,13 +877,16 @@ export default function NhlFrontOfficeBoard() {
     setMandate(null); setTrust(FO_TRUST_START); setFired(false); setGradeLine(null);
     setPresser(null); setPressTilt(0); setSeasonTradeLine(null);
     setGm(null); setGmOpen(null);
+    setXpLine(null); setLandedAt(null);
   };
 
   /* Round 987: the desk boxes. The first tap on one, on a save from before
      the desk, switches it on: the ledgers are opened from the league as it
      stands (every pick on the old lists kept) and saved with it. */
   const openDesk = (key: string | null) => {
-    if (key !== null && !gm && league) {
+    /* Round 1561: only a desk box of its own switches the desk on. A career box (Job market, Career, GM level)
+       opens through setGmOpen alone, so looking writes nothing. */
+    if (key !== null && !gm && league && gmPanelFor(NHL_DESK_PANELS, key)) {
       const desk = openNhlDesk(league, myTeam);
       const lg: NhlLeague = JSON.parse(JSON.stringify(league));
       syncNhlPicks(lg, nhlPicksOf(desk, lg));
@@ -831,6 +899,98 @@ export default function NhlFrontOfficeBoard() {
     setGm(next);
     persist({}, league, myTeam);
   };
+  /* Round 1561: a point into a tree this desk routes. A save whose desk is off has nothing to spend from. The GM level
+     screen is drawn only once the kit is here (careerBoxOpen asks for it). */
+  const spendPoint = (tree: GmTree) => {
+    if (!gm || !kit) return;
+    const { hostSpendPoint } = kit;
+    const next = hostSpendPoint(gm, tree, NHL_XP_LIVE);
+    if (next) changeDesk(next);
+  };
+  /* Round 1561: take another club's seat in the same league, the second tap of an offer (the NFL board's takeSeat).
+     The host reads the offer off the market itself (never trusted from the screen) and refuses anything else, leaving
+     the league as it was. On a move: the new club, trust back to the start, its ask, a new stint on his record from
+     next season, its own re-sign ledger and staff, his XP, the pick ledger and the retained rows untouched; his old
+     club's contributors back to automatic. He meets the room on the arrival recap and runs his new club's draft. */
+  const takeSeat = (teamId: string) => {
+    if (phase !== 'fired' || !league) return;
+    /* the market is drawn only once the kit is here (the fired screen waits for it) */
+    if (!kit) return;
+    const { hostOfferGoneLine, hostTakeoverLine, nhlLegacy, nhlTakeSeat } = kit;
+    const lg: NhlLeague = JSON.parse(JSON.stringify(league));
+    const legacy = nhlLegacy(lg, {
+      team: myTeam, seasonsPlayed, titles, fired, seasonCounted: hostSeasonCounted(phase, gm), mandate, series, champion,
+    });
+    const r = nhlTakeSeat(lg, gm, { myTeam, trust, fired, mandate, pressTilt, seasonTradeLine }, legacy, teamId, label);
+    if (!r) { setFeed(f => [hostOfferGoneLine(), ...f].slice(0, 6)); return; }
+    const next = r.save;
+    setLeague(lg);
+    setGm(r.desk);
+    setMyTeam(next.myTeam);
+    setTrust(next.trust ?? FO_TRUST_START);
+    setFired(false);
+    setMandate(next.mandate ?? null);
+    setPressTilt(0);
+    setSeasonTradeLine(null);
+    setGradeLine(null);
+    setXpLine(null);
+    setWonNow(false);
+    /* every transient of the old club: the open box, the tab, a waiver receipt, a draft night, a live phone call */
+    setGmOpen(null); setTab(null); setFeedSlam(null); setWaiverReceipt(null); setDraftNight(null); setTalks(null);
+    setCutArmed(null); setShopOffers([]); setShopTried(false); setTradePartner(''); setMyTradePiece(''); setContributorsOpen(false);
+    /* The introduction presser, the call start makes: first day, full room. */
+    setPresser(buildGmPresser(NHL_WORDS, {
+      justHired: true, teamLabel: label(teamId), fired: false, wonTitle: false,
+      gradeResult: null, tradeLine: null, seasonsPlayed,
+    }));
+    setFeed([hostTakeoverLine(label, r.offer)]);
+    setLandedAt(teamId);
+    setPhase('recap');
+    persist({
+      phase: 'recap', trust: next.trust, fired: false, mandate: next.mandate, pressTilt: 0, seasonTradeLine: null,
+      postseason: { series, champion, gradeLine: null },
+    }, lg, teamId);
+  };
+  /* Round 1561: a season out, the second tap of "Stay out a year" (the NFL board's sitOut). The league plays its draft,
+     its summer, its rounds and its playoffs with nobody in his chair (the host's order, nhlAwayHost's engine calls),
+     and the year goes on his record; his seasons and titles do not move. Saved here, so a reload cannot play it again.
+     No activity mark: a year out is not a press of Play. */
+  const sitOut = () => {
+    if (phase !== 'fired' || !league) return;
+    if (!kit) return; /* as takeSeat above */
+    const { hostAwayRefusalLine, hostSatOutLine, hostSeasonAway, nhlAwayHost, nhlDeskHost, nhlLegacy } = kit;
+    const lg: NhlLeague = JSON.parse(JSON.stringify(league));
+    let desk = gm;
+    if (!desk) { desk = openNhlDesk(lg, myTeam); syncNhlPicks(lg, nhlPicksOf(desk, lg)); }
+    const legacy = nhlLegacy(lg, {
+      team: myTeam, seasonsPlayed, titles, fired, seasonCounted: hostSeasonCounted(phase, gm), mandate, series, champion,
+    });
+    const r = hostSeasonAway({ host: nhlDeskHost, away: nhlAwayHost(myTeam), league: lg, desk, legacy, rng: Math.random });
+    if (r.ok === false) { const why = hostAwayRefusalLine(nhlDeskHost.pack, r.reason); setFeed(f => [why, ...f].slice(0, 6)); return; }
+    setLeague(lg);
+    setGm(r.desk);
+    setChampion(r.report.champion);
+    setSeries([]);
+    setGradeLine(null);
+    setXpLine(null);
+    setGmOpen(null);
+    setFeed([hostSatOutLine(r.report, label)]);
+    persist({ phase: 'fired', fired: true, postseason: { series: [], champion: r.report.champion, gradeLine: null } }, lg, myTeam);
+  };
+  /* Round 1561: the career half of the facts, built once a render for the three career boxes by the shared
+     careerBindingOf (careerBinding.ts says both halves): before the kit, the hub's record from the save alone; with
+     it, the record read off the league and, while he is between seats, the market. */
+  const careerOf = (lg: NhlLeague): GmCareerBinding => careerBindingOf({
+    desk: gm, fired, nameOf: label, live: NHL_XP_LIVE, sources: NHL_XP_SOURCES,
+    box: { team: myTeam, season: lg.season, seasonCounted: hostSeasonCounted(phase, gm), seasonsPlayed, titles, fired },
+    take: offer => takeSeat(offer.teamId), sitOut: () => sitOut(), spend: spendPoint,
+  }, kit && {
+    host: kit.nhlDeskHost, league: lg, hostMarket: kit.hostMarket, hostEarnsLine: kit.hostEarnsLine,
+    legacy: kit.nhlLegacy(lg, {
+      team: myTeam, seasonsPlayed, titles, fired, seasonCounted: hostSeasonCounted(phase, gm),
+      mandate, series, champion,
+    }),
+  });
   const deskFacts = (hub: NhlDeskFacts['hub']): NhlDeskFacts | null => league ? {
     teamId: myTeam, teamLabel: label(myTeam), seasonsPlayed, phase, hub, league,
     seasonOver: phase === 'recap', deskOn: gm !== null, clubName: label,
@@ -839,6 +999,7 @@ export default function NhlFrontOfficeBoard() {
       setGm(desk); setLeague(lg); slamFeed(line);
       persist({}, lg, myTeam);
     },
+    career: careerOf(league),
   } : null;
 
   if (phase === 'pick' || !league || !my) {
@@ -908,24 +1069,37 @@ export default function NhlFrontOfficeBoard() {
   };
 
   /* ---------------- Round 180: the reload path after a firing ---------------- */
+  /* Round 1561: out of work, not the end (the NFL board's since Round 1533). The card says who let him go and what the
+     phone did; the Job market, Career and GM level boxes sit under it; a new front office (which deletes the save)
+     takes two taps. The screen is the career kit's: a save that loads straight into it waits for the kit in a
+     holding box, then draws (useGmCareerKit asks for it). */
   if (phase === 'fired') {
+    if (!kit) return <GmCareerKitHolding failed={kitFailed} onRetry={retryKit} />;
+    const { GmOutOfWork, hostOutOfWorkCard, nhlDeskHost } = kit;
+    const outFacts = deskFacts(hubFacts)!; /* the league is set past the pick screen */
+    const market = outFacts.career.market;
     return (
-      <div className="space-y-4">
-        {/* Round 187: the door shuts with one honest shake, nothing more. */}
-        <div className="cm-loss-shake rounded-2xl border border-destructive/50 bg-card p-5 text-center">
-          <CelebrationStyles />
-          <p className="text-3xl">🪑</p>
-          <p className="cm-slam mt-2 font-display text-2xl font-black text-foreground" style={{ animationDelay: '0.1s' }}>Fired by {label(myTeam)}</p>
-          <p className="cm-rise mt-2 text-sm text-muted-foreground" style={{ animationDelay: '0.35s' }}>{firedLine(seasonsPlayed, titles)}</p>
-          <button onClick={reset} className="mt-4 inline-flex items-center gap-2 rounded-full bg-primary px-8 py-2.5 text-sm font-bold text-primary-foreground hover:opacity-90">
-            <RotateCcw className="h-4 w-4" /> Take another front office
-          </button>
-        </div>
+      <div ref={careerRevealRef}>
+        <GmOutOfWork<NhlDeskFacts>
+          sport="nhl"
+          card={market ? hostOutOfWorkCard(nhlDeskHost, league, outFacts.career.seat, market, label) : { title: `Let go by the ${label(myTeam)}`, lines: [] }}
+          desk={gm ?? readGmDesk(undefined)}
+          facts={outFacts}
+          open={gmOpen}
+          onOpen={openDesk}
+          onDesk={changeDesk}
+          onNewFrontOffice={reset}
+        />
       </div>
     );
   }
 
   if (phase === 'recap') {
+    /* Round 1561: the recap reads his record through the kit (the arrival line, the market line). A season closed in
+       this tab already has it (the final round's button waited for it); a save that loads on the recap waits in a
+       holding box, then draws. */
+    if (!kit) return <GmCareerKitHolding failed={kitFailed} onRetry={retryKit} />;
+    const { hostArrivalLine, hostArriving, nhlDeskHost, Phone } = kit;
     const cup = series.find(s => s.name === 'Stanley Cup Final');
     const myConf = EASTERN.includes(myTeam) ? 'East' : 'West';
     const myRank = nhlFoStandings(league, EASTERN.includes(myTeam) ? EASTERN : undefined)
@@ -933,7 +1107,14 @@ export default function NhlFrontOfficeBoard() {
       .findIndex(x => x.abbr === myTeam) + 1;
     /* Round 187: the verdict curtain. Every string below is exactly what
        Round 180 wrote; stageVerdict only decides confetti and tone. */
-    const staging = stageVerdict({ iAmChampion: champion === myTeam, fired });
+    /* Round 1561: the arrival recap. The day he takes another club's seat the season on this screen was not his: no
+       Cup of his is staged, even when the club he joins won it, and the line under the title says who he takes over. */
+    const recapCareer = careerOf(league);
+    const arriving = hostArriving(recapCareer.seat, league.season);
+    const arrivalLine = arriving ? hostArrivalLine(nhlDeskHost, league, recapCareer.seat, label) : null;
+    const myTitle = champion === myTeam && !arriving;
+    const firedMarketLine = fired ? recapCareer.market?.line ?? '' : null;
+    const staging = stageVerdict({ iAmChampion: myTitle, fired });
     /* Round 987: the season is over and the summer runs after the draft, so
        the re-sign desk is a box here, under the verdict. Open, it takes the
        screen, with a back button to the recap. */
@@ -948,6 +1129,7 @@ export default function NhlFrontOfficeBoard() {
     return (
       <div className="space-y-4">
         <div
+          ref={careerRevealRef}
           data-verdict-reveal
           className={cn(
             'relative overflow-hidden rounded-2xl border bg-card p-5 text-center',
@@ -960,7 +1142,9 @@ export default function NhlFrontOfficeBoard() {
           <Crown className="mx-auto h-10 w-10 text-gold" />
           <p className="cm-slam mt-2 font-display text-2xl font-black text-foreground" style={{ animationDelay: '0.05s' }}>{label(champion)} lift the {league.season + 1} Stanley Cup</p>
           <p className="cm-rise mt-1 text-sm text-muted-foreground" style={{ animationDelay: '0.3s' }}>
-            {champion === myTeam
+            {arrivalLine !== null
+              ? arrivalLine
+              : myTitle
               ? 'Your roster. Your Cup. Start the parade.'
               : `Your ${label(myTeam)} finished ${my.wins}-${my.losses}-${my.otLosses} (${nhlPoints(my)} pts), No. ${myRank} in the ${myConf}.`}
           </p>
@@ -970,6 +1154,10 @@ export default function NhlFrontOfficeBoard() {
           )}
           {mandate && !fired && (
             <p className="cm-rise mt-1 text-[11px] text-muted-foreground" style={{ animationDelay: '0.7s' }}>Trust upstairs: {trust} of 100{trust <= 25 ? '. The seat is hot.' : '.'}</p>
+          )}
+          {/* Round 1561: what the season paid his GM, fired or not: his XP follows him. */}
+          {xpLine && (
+            <p data-gm-xp-recap className="cm-rise mt-1 text-[11px] font-semibold text-gold" style={{ animationDelay: '0.75s' }}>{xpLine}</p>
           )}
           {cup && (
             <p className="cm-tick-in mt-2 text-xs text-muted-foreground" style={{ animationDelay: '0.8s' }}>
@@ -985,12 +1173,13 @@ export default function NhlFrontOfficeBoard() {
             <span className="rounded-full border border-border bg-background px-3 py-1.5">Cups <b className="text-gold">{titles}</b></span>
             <span className="rounded-full border border-border bg-background px-3 py-1.5">Seasons <b className="text-primary">{seasonsPlayed}</b></span>
           </div>
-          {/* Round 180: zero trust ends the save here instead of a draft. */}
+          {/* Round 180: zero trust ends the job here instead of a draft. Round 1561: not the save. The market's own
+              line says what the phone did, and the button only opens the out of work screen the save already holds. */}
           {fired ? (
             <div className="cm-loss-shake mt-4 rounded-2xl border border-destructive/50 bg-destructive/5 p-4">
-              <p className="text-sm font-bold text-destructive">🪑 {firedLine(seasonsPlayed, titles)}</p>
-              <button onClick={reset} className="mt-3 inline-flex items-center gap-2 rounded-full bg-primary px-8 py-2.5 text-sm font-bold text-primary-foreground hover:opacity-90">
-                <RotateCcw className="h-4 w-4" /> Take another front office
+              <p className="text-sm font-bold text-destructive">🪑 {firedMarketLine}</p>
+              <button onClick={() => setPhase('fired')} className="mt-3 inline-flex min-h-[44px] items-center gap-2 rounded-full bg-primary px-8 py-2.5 text-sm font-bold text-primary-foreground hover:opacity-90">
+                <Phone className="h-4 w-4" /> See who is calling
               </button>
             </div>
           ) : presser ? (
@@ -1010,7 +1199,7 @@ export default function NhlFrontOfficeBoard() {
                 gameName="NHL Front Office"
                 gamePath="/nhl-front-office"
                 score={`${titles} Cups in ${seasonsPlayed} seasons`}
-                customText={`NHL Front Office 🏒 ${champion === myTeam ? `My ${label(myTeam)} just won the Cup!` : `${label(champion)} lifted the Cup.`} ${titles} Cups in ${seasonsPlayed} seasons. douknowball.com/nhl-front-office`}
+                customText={`NHL Front Office 🏒 ${myTitle ? `My ${label(myTeam)} just won the Cup!` : `${label(champion)} lifted the Cup.`} ${titles} Cups in ${seasonsPlayed} seasons. douknowball.com/nhl-front-office`}
               />
             </div>
           )}
@@ -1077,7 +1266,7 @@ export default function NhlFrontOfficeBoard() {
   const tiles = foHubTiles(hubFacts);
   /* Round 987: the desk's boxes sit under the board's own; a desk panel open hides the board's boxes. */
   const hubDesk = deskFacts(hubFacts);
-  const deskPanelOpen = gmPanelFor(NHL_DESK_PANELS, gmOpen) !== null;
+  const deskPanelOpen = gmPanelFor(NHL_HUB_PANELS, gmOpen) !== null;
   const openPanel = (key: FoPanelKey) => { setCutArmed(null); setContributorsOpen(false); setGmOpen(null); setTab(key === 'play' ? 'round' : key); };
   /* Round 631: dead money on the cap line, only when there is any. */
   const dead = deadCapUsed(my);
@@ -1090,6 +1279,8 @@ export default function NhlFrontOfficeBoard() {
   return (
     <div ref={waiverBoard} className="space-y-4">
       <CelebrationStyles />
+      {/* Round 1561: the final round's button waits for the career kit; a fetch that failed says so here and asks again */}
+      {kitFailed && closeWaits && <GmCareerKitHolding failed onRetry={retryKit} minHeight={0} />}
       <div className="flex flex-wrap items-center justify-center gap-2 text-xs">
         <span className="rounded-full px-3 py-1 font-bold text-white" style={{ background: t.color }}>{label(myTeam)}</span>
         <span className="rounded-full border border-border bg-card px-3 py-1 text-muted-foreground">{league.season}-{(league.season + 1) % 100} · Round {league.round}/{NHL_FO_ROUNDS}</span>
@@ -1126,10 +1317,19 @@ export default function NhlFrontOfficeBoard() {
       {tab === null
         ? !deskPanelOpen && <FoHubTiles tiles={tiles} onOpen={openPanel} />
         : <FoPanelHeader title={panelTitle} onBack={() => setTab(null)} />}
-      {tab === null && hubDesk && (
-        <GmDeskMount sport="nhl" desk={gm ?? readGmDesk(undefined)} facts={hubDesk} panels={NHL_DESK_PANELS}
-          open={gmOpen} onOpen={openDesk} onDesk={changeDesk} />
-      )}
+      {tab === null && hubDesk && (careerBoxOpen && !kit
+        /* Round 1561: a career box opened before the kit is here: the box's own header and the holding box, the shape
+           the mount draws for a screen still loading, until it arrives (useGmCareerKit asks for it) */
+        ? (
+          <div data-gm-desk="panel" data-gm-panel={gmPanelFor(GM_CAREER_PANELS, gmOpen)?.key} className="space-y-3">
+            <FoPanelHeader title={gmPanelFor(GM_CAREER_PANELS, gmOpen)?.title ?? ''} onBack={() => openDesk(null)} />
+            <GmCareerKitHolding failed={kitFailed} onRetry={retryKit} minHeight={gmCareerFloor(gmOpen)} />
+          </div>
+        )
+        : (
+          <GmDeskMount sport="nhl" desk={gm ?? readGmDesk(undefined)} facts={hubDesk} panels={NHL_HUB_PANELS}
+            open={gmOpen} onOpen={openDesk} onDesk={changeDesk} />
+        ))}
 
       {feed.length > 0 && (
         <div className="rounded-2xl border border-border bg-card p-3 text-xs text-muted-foreground">
@@ -1336,7 +1536,7 @@ export default function NhlFrontOfficeBoard() {
       {tab === 'round' && (
         <div className="rounded-2xl border border-gold/40 bg-card p-4 text-center">
           <p className="mb-2 text-sm text-foreground">Each round simulates a stretch of games across the league. OT losses still earn a point.</p>
-          <button onClick={playRound} disabled={overLimit > 0} className="inline-flex items-center gap-2 rounded-full bg-primary px-8 py-2.5 text-sm font-bold text-primary-foreground hover:opacity-90 disabled:opacity-40">
+          <button onClick={playRound} disabled={overLimit > 0 || closeWaits} className="inline-flex items-center gap-2 rounded-full bg-primary px-8 py-2.5 text-sm font-bold text-primary-foreground hover:opacity-90 disabled:opacity-40">
             <ShieldHalf className="h-4 w-4" /> {league.round >= NHL_FO_ROUNDS ? 'Final stretch + playoffs' : `Play Round ${league.round}`}
           </button>
           <p className="mt-2 text-[10px] text-muted-foreground">Top three per division plus two wild cards per conference make the divisional bracket. Every round is best-of-7.</p>

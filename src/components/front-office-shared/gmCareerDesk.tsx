@@ -25,25 +25,36 @@ import { lazyGmPanel } from './gmLazyPanel';
 
 export const GM_CAREER_KEYS = { market: 'seat', career: 'career', xp: 'xp' } as const;
 
+/* Round 1561 (finding 9): a career screen's holding box stands at that screen's own height, measured at 390 by 844
+   (the owner's phone) on both boards by scripts/playGmCareer.mjs Walk A, r1561-m: the Job market with one offer
+   255 px, the Career screen of two clubs 184, the GM level screen 684, the same on the NFL and the NHL rows. At 320
+   and 1280 the screens differ (270 to 285, 184, 729; 224, 167, 676), so there the walk asks only that nothing above
+   the screen moves. The panel's own holding box (lazyGmPanel) and the board's, while the career kit is on its way
+   (GmCareerKitHolding), read the same number. */
+export const GM_CAREER_FLOORS = { [GM_CAREER_KEYS.market]: 255, [GM_CAREER_KEYS.career]: 184, [GM_CAREER_KEYS.xp]: 684 } as const;
+/** The holding height of a career box by its key; a key that is not a career box keeps the lazy screen's 220. */
+export const gmCareerFloor = (key: string | null | undefined): number =>
+  (key && Object.prototype.hasOwnProperty.call(GM_CAREER_FLOORS, key) ? GM_CAREER_FLOORS[key as keyof typeof GM_CAREER_FLOORS] : 220);
+
 const MARKET: GmPanelDef<GmCareerFacts> = {
   key: GM_CAREER_KEYS.market,
   title: 'Job market',
   tile: ({ facts }) => (facts.phase === 'fired' ? hostMarketTile(facts.career.market) : null),
-  Panel: lazyGmPanel<GmCareerFacts>(() => import('./GmJobMarketPanel')),
+  Panel: lazyGmPanel<GmCareerFacts>(() => import('./GmJobMarketPanel'), GM_CAREER_FLOORS[GM_CAREER_KEYS.market]),
 };
 
 const CAREER: GmPanelDef<GmCareerFacts> = {
   key: GM_CAREER_KEYS.career,
   title: 'Career',
   tile: ({ facts }) => hostCareerTile(facts.career.seat, facts.career.nameOf),
-  Panel: lazyGmPanel<GmCareerFacts>(() => import('./GmCareerPanel')),
+  Panel: lazyGmPanel<GmCareerFacts>(() => import('./GmCareerPanel'), GM_CAREER_FLOORS[GM_CAREER_KEYS.career]),
 };
 
 const XP: GmPanelDef<GmCareerFacts> = {
   key: GM_CAREER_KEYS.xp,
   title: 'GM level',
   tile: ({ desk, facts }) => hostXpTile(desk, facts.career.live, facts.career.deskOn),
-  Panel: lazyGmPanel<GmCareerFacts>(() => import('./GmXpDeskPanel')),
+  Panel: lazyGmPanel<GmCareerFacts>(() => import('./GmXpDeskPanel'), GM_CAREER_FLOORS[GM_CAREER_KEYS.xp]),
 };
 
 export const GM_CAREER_PANELS: readonly GmPanelDef<GmCareerFacts>[] = [MARKET, CAREER, XP];

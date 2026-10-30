@@ -27,6 +27,14 @@
  *      proves nothing), the kit's record must carry a tier other than the bottom one and a last grade somewhere,
  *      and a stored record that fits must be read as itself. Measured 2026-10-22: 55296 saves, the records differ
  *      in 30348, a tier other than the bottom one in 39744, a last grade in 9216, a stored record in 13824.
+ *   3  Round 1561 (fix, the NHL row): section 1 for /nhl-front-office, walked from src/pages/NhlFrontOffice.tsx. The
+ *      page carries its board, the NHL desk boxes, the face, the loader nhlCareerKitLoad.ts and the shared glue
+ *      (useGmCareerKit, GmCareerKitHolding, careerBinding), and not one module of the shared kit core, the NHL's
+ *      adapter and career (gmDeskHostNhl.ts, nhlGmCareer.ts, nhlCareerKit.ts) or the NFL's kit; the loader holds the
+ *      one dynamic edge to nhlCareerKit.ts. Measured 2026-10-30: 104 files reached, 16 kit modules checked absent.
+ *   4  Round 1561 (fix, the NHL row): section 2 over three NHL leagues (seeds 1561, 1559, 41), the kit's record read
+ *      through nhlLegacy. Measured 2026-10-30: 55296 saves, the records differ in 31584, a tier other than the
+ *      bottom one in 41472, a last grade in 9216, a stored record in 13824.
  *
  * Negative controls (SIM_FO_LAZY_DESK_CONTROL), source rewrites applied in memory or at bundle time, never on
  * disk; each must turn its own section red and the run says FIRED or DID NOT FIRE:
@@ -35,6 +43,10 @@
  *   tiertile    the Career box prints the stint's tier, which the hub's record leaves out    section 2
  *   boxseasons  the hub's record counts one season more than the save                        section 2
  *   closestatic the board imports the season's awards statically again (Round 1542)          section 1
+ *   nhleager    the NHL board imports its kit statically beside its loader                   section 3
+ *   nhlhostvalue the NHL board's type only import of the whole host becomes a value import   section 3
+ *   nhltiertile tiertile, held on the NHL leagues                                             section 4
+ *   nhlboxseasons boxseasons, held on the NHL leagues                                         section 4
  *
  * Run: node scripts/simFoLazyDesk.mjs   (SIM_FO_LAZY_DESK_CONTROL=<name> for a control)
  * Reads no database and no network: the bundle is refused if it names the database host.
@@ -54,9 +66,10 @@ const src = (...p) => path.join(ROOT, 'src', ...p);
 
 /* name: [section, file, the text it rewrites, what it becomes] */
 const CONTROLS = {
+  /* Round 1561: the board's loader import names the loader itself (the shared hook takes it), the same line */
   eager: ['1', src('components', 'front-office', 'FrontOfficeBoard.tsx'),
-    "import { loadNflCareerKit, nflCareerKitNow, type NflCareerKit } from '@/components/front-office/nflCareerKitLoad';",
-    "import { loadNflCareerKit, nflCareerKitNow, type NflCareerKit } from '@/components/front-office/nflCareerKitLoad';\nimport '@/components/front-office/nflCareerKit';"],
+    "import { loadNflCareerKit, nflCareerKitLoader, type NflCareerKit } from '@/components/front-office/nflCareerKitLoad';",
+    "import { loadNflCareerKit, nflCareerKitLoader, type NflCareerKit } from '@/components/front-office/nflCareerKitLoad';\nimport '@/components/front-office/nflCareerKit';"],
   hostimport: ['1', src('components', 'front-office-shared', 'gmCareerDesk.tsx'),
     "import { hostCareerTile, hostMarketTile, hostXpTile } from '@/lib/gmCareerFace';",
     "import { hostCareerTile, hostMarketTile, hostXpTile } from '@/lib/gmDeskHost';"],
@@ -69,6 +82,22 @@ const CONTROLS = {
   closestatic: ['1', src('components', 'front-office', 'FrontOfficeBoard.tsx'),
     "import { FoAwardBadge } from '@/components/front-office-shared/FoAwardBadge';",
     "import { FoAwardBadge } from '@/components/front-office-shared/FoAwardBadge';\nimport '@/lib/nflSeasonAwards';"],
+  /* Round 1561 (fix): the NHL row's controls. nhleager is eager on the NHL board; nhlhostvalue turns the board's type
+     only import of the whole host into a value import (the static pull of a kit module other than the kit itself,
+     which no walk sees, because the kit's chunk is still asked for); the two box controls are section 2's on the NHL
+     leagues. */
+  nhleager: ['3', src('components', 'nhl-front-office', 'NhlFrontOfficeBoard.tsx'),
+    "import { nhlCareerKitLoader } from '@/components/nhl-front-office/nhlCareerKitLoad';",
+    "import { nhlCareerKitLoader } from '@/components/nhl-front-office/nhlCareerKitLoad';\nimport '@/components/nhl-front-office/nhlCareerKit';"],
+  nhlhostvalue: ['3', src('components', 'nhl-front-office', 'NhlFrontOfficeBoard.tsx'),
+    "import type { GmCareerBinding } from '@/lib/gmDeskHost';",
+    "import { type GmCareerBinding, hostMarket } from '@/lib/gmDeskHost';\nvoid hostMarket;"],
+  nhltiertile: ['4', src('lib', 'gmCareerFace.ts'),
+    'value: `Season ${hostStintSeasons(seat, index) + 1}`,',
+    'value: `Season ${hostStintSeasons(seat, index) + 1} t${s.tier}`,'],
+  nhlboxseasons: ['4', src('lib', 'gmCareerFace.ts'),
+    '    seasonsPlayed: f.seasonsPlayed, titles: f.titles, fired: f.fired, lastGrade: null,',
+    '    seasonsPlayed: f.seasonsPlayed + 1, titles: f.titles, fired: f.fired, lastGrade: null,'],
 };
 if (CONTROL && !CONTROLS[CONTROL]) {
   console.error(`SIM_FO_LAZY_DESK_CONTROL=${CONTROL} is not a control this harness knows (${Object.keys(CONTROLS).join(', ')})`);
@@ -199,11 +228,32 @@ const PAGE_MUST = [
   'src/lib/nflSeasonStats.ts',
   /* Round 1559: the loader's shared fetch once rule, a leaf the page carries */
   'src/components/front-office-shared/careerKitLoader.ts',
+  /* Round 1561: the board's career glue, shared with the NHL board: the page carries all three, none of them the kit */
+  'src/components/front-office-shared/useGmCareerKit.ts', 'src/components/front-office-shared/GmCareerKitHolding.tsx',
+  'src/components/front-office-shared/careerBinding.ts',
 ];
 
-begin('1', 'the page carries the boxes and the loader, and not one module of the career kit');
-{
-  const start = path.resolve(src('pages', 'FrontOffice.tsx'));
+/* Round 1561 (fix): the NHL row. /nhl-front-office fetches its own kit (nhlCareerKit.ts through nhlCareerKitLoad.ts)
+   the NFL's way, so its page is held to the same promise: not one module of the shared kit core, the NHL's adapter or
+   its career, and not one module of the NFL's kit either (the two pages share the face, the loader and the glue, never
+   a kit). */
+const NHL_KIT_ONLY = [
+  ...KIT_ONLY.filter(k => !['src/lib/gmDeskHostNfl.ts', 'src/lib/nflGmCareer.ts', 'src/components/front-office/nflCareerKit.ts'].includes(k)),
+  'src/lib/gmDeskHostNhl.ts', 'src/lib/nhlGmCareer.ts', 'src/components/nhl-front-office/nhlCareerKit.ts',
+  'src/lib/gmDeskHostNfl.ts', 'src/lib/nflGmCareer.ts', 'src/components/front-office/nflCareerKit.ts',
+];
+const NHL_PAGE_MUST = [
+  'src/components/nhl-front-office/NhlFrontOfficeBoard.tsx', 'src/components/nhl-front-office/NhlGmDesk.tsx',
+  'src/lib/gmCareerFace.ts', 'src/lib/gmSeatRecord.ts', 'src/lib/nhlGmDesk.ts',
+  'src/components/nhl-front-office/nhlCareerKitLoad.ts', 'src/components/front-office-shared/gmCareerDesk.tsx',
+  'src/components/front-office-shared/careerKitLoader.ts', 'src/components/front-office-shared/useGmCareerKit.ts',
+  'src/components/front-office-shared/GmCareerKitHolding.tsx', 'src/components/front-office-shared/careerBinding.ts',
+];
+
+/** Walk one page's static import graph and hold it to its row: what it must carry, what it must never carry, and
+    the one dynamic edge from its loader to its kit. */
+function pageGraph(row) {
+  const start = path.resolve(row.page);
   const seen = new Map(); /* file -> the file that first imported it */
   const dynamicEdges = [];
   const unresolved = [];
@@ -226,13 +276,25 @@ begin('1', 'the page carries the boxes and the loader, and not one module of the
   const chain = r => { const out = []; let f = path.resolve(ROOT, r); while (f) { out.unshift(rel(f)); f = seen.get(f); } return out.join(' > '); };
   ok(unresolved.length === 0, () => `${unresolved.length} imports in the page's graph do not resolve (${unresolved.slice(0, 3).join('; ')})`);
   ok(files.size >= 80, `the walk reached ${files.size} files from the page, fewer than the 80 a page of this site imports`);
-  for (const m of PAGE_MUST) ok(files.has(m), `the walk never reached ${m}, which the page imports: the walker is blind`);
-  for (const k of KIT_ONLY) ok(!files.has(k), () => `the page carries ${k}, which is the kit's: ${chain(k)}`);
-  for (const k of SEASON_LAZY) ok(!files.has(k), () => `the page carries ${k}, which rides in the kit or the season card's chunk: ${chain(k)}`);
-  ok(dynamicEdges.some(([a, b]) => a === 'src/components/front-office/nflCareerKitLoad.ts' && b === 'src/components/front-office/nflCareerKit.ts'),
-    'the loader does not fetch the kit with a dynamic import');
-  console.log(`   ${files.size} files reached from the page, ${dynamicEdges.length} dynamic edges seen, ${KIT_ONLY.length} kit modules and ${SEASON_LAZY.length} season modules checked absent`);
+  for (const m of row.must) ok(files.has(m), `the walk never reached ${m}, which the page imports: the walker is blind`);
+  for (const k of row.kitOnly) ok(!files.has(k), () => `the page carries ${k}, which is the kit's: ${chain(k)}`);
+  for (const k of row.lazy) ok(!files.has(k), () => `the page carries ${k}, which rides in the kit or the season card's chunk: ${chain(k)}`);
+  ok(dynamicEdges.some(([a, b]) => a === row.loader && b === row.kit),
+    `the loader ${row.loader} does not fetch the kit ${row.kit} with a dynamic import`);
+  console.log(`   ${files.size} files reached from ${rel(start)}, ${dynamicEdges.length} dynamic edges seen, ${row.kitOnly.length} kit modules and ${row.lazy.length} season modules checked absent`);
 }
+
+begin('1', 'the page carries the boxes and the loader, and not one module of the career kit');
+pageGraph({
+  page: src('pages', 'FrontOffice.tsx'), must: PAGE_MUST, kitOnly: KIT_ONLY, lazy: SEASON_LAZY,
+  loader: 'src/components/front-office/nflCareerKitLoad.ts', kit: 'src/components/front-office/nflCareerKit.ts',
+});
+
+begin('3', 'NHL row: /nhl-front-office carries the boxes and its loader, and not one module of any career kit');
+pageGraph({
+  page: src('pages', 'NhlFrontOffice.tsx'), must: NHL_PAGE_MUST, kitOnly: NHL_KIT_ONLY, lazy: [],
+  loader: 'src/components/nhl-front-office/nhlCareerKitLoad.ts', kit: 'src/components/nhl-front-office/nhlCareerKit.ts',
+});
 
 /* ================================================================== */
 /* 2. The boxes before the kit equal the boxes after it               */
@@ -260,6 +322,9 @@ export * as E from ${lib('frontOffice')};
 export * as G from ${lib('gmDesk')};
 export { FO_DEPTH } from '${ROOT_URL}/src/data/frontOfficeDepth.ts';
 export { FO_TEAM_MAP } from '${ROOT_URL}/src/data/frontOfficePlayers.ts';
+export * as NC from ${lib('nhlGmCareer')};
+export * as NE from ${lib('nhlFrontOffice')};
+export { NHL_TEAM_MAP } from '${ROOT_URL}/src/data/conquestDataNhl.ts';
 `);
 const esbuild = createRequire(`${modulesDir()}/`)('esbuild');
 await esbuild.build({
@@ -281,14 +346,15 @@ await esbuild.build({
     if (text.includes(host)) { console.error(`refusing to run: the bundle names ${host}`); process.exit(2); }
   }
 }
-const { F, C, E, G, FO_DEPTH, FO_TEAM_MAP } = createRequire(import.meta.url)(BUNDLE);
+const { F, C, E, G, FO_DEPTH, FO_TEAM_MAP, NC, NE, NHL_TEAM_MAP } = createRequire(import.meta.url)(BUNDLE);
 
-begin('2', 'the Career box drawn before the kit is the box drawn with it, save by save (the GM level box reads the desk alone, the same on both)');
-{
-  /* Lehmer's generator, seeded per league: the same leagues every run. */
-  const lehmer = seed => { let s = seed % 2147483647; if (s <= 0) s += 2147483646; return () => (s = (s * 48271) % 2147483647) / 2147483647; };
-  const nameOf = id => { const t = FO_TEAM_MAP.get(id); return t ? `${t.city} ${t.name}` : id; };
-  const leagues = [E.initLeague(lehmer(1550)), E.initLeague(lehmer(1533)), E.initLeague(lehmer(31), { depth: FO_DEPTH })];
+/* Lehmer's generator, seeded per league: the same leagues every run. */
+const lehmer = seed => { let s = seed % 2147483647; if (s <= 0) s += 2147483646; return () => (s = (s * 48271) % 2147483647) / 2147483647; };
+
+/** The Career box before the kit against the box with it, over whole leagues of one sport (row: its leagues, its
+    legacy read through the kit's adapter, its club names). */
+function boxesEqual(row) {
+  const { leagues, legacyOf, nameOf } = row;
   let cases = 0, differ = 0, tierNot4 = 0, graded = 0, fits = 0;
   const J = v => JSON.stringify(v);
   leagues.forEach((lg, li) => {
@@ -307,10 +373,10 @@ begin('2', 'the Career box drawn before the kit is the box drawn with it, save b
                   { tier: 'title', text: '', winFloor: 0, reqLevel: 4, season: lg.season },
                   { tier: 'rebuild', text: '', winFloor: 3, reqLevel: 0, season: lg.season - 1 },
                 ]) {
-                  const facts = { team, seasonsPlayed: sp, titles: ti, fired, seasonCounted: sc, mandate, rounds: [], champion: champ };
+                  const facts = { team, seasonsPlayed: sp, titles: ti, fired, seasonCounted: sc, mandate, champion: champ };
                   const box = F.hostBoxLegacy({ team, season: lg.season, seasonCounted: sc, seasonsPlayed: sp, titles: ti, fired });
                   if (champ) lg.champions.push({ season: lg.season, team: champ });
-                  const legacy = C.nflLegacy(lg, facts);
+                  const legacy = legacyOf(lg, facts);
                   if (champ) lg.champions.pop();
                   const mine = F.hostLegacySeat({ ...box, tier: legacy.tier });
                   const theirs = F.hostLegacySeat({ ...box, team: other, fired: true });
@@ -348,6 +414,20 @@ begin('2', 'the Career box drawn before the kit is the box drawn with it, save b
   ok(fits > 0, 'no stored record fit its save, so the stored path was never read');
   console.log(`   ${cases} saves over ${leagues.length} leagues: the records differ in ${differ}, the kit's tier is not the bottom one in ${tierNot4}, a last grade in ${graded}, a stored record read as itself in ${fits}`);
 }
+
+begin('2', 'the Career box drawn before the kit is the box drawn with it, save by save (the GM level box reads the desk alone, the same on both)');
+boxesEqual({
+  leagues: [E.initLeague(lehmer(1550)), E.initLeague(lehmer(1533)), E.initLeague(lehmer(31), { depth: FO_DEPTH })],
+  legacyOf: (lg, facts) => C.nflLegacy(lg, { ...facts, rounds: [] }),
+  nameOf: id => { const t = FO_TEAM_MAP.get(id); return t ? `${t.city} ${t.name}` : id; },
+});
+
+begin('4', 'NHL row: the Career box drawn before the kit is the box the NHL kit draws, save by save');
+boxesEqual({
+  leagues: [NE.initNhlLeague(lehmer(1561)), NE.initNhlLeague(lehmer(1559)), NE.initNhlLeague(lehmer(41))],
+  legacyOf: (lg, facts) => NC.nhlLegacy(lg, { ...facts, series: [] }),
+  nameOf: id => { const t = NHL_TEAM_MAP.get(id); return t ? `${t.city} ${t.name}` : id; },
+});
 
 /* ================================================================== */
 const red = [...failedIn.keys()].join(', ');

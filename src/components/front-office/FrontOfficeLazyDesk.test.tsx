@@ -87,6 +87,16 @@ describe('NFL front office: the GM career kit loads when it is needed', () => {
     fireEvent.click(screen.getByText('This week'));
     await tick();
     expect(G.loader.nflCareerKitState(), 'a season being played fetched the kit').toBe('idle');
+    /* Round 1561 (fix): the week is played, not only looked at. The press waits for the kit on the last week alone
+       (useGmCareerKit's waits), so a reloaded save in the middle of a season plays its week with the kit away
+       (controlFrontOfficeBoard waitsalways makes it wait on every week). */
+    const weekPress = Array.from(document.querySelectorAll('button')).find(b => (b.textContent ?? '').trim().startsWith('Play Week'));
+    expect(weekPress, 'the week box draws a Play Week press').toBeTruthy();
+    expect(weekPress!.disabled, 'a week in the middle of the season waits for the kit').toBe(false);
+    fireEvent.click(weekPress!);
+    await tick();
+    expect(JSON.parse(localStorage.getItem(SAVE_KEY)!).league.week, 'Play Week did not play the week').toBe(6);
+    expect(G.loader.nflCareerKitState(), 'playing a week fetched the kit').toBe('idle');
     first.unmount();
     /* the same save, the kit on the page: the box is read off the kit's own record (the league through the adapter) */
     await G.loader.loadNflCareerKit();

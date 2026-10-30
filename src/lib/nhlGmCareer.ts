@@ -6,9 +6,8 @@
  * move, what the club he leaves gets back (its contributors, back to automatic), and the board's own engine calls
  * in the board's own order for a year out (NhlFrontOfficeBoard.tsx: playRound, draftWithoutPicks, finishDraft).
  *
- * THIS ROUND IS DARK: no page imports this file yet. Round 1561 binds the NHL board to it through the NHL career kit
- * (src/components/nhl-front-office/nhlCareerKit.ts), fetched the way the NFL's is. scripts/simGmCareer.mjs drives
- * it as its 'nhl' row.
+ * Round 1561 bound the NHL board to it through the NHL career kit (src/components/nhl-front-office/nhlCareerKit.ts),
+ * fetched the way the NFL's is. scripts/simGmCareer.mjs drives it as its 'nhl' row.
  */
 import {
   NHL_FO_ROUNDS, nhlAiDraftPicks, nhlAiMoves, nhlDraftClass, nhlFoStandings, nhlOffseason, nhlResetContributors,

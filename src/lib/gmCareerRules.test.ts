@@ -9,6 +9,11 @@
  * - careerKitNeeded is the board's kitNeeded expression, with the kit absent, on the whole truth table of the
  *   moments it reads (and with the kit present the board never asks).
  * - makeCareerKitLoader fetches once for every caller, forgets a failed fetch, and reports its three states.
+ *
+ * Round 1561 (its brief R2, 1559's R3): the NFL board and page now call the shared pieces themselves, so the NFL
+ * copies they were lifted from are FROZEN below as they stood at c68bce039 (Round 1559's closing head, the base of
+ * Round 1561), each case still holds the shared piece equal to that copy, and each also asserts the board or page
+ * calls the shared piece and no longer carries its own copy (so a second copy cannot grow back beside it).
  */
 import fs from 'node:fs';
 import path from 'node:path';
@@ -31,13 +36,29 @@ const between = (src: string, start: string, end: string): string => {
   return src.slice(i + start.length, j);
 };
 
+/* FROZEN: FrontOffice.tsx's frontOfficeCareerRules at c68bce039, word for word. */
+function nflPageRules1559(): string[] {
+  const xp = hostXpHelp();
+  return [
+    'Getting fired does not end the save. Zero trust upstairs costs you the job, and See who is calling opens the job market: franchises in the same league that rate your record call with the ask they would grade you on. The club that fired you never calls.',
+    'Take a job and you move to that club\'s real roster, cap sheet and picks, meet the room and run its draft. Your record, your titles and your GM XP come with you. The old club\'s staff and re-sign desk stay behind.',
+    'If the phone can still ring next year you can sit a season out: the league plays on without you, then the market reads again. Once the phone has stopped for good the screen says so, and a new front office is the way back in.',
+    'Your GM earns XP every graded season from wins, titles, playoff rounds and the grade against the ask, and each level is a point. Ownership (a missed season costs less trust) and Media (a gamble at the podium lands more often) work now. The other trees say Not here yet.',
+    xp[xp.length - 1].replace(/^Worked example: /, 'For example: '),
+  ];
+}
+
 describe('hostCareerRules', () => {
   it("is the NFL page's five career sentences byte for byte for 'nfl'", () => {
-    const page = read('src/pages/FrontOffice.tsx');
-    const body = between(page, 'function frontOfficeCareerRules(): string[] {', '\n}\n');
-    const nflPage = new Function('hostXpHelp', body)(hostXpHelp) as string[];
+    const nflPage = nflPageRules1559();
     expect(nflPage).toHaveLength(5);
     expect(hostCareerRules('nfl')).toEqual(nflPage);
+  });
+
+  it('the NFL page calls it and carries no copy of its own', () => {
+    const page = read('src/pages/FrontOffice.tsx');
+    expect(between(page, 'function frontOfficeCareerRules(): string[] {', '\n}\n').trim()).toBe("return hostCareerRules('nfl');");
+    expect(page).not.toContain('Getting fired does not end the save.');
   });
 
   it('names the books from the sport descriptor: a payroll under a tax line, a cap sheet under a cap', () => {
@@ -54,35 +75,67 @@ describe('hostCareerRules', () => {
   });
 });
 
+/* FROZEN: the NFL board's three feed lines at c68bce039 (its takeSeat and sitOut), as they were typed. */
+type TakeR = { offer: { teamId: string; ask: { season: number; text: string } } };
+const nflOfferGone1559 = 'That offer is not on the table any more.';
+const nflTakeLine1559 = (label: (id: string) => string, teamId: string, r: TakeR) =>
+  `You take over the ${label(teamId)}. The ${r.offer.ask.season} ask: ${r.offer.ask.text}`;
+const nflSatOutLine1559 = (label: (id: string) => string, r: { report: { season: number; champion: string } }) =>
+  `You sat out ${r.report.season}. The ${label(r.report.champion)} won it.`;
+
 describe('the three feed lines', () => {
   const board = read('src/components/front-office/FrontOfficeBoard.tsx');
   const label = (id: string) => `Club ${id}`;
 
-  it('an offer gone is the board\'s literal line', () => {
-    expect(board).toContain(`'${hostOfferGoneLine()}'`);
+  it("an offer gone is the board's literal line", () => {
+    expect(hostOfferGoneLine()).toBe(nflOfferGone1559);
   });
 
   it("a take is the board's template on the same offer", () => {
-    const tpl = between(board, 'setNewsFeed([`You take over', '`]);');
     const r = { offer: { teamId: 'DAL', ask: { season: 2027, text: 'Win the division.' } } };
-    const boardLine = new Function('label', 'teamId', 'r', 'return `You take over' + tpl + '`;')(label, 'DAL', r);
+    const boardLine = nflTakeLine1559(label, 'DAL', r);
     expect(hostTakeoverLine(label, r.offer as never)).toBe(boardLine);
     expect(boardLine).toBe('You take over the Club DAL. The 2027 ask: Win the division.');
   });
 
   it("a year out is the board's template on the same report", () => {
-    const tpl = between(board, 'setNewsFeed([`You sat out', '`]);');
     const r = { report: { season: 2026, champion: 'KC' } };
-    const boardLine = new Function('label', 'r', 'return `You sat out' + tpl + '`;')(label, r);
+    const boardLine = nflSatOutLine1559(label, r);
     expect(hostSatOutLine(r.report, label)).toBe(boardLine);
     expect(boardLine).toBe('You sat out 2026. The Club KC won it.');
   });
+
+  it('the NFL board prints all three through the shared functions and types none of them itself', () => {
+    expect(board).toContain('setNewsFeed(f => [hostOfferGoneLine(), ...f].slice(0, 6));');
+    expect(board).toContain('setNewsFeed([hostTakeoverLine(label, r.offer)]);');
+    expect(board).toContain('setNewsFeed([hostSatOutLine(r.report, label)]);');
+    expect(board).not.toContain(nflOfferGone1559);
+    expect(board).not.toContain('You take over the');
+    expect(board).not.toContain('You sat out');
+  });
 });
+
+/* FROZEN: the NFL board's kitNeeded at c68bce039, the expression as it was typed. */
+const nflKitNeeded1559 = (kit: unknown, phase: string, presser: unknown, careerBoxOpen: boolean, league: { week: number } | null, REGULAR_WEEKS: number) => !kit && (
+  phase === 'recap' || phase === 'fired' || presser !== null || careerBoxOpen
+  || (phase === 'hub' && !!league && league.week >= REGULAR_WEEKS)
+);
 
 describe('careerKitNeeded', () => {
   const board = read('src/components/front-office/FrontOfficeBoard.tsx');
-  const expr = between(board, 'const kitNeeded = ', ';');
-  const boardKitNeeded = new Function('kit', 'phase', 'presser', 'careerBoxOpen', 'league', 'REGULAR_WEEKS', `return ${expr};`);
+  /* the moment the NFL board hands the shared hook, evaluated as the board writes it; the hook asks when the kit is
+     absent and careerKitNeeded says so (useGmCareerKit.ts: `!kit && careerKitNeeded(moment)`) */
+  const momentText = between(board, 'useGmCareerKit(nflCareerKitLoader, {', '}, {');
+  const boardMoment = new Function('phase', 'presser', 'careerBoxOpen', 'league', 'REGULAR_WEEKS', `return {${momentText}};`);
+  const hook = read('src/components/front-office-shared/useGmCareerKit.ts');
+  const boardKitNeeded = (kit: unknown, phase: string, presser: unknown, careerBoxOpen: boolean, league: { week: number } | null, weeks: number) =>
+    !kit && careerKitNeeded(boardMoment(phase, presser, careerBoxOpen, league, weeks));
+
+  it('the NFL board asks through the shared hook and carries no copy of the rule', () => {
+    expect(hook).toContain('const needed = !kit && careerKitNeeded(moment);');
+    expect(board).not.toContain('const kitNeeded');
+    expect(board).not.toContain("|| (phase === 'hub' && !!league && league.week >= REGULAR_WEEKS)");
+  });
 
   it("equals the NFL board's kitNeeded on every moment, and the board never asks once the kit is here", () => {
     let rows = 0, asks = 0;
@@ -90,9 +143,11 @@ describe('careerKitNeeded', () => {
       for (const presser of [null, { kind: 'x' }]) {
         for (const careerBoxOpen of [false, true]) {
           for (const league of [null, { week: 1 }, { week: REGULAR_WEEKS - 1 }, { week: REGULAR_WEEKS }, { week: REGULAR_WEEKS + 1 }]) {
-            const want = !!boardKitNeeded(null, phase, presser, careerBoxOpen, league, REGULAR_WEEKS);
+            const want = !!nflKitNeeded1559(null, phase, presser, careerBoxOpen, league, REGULAR_WEEKS);
             const lastPeriod = !!league && league.week >= REGULAR_WEEKS;
             expect(careerKitNeeded({ phase, presser: presser !== null, boxOpen: careerBoxOpen, lastPeriod }), J({ phase, presser, careerBoxOpen, league })).toBe(want);
+            expect(!!boardKitNeeded(null, phase, presser, careerBoxOpen, league, REGULAR_WEEKS), J({ phase, presser, careerBoxOpen, league })).toBe(want);
+            expect(!!nflKitNeeded1559({}, phase, presser, careerBoxOpen, league, REGULAR_WEEKS)).toBe(false);
             expect(!!boardKitNeeded({}, phase, presser, careerBoxOpen, league, REGULAR_WEEKS)).toBe(false);
             rows++; if (want) asks++;
           }

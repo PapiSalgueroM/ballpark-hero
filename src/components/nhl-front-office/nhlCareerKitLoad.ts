@@ -7,7 +7,7 @@
  * literal import of the kit stays in this file (scripts/simFoLazyDesk.mjs reads that dynamic edge by file).
  * careerKitLoader.ts is a leaf with no imports, so the module level call below evaluates nothing imported.
  *
- * THIS ROUND IS DARK: no page imports this file yet (Round 1561 binds the NHL board to it).
+ * Round 1561 bound the NHL board to it: NhlFrontOfficeBoard.tsx asks through the shared hook (useGmCareerKit).
  */
 import { makeCareerKitLoader } from '@/components/front-office-shared/careerKitLoader';
 

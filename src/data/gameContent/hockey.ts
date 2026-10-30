@@ -1084,7 +1084,7 @@ export const HOCKEY_CONTENT: GameContentMap = {
       {
         heading: "Hire a staff, settle contracts and build packages",
         items: [
-          "Under the hub's own boxes sit four more: Staff, Re-sign desk, Draft picks and Trade desk. A new franchise opens with them switched on. An older save plays on exactly as it did until you open one of them.",
+          "Under the hub's own boxes sit six more: Staff, Re-sign desk, Draft picks, Trade desk, Career and GM level. A new franchise opens with them switched on. An older save plays on exactly as it did until you open one of the first four.",
           "Staff: a head coach, a special teams assistant, a goalie coach, a scouting director and a head athletic therapist, each rated 1 to 10. Hire off a shortlist, pay off the man you do not want, and match or let go when another club comes in for a good one.",
           "Re-sign desk: every player whose deal runs out this summer gets a tile. Keep him at his ask, push once with your own number, or let him go. Anyone you leave open is settled by your staff's own rule when the summer starts, never by a coin flip.",
           "Trade desk: build a package of up to five pieces a side, players and picks, and keep paying part of a salary to make the money work. It shuts at the deadline.",
@@ -1141,7 +1141,7 @@ export const HOCKEY_CONTENT: GameContentMap = {
       {
         heading: "Trust upstairs runs from zero to 100",
         items: [
-          "Trust upstairs runs 0 to 100: beat the mandate and it climbs, miss it and it falls, a Cup fixes almost anything, and at zero you are fired and the save ends.",
+          "Trust upstairs runs 0 to 100: beat the mandate and it climbs, miss it and it falls, a Cup fixes almost anything, and at zero you are fired, though the save goes on: franchises that rate your record can call, and you can usually sit a season out.",
         ],
       },
       {
@@ -1210,7 +1210,7 @@ export const HOCKEY_CONTENT: GameContentMap = {
       },
       {
         q: "Can I get fired?",
-        a: "Yes. Ownership grades the mandate every season and tracks trust from 0 to 100. Missing the bracket with a Cup-or-bust roster costs real trust, and at zero the save ends and you take another chair.",
+        a: "Yes. Ownership grades the mandate every season and tracks trust from 0 to 100. Missing the bracket with a Cup-or-bust roster costs real trust, and at zero you lose the seat but not the save: franchises that rate your record can call, and you can usually sit a season out instead.",
       },
       {
         q: "How long can one franchise run?",

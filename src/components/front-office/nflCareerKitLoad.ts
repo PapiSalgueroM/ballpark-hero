@@ -16,19 +16,20 @@ import { makeCareerKitLoader } from '@/components/front-office-shared/careerKitL
 
 export type NflCareerKit = typeof import('./nflCareerKit');
 
-const loader = makeCareerKitLoader<NflCareerKit>(() => import('./nflCareerKit'));
+/** Round 1561: the loader itself, for the shared hook (useGmCareerKit.ts) the board calls. */
+export const nflCareerKitLoader = makeCareerKitLoader<NflCareerKit>(() => import('./nflCareerKit'));
 
 /** The kit when it has arrived, else null. */
 export function nflCareerKitNow(): NflCareerKit | null {
-  return loader.now();
+  return nflCareerKitLoader.now();
 }
 
 /** Where the kit stands: never asked for, on its way, or here. Read by the board's tests. */
 export function nflCareerKitState(): 'idle' | 'loading' | 'ready' {
-  return loader.state();
+  return nflCareerKitLoader.state();
 }
 
 /** Ask for the kit. Every caller shares one fetch; a failed one can be asked for again. */
 export function loadNflCareerKit(): Promise<NflCareerKit> {
-  return loader.load();
+  return nflCareerKitLoader.load();
 }

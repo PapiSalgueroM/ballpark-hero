@@ -24,7 +24,9 @@ const candidate = candidatePath ? holdSource(await readFile(path.resolve(candida
 const product = candidate?.source ?? held.get(board).source;
 const controls = {
   handler: [' || my.players.length > NHL_ROSTER_MAX', '', [1]],
-  disabled: ['disabled={overLimit > 0}', 'disabled={false}', [1]],
+  /* Round 1561: the press also waits for the GM career kit on the last round (closeWaits, useGmCareerKit), so the
+     guard reads "overLimit > 0 || closeWaits" and the control drops the roster half alone */
+  disabled: ['disabled={overLimit > 0 || closeWaits}', 'disabled={closeWaits}', [1]],
   warning: ['Your roster has {my.players.length} players, {overLimit} over', 'Your roster has {my.players.length + 1} players, {overLimit} over', [0, 2]],
   roster: ['onClick={() => openPanel(\'team\')}', 'onClick={() => undefined}', [0, 2]],
   waive: ['if (nhlRelease(team, lg.freeAgents, pid, lg.ratingModelVersion))', 'if (false)', [2]],

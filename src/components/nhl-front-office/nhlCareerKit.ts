@@ -4,9 +4,8 @@
  * board fetches src/components/front-office/nflCareerKit.ts (Round 1550). What every sport's kit carries is
  * gmCareerKitCore.ts, re-exported whole; the NHL's own lines follow it: its read adapter and its career file.
  *
- * THIS ROUND IS DARK: nothing imports this file or its loader yet. Round 1561 binds the NHL board to it, through
- * nhlCareerKitLoad.ts only, never statically (scripts/simFoLazyDesk.mjs holds that edge for the NFL and gains the
- * NHL's row with the board). Nothing here is evaluated at module scope: it only re-exports.
+ * Round 1561 bound the NHL board to it, through nhlCareerKitLoad.ts only, never statically (scripts/simFoLazyDesk.mjs
+ * holds that edge on its NHL row, sections 3 and 4). Nothing here is evaluated at module scope: it only re-exports.
  */
 export * from '@/components/front-office-shared/gmCareerKitCore';
 export { nhlDeskHost } from '@/lib/gmDeskHostNhl';

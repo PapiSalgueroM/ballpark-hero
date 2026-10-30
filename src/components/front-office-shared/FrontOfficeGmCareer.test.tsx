@@ -70,10 +70,27 @@ interface BoardRow {
   /** The club button on the pick screen. */
   clubLabel: string;
   load(): Promise<ComponentType>;
-  /** Round 1559: the career block runs only on a board that has the career (the NHL's joins in Round 1561). */
-  career: boolean;
+  /** Round 1559: the career block runs only on a board that has the career. Round 1561: the NHL's joins, and the
+      block reads each board's own season end, words and adapter from here. */
+  career: CareerSpec | null;
   /** Round 1559: the board's own presses for the default path walk. */
   drive: BoardDrive;
+}
+/** Round 1561: what the career block needs of a board, beyond its presses. */
+interface CareerSpec {
+  /** The title ask in the sport pack's words, for the doomed season. */
+  titleAsk(season: number): Record<string, unknown>;
+  /** Put a save on the morning of its last regular period (the NFL's week 17, the NHL's round 20). */
+  toLastPeriod(s: any): void;
+  /** The hub box that holds the season's press, and the press that plays the last period and the playoffs. */
+  tile: string;
+  finalButton: string;
+  /** The route useGameCompletion records a finish under. */
+  path: string;
+  /** The recap's line under the title when the title is his, which an arrival never stages. */
+  parade: string;
+  /** The sport's read adapter (the market and seat reads of the year out and closed market cases). */
+  adapter(): Promise<any>;
 }
 interface BoardDrive {
   /** Cut or waive until the board will play; how many went. */
@@ -91,7 +108,11 @@ const BOARDS: BoardRow[] = [
     load: async () => ((process.env.FO_BOARD_NFL
       ? await import(/* @vite-ignore */ process.env.FO_BOARD_NFL)
       : await import('@/components/front-office/FrontOfficeBoard')) as { default: ComponentType }).default,
-    career: true,
+    career: {
+      titleAsk: season => TITLE_ASK(season), toLastPeriod: s => { s.league.week = 17; },
+      tile: 'This week', finalButton: 'Play the final week + playoffs', path: '/front-office',
+      parade: 'Your build. Your rings.', adapter: async () => (await import('@/lib/gmDeskHostNfl')).nflDeskHost,
+    },
     drive: { toLimit: cutToLimit, dropOne: cutOne, playSeason, runDraft },
   },
   {
@@ -99,7 +120,12 @@ const BOARDS: BoardRow[] = [
     load: async () => ((process.env.FO_BOARD_NHL
       ? await import(/* @vite-ignore */ process.env.FO_BOARD_NHL)
       : await import('@/components/nhl-front-office/NhlFrontOfficeBoard')) as { default: ComponentType }).default,
-    career: false,
+    /* Round 1561: the NHL board's career, bound in this round */
+    career: {
+      titleAsk: season => NHL_TITLE_ASK(season), toLastPeriod: s => { s.league.round = 20; },
+      tile: 'Play', finalButton: 'Final stretch + playoffs', path: '/nhl-front-office',
+      parade: 'Your roster. Your Cup.', adapter: async () => (await import('@/lib/gmDeskHostNhl')).nhlDeskHost,
+    },
     drive: { toLimit: waiveToLimit, dropOne: waiveOne, playSeason: playNhlSeason, runDraft: runNhlDraft },
   },
 ];
@@ -408,6 +434,23 @@ describe('nhl board: the saves the base wrote', () => {
       localStorage.setItem(row.saveKey, raw!);
       render(<Board />);
       await waitFor(() => expect(buttons().length).toBeGreaterThan(0), { timeout: 30_000 });
+      /* Round 1561, where each lands on the bound board: a fired save on the out of work screen with its three boxes
+         (the kit fetched for it, so wait for the screen), the hub save on the hub with the Career and GM level boxes */
+      if (name.startsWith('fired')) {
+        await waitFor(() => expect(outScreen(), `${name} opens out of work`).not.toBeNull(), { timeout: 30_000 });
+        expect(document.querySelectorAll('[data-gm-out-of-work] [data-gm-desk="tiles"] button')).toHaveLength(3);
+        /* Round 1561 (fix, the review's bindlegacy): a save older than the seat block stands on the record the kit
+           reads off the league (careerBinding.ts), and only that record knows his old club's tier, which decides
+           next year. The save alone would print "Open it to see each ask" and lose the sentence below. */
+        const card = outScreen()?.textContent ?? '';
+        expect(card, `${name}: the card's next year line`).toContain('Pass, and next year the phone rings only if the Detroit Red Wings have climbed into the second tier of the league by then.');
+        expect(card, `${name}: the Job market box's line`).toContain('Next year hangs on your old club');
+      } else {
+        expect(outScreen(), 'the hub save is not out of work').toBeNull();
+        for (const title of ['Career', 'GM level']) {
+          expect(buttons().some(b => Array.from(b.querySelectorAll('div')).some(dv => (dv.textContent ?? '').trim() === title && dv.className.includes('uppercase'))), `the hub draws the ${title} box`).toBe(true);
+        }
+      }
       await new Promise(r => setTimeout(r, 50));
       expect(localStorage.getItem(row.saveKey), 'mounting writes nothing').toBe(raw);
     });
@@ -438,15 +481,18 @@ async function doomedSave(row: BoardRow, Board: ComponentType) {
   answerPresser();
   view.unmount();
   const s = readSave(row);
+  const spec = row.career!;
   s.trust = 5;
-  s.mandate = TITLE_ASK(s.league.season);
+  s.mandate = spec.titleAsk(s.league.season);
   for (const p of s.league.teams[s.myTeam].players) p.ovr = 60;
-  s.league.week = 17;
+  spec.toLastPeriod(s);
   localStorage.setItem(row.saveKey, JSON.stringify(s));
   view = render(<Board />);
-  cutToLimit();
-  openTile('This week');
-  fireEvent.click(buttonNamed('Play the final week + playoffs')!);
+  row.drive.toLimit();
+  openTile(spec.tile);
+  /* Round 1561: the last period's press waits for the career kit (useGmCareerKit), here since the start */
+  await waitFor(() => expect(buttonNamed(spec.finalButton)?.disabled).toBe(false), { timeout: 30_000 });
+  fireEvent.click(buttonNamed(spec.finalButton)!);
   await waitFor(() => expect(readSave(row)?.phase).toBe('fired'), { timeout: 60_000 });
   return view;
 }
@@ -516,14 +562,14 @@ for (const row of BOARDS.filter(b => b.career)) {
       expect(s.postseason.champion, 'the club he joined won the closed season').toBe(target);
       const recap = document.querySelector('[data-verdict-reveal]')?.textContent ?? '';
       expect(recap, 'the arrival line').toContain('You take over the');
-      expect(recap, 'no title of his is staged').not.toContain('Your build. Your rings.');
+      expect(recap, 'no title of his is staged').not.toContain(row.career!.parade);
       expect(document.querySelector('[data-verdict-reveal]')?.className ?? '', 'no title pulse').not.toContain('cm-win-pulse');
       /* The room meets him, then his new club's draft, and the summer keeps the ask he was shown. */
       const ask = s.mandate;
       expect(ask.season).toBe(s.league.season + 1);
       answerPresser();
       fireEvent.click(buttonNamed(/Go to the draft/)!);
-      runDraft(row);
+      row.drive.runDraft(row);
       const after = readSave(row);
       expect([after.phase, after.myTeam, JSON.stringify(after.mandate)]).toEqual(['hub', target, JSON.stringify(ask)]);
       expect(completion.calls, 'nothing is recorded through the market, the take, the arrival and the draft').toHaveLength(0);
@@ -533,11 +579,61 @@ for (const row of BOARDS.filter(b => b.career)) {
       for (const p of t.league.teams[t.myTeam].players) p.ovr = 99;
       localStorage.setItem(row.saveKey, JSON.stringify(t));
       render(<Board />);
-      cutToLimit();
-      playSeason(row, () => undefined);
+      row.drive.toLimit();
+      row.drive.playSeason(row, () => undefined);
       const won = readSave(row);
       expect(won.postseason.champion, 'a club of 99s wins it').toBe(target);
-      expect(completion.calls).toEqual([{ path: '/front-office', score: won.titles * 100 + won.seasonsPlayed * 5 }]);
+      expect(completion.calls).toEqual([{ path: row.career!.path, score: won.titles * 100 + won.seasonsPlayed * 5 }]);
+    });
+
+    /* Round 1561 (fix, critic 21d of brief 1559): a phone call left open when the season closes is the old club's, and
+       taking a seat drops it. Kept, the new club's Trades box never builds a deal: the old call's piece is on no roster
+       there, so no card draws to end it (controlFrontOfficeBoard talkskept and nhl-talkskept keep it). The desk is off,
+       so no deadline refuses the call on the last period. */
+    it("a call left open when he is fired stays with the old club: the new club's Trades box builds a deal", async () => {
+      const { Board } = await freshBoard(row, 18);
+      let view = render(<Board />);
+      clickText(row.clubLabel);
+      await waitFor(() => expect(readSave(row)?.phase).toBe('hub'), { timeout: 120_000 });
+      answerPresser();
+      view.unmount();
+      const s = readSave(row);
+      const spec = row.career!;
+      delete s.gm;
+      s.trust = 5;
+      s.mandate = spec.titleAsk(s.league.season);
+      for (const p of s.league.teams[s.myTeam].players) p.ovr = 60;
+      spec.toLastPeriod(s);
+      localStorage.setItem(row.saveKey, JSON.stringify(s));
+      view = render(<Board />);
+      row.drive.toLimit();
+      openCall(row);
+      expect(document.querySelector('[data-trade-talks]'), 'a call is open at the old club').not.toBeNull();
+      openTile(spec.tile);
+      await waitFor(() => expect(buttonNamed(spec.finalButton)?.disabled).toBe(false), { timeout: 30_000 });
+      fireEvent.click(buttonNamed(spec.finalButton)!);
+      await waitFor(() => expect(readSave(row)?.phase).toBe('fired'), { timeout: 60_000 });
+      fireEvent.click(buttonNamed('See who is calling')!);
+      await openCareerBox('Job market');
+      const target = offerIds()[0];
+      expect(target, 'somebody calls after a firing').toBeTruthy();
+      fireEvent.click(document.querySelector(`[data-gm-offer="${target}"]`)!);
+      const take = () => document.querySelector('[data-gm-take]') as HTMLButtonElement;
+      fireEvent.click(take());
+      fireEvent.click(take());
+      expect(readSave(row).myTeam, 'he took the job').toBe(target);
+      answerPresser();
+      fireEvent.click(buttonNamed(/Go to the draft/)!);
+      row.drive.runDraft(row);
+      expect(readSave(row).phase).toBe('hub');
+      /* the draft night's card stands between the draft and the hub (one tap, the same on both boards) */
+      fireEvent.click(buttonNamed('Continue to the hub')!);
+      openTile('Trades');
+      expect(document.querySelector('[data-trade-talks]'), "the old club's call is not on the new club's desk").toBeNull();
+      const partner = Object.keys(readSave(row).league.teams).find(x => x !== target)!;
+      fireEvent.click(screen.getAllByText(partner).find(el => el.tagName === 'BUTTON')!);
+      expect(document.querySelectorAll('[data-trade-row]').length, "the new club's Trades box builds a deal with a partner").toBeGreaterThan(0);
+      view.unmount();
     });
 
     it('a year out: two taps, the league a season on with one more champion, his counters as they were', async () => {
@@ -546,16 +642,16 @@ for (const row of BOARDS.filter(b => b.career)) {
       view.unmount();
       const H = await import('@/lib/gmDeskHost');
       const SEAT = await import('@/lib/gmSeat');
-      const { nflDeskHost } = await import('@/lib/gmDeskHostNfl');
+      const host = await row.career!.adapter();
       const s0 = readSave(row);
       /* A record whose next year is still open (the stay out button is drawn only then). */
       let planted = false;
       for (const grades of [['overachieved', 'met', 'missed'], ['met', 'met', 'missed'], ['title', 'met', 'badly']] as const) {
-        const tier = SEAT.leagueTiers(H.hostSeatTeams(nflDeskHost, s0.league, (id: string) => id)).get(s0.myTeam) ?? 4;
+        const tier = SEAT.leagueTiers(H.hostSeatTeams(host, s0.league, (id: string) => id)).get(s0.myTeam) ?? 4;
         let c = SEAT.newGmCareer(s0.myTeam, tier, s0.league.season - grades.length + 1);
         for (const g of grades) c = SEAT.recordSeatSeason(c, g);
         const seat = { v: 1 as const, career: SEAT.endSeatStint(c, 'fired'), last: s0.league.season };
-        if (H.hostCanSitOut(H.hostMarket(nflDeskHost, s0.league, seat, (id: string) => id))) { plantRecord(row, seat, grades.length); planted = true; break; }
+        if (H.hostCanSitOut(H.hostMarket(host, s0.league, seat, (id: string) => id))) { plantRecord(row, seat, grades.length); planted = true; break; }
       }
       expect(planted, 'a record with next year open').toBe(true);
       render(<Board />);
@@ -606,18 +702,18 @@ for (const row of BOARDS.filter(b => b.career)) {
       view.unmount();
       const H = await import('@/lib/gmDeskHost');
       const SEAT = await import('@/lib/gmSeat');
-      const { nflDeskHost } = await import('@/lib/gmDeskHostNfl');
+      const host = await row.career!.adapter();
       const s0 = readSave(row);
       let planted = false;
       for (const grades of [['badly', 'badly', 'badly'], ['missed', 'badly'], ['badly']] as const) {
         for (const out of [1, 2]) {
-          const tier = SEAT.leagueTiers(H.hostSeatTeams(nflDeskHost, s0.league, (id: string) => id)).get(s0.myTeam) ?? 4;
+          const tier = SEAT.leagueTiers(H.hostSeatTeams(host, s0.league, (id: string) => id)).get(s0.myTeam) ?? 4;
           let c = SEAT.newGmCareer(s0.myTeam, tier, s0.league.season - out - grades.length + 1);
           for (const g of grades) c = SEAT.recordSeatSeason(c, g);
           c = SEAT.endSeatStint(c, 'fired');
           for (let i = 0; i < out; i += 1) c = SEAT.sitOutYear(c);
           const seat = { v: 1 as const, career: c, last: s0.league.season - out };
-          if (!planted && H.hostMarket(nflDeskHost, s0.league, seat, (id: string) => id)?.state === 'closed') { plantRecord(row, seat, grades.length); planted = true; }
+          if (!planted && H.hostMarket(host, s0.league, seat, (id: string) => id)?.state === 'closed') { plantRecord(row, seat, grades.length); planted = true; }
         }
       }
       expect(planted, 'a closed market').toBe(true);
@@ -691,12 +787,14 @@ for (const row of BOARDS.filter(b => b.career)) {
       const post = Object.keys(staff).find(k => !['v', 'poach', 'matchesLeft', 'hires', 'seasonSpend'].includes(k) && staff[k]);
       expect(post, 'a seated post').toBeDefined();
       staff.poach = { postId: post, club: Object.keys(s.league.teams).find(id => id !== s.myTeam), weeksLeft: 1 };
-      s.league.week = 17;
+      const spec = row.career!;
+      spec.toLastPeriod(s);
       localStorage.setItem(row.saveKey, JSON.stringify(s));
       view = render(<Board />);
-      cutToLimit();
-      openTile('This week');
-      fireEvent.click(buttonNamed('Play the final week + playoffs')!);
+      row.drive.toLimit();
+      openTile(spec.tile);
+      await waitFor(() => expect(buttonNamed(spec.finalButton)?.disabled).toBe(false), { timeout: 30_000 });
+      fireEvent.click(buttonNamed(spec.finalButton)!);
       await waitFor(() => expect(['recap', 'fired']).toContain(readSave(row)?.phase), { timeout: 60_000 });
       const after = readSave(row).gm.blocks;
       expect(after.xp, 'the season closed through the desk host').toBeDefined();
@@ -804,8 +902,34 @@ async function lookAt(title: string, landed: string) {
   if (!box) throw new Error(`no career box titled ${title}`);
   fireEvent.click(box);
   await waitFor(() => expect(document.querySelector(landed)).not.toBeNull(), { timeout: 30_000 });
+  /* Round 1561 (fix): a career box takes the hub, the tile rule's one screen at a time: none of the board's own boxes
+     is drawn under it (controlFrontOfficeBoard hubstack and nhl-hubstack read the desk's own panels alone again) */
+  expect(boardBoxes(), `${title} is drawn under the board's own boxes`).toEqual([]);
   backToHub();
   await waitFor(() => expect(document.querySelector('[data-gm-desk="panel"]')).toBeNull(), { timeout: 30_000 });
+}
+
+/** The board's own hub boxes on screen (both boards title them the same, foHub.ts), by their upper case title line. */
+const BOARD_BOX_TITLES = ['Roster', 'Free agency', 'Trades', 'Standings'];
+const boardBoxes = (): string[] => buttons().flatMap(b => Array.from(b.querySelectorAll('div'))
+  .filter(dv => dv.className.includes('uppercase') && BOARD_BOX_TITLES.includes((dv.textContent ?? '').trim()))
+  .map(dv => (dv.textContent ?? '').trim()));
+
+/** Critic 21d's setup: a phone call opened in the Trades box (a partner, his first man, the first of theirs open for
+    talks), the way NhlTradeLists.test and FrontOfficeCuts.test open one. */
+function openCall(row: BoardRow) {
+  openTile('Trades');
+  const s = readSave(row);
+  const partner = Object.keys(s.league.teams).find(x => x !== s.myTeam)!;
+  fireEvent.click(screen.getAllByText(partner).find(el => el.tagName === 'BUTTON')!);
+  const piece = s.league.teams[s.myTeam].players[0];
+  const sends = screen.getAllByText(`${piece.name} (${piece.pos})`);
+  fireEvent.click(sends[sends.length - 1]);
+  const open = Array.from(document.querySelectorAll('[data-trade-row]'))
+    .map(r => within(r as HTMLElement).queryByText('Open talks') as HTMLButtonElement | null)
+    .find(b => b && !b.disabled);
+  if (!open) throw new Error(`nobody on ${partner}'s list is open for talks`);
+  fireEvent.click(open);
 }
 
 /** The safe answer (the first, which never gambles) at a presser on screen, if there is one. */

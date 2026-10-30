@@ -5,7 +5,7 @@ import FrontOfficeBoard from '@/components/front-office/FrontOfficeBoard';
 import { GameNav } from '@/components/game/GameNav';
 import PageSeo from '@/components/seo/PageSeo';
 import GameSeoContent from '@/components/seo/GameSeoContent';
-import { hostXpHelp } from '@/lib/gmCareerFace'; /* Round 1550: the help's part of the career, not the whole host */
+import { hostCareerRules } from '@/lib/gmCareerFace'; /* Round 1550: the help's part of the career, not the whole host */
 /* Round 1542: who scored and the season's awards, from the rules themselves (the board holds the same module) */
 import { nflStatsHelp } from '@/lib/nflSeasonStats';
 
@@ -20,16 +20,10 @@ const FRONT_OFFICE_RATING_RULES = [
 
 /* Round 1533: the career rules (fired is a chapter, not the end), beside the rating rules in the ? panel. Built inside
    the component, never at module scope, and the worked example is the desk host's own, computed from the game's
-   functions rather than typed. */
+   functions rather than typed. Round 1561: the five sentences are every sport's (hostCareerRules, gmCareerFace.ts,
+   the books word from the sport's cap model), the NHL page's too. */
 function frontOfficeCareerRules(): string[] {
-  const xp = hostXpHelp();
-  return [
-    'Getting fired does not end the save. Zero trust upstairs costs you the job, and See who is calling opens the job market: franchises in the same league that rate your record call with the ask they would grade you on. The club that fired you never calls.',
-    'Take a job and you move to that club\'s real roster, cap sheet and picks, meet the room and run its draft. Your record, your titles and your GM XP come with you. The old club\'s staff and re-sign desk stay behind.',
-    'If the phone can still ring next year you can sit a season out: the league plays on without you, then the market reads again. Once the phone has stopped for good the screen says so, and a new front office is the way back in.',
-    'Your GM earns XP every graded season from wins, titles, playoff rounds and the grade against the ask, and each level is a point. Ownership (a missed season costs less trust) and Media (a gamble at the podium lands more often) work now. The other trees say Not here yet.',
-    xp[xp.length - 1].replace(/^Worked example: /, 'For example: '),
-  ];
+  return hostCareerRules('nfl');
 }
 
 /* Round 1542: the season numbers' rules, built inside the component like the career's, the worked example computed */

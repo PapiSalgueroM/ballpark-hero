@@ -51,11 +51,12 @@ const say = (ok, what) => {
 };
 
 const DESKS = [
-  /* Round 1533: the NFL hub also holds the GM's two career boxes (NFL_HUB_PANELS); the other three get theirs next round. */
+  /* Round 1533: the NFL hub also holds the GM's two career boxes (NFL_HUB_PANELS). Round 1561: the NHL's too
+     (NHL_HUB_PANELS); the MLB and NBA get theirs in their own binds. */
   { route: '/front-office', key: 'front-office-save-v1', name: 'NFL', play: 'This week', panel: /Play Week|Play the final week|Bye week/, career: ['Career', 'GM level'] },
   { route: '/mlb-front-office', key: 'mlb-front-office-save-v1', name: 'MLB', play: 'Play', panel: /Play Round|Final stretch/ },
   { route: '/nba-front-office', key: 'nba-front-office-save-v1', name: 'NBA', play: 'Play', panel: /Play Round|Final stretch/, floor: NBA_FLOOR },
-  { route: '/nhl-front-office', key: 'nhl-front-office-save-v1', name: 'NHL', play: 'Play', panel: /Play Round|Final stretch/ },
+  { route: '/nhl-front-office', key: 'nhl-front-office-save-v1', name: 'NHL', play: 'Play', panel: /Play Round|Final stretch/, career: ['Career', 'GM level'] },
 ];
 
 /* Each box, and a string that only appears once that box is open. */

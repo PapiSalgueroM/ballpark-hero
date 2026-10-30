@@ -70,7 +70,25 @@
  * (askalways), the last week's press not waiting for it (nowait) and a save
  * on the recap never asking for it (recapnever). Every control now runs six
  * files.
- * `blank` is this file's own control and is not part of `all`: it rewrites a
+ * Round 1561 gave it a board key. The NHL board plays the GM career on the
+ * same shared pieces (useGmCareerKit, careerBinding), so its controls are
+ * named nhl-<what>, carry the board as their fifth entry, write the copy of
+ * src/components/nhl-front-office/NhlFrontOfficeBoard.tsx, point
+ * FO_BOARD_NHL at it, and run the two files that read that board through
+ * the variable: the career file (its "nhl board:" rows) and
+ * src/components/nhl-front-office/NhlLazyDesk.test.tsx. nhl-wipebutton (the
+ * fired recap's button calls reset again), nhl-lookopens, nhl-xpzero,
+ * nhl-arrivaltitle, and the lazy kit's three, nhl-askalways, nhl-nowait and
+ * nhl-recapnever. Each control writes its copy in a folder of its own
+ * (dist/.fo-board-control/<name>), so two controls run side by side no
+ * longer take each other's copy away. A relative import in a board
+ * ('./NhlWaiverReceipt') is written as its '@/' path in the copy.
+ * Round 1561's fix pass added three on each board for the review's mutants
+ * that every board test survived: waitsalways and nhl-waitsalways (the press
+ * waits for the kit on every period), hubstack and nhl-hubstack (a career
+ * box drawn under the board's own boxes) and talkskept and nhl-talkskept
+ * (the old club's phone call kept through a seat taken).
+ * `blank` and `nhl-blank` are this file's own controls and are not part of `all`: it rewrites a
  * comment and nothing else, so no test may go red, and the run must say DID
  * NOT FIRE and exit 1. If `blank` ever exits 0 this file is lying.
  *
@@ -96,6 +114,13 @@ const PS = 'src/components/front-office/FrontOfficePostseason.test.tsx';
 const CA = 'src/components/front-office-shared/FrontOfficeGmCareer.test.tsx';
 /* Round 1550: the career kit fetched when a screen needs it, the board driving the fetch itself */
 const LZ = 'src/components/front-office/FrontOfficeLazyDesk.test.tsx';
+/* Round 1561: the NHL board and its lazy kit file. A control's fifth entry names its board (none: the NFL's). */
+const NHL_BOARD = 'src/components/nhl-front-office/NhlFrontOfficeBoard.tsx';
+const NLZ = 'src/components/nhl-front-office/NhlLazyDesk.test.tsx';
+const BOARDS = {
+  nfl: { file: BOARD, env: 'FO_BOARD_NFL', tests: [GD, OP, TL, PS, CA, LZ] },
+  nhl: { file: NHL_BOARD, env: 'FO_BOARD_NHL', tests: [CA, NLZ] },
+};
 
 /* The tests by the words of their titles. */
 const T = {
@@ -160,6 +185,21 @@ const T = {
   lzWeek: [LZ, 'the last week asks for it, its press buttons wait for it'],
   lzRecap: [LZ, 'a save that loads on the recap waits in a holding box'],
   lzFired: [LZ, 'a save that loads on the fired screen waits in a holding box'],
+  /* Round 1561: the NHL board's rows of the career file, scoped by their block's name as the NFL's are, and its lazy file */
+  nhDefault: [CA, 'nhl board: the default path'],
+  nhCaFired: [CA, 'nhl board: the career fired: the recap offers who is calling and keeps the save'],
+  nhCaTake: [CA, 'nhl board: the career taking an offer takes two taps'],
+  nhCaLookHub: [CA, 'nhl board: the career looking at Career and GM level on the hub'],
+  nhCaLookOut: [CA, 'nhl board: the career looking at all three boxes out of work'],
+  nlzSeason: [NLZ, 'a season being played never asks for it'],
+  nlzBox: [NLZ, 'a career box opened asks for it'],
+  nlzRound: [NLZ, 'the last round asks for it, its press waits for it'],
+  nlzRecap: [NLZ, 'a save that loads on the recap waits in a holding box'],
+  nlzFired: [NLZ, 'a save that loads on the fired screen waits in a holding box'],
+  nlzOffline: [NLZ, 'a desk off save on the last round whose fetch fails'],
+  /* Round 1561's fix pass: critic 21d's call left open, on each board */
+  caTalks: [CA, 'nfl board: the career a call left open when he is fired stays with the old club'],
+  nhCaTalks: [CA, 'nhl board: the career a call left open when he is fired stays with the old club'],
 };
 
 const TELL_WEEK = 'const told = games.map(g => nflTell(g, lg.teams, lg.season, nflWhere(lg.week), deskWeek?.edges));';
@@ -233,38 +273,73 @@ const CONTROLS = {
   lookopens: ["looking at a career box switches a desk off save's desk on", [['if (key !== null && !gm && league && gmPanelFor(NFL_DESK_PANELS, key)) {', 'if (key !== null && !gm && league) {']], [T.caLookHub, T.caLookOut], [T.caFired]],
   deskstale: ["the close is built on the desk from before the final week's tick", [['const deskNow = gmLive.current;', 'const deskNow = gm;']], [T.caTick], [T.opDeskOn]],
   /* Round 1550: the kit asked for in the middle of a season; the last week's press not waiting for it; a save on the
-     recap never asking for it (its holding box then never lands) */
-  askalways: ['the board asks for the career kit while a season is played', [['  const kitNeeded = !kit && (', '  const kitNeeded = !kit && (true ||']], [T.lzSeason], [T.lzRecap, T.ordinary]],
-  nowait: ["the last week's press does not wait for the career kit", [["  const closeWaits = !kit && phase === 'hub' && !!league && league.week >= REGULAR_WEEKS;", '  const closeWaits = false;']], [T.lzWeek], [T.lzRecap, T.ordinary]],
-  recapnever: ['a save that loads on the recap never asks for the career kit', [["    phase === 'recap' || phase === 'fired' || presser !== null || careerBoxOpen", "    phase === 'fired' || presser !== null || careerBoxOpen"]], [T.lzRecap], [T.lzFired, T.lzWeek]],
+     recap never asking for it (its holding box then never lands). Round 1561: the rule is the shared hook's
+     (useGmCareerKit.ts, careerKitNeeded), so each control rewrites the moment the board hands it, the same three
+     mutants: a moment that always asks, a press that never waits, a recap the rule never sees. */
+  askalways: ['the board asks for the career kit while a season is played', [['    presser: presser !== null,\n    boxOpen: careerBoxOpen,', '    presser: true,\n    boxOpen: careerBoxOpen,']], [T.lzSeason], [T.lzRecap, T.ordinary]],
+  nowait: ["the last week's press does not wait for the career kit", [['  const closeWaits = careerKit.waits;', '  const closeWaits = false;']], [T.lzWeek], [T.lzRecap, T.ordinary]],
+  recapnever: ['a save that loads on the recap never asks for the career kit', [['  const careerKit = useGmCareerKit(nflCareerKitLoader, {\n    phase,\n', "  const careerKit = useGmCareerKit(nflCareerKitLoader, {\n    phase: phase === 'recap' ? 'draft' : phase,\n"]], [T.lzRecap], [T.lzFired, T.lzWeek]],
   /* the review's finding 6: "GM XP +0" printed on a season that paid nothing */
   xpzero: ['the recap prints the XP line on a season that paid nothing', [['setXpLine(v.desk && v.award && v.award.total > 0 ? hostXpRecapLine(', 'setXpLine(v.desk && v.award ? hostXpRecapLine(']], [T.caFired], [T.caTake]],
   blank: ["THIS FILE'S OWN CONTROL: a comment is reworded and nothing else, so nothing may fire", [['setGameLog(null); /* the summer */', 'setGameLog(null); /* the summer, as it was */']], [T.week], []],
+  /* Round 1561: the NHL board's controls, the same mutants on its own lines (the fifth entry names the board) */
+  'nhl-wipebutton': ['the NHL fired recap deletes the save again', [["<button onClick={() => setPhase('fired')} className=", '<button onClick={reset} className=']], [T.nhCaFired], [T.nhDefault], 'nhl'],
+  'nhl-arrivaltitle': ["the NHL arrival recap stages the new club's title as his", [['const myTitle = champion === myTeam && !arriving;', 'const myTitle = champion === myTeam;']], [T.nhCaTake], [T.nhDefault], 'nhl'],
+  'nhl-lookopens': ["looking at a career box switches a desk off NHL save's desk on", [['if (key !== null && !gm && league && gmPanelFor(NHL_DESK_PANELS, key)) {', 'if (key !== null && !gm && league) {']], [T.nhCaLookHub, T.nhCaLookOut], [T.nhCaFired], 'nhl'],
+  'nhl-xpzero': ['the NHL recap prints the XP line on a season that paid nothing', [['setXpLine(v.desk && v.award && v.award.total > 0 ? hostXpRecapLine(', 'setXpLine(v.desk && v.award ? hostXpRecapLine(']], [T.nhCaFired], [T.nhCaTake], 'nhl'],
+  'nhl-askalways': ['the NHL board asks for the career kit while a season is played', [['    presser: presser !== null,\n    boxOpen: careerBoxOpen,', '    presser: true,\n    boxOpen: careerBoxOpen,']], [T.nlzSeason], [T.nlzRecap, T.nhDefault], 'nhl'],
+  'nhl-nowait': ["the NHL last round's press does not wait for the career kit", [['  const closeWaits = careerKit.waits;', '  const closeWaits = false;']], [T.nlzRound, T.nlzOffline], [T.nlzRecap, T.nhDefault], 'nhl'],
+  'nhl-recapnever': ['an NHL save that loads on the recap never asks for the career kit', [['  const careerKit = useGmCareerKit(nhlCareerKitLoader, {\n    phase,\n', "  const careerKit = useGmCareerKit(nhlCareerKitLoader, {\n    phase: phase === 'recap' ? 'draft' : phase,\n"]], [T.nlzRecap], [T.nlzFired, T.nlzRound], 'nhl'],
+  /* Round 1561's fix pass (the review's surviving mutants, each green on the board tests before these): the press
+     waiting for the kit on every period, which the shared hook keeps to the last one (hookwaits, written here as the
+     board's own wait); a career box opened on the hub drawn under the board's own boxes (hubpanels); and the old
+     club's phone call kept through a seat taken (talkskept, critic 21d; the NFL board gained the clearing in the
+     same pass) */
+  waitsalways: ['the press waits for the career kit on every week, not the last one alone', [['  const closeWaits = careerKit.waits;', "  const closeWaits = !careerKit.kit && phase === 'hub';"]], [T.lzSeason], [T.lzRecap]],
+  'nhl-waitsalways': ['the NHL press waits for the career kit on every round, not the last one alone', [['  const closeWaits = careerKit.waits;', "  const closeWaits = !careerKit.kit && phase === 'hub';"]], [T.nlzSeason], [T.nlzRecap], 'nhl'],
+  hubstack: ["a career box opened on the hub is drawn under the board's own boxes", [['  const deskPanelOpen = gmPanelFor(NFL_HUB_PANELS, gmOpen) !== null;', '  const deskPanelOpen = gmPanelFor(NFL_DESK_PANELS, gmOpen) !== null;']], [T.caLookHub], [T.caFired]],
+  'nhl-hubstack': ["an NHL career box opened on the hub is drawn under the board's own boxes", [['  const deskPanelOpen = gmPanelFor(NHL_HUB_PANELS, gmOpen) !== null;', '  const deskPanelOpen = gmPanelFor(NHL_DESK_PANELS, gmOpen) !== null;']], [T.nhCaLookHub], [T.nhCaFired], 'nhl'],
+  talkskept: ["the old club's phone call follows him through a seat taken", [["    setTalks(null); setTradePartner(''); setMyTradePiece('');\n", "    setTradePartner(''); setMyTradePiece('');\n"]], [T.caTalks], [T.caTake]],
+  'nhl-talkskept': ["the NHL old club's phone call follows him through a seat taken", [['setDraftNight(null); setTalks(null);', 'setDraftNight(null);']], [T.nhCaTalks], [T.nhCaTake], 'nhl'],
+  'nhl-blank': ["THIS FILE'S OWN CONTROL on the NHL board: a comment is reworded and nothing else, so nothing may fire", [['/* Round 180: rank my roster against the league and let ownership set the ask. */', '/* Round 180: rank my roster against the league, and let ownership set the ask. */']], [T.nhDefault], [], 'nhl'],
 };
+const isBlank = n => n === 'blank' || n === 'nhl-blank';
 
 const cannot = m => { console.error(`controlFrontOfficeBoard: CANNOT RUN. ${m}`); process.exit(2); };
 const asked = process.argv[2];
 if (asked === 'list') { for (const [n, [why]] of Object.entries(CONTROLS)) console.log(`${n}: ${why}`); process.exit(0); }
-const names = asked === 'all' || asked === 'check' ? Object.keys(CONTROLS).filter(n => n !== 'blank' || asked === 'check') : [asked];
+const names = asked === 'all' || asked === 'check' ? Object.keys(CONTROLS).filter(n => !isBlank(n) || asked === 'check') : [asked];
 if (!asked || names.some(n => !Object.prototype.hasOwnProperty.call(CONTROLS, n))) cannot(`Name a control, or all, list or check. Known: ${Object.keys(CONTROLS).join(', ')}`);
 
-/* The board is CRLF in a Windows working copy; the strings here are LF. */
-const board = fs.readFileSync(path.join(ROOT, BOARD), 'utf8').split('\r\n').join('\n');
-if (/from '\.\.?\//.test(board)) cannot(`${BOARD} holds an import relative to its own folder, which a copy under dist cannot resolve`);
+/* A board is CRLF in a Windows working copy; the strings here are LF. A control's board is its fifth entry (the NFL's
+   when it has none). An import relative to the board's own folder is written as its '@/' path in the copy. */
+const boardOf = n => BOARDS[CONTROLS[n][4] ?? 'nfl'];
+const texts = new Map();
+const boardText = b => {
+  if (!texts.has(b.file)) {
+    const text = fs.readFileSync(path.join(ROOT, b.file), 'utf8').split('\r\n').join('\n');
+    if (/from '\.\.\//.test(text)) cannot(`${b.file} holds an import from a parent folder, which a copy under dist cannot resolve`);
+    texts.set(b.file, text);
+  }
+  return texts.get(b.file);
+};
+const rooted = (b, src) => src.replaceAll("from './", `from '@/${path.posix.dirname(b.file).replace(/^src\//, '')}/`);
 /* `check` runs no test: it only asks that every control still has its strings in the board, each exactly once. */
 if (asked === 'check') {
   for (const n of names) for (const [from] of CONTROLS[n][1]) {
-    const hits = board.split(from).length - 1;
+    const hits = boardText(boardOf(n)).split(from).length - 1;
     if (hits !== 1) cannot(`${n}: its string is in the board ${hits} times and must be there exactly once: ${from.slice(0, 100)}`);
   }
   console.log(`controlFrontOfficeBoard: check passed. Every string of all ${names.length} controls is in the board exactly once.`);
   process.exit(0);
 }
-const dir = path.join(ROOT, 'dist', '.fo-board-control');
+const top = path.join(ROOT, 'dist', '.fo-board-control');
 const LOAD_ERROR = /Failed to (load|resolve)|SyntaxError|Cannot find module/;
 
 function run(name) {
   const [why, edits, red, green] = CONTROLS[name];
+  const b = boardOf(name);
+  const board = boardText(b);
   let src = board;
   for (const [from, to] of edits) {
     const hits = src.split(from).length - 1;
@@ -272,14 +347,16 @@ function run(name) {
     src = src.replace(from, () => to);
   }
   if (src === board) cannot(`${name}: the rewrite changed nothing`);
+  src = rooted(b, src);
+  const dir = path.join(top, name);
   fs.mkdirSync(dir, { recursive: true });
   const copy = path.join(dir, `Board.${name}.tsx`);
   const report = path.join(dir, `report.${name}.json`);
   fs.writeFileSync(copy, src);
   let r, json = null;
   try {
-    r = spawnSync(process.execPath, [path.join(ROOT, 'node_modules', 'vitest', 'vitest.mjs'), 'run', GD, OP, TL, PS, CA, LZ, '--reporter=json', `--outputFile=${report}`, '--testTimeout=600000', '--hookTimeout=120000'],
-      { cwd: ROOT, encoding: 'utf8', env: { ...process.env, FO_BOARD_NFL: copy.replaceAll('\\', '/'), CI: '1', FORCE_COLOR: '0', NO_COLOR: '1' }, maxBuffer: 64 * 1024 * 1024 });
+    r = spawnSync(process.execPath, [path.join(ROOT, 'node_modules', 'vitest', 'vitest.mjs'), 'run', ...b.tests, '--reporter=json', `--outputFile=${report}`, '--testTimeout=600000', '--hookTimeout=120000'],
+      { cwd: ROOT, encoding: 'utf8', env: { ...process.env, [b.env]: copy.replaceAll('\\', '/'), CI: '1', FORCE_COLOR: '0', NO_COLOR: '1' }, maxBuffer: 64 * 1024 * 1024 });
     if (fs.existsSync(report)) json = JSON.parse(fs.readFileSync(report, 'utf8'));
   } finally {
     fs.rmSync(dir, { recursive: true, force: true });
@@ -292,7 +369,7 @@ function run(name) {
   console.log(`control ${name} (${why}): vitest exit ${r.status}; ${reds.length} red, ${rows.filter(x => x.status === 'passed').length} green of ${rows.length}`);
   for (const x of reds) console.log(`   red: ${path.basename(x.file)} > ${x.title.slice(0, 150)}`);
   /* a copy that did not load is not a firing */
-  const unloaded = [GD, OP, TL, PS, CA, LZ].filter(f => !rows.some(x => x.file.endsWith(f)));
+  const unloaded = b.tests.filter(f => !rows.some(x => x.file.endsWith(f)));
   if (unloaded.length || json.testResults.some(f => LOAD_ERROR.test(f.message || '')) || reds.some(x => LOAD_ERROR.test(x.why))) {
     return { name, fired: false, said: `the copy did not load or a test file did not run (${unloaded.join(', ') || 'a load error in the report'}), so a red here is not the check: ${tail}` };
   }

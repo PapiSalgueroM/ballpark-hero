@@ -154,6 +154,8 @@ for (const c of CASES) {
   /* Round 1550: the board fetches its career kit when a screen needs it (FrontOfficeLazyDesk.test.tsx drives that);
      these cases drive the rules, so the kit is on the page before the board mounts. */
   if (c.env === 'FO_BOARD_NFL') await (await import('@/components/front-office/nflCareerKitLoad')).loadNflCareerKit();
+  /* Round 1561 (critic 1 of brief 1559): the NHL board fetches its own kit the same way since its career bind */
+  if (c.env === 'FO_BOARD_NHL') await (await import('@/components/nhl-front-office/nhlCareerKitLoad')).nhlCareerKitLoader.load();
   const save = (shape: any) => localStorage.setItem(c.saveKey, JSON.stringify(shape));
   const read = (): any => JSON.parse(localStorage.getItem(c.saveKey)!);
 

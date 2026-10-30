@@ -45,12 +45,16 @@ import {
    (src/lib/gmDeskHost.ts); this board binds it through the NFL's read adapter and src/lib/nflGmDesk.ts.
    Round 1550: the page carries only what every screen reads (src/lib/gmCareerFace.ts: the record and XP readers,
    the hub boxes, the summer's ask). The rest (the verdict, the market, a seat, the year out, the out of work
-   screen) is the career kit, fetched when it is needed: nflCareerKit.ts says when, `kitNeeded` below asks. */
-import { GM_HOST_KEYS, hostBoxLegacy, hostSeatOf, hostSummerMandate } from '@/lib/gmCareerFace';
+   screen) is the career kit, fetched when it is needed: nflCareerKit.ts says when, useGmCareerKit below asks. */
+import { GM_HOST_KEYS, hostSummerMandate } from '@/lib/gmCareerFace';
 import type { GmCareerBinding } from '@/lib/gmDeskHost';
-import type { GmSeatPack } from '@/lib/gmSeat';
-import { loadNflCareerKit, nflCareerKitNow, type NflCareerKit } from '@/components/front-office/nflCareerKitLoad';
-import { GM_CAREER_PANELS } from '@/components/front-office-shared/gmCareerDesk';
+import { loadNflCareerKit, nflCareerKitLoader, type NflCareerKit } from '@/components/front-office/nflCareerKitLoad';
+/* Round 1561: the board's career glue is every sport's now (the kit's state and when to ask, the holding box, the
+   binding the three boxes read), shared with the NHL board */
+import { useGmCareerKit } from '@/components/front-office-shared/useGmCareerKit';
+import { GmCareerKitHolding } from '@/components/front-office-shared/GmCareerKitHolding';
+import { careerBindingOf } from '@/components/front-office-shared/careerBinding';
+import { GM_CAREER_PANELS, gmCareerFloor } from '@/components/front-office-shared/gmCareerDesk';
 import type { GmTree } from '@/lib/gmXp';
 import OwnerMandateCard from '@/components/front-office-shared/OwnerMandateCard';
 /* Round 187: the verdict curtain. stageVerdict decides the presentation
@@ -107,7 +111,7 @@ import type { NflSeasonCardProps } from '@/components/front-office/NflSeasonStat
    game, the match clock and the "?" are one chunk the week box asks for
    when it opens; the press never waits on it. Made here, at module level:
    a lazy part must be the same component on every render. */
-import { GmPanelLoading, lazyPart } from '@/components/front-office-shared/gmLazyPanel';
+import { lazyPart } from '@/components/front-office-shared/gmLazyPanel';
 const NflGameDay = lazyPart<GmGameDayMount>(() => import('@/components/front-office/NflGameDay'));
 /* Round 1309: the bracket card, the face of the same box in the playoffs. Made
    once at module level, so the card, its "?" and the ledger's week names are
@@ -125,27 +129,6 @@ function NflSeasonCard(props: NflSeasonCardProps) {
     <Suspense fallback={<div role="status" data-season-stats-loading style={{ minHeight: 260 }} className="rounded-2xl border border-border bg-card p-3 text-xs text-muted-foreground">One moment</div>}>
       <NflSeasonCardChunk {...props} />
     </Suspense>
-  );
-}
-/* Round 1550: the two binding fields only the screens behind the career boxes read (the seat pack, the earn line).
-   Those screens are drawn once the kit is here and never before, so a read without it is a bug and says so. */
-const careerKitOrThrow = (): NflCareerKit => {
-  const k = nflCareerKitNow();
-  if (!k) throw new Error('the career kit was read before it arrived');
-  return k;
-};
-/* Round 1550: where a career screen stands while the kit is on its way (a save loaded on the recap or the fired
-   screen, a career box opened): the holding box every lazy screen on this board shows, at the height of a screen,
-   and a retry if the fetch failed. */
-function CareerKitHolding({ failed, onRetry, minHeight = 320 }: { failed: boolean; onRetry: () => void; minHeight?: number }) {
-  if (!failed) return <GmPanelLoading minHeight={minHeight} />;
-  return (
-    <div role="status" data-career-kit-failed style={{ minHeight }} className="rounded-2xl border border-border bg-card p-4 text-center text-sm text-muted-foreground">
-      <p>That screen didn't load. Check your connection and try again.</p>
-      <button type="button" onClick={onRetry} className="mt-3 inline-flex min-h-[44px] items-center rounded-full border border-primary px-6 text-sm font-bold text-primary hover:bg-primary/10">
-        Try again
-      </button>
-    </div>
   );
 }
 /* the three button rows of the playoffs (Week 17, and a round): stacked under sm, three a row from sm up, each one
@@ -303,12 +286,6 @@ export default function FrontOfficeBoard() {
   const gmLive = useRef<GmDesk | null>(null);
   const setGm = (d: GmDesk | null) => { gmLive.current = d; setGmState(d); };
   const [gmOpen, setGmOpen] = useState<string | null>(null);
-  /* Round 1550: the career kit (nflCareerKit.ts), null until it has arrived. Read from the loader on the first
-     render, so a board mounted after it came (a later visit to the page in the same tab) never waits for it.
-     kitTry asks again after a fetch that failed (the holding box's button). */
-  const [kit, setKit] = useState<NflCareerKit | null>(nflCareerKitNow);
-  const [kitFailed, setKitFailed] = useState(false);
-  const [kitTry, setKitTry] = useState(0);
   /* Round 1305: the season's told games of his club. Every save reads the
      log from here, the desk's pattern above, so the press that has just told
      a game saves it through the persist calls as they stand. Null: nothing
@@ -371,39 +348,25 @@ export default function FrontOfficeBoard() {
     wideAtLoad ? { block: 'end' } : inBracket ? { block: 'end' } : undefined,
   );
 
-  /* Round 1533's fix pass (the review's finding 5): the two career screens a tap lands on bring their top onto the
-     screen, the owner's rule that the next step appears in view on its own. Measured at 390 by 844 with real taps,
-     "See who is calling" left the out of work card cut off at scrollY 270 and the take left the arrival's title,
-     arrival line and trust 877 px above the screen. Keyed to those two landings alone ('out' and the club he took),
-     so opening a box, a year out, a reload or an ordinary recap never moves the page. */
-  const careerRevealRef = useRevealScroll<HTMLDivElement>(
-    phase === 'fired' ? 'out' : landedAt === null ? 'none' : `arrival:${landedAt}`,
-    { enabled: phase === 'fired' || landedAt !== null, skipFirst: false },
-  );
+  /* Round 1550: the career kit (nflCareerKit.ts), null until it has arrived, asked for when a screen needs it and at
+     no other time: the recap and the fired screen (a save that loads straight into either waits for it, then draws),
+     a press conference to answer, a career box opened, and the last week of the season, so the verdict's code is
+     here before the press that closes the season (the press buttons wait for it: closeWaits). A new front office
+     fetches it with its league (start). A season being played, the draft and the pick screen never ask.
+     Round 1533's fix pass (the review's finding 5): the two career screens a tap lands on bring their top onto the
+     screen ('out' and the club he took), measured at 390 by 844 with real taps. Round 1561: all of it is the shared
+     hook's (useGmCareerKit.ts), the NHL board's too; the board hands it the moment it is in. */
+  const careerBoxOpen = gmPanelFor(GM_CAREER_PANELS, gmOpen) !== null;
+  const careerKit = useGmCareerKit(nflCareerKitLoader, {
+    phase,
+    presser: presser !== null,
+    boxOpen: careerBoxOpen,
+    lastPeriod: !!league && league.week >= REGULAR_WEEKS,
+  }, { phase, landedAt });
+  const { kit, failed: kitFailed, retry: retryKit, revealRef: careerRevealRef } = careerKit;
+  const closeWaits = careerKit.waits;
 
   useGameCompletion('front-office', roomHeld ? roomHeld.won : wonTitleNow, titles * 100 + seasonsPlayed * 5);
-
-  /* Round 1550: the career kit is asked for when a screen needs it and at no other time: the recap and the fired
-     screen (a save that loads straight into either waits for it, then draws), a press conference to answer, a
-     career box opened, and the last week of the season, so the verdict's code is here before the press that
-     closes the season (the press buttons wait for it: closeWaits). A new front office fetches it with its league
-     (start). A season being played, the draft and the pick screen never ask. */
-  const careerBoxOpen = gmPanelFor(GM_CAREER_PANELS, gmOpen) !== null;
-  const kitNeeded = !kit && (
-    phase === 'recap' || phase === 'fired' || presser !== null || careerBoxOpen
-    || (phase === 'hub' && !!league && league.week >= REGULAR_WEEKS)
-  );
-  useEffect(() => {
-    if (!kitNeeded) return;
-    let live = true;
-    loadNflCareerKit().then(
-      k => { if (live) { setKitFailed(false); setKit(k); } },
-      () => { if (live) setKitFailed(true); },
-    );
-    return () => { live = false; };
-  }, [kitNeeded, kitTry]);
-  const closeWaits = !kit && phase === 'hub' && !!league && league.week >= REGULAR_WEEKS;
-  const retryKit = () => { setKitFailed(false); setKitTry(n => n + 1); };
 
   /* Round 180: rank my roster against the league and let ownership set the ask.
      Round 192: the press tilt can move it one tier either way. */
@@ -546,7 +509,7 @@ export default function FrontOfficeBoard() {
       return;
     }
     setStarting(null);
-    setKit(k);
+    careerKit.arrived(k);
     const { hostNewSeat, hostSeatTeams, leagueTiers, nflDeskHost } = k;
     /* Codex853: a new franchise is the player's answer to a save that would not
        open, so the notice goes once one really starts (not when the fetch fails). */
@@ -1307,37 +1270,20 @@ export default function FrontOfficeBoard() {
   };
   /* Round 1533: the career half of the facts, built once a render for the three career boxes. His record is the
      stored block when it fits the save, else the record a save older than the block stands on (never written
-     by reading). The market is read only while he is between seats. */
-  const careerOf = (lg: LeagueState): GmCareerBinding => {
-    /* Round 1550: before the kit is here the binding is the hub's, and the hub reads the two boxes off it and
-       nothing else. His record is the stored block when it fits the save (hostSeatOf, the same reader), else the
-       record a save older than the block stands on, built from the save alone (hostBoxLegacy says what it leaves
-       out and why the boxes never read it; scripts/simFoLazyDesk.mjs holds every box equal to the kit's own
-       record's). The screens behind the boxes, the only readers of the seat pack and the earn line, are drawn once
-       the kit is here, never before. */
-    if (!kit) {
-      const seat = hostSeatOf(gm, hostBoxLegacy({
-        team: myTeam, season: lg.season, seasonCounted: nflSeasonCounted(phase, gm), seasonsPlayed, titles, fired,
-      }));
-      return {
-        get pack(): GmSeatPack { return careerKitOrThrow().nflDeskHost.pack; },
-        seat, market: null, nameOf: label, live: NFL_XP_LIVE, deskOn: gm !== null,
-        get earns(): string { return careerKitOrThrow().hostEarnsLine(NFL_XP_SOURCES); },
-        take: offer => takeSeat(offer.teamId), sitOut: () => sitOut(), spend: spendPoint,
-      };
-    }
-    const { hostEarnsLine, hostMarket, nflDeskHost, nflLegacy } = kit;
-    const legacy = nflLegacy(lg, {
+     by reading). The market is read only while he is between seats. Round 1550: before the kit is here the binding
+     is the hub's, built from the save alone. Round 1561: built by the shared careerBindingOf (careerBinding.ts says
+     both halves), the NHL board's too. */
+  const careerOf = (lg: LeagueState): GmCareerBinding => careerBindingOf({
+    desk: gm, fired, nameOf: label, live: NFL_XP_LIVE, sources: NFL_XP_SOURCES,
+    box: { team: myTeam, season: lg.season, seasonCounted: nflSeasonCounted(phase, gm), seasonsPlayed, titles, fired },
+    take: offer => takeSeat(offer.teamId), sitOut: () => sitOut(), spend: spendPoint,
+  }, kit && {
+    host: kit.nflDeskHost, league: lg, hostMarket: kit.hostMarket, hostEarnsLine: kit.hostEarnsLine,
+    legacy: kit.nflLegacy(lg, {
       team: myTeam, seasonsPlayed, titles, fired, seasonCounted: nflSeasonCounted(phase, gm),
       mandate, rounds: playoffRounds, champion,
-    });
-    const seat = hostSeatOf(gm, legacy);
-    return {
-      pack: nflDeskHost.pack, seat, market: fired ? hostMarket(nflDeskHost, lg, seat, label) : null, nameOf: label,
-      live: NFL_XP_LIVE, deskOn: gm !== null, earns: hostEarnsLine(NFL_XP_SOURCES),
-      take: offer => takeSeat(offer.teamId), sitOut: () => sitOut(), spend: spendPoint,
-    };
-  };
+    }),
+  });
   /* Round 1533: take another club's seat in the same league, the second tap of an offer. The host reads the offer
      off the market itself (never trusted from the screen) and refuses anything else, leaving the league as it was.
      On a move: the new club, trust back to the start, its ask, a new stint on his record from next season, its own
@@ -1347,14 +1293,14 @@ export default function FrontOfficeBoard() {
     if (phase !== 'fired' || !league || playoffsLive.current) return;
     /* Round 1550: the market is drawn only once the kit is here (the fired screen waits for it) */
     if (!kit) return;
-    const { nflLegacy, nflTakeSeat } = kit;
+    const { hostOfferGoneLine, hostTakeoverLine, nflLegacy, nflTakeSeat } = kit;
     const lg: LeagueState = JSON.parse(JSON.stringify(league));
     const legacy = nflLegacy(lg, {
       team: myTeam, seasonsPlayed, titles, fired, seasonCounted: nflSeasonCounted(phase, gm),
       mandate, rounds: playoffRounds, champion,
     });
     const r = nflTakeSeat(lg, gm, { myTeam, trust, fired, mandate, pressTilt, seasonTradeLine }, legacy, teamId, label);
-    if (!r) { setNewsFeed(f => ['That offer is not on the table any more.', ...f].slice(0, 6)); return; }
+    if (!r) { setNewsFeed(f => [hostOfferGoneLine(), ...f].slice(0, 6)); return; }
     const next = r.save;
     setLeague(lg);
     setGm(r.desk);
@@ -1371,12 +1317,15 @@ export default function FrontOfficeBoard() {
     setHeld(null); setHeldRoom(null); setHeldBracket(null); setGmOpen(null);
     setTab(null); setWeekResults([]); setFeedSlam(null); setCutArmed(null); setShopOffers([]); setShopTried(false);
     setDraftNight(null); setPlayoffs(null); ask.current = 'week';
+    /* Round 1561 (fix, the NHL's critic 21d on its twin): a phone call left open at the old club is the old club's.
+       Kept, it hid the new club's deal builder (its piece is on no roster here, so no card drew to end it). */
+    setTalks(null); setTradePartner(''); setMyTradePiece('');
     /* The introduction presser, the call start makes: first day, full room. */
     setPresser(buildGmPresser(NFL_WORDS, {
       justHired: true, teamLabel: label(teamId), fired: false, wonTitle: false,
       gradeResult: null, tradeLine: null, seasonsPlayed,
     }));
-    setNewsFeed([`You take over the ${label(teamId)}. The ${r.offer.ask.season} ask: ${r.offer.ask.text}`]);
+    setNewsFeed([hostTakeoverLine(label, r.offer)]);
     setLandedAt(teamId);
     setPhase('recap');
     persist({
@@ -1391,7 +1340,7 @@ export default function FrontOfficeBoard() {
   const sitOut = () => {
     if (phase !== 'fired' || !league || playoffsLive.current) return;
     if (!kit) return; /* Round 1550: as takeSeat above */
-    const { hostAwayRefusalLine, hostSeasonAway, nflAwayHost, nflDeskHost, nflLegacy } = kit;
+    const { hostAwayRefusalLine, hostSatOutLine, hostSeasonAway, nflAwayHost, nflDeskHost, nflLegacy } = kit;
     const lg: LeagueState = JSON.parse(JSON.stringify(league));
     let desk = gm;
     if (!desk) { desk = openNflDesk(lg, myTeam); syncNflPicks(lg, nflPicksOf(desk, lg)); }
@@ -1409,7 +1358,7 @@ export default function FrontOfficeBoard() {
     setGradeLine(null);
     setXpLine(null);
     setGmOpen(null);
-    setNewsFeed([`You sat out ${r.report.season}. The ${label(r.report.champion)} won it.`]);
+    setNewsFeed([hostSatOutLine(r.report, label)]);
     persist({ phase: 'fired', fired: true, postseason: { rounds: [], champion: r.report.champion, gradeLine: null } }, lg, myTeam);
   };
   const deskFacts = (hub: NflDeskFacts['hub']): NflDeskFacts | null => league ? {
@@ -1443,9 +1392,11 @@ export default function FrontOfficeBoard() {
             agents, swing trades, survive the injury report, draft the future, and chase a dynasty
             across as many seasons as you can. Saves automatically.
           </p>
+          {/* Round 1561 (closing check, finding 12, the NHL line's twin): the rosters or the career kit (Round 1550)
+              failed, so the line names neither */}
           {startError && (
             <p data-start-error className="mt-2 text-xs text-destructive">
-              The rosters did not load. Check your connection and tap your team again.
+              The new front office did not load. Check your connection and tap your team again.
             </p>
           )}
         </div>
@@ -1528,8 +1479,8 @@ export default function FrontOfficeBoard() {
      Career and GM level boxes sit under it; a new front office (which deletes the save) takes two taps. */
   if (phase === 'fired') {
     /* Round 1550: the out of work screen is the career kit's. A save that loads straight into it waits for the kit
-       in a holding box, then draws (kitNeeded asks for it). */
-    if (!kit) return <CareerKitHolding failed={kitFailed} onRetry={retryKit} />;
+       in a holding box, then draws (useGmCareerKit asks for it). */
+    if (!kit) return <GmCareerKitHolding failed={kitFailed} onRetry={retryKit} />;
     const { GmOutOfWork, hostOutOfWorkCard, nflDeskHost } = kit;
     const outFacts = deskFacts(hubFacts)!; /* the league is set past the pick screen */
     const market = outFacts.career.market;
@@ -1555,7 +1506,7 @@ export default function FrontOfficeBoard() {
     /* Round 1550: the recap reads his record through the kit (the arrival line, the market line). A season closed
        in this tab already has it (the last week's buttons waited for it); a save that loads on the recap waits in a
        holding box, then draws. */
-    if (!kit) return <CareerKitHolding failed={kitFailed} onRetry={retryKit} />;
+    if (!kit) return <GmCareerKitHolding failed={kitFailed} onRetry={retryKit} />;
     const { hostArrivalLine, hostArriving, nflDeskHost, Phone } = kit;
     const table = standings(league.teams);
     const myRank = table.findIndex(t => t.abbr === myTeam) + 1;
@@ -2016,7 +1967,7 @@ export default function FrontOfficeBoard() {
     <div className="space-y-4">
       <CelebrationStyles />
       {/* Round 1550: the last week's buttons wait for the career kit; a fetch that failed says so here and asks again */}
-      {kitFailed && closeWaits && <CareerKitHolding failed onRetry={retryKit} minHeight={0} />}
+      {kitFailed && closeWaits && <GmCareerKitHolding failed onRetry={retryKit} minHeight={0} />}
       {/* status bar */}
       <div className="flex flex-wrap items-center justify-center gap-2 text-xs">
         <span className="rounded-full px-3 py-1 font-bold" style={{ background: t.color, color: '#fff' }}>{label(myTeam)}</span>
@@ -2049,11 +2000,11 @@ export default function FrontOfficeBoard() {
         : <FoPanelHeader title={panelTitle} onBack={() => setTab(null)} />}
       {tab === null && hubDesk && (careerBoxOpen && !kit
         /* Round 1550: a career box opened before the kit is here: the box's own header and the holding box, the shape
-           the mount draws for a screen still loading, until it arrives (kitNeeded asks for it) */
+           the mount draws for a screen still loading, until it arrives (useGmCareerKit asks for it) */
         ? (
           <div data-gm-desk="panel" data-gm-panel={gmPanelFor(GM_CAREER_PANELS, gmOpen)?.key} className="space-y-3">
             <FoPanelHeader title={gmPanelFor(GM_CAREER_PANELS, gmOpen)?.title ?? ''} onBack={() => openDesk(null)} />
-            <CareerKitHolding failed={kitFailed} onRetry={retryKit} minHeight={220} />
+            <GmCareerKitHolding failed={kitFailed} onRetry={retryKit} minHeight={gmCareerFloor(gmOpen)} />
           </div>
         )
         : (

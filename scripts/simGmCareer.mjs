@@ -213,6 +213,8 @@ const FILES = {
   trade: path.join(ROOT, 'src', 'lib', 'gmTradePackage.ts'),
   seat: path.join(ROOT, 'src', 'lib', 'gmSeat.ts'),
   board: path.join(ROOT, 'src', 'components', 'front-office', 'FrontOfficeBoard.tsx'),
+  /* Round 1561: the NHL board, bound to the career (its press through hostPressOption) */
+  nhlBoard: path.join(ROOT, 'src', 'components', 'nhl-front-office', 'NhlFrontOfficeBoard.tsx'),
 };
 const EDITS = {
   addkey: ['host', '  next = withGmBlock(next, GM_HOST_KEYS.xp, nextXp);\n',
@@ -288,6 +290,9 @@ const EDITS = {
    NFL_ONLY with no NHL line (the board's press, the depth chart) is not a control of the nhl row and says so. */
 const EDITS_BY_SPORT = {
   nhl: {
+    /* Round 1561: the NHL board's press drawing twice (section 3 reads the bound board's answerPress) */
+    extradraw: ['nhlBoard', "    const res = applyGmPressChoice(trust, hostPressOption(presser.options[i], hostXpEffects(gm, 'nhl')), Math.random);",
+      "    const res = applyGmPressChoice(trust, hostPressOption(presser.options[i], hostXpEffects(gm, 'nhl')), () => (Math.random(), Math.random()));"],
     staffrides: ['nhlCareer', "    { key: NHL_DESK_KEYS.staff, owner: 'club', fresh: (league, team) => freshStaff(league, team) },", "    { key: NHL_DESK_KEYS.staff, owner: 'gm' },"],
     ledgerrides: ['nhlCareer', "    { key: NHL_DESK_KEYS.contracts, owner: 'club', fresh: (league, team) => openLedger(league, team) },", "    { key: NHL_DESK_KEYS.contracts, owner: 'gm' },"],
     /* the old club keeps the contributors he chose (the NHL's depthstays) */
@@ -697,7 +702,8 @@ const DRIVE = {
     words: NHL_WORDS,
     xpLive: () => DN.NHL_XP_LIVE,
     xpSources: () => DN.NHL_XP_SOURCES,
-    board: null,
+    /* Round 1561: the board is bound, so section 3 reads its answerPress */
+    board: 'nhlBoard',
     saveSport: 'NHL',
     /* Round 1559 fix pass (review minor 9, critic advice 12): the season's shape and the roster limit read from the
        sport's descriptor (src/lib/gmSport.ts), as the games count is; simGmDesk check 2 holds it equal to the engine,

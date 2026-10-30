@@ -1143,6 +1143,9 @@ for (const set of SEEDSETS) {
     /* Round 1542, who scored: the season lines split a told final into drives on the story's own stream, so they read
        the quick path's key (gmStoryKey) and its saved shape, and nothing else of Game Day */
     ['src/lib/nflSeasonStats.ts', new Set([noExt(SCORE)])],
+    /* Round 1559 (found red on its closing head by Round 1561): the GM career file's watched title case builds the
+       bracket to the title game, so it reads the bracket machine and the NFL's postseason press half, and nothing else */
+    ['src/components/front-office-shared/FrontOfficeGmCareer.test.tsx', new Set([noExt(BRACKET), noExt(NFL_POST)])],
   ]);
   /* an import's path from the repo root: the alias, or a path from the importing file; a package is nobody's */
   const target = (from, spec) => {
