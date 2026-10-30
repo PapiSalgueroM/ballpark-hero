@@ -233,10 +233,12 @@ const CONTROLS = {
   lookopens: ["looking at a career box switches a desk off save's desk on", [['if (key !== null && !gm && league && gmPanelFor(NFL_DESK_PANELS, key)) {', 'if (key !== null && !gm && league) {']], [T.caLookHub, T.caLookOut], [T.caFired]],
   deskstale: ["the close is built on the desk from before the final week's tick", [['const deskNow = gmLive.current;', 'const deskNow = gm;']], [T.caTick], [T.opDeskOn]],
   /* Round 1550: the kit asked for in the middle of a season; the last week's press not waiting for it; a save on the
-     recap never asking for it (its holding box then never lands) */
-  askalways: ['the board asks for the career kit while a season is played', [['  const kitNeeded = !kit && (', '  const kitNeeded = !kit && (true ||']], [T.lzSeason], [T.lzRecap, T.ordinary]],
-  nowait: ["the last week's press does not wait for the career kit", [["  const closeWaits = !kit && phase === 'hub' && !!league && league.week >= REGULAR_WEEKS;", '  const closeWaits = false;']], [T.lzWeek], [T.lzRecap, T.ordinary]],
-  recapnever: ['a save that loads on the recap never asks for the career kit', [["    phase === 'recap' || phase === 'fired' || presser !== null || careerBoxOpen", "    phase === 'fired' || presser !== null || careerBoxOpen"]], [T.lzRecap], [T.lzFired, T.lzWeek]],
+     recap never asking for it (its holding box then never lands). Round 1561: the rule is the shared hook's
+     (useGmCareerKit.ts, careerKitNeeded), so each control rewrites the moment the board hands it, the same three
+     mutants: a moment that always asks, a press that never waits, a recap the rule never sees. */
+  askalways: ['the board asks for the career kit while a season is played', [['    presser: presser !== null,\n    boxOpen: careerBoxOpen,', '    presser: true,\n    boxOpen: careerBoxOpen,']], [T.lzSeason], [T.lzRecap, T.ordinary]],
+  nowait: ["the last week's press does not wait for the career kit", [['  const closeWaits = careerKit.waits;', '  const closeWaits = false;']], [T.lzWeek], [T.lzRecap, T.ordinary]],
+  recapnever: ['a save that loads on the recap never asks for the career kit', [['  const careerKit = useGmCareerKit(nflCareerKitLoader, {\n    phase,\n', "  const careerKit = useGmCareerKit(nflCareerKitLoader, {\n    phase: phase === 'recap' ? 'draft' : phase,\n"]], [T.lzRecap], [T.lzFired, T.lzWeek]],
   /* the review's finding 6: "GM XP +0" printed on a season that paid nothing */
   xpzero: ['the recap prints the XP line on a season that paid nothing', [['setXpLine(v.desk && v.award && v.award.total > 0 ? hostXpRecapLine(', 'setXpLine(v.desk && v.award ? hostXpRecapLine(']], [T.caFired], [T.caTake]],
   blank: ["THIS FILE'S OWN CONTROL: a comment is reworded and nothing else, so nothing may fire", [['setGameLog(null); /* the summer */', 'setGameLog(null); /* the summer, as it was */']], [T.week], []],

@@ -54,9 +54,10 @@ const src = (...p) => path.join(ROOT, 'src', ...p);
 
 /* name: [section, file, the text it rewrites, what it becomes] */
 const CONTROLS = {
+  /* Round 1561: the board's loader import names the loader itself (the shared hook takes it), the same line */
   eager: ['1', src('components', 'front-office', 'FrontOfficeBoard.tsx'),
-    "import { loadNflCareerKit, nflCareerKitNow, type NflCareerKit } from '@/components/front-office/nflCareerKitLoad';",
-    "import { loadNflCareerKit, nflCareerKitNow, type NflCareerKit } from '@/components/front-office/nflCareerKitLoad';\nimport '@/components/front-office/nflCareerKit';"],
+    "import { loadNflCareerKit, nflCareerKitLoader, type NflCareerKit } from '@/components/front-office/nflCareerKitLoad';",
+    "import { loadNflCareerKit, nflCareerKitLoader, type NflCareerKit } from '@/components/front-office/nflCareerKitLoad';\nimport '@/components/front-office/nflCareerKit';"],
   hostimport: ['1', src('components', 'front-office-shared', 'gmCareerDesk.tsx'),
     "import { hostCareerTile, hostMarketTile, hostXpTile } from '@/lib/gmCareerFace';",
     "import { hostCareerTile, hostMarketTile, hostXpTile } from '@/lib/gmDeskHost';"],
@@ -199,6 +200,9 @@ const PAGE_MUST = [
   'src/lib/nflSeasonStats.ts',
   /* Round 1559: the loader's shared fetch once rule, a leaf the page carries */
   'src/components/front-office-shared/careerKitLoader.ts',
+  /* Round 1561: the board's career glue, shared with the NHL board: the page carries all three, none of them the kit */
+  'src/components/front-office-shared/useGmCareerKit.ts', 'src/components/front-office-shared/GmCareerKitHolding.tsx',
+  'src/components/front-office-shared/careerBinding.ts',
 ];
 
 begin('1', 'the page carries the boxes and the loader, and not one module of the career kit');
