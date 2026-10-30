@@ -1,0 +1,3 @@
+committed export via --market: exit 0 | ok: the committed ledger equals the generator's output
+export with one new tripwire row: exit 1 | FAIL: arsenalLedger.json is not what the generator writes from the committed pages and the export given: stop the apply
+control freshrow FIRED (and the unchanged export passed)

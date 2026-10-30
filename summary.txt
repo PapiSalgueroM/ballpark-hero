@@ -1,0 +1,6 @@
+simTrustCopy exit=0 1s | simTrustCopy: green. One disclaimer under every page and one count of the games, the registry's own.
+genChecks exit=0 5s | ok: owedToChat1587.json equals the generator's output
+ledgerFresh-control exit=0 4s | control freshrow FIRED (and the unchanged export passed)
+simClubNamesakes exit=0 2s | simClubNamesakes: green. The detection flags Arsenal FC where it is two clubs, and the grid stops reading Arsenal inside another club's name, nowhere else.
+simNoRivalNames exit=0 21s | No rival product names found. 0 findings.
+tsc exit=0 82s | 
