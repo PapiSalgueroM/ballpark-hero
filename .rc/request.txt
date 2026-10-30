@@ -1,0 +1,4 @@
+#!serve
+#!playwright
+psc-base: git worktree add -f /tmp/b3 4bd20c993 >/dev/null 2>&1 && ln -s "$PWD/node_modules" /tmp/b3/node_modules && (cd /tmp/b3 && node_modules/.bin/vite build --outDir /tmp/b3-dist --emptyOutDir > /tmp/b3-build.log 2>&1 || (tail -20 /tmp/b3-build.log; exit 9)) && (node scripts/lib/hostLikeServer.mjs /tmp/b3-dist 4176 >/dev/null 2>&1 &) && sleep 3 && SWEEP_BASE=http://localhost:4176 ENGINES=chromium node scripts/playSoccerCareer.mjs
+psc-branch-v: ATTEMPTS=1 VERBOSE=1 ENGINES=chromium node scripts/playSoccerCareer.mjs 2>&1 | tail -80
