@@ -1,0 +1,12 @@
+MUTATION APPLIED: hookwaits in src/components/front-office-shared/useGmCareerKit.ts
+M3 simNhlRosterLimit exit=1 | Node.js v24.22.1
+M3 simGmGameDay exit=0 | simGmGameDay: 462 checks, 0 failed
+M3 simNhlWaiverReceipt exit=1 | Node.js v24.22.1
+M3 simNhlContributorsBoard exit=0 | simNhlContributorsBoard: stable nodes, finite cue binding and focus are unit checked; native pixel/reduced-motion and full-season engine acceptance are separate
+M3 simNhlDraftCapital exit=0 | NHL draft: CRLF-safe executable controls, bounded owned-copy cleanup and zero outside transport verified.
+M3 simNhlRatingEvidence exit=0 | NHL rating evidence: CRLF-safe executable bindings, raw-byte holds and owned-copy cleanup verified. No native or live claims.
+M3 simNhlCpuRosters exit=0 | simNhlCpuRosters passed: /home/runner/work/_temp/t-m3-sims/dukb-nhl969-proof-SZgyKh
+M3 simOwnerMandate exit=0 | ALL OWNER MANDATE CHECKS PASSED
+M3 simGmCareer exit=0 | simGmCareer: all checks passed (nhl)
+M3 vitest-nhl exit=0 |  Test Files  2 passed (2)
+M3 sims done: simNhlRosterLimit=1 simGmGameDay=0 simNhlWaiverReceipt=1 simNhlContributorsBoard=0 simNhlDraftCapital=0 simNhlRatingEvidence=0 simNhlCpuRosters=0 simOwnerMandate=0 simGmCareer=0
