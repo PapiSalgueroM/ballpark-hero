@@ -18160,6 +18160,14 @@ export function judgedByTie(state: Pick<CareerState, 'matchRules' | 'tieRules'>,
 /** Round 1603: a haul past a hat-trick says its number in words (narration of the save's own match). */
 const HAUL_WORDS: Record<number, string> = { 4: 'four', 5: 'five', 6: 'six', 7: 'seven', 8: 'eight' };
 
+/** Round 1603 (player report 3ce0d4ff): the match line for a man's goals tonight. Three is a hat-trick, four
+ *  and five are named ("scored four"), fewer gets no line. It used to call every haul of three or more a
+ *  hat-trick, so a five goal night read as three. */
+export function haulLine(name: string, count: number): string | null {
+  if (count < 3) return null;
+  return count === 3 ? `⚽ ${name} bagged a hat-trick!` : `⚽ ${name} scored ${HAUL_WORDS[count] ?? count}!`;
+}
+
 /**
  * Plays my match for this entry, mutating state (tables, squad, cups, board)
  * and returning the report. state must already be a private copy.
@@ -18369,8 +18377,8 @@ function playMyMatch(state: CareerState, entry: CalendarEntry, live: LiveMatch):
   const tally = new Map<string, number>();
   for (const sc of myScorers) if (!sc.og) tally.set(sc.name, (tally.get(sc.name) ?? 0) + 1);
   tally.forEach((count, name) => {
-    /* Round 1603 (player report 3ce0d4ff): four and five are named, a hat-trick is three. */
-    if (count >= 3) events.push(count === 3 ? `⚽ ${name} bagged a hat-trick!` : `⚽ ${name} scored ${HAUL_WORDS[count] ?? count}!`);
+    const line = haulLine(name, count);
+    if (line) events.push(line);
   });
   /* Round 670: extra time gets a line of its own, before the shootout's. */
   if (decidedBy === 'aet') events.push(advanced ? '⏱️ Settled in extra time, and you are through.' : '⏱️ Settled in extra time, and you are out.');

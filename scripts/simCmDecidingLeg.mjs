@@ -1,0 +1,477 @@
+/* Round 1603: a deciding second leg is judged by the tie (player report b7b51855), and four and five goal hauls
+   are named (player report 3ce0d4ff).
+
+   THE RULE. On a deciding second leg (the match whose report carries tie.leg 2 with through set) the board's base
+   swing, the dressing room's morale swing and the fans' result read the TIE: lost 1-2 and through on penalties is
+   a tie won, won 2-1 and out on aggregate is an exit. The record keeps the NIGHT (Round 507): the fixture log's
+   score and W/D/L, the form guide, the career totals, the head to head book, the bracket and every rating. The
+   result log gains `tie` only where the tie and the night differ, and the fan meter reads `tie ?? res`. Manager
+   Hot Seat keeps the night's reading for days dated before HOT_SEAT_TIE_FROM and free runs without the 1603
+   stamp (tieRules 'night'), and matchRules 'base' (the engine before Round 1331) keeps it too.
+
+   HOW. Two engines are bundled from this tree: HEAD as it is, and OLD, the same source with judgedByTie forced
+   false, which is the engine before this round (the one function every reaction reads). Every Math.random draw
+   is a stream keyed on the career, the week and the replay, set identically before each engine call, and
+   Date.now is fixed, so the two engines see the same dice.
+
+   1) Careers in lockstep (the byte identity). A fleet of seeded careers in clubs that reach the knockouts, in
+      today's world and the three eras, plays its first season on HEAD and OLD side by side until the club is out
+      of the Champions League or has won it. Every week the two saves and reports must be JSON equal, up to the
+      first deciding second leg where the night and the tie differ; a career with no such leg is equal to the end
+      of the window. Prints how many careers parted and at which week.
+   2) The leg fleet. Every deciding second leg the walk meets is replayed from its own pre match save on
+      DECIDING_LEG_REPLAYS further streams, through both engines. On every leg: the record is the night on both
+      (log score and res, form, career totals, head to head, bracket, ratings), and `tie` is in the log exactly
+      when the tie and the night differ. Where they agree the two saves carry the same board, morale and fans.
+      Where they differ: the board moves the tie's way (more confidence through, less out, against OLD), the squad's
+      morale moves the tie's way, and the fans' results term equals the term of OLD's save with that night
+      counted as the tie, to the last digit. Floor: at least 30 differing legs, the number printed.
+   3) The gate. Every leg pre-save of section 2 played with tieRules 'night', and again with matchRules 'base',
+      must give HEAD exactly OLD's save and report. tieRulesOf answers 'night' for a daily the day before
+      HOT_SEAT_TIE_FROM, nothing on it, nothing for a free run stamped 1603, 'night' for one without; startHotSeat
+      writes it and handoverState takes it off; loadCareer drops it. HOT_SEAT_TIE_FROM is a real date after the
+      round's base commit.
+   4) Manager Hot Seat replays. Every daily from 2026-09-30 to the day before HOT_SEAT_TIE_FROM, and a set of
+      unstamped free runs, played balanced with the first press answer to the verdict on HEAD and OLD: the same
+      verdict, points, target, takeover and the whole match log. With DECIDING_LEG_BASE=<root of a checkout of
+      the base commit> the same days are also played on that tree's own Hot Seat and must match HEAD. The days
+      from the cutover to a week past it are played too and the runs that meet a deciding leg are counted.
+   5) The haul words. haulLine names three a hat-trick, four "scored four" and five "scored five" on planted
+      lines, and every haul of three or more the fleet's matches produce is announced by its own count.
+
+   NEGATIVE CONTROLS (DECIDING_LEG_CONTROL=<name>; each rewrites one line of HEAD only, refuses to run when its
+   line is not in the file exactly once, and must turn its own check red, exit 1, last line FIRED):
+     board     the board's base swing reads the night again: section 2's board check goes red.
+     morale    the dressing room's swing reads the night again: section 2's morale check goes red.
+     fans      the fan meter reads `res` and ignores `tie`: section 2's fans check goes red.
+     tieall    `tie` is written on every deciding second leg, the ones where night and tie agree too: section 1's
+               identity goes red (and section 2's tie field).
+     hattrick  every haul of three or more is a hat-trick again: section 5's planted lines go red.
+     nogate    judgedByTie ignores tieRules and matchRules: section 3's gate goes red.
+     cutover   HOT_SEAT_TIE_FROM moved to 2026-10-01, before the base commit: section 3's cutover goes red.
+
+   MEASURED (filled from the runner, see the commit that set the floor).
+
+   Run: node scripts/simCmDecidingLeg.mjs   (DECIDING_LEG_CAREERS, DECIDING_LEG_REPLAYS, DECIDING_LEG_SECTION) */
+import { build } from 'esbuild';
+import { createRequire } from 'node:module';
+import fs from 'node:fs';
+import os from 'node:os';
+import path from 'node:path';
+import { fileURLToPath } from 'node:url';
+
+const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
+const BASE_ROOT = process.env.DECIDING_LEG_BASE ? path.resolve(process.env.DECIDING_LEG_BASE) : '';
+const CONTROL = process.env.DECIDING_LEG_CONTROL || '';
+const SECTION = process.env.DECIDING_LEG_SECTION || '';
+const REPLAYS = Number(process.env.DECIDING_LEG_REPLAYS || 8);
+const LEG_FLOOR = 30;
+/* The day the round's base commit (4bd20c993, origin/main) was made. */
+const BASE_COMMIT_DATE = '2026-10-30';
+const FIXED_NOW = 1793000000000;
+
+const CM = 'clubManager.ts';
+const METERS = 'clubManagerMeters.ts';
+const HS = 'managerHotSeat.ts';
+const JUDGE = "  return state.matchRules !== 'base' && state.tieRules !== 'night' && tie?.leg === 2 && typeof tie.through === 'boolean';";
+const OLD_PATCH = [[CM, JUDGE, '  return false;']];
+const CONTROLS = {
+  board: [[CM, '  let confDelta = reactWon ? 4 : reactDrawn ? 0.5 : -4.5;', '  let confDelta = won ? 4 : drawn ? 0.5 : -4.5;']],
+  morale: [[CM, '  const moraleShift = reactWon ? 5 : reactDrawn ? -1 : -6;', '  const moraleShift = won ? 5 : drawn ? -1 : -6;']],
+  fans: [[METERS, 'log.map(e => e && (e.tie ?? e.res))', 'log.map(e => e && e.res)']],
+  tieall: [[CM, "    ...(reactWon !== won || reactDrawn !== drawn ? { tie: reactWon ? 'W' as const : 'L' as const } : {}),", "    ...(tieJudged ? { tie: reactWon ? 'W' as const : 'L' as const } : {}),"]],
+  hattrick: [[CM, '  return count === 3 ? `⚽ ${name} bagged a hat-trick!` : `⚽ ${name} scored ${HAUL_WORDS[count] ?? count}!`;', '  return `⚽ ${name} bagged a hat-trick!`;']],
+  nogate: [[CM, JUDGE, "  return tie?.leg === 2 && typeof tie.through === 'boolean';"]],
+  cutover: [[HS, "export const HOT_SEAT_TIE_FROM = '2026-11-06';", "export const HOT_SEAT_TIE_FROM = '2026-10-01';"]],
+};
+/* Which section's check each control must turn red, and the sections it needs. */
+const CONTROL_CHECK = { board: 'legs: board', morale: 'legs: morale', fans: 'legs: fans', tieall: 'careers: identity', hattrick: 'hauls: planted', nogate: 'gate: night', cutover: 'gate: cutover' };
+/* The control's own check must go red; these go red beside it and are printed. */
+if (CONTROL && !CONTROLS[CONTROL]) {
+  console.log(`simCmDecidingLeg: ABORT, DECIDING_LEG_CONTROL=${CONTROL} is not one of ${Object.keys(CONTROLS).join(', ')}`);
+  process.exit(2);
+}
+const abort = why => { console.log(`simCmDecidingLeg: ABORT, ${why}`); process.exit(2); };
+
+/* ---------- the engines ---------- */
+const work = fs.mkdtempSync(path.join(os.tmpdir(), 'deciding-leg-'));
+async function bundle(name, root, patches) {
+  const entry = path.join(work, `${name}.entry.ts`);
+  const P = f => JSON.stringify(path.join(root, f).split(path.sep).join('/'));
+  fs.writeFileSync(entry, `export * as cm from ${P('src/lib/clubManager.ts')};\nexport * as meters from ${P('src/lib/clubManagerMeters.ts')};\nexport * as hs from ${P('src/lib/managerHotSeat.ts')};\n`);
+  const out = path.join(work, `${name}.cjs`);
+  const used = patches.map(() => false);
+  const plugin = {
+    name: 'deciding-leg',
+    setup(b) {
+      if (!patches.length) return;
+      b.onLoad({ filter: /(clubManager|clubManagerMeters|managerHotSeat)\.ts$/ }, async args => {
+        const file = args.path.split(path.sep).join('/');
+        const mine = patches.map((p, i) => [p, i]).filter(([p]) => file.endsWith(`/src/lib/${p[0]}`));
+        if (!mine.length) return undefined;
+        let src = (await fs.promises.readFile(args.path, 'utf8')).split('\r\n').join('\n');
+        for (const [[f, from, to], i] of mine) {
+          const n = src.split(from).length - 1;
+          if (n !== 1) abort(`${name}: the line to rewrite is in ${f} ${n} times, it must be exactly once: ${from.trim()}`);
+          src = src.replace(from, () => to);
+          used[i] = true;
+        }
+        return { contents: src, loader: 'ts' };
+      });
+    },
+  };
+  await build({ entryPoints: [entry], bundle: true, platform: 'node', format: 'cjs', outfile: out, logLevel: 'silent', alias: { '@': path.join(root, 'src') }, plugins: [plugin] });
+  if (used.some(u => !u)) abort(`${name}: a rewrite never found its file`);
+  return out;
+}
+const store = new Map();
+globalThis.localStorage = { getItem: k => store.get(k) ?? null, setItem: (k, v) => store.set(k, String(v)), removeItem: k => store.delete(k), clear: () => store.clear(), key: i => [...store.keys()][i] ?? null, get length() { return store.size; } };
+Date.now = () => FIXED_NOW;
+const req = createRequire(import.meta.url);
+/** A fresh module instance of a bundle (a copy under its own name, so two instances never share counters). */
+let copies = 0;
+function load(file) {
+  const copy = file.replace(/\.cjs$/, `.${copies++}.cjs`);
+  fs.copyFileSync(file, copy);
+  const m = req(copy);
+  /* Out of the cache at once, so an instance nobody holds any more is collected. */
+  delete req.cache[req.resolve(copy)];
+  fs.unlinkSync(copy);
+  return m;
+}
+const headFile = await bundle('head', ROOT, CONTROL ? CONTROLS[CONTROL] : []);
+const oldFile = await bundle('old', ROOT, OLD_PATCH);
+const baseFile = BASE_ROOT ? await bundle('base', BASE_ROOT, []) : null;
+
+/* ---------- dice ---------- */
+function keyOf(...parts) {
+  let h = 2166136261 >>> 0;
+  for (const ch of parts.join('|')) { h ^= ch.charCodeAt(0); h = Math.imul(h, 16777619) >>> 0; }
+  return h >>> 0;
+}
+function withStream(seed, fn) {
+  let a = seed | 0;
+  const prev = Math.random;
+  Math.random = () => {
+    a = (a + 0x6d2b79f5) | 0;
+    let t = Math.imul(a ^ (a >>> 15), 1 | a);
+    t = (t + Math.imul(t ^ (t >>> 7), 61 | t)) ^ t;
+    return ((t ^ (t >>> 14)) >>> 0) / 4294967296;
+  };
+  try { return fn(); } finally { Math.random = prev; }
+}
+const clone = v => structuredClone(v);
+const J = v => JSON.stringify(v);
+
+/* ---------- checks ---------- */
+const checks = [];
+function check(name, ok, detail = '') {
+  checks.push({ name, ok: !!ok });
+  console.log(`  ${ok ? 'ok  ' : 'FAIL'} ${name}${detail ? ` (${detail})` : ''}`);
+}
+const run = s => !SECTION || SECTION.split(',').includes(s);
+async function fresh(file) {
+  const m = load(file);
+  await m.cm.ensureAllEraRosters();
+  return m;
+}
+
+/* ---------- the career fleet ---------- */
+const CAREERS = [
+  ['Real Madrid', 'now'], ['Bayern Munich', 'now'], ['Manchester City', 'now'], ['Liverpool', 'now'], ['Arsenal', 'now'],
+  ['Inter Milan', 'now'], ['Barcelona', 'now'], ['Barcelona', 'era2005'], ['Chelsea', 'era2005'], ['Real Madrid', 'era2010'],
+  ['Bayern Munich', 'era2010'], ['Barcelona', 'era2015'], ['Juventus', 'era2015'], ['Liverpool', 'era2020'],
+  ['Bayern Munich', 'era2020'], ['Chelsea', 'era2020'],
+];
+const FLEET = CAREERS.slice(0, Number(process.env.DECIDING_LEG_CAREERS || CAREERS.length));
+const OPTS = { skipHalftime: true };
+const step = (m, s, seed) => withStream(seed, () => m.cm.playNextEntry(clone(s), OPTS));
+function decidingLegAt(m, s) {
+  const e = s.calendar?.[s.week];
+  return !!e && e.type === 'uclKo' && e.uclLeg === 2 && m.cm.uclLegsFor(s.eraId, e.uclRound) === 2 && s.uclKoRound === e.uclRound;
+}
+function legOf(report) {
+  const t = report?.tie;
+  if (!t || t.leg !== 2 || typeof t.through !== 'boolean') return null;
+  const night = report.won ? 'W' : report.drawn ? 'D' : 'L';
+  const tie = t.through ? 'W' : 'L';
+  return { night, tie, differ: night !== tie, how: report.decidedBy };
+}
+function windowOver(s) {
+  if (s.sacked || s.uclKoRound === 'out' || s.uclKoRound === 'won') return true;
+  const cal = s.calendar ?? [];
+  const lastKo = cal.reduce((m, e, i) => (e.type === 'uclKo' ? i : m), -1);
+  const lastGroup = cal.reduce((m, e, i) => (e.type === 'uclGroup' ? i : m), -1);
+  return s.week > lastKo || (s.week > lastGroup && s.uclKoRound === null);
+}
+const legPre = [];
+const hauls = { lines: 0, three: 0, more: 0, bad: [] };
+function scanHauls(m, report) {
+  if (!report) return;
+  const tally = new Map();
+  for (const sc of report.myScorers ?? []) if (!sc.og) tally.set(sc.name, (tally.get(sc.name) ?? 0) + 1);
+  for (const [name, n] of tally) {
+    if (n < 3) continue;
+    hauls.lines += 1;
+    if (n === 3) hauls.three += 1; else hauls.more += 1;
+    const want = m.cm.haulLine(name, n);
+    if (!report.events.includes(want)) hauls.bad.push(`${name} scored ${n}, no "${want}"`);
+    if (n !== 3 && report.events.includes(`⚽ ${name} bagged a hat-trick!`)) hauls.bad.push(`${name} scored ${n} and was given a hat-trick`);
+  }
+}
+if (run('careers') || run('legs') || run('gate') || run('hauls')) {
+  console.log(`1) careers in lockstep, HEAD against OLD${baseFile ? ' and OLD against the base tree' : ''} (${FLEET.length} careers)`);
+  const identityBad = [];
+  const baseBad = [];
+  const parted = [];
+  let inUcl = 0;
+  for (const [club, era] of FLEET) {
+    const tag = `${club} ${era}`;
+    const H = await fresh(headFile);
+    const O = await fresh(oldFile);
+    const B = baseFile ? await fresh(baseFile) : null;
+    const seed0 = keyOf(tag, 'start');
+    let sH = withStream(seed0, () => H.cm.startCareer(club, era));
+    let sO = withStream(seed0, () => O.cm.startCareer(club, era));
+    let sB = B ? withStream(seed0, () => B.cm.startCareer(club, era)) : null;
+    if (J(sH) !== J(sO)) identityBad.push(`${tag} at the start`);
+    if (B && J(sB) !== J(sO)) baseBad.push(`${tag} at the start`);
+    if (sH.uclGroup === null) { console.log(`   ${tag}: not in the Champions League, skipped`); continue; }
+    inUcl += 1;
+    let split = null;
+    let guard = 0;
+    while (!windowOver(sH) && guard++ < 160) {
+      const seed = keyOf(tag, sH.season, sH.week);
+      const atLeg = decidingLegAt(H, sH);
+      const pre = atLeg ? clone(sH) : null;
+      const rH = step(H, sH, seed);
+      if (atLeg) legPre.push({ tag, week: sH.week, round: sH.calendar[sH.week].uclRound, pre, seed, walk: legOf(rH.report) });
+      scanHauls(H, rH.report);
+      if (!split || B) {
+        const rO = step(O, sO, seed);
+        if (B) {
+          const rB = step(B, sB, seed);
+          if (J(rB.state) !== J(rO.state) || J(rB.report ?? null) !== J(rO.report ?? null)) baseBad.push(`${tag} week ${sO.week}`);
+          sB = rB.state;
+        }
+        if (!split) {
+          const leg = legOf(rH.report);
+          const same = J(rH.state) === J(rO.state) && J(rH.report ?? null) === J(rO.report ?? null);
+          if (leg?.differ) split = { week: sH.week, round: sH.calendar[sH.week].uclRound, leg };
+          else if (!same) { identityBad.push(`${tag} week ${sH.week} (${sH.calendar[sH.week]?.type})`); split = { week: sH.week, broken: true }; }
+        }
+        sO = rO.state;
+      }
+      sH = rH.state;
+      if (rH.kind === 'seasonOver') break;
+    }
+    if (split && !split.broken) parted.push(`${tag} week ${split.week} (${split.round}, night ${split.leg.night}, tie ${split.leg.tie}, ${split.leg.how})`);
+    console.log(`   ${tag}: ${split ? (split.broken ? 'BROKE' : `parted at week ${split.week}`) : `equal to week ${sH.week}`}; Champions League ${sH.uclKoRound ?? 'group'}`);
+  }
+  console.log(`   ${inUcl} careers in the Champions League, ${parted.length} parted at a deciding leg: ${parted.join('; ') || 'none'}`);
+  check('careers: identity (HEAD equals OLD to the first deciding leg where night and tie differ)', identityBad.length === 0 && inUcl >= 8, identityBad.slice(0, 3).join('; ') || `${inUcl} careers`);
+  if (baseFile) check('careers: OLD is the base tree, week for week over the whole window', baseBad.length === 0, baseBad.slice(0, 3).join('; '));
+  console.log(`   ${legPre.length} deciding second legs met (${legPre.filter(l => l.walk?.differ).length} differing on the walk's own dice)`);
+}
+
+/* ---------- 2. the leg fleet ---------- */
+const recordOf = r => {
+  const log = (r.state.resultLog ?? []).map(e => { const { tie, ...rest } = e; return rest; });
+  const p = r.report;
+  return J([log, r.state.form, r.state.careerStats, r.state.h2h, r.state.uclBracket, r.state.uclKoRound,
+    p.won, p.drawn, p.homeGoals, p.awayGoals, p.tie, p.decidedBy, p.shootoutWon ?? null, p.detail?.myRatings ?? null]);
+};
+const moraleGap = (a, b) => {
+  const was = new Map(b.squad.map(p => [p.id, p.morale]));
+  const d = a.squad.filter(p => was.has(p.id)).map(p => p.morale - was.get(p.id));
+  return d.length ? d.reduce((x, y) => x + y, 0) / d.length : 0;
+};
+if (run('legs') || run('careers')) {
+  console.log(`2) the leg fleet: every deciding leg replayed on ${REPLAYS} more streams through both engines`);
+  const H = await fresh(headFile);
+  const O = await fresh(oldFile);
+  const fansOf = st => H.meters.fanTerms(st).results;
+  const n = { legs: 0, differ: 0, agree: 0, pens: 0, aet: 0, through: 0, out: 0 };
+  const bad = { record: [], tie: [], agree: [], board: [], morale: [], fans: [] };
+  const sum = { boardThrough: 0, boardOut: 0, moraleThrough: 0, moraleOut: 0 };
+  for (const L of legPre) {
+    const seeds = [L.seed, ...Array.from({ length: REPLAYS }, (_, k) => keyOf(L.seed, 'replay', k))];
+    for (const sd of seeds) {
+      const rH = step(H, L.pre, sd);
+      const rO = step(O, L.pre, sd);
+      const leg = legOf(rH.report);
+      if (!leg) continue;
+      n.legs += 1;
+      const tag = `${L.tag} ${L.round} week ${L.week} stream ${sd}`;
+      if (recordOf(rH) !== recordOf(rO)) bad.record.push(tag);
+      const last = rH.state.resultLog.at(-1);
+      if (leg.differ ? last.tie !== leg.tie : 'tie' in last) bad.tie.push(`${tag}: night ${leg.night}, tie ${leg.tie}, logged ${last.tie ?? 'nothing'}`);
+      if (!leg.differ) {
+        n.agree += 1;
+        if (rH.state.boardConfidence !== rO.state.boardConfidence || moraleGap(rH.state, rO.state) !== 0 || fansOf(rH.state) !== fansOf(rO.state)) bad.agree.push(tag);
+        continue;
+      }
+      n.differ += 1;
+      if (leg.how === 'pens') n.pens += 1;
+      if (leg.how === 'aet') n.aet += 1;
+      const through = leg.tie === 'W';
+      if (through) n.through += 1; else n.out += 1;
+      const dB = rH.state.boardConfidence - rO.state.boardConfidence;
+      const dM = moraleGap(rH.state, rO.state);
+      if (through) { sum.boardThrough += dB; sum.moraleThrough += dM; } else { sum.boardOut += dB; sum.moraleOut += dM; }
+      const boardOk = through ? (dB > 0 || rH.state.boardConfidence === 100) : (dB < 0 || rH.state.boardConfidence === 0);
+      if (!boardOk) bad.board.push(`${tag}: night ${leg.night}, tie ${leg.tie}, board ${rO.state.boardConfidence} to ${rH.state.boardConfidence}`);
+      if (through ? !(dM > 0) : !(dM < 0)) bad.morale.push(`${tag}: night ${leg.night}, tie ${leg.tie}, morale moved ${dM.toFixed(2)}`);
+      const asTie = clone(rO.state);
+      const e = asTie.resultLog.at(-1);
+      e.res = leg.tie;
+      delete e.tie;
+      const got = fansOf(rH.state);
+      const want = fansOf(asTie);
+      if (!(Math.abs(got - want) < 1e-9) || got === fansOf(rO.state)) bad.fans.push(`${tag}: results term ${got} against ${want} (night ${fansOf(rO.state)})`);
+    }
+  }
+  console.log(`   ${n.legs} deciding legs played: ${n.agree} where night and tie agree, ${n.differ} where they differ (${n.through} through, ${n.out} out; ${n.pens} on penalties, ${n.aet} in extra time)`);
+  if (n.through) console.log(`   through: board ${(sum.boardThrough / n.through).toFixed(2)} and squad morale ${(sum.moraleThrough / n.through).toFixed(2)} above the old reading on average`);
+  if (n.out) console.log(`   out: board ${(sum.boardOut / n.out).toFixed(2)} and squad morale ${(sum.moraleOut / n.out).toFixed(2)} against the old reading on average`);
+  check(`legs: at least ${LEG_FLOOR} deciding legs where the night and the tie differ`, n.differ >= LEG_FLOOR, `${n.differ}`);
+  check('legs: the record is the night on both engines (log, form, totals, head to head, bracket, ratings)', bad.record.length === 0, bad.record.slice(0, 2).join('; '));
+  check('legs: tie is logged exactly where the tie and the night differ', bad.tie.length === 0, bad.tie.slice(0, 2).join('; '));
+  check('legs: where night and tie agree, board, morale and fans are the old engine\'s', bad.agree.length === 0, bad.agree.slice(0, 2).join('; '));
+  check('legs: board moves the tie\'s way on every differing leg', bad.board.length === 0 && n.differ > 0, bad.board.slice(0, 2).join('; '));
+  check('legs: morale moves the tie\'s way on every differing leg', bad.morale.length === 0 && n.differ > 0, bad.morale.slice(0, 2).join('; '));
+  check('legs: fans count the tie, to the last digit, on every differing leg', bad.fans.length === 0 && n.differ > 0, bad.fans.slice(0, 2).join('; '));
+}
+
+/* ---------- 3. the gate ---------- */
+if (run('gate') || run('careers')) {
+  console.log('3) the gate: the night\'s reading for a Hot Seat run that plays it, the date, the stamp, the save');
+  /* A fresh pair of engines for every pre-save, so the counters behind message ids start level on both. */
+  const pick = [...legPre.filter(l => l.walk?.differ).slice(0, 8), ...legPre.filter(l => l.walk && !l.walk.differ).slice(0, 4)];
+  const bad = { night: [], base: [] };
+  let differing = 0;
+  for (const L of pick) {
+    if (L.walk.differ) differing += 1;
+    const H = await fresh(headFile);
+    const O = await fresh(oldFile);
+    for (const mode of ['night', 'base']) {
+      const p = clone(L.pre);
+      if (mode === 'night') p.tieRules = 'night'; else p.matchRules = 'base';
+      const rH = step(H, p, L.seed);
+      const rO = step(O, p, L.seed);
+      if (J(rH.state) !== J(rO.state) || J(rH.report) !== J(rO.report)) bad[mode].push(`${L.tag} ${L.round} week ${L.week}`);
+    }
+  }
+  console.log(`   ${pick.length} leg pre-saves played on the old reading, ${differing} of them legs where the night and the tie differ`);
+  check('gate: night, tieRules \'night\' plays the old engine byte for byte', bad.night.length === 0 && differing > 0, bad.night.slice(0, 2).join('; ') || `${pick.length} legs`);
+  check('gate: base, matchRules \'base\' plays the old engine byte for byte', bad.base.length === 0 && differing > 0, bad.base.slice(0, 2).join('; ') || `${pick.length} legs`);
+  const H = await fresh(headFile);
+  const from = H.hs.HOT_SEAT_TIE_FROM;
+  const real = typeof from === 'string' && /^\d{4}-\d{2}-\d{2}$/.test(from) && !Number.isNaN(Date.parse(from));
+  check('gate: cutover, HOT_SEAT_TIE_FROM is a real date after the round\'s base commit', real && from > BASE_COMMIT_DATE, `${from}, base ${BASE_COMMIT_DATE}`);
+  const dayBefore = real ? new Date(Date.parse(from) - 86400000).toISOString().slice(0, 10) : '2026-01-01';
+  const table = [
+    [{ club: 'x', seed: 1, daily: dayBefore }, 'night'], [{ club: 'x', seed: 1, daily: from }, undefined],
+    [{ club: 'x', seed: 1, rules: 1331, tie: 1603 }, undefined], [{ club: 'x', seed: 1, rules: 1331 }, 'night'], [{ club: 'x', seed: 1 }, 'night'],
+  ];
+  const wrong = table.filter(([s, want]) => H.hs.tieRulesOf(s) !== want).map(([s]) => J(s));
+  check('gate: tieRulesOf answers by the date for a daily and by the 1603 stamp for a free run', wrong.length === 0, wrong.join('; '));
+  const before = H.hs.dailyHotSeat(dayBefore);
+  store.clear();
+  const runBefore = H.hs.startHotSeat({ club: before.club, seed: before.seed, daily: dayBefore });
+  const after = H.hs.dailyHotSeat(from);
+  store.clear();
+  const runAfter = H.hs.startHotSeat({ club: after.club, seed: after.seed, daily: from });
+  check('gate: startHotSeat writes the night\'s reading before the cutover and nothing from it on', runBefore.state.tieRules === 'night' && !('tieRules' in runAfter.state));
+  check('gate: handoverState takes it off', !('tieRules' in H.hs.handoverState(runBefore)));
+  store.clear();
+  const career = legPre[0]?.pre ?? runAfter.state;
+  const saved = H.cm.saveCareer({ ...clone(career), tieRules: 'night' });
+  const loaded = H.cm.loadCareer();
+  check('gate: loadCareer drops it, so no Club Manager save plays it', saved && loaded && !('tieRules' in loaded), saved ? (loaded ? 'still there' : 'did not load') : 'did not save');
+}
+
+/* ---------- 4. Manager Hot Seat replays ---------- */
+function hotSeatDay(m, setup) {
+  store.clear();
+  let r = m.hs.startHotSeat(setup);
+  let guard = 0;
+  while (!r.verdict && guard++ < 40) r = m.hs.pendingPress(r) ? m.hs.answerHotSeatPress(r, 0) : m.hs.playHotSeatMatch(r, 'balanced', null);
+  const legs = r.log.filter(x => /second leg/i.test(x.compLabel ?? '')).length;
+  return { digest: J([r.takeover, r.target, r.log, r.verdict ? [r.verdict.kind, r.points] : null]), legs, verdict: r.verdict?.kind ?? 'none', points: r.points };
+}
+if (run('hotseat')) {
+  console.log(`4) Manager Hot Seat: the days before the cutover replay as they did${baseFile ? ', on this tree and on the base tree' : ''}`);
+  const probe = await fresh(headFile);
+  const from = probe.hs.HOT_SEAT_TIE_FROM;
+  const days = [];
+  for (let t = Date.parse('2026-09-30'); ; t += 86400000) {
+    const d = new Date(t).toISOString().slice(0, 10);
+    if (d >= from && days.filter(x => x >= from).length >= 7) break;
+    days.push(d);
+  }
+  const bad = [];
+  const baseBad = [];
+  let legRuns = 0;
+  let afterMoved = 0;
+  const lines = [];
+  for (const day of days) {
+    const H = await fresh(headFile);
+    const O = await fresh(oldFile);
+    const setup = H.hs.dailyHotSeat(day);
+    const s = { club: setup.club, seed: setup.seed, daily: day };
+    const h = hotSeatDay(H, s);
+    const o = hotSeatDay(O, s);
+    if (h.legs) legRuns += 1;
+    if (day < from) { if (h.digest !== o.digest) bad.push(`${day} ${setup.club}`); } else if (h.digest !== o.digest) afterMoved += 1;
+    if (baseFile && day < from) {
+      const B = await fresh(baseFile);
+      if (hotSeatDay(B, s).digest !== h.digest) baseBad.push(`${day} ${setup.club}`);
+    }
+    lines.push(`${day} ${setup.club} ${h.verdict} ${h.points}`);
+  }
+  const frees = [['Everton', 11], ['Celtic', 22], ['Ajax', 33], ['Benfica', 44], ['Club Brugge', 55], ['Napoli', 66]];
+  let freeBad = 0;
+  for (const [club, seed] of frees) {
+    const H = await fresh(headFile);
+    const O = await fresh(oldFile);
+    const s = { club, seed, rules: 1331 };
+    let h;
+    try { h = hotSeatDay(H, s); } catch { continue; }
+    const o = hotSeatDay(O, s);
+    if (h.legs) legRuns += 1;
+    if (h.digest !== o.digest) freeBad += 1;
+  }
+  console.log(`   ${days.length} dailies (${days.filter(d => d < from).length} before ${from}) and ${frees.length} unstamped free runs; ${legRuns} of the runs met a second leg at all; ${afterMoved} days from the cutover on moved`);
+  console.log(`   ${lines.slice(0, 4).join('; ')} ...`);
+  check('hotseat: every daily before the cutover replays the same verdict, points, target, takeover and log', bad.length === 0, bad.slice(0, 3).join('; ') || `${days.filter(d => d < from).length} days`);
+  check('hotseat: every unstamped free run replays as it did', freeBad === 0, `${freeBad} moved`);
+  if (baseFile) check('hotseat: the base tree deals and plays every day before the cutover the same way', baseBad.length === 0, baseBad.slice(0, 3).join('; '));
+}
+
+/* ---------- 5. the haul words ---------- */
+if (run('hauls') || run('careers')) {
+  console.log('5) the haul words');
+  const H = await fresh(headFile);
+  const planted = [[3, '⚽ Planted Striker bagged a hat-trick!'], [4, '⚽ Planted Striker scored four!'], [5, '⚽ Planted Striker scored five!'], [2, null]];
+  const wrong = planted.filter(([n, want]) => H.cm.haulLine('Planted Striker', n) !== want).map(([n]) => `${n}: ${H.cm.haulLine('Planted Striker', n)}`);
+  check('hauls: planted lines, three a hat-trick, four and five by their count, two nothing', wrong.length === 0, wrong.join('; '));
+  console.log(`   the fleet's matches scored ${hauls.lines} hauls of three or more (${hauls.three} of three, ${hauls.more} of four or more)`);
+  check('hauls: every haul the fleet scored is announced by its own count', hauls.bad.length === 0, hauls.bad.slice(0, 2).join('; '));
+}
+
+/* ---------- verdict ---------- */
+const red = checks.filter(c => !c.ok);
+if (CONTROL) {
+  const want = CONTROL_CHECK[CONTROL];
+  const fired = red.some(c => c.name.startsWith(want));
+  console.log(fired
+    ? `simCmDecidingLeg: control ${CONTROL} FIRED (${want} went red; red in all: ${red.map(c => c.name.split(',')[0]).join(' | ')})`
+    : `simCmDecidingLeg: control ${CONTROL} DID NOT FIRE (${want} stayed green)`);
+  process.exit(fired ? 1 : 0);
+}
+if (checks.length === 0) abort('no check ran');
+console.log(red.length
+  ? `simCmDecidingLeg: FAIL, ${red.length} of ${checks.length} checks red (${red.map(c => c.name.split(':')[0]).join(', ')})`
+  : `simCmDecidingLeg: PASS, ${checks.length} of ${checks.length} checks green. A deciding second leg is judged by the tie, the record keeps the night, Hot Seat replays and hauls are counted.`);
+process.exit(red.length ? 1 : 0);
