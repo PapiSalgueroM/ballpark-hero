@@ -1,0 +1,5 @@
+vitest-oldledger exit=0 4s |    Duration  3.21s (transform 1.77s, setup 123ms, collect 4.35s, tests 288ms, environment 854ms, prepare 190ms)
+simNoRivalNames exit=0 17s | No rival product names found. 0 findings.
+simStorageWrites exit=0 3s | simStorageWrites: all green (owed: 12)
+simHarnessAnchors exit=0 40s | simHarnessAnchors: green. Every harness parses and none carries an unmatchable anchor.
+tsc exit=0 54s | 
