@@ -1,0 +1,5 @@
+build exit=0 35s | [dukb] inlined 1 stylesheet(s) and 1 module(s) into 181 snapshots (11 left alone)
+states exit=0 46s | playFirstVisitDialogs: green. Every first visit dialog can be started, and no fixed button or link meets the banner, with the cookie banner unanswered.
+shard2 exit=1 254s | playFirstVisitDialogs: RED. 3 bar lines: /world-cup-bracket 320x640, /world-cup-bracket 390x844, /world-cup-bracket 1280x900
+shard1 exit=0 274s | playFirstVisitDialogs: green. Every first visit dialog can be started, and no fixed button or link meets the banner, with the cookie banner unanswered.
+shard3 exit=0 285s | playFirstVisitDialogs: green. Every first visit dialog can be started, and no fixed button or link meets the banner, with the cookie banner unanswered.
