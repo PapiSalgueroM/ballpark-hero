@@ -1,0 +1,3 @@
+bv-dailies: git worktree add -q .rcbase4 4bd20c993 && CM_BOARD_BASE=.rcbase4 node scripts/simCmBoardVerdict.mjs --part=dailies
+bv-grade-fate: git worktree add -q .rcbase5 4bd20c993 && CM_BOARD_BASE=.rcbase5 node scripts/simCmBoardVerdict.mjs --part=grade,fate
+bv-pure-title: git worktree add -q .rcbase6 4bd20c993 && CM_BOARD_BASE=.rcbase6 node scripts/simCmBoardVerdict.mjs --part=pure,title

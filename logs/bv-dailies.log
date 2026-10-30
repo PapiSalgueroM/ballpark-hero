@@ -1,0 +1,17 @@
+simCmBoardVerdict could not run: Error: Build failed with 56 errors:
+../../_temp/t-bv-dailies/simCmBoardVerdict-N7N2j1/base-clubManager.ts:1:33: ERROR: Could not resolve ".rcbase4/src/lib/nameFold" (originally "@/lib/nameFold")
+../../_temp/t-bv-dailies/simCmBoardVerdict-N7N2j1/base-clubManager.ts:2:36: ERROR: Could not resolve ".rcbase4/src/lib/nameModeration" (originally "@/lib/nameModeration")
+../../_temp/t-bv-dailies/simCmBoardVerdict-N7N2j1/base-clubManager.ts:3:96: ERROR: Could not resolve ".rcbase4/src/lib/clubManagerFixtures" (originally "@/lib/clubManagerFixtures")
+../../_temp/t-bv-dailies/simCmBoardVerdict-N7N2j1/base-clubManager.ts:4:35: ERROR: Could not resolve ".rcbase4/src/lib/clubManagerRecords" (originally "@/lib/clubManagerRecords")
+../../_temp/t-bv-dailies/simCmBoardVerdict-N7N2j1/base-clubManager.ts:5:184: ERROR: Could not resolve ".rcbase4/src/lib/clubManagerVar" (originally "@/lib/clubManagerVar")
+...
+    at failureErrorWithLog (/home/runner/work/ballpark-hero/ballpark-hero/node_modules/esbuild/lib/main.js:1472:15)
+    at /home/runner/work/ballpark-hero/ballpark-hero/node_modules/esbuild/lib/main.js:945:25
+    at /home/runner/work/ballpark-hero/ballpark-hero/node_modules/esbuild/lib/main.js:897:52
+    at buildResponseToResult (/home/runner/work/ballpark-hero/ballpark-hero/node_modules/esbuild/lib/main.js:943:7)
+    at /home/runner/work/ballpark-hero/ballpark-hero/node_modules/esbuild/lib/main.js:970:16
+    at responseCallbacks.<computed> (/home/runner/work/ballpark-hero/ballpark-hero/node_modules/esbuild/lib/main.js:622:9)
+    at handleIncomingPacket (/home/runner/work/ballpark-hero/ballpark-hero/node_modules/esbuild/lib/main.js:677:12)
+    at Socket.readFromStdout (/home/runner/work/ballpark-hero/ballpark-hero/node_modules/esbuild/lib/main.js:600:7)
+    at Socket.emit (node:events:514:28)
+    at addChunk (node:internal/streams/readable:569:12)
