@@ -1,0 +1,27 @@
+  NONE     /club-manager 320x640: no first visit dialog, banner 335 to 640 (pending)
+  NONE     /club-manager 390x844: no first visit dialog, banner 611 to 844 (pending)
+  NONE     /club-manager 1280x900: no first visit dialog, banner 735 to 900 (pending)
+  FAIL     /stadium-tycoon 320x640: dialog "How Stadium Tycoon works" (static) 12 to 319, "Let's go" (its go label) 295 to 343 has 8 of its 48 px under the banner (its bottom 8 px below the banner's top); sits in a dialog whose own box runs 29 px under the banner, banner 335 to 640 (pending)
+  FAIL     /stadium-tycoon 390x844: dialog "How Stadium Tycoon works" (static) 12 to 595, "Let's go" (its go label) 571 to 619 has 8 of its 48 px under the banner (its bottom 8 px below the banner's top); sits in a dialog whose own box runs 29 px under the banner, banner 611 to 844 (pending)
+  FAIL     /stadium-tycoon 1280x900: dialog "How Stadium Tycoon works" (static) 12 to 719, "Let's go" (its go label) 695 to 743 has 8 of its 48 px under the banner (its bottom 8 px below the banner's top); sits in a dialog whose own box runs 29 px under the banner, banner 735 to 900 (pending)
+  FAIL     /wonderkid-factory 320x640: dialog "How Wonderkid Factory works" (static) 12 to 319, "Let's go" (its go label) 295 to 343 has 8 of its 48 px under the banner (its bottom 8 px below the banner's top); sits in a dialog whose own box runs 29 px under the banner, banner 335 to 640 (pending)
+  FAIL     /wonderkid-factory 390x844: dialog "How Wonderkid Factory works" (static) 12 to 595, "Let's go" (its go label) 571 to 619 has 8 of its 48 px under the banner (its bottom 8 px below the banner's top); sits in a dialog whose own box runs 29 px under the banner, banner 611 to 844 (pending)
+  FAIL     /wonderkid-factory 1280x900: dialog "How Wonderkid Factory works" (static) 12 to 719, "Let's go" (its go label) 695 to 743 has 8 of its 48 px under the banner (its bottom 8 px below the banner's top); sits in a dialog whose own box runs 29 px under the banner, banner 735 to 900 (pending)
+  NONE     /soccer-career 320x640: no first visit dialog, banner 335 to 640 (pending)
+  NONE     /soccer-career 390x844: no first visit dialog, banner 611 to 844 (pending)
+  NONE     /soccer-career 1280x900: no first visit dialog, banner 735 to 900 (pending)
+  NONE     /hall-of-champions 320x640: no first visit dialog, banner 335 to 640 (pending)
+  NONE     /hall-of-champions 390x844: no first visit dialog, banner 611 to 844 (pending)
+  NONE     /hall-of-champions 1280x900: no first visit dialog, banner 735 to 900 (pending)
+  FAIL     /idle-arena 320x640: dialog "How Idle Arena works" (static) 12 to 319, "Start tapping" (its go label) 295 to 343 has 8 of its 48 px under the banner (its bottom 8 px below the banner's top); sits in a dialog whose own box runs 29 px under the banner, banner 335 to 640 (pending)
+  FAIL     /idle-arena 390x844: dialog "How Idle Arena works" (static) 12 to 595, "Start tapping" (its go label) 571 to 619 has 8 of its 48 px under the banner (its bottom 8 px below the banner's top); sits in a dialog whose own box runs 29 px under the banner, banner 611 to 844 (pending)
+  FAIL     /idle-arena 1280x900: dialog "How Idle Arena works" (static) 12 to 719, "Start tapping" (its go label) 696 to 744 has 9 of its 48 px under the banner (its bottom 9 px below the banner's top); sits in a dialog whose own box runs 30 px under the banner, banner 735 to 900 (pending)
+  FAIL     /stadium-tycoon#away 320x640: dialog "While you were away" (static) 12 to 319, "Back to work" (its primary style) 299 to 343 has 8 of its 44 px under the banner (its bottom 8 px below the banner's top); sits in a dialog whose own box runs 33 px under the banner, banner 335 to 640 (pending)
+  FAIL     /stadium-tycoon#away 390x844: dialog "While you were away" (static) 71 to 536, "Back to work" (its primary style) 575 to 619 has 8 of its 44 px under the banner (its bottom 8 px below the banner's top); sits in a dialog whose own box runs 33 px under the banner, banner 611 to 844 (pending)
+  FAIL     /stadium-tycoon#away 1280x900: dialog "While you were away" (static) 141 to 590, "Back to work" (its primary style) 699 to 743 has 8 of its 44 px under the banner (its bottom 8 px below the banner's top); sits in a dialog whose own box runs 33 px under the banner, banner 735 to 900 (pending)
+
+21 route widths walked over 6 routes and 1 seeded scene (3 of the lines): 0 dialogs tapped and closed, 0 expected site reds, 9 without a first visit dialog, 12 red
+
+THE BOTTOM BAR NET (Round 1605): fixed buttons and links against the pending banner
+21 bar lines (0 of them scripted states): 21 green over 11 fixed controls, 0 red, 0 with no pending banner; the closest green control sat 100 px above the banner ("Back to work", /stadium-tycoon#away 390x844)
+playFirstVisitDialogs: PLAYFIRST_CONTROL=edge FIRED. 12 of 12 moved dialogs read red for the check it targets

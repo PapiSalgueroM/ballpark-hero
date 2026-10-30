@@ -1,0 +1,10 @@
+build exit=0 26s | [dukb] inlined 1 stylesheet(s) and 1 module(s) into 181 snapshots (11 left alone)
+cover exit=1 41s | playFirstVisitDialogs: PLAYFIRST_CONTROL=cover FIRED. 12 of 12 dialog buttons read as covered and the walk is red
+ratchet exit=1 44s | playFirstVisitDialogs: PLAYFIRST_CONTROL=ratchet FIRED. 21 green or dialog free route widths listed as expected reds each failed the walk
+nolift exit=3 50s | playFirstVisitDialogs: CONSENT_BAR_CONTROL=nolift did NOT fire on 3 of 12 stripped lines: /world-cup-bracket 320x640, /world-cup-bracket 390x844, /world-cup-bracket 1280x
+expected exit=1 40s | playFirstVisitDialogs: PLAYFIRST_CONTROL=expected FIRED. 12 of 12 covered route widths listed in EXPECTED_SITE_RED printed EXPECTED and none failed the walk
+edge exit=1 42s | playFirstVisitDialogs: PLAYFIRST_CONTROL=edge FIRED. 12 of 12 moved dialogs read red for the check it targets
+lift exit=1 43s | playFirstVisitDialogs: PLAYFIRST_CONTROL=lift FIRED. 12 of 12 moved dialogs read red for the check it targets
+stale exit=1 14s | playFirstVisitDialogs: PLAYFIRST_CONTROL=stale FIRED. 3 of 3 seeded lines with a fresh save opened no card and failed the walk
+jump exit=1 14s | playFirstVisitDialogs: PLAYFIRST_CONTROL=jump FIRED. 3 of 3 moved dialogs read red for the check it targets
+nobanner exit=1 147s | playFirstVisitDialogs: PLAYFIRST_CONTROL=nobanner FIRED. 21 of 21 route widths with the banner hidden were refused as measuring nothing
