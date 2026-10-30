@@ -1,0 +1,6 @@
+tsc: node_modules/.bin/tsc --noEmit -p tsconfig.app.json
+vitest: node_modules/.bin/vitest run src/test/ClubManagerSeasonSummary.expiring.test.tsx src/test/contractPreview.test.tsx src/test/clubManagerDeskCues.test.tsx src/test/cmTablesTruth.test.tsx --testTimeout=300000 --hookTimeout=120000
+fleet: node scripts/simCmFreeAgencyFleet.mjs
+ctl-trimstranger: CM_FA_CONTROL=trimstranger node scripts/simCmFreeAgencyFleet.mjs
+ctl-trimbar: CM_FA_CONTROL=trimbar node scripts/simCmFreeAgencyFleet.mjs
+simFreeAgents: node scripts/simFreeAgents.mjs

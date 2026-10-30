@@ -1,0 +1,6 @@
+vitest exit=0 22s |    Duration  20.75s (transform 3.18s, setup 475ms, collect 10.40s, tests 22.33s, environment 2.07s, prepare 623ms)
+tsc exit=0 72s | 
+fleet exit=0 163s | simCmFreeAgencyFleet: green, all seven sections held
+ctl-trimstranger exit=1 155s | simCmFreeAgencyFleet: CONTROL trimstranger FIRED: section 5 red
+ctl-trimbar exit=1 139s | simCmFreeAgencyFleet: CONTROL trimbar FIRED: section 5 red
+simFreeAgents exit=0 78s | simFreeAgents: all sections passed
