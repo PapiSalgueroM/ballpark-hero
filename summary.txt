@@ -1,0 +1,2 @@
+appeal exit=0 40s | Equivalent appeal outcomes must agree: passed for 24 original pairs and 3 separate generated-position pairs.
+worldmoves-both-off exit=1 1112s | simCmWorldMoves: RED, sections 5 (96), 6 (270), 8 (57)
