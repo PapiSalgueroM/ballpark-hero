@@ -36,6 +36,9 @@
    7d. never your club, a club you managed, a Hot Seat club or a mid season
        predecessor;
    7e. an old save fixture loads with its managers record byte identical.
+   7g. in every league, the summer you take the sentinel's own job (a move
+       into his chair, the call an accepted offer makes) reads "You take
+       over at {club}." and nothing names him, then or after.
    8.  with SIM_MANAGERS_BASE=<commit>, a fleet (12 seeds by 5 eras by 3
        seasons, mid season starts, Hot Seat runs) saves the same bytes as
        that commit's engine (after the 7c strip once the table has rows).
@@ -47,6 +50,8 @@
      sever      cuts the ensure call out of startCareer, section 1 fails.
      namedsack  the old sack line for a real holder, 7b must name the sentinel.
      recycle    a real name recycled into another chair, 7b must go red.
+     takeover   the takeover line names the real man you replace, 7g must
+                name the sentinel.
 
    Run: node scripts/simManagers.mjs
 */
@@ -62,13 +67,15 @@ const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 let failures = 0;
 const fail = m => { failures += 1; console.error('  FAIL: ' + m); };
 const CONTROL_NAME = process.env.SIM_MANAGERS_CONTROL || '';
-if (CONTROL_NAME && !['sever', 'namedsack', 'recycle'].includes(CONTROL_NAME)) {
-  console.error(`SIM_MANAGERS_CONTROL=${CONTROL_NAME} is not a control this harness knows (sever, namedsack, recycle)`);
+/* Round 1606: the sentinel controls, each judged on its own section's failures. */
+const SENTINEL_CONTROLS = { namedsack: '7b', recycle: '7b', takeover: '7g' };
+if (CONTROL_NAME && CONTROL_NAME !== 'sever' && !SENTINEL_CONTROLS[CONTROL_NAME]) {
+  console.error(`SIM_MANAGERS_CONTROL=${CONTROL_NAME} is not a control this harness knows (sever, ${Object.keys(SENTINEL_CONTROLS).join(', ')})`);
   process.exit(2);
 }
 const CONTROL = CONTROL_NAME === 'sever';
-/* Round 1606: the two sentinel controls run section 7 alone and are judged on 7b's failures only. */
-const MODE = CONTROL_NAME === 'namedsack' || CONTROL_NAME === 'recycle' ? CONTROL_NAME : '';
+/* Round 1606: the sentinel controls run section 7 alone and are judged on their own section's failures only. */
+const MODE = SENTINEL_CONTROLS[CONTROL_NAME] ? CONTROL_NAME : '';
 const refuse = why => { console.error(`control or setup cannot run: ${why}; refusing a dead check`); process.exit(2); };
 
 const ENTRY = path.join(os.tmpdir(), 'managers.entry.mjs');
@@ -109,14 +116,16 @@ for (const p of POOL) realNames.add(fold(p.name));
 /* Round 1606: and every real manager in the dugout table, so no generated name can be one of them either. */
 for (const n of rd.realDugoutNames(CM_DUGOUTS)) realNames.add(fold(n));
 
-/* Round 1606: the sentinel controls run section 7 alone and are judged on 7b. */
+/* Round 1606: the sentinel controls run section 7 alone and are judged on their own section. recycle only needs a
+   failure (the recycled man is in a chair, not a line); every other control must make its section NAME him. */
 if (MODE) {
-  const { bFails, bNamed } = await realDugoutsSection();
-  if (bFails > 0 && (MODE !== 'namedsack' || bNamed > 0)) {
-    console.log(`\ncontrol run: ${MODE} FIRED, 7b went red ${bFails} time(s), ${bNamed} naming the sentinel`);
+  const sec = SENTINEL_CONTROLS[MODE];
+  const { fails, named } = (await realDugoutsSection()).bySection[sec];
+  if (fails > 0 && (MODE === 'recycle' || named > 0)) {
+    console.log(`\ncontrol run: ${MODE} FIRED, ${sec} went red ${fails} time(s), ${named} naming the sentinel`);
     process.exit(0);
   }
-  console.error(`\ncontrol run: ${MODE} changed NOTHING in 7b (${bFails} failures, ${bNamed} naming the sentinel), the check is dead`);
+  console.error(`\ncontrol run: ${MODE} changed NOTHING in ${sec} (${fails} failures, ${named} naming the sentinel), the check is dead`);
   process.exit(1);
 }
 
@@ -272,8 +281,16 @@ console.log('\nsimManagers: all green');
 /* ---------- 7. Round 1606: the real dugouts, proven with a sentinel ---------- */
 async function realDugoutsSection() {
   console.log('7) real dugouts: a sentinel registered as real is a display fact and nothing else');
-  let bFails = 0, bNamed = 0;
-  const failB = m => { bFails += 1; if (m.includes(SENTINEL)) bNamed += 1; fail(`7b: ${m}`); };
+  /* Each sentinel section counts its own failures, and how many of them name him, so a control is judged on its own. */
+  const bySection = {};
+  const failer = sec => {
+    bySection[sec] = { fails: 0, named: 0 };
+    return m => { bySection[sec].fails += 1; if (m.includes(SENTINEL)) bySection[sec].named += 1; fail(`${sec}: ${m}`); };
+  };
+  const failB = failer('7b');
+  const failG = failer('7g');
+  /* Everything a state says outside the record and the vacancy list, in one pass (spoken() copies the state first). */
+  const said = state => JSON.stringify({ ...state, managers: undefined, pendingVacancies: undefined });
   /* The sentinel must be nobody: no shipped file under src (every roster, bake, pool and generator bank) carries
      it. Tests are not shipped, and src/test/clubDetailDugout.test.tsx swaps in this same sentinel on purpose. */
   const carriers = [];
@@ -289,7 +306,8 @@ async function realDugoutsSection() {
 
   const plan = await sentinelPlan(cm);
   const edit = MODE === 'namedsack' ? { from: 'const holderReal = realOut.has(s.name);', to: 'const holderReal = false;' }
-    : MODE === 'recycle' ? { from: 'if (recycled && !realOut.has(recycled)) {', to: 'if (recycled) {' } : null;
+    : MODE === 'recycle' ? { from: 'if (recycled && !realOut.has(recycled)) {', to: 'if (recycled) {' }
+    : MODE === 'takeover' ? { from: 'const displacedReal = isRealChair(record[state.clubName]);', to: 'const displacedReal = false;' } : null;
   const tmp = fs.mkdtempSync(path.join(os.tmpdir(), 'managers-1606-'));
   const nodeModules = path.join(ROOT, 'node_modules');
   const srcDir = path.join(ROOT, 'src');
@@ -363,7 +381,7 @@ async function realDugoutsSection() {
       }
     }
   }
-  console.log(`   7b: ${summers} summers, ${emptied} with the sentinel's chair emptied (${natural} by the sim's own draw), ${recycleChances} with a second chair to recycle into, ${offersChecked} offers read (${realOffers} for the emptied real chair, all saying only that the club is making a change), ${bFails} failures (${((Date.now() - t0) / 1000).toFixed(0)} s)`);
+  console.log(`   7b: ${summers} summers, ${emptied} with the sentinel's chair emptied (${natural} by the sim's own draw), ${recycleChances} with a second chair to recycle into, ${offersChecked} offers read (${realOffers} for the emptied real chair, all saying only that the club is making a change), ${bySection['7b'].fails} failures (${((Date.now() - t0) / 1000).toFixed(0)} s)`);
   console.log(`   7c: ${sameStrip} of ${summers} sentinel careers equal their empty table twin after the strip, draw for draw`);
   if (emptied < 200) fail(`7b: only ${emptied} summers emptied the sentinel's chair (floor 200)`);
   /* 7a runs after 7b and 7c on purpose: the engine numbers its youth ids with a counter, so the two twins must have run the same calls before they are compared. */
@@ -405,8 +423,37 @@ async function realDugoutsSection() {
     if (!cupOne || cupOne.name !== SENTINEL) fail(`7a: a club outside the league does not show its opening day man in season one (${JSON.stringify(cupOne)})`);
     console.log('   7a: a later world and a season two repair seat nobody real; an outside club shows him in season one only');
   }
+  /* 7g. Taking his job. In every league the summer moves you into the sentinel's chair, the call an accepted offer
+     makes (useClubManager passes the club to startNextSeason). The vacancy list stays as finishSeason drew it, so
+     the move comes from a chair the axe also picked as often as the sim picks it, and from one it did not. The
+     takeover line can be cut when the summer has four chair lines before it, so it is counted, and floored. */
+  {
+    let moves = 0, lines = 0;
+    for (const L of leagues) {
+      const seed = hashSeed(`7g|${L.era}|${L.id}`);
+      const c = seeded(seed, () => S.cm.startCareer(L.career, L.era)).value;
+      if (c.managers?.[L.sentinel]?.name !== SENTINEL) { fail(`7g: ${L.era} ${L.id}: the sentinel was not in his chair to be taken`); continue; }
+      const fin = seeded(seed + 1, () => S.cm.finishSeason(c).state).value;
+      const next = seeded(seed + 2, () => S.cm.startNextSeason(fin, L.sentinel)).value;
+      if (next.clubName !== L.sentinel) { fail(`7g: ${L.era} ${L.id}: the move into ${L.sentinel} did not happen, the check tests nothing`); continue; }
+      moves += 1;
+      const took = (next.aiHeadlines ?? []).filter(h => typeof h === 'string' && h.startsWith(`\u{1F91D} You take over at ${L.sentinel}`));
+      if (took.length) {
+        lines += 1;
+        for (const h of took) if (h !== `\u{1F91D} You take over at ${L.sentinel}.`) failG(`${L.era} ${L.id}: the takeover line is "${h}"`);
+      }
+      const text = said(next);
+      if (text.includes(SENTINEL)) failG(`${L.era} ${L.id}: the summer you took his job says ${SENTINEL}: "${text.slice(Math.max(0, text.indexOf(SENTINEL) - 80), text.indexOf(SENTINEL) + 40)}"`);
+      const kept = Object.entries(next.managers ?? {}).filter(([, v]) => v.name === SENTINEL || v.real === 1);
+      if (kept.length) failG(`${L.era} ${L.id}: after you took his job ${SENTINEL} still sits at ${kept.map(([club]) => club).join(', ')}`);
+      if (S.cm.dugoutOf(next, L.sentinel) !== null) failG(`${L.era} ${L.id}: your own new club shows a dugout`);
+    }
+    console.log(`   7g: ${moves} summers took the sentinel's own job, ${lines} takeover lines read (all "You take over at {club}."), ${bySection['7g'].fails} failures`);
+    if (moves !== leagues.length) fail(`7g: only ${moves} of ${leagues.length} leagues moved you into his chair`);
+    if (lines < Math.ceil(leagues.length / 2)) fail(`7g: only ${lines} of ${moves} takeover lines survived the feed's cut, too few to read (floor half the leagues)`);
+  }
   await ownAndManaged(S, byEra('now').find(l => l.id === 'premier') ?? byEra('now')[0]);
-  return { bFails, bNamed };
+  return { bySection };
 }
 
 /* 7d and 7e. Never your club, a club you managed, a Hot Seat club or a mid season predecessor; an old save
