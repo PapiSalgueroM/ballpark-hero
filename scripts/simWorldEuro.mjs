@@ -60,6 +60,7 @@
  * nothing that is not its own (the last line says FIRED, DID NOT FIRE CLEANLY or ABORTED).
  *   section 0, the data twisted in memory: onesource (A2 keeps one publisher) wiki (K1's second page is a wiki)
  *              thinused (A6, one publisher, carries a constant) receipt (the hash of another file)
+ *              u8thursday (Round 1593: row U8 types every night a Thursday)
  *   section 1, the engine edited in the bundle: twocomps (the field is not kept apart from the Champions League)
  *              meinfield (my club is not kept out) earned (my club's route worked out with it kept out)
  *              carryearned (the job move's carry keeps the old club's route for the new club)
@@ -101,6 +102,8 @@ const CONTROLS = {
   onesource: [0, /^A2 is verified and stands on fewer than two publishers/, /^A2/],
   wiki: [0, /^K1: .* is a wiki/, /^K1/],
   thinused: [0, /^A6 is not verified and carries/, /^A6/],
+  /* Round 1593: row U8 typed as all Thursdays. */
+  u8thursday: [0, /^U8 notThursday/, /^U8/],
   receipt: [0, /does not carry the hash/],
   /* fix-1509: since the carry refuses a field sharing clubs with the Champions League, the seen probe's carry of
      this control's broken field draws it again, so its nights start over: the control's own fault, said here. */
@@ -206,6 +209,7 @@ function section0() {
   if (CONTROL === 'onesource') { const r = row('A2'); changed = r.sources.length > 1; r.sources.length = 1; }
   if (CONTROL === 'wiki') { const s = row('K1').sources[1]; changed = !isWiki(s.url); s.url = 'https://en.wikipedia.org/wiki/2026_FA_Cup_final'; }
   if (CONTROL === 'thinused') { const r = row('A6'); changed = r.status !== 'verified' && r.usedBy.length === 0; r.usedBy = ['EURO_SLOTS.eredivisie.uel']; }
+  if (CONTROL === 'u8thursday') { const r = row('U8'); changed = r.figures.notThursday.length > 0; r.figures.notThursday = []; }
 
   /* 0.1 Every row is a reading somebody can open, and a verified row stands on two publishers. */
   const ids = new Set();
@@ -307,6 +311,27 @@ async function section0Engine() {
   const seasonOrder = m => (m + 4) % 12;
   ok(u7.figures.months.every((m, i, a) => i === 0 || seasonOrder(m) >= seasonOrder(a[i - 1])), 'U7 months are not in season order');
   ok(u7.figures.months.length === w.LEAGUE_PHASE_NIGHT_ORDER.length, 'U7 does not give a month for each of the seventeen nights');
+  /* Round 1593 (the critic's correction 11): row U8's dates are U7's two pages' lines, night by night, and its
+     notThursday is what the calendar says of them. Control `u8thursday` types every night a Thursday. */
+  const u8 = row('U8');
+  const MONTH_NAMES = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
+  const isoOf = (y, m, d) => `${y}-${String(m).padStart(2, '0')}-${String(d).padStart(2, '0')}`;
+  const nightsOf = line => {
+    const year = Number(line.match(/(\d{4})\s*$/)?.[1]);
+    let month = null;
+    const out = [];
+    for (const part of line.slice(line.indexOf(':') + 1).split('&').map(p => p.trim()).reverse()) {
+      const m = part.match(/^(?:([A-Z][a-z]+) )?(\d{1,2})(?:\/(\d{1,2}))?(?:,? ([A-Z][a-z]+))?/);
+      if (!m) return [['unread']];
+      const named = m[1] ?? m[4];
+      if (named) month = MONTH_NAMES.indexOf(named) + 1;
+      out.unshift([m[2], m[3]].filter(Boolean).map(d => isoOf(year, month, Number(d))));
+    }
+    return out;
+  };
+  for (const s of u7.sources) ok(same(s.literal.flatMap(nightsOf), u8.figures.dates), `U8 dates are not ${s.publisher}'s lines night by night: ${JSON.stringify(s.literal.flatMap(nightsOf)).slice(0, 160)}`);
+  const notThursday = u8.figures.dates.flatMap((ds, i) => (ds.some(d => new Date(`${d}T12:00:00Z`).getUTCDay() !== 4) ? [i + 1] : []));
+  ok(same(notThursday, u8.figures.notThursday), `U8 notThursday is ${JSON.stringify(u8.figures.notThursday)}, the calendar says ${JSON.stringify(notThursday)}`);
   const marks = w.LEAGUE_PHASE_NIGHT_MARKS;
   ok(e.UEL_FINAL_MARK > marks[marks.length - 2] && e.UEL_FINAL_MARK < 1, `UEL_FINAL_MARK ${e.UEL_FINAL_MARK} is not after the semi-finals' second leg mark and before the season's end`);
   /* 0.9 No European league of today's world is Russian or Ukrainian (the critic's 9(g) for the league phase): the
