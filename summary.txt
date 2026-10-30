@@ -1,0 +1,4 @@
+prepare exit=0 70s | ordinary-build raw=0
+playLiveTicker exit=1 39s | playLiveTicker.mjs raw=1
+playCmHubLanding exit=0 97s | playCmHubLanding.mjs raw=0
+finish exit=0 7s | 

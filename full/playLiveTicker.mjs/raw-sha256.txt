@@ -1,0 +1,2 @@
+69ecb0327ad9a618932dc1b64b77755e52b5033f085b0bbcc32f7af8d93e13c4  /home/runner/work/_temp/rc-out/full/playLiveTicker.mjs/stdout.log
+e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855  /home/runner/work/_temp/rc-out/full/playLiveTicker.mjs/stderr.log

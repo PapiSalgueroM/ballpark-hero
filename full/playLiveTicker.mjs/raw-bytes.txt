@@ -1,0 +1,3 @@
+3465 /home/runner/work/_temp/rc-out/full/playLiveTicker.mjs/stdout.log
+   0 /home/runner/work/_temp/rc-out/full/playLiveTicker.mjs/stderr.log
+3465 total
