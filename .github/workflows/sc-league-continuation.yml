@@ -1,0 +1,61 @@
+name: Soccer Career league continuation focused proof
+on:
+  push:
+    branches: [codex/sc-leagues-menu424-proof-20261030]
+  workflow_dispatch:
+permissions:
+  contents: read
+concurrency:
+  group: sc-leagues-menu424-${{ github.sha }}
+  cancel-in-progress: false
+defaults:
+  run:
+    shell: bash
+jobs:
+  focused:
+    if: github.ref == 'refs/heads/codex/sc-leagues-menu424-proof-20261030'
+    runs-on: ubuntu-latest
+    timeout-minutes: 90
+    env:
+      CI: '1'
+      SIM_NETWORK: offline
+      CAREER_SEASON_LOCAL_ONLY: '1'
+      SC_PRODUCT_COMMIT: 78e7b2ec9ea0865da3029275c060104d2668117b
+      SC_PRODUCT_TREE: 96fb865e8e38462d96f51a858150ba1be5178d92
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.sha }}
+          fetch-depth: 0
+          persist-credentials: false
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: npm
+      - name: Establish external evidence directory
+        run: |
+          set -euo pipefail
+          echo "SC_LEAGUES_OUT=$RUNNER_TEMP/sc-leagues-menu424-evidence" >> "$GITHUB_ENV"
+          mkdir -p "$RUNNER_TEMP/sc-leagues-menu424-evidence"
+      - name: Frozen proof inputs and ordinary dependencies
+        run: |
+          set -euo pipefail
+          test "$GITHUB_REF_NAME" = codex/sc-leagues-menu424-proof-20261030
+          printf '%s  %s\n' eeeb62db8af3fda4d6cf295f6c037e4a5e2775ebc15ed65e929499dcdb58067e scripts/qa/proveSoccerLeagueContinuation.mjs | sha256sum --check
+          printf '%s  %s\n' e3393aa70229b6c6a9a345836726d1262d9b918e8ee2ff83b2eff9e666846f26 qa/sc-league-continuation-v1/PRODUCT-MANIFEST.json | sha256sum --check
+          node --check scripts/qa/proveSoccerLeagueContinuation.mjs
+          npm ci 2>&1 | tee "$SC_LEAGUES_OUT/npm-ci.log"
+      - name: Real types, actual Menu baseline, focused cases, physical inverse and restoration
+        env:
+          NODE_OPTIONS: --require=${{ github.workspace }}/scripts/lib/offlineTransport.cjs
+        run: |
+          set -euo pipefail
+          node scripts/qa/proveSoccerLeagueContinuation.mjs 2>&1 | tee "$SC_LEAGUES_OUT/controller.log"
+      - name: Retain original evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: sc-leagues-menu424-${{ github.run_id }}-a${{ github.run_attempt }}
+          path: ${{ runner.temp }}/sc-leagues-menu424-evidence/
+          if-no-files-found: error
+          retention-days: 14

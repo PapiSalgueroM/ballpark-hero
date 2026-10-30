@@ -1,0 +1,231 @@
+{
+  "status": "SOURCE_ONLY_UNRUN",
+  "base": "988dc9d6b880d6c8a15fb4a00e09e6bf7a18eeab",
+  "baseTree": "0dcb7bd435a5f476dcb7eeadff1f838dad68b3d6",
+  "baseBlobCount": 5456,
+  "candidateBlobCount": 5456,
+  "modifiedCount": 12,
+  "unchangedCount": 5444,
+  "addedCount": 0,
+  "deletedCount": 0,
+  "oldBase": "e1b33581532b1514e4510e9d89e633e5305fa963",
+  "oldFeature": "097589b9a7ef3d5ad10d55e6e463f6031eba391a",
+  "allWholeForwardInverse": true,
+  "files": [
+    {
+      "path": "scripts/data/soccerCareerFacts.json",
+      "mode": "100644",
+      "base": {
+        "bytes": 155064,
+        "sha256": "30f66a537a7cb5546f3c4694b60370c7230b99e38f47799236b1f47c586058a5",
+        "gitBlob": "668ec82179b21e3314d5e1907635f565e4259765"
+      },
+      "candidate": {
+        "bytes": 176880,
+        "sha256": "bc02c0d49e6d0b5fde50c2a2b1b78b30d6b1ec035a75d96265638cc9047b4ae6",
+        "gitBlob": "9828e41da792eafeead8036879d49f05242a5164"
+      },
+      "oldFeatureGit": "6ac25dc9d27bb0295f0e268be79990cf69086f7f",
+      "spans": 5,
+      "wholeForwardInverse": true,
+      "baseSameAsOld419": true
+    },
+    {
+      "path": "scripts/lib/careerClubPool.mjs",
+      "mode": "100644",
+      "base": {
+        "bytes": 22479,
+        "sha256": "44d22724251bfb81daf858ecf90464495076772a781ddceee61dbeb28d0dc253",
+        "gitBlob": "244dbd4c24f771baca38e8749a044d825eef20b2"
+      },
+      "candidate": {
+        "bytes": 22296,
+        "sha256": "ded92933aa4790e4c4a532647d09e5ee3c65b22dfec57432de18d25641d9dce0",
+        "gitBlob": "16ccc6137958a1adf2e40e5d26b99de466b38e24"
+      },
+      "oldFeatureGit": "16ccc6137958a1adf2e40e5d26b99de466b38e24",
+      "spans": 1,
+      "wholeForwardInverse": true,
+      "baseSameAsOld419": true
+    },
+    {
+      "path": "scripts/simCareerClubPool.mjs",
+      "mode": "100644",
+      "base": {
+        "bytes": 69209,
+        "sha256": "ca1735a860f14d1a7a4f09393d89784085d674453b666bbfc62e28c714523e7a",
+        "gitBlob": "778b8bbe99930c0b1b8260a0207abf35fd09ffea"
+      },
+      "candidate": {
+        "bytes": 69585,
+        "sha256": "72a20476e826f482bd9e21890000ba2d59f391152177e154025484b5ea8d989b",
+        "gitBlob": "e818bc4cb798eda0bd69cfe38f497b51800d6da1"
+      },
+      "oldFeatureGit": "e818bc4cb798eda0bd69cfe38f497b51800d6da1",
+      "spans": 2,
+      "wholeForwardInverse": true,
+      "baseSameAsOld419": true
+    },
+    {
+      "path": "src/data/leagueFormat.ts",
+      "mode": "100644",
+      "base": {
+        "bytes": 7008,
+        "sha256": "76d189179c606475113e7289a1145a9d2036c7741b7c918aed0efd796bebc0ec",
+        "gitBlob": "df8aa75d55eda49dcdc455e2be9d86c57848a3a7"
+      },
+      "candidate": {
+        "bytes": 7070,
+        "sha256": "915b4acd46f103d7c371d58c043c600a85e4e592ae6b59d5a8000d930e76fca5",
+        "gitBlob": "802650466c0c4439f12c741e7d1ae28957280f9b"
+      },
+      "oldFeatureGit": "802650466c0c4439f12c741e7d1ae28957280f9b",
+      "spans": 1,
+      "wholeForwardInverse": true,
+      "baseSameAsOld419": true
+    },
+    {
+      "path": "src/data/soccerCareerClubPool.ts",
+      "mode": "100644",
+      "base": {
+        "bytes": 43978,
+        "sha256": "735d636cb22c14794692fef45e22323fe85d3c38cbbdbaa1df1ccc7aba961bd8",
+        "gitBlob": "15fe51c1cfa9ffbd43bd86576ad7bbc3bea8840c"
+      },
+      "candidate": {
+        "bytes": 49030,
+        "sha256": "5e565223239c8bb5ea8f5be3d2ecfb5c72ed026d3598031fcb5221f265e01d58",
+        "gitBlob": "83e9df78441c0d16509f80b8ec0bfbadb0f08f26"
+      },
+      "oldFeatureGit": "83e9df78441c0d16509f80b8ec0bfbadb0f08f26",
+      "spans": 4,
+      "wholeForwardInverse": true,
+      "baseSameAsOld419": true
+    },
+    {
+      "path": "src/lib/clubManager.ts",
+      "mode": "100644",
+      "base": {
+        "bytes": 1241789,
+        "sha256": "57a8d0bb97cbf3ebc880ea4b2f5e1ade0a3df63cdd51e4a57fb9bd69ace8a671",
+        "gitBlob": "4ce178814d8fb9de0564b32488d57c0fc75d91d6"
+      },
+      "candidate": {
+        "bytes": 1242401,
+        "sha256": "a57ebdbf9d1ca33acbc3f3906801d7330b956e92df24b0069a0c1f0e15e76441",
+        "gitBlob": "2832a7a81c3f0ed8e08553bcb8f81c02d04d931e"
+      },
+      "oldFeatureGit": "aff16d7d51de6da8dd1d16893c9c03acc57cb97f",
+      "spans": 1,
+      "wholeForwardInverse": true,
+      "baseSameAsOld419": false
+    },
+    {
+      "path": "src/lib/soccerCareerDerby.ts",
+      "mode": "100644",
+      "base": {
+        "bytes": 23313,
+        "sha256": "eafe7005ece8fe2b4c44e380ba5d980a6535d3700f3a05be69f65e776288db99",
+        "gitBlob": "60478118d744b618e30f8ed651055c12449592b8"
+      },
+      "candidate": {
+        "bytes": 23401,
+        "sha256": "24b47bb4f83a37f4c43fcd5cb42be7976eac299a5bec0f7673af0621c6c804e8",
+        "gitBlob": "e25062b2b6560957feb414fd709b7bbc5b4af7ba"
+      },
+      "oldFeatureGit": "e25062b2b6560957feb414fd709b7bbc5b4af7ba",
+      "spans": 1,
+      "wholeForwardInverse": true,
+      "baseSameAsOld419": true
+    },
+    {
+      "path": "src/lib/soccerCareerEngine.ts",
+      "mode": "100644",
+      "base": {
+        "bytes": 551875,
+        "sha256": "b3f8f38a75fee1d7c1d5d67cfdebd3470bdf1ab4e6dd17c2e8e0019ad209ef93",
+        "gitBlob": "e0e973062938d2bab8a3241a6498765a9cd1c36c"
+      },
+      "candidate": {
+        "bytes": 552324,
+        "sha256": "7c79aef8322ea52d617c2390500bba5d2b93de8af2295f75dd3f2b079902711e",
+        "gitBlob": "6661bca7a583d57933a533f9edcabc1fc102c700"
+      },
+      "oldFeatureGit": "97e40cf67e30c3cbf6425eab95afa0c53a20d66b",
+      "spans": 3,
+      "wholeForwardInverse": true,
+      "baseSameAsOld419": false
+    },
+    {
+      "path": "src/lib/soccerCareerLeague.test.ts",
+      "mode": "100644",
+      "base": {
+        "bytes": 28313,
+        "sha256": "14a5d2b9294cf713b64d3e37199ea572e2b95d7513b5fe52fd8a87831deb74d4",
+        "gitBlob": "6766769ad0bbb63239131f1cf8dd16793aa50144"
+      },
+      "candidate": {
+        "bytes": 28994,
+        "sha256": "55d8f1e6af32a3b6498295d0e712fb1a6ee0e3fc204d74314d6db51c922d81f2",
+        "gitBlob": "3eeb71927250a19b6a7c1b5f5476d633b4bf25cd"
+      },
+      "oldFeatureGit": "3eeb71927250a19b6a7c1b5f5476d633b4bf25cd",
+      "spans": 1,
+      "wholeForwardInverse": true,
+      "baseSameAsOld419": true
+    },
+    {
+      "path": "src/lib/soccerCareerLeague.ts",
+      "mode": "100644",
+      "base": {
+        "bytes": 47199,
+        "sha256": "adb5555de0adc046bed402fd7386305baf5ce9e96aba023b6a64541f9785ca68",
+        "gitBlob": "7b65ad0ad43825dcc159db83de100eda8330c102"
+      },
+      "candidate": {
+        "bytes": 47020,
+        "sha256": "fe3efae2f43e780c2cd4d13ca7fa85f023a2fefe8cf1b002866a1cf0d963268a",
+        "gitBlob": "9c05bf681f30bcd3703f55ad72c1289f4eeb9844"
+      },
+      "oldFeatureGit": "9c05bf681f30bcd3703f55ad72c1289f4eeb9844",
+      "spans": 1,
+      "wholeForwardInverse": true,
+      "baseSameAsOld419": true
+    },
+    {
+      "path": "src/test/cmWorldIdentity1052.test.ts",
+      "mode": "100644",
+      "base": {
+        "bytes": 9506,
+        "sha256": "0bd984705752ca922d732dd81c9e3889a4f61bb35314fbb65bfccc4212d847a0",
+        "gitBlob": "1f23387af08e4e4aab2d322c452f68aa19e526ea"
+      },
+      "candidate": {
+        "bytes": 13366,
+        "sha256": "9735cd94d699af6247894de3af2705012096fa59a5f541640929c5b90d001ecb",
+        "gitBlob": "05ed085f6c3a0c8a46cc8d19523474af545888cb"
+      },
+      "oldFeatureGit": "05ed085f6c3a0c8a46cc8d19523474af545888cb",
+      "spans": 3,
+      "wholeForwardInverse": true,
+      "baseSameAsOld419": true
+    },
+    {
+      "path": "docs/PROJECT-STATE.md",
+      "mode": "100644",
+      "base": {
+        "bytes": 1988690,
+        "sha256": "b2b07e2ca300d77c6dcb557f4a70239d3426b8ec0186e0cc61a634b53fdb2615",
+        "gitBlob": "83805e4ad8e5c95ef83f812a709495c6dc0aef9f"
+      },
+      "candidate": {
+        "bytes": 1991274,
+        "sha256": "6536058793e79a66746e451d5c16472d55484ad4ffa8e05dbf27cbda6199d712",
+        "gitBlob": "994cd7b43ac89602ad92510ab67363b7c355b4f6"
+      },
+      "spans": 1,
+      "appendOnly": true,
+      "wholeForwardInverse": true
+    }
+  ]
+}
