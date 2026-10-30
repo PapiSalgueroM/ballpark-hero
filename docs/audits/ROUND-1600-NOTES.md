@@ -74,6 +74,21 @@ market read the new files. Loading `scripts/data/cmOldSave1052Fixture.json` give
 head (runner r1600-s8, probe). The loan guard reads the age with a year either side (`sameManNearAge`, ported from
 Round 1102's fix 2e8715bf), since an old save's men now sit a year off the world's rows for them.
 
+The world ledger (the fixer's round, both reviews' MAJOR 1). The ledger names a man by the birth year his age gave,
+and the flip moved most of today's ages a year on, so a save written before it put the men its ledger had moved back
+at the club they left as well (Gyokeres at Arsenal and PSG, Kane at Bayern Munich and Roma, Haaland at Manchester
+City and Real Madrid). The rule for those saves, one holder (`nearAges` and `bornNear` in
+`src/lib/clubManagerWorldRoster.ts`): a ledger of today's world without the stamp reads the projected world a year
+either side of the birth year it recorded, wherever a projected row meets a record (worldRosterClub, pruneWorldRoster,
+recordActualRosterTransfer's source, adoptLivingWorld, the released free agent). A new seeded career on the age
+world opens a stamped ledger (`curve: 2`, a named block before startCareer's last line) and keeps the exact year.
+Past seasons never moved their ages and stay exact. Nothing in an old save is rewritten. The one cost, a namesake of
+the same club and position born a year apart going unlisted, has no case in today's files (simCmOldLedger section
+1: 454 clubs, 0 pairs). `scripts/simCmOldLedger.mjs` builds the base engine (14a9af704) from git, writes saves on it
+at Everton, AC Milan and Bayern Munich, and holds them on this tree: every moved man at his owner once and gone from
+the club he left, on load and after the summer; the load saves back what the base's own load saves; a day one man
+whose age moved can be sold and lands at his buyer; a new career is stamped. Control `CM_OLD_LEDGER_CONTROL=exact`.
+
 ## The drop out table and the August ages (simEras section 6, the draft's cause two)
 
 dropOutChance's table (`src/lib/clubManagerEras.ts`) was fitted to the bake's age column, the 1 January age. The
@@ -144,3 +159,41 @@ Base 14a9af704 on the runner (r1600-base, r1600-s11b, r1600-s12) against the hea
    toss at the top. The written test (head within three points of base) fails by about 5. Everton's eleven carries
    veterans the read lifts; the band is a pin of one club's level. simPress (the same season) is green on 53.05
    (r1600-s6b, r1600-s16b).
+
+## The fixer's round (after the two reviews, 2026-10-30)
+
+The run review (review-run-1600.md) and the read review (review-read-1600.md) found three majors and five minors.
+What changed, and what did not:
+
+- The world ledger of an old save (both reviews' MAJOR 1): see "Old saves (R2)" above.
+- R1's whole population proof (read MAJOR 2, run MINOR 1): `scripts/simCmLevelReads.mjs` section 5 holds today's
+  world row by row (5,113 modern rows, each shows ageRead(level, age), its level the rating curve 1 showed, 0 off)
+  and the main file's age band table as a recorded baseline, the run reviewer's popProbe numbers on cd95e82f4,
+  matched exactly on runner r1600-fix2: 14 to 20, 327 men, level 74.63, shown 70.09; 21 to 23, 924, 74.55, 72.70;
+  24 to 29, 2,322, 74.62, 74.62; 30 to 32, 553, 72.94, 74.52; 33 to 35, 230, 70.94, 74.66; 36 and over, 44,
+  68.64, 75.48; 4,400 men (Ryan Fraser leaves Southampton at join time, on the base too), 2,077 rows the read
+  changes, 827 veterans at 72.16 shown 74.61, 394 shown 75 and up, 118 at 80, 17 at 85, 7 in the top 100. The
+  control `CM_LEVEL_READS_CONTROL=youth` (the 2026 load skips the read under 24) turns section 5 red on its own
+  checks (1,504 rows off the read, two bands, two veteran lines).
+- Proposal 3's proof set, what was run and what was dropped: simCmRatingShape was not ported; section 5 above holds
+  what it held (the table's 2026 rows are section 3, the band table is section 5). playCmRatings was not ported;
+  the walks at 390 and 1280 were run on runners (the builder's r1600-walk2, the run reviewer's r1600-run3) and no
+  committed walk holds them. Of the three old save fixtures, cmOldSave1052Fixture.json (an old squad) is the
+  builder's probe and simCmOldLedger writes its saves on the base engine at run time; a third was not made.
+- The ages (read MAJOR 3): 3,974 of the 4,401 men of the main file stand on rule 2 of scripts/lib/cmAges.mjs (the
+  table's 1 January age plus one), which is a year over for a man born after 1 August, about three in ten of them
+  (about 1,190 men); 427 stand on a birth date. What's New and the squads header now say so instead of calling every
+  age exact. The read reviewer found two of nine verified rows a year over (Jordan Carrillo, Ousseynou Niang, both
+  born in late 2001 by two sources each). Taking birth dates for the 2,080 moved men at a rating sensitive age is
+  the lead's to rule.
+- Deadline Day's desk (read MINOR 2): What's New now says new days deal targets of 29 and under.
+- A man's level is his day one level (both reviews' minor): the comments now say so; the behaviour is not changed,
+  because refreshing it as he ages moves every projected world and every recorded digest. The lead's to rule.
+- The drop out shift on the other files (read MINOR 4): not measured and not changed. projectClub hands every club of
+  today's world its age less one at the drop out table (dropShift), the A-League and Russia files, the real free
+  agents and the made up men included, though only the main squads file's ages moved to August. Measuring it needs
+  a fleet on the base, the head and a head that shifts the main file's clubs only; the lead's to rule.
+- Difficulty (read MINOR 3): the floors are green, but the move was let through on non significance (1.6 standard
+  errors at 20 seeds a club and one season, runner r1600-s12): the steady driver's points a game went 1.34 to 1.21
+  at mid clubs and 0.71 to 0.61 at small ones, and sacks 45 to 57 of 120. Both sizes moved the same way, about five
+  points a season harder for a mid club. Not re-measured here; the lead's to rule.
