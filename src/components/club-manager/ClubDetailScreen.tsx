@@ -133,8 +133,8 @@ export function ClubDetailScreen({ clubName, career, onBack }: ClubDetailScreenP
               )
             ) : (
               dugout && (
-                <div className="text-[10px] text-muted-foreground flex items-center gap-1 min-w-0" data-cm-dugout={dugout.real ? 'real' : 'made-up'}>
-                  <span className="truncate">
+                <div className="text-[10px] text-muted-foreground flex flex-wrap items-center gap-x-1 gap-y-0.5 min-w-0" data-cm-dugout={dugout.real ? 'real' : 'made-up'}>
+                  <span className="truncate max-w-full">
                     Manager: <span className="text-foreground font-semibold">{dugout.name}</span>
                     {dugout.real
                       ? (realDugoutSince(dugout.appointed) ? ` · ${realDugoutSince(dugout.appointed)}` : '')
