@@ -1,0 +1,6 @@
+academy exit=0 18s | simSoccerAcademyPlacement: all sections green
+vitest-create exit=0 22s |    Duration  20.44s (transform 6.02s, setup 351ms, collect 14.28s, tests 35.90s, environment 2.34s, prepare 878ms)
+academy-base exit=0 23s | simSoccerAcademyPlacement: all sections green
+academy-redraw exit=1 11s | control redraw FIRED: section 1 went red as it must
+academy-pickfirst exit=1 9s | control pickfirst FIRED: section 2 went red as it must
+academy-extradraw exit=1 9s | control extradraw FIRED: section 3 went red as it must
