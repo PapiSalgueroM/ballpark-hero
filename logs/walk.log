@@ -1,0 +1,33 @@
+mkwalk: season 1 week 48, league weeks left 4, expiring 3, hub line {"count":3,"text":"3 deals end this summer: Jordan Pickford, Christian Nørgaard, Mark Travers."}, pool 14, sacked false
+mkwalk: wrote walksave.txt
+mkwalk: end of season 1, review pending true, expiring 3, sacked false
+mkwalk: wrote walkend.txt
+  ok   phone-rm: the hub names the deals that run out: "📝 3 deals end this summer: Jordan Pickford, Christian Nørgaard, Mark Travers. Open the contracts desk"
+  ok   phone-rm: the hub line sits inside the screen (x 16, width 358)
+  ok   phone-rm: no sideways scroll on the hub (0)
+  info phone-rm: after "Open the contracts desk" the desk heading is at 1434 px from the top of a 844 px screen (scrollY 0)
+  info phone-rm: stuck on buttons ["Menu","Back","Sign up to track your statsTra","","Every shot and corner (30 more","All player ratings","Continue","Report a problem","Cookie choices","Light mode","Sound: off","Report a problem"]
+  info phone-rm: driver steps tab,calendar,rest,nothing,nothing,nothing,nothing, resuming the end of season save instead
+  FAIL phone-rm: the season review shows the contracts checkpoint (steps tab,calendar,rest,nothing,nothing,nothing,nothing)
+  ok   phone-motion: the hub names the deals that run out: "📝 3 deals end this summer: Jordan Pickford, Christian Nørgaard, Mark Travers. Open the contracts desk"
+  ok   phone-motion: the hub line sits inside the screen (x 16, width 358)
+  ok   phone-motion: no sideways scroll on the hub (0)
+  info phone-motion: after "Open the contracts desk" the desk heading is at 1434 px from the top of a 844 px screen (scrollY 0)
+  info phone-motion: stuck on buttons ["Menu","Back","Sign up to track your statsTra","","Every shot and corner (27 more","All player ratings","Continue","Report a problem","Cookie choices","Light mode","Sound: off","Report a problem"]
+  info phone-motion: driver steps tab,calendar,rest,nothing,nothing,nothing,nothing, resuming the end of season save instead
+  FAIL phone-motion: the season review shows the contracts checkpoint (steps tab,calendar,rest,nothing,nothing,nothing,nothing)
+  ok   desktop-rm: the hub names the deals that run out: "📝 3 deals end this summer: Jordan Pickford, Christian Nørgaard, Mark Travers. Open the contracts desk"
+  ok   desktop-rm: the hub line sits inside the screen (x 208, width 864)
+  ok   desktop-rm: no sideways scroll on the hub (0)
+  info desktop-rm: after "Open the contracts desk" the desk heading is at 1404 px from the top of a 900 px screen (scrollY 0)
+  info desktop-rm: stuck on buttons ["Menu","Back","Sign up to track your statsTra","","Every shot and corner (27 more","All player ratings","Continue","Report a problem","Cookie choices","Light mode","Sound: off","Report a problem"]
+  info desktop-rm: driver steps tab,calendar,rest,nothing,nothing,nothing,nothing, resuming the end of season save instead
+  FAIL desktop-rm: the season review shows the contracts checkpoint (steps tab,calendar,rest,nothing,nothing,nothing,nothing)
+  ok   desktop-motion: the hub names the deals that run out: "📝 3 deals end this summer: Jordan Pickford, Christian Nørgaard, Mark Travers. Open the contracts desk"
+  ok   desktop-motion: the hub line sits inside the screen (x 208, width 864)
+  ok   desktop-motion: no sideways scroll on the hub (0)
+  info desktop-motion: after "Open the contracts desk" the desk heading is at 1404 px from the top of a 900 px screen (scrollY 0)
+  info desktop-motion: stuck on buttons ["Menu","Back","Sign up to track your statsTra","","Every shot and corner (21 more","All player ratings","Continue","Report a problem","Cookie choices","Light mode","Sound: off","Report a problem"]
+  info desktop-motion: driver steps tab,calendar,rest,nothing,nothing,nothing,nothing, resuming the end of season save instead
+  FAIL desktop-motion: the season review shows the contracts checkpoint (steps tab,calendar,rest,nothing,nothing,nothing,nothing)
+walk1597-review: RED, 4 failures
