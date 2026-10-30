@@ -9033,9 +9033,14 @@ export function ensureManagers(state: CareerState, years: number = yearsOn(state
   }
 }
 
-/** Who is in a club's dugout, or null for your own club and unknown clubs. */
-export function managerOf(career: CareerState, club: string): { name: string; since: number; real?: 1; appointed?: string } | null {
-  return career.managers?.[club] ?? null;
+/** Who is in a club's dugout, or null for your own club and unknown clubs.
+ *  @deprecated Round 1606: no screen reads this; anything a player sees reads dugoutOf. It stays exported because
+ *  scripts/simClubDetailCurrentRoster.mjs rebuilds an older ClubDetailScreen that imports it, and it hides a real
+ *  man at a club this career managed exactly as dugoutOf does. */
+export function managerOf(career: CareerState, club: string): { name: string; since: number } | null {
+  const entry = career.managers?.[club];
+  if (!entry || (entry.real === 1 && (career.careerStats?.clubsManaged ?? []).includes(club))) return null;
+  return entry;
 }
 
 /** Round 1606: what a display slot (the club page, the fixture card) shows for a club's dugout. The record's
