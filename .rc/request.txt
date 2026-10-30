@@ -1,0 +1,2 @@
+euro-merged: git fetch -q origin r1593-cm-europa-play:refs/remotes/origin/r1593-cm-europa-play && git worktree add -q .rcm93 HEAD && cd .rcm93 && git -c user.email=r@x -c user.name=r merge -q --no-edit -X ours origin/r1593-cm-europa-play && node scripts/simCmEuroPlay.mjs
+euro-1593-alone: git worktree add -q .rce93 origin/r1593-cm-europa-play && cd .rce93 && node scripts/simCmEuroPlay.mjs
