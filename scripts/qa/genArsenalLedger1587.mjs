@@ -31,9 +31,9 @@ export const ALIASES = {
   'gabriel': ['gabriel magalhaes'],
 };
 
-export const fold = (s) => String(s ?? '').normalize('NFD').replace(/[̀-ͯ]/g, '').toLowerCase().replace(/[^a-z]+/g, ' ').trim();
+export const fold = (s) => String(s ?? '').normalize('NFD').replace(/\p{M}/gu, '').toLowerCase().replace(/[^a-z]+/g, ' ').trim();
 const SEASON_ONLY = new Set(['sarandi', 'london', 'sarandi-player', 'london-player']);
-const CLUB_ONLY = new Set(['sarandi-noisy', 'london-mixed']);
+const CLUB_ONLY = new Set(['sarandi-noisy', 'london-mixed', 'sarandi-club', 'london-club']);
 const sideOf = (kind) => (kind.startsWith('sarandi') ? 'sarandi' : kind.startsWith('london') ? 'london' : null);
 
 export function tripwireKind(r) {

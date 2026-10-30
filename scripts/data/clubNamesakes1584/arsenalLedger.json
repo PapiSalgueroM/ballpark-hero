@@ -34,11 +34,11 @@
  "counts": {
   "judgedRows": 162,
   "men": 74,
-  "sarandi": 52,
-  "london": 13,
+  "sarandi": 56,
+  "london": 18,
   "held": 0,
-  "pending": 9,
-  "sarandiRows": 105
+  "pending": 0,
+  "sarandiRows": 110
  },
  "men": [
   {
@@ -51,7 +51,7 @@
    "nets": [
     "conmebol"
    ],
-   "verdict": "pending",
+   "verdict": "london",
    "rows": [
     133150,
     132619
@@ -60,15 +60,32 @@
     2004,
     2005
    ],
-   "span": null,
+   "span": [
+    2004,
+    2005
+   ],
    "yearsOutsideSpan": [],
    "hosts": {
     "sarandi": [],
     "london": [
-     "statscrew.com"
+     "statscrew.com",
+     "espn.com"
     ]
    },
-   "sources": [],
+   "sources": [
+    {
+     "host": "statscrew.com",
+     "url": "https://www.statscrew.com/worldfootball/roster/t-ARSFC764/y-2004",
+     "read": "2026-10-29",
+     "says": "2004-05 Arsenal (London) squad lists Edu Gaspar (born 1978-05-16)"
+    },
+    {
+     "host": "espn.com",
+     "url": "https://www.espn.com/soccer/story/_/id/42246160/how-arsenal-handle-sporting-director-edu-shock-exit",
+     "read": "2026-10-29",
+     "says": "club only, season not trusted: ESPN article of 2024-11-07 on Arsenal's sporting director Edu: he made 127 appearances for Arsenal as a midfielder in the Invincibles squad (2003-04)"
+    }
+   ],
    "dobMismatch": []
   },
   {
@@ -906,22 +923,39 @@
    "nets": [
     "conmebol"
    ],
-   "verdict": "pending",
+   "verdict": "london",
    "rows": [
     62173
    ],
    "rowYears": [
     2007
    ],
-   "span": null,
+   "span": [
+    2006,
+    2007
+   ],
    "yearsOutsideSpan": [],
    "hosts": {
     "sarandi": [],
     "london": [
-     "statscrew.com"
+     "statscrew.com",
+     "espn.com"
     ]
    },
-   "sources": [],
+   "sources": [
+    {
+     "host": "statscrew.com",
+     "url": "https://www.statscrew.com/worldfootball/roster/t-ARSFC764/y-2006",
+     "read": "2026-10-29",
+     "says": "2006-07 Arsenal (London) squad lists Júlio Baptista (born 1981-10-01)"
+    },
+    {
+     "host": "espn.com",
+     "url": "https://www.espn.com/soccer/player/bio/_/id/38643/julio-baptista",
+     "read": "2026-10-29",
+     "says": "club only, season not trusted: ESPN bio: Júlio Baptista, born 1981-10-01, Brazil; career history lists Arsenal (1 season, linked to ESPN club 359, the London club's squad pages) with Sevilla, Real Madrid, AS Roma, Málaga, Cruzeiro"
+    }
+   ],
    "dobMismatch": []
   },
   {
@@ -1141,22 +1175,39 @@
    "nets": [
     "conmebol"
    ],
-   "verdict": "pending",
+   "verdict": "sarandi",
    "rows": [
     92424
    ],
    "rowYears": [
     2007
    ],
-   "span": null,
+   "span": [
+    2006,
+    2007
+   ],
    "yearsOutsideSpan": [],
    "hosts": {
     "sarandi": [
-     "statscrew.com"
+     "statscrew.com",
+     "espn.com"
     ],
     "london": []
    },
-   "sources": [],
+   "sources": [
+    {
+     "host": "statscrew.com",
+     "url": "https://www.statscrew.com/worldfootball/roster/t-ARSSA760/y-2006",
+     "read": "2026-10-29",
+     "says": "2006-07 Arsenal de Sarandí squad lists Pablo Mouche (born 1987-10-11)"
+    },
+    {
+     "host": "espn.com",
+     "url": "https://africa.espn.com/football/player/bio/_/id/90835/pablo-mouche",
+     "read": "2026-10-29",
+     "says": "club only, season not trusted: ESPN bio: Pablo Mouche, born 1987-10-11, Argentina; career history lists Arsenal Sarandi (1 season) with Boca Juniors, Kayserispor, Palmeiras, Lanús and others; no Arsenal of England"
+    }
+   ],
    "dobMismatch": []
   },
   {
@@ -3789,7 +3840,7 @@
    "nets": [
     "conmebol"
    ],
-   "verdict": "pending",
+   "verdict": "sarandi",
    "rows": [
     111263,
     109938
@@ -3798,15 +3849,38 @@
     2016,
     2017
    ],
-   "span": null,
+   "span": [
+    2016,
+    2018
+   ],
    "yearsOutsideSpan": [],
    "hosts": {
     "sarandi": [
-     "statscrew.com"
+     "statscrew.com",
+     "espn.com"
     ],
     "london": []
    },
-   "sources": [],
+   "sources": [
+    {
+     "host": "statscrew.com",
+     "url": "https://www.statscrew.com/worldfootball/roster/t-ARSSA760/y-2016",
+     "read": "2026-10-29",
+     "says": "2016-17 Arsenal de Sarandí squad lists Gonzalo Bazán (born 1989-05-05)"
+    },
+    {
+     "host": "statscrew.com",
+     "url": "https://www.statscrew.com/worldfootball/roster/t-ARSSA760/y-2017",
+     "read": "2026-10-29",
+     "says": "2017-18 Arsenal de Sarandí squad lists Gonzalo Bazán (born 1989-05-05)"
+    },
+    {
+     "host": "espn.com",
+     "url": "https://africa.espn.com/football/player/bio/_/id/200340/gonzalo-bazan",
+     "read": "2026-10-29",
+     "says": "club only, season not trusted: ESPN bio: Gonzalo Bazán, born 1989-05-05, Argentina; career history lists Arsenal Sarandi (2 seasons) among Chacarita Juniors, Guillermo Brown, Platense, Gimnasia (Mendoza), Sarmiento (Junín), Ferro Carril Oeste, Atlético Tucumán; no Arsenal of England"
+    }
+   ],
    "dobMismatch": []
   },
   {
@@ -3819,22 +3893,39 @@
    "nets": [
     "conmebol"
    ],
-   "verdict": "pending",
+   "verdict": "sarandi",
    "rows": [
     82560
    ],
    "rowYears": [
     2016
    ],
-   "span": null,
+   "span": [
+    2016,
+    2017
+   ],
    "yearsOutsideSpan": [],
    "hosts": {
     "sarandi": [
-     "statscrew.com"
+     "statscrew.com",
+     "espn.com"
     ],
     "london": []
    },
-   "sources": [],
+   "sources": [
+    {
+     "host": "statscrew.com",
+     "url": "https://www.statscrew.com/worldfootball/roster/t-ARSSA760/y-2016",
+     "read": "2026-10-29",
+     "says": "2016-17 Arsenal de Sarandí squad lists Mariano Barbieri (born 1990-11-29)"
+    },
+    {
+     "host": "espn.com",
+     "url": "https://africa.espn.com/football/player/bio/_/id/142135/mariano-barbieri",
+     "read": "2026-10-29",
+     "says": "club only, season not trusted: ESPN bio: Mariano Barbieri, born 1990-11-29, Argentina; career history lists Arsenal Sarandi (1 season) with Flandria, Deportivo Morón, Defensa y Justicia, Belgrano and others; no Arsenal of England"
+    }
+   ],
    "dobMismatch": []
   },
   {
@@ -3898,22 +3989,45 @@
    "nets": [
     "conmebol"
    ],
-   "verdict": "pending",
+   "verdict": "sarandi",
    "rows": [
     54515
    ],
    "rowYears": [
     2017
    ],
-   "span": null,
+   "span": [
+    2016,
+    2018
+   ],
    "yearsOutsideSpan": [],
    "hosts": {
     "sarandi": [
-     "statscrew.com"
+     "statscrew.com",
+     "espn.com"
     ],
     "london": []
    },
-   "sources": [],
+   "sources": [
+    {
+     "host": "statscrew.com",
+     "url": "https://www.statscrew.com/worldfootball/roster/t-ARSSA760/y-2016",
+     "read": "2026-10-29",
+     "says": "2016-17 Arsenal de Sarandí squad lists Leandro Marín (born 1992-01-22)"
+    },
+    {
+     "host": "statscrew.com",
+     "url": "https://www.statscrew.com/worldfootball/roster/t-ARSSA760/y-2017",
+     "read": "2026-10-29",
+     "says": "2017-18 Arsenal de Sarandí squad lists Leandro Marín (born 1992-01-22)"
+    },
+    {
+     "host": "espn.com",
+     "url": "https://africa.espn.com/football/player/bio/_/id/195650/leandro-marin",
+     "read": "2026-10-29",
+     "says": "club only, season not trusted: ESPN bio: Leandro Marín, born 1992-01-22, Argentina; career history lists Arsenal Sarandi (2 seasons) with Patronato, Lausanne Sports, Tigre and Boca Juniors; no Arsenal of England"
+    }
+   ],
    "dobMismatch": []
   },
   {
@@ -4290,7 +4404,8 @@
     "sarandi": [],
     "london": [
      "espn.com",
-     "statscrew.com"
+     "statscrew.com",
+     "fotmob.com"
     ]
    },
    "sources": [
@@ -4329,6 +4444,12 @@
      "url": "https://www.statscrew.com/worldfootball/roster/t-ARSFC764/y-2022",
      "read": "2026-10-29",
      "says": "2022-23 Arsenal (London) squad lists Gabriel (born 1997-12-19)"
+    },
+    {
+     "host": "fotmob.com",
+     "url": "https://www.fotmob.com/teams/9825/squad/arsenal-fc",
+     "read": "2026-10-29",
+     "says": "2026-2027 Arsenal (London) squad lists Gabriel"
     }
    ],
    "dobMismatch": []
@@ -4590,22 +4711,39 @@
    "nets": [
     "conmebol"
    ],
-   "verdict": "pending",
+   "verdict": "london",
    "rows": [
     3198
    ],
    "rowYears": [
     2025
    ],
-   "span": null,
+   "span": [
+    2024,
+    2025
+   ],
    "yearsOutsideSpan": [],
    "hosts": {
     "sarandi": [],
     "london": [
-     "espn.com"
+     "espn.com",
+     "fotmob.com"
     ]
    },
-   "sources": [],
+   "sources": [
+    {
+     "host": "espn.com",
+     "url": "https://www.espn.com/soccer/team/squad/_/id/359/season/2024/league/ENG.1",
+     "read": "2026-10-29",
+     "says": "2024-25 Arsenal (London) squad lists Neto"
+    },
+    {
+     "host": "fotmob.com",
+     "url": "https://www.fotmob.com/players/176186/neto",
+     "read": "2026-10-29",
+     "says": "fotmob: Neto, Brazilian goalkeeper born 1989-07-19; senior career shows Arsenal on loan from Bournemouth, Aug 2024 to Jun 2025"
+    }
+   ],
    "dobMismatch": []
   },
   {
@@ -4666,22 +4804,39 @@
    "nets": [
     "conmebol"
    ],
-   "verdict": "pending",
+   "verdict": "london",
    "rows": [
     162548
    ],
    "rowYears": [
     2026
    ],
-   "span": null,
+   "span": [
+    2026,
+    2027
+   ],
    "yearsOutsideSpan": [],
    "hosts": {
     "sarandi": [],
     "london": [
-     "espn.com"
+     "espn.com",
+     "fotmob.com"
     ]
    },
-   "sources": [],
+   "sources": [
+    {
+     "host": "espn.com",
+     "url": "https://www.espn.com/soccer/team/squad/_/id/359/season/2026/league/ENG.1",
+     "read": "2026-10-29",
+     "says": "2026-27 Arsenal (London) squad lists Bruno Guimarães"
+    },
+    {
+     "host": "fotmob.com",
+     "url": "https://www.fotmob.com/teams/9825/squad/arsenal-fc",
+     "read": "2026-10-29",
+     "says": "2026-2027 Arsenal (London) squad lists Bruno Guimarães"
+    }
+   ],
    "dobMismatch": []
   },
   {
@@ -4694,22 +4849,45 @@
    "nets": [
     "conmebol"
    ],
-   "verdict": "pending",
+   "verdict": "london",
    "rows": [
     17917
    ],
    "rowYears": [
     2026
    ],
-   "span": null,
+   "span": [
+    2025,
+    2027
+   ],
    "yearsOutsideSpan": [],
    "hosts": {
     "sarandi": [],
     "london": [
-     "espn.com"
+     "espn.com",
+     "fotmob.com"
     ]
    },
-   "sources": [],
+   "sources": [
+    {
+     "host": "espn.com",
+     "url": "https://www.espn.com/soccer/team/squad/_/id/359/season/2025/league/ENG.1",
+     "read": "2026-10-29",
+     "says": "2025-26 Arsenal (London) squad lists Piero Hincapié"
+    },
+    {
+     "host": "espn.com",
+     "url": "https://www.espn.com/soccer/team/squad/_/id/359/season/2026/league/ENG.1",
+     "read": "2026-10-29",
+     "says": "2026-27 Arsenal (London) squad lists Piero Hincapié"
+    },
+    {
+     "host": "fotmob.com",
+     "url": "https://www.fotmob.com/teams/9825/squad/arsenal-fc",
+     "read": "2026-10-29",
+     "says": "2026-2027 Arsenal (London) squad lists Piero Hincapié"
+    }
+   ],
    "dobMismatch": []
   }
  ]
