@@ -49,8 +49,12 @@
  *   offeropen      makeOffer stops checking the window               -> section 3
  *   bidopen        acceptBid stops checking the window               -> section 3
  *   keenall        every free agent will sign for anyone             -> sections 4, 9 and 18
- *   nodecay        the pool never ages out                           -> section 4
+ *   nodecay        the made up journeymen never clear out            -> section 4
  *   nodecaywire    the rollover skips the decay                      -> section 4
+ *   olddelete      every man is deleted two summers after he arrived
+ *                  again, the bug Round 1597 took out                -> section 4
+ *   nosummer       the rollover skips the list's summer, so nobody
+ *                  on it ages                                        -> section 4
  *   nodedupe       the pool accepts a duplicate                      -> section 5
  *   noretired      a retired name can enter the pool                 -> section 5
  *   stalekeep      an old pool record survives a fresh release       -> section 5
@@ -249,8 +253,16 @@ if (CONTROL === 'nosev') {
   console.log(`   [control ledgersquad: ${pick}, on a baked squad, written into the ledger and the file]`);
 } else if (CONTROL === 'nodecay') {
   rewrite('nodecay', 'engine',
-    '.filter(f => !gone.has(f.name) && nextSeason - f.since < 2)',
+    '.filter(f => !gone.has(f.name) && (!isJourneyman(f) || nextSeason - f.since < 2))',
     '.filter(f => !gone.has(f.name))');
+} else if (CONTROL === 'olddelete') {
+  rewrite('olddelete', 'engine',
+    '.filter(f => !gone.has(f.name) && (!isJourneyman(f) || nextSeason - f.since < 2))',
+    '.filter(f => !gone.has(f.name) && nextSeason - f.since < 2)');
+} else if (CONTROL === 'nosummer') {
+  rewrite('nosummer', 'engine',
+    '  const poolSummer = summerFreeAgents(career);',
+    '  const poolSummer = { pool: career.freeAgents ?? [], retired: [] as { name: string; age: number; rating: number }[], left: [] as { name: string; age: number; rating: number }[] };');
 } else if (CONTROL === 'nodecaywire') {
   rewrite('nodecaywire', 'engine',
     'const carried = decayFreeAgents(career.freeAgents ?? [], career.season + 1, gone);',
@@ -683,25 +695,35 @@ console.log('4) the pool stays weak and clears itself out');
   } else {
     ok('a far better player than the club refuses to sign, and a weak one in the same spot signs');
   }
-  /* And it decays rather than piling up. Two seasons and an unsigned man is
-     gone, so a save cannot accumulate a bench of good free agents. */
+  /* And it clears its cover rather than piling up, but never the men. Round
+     1597 (the owner: a man you do not re-sign "just dissapear[s] from the
+     game"): only a made up journeyman is gone after two summers, because the
+     top up makes six of them a season. A man whose deal ran out stays until a
+     club signs him or he retires; summerFreeAgents ages him, not this, so the
+     decay must leave him exactly as it found him. The interest rule is what
+     keeps a bench of good free agents from building up for you. */
   const poolNow = [
-    { name: 'Fresh', position: 'MID', age: 27, rating: 70, since: 5, reason: 'expired' },
-    { name: 'Stale', position: 'MID', age: 30, rating: 70, since: 3, reason: 'expired' },
+    { name: 'Fresh', position: 'MID', age: 27, rating: 70, since: 5, reason: 'unattached', generated: true },
+    { name: 'Stale', position: 'MID', age: 30, rating: 70, since: 3, reason: 'unattached', generated: true },
+    { name: 'Walked', position: 'CB', age: 30, rating: 70, since: 3, reason: 'expired', fromMyClub: true },
     { name: 'Dead', position: 'GK', age: 36, rating: 66, since: 5, reason: 'expired' },
   ];
   const after = cm.decayFreeAgents(poolNow, 6, new Set(['Dead']));
   const names = after.map(f => f.name);
-  if (names.includes('Stale')) fail('a free agent unsigned for three seasons is still in the pool');
-  else if (!names.includes('Fresh')) fail('a man who has been free for one season was dropped too early');
+  if (names.includes('Stale')) fail('a journeyman unsigned for three seasons is still in the pool');
+  else if (!names.includes('Fresh')) fail('a journeyman who has been free for one season was dropped too early');
+  else if (!names.includes('Walked')) fail('a man whose deal ran out three summers ago was deleted from the pool: he is gone from the game');
   else if (names.includes('Dead')) fail('a retired man survived the summer in the pool');
-  else ok(`the pool ages out: kept ${names.join(', ')}, dropped Stale and Dead`);
+  else ok(`the pool clears its cover and keeps the men: kept ${names.join(', ')}, dropped Stale and Dead`);
   const fresh = after.find(f => f.name === 'Fresh');
   if (!(fresh && fresh.rating === 69 && fresh.age === 28)) {
-    fail(`an unsigned free agent does not decay: expected 69 rated and 28, got ${fresh ? `${fresh.rating} and ${fresh.age}` : 'nothing'}`);
+    fail(`an unsigned journeyman does not decay: expected 69 rated and 28, got ${fresh ? `${fresh.rating} and ${fresh.age}` : 'nothing'}`);
   } else {
-    ok('an unsigned man loses a year and a rating point over the summer');
+    ok('an unsigned journeyman loses a year and a rating point over the summer');
   }
+  const walked = after.find(f => f.name === 'Walked');
+  if (!(walked && walked.rating === 70 && walked.age === 30)) fail(`the decay aged a man it does not own: Walked came out ${walked ? `${walked.rating} rated and ${walked.age}` : 'missing'}, expected 70 and 30`);
+  else ok('the decay leaves a man whose deal ran out to the list\'s own summer');
   /* AND THE ROLLOVER ACTUALLY CALLS IT. The first draft tested the exported
      function alone, with a note saying the rollover could not be driven from a
      synthetic state. It can: startNextSeason runs on a startCareer state. This
@@ -709,12 +731,17 @@ console.log('4) the pool stays weak and clears itself out');
      because which men the decay keeps is the check above. */
   const st2 = seeded(4610, () => cm.startCareer('Everton'));
   st2.freeAgents = [
-    { name: 'Fresh Probe', position: 'CM', age: 27, rating: 60, since: st2.season, reason: 'expired' },
+    { name: 'Fresh Probe', position: 'CM', age: 27, rating: 60, since: st2.season, reason: 'unattached', generated: true },
+    /* Round 1597: free two summers already, 29 so he cannot retire (nobody does before 32). */
+    { name: 'Walked Probe', position: 'CB', age: 29, rating: 60, since: st2.season - 2, reason: 'expired', fromMyClub: true },
   ];
   const n = seeded(4611, () => cm.startNextSeason(st2));
   const fp = (n.freeAgents ?? []).find(f => f.name === 'Fresh Probe');
   if (!(fp && fp.rating === 59 && fp.age === 28)) fail(`a real rollover did not run the decay: Fresh Probe came out ${fp ? `${fp.rating} rated and ${fp.age}` : 'missing'}, expected 59 and 28`);
-  else ok('a real rollover runs the decay over the pool');
+  else ok('a real rollover runs the decay over the journeymen');
+  const wp = (n.freeAgents ?? []).find(f => f.name === 'Walked Probe');
+  if (!(wp && wp.age === 30)) fail(`a real rollover lost or did not age a man whose deal ran out two summers ago: Walked Probe came out ${wp ? `${wp.age}` : 'missing'}, expected on the list at 30`);
+  else ok(`a real rollover keeps a man whose deal ran out two summers ago, a year older (${wp.rating} rated at 30)`);
 }
 
 /* ═══════════════ 5) the pool cannot hold a duplicate or a dead man ═══════════════ */
@@ -1677,8 +1704,10 @@ console.log("18) a modern day one opens with today's real free agents, and only 
   try { loaded = cm.loadCareer(); } finally { globalThis.localStorage.getItem = realGet; }
   if (!loaded) leaks.push('an old save did not load');
   else if (realOf(loaded).length) leaks.push(`an old save with no pool opens listing ${realOf(loaded).length}`);
-  /* Summers: a man not signed is carried one summer, a year older, and then
-     gone with everybody else the pool ages out; a man signed is never back. */
+  /* Summers: a man not signed is carried, a year older each summer, until a
+     club signs him or he retires (Round 1597: the pool no longer deletes him at
+     his second summer); a man signed is never back; and no summer seeds them
+     again, so nobody is listed in season three who was not there on day one. */
   const signable = realOf(everton).find(f => cm.freeAgentBlock({ ...everton, wageCap: Number.MAX_SAFE_INTEGER }, f) === null);
   const signedSt = signable ? cm.signFreeAgent({ ...clone(everton), wageCap: Number.MAX_SAFE_INTEGER }, signable.name) : null;
   if (!signedSt) leaks.push('no real free agent could be signed at Everton, so the summer checks see nothing');
@@ -1688,11 +1717,19 @@ console.log("18) a modern day one opens with today's real free agents, and only 
     const carried = realOf(n1);
     const want = realOf(everton).filter(f => f.name !== signable.name);
     if (carried.some(f => f.name === signable.name)) leaks.push(`${signable.name}, signed in season one, is back in the pool the next summer`);
-    if (carried.length !== want.length || carried.some(f => f.since !== everton.season || f.age !== (want.find(w => w.name === f.name)?.age ?? -9) + 1)) leaks.push(`season two holds ${carried.length} real men, not the ${want.length} unsigned ones a year older`);
-    if (realOf(n2).length) leaks.push(`season three still lists ${realOf(n2).length} real men, so the summer re-seeds them`);
+    const accounted = (st, f, years) => {
+      const on = realOf(st).find(x => x.name === f.name);
+      return on ? on.since === everton.season && on.age === f.age + years : (st.retiredNames ?? []).includes(f.name);
+    };
+    const lost1 = want.filter(f => !accounted(n1, f, 1));
+    if (lost1.length || carried.length > want.length) leaks.push(`season two lists ${carried.length} real men, and ${lost1.length} of the ${want.length} unsigned ones are neither on it a year older nor retired`);
+    const extra = realOf(n2).filter(f => !want.some(w => w.name === f.name));
+    if (extra.length) leaks.push(`season three lists ${extra.length} real men who were not there on day one, so the summer re-seeds them`);
+    const lost2 = want.filter(f => !accounted(n2, f, 2));
+    if (lost2.length) leaks.push(`season three: ${lost2.length} unsigned real men are neither on the list two years older nor retired`);
   }
   if (leaks.length) fail(`the real free agents are listed somewhere other than a new modern day one: ${leaks.slice(0, 3).join(' | ')}`);
-  else ok('never in an era save, a job move, an old save or a later summer; a signed man never comes back and the rest age out in two');
+  else ok('never in an era save, a job move, an old save or a later summer; a signed man never comes back and the rest stay on the list, older each summer, until they retire');
 
   /* COVER, NOT AN UPGRADE. The rule this pool has lived under since Round
      619. Journeymen sit 20 to 26 under the club; a real man sits wherever his

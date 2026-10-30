@@ -1,6 +1,6 @@
 import { Link } from 'react-router-dom';
-import { lazy, Suspense, useCallback, useEffect, useMemo, useState } from 'react';
-import type { ReactNode } from 'react';
+import { lazy, Suspense, useCallback, useEffect, useMemo, useRef, useState } from 'react';
+import type { MutableRefObject, ReactNode } from 'react';
 import { cn } from '@/lib/utils';
 import type { MidSeasonEntry } from '@/lib/clubManagerCalendar';
 import { Play, ChevronRight, ChevronLeft, Trophy, Briefcase } from 'lucide-react';
@@ -21,7 +21,7 @@ import {
 import { generatedLeagueCountClauses, generatedLeagueMonthClause } from '@/data/clubManagerWorldRosters';
 import { FACILITY_IDS, facilitiesOf } from '@/lib/clubManagerFacilities';
 import { projectFinances } from '@/lib/clubManagerFinances';
-import { inboxTile, kittyChange, leagueTileValue, recordLine } from '@/lib/clubManagerHubLines';
+import { expiringDealsLine, inboxTile, kittyChange, leagueTileValue, recordLine } from '@/lib/clubManagerHubLines';
 import { myClubFirst, pitchName } from '@/lib/cmMatchDisplay';
 import { BOARD_EDGE, boardMeter } from '@/lib/clubManagerMeters';
 import { STAFF_POST_IDS, STAFF_POST_INFO, staffOf } from '@/lib/clubManagerStaff';
@@ -44,7 +44,7 @@ import type { CareerSetup } from '@/lib/clubManagerStart';
 import { withWorldEdit, worldEditMoves, realLeagueIdOf } from '@/lib/clubManagerWorldEdit';
 import type { WorldEdit } from '@/lib/clubManagerWorldEdit';
 import { levelFor, pointsFree, xpOf, MAX_LEVEL } from '@/lib/clubManagerXp';
-import { useRevealScroll } from '@/hooks/useRevealScroll';
+import { GAP, topInset, useRevealScroll } from '@/hooks/useRevealScroll';
 import { useArrivalTop } from '@/hooks/useArrivalTop';
 
 const ClubManagerTreatmentPanel = lazy(() => import('@/components/club-manager/ClubManagerTreatmentPanel'));
@@ -108,6 +108,27 @@ function ScreenLoading({ children, compact = false }: { children: ReactNode; com
       {children}
     </Suspense>
   );
+}
+
+/** Round 1597 review fix: the hub's deals line says "Open the contracts desk", and the Squad tab opened at the top
+ *  of the squad list with the desk about 1,400 px further down. Mounted inside the desk's own Suspense boundary, so
+ *  it runs once the desk is there, and it brings the desk's top into view once per press (served remembers the last
+ *  press it answered, so opening the tab any other way never moves the page). One press, one scroll: no cleanup
+ *  cancels it, unlike useRevealScroll, whose re-run on a re-render would. */
+function DeskInView({ jump, served, children }: { jump: number; served: MutableRefObject<number>; children: ReactNode }) {
+  const ref = useRef<HTMLDivElement>(null);
+  useEffect(() => {
+    if (jump <= served.current) return;
+    served.current = jump;
+    requestAnimationFrame(() => requestAnimationFrame(() => {
+      const node = ref.current;
+      if (!node) return;
+      node.style.scrollMarginTop = `${topInset() + GAP}px`;
+      const still = typeof window.matchMedia === 'function' && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+      node.scrollIntoView({ behavior: still ? 'auto' : 'smooth', block: 'start', inline: 'nearest' });
+    }));
+  }, [jump, served]);
+  return <div ref={ref}>{children}</div>;
 }
 
 /** Round 832: a past era's squads did not arrive (offline, a dropped
@@ -251,6 +272,9 @@ const ClubManager = () => {
   /* Round 782: the pre match card's shortcut to the shootout order asks the
      tactics tab to open that tile on arrival; the tab hands the request back. */
   const [tacticsTile, setTacticsTile] = useState<'shootout' | null>(null);
+  /* Round 1597 review fix: each press of the hub's deals line, and the last one the desk has answered (DeskInView). */
+  const [deskJump, setDeskJump] = useState(0);
+  const deskServed = useRef(0);
   const panelRef = useRevealScroll<HTMLDivElement>(`hub:${hubPanel ?? ''}:${clubView ?? ''}`, { skipFirst: true });
   /* Round 928 review: the managers screen is where one career is swapped for
      another, so the hub's open panel, rival view, live viewer switch and
@@ -977,6 +1001,8 @@ const ClubManager = () => {
   /* Round 979: an open appeal or decision counts as unread on the tile.
      Round 1328: the count and the line come from one rule, the panel's own. */
   const inboxLine = inboxTile(c);
+  /* Round 1597: the deals that run out this summer, named in the season's last weeks. */
+  const dealsLine = expiringDealsLine(c);
   const lastRes = (c.resultLog ?? []).slice(-1)[0];
   const rivalName = c.boardObjectives?.find(o => o.id === 'rival')?.rivalName ?? null;
   const rivalIdx = rivalName ? g.tableRows.findIndex(r => r.club === rivalName) : -1;
@@ -1123,6 +1149,36 @@ const ClubManager = () => {
               </div>
               <div className="text-[9px] text-muted-foreground mt-1">That is the end of their careers. You will need to replace them.</div>
             </div>
+          )}
+          {/* Round 1597: and the men on the free agent list who called it a day, so nobody leaves the game unseen. */}
+          {!leagueStarted(c) && (c.freeAgentsRetired ?? []).length > 0 && (
+            <div data-cm-fa-retired className="rounded-xl border border-border bg-card p-2.5">
+              <div className="text-[10px] text-muted-foreground uppercase tracking-wider mb-1">👟 Retired off the free agent list</div>
+              <div className="text-xs text-foreground">
+                {(c.freeAgentsRetired ?? []).map(r => `${r.name} (${r.age}, rated ${r.rating})`).join(' · ')}
+              </div>
+              <div className="text-[9px] text-muted-foreground mt-1">Nobody signed them, so they have hung up their boots.</div>
+            </div>
+          )}
+          {/* Round 1597 closing check: and the made up men who left the list for a club outside these leagues. */}
+          {!leagueStarted(c) && (c.freeAgentsLeft ?? []).length > 0 && (
+            <div data-cm-fa-left className="rounded-xl border border-border bg-card p-2.5">
+              <div className="text-[10px] text-muted-foreground uppercase tracking-wider mb-1">🧳 Off the free agent list</div>
+              <div className="text-xs text-foreground">
+                {(c.freeAgentsLeft ?? []).map(r => `${r.name} (${r.age}, rated ${r.rating})`).join(' · ')}
+              </div>
+              <div className="text-[9px] text-muted-foreground mt-1">Made up players nobody here signed. They found a club in a league this game does not follow, so they are off the list.</div>
+            </div>
+          )}
+          {/* Round 1597: the last weeks of a season name every deal that runs out, so none ends unseen. */}
+          {dealsLine && (
+            <button
+              data-cm-deals-line
+              onClick={() => { g.setActiveTab('squad'); setDeskJump(n => n + 1); }}
+              className="w-full rounded-xl border border-primary/40 bg-primary/10 p-2.5 text-left text-xs text-foreground hover:bg-primary/20 transition-colors"
+            >
+              📝 {dealsLine.text} {dealsLine.real && <><span data-cm-deal-label className="text-muted-foreground">(this game&apos;s deals)</span> </>}<span className="font-bold text-primary">Open the contracts desk</span>
+            </button>
           )}
           {c.transferWindow !== null && (
             <button
@@ -1639,7 +1695,7 @@ const ClubManager = () => {
                mounted until now, so renewals were unreachable for 88 rounds.
                Plain renewal or the cheaper clause deal, and every clause you
                have granted stays in view with its bargain warning. */}
-            <ScreenLoading><ContractsCard career={c} onRelease={g.terminate} onSignFreeAgent={g.signFree} onRenew={g.renew} onRenewWithClause={g.renewWithClause} /></ScreenLoading>
+            <ScreenLoading><DeskInView jump={deskJump} served={deskServed}><ContractsCard career={c} onRelease={g.terminate} onSignFreeAgent={g.signFree} onRenew={g.renew} onRenewWithClause={g.renewWithClause} /></DeskInView></ScreenLoading>
           </div>
         </TabsContent>
 

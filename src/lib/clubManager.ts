@@ -93,6 +93,8 @@ import {
   eraRostersLoaded,
 } from '@/lib/clubManagerEras';
 import type { ProjectedPlayer, CMEra } from '@/lib/clubManagerEras';
+/* Round 1597 closing check: the world's own odds of leaving these leagues, for a made up free agent. */
+import { dropOutChance } from '@/lib/clubManagerEras';
 /* Round 1520: after the eras module, which brings the nationality maps in first, so the chunk keeps its order. */
 import { countNations, drawNation, mapSpelling, type NationCount } from '@/lib/clubManagerMadeUpNations';
 import { nationalityOf } from '@/data/playerNationalities';
@@ -2861,9 +2863,20 @@ export interface CareerState {
   /** Round 619: what ending a contract early still costs after he has gone. */
   severance?: SeveranceRow[];
   /** Round 619 review: every man this manager has released. None of them
-   *  signs for him again by any route, so it outlives the pool record, which
-   *  ages out after two summers. See releasedByYouNames. */
+   *  signs for him again by any route, so it outlives the pool record (which
+   *  aged out after two summers until Round 1597). See releasedByYouNames. */
   releasedNames?: string[];
+  /** Round 1597: set at a career's first summer on the build where nobody leaves
+   *  the pool except by signing or retiring, once the men its world ledger still
+   *  held as released were put back on the list (recoverPooledReleases). Absent on
+   *  every save before that summer, which is what makes the pass run once. */
+  freeAgencyV2?: true;
+  /** Round 1597: the men on the free agent list who retired at the last summer, for the new season's first
+   *  screen (retiredLastSummer is the squad's). Rewritten every summer; absent when nobody did. */
+  freeAgentsRetired?: { name: string; age: number; rating: number }[];
+  /** Round 1597 closing check: the made up men on the free agent list who left these leagues at the last summer
+   *  (leavesTheLeagues), for the new season's first screen. Rewritten every summer; absent when nobody did. */
+  freeAgentsLeft?: { name: string; age: number; rating: number }[];
   aiHeadlines: string[];
   /** Names no longer purchasable (bought by me or by AI clubs this season). */
   goneNames: string[];
@@ -7581,6 +7594,9 @@ export interface FreeAgent {
   reason: 'released' | 'expired' | 'unattached';
   /** Set only when I was the one who let him go. */
   fromMyClub?: true;
+  /** Round 1597: let go by the summer trim (a squad over the limit), not by my own release, so releasedByYou does
+      not bar him: after his season away he may sign for me again like any man whose deal ran out with me. */
+  trimmed?: true;
 }
 
 export interface SeveranceRow {
@@ -7836,14 +7852,159 @@ export function seedRealFreeAgents(state: CareerState): void {
  * note instead of a verdict. A rule nothing can test is a rule nobody is
  * keeping.
  *
- * Anyone who retired leaves whatever else is true of him, everyone left ages a
- * year and loses a rating point, and a man unsigned for two seasons is gone, so
- * a save cannot slowly accumulate a bench of good free agents.
+ * Anyone who retired leaves whatever else is true of him. Round 1597 (the
+ * owner: "if u dont resign a player in time then they just dissapear"): only the
+ * made up journeymen still age a year, lose a rating point and go after two
+ * summers, because they are cover the top up makes six of a season and nothing
+ * else. Every other man was deleted here at his second summer with no line in
+ * the news, so a man you let walk was simply gone from the game. He now stays
+ * until a club signs him or he retires, and he ages over the summer the way a
+ * footballer does, in summerFreeAgents below, before this runs. The interest
+ * rule (freeAgentInterest) is what keeps a bench of good free agents from
+ * piling up for you; it never needed a delete.
  */
 export function decayFreeAgents(pool: FreeAgent[], nextSeason: number, gone: Set<string>): FreeAgent[] {
   return pool
-    .filter(f => !gone.has(f.name) && nextSeason - f.since < 2)
-    .map(f => ({ ...f, age: f.age + 1, rating: Math.max(40, f.rating - 1) }));
+    .filter(f => !gone.has(f.name) && (!isJourneyman(f) || nextSeason - f.since < 2))
+    .map(f => isJourneyman(f) ? { ...f, age: f.age + 1, rating: Math.max(40, f.rating - 1) } : f);
+}
+
+/** Round 1597: a made up journeyman of the top up, the one kind of free agent that is cover and nothing more. */
+function isJourneyman(f: FreeAgent): boolean {
+  return f.reason === 'unattached' && f.generated === true;
+}
+
+/**
+ * Round 1597: the pool's summer, for everyone but the journeymen (decayFreeAgents).
+ *
+ * One aging rule, the one every footballer in the game ages on. A man the world
+ * ledger still holds as released (a man who left a club I ran) is aged and
+ * retired BY the ledger: his record one world year on, with the ledger's own
+ * keyed draws (refreshWorldRoster), so the list and the ledger can never
+ * disagree about whether he is still playing. Anyone else (no ledger, a made up
+ * man the ledger never took, a real man with no club) goes through agePlayer and
+ * retireChance on a stream keyed by his name, the season he arrived and the
+ * summer, never Math.random, so no draw of the summer moves. He retires on the
+ * same odds a squad player does: nobody before 32, everybody by 42.
+ *
+ * Pure. Returns the pool for startNextSeason to carry and the men who retired,
+ * whom the rollover writes onto retiredNames and into the news, and (closing
+ * check) the made up men who left these leagues (leavesTheLeagues), said on the
+ * new season's first screen the same way.
+ */
+export function summerFreeAgents(career: CareerState): { pool: FreeAgent[]; retired: { name: string; age: number; rating: number }[]; left: { name: string; age: number; rating: number }[] } {
+  const pool = career.freeAgents ?? [];
+  const retired: { name: string; age: number; rating: number }[] = [];
+  const left: { name: string; age: number; rating: number }[] = [];
+  if (!pool.length) return { pool, retired, left };
+  const nextSeason = career.season + 1, year = worldYear(career);
+  const ahead = livingWorldOf(career) ? worldRosterView(refreshWorldRoster({ ...career, season: nextSeason })) : null;
+  const neutral = { ...career, training: DEFAULT_TRAINING, academy: undefined, facilities: undefined, staff: undefined };
+  const kept: FreeAgent[] = [];
+  /* Round 1597 closing check: a made up man still playing may leave these leagues (leavesTheLeagues). */
+  const stay = (f: FreeAgent, aged: FreeAgent) => {
+    if (leavesTheLeagues(career, aged, f.since, nextSeason)) left.push({ name: f.name, age: aged.age, rating: aged.rating });
+    else kept.push(aged);
+  };
+  for (const f of pool) {
+    if (isJourneyman(f)) { kept.push(f); continue; }
+    const held = (ahead?.records ?? []).filter(r => r.owner === null && (r.status === 'released' || r.status === 'retired')
+      && r.origin.name === f.name && r.origin.birthYear === year - f.age && r.player.position === f.position);
+    if (held.length === 1) {
+      const r = held[0];
+      if (r.status === 'retired') { retired.push({ name: f.name, age: r.player.age, rating: r.player.rating }); continue; }
+      stay(f, { ...f, age: r.player.age, rating: r.player.rating, ...(f.value !== undefined && r.player.value !== undefined ? { value: r.player.value } : {}) });
+      continue;
+    }
+    const random = keyedRng(`free-agent-summer|${worldSeedOf(career) ?? 'legacy'}|${f.name}|${f.since}|${nextSeason}`);
+    const man = agePlayer({
+      id: `fa-${slug(f.name)}`, name: f.name, position: f.position, rating: f.rating, age: f.age, value: f.value,
+      fitness: 100, morale: 70, injuryWeeks: 0, suspendedMatches: 0, isYouth: false, seasonGoals: 0, seasonAssists: 0,
+    } as CMPlayer, neutral, random);
+    if (random() < retireChance(man.age, man.rating, man.position)) { retired.push({ name: f.name, age: man.age, rating: man.rating }); continue; }
+    stay(f, { ...f, age: man.age, rating: man.rating, ...(f.value !== undefined && man.value !== undefined ? { value: man.value } : {}) });
+  }
+  return { pool: kept, retired, left };
+}
+
+/**
+ * Round 1597 closing check: a made up man on the free agent list leaves these leagues on the world's own odds.
+ *
+ * The list keeps a man until a club signs him or he retires, and until FA-3 the only club that signs from it is
+ * mine, so the made up men who walked (youth pads, academy boys, a made up squad man) piled up: a median 43 men
+ * besides the journeymen by season 9 in fleet careers that renew nobody, median age 25, a youth pad listed for up
+ * to fifteen years. Every man of the projected world leaves these leagues on dropOutChance each summer (a lower
+ * division, a league abroad: projectedWorld's worldExitChance), so a made up free agent does too, after his aging,
+ * on a stream keyed by his name, the season he arrived and the summer (no draw of the summer moves). Never a
+ * journeyman (decayFreeAgents clears those) and never a real footballer: a real man stays until a club signs him
+ * or he retires, as FA-1 promises. The new season's first screen names every man who left (freeAgentsLeft).
+ */
+function leavesTheLeagues(career: CareerState, aged: FreeAgent, since: number, nextSeason: number): boolean {
+  if (aged.generated !== true && !aged.name.endsWith(YOUTH_PAD_SUFFIX)) return false;
+  const random = keyedRng(`free-agent-leaves|${worldSeedOf(career) ?? 'legacy'}|${aged.name}|${since}|${nextSeason}`);
+  return random() < dropOutChance(aged.age, aged.rating, aged.position);
+}
+
+/**
+ * Round 1597: an old save gets back the men an older build deleted from its pool.
+ *
+ * Until this round a man unsigned two summers after he arrived was deleted from
+ * the pool, and a man the summer trim let go was never written to it. Every one
+ * of them left a club I ran, so in a living world the ledger wrote him a
+ * released record with no owner, and while his old club's projection still lists
+ * him that record is still in the save. Once, at the career's first summer on
+ * this build and never on load (the shape of adoptLivingWorld), every such man
+ * who is in no squad of mine, not out on loan from me, not on the list and not
+ * retired goes back on the list, as a man whose deal ran out unless I released
+ * him myself (releasedNames). A man whose record an old build also pruned is not
+ * in the save any more and is not rebuilt: that would be making up his age and
+ * rating. A career with no ledger is left exactly as it is. Pure, no draw.
+ */
+export function recoverPooledReleases(career: CareerState): CareerState {
+  if (career.freeAgencyV2 || !livingWorldOf(career)) return career;
+  const done: CareerState = { ...career, freeAgencyV2: true };
+  const held = worldRosterView(refreshWorldRoster(career));
+  if (!held || !Array.isArray(career.freeAgents)) return done;
+  const here = new Set([
+    ...career.squad.map(p => p.name),
+    ...(career.loanedOut ?? []).map(l => l.player.name),
+    ...career.freeAgents.map(f => f.name),
+    ...(career.retiredNames ?? []),
+  ]);
+  const mine = new Set(career.releasedNames ?? []);
+  const back: FreeAgent[] = [];
+  for (const r of held.records) {
+    const p = r.player;
+    if (r.status !== 'released' || r.owner !== null || here.has(p.name) || here.has(r.origin.name)) continue;
+    here.add(p.name);
+    back.push({
+      name: p.name, position: p.position, age: p.age, rating: p.rating,
+      value: p.value, generated: madeUp(p) || undefined, ...(p.nation ? { nation: p.nation } : {}),
+      founderSaleRatio: p.founderSaleRatio, since: career.season,
+      reason: mine.has(p.name) ? 'released' : 'expired', fromMyClub: true,
+    });
+  }
+  return back.length ? { ...done, freeAgents: [...career.freeAgents, ...back] } : done;
+}
+
+/**
+ * Round 1597 closing check: what a mid season job move (joinClubNow) carries of free agency, the way a summer move
+ * keeps it (startNextSeason's pool block). Every man on the list stays in the world except the made up journeymen
+ * and the other men with no club ('unattached'), which the joined save's own list already holds for the new club;
+ * this manager's releasedNames and the once only freeAgencyV2 pass come along. Until this the joined save took the
+ * new club's list whole and lost the other two, so every man I had let walk was gone, and at the next summer
+ * recoverPooledReleases (run again for want of the flag) put a man I had released back from the ledger as a
+ * signable 'expired' record. Nobody in the joined squad or retired is listed. Returns only the fields to spread.
+ */
+export function freeAgencyCarry(career: CareerState, joined: Pick<CareerState, 'freeAgents' | 'squad'>): Partial<Pick<CareerState, 'freeAgents' | 'releasedNames' | 'freeAgencyV2'>> {
+  const fresh = joined.freeAgents ?? [];
+  const skip = new Set([...joined.squad.map(p => p.name), ...(career.retiredNames ?? []), ...fresh.map(f => f.name)]);
+  const kept = (career.freeAgents ?? []).filter(f => f.reason !== 'unattached' && !skip.has(f.name));
+  return {
+    ...(kept.length ? { freeAgents: [...fresh, ...kept] } : {}),
+    ...(career.releasedNames !== undefined ? { releasedNames: career.releasedNames } : {}),
+    ...(career.freeAgencyV2 ? { freeAgencyV2: true as const } : {}),
+  };
 }
 
 /** What the settlements still cost a week, in thousands. */
@@ -8080,7 +8241,9 @@ export function releasedByYouNames(career: CareerState): Set<string> {
  * City: 12.8m of renewal fees dodged for 37k of settlements.
  */
 export function releasedByYou(fa: FreeAgent): boolean {
-  return fa.fromMyClub === true && fa.reason === 'released';
+  /* Round 1597 closing check: a man the summer trim cut left my club, so he is mine (fromMyClub: the season away,
+     and no stranger's eleventh best man line), but I never pressed release on him, so he is not barred for ever. */
+  return fa.fromMyClub === true && fa.reason === 'released' && fa.trimmed !== true;
 }
 
 /** Why a free agent signing would be refused. The card shows the same reason the engine uses. */
@@ -8310,21 +8473,30 @@ export function renewalTermsWithClause(p: CMPlayer): { years: number; wage: numb
   return { years: base.years, wage, fee, clause };
 }
 
+/* Round 1597 fix: a man I lent out is still mine, and so is his deal. Until this fix a renewal looked in the squad
+   only, so a man in his last year who was out on loan could not be kept by any screen: he came home at the summer
+   and walked the same day. The two below find him in the squad or out on loan and write the new deal where he is. */
+function dealHolder(career: CareerState, playerId: string): CMPlayer | undefined {
+  return career.squad.find(x => x.id === playerId) ?? (career.loanedOut ?? []).find(l => l.player.id === playerId)?.player;
+}
+function withDealRewritten(career: CareerState, playerId: string, edit: (p: CMPlayer) => CMPlayer): Pick<CareerState, 'squad' | 'loanedOut'> | Pick<CareerState, 'squad'> {
+  if (career.squad.some(x => x.id === playerId)) return { squad: career.squad.map(x => (x.id === playerId ? edit(x) : x)) };
+  return { squad: career.squad, loanedOut: (career.loanedOut ?? []).map(l => (l.player.id === playerId ? { ...l, player: edit(l.player) } : l)) };
+}
+
 /** Sign him again. Costs the fee up front and resets his deal. A plain
     renewal DELETES any release clause he carried: that is the counter-move
     once his value has grown past the number, and it costs full wage. */
 export function renewContract(career: CareerState, playerId: string): CareerState | null {
-  const p = career.squad.find(x => x.id === playerId);
+  const p = dealHolder(career, playerId);
   if (!p || p.onLoan) return null;
   const terms = renewalTerms(p);
   if (terms.fee > career.budget) return null;
   return {
     ...career,
     budget: Math.round((career.budget - terms.fee) * 10) / 10,
-    squad: career.squad.map(x => (
-      x.id === playerId
-        ? { ...x, contractYears: terms.years, wage: terms.wage, morale: clamp(x.morale + 9, 5, 99), releaseClause: undefined }
-        : x
+    ...withDealRewritten(career, playerId, x => (
+      { ...x, contractYears: terms.years, wage: terms.wage, morale: clamp(x.morale + 9, 5, 99), releaseClause: undefined }
     )),
   };
 }
@@ -8332,17 +8504,15 @@ export function renewContract(career: CareerState, playerId: string): CareerStat
 /** Sign him again WITH the clause: the discounted wage, and the exit door
     written into the deal at 1.5x today's sell value. */
 export function renewContractWithClause(career: CareerState, playerId: string): CareerState | null {
-  const p = career.squad.find(x => x.id === playerId);
+  const p = dealHolder(career, playerId);
   if (!p || p.onLoan) return null;
   const terms = renewalTermsWithClause(p);
   if (terms.fee > career.budget) return null;
   return {
     ...career,
     budget: Math.round((career.budget - terms.fee) * 10) / 10,
-    squad: career.squad.map(x => (
-      x.id === playerId
-        ? { ...x, contractYears: terms.years, wage: terms.wage, morale: clamp(x.morale + 9, 5, 99), releaseClause: terms.clause }
-        : x
+    ...withDealRewritten(career, playerId, x => (
+      { ...x, contractYears: terms.years, wage: terms.wage, morale: clamp(x.morale + 9, 5, 99), releaseClause: terms.clause }
     )),
   };
 }
@@ -8352,6 +8522,19 @@ export function expiringPlayers(career: CareerState): CMPlayer[] {
   return career.squad
     .filter(p => !p.onLoan && (p.contractYears ?? 9) <= 1)
     .sort((a, b) => b.rating - a.rating);
+}
+
+/**
+ * Round 1597 fix: every deal of mine that ends this summer, the men out on loan from me included, best first. The
+ * contracts desk lists the squad (expiringPlayers); a man I lent out comes home at the summer and, with nothing
+ * signed, walks the same day, so the season review's checkpoint and the hub's line read this one. loanClub says
+ * where he is playing. With nobody out on loan it is expiringPlayers, in the same order.
+ */
+export function expiringDeals(career: Pick<CareerState, 'squad' | 'loanedOut'>): { player: CMPlayer; loanClub?: string }[] {
+  return [
+    ...career.squad.filter(p => !p.onLoan && (p.contractYears ?? 9) <= 1).map(player => ({ player })),
+    ...(career.loanedOut ?? []).filter(l => (l.player.contractYears ?? 9) <= 1).map(l => ({ player: l.player, loanClub: l.club })),
+  ].sort((a, b) => b.player.rating - a.player.rating);
 }
 
 /* ================================================================== */
@@ -10581,7 +10764,9 @@ export function answerMessage(career: CareerState, messageId: string, optionIdx:
 
     /* ---- Round 474: the agent ---- */
     case 'renewDeal': {
-      const applied = renewContract({ ...career, squad, budget }, msg.playerId);
+      /* Round 1597 fix: renewContract now also renews a man out on loan, and this case writes back the squad and
+         the budget only, so it keeps to the squad as before (a man lent out since the message gets the old answer). */
+      const applied = squad.some(p => p.id === msg.playerId) ? renewContract({ ...career, squad, budget }, msg.playerId) : null;
       if (applied) {
         squad = applied.squad;
         budget = applied.budget;
@@ -22003,6 +22188,18 @@ export function startNextSeason(career: CareerState, acceptOfferClub?: string): 
      the summer's first deal is made (adoptLivingWorld, above worldSeedOf's neighbours). Its own hunk, one line. */
   career = adoptLivingWorld(career);
   career = snapshotWorldRosterClub(career, career.clubName);
+  /* Round 1597: the free agent list's summer, before anything reads the list (the emergency fill below signs out of
+     it). An old save first gets back the men its ledger still holds as released (recoverPooledReleases, once), then
+     every man on the list ages a year and the old ones may retire (summerFreeAgents). Those who retire go onto
+     retiredNames here, so the pool block's gone set, the fill and the market all treat them as retired, and into
+     the news further down. Nobody leaves the list any other way except by signing, or (closing check) a made up
+     man leaving these leagues on the world's odds, which the new season's first screen names too (freeAgentsLeft). */
+  career = recoverPooledReleases(career);
+  const poolSummer = summerFreeAgents(career);
+  if (Array.isArray(career.freeAgents)) {
+    career = { ...career, freeAgents: poolSummer.pool, ...(poolSummer.retired.length
+      ? { retiredNames: [...(career.retiredNames ?? []), ...poolSummer.retired.map(r => r.name)] } : {}) };
+  }
   const summary = career.pendingSummary;
   const prevPos = summary ? summary.position : Math.max(1, leaguePosition(career));
   /*
@@ -22128,7 +22325,8 @@ export function startNextSeason(career: CareerState, acceptOfferClub?: string): 
   let emergencyFrom = new Map<string, string>();
   const retiredNow: { name: string; age: number; rating: number }[] = [];
   /* Round 619: men whose deals ran out this summer, collected here and
-     written into the new season's free agent pool below. */
+     written into the new season's free agent pool below. Round 1597: and the
+     men the summer trim lets go. */
   const walkedFree619: FreeAgent[] = [];
   // Round 71: loan players go back to their parent clubs at season's end.
   const afterLoans = career.squad.filter(p => !p.onLoan);
@@ -22237,6 +22435,16 @@ export function startNextSeason(career: CareerState, acceptOfferClub?: string): 
       spare.sort((a, b) => (a.isYouth ? 0 : 1) - (b.isYouth ? 0 : 1) || a.rating - b.rating);
       const cut = new Set(spare.slice(0, squad.length - SQUAD_LIMIT).map(p => p.id));
       for (const p of squad) if (cut.has(p.id)) { releasedNews.push(p.name); rosterExits.push({ player: p, kind: 'release' }); }
+      /* Round 1597: and they go onto the free agent list like everyone else who leaves, where until now they were
+         never written and so were gone the same summer. As men who left my club (fromMyClub: the season away, as
+         for a deal that ran out, and none of a stranger's rules), marked trimmed and never onto releasedNames: the
+         club trimmed him, I did not release him, so releasedByYou does not bar him and he may sign for me again
+         on the usual rules. */
+      walkedFree619.push(...squad.filter(p => cut.has(p.id)).map(p => ({
+        name: p.name, position: p.position, age: p.age, rating: p.rating,
+        value: p.value, generated: madeUp(p) || undefined, ...(p.nation ? { nation: p.nation } : {}), since: season,
+        founderSaleRatio: p.founderSaleRatio, reason: 'released' as const, fromMyClub: true as const, trimmed: true as const,
+      })));
       squad = squad.filter(p => !cut.has(p.id));
     }
   }
@@ -22248,6 +22456,22 @@ export function startNextSeason(career: CareerState, acceptOfferClub?: string): 
       const man = squad.find(p => p.name === name);
       if (man) rosterCareer = recordActualRosterTransfer(rosterCareer, man, club, clubName, 'permanent');
     }
+    /* Round 1597 closing check: a man the fill signed off the free agent list is recorded as mine again, the way
+       signFreeAgent records a man I sign off it (a 'permanent' deal from no club, on his released record's key).
+       Until this his record stayed released with no owner and aged and retired on its own while he played for me,
+       so once the list kept men for years, a man the fill took back and who later walked again was listed alive
+       beside a ledger that said he had retired (simCmFreeAgencyFleet section 6, Everton, summer into season 9). */
+    let poolSigned = false;
+    for (const name of freeAgentsIn) {
+      const man = squad.find(p => p.name === name);
+      if (!man || emergencyFrom.has(name)) continue;
+      const released = worldRosterView(rosterCareer)?.records.filter(record => record.status === 'released' && record.owner === null
+        && record.player.name === name && record.origin.birthYear === worldYear(rosterCareer) - man.age);
+      if (released?.length !== 1) continue;
+      rosterCareer = recordWorldRosterTransfer(rosterCareer, { player: man, from: null, to: clubName, kind: 'permanent', key: released[0].key });
+      poolSigned = true;
+    }
+    if (poolSigned) squad = rosterCareer.squad;
     /* Release AZ fix (closing check, NEW-A): the record copies its key onto the man in rosterCareer's squad only,
        and the new season is built from this one, so the ledger held him as mine while no man of my squad carried
        his key. The exits above write no squad, so this takes exactly the emergency signings' keys. */
@@ -22754,6 +22978,15 @@ export function startNextSeason(career: CareerState, acceptOfferClub?: string): 
   /* Round 161: the add-ons that came due lead the summer's news. This sits
      after generateHeadlines on purpose: that call rebuilds the feed. */
   if (addOnNews.length || loanOptionNews.length) state.aiHeadlines = [...loanOptionNews, ...addOnNews, ...state.aiHeadlines].slice(0, 8);
+  /* Round 1597: a man on the free agent list who retires is said on the new season's first screen, beside the
+     squad's own retirements, so nobody leaves the game unseen. Kept on the save for the summer, not put in the
+     feed: the merry-go-round and the promotions prepend after this and the feed keeps eight lines, so a headline
+     here was pushed off in 34 of the fleet's summers (simCmFreeAgencyFleet's first run). */
+  if (poolSummer.retired.length) state.freeAgentsRetired = poolSummer.retired;
+  else delete state.freeAgentsRetired;
+  /* Round 1597 closing check: and the made up men who left these leagues off the list (leavesTheLeagues), the same way. */
+  if (poolSummer.left.length) state.freeAgentsLeft = poolSummer.left;
+  else delete state.freeAgentsLeft;
   /* Round 508: an exercised option is a TRANSFER, so it goes in the transfer
      log rather than only into the headline feed. The feed is capped at eight
      and two more prepends follow this line, so a summer with promotion news and

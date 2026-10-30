@@ -64,6 +64,9 @@ interface ResultScreenProps {
    *  no replay). */
   onPlayAgain?: () => void;
   playAgainLabel?: string;
+  /** Round 1597: the button is shown but shut, for a screen that needs an
+   *  answer first (Club Manager's summer contracts checkpoint). */
+  playAgainDisabled?: boolean;
   /**
    * Round 299, the scoring audit: OPT IN completion recording on mount.
    * Thirteen games never recorded a play, so they fed no streak day, no
@@ -103,6 +106,7 @@ export function ResultScreen({
   children,
   onPlayAgain,
   playAgainLabel = 'Play Again',
+  playAgainDisabled = false,
   playNext,
   className,
   recordCompletionOnMount = false,
@@ -192,7 +196,8 @@ export function ResultScreen({
       {onPlayAgain && (
         <button
           onClick={onPlayAgain}
-          className="mt-5 inline-flex items-center gap-2 px-8 py-3 min-h-[44px] bg-primary text-primary-foreground rounded-full font-semibold hover:opacity-90 transition-opacity"
+          disabled={playAgainDisabled}
+          className="mt-5 inline-flex items-center gap-2 px-8 py-3 min-h-[44px] bg-primary text-primary-foreground rounded-full font-semibold hover:opacity-90 transition-opacity disabled:opacity-40 disabled:cursor-not-allowed"
         >
           {playAgainLabel}
         </button>

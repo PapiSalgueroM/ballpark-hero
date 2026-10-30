@@ -1055,6 +1055,8 @@ async function caseRetire(ctx, tag) {
   /* B plays on: the next season's first match. */
   const B = await newPage(ctx);
   await openToEnd(B);
+  /* Round 1597: the deals that run out are answered first (the summer contracts checkpoint); it changes no save. */
+  await B.locator('[data-cm-deals-rest]:not([disabled])').first().click({ timeout: 3000 }).catch(() => {});
   await B.getByRole('button', { name: /^Continue to Season 2/ }).first().click({ timeout: 8000 }).catch(() => {});
   await B.locator('[data-cm-way="quick"]').first().waitFor({ timeout: 15000 }).catch(() => {});
   await quick(B);

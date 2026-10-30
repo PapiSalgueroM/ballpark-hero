@@ -176,6 +176,9 @@ async function journey(fixture, width, height) {
     write(`${id}-browser-oracle`, expected);
     assert.deepEqual(expected.state, fixture.saveExpected, 'Browser engine matches the entire retained Node save-writer expectation');
     assert.deepEqual(expected.draws, fixture.draws, 'Browser engine consumes every recorded summer RNG draw in order');
+    /* Round 1597: the deals that run out are answered first (the summer contracts checkpoint); it changes no save. */
+    const rest = page.locator('[data-cm-deals-rest]:not([disabled])');
+    if (await rest.count()) await rest.first().click();
     const next = page.getByRole('button', { name: `Continue to Season ${before.season + 1}`, exact: true });
     await capture(next, 'continue-control', false, true);
     /* The actual hook invokes startNextSeason synchronously in this button's handler. */

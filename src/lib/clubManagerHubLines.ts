@@ -1,4 +1,4 @@
-import type { CareerState, CareerStats } from '@/lib/clubManager';
+import { expiringDeals, type CareerState, type CareerStats } from '@/lib/clubManager';
 import type { FinanceProjection } from '@/lib/clubManagerFinances';
 import { deskOf } from '@/lib/clubManagerDecisions';
 import { formatNumber } from '@/lib/formatNumber';
@@ -80,4 +80,30 @@ export function kittyChange(p: Pick<FinanceProjection, 'resultActual' | 'resultP
   }
   const round2 = (n: number) => Math.round(n * 100) / 100;
   return { actual: round2(p.resultActual + coverActual), projected: round2(p.resultProjected + coverProjected) };
+}
+
+/** Round 1597: how many league weeks before the end of the season the hub starts naming the deals that run out. */
+export const DEALS_WARN_WEEKS = 6;
+
+/**
+ * Round 1597, the owner: "if u dont resign a player in time then they just dissapear". The hub's line for the
+ * last DEALS_WARN_WEEKS league weeks of a season: every man in the final year of his deal (expiringDeals: the
+ * contracts desk's own list plus the men out on loan from me, best first). Null before that stretch, once the
+ * league is done, and when nobody's deal runs out. Read off the save alone and drawn from no stream: never an inbox
+ * message, because the inbox stops at its first message of a week and one more there would change which other
+ * message fires.
+ */
+export function expiringDealsLine(c: Pick<CareerState, 'squad' | 'loanedOut' | 'week' | 'calendar'>): { count: number; text: string; real: boolean } | null {
+  const cal = Array.isArray(c.calendar) ? c.calendar : [];
+  const left = cal.slice(Math.max(0, c.week)).filter(e => e.type === 'league').length;
+  if (left === 0 || left > DEALS_WARN_WEEKS) return null;
+  const men = expiringDeals(c);
+  if (!men.length) return null;
+  const named = men.slice(0, 3).map(d => (d.loanClub ? `${d.player.name} (on loan)` : d.player.name)).join(', ');
+  const more = men.length > 3 ? ` and ${formatNumber(men.length - 3)} more` : '';
+  const count = men.length;
+  /* Round 1325's rule (isRealPlayer, SquadScreen): a real man's deal printed beside his name is labelled as this
+     game's. The rule is restated here because a lib cannot import a screen, and the page loads that one lazily. */
+  const real = men.slice(0, 3).some(d => !d.player.generated && !d.player.isYouth && !d.player.academyGrad);
+  return { count, real, text: `${formatNumber(count)} deal${count === 1 ? ' ends' : 's end'} this summer: ${named}${more}.` };
 }
