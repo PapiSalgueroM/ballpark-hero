@@ -162,8 +162,28 @@ if (isMain) {
   const out = path.join(DATA, LEDGER_FILE);
   console.log(`pages ${pages.length}, judged rows ${ledger.counts.judgedRows}, men ${ledger.counts.men}: sarandi ${ledger.counts.sarandi} (${ledger.counts.sarandiRows} rows), london ${ledger.counts.london}, held ${ledger.counts.held}, pending ${ledger.counts.pending}`);
   for (const m of ledger.men) if (m.verdict === 'pending' || m.verdict === 'held' || m.dobMismatch.length) console.log(`  ${m.verdict} ${m.name} ${m.rowYears.join(',')} sar:${m.hosts.sarandi.join('+')} lon:${m.hosts.london.join('+')}${m.dobMismatch.length ? ' DOB? ' + m.dobMismatch.join('; ') : ''}`);
+  if (mi > 0) {
+    // review 1587 minor 5: no Sarandí squad page past 2024-25 was read, so the roster net is blind to a man who joined
+    // later and is stored with a non CONMEBOL nationality. Every unjudged row from 2025 on is listed for the lead to
+    // read by name (on 10-29 each was a London man: Saka, Rice, Raya and the rest).
+    const judgedIds = new Set(ledger.men.flatMap((m) => m.rows));
+    const late = market.filter((r) => r.year >= 2025 && !judgedIds.has(r.id));
+    const byName = new Map();
+    for (const r of late) byName.set(r.player_name, (byName.get(r.player_name) || []).concat([`${r.year} ${r.nationality}`]));
+    console.log(`unjudged rows from 2025 on: ${late.length} rows, ${byName.size} names. Confirm each is a London Arsenal man before the write:`);
+    console.log('  ' + [...byName].map(([n, ys]) => `${n} (${ys.join(', ')})`).join('; '));
+  }
   if (process.argv.includes('--check')) {
     const cur = fs.existsSync(out) ? fs.readFileSync(out, 'utf8').replace(/\r\n/g, '\n') : '';
+    if (cur !== text && mi > 0 && cur) {
+      // review 1587 minor 11: name the men that differ, so the lead sees at once whether the change touches a sarandi
+      // man (the payload) or only a london man's rows. The check still fails closed either way.
+      const was = new Map(JSON.parse(cur).men.map((m) => [`${m.nameFolded} ${m.birthYears.join('-')}`, m]));
+      const now = new Map(ledger.men.map((m) => [`${m.nameFolded} ${m.birthYears.join('-')}`, m]));
+      for (const [k, m] of now) if (!was.has(k)) console.log(`  new man: ${m.name} (${m.verdict}) rows ${m.rowYears.join(',')}`);
+      for (const [k, m] of was) if (!now.has(k)) console.log(`  man gone: ${m.name} (${m.verdict})`);
+      for (const [k, m] of now) if (was.has(k) && JSON.stringify(was.get(k)) !== JSON.stringify(m)) console.log(`  man changed: ${m.name} (${was.get(k).verdict} to ${m.verdict}) rows ${was.get(k).rowYears.join(',')} to ${m.rowYears.join(',')}`);
+    }
     if (cur !== text) { console.log(`FAIL: arsenalLedger.json is not what the generator writes from the committed pages and ${mi > 0 ? 'the export given' : 'the committed export'}${mi > 0 ? ': stop the apply' : ''}`); process.exit(1); }
     console.log('ok: the committed ledger equals the generator\'s output');
   } else { fs.writeFileSync(out, text); console.log('wrote ' + path.relative(ROOT, out)); }
