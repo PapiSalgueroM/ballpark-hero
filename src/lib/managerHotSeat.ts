@@ -73,7 +73,6 @@ import {
   registerLeagueOverrides,
   resolveXI,
   restoreEngineRegistrations,
-  saveCareer,
   startCareer,
   /* Round 1509 (ruling 1l): the dailies start a career that follows no competition from outside. */
   DAILY_START,
@@ -86,6 +85,7 @@ import {
   type TalkTone,
 } from '@/lib/clubManager';
 import { FAN_SINGING, boardMeter, fanMeter, type Meter, type MeterTone } from '@/lib/clubManagerMeters';
+import type { HandOverResult } from '@/lib/clubManagerHandOver';
 import { LEGACY_BOARD_START } from '@/lib/clubManagerBoardVerdict';
 import type { SeasonHandover } from '@/lib/clubManagerScore';
 import { dailyIndex, dailyPrngSeed } from '@/lib/dateUtils';
@@ -820,50 +820,20 @@ export function shareText(run: HotSeatRun): string {
  * loadCareer like any other save. Nothing is rebuilt or topped up here, which
  * is the point: the season you saved is the season you carry on.
  *
- * Club Manager keeps one career per device under one key, so a save already
- * there is never replaced without the player saying so.
+ * Round 1592 (report fe949903): Club Manager keeps three careers, one per
+ * manager slot, and the carry goes in by Club Manager's own rule through
+ * handOverCareer in src/lib/clubManagerHandOver.ts: the first empty slot, never
+ * a slot that holds a career. Only when all three are full does the card ask
+ * which one to replace, naming each, and the replaced career is kept aside
+ * first so Club Manager can put it back. Until this round the carry wrote
+ * over the career being played, even with two slots empty.
  * scripts/simManagerHotSeat.mjs section 5 holds all of it.
  */
-
-/** Club Manager's save key. clubManager.ts does not export its own copy, so
- *  section 5 of the harness proves this one is the key saveCareer writes. */
-const CLUB_MANAGER_SAVE_KEY = 'dukb-club-manager-save';
 
 /** Only a manager still in the job can carry on in it. */
 export function canCarryOn(run: HotSeatRun): boolean {
   const kind = run.verdict?.kind;
   return (kind === 'survived' || kind === 'reprieve') && !run.state.sacked;
-}
-
-export interface ExistingClubManagerSave {
-  /** The club on the save, or null when the save cannot be read. */
-  club: string | null;
-  season: number | null;
-}
-
-/**
- * The Club Manager career already on this device, or null when there is none.
- * Read raw rather than through loadCareer, which registers the save's custom
- * club and league memberships as it opens it. Anything at the key counts as a
- * save, even one that cannot be read, so the answer errs toward asking.
- */
-export function existingClubManagerSave(): ExistingClubManagerSave | null {
-  let raw: string | null;
-  try {
-    raw = localStorage.getItem(CLUB_MANAGER_SAVE_KEY);
-  } catch {
-    return null;
-  }
-  if (!raw) return null;
-  try {
-    const p = JSON.parse(raw) as { clubName?: unknown; season?: unknown } | null;
-    return {
-      club: p && typeof p.clubName === 'string' ? p.clubName : null,
-      season: p && typeof p.season === 'number' && Number.isFinite(p.season) ? p.season : null,
-    };
-  } catch {
-    return { club: null, season: null };
-  }
 }
 
 /** The career Club Manager receives: the run's state as it stands, copied so
@@ -909,16 +879,19 @@ export function carryOnSummary(run: HotSeatRun): CarryOnSummary {
   };
 }
 
-export type CarryOnResult = 'saved' | 'confirm' | 'refused' | 'failed';
+export type CarryOnResult = 'saved' | 'full' | 'changed' | 'refused' | 'failed';
 
 /**
- * Hands the run to Club Manager. 'refused' when the manager was sacked,
- * 'confirm' when a Club Manager career is already saved and the player has
- * not said to replace it (nothing is written), 'failed' when the browser
- * refused the write, 'saved' when Club Manager will open this career next.
+ * Hands the run to Club Manager through `handOver`, which the page passes in
+ * as handOverCareer from src/lib/clubManagerHandOver.ts (with the slot the
+ * player picked, when all three were full). Passed in rather than imported so
+ * this lib, which Deadline Day loads for its club pool, carries none of the
+ * slot code. 'refused' when the manager was sacked (nothing is handed over);
+ * 'saved' when Club Manager will open this career next; otherwise the hand
+ * over's own answer: 'full', 'changed' or 'failed', with nothing written.
  */
-export function carryOnInClubManager(run: HotSeatRun, opts: { replace: boolean }): CarryOnResult {
+export function carryOnInClubManager(run: HotSeatRun, handOver: (career: CareerState) => HandOverResult): CarryOnResult {
   if (!canCarryOn(run)) return 'refused';
-  if (!opts.replace && existingClubManagerSave() !== null) return 'confirm';
-  return saveCareer(handoverState(run)) ? 'saved' : 'failed';
+  const res = handOver(handoverState(run));
+  return 'why' in res ? res.why : 'saved';
 }

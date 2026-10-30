@@ -568,8 +568,8 @@ const NOTHING_HELD = [
     why: 'a refused switch is rolled back step by step and answers false (step 1 parks the outgoing career, step 3 seats the incoming one, each write with its own undo); the outgoing career never left its key' },
   { file: 'src/lib/clubManager.ts', keys: ['write:saveCareer'],
     why: 'answers false and holds nothing itself; the callers that keep the answer are listed under keeps:saveCareer' },
-  { file: 'src/lib/managerHotSeat.ts', keys: ['keeps:saveCareer'],
-    why: 'the hand over to Club Manager answers "failed" and writes nothing; the run stays in the hot seat save' },
+  { file: 'src/lib/clubManagerHandOver.ts', keys: ['write:writeParked', 'keeps:saveCareer', 'keeps:writeParked', 'keeps:switchSlot'],
+    why: 'handOverCareer, Hot Seat\'s hand over to Club Manager (Round 1592): a refused write answers "failed" with every career where it was (the parked write is taken back out, a refused swap rolls itself back, a replaced career\'s kept aside copy is removed), and the run stays in the hot seat save' },
   { file: 'src/lib/rankEmCircuit.ts', keys: ['write:saveCircuit'],
     why: 'answers false and holds nothing itself; RankEm.tsx keeps the answer and is listed' },
   /* Round 1330: the soccer save's write runs inside saveFence.write */

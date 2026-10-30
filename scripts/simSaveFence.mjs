@@ -136,6 +136,7 @@ async function bundle(root = ROOT, label = 'head', patch = CONTROL) {
     `export * as slots from ${P('src/lib/clubManagerSlots.ts')};`,
     has('src/lib/saveFence.ts') ? `export * as fence from ${P('src/lib/saveFence.ts')};` : 'export const fence = null;',
     `export * as hs from ${P('src/lib/managerHotSeat.ts')};`,
+    has('src/lib/clubManagerHandOver.ts') ? `export * as ho from ${P('src/lib/clubManagerHandOver.ts')};` : 'export const ho = null;',
   ].join('\n') + '\n');
   await build({
     entryPoints: [entry], outfile: out, bundle: true, format: 'esm', platform: 'node', logLevel: 'error',
@@ -288,7 +289,10 @@ async function sectionTabs(load) {
     }
     tick('tabs');
     if (!run) { fail('tabs', 'HOT SEAT: no surviving Hot Seat manager in 40 free play seeds, nothing to hand over'); return; }
-    const handed = hs.carryOnInClubManager(run, { replace: true });
+    /* Round 1592: tab A's career stays in slot 1; the job goes into empty slot 2, which takes SAVE_KEY.
+       A tree from before that round has no hand over module and still takes the replace. */
+    const { ho } = engB;
+    const handed = ho ? hs.carryOnInClubManager(run, c => ho.handOverCareer(c)) : hs.carryOnInClubManager(run, { replace: true });
     const handedFace = face(store.get(SAVE_KEY));
     const sawIt = H.moved();
     const hLeave = H.leave();
