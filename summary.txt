@@ -1,0 +1,21 @@
+simManagers exit=0 41s | simManagers: all green
+ctl-namedsack exit=0 32s | control run: namedsack FIRED, 7b went red 184 time(s), 184 naming the sentinel
+simManagers-fleet exit=0 100s | simManagers: all green
+ctl-recycle exit=0 32s | control run: recycle FIRED, 7b went red 205 time(s), 205 naming the sentinel
+ctl-bogus exit=2 0s | SIM_MANAGERS_CONTROL=bogus is not a control this harness knows (sever, namedsack, recycle)
+ctl-sever exit=0 9s | control run: 3 failure(s) FIRED as expected
+tsc exit=0 112s | 
+quotes-dugout exit=1 23s | control run: dugout FIRED, pass 1 caught 1 planted quote(s) from a real manager
+simNoInventedQuotes exit=0 32s | simNoInventedQuotes: green. No real player is quoted or accused anywhere.
+names-renamed exit=0 0s |    CONTROL FIRED: renamed caught by the ledger harvest
+quotes-desk exit=1 31s | simNoInventedQuotes: 1 failure
+conduct-saga exit=0 1s | control "saga": 2 failure(s) fired as expected, the check works
+simNoInventedConduct exit=0 1s | simNoInventedConduct: green. A real player can score in your sim and get hurt in it. He cannot fall out with the board in it.
+simInventedNames exit=0 15s | simInventedNames: green. Every invented man on this site is invented all the way down.
+vitest exit=0 10s |    Duration  9.64s (transform 4.23s, setup 822ms, collect 13.41s, tests 4.45s, environment 4.31s, prepare 1.23s)
+roster-head exit=0 7s | simClubDetailCurrentRoster normal: green.
+simNoRivalNames exit=0 29s | No rival product names found. 0 findings.
+simHarnessAnchors exit=0 65s | simHarnessAnchors: green. Every harness parses and none carries an unmatchable anchor.
+simManagerHotSeat exit=0 81s | simManagerHotSeat: green. The target is the club's, reading the room pays, outcomes replay, a Club Manager save keeps its registrations and a survivor carries on in Club 
+budget-head exit=1 210s | simClubManagerBudget: 1 FAILURE(S)
+budget-base exit=1 193s | simClubManagerBudget: 1 FAILURE(S)

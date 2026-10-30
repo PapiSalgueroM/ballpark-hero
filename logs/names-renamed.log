@@ -1,0 +1,6 @@
+1) Harvesting every real player name the site ships
+   NEGATIVE CONTROL ON: the ledger's notCurrent key renamed, this block must go red
+  FAIL: the roster ledger has no notCurrent array, so the harvest would read nothing from it
+  FAIL: harvested 546 ledger rows, but the ledger's population is 564
+   546 ledger rows harvested; 176 of the ledger's men are known to the harvest only through the ledger
+   CONTROL FIRED: renamed caught by the ledger harvest

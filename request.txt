@@ -1,0 +1,21 @@
+tsc: node_modules/.bin/tsc --noEmit -p tsconfig.app.json
+simManagers: node scripts/simManagers.mjs
+simManagers-fleet: SIM_MANAGERS_BASE=c0c66e087 node scripts/simManagers.mjs
+ctl-namedsack: SIM_MANAGERS_CONTROL=namedsack node scripts/simManagers.mjs
+ctl-recycle: SIM_MANAGERS_CONTROL=recycle node scripts/simManagers.mjs
+ctl-sever: SIM_MANAGERS_CONTROL=sever node scripts/simManagers.mjs
+ctl-bogus: SIM_MANAGERS_CONTROL=bogus node scripts/simManagers.mjs
+simNoInventedQuotes: node scripts/simNoInventedQuotes.mjs
+quotes-dugout: QUOTES_CONTROL=dugout node scripts/simNoInventedQuotes.mjs
+quotes-desk: QUOTES_CONTROL=desk node scripts/simNoInventedQuotes.mjs
+simInventedNames: node scripts/simInventedNames.mjs
+names-renamed: INVENTED_LEDGER_CONTROL=renamed node scripts/simInventedNames.mjs
+simNoInventedConduct: node scripts/simNoInventedConduct.mjs
+conduct-saga: INVENTED_CONDUCT_CONTROL=saga node scripts/simNoInventedConduct.mjs
+simNoRivalNames: node scripts/simNoRivalNames.mjs
+simHarnessAnchors: node scripts/simHarnessAnchors.mjs
+vitest: node_modules/.bin/vitest run src/test/clubDetailDugout.test.tsx src/test/clubDetailOwnClub.test.tsx src/test/clubManagerJobHunt.test.ts src/test/clubDetailFixtures.test.tsx --testTimeout=300000 --hookTimeout=120000
+roster-head: CM_OWN_ROSTER_CORE_REF=HEAD node scripts/simClubDetailCurrentRoster.mjs
+simManagerHotSeat: node scripts/simManagerHotSeat.mjs
+budget-head: node scripts/simClubManagerBudget.mjs
+budget-base: git worktree add /tmp/base c0c66e087 >/dev/null 2>&1 && ln -s "$PWD/node_modules" /tmp/base/node_modules && cd /tmp/base && node scripts/simClubManagerBudget.mjs

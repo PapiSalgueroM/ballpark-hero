@@ -1,0 +1,10 @@
+NEGATIVE CONTROL ON: the six old templates and the name interpolation are back
+1) no template array in src pairs a name placeholder with a conduct verb
+   1 template arrays across 1693 files
+  FAIL: 4 template line(s) put a real name next to a conduct verb: src/lib/worldXi.ts:442 "{name} handed in a transfer request after a bust-up with the board." | src/lib/worldXi.ts:442 "A release clause row over {name} rumbled on for months before a new de" | src/lib/worldXi.ts:442 "{name} rejected a club-record bid, insisting the trophy hunt was not f"
+2) the real World XI engine never prints conduct beside a squad member's name
+   400 seasons (400 distinct), 9405 narrative and month lines, 2677 naming a squad member (goals and injuries are allowed to)
+  FAIL: 254 line(s) put a real name beside conduct: seed 3: "Pedri handed in a transfer request after a bust-up with the board." | seed 4: "Theo Hernandez rejected a club-record bid, insisting the trophy hunt was not finished."
+3) World XI and Build Your XI show the same report
+
+control "saga": 2 failure(s) fired as expected, the check works

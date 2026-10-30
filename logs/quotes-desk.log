@@ -1,0 +1,29 @@
+3) Self test: the detector still catches what Round 137 removed
+   10 of 10 known bad lines flagged
+   7 of 7 defensible lines left alone
+1) Runtime: every line real seasons can put on screen
+   harvested 1439 distinct lines across 8 clubs
+   8 of them put words in a real player's mouth
+     real name (Jarrad Branthwaite) next to alleged conduct "missed training"
+       The head coach flags Jarrad Branthwaite: he missed training twice this week and turned up hungover.
+     real name (Erling Haaland) next to alleged conduct "missed training"
+       The head coach flags Erling Haaland: he missed training twice this week and turned up hungover.
+     real name (Hannibal) next to alleged conduct "missed training"
+       The head coach flags Hannibal: he missed training twice this week and turned up hungover.
+     real name (Kylian Mbappé) next to alleged conduct "missed training"
+       The head coach flags Kylian Mbappé: he missed training twice this week and turned up hungover.
+     real name (Simon Adingra) next to alleged conduct "missed training"
+       The head coach flags Simon Adingra: he missed training twice this week and turned up hungover.
+     real name (Ethan Ampadu) next to alleged conduct "missed training"
+       The head coach flags Ethan Ampadu: he missed training twice this week and turned up hungover.
+     real name (Rodrigo De Paul) next to alleged conduct "missed training"
+       The head coach flags Rodrigo De Paul: he missed training twice this week and turned up hungover.
+     real name (Tommy Doyle) next to alleged conduct "missed training"
+       The head coach flags Tommy Doyle: he missed training twice this week and turned up hungover.
+  FAIL: 8 rendered lines attribute invented speech or conduct to a real player
+2) Static: hand written copy in src
+   scanned 2184 files, 0 offending lines
+   flags: a real player speaking in the first person, in a page file
+   flags: the same line in what used to be the exempt directory
+
+simNoInventedQuotes: 1 failure
