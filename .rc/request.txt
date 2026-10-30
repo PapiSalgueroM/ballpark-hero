@@ -1,0 +1,14 @@
+roster-head: CM_OWN_ROSTER_CORE_REF=HEAD node scripts/simClubDetailCurrentRoster.mjs
+roster-base: git worktree add /tmp/base c0c66e087 >/dev/null 2>&1 && ln -s "$PWD/node_modules" /tmp/base/node_modules && cd /tmp/base && node scripts/simClubDetailCurrentRoster.mjs
+roster-base-coreref: git worktree add /tmp/base2 c0c66e087 >/dev/null 2>&1 && ln -s "$PWD/node_modules" /tmp/base2/node_modules && cd /tmp/base2 && CM_OWN_ROSTER_CORE_REF=HEAD node scripts/simClubDetailCurrentRoster.mjs
+simCmOwnClubMarket: node scripts/simCmOwnClubMarket.mjs
+simAccessibility: node scripts/simAccessibility.mjs
+simTrustCopy: node scripts/simTrustCopy.mjs
+simCmLeagueFixtures: node scripts/simCmLeagueFixtures.mjs
+simAcademy: node scripts/simAcademy.mjs
+simClubManagerALeague: node scripts/simClubManagerALeague.mjs
+simClubManagerBudget: node scripts/simClubManagerBudget.mjs
+simClubManagerScore: node scripts/simClubManagerScore.mjs
+simCmDifficulty: node scripts/simCmDifficulty.mjs
+simCmVarLedger: node scripts/simCmVarLedger.mjs
+simWilderness: node scripts/simWilderness.mjs
