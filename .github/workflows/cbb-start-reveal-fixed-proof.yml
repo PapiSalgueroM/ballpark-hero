@@ -1,0 +1,65 @@
+name: CBB start reveal fixed source proof
+on:
+  push:
+    branches: [codex/cbb-start-reveal-fixed-20261030]
+permissions:
+  contents: read
+jobs:
+  proof:
+    runs-on: ubuntu-latest
+    timeout-minutes: 45
+    env:
+      CI: 'true'
+      TZ: UTC
+      GIT_OPTIONAL_LOCKS: '0'
+      CBB_CONTROLLER_SHA256: 004111048281a636addce9f098052cc6a145c2d3d2dee79ea8b5bdfc1f710507
+      EXPECTED_PRODUCT: 5d88ba03649660c3798db6e9944f3d2c1eb4eb3c
+      EXPECTED_PRODUCT_TREE: 701cdce92cfe2937e3a2c582628670c5004b1ca2
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.sha }}
+          fetch-depth: 0
+          persist-credentials: false
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '24'
+          cache: npm
+      - name: Set isolated evidence output on the runner
+        run: echo "CBB_PROOF_OUT=$RUNNER_TEMP/cbb-start-reveal-fixed" >> "$GITHUB_ENV"
+      - name: Bind clean Board product, three QA additions and immutable source copy
+        run: node scripts/qa/runCbbStartRevealFixedProof.mjs prepare
+      - name: Cheap new helper syntax
+        run: |
+          set -euo pipefail
+          node --check scripts/qa/runCbbStartRevealFixedProof.mjs > "$CBB_PROOF_OUT/controller-syntax.stdout.log" 2> "$CBB_PROOF_OUT/controller-syntax.stderr.log"
+          node --check scripts/qa/probeCbbStartRevealFixed.mjs > "$CBB_PROOF_OUT/probe-syntax.stdout.log" 2> "$CBB_PROOF_OUT/probe-syntax.stderr.log"
+      - name: Actual locked dependencies
+        run: node scripts/qa/runCbbStartRevealFixedProof.mjs deps
+      - name: Real application types
+        run: node scripts/qa/runCbbStartRevealFixedProof.mjs types
+      - name: Existing three CBB real-engine transaction cases
+        run: node scripts/qa/runCbbStartRevealFixedProof.mjs flow
+      - name: Existing six CBB depth and legacy cases
+        run: node scripts/qa/runCbbStartRevealFixedProof.mjs depth
+      - name: Existing four CFB sibling depth cases
+        run: node scripts/qa/runCbbStartRevealFixedProof.mjs cfb-depth
+      - name: Ordinary fixed-source build
+        run: node scripts/qa/runCbbStartRevealFixedProof.mjs build
+      - name: Isolated actual Chromium and prepared site fonts
+        run: node scripts/qa/runCbbStartRevealFixedProof.mjs browser-tools
+      - name: Desktop and phone visible, original Board reds, physical ownership control and fixed restoration
+        run: node scripts/qa/runCbbStartRevealFixedProof.mjs browser
+      - name: Always retain actual source variants, dist variants, original images and final holds
+        if: ${{ always() }}
+        run: node scripts/qa/runCbbStartRevealFixedProof.mjs retain
+      - uses: actions/upload-artifact@v4
+        if: ${{ always() }}
+        with:
+          name: cbb-start-reveal-fixed-${{ github.run_id }}-a${{ github.run_attempt }}
+          path: |
+            ${{ env.CBB_PROOF_OUT }}/**
+            !${{ env.CBB_PROOF_OUT }}/work/**
+          if-no-files-found: error
+          include-hidden-files: true
+          retention-days: 14
