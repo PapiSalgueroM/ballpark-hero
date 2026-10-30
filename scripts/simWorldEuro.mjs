@@ -76,6 +76,11 @@
  *   section 5: noholder (the line reverted: the winner stays out of the next Champions League)
  *   section 4: live (the evaluation reads today's strengths, not the snapshot) ahead (a night counts a week
  *              early) noseen (the job move's carry forgets the nights it had shown)
+ * ROUND 1593: my own club now PLAYS a Europa League place it earns from season two (startNextSeason's open passes
+ *   worldCompField's opt in). This harness holds the competition my club follows, so every engine it builds plays
+ *   with that one opt in dropped (scripts/lib/worldUelPlay.mjs, PLAY_OFF below): the field is the watcher's, never
+ *   my club, as these sections assert. scripts/simCmEuroPlay.mjs holds the participant, and its section 6 holds the
+ *   head with the same hook to the base, byte for byte.
  */
 import fs from 'node:fs';
 import os from 'node:os';
@@ -83,6 +88,7 @@ import path from 'node:path';
 import { createHash } from 'node:crypto';
 import { fileURLToPath, pathToFileURL } from 'node:url';
 import { build } from 'esbuild';
+import { PLAY_EDITS } from './lib/worldUelPlay.mjs';
 
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const text = file => fs.readFileSync(path.join(ROOT, file), 'utf8').replaceAll('\r\n', '\n');
@@ -144,7 +150,7 @@ const CAREER_EDITS = {
 /* Section 2's other arm: this round's four opens taken out. */
 const UEL_OFF = [
   { file: CM, from: "    openWorldComp(state, 'uel', worldCompField(state, 'uel', null), null);\n", to: '' },
-  { file: CM, from: "    openWorldComp(state, 'uel', worldCompField(state, 'uel', tables, null, watchCup), null);\n", to: "    setWorldComp(state, 'uel', null);\n" },
+  { file: CM, from: "    openWorldComp(state, 'uel', worldCompField(state, 'uel', tables, null, watchCup, null, true), null);\n", to: "    setWorldComp(state, 'uel', null);\n" },
   { file: CAL, from: "  carryWorldComp(career, joined, 'uel');\n", to: '' },
   { file: CM, from: "    repairWorldComp(parsed, 'uel');\n", to: '' },
 ];
@@ -316,6 +322,9 @@ const SEEDS = (process.env.WORLD_EURO_SEEDS || '1,2,3,4,5').split(',').map(Numbe
 const counts = {};
 const bump = (k, n = 1) => { counts[k] = (counts[k] ?? 0) + n; };
 const careerEdits = () => CAREER_EDITS[CONTROL] ?? [];
+/* Round 1593: every engine here follows the Europa League from outside (the header's note); never counted as a
+   control's change. */
+const PLAY_OFF = PLAY_EDITS;
 const byPlain = (a, b) => (a < b ? -1 : a > b ? 1 : 0);
 const ROUTES = 'LCPHF';
 let fleetLib = null;
@@ -522,7 +531,7 @@ async function europaPass() {
   const { engineOf, pickFleet } = await lib();
   const O = await oracleLib();
   O_MONTHS = [...O.ea.UEL_NIGHT_MONTHS];
-  const E = await engineOf(ROOT, 'head', { edits: careerEdits() }, cannot);
+  const E = await engineOf(ROOT, 'head', { edits: [...PLAY_OFF, ...careerEdits()] }, cannot);
   if (careerEdits().length) changed = true;
   const fleet = pickFleet(await E.fresh(), 'all', cannot);
   const t0 = Date.now();
@@ -733,7 +742,7 @@ async function selfRelative() {
      on worldComps.usc by design (simOneOffCups section 3 holds that open to its own key). */
   const { USC_OPEN_OFF } = await import(pathToFileURL(path.join(ROOT, 'scripts', 'lib', 'oneOffNights1510.mjs')).href);
   const named = [UEL_HOLDER_EDIT, EURO_BOARD_EDIT, USC_OPEN_OFF];
-  const head = await engineOf(ROOT, 'head2', { edits: [...careerEdits(), ...named] }, cannot);
+  const head = await engineOf(ROOT, 'head2', { edits: [...PLAY_OFF, ...careerEdits(), ...named] }, cannot);
   const off = await engineOf(ROOT, 'off', { edits: [...UEL_OFF, ...named] }, cannot);
   if (careerEdits().length) changed = true;
   const fleet = pickFleet(await head.fresh(), 'all', cannot);
@@ -768,7 +777,7 @@ async function selfRelative() {
 /** Section 6: the dailies take the Europa League off with everything else, and what it costs them. */
 async function dailies() {
   const { engineOf, tape } = await lib();
-  const E = await engineOf(ROOT, 'daily', { edits: careerEdits() }, cannot);
+  const E = await engineOf(ROOT, 'daily', { edits: [...PLAY_OFF, ...careerEdits()] }, cannot);
   const baseRef = process.env.WORLD_EURO_BASE || '';
   const B = baseRef ? await engineOf(ROOT, 'dailybase', { base: baseRef }, cannot) : null;
   /* A day's own start (the Hot Seat's, with DAILY_START since step 6b's ruling 1l), the median of three. */
@@ -828,7 +837,7 @@ function printMeasured() {
  *  state: each objective graded otherwise is a European rung the head met by a route the base did not have). */
 async function boardSection() {
   const { engineOf, pickFleet } = await lib();
-  const E = await engineOf(ROOT, 'board', { edits: careerEdits() }, cannot);
+  const E = await engineOf(ROOT, 'board', { edits: [...PLAY_OFF, ...careerEdits()] }, cannot);
   if (careerEdits().length) changed = true;
   const baseRef = process.env.WORLD_EURO_BASE || '';
   if (!baseRef) cannot('section 3 needs WORLD_EURO_BASE, the commit before the board step');
@@ -924,8 +933,8 @@ const SEARCH_SEEDS = (process.env.WORLD_EURO_SEARCH_SEEDS || '1,2,3,4,5,6').spli
 async function holderSection() {
   const { engineOf, pickFleet } = await lib();
   const { UEL_HOLDER_EDIT } = await import(pathToFileURL(path.join(ROOT, 'scripts', 'lib', 'worldUelHolder1509.mjs')).href);
-  const head = await engineOf(ROOT, 'h5', { edits: careerEdits() }, cannot);
-  const ref = await engineOf(ROOT, 'h5off', { edits: [UEL_HOLDER_EDIT] }, cannot);
+  const head = await engineOf(ROOT, 'h5', { edits: [...PLAY_OFF, ...careerEdits()] }, cannot);
+  const ref = await engineOf(ROOT, 'h5off', { edits: [...PLAY_OFF, UEL_HOLDER_EDIT] }, cannot);
   if (careerEdits().length) changed = true;
   const fleet = pickFleet(await head.fresh(), 'all', cannot).filter(f => f.era === 'now');
   const t0 = Date.now();

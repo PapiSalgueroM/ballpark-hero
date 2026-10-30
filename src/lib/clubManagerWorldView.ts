@@ -29,6 +29,8 @@ import {
   careerLeagueOf, evalOneOff, leagueRulesOf, oneOffNightPlaces, oneOffPartialOf, oneOffRowOf, worldLeagueDefs,
   /* Round 1514: the UEFA Super Cup, and a slice's row with its dated edition. */
   oneOffSliceRow, uefaSuperCupRowOf, type OneOffKey,
+  /* Round 1593: how far my own club has gone in the Europa League it plays. */
+  uelProgressRank,
 } from '@/lib/clubManager';
 import { oneOffEdition, oneOffFixturesOf, oneOffPartialWhy, oneOffPlayedIn, type OneOffRow, type OneOffSkip } from '@/lib/worldOneOffs';
 import { nightDateAt } from '@/lib/worldNights';
@@ -336,7 +338,7 @@ export function realFifthNation(career: CareerState): string | null {
 }
 
 /** The tile's line for that club: why it is in neither. */
-export const REAL_FIFTH_TILE = 'Fifth was a real Champions League place, a Europa League one here, not played yet';
+export const REAL_FIFTH_TILE = "Fifth was a real Champions League place, a Europa League one here, and season one's places were settled before you arrived";
 
 /** The Champions League tile's two lines on the Cups panel. */
 export function worldUclStatus(career: CareerState, view: WorldCompView | null): WorldUclStatus {
@@ -374,16 +376,30 @@ export function routeWords(code: string | undefined): string | null {
     : code === 'H' ? 'winning the Conference League' : code === 'F' ? 'the fill, as the next best placed club of a strong league' : null;
 }
 
-/** Round 1509: the Europa League tile's two lines on the Cups panel. My club only ever follows it from outside in
- *  this round, so a place it earned says so and that its own nights are not played yet. */
+/** Round 1509: the Europa League tile's two lines on the Cups panel. Round 1593: a club that plays it this season
+ *  is 'in' (the worldUclStatus shape); a place earned in season one, or before the nights were in the game, says so. */
 export function worldUelStatus(career: CareerState, view: WorldCompView | null): WorldUclStatus {
   if (!view) return { mode: 'none', value: 'Nothing to follow', sub: 'It shows here from next season' };
+  const slice = career.worldComps?.uel;
+  if (slice && slice.s === career.season && slice.me === career.clubName) {
+    const { rank, alive } = uelProgressRank(career);
+    const winnerLine = view.winner ? `Won by ${view.winner}` : 'Follow the rest of it';
+    if (rank === 4) return { mode: 'in', value: 'Europa League winners', sub: `${seasonLabel(career)} is yours` };
+    if (!alive) return { mode: 'in', value: rank > 0 ? 'Out in the knockouts' : 'Out in the league phase', sub: winnerLine };
+    const ahead = nextNight(view);
+    const at = !ahead ? "You're in it" : ahead.stage === 'md' ? `League phase, matchday ${(ahead.md ?? 0) + 1} of ${firstStageNights(view)} next` : `${nightLabel(ahead)} next`;
+    return { mode: 'in', value: at, sub: "You're in it: your nights are on your calendar, on Thursdays" };
+  }
   const next = nextNight(view);
   const first = firstStageNights(view);
   const value = view.winner ? `Won by ${view.winner}`
     : !next ? 'Season over'
       : next.stage === 'md' ? `Matchday ${(next.md ?? 0) + 1} of ${first} next` : `${nightLabel(next)} next`;
-  return { mode: 'watching', value, sub: view.earned ? 'You earned a place, but your own nights are not played yet' : 'You are following it from outside' };
+  const sub = slice?.me && slice.me !== career.clubName ? `${slice.me} play it, and their nights go on without you now`
+    : !view.earned ? 'You are following it from outside'
+      : career.season === 1 ? "You earned a place, but season one's places were settled before you arrived"
+        : 'You earned a place before your own nights were in the game, so this season you follow it';
+  return { mode: 'watching', value, sub };
 }
 
 /** One game of a club's run, in the club fixtures reader's row shape (round is the night here). */

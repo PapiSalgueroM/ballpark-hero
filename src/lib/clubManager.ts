@@ -2802,6 +2802,8 @@ export interface SeasonSummary {
   topScorer: { name: string; goals: number } | null;
   topAssister: { name: string; assists: number } | null;
   qualifiedUcl: boolean;
+  /** Round 1593: my club's Europa League season in words, only in a season it played one. */
+  uelRun?: string;
   signings: TransferRecord[];
   offers: JobOffer[];
   /** Round 633: the ledger in clubManagerScore.ts, 0..130. Was league points
@@ -14746,6 +14748,23 @@ export function uelProgressRank(state: CareerState): { rank: number; alive: bool
   return { rank, alive: true };
 }
 
+/** Round 1593: my club's Europa League season in the review's words (a season it played), or null. */
+const UEL_RUN_WORDS: Record<WorldKoRound, string> = { PO: 'knockout play-off', R16: 'round of 16', QF: 'quarter-finals', SF: 'semi-finals', F: 'final' };
+export function uelRunWords(state: CareerState): string | null {
+  const slice = state.worldComps?.uel;
+  if (!slice || slice.me !== state.clubName || slice.s !== state.season) return null;
+  const res = evalWorldComp(state, 'uel');
+  if (!res) return null;
+  if (res.done && res.winner === state.clubName) return 'won it';
+  const order: WorldKoRound[] = ['PO', 'R16', 'QF', 'SF', 'F'];
+  const last = res.ties.filter(t => t.home === state.clubName || t.away === state.clubName)
+    .sort((a, b) => order.indexOf(b.round) - order.indexOf(a.round))[0];
+  if (last) return last.round === 'F' ? 'lost the final' : `out in the ${UEL_RUN_WORDS[last.round]}`;
+  const table = res.table ?? [];
+  const pos = table.findIndex(r => r.club === state.clubName) + 1;
+  return pos > 0 ? `${ordinal(pos)} of ${table.length} in the league phase` : null;
+}
+
 /** How far we got in Europe: 0 = group, 1 = knockouts ... 4 = won it. */
 export function uclProgressRank(state: CareerState): { rank: number; alive: boolean } {
   if (state.uclKoRound === 'won') return { rank: 4, alive: false };
@@ -21847,6 +21866,8 @@ export function finishSeason(career: CareerState): { state: CareerState; summary
     /* Round 543: the league's own slot count, not a hardcoded four. */
     /* Round 1593: or the Europa League won (row Q4: its winner plays the next Champions League). */
     qualifiedUcl: position <= uclPlacesIn(careerLeagueOf(state)) || wonUelThisSeason(state),
+    /* Round 1593: the Europa League season in words, a key only a season that played one carries. */
+    ...(uelRunWords(state) ? { uelRun: uelRunWords(state) as string } : {}),
     signings: state.seasonSignings,
     offers,
     /* Round 633: one function, two call sites, so the number the player

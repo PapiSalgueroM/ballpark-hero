@@ -1,7 +1,7 @@
 import { useMemo, useState } from 'react';
 import { cn } from '@/lib/utils';
 import { CalendarDays } from 'lucide-react';
-import { careerLeagueOf, careerRoundPairs } from '@/lib/clubManager';
+import { careerLeagueOf, careerRoundPairs, fixtureFor } from '@/lib/clubManager';
 import type { CareerState, CalendarEntry } from '@/lib/clubManager';
 
 /** Round 73: the season at a glance. Recent results plus what's coming. */
@@ -37,6 +37,10 @@ export function CalendarCard({ career, onQuickSim }: { career: CareerState; onQu
           label: `⭐ UCL ${entry.uclRound === 'F' ? 'Final' : entry.uclRound}`,
           detail: career.uclDraw[entry.uclRound] ?? 'Draw to come',
         });
+      } else if (entry.type === 'uel') {
+        /* Round 1593: my Europa League night, once its opponent is known (a knockout night after its draw). */
+        const fx = fixtureFor(career, entry);
+        if (fx) out.push({ label: `🟠 ${fx.compLabel.replace('Europa League · ', 'UEL ')}`, detail: fx.opponent });
       }
     }
     return out;

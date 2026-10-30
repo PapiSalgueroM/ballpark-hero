@@ -393,9 +393,7 @@ function headerLines(career: CareerState, view: WorldCompView): string[] {
 function uelHeaderLines(career: CareerState, view: WorldCompView): string[] {
   const how = routeWords(view.earned);
   return [
-    how
-      ? `${career.clubName} earned a place in it by ${how}, but your own Europa League nights are not in the game yet, so the place went to the next club in line and you follow it from outside.`
-      : `${career.clubName} are not in it this season, so you are following it from outside.`,
+    uelLeadLine(career, how),
     'This is the real format: 36 clubs in one table, then knockouts, each night but the final the day after the Champions League\'s.',
     career.season === 1
       ? 'This season\'s field is the real 2025-26 tables and cup winners, put through the game\'s rule.'
@@ -406,6 +404,17 @@ function uelHeaderLines(career: CareerState, view: WorldCompView): string[] {
   ];
 }
 
+/** Round 1593: the first line under the Europa League's heading: in it, a moved manager's old club in it, a place
+ *  earned in season one or before the nights were in the game, or outside. */
+function uelLeadLine(career: CareerState, how: string | null): string {
+  const slice = career.worldComps?.uel;
+  if (slice && slice.s === career.season && slice.me === career.clubName) return `${career.clubName} are in it this season${how ? `, by ${how}` : ''}: your nights are on your calendar, every one on a Thursday.`;
+  if (slice?.me && slice.me !== career.clubName) return `${slice.me} are in it, and their nights go on without you now that you have moved.`;
+  if (how && career.season === 1) return `${career.clubName} earned a place in it by ${how}, but season one's places were settled before you arrived, so the place went to the next club in line and you follow it from outside.`;
+  if (how) return `${career.clubName} earned a place in it by ${how} before your own Europa League nights were in the game, so this season you follow it from outside.`;
+  return `${career.clubName} are not in it this season, so you are following it from outside.`;
+}
+
 /** Round 1509: the Europa League's ?, the rule and what stands in for the real thing. */
 function UelHowItWorks() {
   return (
@@ -413,7 +422,9 @@ function UelHowItWorks() {
       <p>36 clubs play eight games each, four at home and four away, in one table. 1st to 8th go straight to the round of 16, 9th to 24th play a two legged play-off for the other eight places, and 25th and below are out. Two legs from the play-offs to the semi-finals, then a one match final. A tie level on aggregate goes to extra time, then penalties.</p>
       <p>Who is in it, by the game's rule: in each league, the club just below its Champions League places, and your own country's cup winner. A club already in the Champions League, or a cup winner already in, hands its place down the table to the next club. Cups abroad are not played in the game, so from your second season their place goes down their league too. The last places go to the next best placed clubs of the leagues with the most Champions League places. In your first season the field is the real 2025-26 tables, cup winners and Conference League winner, put through the same rule. The winner goes into next season's Champions League (in a season your own club is in that one, only when the game's smaller field has room).</p>
       <p>What the game plays in place of the real thing: those places are simplified and the same every season. In the real 2026-27, England and Spain had a fifth Champions League place and France sent its fourth to Champions League qualifying, so the real field was not quite this one. The pots are set by how strong the clubs are in your save, the bracket and the order of clubs level on points are the Champions League's, and every night sits on your own calendar, the day after a Champions League night, with the final between the Champions League's semi-finals and its final, so the dates are the game's.</p>
-      <p>Your club: your own Europa League nights are not in the game yet, so a place the rule gives your club goes to the next club in line, and the screen says which way you earned it. The board counts that place all the same: through the season it reads your league place and, once it is played, your cup final, and a place that only comes down to you once every league has finished counts when the season ends.</p>
+      <p>Your club: finish in a Europa League place, win your cup, or have your cup's place passed down to you, and next season you play it (never through the last places, which stand in for the qualifying rounds). Eight league phase nights against eight different clubs, four at home, then the knockouts if you finish in the top 24. Your first season's places were settled before you arrived, so that season you follow it. The board counts a place the same way: through the season it reads your league place and, once it is played, your cup final.</p>
+      <p>Every one of your nights is a Thursday on your own calendar, between your league weekends; a short league season plays its last few after the league is done. The real 2026-27 nights are Thursdays too, except matchday 1 (a Wednesday and a Thursday) and the final (Wednesday 26 May 2027, in Frankfurt), so the game's dates are its own. For example: 16th of 36 sends you to the knockout play-off; win the first leg 1-0 away, draw the second 2-2 at home, and you are through 3-2 on aggregate to the round of 16.</p>
+      <p>The board sets a Europa League target, the gates and the trips are paid like any European night, there is no prize money for any European cup in the game, and the winner plays next season's Champions League. The Conference League and the qualifying rounds are not in the game yet.</p>
     </div>
   );
 }

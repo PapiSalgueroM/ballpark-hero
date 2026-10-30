@@ -1194,7 +1194,8 @@ const ClubManager = () => {
                 )}
                 {/* Round 782: a knockout tie can end on penalties, so the
                     shootout order is one tap from the pre match card. Round 1510: and a super cup night. */}
-                {(fx.competition === 'cup' || fx.competition === 'uclKo' || fx.competition === 'oneOff') && (
+                {/* Round 1593: and a Europa League knockout night (a league phase night never goes to penalties). */}
+                {(fx.competition === 'cup' || fx.competition === 'uclKo' || fx.competition === 'oneOff' || (fx.competition === 'uel' && !fx.compLabel.includes('League phase'))) && (
                   <button
                     onClick={() => { setTacticsTile('shootout'); g.setActiveTab('tactics'); }}
                     data-cm-shootout-link="1"
