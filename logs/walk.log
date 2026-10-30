@@ -1,0 +1,19 @@
+mkwalk: season 1 week 48, league weeks left 4, expiring 3, hub line {"count":3,"text":"3 deals end this summer: Jordan Pickford, Christian Nørgaard, Mark Travers."}, pool 14, sacked false
+mkwalk: wrote walksave.txt
+  ok   phone-rm: the hub names the deals that run out: "📝 3 deals end this summer: Jordan Pickford, Christian Nørgaard, Mark Travers. Open the contracts desk"
+  ok   phone-rm: the hub line sits inside the screen (x 16, width 358)
+  ok   phone-rm: no sideways scroll on the hub (0)
+  FAIL phone-rm: the season review shows the contracts checkpoint (steps nothing,nothing,nothing,nothing,nothing,nothing,nothing,nothing,nothing,nothing,nothing,nothing,nothing,nothing,nothing,nothing,nothing,nothing,nothing,nothing,nothing,nothing,nothing,nothing,nothing,nothing,nothing,nothing,nothing,nothing,nothing,nothing,nothing,nothing,nothing,nothing,nothing,nothing,nothing,nothing)
+  ok   phone-motion: the hub names the deals that run out: "📝 3 deals end this summer: Jordan Pickford, Christian Nørgaard, Mark Travers. Open the contracts desk"
+  ok   phone-motion: the hub line sits inside the screen (x 16, width 358)
+  ok   phone-motion: no sideways scroll on the hub (0)
+  FAIL phone-motion: the season review shows the contracts checkpoint (steps nothing,nothing,nothing,nothing,nothing,nothing,nothing,nothing,nothing,nothing,nothing,nothing,nothing,nothing,nothing,nothing,nothing,nothing,nothing,nothing,nothing,nothing,nothing,nothing,nothing,nothing,nothing,nothing,nothing,nothing,nothing,nothing,nothing,nothing,nothing,nothing,nothing,nothing,nothing,nothing)
+  ok   desktop-rm: the hub names the deals that run out: "📝 3 deals end this summer: Jordan Pickford, Christian Nørgaard, Mark Travers. Open the contracts desk"
+  ok   desktop-rm: the hub line sits inside the screen (x 208, width 864)
+  ok   desktop-rm: no sideways scroll on the hub (0)
+  FAIL desktop-rm: the season review shows the contracts checkpoint (steps nothing,nothing,nothing,nothing,nothing,nothing,nothing,nothing,nothing,nothing,nothing,nothing,nothing,nothing,nothing,nothing,nothing,nothing,nothing,nothing,nothing,nothing,nothing,nothing,nothing,nothing,nothing,nothing,nothing,nothing,nothing,nothing,nothing,nothing,nothing,nothing,nothing,nothing,nothing,nothing)
+  ok   desktop-motion: the hub names the deals that run out: "📝 3 deals end this summer: Jordan Pickford, Christian Nørgaard, Mark Travers. Open the contracts desk"
+  ok   desktop-motion: the hub line sits inside the screen (x 208, width 864)
+  ok   desktop-motion: no sideways scroll on the hub (0)
+  FAIL desktop-motion: the season review shows the contracts checkpoint (steps nothing,nothing,nothing,nothing,nothing,nothing,nothing,nothing,nothing,nothing,nothing,nothing,nothing,nothing,nothing,nothing,nothing,nothing,nothing,nothing,nothing,nothing,nothing,nothing,nothing,nothing,nothing,nothing,nothing,nothing,nothing,nothing,nothing,nothing,nothing,nothing,nothing,nothing,nothing,nothing)
+walk1597-review: RED, 4 failures
