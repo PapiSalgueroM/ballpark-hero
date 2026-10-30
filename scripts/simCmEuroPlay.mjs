@@ -35,7 +35,7 @@ const CONTROL = process.env.CM_EURO_PLAY_CONTROL || '';
 const ONLY = (process.env.CM_EURO_PLAY_ONLY || '').split(',').filter(Boolean).map(Number);
 const SEEDS = (process.env.CM_EURO_PLAY_SEEDS || '1,2').split(',').map(Number);
 const cannot = why => { console.log(`simCmEuroPlay: cannot run: ${why}`); process.exit(2); };
-const CONTROLS = { rawlength: [5, /^5\.1 /] };
+const CONTROLS = { rawlength: [5, /^5.1 /], nothursday: [1, /^1 /], mineflip: [2, /^2 /], noplaygate: [4, /^4 /], noplayrevert: [6, /^6 /] };
 if (CONTROL && !CONTROLS[CONTROL]) cannot(`no control named ${CONTROL}`);
 const runs = n => (CONTROL ? CONTROLS[CONTROL][0] === n : ONLY.length === 0 || ONLY.includes(n));
 
@@ -184,7 +184,128 @@ async function section5() {
   if (CONTROL === 'rawlength') console.log(`  5 control rawlength failed on: ${firedOn.join('; ') || 'nothing'}`);
 }
 
+/* ── Sections 1, 2, 4 and 6: your club plays the Europa League ──────────────────────────────────────────────── */
+/* Clubs that earn a Europa League place often (one per league size where the game has one), and the two clubs whose
+   real fifth place was a Champions League one (season one must never play: the critic's correction 1). Each is
+   checked to be a club of today's world. Two seasons each, so season two is the first that can play. */
+const PLAY_FLEET_ALL = ['Aston Villa', 'Real Sociedad', 'Lazio', 'Eintracht Frankfurt', 'Lyon', 'AZ Alkmaar', 'Braga', 'Rangers', 'Hajduk Split', 'Liverpool', 'Real Betis'];
+const PLAY_FLEET = PLAY_FLEET_ALL.filter(c => !process.env.CM_EURO_PLAY_FLEET || process.env.CM_EURO_PLAY_FLEET.split(',').includes(c));
+const PLAY_SEEDS = (process.env.CM_EURO_PLAY_PLAY_SEEDS || '1,2,3,4').split(',').map(Number);
+const PLAY_MIN = Number(process.env.CM_EURO_PLAY_MIN_PLAY || 4);
+const BASE = process.env.CM_EURO_PLAY_BASE || '14a9af704';
+/* Step A0's table (results-g/rc-1593.txt): tail nights by league size, a league without a cup marked. */
+const TAIL = { 10: 5, 12: 3, 14: 2, 15: 1, 16: 1, 18: 1, '18nocup': 0, 20: 0, 24: 0 };
+const CM_FILE = 'src/lib/clubManager.ts';
+const CAL_FILE = 'src/lib/clubManagerCalendar.ts';
+const CONTROL_EDITS = {
+  nothursday: [{ file: CAL_FILE, from: 'addDays(last, wasSaturday ? 5 : 1)', to: 'addDays(last, wasSaturday ? 4 : 1)' }],
+  mineflip: [{ file: CM_FILE, from: '{ h: my.atHome ? mine : theirs, a: my.atHome ? theirs : mine }', to: '{ h: my.atHome ? theirs : mine, a: my.atHome ? mine : theirs }' }],
+  noplaygate: [{ file: CM_FILE, from: "  if (play && tables && mine.clubs.length === UCL_LEAGUE.clubs && (earned === 'L'", to: "  if (mine.clubs.length === UCL_LEAGUE.clubs && (earned === 'L'" }],
+};
+const iso = d => `${d.y}-${String(d.m).padStart(2, '0')}-${String(d.d).padStart(2, '0')}`;
+const dayNo = d => Date.UTC(d.y, d.m - 1, d.d) / 86400000;
+
+/** Section 1 on a participant season's opening state: the nights on the calendar. */
+function nightsCheck(M, s, where, counts) {
+  const cal = s.calendar;
+  const dates = M.cal.entryDatesOf(s);
+  const uel = cal.flatMap((e, i) => (e.type === 'uel' ? [{ n: e.night?.n, i, d: dates[i] }] : []));
+  ok(uel.length === 17 && uel.every((x, k) => x.n === k), `1 ${where}: ${uel.length} Europa League nights, in order ${uel.map(x => x.n).join(',')}`);
+  const plain = cal.filter(e => e.type !== 'uel');
+  const plainDates = M.cal.dateOfEntries(M.cal.worldYearOf(s), plain, null);
+  ok(same(dates.filter((_, i) => cal[i].type !== 'uel').map(iso), plainDates.map(iso)), `1 ${where}: an entry moved when the nights went in`);
+  uel.forEach((x, k) => {
+    const dow = new Date(Date.UTC(x.d.y, x.d.m - 1, x.d.d)).getUTCDay();
+    ok(dow === 4, `1 ${where}: night ${x.n} on ${iso(x.d)} is no Thursday`);
+    ok(!dates.some((d, i) => i !== x.i && iso(d) === iso(x.d)), `1 ${where}: night ${x.n} shares ${iso(x.d)} with another entry`);
+    if (k > 0) ok(dayNo(x.d) - dayNo(uel[k - 1].d) >= 7, `1 ${where}: night ${x.n} on ${iso(x.d)} is less than a week after the last`);
+  });
+  const lastPlain = cal.reduce((a, e, i) => (e.type !== 'uel' ? i : a), -1);
+  const tail = uel.filter(x => x.i > lastPlain).length;
+  const lg = M.cm.careerLeagueOf(s);
+  const key = lg.cupName === null ? `${lg.clubs.length}nocup` : lg.clubs.length;
+  ok(TAIL[key] === tail, `1 ${where}: ${tail} tail nights, step A0's table says ${TAIL[key]} for ${key}`);
+  counts.tail[key] = tail;
+}
+const same = (a, b) => JSON.stringify(a) === JSON.stringify(b);
+
+/** Section 2 on a participant season's last state before finishSeason: one competition, my results recorded. */
+function competitionCheck(M, s, where) {
+  const slice = s.worldComps?.uel;
+  const res = M.cm.evalWorldComp(s, 'uel', Infinity);
+  ok(!!res?.done && !!res.winner, `2 ${where}: the Europa League crowned no winner`);
+  ok(slice.clubs.includes(s.clubName), `2 ${where}: my club is not an entrant`);
+  ok((res?.table ?? []).every(r => r.w + r.d + r.l === 8), `2 ${where}: a club did not play eight league phase matches`);
+  const ucl = new Set(M.cm.uclEntrantsOf(s));
+  ok(!slice.clubs.some(c => ucl.has(c)), `2 ${where}: a club is in both competitions`);
+  const played = (s.resultLog ?? []).filter(r => r.competition === 'uel');
+  ok(played.length === Object.keys(slice.mine ?? {}).length, `2 ${where}: ${played.length} nights in the result log, ${Object.keys(slice.mine ?? {}).length} recorded`);
+  for (const r of played) {
+    const n = s.calendar[r.week]?.night?.n;
+    const rec = slice.mine?.[n];
+    const fx = res?.nights[n]?.fixtures.find(x => x.home === s.clubName || x.away === s.clubName);
+    const [gf, ga] = r.score.split('-').map(Number);
+    const mine = fx?.home === s.clubName ? [rec?.h, rec?.a] : [rec?.a, rec?.h];
+    ok(!!rec && mine[0] === gf && mine[1] === ga, `2 ${where}: night ${n} is ${r.score} in the log, recorded ${JSON.stringify(rec)}`);
+  }
+  return played.length;
+}
+
+async function sectionPlay() {
+  const head = await engine('head', CONTROL_EDITS[CONTROL] ?? []);
+  const probe = await head.fresh();
+  const world = new Set(probe.cm.REAL_LEAGUES.flatMap(l => l.clubs));
+  for (const c of PLAY_FLEET) if (!world.has(c)) cannot(`${c} is not a club of today's world`);
+  const counts = { tail: {}, participant: 0, watcher: 0, nightsPlayed: 0, seasonOneMe: 0 };
+  const runs6 = runs(6);
+  const lib6 = runs6 ? await import('./lib/worldUclFleet.mjs') : null;
+  const { PLAY_EDITS } = await import('./lib/worldUelPlay.mjs');
+  const B = runs6 ? await lib6.engineOf(ROOT, 'base', { base: BASE }, cannot) : null;
+  const HR = runs6 ? await lib6.engineOf(ROOT, 'head-reverted', { edits: CONTROL === 'noplayrevert' ? TICKING_EDITS : [...PLAY_EDITS, ...TICKING_EDITS] }, cannot) : null;
+  let identical = 0;
+  let parted = 0;
+  for (const club of PLAY_FLEET) for (const seed of PLAY_SEEDS) {
+    const where0 = `${club} seed ${seed}`;
+    let nights = false;
+    let prevEnd = null;
+    const onStep = (M, s, label) => {
+      if (!s) return;
+      if (s.calendar?.some(e => e.night)) nights = true;
+      const slice = s.worldComps?.uel;
+      if (label === 'start' && (runs(4) || CONTROL === 'noplaygate')) {
+        if (slice?.me) counts.seasonOneMe += 1;
+        ok(!slice?.me, `4 ${where0}: season one plays the Europa League (route ${slice?.earned ?? 'none'}); its places were settled before you arrived`);
+      }
+      if (/-rollover$/.test(label)) {
+        const plays = !!slice && slice.me === s.clubName;
+        const earned = slice?.earned ?? null;
+        if (runs(4)) ok(plays === (earned === 'L' || earned === 'C' || earned === 'P'), `4 ${where0} season ${s.season}: plays ${plays}, earned ${earned}`);
+        if (plays) { counts.participant += 1; if (runs(1)) nightsCheck(M, s, `${where0} season ${s.season}`, counts); }
+        else { counts.watcher += 1; if (runs(1)) ok(!s.calendar.some(e => e.type === 'uel'), `1 ${where0} season ${s.season}: a watcher's calendar holds a Europa League night`); }
+      }
+      if (/^s\d+-e\d+$/.test(label) && slice?.me === s.clubName) prevEnd = s;
+      if (/-finish$/.test(label) && prevEnd && prevEnd.season === s.season - 0 && prevEnd.worldComps?.uel?.me === prevEnd.clubName) {
+        if (runs(2)) counts.nightsPlayed += competitionCheck(M, prevEnd, `${where0} season ${prevEnd.season}`);
+        prevEnd = null;
+      }
+    };
+    const steps = await journey(head, club, seed, 2, onStep);
+    if (!runs6) continue;
+    const base = await journey(B, club, seed, 2);
+    const rev = await journey(HR, club, seed, 2);
+    const at = rev.findIndex((x, i) => x.h !== base[i]?.h || x.d !== base[i]?.d);
+    ok(at < 0 && rev.length === base.length, `6 ${where0}: with the participant open and the ticking weeks reverted the head parts from the base at ${rev[at]?.label}`);
+    const part = steps.findIndex((x, i) => x.h !== base[i]?.h || x.d !== base[i]?.d);
+    if (!nights) ok(part < 0, `6 ${where0}: no night in any season, yet the head parts from the base at ${steps[part]?.label}`);
+    if (part < 0) identical += 1; else parted += 1;
+  }
+  if (runs(1) || runs(4)) ok(counts.participant >= PLAY_MIN, `1 only ${counts.participant} participant seasons in the fleet, at least ${PLAY_MIN} are needed`);
+  console.log(`  play: ${PLAY_FLEET.length * PLAY_SEEDS.length} saves, ${counts.participant} participant seasons, ${counts.watcher} watcher seasons, ${counts.nightsPlayed} nights played, tails ${JSON.stringify(counts.tail)}, season one participants ${counts.seasonOneMe}`);
+  if (runs6) console.log(`  6 base ${BASE}: ${identical} saves byte equal to the base on the head, ${parted} parted (participants and super cup nights, by design)`);
+}
+
 /* ── Run ───────────────────────────────────────────────────────────────────────────────────────────────────── */
+if (runs(1) || runs(2) || runs(4) || runs(6)) await sectionPlay();
 if (runs(5)) await section5();
 if (CONTROL) {
   const [, must] = CONTROLS[CONTROL];
