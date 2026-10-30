@@ -1,0 +1,9 @@
+euro-nobind: R=$PWD; git fetch -q origin r1593-cm-europa-play:refs/remotes/origin/r1593-cm-europa-play; git worktree add -q .rcm93n HEAD && cd .rcm93n && git -c user.email=r@x -c user.name=r merge -q --no-edit -X ours origin/r1593-cm-europa-play && echo joined93=$(git rev-parse --short origin/r1593-cm-europa-play) && node scripts/simCmEuroPlay.mjs
+euro-bindA: R=$PWD; git fetch -q origin r1593-cm-europa-play:refs/remotes/origin/r1593-cm-europa-play; git worktree add -q .rcm93a HEAD && cd .rcm93a && git -c user.email=r@x -c user.name=r merge -q --no-edit -X ours origin/r1593-cm-europa-play && echo joined93=$(git rev-parse --short origin/r1593-cm-europa-play) && node $R/.rc/x/bindA.mjs && node scripts/simCmEuroPlay.mjs
+euro-bindB: R=$PWD; git fetch -q origin r1593-cm-europa-play:refs/remotes/origin/r1593-cm-europa-play; git worktree add -q .rcm93b HEAD && cd .rcm93b && git -c user.email=r@x -c user.name=r merge -q --no-edit -X ours origin/r1593-cm-europa-play && echo joined93=$(git rev-parse --short origin/r1593-cm-europa-play) && CM_EURO_PLAY_BASE=4889f0e84 node scripts/simCmEuroPlay.mjs
+euro-bindA-noplay: R=$PWD; git fetch -q origin r1593-cm-europa-play:refs/remotes/origin/r1593-cm-europa-play; git worktree add -q .rcm93c HEAD && cd .rcm93c && git -c user.email=r@x -c user.name=r merge -q --no-edit -X ours origin/r1593-cm-europa-play && node $R/.rc/x/bindA.mjs && CM_EURO_PLAY_CONTROL=noplayrevert node scripts/simCmEuroPlay.mjs
+tsc: node_modules/.bin/tsc --noEmit -p tsconfig.app.json
+dl: node scripts/simCmDecidingLeg.mjs
+simNoRivalNames: node scripts/simNoRivalNames.mjs
+simHarnessAnchors: node scripts/simHarnessAnchors.mjs
+simStorageWrites: node scripts/simStorageWrites.mjs

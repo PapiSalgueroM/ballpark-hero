@@ -1,0 +1,9 @@
+euro-nobind exit=1 541s | simCmEuroPlay: RED, 1413 checks, 2 failures
+euro-bindA exit=0 541s | simCmEuroPlay: green, 1413 checks, 0 failures
+euro-bindB exit=0 551s | simCmEuroPlay: green, 1413 checks, 0 failures
+dl exit=0 95s | simCmDecidingLeg: PASS, 21 of 21 checks green. A deciding second leg is judged by the tie, the record keeps the night, Hot Seat replays and hauls are counted.
+tsc exit=0 118s | 
+simNoRivalNames exit=0 27s | No rival product names found. 0 findings.
+simStorageWrites exit=0 5s | simStorageWrites: all green (owed: 12)
+simHarnessAnchors exit=0 64s | simHarnessAnchors: green. Every harness parses and none carries an unmatchable anchor.
+euro-bindA-noplay exit=1 314s | simCmEuroPlay: control noplayrevert FIRED (12 failures, all its own)

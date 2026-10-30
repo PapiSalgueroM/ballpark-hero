@@ -1,0 +1,9 @@
+Auto-merging scripts/data/cmLeagueRulesDigest.json
+Auto-merging scripts/fixtures/managerAppealIsolation1081/manifest.json
+Auto-merging scripts/simCmLeagueRules.mjs
+Auto-merging src/lib/clubManager.ts
+Auto-merging src/pages/WhatsNew.tsx
+bindA applied: simCmEuroPlay section 6 reverts the Round 1603 tie reading too
+  play: 44 saves, 12 participant seasons, 32 watcher seasons, 0 nights played, tails {}, season one participants 0, ties of mine checked 0
+  6 base 14a9af704: 30 saves byte equal to the base on the head, 14 parted (participants and super cup nights, by design)
+simCmEuroPlay: control noplayrevert FIRED (12 failures, all its own)
