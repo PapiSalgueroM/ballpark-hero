@@ -1,0 +1,7 @@
+tsc exit=0 67s | 
+vt-fa exit=0 10s |    Duration  9.61s (transform 4.40s, setup 455ms, collect 7.74s, tests 10.37s, environment 2.97s, prepare 724ms)
+vt-chat94b exit=0 4s |    Duration  3.55s (transform 2.83s, setup 112ms, collect 3.36s, tests 1.79s, environment 562ms, prepare 127ms)
+vt-chat94b-old exit=1 4s | ::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/test/cmFreeAgentCanonicalLinks.test.ts,title=src/test/cmFreeAgentCanonicalLinks.test.ts > Club Manager cano
+fleet exit=0 164s | simCmFreeAgencyFleet: green, all eight sections held
+ctl-norecover exit=1 163s | simCmFreeAgencyFleet: CONTROL norecover FIRED: section 4 red
+simFreeAgents exit=0 98s | simFreeAgents: all sections passed
