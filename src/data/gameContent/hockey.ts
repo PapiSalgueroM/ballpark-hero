@@ -1084,7 +1084,7 @@ export const HOCKEY_CONTENT: GameContentMap = {
       {
         heading: "Hire a staff, settle contracts and build packages",
         items: [
-          "Under the hub's own boxes sit four more: Staff, Re-sign desk, Draft picks and Trade desk. A new franchise opens with them switched on. An older save plays on exactly as it did until you open one of them.",
+          "Under the hub's own boxes sit six more: Staff, Re-sign desk, Draft picks, Trade desk, Career and GM level. A new franchise opens with them switched on. An older save plays on exactly as it did until you open one of the first four.",
           "Staff: a head coach, a special teams assistant, a goalie coach, a scouting director and a head athletic therapist, each rated 1 to 10. Hire off a shortlist, pay off the man you do not want, and match or let go when another club comes in for a good one.",
           "Re-sign desk: every player whose deal runs out this summer gets a tile. Keep him at his ask, push once with your own number, or let him go. Anyone you leave open is settled by your staff's own rule when the summer starts, never by a coin flip.",
           "Trade desk: build a package of up to five pieces a side, players and picks, and keep paying part of a salary to make the money work. It shuts at the deadline.",
