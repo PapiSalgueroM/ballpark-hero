@@ -1,0 +1,15 @@
+tsc: node_modules/.bin/tsc --noEmit -p tsconfig.app.json
+vitest: node_modules/.bin/vitest run src/lib/worldNights.test.ts src/lib/worldCompetition.test.ts src/lib/euroAccess.test.ts --testTimeout=300000 --hookTimeout=120000
+simCmEuroPlay: node scripts/simCmEuroPlay.mjs
+simCmEuroPlay-legfromucl: CM_EURO_PLAY_CONTROL=legfromucl node scripts/simCmEuroPlay.mjs
+simCmEuroPlay-mineflip: CM_EURO_PLAY_CONTROL=mineflip node scripts/simCmEuroPlay.mjs
+simCmEuroPlay-noplaygate: CM_EURO_PLAY_CONTROL=noplaygate node scripts/simCmEuroPlay.mjs
+simCmEuroPlay-noplayrevert: CM_EURO_PLAY_CONTROL=noplayrevert node scripts/simCmEuroPlay.mjs
+simCmEuroPlay-nothursday: CM_EURO_PLAY_CONTROL=nothursday node scripts/simCmEuroPlay.mjs
+simBoard: node scripts/simBoard.mjs
+simBoardObjectives: node scripts/simBoardObjectives.mjs
+simExtraTime: node scripts/simExtraTime.mjs
+simCmShootoutOrder: node scripts/simCmShootoutOrder.mjs
+simHarnessAnchors: node scripts/simHarnessAnchors.mjs
+simClubManagerFinances: node scripts/simClubManagerFinances.mjs
+proofFleet: node scripts/proofWorldUclFleet.mjs --base 14a9af704 --fleet all --coach nocoach --seeds 1,2 --eval

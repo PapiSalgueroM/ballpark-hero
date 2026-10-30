@@ -1,0 +1,15 @@
+vitest exit=0 9s |    Duration  8.45s (transform 3.31s, setup 759ms, collect 10.95s, tests 4.75s, environment 3.09s, prepare 993ms)
+tsc exit=0 116s | 
+simCmEuroPlay-legfromucl exit=1 124s | simCmEuroPlay: control legfromucl FIRED (9 failures, all its own)
+simCmEuroPlay-mineflip exit=1 126s | simCmEuroPlay: control mineflip FIRED (97 failures, all its own)
+simCmEuroPlay-noplaygate exit=1 126s | simCmEuroPlay: control noplaygate FIRED (32 failures, all its own)
+simCmEuroPlay-nothursday exit=1 123s | simCmEuroPlay: control nothursday FIRED (114 failures, all its own)
+simBoard exit=0 8s | ALL BOARD CHECKS PASSED
+simBoardObjectives exit=0 0s | simBoardObjectives: green. Every board talks like a board.
+simCmEuroPlay exit=0 496s | simCmEuroPlay: green, 1305 checks, 0 failures
+simExtraTime exit=0 133s | simExtraTime: PASS. A level Champions League decider plays thirty minutes of extra time before penalties, nothing else does, goals per decider hold, the AI plays it too (
+simCmShootoutOrder exit=0 42s | simCmShootoutOrder: all sections passed
+simHarnessAnchors exit=0 75s | simHarnessAnchors: green. Every harness parses and none carries an unmatchable anchor.
+simCmEuroPlay-noplayrevert exit=1 370s | simCmEuroPlay: control noplayrevert FIRED (12 failures, all its own)
+simClubManagerFinances exit=0 75s | simClubManagerFinances: PASS. The books add up, the projection lands, prices move the fans and the board, and the sponsor desk pays what it says.
+proofFleet exit=1 191s | proofWorldUclFleet: RED, 1 journeys differ from 14a9af704 (of 38)

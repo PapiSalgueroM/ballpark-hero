@@ -1,0 +1,18 @@
+
+[1m[46m RUN [49m[22m [36mv3.2.7 [39m[90m/home/runner/work/ballpark-hero/ballpark-hero[39m
+
+[90mstdout[2m | src/lib/worldCompetition.test.ts[2m > [22m[2mthe nights[2m > [22m[2mevery league size the game has, read off REAL_LEAGUES and ERA_LEAGUES, places its nights on their own rounds
+[22m[39mworldCompetition: league sizes the game has: 10, 12, 14, 15, 16, 18, 20, 24 (27 real leagues, 4 eras)
+
+ [32m✓[39m src/lib/euroAccess.test.ts [2m([22m[2m17 tests[22m[2m)[22m[32m 269[2mms[22m[39m
+ [32m✓[39m src/lib/worldCompetition.test.ts [2m([22m[2m75 tests[22m[2m)[22m[33m 1900[2mms[22m[39m
+   [33m[2m✓[22m[39m evaluateWorldComp[2m > [22man era season played to the end is complete and legal [33m 462[2mms[22m[39m
+   [33m[2m✓[22m[39m evaluateWorldComp[2m > [22mcrowns exactly one winner every finished season, over a few hundred seeds [33m 492[2mms[22m[39m
+ [32m✓[39m src/lib/worldNights.test.ts [2m([22m[2m15 tests[22m[2m)[22m[33m 2580[2mms[22m[39m
+   [33m[2m✓[22m[39m placeNights on the engine calendars[2m > [22mfinds a slot that moves no date on every league size, with and without a cup, a round of 16 and two legs, in every year [33m 2233[2mms[22m[39m
+
+[2m Test Files [22m [1m[32m3 passed[39m[22m[90m (3)[39m
+[2m      Tests [22m [1m[32m107 passed[39m[22m[90m (107)[39m
+[2m   Start at [22m 06:46:42
+[2m   Duration [22m 8.45s[2m (transform 3.31s, setup 759ms, collect 10.95s, tests 4.75s, environment 3.09s, prepare 993ms)[22m
+
