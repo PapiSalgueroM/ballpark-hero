@@ -1,0 +1,10 @@
+exits hotseat branch 0 base 0, deadline branch 0 base 0
+HOTSEAT_IDENTICAL
+DEADLINE_IDENTICAL
+error: unexpected argument '-2' found
+
+  tip: to pass '-2' as a value, use '-- -2'
+
+Usage: tail [OPTION]... [FILE]...
+
+For more information, try '--help'.

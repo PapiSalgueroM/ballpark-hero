@@ -1,0 +1,8 @@
+simAcademy: node scripts/simAcademy.mjs
+simCmLedgerBound: node scripts/simCmLedgerBound.mjs
+simCmWorldMoves: node scripts/simCmWorldMoves.mjs
+simCmUnseededWorld: node scripts/simCmUnseededWorld.mjs
+simClubManagerSaveSize: node scripts/simClubManagerSaveSize.mjs
+simContracts: node scripts/simContracts.mjs
+simBooks: node scripts/simBooks.mjs
+hotseat-deadline-diff: git worktree add -q .rcbase 14a9af704 && node scripts/simManagerHotSeat.mjs > $RC_OUT/hs-branch.txt 2>&1; a=$?; (cd .rcbase && node scripts/simManagerHotSeat.mjs) > $RC_OUT/hs-base.txt 2>&1; b=$?; node scripts/simDeadlineDay.mjs > $RC_OUT/dd-branch.txt 2>&1; c=$?; (cd .rcbase && node scripts/simDeadlineDay.mjs) > $RC_OUT/dd-base.txt 2>&1; d=$?; echo "exits hotseat branch $a base $b, deadline branch $c base $d"; diff $RC_OUT/hs-base.txt $RC_OUT/hs-branch.txt > /dev/null && echo HOTSEAT_IDENTICAL || echo HOTSEAT_DIFFERS; diff $RC_OUT/dd-base.txt $RC_OUT/dd-branch.txt > /dev/null && echo DEADLINE_IDENTICAL || echo DEADLINE_DIFFERS; tail -2 $RC_OUT/hs-branch.txt $RC_OUT/dd-branch.txt
