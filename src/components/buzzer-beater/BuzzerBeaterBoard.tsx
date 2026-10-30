@@ -90,6 +90,23 @@ export default function BuzzerBeaterBoard() {
     chargingRef.current = false;
     clearPointerHold();
   }, [clearPointerHold]);
+  useEffect(() => {
+    const cancelCharge = () => {
+      clearPointerHold();
+      chargingRef.current = false;
+      setCharging(false);
+    };
+    const cancelHiddenCharge = () => {
+      if (document.visibilityState === 'hidden') cancelCharge();
+    };
+    window.addEventListener('blur', cancelCharge);
+    document.addEventListener('visibilitychange', cancelHiddenCharge);
+    return () => {
+      window.removeEventListener('blur', cancelCharge);
+      document.removeEventListener('visibilitychange', cancelHiddenCharge);
+    };
+  }, [clearPointerHold]);
+
   const aimingRef = useRef(false);
   const practicePowerRef = useRef<HTMLInputElement | null>(null);
   const practiceActionRef = useRef<HTMLButtonElement | null>(null);
