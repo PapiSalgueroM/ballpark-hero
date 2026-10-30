@@ -1,0 +1,9 @@
+tsc: node_modules/.bin/tsc --noEmit -p tsconfig.app.json
+vitest: node_modules/.bin/vitest run src/test/cmValueCurve.test.ts src/lib/clubManagerOwnClubLevel.test.ts src/lib/clubManagerTrajectory.test.ts --testTimeout=300000 --hookTimeout=120000
+simFreeAgents: node scripts/simFreeAgents.mjs
+simFreeAgents-marketreleased: FA_CONTROL=marketreleased node scripts/simFreeAgents.mjs
+simCmLedgerBound: node scripts/simCmLedgerBound.mjs
+simCmLedgerBound-madeup: CM_LEDGER_BOUND_CONTROL=madeup node scripts/simCmLedgerBound.mjs
+simClubManagerSaveSize: node scripts/simClubManagerSaveSize.mjs
+simNoRivalNames: node scripts/simNoRivalNames.mjs
+build: npx vite build --logLevel error && echo BUILD_OK

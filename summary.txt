@@ -1,0 +1,9 @@
+vitest exit=0 30s |    Duration  28.59s (transform 5.22s, setup 448ms, collect 9.31s, tests 28.12s, environment 2.30s, prepare 553ms)
+tsc exit=2 121s |   Property 'lv' does not exist on type '{ founderSaleRatio: number; nation?: string; name: string; club: string; position: Position; age: number; rating: number; price: n
+simFreeAgents exit=0 152s | simFreeAgents: all sections passed
+simFreeAgents-marketreleased exit=1 144s | simFreeAgents: 1 failure(s)
+simClubManagerSaveSize exit=0 99s | simClubManagerSaveSize: all sections green
+simNoRivalNames exit=0 18s | No rival product names found. 0 findings.
+build exit=0 47s | BUILD_OK
+simCmLedgerBound exit=0 414s | simCmLedgerBound: green, all four sections held
+simCmLedgerBound-madeup exit=1 412s | simCmLedgerBound: CONTROL madeup FIRED: section 3 red (red: 1 (1), 3 (572))
