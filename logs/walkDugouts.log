@@ -1,0 +1,8 @@
+  ok    in the job at Everton, season 1
+  ok    Liverpool's page shows "pool Premier League · 👑 Elite Manager: Andoni Iraola 88 Best XI £855m Squad value "
+  ok    Liverpool slot: real, line "Manager: Andoni Iraola"
+  ok    Manchester United's page shows "Premier League · 🥇 Contenders Manager: Michael Carrick · since Jan 2026 87 Best XI £"
+  ok    Manchester United slot: real, line "Manager: Michael Carrick · since Jan 2026"
+  ok    Newcastle's page shows "Premier League · 🥇 Contenders Manager: Matthias Jaissle · since Aug 2026 84 Best XI £"
+  ok    Newcastle slot: real, line "Manager: Matthias Jaissle · since Aug 2026"
+walkDugouts: green, three rival pages show their opening day manager
