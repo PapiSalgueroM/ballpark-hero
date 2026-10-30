@@ -1,0 +1,2 @@
+b10e2c2cb86b83535bef845e82379fbecae378a4efa9cbd1bc31a4b4ee241ab8  /home/runner/work/_temp/rc-out/full/playSoccerCareerPendingMorale.mjs/stdout.log
+e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855  /home/runner/work/_temp/rc-out/full/playSoccerCareerPendingMorale.mjs/stderr.log

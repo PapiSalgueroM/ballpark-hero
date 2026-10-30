@@ -1,0 +1,2 @@
+8e7d1026b6715e2a1818f5f32e3b664a2d475a1786d461346058cb2d5462f84b  /home/runner/work/_temp/rc-out/full/playSoccerCareerSaveSize.mjs/stdout.log
+e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855  /home/runner/work/_temp/rc-out/full/playSoccerCareerSaveSize.mjs/stderr.log

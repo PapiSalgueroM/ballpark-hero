@@ -1,0 +1,12 @@
+prepare exit=0 91s | ordinary-build raw=0
+playSoccerCareerLeagueWorld exit=0 19s | playSoccerCareerLeagueWorld.mjs raw=0
+playSoccerCareerLifeReviews exit=1 2s | playSoccerCareerLifeReviews.mjs raw=1
+playSoccerCareerOpponents exit=0 14s | playSoccerCareerOpponents.mjs raw=0
+playSoccerCareerPendingLife exit=1 2s | playSoccerCareerPendingLife.mjs raw=1
+playSoccerCareerPendingMorale exit=1 2s | playSoccerCareerPendingMorale.mjs raw=1
+playSoccerCareerPendingPopularity exit=1 2s | playSoccerCareerPendingPopularity.mjs raw=1
+playSoccerCareerRoutineEvents exit=1 2s | playSoccerCareerRoutineEvents.mjs raw=1
+playSoccerCareerSaveSize exit=1 2s | playSoccerCareerSaveSize.mjs raw=1
+playSoccerCareerSavedLoan exit=1 2s | playSoccerCareerSavedLoan.mjs raw=1
+playSoccerCareerStatRewards exit=1 2s | playSoccerCareerStatRewards.mjs raw=1
+finish exit=0 8s | 

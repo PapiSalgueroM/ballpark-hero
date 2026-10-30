@@ -1,0 +1,2 @@
+ad86eb0e9daa6c684b984c5dd952cd9fa7d568d531c7498a90a288bc94e75205  /home/runner/work/_temp/rc-out/full/playSoccerCareerOpponents.mjs/stdout.log
+e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855  /home/runner/work/_temp/rc-out/full/playSoccerCareerOpponents.mjs/stderr.log
