@@ -1,0 +1,250 @@
+{
+  "head": "36f4ddca65b32fcb10dc49db71c29280da207bf8",
+  "parentRef": "082fc2774c8aa9f919c14efa33bfc3fbfc599597",
+  "phase": "fixed",
+  "control": "",
+  "bindings": [
+    {
+      "file": "src/components/club-manager/ClubDetailScreen.tsx",
+      "parentSha256": "bf8a46ebf55f6dae9deeab81380915280ef5fe94d9b9c64dae3ca369da63c6fe",
+      "candidateSha256": "e00c2e79b286ea93d3f787309e206fbeecc22db6999fc269c9a41349ec387e9c"
+    },
+    {
+      "file": "src/lib/clubManager.ts",
+      "parentSha256": "22833be3e9849fbcbd20f4e75f490fdb7a519651473358c63671e341a18cd8d8",
+      "candidateSha256": "411adb4402a67d5180a7f51f2ecaef940837a78c233868dcb6bd52927c0bf028"
+    },
+    {
+      "file": "src/lib/clubManagerWorldRoster.ts",
+      "parentSha256": "5a9d8dc53227d8af609876f62d2423b55679c333964dec9b2faa4e51818eb737",
+      "candidateSha256": "f6adb423530a29fc75fcc6e759bb746e6885b2b718ef4dc12033304e8669e4b4"
+    },
+    {
+      "file": "src/lib/clubManagerEras.ts",
+      "parentSha256": "d7b6b39f375ecd9e0e4cab9bf01b1782249fab65c9b6a1ebbef199bbb7619cd5",
+      "candidateSha256": "afef0fd0e9c3dbe24d3cfa7d521df78bd8762dd059d226051e582d503aa25bd0"
+    },
+    {
+      "file": "src/test/clubDetailOwnClub.test.tsx",
+      "parentSha256": "441dc39313529306a3e2f3725f7c10829151b179f83808ee63cad83432c48c35",
+      "candidateSha256": "65da5716a548e3c89ff612df10b1bc6093a0eac9f1380d5ca7c5a7075640c789"
+    }
+  ],
+  "fixtureBindings": [
+    {
+      "file": "src/lib/clubDetailFixtures.ts",
+      "headSha256": "3375d8edac9dee57012f2bee3a0d2992a2e20714b06872fe60ed6682dada4e9f",
+      "candidateSha256": "3375d8edac9dee57012f2bee3a0d2992a2e20714b06872fe60ed6682dada4e9f"
+    },
+    {
+      "file": "scripts/lib/clubDetailFixturesSourceJoin.mjs",
+      "headSha256": "4970b655e0bfc110e1420fc181a365751f815c7d897d9260679450d277bd2756",
+      "candidateSha256": "4970b655e0bfc110e1420fc181a365751f815c7d897d9260679450d277bd2756"
+    }
+  ],
+  "componentBinding": {
+    "file": "src/components/club-manager/ClubDetailScreen.tsx",
+    "spans": [
+      {
+        "anchor": "  const fromMySquad = isMyCustom || (clubName === career.clubName && (worldSeedOf(career) !== undefined || worldRosterView(career) !== null));",
+        "replacement": "  const fromMySquad = isMyCustom || clubName === career.clubName;",
+        "offset": 2704
+      },
+      {
+        "anchor": "worldSeasonLabel, worldSeedOf, yearsOn,",
+        "replacement": "worldSeasonLabel, yearsOn,",
+        "offset": 222
+      },
+      {
+        "anchor": "import { worldRosterView } from '@/lib/clubManagerWorldRoster';\n",
+        "replacement": "",
+        "offset": 404
+      },
+      {
+        "anchor": "  /* Release AZ fix pass 4, the lead's ruling (the manager's own club is read\n     from his squad, never the world roster): in a career that plays the living\n     world, my own club opened from a bracket or the world tables is my squad,\n     as a club I founded always was. Off the world roster it listed only the\n     men of my club who are NOT in my squad (the men a deep club's bake holds\n     beyond the 26 a squad starts with, then every replacement the projection\n     made up). A career from before the release reads the projected world here\n     exactly as it did (ruling Y1). src/test/clubDetailOwnClub.test.tsx holds\n     it. */",
+        "replacement": "  /* The club you manage always reads the squad in this save. Rival clubs\n     keep their current world roster, including recorded transfers. */",
+        "offset": 1988
+      }
+    ],
+    "parentSha256": "bf8a46ebf55f6dae9deeab81380915280ef5fe94d9b9c64dae3ca369da63c6fe",
+    "plannedSha256": "834de535e91f55ef0c8615ef9058f173a345c1d4e6631db5838273703199640e",
+    "inverseSha256": "bf8a46ebf55f6dae9deeab81380915280ef5fe94d9b9c64dae3ca369da63c6fe"
+  },
+  "oldTestBinding": {
+    "file": "src/test/clubDetailOwnClub.test.tsx",
+    "spans": [
+      {
+        "anchor": "/* Release AZ fix pass 4, the lead's ruling of 2026-10-12: the manager's own club is read from his squad, never\n   the world roster. The club screen opened on my own club (from a cup bracket, the Champions League cards or the\n   world tables) read it off the world roster minus my squad, so \"your club\" listed only the men of my club who\n   are not in my squad: the men a deep club's bake holds beyond the 26 a squad starts with. In a career that plays\n   the living world it now lists my squad, as a club I founded always did. A career from before the release (no\n   world seed, so by ruling Y1 no ledger either) reads the projected world here exactly as it did. Every state\n   below is the real engine's on a real club; nothing is made up. */",
+        "replacement": "/* Club details use the saved owned squad for every career, including legacy\n   saves. Rival clubs still use their current world roster. */",
+        "offset": 310
+      },
+      {
+        "anchor": "a career from before the release reads its own club off the projected world exactly as it did",
+        "replacement": "a career from before the release reads its own club from its current saved squad",
+        "offset": 2873
+      },
+      {
+        "anchor": "expect(screenText(old, 'Real Madrid')).toContain(`Squad (${projected.length} on the books)`);",
+        "replacement": "expect(screenText(old, 'Real Madrid')).toContain(`Squad (${old.squad.length} on the books)`);",
+        "offset": 3313
+      },
+      {
+        "anchor": "    delete old.worldSeed;\n    expect(old.worldRoster).toBeUndefined();",
+        "replacement": "    delete old.worldSeed;\n    /* Round 1344: a new career now carries its opening window's deals between other clubs in a ledger (the post\n       seed flush); a career from before the release had none, so it comes off with the seed. */\n    delete old.worldRoster;\n    expect(old.worldRoster).toBeUndefined();",
+        "offset": 3076
+      }
+    ],
+    "parentSha256": "441dc39313529306a3e2f3725f7c10829151b179f83808ee63cad83432c48c35",
+    "plannedSha256": "65da5716a548e3c89ff612df10b1bc6093a0eac9f1380d5ca7c5a7075640c789",
+    "inverseSha256": "441dc39313529306a3e2f3725f7c10829151b179f83808ee63cad83432c48c35"
+  },
+  "compiled": [
+    {
+      "file": "chunk-6DZX6EAA.mjs",
+      "sha256": "31832015d4afdca0b1a7ae0b6c23ed5ebb0db91771036d114c8e8ac6bf057516"
+    },
+    {
+      "file": "chunk-A2SZ4LSJ.mjs",
+      "sha256": "aafda5e93b6df96daeee888872fdbaac01c4b22b6c981c809f26009033aec406"
+    },
+    {
+      "file": "clubManagerBundesliga2Fixtures2026-J4MOC6R2.mjs",
+      "sha256": "0a98737ee3443a102c752fa166c93325d2832116978d44c777c69346b65e61ee"
+    },
+    {
+      "file": "clubManagerBundesligaFixtures2026-INEBFSJE.mjs",
+      "sha256": "6af774c50f97b6bc1d521979ce14fbb33011c900256cd78fb7e5aca929b49d9c"
+    },
+    {
+      "file": "clubManagerChampionshipFixtures2026-LVI2GEZ4.mjs",
+      "sha256": "ddb4f5e36b64c6ff5e98765cbc0c5dc78622b37773bdc077e0a72cc3d94737cb"
+    },
+    {
+      "file": "clubManagerEra2005-7MO6AG63.mjs",
+      "sha256": "a1bd93c730401de7ac5bdcc00d5f3cf350e89f344f9b1ffb6fa3b415391312a5"
+    },
+    {
+      "file": "clubManagerEra2010-AV4GIHSO.mjs",
+      "sha256": "07e58e2d5f6cc3a46f86b01a32047ffa15ecb86fd648b577fe7d587202ca9c30"
+    },
+    {
+      "file": "clubManagerEra2015-IIA6PQIN.mjs",
+      "sha256": "5f66dfa31c8320d809366791e246a5ad423b249ae9ed591ee4910ee6c24b91e5"
+    },
+    {
+      "file": "clubManagerEra2020-AQL6LZUB.mjs",
+      "sha256": "b7240351e32d2a8a2eced5f40a5c53e5185082dc0622a3020ba45498af24d03e"
+    },
+    {
+      "file": "clubManagerEredivisieFixtures2026-3EQGNF6S.mjs",
+      "sha256": "2cb626c1b25b8ef6c0b7ce50f63ba63783ce6d4068c3ce95edc879534b55e95e"
+    },
+    {
+      "file": "clubManagerLaLigaFixtures2026-4IRE35QX.mjs",
+      "sha256": "243e6bed2e54cb42cbdec0c7cc39b3dca5d84c51c23c9a9c20651f4be71321e6"
+    },
+    {
+      "file": "clubManagerLigue2Fixtures2026-MKDRYGWC.mjs",
+      "sha256": "9af24bebd53df49ecfd2cc33866c27aea03bcc761910373f70d5cc9f4e8615c4"
+    },
+    {
+      "file": "clubManagerPrimeiraFixtures2026-S7HDC5OV.mjs",
+      "sha256": "636e127c76c1c83c619e630d7679e3afd897eaca300d3ea7e5ff0a45e7c9668a"
+    },
+    {
+      "file": "clubManagerSerieAFixtures2026-F2VD74PU.mjs",
+      "sha256": "d27d6028ecddd2825f9bfd57346e24b1120d3292ffa4e8cea69a028a00923596"
+    },
+    {
+      "file": "clubManagerSuperLigFixtures2026-RAAV5TQL.mjs",
+      "sha256": "b72a8f50728f11ed6d3c8aa5cfffbc16a8ba58e172403f8d99db8b34e3c303c7"
+    },
+    {
+      "file": "component.mjs",
+      "sha256": "8cff9c8b839d7527362b479eeb69ab8108fd27c61612dbc8f3a3b9b9809d1063"
+    },
+    {
+      "file": "engine.mjs",
+      "sha256": "30e7f41207741620d44cc490b27c0c22d9e332632ebcbb51ac3bc8f0d2c90813"
+    },
+    {
+      "file": "era2005-D7FMMYNO.mjs",
+      "sha256": "622913687f890a5bd0c8819fa1acb7faac596e4497e8ca246a2a258c1b2eb820"
+    },
+    {
+      "file": "era2010-JQ45LSI4.mjs",
+      "sha256": "c83c25b155d2958cdfb7d80caf9399d4ded0594e4cd3d2105206bd890026c2c5"
+    },
+    {
+      "file": "era2015-ZZX34TBE.mjs",
+      "sha256": "1c032b3de71f8226c5b108657c1894b44a73d71818344c1c9159d9648501ff12"
+    },
+    {
+      "file": "era2020-S3NPRWGX.mjs",
+      "sha256": "497b6a03a94ff58291082004f699e1ff3d8594ce1d078d9cb562189d89710366"
+    }
+  ],
+  "child": {
+    "status": 0,
+    "signal": null,
+    "error": null
+  },
+  "methodError": "AssertionError [ERR_ASSERTION]: Expected values to be strictly equal:\n+ actual - expected\n... Skipped lines\n\n+ \"import { useMemo } from 'react';\\n\" +\n- \"import { useMemo, useState } from 'react';\\n\" +\n-   \"import { clubLeagueFixtures } from '@/lib/clubDetailFixtures';\\n\" +\n    \"import { cn } from '@/lib/utils';\\n\" +\n    \"import { ChevronLeft, Eye } from 'lucide-react';\\n\" +\n    'import {\\n' +\n    '  money, moneyIn, sortedLeagueTable, isPartialClub, TIER_INFO,\\n' +\n    '  oppRosterFor, worldRosterXIAvg, worldSeasonLabel, yearsOn,\\n' +\n    '  boardWantLabel, careerLeagueOf, eraClubDefFor,\\n' +\n+   '  managerOf, sellValue,\\n' +\n-   '  dugoutOf, sellValue,\\n' +\n    \"} from '@/lib/clubManager';\\n\" +\n    \"import type { CareerState } from '@/lib/clubManager';\\n\" +\n    \"import { ratingTint, MadeUpTag } from '@/components/club-manager/SquadScreen';\\n\" +\n-   \"import { realDugoutSince, DUGOUT_MADE_UP_TITLE, DUGOUT_PARTIAL_TITLE } from '@/lib/realDugouts';\\n\" +\n    '\\n' +\n    'interface ClubDetailScreenProps {\\n' +\n    '  clubName: string;\\n' +\n    '  career: CareerState;\\n' +\n    '  onBack: () => void;\\n' +\n...\n    'export function ClubDetailScreen({ clubName, career, onBack }: ClubDetailScreenProps) {\\n' +\n-   '  const [fixturesClub, setFixturesClub] = useState<string | null>(null);\\n' +\n    '  /* Round 514: the money symbol follows the start option. Shadowing the\\n' +\n    '     import here is one line instead of a career argument on every call. */\\n' +\n    '  const money = moneyIn(career);\\n' +\n    \"  /* Round 146: everything in this viewer reads the SAVE's world. In a 2010\\n\" +\n    '     career the def is the 2010 def, the league is the 2010 league and the\\n' +\n...\n    '  const league = careerLeagueOf({ clubName, eraId: career.eraId, customClub: career.customClub });\\n' +\n-   '  /* Round 1606: who is in the other dugout, as a display slot reads it (real and dated, or made up). */\\n' +\n-   '  const dugout = clubName === career.clubName ? null : dugoutOf(career, clubName);\\n' +\n    '  /* Round 132: the rival viewer shows the rival AS HE IS THIS SEASON. Before\\n' +\n    '     the clock existed this read the frozen August 2026 bake, so in 2036 you\\n' +\n    '     could open Liverpool and be looking at a squad list a decade out of date\\n' +\n    '     while the league table next to it was being decided by something else. */\\n' +\n    '  const onYears = yearsOn(career);\\n' +\n...\n    '\\n' +\n-   '  if (fixturesClub === clubName) {\\n' +\n-   '    const fixtures = clubLeagueFixtures(career, clubName);\\n' +\n-   '    return <section aria-label=\"Club league fixtures\" className=\"space-y-3\">\\n' +\n-   '      <button type=\"button\" onClick={() => setFixturesClub(null)} className=\"inline-flex min-h-11 items-center gap-1 text-sm text-muted-foreground hover:text-foreground\">\\n' +\n-   '        <ChevronLeft className=\"h-4 w-4\" /> Back\\n' +\n-   '      </button>\\n' +\n-   '      <div><h2 className=\"text-lg font-bold\">{clubName} fixtures</h2>\\n' +\n-   '        {fixtures && <p className=\"text-xs text-muted-foreground\">{fixtures.leagueName} · {worldSeasonLabel(career)}</p>}\\n' +\n-   '      </div>\\n' +\n-   '      {fixtures ? <ul className=\"max-h-[48vh] overflow-y-auto overscroll-contain space-y-2 pr-1\">\\n' +\n-   '        {fixtures.rows.map(row => <li key={`${row.round}-${row.home}-${row.away}`} data-club-fixture={row.round} className=\"rounded-xl border border-border p-3\">\\n' +\n-   '          <p className=\"text-[10px] text-muted-foreground\">Matchday {row.round + 1}</p>\\n' +\n-   '          <p className=\"break-words text-sm font-semibold\">{row.home} vs {row.away}</p>\\n' +\n-   '          <p className=\"text-sm\">{row.status === \\'recorded\\' ? `${row.homeGoals} - ${row.awayGoals}` : row.status === \\'upcoming\\' ? \\'Upcoming\\' : \\'Result not recorded\\'}</p>\\n' +\n-   '        </li>)}\\n' +\n-   '      </ul> : <p className=\"text-sm text-muted-foreground\">League fixtures are not available for this club in this save.</p>}\\n' +\n-   '    </section>;\\n' +\n-   '  }\\n' +\n-   '\\n' +\n    '  return (\\n' +\n    '    <div>\\n' +\n    '      <button\\n' +\n    '        onClick={onBack}\\n' +\n    '        className=\"inline-flex items-center gap-1 text-xs text-muted-foreground hover:text-foreground transition-colors mb-3\"\\n' +\n...\n    '                shows your created manager if one exists, second person if\\n' +\n+   '                not, and rivals show the generated name and its tenure. */}\\n' +\n-   '                not, and rivals show the generated name and its tenure.\\n' +\n-   '                Round 1606: a real opening day manager shows with the month\\n' +\n-   '                he took the job, and nothing else about him; every made up\\n' +\n-   '                one wears MADE UP so the page says which is which. */}\\n' +\n    '            {clubName === career.clubName ? (\\n' +\n    '              career.manager && (\\n' +\n+   '                <div className=\"text-[10px] text-muted-foreground\">Dugout: <span className=\"text-foreground font-semibold\">{career.manager.name}</span> (you)</div>\\n' +\n-   '                <div className=\"text-[10px] text-muted-foreground\">Manager: <span className=\"text-foreground font-semibold\">{career.manager.name}</span> (you)</div>\\n' +\n    '              )\\n' +\n    '            ) : (\\n' +\n+   '              managerOf(career, clubName) && (\\n' +\n+   '                <div className=\"text-[10px] text-muted-foreground\">\\n' +\n+   '                  Dugout: <span className=\"text-foreground font-semibold\">{managerOf(career, clubName)!.name}</span>\\n' +\n+   \"                  {' '}since S{managerOf(career, clubName)!.since}\\n\" +\n-   '              dugout && (\\n' +\n-   `                <div className=\"text-[10px] text-muted-foreground flex flex-wrap items-center gap-x-1 gap-y-0.5 min-w-0\" data-cm-dugout={dugout.real ? 'real' : 'made-up'}>\\n` +\n-   '                  <span className=\"truncate max-w-full\">\\n' +\n-   '                    Manager: <span className=\"text-foreground font-semibold\">{dugout.name}</span>\\n' +\n-   '                    {dugout.real\\n' +\n-   \"                      ? (realDugoutSince(dugout.appointed) ? ` · ${realDugoutSince(dugout.appointed)}` : '')\\n\" +\n-   \"                      : (dugout.since ? ` · since S${dugout.since}` : '')}\\n\" +\n-   '                  </span>\\n' +\n-   '                  {!dugout.real && <MadeUpTag title={dugout.partial ? DUGOUT_PARTIAL_TITLE : DUGOUT_MADE_UP_TITLE} />}\\n' +\n    '                </div>\\n' +\n    '              )\\n' +\n    '            )}\\n' +\n    '          </div>\\n' +\n    '          <Eye className=\"w-4 h-4 text-muted-foreground ml-auto shrink-0\" />\\n' +\n...\n    '            <div className=\"text-lg font-bold font-display text-foreground\">{row && inMyLeague ? `${row.w}-${row.d}-${row.l}` : \\'-\\'}</div>\\n' +\n+   '            <div className=\"text-[9px] text-muted-foreground\">W-D-L</div>\\n' +\n+   '          </div>\\n' +\n+   '        </div>\\n' +\n+   '        {row && inMyLeague && (\\n' +\n+   '          <div className=\"grid grid-cols-3 gap-2 text-center mt-2 pt-2 border-t border-border/40\">\\n' +\n+   '            <div><span className=\"text-xs font-bold text-foreground\">{row.gf}</span> <span className=\"text-[9px] text-muted-foreground\">scored</span></div>\\n' +\n+   '            <div><span className=\"text-xs font-bold text-foreground\">{row.ga}</span> <span className=\"text-[9px] text-muted-foreground\">conceded</span></div>\\n' +\n+   '            <div><span className=\"text-xs font-bold text-foreground\">{row.pts}</span> <span className=\"text-[9px] text-muted-foreground\">points</span></div>\\n' +\n+   '          </div>\\n' +\n+   '        )}\\n' +\n+   '        {/* Round 145: this line used to print the raw strength rank (\"top 20\"\\n' +\n+   '            at a rank 20 club), which is exactly the phrasing the owner told us\\n' +\n+   '            to kill. It now says what the board actually demands. */}\\n' +\n+   '        <div className=\"text-[9px] text-muted-foreground mt-2\">\\n' +\n+   '          Board wants: <span className=\"text-foreground font-semibold\">{boardWant}</span> · transfer budget around {money(def.budget)}\\n' +\n+   '        </div>\\n' +\n+   '      </div>\\n' +\n+   '\\n' +\n+   '      {/* Full squad */}\\n' +\n+   '      <div className=\"bg-card border border-border rounded-2xl p-3\">\\n' +\n+   '        <div className=\"flex items-center justify-between text-[10px] text-muted-foreground uppercase tracking-wide pb-1 border-b border-border/60\">\\n' +\n+   '          <span>Squad ({roster.length} on the books)</span>\\n' +\n+   '          <span>Worth · OVR</span>\\n' +\n+   '        </div>\\n' +\n+   '        {roster.map(p => (\\n' +\n+   '          <div key={p.n} className=\"flex items-center gap-2 py-1.5 border-b border-border/30 last:border-0\">\\n' +\n+   '            <span className=\"w-9 shrink-0 text-[10px] font-bold text-muted-foreground bg-secondary rounded px-1 py-0.5 text-center\">{p.p}</span>\\n' +\n+   '            <div className=\"flex-1 min-w-0\">\\n' +\n+   '              <div className=\"flex items-center gap-1.5\">\\n' +\n+   '                <span className=\"text-xs text-foreground truncate\">{p.n}</span>\\n' +\n+   '                {p.g && <MadeUpTag />}\\n' +\n+   '              </div>\\n' +\n+   '              <div className=\"text-[9px] text-muted-foreground\">{p.a}y</div>\\n' +\n+   '            </div>\\n' +\n+   '            <span className=\"shrink-0 text-right leading-tight\">\\n' +\n+   '              <span className=\"block text-[10px] font-bold text-gold\">{money(p.v)}</span>\\n' +\n+   '              {p.s !== undefined && <span className=\"block text-[9px] text-muted-foreground\">sells {money(p.s)}</span>}\\n' +\n+   '            </span>\\n' +\n+   '            <'... 1379 more characters\n-   '            <div className=\"'... 4000 more characters\n\n    at file:///home/runner/work/ballpark-hero/ballpark-hero/scripts/simClubDetailCurrentRoster.mjs:149:48\n    at process.processTicksAndRejections (node:internal/process/task_queues:104:5)",
+  "sourceReceipts": [
+    {
+      "file": "src/components/club-manager/ClubDetailScreen.tsx",
+      "beforeSha256": "e00c2e79b286ea93d3f787309e206fbeecc22db6999fc269c9a41349ec387e9c",
+      "afterSha256": "834de535e91f55ef0c8615ef9058f173a345c1d4e6631db5838273703199640e"
+    },
+    {
+      "file": "src/lib/clubManager.ts",
+      "beforeSha256": "411adb4402a67d5180a7f51f2ecaef940837a78c233868dcb6bd52927c0bf028",
+      "afterSha256": "411adb4402a67d5180a7f51f2ecaef940837a78c233868dcb6bd52927c0bf028"
+    },
+    {
+      "file": "src/lib/clubManagerWorldRoster.ts",
+      "beforeSha256": "f6adb423530a29fc75fcc6e759bb746e6885b2b718ef4dc12033304e8669e4b4",
+      "afterSha256": "f6adb423530a29fc75fcc6e759bb746e6885b2b718ef4dc12033304e8669e4b4"
+    },
+    {
+      "file": "src/lib/clubManagerEras.ts",
+      "beforeSha256": "afef0fd0e9c3dbe24d3cfa7d521df78bd8762dd059d226051e582d503aa25bd0",
+      "afterSha256": "afef0fd0e9c3dbe24d3cfa7d521df78bd8762dd059d226051e582d503aa25bd0"
+    },
+    {
+      "file": "src/test/clubDetailOwnClub.test.tsx",
+      "beforeSha256": "65da5716a548e3c89ff612df10b1bc6093a0eac9f1380d5ca7c5a7075640c789",
+      "afterSha256": "65da5716a548e3c89ff612df10b1bc6093a0eac9f1380d5ca7c5a7075640c789"
+    },
+    {
+      "file": "src/test/clubDetailCurrentRoster.test.tsx",
+      "beforeSha256": "d2692b39d5ffad7bd38916b86ab9faa40cc9f0949a3b8c43026b74f3191e2f7b",
+      "afterSha256": "d2692b39d5ffad7bd38916b86ab9faa40cc9f0949a3b8c43026b74f3191e2f7b"
+    },
+    {
+      "file": "scripts/simClubDetailCurrentRoster.mjs",
+      "beforeSha256": "f635a44d89d10ef93b6627fd9dfbd59b25faf79346ba222263031fea76216fb2",
+      "afterSha256": "f635a44d89d10ef93b6627fd9dfbd59b25faf79346ba222263031fea76216fb2"
+    },
+    {
+      "file": ".github/workflows/club-detail-current-roster.yml",
+      "beforeSha256": "d4fd6b2ce56e21834e4adaee828d9974529384448721556aafe4132a1e21382d",
+      "afterSha256": "d4fd6b2ce56e21834e4adaee828d9974529384448721556aafe4132a1e21382d"
+    },
+    {
+      "file": "scripts/playClubDetailCurrentRoster.mjs",
+      "beforeSha256": "361ab2bb4645181fdea3893b3c0be60f24a350cd1d86173700916579baa0d09f",
+      "afterSha256": "361ab2bb4645181fdea3893b3c0be60f24a350cd1d86173700916579baa0d09f"
+    },
+    {
+      "file": "src/lib/clubDetailFixtures.ts",
+      "beforeSha256": "3375d8edac9dee57012f2bee3a0d2992a2e20714b06872fe60ed6682dada4e9f",
+      "afterSha256": "3375d8edac9dee57012f2bee3a0d2992a2e20714b06872fe60ed6682dada4e9f"
+    },
+    {
+      "file": "scripts/lib/clubDetailFixturesSourceJoin.mjs",
+      "beforeSha256": "4970b655e0bfc110e1420fc181a365751f815c7d897d9260679450d277bd2756",
+      "afterSha256": "4970b655e0bfc110e1420fc181a365751f815c7d897d9260679450d277bd2756"
+    }
+  ]
+}

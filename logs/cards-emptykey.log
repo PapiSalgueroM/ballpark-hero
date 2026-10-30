@@ -1,0 +1,46 @@
+simCmPlayerCard: 6 careers of 3 seasons, engines: candidate (control emptykey), off; PAST_KEPT 10
+  FAIL archive: Real Madrid seed 0 season 3: youth-muwv75s0-25-800 holds an empty entry
+  FAIL archive: Real Madrid seed 0 season 3: youth-muwv75s0-25-800 played no game and gained an entry
+  FAIL archive: Real Madrid seed 0 season 3: the careful reader does not read the saved list back as it is
+  FAIL archive: Lincoln City seed 0 season 3: fa-boris-bakker-s3 holds an empty entry
+  FAIL archive: Lincoln City seed 0 season 3: fa-boris-bakker-s3 played no game and gained an entry
+  FAIL archive: Hertha BSC seed 0 season 2: fa-pau-ahlberg-s2 holds an empty entry
+  FAIL archive: Hertha BSC seed 0 season 2: fa-pau-ahlberg-s2 played no game and gained an entry
+  FAIL archive: Hertha BSC seed 0 season 3: fa-bruno-roman-s3 holds an empty entry
+  FAIL archive: Hertha BSC seed 0 season 3: fa-sander-colombo-s3 holds an empty entry
+  FAIL archive: Hertha BSC seed 0 season 3: fa-tunde-seydou-s3 holds an empty entry
+  FAIL archive: Hertha BSC seed 0 season 3: fa-bruno-roman-s3 played no game and gained an entry
+  FAIL archive: Hertha BSC seed 0 season 3: fa-sander-colombo-s3 played no game and gained an entry
+  FAIL archive: Hertha BSC seed 0 season 3: fa-tunde-seydou-s3 played no game and gained an entry
+  FAIL archive: Real Anthony seed 0 season 1: p-amadou-dahl holds an empty entry
+  FAIL archive: Real Anthony seed 0 season 1: p-ludo-marino holds an empty entry
+  FAIL archive: Real Anthony seed 0 season 1: p-amadou-dahl played no game and gained an entry
+  FAIL archive: Real Anthony seed 0 season 1: p-ludo-marino played no game and gained an entry
+  FAIL archive: Arsenal (era2010) seed 0 season 1: p-nicklas-bendtner holds an empty entry
+  FAIL archive: Arsenal (era2010) seed 0 season 1: p-aaron-ramsey holds an empty entry
+  FAIL archive: Arsenal (era2010) seed 0 season 1: p-franco-jara holds an empty entry
+cards   7861 checks: my men at 160 points, 3508 rival book rows at season ends, on the first seed of every club; notes seen {"thisclub":3499,"leftclub":9,"thin":917}
+stream  862 of 862 faces equal to the off engine (every entry, season end and summer, with the draw count)
+stream  base arm NOT RUN: set CARDS_BASE to a worktree of the base commit
+archive 846 checks; 377 rows written and checked, 3 of them for a man out on loan at the season end, the most rows one man held 3
+cards   the namesake case at Coventry City: each of two men of one name reads his own row
+cap     Everton renewing, 4 seasons: 4 seasons, the most rows one man held 4
+size    candidate bytes a season: 162809 176343 187609 187347
+size    archive bytes a season:   836 1249 1614 1941
+size    season 4: 187347 bytes, of which the archive 1941; slope over seasons 4 to 4 n/a bytes a season (printed for the lead, not gated here)
+cap     a constructed squad of 25 archived 12 times holds 10 rows a man, the newest (seasons 3 to 12)
+oldsave the committed save of Round 1052 (Sevilla): six entries on, book 34 (late round index), 146 rival rows held, kept from no line
+oldsave the committed save of Round 1052 (Sevilla): loaded clean, season 1 played out, pastFrom 1, 20 men with a row
+oldsave the committed second tier save (Valencia): six entries on, book 34 (late round index), 136 rival rows held, kept from no line
+oldsave the committed second tier save (Valencia): loaded clean, season 1 played out, pastFrom 1, 22 men with a row
+oldsave a save parked on its season 1 review: nothing on load or at the summer, pastFrom 2 after season 2
+dailies 38 states of 4 Hot Seat days and 2 Deadline Day runs looked at
+markup  12 of 12 renders (Squad, Stats, a leaders board, a club page, on 3 saves) with no provider free of any card link (base arm NOT RUN: set CARDS_BASE)
+  cards    8189 checks, 0 failed
+  archive  846 checks, 41 failed
+  stream   6 checks, 0 failed
+  cap      87 checks, 0 failed
+  oldsave  12 checks, 0 failed
+  dailies  38 checks, 0 failed
+  markup   12 checks, 0 failed
+simCmPlayerCard: control emptykey FIRED, 41 failures in section archive (41 in all) (41s)
