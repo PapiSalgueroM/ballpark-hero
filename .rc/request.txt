@@ -1,0 +1,8 @@
+#!serial
+head-writes: node scripts/simWritesAreSent.mjs 2>&1 | tail -25
+head-result: node scripts/simResultMoment.mjs 2>&1 | tail -25
+main-writes: git worktree add /tmp/mainwt origin/main > /dev/null 2>&1; ln -sfn "$PWD/node_modules" /tmp/mainwt/node_modules; cd /tmp/mainwt && git log --oneline -1 && node scripts/simWritesAreSent.mjs 2>&1 | tail -12
+main-result: cd /tmp/mainwt && node scripts/simResultMoment.mjs 2>&1 | tail -12
+base-writes: git worktree add /tmp/basewt 6eefda2ec > /dev/null 2>&1; ln -sfn "$PWD/node_modules" /tmp/basewt/node_modules; cd /tmp/basewt && git log --oneline -1 && node scripts/simWritesAreSent.mjs 2>&1 | tail -12
+base-result: cd /tmp/basewt && node scripts/simResultMoment.mjs 2>&1 | tail -12
+main-edge: cd /tmp/mainwt && node scripts/simEdgeSync.mjs 2>&1 | grep -E "FAIL|finding|green" | head -6
