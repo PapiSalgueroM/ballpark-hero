@@ -1,0 +1,11 @@
+#!playwright
+#!serial
+tsc: node_modules/.bin/tsc --noEmit -p tsconfig.app.json
+simNoRivalNames: node scripts/simNoRivalNames.mjs
+simHarnessAnchors: node scripts/simHarnessAnchors.mjs
+simStorageWrites: node scripts/simStorageWrites.mjs
+vitest: node_modules/.bin/vitest run src/test/routeErrorRecovery.test.tsx src/test/cmSavePointsScreen.test.tsx src/test/careerAwardsNightCard.test.tsx src/test/careerDerbies.test.tsx src/test/careerDilemmaReach.test.tsx src/test/careerDilemmaSaves.test.tsx src/test/careerKeepPlaying.test.tsx src/test/careerRecordedStats.test.tsx src/test/careerSeasonRatings.test.tsx src/test/careerStory.test.tsx --testTimeout=300000 --hookTimeout=120000
+m1always: node .rc/x/fx-mut.mjs m1 && node_modules/.bin/vite build --outDir /tmp/dm1 --emptyOutDir > /dev/null 2>&1 && { node scripts/lib/hostLikeServer.mjs /tmp/dm1 4181 > /dev/null 2>&1 & } && sleep 4 && BASE=http://localhost:4181 ONLY=/club-manager node scripts/playFirstVisitDialogs.mjs; s=$?; git checkout -- src scripts; exit $s
+m3nosm: node .rc/x/fx-mut.mjs m3 && node_modules/.bin/vite build --outDir /tmp/dm3 --emptyOutDir > /dev/null 2>&1 && { node scripts/lib/hostLikeServer.mjs /tmp/dm3 4183 > /dev/null 2>&1 & } && sleep 4 && BASE=http://localhost:4183 ONLY=/soccer-career node scripts/playFirstVisitDialogs.mjs; s=$?; git checkout -- src scripts; exit $s
+m6card: node .rc/x/fx-mut.mjs m6 && node_modules/.bin/vite build --outDir /tmp/dm6 --emptyOutDir > /dev/null 2>&1 && { node scripts/lib/hostLikeServer.mjs /tmp/dm6 4186 > /dev/null 2>&1 & } && sleep 4 && BASE=http://localhost:4186 ONLY=/soccer-career node scripts/playFirstVisitDialogs.mjs; s=$?; git checkout -- src scripts; exit $s
+m7foot: node .rc/x/fx-mut.mjs m7 && node_modules/.bin/vite build --outDir /tmp/dm7 --emptyOutDir > /dev/null 2>&1 && { node scripts/lib/hostLikeServer.mjs /tmp/dm7 4187 > /dev/null 2>&1 & } && sleep 4 && BASE=http://localhost:4187 ONLY=/soccer-career node scripts/playFirstVisitDialogs.mjs; s=$?; git checkout -- src scripts; exit $s
