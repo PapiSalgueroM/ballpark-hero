@@ -748,8 +748,15 @@ console.log('10) A manager who never opens the screen is where he always was');
   console.log(`   ${RUNS} do nothing Everton seasons: ${mean(pts).toFixed(1)} pts (2se ${se2(pts).toFixed(1)}), ${mean(reqs).toFixed(2)} transfer requests, sacked ${sacked.reduce((a, b) => a + b, 0)}/${RUNS}`);
   /* Before this round the same do nothing season came out at 44.4 points over
      forty runs. The promises system is not allowed to move that number much in
-     either direction, because eleven rounds of balance sit on it. */
-  if (mean(pts) < 36 || mean(pts) > 54) fail(`a do nothing Everton season now finishes on ${mean(pts).toFixed(1)} points, and it used to be 44.4`);
+     either direction, because eleven rounds of balance sit on it.
+     Round 1600 (the lead's ruling): the band moved by the measured shift, 36 to 54 to 41 to 59. Club Manager
+     now rates veterans by their level, Everton's eleven carries veterans the age read lifts, and the same do
+     nothing season gains about five points. Measured on GitHub runners (r1600-f3b), four unseeded runs of 60
+     seasons a side: base 14a9af704 47.20, 49.63, 46.57, 48.53 (mean 47.98; the builder's r1600-s11b drew 48.8);
+     head 4950135f6 51.80, 53.67, 52.70, 53.83 (mean 53.00, run sd 0.94, each run within 1.2 of the mean, a
+     run's 2se 2.7 to 3.3; the builder's runs drew 55.3 and 52.6). Shift 5.02, so +5. The head's mean sits 12
+     points over the floor and 6 under the top, about four of one run's standard errors from the nearer edge. */
+  if (mean(pts) < 41 || mean(pts) > 59) fail(`a do nothing Everton season now finishes on ${mean(pts).toFixed(1)} points, band 41 to 59 (Round 1600 measured 53.0)`);
   if (mean(reqs) > 6) fail(`a manager who touched nothing collected ${mean(reqs).toFixed(2)} transfer requests`);
   if (sacked.reduce((a, b) => a + b, 0) > RUNS * 0.6) fail('a do nothing season now gets you sacked more often than not');
 }
