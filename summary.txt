@@ -1,0 +1,2 @@
+attr-oldfixture-head exit=1 64s | simDailySaveHardening: 1 failure(s)
+attr-oldfixture-bulls-undated exit=0 63s | simDailySaveHardening: part all green
