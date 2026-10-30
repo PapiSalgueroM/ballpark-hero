@@ -1,0 +1,12 @@
+#!serve
+#!playwright
+walk: git worktree add -f /tmp/wbase 14a9af704 -q && ln -s "$PWD/node_modules" /tmp/wbase/node_modules && OLD_BASE=/tmp/wbase node .rc/x/walk1601.mjs
+playCmPlayerCard: ENGINES=chromium node scripts/playCmPlayerCard.mjs
+w-swap: PLAY_CARDS_CONTROL=swap ENGINES=chromium node scripts/playCmPlayerCard.mjs
+w-wide: PLAY_CARDS_CONTROL=wide ENGINES=chromium node scripts/playCmPlayerCard.mjs
+w-stack: PLAY_CARDS_CONTROL=stack ENGINES=chromium node scripts/playCmPlayerCard.mjs
+w-nohold: PLAY_CARDS_CONTROL=nohold ENGINES=chromium node scripts/playCmPlayerCard.mjs
+w-thin: PLAY_CARDS_CONTROL=thin ENGINES=chromium node scripts/playCmPlayerCard.mjs
+w-write: PLAY_CARDS_CONTROL=write ENGINES=chromium node scripts/playCmPlayerCard.mjs
+playCmLeagueLeaders: ENGINES=chromium node scripts/playCmLeagueLeaders.mjs
+sweepWeight: ENGINES=chromium node scripts/sweepWeight.mjs
