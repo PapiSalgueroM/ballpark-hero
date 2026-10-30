@@ -1,0 +1,60 @@
+{
+  "schema": 1,
+  "source": "1524c116bfb91f7b2ee3f5e67c18f32df585d968",
+  "sourceTest": "src/test/cmFreeAgentDiscovery.test.tsx",
+  "inputKind": "ACTUAL_ENGINE_STATES_FROM_FINAL_HEALTHY_TEST_ONLY",
+  "productionDataChanged": false,
+  "naturalExpiry": {
+    "beforeCareer": "natural-expiry-before.career.json",
+    "career": "natural-expiry-closed.career.json",
+    "name": "Ainsley Maitland-Niles",
+    "id": "p-ainsley-maitland-niles",
+    "worldRosterKey": "[\"now\",\"Everton\",\"Ainsley Maitland-Niles\",\"RB\",1998,0]",
+    "player": {
+      "id": "p-ainsley-maitland-niles",
+      "name": "Ainsley Maitland-Niles",
+      "position": "RB",
+      "rating": 77,
+      "age": 29,
+      "fitness": 100,
+      "morale": 70,
+      "injuryWeeks": 0,
+      "suspendedMatches": 0,
+      "isYouth": false,
+      "seasonGoals": 0,
+      "seasonAssists": 0,
+      "value": 8.3,
+      "wage": 22,
+      "contractYears": 3,
+      "potential": 77,
+      "role": "backup",
+      "lastTen": [],
+      "apps": 0,
+      "seasonYellows": 0,
+      "seasonReds": 0,
+      "cleanSheets": 0,
+      "ratingSum": 0,
+      "worldRosterKey": "[\"now\",\"Everton\",\"Ainsley Maitland-Niles\",\"RB\",1998,0]",
+      "generated": false
+    },
+    "quote": {
+      "wage": 22,
+      "years": 3,
+      "fee": 3
+    },
+    "beforeBudget": 120,
+    "afterBudget": 117,
+    "setupOnlyBudget": 9999,
+    "setupOnlyWageCap": 9999,
+    "actualSeasonRollover": true
+  },
+  "price": {
+    "career": "price-open.career.json",
+    "boundary": {
+      "name": "Amine Gouiri",
+      "club": "Marseille",
+      "price": 24.8
+    },
+    "displayedCurrencyIsSymbolOnly": true
+  }
+}
