@@ -1,0 +1,14 @@
+simApproaches: node scripts/simApproaches.mjs
+simBracketMoment: node scripts/simBracketMoment.mjs
+simClubManagerDecisions: node scripts/simClubManagerDecisions.mjs
+simClubManagerNewLeagues: node scripts/simClubManagerNewLeagues.mjs
+simClubManagerStaff: node scripts/simClubManagerStaff.mjs
+simCmFixtureFleet: node scripts/simCmFixtureFleet.mjs
+simCmMadeUpNations: node scripts/simCmMadeUpNations.mjs
+simCmQuickLegs: node scripts/simCmQuickLegs.mjs
+simCmSubs: node scripts/simCmSubs.mjs
+simCreateClub: node scripts/simCreateClub.mjs
+simFixtureBalance: node scripts/simFixtureBalance.mjs
+simManagers: node scripts/simManagers.mjs
+simSaveFence: node scripts/simSaveFence.mjs
+simWorld: node scripts/simWorld.mjs
