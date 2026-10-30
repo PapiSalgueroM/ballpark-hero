@@ -10,6 +10,7 @@
 import type { BakedPlayer } from '@/data/clubManagerRosters';
 
 export const CM_RUSSIA_META = {
+  curve: 2,
   label: 'Russian Premier League',
   read: '2026-10-08',
   readTo: '2026-10-08',

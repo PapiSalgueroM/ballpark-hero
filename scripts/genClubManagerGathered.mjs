@@ -110,7 +110,8 @@ export function generateGathered(id, researchOverride) {
       nationalities: `/** Nationality where two hosts agree; a name missing here is unknown and
  *  shows no flag. */`,
     },
-    meta: { label: row.label, read: reads[0], readTo: reads[reads.length - 1], players: total, clubs: research.clubs.length },
+    /* Round 1600: curve 2, the engine reads each man's age at load (src/data/clubManagerWorldRosters.ts). */
+    meta: { curve: 2, label: row.label, read: reads[0], readTo: reads[reads.length - 1], players: total, clubs: research.clubs.length },
     rosters: built.rosters, partial: built.partial, noValue: built.noValue, positionThin: built.positionThin, supersedes: {}, nationalities: built.nationalities,
   });
   return { errors: [], row, research, built, text };

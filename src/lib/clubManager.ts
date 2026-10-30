@@ -71,6 +71,9 @@ import { players as RAW_POOL } from '@/data/players';
 // imports nothing but types, so reading it at module scope is safe.
 import { CM_ROSTER_META } from '@/data/clubManagerRosters';
 import { CM_REAL_FREE_AGENTS } from '@/data/clubManagerFreeAgents2026';
+// Round 1600: on its own line, so scripts/simFreeAgents.mjs can still serve the list above from its own copy.
+import { CM_REAL_FREE_AGENTS_CURVE } from '@/data/clubManagerFreeAgents2026';
+import { CM_AGE_CURVE, ageRead } from '@/lib/cmAgeRead';
 import type { BakedPlayer } from '@/data/clubManagerRosters';
 // Round 1035: the modern squads are the baked file joined with the A-League
 // Men's generated one, in one place both engine files read.
@@ -7864,7 +7867,11 @@ export function seedRealFreeAgents(state: CareerState): void {
   ]);
   const real: FreeAgent[] = CM_REAL_FREE_AGENTS
     .filter(r => !taken.has(r.name))
-    .map(r => ({ name: r.name, position: r.position, age: r.age, rating: r.rating, value: r.value, since: state.season, reason: 'unattached' as const }));
+    /* Round 1600: the file's rating is the level; the pool shows the age read of it, as every squad does (one rule
+       for every man of the world), except on the curve 1 view a daily dated before the read is dealt on. */
+    .map(r => ({ name: r.name, position: r.position, age: r.age,
+      rating: CM_REAL_FREE_AGENTS_CURVE === CM_AGE_CURVE && cmWorldTag() === '' ? ageRead(r.rating, r.age) : r.rating,
+      value: r.value, since: state.season, reason: 'unattached' as const }));
   state.freeAgents = [...pool, ...real];
 }
 

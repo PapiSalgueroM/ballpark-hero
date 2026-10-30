@@ -504,8 +504,9 @@ describe('one order in every world: the stretch first, then the age points', () 
       if (found.length !== 1) { wrong.push(`${world} ${name}: ${found.length} rows of that name`); continue; }
       const row = found[0];
       checked += 1;
-      if (row.a !== fileAge) wrong.push(`${world} ${name}: the file holds age ${row.a}, the table was typed from ${fileAge}`);
-      /* in 2026 the file will hold the August age at the flip; until then it is typed beside the row */
+      /* Round 1600: the 2026 file holds the August age since the flip; a past season still the 1 January one */
+      const holds = world === 'now' ? ratedAt : fileAge;
+      if (row.a !== holds) wrong.push(`${world} ${name}: the file holds age ${row.a}, the table says ${holds}`);
       const got = world === 'now' ? readInWorld(row.r, ratedAt) : readInWorld(row.r, row.a, eraWorld(world));
       if (got.level !== mainShows) wrong.push(`${world} ${name}: main shows ${got.level}, the table says ${mainShows}`);
       if (got.age !== ratedAt) wrong.push(`${world} ${name}: rated at ${got.age}, the table says ${ratedAt}`);
@@ -924,9 +925,9 @@ describe('what every 2026 age will stand on (the basis file), man for man agains
   });
 
   it('every line is what the ages rule resolves from the committed ledgers, and its last item is the value rating', () => {
-    /* While the squads file is on curve 1 its rating IS the value rating. The round that re-rates the
-       file changes this one comparison to the level (levelFrom of the shipped rating and age). */
-    expect((CM_ROSTER_META as any).curve ?? 1).toBe(1);
+    /* Round 1600 put the squads file on curve 2, and kept its rating the value rating (the level): the engine
+       adds the age at load (src/data/clubManagerWorldRosters.ts), so this comparison holds on either curve. */
+    expect((CM_ROSTER_META as any).curve).toBe(2);
     const births = realBirths();
     const wrong: string[] = [];
     const basisCount: Record<string, number> = {};
@@ -959,7 +960,9 @@ describe('what every 2026 age will stand on (the basis file), man for man agains
        how far the August age sits from the age main ships today. A new pull recounts them, and
        scripts/genCmAgesBasis2026.mjs prints all three. */
     expect(basisCount).toEqual({ born: 427, moved: 3974 });
-    expect(againstShipped).toEqual({ '1': 4221, '0': 176, '-1': 4 });
+    /* Round 1600: the squads file ships these August ages now (before it, one over for 4,221 men, the same
+       for 176 and one under for 4). */
+    expect(againstShipped).toEqual({ '0': 4401 });
     expect(changed).toBe(2078);
     console.log(`2026 at the flip: ${changed} of 4401 ratings change; by points ${JSON.stringify(swing)}`);
   });
@@ -975,7 +978,8 @@ describe('what every 2026 age will stand on (the basis file), man for man agains
       const august = augustAge2026({ name, club, age, year, id }, births);
       expect([name, august.basis]).toEqual([name, 'born']);
       got.push([name, august.age, list[i].r, rateFrom(list[i].r, august.age, list[i].p)]);
-      expect([name, list[i].a, august.age, list[i].r, rateFrom(list[i].r, august.age, list[i].p)]).toEqual([name, fileAge, ratedAt, mainShows, shown]);
+      /* Round 1600: the file holds the August age (it held the table's, fileAge, before the flip) */
+      expect([name, list[i].a, august.age, list[i].r, rateFrom(list[i].r, august.age, list[i].p), fileAge <= ratedAt]).toEqual([name, ratedAt, ratedAt, mainShows, shown, true]);
     }
     expect(got.length).toBe(8);
   });

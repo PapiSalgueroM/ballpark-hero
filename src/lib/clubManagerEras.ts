@@ -47,8 +47,8 @@ import { CM_ROSTER_META } from '@/data/clubManagerRosters';
 import type { BakedPlayer } from '@/data/clubManagerRosters';
 import { advanceClubManagerTrajectory } from '@/lib/clubManagerTrajectory';
 // Round 1035: the modern squads, baked plus the A-League Men, joined once.
-import { CM_WORLD_ROSTERS as CM_ROSTERS, CM_WORLD_READS_AGE, cmWorld, cmWorldTag } from '@/data/clubManagerWorldRosters';
-import { levelFrom, RATING_CEIL, ERA_RATING_AGE_SHIFT } from '@/lib/cmAgeRead';
+import { CM_WORLD_ROSTERS as CM_ROSTERS, cmWorld, cmWorldTag } from '@/data/clubManagerWorldRosters';
+import { readInWorld, RATING_CEIL, ERA_RATING_AGE_SHIFT } from '@/lib/cmAgeRead';
 import { loadNationalityWorld, registerNationalityWorld } from '@/data/playerNationalities';
 /* Round 832: the three era bakes are no longer imported here. Each one is its
    own chunk, fetched when its era is picked or an era save is opened (see
@@ -716,21 +716,9 @@ export function eraTop(eraId: string | undefined): number {
   return (eraId ? ERA_RATING_TOP[eraId] : undefined) ?? RATING_CEIL;
 }
 
-/* Round 1600: whether a world shows its men through the age read. Today's world follows its main squads file's
-   stamp (CM_WORLD_READS_AGE). The past seasons read it from the step that turns them over; until then never. */
+/* Round 1600: whether the past seasons show their men through the age read (Proposal 4): read at load in
+   eraRosters, the stretch first and then the points, on each season's own top. */
 const PAST_SEASONS_READ_AGE = false;
-export function worldReadsAge(eraId: string | undefined): boolean {
-  return isHistoricEra(eraId) ? PAST_SEASONS_READ_AGE : CM_WORLD_READS_AGE;
-}
-
-/** Round 1600: the level a SHOWN rating stands on in a world, for a man the game made up at that rating (a
- *  created club's founder): the age read run backwards (levelFrom, total, so any whole rating answers), at the
- *  age the world's own rows are read at. In a world that does not read age it is the rating. */
-export function levelForShown(eraId: string | undefined, rating: number, age: number): number {
-  if (!worldReadsAge(eraId)) return rating;
-  const shift = isHistoricEra(eraId) ? ERA_RATING_AGE_SHIFT : 0;
-  return levelFrom(Math.round(rating), Math.round(age) + shift, eraTop(eraId));
-}
 
 /**
  * Round 640: the money the bakes put on a bake rating, in pounds millions,
@@ -774,8 +762,17 @@ export function eraRosters(eraId: string | undefined): Record<string, BakedPlaye
   const hit = UPLIFTED_CACHE.get(eraId);
   if (hit) return hit;
   const out: Record<string, BakedPlayer[]> = {};
+  /* Round 1600 (Proposal 4): with PAST_SEASONS_READ_AGE each man is read the way today's world is, in one order:
+     the season's stretch first (the level), then the points for his age on that season's own top, at the file's
+     age plus ERA_RATING_AGE_SHIFT (its files hold the 1 January age). The level rides as lv where they differ. */
+  const world = { stretch: (r: number) => eraUpliftRating(eraId, r), top: eraTop(eraId), ageShift: ERA_RATING_AGE_SHIFT };
   for (const [club, list] of Object.entries(raw)) {
-    out[club] = list.map(b => ({ ...b, r: eraUpliftRating(eraId, b.r) }));
+    out[club] = list.map(b => {
+      const level = eraUpliftRating(eraId, b.r);
+      if (!PAST_SEASONS_READ_AGE) return { ...b, r: level };
+      const shown = readInWorld(b.r, b.a, world).rating;
+      return shown === level ? { ...b, r: level } : { ...b, r: shown, lv: level };
+    });
   }
   UPLIFTED_CACHE.set(eraId, out);
   return out;

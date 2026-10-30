@@ -44,7 +44,7 @@ import crypto from 'node:crypto';
 import { createRequire } from 'node:module';
 import { fileURLToPath } from 'node:url';
 import { build } from 'esbuild';
-import { stampedSquads, agedSquads } from './lib/cmFlipProbe.mjs';
+import { stampedSquads, agedSquads, unflippedSquads, unstampedLeague, isStamped } from './lib/cmSquadAges.mjs';
 
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const CONTROL = process.env.CM_LEVEL_READS_CONTROL || '';
@@ -76,15 +76,23 @@ if (CONTROL) {
   console.log(`CONTROL ${CONTROL} APPLIED to ${file}`);
 }
 
-/* ---------- the 2026 squads file, stamped and (arm B2) aged to 1 August ---------- */
-const ROSTERS_REL = 'src/data/clubManagerRosters.ts';
-const ROSTERS = read(ROSTERS_REL);
-const ROSTERS_STAMPED = stampedSquads(ROSTERS);
+/* ---------- the 2026 files either side of the flip ----------
+   Since the flip ships, the files are curve 2: arm A is the curve 1 world rebuilt from them (no stamp on any of the
+   three modern files, every man of the main file at the age the curve 1 view holds), and arm B2 is the files as
+   shipped. On a tree from before the flip the files are curve 1 and it runs the other way round. */
+const SHIPPED = read('src/data/clubManagerRosters.ts');
+const LEAGUES = { aleague: read('src/data/clubManagerALeague2026.ts'), russia: read('src/data/clubManagerRussia2026.ts') };
 const BASIS = JSON.parse(read('scripts/data/cmAgesBasis2026.json'));
-const AGED = agedSquads(ROSTERS_STAMPED, BASIS);
+const FLIPPED = isStamped(SHIPPED);
+const BACK = FLIPPED ? unflippedSquads(SHIPPED, read('src/data/clubManagerCurve1View.ts')) : null;
+const CURVE1 = FLIPPED ? BACK.text : SHIPPED;
+const AGED = FLIPPED ? { text: SHIPPED, moved: BACK.moved, rows: BACK.rows } : agedSquads(stampedSquads(SHIPPED), BASIS);
+const ROSTERS = CURVE1;
+const ROSTERS_STAMPED = stampedSquads(CURVE1);
+const CURVE1_LEAGUES = { aleague: unstampedLeague(LEAGUES.aleague), russia: unstampedLeague(LEAGUES.russia) };
 
 const TMP = fs.mkdtempSync(path.join(os.tmpdir(), 'cmlevelreads-'));
-async function bundle(name, rosterText) {
+async function bundle(name, rosterText, leagues = CURVE1_LEAGUES) {
   const outfile = path.join(TMP, `${name}.cjs`);
   await build({
     stdin: { contents: "export * as cm from '@/lib/clubManager'; export * as eras from '@/lib/clubManagerEras';", resolveDir: ROOT, loader: 'ts' },
@@ -98,6 +106,8 @@ async function bundle(name, rosterText) {
       };
       for (const [rel, filter] of Object.entries(FILTERS)) b.onLoad({ filter }, () => ({ contents: SRC[rel], loader: 'ts' }));
       b.onLoad({ filter: /[\\/]src[\\/]data[\\/]clubManagerRosters\.ts$/ }, () => ({ contents: rosterText, loader: 'ts' }));
+      b.onLoad({ filter: /[\\/]src[\\/]data[\\/]clubManagerALeague2026\.ts$/ }, () => ({ contents: leagues.aleague, loader: 'ts' }));
+      b.onLoad({ filter: /[\\/]src[\\/]data[\\/]clubManagerRussia2026\.ts$/ }, () => ({ contents: leagues.russia, loader: 'ts' }));
     } }],
   });
   return createRequire(import.meta.url)(outfile);
@@ -106,7 +116,7 @@ const store = new Map();
 globalThis.localStorage = { getItem: k => (store.has(k) ? store.get(k) : null), setItem: (k, v) => { store.set(k, String(v)); }, removeItem: k => { store.delete(k); } };
 const A = await bundle('A', ROSTERS);
 const B1 = await bundle('B1', ROSTERS_STAMPED);
-const B2 = await bundle('B2', AGED.text);
+const B2 = await bundle('B2', AGED.text, FLIPPED ? LEAGUES : CURVE1_LEAGUES);
 for (const arm of [A, B1, B2]) await arm.cm.ensureAllEraRosters();
 
 /* ---------- helpers ---------- */
@@ -222,9 +232,13 @@ compare(REC.clubs, statB2, ['xi', 'anchors', 'tier', 'budget', 'exp'], 'arm B2')
 const scaleMoved = Object.keys(REC.clubs).filter(n => REC.clubs[n].scale !== statB2[n]?.scale).length;
 console.log(`   value scales the age move shifts (information, ages enter the curve): ${scaleMoved} clubs`);
 const who = (arm, club, name) => (arm.eras.eraRosters('now')[club] ?? []).find(b => b.n === name);
-for (const [club, name] of [['Inter Miami', 'Lionel Messi'], ['Al-Nassr', 'Cristiano Ronaldo'], ['AC Milan', 'Luka Modrić'], ['Liverpool', 'Virgil van Dijk'], ['Bayern Munich', 'Harry Kane'], ['Barcelona', 'Lamine Yamal']]) {
+/* The owner's three and the rest of Round 1214's 2026 table (docs/audits/ROUND-1214-NOTES.md, two other people's
+   arithmetic on the same files): the flip must show exactly these, on the level curve 1 showed. */
+for (const [club, name, want] of [['Inter Miami', 'Lionel Messi', 86], ['Al-Nassr', 'Cristiano Ronaldo', 86], ['AC Milan', 'Luka Modrić', 80],
+  ['Liverpool', 'Virgil van Dijk', 85], ['Bayern Munich', 'Harry Kane', 91], ['Barcelona', 'Lamine Yamal', 94]]) {
   const a = who(A, club, name), b = who(B2, club, name);
-  console.log(`   ${name} (${club}): shipped ${a?.r ?? '-'} at ${a?.a ?? '-'}, flipped ${b?.r ?? '-'} at ${b?.a ?? '-'} on level ${b ? (b.lv ?? b.r) : '-'}`);
+  console.log(`   ${name} (${club}): curve 1 ${a?.r ?? '-'} at ${a?.a ?? '-'}, flipped ${b?.r ?? '-'} at ${b?.a ?? '-'} on level ${b ? (b.lv ?? b.r) : '-'}`);
+  check(b?.r === want && (b?.lv ?? b?.r) === a?.r, `arm B2: ${name} shows ${b?.r} on level ${b?.lv ?? b?.r}, the table says ${want} on ${a?.r}`);
 }
 
 const total = Object.values(failures).reduce((s, n) => s + n, 0);

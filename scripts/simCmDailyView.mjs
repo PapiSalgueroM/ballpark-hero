@@ -6,7 +6,7 @@
  *
  * THREE ARMS of the real engine and both dailies, bundled with esbuild:
  *   A    the files as shipped (the world every day so far was dealt on).
- *   F    the main squads file flipped (stamped curve 2, every man at his 1 August 2026 age: scripts/lib/cmFlipProbe.mjs),
+ *   F    the main squads file flipped (stamped curve 2, every man at his 1 August 2026 age: scripts/lib/cmSquadAges.mjs),
  *        the view in place: the release as it will ship.
  *   F0   the same flip with the view taken out of onStaticWorld: what the release would deal with no view.
  *
@@ -33,7 +33,7 @@ import crypto from 'node:crypto';
 import { createRequire } from 'node:module';
 import { fileURLToPath } from 'node:url';
 import { build } from 'esbuild';
-import { stampedSquads, agedSquads } from './lib/cmFlipProbe.mjs';
+import { stampedSquads, agedSquads, unflippedSquads, unstampedLeague, isStamped } from './lib/cmSquadAges.mjs';
 
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const CONTROL = process.env.CM_DAILY_VIEW_CONTROL || '';
@@ -61,15 +61,21 @@ const srcF0 = rewrite(SRC, CONTROLS.off, 'arm F0');
 const CUTOVER = /export const CM_DAILY_NEW_NUMBERS_FROM = '(\d{4}-\d{2}-\d{2})';/.exec(SRC[HOT])?.[1];
 if (!CUTOVER) { console.log('simCmDailyView: ABORTED, no CM_DAILY_NEW_NUMBERS_FROM'); process.exit(2); }
 
-const SQUADS = read('src/data/clubManagerRosters.ts');
-const FLIPPED = agedSquads(stampedSquads(SQUADS), JSON.parse(read('scripts/data/cmAgesBasis2026.json'))).text;
+/* Since the flip ships, the shipped files ARE arm F's, and arm A is the curve 1 world rebuilt from them (no stamp on
+   the three modern files, the main file's men at the curve 1 view's ages). Before it, the other way round. */
+const SHIPPED = read('src/data/clubManagerRosters.ts');
+const LEAGUES = { aleague: read('src/data/clubManagerALeague2026.ts'), russia: read('src/data/clubManagerRussia2026.ts') };
+const CURVE1_LEAGUES = { aleague: unstampedLeague(LEAGUES.aleague), russia: unstampedLeague(LEAGUES.russia) };
+const SQUADS = isStamped(SHIPPED) ? unflippedSquads(SHIPPED, read('src/data/clubManagerCurve1View.ts')).text : SHIPPED;
+const FLIPPED = isStamped(SHIPPED) ? SHIPPED : agedSquads(stampedSquads(SHIPPED), JSON.parse(read('scripts/data/cmAgesBasis2026.json'))).text;
+const FLIPPED_LEAGUES = isStamped(SHIPPED) ? LEAGUES : CURVE1_LEAGUES;
 const TMP = fs.mkdtempSync(path.join(os.tmpdir(), 'cmdailyview-'));
 const FILTERS = {
   [HOT]: /[\\/]src[\\/]lib[\\/]managerHotSeat\.ts$/,
   [WORLD]: /[\\/]src[\\/]data[\\/]clubManagerWorldRosters\.ts$/,
   [ERAS]: /[\\/]src[\\/]lib[\\/]clubManagerEras\.ts$/,
 };
-async function bundle(name, src, squads) {
+async function bundle(name, src, squads, leagues) {
   const outfile = path.join(TMP, `${name}.cjs`);
   await build({
     stdin: { contents: "export * as cm from '@/lib/clubManager'; export * as hs from '@/lib/managerHotSeat'; export * as dd from '@/lib/deadlineDay'; export * as intl from '@/lib/clubManagerInternationals';", resolveDir: ROOT, loader: 'ts' },
@@ -78,15 +84,17 @@ async function bundle(name, src, squads) {
     plugins: [{ name: 'arm', setup(b) {
       for (const [rel, filter] of Object.entries(FILTERS)) b.onLoad({ filter }, () => ({ contents: src[rel], loader: 'ts' }));
       b.onLoad({ filter: /[\\/]src[\\/]data[\\/]clubManagerRosters\.ts$/ }, () => ({ contents: squads, loader: 'ts' }));
+      b.onLoad({ filter: /[\\/]src[\\/]data[\\/]clubManagerALeague2026\.ts$/ }, () => ({ contents: leagues.aleague, loader: 'ts' }));
+      b.onLoad({ filter: /[\\/]src[\\/]data[\\/]clubManagerRussia2026\.ts$/ }, () => ({ contents: leagues.russia, loader: 'ts' }));
     } }],
   });
   return createRequire(import.meta.url)(outfile);
 }
 const store = new Map();
 globalThis.localStorage = { getItem: k => (store.has(k) ? store.get(k) : null), setItem: (k, v) => { store.set(k, String(v)); }, removeItem: k => { store.delete(k); } };
-const A = await bundle('A', SRC, SQUADS);
-const F = await bundle('F', srcF, FLIPPED);
-const F0 = await bundle('F0', srcF0, FLIPPED);
+const A = await bundle('A', SRC, SQUADS, CURVE1_LEAGUES);
+const F = await bundle('F', srcF, FLIPPED, FLIPPED_LEAGUES);
+const F0 = await bundle('F0', srcF0, FLIPPED, FLIPPED_LEAGUES);
 for (const arm of [A, F, F0]) await arm.cm.ensureAllEraRosters();
 
 /* ---------- helpers ---------- */
@@ -150,8 +158,8 @@ check(moved > 0, 'the flip moves no daily, so this section proves nothing about 
 section = 2;
 /* Fresh instances of both arms: the engine keeps module counters (makeYouth's sequence, which goes into a youth
    pad's id), and section 1 walked F on the view and F0 on the live world, so their counters no longer agree. */
-const F2 = await bundle('F2', srcF, FLIPPED);
-const F02 = await bundle('F02', srcF0, FLIPPED);
+const F2 = await bundle('F2', srcF, FLIPPED, FLIPPED_LEAGUES);
+const F02 = await bundle('F02', srcF0, FLIPPED, FLIPPED_LEAGUES);
 for (const arm of [F2, F02]) await arm.cm.ensureAllEraRosters();
 const LATE = datesFrom(CUTOVER, day(CUTOVER, 14));
 let lateSame = 0;

@@ -10,6 +10,7 @@
 import type { BakedPlayer } from '@/data/clubManagerRosters';
 
 export const CM_ALEAGUE_META = {
+  curve: 2,
   read: '2026-10-06',
   players: 310,
   clubs: 12,

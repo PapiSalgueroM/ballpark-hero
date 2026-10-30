@@ -40,10 +40,6 @@ export function fileCurve(meta: object): number {
   return curve === undefined ? 1 : Number(curve);
 }
 
-/** True when today's main squads file (the bake) is read with the age. A created club's founders are priced
- *  through the same read in that case (customFounderValue). */
-export const CM_WORLD_READS_AGE: boolean = fileCurve(CM_ROSTER_META) === CM_AGE_CURVE;
-
 export function readWithAge(rosters: Record<string, BakedPlayer[]>, curve: number): Record<string, BakedPlayer[]> {
   if (curve !== CM_AGE_CURVE) return rosters;
   const out: Record<string, BakedPlayer[]> = {};
