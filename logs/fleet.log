@@ -1,0 +1,5 @@
+base 4bd20c993 engine differs from branch engine: true
+A default path: 240 of 240 careers byte equal to the base at every step (21840 states compared)
+B old saves: 80 of 80 base saves parsed as saves by the branch, 80 of 80 played on byte equal
+C name path: 240 of 240 started at the shown club, 240 of 240 with the default path's field set, 240 of 240 played 90 steps without a throw
+fleetProbe1604: green, default path, old saves and name path all hold

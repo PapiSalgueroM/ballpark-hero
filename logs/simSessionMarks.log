@@ -1,0 +1,8 @@
+1) Every board pings its play unscored, once, after the guard, and never as a full completion
+2) useGameCompletion still writes the scored legacy in all eight
+3) Stadium Tycoon marks once per session, on the first real action
+4) The marked paths are routes App.tsx actually serves
+5) Club Manager pings a match and completes a season; Soccer Career pings a season
+6) No em or en dash in any touched file
+
+simSessionMarks: green. Nine games count the day you play them, none of them invented a score or a streak day to do it.

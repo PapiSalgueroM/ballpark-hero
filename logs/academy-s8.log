@@ -1,0 +1,15 @@
+grid: 134 nations x 8 eras x 5 bands x 8 seeds, 460 clubs
+
+1. KEPT: the career starts at the academy the screen showed
+  42880 of 42880 careers started at the academy shown
+  1340 of 1340 stray names (no such club, and Leipzig before it existed in 1990) fell back to a club in the list
+
+2. OLD PATH: two independent draws, the way it was before this round
+  old path agreement 11027 of 42880 (25.7%), by band: 35: 39.7%, 45: 42.0%, 60: 20.7%, 70: 7.6%, 80: 18.6%
+
+3. UNCHANGED: initCareer without a name is the base engine, byte for byte
+  42880 of 42880 careers byte equal to the base engine 28e7392f3 (state and the next three draws)
+  42880 of 42880 equal with a null name, 42880 of 42880 with a name in no list
+
+0 failure(s), red sections: none
+simSoccerAcademyPlacement: all sections green

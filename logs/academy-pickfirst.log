@@ -1,0 +1,17 @@
+grid: 134 nations x 8 eras x 5 bands x 3 seeds, 460 clubs
+
+1. KEPT: the career starts at the academy the screen showed
+  16080 of 16080 careers started at the academy shown
+  1340 of 1340 stray names (no such club, and Leipzig before it existed in 1990) fell back to a club in the list
+
+2. OLD PATH: two independent draws, the way it was before this round
+  old path agreement 16080 of 16080 (100.0%), by band: 35: 100.0%, 45: 100.0%, 60: 100.0%, 70: 100.0%, 80: 100.0%
+  FAIL [2]: two independent draws agreed 100.0% of the time, not under 35%: the grid cannot see the defect
+
+3. UNCHANGED: initCareer without a name is the base engine, byte for byte
+  0 of 16080 careers byte equal to the base engine 28e7392f3 (state and the next three draws)
+  16080 of 16080 equal with a null name, 16080 of 16080 with a name in no list
+  FAIL [3]: 16080 careers differ from the base engine, first: Albania 1990-94 35; Albania 1990-94 45
+
+2 failure(s), red sections: 2, 3
+control pickfirst FIRED: section 2 went red as it must

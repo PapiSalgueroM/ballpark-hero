@@ -1,0 +1,7 @@
+  4192 of 16080 careers started at the academy shown
+  FAIL [1]: 11888 careers started somewhere else, first: Albania 1990-94 35: shown Pakhtakor, started Pumas Youth; Albania 1990-94 45: shown Mamelodi Sundowns, started Trabzonspor Youth; Albania 1990-94 60: shown Jeonbuk
+  old path agreement 4177 of 16080 (26.0%), by band: 35: 39.5%, 45: 42.1%, 60: 21.2%, 70: 8.6%, 80: 18.6%
+  16080 of 16080 careers byte equal to the base engine 4bd20c993 (state and the next three draws)
+simSoccerAcademyPlacement: RED
+control redraw: anchor not found: (academyName ? yearClubs.find(c => c.name === academyName) : undefined)
+harness on base exit=1 (1 expected), redraw control on base exit=2 (2 expected)

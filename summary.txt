@@ -1,0 +1,25 @@
+academy exit=0 8s | simSoccerAcademyPlacement: all sections green
+academy-redraw exit=1 8s | control redraw FIRED: section 1 went red as it must
+academy-s8 exit=0 18s | simSoccerAcademyPlacement: all sections green
+academy-pickfirst exit=1 6s | control pickfirst FIRED: section 2 went red as it must
+academy-bogus exit=2 0s | unknown control bogus (redraw, pickfirst, extradraw)
+academy-extradraw exit=1 7s | control extradraw FIRED: section 3 went red as it must
+academy-onbase exit=0 8s | harness on base exit=1 (1 expected), redraw control on base exit=2 (2 expected)
+clubpool exit=0 18s | simCareerClubPool: all sections green
+fleet exit=0 30s | fleetProbe1604: green, default path, old saves and name path all hold
+tsc exit=0 66s | 
+vitest-create exit=0 11s |    Duration  10.14s (transform 4.41s, setup 227ms, collect 8.78s, tests 12.61s, environment 1.50s, prepare 404ms)
+clubpool-academypick exit=0 23s | control academypick: section 6 went red as it must (red: 6)
+simNoRivalNames exit=0 15s | No rival product names found. 0 findings.
+simCareerAcademy exit=0 3s | simCareerAcademy: ALL CHECKS PASSED in 3.2s
+simCareerEras exit=0 0s | simCareerEras: all green
+simNationalityFlags exit=1 0s | simNationalityFlags: 1 failure
+simHarnessAnchors exit=0 45s | simHarnessAnchors: green. Every harness parses and none carries an unmatchable anchor.
+simActivityNotCompletion exit=0 5s | simActivityNotCompletion: all green
+simSessionMarks exit=0 0s | simSessionMarks: green. Nine games count the day you play them, none of them invented a score or a streak day to do it.
+simSaveFence exit=0 39s | simSaveFence: all green (tabs, source, fleet)
+simTrustCopy exit=0 1s | simTrustCopy: green. One disclaimer under every page and one count of the games, the registry's own.
+simAccessibility exit=0 0s | simAccessibility: all green
+simCareerNoDeadEnd exit=0 1s | simCareerNoDeadEnd: green. A convicted career is still a career, and a stranded save comes back.
+simCareerPositionRatings exit=0 54s | all sections green: defenders and holding midfielders are rated on their defending
+simCreation exit=0 225s | ALL CREATION CHECKS PASSED
