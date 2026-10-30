@@ -1,0 +1,8 @@
+FLEET PATCHED src/components/front-office-shared/FleetGm.test.tsx seeds 1, 2, 3
+MUTATION APPLIED: outcomepre in src/components/nhl-front-office/NhlFrontOfficeBoard.tsx
+/tmp/k0.log:[22m[39mFO_GM_CAREER_RECORD nhl 6 cases -> /tmp/k0.json
+/tmp/k1.log:[22m[39mFO_GM_CAREER_RECORD nhl 6 cases -> /tmp/k1.json
+FLEET nfl: 0 cases, 0 checkpoints, 0 distinct digests, 0 differ
+FLEET nhl: 6 cases, 87 checkpoints, 84 distinct digests, 0 differ
+FLEET RESULT: RED (1 sport(s))
+PROBE xp done
