@@ -1,0 +1,25 @@
+tsc: node_modules/.bin/tsc --noEmit -p tsconfig.app.json
+academy: node scripts/simSoccerAcademyPlacement.mjs
+academy-s8: SEEDS=8 node scripts/simSoccerAcademyPlacement.mjs
+academy-redraw: SC_ACADEMY_CONTROL=redraw node scripts/simSoccerAcademyPlacement.mjs
+academy-pickfirst: SC_ACADEMY_CONTROL=pickfirst node scripts/simSoccerAcademyPlacement.mjs
+academy-extradraw: SC_ACADEMY_CONTROL=extradraw node scripts/simSoccerAcademyPlacement.mjs
+academy-bogus: SC_ACADEMY_CONTROL=bogus node scripts/simSoccerAcademyPlacement.mjs
+academy-onbase: git worktree add -f /tmp/b0 4bd20c993 >/dev/null 2>&1 && ln -s "$PWD/node_modules" /tmp/b0/node_modules && cp scripts/simSoccerAcademyPlacement.mjs /tmp/b0/scripts/ && (cd /tmp/b0 && node scripts/simSoccerAcademyPlacement.mjs 2>&1 | grep -E "careers started|old path|byte equal|FAIL|RED|green" | cut -c1-220; a=${PIPESTATUS[0]}; SC_ACADEMY_CONTROL=redraw node scripts/simSoccerAcademyPlacement.mjs 2>&1 | tail -2; b=${PIPESTATUS[0]}; echo "harness on base exit=$a (1 expected), redraw control on base exit=$b (2 expected)"; [ "$a" = 1 ] && [ "$b" = 2 ])
+fleet: node .rc/x/fleetProbe1604.mjs
+clubpool: node scripts/simCareerClubPool.mjs
+clubpool-academypick: SIM_CLUB_POOL_CONTROL=academypick node scripts/simCareerClubPool.mjs
+vitest-create: node_modules/.bin/vitest run src/test/soccerCareerCreationRoll.test.tsx src/test/soccerCareerSaveRecovery.test.tsx src/test/soccerCareerSaveRetry.test.tsx --testTimeout=300000 --hookTimeout=120000
+simHarnessAnchors: node scripts/simHarnessAnchors.mjs
+simNoRivalNames: node scripts/simNoRivalNames.mjs
+simCreation: node scripts/simCreation.mjs
+simCareerAcademy: node scripts/simCareerAcademy.mjs
+simCareerEras: node scripts/simCareerEras.mjs
+simNationalityFlags: node scripts/simNationalityFlags.mjs
+simSaveFence: node scripts/simSaveFence.mjs
+simActivityNotCompletion: node scripts/simActivityNotCompletion.mjs
+simSessionMarks: node scripts/simSessionMarks.mjs
+simCareerPositionRatings: node scripts/simCareerPositionRatings.mjs
+simTrustCopy: node scripts/simTrustCopy.mjs
+simAccessibility: node scripts/simAccessibility.mjs
+simCareerNoDeadEnd: node scripts/simCareerNoDeadEnd.mjs
