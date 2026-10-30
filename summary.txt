@@ -1,0 +1,9 @@
+build exit=0 36s | [dukb] inlined 1 stylesheet(s) and 1 module(s) into 181 snapshots (11 left alone)
+simAccessibility exit=0 0s | simAccessibility: all green
+sweepWeight exit=0 31s | sweepWeight: green. Every page is inside its budget, and the budgets came down this round.
+simTrustCopy exit=0 1s | simTrustCopy: green. One disclaimer under every page and one count of the games, the registry's own.
+playHomeFold exit=0 34s | playHomeFold: green. The first thing on the page is something to play.
+simNoRivalNames exit=0 19s | No rival product names found. 0 findings.
+cssgrep exit=0 0s | dist/assets/BallIq-BjxfiyZ_.css:0
+probeLift exit=1 29s | probeLift: RED, 4 reads off
+tsc exit=0 87s | 

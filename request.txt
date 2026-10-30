@@ -1,0 +1,10 @@
+#!serve
+#!playwright
+tsc: node_modules/.bin/tsc --noEmit -p tsconfig.app.json
+simAccessibility: node scripts/simAccessibility.mjs
+sweepWeight: node scripts/sweepWeight.mjs
+playHomeFold: node scripts/playHomeFold.mjs
+simTrustCopy: node scripts/simTrustCopy.mjs
+simNoRivalNames: node scripts/simNoRivalNames.mjs
+probeLift: node .rc/x/probeLift.mjs
+cssgrep: grep -ohE 'bottom:(calc\()?var\(--dukb-consent-height,230px\)( ?\+ ?[0-9.]+rem\))?' dist/assets/*.css | sort | uniq -c && grep -c 'min-width:640px' dist/assets/*.css | head -3
