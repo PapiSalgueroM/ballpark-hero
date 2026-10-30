@@ -1,0 +1,7 @@
+tsc: node_modules/.bin/tsc --noEmit -p tsconfig.app.json
+simFoLazyDesk: node scripts/simFoLazyDesk.mjs
+nhleager: SIM_FO_LAZY_DESK_CONTROL=nhleager node scripts/simFoLazyDesk.mjs
+nhlhostvalue: SIM_FO_LAZY_DESK_CONTROL=nhlhostvalue node scripts/simFoLazyDesk.mjs
+nhltiertile: SIM_FO_LAZY_DESK_CONTROL=nhltiertile node scripts/simFoLazyDesk.mjs
+nhlboxseasons: SIM_FO_LAZY_DESK_CONTROL=nhlboxseasons node scripts/simFoLazyDesk.mjs
+eager: SIM_FO_LAZY_DESK_CONTROL=eager node scripts/simFoLazyDesk.mjs
