@@ -20,8 +20,11 @@
    5. a table name that is also a player's name is LISTED (the 2026 world rosters, then the four era
       bakes), never silently merged; so is any name the made up name generator could build (expected none).
 
+   Section 0 also fails a man who sits in two chairs (one table, one opening day, one club each).
+
    Negative controls, each refusing to run if its mutation changed nothing, each turning its section red:
-   DUGOUTS_CONTROL=onehost   the first chair's reads all point at one source (section 1)
+   DUGOUTS_CONTROL=twochairs Arsenal's man is also written into Aston Villa's chair (section 0)
+   DUGOUTS_CONTROL=onehost  the first chair's reads all point at one source (section 1)
    DUGOUTS_CONTROL=orphan    a chair for a club in no league is added to table and receipt (section 2)
    DUGOUTS_CONTROL=gap       Arsenal's chair leaves table and receipt (section 3)
    DUGOUTS_CONTROL=monthclash one read of a dated chair prints another month (section 4)
@@ -41,8 +44,8 @@ import { fileURLToPath, pathToFileURL } from 'node:url';
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const SRC = `${ROOT.replaceAll('\\', '/')}/src`;
 const CONTROL = process.env.DUGOUTS_CONTROL || '';
-const CONTROLS = { onehost: 1, orphan: 2, gap: 3, monthclash: 4 };
-if (CONTROL && !CONTROLS[CONTROL]) { console.error(`unknown DUGOUTS_CONTROL=${CONTROL}`); process.exit(1); }
+const CONTROLS = { twochairs: 0, onehost: 1, orphan: 2, gap: 3, monthclash: 4 };
+if (CONTROL && !(CONTROL in CONTROLS)) { console.error(`unknown DUGOUTS_CONTROL=${CONTROL}`); process.exit(1); }
 
 const failed = new Set();
 let failures = 0;
@@ -75,7 +78,14 @@ const ERA = receipt.era;
 if (CONTROL) {
   const before = JSON.stringify([receipt, table]);
   const refuse = m => { console.error(`control ${CONTROL}: ${m}, refusing a dead control`); process.exit(1); };
-  if (CONTROL === 'onehost') {
+  if (CONTROL === 'twochairs') {
+    const a = receipt.chairs.find(c => c.club === 'Arsenal');
+    const v = receipt.chairs.find(c => c.club === 'Aston Villa');
+    if (!a || !v || a.name === v.name || !table[ERA]?.Arsenal || !table[ERA]?.['Aston Villa']) refuse('Arsenal and Aston Villa do not hold two different men');
+    v.name = a.name;
+    for (const r of v.reads) r.name = a.name;
+    table[ERA]['Aston Villa'] = { name: a.name };
+  } else if (CONTROL === 'onehost') {
     const c = receipt.chairs[0];
     if (!c || c.reads.length < 2 || new Set(c.reads.map(r => r.source)).size < 2) refuse('the first chair has no second source to remove');
     for (const r of c.reads) r.source = c.reads[0].source;
@@ -132,6 +142,12 @@ for (const c of chairs) {
   if (extra.length) fail(0, `${c.club}: the row carries ${extra.join(', ')}; a real manager's row is a name and a month only`);
 }
 for (const club of Object.keys(rows)) if (!chairs.some(c => c.club === club)) fail(0, `${club}: in the table, not in the receipt`);
+const seat = new Map();
+for (const [club, row] of Object.entries(rows)) {
+  const k = fold(row.name);
+  if (seat.has(k)) fail(0, `${row.name} sits in two chairs: ${seat.get(k)} and ${club}`);
+  else seat.set(k, club);
+}
 const receiptPartial = (receipt.partial ?? []).map(p => p.club);
 if (JSON.stringify([...receiptPartial].sort()) !== JSON.stringify([...partial].sort())) fail(0, `partial list differs: table [${partial}] receipt [${receiptPartial}]`);
 const dashes = [String.fromCharCode(0x2013), String.fromCharCode(0x2014)];
