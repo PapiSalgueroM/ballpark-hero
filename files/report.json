@@ -1,0 +1,114 @@
+{
+ "pools": {
+  "head": 20,
+  "base": 20
+ },
+ "cases": [
+  {
+   "tag": "390-nbaconn-003-win",
+   "day": "2026-11-13",
+   "receipts": [
+    {
+     "text": "Locked: Played for the Golden State Warriors (as of 2025-26). Those five are solved.",
+     "dateLines": 1,
+     "right": 361
+    },
+    {
+     "text": "Locked: Played for the New York Knicks (as of 2025-26). Those five are solved.",
+     "dateLines": 1,
+     "right": 361
+    },
+    {
+     "text": "Locked: Born in Canada. Those five are solved.",
+     "dateLines": 0,
+     "right": 361
+    },
+    null
+   ],
+   "firstDialog": true,
+   "rows": [
+    {
+     "text": "Played for the Golden State Warriors (as of 2025-26)",
+     "right": 361,
+     "over": false,
+     "names": "Stephen Curry, Draymond Green, Chris Mullin, Andre Iguodala, Monta Ellis"
+    },
+    {
+     "text": "Played for the New York Knicks (as of 2025-26)",
+     "right": 361,
+     "over": false,
+     "names": "Patrick Ewing, Allan Houston, Amar'e Stoudemire, Julius Randle, Derek Harper"
+    },
+    {
+     "text": "Born in Canada",
+     "right": 361,
+     "over": false,
+     "names": "Jamal Murray, Shai Gilgeous-Alexander, Tristan Thompson, Dillon Brooks, Bennedict Mathurin"
+    },
+    {
+     "text": "Drafted #2 overall",
+     "right": 361,
+     "over": false,
+     "names": "Ja Morant, Brandon Ingram, Victor Oladipo, Jalen Green, Marvin Bagley III"
+    }
+   ]
+  },
+  {
+   "tag": "390-reduced-nbaconn-002-lose",
+   "day": "2026-11-18",
+   "receipts": [],
+   "rows": []
+  },
+  {
+   "tag": "1280-nbaconn-004-win",
+   "day": "2026-11-19",
+   "receipts": [],
+   "rows": []
+  },
+  {
+   "tag": "1280-reduced-nbaconn-002-win",
+   "day": "2026-11-18",
+   "receipts": [],
+   "rows": []
+  },
+  {
+   "tag": "390-reduced-nbaconn-004-win",
+   "day": "2026-11-19",
+   "receipts": [],
+   "rows": []
+  },
+  {
+   "tag": "1280-nbaconn-001-lose",
+   "day": "2026-11-03",
+   "receipts": [],
+   "rows": []
+  },
+  {
+   "tag": "oldsave-write-nbaconn-004",
+   "day": "2026-11-19",
+   "rows": []
+  },
+  {
+   "tag": "oldsave-write-nbaconn-002",
+   "day": "2026-11-18",
+   "rows": []
+  },
+  {
+   "tag": "offline-390",
+   "day": "2026-11-02",
+   "rows": []
+  }
+ ],
+ "problems": [
+  "390-reduced-nbaconn-002-lose: TimeoutError: locator.tap: Timeout 15000ms exceeded.\nCall log:\n  - waiting for locator('[data-nba-planning]').getByRole('button', { name: 'Derrick Rose', exact: true })\n    - locator resolved to <butt",
+  "1280-nbaconn-004-win: TimeoutError: locator.click: Timeout 15000ms exceeded.\nCall log:\n  - waiting for locator('[data-nba-planning]').getByRole('button', { name: 'Larry Bird', exact: true })\n    - locator resolved to <butt",
+  "1280-reduced-nbaconn-002-win: TimeoutError: locator.click: Timeout 15000ms exceeded.\nCall log:\n  - waiting for locator('[data-nba-planning]').getByRole('button', { name: 'Derrick Rose', exact: true })\n    - locator resolved to <bu",
+  "390-reduced-nbaconn-004-win: TimeoutError: locator.tap: Timeout 15000ms exceeded.\nCall log:\n  - waiting for locator('[data-nba-planning]').getByRole('button', { name: 'Larry Bird', exact: true })\n    - locator resolved to <button",
+  "1280-nbaconn-001-lose: TimeoutError: locator.click: Timeout 15000ms exceeded.\nCall log:\n  - waiting for locator('[data-nba-planning]').getByRole('button', { name: 'Karl Malone', exact: true })\n    - locator resolved to <but",
+  "oldsave-write-nbaconn-004: TimeoutError: locator.tap: Timeout 15000ms exceeded.\nCall log:\n  - waiting for locator('[data-nba-planning]').getByRole('button', { name: 'Chris Webber', exact: true })\n    - locator resolved to <butt",
+  "oldsave nbaconn-004: no save written",
+  "oldsave-write-nbaconn-002: TimeoutError: locator.tap: Timeout 15000ms exceeded.\nCall log:\n  - waiting for locator('[data-nba-planning]').getByRole('button', { name: 'Tony Parker', exact: true })\n    - locator resolved to <butto",
+  "oldsave nbaconn-002: no save written",
+  "offline-390: TimeoutError: locator.tap: Timeout 15000ms exceeded.\nCall log:\n  - waiting for locator('[data-nba-planning]').getByRole('button', { name: 'Stephen Curry', exact: true })\n    - locator resolved to <but"
+ ]
+}

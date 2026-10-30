@@ -1,0 +1,49 @@
+390-nbaconn-003-win: {"tag":"390-nbaconn-003-win","day":"2026-11-13","receipts":[{"text":"Locked: Played for the Golden State Warriors (as of 2025-26). Those five are solved.","dateLines":1,"right":361},{"text":"Locked: Played for the New York Knicks (as of 2025-26). Those five are solved.","dateLines":1,"right":361},{"text":"Locked: Born in Canada. Those five are solved.","dateLines":0,"right":361},null],"firstDialog":true,"rows":[{"text":"Played for the Golden State Warriors (as of 2025-26)","right":361,"over":false,"names":"Stephen Curry, Draymond Green, Chris Mullin, Andre Iguodala, Monta Ellis"},{"text":"Play
+PROBLEM 390-reduced-nbaconn-002-lose: TimeoutError: locator.tap: Timeout 15000ms exceeded.
+Call log:
+  - waiting for locator('[data-nba-planning]').getByRole('button', { name: 'Derrick Rose', exact: true })
+    - locator resolved to <butt
+390-reduced-nbaconn-002-lose: {"tag":"390-reduced-nbaconn-002-lose","day":"2026-11-18","receipts":[],"rows":[]}
+PROBLEM 1280-nbaconn-004-win: TimeoutError: locator.click: Timeout 15000ms exceeded.
+Call log:
+  - waiting for locator('[data-nba-planning]').getByRole('button', { name: 'Larry Bird', exact: true })
+    - locator resolved to <butt
+1280-nbaconn-004-win: {"tag":"1280-nbaconn-004-win","day":"2026-11-19","receipts":[],"rows":[]}
+PROBLEM 1280-reduced-nbaconn-002-win: TimeoutError: locator.click: Timeout 15000ms exceeded.
+Call log:
+  - waiting for locator('[data-nba-planning]').getByRole('button', { name: 'Derrick Rose', exact: true })
+    - locator resolved to <bu
+1280-reduced-nbaconn-002-win: {"tag":"1280-reduced-nbaconn-002-win","day":"2026-11-18","receipts":[],"rows":[]}
+PROBLEM 390-reduced-nbaconn-004-win: TimeoutError: locator.tap: Timeout 15000ms exceeded.
+Call log:
+  - waiting for locator('[data-nba-planning]').getByRole('button', { name: 'Larry Bird', exact: true })
+    - locator resolved to <button
+390-reduced-nbaconn-004-win: {"tag":"390-reduced-nbaconn-004-win","day":"2026-11-19","receipts":[],"rows":[]}
+PROBLEM 1280-nbaconn-001-lose: TimeoutError: locator.click: Timeout 15000ms exceeded.
+Call log:
+  - waiting for locator('[data-nba-planning]').getByRole('button', { name: 'Karl Malone', exact: true })
+    - locator resolved to <but
+1280-nbaconn-001-lose: {"tag":"1280-nbaconn-001-lose","day":"2026-11-03","receipts":[],"rows":[]}
+PROBLEM oldsave-write-nbaconn-004: TimeoutError: locator.tap: Timeout 15000ms exceeded.
+Call log:
+  - waiting for locator('[data-nba-planning]').getByRole('button', { name: 'Chris Webber', exact: true })
+    - locator resolved to <butt
+oldsave-write-nbaconn-004: {"tag":"oldsave-write-nbaconn-004","day":"2026-11-19","rows":[]}
+PROBLEM oldsave nbaconn-004: no save written
+PROBLEM oldsave-write-nbaconn-002: TimeoutError: locator.tap: Timeout 15000ms exceeded.
+Call log:
+  - waiting for locator('[data-nba-planning]').getByRole('button', { name: 'Tony Parker', exact: true })
+    - locator resolved to <butto
+oldsave-write-nbaconn-002: {"tag":"oldsave-write-nbaconn-002","day":"2026-11-18","rows":[]}
+PROBLEM oldsave nbaconn-002: no save written
+PROBLEM offline-390: TimeoutError: locator.tap: Timeout 15000ms exceeded.
+Call log:
+  - waiting for locator('[data-nba-planning]').getByRole('button', { name: 'Stephen Curry', exact: true })
+    - locator resolved to <but
+offline-390: {"tag":"offline-390","day":"2026-11-02","rows":[]}
+rwalk1583: 10 problems: 390-reduced-nbaconn-002-lose: TimeoutError: locator.tap: Timeout 15000ms exceeded.
+Call log:
+  - waiting for locator('[data-nba-planning]').getByRole('button', { name: 'Derrick Rose', exact: true })
+    - locator resolved to <butt || 1280-nbaconn-004-win: TimeoutError: locator.click: Timeout 15000ms exceeded.
+Call log:
+  - waiting for locator('[data-nba-planning]').getByRole('button', { name: 'Lar
