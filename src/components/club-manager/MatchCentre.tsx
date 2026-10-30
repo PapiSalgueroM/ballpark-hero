@@ -1,7 +1,9 @@
 import { cn } from '@/lib/utils';
 import { ChevronLeft, Play, Zap } from 'lucide-react';
 import type { CareerState, MatchFacts, FormResult, TalkTone } from '@/lib/clubManager';
-import { toLeague } from '@/lib/clubManager';
+import { toLeague, dugoutOf } from '@/lib/clubManager';
+import { MadeUpTag } from '@/components/club-manager/SquadScreen';
+import { DUGOUT_MADE_UP_TITLE, DUGOUT_PARTIAL_TITLE } from '@/lib/realDugouts';
 import { TeamTalkRow } from '@/components/club-manager/TeamTalkRow';
 import { inFixtureOrder, myClubFirst } from '@/lib/cmMatchDisplay';
 import { AI_STYLES, opponentStyle } from '@/lib/clubManagerTactics';
@@ -75,10 +77,19 @@ export function MatchCentre({
       {myPosLabel && <div className="text-[9px] text-muted-foreground">{myPosLabel} in league</div>}
     </div>
   );
+  /* Round 1606: who is in their dugout, the display slot's fact: a real opening day manager by name only, a made
+     up one marked so. Nothing about him is said or rated here; the style above is the club's, the sim's pick. */
+  const oppDugout = dugoutOf(career, f.opponent);
   const oppBlock = (
     <div className={cn('flex-1 min-w-0', mineFirst ? 'text-left' : 'text-right')} data-cm-mc-side="opp">
       <div className="text-sm font-bold text-foreground truncate">{f.opponent}</div>
       {oppPosLabel && <div className="text-[9px] text-muted-foreground truncate">{oppPosLabel}</div>}
+      {oppDugout && (
+        <div className={cn('text-[9px] text-muted-foreground flex items-center gap-1 min-w-0', mineFirst ? 'justify-start' : 'justify-end')} data-cm-mc-dugout={oppDugout.real ? 'real' : 'made-up'}>
+          <span className="truncate">Manager: {oppDugout.name}</span>
+          {!oppDugout.real && <MadeUpTag title={oppDugout.partial ? DUGOUT_PARTIAL_TITLE : DUGOUT_MADE_UP_TITLE} />}
+        </div>
+      )}
     </div>
   );
   const myDot = <span className="w-2.5 h-2.5 rounded-full shrink-0" style={{ backgroundColor: clubColor }} />;

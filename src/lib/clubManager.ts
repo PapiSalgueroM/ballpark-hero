@@ -9048,7 +9048,7 @@ export function dugoutOf(career: CareerState, club: string): DugoutView | null {
     }
     return { name: entry.name, since: entry.since, ...(realDugoutPartial(CM_DUGOUTS_PARTIAL, era, club) ? { partial: true } : {}) };
   }
-  if (career.leagueClubs.includes(club)) return null;
+  if ((career.leagueClubs ?? []).includes(club)) return null;
   const real = openingDayDugout(career, club, yearsOn(career));
   return real ? { name: real.name, real: 1, ...(real.appointed ? { appointed: real.appointed } : {}) } : null;
 }
