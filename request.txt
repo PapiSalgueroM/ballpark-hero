@@ -1,0 +1,5 @@
+#!serve
+#!playwright
+simResultMoment: node scripts/simResultMoment.mjs
+simWritesAreSent: node scripts/simWritesAreSent.mjs
+simPrerender: node scripts/simPrerender.mjs
