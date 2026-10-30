@@ -1,0 +1,46 @@
+PROBLEM 390-nbaconn-003: guess 1 moved the page from 518 to 397
+PROBLEM 390-nbaconn-003: "Played for the Golden State Warriors (as of 2025-26)" breaks its date over 0 lines
+PROBLEM 390-nbaconn-003: "Played for the New York Knicks (as of 2025-26)" breaks its date over 0 lines
+PROBLEM 390-nbaconn-003: the dialog does not say what a date means
+390-nbaconn-003: 4 rows; Played for the Golden State Warriors (as of 2025-26) / Played for the New York Knicks (as of 2025-26) / Born in Canada / Drafted #2 overall; scroll [[518,397],[397,397],[397,397],[397,397]]
+PROBLEM 390-nbaconn-004: guess 1 moved the page from 518 to 397
+PROBLEM 390-nbaconn-004: "Played for the Boston Celtics (as of 2025-26)" breaks its date over 0 lines
+PROBLEM 390-nbaconn-004: "Played for the Los Angeles Lakers (as of 2025-26)" breaks its date over 0 lines
+PROBLEM 390-nbaconn-004: "Played for the Sacramento Kings (as of 2025-26)" breaks its date over 0 lines
+390-nbaconn-004: 4 rows; Played for the Boston Celtics (as of 2025-26) / Played for the Los Angeles Lakers (as of 2025-26) / Born in Africa / Played for the Sacramento Kings (as of 2025-26); scroll [[518,397],[397,397],[
+PROBLEM 390-nbaconn-002: guess 1 moved the page from 518 to 397
+PROBLEM 390-nbaconn-002: "Played for the Chicago Bulls (as of 2025-26)" breaks its date over 0 lines
+PROBLEM 390-reduced-nbaconn-003: guess 1 moved the page from 518 to 397
+PROBLEM 390-reduced-nbaconn-003: "Played for the Golden State Warriors (as of 2025-26)" breaks its date over 0 lines
+PROBLEM 390-reduced-nbaconn-003: "Played for the New York Knicks (as of 2025-26)" breaks its date over 0 lines
+390-reduced-nbaconn-003: 4 rows; Played for the Golden State Warriors (as of 2025-26) / Played for the New York Knicks (as of 2025-26) / Born in Canada / Drafted #2 overall; scroll [[518,397],[397,397],[397,397],[397,397
+PROBLEM 390-reduced-nbaconn-004: guess 1 moved the page from 518 to 397
+PROBLEM 390-reduced-nbaconn-004: "Played for the Boston Celtics (as of 2025-26)" breaks its date over 0 lines
+PROBLEM 390-reduced-nbaconn-004: "Played for the Los Angeles Lakers (as of 2025-26)" breaks its date over 0 lines
+PROBLEM 390-reduced-nbaconn-004: "Played for the Sacramento Kings (as of 2025-26)" breaks its date over 0 lines
+390-reduced-nbaconn-004: 4 rows; Played for the Boston Celtics (as of 2025-26) / Played for the Los Angeles Lakers (as of 2025-26) / Born in Africa / Played for the Sacramento Kings (as of 2025-26); scroll [[518,397],[39
+PROBLEM 390-reduced-nbaconn-002: guess 1 moved the page from 518 to 397
+PROBLEM 390-reduced-nbaconn-002: "Played for the Chicago Bulls (as of 2025-26)" breaks its date over 0 lines
+PROBLEM 1280-nbaconn-003: guess 1 moved the page from 518 to 441
+PROBLEM 1280-nbaconn-003: "Played for the Golden State Warriors (as of 2025-26)" breaks its date over 0 lines
+PROBLEM 1280-nbaconn-003: "Played for the New York Knicks (as of 2025-26)" breaks its date over 0 lines
+1280-nbaconn-003: 4 rows; Played for the Golden State Warriors (as of 2025-26) / Played for the New York Knicks (as of 2025-26) / Born in Canada / Drafted #2 overall; scroll [[518,441],[441,441],[441,441],[441,441]]
+PROBLEM 1280-nbaconn-004: guess 1 moved the page from 518 to 441
+PROBLEM 1280-nbaconn-004: "Played for the Boston Celtics (as of 2025-26)" breaks its date over 0 lines
+PROBLEM 1280-nbaconn-004: "Played for the Los Angeles Lakers (as of 2025-26)" breaks its date over 0 lines
+PROBLEM 1280-nbaconn-004: "Played for the Sacramento Kings (as of 2025-26)" breaks its date over 0 lines
+1280-nbaconn-004: 4 rows; Played for the Boston Celtics (as of 2025-26) / Played for the Los Angeles Lakers (as of 2025-26) / Born in Africa / Played for the Sacramento Kings (as of 2025-26); scroll [[518,441],[441,441],
+PROBLEM 1280-nbaconn-002: guess 1 moved the page from 518 to 441
+PROBLEM 1280-nbaconn-002: "Played for the Chicago Bulls (as of 2025-26)" breaks its date over 0 lines
+PROBLEM 1280-reduced-nbaconn-003: guess 1 moved the page from 518 to 441
+PROBLEM 1280-reduced-nbaconn-003: "Played for the Golden State Warriors (as of 2025-26)" breaks its date over 0 lines
+PROBLEM 1280-reduced-nbaconn-003: "Played for the New York Knicks (as of 2025-26)" breaks its date over 0 lines
+1280-reduced-nbaconn-003: 4 rows; Played for the Golden State Warriors (as of 2025-26) / Played for the New York Knicks (as of 2025-26) / Born in Canada / Drafted #2 overall; scroll [[518,441],[441,441],[441,441],[441,44
+PROBLEM 1280-reduced-nbaconn-004: guess 1 moved the page from 518 to 441
+PROBLEM 1280-reduced-nbaconn-004: "Played for the Boston Celtics (as of 2025-26)" breaks its date over 0 lines
+PROBLEM 1280-reduced-nbaconn-004: "Played for the Los Angeles Lakers (as of 2025-26)" breaks its date over 0 lines
+PROBLEM 1280-reduced-nbaconn-004: "Played for the Sacramento Kings (as of 2025-26)" breaks its date over 0 lines
+1280-reduced-nbaconn-004: 4 rows; Played for the Boston Celtics (as of 2025-26) / Played for the Los Angeles Lakers (as of 2025-26) / Born in Africa / Played for the Sacramento Kings (as of 2025-26); scroll [[518,441],[4
+PROBLEM 1280-reduced-nbaconn-002: guess 1 moved the page from 518 to 441
+PROBLEM 1280-reduced-nbaconn-002: "Played for the Chicago Bulls (as of 2025-26)" breaks its date over 0 lines
+walk1583: 37 problems
