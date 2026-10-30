@@ -1,0 +1,3 @@
+2802 /home/runner/work/_temp/rc-out/full/simMissingNineFeedback.mjs/stdout.log
+   0 /home/runner/work/_temp/rc-out/full/simMissingNineFeedback.mjs/stderr.log
+2802 total

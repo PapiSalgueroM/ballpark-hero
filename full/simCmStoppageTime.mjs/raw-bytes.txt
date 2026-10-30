@@ -1,0 +1,3 @@
+2945 /home/runner/work/_temp/rc-out/full/simCmStoppageTime.mjs/stdout.log
+   0 /home/runner/work/_temp/rc-out/full/simCmStoppageTime.mjs/stderr.log
+2945 total

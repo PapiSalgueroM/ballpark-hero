@@ -1,0 +1,2 @@
+54e05f184bc40e28d3a416a1c09878ce03fac49d3b103c4cf301a43824175ddb  /home/runner/work/_temp/rc-out/full/simFirstTeamPage.mjs/stdout.log
+e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855  /home/runner/work/_temp/rc-out/full/simFirstTeamPage.mjs/stderr.log

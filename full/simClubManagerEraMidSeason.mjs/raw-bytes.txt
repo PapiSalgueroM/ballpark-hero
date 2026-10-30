@@ -1,0 +1,3 @@
+43481 /home/runner/work/_temp/rc-out/full/simClubManagerEraMidSeason.mjs/stdout.log
+    0 /home/runner/work/_temp/rc-out/full/simClubManagerEraMidSeason.mjs/stderr.log
+43481 total

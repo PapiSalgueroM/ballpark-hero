@@ -1,0 +1,3 @@
+1375 /home/runner/work/_temp/rc-out/full/simCareerPendingMoneyGates.mjs/stdout.log
+   0 /home/runner/work/_temp/rc-out/full/simCareerPendingMoneyGates.mjs/stderr.log
+1375 total

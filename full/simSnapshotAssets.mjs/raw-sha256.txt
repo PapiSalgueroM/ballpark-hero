@@ -1,0 +1,2 @@
+855bf1624e0b674beffb9918d858f57fcadc4cc81c6f2002ee1417141636ecdd  /home/runner/work/_temp/rc-out/full/simSnapshotAssets.mjs/stdout.log
+e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855  /home/runner/work/_temp/rc-out/full/simSnapshotAssets.mjs/stderr.log

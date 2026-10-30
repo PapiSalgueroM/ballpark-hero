@@ -1,0 +1,3 @@
+699 /home/runner/work/_temp/rc-out/full/simConquest.mjs/stdout.log
+  0 /home/runner/work/_temp/rc-out/full/simConquest.mjs/stderr.log
+699 total

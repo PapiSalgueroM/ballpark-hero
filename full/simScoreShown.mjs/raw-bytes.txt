@@ -1,0 +1,3 @@
+9249 /home/runner/work/_temp/rc-out/full/simScoreShown.mjs/stdout.log
+   0 /home/runner/work/_temp/rc-out/full/simScoreShown.mjs/stderr.log
+9249 total

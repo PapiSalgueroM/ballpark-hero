@@ -1,0 +1,2 @@
+11cb9349d59076f0cac09b354eb34829da44c15f4052c6e3f8471531d4b63f4c  /home/runner/work/_temp/rc-out/full/simBuzzerBeater.mjs/stdout.log
+e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855  /home/runner/work/_temp/rc-out/full/simBuzzerBeater.mjs/stderr.log

@@ -1,0 +1,2 @@
+8738e7d8e1f01e30b8679d57d7d9378054bb92254ce360f2f50876ddaef7cda8  /home/runner/work/_temp/rc-out/full/simPlayerSearchFailure.mjs/stdout.log
+e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855  /home/runner/work/_temp/rc-out/full/simPlayerSearchFailure.mjs/stderr.log

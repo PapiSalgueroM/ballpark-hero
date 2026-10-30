@@ -1,0 +1,3 @@
+1361 /home/runner/work/_temp/rc-out/full/simTradeTalks.mjs/stdout.log
+   0 /home/runner/work/_temp/rc-out/full/simTradeTalks.mjs/stderr.log
+1361 total

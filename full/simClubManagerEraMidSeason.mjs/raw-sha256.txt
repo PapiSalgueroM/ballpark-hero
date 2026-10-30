@@ -1,0 +1,2 @@
+8d34d8ae7e84478f21217f79b7dad8b725fd3aa6a09ccf1847f60c85142bf2c7  /home/runner/work/_temp/rc-out/full/simClubManagerEraMidSeason.mjs/stdout.log
+e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855  /home/runner/work/_temp/rc-out/full/simClubManagerEraMidSeason.mjs/stderr.log

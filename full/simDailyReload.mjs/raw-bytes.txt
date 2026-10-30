@@ -1,0 +1,3 @@
+8004 /home/runner/work/_temp/rc-out/full/simDailyReload.mjs/stdout.log
+   0 /home/runner/work/_temp/rc-out/full/simDailyReload.mjs/stderr.log
+8004 total

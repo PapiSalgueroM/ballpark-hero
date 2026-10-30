@@ -1,0 +1,3 @@
+1831 /home/runner/work/_temp/rc-out/full/simBuzzerBeater.mjs/stdout.log
+   0 /home/runner/work/_temp/rc-out/full/simBuzzerBeater.mjs/stderr.log
+1831 total

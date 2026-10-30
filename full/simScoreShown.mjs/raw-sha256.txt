@@ -1,0 +1,2 @@
+765dbc638bd2c10c0c47ad3814b023029203bd6329791839f492eeba54687cfa  /home/runner/work/_temp/rc-out/full/simScoreShown.mjs/stdout.log
+e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855  /home/runner/work/_temp/rc-out/full/simScoreShown.mjs/stderr.log

@@ -1,0 +1,28 @@
+{
+  "originalFilesAndBodiesHeld": true,
+  "entries": [
+    {
+      "file": "node_modules/.vite/vitest/da39a3ee5e6b4b0d3255bfef95601890afd80709/results.json",
+      "bytes": 1291,
+      "sha256": "d20b65ea555b5cbbb8dabebf4e6ea1f9ccdc7348b2d175f993706f8b8d458ed0",
+      "tests": [
+        ":src/test/aussieRulesManager.test.ts",
+        ":src/test/careerDilemmaReach.test.tsx",
+        ":src/test/careerDilemmaSaves.test.tsx",
+        ":src/test/dailyReload.test.tsx",
+        ":src/test/firstTeam.test.tsx",
+        ":src/test/liveSimMotion.test.tsx",
+        ":src/test/missingNineFeedback.test.tsx",
+        ":src/components/nba-front-office/NbaFrontOfficeRatingEvidence.test.tsx",
+        ":src/test/playerSearchFailure.test.tsx",
+        ":src/test/scoreShown.test.tsx",
+        ":src/test/soccerLineupPicker.test.tsx",
+        ":src/test/staffScreen.test.tsx",
+        ":src/test/tycoonHelp.test.tsx",
+        ":src/test/usCareerActionConfirm.test.tsx",
+        ":src/lib/usCareerShopPromises.test.ts"
+      ],
+      "kind": "NEW_GENERATED_RESULTS_CACHE_ONLY_NO_TEST_CREDIT"
+    }
+  ]
+}

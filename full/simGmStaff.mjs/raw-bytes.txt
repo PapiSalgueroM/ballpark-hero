@@ -1,0 +1,3 @@
+19412 /home/runner/work/_temp/rc-out/full/simGmStaff.mjs/stdout.log
+    0 /home/runner/work/_temp/rc-out/full/simGmStaff.mjs/stderr.log
+19412 total

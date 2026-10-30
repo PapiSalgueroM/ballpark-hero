@@ -1,0 +1,3 @@
+794 /home/runner/work/_temp/rc-out/full/simIntlFormatHistory.mjs/stdout.log
+  0 /home/runner/work/_temp/rc-out/full/simIntlFormatHistory.mjs/stderr.log
+794 total

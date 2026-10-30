@@ -1,0 +1,3 @@
+96732 /home/runner/work/_temp/rc-out/full/simSoccerCareerSaveSize.mjs/stdout.log
+    0 /home/runner/work/_temp/rc-out/full/simSoccerCareerSaveSize.mjs/stderr.log
+96732 total

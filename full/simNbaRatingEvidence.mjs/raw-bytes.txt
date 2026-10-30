@@ -1,0 +1,3 @@
+701 /home/runner/work/_temp/rc-out/full/simNbaRatingEvidence.mjs/stdout.log
+  0 /home/runner/work/_temp/rc-out/full/simNbaRatingEvidence.mjs/stderr.log
+701 total

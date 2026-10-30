@@ -1,0 +1,3 @@
+30315 /home/runner/work/_temp/rc-out/full/simCmHandoverDesk.mjs/stdout.log
+    0 /home/runner/work/_temp/rc-out/full/simCmHandoverDesk.mjs/stderr.log
+30315 total

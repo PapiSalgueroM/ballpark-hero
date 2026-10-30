@@ -1,0 +1,2 @@
+51cff0039b200206fd0b49dcf8c076757fe8fef78f7254fb00a58602f8ecefe0  /home/runner/work/_temp/rc-out/full/simAussieRulesManager.mjs/stdout.log
+e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855  /home/runner/work/_temp/rc-out/full/simAussieRulesManager.mjs/stderr.log
