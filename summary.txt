@@ -1,0 +1,4 @@
+rules-head exit=0 65s | simCmLeagueRules: all checks passed (modern, eras, pure, drop4, cupless, shapes, chunks)
+rules-noet exit=0 64s | simCmLeagueRules: all checks passed (modern, eras, pure, drop4, cupless, shapes, chunks)
+rules-nowin exit=0 62s | simCmLeagueRules: all checks passed (modern, eras, pure, drop4, cupless, shapes, chunks)
+appeal exit=1 8s | Node.js v24.22.1
