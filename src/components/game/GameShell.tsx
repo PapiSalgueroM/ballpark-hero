@@ -10,6 +10,7 @@ interface GameShellProps {
   /** Two width variants only: narrow (max-w-2xl) for 1-2 column comparison/card games,
    *  wide (max-w-4xl) for search+board games. */
   width: 'narrow' | 'wide';
+  showNavbar?: boolean;
   /** Game title. It is the page h1 by default. Omit to render no heading block. */
   title?: string;
   /** Use level 2 only when another component on the page owns the single h1. */
@@ -51,6 +52,7 @@ interface GameShellProps {
  */
 export function GameShell({
   width,
+  showNavbar = true,
   title,
   headingLevel = 1,
   emoji,
@@ -77,7 +79,7 @@ export function GameShell({
        keyboard affordance focused nothing. tabIndex -1 so the jump moves real
        focus, not just the scroll. */}
     <main id="dukb-main" tabIndex={-1} className="min-h-screen bg-background">
-      <GameNavbar />
+      {showNavbar && <GameNavbar />}
       <div
         className={cn(
           /* Round 288: relative, so RulesGate's floating "?" (absolute top-0

@@ -11,6 +11,7 @@ import BrokenSaveRestore from "@/components/BrokenSaveRestore";
 import { AuthProvider } from "@/contexts/AuthContext";
 import { Header } from "@/components/layout/Header";
 import { SiteMenu } from "@/components/layout/SiteMenu";
+import { SiteMenuProvider } from "@/components/layout/SiteMenuHost";
 import { LiveTicker } from "@/components/layout/LiveTicker";
 import { UpdateNudge } from "@/components/layout/UpdateNudge";
 import { Footer } from "@/components/game/Footer";
@@ -310,7 +311,7 @@ const RouteLoader = () => (
 const AppContent = () => {
   const { pathname } = useLocation();
   return (
-    <>
+    <SiteMenuProvider>
       {/* Round 215: the first tab stop on every page jumps a keyboard player
           past the ticker and nav straight to the content. Invisible until
           focused, styled in index.css. */}
@@ -318,11 +319,9 @@ const AppContent = () => {
       <ScrollToTop />
       <CookieConsent />
       {/* Round 167: the site's own wire across the top of every screen. */}
-      <div data-site-chrome="" className="sticky top-0 z-50 flex h-11 items-center border-b border-border/40 bg-background">
-        <SiteMenu />
-        <div className="min-w-0 flex-1">
-          <LiveTicker />
-        </div>
+      <SiteMenu />
+      <div data-site-chrome="" className={`sticky top-0 z-50 ${pathname === '/' ? 'h-8' : 'hidden h-8 md:block'}`}>
+        <LiveTicker />
       </div>
       {shouldShowHeader(pathname) && <Header />}
       {/* Round 1142: one line, game routes only, and only in a browser that
@@ -576,7 +575,7 @@ const AppContent = () => {
       </RouteErrorBoundary>
       <Footer />
       </Suspense>
-    </>
+    </SiteMenuProvider>
   );
 };
 

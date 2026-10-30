@@ -138,7 +138,9 @@ try {
     for (const reducedMotion of ['no-preference', 'reduce']) {
       const page = await browser.newPage({ viewport: { width, height }, reducedMotion });
       page.on('pageerror', e => fail('layout', `page error: ${e.message}`));
-      await page.route('**/*', route => route.fulfill({ status: 200, contentType: 'text/html', body: html }));
+      await page.route('**/*', route => route.request().method() === 'GET' && route.request().url() === 'http://127.0.0.1:4173/sport-glyphs.svg'
+        ? route.fulfill({ status: 200, contentType: 'image/svg+xml', body: fs.readFileSync(path.join(root, 'public/sport-glyphs.svg')) })
+        : route.fulfill({ status: 200, contentType: 'text/html', body: html }));
       await page.goto('http://127.0.0.1:4173/season-verdict-fixture');
       await page.addScriptTag({ content: bundle.outputFiles[0].text });
       for (const f of FIXTURES) {
