@@ -14018,8 +14018,10 @@ function uelNightLabel(my: MyWorldNight): string {
  * critic's correction 7: the slice is REPLACED, so an evaluation memoised on the old object is never served again).
  * After the eighth matchday the league phase table says where my club stands; a first leg says where the second is;
  * a night that settles a tie reads the tie off the evaluation one night on. The board's swing is the domestic cup's
- * (plus 12 the trophy, plus 2 a round won, minus 3 out before the quarter-finals and minus 4.5 from them on), never a
- * number of its own (the critic's advice 16): the Champions League's bigger swing stays the Champions League's.
+ * on the knockout ties (plus 12 the trophy, plus 2 a tie won, minus 3 out in the play-off or the round of 16 and
+ * minus 4.5 from the quarter-finals on), never a number of its own (the critic's advice 16): the Champions League's
+ * bigger swing stays the Champions League's. The league phase moves the board by nothing, finishing in it or out
+ * of it; only its target, graded at the season's end, reads how far the club went.
  */
 function completeWorldNight(state: CareerState, night: NightRef, mine: number, theirs: number, et: boolean, shootoutWon: boolean | null, events: string[]): { trophy: string | null; conf: number } {
   const none = { trophy: null, conf: 0 };
