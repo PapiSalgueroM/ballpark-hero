@@ -1,0 +1,5 @@
+build exit=0 24s | [dukb] inlined 1 stylesheet(s) and 1 module(s) into 181 snapshots (11 left alone)
+psc-noreach exit=1 11s | control "noreach": other checks went red too, so the control is not isolated: 6. no console or page errors across the walk: Failed to load resource: net::ERR_CONNECTION_R
+psc-noagg exit=1 106s | control "noagg": other checks went red too, so the control is not isolated: 6. no console or page errors across the walk: Failed to load resource: net::ERR_CONNECTION_REF
+psc exit=1 107s |   - 6. no console or page errors across the walk: Failed to load resource: net::ERR_CONNECTION_REFUSED | Failed to load resource: net::ERR_CONNECTION_REFUSED | Failed to 
+psc-s2 exit=1 104s |   - 6. no console or page errors across the walk: Failed to load resource: net::ERR_CONNECTION_REFUSED | Failed to load resource: net::ERR_CONNECTION_REFUSED | Failed to 

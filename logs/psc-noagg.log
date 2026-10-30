@@ -1,0 +1,18 @@
+control "noagg": target chunk SoccerCareer-DUZOFxBi.js
+playSoccerCareer: base seed 20260914, era "Current era", up to 4 career(s) of 240 steps, CONTROL=noagg
+
+The walk
+  PASS  1. the walk reached a qualified Champions League campaign: seed 20260914 after 153 steps, 11 distinct phases driven (attempts: 20260914:reached in 153)
+
+The card a player actually saw
+      ⭐ CHAMPIONS LEAGUE Out in the knockout play-off LEAGUE PHASE 10TH OF 36 4-2-2, 14 pts · 8th had 15 pts, 24th had 10 All 8 games Level on points splits on goal difference, then goals scored. KNOCKOUTS Play-off L1 Sporting CP 2 - 4 Newcastle Play-off L2 Newcastl
+  FAIL  2. every two legged tie shows its aggregate on screen: 1 tie(s) print no aggregate: PO should read "2-9 on aggregate" (settled by aggregate)
+  PASS  3. both legs of a two legged tie are labelled: L1 and L2 present for all 1
+  PASS  4. no first leg claims a result: a first leg wins nothing, and none claims to
+
+The page survived
+  PASS  5. the error boundary never appeared and the root is not empty: root holds 20959 characters
+  FAIL  6. no console or page errors across the walk: Failed to load resource: net::ERR_CONNECTION_REFUSED | Failed to load resource: net::ERR_CONNECTION_REFUSED | Failed to load resource: net::ERR_CONNECTION_REFUSED
+
+control "noagg": 1 served response(s) rewritten
+control "noagg": other checks went red too, so the control is not isolated: 6. no console or page errors across the walk: Failed to load resource: net::ERR_CONNECTION_REFUSED | Failed to load resource: net::ERR_CONNECTION_REFUSED | Failed to load resource: net::ERR_CONNECTION_REFUSED
