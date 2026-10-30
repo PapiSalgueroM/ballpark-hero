@@ -189,11 +189,20 @@ What changed, and what did not:
 - Deadline Day's desk (read MINOR 2): What's New now says new days deal targets of 29 and under.
 - A man's level is his day one level (both reviews' minor): the comments now say so; the behaviour is not changed,
   because refreshing it as he ages moves every projected world and every recorded digest. The lead's to rule.
-- The drop out shift on the other files (read MINOR 4): not measured and not changed. projectClub hands every club of
-  today's world its age less one at the drop out table (dropShift), the A-League and Russia files, the real free
-  agents and the made up men included, though only the main squads file's ages moved to August. Measuring it needs
-  a fleet on the base, the head and a head that shifts the main file's clubs only; the lead's to rule.
-- Difficulty (read MINOR 3): the floors are green, but the move was let through on non significance (1.6 standard
-  errors at 20 seeds a club and one season, runner r1600-s12): the steady driver's points a game went 1.34 to 1.21
-  at mid clubs and 0.71 to 0.61 at small ones, and sacks 45 to 57 of 120. Both sizes moved the same way, about five
-  points a season harder for a mid club. Not re-measured here; the lead's to rule.
+- The drop out shift on the other files (read MINOR 4): not changed, because reading their generators says it fits
+  them. projectClub hands every club of today's world its age less one at the drop out table (dropShift). The
+  A-League file (Round 1035, scripts/genClubManagerALeague.mjs) and the Russia file (Round 1052,
+  scripts/genClubManagerGathered.mjs) carry each man's age as two hosts showed it when the squads were gathered in
+  autumn 2026, and the real free agents carry "Age in August 2026": all three stand on the August basis or a few weeks
+  after it, like the main file now, not on the 1 January age the table was fitted to. The one residual is the made up
+  men, whose entry ages (ENTRY_AGE_WEIGHTS) were read off the 1 January bake and who then get the shift too; not
+  measured, small (they enter at 17 to 26), the lead's to rule.
+- Difficulty (read MINOR 3): the builder's 20 seeds (runner r1600-s12, seeds 0 to 19, one season, steady driver)
+  read mid clubs 1.34 to 1.21 points a game, small 0.71 to 0.61, sacks 45 to 57 of 120, and the move was let through
+  on non significance. The fixer measured 60 more seeds (runner r1600-rr2, seeds 20 to 79, the same nine clubs, the
+  base 14a9af704 against the head 178a1fd8c, rows pooled and paired by club and seed): mid 1.263 to 1.200 (paired
+  0.063 down, 1.9 standard errors), small 0.594 to 0.581 (0.013 down, 0.5), big 1.940 to 1.987 (0.047 up), sacks at
+  mid and small clubs 154 to 158 of 360 and at big ones 22 to 10 of 180. Pooled over all 80 seeds: mid 1.28 to 1.20
+  (about three points a season harder for a mid club), small 0.62 to 0.59, sacks at mid and small clubs 199 to 215 of 480. So the mid
+  club drop is real and smaller than the first 20 seeds said, the small club drop mostly was not, and the sack jump
+  did not repeat. The floors are green; whether three points a season is acceptable is the lead's to rule.
