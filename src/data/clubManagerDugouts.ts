@@ -112,7 +112,7 @@ export const CM_DUGOUTS: RealDugoutTable = {
     "Le Mans": { name: "Patrick Videira" },
     "Lens": { name: "Dino Toppmöller" },
     "Lille": { name: "Davide Ancelotti" },
-    "Lorient": { name: "Alexandre Dujeux" },
+    "Lorient": { name: "Alexandre Dujeux", appointed: "2026-06" },
     "Lyon": { name: "Paulo Fonseca" },
     "Marseille": { name: "Bruno Genesio" },
     "Monaco": { name: "Filipe Luís" },
@@ -121,7 +121,7 @@ export const CM_DUGOUTS: RealDugoutTable = {
     "PSG": { name: "Luis Enrique" },
     "Rennes": { name: "Franck Haise" },
     "Strasbourg": { name: "Hugo Oliveira" },
-    "Toulouse": { name: "Jens Berthel Askou" },
+    "Toulouse": { name: "Jens Berthel Askou", appointed: "2026-05" },
     "Troyes": { name: "Stéphane Dumont" },
   },
 };

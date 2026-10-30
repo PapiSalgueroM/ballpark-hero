@@ -27,7 +27,7 @@
    DUGOUTS_CONTROL=monthclash one read of a dated chair prints another month (section 4)
    A control run prints "control <name> FIRED" and exits 1 when its section went red, and exits 3 if not.
 
-   Measured on the committed table (2026-10-30): 96 chairs, 0 partial, 4 stored months, 25 sources on 18
+   Measured on the committed table (2026-10-30): 96 chairs, 0 partial, 6 stored months, 27 sources on 19
    registrable domains. Nothing here is statistical, so there are no bands.
 
    Run: node scripts/simClubManagerDugouts.mjs
