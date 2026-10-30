@@ -43,7 +43,13 @@
      extradraw  initCareer draws once more when no name is
                 handed in, shifting every later draw        -> section 3
 
-   Measured (runner, Round 1604): see AGREE_CEILING below.
+   Measured on a GitHub runner at bdff8601a (rc r1604-s2): section 1 kept
+   16080 of 16080 (3 seeds) and 32160 of 32160 (6 seeds); the old path agreed
+   26.0% (3 seeds) and 25.9% (6 seeds), by band 35: 39.5, 45: 42.1, 60: 21.2,
+   70: 8.6, 80: 18.6 percent; the redraw control kept 4192 of 16080. The
+   sampling error on 16080 cases is about 0.35 points, so AGREE_CEILING sits
+   at 35 percent, some 25 errors above the measure and far below the 100 the
+   pickfirst control reaches. More clubs in the pool only push it lower.
    Run: node scripts/simSoccerAcademyPlacement.mjs   (SEEDS=n, default 3)
    No network and no database: everything is bundled from this tree. */
 import fs from 'node:fs';
@@ -58,7 +64,7 @@ const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const CONTROL = process.env.SC_ACADEMY_CONTROL || '';
 const SEEDS = Number(process.env.SEEDS || 3);
 const BANDS = [35, 45, 60, 70, 80];
-const AGREE_CEILING = 0.5;
+const AGREE_CEILING = 0.35;
 globalThis.localStorage = { getItem: () => null, setItem: () => {}, removeItem: () => {}, clear: () => {} };
 const tmpDir = fs.mkdtempSync(path.join(process.env.TEMP || process.env.TMP || os.tmpdir(), 'simacademy-'));
 process.on('exit', () => { try { fs.rmSync(tmpDir, { recursive: true, force: true }); } catch { /* best effort */ } });
