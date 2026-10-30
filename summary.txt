@@ -1,0 +1,6 @@
+ctl-leftunsaid exit=1 1s | Node.js v24.22.1
+ctl-dropreal exit=1 255s | simCmFreeAgencyFleet: CONTROL dropreal FIRED: section 8 red
+ctl-deletepool exit=1 260s | simCmFreeAgencyFleet: CONTROL deletepool FIRED: section 1 red (red: 1 (343), 4 (15), 8 (374))
+ctl-nodropout exit=1 275s | simCmFreeAgencyFleet: CONTROL nodropout FIRED: section 8 red
+simClubManagerSaveSize exit=0 76s | simClubManagerSaveSize: all sections green
+ctl-norecover exit=1 192s | simCmFreeAgencyFleet: CONTROL norecover FIRED: section 4 red (red: 4 (13), 6 (1))

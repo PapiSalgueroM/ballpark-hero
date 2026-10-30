@@ -1,0 +1,45 @@
+  FAIL section 8: Everton none, summer into season 3: Dele Alli left the list unsigned, not retired, and the first screen does not name him
+  FAIL section 8: Everton none, summer into season 3: Tiemoué Bakayoko left the list unsigned, not retired, and the first screen does not name him
+  FAIL section 8: Everton none, summer into season 4: Jordan Pickford left the list unsigned, not retired, and the first screen does not name him
+  FAIL section 8: Everton none, summer into season 4: Mark Travers left the list unsigned, not retired, and the first screen does not name him
+  FAIL section 1: Everton now none, summer into season 4: Jordan Pickford (left at a summer) is in no squad, not on the list and not retired
+  FAIL section 1: Everton now none, summer into season 4: Mark Travers (left at a summer) is in no squad, not on the list and not retired
+  FAIL section 8: Everton none, summer into season 5: Jarrad Branthwaite left the list unsigned, not retired, and the first screen does not name him
+  FAIL section 8: Everton none, summer into season 5: Brennan Johnson left the list unsigned, not retired, and the first screen does not name him
+  FAIL section 8: Everton none, summer into season 5: Thierno Barry left the list unsigned, not retired, and the first screen does not name him
+  FAIL section 8: Everton none, summer into season 5: Vitaliy Mykolenko left the list unsigned, not retired, and the first screen does not name him
+  FAIL section 1: Everton now none, summer into season 5: Jarrad Branthwaite (left at a summer) is in no squad, not on the list and not retired
+  FAIL section 1: Everton now none, summer into season 5: Brennan Johnson (left at a summer) is in no squad, not on the list and not retired
+  FAIL section 1: Everton now none, summer into season 5: Thierno Barry (left at a summer) is in no squad, not on the list and not retired
+  FAIL section 1: Everton now none, summer into season 5: Vitaliy Mykolenko (left at a summer) is in no squad, not on the list and not retired
+  FAIL section 1: Everton now none, summer into season 5: Merlin Röhl (left at a summer) is in no squad, not on the list and not retired
+  FAIL section 1: Everton now none, summer into season 5: Harrison Armstrong (left at a summer) is in no squad, not on the list and not retired
+  Everton now none: 69 men left, lost 29, twice 0, 6 retired off the list; at season 9 17 on the list besides the journeymen, median age 22
+  Everton now eleven: 31 men left, lost 16, twice 0, 7 retired off the list; at season 9 8 on the list besides the journeymen, median age 22
+  Villarreal now none: 72 men left, lost 32, twice 0, 7 retired off the list; at season 9 18 on the list besides the journeymen, median age 22
+  Villarreal now eleven: 39 men left, lost 19, twice 0, 8 retired off the list; at season 9 10 on the list besides the journeymen, median age 21
+  Freiburg now none: 67 men left, lost 33, twice 0, 7 retired off the list; at season 9 14 on the list besides the journeymen, median age 24
+  Freiburg now eleven: 36 men left, lost 17, twice 0, 9 retired off the list; at season 9 9 on the list besides the journeymen, median age 21
+  Ajax now none: 73 men left, lost 36, twice 0, 8 retired off the list; at season 9 15 on the list besides the journeymen, median age 23
+  Ajax now eleven: 39 men left, lost 17, twice 0, 9 retired off the list; at season 9 10 on the list besides the journeymen, median age 21
+  Braga now none: 69 men left, lost 42, twice 0, 5 retired off the list; at season 9 12 on the list besides the journeymen, median age 23
+  Braga now eleven: 37 men left, lost 25, twice 0, 4 retired off the list; at season 9 8 on the list besides the journeymen, median age 21
+  Southampton era2015 none: 67 men left, lost 30, twice 0, 2 retired off the list; at season 9 20 on the list besides the journeymen, median age 22
+  Southampton era2015 eleven: 37 men left, lost 18, twice 0, 3 retired off the list; at season 9 8 on the list besides the journeymen, median age 21
+  trim Everton now: squad 35 into the summer, 30 after; 3 trimmed, listed as {"released mine":3}; lent out Christian Nørgaard
+  trim Ajax now: squad 39 into the summer, 30 after; 5 trimmed, listed as {"released mine":5}; lent out Simon Adingra
+  trim Southampton era2015: squad 36 into the summer, 30 after; 0 trimmed, listed as {}; lent out Graziano Pellè
+  trim Freiburg now: squad 38 into the summer, 30 after; 4 trimmed, listed as {"released mine":4}; lent out Maximilian Eggestein
+  FAIL section 4: Everton: Hayden Hackney, on the old save's list, is gone after its next summer
+  FAIL section 4: Everton: Tyrique George, on the old save's list, is gone after its next summer
+  FAIL section 4: Everton: Carlos Alcaraz, on the old save's list, is gone after its next summer
+  old save Everton now (written on 14a9af704, end of season 5): main had lost 12 men, 4 of them recoverable; recoverable here 4, back after the summer 4
+  FAIL section 4: Ajax: Tolu Arokodare, on the old save's list, is gone after its next summer
+  FAIL section 4: Ajax: Yves Bissouma, on the old save's list, is gone after its next summer
+  FAIL section 4: Ajax: Sofyan Amrabat, on the old save's list, is gone after its next summer
+  FAIL section 4: Ajax: Rayane Bounida, on the old save's list, is gone after its next summer
+  FAIL section 4: Ajax: Owen Wijndal, on the old save's list, is gone after its next summer
+  old save Ajax now (written on 14a9af704, end of season 5): main had lost 15 men, 4 of them recoverable; recoverable here 4, back after the summer 4
+  old save Southampton era2015 (written on 14a9af704, end of season 5): main had lost 11 men, 5 of them recoverable; recoverable here 5, back after the summer 5
+simCmFreeAgencyFleet: 12 careers to season 9, 4 trim and loan careers to season 4; 769 men left a squad, 1794 summer checks; lost 343, twice 0; 94 retired off the list (0 summers unseen); list size at the end median 12, its median age median 22; left for a league the game does not follow 108 (expected 76.4, sd 7.2; real 0; tracked men among them 106); trimmed 12 (mine and never barred 12); ledger held list men 322, a summer on 522; out on loan in the last year 4 (left 4, renewed 4); old saves recoverable 13, recovered 13
+simCmFreeAgencyFleet: CONTROL deletepool FIRED: section 1 red (red: 1 (343), 4 (15), 8 (374))
