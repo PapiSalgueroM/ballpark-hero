@@ -1,0 +1,14 @@
+
+[1m[46m RUN [49m[22m [36mv3.2.7 [39m[90m/home/runner/work/ballpark-hero/ballpark-hero[39m
+
+ [32m✓[39m src/test/clubDetailOwnClub.test.tsx [2m([22m[2m3 tests[22m[2m)[22m[33m 397[2mms[22m[39m
+ [32m✓[39m src/test/clubDetailDugout.test.tsx [2m([22m[2m5 tests[22m[2m)[22m[33m 748[2mms[22m[39m
+   [33m[2m✓[22m[39m the club page shows who is in the other dugout[2m > [22ma club outside your league shows its opening day man in season one only [33m 312[2mms[22m[39m
+ [32m✓[39m src/test/clubDetailFixtures.test.tsx [2m([22m[2m10 tests[22m[2m)[22m[33m 1043[2mms[22m[39m
+   [33m[2m✓[22m[39m Club detail saved league fixtures[2m > [22mfixtures show the saved directed score and calendar-prefix progress [33m 406[2mms[22m[39m
+
+[2m Test Files [22m [1m[32m3 passed[39m[22m[90m (3)[39m
+[2m      Tests [22m [1m[32m18 passed[39m[22m[90m (18)[39m
+[2m   Start at [22m 10:36:49
+[2m   Duration [22m 4.63s[2m (transform 2.04s, setup 272ms, collect 7.67s, tests 2.19s, environment 1.39s, prepare 375ms)[22m
+

@@ -1,0 +1,23 @@
+fence exit=0 0s | simClubManagerDugouts: all green (96 chairs, 0 partial)
+ctl-twochairs exit=1 0s | control twochairs FIRED: section 0 red (2 failure(s) in all)
+ctl-samedomain exit=1 0s | control samedomain FIRED: section 1 red (1 failure(s) in all)
+ctl-onehost exit=1 1s | control onehost FIRED: section 1 red (1 failure(s) in all)
+ctl-wikimirror exit=1 1s | control wikimirror FIRED: section 1 red (1 failure(s) in all)
+ctl-orphan exit=1 1s | control orphan FIRED: section 2 red (3 failure(s) in all)
+ctl-gap exit=1 1s | control gap FIRED: section 3 red (2 failure(s) in all)
+ctl-monthclash exit=1 1s | control monthclash FIRED: section 4 red (2 failure(s) in all)
+ctl-monthsamedomain exit=1 1s | control monthsamedomain FIRED: section 4 red (1 failure(s) in all)
+ctl-latereads exit=1 1s | control latereads FIRED: section 6 red (96 failure(s) in all)
+ctl-bogus exit=2 0s | unknown DUGOUTS_CONTROL=bogus
+ctl-spelling exit=1 1s | control spelling FIRED: section 7 red (1 failure(s) in all)
+quotes-dugout exit=1 18s | control run: dugout FIRED, pass 1 caught 1 planted quote(s) from a real manager
+quotes exit=0 26s | simNoInventedQuotes: green. No real player is quoted or accused anywhere.
+inventednames exit=0 11s | simInventedNames: green. Every invented man on this site is invented all the way down.
+rivals exit=0 15s | No rival product names found. 0 findings.
+tsc exit=0 87s | 
+storage exit=0 3s | simStorageWrites: all green (owed: 12)
+trustcopy exit=0 1s | simTrustCopy: green. One disclaimer under every page and one count of the games, the registry's own.
+cmleaguefixtures exit=0 10s | simCmLeagueFixtures: OK, sections A to J green: 10 ledger(s), 10 frozen, 0 pending, 10 bound, 0 unbound, 3528 fixtures, 268 of 268 controls fired
+anchors exit=0 57s | simHarnessAnchors: green. Every harness parses and none carries an unmatchable anchor.
+vitest exit=0 5s |    Duration  4.63s (transform 2.04s, setup 272ms, collect 7.67s, tests 2.19s, environment 1.39s, prepare 375ms)
+fleet exit=0 80s | simManagers: all green
