@@ -515,40 +515,52 @@ function craftRun(M, s0, plan, upTo = 17) {
 const outAt = stage => night => (night.stage === stage ? LOSE : WIN);
 const poPlan = k => night => (night.stage === 'md' ? (night.md < k ? WIN : LOSE) : LOSE);
 
-/** Season two of the crafted Everton save on stream `base`, played to its end, or null when the club was sacked. */
-async function craftSeasonTwo(E, base) {
+/** Season two of a crafted save: `club`'s season one (on playCmEuroPlay's case (a) streams for Everton), its cup
+ *  final handed to it, the rollover, then season two on stream `base` to its end. `why` says what rules it out. */
+const CRAFT_CLUBS = [['Everton', 0x1509a], ['Millwall', 0x15a0a], ['Charlton Athletic', 0x15b0a], ['Bristol City', 0x15c0a]];
+async function craftSeasonTwo(E, club, one, base) {
   const M = await E.fresh();
   const opts = { skipHalftime: true, noCoach: true };
-  let s = tape(0x1509a, () => M.cm.startCareer('Everton')).value;
-  for (let i = 0; i < 400 && s.week < s.calendar.length; i += 1) s = tape(0x1509a + 1 + i, () => M.cm.playNextEntry(s, opts)).value.state;
-  const fin = tape(0x1509b, () => M.cm.finishSeason(s)).value.state;
+  let s = tape(one, () => M.cm.startCareer(club)).value;
+  for (let i = 0; i < 400 && s.week < s.calendar.length; i += 1) s = tape(one + 1 + i, () => M.cm.playNextEntry(s, opts)).value.state;
+  const fin = tape(one + 1, () => M.cm.finishSeason(s)).value.state;
   const final = (fin.cupBracket ?? []).find(t => t.round === 'F');
-  if (!final) cannot('section 7: the Everton season has no cup final to set');
-  final.winner = 'Everton';
-  let p = tape(0x1509c, () => M.cm.startNextSeason(fin)).value;
+  if (!final) return { why: 'season one has no cup final to set' };
+  final.winner = club;
+  let p = tape(one + 2, () => M.cm.startNextSeason(fin)).value;
   if (!M.cm.uelParticipant(p) || p.worldComps.uel.earned !== 'C' || M.cm.careerLeagueOf(p).euro) {
-    cannot(`section 7: the crafted Everton season two is not a Championship participant by its cup (me ${p.worldComps?.uel?.me ?? 'none'}, ${M.cm.careerLeagueOf(p).name})`);
+    return { why: `season two is not a participant by its cup outside the European leagues (me ${p.worldComps?.uel?.me ?? 'none'}, route ${p.worldComps?.uel?.earned ?? 'none'}, ${M.cm.careerLeagueOf(p).name})` };
   }
   for (let i = 0; i < 400 && p.week < p.calendar.length; i += 1) p = tape(base + i, () => M.cm.playNextEntry(p, opts)).value.state;
-  return p.sacked || p.week < p.calendar.length ? null : { M, end: p };
+  if (p.sacked) return { why: `sacked in season two (week ${p.week} of ${p.calendar.length})` };
+  if (p.week < p.calendar.length) return { why: `season two stopped at week ${p.week} of ${p.calendar.length}` };
+  return { M, end: p, why: null };
 }
 
 async function section7() {
   const E = await engine('craft', [...EXPORT_EDITS, ...(CONTROL_EDITS[CONTROL] ?? [])]);
-  /* The stream: a dry run to the rollover, which is where promotion shows. */
-  let base = null;
-  for (const b of CRAFT_STREAMS) {
-    const c = await craftSeasonTwo(E, b);
-    if (!c) continue;
-    const f0 = tape(0x7001, () => c.M.cm.finishSeason(craftRun(c.M, c.end, () => WIN))).value;
-    if (!c.M.cm.careerLeagueOf(tape(0x7002, () => c.M.cm.startNextSeason(f0.state)).value).euro) { base = b; break; }
+  /* The save: a dry run to the rollover, which is where promotion shows. */
+  let pick = null;
+  const tried = [];
+  for (const [club, one] of CRAFT_CLUBS) {
+    for (const b of CRAFT_STREAMS) {
+      const c = await craftSeasonTwo(E, club, one, b);
+      if (c.why) { tried.push(`${club} 0x${b.toString(16)}: ${c.why}`); if (/^season (one|two is not)/.test(c.why)) break; continue; }
+      const f0 = tape(0x7001, () => c.M.cm.finishSeason(craftRun(c.M, c.end, () => WIN))).value;
+      const lg = c.M.cm.careerLeagueOf(tape(0x7002, () => c.M.cm.startNextSeason(f0.state)).value);
+      if (!lg.euro) { pick = [club, one, b]; break; }
+      tried.push(`${club} 0x${b.toString(16)}: up into the ${lg.name}`);
+    }
+    if (pick) break;
   }
-  if (base === null) cannot('section 7: no stream of CRAFT_STREAMS keeps Everton in work and out of the European leagues');
+  for (const x of tried) console.log(`  7 passed over: ${x}`);
+  if (!pick) cannot('section 7: no crafted save stays in work and out of the European leagues');
   /* The same save again in a fresh context (the journeys replay byte for byte), graded before its rollover
      registers next season's leagues. */
-  const { M, end } = await craftSeasonTwo(E, base);
+  const [club, one, base] = pick;
+  const { M, end } = await craftSeasonTwo(E, club, one, base);
   const me = end.clubName;
-  const where = `Everton season ${end.season} (stream 0x${base.toString(16)}, ${M.cm.careerLeagueOf(end).name})`;
+  const where = `${club} season ${end.season} (stream 0x${base.toString(16)}, ${M.cm.careerLeagueOf(end).name})`;
   const won = craftRun(M, end, () => WIN);
   ok(end.boardObjectives?.some(o => o.id === 'uel'), `7 ${where}: the board set no Europa League target`);
 
