@@ -1,0 +1,36 @@
+# Release BT lane a: Round 1569's closing lines (the US My Career reports), from the request files of its third fix run on its pushed head 493926a4f (r1569/.tmp-fx/fix3-1793267433/rc-gates.txt and rc-gates2.txt; results-g/rc-1569.txt, R2 and R3), with simUsCareerReports and its nine controls (each must exit 1 on its own section, never abort) and seeds 1 to 3. parity and parity-label now replay the join's own re-record (scripts/data/usBoardFixture.json from 6d109b351, commit 379d3d81a).
+# Left out: tsc, simNoRivalNames, simHarnessAnchors, simStorageWrites, dash and dash-control (lane g carries the join's core and dash scan); ladder-base and ladder-head (a measure on 2ee79c595, not a gate), r2-base and r3-base (attributions that are red on 2ee79c595 by design, like BS's Block F).
+vnew: node_modules/.bin/vitest run src/test/usCareerReports1569.test.tsx --testTimeout=300000 --hookTimeout=120000
+vboard1: node_modules/.bin/vitest run src/test/careerDecisionOutcome.test.tsx src/test/careerHallV1Replay.test.ts src/test/careerSeasonReview.test.tsx src/test/extensionResponseMotion.test.tsx src/test/myCareerRestore.test.tsx src/test/noDoubleRecord.test.tsx src/test/rivalryChoiceBoard.test.tsx src/test/usCareerActionConfirm.test.tsx src/test/usCareerDirtyMoney.test.tsx src/test/usCareerDraftNightBoard.test.tsx src/test/usCareerHallBoard.test.tsx --testTimeout=300000 --hookTimeout=120000
+vboard2: node_modules/.bin/vitest run src/test/usCareerMarketBoard.test.tsx src/test/usCareerMarketSecondTab.test.tsx src/test/usCareerMarketUi.test.tsx src/test/usCareerPractice.test.tsx src/test/usCareerProspect.test.tsx src/test/usCareerReports1346.test.tsx src/test/usCareerReveals.test.tsx src/test/usCareerSaveRetry.test.tsx src/test/usCareerStatLines.test.tsx src/test/usCareerSummer.test.tsx src/test/usSeasonCentreEntry.test.tsx --testTimeout=300000 --hookTimeout=120000
+parity: node scripts/simUsBoardParity.mjs
+parity-label: US_BOARD_PARITY_CONTROL=label node scripts/simUsBoardParity.mjs
+sim: node scripts/simUsCareerReports.mjs
+ctl-blind: SIM_REPORTS_CONTROL=blind node scripts/simUsCareerReports.mjs
+ctl-nocredit: SIM_REPORTS_CONTROL=nocredit node scripts/simUsCareerReports.mjs
+ctl-alwayslast: SIM_REPORTS_CONTROL=alwayslast node scripts/simUsCareerReports.mjs
+ctl-noseason: SIM_REPORTS_CONTROL=noseason node scripts/simUsCareerReports.mjs
+ctl-titlecredit: SIM_REPORTS_CONTROL=titlecredit node scripts/simUsCareerReports.mjs
+ctl-creditlow: SIM_REPORTS_CONTROL=creditlow node scripts/simUsCareerReports.mjs
+ctl-fangate: SIM_REPORTS_CONTROL=fangate node scripts/simUsCareerReports.mjs
+ctl-fanforget: SIM_REPORTS_CONTROL=fanforget node scripts/simUsCareerReports.mjs
+ctl-fansoccer: SIM_REPORTS_CONTROL=fansoccer node scripts/simUsCareerReports.mjs
+sim-seed1: SIM_SEED=1 node scripts/simUsCareerReports.mjs
+sim-seed2: SIM_SEED=2 node scripts/simUsCareerReports.mjs
+sim-seed3: SIM_SEED=3 node scripts/simUsCareerReports.mjs
+simNflCareer: node scripts/simNflCareer.mjs
+simNbaCareer: node scripts/simNbaCareer.mjs
+simMlbCareer: node scripts/simMlbCareer.mjs
+simNhlCareer: node scripts/simNhlCareer.mjs
+simCareerPressMarket: node scripts/simCareerPressMarket.mjs
+simCareerParity: node scripts/simCareerParity.mjs
+simCareerDerbies: node scripts/simCareerDerbies.mjs
+simCareerSocialBrands: node scripts/simCareerSocialBrands.mjs
+simUsCareerActionConfirm: node scripts/simUsCareerActionConfirm.mjs
+simUsCareerProspect: node scripts/simUsCareerProspect.mjs
+vconfirm: node_modules/.bin/vitest run src/test/usCareerActionConfirm.test.tsx --testTimeout=300000 --hookTimeout=120000
+uca-restartWiring: US_CAREER_ACTION_CONTROL=restartWiring node scripts/simUsCareerActionConfirm.mjs
+uca-direct: US_CAREER_ACTION_CONTROL=direct node scripts/simUsCareerActionConfirm.mjs
+simUsCareerSaveRetry: node scripts/simUsCareerSaveRetry.mjs
+simUsCareerSkips: node scripts/simUsCareerSkips.mjs
+simUsSeasonCentre: node scripts/simUsSeasonCentre.mjs
