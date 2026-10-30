@@ -1,0 +1,5 @@
+#!serve
+#!playwright
+#!serial
+walk-head: node .rc/x/walk1583.mjs 2>&1 | grep -E "^PROBLEM|^walk1583|nbaconn-00[34]:" | cut -c1-220; exit ${PIPESTATUS[0]}
+walk-base: git worktree add -q /tmp/base b4a331a9cb1db7411b91538eaeaf29385d2ce3a9 && ln -s "$PWD/node_modules" /tmp/base/node_modules && (cd /tmp/base && node_modules/.bin/vite build > /tmp/vb.log 2>&1) && (nohup node scripts/lib/hostLikeServer.mjs /tmp/base/dist 4175 > /tmp/hs.log 2>&1 &) && sleep 4 && mkdir -p "$RC_OUT/base" && BASE=http://127.0.0.1:4175 RC_OUT="$RC_OUT/base" node .rc/x/walk1583.mjs 2>&1 | grep -E "^PROBLEM|^walk1583|nbaconn-00[34]:" | cut -c1-220; exit ${PIPESTATUS[0]}
