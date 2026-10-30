@@ -1,0 +1,5 @@
+#!serve
+#!playwright
+#!serial
+walk: node .rc/x/walkRev1604.mjs
+walk-main: git worktree add -f /tmp/base 4bd20c993 >/dev/null 2>&1 && ln -s "$PWD/node_modules" /tmp/base/node_modules && (cd /tmp/base && node_modules/.bin/vite build --outDir /tmp/base-dist --emptyOutDir > /tmp/base-build.log 2>&1 || (tail -20 /tmp/base-build.log; exit 9)) && (node scripts/lib/hostLikeServer.mjs /tmp/base-dist 4175 >/dev/null 2>&1 &) && sleep 3 && BASE=http://localhost:4175 RC_OUT="$RC_OUT/main" node .rc/x/walkRev1604.mjs
