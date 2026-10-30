@@ -431,9 +431,29 @@ async function realDugoutsSection() {
     if (JSON.stringify(later.managers ?? {}).includes(SENTINEL)) fail('7a: a fresh save for a job taken two years on seated the sentinel');
     const c = seeded(12, () => S.cm.startCareer(L.career, 'now')).value;
     const two = seeded(13, () => S.cm.startNextSeason(c)).value;
+    /* The partial mark blames a sourcing gap, so it belongs only to the made up man in the opening day chair the
+       table describes: he keeps it in season two, a man the summer appointed there never wears it, and neither does
+       anyone in a world started two years on or after a season two repair. */
+    let partialRead = 0;
+    const carried = two.managers?.[L.partial];
+    if (carried) {
+      partialRead += 1;
+      const pv2 = S.cm.dugoutOf(two, L.partial);
+      if (carried.since === 1 && pv2?.partial !== true) fail(`7a: the opening day's made up man at ${L.partial} lost the partial mark in season two (${JSON.stringify(pv2)})`);
+      if (carried.since !== 1 && pv2?.partial) fail(`7a: a man the summer appointed at ${L.partial} wears the partial mark (${JSON.stringify(pv2)})`);
+    }
+    if (later.leagueClubs.includes(L.partial)) {
+      partialRead += 1;
+      if (S.cm.dugoutOf(later, L.partial)?.partial) fail(`7a: in a world started two years on, ${L.partial}'s made up man wears the partial mark`);
+    }
     delete two.managers;
     S.cm.ensureManagers(two);
     if (JSON.stringify(two.managers ?? {}).includes(SENTINEL)) fail('7a: a season two load repair seated the sentinel');
+    if (two.managers?.[L.partial]) {
+      partialRead += 1;
+      if (S.cm.dugoutOf(two, L.partial)?.partial) fail(`7a: after a season two repair, ${L.partial}'s new made up man wears the partial mark`);
+    }
+    if (partialRead < 3) fail(`7a: only ${partialRead} of 3 partial mark reads ran, the check tests too little`);
     /* An outside club: another league's sentinel club that the summer did not bring into this league (a club
        promoted into it gets a made up name from season two, which is right and is not this check). */
     const outside = byEra('now').find(l => l.id !== L.id && !two.leagueClubs.includes(l.sentinel) && !c.leagueClubs.includes(l.sentinel))?.sentinel ?? '';

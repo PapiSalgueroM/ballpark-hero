@@ -9046,7 +9046,11 @@ export function dugoutOf(career: CareerState, club: string): DugoutView | null {
       if ((career.careerStats?.clubsManaged ?? []).includes(club)) return null;
       return { name: entry.name, since: entry.since, real: 1, ...(entry.appointed ? { appointed: entry.appointed } : {}) };
     }
-    return { name: entry.name, since: entry.since, ...(realDugoutPartial(CM_DUGOUTS_PARTIAL, era, club) ? { partial: true } : {}) };
+    /* Partial only for the made up man standing in the opening day chair the table describes (seated in season one
+       of a world at the table's own year, at a club this career never managed); a man the sim appointed later is
+       made up for that reason instead. */
+    const opening = entry.since === 1 && yearsOn(career) === Math.max(0, career.season - 1) && !(career.careerStats?.clubsManaged ?? []).includes(club);
+    return { name: entry.name, since: entry.since, ...(opening && realDugoutPartial(CM_DUGOUTS_PARTIAL, era, club) ? { partial: true } : {}) };
   }
   if ((career.leagueClubs ?? []).includes(club)) return null;
   const real = openingDayDugout(career, club, yearsOn(career));
