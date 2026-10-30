@@ -1,0 +1,13 @@
+simClubManagerDugouts exit=0 0s | simClubManagerDugouts: all green (96 chairs, 0 partial)
+simManagers exit=2 7s | control or setup cannot run: the sentinel surname is in 1 src file(s) (/home/runner/work/ballpark-hero/ballpark-hero/src/test/clubDetailDugout.test.tsx), it is not nobody
+simManagers-fleet exit=2 7s | control or setup cannot run: the sentinel surname is in 1 src file(s) (/home/runner/work/ballpark-hero/ballpark-hero/src/test/clubDetailDugout.test.tsx), it is not nobody
+ctl-twochairs exit=1 0s | control twochairs FIRED: section 0 red (1 failure(s) in all)
+ctl-onehost exit=1 1s | control onehost FIRED: section 1 red (1 failure(s) in all)
+ctl-gap exit=1 1s | control gap FIRED: section 3 red (2 failure(s) in all)
+ctl-orphan exit=1 1s | control orphan FIRED: section 2 red (2 failure(s) in all)
+ctl-monthclash exit=1 1s | control monthclash FIRED: section 4 red (2 failure(s) in all)
+simInventedNames exit=0 13s | simInventedNames: green. Every invented man on this site is invented all the way down.
+simNoInventedQuotes exit=0 30s | simNoInventedQuotes: green. No real player is quoted or accused anywhere.
+simNoRivalNames exit=0 21s | No rival product names found. 0 findings.
+vitest-dugout exit=0 7s |    Duration  5.73s (transform 2.19s, setup 327ms, collect 7.30s, tests 3.44s, environment 2.30s, prepare 557ms)
+tsc exit=0 74s | 
