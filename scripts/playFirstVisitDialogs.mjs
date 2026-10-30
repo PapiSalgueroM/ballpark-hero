@@ -77,6 +77,25 @@
  * mutation leg) the seeded lines go red at 320 (the button 407 to 451 under the banner, the box 141 px under it) and
  * 390 (18 of the button's 44 px and 43 px of the box under it), and stay green at 1280.
  *
+ * THE BOTTOM BAR NET (Round 1605): a fixed bar is not a dialog, so none of the above ever looked at one. Soccer
+ * Career's floating action bar sat under the unanswered banner on every first visit ("NO NEXT SEASON BUTTON", fixed by
+ * class in Release BS), and the same shape stayed live in its siblings: Club Manager's Take the job, the custom club
+ * bar, and Soccer Career's desktop Training and Phone. So this net is a SHAPE CHECK, not a list: on every line, with
+ * the banner up and unanswered (fixed, and body[data-consent-pending] set), it reads EVERY button or link that sits
+ * inside a position fixed element (or is one), clips its box to its scroll boxes and the screen, and fails the line
+ * when what is left meets the banner's box by more than 1 px either way, whether it is under the banner or drawn over
+ * it. It reads at load and again after the first visit dialog is tapped closed (a bar that a rules card hides at load
+ * still counts). A line where the banner was never pending measured nothing and is ABORTED, never green. Three
+ * scripted states reach the bars no load shows (the STATES table): Club Manager with a club picked (Take the job), the
+ * custom club form open (Found the club), and a Soccer Career hub from a planted career (Next Year, Training, Phone).
+ * Each FAILS when its script cannot reach the state or the controls it names are not on screen, so a renamed button
+ * turns it red rather than green. A control whose host is the site's own chrome (data-site-chrome) is marked SITE in
+ * its line: that cause belongs to the other lane and the lead hands it over.
+ * NEGATIVE CONTROL: CONSENT_BAR_CONTROL=nolift first asserts that src/pages/SoccerCareer.tsx still holds the action
+ * bar's lift class (refuses to run otherwise), then strips every [body[data-consent-pending]_&]: class from the page
+ * before the read. Every line it stripped something on must go red, and the Soccer Career hub must be one of them:
+ * FIRED (exit 1), did NOT fire (exit 3), or ABORTED when nothing was stripped or the hub is not in the run (exit 2).
+ *
  * Run: BASE=http://localhost:4173 node scripts/playFirstVisitDialogs.mjs   (a served build, see scripts/lib/hostLikeServer.mjs)
  *      ONLY=/stadium-tycoon,/idle-arena scopes it; PLAYFIRST_SHARD=1/3 runs a third of the routes;
  *      PLAYFIRST_JSON=<file> writes every measurement as JSON.
@@ -93,6 +112,16 @@ const BASE = process.env.BASE ?? process.env.SWEEP_BASE ?? 'http://localhost:417
 const CONTROL = process.env.PLAYFIRST_CONTROL || '';
 const CONTROLS = ['cover', 'ratchet', 'expected', 'edge', 'lift', 'nobanner', 'stale', 'jump'];
 if (CONTROL && !CONTROLS.includes(CONTROL)) { console.error(`PLAYFIRST_CONTROL=${CONTROL} is not a control this walk knows (${CONTROLS.join(', ')})`); process.exit(2); }
+/* Round 1605: the bottom bar net's own control (see the header). The needle is the class Release BS put on Soccer
+   Career's floating action bar; the control refuses to run when the source no longer holds it. */
+const BAR_CONTROL = process.env.CONSENT_BAR_CONTROL || '';
+if (BAR_CONTROL && BAR_CONTROL !== 'nolift') { console.error(`CONSENT_BAR_CONTROL=${BAR_CONTROL} is not a control this walk knows (nolift)`); process.exit(2); }
+if (BAR_CONTROL && CONTROL) { console.error('playFirstVisitDialogs: run CONSENT_BAR_CONTROL and PLAYFIRST_CONTROL one at a time'); process.exit(2); }
+const LIFT_NEEDLE = '[body[data-consent-pending]_&]:bottom-[var(--dukb-consent-height,230px)]';
+if (BAR_CONTROL === 'nolift' && !fs.readFileSync(path.join(ROOT, 'src/pages/SoccerCareer.tsx'), 'utf8').includes(LIFT_NEEDLE)) {
+  console.log(`playFirstVisitDialogs control ABORTED: CONSENT_BAR_CONTROL=nolift strips ${LIFT_NEEDLE}, and src/pages/SoccerCareer.tsx no longer holds it, so it would strip nothing. Refusing to run.`);
+  process.exit(2);
+}
 const WIDTHS = [[320, 640], [390, 844], [1280, 900]];
 const BANNER = '[role="region"][aria-label="Cookie choices"], [role="dialog"][aria-label="Cookie choices"]';
 
@@ -201,6 +230,147 @@ for (const sc of sceneRuns) {
 }
 if (['stale', 'jump'].includes(CONTROL) && !sceneRuns.length) { console.log(`playFirstVisitDialogs control ABORTED: PLAYFIRST_CONTROL=${CONTROL} acts on seeded scenes and none is in this run`); process.exit(2); }
 const SHOTS = process.env.RC_OUT || '';
+
+/* Round 1605: THE BOTTOM BAR NET's scripted states (see the header). Steps press buttons with a DOM click, never a
+   tap, so reaching a state never depends on the very thing the net measures. A step names a pattern its button's
+   text must match (the first visible, enabled one wins); `sibling` presses the first other button beside it instead
+   (the first club in the grid that also holds "Create your own club"). `want` is what must be on screen once the
+   state is reached. The Soccer Career hub is a career made in node by the engine's own initCareer and checked by the
+   game's own save reader before any page opens. The states do not run under PLAYFIRST_CONTROL (its controls judge
+   dialogs only). */
+const CM_TO_TEAMS = [{ text: 'Today\\.' }, { text: '^\\s*England' }, { text: 'Strongest sides' }];
+const STATES = [
+  { key: '/club-manager#club-picked', route: '/club-manager', steps: [...CM_TO_TEAMS, { text: 'Create your own club', sibling: true }], want: [{ sel: 'button', text: 'Take the job' }] },
+  { key: '/club-manager#custom-club', route: '/club-manager', steps: [...CM_TO_TEAMS, { text: 'Create your own club' }], want: [{ sel: 'button', text: 'Found the club' }] },
+  {
+    key: '/soccer-career#hub', route: '/soccer-career', plant: plantCareer, steps: [],
+    want: [{ sel: '[data-career-action-bar="floating"]' }, { sel: '[data-career-utility="training"]' }, { sel: '[data-career-utility="phone"]' }],
+  },
+];
+const stateRuns = CONTROL ? [] : STATES.filter(st => routes.includes(st.route));
+if (BAR_CONTROL === 'nolift' && !stateRuns.some(st => st.key === '/soccer-career#hub')) {
+  console.log('playFirstVisitDialogs control ABORTED: CONSENT_BAR_CONTROL=nolift acts on the Soccer Career hub, and /soccer-career is not in this run');
+  process.exit(2);
+}
+
+/* A youth career on day one, made by the engine and round tripped through the game's own save writer and reader. */
+async function plantCareer() {
+  const { build } = await import('esbuild');
+  const tmp = fs.mkdtempSync(path.join(os.tmpdir(), 'playfirst-career-'));
+  const out = path.join(tmp, 'career.mjs');
+  const lib = f => JSON.stringify(path.join(ROOT, 'src/lib', f).split(path.sep).join('/'));
+  await build({
+    stdin: { contents: `export * as E from ${lib('soccerCareerEngine.ts')}; export * as S from ${lib('soccerCareerSave.ts')};`, resolveDir: ROOT, loader: 'ts' },
+    bundle: true, format: 'esm', platform: 'node', outfile: out, logLevel: 'error', alias: { '@': path.join(ROOT, 'src') },
+  });
+  if (!globalThis.localStorage) globalThis.localStorage = { getItem: () => null, setItem: () => {}, removeItem: () => {} };
+  const { E, S } = await import(pathToFileURL(out).href);
+  fs.rmSync(tmp, { recursive: true, force: true });
+  const real = Math.random;
+  Math.random = mulberry(1605);
+  const stat = o => ({ pace: o, shooting: o, passing: o, dribbling: o, defending: o, physical: o, reflexes: o });
+  let s;
+  try { s = E.initCareer('Probe', 'England', 'ST', '2020s', stat(62), 62, 2020, E.FALLBACK_CLUBS, null); } finally { Math.random = real; }
+  if (!s || s.phase !== 'youth' || s.retired) throw new Error(`the Soccer Career plant: initCareer left the career in ${s?.phase}, not youth`);
+  const save = S.serializeSoccerCareerSave(s);
+  if (!S.isSoccerCareerSave(S.parseSoccerCareerSave(save))) throw new Error('the Soccer Career plant: the game\'s own reader refuses the save');
+  return { key: 'soccerCareerSave', save };
+}
+for (const st of stateRuns) {
+  if (!st.plant) continue;
+  try { st.seed = await st.plant(); } catch (e) { console.log(`playFirstVisitDialogs ABORTED: ${String(e.message || e)}`); process.exit(2); }
+}
+
+/* Runs in the page: every button or link inside a position fixed element (or one itself) whose box, clipped to its
+   scroll boxes and the screen, meets a pending banner's box. Under CONSENT_BAR_CONTROL=nolift it first strips every
+   [body[data-consent-pending]_&]: class in the page. */
+function barsInPage({ BANNER, strip }) {
+  const W = innerWidth, H = innerHeight;
+  const banner = [...document.querySelectorAll(BANNER)].find(b => {
+    const r = b.getBoundingClientRect(); const s = getComputedStyle(b);
+    return r.width >= 2 && r.height >= 2 && s.display !== 'none' && s.visibility !== 'hidden';
+  }) || null;
+  if (!banner || getComputedStyle(banner).position !== 'fixed' || document.body.dataset.consentPending == null) return { pending: false };
+  let stripped = 0;
+  if (strip) for (const el of document.querySelectorAll('[class*="data-consent-pending"]')) {
+    for (const c of [...el.classList]) if (c.includes('[body[data-consent-pending]_&]:')) { el.classList.remove(c); stripped += 1; }
+  }
+  const bb = banner.getBoundingClientRect();
+  const cut = (a, b) => ({ left: Math.max(a.left, b.left), top: Math.max(a.top, b.top), right: Math.min(a.right, b.right), bottom: Math.min(a.bottom, b.bottom) });
+  const label = el => ((el.textContent || '').trim() || el.getAttribute('aria-label') || el.getAttribute('title') || '').replace(/\s+/g, ' ').slice(0, 30);
+  const offenders = [];
+  let fixedControls = 0, closest = null;
+  for (const c of document.querySelectorAll('button, a[href], [role="button"], [role="link"]')) {
+    if (banner.contains(c)) continue;
+    const r = c.getBoundingClientRect();
+    if (r.width < 2 || r.height < 2) continue;
+    const cs = getComputedStyle(c);
+    if (cs.display === 'none' || cs.visibility === 'hidden') continue;
+    let host = null, opacity = 1, box = cut(r, { left: 0, top: 0, right: W, bottom: H });
+    for (let n = c; n && n !== document.documentElement; n = n.parentElement) {
+      const s = getComputedStyle(n);
+      opacity *= Number(s.opacity);
+      if (host) continue;
+      if (n !== c && (s.overflowX !== 'visible' || s.overflowY !== 'visible')) box = cut(box, n.getBoundingClientRect());
+      if (s.position === 'fixed') host = n;
+    }
+    if (!host || opacity < 0.05 || box.right - box.left < 1 || box.bottom - box.top < 1) continue;
+    fixedControls += 1;
+    const ox = Math.min(box.right, bb.right) - Math.max(box.left, bb.left);
+    const oy = Math.min(box.bottom, bb.bottom) - Math.max(box.top, bb.top);
+    if (ox > 1 && oy > 1) {
+      const x = Math.max(box.left, bb.left) + ox / 2, y = Math.max(box.top, bb.top) + oy / 2;
+      const atPoint = document.elementFromPoint(x, y);
+      offenders.push({
+        label: label(c), host: `${host.tagName.toLowerCase()}.${String(host.className).trim().split(/\s+/).slice(0, 8).join('.')}`.slice(0, 90),
+        z: getComputedStyle(host).zIndex, site: !!(host.closest('[data-site-chrome]') || c.closest('[data-site-chrome]')),
+        top: Math.round(box.top), bottom: Math.round(box.bottom), meets: Math.round(oy),
+        side: atPoint && banner.contains(atPoint) ? 'under the banner' : 'over the banner',
+      });
+    } else if (ox > 1 && box.bottom <= bb.top + 1) {
+      const gap = Math.round(bb.top - box.bottom);
+      if (closest === null || gap < closest.gap) closest = { gap, label: label(c) };
+    }
+  }
+  return { pending: true, banner: { top: Math.round(bb.top), bottom: Math.round(bb.bottom) }, fixedControls, offenders, closest, stripped };
+}
+
+/* Runs in the page (a scripted state): closes an open first visit dialog with a DOM click on its own go button. */
+function dismissInPage({ BANNER }) {
+  const banner = document.querySelector(BANNER);
+  const vis = el => { const r = el.getBoundingClientRect(); const s = getComputedStyle(el); return r.width >= 2 && r.height >= 2 && s.display !== 'none' && s.visibility !== 'hidden'; };
+  const d = [...document.querySelectorAll('[role="dialog"],[role="alertdialog"],[aria-modal="true"]')].filter(x => vis(x) && !(banner && banner.contains(x))).pop();
+  if (!d) return '';
+  const label = b => ((b.textContent || '').trim() || b.getAttribute('aria-label') || '').replace(/\s+/g, ' ').slice(0, 30);
+  const btns = [...d.querySelectorAll('button,[role="button"]')].filter(b => vis(b) && !b.disabled && !(banner && banner.contains(b)));
+  const GO = /^(let'?s (go|play|start|do (it|this))|play|start|got it|continue|begin|ok|okay|i'?m ready|ready|kick ?off|go|done|enter)\b/i;
+  const pick = btns.find(b => GO.test(label(b))) || btns.find(b => /\bbg-primary\b/.test(String(b.className))) || btns.find(b => /close|dismiss/i.test(label(b)));
+  if (!pick) return `a dialog with no go button (${btns.map(label).join(', ').slice(0, 60)})`;
+  pick.click();
+  return label(pick) || 'its button';
+}
+
+/* Runs in the page (a scripted state): presses one step's button, or says why it could not. */
+function stepInPage({ BANNER, text, sibling }) {
+  const banner = document.querySelector(BANNER);
+  const vis = el => { const r = el.getBoundingClientRect(); const s = getComputedStyle(el); return r.width >= 2 && r.height >= 2 && s.display !== 'none' && s.visibility !== 'hidden'; };
+  const norm = el => (el.textContent || '').replace(/\s+/g, ' ').trim();
+  const re = new RegExp(text);
+  const ok = b => vis(b) && !b.disabled && !(banner && banner.contains(b));
+  const btn = [...document.querySelectorAll('button')].find(b => ok(b) && re.test(norm(b)));
+  if (!btn) return `no button reads /${text}/`;
+  const target = sibling ? [...(btn.parentElement?.children ?? [])].find(b => b !== btn && b.matches('button') && ok(b)) : btn;
+  if (!target) return `no other button sits beside "${norm(btn).slice(0, 30)}"`;
+  target.click();
+  return '';
+}
+
+/* Runs in the page (a scripted state): which of the state's wanted controls are not on screen. */
+function wantInPage({ want }) {
+  const vis = el => { const r = el.getBoundingClientRect(); const s = getComputedStyle(el); return r.width >= 2 && r.height >= 2 && s.display !== 'none' && s.visibility !== 'hidden'; };
+  return want.filter(w => ![...document.querySelectorAll(w.sel)].some(el => vis(el) && (!w.text || (el.textContent || '').includes(w.text))))
+    .map(w => (w.text ? `"${w.text}"` : w.sel));
+}
 
 /* Runs in the page. Finds the open first visit dialog, picks its own primary button, scrolls that into the middle of
    its own scroll box and reports what sits at its centre. Marks both so the tap and the close check find them again. */
@@ -349,6 +519,8 @@ for (const { route, w, h, key, scene } of lines) {
     await page.waitForFunction(() => (document.body?.innerText ?? '').trim().length > 80, null, { timeout: 15000 }).catch(() => {});
     await page.waitForSelector(BANNER, { timeout: 5000 }).catch(() => {});
     await page.waitForTimeout(1500);
+    /* Round 1605: the bottom bar net reads at load, before the dialog checks touch anything */
+    res.barsLoad = await page.evaluate(barsInPage, { BANNER, strip: BAR_CONTROL === 'nolift' });
     if (scene) {
       res.card = await page.evaluate(cardFactsInPage, { label: scene.label, full: scene.full });
       if (res.card.open && (res.card.count !== scene.seed.count || res.card.missing.length)) {
@@ -381,12 +553,62 @@ for (const { route, w, h, key, scene } of lines) {
       }
       Object.assign(res, after);
       if (scene) res.after = await where();
+      /* Round 1605: and again once the first visit dialog is closed, for a bar the dialog hid at load */
+      res.barsAfter = await page.evaluate(barsInPage, { BANNER, strip: BAR_CONTROL === 'nolift' });
     }
   } catch (e) {
     res.error = String(e.message || e).split('\n')[0].slice(0, 120);
   }
   await ctx.close();
   results.push(res);
+}
+/* Round 1605: the scripted states, each in a fresh context with the banner left unanswered */
+const stateResults = [];
+for (const st of stateRuns) for (const [w, h] of WIDTHS) {
+  const res = { state: st.key, route: st.route, width: w, height: h, key: `${st.key}@${w}`, dismissed: [], missed: '', missing: [] };
+  const ctx = await browser.newContext({ viewport: { width: w, height: h } });
+  const page = await ctx.newPage();
+  await page.route(/supabase\.co/, r => r.abort());
+  const dismiss = async () => {
+    for (let i = 0; i < 4; i += 1) {
+      const d = await page.evaluate(dismissInPage, { BANNER });
+      if (!d) return;
+      res.dismissed.push(d);
+      await page.waitForTimeout(500);
+    }
+  };
+  try {
+    if (st.seed) await page.addInitScript(([k, v]) => { try { localStorage.setItem(k, v); } catch { /* the line then misses its state and fails */ } }, [st.seed.key, st.seed.save]);
+    await page.goto(`${BASE}${st.route}`, { waitUntil: 'domcontentloaded', timeout: 30000 });
+    await page.waitForFunction(() => (document.body?.innerText ?? '').trim().length > 80, null, { timeout: 15000 }).catch(() => {});
+    await page.waitForSelector(BANNER, { timeout: 5000 }).catch(() => {});
+    await page.waitForTimeout(1500);
+    await dismiss();
+    for (const step of st.steps) {
+      let why = '';
+      for (let t = 0; t < 10; t += 1) {
+        why = await page.evaluate(stepInPage, { BANNER, ...step });
+        if (!why) break;
+        await page.waitForTimeout(500);
+      }
+      if (why) { res.missed = why; break; }
+      await page.waitForTimeout(400);
+    }
+    if (!res.missed) {
+      for (let t = 0; t < 10; t += 1) {
+        await page.waitForTimeout(500);
+        await dismiss();
+        res.missing = await page.evaluate(wantInPage, { want: st.want });
+        if (!res.missing.length) break;
+      }
+    }
+    res.barsLoad = await page.evaluate(barsInPage, { BANNER, strip: BAR_CONTROL === 'nolift' });
+    if (SHOTS) await page.screenshot({ path: path.join(SHOTS, `bars-${st.key.replace(/[^a-z0-9]+/gi, '-').replace(/^-|-$/g, '')}-${w}${BAR_CONTROL ? `-${BAR_CONTROL}` : ''}.png`) });
+  } catch (e) {
+    res.error = String(e.message || e).split('\n')[0].slice(0, 120);
+  }
+  await ctx.close();
+  stateResults.push(res);
 }
 await browser.close();
 
@@ -459,6 +681,57 @@ if (process.env.PLAYFIRST_JSON) fs.writeFileSync(process.env.PLAYFIRST_JSON, JSO
 console.log('');
 const seeded = results.filter(r => r.scene);
 console.log(`${results.length} route widths walked over ${routes.length} routes${seeded.length ? ` and ${sceneRuns.length} seeded scene${sceneRuns.length === 1 ? '' : 's'} (${seeded.length} of the lines)` : ''}: ${passed} dialogs tapped and closed, ${expected} expected site reds, ${none} without a first visit dialog, ${failures.length} red`);
+/* Round 1605: THE BOTTOM BAR NET's verdicts. A route line that did not load already failed above; a state line that
+   did not load fails here. Green route lines are summed, every other line is printed. */
+console.log('');
+console.log('THE BOTTOM BAR NET (Round 1605): fixed buttons and links against the pending banner');
+const barFailures = [], barNoBanner = [], barLines = [];
+let barPassed = 0, barControls = 0, barClosest = null;
+for (const r of [...results, ...stateResults]) {
+  const where = `${r.state ?? r.scene ?? r.route} ${r.width}x${r.height}`;
+  const reads = [r.barsLoad, r.barsAfter].filter(Boolean);
+  const pending = reads.filter(b => b.pending);
+  const seen = new Set();
+  const offenders = pending.flatMap(b => b.offenders).filter(o => { const k = `${o.label}|${o.host}`; if (seen.has(k)) return false; seen.add(k); return true; });
+  const line = { r, where, offenders, stripped: reads.reduce((s, b) => s + (b.stripped || 0), 0) };
+  barLines.push(line);
+  const banner = pending[0]?.banner;
+  const closest = pending.map(b => b.closest).filter(Boolean).sort((a, b) => a.gap - b.gap)[0] ?? null;
+  let state, why;
+  if (r.error) { if (!r.state) continue; state = 'FAIL'; why = `the page did not load: ${r.error}`; }
+  else if (r.state && r.missed) { state = 'FAIL'; why = `the script did not reach its state: ${r.missed}`; }
+  else if (r.state && r.missing.length) { state = 'FAIL'; why = `the state is reached but ${r.missing.join(', ')} is not on screen`; }
+  else if (!pending.length) { state = 'NOBANNER'; why = 'the banner was never pending on this line, so it measured nothing'; barNoBanner.push(where); }
+  else if (offenders.length) {
+    state = 'FAIL';
+    why = `${offenders.length} fixed control${offenders.length === 1 ? '' : 's'} meet${offenders.length === 1 ? 's' : ''} the banner ${banner.top} to ${banner.bottom}: `
+      + offenders.map(o => `${o.site ? 'SITE ' : ''}"${o.label}" ${o.top} to ${o.bottom}, ${o.meets} px ${o.side}, in ${o.host} (z ${o.z})`).join('; ');
+  } else {
+    state = 'PASS';
+    const n = Math.max(...pending.map(b => b.fixedControls));
+    barControls += n;
+    if (closest && (barClosest === null || closest.gap < barClosest.gap)) barClosest = { ...closest, where };
+    why = `${n} fixed control${n === 1 ? '' : 's'}, none meets the banner ${banner.top} to ${banner.bottom}${closest ? `; the closest, "${closest.label}", ${closest.gap} px above it` : ''}`;
+  }
+  if (r.state && r.dismissed.length) why += ` (closed first: ${r.dismissed.join(', ')})`;
+  line.state = state;
+  if (state === 'FAIL') barFailures.push(`${where}: ${why}`);
+  if (state === 'PASS') barPassed += 1;
+  if (state !== 'PASS' || r.state) console.log(`  BARS ${state.padEnd(8)} ${where}: ${why}`);
+}
+console.log(`${barLines.length} bar lines (${stateResults.length} of them scripted states): ${barPassed} green over ${barControls} fixed controls, ${barFailures.length} red, ${barNoBanner.length} with no pending banner${barClosest ? `; the closest green control sat ${barClosest.gap} px above the banner ("${barClosest.label}", ${barClosest.where})` : ''}`);
+if (BAR_CONTROL === 'nolift') {
+  const acted = barLines.filter(l => l.stripped > 0);
+  const hub = acted.filter(l => l.r.state === '/soccer-career#hub');
+  if (!acted.length || !hub.length) {
+    console.log(`playFirstVisitDialogs control ABORTED: CONSENT_BAR_CONTROL=nolift stripped ${acted.length ? 'nothing on the Soccer Career hub' : 'nothing on any line'}, so the lift class was not in the page`);
+    process.exit(2);
+  }
+  const escaped = acted.filter(l => l.state !== 'FAIL' || !l.offenders.length);
+  if (!escaped.length) { console.log(`playFirstVisitDialogs: CONSENT_BAR_CONTROL=nolift FIRED. ${acted.length} of ${acted.length} lines with the lift stripped read red, the Soccer Career hub among them`); process.exit(1); }
+  console.log(`playFirstVisitDialogs: CONSENT_BAR_CONTROL=nolift did NOT fire on ${escaped.length} of ${acted.length} stripped lines: ${escaped.map(l => l.where).join(', ')}`);
+  process.exit(3);
+}
 /* Exit 2 as the brief's design asked (a smaller card is never measured), but this abort is NOT the environment: the
    plant already drew the full card in node on 200 of 200 seeded streams, so a short count or a missing line is the
    page's until shown otherwise (a mutation that drops the "final matchday" line lands here). The line says so. */
@@ -518,12 +791,16 @@ if (CONTROL === 'nobanner') {
   console.log(`playFirstVisitDialogs: PLAYFIRST_CONTROL=nobanner did NOT fire: ${judged - noBanner.length} of ${judged} route widths still saw the banner on screen`);
   process.exit(3);
 }
-if (failures.length) {
-  console.log(`playFirstVisitDialogs: RED. ${failures.length} route widths: ${failures.map(f => f.split(':')[0]).join(', ')}`);
+if (failures.length || barFailures.length) {
+  const red = [];
+  if (failures.length) red.push(`${failures.length} route widths: ${failures.map(f => f.split(':')[0]).join(', ')}`);
+  if (barFailures.length) red.push(`${barFailures.length} bar lines: ${barFailures.map(f => f.split(':')[0]).join(', ')}`);
+  console.log(`playFirstVisitDialogs: RED. ${red.join('. ')}`);
   process.exit(1);
 }
-if (noBanner.length) {
-  console.log(`playFirstVisitDialogs ABORTED: the cookie banner never came on screen on ${noBanner.length} route widths, so they measured nothing: ${noBanner.join(', ')}`);
+if (noBanner.length || barNoBanner.length) {
+  const none = [...new Set([...noBanner, ...barNoBanner])];
+  console.log(`playFirstVisitDialogs ABORTED: the cookie banner never came on screen (or was never pending) on ${none.length} lines, so they measured nothing: ${none.join(', ')}`);
   process.exit(2);
 }
-console.log('playFirstVisitDialogs: green. Every first visit dialog can be started with the cookie banner unanswered.');
+console.log('playFirstVisitDialogs: green. Every first visit dialog can be started, and no fixed button or link meets the banner, with the cookie banner unanswered.');
