@@ -13,6 +13,8 @@ import { MadeUpTag } from '@/components/club-manager/SquadScreen';
 const btn = 'inline-flex items-center justify-center min-h-[44px] min-w-[44px] rounded-lg text-xs text-muted-foreground hover:text-foreground';
 const tile = 'rounded-xl border border-border bg-card p-3 space-y-1';
 const avg = (v: number | null): string => (v === null ? 'no rating' : v.toFixed(1));
+/** "1 goal", "2 goals". */
+const count = (v: number, one: string, many: string): string => `${v} ${v === 1 ? one : many}`;
 
 /** The plain line for each note, written once. */
 function noteText(n: CardNote, card: PlayerCard, state: CareerState): string {
@@ -32,10 +34,10 @@ function noteText(n: CardNote, card: PlayerCard, state: CareerState): string {
 
 function Line({ label, line, back, cards }: { label: string; line: SeasonLine; back: boolean; cards: boolean }) {
   const bits = [
-    line.apps === null ? null : `${line.apps} apps`,
-    `${line.goals} goals`,
-    `${line.assists} assists`,
-    back && line.cleanSheets !== null ? `${line.cleanSheets} clean sheets` : null,
+    line.apps === null ? null : count(line.apps, 'app', 'apps'),
+    count(line.goals, 'goal', 'goals'),
+    count(line.assists, 'assist', 'assists'),
+    back && line.cleanSheets !== null ? count(line.cleanSheets, 'clean sheet', 'clean sheets') : null,
   ].filter(Boolean);
   const sub = [
     line.apps === null ? null : line.average === null ? 'No rating yet' : `Averaging ${avg(line.average)}`,

@@ -71,13 +71,21 @@ describe('the card screen', () => {
     fireEvent.click(screen.getByRole('button', { name: /Back/ }));
     expect(onBack).toHaveBeenCalledTimes(1);
   });
+  it('says "1 goal" and "1 assist", never "1 goals"', () => {
+    const p = s2.squad.find(x => x.seasonGoals === 1 || x.seasonAssists === 1);
+    if (!p) throw new Error('no man of mine on one goal or one assist');
+    const { container } = render(<PlayerCardScreen card={{ k: 'mine', id: p.id }} career={s2} onBack={() => {}} />);
+    const line = container.querySelector('[data-cm-card-line="This season"]')?.textContent ?? '';
+    expect(line).toContain(p.seasonGoals === 1 ? '1 goal,' : '1 assist');
+    expect(line).not.toMatch(/\b1 (apps|goals|assists|clean sheets)\b/);
+  });
   it('draws a rival of my league with the book\'s count and no apps', () => {
     const boards = leagueBoardsOf(s2);
     const top = boards ? leaders(boards.input, 'goals', Number.MAX_SAFE_INTEGER).find(m => !m.mine) : undefined;
     if (!top) throw new Error('no rival on the goals board');
     const { container } = render(<PlayerCardScreen card={{ k: 'man', name: top.name, pos: top.pos, club: top.club }} career={s2} onBack={() => {}} />);
     const line = container.querySelector('[data-cm-card-line="League, this season"]')?.textContent ?? '';
-    expect(line).toContain(`${top.n} goals`);
+    expect(line).toContain(`${top.n} ${top.n === 1 ? 'goal' : 'goals'}`);
     expect(line).not.toContain('apps');
     expect(container.querySelector('[data-cm-card-past]')).toBeNull();
   });

@@ -151,7 +151,9 @@ console.log(`playCmPlayerCard: saves built: S1 season ${S.S1.season} week ${S.S1
 function expected(save, ref) {
   const c = cards.playerCardOf(wake(save), ref);
   if (!c) return null;
-  const line = l => [l.apps === null ? null : `${l.apps} apps`, `${l.goals} goals`, `${l.assists} assists`, c.back && l.cleanSheets !== null ? `${l.cleanSheets} clean sheets` : null].filter(Boolean).join(', ');
+  /* The card's own rule: "1 goal", "2 goals". */
+  const n = (v, one, many) => `${v} ${v === 1 ? one : many}`;
+  const line = l => [l.apps === null ? null : n(l.apps, 'app', 'apps'), n(l.goals, 'goal', 'goals'), n(l.assists, 'assist', 'assists'), c.back && l.cleanSheets !== null ? n(l.cleanSheets, 'clean sheet', 'clean sheets') : null].filter(Boolean).join(', ');
   const avg = v => (v === null ? 'no rating' : v.toFixed(1));
   return {
     kind: c.mine ? 'mine' : 'man', name: c.name,
