@@ -1,0 +1,6 @@
+tsc: node_modules/.bin/tsc --noEmit -p tsconfig.app.json
+migcheck1567: node scripts/qa/usConnections1567Migration.mjs check
+facts: node scripts/simUsConnectionsFacts.mjs
+vitest-us: node_modules/.bin/vitest run src/test/usCareerHallWall.test.tsx src/test/usCareerSaveRetry.test.tsx src/lib/usCareerHallWall.test.ts src/test/usCareerReports1569.test.tsx src/test/careerSeasonReview.test.tsx src/hooks/useConnectionsRelabel.test.ts --testTimeout=300000 --hookTimeout=120000
+simUsCareerHallWall: node scripts/simUsCareerHallWall.mjs
+copyfence: node scripts/simConnectionsDatedCopy.mjs
