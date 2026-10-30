@@ -25,6 +25,10 @@ import NhlMyCareer from '@/pages/NhlMyCareer';
 import { loadGameContent } from '@/data/gameContent/loader';
 import { recordActivity, recordCompletion } from '@/lib/completions';
 import { decisionSave, decisionSports, makeDecisionCareer } from '@/test/fixtures/careerDecisionOutcome1009';
+import { noteIntlCalls } from '@/test/helpers/intlCallNote';
+
+/* Round 1557 (critic-1541 correction 9): the file prints whether its NBA saves meet the national team's call. */
+noteIntlCalls('careerEntryGuide');
 
 const { loadGameContent: realLoad } = await vi.importActual<typeof import('@/data/gameContent/loader')>('@/data/gameContent/loader');
 const pages: Record<string, ComponentType> = { nba: NbaMyCareer, nfl: NflMyCareer, mlb: MlbMyCareer, nhl: NhlMyCareer };

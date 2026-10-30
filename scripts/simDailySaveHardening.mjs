@@ -114,6 +114,27 @@
  *           none of the others. Until this the part's rule "a guide word
  *           other than ready or none fails" had no control of its own.
  *
+ * Round 1565 (closing check), the heading race. The guide was not the only
+ * late piece: the guide block's heading is the search title from one of the
+ * 32 seo meta parts (src/data/seoMetaParts), and nothing fetched the part
+ * before the baseline. On GitHub runners dailySaveShapes went red 1 run in 13
+ * alone and 6 in 10 beside the other daily save files, on origin/main
+ * 1229c0190 as on the round's head (r1565-vf-a, r1565-vf-c, r1565-vf-e), each
+ * red the heading of /baseball-connections, /nba-career, /afl-higher-lower or
+ * /college-grid. Each row of a game page now fetches its part too and its
+ * line carries meta: "ready" or "none", which the shapes part holds it to.
+ * Three controls run the test with that race switched on (R848_META):
+ *   metaslow  every part load 300 ms late and the row does its fetch: all
+ *           green, every line ready or none.
+ *   metalate  the loads wait behind a gate and the row skips its fetch:
+ *           exactly the first row of each part red, on the page difference
+ *           and nothing else. Which part holds a route is read from the part
+ *           files, never typed, and the set must hold the four recorded reds
+ *           or the diagnosis is wrong. The shapes part's own judgement must
+ *           also name exactly the game rows on the word "skipped".
+ *   metaheld  the gate never opens: every game row red on the named
+ *           assertion, none on a diff; a route that is not a game green.
+ *
  * All outcomes are deterministic (fixed clock, Math.random pinned, no network),
  * so there are no bands: the counts below are exact and were the same on every
  * run. Measured 2026-10-01: against the hook before this round 35 of the 36
@@ -133,7 +154,7 @@ const VITEST = path.join(path.dirname(createRequire(path.join(ROOT, 'package.jso
 const PRE = '617b8354';
 const PART = process.env.R848_PART || 'all';
 const CONTROL = process.env.R848_CONTROL || '';
-const CONTROLS = ['stale', 'guard', 'turn', 'verdict', 'event', 'mark', 'finished', 'decided', 'strict', 'single', 'empty', 'shape', 'skip', 'skipdiv', 'guideslow', 'guidelate', 'guideheld', 'guidepart'];
+const CONTROLS = ['stale', 'guard', 'turn', 'verdict', 'event', 'mark', 'finished', 'decided', 'strict', 'single', 'empty', 'shape', 'skip', 'skipdiv', 'guideslow', 'guidelate', 'guideheld', 'guidepart', 'metaslow', 'metalate', 'metaheld'];
 assert.ok(['all', 'saves', 'shapes', 'skip', 'parity'].includes(PART), `unknown R848_PART ${PART}`);
 assert.ok(!CONTROL || CONTROLS.includes(CONTROL), `unknown R848_CONTROL ${CONTROL}`);
 
@@ -192,6 +213,8 @@ const shapesLineProblems = (l) => {
   const out = [];
   if (l.failures.length) out.push(`${l.route}: ${l.failures.join('; ').slice(0, 300)}`);
   if (l.guide !== 'ready' && l.guide !== 'none') out.push(`${l.route}: its line says guide ${JSON.stringify(l.guide ?? null)}, so its baseline was not taken with the guide landed`);
+  /* Round 1565: the same for the seo meta part that holds the heading. */
+  if (l.meta !== 'ready' && l.meta !== 'none') out.push(`${l.route}: its line says meta ${JSON.stringify(l.meta ?? null)}, so its baseline was not taken with the seo meta part landed`);
   return out;
 };
 
@@ -422,6 +445,70 @@ try {
       assert.notEqual(run.status, 0, 'the run is red');
       console.log(`R848 guideheld control: ${red.length} rows red, exactly the ${guided.length} rows whose route has a guide, each on the named assertion; ${result.length - guided.length} rows with no guide green`);
     }
+  } else if (['metaslow', 'metalate', 'metaheld'].includes(CONTROL)) {
+    /* Round 1565: the heading race, switched on in the test (R848_META).
+       Which part holds a route is read from the part files themselves; the
+       exposed rows are the first row, in the test's own order, of each part. */
+    const mode = CONTROL.slice('meta'.length);
+    const partDir = 'src/data/seoMetaParts';
+    const partOf = new Map();
+    for (const f of fs.readdirSync(path.join(ROOT, partDir))) {
+      const m = /^seoMetaPart(\d+)\.ts$/.exec(f);
+      if (m) for (const k of code(read(`${partDir}/${f}`)).matchAll(/^\s*['"](\/[^'"]+)['"]\s*:/gm)) partOf.set(k[1], Number(m[1]));
+    }
+    assert.ok(partOf.size >= 100, `the seo meta parts were read (${partOf.size} routes)`);
+    const titled = [...shapesRoutes].filter((r) => partOf.has(r));
+    const firstRows = [];
+    const parts = new Set();
+    for (const r of titled) if (!parts.has(partOf.get(r))) { parts.add(partOf.get(r)); firstRows.push(r); }
+    assert.ok(firstRows.length >= 2, 'at least two seo meta parts are in play');
+    const run = vitest(SHAPES, { env: { R848_META: mode } });
+    const result = lines(run.text, 'R848_SHAPES');
+    assert.equal(result.length, shapesRoutes.size, 'one R848_SHAPES line a route');
+    const switched = lines(run.text, 'R848_META')[0];
+    assert.ok(switched && switched.mode === mode, `the test ran with R848_META=${mode} (it printed ${JSON.stringify(switched ?? null)})`);
+    const statusOf = new Map(run.rows.map((r) => [r.title.split(' > ').pop(), r.status]));
+    const DIFF = /: drew a different page from a fresh daily, first at /;
+    const MOVED = /^the fresh page moved while the row ran, first at /;
+    const NAMED = /^the seo meta part for this route had not landed when the baseline was taken/;
+    const red = result.filter((l) => l.failures.length).map((l) => l.route);
+    for (const l of result) if ((statusOf.get(l.route) === 'passed') !== (l.failures.length === 0)) fail(`${l.route}: the row is ${statusOf.get(l.route)} with ${l.failures.length} failure(s) on its line`);
+    /* The test decides "a game" from the registry, this harness from the part
+       files: two readings that must name the same rows. */
+    const gameRows = result.filter((l) => l.meta !== 'none').map((l) => l.route);
+    if (gameRows.slice().sort().join() !== titled.slice().sort().join()) fail(`STOP: the test treats ${gameRows.length} rows as game pages and the part files hold ${titled.length} of the routes, so the exposed set below is not the right one`);
+    if (mode === 'slow') {
+      if (switched.waited < firstRows.length) fail(`only ${switched.waited} part loads were made to wait, fewer than the ${firstRows.length} parts in play, so the delay never happened`);
+      for (const l of result) {
+        if (l.failures.length) fail(`${l.route} went red under slow seo meta parts: ${l.failures.join('; ').slice(0, 300)}`);
+        if (l.meta !== 'ready' && l.meta !== 'none') fail(`${l.route}: its line says meta ${JSON.stringify(l.meta)}, not ready or none`);
+      }
+      if (run.status !== 0) fail('the run is not green under slow seo meta parts');
+      console.log(`R848 metaslow control: ${result.filter((l) => !l.failures.length).length} of ${result.length} rows green with every part load 300 ms late (${switched.waited} loads waited), ${result.filter((l) => l.meta === 'ready').length} ready, ${result.filter((l) => l.meta === 'none').length} none`);
+    } else if (mode === 'late') {
+      for (const need of ['/baseball-connections', '/nba-career', '/afl-higher-lower', '/college-grid']) {
+        if (!firstRows.includes(need)) fail(`STOP: ${need} is not the first row of a seo meta part (first rows: ${firstRows.join(', ')}), so the diagnosis of the recorded red is wrong`);
+      }
+      if (red.slice().sort().join() !== firstRows.slice().sort().join()) fail(`expected exactly the first row of each seo meta part red (${firstRows.join(', ')}), got ${red.join(', ') || 'none'}`);
+      for (const l of result.filter((x) => firstRows.includes(x.route))) {
+        const other = l.failures.filter((f) => !DIFF.test(f) && !MOVED.test(f));
+        if (other.length) fail(`${l.route} failed on something other than the page difference: ${other[0].slice(0, 200)}`);
+        if (!l.failures.some((f) => DIFF.test(f))) fail(`${l.route}: no damaged form drew a different page, so the recorded red was not reproduced`);
+        if (!l.failures.some((f) => MOVED.test(f))) fail(`${l.route}: the last fresh mount did not report that the fresh page moved`);
+      }
+      const WORD = /: its line says meta "skipped", so its baseline was not taken with the seo meta part landed$/;
+      const namedRows = result.filter((l) => shapesLineProblems(l).some((p) => WORD.test(p))).map((l) => l.route);
+      if (namedRows.slice().sort().join() !== titled.slice().sort().join()) fail(`expected the shapes part's judgement to name exactly the ${titled.length} game rows on the meta word, got ${namedRows.length} (${namedRows.slice(0, 6).join(', ') || 'none'})`);
+      assert.notEqual(run.status, 0, 'the run is red');
+      console.log(`R848 metalate control: ${red.length} rows red, exactly the first row of each of the ${firstRows.length} seo meta parts in play (the four recorded reds among them), ${result.length - red.length} green, every failure a page difference; the shapes part named all ${namedRows.length} game rows on "skipped"`);
+    } else {
+      for (const l of result) {
+        if (!titled.includes(l.route)) { if (l.failures.length) fail(`${l.route} is not a game page and went red with the parts held back`); continue; }
+        if (l.failures.length !== 1 || !NAMED.test(l.failures[0])) fail(`${l.route}: expected the one named failure, got ${l.failures.length ? l.failures.join('; ').slice(0, 200) : 'none'}`);
+      }
+      assert.notEqual(run.status, 0, 'the run is red');
+      console.log(`R848 metaheld control: ${red.length} rows red, exactly the ${titled.length} game rows, each on the named assertion; ${result.length - titled.length} row(s) that are not a game page green`);
+    }
   } else {
     /* ------------------------------------------------------- the parts */
     if (PART === 'all' || PART === 'saves') {
@@ -464,7 +551,7 @@ try {
       if (result.length !== shapesRoutes.size) fail(`expected ${shapesRoutes.size} route results, got ${result.length}`);
       for (const l of result) for (const p of shapesLineProblems(l)) fail(p);
       for (const r of run.rows.filter((x) => x.status !== 'passed')) fail(`${r.title} ${r.status}`);
-      console.log(`   ${result.filter((l) => !l.failures.length).length} of ${shapesRoutes.size} routes: nothing thrown on any damaged form, and the audit's and the brief's forms draw exactly a fresh daily (guide ready on ${result.filter((l) => l.guide === 'ready').length}, none on ${result.filter((l) => l.guide === 'none').length})`);
+      console.log(`   ${result.filter((l) => !l.failures.length).length} of ${shapesRoutes.size} routes: nothing thrown on any damaged form, and the audit's and the brief's forms draw exactly a fresh daily (guide ready on ${result.filter((l) => l.guide === 'ready').length}, none on ${result.filter((l) => l.guide === 'none').length}; seo meta part ready on ${result.filter((l) => l.meta === 'ready').length}, none on ${result.filter((l) => l.meta === 'none').length})`);
     }
     if (PART === 'all' || PART === 'parity') {
       console.log('parity) every consumer plays and restores through the new hook exactly as through the hook at ' + PRE);

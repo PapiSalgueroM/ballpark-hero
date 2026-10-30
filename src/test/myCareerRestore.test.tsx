@@ -34,6 +34,10 @@ import { ARCHETYPES, startCareer } from '@/lib/nflMyCareer';
 import { NBA_ARCHETYPES, startNbaCareer } from '@/lib/nbaMyCareer';
 import { MLB_ARCHETYPES, startMlbCareer } from '@/lib/mlbMyCareer';
 import { NHL_ARCHETYPES, startNhlCareer } from '@/lib/nhlMyCareer';
+import { noteIntlCalls } from '@/test/helpers/intlCallNote';
+
+/* Round 1557 (critic-1541 correction 9): the file prints whether its NBA saves meet the national team's call. */
+noteIntlCalls('myCareerRestore');
 
 type SavedCareer = { retired: boolean; name: string };
 

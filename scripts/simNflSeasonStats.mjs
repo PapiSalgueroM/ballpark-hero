@@ -28,11 +28,17 @@
  *    by the harness's own copy of the rule; every credited man is a healthy starter of his club (the engine's own
  *    starterIds, never a lineman). Per club and season: thrown equals caught; run and caught plus unclaimed equal the
  *    club line's touchdowns; the told points sit between 6 and 8 a touchdown plus the kicks. Unclaimed is zero.
+ *    Round 1566's fix pass: the card's kicks reader (nflClubKicks, the sentence "<club> kicked N field goals and scored
+ *    M safeties") gives each club's touchdowns, field goals and safeties as the harness summed them from the games.
  *  3 DETERMINISM: each season played twice in the seeded Math.random, recording and not: the generator's state and
  *    draw count after Week 17 and after the postseason and close, the winners, injuries, computer moves, records,
  *    bracket and champion are the same, and the league is the same once the new keys are taken out (ids named by
  *    first appearance: the engine's minter counts on across two runs of one process). Weeks 1 and 9 recorded again
- *    on a copy through JSON give the board's block.
+ *    on a copy through JSON give the board's block. Round 1566's closing check: all of that is one process, so it
+ *    cannot see a value drawn once a page load; a deep season of every set is played the board's way in two fresh
+ *    loads of the engine too (each its own module instance, its own id epoch and counters), and the two leagues are
+ *    the same characters once each load's epoch is swapped for one token. The epoch is what is left between page
+ *    loads, and its cost is printed (fixing its length changes every id minted on the site, the lead's call).
  *  4 THE RATING EFFECT, the strongest signal: for each club game the WR1 (the first healthy receiver on the chart)
  *    and his LIFT, his touchdown catches over what a credit blind to rating and slot gives him in the same games
  *    (one in k of the pool's receivers; 1 is no effect), in two bands of his rating. Asserted: the lift of the band
@@ -68,8 +74,10 @@
  *   nocatch      a pass credits the thrower only                                 -> section 2, red on every set
  *   injured      the pool keeps injured skill men                                -> section 2, red on every set
  *   swapsides    the press splits the final with the away score first           -> section 2, red on every set
+ *   kickswap     nflClubKicks reads the safeties as the field goals and back     -> section 2, red on every set
  *   extradraw    a Math.random() in nflCreditGame                                -> section 3, red on every set
  *   unkeyed      the credit stream keyed to a counter at module scope            -> section 3, red on every set
+ *   perload      a value drawn once a page load kept in the block                -> section 3, red on every set
  *   randomcredit every credit uniform over the eligible men, ratings ignored     -> section 4, red on every set
  *   passflip     a touchdown is a pass when the draw is ABOVE the QB1's chance   -> section 4, red on every set
  *   sackswap     nflSackChance called with the block first and the rush second  -> section 4, red on every set
@@ -101,6 +109,7 @@ const STATS = 'src/lib/nflSeasonStats.ts';
 const FO_STATS = 'src/lib/foSeasonStats.ts';
 const AWARDS = 'src/lib/nflSeasonAwards.ts';
 const CLOSE = 'src/lib/foSeasonClose.ts';
+const VIEW = 'src/lib/nflSeasonView.ts';
 
 /* `labels`: pieces of check labels that must ALL be among the reds of the control's section. `everySet`: the
    control must turn the section's check red on every seed set run. `needs`: the sections it cannot fire without. */
@@ -111,13 +120,20 @@ const CONTROLS = {
   nocatch: { section: 2, labels: ['thrown equals caught'], everySet: true, needs: [2], patches: [{ file: STATS, from: "        if (cr.passer) { bump(men[cr.passer.id], 'ptd'); bump(men[cr.scorer.id], 'ctd'); }", to: "        if (cr.passer) { bump(men[cr.passer.id], 'ptd'); }" }] },
   injured: { section: 2, labels: ['healthy starter of his club'], everySet: true, needs: [2], patches: [{ file: STATS, from: 'skill: unitStarters(team, SKILL_POS, SKILL_SLOTS),', to: 'skill: unitStarters({ ...team, players: team.players.map(p => ({ ...p, out: 0 })) }, SKILL_POS, SKILL_SLOTS),' }] },
   swapsides: { section: 2, labels: ["credited and unclaimed touchdowns are the story's"], everySet: true, needs: [2], patches: [{ file: STATS, from: 'nflDrivePair(told.homeScore, told.awayScore, keyedRng(gmStoryKey(told)))', to: 'nflDrivePair(told.awayScore, told.homeScore, keyedRng(gmStoryKey(told)))' }] },
+  kickswap: { section: 2, labels: ["the card's kicks reader gives the touchdowns, field goals and safeties the games told"], everySet: true, needs: [2], patches: [{ file: VIEW, from: 'return c ? { td: c[0], fg: c[1], sf: c[2] } : null;', to: 'return c ? { td: c[0], fg: c[2], sf: c[1] } : null;' }] },
   extradraw: { section: 3, labels: ['the same generator state and draw count after Week 17'], everySet: true, needs: [3], patches: [{ file: STATS, from: '  const rng = keyedRng(`${told.key}|credit`);', to: '  const rng = keyedRng(`${told.key}|credit`); Math.random();' }] },
   unkeyed: { section: 3, labels: ['the same week recorded twice gives the same block'], everySet: true, needs: [3], patches: [{ file: STATS, from: '  const rng = keyedRng(`${told.key}|credit`);', to: '  const rng = keyedRng(`${told.key}|credit|${(globalThis.__nflCreditCalls = (globalThis.__nflCreditCalls ?? 0) + 1)}`);' }] },
+  /* Round 1566's closing check: a value drawn at module scope (once a page load, as the id epoch is) kept in the block.
+     Every play inside one load agrees on it, so only section 3's check between two fresh loads can see it. */
+  perload: { section: 3, labels: ['between two page loads'], everySet: true, needs: [3], patches: [
+    { file: STATS, from: 'export function nflRecordWeek(lg: LeagueState, told: readonly NflToldGame[], my: string): number {', to: 'const DUKB_LOAD = Math.floor(Math.random() * 1e9);\nexport function nflRecordWeek(lg: LeagueState, told: readonly NflToldGame[], my: string): number {' },
+    { file: STATS, from: '  if (!nflLiveStats(lg)) return 0;', to: '  if (!nflLiveStats(lg)) return 0;\n  (lg.stats as unknown as Record<string, number>).loaded = DUKB_LOAD;' },
+  ] },
   randomcredit: { section: 4, labels: ["lift over a rating blind credit climbs with his rating"], everySet: true, needs: [4], patches: [{ file: STATS, from: '  const ws = men.map(m => Math.max(0, weight(m)));', to: '  const ws = men.map(m => (weight(m) > 0 ? 1 : 0));' }] },
   passflip: { section: 4, labels: ['the pass share climbs with the QB1'], everySet: true, needs: [4], patches: [{ file: STATS, from: 'const catcher = s.pool.qb && kind < nflPassChance(s.pool.qb.ovr) ?', to: 'const catcher = s.pool.qb && kind > nflPassChance(s.pool.qb.ovr) ?' }] },
   sackswap: { section: 4, labels: ['the sacks climb with the rush against the block'], everySet: true, needs: [4], patches: [{ file: STATS, from: 'const chance = nflSackChance(rush, mean(line.map(m => m.ovr), NFL_BLOCK_FLOOR));', to: 'const chance = nflSackChance(mean(line.map(m => m.ovr), NFL_BLOCK_FLOOR), rush);' }] },
   tiebreak: { section: 5, labels: ['a tie goes to more games, then the id'], needs: [5], patches: [{ file: FO_STATS, from: '.sort((a, b) => b.s - a.s || b.p.g - a.p.g || a.p.id.localeCompare(b.p.id))', to: '.sort((a, b) => b.s - a.s)' }] },
-  rookieall: { section: 5, labels: ['the rookie lines are the first year men the harness drafted'], needs: [5], patches: [{ file: STATS, from: 'const line: NflSavedLine = men[m.id] ?? (m.rookieSeason === lg.season ?', to: 'const line: NflSavedLine = men[m.id] ?? (m.rookieSeason !== undefined ?' }] },
+  rookieall: { section: 5, labels: ['the rookie lines are the first year men the harness drafted'], needs: [5], patches: [{ file: STATS, from: 'm.id, m.name, m.pos, m.rookieSeason === lg.season), true);', to: 'm.id, m.name, m.pos, m.rookieSeason !== undefined), true);' }] },
   closetwice: { section: 5, labels: ['a second close writes no card twice'], needs: [5], patches: [{ file: CLOSE, from: '  if (done) return done;', to: '' }] },
   oldopen: { section: 6, labels: ['recording nothing and throwing nothing'], needs: [6], patches: [{ file: STATS, from: '  if (lg.week === 1 && !nflLiveStats(lg)) lg.stats = nflNewStats(lg.season);', to: '  if (!nflLiveStats(lg)) lg.stats = nflNewStats(lg.season);' }] },
   wholeroster: { section: 7, labels: ["every line is a man who was in his club's pool"], needs: [7], patches: [{ file: STATS, from: '      for (const m of nflPoolMen(s.pool)) {', to: '      for (const m of lg.teams[s.team].players) {' }] },
@@ -170,18 +186,28 @@ const HEAD_ENTRY = [
   "export * as view from './src/lib/nflSeasonView.ts';",
   "export * as fo from './src/lib/foSeasonStats.ts';",
   "export { leagueNames } from './src/lib/foNames.ts';",
+  "export { makeIdMinter } from './src/lib/entityIds.ts';",
 ];
 
 const t0 = Date.now();
 let M;
 let fired;
 let B = null;
+/* Round 1566's closing check: two more bundles of the same tree for section 3, each a fresh page load (a module
+   instance of its own: its own id epoch drawn at module scope, its own counters from one) */
+const LOADS = [];
 try {
   ({ M, fired } = await bundle(HEAD_ENTRY, PATCHES, 'head'));
   /* the awards and the close live in src/lib/nflSeasonAwards.ts (they ride in the career kit, not the page): the
      harness reads them beside the lines, as one lib */
   if (!M.awards || typeof M.awards.nflCloseSeasonStats !== 'function') throw new Error('src/lib/nflSeasonAwards.ts does not export nflCloseSeasonStats');
   M = { ...M, stats: { ...M.stats, ...M.awards } };
+  if (SECTIONS.includes(3)) {
+    for (const tag of ['load2', 'load3']) {
+      const { M: L } = await bundle(HEAD_ENTRY, PATCHES, tag);
+      LOADS.push({ ...L, stats: { ...L.stats, ...L.awards } });
+    }
+  }
   if (SECTIONS.includes(1) && LIFT_BASE) {
     if (!fs.existsSync(path.join(LIFT_BASE, DRIVES)) && !fs.existsSync(path.join(LIFT_BASE, 'src/lib/gameLaws/nfl.ts'))) throw new Error(`LIFT_BASE ${LIFT_BASE} holds no NFL story law`);
     B = await bundleAt(LIFT_BASE, STORY_ENTRY, 'base');
@@ -370,11 +396,18 @@ const measured4 = [];
 /* section 7: the saves and blocks the fleet writes, and whether every line is a man who was in his club's pool */
 const sizes = { saves: [], bases: [], blocks: [], lines: [], statLines: [], pool: null };
 if (SECTIONS.includes(7)) sizes.pool = tally();
+/* Round 1566 (brief decision 2): the id epoch (src/lib/entityIds.ts) is drawn once a page load, 2 to 14 characters,
+   and every minted id carries it, so a size measured with the run's own epoch moved between runs of one head. Section
+   7 measures every save and block with the epoch pinned at its longest (14 characters), the most the ids can cost, so
+   the same run measures the same characters every time. The probe minter has its own counter: it moves no id. */
+const RUN_EPOCH = (() => { const id = M.makeIdMinter('q')(); return id.slice(1, id.lastIndexOf('-')); })();
+const pinEpoch = text => text.replace(new RegExp(`(["|])([a-z]{1,2})${RUN_EPOCH}-(\\d+)`, 'g'), `$1$2${'z'.repeat(14)}-$3`);
 let seasonPools = {};
+let seasonKicks = {};
 if (SECTIONS.some(s => s === 2 || s === 3 || s === 4 || s === 7)) {
   const E = M.engine, S = M.stats;
   for (const set of SEEDSETS) {
-    const t2 = { td: tally(), kicks: tally(), cheap: tally(), pool: tally(), thrown: tally(), club: tally(), bounds: tally() };
+    const t2 = { td: tally(), kicks: tally(), cheap: tally(), pool: tally(), thrown: tally(), club: tally(), bounds: tally(), view: tally() };
     const t3 = { w17: tally(), after: tally(), results: tally(), league: tally(), twice: tally() };
     const r4 = { hi: { games: 0, pass: 0, wr1: 0, blind: 0 }, lo: { games: 0, pass: 0, wr1: 0, blind: 0 }, qb: {}, sack: {}, dist: {}, passFit: newFit(), sackFit: newFit() };
     let unclaimed = 0;
@@ -400,6 +433,9 @@ if (SECTIONS.some(s => s === 2 || s === 3 || s === 4 || s === 7)) {
         unclaimed += sd.unclaimed;
         if (!regular) continue;
         unclaimedBy[sd.team] = (unclaimedBy[sd.team] ?? 0) + sd.unclaimed;
+        /* the club's regular season as the games told it, for the card's kicks reader (section 2, control kickswap) */
+        const told = (seasonKicks[sd.team] ??= { td: 0, fg: 0, sf: 0 });
+        told.td += sd.tds; told.fg += sd.fgs; told.sf += sd.safeties;
         /* section 4: the WR1 of the club at this game, the first healthy receiver on its chart */
         const wr1 = E.depthOrder(team, 'WR').find(p => p.out === 0);
         const passes = sd.credits.filter(cr => cr.passer);
@@ -430,6 +466,7 @@ if (SECTIONS.some(s => s === 2 || s === 3 || s === 4 || s === 7)) {
         const unclaimedBy = {};
         let pending = null;
         seasonPools = {};
+        seasonKicks = {};
         const his = [];
         const a = boardSeason(A, true, {
           onWeek: (lg, told, week) => {
@@ -455,17 +492,21 @@ if (SECTIONS.some(s => s === 2 || s === 3 || s === 4 || s === 7)) {
             count(t2.club, sum('rtd') + sum('ctd') + (unclaimedBy[team] ?? 0) === td, () => `${seasonId(set, kind, i)} ${team}`);
             const pts = st.teams[team].pts;
             count(t2.bounds, 6 * td + 3 * fg + 2 * sf <= pts && pts <= 8 * td + 3 * fg + 2 * sf && st.teams[team].g === E.REGULAR_WEEKS, () => `${seasonId(set, kind, i)} ${team}`);
+            /* the card's sentence reads nflClubKicks: its three counts must be the ones the games told, not the block's */
+            const read = M.view.nflClubKicks(A.lg, team);
+            const told = seasonKicks[team];
+            count(t2.view, !!read && !!told && read.td === told.td && read.fg === told.fg && read.sf === told.sf, () => `${seasonId(set, kind, i)} ${team}: the card read ${JSON.stringify(read)}, the games told ${JSON.stringify(told)}`);
           }
         }
         if (SECTIONS.includes(7)) {
           /* the board's save: the league (block and history in it), his club and the season's log of his games */
-          sizes.saves.push(JSON.stringify({ league: A.lg, myTeam: A.user, phase: 'recap', gameLog: { v: 1, season: A.lg.season, team: A.user, games: his } }).length);
-          sizes.blocks.push(JSON.stringify(A.lg.stats).length);
+          sizes.saves.push(pinEpoch(JSON.stringify({ league: A.lg, myTeam: A.user, phase: 'recap', gameLog: { v: 1, season: A.lg.season, team: A.user, games: his } })).length);
+          sizes.blocks.push(pinEpoch(JSON.stringify(A.lg.stats)).length);
           const bare = JSON.parse(JSON.stringify(A.lg));
           delete bare.stats;
           delete bare.awards;
           for (const p of S.nflEveryMan(bare).flat()) { delete p.awards; delete p.rookieSeason; }
-          sizes.bases.push(JSON.stringify({ league: bare, myTeam: A.user, phase: 'recap', gameLog: { v: 1, season: A.lg.season, team: A.user, games: his } }).length);
+          sizes.bases.push(pinEpoch(JSON.stringify({ league: bare, myTeam: A.user, phase: 'recap', gameLog: { v: 1, season: A.lg.season, team: A.user, games: his } })).length);
           const ls = Object.values(M.stats.nflFoStats(A.lg.stats).lines);
           sizes.lines.push(ls.length);
           sizes.statLines.push(ls.filter(l => Object.values(l.tot).some(v => v > 0)).length);
@@ -492,6 +533,7 @@ if (SECTIONS.some(s => s === 2 || s === 3 || s === 4 || s === 7)) {
       settle(2, `set ${set}: per club and season, thrown equals caught`, t2.thrown);
       settle(2, `set ${set}: per club and season, run and caught touchdowns plus unclaimed are the club line's`, t2.club);
       settle(2, `set ${set}: per club and season, the told points sit between six and eight a touchdown plus the kicks, over 17 games`, t2.bounds);
+      settle(2, `set ${set}: per club and season, the card's kicks reader gives the touchdowns, field goals and safeties the games told`, t2.view);
       check(2, `set ${set}: no touchdown went unclaimed on the fleet (${unclaimed})`, unclaimed === 0);
     }
     if (SECTIONS.includes(3)) {
@@ -502,6 +544,22 @@ if (SECTIONS.some(s => s === 2 || s === 3 || s === 4 || s === 7)) {
       settle(3, `set ${set}: the same winners, injuries, computer moves, records, bracket and champion`, t3.results);
       settle(3, `set ${set}: the same league once the new keys are taken out`, t3.league);
       settle(3, `set ${set}: the same week recorded twice gives the same block, once through JSON`, t3.twice);
+      /* Round 1566's closing check: the same deep season played the board's way in two fresh loads (LOADS), the
+         helpers reading the load's engine for the length of the play */
+      const inLoad = (L, fn) => { const keep = M; M = L; try { return fn(); } finally { M = keep; } };
+      const TOKEN = '~'.repeat(14);
+      const [x, y] = LOADS.map(L => inLoad(L, () => {
+        const q = L.makeIdMinter('q')();
+        const ep = q.slice(1, q.lastIndexOf('-'));
+        const s = openFleetSeason(set, 'deep', 0);
+        boardSeason(s, true);
+        const raw = JSON.stringify(s.lg);
+        return { ep, raw: raw.length, text: raw.split(`${ep}-`).join(`${TOKEN}-`), ids: raw.split(`${ep}-`).length - 1 };
+      }));
+      const tl = tally();
+      count(tl, x.text === y.text, () => `${seasonId(set, 'deep', 0)}: ${x.text.length} and ${y.text.length} characters with the epoch swapped`);
+      settle(3, `set ${set}: between two page loads (two fresh loads of the engine, each its own id epoch) a deep season played the board's way is the same league but for the epoch`, tl);
+      console.log(`  set ${set}: two page loads, ids as minted: epochs of ${x.ep.length} and ${y.ep.length} characters, the league ${x.raw} and ${y.raw} characters; ${x.ids} ids in it, so each character of epoch (2 to 14 a load) moves it by ${x.ids}`);
     }
     if (SECTIONS.includes(4)) {
       const share = b => (b.pass ? b.wr1 / b.pass : 0);
@@ -552,7 +610,7 @@ if (SECTIONS.includes(7)) {
   const med = xs => sorted(xs)[Math.floor(xs.length / 2)];
   const k = n => `${(n / 1024).toFixed(1)}K`;
   const maxSave = Math.max(...sizes.saves);
-  console.log(`  over ${sizes.saves.length} seasons: the biggest save ${k(maxSave)}, the block median ${k(med(sizes.blocks))} and largest ${k(Math.max(...sizes.blocks))}`);
+  console.log(`  over ${sizes.saves.length} seasons, ids at the longest epoch: the save median ${k(med(sizes.saves))} (${med(sizes.saves)} characters), the biggest ${k(maxSave)} (${maxSave}), the block median ${k(med(sizes.blocks))} and largest ${k(Math.max(...sizes.blocks))}`);
   console.log(`  lines a season: the pool's ${Math.min(...sizes.lines)} to ${Math.max(...sizes.lines)} (median ${med(sizes.lines)}); men with a stat only ${Math.min(...sizes.statLines)} to ${Math.max(...sizes.statLines)} (median ${med(sizes.statLines)})`);
   check(7, `the biggest save with lines, ${k(maxSave)}, is inside the NFL save budget of ${k(budget)}`, sizes.saves.length > 0 && maxSave <= budget);
   /* THE BRIEF'S STOP LINE (600K) WAS PASSED BEFORE THIS ROUND: a deep league opens at about 620K of its own (every

@@ -616,7 +616,7 @@ export function simMlbSeason(
       line.poLine = `${hits} for ${ab} (.${String(Math.round(shown * 1000)).padStart(3, '0')}), ${hr} HR`;
     }
     notes.push(`📊 Postseason: ${poG} game${poG === 1 ? '' : 's'}, ${line.poLine}.`);
-    const cn = clutchNote(clutch, depth, 'mlb');
+    const cn = clutchNote(clutch, depth, 'mlb', pf);
     if (cn) notes.push(cn);
   }
 

@@ -10,7 +10,7 @@ import type { CareerState, SeasonLine } from './nflMyCareer';
 import { careerTotals, legacyOf, nflSeasonLength, teamLabelOf } from './nflMyCareer';
 import { NFL_BADGES, earnedBadges } from './careerBadges';
 import type { BadgeDef, NflBadgeFacts } from './careerBadges';
-import { fanComments, followersFromFanbase, fmtFollowers, nflSeasonHeadlines } from './careerSocial';
+import { conductOnRecord, fanComments, followersFromFanbase, fmtFollowers, nflSeasonHeadlines } from './careerSocial';
 import { nflMoneyWealth } from './nflCareerMoney';
 
 /** Everything the badge table reads, off the save and the legacy verdict. */
@@ -65,6 +65,7 @@ export function nflFanComments(c: CareerState): string[] {
     pos: c.pos,
     standing: c.fanbase,
     followers: fmtFollowers(nflFollowers(c)),
+    conduct: conductOnRecord(c),
   });
 }
 

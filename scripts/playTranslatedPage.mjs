@@ -455,6 +455,7 @@ import { spawn } from 'node:child_process';
 import { fileURLToPath } from 'node:url';
 import pw from './lib/playwrightLoader.mjs';
 import { REJECT_LABELS, consentLabelSource } from './lib/answerConsent.mjs';
+import { intlCallsMet, watchIntlCalls } from './lib/intlCallNote.mjs';
 
 const { chromium } = pw;
 const env = process.env;
@@ -1565,6 +1566,9 @@ async function runWalk({ mode, view, route }, out) {
   const check = (name, ok, detail) => checkLine(name, ok, detail, out);
   out(`\n${tag}`);
   const W = await openWalk(view, mode);
+  /* Round 1557 (critic-1541 correction 9): an NBA walk prints whether its career met the national team's call. */
+  const nba = route.startsWith('/nba-my-career');
+  if (nba) await watchIntlCalls(W.page);
   const rec = newRecord(route, view, mode, '', out);
   let retry = null;
   try {
@@ -1601,6 +1605,7 @@ async function runWalk({ mode, view, route }, out) {
     create: route === CREATE_ROUTE ? { drawn: !!rec.createDrawn, boxes: rec.boxes || {}, reached: !!rec.reached, reachedDetail: rec.reachedDetail || '', seasonAt: rec.seasonAt ?? null, seasonDetail: rec.seasonDetail || '' } : null,
     stepList: rec.steps,
   };
+  if (nba) out(`        note ${tag}: ${intlCallsMet(W.page)}`);
   await W.ctx.close();
 
   /* what the page was like while it was translated: the create walk ends with the translator undoing itself */

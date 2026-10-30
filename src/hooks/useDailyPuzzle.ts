@@ -259,14 +259,18 @@ function readPersistedState<G>(
 
     const saved = JSON.parse(raw) as PersistedDailyState<G>;
 
-    // Validate schema version, date, puzzle index and, when both sides carry
-    // one (Round 718 fix), the puzzle id, before trusting the data
-    if (
-      saved.v === SCHEMA_VERSION &&
-      saved.date === todayStr &&
-      saved.puzzleIndex === puzzleIndex &&
-      (saved.puzzleId === undefined || puzzleId === undefined || saved.puzzleId === puzzleId)
-    ) {
+    // Validate schema version, date and the puzzle before trusting the data.
+    // When both sides carry a puzzle id (Round 718 fix) the id decides: Round
+    // 1565 appended live boards to the soccer Connections file, so a board the
+    // table dealt now sits at another index of the fallback pool than the one
+    // an earlier bundle saved (0, its not-found fallback), and an index check
+    // threw away a finished day the moment the release went out. A save with
+    // no id, or a game with none, still matches on the index.
+    const samePuzzle =
+      saved.puzzleId !== undefined && puzzleId !== undefined
+        ? saved.puzzleId === puzzleId
+        : saved.puzzleIndex === puzzleIndex;
+    if (saved.v === SCHEMA_VERSION && saved.date === todayStr && samePuzzle) {
       const guesses = deserializeGuesses(saved.guesses);
       // Round 848: a malformed log is no save at all. Today starts fresh and
       // the next write replaces these bytes.

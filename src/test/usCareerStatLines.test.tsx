@@ -73,6 +73,10 @@ import {
   nflCareerStatBullet, nflCareerSoFar, mlbCareerStatBullet, mlbCareerSoFar,
   SUSPENDED_STAT_LINE,
 } from '@/lib/usCareerStatLine';
+import { noteIntlCalls } from '@/test/helpers/intlCallNote';
+
+/* Round 1557 (critic-1541 correction 9): the file prints whether its NBA saves meet the national team's call. */
+noteIntlCalls('usCareerStatLines');
 
 function mulberry32(seed: number): () => number {
   let a = seed;

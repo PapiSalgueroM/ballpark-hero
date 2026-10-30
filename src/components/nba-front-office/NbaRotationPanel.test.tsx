@@ -6,7 +6,7 @@ import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 import NbaFrontOfficeBoard from '@/components/nba-front-office/NbaFrontOfficeBoard';
 import { NbaRotationPanel } from '@/components/nba-front-office/NbaRotationPanel';
 import { initNbaLeague, nbaStrength, type NbaLeague } from '@/lib/nbaFrontOffice';
-import { nbaBoxScore } from '@/lib/nbaSeasonStats';
+import { nbaBoxScore, nbaFoStats } from '@/lib/nbaSeasonStats';
 
 vi.mock('@/hooks/useGameCompletion', () => ({ useGameCompletion: () => undefined }));
 vi.mock('@/lib/completions', () => ({ recordActivity: () => undefined }));
@@ -177,13 +177,13 @@ describe('NBA rotation UI with real board persistence', () => {
     const { league, team } = fixture(); seed(league, team); const baseline = openBoard(); exitToHub();
     fireEvent.click(screen.getByText('Play')); fireEvent.click(screen.getByRole('button', { name: 'Play Round 1' }));
     const automatic = read(); const key = `${team}|${ids[13]}`;
-    expect(automatic.league.stats!.lines[key]).toBeUndefined();
+    expect(nbaFoStats(automatic.league.stats!).lines[key]).toBeUndefined();
     const games = automatic.league.teams[team].wins + automatic.league.teams[team].losses;
     expect(games).toBe(4);
     baseline.unmount(); vi.mocked(Math.random).mockImplementation(rng(991)); seed(league, team); openBoard();
     fireEvent.change(choice(7), { target: { value: ids[13] } }); exitToHub();
     fireEvent.click(screen.getByText('Play')); fireEvent.click(screen.getByRole('button', { name: 'Play Round 1' }));
-    const chosen = read(); const line = chosen.league.stats!.lines[key];
+    const chosen = read(); const line = nbaFoStats(chosen.league.stats!).lines[key];
     expect(line.g).toBe(games); expect(line.gs).toBe(0); expect(line.tot.pts).toBeGreaterThan(0);
     expect(chosen.league.teams[team].rotation![7]).toBe(ids[13]);
     expect(chosen.league.teams[team].wins + chosen.league.teams[team].losses).toBe(games);
