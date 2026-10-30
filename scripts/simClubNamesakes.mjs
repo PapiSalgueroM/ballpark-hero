@@ -47,7 +47,9 @@
  *    'Arsenal de Sarandí' on two hosts.
  * T, THE TRIPWIRE (Round 1587). Every Q2 row with a CONMEBOL nationality token, an empty nationality or Arsenal FC as
  *    the middle of a three part split (160 rows) belongs to a judged man, and no row id sits in two men. While the
- *    migration does not exist it may print pending; once it exists pending must be 0.
+ *    migration does not exist it may print pending; once it exists pending must be 0. The ROSTER NET is computed here
+ *    too, from the committed pages with a name match written a second time (review 1587 minor 3): every Q2 row whose
+ *    man is listed on a fetched Sarandí page, whatever his stored nationality, belongs to a judged man.
  * M, THE PAYLOAD (Round 1587). The applied form's market payload is exactly the ledger's sarandi rows (110), the
  *    generator rerun on the committed exports gives the committed payload (56 stints, 0 held), every Arsenal FC stint
  *    of Q3 moves exactly when critic 2's rule says so (written a second time here, so the generator is not its own
@@ -71,7 +73,8 @@
  *    must be held, so M is red. leak (one sarandi row put back to Arsenal FC in the state after): P and R red.
  *    unmerge now removes the ledger's sarandi rows by id. freshmoved (the "unchanged" fresh Q2 carries a moved value)
  *    and freshstill (the "moved" fresh Q2 is left unchanged): F is red. namesakedrift (every payload club spelled
- *    'Arsenal Sarandí' in memory): M's tie to the grid's exclusion is red.
+ *    'Arsenal Sarandí' in memory): M's tie to the grid's exclusion is red. nonet (the first man who came in by the
+ *    roster net only, Joel Soñora or Nicolás Giménez, taken out of the ledger in memory): T's roster net check is red.
  *
  * Run: node scripts/simClubNamesakes.mjs            (green: the closing line and exit 0) */
 import fs from 'node:fs';
@@ -90,7 +93,7 @@ const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const DATA = path.join(ROOT, 'scripts', 'data', 'clubNamesakes1584');
 const MIGRATION_PATH = 'supabase/migrations/20261101120000_round_1587_arsenal_de_sarandi.sql';
 const CONTROLS = ['blind', 'unmerge', 'noexclude', 'wide', 'mirrordrift', 'onehost', 'forget',
-  'manhost', 'wiki', 'twotm', 'unjudged', 'payload', 'londonspan', 'leak', 'freshmoved', 'freshstill', 'namesakedrift'];
+  'manhost', 'wiki', 'twotm', 'unjudged', 'payload', 'londonspan', 'leak', 'freshmoved', 'freshstill', 'namesakedrift', 'nonet'];
 const WIKI_HOST = /(^|\.)(wikipedia|wikidata|wikimedia|fandom|wikiwand)\./i;
 const regDomain = h => h.toLowerCase().replace(/^www\./, '').split('.').slice(-2).join('.');
 /* two registrable hosts (soccerway's and ESPN's regional mirrors are one host each), no wiki, at most one Transfermarkt,
@@ -354,15 +357,37 @@ console.log('T) every tripwire row and every roster net row belongs to exactly o
     market = market.concat([{ ...market.find(r => r.id === 6876), id: 99999991, player_name: 'Ficticio Unjudged', name_folded: 'ficticio unjudged' }]);
     fired.push('unjudged: a made up Argentine Arsenal FC row added to Q2 in memory');
   }
+  let men = AL.men;
+  if (CONTROL === 'nonet') {
+    const netOnly = men.find(m => m.nets.length === 1 && m.nets[0] === 'roster');
+    if (!netOnly) abort('no man of the ledger came in by the roster net only');
+    men = men.filter(m => m !== netOnly);
+    fired.push(`nonet: ${netOnly.name}, who came in by the roster net only, taken out of the ledger`);
+  }
   const owner = new Map();
   let twice = 0;
-  for (const m of AL.men) for (const id of m.rows) { if (owner.has(id)) twice += 1; owner.set(id, m.name); }
+  for (const m of men) for (const id of m.rows) { if (owner.has(id)) twice += 1; owner.set(id, m.name); }
+  /* review 1587 minor 3: the roster net computed HERE, from the committed pages and with a name match written a second
+     time (the generator's own is not its judge): every Q2 row whose man is listed on a fetched Arsenal de Sarandí page,
+     whatever his stored nationality, must belong to a judged man */
+  const fold2 = s => String(s ?? '').normalize('NFD').replace(/\p{M}/gu, '').toLowerCase().replace(/[^a-z]+/g, ' ').trim();
+  const sameName = (a, b) => {
+    if (a === b || (ARSENAL.ALIASES[a] || []).includes(b)) return true;
+    const A = a.split(' '), B = b.split(' ');
+    return A.length > 1 && B.length > 1 && (A.every(t => B.includes(t)) || B.every(t => A.includes(t)));
+  };
+  const pages = ARSENAL.parsePages(fs.readFileSync(path.join(DATA, ARSENAL.PAGES_FILE), 'utf8'));
+  const listed = [...new Set(pages.filter(p => /^sarandi/.test(p.kind)).flatMap(p => p.names.map(n => fold2(n.name))))];
+  const net = market.filter(r => listed.some(n => sameName(fold2(r.player_name), n)));
+  const netOut = net.filter(r => !owner.has(r.id));
+  if (net.length && !netOut.length) ok(`${net.length} roster net rows (names on ${pages.filter(p => /^sarandi/.test(p.kind)).length} Sarandí pages), every one judged`);
+  else fail(`${netOut.length} of ${net.length} roster net rows belong to no judged man: ${netOut.slice(0, 3).map(r => r.player_name + ' ' + r.year + ' ' + r.nationality).join(', ')}`);
   const trip = market.filter(r => ARSENAL.tripwireKind(r));
   const pending = trip.filter(r => !owner.has(r.id));
   const migrationThere = fs.existsSync(path.join(ROOT, MIGRATION_PATH));
   if (twice) fail(`${twice} row ids sit in two men`);
   else ok(`no row id sits in two men (${owner.size} judged rows)`);
-  if (!pending.length) ok(`${trip.length} tripwire rows, every one judged; ${AL.men.filter(m => m.nets.includes('roster')).length} men came in by the roster net only`);
+  if (!pending.length) ok(`${trip.length} tripwire rows, every one judged; ${men.filter(m => m.nets.length === 1 && m.nets[0] === 'roster').length} men came in by the roster net only`);
   else if (!migrationThere) ok(`pending ${pending.length} (allowed while the migration does not exist)`);
   else fail(`pending ${pending.length} tripwire rows with the migration written: ${pending.slice(0, 3).map(r => r.player_name + ' ' + r.year).join(', ')}`);
 }
