@@ -1,0 +1,14 @@
+#!build
+#!playwright
+#!serial
+# Release BT kit: 1 of the 2 request lines of Release BS's rc-BIa.txt (rBSg/.tmp-fx/bs), the lines of the BT areas (the US My Careers, the Front Offices, Soccer Connections and the daily save shape, Build Your XI and the player search box, What's New, the guides and search index, the weight rows) and the setup lines before them; 1 line(s) outside those areas left out: vitest.
+# Release BS kit: 2 of the 6 request lines of Release BR's rc-BIa.txt (rBRg/.tmp-fx/br), the lines of the BS areas (Soccer Career, Club Manager and the manager games on its engine, Player Bingo, Conquest, Stat and Draft Detective, the US My Career save notice, What's New, the polls, the guide intro) and the setup lines before them; 4 line(s) outside those areas left out: preload5 stale walk simFlagshipWeight.
+# Release BI, Round 1338 (lazy chunks wait for the reload), merged in Round BIG as a7094670 (first parent e814c2de).
+# simPreloadWait section 5 compares the stock build with the base built twice: the base is this tree WITHOUT Round
+# 1338 (scripts/lib/treeWithoutMerge.mjs a7094670 e814c2de), so the other rounds of the release are on both sides.
+# The lazy walks of Round 1338 are rc-BFb's lazy lines (unchanged). Controls: each loop line exits 0 only when every
+# control exits 1. Walk: walkstock must exit 1 (the stock wrapper flashes the bug). The walk has a timing race on row D
+# (home tile tap to /soccer-career at 1280, host way: "the tap made 1 document request(s)"): 2 red of 15 runs on the
+# Round BIG head, 0 of 6 on the m1 tree; so it runs #!serial and, when red, reruns ALONE once and the line reads the
+# rerun (both results are printed). finish-BIG.md section 9.2 has the evidence.
+simUsCareerWeight: node scripts/simUsCareerWeight.mjs
