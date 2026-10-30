@@ -1,0 +1,2 @@
+eed5fd3e50ecec416a540fc6d87b7701e3dc14fcc9d58fb0175c11cd17dd2fc4  /home/runner/work/_temp/rc-out/full/playCmSavePoints.mjs/stdout.log
+e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855  /home/runner/work/_temp/rc-out/full/playCmSavePoints.mjs/stderr.log

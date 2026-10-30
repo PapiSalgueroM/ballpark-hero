@@ -1,0 +1,2 @@
+8edbf7e8863d27ad6b6a937cbbcf9572c296c006d65ee8bb19d76776951c9763  /home/runner/work/_temp/rc-out/full/playCmTablesFit.mjs/stdout.log
+e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855  /home/runner/work/_temp/rc-out/full/playCmTablesFit.mjs/stderr.log

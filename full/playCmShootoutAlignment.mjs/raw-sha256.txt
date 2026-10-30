@@ -1,0 +1,2 @@
+4b5d8ff88cd45dd00732c1ca00c86684a62164740ce1d9e193663e34297d6791  /home/runner/work/_temp/rc-out/full/playCmShootoutAlignment.mjs/stdout.log
+e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855  /home/runner/work/_temp/rc-out/full/playCmShootoutAlignment.mjs/stderr.log

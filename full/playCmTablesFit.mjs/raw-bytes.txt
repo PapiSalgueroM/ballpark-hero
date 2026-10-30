@@ -1,0 +1,3 @@
+6212 /home/runner/work/_temp/rc-out/full/playCmTablesFit.mjs/stdout.log
+   0 /home/runner/work/_temp/rc-out/full/playCmTablesFit.mjs/stderr.log
+6212 total

@@ -1,0 +1,3 @@
+3754 /home/runner/work/_temp/rc-out/full/playCmWorldMoves.mjs/stdout.log
+   0 /home/runner/work/_temp/rc-out/full/playCmWorldMoves.mjs/stderr.log
+3754 total

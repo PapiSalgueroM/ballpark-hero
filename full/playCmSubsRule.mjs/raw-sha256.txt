@@ -1,0 +1,2 @@
+c65b401c78a1cb9a302d167f2c55dcd6aeb803147fbb27f8141c01486cc71a27  /home/runner/work/_temp/rc-out/full/playCmSubsRule.mjs/stdout.log
+e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855  /home/runner/work/_temp/rc-out/full/playCmSubsRule.mjs/stderr.log

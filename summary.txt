@@ -1,0 +1,12 @@
+prepare exit=0 49s | ordinary-build raw=0
+playCmSavePoints exit=0 133s | playCmSavePoints.mjs raw=0
+playCmShootoutAlignment exit=1 1s | playCmShootoutAlignment.mjs raw=1
+playCmSubsRule exit=0 52s | playCmSubsRule.mjs raw=0
+playCmTablesFit exit=1 156s | playCmTablesFit.mjs raw=1
+playCmTactics exit=0 118s | playCmTactics.mjs raw=0
+playCmVar exit=0 603s | playCmVar.mjs raw=0
+playCmWorldMoves exit=0 19s | playCmWorldMoves.mjs raw=0
+playCollegeGridFirstTap exit=0 28s | playCollegeGridFirstTap.mjs raw=0
+playCollegeSeat exit=0 242s | playCollegeSeat.mjs raw=0
+playConquestScenes exit=1 73s | playConquestScenes.mjs raw=1
+finish exit=0 5s | 

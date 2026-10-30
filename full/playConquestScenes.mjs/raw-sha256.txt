@@ -1,0 +1,2 @@
+b99afc50e636f369df39f5374a5e998013f455585494cc70de1522c26f4bfcd3  /home/runner/work/_temp/rc-out/full/playConquestScenes.mjs/stdout.log
+e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855  /home/runner/work/_temp/rc-out/full/playConquestScenes.mjs/stderr.log

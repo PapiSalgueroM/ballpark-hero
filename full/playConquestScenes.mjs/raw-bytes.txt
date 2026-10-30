@@ -1,0 +1,3 @@
+17154 /home/runner/work/_temp/rc-out/full/playConquestScenes.mjs/stdout.log
+    0 /home/runner/work/_temp/rc-out/full/playConquestScenes.mjs/stderr.log
+17154 total

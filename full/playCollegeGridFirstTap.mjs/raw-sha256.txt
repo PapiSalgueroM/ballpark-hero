@@ -1,0 +1,2 @@
+e7597baca2a39a6a9aa68ed5b2c13f0cace1f4eb6d7b6f615fa4a669e1d992de  /home/runner/work/_temp/rc-out/full/playCollegeGridFirstTap.mjs/stdout.log
+e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855  /home/runner/work/_temp/rc-out/full/playCollegeGridFirstTap.mjs/stderr.log

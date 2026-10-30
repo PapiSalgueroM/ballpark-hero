@@ -1,0 +1,2 @@
+6d9844a0c1e2fa5b67b4b870def250315b3bf3b2a8f5f35296e392b8c79b7bfe  /home/runner/work/_temp/rc-out/full/playCmTactics.mjs/stdout.log
+e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855  /home/runner/work/_temp/rc-out/full/playCmTactics.mjs/stderr.log

@@ -1,0 +1,2 @@
+8c852ad18b726a4995dc6b9aa05f6f0a466e43244b7ae034eacad6dc98c2d648  /home/runner/work/_temp/rc-out/full/playCmWorldMoves.mjs/stdout.log
+e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855  /home/runner/work/_temp/rc-out/full/playCmWorldMoves.mjs/stderr.log
