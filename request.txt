@@ -1,0 +1,6 @@
+#!serial
+legA-both-off: sed -i 's/return count === 3 ? /return count >= 3 ? /; s/const tieJudged = judgedByTie(state, tieLine);/const tieJudged = false;/' src/lib/clubManager.ts && test "$(grep -c -e 'return count >= 3 ? ' -e 'const tieJudged = false;' src/lib/clubManager.ts)" = 2 && echo MUTATED-both && node scripts/simCmLeagueRules.mjs; s=$?; git checkout -- src; exit $s
+legB-haul-off: sed -i 's/return count === 3 ? /return count >= 3 ? /' src/lib/clubManager.ts && test "$(grep -c 'return count >= 3 ? ' src/lib/clubManager.ts)" = 1 && echo MUTATED-haul && node scripts/simCmLeagueRules.mjs; s=$?; git checkout -- src; exit $s
+legB-tie-off: sed -i 's/const tieJudged = judgedByTie(state, tieLine);/const tieJudged = false;/' src/lib/clubManager.ts && test "$(grep -c 'const tieJudged = false;' src/lib/clubManager.ts)" = 1 && echo MUTATED-tie && node scripts/simCmLeagueRules.mjs; s=$?; git checkout -- src; exit $s
+write: node scripts/simCmLeagueRules.mjs --part=modern,eras,pure --write && cp scripts/data/cmLeagueRulesDigest.json $RC_OUT/cmLeagueRulesDigest.json && node scripts/simCmLeagueRules.mjs; s=$?; git checkout -- scripts/data; exit $s
+ledgerbound-alone: node scripts/simCmLedgerBound.mjs
