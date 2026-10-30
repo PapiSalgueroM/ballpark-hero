@@ -1,0 +1,5 @@
+#!serve
+#!playwright
+walk-basefix: git worktree add -f rcbase 14a9af704 > /dev/null 2>&1; RC_OUT=$RC_OUT/basefix FIX_ROOT=$PWD/rcbase node .rc/x/walkrev.mjs
+walk-headfix: RC_OUT=$RC_OUT/headfix node .rc/x/walkrev.mjs
+playTwoTabs1280: SIZES=1280x900 CASES=3,4,9 node scripts/playTwoTabs.mjs

@@ -1,0 +1,4 @@
+build exit=0 37s | [dukb] inlined 1 stylesheet(s) and 1 module(s) into 181 snapshots (11 left alone)
+playTwoTabs1280 exit=0 38s | playTwoTabs: green at 1280x900
+walk-headfix exit=0 45s | walkrev: green, every case at both sizes with reduced motion on and off
+walk-basefix exit=0 46s | walkrev: green, every case at both sizes with reduced motion on and off
