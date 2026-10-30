@@ -1,0 +1,3 @@
+cards-full4: git worktree add -f /tmp/cbase 14a9af704 -q && ln -s "$PWD/node_modules" /tmp/cbase/node_modules && CARDS_SEEDS=5 CARDS_BASE=/tmp/cbase node scripts/simCmPlayerCard.mjs
+cards-linkalways: CARDS_SEEDS=1 CARDS_LONG=4 CARDS_CONTROL=linkalways node scripts/simCmPlayerCard.mjs
+cards-default: node scripts/simCmPlayerCard.mjs
