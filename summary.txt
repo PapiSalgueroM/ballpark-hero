@@ -1,0 +1,6 @@
+build exit=0 36s | [dukb] inlined 1 stylesheet(s) and 1 module(s) into 181 snapshots (11 left alone)
+roster-head exit=0 78s | Current-roster browser: passed; 1144 checks, 21 saved page journeys, 1 effective controls, 22 originals, 0 failures, 0 setup failures.
+sweepWeight exit=1 29s | sweepWeight: 1 failure
+playCmPlayerCard exit=0 152s | playCmPlayerCard: green, 5 sections at 320, 390 and 1280
+walk-write exit=1 152s | playCmPlayerCard: CONTROL write FIRED: section 5 went red (1 failures) and no other did
+weight-main exit=0 77s | [dukb] inlined 1 stylesheet(s) and 1 module(s) into 181 snapshots (11 left alone)
