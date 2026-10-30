@@ -843,8 +843,9 @@ export function makeNhlChecker({ record, ledger = {} }) {
 const US_STATES = new Set(['AL', 'AK', 'AZ', 'AR', 'CA', 'CO', 'CT', 'DE', 'FL', 'GA', 'HI', 'ID', 'IL', 'IN', 'IA', 'KS', 'KY', 'LA', 'ME', 'MD', 'MA', 'MI', 'MN', 'MS', 'MO', 'MT', 'NE', 'NV', 'NH', 'NJ', 'NM', 'NY', 'NC', 'ND', 'OH', 'OK', 'OR', 'PA', 'RI', 'SC', 'SD', 'TN', 'TX', 'UT', 'VT', 'VA', 'WA', 'WV', 'WI', 'WY', 'DC']);
 /* PQ: the old code for Quebec, which ESPN still prints ("Montreal, PQ") */
 const CA_PROVINCES = new Set(['AB', 'BC', 'MB', 'NB', 'NL', 'NS', 'NT', 'NU', 'ON', 'PE', 'PQ', 'QC', 'SK', 'YT']);
-/* country names as ESPN prints them -> the country (each one seen on the 2026-10-29 read) */
-const NBA_COUNTRY_NAMES = {
+/* country names as ESPN prints them -> the country (each one seen on the 2026-10-29 read); exported for
+   simUsConnectionsFacts section 11, which holds every country either reader gives to one continent */
+export const NBA_COUNTRY_NAMES = {
   France: 'France', Belgium: 'Belgium', 'West Germany': 'West Germany', Lithuania: 'Lithuania', Nigeria: 'Nigeria',
   Cameroon: 'Cameroon', Sudan: 'Sudan', Jamaica: 'Jamaica', Spain: 'Spain', Yugoslavia: 'Yugoslavia',
   /* ESPN prints "Congo" for Brazzaville (the Republic of the Congo); both Congos are in Africa */

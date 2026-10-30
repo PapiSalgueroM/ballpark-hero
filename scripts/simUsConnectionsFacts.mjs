@@ -51,6 +51,11 @@
  *      "Played for the X" group on a board with a man still playing who does
  *      not fit it is dated ("Played for the Steelers (as of 2025)"), which the
  *      checkers hold to the seasons up to that one
+ *  (sections 9 and 10, Round 1574, are described where they run)
+ *  11) (fix-1583) the NBA birthplace readers: a suffix no list holds reads as
+ *      null, never as a country; every stored country on both hosts is what
+ *      its reader gives for the stored text or code; every country a reader
+ *      can give sits in exactly one of "Born in Africa"'s two sets
  *
  * Live rows: players are dealt from the tables baseball_connections_puzzles,
  * nfl_connections_puzzles and nhl_connections_puzzles. This harness never reads
@@ -155,6 +160,16 @@
  *                              (other-unknown, him)
  *   US_CONN_CONTROL=nbaaba     the Bulls group read as the Pacers, Moses Malone given an ABA Pacers season
  *                              (other-unknown, him)
+ *   fix-1583 (review-run-1583 minor 3: three "unknown, never a guess" branches had no control):
+ *   US_CONN_CONTROL=nbaespn    Pascal Siakam given a season under "Seattle Supersonics" on ESPN's side, a spelling
+ *                              no franchise lists, beside nbaconn-004's club groups (other-unknown, him)
+ *   US_CONN_CONTROL=nbacontinent Paul Pierce's second host birthplace read as Australia, in neither continent set,
+ *                              beside "Born in Africa" (other-unknown, him)
+ *   US_CONN_CONTROL=nbabornrecord Dillon Brooks' stored text read as "Mississauga, Ontario" with Canada still stored
+ *                              (born-record, him; section 11)
+ *   US_CONN_CONTROL=nbacontinentgap the ESPN reader taught Australia and no continent set (continent-gap, it;
+ *                              section 11). Section 11's fixed reader probes have no data control: their proof is
+ *                              the born-guess mutation (an unlisted suffix returned as the country), red on a runner
  * A control is red only when the rule it names fires for the man or group it
  * moved. Any other failure in a control run (a moved man has no two host fact
  * in section 3, say) is printed but never turns the run red on its own, so
@@ -170,7 +185,7 @@ import path from 'node:path';
 import { fileURLToPath, pathToFileURL } from 'node:url';
 import { build } from 'esbuild';
 import { crossCheckBoards, findingKey } from './lib/connectionsCrossCheck.mjs';
-import { makeUsChecker, fold, AGES, SEASON_LINE, loadUsConnectionsRecord, makeNbaChecker, NBA_CLUBS } from './lib/usConnectionsCheck.mjs';
+import { makeUsChecker, fold, AGES, SEASON_LINE, loadUsConnectionsRecord, makeNbaChecker, NBA_CLUBS, nbaBirthCountry, NBA_COUNTRY_NAMES, NBA_COUNTRY_CODES } from './lib/usConnectionsCheck.mjs';
 import { TABLE_RANGE, tableBoards, tableRows, inRange } from './lib/usConnectionsTables.mjs';
 
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
@@ -203,7 +218,7 @@ if (TABLE_CONTROLS.includes(CONTROL) && !TABLE_RANGE.nhl) { console.error(`US_CO
 const rangeDropped = CONTROL === 'rangedrop' && !!TABLE_RANGE.nhl;
 if (rangeDropped) { delete TABLE_RANGE.nhl; console.log('US_CONN_CONTROL=rangedrop: TABLE_RANGE loses nhl in memory for this run'); }
 /* Round 1583: the NBA controls, on the four NBA file boards */
-const NBA_CONTROLS = ['nbaundate', 'nbayear', 'nbaafter', 'parker', 'kareem', 'cousins', 'nbawatch', 'nbaclub', 'nbaborn', 'nbalineage', 'nbaaba'];
+const NBA_CONTROLS = ['nbaundate', 'nbayear', 'nbaafter', 'parker', 'kareem', 'cousins', 'nbawatch', 'nbaclub', 'nbaborn', 'nbalineage', 'nbaaba', 'nbaespn', 'nbacontinent', 'nbabornrecord', 'nbacontinentgap'];
 /* Round 1567: a club group dated against trades ("Played for the Steelers (as of 2025)") is the same claim as the
    undated one for every man whose seasons there all came before the date, which section 4 checks against the
    record; the ledgers name such groups and facts by the undated label, and a refuted claim stays refuted dated */
@@ -522,6 +537,46 @@ if (CONTROL) {
       });
       if (changed) g.theme = 'Played for the Indiana Pacers (as of 2025-26)';
       own = { kinds: ['other-unknown'], subject: 'Moses Malone' };
+    } else if (CONTROL === 'nbaespn') {
+      /* fix-1583 (review-run-1583 minor 3, espn-closed): Pascal Siakam given a 2016-17 season on ESPN's side only under
+         "Seattle Supersonics", a spelling no franchise lists (ESPN's names are an open list): it could be an old name
+         of a club beside him, so he is unknown beside nbaconn-004's club groups, never OUT (other-unknown, him) */
+      changed = !!group('nbaconn-004', LAKERS) && rebuild(r => {
+        const m = r.men['Pascal Siakam'];
+        if (!m?.seasons?.['2016-17'] || m.seasons['2016-17'].includes('Seattle Supersonics')) return false;
+        m.seasons['2016-17'] = [...m.seasons['2016-17'], 'Seattle Supersonics'];
+        return true;
+      });
+      own = { kinds: ['other-unknown'], subject: 'Pascal Siakam' };
+    } else if (CONTROL === 'nbacontinent') {
+      /* fix-1583 (continent-no): Paul Pierce's birthplace on the second host read as Australia, a country in neither of
+         "Born in Africa"'s two sets: unknown beside nbaconn-004's "Born in Africa", never a no (other-unknown, him) */
+      changed = !!group('nbaconn-004', 'Born in Africa') && !!group('nbaconn-004', CELTICS)?.players.includes('Paul Pierce') && rebuild((r, s2) => {
+        const b = s2.men['Paul Pierce'];
+        if (b?.born !== 'USA') return false;
+        b.born = 'Australia';
+        return true;
+      });
+      own = { kinds: ['other-unknown'], subject: 'Paul Pierce' };
+    } else if (CONTROL === 'nbabornrecord') {
+      /* fix-1583 (born-guess, section 11): Dillon Brooks' stored birthplace text read as "Mississauga, Ontario" (a
+         spelled out province no list holds) while his stored country stays Canada: the reader gives null for that
+         text, so the stored country is no longer the reader's (born-record, him) */
+      changed = rebuild(r => {
+        const m = r.men['Dillon Brooks'];
+        if (m?.bornText !== 'Mississauga, ON' || m.born !== 'Canada') return false;
+        m.bornText = 'Mississauga, Ontario';
+        return true;
+      });
+      own = { kinds: ['born-record'], subject: 'Dillon Brooks' };
+    } else if (CONTROL === 'nbacontinentgap') {
+      /* fix-1583 (section 11): the ESPN reader taught Australia, as a round adding an Australian would, and neither
+         continent set: the country would fall through "Born in Africa" (continent-gap, Australia) */
+      if (!NBA_COUNTRY_NAMES.Australia) {
+        NBA_COUNTRY_NAMES.Australia = 'Australia';
+        changed = true;
+      }
+      own = { kinds: ['continent-gap'], subject: 'Australia' };
     }
   } else if (CONTROL === 'rangedrop') {
     if (rangeDropped) {
@@ -1035,6 +1090,39 @@ for (const s of SPORTS) {
   }
   for (const k of OWED_UNWATCHED[s] ?? []) if (!kinds.has(k) || sports[s].checker.watched?.has(k)) fail(`${s}: ${k} is on the owed list and ${sports[s].checker.watched?.has(k) ? 'is watched now' : 'on no board'}: take it off OWED_UNWATCHED`);
   console.log(`   ${s}: kinds ${[...kinds].map(([k, c]) => `${k} ${c}`).join(', ')}; ${n} problems${owed.size ? `; running and not watched, owed to the baseball table rounds: ${[...owed].join(', ')}` : ''}`);
+}
+
+console.log('11) the NBA birthplace readers: a place no list holds is unknown, and every stored country is the reader\'s');
+/* fix-1583 (review-run-1583 minor 3): the checker reads the stored country, and nbaBirthCountry runs only when the
+   record is fetched (fetchNbaRecord.mjs), so this asks the readers themselves. (a) fixed probes: a suffix no list
+   holds gives null, never the suffix; (b) on both hosts every man's stored country is what the reader gives for his
+   stored text or code; (c) every country either reader can give sits in exactly one of "Born in Africa"'s two sets,
+   so a country a round teaches the readers cannot fall through the continent group */
+{
+  let bad = 0;
+  const PROBES = [['Mississauga, ON', 'Canada'], ['Montreal, PQ', 'Canada'], ['Chicago, IL', 'USA'], ['Paris, France', 'France'], ['Kinshasa, Congo', 'Congo'], ['Melbourne, Australia', null], ['Mississauga, Ontario', null], ['', null], [null, null]];
+  for (const [text, want] of PROBES) {
+    const got = nbaBirthCountry(text);
+    if (got !== want) { bad += 1; fire('born-reader', String(text)); fail(`nba: nbaBirthCountry(${JSON.stringify(text)}) gives ${JSON.stringify(got)}, not ${JSON.stringify(want)}`); }
+  }
+  const { record, second, checker } = sports.nba;
+  const readBack = [[record?.men, m => nbaBirthCountry(m.bornText), 'the record', 'bornText'], [second?.men, m => (m.bornCode ? NBA_COUNTRY_CODES[m.bornCode] ?? null : null), 'the second host', 'bornCode']];
+  let men = 0;
+  for (const [all, reader, host, field] of readBack) {
+    for (const [name, m] of Object.entries(all ?? {})) {
+      men += 1;
+      const want = reader(m);
+      if ((m.born ?? null) !== want) { bad += 1; fire('born-record', name); fail(`nba: ${host} stores ${name} as born in ${JSON.stringify(m.born ?? null)}, but its reader gives ${JSON.stringify(want)} for ${field} ${JSON.stringify(m[field] ?? null)}`); }
+    }
+  }
+  const c = checker.criterion('Born in Africa');
+  const countries = new Set(['USA', 'Canada', ...Object.values(NBA_COUNTRY_NAMES), ...Object.values(NBA_COUNTRY_CODES)]);
+  if (c?.kind !== 'continent') { bad += 1; fail('nba: "Born in Africa" is no continent criterion, so section 11 (c) asks nothing'); }
+  for (const x of countries) {
+    const n = (c?.yes?.has(x) ? 1 : 0) + (c?.no?.has(x) ? 1 : 0);
+    if (n !== 1) { bad += 1; fire('continent-gap', x); fail(`nba: a reader can give ${x}, which sits in ${n} of "Born in Africa"'s two sets, not exactly one`); }
+  }
+  console.log(`   nba: ${PROBES.length} reader probes, ${men} stored birthplaces read back on two hosts, ${countries.size} countries each in one continent set; ${bad} problems`);
 }
 
 console.log('');
