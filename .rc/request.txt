@@ -1,0 +1,3 @@
+old-a: node .rc/x/oldsave1593.mjs
+old-b: OLD_SEEDS=4,5,6 node .rc/x/oldsave1593.mjs
+oldfleet: node scripts/proofWorldUclFleet.mjs --base 14a9af704 --fleet all --coach nocoach --seeds 1,2 --old-saves --uel-play-off
