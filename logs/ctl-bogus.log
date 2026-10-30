@@ -1,0 +1,1 @@
+simCmDecidingLeg: ABORT, DECIDING_LEG_CONTROL=bogus is not one of board, morale, fans, tieall, hattrick, nogate, cutover

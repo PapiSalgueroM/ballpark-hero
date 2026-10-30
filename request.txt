@@ -1,0 +1,18 @@
+tsc: node_modules/.bin/tsc --noEmit -p tsconfig.app.json
+simCmDecidingLeg: node scripts/simCmDecidingLeg.mjs
+ctl-board: DECIDING_LEG_CONTROL=board node scripts/simCmDecidingLeg.mjs
+ctl-morale: DECIDING_LEG_CONTROL=morale node scripts/simCmDecidingLeg.mjs
+ctl-fans: DECIDING_LEG_CONTROL=fans node scripts/simCmDecidingLeg.mjs
+ctl-tieall: DECIDING_LEG_CONTROL=tieall node scripts/simCmDecidingLeg.mjs
+ctl-hattrick: DECIDING_LEG_CONTROL=hattrick node scripts/simCmDecidingLeg.mjs
+ctl-nogate: DECIDING_LEG_CONTROL=nogate node scripts/simCmDecidingLeg.mjs
+ctl-cutover: DECIDING_LEG_CONTROL=cutover node scripts/simCmDecidingLeg.mjs
+ctl-bogus: DECIDING_LEG_CONTROL=bogus node scripts/simCmDecidingLeg.mjs
+vitest: node_modules/.bin/vitest run src/test/cmDecidingLegCard.test.tsx src/test/managerPenaltyMarkers.test.tsx src/test/managerQuickSimLegs.test.tsx src/test/cmReportBoardWord.test.tsx --testTimeout=300000 --hookTimeout=120000
+simCmLeagueRules: node scripts/simCmLeagueRules.mjs
+simManagerAppealIsolation: node scripts/simManagerAppealIsolation.mjs
+simCmMatchDay: node scripts/simCmMatchDay.mjs
+simCmShootoutOrder: node scripts/simCmShootoutOrder.mjs
+simManagerHotSeat: node scripts/simManagerHotSeat.mjs
+simExtraTime: node scripts/simExtraTime.mjs
+simNoRivalNames: node scripts/simNoRivalNames.mjs

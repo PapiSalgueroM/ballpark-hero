@@ -1,0 +1,16 @@
+
+[1m[46m RUN [49m[22m [36mv3.2.7 [39m[90m/home/runner/work/ballpark-hero/ballpark-hero[39m
+
+ [32m✓[39m src/test/cmDecidingLegCard.test.tsx [2m([22m[2m4 tests[22m[2m)[22m[33m 326[2mms[22m[39m
+ [32m✓[39m src/test/managerQuickSimLegs.test.tsx [2m([22m[2m2 tests[22m[2m)[22m[33m 1146[2mms[22m[39m
+   [33m[2m✓[22m[39m Club Manager: a quick sim makes its subs (Round 1146)[2m > [22mbrings fresh legs on after the break, and the report the player lands on lists the change [33m 958[2mms[22m[39m
+ [32m✓[39m src/test/cmReportBoardWord.test.tsx [2m([22m[2m3 tests[22m[2m)[22m[33m 1861[2mms[22m[39m
+   [33m[2m✓[22m[39m the report card and the header say the same thing about the board[2m > [22magrees at every whole value from 0 to 100, No sacking off [33m 1297[2mms[22m[39m
+   [33m[2m✓[22m[39m the report card and the header say the same thing about the board[2m > [22magrees at every whole value from 0 to 100, No sacking on [33m 554[2mms[22m[39m
+ [32m✓[39m src/test/managerPenaltyMarkers.test.tsx [2m([22m[2m4 tests[22m[2m)[22m[32m 183[2mms[22m[39m
+
+[2m Test Files [22m [1m[32m4 passed[39m[22m[90m (4)[39m
+[2m      Tests [22m [1m[32m13 passed[39m[22m[90m (13)[39m
+[2m   Start at [22m 09:26:43
+[2m   Duration [22m 8.16s[2m (transform 2.97s, setup 508ms, collect 12.52s, tests 3.52s, environment 2.81s, prepare 987ms)[22m
+
