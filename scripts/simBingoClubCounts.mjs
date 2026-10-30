@@ -148,6 +148,10 @@
                                    transfer line: section 8 red.
      BINGO_CLUBS_CONTROL=windowdb  the first ROUND entry's window.db edited:
                                    section 8 red.
+     BINGO_CLUBS_CONTROL=bornone   ROUND's first born date (else any round
+                                   keyed entry's) keeps one source in memory:
+                                   section 5 red (onesource lands on a Round
+                                   1571 club and never reached this check).
      BINGO_CLUBS_CONTROL=touchprev one PREV entry's notes edited in memory:
                                    section 9 red. (Named for PREV, not for a
                                    round, so it moves with PREV.)
@@ -710,6 +714,16 @@ if (CONTROL === 'onesource') {
     victim.sources = victim.sources.slice(1);
     changed(`${victim.what} loses a source`);
   }
+}
+/* bornone (review 2026-10-30): onesource lands on a Round 1571 club, so this one proves the round
+   keyed born date check itself: ROUND's first born date on two sources keeps one, else any round's. */
+if (CONTROL === 'bornone') {
+  const born = sourced.filter(s => s.bornOf !== undefined && (s.sources ?? []).length >= 2);
+  const victim = born.find(s => s.bornOf === ROUND) ?? born[0];
+  if (victim) {
+    victim.sources = victim.sources.slice(0, 1);
+    changed(`${victim.what} keeps one source (round ${victim.bornOf})`);
+  } else console.log('   =bornone: no round keyed born date with two sources yet (exit 3 by design)');
 }
 /* Hosts are counted by family since Round 1576 (critic 1576 advice 10d): transfermarkt.com and
    transfermarkt.us are one host, api.fotmob.com and fotmob.com are one. The family is the label
