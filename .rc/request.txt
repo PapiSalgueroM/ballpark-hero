@@ -1,0 +1,8 @@
+#!serve
+#!playwright
+#!serial
+rr-walk1573-bt: git worktree add /tmp/wb 158969218 && ln -s "$PWD/node_modules" /tmp/wb/node_modules && (cd /tmp/wb && node_modules/.bin/vite build --outDir /tmp/wb-dist --emptyOutDir > /tmp/wb-build.log 2>&1) && PLAY_BASE_DIST=/tmp/wb-dist PLAY_SHORT_DATE=2026-11-04 PLAY_GOOD_DATE=2026-11-02 PLAY_DEALS=150 node .rc/x/rrwalk1573.mjs
+rr-nofallback-nhl-A: PLAY_GM_CAREER_SPORT=nhl PLAY_GM_CAREER_WALKS=A PLAY_GM_CAREER_SIZE=390 PLAY_GM_CAREER_CONTROL=nofallback node scripts/playGmCareer.mjs
+rr-nofallback-nfl-A: PLAY_GM_CAREER_SPORT=nfl PLAY_GM_CAREER_WALKS=A PLAY_GM_CAREER_SIZE=390 PLAY_GM_CAREER_CONTROL=nofallback node scripts/playGmCareer.mjs
+rr-mutdeps-vt: node .rc/x/rrmutdeps.mjs && node_modules/.bin/vitest run src/test/usCareerHallWall.test.tsx src/lib/usCareerHallWall.test.ts --testTimeout=300000 --hookTimeout=120000; s=$?; git checkout -- src scripts; exit $s
+rr-mutdeps-sim: node .rc/x/rrmutdeps.mjs && node scripts/simUsCareerHallWall.mjs; s=$?; git checkout -- src scripts; exit $s
