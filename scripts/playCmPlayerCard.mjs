@@ -2,7 +2,8 @@
  * Round 1601: Club Manager's player card, walked on the built site.
  *
  * The saves are built here by the engine bundle on a seeded stream and put under the save key before the page loads:
- *   S1 an Everton career twenty entries into its third season: two seasons of rows, a whole league book;
+ *   S1 an Arsenal career twenty entries into its third season: two seasons of rows, a whole league book on full
+ *      record (the first of six seeds that keeps the manager and its league whole);
  *   S2 a Hertha BSC career twenty entries in: the 2. Bundesliga, where much of the league is not on record;
  *   S3 S1 with its rows taken off and pastFrom set to 3: the kept from line.
  * At 320 by 568, 390 by 844 and 1280 by 900, Chromium, the database host blocked and every other host too.
@@ -113,18 +114,22 @@ function toSeasonEnd(s) {
 }
 const S = {};
 /* A club that keeps its manager on the seed it is played on: the first seed of a few that does. */
-function kept(make, seed) {
+function kept(make, seed, good = () => true) {
   for (let k = 0; k < 6; k += 1) {
     const s = onStream(seed + k * 7919, make);
-    if (s && !s.sacked && !s.pendingSummary?.sacked) return s;
+    if (s && !s.sacked && good(s)) return s;
   }
   return null;
 }
 S.S1 = kept(() => {
-  let s = cm.startCareer('Everton');
+  let s = cm.startCareer('Arsenal');
   for (let season = 0; season < 2 && !s.sacked; season += 1) s = cm.startNextSeason(cm.finishSeason(toSeasonEnd(s)).state);
   return s.sacked ? s : playTo(s, 20);
-}, 0x160101);
+}, 0x160101, s => {
+  /* Still in a league whose book is whole and on full record (a relegation or a thin league would earn the thin line). */
+  const lb = cm.leagueBoardsOf(s);
+  return s.season === 3 && !!lb && lb.from === null && lb.share >= boards.BOOK_FULL_SHARE;
+});
 S.S2 = onStream(0x160102, () => playTo(cm.startCareer('Hertha BSC'), 20));
 S.S3 = JSON.parse(JSON.stringify(S.S1));
 delete S.S3.pastLines;
