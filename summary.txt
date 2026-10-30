@@ -1,0 +1,2 @@
+build exit=0 36s | [dukb] inlined 1 stylesheet(s) and 1 module(s) into 181 snapshots (11 left alone)
+vitest-1334 exit=0 58s |    Duration  57.93s (transform 6.79s, setup 2.18s, collect 20.97s, tests 113.85s, environment 13.62s, prepare 2.96s)
