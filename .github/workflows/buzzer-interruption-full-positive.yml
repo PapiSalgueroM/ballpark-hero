@@ -1,0 +1,174 @@
+name: Buzzer interruption fixed full default suite
+on:
+  push:
+    branches: [codex/buzzer-interruption-qualify-20261030]
+permissions:
+  contents: read
+jobs:
+  full-default-positive:
+    runs-on: ubuntu-latest
+    timeout-minutes: 120
+    env:
+      CI: 'true'
+      SIM_NETWORK: offline
+      GIT_OPTIONAL_LOCKS: '0'
+      EXPECTED_MAIN: 14a9af7042793e487d12af0bffcaf030a0d0da9a
+      EXPECTED_PARENT: 9ac0b58ef95340a5717f75501de84d11404de3cd
+      EXPECTED_TREE: 91d7c77d2313c444449516d54e114cff239ba540
+      EXPECTED_TEST_BASE: fdcd573d5b37dd76a095fe1f872d84fc5c7e5ff7
+      TEST_SHA256: a4dc200d089b9c30f54adc4f47d0c2f6e485bfeb68abb9a8c61a54007e6969d4
+      HARNESS_SHA256: ce4cdb3c645452cc5f1a9412ede95c610a3c11584dcf948d20531d5abe4f41a9
+      CONTROLLER_SHA256: f95ac51ede62435a04f2a91ebd08973be676f744bc002f2f56ae8e2ee0544bcc
+      FOCUSED_RED_SHA256: 6d91d77e324fd80bb04cac5c28c8de964c3c8961aeea88e34244503351510917
+      COLLECTOR_SHA256: d2800d0b5baeb39e986e5aeffe00273bdf721b5e91b334708b12626e3425c7d1
+      NATIVE_JUDGE_SHA256: 499275818f57aa7bea681690a3c34936e496eed09d1f332d6215399eb569ae7e
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          persist-credentials: false
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '24'
+      - name: Bind fixed product and exact shared six-QA proof
+        run: |
+          set -euo pipefail
+          out="$RUNNER_TEMP/bfp"
+          test ! -e "$out"
+          mkdir -p "$out/helpers" "$out/runtime-tmp"
+          echo "BUZZER_OUT=$out" >> "$GITHUB_ENV"
+          echo "PLACEMENT_OUT=$out" >> "$GITHUB_ENV"
+          echo "TMPDIR=$out/runtime-tmp" >> "$GITHUB_ENV"
+          test "$GITHUB_REF_NAME" = codex/buzzer-interruption-qualify-20261030
+          test "$(git rev-list --parents -n1 HEAD)" = "$GITHUB_SHA $EXPECTED_PARENT"
+          test "$(git rev-list --parents -n1 "$EXPECTED_PARENT")" = "$EXPECTED_PARENT $EXPECTED_TEST_BASE"
+          test "$(git rev-list --parents -n1 "$EXPECTED_TEST_BASE")" = "$EXPECTED_TEST_BASE $EXPECTED_MAIN"
+          test "$(git rev-parse "$EXPECTED_PARENT^{tree}")" = "$EXPECTED_TREE"
+          test "$(git ls-files | wc -l)" -eq 5460
+          git diff --name-status "$EXPECTED_MAIN" "$EXPECTED_PARENT" | LC_ALL=C sort > "$out/product.paths"
+          printf 'A\tscripts/simBuzzerInterruption.mjs\nM\tsrc/components/buzzer-beater/BuzzerBeaterBoard.tsx\nA\tsrc/test/buzzerInterruption.test.tsx\n' | LC_ALL=C sort > "$out/expected-product.paths"
+          cmp "$out/product.paths" "$out/expected-product.paths"
+          git diff --name-status "$EXPECTED_PARENT" HEAD | LC_ALL=C sort > "$out/proof.paths"
+          printf 'A\t.github/workflows/buzzer-interruption-full-positive.yml\nA\t.github/workflows/buzzer-interruption-game-qualify.yml\nA\tscripts/qa/buzzerInterruptionFullPositive.cjs\nA\tscripts/qa/buzzerInterruptionFocusedRed.cjs\nA\tscripts/qa/playBuzzerInterruptionBaseline.mjs\nA\tscripts/qa/judgeBuzzerInterruptionNativeFixed.cjs\n' | LC_ALL=C sort > "$out/expected-proof.paths"
+          cmp "$out/proof.paths" "$out/expected-proof.paths"
+          test "$(sha256sum src/test/buzzerInterruption.test.tsx | cut -d' ' -f1)" = "$TEST_SHA256"
+          test "$(sha256sum src/components/buzzer-beater/BuzzerBeaterBoard.tsx | cut -d' ' -f1)" = 2f78fd8b566a68045892877e6c77cc92ea1db1e93285e30af96a74f38dcf0c6f
+          test "$(sha256sum scripts/simBuzzerInterruption.mjs | cut -d' ' -f1)" = "$HARNESS_SHA256"
+          test "$(sha256sum scripts/qa/buzzerInterruptionFullPositive.cjs | cut -d' ' -f1)" = "$CONTROLLER_SHA256"
+          test "$(sha256sum scripts/qa/buzzerInterruptionFocusedRed.cjs | cut -d' ' -f1)" = "$FOCUSED_RED_SHA256"
+          test "$(sha256sum scripts/qa/playBuzzerInterruptionBaseline.mjs | cut -d' ' -f1)" = "$COLLECTOR_SHA256"
+          test "$(sha256sum scripts/qa/judgeBuzzerInterruptionNativeFixed.cjs | cut -d' ' -f1)" = "$NATIVE_JUDGE_SHA256"
+          sha256sum scripts/qa/buzzerInterruptionFullPositive.cjs scripts/qa/buzzerInterruptionFocusedRed.cjs scripts/qa/playBuzzerInterruptionBaseline.mjs scripts/qa/judgeBuzzerInterruptionNativeFixed.cjs > "$out/qa-helpers.before.sha256"
+          sha256sum .github/workflows/buzzer-interruption-full-positive.yml .github/workflows/buzzer-interruption-game-qualify.yml > "$out/workflows.actual-head.sha256"
+          git ls-files -z | sort -z > "$out/source-members.initial"
+          xargs -0 sha256sum < "$out/source-members.initial" > "$out/source.initial.sha256"
+          git ls-files --others --exclude-standard -z | sort -z > "$out/untracked.initial"
+          test ! -s "$out/untracked.initial"
+          git for-each-ref --format='%(refname) %(objectname)' > "$out/refs.before"
+          git rev-parse HEAD > "$out/head.txt"
+          git rev-parse 'HEAD^{tree}' > "$out/tree.txt"
+          git archive --format=tar HEAD > "$out/source.tar"
+          cp scripts/qa/buzzerInterruptionFullPositive.cjs "$out/full-default-positive-controller.cjs"
+          cmp scripts/qa/buzzerInterruptionFullPositive.cjs "$out/full-default-positive-controller.cjs"
+          sha256sum "$out/full-default-positive-controller.cjs" > "$out/controller-copy.sha256"
+          raw=0
+          node --check scripts/qa/buzzerInterruptionFullPositive.cjs > "$out/syntax.stdout" 2> "$out/syntax.stderr" || raw=$?
+          printf '%s\n' "$raw" > "$out/syntax.exit"
+          test "$raw" -eq 0
+          test ! -s "$out/syntax.stdout"
+          test ! -s "$out/syntax.stderr"
+          cat > "$out/helpers/run.sh" <<'RUN'
+          run() {
+            local id="$1" budget="$2"; shift 2
+            local raw=0
+            : > "$BUZZER_OUT/$id.transport"
+            { printf '%q ' "$@"; printf '\n'; } > "$BUZZER_OUT/$id.command"
+            NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" SIM_OFFLINE_RECEIPT="$BUZZER_OUT/$id.transport" FORCE_COLOR=0 env -u NO_COLOR timeout --signal=TERM --kill-after=15s "$budget" "$@" > "$BUZZER_OUT/$id.stdout" 2> "$BUZZER_OUT/$id.stderr" || raw=$?
+            printf '%s\n' "$raw" > "$BUZZER_OUT/$id.exit"
+            test ! -s "$BUZZER_OUT/$id.transport"
+          }
+          RUN
+          sha256sum "$out/helpers/run.sh" > "$out/helpers.sha256"
+      - name: Locked dependencies and actual application types
+        run: |
+          set -euo pipefail
+          out="$BUZZER_OUT"
+          raw=0
+          env -u NODE_OPTIONS npm ci > "$out/npm-ci.stdout" 2> "$out/npm-ci.stderr" || raw=$?
+          printf '%s\n' "$raw" > "$out/npm-ci.exit"
+          test "$raw" -eq 0
+          source "$out/helpers/run.sh"
+          run types 3m node node_modules/typescript/bin/tsc --noEmit -p tsconfig.app.json
+          test "$(cat "$out/types.exit")" -eq 0
+          test ! -s "$out/types.stdout"
+          test ! -s "$out/types.stderr"
+      - name: Quick permanent eighteen-case positive preflight
+        run: |
+          set -euo pipefail
+          out="$BUZZER_OUT"
+          source "$out/helpers/run.sh"
+          run focused-positive 5m env BUZZER_INTERRUPTION_OUT="$out/focused-positive" node scripts/simBuzzerInterruption.mjs
+          test "$(cat "$out/focused-positive.exit")" -eq 0
+          grep -Fqx 'simBuzzerInterruption: 18 real Board cases pass; no skipped/todo/callback errors.' "$out/focused-positive.stdout"
+          grep -Fqx "simBuzzerInterruption: 3 copied checker refusals/same-file restores; evidence $out/focused-positive" "$out/focused-positive.stdout"
+          test "$(cat "$out/focused-positive/raw.exit")" -eq 0
+          test -f "$out/focused-positive/admission.json"
+          sha256sum -c "$out/qa-helpers.before.sha256" > "$out/qa-helpers.after-focused.log"
+      - name: Actual unfiltered positive default suite, measured thirty-two-minute foundation
+        run: |
+          set -euo pipefail
+          out="$BUZZER_OUT"
+          source "$out/helpers/run.sh"
+          run full-default 95m node "$out/full-default-positive-controller.cjs"
+          test "$(cat "$out/full-default.exit")" -eq 0
+          test ! -s "$out/full-default.stderr"
+          grep -Fqx 'BUZZER_INTERRUPTION_DEFAULT_GREEN: actual default npm test passed with zero failures/runtime errors, exact58 source-owned optional skips and18 Buzzer cases;7 copied classifier refusals/restores passed.' "$out/full-default.stdout"
+          test "$(cat "$out/full-suite/raw.exit")" -eq 0
+          test -f "$out/full-suite/ACTUAL-DEFAULT-FULL-SUITE-ADMISSION.json"
+          sha256sum -c "$out/controller-copy.sha256" > "$out/controller-copy-held.log"
+          git ls-files -z | sort -z | xargs -0 sha256sum > "$out/source.after-default.sha256"
+          cmp "$out/source.initial.sha256" "$out/source.after-default.sha256"
+          find node_modules -type f -print0 | sort -z > "$out/dependencies.members.post-qualification"
+          xargs -0 sha256sum < "$out/dependencies.members.post-qualification" > "$out/dependencies.post-qualification.sha256"
+          find node_modules -type l -printf '%p -> %l\n' | sort > "$out/dependency-links.post-qualification"
+      - name: Always preserve source and post-qualification evidence
+        if: ${{ always() }}
+        run: |
+          set -euo pipefail
+          out="$RUNNER_TEMP/bfp"
+          mkdir -p "$out"
+          failed=0
+          git ls-files -z | sort -z > "$out/source-members.final"
+          cmp "$out/source-members.initial" "$out/source-members.final" || failed=1
+          sha256sum -c "$out/source.initial.sha256" > "$out/source-held.log" 2>&1 || failed=1
+          git ls-files --others --exclude-standard -z | sort -z > "$out/untracked.final"
+          cmp "$out/untracked.initial" "$out/untracked.final" || failed=1
+          git diff --exit-code HEAD > "$out/working-source.diff" || failed=1
+          git for-each-ref --format='%(refname) %(objectname)' > "$out/refs.after"
+          cmp "$out/refs.before" "$out/refs.after" || failed=1
+          sha256sum -c "$out/helpers.sha256" > "$out/helpers-held.log" 2>&1 || failed=1
+          sha256sum -c "$out/controller-copy.sha256" > "$out/controller-copy-final-held.log" 2>&1 || failed=1
+          sha256sum -c "$out/qa-helpers.before.sha256" > "$out/qa-helpers.final-held.log" 2>&1 || failed=1
+          sha256sum -c "$out/workflows.actual-head.sha256" > "$out/workflows.final-held.log" 2>&1 || failed=1
+          if test -f "$out/dependencies.post-qualification.sha256"; then
+            find node_modules -type f -print0 | sort -z > "$out/dependencies.members.final"
+            cmp "$out/dependencies.members.post-qualification" "$out/dependencies.members.final" || failed=1
+            sha256sum -c "$out/dependencies.post-qualification.sha256" > "$out/dependencies-final-held.log" 2>&1 || failed=1
+            find node_modules -type l -printf '%p -> %l\n' | sort > "$out/dependency-links.final"
+            cmp "$out/dependency-links.post-qualification" "$out/dependency-links.final" || failed=1
+          else
+            printf 'POST_QUALIFICATION_DEPENDENCY_SNAPSHOT_NOT_CREATED\n' > "$out/dependencies-not-created.txt"
+            failed=1
+          fi
+          printf '%s\n' "$failed" > "$out/final-holds.exit"
+          printf '{"scope":"FIXED_APP_DEFAULT_VITEST_AND_FOCUSED_PREFLIGHT_ONLY","parent":"%s","main":"%s","source":"%s","focused18":"READ_ACTUAL_FOCUSED_ADMISSION","fullDefaultSuite":"READ_ACTUAL_DEFAULT_ADMISSION","optionalProfilesExecuted":false,"dependencyInventoryScope":"POST_QUALIFICATION_ONLY","build":"UNRUN","browser":"UNRUN_THIS_JOB","caps":"UNRUN_THIS_JOB","SEO":"UNRUN","globalSims":"UNRUN","parallelGameJob":"SEPARATE_REQUIRED_SAME_SOURCE_RESULT","priorOriginal20mTimeout":"PRESERVED_NO_CREDIT","featureReady":false}\n' "$EXPECTED_PARENT" "$EXPECTED_MAIN" "$GITHUB_SHA" > "$out/SCOPE.json"
+          find "$out" -type f -print0 | sort -z | xargs -0 sha256sum > "$RUNNER_TEMP/buzzer-full-positive-evidence.sha256"
+          cp "$RUNNER_TEMP/buzzer-full-positive-evidence.sha256" "$out/evidence.sha256"
+          exit "$failed"
+      - uses: actions/upload-artifact@v4
+        if: ${{ always() }}
+        with:
+          name: buzzer-interruption-full-positive-${{ github.run_id }}-a${{ github.run_attempt }}
+          path: ${{ runner.temp }}/bfp
+          if-no-files-found: error
+          retention-days: 14
