@@ -1,0 +1,3 @@
+3646 /home/runner/work/_temp/rc-out/full/simGmDraftOrder.mjs/stdout.log
+   0 /home/runner/work/_temp/rc-out/full/simGmDraftOrder.mjs/stderr.log
+3646 total

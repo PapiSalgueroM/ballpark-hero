@@ -1,0 +1,3 @@
+811 /home/runner/work/_temp/rc-out/full/simQuotaHonesty.mjs/stdout.log
+  0 /home/runner/work/_temp/rc-out/full/simQuotaHonesty.mjs/stderr.log
+811 total

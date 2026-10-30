@@ -1,0 +1,3 @@
+2830 /home/runner/work/_temp/rc-out/full/simNflFullRosters.mjs/stdout.log
+   0 /home/runner/work/_temp/rc-out/full/simNflFullRosters.mjs/stderr.log
+2830 total

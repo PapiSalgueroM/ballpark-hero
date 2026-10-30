@@ -1,0 +1,38 @@
+#!serial
+# Full default filenames only. UNBOUND until final source and support admission.
+prepare: bash .rc/default-support.sh prepare
+simAllocation: bash .rc/default-support.sh run simAllocation.mjs
+simBoard: bash .rc/default-support.sh run simBoard.mjs
+simCalendarCurrentDate: bash .rc/default-support.sh run simCalendarCurrentDate.mjs
+simCareerIntl: bash .rc/default-support.sh run simCareerIntl.mjs
+simCareerSocialBrands: bash .rc/default-support.sh run simCareerSocialBrands.mjs
+simClubDetailFixtures: bash .rc/default-support.sh run simClubDetailFixtures.mjs
+simClubVerdict: bash .rc/default-support.sh run simClubVerdict.mjs
+simCmOwnClubMarket: bash .rc/default-support.sh run simCmOwnClubMarket.mjs
+simCollegeSeat: bash .rc/default-support.sh run simCollegeSeat.mjs
+simCreation: bash .rc/default-support.sh run simCreation.mjs
+simEarlyReturnScope: bash .rc/default-support.sh run simEarlyReturnScope.mjs
+simFairPuzzles: bash .rc/default-support.sh run simFairPuzzles.mjs
+simFootleStatImport: bash .rc/default-support.sh run simFootleStatImport.mjs
+simGmDraftOrder: bash .rc/default-support.sh run simGmDraftOrder.mjs
+simGuessSoccerClubHints: bash .rc/default-support.sh run simGuessSoccerClubHints.mjs
+simHubs: bash .rc/default-support.sh run simHubs.mjs
+simListQuizFeedback: bash .rc/default-support.sh run simListQuizFeedback.mjs
+simManagerWorldBrowser: bash .rc/default-support.sh run simManagerWorldBrowser.mjs
+simMlbPostseasonFormatHistory: bash .rc/default-support.sh run simMlbPostseasonFormatHistory.mjs
+simNbaDraftBoard: bash .rc/default-support.sh run simNbaDraftBoard.mjs
+simNflFullRosters: bash .rc/default-support.sh run simNflFullRosters.mjs
+simNhlRosterLimit: bash .rc/default-support.sh run simNhlRosterLimit.mjs
+simPlayerAutocompleteInteraction: bash .rc/default-support.sh run simPlayerAutocompleteInteraction.mjs
+simQuotaHonesty: bash .rc/default-support.sh run simQuotaHonesty.mjs
+simRosterAdjudication: bash .rc/default-support.sh run simRosterAdjudication.mjs
+simSeoDiscovery1444: bash .rc/default-support.sh run simSeoDiscovery1444.mjs
+simSoccerCareerLifeReviews: bash .rc/default-support.sh run simSoccerCareerLifeReviews.mjs
+simSoccerFarewellPageControl: bash .rc/default-support.sh run simSoccerFarewellPageControl.mjs
+simSoccerVeteranTalks: bash .rc/default-support.sh run simSoccerVeteranTalks.mjs
+simTennisPlayerFeedback: bash .rc/default-support.sh run simTennisPlayerFeedback.mjs
+simTriviaBank: bash .rc/default-support.sh run simTriviaBank.mjs
+simTycoonTicketPolicy: bash .rc/default-support.sh run simTycoonTicketPolicy.mjs
+simUsCoachPoaching: bash .rc/default-support.sh run simUsCoachPoaching.mjs
+simWindow2026Integration: bash .rc/default-support.sh run simWindow2026Integration.mjs
+finish: bash .rc/default-support.sh finish

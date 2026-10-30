@@ -1,0 +1,3 @@
+6897 /home/runner/work/_temp/rc-out/full/simCollegeSeat.mjs/stdout.log
+   0 /home/runner/work/_temp/rc-out/full/simCollegeSeat.mjs/stderr.log
+6897 total

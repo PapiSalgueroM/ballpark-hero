@@ -1,0 +1,2 @@
+0f17cbff2e2268cbc7f4940d280137e9698a429960b3ec3d3973082a7beb4cd0  /home/runner/work/_temp/rc-out/full/simFairPuzzles.mjs/stdout.log
+e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855  /home/runner/work/_temp/rc-out/full/simFairPuzzles.mjs/stderr.log

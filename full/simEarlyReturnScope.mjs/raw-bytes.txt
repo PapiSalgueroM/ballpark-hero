@@ -1,0 +1,3 @@
+1010 /home/runner/work/_temp/rc-out/full/simEarlyReturnScope.mjs/stdout.log
+   0 /home/runner/work/_temp/rc-out/full/simEarlyReturnScope.mjs/stderr.log
+1010 total

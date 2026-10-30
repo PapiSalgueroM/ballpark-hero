@@ -1,0 +1,3 @@
+2749 /home/runner/work/_temp/rc-out/full/simCareerIntl.mjs/stdout.log
+   0 /home/runner/work/_temp/rc-out/full/simCareerIntl.mjs/stderr.log
+2749 total

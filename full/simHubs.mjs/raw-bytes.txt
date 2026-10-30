@@ -1,0 +1,3 @@
+1973 /home/runner/work/_temp/rc-out/full/simHubs.mjs/stdout.log
+   0 /home/runner/work/_temp/rc-out/full/simHubs.mjs/stderr.log
+1973 total

@@ -1,0 +1,3 @@
+6282 /home/runner/work/_temp/rc-out/full/simCareerSocialBrands.mjs/stdout.log
+   0 /home/runner/work/_temp/rc-out/full/simCareerSocialBrands.mjs/stderr.log
+6282 total

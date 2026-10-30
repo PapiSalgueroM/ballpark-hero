@@ -1,0 +1,3 @@
+633 /home/runner/work/_temp/rc-out/full/simSoccerFarewellPageControl.mjs/stdout.log
+  0 /home/runner/work/_temp/rc-out/full/simSoccerFarewellPageControl.mjs/stderr.log
+633 total

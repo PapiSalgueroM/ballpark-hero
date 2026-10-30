@@ -1,0 +1,3 @@
+1834 /home/runner/work/_temp/rc-out/full/simRosterAdjudication.mjs/stdout.log
+   0 /home/runner/work/_temp/rc-out/full/simRosterAdjudication.mjs/stderr.log
+1834 total

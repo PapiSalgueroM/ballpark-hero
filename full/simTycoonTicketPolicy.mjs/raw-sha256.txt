@@ -1,0 +1,2 @@
+fa08692ecc11dbe985ab488e9fb6f7303bebc6fb9bbb4e14aeee14255d9a70c5  /home/runner/work/_temp/rc-out/full/simTycoonTicketPolicy.mjs/stdout.log
+e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855  /home/runner/work/_temp/rc-out/full/simTycoonTicketPolicy.mjs/stderr.log

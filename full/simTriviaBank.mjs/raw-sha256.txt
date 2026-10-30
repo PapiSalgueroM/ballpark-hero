@@ -1,0 +1,2 @@
+b32be94ab91fbe52706a34073c1e87efa1dde9610a371250e78d77f46c655017  /home/runner/work/_temp/rc-out/full/simTriviaBank.mjs/stdout.log
+e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855  /home/runner/work/_temp/rc-out/full/simTriviaBank.mjs/stderr.log

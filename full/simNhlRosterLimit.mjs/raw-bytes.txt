@@ -1,0 +1,3 @@
+856 /home/runner/work/_temp/rc-out/full/simNhlRosterLimit.mjs/stdout.log
+  0 /home/runner/work/_temp/rc-out/full/simNhlRosterLimit.mjs/stderr.log
+856 total

@@ -1,0 +1,3 @@
+1146 /home/runner/work/_temp/rc-out/full/simFairPuzzles.mjs/stdout.log
+   0 /home/runner/work/_temp/rc-out/full/simFairPuzzles.mjs/stderr.log
+1146 total

@@ -1,0 +1,2 @@
+44d6dc0788339946d44f0219be4afec3345e0c91b10f11382e52291a556ebf48  /home/runner/work/_temp/rc-out/full/simGuessSoccerClubHints.mjs/stdout.log
+e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855  /home/runner/work/_temp/rc-out/full/simGuessSoccerClubHints.mjs/stderr.log

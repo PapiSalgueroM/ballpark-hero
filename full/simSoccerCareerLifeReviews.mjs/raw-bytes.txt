@@ -1,0 +1,3 @@
+802 /home/runner/work/_temp/rc-out/full/simSoccerCareerLifeReviews.mjs/stdout.log
+  0 /home/runner/work/_temp/rc-out/full/simSoccerCareerLifeReviews.mjs/stderr.log
+802 total

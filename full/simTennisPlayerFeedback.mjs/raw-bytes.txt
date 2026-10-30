@@ -1,0 +1,3 @@
+3518 /home/runner/work/_temp/rc-out/full/simTennisPlayerFeedback.mjs/stdout.log
+   0 /home/runner/work/_temp/rc-out/full/simTennisPlayerFeedback.mjs/stderr.log
+3518 total

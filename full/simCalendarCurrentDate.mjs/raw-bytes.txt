@@ -1,0 +1,3 @@
+1059 /home/runner/work/_temp/rc-out/full/simCalendarCurrentDate.mjs/stdout.log
+   0 /home/runner/work/_temp/rc-out/full/simCalendarCurrentDate.mjs/stderr.log
+1059 total

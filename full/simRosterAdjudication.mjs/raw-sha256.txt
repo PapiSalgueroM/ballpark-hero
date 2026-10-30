@@ -1,0 +1,2 @@
+a1810800e623f07b7a8b9603636df4b57527d07ff8daec3e8c28a1e7a490fe76  /home/runner/work/_temp/rc-out/full/simRosterAdjudication.mjs/stdout.log
+e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855  /home/runner/work/_temp/rc-out/full/simRosterAdjudication.mjs/stderr.log

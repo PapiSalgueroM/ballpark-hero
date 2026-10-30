@@ -1,0 +1,2 @@
+fcd190070279eb7e5a20b36c012761cd80152c4262a6c23f36054121e9e94447  /home/runner/work/_temp/rc-out/full/simNbaDraftBoard.mjs/stdout.log
+e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855  /home/runner/work/_temp/rc-out/full/simNbaDraftBoard.mjs/stderr.log

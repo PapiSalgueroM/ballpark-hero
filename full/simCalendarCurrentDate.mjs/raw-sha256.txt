@@ -1,0 +1,2 @@
+9fd4580e23ee7e55b091594c30dc4536d1d9b5aeb7e201941aff438cc1668b05  /home/runner/work/_temp/rc-out/full/simCalendarCurrentDate.mjs/stdout.log
+e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855  /home/runner/work/_temp/rc-out/full/simCalendarCurrentDate.mjs/stderr.log

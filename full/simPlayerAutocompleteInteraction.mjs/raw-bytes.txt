@@ -1,0 +1,3 @@
+5649 /home/runner/work/_temp/rc-out/full/simPlayerAutocompleteInteraction.mjs/stdout.log
+   0 /home/runner/work/_temp/rc-out/full/simPlayerAutocompleteInteraction.mjs/stderr.log
+5649 total

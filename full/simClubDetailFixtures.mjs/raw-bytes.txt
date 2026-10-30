@@ -1,0 +1,3 @@
+628308 /home/runner/work/_temp/rc-out/full/simClubDetailFixtures.mjs/stdout.log
+     0 /home/runner/work/_temp/rc-out/full/simClubDetailFixtures.mjs/stderr.log
+628308 total

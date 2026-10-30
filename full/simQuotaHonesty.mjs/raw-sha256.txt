@@ -1,0 +1,2 @@
+64675e1e90800ab7d878aff3c5f71004a500c53e21971cdecdfc4f08e8550855  /home/runner/work/_temp/rc-out/full/simQuotaHonesty.mjs/stdout.log
+e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855  /home/runner/work/_temp/rc-out/full/simQuotaHonesty.mjs/stderr.log

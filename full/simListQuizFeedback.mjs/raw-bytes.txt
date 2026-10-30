@@ -1,0 +1,3 @@
+3112 /home/runner/work/_temp/rc-out/full/simListQuizFeedback.mjs/stdout.log
+   0 /home/runner/work/_temp/rc-out/full/simListQuizFeedback.mjs/stderr.log
+3112 total

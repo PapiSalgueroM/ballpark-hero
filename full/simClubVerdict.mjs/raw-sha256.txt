@@ -1,0 +1,2 @@
+a7e2b74fd0385c4c33ffe5a9ef126c9c28e12d5bb35bf9f88ca12ea0e6aabab3  /home/runner/work/_temp/rc-out/full/simClubVerdict.mjs/stdout.log
+e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855  /home/runner/work/_temp/rc-out/full/simClubVerdict.mjs/stderr.log

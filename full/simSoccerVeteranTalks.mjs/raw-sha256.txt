@@ -1,0 +1,2 @@
+de31f78d5f5999bb76d9ce21504c53a0bb7b657c702d26657d88bb299c9e54d3  /home/runner/work/_temp/rc-out/full/simSoccerVeteranTalks.mjs/stdout.log
+e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855  /home/runner/work/_temp/rc-out/full/simSoccerVeteranTalks.mjs/stderr.log

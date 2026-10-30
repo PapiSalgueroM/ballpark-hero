@@ -1,0 +1,2 @@
+4b636d47f3483a1d5cfd499dc13207a9a597fbdb511d5fcaf453cfdd1df806e4  /home/runner/work/_temp/rc-out/full/simCmOwnClubMarket.mjs/stdout.log
+e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855  /home/runner/work/_temp/rc-out/full/simCmOwnClubMarket.mjs/stderr.log
