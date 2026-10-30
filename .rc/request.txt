@@ -1,0 +1,3 @@
+tsc: node_modules/.bin/tsc --noEmit -p tsconfig.app.json
+vitest-a: node_modules/.bin/vitest run src/components/front-office-shared/FrontOfficeGmCareer.test.tsx src/components/front-office/FrontOfficeLazyDesk.test.tsx src/components/nhl-front-office/NhlLazyDesk.test.tsx src/components/front-office-shared/GmCareerDesk.test.tsx src/lib/gmCareerRules.test.ts src/lib/gmDeskHost.test.ts src/lib/gmXp.test.ts src/lib/gmSeat.test.ts --testTimeout=600000 --hookTimeout=120000
+simNoRivalNames: node scripts/simNoRivalNames.mjs
