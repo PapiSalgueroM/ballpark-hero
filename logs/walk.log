@@ -1,0 +1,51 @@
+looking for a deciding second leg: Real Madrid era2010: match, week 24, Champions League out, legs on the calendar 3; Barcelona era2015: found
+the save: Barcelona era2015, week 31, the R16 second leg
+   390 through: seed 3, "THROUGH", "Lost 1-2 on the night", score 1 - 2, motion {"cls":"cm-win-pulse","anim":"cmWinPulse"}
+ok   390 through: headline THROUGH in its tone
+ok   390 through: the night line reads the night [Lost 1-2 on the night]
+ok   390 through: the scoreline is printed [1 - 2]
+ok   390 through: no sideways scroll
+ok   390 through: the night line sits inside the card [{"x":37,"y":333.5,"w":316,"h":16.5,"right":353,"bottom":350}]
+ok   390 through: no page error
+ok   390 through: the card pulses (cmWinPulse) [{"cls":"cm-win-pulse","anim":"cmWinPulse"}]
+   390 out: seed 1, "OUT", "Won 2-0 on the night", score 2 - 0, motion {"cls":"cm-loss-shake","anim":"cmLossShake"}
+ok   390 out: headline OUT in its tone
+ok   390 out: the night line reads the night [Won 2-0 on the night]
+ok   390 out: the scoreline is printed [2 - 0]
+ok   390 out: no sideways scroll
+ok   390 out: the night line sits inside the card [{"x":37,"y":333.5,"w":316,"h":16.5,"right":353,"bottom":350}]
+ok   390 out: no page error
+ok   390 out: the card shakes (cmLossShake) [{"cls":"cm-loss-shake","anim":"cmLossShake"}]
+   1280 through: seed 3, "THROUGH", "Lost 1-2 on the night", score 1 - 2, motion {"cls":"cm-win-pulse","anim":"cmWinPulse"}
+ok   1280 through: headline THROUGH in its tone
+ok   1280 through: the night line reads the night [Lost 1-2 on the night]
+ok   1280 through: the scoreline is printed [1 - 2]
+ok   1280 through: no sideways scroll
+ok   1280 through: the night line sits inside the card [{"x":437,"y":317.5,"w":406,"h":16.5,"right":843,"bottom":334}]
+ok   1280 through: no page error
+ok   1280 through: the card pulses (cmWinPulse) [{"cls":"cm-win-pulse","anim":"cmWinPulse"}]
+   1280 out: seed 1, "OUT", "Won 2-0 on the night", score 2 - 0, motion {"cls":"cm-loss-shake","anim":"cmLossShake"}
+ok   1280 out: headline OUT in its tone
+ok   1280 out: the night line reads the night [Won 2-0 on the night]
+ok   1280 out: the scoreline is printed [2 - 0]
+ok   1280 out: no sideways scroll
+ok   1280 out: the night line sits inside the card [{"x":437,"y":317.5,"w":406,"h":16.5,"right":843,"bottom":334}]
+ok   1280 out: no page error
+ok   1280 out: the card shakes (cmLossShake) [{"cls":"cm-loss-shake","anim":"cmLossShake"}]
+   390 reduced motion through: seed 3, "THROUGH", "Lost 1-2 on the night", score 1 - 2, motion {"cls":"cm-win-pulse","anim":"none"}
+ok   390 reduced motion through: headline THROUGH in its tone
+ok   390 reduced motion through: the night line reads the night [Lost 1-2 on the night]
+ok   390 reduced motion through: the scoreline is printed [1 - 2]
+ok   390 reduced motion through: no sideways scroll
+ok   390 reduced motion through: the night line sits inside the card [{"x":37,"y":333.5,"w":316,"h":16.5,"right":353,"bottom":350}]
+ok   390 reduced motion through: no page error
+ok   390 reduced motion through: the card stays still [{"cls":"cm-win-pulse","anim":"none"}]
+   390 reduced motion out: seed 1, "OUT", "Won 2-0 on the night", score 2 - 0, motion {"cls":"cm-loss-shake","anim":"none"}
+ok   390 reduced motion out: headline OUT in its tone
+ok   390 reduced motion out: the night line reads the night [Won 2-0 on the night]
+ok   390 reduced motion out: the scoreline is printed [2 - 0]
+ok   390 reduced motion out: no sideways scroll
+ok   390 reduced motion out: the night line sits inside the card [{"x":37,"y":333.5,"w":316,"h":16.5,"right":353,"bottom":350}]
+ok   390 reduced motion out: no page error
+ok   390 reduced motion out: the card stays still [{"cls":"cm-loss-shake","anim":"none"}]
+playCmDecidingLeg GREEN: 42 of 42 checks green

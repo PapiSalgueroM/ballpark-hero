@@ -1,0 +1,18 @@
+
+[1m[46m RUN [49m[22m [36mv3.2.7 [39m[90m/home/runner/work/ballpark-hero/ballpark-hero[39m
+
+ [32m✓[39m src/test/cmDecidingLegCard.test.tsx [2m([22m[2m4 tests[22m[2m)[22m[32m 255[2mms[22m[39m
+ [32m✓[39m src/test/dailyMenuResume.test.tsx [2m([22m[2m3 tests[22m[2m)[22m[33m 1716[2mms[22m[39m
+   [33m[2m✓[22m[39m Deadline Day: Menu and back keeps the window[2m > [22mreopens the daily at the same hour with the same actions, and the store keeps them [33m 384[2mms[22m[39m
+   [33m[2m✓[22m[39m Manager Hot Seat: Menu and back keeps the job[2m > [22mreopens the daily on the next match, not on the brief, and the store keeps the match [33m 1204[2mms[22m[39m
+ [32m✓[39m src/test/managerHotSeatCarryOnCard.test.tsx [2m([22m[2m6 tests[22m[2m)[22m[33m 2110[2mms[22m[39m
+   [33m[2m✓[22m[39m Manager Hot Seat: the offer waits on the menu[2m > [22ma finished free run that kept the job reopens on its verdict with the offer [33m 457[2mms[22m[39m
+ [32m✓[39m src/test/managerHotSeatTieStamp.test.tsx [2m([22m[2m3 tests[22m[2m)[22m[33m 1846[2mms[22m[39m
+   [33m[2m✓[22m[39m Manager Hot Seat: a free run carries the 1603 tie stamp[2m > [22ma new free run is opened with the stamp, so it reads the tie, and its save says so [33m 379[2mms[22m[39m
+   [33m[2m✓[22m[39m Manager Hot Seat: a free run carries the 1603 tie stamp[2m > [22ma saved free run hands its stamp back to the engine, and one saved without it stays on the night [33m 443[2mms[22m[39m
+
+[2m Test Files [22m [1m[32m4 passed[39m[22m[90m (4)[39m
+[2m      Tests [22m [1m[32m16 passed[39m[22m[90m (16)[39m
+[2m   Start at [22m 13:09:20
+[2m   Duration [22m 10.32s[2m (transform 3.42s, setup 544ms, collect 12.66s, tests 5.93s, environment 3.28s, prepare 900ms)[22m
+
