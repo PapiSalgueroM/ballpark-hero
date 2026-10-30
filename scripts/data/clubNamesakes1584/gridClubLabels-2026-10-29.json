@@ -1,0 +1,402 @@
+[
+ {
+  "label": "Played for AC Milan",
+  "puzzles": 38
+ },
+ {
+  "label": "Played for AS Roma",
+  "puzzles": 10
+ },
+ {
+  "label": "Played for Ajax",
+  "puzzles": 23
+ },
+ {
+  "label": "Played for Al-Hilal",
+  "puzzles": 11
+ },
+ {
+  "label": "Played for Al-Ittihad",
+  "puzzles": 8
+ },
+ {
+  "label": "Played for Al-Nassr",
+  "puzzles": 11
+ },
+ {
+  "label": "Played for Anderlecht",
+  "puzzles": 16
+ },
+ {
+  "label": "Played for Arsenal",
+  "puzzles": 37
+ },
+ {
+  "label": "Played for Aston Villa",
+  "puzzles": 20
+ },
+ {
+  "label": "Played for Atalanta",
+  "puzzles": 13
+ },
+ {
+  "label": "Played for Athletic Bilbao",
+  "puzzles": 11
+ },
+ {
+  "label": "Played for Atletico Madrid",
+  "puzzles": 1
+ },
+ {
+  "label": "Played for Atlético Madrid",
+  "puzzles": 35
+ },
+ {
+  "label": "Played for Atlético Mineiro",
+  "puzzles": 18
+ },
+ {
+  "label": "Played for Barcelona",
+  "puzzles": 37
+ },
+ {
+  "label": "Played for Bayer Leverkusen",
+  "puzzles": 21
+ },
+ {
+  "label": "Played for Bayern Munich",
+  "puzzles": 33
+ },
+ {
+  "label": "Played for Benfica",
+  "puzzles": 22
+ },
+ {
+  "label": "Played for Beşiktaş",
+  "puzzles": 18
+ },
+ {
+  "label": "Played for Boca Juniors",
+  "puzzles": 15
+ },
+ {
+  "label": "Played for Bologna",
+  "puzzles": 16
+ },
+ {
+  "label": "Played for Bordeaux",
+  "puzzles": 18
+ },
+ {
+  "label": "Played for Borussia Dortmund",
+  "puzzles": 29
+ },
+ {
+  "label": "Played for Borussia Mönchengladbach",
+  "puzzles": 14
+ },
+ {
+  "label": "Played for Celta Vigo",
+  "puzzles": 17
+ },
+ {
+  "label": "Played for Celtic",
+  "puzzles": 13
+ },
+ {
+  "label": "Played for Chelsea",
+  "puzzles": 37
+ },
+ {
+  "label": "Played for Club Brugge",
+  "puzzles": 14
+ },
+ {
+  "label": "Played for Corinthians",
+  "puzzles": 14
+ },
+ {
+  "label": "Played for Crystal Palace",
+  "puzzles": 13
+ },
+ {
+  "label": "Played for Eintracht Frankfurt",
+  "puzzles": 16
+ },
+ {
+  "label": "Played for Espanyol",
+  "puzzles": 18
+ },
+ {
+  "label": "Played for Everton",
+  "puzzles": 18
+ },
+ {
+  "label": "Played for FC Basel",
+  "puzzles": 16
+ },
+ {
+  "label": "Played for Fenerbahçe",
+  "puzzles": 19
+ },
+ {
+  "label": "Played for Feyenoord",
+  "puzzles": 17
+ },
+ {
+  "label": "Played for Fiorentina",
+  "puzzles": 20
+ },
+ {
+  "label": "Played for Flamengo",
+  "puzzles": 14
+ },
+ {
+  "label": "Played for Fulham",
+  "puzzles": 21
+ },
+ {
+  "label": "Played for Galatasaray",
+  "puzzles": 23
+ },
+ {
+  "label": "Played for Genoa",
+  "puzzles": 18
+ },
+ {
+  "label": "Played for Grêmio",
+  "puzzles": 17
+ },
+ {
+  "label": "Played for Hamburger SV",
+  "puzzles": 15
+ },
+ {
+  "label": "Played for Hoffenheim",
+  "puzzles": 17
+ },
+ {
+  "label": "Played for Inter Miami",
+  "puzzles": 11
+ },
+ {
+  "label": "Played for Inter Milan",
+  "puzzles": 33
+ },
+ {
+  "label": "Played for Juventus",
+  "puzzles": 33
+ },
+ {
+  "label": "Played for LA Galaxy",
+  "puzzles": 7
+ },
+ {
+  "label": "Played for Lazio",
+  "puzzles": 19
+ },
+ {
+  "label": "Played for Leeds United",
+  "puzzles": 16
+ },
+ {
+  "label": "Played for Leicester City",
+  "puzzles": 13
+ },
+ {
+  "label": "Played for Lille",
+  "puzzles": 20
+ },
+ {
+  "label": "Played for Liverpool",
+  "puzzles": 38
+ },
+ {
+  "label": "Played for Lyon",
+  "puzzles": 23
+ },
+ {
+  "label": "Played for Manchester City",
+  "puzzles": 39
+ },
+ {
+  "label": "Played for Manchester United",
+  "puzzles": 34
+ },
+ {
+  "label": "Played for Marseille",
+  "puzzles": 19
+ },
+ {
+  "label": "Played for Monaco",
+  "puzzles": 26
+ },
+ {
+  "label": "Played for Napoli",
+  "puzzles": 19
+ },
+ {
+  "label": "Played for Newcastle United",
+  "puzzles": 1
+ },
+ {
+  "label": "Played for Newcastle",
+  "puzzles": 17
+ },
+ {
+  "label": "Played for Nice",
+  "puzzles": 16
+ },
+ {
+  "label": "Played for Olympiacos",
+  "puzzles": 19
+ },
+ {
+  "label": "Played for PSG",
+  "puzzles": 25
+ },
+ {
+  "label": "Played for PSV",
+  "puzzles": 21
+ },
+ {
+  "label": "Played for Palmeiras",
+  "puzzles": 17
+ },
+ {
+  "label": "Played for Paris Saint-Germain",
+  "puzzles": 8
+ },
+ {
+  "label": "Played for Parma",
+  "puzzles": 17
+ },
+ {
+  "label": "Played for Porto",
+  "puzzles": 17
+ },
+ {
+  "label": "Played for RB Leipzig",
+  "puzzles": 13
+ },
+ {
+  "label": "Played for Rangers",
+  "puzzles": 12
+ },
+ {
+  "label": "Played for Real Betis",
+  "puzzles": 17
+ },
+ {
+  "label": "Played for Real Madrid",
+  "puzzles": 37
+ },
+ {
+  "label": "Played for Real Sociedad",
+  "puzzles": 14
+ },
+ {
+  "label": "Played for Red Bull Salzburg",
+  "puzzles": 16
+ },
+ {
+  "label": "Played for Rennes",
+  "puzzles": 17
+ },
+ {
+  "label": "Played for River Plate",
+  "puzzles": 16
+ },
+ {
+  "label": "Played for Roma",
+  "puzzles": 24
+ },
+ {
+  "label": "Played for Saint-Étienne",
+  "puzzles": 14
+ },
+ {
+  "label": "Played for Sampdoria",
+  "puzzles": 13
+ },
+ {
+  "label": "Played for Santos",
+  "puzzles": 16
+ },
+ {
+  "label": "Played for Schalke",
+  "puzzles": 19
+ },
+ {
+  "label": "Played for Sevilla",
+  "puzzles": 26
+ },
+ {
+  "label": "Played for Shakhtar Donetsk",
+  "puzzles": 15
+ },
+ {
+  "label": "Played for Southampton",
+  "puzzles": 14
+ },
+ {
+  "label": "Played for Sporting CP",
+  "puzzles": 18
+ },
+ {
+  "label": "Played for Stuttgart",
+  "puzzles": 17
+ },
+ {
+  "label": "Played for Sunderland",
+  "puzzles": 11
+ },
+ {
+  "label": "Played for São Paulo",
+  "puzzles": 20
+ },
+ {
+  "label": "Played for Torino",
+  "puzzles": 15
+ },
+ {
+  "label": "Played for Tottenham Hotspur",
+  "puzzles": 10
+ },
+ {
+  "label": "Played for Tottenham",
+  "puzzles": 22
+ },
+ {
+  "label": "Played for Trabzonspor",
+  "puzzles": 18
+ },
+ {
+  "label": "Played for Udinese",
+  "puzzles": 19
+ },
+ {
+  "label": "Played for Valencia",
+  "puzzles": 21
+ },
+ {
+  "label": "Played for Villarreal",
+  "puzzles": 19
+ },
+ {
+  "label": "Played for Werder Bremen",
+  "puzzles": 19
+ },
+ {
+  "label": "Played for West Ham",
+  "puzzles": 19
+ },
+ {
+  "label": "Played for Wolfsburg",
+  "puzzles": 17
+ },
+ {
+  "label": "Played for Zenit St. Petersburg",
+  "puzzles": 15
+ }
+]
