@@ -1,0 +1,5 @@
+#!serial
+digest-head: node scripts/simCmLeagueRules.mjs
+digest-revert: git checkout 14a9af704 -- src/lib/clubManager.ts && node scripts/simCmLeagueRules.mjs; s=$?; git checkout HEAD -- src; exit $s
+digest-write: node scripts/simCmLeagueRules.mjs --part=modern,eras,pure --write && cp scripts/data/cmLeagueRulesDigest.json "$RC_OUT/cmLeagueRulesDigest.json" && git diff --stat -- scripts/data/cmLeagueRulesDigest.json && node scripts/simCmLeagueRules.mjs; s=$?; git checkout HEAD -- scripts/data; exit $s
+deadline: CI=1 SIM_NETWORK=offline CM_DEADLINE_CORE_REF=HEAD MANAGER_DEADLINE_OUT="$RC_OUT/deadline" node scripts/simClubManagerDecisionDeadline.mjs
