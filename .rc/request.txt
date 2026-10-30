@@ -1,0 +1,8 @@
+tsc: node_modules/.bin/tsc --noEmit -p tsconfig.app.json
+plain: node scripts/simUsConnectionsFacts.mjs
+copyfence: node scripts/simConnectionsDatedCopy.mjs
+recordgrows: node scripts/qa/nbaRecordGrows1583.mjs
+simNoRivalNames: node scripts/simNoRivalNames.mjs
+simHarnessAnchors: node scripts/simHarnessAnchors.mjs
+simStorageWrites: node scripts/simStorageWrites.mjs
+treediff: git diff --stat aadf8c815261b8698f7a62d99475e71a78af4c2b HEAD; test "$(git diff --name-only aadf8c815261b8698f7a62d99475e71a78af4c2b HEAD)" = "docs/WORKBOARD.md" && echo "only docs/WORKBOARD.md differs from aadf8c815"
