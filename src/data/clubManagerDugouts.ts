@@ -5,7 +5,9 @@
  * One row per chair: the man in charge for the club's first league match of the season an era describes, plus
  * the month he was appointed to that stint ('YYYY-MM', dropped where two sources disagree on the month). Keys are
  * the era ids of src/lib/clubManagerEras.ts ('now', 'era2020', 'era2015', 'era2010', 'era2005') and the club
- * names exactly as the game's league tables spell them.
+ * names exactly as the game's league tables spell them. A man's name is written the way his club's own site
+ * prints it, accents and all (so Niko Kovac at Dortmund, Diego Pablo Simeone at Atlético), and the receipt names
+ * that page for every chair.
  *
  * Every row needs two independent sources, neither a wiki. The URLs live in scripts/data/cmDugouts.receipt.json
  * and never in this file, which ships in the bundle. A chair in a covered league that could not be two sourced
@@ -27,7 +29,7 @@ export const CM_DUGOUTS: RealDugoutTable = {
     "Aston Villa": { name: "Unai Emery" },
     "Bournemouth": { name: "Marco Rose" },
     "Brentford": { name: "Keith Andrews" },
-    "Brighton": { name: "Fabian Hürzeler" },
+    "Brighton": { name: "Fabian Hurzeler" },
     "Chelsea": { name: "Xabi Alonso" },
     "Coventry City": { name: "Frank Lampard" },
     "Crystal Palace": { name: "Pierre Sage" },
@@ -46,7 +48,7 @@ export const CM_DUGOUTS: RealDugoutTable = {
     // La Liga
     "Alavés": { name: "Quique Sánchez Flores" },
     "Athletic Club": { name: "Edin Terzić" },
-    "Atlético Madrid": { name: "Diego Simeone" },
+    "Atlético Madrid": { name: "Diego Pablo Simeone" },
     "Barcelona": { name: "Hansi Flick" },
     "Real Betis": { name: "Manuel Pellegrini" },
     "Celta Vigo": { name: "Claudio Giráldez" },
@@ -57,7 +59,7 @@ export const CM_DUGOUTS: RealDugoutTable = {
     "Levante": { name: "Luís Castro" },
     "Málaga": { name: "Juanfran Funes" },
     "Osasuna": { name: "Luis Miguel Ramis" },
-    "Racing Santander": { name: "José Alberto López" },
+    "Racing Santander": { name: "José Alberto" },
     "Rayo Vallecano": { name: "Beñat San José" },
     "Real Madrid": { name: "José Mourinho" },
     "Real Sociedad": { name: "Pellegrino Matarazzo", appointed: "2025-12" },
@@ -77,19 +79,19 @@ export const CM_DUGOUTS: RealDugoutTable = {
     "Lazio": { name: "Gennaro Gattuso" },
     "Lecce": { name: "Eusebio Di Francesco" },
     "AC Milan": { name: "Rúben Amorim" },
-    "Monza": { name: "Ivan Jurić" },
+    "Monza": { name: "Ivan Juric" },
     "Napoli": { name: "Massimiliano Allegri" },
     "Parma": { name: "Carlos Cuesta" },
     "Roma": { name: "Gian Piero Gasperini" },
     "Sassuolo": { name: "Alberto Aquilani" },
     "Torino": { name: "Ignazio Abate" },
-    "Udinese": { name: "Kosta Runjaić" },
+    "Udinese": { name: "Kosta Runjaic" },
     "Venezia": { name: "Giovanni Stroppa" },
     // Bundesliga
     "Augsburg": { name: "Manuel Baum" },
     "Bayer Leverkusen": { name: "Carles Martínez" },
     "Bayern Munich": { name: "Vincent Kompany" },
-    "Borussia Dortmund": { name: "Niko Kovač", appointed: "2025-02" },
+    "Borussia Dortmund": { name: "Niko Kovac", appointed: "2025-02" },
     "Gladbach": { name: "Eugen Polanski" },
     "Eintracht Frankfurt": { name: "Adi Hütter" },
     "Freiburg": { name: "Julian Schuster" },
@@ -98,7 +100,7 @@ export const CM_DUGOUTS: RealDugoutTable = {
     "Köln": { name: "René Wagner" },
     "Mainz": { name: "Urs Fischer" },
     "RB Leipzig": { name: "Martín Demichelis" },
-    "Schalke 04": { name: "Miron Muslić" },
+    "Schalke 04": { name: "Miron Muslic" },
     "Elversberg": { name: "Vincent Wagner" },
     "Paderborn": { name: "Ralf Kettemann" },
     "Stuttgart": { name: "Sebastian Hoeneß" },

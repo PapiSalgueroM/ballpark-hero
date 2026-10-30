@@ -23,7 +23,10 @@
    6. the opening day, the fact itself: every covered league's opener date is in the receipt on two vetted
       registrable domains, and every chair rests on at least one read published on or before its league's
       opener, or on a report of that club's matchday 1 (role "matchday 1 report"). A list dated after the
-      opener can still back a chair, but never alone.
+      opener can still back a chair, but never alone;
+   7. the spelling (the lead's ruling R5): every chair cites a read of its own club's site (a domain on
+      CLUB_SITES mapped to that club), and the stored name is the form that page prints, accents exact, case
+      free (a club that sets names in capitals prints the same letters). Hosts are still compared folded.
 
    Section 0 also fails a man who sits in two chairs (one table, one opening day, one club each).
 
@@ -38,11 +41,14 @@
    DUGOUTS_CONTROL=monthsamedomain a stored month is printed by two source ids on one domain (section 4; same)
    DUGOUTS_CONTROL=wikimirror S-PL2 moves to infogalactic.com, a Wikipedia fork without "wiki" in its name (section 1)
    DUGOUTS_CONTROL=latereads  every source is dated 2026-12-01 and the matchday 1 report loses its role (section 6)
+   DUGOUTS_CONTROL=spelling   the first chair whose club prints an accent is stored without it, table, receipt and
+                              reads alike, so sections 0 and 4 stay green and only the club's spelling catches it (7)
    A control run prints "control <name> FIRED" and exits 1 when its section went red, exits 3 if it did not
    fire, and exits 2 when it refuses to run (unknown name, or its mutation could not be applied or changed nothing).
 
-   Measured on the committed table (2026-10-30): 96 chairs, 0 partial, 6 stored months, 27 sources on 19
-   registrable domains. Nothing here is statistical, so there are no bands.
+   Measured on the committed table (2026-10-30): 96 chairs, 0 partial, 5 stored months, 123 sources (27 hosts'
+   lists and reports, 96 club site reads) on 115 registrable domains, 96 of 96 names the club's own spelling.
+   Nothing here is statistical, so there are no bands.
 
    Run: node scripts/simClubManagerDugouts.mjs
 */
@@ -55,7 +61,7 @@ import { fileURLToPath, pathToFileURL } from 'node:url';
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const SRC = `${ROOT.replaceAll('\\', '/')}/src`;
 const CONTROL = process.env.DUGOUTS_CONTROL || '';
-const CONTROLS = { twochairs: 0, onehost: 1, samedomain: 1, wikimirror: 1, orphan: 2, gap: 3, monthclash: 4, monthsamedomain: 4, latereads: 6 };
+const CONTROLS = { twochairs: 0, onehost: 1, samedomain: 1, wikimirror: 1, orphan: 2, gap: 3, monthclash: 4, monthsamedomain: 4, latereads: 6, spelling: 7 };
 if (CONTROL && !(CONTROL in CONTROLS)) { console.error(`unknown DUGOUTS_CONTROL=${CONTROL}`); process.exit(2); }
 
 const failed = new Set();
@@ -111,6 +117,15 @@ if (CONTROL) {
     const c = receipt.chairs[0];
     if (!c || c.reads.length < 2 || new Set(c.reads.map(r => r.source)).size < 2) refuse('the first chair has no second source to remove');
     for (const r of c.reads) r.source = c.reads[0].source;
+  } else if (CONTROL === 'spelling') {
+    /* The hosts' folded agreement cannot see a lost accent; only the club's own spelling can. */
+    const strip = s => s.normalize('NFD').replace(/\p{M}/gu, '').normalize('NFC');
+    const c = receipt.chairs.find(x => x.spelling?.name && strip(x.spelling.name) !== x.spelling.name && table[ERA]?.[x.club]);
+    if (!c) refuse('no chair whose club prints an accent');
+    c.name = strip(c.name);
+    for (const r of c.reads) r.name = strip(r.name);
+    table[ERA][c.club] = { ...table[ERA][c.club], name: c.name };
+    console.log(`control spelling: ${c.club} stored as ${c.name}, its club prints ${c.spelling.name}`);
   } else if (CONTROL === 'latereads') {
     /* Every page dated after every opener, and no matchday 1 report: nothing then shows who was there on the day. */
     for (const s of receipt.sources) { s.published = '2026-12-01'; if (s.role === 'matchday 1 report') delete s.role; }
@@ -192,7 +207,36 @@ const VETTED = {
   // the opening day reads (section 6)
   'futbolfantasy.com': 'outlet', 'beinsports.com': 'outlet', 'lapresse.it': 'outlet', 'fantacalcio-online.com': 'outlet', 'sky.de': 'outlet', 'sport1.de': 'outlet',
 };
-const vettedKind = url => VETTED[domainOf(url)] ?? null;
+/* The clubs' own sites: R5's spelling reads, and a host like any other. Each registrable domain maps to the one
+   club whose site it is, so a spelling read on another club's site fails section 7. */
+const CLUB_SITES = {
+  'arsenal.com': 'Arsenal', 'avfc.co.uk': 'Aston Villa', 'afcb.co.uk': 'Bournemouth', 'brentfordfc.com': 'Brentford',
+  'brightonandhovealbion.com': 'Brighton', 'chelseafc.com': 'Chelsea', 'ccfc.co.uk': 'Coventry City',
+  'cpfc.co.uk': 'Crystal Palace', 'evertonfc.com': 'Everton', 'fulhamfc.com': 'Fulham', 'wearehullcity.co.uk': 'Hull City',
+  'itfc.co.uk': 'Ipswich Town', 'leedsunited.com': 'Leeds United', 'liverpoolfc.com': 'Liverpool',
+  'mancity.com': 'Manchester City', 'manutd.com': 'Manchester United', 'newcastleunited.com': 'Newcastle',
+  'nottinghamforest.co.uk': 'Nottingham Forest', 'safc.com': 'Sunderland', 'tottenhamhotspur.com': 'Tottenham',
+  'deportivoalaves.com': 'Alavés', 'athletic-club.eus': 'Athletic Club', 'atleticodemadrid.com': 'Atlético Madrid',
+  'fcbarcelona.com': 'Barcelona', 'realbetisbalompie.es': 'Real Betis', 'rccelta.es': 'Celta Vigo',
+  'rcdeportivo.es': 'Deportivo La Coruña', 'elchecf.es': 'Elche', 'rcdespanyol.com': 'Espanyol', 'getafecf.com': 'Getafe',
+  'levanteud.com': 'Levante', 'malagacf.com': 'Málaga', 'osasuna.es': 'Osasuna', 'realracingclub.es': 'Racing Santander',
+  'rayovallecano.es': 'Rayo Vallecano', 'realmadrid.com': 'Real Madrid', 'realsociedad.eus': 'Real Sociedad',
+  'sevillafc.es': 'Sevilla', 'valenciacf.com': 'Valencia', 'villarrealcf.es': 'Villarreal', 'atalanta.it': 'Atalanta',
+  'bolognafc.it': 'Bologna', 'cagliaricalcio.com': 'Cagliari', 'comofootball.com': 'Como', 'acffiorentina.com': 'Fiorentina',
+  'frosinonecalcio.com': 'Frosinone', 'genoacfc.it': 'Genoa', 'inter.it': 'Inter Milan', 'juventus.com': 'Juventus',
+  'sslazio.it': 'Lazio', 'uslecce.it': 'Lecce', 'acmilan.com': 'AC Milan', 'acmonza.com': 'Monza', 'sscnapoli.it': 'Napoli',
+  'parmacalcio1913.com': 'Parma', 'asroma.com': 'Roma', 'sassuolocalcio.it': 'Sassuolo', 'torinofc.it': 'Torino',
+  'udinese.it': 'Udinese', 'veneziafc.it': 'Venezia', 'fcaugsburg.de': 'Augsburg', 'bayer04.de': 'Bayer Leverkusen',
+  'fcbayern.com': 'Bayern Munich', 'bvb.de': 'Borussia Dortmund', 'borussia.de': 'Gladbach',
+  'eintracht.de': 'Eintracht Frankfurt', 'scfreiburg.com': 'Freiburg', 'hsv.de': 'Hamburg', 'tsg-hoffenheim.de': 'Hoffenheim',
+  'fc.de': 'Köln', 'mainz05.de': 'Mainz', 'rbleipzig.com': 'RB Leipzig', 'schalke04.de': 'Schalke 04',
+  'sv07elversberg.de': 'Elversberg', 'scp07.de': 'Paderborn', 'vfb.de': 'Stuttgart', 'fc-union-berlin.de': 'Union Berlin',
+  'werder.de': 'Werder Bremen', 'angers-sco.fr': 'Angers', 'aja.fr': 'Auxerre', 'sb29.bzh': 'Brest', 'hac.football': 'Le Havre',
+  'lemansfc.fr': 'Le Mans', 'rclens.fr': 'Lens', 'losc.fr': 'Lille', 'fclorient.bzh': 'Lorient', 'ol.fr': 'Lyon',
+  'om.fr': 'Marseille', 'asmonaco.com': 'Monaco', 'ogcnice.com': 'Nice', 'parisfc.fr': 'Paris FC', 'psg.fr': 'PSG',
+  'staderennais.com': 'Rennes', 'rcstrasbourgalsace.fr': 'Strasbourg', 'toulousefc.com': 'Toulouse', 'estac.fr': 'Troyes',
+};
+const vettedKind = url => VETTED[domainOf(url)] ?? (CLUB_SITES[domainOf(url)] ? `club:${CLUB_SITES[domainOf(url)]}` : null);
 const sources = new Map(receipt.sources.map(s => [s.id, s]));
 const mapClub = c => receipt.nameNormalization[c] ?? c;
 const leagueById = new Map(mod.REAL_LEAGUES.map(l => [l.id, l]));
@@ -354,6 +398,22 @@ for (const c of chairs) {
   else restsBefore += 1;
 }
 console.log(`  ${restsBefore} of ${chairs.length} chairs rest on a read from on or before their opener (or a matchday 1 report)`);
+
+/* ---- 7. R5: the stored name is the club's own site's spelling ---- */
+console.log("section 7: every stored name is the club's own spelling (accents exact, case free)");
+const caseFree = s => String(s).normalize('NFC').toLocaleUpperCase('en');
+let spelled = 0;
+for (const c of chairs) {
+  const sp = c.spelling;
+  if (!sp?.source || !sp.name) { fail(7, `${c.club}: no read of the club's own site for the spelling`); continue; }
+  const s = sources.get(sp.source);
+  if (!s) { fail(7, `${c.club}: the spelling cites unknown source ${sp.source}`); continue; }
+  if (vettedKind(s.url) !== `club:${c.club}`) { fail(7, `${c.club}: the spelling read ${sp.source} is on ${domainOf(s.url)}, not ${c.club}'s own site`); continue; }
+  if (s.role !== 'club site') fail(7, `${c.club}: ${sp.source} is not marked as a club site read`);
+  if (caseFree(sp.name) !== caseFree(c.name)) fail(7, `${c.club}: the club prints ${sp.name}, the chair stores ${c.name}`);
+  else spelled += 1;
+}
+console.log(`  ${spelled} of ${chairs.length} stored names are the club's own spelling`);
 
 fs.rmSync(tmp, { recursive: true, force: true });
 if (CONTROL) {
