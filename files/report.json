@@ -1,0 +1,511 @@
+{
+ "pools": {
+  "head": 20,
+  "base": 20
+ },
+ "cases": [
+  {
+   "tag": "390-nbaconn-003-win",
+   "day": "2026-11-13",
+   "receipts": [
+    {
+     "text": "Locked: Played for the Golden State Warriors (as of 2025-26). Those five are solved.",
+     "dateLines": 1,
+     "spans": [
+      "(as of 2025-26)"
+     ],
+     "right": 361
+    },
+    {
+     "text": "Locked: Played for the New York Knicks (as of 2025-26). Those five are solved.",
+     "dateLines": 1,
+     "spans": [
+      "(as of 2025-26)"
+     ],
+     "right": 361
+    },
+    {
+     "text": "Locked: Born in Canada. Those five are solved.",
+     "dateLines": 0,
+     "spans": [],
+     "right": 361
+    },
+    null
+   ],
+   "dialog": true,
+   "rows": [
+    {
+     "text": "Played for the Golden State Warriors (as of 2025-26)",
+     "right": 361,
+     "over": false,
+     "names": "Stephen Curry, Draymond Green, Chris Mullin, Andre Iguodala, Monta Ellis"
+    },
+    {
+     "text": "Played for the New York Knicks (as of 2025-26)",
+     "right": 361,
+     "over": false,
+     "names": "Patrick Ewing, Allan Houston, Amar'e Stoudemire, Julius Randle, Derek Harper"
+    },
+    {
+     "text": "Born in Canada",
+     "right": 361,
+     "over": false,
+     "names": "Jamal Murray, Shai Gilgeous-Alexander, Tristan Thompson, Dillon Brooks, Bennedict Mathurin"
+    },
+    {
+     "text": "Drafted #2 overall",
+     "right": 361,
+     "over": false,
+     "names": "Ja Morant, Brandon Ingram, Victor Oladipo, Jalen Green, Marvin Bagley III"
+    }
+   ]
+  },
+  {
+   "tag": "390-reduced-nbaconn-002-lose",
+   "day": "2026-11-18",
+   "receipts": [
+    {
+     "text": "Not a group. One life used. Your draft stays here to revise.",
+     "dateLines": 0,
+     "spans": [],
+     "right": 361
+    },
+    {
+     "text": "Not a group. One life used. Your draft stays here to revise.",
+     "dateLines": 0,
+     "spans": [],
+     "right": 361
+    },
+    {
+     "text": "Not a group. One life used. Your draft stays here to revise.",
+     "dateLines": 0,
+     "spans": [],
+     "right": 361
+    },
+    null
+   ],
+   "dialog": true,
+   "rows": [
+    {
+     "text": "Played for the Chicago Bulls (as of 2025-26)",
+     "right": 361,
+     "over": false,
+     "names": "Derrick Rose, Joakim Noah, Jimmy Butler, Luol Deng, Scottie Pippen"
+    },
+    {
+     "text": "2,000+ career three-pointers",
+     "right": 361,
+     "over": false,
+     "names": "Stephen Curry, Ray Allen, Reggie Miller, James Harden, Klay Thompson"
+    },
+    {
+     "text": "Born in France",
+     "right": 361,
+     "over": false,
+     "names": "Victor Wembanyama, Rudy Gobert, Ian Mahinmi, Boris Diaw, Evan Fournier"
+    },
+    {
+     "text": "14,000+ career rebounds",
+     "right": 361,
+     "over": false,
+     "names": "Kareem Abdul-Jabbar, Elvin Hayes, Moses Malone, Tim Duncan, Kevin Garnett"
+    }
+   ]
+  },
+  {
+   "tag": "1280-nbaconn-004-win",
+   "day": "2026-11-19",
+   "receipts": [
+    {
+     "text": "Locked: Played for the Boston Celtics (as of 2025-26). Those five are solved.",
+     "dateLines": 1,
+     "spans": [
+      "(as of 2025-26)"
+     ],
+     "right": 947
+    },
+    {
+     "text": "Locked: Played for the Los Angeles Lakers (as of 2025-26). Those five are solved.",
+     "dateLines": 1,
+     "spans": [
+      "(as of 2025-26)"
+     ],
+     "right": 947
+    },
+    {
+     "text": "Locked: Born in Africa. Those five are solved.",
+     "dateLines": 0,
+     "spans": [],
+     "right": 947
+    },
+    null
+   ],
+   "dialog": true,
+   "rows": [
+    {
+     "text": "Played for the Boston Celtics (as of 2025-26)",
+     "right": 947,
+     "over": false,
+     "names": "Larry Bird, Kevin McHale, Paul Pierce, Jayson Tatum, Jaylen Brown"
+    },
+    {
+     "text": "Played for the Los Angeles Lakers (as of 2025-26)",
+     "right": 947,
+     "over": false,
+     "names": "James Worthy, Pau Gasol, Anthony Davis, Byron Scott, Lamar Odom"
+    },
+    {
+     "text": "Born in Africa",
+     "right": 947,
+     "over": false,
+     "names": "Joel Embiid, Hakeem Olajuwon, Dikembe Mutombo, Serge Ibaka, Pascal Siakam"
+    },
+    {
+     "text": "Played for the Sacramento Kings (as of 2025-26)",
+     "right": 947,
+     "over": false,
+     "names": "Chris Webber, Peja Stojaković, Mike Bibby, De'Aaron Fox, Jason Williams"
+    }
+   ]
+  },
+  {
+   "tag": "1280-reduced-nbaconn-002-win",
+   "day": "2026-11-18",
+   "receipts": [
+    {
+     "text": "Locked: Played for the Chicago Bulls (as of 2025-26). Those five are solved.",
+     "dateLines": 1,
+     "spans": [
+      "(as of 2025-26)"
+     ],
+     "right": 947
+    },
+    {
+     "text": "Locked: 2,000+ career three-pointers. Those five are solved.",
+     "dateLines": 0,
+     "spans": [],
+     "right": 947
+    },
+    {
+     "text": "Locked: Born in France. Those five are solved.",
+     "dateLines": 0,
+     "spans": [],
+     "right": 947
+    },
+    null
+   ],
+   "dialog": true,
+   "rows": [
+    {
+     "text": "Played for the Chicago Bulls (as of 2025-26)",
+     "right": 947,
+     "over": false,
+     "names": "Derrick Rose, Joakim Noah, Jimmy Butler, Luol Deng, Scottie Pippen"
+    },
+    {
+     "text": "2,000+ career three-pointers",
+     "right": 947,
+     "over": false,
+     "names": "Stephen Curry, Ray Allen, Reggie Miller, James Harden, Klay Thompson"
+    },
+    {
+     "text": "Born in France",
+     "right": 947,
+     "over": false,
+     "names": "Victor Wembanyama, Rudy Gobert, Ian Mahinmi, Boris Diaw, Evan Fournier"
+    },
+    {
+     "text": "14,000+ career rebounds",
+     "right": 947,
+     "over": false,
+     "names": "Kareem Abdul-Jabbar, Elvin Hayes, Moses Malone, Tim Duncan, Kevin Garnett"
+    }
+   ]
+  },
+  {
+   "tag": "390-reduced-nbaconn-004-win",
+   "day": "2026-11-19",
+   "receipts": [
+    {
+     "text": "Locked: Played for the Boston Celtics (as of 2025-26). Those five are solved.",
+     "dateLines": 1,
+     "spans": [
+      "(as of 2025-26)"
+     ],
+     "right": 361
+    },
+    {
+     "text": "Locked: Played for the Los Angeles Lakers (as of 2025-26). Those five are solved.",
+     "dateLines": 1,
+     "spans": [
+      "(as of 2025-26)"
+     ],
+     "right": 361
+    },
+    {
+     "text": "Locked: Born in Africa. Those five are solved.",
+     "dateLines": 0,
+     "spans": [],
+     "right": 361
+    },
+    null
+   ],
+   "dialog": true,
+   "rows": [
+    {
+     "text": "Played for the Boston Celtics (as of 2025-26)",
+     "right": 361,
+     "over": false,
+     "names": "Larry Bird, Kevin McHale, Paul Pierce, Jayson Tatum, Jaylen Brown"
+    },
+    {
+     "text": "Played for the Los Angeles Lakers (as of 2025-26)",
+     "right": 361,
+     "over": false,
+     "names": "James Worthy, Pau Gasol, Anthony Davis, Byron Scott, Lamar Odom"
+    },
+    {
+     "text": "Born in Africa",
+     "right": 361,
+     "over": false,
+     "names": "Joel Embiid, Hakeem Olajuwon, Dikembe Mutombo, Serge Ibaka, Pascal Siakam"
+    },
+    {
+     "text": "Played for the Sacramento Kings (as of 2025-26)",
+     "right": 361,
+     "over": false,
+     "names": "Chris Webber, Peja Stojaković, Mike Bibby, De'Aaron Fox, Jason Williams"
+    }
+   ]
+  },
+  {
+   "tag": "1280-nbaconn-001-lose",
+   "day": "2026-11-03",
+   "receipts": [
+    {
+     "text": "Not a group. One life used. Your draft stays here to revise.",
+     "dateLines": 0,
+     "spans": [],
+     "right": 947
+    },
+    {
+     "text": "Not a group. One life used. Your draft stays here to revise.",
+     "dateLines": 0,
+     "spans": [],
+     "right": 947
+    },
+    {
+     "text": "Not a group. One life used. Your draft stays here to revise.",
+     "dateLines": 0,
+     "spans": [],
+     "right": 947
+    },
+    null
+   ],
+   "dialog": true,
+   "rows": [
+    {
+     "text": "28,000+ career points",
+     "right": 947,
+     "over": false,
+     "names": "Karl Malone, Kobe Bryant, Michael Jordan, Dirk Nowitzki, Carmelo Anthony"
+    },
+    {
+     "text": "Played for the Miami Heat (as of 2025-26)",
+     "right": 947,
+     "over": false,
+     "names": "Dwyane Wade, Alonzo Mourning, Chris Bosh, Udonis Haslem, Tim Hardaway"
+    },
+    {
+     "text": "10,000+ career assists",
+     "right": 947,
+     "over": false,
+     "names": "John Stockton, Jason Kidd, Steve Nash, Mark Jackson, Chris Paul"
+    },
+    {
+     "text": "Drafted #1 overall",
+     "right": 947,
+     "over": false,
+     "names": "Allen Iverson, Yao Ming, Dwight Howard, John Wall, Zion Williamson"
+    }
+   ]
+  },
+  {
+   "tag": "oldsave-write-nbaconn-004",
+   "day": "2026-11-19",
+   "save": {
+    "name": "nba-connections-daily-2026-11-19",
+    "value": "{\"v\":1,\"date\":\"2026-11-19\",\"puzzleIndex\":3,\"puzzleId\":\"nbaconn-004\",\"guesses\":[{\"t\":\"ok\",\"theme\":\"Played for the Sacramento Kings\",\"players\":[\"Chris Webber\",\"Peja Stojaković\",\"Mike Bibby\",\"DeMarcus Cousins\",\"Jason Williams\"],\"diff\":\"purple\"},{\"t\":\"x\"}],\"gameStatus\":\"playing\"}"
+   },
+   "rows": [
+    {
+     "text": "Played for the Sacramento Kings",
+     "right": 361,
+     "over": false,
+     "names": "Chris Webber, Peja Stojaković, Mike Bibby, DeMarcus Cousins, Jason Williams"
+    }
+   ]
+  },
+  {
+   "tag": "oldsave-basepool-nbaconn-004",
+   "tiles": 19,
+   "after": "{\"v\":1,\"date\":\"2026-11-19\",\"puzzleIndex\":3,\"puzzleId\":\"nbaconn-004\",\"guesses\":[{\"t\":\"ok\",\"theme\":\"Played for the Sacramento Kings\",\"players\":[\"Chris Webber\",\"Peja Stojaković\",\"Mike Bibby\",\"DeMarcus Cousins\",\"Jason Williams\"],\"diff\":\"purple\"},{\"t\":\"x\"}],\"gameStatus\":\"playing\"}",
+   "bytesSame": true,
+   "rows": [
+    {
+     "text": "Played for the Sacramento Kings",
+     "right": 361,
+     "over": false,
+     "names": "Chris Webber, Peja Stojaković, Mike Bibby, DeMarcus Cousins, Jason Williams"
+    }
+   ]
+  },
+  {
+   "tag": "oldsave-decidedpool-nbaconn-004",
+   "tiles": 20,
+   "after": "{\"v\":1,\"date\":\"2026-11-19\",\"puzzleIndex\":3,\"puzzleId\":\"nbaconn-004\",\"guesses\":[{\"t\":\"ok\",\"theme\":\"Played for the Sacramento Kings\",\"players\":[\"Chris Webber\",\"Peja Stojaković\",\"Mike Bibby\",\"DeMarcus Cousins\",\"Jason Williams\"],\"diff\":\"purple\"},{\"t\":\"x\"}],\"gameStatus\":\"playing\"}",
+   "bytesSame": true,
+   "rows": [
+    {
+     "text": "Played for the Sacramento Kings",
+     "right": 361,
+     "over": false,
+     "names": "Chris Webber, Peja Stojaković, Mike Bibby, DeMarcus Cousins, Jason Williams"
+    }
+   ]
+  },
+  {
+   "tag": "oldsave-write-nbaconn-002",
+   "day": "2026-11-18",
+   "save": {
+    "name": "nba-connections-daily-2026-11-18",
+    "value": "{\"v\":1,\"date\":\"2026-11-18\",\"puzzleIndex\":1,\"puzzleId\":\"nbaconn-002\",\"guesses\":[{\"t\":\"ok\",\"theme\":\"Born in France\",\"players\":[\"Tony Parker\",\"Rudy Gobert\",\"Nicolas Batum\",\"Boris Diaw\",\"Evan Fournier\"],\"diff\":\"blue\"},{\"t\":\"x\"}],\"gameStatus\":\"playing\"}"
+   },
+   "rows": [
+    {
+     "text": "Born in France",
+     "right": 361,
+     "over": false,
+     "names": "Tony Parker, Rudy Gobert, Nicolas Batum, Boris Diaw, Evan Fournier"
+    }
+   ]
+  },
+  {
+   "tag": "oldsave-basepool-nbaconn-002",
+   "tiles": 19,
+   "after": "{\"v\":1,\"date\":\"2026-11-18\",\"puzzleIndex\":1,\"puzzleId\":\"nbaconn-002\",\"guesses\":[{\"t\":\"ok\",\"theme\":\"Born in France\",\"players\":[\"Tony Parker\",\"Rudy Gobert\",\"Nicolas Batum\",\"Boris Diaw\",\"Evan Fournier\"],\"diff\":\"blue\"},{\"t\":\"x\"}],\"gameStatus\":\"playing\"}",
+   "bytesSame": true,
+   "rows": [
+    {
+     "text": "Born in France",
+     "right": 361,
+     "over": false,
+     "names": "Tony Parker, Rudy Gobert, Nicolas Batum, Boris Diaw, Evan Fournier"
+    }
+   ]
+  },
+  {
+   "tag": "oldsave-decidedpool-nbaconn-002",
+   "tiles": 21,
+   "after": "{\"v\":1,\"date\":\"2026-11-18\",\"puzzleIndex\":1,\"puzzleId\":\"nbaconn-002\",\"guesses\":[{\"t\":\"ok\",\"theme\":\"Born in France\",\"players\":[\"Tony Parker\",\"Rudy Gobert\",\"Nicolas Batum\",\"Boris Diaw\",\"Evan Fournier\"],\"diff\":\"blue\"},{\"t\":\"x\"}],\"gameStatus\":\"playing\"}",
+   "bytesSame": true,
+   "rows": [
+    {
+     "text": "Born in France",
+     "right": 361,
+     "over": false,
+     "names": "Tony Parker, Rudy Gobert, Nicolas Batum, Boris Diaw, Evan Fournier"
+    }
+   ]
+  },
+  {
+   "tag": "offline-390",
+   "day": "2026-11-02",
+   "rows": [
+    {
+     "text": "Played for the Golden State Warriors (as of 2025-26)",
+     "right": 361,
+     "over": false,
+     "names": "Stephen Curry, Draymond Green, Chris Mullin, Andre Iguodala, Monta Ellis"
+    },
+    {
+     "text": "Played for the New York Knicks (as of 2025-26)",
+     "right": 361,
+     "over": false,
+     "names": "Patrick Ewing, Allan Houston, Amar'e Stoudemire, Julius Randle, Derek Harper"
+    },
+    {
+     "text": "Born in Canada",
+     "right": 361,
+     "over": false,
+     "names": "Jamal Murray, Shai Gilgeous-Alexander, Tristan Thompson, Dillon Brooks, Bennedict Mathurin"
+    },
+    {
+     "text": "Drafted #2 overall",
+     "right": 361,
+     "over": false,
+     "names": "Ja Morant, Brandon Ingram, Victor Oladipo, Jalen Green, Marvin Bagley III"
+    }
+   ]
+  }
+ ],
+ "problems": [],
+ "datedReceipts": [
+  {
+   "tag": "390-nbaconn-003-win",
+   "text": "Locked: Played for the Golden State Warriors (as of 2025-26). Those five are solved.",
+   "dateLines": 1,
+   "spans": [
+    "(as of 2025-26)"
+   ]
+  },
+  {
+   "tag": "390-nbaconn-003-win",
+   "text": "Locked: Played for the New York Knicks (as of 2025-26). Those five are solved.",
+   "dateLines": 1,
+   "spans": [
+    "(as of 2025-26)"
+   ]
+  },
+  {
+   "tag": "1280-nbaconn-004-win",
+   "text": "Locked: Played for the Boston Celtics (as of 2025-26). Those five are solved.",
+   "dateLines": 1,
+   "spans": [
+    "(as of 2025-26)"
+   ]
+  },
+  {
+   "tag": "1280-nbaconn-004-win",
+   "text": "Locked: Played for the Los Angeles Lakers (as of 2025-26). Those five are solved.",
+   "dateLines": 1,
+   "spans": [
+    "(as of 2025-26)"
+   ]
+  },
+  {
+   "tag": "1280-reduced-nbaconn-002-win",
+   "text": "Locked: Played for the Chicago Bulls (as of 2025-26). Those five are solved.",
+   "dateLines": 1,
+   "spans": [
+    "(as of 2025-26)"
+   ]
+  },
+  {
+   "tag": "390-reduced-nbaconn-004-win",
+   "text": "Locked: Played for the Boston Celtics (as of 2025-26). Those five are solved.",
+   "dateLines": 1,
+   "spans": [
+    "(as of 2025-26)"
+   ]
+  },
+  {
+   "tag": "390-reduced-nbaconn-004-win",
+   "text": "Locked: Played for the Los Angeles Lakers (as of 2025-26). Those five are solved.",
+   "dateLines": 1,
+   "spans": [
+    "(as of 2025-26)"
+   ]
+  }
+ ]
+}
