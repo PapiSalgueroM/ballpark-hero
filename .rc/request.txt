@@ -1,0 +1,8 @@
+ucl-2: WORLD_UCL_ONLY=2 node scripts/simWorldUcl.mjs
+simOneOffCups: node scripts/simOneOffCups.mjs
+simCmUnseededWorld: node scripts/simCmUnseededWorld.mjs
+simGmStaff: node scripts/simGmStaff.mjs
+simClubManagerSlots: node scripts/simClubManagerSlots.mjs
+simBoardObjectives: node scripts/simBoardObjectives.mjs
+simClubManagerFinances: node scripts/simClubManagerFinances.mjs
+tsc: node_modules/.bin/tsc --noEmit -p tsconfig.app.json
