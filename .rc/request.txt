@@ -1,0 +1,39 @@
+#!serial
+# Full default filenames only. UNBOUND until final source and support admission.
+prepare: bash .rc/default-support.sh prepare
+playNbaLotteryNight: bash .rc/default-support.sh run playNbaLotteryNight.mjs
+simAussieRulesManagerBoard: bash .rc/default-support.sh run simAussieRulesManagerBoard.mjs
+simBuzzerContestRecap: bash .rc/default-support.sh run simBuzzerContestRecap.mjs
+simCareerDilemmaTruth: bash .rc/default-support.sh run simCareerDilemmaTruth.mjs
+simCareerPendingOverallGates: bash .rc/default-support.sh run simCareerPendingOverallGates.mjs
+simCbbRecruitFilters: bash .rc/default-support.sh run simCbbRecruitFilters.mjs
+simClubManagerEraUcl: bash .rc/default-support.sh run simClubManagerEraUcl.mjs
+simCmInternationals: bash .rc/default-support.sh run simCmInternationals.mjs
+simCmSubs: bash .rc/default-support.sh run simCmSubs.mjs
+simConquestDaily: bash .rc/default-support.sh run simConquestDaily.mjs
+simDailySaveHardening: bash .rc/default-support.sh run simDailySaveHardening.mjs
+simErrorBoundary: bash .rc/default-support.sh run simErrorBoundary.mjs
+simFirstTouchDrill: bash .rc/default-support.sh run simFirstTouchDrill.mjs
+simFrontOfficeSaveRecovery: bash .rc/default-support.sh run simFrontOfficeSaveRecovery.mjs
+simGmTradePackage: bash .rc/default-support.sh run simGmTradePackage.mjs
+simHeisman: bash .rc/default-support.sh run simHeisman.mjs
+simInventedNames: bash .rc/default-support.sh run simInventedNames.mjs
+simLoanSpell: bash .rc/default-support.sh run simLoanSpell.mjs
+simMissingNineSources: bash .rc/default-support.sh run simMissingNineSources.mjs
+simNascarDriverFeedback: bash .rc/default-support.sh run simNascarDriverFeedback.mjs
+simNbaRotation: bash .rc/default-support.sh run simNbaRotation.mjs
+simNflTruth: bash .rc/default-support.sh run simNflTruth.mjs
+simOpposition: bash .rc/default-support.sh run simOpposition.mjs
+simPlayerSearchKeyboard: bash .rc/default-support.sh run simPlayerSearchKeyboard.mjs
+simRecordPages: bash .rc/default-support.sh run simRecordPages.mjs
+simScoringCoverage: bash .rc/default-support.sh run simScoringCoverage.mjs
+simSoccerAgentReview: bash .rc/default-support.sh run simSoccerAgentReview.mjs
+simSoccerCareerSavedLoan: bash .rc/default-support.sh run simSoccerCareerSavedLoan.mjs
+simSoccerLoanBite: bash .rc/default-support.sh run simSoccerLoanBite.mjs
+simStaleChunk: bash .rc/default-support.sh run simStaleChunk.mjs
+simTradeTalksMotion: bash .rc/default-support.sh run simTradeTalksMotion.mjs
+simTycoonLeague: bash .rc/default-support.sh run simTycoonLeague.mjs
+simUsCareerAnnualBenefits: bash .rc/default-support.sh run simUsCareerAnnualBenefits.mjs
+simValidatePlayerRecords: bash .rc/default-support.sh run simValidatePlayerRecords.mjs
+simWorldXiDefensiveMids: bash .rc/default-support.sh run simWorldXiDefensiveMids.mjs
+finish: bash .rc/default-support.sh finish
