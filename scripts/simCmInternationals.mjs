@@ -90,6 +90,8 @@
  *   near     the long trip cost goes to the short trips       -> check 7
  *
  * Run: node scripts/simCmInternationals.mjs   (SEEDS=<n> to widen the sample)
+ *   INTL_SQUADS=<club>,<club>,... measures another six squads (Round 1600: the
+ *   rest rule's weight is fitted on the default six and held on a second six).
  */
 import { build } from 'esbuild';
 import fs from 'node:fs';
@@ -355,7 +357,7 @@ console.log('1) The window rule against the verified dates, and a played season 
 }
 
 /* ---------- 2 and 3. The forks ---------- */
-const HEAVY = ['Arsenal', 'Manchester City', 'Real Madrid', 'Liverpool', 'Chelsea', 'Bayern Munich'];
+const HEAVY = process.env.INTL_SQUADS ? process.env.INTL_SQUADS.split(',') : ['Arsenal', 'Manchester City', 'Real Madrid', 'Liverpool', 'Chelsea', 'Bayern Munich'];
 const rows = [];
 let missedAll = 0;
 const restCheck = { rested: 0, playing: 0, picked: 0, repicks: 0, repickPlays: 0, swaps: 0, returned: 0, lingering: 0 };
@@ -438,7 +440,7 @@ for (const club of HEAVY) {
         if (rest2.intl?.rest) restCheck.lingering += 1;
       }
       rows.push({
-        club, seed, kind: s.intl.last.windowId.split('-')[1], called: s.intl.last.called.length,
+        club, seed, kind: s.intl.last.windowId.split('-')[1], called: s.intl.last.called.length, names: s.intl.last.called.map(c => c.name),
         off: cm.matchStrengthNow(off), start: cm.matchStrengthNow(start), rest: cm.matchStrengthNow(rest),
         off2: held(off2), start2: held(toNext(start)), rest2: held(rest2),
       });
@@ -480,6 +482,13 @@ console.log('3) Resting the spent ones wins back the cost over the two matches t
     const w = mean(list, r => (r.rest - r.start) + (r.rest2 - r.start2));
     console.log(`   ${club.padEnd(16)} cost ${f2(c)}, rest wins back ${f2(w)} (${f2(c > 0 ? w / c : 0)}); now ${f2(mean(list, r => r.rest - r.start))}, next ${f2(mean(list, r => r.rest2 - r.start2))}`);
   }
+  /* Round 1600: who each squad loses to its breaks (every seed), and the two halves of the pooled rest, printed. */
+  for (const club of HEAVY) {
+    const n = new Map();
+    for (const r of rows.filter(x => x.club === club)) for (const nm of r.names) n.set(nm, (n.get(nm) ?? 0) + 1);
+    console.log(`   ${club} loses: ${[...n.entries()].sort((x, y) => y[1] - x[1] || x[0].localeCompare(y[0])).map(([k, v]) => `${k} ${v}`).join(', ')}`);
+  }
+  console.log(`   pooled rest: now ${f2(mean(rows, r => r.rest - r.start))}, next ${f2(mean(rows, r => r.rest2 - r.start2))}`);
   console.log(`   pooled: the break costs ${f2(cost)} over two matches and the rest wins back ${f2(won)}, a share of ${f2(share)} (floor ${REC_FLOOR})`);
   if (share < REC_FLOOR) fail(`resting wins back only ${f2(share)} of the break's cost, floor ${REC_FLOOR}`);
 }
