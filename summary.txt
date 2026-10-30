@@ -1,0 +1,18 @@
+fence exit=0 0s | simClubManagerDugouts: all green (96 chairs, 0 partial)
+ctl-twochairs exit=1 0s | control twochairs FIRED: section 0 red (1 failure(s) in all)
+ctl-samedomain exit=1 0s | control samedomain FIRED: section 1 red (1 failure(s) in all)
+ctl-onehost exit=1 0s | control onehost FIRED: section 1 red (1 failure(s) in all)
+ctl-wikimirror exit=1 0s | control wikimirror FIRED: section 1 red (1 failure(s) in all)
+ctl-orphan exit=1 0s | control orphan FIRED: section 2 red (2 failure(s) in all)
+ctl-monthclash exit=1 0s | control monthclash FIRED: section 4 red (2 failure(s) in all)
+ctl-gap exit=1 0s | control gap FIRED: section 3 red (2 failure(s) in all)
+ctl-monthsamedomain exit=1 0s | control monthsamedomain FIRED: section 4 red (1 failure(s) in all)
+ctl-latereads exit=1 0s | control latereads FIRED: section 6 red (96 failure(s) in all)
+ctl-bogus exit=2 0s | unknown DUGOUTS_CONTROL=bogus
+rivals exit=0 28s | No rival product names found. 0 findings.
+storage exit=0 4s | simStorageWrites: all green (owed: 12)
+trustcopy exit=0 1s | simTrustCopy: green. One disclaimer under every page and one count of the games, the registry's own.
+cmleaguefixtures exit=0 15s | simCmLeagueFixtures: OK, sections A to J green: 10 ledger(s), 10 frozen, 0 pending, 10 bound, 0 unbound, 3528 fixtures, 268 of 268 controls fired
+vitest exit=0 6s |    Duration  5.04s (transform 2.36s, setup 214ms, collect 6.00s, tests 1.24s, environment 1.02s, prepare 441ms)
+anchors exit=0 67s | simHarnessAnchors: green. Every harness parses and none carries an unmatchable anchor.
+tsc exit=0 96s | 
