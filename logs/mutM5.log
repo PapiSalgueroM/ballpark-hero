@@ -1,0 +1,8 @@
+mutant M5: applied to src/pages/SoccerCareer.tsx (anchor seen 1 time(s))
+  gate node_modules/.bin/vitest run exit=0 11s | at _HelmetProvider (/home/runner/work/ballpark-hero/ballpark-hero/node_modules/react-helmet-async/lib/index.esm.js:460:5)
+    [33m[2m✓[22m[39m Soccer Career failed write recovery[2m > [22mkeeps the restored career and old bytes while showing a persistent save warning and one toast [33m 426[2mms[22m[39m
+    [33m[2m✓[22m[39m Soccer Career failed write recovery[2m > [22mkeeps repeated refused retries visible without replaying progress or repeating the toast [33m 316[2mms[22m[39m
+    [33m[2m✓[22m[39m Soccer Career failed write recovery[2m > [22mretries the actually earned training result exactly once and restores it on the next mount [33m 2897[2mms[22m[39m
+    [33m[2m✓[22m[39m Soccer Career failed write recovery[2m > [22mretries the latest earned season after more than one failed career change without rerunning its engine [33m 1590[2mms[22m[39m
+  gate node scripts/simSoccerAcademyPlacement.mjs exit=0 9s | simSoccerAcademyPlacement: all sections green
+MUTANT M5 SURVIVED: all 2 gates green

@@ -1,0 +1,6 @@
+mutant M6: applied to src/lib/soccerCareerEngine.ts (anchor seen 1 time(s))
+  gate node scripts/simSoccerAcademyPlacement.mjs exit=1 9s | FAIL [3]: 2294 careers differ from the base engine, first: Albania 1995-99 60; Algeria 1995-99 60
+    FAIL [1]: 178 careers started somewhere else, first: Albania 2000-04 70: shown Liverpool, started Liverpool Youth; Algeria 2000-04 80: shown Liverpool, started Liverpool Youth; Angola 2000-04 80: shown Liverpool, started
+    FAIL [3]: 2294 careers differ from the base engine, first: Albania 1995-99 60; Algeria 1995-99 60
+  gate node scripts/simCareerClubPool.mjs exit=0 22s | simCareerClubPool: all sections green
+MUTANT M6 KILLED by node scripts/simSoccerAcademyPlacement.mjs

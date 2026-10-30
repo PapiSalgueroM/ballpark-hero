@@ -1,0 +1,6 @@
+mutM1 exit=0 32s | MUTANT M1 KILLED by node scripts/simSoccerAcademyPlacement.mjs
+mutM2 exit=1 92s | MUTANT M2 SURVIVED: all 3 gates green
+mutM3 exit=1 20s | MUTANT M3 SURVIVED: all 2 gates green
+mutM5 exit=1 20s | MUTANT M5 SURVIVED: all 2 gates green
+mutM6 exit=0 32s | MUTANT M6 KILLED by node scripts/simSoccerAcademyPlacement.mjs
+mutM7 exit=1 21s | MUTANT M7 SURVIVED: all 2 gates green

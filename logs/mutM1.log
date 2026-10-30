@@ -1,0 +1,6 @@
+mutant M1: applied to src/lib/soccerCareerEngine.ts (anchor seen 1 time(s))
+  gate node scripts/simSoccerAcademyPlacement.mjs exit=1 9s | FAIL [1]: 670 stray names were honoured or left the list
+    FAIL [1]: 1443 careers started somewhere else, first: Albania 1990-94 60: shown Chelsea, started Chelsea Youth; Albania 1990-94 80: shown PSG, started PSG Youth; Algeria 1990-94 35: shown Girona, started Girona Youth
+    FAIL [1]: 670 stray names were honoured or left the list
+  gate node scripts/simCareerClubPool.mjs exit=0 22s | simCareerClubPool: all sections green
+MUTANT M1 KILLED by node scripts/simSoccerAcademyPlacement.mjs

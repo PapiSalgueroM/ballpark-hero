@@ -1,0 +1,7 @@
+#!serial
+mutM1: node .rc/x/mutRun1604.mjs M1; s=$?; git checkout -- src scripts; exit $s
+mutM2: node .rc/x/mutRun1604.mjs M2; s=$?; git checkout -- src scripts; exit $s
+mutM3: node .rc/x/mutRun1604.mjs M3; s=$?; git checkout -- src scripts; exit $s
+mutM5: node .rc/x/mutRun1604.mjs M5; s=$?; git checkout -- src scripts; exit $s
+mutM6: node .rc/x/mutRun1604.mjs M6; s=$?; git checkout -- src scripts; exit $s
+mutM7: node .rc/x/mutRun1604.mjs M7; s=$?; git checkout -- src scripts; exit $s
