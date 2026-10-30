@@ -1,0 +1,7 @@
+mutant M7: applied to src/pages/SoccerCareer.tsx (anchor seen 1 time(s))
+  gate node_modules/.bin/vitest run exit=1 6s | [31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[4/4]⎯[22m[39m
+    [31m❯[39m src/test/soccerCareerCreationRoll.test.tsx [2m([22m[2m8 tests[22m[2m | [22m[31m4 failed[39m[2m)[22m[33m 1999[2mms[22m[39m
+    [2m Test Files [22m [1m[31m1 failed[39m[22m[90m (1)[39m
+    [2m      Tests [22m [1m[31m4 failed[39m[22m[2m | [22m[1m[32m4 passed[39m[22m[90m (8)[39m
+    [41m[1m FAIL [22m[49m src/test/soccerCareerCreationRoll.test.tsx[2m > [22mSoccer Career creation: the academy shown is the academy joined[2m > [22macademy kept: a settled roll starts the career at the club under 
+MUTANT M7 KILLED by node_modules/.bin/vitest run
