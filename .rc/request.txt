@@ -1,0 +1,9 @@
+simStorageWrites: node scripts/simStorageWrites.mjs
+simManagerHotSeat: node scripts/simManagerHotSeat.mjs
+simManagerHotSeat-seed1: SIM_SEED=1 HOT_SEAT_SECTION=5 node scripts/simManagerHotSeat.mjs
+simManagerHotSeat-seed2: SIM_SEED=2 HOT_SEAT_SECTION=5 node scripts/simManagerHotSeat.mjs
+simDailyDeals: node scripts/simDailyDeals.mjs
+simClubManagerSlots: node scripts/simClubManagerSlots.mjs
+simClubManagerSaveSize: node scripts/simClubManagerSaveSize.mjs
+simSaveKeeper: node scripts/simSaveKeeper.mjs
+simCmSavePoints: node scripts/simCmSavePoints.mjs
