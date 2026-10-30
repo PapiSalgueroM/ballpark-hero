@@ -1,0 +1,14 @@
+MUT m-friday: applied to src/lib/clubManagerCalendar.ts
+--- sim1234 exit 0
+simCmEuroPlay: green, 1250 checks, 0 failures
+  2 review: 12 participant seasons read on the review, 1 of them won it
+  2b moves: 6 job moves out of 3 participant seasons, each played to the season's end
+simCmEuroPlay: green, 1250 checks, 0 failures
+--- vitestview exit 0
+[2m Test Files [22m [1m[32m2 passed[39m[22m[90m (2)[39m
+[2m      Tests [22m [1m[32m37 passed[39m[22m[90m (37)[39m
+[2m   Duration [22m 4.61s[2m (transform 1.87s, setup 138ms, collect 3.33s, tests 3.12s, environment 670ms, prepare 225ms)[22m
+[2m      Tests [22m [1m[32m37 passed[39m[22m[90m (37)[39m
+[2m   Start at [22m 10:50:15
+[2m   Duration [22m 4.61s[2m (transform 1.87s, setup 138ms, collect 3.33s, tests 3.12s, environment 670ms, prepare 225ms)[22m
+MUT m-friday: SURVIVED (sim1234=0 vitestview=0)

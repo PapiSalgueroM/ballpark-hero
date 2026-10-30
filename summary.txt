@@ -1,0 +1,5 @@
+m-inplace exit=1 95s | MUT m-inplace: SURVIVED (sim1234=0 vitest=0)
+m-friday exit=1 95s | MUT m-friday: SURVIVED (sim1234=0 vitestview=0)
+m-neutral exit=1 90s | MUT m-neutral: SURVIVED (sim1234=0)
+m-noobj exit=0 149s | MUT m-noobj: KILLED (sim1234=0 rules=1 board=0)
+nouelucl-s5to8 exit=3 90s | simCmEuroPlay: control nouelucl DID NOT FIRE as it must (0 own, 0 other failures)
