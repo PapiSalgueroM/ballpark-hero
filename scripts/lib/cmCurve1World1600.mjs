@@ -12,11 +12,13 @@
  * WHAT. The world as it stood before the flip, rebuilt from this tree's own files through the shared library
  * (scripts/lib/cmSquadAges.mjs, the same rebuild simCmLevelReads' curve 1 arm uses): the main squads file with
  * its stamp off and every man at the age the curve 1 view holds (src/data/clubManagerCurve1View.ts), the A-League
- * and Russia files with their stamps off, and the real free agents back on curve 1. On that world this tree's
- * engine reads no age at all (cmWorldReadsAge is false, so no `lv`, no age read of a free agent, no drop out
- * shift and no ledger stamp), so a kit bundles BOTH engines on it and every claim it makes about the code the
- * two share is judged on one world again. simCmLeagueRules' modern part (27 entries, 0 differ, Round 1600's
- * re-record proof) is the measurement that this tree's engine on the curve 1 files plays as the engine before.
+ * and Russia files with their stamps off, the real free agents back on curve 1, and the past seasons' age read
+ * (Proposal 4, PAST_SEASONS_READ_AGE in src/lib/clubManagerEras.ts) switched off. On that world this tree's engine
+ * reads no age at all (cmWorldReadsAge is false, so no `lv`, no age read of a free agent, no drop out shift and no
+ * ledger stamp, and a past season shows its stretched levels), so a kit bundles BOTH engines on it and every claim
+ * it makes about the code the two share is judged on one world again. simCmLeagueRules' modern and eras parts
+ * (Round 1600's re-record proofs) are the measurement that this tree's engine there plays as the engine before;
+ * simManagerWorldContinuity's probe (r1600-h5k) found the past seasons' read was needed for the era careers.
  *
  * HOW. curve1Plugin1600(root) is an esbuild plugin (the async build API: buildSync takes no plugins) that serves
  * the four rebuilt files in place of the shipped ones. It fails closed: it throws unless this tree's main squads
@@ -43,6 +45,7 @@ export function curve1Files1600(root) {
     throw new Error('cmCurve1World1600: the free agents file names its curve in a shape the rebuild does not know');
   }
   return {
+    clubManagerEras: withoutPastSeasonsRead1600(read(root, 'src/lib/clubManagerEras.ts')),
     clubManagerRosters: unflippedSquads(shipped, read(root, 'src/data/clubManagerCurve1View.ts')).text,
     clubManagerALeague2026: unstampedLeague(read(root, 'src/data/clubManagerALeague2026.ts')),
     clubManagerRussia2026: unstampedLeague(read(root, 'src/data/clubManagerRussia2026.ts')),
@@ -50,7 +53,18 @@ export function curve1Files1600(root) {
   };
 }
 
+const PAST_READ = 'const PAST_SEASONS_READ_AGE = true;';
+/** src/lib/clubManagerEras.ts with the past seasons' age read off (Round 1600's Proposal 4, the era flip, taken
+ *  out: each past season's man is shown at his stretched level again, as before the round). Throws unless the
+ *  switch stands exactly once, so a later edit to it cannot leave the bridge reading half a world. */
+export function withoutPastSeasonsRead1600(source) {
+  const lf = source.replaceAll('\r\n', '\n');
+  if (lf.split(PAST_READ).length !== 2) throw new Error('cmCurve1World1600: src/lib/clubManagerEras.ts does not hold its past seasons switch exactly once');
+  return lf.replace(PAST_READ, 'const PAST_SEASONS_READ_AGE = false;');
+}
+
 const FILTERS = {
+  clubManagerEras: /[\\/]src[\\/]lib[\\/]clubManagerEras\.ts$/,
   clubManagerRosters: /[\\/]src[\\/]data[\\/]clubManagerRosters\.ts$/,
   clubManagerALeague2026: /[\\/]src[\\/]data[\\/]clubManagerALeague2026\.ts$/,
   clubManagerRussia2026: /[\\/]src[\\/]data[\\/]clubManagerRussia2026\.ts$/,

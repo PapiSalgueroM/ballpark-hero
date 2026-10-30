@@ -12,13 +12,15 @@ import { withoutMadeUpNations } from './lib/cmNoMadeUpNations1520.mjs';
 import { worldReadsAge1600, curve1Files1600 } from './lib/cmCurve1World1600.mjs';
 
 /* Round 1600 (2026-10-30), the bridge for this kit pinned to an old engine: that round put today's world on curve 2
-   (the age read at load, the level kept as lv), which the pinned engine cannot read, so the current arm loads the
-   world before the flip (scripts/lib/cmCurve1World1600.mjs: the four modern data files rebuilt from this tree's own,
-   on which the current engine reads no age). Without it the inactive group's first comparison differs in nearly
-   every man's age and rating, and node's assertion message for two whole career states that far apart took more
-   memory than a GitHub runner has (r1600-h5b to r1600-h5h: the run step killed, nothing published). With it the
-   current arm plays the inputs of the inactive group exactly as main's engine does (r1600-h5j). */
-const CURVE1_1600 = worldReadsAge1600(ROOT) ? (f => ({ 'src/data/clubManagerRosters.ts': f.clubManagerRosters,
+   (the age read at load, the level kept as lv, and the past seasons read the same way), which the pinned engine
+   cannot read, so the current arm loads the world before the flip (scripts/lib/cmCurve1World1600.mjs: the four
+   modern data files rebuilt from this tree's own and the past seasons' switch off, on which the current engine
+   reads no age). Without it the inactive group's first comparison differs in nearly every man's age and rating,
+   and node's assertion message for two whole career states that far apart took more memory than a GitHub runner
+   has (r1600-h5b to r1600-h5h: the run step killed, nothing published). With the data files alone the modern
+   inputs of the inactive group played exactly as main's engine and the era ones did not (r1600-h5k); with the
+   switch too, see the proof named in the round's report. */
+const CURVE1_1600 = worldReadsAge1600(ROOT) ? (f => ({ 'src/lib/clubManagerEras.ts': f.clubManagerEras, 'src/data/clubManagerRosters.ts': f.clubManagerRosters,
   'src/data/clubManagerALeague2026.ts': f.clubManagerALeague2026, 'src/data/clubManagerRussia2026.ts': f.clubManagerRussia2026,
   'src/data/clubManagerFreeAgents2026.ts': f.clubManagerFreeAgents2026 }))(curve1Files1600(ROOT)) : {};
 
