@@ -1,0 +1,10 @@
+build exit=0 33s | [dukb] inlined 1 stylesheet(s) and 1 module(s) into 181 snapshots (11 left alone)
+head exit=0 0s | 548be6c9faad4cd8b2e090f73dd74feb39078670
+sim exit=0 4s | simBingoClubCounts: GREEN, every section held
+moved exit=0 4s | simBingoClubCounts: GREEN, every section held
+moved-old exit=1 4s | simBingoClubCounts: RED, 23 failures (section 4: 23)
+moved-nowindow exit=1 4s | simBingoClubCounts: CONTROL=nowindow FIRED (1 failures; section 8: 1)
+moved-bornone exit=1 4s | simBingoClubCounts: CONTROL=bornone FIRED (1 failures; section 5: 1)
+moved-windowseason exit=1 4s | simBingoClubCounts: CONTROL=windowseason FIRED (1 failures; section 8: 1)
+playBingoClubRules exit=0 58s | playBingoClubRules: GREEN, both viewports held
+tsc exit=0 78s | 
