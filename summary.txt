@@ -1,0 +1,12 @@
+academy-redraw exit=1 13s | control redraw FIRED: section 1 went red as it must
+academy exit=0 13s | simSoccerAcademyPlacement: all sections green
+academy-pickfirst exit=1 10s | control pickfirst FIRED: section 2 went red as it must
+academy-extradraw exit=1 11s | control extradraw FIRED: section 3 went red as it must
+vitest-create exit=0 13s |    Duration  12.81s (transform 5.37s, setup 372ms, collect 10.70s, tests 16.45s, environment 1.58s, prepare 586ms)
+academy-seeds6 exit=0 23s | simSoccerAcademyPlacement: all sections green
+clubpool exit=0 26s | simCareerClubPool: all sections green
+nodeadend exit=0 1s | simCareerNoDeadEnd: green. A convicted career is still a career, and a stranded save comes back.
+accessibility exit=0 0s | simAccessibility: all green
+clubpool-academypick exit=0 23s | control academypick: section 6 went red as it must (red: 6)
+norival exit=0 15s | No rival product names found. 0 findings.
+tsc exit=0 86s | 
