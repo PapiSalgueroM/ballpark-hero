@@ -1,0 +1,16 @@
+fence exit=0 1s | simClubManagerDugouts: all green (96 chairs, 0 partial)
+ctl-twochairs exit=1 1s | control twochairs FIRED: section 0 red (1 failure(s) in all)
+ctl-orphan exit=1 1s | control orphan FIRED: section 2 red (2 failure(s) in all)
+ctl-onehost exit=1 1s | control onehost FIRED: section 1 red (1 failure(s) in all)
+ctl-gap exit=1 1s | control gap FIRED: section 3 red (2 failure(s) in all)
+ctl-monthclash exit=1 1s | control monthclash FIRED: section 4 red (2 failure(s) in all)
+quotes exit=0 39s | simNoInventedQuotes: green. No real player is quoted or accused anywhere.
+inventednames exit=0 13s | simInventedNames: green. Every invented man on this site is invented all the way down.
+rivals exit=0 23s | No rival product names found. 0 findings.
+trustcopy exit=0 1s | simTrustCopy: green. One disclaimer under every page and one count of the games, the registry's own.
+cmleaguefixtures exit=0 16s | simCmLeagueFixtures: OK, sections A to J green: 10 ledger(s), 10 frozen, 0 pending, 10 bound, 0 unbound, 3528 fixtures, 268 of 268 controls fired
+vitest exit=0 7s |    Duration  6.59s (transform 2.53s, setup 359ms, collect 9.79s, tests 3.73s, environment 2.19s, prepare 612ms)
+fleet exit=0 102s | simManagers: all green
+dashes exit=0 0s | added lines with a dash: 0
+oldsave exit=1 5s | rv-oldsave: 10 failure(s)
+tsc exit=0 112s | 

@@ -1,0 +1,26 @@
+base c0c66e087 bundled, branch bundled
+  Everton now: load same; league chairs shown real on the old save: 0; pre-308 save repaired with 19 real chair(s)
+  Arsenal now: load same; league chairs shown real on the old save: 0; pre-308 save repaired with 19 real chair(s)
+  Real Madrid now: load same; league chairs shown real on the old save: 0; pre-308 save repaired with 19 real chair(s)
+  Bayern Munich now: load same; league chairs shown real on the old save: 0; pre-308 save repaired with 17 real chair(s)
+  PSG now: load same; league chairs shown real on the old save: 0; pre-308 save repaired with 17 real chair(s)
+  Napoli now: load same; league chairs shown real on the old save: 0; pre-308 save repaired with 19 real chair(s)
+  Coventry City now: load same; league chairs shown real on the old save: 0; pre-308 save repaired with 19 real chair(s)
+  FAIL: Toulouse now: after one rollover the branch differs from the base: .squad.8.id: "youth-mv0wy2o0-26-255" vs "youth-mv0wy2o0-24-255"
+  Toulouse now: load same; league chairs shown real on the old save: 0; pre-308 save repaired with 17 real chair(s)
+  FAIL: Everton era2010: base could not start (Club Manager: the era2010 squads are not loaded yet (await ensureEraRosters first))
+  FAIL: Barcelona era2015: base could not start (Club Manager: the era2015 squads are not loaded yet (await ensureEraRosters first))
+  FAIL: Juventus era2020: base could not start (Club Manager: the era2020 squads are not loaded yet (await ensureEraRosters first))
+  FAIL: Lyon era2005: base could not start (Club Manager: the era2005 squads are not loaded yet (await ensureEraRosters first))
+  FAIL: Arsenal now newYear: after one rollover the branch differs from the base: .squad.19.id: "youth-mv0wy2o0-33-419" vs "youth-mv0wy2o0-31-419"
+  Arsenal now newYear: load same; league chairs shown real on the old save: 0; pre-308 save repaired with 19 real chair(s)
+  FAIL: Lyon now runIn: after one rollover the branch differs from the base: .squad.15.id: "youth-mv0wy2o0-36-266" vs "youth-mv0wy2o0-34-266"
+  Lyon now runIn: load same; league chairs shown real on the old save: 0; pre-308 save repaired with 17 real chair(s)
+  FAIL: Sevilla now autumn: after one rollover the branch differs from the base: .squad.17.id: "youth-mv0wy2o0-45-159" vs "youth-mv0wy2o0-41-159"
+  Sevilla now autumn: load same; league chairs shown real on the old save: 0; pre-308 save repaired with 19 real chair(s)
+  FAIL: Everton now season2: after one rollover the branch differs from the base: .squad.12.id: "youth-mv0wy2o0-56-379" vs "youth-mv0wy2o0-46-379"
+  Everton now season2: load same; league chairs shown real on the old save: 0; pre-308 save repaired with 0 real chair(s)
+  FAIL: Getafe now season2: after one rollover the branch differs from the base: .squad.18.id: "youth-mv0wy2o0-69-494" vs "youth-mv0wy2o0-53-494"
+  Getafe now season2: load same; league chairs shown real on the old save: 0; pre-308 save repaired with 0 real chair(s)
+old saves: 13 of 17 load identical on the branch, 7 of 17 identical after one rollover; real chairs shown on old saves: 0; pre-308 saves repaired: 13, real chairs seated in them: 201
+rv-oldsave: 10 failure(s)
