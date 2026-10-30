@@ -1,0 +1,17 @@
+  info  fixtures written by the engine at /home/runner/work/ballpark-hero/ballpark-hero
+  info  fixture NEAR: Everton season 1 week 48, league weeks left 4, expiring 3, managers 19 real
+  info  fixture END: review pending true, expiring 3
+  info  fixture HOT: Chelsea (survived); slot 1 holds Aston Villa
+-- 390rm section E
+  ok    390rm E: the Match Centre link 290x17 at 414 to 430, banner top 611, hit itself
+  ok    390rm E: match preview manager "Manager: Fabian Hurzeler" (real), box 121x14 at 33 to 154, font 9px
+-- 1280rm section E
+  ok    1280rm E: the Match Centre link 290x17 at 442 to 458, banner top 735, hit itself
+  ok    1280rm E: match preview manager "Manager: Fabian Hurzeler" (real), box 166x14 at 433 to 599, font 9px
+-- 390mo section E
+  ok    390mo E: the Match Centre link 290x17 at 414 to 430, banner top 611, hit itself
+  ok    390mo E: match preview manager "Manager: Fabian Hurzeler" (real), box 121x14 at 33 to 154, font 9px
+-- 1280mo section E
+  ok    1280mo E: the Match Centre link 290x17 at 442 to 458, banner top 735, hit itself
+  ok    1280mo E: match preview manager "Manager: Fabian Hurzeler" (real), box 166x14 at 433 to 599, font 9px
+walkcmsc: green
