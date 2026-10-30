@@ -1,0 +1,150 @@
+name: Daily date full default suite
+on:
+  push:
+    branches: [codex/daily-date-full-20261030]
+permissions:
+  contents: read
+jobs:
+  full-default:
+    runs-on: ubuntu-latest
+    timeout-minutes: 120
+    env:
+      CI: 'true'
+      SIM_NETWORK: offline
+      GIT_OPTIONAL_LOCKS: '0'
+      EXPECTED_MAIN: c18c4b7a805a790288fa82d1dbe89085dec8eb1a
+      EXPECTED_PARENT: c203b904ee4bed19093b9aa20f5ae52b07d134b8
+      EXPECTED_TREE: 1de92098f3b10720411bf7a06ed40a2585438dba
+      TESTS_PARENT: 77f8b9ac981145ce59d65953b1e8bc90269d8c25
+      FACE_TEST_SHA256: 1fc71e45c3238d59a7c2969832286c6e42c0797d0f062a8a15afe4c1213bbd06
+      MINE_TEST_SHA256: eac2f75f870d896ea02aa7b310dd322f3b49fe8d8f0b355b4f7628448cf9da6d
+      CONTROLLER_SHA256: f03e1f05b335a5b5bf835a40e9c3e1669d83db2ed689672913943b93e736a5fc
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          persist-credentials: false
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '24'
+      - name: Bind fixed product and exact shared qualification source
+        run: |
+          set -euo pipefail
+          out="$RUNNER_TEMP/daily-date-full"
+          test ! -e "$out"
+          mkdir -p "$out/runtime-tmp"
+          echo "DAILY_FULL_OUT=$out" >> "$GITHUB_ENV"
+          echo "PLACEMENT_OUT=$out" >> "$GITHUB_ENV"
+          echo "TMPDIR=$out/runtime-tmp" >> "$GITHUB_ENV"
+          test "$GITHUB_REF_NAME" = codex/daily-date-full-20261030
+          test "$(git rev-list --parents -n1 HEAD)" = "$GITHUB_SHA $EXPECTED_PARENT"
+          test "$(git rev-list --parents -n1 "$EXPECTED_PARENT")" = "$EXPECTED_PARENT $TESTS_PARENT"
+          test "$(git rev-list --parents -n1 "$TESTS_PARENT")" = "$TESTS_PARENT $EXPECTED_MAIN"
+          test "$(git rev-parse "$EXPECTED_PARENT^{tree}")" = "$EXPECTED_TREE"
+          test "$(git ls-files | wc -l)" -eq 5496
+          git diff --name-status "$EXPECTED_MAIN" "$EXPECTED_PARENT" > "$out/product.paths"
+          printf 'M\tsrc/hooks/useFaceOff.ts\nM\tsrc/pages/Minefield.tsx\nA\tsrc/test/faceOffDailyDate.test.tsx\nA\tsrc/test/minefieldDailyDate.test.tsx\n' > "$out/expected-product.paths"
+          cmp "$out/product.paths" "$out/expected-product.paths"
+          git diff --name-status "$EXPECTED_PARENT" HEAD > "$out/proof.paths"
+          printf 'A\t.github/workflows/daily-date-full.yml\nA\tscripts/qa/dailyDateFull.cjs\n' > "$out/expected-proof.paths"
+          cmp "$out/proof.paths" "$out/expected-proof.paths"
+          test "$(sha256sum src/test/faceOffDailyDate.test.tsx | cut -d' ' -f1)" = "$FACE_TEST_SHA256"
+          test "$(sha256sum src/test/minefieldDailyDate.test.tsx | cut -d' ' -f1)" = "$MINE_TEST_SHA256"
+          test "$(sha256sum scripts/qa/dailyDateFull.cjs | cut -d' ' -f1)" = "$CONTROLLER_SHA256"
+          test "$(git hash-object src/hooks/useFaceOff.ts)" = ae4787e541c39ad15f708692f433e6fa7bf913ed
+          test "$(git hash-object src/pages/Minefield.tsx)" = 532612258836c29a7793b2936f0fed88e8a75ea3
+          test "$(git hash-object src/test/faceOffDeadline.test.tsx)" = 9449c8de78c051969a7760ae21dc10bb4b655cae
+          test "$(git hash-object scripts/sweepWeight.mjs)" = 58afae7329f0e1a520d7804e670b29583fd2964d
+          git ls-files -z | sort -z > "$out/source-members.initial"
+          xargs -0 sha256sum < "$out/source-members.initial" > "$out/source.initial.sha256"
+          git ls-files --others --exclude-standard -z | sort -z > "$out/untracked.initial"
+          test ! -s "$out/untracked.initial"
+          git for-each-ref --format='%(refname) %(objectname)' > "$out/refs.before"
+          git rev-parse HEAD > "$out/head.txt"
+          git rev-parse 'HEAD^{tree}' > "$out/tree.txt"
+          git archive --format=tar HEAD > "$out/source.tar"
+          cp scripts/qa/dailyDateFull.cjs "$out/full-default-controller.cjs"
+          cmp scripts/qa/dailyDateFull.cjs "$out/full-default-controller.cjs"
+          sha256sum "$out/full-default-controller.cjs" > "$out/controller-copy.sha256"
+          raw=0
+          node --check scripts/qa/dailyDateFull.cjs > "$out/syntax.stdout" 2> "$out/syntax.stderr" || raw=$?
+          printf '%s\n' "$raw" > "$out/syntax.exit"
+          test "$raw" -eq 0
+          test ! -s "$out/syntax.stdout"
+          test ! -s "$out/syntax.stderr"
+      - name: Locked dependencies and actual application types
+        run: |
+          set -euo pipefail
+          out="$DAILY_FULL_OUT"
+          raw=0
+          env -u NODE_OPTIONS npm ci > "$out/npm-ci.stdout" 2> "$out/npm-ci.stderr" || raw=$?
+          printf '%s\n' "$raw" > "$out/npm-ci.exit"
+          test "$raw" -eq 0
+          raw=0
+          : > "$out/types.transport"
+          NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" SIM_OFFLINE_RECEIPT="$out/types.transport" timeout --signal=TERM --kill-after=15s 3m node node_modules/typescript/bin/tsc --noEmit -p tsconfig.app.json > "$out/types.stdout" 2> "$out/types.stderr" || raw=$?
+          printf '%s\n' "$raw" > "$out/types.exit"
+          test "$raw" -eq 0
+          test ! -s "$out/types.stdout"
+          test ! -s "$out/types.stderr"
+          test ! -s "$out/types.transport"
+      - name: Actual collected positive identities and unfiltered default suite with ten controls
+        run: |
+          set -euo pipefail
+          out="$DAILY_FULL_OUT"
+          raw=0
+          : > "$out/red.transport"
+          NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" SIM_OFFLINE_RECEIPT="$out/red.transport" timeout --signal=TERM --kill-after=15s 110m node "$out/full-default-controller.cjs" > "$out/red.stdout" 2> "$out/red.stderr" || raw=$?
+          printf '%s\n' "$raw" > "$out/red.exit"
+          if test "$raw" -ne 0; then
+            sed -n '1,100p' "$out/red.stderr"
+            tail -n 40 "$out/red.stdout"
+          fi
+          test "$raw" -eq 0
+          test ! -s "$out/red.stderr"
+          test ! -s "$out/red.transport"
+          grep -Fqx 'DAILY_DATE_DEFAULT_GREEN: actual unfiltered npm test matched actual collected positive identities with zero failures/runtime errors, exact58 source-owned optional skips and9 daily-date cases plus15 unchanged deadline cases;10 copied classifier refusals/restores passed.' "$out/red.stdout"
+          test "$(cat "$out/full-suite/raw.exit")" -eq 0
+          sha256sum -c "$out/controller-copy.sha256" > "$out/controller-copy-held.log"
+          find node_modules -type f -print0 | sort -z > "$out/dependencies.members.post"
+          xargs -0 sha256sum < "$out/dependencies.members.post" > "$out/dependencies.post.sha256"
+          find node_modules -type l -printf '%p -> %l\n' | sort > "$out/dependency-links.post"
+      - name: Always preserve source and qualification evidence
+        if: ${{ always() }}
+        run: |
+          set -euo pipefail
+          out="$RUNNER_TEMP/daily-date-full"
+          mkdir -p "$out"
+          failed=0
+          git ls-files -z | sort -z > "$out/source-members.final"
+          cmp "$out/source-members.initial" "$out/source-members.final" || failed=1
+          sha256sum -c "$out/source.initial.sha256" > "$out/source-held.log" 2>&1 || failed=1
+          git ls-files --others --exclude-standard -z | sort -z > "$out/untracked.final"
+          cmp "$out/untracked.initial" "$out/untracked.final" || failed=1
+          git diff --exit-code HEAD > "$out/working-source.diff" || failed=1
+          git for-each-ref --format='%(refname) %(objectname)' > "$out/refs.after"
+          cmp "$out/refs.before" "$out/refs.after" || failed=1
+          sha256sum -c "$out/controller-copy.sha256" > "$out/controller-copy-final-held.log" 2>&1 || failed=1
+          if test -f "$out/dependencies.post.sha256"; then
+            find node_modules -type f -print0 | sort -z > "$out/dependencies.members.final"
+            cmp "$out/dependencies.members.post" "$out/dependencies.members.final" || failed=1
+            sha256sum -c "$out/dependencies.post.sha256" > "$out/dependencies-final-held.log" 2>&1 || failed=1
+            find node_modules -type l -printf '%p -> %l\n' | sort > "$out/dependency-links.final"
+            cmp "$out/dependency-links.post" "$out/dependency-links.final" || failed=1
+          else
+            printf 'POST_QUALIFICATION_DEPENDENCY_SNAPSHOT_NOT_CREATED\n' > "$out/dependencies-not-created.txt"
+            failed=1
+          fi
+          printf '%s\n' "$failed" > "$out/final-holds.exit"
+          printf '{"scope":"ACTUAL_UNFILTERED_DEFAULT_SUITE_ONLY","applicationFix":true,"fullSuite":"READ_ACTUAL_ADMISSION_AND_LITERAL_IDENTITIES","sourceCollection":"ACTUAL_POSITIVE_IDENTITIES_PREREQUISITE","capPolicy":"CURRENT_MAIN_58AF_WITH_SIX_PREEXISTING_MAIN_RAISES_NO_ROOT_CAP_CHANGE","optionalProfilesExecuted":false,"runtimeCallbackErrors":"READ_ACTUAL_CALLBACK","focusedInverseProof":"SEPARATE_FOCUSED_BRANCH","build":"UNRUN","browser":"UNRUN","caps":"UNRUN","builtReaders":"UNRUN","globalSims":"UNRUN","featureReady":false,"dependencyInventoryScope":"POST_QUALIFICATION_ONLY"}\n' > "$out/SCOPE.json"
+          find "$out" -type f -print0 | sort -z | xargs -0 sha256sum > "$RUNNER_TEMP/daily-date-full-evidence.sha256"
+          cp "$RUNNER_TEMP/daily-date-full-evidence.sha256" "$out/evidence.sha256"
+          exit "$failed"
+      - uses: actions/upload-artifact@v4
+        if: ${{ always() }}
+        with:
+          name: daily-date-full-${{ github.run_id }}-a${{ github.run_attempt }}
+          path: ${{ runner.temp }}/daily-date-full
+          include-hidden-files: true
+          if-no-files-found: error
+          retention-days: 14
