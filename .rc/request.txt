@@ -1,0 +1,6 @@
+#!serve
+#!playwright
+playClubManagerSlots: ENGINES=chromium node scripts/playClubManagerSlots.mjs
+playSaveKeeper: KEEPER_DIST=dist KEEPER_NO_BASE=1 node scripts/playSaveKeeper.mjs
+simClubManagerSaveSize: node scripts/simClubManagerSaveSize.mjs
+playTwoTabs390: SIZES=390x844 CASES=3,4,9 node scripts/playTwoTabs.mjs
