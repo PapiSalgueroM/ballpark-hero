@@ -1,0 +1,16 @@
+n1584-sim exit=0 2s | simClubNamesakes: green. The detection flags Arsenal FC where it is two clubs, and the grid stops reading Arsenal inside another club's name, nowhere else.
+n1584-ctl-onehost exit=1 2s | simClubNamesakes: 1 finding(s).
+n1584-ctl-forget exit=1 2s | simClubNamesakes: 1 finding(s).
+n1587-repro-dated exit=0 1s | same: scripts/qa/clubNamesakes1587Applied.sql
+n1587-repro-oldgen exit=1 1s | FAIL: the table moved since the committed export (or the ledger changed). Stop the apply.
+n1587-repro-refuse exit=0 0s | refuse-exit=2
+n1587-sim exit=0 2s | simClubNamesakes: green. The detection flags Arsenal FC where it is two clubs, and the grid stops reading Arsenal inside another club's name, nowhere else.
+n1587-c-freshmoved exit=1 2s | simClubNamesakes: 1 finding(s).
+n1587-c-freshstill exit=1 2s | simClubNamesakes: 1 finding(s).
+n1587-c-purgeblind exit=1 2s | simClubNamesakes: 2 finding(s).
+n1587-rh exit=0 8s | rehearseClubNamesakes1587: green. Both forms move exactly the 110 market rows and 56 stints to Arsenal de Sarandí and nothing else, and a second run changes nothing.
+n1587-rh-cachedrift exit=1 7s | rehearseClubNamesakes1587: 1 finding(s).
+n1587-gen-ledger exit=0 1s | ok: the committed ledger equals the generator's output
+n1587-gen-payload exit=0 0s | same: scripts/qa/clubNamesakes1587Applied.sql
+n1587-gen-owed exit=0 1s | ok: owedToChat1587.json equals the generator's output
+n1587-simEdgeSync exit=1 0s | simEdgeSync: 2 finding(s).
