@@ -1,0 +1,14 @@
+hits 1
+ ✓ src/components/front-office/FrontOfficeOnePress.test.tsx (13 tests) 2893ms
+   ✓ NFL front office, fifteen league, GM desk off: one press of the final week > ordinary: the save at the recap, the draft and the next season's hub is the base's  1099ms
+ ✓ src/components/front-office/FrontOfficePostseason.test.tsx (38 tests) 5048ms
+   ✓ NFL front office, fifteen league, GM desk off: the bracket a round at a time is the one press > title: "Play Week 17" then a press a round, and then "Sim the rest", leave the one press save after the same draws  305ms
+   ✓ NFL front office, deep league, GM desk off: the bracket a round at a time is the one press > ordinary: "Play Week 17" then a press a round, and then "Sim the rest", leave the one press save after the same draws  333ms
+   ✓ NFL front office, deep league, GM desk off: the bracket a round at a time is the one press > title: "Play Week 17" then a press a round, and then "Sim the rest", leave the one press save after the same draws  333ms
+   ✓ NFL front office, deep league, GM desk off: the bracket a round at a time is the one press > fired: "Play Week 17" then a press a round, and then "Sim the rest", leave the one press save after the same draws  305ms
+   ✓ NFL front office, deep league, GM desk on: the bracket a round at a time is the one press > ordinary: "Play Week 17" then a press a round, and then "Sim the rest", leave the one press save after the same draws  363ms
+   ✓ NFL front office, deep league, GM desk on: the bracket a round at a time is the one press > title: "Play Week 17" then a press a round, and then "Sim the rest", leave the one press save after the same draws  353ms
+   ✓ NFL front office, deep league, GM desk on: the bracket a round at a time is the one press > fired: "Play Week 17" then a press a round, and then "Sim the rest", leave the one press save after the same draws  336ms
+ Test Files  2 passed (2)
+      Tests  51 passed (51)
+exit 0
