@@ -354,8 +354,10 @@ const renewAll = (cm, fin) => {
     console.log(`size    base bytes a season:      ${b.sizes.join(' ')}`);
     console.log(`size    base season ${b.sizes.length}: ${b.sizes[b.sizes.length - 1]} bytes, slope ${bp.length >= 3 ? slopeOf(bp).toFixed(0) : 'n/a'}; candidate minus base: ${c.sizes.map((x, i) => x - (b.sizes[i] ?? 0)).join(' ')}`);
   }
-  if (c.sizes.length < LONG) cannot(`${long.name} ended after ${c.sizes.length} seasons (sacked), so the cap was never reached`);
-  if (c.most < PAST_KEPT && LONG > PAST_KEPT) cannot(`${long.name}: nobody reached ${PAST_KEPT} rows in ${LONG} seasons, so the cap was never tried`);
+  /* A control aimed at another section is judged there; the cap is then printed, not required. */
+  const judged = !CONTROL || CONTROLS[CONTROL].section === 'cap';
+  if (judged && c.sizes.length < LONG) cannot(`${long.name} ended after ${c.sizes.length} seasons (sacked), so the cap was never reached`);
+  if (judged && c.most < PAST_KEPT) cannot(`${long.name}: nobody reached ${PAST_KEPT} rows in ${LONG} seasons, so the cap was never tried`);
   /* The cap on a constructed squad, so it is tried whatever the engine's renewals do. */
   const squad = Array.from({ length: 25 }, (_, i) => ({ id: `m${i}`, apps: 1 + (i % 30), seasonGoals: i % 4, seasonAssists: i % 3, cleanSheets: 0, ratingSum: 6.5 * (1 + (i % 30)) }));
   const st = { season: 1, squad };
