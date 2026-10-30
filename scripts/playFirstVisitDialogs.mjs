@@ -104,7 +104,9 @@
  * pending banner; the closest green control is Take the job, 12 px above the banner, then Found the club 12 to 15, Next
  * Year 18 and Auto Fill 24. No site control met the banner anywhere. The first nolift run (r1605-ctl) caught 9 of 12
  * stripped lines and passed the bracket's 3: its button has transition-all, so it was read mid move. The strip turns
- * transitions off now.
+ * transitions off now, and the rerun (r1605-nolift) fired on 12 of 12, each control back where main had it (Take the
+ * job and Found the club 44 px under, the hub's Next Year 48, Training and Phone 56, Auto Fill 52); with /soccer-career
+ * left out of the run it refuses (ABORTED, exit 2).
  *
  * Run: BASE=http://localhost:4173 node scripts/playFirstVisitDialogs.mjs   (a served build, see scripts/lib/hostLikeServer.mjs)
  *      ONLY=/stadium-tycoon,/idle-arena scopes it; PLAYFIRST_SHARD=1/3 runs a third of the routes;
