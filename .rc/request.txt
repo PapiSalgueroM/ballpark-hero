@@ -1,0 +1,6 @@
+#!serial
+# Supplemental immutable-main diagnostic only. No final-F or 1022-default qualification credit.
+prepare: bash .rc/default-support.sh prepare
+simGmCalendar: bash .rc/default-support.sh run simGmCalendar.mjs
+simSoccerDeck: bash .rc/default-support.sh run simSoccerDeck.mjs
+finish: bash .rc/default-support.sh finish
