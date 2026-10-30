@@ -137,7 +137,7 @@ const wake = s => { cm.registerCustomClub?.(s.customClub ?? null, s.eraId); cm.r
 const lb1 = cm.leagueBoardsOf(wake(S.S1));
 const lb2 = cm.leagueBoardsOf(wake(S.S2));
 if (S.S1.season !== 3 || !(S.S1.pastLines ?? []).some(e => e[1].length === 2)) cannot('S1 is not in its third season with men holding two kept seasons');
-if (!lb1 || lb1.from !== null || lb1.share < boards.BOOK_FULL_SHARE) cannot('S1 holds no whole, full league book');
+if (!lb1 || lb1.from !== null || lb1.share < boards.BOOK_FULL_SHARE) cannot(`S1 holds no whole, full league book (${lb1 ? `from ${lb1.from}, share ${lb1.share}` : `no readable book: ${S.S1.leagueBook ? 'a book the reader refuses or that does not add up' : 'no book key'}`}; season ${S.S1.season} week ${S.S1.week})`);
 if (!lb2 || lb2.share >= boards.BOOK_FULL_SHARE) cannot(`S2 reads ${lb2?.share ?? 'no book'}: the thin line has no save to earn it`);
 console.log(`playCmPlayerCard: saves built: S1 season ${S.S1.season} week ${S.S1.week}, ${S.S1.pastLines.length} men with kept seasons; S2 week ${S.S2.week}, share ${lb2.share}; S3 kept from 3`);
 
