@@ -1,0 +1,4 @@
+vitest exit=0 9s |    Duration  8.04s (transform 2.60s, setup 448ms, collect 9.56s, tests 6.39s, environment 2.41s, prepare 761ms)
+simNoRivalNames exit=0 18s | No rival product names found. 0 findings.
+tsc exit=0 65s | 
+fleet exit=0 134s | simCmFreeAgencyFleet: green, all four sections held
