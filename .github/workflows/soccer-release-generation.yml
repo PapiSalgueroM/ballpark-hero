@@ -1,0 +1,84 @@
+name: Soccer release generated inputs
+on:
+  push:
+    branches: [codex/soccer-release-generation-v2-20261030]
+permissions:
+  contents: read
+concurrency:
+  group: soccer-release-generation-${{ github.ref }}
+  cancel-in-progress: false
+jobs:
+  archive:
+    if: github.ref_name == 'codex/soccer-release-generation-v2-20261030'
+    runs-on: ubuntu-latest
+    timeout-minutes: 45
+    outputs:
+      archive_sha256: ${{ steps.result.outputs.archive_sha256 }}
+    steps:
+      - uses: actions/checkout@v4
+        with: {fetch-depth: 0}
+      - uses: actions/setup-node@v4
+        with: {node-version: 24, cache: npm}
+      - run: npm ci
+      - name: One controlled archive read, no write permission
+        env:
+          GEN_OUT: ${{ runner.temp }}/soccer-generation-${{ github.run_id }}-a${{ github.run_attempt }}/archive
+        run: |
+          mkdir -p "$GEN_OUT"
+          node scripts/qa/prepareSoccerReleaseGeneration.mjs archive
+      - name: Bind actual generated body
+        id: result
+        env:
+          GEN_OUT: ${{ runner.temp }}/soccer-generation-${{ github.run_id }}-a${{ github.run_attempt }}/archive
+        run: echo "archive_sha256=$(sha256sum "$GEN_OUT/archive-generated.json" | cut -d ' ' -f 1)" >> "$GITHUB_OUTPUT"
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: soccer-generation-archive-${{ github.run_id }}-a${{ github.run_attempt }}
+          path: |
+            ${{ runner.temp }}/soccer-generation-${{ github.run_id }}-a${{ github.run_attempt }}/archive/
+            !${{ runner.temp }}/soccer-generation-${{ github.run_id }}-a${{ github.run_attempt }}/archive/matched-source/**
+          if-no-files-found: error
+          retention-days: 14
+  seo:
+    needs: archive
+    runs-on: ubuntu-latest
+    timeout-minutes: 150
+    env:
+      GEN_ARCHIVE_SHA256: ${{ needs.archive.outputs.archive_sha256 }}
+    steps:
+      - uses: actions/checkout@v4
+        with: {fetch-depth: 0}
+      - uses: actions/setup-node@v4
+        with: {node-version: 24, cache: npm}
+      - name: Bind external generation paths
+        run: |
+          echo "GEN_OUT=$RUNNER_TEMP/soccer-generation-$GITHUB_RUN_ID-a$GITHUB_RUN_ATTEMPT/seo" >> "$GITHUB_ENV"
+          echo "GEN_ARCHIVE_INPUT=$RUNNER_TEMP/soccer-generation-input-$GITHUB_RUN_ID-a$GITHUB_RUN_ATTEMPT" >> "$GITHUB_ENV"
+          echo "PLAYWRIGHT_BROWSERS_PATH=$RUNNER_TEMP/soccer-generation-tools-$GITHUB_RUN_ID-a$GITHUB_RUN_ATTEMPT/browsers" >> "$GITHUB_ENV"
+          echo "FREE_KICK_FONT_CACHE=$RUNNER_TEMP/soccer-generation-$GITHUB_RUN_ID-a$GITHUB_RUN_ATTEMPT/seo/prepared-fonts" >> "$GITHUB_ENV"
+      - uses: actions/download-artifact@v4
+        with:
+          name: soccer-generation-archive-${{ github.run_id }}-a${{ github.run_attempt }}
+          path: ${{ runner.temp }}/soccer-generation-input-${{ github.run_id }}-a${{ github.run_attempt }}
+      - name: Install held dependencies and browser support
+        run: |
+          npm ci
+          tools="$RUNNER_TEMP/soccer-generation-tools-$GITHUB_RUN_ID-a$GITHUB_RUN_ATTEMPT"
+          npm install --prefix "$tools" --no-save --package-lock=false playwright@1.64.0
+          ln -s "$tools/node_modules/playwright" node_modules/playwright
+          ln -s "$tools/node_modules/playwright-core" node_modules/playwright-core
+          node "$tools/node_modules/playwright/cli.js" install --with-deps chromium
+          mkdir -p "$GEN_OUT"
+          FREE_KICK_FONT_CACHE="$FREE_KICK_FONT_CACHE" node scripts/qa/freeKickLab1070.mjs --prefetch-fonts-only > "$GEN_OUT/font-prefetch.stdout.log" 2> "$GEN_OUT/font-prefetch.stderr.log"
+      - name: Offline SEO generation and complete output export
+        run: node scripts/qa/prepareSoccerReleaseGeneration.mjs seo
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: soccer-generation-seo-${{ github.run_id }}-a${{ github.run_attempt }}
+          path: |
+            ${{ runner.temp }}/soccer-generation-${{ github.run_id }}-a${{ github.run_attempt }}/seo/
+            !${{ runner.temp }}/soccer-generation-${{ github.run_id }}-a${{ github.run_attempt }}/seo/matched-source/**
+          if-no-files-found: error
+          retention-days: 14
