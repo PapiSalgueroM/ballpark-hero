@@ -71,6 +71,25 @@
  * just as tired buys nothing, which is real. The pooled share is the claim,
  * and it is over half, so the floor says "most".
  *
+ * ROUND 1600, CHECK 3 RE-CUT (the lead's ruling). The national team now calls
+ * up by level, so the breaks take veterans where they took youths, and a
+ * rested veteran's deputy is a younger man the age read shows lower: resting
+ * buys less of the match itself (set A alone fell to 0.42 against the old
+ * floor of 0.50; no LEGS_LATER_WEIGHT cleared it, so the weight stays 0.5).
+ * So check 3 reads the POOLED twelve squads (set A, the six the weight was
+ * fitted on, and set B, six it never saw: Barcelona, PSG, Inter Milan,
+ * Juventus, Atletico Madrid, Borussia Dortmund) and holds resting as a real
+ * choice both ways. Measured on GitHub runners (r1600-f3a, SEEDS=18), the
+ * share seed by seed over the twelve:
+ *   head 4950135f6  mean 0.492, sd 0.061 (se of the mean 0.014), pooled 0.49
+ *   base 14a9af704  mean 0.497, sd 0.051, pooled 0.50
+ * The check reads three seeds, so its own standard error is 0.061 / sqrt 3 =
+ * 0.035, and the band is the head's mean plus and minus three of them, 0.386
+ * to 0.598, rounded outward to 0.38 to 0.60. The low edge is under the base's
+ * share less 0.10 (0.40), as the ruling asks. The six three seed batches of
+ * the 18 read about 0.45 to 0.53. Controls: norest (the rest effect at zero) and
+ * freelegs (a rest refills the rested men's legs) each turn check 3 red.
+ *
  * NEGATIVE CONTROLS, SIM_CMINTL_CONTROL=<name>, each rewrites one line of
  * the module or the engine as the bundler loads it (it refuses to run unless
  * the file holds exactly one copy of the line) and must turn its check red.
@@ -83,6 +102,7 @@
  *            own (Round 1021: 2020-21 started late)          -> check 1
  *   nocost   a break takes no fitness                       -> check 2
  *   norest   the assistant never rests anybody              -> check 3
+ *   freelegs a rest hands the rested men back on full legs   -> check 3 (Round 1600: the band's top)
  *   anyone   a man with no known country is called as well   -> check 4
  *   oldsave  a save with no block is given one on the spot   -> check 5
  *   writexi  the rest is not written into the picked eleven  -> check 6
@@ -110,8 +130,8 @@ const SEED_BASE = Math.max(0, Number(process.env.SEED_BASE ?? 0));
 /* Bands, set from the measured headroom written in the header. */
 const GAP_FLOOR = 1.5;
 const KIND_FLOOR = { sepoct: 2.0, nov: 1.4, mar: 0.6 };
-/* Round 1600: a two sided band on the pooled twelve, see the header (PROVISIONAL until measured). */
-const REC_BAND = [0.40, 0.60];
+/* Round 1600: a two sided band on the pooled twelve, cut from the measured headroom in the header. */
+const REC_BAND = [0.38, 0.60];
 const FAR_FLOOR = 5;
 
 /* Each control rewrites one line of the module, or of the engine where the
@@ -165,6 +185,11 @@ const CONTROLS = {
   norest: {
     fixed: '    if (!moved) break;\n  }\n  return chosen;',
     broken: '    if (!moved) break;\n  }\n  return [];',
+  },
+  /* Round 1600: resting made too good to turn down (the band's top edge). */
+  freelegs: {
+    fixed: '    state.xiIds = state.xiIds.map((id, i) => (i === s.slot ? s.out : id));\n  }\n  delete intl.rest;\n',
+    broken: '    state.xiIds = state.xiIds.map((id, i) => (i === s.slot ? s.out : id));\n  }\n  for (const p of state.squad) if (rest.ids.includes(p.id)) p.fitness = 100;\n  delete intl.rest;\n',
   },
   anyone: {
     fixed: '    if (!nation) continue;',
