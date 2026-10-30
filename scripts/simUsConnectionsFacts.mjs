@@ -34,7 +34,10 @@
  *      still to be named (the World Series MVP from its two clubs, Gold Gloves,
  *      Silver Sluggers, the MVP and the rest in November) or a running total
  *      one season from a milestone (Erik Karlsson at 947 points beside
- *      "1,000+ career points")
+ *      "1,000+ career points"); and (fix-1574, one rule since fix2) beside
+ *      every single season mark (a kind AGES calls 'season', whatever its
+ *      label), every man still playing read by his career best on the
+ *      record and both hosts, none at or over three quarters of the mark
  *   6) no man is dealt twice on one board under two names (bconn-049 held
  *      "Goose Gossage" and "Rich Gossage", and the game's own check compares
  *      spellings)
@@ -65,10 +68,13 @@
  *      the export plus recorded decisions: each board valid, its colours in the
  *      exported order, every group decided exactly once in the ledger's
  *      tableDecisions (RECORD, LIST, PERMAN or REBUILD, from the exported label
- *      to the label now), none dangling, PER MAN only for a label on one board
+ *      to the label now), none dangling, PER MAN only for a label on one board;
+ *      and (fix-1574) every row the table file decides is in TABLE_RANGE
  *  10) (Round 1574) every criterion kind on a board says how it ages
  *      (usConnectionsCheck.mjs AGES, a list its own age) and a running kind is
- *      one the sport's watch() handles (WATCHED); section 8 dates every 'move'
+ *      one the sport's watch() handles (WATCHED); (fix2-1574) a kind aged
+ *      'season' is exactly one the checker reads by season best (seasonBest);
+ *      section 8 dates every 'move'
  *      kind. Section 3 also holds every member of every table group to a fact
  *      and every ledger list to two hosts, closed, with an age.
  * US_CONN_DUMP=<file> writes every (sport, board, group, man, verdict) line,
@@ -108,7 +114,9 @@
  *                             season makes him unknown (must raise: member-unknown, for baseball)
  *   US_CONN_CONTROL=futuredate nflconn-004's Steelers dated (as of 2030) (must raise: date-open, for it)
  *   US_CONN_CONTROL=grayonehost the first baseball gray pair keeps one host (must raise: gray-one-host, for it)
- *   Round 1574, the table rows (each puts nhl in TABLE_RANGE in memory if the file does not already):
+ *   Round 1574, the table rows (fix-1574: each refuses, exit 2, when TABLE_RANGE does not hold nhl):
+ *   US_CONN_CONTROL=rangedrop  fix-1574: nhl dropped from TABLE_RANGE in memory while its table file decides
+ *                             rows (unranged, nhl)
  *   US_CONN_CONTROL=tablemiss  the NHL table file read as empty while TABLE_RANGE holds nhl (tablemiss, nhl)
  *   US_CONN_CONTROL=ages       the AGES entry of a kind used on an NHL table board removed (ages, that kind)
  *   US_CONN_CONTROL=newrunning a running kind taught to AGES and put on an NHL table board, with no watch
@@ -121,6 +129,14 @@
  *   US_CONN_CONTROL=listonehost the first NHL ledger list keeps one host (list-one-host, it)
  *   US_CONN_CONTROL=nofact     the fact holding the first member of an NHL table group removed (no-fact, him)
  *   US_CONN_CONTROL=stamkos    Steven Stamkos back on nhlconn-016 beside its dated Predators group (second-fit, him)
+ *   US_CONN_CONTROL=watchline  fix-1574: Auston Matthews (69 goals in 2023-24) back in nhlconn-011's Maple Leafs group
+ *                             beside "Scored 70 goals in a season" (watch-line, him)
+ *   US_CONN_CONTROL=watchline60 fix2-1574: John Tavares (47 in 2018-19) back in nhlconn-010's Islanders group beside
+ *                             "Scored 60 goals in a season", over its 45 line (watch-line, him). No board carries a
+ *                             single season mark other than goals, so no control plants one
+ *   US_CONN_CONTROL=watchbest  fix2-1574: Evgeni Malkin's hockey-reference number in his watch line fact read as 53,
+ *                             over 52.5 (watch-line, him)
+ *   US_CONN_CONTROL=seasonage  fix2-1574: AGES.nhl.season back to 'running' in memory (season-age, season)
  *   Round 1583, the NBA file boards:
  *   US_CONN_CONTROL=nbaundate  nbaconn-004's Celtics group undated beside Joel Embiid, still playing (trade, him)
  *   US_CONN_CONTROL=nbayear    Pascal Siakam given one Lakers season, 2025-26, on both hosts, beside nbaconn-004's
@@ -154,8 +170,8 @@ import path from 'node:path';
 import { fileURLToPath, pathToFileURL } from 'node:url';
 import { build } from 'esbuild';
 import { crossCheckBoards, findingKey } from './lib/connectionsCrossCheck.mjs';
-import { makeUsChecker, fold, AGES, loadUsConnectionsRecord, makeNbaChecker, NBA_CLUBS } from './lib/usConnectionsCheck.mjs';
-import { TABLE_RANGE, tableBoards, tableRows } from './lib/usConnectionsTables.mjs';
+import { makeUsChecker, fold, AGES, SEASON_LINE, loadUsConnectionsRecord, makeNbaChecker, NBA_CLUBS } from './lib/usConnectionsCheck.mjs';
+import { TABLE_RANGE, tableBoards, tableRows, inRange } from './lib/usConnectionsTables.mjs';
 
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const R = ROOT.replaceAll('\\', '/');
@@ -179,12 +195,15 @@ for (const s of REPORT) {
 if (REPORT.size && CONTROL) { console.error('US_CONN_TABLES is a report, never a control run'); process.exit(2); }
 const STRICT = new Set((process.env.US_CONN_LIVE_STRICT ?? '').split(',').filter(Boolean));
 const DUMP = process.env.US_CONN_DUMP ?? '';
-/* the Round 1574 controls work on the NHL table rows: before a round puts nhl in TABLE_RANGE, they put it there in
-   memory for their own run */
-const TABLE_CONTROLS = ['tablemiss', 'ages', 'newrunning', 'decisionless', 'recolour', 'dangling', 'permantwice', 'listonehost', 'nofact', 'stamkos'];
+/* the Round 1574 controls work on the NHL table rows, which TABLE_RANGE holds since that round; fix-1574: with nhl
+   dropped from it they refuse (exit 2) rather than put it back in memory, and the plain run fails unranged */
+const TABLE_CONTROLS = ['tablemiss', 'ages', 'newrunning', 'decisionless', 'recolour', 'dangling', 'permantwice', 'listonehost', 'nofact', 'stamkos', 'watchline', 'watchline60', 'watchbest', 'seasonage'];
+if (TABLE_CONTROLS.includes(CONTROL) && !TABLE_RANGE.nhl) { console.error(`US_CONN_CONTROL=${CONTROL} ABORTED: TABLE_RANGE does not hold nhl, so the NHL table rows are checked by nothing (the plain run fails unranged); this control will not put it back in memory`); process.exit(2); }
+/* fix-1574 (review-run-1574 finding 3): US_CONN_CONTROL=rangedrop drops nhl from TABLE_RANGE in memory */
+const rangeDropped = CONTROL === 'rangedrop' && !!TABLE_RANGE.nhl;
+if (rangeDropped) { delete TABLE_RANGE.nhl; console.log('US_CONN_CONTROL=rangedrop: TABLE_RANGE loses nhl in memory for this run'); }
 /* Round 1583: the NBA controls, on the four NBA file boards */
 const NBA_CONTROLS = ['nbaundate', 'nbayear', 'nbaafter', 'parker', 'kareem', 'cousins', 'nbawatch', 'nbaclub', 'nbaborn', 'nbalineage', 'nbaaba'];
-if (TABLE_CONTROLS.includes(CONTROL) && !TABLE_RANGE.nhl) { TABLE_RANGE.nhl = 'all'; console.log(`US_CONN_CONTROL=${CONTROL}: TABLE_RANGE holds nhl in memory for this run`); }
 /* Round 1567: a club group dated against trades ("Played for the Steelers (as of 2025)") is the same claim as the
    undated one for every man whose seasons there all came before the date, which section 4 checks against the
    record; the ledgers name such groups and facts by the undated label, and a refuted claim stays refuted dated */
@@ -504,11 +523,55 @@ if (CONTROL) {
       if (changed) g.theme = 'Played for the Indiana Pacers (as of 2025-26)';
       own = { kinds: ['other-unknown'], subject: 'Moses Malone' };
     }
+  } else if (CONTROL === 'rangedrop') {
+    if (rangeDropped) {
+      changed = true;
+      own = { kinds: ['unranged'], subject: 'nhl' };
+    }
   } else if (TABLE_CONTROLS.includes(CONTROL)) {
     /* Round 1574: the controls on the NHL table rows */
     const tb = boards.nhl.filter(b => !fileIds.nhl.has(b.id));
     const decs = (ledgerOf('nhl').tableDecisions ??= []);
-    if (CONTROL === 'tablemiss') {
+    if (CONTROL === 'watchline') {
+      /* fix-1574: Auston Matthews (69 goals in 2023-24) back in nhlconn-011's Maple Leafs group, beside its 70 goal
+         group, in place of Dave Keon */
+      const g = boardOf('nhl', 'nhlconn-011')?.groups.find(x => undated(x.theme) === 'Played for the Maple Leafs');
+      const at = g ? g.players.indexOf('Dave Keon') : -1;
+      if (at >= 0) {
+        g.players[at] = 'Auston Matthews';
+        changed = true;
+        own = { kinds: ['watch-line'], subject: 'Auston Matthews' };
+      }
+    } else if (CONTROL === 'watchline60') {
+      /* fix2-1574: John Tavares (47 goals in 2018-19, over 45) back in nhlconn-010's Islanders group, beside its 60
+         goal group, in place of John Tonelli: the one rule holds a second season mark, not only the 70 */
+      const g = boardOf('nhl', 'nhlconn-010')?.groups.find(x => undated(x.theme) === 'Played for the Islanders');
+      const at = g ? g.players.indexOf('John Tonelli') : -1;
+      if (at >= 0) {
+        g.players[at] = 'John Tavares';
+        changed = true;
+        own = { kinds: ['watch-line'], subject: 'John Tavares' };
+      }
+    } else if (CONTROL === 'watchbest') {
+      /* fix2-1574: the second host's number in Evgeni Malkin's watch line fact (50 in 2011-12, kept beside the 70
+         goal group on nhlconn-012) read as 53, over 52.5: the line is held on both hosts, not on the ledger's entry */
+      const f = (ledgerOf('nhl').facts ?? []).find(x => x.name === 'Evgeni Malkin' && x.label === 'Scored 70 goals in a season' && x.holds === false);
+      const src = f?.sources.find(x => x.host === 'hockey-reference.com' && x.says.includes('in a season 50 '));
+      if (src) {
+        src.says = src.says.replace('in a season 50 ', 'in a season 53 ');
+        console.log(`US_CONN_CONTROL=watchbest: Evgeni Malkin's hockey-reference line now reads "${src.says}"`);
+        changed = true;
+        own = { kinds: ['watch-line'], subject: 'Evgeni Malkin' };
+      }
+    } else if (CONTROL === 'seasonage') {
+      /* fix2-1574: the season kind aged 'running' as before the fix, so the watch line would read no group */
+      if (AGES.nhl.season === 'season') {
+        AGES.nhl.season = 'running';
+        console.log('US_CONN_CONTROL=seasonage: AGES.nhl.season is running in memory');
+        changed = true;
+        own = { kinds: ['season-age'], subject: 'season' };
+      }
+    } else if (CONTROL === 'tablemiss') {
       changed = true; /* the read itself was emptied above, before the boards were built */
     } else if (CONTROL === 'ages') {
       const c = tb.flatMap(b => b.groups.map(g => sports.nhl.checker.criterion(g.theme))).find(x => x && x.kind !== 'list' && AGES.nhl[x.kind]);
@@ -755,6 +818,51 @@ for (const s of SPORTS) {
   }
   console.log(`   ${s}: ${n} watched men beside a group they may join`);
 }
+/* fix-1574 (review-read-1574 finding 1), made one rule by fix2-1574 (the lead's ruling): watch() reads a season mark
+   on the seasons since 2024-25 only, so beside EVERY single season mark (every group whose kind AGES calls 'season',
+   whatever its label) every man still playing is read by his career best: the record's (the checker's seasonBest,
+   which the ledger's watchLine entry must equal) and both hosts' in his two host fact, each under SEASON_LINE of the
+   mark, or the watch line moved him off the board. One the line has not read, one it moved, one at or over the line
+   on either host, and a kept entry beside no season mark any more all fail */
+const seasonNum = says => Number((String(says).match(/in a season (\d+)/) ?? [])[1]);
+for (const s of SPORTS) {
+  if (live.has(s)) continue;
+  const wl = ledgerOf(s).watchLine;
+  const facts = new Map((ledgerOf(s).facts ?? []).filter(f => f.holds === false && hostsOk(f.sources)).map(f => [`${fold(f.label)}|${fold(f.name)}`, f]));
+  const per = new Map();
+  const seen = new Set();
+  let n = 0;
+  const bad = (subject, m) => { n += 1; fire('watch-line', subject); fail(m); };
+  if (wl && wl.fraction !== SEASON_LINE) bad(s, `${s}: the watchLine's fraction ${wl.fraction} is not the checker's SEASON_LINE ${SEASON_LINE}`);
+  for (const b of boards[s]) for (const g of b.groups) {
+    const c = sports[s].checker.criterion(g.theme);
+    if (!c || AGES[s][c.kind] !== 'season') continue;
+    const line = SEASON_LINE * c.min;
+    if (!per.has(g.theme)) per.set(g.theme, { line, min: c.min, boards: 0, read: 0 });
+    const row = per.get(g.theme);
+    row.boards += 1;
+    if (!wl) { bad(g.theme, `${s} ${b.id}: "${g.theme}" is a single season mark and the ${s} ledger has no watchLine`); continue; }
+    for (const o of b.groups) if (o !== g) for (const p of o.players) {
+      if (sports[s].checker.active?.(p) !== true) continue;
+      seen.add(`${b.id}|${fold(g.theme)}|${fold(p)}`);
+      const e = (wl.men ?? []).find(m => m.id === b.id && fold(m.label) === fold(g.theme) && fold(m.name) === fold(p));
+      const rb = sports[s].checker.seasonBest?.(p, c);
+      const f = facts.get(`${fold(g.theme)}|${fold(p)}`);
+      const nums = (f?.sources ?? []).map(x => seasonNum(x.says));
+      const why = !e ? 'the watch line has not read his career best' : e.moved ? 'the watch line moved him off this board'
+        : !rb ? 'the record has no season by season goals for him'
+        : e.best !== rb.best ? `the watchLine says ${e.best}, the record's career best is ${rb.best} (${rb.season})`
+        : !(rb.best < line) ? `his career best ${rb.best} is at or over the line ${line}`
+        : !f ? 'his career best has no two host fact'
+        : nums.length < 2 || nums.some(x => !(x < line)) ? `his two host fact does not read a career best under ${line} on both hosts (${f.sources.map(x => x.says).join('; ')})` : '';
+      if (!why) { row.read += 1; continue; }
+      bad(p, `${s} ${b.id}: ${p} ("${o.theme}") is still playing beside "${g.theme}": ${why}`);
+    }
+  }
+  for (const e of wl?.men ?? []) if (!e.moved && !seen.has(`${e.id}|${fold(e.label)}|${fold(e.name)}`)) bad(e.name, `${s} ${e.id}: the watchLine keeps ${e.name} beside "${e.label}", and he is not still playing beside that season mark there`);
+  for (const [label, r] of per) console.log(`   ${s}: the watch line of "${label}" (${r.line} of ${r.min}, on the career best) on ${r.boards} boards read ${r.read} men still playing beside it`);
+  if (per.size || wl) console.log(`   ${s}: ${per.size} single season marks on the boards; ${n} watch line problems`);
+}
 
 console.log('6) no man is dealt twice on one board');
 for (const s of SPORTS) {
@@ -844,6 +952,16 @@ console.log('9) the table rows are the export plus recorded decisions');
 /* Round 1574: a table row reaches the live table only through a round's migration, written from the table file;
    so its board must be a valid board in the exported colours, and every group must say how it was decided */
 const WAYS = ['RECORD', 'LIST', 'PERMAN', 'REBUILD'];
+/* fix-1574 (review-run-1574 finding 3): a row the table file decides (a tableDecisions line, or a board that is not
+   its export) reaches the live table through a migration, so TABLE_RANGE must hold it; a sport dropped from
+   TABLE_RANGE (a Round 1580 "{ nfl: 'all' }" written over nhl, say) is a failure, never silence */
+for (const s of SPORTS) {
+  if (live.has(s)) continue;
+  const decided = new Set([...(ledgerOf(s).tableDecisions ?? []).map(d => d.id), ...tableRows(ROOT, s).filter(r => JSON.stringify(r.exported) !== JSON.stringify(r.board)).map(r => r.puzzle_id)]);
+  const out = [...decided].filter(id => !inRange(TABLE_RANGE[s], id));
+  for (const id of out) { fire('unranged', s); fail(`${s} ${id}: the table file decides this row and TABLE_RANGE does not hold it, so no section checks it before its migration`); }
+  if (decided.size) console.log(`   ${s}: ${decided.size} decided table rows, ${decided.size - out.length} of them in TABLE_RANGE`);
+}
 for (const s of SPORTS) {
   if (!tables.has(s) || live.has(s)) continue;
   const held = boards[s].filter(b => !fileIds[s].has(b.id));
@@ -900,7 +1018,16 @@ for (const s of SPORTS) {
     const age = c.kind === 'list' ? lists.get(c.key)?.age : AGES[s][c.kind];
     kinds.set(c.kind, (kinds.get(c.kind) ?? 0) + 1);
     if (!age) { n += 1; fire('ages', c.kind); fail(`${s} ${b.id}: "${g.theme}" is kind ${c.kind}, which says nowhere how it ages`); continue; }
-    if (age !== 'running' || sports[s].checker.watched?.has(c.kind)) continue;
+    /* fix2-1574: a kind the checker reads by season best is a single season mark, aged 'season' (section 5's watch
+       line reads the men beside it), and a kind aged 'season' is one it reads that way */
+    const sb = c.kind === 'list' ? undefined : sports[s].checker.seasonBest?.(g.players[0], c);
+    if ((age === 'season') !== (sb !== undefined)) {
+      n += 1;
+      fire('season-age', c.kind);
+      fail(`${s} ${b.id}: "${g.theme}" is kind ${c.kind}, aged ${age}, and the ${s} checker ${sb !== undefined ? 'reads it by season best, so it is a single season mark and its age must be season' : 'does not read it by season best (seasonBest), so the watch line could not read the men beside it'}`);
+      continue;
+    }
+    if ((age !== 'running' && age !== 'season') || sports[s].checker.watched?.has(c.kind)) continue;
     if ((OWED_UNWATCHED[s] ?? []).includes(c.kind)) { owed.add(c.kind); continue; }
     n += 1;
     fire('unwatched', c.kind);

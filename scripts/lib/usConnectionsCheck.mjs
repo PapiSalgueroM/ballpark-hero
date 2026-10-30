@@ -613,6 +613,9 @@ const EUROPE = new Set(['AUT', 'BLR', 'CHE', 'CZE', 'DEU', 'DNK', 'EST', 'FIN', 
 /* the last finished NHL season (start year) and the seasons a running watch reads */
 const NHL_RECENT = ['2024-25', '2025-26', '2026-27'];
 const NHL_IN_PLAY = '2026-27';
+/* fix2-1574: the share of a single season mark that puts a man still playing on watch beside it (52.5 of 70, 45 of
+   60): watch() reads it on the recent seasons, section 5's watch line on the career best (seasonBest) */
+export const SEASON_LINE = 0.75;
 
 /**
  * NHL's checker. record: the league's own rows; ledger: the round's two host ledger.
@@ -780,7 +783,7 @@ export function makeNhlChecker({ record, ledger = {} }) {
       }
       case 'season': {
         const best = Math.max(0, ...NHL_RECENT.map(y => m.sg?.[y] ?? 0));
-        return best >= c.min * 0.75 ? `active with ${best} goals in a season since 2024-25, within a quarter of ${c.min}` : null;
+        return best >= c.min * SEASON_LINE ? `active with ${best} goals in a season since 2024-25, within a quarter of ${c.min}` : null;
       }
       case 'clubGoals': {
         const best = clubGoalsBest(m);
@@ -808,10 +811,21 @@ export function makeNhlChecker({ record, ledger = {} }) {
     }
   }
 
+  /* fix2-1574: a single season mark's career best on the record, { best, season } (null when the record has no
+     season by season goals for him); undefined for a kind that is not a single season mark. simUsConnectionsFacts
+     section 10 ties it to AGES ('season'), and section 5's watch line reads every man still playing by it */
+  function seasonBest(name, c) {
+    if (c.kind !== 'season') return undefined;
+    const m = byName.get(fold(name));
+    if (!m?.sg) return null;
+    const [season, best] = Object.entries(m.sg).sort((a, b) => b[1] - a[1])[0] ?? [null, 0];
+    return { best, season };
+  }
+
   const identity = name => { const m = byName.get(fold(name)); return m?.nhl ? `nhl:${m.nhl}` : fold(name); };
   /* a man who can still change clubs (Round 1567's trade check): the league's own active flag */
   const active = name => { const m = byName.get(fold(name)); return m ? !!m.active : null; };
-  return { criterion, fits, watch, identity, active, watched: WATCHED.nhl, has: name => byName.has(fold(name)) };
+  return { criterion, fits, watch, seasonBest, identity, active, watched: WATCHED.nhl, has: name => byName.has(fold(name)) };
 }
 
 /* ------------------------------------------------------------------ */
@@ -1065,6 +1079,10 @@ export function makeNbaChecker({ record, second, ledger = {} }) {
  * in play can add a man to, so the sport's watch() must handle it (WATCHED); 'move': a club, so a man still playing
  * can join it by moving, which section 8 holds by a date. A ledger list carries its own age (lists.<key>.age).
  * A kind with no entry here fails section 10 when it is on a board.
+ * fix2-1574: 'season': a single season mark ("Scored 60 goals in a season"), running like the rest, and beside it
+ * section 5's watch line reads every man still playing by his career best (the checker's seasonBest); section 10
+ * fails a kind the checker reads by season best that is not aged 'season', and the other way round. Baseball's
+ * 'season' kind stays 'running': its checker has no seasonBest yet (the baseball table rounds own it).
  */
 export const AGES = {
   baseball: {
@@ -1075,7 +1093,7 @@ export const AGES = {
   },
   nfl: { club: 'move', college: 'fixed', firstPick: 'fixed', yards: 'running' },
   nhl: {
-    club: 'move', career: 'running', season: 'running', clubGoals: 'running', wins: 'running', goalieGoal: 'running',
+    club: 'move', career: 'running', season: 'season', clubGoals: 'running', wins: 'running', goalieGoal: 'running',
     pos: 'fixed', award: 'running', smytheLost: 'running', cupClubs: 'running', cupWith: 'fixed', hofClub: 'running',
     draft: 'fixed', draftBy: 'fixed',
   },

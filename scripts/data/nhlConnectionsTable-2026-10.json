@@ -68,7 +68,7 @@
   "board":[
    {"theme":"Goaltenders","players":["Patrick Roy","Martin Brodeur","Dominik Hasek","Carey Price","Ken Dryden"],"difficulty":"yellow"},
    {"theme":"Scored 60 goals in a season","players":["Teemu Selanne","Wayne Gretzky","Mario Lemieux","Auston Matthews","Brett Hull"],"difficulty":"green"},
-   {"theme":"Played for the Islanders (as of 2025-26)","players":["Bryan Trottier","Denis Potvin","Clark Gillies","John Tavares","Bobby Nystrom"],"difficulty":"blue"},
+   {"theme":"Played for the Islanders (as of 2025-26)","players":["Bryan Trottier","Denis Potvin","Clark Gillies","John Tonelli","Bobby Nystrom"],"difficulty":"blue"},
    {"theme":"Played 1,650 or more NHL games","players":["Gordie Howe","Patrick Marleau","Ron Francis","Mark Recchi","Joe Thornton"],"difficulty":"purple"}]},
 {"puzzle_id":"nhlconn-011","sort_order":11,"exportedH":"08666d55c024e88eba457bb3af5a542b",
   "exported":[
@@ -77,7 +77,7 @@
    {"theme":"Scored a Stanley Cup winning goal","players":["Patrick Kane","Bobby Orr","Alec Martinez","Uwe Krupp","Bobby Nystrom"],"difficulty":"blue"},
    {"theme":"Scored 50 goals in 50 games","players":["Maurice Richard","Mike Bossy","Wayne Gretzky","Mario Lemieux","Brett Hull"],"difficulty":"purple"}],
   "board":[
-   {"theme":"Played for the Maple Leafs (as of 2025-26)","players":["Mats Sundin","Mitch Marner","Doug Gilmour","Wendel Clark","Auston Matthews"],"difficulty":"yellow"},
+   {"theme":"Played for the Maple Leafs (as of 2025-26)","players":["Mats Sundin","Mitch Marner","Doug Gilmour","Wendel Clark","Dave Keon"],"difficulty":"yellow"},
    {"theme":"Won the Norris Trophy","players":["Ray Bourque","Nicklas Lidstrom","Cale Makar","Erik Karlsson","Denis Potvin"],"difficulty":"green"},
    {"theme":"Goalies with 400 career wins","players":["Martin Brodeur","Patrick Roy","Marc-Andre Fleury","Roberto Luongo","Glenn Hall"],"difficulty":"blue"},
    {"theme":"Scored 70 goals in a season","players":["Wayne Gretzky","Mario Lemieux","Brett Hull","Phil Esposito","Teemu Selanne"],"difficulty":"purple"}]},
@@ -88,7 +88,7 @@
    {"theme":"Scored 70 goals in a season","players":["Phil Esposito","Teemu Selanne","Alexander Mogilny","Bernie Nicholls","Jari Kurri"],"difficulty":"blue"},
    {"theme":"Defensemen who captained a Cup winner","players":["Nicklas Lidstrom","Scott Stevens","Zdeno Chara","Denis Potvin","Derian Hatcher"],"difficulty":"purple"}],
   "board":[
-   {"theme":"Played for the Oilers (as of 2025-26)","players":["Ryan Nugent-Hopkins","Mark Messier","Connor McDavid","Taylor Hall","Paul Coffey"],"difficulty":"yellow"},
+   {"theme":"Played for the Oilers (as of 2025-26)","players":["Ryan Nugent-Hopkins","Mark Messier","Nail Yakupov","Taylor Hall","Paul Coffey"],"difficulty":"yellow"},
    {"theme":"Won the Vezina Trophy","players":["Dominik Hasek","Patrick Roy","Carey Price","Martin Brodeur","Andrei Vasilevskiy"],"difficulty":"green"},
    {"theme":"Scored 70 goals in a season","players":["Phil Esposito","Teemu Selanne","Alexander Mogilny","Mario Lemieux","Brett Hull"],"difficulty":"blue"},
    {"theme":"Drafted second overall","players":["Evgeni Malkin","Jack Eichel","Tyler Seguin","Gabriel Landeskog","Drew Doughty"],"difficulty":"purple"}]},
@@ -156,7 +156,7 @@
   "board":[
    {"theme":"Played for Utah (as of 2025-26)","players":["Clayton Keller","Logan Cooley","Dylan Guenther","Mikhail Sergachev","Nick Schmaltz"],"difficulty":"yellow"},
    {"theme":"Drafted by the Sabres","players":["Jack Eichel","Alexander Mogilny","Sam Reinhart","Dylan Cozens","Casey Mittelstadt"],"difficulty":"green"},
-   {"theme":"Drafted first overall","players":["Connor McDavid","Auston Matthews","Nathan MacKinnon","Taylor Hall","Sidney Crosby"],"difficulty":"blue"},
+   {"theme":"Drafted first overall","players":["Connor McDavid","Auston Matthews","Nathan MacKinnon","Mike Modano","Sidney Crosby"],"difficulty":"blue"},
    {"theme":"Won the Vezina Trophy","players":["Connor Hellebuyck","Andrei Vasilevskiy","Igor Shesterkin","Carey Price","Sergei Bobrovsky"],"difficulty":"purple"}]},
 {"puzzle_id":"nhlconn-019","sort_order":19,"exportedH":"8b7b7794f89fb8f99f1d3b569856da28",
   "exported":[
