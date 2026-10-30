@@ -1,0 +1,31 @@
+
+[1m[46m RUN [49m[22m [36mv3.2.7 [39m[90m/home/runner/work/ballpark-hero/ballpark-hero[39m
+
+ [32m✓[39m src/components/front-office-shared/GmCareerDesk.test.tsx [2m([22m[2m15 tests[22m[2m)[22m[33m 380[2mms[22m[39m
+ [32m✓[39m src/lib/gmDeskHost.test.ts [2m([22m[2m43 tests[22m[2m)[22m[33m 882[2mms[22m[39m
+   [33m[2m✓[22m[39m the record of a save older than the block[2m > [22mfills nothing in: titles out are titles in, the rest is a count, and it passes the career validator [33m 651[2mms[22m[39m
+Browserslist: browsers data (caniuse-lite) is 16 months old. Please run:
+  npx update-browserslist-db@latest
+  Why you should do it regularly: https://github.com/browserslist/update-db#readme
+ [32m✓[39m src/lib/gmCareerRules.test.ts [2m([22m[2m12 tests[22m[2m)[22m[32m 31[2mms[22m[39m
+ [32m✓[39m src/components/nhl-front-office/NhlWaiverReceipt.test.tsx [2m([22m[2m11 tests[22m[2m)[22m[33m 371[2mms[22m[39m
+ [32m✓[39m src/components/nhl-front-office/NhlFrontOfficeRatingEvidence.test.tsx [2m([22m[2m10 tests[22m[2m)[22m[33m 2993[2mms[22m[39m
+   [33m[2m✓[22m[39m NHL actual opening ratings and readable saved evidence[2m > [22mdrops a real pending rating import after unmount without overwriting a newer save [33m 401[2mms[22m[39m
+   [33m[2m✓[22m[39m NHL actual opening ratings and readable saved evidence[2m > [22mstarts actual ANA with all416 reviewed prices ratings and opening evidence [33m 509[2mms[22m[39m
+   [33m[2m✓[22m[39m NHL actual opening ratings and readable saved evidence[2m > [22msettles two same-frame franchise clicks with one initializer and one save [33m 555[2mms[22m[39m
+   [33m[2m✓[22m[39m NHL actual opening ratings and readable saved evidence[2m > [22mrefuses an invalid opening version without overwriting another save and retries cleanly [33m 627[2mms[22m[39m
+ [32m✓[39m src/components/nhl-front-office/NhlTradeLists.test.tsx [2m([22m[2m4 tests[22m[2m)[22m[33m 614[2mms[22m[39m
+   [33m[2m✓[22m[39m NHL Front Office: every man on the roster can be traded[2m > [22mthe Trade Finder, the send list and the partner list each show the whole roster [33m 332[2mms[22m[39m
+ [32m✓[39m src/test/nhlContributorsBoard.test.tsx [2m([22m[2m9 tests[22m[2m)[22m[33m 3905[2mms[22m[39m
+   [33m[2m✓[22m[39m actual NHL contributor decisions[2m > [22mopens automatic contributors quietly with exact healthy counts and unchanged ratings [33m 998[2mms[22m[39m
+   [33m[2m✓[22m[39m actual NHL contributor decisions[2m > [22mstages replacements without saving and cancels back to the exact roster opener [33m 514[2mms[22m[39m
+   [33m[2m✓[22m[39m actual NHL contributor decisions[2m > [22mapplies exact IDs once through the original save with finite clone-safe feedback and stable inputs [33m 644[2mms[22m[39m
+   [33m[2m✓[22m[39m actual NHL contributor decisions[2m > [22mrestores manual choices quietly and returns to automatic selection in one unchanged-pipeline save [33m 447[2mms[22m[39m
+   [33m[2m✓[22m[39m actual NHL contributor decisions[2m > [22mshows thin and empty groups truthfully with the original empty-group rating [33m 460[2mms[22m[39m
+   [33m[2m✓[22m[39m actual NHL contributor decisions[2m > [22mrepairs existing restored overrides after ID repair without creating automatic overrides or writes [33m 326[2mms[22m[39m
+
+[2m Test Files [22m [1m[32m7 passed[39m[22m[90m (7)[39m
+[2m      Tests [22m [1m[32m104 passed[39m[22m[90m (104)[39m
+[2m   Start at [22m 01:20:53
+[2m   Duration [22m 7.60s[2m (transform 1.85s, setup 391ms, collect 4.52s, tests 9.18s, environment 3.13s, prepare 833ms)[22m
+

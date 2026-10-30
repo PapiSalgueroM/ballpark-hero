@@ -1,0 +1,9 @@
+vitest-close exit=0 10s |    Duration  9.08s (transform 3.60s, setup 313ms, collect 8.40s, tests 13.55s, environment 1.73s, prepare 1.01s)
+vitest-nhl exit=0 8s |    Duration  7.60s (transform 1.85s, setup 391ms, collect 4.52s, tests 9.18s, environment 3.13s, prepare 833ms)
+simGmReload exit=0 7s | simGmReload: all green. Four front offices keep a finished season through a reload, and none of them can play a closed one again.
+simFoHub exit=0 0s | simFoHub: green. Four hubs, five boxes each, every one of them saying something true.
+vitest-ca exit=0 30s |    Duration  29.67s (transform 2.34s, setup 117ms, collect 272ms, tests 28.03s, environment 454ms, prepare 138ms)
+simFoLazyDesk exit=0 27s | simFoLazyDesk: all checks passed
+tsc exit=0 76s | 
+simGmCareer-nhl exit=0 25s | simGmCareer: all checks passed (nhl)
+simHarnessAnchors exit=0 48s | simHarnessAnchors: green. Every harness parses and none carries an unmatchable anchor.
