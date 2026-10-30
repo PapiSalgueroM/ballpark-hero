@@ -1,0 +1,1 @@
+cx-1597: git fetch -q origin +r1597-cm-nobody-vanishes:refs/tmp/m1597 && t=$(git merge-tree --write-tree HEAD^ refs/tmp/m1597 | head -1) && git show $t:src/pages/ClubManager.tsx | grep -n -B3 -A28 "^<<<<<<<" | cut -c1-220 | head -80

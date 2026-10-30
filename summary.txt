@@ -1,0 +1,1 @@
+cx-1597 exit=0 1s | 310-  const academy = g.career?.academy ?? null;

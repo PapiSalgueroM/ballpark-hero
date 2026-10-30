@@ -1,0 +1,32 @@
+279-  /* Round 782: the pre match card's shortcut to the shootout order asks the
+280-     tactics tab to open that tile on arrival; the tab hands the request back. */
+281-  const [tacticsTile, setTacticsTile] = useState<'shootout' | null>(null);
+282:<<<<<<< HEAD^
+283-  const panelRef = useRevealScroll<HTMLDivElement>(`hub:${hubPanel ?? ''}:${cards?.pushes ?? 0}`, { skipFirst: true });
+284-=======
+285-  /* Round 1597 review fix: each press of the hub's deals line, and the last one the desk has answered (DeskInView). */
+286-  const [deskJump, setDeskJump] = useState(0);
+287-  const deskServed = useRef(0);
+288-  const panelRef = useRevealScroll<HTMLDivElement>(`hub:${hubPanel ?? ''}:${clubView ?? ''}`, { skipFirst: true });
+289->>>>>>> refs/tmp/m1597
+290-  /* Round 928 review: the managers screen is where one career is swapped for
+291-     another, so the hub's open panel, rival view, live viewer switch and
+292-     tactics request belong to the career being left, not the one coming in. */
+293-  useEffect(() => {
+294-    if (g.phase !== 'resume') return;
+295-    setHubPanel(null);
+296-    setClubView(null);
+297-    setWatchMode(false);
+298-    setTacticsTile(null);
+299-  }, [g.phase]);
+300-
+301-  /* Round 154: clubDefFor, not clubByName, because a custom club has no
+302-     entry in any static table and resolves through the save's registered
+303-     spec instead (color, tier, expectation all correct, never null). */
+304-  const club = g.career ? clubDefFor(g.career.clubName) : null;
+305-  const unavailable = useMemo(
+306-    () => (g.career ? g.career.squad.filter(p => !isAvailable(p)) : []),
+307-    [g.career],
+308-  );
+309-  // Round 116: the academy and the training ground feed their own hub tiles.
+310-  const academy = g.career?.academy ?? null;
