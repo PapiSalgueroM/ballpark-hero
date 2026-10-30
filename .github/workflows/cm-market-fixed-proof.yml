@@ -1,0 +1,189 @@
+name: Club Manager fixed first-pass proof only
+on:
+  push:
+    branches: [codex/cm-market-fixed-v2-20261030]
+permissions:
+  contents: read
+jobs:
+  fixed:
+    runs-on: ubuntu-latest
+    timeout-minutes: 90
+    env:
+      CI: 'true'
+      TZ: UTC
+      SIM_NETWORK: offline
+      GIT_OPTIONAL_LOCKS: '0'
+      EXPECTED_PRODUCT: 4687af51ef7c0e1ab374468adcef718cc25e8e17
+      EXPECTED_PRODUCT_TREE: e777f2226e172b9b06b2af4f23f383f5a9749fcc
+      EXPECTED_PRODUCT_PARENT: 03ff740d00da9e9487a8c8eaa5e92c324b9731e3
+      EXPECTED_PRODUCT_FILES: '5457'
+      FA_CARD_CONTROL: cardsign
+      FA_CARD_CONTROL_CLOSE: '^simFreeAgents: 1 failure\(s\)$'
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          persist-credentials: false
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '24'
+          cache: npm
+      - name: Bind clean product and two proof-only additions without mutating checkout
+        run: |
+          set -euo pipefail
+          out="$RUNNER_TEMP/cm-market-fixed";test ! -e "$out";mkdir -p "$out"
+          echo "CM_FIXED_OUT=$out" >> "$GITHUB_ENV";echo "CM_FIXED_CHECKOUT=$GITHUB_WORKSPACE" >> "$GITHUB_ENV"
+          test "$GITHUB_REF_NAME" = codex/cm-market-fixed-v2-20261030
+          [[ "$EXPECTED_PRODUCT" =~ ^[a-f0-9]{40}$ && "$EXPECTED_PRODUCT_TREE" =~ ^[a-f0-9]{40}$ && "$EXPECTED_PRODUCT_PARENT" =~ ^[a-f0-9]{40}$ && "$EXPECTED_PRODUCT_FILES" =~ ^[0-9]+$ ]]
+          test "$(git rev-list --parents -n1 HEAD)" = "$GITHUB_SHA $EXPECTED_PRODUCT"
+          test "$(git rev-list --parents -n1 "$EXPECTED_PRODUCT")" = "$EXPECTED_PRODUCT $EXPECTED_PRODUCT_PARENT"
+          test "$(git rev-parse "$EXPECTED_PRODUCT^{tree}")" = "$EXPECTED_PRODUCT_TREE"
+          test "$(git ls-tree -r --name-only "$EXPECTED_PRODUCT" | wc -l)" -eq "$EXPECTED_PRODUCT_FILES"
+          test "$(git ls-files | wc -l)" -eq "$((EXPECTED_PRODUCT_FILES + 2))"
+          test -z "$(git ls-tree "$EXPECTED_PRODUCT" -- .github/workflows/cm-market-causal-baseline.yml scripts/qa/classifyCmMarketBaseline.mjs)"
+          git diff --name-status "$EXPECTED_PRODUCT" HEAD > "$out/proof-diff.txt"
+          printf 'A\t.github/workflows/cm-market-fixed-proof.yml\nA\tscripts/qa/proveCmMarketFixed.mjs\n' > "$out/expected-proof-diff.txt"
+          cmp "$out/proof-diff.txt" "$out/expected-proof-diff.txt"
+          git ls-files -z | sort -z > "$out/source-members.initial"
+          xargs -0 sha256sum < "$out/source-members.initial" > "$out/source.initial.sha256"
+          git ls-files --others --exclude-standard -z | sort -z > "$out/untracked.initial";test ! -s "$out/untracked.initial"
+          git for-each-ref --format='%(refname) %(objectname)' > "$out/refs.initial"
+          sha256sum "$(git rev-parse --git-path index)" > "$out/default-index.initial.sha256"
+          git archive --format=tar HEAD > "$out/source.tar"
+          matched="$out/matched-source";mkdir "$matched";tar -xf "$out/source.tar" -C "$matched"
+          ln -s "$GITHUB_WORKSPACE/node_modules" "$matched/node_modules"
+          echo "CM_FIXED_ROOT=$matched" >> "$GITHUB_ENV";echo "CM_FIXED_GIT_DIR=$(git rev-parse --absolute-git-dir)" >> "$GITHUB_ENV"
+          printf '{"scope":"FIXED_FIRST_PASS_ONLY","source":"%s","product":"%s","productParent":"%s","units":"PENDING_EXACT14_PLUS_BOUND_UI_AND_PERMANENT_REGRESSION","harnesses":["simFreeAgents","simContracts","simClubManagerSave","simCmWorldMoves_SECTIONS_0_TO_4"],"ordinaryBuild":"PENDING","unchangedFatalCaps":15,"browserGameplay":"UNRUN_CAP_BROWSER_ONLY","fullSEO":"UNRUN","savedSiteReaders":"UNRUN","fullDefaultVitest":"UNRUN_SCOPED_DEFAULT_CONFIG_ONLY","defaultSims":"UNRUN","remainingWorldLedgerAcademyIntegration":"UNRUN_REQUIRED_AFTER_STABLE","featureReady":false}\n' "$GITHUB_SHA" "$EXPECTED_PRODUCT" "$EXPECTED_PRODUCT_PARENT" > "$out/SCOPE.json"
+      - name: Cheap remote helper syntax
+        run: |
+          set -euo pipefail
+          out="$CM_FIXED_OUT";raw=0
+          node --check scripts/qa/proveCmMarketFixed.mjs > "$out/syntax.stdout.log" 2> "$out/syntax.stderr.log" || raw=$?
+          printf '%s\n' "$raw" > "$out/syntax.raw.exit";test "$raw" -eq 0
+      - name: Locked application dependencies
+        run: |
+          set -euo pipefail
+          out="$CM_FIXED_OUT";npm ci > "$out/npm-ci.stdout.log" 2> "$out/npm-ci.stderr.log"
+          find node_modules -type f -print0 | sort -z > "$out/deps.members.initial"
+          xargs -0 sha256sum < "$out/deps.members.initial" > "$out/deps.initial.sha256"
+          find node_modules -type l -printf '%p -> %l\n' | sort > "$out/deps.links.initial"
+          cat > "$out/run-gate.sh" <<'GATE'
+          run_gate() {
+            local id="$1" want="$2" closing="$3";shift 3
+            local dir="$CM_FIXED_OUT/$id";test ! -e "$dir";mkdir -p "$dir";printf '%q ' "$@" > "$dir/command.txt";printf '\n' >> "$dir/command.txt"
+            : > "$dir/transport.jsonl";local raw=0
+            SIM_OFFLINE_RECEIPT="$dir/transport.jsonl" NODE_OPTIONS="--require=$CM_FIXED_ROOT/scripts/lib/offlineTransport.cjs ${CM_FIXED_PRELOAD:-}" FORCE_COLOR=0 timeout --signal=TERM --kill-after=15s "${GATE_TIMEOUT:-10m}" "$@" > "$dir/stdout.log" 2> "$dir/stderr.log" || raw=$?
+            printf '%s\n' "$raw" > "$dir/raw.exit";cat "$dir/stdout.log" "$dir/stderr.log" > "$dir/combined.log"
+            test "$raw" -eq "$want";test ! -s "$dir/transport.jsonl"
+            if test -n "$closing";then test "$(grep -Ec -- "$closing" "$dir/combined.log" || true)" -eq 1;fi
+          }
+          GATE
+          sha256sum "$out/run-gate.sh" > "$out/run-gate.initial.sha256"
+      - name: Genuine application types before expensive work
+        run: |
+          set -euo pipefail
+          cd "$CM_FIXED_ROOT";source "$CM_FIXED_OUT/run-gate.sh"
+          GATE_TIMEOUT=3m run_gate types 0 '' node_modules/.bin/tsc --noEmit -p tsconfig.app.json
+      - name: Exact scoped green, three physical source controls and restoration green
+        run: |
+          set -euo pipefail
+          cd "$CM_FIXED_ROOT";source "$CM_FIXED_OUT/run-gate.sh"
+          GATE_TIMEOUT=55m run_gate scoped-unit-controller 0 '^CM_FIXED_SCOPED_UNITS: green, exact scoped identities and three physical source controls restored\.$' node scripts/qa/proveCmMarketFixed.mjs units
+      - name: Owned free-agent and bounded contract, save and world outcomes
+        run: |
+          set -euo pipefail
+          cd "$CM_FIXED_ROOT";source "$CM_FIXED_OUT/run-gate.sh"
+          unset FA_CONTROL CM_SAVE_CONTROL CM_WORLD_MOVES_CONTROL CM_WORLD_MOVES_SECTIONS CM_WORLD_MOVES_SEEDS CM_WORLD_MOVES_ERAS CM_WORLD_MOVES_HEAD CM_WORLD_MOVES_BASE CM_WORLD_MOVES_SEASONS CM_WORLD_MOVES_SHAPE_ARMS
+          export GIT_DIR="$CM_FIXED_GIT_DIR"
+          run_gate simFreeAgents 0 '^simFreeAgents: all sections passed$' node scripts/simFreeAgents.mjs
+          test "$FA_CARD_CONTROL" = cardsign
+          run_gate simFreeAgents-card-control 1 "$FA_CARD_CONTROL_CLOSE" env FA_CONTROL="$FA_CARD_CONTROL" node scripts/simFreeAgents.mjs
+          test "$(grep -Fxc '   [control cardsign applied to pool]' "$CM_FIXED_OUT/simFreeAgents-card-control/combined.log")" -eq 1
+          test "$(grep -Ec '^   FAIL ' "$CM_FIXED_OUT/simFreeAgents-card-control/combined.log")" -eq 1
+          grep -Eq '^   FAIL [1-9][0-9]* buttons disagree with the engine:' "$CM_FIXED_OUT/simFreeAgents-card-control/combined.log"
+          sha256sum -c "$CM_FIXED_OUT/source.initial.sha256" > "$CM_FIXED_OUT/card-control-source-restored.log"
+          run_gate simFreeAgents-restored 0 '^simFreeAgents: all sections passed$' node scripts/simFreeAgents.mjs
+          run_gate simContracts 0 '^ALL CONTRACT CHECKS PASSED$' node scripts/simContracts.mjs
+          run_gate simClubManagerSave 0 '^simClubManagerSave: all sections green$' node scripts/simClubManagerSave.mjs
+          GATE_TIMEOUT=20m run_gate simCmWorldMoves-0-to-4 0 '^simCmWorldMoves: green, sections 0, 1, 2, 3, 4 held$' env CM_WORLD_MOVES_SECTIONS=0,1,2,3,4 node scripts/simCmWorldMoves.mjs
+      - name: Isolated existing cap browser tooling and prepared fonts
+        run: |
+          set -euo pipefail
+          out="$CM_FIXED_OUT";tools="$RUNNER_TEMP/cm-market-fixed-browser-tools";fonts="$RUNNER_TEMP/cm-market-fixed-fonts";test ! -e "$tools";test ! -e "$fonts"
+          sha256sum -c "$out/deps.initial.sha256" > "$out/deps.before-browser-held.log"
+          npm install --prefix "$tools" --no-save --package-lock=false playwright@1.64.0 > "$out/browser-install.log" 2>&1
+          test ! -e node_modules/playwright;test ! -e node_modules/playwright-core
+          ln -s "$tools/node_modules/playwright" node_modules/playwright;ln -s "$tools/node_modules/playwright-core" node_modules/playwright-core
+          node -e 'const a=require("node:assert/strict");a.equal(require("playwright/package.json").version,"1.64.0");a.equal(require("playwright-core/package.json").version,"1.64.0")' > "$out/browser-version.stdout.log" 2> "$out/browser-version.stderr.log"
+          export PLAYWRIGHT_BROWSERS_PATH="$tools/browsers" FREE_KICK_FONT_CACHE="$fonts"
+          echo "PLAYWRIGHT_BROWSERS_PATH=$PLAYWRIGHT_BROWSERS_PATH" >> "$GITHUB_ENV";echo "FREE_KICK_FONT_CACHE=$fonts" >> "$GITHUB_ENV";echo "CM_FIXED_TOOLS=$tools" >> "$GITHUB_ENV"
+          node "$tools/node_modules/playwright/cli.js" install --with-deps chromium > "$out/chromium-install.log" 2>&1
+          node scripts/qa/freeKickLab1070.mjs --prefetch-fonts-only > "$out/font-prefetch.log" 2>&1
+          echo "FONT_CACHE_MANIFEST_SHA256=$(sha256sum "$fonts/manifest.json" | cut -d ' ' -f1)" >> "$GITHUB_ENV"
+          find "$tools" "$fonts" -type f -print0 | sort -z > "$out/tools.members.initial"
+          xargs -0 sha256sum < "$out/tools.members.initial" > "$out/tools.initial.sha256"
+          find node_modules -type l -printf '%p -> %l\n' | sort > "$out/deps.links.after-browser"
+          { cat "$out/deps.links.initial";printf 'node_modules/playwright -> %s/node_modules/playwright\nnode_modules/playwright-core -> %s/node_modules/playwright-core\n' "$tools" "$tools"; } | sort > "$out/deps.links.expected-after-browser"
+          cmp "$out/deps.links.expected-after-browser" "$out/deps.links.after-browser"
+      - name: Ordinary build and unchanged fifteen fatal caps
+        run: |
+          set -euo pipefail
+          cd "$CM_FIXED_ROOT";out="$CM_FIXED_OUT";source "$out/run-gate.sh"
+          run_gate ordinary-vite-build 0 'built in .+' npm run build
+          node scripts/qa/proveCmMarketFixed.mjs prepare-caps
+          node --check "$out/caps-preload.cjs" > "$out/caps-preload.syntax.stdout.log" 2> "$out/caps-preload.syntax.stderr.log"
+          : > "$out/caps-server.transport"
+          SIM_OFFLINE_RECEIPT="$out/caps-server.transport" NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/lib/hostLikeServer.mjs dist 4173 > "$out/caps-server.log" 2>&1 & server=$!
+          trap 'kill "$server" 2>/dev/null || true;wait "$server" 2>/dev/null || true' EXIT
+          ready=0;for attempt in $(seq 1 30);do if curl --fail --silent http://127.0.0.1:4173/ > /dev/null;then ready=1;break;fi;sleep 1;done;test "$ready" -eq 1
+          mkdir "$out/caps-receipts";: > "$out/caps-receipts/contexts.jsonl";: > "$out/caps-receipts/fonts.jsonl";: > "$out/caps-receipts/flags.jsonl"
+          export BASE=http://127.0.0.1:4173 SWEEP_BASE=http://127.0.0.1:4173 SWEEP_OFFLINE=1 SWEEP_CONTEXT_RECEIPT="$out/caps-receipts/contexts.jsonl" FONT_CACHE_USE_RECEIPT="$out/caps-receipts/fonts.jsonl" SWEEP_FLAG_RECEIPT="$out/caps-receipts/flags.jsonl" CM_FIXED_PRELOAD="--require=$out/caps-preload.cjs"
+          run_gate caps 0 '^sweepWeight: green' node scripts/sweepWeight.mjs
+          cp "$out/caps-receipts/"*.jsonl "$out/caps/"
+          node scripts/qa/proveCmMarketFixed.mjs admit-caps
+          test ! -s "$out/caps-server.transport"
+          tar -cf "$out/dist.tar" -C dist .;tar -cf "$out/font-cache.tar" -C "$FREE_KICK_FONT_CACHE" .
+      - name: Always retain capsule and exact source, dependency and ref holds
+        if: ${{ always() }}
+        env:
+          PRIOR_STATUS: ${{ job.status }}
+        run: |
+          set -euo pipefail
+          out="${CM_FIXED_OUT:-$RUNNER_TEMP/cm-market-fixed}";mkdir -p "$out";failed=0
+          cd "$GITHUB_WORKSPACE"
+          git ls-files -z | sort -z > "$out/source-members.final";xargs -0 sha256sum < "$out/source-members.final" > "$out/source.final.sha256"
+          cmp "$out/source-members.initial" "$out/source-members.final" || failed=1;cmp "$out/source.initial.sha256" "$out/source.final.sha256" || failed=1
+          git ls-files --others --exclude-standard -z | sort -z > "$out/untracked.final";cmp "$out/untracked.initial" "$out/untracked.final" || failed=1
+          git for-each-ref --format='%(refname) %(objectname)' > "$out/refs.final";cmp "$out/refs.initial" "$out/refs.final" || failed=1
+          sha256sum -c "$out/default-index.initial.sha256" > "$out/default-index-held.log" 2>&1 || failed=1
+          if test -d "${CM_FIXED_ROOT:-/nonexistent-cm-fixed}";then
+            cd "$CM_FIXED_ROOT";sha256sum -c "$out/source.initial.sha256" > "$out/matched-source-held.log" 2>&1 || failed=1
+            find . -type f -not -path './dist/*' -printf '%P\n' | sort > "$out/matched-regular-members.final"
+            tr '\0' '\n' < "$out/source-members.initial" > "$out/matched-regular-members.expected";cmp "$out/matched-regular-members.expected" "$out/matched-regular-members.final" || failed=1
+          else failed=1;fi
+          cd "$GITHUB_WORKSPACE"
+          if test -f "$out/deps.initial.sha256";then
+            find node_modules -type f -print0 | sort -z > "$out/deps.members.final"
+            sha256sum -c "$out/deps.initial.sha256" > "$out/deps-held.log" 2>&1 || failed=1
+            (cd "$CM_FIXED_ROOT";node scripts/qa/proveCmMarketFixed.mjs admit-deps) > "$out/dependency-cache-controller.stdout.log" 2> "$out/dependency-cache-controller.stderr.log" || failed=1
+            find node_modules -type l -printf '%p -> %l\n' | sort > "$out/deps.links.final"
+            if test -f "$out/deps.links.after-browser";then cmp "$out/deps.links.after-browser" "$out/deps.links.final" || failed=1;else cmp "$out/deps.links.initial" "$out/deps.links.final" || failed=1;fi
+          fi
+          if test -f "$out/tools.initial.sha256";then find "$CM_FIXED_TOOLS" "$FREE_KICK_FONT_CACHE" -type f -print0 | sort -z > "$out/tools.members.final";cmp "$out/tools.members.initial" "$out/tools.members.final" || failed=1;sha256sum -c "$out/tools.initial.sha256" > "$out/tools-held.log" 2>&1 || failed=1;fi
+          if test -d "$out/fixtures";then tar -cf "$out/fixtures.tar" -C "$out/fixtures" .;fi
+          if test -f "$out/run-gate.initial.sha256";then sha256sum -c "$out/run-gate.initial.sha256" > "$out/run-gate-held.log" 2>&1 || failed=1;fi
+          printf '%s\n' "$failed" > "$out/final-holds.exit"
+          status=PARTIAL_OR_FAILED_NO_FIXED_PROOF_CREDIT
+          if test "$PRIOR_STATUS" = success && test "$failed" -eq 0;then test -f "$out/SCOPED-UNIT-ADMISSION.json";test -f "$out/CAPS-ADMISSION.json";status=FIXED_FIRST_PASS_ONLY_NOT_FINAL_INTEGRATION;fi
+          printf '{"status":"%s","priorStatus":"%s","source":"%s","product":"%s","finalHoldsRaw":%s,"browserGameplay":"UNRUN_CAP_BROWSER_ONLY","fullSEO":"UNRUN","savedSiteReaders":"UNRUN","fullDefaultSuite":"UNRUN_SCOPED_DEFAULT_CONFIG_ONLY","defaultSims":"UNRUN","remainingWorldLedgerAcademyIntegration":"UNRUN_REQUIRED_AFTER_STABLE","mergeOrPublicationCredit":false}\n' "$status" "$PRIOR_STATUS" "$GITHUB_SHA" "$EXPECTED_PRODUCT" "$failed" > "$out/QUALIFICATION-STATUS.json"
+          find "$out" -path "$out/matched-source" -prune -o -type f -print0 | sort -z | xargs -0 sha256sum > "$RUNNER_TEMP/cm-market-fixed-evidence.sha256"
+          cp "$RUNNER_TEMP/cm-market-fixed-evidence.sha256" "$out/evidence.sha256";exit "$failed"
+      - uses: actions/upload-artifact@v4
+        if: ${{ always() }}
+        with:
+          name: cm-market-fixed-${{ github.run_id }}-a${{ github.run_attempt }}
+          path: |
+            ${{ runner.temp }}/cm-market-fixed
+            !${{ runner.temp }}/cm-market-fixed/matched-source/**
+          if-no-files-found: error
+          retention-days: 14
