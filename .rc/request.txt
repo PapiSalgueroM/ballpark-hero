@@ -1,0 +1,8 @@
+simCmWorldMoves-head: node scripts/simCmWorldMoves.mjs
+simCmWorldMoves-base: git worktree add -f /tmp/bg1 14a9af704 -q && ln -s "$PWD/node_modules" /tmp/bg1/node_modules && cd /tmp/bg1 && node scripts/simCmWorldMoves.mjs
+simClubManagerGathered-head: node scripts/simClubManagerGathered.mjs
+simClubManagerGathered-base: git worktree add -f /tmp/bg2 14a9af704 -q && ln -s "$PWD/node_modules" /tmp/bg2/node_modules && cd /tmp/bg2 && node scripts/simClubManagerGathered.mjs
+simClubManagerBudget-head: node scripts/simClubManagerBudget.mjs
+simClubManagerBudget-base: git worktree add -f /tmp/bg3 14a9af704 -q && ln -s "$PWD/node_modules" /tmp/bg3/node_modules && cd /tmp/bg3 && node scripts/simClubManagerBudget.mjs
+simCmLedgerBound-head: node scripts/simCmLedgerBound.mjs
+simCmLedgerBound-base: git worktree add -f /tmp/bg4 14a9af704 -q && ln -s "$PWD/node_modules" /tmp/bg4/node_modules && cd /tmp/bg4 && node scripts/simCmLedgerBound.mjs
