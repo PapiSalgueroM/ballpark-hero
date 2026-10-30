@@ -1,0 +1,2 @@
+5e525b720b46fa207c20a4a2d542f0d4adcb6095e6c48760aadb7a22a4fdea44  /home/runner/work/_temp/rc-out/full/simSoccerCareerUcl.mjs/stdout.log
+e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855  /home/runner/work/_temp/rc-out/full/simSoccerCareerUcl.mjs/stderr.log

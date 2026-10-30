@@ -1,0 +1,2 @@
+002bcfcffd015b9a934e46e7e0de4a5166695f57c7fc69683378ac1fc3b1b08a  /home/runner/work/_temp/rc-out/full/simRelatedGames.mjs/stdout.log
+e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855  /home/runner/work/_temp/rc-out/full/simRelatedGames.mjs/stderr.log

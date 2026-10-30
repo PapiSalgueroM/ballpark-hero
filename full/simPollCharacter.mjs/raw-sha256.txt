@@ -1,0 +1,2 @@
+8761d2de0bca1a5c11cbf3b4e9074c0bfda0a676de3b1df4eb39eefd835b40ae  /home/runner/work/_temp/rc-out/full/simPollCharacter.mjs/stdout.log
+e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855  /home/runner/work/_temp/rc-out/full/simPollCharacter.mjs/stderr.log

@@ -1,0 +1,3 @@
+655 /home/runner/work/_temp/rc-out/full/simALeagueSquads.mjs/stdout.log
+  0 /home/runner/work/_temp/rc-out/full/simALeagueSquads.mjs/stderr.log
+655 total

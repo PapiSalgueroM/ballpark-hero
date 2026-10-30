@@ -1,0 +1,3 @@
+494 /home/runner/work/_temp/rc-out/full/simOwnerMandate.mjs/stdout.log
+  0 /home/runner/work/_temp/rc-out/full/simOwnerMandate.mjs/stderr.log
+494 total

@@ -1,0 +1,3 @@
+865 /home/runner/work/_temp/rc-out/full/simSearchDiscard.mjs/stdout.log
+  0 /home/runner/work/_temp/rc-out/full/simSearchDiscard.mjs/stderr.log
+865 total

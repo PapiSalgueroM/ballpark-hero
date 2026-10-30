@@ -1,0 +1,2 @@
+abd3aa8035c133c14c8ccc75a0b77d4cab69f3b28713bd8b7ad9a1c1a9e35fed  /home/runner/work/_temp/rc-out/full/simConquestMap.mjs/stdout.log
+e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855  /home/runner/work/_temp/rc-out/full/simConquestMap.mjs/stderr.log

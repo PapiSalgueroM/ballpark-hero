@@ -1,0 +1,3 @@
+2155 /home/runner/work/_temp/rc-out/full/simMissingXiLayout.mjs/stdout.log
+   0 /home/runner/work/_temp/rc-out/full/simMissingXiLayout.mjs/stderr.log
+2155 total

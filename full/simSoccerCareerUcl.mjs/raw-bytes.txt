@@ -1,0 +1,3 @@
+3154 /home/runner/work/_temp/rc-out/full/simSoccerCareerUcl.mjs/stdout.log
+   0 /home/runner/work/_temp/rc-out/full/simSoccerCareerUcl.mjs/stderr.log
+3154 total

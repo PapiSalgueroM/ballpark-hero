@@ -1,0 +1,3 @@
+1246 /home/runner/work/_temp/rc-out/full/simManagerAppealIsolation.mjs/stdout.log
+   0 /home/runner/work/_temp/rc-out/full/simManagerAppealIsolation.mjs/stderr.log
+1246 total

@@ -1,0 +1,3 @@
+705 /home/runner/work/_temp/rc-out/full/simCfbDynasty.mjs/stdout.log
+  0 /home/runner/work/_temp/rc-out/full/simCfbDynasty.mjs/stderr.log
+705 total

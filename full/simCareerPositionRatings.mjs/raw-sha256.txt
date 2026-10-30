@@ -1,0 +1,2 @@
+21e156944bfe1bc2fa34695a30ff601bea7a9aa6fe43a268d74d71aa69d14a40  /home/runner/work/_temp/rc-out/full/simCareerPositionRatings.mjs/stdout.log
+e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855  /home/runner/work/_temp/rc-out/full/simCareerPositionRatings.mjs/stderr.log

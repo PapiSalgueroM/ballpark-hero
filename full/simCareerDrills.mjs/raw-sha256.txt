@@ -1,0 +1,2 @@
+71b1fe421e4614a8533f9506d29ee6d7dae2d84b04eebfba6b25e925114b11e5  /home/runner/work/_temp/rc-out/full/simCareerDrills.mjs/stdout.log
+e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855  /home/runner/work/_temp/rc-out/full/simCareerDrills.mjs/stderr.log

@@ -1,0 +1,2 @@
+dfe851e72f3f5ea136667ea1b712e2bc290803805f3ecea71d296ddd74449a8b  /home/runner/work/_temp/rc-out/full/simAuthModalFocus.mjs/stdout.log
+e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855  /home/runner/work/_temp/rc-out/full/simAuthModalFocus.mjs/stderr.log

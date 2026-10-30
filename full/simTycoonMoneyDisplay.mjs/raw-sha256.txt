@@ -1,0 +1,2 @@
+398dacc3db2a7f3e40ed28048c75285ccf186d74f7e978f746382f317262200e  /home/runner/work/_temp/rc-out/full/simTycoonMoneyDisplay.mjs/stdout.log
+e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855  /home/runner/work/_temp/rc-out/full/simTycoonMoneyDisplay.mjs/stderr.log

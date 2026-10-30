@@ -1,0 +1,3 @@
+1275 /home/runner/work/_temp/rc-out/full/simSoccerAppearanceOptions.mjs/stdout.log
+   0 /home/runner/work/_temp/rc-out/full/simSoccerAppearanceOptions.mjs/stderr.log
+1275 total

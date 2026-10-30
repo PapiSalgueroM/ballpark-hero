@@ -1,0 +1,3 @@
+6453 /home/runner/work/_temp/rc-out/full/simStatDetectiveMotion.mjs/stdout.log
+   0 /home/runner/work/_temp/rc-out/full/simStatDetectiveMotion.mjs/stderr.log
+6453 total

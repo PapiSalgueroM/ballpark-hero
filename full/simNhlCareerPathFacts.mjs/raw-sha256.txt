@@ -1,0 +1,2 @@
+033fc3dc357f5e1207b2a156e4bf47966fb1f6155b8ac313081d656dc78282c5  /home/runner/work/_temp/rc-out/full/simNhlCareerPathFacts.mjs/stdout.log
+e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855  /home/runner/work/_temp/rc-out/full/simNhlCareerPathFacts.mjs/stderr.log

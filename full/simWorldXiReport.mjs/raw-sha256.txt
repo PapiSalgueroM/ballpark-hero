@@ -1,0 +1,2 @@
+eadff6ca51fc21d5f6dadc0203b8a524e9f8b9706114f86e4454cef8c75a6153  /home/runner/work/_temp/rc-out/full/simWorldXiReport.mjs/stdout.log
+e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855  /home/runner/work/_temp/rc-out/full/simWorldXiReport.mjs/stderr.log

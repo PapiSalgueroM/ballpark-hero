@@ -1,0 +1,2 @@
+bcb5243e355e7ae6b770a9cbe02ecf6f62f4aae3b84a5c444a7a3ceb6e51a023  /home/runner/work/_temp/rc-out/full/simCmTactics.mjs/stdout.log
+e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855  /home/runner/work/_temp/rc-out/full/simCmTactics.mjs/stderr.log

@@ -1,0 +1,2 @@
+bc702f00f195243476d00a666e9ce212be91d3464c907a82cf68106f866664a8  /home/runner/work/_temp/rc-out/full/simSoccerOfferReview.mjs/stdout.log
+e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855  /home/runner/work/_temp/rc-out/full/simSoccerOfferReview.mjs/stderr.log

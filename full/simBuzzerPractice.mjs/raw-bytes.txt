@@ -1,0 +1,3 @@
+2964 /home/runner/work/_temp/rc-out/full/simBuzzerPractice.mjs/stdout.log
+   0 /home/runner/work/_temp/rc-out/full/simBuzzerPractice.mjs/stderr.log
+2964 total

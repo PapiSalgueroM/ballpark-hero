@@ -1,0 +1,3 @@
+949 /home/runner/work/_temp/rc-out/full/simNationalPools.mjs/stdout.log
+  0 /home/runner/work/_temp/rc-out/full/simNationalPools.mjs/stderr.log
+949 total

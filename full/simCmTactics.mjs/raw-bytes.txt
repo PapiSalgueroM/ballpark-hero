@@ -1,0 +1,3 @@
+7730 /home/runner/work/_temp/rc-out/full/simCmTactics.mjs/stdout.log
+   0 /home/runner/work/_temp/rc-out/full/simCmTactics.mjs/stderr.log
+7730 total

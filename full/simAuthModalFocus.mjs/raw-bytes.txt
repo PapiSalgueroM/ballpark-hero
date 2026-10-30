@@ -1,0 +1,3 @@
+1689 /home/runner/work/_temp/rc-out/full/simAuthModalFocus.mjs/stdout.log
+   0 /home/runner/work/_temp/rc-out/full/simAuthModalFocus.mjs/stderr.log
+1689 total

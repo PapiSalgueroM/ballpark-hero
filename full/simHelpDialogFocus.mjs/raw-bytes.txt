@@ -1,0 +1,3 @@
+2562 /home/runner/work/_temp/rc-out/full/simHelpDialogFocus.mjs/stdout.log
+   0 /home/runner/work/_temp/rc-out/full/simHelpDialogFocus.mjs/stderr.log
+2562 total

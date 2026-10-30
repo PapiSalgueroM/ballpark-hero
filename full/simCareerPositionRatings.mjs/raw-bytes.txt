@@ -1,0 +1,3 @@
+3226 /home/runner/work/_temp/rc-out/full/simCareerPositionRatings.mjs/stdout.log
+   0 /home/runner/work/_temp/rc-out/full/simCareerPositionRatings.mjs/stderr.log
+3226 total

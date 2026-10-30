@@ -1,0 +1,2 @@
+835a17317bc58a6cff5a503d7d08bc06310f1156a41ef0df2b96c7fb962d3c41  /home/runner/work/_temp/rc-out/full/simSoccerAppearanceOptions.mjs/stdout.log
+e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855  /home/runner/work/_temp/rc-out/full/simSoccerAppearanceOptions.mjs/stderr.log

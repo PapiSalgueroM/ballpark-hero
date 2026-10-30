@@ -1,0 +1,2 @@
+64eea9f5c15437756975d914e22e003cff2aee78f0e4b70d651e7db059918e38  /home/runner/work/_temp/rc-out/full/simGamePicks.mjs/stdout.log
+e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855  /home/runner/work/_temp/rc-out/full/simGamePicks.mjs/stderr.log

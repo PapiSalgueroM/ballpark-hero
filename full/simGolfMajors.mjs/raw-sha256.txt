@@ -1,0 +1,2 @@
+7d65fa1d369e0a80aced1b0e2c6adf776b79b000f0e4234a6be44f8e1b123620  /home/runner/work/_temp/rc-out/full/simGolfMajors.mjs/stdout.log
+e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855  /home/runner/work/_temp/rc-out/full/simGolfMajors.mjs/stderr.log

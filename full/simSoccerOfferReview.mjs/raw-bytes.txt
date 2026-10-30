@@ -1,0 +1,3 @@
+556 /home/runner/work/_temp/rc-out/full/simSoccerOfferReview.mjs/stdout.log
+  0 /home/runner/work/_temp/rc-out/full/simSoccerOfferReview.mjs/stderr.log
+556 total

@@ -1,0 +1,3 @@
+437 /home/runner/work/_temp/rc-out/full/simPollCharacter.mjs/stdout.log
+  0 /home/runner/work/_temp/rc-out/full/simPollCharacter.mjs/stderr.log
+437 total
