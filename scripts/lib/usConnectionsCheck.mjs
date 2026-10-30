@@ -410,7 +410,7 @@ export function makeBaseballChecker({ record, ledger = {} }) {
   /* a man who can still change clubs (Round 1567's trade check): no last game on the record (the service leaves it
      empty while a man is active, Yu Darvish's lost 2026 included), or one from 2025 on; null off the record */
   const active = name => { const m = byName.get(fold(name)); return m ? (!m.last || Number(m.last.slice(0, 4)) >= 2025) : null; };
-  return { criterion, fits, watch, identity, active, has: name => byName.has(fold(name)) };
+  return { criterion, fits, watch, identity, active, watched: WATCHED.baseball, has: name => byName.has(fold(name)) };
 }
 
 /* ------------------------------------------------------------------ */
@@ -558,16 +558,70 @@ export function makeNflChecker({ record, grid, ledger = {} }) {
   const identity = name => { const m = byName.get(fold(name)); return m?.espn ? `espn:${m.espn}` : fold(name); };
   /* a man who can still change clubs (Round 1567's trade check): a season in 2025 or 2026 on ESPN's record */
   const active = name => { const m = byName.get(fold(name)); return m ? !!(m.seasons?.['2025'] || m.seasons?.['2026']) : null; };
-  return { criterion, fits, watch, identity, active, clubDisagreement, has: name => byName.has(fold(name)) || gridBy.has(fold(name)) };
+  return { criterion, fits, watch, identity, active, clubDisagreement, watched: WATCHED.nfl, has: name => byName.has(fold(name)) || gridBy.has(fold(name)) };
 }
 
 /* ------------------------------------------------------------------ */
 /* NHL                                                                 */
 /* ------------------------------------------------------------------ */
 
+/*
+ * Board wording (folded) -> the club names the league's season rows carry. Round 1574: an explicit map, as NFL_CLUBS
+ * and MLB_CLUBS are, in place of "a club name that ends with the nickname", which read "Winnipeg Jets (1979)" as no
+ * Jet and would have counted the Minnesota North Stars as Stars. Each entry is exactly the names its label covers.
+ * The league's service names a moved franchise's old seasons by the club as it then was (Quebec Nordiques, Winnipeg
+ * Jets (1979), Atlanta Thrashers, Hartford Whalers, Minnesota North Stars), and a renamed club's by today's name
+ * (Chicago Blackhawks, Anaheim Ducks). A label this map does not hold is not judged: it counts as unjudged, never as
+ * a silent no. The ledger (nhlConnectionsVerified-2026-10.json, clubLabels) says which names each table label covers.
+ */
+export const NHL_CLUBS = {
+  penguins: ['Pittsburgh Penguins'], mapleleafs: ['Toronto Maple Leafs'], avalanche: ['Colorado Avalanche'],
+  redwings: ['Detroit Red Wings'], blackhawks: ['Chicago Blackhawks'], kings: ['Los Angeles Kings'],
+  lightning: ['Tampa Bay Lightning'], ducks: ['Anaheim Ducks'], bruins: ['Boston Bruins'], oilers: ['Edmonton Oilers'],
+  goldenknights: ['Vegas Golden Knights'], hurricanes: ['Carolina Hurricanes'], canadiens: ['Montréal Canadiens'],
+  panthers: ['Florida Panthers'], sharks: ['San Jose Sharks'], islanders: ['New York Islanders'],
+  rangers: ['New York Rangers'], capitals: ['Washington Capitals'], flyers: ['Philadelphia Flyers'],
+  blues: ['St. Louis Blues'], stars: ['Dallas Stars'], sabres: ['Buffalo Sabres'], predators: ['Nashville Predators'],
+  canucks: ['Vancouver Canucks'], senators: ['Ottawa Senators'], devils: ['New Jersey Devils'],
+  whalers: ['Hartford Whalers'], flames: ['Calgary Flames'], wild: ['Minnesota Wild'], kraken: ['Seattle Kraken'],
+  bluejackets: ['Columbus Blue Jackets'],
+  /* one franchise under two names, both counted because the label names both */
+  avalancheornordiques: ['Colorado Avalanche', 'Quebec Nordiques'],
+  winnipegjetseitherera: ['Winnipeg Jets', 'Winnipeg Jets (1979)'],
+  /* the club in Salt Lake City from 2024-25 on, under both its names; the Arizona Coyotes are not counted */
+  utah: ['Utah Hockey Club', 'Utah Mammoth'],
+};
+/* a club name -> its franchise, for a claim about franchises ("Won the Cup with three different franchises") */
+const NHL_FRANCHISE = {
+  'Quebec Nordiques': 'Colorado Avalanche', 'Atlanta Thrashers': 'Winnipeg Jets', 'Minnesota North Stars': 'Dallas Stars',
+  'Hartford Whalers': 'Carolina Hurricanes', 'Winnipeg Jets (1979)': 'Utah', 'Phoenix Coyotes': 'Utah', 'Arizona Coyotes': 'Utah',
+  'Utah Hockey Club': 'Utah', 'Utah Mammoth': 'Utah', 'Atlanta Flames': 'Calgary Flames', 'Kansas City Scouts': 'New Jersey Devils',
+  'Colorado Rockies': 'New Jersey Devils', 'California Golden Seals': 'Cleveland Barons', 'Oakland Seals': 'Cleveland Barons',
+};
+const franchise = t => NHL_FRANCHISE[t] ?? t;
+/* the trophies a label names, as the league's landing names them */
+const NHL_TROPHIES = {
+  vezinatrophy: 'Vezina Trophy', norristrophy: 'James Norris Memorial Trophy', caldertrophy: 'Calder Memorial Trophy',
+  artrosstrophy: 'Art Ross Trophy', rocketrichardtrophy: 'Maurice “Rocket” Richard Trophy',
+  connsmythetrophy: 'Conn Smythe Trophy', harttrophy: 'Hart Memorial Trophy',
+};
+const NHL_DRAFT_TEAMS = { sabres: 'BUF' };
+const ORDINAL = { first: 1, second: 2, third: 3 };
+const COUNT = { two: 2, three: 3, four: 4 };
+/* birth countries (the landing's three letters) in Europe, for "European-born" */
+const EUROPE = new Set(['AUT', 'BLR', 'CHE', 'CZE', 'DEU', 'DNK', 'EST', 'FIN', 'FRA', 'GBR', 'HUN', 'ITA', 'LAT', 'LTU', 'LVA', 'NLD', 'NOR', 'POL', 'RUS', 'SVK', 'SVN', 'SWE', 'UKR']);
+/* the last finished NHL season (start year) and the seasons a running watch reads */
+const NHL_RECENT = ['2024-25', '2025-26', '2026-27'];
+const NHL_IN_PLAY = '2026-27';
+/* fix2-1574: the share of a single season mark that puts a man still playing on watch beside it (52.5 of 70, 45 of
+   60): watch() reads it on the recent seasons, section 5's watch line on the career best (seasonBest) */
+export const SEASON_LINE = 0.75;
+
 /**
  * NHL's checker. record: the league's own rows; ledger: the round's two host ledger.
- * "Played for the Penguins" matches a season row whose club name ends with that nickname.
+ * Round 1574 taught it every claim the 16 table rows past the file make (decided in the ledger's tableDecisions):
+ * clubs by an explicit map, season goals, goalie wins, awards, the draft, the position, goals credited to a goalie,
+ * Cups won with a club or with several franchises, the Hall of Fame with a club, and goals for one franchise.
  */
 export function makeNhlChecker({ record, ledger = {} }) {
   const men = { ...record.men };
@@ -580,12 +634,80 @@ export function makeNhlChecker({ record, ledger = {} }) {
     if (lists.has(f)) return { kind: 'list', key: f };
     let m;
     /* "(as of 2025-26)" (Round 1567): only seasons up to that one count, so a trade after it cannot add a man */
-    if ((m = label.match(/^Played for the (.+?)(?: \(as of (\d{4})-\d{2}\))?$/))) return { kind: 'club', nick: fold(m[1]), ...(m[2] ? { asOf: Number(m[2]) } : {}) };
+    if ((m = label.match(/^Played for (?:the )?(.+?)(?: \(as of (\d{4})-\d{2}\))?$/))) {
+      const names = NHL_CLUBS[fold(m[1])];
+      return names ? { kind: 'club', names, ...(m[2] ? { asOf: Number(m[2]) } : {}) } : null;
+    }
     if ((m = label.replace(/,/g, '').match(/^(\d+)\+ career (points|goals|assists|games)$/))) {
       return { kind: 'career', stat: { points: 'P', goals: 'G', assists: 'A', games: 'GP' }[m[2]], min: Number(m[1]) };
     }
+    if ((m = label.replace(/,/g, '').match(/^Played (\d+)(?: or more)? NHL games$/))) return { kind: 'career', stat: 'GP', min: Number(m[1]) };
+    if ((m = label.replace(/,/g, '').match(/^Scored (\d+) career goals$/))) return { kind: 'career', stat: 'G', min: Number(m[1]) };
+    if ((m = label.replace(/,/g, '').match(/^European-born (\d+) goal scorers$/))) return { kind: 'career', stat: 'G', min: Number(m[1]), europe: true };
+    if ((m = label.match(/^Scored (\d+) goals in a season$/))) return { kind: 'season', min: Number(m[1]) };
+    if ((m = label.match(/^Scored (\d+) goals for one franchise$/))) return { kind: 'clubGoals', min: Number(m[1]) };
+    if ((m = label.replace(/,/g, '').match(/^Goalies with (\d+) career wins$/))) return { kind: 'wins', min: Number(m[1]) };
+    if (f === 'goaliescreditedwithscoringagoal') return { kind: 'goalieGoal' };
+    if (f === 'goaltenders') return { kind: 'pos', pos: 'G' };
+    if (f === 'goalieswhowontheharttrophy') return { kind: 'award', trophy: NHL_TROPHIES.harttrophy, pos: 'G' };
+    if (f === 'wontheconnsmytheinalosingcause') return { kind: 'smytheLost' };
+    if ((m = label.match(/^Won the Cup with (two|three|four) different franchises$/))) return { kind: 'cupClubs', min: COUNT[m[1]] };
+    /* a Cup in a finished season ("Won the 2024 Cup with the Panthers") or a finished run of them ("Won the Cup with
+       the Islanders, 1980 to 1983"; years are the spring the Cup was won) */
+    const season = y => `${y - 1}-${String(y).slice(2)}`;
+    if ((m = label.match(/^Won the (\d{4}) Cup with the (.+)$/))) {
+      const names = NHL_CLUBS[fold(m[2])];
+      return names ? { kind: 'cupWith', seasons: [season(Number(m[1]))], names } : null;
+    }
+    if ((m = label.match(/^Won the Cup with the (.+), (\d{4}) to (\d{4})$/))) {
+      const names = NHL_CLUBS[fold(m[1])];
+      const [a, b] = [Number(m[2]), Number(m[3])];
+      return names && a <= b ? { kind: 'cupWith', seasons: Array.from({ length: b - a + 1 }, (_, i) => season(a + i)), names } : null;
+    }
+    if ((m = label.match(/^Hall of Famers who played for the (.+)$/))) {
+      const names = NHL_CLUBS[fold(m[1])];
+      return names ? { kind: 'hofClub', names } : null;
+    }
+    /* an award in a closed past range ("Won the Conn Smythe Trophy before 2000": a season ending before that year) */
+    if ((m = label.match(/^Won the (.+?) before (\d{4})$/))) {
+      const trophy = NHL_TROPHIES[fold(m[1])] ?? NHL_TROPHIES[fold(m[1]) + 'trophy'];
+      return trophy ? { kind: 'award', trophy, before: Number(m[2]) } : null;
+    }
+    if ((m = label.match(/^Won the (.+)$/))) {
+      const trophy = NHL_TROPHIES[fold(m[1])] ?? NHL_TROPHIES[fold(m[1]) + 'trophy'];
+      return trophy ? { kind: 'award', trophy } : null;
+    }
+    if ((m = label.match(/^Drafted (first|second|third) overall$/))) return { kind: 'draft', overall: ORDINAL[m[1]] };
+    if ((m = label.match(/^Drafted by the (.+)$/))) {
+      const team = NHL_DRAFT_TEAMS[fold(m[1])];
+      return team ? { kind: 'draftBy', team } : null;
+    }
     return null;
   }
+
+  /* the franchises a man won the Cup with, as far as the record knows: a Cup season with no playoff club on the
+     record (he won it without playing a playoff game) is counted in unknown */
+  const cupFranchises = m => {
+    const known = new Set();
+    let unknown = 0;
+    for (const y of m.aw?.['Stanley Cup'] ?? []) {
+      const clubs = m.pc?.[y];
+      if (!clubs?.length) { unknown += 1; continue; }
+      for (const t of clubs) known.add(franchise(t));
+    }
+    return { known, unknown };
+  };
+  const clubGoalsBest = m => {
+    const by = {};
+    for (const [t, g] of Object.entries(m.cg ?? {})) by[franchise(t)] = (by[franchise(t)] ?? 0) + g;
+    return Math.max(0, ...Object.values(by));
+  };
+  /* Calder eligibility for the season in play: no earlier season of more than 25 games, and not two earlier
+     seasons of 6 or more (the league's rookie rule, age aside) */
+  const rookieEligible = m => {
+    const earlier = Object.entries(m.gp ?? {}).filter(([y]) => y < NHL_IN_PLAY).map(([, g]) => g);
+    return !earlier.some(g => g > 25) && earlier.filter(g => g >= 6).length < 2;
+  };
 
   function fits(name, c) {
     if (c.kind === 'list') {
@@ -595,27 +717,148 @@ export function makeNhlChecker({ record, ledger = {} }) {
     }
     const m = byName.get(fold(name));
     if (!m) return null;
-    if (c.kind === 'club') return Object.entries(m.seasons ?? {}).filter(([s]) => c.asOf === undefined || Number(s.slice(0, 4)) <= c.asOf).flatMap(([, v]) => v).some(t => fold(t).endsWith(c.nick));
-    if (c.kind === 'career') return (m.career?.[c.stat] ?? 0) >= c.min;
-    return null;
+    switch (c.kind) {
+      case 'club': return Object.entries(m.seasons ?? {}).filter(([s]) => c.asOf === undefined || Number(s.slice(0, 4)) <= c.asOf).flatMap(([, v]) => v).some(t => c.names.includes(t));
+      case 'career':
+        if (c.europe && !m.country) return null;
+        if (c.europe && !EUROPE.has(m.country)) return false;
+        return (m.career?.[c.stat] ?? 0) >= c.min;
+      case 'season': return m.sg ? Object.values(m.sg).some(g => g >= c.min) : null;
+      case 'clubGoals': return m.cg ? clubGoalsBest(m) >= c.min : null;
+      case 'wins': if (m.pos !== 'G') return false; return m.wins === undefined ? null : m.wins >= c.min;
+      case 'goalieGoal': return m.pos === 'G' && (m.career?.G ?? 0) >= 1;
+      case 'pos': return m.pos === c.pos;
+      case 'award':
+        if (!m.aw) return null;
+        if (c.pos && m.pos !== c.pos) return false;
+        /* "before 2000": a season ending before that year ("1998-99" ends in 1999) */
+        return (m.aw[c.trophy] ?? []).some(y => c.before === undefined || Number(y.slice(0, 4)) + 1 < c.before);
+      case 'smytheLost': {
+        if (!m.aw) return null;
+        const cups = new Set(m.aw['Stanley Cup'] ?? []);
+        return (m.aw['Conn Smythe Trophy'] ?? []).some(y => !cups.has(y));
+      }
+      case 'cupClubs': {
+        if (!m.aw) return null;
+        const f = cupFranchises(m);
+        if (f.known.size >= c.min) return true;
+        return f.unknown ? null : false;
+      }
+      case 'cupWith': {
+        if (!m.aw) return null;
+        const cups = (m.aw['Stanley Cup'] ?? []).filter(y => c.seasons.includes(y));
+        if (cups.some(y => (m.pc?.[y] ?? []).some(t => c.names.includes(t)))) return true;
+        /* a Cup in the range won without a playoff game on the record: the club cannot be read */
+        return cups.some(y => !(m.pc?.[y] ?? []).length) ? null : false;
+      }
+      case 'hofClub':
+        if (m.hhof === undefined) return null;
+        return m.hhof === 1 && Object.values(m.seasons ?? {}).flat().some(t => c.names.includes(t));
+      case 'draft': return m.draft ? m.draft[2] === c.overall : false;
+      case 'draftBy': return m.draft ? m.draft[3] === c.team : false;
+      default: return null;
+    }
   }
 
-  /** An active man close enough to a career milestone to reach it before the season ends. */
+  /**
+   * A man who does not fit now but could join the group before the board is dealt again (the rules are written
+   * in the ledger, watchRules). The season in play is 2026-27. A career mark: active and within a season's reach.
+   * A season mark: active and three quarters of the way there in one of the last two seasons or this one. An
+   * award: active and eligible (the Vezina a goalie, the Norris a defenceman, the Calder a man still a rookie, the
+   * Art Ross and the Rocket Richard a skater, the Hart and the Conn Smythe anyone). The Hall of Fame: anyone not in
+   * it who played for the club, active or not (the Hall inducts each November).
+   */
   function watch(name, c) {
-    if (c.kind !== 'career') return null;
     const m = byName.get(fold(name));
-    if (!m || !m.active || fits(name, c) !== false) return null;
-    const have = m.career?.[c.stat] ?? 0;
-    /* a season's worth: 110 points, 60 goals, 80 assists, 82 games */
-    const reach = { P: 110, G: 60, A: 80, GP: 82 }[c.stat] ?? 0;
-    return have + reach >= c.min ? `active with ${have}, within a season of ${c.min}` : null;
+    if (!m || fits(name, c) !== false) return null;
+    if (c.kind === 'hofClub') return Object.values(m.seasons ?? {}).flat().some(t => c.names.includes(t)) ? 'played for the club and is not in the Hall yet; the Hall inducts each November' : null;
+    if (!m.active) return null;
+    switch (c.kind) {
+      case 'career': {
+        if (c.europe && !EUROPE.has(m.country)) return null;
+        const have = m.career?.[c.stat] ?? 0;
+        /* a season's worth: 110 points, 60 goals, 80 assists, 82 games */
+        const reach = { P: 110, G: 60, A: 80, GP: 82 }[c.stat] ?? 0;
+        return have + reach >= c.min ? `active with ${have}, within a season of ${c.min}` : null;
+      }
+      case 'season': {
+        const best = Math.max(0, ...NHL_RECENT.map(y => m.sg?.[y] ?? 0));
+        return best >= c.min * SEASON_LINE ? `active with ${best} goals in a season since 2024-25, within a quarter of ${c.min}` : null;
+      }
+      case 'clubGoals': {
+        const best = clubGoalsBest(m);
+        return best + 60 >= c.min ? `active with ${best} goals for one franchise, within a season of ${c.min}` : null;
+      }
+      case 'wins': return m.pos === 'G' && (m.wins ?? 0) + 45 >= c.min ? `an active goalie with ${m.wins} wins, within a season of ${c.min}` : null;
+      case 'goalieGoal': return m.pos === 'G' ? 'an active goalie, who may yet be credited with a goal' : null;
+      case 'award': {
+        const t = c.trophy;
+        /* a closed past range ("before 2000") no season in play can add to */
+        if (c.before !== undefined) return null;
+        if (c.pos && m.pos !== c.pos) return null;
+        if (t === NHL_TROPHIES.vezinatrophy && m.pos !== 'G') return null;
+        if (t === NHL_TROPHIES.norristrophy && m.pos !== 'D') return null;
+        if (t === NHL_TROPHIES.caldertrophy && !rookieEligible(m)) return null;
+        if ((t === NHL_TROPHIES.artrosstrophy || t === NHL_TROPHIES.rocketrichardtrophy) && m.pos === 'G') return null;
+        return `active and eligible; the ${NHL_IN_PLAY} ${t} is still to be won`;
+      }
+      case 'smytheLost': return `active; the ${NHL_IN_PLAY} Conn Smythe is still to be won`;
+      case 'cupClubs': {
+        const f = cupFranchises(m);
+        return f.known.size + f.unknown >= c.min - 1 ? `active with Cups for ${f.known.size} franchises${f.unknown ? ` (and ${f.unknown} Cup the record cannot place)` : ''}, one Cup from ${c.min}` : null;
+      }
+      default: return null;
+    }
+  }
+
+  /* fix2-1574: a single season mark's career best on the record, { best, season } (null when the record has no
+     season by season goals for him); undefined for a kind that is not a single season mark. simUsConnectionsFacts
+     section 10 ties it to AGES ('season'), and section 5's watch line reads every man still playing by it */
+  function seasonBest(name, c) {
+    if (c.kind !== 'season') return undefined;
+    const m = byName.get(fold(name));
+    if (!m?.sg) return null;
+    const [season, best] = Object.entries(m.sg).sort((a, b) => b[1] - a[1])[0] ?? [null, 0];
+    return { best, season };
   }
 
   const identity = name => { const m = byName.get(fold(name)); return m?.nhl ? `nhl:${m.nhl}` : fold(name); };
   /* a man who can still change clubs (Round 1567's trade check): the league's own active flag */
   const active = name => { const m = byName.get(fold(name)); return m ? !!m.active : null; };
-  return { criterion, fits, watch, identity, active, has: name => byName.has(fold(name)) };
+  return { criterion, fits, watch, seasonBest, identity, active, watched: WATCHED.nhl, has: name => byName.has(fold(name)) };
 }
+
+/*
+ * Round 1574: how each criterion kind ages, for simUsConnectionsFacts section 10. 'fixed': nothing a season in play
+ * can change (a birth country, a draft, a closed past range); 'running': a total, a count or an award the season
+ * in play can add a man to, so the sport's watch() must handle it (WATCHED); 'move': a club, so a man still playing
+ * can join it by moving, which section 8 holds by a date. A ledger list carries its own age (lists.<key>.age).
+ * A kind with no entry here fails section 10 when it is on a board.
+ * fix2-1574: 'season': a single season mark ("Scored 60 goals in a season"), running like the rest, and beside it
+ * section 5's watch line reads every man still playing by his career best (the checker's seasonBest); section 10
+ * fails a kind the checker reads by season best that is not aged 'season', and the other way round. Baseball's
+ * 'season' kind stays 'running': its checker has no seasonBest yet (the baseball table rounds own it).
+ */
+export const AGES = {
+  baseball: {
+    posEra: 'running', born: 'fixed', club: 'move', mvpBoth: 'running', mvpRun: 'running', award: 'running',
+    wsClubs: 'running', wsWith: 'fixed', awardAt: 'running', career: 'running', avg300: 'running', season: 'running',
+    bats: 'fixed', starter: 'running', firstPick: 'fixed', undrafted: 'running', college: 'fixed',
+    hofPos: 'running', hofPitcher: 'running', recordList: 'running',
+  },
+  nfl: { club: 'move', college: 'fixed', firstPick: 'fixed', yards: 'running' },
+  nhl: {
+    club: 'move', career: 'running', season: 'season', clubGoals: 'running', wins: 'running', goalieGoal: 'running',
+    pos: 'fixed', award: 'running', smytheLost: 'running', cupClubs: 'running', cupWith: 'fixed', hofClub: 'running',
+    draft: 'fixed', draftBy: 'fixed',
+  },
+};
+/* the kinds each sport's watch() handles (a running kind outside its set fails section 10) */
+export const WATCHED = {
+  baseball: new Set(['mvpBoth', 'mvpRun', 'award', 'awardAt', 'career', 'season']),
+  nfl: new Set(['yards']),
+  nhl: new Set(['career', 'season', 'clubGoals', 'wins', 'goalieGoal', 'award', 'smytheLost', 'cupClubs', 'hofClub']),
+};
 
 /* ------------------------------------------------------------------ */
 /* the record files                                                    */

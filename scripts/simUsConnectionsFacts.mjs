@@ -28,7 +28,10 @@
  *      still to be named (the World Series MVP from its two clubs, Gold Gloves,
  *      Silver Sluggers, the MVP and the rest in November) or a running total
  *      one season from a milestone (Erik Karlsson at 947 points beside
- *      "1,000+ career points")
+ *      "1,000+ career points"); and (fix-1574, one rule since fix2) beside
+ *      every single season mark (a kind AGES calls 'season', whatever its
+ *      label), every man still playing read by his career best on the
+ *      record and both hosts, none at or over three quarters of the mark
  *   6) no man is dealt twice on one board under two names (bconn-049 held
  *      "Goose Gossage" and "Rich Gossage", and the game's own check compares
  *      spellings)
@@ -49,6 +52,27 @@
  *   US_CONN_LIVE=baseball=<file>,nfl=<file>,nhl=<file> node scripts/simUsConnectionsFacts.mjs
  * which checks those rows by sections 1, 2, 4, 5 and 6 (rows past the file's
  * boards hold men the record has never read: they count as unknown, said aloud).
+ * Round 1574: with US_CONN_LIVE_STRICT=nhl (sports also in US_CONN_LIVE) those
+ * sports' live rows are held to section 7's ceilings and a man not in the
+ * record fails; without it US_CONN_LIVE behaves as before. Under US_CONN_LIVE
+ * a sport's export replaces both its file and its table boards.
+ *
+ *   9) (Round 1574) the table rows (scripts/data/<sport>ConnectionsTable-2026-10.json,
+ *      the sports TABLE_RANGE in scripts/lib/usConnectionsTables.mjs holds) are
+ *      the export plus recorded decisions: each board valid, its colours in the
+ *      exported order, every group decided exactly once in the ledger's
+ *      tableDecisions (RECORD, LIST, PERMAN or REBUILD, from the exported label
+ *      to the label now), none dangling, PER MAN only for a label on one board;
+ *      and (fix-1574) every row the table file decides is in TABLE_RANGE
+ *  10) (Round 1574) every criterion kind on a board says how it ages
+ *      (usConnectionsCheck.mjs AGES, a list its own age) and a running kind is
+ *      one the sport's watch() handles (WATCHED); (fix2-1574) a kind aged
+ *      'season' is exactly one the checker reads by season best (seasonBest);
+ *      section 8 dates every 'move'
+ *      kind. Section 3 also holds every member of every table group to a fact
+ *      and every ledger list to two hosts, closed, with an age.
+ * US_CONN_DUMP=<file> writes every (sport, board, group, man, verdict) line,
+ * sorted, and changes nothing else.
  *
  * Controls (each must exit 1; the harness first asserts the control changed
  * its input, else it prints ABORTED and exits 2; each prints how often it fired):
@@ -84,6 +108,29 @@
  *                             season makes him unknown (must raise: member-unknown, for baseball)
  *   US_CONN_CONTROL=futuredate nflconn-004's Steelers dated (as of 2030) (must raise: date-open, for it)
  *   US_CONN_CONTROL=grayonehost the first baseball gray pair keeps one host (must raise: gray-one-host, for it)
+ *   Round 1574, the table rows (fix-1574: each refuses, exit 2, when TABLE_RANGE does not hold nhl):
+ *   US_CONN_CONTROL=rangedrop  fix-1574: nhl dropped from TABLE_RANGE in memory while its table file decides
+ *                             rows (unranged, nhl)
+ *   US_CONN_CONTROL=tablemiss  the NHL table file read as empty while TABLE_RANGE holds nhl (tablemiss, nhl)
+ *   US_CONN_CONTROL=ages       the AGES entry of a kind used on an NHL table board removed (ages, that kind)
+ *   US_CONN_CONTROL=newrunning a running kind taught to AGES and put on an NHL table board, with no watch
+ *                             (unwatched, probe)
+ *   US_CONN_CONTROL=decisionless one NHL tableDecisions line removed (undecided, that group)
+ *   US_CONN_CONTROL=recolour   two groups' colours swapped on an NHL table board (recolour, that board)
+ *   US_CONN_CONTROL=dangling   a decision for group 4 of an NHL table board (dangling, it)
+ *   US_CONN_CONTROL=permantwice an NHL decision made PER MAN and its label copied to a second board
+ *                             (perman-twice, that label)
+ *   US_CONN_CONTROL=listonehost the first NHL ledger list keeps one host (list-one-host, it)
+ *   US_CONN_CONTROL=nofact     the fact holding the first member of an NHL table group removed (no-fact, him)
+ *   US_CONN_CONTROL=stamkos    Steven Stamkos back on nhlconn-016 beside its dated Predators group (second-fit, him)
+ *   US_CONN_CONTROL=watchline  fix-1574: Auston Matthews (69 goals in 2023-24) back in nhlconn-011's Maple Leafs group
+ *                             beside "Scored 70 goals in a season" (watch-line, him)
+ *   US_CONN_CONTROL=watchline60 fix2-1574: John Tavares (47 in 2018-19) back in nhlconn-010's Islanders group beside
+ *                             "Scored 60 goals in a season", over its 45 line (watch-line, him). No board carries a
+ *                             single season mark other than goals, so no control plants one
+ *   US_CONN_CONTROL=watchbest  fix2-1574: Evgeni Malkin's hockey-reference number in his watch line fact read as 53,
+ *                             over 52.5 (watch-line, him)
+ *   US_CONN_CONTROL=seasonage  fix2-1574: AGES.nhl.season back to 'running' in memory (season-age, season)
  * A control is red only when the rule it names fires for the man or group it
  * moved. Any other failure in a control run (a moved man has no two host fact
  * in section 3, say) is printed but never turns the run red on its own, so
@@ -99,7 +146,8 @@ import path from 'node:path';
 import { fileURLToPath, pathToFileURL } from 'node:url';
 import { build } from 'esbuild';
 import { crossCheckBoards, findingKey } from './lib/connectionsCrossCheck.mjs';
-import { makeUsChecker, fold } from './lib/usConnectionsCheck.mjs';
+import { makeUsChecker, fold, AGES, SEASON_LINE } from './lib/usConnectionsCheck.mjs';
+import { TABLE_RANGE, tableBoards, tableRows, inRange } from './lib/usConnectionsTables.mjs';
 
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const R = ROOT.replaceAll('\\', '/');
@@ -107,6 +155,22 @@ const TMP = fs.mkdtempSync(path.join(os.tmpdir(), 'usconnfacts-'));
 const CONTROL = process.env.US_CONN_CONTROL ?? '';
 const LIVE = process.env.US_CONN_LIVE ?? '';
 const SPORTS = ['baseball', 'nfl', 'nhl'];
+/* Round 1574: report mode. US_CONN_TABLES=nfl,nhl adds those sports' table rows (scripts/data/<sport>ConnectionsTable
+   -2026-10.json, all of them, whatever TABLE_RANGE says) for one run, prints every section and exits 0 whatever it
+   finds, "REPORT ONLY" on its last line: the true count of a sport's table rows before and while a round decides
+   them. Never a gate. */
+const REPORT = new Set((process.env.US_CONN_TABLES ?? '').split(',').filter(Boolean));
+for (const s of REPORT) if (!SPORTS.includes(s)) { console.error(`US_CONN_TABLES names ${s}, not a sport here`); process.exit(2); }
+if (REPORT.size && CONTROL) { console.error('US_CONN_TABLES is a report, never a control run'); process.exit(2); }
+const STRICT = new Set((process.env.US_CONN_LIVE_STRICT ?? '').split(',').filter(Boolean));
+const DUMP = process.env.US_CONN_DUMP ?? '';
+/* the Round 1574 controls work on the NHL table rows, which TABLE_RANGE holds since that round; fix-1574: with nhl
+   dropped from it they refuse (exit 2) rather than put it back in memory, and the plain run fails unranged */
+const TABLE_CONTROLS = ['tablemiss', 'ages', 'newrunning', 'decisionless', 'recolour', 'dangling', 'permantwice', 'listonehost', 'nofact', 'stamkos', 'watchline', 'watchline60', 'watchbest', 'seasonage'];
+if (TABLE_CONTROLS.includes(CONTROL) && !TABLE_RANGE.nhl) { console.error(`US_CONN_CONTROL=${CONTROL} ABORTED: TABLE_RANGE does not hold nhl, so the NHL table rows are checked by nothing (the plain run fails unranged); this control will not put it back in memory`); process.exit(2); }
+/* fix-1574 (review-run-1574 finding 3): US_CONN_CONTROL=rangedrop drops nhl from TABLE_RANGE in memory */
+const rangeDropped = CONTROL === 'rangedrop' && !!TABLE_RANGE.nhl;
+if (rangeDropped) { delete TABLE_RANGE.nhl; console.log('US_CONN_CONTROL=rangedrop: TABLE_RANGE loses nhl in memory for this run'); }
 /* Round 1567: a club group dated against trades ("Played for the Steelers (as of 2025)") is the same claim as the
    undated one for every man whose seasons there all came before the date, which section 4 checks against the
    record; the ledgers name such groups and facts by the undated label, and a refuted claim stays refuted dated */
@@ -131,6 +195,24 @@ const data = await import(pathToFileURL(path.join(TMP, 'bundle.mjs')).href);
 /* the boards under test: the shipped files, or the lead's export of a live table */
 const boards = {};
 for (const s of SPORTS) boards[s] = data[s].map(b => ({ id: b.id, groups: b.groups.map(g => ({ ...g, players: [...g.players] })) }));
+/* Round 1574: the table rows past the files, for each sport TABLE_RANGE holds (or the report names), held to every
+   section beside the file's boards; an id on both is a failure (the table file is the rows the file does not hold) */
+const tables = new Set();
+const fileIds = {};
+for (const s of SPORTS) {
+  fileIds[s] = new Set(boards[s].map(b => b.id));
+  const range = REPORT.has(s) ? 'all' : TABLE_RANGE[s];
+  if (!range) continue;
+  tables.add(s);
+  const held = CONTROL === 'tablemiss' && s === 'nhl' ? [] : tableBoards(ROOT, s, range);
+  if (!held.length) { fire('tablemiss', s); fail(`${s}: TABLE_RANGE holds ${JSON.stringify(range)} and the table file gives no row, so nothing past the file is checked`); }
+  if (CONTROL === 'tablemiss' && s === 'nhl') own = { kinds: ['tablemiss'], subject: 'nhl' };
+  for (const b of held) {
+    if (fileIds[s].has(b.id)) fail(`${s} ${b.id}: a table row repeats a file board's id`);
+    boards[s].push(b);
+  }
+  console.log(`${REPORT.has(s) ? 'US_CONN_TABLES (report)' : 'TABLE_RANGE'}: ${s} holds ${boards[s].length - fileIds[s].size} table rows beside the file's ${fileIds[s].size} boards`);
+}
 const live = new Set();
 if (LIVE) {
   for (const part of LIVE.split(',')) {
@@ -308,6 +390,137 @@ if (CONTROL) {
       changed = true;
       own = { kinds: ['unjudged'], subject: 'Played in Japan before MLB' };
     }
+  } else if (CONTROL === 'rangedrop') {
+    if (rangeDropped) {
+      changed = true;
+      own = { kinds: ['unranged'], subject: 'nhl' };
+    }
+  } else if (TABLE_CONTROLS.includes(CONTROL)) {
+    /* Round 1574: the controls on the NHL table rows */
+    const tb = boards.nhl.filter(b => !fileIds.nhl.has(b.id));
+    const decs = (ledgerOf('nhl').tableDecisions ??= []);
+    if (CONTROL === 'watchline') {
+      /* fix-1574: Auston Matthews (69 goals in 2023-24) back in nhlconn-011's Maple Leafs group, beside its 70 goal
+         group, in place of Dave Keon */
+      const g = boardOf('nhl', 'nhlconn-011')?.groups.find(x => undated(x.theme) === 'Played for the Maple Leafs');
+      const at = g ? g.players.indexOf('Dave Keon') : -1;
+      if (at >= 0) {
+        g.players[at] = 'Auston Matthews';
+        changed = true;
+        own = { kinds: ['watch-line'], subject: 'Auston Matthews' };
+      }
+    } else if (CONTROL === 'watchline60') {
+      /* fix2-1574: John Tavares (47 goals in 2018-19, over 45) back in nhlconn-010's Islanders group, beside its 60
+         goal group, in place of John Tonelli: the one rule holds a second season mark, not only the 70 */
+      const g = boardOf('nhl', 'nhlconn-010')?.groups.find(x => undated(x.theme) === 'Played for the Islanders');
+      const at = g ? g.players.indexOf('John Tonelli') : -1;
+      if (at >= 0) {
+        g.players[at] = 'John Tavares';
+        changed = true;
+        own = { kinds: ['watch-line'], subject: 'John Tavares' };
+      }
+    } else if (CONTROL === 'watchbest') {
+      /* fix2-1574: the second host's number in Evgeni Malkin's watch line fact (50 in 2011-12, kept beside the 70
+         goal group on nhlconn-012) read as 53, over 52.5: the line is held on both hosts, not on the ledger's entry */
+      const f = (ledgerOf('nhl').facts ?? []).find(x => x.name === 'Evgeni Malkin' && x.label === 'Scored 70 goals in a season' && x.holds === false);
+      const src = f?.sources.find(x => x.host === 'hockey-reference.com' && x.says.includes('in a season 50 '));
+      if (src) {
+        src.says = src.says.replace('in a season 50 ', 'in a season 53 ');
+        console.log(`US_CONN_CONTROL=watchbest: Evgeni Malkin's hockey-reference line now reads "${src.says}"`);
+        changed = true;
+        own = { kinds: ['watch-line'], subject: 'Evgeni Malkin' };
+      }
+    } else if (CONTROL === 'seasonage') {
+      /* fix2-1574: the season kind aged 'running' as before the fix, so the watch line would read no group */
+      if (AGES.nhl.season === 'season') {
+        AGES.nhl.season = 'running';
+        console.log('US_CONN_CONTROL=seasonage: AGES.nhl.season is running in memory');
+        changed = true;
+        own = { kinds: ['season-age'], subject: 'season' };
+      }
+    } else if (CONTROL === 'tablemiss') {
+      changed = true; /* the read itself was emptied above, before the boards were built */
+    } else if (CONTROL === 'ages') {
+      const c = tb.flatMap(b => b.groups.map(g => sports.nhl.checker.criterion(g.theme))).find(x => x && x.kind !== 'list' && AGES.nhl[x.kind]);
+      if (c) {
+        console.log(`US_CONN_CONTROL=ages: AGES.nhl.${c.kind} removed`);
+        delete AGES.nhl[c.kind];
+        changed = true;
+        own = { kinds: ['ages'], subject: c.kind };
+      }
+    } else if (CONTROL === 'newrunning') {
+      const g = tb[0]?.groups[0];
+      if (g && !AGES.nhl.probe) {
+        AGES.nhl.probe = 'running';
+        const orig = sports.nhl.checker.criterion;
+        sports.nhl.checker.criterion = l => (l === g.theme ? { kind: 'probe' } : orig(l));
+        console.log(`US_CONN_CONTROL=newrunning: "${g.theme}" on ${tb[0].id} now reads as kind probe, running, with no watch`);
+        changed = true;
+        own = { kinds: ['unwatched'], subject: 'probe' };
+      }
+    } else if (CONTROL === 'decisionless') {
+      const d = decs[0];
+      if (d) {
+        decs.splice(0, 1);
+        changed = true;
+        own = { kinds: ['undecided'], subject: `${d.id} ${d.group}` };
+      }
+    } else if (CONTROL === 'recolour') {
+      const b = tb[0];
+      if (b && b.groups[0].difficulty !== b.groups[1].difficulty) {
+        [b.groups[0].difficulty, b.groups[1].difficulty] = [b.groups[1].difficulty, b.groups[0].difficulty];
+        changed = true;
+        own = { kinds: ['recolour'], subject: b.id };
+      }
+    } else if (CONTROL === 'dangling') {
+      const b = tb[0];
+      if (b) {
+        decs.push({ id: b.id, group: 4, way: 'RECORD', from: 'none', to: 'none', why: 'control' });
+        changed = true;
+        own = { kinds: ['dangling'], subject: `${b.id} 4` };
+      }
+    } else if (CONTROL === 'permantwice') {
+      const d = decs.find(x => x.way !== 'PERMAN');
+      const other = d && tb.find(b => b.id !== d.id);
+      if (d && other) {
+        d.way = 'PERMAN';
+        other.groups[d.group].theme = d.to;
+        changed = true;
+        own = { kinds: ['perman-twice'], subject: d.to };
+      }
+    } else if (CONTROL === 'listonehost') {
+      /* Round 1574 decided no NHL group by a list; until a round does, the control adds one, read on two hosts, in memory */
+      const lists = (ledgerOf('nhl').lists ??= {});
+      if (!Object.keys(lists).length) lists.control = { label: 'A control list', closed: true, age: 'fixed', members: ['Wayne Gretzky'], sources: [{ host: 'api-web.nhle.com', url: 'https://api-web.nhle.com/', says: 'control' }, { host: 'hockey-reference.com', url: 'https://www.hockey-reference.com/', says: 'control' }] };
+      const [k, l] = Object.entries(lists).find(([, x]) => x.sources?.length >= 2) ?? [];
+      if (l) {
+        console.log(`US_CONN_CONTROL=listonehost: the list "${l.label ?? k}" keeps only ${l.sources[0].host}`);
+        l.sources = [l.sources[0]];
+        changed = true;
+        own = { kinds: ['list-one-host'], subject: l.label ?? k };
+      }
+    } else if (CONTROL === 'nofact') {
+      const g = tb[0]?.groups[0];
+      const facts = ledgerOf('nhl').facts ?? [];
+      const p = g?.players[0];
+      const at = p ? facts.findIndex(f => f.holds && fold(undated(f.label)) === fold(undated(g.theme)) && fold(f.name) === fold(p)) : -1;
+      if (at >= 0) {
+        facts.splice(at, 1);
+        changed = true;
+        own = { kinds: ['no-fact'], subject: p };
+      }
+    } else if (CONTROL === 'stamkos') {
+      /* the board's own second answer at the export: Steven Stamkos (a Predator since 2024-25) back on nhlconn-016,
+         in its rebuilt first overall group (he was drafted first in 2008), beside its dated Predators group */
+      const b = boardOf('nhl', 'nhlconn-016');
+      const pred = b?.groups.find(x => undated(x.theme) === 'Played for the Predators');
+      const g = b?.groups.find(x => x.theme === 'Drafted first overall');
+      if (pred && g && !b.groups.some(x => x.players.includes('Steven Stamkos'))) {
+        g.players[g.players.length - 1] = 'Steven Stamkos';
+        changed = true;
+        own = { kinds: ['second-fit'], subject: 'Steven Stamkos' };
+      }
+    }
   } else {
     console.error(`unknown US_CONN_CONTROL=${CONTROL}`);
     process.exit(2);
@@ -374,6 +587,14 @@ for (const s of SPORTS) {
   let bad = 0;
   for (const f of facts) if (!hostsOk(f.sources)) { bad += 1; fire('one-host', `${f.name} | ${f.label}`); fail(`${s}: ${f.name} in "${f.label}" (${f.holds ? 'fits' : 'does not fit'}) does not stand on two hosts`); }
   for (const [k, w] of Object.entries(L.watchLines ?? {})) if (!hostsOk(w.sources)) fail(`${s}: the line ${k} does not stand on two hosts`);
+  /* Round 1574: a closed list the checker reads says "no" for every man not on it, so it stands on two hosts (each
+     page taken whole), says it is closed, and carries its own age (a running list needs a watch, section 10) */
+  for (const [k, l] of Object.entries(L.lists ?? {})) {
+    const name = l.label ?? k;
+    if (!hostsOk(l.sources)) { fire('list-one-host', name); fail(`${s}: the list "${name}" does not stand on two hosts`); }
+    if (l.closed !== true) { fire('list-open', name); fail(`${s}: the list "${name}" does not say it is closed`); }
+    if (!['fixed', 'running'].includes(l.age)) { fire('list-age', name); fail(`${s}: the list "${name}" carries no age (fixed or running)`); }
+  }
   if (live.has(s)) { console.log(`   ${s}: ${facts.length} facts (the flagged groups are the file's, not checked against a live export)`); continue; }
   /* every member of a group the round flagged is held to it by a fact */
   /* a fact is about a man and a label, whichever board deals them together */
@@ -388,6 +609,18 @@ for (const s of SPORTS) {
       if (!holding.has(`${fold(undated(label))}|${fold(p)}`)) { fire('no-fact', p); fail(`${s} ${id}: ${p} in "${label}" has no two host fact`); }
     }
   }
+  /* Round 1574: no round had read the table rows, so every member of every table group is held, not only flagged ones */
+  let tableMembers = 0;
+  if (tables.has(s)) {
+    for (const b of boards[s]) {
+      if (fileIds[s].has(b.id)) continue;
+      for (const g of b.groups) for (const p of g.players) {
+        tableMembers += 1;
+        if (!holding.has(`${fold(undated(g.theme))}|${fold(p)}`)) { fire('no-fact', p); fail(`${s} ${b.id}: ${p} in "${g.theme}" (a table group) has no two host fact`); }
+      }
+    }
+  }
+  if (tables.has(s)) console.log(`   ${s}: ${tableMembers} table members, each to be held by a fact`);
   /* every finding the round fixed has the fact behind it: the man, the label and the verdict the finding
      rests on (a member who does not fit, a man from another group who does, a watched man not in it yet),
      or a disputed entry that records both hosts' lines and why nothing rests on them */
@@ -417,11 +650,26 @@ for (const s of SPORTS) {
   unchecked[s] = cross.unchecked;
   memberUnknown[s] = cross.memberUnknown;
   otherUnknown[s] = cross.otherUnknown;
-  if (live.has(s)) {
+  if (live.has(s) || REPORT.has(s)) {
     const off = [...new Set(boards[s].flatMap(b => b.groups.flatMap(g => g.players)).filter(p => !sports[s].checker.has(p)))];
-    if (off.length) console.log(`   ${s}: ${off.length} MEN ON THE LIVE ROWS ARE NOT IN THE RECORD, SO THEIR GROUPS ARE NOT FULLY CHECKED. Extend the record with NAMES_FROM=<export> (scripts/usConnections/fetch*Record.mjs) and run again. First of them: ${off.slice(0, 8).join(', ')}`);
+    if (off.length) console.log(`   ${s}: ${off.length} MEN ON THE ${live.has(s) ? 'LIVE' : 'TABLE'} ROWS ARE NOT IN THE RECORD, SO THEIR GROUPS ARE NOT FULLY CHECKED. Extend the record with NAMES_FROM=<export> (scripts/usConnections/fetch*Record.mjs) and run again. First of them: ${off.slice(0, 8).join(', ')}`);
+    else console.log(`   ${s}: every man on the ${live.has(s) ? 'live' : 'table'} rows is in the record`);
+    /* Round 1574: under US_CONN_LIVE_STRICT a man the record has never read is a failure, not a warning */
+    if (STRICT.has(s) && live.has(s)) for (const p of off) { fire('not-in-record', p); fail(`${s}: ${p} is on the live rows and not in the record (US_CONN_LIVE_STRICT)`); }
   }
   console.log(`   ${s}: ${cross.boards} boards, ${cross.checked} of ${cross.groups} groups judged; members ${cross.memberChecks} judged (${cross.memberUnknown} unknown), other tiles ${cross.otherChecks} judged (${cross.otherUnknown} unknown); ${cross.findings.length} findings`);
+}
+/* Round 1574: US_CONN_DUMP=<file>, every verdict the checkers give, one line per (sport, board, group, man), sorted:
+   the proof that a round changed no verdict on the file boards is two dumps with the same bytes */
+if (DUMP) {
+  const lines = [];
+  for (const s of SPORTS) for (const b of boards[s]) for (const g of b.groups) {
+    const c = sports[s].checker.criterion(g.theme);
+    for (const p of b.groups.flatMap(x => x.players)) lines.push(`${s}\t${b.id}\t${g.theme}\t${p}\t${c ? String(sports[s].checker.fits(p, c)) : 'unjudged'}`);
+  }
+  lines.sort();
+  fs.writeFileSync(DUMP, lines.join('\n') + '\n');
+  console.log(`US_CONN_DUMP: ${lines.length} verdicts written to ${DUMP}`);
 }
 
 console.log('5) no man is a season from joining a group beside him');
@@ -436,6 +684,51 @@ for (const s of SPORTS) {
     }
   }
   console.log(`   ${s}: ${n} watched men beside a group they may join`);
+}
+/* fix-1574 (review-read-1574 finding 1), made one rule by fix2-1574 (the lead's ruling): watch() reads a season mark
+   on the seasons since 2024-25 only, so beside EVERY single season mark (every group whose kind AGES calls 'season',
+   whatever its label) every man still playing is read by his career best: the record's (the checker's seasonBest,
+   which the ledger's watchLine entry must equal) and both hosts' in his two host fact, each under SEASON_LINE of the
+   mark, or the watch line moved him off the board. One the line has not read, one it moved, one at or over the line
+   on either host, and a kept entry beside no season mark any more all fail */
+const seasonNum = says => Number((String(says).match(/in a season (\d+)/) ?? [])[1]);
+for (const s of SPORTS) {
+  if (live.has(s)) continue;
+  const wl = ledgerOf(s).watchLine;
+  const facts = new Map((ledgerOf(s).facts ?? []).filter(f => f.holds === false && hostsOk(f.sources)).map(f => [`${fold(f.label)}|${fold(f.name)}`, f]));
+  const per = new Map();
+  const seen = new Set();
+  let n = 0;
+  const bad = (subject, m) => { n += 1; fire('watch-line', subject); fail(m); };
+  if (wl && wl.fraction !== SEASON_LINE) bad(s, `${s}: the watchLine's fraction ${wl.fraction} is not the checker's SEASON_LINE ${SEASON_LINE}`);
+  for (const b of boards[s]) for (const g of b.groups) {
+    const c = sports[s].checker.criterion(g.theme);
+    if (!c || AGES[s][c.kind] !== 'season') continue;
+    const line = SEASON_LINE * c.min;
+    if (!per.has(g.theme)) per.set(g.theme, { line, min: c.min, boards: 0, read: 0 });
+    const row = per.get(g.theme);
+    row.boards += 1;
+    if (!wl) { bad(g.theme, `${s} ${b.id}: "${g.theme}" is a single season mark and the ${s} ledger has no watchLine`); continue; }
+    for (const o of b.groups) if (o !== g) for (const p of o.players) {
+      if (sports[s].checker.active?.(p) !== true) continue;
+      seen.add(`${b.id}|${fold(g.theme)}|${fold(p)}`);
+      const e = (wl.men ?? []).find(m => m.id === b.id && fold(m.label) === fold(g.theme) && fold(m.name) === fold(p));
+      const rb = sports[s].checker.seasonBest?.(p, c);
+      const f = facts.get(`${fold(g.theme)}|${fold(p)}`);
+      const nums = (f?.sources ?? []).map(x => seasonNum(x.says));
+      const why = !e ? 'the watch line has not read his career best' : e.moved ? 'the watch line moved him off this board'
+        : !rb ? 'the record has no season by season goals for him'
+        : e.best !== rb.best ? `the watchLine says ${e.best}, the record's career best is ${rb.best} (${rb.season})`
+        : !(rb.best < line) ? `his career best ${rb.best} is at or over the line ${line}`
+        : !f ? 'his career best has no two host fact'
+        : nums.length < 2 || nums.some(x => !(x < line)) ? `his two host fact does not read a career best under ${line} on both hosts (${f.sources.map(x => x.says).join('; ')})` : '';
+      if (!why) { row.read += 1; continue; }
+      bad(p, `${s} ${b.id}: ${p} ("${o.theme}") is still playing beside "${g.theme}": ${why}`);
+    }
+  }
+  for (const e of wl?.men ?? []) if (!e.moved && !seen.has(`${e.id}|${fold(e.label)}|${fold(e.name)}`)) bad(e.name, `${s} ${e.id}: the watchLine keeps ${e.name} beside "${e.label}", and he is not still playing beside that season mark there`);
+  for (const [label, r] of per) console.log(`   ${s}: the watch line of "${label}" (${r.line} of ${r.min}, on the career best) on ${r.boards} boards read ${r.read} men still playing beside it`);
+  if (per.size || wl) console.log(`   ${s}: ${per.size} single season marks on the boards; ${n} watch line problems`);
 }
 
 console.log('6) no man is dealt twice on one board');
@@ -468,6 +761,11 @@ for (const s of SPORTS) {
     if (n !== (L.uncheckedCeiling ?? -1)) fail(`${s}: ${n} groups nothing judges, the ledger's uncheckedCeiling says ${L.uncheckedCeiling}: ${n > L.uncheckedCeiling ? 'one came back' : 'lower the ceiling'}`);
     if (u !== (L.memberUnknownCeiling ?? -1)) fail(`${s}: ${u} members the record cannot place, the ledger's memberUnknownCeiling says ${L.memberUnknownCeiling}: ${u > L.memberUnknownCeiling ? 'one came back' : 'lower the ceiling'}`);
     if (o !== (L.otherUnknownCeiling ?? -1)) fail(`${s}: ${o} other tiles the record cannot judge against a group beside them, the ledger's otherUnknownCeiling says ${L.otherUnknownCeiling}: ${o > L.otherUnknownCeiling ? 'one came back, and it may be a second right answer' : 'lower the ceiling'}`);
+  } else if (STRICT.has(s) && live.has(s) && !CONTROL) {
+    /* Round 1574: the live rows of a strict sport are held to the ledger's ceilings like the files */
+    if (n > (L.uncheckedCeiling ?? 0)) fail(`${s}: ${n} live groups nothing judges, over the ceiling of ${L.uncheckedCeiling} (US_CONN_LIVE_STRICT)`);
+    if (u > (L.memberUnknownCeiling ?? 0)) fail(`${s}: ${u} live members the record cannot place, over the ceiling of ${L.memberUnknownCeiling} (US_CONN_LIVE_STRICT)`);
+    if (o > (L.otherUnknownCeiling ?? 0)) fail(`${s}: ${o} live other tiles the record cannot judge, over the ceiling of ${L.otherUnknownCeiling} (US_CONN_LIVE_STRICT)`);
   } else if (CONTROL) {
     if (n > (L.uncheckedCeiling ?? 0)) { for (const x of unchecked[s]) fire('unjudged', x.label); fail(`${s}: ${n} groups nothing judges, over the ceiling of ${L.uncheckedCeiling}`); }
     if (u > (L.memberUnknownCeiling ?? 0)) { fire('member-unknown', s); fail(`${s}: ${u} members the record cannot place, over the ceiling of ${L.memberUnknownCeiling}`); }
@@ -491,7 +789,8 @@ for (const s of SPORTS) {
   let n = 0, dated = 0, open = 0;
   for (const b of boards[s]) for (const g of b.groups) {
     const c = sports[s].checker.criterion(g.theme);
-    if (!c || c.kind !== 'club' || c.legend) continue;
+    /* Round 1574: every kind that ages by a move (usConnectionsCheck.mjs AGES), not only 'club' */
+    if (!c || AGES[s][c.kind] !== 'move' || c.legend) continue;
     if (c.asOf !== undefined && c.asOf <= LAST_FINISHED[s]) { dated += 1; continue; }
     if (c.asOf !== undefined) { fire('date-open', g.theme); fail(`${s} ${b.id}: "${g.theme}" is dated past the last finished season (${LAST_FINISHED[s]}), so a move in a season still being played can add a man`); }
     open += 1;
@@ -505,7 +804,103 @@ for (const s of SPORTS) {
   console.log(`   ${s}: ${dated} dated club groups, ${open} undated, ${n} active men one move from a club group beside them`);
 }
 
+console.log('9) the table rows are the export plus recorded decisions');
+/* Round 1574: a table row reaches the live table only through a round's migration, written from the table file;
+   so its board must be a valid board in the exported colours, and every group must say how it was decided */
+const WAYS = ['RECORD', 'LIST', 'PERMAN', 'REBUILD'];
+/* fix-1574 (review-run-1574 finding 3): a row the table file decides (a tableDecisions line, or a board that is not
+   its export) reaches the live table through a migration, so TABLE_RANGE must hold it; a sport dropped from
+   TABLE_RANGE (a Round 1580 "{ nfl: 'all' }" written over nhl, say) is a failure, never silence */
+for (const s of SPORTS) {
+  if (live.has(s)) continue;
+  const decided = new Set([...(ledgerOf(s).tableDecisions ?? []).map(d => d.id), ...tableRows(ROOT, s).filter(r => JSON.stringify(r.exported) !== JSON.stringify(r.board)).map(r => r.puzzle_id)]);
+  const out = [...decided].filter(id => !inRange(TABLE_RANGE[s], id));
+  for (const id of out) { fire('unranged', s); fail(`${s} ${id}: the table file decides this row and TABLE_RANGE does not hold it, so no section checks it before its migration`); }
+  if (decided.size) console.log(`   ${s}: ${decided.size} decided table rows, ${decided.size - out.length} of them in TABLE_RANGE`);
+}
+for (const s of SPORTS) {
+  if (!tables.has(s) || live.has(s)) continue;
+  const held = boards[s].filter(b => !fileIds[s].has(b.id));
+  const rows = new Map(tableRows(ROOT, s).map(r => [r.puzzle_id, r]));
+  const decs = ledgerOf(s).tableDecisions ?? [];
+  const count = new Map();
+  let bad = 0;
+  for (const d of decs) {
+    const key = `${d.id} ${d.group}`;
+    count.set(key, (count.get(key) ?? 0) + 1);
+    const b = held.find(x => x.id === d.id);
+    if (!rows.has(d.id) || !Number.isInteger(d.group) || d.group < 0 || d.group > 3) { bad += 1; fire('dangling', key); fail(`${s}: a tableDecisions line points at ${d.id} group ${d.group}, which no table row holds`); continue; }
+    if (!WAYS.includes(d.way)) { bad += 1; fire('no-way', key); fail(`${s} ${d.id} group ${d.group}: the decision's way "${d.way}" is none of ${WAYS.join(', ')}`); }
+    if (!b) continue;
+    if (d.from !== rows.get(d.id).exported[d.group]?.theme) { bad += 1; fire('decision-stale', key); fail(`${s} ${d.id} group ${d.group}: the decision says it was "${d.from}", the export says "${rows.get(d.id).exported[d.group]?.theme}"`); }
+    if (d.to !== b.groups[d.group]?.theme) { bad += 1; fire('decision-stale', key); fail(`${s} ${d.id} group ${d.group}: the decision says it is "${d.to}", the board says "${b.groups[d.group]?.theme}"`); }
+    if (!String(d.why ?? '').trim()) { bad += 1; fire('no-why', key); fail(`${s} ${d.id} group ${d.group}: the decision gives no reason`); }
+    /* PER MAN decides a label for the 20 men of one board: the checker keeps it by label, so it may sit on one board only */
+    if (d.way === 'PERMAN') {
+      const on = boards[s].filter(x => x.groups.some(g => fold(undated(g.theme)) === fold(undated(d.to)))).length;
+      if (on !== 1) { bad += 1; fire('perman-twice', d.to); fail(`${s}: "${d.to}" is decided PER MAN and sits on ${on} boards; PER MAN is for a label on one board only`); }
+    }
+  }
+  for (const b of held) {
+    const r = rows.get(b.id);
+    const names = b.groups.flatMap(g => g.players);
+    if (b.groups.length !== 4 || b.groups.some(g => g.players.length !== 5) || new Set(names.map(fold)).size !== 20) { bad += 1; fire('invalid', b.id); fail(`${s} ${b.id}: not a valid board (four groups of five, twenty different names), so the game would never deal it`); }
+    if (b.groups.map(g => g.difficulty).join() !== r.exported.map(g => g.difficulty).join()) { bad += 1; fire('recolour', b.id); fail(`${s} ${b.id}: the colours are ${b.groups.map(g => g.difficulty).join(', ')}, the export's ${r.exported.map(g => g.difficulty).join(', ')}`); }
+    for (const [i, g] of b.groups.entries()) {
+      const n = count.get(`${b.id} ${i}`) ?? 0;
+      const changed = g.theme !== r.exported[i]?.theme || g.players.join('|') !== (r.exported[i]?.players ?? []).join('|');
+      if (n === 0) { bad += 1; fire('undecided', `${b.id} ${i}`); fail(`${s} ${b.id}: "${g.theme}" has no tableDecisions line${changed ? ', and it differs from the export' : ''}`); }
+      if (n > 1) { bad += 1; fire('decided-twice', `${b.id} ${i}`); fail(`${s} ${b.id}: "${g.theme}" has ${n} tableDecisions lines`); }
+    }
+  }
+  const orders = held.map(b => rows.get(b.id).sort_order);
+  if (new Set(orders).size !== orders.length) { bad += 1; fail(`${s}: two table rows share a sort_order`); }
+  console.log(`   ${s}: ${held.length} table rows, ${decs.length} decisions (${WAYS.map(w => `${w} ${decs.filter(d => d.way === w).length}`).join(', ')}), ${bad} problems`);
+}
+
+console.log('10) every criterion kind says how it ages, and every running kind is watched');
+/* Round 1574: a kind nobody taught the watch falls to null in watch(), so section 5 cannot see it; this asks the
+   question by kind. Baseball's running kinds that its watch does not handle are owed by name to the baseball
+   table rounds (a frozen list: a new one fails, and one taught must leave it) */
+const OWED_UNWATCHED = { baseball: ['posEra', 'wsClubs', 'avg300', 'starter', 'undrafted', 'hofPos', 'hofPitcher', 'recordList'] };
+for (const s of SPORTS) {
+  const lists = new Map(Object.entries(ledgerOf(s).lists ?? {}).map(([k, v]) => [fold(v.label ?? k), v]));
+  const kinds = new Map();
+  const owed = new Set();
+  let n = 0;
+  for (const b of boards[s]) for (const g of b.groups) {
+    const c = sports[s].checker.criterion(g.theme);
+    if (!c) continue;
+    const age = c.kind === 'list' ? lists.get(c.key)?.age : AGES[s][c.kind];
+    kinds.set(c.kind, (kinds.get(c.kind) ?? 0) + 1);
+    if (!age) { n += 1; fire('ages', c.kind); fail(`${s} ${b.id}: "${g.theme}" is kind ${c.kind}, which says nowhere how it ages`); continue; }
+    /* fix2-1574: a kind the checker reads by season best is a single season mark, aged 'season' (section 5's watch
+       line reads the men beside it), and a kind aged 'season' is one it reads that way */
+    const sb = c.kind === 'list' ? undefined : sports[s].checker.seasonBest?.(g.players[0], c);
+    if ((age === 'season') !== (sb !== undefined)) {
+      n += 1;
+      fire('season-age', c.kind);
+      fail(`${s} ${b.id}: "${g.theme}" is kind ${c.kind}, aged ${age}, and the ${s} checker ${sb !== undefined ? 'reads it by season best, so it is a single season mark and its age must be season' : 'does not read it by season best (seasonBest), so the watch line could not read the men beside it'}`);
+      continue;
+    }
+    if ((age !== 'running' && age !== 'season') || sports[s].checker.watched?.has(c.kind)) continue;
+    if ((OWED_UNWATCHED[s] ?? []).includes(c.kind)) { owed.add(c.kind); continue; }
+    n += 1;
+    fire('unwatched', c.kind);
+    fail(`${s} ${b.id}: "${g.theme}" is kind ${c.kind}, running, and the ${s} watch does not handle it, so a man who joins it next season is never seen`);
+  }
+  for (const k of OWED_UNWATCHED[s] ?? []) if (!kinds.has(k) || sports[s].checker.watched?.has(k)) fail(`${s}: ${k} is on the owed list and ${sports[s].checker.watched?.has(k) ? 'is watched now' : 'on no board'}: take it off OWED_UNWATCHED`);
+  console.log(`   ${s}: kinds ${[...kinds].map(([k, c]) => `${k} ${c}`).join(', ')}; ${n} problems${owed.size ? `; running and not watched, owed to the baseball table rounds: ${[...owed].join(', ')}` : ''}`);
+}
+
 console.log('');
+if (REPORT.size) {
+  const tally = {};
+  for (const f of fires) tally[f.kind] = (tally[f.kind] ?? 0) + 1;
+  console.log(`report: ${failures} failure lines over the files and the table rows of ${[...REPORT].join(', ')}; findings by rule: ${Object.entries(tally).map(([k, n]) => `${k} ${n}`).join(', ') || 'none'}`);
+  console.log('REPORT ONLY');
+  process.exit(0);
+}
 if (CONTROL) {
   /* red only when the rule this control names fired for the man or group it moved: every other failure is noise
      here, so a control whose own rule is deleted goes green and says so */
