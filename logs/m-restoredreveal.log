@@ -1,0 +1,9 @@
+mut: restoredreveal applied to src/components/club-manager/SquadScreen.tsx
+  FAIL 3: S1-320-top: Back left the page at 619, it stood at 827
+  FAIL 3: S3-320-top: Back left the page at 619, it stood at 827
+  FAIL 3: S1-390-top: Back left the page at 587, it stood at 610
+  FAIL 3: S3-390-top: Back left the page at 587, it stood at 610
+playCmPlayerCard: 4 FAILURE(S)
+green 5 a match with cards opened: 2 checks
+playCmPlayerCard: 4 FAILURE(S)
+restoredreveal walk=1

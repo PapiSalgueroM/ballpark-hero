@@ -1,0 +1,7 @@
+m-keepoldest exit=1 61s | keepoldest harness=0 vitest=1
+m-noloans exit=1 60s | noloans harness=0 vitest=1
+m-clubyear exit=1 59s | clubyear harness=1 vitest=1
+m-latefrom exit=0 61s | latefrom harness=0 vitest=0
+m-keptboundary exit=1 60s | keptboundary harness=1 vitest=1
+m-restoredreveal exit=1 172s | restoredreveal walk=1
+m-revealkey exit=1 171s | revealkey walk=1

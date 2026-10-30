@@ -1,0 +1,8 @@
+mut: keptboundary applied to src/lib/clubManagerCards.ts
+  dailies  38 checks, 0 failed
+  markup   12 checks, 0 failed
+simCmPlayerCard: RED, 2 failures (55s)
+[31m⎯⎯⎯⎯⎯⎯⎯[39m[1m[41m Failed Tests 1 [49m[22m[31m⎯⎯⎯⎯⎯⎯⎯[39m
+[41m[1m FAIL [22m[49m src/lib/clubManagerCards.test.ts[2m > [22mone of my men[2m > [22mreads this season off his line, the league off comp.league, and his kept seasons with history's club
+[2m      Tests [22m [1m[31m1 failed[39m[22m[2m | [22m[1m[32m29 passed[39m[22m[90m (30)[39m
+keptboundary harness=1 vitest=1

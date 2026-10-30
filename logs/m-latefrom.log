@@ -1,0 +1,6 @@
+mut: latefrom applied to src/lib/clubManagerCards.ts
+  dailies  38 checks, 0 failed
+  markup   12 checks, 0 failed
+simCmPlayerCard: all green, 9412 checks (55s)
+[2m      Tests [22m [1m[32m30 passed[39m[22m[90m (30)[39m
+latefrom harness=0 vitest=0

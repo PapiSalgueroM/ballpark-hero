@@ -1,0 +1,10 @@
+mut: revealkey applied to src/pages/ClubManager.tsx
+  FAIL 3: S1-320-assists: Back left the page at 621, it stood at 1078
+  FAIL 3: S2-320-assists: Back left the page at 711, it stood at 1168
+  FAIL 3: S4-320-assists: Back left the page at 613, it stood at 1070
+  FAIL 3: S4-390-assists: Back left the page at 567, it stood at 886
+  FAIL 3: S1-1280-assists: Back left the page at 513, it stood at 804
+  FAIL 3: S2-1280-assists: Back left the page at 559, it stood at 850
+green 5 a match with cards opened: 2 checks
+playCmPlayerCard: 7 FAILURE(S)
+revealkey walk=1

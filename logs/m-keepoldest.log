@@ -1,0 +1,8 @@
+mut: keepoldest applied to src/lib/clubManagerCareerLines.ts
+  dailies  38 checks, 0 failed
+  markup   12 checks, 0 failed
+simCmPlayerCard: all green, 9412 checks (54s)
+[31m⎯⎯⎯⎯⎯⎯⎯[39m[1m[41m Failed Tests 1 [49m[22m[31m⎯⎯⎯⎯⎯⎯⎯[39m
+[41m[1m FAIL [22m[49m src/lib/clubManagerCareerLines.test.ts[2m > [22mwithSeasonRow[2m > [22mcaps at PAST_KEPT, newest kept
+[2m      Tests [22m [1m[31m1 failed[39m[22m[2m | [22m[1m[32m29 passed[39m[22m[90m (30)[39m
+keepoldest harness=0 vitest=1
