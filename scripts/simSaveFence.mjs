@@ -288,7 +288,8 @@ async function sectionTabs(load) {
     }
     tick('tabs');
     if (!run) { fail('tabs', 'HOT SEAT: no surviving Hot Seat manager in 40 free play seeds, nothing to hand over'); return; }
-    const handed = hs.carryOnInClubManager(run, { replace: true });
+    /* Round 1592: tab A's career stays in slot 1; the job goes into empty slot 2, which takes SAVE_KEY. */
+    const handed = hs.carryOnInClubManager(run);
     const handedFace = face(store.get(SAVE_KEY));
     const sawIt = H.moved();
     const hLeave = H.leave();

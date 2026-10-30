@@ -395,7 +395,7 @@ async function caseHotSeat(ctx, tag) {
   if (!await offer.first().isVisible().catch(() => false)) await shot(B, `${tag}-3-hot-seat-menu`);
   await offer.first().click({ timeout: 15000 }).catch(() => {});
   await B.getByRole('button', { name: 'Carry on in Club Manager' }).first().click({ timeout: 15000 }).catch(() => {});
-  await B.getByRole('button', { name: /^Replace it and carry on/ }).first().click({ timeout: 8000 }).catch(() => {});
+  /* Round 1592: no Replace step any more; A's career stays in slot 1 and the job takes empty slot 2. */
   await B.waitForURL(/\/club-manager/, { timeout: 15000 }).catch(() => {});
   await B.locator('[data-cm-way="quick"], [data-testid="cm-slots"]').first().waitFor({ timeout: 20000 }).catch(() => {});
   await clearBanner(B);
@@ -610,7 +610,6 @@ async function caseBack(ctx, tag) {
         await clearDialogs(A);
         await A.getByRole('button', { name: `See the Club Manager offer for ${HOT.club}` }).first().click({ timeout: 15000 }).catch(() => {});
         await A.getByRole('button', { name: 'Carry on in Club Manager' }).first().click({ timeout: 15000 }).catch(() => {});
-        await A.getByRole('button', { name: /^Replace it and carry on/ }).first().click({ timeout: 8000 }).catch(() => {});
         await A.waitForURL(/\/club-manager/, { timeout: 15000 }).catch(() => {});
         await A.waitForTimeout(1000);
         const handed = await disk(A);
