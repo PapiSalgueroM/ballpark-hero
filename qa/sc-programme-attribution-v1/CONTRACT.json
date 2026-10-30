@@ -1,0 +1,505 @@
+{
+  "schema": 1,
+  "status": "BOUND",
+  "product": "0b545ff00497ed849224ab74deaba546ab5d93ca",
+  "productTree": "02cde32c88fd64e0417ef36ea098a899a758645c",
+  "base": "78e7b2ec9ea0865da3029275c060104d2668117b",
+  "baseTree": "96fb865e8e38462d96f51a858150ba1be5178d92",
+  "baseFiles": 5456,
+  "productFiles": 5457,
+  "proofFiles": 5460,
+  "branch": "codex/sc-programme-attribution-fixed-20261030",
+  "repair": [
+    {
+      "mode": "100644",
+      "path": "scripts/simCareerProgramme.mjs",
+      "bytes": 32227,
+      "gitBlob": "d6cdd02fb39e3d423737b4957ba66c46a54421f6",
+      "sha256": "ef4dad717fe38919c529f801c7d6fa7e5155d1f4f3c463bacd65112c96402d22"
+    },
+    {
+      "mode": "100644",
+      "path": "scripts/lib/careerProgrammePoolAttribution.mjs",
+      "bytes": 10995,
+      "gitBlob": "794d328d470533d826667cd4378c70e8853cdf88",
+      "sha256": "fcf9dfede4a066358569bb2ec49b79a2db18bf149e8785ca6bd912367e083f94"
+    }
+  ],
+  "proofAdds": [
+    ".github/workflows/sc-programme-attribution.yml",
+    "qa/sc-programme-attribution-v1/CONTRACT.json",
+    "scripts/qa/proveProgrammeAttribution.mjs"
+  ],
+  "units": [
+    {
+      "cases": [
+        {
+          "title": "walks every window boundary of the verified table",
+          "ancestorTitles": [
+            "leagueSizeFor"
+          ]
+        },
+        {
+          "title": "claims no size for a league it has not verified",
+          "ancestorTitles": [
+            "leagueSizeFor"
+          ]
+        },
+        {
+          "title": "follows the era tier rules year by year",
+          "ancestorTitles": [
+            "eliteInYear"
+          ]
+        },
+        {
+          "title": "is 1st exactly when the title was won",
+          "ancestorTitles": [
+            "drawLeagueFinish"
+          ]
+        },
+        {
+          "title": "gives no finish without a title in a league with no verified size",
+          "ancestorTitles": [
+            "drawLeagueFinish"
+          ]
+        },
+        {
+          "title": "is the same draw for the same season",
+          "ancestorTitles": [
+            "drawLeagueFinish"
+          ]
+        },
+        {
+          "title": "never touches Math.random",
+          "ancestorTitles": [
+            "drawLeagueFinish"
+          ]
+        },
+        {
+          "title": "steps down the table tier by tier and stays inside it",
+          "ancestorTitles": [
+            "finishBand"
+          ]
+        },
+        {
+          "title": "passes a sound row through",
+          "ancestorTitles": [
+            "readLeagueFinish"
+          ]
+        },
+        {
+          "title": "reads an old save as no finish",
+          "ancestorTitles": [
+            "readLeagueFinish"
+          ]
+        },
+        {
+          "title": "drops a corrupt finish and keeps the rest of the row alone",
+          "ancestorTitles": [
+            "readLeagueFinish"
+          ]
+        },
+        {
+          "title": "reads like a sentence",
+          "ancestorTitles": [
+            "leagueWithArticle"
+          ]
+        },
+        {
+          "title": "Round 1037: the old French name takes no article, the old English ones do",
+          "ancestorTitles": [
+            "leagueWithArticle"
+          ]
+        },
+        {
+          "title": "reads like a table",
+          "ancestorTitles": [
+            "ordinal"
+          ]
+        },
+        {
+          "title": "names only clubs of his own league, at its verified size",
+          "ancestorTitles": [
+            "managerLeagueField (Round 1029)"
+          ]
+        },
+        {
+          "title": "finds his club under the other game's spelling and never names it twice",
+          "ancestorTitles": [
+            "managerLeagueField (Round 1029)"
+          ]
+        },
+        {
+          "title": "plays the league the job came with, in the list's spelling, over the list's own row",
+          "ancestorTitles": [
+            "managerLeagueField (Round 1029)"
+          ]
+        },
+        {
+          "title": "plays every club it knows of a league without a verified size, plus his own",
+          "ancestorTitles": [
+            "managerLeagueField (Round 1029)"
+          ]
+        },
+        {
+          "title": "keeps a market job's league and drops any name that could be his own club",
+          "ancestorTitles": [
+            "managerLeagueField (Round 1029)"
+          ]
+        },
+        {
+          "title": "matches a league by name across a border",
+          "ancestorTitles": [
+            "managerLeagueField (Round 1029)"
+          ]
+        },
+        {
+          "title": "knows the Championship's size from 2004, and the second-flight size windows",
+          "ancestorTitles": [
+            "managerLeagueField (Round 1029)"
+          ]
+        },
+        {
+          "title": "moves division only between the Premier League and the Championship",
+          "ancestorTitles": [
+            "managerLeagueField (Round 1029)"
+          ]
+        },
+        {
+          "title": "moves division only from 2004/05, when the Championship got its name",
+          "ancestorTitles": [
+            "managerLeagueField (Round 1029)"
+          ]
+        },
+        {
+          "title": "says where he finished without a position, at every place of a 20 field",
+          "ancestorTitles": [
+            "managerLeagueField (Round 1029)"
+          ]
+        },
+        {
+          "title": "walks the verified size into a manager's table, step by step",
+          "ancestorTitles": [
+            "managerLeagueField (Round 1029)"
+          ]
+        },
+        {
+          "title": "names a past season of a ledger league from the ledgers, never today's clubs",
+          "ancestorTitles": [
+            "managerLeagueField (Round 1029)"
+          ]
+        },
+        {
+          "title": "seats a club the ledgers had elsewhere in a real member's place",
+          "ancestorTitles": [
+            "managerLeagueField (Round 1029)"
+          ]
+        },
+        {
+          "title": "never seats a club by today's label alone: a job's first past season follows the ledgers",
+          "ancestorTitles": [
+            "managerLeagueField (Round 1029)"
+          ]
+        },
+        {
+          "title": "flags a past season in a league it holds even when it knows no other club there",
+          "ancestorTitles": [
+            "managerLeagueField (Round 1029)"
+          ]
+        },
+        {
+          "title": "names nobody when nothing names the league",
+          "ancestorTitles": [
+            "managerLeagueField (Round 1029)"
+          ]
+        },
+        {
+          "title": "draws which known clubs fill a full table from the rng, and only then",
+          "ancestorTitles": [
+            "managerLeagueField (Round 1029)"
+          ]
+        },
+        {
+          "title": "names the league from 2026-27 on",
+          "ancestorTitles": [
+            "dugoutTableWords (Round 1029)"
+          ]
+        },
+        {
+          "title": "names no league over or under a past season's table",
+          "ancestorTitles": [
+            "dugoutTableWords (Round 1029)"
+          ]
+        },
+        {
+          "title": "keeps an old save's table and its order note",
+          "ancestorTitles": [
+            "dugoutTableWords (Round 1029)"
+          ]
+        },
+        {
+          "title": "gives the dugout the league's real number of rows and never a verified size",
+          "ancestorTitles": [
+            "the leagues that are not one plain table (Round 1100)"
+          ]
+        },
+        {
+          "title": "says why a split league's table carries no points, and keeps the old line elsewhere",
+          "ancestorTitles": [
+            "the leagues that are not one plain table (Round 1100)"
+          ]
+        },
+        {
+          "title": "bands a club by its place in its own league, and reads the club out of the engine's key",
+          "ancestorTitles": [
+            "the leagues that are not one plain table (Round 1100)"
+          ]
+        }
+      ],
+      "gitBlob": "3eeb71927250a19b6a7c1b5f5476d633b4bf25cd",
+      "file": "src/lib/soccerCareerLeague.test.ts",
+      "bytes": 28994,
+      "sha256": "55d8f1e6af32a3b6498295d0e712fb1a6ee0e3fc204d74314d6db51c922d81f2"
+    },
+    {
+      "cases": [
+        {
+          "title": "has a fixture, recorded on the base",
+          "ancestorTitles": [
+            "Round 1052: the world before the round is still there, untouched"
+          ]
+        },
+        {
+          "title": "keeps the 26 leagues, their order, names, cups and clubs, as the first leagues of the world",
+          "ancestorTitles": [
+            "Round 1052: the world before the round is still there, untouched"
+          ]
+        },
+        {
+          "title": "keeps the 20 nations as the first nations, the pyramids and every rules row",
+          "ancestorTitles": [
+            "Round 1052: the world before the round is still there, untouched"
+          ]
+        },
+        {
+          "title": "keeps every one of the 438 clubs: squad, club row, ratings, partial mark and flags",
+          "ancestorTitles": [
+            "Round 1052: the world before the round is still there, untouched"
+          ]
+        },
+        {
+          "title": "rejects an outside-twenty copied colour change and readmits its restoration",
+          "ancestorTitles": [
+            "Round 1052: the world before the round is still there, untouched"
+          ]
+        },
+        {
+          "title": "rejects an inside-twenty copied colour change and readmits its restoration",
+          "ancestorTitles": [
+            "Round 1052: the world before the round is still there, untouched"
+          ]
+        },
+        {
+          "title": "rejects an inside-twenty copied budget change and readmits its restoration",
+          "ancestorTitles": [
+            "Round 1052: the world before the round is still there, untouched"
+          ]
+        },
+        {
+          "title": "keeps the free agent pool",
+          "ancestorTitles": [
+            "Round 1052: the world before the round is still there, untouched"
+          ]
+        },
+        {
+          "title": "keeps the past seasons own Russian clubs at the strength their season gave them",
+          "ancestorTitles": [
+            "Round 1052: the world before the round is still there, untouched"
+          ]
+        }
+      ],
+      "gitBlob": "05ed085f6c3a0c8a46cc8d19523474af545888cb",
+      "file": "src/test/cmWorldIdentity1052.test.ts",
+      "bytes": 13366,
+      "sha256": "9735cd94d699af6247894de3af2705012096fa59a5f541640929c5b90d001ecb"
+    },
+    {
+      "cases": [
+        {
+          "title": "quotes a deterministic bounded real current pool without input changes or global draws",
+          "ancestorTitles": [
+            "coaching coursework first manager choice"
+          ]
+        },
+        {
+          "title": "requires exact reviewed numeric3 without interpreting it as a licence",
+          "ancestorTitles": [
+            "coaching coursework first manager choice"
+          ]
+        },
+        {
+          "title": "requires an actual first retired entry and refuses an existing career",
+          "ancestorTitles": [
+            "coaching coursework first manager choice"
+          ]
+        },
+        {
+          "title": "refuses an empty, elite-only, malformed or duplicate-ID starter pool",
+          "ancestorTitles": [
+            "coaching coursework first manager choice"
+          ]
+        },
+        {
+          "title": "delegates every chosen starter to canonical full singleton initialization and one draw",
+          "ancestorTitles": [
+            "coaching coursework first manager choice"
+          ]
+        },
+        {
+          "title": "uses actual starter records from the current canonical pool without manufacturing data",
+          "ancestorTitles": [
+            "coaching coursework first manager choice"
+          ]
+        },
+        {
+          "title": "rejects stale replaced saves and changed or duplicate current club bindings without a draw",
+          "ancestorTitles": [
+            "coaching coursework first manager choice"
+          ]
+        },
+        {
+          "title": "rejects malformed, forged or elite requests without changing existing money or state",
+          "ancestorTitles": [
+            "coaching coursework first manager choice"
+          ]
+        },
+        {
+          "title": "makes repeat taps on the adopted manager career a no-op without another draw",
+          "ancestorTitles": [
+            "coaching coursework first manager choice"
+          ]
+        },
+        {
+          "title": "keeps the selected existing ManagerState through official save, load and repair",
+          "ancestorTitles": [
+            "coaching coursework first manager choice"
+          ]
+        }
+      ],
+      "gitBlob": "78b33a17fc911eee716bef45daee7d82c4189b9b",
+      "file": "src/test/soccerCareerCoachingStart.test.ts",
+      "bytes": 8355,
+      "sha256": "d0e613d57c94ce5219de0e0f27f02f60ffe8ec8ce9a781a7e3c528aa62652b42"
+    },
+    {
+      "cases": [
+        {
+          "title": "the raw list holds clubs the era table rules out, so the check below has teeth",
+          "ancestorTitles": [
+            "coaching start keeps to the clubs of its season"
+          ]
+        },
+        {
+          "title": "every offered club exists in the first manager season, at that season tier, and signing lands there",
+          "ancestorTitles": [
+            "coaching start keeps to the clubs of its season"
+          ]
+        }
+      ],
+      "gitBlob": "5631fd47065bea4b30a83e17f714cdbbcc95b248",
+      "file": "src/test/soccerCareerCoachingStartEra.test.ts",
+      "bytes": 3557,
+      "sha256": "de4980fa24fd4f5db8160c7418e988c2a93e57957b0a95c21de9e76bf28a440c"
+    }
+  ],
+  "unitCases": 58,
+  "original": {
+    "file": "scripts/simCareerProgramme.mjs",
+    "gitBlob": "11bff46e6f9415d0760f10d2a254cb74d1dc1b7d",
+    "sha256": "4348db850efb1208a3d6238d4b812751ff94369f0140356caf2597b28f55c847",
+    "bytes": 27175
+  },
+  "controlIds": [
+    "tactics",
+    "position",
+    "set_pieces",
+    "promise",
+    "negotiation",
+    "bonuses",
+    "adaptation",
+    "fitness",
+    "captain",
+    "loan",
+    "us-workload",
+    "us-tactics",
+    "us-expectation",
+    "us-partnership",
+    "us-bonus",
+    "us-reinvention",
+    "ui-scroll",
+    "ui-focus",
+    "wheel-roll",
+    "wheel-ack",
+    "wheel-ui"
+  ],
+  "fixtures": {
+    "ids": [
+      "ere",
+      "cha",
+      "sco",
+      "her",
+      "nan"
+    ],
+    "sha256": "1c2ac7441402ad6db4916c844181b869a3550726c7e0afed4cce194f5e6ca8ef",
+    "gitBlob": "81425f731297f0ff72fc4e163dfe1a4cb86814ab",
+    "path": "scripts/data/careerLeagueWorldSaves1100.json",
+    "seeds": [
+      1,
+      2,
+      3,
+      4,
+      5,
+      6,
+      7,
+      8,
+      9,
+      10
+    ]
+  },
+  "cacheTests": [
+    "src/lib/soccerCareerProgramme.test.ts",
+    "src/lib/usCareerProgramme.test.ts",
+    "src/test/soccerCareerProgrammeUi.test.tsx",
+    "src/lib/careerChanceWheel.test.ts",
+    "src/test/careerChanceWheelUi.test.tsx",
+    "src/test/soccerCareerLeagueWorld.test.ts",
+    "src/test/soccerCareerWorldSettle.test.ts"
+  ],
+  "focused": [
+    {
+      "closing": "simCareerClubPool: all sections green",
+      "name": "simCareerClubPool"
+    },
+    {
+      "closing": "simCareerDerbies: all 8 sections green",
+      "name": "simCareerDerbies"
+    },
+    {
+      "closing": "simCareerEras: all green",
+      "name": "simCareerEras"
+    },
+    {
+      "closing": "simCareerLeagueFinish: green.",
+      "name": "simCareerLeagueFinish"
+    },
+    {
+      "closing": "simCareerLeagueWorld: all sections green",
+      "name": "simCareerLeagueWorld"
+    },
+    {
+      "closing": "simSoccerCareerLeagueWorld: seventeen outcome tests and two engine career tests green, all twelve effective negative controls caught",
+      "name": "simSoccerCareerLeagueWorld"
+    }
+  ],
+  "limits": "No app/Cup/body/data changes, no build/browser/caps/readers/default full units/default full sims/current-main/release credit"
+}

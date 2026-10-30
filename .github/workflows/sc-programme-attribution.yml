@@ -1,0 +1,72 @@
+name: Soccer Programme attribution guard qualification
+on:
+  push:
+    branches: [codex/sc-programme-attribution-fixed-20261030]
+  workflow_dispatch:
+permissions:
+  contents: read
+concurrency:
+  group: sc-programme-attribution-${{ github.sha }}
+  cancel-in-progress: false
+jobs:
+  qualify:
+    if: github.ref == 'refs/heads/codex/sc-programme-attribution-fixed-20261030'
+    runs-on: ubuntu-latest
+    timeout-minutes: 45
+    env:
+      SIM_NETWORK: offline
+      CAREER_SEASON_LOCAL_ONLY: '1'
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.sha }}
+          fetch-depth: 0
+          persist-credentials: false
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: npm
+      - name: External evidence and source binding
+        shell: bash
+        run: |
+          set -euo pipefail
+          out="$RUNNER_TEMP/sc-attribution-${GITHUB_RUN_ID}-a${GITHUB_RUN_ATTEMPT}"
+          mkdir "$out"
+          echo "SC_ATTRIBUTION_OUT=$out" >> "$GITHUB_ENV"
+          printf '%s  %s\n' 65ab0079ea196900447f77f114a973ac3677c8b6fb324b6b47001baa997e576c scripts/qa/proveProgrammeAttribution.mjs | sha256sum --check
+          printf '%s  %s\n' 00ed4efb7ef3f4024019cd86fff695a56e1f5ca0812c45c206df167b4a8db17a qa/sc-programme-attribution-v1/CONTRACT.json | sha256sum --check
+          printf '%s  %s\n' ef4dad717fe38919c529f801c7d6fa7e5155d1f4f3c463bacd65112c96402d22 scripts/simCareerProgramme.mjs | sha256sum --check
+          printf '%s  %s\n' fcf9dfede4a066358569bb2ec49b79a2db18bf149e8785ca6bd912367e083f94 scripts/lib/careerProgrammePoolAttribution.mjs | sha256sum --check
+      - name: Ordinary locked dependencies
+        shell: bash
+        run: |
+          set -euo pipefail
+          raw=0
+          npm ci --no-audit --no-fund > "$SC_ATTRIBUTION_OUT/npm-ci.stdout.log" 2> "$SC_ATTRIBUTION_OUT/npm-ci.stderr.log" || raw=$?
+          printf '%s\n' "$raw" > "$SC_ATTRIBUTION_OUT/npm-ci.exit"
+          exit "$raw"
+      - name: Cheap source syntax
+        shell: bash
+        run: |
+          set -euo pipefail
+          for file in scripts/simCareerProgramme.mjs scripts/lib/careerProgrammePoolAttribution.mjs scripts/qa/proveProgrammeAttribution.mjs; do
+            node --check "$file"
+          done > "$SC_ATTRIBUTION_OUT/syntax.stdout.log" 2> "$SC_ATTRIBUTION_OUT/syntax.stderr.log"
+      - name: Actual types, preserved scopes, source refusals and complete restoration
+        shell: bash
+        env:
+          NODE_OPTIONS: --require=${{ github.workspace }}/scripts/lib/offlineTransport.cjs
+        run: |
+          set -euo pipefail
+          raw=0
+          SIM_OFFLINE_RECEIPT="$SC_ATTRIBUTION_OUT/controller.transport.jsonl" node scripts/qa/proveProgrammeAttribution.mjs > "$SC_ATTRIBUTION_OUT/controller.stdout.log" 2> "$SC_ATTRIBUTION_OUT/controller.stderr.log" || raw=$?
+          printf '%s\n' "$raw" > "$SC_ATTRIBUTION_OUT/controller.exit"
+          exit "$raw"
+      - name: Retain original evidence on success or failure
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: sc-programme-attribution-${{ github.run_id }}-a${{ github.run_attempt }}
+          path: ${{ env.SC_ATTRIBUTION_OUT }}
+          if-no-files-found: error
+          retention-days: 14
