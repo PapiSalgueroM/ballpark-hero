@@ -470,8 +470,9 @@ export function futureRead(row: { r: number; lv?: number }): number {
   return Math.max(row.r, row.lv ?? row.r);
 }
 
-/** How a projected club's values relate to the raw curve, from its real data. */
-function valueScaleFor(club: string, baked: BakedPlayer[]): number {
+/** How a projected club's values relate to the raw curve, from its real data. Round 1600: exported for
+ *  scripts/simCmLevelReads.mjs, which holds every club's scale to its recording (the scale reads the level). */
+export function valueScaleFor(club: string, baked: BakedPlayer[]): number {
   // Round 105's lesson, applied to a different number: anchor on the squad you
   // were handed. A generated player's value has to sit on the same scale as
   // the real values in the same league, so it is derived from this club's own
