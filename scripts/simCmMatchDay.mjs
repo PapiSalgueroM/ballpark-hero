@@ -71,7 +71,7 @@
    not fire.
    Green is the closing summary line and the real exit code.
 
-   Run: node scripts/simCmMatchDay.mjs     (MATCHDAY_BASE=<commit> overrides the base, default cbc72c1d)
+   Run: node scripts/simCmMatchDay.mjs     (MATCHDAY_BASE=<commit> overrides the base, default d10a1c54d)
    The base is pinned on purpose: section 7 proves this round left a home match as it was. A later round that
    edits MatchReportCard, MatchTimeline, LiveSimScreen, HalftimeScreen or MatchCentre and changes what a home match
    prints turns section 7 red until MATCHDAY_BASE is moved to that round's own starting commit (say so in its
@@ -85,6 +85,11 @@
    final (the Match Centre, the picker and the report mark the style as this sim's pick; the live sheet hands its
    tactics panel the clock). Section 7 was green against 1f2f9ddf on that tree as well (r1522-fx4 mdOld), and with
    the four screens back at bc79b526 it is green against d8aaa4cb again (r1522-fx5 mdBuilder).
+   Round 1603 moved it from cbc72c1d to d10a1c54d, its own commit with the report card final: a deciding second leg
+   is headlined THROUGH or OUT with the night under it, so the five home deciding legs of the fleet printed more than
+   at cbc72c1d (r1603-g1: 5 reds, all section 7, all second legs). With that card's decider switched off on the
+   round's tree every section is green against cbc72c1d (r1603-f10 md-nodecider), and against d10a1c54d every section
+   is green and control homeflip fires (md-base1603, md-base1603-homeflip).
 */
 import './lib/seedRandom.mjs';
 import { execFileSync } from 'node:child_process';
@@ -107,7 +112,7 @@ const CONTROL_KINDS = {
 };
 const kindHits = (CONTROL_KINDS[CONTROL] ?? []).map(() => 0);
 if (CONTROL && !CONTROLS[CONTROL]) { console.error(`MATCHDAY_CONTROL=${CONTROL} is not a control this harness knows`); process.exit(2); }
-const BASE = process.env.MATCHDAY_BASE || 'cbc72c1d';
+const BASE = process.env.MATCHDAY_BASE || 'd10a1c54d';
 const lf = s => s.replaceAll('\r\n', '\n');
 const cannotRun = m => { console.error(`simCmMatchDay could not run: ${m}`); process.exit(2); };
 
