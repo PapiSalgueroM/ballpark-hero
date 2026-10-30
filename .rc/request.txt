@@ -1,0 +1,3 @@
+intl: node scripts/simCmInternationals.mjs
+intl-norest: SIM_CMINTL_CONTROL=norest node scripts/simCmInternationals.mjs
+intl-freelegs: SIM_CMINTL_CONTROL=freelegs node scripts/simCmInternationals.mjs
