@@ -1,0 +1,10 @@
+simManagers: node scripts/simManagers.mjs
+simManagers-fleet: SIM_MANAGERS_BASE=c0c66e087 node scripts/simManagers.mjs
+simManagers-namedsack: SIM_MANAGERS_CONTROL=namedsack node scripts/simManagers.mjs
+simManagers-recycle: SIM_MANAGERS_CONTROL=recycle node scripts/simManagers.mjs
+simManagers-sever: SIM_MANAGERS_CONTROL=sever node scripts/simManagers.mjs
+simNoInventedQuotes: node scripts/simNoInventedQuotes.mjs
+quotes-dugout: QUOTES_CONTROL=dugout node scripts/simNoInventedQuotes.mjs
+quotes-desk: QUOTES_CONTROL=desk node scripts/simNoInventedQuotes.mjs
+simInventedNames: node scripts/simInventedNames.mjs
+simNoInventedConduct: node scripts/simNoInventedConduct.mjs
