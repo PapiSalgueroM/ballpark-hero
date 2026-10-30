@@ -93,7 +93,7 @@ export const DEALS_WARN_WEEKS = 6;
  * message, because the inbox stops at its first message of a week and one more there would change which other
  * message fires.
  */
-export function expiringDealsLine(c: Pick<CareerState, 'squad' | 'loanedOut' | 'week' | 'calendar'>): { count: number; text: string } | null {
+export function expiringDealsLine(c: Pick<CareerState, 'squad' | 'loanedOut' | 'week' | 'calendar'>): { count: number; text: string; real: boolean } | null {
   const cal = Array.isArray(c.calendar) ? c.calendar : [];
   const left = cal.slice(Math.max(0, c.week)).filter(e => e.type === 'league').length;
   if (left === 0 || left > DEALS_WARN_WEEKS) return null;
@@ -102,5 +102,8 @@ export function expiringDealsLine(c: Pick<CareerState, 'squad' | 'loanedOut' | '
   const named = men.slice(0, 3).map(d => (d.loanClub ? `${d.player.name} (on loan)` : d.player.name)).join(', ');
   const more = men.length > 3 ? ` and ${formatNumber(men.length - 3)} more` : '';
   const count = men.length;
-  return { count, text: `${formatNumber(count)} deal${count === 1 ? ' ends' : 's end'} this summer: ${named}${more}.` };
+  /* Round 1325's rule (isRealPlayer, SquadScreen): a real man's deal printed beside his name is labelled as this
+     game's. The rule is restated here because a lib cannot import a screen, and the page loads that one lazily. */
+  const real = men.slice(0, 3).some(d => !d.player.generated && !d.player.isYouth && !d.player.academyGrad);
+  return { count, real, text: `${formatNumber(count)} deal${count === 1 ? ' ends' : 's end'} this summer: ${named}${more}.` };
 }

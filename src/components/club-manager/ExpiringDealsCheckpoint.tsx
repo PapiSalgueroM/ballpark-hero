@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { HelpCircle } from 'lucide-react';
 import { money, renewalTerms, type CareerState, type CMPlayer } from '@/lib/clubManager';
+import { isRealPlayer } from '@/components/club-manager/SquadScreen';
 import { cn } from '@/lib/utils';
 
 /* Round 1597, the owner: "if u dont resign a player in time then they just dissapear from the game". The season
@@ -72,8 +73,9 @@ export function ExpiringDealsCheckpoint({ c, ids, letGo, onRenew, onLetGo, onLet
             <div key={id} data-cm-deal={answer} {...(loanClub ? { 'data-cm-deal-loan': loanClub } : {})} className="flex items-center gap-2 min-h-11">
               <div className="flex-1 min-w-0">
                 <div className="text-xs text-foreground truncate" title={man.name}>{man.name}</div>
+                {/* Round 1325's rule: a real man's years and wage are this game's numbers, and the row says so. */}
                 <div className="text-[9px] text-muted-foreground">
-                  {man.position}, {man.age}, {man.rating} rated{loanClub ? `, on loan at ${loanClub}` : ''} · {answer === 'renewed' ? `renewed, ${man.contractYears} years`
+                  {man.position}, {man.age}, {man.rating} rated{loanClub ? `, on loan at ${loanClub}` : ''} · {isRealPlayer(man) && <><span data-cm-deal-label>this game&apos;s deal</span>, </>}{answer === 'renewed' ? `renewed, ${man.contractYears} years`
                     : answer === 'letGo' ? 'leaving for nothing this summer'
                     : `renew: ${terms.years}y at ${terms.wage}k a week, ${money(terms.fee)} to sign`}
                 </div>

@@ -1143,7 +1143,7 @@ const ClubManager = () => {
               onClick={() => g.setActiveTab('squad')}
               className="w-full rounded-xl border border-primary/40 bg-primary/10 p-2.5 text-left text-xs text-foreground hover:bg-primary/20 transition-colors"
             >
-              📝 {dealsLine.text} <span className="font-bold text-primary">Open the contracts desk</span>
+              📝 {dealsLine.text} {dealsLine.real && <><span data-cm-deal-label className="text-muted-foreground">(this game&apos;s deals)</span> </>}<span className="font-bold text-primary">Open the contracts desk</span>
             </button>
           )}
           {c.transferWindow !== null && (

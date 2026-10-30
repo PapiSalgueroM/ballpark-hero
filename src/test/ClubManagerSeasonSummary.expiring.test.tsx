@@ -94,6 +94,30 @@ describe('Round 1597: no deal ends unseen', () => {
     expect(start.disabled).toBe(false);
   });
 
+  /* Review fix, Round 1325's rule: a real man's deal printed beside his name says it is this game's, on the row and on
+     the hub line, and a made up man's does not. Read off the element and its words both, as cmTablesTruth does. */
+  it('labels a real man\'s deal as this game\'s, on the row and the hub line, and no made up man\'s', () => {
+    const { state, summary } = finishSeason(startCareer('OB'));
+    const squad = state.squad.map(p => ({ ...p, contractYears: 3 }));
+    const [a, b] = squad.filter(p => !p.onLoan).sort((x, y) => y.rating - x.rating).slice(0, 2);
+    const real = { ...a, contractYears: 1, generated: undefined, isYouth: false, academyGrad: undefined };
+    const madeUpMan = { ...b, contractYears: 1, generated: true };
+    const c0: CareerState = { ...state, budget: 999, squad: squad.map(p => (p.id === a.id ? real : p.id === b.id ? madeUpMan : p)),
+      pendingSummary: summary, jobHunt: undefined };
+    const g = { nextSeason: vi.fn(), startNew: vi.fn(), renew: vi.fn() };
+    const view = render(<ClubManagerSeasonSummary sm={{ ...summary, offers: [] }} c={c0} g={g} />);
+    const labelled = (row: Element) => {
+      const el = !!row.querySelector('[data-cm-deal-label]');
+      expect(el).toBe(/this game's (deal|wage|numbers)/.test(row.textContent ?? ''));
+      return el;
+    };
+    expect(labelled(rowOf(view.container, c0, real.id))).toBe(true);
+    expect(labelled(rowOf(view.container, c0, madeUpMan.id))).toBe(false);
+    const line = (squadOf: CMPlayer[]) => expiringDealsLine({ squad: squadOf, loanedOut: [], week: 0, calendar: [{ type: 'league' }] as unknown as CareerState['calendar'] });
+    expect(line(c0.squad)?.real).toBe(true);
+    expect(line(c0.squad.filter(p => p.id !== real.id))?.real).toBe(false);
+  });
+
   /* Review fix: a man in his last year who is out on loan came home at the summer and walked with no row here, no
      hub line and no way to renew him (both renewals looked in the squad only). */
   it('a final year man out on loan is listed, named by the hub, renewed where he is, and comes home on the new deal', () => {
