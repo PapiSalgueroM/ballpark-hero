@@ -1,0 +1,12 @@
+control waitsalways (the press waits for the career kit on every week, not the last one alone): vitest exit 1; 9 red, 102 green of 111
+   red: FrontOfficeGameDay.test.tsx > NFL front office: a press tells his game and keeps it his game of the week is in the save, and the grid shows that very score, a football score
+   red: FrontOfficeGameDay.test.tsx > NFL front office: a press tells his game and keeps it the next press appends in week order, and a remount keeps the log
+   red: FrontOfficeGameDay.test.tsx > NFL front office: a press tells his game and keeps it a save from before the round adopts the log at the week it is first played here: it starts at we
+   red: FrontOfficeGameDay.test.tsx > NFL front office: a log that does not read whole is absent, and never refuses the save a damaged log, a log of another season or another club, an empt
+   red: FrontOfficeGameDay.test.tsx > NFL front office: the log does not follow a GM into his next franchise abandon in the middle of a season and start again: the new save holds no log, a
+   red: FrontOfficeGameDay.test.tsx > NFL front office: the one press finish the told scores are the saved scores, with the GM desk off: the rounds of the recap hold what the bind answered
+   red: FrontOfficeGameDay.test.tsx > NFL front office: the one press finish the told scores are the saved scores, with the GM desk on: the rounds of the recap hold what the bind answered 
+   red: FrontOfficeGameDay.test.tsx > NFL front office: the one press finish with the GM desk on, his game is told at the chance it was played at, the edge of his staff included
+   red: FrontOfficeLazyDesk.test.tsx > NFL front office: the GM career kit loads when it is needed a season being played never asks for it, and the Career box reads the same before and afte
+control waitsalways: FIRED. Every test it names is red and every test it spares is green.
+controlFrontOfficeBoard: 1 of 1 control(s) fired, the board tests can fail for each named reason.

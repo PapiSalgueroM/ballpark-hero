@@ -1,0 +1,5 @@
+control nhl-nowait (the NHL last round's press does not wait for the career kit): vitest exit 1; 2 red, 41 green of 43
+   red: NhlLazyDesk.test.tsx > NHL front office: the GM career kit loads when it is needed the last round asks for it, its press waits for it, and the press then closes the season
+   red: NhlLazyDesk.test.tsx > NHL front office: the GM career kit loads when it is needed a desk off save on the last round whose fetch fails: the retry card, nothing written, then
+control nhl-nowait: FIRED. Every test it names is red and every test it spares is green.
+controlFrontOfficeBoard: 1 of 1 control(s) fired, the board tests can fail for each named reason.
