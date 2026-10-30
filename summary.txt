@@ -1,0 +1,12 @@
+oldLedger exit=0 4s | simCmOldLedger: all sections green
+oldLedger-exact exit=1 5s | simCmOldLedger: control exact FIRED (section 2: men at two clubs on load)
+vitest-ledger exit=0 11s |    Duration  10.71s (transform 3.89s, setup 701ms, collect 12.12s, tests 9.17s, environment 3.61s, prepare 1.23s)
+tsc exit=0 119s | 
+clubDetail-headref exit=0 6s | simClubDetailCurrentRoster normal: green.
+clubDetail-prev exit=1 1s | Node.js v24.22.1
+oldCareers exit=1 82s | simCmOldCareersWorld: RED, 20 failure(s) (section 1 2, section 2 18) (82s)
+unseeded exit=1 238s | simCmUnseededWorld: 113 FAILURE(S)
+unseeded-prev exit=1 232s | simCmUnseededWorld: 113 FAILURE(S)
+oldCareers-prev exit=1 81s | simCmOldCareersWorld: RED, 20 failure(s) (section 1 2, section 2 18) (80s)
+worldMoves exit=1 1234s | simCmWorldMoves: RED, sections 5 (96), 6 (404), 7 (1), 8 (81), 11 (8)
+worldMoves-prev exit=1 1251s | simCmWorldMoves: RED, sections 5 (96), 6 (404), 7 (1), 8 (81), 11 (8)
