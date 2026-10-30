@@ -1,0 +1,3 @@
+prepare exit=0 65s | ordinary-build raw=0
+sweepGames exit=1 916s | sweepGames.mjs raw=1
+finish exit=0 7s | 

@@ -1,0 +1,3 @@
+114382 /home/runner/work/_temp/rc-out/full/sweepGames.mjs/stdout.log
+     0 /home/runner/work/_temp/rc-out/full/sweepGames.mjs/stderr.log
+114382 total
