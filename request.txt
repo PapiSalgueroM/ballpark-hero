@@ -1,0 +1,5 @@
+#!playwright
+#!serial
+weightbase: git worktree add /tmp/base 14a9af704 > /dev/null 2>&1 && ln -s "$PWD/node_modules" /tmp/base/node_modules && (cd /tmp/base && node_modules/.bin/vite build > /tmp/base-build.log 2>&1) && (node scripts/lib/hostLikeServer.mjs /tmp/base/dist 4180 > /dev/null 2>&1 &) && sleep 4 && SWEEP_OFFLINE=1 BASE=http://localhost:4180 SWEEP_BASE=http://localhost:4180 ENGINES=chromium node scripts/sweepWeight.mjs
+weightstub: node .rc/x/mutstub.mjs || exit 99; node_modules/.bin/vite build --outDir /tmp/dist-stub > /tmp/stub-build.log 2>&1; s=$?; git checkout -- src; [ $s = 0 ] || { tail -20 /tmp/stub-build.log; exit 98; }; (node scripts/lib/hostLikeServer.mjs /tmp/dist-stub 4182 > /dev/null 2>&1 &) ; sleep 4 ; SWEEP_OFFLINE=1 BASE=http://localhost:4182 SWEEP_BASE=http://localhost:4182 ENGINES=chromium node scripts/sweepWeight.mjs
+weighthead: node_modules/.bin/vite build --outDir /tmp/dist-head > /tmp/head-build.log 2>&1 && (node scripts/lib/hostLikeServer.mjs /tmp/dist-head 4181 > /dev/null 2>&1 &) && sleep 4 && SWEEP_OFFLINE=1 BASE=http://localhost:4181 SWEEP_BASE=http://localhost:4181 ENGINES=chromium node scripts/sweepWeight.mjs

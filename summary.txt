@@ -1,0 +1,3 @@
+weightbase exit=1 62s | sweepWeight: 12 failures
+weightstub exit=1 61s | sweepWeight: 12 failures
+weighthead exit=1 60s | sweepWeight: 12 failures
