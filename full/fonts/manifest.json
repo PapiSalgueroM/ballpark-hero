@@ -1,0 +1,56 @@
+[
+  {
+    "url": "https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Inter:wght@400;500;600;700&display=swap",
+    "file": "d31cf2fc57ff806591439de3aa2749d4e191acf5005a85c68556dddd009d1141",
+    "contentType": "text/css; charset=utf-8",
+    "sha256": "f867cc05f0d31bbbdad175a4301931100be7a1316ead1b8f83bf492d38ba6b3b"
+  },
+  {
+    "url": "https://fonts.gstatic.com/s/inter/v20/UcCO3FwrK3iLTeHuS_nVMrMxCp50SjIw2boKoduKmMEVuLyfMZg.ttf",
+    "file": "a699af1dea30b799318e058c03ae61680de787476d635909fbb0354740971bab",
+    "contentType": "font/ttf",
+    "sha256": "1b08e7fc267a5c7e1d614100f604b83e7e8a0be241f0f288faa2b3ac93a683ba"
+  },
+  {
+    "url": "https://fonts.gstatic.com/s/inter/v20/UcCO3FwrK3iLTeHuS_nVMrMxCp50SjIw2boKoduKmMEVuI6fMZg.ttf",
+    "file": "e45972c7e9f24dc390848eb598daf023bc4e4284384ba7bb6696dc53c9e90a67",
+    "contentType": "font/ttf",
+    "sha256": "8c883f63b2c4157d997319f2c8bc6995ed4357ef371940d31ca159004a4aae63"
+  },
+  {
+    "url": "https://fonts.gstatic.com/s/inter/v20/UcCO3FwrK3iLTeHuS_nVMrMxCp50SjIw2boKoduKmMEVuGKYMZg.ttf",
+    "file": "87e867b52640b3b397a977c3046d1cc543ecde56ff4d0fd14bc53b812bc940ed",
+    "contentType": "font/ttf",
+    "sha256": "e7a1aaf7eda9f2fad4131725fa556265ec75ca7b2d756260173a040363e8d4f7"
+  },
+  {
+    "url": "https://fonts.gstatic.com/s/inter/v20/UcCO3FwrK3iLTeHuS_nVMrMxCp50SjIw2boKoduKmMEVuFuYMZg.ttf",
+    "file": "6f49e1b28bce7339f4846ecd070af9e4eb927e5b7b543fde5f0cf8e6a7730736",
+    "contentType": "font/ttf",
+    "sha256": "b37284b5701b6b168dfc770aa1a4ac492106422fd3ba76bc7641e37434e8019c"
+  },
+  {
+    "url": "https://fonts.gstatic.com/s/spacegrotesk/v22/V8mQoQDjQSkFtoMM3T6r8E7mF71Q-gOoraIAEj7oUUsj.ttf",
+    "file": "0dfc29fde7d95ca65fe2a51c3649883a423d0d3fd86bfe63e2a35e38a0a995b5",
+    "contentType": "font/ttf",
+    "sha256": "ec926d5065eaca49a48f96e312bbae0bbc5733c24215cf5dfabbdccee926fef7"
+  },
+  {
+    "url": "https://fonts.gstatic.com/s/spacegrotesk/v22/V8mQoQDjQSkFtoMM3T6r8E7mF71Q-gOoraIAEj7aUUsj.ttf",
+    "file": "56632cca6632f379925bba8326ffd04478b42d23ec4f5c22d194c9a440c93eae",
+    "contentType": "font/ttf",
+    "sha256": "3e699ead1876244fa392243054ddefe7cf631b488438828a8a100731a22ab995"
+  },
+  {
+    "url": "https://fonts.gstatic.com/s/spacegrotesk/v22/V8mQoQDjQSkFtoMM3T6r8E7mF71Q-gOoraIAEj42Vksj.ttf",
+    "file": "d03f1389be8c7cea7e4f4546b5715c72a75444a877838be6f0a2dc347c1c840d",
+    "contentType": "font/ttf",
+    "sha256": "6c0346b8d297ebdc225832833e03e884a26ad99d265ecd3924d46e1ba285ea87"
+  },
+  {
+    "url": "https://fonts.gstatic.com/s/spacegrotesk/v22/V8mQoQDjQSkFtoMM3T6r8E7mF71Q-gOoraIAEj4PVksj.ttf",
+    "file": "aaf352f017a5007bcd6888e3ff12196b1ebd868d5769eac83cec687f5678c909",
+    "contentType": "font/ttf",
+    "sha256": "3e756954468ff1cb302dae0414262e72f76a67d87bef3fa1f3226cd0fb9b2d85"
+  }
+]
