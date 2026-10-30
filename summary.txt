@@ -1,0 +1,11 @@
+vitest-cm exit=0 21s |    Duration  20.34s (transform 4.63s, setup 712ms, collect 11.43s, tests 29.20s, environment 3.14s, prepare 946ms)
+simCmOldLedger exit=0 2s | simCmOldLedger: all sections green
+simCmOldLedger-exact exit=1 2s | simCmOldLedger: control exact FIRED (section 2: men at two clubs on load)
+tsc exit=0 72s | 
+simManagerWorldContinuity exit=1 26s |     at async file:///home/runner/work/ballpark-hero/ballpark-hero/scripts/simManagerWorldContinuity.mjs:541:24
+simFreeAgents exit=0 108s | simFreeAgents: all sections passed
+simNoRivalNames exit=0 14s | No rival product names found. 0 findings.
+simHarnessAnchors exit=0 45s | simHarnessAnchors: green. Every harness parses and none carries an unmatchable anchor.
+simStorageWrites exit=0 2s | simStorageWrites: all green (owed: 12)
+simClubManagerNewLeagues exit=0 125s | simClubManagerNewLeagues: all checks passed
+simCmLedgerBound exit=0 257s | simCmLedgerBound: green, all four sections held

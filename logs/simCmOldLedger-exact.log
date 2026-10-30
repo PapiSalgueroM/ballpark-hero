@@ -1,0 +1,49 @@
+simCmOldLedger: base 14a9af704, control exact
+section 1: 454 clubs, 0 namesake pairs of one position born within a year
+made on base: Everton bought Aleksey Gritsaenko from Rubin Kazan
+  section 2 loaded: Everton, 5 records, 5 moves, 3 problems
+     Amadou Onana still at Aston Villa (owned to Sunderland, born 2001)
+     Pedro Neto still at Chelsea (owned to Tottenham, born 2001)
+     Federico Valverde still at Real Madrid (owned to Chelsea, born 1999)
+  FAIL 2: Everton: 3 problems on load
+  section 2 bytes: stored 60559, base load saves 61728, this tree 61728 (the base's)
+  section 4: Everton sold Jarrad Branthwaite (23y) to Aston Villa: record owned by Aston Villa, listed at Aston Villa 1
+  section 3 season two: Everton, 13 records, 13 moves, 3 problems
+     Amadou Onana still at Aston Villa (owned to Sunderland, born 2001)
+     Pedro Neto still at Chelsea (owned to Tottenham, born 2001)
+     Federico Valverde still at Real Madrid (owned to Chelsea, born 1999)
+  FAIL 3: Everton: 3 problems in season two
+made on base: AC Milan bought Aleksey Gritsaenko from Rubin Kazan
+  section 2 loaded: AC Milan, 6 records, 6 moves, 4 problems
+     Eberechi Eze still at Arsenal (owned to Inter Milan, born 1999)
+     Aleksandar Pavlovic still at Bayern Munich (owned to Inter Milan, born 2005)
+     Gianluigi Donnarumma still at Manchester City (owned to Liverpool, born 2000)
+     Phil Foden still at Manchester City (owned to Bayern Munich, born 2001)
+  FAIL 2: AC Milan: 4 problems on load
+  section 2 bytes: stored 61313, base load saves 62476, this tree 62476 (the base's)
+  section 4: AC Milan sold Christian Pulisic (27y) to Juventus: record owned by Juventus, listed at Juventus 1
+  section 3 season two: AC Milan, 18 records, 18 moves, 4 problems
+     Eberechi Eze still at Arsenal (owned to Inter Milan, born 1999)
+     Aleksandar Pavlovic still at Bayern Munich (owned to Inter Milan, born 2005)
+     Gianluigi Donnarumma still at Manchester City (owned to Liverpool, born 2000)
+     Phil Foden still at Manchester City (owned to Bayern Munich, born 2001)
+  FAIL 3: AC Milan: 4 problems in season two
+made on base: Bayern Munich bought Aleksey Gritsaenko from Rubin Kazan
+  section 2 loaded: Bayern Munich, 6 records, 6 moves, 4 problems
+     Adam Wharton still at Crystal Palace (owned to Arsenal, born 2005)
+     Kobbie Mainoo still at Manchester United (owned to Stuttgart, born 2006)
+     Elliot Anderson still at Manchester City (owned to Bayer Leverkusen, born 2003)
+     Can Uzun still at Eintracht Frankfurt (owned to Borussia Dortmund, born 2006)
+  FAIL 2: Bayern Munich: 4 problems on load
+  section 2 bytes: stored 62553, base load saves 63718, this tree 63718 (the base's)
+  section 4: Bayern Munich sold Jamal Musiala (22y) to Borussia Dortmund: record owned by Borussia Dortmund, listed at Borussia Dortmund 1
+  section 3 season two: Bayern Munich, 14 records, 14 moves, 4 problems
+     Adam Wharton still at Crystal Palace (owned to Arsenal, born 2005)
+     Kobbie Mainoo still at Manchester United (owned to Stuttgart, born 2006)
+     Elliot Anderson still at Manchester City (owned to Bayer Leverkusen, born 2003)
+     Can Uzun still at Eintracht Frankfurt (owned to Borussia Dortmund, born 2006)
+  FAIL 3: Bayern Munich: 4 problems in season two
+section 5: a new Everton career, ledger curve 2, near false
+  section 5 new: Everton, 5 records, 5 moves, 0 problems
+simCmOldLedger: 17 ledger moves loaded, 3 sales, 6 failures
+simCmOldLedger: control exact FIRED (section 2: men at two clubs on load)

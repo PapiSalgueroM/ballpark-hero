@@ -1,0 +1,11 @@
+tsc: node_modules/.bin/tsc --noEmit -p tsconfig.app.json
+vitest-cm: node_modules/.bin/vitest run src/test/cmFreeAgentContinuity.test.ts src/test/cmFreeAgentDiscovery.test.tsx src/test/cmFreeAgentLegacyIdentity.test.ts src/test/cmMarketMaxPrice.test.tsx src/test/cmValueCurve.test.ts src/lib/clubManagerWorldRoster.test.ts src/lib/clubManagerTrajectory.test.ts --testTimeout=300000 --hookTimeout=120000
+simFreeAgents: node scripts/simFreeAgents.mjs
+simCmOldLedger: node scripts/simCmOldLedger.mjs
+simCmOldLedger-exact: CM_OLD_LEDGER_CONTROL=exact node scripts/simCmOldLedger.mjs
+simCmLedgerBound: node scripts/simCmLedgerBound.mjs
+simManagerWorldContinuity: node scripts/simManagerWorldContinuity.mjs
+simClubManagerNewLeagues: node scripts/simClubManagerNewLeagues.mjs
+simNoRivalNames: node scripts/simNoRivalNames.mjs
+simHarnessAnchors: node scripts/simHarnessAnchors.mjs
+simStorageWrites: node scripts/simStorageWrites.mjs
