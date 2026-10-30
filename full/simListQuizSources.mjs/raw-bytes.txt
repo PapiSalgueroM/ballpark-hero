@@ -1,0 +1,3 @@
+6072 /home/runner/work/_temp/rc-out/full/simListQuizSources.mjs/stdout.log
+   0 /home/runner/work/_temp/rc-out/full/simListQuizSources.mjs/stderr.log
+6072 total

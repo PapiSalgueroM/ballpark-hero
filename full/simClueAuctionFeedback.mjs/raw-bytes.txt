@@ -1,0 +1,3 @@
+2929 /home/runner/work/_temp/rc-out/full/simClueAuctionFeedback.mjs/stdout.log
+   0 /home/runner/work/_temp/rc-out/full/simClueAuctionFeedback.mjs/stderr.log
+2929 total

@@ -1,0 +1,3 @@
+10412 /home/runner/work/_temp/rc-out/full/simSoccerWorldTruth.mjs/stdout.log
+    0 /home/runner/work/_temp/rc-out/full/simSoccerWorldTruth.mjs/stderr.log
+10412 total

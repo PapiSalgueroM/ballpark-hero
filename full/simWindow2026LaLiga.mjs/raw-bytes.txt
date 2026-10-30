@@ -1,0 +1,3 @@
+2840 /home/runner/work/_temp/rc-out/full/simWindow2026LaLiga.mjs/stdout.log
+   0 /home/runner/work/_temp/rc-out/full/simWindow2026LaLiga.mjs/stderr.log
+2840 total

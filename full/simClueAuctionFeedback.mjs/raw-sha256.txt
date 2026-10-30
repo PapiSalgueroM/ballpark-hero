@@ -1,0 +1,2 @@
+e353e11aa2b2320fd4f3a05b7de07cdd027ab662b134e832c4b7be5705223995  /home/runner/work/_temp/rc-out/full/simClueAuctionFeedback.mjs/stdout.log
+e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855  /home/runner/work/_temp/rc-out/full/simClueAuctionFeedback.mjs/stderr.log

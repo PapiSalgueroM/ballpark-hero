@@ -1,0 +1,2 @@
+0c12ed666902e8883b00a6a898893b7695cc4c4a10f35cd58516521aecf121cc  /home/runner/work/_temp/rc-out/full/simManagerWorldContinuity.mjs/stdout.log
+e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855  /home/runner/work/_temp/rc-out/full/simManagerWorldContinuity.mjs/stderr.log

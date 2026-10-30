@@ -1,0 +1,38 @@
+#!serial
+# Full default filenames only. UNBOUND until final source and support admission.
+prepare: bash .rc/default-support.sh prepare
+simAlphabetSprint: bash .rc/default-support.sh run simAlphabetSprint.mjs
+simBoardAsks: bash .rc/default-support.sh run simBoardAsks.mjs
+simCareerAcademy: bash .rc/default-support.sh run simCareerAcademy.mjs
+simCareerKeepPlaying: bash .rc/default-support.sh run simCareerKeepPlaying.mjs
+simCareerSquad: bash .rc/default-support.sh run simCareerSquad.mjs
+simClubManager: bash .rc/default-support.sh run simClubManager.mjs
+simClueAuctionFeedback: bash .rc/default-support.sh run simClueAuctionFeedback.mjs
+simCmOwnGoals: bash .rc/default-support.sh run simCmOwnGoals.mjs
+simCollegeTables: bash .rc/default-support.sh run simCollegeTables.mjs
+simCup: bash .rc/default-support.sh run simCup.mjs
+simEdgeSync: bash .rc/default-support.sh run simEdgeSync.mjs
+simFantasyDraftPool: bash .rc/default-support.sh run simFantasyDraftPool.mjs
+simFootleUnlimited: bash .rc/default-support.sh run simFootleUnlimited.mjs
+simGmFacilities: bash .rc/default-support.sh run simGmFacilities.mjs
+simGuessTheNationFeedback: bash .rc/default-support.sh run simGuessTheNationFeedback.mjs
+simIdleArena: bash .rc/default-support.sh run simIdleArena.mjs
+simListQuizSources: bash .rc/default-support.sh run simListQuizSources.mjs
+simManagerWorldContinuity: bash .rc/default-support.sh run simManagerWorldContinuity.mjs
+simMlbTradeRoster: bash .rc/default-support.sh run simMlbTradeRoster.mjs
+simNbaDraftCapital: bash .rc/default-support.sh run simNbaDraftCapital.mjs
+simNflGmDesk: bash .rc/default-support.sh run simNflGmDesk.mjs
+simNhlWaiverReceipt: bash .rc/default-support.sh run simNhlWaiverReceipt.mjs
+simPlayerAutocompleteTouchScroll: bash .rc/default-support.sh run simPlayerAutocompleteTouchScroll.mjs
+simRankEmCircuit: bash .rc/default-support.sh run simRankEmCircuit.mjs
+simRugbyLeagueChallenge: bash .rc/default-support.sh run simRugbyLeagueChallenge.mjs
+simSeoTitles: bash .rc/default-support.sh run simSeoTitles.mjs
+simSoccerCareerLoyalty: bash .rc/default-support.sh run simSoccerCareerLoyalty.mjs
+simSoccerGridBlurOwnership: bash .rc/default-support.sh run simSoccerGridBlurOwnership.mjs
+simSoccerWorldTruth: bash .rc/default-support.sh run simSoccerWorldTruth.mjs
+simTennisPlayerReplay: bash .rc/default-support.sh run simTennisPlayerReplay.mjs
+simTriviaFacts: bash .rc/default-support.sh run simTriviaFacts.mjs
+simUclField: bash .rc/default-support.sh run simUclField.mjs
+simUsCoachRetirement: bash .rc/default-support.sh run simUsCoachRetirement.mjs
+simWindow2026LaLiga: bash .rc/default-support.sh run simWindow2026LaLiga.mjs
+finish: bash .rc/default-support.sh finish

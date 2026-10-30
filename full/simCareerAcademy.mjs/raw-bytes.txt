@@ -1,0 +1,3 @@
+1667 /home/runner/work/_temp/rc-out/full/simCareerAcademy.mjs/stdout.log
+   0 /home/runner/work/_temp/rc-out/full/simCareerAcademy.mjs/stderr.log
+1667 total

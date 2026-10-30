@@ -1,0 +1,2 @@
+f6e5d28096a02085f7f59f2f1298f02eb2c67579012b4cc17e61be197eeb7971  /home/runner/work/_temp/rc-out/full/simCareerSquad.mjs/stdout.log
+e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855  /home/runner/work/_temp/rc-out/full/simCareerSquad.mjs/stderr.log

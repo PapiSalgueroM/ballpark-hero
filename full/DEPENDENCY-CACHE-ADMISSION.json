@@ -1,0 +1,23 @@
+{
+  "originalFilesAndBodiesHeld": true,
+  "entries": [
+    {
+      "file": "node_modules/.vite/vitest/da39a3ee5e6b4b0d3255bfef95601890afd80709/results.json",
+      "bytes": 883,
+      "sha256": "c09eaf5561d76a6bc4193d3ecc1eca9bcf4cee4b4cd8b4395635dc8f47487475",
+      "tests": [
+        ":src/test/clueAuctionFeedback.test.tsx",
+        ":src/test/footleUnlimitedSession.test.tsx",
+        ":src/test/guessTheNationFeedback.test.tsx",
+        ":src/test/mlbTradeRoster.test.tsx",
+        ":src/test/rankEmCircuit.test.tsx",
+        ":src/test/rugbyLeagueChallenge.test.tsx",
+        ":src/test/tennisPlayerFeedback.test.tsx",
+        ":src/test/tennisPlayerReplay.test.tsx",
+        ":src/test/usCareerReports1346.test.tsx",
+        ":src/test/usCoachRetirement.test.tsx"
+      ],
+      "kind": "NEW_GENERATED_RESULTS_CACHE_ONLY_NO_TEST_CREDIT"
+    }
+  ]
+}

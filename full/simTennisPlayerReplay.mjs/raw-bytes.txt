@@ -1,0 +1,3 @@
+771 /home/runner/work/_temp/rc-out/full/simTennisPlayerReplay.mjs/stdout.log
+  0 /home/runner/work/_temp/rc-out/full/simTennisPlayerReplay.mjs/stderr.log
+771 total

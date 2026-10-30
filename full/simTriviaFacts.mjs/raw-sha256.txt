@@ -1,0 +1,2 @@
+60ecf665a440ab6c9a1e119ea778c70f4a0efee3695c12d96ec20e209279c518  /home/runner/work/_temp/rc-out/full/simTriviaFacts.mjs/stdout.log
+e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855  /home/runner/work/_temp/rc-out/full/simTriviaFacts.mjs/stderr.log

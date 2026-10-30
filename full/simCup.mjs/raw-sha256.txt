@@ -1,0 +1,2 @@
+cd06a31fbf7c3b8b74d640f0383c012fb43303aaf7d7c218d69b0cf06f451c63  /home/runner/work/_temp/rc-out/full/simCup.mjs/stdout.log
+e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855  /home/runner/work/_temp/rc-out/full/simCup.mjs/stderr.log

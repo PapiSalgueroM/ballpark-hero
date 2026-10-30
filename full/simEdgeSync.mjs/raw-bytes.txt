@@ -1,0 +1,3 @@
+895 /home/runner/work/_temp/rc-out/full/simEdgeSync.mjs/stdout.log
+  0 /home/runner/work/_temp/rc-out/full/simEdgeSync.mjs/stderr.log
+895 total

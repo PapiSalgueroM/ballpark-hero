@@ -1,0 +1,3 @@
+1081 /home/runner/work/_temp/rc-out/full/simUsCoachRetirement.mjs/stdout.log
+   0 /home/runner/work/_temp/rc-out/full/simUsCoachRetirement.mjs/stderr.log
+1081 total

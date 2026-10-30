@@ -1,0 +1,2 @@
+8e4bdd2658953afda6ee9889a8a19f78c21c5a1f4f265a5be0b1a18a683338b6  /home/runner/work/_temp/rc-out/full/simMlbTradeRoster.mjs/stdout.log
+e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855  /home/runner/work/_temp/rc-out/full/simMlbTradeRoster.mjs/stderr.log

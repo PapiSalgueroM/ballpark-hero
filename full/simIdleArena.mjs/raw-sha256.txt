@@ -1,0 +1,2 @@
+5e8ade1eb1f9fa62aa310932a254ed4b5cde7c97da7a306c4e4422b40e901c68  /home/runner/work/_temp/rc-out/full/simIdleArena.mjs/stdout.log
+e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855  /home/runner/work/_temp/rc-out/full/simIdleArena.mjs/stderr.log

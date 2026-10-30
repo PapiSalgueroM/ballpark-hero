@@ -1,0 +1,2 @@
+aab6524288fc5ac06b85e0e39e0c0c4e40628ebeb1919083fc3c79f600e4eaf4  /home/runner/work/_temp/rc-out/full/simEdgeSync.mjs/stdout.log
+e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855  /home/runner/work/_temp/rc-out/full/simEdgeSync.mjs/stderr.log

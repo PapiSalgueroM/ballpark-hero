@@ -1,0 +1,3 @@
+4791 /home/runner/work/_temp/rc-out/full/simRugbyLeagueChallenge.mjs/stdout.log
+   0 /home/runner/work/_temp/rc-out/full/simRugbyLeagueChallenge.mjs/stderr.log
+4791 total

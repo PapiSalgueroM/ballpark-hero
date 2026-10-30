@@ -1,0 +1,3 @@
+3231 /home/runner/work/_temp/rc-out/full/simMlbTradeRoster.mjs/stdout.log
+   0 /home/runner/work/_temp/rc-out/full/simMlbTradeRoster.mjs/stderr.log
+3231 total

@@ -1,0 +1,3 @@
+1069 /home/runner/work/_temp/rc-out/full/simSoccerGridBlurOwnership.mjs/stdout.log
+   0 /home/runner/work/_temp/rc-out/full/simSoccerGridBlurOwnership.mjs/stderr.log
+1069 total

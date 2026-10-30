@@ -1,0 +1,3 @@
+993 /home/runner/work/_temp/rc-out/full/simAlphabetSprint.mjs/stdout.log
+  0 /home/runner/work/_temp/rc-out/full/simAlphabetSprint.mjs/stderr.log
+993 total

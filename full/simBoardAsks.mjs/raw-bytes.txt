@@ -1,0 +1,3 @@
+3157 /home/runner/work/_temp/rc-out/full/simBoardAsks.mjs/stdout.log
+   0 /home/runner/work/_temp/rc-out/full/simBoardAsks.mjs/stderr.log
+3157 total

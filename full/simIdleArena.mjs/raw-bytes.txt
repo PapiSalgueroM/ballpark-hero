@@ -1,0 +1,3 @@
+4998 /home/runner/work/_temp/rc-out/full/simIdleArena.mjs/stdout.log
+   0 /home/runner/work/_temp/rc-out/full/simIdleArena.mjs/stderr.log
+4998 total

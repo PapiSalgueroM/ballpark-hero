@@ -1,0 +1,2 @@
+a1abbf446b1fa7d476782f69417c21a3e8496d53dffb3b5831f3704c3da5e9f3  /home/runner/work/_temp/rc-out/full/simSoccerWorldTruth.mjs/stdout.log
+e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855  /home/runner/work/_temp/rc-out/full/simSoccerWorldTruth.mjs/stderr.log

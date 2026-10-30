@@ -1,0 +1,3 @@
+3250 /home/runner/work/_temp/rc-out/full/simGmFacilities.mjs/stdout.log
+   0 /home/runner/work/_temp/rc-out/full/simGmFacilities.mjs/stderr.log
+3250 total

@@ -1,0 +1,2 @@
+bda38c067e599d3ccc1889dc4864ef445e1681652c22cb2c47d7c031fb5271fc  /home/runner/work/_temp/rc-out/full/simBoardAsks.mjs/stdout.log
+e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855  /home/runner/work/_temp/rc-out/full/simBoardAsks.mjs/stderr.log

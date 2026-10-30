@@ -1,0 +1,2 @@
+2962646242292123e845e64eb318b643baef65520919e4caa4f187f9a922dbea  /home/runner/work/_temp/rc-out/full/simPlayerAutocompleteTouchScroll.mjs/stdout.log
+e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855  /home/runner/work/_temp/rc-out/full/simPlayerAutocompleteTouchScroll.mjs/stderr.log

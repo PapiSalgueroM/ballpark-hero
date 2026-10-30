@@ -1,0 +1,2 @@
+63f4c591b653778676ba122052fa8fbdfb9df7ee208d9737280adae05ac4b626  /home/runner/work/_temp/rc-out/full/simCmOwnGoals.mjs/stdout.log
+e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855  /home/runner/work/_temp/rc-out/full/simCmOwnGoals.mjs/stderr.log

@@ -1,0 +1,3 @@
+470 /home/runner/work/_temp/rc-out/full/simFootleUnlimited.mjs/stdout.log
+  0 /home/runner/work/_temp/rc-out/full/simFootleUnlimited.mjs/stderr.log
+470 total

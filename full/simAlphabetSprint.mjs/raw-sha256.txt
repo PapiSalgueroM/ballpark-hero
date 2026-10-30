@@ -1,0 +1,2 @@
+50f52b16a9037d6b829b9191e70dcac425c59b003c1508a5d61120bab7c3c7f4  /home/runner/work/_temp/rc-out/full/simAlphabetSprint.mjs/stdout.log
+e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855  /home/runner/work/_temp/rc-out/full/simAlphabetSprint.mjs/stderr.log

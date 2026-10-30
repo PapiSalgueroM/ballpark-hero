@@ -1,0 +1,2 @@
+24479f6e482a1380dd8857787e743d3b73d71df405a36e66abd069b62b8b4abc  /home/runner/work/_temp/rc-out/full/simRugbyLeagueChallenge.mjs/stdout.log
+e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855  /home/runner/work/_temp/rc-out/full/simRugbyLeagueChallenge.mjs/stderr.log
