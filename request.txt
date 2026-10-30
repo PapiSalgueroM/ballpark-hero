@@ -1,0 +1,4 @@
+#!serial
+order-oldwords: sed -i 's/return count === 3 ? /return count >= 3 ? /' src/lib/clubManager.ts && test "$(grep -c 'return count >= 3 ? ' src/lib/clubManager.ts)" = 1 && echo MUTATED-oldwords && node scripts/simCmShootoutOrder.mjs; s=$?; git checkout -- src; exit $s
+order-notie: sed -i 's/const tieJudged = judgedByTie(state, tieLine);/const tieJudged = false;/' src/lib/clubManager.ts && test "$(grep -c 'const tieJudged = false;' src/lib/clubManager.ts)" = 1 && echo MUTATED-notie && node scripts/simCmShootoutOrder.mjs; s=$?; git checkout -- src; exit $s
+order-artifacts: mkdir -p $RC_OUT/art && CM_SHOOTOUT_ARTIFACTS=$RC_OUT/art node scripts/simCmShootoutOrder.mjs; s=$?; ls -la $RC_OUT/art | head; exit $s

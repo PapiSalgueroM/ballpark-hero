@@ -1,0 +1,3 @@
+order-oldwords exit=0 22s | simCmShootoutOrder: all sections passed
+order-notie exit=1 21s | simCmShootoutOrder: 2 FAILURE(S)
+order-artifacts exit=1 20s | -rw-r--r-- 1 runner runner 791238 Oct 30 07:55 normal-baseline.json
