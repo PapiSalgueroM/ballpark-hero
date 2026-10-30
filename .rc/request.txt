@@ -1,0 +1,6 @@
+tsc: node_modules/.bin/tsc --noEmit -p tsconfig.app.json
+fleet: node scripts/simCmFreeAgencyFleet.mjs
+ctl-nofilllink: CM_FA_CONTROL=nofilllink node scripts/simCmFreeAgencyFleet.mjs
+ctl-leftunsaid: CM_FA_CONTROL=leftunsaid node scripts/simCmFreeAgencyFleet.mjs
+simCmLedgerBound: node scripts/simCmLedgerBound.mjs
+simFreeAgents: node scripts/simFreeAgents.mjs
