@@ -133,6 +133,11 @@
      sacked runs refused               fixed 11 to 26                     floor 5
      reprieves handed over             fixed 0 to 2 (section 5 alone)     (reported)
      window before the next fixture    fixed 3 (own seed, after the fixes) (reported)
+   Round 1592, measured on a runner (r1592-s3, 2026-10-30) on the own seed
+   and SIM_SEED=1 and 2: the pool now gives 54 setups in 27 leagues, 41 to
+   43 survivors, and every slot arm (a) to (i) held on every one of them
+   (floor HAND_FLOOR, 20, for each arm, so an arm that stops running is red).
+   Under its control each arm fails on every survivor (43 of 43, r1592-s2).
    Under nocal no career is handed over; under clobber arm (b) fails on
    every survivor; under sackoffer every sacked run fails;
    under nostamp and card every handover fails (39 of 39 on the own seed).
