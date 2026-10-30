@@ -1,0 +1,5 @@
+#!playwright
+#!serial
+ws-base: git worktree add -q /tmp/base b4a331a9cb1db7411b91538eaeaf29385d2ce3a9 && ln -s "$PWD/node_modules" /tmp/base/node_modules && cd /tmp/base && node_modules/.bin/vite build > /tmp/vb.log 2>&1 && node scripts/simWritesAreSent.mjs
+ws-main: git worktree add -q /tmp/main bd0c07bf72dc0214842202fe2f931b14c65d82dc && ln -s "$PWD/node_modules" /tmp/main/node_modules && cd /tmp/main && node_modules/.bin/vite build > /tmp/vm.log 2>&1 && node scripts/simWritesAreSent.mjs
+ws-head: node_modules/.bin/vite build > /tmp/vh.log 2>&1 && node scripts/simWritesAreSent.mjs

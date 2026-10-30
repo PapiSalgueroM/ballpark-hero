@@ -1,0 +1,3 @@
+ws-base exit=1 50s | simWritesAreSent: 2 failures
+ws-main exit=1 51s | simWritesAreSent: 2 failures
+ws-head exit=1 50s | simWritesAreSent: 2 failures
