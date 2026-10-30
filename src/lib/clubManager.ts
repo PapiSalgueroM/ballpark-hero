@@ -8942,9 +8942,12 @@ export function ensurePress(state: CareerState): void {
 /* ─── Round 308: the other dugouts. Owner tweaks item 11, arc two
    ("different managers on different teams"). Every club in your league has
    a named manager now, generated (makeGeneratedName re-rolls any collision
-   with a real footballer's name, and the record never holds a real
-   manager's name because no real manager list exists here at all: an
-   invented career under a real name is the simNoInventedQuotes exposure).
+   with a real footballer's name: an invented career under a real name is
+   the simNoInventedQuotes exposure). Round 1606: a season one start also
+   seats a club's REAL opening day manager from the dugout table
+   (openingDayDugout), as a name in a display slot only; no line the engine
+   writes ever carries him, and when the sim empties his chair a made up
+   man takes it.
    Same house pattern as the ensure family: idempotent, runs at start, on
    load and on the rollover, and a second call changes nothing. ─── */
 function ordinal(n: number): string {
