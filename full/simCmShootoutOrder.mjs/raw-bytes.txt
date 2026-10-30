@@ -1,0 +1,3 @@
+4014 /home/runner/work/_temp/rc-out/full/simCmShootoutOrder.mjs/stdout.log
+   0 /home/runner/work/_temp/rc-out/full/simCmShootoutOrder.mjs/stderr.log
+4014 total

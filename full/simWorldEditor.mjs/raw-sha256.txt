@@ -1,0 +1,2 @@
+552bd2f3aa5f3a1fcac1ee57c8c6333d68c93a88500645cc6817f35c21614a11  /home/runner/work/_temp/rc-out/full/simWorldEditor.mjs/stdout.log
+e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855  /home/runner/work/_temp/rc-out/full/simWorldEditor.mjs/stderr.log

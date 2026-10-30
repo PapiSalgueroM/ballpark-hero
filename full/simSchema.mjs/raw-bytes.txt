@@ -1,0 +1,3 @@
+1264 /home/runner/work/_temp/rc-out/full/simSchema.mjs/stdout.log
+   0 /home/runner/work/_temp/rc-out/full/simSchema.mjs/stderr.log
+1264 total

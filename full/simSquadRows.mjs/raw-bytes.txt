@@ -1,0 +1,3 @@
+1124 /home/runner/work/_temp/rc-out/full/simSquadRows.mjs/stdout.log
+   0 /home/runner/work/_temp/rc-out/full/simSquadRows.mjs/stderr.log
+1124 total

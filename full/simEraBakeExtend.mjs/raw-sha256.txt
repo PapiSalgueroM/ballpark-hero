@@ -1,0 +1,2 @@
+528328ab8580a7c78c55778f2f8e6f071c8c1d77c769e531ee9d4aada005c7c0  /home/runner/work/_temp/rc-out/full/simEraBakeExtend.mjs/stdout.log
+e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855  /home/runner/work/_temp/rc-out/full/simEraBakeExtend.mjs/stderr.log

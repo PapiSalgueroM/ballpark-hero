@@ -1,0 +1,3 @@
+21852 /home/runner/work/_temp/rc-out/full/simUsSeasonCentre.mjs/stdout.log
+    0 /home/runner/work/_temp/rc-out/full/simUsSeasonCentre.mjs/stderr.log
+21852 total

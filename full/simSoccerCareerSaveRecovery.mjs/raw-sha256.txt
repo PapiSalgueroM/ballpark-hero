@@ -1,0 +1,2 @@
+52e3d4c45bc0f741357986afa7c66199b0f9f73d98fabc325724c06552e51b7b  /home/runner/work/_temp/rc-out/full/simSoccerCareerSaveRecovery.mjs/stdout.log
+e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855  /home/runner/work/_temp/rc-out/full/simSoccerCareerSaveRecovery.mjs/stderr.log

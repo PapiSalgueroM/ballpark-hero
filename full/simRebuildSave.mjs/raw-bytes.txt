@@ -1,0 +1,3 @@
+2444 /home/runner/work/_temp/rc-out/full/simRebuildSave.mjs/stdout.log
+   0 /home/runner/work/_temp/rc-out/full/simRebuildSave.mjs/stderr.log
+2444 total

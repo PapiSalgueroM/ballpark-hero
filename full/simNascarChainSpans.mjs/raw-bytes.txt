@@ -1,0 +1,3 @@
+13862 /home/runner/work/_temp/rc-out/full/simNascarChainSpans.mjs/stdout.log
+    0 /home/runner/work/_temp/rc-out/full/simNascarChainSpans.mjs/stderr.log
+13862 total

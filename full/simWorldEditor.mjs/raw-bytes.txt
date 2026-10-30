@@ -1,0 +1,3 @@
+1610 /home/runner/work/_temp/rc-out/full/simWorldEditor.mjs/stdout.log
+   0 /home/runner/work/_temp/rc-out/full/simWorldEditor.mjs/stderr.log
+1610 total

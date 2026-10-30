@@ -1,0 +1,2 @@
+bf197115a972925fb3e41d5ec01bbab7b45462e39c78959be703729ba6f6e8e3  /home/runner/work/_temp/rc-out/full/simPlayerBingoWorldCupAlias.mjs/stdout.log
+e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855  /home/runner/work/_temp/rc-out/full/simPlayerBingoWorldCupAlias.mjs/stderr.log

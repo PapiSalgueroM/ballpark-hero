@@ -1,0 +1,2 @@
+f9376b9921112859abe1079e1a753fd40e1ef2051becb15705de8c5d27f49922  /home/runner/work/_temp/rc-out/full/simNotCurrentPlayers.mjs/stdout.log
+e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855  /home/runner/work/_temp/rc-out/full/simNotCurrentPlayers.mjs/stderr.log

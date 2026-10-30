@@ -1,0 +1,3 @@
+358 /home/runner/work/_temp/rc-out/full/simLiveSim.mjs/stdout.log
+  0 /home/runner/work/_temp/rc-out/full/simLiveSim.mjs/stderr.log
+358 total

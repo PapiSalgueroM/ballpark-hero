@@ -1,0 +1,3 @@
+2489 /home/runner/work/_temp/rc-out/full/simBudgetSigning.mjs/stdout.log
+   0 /home/runner/work/_temp/rc-out/full/simBudgetSigning.mjs/stderr.log
+2489 total

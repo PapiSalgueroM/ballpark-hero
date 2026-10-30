@@ -1,0 +1,3 @@
+2666 /home/runner/work/_temp/rc-out/full/simFightRingPlayback.mjs/stdout.log
+   0 /home/runner/work/_temp/rc-out/full/simFightRingPlayback.mjs/stderr.log
+2666 total

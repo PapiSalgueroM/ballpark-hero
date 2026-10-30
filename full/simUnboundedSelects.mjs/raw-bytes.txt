@@ -1,0 +1,3 @@
+1529 /home/runner/work/_temp/rc-out/full/simUnboundedSelects.mjs/stdout.log
+   0 /home/runner/work/_temp/rc-out/full/simUnboundedSelects.mjs/stderr.log
+1529 total

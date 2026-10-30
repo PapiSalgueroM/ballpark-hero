@@ -1,0 +1,3 @@
+3359 /home/runner/work/_temp/rc-out/full/simCareerDecisionOutcome.mjs/stdout.log
+   0 /home/runner/work/_temp/rc-out/full/simCareerDecisionOutcome.mjs/stderr.log
+3359 total

@@ -1,0 +1,3 @@
+1959 /home/runner/work/_temp/rc-out/full/simSiteSearch.mjs/stdout.log
+   0 /home/runner/work/_temp/rc-out/full/simSiteSearch.mjs/stderr.log
+1959 total

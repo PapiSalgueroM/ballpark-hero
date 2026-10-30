@@ -1,0 +1,3 @@
+1450 /home/runner/work/_temp/rc-out/full/simClubManagerDecisions.mjs/stdout.log
+   0 /home/runner/work/_temp/rc-out/full/simClubManagerDecisions.mjs/stderr.log
+1450 total

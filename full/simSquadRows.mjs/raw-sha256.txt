@@ -1,0 +1,2 @@
+cc1abc0fcee1aaa00c80098d9db0792a96c8c60261477c678d8167ffc166e2a6  /home/runner/work/_temp/rc-out/full/simSquadRows.mjs/stdout.log
+e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855  /home/runner/work/_temp/rc-out/full/simSquadRows.mjs/stderr.log

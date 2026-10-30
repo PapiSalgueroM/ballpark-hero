@@ -1,0 +1,3 @@
+713 /home/runner/work/_temp/rc-out/full/simNotCurrentPlayers.mjs/stdout.log
+  0 /home/runner/work/_temp/rc-out/full/simNotCurrentPlayers.mjs/stderr.log
+713 total

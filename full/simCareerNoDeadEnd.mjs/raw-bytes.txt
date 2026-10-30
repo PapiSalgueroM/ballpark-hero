@@ -1,0 +1,3 @@
+1316 /home/runner/work/_temp/rc-out/full/simCareerNoDeadEnd.mjs/stdout.log
+   0 /home/runner/work/_temp/rc-out/full/simCareerNoDeadEnd.mjs/stderr.log
+1316 total

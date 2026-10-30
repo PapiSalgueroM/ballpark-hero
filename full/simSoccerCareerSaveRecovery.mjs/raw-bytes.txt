@@ -1,0 +1,3 @@
+880 /home/runner/work/_temp/rc-out/full/simSoccerCareerSaveRecovery.mjs/stdout.log
+  0 /home/runner/work/_temp/rc-out/full/simSoccerCareerSaveRecovery.mjs/stderr.log
+880 total

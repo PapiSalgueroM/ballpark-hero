@@ -1,0 +1,3 @@
+2703 /home/runner/work/_temp/rc-out/full/simNbaPlanningBench.mjs/stdout.log
+   0 /home/runner/work/_temp/rc-out/full/simNbaPlanningBench.mjs/stderr.log
+2703 total

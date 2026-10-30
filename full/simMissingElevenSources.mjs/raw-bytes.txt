@@ -1,0 +1,3 @@
+1475 /home/runner/work/_temp/rc-out/full/simMissingElevenSources.mjs/stdout.log
+   0 /home/runner/work/_temp/rc-out/full/simMissingElevenSources.mjs/stderr.log
+1475 total

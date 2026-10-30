@@ -1,0 +1,3 @@
+1681 /home/runner/work/_temp/rc-out/full/simConnectionsLoss.mjs/stdout.log
+   0 /home/runner/work/_temp/rc-out/full/simConnectionsLoss.mjs/stderr.log
+1681 total

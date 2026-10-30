@@ -1,0 +1,2 @@
+fc1028eeeb2a1c0f9386f68072fc05982b32e894a201b8b4b780e3a698cf15bc  /home/runner/work/_temp/rc-out/full/simFightRingPlayback.mjs/stdout.log
+e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855  /home/runner/work/_temp/rc-out/full/simFightRingPlayback.mjs/stderr.log
