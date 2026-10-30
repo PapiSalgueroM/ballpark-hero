@@ -1,0 +1,204 @@
+bundled in 445 ms (control randomcredit)
+
+1. LIFT
+  section 1 skipped: LIFT_BASE is not set
+
+2. IDENTITIES, set 0 (22800 told games)
+  ok   set 0: credited and unclaimed touchdowns are the story's, side by side (22800 looked at)
+  ok   set 0: field goals and safeties are the story's (22800 looked at)
+  ok   set 0: each side's drive counts are the cheapest list of its score, by the harness's own copy of the rule (22800 looked at)
+  ok   set 0: every credited man is a healthy starter of his club at the game, never a lineman (45600 looked at)
+  ok   set 0: per club and season, thrown equals caught (2560 looked at)
+  ok   set 0: per club and season, run and caught touchdowns plus unclaimed are the club line's (2560 looked at)
+  ok   set 0: per club and season, the told points sit between six and eight a touchdown plus the kicks, over 17 games (2560 looked at)
+  ok   set 0: per club and season, the card's kicks reader gives the touchdowns, field goals and safeties the games told (2560 looked at)
+  ok   set 0: no touchdown went unclaimed on the fleet (0)
+
+3. DETERMINISM, set 0
+  ok   set 0: the same generator state and draw count after Week 17, recording or not (80 looked at)
+  ok   set 0: the same generator state and draw count after the postseason and the close (80 looked at)
+  ok   set 0: the same winners, injuries, computer moves, records, bracket and champion (80 looked at)
+  ok   set 0: the same league once the new keys are taken out (80 looked at)
+  ok   set 0: the same week recorded twice gives the same block, once through JSON (160 looked at)
+  ok   set 0: between two page loads (two fresh loads of the engine, each its own id epoch) a deep season played the board's way is the same league but for the epoch (1 looked at)
+  set 0: two page loads, ids as minted: epochs of 13 and 12 characters, the league 663511 and 660885 characters; 2626 ids in it, so each character of epoch (2 to 14 a load) moves it by 2626
+
+4. THE RATING EFFECT, set 0: WR1 85 and up 29322 club games, 48454 touchdown passes, 9595 his (0.198); WR1 73 and under 1373 club games, 1455 passes, 253 his (0.174)
+  receiving touchdowns a game for the WR1 (printed, not asserted): 85 and up 0.327, 73 and under 0.184
+  the lift (his catches over a rating blind credit's): 85 and up 0.989, 73 and under 0.868
+  FAIL set 0: the WR1's lift over a rating blind credit climbs with his rating (gap 0.1214, margin 0.27)
+  ok   set 0: the low band holds 500 club games or more (1373)
+  pass share a point of QB1 rating 0.00989 (se 0.00022, 111798 credited touchdowns); sacks a club game a point of rush less block 0.0801 (se 0.0020, 43520 club games)
+  ok   set 0: the pass share climbs with the QB1's rating (slope 0.00989, margin 0.005)
+  ok   set 0: the sacks climb with the rush against the block (slope 0.0801, margin 0.04)
+  WR1 ratings over the club games (printed): 67: 25, 70: 29, 71: 9, 73: 1310, 74: 52, 75: 8, 76: 69, 77: 1385, 78: 126, 79: 70, 80: 1316, 81: 108, 82: 1363, 83: 2908, 84: 5420, 85: 1366, 86: 1326, 87: 6623, 88: 78, 89: 3995, 90: 2724, 91: 3970, 92: 35, 93: 1307, 94: 2615, 95: 5283
+
+2. IDENTITIES, set 1 (22800 told games)
+  ok   set 1: credited and unclaimed touchdowns are the story's, side by side (22800 looked at)
+  ok   set 1: field goals and safeties are the story's (22800 looked at)
+  ok   set 1: each side's drive counts are the cheapest list of its score, by the harness's own copy of the rule (22800 looked at)
+  ok   set 1: every credited man is a healthy starter of his club at the game, never a lineman (45600 looked at)
+  ok   set 1: per club and season, thrown equals caught (2560 looked at)
+  ok   set 1: per club and season, run and caught touchdowns plus unclaimed are the club line's (2560 looked at)
+  ok   set 1: per club and season, the told points sit between six and eight a touchdown plus the kicks, over 17 games (2560 looked at)
+  ok   set 1: per club and season, the card's kicks reader gives the touchdowns, field goals and safeties the games told (2560 looked at)
+  ok   set 1: no touchdown went unclaimed on the fleet (0)
+
+3. DETERMINISM, set 1
+  ok   set 1: the same generator state and draw count after Week 17, recording or not (80 looked at)
+  ok   set 1: the same generator state and draw count after the postseason and the close (80 looked at)
+  ok   set 1: the same winners, injuries, computer moves, records, bracket and champion (80 looked at)
+  ok   set 1: the same league once the new keys are taken out (80 looked at)
+  ok   set 1: the same week recorded twice gives the same block, once through JSON (160 looked at)
+  ok   set 1: between two page loads (two fresh loads of the engine, each its own id epoch) a deep season played the board's way is the same league but for the epoch (1 looked at)
+  set 1: two page loads, ids as minted: epochs of 13 and 12 characters, the league 665226 and 662593 characters; 2633 ids in it, so each character of epoch (2 to 14 a load) moves it by 2633
+
+4. THE RATING EFFECT, set 1: WR1 85 and up 29368 club games, 48785 touchdown passes, 9694 his (0.199); WR1 73 and under 1323 club games, 1460 passes, 284 his (0.195)
+  receiving touchdowns a game for the WR1 (printed, not asserted): 85 and up 0.330, 73 and under 0.215
+  the lift (his catches over a rating blind credit's): 85 and up 0.993, 73 and under 0.969
+  FAIL set 1: the WR1's lift over a rating blind credit climbs with his rating (gap 0.0232, margin 0.27)
+  ok   set 1: the low band holds 500 club games or more (1323)
+  pass share a point of QB1 rating 0.01016 (se 0.00022, 112687 credited touchdowns); sacks a club game a point of rush less block 0.0776 (se 0.0019, 43520 club games)
+  ok   set 1: the pass share climbs with the QB1's rating (slope 0.01016, margin 0.005)
+  ok   set 1: the sacks climb with the rush against the block (slope 0.0776, margin 0.04)
+  WR1 ratings over the club games (printed): 67: 16, 69: 3, 70: 11, 71: 11, 73: 1282, 74: 61, 75: 9, 76: 71, 77: 1409, 78: 94, 79: 55, 80: 1363, 81: 122, 82: 1377, 83: 2889, 84: 5379, 85: 1356, 86: 1316, 87: 6623, 88: 80, 89: 3993, 90: 2733, 91: 3957, 92: 50, 93: 1330, 94: 2654, 95: 5276
+
+2. IDENTITIES, set 2 (22800 told games)
+  ok   set 2: credited and unclaimed touchdowns are the story's, side by side (22800 looked at)
+  ok   set 2: field goals and safeties are the story's (22800 looked at)
+  ok   set 2: each side's drive counts are the cheapest list of its score, by the harness's own copy of the rule (22800 looked at)
+  ok   set 2: every credited man is a healthy starter of his club at the game, never a lineman (45600 looked at)
+  ok   set 2: per club and season, thrown equals caught (2560 looked at)
+  ok   set 2: per club and season, run and caught touchdowns plus unclaimed are the club line's (2560 looked at)
+  ok   set 2: per club and season, the told points sit between six and eight a touchdown plus the kicks, over 17 games (2560 looked at)
+  ok   set 2: per club and season, the card's kicks reader gives the touchdowns, field goals and safeties the games told (2560 looked at)
+  ok   set 2: no touchdown went unclaimed on the fleet (0)
+
+3. DETERMINISM, set 2
+  ok   set 2: the same generator state and draw count after Week 17, recording or not (80 looked at)
+  ok   set 2: the same generator state and draw count after the postseason and the close (80 looked at)
+  ok   set 2: the same winners, injuries, computer moves, records, bracket and champion (80 looked at)
+  ok   set 2: the same league once the new keys are taken out (80 looked at)
+  ok   set 2: the same week recorded twice gives the same block, once through JSON (160 looked at)
+  ok   set 2: between two page loads (two fresh loads of the engine, each its own id epoch) a deep season played the board's way is the same league but for the epoch (1 looked at)
+  set 2: two page loads, ids as minted: epochs of 13 and 12 characters, the league 666314 and 663671 characters; 2643 ids in it, so each character of epoch (2 to 14 a load) moves it by 2643
+
+4. THE RATING EFFECT, set 2: WR1 85 and up 29374 club games, 48541 touchdown passes, 9760 his (0.201); WR1 73 and under 1306 club games, 1458 passes, 270 his (0.185)
+  receiving touchdowns a game for the WR1 (printed, not asserted): 85 and up 0.332, 73 and under 0.207
+  the lift (his catches over a rating blind credit's): 85 and up 1.004, 73 and under 0.924
+  FAIL set 2: the WR1's lift over a rating blind credit climbs with his rating (gap 0.0799, margin 0.27)
+  ok   set 2: the low band holds 500 club games or more (1306)
+  pass share a point of QB1 rating 0.00979 (se 0.00022, 112000 credited touchdowns); sacks a club game a point of rush less block 0.0795 (se 0.0020, 43520 club games)
+  ok   set 2: the pass share climbs with the QB1's rating (slope 0.00979, margin 0.005)
+  ok   set 2: the sacks climb with the rush against the block (slope 0.0795, margin 0.04)
+  WR1 ratings over the club games (printed): 67: 22, 69: 1, 70: 8, 71: 16, 73: 1259, 74: 63, 75: 14, 76: 63, 77: 1304, 78: 156, 79: 68, 80: 1354, 81: 164, 82: 1344, 83: 2878, 84: 5431, 85: 1349, 86: 1318, 87: 6631, 88: 57, 89: 4013, 90: 2728, 91: 3960, 92: 29, 93: 1345, 94: 2642, 95: 5302
+
+2. IDENTITIES, set 3 (22800 told games)
+  ok   set 3: credited and unclaimed touchdowns are the story's, side by side (22800 looked at)
+  ok   set 3: field goals and safeties are the story's (22800 looked at)
+  ok   set 3: each side's drive counts are the cheapest list of its score, by the harness's own copy of the rule (22800 looked at)
+  ok   set 3: every credited man is a healthy starter of his club at the game, never a lineman (45600 looked at)
+  ok   set 3: per club and season, thrown equals caught (2560 looked at)
+  ok   set 3: per club and season, run and caught touchdowns plus unclaimed are the club line's (2560 looked at)
+  ok   set 3: per club and season, the told points sit between six and eight a touchdown plus the kicks, over 17 games (2560 looked at)
+  ok   set 3: per club and season, the card's kicks reader gives the touchdowns, field goals and safeties the games told (2560 looked at)
+  ok   set 3: no touchdown went unclaimed on the fleet (0)
+
+3. DETERMINISM, set 3
+  ok   set 3: the same generator state and draw count after Week 17, recording or not (80 looked at)
+  ok   set 3: the same generator state and draw count after the postseason and the close (80 looked at)
+  ok   set 3: the same winners, injuries, computer moves, records, bracket and champion (80 looked at)
+  ok   set 3: the same league once the new keys are taken out (80 looked at)
+  ok   set 3: the same week recorded twice gives the same block, once through JSON (160 looked at)
+  ok   set 3: between two page loads (two fresh loads of the engine, each its own id epoch) a deep season played the board's way is the same league but for the epoch (1 looked at)
+  set 3: two page loads, ids as minted: epochs of 13 and 12 characters, the league 664914 and 662282 characters; 2632 ids in it, so each character of epoch (2 to 14 a load) moves it by 2632
+
+4. THE RATING EFFECT, set 3: WR1 85 and up 29308 club games, 48453 touchdown passes, 9645 his (0.199); WR1 73 and under 1332 club games, 1412 passes, 286 his (0.203)
+  receiving touchdowns a game for the WR1 (printed, not asserted): 85 and up 0.329, 73 and under 0.215
+  the lift (his catches over a rating blind credit's): 85 and up 0.994, 73 and under 1.011
+  FAIL set 3: the WR1's lift over a rating blind credit climbs with his rating (gap -0.0171, margin 0.27)
+  ok   set 3: the low band holds 500 club games or more (1332)
+  pass share a point of QB1 rating 0.01005 (se 0.00022, 111572 credited touchdowns); sacks a club game a point of rush less block 0.0797 (se 0.0020, 43520 club games)
+  ok   set 3: the pass share climbs with the QB1's rating (slope 0.01005, margin 0.005)
+  ok   set 3: the sacks climb with the rush against the block (slope 0.0797, margin 0.04)
+  WR1 ratings over the club games (printed): 67: 10, 69: 7, 70: 10, 71: 14, 72: 1, 73: 1290, 74: 80, 75: 5, 76: 128, 77: 1406, 78: 92, 79: 20, 80: 1341, 81: 112, 82: 1394, 83: 2904, 84: 5398, 85: 1353, 86: 1331, 87: 6616, 88: 58, 89: 4015, 90: 2698, 91: 3963, 92: 47, 93: 1314, 94: 2640, 95: 5273
+
+2. IDENTITIES, set 4 (22800 told games)
+  ok   set 4: credited and unclaimed touchdowns are the story's, side by side (22800 looked at)
+  ok   set 4: field goals and safeties are the story's (22800 looked at)
+  ok   set 4: each side's drive counts are the cheapest list of its score, by the harness's own copy of the rule (22800 looked at)
+  ok   set 4: every credited man is a healthy starter of his club at the game, never a lineman (45600 looked at)
+  ok   set 4: per club and season, thrown equals caught (2560 looked at)
+  ok   set 4: per club and season, run and caught touchdowns plus unclaimed are the club line's (2560 looked at)
+  ok   set 4: per club and season, the told points sit between six and eight a touchdown plus the kicks, over 17 games (2560 looked at)
+  ok   set 4: per club and season, the card's kicks reader gives the touchdowns, field goals and safeties the games told (2560 looked at)
+  ok   set 4: no touchdown went unclaimed on the fleet (0)
+
+3. DETERMINISM, set 4
+  ok   set 4: the same generator state and draw count after Week 17, recording or not (80 looked at)
+  ok   set 4: the same generator state and draw count after the postseason and the close (80 looked at)
+  ok   set 4: the same winners, injuries, computer moves, records, bracket and champion (80 looked at)
+  ok   set 4: the same league once the new keys are taken out (80 looked at)
+  ok   set 4: the same week recorded twice gives the same block, once through JSON (160 looked at)
+  ok   set 4: between two page loads (two fresh loads of the engine, each its own id epoch) a deep season played the board's way is the same league but for the epoch (1 looked at)
+  set 4: two page loads, ids as minted: epochs of 13 and 12 characters, the league 666865 and 664226 characters; 2639 ids in it, so each character of epoch (2 to 14 a load) moves it by 2639
+
+4. THE RATING EFFECT, set 4: WR1 85 and up 29398 club games, 49028 touchdown passes, 9753 his (0.199); WR1 73 and under 1329 club games, 1353 passes, 244 his (0.180)
+  receiving touchdowns a game for the WR1 (printed, not asserted): 85 and up 0.332, 73 and under 0.184
+  the lift (his catches over a rating blind credit's): 85 and up 0.994, 73 and under 0.899
+  FAIL set 4: the WR1's lift over a rating blind credit climbs with his rating (gap 0.0944, margin 0.27)
+  ok   set 4: the low band holds 500 club games or more (1329)
+  pass share a point of QB1 rating 0.00995 (se 0.00022, 111907 credited touchdowns); sacks a club game a point of rush less block 0.0801 (se 0.0020, 43520 club games)
+  ok   set 4: the pass share climbs with the QB1's rating (slope 0.00995, margin 0.005)
+  ok   set 4: the sacks climb with the rush against the block (slope 0.0801, margin 0.04)
+  WR1 ratings over the club games (printed): 67: 10, 69: 2, 70: 33, 71: 24, 72: 1, 73: 1259, 74: 51, 75: 11, 76: 71, 77: 1358, 78: 50, 79: 53, 80: 1408, 81: 143, 82: 1368, 83: 2860, 84: 5420, 85: 1363, 86: 1321, 87: 6624, 88: 92, 89: 4004, 90: 2742, 91: 3958, 92: 44, 93: 1321, 94: 2653, 95: 5276
+  pass share of credited touchdowns by QB1 rating (printed): 60: 0.375 of 8 | 65: 0.477 of 14142 | 70: 0.526 of 71307 | 75: 0.579 of 110194 | 80: 0.619 of 134507 | 85: 0.671 of 149841 | 90: 0.716 of 79965
+  sacks a club game by rush less block, to the nearest 5 (printed): -10: 1.51 over 75 | -5: 1.91 over 6569 | 0: 2.31 over 64949 | 5: 2.63 over 116585 | 10: 2.93 over 28927 | 15: 3.32 over 422 | 20: 3.71 over 55 | 25: 3.06 over 17 | 30: 4.00 over 1
+  gaps by set: 0 0.1214, 1 0.0232, 2 0.0799, 3 -0.0171, 4 0.0944
+  pass slopes by set: 0 0.00989, 1 0.01016, 2 0.00979, 3 0.01005, 4 0.00995
+  sack slopes by set: 0 0.0801, 1 0.0776, 2 0.0795, 3 0.0797, 4 0.0801
+
+7. SIZE
+  ok   the save budget is read from scripts/simNflFullRosters.mjs by its anchor
+  over 400 seasons, ids at the longest epoch: the save median 656.5K (672232 characters), the biggest 663.9K (679817), the block median 29.3K and largest 32.0K
+  lines a season: the pool's 402 to 474 (median 432); men with a stat only 395 to 444 (median 414)
+  ok   the biggest save with lines, 663.9K, is inside the NFL save budget of 700.0K
+  LEAD: the brief's stop line is 600K. The biggest save WITHOUT this round's keys is 631.9K on its own; with the block and the history it is 663.9K, 32.0K more
+  ok   every line is a man who was in his club's pool in a game of the season, never the line, the bench or the practice squad (172277 looked at)
+
+6. OLD SAVE
+  ok   a save from before season lines plays from Week 5 to its close recording nothing and throwing nothing (3 looked at)
+  ok   its next Week 1 opens the lines, and that season closes with awards (3 looked at)
+
+5. AWARDS AND THE CLOSE (10 deep franchises, 4 seasons each)
+  ok   the lib names the same three men as the harness's own copy of the rules, its rookies the harness's own draftees (40 looked at)
+  ok   the rookie lines are the first year men the harness drafted, every one that played, and no class in a first season (40 looked at)
+  ok   first year men recorded lines in every season after a franchise's first (30 looked at)
+  ok   a second close returns the same awards and a second close writes no card twice (40 looked at)
+  ok   the history grows by one a season (40 looked at)
+  ok   every winner's card carries his award once (40 looked at)
+  ok   Week 1 opens a clean block for the season and keeps the history (40 looked at)
+  ok   a winner's card and a draftee's first year survive the summer, by id (40 looked at)
+  ok   a tie goes to more games, then the id (m2, a1)
+  seasons 40: an Offensive Rookie of the Year named in 30, a Defensive in 30; the MVP by position {"QB":40}; first year men with lines a season 0,10,11,11,0,10,11,13,0,10,8,12,0,10,11,11,0,16,9,8,0,4,10,11,0,10,13,13,0,7,4,9,0,10,15,12,0,9,15,13
+
+8. COPY AND PURITY
+  ok   src/lib/nflSeasonStats.ts holds no Math.random, no Date and no localStorage, comments taken out
+  ok   src/lib/nflSeasonAwards.ts holds no Math.random, no Date and no localStorage, comments taken out
+  ok   src/lib/gameLaws/nflDrives.ts holds no Math.random, no Date and no localStorage, comments taken out
+  ok   src/lib/foSeasonClose.ts holds no Math.random, no Date and no localStorage, comments taken out
+  ok   the comment stripper keeps the code: the credit stream is still in the stripped lib
+  ok   every sentence the lib builds has no quotation mark and no verb of speech (11 read)
+  ok   the page's rules say the numbers are this save's sim season
+  ok   the card's sim note is the NBA card's with NFL in its place
+  ok   every line the card builds has no quotation mark and no verb of speech (26 read)
+  ok   an award winner's line reads as the NBA's does: "31 TD thrown, 3 run in"
+  ok   the badge says Sim on every award and its title says they are this save's sim awards
+  ok   the history says its seasons are sim seasons
+  ok   the feed line names the award in this save's season
+  ok   the tile's Touchdowns list has a heading that says it is this save's game
+  ok   the tile's credit words have no quotation mark and no verb of speech (A Passer to A Catcher / A Back runs it in)
+
+ran in 77.1 s, seed sets 0, 1, 2, 3, 4, sections 1, 2, 3, 4, 5, 6, 7, 8
+control randomcredit: FIRED at section 4 (1 of 1 named checks red on 5 of 5 sets)
+simNflSeasonStats: 124 checks, 5 failed (control randomcredit); section 1 skipped: LIFT_BASE is not set

@@ -1,0 +1,33 @@
+   control nosplit: the split hands out the floors only, so the leftover points are lost
+1) Every game adds up: 2400 box scores, then every club's season
+   2400 box scores, 900 club seasons over 30 closes
+2) The box takes nothing from the league generator: the same seed with and without lines
+   5 seeds played twice, two seasons each
+3) The award rules pick who the lines say: fixtures, then every simulated season against a typed copy of the rules
+   fixtures plus 30 simulated seasons; rookie of the year named in 20; 238 first year lines, 238 marked rookie
+4) The leaders tables are a recount
+5) The lines read like basketball and like this sim
+   club ppg 112.9 to 113.4 (mean 113.25); tenth scorer median 25.31 (24.1 to 26.4)
+   rating vs ppg Spearman 0.877 to 0.959; differential vs winning share 0.893 to 0.981
+   rebounds C 8.76 F 5.97 G 3.01; assists G 4.22 F 1.96 C 0.81
+6) The close happens once and is kept
+7) A save from before the round: no lines this season, lines from the summer
+   vitest skipped under this control: it reads src, which the control never touches
+8) The copy says what the engine does
+   Sixth Man winners, points a game over 30 seasons: 10th percentile 11.7, median 12.3, 90th 12.7; the page promises 13
+9) One save shape: the NBA keeps the shared short lines, reads them through the one expand, and an old save of named rows converts byte for byte
+   9d skipped: NBA_STATS_BASE is not set (the base comparison is the round's receipt, run on a runner)
+   9e two page loads, ids as minted: epochs of 13 and 14 characters, the league median 85297 and 86005, largest 85822 and 86538; the largest carries 716 ids, so each character of epoch (2 to 14 a load) moves it by 716
+   9e head: the league in the save after the regular season, 10 seeds: median 85241.5, largest 85610 characters (its lines block: median 19848, largest 20203); headroom to 700K (716800) 631190
+   1. every game adds up: 3 checks, 2 FAILED
+   2. the box takes nothing from the league generator: 20 checks
+   3. the award rules pick who the lines say: 16 checks
+   4. the leaders tables are a recount: 1 check
+   5. the lines read like basketball and like this sim: 6 checks
+   6. the close happens once and is kept: 6 checks
+   7. an old save: 5 checks
+   8. the copy says what the engine does: 12 checks
+   9. one save shape: 14 checks
+   red: [1] every one of 2400 box scores adds up, follows its draw and plays the healthy eight: 2400 broken, e.g. BOS pts men 113 vs side 117; BOS reb men 44 vs side 47; BOS ast men 22 vs side 27; BOS stl men 5 vs side 9; BOS blk men 2 vs side 5; MIA pts men 111 vs side 115; MIA reb men 42 vs side 47; MIA ast men 25 vs side 29; MIA stl men 4 vs side 9; MIA blk men 1 vs side 5 | SAC pts men 108 vs side 112; SAC reb men 38 vs side 43; SAC ast men 23 vs side 27; SAC stl men 4 vs side 7; SAC blk men 1 vs side 5; CHI pts men 98 vs side 102; CHI reb men 44 vs side 48; CHI ast men 18 vs side 22; CHI stl men 4 vs side 8; CHI blk men 2 vs side 5 | LAC pts men 111 vs side 115; LAC reb men 42 vs side 46; LAC ast men 18 vs side 22; LAC stl men 2 vs side 6; LAC blk men 2 vs side 6; IND pts men 109 vs side 112; IND reb men 38 vs side 42; IND ast men 22 vs side 26; IND stl men 2 vs side 6; IND blk men 3 vs side 6
+   red: [1] every club season (900) sums its lines to its points and matches its record game for game and win for win: seed 1 2026 DEN: lines 8969 vs club 9277 | seed 1 2026 OKC: lines 8957 vs club 9281 | seed 1 2026 BOS: lines 8803 vs club 9124 | seed 1 2026 NYK: lines 8850 vs club 9182
+control "nosplit": section 1 went red as expected (2 failures) and nothing else moved, the check works. Exiting non zero because the checks did fail.
