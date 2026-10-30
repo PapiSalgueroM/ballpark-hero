@@ -1,0 +1,42 @@
+
+[1m[46m RUN [49m[22m [36mv3.2.7 [39m[90m/home/runner/work/ballpark-hero/ballpark-hero[39m
+
+[90mstdout[2m | src/test/clubManagerSaveSize.test.tsx[2m > [22m[2mClub Manager: the write when the page goes[2m > [22m[2mpagehide writes the career held in memory, with nothing else able to
+[22m[39m  after pagehide the disk holds 58710 bytes, memory 58710
+
+[90mstdout[2m | src/test/clubManagerSaveSize.test.tsx[2m > [22m[2mClub Manager: the write when the page goes[2m > [22m[2mthe tab going hidden writes it too
+[22m[39m  after the tab went hidden the disk holds 60781 bytes, memory 60781
+
+[90mstdout[2m | src/test/clubManagerSaveSize.test.tsx[2m > [22m[2mClub Manager: the write when the page goes[2m > [22m[2mtwo writes of one career are the same bytes
+[22m[39m  three writes, 59236 bytes each, identical
+
+[90mstdout[2m | src/test/clubManagerSaveSize.test.tsx[2m > [22m[2mClub Manager: a refused write is said out loud[2m > [22m[2msaveFailed goes up when the store throws and comes down when a write lands
+[22m[39m  with a throwing store, saveFailed is true
+  with the store back, saveFailed is false and the disk matches memory: true
+
+[90mstdout[2m | src/test/clubManagerSaveSize.test.tsx[2m > [22m[2mClub Manager: a refused write is said out loud[2m > [22m[2ma refused press on the transfer desk says why, and one that goes through clears it
+[22m[39m  second press on Serge Gnabry: "Serge Gnabry is already in your squad."
+  loan out again after the recall: "Christian Pulisic has already been out on loan once this season. One loan out a season."
+
+ [32m✓[39m src/test/clubManagerSaveSize.test.tsx [2m([22m[2m6 tests[22m[2m)[22m[33m 1232[2mms[22m[39m
+   [33m[2m✓[22m[39m Club Manager: the write when the page goes[2m > [22mpagehide writes the career held in memory, with nothing else able to [33m 426[2mms[22m[39m
+   [33m[2m✓[22m[39m Club Manager: the write when the page goes[2m > [22mthe tab going hidden writes it too [33m 393[2mms[22m[39m
+ [32m✓[39m src/test/ClubManagerSeasonSummary.expiring.test.tsx [2m([22m[2m9 tests[22m[2m)[22m[33m 1578[2mms[22m[39m
+   [33m[2m✓[22m[39m Round 1597: no deal ends unseen[2m > [22mlists the three final year men and keeps Continue shut [33m 378[2mms[22m[39m
+   [33m[2m✓[22m[39m Round 1597: no deal ends unseen[2m > [22ma final year man out on loan is listed, named by the hub, renewed where he is, and comes home on the new deal [33m 415[2mms[22m[39m
+ [32m✓[39m src/test/clubManagerHandoverDesk.test.ts [2m([22m[2m10 tests[22m[2m)[22m[33m 5417[2mms[22m[39m
+   [33m[2m✓[22m[39m Club Manager appointment desk ownership[2m > [22mhandover desk missing: picker cannot claim predecessor funds [33m 3650[2mms[22m[39m
+   [33m[2m✓[22m[39m Club Manager appointment desk ownership[2m > [22mhandover desk missing: job cannot claim predecessor funds [33m 1580[2mms[22m[39m
+ [32m✓[39m src/test/clubManagerHubLines.test.ts [2m([22m[2m15 tests[22m[2m)[22m[32m 30[2mms[22m[39m
+ [32m✓[39m src/lib/clubManagerReportAge.test.ts [2m([22m[2m3 tests[22m[2m)[22m[33m 1388[2mms[22m[39m
+   [33m[2m✓[22m[39m reported historical Club Manager retirement[2m > [22mclassifies the first simulated Messi contract expiry separately from retirement and renewal [33m 1259[2mms[22m[39m
+ [32m✓[39m src/test/clubManagerOfferConfirm.test.tsx [2m([22m[2m5 tests[22m[2m)[22m[33m 845[2mms[22m[39m
+ [32m✓[39m src/test/cmFreeAgencyJoinNow.test.ts [2m([22m[2m2 tests[22m[2m)[22m[33m 1094[2mms[22m[39m
+   [33m[2m✓[22m[39m Round 1597: a mid season job move loses nobody off the free agent list[2m > [22mcarries the men who left me, my released names and the once only pass, and leaves the old journeymen [33m 708[2mms[22m[39m
+   [33m[2m✓[22m[39m Round 1597: a mid season job move loses nobody off the free agent list[2m > [22ma save with nothing of the kind joins exactly as before [33m 385[2mms[22m[39m
+
+[2m Test Files [22m [1m[32m7 passed[39m[22m[90m (7)[39m
+[2m      Tests [22m [1m[32m50 passed[39m[22m[90m (50)[39m
+[2m   Start at [22m 10:48:14
+[2m   Duration [22m 9.11s[2m (transform 3.63s, setup 485ms, collect 7.69s, tests 11.58s, environment 3.30s, prepare 915ms)[22m
+

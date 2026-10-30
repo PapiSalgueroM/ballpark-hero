@@ -1,0 +1,6 @@
+vitest exit=0 10s |    Duration  9.11s (transform 3.63s, setup 485ms, collect 7.69s, tests 11.58s, environment 3.30s, prepare 915ms)
+tsc exit=0 68s | 
+simFreeAgents exit=0 95s | simFreeAgents: all sections passed
+simContracts exit=0 19s | ALL CONTRACT CHECKS PASSED
+fleet exit=1 147s | simCmFreeAgencyFleet: RED, sections 6 (1)
+fa-nosummer exit=1 91s | simFreeAgents: 2 failure(s)

@@ -1,0 +1,6 @@
+tsc: node_modules/.bin/tsc --noEmit -p tsconfig.app.json
+vitest: node_modules/.bin/vitest run src/test/cmFreeAgencyJoinNow.test.ts src/test/ClubManagerSeasonSummary.expiring.test.tsx src/test/clubManagerOfferConfirm.test.tsx src/test/clubManagerHubLines.test.ts src/test/clubManagerSaveSize.test.tsx src/lib/clubManagerReportAge.test.ts src/test/clubManagerHandoverDesk.test.ts --testTimeout=300000 --hookTimeout=120000
+fleet: node scripts/simCmFreeAgencyFleet.mjs
+simFreeAgents: node scripts/simFreeAgents.mjs
+fa-nosummer: FA_CONTROL=nosummer node scripts/simFreeAgents.mjs
+simContracts: node scripts/simContracts.mjs
