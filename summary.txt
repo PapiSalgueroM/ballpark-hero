@@ -1,0 +1,9 @@
+vitest-curve exit=0 5s |    Duration  3.96s (transform 1.55s, setup 101ms, collect 1.75s, tests 781ms, environment 613ms, prepare 250ms)
+simEra2005 exit=0 23s | simEra2005: green. 2005 is real, sealed, and plays like 2005.
+simEra2010 exit=0 24s | simEra2010: green. 2010 is real, sealed, and plays like 2010.
+simEra2015 exit=0 20s | simEra2015: green. 2015 is real, sealed, and plays like 2015.
+simEra2020 exit=0 43s | simEra2020: green. 2020-21 is real, sealed, and plays like 2020-21.
+tsc exit=0 101s | 
+simBoardObjectives exit=0 1s | simBoardObjectives: green. Every board talks like a board.
+simCustomClubValues exit=0 108s | simCustomClubValues: 25 checks, 0 failures
+simEras exit=0 1431s | ALL ERA AND AGEING CHECKS PASSED
