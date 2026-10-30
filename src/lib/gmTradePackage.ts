@@ -403,3 +403,24 @@ export function splitRetained(salary: number, retain: number | undefined): { kep
   const kept = Math.round(salary * share * 10) / 10;
   return { kept, moved: Math.round((salary - kept) * 10) / 10 };
 }
+
+/** A retained salary row as a desk keeps it: the club still paying, the man it traded, the figure it keeps. */
+export interface RetainedRowLike { club: string; playerId: string; kept: number }
+
+/**
+ * Round 1559: the summer's retained salary step, one function for every desk that keeps the rows (the NHL's and
+ * MLB's desk summers wrote it twice, word for word, and a year out needs it again). Every row whose club still
+ * carries the man's dead money entry has that entry set back to the figure the club kept, for the season ahead;
+ * a row whose entry has gone (the contract ran out) is dropped. MUTATES the clubs' entries, like the engine's own
+ * offseason, and hands back the rows that stay, in their order.
+ */
+export function keepRetainedOverSummer<R extends RetainedRowLike>(
+  teams: Record<string, { deadCap?: { playerId: string; amount: number }[] } | undefined>, rows: readonly R[],
+): R[] {
+  return rows.filter(r => {
+    const entry = teams[r.club]?.deadCap?.find(d => d.playerId === r.playerId);
+    if (!entry) return false;
+    entry.amount = r.kept;
+    return true;
+  });
+}

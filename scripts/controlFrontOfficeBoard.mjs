@@ -143,12 +143,17 @@ const T = {
   /* Round 1533: the one press digests with the desk on and off (the digest sets aside the host's two blocks only) */
   opDeskOn: [OP, 'GM desk on: one press of the final week ordinary'],
   opDeskOff: [OP, 'GM desk off: one press of the final week ordinary'],
-  caFired: [CA, 'fired: the recap offers who is calling and keeps the save'],
-  caTake: [CA, 'taking an offer takes two taps'],
+  /* Round 1559 (critic 2 of its brief): the career file holds a row per board, so each of its titles is matched with
+     its block's name in front ("nfl board: ..."), never by the words alone, which a second board's copy of the same
+     test (green under an NFL board copy) would also match and so stop the control from firing. */
+  caFired: [CA, 'nfl board: the career fired: the recap offers who is calling and keeps the save'],
+  caTake: [CA, 'nfl board: the career taking an offer takes two taps'],
   /* Round 1533's fix pass */
-  caLookHub: [CA, 'looking at Career and GM level on the hub'],
-  caLookOut: [CA, 'looking at all three boxes out of work'],
-  caTick: [CA, 'a staff approach that runs out in the final week'],
+  caLookHub: [CA, 'nfl board: the career looking at Career and GM level on the hub'],
+  caLookOut: [CA, 'nfl board: the career looking at all three boxes out of work'],
+  caTick: [CA, 'nfl board: the career a staff approach that runs out in the final week'],
+  /* Round 1559 (1533's finding 12): the title watched at the club he took */
+  caWatched: [CA, 'nfl board: a title watched at the club he took the title game watched to full time records one finish'],
   /* Round 1550 */
   lzSeason: [LZ, 'a season being played never asks for it'],
   lzBox: [LZ, 'a career box opened asks for it'],
@@ -215,7 +220,7 @@ const CONTROLS = {
   pressspoils: ["the press card shows the room the title game's press called while he watches it", [['const seenPresser = roomHeld ? roomHeld.presser : presser;', 'const seenPresser = presser;']], [T.psTitleRoom], [T.psTitleWatch, T.psWatchRound]],
   tiewhere: ['"Your game" opens the first game between the two clubs, whatever its round (the review\'s mutant)', [['games.findIndex(g => g.where === tie.round && (g.home === p.home', 'games.findIndex(g => (g.home === p.home']], [T.psTieRival], [T.psFaces, T.psBye]],
   hurtweeks: ['a man hurt on "Play Week 17" is out a count of weeks in the feed, though nobody heals in the bracket', [["const outForPlayoffs = lg.week >= REGULAR_WEEKS && asked === 'bracket';", 'const outForPlayoffs = false;']], [T.psHurtFeed], [T.psChipPress, T.psKeep]],
-  donenow: ["the finish is recorded at the title game's press while he watches it", [["useGameCompletion('front-office', roomHeld ? roomHeld.won : wonTitleNow,", "useGameCompletion('front-office', wonTitleNow,"]], [T.psTitleRoom], [T.psTitleWatch, T.psWatchRound]],
+  donenow: ["the finish is recorded at the title game's press while he watches it", [["useGameCompletion('front-office', roomHeld ? roomHeld.won : wonTitleNow,", "useGameCompletion('front-office', wonTitleNow,"]], [T.psTitleRoom, T.caWatched], [T.psTitleWatch, T.psWatchRound]],
   /* Round 1533: the close through the desk host writes a third block beside seat and xp (critic 1533 correction 2) */
   thirdkey: ['the season close writes a third block on the desk', [['if (v.desk && v.desk !== deskNow) setGm(v.desk);', "if (v.desk) setGm(withGmBlock(v.desk, 'extra', 1));"]], [T.opDeskOn], [T.opDeskOff]],
   /* Round 1533: the fired recap's button wired back to the reset that deletes the save; the arrival recap staging the

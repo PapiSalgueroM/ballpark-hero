@@ -60,8 +60,8 @@ import {
 /* Round 1533: the GM's career (the desk host, bound to this board). Round 1550: only the part every screen reads
    (gmCareerFace.ts) is imported for its values here; the calls that need the whole host, its adapter and the
    market (nflLegacy, nflTakeSeat), and the three only they read (nflOutcome, nflDeskBlockRules, nflAwayHost), live
-   in nflGmCareer.ts, which the board fetches when it needs them. */
-import { GM_HOST_KEYS, isGmSeatBlock } from './gmCareerFace';
+   in nflGmCareer.ts, which the board fetches when it needs them. Round 1559: the season counted rule is every
+   sport's and lives in gmCareerFace.ts (hostSeasonCounted), re-exported at the foot of this file by its NFL name. */
 import type { HostXpSource } from './gmDeskHost';
 import type { GmTree } from './gmXp';
 
@@ -647,13 +647,10 @@ export const NFL_XP_SOURCES: readonly HostXpSource[] = ['wins', 'titles', 'playo
 
 /**
  * Whether the save's counters already hold the league's season (the host's
- * seasonCounted contract, gmDeskHost.ts HostLegacy). Read off the save,
- * never off the league: true on the recap, the draft and the fired screen
- * of the season he ran; false on the hub (a season being played) and after a
- * year out (the league has a champion he did not play for).
+ * seasonCounted contract, gmDeskHost.ts HostLegacy). Round 1559 (Round 1533's
+ * finding 11): the rule reads only the phase names every board has and the
+ * record block, so it is every sport's, hostSeasonCounted in gmCareerFace.ts.
+ * This board's callers keep reading it by its NFL name: a live re-export,
+ * nothing evaluated here.
  */
-export function nflSeasonCounted(phase: string, desk: GmDesk | null): boolean {
-  if (phase === 'hub' || phase === 'pick') return false;
-  const stored = desk ? desk.blocks[GM_HOST_KEYS.seat] : undefined;
-  return !(isGmSeatBlock(stored) && stored.career.seasonsOut > 0);
-}
+export { hostSeasonCounted as nflSeasonCounted } from './gmCareerFace';

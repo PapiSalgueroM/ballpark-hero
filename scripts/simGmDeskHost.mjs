@@ -55,7 +55,7 @@
  *   twice (6) lateseat (6) failopen (6) fitsave (6) cushionall (6)
  *   flatlevel (7) sharedroll (7) flatowner (7) flatmedia (7) flatcut (7) craftfirst (7) flatask (7)
  *   spendany (8) canspend (8) stalestaff (9) halfseason (9) noyear (9) awayxp (9) lastcall (9)
- *   emptytile (10) closedsit (10) fewseasons (10) shutbutton (10) passquiet (10)
+ *   emptytile (10) closedsit (10) fewseasons (10) shutbutton (10) passquiet (10) emptyfeed (10, Round 1559)
  *   longtile (10) clubvalue (10) openpromise (10) halfword (10) allfired (10)
  *   tileclimb (10) climbword (10)   nofirstcall (4, Round 1533) arrivalnull (9, Round 1533: hostArrivalLine)
  * Eleven of them are the review's own mutants made permanent (2026-10-10): five that passed every gate of the round
@@ -217,6 +217,8 @@ const EDITS = {
   shutbutton: ['10', 'host', "  return !!market && market.nextYear !== 'shut';", "  return !!market && (market as HostMarket).state !== 'closed';"],
   passquiet: ['10', 'host', "    return climb !== null ? `${called} Pass, and next year ${climb}` : called;", '    return called;'],
   emptytile: ['10', 'face', "value: 'No more calls',", "value: '',"],
+  /* Round 1559: a feed line a board prints after a take refused, emptied */
+  emptyfeed: ['10', 'host', "  return 'That offer is not on the table any more.';", "  return '';"],
   openpromise: ['10', 'host', 'As things stand next year is still open, and every year out', 'Next year is still open, and every year out'],
   halfword: ['10', 'host', "'second tier', 'third tier', 'bottom tier'] as const;", "'second tier', 'lower half', 'bottom tier'] as const;"],
   allfired: ['10', 'host', "  return s.ended === 'walked' ? { since:", "  return s.ended === 'nobody' ? { since:"],
@@ -1474,6 +1476,18 @@ for (const sport of SPORTS) {
   }
   ok(said.size === 8, `${sport}: the four ways to leave share a wording on the card or on a year out (${said.size} of 8 apart)`);
 }
+/* Round 1559: the three feed lines a board prints after a take and a year out (the NFL board's, now the host's),
+   on each sport's real league and the real offers a fired man with a good record reads (control emptyfeed). */
+let feedLines = 0;
+for (const sport of SPORTS) {
+  const d = DRIVE[sport], lg = FLEET[sport].closed[0].lg, old = Object.keys(lg.teams).sort()[0], season = d.host.season(lg);
+  judge(H.hostOfferGoneLine(), `${sport} feed, an offer gone`); feedLines++;
+  const champion = d.host.champion(lg, season);
+  if (champion) { judge(H.hostSatOutLine({ season, champion }, nameOf), `${sport} feed, a year out`); feedLines++; }
+  const seat = { v: 1, career: { version: 1, stints: [{ team: old, tier: 2, from: season - 2, grades: ['met', 'overachieved', 'met'], ended: 'fired' }], seasonsOut: 0 } };
+  for (const o of H.hostMarket(d.host, lg, seat, nameOf)?.offers ?? []) { judge(H.hostTakeoverLine(nameOf, o), `${sport} feed, a take`); feedLines++; }
+}
+ok(feedLines >= SPORTS.length * 3, `only ${feedLines} feed lines judged over ${SPORTS.length} sports`);
 for (const g of GRADES) { judge(H.HOST_GRADE_MARKS[g].word, 'a grade word'); judge(H.HOST_GRADE_MARKS[g].mark, 'a grade mark'); }
 for (const t of [1, 2, 3, 4]) judge(H.HOST_TIER_WORDS[t], 'a tier word');
 /* Tiers are quarters of the league (four of them, checked on a real league), so a word that names a half says a

@@ -8,7 +8,7 @@ import {
   hostLegacySeat, hostMarket, hostMarketHelp, hostMarketTile, hostMoveBlocks, hostNewSeat, hostOutOfWorkCard,
   hostPressOption, hostSeasonAway, hostSeasonVerdict, hostSeasonsRecorded, hostSeatOf, hostSitArmLine, hostSitOut, hostSpendPoint,
   hostSummerMandate, hostTakeSeat, hostXpEffects, hostXpHelp, hostXpOf, hostXpRecapLine, hostXpRollKey, hostXpTile,
-  isGmSeatBlock,
+  isGmSeatBlock, hostOfferGoneLine, hostSatOutLine, hostTakeoverLine,
   type GmAwayHost, type GmDeskHost, type GmSeatBlock, type HostBlockRule, type HostClub, type HostLegacy,
 } from '@/lib/gmDeskHost';
 import { freshGmDesk, withGmBlock, type GmDesk } from '@/lib/gmDesk';
@@ -818,8 +818,12 @@ describe('the words on the boxes', () => {
         clean(card.title); card.lines.forEach(clean);
         const career = hostCareerTile(seat, nameOf);
         clean(career.value); clean(career.sub);
+        /* Round 1559: the feed lines a board prints after a take and a year out */
+        m.offers.forEach(o => clean(hostTakeoverLine(nameOf, o)));
       }
     }
+    clean(hostOfferGoneLine());
+    clean(hostSatOutLine({ season: 2026, champion: 'KC' }, nameOf));
     for (const deskOn of [false, true]) { const t = hostXpTile(null, GM_TREES, deskOn); clean(t.value); clean(t.sub); }
   });
   it('fit the hub box: a value and a sub each stay on their one line, with a real club name on the Career box', () => {

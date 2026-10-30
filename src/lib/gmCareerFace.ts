@@ -31,6 +31,7 @@ import {
 import { applyMandateResult, gradeSeason, type FoGradeResult, type OwnerMandate } from './foOwnerMandate';
 import type { ClubTier } from './managerOffers';
 import type { HostMarket } from './gmDeskHost';
+import { gmSport, type GmSportKey } from './gmSport';
 
 /* Small helpers, shared with gmDeskHost.ts. */
 export const plural = (n: number, one: string, many = `${one}s`): string => `${n} ${n === 1 ? one : many}`;
@@ -212,6 +213,19 @@ export function hostBoxLegacy(f: HostBoxFacts): HostLegacy {
   };
 }
 
+/**
+ * Round 1559: whether the save's counters already hold the league's season (the seasonCounted contract on
+ * HostLegacy above). Read off the save, never off the league: true on the recap, the draft and the fired screen of
+ * a season he ran; false on the hub and the pick screen (a season being played) and after a year out (the league
+ * has a champion he did not play for). Every board names its phases 'hub' and 'pick', so this is every sport's
+ * rule; it was the NFL's nflSeasonCounted (Round 1533 finding 11), which nflGmDesk.ts now re-exports by name.
+ */
+export function hostSeasonCounted(phase: string, desk: GmDesk | null): boolean {
+  if (phase === 'hub' || phase === 'pick') return false;
+  const stored = desk ? desk.blocks[GM_HOST_KEYS.seat] : undefined;
+  return !(isGmSeatBlock(stored) && stored.career.seasonsOut > 0);
+}
+
 /** His XP block, a fresh one when absent or mangled. Never writes. */
 export function hostXpOf(desk: GmDesk | null): GmXp {
   if (!desk) return defaultGmXp();
@@ -338,5 +352,26 @@ export function hostXpHelp(): string[] {
     `A .500 season that meets the ask pays ${even.total} XP, so at that pace the first point is about ${plural(Math.ceil(XP_FIRST_LEVEL / even.total), 'season')} away. Playoff rounds, a title and beating the ask bring it sooner.`,
     'A tree marked Not here yet takes no points on this desk, so a point is never spent where it moves nothing.',
     `Worked example: a .600 season that met the ask and won one playoff round pays ${season.total} XP. And with two ${GM_TREE_INFO.ownership.label} points, missing the ask on trust ${-loss} costs ${-eased}, not ${-loss}, so you keep the job on trust ${kept.trust}.`,
+  ];
+}
+
+/**
+ * Round 1559: the career rules a Front Office page puts behind its "?" (fired is a chapter, not the end), written
+ * once for the four sports. They were the NFL page's frontOfficeCareerRules (FrontOffice.tsx, Round 1533), sport
+ * neutral but for the word for the books, which comes from the sport's descriptor (gmSport.ts): a league whose line
+ * is a luxury tax line (MLB's cbtLine) keeps a payroll, the others a cap sheet. For 'nfl' this is the NFL page's
+ * five sentences byte for byte (src/lib/gmCareerRules.test.ts reads that page and holds them equal). The last line
+ * is hostXpHelp's worked example, computed, as the NFL page does it. Call it inside a component, never at module
+ * scope.
+ */
+export function hostCareerRules(sport: GmSportKey): string[] {
+  const books = gmSport(sport).cap.model === 'cbtLine' ? 'payroll' : 'cap sheet';
+  const xp = hostXpHelp();
+  return [
+    'Getting fired does not end the save. Zero trust upstairs costs you the job, and See who is calling opens the job market: franchises in the same league that rate your record call with the ask they would grade you on. The club that fired you never calls.',
+    `Take a job and you move to that club's real roster, ${books} and picks, meet the room and run its draft. Your record, your titles and your GM XP come with you. The old club's staff and re-sign desk stay behind.`,
+    'If the phone can still ring next year you can sit a season out: the league plays on without you, then the market reads again. Once the phone has stopped for good the screen says so, and a new front office is the way back in.',
+    'Your GM earns XP every graded season from wins, titles, playoff rounds and the grade against the ask, and each level is a point. Ownership (a missed season costs less trust) and Media (a gamble at the podium lands more often) work now. The other trees say Not here yet.',
+    xp[xp.length - 1].replace(/^Worked example: /, 'For example: '),
   ];
 }

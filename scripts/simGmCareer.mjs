@@ -99,6 +99,41 @@
  *   nameinline 128 failures. notrim did not fire on the roster limit alone (the old club never passed 53), so
  *   section 6 replays every away summer against the engine's offseason with no user club, which it must equal.
  *
+ * ROUND 1559 (the dark half of the GM career on the other boards): the DRIVE
+ * table gains the 'nhl' row (SIM_GM_CAREER_SPORT=nhl), its section 1 recorded
+ * from 115c68092 (digest 838cdddf); sections 2 to 8 read every sport's name
+ * through the row; 2t holds the guide's rule of thumb (Round 1533's finding 8);
+ * 9 holds the bands seed by seed (S9_BANDS, calibrated beside them) and 10 the
+ * lift (the shared bind, season counted rule and retained step equal the NFL
+ * copies they came from). The nhl row reads forty leagues in 4, 5, 9 and 10
+ * (measureSeeds). Controls added: contribstays (5), awaycontrib, retainedrolled
+ * (6), thumbfalse (2t), firenever, nooffers, xpflat, nevershut (9), legacyleak,
+ * retainedlift (10); the NFL's own (staffrides ... noawaydraft) are re-aimed at
+ * the nhl row's own lines. The fired counts of every control on both rows are
+ * in Round 1559's report (results-g/finish-1559.md) and docs/audits.
+ *
+ * ROUND 1559 FIX PASS (the two adversarial reviews, results-g/review-run-1559.md and review-read-1559.md):
+ *   section 6 on the nhl row runs every summer out a second time on a probe copy whose old club is planted over
+ *   the roster limit (the row's plantOverLimit) and asserts the trim reaches it; control namedsummer (the summer
+ *   names the old club, so the engine skips it) must fire there. Before this the nhl row's check held vacuously for the old club: it never
+ *   stood over 15 at the trim in 360 years out (r1559-run-b, r1559-run-d2).
+ *   section 6 on both rows replays every round out on a copy with the same draws against the row's own statement
+ *   of the board's round with nobody in the chair (awayRound), as the summer was already replayed; control
+ *   awaymoves (the rivals' in season moves dropped) must fire there. Before this nothing held those moves: the
+ *   mean roster moved (12.52 against 12.66) and is printed, not asserted (review minor 2).
+ *   section 6 on both rows replays every draft out the same way (awayDraftReplay, ids aside); control oldskip (the
+ *   old club left out of the draft) must fire there. The draft ratio reads the other clubs only, so it could not
+ *   see that; the old club's own draftees are printed, not asserted: on the NHL 2, 0, 6 and 4 over the four seed
+ *   sets of sixty years out, too few to hold a floor that is not a coin toss (r1559-fx2; the NFL 11, 15, 21).
+ *   section 5 on the nhl row plants a retained salary row on the desk before every take and asserts the rows stay
+ *   the league's; control retainedclub (the rows made the club's) must fire (review minor 3).
+ *   section 10's bind cases gain controls syncalways and refusedrelease in gmCareerBind.ts (review minor 6).
+ *
+ * CONTROL COUNTS ARE NOT FIXTURES (review minor 4). The green run is deterministic to the digit, but a control's
+ * failure count is not: nhl notrim failed 105 times in r1559-f1 and 110 in r1559-run-a on the same src. Read a
+ * control by its exit code and its "(FIRED)" line, never by matching a count; the counts in the header and the
+ * audit notes are what one run printed.
+ *
  * Recording: SIM_GM_CAREER_RECORD=<sha of the base> writes the fixture
  * (scripts/data/gmCareerFixture.json, or SIM_GM_CAREER_OUT) and stops.
  * Recorded twice in two processes on a runner; both printed one digest.
@@ -122,11 +157,18 @@ const FIXTURE = path.join(ROOT, 'scripts', 'data', 'gmCareerFixture.json');
 const CONTROL = process.env.SIM_GM_CAREER_CONTROL || '';
 const RECORD = process.env.SIM_GM_CAREER_RECORD || '';
 const ONLY = (process.env.SIM_GM_CAREER_ONLY || '').split(',').filter(Boolean);
-const runs = id => ONLY.length === 0 || ONLY.includes(id);
+/* Round 1559: a DRIVE row whose career is not bound yet runs section 1 alone (set once the row is chosen). */
+let ROW_BOUND = true;
+const runs = id => (ONLY.length === 0 || ONLY.includes(id)) && (ROW_BOUND || id === '1');
 const CONTROLS = {
   epoch: '1', addkey: '1', deskoffblock: '2', paytwice: '2', lateseat: '2', emptytile: '8', nameinline: '8',
   flatowner: '2', flatmedia: '3', extradraw: '3', firedclub: '4', unkeyed: '4', staffrides: '5', ledgerrides: '5', rostermove: '5', depthstays: '5', askrebuilt: '5',
   halfseason: '6', notrim: '6', awayxp: '6', lastcall: '6', noawaydraft: '6', overlap: '7', firedlost: '7', hubcounted: '7',
+  /* Round 1559 */
+  contribstays: '5', awaycontrib: '6', retainedrolled: '6', thumbfalse: '2t',
+  firenever: '9', nooffers: '9', xpflat: '9', nevershut: '9', legacyleak: '10', retainedlift: '10',
+  /* Round 1559 fix pass (the adversarial reviews) */
+  namedsummer: '6', awaymoves: '6', oldskip: '6', retainedclub: '5', syncalways: '10', refusedrelease: '10',
 };
 if (CONTROL && !CONTROLS[CONTROL]) {
   console.error(`SIM_GM_CAREER_CONTROL=${CONTROL} is not a control this harness knows (${Object.keys(CONTROLS).join(', ')})`);
@@ -164,6 +206,11 @@ const FILES = {
   desk: path.join(ROOT, 'src', 'lib', 'nflGmDesk.ts'),
   /* Round 1550: nflTakeSeat and nflLegacy moved here word for word (the board fetches them with the career kit) */
   career: path.join(ROOT, 'src', 'lib', 'nflGmCareer.ts'),
+  /* Round 1559: the take and the legacy read are every sport's, the NFL's facts handed in through nflCareer() */
+  bind: path.join(ROOT, 'src', 'lib', 'gmCareerBind.ts'),
+  /* Round 1559: the NHL row's own career file (its facts for the bind, its year out) */
+  nhlCareer: path.join(ROOT, 'src', 'lib', 'nhlGmCareer.ts'),
+  trade: path.join(ROOT, 'src', 'lib', 'gmTradePackage.ts'),
   seat: path.join(ROOT, 'src', 'lib', 'gmSeat.ts'),
   board: path.join(ROOT, 'src', 'components', 'front-office', 'FrontOfficeBoard.tsx'),
 };
@@ -187,9 +234,11 @@ const EDITS = {
      the old club keeps the depth chart he saved; the summer builds the ask again. */
   staffrides: ['career', "    { key: NFL_DESK_KEYS.staff, owner: 'club', fresh: (league, team) => freshStaff(league, team) },", "    { key: NFL_DESK_KEYS.staff, owner: 'gm' },"],
   ledgerrides: ['career', "    { key: NFL_DESK_KEYS.contracts, owner: 'club', fresh: (league, team) => openLedger(league, team) },", "    { key: NFL_DESK_KEYS.contracts, owner: 'gm' },"],
-  rostermove: ['career', '  const old = league.teams[legacy.team];\n  if (old) for (const pos of DEPTH_GROUPS) resetDepth(old, pos);',
-    '  const old = league.teams[legacy.team];\n  if (old) for (const pos of DEPTH_GROUPS) resetDepth(old, pos);\n  if (old && league.teams[teamId]) league.teams[teamId].players.push(old.players.pop()!);'],
-  depthstays: ['career', '  const old = league.teams[legacy.team];\n  if (old) for (const pos of DEPTH_GROUPS) resetDepth(old, pos);', '  const old = league.teams[legacy.team];'],
+  /* Round 1559 (critic 3): both anchored where the lift put them, rostermove in the shared take after the move is
+     made, depthstays in the NFL spec's releaseOldClub. */
+  rostermove: ['bind', '  s.releaseOldClub(league, legacy.team);\n  return { ...r, opened };',
+    '  s.releaseOldClub(league, legacy.team);\n  { const lt = (league as any).teams; if (lt[legacy.team] && lt[teamId]) lt[teamId].players.push(lt[legacy.team].players.pop()); }\n  return { ...r, opened };'],
+  depthstays: ['career', '      const old = league.teams[team];\n      if (old) for (const pos of DEPTH_GROUPS) resetDepth(old, pos);', '      const old = league.teams[team];'],
   askrebuilt: ['face', '  return stored && stored.season === season ? stored : built;', '  return built;'],
   /* Section 6: the year out. The last week skipped; the old club named as the summer's user club, so it is not cut;
      his XP not put back; the last call refusal removed; the away draft skipped. */
@@ -202,15 +251,78 @@ const EDITS = {
   overlap: ['host', '  const career = startSeatStint(seat.career, offer, market.season);', '  const career = startSeatStint(seat.career, offer, market.season - 1);'],
   firedlost: ['host', "  if (f.fired) career = endSeatStint(career, 'fired');", '  /* the firing not recorded */'],
   /* Section 7, Round 1533's fix pass: the hub reads the league's season as already on his record. */
-  hubcounted: ['desk', "  if (phase === 'hub' || phase === 'pick') return false;", "  if (phase === 'pick') return false;"],
+  /* Round 1559 (finding 11): the rule is every sport's now, hostSeasonCounted in the face, the NFL's name a re-export. */
+  hubcounted: ['face', "  if (phase === 'hub' || phase === 'pick') return false;", "  if (phase === 'pick') return false;"],
   /* Section 8: a player's name put into the arrival line. */
   nameinline: ['host', 'return `You take over the ${nameOf(s.team)}. They finished ${row.record}, ${ordinal(row.place)} in the league.`;',
     'return `You take over the ${nameOf(s.team)}. They finished ${row.record}, ${ordinal(row.place)} in the league. ${(league as any).teams?.[s.team]?.players?.[0]?.name ?? \'\'}`;'],
+  /* Round 1559, section 2t (finding 8): Ownership level 4 handed level 5's step, so three bad years no longer fire
+     a GM with four points on the grades alone. Anchored in the host's own effect, never in gmXp.ts (session I's). */
+  thumbfalse: ['host', '    trustDelta: delta => cushionTrustLoss(delta, points.ownership),',
+    '    trustDelta: delta => cushionTrustLoss(delta, points.ownership === 4 ? 5 : points.ownership),'],
+  /* Round 1559, section 9: the verdict never fires; the market never offers; the season's XP never reaches the
+     block (the consumer, hostCloseSeason, critic 18). */
+  firenever: ['host', '    grade, trustDelta, trust: applied.trust, fired: applied.fired, warning: applied.warning,',
+    '    grade, trustDelta, trust: applied.trust, fired: false, warning: applied.warning,'],
+  nooffers: ['host', '  const { nextYear, climbTo } = hostNextYear(seat, leagueTiers(teams));',
+    '  offers = [];\n  const { nextYear, climbTo } = hostNextYear(seat, leagueTiers(teams));'],
+  xpflat: ['host', '  const nextXp = addXp(xp, award.total);', '  const nextXp = addXp(xp, 0);'],
+  /* next year is never shut: no last call, no closed market, so the closed share a year later falls out of its band */
+  nevershut: ['host', '  return seatNextYear(seat.career, tiers);', "  return { ...seatNextYear(seat.career, tiers), nextYear: 'open' };"],
+  /* Round 1559, section 10: the shared legacy read grades a season the save has not counted; the shared retained
+     step keeps a figure that is not the one the club kept. */
+  legacyleak: ['bind', '    lastGrade: f.seasonCounted ? hostLastGrade(s.host, league, f.mandate, outcome) : null,',
+    '    lastGrade: hostLastGrade(s.host, league, f.mandate, outcome),'],
+  retainedlift: ['trade', '    entry.amount = r.kept;', '    entry.amount = r.kept + 0.1;'],
+  /* Round 1559 fix pass (review minor 2): a week out with the rivals' moves dropped (the round replay, section 6). */
+  awaymoves: ['career', "      aiWeeklyMoves(league, '', rng);", "      /* the rivals' moves dropped */"],
+  /* Round 1559 fix pass (review minor 7): the old club left out of the year out's draft (named as the user club). */
+  oldskip: ['career', "      for (let i = 0; i < batches; i++) cls = nflAiDraftPicks(league, cls, '', rng).remaining;",
+    '      for (let i = 0; i < batches; i++) cls = nflAiDraftPicks(league, cls, oldTeam, rng).remaining;'],
+  /* Round 1559 fix pass (review minor 6): the shared take syncs the picks on every take, not only on a desk it just
+     opened; a refused take hands the old club its lineup back anyway (section 10's bind cases). */
+  syncalways: ['bind', '  if (opened) s.syncOpened(league, r.desk);', '  s.syncOpened(league, r.desk);'],
+  refusedrelease: ['bind', '  if (!r) return null;', '  if (!r) { s.releaseOldClub(league, legacy.team); return null; }'],
 };
+/* Round 1559: the controls anchored in a sport's own file, re-aimed at the NHL row's own lines. A control in
+   NFL_ONLY with no NHL line (the board's press, the depth chart) is not a control of the nhl row and says so. */
+const EDITS_BY_SPORT = {
+  nhl: {
+    staffrides: ['nhlCareer', "    { key: NHL_DESK_KEYS.staff, owner: 'club', fresh: (league, team) => freshStaff(league, team) },", "    { key: NHL_DESK_KEYS.staff, owner: 'gm' },"],
+    ledgerrides: ['nhlCareer', "    { key: NHL_DESK_KEYS.contracts, owner: 'club', fresh: (league, team) => openLedger(league, team) },", "    { key: NHL_DESK_KEYS.contracts, owner: 'gm' },"],
+    /* the old club keeps the contributors he chose (the NHL's depthstays) */
+    contribstays: ['nhlCareer', '      const old = league.teams[team];\n      if (old) nhlResetContributors(old);', '      const old = league.teams[team];'],
+    halfseason: ['nhlCareer', '    periods: () => NHL_FO_ROUNDS,', '    periods: () => NHL_FO_ROUNDS - 1,'],
+    /* the summer run with nobody named and no option: the engine trims nobody */
+    notrim: ['nhlCareer', '      nhlOffseason(league, rng, undefined, { noUserClub: true });', '      nhlOffseason(league, rng, undefined);'],
+    /* Round 1559 fix pass (review MAJOR 1): the summer names the old club as its user club, the NFL's notrim edit:
+       every other club is trimmed, the old one is skipped (the half of noUserClub naming no club cannot give) */
+    namedsummer: ['nhlCareer', '      nhlOffseason(league, rng, undefined, { noUserClub: true });', '      nhlOffseason(league, rng, oldTeam);'],
+    /* Round 1559 fix pass (review minor 2): a round out with the rivals' in season moves dropped */
+    awaymoves: ['nhlCareer', "      nhlAiMoves(league, '', rng);", "      /* the rivals' moves dropped */"],
+    /* Round 1559 fix pass (review minor 7): the old club filtered out of the year out's draft order */
+    oldskip: ['nhlCareer', '        const order = nhlFoStandings(league).map(t => t.abbr).reverse();', '        const order = nhlFoStandings(league).map(t => t.abbr).reverse().filter(a => a !== oldTeam);'],
+    noawaydraft: ['nhlCareer', '        cls = nhlAiDraftPicks(league, cls, order, rng).remaining;', '        /* the draft skipped */'],
+    /* a year out leaves the old club's contributors as he chose them */
+    awaycontrib: ['nhlCareer', '      const old = league.teams[oldTeam];\n      if (old) nhlResetContributors(old);', '      const old = league.teams[oldTeam];'],
+    /* Round 1559 fix pass (review minor 3): the retained salary rows made the club's on a move, the new club's empty */
+    retainedclub: ['nhlCareer', "    { key: NHL_DESK_KEYS.retained, owner: 'league' },", "    { key: NHL_DESK_KEYS.retained, owner: 'club', fresh: () => [] },"],
+    /* the year out's summer rolls the retained rows' dead cap like any other entry */
+    retainedrolled: ['nhlCareer', '      const retained = keepRetainedOverSummer(league.teams, retainedBefore);', '      const retained = retainedBefore;'],
+  },
+};
+const NFL_ONLY = new Set(['staffrides', 'ledgerrides', 'depthstays', 'halfseason', 'notrim', 'noawaydraft', 'extradraw', 'awaymoves', 'oldskip']);
+const SPORT_OF_RUN = process.env.SIM_GM_CAREER_SPORT || 'nfl';
 const overrides = new Map();
 let fired = 0;
-if (CONTROL && EDITS[CONTROL]) {
-  const [which, from, to] = EDITS[CONTROL];
+const EDIT = !CONTROL ? null
+  : (EDITS_BY_SPORT[SPORT_OF_RUN] ?? {})[CONTROL] ?? (SPORT_OF_RUN !== 'nfl' && NFL_ONLY.has(CONTROL) ? null : EDITS[CONTROL] ?? null);
+if (CONTROL && !EDIT && (EDITS[CONTROL] || Object.values(EDITS_BY_SPORT).some(e => e[CONTROL]))) {
+  console.error(`SIM_GM_CAREER_CONTROL=${CONTROL} is not a control of the ${SPORT_OF_RUN} row (it rewrites another sport's own file)`);
+  process.exit(2);
+}
+if (CONTROL && EDIT) {
+  const [which, from, to] = EDIT;
   const src = lf(fs.readFileSync(FILES[which], 'utf8'));
   if (!src.includes(from)) {
     console.error(`control cannot run: ${path.basename(FILES[which])} is not in the shape SIM_GM_CAREER_CONTROL=${CONTROL} rewrites (${from.slice(0, 70)}...)`);
@@ -247,6 +359,15 @@ export * as X from ${lib('gmXp')};
 export * as P from ${lib('gmPicks')};
 export * as FP from ${lib('foGmPress')};
 export { isFrontOfficeSave } from ${lib('frontOfficeSave')};
+export { GM_SPORTS } from ${lib('gmSport')};
+export * as EN from ${lib('nhlFrontOffice')};
+export * as DN from ${lib('nhlGmDesk')};
+export { nhlDeskHost } from ${lib('gmDeskHostNhl')};
+export { NHL_OPENING_RATINGS } from '${ROOT_URL}/src/data/nhlOpeningRatings.ts';
+export { NHL_TEAMS } from '${ROOT_URL}/src/data/conquestDataNhl.ts';
+export * as NC from ${lib('nhlGmCareer')};
+export * as B from ${lib('gmCareerBind')};
+export * as TP from ${lib('gmTradePackage')};
 `);
 const esbuild = createRequire(`${NM}/`)('esbuild');
 await esbuild.build({
@@ -295,11 +416,21 @@ if (CONTROL === 'epoch') {
 const M = createRequire(import.meta.url)(BUNDLE);
 Math.random = realRandom;
 const { E, D, C, H, FM, FP, SEAT, G, K, S, X, P, isFrontOfficeSave, nflDeskHost, leagueNames, FO_DEPTH, FO_TEAMS } = M;
+const { GM_SPORTS, EN, DN, nhlDeskHost, NHL_OPENING_RATINGS, NHL_TEAMS, TP, B } = M;
 const EPOCH = (() => { const id = M.makeIdMinter('x')(); return id.slice(1, id.lastIndexOf('-')); })();
 const unEpoch = s => s.split(EPOCH).join('E');
 
 const NFL_WORDS = { title: 'the Super Bowl', playoffs: 'the playoffs', round: 'a playoff round', games: 17 };
-const LABEL = Object.fromEntries(FO_TEAMS.map(t => [t.abbr, `${t.city} ${t.name}`]));
+/* Round 1559: a sport's words for the owner's ask are its descriptor's (gmSport.ts), the four fields the boards hand
+   buildOwnerMandate and buildGmPresser (simGmDesk check 2 holds the descriptor to the engines). */
+const foWords = key => { const w = GM_SPORTS[key].words; return { title: w.title, playoffs: w.playoffs, round: w.round, games: w.games }; };
+const NHL_WORDS = foWords('nhl');
+const LABELS = {
+  nfl: Object.fromEntries(FO_TEAMS.map(t => [t.abbr, `${t.city} ${t.name}`])),
+  nhl: Object.fromEntries(NHL_TEAMS.map(t => [t.id, `${t.city} ${t.name}`])),
+};
+const SPORT = process.env.SIM_GM_CAREER_SPORT || 'nfl';
+const LABEL = LABELS[SPORT] ?? {};
 const label = id => LABEL[id] ?? id;
 const sameId = id => id;
 
@@ -351,8 +482,49 @@ function nflDraft(lg, team, rng, desk) {
   return desk;
 }
 
+/** Round 1559: the NHL board holds Play while his roster is over NHL_ROSTER_MAX; the GM lets the weakest go (doRelease). */
+function nhlCut(lg, team) {
+  const mine = lg.teams[team];
+  while (mine.players.length > EN.NHL_ROSTER_MAX) {
+    const down = [...mine.players].sort((a, b) => EN.nhlTradeValue(a) - EN.nhlTradeValue(b) || a.id.localeCompare(b.id))[0];
+    if (!down || !EN.nhlRelease(mine, lg.freeAgents, down.id, lg.ratingModelVersion)) break;
+  }
+}
+
+/** Draft night as the NHL board runs it (openDraft, draftPick, draftWithoutPicks): he takes the best grade he sees,
+    his scout's read with the desk on; two batches of the rivals' picks, the order read again before each. */
+function nhlDraft(lg, team, rng, desk) {
+  const mine = lg.teams[team];
+  const count = EN.nhlDraftCapital(mine) ?? 0;
+  let cls = EN.nhlDraftClass(rng, Math.max(24, count + 10), leagueNames(lg));
+  const level = desk ? S.gmStaffLevel(DN.nhlStaffOf(desk, lg, team).block, 'scouting') : null;
+  const grade = pr => (level !== null ? DN.nhlScoutRead(pr, team, lg.season, level) : pr.grade);
+  let left = 2, picksLeft = count;
+  const aiBatch = () => {
+    const order = EN.nhlFoStandings(lg).map(t => t.abbr).reverse().filter(a => a !== team);
+    cls = EN.nhlAiDraftPicks(lg, cls, order, rng).remaining;
+    left -= 1;
+  };
+  while (picksLeft > 0 && mine.picks.length > 0 && cls.length > 0) {
+    const pr = [...cls].sort((a, b) => grade(b) - grade(a) || a.id.localeCompare(b.id))[0];
+    const round = mine.picks[0];
+    if (!EN.nhlConsumeDraftPick(mine)) break;
+    const p = EN.nhlProspectToPlayer(pr, rng, lg.ratingModelVersion);
+    if (desk) DN.nhlSignDraftee(p);
+    mine.players.push(p);
+    if (desk) desk = DN.nhlNoteArrivals(desk, lg, team, [p.id], 'draft', round);
+    cls = cls.filter(x => x.id !== pr.id);
+    const nextPicks = Math.min(picksLeft - 1, mine.picks.length);
+    for (let i = nextPicks === 0 ? left : Math.min(1, left); i > 0; i--) aiBatch();
+    picksLeft = nextPicks;
+  }
+  while (left > 0) aiBatch();
+  return desk;
+}
+
 const DRIVE = {
   nfl: {
+    sport: 'nfl',
     host: nflDeskHost,
     team: 'KC',
     newLeague: (rng, team) => E.initLeague(rng, { depth: FO_DEPTH, userTeam: team }),
@@ -406,18 +578,220 @@ const DRIVE = {
       for (let i = 0; i < 3; i++) cls = E.nflAiDraftPicks(lg, cls, '', rng).remaining;
       E.runOffseason(lg, rng);
     },
+    /* Round 1559: what sections 2 to 8 read through the row, the NFL's own names */
+    words: NFL_WORDS,
+    xpLive: () => D.NFL_XP_LIVE ?? [],
+    xpSources: () => D.NFL_XP_SOURCES ?? [],
+    board: 'board',
+    saveSport: 'NFL',
+    periods: () => E.REGULAR_WEEKS,
+    gamesOf: t => t.wins + t.losses,
+    games: () => E.REGULAR_WEEKS,
+    postKey: 'rounds',
+    takeSeat: (...a) => C.nflTakeSeat(...a),
+    awayHost: old => C.nflAwayHost(old),
+    seasonCounted: (phase, desk) => D.nflSeasonCounted(phase, desk),
+    picksOf: (desk, lg) => D.nflPicksOf(desk, lg),
+    syncPicks: (lg, ledger) => D.syncNflPicks(lg, ledger),
+    pickRules: () => D.nflGamePickRules(),
+    picksKey: () => D.NFL_DESK_KEYS.picks,
+    spec: () => C.nflCareer(),
+    legacyOf: (lg, f) => C.nflLegacy(lg, f),
+    /* The old club's own lineup a take hands back to automatic: the depth chart he saved. Planted on the QBs. */
+    lineupField: 'depth',
+    plantLineup(t) {
+      const qbs = t.players.filter(p => p.pos === 'QB');
+      return qbs.length >= 2 && E.swapDepth(t, 'QB', qbs[0].id, qbs[1].id) && !!t.depth;
+    },
+    /* The summer with nobody in the chair as the engine runs it, for the year out's replay (section 6). */
+    engineSummer: (lg, rng) => E.runOffseason(lg, rng),
+    /* Round 1559 fix pass: playWeek's order with nobody in the chair (injuries, the rivals' moves, every game, the week
+       moved on below the last), for the year out's round replay (section 6, control awaymoves). */
+    /* Round 1559 fix pass: the board's draft with nobody in the chair (the old club's depth chart back to automatic,
+       openDraft's class size rule with no picks of his, draftWithoutPicks's three batches with nobody left out), for
+       the year out's draft replay (section 6, control oldskip). */
+    awayDraftReplay(lg, rng, oldTeam) {
+      const old = lg.teams[oldTeam];
+      if (old) for (const pos of E.DEPTH_GROUPS) E.resetDepth(old, pos);
+      const capital = Object.values(lg.teams).reduce((sum, t) => sum + t.picks.length, 0);
+      let cls = E.generateDraftClass(rng, Math.max(40, Math.min(capital, 18)), leagueNames(lg));
+      for (let i = 0; i < 3; i++) cls = E.nflAiDraftPicks(lg, cls, '', rng).remaining;
+    },
+    awayRound(lg, rng) {
+      E.injuryPass(lg.teams, rng);
+      E.aiWeeklyMoves(lg, '', rng);
+      for (const g of lg.schedule[lg.week - 1]) E.simGame(g, lg.teams, rng);
+      if (lg.week < E.REGULAR_WEEKS) lg.week += 1;
+    },
+    overLimit: t => E.deepOverLimit(t) > 0,
+  },
+  /* Round 1559: the NHL Front Office in its board's own call order (NhlFrontOfficeBoard.tsx: start, playRound,
+     openDraft, draftPick and draftWithoutPicks, finishDraft). Section 1 only until the round binds the career. */
+  nhl: {
+    sport: 'nhl',
+    host: nhlDeskHost,
+    team: 'TOR',
+    deskKeys: ['contracts', 'picks', 'staff', 'retained'],
+    newLeague: rng => EN.initNhlLeague(rng, NHL_OPENING_RATINGS),
+    cut: nhlCut,
+    openDesk: (lg, team) => DN.openNhlDesk(lg, team),
+    /* The board's mandateFor. */
+    mandateFor: (lg, team, defendingChamp, tilt = 0) => FM.buildOwnerMandate(
+      FM.strengthRank(Object.fromEntries(Object.entries(lg.teams).map(([a, t]) => [a, EN.nhlStrength(t)])), team),
+      Object.keys(lg.teams).length, defendingChamp, NHL_WORDS, lg.season, tilt),
+    /* playRound pressed every round (the round, the rivals' moves, the desk's tick), the last one playing the playoffs. */
+    season(lg, team, rng, desk) {
+      for (;;) {
+        EN.simNhlRound(lg, team, rng, desk ? DN.nhlDeskRoundOptions(desk, lg, team) : undefined);
+        EN.nhlAiMoves(lg, team, rng);
+        if (desk) desk = DN.nhlDeskAfterRound(desk, lg, team).desk;
+        if (lg.round >= EN.NHL_FO_ROUNDS) break;
+        lg.round += 1;
+      }
+      const po = EN.runNhlFoPlayoffs(lg, rng, desk ? DN.nhlDeskEdges(desk, lg, team) : undefined);
+      lg.champions.push({ season: lg.season, team: po.champion });
+      return { desk, rounds: po.series, champion: po.champion };
+    },
+    /* The board's close: seriesPostseason over the bracket, the bind's one reader once it exists. */
+    outcome: (lg, team, series, champion) => (M.NC && typeof M.NC.nhlOutcome === 'function'
+      ? M.NC.nhlOutcome(lg, team, series, champion)
+      : { wins: lg.teams[team].wins, ...FM.seriesPostseason(series, team), wonTitle: champion === team }),
+    draft: nhlDraft,
+    /* finishDraft: the desk summer when the desk is on, the engine's own (with his club named) otherwise. */
+    summer(lg, team, rng, desk) {
+      if (!desk) { EN.nhlOffseason(lg, rng, team); return desk; }
+      const s = DN.nhlDeskOffseason(lg, desk, team, rng);
+      if (s.ok === false) throw new Error(`the NHL desk summer refused to run: ${s.lines.join(' ')}`);
+      return s.desk;
+    },
+    /* Round 1559: a season with nobody in any chair, every club on the CPU's policy (the measuring run's league):
+       the board's round with no user club, its draft with no picks of his, and the summer with nobody in the chair
+       (the engine option this round adds, so every club is trimmed as a CPU club is). */
+    cpuLeague: rng => EN.initNhlLeague(rng, NHL_OPENING_RATINGS),
+    cpuSeason(lg, rng) {
+      for (;;) {
+        EN.simNhlRound(lg, '', rng);
+        EN.nhlAiMoves(lg, '', rng);
+        if (lg.round >= EN.NHL_FO_ROUNDS) break;
+        lg.round += 1;
+      }
+      const po = EN.runNhlFoPlayoffs(lg, rng);
+      lg.champions.push({ season: lg.season, team: po.champion });
+      return { rounds: po.series, champion: po.champion };
+    },
+    cpuSummer(lg, rng) {
+      let cls = EN.nhlDraftClass(rng, 24, leagueNames(lg));
+      for (let b = 0; b < 2; b++) cls = EN.nhlAiDraftPicks(lg, cls, EN.nhlFoStandings(lg).map(t => t.abbr).reverse(), rng).remaining;
+      EN.nhlOffseason(lg, rng, undefined, { noUserClub: true });
+    },
+    /* Sections 4, 5, 9 and 10 read forty leagues, not twenty: the NHL fires about 0.036 of its graded club seasons
+       against the NFL's 0.061 (r1559-s2a), so twenty leagues held 278 first feeds, under section 4's floor of 300.
+       More careers, never a lower floor. Section 9's bands are for sets of this many seeds. */
+    measureSeeds: 40,
+    /* Section 7 walks twenty careers on this row (its comment says why). */
+    careerSeeds: 20,
+    /* Section 5's floor on the takes whose old club had a lineup planted: an NHL roster at the close (12 to 15 men,
+       some out hurt) has no spare healthy man at any position on about one take in six: 491 of 584 planted (0.84,
+       r1559-s2c) against the NFL's QBs, always two. The floor sits near 90 percent of the measured share. */
+    plantShare: 0.75,
+    words: NHL_WORDS,
+    xpLive: () => DN.NHL_XP_LIVE,
+    xpSources: () => DN.NHL_XP_SOURCES,
+    board: null,
+    saveSport: 'NHL',
+    /* Round 1559 fix pass (review minor 9, critic advice 12): the season's shape and the roster limit read from the
+       sport's descriptor (src/lib/gmSport.ts), as the games count is; simGmDesk check 2 holds it equal to the engine,
+       and the board's own calls above keep the engine's constants. */
+    periods: () => GM_SPORTS.nhl.periods,
+    gamesOf: t => t.wins + t.losses + t.otLosses,
+    games: () => GM_SPORTS.nhl.words.games,
+    postKey: 'series',
+    takeSeat: (...a) => M.NC.nhlTakeSeat(...a),
+    awayHost: old => M.NC.nhlAwayHost(old),
+    seasonCounted: (phase, desk) => H.hostSeasonCounted(phase, desk),
+    picksOf: (desk, lg) => DN.nhlPicksOf(desk, lg),
+    syncPicks: (lg, ledger) => DN.syncNhlPicks(lg, ledger),
+    pickRules: () => DN.nhlGamePickRules(),
+    picksKey: () => DN.NHL_DESK_KEYS.picks,
+    spec: () => M.NC.nhlCareer(),
+    legacyOf: (lg, f) => M.NC.nhlLegacy(lg, f),
+    /* The old club's own lineup a take hands back to automatic: the contributors he chose. Planted by benching
+       one forward of the automatic six for a healthy one outside it; on a club with no healthy forward spare (a
+       roster of 15 at the close, with men out, often has none: 133 of 293 planted on forwards alone, r1559-s2a),
+       one of the four defensemen, then the goalie. */
+    lineupField: 'contributors',
+    plantLineup(t) {
+      const cur = EN.nhlContributors(t);
+      const spare = (isPos, used) => t.players.find(p => p.out === 0 && isPos(p.pos) && !used.includes(p.id));
+      const fwd = spare(pos => pos === 'C' || pos === 'W', cur.forwards);
+      if (fwd && cur.forwards.length > 0 && EN.nhlSetContributors(t, { ...cur, forwards: [...cur.forwards.slice(0, -1), fwd.id] })) return t.contributors !== undefined;
+      const def = spare(pos => pos === 'D', cur.defense);
+      if (def && cur.defense.length > 0 && EN.nhlSetContributors(t, { ...cur, defense: [...cur.defense.slice(0, -1), def.id] })) return t.contributors !== undefined;
+      const g = spare(pos => pos === 'G', cur.goalie === null ? [] : [cur.goalie]);
+      if (g && cur.goalie !== null && EN.nhlSetContributors(t, { ...cur, goalie: g.id })) return t.contributors !== undefined;
+      return false;
+    },
+    engineSummer: (lg, rng) => EN.nhlOffseason(lg, rng, undefined, { noUserClub: true }),
+    /* Round 1559 fix pass: playRound's order with nobody in the chair (the round, the rivals' moves, the round moved
+       on below the last), for the year out's round replay (section 6, control awaymoves). */
+    /* Round 1559 fix pass: the board's draft with nobody in the chair (the old club's contributors back to automatic,
+       openDraft's class of 24, draftWithoutPicks's two batches over the standings reversed, read again before each,
+       nobody filtered out), for the year out's draft replay (section 6, control oldskip). */
+    awayDraftReplay(lg, rng, oldTeam) {
+      const old = lg.teams[oldTeam];
+      if (old) EN.nhlResetContributors(old);
+      let cls = EN.nhlDraftClass(rng, 24, leagueNames(lg));
+      for (let b = 0; b < 2; b++) cls = EN.nhlAiDraftPicks(lg, cls, EN.nhlFoStandings(lg).map(t => t.abbr).reverse(), rng).remaining;
+    },
+    awayRound(lg, rng) {
+      EN.simNhlRound(lg, '', rng);
+      EN.nhlAiMoves(lg, '', rng);
+      if (lg.round < EN.NHL_FO_ROUNDS) lg.round += 1;
+    },
+    /* the retained rows the desk summer keeps (decision 2g), on the replay as on the league */
+    afterSummer: (lg, desk) => { TP.keepRetainedOverSummer(lg.teams, DN.nhlRetainedOf(desk)); },
+    retainedOf: desk => DN.nhlRetainedOf(desk),
+    /* A rival still paying half of a man it traded, three seasons to run, as the trade desk writes one. */
+    plantRetained(lg, desk, team) {
+      const club = Object.keys(lg.teams).sort().find(a => a !== team);
+      const t = lg.teams[club];
+      t.deadCap = [...(t.deadCap ?? []), { playerId: 'retained-1559', name: 'Retained fixture', amount: 2.4, seasonsLeft: 3 }];
+      return G.withGmBlock(desk, DN.NHL_DESK_KEYS.retained, [{ club, playerId: 'retained-1559', name: 'Retained fixture', share: 0.5, kept: 2.4 }]);
+    },
+    /* Round 1559 fix pass (review MAJOR 1): the old club planted over the roster limit before a summer out, so the
+       half of noUserClub that naming no club cannot give (none skipped, the old club trimmed too) is seen reaching
+       it. Low rated men on long deals: they outlive the summer's ageing and contract steps (years 3, age 27) and are
+       the trim's first releases (rated 40, under anyone the summer keeps); enough of them that the club stands over
+       the limit at the trim whoever else leaves (every man who could retire or reach the end of his deal counted
+       out). Returns the planted ids. */
+    plantOverLimit(lg, team, tag) {
+      const t = lg.teams[team], max = GM_SPORTS.nhl.roster.max;
+      const stays = t.players.filter(p => p.years >= 2 && p.age < 37).length;
+      const ids = [];
+      for (let i = 0; i < Math.max(1, max + 1 - stays); i++) {
+        const id = `over-1559-${tag}-${i}`;
+        t.players.push({ id, name: `Planted ${tag} ${i}`, pos: 'W', age: 27, ovr: 40, salary: EN.nhlSalaryFor(40, lg.ratingModelVersion), years: 3, out: 0, pot: 40 });
+        ids.push(id);
+      }
+      return ids;
+    },
+    overLimit: t => t.players.length > GM_SPORTS.nhl.roster.max,
   },
 };
-const SPORT = process.env.SIM_GM_CAREER_SPORT || 'nfl';
 if (!DRIVE[SPORT]) { console.error(`no DRIVE row for ${SPORT}`); process.exit(2); }
 const d = DRIVE[SPORT];
+if (d.bound === false) {
+  ROW_BOUND = false;
+  if (!RECORD) console.log(`sections 2 to 8 not bound for ${SPORT} yet: section 1 alone`);
+}
 
 /* ================================================================== */
 /* 1. The default path, recorded from the base and replayed            */
 /* ================================================================== */
 const S1_SEEDS = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
 const S1_SEASONS = 5;
-const DESK_KEYS = ['contracts', 'picks', 'staff'];
+/* Round 1019's three blocks on the NFL; the NHL's desk has a fourth, the retained salary rows. */
+const DESK_KEYS = d.deskKeys ?? ['contracts', 'picks', 'staff'];
 const GAINED_KEYS = ['seat', 'xp'];
 /* FIRST, before anything else mints an id, so the recorder and the replay walk the same id stream. */
 const s1 = { hashes: {}, seasons: 0, firedAt: [], badKeys: 0 };
@@ -511,7 +885,7 @@ function buildFleet() {
   }
   return out;
 }
-const FLEET = runs('2') || runs('8') ? buildFleet() : [];
+const FLEET = runs('2') || runs('8') || runs('10') ? buildFleet() : [];
 const tiersOf = lg => SEAT.leagueTiers(H.hostSeatTeams(d.host, lg, sameId));
 
 /* ================================================================== */
@@ -551,7 +925,7 @@ if (runs('2')) {
       const want = X.gmSeasonXp({ winPct: club.games ? club.wins / club.games : 0, titles: outcome.wonTitle ? 1 : 0, playoffRoundsWon: outcome.roundsWon,
         mandateSteps: X.mandateSteps(grade.result), placesAboveExpectation: 0, prospectsGraduated: 0 });
       if (v1.award && v1.award.total !== want.total) fail(`${at}: paid ${v1.award.total} XP, the four facts pay ${want.total}`);
-      if (v1.award) { S2.paid += v1.award.total; RECAP_LINES.push(H.hostXpRecapLine({ award: v1.award, levelAfter: v1.levelAfter, desk: v1.desk }, D.NFL_XP_LIVE ?? [])); }
+      if (v1.award) { S2.paid += v1.award.total; RECAP_LINES.push(H.hostXpRecapLine({ award: v1.award, levelAfter: v1.levelAfter, desk: v1.desk }, d.xpLive())); }
       /* A reload on the recap closes the same season again: nothing is paid and nothing moves. */
       const v2 = H.hostSeasonVerdict(d.host, lg, { team: id, mandate, trust: 60, fired: false, outcome, desk: v1.desk, seasonsPlayed: 1, titles: outcome.wonTitle ? 1 : 0 });
       S2.reloads++;
@@ -617,6 +991,47 @@ if (runs('2')) {
   }
   console.log(`   OWNERSHIP: ${O.losing} losing and ${O.winning} winning club seasons walked at levels 0 to 5; from trust 60 a season costs ${Object.entries(O.ladders).map(([r, c]) => `${r} ${c}`).join('; ')}; ${O.example ?? ''}`);
   ok(O.losing >= 100 && O.winning >= 100, `too few seasons walked (${O.losing} losing, ${O.winning} winning)`);
+
+  /* Round 1559, Round 1533's finding 8: the guide's rule of thumb held in code ("A fresh GM always survives one bad
+     year, and on the grades alone only a full Ownership tree gets him through three", football.ts). From trust 60,
+     a real 'badly' season three times through the board's own verdict at each Ownership level, no press: levels 0
+     to 4 are fired and level 5 is not, and one bad year never fires a fresh GM. Then the room: the best safe answer
+     the press offers after each of the first two seasons (buildGmPresser's own options, no gamble) keeps a GM below
+     level 5 in the job, which is why the sentence says "on the grades alone". Computed, never typed. Control
+     thumbfalse (level 4 handed level 5's step) turns 2t red. */
+  begin('2t', 'the rule of thumb: three bad years from trust 60 fire Ownership levels 0 to 4 on the grades alone and not 5, and the press can change that');
+  {
+    let found = null;
+    for (const snap of FLEET) {
+      const id = Object.keys(snap.lg.teams).sort().find(x => FM.gradeSeason(snap.mandates[x], d.outcome(snap.lg, x, snap.rounds, snap.champion)).result === 'badly');
+      if (id) { found = { snap, id }; break; }
+    }
+    if (!found) fail('no badly season in the fleet to walk the rule of thumb on');
+    else {
+      const { snap, id } = found, lg = snap.lg, mandate = snap.mandates[id], outcome = d.outcome(lg, id, snap.rounds, snap.champion);
+      const tier = tiersOf(lg).get(id);
+      const presser = FP.buildGmPresser(d.words, { justHired: false, teamLabel: label(id), fired: false, wonTitle: false, gradeResult: 'badly', tradeLine: null, seasonsPlayed: 1 });
+      const safe = (presser?.options ?? []).filter(o => !o.effect.gamble).sort((a, b) => b.effect.trust - a.effect.trust)[0] ?? null;
+      const walk = (k, press) => {
+        const desk = ownDesk(id, lg.season, tier, k);
+        let trust = 60;
+        const path = [trust];
+        for (let n = 0; n < 3; n++) {
+          const v = H.hostSeasonVerdict(d.host, lg, { team: id, mandate, trust, fired: false, outcome, desk, seasonsPlayed: n, titles: 0 });
+          trust = v.trust; path.push(trust);
+          if (v.fired) return { fired: true, after: n + 1, path };
+          if (press && safe) { trust = FP.applyGmPressChoice(trust, H.hostPressOption(safe, H.hostXpEffects(desk, d.sport)), () => 0.5).trust; path.push(trust); }
+        }
+        return { fired: false, after: 3, path };
+      };
+      const alone = [0, 1, 2, 3, 4, 5].map(k => walk(k, false));
+      alone.forEach((w, k) => ok(w.fired === (k <= 4), `level ${k} on the grades alone: ${w.fired ? `fired after ${w.after}` : 'kept'} (${w.path.join(' > ')}), the rule says ${k <= 4 ? 'fired' : 'kept'}`));
+      ok(alone[0].after >= 2, `a fresh GM was fired by one bad year (${alone[0].path.join(' > ')})`);
+      const saved = [0, 1, 2, 3, 4].filter(k => !walk(k, true).fired);
+      ok(safe !== null && saved.length > 0, `no safe press answer keeps a GM below level 5 in the job (${safe ? safe.label : 'no safe answer'})`);
+      console.log(`   from trust 60, three badly seasons of ${id}: ${alone.map((w, k) => `level ${k} ${w.fired ? `fired after ${w.after}` : 'kept'}`).join(', ')}; with "${safe?.label}" after each: kept at levels ${saved.join(', ') || 'none'} (level 4: ${walk(4, true).path.join(' > ')})`);
+    }
+  }
 }
 
 /* ================================================================== */
@@ -626,25 +1041,31 @@ if (runs('3')) {
   begin('3', 'Media: every gamble lands exactly one step more often a level, the safe answers and the tilt never move, one draw an answer');
   /* The board's answerPress, read off its source with the comments out: one hostPressOption over hostXpEffects of
      its own desk, handed to applyGmPressChoice with ONE Math.random (control extradraw: the board draws twice). */
-  const boardSrc = lf(overrides.get(path.resolve(FILES.board).toLowerCase()) ?? fs.readFileSync(FILES.board, 'utf8'));
-  const from = boardSrc.indexOf('const answerPress = ');
-  const body = from < 0 ? '' : boardSrc.slice(from, boardSrc.indexOf('\n  };', from));
-  const code = body.replace(/\/\*[\s\S]*?\*\//g, '').replace(/\/\/.*$/gm, '');
-  const count = s => code.split(s).length - 1;
-  ok(count('Math.random') === 1 && count('hostPressOption(') === 1 && count("hostXpEffects(gm, 'nfl')") === 1 && count('applyGmPressChoice(') === 1,
-    `the board's answerPress is not one eased option and one draw (${J({ random: count('Math.random'), option: count('hostPressOption('), effects: count("hostXpEffects(gm, 'nfl')") })})`);
+  /* Round 1559: a row whose board is not bound yet (the NHL's, Round 1561) has no answerPress to read; the presser
+     grid below still runs on its own words and its own sport's effects. */
+  if (d.board) {
+    /* the read normalised where it is made (simHarnessAnchors section 2 cannot tell which FILES entry a keyed read names) */
+    const boardSrc = lf(overrides.get(path.resolve(FILES[d.board]).toLowerCase()) ?? lf(fs.readFileSync(FILES[d.board], 'utf8')));
+    const from = boardSrc.indexOf('const answerPress = ');
+    const body = from < 0 ? '' : boardSrc.slice(from, boardSrc.indexOf('\n  };', from));
+    const code = body.replace(/\/\*[\s\S]*?\*\//g, '').replace(/\/\/.*$/gm, '');
+    const count = s => code.split(s).length - 1;
+    const fxCall = `hostXpEffects(gm, '${d.sport}')`;
+    ok(count('Math.random') === 1 && count('hostPressOption(') === 1 && count(fxCall) === 1 && count('applyGmPressChoice(') === 1,
+      `the board's answerPress is not one eased option and one draw (${J({ random: count('Math.random'), option: count('hostPressOption('), effects: count(fxCall) })})`);
+  } else console.log(`   the ${d.sport} board is not bound to the career yet: its answerPress is read when it is`);
   /* The same call over every presser the board can build, at every Media level, on a half step roll grid. */
   const deskWith = k => {
     let b = X.addXp(X.defaultGmXp(), 1e6);
     for (let i = 0; i < k; i++) b = X.spendGmPoint(b, 'media');
     return G.withGmBlock(G.freshGmDesk(), H.GM_HOST_KEYS.xp, b);
   };
-  const answer = (trust, opt, desk, rng) => FP.applyGmPressChoice(trust, H.hostPressOption(opt, H.hostXpEffects(desk, 'nfl')), rng);
-  const base = { justHired: false, teamLabel: 'Kansas City Chiefs', fired: false, wonTitle: false, gradeResult: null, tradeLine: null, seasonsPlayed: 3 };
+  const answer = (trust, opt, desk, rng) => FP.applyGmPressChoice(trust, H.hostPressOption(opt, H.hostXpEffects(desk, d.sport)), rng);
+  const base = { justHired: false, teamLabel: label(d.team), fired: false, wonTitle: false, gradeResult: null, tradeLine: null, seasonsPlayed: 3 };
   const kinds = new Map();
   for (const f of [{ justHired: true }, { wonTitle: true, gradeResult: 'title' }, { gradeResult: 'missed' }, { gradeResult: 'badly' },
     { gradeResult: 'met', tradeLine: 'a deal for a pass rusher' }, { gradeResult: 'overachieved', tradeLine: 'a deal' }]) {
-    const p = FP.buildGmPresser(NFL_WORDS, { ...base, ...f });
+    const p = FP.buildGmPresser(d.words, { ...base, ...f });
     if (p) kinds.set(p.id, p);
   }
   ok(kinds.size === 4, `the board builds ${kinds.size} kinds of presser, the press file names four`);
@@ -671,7 +1092,7 @@ if (runs('3')) {
       ok(tilts.size === 1, `${at}: the tilt moves with Media`);
       if (!opt.effect.gamble) {
         safes++;
-        ok(trusts.size === 1 && H.hostPressOption(opt, H.hostXpEffects(deskWith(5), 'nfl')) === opt, `${at}: a safe answer moves with Media`);
+        ok(trusts.size === 1 && H.hostPressOption(opt, H.hostXpEffects(deskWith(5), d.sport)) === opt, `${at}: a safe answer moves with Media`);
         continue;
       }
       gambles++;
@@ -716,7 +1137,7 @@ if (runs('8')) {
         for (const o of m.offers) {
           say(o.reason, `an offer's reason, ${at}`); say(o.ask.text, `an offer's ask, ${at}`);
           say(H.hostTakeArmLine(pack, o, true), `the take arm, ${at}`); say(H.hostTakeArmLine(pack, o, false), `the take arm, desk off, ${at}`);
-          if (m.facts[o.teamId]) say(H.hostOfferFactsLine(m.facts[o.teamId], 'cap'), `an offer's facts, ${at}`);
+          if (m.facts[o.teamId]) say(H.hostOfferFactsLine(m.facts[o.teamId], GM_SPORTS[d.sport].cap.line), `an offer's facts, ${at}`);
         }
         boxes.push([H.hostCareerTile(seat, label), `the Career box, ${at}`]);
         say(H.hostCareerTotalsLine(seat), `the career totals, ${at}`);
@@ -728,9 +1149,9 @@ if (runs('8')) {
       const arrival = H.hostArrivalLine(d.host, lg, { v: 1, career: SEAT.newGmCareer(id, tiers.get(id), season + 1) }, label);
       if (arrival === null) fail(`${id}: no arrival line on the day he takes the club`); else say(arrival, `the arrival line, ${id}`);
     }
-    for (const deskOn of [true, false]) boxes.push([H.hostXpTile(null, D.NFL_XP_LIVE ?? [], deskOn), `the GM level box, desk ${deskOn ? 'on' : 'off'}`]);
+    for (const deskOn of [true, false]) boxes.push([H.hostXpTile(null, d.xpLive(), deskOn), `the GM level box, desk ${deskOn ? 'on' : 'off'}`]);
   }
-  for (const l of [...H.hostMarketHelp(d.host.pack), ...H.hostCareerHelp(d.host.pack), ...H.hostXpHelp(), H.hostEarnsLine(D.NFL_XP_SOURCES ?? [])]) WORDS.push([l, 'a help line', new Set()]);
+  for (const l of [...H.hostMarketHelp(d.host.pack), ...H.hostCareerHelp(d.host.pack), ...H.hostXpHelp(), H.hostEarnsLine(d.xpSources())]) WORDS.push([l, 'a help line', new Set()]);
   for (const r of ['in-seat', 'season-open', 'market-closed', 'last-call', 'broken-adapter']) WORDS.push([H.hostAwayRefusalLine(d.host.pack, r), 'a year out refused', new Set()]);
   for (const l of RECAP_LINES) WORDS.push([l, 'the recap XP line', new Set()]);
   const NOT_ALLOWED = [[String.fromCharCode(0x2013), 'an en dash'], [String.fromCharCode(0x2014), 'an em dash'], ['"', 'a quote mark'],
@@ -753,16 +1174,67 @@ if (runs('8')) {
 /* ================================================================== */
 /* 4. The market after real firings                                    */
 /* ================================================================== */
-const S4_SEEDS = (process.env.SIM_GM_CAREER_MEASURE_SEEDS || '1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20').split(',').map(Number);
+/* Round 1559: a row may read more leagues (the nhl row's measureSeeds); the nfl row reads 1 to 20 as it always has. */
+const S4_SEEDS = (process.env.SIM_GM_CAREER_MEASURE_SEEDS || Array.from({ length: d.measureSeeds ?? 20 }, (_, i) => i + 1).join(',')).split(',').map(Number);
 const S4_SEASONS = Number(process.env.SIM_GM_CAREER_MEASURE_SEASONS || 12);
 const S4 = {
   firings: 0, first: { offers: 0, quiet: 0, closed: 0 }, raw: { offers: 0, quiet: 0, closed: 0 },
   lastCalls: 0, rawLastCalls: 0, firstCalls: 0, eligible: 0, hired3: 0, rawHired3: 0, feedsRead: 0, asserted: 0, badly: 0,
 };
-const S5 = { takes: 0, follows: 0, planted: 0, refused: 0 };
+const S5 = { takes: 0, follows: 0, planted: 0, refused: 0, retained: 0 };
+/* Round 1559: section 9 reads section 4's league seed by seed; section 10's bind cases run on section 5's takes. */
+const S9 = { seeds: [] };
+const S10 = { moves: 0, refusals: 0, deskOff: 0 };
+
+/**
+ * Round 1559, section 10: the shared take (gmCareerBind.ts) on the row's own spec, counted. On the first offer of
+ * every fired GM of section 4: a desk off save opens its desk, syncs the picks once and hands the old club's lineup
+ * back once; a take refused (his own old club, which never calls) leaves the league byte equal and calls neither.
+ */
+function bindCases(lgAt, desk, save, legacy, old, teamId, at) {
+  const prev = check;
+  check = '10';
+  const counted = () => {
+    const base = d.spec(), n = { open: 0, sync: 0, release: 0 };
+    return { n, spec: { ...base,
+      openDesk: (l, t) => { n.open++; return base.openDesk(l, t); },
+      syncOpened: (l, dk) => { n.sync++; base.syncOpened(l, dk); },
+      releaseOldClub: (l, t) => { n.release++; base.releaseOldClub(l, t); } } };
+  };
+  /* A desk off save reads its feed off the legacy record (no record block yet), so its offer is that feed's. */
+  const legacyFeed = H.hostMarket(d.host, lgAt, H.hostSeatOf(G.freshGmDesk(), legacy), label);
+  const offTeam = legacyFeed?.offers?.[0]?.teamId ?? null;
+  if (offTeam) {
+    const lg = clone(lgAt), { n, spec } = counted();
+    const r = B.careerTakeSeat(spec, lg, null, save, legacy, offTeam, label);
+    S10.deskOff++; S10.moves++;
+    ok(r !== null && r.opened === true && n.open === 1 && n.sync === 1 && n.release === 1,
+      `${at}: a desk off take opened ${n.open}, synced ${n.sync}, released ${n.release} (each once), opened flag ${r?.opened}`);
+  }
+  {
+    const lg = clone(lgAt), { n, spec } = counted();
+    const r = B.careerTakeSeat(spec, lg, clone(desk), save, legacy, teamId, label);
+    S10.moves++;
+    ok(r !== null && r.opened === false && n.open === 0 && n.sync === 0 && n.release === 1,
+      `${at}: a desk on take opened ${n.open}, synced ${n.sync}, released ${n.release} (none, none, once), opened flag ${r?.opened}`);
+  }
+  {
+    const lg = clone(lgAt), before = J(lg), { n, spec } = counted();
+    const r = B.careerTakeSeat(spec, lg, clone(desk), save, legacy, old, label);
+    S10.refusals++;
+    ok(r === null && J(lg) === before && n.sync === 0 && n.release === 0 && n.open === 0,
+      `${at}: a refused take (his old club) moved the league or called the spec (${J(n)})`);
+    const lg2 = clone(lgAt), before2 = J(lg2), c2 = counted();
+    const r2 = B.careerTakeSeat(c2.spec, lg2, null, save, legacy, old, label);
+    ok(r2 === null && J(lg2) === before2 && c2.n.sync === 0 && c2.n.release === 0,
+      `${at}: a refused desk off take moved the league or synced or released (${J(c2.n)})`);
+  }
+  check = prev;
+}
 const clone = v => JSON.parse(J(v));
-/** The league as a take must leave it: the old club's saved depth chart is the one thing allowed to go. */
-const withoutDepth = (lg, team) => { const c = clone(lg); if (c.teams[team]) delete c.teams[team].depth; return J(c); };
+/** The league as a take must leave it: the old club's own lineup (the NFL's saved depth chart, the NHL's chosen
+    contributors: the row's lineupField) is the one thing allowed to go. */
+const withoutDepth = (lg, team) => { const c = clone(lg); if (c.teams[team]) delete c.teams[team][d.lineupField]; return J(c); };
 const pickCount = lg => Object.values(lg.teams).reduce((n, t) => n + t.picks.length, 0);
 
 /* ================================================================== */
@@ -783,30 +1255,33 @@ function takeChecks(lgAtFiring, old, g, seat, m0, salt) {
   /* The depth chart he saved is part of the league the market reads (a chart moves the club's strength), so the
      feed he chooses from is read on the league with it, as the board reads it. */
   const planted = clone(lgAtFiring);
-  const pt = planted.teams[old];
-  const qbs = pt.players.filter(p => p.pos === 'QB');
-  const hasChart = qbs.length >= 2 && E.swapDepth(pt, 'QB', qbs[0].id, qbs[1].id) && !!pt.depth;
+  const hasChart = d.plantLineup(planted.teams[old]);
   const m = H.hostMarket(d.host, planted, seat, label) ?? m0;
   for (const [k, offer] of m.offers.entries()) {
     const lg = clone(planted);
     if (hasChart) S5.planted++;
-    let desk = D.openNflDesk(lg, old);
-    D.syncNflPicks(lg, D.nflPicksOf(desk, lg));
+    let desk = d.openDesk(lg, old);
+    d.syncPicks(lg, d.picksOf(desk, lg));
     desk = G.withGmBlock(desk, H.GM_HOST_KEYS.seat, g.desk.blocks.seat);
     if (g.desk.blocks.xp !== undefined) desk = G.withGmBlock(desk, H.GM_HOST_KEYS.xp, g.desk.blocks.xp);
+    /* Round 1559 fix pass (review minor 3): on a desk that keeps retained salary, a row planted on a rival before the
+       take, so the rows' owner on a move (the league's: they stay as they are) is seen (control retainedclub). */
+    if (d.plantRetained) { desk = d.plantRetained(lg, desk, old); S5.retained++; }
     const save = { myTeam: old, trust: g.trust, fired: true, mandate: g.mandate, pressTilt: 1, seasonTradeLine: 'a deal' };
     const legacy = H.hostLegacy(d.host, lg, { team: old, seasonsPlayed: g.seasonsPlayed, titles: g.titles, fired: true, seasonCounted: true });
     const at = `${old} to ${offer.teamId} (${salt})`;
     const lgBefore = withoutDepth(lg, old), picksBefore = pickCount(lg), deskBefore = J(desk);
     /* The new club's own blocks, opened on the league as the take reads it (before the old chart goes back). */
-    const fresh = D.openNflDesk(clone(lg), offer.teamId);
-    const r = C.nflTakeSeat(lg, desk, save, legacy, offer.teamId, label);
+    const fresh = d.openDesk(clone(lg), offer.teamId);
+    if (k === 0 && runs('10')) bindCases(lg, desk, save, legacy, old, offer.teamId, at);
+    const r = d.takeSeat(lg, desk, save, legacy, offer.teamId, label);
     if (!r) { S5.refused++; fail(`${at}: an offer on the table was refused`); continue; }
     S5.takes++;
     ok(J(desk) === deskBefore, `${at}: the desk handed in was changed`);
     ok(withoutDepth(lg, old) === lgBefore, `${at}: taking the seat moved the league (a roster, a pick, a standing)`);
-    ok(lg.teams[old].depth === undefined, `${at}: his old club kept the depth chart he saved`);
+    ok(lg.teams[old][d.lineupField] === undefined, `${at}: his old club kept the ${d.lineupField} he saved`);
     ok(pickCount(lg) === picksBefore && J(r.desk.blocks.picks) === J(desk.blocks.picks), `${at}: picks were not conserved`);
+    if (d.retainedOf) ok(d.retainedOf(desk).length > 0 && J(d.retainedOf(r.desk)) === J(d.retainedOf(desk)), `${at}: the retained salary rows did not stay as they were (the league's): ${J(d.retainedOf(r.desk))}`);
     ok(J(r.desk.blocks.xp) === J(desk.blocks.xp), `${at}: his XP moved`);
     ok(J(r.save) === J(SEAT.takeSeat(save, offer)) && r.save.myTeam === offer.teamId && r.save.trust === FM.FO_TRUST_START
       && r.save.fired === false && J(r.save.mandate) === J(offer.ask), `${at}: the save's six fields are not takeSeat's`);
@@ -842,7 +1317,7 @@ function rawMarket(host, lg, seat) {
   return { offers, nextYear, state: offers.length > 0 ? 'offers' : nextYear === 'shut' ? 'closed' : 'quiet' };
 }
 const sitOut = seat => ({ ...seat, career: SEAT.sitOutYear(seat.career) });
-if (runs('4') || runs('5')) {
+if (runs('4') || runs('5') || runs('9') || runs('10')) {
   begin('4', 'the market after real firings: every club graded as a GM\'s club, the first out of work screen and the next two');
   const host = d.host;
   for (const seed of S4_SEEDS) {
@@ -860,10 +1335,20 @@ if (runs('4') || runs('5')) {
     askAll(null);
     /* Men between seats: one track read through the host, one through the raw feed. */
     const tracks = [];
+    /* Round 1559, section 9: this seed's own counts (the seed is the sampling unit, R5) */
+    /* passed: the men who passed on their first feed and sat the year out; closedNext: of them, the phone stopped a
+       year later (a last call passed is closed at once: the board refuses a year out on it, hostCanSitOut). The
+       host's first call means every first feed offers, so "closed a year later" is only ever reached by passing. */
+    const P9 = { clubSeasons: 0, firings: 0, twoPlus: 0, offers: 0, passed: 0, closedNext: 0, xp: [] };
     for (let s = 0; s < S4_SEASONS; s++) {
       const r = d.cpuSeason(lg, rng);
       /* A year on for everyone still out of work, read before this close fires anybody new. */
       for (const t of tracks) {
+        if (t.pass && !t.pass.done) {
+          t.pass.done = true; P9.passed++;
+          if (t.pass.next === 'shut') P9.closedNext++;
+          else if (H.hostMarket(host, lg, sitOut(t.pass.seat), label).state === 'closed') P9.closedNext++;
+        }
         for (const k of ['host', 'raw']) {
           const w = t[k];
           if (w.done || w.feeds >= 3) continue;
@@ -879,13 +1364,15 @@ if (runs('4') || runs('5')) {
         const g = gm[id];
         const outcome = d.outcome(lg, id, r.rounds, r.champion);
         const v = H.hostSeasonVerdict(host, lg, { team: id, mandate: g.mandate, trust: g.trust, fired: false, outcome, desk: g.desk, seasonsPlayed: g.seasonsPlayed, titles: g.titles });
+        P9.clubSeasons++; P9.xp.push(H.hostXpOf(v.desk).xp - H.hostXpOf(g.desk).xp);
         g.trust = v.trust; g.desk = v.desk; g.seasonsPlayed += 1; g.titles += r.champion === id ? 1 : 0;
         if (!v.fired) continue;
-        S4.firings++;
+        S4.firings++; P9.firings++;
         const legacy = H.hostLegacy(host, lg, { team: id, seasonsPlayed: g.seasonsPlayed, titles: g.titles, fired: true, seasonCounted: true });
         const seat = H.hostSeatOf(g.desk, legacy);
         const m = H.hostMarket(host, lg, seat, label);
         const raw = rawMarket(host, lg, seat);
+        P9.offers += m.offers.length; if (m.offers.length >= 2) P9.twoPlus++;
         /* ASSERTED: the club that let him go never calls, nothing above the second tier straight after a 'badly'
            season, every ask is for the season he would first be graded in, and the feed is the same on a second
            read and after a reload (controls firedclub, unkeyed). */
@@ -899,14 +1386,14 @@ if (runs('4') || runs('5')) {
           ok(J(H.hostMarket(host, lg, seat, label)) === J(m), `${at}: a second read of the feed is not the first`);
           ok(J(H.hostMarket(host, JSON.parse(J(lg)), JSON.parse(J(seat)), label)) === J(m), `${at}: the feed after a reload is not the feed before it`);
         }
-        if (runs('5')) takeChecks(lg, id, g, seat, m, seed * 100 + s);
+        if (runs('5') || runs('10')) takeChecks(lg, id, g, seat, m, seed * 100 + s);
         S4.first[m.state]++; S4.raw[raw.state]++;
         if (m.state === 'offers' && m.nextYear === 'shut') S4.lastCalls++;
         if (raw.state === 'offers' && raw.nextYear === 'shut') S4.rawLastCalls++;
         if (m.offers.length > raw.offers.length) S4.firstCalls++;
         const room = S4_SEASONS - 1 - s >= 2;
         const track = w => ({ seat, feeds: 1, next: w.nextYear, hired: w.state === 'offers', done: w.state !== 'quiet' });
-        tracks.push({ room, host: track(m), raw: track(raw) });
+        tracks.push({ room, host: track(m), raw: track(raw), pass: m.state === 'offers' ? { seat, next: m.nextYear, done: false } : null });
         gm[id] = newGm(id, lg.season + 1);
       }
       d.cpuSummer(lg, rng);
@@ -917,6 +1404,11 @@ if (runs('4') || runs('5')) {
       S4.eligible++;
       if (t.host.hired) S4.hired3++;
       if (t.raw.hired) S4.rawHired3++;
+    }
+    {
+      const roomy = tracks.filter(t => t.room);
+      S9.seeds.push({ seed, clubSeasons: P9.clubSeasons, firings: P9.firings, twoPlus: P9.twoPlus, offers: P9.offers,
+        eligible: roomy.length, hired3: roomy.filter(t => t.host.hired).length, passed: P9.passed, closedNext: P9.closedNext, xp: P9.xp });
     }
   }
   const pct = (n, of) => (of ? `${((100 * n) / of).toFixed(1)}%` : 'n/a');
@@ -934,7 +1426,11 @@ if (runs('4') || runs('5')) {
   if (runs('5')) {
     check = '5';
     console.log(`5) taking a seat: ${S5.takes} offers taken (${S5.planted} with a planted depth chart), ${S5.follows} followed through the draft and the summer, ${S5.refused} refused`);
-    ok(S5.takes >= 400 && S5.follows >= 300 && S5.planted >= 0.9 * S5.takes, `too few seats taken (${S5.takes}, ${S5.follows} followed, ${S5.planted} planted)`);
+    ok(S5.takes >= 400 && S5.follows >= 300 && S5.planted >= (d.plantShare ?? 0.9) * S5.takes, `too few seats taken (${S5.takes}, ${S5.follows} followed, ${S5.planted} planted, floor ${d.plantShare ?? 0.9} of the takes)`);
+    if (d.plantRetained) {
+      console.log(`   ${S5.retained} desks held a retained salary row at the take`);
+      ok(S5.retained === S5.takes + S5.refused, `a retained row was planted on ${S5.retained} desks of ${S5.takes + S5.refused}`);
+    }
   }
 }
 
@@ -953,11 +1449,31 @@ const S6_YEARS = 3;
    four runs it sat 0.05 under to 0.02 over the baseline, too near the 0.19 a skipped draft costs to hold a band
    that is not a coin toss, so the drafted ratio carries the check (the strongest signal) and the limit of 53 is
    asserted club by club. */
-const S6_BAND = { draft: [0.95, 1.01] };
+const S6_BANDS = {
+  nfl: { draft: [0.95, 1.01] },
+  /* Round 1559: the NHL row, measured on runners, three years out a seed, three sets of twenty and a held out set:
+       seeds  1-20 ratio 0.987 (r1559-s2a and r1559-s2c, section 6 alone; 0.993 in a whole run, the id counter moves
+       with the sections before it), 21-40 0.993, 41-60 0.990 (r1559-s2a), held out 61-80 0.997 (r1559-s2c).
+     The idle GM's rivals take exactly 600 (ten a season over sixty summers), a ceiling the away path cannot pass. The
+     NFL's band for the same check, its top that ceiling and its floor well under the lowest set; R5's own recipe on
+     the three sets would give [0.982, 1.002], inside it. noawaydraft on this row skips the away draft. */
+  nhl: { draft: [0.95, 1.01] },
+};
+const S6_BAND = S6_BANDS[SPORT_OF_RUN] ?? null;
 const S6 = {
   years: 0, stopped: 0, over: 0, minted: 0, inSeat: 0, closed: 0, lastCall: 0, shadows: 0,
   away: { drafted: 0, rosters: 0, clubSummers: 0 }, base: { drafted: 0, rosters: 0, clubSummers: 0 },
+  /* Round 1559: the retained salary rows a desk keeps over a summer out, and the old club's own lineup */
+  retained: { rows: 0, kept: 0, dropped: 0 }, lineupFree: 0, lineupPlanted: 0,
+  /* Round 1559 fix pass: summers the old club went into planted over the roster limit, and came out trimmed to it */
+  oldPlanted: 0, oldTrimmed: 0,
+  /* Round 1559 fix pass: rounds out replayed against the row's own round, and how many differed */
+  roundShadows: 0, roundsOff: 0,
+  /* Round 1559 fix pass: men the old club drafted in its years out; drafts out replayed, and how many differed */
+  oldDrafted: 0, draftShadows: 0, draftsOff: 0,
 };
+/* Round 1559 fix pass: a league's JSON with every id taken out (a replay on a copy mints its own) */
+const noIdsJ = v => JSON.stringify(v, (key, x) => (key === 'id' ? undefined : x));
 const rosterIds = (lg, skip) => new Set(Object.entries(lg.teams).filter(([a]) => a !== skip).flatMap(([, t]) => [...t.players, ...(t.practice ?? [])].map(p => p.id)));
 const everyId = lg => { const s = rosterIds(lg, null); for (const p of lg.freeAgents) s.add(p.id); return s; };
 const firedSeatFor = (team, tier, season, grades, out = 0) => {
@@ -969,7 +1485,7 @@ const firedSeatFor = (team, tier, season, grades, out = 0) => {
 };
 /** Every club's pick in every round of every year carried exists exactly once, and every engine list is the ledger's (simNflGmDesk check 4). */
 function picksHold(lg, desk, at) {
-  const ledger = desk.blocks[D.NFL_DESK_KEYS.picks], ids = Object.keys(lg.teams), rules = D.nflGamePickRules();
+  const ledger = desk.blocks[d.picksKey()], ids = Object.keys(lg.teams), rules = d.pickRules();
   if (!P.validateLedger(ledger, ids, rules)) { fail(`${at}: the stored pick ledger does not validate`); return; }
   for (const p of P.ledgerProblems(ledger, ids, lg.season, rules)) fail(`${at}: ${p}`);
   for (const [abbr, t] of Object.entries(lg.teams)) {
@@ -990,8 +1506,8 @@ if (runs('6')) {
     /* The refusals, each on a copy that must come back byte equal: in a seat, a closed market, a last call. */
     const refuse = (seat, old, why) => {
       const lg = clone(lg0), before = J(lg);
-      const desk = G.withGmBlock(D.openNflDesk(lg, old), H.GM_HOST_KEYS.seat, seat);
-      const r = H.hostSeasonAway({ host, away: C.nflAwayHost(old), league: lg, desk, legacy: legacyOf(lg, old, why !== 'in-seat'), rng: mulberry32(seed) });
+      const desk = G.withGmBlock(d.openDesk(lg, old), H.GM_HOST_KEYS.seat, seat);
+      const r = H.hostSeasonAway({ host, away: d.awayHost(old), league: lg, desk, legacy: legacyOf(lg, old, why !== 'in-seat'), rng: mulberry32(seed) });
       ok(r.ok === false && r.reason === why && J(lg) === before, `seed ${seed} ${old}: a year out that must be refused (${why}) was not, or moved the league (${r.ok === false ? r.reason : 'played'})`);
     };
     refuse(H.hostNewSeat(team, tiers.get(team), lg0.season), team, 'in-seat'); S6.inSeat++;
@@ -1011,41 +1527,97 @@ if (runs('6')) {
 
     /* The away path: fired at the close of the season he ran, with a record good enough that next year stays open. */
     const lgA = clone(lg0);
-    let desk = G.withGmBlock(D.openNflDesk(lgA, team), H.GM_HOST_KEYS.seat, firedSeatFor(team, tiers.get(team), lg0.season, ['overachieved', 'met', 'missed']));
+    let desk = G.withGmBlock(d.openDesk(lgA, team), H.GM_HOST_KEYS.seat, firedSeatFor(team, tiers.get(team), lg0.season, ['overachieved', 'met', 'missed']));
     desk = G.withGmBlock(desk, H.GM_HOST_KEYS.xp, X.addXp(X.defaultGmXp(), 777));
-    D.syncNflPicks(lgA, D.nflPicksOf(desk, lgA));
+    /* Round 1559: his own lineup planted on the old club (the year out hands it back to automatic, controls
+       awaycontrib on the NHL), and on a desk that keeps retained salary a row planted on a rival (its dead cap entry
+       stands at the figure the club kept after every summer out, control retainedrolled). */
+    if (d.plantLineup(lgA.teams[team])) S6.lineupPlanted++;
+    if (d.plantRetained) { desk = d.plantRetained(lgA, desk, team); S6.retained.rows++; }
+    const plantedRetained = d.retainedOf ? d.retainedOf(desk).length : 0;
+    d.syncPicks(lgA, d.picksOf(desk, lgA));
     const xpBefore = J(desk.blocks.xp), clubBlocks = J([desk.blocks.contracts, desk.blocks.staff]);
     const totalsBefore = J(SEAT.careerTotals(desk.blocks.seat.career));
     const rngA = mulberry32(7000 + seed), drafted = new Set();
     let years = 0;
     for (let y = 0; y < S6_YEARS; y++) {
       const at = `seed ${seed} year out ${y + 1}`;
-      const away = C.nflAwayHost(team);
+      const away = d.awayHost(team);
       const noneMinted = (step, b, lg) => { for (const id of everyId(lg)) if (!b.has(id)) { S6.minted++; fail(`${at}: ${step} minted a player`); break; } };
       const wrapped = {
-        awayDraft(lg, r, dk) { const b = rosterIds(lg, null); const out = away.awayDraft(lg, r, dk); for (const id of rosterIds(lg, null)) if (!b.has(id)) drafted.add(id); return out; },
+        awayDraft(lg, r, dk) {
+          const b = rosterIds(lg, null);
+          /* Round 1559 fix pass (review minor 7): the draft replayed on a copy with the same draws against the row's
+             own statement of the board's draft with nobody in the chair; it must be the league the away host left,
+             ids aside (the copy mints its own). The ratio below reads the other clubs only, so a draft that leaves
+             the old club out was green before this (control oldskip); its own draftees are counted and printed. */
+          const shadow = d.awayDraftReplay ? clone(lg) : null, draws = [];
+          const out = away.awayDraft(lg, shadow ? () => { const x = r(); draws.push(x); return x; } : r, dk);
+          for (const id of rosterIds(lg, null)) if (!b.has(id)) drafted.add(id);
+          const oldNow = lg.teams[team];
+          if (oldNow) for (const p of [...oldNow.players, ...(oldNow.practice ?? [])]) if (!b.has(p.id)) S6.oldDrafted++;
+          if (shadow) {
+            let i = 0, threw = false;
+            try { d.awayDraftReplay(shadow, () => { if (i >= draws.length) throw new Error('out of draws'); return draws[i++]; }, team); } catch { threw = true; }
+            S6.draftShadows++;
+            if (threw || i !== draws.length || noIdsJ(shadow) !== noIdsJ(lg)) { S6.draftsOff++; fail(`${at}: the draft out is not the board's draft with nobody in the chair (${i} of ${draws.length} draws replayed${threw ? ', the replay ran out' : ''})`); }
+          }
+          return out;
+        },
         awaySummer(lg, r, dk) {
           /* The summer with nobody in the chair is the engine's offseason with NO user club, then the ledger rolled:
-             replayed on a copy with the same draws, it must be the league the away host left (control notrim: the
-             old club named as the user club, so the CPU neither cuts nor tags it). */
+             replayed on a copy with the same draws, it must be the league the away host left (the old club named as
+             the user club, so the CPU neither cuts nor tags it: control notrim on the NFL row, namedsummer on the
+             NHL row; the NHL's notrim runs the summer with no club trimmed at all). Round 1559 fix pass: where the
+             row can, a PROBE (a copy of the league at the summer's start, the old club planted over the roster limit,
+             the away host's own summer run on it with a stream of its own) shows that the summer trims the old club
+             too (MAJOR 1). A probe, not the league: planted men left on the real old club made it weaker and moved
+             the draft ratio from 0.993 to 0.973 (r1559-fx1). */
+          const probe = d.plantOverLimit ? clone(lg) : null;
           const shadow = clone(lg), draws = [];
-          const before = D.nflPicksOf(dk, shadow), closed = shadow.season, ids = Object.keys(shadow.teams);
+          const before = d.picksOf(dk, shadow), closed = shadow.season, ids = Object.keys(shadow.teams);
           const out = away.awaySummer(lg, () => { const x = r(); draws.push(x); return x; }, dk);
           let i = 0;
           let threw = false;
-          try { E.runOffseason(shadow, () => { if (i >= draws.length) throw new Error("out of draws"); return draws[i++]; }); } catch { threw = true; }
-          D.syncNflPicks(shadow, P.rollLedger(before, ids, closed, D.nflGamePickRules()));
+          try { d.engineSummer(shadow, () => { if (i >= draws.length) throw new Error("out of draws"); return draws[i++]; }); } catch { threw = true; }
+          d.syncPicks(shadow, P.rollLedger(before, ids, closed, d.pickRules()));
+          if (d.afterSummer) d.afterSummer(shadow, dk);
           S6.shadows++;
           const noIds = v => JSON.stringify(v, (key, x) => (key === 'id' ? undefined : x)); /* the restock mints ids from a counter the copy has moved on */
           if (threw || i !== draws.length || noIds(shadow) !== noIds(lg)) fail(`${at}: the away summer is not the engine's offseason with no user club (${i} of ${draws.length} draws replayed${threw ? ", the replay ran out" : ""})`);
           for (const [abbr, t] of Object.entries(lg.teams)) {
-            if (E.deepOverLimit(t) > 0) { S6.over++; fail(`${at}: ${abbr} is over the roster limit after the summer`); }
+            if (d.overLimit(t)) { S6.over++; fail(`${at}: ${abbr} is over the roster limit after the summer`); }
             if (abbr !== team) { S6.away.rosters += t.players.length; S6.away.clubSummers++; }
+          }
+          if (probe) {
+            /* Over the limit at the trim by construction (plantOverLimit counts out every man who could leave), so
+               ending at or under it means the trim reached the old club. */
+            const plantedOver = d.plantOverLimit(probe, team, `${seed}-${y}`), going = probe.teams[team].players.length;
+            away.awaySummer(probe, mulberry32(8000 + seed * 10 + y), clone(dk));
+            S6.oldPlanted++;
+            const oldT = probe.teams[team], left = oldT.players.filter(p => plantedOver.includes(p.id)).length;
+            if (!d.overLimit(oldT)) S6.oldTrimmed++;
+            else fail(`${at}: the old club, planted over the roster limit (${going} men going in), was not trimmed by the summer (${oldT.players.length} men, ${left} of ${plantedOver.length} planted still on it)`);
           }
           return out;
         },
         periods: lg => away.periods(lg),
-        playRound(lg, r, dk) { const b = everyId(lg); const out = away.playRound(lg, r, dk); noneMinted('a week', b, lg); return out; },
+        playRound(lg, r, dk) {
+          const b = everyId(lg);
+          /* Round 1559 fix pass (review minor 2): the round replayed on a copy with the same draws against the row's
+             own statement of the board's round with nobody in the chair; it must be the league the away host left
+             (control awaymoves: the rivals' in season moves dropped). */
+          const shadow = d.awayRound ? clone(lg) : null, draws = [];
+          const out = away.playRound(lg, shadow ? () => { const x = r(); draws.push(x); return x; } : r, dk);
+          noneMinted('a week', b, lg);
+          if (shadow) {
+            let i = 0, threw = false;
+            try { d.awayRound(shadow, () => { if (i >= draws.length) throw new Error('out of draws'); return draws[i++]; }); } catch { threw = true; }
+            S6.roundShadows++;
+            if (threw || i !== draws.length || J(shadow) !== J(lg)) { S6.roundsOff++; fail(`${at}: a round out is not the board's round with no user club (${i} of ${draws.length} draws replayed${threw ? ', the replay ran out' : ''})`); }
+          }
+          return out;
+        },
         playoffs(lg, r, dk) { const b = everyId(lg); const out = away.playoffs(lg, r, dk); noneMinted('the playoffs', b, lg); return out; },
       };
       const season = lgA.season, champs = lgA.champions.length;
@@ -1054,19 +1626,31 @@ if (runs('6')) {
       years++; S6.years++;
       ok(lgA.season === season + 1 && lgA.champions.length === champs + 1 && new Set(lgA.champions.map(c => c.season)).size === lgA.champions.length,
         `${at}: not one more decided season with one champion`);
-      ok(Object.values(lgA.teams).every(t => t.wins + t.losses === E.REGULAR_WEEKS), `${at}: a club did not play ${E.REGULAR_WEEKS} games`);
+      ok(Object.values(lgA.teams).every(t => d.gamesOf(t) === d.games()), `${at}: a club did not play ${d.games()} games`);
       const seat = r.desk.blocks.seat;
       ok(H.isGmSeatBlock(seat) && seat.career.seasonsOut === y + 1 && J(SEAT.careerTotals(seat.career)) === totalsBefore, `${at}: the record moved beyond one more year out`);
       ok(J(r.desk.blocks.xp) === xpBefore, `${at}: his XP moved in a year out`);
       ok(J([r.desk.blocks.contracts, r.desk.blocks.staff]) === clubBlocks, `${at}: the old club's ledger or staff moved`);
       picksHold(lgA, r.desk, at);
+      if (lgA.teams[team][d.lineupField] === undefined) S6.lineupFree++;
+      else fail(`${at}: the old club kept the ${d.lineupField} he chose through a year out`);
+      if (d.retainedOf) {
+        const rows = d.retainedOf(r.desk);
+        for (const row of rows) {
+          const e = lgA.teams[row.club]?.deadCap?.find(x => x.playerId === row.playerId);
+          if (!e) fail(`${at}: a retained row outlived its dead cap entry`);
+          else if (e.amount !== row.kept) fail(`${at}: ${row.club}'s retained entry reads ${e.amount}, the club kept ${row.kept}`);
+          else S6.retained.kept++;
+        }
+        if (rows.length < plantedRetained && y === S6_YEARS - 1) S6.retained.dropped += plantedRetained - rows.length;
+      }
       desk = r.desk;
     }
     S6.away.drafted += [...rosterIds(lgA, team)].filter(id => drafted.has(id)).length;
 
     /* The baseline: the same league with an idle GM in the old club's chair, the board's calls with him as the user. */
     const lgB = clone(lg0), rngB = mulberry32(7000 + seed), draftedB = new Set();
-    let deskB = D.openNflDesk(lgB, team);
+    let deskB = d.openDesk(lgB, team);
     for (let y = 0; y < years; y++) {
       const b = rosterIds(lgB, null);
       deskB = d.draft(lgB, team, rngB, deskB);
@@ -1084,15 +1668,37 @@ if (runs('6')) {
   console.log(`   drafted men on the other clubs' rosters after the years out: away ${S6.away.drafted}, idle GM ${S6.base.drafted} (ratio ${draftRatio.toFixed(3)}); mean roster after a summer: away ${rosterA.toFixed(2)}, idle GM ${rosterB.toFixed(2)}`);
   ok(S6.years >= 0.9 * S6_SEEDS.length * S6_YEARS && S6.shadows === S6.years, `only ${S6.years} years out played (${S6.shadows} summers replayed)`);
   ok(S6.closed >= 1 && S6.lastCall >= 1, `no closed market or no last call found to refuse (${S6.closed}, ${S6.lastCall})`);
-  ok(draftRatio >= S6_BAND.draft[0] && draftRatio <= S6_BAND.draft[1], `the away draft put ${draftRatio.toFixed(3)} of the idle GM baseline's draftees on the other clubs, band ${J(S6_BAND.draft)}`);
+  if (!S6_BAND) fail(`no measured draft band for the ${d.sport} row (S6_BANDS): ratio ${draftRatio.toFixed(3)}`);
+  else ok(draftRatio >= S6_BAND.draft[0] && draftRatio <= S6_BAND.draft[1], `the away draft put ${draftRatio.toFixed(3)} of the idle GM baseline's draftees on the other clubs, band ${J(S6_BAND.draft)}`);
+  if (S6.retained.rows > 0 || d.afterSummer) {
+    console.log(`   retained rows planted ${S6.retained.rows}: ${S6.retained.kept} summers kept at the figure the club kept, ${S6.retained.dropped} dropped when the entry ran out; the old club's contributors back to automatic after ${S6.lineupFree} of ${S6.years} years`);
+    ok(S6.retained.kept >= S6_SEEDS.length, `only ${S6.retained.kept} retained rows carried over a summer`);
+  }
+  console.log(`   the old club drafted ${S6.oldDrafted} men in its ${S6.years} years out (printed, not asserted: 2, 0, 6 and 4 on the NHL's four seed sets, r1559-fx2)`);
+  if (d.awayDraftReplay) {
+    console.log(`   drafts out replayed against the board's draft with nobody in the chair: ${S6.draftShadows}, ${S6.draftsOff} differed`);
+    ok(S6.draftShadows === S6.years && S6.draftsOff === 0, `only ${S6.draftShadows} drafts out replayed for ${S6.years} years out, ${S6.draftsOff} differed`);
+  }
+  if (d.awayRound) {
+    console.log(`   rounds out replayed against the board's round with no user club: ${S6.roundShadows}, ${S6.roundsOff} differed`);
+    ok(S6.roundShadows >= S6.years * d.periods() && S6.roundsOff === 0, `only ${S6.roundShadows} rounds out replayed for ${S6.years} years out of ${d.periods()} rounds, ${S6.roundsOff} differed`);
+  }
+  if (d.plantOverLimit) {
+    console.log(`   the old club planted over the roster limit before ${S6.oldPlanted} summers out: trimmed to it after ${S6.oldTrimmed}`);
+    ok(S6.oldPlanted === S6.shadows && S6.oldTrimmed === S6.oldPlanted, `the old club went into ${S6.oldPlanted} of ${S6.shadows} summers out planted over the limit and came out trimmed after ${S6.oldTrimmed}`);
+  }
 }
 
 /* ================================================================== */
 /* 7. Whole careers: fired every third season, then a take or a year out */
 /* ================================================================== */
-const S7_SEEDS = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
+/* Round 1559 fix pass: the nhl row walks twenty careers, not ten. Section 7's counts move with the id counter the
+   sections before it advance, and the fix pass's replays in section 6 moved the nhl row's ten careers from 13 years
+   out to 10, on the floor of 10 (r1559-fx3a; 18, 10, 13 in r1559-f1; the nfl row 20, 11, 22 against 21, 14, 15).
+   More careers, never a lower floor. */
+const S7_SEEDS = Array.from({ length: d.careerSeeds ?? 10 }, (_, i) => i + 1);
 const S7_SEASONS = 12;
-const TITLE_ASK = season => ({ tier: 'title', text: 'Win the Super Bowl. Anything less is a failed season upstairs.', winFloor: 0, reqLevel: 4, season });
+const TITLE_ASK = season => ({ tier: 'title', text: `Win ${d.words.title}. Anything less is a failed season upstairs.`, winFloor: 0, reqLevel: 4, season });
 if (runs('7')) {
   begin('7', 'whole careers: the save, the record and the counters agree at every step across firings, takes and years out');
   const host = d.host;
@@ -1110,7 +1716,7 @@ if (runs('7')) {
       ['draft', null, true], ['draft', ran, true], ['fired', null, true], ['fired', ran, true], ['fired', away, false]];
     for (const [phase, desk, want] of ROWS) {
       S7.checks++;
-      const got = D.nflSeasonCounted(phase, desk);
+      const got = d.seasonCounted(phase, desk);
       if (got !== want) fail(`the season counted on ${phase}, ${desk === away ? 'after a year out' : desk ? 'desk on' : 'desk off'}: ${got}, the save says ${want}`);
     }
   }
@@ -1126,7 +1732,7 @@ if (runs('7')) {
     const point = where => {
       S7.checks++;
       const at = `seed ${seed} ${where} (${lg.season})`;
-      ok(isFrontOfficeSave({ ...save, gm: desk }, 'NFL', E.REGULAR_WEEKS), `${at}: the save does not pass isFrontOfficeSave`);
+      ok(isFrontOfficeSave({ ...save, gm: desk }, d.saveSport, d.periods()), `${at}: the save does not pass isFrontOfficeSave`);
       const b = desk.blocks[H.GM_HOST_KEYS.seat];
       if (!H.isGmSeatBlock(b)) { fail(`${at}: the seat block is not sound`); return; }
       const cur = SEAT.currentStint(b.career);
@@ -1157,16 +1763,16 @@ if (runs('7')) {
         });
         desk = v.desk; save.trust = v.trust; save.fired = v.fired;
         save.titles += r.champion === save.myTeam ? 1 : 0; save.seasonsPlayed += 1; S7.seasons++;
-        save.postseason = { rounds: r.rounds, champion: r.champion, gradeLine: v.grade?.verdict ?? null };
+        save.postseason = { [d.postKey]: r.rounds, champion: r.champion, gradeLine: v.grade?.verdict ?? null };
         save.phase = v.fired ? 'fired' : 'recap';
         point('close');
         if (!v.fired) { summer(); point('summer'); continue; }
         S7.firings++;
       }
-      const legacy = H.hostLegacy(host, lg, { team: save.myTeam, seasonsPlayed: save.seasonsPlayed, titles: save.titles, fired: true, seasonCounted: D.nflSeasonCounted('fired', desk) });
+      const legacy = H.hostLegacy(host, lg, { team: save.myTeam, seasonsPlayed: save.seasonsPlayed, titles: save.titles, fired: true, seasonCounted: d.seasonCounted('fired', desk) });
       const m = H.hostMarket(host, lg, H.hostSeatOf(desk, legacy), label);
       if (m.offers.length > 0 && ((seed + s) % 2 === 0 || !H.hostCanSitOut(m))) {
-        const r = C.nflTakeSeat(lg, desk, { myTeam: save.myTeam, trust: save.trust, fired: true, mandate: save.mandate, pressTilt: save.pressTilt, seasonTradeLine: save.seasonTradeLine }, legacy, m.offers[0].teamId, label);
+        const r = d.takeSeat(lg, desk, { myTeam: save.myTeam, trust: save.trust, fired: true, mandate: save.mandate, pressTilt: save.pressTilt, seasonTradeLine: save.seasonTradeLine }, legacy, m.offers[0].teamId, label);
         if (!r) { fail(`seed ${seed}: an offer on the table was refused`); break; }
         Object.assign(save, r.save, { phase: 'recap' });
         save.postseason = { ...save.postseason, gradeLine: null };
@@ -1175,16 +1781,185 @@ if (runs('7')) {
         summer();
         point('summer after a take');
       } else if (H.hostCanSitOut(m)) {
-        const r = H.hostSeasonAway({ host, away: C.nflAwayHost(save.myTeam), league: lg, desk, legacy, rng });
+        const r = H.hostSeasonAway({ host, away: d.awayHost(save.myTeam), league: lg, desk, legacy, rng });
         if (r.ok === false) { fail(`seed ${seed}: a year out on offer was refused (${r.reason})`); break; }
         desk = r.desk; S7.sits++;
-        save.postseason = { rounds: [], champion: r.report.champion, gradeLine: null };
+        save.postseason = { [d.postKey]: [], champion: r.report.champion, gradeLine: null };
         point('year out');
       } else { S7.closed++; break; }
     }
   }
   console.log(`   ${S7_SEEDS.length} careers, ${S7.seasons} seasons run: ${S7.forced} sackings forced, ${S7.firings} firings, ${S7.takes} seats taken, ${S7.sits} years out, ${S7.closed} closed for good; ${S7.checks} checkpoints`);
   ok(S7.firings >= 12 && S7.takes >= 5 && S7.sits >= 10, `too few firings (${S7.firings}), takes (${S7.takes}) or years out (${S7.sits}) to hold a career`);
+}
+
+/* ================================================================== */
+/* 9. The bands: the career's rates on each sport's engine             */
+/* ================================================================== */
+/* Round 1559 (brief decision 8, R5, critic 6): section 4's league read seed by seed, the seed being the sampling
+   unit (one league, zero sum standings, trust carried season to season), never a binomial error over club seasons.
+   Per seed: the FIRING RATE (firings per graded club season), the OFFERS (the share of first feeds with two or more
+   offers, the mean offers in a first feed), the share RE HIRED within three feeds, the CLOSED share a year later
+   (of the men who pass on their first feed and sit the year out, the share whose phone has stopped the next
+   summer; a passed last call counts closed, since the board refuses a year out on it; the host's first call means
+   no first feed is ever quiet, so passing is the only way to a year later) and the XP a graded club season pays. A band is the three calibration sets' lowest and highest set mean, widened by the larger of
+   half their spread and three standard errors of the per seed values; a held out fourth set must clear it. A rate
+   that sits at 100 or 0 percent on every seed is an invariant, asserted exactly, never a band of width zero.
+   The pace cross check ties copy to the engine: hostXpHelp says a .500 season that meets the ask pays N XP and
+   "the median club is near this"; the measured median XP of a graded club season must sit inside PACE of N.
+   simGmDeskHost measures the same pace on the four adapters with the host's own driver; this measures it in each
+   board's own call order through the bind, which is what a player's GM earns. Bands hold for sets of S9_SET seeds
+   (the row's calibration size, its measureSeeds: nfl 20, nhl 40): a run on another count prints its numbers and
+   asserts only the invariants.
+   Controls: firenever (the verdict never fires), nooffers (the market never offers: the offers bands and the re
+   hired invariant), xpflat (a season's XP never reaches the block), nevershut (next year is never shut: the closed
+   share). The four sports sit side by side once MLB (Part B) and NBA (Part C) add their rows; until
+   then nfl and nhl. */
+/* CALIBRATED 2026-10-29 on GitHub runners (r1559-s2c, head 5ce4d870c; the numbers recomputed from the logs by the
+   R5 recipe): each statistic is the mean over a set's seeds of the per seed value; three calibration sets, then a
+   held out fourth. Band = [lowest set mean - w, highest + w], w = the larger of half the three sets' spread and three
+   times the largest per seed standard error of the three (the seed is the unit, never a club season).
+     nfl, sets of 20 (seeds 1-20 / 21-40 / 41-60, held out 61-80):
+       fireRate   .0618 / .0600 / .0581, held .0613; w .0057 (3 se)      -> [.0524, .0675]
+       twoPlus    .0366 / .0361 / .0464, held .0488; w .0303 (3 se)      -> [.0058, .0767]
+       meanOffers 1.0366 / 1.0361 / 1.0464, held 1.0488; w .0303         -> [1.0058, 1.0767]
+       closedNext .5082 / .5504 / .5404, held .5297; w .0753             -> [.4329, .6257]
+       xpMean     111.81 / 112.02 / 112.23, held 112.37; w 1.12          -> [110.69, 113.35]
+     nhl, sets of 40 (seeds 1-40 / 41-80 / 81-120, held out 121-160):
+       fireRate   .0366 / .0355 / .0351, held .0364; w .0030             -> [.0321, .0396]
+       twoPlus    .0488 / .0568 / .0475, held .0441; w .0300             -> [.0175, .0868]
+       meanOffers 1.0503 / 1.0568 / 1.0516, held 1.0441; w .0327         -> [1.0176, 1.0895]
+       closedNext .4993 / .5523 / .4943, held .5300; w .0702             -> [.4241, .6225]
+       xpMean     121.73 / 121.55 / 121.56, held 121.87; w .56           -> [120.98, 122.29]
+     hired3 is 1 on every seed of every set of both rows: the host's first call means every first feed offers, so
+     a man who wants a seat has one at once. An invariant, asserted on every seed, with nooffers as its control.
+     THE PACE, one band for every sport because the copy is one sentence: the median XP of a graded club season over
+     the .500 season that meets the ask (110 XP), sets nfl .864 / .864 / .918 and nhl .945 / .945 / .945, held out
+     .864 and .945; widened by half the spread of the six -> [.824, .985]. simGmDeskHost measures 95 to 106 XP
+     (.864 to .964) on the four adapters with its own driver, inside it, so MLB (Part B) and NBA (Part C) should
+     join without moving it; this measures the pace in each board's own call order through the bind. */
+const S9_SET = d.measureSeeds ?? 20;
+const S9_BANDS = {
+  nfl: {
+    fireRate: [0.0524, 0.0675], twoPlus: [0.0058, 0.0767], meanOffers: [1.0058, 1.0767], closedNext: [0.4329, 0.6257],
+    xpMean: [110.69, 113.35], invariants: { hired3: 1 },
+  },
+  nhl: {
+    fireRate: [0.0321, 0.0396], twoPlus: [0.0175, 0.0868], meanOffers: [1.0176, 1.0895], closedNext: [0.4241, 0.6225],
+    xpMean: [120.98, 122.29], invariants: { hired3: 1 },
+  },
+};
+const S9_PACE = [0.824, 0.985];
+if (runs('9')) {
+  begin('9', 'the bands: the firing rate, the offers, re hiring, the closed share and the XP pace, seed by seed against the calibrated bands');
+  const rows = S9.seeds;
+  const mean = a => a.reduce((x, y) => x + y, 0) / Math.max(1, a.length);
+  const sd = a => { const m = mean(a); return Math.sqrt(a.reduce((x, y) => x + (y - m) ** 2, 0) / Math.max(1, a.length - 1)); };
+  const median = a => { const s = [...a].sort((x, y) => x - y); return s.length ? (s.length % 2 ? s[(s.length - 1) / 2] : (s[s.length / 2 - 1] + s[s.length / 2]) / 2) : 0; };
+  const stat = (name, pick) => { const v = rows.map(pick).filter(x => x !== null); return { name, v, m: mean(v), sd: sd(v), se: sd(v) / Math.sqrt(Math.max(1, v.length)), n: v.length }; };
+  const stats = [
+    stat('fireRate', r => r.clubSeasons ? r.firings / r.clubSeasons : null),
+    stat('twoPlus', r => r.firings ? r.twoPlus / r.firings : null),
+    stat('meanOffers', r => r.firings ? r.offers / r.firings : null),
+    stat('hired3', r => r.eligible ? r.hired3 / r.eligible : null),
+    stat('closedNext', r => r.passed ? r.closedNext / r.passed : null),
+    stat('xpMean', r => r.xp.length ? mean(r.xp) : null),
+  ];
+  const allXp = rows.flatMap(r => r.xp), xpMedian = median(allXp);
+  const even = X.gmSeasonXp({ winPct: 0.5, titles: 0, playoffRoundsWon: 0, mandateSteps: X.mandateSteps('met'), placesAboveExpectation: 0, prospectsGraduated: 0 }).total;
+  const seedSpan = `${S4_SEEDS[0]}-${S4_SEEDS.at(-1)}`;
+  for (const s of stats) console.log(`   S9 ${d.sport} seeds ${seedSpan}: ${s.name} mean ${s.m.toFixed(4)} sd ${s.sd.toFixed(4)} se ${s.se.toFixed(4)} min ${Math.min(...s.v).toFixed(4)} max ${Math.max(...s.v).toFixed(4)} over ${s.n} seeds`);
+  console.log(`   S9 ${d.sport} seeds ${seedSpan}: xpMedian ${xpMedian} over ${allXp.length} graded club seasons; hostXpHelp's .500 season that meets the ask pays ${even} (ratio ${(xpMedian / even).toFixed(3)})`);
+  ok(rows.length === S4_SEEDS.length && allXp.length > 0, `section 9 read ${rows.length} seeds of ${S4_SEEDS.length}`);
+  const band = S9_BANDS[d.sport];
+  if (!band) fail(`no calibrated bands for the ${d.sport} row (S9_BANDS)`);
+  else {
+    for (const s of stats) {
+      if ((band.invariants ?? {})[s.name] !== undefined) {
+        const want = band.invariants[s.name];
+        ok(s.n > 0 && s.v.every(x => x === want), `${s.name}: an invariant at ${want} on every seed, read ${s.v.filter(x => x !== want).length} seeds off it of ${s.n} (mean ${s.m.toFixed(4)})`);
+        continue;
+      }
+      const b = band[s.name];
+      if (!b) { fail(`${s.name}: no band for the ${d.sport} row`); continue; }
+      if (S4_SEEDS.length !== S9_SET) continue;
+      ok(s.m >= b[0] && s.m <= b[1], `${s.name}: the set mean ${s.m.toFixed(4)} is outside the band ${J(b)}`);
+    }
+    if (S4_SEEDS.length !== S9_SET) console.log(`   the bands are for sets of ${S9_SET} seeds: on ${S4_SEEDS.length} seeds only the invariants are asserted`);
+    else console.log(`   ${d.sport} bands held on ${S4_SEEDS.length} seeds: ${stats.filter(s => !(s.name in (band.invariants ?? {}))).map(s => `${s.name} ${s.m.toFixed(4)} in ${J(band[s.name])}`).join('; ')}`);
+  }
+  if (!S9_PACE) fail('no measured pace band (S9_PACE)');
+  else ok(xpMedian / even >= S9_PACE[0] && xpMedian / even <= S9_PACE[1], `the median club earns ${xpMedian} XP a graded season, ${(xpMedian / even).toFixed(3)} of the ${even} hostXpHelp says, outside ${J(S9_PACE)}`);
+}
+
+/* ================================================================== */
+/* 10. The lift: the shared pieces equal the NFL copies they came from */
+/* ================================================================== */
+/* Round 1559 (brief 3.7.1 and 3.7.7): the real proof of the lift is that section 1's recording and section 5's
+   takes replay unchanged on the NFL; this section names the rest. careerLegacy through the row's spec equals the
+   old inline body (nflGmCareer.ts before the lift) on every club of the fleet, counted or not, fired or not, and the
+   row's own wrapper equals it; hostSeasonCounted equals the old nflSeasonCounted on section 7's table;
+   keepRetainedOverSummer equals the old inline summer step (nhlGmDesk.ts and mlbGmDesk.ts before the lift) on
+   planted rows; and the shared take, counted on section 5's first offers: a desk off take opens, syncs and
+   releases once each, a desk on take releases once and syncs never, a refused take moves nothing and calls
+   neither. Controls legacyleak (the legacy read grades a season the save has not counted) and retainedlift. */
+if (runs('10')) {
+  begin('10', 'the lift: the shared legacy read, season counted rule, retained step and take equal what the NFL wrote inline');
+  let legacyRows = 0;
+  for (const snap of FLEET) {
+    const lg = snap.lg;
+    for (const id of Object.keys(lg.teams).sort()) {
+      const mandate = snap.mandates[id];
+      for (const counted of [true, false]) for (const firedNow of [true, false]) {
+        const f = { team: id, seasonsPlayed: 3, titles: 1, fired: firedNow, seasonCounted: counted, mandate };
+        const outcome = snap.champion ? d.outcome(lg, id, snap.rounds, snap.champion) : null;
+        const old = H.hostLegacy(d.host, lg, { team: id, seasonsPlayed: 3, titles: 1, fired: firedNow, seasonCounted: counted,
+          lastGrade: counted ? H.hostLastGrade(d.host, lg, mandate, outcome) : null });
+        const got = B.careerLegacy(d.spec(), lg, { ...f, post: snap.rounds, champion: snap.champion });
+        const wrapped = d.legacyOf(lg, { ...f, [d.postKey]: snap.rounds, champion: snap.champion });
+        legacyRows++;
+        if (J(got) !== J(old)) fail(`seed ${snap.seed} ${id} counted ${counted} fired ${firedNow}: the shared legacy read is not the old body`);
+        if (J(wrapped) !== J(got)) fail(`seed ${snap.seed} ${id}: the ${d.sport} wrapper is not the shared legacy read`);
+      }
+    }
+  }
+  const oldCounted = (phase, desk) => {
+    if (phase === 'hub' || phase === 'pick') return false;
+    const stored = desk ? desk.blocks[H.GM_HOST_KEYS.seat] : undefined;
+    return !(H.isGmSeatBlock(stored) && stored.career.seasonsOut > 0);
+  };
+  const ranBlock = { v: 1, career: SEAT.newGmCareer(d.team, 4, 2026) };
+  const awayBlock = { v: 1, career: SEAT.sitOutYear(SEAT.endSeatStint(SEAT.newGmCareer(d.team, 4, 2026), 'fired')) };
+  let countedRows = 0;
+  for (const phase of ['pick', 'hub', 'draft', 'recap', 'fired']) {
+    for (const desk of [null, G.withGmBlock(G.freshGmDesk(), H.GM_HOST_KEYS.seat, ranBlock), G.withGmBlock(G.freshGmDesk(), H.GM_HOST_KEYS.seat, awayBlock)]) {
+      countedRows++;
+      const want = oldCounted(phase, desk);
+      ok(H.hostSeasonCounted(phase, desk) === want && d.seasonCounted(phase, desk) === want, `${phase}: the season counted rule moved in the lift`);
+    }
+  }
+  const oldKeep = (teams, rows) => rows.filter(r => {
+    const entry = teams[r.club]?.deadCap?.find(x => x.playerId === r.playerId);
+    if (!entry) return false;
+    entry.amount = r.kept;
+    return true;
+  });
+  let keepRows = 0;
+  for (const snap of FLEET) {
+    const clubs = Object.keys(snap.lg.teams).sort().slice(0, 6);
+    const a = clone(snap.lg), b = clone(snap.lg), rows = [];
+    clubs.forEach((club, i) => {
+      for (const t of [a, b]) t.teams[club].deadCap = [...(t.teams[club].deadCap ?? []), { playerId: `keep-${i}`, name: `Keep ${i}`, amount: 1 + i / 10, seasonsLeft: 1 + (i % 3) }];
+      rows.push({ club, playerId: `keep-${i}`, name: `Keep ${i}`, share: 0.5, kept: 3 + i / 4 });
+      if (i % 2) rows.push({ club, playerId: `gone-${i}`, name: `Gone ${i}`, share: 0.25, kept: 1 });
+    });
+    const ra = TP.keepRetainedOverSummer(a.teams, rows), rb = oldKeep(b.teams, rows);
+    keepRows += rows.length;
+    ok(J(ra) === J(rb) && J(a) === J(b) && ra.length === clubs.length, `seed ${snap.seed}: the shared retained step is not the old summer step (${ra.length} rows kept, ${rb.length} by the old step)`);
+  }
+  console.log(`   ${legacyRows} legacy reads equal the old body and the ${d.sport} wrapper; ${countedRows} season counted rows; ${keepRows} retained rows through both summers' old step; the take: ${S10.moves} moves (${S10.deskOff} desk off), ${S10.refusals} refusals`);
+  ok(legacyRows >= 200 && countedRows === 15 && keepRows >= 30, `too few lift rows (${legacyRows}, ${countedRows}, ${keepRows})`);
+  ok(S10.moves >= 100 && S10.refusals >= 50 && S10.deskOff >= 20, `too few takes counted (${S10.moves} moves, ${S10.deskOff} desk off, ${S10.refusals} refusals)`);
 }
 
 /* ================================================================== */

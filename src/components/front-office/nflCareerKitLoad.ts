@@ -7,30 +7,28 @@
  * localStorage).
  *
  * Never imported by value from the kit: only its type, so this file stays in the page and the kit stays out.
+ *
+ * Round 1559: the fetch once rule is every sport's (careerKitLoader.ts, a leaf with no imports, so the module level
+ * call below evaluates nothing imported). The NFL's three names stay, and the literal import of the kit stays in
+ * this file.
  */
+import { makeCareerKitLoader } from '@/components/front-office-shared/careerKitLoader';
+
 export type NflCareerKit = typeof import('./nflCareerKit');
 
-let kit: NflCareerKit | null = null;
-let pending: Promise<NflCareerKit> | null = null;
+const loader = makeCareerKitLoader<NflCareerKit>(() => import('./nflCareerKit'));
 
 /** The kit when it has arrived, else null. */
 export function nflCareerKitNow(): NflCareerKit | null {
-  return kit;
+  return loader.now();
 }
 
 /** Where the kit stands: never asked for, on its way, or here. Read by the board's tests. */
 export function nflCareerKitState(): 'idle' | 'loading' | 'ready' {
-  return kit ? 'ready' : pending ? 'loading' : 'idle';
+  return loader.state();
 }
 
 /** Ask for the kit. Every caller shares one fetch; a failed one can be asked for again. */
 export function loadNflCareerKit(): Promise<NflCareerKit> {
-  if (kit) return Promise.resolve(kit);
-  if (!pending) {
-    pending = import('./nflCareerKit').then(
-      m => { kit = m; return m; },
-      e => { pending = null; throw e; },
-    );
-  }
-  return pending;
+  return loader.load();
 }

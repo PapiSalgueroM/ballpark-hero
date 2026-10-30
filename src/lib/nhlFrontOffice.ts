@@ -609,8 +609,20 @@ export function nhlAiDraftPicks(league: NhlLeague, remaining: NhlProspect[], ord
   return { remaining: available, picks, skipped, substituted, guarded };
 }
 
-export function nhlOffseason(league: NhlLeague, rng: () => number, userTeam?: string): string[] {
+/**
+ * Round 1559 (Round 1223's design): how a summer runs. One field: noUserClub, a summer with nobody in the chair (a
+ * GM sitting a season out), where every club is trimmed to NHL_ROSTER_MAX and none is skipped. Without it the trim
+ * runs only when a user club is named, as it always has (src/test/NhlRosterLimit.outcomes.tsx measures the overage
+ * an unnamed summer leaves, which is why the option is opt in).
+ */
+export interface NhlOffseasonOptions {
+  noUserClub?: boolean;
+}
+
+export function nhlOffseason(league: NhlLeague, rng: () => number, userTeam?: string, opts?: NhlOffseasonOptions): string[] {
   const notes: string[] = [];
+  /* Round 1559: read at the top, so the cut block reads it wherever the summer's steps sit (simNhlCpuRosters earlyAge moves it). */
+  const noUserClub = opts?.noUserClub === true;
   /* Round 211: one name book for the whole offseason. */
   const taken = leagueNames(league);
   for (const t of Object.values(league.teams)) {
@@ -638,10 +650,10 @@ export function nhlOffseason(league: NhlLeague, rng: () => number, userTeam?: st
   }
   league.freeAgents = league.freeAgents.sort((a, b) => b.ovr - a.ovr).slice(0, 30);
   for (const fa of league.freeAgents) { fa.age += 1; if (fa.age >= 32) fa.ovr = Math.max(63, fa.ovr - 1); if (league.ratingModelVersion === NHL_RATING_MODEL_VERSION) fa.salary = nhlSalaryFor(fa.ovr, league.ratingModelVersion); }
-  if (typeof userTeam === 'string' && Object.prototype.hasOwnProperty.call(league.teams, userTeam)) {
+  if (noUserClub || (typeof userTeam === 'string' && Object.prototype.hasOwnProperty.call(league.teams, userTeam))) {
     let released = false;
     for (const t of Object.values(league.teams)) {
-      if (t.abbr === userTeam) continue;
+      if (!noUserClub && t.abbr === userTeam) continue;
       while (t.players.length > NHL_ROSTER_MAX) {
         const selected = nhlContributors(t);
         const protectedIds = new Set([...selected.forwards, ...selected.defense, ...(selected.goalie === null ? [] : [selected.goalie])]);
