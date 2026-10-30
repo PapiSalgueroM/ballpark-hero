@@ -1,0 +1,6 @@
+#!build
+#!playwright
+#!serial
+# Release BT pre publish rerun (the lead): the two rBT-pub reds were environment only (simBrand without fonttools and pillow, simPrerenderBoot without playwright).
+simBrand: pip3 install --quiet fonttools pillow > /tmp/pip.log 2>&1; node scripts/simBrand.mjs
+simPrerenderBoot: node scripts/simPrerenderBoot.mjs
