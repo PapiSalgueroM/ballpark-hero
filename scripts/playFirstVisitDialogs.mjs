@@ -114,7 +114,9 @@
  * floated 242 px up the screen after the answer. Now the net reads the lift by shape: a LIFT is a class whose variant
  * chain holds [body[data-consent-pending]_&] and whose utility moves an edge (bottom, top, inset), ACTIVE when every
  * other variant in its chain is a screen variant this window matches. Every control inside a fixed element with an
- * active lift is a lifted control. On every scripted state line, and on every route line that read a lifted control,
+ * active lift is a lifted control, and so is a scripted state's wanted control inside a fixed element, whatever its
+ * class says (the first cut read the class only, and the source form of that slip, Take the job's class without its
+ * variant, stayed green on r1605-fx-m). On every scripted state line, and on every route line that read a lifted control,
  * the walk goes back to the top of the page, reads the lifted controls with the banner pending, answers the banner
  * with its own Reject all button and reads them again: each must have moved down by the banner's height, plus or
  * minus 2 px, or the line FAILS (and it FAILS when the banner has no Reject all or stays pending). NEGATIVE CONTROL:
@@ -430,8 +432,10 @@ function barsInPage({ BANNER, control, want }) {
     offscreen.push({ label: label(el), why, top: Math.round(r.top), bottom: Math.round(r.bottom), chrome: Math.round(chrome) });
   };
   const inFixed = el => { for (let n = el; n && n !== document.documentElement; n = n.parentElement) if (getComputedStyle(n).position === 'fixed') return true; return false; };
+  const wantedEls = [];
   for (const w of want || []) for (const el of document.querySelectorAll(w.sel)) {
     if (banner.contains(el) || (w.text && !(el.textContent || '').includes(w.text))) continue;
+    wantedEls.push(el);
     if (inFixed(el)) onScreen(el, 'wanted');
   }
   const offenders = [], lift = [];
@@ -451,7 +455,9 @@ function barsInPage({ BANNER, control, want }) {
       if (n !== c && (s.overflowX !== 'visible' || s.overflowY !== 'visible')) box = cut(box, n.getBoundingClientRect());
       if (s.position === 'fixed') host = n;
     }
-    if (host && lifted && opacity >= 0.05) {
+    /* a scripted state's wanted control in a fixed element counts as lifted whatever its class says: the state names
+       a bar that must stand on the banner, so a lift that lost its variant (review mutation m1) is still read */
+    if (host && (lifted || wantedEls.some(w => w.contains(c))) && opacity >= 0.05) {
       if (!c.dataset.playfirstLift) c.dataset.playfirstLift = String((window.__playfirstLift = (window.__playfirstLift || 0) + 1));
       lift.push({ id: c.dataset.playfirstLift, label: label(c), top: Math.round(r.top), bottom: Math.round(r.bottom) });
       onScreen(c, 'lifted');
