@@ -23,9 +23,18 @@
       DECIDING_LEG_REPLAYS further streams, through both engines. On every leg: the record is the night on both
       (log score and res, form, career totals, head to head, bracket, ratings), and `tie` is in the log exactly
       when the tie and the night differ. Where they agree the two saves carry the same board, morale and fans.
-      Where they differ: the board moves the tie's way (more confidence through, less out, against OLD), the squad's
-      morale moves the tie's way, and the fans' results term equals the term of OLD's save with that night
-      counted as the tie, to the last digit. Floor: at least 30 differing legs, the number printed.
+      Where they differ: the board moves the tie's way (the report's swing before the clamp, more through, less
+      out, against OLD), the squad's morale moves the tie's way, and the fans' results term equals the term of
+      OLD's save with that night counted as the tie, to the last digit. Floor: at least 30 differing legs.
+      THE SIZES (review fix, 2026-10-30: the first version held only the signs, and a board check that let a leg at
+      the 100 clamp through). Two observation lines go into HEAD and OLD alike and change nothing: the board's swing
+      just before patience, the press and the level, and each man's result shift with the facts the captain's
+      rules read. On every deciding leg the board's swing in HEAD's report is OLD's with the night's base swing
+      (4, 0.5, -4.5) swapped for the tie's, through the same steps after it, to the tenth; and each man's shift is
+      exactly the tie's (5 or -6, the captain's defeat relief of 1 for the men who played, never above zero, and
+      his own lift of 1), where OLD's is exactly the night's. So a tie won after a lost night moves the board and
+      the dressing room by exactly what the same tie won on the night does. The restated steps are checked against
+      OLD's own numbers first, so a later change to them turns this red rather than passing quietly.
    3) The gate. Every leg pre-save of section 2 played with tieRules 'night', and again with matchRules 'base',
       must give HEAD exactly OLD's save and report. tieRulesOf answers 'night' for a daily the day before
       HOT_SEAT_TIE_FROM, nothing on it, nothing for a free run stamped 1603, 'night' for one without; startHotSeat
@@ -49,6 +58,11 @@
      hattrick  every haul of three or more is a hat-trick again: section 5's planted lines go red.
      nogate    judgedByTie ignores tieRules and matchRules: section 3's gate goes red.
      cutover   HOT_SEAT_TIE_FROM moved to 2026-10-01, before the base commit: section 3's cutover goes red.
+     boardsize  a tie won after a night not won gives the board +1 instead of +4: still more than the night gave,
+               so every sign holds, and section 2's board size goes red.
+     moralesize the same for the dressing room, +1 instead of +5: section 2's morale size goes red.
+     relief    the captain's defeat relief reads the night again (a through leg lost on the night has its +5 cut
+               to 0 for the men who played): section 2's morale size goes red.
 
    MEASURED on GitHub runners, 2026-10-30 (remote checks r1603-s2 and r1603-s3, head c21aed83c), 16 careers, 15 of
    them in the Champions League, 8 replays a leg. The fleet's own dice: 234 deciding legs, 80 where the night and the
@@ -84,6 +98,9 @@ const METERS = 'clubManagerMeters.ts';
 const HS = 'managerHotSeat.ts';
 const JUDGE = "  return state.matchRules !== 'base' && state.tieRules !== 'night' && tie?.leg === 2 && typeof tie.through === 'boolean';";
 const OLD_PATCH = [[CM, JUDGE, '  return false;']];
+/* The engine's own constants, restated: the board's base swing and the dressing room's, by result. */
+const BASE_SWING = { W: 4, D: 0.5, L: -4.5 };
+const MORALE_SWING = { W: 5, D: -1, L: -6 };
 const CONTROLS = {
   board: [[CM, '  let confDelta = reactWon ? 4 : reactDrawn ? 0.5 : -4.5;', '  let confDelta = won ? 4 : drawn ? 0.5 : -4.5;']],
   morale: [[CM, '  const moraleShift = reactWon ? 5 : reactDrawn ? -1 : -6;', '  const moraleShift = won ? 5 : drawn ? -1 : -6;']],
@@ -92,9 +109,23 @@ const CONTROLS = {
   hattrick: [[CM, '  return count === 3 ? `⚽ ${name} bagged a hat-trick!` : `⚽ ${name} scored ${HAUL_WORDS[count] ?? count}!`;', '  return `⚽ ${name} bagged a hat-trick!`;']],
   nogate: [[CM, JUDGE, "  return tie?.leg === 2 && typeof tie.through === 'boolean';"]],
   cutover: [[HS, "export const HOT_SEAT_TIE_FROM = '2026-11-06';", "export const HOT_SEAT_TIE_FROM = '2026-10-01';"]],
+  /* Review fix: three slips that keep every sign and break a size, so only section 2's size checks can see them. */
+  boardsize: [[CM, '  let confDelta = reactWon ? 4 : reactDrawn ? 0.5 : -4.5;', '  let confDelta = reactWon ? (reactWon !== won ? 1 : 4) : reactDrawn ? 0.5 : -4.5;']],
+  moralesize: [[CM, '  const moraleShift = reactWon ? 5 : reactDrawn ? -1 : -6;', '  const moraleShift = reactWon ? (reactWon !== won ? 1 : 5) : reactDrawn ? -1 : -6;']],
+  relief: [[CM, '    if (captainPlayed && !reactWon && !reactDrawn && xiIdSet.has(p.id)) shift = Math.min(0, shift + CAPTAIN_DEFEAT_RELIEF);', '    if (captainPlayed && !won && !drawn && xiIdSet.has(p.id)) shift = Math.min(0, shift + CAPTAIN_DEFEAT_RELIEF);']],
 };
 /* Which section's check each control must turn red, and the sections it needs. */
-const CONTROL_CHECK = { board: 'legs: board', morale: 'legs: morale', fans: 'legs: fans', tieall: 'careers: identity', hattrick: 'hauls: planted', nogate: 'gate: night', cutover: 'gate: cutover' };
+const CONTROL_CHECK = { board: 'legs: board', morale: 'legs: morale', fans: 'legs: fans', tieall: 'careers: identity', hattrick: 'hauls: planted', nogate: 'gate: night', cutover: 'gate: cutover', boardsize: 'legs: board size', moralesize: 'legs: morale size', relief: 'legs: morale size' };
+/* Review fix: two observation lines, put into HEAD and OLD alike, that change nothing the engine does. One reads
+   the board's swing just before patience, the press and the level; the other reads each man's result shift with the
+   facts the captain's rules read. Section 2 then holds the SIZE of both reactions, not only their sign. Each anchor
+   must be in the file exactly once, or the bundle aborts (exit 2). */
+const PATIENCE_LINE = '  const patience = club.tier === 1 ? 1.3 : club.tier === 2 ? 1.15 : club.tier === 3 ? 1 : 0.85;';
+const LIFT_LINE = '    if (captainPlayed && p.id === captainId) shift += CAPTAIN_MATCH_LIFT;';
+const PROBES = [
+  [CM, PATIENCE_LINE, `${PATIENCE_LINE} globalThis.__dlBoard?.push([confDelta, patience, state.press ? pressPatience(state.press.mood) : 1]);`],
+  [CM, LIFT_LINE, `${LIFT_LINE} globalThis.__dlMorale?.push([p.id, shift, xiIdSet.has(p.id), captainPlayed, p.id === captainId]);`],
+];
 /* The control's own check must go red; these go red beside it and are printed. */
 if (CONTROL && !CONTROLS[CONTROL]) {
   console.log(`simCmDecidingLeg: ABORT, DECIDING_LEG_CONTROL=${CONTROL} is not one of ${Object.keys(CONTROLS).join(', ')}`);
@@ -107,7 +138,7 @@ const work = fs.mkdtempSync(path.join(os.tmpdir(), 'deciding-leg-'));
 async function bundle(name, root, patches) {
   const entry = path.join(work, `${name}.entry.ts`);
   const P = f => JSON.stringify(path.join(root, f).split(path.sep).join('/'));
-  fs.writeFileSync(entry, `export * as cm from ${P('src/lib/clubManager.ts')};\nexport * as meters from ${P('src/lib/clubManagerMeters.ts')};\nexport * as hs from ${P('src/lib/managerHotSeat.ts')};\n`);
+  fs.writeFileSync(entry, `export * as cm from ${P('src/lib/clubManager.ts')};\nexport * as meters from ${P('src/lib/clubManagerMeters.ts')};\nexport * as hs from ${P('src/lib/managerHotSeat.ts')};\nexport * as diff from ${P('src/lib/clubManagerDifficulty.ts')};\n`);
   const out = path.join(work, `${name}.cjs`);
   const used = patches.map(() => false);
   const plugin = {
@@ -148,8 +179,8 @@ function load(file) {
   fs.unlinkSync(copy);
   return m;
 }
-const headFile = await bundle('head', ROOT, CONTROL ? CONTROLS[CONTROL] : []);
-const oldFile = await bundle('old', ROOT, OLD_PATCH);
+const headFile = await bundle('head', ROOT, [...PROBES, ...(CONTROL ? CONTROLS[CONTROL] : [])]);
+const oldFile = await bundle('old', ROOT, [...OLD_PATCH, ...PROBES]);
 const baseFile = BASE_ROOT ? await bundle('base', BASE_ROOT, []) : null;
 
 /* ---------- dice ---------- */
@@ -303,19 +334,62 @@ const moraleGap = (a, b) => {
   const d = a.squad.filter(p => was.has(p.id)).map(p => p.morale - was.get(p.id));
   return d.length ? d.reduce((x, y) => x + y, 0) / d.length : 0;
 };
+/* The board's steps after the base swing, restated from playMyMatch: patience and then the press, both only on the
+   way down, then the level (boardSwing). Unrounded; the engine rounds to a tenth. Checked against OLD's own report
+   on every leg before it is trusted, so a later change to those steps turns this red instead of passing quietly. */
+const boardAfter = (m, st, x, pat, press) => { let y = x; if (y < 0) y *= pat; if (y < 0) y *= press; return m.diff.boardSwing(st, y); };
+/* One man's result shift, restated: the swing, the captain's defeat relief (the men who played, never above zero)
+   and his own lift. */
+const shiftOf = (res, xi, capPlayed, isCap) => {
+  let s = MORALE_SWING[res];
+  if (capPlayed && res === 'L' && xi) s = Math.min(0, s + 1);
+  if (capPlayed && isCap) s += 1;
+  return s;
+};
+/* A step with the two observation lines switched on. */
+function observed(m, pre, sd) {
+  globalThis.__dlBoard = [];
+  globalThis.__dlMorale = [];
+  try {
+    const r = step(m, pre, sd);
+    return { r, board: globalThis.__dlBoard, morale: globalThis.__dlMorale };
+  } finally {
+    delete globalThis.__dlBoard;
+    delete globalThis.__dlMorale;
+  }
+}
+const TENTH = 0.05 + 1e-9;
+/* The board's size on one leg: HEAD's unclamped swing is OLD's with the night's base swing taken out and the tie's
+   put in, through the same steps after it. Returns '' when it holds. */
+function boardSizeWrong(H, O, oH, oO, leg) {
+  if (oH.board.length !== 1 || oO.board.length !== 1) return `the board line ran ${oH.board.length} and ${oO.board.length} times`;
+  const [xO, patO, prO] = oO.board[0];
+  const [xH, patH, prH] = oH.board[0];
+  const cO = oO.r.report.confidenceDelta;
+  const cH = oH.r.report.confidenceDelta;
+  if (!(Math.abs(cO - boardAfter(O, oO.r.state, xO, patO, prO)) <= TENTH)) return `the restated steps do not give OLD's own swing ${cO}, so the harness is stale`;
+  const x = xO - BASE_SWING[leg.night] + BASE_SWING[leg.tie];
+  const want = boardAfter(H, oH.r.state, x, patO, prO);
+  if (patH !== patO || prH !== prO) return `patience ${patH} and ${patO}, press ${prH} and ${prO}`;
+  if (!(Math.abs(xH - x) <= 1e-9) || !(Math.abs(cH - want) <= TENTH)) return `night ${leg.night}, tie ${leg.tie}: swing ${cH} before the clamp, the tie on the night gives ${want.toFixed(2)} (old ${cO})`;
+  return '';
+}
 if (run('legs') || run('careers')) {
   console.log(`2) the leg fleet: every deciding leg replayed on ${REPLAYS} more streams through both engines`);
   const H = await fresh(headFile);
   const O = await fresh(oldFile);
   const fansOf = st => H.meters.fanTerms(st).results;
   const n = { legs: 0, differ: 0, agree: 0, pens: 0, aet: 0, through: 0, out: 0 };
-  const bad = { record: [], tie: [], agree: [], board: [], morale: [], fans: [] };
+  const bad = { record: [], tie: [], agree: [], board: [], morale: [], fans: [], boardSize: [], moraleSize: [] };
   const sum = { boardThrough: 0, boardOut: 0, moraleThrough: 0, moraleOut: 0 };
+  const size = { men: 0, menDiffer: 0, relief: 0 };
   for (const L of legPre) {
     const seeds = [L.seed, ...Array.from({ length: REPLAYS }, (_, k) => keyOf(L.seed, 'replay', k))];
     for (const sd of seeds) {
-      const rH = step(H, L.pre, sd);
-      const rO = step(O, L.pre, sd);
+      const oH = observed(H, L.pre, sd);
+      const oO = observed(O, L.pre, sd);
+      const rH = oH.r;
+      const rO = oO.r;
       const leg = legOf(rH.report);
       if (!leg) continue;
       n.legs += 1;
@@ -323,6 +397,24 @@ if (run('legs') || run('careers')) {
       if (recordOf(rH) !== recordOf(rO)) bad.record.push(tag);
       const last = rH.state.resultLog.at(-1);
       if (leg.differ ? last.tie !== leg.tie : 'tie' in last) bad.tie.push(`${tag}: night ${leg.night}, tie ${leg.tie}, logged ${last.tie ?? 'nothing'}`);
+      /* The sizes, on every deciding leg (where night and tie agree the tie's reading IS the night's). */
+      const boardWrong = boardSizeWrong(H, O, oH, oO, leg);
+      if (boardWrong) bad.boardSize.push(`${tag}: ${boardWrong}`);
+      if (oH.morale.length !== oO.morale.length || !oH.morale.length) bad.moraleSize.push(`${tag}: the shift line ran ${oH.morale.length} and ${oO.morale.length} times`);
+      else {
+        for (let i = 0; i < oH.morale.length; i++) {
+          const [id, sH, xi, cap, isCap] = oH.morale[i];
+          const [idO, sO, xiO, capO, isCapO] = oO.morale[i];
+          if (id !== idO || xi !== xiO || cap !== capO || isCap !== isCapO) { bad.moraleSize.push(`${tag}: the two squads differ at man ${i}`); break; }
+          size.men += 1;
+          if (leg.differ) size.menDiffer += 1;
+          if (leg.differ && cap && xi && (leg.night === 'L' || leg.tie === 'L')) size.relief += 1;
+          const wantO = shiftOf(leg.night, xi, cap, isCap);
+          const wantH = shiftOf(leg.tie, xi, cap, isCap);
+          if (sO !== wantO) { bad.moraleSize.push(`${tag}: OLD's shift ${sO} is not the night's ${wantO}, so the harness is stale`); break; }
+          if (sH !== wantH) { bad.moraleSize.push(`${tag}: night ${leg.night}, tie ${leg.tie}, ${id}${xi ? ' played' : ''}${cap ? ', captain on' : ''}${isCap ? ', the captain' : ''}: shift ${sH}, the tie on the night gives ${wantH}`); break; }
+        }
+      }
       if (!leg.differ) {
         n.agree += 1;
         if (rH.state.boardConfidence !== rO.state.boardConfidence || moraleGap(rH.state, rO.state) !== 0 || fansOf(rH.state) !== fansOf(rO.state)) bad.agree.push(tag);
@@ -333,11 +425,13 @@ if (run('legs') || run('careers')) {
       if (leg.how === 'aet') n.aet += 1;
       const through = leg.tie === 'W';
       if (through) n.through += 1; else n.out += 1;
-      const dB = rH.state.boardConfidence - rO.state.boardConfidence;
+      /* The board's swing as the report gives it, before the clamp at 0 and 100, so a leg at the clamp cannot pass
+         on the clamp alone (review fix: the old check read the clamped confidence and let 100 and 0 through). */
+      const dB = rH.report.confidenceDelta - rO.report.confidenceDelta;
       const dM = moraleGap(rH.state, rO.state);
       if (through) { sum.boardThrough += dB; sum.moraleThrough += dM; } else { sum.boardOut += dB; sum.moraleOut += dM; }
-      const boardOk = through ? (dB > 0 || rH.state.boardConfidence === 100) : (dB < 0 || rH.state.boardConfidence === 0);
-      if (!boardOk) bad.board.push(`${tag}: night ${leg.night}, tie ${leg.tie}, board ${rO.state.boardConfidence} to ${rH.state.boardConfidence}`);
+      const boardOk = through ? dB > 0 : dB < 0;
+      if (!boardOk) bad.board.push(`${tag}: night ${leg.night}, tie ${leg.tie}, swing ${rO.report.confidenceDelta} to ${rH.report.confidenceDelta}`);
       if (through ? !(dM > 0) : !(dM < 0)) bad.morale.push(`${tag}: night ${leg.night}, tie ${leg.tie}, morale moved ${dM.toFixed(2)}`);
       const asTie = clone(rO.state);
       const e = asTie.resultLog.at(-1);
@@ -349,14 +443,17 @@ if (run('legs') || run('careers')) {
     }
   }
   console.log(`   ${n.legs} deciding legs played: ${n.agree} where night and tie agree, ${n.differ} where they differ (${n.through} through, ${n.out} out; ${n.pens} on penalties, ${n.aet} in extra time)`);
-  if (n.through) console.log(`   through: board ${(sum.boardThrough / n.through).toFixed(2)} and squad morale ${(sum.moraleThrough / n.through).toFixed(2)} above the old reading on average`);
-  if (n.out) console.log(`   out: board ${(sum.boardOut / n.out).toFixed(2)} and squad morale ${(sum.moraleOut / n.out).toFixed(2)} against the old reading on average`);
+  if (n.through) console.log(`   through: board swing ${(sum.boardThrough / n.through).toFixed(2)} and squad morale ${(sum.moraleThrough / n.through).toFixed(2)} above the old reading on average`);
+  if (n.out) console.log(`   out: board swing ${(sum.boardOut / n.out).toFixed(2)} and squad morale ${(sum.moraleOut / n.out).toFixed(2)} against the old reading on average`);
+  console.log(`   sizes: the board's swing held to the tenth on ${n.legs} legs; ${size.men} men's shifts held exactly (${size.menDiffer} on differing legs, ${size.relief} of them men who played under the captain on the losing side of night or tie, where his relief decides the number)`);
   check(`legs: at least ${LEG_FLOOR} deciding legs where the night and the tie differ`, n.differ >= LEG_FLOOR, `${n.differ}`);
   check('legs: the record is the night on both engines (log, form, totals, head to head, bracket, ratings)', bad.record.length === 0, bad.record.slice(0, 2).join('; '));
   check('legs: tie is logged exactly where the tie and the night differ', bad.tie.length === 0, bad.tie.slice(0, 2).join('; '));
   check('legs: where night and tie agree, board, morale and fans are the old engine\'s', bad.agree.length === 0, bad.agree.slice(0, 2).join('; '));
-  check('legs: board moves the tie\'s way on every differing leg', bad.board.length === 0 && n.differ > 0, bad.board.slice(0, 2).join('; '));
+  check('legs: board moves the tie\'s way on every differing leg (the report\'s swing, before the clamp)', bad.board.length === 0 && n.differ > 0, bad.board.slice(0, 2).join('; '));
+  check('legs: board size, on every deciding leg the swing is exactly what the same tie gives won or lost on the night (patience, press and level applied, to the tenth)', bad.boardSize.length === 0 && n.differ > 0, bad.boardSize.slice(0, 2).join('; '));
   check('legs: morale moves the tie\'s way on every differing leg', bad.morale.length === 0 && n.differ > 0, bad.morale.slice(0, 2).join('; '));
+  check('legs: morale size, on every deciding leg each man\'s shift is exactly the tie\'s (the captain\'s relief and lift included)', bad.moraleSize.length === 0 && size.menDiffer > 0 && size.relief > 0, bad.moraleSize.slice(0, 2).join('; ') || `${size.men} men, ${size.relief} under the captain's relief`);
   check('legs: fans count the tie, to the last digit, on every differing leg', bad.fans.length === 0 && n.differ > 0, bad.fans.slice(0, 2).join('; '));
 }
 
