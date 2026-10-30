@@ -1,0 +1,6 @@
+build exit=0 24s | [dukb] inlined 1 stylesheet(s) and 1 module(s) into 181 snapshots (11 left alone)
+weightFo-head exit=0 9s | weightFo: the copy exited 1
+sweepWeight-head exit=1 31s | sweepWeight: 1 failure
+analyze-head exit=0 36s | dynamic imports of the route chunk: assets/GmLotteryCard-DqkV_jZR.js:1.0K assets/nbaOpeningRatings-DmYGOL8G.js:6.6K
+weightFo-base exit=0 46s | weightFo: the copy exited 1
+analyze-base exit=0 29s | dynamic imports of the route chunk: assets/GmLotteryCard-STUEAUx5.js:1.0K assets/nbaOpeningRatings-DmYGOL8G.js:6.6K
