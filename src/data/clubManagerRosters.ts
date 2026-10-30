@@ -13,7 +13,9 @@
 // lists (the roster ledger withholds the rest), with no summer arrivals added.
 // Values in £m, ratings 48-94 from the value curve: each rating is the man's LEVEL,
 // and the engine adds points for his age at load (curve 2, Round 1600). Ages are
-// each man's age on 1 August 2026 (scripts/data/cmAgesBasis2026.json).
+// moved on to 1 August 2026 (scripts/data/cmAgesBasis2026.json): exact where a
+// birth date is on file, otherwise the value table's 1 January age plus one,
+// which is a year over for a man born after 1 August (about three in ten).
 // Regenerate with: node scripts/bakeClubManagerRosters.mjs
 // DO NOT EDIT BY HAND.
 import type { Position } from '@/types/game';
