@@ -1,0 +1,9 @@
+mut1600: faview APPLIED to src/lib/clubManager.ts
+1. 77 dates before the cutover 2026-11-16
+   arm F deals arm A's day on 0 of 77; not on 2023-02-21, 2026-09-01, 2026-09-02, 2026-09-03, 2026-09-04, 2026-09-05
+   with no view (F0) the flip deals another day on 77 of 77
+  FAIL 77 early dates are dealt again on the flipped world
+2. from the cutover: arm F deals what F0 deals on 14 of 14 dates
+3. Club Manager in arm F before the dailies 7ec98f7f696c8905, after 7ec98f7f696c8905; arm A 09b976505403bf1d
+   section 1: 1 failures
+simCmDailyView: 5 checks, 1 failures

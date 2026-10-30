@@ -1,0 +1,41 @@
+mut1600: youth APPLIED to src/data/clubManagerWorldRosters.ts
+
+[1m[46m RUN [49m[22m [36mv3.2.7 [39m[90m/home/runner/work/ballpark-hero/ballpark-hero[39m
+
+[90mstdout[2m | src/lib/clubManagerTrajectory.test.ts[2m > [22m[2mClub Manager save-bound player trajectories[2m > [22m[2mleaves every real season-zero source row byte-exact without adding potential
+[22m[39mTRAJECTORY original source rows held: 5113
+
+[90mstdout[2m | src/lib/clubManagerTrajectory.test.ts[2m > [22m[2mClub Manager save-bound player trajectories[2m > [22m[2mmakes both rare development turns reachable without escaping their per-season bounds
+[22m[39mTRAJECTORY zero-curve outcomes: {"players":1024,"breakouts":51,"setbacks":35,"unchanged":938}
+
+[90mstdout[2m | src/test/cmValueCurve.test.ts[2m > [22m[2mlevelFrom: the age read run backwards, total[2m > [22m[2mit inverts the read wherever no clamp bit, and the clamped cells are counted
+[22m[39mlevelFrom: clamped cells of 1,664 a top (52 levels by 32 ages): {"94":299,"96":235,"97":203,"98":171}
+
+[90mstdout[2m | src/test/cmValueCurve.test.ts[2m > [22m[2mone order in every world: the stretch first, then the age points[2m > [22m[2mover every row of the four past seasons: never more than six down or eight up, nobody past the top
+[22m[39mera2005: 829 of 1727 rows change, swing -6 to 8, on the top of 96: Ronaldinho, Thierry Henry
+era2010: 890 of 1751 rows change, swing -6 to 8, on the top of 97: Cristiano Ronaldo, Lionel Messi
+era2015: 738 of 1659 rows change, swing -6 to 8, on the top of 98: Cristiano Ronaldo, Lionel Messi
+era2020: 862 of 1774 rows change, swing -6 to 8, on the top of 94: Kylian Mbappé, Lionel Messi
+
+[90mstdout[2m | src/test/cmValueCurve.test.ts[2m > [22m[2mwhat every 2026 age will stand on (the basis file), man for man against the squads main ships[2m > [22m[2mevery line is what the ages rule resolves from the committed ledgers, and its last item is the value rating
+[22m[39m2026 at the flip: 2078 of 4401 ratings change; by points {"0":2323,"1":230,"2":324,"3":110,"4":76,"5":44,"6":20,"7":11,"8":13,"-1":379,"-2":306,"-3":245,"-4":182,"-6":50,"-5":88}
+
+ [32m✓[39m src/test/cmValueCurve.test.ts [2m([22m[2m57 tests[22m[2m)[22m[33m 325[2mms[22m[39m
+[90mstdout[2m | src/lib/clubManagerTrajectory.test.ts[2m > [22m[2mClub Manager save-bound player trajectories[2m > [22m[2mrespects every source age curve, rating floor and carried potential ceiling
+[22m[39mTRAJECTORY bounded player years: 122712
+
+[90mstdout[2m | src/lib/clubManagerTrajectory.test.ts[2m > [22m[2mClub Manager save-bound player trajectories[2m > [22m[2mmeasures save variety and leader changes across the complete real source pool
+[22m[39mTRAJECTORY measured real-pool outcomes: {"sourceRows":5113,"clubs":412,"seeds":[7,31,81,307,1207,2026],"years":5,"variedPlayers":5110,"changedClubLeaders":284,"drift":{"0":1750,"1":1982,"2":3708,"3":3092,"4":2382,"5":1783,"6":1142,"7":360,"8":279,"9":184,"10":85,"11":35,"12":18,"13":3,"14":1,"15":2,"-5":941,"-6":856,"-4":1057,"-3":1122,"-1":1457,"-2":1305,"-14":338,"-12":530,"-10":673,"-17":210,"-7":811,"-8":729,"-9":698,"-11":580,"-21":153,"-24":122,"-27":70,"-29":49,"-30":38,"-18":201,"-16":259,"-15":282,"-13":421,"-22":160,"-26":63,"-19":221,"-23":120,"-32":20,"-31":32,"-28":55,"-33":33,"-25":76,"-20":154,"-36":8,"-34":20,"-37":4,"-35":4}}
+
+[90mstdout[2m | src/lib/clubManagerTrajectory.test.ts[2m > [22m[2msave-scoped actual world projections[2m > [22m[2mmeasures actual seeded world leader changes without asserting an unmeasured frequency
+[22m[39mTRAJECTORY actual world outcomes: {"clubs":454,"seeds":[7,31,81,307,1207,2026],"years":5,"variedClubs":409,"changedLeaders":285,"generatedRows":17853,"drift":{"0":877,"1":1039,"2":2093,"3":1796,"4":1457,"5":1100,"6":696,"7":212,"8":171,"9":111,"10":58,"11":25,"12":7,"13":3,"15":1,"-2":563,"-5":272,"-9":122,"-14":21,"-1":642,"-3":393,"-4":313,"-12":61,"-6":205,"-10":98,"-17":17,"-8":131,"-7":162,"-11":74,"-13":42,"-15":22,"-16":14,"-18":5,"-19":6,"-29":2,"-20":3,"-24":4,"-22":2,"-25":1,"-21":4}}
+
+ [32m✓[39m src/lib/clubManagerTrajectory.test.ts [2m([22m[2m44 tests[22m[2m)[22m[33m 13123[2mms[22m[39m
+   [33m[2m✓[22m[39m Club Manager save-bound player trajectories[2m > [22mrespects every source age curve, rating floor and carried potential ceiling [33m 10124[2mms[22m[39m
+   [33m[2m✓[22m[39m save-scoped actual world projections[2m > [22mmeasures actual seeded world leader changes without asserting an unmeasured frequency [33m 1565[2mms[22m[39m
+
+[2m Test Files [22m [1m[32m2 passed[39m[22m[90m (2)[39m
+[2m      Tests [22m [1m[32m101 passed[39m[22m[90m (101)[39m
+[2m   Start at [22m 10:52:00
+[2m   Duration [22m 14.64s[2m (transform 980ms, setup 154ms, collect 1.70s, tests 13.45s, environment 688ms, prepare 293ms)[22m
+
