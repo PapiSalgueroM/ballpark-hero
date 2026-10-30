@@ -1,0 +1,5 @@
+build exit=0 35s | [dukb] inlined 1 stylesheet(s) and 1 module(s) into 181 snapshots (11 left alone)
+playClubManagerSlots exit=0 14s | playClubManagerSlots: green
+playTwoTabs390 exit=0 34s | playTwoTabs: green at 390x844
+simClubManagerSaveSize exit=0 71s | simClubManagerSaveSize: all sections green
+playSaveKeeper exit=0 625s | playSaveKeeper: green on the BRANCH ARM ONLY (KEEPER_NO_BASE=1). The base arm and journey K were NOT run, so this run carries no loss control and says nothing about the k
