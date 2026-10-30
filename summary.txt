@@ -1,0 +1,9 @@
+simClubManagerDugouts exit=0 1s | simClubManagerDugouts: all green (96 chairs, 0 partial)
+simManagers exit=0 24s | simManagers: all green
+ctl-twochairs exit=1 0s | control twochairs FIRED: section 0 red (1 failure(s) in all)
+ctl-onehost exit=1 0s | control onehost FIRED: section 1 red (1 failure(s) in all)
+ctl-orphan exit=1 0s | control orphan FIRED: section 2 red (2 failure(s) in all)
+ctl-gap exit=1 0s | control gap FIRED: section 3 red (2 failure(s) in all)
+ctl-monthclash exit=1 0s | control monthclash FIRED: section 4 red (2 failure(s) in all)
+simManagers-fleet exit=0 51s | simManagers: all green
+tsc exit=0 53s | 

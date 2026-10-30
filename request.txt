@@ -1,0 +1,9 @@
+tsc: node_modules/.bin/tsc --noEmit -p tsconfig.app.json
+simClubManagerDugouts: node scripts/simClubManagerDugouts.mjs
+simManagers: node scripts/simManagers.mjs
+simManagers-fleet: SIM_MANAGERS_BASE=c0c66e087 node scripts/simManagers.mjs
+ctl-twochairs: DUGOUTS_CONTROL=twochairs node scripts/simClubManagerDugouts.mjs
+ctl-onehost: DUGOUTS_CONTROL=onehost node scripts/simClubManagerDugouts.mjs
+ctl-orphan: DUGOUTS_CONTROL=orphan node scripts/simClubManagerDugouts.mjs
+ctl-gap: DUGOUTS_CONTROL=gap node scripts/simClubManagerDugouts.mjs
+ctl-monthclash: DUGOUTS_CONTROL=monthclash node scripts/simClubManagerDugouts.mjs
