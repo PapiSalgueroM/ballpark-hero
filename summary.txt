@@ -1,0 +1,9 @@
+vitest-nlz exit=0 5s |    Duration  4.84s (transform 1.89s, setup 215ms, collect 488ms, tests 6.34s, environment 1.18s, prepare 346ms)
+simNhlRosterLimit-all exit=0 8s | NHL roster: exact controls, CRLF-safe matching, bounded cleanup and zero outside transport verified.
+vitest-ca exit=0 28s |    Duration  28.03s (transform 3.18s, setup 73ms, collect 347ms, tests 26.48s, environment 512ms, prepare 121ms)
+simGmCareer-nhl exit=0 27s | simGmCareer: all checks passed (nhl)
+tsc exit=0 73s | 
+simGmGameDay exit=1 63s | simGmGameDay: 462 checks, 1 failed
+fobcheck exit=0 1s | controlFrontOfficeBoard: check passed. Every string of all 58 controls is in the board exactly once.
+simGmCareer-nhl-extradraw exit=1 30s | CONTROL extradraw: 1 rewrite(s) applied, 1 failure(s) in section 3 (FIRED)
+simHarnessAnchors exit=0 53s | simHarnessAnchors: green. Every harness parses and none carries an unmatchable anchor.
