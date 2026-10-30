@@ -36,6 +36,8 @@ import {
   carryWorldUcl, carryWorldComp, worldCompNights,
   /* Round 1510: the domestic super cup across a move. */
   carryOneOffs, oneOffEntryLabel, oneOffPotential,
+  /* Round 1597: the free agent list across a move. */
+  freeAgencyCarry,
 } from '@/lib/clubManager';
 import type { WorldCompKey } from '@/lib/worldCompetition';
 import type { CareerState, CalendarEntry, Competition, FormResult, MatchWeekReport, PlayerMessage } from '@/lib/clubManager';
@@ -945,7 +947,8 @@ function seededJoinCarry(career: CareerState, s: CareerState, moved: ReadonlySet
  * Yours and carried: the season number and world year, the career record and
  * the clubs managed, the trophies and the history, the created manager, the
  * XP, the national team job, the start options, the head to head, the
- * retired list, the save's league memberships. The club's and left behind:
+ * retired list, the save's league memberships, the free agent list and the
+ * men you released (Round 1597). The club's and left behind:
  * the squad, the money, the facilities, the staff, the books, the sponsor,
  * the academy, the promises, the created club itself. Null when nothing is
  * waiting on you or the club is not in this world.
@@ -1041,6 +1044,9 @@ export function joinClubNow(career: CareerState): CareerState | null {
     startOptions: career.startOptions,
     h2h: career.h2h,
     retiredNames: career.retiredNames,
+    /* Round 1597 closing check: the free agent list (but the new club's own journeymen), the men I released and the
+       once only list pass come along, as a summer move keeps them. */
+    ...freeAgencyCarry(career, s),
     /* Round 1344, the lead's ruling (brief decision 3): the run in started from the departed career's ledger and
        wrote every deal it played (the new club's opening window and any January between other clubs, a sale through
        a release clause), so the joined career takes the run in's ledger whole. A career with no seed writes none,

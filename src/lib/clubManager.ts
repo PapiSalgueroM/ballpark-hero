@@ -7956,6 +7956,26 @@ export function recoverPooledReleases(career: CareerState): CareerState {
   return back.length ? { ...done, freeAgents: [...career.freeAgents, ...back] } : done;
 }
 
+/**
+ * Round 1597 closing check: what a mid season job move (joinClubNow) carries of free agency, the way a summer move
+ * keeps it (startNextSeason's pool block). Every man on the list stays in the world except the made up journeymen
+ * and the other men with no club ('unattached'), which the joined save's own list already holds for the new club;
+ * this manager's releasedNames and the once only freeAgencyV2 pass come along. Until this the joined save took the
+ * new club's list whole and lost the other two, so every man I had let walk was gone, and at the next summer
+ * recoverPooledReleases (run again for want of the flag) put a man I had released back from the ledger as a
+ * signable 'expired' record. Nobody in the joined squad or retired is listed. Returns only the fields to spread.
+ */
+export function freeAgencyCarry(career: CareerState, joined: Pick<CareerState, 'freeAgents' | 'squad'>): Partial<Pick<CareerState, 'freeAgents' | 'releasedNames' | 'freeAgencyV2'>> {
+  const fresh = joined.freeAgents ?? [];
+  const skip = new Set([...joined.squad.map(p => p.name), ...(career.retiredNames ?? []), ...fresh.map(f => f.name)]);
+  const kept = (career.freeAgents ?? []).filter(f => f.reason !== 'unattached' && !skip.has(f.name));
+  return {
+    ...(kept.length ? { freeAgents: [...fresh, ...kept] } : {}),
+    ...(career.releasedNames !== undefined ? { releasedNames: career.releasedNames } : {}),
+    ...(career.freeAgencyV2 ? { freeAgencyV2: true as const } : {}),
+  };
+}
+
 /** What the settlements still cost a week, in thousands. */
 export function severanceBill(career: CareerState): number {
   return (career.severance ?? []).reduce((s, r) => s + r.weekly, 0);
