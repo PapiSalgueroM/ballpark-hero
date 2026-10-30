@@ -292,9 +292,15 @@ const ACTIONS = [
   'Next Year', 'Next Season', 'Continue', 'Sign Contract',
   'Accept', 'Confirm', 'Proceed', 'Next', 'Done', 'Close',
 ];
-/* ^Menu$ is the site's own menu (Round 1604): opening it is never a step of
-   the game, and pressing it as a fallback is what trapped the walk above. */
-const SKIP = /Retire|New Career|Report a problem|Light mode|Sound: |Cookie|Sign up|^Back$|^Menu$|Full attributes|Reject all|Essential only|^Accept all$|^Accept$|^Save choices$|^⏸$|^🏋️$|^📱/;
+/* Round 1604: ^Menu$ is the site's own menu, and on a phone sized page the
+   training ground button reads "🏋️Training..." and sits before the card, as
+   do Derby history and the trophy count tiles. None of them is a step of the
+   game, and as the fallback they trapped the walk: the Menu and Close loop
+   above, then 226 of 240 steps opening and closing the training ground in
+   front of a random event card whose choices (an emoji, then the label)
+   match no entry (rc r1604-fx-walk, diag-a). With them skipped the fallback
+   takes the card's first choice. */
+const SKIP = /Retire|New Career|Report a problem|Light mode|Sound: |Cookie|Sign up|^Back$|^Menu$|Full attributes|Reject all|Essential only|^Accept all$|^Accept$|^Save choices$|^⏸$|^🏋️$|^🏋️Training|Derby history|^(🏆|⭐|🌍|🌐)\d|^📱/;
 
 async function stepOnce(page) {
   return page.evaluate(async ([actions, skipSrc]) => {
@@ -306,7 +312,10 @@ async function stepOnce(page) {
     let pick = null;
     for (const a of actions) { pick = usable.find(b => b.textContent.trim().startsWith(a)); if (pick) break; }
     if (!pick) pick = usable[0];
-    if (!pick) return { phase: before.phase, age: before.age, action: 'STUCK' };
+    /* Round 1604: a card still revealing (the Ballon d'Or's Continue comes in
+       after a moment) can leave nothing to press, so a STUCK step waits as long
+       as a press would rather than spending the step budget in a blink. */
+    if (!pick) { await new Promise(r => setTimeout(r, 620)); return { phase: before.phase, age: before.age, action: 'STUCK' }; }
     const label = pick.textContent.trim().slice(0, 34);
     pick.click();
     await new Promise(r => setTimeout(r, 620));
