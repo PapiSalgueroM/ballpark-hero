@@ -1,13 +1,18 @@
 /* Round 1603: the report card of a deciding second leg, in the real page, at 390 and 1280 (player report b7b51855).
 
-   The engine plays a Real Madrid 2010-11 career to its first deciding second leg (a fictional fixture from there
-   on: the first leg's score is set in the save so each case is likely, nothing here is a real result). Two saves
+   The engine plays five seeded careers in turn (Real Madrid 2010-11, Barcelona 2015-16, Real Madrid and Bayern
+   today, Barcelona 2005-06) and takes the first deciding second leg it meets, printing where each career stopped
+   and which save it took (on the runners of 2026-10-30 Real Madrid 2010-11 went out at week 24, and Barcelona
+   2015-16's round of 16 second leg at week 31 was taken). From there the fixture is fictional: the first leg's
+   score is set in the save so each case is likely, and nothing here is a real result. Two saves
    go into the served page: one 4-0 up after the first leg, one 0-4 down. Each is played with Quick Sim on a seeded
    page until the card shows the case it is for, at most ATTEMPTS seeds each:
      through  a second leg lost or drawn on the night that still goes through: THROUGH, the night under it;
      out      a second leg won or drawn on the night that still goes out: OUT, the night under it.
    Checks on each card: the headline word and its tone, the night line's words, the scoreline, the page not
-   scrolling sideways, the night line inside the card, no page error. Screenshots go to RC_OUT (or .tmp-fx).
+   scrolling sideways, the night line inside the card, no page error, and the motion: the card pulses
+   (cmWinPulse) for THROUGH and shakes (cmLossShake) for OUT, and with reduced motion asked for (a third pass at
+   390, review fix of 2026-10-30) it does neither. Screenshots go to RC_OUT (or .tmp-fx).
    Needs a built dist (DIST, default dist). Exit 0 green, 1 red, 2 could not run. */
 import './lib/offlineTransport.cjs';
 import fs from 'node:fs';
@@ -72,8 +77,8 @@ function plant(mine, theirs) {
   return s;
 }
 const CASES = [
-  { kind: 'through', save: plant(4, 0), word: 'THROUGH', tone: 'text-correct', night: /^(Lost|Drew) \d+-\d+ on the night$/ },
-  { kind: 'out', save: plant(0, 4), word: 'OUT', tone: 'text-destructive', night: /^(Won|Drew) \d+-\d+ on the night$/ },
+  { kind: 'through', save: plant(4, 0), word: 'THROUGH', tone: 'text-correct', night: /^(Lost|Drew) \d+-\d+ on the night$/, cls: 'cm-win-pulse', anim: 'cmWinPulse' },
+  { kind: 'out', save: plant(0, 4), word: 'OUT', tone: 'text-destructive', night: /^(Won|Drew) \d+-\d+ on the night$/, cls: 'cm-loss-shake', anim: 'cmLossShake' },
 ];
 console.log(`the save: ${pre.clubName} ${pre.eraId}, week ${pre.week}, the ${round} second leg`);
 
@@ -94,10 +99,11 @@ await new Promise((resolve, reject) => {
 
 const results = [];
 const check = (name, ok, detail = '') => { results.push(!!ok); console.log(`${ok ? 'ok  ' : 'FAIL'} ${name}${detail ? ` [${detail}]` : ''}`); };
-const PROFILES = [{ width: 390, height: 844, touch: true }, { width: 1280, height: 900, touch: false }];
+const PROFILES = [{ width: 390, height: 844, touch: true }, { width: 1280, height: 900, touch: false }, { width: 390, height: 844, touch: true, reduced: true }];
+const label = p => `${p.width}${p.reduced ? ' reduced motion' : ''}`;
 const browser = await pw.chromium.launch({ headless: true });
 async function attempt(profile, save, seed) {
-  const context = await browser.newContext({ viewport: { width: profile.width, height: profile.height }, isMobile: profile.touch, hasTouch: profile.touch, serviceWorkers: 'block',
+  const context = await browser.newContext({ viewport: { width: profile.width, height: profile.height }, isMobile: profile.touch, hasTouch: profile.touch, serviceWorkers: 'block', reducedMotion: profile.reduced ? 'reduce' : 'no-preference',
     storageState: { cookies: [], origins: [{ origin: BASE, localStorage: [{ name: KEY, value: JSON.stringify(save) }, { name: 'cookie-consent', value: 'essential' }] }] } });
   await context.route('**/*', route => (new URL(route.request().url()).origin === BASE ? route.continue() : route.abort()));
   await context.routeWebSocket('**/*', socket => socket.close());
@@ -129,7 +135,9 @@ async function attempt(profile, save, seed) {
     const night = document.querySelector('[data-cm-night-line]');
     const card = h?.parentElement;
     const r = el => { if (!el) return null; const b = el.getBoundingClientRect(); return { x: b.x, y: b.y, w: b.width, h: b.height, right: b.right, bottom: b.bottom }; };
-    return { head: h?.textContent ?? null, tone: h?.className ?? '', night: night?.textContent ?? null, card: r(card), nightBox: r(night),
+    const moving = document.querySelector('.cm-win-pulse, .cm-loss-shake');
+    const motion = moving ? { cls: moving.classList.contains('cm-win-pulse') ? 'cm-win-pulse' : 'cm-loss-shake', anim: getComputedStyle(moving).animationName } : null;
+    return { head: h?.textContent ?? null, tone: h?.className ?? '', night: night?.textContent ?? null, card: r(card), nightBox: r(night), motion,
       score: card?.querySelector('.tabular-nums.font-display')?.textContent ?? null, wide: document.documentElement.scrollWidth > window.innerWidth };
   });
   return { ...got, errors, page, context };
@@ -142,22 +150,27 @@ for (const profile of PROFILES) {
     for (let seed = 1; seed <= ATTEMPTS && !found; seed++) {
       tried = seed;
       const a = await attempt(profile, c.save, 1603000 + seed * 97);
-      if (a.error) { check(`${profile.width} ${c.kind}: the page plays the leg`, false, a.error); break; }
+      if (a.error) { check(`${label(profile)} ${c.kind}: the page plays the leg`, false, a.error); break; }
       if (a.head && a.head.startsWith(c.word) && a.night && c.night.test(a.night)) {
         found = a;
-        await a.page.screenshot({ path: path.join(OUT, `deciding-${c.kind}-${profile.width}.png`), fullPage: false }).catch(() => {});
+        await a.page.screenshot({ path: path.join(OUT, `deciding-${c.kind}-${profile.width}${profile.reduced ? '-rm' : ''}.png`), fullPage: false }).catch(() => {});
       }
       if (!found) await a.context.close();
     }
-    if (!found) { check(`${profile.width} ${c.kind}: a card for the case within ${ATTEMPTS} seeds`, false); continue; }
-    console.log(`   ${profile.width} ${c.kind}: seed ${tried}, "${found.head}", "${found.night}", score ${found.score}`);
-    check(`${profile.width} ${c.kind}: headline ${c.word} in its tone`, found.tone.includes(c.tone));
-    check(`${profile.width} ${c.kind}: the night line reads the night`, c.night.test(found.night), found.night);
-    check(`${profile.width} ${c.kind}: the scoreline is printed`, /\d+ - \d+/.test(found.score ?? ''), found.score ?? 'none');
-    check(`${profile.width} ${c.kind}: no sideways scroll`, !found.wide);
+    const L = label(profile);
+    if (!found) { check(`${L} ${c.kind}: a card for the case within ${ATTEMPTS} seeds`, false); continue; }
+    console.log(`   ${L} ${c.kind}: seed ${tried}, "${found.head}", "${found.night}", score ${found.score}, motion ${JSON.stringify(found.motion)}`);
+    check(`${L} ${c.kind}: headline ${c.word} in its tone`, found.tone.includes(c.tone));
+    check(`${L} ${c.kind}: the night line reads the night`, c.night.test(found.night), found.night);
+    check(`${L} ${c.kind}: the scoreline is printed`, /\d+ - \d+/.test(found.score ?? ''), found.score ?? 'none');
+    check(`${L} ${c.kind}: no sideways scroll`, !found.wide);
     const inCard = found.card && found.nightBox && found.nightBox.x >= found.card.x - 1 && found.nightBox.right <= found.card.right + 1 && found.nightBox.h > 0;
-    check(`${profile.width} ${c.kind}: the night line sits inside the card`, inCard, JSON.stringify(found.nightBox));
-    check(`${profile.width} ${c.kind}: no page error`, found.errors.length === 0, found.errors.slice(0, 2).join(' | '));
+    check(`${L} ${c.kind}: the night line sits inside the card`, inCard, JSON.stringify(found.nightBox));
+    check(`${L} ${c.kind}: no page error`, found.errors.length === 0, found.errors.slice(0, 2).join(' | '));
+    /* The card carries the tie's motion class either way; reduced motion turns the animation itself off. */
+    const still = found.motion?.cls === c.cls && found.motion.anim === 'none';
+    const moves = found.motion?.cls === c.cls && found.motion.anim === c.anim;
+    check(`${L} ${c.kind}: ${profile.reduced ? 'the card stays still' : `the card ${c.kind === 'through' ? 'pulses' : 'shakes'} (${c.anim})`}`, profile.reduced ? still : moves, JSON.stringify(found.motion));
     await found.context.close();
   }
 }
