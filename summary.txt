@@ -1,0 +1,4 @@
+simManagers exit=1 45s | simManagers: 1 failure(s)
+m-managedopen exit=1 44s | simManagers: 3 failure(s)
+m-partial exit=1 45s | simManagers: 2 failure(s)
+ctl-offer exit=0 23s | control run: offer FIRED, 7h went red 13 time(s), 13 naming the sentinel
