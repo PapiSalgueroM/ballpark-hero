@@ -1,0 +1,5 @@
+Shootout results: 159 actual matches compared; 0 assertions failed; preservation passed.
+Current witnesses: shootout win 782112, shootout loss 782114, ordinary match 782100.
+Preservation: whole state 159/159, global draw values/count 159/159, other report content 159/159.
+Negative controls: 10/10 changed inputs rejected. Evidence: /home/runner/work/ballpark-hero/ballpark-hero/.sim-artifacts/cm-shootout-results-v5V3bk
+ALL SHOOTOUT RESULTS CHECKS PASSED

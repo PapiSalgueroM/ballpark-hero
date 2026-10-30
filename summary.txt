@@ -1,0 +1,15 @@
+simCmVar exit=1 0s | Node.js v24.22.1
+simCmRetire exit=0 25s | simCmRetire: all 18 checks passed (record, oldsave, pens, base, retire, dashes)
+simCmShootoutOrder exit=1 26s | simCmShootoutOrder: 2 FAILURE(S)
+simManagerWorldContinuity exit=1 24s |     at async file:///home/runner/work/ballpark-hero/ballpark-hero/scripts/simManagerWorldContinuity.mjs:527:24
+simCmUnseededWorld exit=1 131s | simCmUnseededWorld: 113 FAILURE(S)
+simUclLegMigration exit=0 0s | simUclLegMigration: all green
+simCmShootoutResults exit=0 8s | ALL SHOOTOUT RESULTS CHECKS PASSED
+simCmQuickLegs exit=0 56s | simCmQuickLegs: PASS, 10 sections green
+simCmStoppageTime exit=0 21s | simCmStoppageTime: PASS. Goals fall in the board at a measured share without adding any, every line in a board says 45+N or 90+N wherever a minute is printed, extra time 
+simCmTablesTruth exit=0 14s | simCmTablesTruth: every case green
+simCmNoSack exit=0 116s | simCmNoSack: PASS (sections 1, 2, 3, 4, 5, 6, 7)
+simCmBoardVerdict-full exit=0 619s | simCmBoardVerdict GREEN: 0 of 0 checks green (parts measure, 618 s)
+simNoRivalNames exit=0 13s | No rival product names found. 0 findings.
+simWorldUcl exit=0 1231s | simWorldUcl: green, 495909 checks, 0 failures
+simOneOffCups exit=0 1866s | simOneOffCups: green, 270516 checks (1865 s)

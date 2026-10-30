@@ -1,0 +1,15 @@
+simCmRetire: node scripts/simCmRetire.mjs
+simCmShootoutOrder: node scripts/simCmShootoutOrder.mjs
+simCmVar: node scripts/simCmVar.mjs
+simCmUnseededWorld: node scripts/simCmUnseededWorld.mjs
+simManagerWorldContinuity: node scripts/simManagerWorldContinuity.mjs
+simWorldUcl: node scripts/simWorldUcl.mjs
+simOneOffCups: node scripts/simOneOffCups.mjs
+simUclLegMigration: node scripts/simUclLegMigration.mjs
+simCmShootoutResults: node scripts/simCmShootoutResults.mjs
+simCmQuickLegs: node scripts/simCmQuickLegs.mjs
+simCmStoppageTime: node scripts/simCmStoppageTime.mjs
+simCmTablesTruth: node scripts/simCmTablesTruth.mjs
+simCmNoSack: node scripts/simCmNoSack.mjs
+simCmBoardVerdict-full: node scripts/simCmBoardVerdict.mjs
+simNoRivalNames: node scripts/simNoRivalNames.mjs
