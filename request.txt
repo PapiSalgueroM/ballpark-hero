@@ -1,0 +1,35 @@
+tsc: node_modules/.bin/tsc --noEmit -p tsconfig.app.json
+vitest-create: node_modules/.bin/vitest run src/test/soccerCareerCreationRoll.test.tsx src/test/soccerCareerSaveRecovery.test.tsx src/test/soccerCareerSaveRetry.test.tsx --testTimeout=300000 --hookTimeout=120000
+academy: node scripts/simSoccerAcademyPlacement.mjs
+academy-redraw: SC_ACADEMY_CONTROL=redraw node scripts/simSoccerAcademyPlacement.mjs
+academy-pickfirst: SC_ACADEMY_CONTROL=pickfirst node scripts/simSoccerAcademyPlacement.mjs
+academy-extradraw: SC_ACADEMY_CONTROL=extradraw node scripts/simSoccerAcademyPlacement.mjs
+clubpool: node scripts/simCareerClubPool.mjs
+clubpool-academypick: SIM_CLUB_POOL_CONTROL=academypick node scripts/simCareerClubPool.mjs
+nodeadend: node scripts/simCareerNoDeadEnd.mjs
+accessibility: node scripts/simAccessibility.mjs
+trustcopy: node scripts/simTrustCopy.mjs
+simLiveScores: node scripts/simLiveScores.mjs
+simNoRivalNames: node scripts/simNoRivalNames.mjs
+simInventedNames: node scripts/simInventedNames.mjs
+simHarnessAnchors: node scripts/simHarnessAnchors.mjs
+simNoInventedQuotes: node scripts/simNoInventedQuotes.mjs
+simNoInventedConduct: node scripts/simNoInventedConduct.mjs
+simLegalPages: node scripts/simLegalPages.mjs
+simSingleFooter: node scripts/simSingleFooter.mjs
+simCompletionSlugs: node scripts/simCompletionSlugs.mjs
+simCompletionOnce: node scripts/simCompletionOnce.mjs
+simNoDoubleRecord: node scripts/simNoDoubleRecord.mjs
+simDailyPuzzleContract: node scripts/simDailyPuzzleContract.mjs
+simDailySaveHardening: node scripts/simDailySaveHardening.mjs
+simWritesAreSent: node scripts/simWritesAreSent.mjs
+simSchemaNames: node scripts/simSchemaNames.mjs
+simFetchRetry: node scripts/simFetchRetry.mjs
+simGoogleOnlyReturn: node scripts/simGoogleOnlyReturn.mjs
+simReportRelay: node scripts/simReportRelay.mjs
+simNavbarStatsReads: node scripts/simNavbarStatsReads.mjs
+simLeaderboardCaps: node scripts/simLeaderboardCaps.mjs
+simScoringCoverage: node scripts/simScoringCoverage.mjs
+simSiteSearch: node scripts/simSiteSearch.mjs
+simResultMoment: node scripts/simResultMoment.mjs
+simGuideHeadings: node scripts/simGuideHeadings.mjs
