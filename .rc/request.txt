@@ -1,0 +1,10 @@
+#!serve
+#!playwright
+#!serial
+m4-base-rl: node scripts/simNhlRosterLimit.mjs > /tmp/a.log 2>&1; e=$?; tail -12 /tmp/a.log | cut -c1-220; echo "M4 unmutated simNhlRosterLimit exit=$e"
+m4-base-wr: node scripts/simNhlWaiverReceipt.mjs > /tmp/a.log 2>&1; e=$?; tail -12 /tmp/a.log | cut -c1-220; echo "M4 unmutated simNhlWaiverReceipt exit=$e"
+m4-mut-rl: node .rc/x/mutRun.mjs hookwaits || exit 2; node scripts/simNhlRosterLimit.mjs > /tmp/a.log 2>&1; e=$?; tail -14 /tmp/a.log | cut -c1-220; git checkout -- src scripts; echo "M4 hookwaits simNhlRosterLimit exit=$e"
+m4-mut-rlall: node .rc/x/mutRun.mjs hookwaits || exit 2; NHL_ROSTER_CONTROL=all node scripts/simNhlRosterLimit.mjs > /tmp/a.log 2>&1; e=$?; tail -14 /tmp/a.log | cut -c1-220; git checkout -- src scripts; echo "M4 hookwaits simNhlRosterLimit-all exit=$e"
+m4-mut-wr: node .rc/x/mutRun.mjs hookwaits || exit 2; node scripts/simNhlWaiverReceipt.mjs > /tmp/a.log 2>&1; e=$?; tail -14 /tmp/a.log | cut -c1-220; git checkout -- src scripts; echo "M4 hookwaits simNhlWaiverReceipt exit=$e"
+m4-base-pom: node scripts/playOwnerMandate.mjs > /tmp/a.log 2>&1; e=$?; tail -12 /tmp/a.log | cut -c1-220; echo "M4 unmutated playOwnerMandate exit=$e"
+m4-mut-walks: node .rc/x/mutRun.mjs hookwaits && node_modules/.bin/vite build > /tmp/vb4.log 2>&1 || exit 2; node scripts/playOwnerMandate.mjs > /tmp/a.log 2>&1; e=$?; grep -aE "FAIL|BAD|red|Error" /tmp/a.log | head -8 | cut -c1-220; tail -3 /tmp/a.log | cut -c1-220; echo "M4 hookwaits playOwnerMandate exit=$e"; PLAY_GM_CAREER_SPORT=nhl PLAY_GM_CAREER_SIZE=390 node scripts/playGmCareer.mjs > /tmp/b.log 2>&1; f=$?; grep -aE "FAIL" /tmp/b.log | head -6 | cut -c1-220; tail -2 /tmp/b.log | cut -c1-220; git checkout -- src scripts; echo "M4 hookwaits playGmCareer nhl 390 exit=$f"
