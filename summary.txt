@@ -1,0 +1,3 @@
+intl-norest exit=1 62s | simCmInternationals: 4 FAILURES (control norest)
+intl exit=0 65s | simCmInternationals: all green
+intl-freelegs exit=1 65s | simCmInternationals: 1 FAILURES (control freelegs)
