@@ -61,6 +61,33 @@
         support (printed; expected near zero, since the career shape quota
         puts a club count tile on nearly every board); and no seed that keeps
         the per tile guarantee in the first cards on BASE loses it.
+     8. the window answer (Round 1576). Every entry with `round` ROUND carries
+        a `window` block: which overlay wrote his 2026 row (`hand` or
+        `generated`), the club it wrote (`db`, the overlay's table spelling)
+        and the generated row's `from` (null for a hand man), all equal to the
+        overlay files; and `clubs`, his senior first team club or clubs of
+        2025-26, each with two sources on two host families whose quoted
+        lines reach into 2025-26 (a 25/26 season token, or quoted dates whose
+        span overlaps 2025-07-01 to 2026-06-30). Each window club is one of
+        his sourced career or added clubs and is counted by the tree; an added
+        window club's fromSeason to toSeason covers 2025-26; a generated
+        man's `from` is one of his window clubs. A man with no senior window
+        club lists none and says why in `note`; a partial man may list none
+        (his `reason` says why, `waitsOn` names the round that can fix him).
+        A window man judged by an earlier round is printed, and the overlay's
+        club must be in his tree history.
+     9. against the previous closed head on this record (PREV): every entry
+        of PREV's record is byte equal by name (except a name in AMENDED, which
+        a later brief names), no PREV name gains a second entry, and the
+        record's round, checkedOn, report, fixture, counting, hole candidates,
+        PREV's rule keys and PREV's classes' round and rule are byte equal;
+        a `prev` bundle (PREV's playerBingo.ts, clubCareerAdditions.ts and
+        derived file) gives every pool man without a ROUND entry the tree's
+        club history exactly; every support difference between prev and the
+        tree is on a club square and is a ROUND man (printed as the list a
+        What's New line may draw on: empty means no entry); and the 200
+        seeded boards are byte identical prev against the tree, with decks
+        equal wherever every tile kept its support and no guarantee lost.
 
    Negative controls (each asserts it changed something, or exits 3):
      BINGO_CLUBS_CONTROL=rule      the Round 669 lists dropped from the rule:
@@ -99,15 +126,65 @@
                                    memory: section 5 red.
      FIXTURE_CONTROL=cap           the stub drops the range and the 1,000 row
                                    cap: at least one man's history changes.
+   Round 1576's controls (the four section 8 ones exit 3 until the record
+   holds a ROUND entry they can change, and say so):
+     BINGO_CLUBS_CONTROL=window    the generated half of the window rule
+                                   dropped (Ward-Prowse leaves the class): the
+                                   committed class and the owed pin disagree,
+                                   section 1 red.
+     BINGO_CLUBS_CONTROL=unjudged  one pool man who is on no list added to the
+                                   owed names: UNJUDGED passes its ratchet,
+                                   section 4 red.
+     BINGO_CLUBS_CONTROL=nowindow  the first ROUND entry's window block
+                                   deleted in memory: section 8 red.
+     BINGO_CLUBS_CONTROL=windowdrop the first ROUND addition whose window club
+                                   is an added club loses that club in the
+                                   derived file fed to the tree's lib: section
+                                   8 red ("not counted"; 2 and 3 may redden).
+     BINGO_CLUBS_CONTROL=windowseason one window quote swapped for a 2022-23
+                                   transfer line: section 8 red.
+     BINGO_CLUBS_CONTROL=windowdb  the first ROUND entry's window.db edited:
+                                   section 8 red.
+     BINGO_CLUBS_CONTROL=touchprev one PREV entry's notes edited in memory:
+                                   section 9 red. (Named for PREV, not for a
+                                   round, so it moves with PREV.)
+     BINGO_CLUBS_CONTROL=prevleak  one club added in memory to the tree's
+                                   history of a pool man with no ROUND entry:
+                                   section 9 red.
+     drift (above) must redden section 9 as well as 7.
    Exit 0 green, 1 red (or a control that fired), 2 could not run, 3 a control
    that changed nothing.
 
-   Two things a later round must know:
+   What a later round on this record must know (the lead's Bingo ruling of
+   2026-10-29: one record, one generator, one derived file, one ratchet
+   design, rounds strictly serial 1576, 1577, 1588):
      BASE is pinned to 692590145 for good. Section 2 fails on ANY later change
      to the pool, seasonStats, clubYears or a non club tile's support, by
-     design. The next round that edits src/lib/playerBingo.ts (the other
-     lane's BS-mix-4, Rounds 1576 and 1577) must move BASE to its own base
-     commit, or move section 2, in that round, and say so.
+     design. Round 1576 edited no src file, so BASE and the honours pin stand.
+     The next round that edits src/lib/playerBingo.ts (1577, or the other
+     lane's BS-mix-4, whichever comes first) moves section 2 in that round
+     and says so; it never moves BASE (the bundler takes the derived file and
+     clubCareerAdditions.ts from the tree, so a moved BASE would carry every
+     addition).
+     PREV and ROUND: every round on this record moves PREV to the last closed
+     head and ROUND to its own number in its own commit, with both legs of
+     section 9 shown, and lists in AMENDED by name any earlier entry its brief
+     amends (printed; never an unnamed edit).
+     A new class goes under record.classes (its key, round, rule, owedBy,
+     candidates), its rule beside the window rule in section 1, its harness
+     section at the next free number; never renumber an earlier section.
+     The two ratchets: PENDING_MAX (pending) and UNJUDGED_MAX (pending plus
+     every owed row, distinct names, suffixes stripped) only fall. A class
+     opening step may raise them by exactly its new names, printed; nothing
+     else raises them. Round 1576 opened the window class by moving its 98
+     unjudged men from owed into pending: pending 0 to 98, unjudged 141 to
+     139.
+     The window class is pinned to the two Round 1576 owed rows of the record
+     at WINDOW_OWED_AT. The rule runs on BASE's lib, but bingoFixtureBundle
+     resolves whoAmI.ts and playerSearch.ts against the tree, so a later
+     isSameMan change (Round 1589) can move the class: then rerun
+     --write-candidates, print the names that moved, and put any new name in
+     a new class under the lead's ruling; never edit the pin silently.
      The identity guards of the bind (role, nationality, birth year window,
      an ambiguous match refused) are caught only by the two unit files
      src/test/clubCareerAdditions.test.ts and
@@ -118,7 +195,10 @@
 
    Run: node scripts/simBingoClubCounts.mjs
         node scripts/simBingoClubCounts.mjs --write-candidates   (rewrites the
-        record's candidates and adds new names to pending; commit the result)
+        record's candidates, every class's candidates, pending and owed, then
+        stops: commit the result)
+        node scripts/simBingoClubCounts.mjs --write-verdicts     (writes every
+        judged man's verdict before and after, then stops: read them)
 */
 import { execSync } from 'node:child_process';
 import crypto from 'node:crypto';
@@ -134,7 +214,13 @@ const FIXTURE = 'scripts/data/bingoPoolHistory-2026-10-29.json';
 const FIXTURE_SHA256 = '8c8f8fc276a7dd696e586b97148ea1815712e64c619665750b5d45a9efe353e1';
 const RECORD = 'scripts/data/bingoClubAdditions-2026-10.json';
 const HOLE_YEARS = [2023, 2024, 2025];
-const PENDING_MAX = 0;
+const PENDING_MAX = 98;
+const UNJUDGED_MAX = 139;
+const PREV = '32baab916'; // the previous closed head on this record (Round 1571's)
+const ROUND = 1576; // the round whose entries sections 8 and 9 hold apart
+const AMENDED = []; // PREV entries this round's brief amends, by name (none)
+const WINDOW_OWED_AT = '32baab916'; // the record whose two Round 1576 owed rows define the window class
+const WINDOW_SEASON = { from: '2025-07-01', to: '2026-06-30' };
 const BANNED_HOSTS = /(^|\.)(wikipedia\.org|wikidata\.org|fandom\.com|thesportsdb\.com|wikiwand\.com)$/;
 const CONTROL = process.env.BINGO_CLUBS_CONTROL || '';
 const FIXTURE_CONTROL = process.env.FIXTURE_CONTROL || '';
@@ -232,29 +318,103 @@ const from669 = candidates.filter(n => lists669.has(norm(n))).length;
 console.log(`   hole class: ${candidates.length} candidates (${from669} on Round 669's lists, ${candidates.length - from669} more whose counted rows begin at or after 2023 with a hole year missing)`);
 if (!candidates.includes('Tyler Morton')) fail('Tyler Morton is not a candidate under the rule');
 
-if (WRITE) {
-  const judged = new Set([...record.additions, ...record.agrees, ...record.partial].map(e => e.name));
-  record.candidates = candidates;
-  record.pending = candidates.filter(n => !judged.has(n));
-  fs.writeFileSync(path.join(ROOT, RECORD), JSON.stringify(record, null, 2) + '\n');
-  console.log(`   --write-candidates: wrote ${candidates.length} candidates, ${record.pending.length} pending, to ${RECORD}`);
-}
+if (WRITE) record.candidates = candidates;
 if (JSON.stringify(record.candidates) !== JSON.stringify(candidates)) {
   const missingNames = candidates.filter(n => !record.candidates.includes(n));
   const extra = record.candidates.filter(n => !candidates.includes(n));
   fail(`the record's committed candidates differ from the rule (rule only: ${missingNames.slice(0, 6).join(', ') || 'none'}; record only: ${extra.slice(0, 6).join(', ') || 'none'})`);
 }
 
+/* The window class (Round 1576): Round 1571's own owed computation lifted into a rule. Every pool
+   man on the hand overlay who is not a hole candidate, plus every generated overlay row whose pool
+   man is not a hole candidate and whose `from` club key is in none of his counted clubYears keys
+   (a row with `from` null wrote over no club and is skipped). Plain names; the classes map is the
+   one shape every later class extends (the lead's ruling B2). */
+const { TRANSFER_OVERLAY_2026_HAND, WINDOW_2026_ADDITIONS } = await import(new URL('./transferOverlay2026.mjs', import.meta.url).href);
+const poolByNorm = new Map(baseData.pool.map(p => [norm(p.name), p]));
+const holeSet = new Set(candidates);
+function windowClass(data, { generated = true } = {}) {
+  const out = new Set();
+  for (const e of TRANSFER_OVERLAY_2026_HAND) {
+    const p = poolByNorm.get(norm(e.name));
+    if (p && !holeSet.has(p.name)) out.add(p.name);
+  }
+  if (generated) {
+    for (const e of WINDOW_2026_ADDITIONS) {
+      const p = poolByNorm.get(norm(e.name));
+      if (!p || holeSet.has(p.name) || !e.from) continue;
+      const fromKey = base.clubKey(e.from);
+      const counted = new Set([...(data.clubYears.get(p.name) ?? [])].map(c => c.key));
+      if (fromKey && !counted.has(fromKey)) out.add(p.name);
+    }
+  }
+  return [...out].sort();
+}
+let windowCandidates = windowClass(baseData);
+if (CONTROL === 'window') {
+  const handOnly = windowClass(baseData, { generated: false });
+  if (handOnly.length !== windowCandidates.length) changed(`the generated half of the window rule dropped: ${windowCandidates.length} window candidates become ${handOnly.length}`);
+  windowCandidates = handOnly;
+}
+const classes = { window: windowCandidates };
+const allCandidates = [...new Set([...candidates, ...Object.values(classes).flat()])];
+const candidateSet = new Set(allCandidates);
+const handOf = new Map();
+for (const e of TRANSFER_OVERLAY_2026_HAND) {
+  const p = poolByNorm.get(norm(e.name));
+  if (p) handOf.set(p.name, [...(handOf.get(p.name) ?? []), e]);
+}
+const generatedOf = new Map();
+for (const e of WINDOW_2026_ADDITIONS) {
+  const p = poolByNorm.get(norm(e.name));
+  if (p) generatedOf.set(p.name, [...(generatedOf.get(p.name) ?? []), e]);
+}
+const fixtureNames = new Set(rows.map(r => (r.player_name ?? '').trim()));
+const generatedLost = windowCandidates.filter(n => !handOf.has(n));
+console.log(`   window class: ${windowCandidates.length} candidates (${windowCandidates.length - generatedLost.length} on the hand overlay; ${generatedLost.length} from generated rows whose from club he has no counted row at: ${generatedLost.map(n => `${n} (${generatedOf.get(n).map(e => e.from).join(', ')})`).join('; ')})`);
+console.log(`   printed, not asserted: generated rows with from null (wrote over no club): ${WINDOW_2026_ADDITIONS.filter(e => !e.from).map(e => `${e.name}${fixtureNames.has(e.name) ? ' (a fixture name)' : ''}`).join(', ')}`);
+const sameDb = WINDOW_2026_ADDITIONS.filter(e => e.from && e.from === e.db);
+console.log(`   printed, not asserted: generated rows with from equal to db (changed nothing): ${sameDb.length}${sameDb.some(e => fixtureNames.has(e.name)) ? ', fixture names among them: ' + sameDb.filter(e => fixtureNames.has(e.name)).map(e => e.name).join(', ') : ', none a fixture name'}`);
+console.log(`   printed, not asserted: hand overlay names in the fixture but outside BASE's pool (the lead's live pass): ${[...new Set(TRANSFER_OVERLAY_2026_HAND.map(e => e.name))].filter(n => fixtureNames.has(n) && !poolByNorm.has(norm(n))).join(', ') || 'none'}`);
+for (const [n, list] of handOf) if (candidateSet.has(n) && new Set(list.map(e => e.db)).size > 1) fail(`${n} has two hand overlay rows with different clubs (${list.map(e => e.db).join(', ')})`);
+for (const n of windowCandidates) if (handOf.has(n) && generatedOf.has(n)) fail(`${n} is on the hand overlay and has a generated row: section 8 cannot say which overlay wrote his row`);
+/* The pin: the class is exactly what Round 1571 owed this round (its two Round 1576 rows at
+   WINDOW_OWED_AT, suffixes stripped), read with git show, never typed here. */
+let owedAtRecord;
+try {
+  owedAtRecord = JSON.parse(execSync(`git show ${WINDOW_OWED_AT}:${RECORD}`, { cwd: ROOT, encoding: 'utf8', maxBuffer: 1 << 26 }));
+} catch (error) {
+  abort(`git show ${WINDOW_OWED_AT}:${RECORD} failed (${error.message.split('\n')[0]})`);
+}
+const stripSuffix = n => n.replace(/ \(.*\)$/, '');
+const pinned = [...new Set(owedAtRecord.owed.filter(o => o.round === 1576).flatMap(o => o.names).map(stripSuffix))].sort();
+if (JSON.stringify(windowCandidates) !== JSON.stringify(pinned)) fail(`the window rule (${windowCandidates.length}) is not the ${pinned.length} names Round 1571 owed to Round 1576 at ${WINDOW_OWED_AT} (rule only: ${windowCandidates.filter(n => !pinned.includes(n)).join(', ') || 'none'}; pin only: ${pinned.filter(n => !windowCandidates.includes(n)).join(', ') || 'none'})`);
+const judgedNames = new Set([...record.additions, ...record.agrees, ...record.partial].map(e => e.name));
+if (WRITE) {
+  record.classes = { ...(record.classes ?? {}) };
+  for (const [key, names] of Object.entries(classes)) record.classes[key] = { ...(record.classes[key] ?? { round: ROUND }), candidates: names };
+  record.pending = allCandidates.filter(n => !judgedNames.has(n));
+}
+for (const [key, names] of Object.entries(classes)) {
+  const committed = record.classes?.[key];
+  if (!committed) { fail(`the record has no classes.${key}`); continue; }
+  if (JSON.stringify(committed.candidates) !== JSON.stringify(names)) fail(`the record's classes.${key}.candidates differ from the rule (rule only: ${names.filter(n => !(committed.candidates ?? []).includes(n)).slice(0, 6).join(', ') || 'none'}; record only: ${(committed.candidates ?? []).filter(n => !names.includes(n)).slice(0, 6).join(', ') || 'none'})`);
+  if (typeof committed.rule !== 'string' || committed.rule !== record.rule?.[key]) fail(`classes.${key}.rule must be the record's rule.${key} sentence`);
+}
+if (record.classes?.window && record.classes.window.round !== 1576) fail(`classes.window.round is ${record.classes.window.round}, not 1576`);
+for (const key of Object.keys(record.classes ?? {})) if (!(key in classes)) fail(`the record carries classes.${key}, which no rule in section 1 computes`);
+
 /* Printed, not asserted: the classes this round does not judge (the lead's
-   ruling R1 numbers them). The record's `owed` carries each list by round. */
-const candidateSet = new Set(candidates);
+   ruling R1 numbers them). The record's `owed` carries each list by round.
+   Since Round 1576 the owed lists skip every candidate of every class and
+   every judged man (a list of men nobody has judged). */
 const ownRows = new Map();
 for (const p of baseData.pool) ownRows.set(p.name, rows.filter(r => (r.player_name ?? '').trim() === p.name && base.isSameMan(p, { age: r.age, year: r.year })));
 const gapOutside = [];
 const academySeniors = [];
 const lateStarters = [];
 for (const p of baseData.pool) {
-  if (candidateSet.has(p.name)) continue;
+  if (candidateSet.has(p.name) || judgedNames.has(p.name)) continue;
   const years = countedYears(baseData, p.name);
   const first = years.size ? Math.min(...years) : p.year;
   if (HOLE_YEARS.some(y => !years.has(y) && y > first)) gapOutside.push(p.name);
@@ -265,26 +425,12 @@ for (const p of baseData.pool) {
   const firstRow = own.filter(r => !base.isAcademyRow({ age: r.age, value: r.market_value_usd }) && r.year === first)[0];
   if (firstRow && Number(firstRow.age) >= 22) lateStarters.push(`${p.name} (${first}, ${firstRow.age})`);
 }
-const { TRANSFER_OVERLAY_2026_HAND, WINDOW_2026_ADDITIONS } = await import(new URL('./transferOverlay2026.mjs', import.meta.url).href);
-const poolByNorm = new Map(baseData.pool.map(p => [norm(p.name), p]));
-const handMen = [...new Set(TRANSFER_OVERLAY_2026_HAND.map(e => norm(e.name)).filter(n => poolByNorm.has(n)))].map(n => poolByNorm.get(n).name).filter(n => !candidateSet.has(n)).sort();
-const windowLost = [];
-for (const e of WINDOW_2026_ADDITIONS) {
-  const p = poolByNorm.get(norm(e.name));
-  if (!p || candidateSet.has(p.name) || !e.from) continue;
-  const fromKey = base.clubKey(e.from);
-  const counted = new Set([...(baseData.clubYears.get(p.name) ?? [])].map(c => c.key));
-  if (fromKey && !counted.has(fromKey)) windowLost.push(`${p.name} (${e.from})`);
-}
-console.log(`   owed to Round 1576, C2: pool men on the hand overlay (no from, each needs a lookup): ${handMen.length}; generated overlay rows whose from club is in none of his counted rows: ${windowLost.length}: ${windowLost.join('; ')}`);
 console.log(`   owed, C1 outside the hole (a 2023 to 2025 year missing after his first counted row, not a candidate): ${gapOutside.length}: ${gapOutside.join(', ')}`);
 console.log(`   owed, academy filtered rows at a club he has no counted row at (critic advice 10): ${academySeniors.length}`);
 for (let i = 0; i < academySeniors.length; i += 6) console.log('     ' + academySeniors.slice(i, i + 6).join('; '));
 console.log(`   owed, C3 late starters outside the hole (first counted row at a listed age of 22 or more): ${lateStarters.length}`);
 for (let i = 0; i < lateStarters.length; i += 8) console.log('     ' + lateStarters.slice(i, i + 8).join('; '));
 const owedNow = [
-  { round: 1576, class: 'C2 window: pool men on the hand overlay, whose 2025-26 club needs a lookup', names: handMen },
-  { round: 1576, class: 'C2 window: generated overlay rows whose from club is in none of his counted rows', names: windowLost },
   { round: null, class: 'C1 outside the hole: a 2023 to 2025 year missing after a first counted row before 2023 (no round numbered by the lead; suggested 1577)', names: gapOutside },
   { round: 1577, class: 'academy filtered rows at a club with no counted row (critic advice 10)', names: academySeniors },
   { round: 1577, class: 'C3 late starters outside the hole: first counted row at a listed age of 22 or more', names: lateStarters },
@@ -292,6 +438,8 @@ const owedNow = [
 if (WRITE) {
   record.owed = owedNow;
   fs.writeFileSync(path.join(ROOT, RECORD), JSON.stringify(record, null, 2) + '\n');
+  console.log(`   --write-candidates: wrote ${candidates.length} hole candidates, ${Object.entries(classes).map(([k, v]) => `${v.length} ${k}`).join(', ')} class candidates, ${record.pending.length} pending and ${owedNow.length} owed rows to ${RECORD}; stopping here (rerun without the flag for the proof)`);
+  process.exit(failures ? 1 : 0);
 }
 if (JSON.stringify(record.owed) !== JSON.stringify(owedNow)) fail('the record\'s owed lists differ from what the fixture yields (rerun with --write-candidates and commit)');
 
@@ -328,6 +476,22 @@ if (CONTROL === 'nosplit') {
   if (!module.includes(anchor)) abort('=nosplit: the split line is not in src/lib/clubCareerAdditions.ts');
   headExtra['@/lib/clubCareerAdditions'] = module.replace(anchor, 'return [value]');
   changed('the mid season split patched out of a copy of clubCareerAdditions.ts');
+}
+const windowClubName = c => (typeof c === 'string' ? c : c?.club);
+let windowDropped = null;
+if (CONTROL === 'windowdrop') {
+  const json = JSON.parse(read('src/data/bingoClubAdditions.json'));
+  for (const e of record.additions.filter(x => x.round === ROUND)) {
+    const added = new Set((e.clubs ?? []).map(c => c.club));
+    const club = (e.window?.clubs ?? []).map(windowClubName).find(c => added.has(c));
+    const row = json.add.find(a => a.n === e.name);
+    if (!club || !row?.clubs.includes(club)) continue;
+    headExtra['@/data/bingoClubAdditions.json'] = JSON.stringify({ ...json, add: json.add.map(a => (a === row ? { ...a, clubs: a.clubs.filter(c => c !== club) } : a)) });
+    windowDropped = { name: e.name, club };
+    changed(`${e.name}'s added window club ${club} removed from the derived file fed to the tree's lib`);
+    break;
+  }
+  if (!windowDropped) console.log(`   =windowdrop: no round ${ROUND} addition has an added window club yet, so it changes nothing (exit 3 by design until one exists)`);
 }
 const head = await loadBingoLib({ root: ROOT, libSource: headSource, label: 'head', tmp, extraSources: headExtra });
 const headData = (await load(head)).data;
@@ -438,7 +602,11 @@ for (const e of [...record.additions, ...record.agrees]) {
   if (JSON.stringify(got) !== JSON.stringify([...new Set(senior)].sort())) fail(`${e.name}: the tree counts [${got.join(', ')}], his sourced senior career is [${[...new Set(senior)].sort().join(', ')}]`);
   else careerChecked += 1;
 }
-if (WRITE_VERDICTS && !CONTROL) fs.writeFileSync(path.join(ROOT, RECORD), JSON.stringify(record, null, 2) + '\n');
+if (WRITE_VERDICTS && !CONTROL) {
+  fs.writeFileSync(path.join(ROOT, RECORD), JSON.stringify(record, null, 2) + '\n');
+  console.log(`   --write-verdicts: wrote ${record.additions.length + record.agrees.length} verdicts to ${RECORD}; stopping here (rerun without the flag for the proof)`);
+  process.exit(failures ? 1 : 0);
+}
 console.log(`   ${record.additions.length + record.agrees.length} recorded verdicts checked against BASE and the tree; ${careerChecked} whole senior careers equal to what the tree counts`);
 
 /* ---------------------------------------------------------------- 4 */
@@ -459,18 +627,44 @@ for (const [list, names] of Object.entries(lists)) {
     seen.set(n, list);
   }
 }
-for (const n of candidates) if (!seen.has(n)) fail(`candidate ${n} is in none of additions, agrees, partial and pending`);
-/* A man who is not a candidate is judged only because the count rule moves one of his club
-   square verdicts (class 'counting'); section 2 requires every such man to be judged. */
+for (const n of allCandidates) if (!seen.has(n)) fail(`candidate ${n} is in none of additions, agrees, partial and pending`);
+for (const n of lists.pending) if (!candidateSet.has(n)) fail(`pending ${n} is a candidate of no class`);
+/* A man who is not a candidate of any class is judged only because the count rule moves one of
+   his club square verdicts (class 'counting'); section 2 requires every such man to be judged. */
 const movers = new Set([...verdictMoves.map(m => m.split(" now fits ")[0].split(" no longer fits ")[0]), ...ruleMoverNames]);
 for (const e of [...record.additions, ...record.agrees]) {
   if (candidateSet.has(e.name)) continue;
-  if (e.class !== 'counting') fail(`${e.name} is judged but is neither a candidate nor of class counting`);
+  if (e.class !== 'counting') fail(`${e.name} is judged but is no candidate of any class and not of class counting`);
   else if (!movers.has(e.name)) fail(`${e.name} is of class counting but no club square verdict of his moves`);
 }
 for (const e of record.partial) if (!candidateSet.has(e.name)) fail(`partial ${e.name} is not a candidate`);
+/* Every Round 1576 entry is a window candidate judged for his whole senior career (`fullCareer`,
+   new in Round 1576: the contract Round 1577's classes read before they take a man back). */
+const windowSet = new Set(classes.window);
+const roundEntries = [...record.additions, ...record.agrees, ...record.partial].filter(e => e.round === ROUND);
+for (const e of roundEntries) {
+  if (!windowSet.has(e.name)) fail(`${e.name} carries round ${ROUND} but is not a window candidate`);
+  if (!String(e.class ?? '').startsWith('window')) fail(`${e.name}: class "${e.class}" does not start with "window"`);
+  if (!record.partial.includes(e) && e.fullCareer !== true) fail(`${e.name}: a judged round ${ROUND} entry must carry fullCareer true`);
+}
+for (const e of [...record.additions, ...record.agrees, ...record.partial]) if (e.round !== undefined && e.round !== ROUND) fail(`${e.name}: round ${e.round} is not this round (${ROUND}); an earlier round's entry carries no round key`);
 if (lists.pending.length > PENDING_MAX) fail(`pending holds ${lists.pending.length}, the ratchet allows ${PENDING_MAX} (it may only shrink)`);
-console.log(`   ${candidates.length} candidates: ${lists.additions.length} additions, ${lists.agrees.length} agrees, ${lists.partial.length} partial, ${lists.pending.length} pending (ratchet ${PENDING_MAX})`);
+/* The second ratchet: the distinct names nobody has judged (pending plus every owed row), so a
+   class that moves men from owed into pending can never hide growth. */
+const owedNames = record.owed.flatMap(o => o.names).map(stripSuffix);
+if (CONTROL === 'unjudged') {
+  const listed = new Set([...lists.pending, ...owedNames, ...seen.keys()]);
+  const outsider = baseData.pool.find(p => !listed.has(p.name));
+  if (outsider) {
+    owedNames.push(outsider.name);
+    changed(`${outsider.name}, on no list, added to the owed names`);
+  }
+}
+const unjudged = new Set([...lists.pending, ...owedNames]);
+if (unjudged.size > UNJUDGED_MAX) fail(`pending plus owed holds ${unjudged.size} distinct names, the ratchet allows ${UNJUDGED_MAX} (it may only shrink)`);
+for (const n of unjudged) if (judgedNames.has(n)) fail(`${n} is judged and still on a pending or owed list`);
+console.log(`   ${allCandidates.length} candidates (${candidates.length} hole, ${Object.entries(classes).map(([k, v]) => `${v.length} ${k}`).join(', ')}): ${lists.additions.length} additions, ${lists.agrees.length} agrees, ${lists.partial.length} partial, ${lists.pending.length} pending (ratchet ${PENDING_MAX}); round ${ROUND} entries ${roundEntries.length}`);
+console.log(`   unjudged (pending plus owed, distinct): ${unjudged.size} (ratchet ${UNJUDGED_MAX}); owed rows: ${record.owed.map(o => `${o.round ?? 'unnumbered'} ${o.names.length}`).join(', ')}`);
 if (lists.pending.length) console.log(`   pending: ${lists.pending.join(', ')}`);
 
 /* ---------------------------------------------------------------- 5 */
@@ -484,6 +678,8 @@ for (const e of [...record.additions, ...record.agrees]) {
   if (!(e.career ?? []).length && !(e.clubs ?? []).length) fail(`${e.name}: no sourced club at all`);
   for (const c of e.career ?? []) sourced.push({ what: `${e.name}: ${c.club} (career)`, sources: c.sources });
   for (const s of e.identity?.sources ?? []) if (!s.url || !s.quote) fail(`${e.name}: an identity source without url or quote`);
+  /* Round 1576 on (critic 1576 advice 10d): the born date on two host families too. */
+  if (e.round === ROUND) sourced.push({ what: `${e.name}: born ${e.identity?.born} (identity)`, sources: e.identity?.sources });
 }
 if (CONTROL === 'onesource') {
   const victim = sourced.find(s => (s.sources ?? []).length >= 2);
@@ -492,25 +688,35 @@ if (CONTROL === 'onesource') {
     changed(`${victim.what} loses a source`);
   }
 }
-for (const s of sourced) {
+/* Hosts are counted by family since Round 1576 (critic 1576 advice 10d): transfermarkt.com and
+   transfermarkt.us are one host, api.fotmob.com and fotmob.com are one. The family is the label
+   before the public suffix (a "co" or "com" second level label is skipped: bbc.co.uk is bbc). */
+const hostFamily = host => {
+  const labels = host.split('.');
+  let i = labels.length - 2;
+  if (i > 0 && ['co', 'com', 'org', 'net', 'gov', 'ac'].includes(labels[i])) i -= 1;
+  return labels[Math.max(i, 0)];
+};
+function checkSources(what, sources) {
   const hosts = new Set();
-  for (const src of s.sources ?? []) {
+  for (const src of sources ?? []) {
     let host = '';
     try {
       const url = new URL(src.url);
-      if (url.protocol !== 'https:') fail(`${s.what}: ${src.url} is not https`);
+      if (url.protocol !== 'https:') fail(`${what}: ${src.url} is not https`);
       host = url.hostname.replace(/^www[.]/, '');
     } catch {
-      fail(`${s.what}: "${src.url}" is not a url`);
+      fail(`${what}: "${src.url}" is not a url`);
       continue;
     }
-    if (BANNED_HOSTS.test(host)) fail(`${s.what}: ${host} is crowd edited`);
-    if (!/^[0-9]{4}-[0-9]{2}-[0-9]{2}$/.test(src.read ?? '') || src.read < FIXTURE_DAY || src.read > today) fail(`${s.what}: read date "${src.read}" is not a day from ${FIXTURE_DAY} to ${today}`);
-    if (typeof src.quote !== 'string' || src.quote.trim().length < 8) fail(`${s.what}: ${host} has no quoted line`);
-    hosts.add(host);
+    if (BANNED_HOSTS.test(host)) fail(`${what}: ${host} is crowd edited`);
+    if (!/^[0-9]{4}-[0-9]{2}-[0-9]{2}$/.test(src.read ?? '') || src.read < FIXTURE_DAY || src.read > today) fail(`${what}: read date "${src.read}" is not a day from ${FIXTURE_DAY} to ${today}`);
+    if (typeof src.quote !== 'string' || src.quote.trim().length < 8) fail(`${what}: ${host} has no quoted line`);
+    hosts.add(hostFamily(host));
   }
-  if (hosts.size < 2) fail(`${s.what}: ${hosts.size} host(s), two different hosts are required`);
+  if (hosts.size < 2) fail(`${what}: ${hosts.size} host famil${hosts.size === 1 ? 'y' : 'ies'}, two different hosts are required`);
 }
+for (const s of sourced) checkSources(s.what, s.sources);
 console.log(`   ${sourced.length} sourced facts checked`);
 /* Every added club carries the stint shape a later stints migration can write (critic advice 13):
    fromSeason and toSeason each ONE season ("2022-23", or "2022" where the league runs by calendar
@@ -645,6 +851,213 @@ Math.random = realRandom;
 if (boardsEqual !== 200) fail(`${200 - boardsEqual} of 200 seeded boards differ from BASE`);
 if (guaranteeRegressions) fail(`${guaranteeRegressions} seeds keep the ${base.GUARANTEED_PER_LINE} per tile guarantee in the first ${base.GUARANTEE_WINDOW} cards on BASE and lose it on the tree`);
 console.log(`   eligibility equal; ${boardsEqual} of 200 boards byte identical; ${decksComparable} boards kept every tile's support, ${decksEqual} of their decks identical; guarantee regressions ${guaranteeRegressions}`);
+
+/* ---------------------------------------------------------------- 8 */
+section = '8';
+console.log(`8) The window answer (round ${ROUND} entries)`);
+/* A quoted line reaches into 2025-26 when it holds a 2025-26 season token (Transfermarkt's 25/26)
+   or when the span of the dates it quotes (dd/mm/yyyy or yyyy-mm-dd; FotMob's "to now" is the day
+   it was read) overlaps 2025-07-01 to 2026-06-30. A mechanical floor under the builder's reading,
+   not a parse of which club each date belongs to: a 2022-23 line alone fails it. */
+const quoteDates = q => [
+  ...[...q.matchAll(/(?<![0-9])([0-9]{2})\/([0-9]{2})\/([0-9]{4})(?![0-9])/g)].map(m => `${m[3]}-${m[2]}-${m[1]}`),
+  ...[...q.matchAll(/(?<![0-9])[0-9]{4}-[0-9]{2}-[0-9]{2}(?![0-9])/g)].map(m => m[0]),
+];
+const showsWindowSeason = (q, read) => {
+  if (/(?<![0-9/])(25\/26|2025-26|2025\/26)(?![0-9/])/.test(q)) return true;
+  const dates = quoteDates(q);
+  if (/ to now(?![a-z])/.test(q) && read) dates.push(read);
+  if (!dates.length) return false;
+  dates.sort();
+  return dates[0] <= WINDOW_SEASON.to && dates[dates.length - 1] >= WINDOW_SEASON.from;
+};
+const splitSeason = s => /^[0-9]{4}-[0-9]{2}$/.test(s ?? '');
+const coversWindow = (from, to) => {
+  const a = seasonStart(from);
+  const b = seasonStart(to);
+  if (a === null || b === null) return false;
+  return splitSeason(from) && splitSeason(to) ? a <= 2025 && b >= 2025 : a <= 2026 && b >= 2025;
+};
+const keyOf = club => { const k = base.clubKey(club); return aliasOf.get(k) ?? k; };
+function expectedOverlay(name) {
+  const hand = handOf.get(name) ?? [];
+  if (hand.length) return { overlay: 'hand', db: hand[hand.length - 1].db, from: null };
+  const counted = new Set([...(baseData.clubYears.get(name) ?? [])].map(c => c.key));
+  const row = (generatedOf.get(name) ?? []).find(g => g.from && !counted.has(base.clubKey(g.from)));
+  return row ? { overlay: 'generated', db: row.db, from: row.from } : null;
+}
+const partialNames = new Set(record.partial.map(e => e.name));
+const winEntries = structuredClone(roundEntries);
+const firstWith = test => winEntries.find(test);
+if (CONTROL === 'nowindow') {
+  const v = firstWith(e => e.window);
+  if (v) { delete v.window; changed(`${v.name}'s window block deleted`); } else console.log(`   =nowindow: no round ${ROUND} entry yet (exit 3 by design)`);
+}
+if (CONTROL === 'windowdb') {
+  const v = firstWith(e => e.window?.db);
+  if (v) { v.window.db = `${v.window.db} Reserves`; changed(`${v.name}'s window.db edited to "${v.window.db}"`); } else console.log(`   =windowdb: no round ${ROUND} entry yet (exit 3 by design)`);
+}
+if (CONTROL === 'windowseason') {
+  const v = firstWith(e => (e.window?.clubs ?? []).some(c => c?.sources?.length));
+  if (v) {
+    const c = v.window.clubs.find(x => x?.sources?.length);
+    c.sources[0].quote = '22/23 01/07/2022 Other Club -> Another Club (-)';
+    changed(`${v.name}: the first quote for window club ${c.club} swapped for a 2022-23 transfer line`);
+  } else console.log(`   =windowseason: no round ${ROUND} window club with sources yet (exit 3 by design)`);
+}
+let tableLacked = 0;
+let windowClubs = 0;
+for (const e of winEntries) {
+  const isPartial = partialNames.has(e.name);
+  const exp = expectedOverlay(e.name);
+  const w = e.window;
+  if (!w) { fail(`${e.name}: no window block`); continue; }
+  if (!exp) fail(`${e.name}: no overlay row explains his window class`);
+  else if (w.overlay !== exp.overlay || w.db !== exp.db || (w.from ?? null) !== exp.from) fail(`${e.name}: window {overlay ${w.overlay}, db ${w.db}, from ${w.from}} is not the overlay's {${exp.overlay}, ${exp.db}, ${exp.from}}`);
+  if (w.season !== '2025-26') fail(`${e.name}: window.season is "${w.season}", not "2025-26"`);
+  const wclubs = w.clubs ?? [];
+  if (!wclubs.length) {
+    if (isPartial) { if (typeof e.reason !== 'string' || e.reason.length < 8) fail(`${e.name}: a partial window man with no window club needs a reason`); }
+    else if (typeof w.note !== 'string' || w.note.trim().length < 8) fail(`${e.name}: no window club and no note saying why (a senior first team only)`);
+    console.log(`   ${e.name}: no window club listed (${isPartial ? 'partial' : w.note})`);
+  }
+  if (isPartial && e.waitsOn !== undefined && ![1577, 1587, 1589].includes(e.waitsOn)) fail(`${e.name}: waitsOn ${e.waitsOn} is not 1577, 1587 or 1589`);
+  const careerKeys = new Set((e.career ?? []).map(c => keyOf(c.club)));
+  const addedKeys = new Set((e.clubs ?? []).map(c => keyOf(c.club)));
+  const tree = headData.clubHistory.get(e.name) ?? new Set();
+  let lacked = false;
+  for (const wc of wclubs) {
+    const club = windowClubName(wc);
+    const k = keyOf(club ?? '');
+    windowClubs += 1;
+    if (!isPartial) {
+      if (!careerKeys.has(k) && !addedKeys.has(k)) fail(`${e.name}: window club ${club} is in neither his sourced career nor his added clubs`);
+      if (!tree.has(k)) fail(`${e.name}: window club ${club} is not counted by the tree (his 2025-26 club not counted)`);
+    }
+    checkSources(`${e.name}: window club ${club}`, wc?.sources);
+    for (const s of wc?.sources ?? []) {
+      if (typeof s.quote === 'string' && !showsWindowSeason(s.quote, s.read)) fail(`${e.name}: window club ${club}: a quote does not reach into 2025-26 ("${s.quote.slice(0, 90)}")`);
+    }
+    if (addedKeys.has(k)) {
+      lacked = true;
+      const c = e.clubs.find(x => keyOf(x.club) === k);
+      if (!coversWindow(c.fromSeason, c.toSeason)) fail(`${e.name}: added window club ${club} runs ${c.fromSeason} to ${c.toSeason}, which does not cover 2025-26`);
+    }
+  }
+  if (lacked) tableLacked += 1;
+  if (!isPartial && exp?.overlay === 'generated' && !wclubs.some(wc => keyOf(windowClubName(wc) ?? '') === keyOf(exp.from))) fail(`${e.name}: the generated row's from (${exp.from}) is not one of his window clubs`);
+}
+for (const n of classes.window) {
+  const e = [...record.additions, ...record.agrees, ...record.partial].find(x => x.name === n);
+  if (!e || e.round === ROUND) continue;
+  const exp = expectedOverlay(n);
+  const inTree = exp && (headData.clubHistory.get(n) ?? new Set()).has(keyOf(exp.db));
+  console.log(`   ${n}: judged by an earlier round (class ${e.class}); the overlay's ${exp?.db} ${inTree ? 'is' : 'is NOT'} in his tree history`);
+  if (!inTree && !partialNames.has(n)) fail(`${n}: the overlay's ${exp?.db} is not in his tree history`);
+}
+console.log(`   ${winEntries.length} round ${ROUND} entries (${winEntries.filter(e => partialNames.has(e.name)).length} partial), ${windowClubs} window clubs; ${tableLacked} men had a 2025-26 club the table lacked`);
+
+/* ---------------------------------------------------------------- 9 */
+section = '9';
+console.log(`9) Against the previous closed head on this record, PREV ${PREV}`);
+let prevRecord;
+let prevLibSource;
+let prevModule;
+let prevDerived;
+try {
+  const show = rel => execSync(`git show ${PREV}:${rel}`, { cwd: ROOT, encoding: 'utf8', maxBuffer: 1 << 26 });
+  prevRecord = JSON.parse(show(RECORD));
+  prevLibSource = show('src/lib/playerBingo.ts');
+  prevModule = show('src/lib/clubCareerAdditions.ts');
+  prevDerived = show('src/data/bingoClubAdditions.json');
+} catch (error) {
+  abort(`git show ${PREV} failed (${error.message.split('\n')[0]})`);
+}
+const treeByName = new Map();
+for (const list of ['additions', 'agrees', 'partial']) for (const e of record[list]) treeByName.set(e.name, [...(treeByName.get(e.name) ?? []), { list, e }]);
+const prevEntries = ['additions', 'agrees', 'partial'].flatMap(list => prevRecord[list].map(e => ({ list, e })));
+let touchVictim = null;
+if (CONTROL === 'touchprev') {
+  touchVictim = prevEntries.find(p => !AMENDED.includes(p.e.name) && (treeByName.get(p.e.name) ?? []).length === 1)?.e.name ?? null;
+  if (touchVictim) changed(`${touchVictim}'s notes edited in memory`);
+}
+let frozen = 0;
+for (const { list, e } of prevEntries) {
+  const mine = treeByName.get(e.name) ?? [];
+  if (mine.length !== 1) { fail(`${e.name} (a PREV ${list} entry) has ${mine.length} entries in the tree's record`); continue; }
+  if (AMENDED.includes(e.name)) { console.log(`   amended by name (the brief says so): ${e.name}`); continue; }
+  const ours = e.name === touchVictim ? { ...mine[0].e, notes: `${mine[0].e.notes ?? ''} (edited)` } : mine[0].e;
+  if (mine[0].list !== list || JSON.stringify(ours) !== JSON.stringify(e)) fail(`${e.name}: the PREV ${list} entry is not byte equal in the tree's record (${mine[0].list})`);
+  else frozen += 1;
+}
+for (const key of ['round', 'checkedOn', 'report', 'fixture', 'counting', 'candidates']) if (JSON.stringify(record[key]) !== JSON.stringify(prevRecord[key])) fail(`the record's ${key} differs from PREV's`);
+const prevRuleKeys = Object.keys(prevRecord.rule ?? {});
+for (const key of prevRuleKeys) if (JSON.stringify(record.rule?.[key]) !== JSON.stringify(prevRecord.rule[key])) fail(`rule.${key} differs from PREV's`);
+for (const [key, c] of Object.entries(prevRecord.classes ?? {})) for (const f of ['round', 'rule']) if (JSON.stringify(record.classes?.[key]?.[f]) !== JSON.stringify(c[f])) fail(`classes.${key}.${f} differs from PREV's`);
+console.log(`   (a) ${frozen} of ${prevEntries.length} PREV entries byte equal by name (${AMENDED.length} amended by name); round, checkedOn, report, fixture, counting, hole candidates, ${prevRuleKeys.length} rule keys and ${Object.keys(prevRecord.classes ?? {}).length} earlier classes equal`);
+const prevLib = await loadBingoLib({ root: ROOT, libSource: prevLibSource, label: 'prev', tmp, extraSources: { '@/data/bingoClubAdditions.json': prevDerived, '@/lib/clubCareerAdditions': prevModule } });
+const prevData = (await load(prevLib)).data;
+const roundNames = new Set(roundEntries.map(e => e.name));
+let prevLeakVictim = null;
+if (CONTROL === 'prevleak') {
+  prevLeakVictim = headData.pool.find(p => !roundNames.has(p.name))?.name ?? null;
+  if (prevLeakVictim) changed(`one club added in memory to ${prevLeakVictim}'s tree history (no round ${ROUND} entry)`);
+}
+if (JSON.stringify(prevData.pool) !== JSON.stringify(headData.pool)) fail('the pool differs from PREV');
+let sameHistories = 0;
+for (const p of prevData.pool) {
+  if (roundNames.has(p.name)) continue;
+  const was = [...(prevData.clubHistory.get(p.name) ?? [])].sort();
+  const now = [...(headData.clubHistory.get(p.name) ?? [])];
+  if (p.name === prevLeakVictim) now.push('qzx leaked club');
+  now.sort();
+  if (JSON.stringify(was) !== JSON.stringify(now)) fail(`${p.name} has no round ${ROUND} entry and his club history moved against PREV ([${was.join(', ')}] -> [${now.join(', ')}])`);
+  else sameHistories += 1;
+}
+console.log(`   (b) ${sameHistories} pool men without a round ${ROUND} entry keep PREV's club history exactly`);
+const prevCriteria = prevLib.buildCriteria(prevData);
+if (JSON.stringify(prevCriteria.map(c => c.id)) !== JSON.stringify(headCriteria.map(c => c.id))) fail('the criterion list differs from PREV');
+const prevMoves = [];
+for (const hc of headCriteria) {
+  const pc = prevCriteria.find(c => c.id === hc.id);
+  if (!pc) continue;
+  const gained = hc.support.filter(n => !pc.support.includes(n));
+  const lost = pc.support.filter(n => !hc.support.includes(n));
+  if (!gained.length && !lost.length) continue;
+  if (!CLUB_SQUARES(hc.id)) fail(`${hc.id} support moved against PREV though it is not a club square`);
+  for (const n of [...gained, ...lost]) {
+    if (!roundNames.has(n)) fail(`${hc.id}: ${n} moved against PREV but has no round ${ROUND} entry`);
+    prevMoves.push(`${n} ${gained.includes(n) ? 'now fits' : 'no longer fits'} ${hc.label} (support ${pc.support.length} -> ${hc.support.length})`);
+  }
+}
+console.log(`   (c) ${prevMoves.length} club square verdicts moved against PREV${prevMoves.length ? ' (the list a What\'s New line may draw on):' : ': none, so no What\'s New line'}`);
+for (const m of prevMoves) console.log('     ' + m);
+if (JSON.stringify(eligible(prevCriteria)) !== JSON.stringify(eligible(headCriteria))) fail('eligibility differs from PREV');
+let prevBoards = 0;
+let prevComparable = 0;
+let prevDecks = 0;
+let prevRegressions = 0;
+for (let seed = 1; seed <= 200; seed++) {
+  Math.random = mulberry32(seed);
+  const pBoard = prevLib.generateBoard(prevCriteria);
+  const pDeck = prevLib.buildDeck(prevData.pool, pBoard);
+  Math.random = mulberry32(seed);
+  if (CONTROL === 'drift') Math.random();
+  const hBoard = head.generateBoard(headCriteria);
+  const hDeck = head.buildDeck(headData.pool, hBoard);
+  Math.random = realRandom;
+  if (JSON.stringify(pBoard.map(c => c.id)) === JSON.stringify(hBoard.map(c => c.id))) prevBoards += 1;
+  if (pBoard.every((c, i) => hBoard[i] && JSON.stringify(c.support) === JSON.stringify(hBoard[i].support))) {
+    prevComparable += 1;
+    if (JSON.stringify(pDeck.map(p => p.name)) === JSON.stringify(hDeck.map(p => p.name))) prevDecks += 1;
+    else fail(`seed ${seed}: every board tile kept its PREV support but the deck differs from PREV`);
+  }
+  if (guaranteeHolds(pBoard, pDeck) && !guaranteeHolds(hBoard, hDeck)) prevRegressions += 1;
+}
+Math.random = realRandom;
+if (prevBoards !== 200) fail(`${200 - prevBoards} of 200 seeded boards differ from PREV`);
+if (prevRegressions) fail(`${prevRegressions} seeds keep the per tile guarantee on PREV and lose it on the tree`);
+console.log(`   (d) eligibility equal to PREV; ${prevBoards} of 200 boards byte identical; ${prevComparable} boards kept every tile's support, ${prevDecks} of their decks identical; guarantee regressions ${prevRegressions}`);
 
 /* ---------------------------------------------------------------- end */
 const summary = Object.entries(bySection).map(([s, n]) => `section ${s}: ${n}`).join(', ');
