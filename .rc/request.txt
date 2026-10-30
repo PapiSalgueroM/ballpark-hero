@@ -1,0 +1,5 @@
+#!playwright
+simWritesAreSent: node scripts/simWritesAreSent.mjs
+simResultMoment: node scripts/simResultMoment.mjs
+hardening-head: node scripts/simDailySaveHardening.mjs 2>&1 | tail -4
+hardening-base: git worktree add -q /tmp/base b4a331a9cb1db7411b91538eaeaf29385d2ce3a9 && ln -s "$PWD/node_modules" /tmp/base/node_modules && cd /tmp/base && node scripts/simDailySaveHardening.mjs 2>&1 | tail -4
