@@ -1,0 +1,3 @@
+BAD  r390: after a reload mid season the Play Round 4 press is live
+BAD  r390: the round plays after the reload (4 to 4)
+ok   r390: no console error (clean)

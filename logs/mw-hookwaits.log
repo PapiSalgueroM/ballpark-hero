@@ -1,0 +1,11 @@
+MUTATION APPLIED: hookwaits in src/components/front-office-shared/useGmCareerKit.ts
+BAD  r390: after a reload mid season the Play Round 4 press is live
+BAD  r390: the round plays after the reload (4 to 4)
+ok   r390: no console error (clean)
+REVIEW WALK: 2 bad line(s)
+  PASS  nhl 390x844 E GM level: every control at least 44 px tall (all)
+  PASS  nhl 390x844 E GM level: no text under its floor (none)
+  PASS  nhl 390x844 E: no console error (clean)
+
+playGmCareer: green. 1 board(s) (nhl), 1 sizes, four walks each and the slow kit walk at 390 and 1280.
+MW hookwaits: my walk R exit 1, playGmCareer nhl E exit 0

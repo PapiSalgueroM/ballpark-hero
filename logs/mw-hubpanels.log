@@ -1,0 +1,32 @@
+MUTATION APPLIED: hubpanels in src/components/nhl-front-office/NhlFrontOfficeBoard.tsx
+ok   p390 hub start: nothing wider than the screen (0px over)
+ok   p390 hub start: no overlapping text (none)
+info p390 hub start: clipped text candidates: Your biggest chip is David Pas | 5 places short of the cut, 20  | +0.87 team strength from the b | Nobody is out of contract this | 15 rounds to the deadline
+ok   p390: the introduction presser is there to answer
+ok   p390 recap: nothing wider than the screen (0px over)
+BAD  p390 recap: no overlapping text ("Central Final: Colorado " x "Cups 0" 73x11; "Central Final: Colorado " x "Seasons 1" 91x11; "Pacific Semi: Minnesota " x "Cups 0" 73x17; "Pacific Semi: Minnesota " x "0" 9x12; "Pacific Semi: Minnesota " x "Seasons 1" 91x17; "Pacific Semi: Minnesota " x "1" 6x12)
+info p390 recap: clipped text candidates: Nobody is out of contract this
+info p390 recap xp line: GM XP +175. Level 1.
+ok   p390: the recap names the Cup
+ok   p390: the draft runs to the hub
+ok   p390: season two's hub has the Career box
+BAD  p390: the Career screen takes the hub (the board's Play box is not drawn under it)
+ok   p390 Career: nothing wider than the screen (0px over)
+ok   p390 Career: no overlapping text (none)
+info p390 Career: clipped text candidates: Roster full at 15. Cut or trad | Your biggest chip is David Pas
+ok   p390: season two's hub has the GM level box
+BAD  p390: the GM level screen takes the hub (the board's Play box is not drawn under it)
+ok   p390 GM level: nothing wider than the screen (0px over)
+ok   p390 GM level: no overlapping text (none)
+info p390 GM level: clipped text candidates: Roster full at 15. Cut or trad | Your biggest chip is David Pas
+ok   p390: the ? panel carries the career rules
+ok   p390: the ? panel's hockey rule says the save goes on
+ok   p390: no rule left saying firing ends the save
+ok   p390: no console error (clean)
+REVIEW WALK: 3 bad line(s)
+  PASS  nhl 390x844 A: a point spent in Ownership is in the save after a reload
+  PASS  nhl 390x844 A: a round plays at the new club
+  PASS  nhl 390x844 A: no console error (clean)
+
+playGmCareer: green. 1 board(s) (nhl), 1 sizes, four walks each and the slow kit walk at 390 and 1280.
+MW hubpanels: my walk P exit 1, playGmCareer nhl A exit 0
