@@ -1,0 +1,9 @@
+wcprobe: bash .rc/x/wcProbe.sh
+worldcont-head: bash .rc/x/wd.sh node scripts/simManagerWorldContinuity.mjs
+shootout: node scripts/simCmShootoutOrder.mjs
+so-keepcurve: CM_SHOOTOUT_CONTROL=keepcurve node scripts/simCmShootoutOrder.mjs
+so-unsetpath: CM_SHOOTOUT_CONTROL=unsetpath node scripts/simCmShootoutOrder.mjs
+shootoutResults: node scripts/simCmShootoutResults.mjs
+sr-keepcurve: CM_SHOOTOUT_RESULTS_CONTROL=keepcurve node scripts/simCmShootoutResults.mjs
+anchors: node scripts/simHarnessAnchors.mjs
+noRival: node scripts/simNoRivalNames.mjs
