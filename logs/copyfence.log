@@ -1,0 +1,12 @@
+   baseball: 0 raw labels, receipt not shown, dialog date 2026 (boards carry 2026)
+   nfl: 0 raw labels, receipt not shown, dialog date 2025 (boards carry 2025)
+   nhl: 0 raw labels, receipt shown, dialog date 2025-26 (boards carry 2025-26)
+   nba: 0 raw labels, receipt shown, dialog date 2025-26 (boards carry 2025-26)
+simConnectionsDatedCopy: green. The four US Connections pages render every group label through ConnectionsGroupLabel and every receipt through ConnectionsReceiptText, and each How to play dialog says what "as of" means with a date its own boards carry (45 dated labels).
+plain exit=0
+ok page | CONN_COPY_CONTROL=page fired its own rule 2 time(s): raw-label for nba (2 findings in all)
+ok receipt | CONN_COPY_CONTROL=receipt fired its own rule 2 time(s): raw-receipt for nba (2 findings in all)
+ok dialog | CONN_COPY_CONTROL=dialog fired its own rule 1 time(s): no-sentence for nba (1 findings in all)
+ok datemove | CONN_COPY_CONTROL=datemove fired its own rule 1 time(s): wrong-date for nhl (1 findings in all)
+ok comment | CONN_COPY_CONTROL=comment fired its own rule 2 time(s): raw-label for nba (2 findings in all)
+copyfence: plain exit 0, 0 of 5 controls did not fire
