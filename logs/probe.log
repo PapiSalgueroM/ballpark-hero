@@ -1,0 +1,7 @@
+PROBE PATCHED
+[22m[39mPROBE_BUTTONS|nfl|Continue to the hub
+PROBE_PANEL|nfl|none|press false
+[22m[39mPROBE_BUTTONS|nhl|Continue to the hub
+PROBE_PANEL|nhl|none|press false
+[31m⎯⎯⎯⎯⎯⎯⎯[39m[1m[41m Failed Tests 2 [49m[22m[31m⎯⎯⎯⎯⎯⎯⎯[39m
+[2m      Tests [22m [1m[31m2 failed[39m[22m[2m | [22m[33m34 skipped[39m[90m (36)[39m
