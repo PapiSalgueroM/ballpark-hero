@@ -625,6 +625,20 @@
       file before it is green, 27 of 27 equal (rr1-stamp-proof). Written
       with --part=modern,eras --write on 178a1fd8c (r1600-rr rr1-retake),
       then run green whole on the same runner.
+      Round 1600's merge of main at 931308159 (2026-10-30) re-took modern
+      and eras for main's free agent continuity (Chat's soccer release,
+      43f611ff1: the summer links the live free agent pool to the ledger
+      in startNextSeason and keeps a released record the pool still points
+      at). All 47 entries moved in wholeNext and the ten pyramid saves in
+      s2_whole, nothing else (pure 48 of 48). Attribution on a runner at
+      41b25abf9 (r1600-x2e): the head reads 47 failures (rules-head); with
+      clubManager.ts back to the pre-merge head 1b182d1ca's the file is
+      green whole (rules-premerge), so main's engine lines are the only
+      cause; with the merge's one line of its own (freeAgentRecord's near
+      read) taken out it still reads 47 (rules-mutexact); main 931308159
+      on its own file reads the same 47 (rules-main). Written with
+      --part=modern,eras --write on 41b25abf9 (rules-write, 57 lines
+      changed), then run green whole on the same runner.
    2. DIGEST, ERAS (hard). The same for every league of every historic era,
       one career each.
    3. DIGEST, PURE (hard). For every modern and era league: the drop count,
