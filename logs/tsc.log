@@ -1,0 +1,5 @@
+src/components/club-manager/ClubManagerSeasonSummary.tsx(420,18): error TS2304: Cannot find name 'deals'.
+src/components/club-manager/ClubManagerSeasonSummary.tsx(421,20): error TS2304: Cannot find name 'deals'.
+src/components/club-manager/ClubManagerSeasonSummary.tsx(422,30): error TS2339: Property 'renew' does not exist on type 'Pick<{ simToWeek: (targetWeek: number) => void; saveFailed: boolean; saveMoved: boolean; deskNote: string; clearDeskNote: () => void; tacticsFailed: boolean; retryTactics: () => void; bootError: string; ... 114 more ...; joinNow: () => void; }, "startNew" | ... 1 more ... | "takeJob"> & Partial<...>'.
+src/components/club-manager/ClubManagerSeasonSummary.tsx(423,28): error TS2304: Cannot find name 'setDeals'.
+src/components/club-manager/ClubManagerSeasonSummary.tsx(424,32): error TS2304: Cannot find name 'setDeals'.
